@@ -209,14 +209,14 @@ float CVAR_READONLY	= 4;
 // server list constants
 
 float SLIST_CNAME = 0;
-float SLIST_LINE1 = 1;
-float SLIST_LINE2 = 2;
+float SLIST_LINE1 = 1024;
+float SLIST_LINE2 = 1025;
 
 float SLIST_HOSTCACHECOUNT   = 0;
-float SLIST_MASTERQUERYCOUNT = 1;
-float SLIST_MASTERREPLYCOUNT = 2;
-float SLIST_SERVERQUERYCOUNT = 3;
-float SLIST_SERVERREPLYCOUNT = 4;
+float SLIST_MASTERQUERYCOUNT = 2;
+float SLIST_MASTERREPLYCOUNT = 3;
+float SLIST_SERVERQUERYCOUNT = 4;
+float SLIST_SERVERREPLYCOUNT = 5;
 
 ///////////////////////////
 // null entity (actually it is the same like the world entity)
