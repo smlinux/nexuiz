@@ -136,9 +136,9 @@ Item Window CreateGame
 		}
 		Derive Nex_Void Seperator2
 		{}
-		Derive TextButton StartMap
+				Derive PictureButton Start
 		{
-			normal	"Start"
+			normal		"$gfx/m_start"
 
 			action	Nex_Action_Map_Start
 		}

@@ -169,9 +169,9 @@ Item Layout JoinGame
 			}
 		}
 	}
-	Derive TextButton Refresh
+	Derive PictureButton Refresh
 	{
-		normal	"Refresh List"
+		normal		"$gfx/m_refresh"
 
 		action 	Nex_Action_RefreshSlist
 	}

@@ -35,9 +35,9 @@ Item Layout Video
 	}
 	Derive Nex_Void Seperator1
 	{}
-	Derive TextButton Apply
+	Derive PictureButton Apply
 	{
-		normal	"Apply Changes"
+		normal		"$gfx/m_apply"
 
 		action	Nex_Action_Video_Apply
 	}
