@@ -815,51 +815,45 @@ void(void) menu_selectdown =
 
 void(void) menu_selectup =
 {
-	local entity ent;
-	
 	// if we try to up from the current activewindow pop the history.
 	// else move up in the hierarchy and try to select and item.
 	
-	print( "Check whether menu_selected == menu_activewindow\n" );
+	//print( "Check whether menu_selected == menu_activewindow\n" );
 	if( menu_selected == menu_activewindow ) {
-		print( "Pop history\n" );
+		//print( "Pop history\n" );
 		if( menu_history == null_entity ) {
-			print( "History empty!\n" );
+			//print( "History empty!\n" );
 			menu_toggle();
-			// set the active window to the 'main' window
-			menu_activewindow = ent;
-			// if the menu isnt toggled then select an item now !
-			menu_selectdown();
+			menu_reselect();
 		}
 		menu_pophistory();
 		return;
 	}
 	
-	print( "Check whether parent exists\n" );	
+	//print( "Check whether parent exists\n" );	
 	if( menu_selected._parent == null_entity )
 		return;
 	
-	print( "Try to select the parent\n" );
+	//print( "Try to select the parent\n" );
 	menu_selected = menu_selected._parent;
 	if( menu_selectable( menu_selected ) )
 		return;
 
-	print( "Try to select an item after the parent\n" );
+	//print( "Try to select an item after the parent\n" );
 	menu_selectnext();
 	if( menu_selectable( menu_selected ) )
 		return;
 
-	print( "Try to select an item before the parent\n" );
+	//print( "Try to select an item before the parent\n" );
 	menu_selectprev();
 	if( menu_selectable( menu_selected ) )
 		return;
 
-	print( "Try to select the parent of the parent\n" );
+	//print( "Try to select the parent of the parent\n" );
 	menu_selectup();	
 
-	print( "Selected:\n" );
-	eprint( menu_selected );	
-	eprint( menu_activewindow );	
+	//print( "Selected:\n" );
+	//eprint( menu_selected );	
 };
 
 void(void) menu_reselect =
