@@ -111,7 +111,7 @@ Option menus
 	parent	options_player
 	origin		"350 0"
 	clip_pos	"200 0"
-	clip_size	"500 400"
+	clip_size	"600 400"
 }
 {
 	type	ITEM_PICTURE
@@ -180,7 +180,7 @@ Option menus
 	text		"Player Name"
 	pos		"0 0 0"
 	clip_pos	"10 0 0"
-	clip_size	"200 20 0"
+	clip_size	"154 20 0"
 	//font_size	"10 10 0"
 	alignment	16		// TEXT_ALIGN_RIGHTPOS
 	flag		256		// FLAG_AUTOSETCLICK
@@ -192,7 +192,7 @@ Option menus
 	name		options_player_opt_playername_switch
 	parent		options_player_opt_playername
 	pos		"10 0 0"
-	size		"200 11 0"
+	size		"154 11 0"
 	font_size	"11 11 0"
 	flag 		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
 	text		"NexuizPlayer"

@@ -1008,6 +1008,9 @@ void(void) ITEM_EDITBOX =
 	if(self.flag == 0)
 		self.flag = FLAG_AUTOSETCLICK;
 
+	//init clip_pos
+	self.clip_pos = self.pos;
+
 	if(self.color == '0 0 0')
 		self.color = ITEM_PICTURE_NORMAL_COLOR;
 	if(self.alpha == 0)
@@ -1027,9 +1030,6 @@ void(void) ITEM_EDITBOX =
 	{
 		self.pos_x = self.pos_x - self.size_x;
 	}
-
-	//init clip_pos
-	self.clip_pos = self.pos;
 
 	item_init(
 		defct_reinit,

@@ -528,12 +528,39 @@ template for map selection
 	text		"16"
 	refresh		nex_xp_maxclients
 }
+//////
+// Public Server
+////
+// Text
+{
+	type 		ITEM_TEXTBUTTON
+	name		creategame_opt_publicserv_text
+	parent		creategame_opt
+	text		"Public Server"
+	pos			"0 105 0"
+	//font_size	"10 10 0"
+	alignment	16		// TEXT_ALIGN_RIGHTPOS
+	flag		256		// FLAG_AUTOSETCLICK
+	key			nex_redirect_key
+}
+// Switch
+{
+	type		ITEM_TEXTSWITCH
+	name		creategame_opt_publicserv_switch
+	parent		creategame_opt_publicserv_text
+	pos			"10 105 0"
+	//font_size	"10 10 0"
+	flag 		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
+	text		"'No''Yes'"
+	value		1
+	switchchange   nex_xp_publicserv
+}
 // start
 {
 	type 		ITEM_TEXTBUTTON
 	name		creategame_opt_start
 	parent		creategame_opt
-	pos		"0 115"
+	pos		"0 130"
 	flag		256		// FLAG_AUTOSETCLICK
 	alignment	8
 	text		"Start Game"
