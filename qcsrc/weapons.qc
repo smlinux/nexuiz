@@ -431,11 +431,10 @@ void W_Shotgun_Attack (void)
 
 void W_Grenade_Explode (entity ignore)
 {
-	te_explosion (self.origin);
-	effect (self.origin, "models/dpexplosion.spr32", 0, 20, 30);
+	Explosion (self, "weapons/Grenade_Impact.wav", 30);
 
 	RadiusDamage (self.owner, self, 0, 100, world);
-	sound (self, CHAN_BODY, "weapons/Grenade_Impact.wav", 1, ATTN_NORM);
+
 	remove (self);
 }
 
@@ -636,11 +635,10 @@ void W_Nex_Attack (void)
 
 void W_Hagar_Explode (void)
 {
-	te_explosion (self.origin);
-	effect (self.origin, "models/dpexplosion.spr32", 0, 20, 40);
-	
+	Explosion (self, "weapons/Rocket_Impact.wav", 40);
+
 	RadiusDamage (self.owner, self, 0, 100, world);
-	sound (self, CHAN_BODY, "weapons/Rocket_Impact.wav", 1, ATTN_NORM);
+
 	remove (self);
 }
 
@@ -695,11 +693,10 @@ void W_Hagar_Attack (void)
 
 void W_Rocket_Explode (entity ignore)
 {
-	te_explosion (self.origin);
-	effect (self.origin, "models/dpexplosion.spr32", 0, 20, 30);
-	
+	Explosion (self, "weapons/Rocket_Impact.wav", 30);
+
 	RadiusDamage (self.owner, self, 0, 100, ignore);
-	sound (self, CHAN_BODY, "weapons/Rocket_Impact.wav", 1, ATTN_NORM);
+
 	remove (self);
 }
 

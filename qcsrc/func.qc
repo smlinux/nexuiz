@@ -233,6 +233,76 @@ void traceline_hitcorpse (entity source, vector v1, vector v2, float nomonst, en
 
 /*
 ==================
+findbetterlocation
+
+Returns a point at least 12 units away from walls
+(useful for explosion animations, although the blast is performed where it really happened)
+Ripped from DPMod
+==================
+*/
+vector findbetterlocation (vector org)
+{
+	vector	loc;
+	
+	traceline (org, org - '12 0 0', TRUE, world);
+	if (trace_fraction < 1)
+	{
+		loc = trace_endpos;
+		traceline (loc, loc + '12 0 0', TRUE, world);
+		if (trace_fraction >= 1)
+			org = loc + '12 0 0';
+	}
+	
+	traceline (org, org - '-12 0 0', TRUE, world);
+	if (trace_fraction < 1)
+	{
+		loc = trace_endpos;
+		traceline (loc, loc + '-12 0 0', TRUE, world);
+		if (trace_fraction >= 1)
+			org = loc + '-12 0 0';
+	}
+	
+	traceline (org, org - '0 12 0' , TRUE, world);
+	if (trace_fraction < 1)
+	{
+		loc = trace_endpos;
+		traceline (loc, loc + '0 12 0', TRUE, world);
+		if (trace_fraction >= 1)
+			org = loc + '0 12 0';
+	}
+	
+	traceline (org, org - '0 -12 0', TRUE, world);
+	if (trace_fraction < 1)
+	{
+		loc = trace_endpos;
+		traceline (loc, loc + '0 -12 0', TRUE, world);
+		if (trace_fraction >= 1)
+			org = loc + '0 -12 0';
+	}
+	
+	traceline (org, org - '0 0 12' , TRUE, world);
+	if (trace_fraction < 1)
+	{
+		loc = trace_endpos;
+		traceline (loc, loc + '0 0 12', TRUE, world);
+		if (trace_fraction >= 1)
+			org = loc + '0 0 12';
+	}
+	
+	traceline (org, org - '0 0 -12', TRUE, world);
+	if (trace_fraction < 1)
+	{
+		loc = trace_endpos;
+		traceline (loc, loc + '0 0 -12', TRUE, world);
+		if (trace_fraction >= 1)
+			org = loc + '0 0 -12';
+	}
+	
+	return org;
+}
+
+/*
+==================
 crandom
 
 Returns a random number between -1.0 and 1.0
@@ -241,4 +311,24 @@ Returns a random number between -1.0 and 1.0
 float crandom (void)
 {
 	return 2 * (random () - 0.5);
+}
+
+// Violence
+
+/*
+==================
+Explosion
+
+Plays an explosion effect
+==================
+*/
+void Explosion (entity ent, string snd, float fps)
+{
+	vector	org2;
+	
+	org2 = findbetterlocation (ent.origin);
+	
+	te_explosion (org2);
+	effect (org2, "models/dpexplosion.spr32", 0, 20, fps);
+	sound (ent, CHAN_BODY, snd, 1, ATTN_NORM);
 }
