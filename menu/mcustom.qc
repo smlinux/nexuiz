@@ -468,7 +468,7 @@ void(void) nex_xp_enummaps =
 				temp = fgets( file );
 				maps_current.text = strzone( strcat( old, temp, "\n" ) );
 				strunzone( old );
-			} while( temp );
+			} while( validstring( temp ) );
 			fclose( file );
 		}
 
@@ -807,7 +807,8 @@ void(void) slist_info1 =
 	query = gethostcachevalue(SLIST_MASTERQUERYCOUNT);
 	reply = gethostcachevalue(SLIST_MASTERREPLYCOUNT);
 
-	strunzone(self.text);
+	if( self.text )
+		strunzone(self.text);
 
 	temp = strcat(ftos(reply), "/");
 	temp = strcat(temp, ftos(query), " Master Servers");
@@ -823,7 +824,8 @@ void(void) slist_info2 =
 	query = gethostcachevalue(SLIST_SERVERQUERYCOUNT);
 	reply = gethostcachevalue(SLIST_SERVERREPLYCOUNT);
 
-	strunzone(self.text);
+	if( self.text )
+		strunzone(self.text);
 
 	temp = strcat(ftos(reply), "/");
 	temp = strcat(temp, ftos(query), " Game Servers");
@@ -842,17 +844,27 @@ string mlist_saved;
 
 string player_name;
 
-string player_model_cvar = "player_model";
+string player_model_cvar = "_cl_playermodel";
 string player_name_cvar = "_cl_name";
-string player_skin_cvar = "player_skin";
+string player_skin_cvar = "_cl_playerskin";
 string player_fov_cvar = "player_fov";
 
-void(void) nex_player_init =
+void() nex_player_init =
+{
+	local entity lEntity;
+
+	mlist_saved = strzone( str_cvar( player_model_cvar ) );
+
+	lEntity = menu_getitem( "options_player_opt_playername_switch" );
+	lEntity.text = strzone( str_cvar( player_name_cvar ) );
+
+};
+
+void(void) nex_player_reinit =
 {
 	entity ent;
 
-	if( mlist_saved )
-		strunzone( mlist_saved );
+	strunzone( mlist_saved );
 	mlist_saved = strzone( str_cvar( player_model_cvar ) );
 
 	ent = menu_getitem( "options_player_opt_playername_switch" );
@@ -867,9 +879,8 @@ void(void) nex_player_name =
 
 void(void) nex_player_apply =
 {
-	cvar_set( player_model_cvar, mlist_current.picture_selected );
-	cvar_set( player_skin_cvar, mlist_current.picture_pressed );
-
+	cmd( strcat( "playermodel \"", mlist_current.picture_selected, "\"\n" ) );
+	cmd( strcat( "playerskin \"", mlist_current.picture_pressed, "\"\n" ) );
 	cmd( strcat( "name ", player_name, "\n" ) );
 };
 
@@ -923,7 +934,7 @@ void(void) nex_player_buildlist =
 
 	// remove the old player list
 	if( mlist_list ) {
-		entity node;
+		local entity node;
 
 		// save the old selected model
 		mlist_saved = strzone( mlist_current.name );
@@ -965,14 +976,14 @@ void(void) nex_player_buildlist =
 		dskin = strzone( fgets( handle ) );
 		dmodel = strzone( fgets( handle ) );
 		{
-			local string temp, old;
+			local string ltemp, lold;
 			dtext = strzone( "" );
 			do {
-				old = dtext;
-				temp = fgets( handle );
-				dtext = strzone( strcat( old, temp, "\n" ) );
-				strunzone( old );
-			} while( temp );
+				lold = dtext;
+				ltemp = fgets( handle );
+				dtext = strzone( strcat( lold, ltemp, "\n" ) );
+				strunzone( lold );
+			} while( validstring( ltemp ) );
 		}
 
 		if( !dname || !dpicture || !dskin || !dmodel || !dtext ) {
@@ -982,6 +993,7 @@ void(void) nex_player_buildlist =
 			strunzone( dpicture );
 			strunzone( dskin );
 			strunzone( dmodel );
+			//strunzone( dtext );
 
 			fclose( handle );
 			continue;

@@ -593,7 +593,6 @@ void(void) ITEM_TEXTBUTTON =
 void(void) ITEM_SLIDER_DRAW =
 {
 	vector slider_pos;
-	string t;
 
 	// draw the bar
 	if(self.picture_bar != "")

@@ -87,7 +87,8 @@ string	fgets(float fhandle)  = #50;
 void	fputs(float fhandle, string s)  = #51;
 
 float	strlen(string s)  = #52;
-string	strcat(string s1,string s2,...)  = #53;
+//string	strcat(string s1,string s2,...)  = #53;
+string	strcat(string s1, ...)  = #53;
 string	substring(string s, float start, float length)  = #54;
 
 vector	stov(string s)  = #55;
@@ -117,6 +118,15 @@ float	search_getsize(float handle) = #76;
 string	search_getfilename(float handle, float num) = #77;
 
 string	chr(float ascii) = #78;
+
+float 	etof(entity ent) = #79;
+entity 	ftoe(float num)	 = #80;
+
+float   validstring(string str) = #81;
+
+float 	altstr_count(string str) = #82;
+string  altstr_prepare(string str) = #83;
+string  altstr_get(string str, float num) = #84;
 
 /////////////////////////////////////////////////
 // Write* Functions
@@ -152,6 +162,11 @@ void	drawresetcliparea(void) = #459;
 
 vector  drawgetimagesize(string pic) = #460;
 
+float	cin_open(string file, string name) 	= #461;
+void	cin_close(string name) 			= #462;
+void	cin_setstate(string name, float type) 	= #463;
+float	cin_getstate(string name)		= #464;
+
 ////////////////////////////////////////////////
 // Menu functions
 ////////////////////////////////////////////////
@@ -172,3 +187,4 @@ string	findkeysforcommand(string command) = #610;
 float	gethostcachevalue(float type) = #611;
 string	gethostcachestring(float type, float hostnr) = #612;
 
+void 	parseentitydata(entity ent, string data) = #613;

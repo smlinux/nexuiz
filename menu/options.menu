@@ -76,6 +76,7 @@ Option menus
 	parent	opt_frame
 	origin	"-250 0"
 	init	nex_player_init
+	reinit  nex_player_reinit
 }
 // sound
 {
