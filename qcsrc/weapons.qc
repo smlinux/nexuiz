@@ -38,7 +38,7 @@ void W_UpdateAmmo (void)
 void W_UpdateWeapon (void)
 {
 	if (self.weapon == IT_LASER)
-		self.weaponmodel = "models/weapons/w_lazer.zym";
+		self.weaponmodel = "models/weapons/w_laser.md3";
 	else if (self.weapon == IT_UZI)
 		self.weaponmodel = "models/weapons/w_uzi.md3";
 	else if (self.weapon == IT_SHOTGUN)

@@ -4,7 +4,7 @@ void worldspawn (void)
 	BotInit();
 	precache_model ("models/player/player.zym");
 	
-	precache_model ("models/weapons/w_lazer.zym");
+	precache_model ("models/weapons/w_laser.md3");
 	precache_model ("models/weapons/w_uzi.md3");
 	precache_model ("models/weapons/w_shotgun.md3");
 	precache_model ("models/weapons/w_gl.md3");

@@ -250,7 +250,7 @@ void item_health100 (void)
 	StartItem ();
 }
 
-void misc_model (void)
+void misc_models (void)
 {
 	precache_model (self.model);
 	setmodel (self, self.model);

@@ -18,6 +18,7 @@ bot/bot_ed.qc
 dpextensions.qc
 func.qc
 
+sv_user.nc
 worldspawn.qc
 rain.qc
 casings.qc
