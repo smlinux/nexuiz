@@ -173,12 +173,16 @@ void W_SwitchWeapon (float wep)
 void W_NextWeapon (void)
 {
 	float	noammo;
-	
-	while (TRUE)
+
+	float	loops;
+
+// AK Let it test only every possible weapon then kick it out of the loop
+	while (loops <= 9)
 	{
 		noammo = FALSE;
 		
-		if (self.weapon == IT_CRYLINK)
+// AK Sombody messed up the sequence (please undo if it was extra made so)
+		if (self.weapon == IT_ROCKET_LAUNCHER)
 			self.weapon = IT_LASER;
 		else if (self.weapon == IT_LASER)
 		{
@@ -235,14 +239,19 @@ void W_NextWeapon (void)
 			W_UpdateAmmo ();
 			return;
 		}
+		
+		loops++;
 	}
 }
 
 void W_PreviousWeapon (void)
 {
 	float	noammo;
+
+	float 	loops;
 	
-	while (TRUE)
+// AK the same as above
+	while (loops <= 9)
 	{
 		noammo = FALSE;
 		
@@ -303,6 +312,8 @@ void W_PreviousWeapon (void)
 			W_UpdateAmmo ();
 			return;
 		}
+		
+		loops++;
 	}
 }
 
@@ -598,7 +609,7 @@ void W_Grenade_Attack2 (void)
 	gren.velocity = v_forward * 1400 + v_up * 100;
 	gren.angles = vectoangles (gren.velocity);
 	gren.avelocity = '150 1500 150';
-	
+		
 	gren.touch = W_Grenade_Explode;
 	gren.think = W_Grenade_FuseExplode;
 	gren.nextthink = time + 5;
