@@ -309,6 +309,7 @@ void W_PreviousWeapon (void)
 
 float W_CheckAmmo (void)
 {
+	W_UpdateAmmo ();
 	if (self.weapon == IT_LASER)
 		return TRUE;
 	else if (self.currentammo)
@@ -316,7 +317,6 @@ float W_CheckAmmo (void)
 		
 	self.weapon = W_GetBestWeapon ();
 	W_UpdateWeapon ();
-	W_UpdateAmmo ();
 	
 	return FALSE;
 }
@@ -413,6 +413,7 @@ void W_Uzi_Attack (void)
 	self.punchangle_z = random () - 0.5;
 	
 	self.attack_finished = time + 0.075;
+	self.ammo_nails = self.ammo_nails - 1;
 }
 
 // Don't shoot this weapon, it crashes :)
@@ -488,6 +489,7 @@ void W_Grenade_Attack (void)
 	gren.nextthink = time + 2;
 	
 	self.attack_finished = time + 1;
+	self.ammo_rockets = self.ammo_rockets - 1;
 }
 
 void W_Electro_Touch (void)
@@ -544,6 +546,37 @@ void W_Electro_Attack (void)
 	proj.nextthink = time + 3;
 	
 	self.attack_finished = time + 0.6;
+	self.ammo_cells = self.ammo_cells - 1;
+}
+
+void W_Crylink_Attack (void)
+{
+	vector	org;
+	
+	sound (self, CHAN_WEAPON, "weapons/crylink.wav", 1, ATTN_NORM);
+	org = self.origin + self.view_ofs + v_forward * 18 + v_right * 7 + v_up * -9;
+	makevectors (self.v_angle);
+
+	// FIXME: make it accurate!
+
+	traceline (org, self.origin + self.view_ofs + (v_forward * 4096), FALSE, self);
+
+	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+	WriteByte (MSG_BROADCAST, 76);
+	WriteCoord (MSG_BROADCAST, org_x);
+	WriteCoord (MSG_BROADCAST, org_y);
+	WriteCoord (MSG_BROADCAST, org_z);
+	WriteCoord (MSG_BROADCAST, trace_endpos_x);
+	WriteCoord (MSG_BROADCAST, trace_endpos_y);
+	WriteCoord (MSG_BROADCAST, trace_endpos_z);
+	WriteCoord (MSG_BROADCAST, self.v_angle_x);
+	WriteCoord (MSG_BROADCAST, self.v_angle_y);
+	WriteCoord (MSG_BROADCAST, self.v_angle_z);
+
+	te_spike (trace_endpos);
+
+	self.ammo_cells = self.ammo_cells - 0.25;
+	self.attack_finished = time + 0.165;
 }
 
 void W_Nex_Smite (void)
@@ -596,11 +629,64 @@ void W_Nex_Attack (void)
 	PointSound (trace_endpos, "weapons/NexImpact.wav", 1, ATTN_NORM);
 	
 	self.attack_finished = time + 1;
+	self.ammo_cells = self.ammo_cells - 1;
+}
+
+void W_Hagar_Explode (void)
+{
+	te_explosion (self.origin);
+	RadiusDamage (self.owner, self, 0, 100);
+	sound (self, CHAN_BODY, "weapons/Rocket_Impact.wav", 1, ATTN_NORM);
+	remove (self);
+}
+
+void W_Hagar_Touch (void)
+{
+	if (other == self.owner)
+		return;
+	else if (pointcontents (self.origin) == CONTENT_SKY)
+	{
+		remove (self);
+		return;
+	}
+	
+	W_Hagar_Explode ();
 }
 
 void W_Hagar_Attack (void)
 {
+	entity	missile;
+	vector	org;
+	
+	sound (self, CHAN_WEAPON, "weapons/Hagar_Fire.wav", 1, ATTN_NORM);
+	
+	missile = spawn ();
+	missile.owner = self;
+	missile.classname = "rocket";
+	
+	missile.takedamage = DAMAGE_YES;
+	missile.health = 1;
+	missile.event_hurt = W_Hagar_Explode;
+	
+	missile.movetype = MOVETYPE_FLY;
+	missile.solid = SOLID_BBOX;
+	setmodel (missile, "models/hagarmissile.mdl");
+	setsize (missile, '0 0 0', '0 0 0');
+	
+	makevectors (self.v_angle);
+	
+	org = self.origin + self.view_ofs + v_forward * 20 + v_right * 4 + v_up * -15;
+	
+	setorigin (missile, org);
+	missile.velocity = v_forward * 2000;
+	missile.angles = vectoangles (missile.velocity);
+	
+	missile.touch = W_Hagar_Touch;
+	missile.think = SUB_Remove;
+	missile.nextthink = time + 1;
+	
 	self.attack_finished = time + 0.2;
+	self.ammo_rockets = self.ammo_rockets - 0.25;
 }
 
 void W_Rocket_Explode (entity ignore)
@@ -662,42 +748,13 @@ void W_Rocket_Attack (void)
 	missile.nextthink = time + 1;
 	
 	self.attack_finished = time + 0.5;
-}
-
-void W_Crylink_Attack (void)
-{
-	vector	org;
+	self.ammo_rockets = self.ammo_rockets - 1;
 	
-	sound (self, CHAN_WEAPON, "weapons/crylink.wav", 1, ATTN_NORM);
-	org = self.origin + self.view_ofs + v_forward * 18 + v_right * 7 + v_up * -9;
-	makevectors (self.v_angle);
-
-	// FIXME: make it accurate!
-
-	traceline (org, self.origin + self.view_ofs + (v_forward * 4096), FALSE, self);
-
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, 76);
-	WriteCoord (MSG_BROADCAST, org_x);
-	WriteCoord (MSG_BROADCAST, org_y);
-	WriteCoord (MSG_BROADCAST, org_z);
-	WriteCoord (MSG_BROADCAST, trace_endpos_x);
-	WriteCoord (MSG_BROADCAST, trace_endpos_y);
-	WriteCoord (MSG_BROADCAST, trace_endpos_z);
-	WriteCoord (MSG_BROADCAST, self.v_angle_x);
-	WriteCoord (MSG_BROADCAST, self.v_angle_y);
-	WriteCoord (MSG_BROADCAST, self.v_angle_z);
-
-	self.ammo_cells = self.ammo_cells - 1;
-	self.attack_finished = time + 0.125;
 }
 
 void W_Attack (void)
 {
-	if (!W_CheckAmmo ())
-		return;
-	
-	else if (self.weapon == IT_LASER)
+	if (self.weapon == IT_LASER)
 		W_Laser_Attack ();
 	else if (self.weapon == IT_UZI)
 		W_Uzi_Attack ();
@@ -715,4 +772,8 @@ void W_Attack (void)
 		W_Hagar_Attack ();
 	else if (self.weapon == IT_ROCKET_LAUNCHER)
 		W_Rocket_Attack ();
+
+	if (!W_CheckAmmo ())
+		return;
+
 }

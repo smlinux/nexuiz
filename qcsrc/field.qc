@@ -34,3 +34,6 @@ string	string_null;
 .void()		think1;
 .float state;
 .float		t_length, t_width;
+
+.float		hagar_count;
+.float		crylink_count;
