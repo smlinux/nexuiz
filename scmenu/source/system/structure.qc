@@ -140,7 +140,6 @@ bool() _Menu_SelectUp =
 	lSelected = Menu_ActiveItem;
 	if( !lSelected ) {
 		_Menu_Structure_Debug( 1, "_SelectUp: Bad Menu_ActiveItem!\n" );
-		crash();
 		return false;
 	}
 

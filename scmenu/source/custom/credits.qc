@@ -10,7 +10,6 @@ void() Item_Nex_Credits_Spawn =
 	if( lFile < 0 ) {
 		// shut up
 		Menu_DeleteAfterToggle( self );
-		crash();
 		return;
 	}
 
