@@ -1,6 +1,5 @@
 Bugs:
 No water and slime textures for some strange reason
-The rockets disappear after a certain amount of time
 Teleporter doesn't work
 
 SPAWNING/MISC:
@@ -10,9 +9,7 @@ When dead, leave corpse. Fade away corpse in 10 seconds.
 
 WEAPONS:
 Laser: Autoaim and kill any projectile coming (can destory rockets, grenades, hagar missiles). This is hard, but I think it will add to the gameplay without making it to fancy and complex.
-Shotgun: Automatic fast 3 shots
 Add weapon animations. Ask Vermeulen for description. I am hoping for a client side moving of the weapon, moving it back depending on how powerful the shot was, and moving with the users jumps/runs/stafing/hits etc.
-Grenade Launcher: The grenade launcher should fire its grenades as normal, with a 6 second timer. The secondary fire for the grenade launcher should actually be able to explode every single grenade the user has fired
 
 POWERUPS:
 Add energy powerup - Makes the user run 3 times as fast, and jumps 3 times as high. 30 seconds, 2 minute respond time

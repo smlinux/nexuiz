@@ -478,7 +478,7 @@ void W_Uzi_Attack (void)
 {
 	sound (self, CHAN_WEAPON, "weapons/Uzi_Fire.wav", 1, ATTN_NORM);
 
-	fireBullet (v_forward, 100, 8, IT_SHOTGUN);
+	fireBullet (v_forward, 100, 6, IT_UZI);
 
 	self.punchangle = (randomvec() + '-1 0 0') * 2;
 	self.punchangle_z = 0; // don't want roll
@@ -501,7 +501,7 @@ void W_Uzi_Attack2 (void)
 	if (self.ammo_nails<8)
 		bullets = self.ammo_nails;
 	else
-		bullets = 8;
+		bullets = 4;
 
 	for (sc = bullets; sc > 0; sc = sc - 1)
 		fireBullet (v_forward, 270, 8, IT_SHOTGUN);
@@ -530,7 +530,7 @@ void W_Grenade_Explode (entity ignore)
 {
 	ImpactEffect (self, IT_GRENADE_LAUNCHER);
 
-	RadiusDamage (self.owner, self, 0, 100, 50, 100, world, 400);
+	RadiusDamage (self.owner, self, 0, 100, 50, 200, world, 400);
 
 	remove (self);
 }
@@ -542,10 +542,12 @@ void W_Grenade_FuseExplode (void)
 
 void W_Grenade_Touch (void)
 {
-	if (other.classname == "player" || other.classname == "corpse")
-		W_Grenade_Explode (other);
-	else
-		sound (self, CHAN_BODY, "weapons/Grenade_Bounce.wav", 1, ATTN_NORM);
+	// I decided to take this out to add more skill to using the grenade launcher, so the user always has to trigger it.
+	// I increased the power of the grenade launcher because of this.
+	//if (other.classname == "player" || other.classname == "corpse")
+	//	W_Grenade_Explode (other);
+	//else
+	sound (self, CHAN_BODY, "weapons/Grenade_Bounce.wav", 1, ATTN_NORM);
 }
 
 void W_Grenade_Attack (void)
@@ -985,7 +987,7 @@ void W_Rocket2_Explode (entity ignore)
 {
 	ImpactEffect (self, IT_ROCKET_LAUNCHER);
 
-	RadiusDamage (self.owner, self, 0, 15, 5, 200, ignore, 400);
+	RadiusDamage (self.owner, self, 0, 35, 15, 200, ignore, 400);
 
 	remove (self);
 }
