@@ -497,7 +497,7 @@ void W_Laser_Attack (void)
 
 	te_spark (trace_endpos, v_forward, 55);
 
-	self.attack_finished = time + 0.600;
+	self.attack_finished = time + 0.400;
 }
 
 void W_Laser_Attack2 (void)
@@ -1108,7 +1108,7 @@ void W_Nex_Attack (void)
 	if (game & GAME_INSTAGIB)
 		FireRailgunBullet (org, self.origin + self.view_ofs + v_forward * 4096, 800, IT_NEX);
 	else
-		FireRailgunBullet (org, self.origin + self.view_ofs + v_forward * 4096, 80, IT_NEX);
+		FireRailgunBullet (org, self.origin + self.view_ofs + v_forward * 4096, 100, IT_NEX);
 
 	te_plasmaburn (trace_endpos);
 

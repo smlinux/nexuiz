@@ -15,6 +15,7 @@ void Obituary (entity attacker, entity targ, float deathtype)
 			else if (deathtype == IT_HAGAR) {bprint(s);bprint(" should have used a different weapon\n");}
 			else if (deathtype == IT_ROCKET_LAUNCHER) {bprint(s);bprint(" exploded\n");}
 			else {bprint(s);bprint(" competes for the darwin awards\n");}
+			self.frags = self.frags - 1;
 		}
 		else if (attacker.classname == "player")
 		{
@@ -28,6 +29,7 @@ void Obituary (entity attacker, entity targ, float deathtype)
 			else if (deathtype == IT_HAGAR) {bprint(s);bprint(" was pummeled by ");bprint(attacker.netname);bprint("\n");}
 			else if (deathtype == IT_ROCKET_LAUNCHER) {bprint(s);bprint(" was given a lesson in rocketry by ");bprint(attacker.netname);bprint("\n");}
 			else {bprint(s);bprint(" was killed by ");bprint(attacker.netname);bprint("\n");}
+			attacker.frags = attacker.frags + 1;
 		}
 		else
 		{
