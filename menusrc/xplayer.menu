@@ -1,0 +1,193 @@
+/*
+Property of Alientrap
+
+Singleplayer & Multiplayer menu
+*/
+/*
+template for map selection
+*/
+/////////////////////////
+// map selection window
+// frame
+{
+	type	ITEM_WINDOW
+	name	mapselection
+}
+{
+	type	ITEM_WINDOW
+	name	mapselection_frame
+	parent	mapselection
+	origin	"100 0"
+	clip_pos "100 0"
+	clip_size "500 100"
+	init	nex_xp_build_maplist
+}
+// prev button
+{
+	type 	ITEM_TEXTBUTTON
+	name	mapselection_prev
+	parent	mapselection
+	text	"Prev"
+	pos		"0 43.5"
+	action	nex_xp_prev
+}
+// next button
+{
+	type	ITEM_TEXTBUTTON
+	name	mapselection_next
+	parent	mapselection
+	text	"Next"
+	pos		"600 43.5"
+	action	nex_xp_next
+}
+// template used to create the different pictures
+{
+	type 	ITEM_PICTURE
+	name  	mapselection_template_picture
+	parent	mapselection_frame
+	picture	"gfx/m_nomap"
+	size	"100 100"
+	pos		"-100 0 0"
+	flag	256
+	action	nex_xp_click
+}
+{
+	type 	ITEM_TEXT
+	name	mapselection_template_text
+	parent	mapselection_frame
+	text	template
+	alignment 1
+	font_size	"13 13 0"
+	pos		"-110 43.5 0"
+	flag	256
+	action 	nex_xp_click
+	//size	"100 13 0"
+}
+{
+	type 	ITEM_RECTANGLE
+	name	mapselection_selsquare
+	parent	mapselection_frame
+	color	"0.9 0.9 0.6" //"^1 0.5 0.5"
+	drawflag 2
+	size	"100 100"
+}
+///////////////////////
+// singleplayer stuff
+// std stuff
+{
+	type	ITEM_WINDOW
+	name	singleplayer
+}
+{
+	type	ITEM_REFERENCE
+	name	singleplayer_bg_ref
+	parent	singleplayer
+	link	background
+}
+{
+	type	ITEM_REFERENCE
+	name	singleplayer_mainframe
+	parent	singleplayer
+	link	mainframe
+	orderpos 1000
+}
+// singleplayer options
+{
+	type 	ITEM_WINDOW
+	name	singleplayer_frame
+	parent	singleplayer
+	origin 	"600 200"
+}
+// map selection
+{
+	type 	ITEM_REFERENCE
+	name  	singleplayer_mapselection
+	parent	singleplayer_frame
+	link	mapselection
+	origin 	"-400 -100"
+}
+// max frags
+{
+	type 		ITEM_TEXTBUTTON
+	name		singleplayer_maxfrag_text
+	parent		singleplayer_frame
+	text		"Frag Limit"
+	pos			"0 0 0"
+	//font_size	"10 10 0"
+	alignment	16		// TEXT_ALIGN_RIGHTPOS
+	flag		256		// FLAG_AUTOSETCLICK
+	key			nex_redirect_key
+}
+// Switch
+{
+	type		ITEM_EDITBOX
+	name		singleplayer_maxfrag_switch
+	parent		singleplayer_maxfrag_text
+	pos			"10 0 0"
+	//font_size	"10 10 0"
+	flag 		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
+	maxlen		3
+	text		"0"
+	refresh		nex_xp_maxfrags
+}
+// max time
+{
+	type 		ITEM_TEXTBUTTON
+	name		singleplayer_maxtime_text
+	parent		singleplayer_frame
+	text		"Time Limit"
+	pos			"0 15 0"
+	//font_size	"10 10 0"
+	alignment	16		// TEXT_ALIGN_RIGHTPOS
+	flag		256		// FLAG_AUTOSETCLICK
+	key			nex_redirect_key
+}
+// Switch
+{
+	type		ITEM_EDITBOX
+	name		singleplayer_maxtime_switch
+	parent		singleplayer_maxtime_text
+	pos			"10 15 0"
+	//font_size	"10 10 0"
+	flag 		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
+	maxlen		3
+	text		"0"
+	refresh		nex_xp_maxtime
+}
+// max bots
+{
+	type 		ITEM_TEXTBUTTON
+	name		singleplayer_maxbots_text
+	parent		singleplayer_frame
+	text		"Max Bots"
+	pos			"0 30 0"
+	//font_size	"10 10 0"
+	alignment	16		// TEXT_ALIGN_RIGHTPOS
+	flag		256		// FLAG_AUTOSETCLICK
+	key			nex_redirect_key
+}
+// Switch
+{
+	type		ITEM_EDITBOX
+	name		singleplayer_maxbots_switch
+	parent		singleplayer_maxbots_text
+	pos			"10 30 0"
+	//font_size	"10 10 0"
+	flag 		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
+	maxlen		3
+	text		"4"
+	refresh		nex_xp_maxbots
+}
+// start
+{
+	type 		ITEM_TEXTBUTTON
+	name		singleplayer_start
+	parent		singleplayer_frame
+	pos			"0 60"
+	flag		256		// FLAG_AUTOSETCLICK
+	alignment	8
+	text		"Start Game"
+	action		nex_sp_start
+}
+//////////////////////
+// multiplayer stuff
