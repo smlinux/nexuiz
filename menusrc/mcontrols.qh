@@ -96,6 +96,9 @@ const float		BUTTON_NORMAL	= 0;
 const float		BUTTON_SELECTED = 1;
 const float		BUTTON_PRESSED	= 2;
 
+// ITEM_EDITBOX constantes
+const float		EDITBOX_CURSOR_FREQ = 1;
+
 // flags constant
 
 const float	FLAG_STANDARD		= 1;	// use this flag if you want the standard behavior and not what the control recommends
@@ -179,6 +182,10 @@ const float FLAG_CHILDDRAWREFRESHONLY = 4096;
 
 .void(void) switchchange;
 
+// ITEM_EDITBOX (derived from ITEM_TEXT mostly)
+.string format; // //wildcards are * for each letter except the next after it - \* for * and */ space ' ' for one letter e.g. "   .   .   .   " for an ip field
+.float maxlen; // -1 for infinite
+.float _cursorpos;
 // functions
 
 /*void(void) ctinit_picture;

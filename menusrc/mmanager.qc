@@ -312,6 +312,9 @@ void(void) menu_performreinit =
 	// clear history
 	menu_clearhistory();
 
+	// reset the key hook (if necessary at all)
+	menu_keyhook = null_function;
+
 	// and reinit all menu items
 	self = null_entity;
 	while((self = nextent(self)) != null_entity)
@@ -481,6 +484,9 @@ void(entity menu) menu_drawwindow =
 			} else if(ent.flag & FLAG_DRAWREFRESHONLY)
 			{
 				raise_refresh(ent);
+			} else if(ent.flag & FLAG_DRAWONLY)
+			{
+				// TODO: find a better solution for this hack
 			} else if(ent._parent)
 			{
 				if(ent._parent.flag & FLAG_CHILDDRAWREFRESHONLY)
@@ -584,6 +590,12 @@ void(void) menu_shutdown =
 
 void(float keynr, float ascii) menu_keydown =
 {
+	// is a keyhook set ?
+	if(menu_keyhook != null_function)
+	{
+		// call it
+		menu_keyhook(keynr, ascii);
+	}
 	// before calling the current keydown functions, process the mouse again
 	// so only the correct item is called
 	// (except mouse wheel up and down)
@@ -621,7 +633,7 @@ void(float keynr, float ascii) menu_keydown =
 		// call window keydown
 		raise_key(menu_activewindow, keynr, ascii);
 	}
-	else
+	else if(menu_hasevents(menu_selected))
 	{
 		raise_key(menu_selected, keynr, ascii);
 	}

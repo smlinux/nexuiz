@@ -176,3 +176,8 @@ void(entity ent) menu_pushhistory;
 void(void) menu_pophistory;
 float(entity ent) menu_verifyhistory;
 void(void)	menu_clearhistory;
+
+// key hook - only as long as there is no history change or the menu is closed
+var void(float keynr, float ascii) menu_keyhook;
+
+

@@ -817,6 +817,193 @@ void(void) ITEM_TEXTSWITCH =
 	ctcall_init();
 };
 
+// ITEM_EDITBOX
+
+void(void) ITEM_EDITBOX_REINIT =
+{
+	self._cursorpos = 0;
+	self._button_state = BUTTON_NORMAL;
+};
+
+void(void) ITEM_EDITBOX_DRAW =
+{
+	vector csize, cpos;
+
+	if(self.text != "")
+		ITEM_TEXT_DRAW();
+
+	if(mod(time * 1000, 1000 / EDITBOX_CURSOR_FREQ) > 500 / EDITBOX_CURSOR_FREQ)
+		return;
+
+	csize_x = 1.5;
+	csize_y = self.font_size_y;
+	csize_z = 0;
+	cpos = self.pos;
+	cpos_x = cpos_x + self._cursorpos * self.font_size_x;
+
+	if(self._button_state == BUTTON_NORMAL)
+		menu_fillarea(cpos, csize, self.color, self.alpha, self.drawflag);
+	else
+		menu_fillarea(cpos, csize, self.color_selected, self.alpha_selected, self.drawflag_selected);
+};
+
+void(float ascii) ITEM_EDITBOX_INSERT =
+{
+	string firsthalf, secondhalf;
+	float len;
+
+	if(self._cursorpos > strlen(self.text))
+		return;
+
+	if(self.format == "")
+	{
+		// no format stuff, so lets have fun
+		firsthalf = substring(self.text, 0, self._cursorpos);
+		secondhalf = substring(self.text, self._cursorpos, strlen(self.text) - self._cursorpos);
+		strunzone(self.text);
+		self.text = strcat(firsthalf, chr(ascii));
+		self.text = strcat(self.text, secondhalf);
+		if(self.maxlen > 0 && strlen(self.text) > self.maxlen)
+		{
+			// remove the last char(s)
+			self.text = substring(self.text, 0, self.maxlen);
+		}
+		// move the cursor forward
+		if(strlen(self.text) >= self._cursorpos)
+			self._cursorpos = self._cursorpos + 1;
+
+		self.text = strzone(self.text);
+	}
+	else // here begins the funny part
+	{
+		// TODO: add wildcard support :-/
+		// move the cursor to the next space
+		len = strlen(self.format);
+		while(substring(self.format, self._cursorpos, 1) != " " && len > self._cursorpos)
+		{
+			self._cursorpos = self._cursorpos + 1;
+		}
+		if(self._cursorpos >= len)
+			return;
+
+		firsthalf = substring(self.text, 0, self._cursorpos);
+		secondhalf = substring(self.text, self._cursorpos + 1 , strlen(self.text) - self._cursorpos - 1);
+		strunzone(self.text);
+		self.text = strcat(firsthalf, chr(ascii), secondhalf);
+		self.text = strzone(self.text);
+	}
+};
+
+void(void) ITEM_EDITBOX_LEFT =
+{
+	if(self._cursorpos > 0)
+		self._cursorpos = self._cursorpos - 1;
+};
+
+void(void) ITEM_EDITBOX_RIGHT =
+{
+	if(self._cursorpos < strlen(self.text))
+		self._cursorpos = self._cursorpos + 1;
+};
+
+void(float keynr, float ascii) ITEM_EDITBOX_KEY =
+{
+	if(ctcall_key(keynr, ascii))
+		return;
+
+	if(ascii >= 20 && ascii <= 126)
+	{
+		ITEM_EDITBOX_INSERT(ascii);
+	} else if(keynr == K_BACKSPACE)
+	{
+		if(self.format == "")
+		{
+			string firsthalf, secondhalf;
+
+			firsthalf = substring(self.text,0, self._cursorpos - 1);
+			secondhalf = substring(self.text,self._cursorpos, strlen(self.text) - self._cursorpos);
+			strunzone(self.text);
+			self.text = strcat(firsthalf, secondhalf);
+			self.text = strzone(self.text);
+
+			ITEM_EDITBOX_LEFT();
+		}
+	} else if(keynr == K_ENTER)
+	{
+		if(self._action)
+			self._action();
+		//snd_play(self.sound_action);
+	} else if(keynr == K_LEFTARROW)
+	{
+		ITEM_EDITBOX_LEFT();
+	}
+	else if(keynr == K_RIGHTARROW)
+	{
+		ITEM_EDITBOX_RIGHT();
+	}
+	else
+		def_keyevent(key, ascii);
+
+	snd_play(self.sound_pressed);
+};
+
+void(void) ITEM_EDITBOX_REFRESH =
+{
+	if(menu_selected != self)
+		self._button_state = BUTTON_NORMAL;
+	else if(self._button_state == BUTTON_NORMAL)
+	{
+		self._button_state = BUTTON_SELECTED;
+
+		if(self.sound_selected)
+			snd_play(self.sound_selected);
+	}
+
+	ITEM_TEXT_REFRESH();
+};
+
+void(void) ITEM_EDITBOX =
+{
+	if(self.sound_selected != "")
+		snd_loadsound(self.sound_selected, SOUND_ENFORCELOADING);
+	else
+		self.sound_selected = SOUND_SELECT;
+
+	if(self.sound_pressed != "")
+		snd_loadsound(self.sound_pressed, SOUND_ENFORCELOADING);
+	else
+		self.sound_pressed = SOUND_ACTION;
+
+	// if flag wasnt set yet, then set it to FLAG_DRAWONLY
+	if(self.flag == 0)
+		self.flag = FLAG_AUTOSETCLICK;
+
+	if(self.color == '0 0 0')
+		self.color = ITEM_PICTURE_NORMAL_COLOR;
+	if(self.alpha == 0)
+		self.alpha = ITEM_PICTURE_NORMAL_ALPHA;
+	if(self.color_selected == '0 0 0')
+		self.color_selected = ITEM_PICTURE_SELECTED_COLOR;
+	if(self.alpha_selected == 0)
+		self.alpha_selected = ITEM_PICTURE_SELECTED_ALPHA;
+
+	ITEM_TEXT();
+
+	self.text = strzone(self.text);
+
+	item_init(
+		defct_reinit,
+		defct_destroy,
+		ITEM_EDITBOX_KEY,
+		ITEM_EDITBOX_DRAW,
+		defct_mouse_enter,
+		defct_mouse_leave,
+		defct_action,
+		ITEM_EDITBOX_REFRESH);
+
+	ctcall_init();
+};
+
 /*
 /////////////////////////////////////////////////////////////////////////
 // The "actual" funtions

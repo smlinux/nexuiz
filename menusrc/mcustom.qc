@@ -388,6 +388,42 @@ void(void) nex_options_invmouse_refresh =
 		self.value = 1;
 };
 
+void(void) nex_snd =
+{
+	entity ent;
+	ent = menu_getitem("options_settings_ref");
+	ent._child = menu_getitem("options_sound");
+	menu_jumptowindow(ent, false);
+}
+
+void(void) nex_snd_cd_init =
+{
+	if(cvar("cdaudioinitialized"))
+	{
+		self.flag = FLAG_AUTOSETCLICK;
+		self.color = ITEM_TEXT_NORMAL_COLOR;
+	}
+	else
+	{
+		self.flag = FLAG_NOSELECT | FLAG_DRAWONLY | FLAG_CHILDDRAWONLY;
+		self.color = '0.5 0.5 0.5';
+	}
+};
+
+void(void) nex_snd_snd_init =
+{
+	if(cvar("snd_initialized"))
+	{
+		self.flag = FLAG_AUTOSETCLICK;
+		self.color = ITEM_TEXT_NORMAL_COLOR;
+	}
+	else
+	{
+		self.flag = FLAG_NOSELECT | FLAG_DRAWONLY | FLAG_CHILDDRAWONLY;
+		self.color = '0.5 0.5 0.5';
+	}
+};
+
 void(void) nex_cc =
 {
 	entity ent;
@@ -433,6 +469,20 @@ void(void) nex_cc_check_hwgamma =
 void(void) nex_cc_check_gamma = // used in key -- BADBAD HACKHACK
 {
 	if(cvar("v_hwgamma") && cvar("vid_hardwaregammasupported") && !cvar("v_color_enable"))
+	{
+		self.flag = FLAG_AUTOSETCLICK;
+		self.color = ITEM_TEXT_NORMAL_COLOR;
+	}
+	else
+	{
+		self.flag = FLAG_NOSELECT;
+		self.color = '0.5 0.5 0.5';
+	}
+};
+
+void(void) nex_cc_check_grey = // used in key -- BADBAD HACKHACK
+{
+	if(cvar("v_hwgamma") && cvar("vid_hardwaregammasupported") && cvar("v_color_enable"))
 	{
 		self.flag = FLAG_AUTOSETCLICK;
 		self.color = ITEM_TEXT_NORMAL_COLOR;

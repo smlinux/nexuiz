@@ -297,8 +297,6 @@ void(float keynr, float ascii)	def_keyevent =
 		}
 	} else if(keynr == K_ENTER || keynr == K_MOUSE1)
 	{
-		eprint(self);
-		print("Action called\n");
 		if(self._action)
 			self._action();
 		// move to the child menu
@@ -432,5 +430,24 @@ string(float n, string s) getaltstring =
 	}
 
 	return substring(s, start, length);
+};
+
+void(string key) bind_unbindkey =
+{
+	cmd(strcat("unbind",key,"\n"));
+};
+
+void(string key, string command) bind_bindkey =
+{
+	cmd(strcat("bind",key," ",command,"\n"));
+};
+
+string(float keynum) bind_getstringforkey =
+{
+	return keynumtostring(keynum);
+};
+
+string(string command) bind_getkeylist =
+{
 };
 

@@ -111,6 +111,13 @@ void	loadfromfile(string file) = #69;
 
 float	mod(float val, float m) = #70;
 
+float	search_begin(string pattern, float caseinsensitive, float quiet) = #74;
+void	search_end(float handle) = #75;
+float	search_getsize(float handle) = #76;
+string	search_getfilename(float handle, float num) = #77;
+
+string	chr(float ascii) = #78;
+
 /////////////////////////////////////////////////
 // Write* Functions
 /////////////////////////////////////////////////
@@ -159,3 +166,4 @@ float	isfunction(string function_name) = #607;
 void	callfunction(...) = #605;
 void	writetofile(float fhandle, entity ent) = #606;
 vector	getresolution(float number) = #608;
+string	keynumtostring(float keynum) = #609;

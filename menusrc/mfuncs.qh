@@ -48,6 +48,12 @@ void(void)	ctcall_mouse_leave;
 void(void)	ctcall_action;
 void(void)	ctcall_refresh;
 
+// bind stuff
+void(string key) 				 bind_unbindkey;
+string(float keynr) 			 bind_getstringforkey;
+string(string command) 			 bind_getkeylist; // returns altstring
+void(string key, string command) bind_bindkey;
+
 // control event function initializer
 void(void(void) reinitevent, void(void) destroyevent, void(float key, float ascii) keyevent, void(void) drawevent, void(void) mouse_enterevent, void(void) mouse_leaveevent, void(void) actionevent, void(void) refreshevent)
 	item_init;
