@@ -538,7 +538,7 @@ void PlayerPostThink (void)
 		{
 			if (self.jump_flag < -100 && !self.watertype == CONTENT_WATER) // HitGround
 			{
-				soundrandom = random() * 3;
+				soundrandom = random() * 4;
 				if (soundrandom < 1)
 					sound (self, CHAN_BODY, "misc/hitground1.wav", 1, ATTN_NORM);
 				if (soundrandom < 2)
