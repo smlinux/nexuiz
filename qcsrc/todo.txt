@@ -1,0 +1,130 @@
+*********************************
+************MENU*****************
+- Lan listing
+- Player model and skin selection
+- Player options (player name)
+- Replace Cursor graphics
+- Add menu music
+- Add deathmatch game options
+- Option to play music
+
+
+*********************************
+*************QC******************
+-ARMOR-
+	- 25 Armor, Armor Shard, 100 Armor (25 armor with new skin)
+
+-POWERUPS-
+	- Strength - Player model turns completely white. This is alike to the painkiller powerup, the users screen with turn mostly white, they will be able to run twice as fast, their weapon will automaticly be a railgun with radius damage equal to the rocket launcher. They have 100 health, or 15 seconds (if the 100 health is taken away the powerup is gone). This powerup can also be earned, with kills in a short amount of time. If the user gets about 8 kills in 13 seconds, this powerup is given to the user.
+	- Speed - Player model turns completely yellow. The users view will turn blury, and the user will be able to run 2x as fast.
+	- Invincible - Player model turns completely red. Completely invincible from normal attacks. The users view will be tinted red.
+
+-ANIMATION-
+	-Jumping animation
+
+-WEAPONS-
+	-Shotgun - secondary fire - auto 3 shots fired
+	-Electro - Replace secondary fire with third fire with one bounce
+
+-BUGS/OTHER-
+	- Add quake1/halflife entity support (just the weapons)
+	- Weird bug where the user starts firing from the other side of the screen, mostly happens with laser/crylink
+	- corpses not fading away
+	- People not dying when falling into the black
+	- change the player's solid to SOLID_BBOX before the traceline and back after, so that the uzi affects corpses
+
+-BOTS-
+	- Make waypoints for all levels
+	- Personalitys for the bots (names for bots with certain models)
+	- fix HORRIBLE use of weapons
+	- Secondary weapon support (grenade/rocket launcher might be difficult)
+
+
+*********************************
+************Engine***************
+
+-PARTICLE EFFECTS-
+	- Crylink (white trail, make the hit effect white also)
+	- Electro secondary explosion (smaller DP fireball effect, with blue skin)
+	- Grey Smoke for Uzi, Shotgun
+	- New effect for the laser explosion
+	- New Nexgun beam and explosion
+	- Hagar explosion (less spamy)
+	- Spark effect for levels
+	- Rocket launcher explosion, more powerful
+
+-3D GRAPHICS-
+	- Add DPshader
+	- Bloom effect
+	- Decal clipping
+
+-2D GRAPHICS
+	- Powerup images when powerup is picked up (showlmp)
+	- Don't show monsters/secrets on the bottom of the scoreboard
+	- More advanced scoreboard?
+
+*********************************
+******Animation and art**********
+
+-3D GRAPHICS-
+	- New weapon model for Uzi
+	- New weapon model for Hagar
+	- A small piece of flesh for Gib model
+	- A medium piece of flesh for gib model
+	- A large piece of flesh for gib model
+	- Large Rocket model (for rocket launcher)
+	- Small rocket model (for Hagar)
+
+-2D GRAPHICS-
+	- Change hud numbers to fit hud
+	- Next/Prev button
+	- New menu cursor
+
+-Textures-
+	- Slime textures for Slime Pit
+	- Water texture for oil rig
+	- Lava texture
+
+-SKINS-
+	- carni
+	- grunt
+	- headhunter
+	- female shock
+	- specop
+
+-SHADERS
+	- Make dpshaders for the laser-crylink-nex
+	- Convert quake3 shaders for the evil textures to DPshader
+	- Use envmap for rocket launcher
+	- Pulsing glow effect for the laser/Nex/Crylink
+	- Electric wave effect for g_electro model
+	- Glowing White/Red/Yellow scrolling effect for Strength/Invinicable/Speed
+
+*********************************
+*************AUDIO***************
+
+-LEVELS-
+	- Add spark sounds to levels
+	- Machine sound
+
+-WEAPONS-
+	- Change Electro fire sound
+	- Missile sounds for electro, rocket
+
+-ITEMS-
+	- Armor pickup sound
+
+-OTHER-
+	- Gib Splat sound
+
+*********************************
+*************MAPS****************
+Nexdm01 -
+
+Nexdm02 -
+
+Nexdm03 -
+
+Nexdm04 -
+
+Nexdm05 -
