@@ -2,21 +2,27 @@
 // options/player.menu
 Item Window Player
 {
-	size	  '600 600'
+	size	  '700 600'
 
 	Item Window Avatar
 	{
-		size	'250 600'
+		size	'300 600'
 		flag	[FlagEmbedded]
 
 		Derive Picture Picture
 		{
-			size	'250 400'
+			size	'300 400'
 			picture "gfx/m_white"
+		}
+		Derive Rect Overlay
+		{
+			size		'300 15'
+			drawFlag 	[DrawFlagAdditive]
+			alpha		0.4
 		}
 		Derive MultiLabel Description
 		{
-			size	'250 200'
+			size	'300 200'
 			pos	'0 400'
 			wrap 	20
 		}
@@ -30,12 +36,12 @@ Item Window Player
 		Derive Label Name
 		{
 			pos		'24 0'
-			size		'202 12'
+			size		'252 12'
 			alignment	[AlignCenter]
 		}
 		Derive TextButton Next
 		{
-			pos	'226 0'
+			pos	'256 0'
 			normal	">>"
 
 			action	Nex_Action_Avatar_Next
@@ -47,9 +53,9 @@ Item Window Player
 	}
 	Item Layout Settings
 	{
-		pos		'250 0'
-		origin		'175 0'
-		size		'350 600'
+		pos		'300 0'
+		origin		'200 0'
+		size		'400 600'
 		flag		[FlagEmbedded]
 		alignment	[AlignFirst]
 		direction	[Nex_DefaultVertDirection]
@@ -63,10 +69,17 @@ Item Window Player
 			}
 			Derive EditBox EditBox
 			{
-				size 	'156 20'
+				size 	'182 20'
 				target	"Data::Player::Name::Text"
-				action  Nex_Action_TestOnChange
 			}
+		}
+		Derive Nex_Void Seperator1
+		{}
+		Derive PictureButton Apply
+		{
+			normal		"$gfx/m_apply"
+
+			action	Nex_Action_Player_Apply
 		}
 	}
 }

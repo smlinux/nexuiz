@@ -43,7 +43,7 @@ void() Nex_Action_Avatar_Next =
 
 	lItem = Menu_GetItem( "Data::Player::Avatar" );
 	lItem._realValue = lItem._realValue + 1;
-	Raise_DataEvent( lItem, ITEM_DATA_SEND );
+	Raise_DataEvent( lItem, ITEM_DATALINK_SET );
 };
 
 void() Nex_Action_Avatar_Prev =
@@ -52,5 +52,16 @@ void() Nex_Action_Avatar_Prev =
 
 	lItem = Menu_GetItem( "Data::Player::Avatar" );
 	lItem._realValue = lItem._realValue - 1;
+	Raise_DataEvent( lItem, ITEM_DATALINK_SET );
+};
+
+void() Nex_Action_Player_Apply =
+{
+	local entity lItem;
+
+	lItem = Menu_GetItem( "Data::Player::Avatar" );
+	Raise_DataEvent( lItem, ITEM_DATA_SEND );
+
+	lItem = Menu_GetItem( "Data::Player::Name" );
 	Raise_DataEvent( lItem, ITEM_DATA_SEND );
 };

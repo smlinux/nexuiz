@@ -54,7 +54,7 @@ Item Layout Options
 	}
 	Item EventWindow Panel
 	{
-		size	'600 600'
+		size	'700 600'
 		reinit	Nex_Action_MakeFirstVisible
 
 		#include "menu/options/sound.menu"
