@@ -897,7 +897,7 @@ void W_Crylink_Attack2 (void)
 	
 	makevectors (self.v_angle);
 
-	setmodel (proj, "progs/s_bubble.spr");
+	setmodel (proj, "models/sprites/bubbles.spr");
 	setsize (proj, '0 0 0', '0 0 0');
 	setorigin (proj, self.origin + self.view_ofs + v_forward * 10 + v_right * 5 + v_up * -14);
 
@@ -1217,44 +1217,6 @@ void W_Rocket_Attack2 (void)
 }
 
 
-void W_Rocket_Attack3 (void)
-{
-	entity	missile;
-	vector	org;
-
-	sound (self, CHAN_WEAPON, "weapons/rocket_fire.wav", 1, ATTN_NORM);
-
-	missile = spawn ();
-	missile.owner = self;
-	missile.classname = "missile";
-
-	missile.takedamage = DAMAGE_YES;
-	missile.damageforcescale = 4;
-	missile.health = 10;
-	missile.event_damage = W_Rocket_Damage;
-
-	missile.movetype = MOVETYPE_FLY;
-	missile.solid = SOLID_BBOX;
-	setmodel (missile, "models/rocketmissile.mdl");
-	setsize (missile, '0 0 0', '0 0 0');
-
-	makevectors (self.v_angle);
-
-	org = self.origin + self.view_ofs + v_forward * 20 + v_right * 4 + v_up * -15;
-
-	setorigin (missile, org);
-	missile.velocity = v_forward * 1200;
-	missile.angles = vectoangles (missile.velocity);
-
-	missile.touch = W_Rocket_Touch ;
-	missile.think = W_Drunkmissile;
-	missile.nextthink = time + 0.2;
-
-	self.attack_finished = time + 1.5;
-	self.ammo_rockets = self.ammo_rockets - 1;
-
-}
-
 void W_Attack (void)
 {
 	if (self.deadflag != DEAD_NO)
@@ -1347,23 +1309,8 @@ void W_ThirdAttack (void)
 	if (!W_CheckAmmo ())
 		return;
 
-	if (self.weapon == IT_LASER)
-		W_Laser_Attack2 ();
-	else if (self.weapon == IT_UZI)
-		W_Uzi_Attack2 ();
-	else if (self.weapon == IT_SHOTGUN)
-		W_Shotgun_Attack2 ();
-	else if (self.weapon == IT_GRENADE_LAUNCHER)
-		W_Grenade_Attack2 ();
-	//else if (self.weapon == IT_ELECTRO) 
-	else if (self.weapon == IT_CRYLINK)
-		W_Crylink_Attack2 ();
-	else if (self.weapon == IT_NEX)
-		W_Nex_Attack2 ();
-	else if (self.weapon == IT_HAGAR)
+	if (self.weapon == IT_HAGAR)
 		W_Hagar_Attack3 ();
-	else if (self.weapon == IT_ROCKET_LAUNCHER)
-		W_Rocket_Attack3 ();
 
 	W_UpdateAmmo ();
 }
