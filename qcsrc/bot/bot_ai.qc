@@ -611,14 +611,18 @@ float(entity thing) priority_for_thing =
 	thisp = 0;
 	// This is the most executed function in the bot. Careful what you do here.
 
-	if ((thing.flags & FL_ITEM) && thing.model != string_null && thing.search_time < time)
+	if (thing.flags & FL_ITEM && thing.model != string_null && thing.search_time < time)
 	{
 		// ugly hack
                 if (thing._last != self)
                         thisp = 20;
-		if (thing.classname == "item_artifact_super_damage")
+		else if (thing.classname == "item_strength") // IT_STRENGTH
 			thisp = 65;
-		else if (thing.classname == "item_artifact_invulnerability")
+		else if (thing.classname == "item_invincible") // IT_INVINCIBLE
+			thisp = 65;
+		else if (thing.classname == "item_speed") // IT_SPEED
+			thisp = 65;
+		else if (thing.classname == "item_slowmo") // IT_SLOWMO
 			thisp = 65;
 		else if (thing.classname == "item_health")
 		{
@@ -630,46 +634,54 @@ float(entity thing) priority_for_thing =
 		else if (thing.model == "progs/armor.mdl")
 		{
 			if (self.armorvalue < 200)
-			{		
+			{
 				if (thing.skin == 2)
 					thisp = 60;
 				else if (self.armorvalue < 100)			
 					thisp = thisp + 25;
 			}
 		}
-		else if (thing.classname == "weapon_supershotgun")
+		else if (thing.classname == "weapon_shotgun")
 		{
-			if (!(self.items & 2)) // IT_SUPER_SHOTGUN  
+			if (!(self.items & IT_SHOTGUN))
 				thisp = 25;
 		}
-		else if (thing.classname == "weapon_nailgun")
+		else if (thing.classname == "weapon_uzi")
 		{
-			if (!(self.items & 4)) // IT_NAILGUN 
+			if (!(self.items & IT_UZI))
 				thisp = 30;
 		}
-		else if (thing.classname == "weapon_supernailgun")
+		else if (thing.classname == "weapon_electro")
 		{
-			if (!(self.items & 8)) // IT_SUPER_NAILGUN
+			if (!(self.items & IT_ELECTRO))
 				thisp = 35;
 		}
 		else if (thing.classname == "weapon_grenadelauncher")
 		{
-			if (!(self.items & 16)) // IT_GRENADE_LAUNCHER
+			if (!(self.items & IT_GRENADE_LAUNCHER))
+				thisp = 45;
+		}
+		else if (thing.classname == "weapon_crylink")
+		{
+			if (!(self.items & IT_CRYLINK))
+				thisp = 60;
+		}
+		else if (thing.classname == "weapon_nex")
+		{
+			if (!(self.items & IT_NEX)) // IT_LIGHTNING
+				thisp = 50;
+		}
+		else if (thing.classname == "weapon_hagar")
+		{
+			if (!(self.items & IT_HAGAR))
 				thisp = 45;
 		}
 		else if (thing.classname == "weapon_rocketlauncher")
 		{
-			if (!(self.items & 32)) // IT_ROCKET_LAUNCHER
-				thisp = 60;
-		}
-		else if (thing.classname == "weapon_lightning")
-		{
-			if (!(self.items & 64)) // IT_LIGHTNING
+			if (!(self.items & IT_ROCKET_LAUNCHER))
 				thisp = 50;
 		}
 	}
-	else if ((thing.flags & FL_MONSTER) && thing.health > 0)
-		thisp = 45;
 	else if (thing.classname == "player")
 	{ 
 		if (thing.health > 0)

@@ -747,8 +747,8 @@ void() BotInit =
 		numents = numents + 1;
 		ent = nextent(ent);
 	}
-	//precache_model("progs/s_light.spr");
-	//precache_model("progs/s_bubble.spr");
+	precache_model("progs/s_light.spr");
+	precache_model("progs/s_bubble.spr");
 	// the bots return!
 	b_options = cvar("saved1");
 	if (coop || (b_options & OPT_SAVEBOTS))

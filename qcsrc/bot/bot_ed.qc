@@ -1006,11 +1006,11 @@ void() bot_way_edit =
 		t = way_head;
 		while (t)
 		{
-			//setmodel(t, "progs/s_bubble.spr"); // show the waypoints
+			setmodel(t, "progs/s_bubble.spr"); // show the waypoints
 			t = t._next;
 		}
-		//if (self.current_way)
-		//	setmodel(self.current_way, "progs/s_light.spr");
+		if (self.current_way)
+			setmodel(self.current_way, "progs/s_light.spr");
 	}
 	else
 	{

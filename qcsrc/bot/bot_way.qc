@@ -275,8 +275,8 @@ entity(vector org) make_waypoint =
 	}
 
 	point.count = waypoints;
-	//if (waypoint_mode > WM_LOADED) // editor modes
-	//	setmodel(point, "progs/s_bubble.spr"); 
+	if (waypoint_mode > WM_LOADED) // editor modes
+		setmodel(point, "progs/s_bubble.spr"); 
 	return point;
 };
 
@@ -422,9 +422,9 @@ void() DynamicWaypoint =
 					}
 					if (editor)
 					{
-						//setmodel(t, "progs/s_light.spr");
-						//if (self.current_way)
-						//	setmodel(self.current_way, "progs/s_bubble.spr");
+						setmodel(t, "progs/s_light.spr");
+						if (self.current_way)
+							setmodel(self.current_way, "progs/s_bubble.spr");
 					}
 				}
 				self.current_way = t;
@@ -472,9 +472,9 @@ void() DynamicWaypoint =
 
 	if (editor)
 	{
-		//setmodel(t, "progs/s_light.spr");
-		//if (self.current_way)
-		//	setmodel(self.current_way, "progs/s_bubble.spr");
+		setmodel(t, "progs/s_light.spr");
+		if (self.current_way)
+			setmodel(self.current_way, "progs/s_bubble.spr");
 	}
 	self.current_way = t;
 	self.dyn_flags = 0;
