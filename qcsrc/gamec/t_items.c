@@ -83,6 +83,13 @@ void Item_Touch (void)
 	}
 }
 
+// Savage: used for item garbage-collection
+// TODO: perhaps nice special effect?
+void RemoveItem(void) = {
+	remove(self);
+}
+
+
 void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, string itemname, float itemid, float itemflags)
 {
 	if ((cvar("g_instagib") == 1) | (cvar("g_rocketarena") == 1))
@@ -112,6 +119,14 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 	self.movetype = MOVETYPE_TOSS;
 	self.solid = SOLID_TRIGGER;
 	self.touch = Item_Touch;
+	
+	
+	// Savage: remove thrown items after a certain period of time ("garbage collection")
+	if(self.norespawn) {
+		self.think = RemoveItem;
+		self.nextthink = time + 60;
+	}	
+	
 }
 
 void weapon_uzi (void) {self.ammo_nails = 30;StartItem ("models/weapons/g_uzi.md3", "weapons/weaponpickup.wav", 15, "Uzi", IT_UZI, FL_WEAPON);}
