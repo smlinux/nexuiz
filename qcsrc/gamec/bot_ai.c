@@ -18,7 +18,7 @@ NO EVENT WILL RYAN "FRIKAC" SMITH BE LIABLE FOR ANY
 GENERAL, CONSEQUENTIAL, INDIRECT, INCIDENTAL,
 EXEMPLARY, OR SPECIAL DAMAGES, EVEN IF RYAN "FRIKAC"
 SMITH HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH
-DAMAGES, IRRESPECTIVE OF THE CAUSE OF SUCH DAMAGES. 
+DAMAGES, IRRESPECTIVE OF THE CAUSE OF SUCH DAMAGES.
 
 You accept this software on the condition that you
 indemnify and hold harmless Ryan "FrikaC" Smith from
@@ -26,7 +26,7 @@ any and all liability or damages to third parties,
 including attorney fees, court costs, and other
 related costs and expenses, arising out of your use
 of this software irrespective of the cause of said
-liability. 
+liability.
 
 The export from the United States or the subsequent
 reexport of this software is subject to compliance
@@ -35,10 +35,10 @@ control restrictions. You agree that in the event you
 seek to export this software, you assume full
 responsibility for obtaining all necessary export
 licenses and approvals and for assuring compliance
-with applicable reexport restrictions. 
+with applicable reexport restrictions.
 
 Any reproduction of this software must contain
-this notice in its entirety. 
+this notice in its entirety.
 
 */
 
@@ -110,7 +110,7 @@ is gone too.
 void(entity ent) target_drop =
 {
 	local float tg;
-	
+
 	tg = target_onstack(ent);
 	if (tg == 1)
 	{
@@ -167,7 +167,7 @@ void(entity targ, float success) bot_lost =
 		if (targ.classname == "item_artifact_invisibility")
 			if (self.items & 524288)
 				bot_start_topic(3);
-                
+
                 if (targ.flags & FL_ITEM)
                 {
                         if (targ.model == string_null)
@@ -265,13 +265,13 @@ void(entity targ) bot_check_lost =
 				self.search_time = time + 5; // never time out
 			}
 			else if (!fisible(targ))
-				bot_lost(targ, FALSE);	
+				bot_lost(targ, FALSE);
 		}
 		else if (waypoint_mode > WM_LOADED)
 		{
 			if (vlen(targ.origin - self.origin) < 128)
 			{
-				bot_lost(targ, TRUE);	
+				bot_lost(targ, TRUE);
 			}
 		}
 	}
@@ -286,7 +286,7 @@ void(entity targ) bot_check_lost =
 				self.enemy = world;
 			//if (self.target1)
 			//	bot_get_path(self.target1, TRUE);
-				
+
 		}
 	}
 	// trigger_multiple style triggers are lost if their thinktime changes
@@ -368,7 +368,7 @@ void() bot_handle_ai =
 				if (newt.targetname)
 				{
 					newt = find(world, target, newt.targetname);
-					if (newt.health > 0) 
+					if (newt.health > 0)
 					{
 						self.enemy = newt;
 						bot_weapon_switch(1);
@@ -397,7 +397,7 @@ void() bot_handle_ai =
 	}
 	else if (self.b_aiflags & AI_SUPER_JUMP)
 	{
-		if (self.weapon != 32)
+		if (self.weapon != WEP_LASER)
 			self.impulse = 7;
 		else if (self.flags & FL_ONGROUND)
 		{
@@ -410,7 +410,7 @@ void() bot_handle_ai =
 			}
 			else
 				bot_lost(self.target1, FALSE);
-			
+
 		}
 	}
 	if (self.b_aiflags & AI_SURFACE)
@@ -430,7 +430,7 @@ void() bot_handle_ai =
 		// things, not just trains (door elevators come to mind)
 		b_temp3 = self;
 		self = self.last_way;
-	
+
 		if (!frik_recognize_plat(FALSE)) // if there is nothing there now
 		{
 			self = b_temp3;
@@ -564,7 +564,7 @@ void() bot_path =
 				else if (trace_ent.targetname)
 				{
 					tele = find(world, target, trace_ent.targetname);
-					if (tele.health > 0) 
+					if (tele.health > 0)
 					{
 						self.enemy = tele;
 						bot_weapon_switch(1);
@@ -574,10 +574,10 @@ void() bot_path =
 					//	target_drop(jj);
 						target_add(tele);
 					//	bot_get_path(tele, TRUE);
-						self.b_aiflags = self.b_aiflags | AI_BLIND; // give a bot a bone	
+						self.b_aiflags = self.b_aiflags | AI_BLIND; // give a bot a bone
 						return;
-					}					
-				}		
+					}
+				}
 			}
 			else if (trace_ent.classname == "func_wall")
 			{
@@ -636,13 +636,37 @@ float(entity thing) priority_for_thing =
 			if (self.health < 40)
 				thisp = thisp + 50;
 		}
+		else if (thing.classname == "item_health1" || thing.classname == "item_health2")
+		{
+			thisp = 20;
+			if (self.health < 40)
+				thisp = thisp + 50;
+		}
+		else if (thing.classname == "item_health100")
+		{
+			thisp = 55;
+			if (self.health < 40)
+				thisp = thisp + 50;
+		}
+		else if (thing.classname == "item_armor1")
+		{
+			thisp = 20;
+			if (self.armorvalue < 100)
+				thisp = thisp + 25;
+		}
+		else if (thing.classname == "item_armor25")
+		{
+			thisp = 60;
+			if (self.armorvalue < 100)
+				thisp = thisp + 25;
+		}
 		else if (thing.model == "progs/armor.mdl")
 		{
 			if (self.armorvalue < 200)
 			{
 				if (thing.skin == 2)
 					thisp = 60;
-				else if (self.armorvalue < 100)			
+				else if (self.armorvalue < 100)
 					thisp = thisp + 25;
 			}
 		}
@@ -688,7 +712,7 @@ float(entity thing) priority_for_thing =
 		}
 	}
 	else if (thing.classname == "player")
-	{ 
+	{
 		if (thing.health > 0)
 		{
 			if (thing == self)
@@ -729,10 +753,10 @@ float(entity thing) priority_for_thing =
 			if (thing.current_way.items == -1)
 				return 0;
 			else
-				thisp = thisp + (13000 - thing.current_way.items) * 0.05; 
+				thisp = thisp + (13000 - thing.current_way.items) * 0.05;
 
 		}
-	} 		
+	}
 	return thisp;
 };
 
@@ -765,7 +789,7 @@ void(float scope) bot_look_for_crap =
 	if (best == world)
 		return;
 	if (!target_onstack(best))
-	{	
+	{
 		target_add(best);
 		if (scope)
 		{
@@ -792,7 +816,7 @@ void() bot_angle_set =
 {
 	local float h;
 	local vector view;
-	
+
 	if (self.enemy)
 	{
 		if (self.enemy.items & 524288)
@@ -811,12 +835,12 @@ void() bot_angle_set =
 				view = self.enemy.velocity * h;
 			else
 				view = (self.enemy.velocity - (sv_gravity * '0 0 1') * h) * h;
-			view = self.enemy.origin + view;  
+			view = self.enemy.origin + view;
 			// FIXME: ?
 			traceline(self.enemy.origin, view, FALSE, self);
 			view = trace_endpos;
-			
-			if (self.weapon == 32) 
+
+			if (self.weapon == WEP_GRENADE_LAUNCHER || self.weapon == WEP_ELECTRO || self.weapon == WEP_HAGAR || self.weapon == WEP_ROCKET_LAUNCHER)
 				view = view - '0 0 22';
 
 			view = normalize(view - self.origin);
@@ -895,7 +919,7 @@ void() BotAI =
 	// status bars, and the mod probably already compensated for that
 
 	if (self.health < 1)
-	{ 
+	{
 		self.button0 = floor(random() * 2);
 		self.button2 = 0;
 		self.keys = 0;
@@ -905,7 +929,7 @@ void() BotAI =
 		self.last_way = world;
 		return;
 	}
-		
+
 	// stagger the bot's AI out so they all don't think at the same time, causing game
 	// 'spikes'
 	if (self.b_skill < 2)
@@ -930,7 +954,7 @@ void() BotAI =
 
 	self.button2 = 0;
 	self.button0 = 0;
-	
+
 
 	// target1 is like goalentity in normal Quake monster AI.
 	// it's the bot's most immediate target
@@ -959,7 +983,7 @@ void() BotAI =
                 		self.route_failed = 0;
                 	}
                         else if(!begin_route())
-                        {	
+                        {
                                 bot_look_for_crap(FALSE);
                         }
 			self.keys = 0;
@@ -991,7 +1015,7 @@ void() BotAI =
 		if (time > (self.air_finished - 2))
 		{
 			traceline (self.origin, self.origin + '0 0 6800', TRUE, self);
-			if (trace_inopen)	
+			if (trace_inopen)
 			{
 				self.keys = KEY_MOVEUP;
 				self.button2 = TRUE; // swim!
@@ -1002,9 +1026,9 @@ void() BotAI =
 */
 	// b_aiflags handling
 
-	
+
 	if (self.b_aiflags)
-		bot_handle_ai(); 
+		bot_handle_ai();
 	else
 		bot_chat(); // don't want chat to screw him up if he's rjing or something
 };
