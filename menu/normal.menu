@@ -58,7 +58,7 @@ template
 	picture_selected "gfx/m_top_sel_singleplayer"
 	picture_pressed	"gfx/m_top_sel_singleplayer"*/
 	drawflag_pressed 0
-	action		nex_display_multiplayer
+	action		nex_display_creategame
 }
 // multiplayer
 {
@@ -133,7 +133,7 @@ template
 }
 {
 	type		ITEM_WINDOW
-	name		multiplayer
+	name		creategame
 	parent  	mainframe
 	//origin		"350 100"
 	origin		"210 125"

@@ -386,10 +386,11 @@ void(void) nex_video_apply =
 float maxfrags;
 float maxtime;
 float maxbots;
-
+float skilllevel;
 string hostname;
 float  maxclients;
 float  publicserver;
+float  gamemode;
 
 entity maps_list;
 entity maps_current;
@@ -409,13 +410,13 @@ void(void) _nex_xp_update =
 {
 	entity item;
 	
-	item = menu_getitem( "multiplayer_map_name" );
+	item = menu_getitem( "creategame_map_name" );
 	item.text = maps_current.name;
 	
-	item = menu_getitem( "multiplayer_map_picture" );
+	item = menu_getitem( "creategame_map_picture" );
 	item.picture = maps_current.picture;
 	
-	item = menu_getitem( "multiplayer_map_info" );
+	item = menu_getitem( "creategame_map_info" );
 	item.text = maps_current.text;
 };
 
@@ -514,10 +515,10 @@ void(void) nex_xp_next =
 };
 
 
-void(void) nex_display_multiplayer =
+void(void) nex_display_creategame =
 {
-	nex_makeonlyvisible( menu_getitem( "multiplayer" ) );
-	menu_jumptowindow( menu_getitem( "multiplayer" ), false );
+	nex_makeonlyvisible( menu_getitem( "creategame" ) );
+	menu_jumptowindow( menu_getitem( "creategame" ), false );
 };
 
 void(void) nex_xp_maxfrags =
@@ -535,7 +536,7 @@ void(void) nex_xp_maxbots =
 {
 	float x;
 	x = stof(self.text);
-	maxbots = rint(x);
+	maxbots = min( rint(x), maxclients - 1 );
 
 	strunzone(self.text);
 	self.text = ftos(x);
@@ -553,36 +554,12 @@ void(void) nex_xp_maxtime =
 	self.text = strzone(self.text);
 };
 
-void(void) nex_sp_start =
-{
-	//local float i;
-
-	cvar_set("fraglimit", ftos(maxfrags));
-	cvar_set("timelimit", ftos(maxtime));
-	cvar_set("deathmatch", ftos(1));
-	cvar_set("maxplayers", ftos(maxbots + 1));
-	cmd("map ");
-	cmd(maps_current.name);
-	cmd(";wait;togglemenu;wait;");
-
-	// BLACK: TODO - change this somewhen into something cleaner - see bot/bot.qc
-	//if(maxbots && maxbots <= (99 - 40 + 1))
-	{
-		string t;
-		t = strcat("impulse ", ftos(40 + maxbots - 1));
-		cmd(t);
-		print(t);
-	}
-
-	cmd("\n");
-};
-
-void(void) nex_mp_hostname =
+void(void) nex_xp_hostname =
 {
 	hostname = self.text;
 };
 
-void(void) nex_mp_maxclients =
+void(void) nex_xp_maxclients =
 {
 	local float i;
 	i = stof(self.text);
@@ -592,12 +569,22 @@ void(void) nex_mp_maxclients =
 	self.text = strzone(ftos(maxclients));
 };
 
-void(void) nex_mp_publicserv =
+void(void) nex_xp_publicserv =
 {
 	publicserver = self.value;
 };
 
-void(void) nex_mp_start =
+void(void) nex_xp_gamemode =
+{
+	gamemode = self.value;
+};
+
+void(void) nex_xp_skilllevel =
+{
+	skilllevel = self.value;
+}
+
+void(void) nex_xp_start =
 {
 	cvar_set("fraglimit", ftos(maxfrags));
 	cvar_set("timelimit", ftos(maxtime));

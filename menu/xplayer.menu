@@ -269,11 +269,11 @@ template for map selection
 	text		"Start Game"
 	action		nex_mp_start
 }*/
-// multiplayer map frame
+// creategame map frame
 {
 	type 		ITEM_WINDOW
-	name 		multiplayer_map
-	parent		multiplayer
+	name 		creategame_map
+	parent		creategame
 	clip_pos	"0 0"
 	clip_size	"270 475"
 	reinit		nex_xp_enummaps
@@ -281,8 +281,8 @@ template for map selection
 // <<
 {
 	type		ITEM_TEXTBUTTON
-	name		multiplayer_map_prev
-	parent		multiplayer_map
+	name		creategame_map_prev
+	parent		creategame_map
 	pos		"0 0"
 	size		"22 11"
 	text		"<<"
@@ -291,8 +291,8 @@ template for map selection
 // map name
 {
 	type		ITEM_TEXT
-	name		multiplayer_map_name
-	parent		multiplayer_map
+	name		creategame_map_name
+	parent		creategame_map
 	pos		"27 0"
 	clip_pos	"27 0"
 	size		"216 11"
@@ -304,8 +304,8 @@ template for map selection
 // >>
 {
 	type		ITEM_TEXTBUTTON
-	name		multiplayer_map_next
-	parent		multiplayer_map
+	name		creategame_map_next
+	parent		creategame_map
 	pos		"248 0"
 	size		"22 11"
 	text 		">>"
@@ -314,17 +314,17 @@ template for map selection
 // map picture
 {
 	type 		ITEM_PICTURE
-	name		multiplayer_map_picture
-	parent		multiplayer_map
+	name		creategame_map_picture
+	parent		creategame_map
 	pos		"0 11"
 	size		"270 232"
-	picture		"gfx/m_top_singleplayer"
+	picture		"gfx/m_nomap"
 }	
 // info box
 {
 	type		ITEM_CUSTOM
-	name		multiplayer_map_info
-	parent		multiplayer_map
+	name		creategame_map_info
+	parent		creategame_map
 	clip_pos	"0 243"
 	clip_size	"270 232"
 	pos		"0 243"
@@ -336,15 +336,208 @@ template for map selection
 	font_size	"9 9"
 	draw 		nex_draw_text
 }
-// multiplayer options frame
+// creategame options frame
 {
 	type		ITEM_WINDOW
-	name		multiplayer_opt
-	parent		multiplayer
-	clip_pos	"0 0 0"
+	name		creategame_opt
+	parent		creategame
+	origin		"436 0" //270+175
+	clip_pos	"270 0"	
 	clip_size	"350 475"
 }
-
+//////
+// Server Name
+////
+// Text
+{
+	type 		ITEM_TEXTBUTTON
+	name		creategame_opt_server_name_text
+	parent		creategame_opt
+	text		"Server Name"
+	pos		"0 0 0"
+	origin		"0 0 0"
+	//font_size	"10 10 0"
+	alignment	16		// TEXT_ALIGN_RIGHTPOS
+	flag		256		// FLAG_AUTOSETCLICK
+	key		nex_redirect_key
+}
+// Editbox
+{
+	type		ITEM_EDITBOX
+	name		creategame_opt_server_name_edit
+	parent		creategame_opt_server_name_text
+	//pos		"10 0 0"
+	pos		"10 0 0"
+	//font_size	"10 10 0"
+	flag 		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
+	text		"xxx-game (.)(.)" //please remove this somewhen - I dont have the power to ^_^
+	maxlen		15
+	refresh		nex_xp_hostname
+}
+//////
+// Game Mode
+////
+// Text
+{
+	type 	ITEM_TEXTBUTTON
+	name		creategame_opt_gamemode_text
+	parent		creategame_opt
+	text		"Game Mode"
+	pos		"0 15 0"
+	origin		"0 15 0"
+	//font_size	"10 10 0"
+	alignment	16		// TEXT_ALIGN_RIGHTPOS
+	flag		256		// FLAG_AUTOSETCLICK
+	key			nex_redirect_key
+}
+// Switch
+{
+	type	ITEM_TEXTSWITCH
+	name		creategame_opt_gamemode_switch
+	parent		creategame_opt_gamemode_text
+	//pos		"10 15 0"
+	pos		"10 0 0"
+	//font_size	"10 10 0"
+	flag 		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
+	text		"'Deathmatch' 'Instagib' 'DarkArena' 'HeadHunter' 'SlowMo' 'Speedy' 'GrapplingHook'"
+	value		0
+	switchchange	nex_xp_gamemode
+}
+// max frags
+{
+	type 		ITEM_TEXTBUTTON
+	name		creategame_opt_maxfrag_text
+	parent		creategame_opt
+	text		"Frag Limit"
+	pos		"0 30 0"
+	//font_size	"10 10 0"
+	alignment	16		// TEXT_ALIGN_RIGHTPOS
+	flag		256		// FLAG_AUTOSETCLICK
+	key		nex_redirect_key
+}
+// Switch
+{
+	type		ITEM_EDITBOX
+	name		creategame_opt_maxfrag_switch
+	parent		creategame_opt_maxfrag_text
+	pos		"10 30 0"
+	//font_size	"10 10 0"
+	flag 		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
+	maxlen		3
+	text		"0"
+	refresh		nex_xp_maxfrags
+}
+// max time
+{
+	type 		ITEM_TEXTBUTTON
+	name		creategame_opt_maxtime_text
+	parent		creategame_opt
+	text		"Time Limit"
+	pos		"0 45 0"
+	//font_size	"10 10 0"
+	alignment	16		// TEXT_ALIGN_RIGHTPOS
+	flag		256		// FLAG_AUTOSETCLICK
+	key			nex_redirect_key
+}
+// Switch
+{
+	type		ITEM_EDITBOX
+	name		creategame_opt_maxtime_switch
+	parent		creategame_opt_maxtime_text
+	pos		"10 45 0"
+	//font_size	"10 10 0"
+	flag 		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
+	maxlen		3
+	text		"0"
+	refresh		nex_xp_maxtime
+}
+// max bots
+{
+	type 		ITEM_TEXTBUTTON
+	name		creategame_opt_maxbots_text
+	parent		creategame_opt
+	text		"Bot Count"
+	pos		"0 60 0"
+	//font_size	"10 10 0"
+	alignment	16		// TEXT_ALIGN_RIGHTPOS
+	flag		256		// FLAG_AUTOSETCLICK
+	key		nex_redirect_key
+}
+// Switch
+{
+	type		ITEM_EDITBOX
+	name		creategame_opt_maxbots_switch
+	parent		creategame_opt_maxbots_text
+	pos		"10 60 0"
+	//font_size	"10 10 0"
+	flag 		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
+	maxlen		2
+	text		"0"
+	refresh		nex_xp_maxbots
+}
+//////
+// Skill Level
+////
+// Text
+{
+	type 		ITEM_TEXTBUTTON
+	name		creategame_opt_skilllevel_text
+	parent		creategame_opt
+	text		"Skill Level"
+	pos		"0 75 0"
+	//font_size	"10 10 0"
+	alignment	16		// TEXT_ALIGN_RIGHTPOS
+	flag		256		// FLAG_AUTOSETCLICK
+	key			nex_redirect_key
+}
+// Switch
+{
+	type		ITEM_TEXTSWITCH
+	name		creategame_opt_skilllevel_switch
+	parent		creategame_opt_skilllevel_text
+	pos		"10 75 0"
+	//font_size	"10 10 0"
+	flag 		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
+	text		"'N00b' 'Normal' 'Hard'"
+	value		1
+	switchchange 	nex_xp_skilllevel
+	init		nex_xp_skilllevel
+}
+// max clients
+{
+	type 		ITEM_TEXTBUTTON
+	name		creategame_opt_maxclients_text
+	parent		creategame_opt
+	text		"Max Clients"
+	pos			"0 90 0"
+	//font_size	"10 10 0"
+	alignment	16		// TEXT_ALIGN_RIGHTPOS
+	flag		256		// FLAG_AUTOSETCLICK
+	key			nex_redirect_key
+}
+// Switch
+{
+	type		ITEM_EDITBOX
+	name		creategame_opt_maxclients_switch
+	parent		creategame_opt_maxclients_text
+	pos			"10 90 0"
+	//font_size	"10 10 0"
+	flag 		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
+	maxlen		2
+	text		"16"
+	refresh		nex_xp_maxclients
+}
+// start
+{
+	type 		ITEM_TEXTBUTTON
+	name		creategame_opt_start
+	parent		creategame_opt
+	pos		"0 115"
+	flag		256		// FLAG_AUTOSETCLICK
+	alignment	8
+	text		"Start Game"
+	action		nex_xp_start
+}
 
 // multiplayer server list
 {
