@@ -23,6 +23,12 @@ void animate_sprite (float startframe, float frame_count)
 		self.frame = self.frame + 1;
 }
 
+vector W_GetFireLoc (vector desired)
+{
+	traceline (self.origin + self.view_ofs - '0 0 6', desired, MOVE_NORMAL, self);
+	return trace_endpos;
+}
+
 void W_UpdateAmmo (void)
 {
 	self.items = self.items - (self.items & (IT_NAILS | IT_SHELLS | IT_ROCKETS | IT_CELLS));
@@ -452,6 +458,8 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float deathtype
 	//remove(explosion);
 }
 
+// "Sajt Says!": If you start using muzzle locations that aren't just origin+view_ofs, you may want to add a call to
+// W_GetFireLoc in here
 void fireBullet (vector start, vector dir, float spread, float damage, float dtype)
 {
 	vector	end;
@@ -523,7 +531,7 @@ void W_Laser_Attack (void)
 
 	sound (self, CHAN_WEAPON, "weapons/crylink.wav", 1, ATTN_NORM);
 
-	org = self.origin + self.view_ofs + v_forward * 10 + v_right * 5 + v_up * -14;	
+	org = W_GetFireLoc (self.origin + self.view_ofs + v_forward * 10 + v_right * 5 + v_up * -14);
 
 	FireRailgunBullet (org, self.origin + self.view_ofs + v_forward * 4096, 25, IT_LASER);
 
@@ -535,6 +543,7 @@ void W_Laser_Attack (void)
 void W_Laser_Attack2 (void)
 {
 	entity	missile;
+	vector	org;
 
 	sound (self, CHAN_WEAPON, "weapons/lasergun_fire.wav", 1, ATTN_NORM);
 
@@ -547,7 +556,9 @@ void W_Laser_Attack2 (void)
 
 	setmodel (missile, "models/laser.mdl");
 	setsize (missile, '0 0 0', '0 0 0');
-	setorigin (missile, self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -12);
+
+	org = W_GetFireLoc (self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -12);
+	setorigin (missile, org);
 
 	missile.velocity = v_forward * 1000;
 	missile.velocity = missile.velocity + v_right * ( crandom() * 45 );
@@ -572,6 +583,7 @@ void W_Shotgun_Attack (void)
 {
 	float	sc;
 	float	bullets;
+	vector	org;
 
 	sound (self, CHAN_WEAPON, "weapons/shotgun_fire.wav", 1, ATTN_NORM);
 
@@ -583,8 +595,7 @@ void W_Shotgun_Attack (void)
 	self.ammo_shells = self.ammo_shells - 1;
 	self.attack_finished = time + 0.7;
 
-	vector	org; // casing code
-	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 4) + (v_forward * 15);
+	org = W_GetFireLoc (self.origin + self.view_ofs + (v_right * 6) - (v_up * 4) + (v_forward * 15));
 	SpawnCasing (org, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 + 10) * v_up), 2, v_forward,'0 250 0', 100, 1);
 }
 
@@ -595,6 +606,8 @@ void W_Shotgun_Attack2 (void)
 
 void W_Uzi_Attack (void)
 {
+	vector	org;
+
 	sound (self, CHAN_WEAPON, "weapons/uzi_fire.wav", 1, ATTN_NORM);
 
 	fireBullet (self.origin + self.view_ofs, v_forward, 0.025, 8, IT_UZI);
@@ -606,8 +619,7 @@ void W_Uzi_Attack (void)
 	self.attack_finished = time + 0.075;
 	self.ammo_nails = self.ammo_nails - 1;
 
-	vector	org; // casing code
-	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 1) + (v_forward * 15);
+	org = W_GetFireLoc (self.origin + self.view_ofs + (v_right * 6) - (v_up * 1) + (v_forward * 15));
 	SpawnCasing (org, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 + 10) * v_up), 2, v_forward,'0 250 0', 100, 2);
 	//W_Smoke(org, v_forward, 12);
 }
@@ -616,6 +628,7 @@ void W_Uzi_Attack2 (void)
 {
 	float	sc;
 	float	bullets;
+	vector	org;
 
 	sound (self, CHAN_WEAPON, "weapons/shotgun_fire.wav", 1, ATTN_NORM);
 
@@ -633,8 +646,7 @@ void W_Uzi_Attack2 (void)
 	self.ammo_nails = self.ammo_nails - bullets;
 	self.attack_finished = time + 0.4;
 
-	vector	org; // casing code
-	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 4) + (v_forward * 15);
+	org = W_GetFireLoc (self.origin + self.view_ofs + (v_right * 6) - (v_up * 4) + (v_forward * 15));
 	SpawnCasing (org, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 + 10) * v_up), 2, v_forward,'0 250 0', 100, 3);
 }
 
@@ -664,6 +676,7 @@ void W_Crylink_Touch (void)
 void W_Crylink_Attack (void) //(float postion)
 {
 	entity	proj;
+	vector	org;
 
 	sound (self, CHAN_WEAPON, "weapons/crylink2.wav", 1, ATTN_NORM);
 
@@ -676,7 +689,9 @@ void W_Crylink_Attack (void) //(float postion)
 	
 	setmodel (proj, "models/sprites/bubbles.spr");
 	setsize (proj, '0 0 0', '0 0 0');
-	setorigin (proj, self.origin + self.view_ofs + v_forward * 10 + v_right * 5 + v_up * -14);
+
+	org = W_GetFireLoc (self.origin + self.view_ofs + v_forward * 10 + v_right * 5 + v_up * -14);
+	setorigin (proj, org);
 
 	proj.velocity = v_forward * 4000;
 	proj.velocity = proj.velocity + v_right * ( crandom() * 50 );
@@ -718,6 +733,7 @@ void W_Electro_Touch (void)
 void W_Electro_Attack (float postion)
 {
 	entity	proj;
+	vector	org;
 
 	sound (self, CHAN_WEAPON, "weapons/electro_fire.wav", 1, ATTN_NORM);
 
@@ -729,11 +745,6 @@ void W_Electro_Attack (float postion)
 	proj.solid = SOLID_BBOX;
 	proj.effects = 1;
 	
-	vector org;
-	org = self.origin + self.view_ofs + v_forward * 15 + v_right * 7 + v_up * -9;
-
-	te_smallflash(org);
-
 	//entity	flash;
 	//flash = spawn ();
 	//flash.drawonlytoclient;
@@ -746,11 +757,14 @@ void W_Electro_Attack (float postion)
 	setmodel (proj, "models/elaser.mdl");
 	setsize (proj, '0 0 0', '0 0 0');
 	if (postion == 0)
-	setorigin (proj, self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -14);
-	if (postion == 1)
-	setorigin (proj, self.origin + self.view_ofs + v_forward * 15 + v_right * 10 + v_up * -12);
-	if (postion == 2)
-	setorigin (proj, self.origin + self.view_ofs + v_forward * 15 + v_right * 15 + v_up * -14);
+		org = W_GetFireLoc (self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -14);
+	else if (postion == 1)
+		org = W_GetFireLoc (self.origin + self.view_ofs + v_forward * 15 + v_right * 10 + v_up * -12);
+	else
+		org = W_GetFireLoc (self.origin + self.view_ofs + v_forward * 15 + v_right * 15 + v_up * -14);
+
+	te_smallflash (org);
+	setorigin (proj, org);
 
 	proj.velocity = v_forward * 9999;
 	proj.touch = W_Electro_Touch;
@@ -830,6 +844,7 @@ void W_Plasma_Damage (entity inflictor, entity attacker, float damage, float dea
 void W_Electro_Attack2 (float postion)
 {
 	entity	Plasma;
+	vector	org;
 
 	sound (self, CHAN_WEAPON, "weapons/electro_fire.wav", 1, ATTN_NORM);
 
@@ -842,10 +857,6 @@ void W_Electro_Attack2 (float postion)
 
 	Plasma.movetype = MOVETYPE_BOUNCE;
 	Plasma.solid = SOLID_BBOX;
-	
-	vector org;
-	org = self.origin + self.view_ofs + v_forward * 15 + v_right * 7 + v_up * -9;
-	te_smallflash(org);
 
 	Plasma.takedamage = DAMAGE_YES;
 	Plasma.damageforcescale = 4;
@@ -853,14 +864,17 @@ void W_Electro_Attack2 (float postion)
 	Plasma.event_damage = W_Plasma_Damage;
 
 	setmodel (Plasma, "models/elaser.mdl");
-	setsize (Plasma, '-6 -6 -3', '6 6 3');
+	setsize (Plasma, '-3 -3 -3', '3 3 3');
 
 	if (postion == 0)
-	setorigin (Plasma, self.origin + self.view_ofs + v_forward * 15 + v_right * 0 + v_up * -14);
-	if (postion == 1)
-	setorigin (Plasma, self.origin + self.view_ofs + v_forward * 15 + v_right * 10 + v_up * -12);
-	if (postion == 2)
-	setorigin (Plasma, self.origin + self.view_ofs + v_forward * 15 + v_right * 20 + v_up * -14);
+		org = W_GetFireLoc (self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -14);
+	else if (postion == 1)
+		org = W_GetFireLoc (self.origin + self.view_ofs + v_forward * 15 + v_right * 10 + v_up * -12);
+	else
+		org = W_GetFireLoc (self.origin + self.view_ofs + v_forward * 15 + v_right * 15 + v_up * -14);
+
+	te_smallflash (org);
+	setorigin (Plasma, org);
 
 	Plasma.velocity = v_forward * 900 + v_up * 200;
 	Plasma.angles = vectoangles (Plasma.velocity);
@@ -874,7 +888,6 @@ void W_Electro_Attack2 (float postion)
 
 	self.attack_finished = time + 1;
 	self.ammo_cells = self.ammo_cells - 2;
-
 }
 
 void W_Electro_Attack3 (float postion)
@@ -891,18 +904,18 @@ void W_Electro_Attack3 (float postion)
 	proj.movetype = MOVETYPE_BOUNCEMISSILE; 
 	proj.solid = SOLID_BBOX;
 	proj.effects = 1;
-	
-	org = self.origin + self.view_ofs + v_forward * 15 + v_right * 7 + v_up * -9;
-	te_smallflash(org);
 
 	setmodel (proj, "models/bullet.mdl");
 	setsize (proj, '0 0 0', '0 0 0');
 	if (postion == 0)
-	setorigin (proj, self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -14);
-	if (postion == 1)
-	setorigin (proj, self.origin + self.view_ofs + v_forward * 15 + v_right * 10 + v_up * -12);
-	if (postion == 2)
-	setorigin (proj, self.origin + self.view_ofs + v_forward * 15 + v_right * 15 + v_up * -14);
+		org = W_GetFireLoc (self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -14);
+	else if (postion == 1)
+		org = W_GetFireLoc (self.origin + self.view_ofs + v_forward * 15 + v_right * 10 + v_up * -12);
+	else
+		org = W_GetFireLoc (self.origin + self.view_ofs + v_forward * 15 + v_right * 15 + v_up * -14);
+
+	te_smallflash (org);
+	setorigin (proj, org);
 
 	proj.velocity = v_forward * 9999;
 	proj.think = W_Electro_Touch;
@@ -944,10 +957,11 @@ void W_Grenade_Damage (entity inflictor, entity attacker, float damage, float de
 
 void W_Grenade_Attack (void)
 {
+	entity	gren;
+	vector	org;
+
 	sound (self, CHAN_WEAPON, "weapons/grenade_fire.wav", 1, ATTN_NORM);
 	self.punchangle_x = -4;
-
-	entity gren;
 
 	gren = spawn ();
 	gren.owner = self;
@@ -956,7 +970,10 @@ void W_Grenade_Attack (void)
 	gren.solid = SOLID_BBOX;
 	setmodel(gren, "models/grenademodel.md3");
 	setsize(gren, '-6 -6 -3', '6 6 3');		
-	setorigin(gren, self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -12);
+
+	org = W_GetFireLoc (self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -12);
+	setorigin (gren, org);
+
 	gren.health = 1;
 	gren.takedamage = DAMAGE_YES;
 	gren.velocity = v_forward * 2000 + v_up * 200;
@@ -967,14 +984,13 @@ void W_Grenade_Attack (void)
 	gren.nextthink = time + 30;
 	self.ammo_rockets = self.ammo_rockets - 1;
 
-
 	self.attack_finished = time + 0.8;
 }
 
 void W_Grenade_Attack2 (void)
 {
-
 	entity	gren;
+	vector	org;
 
 	sound (self, CHAN_WEAPON, "weapons/grenade_fire.wav", 1, ATTN_NORM);
 
@@ -993,9 +1009,10 @@ void W_Grenade_Attack2 (void)
 	gren.event_damage = W_Grenade_Damage;
 
 	setmodel (gren, "models/grenademodel.md3");
-	setsize (gren, '-6 -6 -3', '6 6 3');
+	setsize (gren, '-3 -3 -3', '3 3 3');
 
-	setorigin (gren, self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -12);
+	org = W_GetFireLoc (self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -12);
+	setorigin (gren, org);
 
 	gren.velocity = v_forward * 900 + v_up * 200;
 	gren.angles = vectoangles (gren.velocity);
@@ -1048,6 +1065,7 @@ void W_Hagar_Damage (entity inflictor, entity attacker, float damage, float deat
 void W_Hagar_Attack (void)
 {
 	entity	missile;
+	vector	org;
 
 	sound (self, CHAN_WEAPON, "weapons/hagar_fire.wav", 1, ATTN_NORM);
 
@@ -1065,7 +1083,8 @@ void W_Hagar_Attack (void)
 	setmodel (missile, "models/hagarmissile.mdl");
 	setsize (missile, '0 0 0', '0 0 0');
 
-	setorigin (missile, self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -12);
+	org = W_GetFireLoc (self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -12);
+	setorigin (missile, org);
 
 	missile.velocity = v_forward * 2000;
 	missile.velocity = missile.velocity + v_right * ( crandom() * 70 );
@@ -1084,6 +1103,7 @@ void W_Hagar_Attack (void)
 void W_Hagar_Attack2 (void)
 {
 	entity	missile;
+	vector	org;
 
 	sound (self, CHAN_WEAPON, "weapons/hagar_fire.wav", 1, ATTN_NORM);
 
@@ -1102,7 +1122,8 @@ void W_Hagar_Attack2 (void)
 	setmodel (missile, "models/hagarmissile.mdl");
 	setsize (missile, '-6 -6 -3', '6 6 3');
 
-	setorigin (missile, self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -12);
+	org = W_GetFireLoc (self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -12);
+	setorigin (missile, org);
 
 	missile.velocity = v_forward * 1400 + v_up * 100;
 	missile.angles = vectoangles (missile.velocity);
@@ -1140,7 +1161,7 @@ void W_Nex_Attack (void)
 	sound (self, CHAN_WEAPON, "weapons/nexfire.wav", 1, ATTN_NORM);
 	self.punchangle_x = -4;
 
-	org = self.origin + self.view_ofs + v_forward * 15 + v_right * 8 + v_up * -5;
+	org = W_GetFireLoc (self.origin + self.view_ofs + v_forward * 15 + v_right * 8 + v_up * -5);
 	te_smallflash(org);
 
 	//if (game & GAME_INSTAGIB)
@@ -1215,9 +1236,9 @@ void W_Rocket_Attack (void)
 	setmodel (missile, "models/rocketmissile.mdl");
 	setsize (missile, '0 0 0', '0 0 0');
 
-	org = self.origin + self.view_ofs + v_forward * 15 + v_right * 4 + v_up * -15;
-
+	org = W_GetFireLoc (self.origin + self.view_ofs + v_forward * 15 + v_right * 4 + v_up * -15);
 	setorigin (missile, org);
+
 	missile.velocity = v_forward * 850;
 	missile.angles = vectoangles (missile.velocity);
 
