@@ -89,6 +89,7 @@ void PutClientInServer (void)
 	self.event_die = PlayerDie;
 	
 	self.statdraintime = time + 5;
+	self.button0 = self.button1 = self.button2 = self.button3 = 0;
 	
 	W_UpdateWeapon ();
 	W_UpdateAmmo ();
@@ -163,6 +164,13 @@ When you press the jump key
 */
 void PlayerJump (void)
 {
+	if (self.deadflag != DEAD_NO)
+	{
+		if (self.death_time < time)
+			PutClientInServer();
+
+		return;
+	}
 	if (!(self.flags & FL_ONGROUND))
 		return;
 	if (!(self.flags & FL_JUMPRELEASED))
@@ -195,6 +203,11 @@ void PlayerPreThink (void)
 			W_SecondaryAttack ();
 	}
 
+	if (self.button2)
+		PlayerJump ();
+	else
+		self.flags = self.flags | FL_JUMPRELEASED;
+
 	if (self.deadflag != DEAD_NO)
 	{
 		self.angles = self.dead_angles;
@@ -205,11 +218,6 @@ void PlayerPreThink (void)
 		self.viewzoom = 0.1;
 	else if (self.viewzoom != 1)
 		self.viewzoom = 1;
-	
-	if (self.button2)
-		PlayerJump ();
-	else
-		self.flags = self.flags | FL_JUMPRELEASED;
 		
 	if (self.statdraintime < time)
 	{
