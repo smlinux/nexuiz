@@ -7,6 +7,15 @@ gamec/defs.h		// Should rename this, it has fields and globals
 
 gamec/extensions.h
 
+gamec/bot.c
+gamec/bot_way.c
+gamec/bot_fight.c 
+gamec/bot_ai.c
+gamec/bot_misc.c
+gamec/bot_phys.c
+gamec/bot_move.c
+gamec/bot_ed.c
+
 gamec/g_subs.c
 
 gamec/cl_physics.c
