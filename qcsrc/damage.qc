@@ -41,11 +41,12 @@ void Damage (entity attacker, vector hitloc, entity targ, float deathtype, float
 void RadiusDamage (entity attacker, entity inflictor, float deathtype, float damage)
 {
 	entity	targ;
-	
+
 	targ = findradius (inflictor.origin, damage);
 	while (targ)
 	{
-		Damage (attacker, inflictor.origin, targ, deathtype, damage);
+		if (targ != inflictor)
+			Damage (attacker, inflictor.origin, targ, deathtype, damage - vlen (inflictor.origin - targ.origin));
 		targ = targ.chain;
 	}
 }
