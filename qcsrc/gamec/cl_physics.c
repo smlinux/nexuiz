@@ -65,8 +65,6 @@ void SV_PlayerPhysics()
 		wishspeed = vlen(wishvel);
 		if (wishspeed > sv_maxspeed)
 			wishspeed = sv_maxspeed;
-		if (self.items & IT_SPEED)
-			wishspeed = wishspeed * POWERUP_SPEED_MOVEMENT;
 		if (self.crouch)
 			wishspeed = wishspeed * 0.5;
 		wishspeed = wishspeed * 0.6;
@@ -85,8 +83,6 @@ void SV_PlayerPhysics()
 		wishspeed = vlen(wishvel);
 		if (wishspeed > sv_maxspeed)
 			wishspeed = sv_maxspeed;
-		if (self.items & IT_SPEED)
-			wishspeed = wishspeed * POWERUP_SPEED_MOVEMENT;
 		if (self.crouch)
 			wishspeed = wishspeed * 0.5;
 		if (self.ladder_entity.classname == "func_water")
@@ -127,8 +123,6 @@ void SV_PlayerPhysics()
 	wishspeed = vlen(wishvel);
 	if (wishspeed > sv_maxspeed)
 		wishspeed = sv_maxspeed;
-	if (self.items & IT_SPEED)
-		wishspeed = wishspeed * POWERUP_SPEED_MOVEMENT;
 	if (self.crouch)
 		wishspeed = wishspeed * 0.5;
 

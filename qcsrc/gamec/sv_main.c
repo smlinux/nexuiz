@@ -19,25 +19,4 @@ void StartFrame (void)
 
 	BotFrame ();
 	CheckRules ();
-
-	if (slowmoactive)
-	{
-		if (!slowmowasactive)
-		{
-			slowmowasactive = TRUE;
-			slowmooldvalue = cvar("slowmo");
-			s = strcat("slowmo ", ftos(slowmooldvalue * 0.25), "\n");
-			localcmd(s);
-		}
-	}
-	else
-	{
-		if (slowmowasactive)
-		{
-			slowmowasactive = FALSE;
-			s = strcat("slowmo ", ftos(slowmooldvalue), "\n");
-			localcmd(s);
-		}
-	}
-	slowmoactive = FALSE;
 }

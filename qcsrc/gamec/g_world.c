@@ -78,10 +78,8 @@ void worldspawn (void)
 	precache_model ("models/items/a_rockets.md3");
 	precache_model ("models/items/a_bullets.mdl");
 
-	precache_model ("models/items/g_strength.zym");
-	precache_model ("models/items/g_invincible.zym");
-	precache_model ("models/items/g_slowmo.zym");
-	precache_model ("models/items/g_speed.zym");
+	precache_model ("models/items/g_strength.md3");
+	precache_model ("models/items/g_invincible.md3");
 
 	precache_model ("models/gibs/eye.md3");
 	precache_model ("models/gibs/gib1.md3");

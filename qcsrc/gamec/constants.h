@@ -173,15 +173,8 @@ vector	PL_MAX					= '16 16 45';
 float	game;	// set to "gamecfg" on worldspawn
 
 
-
-float	POWERUP_SPEED_MOVEMENT	= 3; // movement multiplier for speed powerup
-float	POWERUP_SPEED_JUMPVELOCITY = 640; // how much jump velocity with speed powerup
-//float	JUMP_VELOCITY = ; // normal jump velocity
-
 float	POWERUP_STRENGTH_DAMAGE	= 2; // damage multiplier for strength powerup
 float	POWERUP_STRENGTH_FORCE	= 4; // force multiplier for strength powerup
 
 float	POWERUP_INVINCIBLE_TAKEDAMAGE	= 0.2; // received damage multiplier for invincible powerup
-
-float	POWERUP_SLOWMO_MOVEMENT	= 0.3; // movement speed multiplier for slowmo powerup
 

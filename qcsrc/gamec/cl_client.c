@@ -252,10 +252,7 @@ void PlayerJump (void)
 	if (!(self.flags & FL_JUMPRELEASED))
 		return;
 
-	if (self.items & IT_SPEED)
-		self.velocity_z = self.velocity_z + POWERUP_SPEED_JUMPVELOCITY;
-	else
-		self.velocity_z = self.velocity_z + cvar("g_balance_jumpheight");
+	self.velocity_z = self.velocity_z + cvar("g_balance_jumpheight");
 
 	self.flags = self.flags - FL_ONGROUND;
 	self.flags = self.flags - FL_JUMPRELEASED;
@@ -287,7 +284,6 @@ void() WaterMove =
 		if (self.flags & FL_INWATER)
 		{
 			// play leave water sound
-			sound (self, CHAN_BODY, "misc/outwater.wav", 1, ATTN_NORM);
 			self.flags = self.flags - FL_INWATER;
 		}
 		return;
@@ -378,7 +374,7 @@ void player_powerups (void)
 		if (time < self.strength_finished)
 		{
 			self.items = self.items | IT_STRENGTH;
-			sprint(self, "Strength infuses your weapons with devestating power\n");
+			sprint(self, "^5Strength infuses your weapons with devestating power\n");
 		}
 	}
 	if (self.items & IT_INVINCIBLE)
@@ -387,7 +383,7 @@ void player_powerups (void)
 		if (time > self.invincible_finished)
 		{
 			self.items = self.items - (self.items & IT_INVINCIBLE);
-			sprint(self, "Invincible has worn off\n");
+			sprint(self, "^5Invincible has worn off\n");
 		}
 	}
 	else
@@ -399,54 +395,6 @@ void player_powerups (void)
 			sprint(self, "Invincible shielding surrounds you\n");
 		}
 	}
-	if (self.items & IT_SPEED)
-	{
-		self.effects = self.effects | EF_DIMLIGHT;
-		if (time > self.speed_finished)
-		{
-			self.items = self.items - (self.items & IT_SPEED);
-			sprint(self, "Speed has worn off\n");
-		}
-	}
-	else
-	{
-		self.effects = self.effects - (self.effects & EF_DIMLIGHT);
-		if (time < self.speed_finished)
-		{
-			self.items = self.items | IT_SPEED;
-			sprint(self, "Speed makes you run faster than ever before\n");
-		}
-	}
-	if (self.items & IT_SLOWMO)
-	{
-		self.effects = self.effects | EF_DIMLIGHT;
-		slowmoactive = TRUE;
-		if (time > self.slowmo_finished)
-		{
-			self.items = self.items - (self.items & IT_SLOWMO);
-			sprint(self, "Slow Motion has worn off\n");
-		}
-	}
-	else
-	{
-		self.effects = self.effects - (self.effects & EF_DIMLIGHT);
-		if (time < self.slowmo_finished)
-		{
-			self.items = self.items | IT_SLOWMO;
-			sprint(self, "Slow Motion slows time around you\n");
-		}
-	}
-	/*
-	self.items = self.items - (self.items & (IT_STRENGTH + IT_INVINCIBLE + IT_SLOWMO + IT_SPEED));
-	if (time < self.strength_finished)
-		self.items = self.items | IT_STRENGTH;
-	if (time < self.invincible_finished)
-		self.items = self.items | IT_INVINCIBLE;
-	if (time < self.slowmo_finished)
-		self.items = self.items | IT_SLOWMO;
-	if (time < self.speed_finished)
-		self.items = self.items | IT_SPEED;
-	*/
 }
 
 void player_regen (void)
