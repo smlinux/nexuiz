@@ -296,7 +296,11 @@ void PlayerPreThink (void)
 
 	if (self.statdraintime < time)
 	{
+		if (self.health < 25)
+			self.health = self.health + 3;
 		if (self.health < 50)
+			self.health = self.health + 2;
+		if (self.health < 100)
 			self.health = self.health + 1;
 		if (self.health > 100)
 			self.health = self.health - 1;
