@@ -17,11 +17,11 @@ void() trigger_push_touch =
 	// figure out how long it will take to hit the point considering gravity
 	grav = cvar("sv_gravity");
 	flighttime = sqrt((self.enemy.origin_z - org_z) / (0.5 * grav));
-	//if (!flighttime)
-	//{
+	if (!flighttime)
+	{
 	//	remove(self);
-	//	return;
-	//}
+		return;
+	}
 
 	// how far in X and Y to move
 	self.movedir = (self.enemy.origin - org);
@@ -92,11 +92,6 @@ void() trigger_push =
 	self.modelindex = 0;
 	self.model = "";
 
-	// normal push setup
-	if (!self.speed)
-		self.speed = 1000;
-	self.movedir = self.movedir * self.speed * 10;
-
 	self.touch = trigger_push_touch;
 
 	// check if this is a jump pad
@@ -105,13 +100,14 @@ void() trigger_push =
 		self.think = trigger_push_findtarget;
 		self.nextthink = time + 0.2;
 	}
-};
-
-
-void() target_push =
-{
-	trigger_push();
+	else
+	{
+		// normal push setup
+		if (!self.speed)
+			self.speed = 1000;
+		self.movedir = self.movedir * self.speed * 10;
+	}
 };
 
 void() info_notnull = {};
-void() info_targetposition = {};
+void() target_position = {};
