@@ -1,10 +1,11 @@
 // Property of Alientrap/AK
-// options/server.menu
-Item Layout Server
+//
+// creategame/game.menu
+Item Layout Game
 {
 	direction	[Nex_DefaultVertDirection]
-	size		'600 600'
-	origin		'300 50'
+	size 		'900 585'
+	origin		'450 0'
 	alignment	[AlignFirst]
 
 	DeriveTemplate Nex_Composition Nex_Option_EditBox
@@ -24,76 +25,76 @@ Item Layout Server
 	Derive Nex_Option_Switch Instagib
 	{
 		text	"Instagib"
-		target	"::Data::Server::Instagib::Switch"
+		target	"::Data::Game::Instagib::Switch"
 	}
 	Derive Nex_Option_Switch Rocketarena
 	{
 		text	"Rocket Arena"
-		target	"::Data::Server::RocketArena::Switch"
+		target	"::Data::Game::RocketArena::Switch"
 	}
 	Derive Nex_Option_Switch Casings
 	{
 		text	"Bullet Casings"
-		target	"::Data::Server::Casings::Switch"
+		target	"::Data::Game::Casings::Switch"
 	}
 	Derive Nex_Option_EditBox Health
 	{
 		text	"Starting Health"
-		target	"Data::Server::Health::Text"
+		target	"Data::Game::Health::Text"
 	}
 	Derive Nex_Option_EditBox Gravity
 	{
 		text	"Level Gravity"
-		target	"Data::Server::Gravity::Text"
+		target	"Data::Game::Gravity::Text"
 	}
 	Derive Nex_Option_EditBox Maxspeed
 	{
 		text	"Player Maxspeed"
-		target	"Data::Server::Health::Text"
+		target	"Data::Game::MaxSpeed::Text"
 	}
 	Derive Nex_Option_EditBox Gamespeed
 	{
 		text	"Game Speed"
-		target	"Data::Server::GameSpeed::Text"
+		target	"Data::Game::GameSpeed::Text"
 	}
 	Derive Nex_Option_EditBox Maxairspeed
 	{
 		text	"Max Air Speed"
-		target	"Data::Server::MaxAirSpeed::Text"
+		target	"Data::Game::MaxAirSpeed::Text"
 	}
 	Derive Nex_Option_EditBox JumpHeight
 	{
 		text	"Jump height"
-		target	"Data::Server::JumpHeight::Text"
+		target	"Data::Game::JumpHeight::Text"
 	}
 	Derive Nex_Option_EditBox HealthRegeneration
 	{
 		text	"Regeneration Speed"
-		target	"Data::Server::HealthRegeneration::Text"
+		target	"Data::Game::HealthRegeneration::Text"
 	}
 	Derive Nex_Option_EditBox ArmorRott
 	{
 		text	"Armor Rott Speed"
-		target	"Data::Server::ArmorRott::Text"
+		target	"Data::Game::ArmorRott::Text"
 	}
 	Derive Nex_Option_EditBox SelfDamagePercent
 	{
 		text	"Self Damage Percent"
-		target	"Data::Server::SelfDamagePercent::Text"
+		target	"Data::Game::SelfDamagePercent::Text"
 	}
 	Derive Nex_Option_EditBox WeaponSwitchDelay
 	{
 		text	"Weapon Switch Delay"
-		target	"Data::Server::WeaponSwitchDelay::Text"
+		target	"Data::Game::WeaponSwitchDelay::Text"
 	}
 	Derive Nex_Option_EditBox Friction
 	{
 		text	"Player Friction"
-		target	"Data::Server::Friction::Text"
+		target	"Data::Game::Friction::Text"
 	}
 	Derive Nex_Option_EditBox Accelerate
 	{
 		text	"Player Accelerate"
-		target	"Data::Server::Accelerate::Text"
+		target	"Data::Game::Accelerate::Text"
 	}
 }

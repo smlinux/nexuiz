@@ -1,9 +1,9 @@
 // Property of Alientrap/AK
 //
 // creategame/basic.menu
-Item Window BasicOptions
+Item Window Basic
 {
-	size '850 585'
+	size '900 585'
 
 	Item Window Map
 	{
@@ -55,8 +55,8 @@ Item Window BasicOptions
 	Item Layout Settings
 	{
 		pos		'400 0'
-		size		'450 585'
-		origin		'225 0'
+		size		'500 585'
+		origin		'250 0'
 		alignment	[AlignFirst]
 		direction	[Nex_DefaultVertDirection]
 		flag 		[FlagEmbedded]

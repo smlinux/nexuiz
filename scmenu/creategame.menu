@@ -3,13 +3,13 @@
 // creategame.menu
 Item Layout CreateGame
 {
-	size	'850 630'
+	size	'900 630'
 	alignment [AlignLeft]
 	direction [Nex_DefaultVertDirection]
 
 	Item Layout Bar
 	{
-		size	  '850 20'
+		size	  '900 20'
 		alignment [AlignLeft]
 		direction [Nex_DefaultHorzDirection]
 
@@ -18,7 +18,7 @@ Item Layout CreateGame
 			normal		" Basic Options "
 
 			init		Nex_Action_JumpToPage
-			target		"Panel::BasicOptions"
+			target		"Panel::Basic"
 		}
 		Derive TextButton MapList
 		{
@@ -30,18 +30,26 @@ Item Layout CreateGame
 		Derive TextButton Configurations
 		{
 			normal		" Game Settings "
+
+			init		Nex_Action_JumpToPage
+			target		"Panel::Game"
 		}
 		Derive TextButton Advanced
 		{
 			normal		" Weapon Settings "
+
+			init		Nex_Action_JumpToPage
+			target		"Panel::Weapon"
 		}
 	}
 	Item EventWindow Panel
 	{
-		size '850 585'
+		size '900 585'
 		reinit	Nex_Action_MakeFirstVisible
 
 		#include "menu/creategame/basic.menu"
 		#include "menu/creategame/maplist.menu"
+		#include "menu/creategame/game.menu"
+		#include "menu/creategame/weapon.menu"
 	}
 }

@@ -66,27 +66,6 @@ Item Layout Options
 			init		Nex_Action_JumpToPage
 			target		"Panel::Input"
 		}
-		Derive TextButton Server
-		{
-			normal		"Gameplay"
-
-			init		Nex_Action_JumpToPage
-			target		"Panel::Server"
-		}
-		Derive TextButton Weapon
-		{
-			normal		"Weapons"
-
-			init		Nex_Action_JumpToPage
-			target		"Panel::Weapon"
-		}
-		Derive TextButton Weapon2
-		{
-			normal		"More Weapons"
-
-			init		Nex_Action_JumpToPage
-			target		"Panel::Weapon2"
-		}
 	}
 	Item EventWindow Panel
 	{
@@ -100,9 +79,6 @@ Item Layout Options
 		#include "menu/options/color.menu"
 		#include "menu/options/effects.menu"
 		#include "menu/options/input.menu"
-		//#include "menu/options/server.menu"
-		//#include "menu/options/weapon.menu"
-		//#include "menu/options/weapon2.menu"
 	}
 }
 }

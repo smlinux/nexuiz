@@ -1,0 +1,280 @@
+// Property of Alientrap/AK
+//
+// creategame/weapon.menu
+Item ScrollWindow Weapon
+{
+	size 		'900 585'
+
+	Item Arrangement Arrangement
+	{
+		direction	[Nex_DefaultVertDirection]
+		alignment	[AlignFirst]
+		flag		[FlagEmbedded]
+
+		// hack to make the arrangement have a set width
+		Item Window FixWidth
+		{
+			size	'900 0'
+			Derive Nex_Void Left
+			{
+				pos	'0 0'
+				size	'450 0'
+			}
+			Derive Nex_Void Right
+			{
+				pos	'450 0'
+				size	'450 0'
+			}
+		}
+
+		DeriveTemplate Nex_Composition Nex_Option_EditBox
+		{
+			DeriveTemplate Nex_Automation_Option_EditBox Automation
+			{}
+			DeriveTemplate TextButton Description
+			{}
+			DeriveTemplate EditBox EditBox
+			{
+				size 	'260 12'
+				action  Nex_Action_TestOnChange
+				select  Nex_Action_TestOnSelect
+			}
+		}
+
+		Derive Nex_Option_EditBox LaserDamage
+		{
+			text	"Laser Damage"
+			target	"Data::Weapon::LaserDamage::Text"
+		}
+		Derive Nex_Option_EditBox LaserEdgeDamage
+		{
+			text	"Laser edge damage"
+			target	"Data::Weapon::LaserEdgeDamage::Text"
+		}
+		Derive Nex_Option_EditBox LaserForce
+		{
+			text	"Laser Push Force"
+			target	"Data::Weapon::LaserForce::Text"
+		}
+		Derive Nex_Option_EditBox LaserRadius
+		{
+			text	"Laser Radius"
+			target	"Data::Weapon::LaserRadius::Text"
+		}
+		Derive Nex_Option_EditBox LaserSpeed
+		{
+			text	"Laser Speed"
+			target	"Data::Weapon::LaserSpeed::Text"
+		}
+		Derive Nex_Option_EditBox ShotgunDamage
+		{
+			text	"Shotgun Damage"
+			target	"Data::Weapon::ShotgunDamage::Text"
+		}
+		Derive Nex_Option_EditBox ShotgunBullets
+		{
+			text	"Shotgun Bullets"
+			target	"Data::Weapon::ShotgunBullets::Text"
+		}
+		Derive Nex_Option_EditBox UziDamage
+		{
+			text	"Uzi Damage"
+			target	"Data::Weapon::UziDamage::Text"
+		}
+		Derive Nex_Option_EditBox UziSpread
+		{
+			text	"Uzi Spread"
+			target	"Data::Weapon::UziSpread::Text"
+		}
+		Derive Nex_Option_EditBox UziSpread2
+		{
+			text	"Uzi Spread2"
+			target	"Data::Weapon::UziSpread2::Text"
+		}
+		Derive Nex_Option_EditBox UziRefire
+		{
+			text	"Uzi Refire"
+			target	"Data::Weapon::UziRefire::Text"
+		}
+		Derive Nex_Option_EditBox GrenadeLauncherDamage
+		{
+			text	"Grenade Launcher Damage"
+			target	"Data::Weapon::GrenadeLauncherDamage::Text"
+		}
+		Derive Nex_Option_EditBox GrenadeLauncherEdgeDamage
+		{
+			text	"GL Edge Damage"
+			target	"Data::Weapon::GrenadeLauncherEdgeDamage::Text"
+		}
+		Derive Nex_Option_EditBox GrenadeLauncherForce
+		{
+			text	"Grenade Launcher Force"
+			target	"Data::Weapon::GrenadeLauncherForce::Text"
+		}
+		Derive Nex_Option_EditBox GrenadeLauncherRadius
+		{
+			text	"Grenade Launcher Radius"
+			target	"Data::Weapon::GrenadeLauncherRadius::Text"
+		}
+		Derive Nex_Option_EditBox GrenadeLauncherSpeed
+		{
+			text	"Grenade Launcher Speed"
+			target	"Data::Weapon::GrenadeLauncherSpeed::Text"
+		}
+		Derive Nex_Option_EditBox GrenadeLauncherSpeedUp
+		{
+			text	"Grenade Launcher Speedup"
+			target	"Data::Weapon::GrenadeLauncherSpeedUp::Text"
+		}
+		Derive Nex_Option_EditBox GrenadeLauncherSpeed2
+		{
+			text	"Grenade Launcher Speed2"
+			target	"Data::Weapon::GrenadeLauncherSpeed2::Text"
+		}
+		Derive Nex_Option_EditBox GrenadeLauncherSpeed2Up
+		{
+			text	"Grenade Launcher Speed2up"
+			target	"Data::Weapon::GrenadeLauncherSpeed2Up::Text"
+		}
+		Derive Nex_Option_EditBox ElectroDamage
+		{
+			text	"Electro Damage"
+			target	"Data::Weapon::ElectroDamage::Text"
+		}
+		Derive Nex_Option_EditBox ElectroEdgeDamage
+		{
+			text	"Electro Edgedamage"
+			target	"Data::Weapon::ElectroEdgeDamage::Text"
+		}
+		Derive Nex_Option_EditBox ElectroForce
+		{
+			text	"Electro Force"
+			target	"Data::Weapon::ElectroForce::Text"
+		}
+		Derive Nex_Option_EditBox ElectroRadius
+		{
+			text	"Electro Radius"
+			target	"Data::Weapon::ElectroRadius::Text"
+		}
+		Derive Nex_Option_EditBox ElectroRefire
+		{
+			text	"Electro Refire"
+			target	"Data::Weapon::ElectroRefire::Text"
+		}
+		Derive Nex_Option_EditBox ElectroSpeed
+		{
+			text	"Electro Speed"
+			target	"Data::Weapon::ElectroSpeed::Text"
+		}
+		Derive Nex_Option_EditBox ElectroBallSpeed
+		{
+			text	"Electroball Speed"
+			target	"Data::Weapon::ElectroBallSpeed::Text"
+		}
+		Derive Nex_Option_EditBox ElectroBallSpeedUp
+		{
+			text	"Electroball Speed up"
+			target	"Data::Weapon::ElectroBallSpeedUp::Text"
+		}
+		Derive Nex_Option_EditBox CryLinkDamage
+		{
+			text	"CryLink Damage"
+			target	"Data::Weapon::CryLinkDamage::Text"
+		}
+		Derive Nex_Option_EditBox CryLinkEdgeDamage
+		{
+			text	"CryLink Edgedamage"
+			target	"Data::Weapon::CryLinkEdgeDamage::Text"
+		}
+		Derive Nex_Option_EditBox CryLinkForce
+		{
+			text	"CryLink Force"
+			target	"Data::Weapon::CryLinkForce::Text"
+		}
+		Derive Nex_Option_EditBox CryLinkRadius
+		{
+			text	"CryLink Radius"
+			target	"Data::Weapon::CryLinkRadius::Text"
+		}
+		Derive Nex_Option_EditBox CryLinkSpeed
+		{
+			text	"CryLink Speed"
+			target	"Data::Weapon::CryLinkSpeed::Text"
+		}
+		Derive Nex_Option_EditBox CryLinkSpread
+		{
+			text	"CryLink Spread"
+			target	"Data::Weapon::CryLinkSpread::Text"
+		}
+		Derive Nex_Option_EditBox CryLinkRefire
+		{
+			text	"CryLink Refire"
+			target	"Data::Weapon::CryLinkRefire::Text"
+		}
+		Derive Nex_Option_EditBox NexDamage
+		{
+			text	"Nex Damage"
+			target	"Data::Weapon::NexDamage::Text"
+		}
+		Derive Nex_Option_EditBox HagarDamage
+		{
+			text	"Hagar Damage"
+			target	"Data::Weapon::HagarDamage::Text"
+		}
+		Derive Nex_Option_EditBox HagarEdgeDamage
+		{
+			text	"Hagar Edge Damage"
+			target	"Data::Weapon::HagarEdgeDamage::Text"
+		}
+		Derive Nex_Option_EditBox HagarForce
+		{
+			text	"Hagar Force"
+			target	"Data::Weapon::HagarForce::Text"
+		}
+		Derive Nex_Option_EditBox HagarRadius
+		{
+			text	"Hagar Radius"
+			target	"Data::Weapon::HagarRadius::Text"
+		}
+		Derive Nex_Option_EditBox HagarSpeed
+		{
+			text	"Hagar Speed"
+			target	"Data::Weapon::HagarSpeed::Text"
+		}
+		Derive Nex_Option_EditBox HagarSpeed2
+		{
+			text	"Hagar Speed2"
+			target	"Data::Weapon::HagarSpeed2::Text"
+		}
+		Derive Nex_Option_EditBox HagarSpeed2Up
+		{
+			text	"Hagar Speed2 up"
+			target	"Data::Weapon::HagarSpeed2Up::Text"
+		}
+		Derive Nex_Option_EditBox RocketLauncherDamage
+		{
+			text	"Rocket Launcher Damage"
+			target	"Data::Weapon::RocketLauncherDamage::Text"
+		}
+		Derive Nex_Option_EditBox RocketLauncherEdgeDamage
+		{
+			text	"RL Edge Damage"
+			target	"Data::Weapon::RocketLauncherEdgeDamage::Text"
+		}
+		Derive Nex_Option_EditBox RocketLauncherForce
+		{
+			text	"Rocket Launcher Force"
+			target	"Data::Weapon::RocketLauncherForce::Text"
+		}
+		Derive Nex_Option_EditBox RocketLauncherRadius
+		{
+			text	"Rocket Launcher Radius"
+			target	"Data::Weapon::RocketLauncherRadius::Text"
+		}
+		Derive Nex_Option_EditBox RocketLauncherSpeed
+		{
+			text	"Rocket Launcher Speed"
+			target	"Data::Weapon::RocketLauncherSpeed::Text"
+		}
+	}
+}

@@ -42,7 +42,7 @@ void() Item_Arrangement_Update =
 	if( self.direction_x ) {
 		if( self.alignment == ITEM_ALIGN_LEFT )
 			self.origin_y = 0;
-		else if( self.alignment == ITEM_ALIGN_CENTER )
+		else if( self.alignment == ITEM_ALIGN_CENTER || self.alignment == ITEM_ALIGN_FIRST )
 			self.origin_y = self.size_y / 2;
 		else
 			self.origin_y = self.size_y;
@@ -51,7 +51,7 @@ void() Item_Arrangement_Update =
 	if( self.direction_y ) {
 		if( self.alignment == ITEM_ALIGN_LEFT )
 			self.origin_x = 0;
-		else if( self.alignment == ITEM_ALIGN_CENTER )
+		else if( self.alignment == ITEM_ALIGN_CENTER || self.alignment == ITEM_ALIGN_FIRST )
 			self.origin_x = self.size_x / 2;
 		else
 			self.origin_x = self.size_x;

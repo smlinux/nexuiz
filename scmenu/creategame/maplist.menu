@@ -3,7 +3,7 @@
 // creategame/maplist.menu
 Item Window MapList
 {
-	size '850 585'
+	size '900 585'
 
 	Derive Label MapsLabel
 	{
@@ -13,25 +13,25 @@ Item Window MapList
 	Derive List Maps
 	{
 		pos	'0 20'
-		size	'400 500'
+		size	'425 500'
 
 		target	"::Data::Server::Map::List"
 	}
 	Derive Label CycleLabel
 	{
-		pos	'450 0'
+		pos	'475 0'
 		text	"Cycle List or some other name:"
 	}
 	Derive List Cycle
 	{
-		pos	'450 20'
-		size	'400 450'
+		pos	'475 20'
+		size	'425 450'
 
 		target	"::Data::Server::Map::Cycle"
 	}
 	Item Layout Panel
 	{
-		pos	'450 470'
+		pos	'475 470'
 		size	'400 30'
 		direction	[Nex_DefaultHorzDirection]
 		flag 		[FlagEmbedded]
