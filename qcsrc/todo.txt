@@ -4,9 +4,9 @@ Add deathtypes and obituary messages
 When dead, leave corpse. Fade away corpse in 10 seconds.
 
 WEAPONS:
-Laser: Autoaim and kill any projectile coming (can destory rockets, grenades, hagar missiles)
+Laser: Autoaim and kill any projectile coming (can destory rockets, grenades, hagar missiles). This is hard, but I think it will add to the gameplay without making it to fancy and complex.
 Shotgun: Automatic fast 3 shots
-Add weapon animations. Ask Vermeulen for description.
+Add weapon animations. Ask Vermeulen for description. I am hoping for a client side moving of the weapon, moving it back depending on how powerful the shot was, and moving with the users jumps/runs/stafing/hits etc.
 
 POWERUPS:
 Add energy powerup - Makes the user run 3 times as fast, and jumps 3 times as high. 30 seconds, 2 minute respond time
@@ -29,11 +29,12 @@ Add crouching
 ANIMATIONS:  (all player animations are in player.qc)
 Add crouching animations (when crouch is added, this includes: duck duckwalk duckjump duckidle)
 Add taunt
-Add dying animations (dead1 dead2, then switch to corpse)
+Add dying animations (dead1 dead2, then switch to corpse) (I would really really pefer ragdoll, and I think a lot of people would, but I am guessing we can not do that in the time frame)
 
 EFFECTS:
 New effect for the laser. No trail, red, needs to glow. Can be done entirely by model, hopefully.
 Small air burst, large air burst. Small air burst should be red, for the laser. Large air burst is for the secondary rocket fire.
+The glow texture on the nex gun needs to fade in and out depending on the users fire rate.
 
 Quake3 entities needed:
 Add func_rotating, func_bobbing, func_group, func_train
