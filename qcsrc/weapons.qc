@@ -646,7 +646,7 @@ void W_Crylink_Attack (void) //(float postion)
 	setsize (proj, '0 0 0', '0 0 0');
 	setorigin (proj, self.origin + self.view_ofs + v_forward * 10 + v_right * 5 + v_up * -14);
 
-	proj.velocity = v_forward * 7000;
+	proj.velocity = v_forward * 4000;
 	proj.velocity = proj.velocity + v_right * ( crandom() * 50 );
 	proj.velocity = proj.velocity + v_up * ( crandom() * 50 );
 	proj.touch = W_Crylink_Touch;
@@ -754,9 +754,30 @@ void W_Plasma_Explode (entity ignore)
 	remove (self);
 }
 
+void W_Plasma_Explode2 (entity ignore)
+{
+	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+	WriteByte (MSG_BROADCAST, 79);
+	WriteCoord (MSG_BROADCAST, self.origin_x);
+	WriteCoord (MSG_BROADCAST, self.origin_y);
+	WriteCoord (MSG_BROADCAST, self.origin_z);
+	WriteCoord (MSG_BROADCAST, 0);		// SeienAbunae: groan... Useless clutter
+	WriteCoord (MSG_BROADCAST, 0);
+	WriteCoord (MSG_BROADCAST, 0);
+	WriteByte (MSG_BROADCAST, 155);
+
+	te_customflash (self.origin, 5000, 10, '0 0 1');
+
+	self.event_damage = SUB_Null;
+	RadiusDamage (self, self.owner, 150, 50, 150, world, 150, IT_ELECTRO);
+	sound (self, CHAN_IMPACT, "weapons/plasmahit.wav", 1, ATTN_NORM);
+
+	remove (self);
+}
+
 void W_Plasma_FuseExplode (void)
 {
-	W_Plasma_Explode (world);
+	W_Plasma_Explode2 (world);
 }
 
 void W_Plasma_Touch (void)
@@ -1203,7 +1224,7 @@ void W_Rocket_Attack (void)
 	org = self.origin + self.view_ofs + v_forward * 20 + v_right * 4 + v_up * -15;
 
 	setorigin (missile, org);
-	missile.velocity = v_forward * 1000;
+	missile.velocity = v_forward * 850;
 	missile.angles = vectoangles (missile.velocity);
 
 	missile.touch = W_Rocket_Touch ;
