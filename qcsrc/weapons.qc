@@ -428,20 +428,28 @@ void W_Shotgun_Attack (void)
 	self.attack_finished = time + 0.8;
 }
 
-void W_Grenade_Explode (void)
+void W_Grenade_Explode (entity ignore)
 {
 	te_explosion (self.origin);
-	RadiusDamage (self.owner, self, 0, 100);
+	RadiusDamage (self.owner, self, 0, 100, world);
 	sound (self, CHAN_BODY, "weapons/Grenade_Impact.wav", 1, ATTN_NORM);
 	remove (self);
+}
+
+void W_Grenade_FuseExplode (void)
+{
+	W_Grenade_Explode (world);
 }
 
 void W_Grenade_Touch (void)
 {
 	if (other.classname == "player" || other.classname == "corpse")
-		W_Grenade_Explode ();
-
-	sound (self, CHAN_BODY, "weapons/Grenade_Bounce.wav", 1, ATTN_NORM);
+	{
+		Damage (self.owner, self.origin, other, 0, 100);
+		W_Grenade_Explode (other);
+	}
+	else
+		sound (self, CHAN_BODY, "weapons/Grenade_Bounce.wav", 1, ATTN_NORM);
 }
 
 void W_Grenade_Attack (void)
@@ -471,12 +479,12 @@ void W_Grenade_Attack (void)
 	setorigin (gren, org);
 	
 	makevectors (self.v_angle);
-	gren.velocity = v_forward * 1200;
+	gren.velocity = v_forward * 900 + v_up * 200;
 	gren.angles = vectoangles (gren.velocity);
 	gren.avelocity = '150 1500 150';
 	
 	gren.touch = W_Grenade_Touch;
-	gren.think = W_Grenade_Explode;
+	gren.think = W_Grenade_FuseExplode;
 	gren.nextthink = time + 2;
 	
 	self.attack_finished = time + 1;
@@ -595,10 +603,10 @@ void W_Hagar_Attack (void)
 	self.attack_finished = time + 0.2;
 }
 
-void W_Rocket_Explode (void)
+void W_Rocket_Explode (entity ignore)
 {
 	te_explosion (self.origin);
-	RadiusDamage (self.owner, self, 0, 100);
+	RadiusDamage (self.owner, self, 0, 100, ignore);
 	sound (self, CHAN_BODY, "weapons/Rocket_Impact.wav", 1, ATTN_NORM);
 	remove (self);
 }
@@ -612,8 +620,13 @@ void W_Rocket_Touch (void)
 		remove (self);
 		return;
 	}
-	
-	W_Rocket_Explode ();
+	else if (other.classname == "player" || other.classname == "corpse")
+	{
+		Damage (self.owner, self.origin, other, 0, 100);
+		W_Rocket_Explode (other);
+	}
+	else
+		W_Rocket_Explode (world);
 }
 
 void W_Rocket_Attack (void)

@@ -38,7 +38,7 @@ void Damage (entity attacker, vector hitloc, entity targ, float deathtype, float
 	self = oldself;
 }
 
-void RadiusDamage (entity attacker, entity inflictor, float deathtype, float damage)
+void RadiusDamage (entity attacker, entity inflictor, float deathtype, float damage, entity ignore)
 {
 	entity	targ;
 
@@ -46,7 +46,8 @@ void RadiusDamage (entity attacker, entity inflictor, float deathtype, float dam
 	while (targ)
 	{
 		if (targ != inflictor)
-			Damage (attacker, inflictor.origin, targ, deathtype, damage - vlen (inflictor.origin - targ.origin));
+			if (ignore && targ != ignore)
+				Damage (attacker, inflictor.origin, targ, deathtype, damage - vlen (inflictor.origin - targ.origin));
 		targ = targ.chain;
 	}
 }
