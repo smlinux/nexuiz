@@ -59,7 +59,7 @@ void player_anim (void)
 	{
 		// don't duck if moving
 		if (self.movement_x * self.movement_x + self.movement_y * self.movement_y > 20)
-			self.crouch = 0;
+			self.frame = $duckwalk;
 		else
 			self.frame = $duckidle;
 	}
