@@ -180,7 +180,7 @@ void PlayerJump (void)
 	if (!(self.flags & FL_JUMPRELEASED))
 		return;
 
-	self.velocity_z = self.velocity_z + 270;
+	self.velocity_z = self.velocity_z + 300;
 
 	self.flags = self.flags - FL_ONGROUND;
 	self.flags = self.flags - FL_JUMPRELEASED;

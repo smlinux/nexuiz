@@ -1,6 +1,7 @@
 $frame die1 die2 draw duck duckwalk duckjump duckidle idle
 $frame jump pain1 pain2 shoot taunt run runbackwards
-$frame strafeleft straferight dead1 dead2
+$frame strafeleft straferight dead1 dead2 forwardright
+$frame forwardleft backright backleft
 
 //Begin change by Supajoe on 11:44 PM EST 11/16/03 (Subject: Player animations)
 void player_run (void);
@@ -27,18 +28,22 @@ void player_run (void)
 		player_stand ();
 	else
 	{
-		if (self.movement_x != 0)	//Forward or backward movement
-			{
-				if (self.movement_x > 0)	//Are we moving forward or backward?
-					self.frame = $run;
-				else	self.frame = $runbackwards;
-			}
-		else if (self.movement_y != 0)	//Right or left movement
-			{
-				if (self.movement_y > 0)	//Are we moving right or left?
-					self.frame = $straferight;
-				else	self.frame = $strafeleft;
-			}
+ 		if (self.movement_x > 0 && self.movement_y == 0)
+  		 self.frame = $run;
+  		else if (self.movement_x < 0 && self.movement_y == 0)
+  		 self.frame = $runbackwards;
+  		else if (self.movement_x == 0 && self.movement_y > 0)
+  		 self.frame = $straferight;
+  		else if (self.movement_x == 0 && self.movement_y < 0)
+  		 self.frame = $strafeleft;
+  		else if (self.movement_x > 0 && self.movement_y > 0)
+  		 self.frame = $forwardright;
+  		else if (self.movement_x > 0 && self.movement_y < 0)
+  		 self.frame = $forwardleft;
+  		else if (self.movement_x < 0 && self.movement_y > 0)
+  		 self.frame = $backright;
+  		else if (self.movement_x < 0 && self.movement_y < 0)
+ 		 self.frame = $backleft;
 		else if (self.attack_finished > time)
 			self.frame = $shoot;
 		else if (self.pain_finished > time)

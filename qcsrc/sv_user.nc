@@ -36,7 +36,7 @@ void SV_PlayerPhysics() {
 	{
 		lastclientthink = time;
 		sv_maxspeed = cvar("sv_maxspeed");
-		sv_maxspeed = 150;
+		sv_maxspeed = 220;
 		sv_friction = cvar("sv_friction");
 		sv_accelerate = cvar("sv_accelerate");
 		sv_stopspeed = cvar("sv_stopspeed");

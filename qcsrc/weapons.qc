@@ -800,7 +800,6 @@ void W_Nex_Attack (void)
 
 	org = self.origin + self.view_ofs + v_forward * 18 + v_right * 8 + v_up * -5;
 
-	// FIXME: iterate to hit multiple guys
 	// FIXME: make it accurate!
 
 	traceline (org, self.origin + self.view_ofs + (v_forward * 4096), FALSE, self);
@@ -989,18 +988,72 @@ void W_Rocket_Attack (void)
 	missile.velocity = v_forward * 2500;
 	missile.angles = vectoangles (missile.velocity);
 
-	missile.touch = W_Rocket_Touch;
+	missile.touch = W_Rocket_Touch ;
 	missile.think = SUB_Remove;
 	missile.nextthink = time + 1;
 
-	self.attack_finished = time + 0.5;
+	self.attack_finished = time + 1.5;
 	self.ammo_rockets = self.ammo_rockets - 1;
 
 }
 
+void W_Rocket2_Explode (entity ignore)
+{
+	ImpactEffect (self, IT_ROCKET_LAUNCHER);
+
+	RadiusDamage (self.owner, self, 0, 15, 5, 200, ignore, 400);
+
+	remove (self);
+}
+
+void W_Rocket2_Touch (void)
+{
+	if (other == self.owner)
+		return;
+	else if (pointcontents (self.origin) == CONTENT_SKY)
+	{
+		remove (self);
+		return;
+	}
+	else
+		W_Rocket2_Explode (world);
+}
+
 void W_Rocket_Attack2 (void)
 {
+	entity	missile;
+	vector	org;
 
+	//sound (self, CHAN_WEAPON, "weapons/Rocket_Fire.wav", 1, ATTN_NORM);
+
+	missile = spawn ();
+	missile.owner = self;
+	missile.classname = "rocket";
+
+	missile.takedamage = DAMAGE_YES;
+	missile.damageforcescale = 4;
+	missile.health = 1;
+	missile.event_hurt = W_Rocket2_Explode;
+
+	missile.movetype = MOVETYPE_FLY;
+	missile.solid = SOLID_BBOX;
+	setmodel (missile, "models/rocketmissile.mdl");
+	setsize (missile, '0 0 0', '0 0 0');
+
+	makevectors (self.v_angle);
+
+	org = self.origin + self.view_ofs + v_forward * 20 + v_right * 4 + v_up * -15;
+
+	setorigin (missile, org);
+	missile.velocity = v_forward * 1500;
+	missile.angles = vectoangles (missile.velocity);
+
+	missile.touch = W_Rocket2_Touch;
+	missile.think = SUB_Remove;
+	missile.nextthink = time + 1;
+
+	self.attack_finished = time + 1;
+	self.ammo_rockets = self.ammo_rockets - 1;
 }
 
 void W_Attack (void)
