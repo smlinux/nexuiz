@@ -134,3 +134,5 @@ float WEP_ROCKET_LAUNCHER	= 9; // float	IT_ROCKET_LAUNCHER		= 128;
 // For weapon cycling commands
 float WEP_FIRST				= 1;
 float WEP_LAST				= 9;
+
+float WEP_TELEPORTER		= 10;

@@ -53,6 +53,8 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				bprint ("^1",s, " was pummeled by ", attacker.netname, "\n");
 			else if (deathtype == IT_ROCKET_LAUNCHER)
 				bprint ("^1",s, " blasted by ", attacker.netname, "\n");
+			else if (deathtype == WEP_TELEPORTER)
+				bprint ("^1",s, " was telefragged by ", attacker.netname, "\n");
 			else
 				bprint ("^1",s, " was killed by ", attacker.netname, "\n");
 
