@@ -563,6 +563,8 @@ void W_Uzi_Attack2 (void)
 	if (bullets > self.ammo_nails)
 		bullets = self.ammo_nails;
 
+	sound (self, CHAN_WEAPON, "weapons/uzi_fire_secondary.wav", 1, ATTN_NORM);
+
 	for (sc = bullets; sc > 0; sc = sc - 1)
 		fireBullet (v_forward, 400, 8, IT_SHOTGUN);
 
