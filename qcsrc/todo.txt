@@ -34,3 +34,4 @@ Add dying animations (dead1 dead2, then switch to corpse)
 EFFECTS:
 New effect for the laser. No trail, red, needs to glow. Can be done entirely by model, hopefully.
 Small air burst, large air burst. Small air burst should be red, for the laser. Large air burst is for the secondary rocket fire.
+Crylink beam effect (thinner, fades faster, and white)

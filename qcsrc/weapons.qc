@@ -641,7 +641,7 @@ void W_Electro_Touch (void)
 		else
 			sound (other, CHAN_IMPACT, "misc/BodyImpact2.wav", 1, ATTN_NORM);
 		dir = normalize(self.velocity);
-		Damage (self.owner, self.origin, other, 0, 40, dir * 80);
+		Damage (self.owner, self.origin, other, 0, 50, dir * 80);
 	}
 
 	remove (self);
@@ -775,7 +775,7 @@ void W_Crylink_Attack2 (void)
 
 	traceline (org, self.origin + self.view_ofs + v_forward * 4096 + v_right * (random () * 100 - 50) + v_up * (random () * 100 - 50), FALSE, self);
 
-	Damage (self, trace_endpos, trace_ent, 0, 20, v_forward * 10);
+	Damage (self, trace_endpos, trace_ent, 0, 10, v_forward * 10);
 
 	te_lightning1 (self, org, trace_endpos);
 

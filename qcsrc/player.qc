@@ -110,7 +110,7 @@ void PlayerHurt (vector hitloc, float damage)
 		}
 }
 
-void PlayerDie (void)
+void PlayerDie (vector hitloc, float damage)
 {
 	self.avelocity = '0 0 0';
 	self.movetype = MOVETYPE_TOSS;
@@ -124,10 +124,14 @@ void PlayerDie (void)
 	self.dead_angles_x = 0;
 	self.deadflag = DEAD_DEAD;
 
-//Supajoe: Working on this
-//	if (random() > 0.5)
-//		self.frame = $die1;
-//	else	self.frame = $die2;
+	vector	vel;
+	te_bloodshower (self.origin + self.mins, self.origin + self.maxs, 600, 500);
+	vel = normalize (self.origin - hitloc) * damage * 4;	// blow gibs away from impact point
+	if (vel_z > 0)
+		vel_z = vel_z * 2;	// more vertical
+	Gib (vel);
+
+	SUB_SetFade (self, time);
 
 	PlayerWeaponThrow ();
 }
