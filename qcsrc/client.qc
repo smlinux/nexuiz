@@ -96,34 +96,16 @@ void PutClientInServer (void)
 	self.viewzoom = 0.6;
 
 	mdlrandom = crandom();
-	if (mdlrandom>-0.9)
+	if (mdlrandom>-1)
 		setmodel (self, "models/player/insurrectionist.zym");
-	if (mdlrandom>-0.8)
-		setmodel (self, "models/player/mulder.zym");
 	if (mdlrandom>-0.6)
-		setmodel (self, "models/player/lurk.zym");
-	if (mdlrandom>-0.4)
-		setmodel (self, "models/player/grunt.zym");
-	if (mdlrandom>-0.3)
-		setmodel (self, "models/player/pyria.zym");
-	if (mdlrandom>-0.2)
-		setmodel (self, "models/player/headhunter.zym");
-	if (mdlrandom>0.0)
-		setmodel (self, "models/player/jeandarc.zym");
-	if (mdlrandom>0.1)
+		setmodel (self, "models/player/mulder.zym");
+	if (mdlrandom>-2)
 		setmodel (self, "models/player/marine.zym");
 	if (mdlrandom>0.2)
-		setmodel (self, "models/player/robot.zym");
-	if (mdlrandom>0.4)
-		setmodel (self, "models/player/pyria.zym");
-	if (mdlrandom>0.6)
-		setmodel (self, "models/player/shock.zym");
-	if (mdlrandom>0.7)
-		setmodel (self, "models/player/lycanthrope.zym");
-	if (mdlrandom>0.8)
 		setmodel (self, "models/player/specop.zym");
-	if (mdlrandom>0.9)
-		setmodel (self, "models/player/visitant.zym");
+	if (mdlrandom>0.6)
+		setmodel (self, "models/player/fshock.zym");
 
 
 	setsize (self, PL_MIN, PL_MAX);
@@ -157,7 +139,7 @@ void PutClientInServer (void)
 		self.items = IT_LASER | IT_UZI;
 		self.weapon = IT_UZI;
 		self.ammo_shells = 0;
-		self.ammo_nails = 25;
+		self.ammo_nails = 200;
 		self.ammo_rockets = 0;
 		self.ammo_cells = 0;
 	}
@@ -298,6 +280,7 @@ void PlayerPreThink (void)
 		return;
 	}
 
+/*
 	if (self.button4)
 	{
 		if (self.weapon == IT_ROCKET_LAUNCHER)
@@ -306,12 +289,11 @@ void PlayerPreThink (void)
 		if (self.attack_finished < time && !self.button0 && !self.button3)
 			W_ThirdAttack ();
 	}
+*/
 
 	if (self.button3)
 	{
 		if (self.weapon == IT_GRENADE_LAUNCHER)
-			W_SecondaryAttack ();
-		if (self.weapon == IT_ROCKET_LAUNCHER)
 			W_SecondaryAttack ();
 		if (!(game & GAME_INSANE))
 			if (self.attack_finished < time && !self.button0)
@@ -340,12 +322,16 @@ void PlayerPreThink (void)
 	if (self.statdraintime < time)
 	{
 		// GAME_REGENERATION does fast health regeneration up to 200. Note that your armour doesn't rot anymore either.
-		// Sajt - go ahead and tweak this, I just guessed some values :)
 		if (game & GAME_REGENERATION)
 		{
+			if (self.health < 50)
+				self.health = self.health + 3;
+			if (self.health < 100)
+				self.health = self.health + 3;
+			if (self.health < 150)
+				self.health = self.health + 3;
 			if (self.health < 200)
-				self.health = self.health + 2;
-
+				self.health = self.health + 3;
 			self.statdraintime = time + 0.25;
 		}
 		else

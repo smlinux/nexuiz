@@ -578,7 +578,7 @@ void W_Uzi_Attack (void)
 
 	vector	org; // casing code
 	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 1) + (v_forward * 20);
-	SpawnCasing (org, v_forward, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 + 10) * v_up), 1);
+	SpawnCasing (org, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 + 10) * v_up), 2, v_forward,'0 250 0', 100, 2);
 	//W_Smoke(org, v_forward, 12);
 }
 
@@ -605,7 +605,7 @@ void W_Uzi_Attack2 (void)
 
 	vector	org; // casing code
 	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 4) + (v_forward * 15);
-	SpawnCasing (org, v_forward, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 + 10) * v_up), 2);
+	SpawnCasing (org, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 + 10) * v_up), 2, v_forward,'0 250 0', 100, 3);
 }
 
 void W_Uzi_Attack3 (void)
@@ -619,7 +619,7 @@ void W_Uzi_Attack3 (void)
 
 	vector	org; // casing code
 	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 1) + (v_forward * 20);
-	SpawnCasing (org, v_forward, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 + 10) * v_up), 1);
+	SpawnCasing (org, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 + 10) * v_up), 2, v_forward,'0 250 0', 100, 2);
 }
 
 void W_Shotgun_Attack (void)
@@ -639,7 +639,7 @@ void W_Shotgun_Attack (void)
 
 	vector	org; // casing code
 	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 4) + (v_forward * 15);
-	SpawnCasing (org, v_forward, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 + 10) * v_up), 2);
+	SpawnCasing (org, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 + 10) * v_up), 2, v_forward,'0 250 0', 100, 1);
 }
 
 void W_Shotgun_Attack2 (void)
@@ -979,7 +979,7 @@ void W_Crylink_Touch (void)
 {
 	self.event_damage = SUB_Null;
 	te_smallflash(self.origin);
-	RadiusDamage (self, self.owner, 20, 0, 3, world, 50, IT_CRYLINK);
+	RadiusDamage (self, self.owner, 45, 0, 3, world, 55, IT_CRYLINK);
 	remove (self);
 }
 
@@ -1057,7 +1057,10 @@ void W_Nex_Attack (void)
 	org = self.origin + self.view_ofs + v_forward * 18 + v_right * 8 + v_up * -5;
 	te_smallflash(org);
 
-	FireRailgunBullet (org, self.origin + self.view_ofs + v_forward * 4096, 80, IT_NEX);
+	if (game & GAME_INSTAGIB)
+		FireRailgunBullet (org, self.origin + self.view_ofs + v_forward * 4096, 800, IT_NEX);
+	else
+		FireRailgunBullet (org, self.origin + self.view_ofs + v_forward * 4096, 80, IT_NEX);
 
 	te_plasmaburn (trace_endpos);
 
@@ -1281,7 +1284,7 @@ void W_Rocket_Attack (void)
 	org = self.origin + self.view_ofs + v_forward * 20 + v_right * 4 + v_up * -15;
 
 	setorigin (missile, org);
-	missile.velocity = v_forward * 1200;
+	missile.velocity = v_forward * 2000;
 	missile.angles = vectoangles (missile.velocity);
 
 	missile.touch = W_Rocket_Touch ;

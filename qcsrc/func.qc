@@ -64,7 +64,6 @@ void SUB_SetFade_Think (void)
 		self.alpha = 1;
 	if (self.alpha < 0.01)	// don't let it reach 0, lest it become fully visible again
 		SUB_VanishOrRemove(self);
-	if (self.flags & FL_CLIENT && self.deadflag == DEAD_NO) objerror("Fading on non-corpse client!\n");
 }
 
 /*
@@ -76,6 +75,8 @@ Fade 'ent' out when time >= 'when'
 */
 void SUB_SetFade (entity ent, float when)
 {
+	if (self.flags & FL_CLIENT) // && self.deadflag != DEAD_NO)
+		return;
 	ent.alpha = 1;
 	ent.fade_time = when;
 	ent.think = SUB_SetFade_Think;
@@ -351,6 +352,8 @@ void ImpactEffect (entity ent, float weapontype)
 	
 	if (weapontype == IT_ROCKET_LAUNCHER)
 	{
+		te_explosion (org2);
+		te_explosion (org2);
 		te_explosion (org2);
 		effect (org2, "models/sprites/dpexplosion1.spr32", 0, 20, 40);
 		sound (ent, CHAN_BODY, "weapons/rocket_impact.wav", 1, ATTN_NORM);

@@ -35,7 +35,7 @@ void TossGib (entity gib, string mdlname, vector org, vector v)
 	gib.event_damage = GibDamage;
 
 	gib.velocity = v + randomvec() * 150;
-	gib.avelocity = '300 300 300';
+	gib.avelocity = randomvec() * 300;
 
 	SUB_SetFade (gib, time + 12 + random () * 4);
 }

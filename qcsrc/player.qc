@@ -51,13 +51,13 @@ void player_anim (void)
 			self.frame = self.dead_frame;
 		else
 			self.frame = self.die_frame;
-		//SUB_SetFade (self, time + 12 + random () * 4);
+		SUB_SetFade (self, time + 12 + random () * 4);
 		return;
 	}
 
-	if (self.crouch)
+
+	if (self.crouch) 
 	{
-		// don't duck if moving
 		if (self.movement_x * self.movement_x + self.movement_y * self.movement_y > 20)
 			self.frame = $duckwalk;
 		else
@@ -89,6 +89,9 @@ void player_anim (void)
 	else if (self.attack_finished > time)
 		self.frame = $shoot;
 	else
+		self.frame = $idle;
+
+	if (!(self.flags & FL_ONGROUND))
 		self.frame = $idle;
 }
 //End change by Supajoe on 11:44 PM EST 11/16/03 (Subject: Player animations)
@@ -203,9 +206,9 @@ void PlayerDamage (vector hitloc, float damage, entity inflictor, entity attacke
 		// dying animation
 		self.deadflag = DEAD_DYING;
 		// when to allow respawn
-		self.death_time = time + 2;
+		self.death_time = time + 0.5;
 		// when to switch to the dead_frame
-		self.dead_time = time + 0.8;
+		self.dead_time = time + 1.5;
 		if (random() < 0.5)
 		{
 			self.die_frame = $die1;

@@ -1217,7 +1217,7 @@ void() BotImpulses =
 		f = cvar("skill");
 		BotConnect(0, 0, f);
 	}
-	else if (self.impulse == 101)
+	if (self.impulse == 101)
 	{
 		f = cvar("skill");
 		BotConnect(1, 0, f);

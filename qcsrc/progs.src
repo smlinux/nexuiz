@@ -20,6 +20,7 @@ func.qc
 
 sv_user.nc
 worldspawn.qc
+decors.qc
 casings.qc
 jumppads.qc
 teleporters.qc

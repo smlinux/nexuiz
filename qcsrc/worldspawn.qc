@@ -12,20 +12,10 @@ void worldspawn (void)
 	else
 		localcmd ("sv_gravity 800\n");
 
-	precache_model ("models/player/player.zym");
 	precache_model ("models/player/marine.zym");
-	precache_model ("models/player/grunt.zym");
 	precache_model ("models/player/specop.zym");
-	precache_model ("models/player/pyria.zym");
-	precache_model ("models/player/lurk.zym");
-	precache_model ("models/player/headhunter.zym");
-	precache_model ("models/player/jeandarc.zym");
-	precache_model ("models/player/visitant.zym");
 	precache_model ("models/player/mulder.zym");
 	precache_model ("models/player/insurrectionist.zym");
-	precache_model ("models/player/lycanthrope.zym");
-	precache_model ("models/player/robot.zym");
-	precache_model ("models/player/shock.zym");
 	precache_model ("models/player/fshock.zym");
 
 	precache_model ("models/weapons/g_uzi.md3");
@@ -48,7 +38,9 @@ void worldspawn (void)
 	precache_model ("models/hagarmissile.mdl");
 	precache_model ("models/rocketmissile.mdl");
 	precache_model ("models/bullet.mdl");
-	precache_model ("models/casing.mdl");
+	precache_model ("models/casing_bronze.mdl");
+	precache_model ("models/casing_shell.mdl");
+	precache_model ("models/casing_steel.mdl");
 	precache_model ("models/beam.mdl");
 	precache_model ("models/flash.md3");
 	precache_model ("models/laser.mdl");
@@ -114,6 +106,7 @@ void worldspawn (void)
 	precache_sound ("weapons/crylink2.wav");
 	precache_sound ("weapons/plasmahit.wav");
 	precache_sound ("weapons/uzi_fire_secondary.wav");
+	precache_sound ("weapons/tink1.wav");
 	
 	precache_sound ("misc/itempickup.wav");
 	precache_sound ("misc/bodyimpact1.wav");
@@ -123,6 +116,7 @@ void worldspawn (void)
 	precache_sound ("misc/megahealth.wav");
 	precache_sound ("misc/mediumhealth.wav");
 	precache_sound ("misc/gib.wav");
+	precache_sound ("misc/talk.wav");
 
 	precache_sound ("misc/itemrespawn.wav");
 	
@@ -130,14 +124,6 @@ void worldspawn (void)
 	precache_sound ("player/hitground2.wav");
 	precache_sound ("demon/dland2.wav");
 
-
-	//testing
-	precache_sound ("1.wav");
-	precache_sound ("2.wav");
-	precache_sound ("3.wav");
-	precache_sound ("4.wav");
-	precache_sound ("5.wav");
-	precache_sound ("6.wav");
 
 	// plays music for the level if there is any
 	if (self.noise)

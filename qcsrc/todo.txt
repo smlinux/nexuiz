@@ -54,12 +54,13 @@
 
 -3D GRAPHICS-
 	- Add DPshader
-	- Bloom effect to the glow models
+	- Bloom effect
 	- Decal clipping
 
--2D GRAPHICS-
-	- Flashing Red numbers when low ammo/health, rather than just red
+-2D GRAPHICS
 	- Powerup images when powerup is picked up (showlmp)
+	- Don't show monsters/secrets on the bottom of the scoreboard
+	- More advanced scoreboard?
 
 *********************************
 ******Animation and art**********
@@ -67,13 +68,22 @@
 -3D GRAPHICS-
 	- New weapon model for Uzi
 	- New weapon model for Hagar
-	- 3 new basic gib models
+	- A small piece of flesh for Gib model
+	- A medium piece of flesh for gib model
+	- A large piece of flesh for gib model
+	- Large Rocket model (for rocket launcher)
+	- Small rocket model (for Hagar)
+	- Casing model
 
 -2D GRAPHICS-
 	- Change hud numbers to fit hud
 	- Next/Prev button
 	- New menu cursor
-	- Slime textures for Slime Pit, and water texture for oil rig
+
+-Textures-
+	- Slime textures for Slime Pit
+	- Water texture for oil rig
+	- Lava texture
 
 -SKINS-
 	- carni
@@ -99,8 +109,10 @@
 
 -WEAPONS-
 	- Change Electro fire sound
-	- Add crylink pulse sound
 	- Missile sounds for electro, rocket
+
+-ITEMS-
+	- Armor
 
 -OTHER-
 	- Gib Splat sound
