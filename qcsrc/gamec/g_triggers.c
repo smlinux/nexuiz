@@ -390,3 +390,38 @@ if(self.noise) {
 //remove(self);
 };
 
+
+
+void() sparksthink =
+{
+  local float tmp;
+  self.nextthink = time + 0.1;
+  
+  if(random() < self.wait) {
+    te_spark(self.origin,'0 0 -1',self.cnt);
+  }
+}
+
+
+void() func_sparks =
+{
+  self.think = sparksthink;
+  self.nextthink = time + 0.2;
+ 
+  // self.cnt is the amount of sparks that one burst will spawn 
+  if(self.cnt < 1) {
+    self.cnt = 25.0; // nice default value
+  }
+  
+  // self.wait is the probability that a sparkthink will spawn a spark shower
+  // range: 0 - 1, but 0 makes little sense, so...
+  if(self.wait < 0.05) {
+    self.wait = 0.25; // nice default value
+  }
+
+  // sound
+  if(self.noise) {
+    precache_sound (self.noise);
+    ambientsound (self.origin, self.noise, 1, ATTN_STATIC);
+  }
+}
