@@ -114,7 +114,7 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 	else
 	{
 		setorigin (self, self.origin + '0 0 15');
-		setsize (self, '-8 -8 -8', '8 8 8');
+		setsize (self, '-8 -8 -5', '8 8 8');
 	}
 	self.movetype = MOVETYPE_TOSS;
 	self.solid = SOLID_TRIGGER;
