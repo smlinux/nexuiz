@@ -90,6 +90,12 @@ void StartItem (void)
 
 void StartWeapon (void)
 {
+	if (game & (GAME_INSTAGIB | GAME_ROCKET_ARENA))
+	{
+		remove (self);
+		return;
+	}
+
 	self.flags = FL_ITEM | FL_WEAPON;
 	setmodel (self, self.mdl);
 	setsize (self, '-12 -12 -12', '12 12 12');
@@ -180,6 +186,12 @@ void weapon_rocketlauncher (void)
 
 void item_rockets (void)
 {
+	if (game & (GAME_INSTAGIB | GAME_ROCKET_ARENA))
+	{
+		remove (self);
+		return;
+	}
+
 	self.mdl = "models/items/a_rockets.md3";
 	self.ammo_rockets = 25;
 	self.netname = "rockets";
@@ -189,6 +201,12 @@ void item_rockets (void)
 
 void item_bullets (void)
 {
+	if (game & (GAME_INSTAGIB | GAME_ROCKET_ARENA))
+	{
+		remove (self);
+		return;
+	}
+
 	self.mdl = "models/items/a_bullets.zym";
 	self.ammo_nails = 100;
 	self.netname = "bullets";
@@ -198,6 +216,12 @@ void item_bullets (void)
 
 void item_cells (void)
 {
+	if (game & (GAME_INSTAGIB | GAME_ROCKET_ARENA))
+	{
+		remove (self);
+		return;
+	}
+
 	self.mdl = "models/items/a_cells.md3";
 	self.ammo_cells = 50;
 	self.netname = "cells";
@@ -207,6 +231,12 @@ void item_cells (void)
 
 void item_shells (void)
 {
+	if (game & (GAME_INSTAGIB | GAME_ROCKET_ARENA))
+	{
+		remove (self);
+		return;
+	}
+
 	self.mdl = "models/items/a_shells.md3";
 	self.ammo_shells = 50;
 	self.netname = "shells";

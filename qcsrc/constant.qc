@@ -156,3 +156,22 @@ vector	PL_MAX					= '16 16 45';
 //vector	PL_VIEW_OFS				= '0 0 32';
 //vector	PL_MIN					= '-16 -16 -48';
 //vector	PL_MAX					= '16 16 48';
+
+
+// Sajt - added these, just as constants. Not sure how you want them actually put in the game, but I just
+// did this so at least they worked
+// NOTE: instagib IS NOT compatible with rocket-arena, so make sure to prevent selecting both in a menu
+float	GAME_INSTAGIB			= 1;
+float	GAME_GRAPPLING_HOOK		= 2;
+float 	GAME_STRENGTH_GAIN		= 4;
+float	GAME_REGENERATION		= 8;
+float	GAME_ROCKET_ARENA		= 16;
+float	GAME_NO_SELF_DAMAGE		= 32;
+float	GAME_AIR_CONTROL		= 64;
+float	GAME_LOW_GRAVITY		= 128;
+float	GAME_FULLBRIGHT_PLAYERS	= 256;
+
+float	game;	// set to "gamecfg" on worldspawn
+
+
+

@@ -35,6 +35,10 @@ entity dest;
 .float  crouch;	// Crouching or not?
 .float  hasaliases; // Has aliases (like +crouch) binded or not?
 
+.float	strength_finished;
+.float	speed_finished;
+.float	invincible_finished;
+
 .vector		finaldest, finalangle; 		//plat.qc stuff
 .void()		think1;
 .float state;

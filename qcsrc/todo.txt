@@ -15,15 +15,18 @@
 	- 25 Armor, Armor Shard, 100 Armor (25 armor with new skin)
 
 -DEATHMATCH GAME OPTIONS-
-	- Instagib - Everyone starts with Nex gun and infinite ammo, instagib.
+	- Done: Instagib - Everyone starts with Nex gun and infinite ammo, instagib.
 	- Grappling hook - Option to include the grappling hook in the game
-	- Quick Strength Gain - Short Strength powerup given for every kill
-	- Quick Health Regeneration - Very fast health Regeneration
-	- Rocket Arena - Everyone starts with just the rocket launcher and infinite ammo
-	- No Self Damage - Turn off damaging yourself, no health taken with rocket/grenade/laser jumps
+	- Done: Quick Strength Gain - Short Strength powerup given for every kill
+	- Done: Quick Health Regeneration - Very fast health Regeneration
+	- Done: Rocket Arena - Everyone starts with just the rocket launcher and infinite ammo
+	- Done: No Self Damage - Turn off damaging yourself, no health taken with rocket/grenade/laser jumps
 	- Complete Air Control - User can move the same way in the air as on the ground
-	- Low Gravity - Turns gravity from 800 to 200
-	- Fullbright Players - Every player model is full bright
+	- Done: Low Gravity - Turns gravity from 800 to 200
+	- Done: Fullbright Players - Every player model is full bright
+
+	Sajt: One thing I haven't touched with these is some of the items, like health and armour. Should these be removed on certain
+	      gametypes? (I removed weapons and ammo on rocket-arena and instagib...)
 
 -POWERUPS-
 	- Strength - Player model turns completely white. This is alike to the painkiller powerup, the users screen with turn mostly white, they will be able to run twice as fast, their weapon will automaticly be a railgun with radius damage equal to the rocket launcher. They have 100 health, or 15 seconds (if the 100 health is taken away the powerup is gone). This powerup can also be earned, with kills in a short amount of time. If the user gets about 8 kills in 13 seconds, this powerup is given to the user.

@@ -88,11 +88,6 @@ void PutClientInServer (void)
 	self.pain_frame = 0;
 	self.pain_finished = 0;
 
-	self.ammo_shells = 100;
-	self.ammo_nails = 100;
-	self.ammo_rockets = 100;
-	self.ammo_cells = 100;
-
 	self.deadflag = DEAD_NO;
 
 	self.view_ofs = PL_VIEW_OFS;
@@ -135,10 +130,40 @@ void PutClientInServer (void)
 	setorigin (self, spot.origin + '0 0 1' * (1 - self.mins_z - 24));
 	// don't reset back to last position, even if new position is stuck in solid
 	self.oldorigin = self.origin;
-	//self.effects = self.effects | EF_FULLBRIGHT;
 
-	self.items = IT_LASER | IT_UZI| IT_SHOTGUN | IT_GRENADE_LAUNCHER | IT_ELECTRO | IT_CRYLINK | IT_NEX | IT_HAGAR | IT_ROCKET_LAUNCHER;
-	self.weapon = IT_UZI;
+//	self.items = IT_LASER | IT_UZI| IT_SHOTGUN | IT_GRENADE_LAUNCHER | IT_ELECTRO | IT_CRYLINK | IT_NEX | IT_HAGAR | IT_ROCKET_LAUNCHER;
+//	self.weapon = IT_UZI;
+
+	if (game & GAME_INSTAGIB)
+	{
+		self.items = IT_NEX;
+		self.weapon = IT_NEX;
+		self.ammo_shells = 0;
+		self.ammo_nails = 0;
+		self.ammo_rockets = 0;
+		self.ammo_cells = 999;
+	}
+	else if (game & GAME_ROCKET_ARENA)
+	{
+		self.items = IT_ROCKET_LAUNCHER;
+		self.weapon = IT_ROCKET_LAUNCHER;
+		self.ammo_shells = 0;
+		self.ammo_nails = 0;
+		self.ammo_rockets = 999;
+		self.ammo_cells = 0;
+	}
+	else
+	{
+		self.items = IT_LASER | IT_UZI;
+		self.weapon = IT_UZI;
+		self.ammo_shells = 0;
+		self.ammo_nails = 25;
+		self.ammo_rockets = 0;
+		self.ammo_cells = 0;
+	}
+
+	if (game & GAME_FULLBRIGHT_PLAYERS)
+		self.effects = EF_FULLBRIGHT;
 
 	self.event_damage = PlayerDamage;
 
@@ -307,24 +332,36 @@ void PlayerPreThink (void)
 
 	if (self.statdraintime < time)
 	{
-		if (self.health < 25)
-			self.health = self.health + 3;
-		if (self.health < 50)
-			self.health = self.health + 2;
-		if (self.health < 100)
-			self.health = self.health + 1;
-		if (self.health > 100)
-			self.health = self.health - 1;
-		if (self.health > 150)
-			self.health = self.health - 2;
-		if (self.health > 200)
-			self.health = self.health - 4;
-		if (self.health > 250)
-			self.health = self.health - 6;
-		if (self.armorvalue > 100)
-			self.armorvalue = self.armorvalue - 1;
+		// GAME_REGENERATION does fast health regeneration up to 200. Note that your armour doesn't rot anymore either.
+		// Sajt - go ahead and tweak this, I just guessed some values :)
+		if (game & GAME_REGENERATION)
+		{
+			if (self.health < 200)
+				self.health = self.health + 2;
 
-		self.statdraintime = time + 1;
+			self.statdraintime = time + 0.25;
+		}
+		else
+		{
+			if (self.health < 25)
+				self.health = self.health + 3;
+			if (self.health < 50)
+				self.health = self.health + 2;
+			if (self.health < 100)
+				self.health = self.health + 1;
+			if (self.health > 100)
+				self.health = self.health - 1;
+			if (self.health > 150)
+				self.health = self.health - 2;
+			if (self.health > 200)
+				self.health = self.health - 4;
+			if (self.health > 250)
+				self.health = self.health - 6;
+			if (self.armorvalue > 100)
+				self.armorvalue = self.armorvalue - 1;
+
+			self.statdraintime = time + 1;
+		}
 	}
 	player_anim ();
 	weapon_anim ();

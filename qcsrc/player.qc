@@ -97,6 +97,8 @@ void SpawnThrownWeapon (vector org, float w)
 {
 	local entity oldself;
 
+	if (game & (GAME_INSTAGIB | GAME_ROCKET_ARENA))
+		return;
 	if (w == IT_LASER)
 		return;
 
@@ -159,6 +161,10 @@ void PlayerCorpseDamage (vector hitloc, float damage, entity inflictor, entity a
 
 void PlayerDamage (vector hitloc, float damage, entity inflictor, entity attacker, float deathtype)
 {
+	if (attacker == self)
+		if (game & GAME_NO_SELF_DAMAGE)
+			return;
+
 	te_blood (hitloc, '0 0 20', damage);
 	if (self.pain_finished < time)		//Don't switch pain sequences like crazy
 	{
@@ -168,6 +174,10 @@ void PlayerDamage (vector hitloc, float damage, entity inflictor, entity attacke
 			self.pain_frame = $pain2;
 		self.pain_finished = time + 0.5;	//Supajoe
 	}
+
+	if (game & GAME_INSTAGIB)
+		damage = self.health + 75;
+
 	self.health = self.health - damage;
 	self.dmg_take = self.dmg_take + damage;
 	self.dmg_inflictor = inflictor;

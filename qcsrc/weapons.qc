@@ -77,7 +77,12 @@ void W_UpdateWeapon (void)
 
 float W_GetBestWeapon (void)
 {
-	if ((self.items & IT_ROCKET_LAUNCHER) && self.ammo_rockets)
+	if (game & GAME_INSTAGIB)
+		return IT_NEX;
+	else if (game & GAME_ROCKET_ARENA)
+		return IT_ROCKET_LAUNCHER;
+
+	else if ((self.items & IT_ROCKET_LAUNCHER) && self.ammo_rockets)
 		return IT_ROCKET_LAUNCHER;
 	else if ((self.items & IT_HAGAR) && self.ammo_rockets)
 		return IT_HAGAR;
@@ -123,6 +128,9 @@ void W_SwitchWeapon (float wep)
 {
 	float		nextwep;
 	var float	noammo = FALSE;
+
+	if (game & (GAME_INSTAGIB | GAME_ROCKET_ARENA))
+		return;
 
 	if (wep == 1)
 		nextwep = IT_LASER;
@@ -199,6 +207,9 @@ void W_NextWeapon (void)
 {
 	float	noammo;
 
+	if (game & (GAME_INSTAGIB | GAME_ROCKET_ARENA))
+		return;
+
 	while (TRUE)
 	{
 		noammo = FALSE;
@@ -267,6 +278,9 @@ void W_PreviousWeapon (void)
 {
 	float	noammo;
 
+	if (game & (GAME_INSTAGIB | GAME_ROCKET_ARENA))
+		return;
+
 	while (TRUE)
 	{
 		noammo = FALSE;
@@ -333,6 +347,9 @@ void W_PreviousWeapon (void)
 
 float W_CheckAmmo (void)
 {
+	if (game & (GAME_INSTAGIB | GAME_ROCKET_ARENA))
+		return TRUE;
+
 	W_UpdateAmmo ();
 	if (self.weapon == IT_LASER)
 		return TRUE;
@@ -1096,7 +1113,9 @@ void W_Nex_Attack (void)
 	PointSound (trace_endpos, "weapons/neximpact.wav", 1, ATTN_NORM);
 
 	self.attack_finished = time + 1;
-	self.ammo_cells = self.ammo_cells - 1;
+
+	if (!(game & GAME_INSTAGIB))
+		self.ammo_cells = self.ammo_cells - 1;
 }
 
 void W_Nex_Attack2 (void)
@@ -1328,8 +1347,9 @@ void W_Rocket_Attack (void)
 	missile.nextthink = time + 9;
 
 	self.attack_finished = time + 1.5;
-	self.ammo_rockets = self.ammo_rockets - 1;
 
+	if (!(game & GAME_ROCKET_ARENA))
+		self.ammo_rockets = self.ammo_rockets - 1;
 }
 
 void W_Rocket_Attack2 (void)
