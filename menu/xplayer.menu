@@ -287,7 +287,7 @@ template for map selection
 	size		"22 11"
 	text		"<<"
 	action		nex_xp_prev
-}	
+}
 // map name
 {
 	type		ITEM_TEXT
@@ -319,7 +319,7 @@ template for map selection
 	pos		"0 11"
 	size		"270 232"
 	picture		"gfx/m_nomap"
-}	
+}
 // info box
 {
 	type		ITEM_CUSTOM
@@ -343,7 +343,7 @@ template for map selection
 	name		creategame_opt
 	parent		creategame
 	origin		"436 0" //270+175
-	clip_pos	"270 0"	
+	clip_pos	"270 0"
 	clip_size	"350 445"
 }
 //////

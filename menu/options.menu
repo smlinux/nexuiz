@@ -10,12 +10,6 @@ Option menus
 	parent 	options
 	origin 	"200 145"
 }
-{
-	type	ITEM_WINDOW
-	name	opt_frame
-	parent	opt_panel
-	origin	"400 30"
-}
 // side panel entries
 {
 	type 	ITEM_TEXTBUTTON
@@ -61,6 +55,12 @@ Option menus
 	text	"Color Control"
 	pos		"0 75"
 	action	nex_cc
+}
+{
+	type	ITEM_WINDOW
+	name	opt_frame
+	parent	opt_panel
+	origin	"400 30"
 }
 // sub windows
 {
@@ -109,9 +109,9 @@ Option menus
 	type	ITEM_WINDOW
 	name	options_player_opt
 	parent	options_player
-	origin		"300 0"
+	origin		"350 0"
 	clip_pos	"200 0"
-	clip_size	"200 400"
+	clip_size	"500 400"
 }
 {
 	type	ITEM_PICTURE
@@ -153,7 +153,7 @@ Option menus
 	name	options_player_model_next
 	parent	options_player_model
 	text	">>"
-	pos	"179 252"	
+	pos	"179 252"
 	action	nex_player_model_next
 }
 // info box
@@ -172,7 +172,43 @@ Option menus
 	font_size	"9 9"
 	draw 		nex_draw_text
 }
-	
+// game name
+{
+	type 		ITEM_TEXTBUTTON
+	name		options_player_opt_playername
+	parent		options_player_opt
+	text		"Player Name"
+	pos		"0 0 0"
+	clip_pos	"10 0 0"
+	clip_size	"100 11 0"
+	//font_size	"10 10 0"
+	alignment	16		// TEXT_ALIGN_RIGHTPOS
+	flag		256		// FLAG_AUTOSETCLICK
+	key			nex_redirect_key
+}
+// Switch
+{
+	type		ITEM_EDITBOX
+	name		options_player_opt_playername_switch
+	parent		options_player_opt_playername
+	pos		"10 0 0"
+	size		"200 11 0"
+	font_size	"11 11 0"
+	flag 		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
+	text		"NexuizPlayer"
+	maxlen		32
+	refresh		nex_player_name
+}
+// Apply (Changes)
+{
+	type		ITEM_TEXTBUTTON
+	name		options_player_opt_apply
+	parent		options_player_opt
+	pos		"20 378"
+	text		"Apply Changes"
+	flag		256
+	action		nex_player_apply
+}
 //////
 // CD Music Volume
 ////
@@ -531,7 +567,7 @@ Option menus
 	cvarname	"v_color_black_r"
 	cvartype	4		// CVAR_STEP
 	min_value	0
-	max_value	0.80
+	max_value	1
 	step		0.125
 	init		nex_cvar_slider
 	action		nex_cc_color_enable
@@ -575,7 +611,7 @@ Option menus
 	cvarname	"v_color_black_g"
 	cvartype	4		// CVAR_STEO
 	min_value	0
-	max_value	0.80
+	max_value	1
 	step		0.125
 	init		nex_cvar_slider
 	action		nex_cc_color_enable
@@ -619,7 +655,7 @@ Option menus
 	cvarname	"v_color_black_b"
 	cvartype	4		// CVAR_STEP
 	min_value	0
-	max_value	0.80
+	max_value	1
 	step		0.125
 	init		nex_cvar_slider
 	action		nex_cc_color_enable
@@ -663,7 +699,7 @@ Option menus
 	cvarname	"v_color_black"
 	cvartype	1		// CVAR_INT
 	min_value	0
-	max_value	0.8
+	max_value	1
 	step		0.125
 	init		nex_cc_grey
 	action		nex_cc_color_enable
@@ -707,7 +743,7 @@ Option menus
 	cvarname	"v_color_grey_r"
 	cvartype	4		// CVAR_STEP
 	min_value	0
-	max_value	0.80
+	max_value	1
 	step		0.125
 	init		nex_cvar_slider
 	action		nex_cc_color_enable
@@ -751,7 +787,7 @@ Option menus
 	cvarname	"v_color_grey_g"
 	cvartype	4		// CVAR_STEO
 	min_value	0
-	max_value	0.80
+	max_value	1
 	step		0.125
 	init		nex_cvar_slider
 	action		nex_cc_color_enable
@@ -795,7 +831,7 @@ Option menus
 	cvarname	"v_color_grey_b"
 	cvartype	4		// CVAR_STEP
 	min_value	0
-	max_value	0.80
+	max_value	1
 	step		0.125
 	init		nex_cvar_slider
 	action		nex_cc_color_enable
@@ -839,7 +875,7 @@ Option menus
 	cvarname	"v_color_grey"
 	cvartype	1		// CVAR_INT
 	min_value	0
-	max_value	0.8
+	max_value	1
 	step		0.125
 	init		nex_cc_grey
 	action		nex_cc_color_enable
@@ -883,7 +919,7 @@ Option menus
 	cvarname	"v_color_white_r"
 	cvartype	4		// CVAR_STEP
 	min_value	0
-	max_value	0.80
+	max_value	1
 	step		0.125
 	init		nex_cvar_slider
 	action		nex_cc_color_enable
@@ -927,7 +963,7 @@ Option menus
 	cvarname	"v_color_white_g"
 	cvartype	4		// CVAR_STEO
 	min_value	0
-	max_value	0.80
+	max_value	1
 	step		0.125
 	init		nex_cvar_slider
 	action		nex_cc_color_enable
@@ -971,7 +1007,7 @@ Option menus
 	cvarname	"v_color_white_b"
 	cvartype	4		// CVAR_STEP
 	min_value	0
-	max_value	0.80
+	max_value	1
 	step		0.125
 	init		nex_cvar_slider
 	action		nex_cc_color_enable
@@ -1015,7 +1051,7 @@ Option menus
 	cvarname	"v_color_white"
 	cvartype	1		// CVAR_INT
 	min_value	0
-	max_value	0.8
+	max_value	1
 	step		0.125
 	init		nex_cc_grey
 	action		nex_cc_color_enable

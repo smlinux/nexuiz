@@ -353,6 +353,7 @@ void(void) menu_performreinit =
 
 	// set the selected item
 	menu_selected = menu_activewindow;
+
 	// find first child that can be selected
 	menu_selectdown();
 };
@@ -483,6 +484,7 @@ void(void) menu_frame =
 		cvar_set("menu_reloadlist","0");
 		menu_restart();
 	}*/
+	menu_automatedselection = false;
 	// if mouse moved, process it
 	if(cursor_rel != '0 0 0')
 	{
@@ -876,6 +878,7 @@ void(entity menu, float setactive) menu_jumptowindow =
 
 	// now set the selected to the first selectable child
 	menu_selected = menu;
+	menu_automatedselection = true;
 	menu_selectdown();
 };
 

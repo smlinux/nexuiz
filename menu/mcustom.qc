@@ -15,14 +15,14 @@ void() nex_setposition =
 	self.pos_x = 0;
 	self.pos_y = (self.font_size_y + 5) * self.orderpos;
 	self.pos_z = 0;
-	
+
 	self.origin = self.pos;
 };
 
 void(entity item) nex_makeonlyvisible =
 {
 	local entity node;
-	
+
 	if( item.flag & FLAG_HIDDEN )
 		item.flag = item.flag - FLAG_HIDDEN;
 	for( node = item._next ; node ; node = node._next )
@@ -250,7 +250,7 @@ void(void) nex_display_options =
 	entity ent;
 
 	ent = menu_getitem( "options" );
-	
+
 	nex_makeonlyvisible( ent );
 	menu_jumptowindow( ent, false );
 };
@@ -409,13 +409,13 @@ void(entity node) _nex_xp_remove =
 void(void) _nex_xp_update =
 {
 	entity item;
-	
+
 	item = menu_getitem( "creategame_map_name" );
 	item.text = maps_current.name;
-	
+
 	item = menu_getitem( "creategame_map_picture" );
 	item.picture = maps_current.picture;
-	
+
 	item = menu_getitem( "creategame_map_info" );
 	item.text = maps_current.text;
 };
@@ -425,11 +425,11 @@ void(void) nex_xp_enummaps =
 	float count;
 	float searchhandle;
 	float counter;
-	
+
 	// remove the old list
 	if( maps_list ) {
 		entity node;
-		
+
 		node = maps_list;
 		while( node._next ) {
 			node = node._next;
@@ -438,24 +438,24 @@ void(void) nex_xp_enummaps =
 		_nex_xp_remove( node );
 	}
 	maps_list = maps_current = null_entity;
-	
+
 	searchhandle = search_begin( "maps/*.bsp", true, true );
 	if( searchhandle == -1 ) {
 		print( "menu: No maps found!\n" );
 		return;
 	} else if( searchhandle == -2)
 		return;
-		
+
 	maps_list = maps_current = spawn();
 	count = search_getsize( searchhandle );
 	for( counter = 0 ; counter < count ; counter = counter + 1 ) {
 		float file;
 		string fname;
-		
+
 		fname = search_getfilename( searchhandle, counter );
 		fname = substring( fname, 0, strlen( fname ) -  4 );
 		fname = strzone( fname );
-		
+
 		//try to find the information text
 		file = fopen( strcat( fname, ".txt" ), FILE_READ );
 		if( file == -1 )
@@ -471,7 +471,7 @@ void(void) nex_xp_enummaps =
 			} while( temp );
 			fclose( file );
 		}
-		
+
 		//try to find the picture
 		file = search_begin( strcat( fname, ".jpg" ), true, true );
 		if( file == -1 )
@@ -480,10 +480,10 @@ void(void) nex_xp_enummaps =
 			maps_current.picture = strzone( strcat( fname, ".jpg" ) );
 			search_end( file );
 		}
-		
+
 		maps_current.name = strzone( substring( fname, 5, strlen( fname ) - 5 ) ); // remove the 'maps/'
 		strunzone( fname );
-		
+
 		// create next item and link it with the list
 		maps_current._next = spawn();
 		maps_current._next._prev = maps_current;
@@ -493,18 +493,18 @@ void(void) nex_xp_enummaps =
 	maps_current = maps_current._prev;
 	remove( maps_current._next );
 	maps_current._next = null_entity;
-	
+
 	search_end( searchhandle );
 
 	maps_current = maps_list;
-	_nex_xp_update();			
+	_nex_xp_update();
 };
 
 void(void) nex_xp_prev =
 {
 	if( maps_current._prev )
 		maps_current = maps_current._prev;
-	_nex_xp_update();	
+	_nex_xp_update();
 };
 
 void(void) nex_xp_next =
@@ -589,20 +589,20 @@ void(void) nex_xp_start =
 	cvar_set( "fraglimit", ftos( maxfrags ) );
 	cvar_set( "timelimit", ftos( maxtime ) );
 	cvar_set( "deathmatch", "1" );
-	
+
 	cmd( "maxplayers " );
 	cmd( ftos( maxclients ) );
 	cmd( "\n" );
-	
+
 	cvar_set( "sv_public", ftos( publicserver ) );
 	cvar_set( "hostname", hostname );
-	
+
 	// see bot/bot.qc: BotInit
 	cvar_set( "saved1", "1" );
 	cvar_set( "scratch1", ftos( pow( 2, maxbots ) - 1 ) );
 	cvar_set( "scratch2", ftos( skilllevel * (pow(4, min(maxbots, 8)) - 1) / 3) );
 	cvar_set( "scratch3", ftos( skilllevel * (pow(4, min(maxbots - 8, 8)) - 1) / 3) );
-	
+
 	cmd( "map " );
 	cmd( maps_current.name );
 	cmd( "\n" );
@@ -618,34 +618,34 @@ void(void) nex_draw_text =
 {
 	local vector drawpos;
 	local float cpos, end;
-	
+
 	cpos = 0;
 	drawpos = self.pos;
-	drawpos_y = drawpos_y + self.font_size_y; 
+	drawpos_y = drawpos_y + self.font_size_y;
 	do {
 		local string l;
 		local float i;
-		
+
 		end = strlen( self.text );
 		i = cpos;
 		do {
 			l = substring( self.text, i, 1 );
-			
+
 			if( l == "\n" ) {
 				end = i;
 				break;
 			}
-			
+
 			i = i + 1;
 		} while( l != "" );
-		
+
 		l = substring( self.text, cpos, end - cpos );
 		if( l != "" )
 			menu_drawstring( drawpos, l, self.font_size, self.color, self.alpha, self.drawflag );
 		drawpos_y = drawpos_y + self.font_size_y;
-		
+
 		cpos = end + 1;
-	} while( end != strlen( self.text ) );			
+	} while( end != strlen( self.text ) );
 }
 
 // server list
@@ -827,21 +827,38 @@ void(void) slist_info2 =
 var entity mlist_list = null_entity;
 entity mlist_current;
 string mlist_saved;
+
+string player_name;
+
 string player_model_cvar = "player_model";
-string player_name_cvar = "m_player_name";
+string player_name_cvar = "_cl_name";
 string player_skin_cvar = "player_skin";
+string player_fov_cvar = "player_fov";
 
 void(void) nex_player_init =
 {
-	// used by the qc
-	//registercvar( player_model_cvar, "", CVAR_SAVE );
-	//registercvar( player_skin_cvar, "", CVAR_SAVE );
-	
+	entity ent;
+
 	if( mlist_saved )
 		strunzone( mlist_saved );
-	mlist_saved = strzone( str_cvar( player_name_cvar ) );
-	registercvar( player_name_cvar, "", CVAR_SAVE );
-}
+	mlist_saved = strzone( str_cvar( player_model_cvar ) );
+
+	ent = menu_getitem( "options_player_opt_playername_switch" );
+	ent.text = str_cvar( player_name_cvar);
+};
+
+void(void) nex_player_name =
+{
+	player_name = self.text;
+};
+
+void(void) nex_player_apply =
+{
+	cvar_set( player_model_cvar, mlist_current.picture_selected );
+	cvar_set( player_skin_cvar, mlist_current.picture_pressed );
+
+	cmd( strcat( "name ", player_name, "\n" ) );
+};
 
 // name = name
 // picture_selected = model name
@@ -855,27 +872,23 @@ void(entity e) _nex_player_remove =
 	strunzone( e.picture_pressed );
 	strunzone( e.picture );
 	strunzone( e.text );
-	
+
 	remove( e );
 };
 
 void() _nex_player_model_update =
 {
 	entity item;
-	
+
 	if( !mlist_list )
 		return;
-	
-	cvar_set( player_name_cvar, mlist_current.name );
-	//cvar_set( player_model_cvar, mlist_current.picture_selected );
-	//cvar_set( player_skin_cvar, mlist_current.picture_pressed );
-	
+
 	item = menu_getitem( "options_player_model_name" );
 	item.text = mlist_current.name;
-	
+
 	item = menu_getitem( "options_player_model_picture" );
 	item.picture = mlist_current.picture;
-	
+
 	item = menu_getitem( "options_player_model_info" );
 	item.text = mlist_current.text;
 };
@@ -894,28 +907,28 @@ void(void) nex_player_buildlist =
 	float counter;
 	float loaded;
 	entity hit;
-	
+
 	// remove the old player list
 	if( mlist_list ) {
 		entity node;
-		
+
 		// save the old selected model
 		mlist_saved = strzone( mlist_current.name );
-		
+
 		node = mlist_list;
 		while( node._next ) {
 			node = node._next;
 			_nex_player_remove( node._prev );
 		}
 		_nex_player_remove( node );
-		
+
 		mlist_list = mlist_current = null_entity;
 	}
-	
+
 	shandle = search_begin( "models/player/*.txt", false, true );
 	if( shandle < 0 )
 		return;
-	
+
 	count = search_getsize( shandle );
 	mlist_list = mlist_current = spawn();
 	hit = null_entity;
@@ -926,15 +939,15 @@ void(void) nex_player_buildlist =
 		string dskin;
 		string dmodel;
 		string dtext;
-		
+
 		float handle;
-		
+
 		handle = fopen( search_getfilename( handle, counter ), FILE_READ );
 
 		if( handle < 0 )
 			continue;
-		
-		dname = strzone( fgets( handle ) ); 
+
+		dname = strzone( fgets( handle ) );
 		dpicture = strzone( fgets( handle ) );
 		dskin = strzone( fgets( handle ) );
 		dmodel = strzone( fgets( handle ) );
@@ -948,54 +961,54 @@ void(void) nex_player_buildlist =
 				strunzone( old );
 			} while( temp );
 		}
-			
+
 		if( !dname || !dpicture || !dskin || !dmodel || !dtext ) {
 			print( "Bad model definition file '", search_getfilename( shandle, counter ), "'\n" );
-			
+
 			strunzone( dname );
 			strunzone( dpicture );
 			strunzone( dskin );
 			strunzone( dmodel );
-			
+
 			fclose( handle );
 			continue;
 		}
-		
+
 		// is this the previous selected model?
 		if( dname == mlist_saved )
 			hit = mlist_current;
-		
+
 		mlist_current.name = dname;
 		mlist_current.picture = dpicture;
 		mlist_current.picture_pressed = dskin;
 		mlist_current.picture_selected = dmodel;
 		mlist_current.text = dtext;
-		
+
 		loaded = loaded + 1;
-		
+
 		mlist_current._next = spawn();
 		mlist_current._next._prev = mlist_current;
 		mlist_current = mlist_current._next;
-		
+
 		fclose( handle );
 	}
 	mlist_current._prev._next = null_entity;
 	remove( mlist_current );
-	
+
 	search_end( shandle );
-	
+
 	if( loaded == 0 ) {
 		print( "No model description files found in models/player\n" );
 		mlist_list = mlist_current = null_entity;
 	} else
 		print( ftos( loaded ), " model description files loaded from models/player\n" );
-	
+
 	if( hit )
 		mlist_current = hit;
 	else
 		mlist_current = mlist_list;
-	
-	_nex_player_model_update();			
+
+	_nex_player_model_update();
 };
 
 void(void) nex_player_model_next =
@@ -1010,7 +1023,7 @@ void(void) nex_player_model_prev =
 	if( mlist_current._prev )
 		mlist_current = mlist_current._prev;
 	_nex_player_model_update();
-}
+};
 
 void(void) nex_player =
 {

@@ -247,7 +247,7 @@ void(void) ITEM_BUTTON_REFRESH =
 		else if( menu_selected == self && self._button_state != BUTTON_SELECTED)
 		{
 			self._button_state = BUTTON_SELECTED;
-			if(self.sound_selected)
+			if(self.sound_selected != "" && menu_automatedselection == false)
 				snd_play(self.sound_selected);
 		}
 	}
@@ -367,16 +367,39 @@ void(void) ITEM_TEXTBUTTON_REFRESH =
 			self.font_size_y = self.size_y;
 	}
 
-	if((self.hold_pressed + self._press_time < time && self._button_state == BUTTON_PRESSED) || (menu_selected != self && self._button_state == BUTTON_SELECTED))
+	/*if((self.hold_pressed + self._press_time < time && self._button_state == BUTTON_PRESSED) || (menu_selected != self && self._button_state == BUTTON_SELECTED))
 	{
 		self._button_state = BUTTON_NORMAL;
 	}
 	if(menu_selected == self && self._button_state == BUTTON_NORMAL)
 	{
 		self._button_state = BUTTON_SELECTED;
-		if(self.sound_selected)
+		if(self.sound_selected != "" && menu_automatedselection == false)
 			snd_play(self.sound_selected);
-	}
+	}*/
+	/*if( self.hold_pressed + self._press_time < time )
+	{
+		if( menu_selected != self && self._button_state != BUTTON_NORMAL )
+			self._button_state = BUTTON_NORMAL;
+		else if( menu_selected == self && self._button_state != BUTTON_SELECTED)
+		{
+			self._button_state = BUTTON_SELECTED;
+			if(self.sound_selected != "" && menu_automatedselection == false)
+				snd_play(self.sound_selected);
+		}
+	}*/
+	if( self._button_state == BUTTON_PRESSED ) {
+		if( self.hold_pressed + self._press_time < time )
+			if( menu_selected == self )
+				self._button_state = BUTTON_SELECTED;
+			else
+				self._button_state = BUTTON_NORMAL;
+	} else if( self._button_state == BUTTON_NORMAL && menu_selected == self ) {
+		self._button_state = BUTTON_SELECTED;
+		if( self.sound_selected != "" && menu_automatedselection == false )
+			snd_play( self.sound_selected );
+	} else if( menu_selected != self )
+		self._button_state = BUTTON_NORMAL;
 
 	def_refresh();
 	ctcall_refresh();
@@ -952,7 +975,7 @@ void(void) ITEM_EDITBOX_REFRESH =
 	{
 		self._button_state = BUTTON_SELECTED;
 
-		if(self.sound_selected)
+		if(self.sound_selected != "" && menu_automatedselection == false)
 			snd_play(self.sound_selected);
 	}
 
