@@ -139,11 +139,10 @@ void(void) nex_options_invmouse_refresh;
 // quit message stuff
 const float DPMOD_QUIT_MSG_COUNT = 4;
 
-string[4] nex_quitmsg =
-"'Tired of fragging''already ?'",
-"'Quit now and forfeit''your bodycount ?'",
-"'Are you sure you''want to quit ?'",
-"'Off to do something''constructive ?'";
+string 	nex_quitmsg_0 = "'Tired of fragging''already ?'",
+	nex_quitmsg_1 = "'Quit now and forfeit''your bodycount ?'",
+	nex_quitmsg_2 = "'Are you sure you''want to quit ?'",
+	nex_quitmsg_3 = "'Off to do something''constructive ?'";
 
 float nex_quitrequest;
 

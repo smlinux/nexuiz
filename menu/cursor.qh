@@ -30,14 +30,13 @@ var string CF_NORMAL = "ui/mousepointer.tga";
 const float CURSOR_ENFORCELOADING = false;
 
 // pulse animation
-string[7] CF_PULSE =
-	"",
-	"",
-	"",
-	"",
-	"",
-	"",
-	"";
+var string 	CF_PULSE_0 = "",
+		CF_PULSE_1 = "",
+		CF_PULSE_2 = "",
+		CF_PULSE_3 = "",
+		CF_PULSE_4 = "",
+		CF_PULSE_5 = "",
+		CF_PULSE_6 = "";
 
 // global ui vars
 vector cursor;

@@ -47,13 +47,13 @@ float	stof(string val,...)  = #21;
 entity	spawn(void) = #22;
 void	remove(entity e) = #23;
 
-entity	findstring(entity start, .string field, string match)  = #24;
-entity	findfloat(entity start, .float field, float match) = #25;
-entity	findentity(entity start, .entity field, entity match) = #25;
+entity	findstring(entity start, .string _field, string match)  = #24;
+entity	findfloat(entity start, .float _field, float match) = #25;
+entity	findentity(entity start, .entity _field, entity match) = #25;
 
-entity	findchainstring(.string field, string match) = #26;
-entity	findchainfloat(.float field, float match) = #27;
-entity	findchainentity(.entity field, entity match) = #27;
+entity	findchainstring(.string _field, string match) = #26;
+entity	findchainfloat(.float _field, float match) = #27;
+entity	findchainentity(.entity _field, entity match) = #27;
 
 string	precache_file(string file) = #28;
 string	precache_sound(string sample) = #29;

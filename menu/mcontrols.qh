@@ -45,13 +45,13 @@ const float	 ITEM_TEXT_PRESSED_ALPHA	= 1;
 
 
 // pitures
-const vector ITEM_PICTURE_NORMAL_COLOR = '1 1 1'
+const vector ITEM_PICTURE_NORMAL_COLOR = '1 1 1';
 const float	 ITEM_PICTURE_NORMAL_ALPHA = 1;
 
-const vector ITEM_PICTURE_SELECTED_COLOR = '1 1 1'
+const vector ITEM_PICTURE_SELECTED_COLOR = '1 1 1';
 const float	 ITEM_PICTURE_SELECTED_ALPHA = 1;
 
-const vector ITEM_PICTURE_PRESSED_COLOR = '1 1 1'
+const vector ITEM_PICTURE_PRESSED_COLOR = '1 1 1';
 const float	 ITEM_PICTURE_PRESSED_ALPHA = 1;
 
 // slider color

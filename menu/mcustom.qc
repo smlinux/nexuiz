@@ -700,12 +700,16 @@ void(void) slist_draw =
 
 		line = gethostcachestring(SLIST_LINE1, slist_start + c);
 
+		if( !line || line == "" )
+			line = "Empty";
 		menu_drawstring(pos, line, self.font_size, self.color, self.alpha, self.drawflag);
 
 		pos_y = pos_y + self.font_size_y;
 
 		line = gethostcachestring(SLIST_LINE2, slist_start + c);
 
+		if( !line || line == "" )
+			line = "Empty";
 		menu_drawstring(pos, line, self.font_size, self.color, self.alpha, self.drawflag);
 
 		pos_y = pos_y + self.font_size_y;
@@ -903,11 +907,11 @@ model filename\n
 rest text*/
 void(void) nex_player_buildlist =
 {
-	float shandle;
-	float count;
-	float counter;
-	float loaded;
-	entity hit;
+	local float shandle;
+	local float count;
+	local float counter;
+	local float loaded;
+	local entity hit;
 
 	// remove the old player list
 	if( mlist_list ) {
@@ -935,13 +939,13 @@ void(void) nex_player_buildlist =
 	hit = null_entity;
 	loaded = 0;
 	for ( counter = 0 ; counter < count ; counter = counter + 1 ) {
-		string dname;
-		string dpicture;
-		string dskin;
-		string dmodel;
-		string dtext;
+		local string dname;
+		local string dpicture;
+		local string dskin;
+		local string dmodel;
+		local string dtext;
 
-		float handle;
+		local float handle;
 
 		handle = fopen( search_getfilename( handle, counter ), FILE_READ );
 
@@ -953,7 +957,7 @@ void(void) nex_player_buildlist =
 		dskin = strzone( fgets( handle ) );
 		dmodel = strzone( fgets( handle ) );
 		{
-			string temp, old;
+			local string temp, old;
 			dtext = strzone( "" );
 			do {
 				old = dtext;
