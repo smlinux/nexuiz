@@ -544,56 +544,31 @@ void PlayerPostThink (void)
 		ImpulseCommands ();
 
 	// VorteX: landing on floor, landing damage etc.
+	// LordHavoc: removed 'big fall' death code that VorteX added
 	if (self.flags & FL_ONGROUND)
 	{
-		if (fabs(self.jump_flag) > 100)
+		if (self.jump_flag < -100 && !self.watertype == CONTENT_WATER) // HitGround
 		{
-			if (self.jump_flag < -100 && !self.watertype == CONTENT_WATER) // HitGround
+			soundrandom = random() * 4;
+			if (soundrandom < 1)
+				sound (self, CHAN_BODY, "misc/hitground1.wav", 1, ATTN_NORM);
+			else if (soundrandom < 2)
+				sound (self, CHAN_BODY, "misc/hitground2.wav", 1, ATTN_NORM);
+			else if (soundrandom < 3)
+				sound (self, CHAN_BODY, "misc/hitground3.wav", 1, ATTN_NORM);
+			else if (soundrandom < 4)
+				sound (self, CHAN_BODY, "misc/hitground4.wav", 1, ATTN_NORM);
+			if (self.jump_flag < -650) // landing damage
 			{
-				soundrandom = random() * 4;
-				if (soundrandom < 1)
-					sound (self, CHAN_BODY, "misc/hitground1.wav", 1, ATTN_NORM);
-				else if (soundrandom < 2)
-					sound (self, CHAN_BODY, "misc/hitground2.wav", 1, ATTN_NORM);
-				else if (soundrandom < 3)
-					sound (self, CHAN_BODY, "misc/hitground3.wav", 1, ATTN_NORM);
-				else if (soundrandom < 4)
-					sound (self, CHAN_BODY, "misc/hitground4.wav", 1, ATTN_NORM);
-				if (self.jump_flag < -650) // landing damage
-				{
-					local float dm;
-					dm = bound(0, 0.1*(fabs(self.jump_flag) - 600), 5);
-					Damage (self, world, world, dm, DEATH_FALL, '0 0 0', '0 0 0');
-				}
-				self.jump_flag = 0;
+				local float dm;
+				dm = bound(0, 0.1*(fabs(self.jump_flag) - 600), 5);
+				Damage (self, world, world, dm, DEATH_FALL, '0 0 0', '0 0 0');
 			}
+			self.jump_flag = 0;
 		}
 	}
 	else
-	{
-		if (self.jump_flag != -10000) // not in falling death
-		{
-			self.jump_flag = self.velocity_z;
-			// check for falling into the void
-			if (self.jump_flag < -700)
-			{
-				tracebox(self.origin, self.mins, self.maxs, self.origin + '0 0 -1'*2048, MOVE_NORMAL, self);
-				if (trace_fraction == 1)
-				{// VorteX: add player falling sound here
-					self.jump_flag = -10000;
-					self.lip = time + 1;
-				}
-			}
-		}
-		else
-		{
-			if (time < self.lip)
-			{// prevent all inventory drop
-				self.weapon = 0;
-				Damage (self, world, world, 40000, DEATH_BIGFALL, '0 0 0', '0 0 0');
-			}
-		}
-	}
+		self.jump_flag = self.velocity_z;
 
 	//if (TetrisPostFrame()) return;
 }
