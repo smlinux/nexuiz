@@ -3,6 +3,7 @@
 
 entity	activator;
 string	string_null;
+entity	casing;
 
 // Fields
 

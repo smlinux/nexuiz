@@ -321,6 +321,32 @@ float W_CheckAmmo (void)
 	return FALSE;
 }
 
+void fireBullet (vector dir, float spread, float damage, float dtype)
+{
+	vector	org;
+	
+	makevectors (self.v_angle);
+	
+	// use traceline_hitcorpse to make sure it can hit gibs and corpses too
+	org = self.origin + self.view_ofs;
+	traceline_hitcorpse (self, org, org + v_forward * 4096 + v_right * crandom () * spread + v_up * crandom () * spread, FALSE, self);
+	
+	// FIXME - causes excessive 'tinking'. Hopefully remove "tink1.wav" from the ricochets with csqc
+	if ((trace_fraction != 1.0) && (trace_ent != self) && (pointcontents (trace_endpos) != CONTENT_SKY))
+	{
+		if (trace_ent == world)
+			te_spike (trace_endpos);
+		else if (trace_ent.classname == "player" || trace_ent.classname == "corpse" || trace_ent.classname == "gib")
+		{
+			Damage (self, trace_endpos, trace_ent, 0, damage);
+			if (random () < 0.5)
+				sound (trace_ent, CHAN_IMPACT, "misc/BodyImpact1.wav", 1, ATTN_NORM);
+			else
+				sound (trace_ent, CHAN_IMPACT, "misc/BodyImpact2.wav", 1, ATTN_NORM);
+		}
+	}
+}
+
 void W_Laser_Touch (void)
 {
 	vector	dir;
@@ -391,82 +417,58 @@ void W_Laser_Attack2 (void)
 
 void W_Uzi_Attack (void)
 {
-	vector	org;
-
 	sound (self, CHAN_WEAPON, "weapons/Uzi_Fire.wav", 1, ATTN_NORM);
-	
-	makevectors (self.v_angle);
-	
-	// use traceline_hitcorpse to make sure it can hit gibs and corpses too
-	org = self.origin + self.view_ofs;
-	traceline_hitcorpse (self, org, org + v_forward * 4096 + v_right * crandom () * 300 + v_up * crandom () * 300, FALSE, self);
-	
-	// FIXME - causes excessive 'tinking'. Hopefully remove "tink1.wav" from the ricochets with csqc
-	if ((trace_fraction != 1.0) && (trace_ent != self) && (pointcontents (trace_endpos) != CONTENT_SKY))
-	{
-		if (trace_ent == world)
-			te_spike (trace_endpos);
-		else if (trace_ent.classname == "player" || trace_ent.classname == "corpse" || trace_ent.classname == "gib")
-		{
-			Damage (self, trace_endpos, trace_ent, 0, 8);
-			if (random () < 0.5)
-				sound (trace_ent, CHAN_IMPACT, "misc/BodyImpact1.wav", 1, ATTN_NORM);
-			else
-				sound (trace_ent, CHAN_IMPACT, "misc/BodyImpact2.wav", 1, ATTN_NORM);
-		}
-	}
-	
+
+	fireBullet (v_forward, 300, 8, IT_SHOTGUN);	
+
 	self.punchangle_x = random () * -2;
 	self.punchangle_y = crandom () * 0.5;
 	self.punchangle_z = crandom () * 0.5;
 	
 	self.attack_finished = time + 0.075;
 	self.ammo_nails = self.ammo_nails - 1;
+
+	vector	org; // casing code
+	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 1) + (v_forward * 20);
+	SpawnCasing (org, v_forward, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 + 10) * v_up), 2);
 }
 
 void W_Uzi_Attack2 (void)
 {
-	vector	org;
-
 	sound (self, CHAN_WEAPON, "weapons/Uzi_Fire.wav", 1, ATTN_NORM);
 	
-	makevectors (self.v_angle);
-	
-	// use traceline_hitcorpse to make sure it can hit gibs and corpses too
-	org = self.origin + self.view_ofs;
-	traceline_hitcorpse (self, org, org + v_forward * 8192, FALSE, self);
-	
-	if ((trace_fraction != 1.0) && (trace_ent != self) && (pointcontents (trace_endpos) != CONTENT_SKY))
-	{
-		if (trace_ent == world)
-			te_spike (trace_endpos);
-		else if (trace_ent.classname == "player" || trace_ent.classname == "corpse" || trace_ent.classname == "gib")
-		{
-			Damage (self, trace_endpos, trace_ent, 0, 12);
-			if (random () < 0.5)
-				sound (trace_ent, CHAN_IMPACT, "misc/BodyImpact1.wav", 1, ATTN_NORM);
-			else
-				sound (trace_ent, CHAN_IMPACT, "misc/BodyImpact2.wav", 1, ATTN_NORM);
-		}
-	}
+	fireBullet (v_forward, 3, 10, IT_SHOTGUN);
 	
 	self.punchangle = '-0.5 0 0';
 	
 	self.attack_finished = time + 0.3;
 	self.ammo_nails = self.ammo_nails - 1;
+
+	vector	org;
+	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 1) + (v_forward * 20);
+	SpawnCasing (org, v_forward, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 + 10) * v_up), 2);
 }
 
-// Don't shoot this weapon, it crashes :)
 void W_Shotgun_Attack (void)
 {
 	sound (self, CHAN_WEAPON, "weapons/Shotgun_fire.wav", 1, ATTN_NORM);
-	
+
+	float	sc;
+	sc = 7;
+	while (sc > 0)
+	{
+		fireBullet (v_forward, 300, 8, IT_SHOTGUN);
+		sc = sc - 1;
+	}
+
 	self.punchangle_x = -2;
-	
-	makevectors (self.v_angle);
-	FireBullets (6, v_forward, '0.04 0.04 0');
-	
+
+	self.ammo_shells = self.ammo_shells - 1;
 	self.attack_finished = time + 0.8;
+
+	vector	org; // casing code
+	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 4) + (v_forward * 15);
+	SpawnCasing (org, v_forward, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 + 10) * v_up), 1);
 }
 
 void W_Shotgun_Attack2 (void)
