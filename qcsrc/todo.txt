@@ -1,27 +1,28 @@
 *********************************
 *************QC******************
-Major Features:
-Bot Support
+Better Bot Support, fix jumping bug
+Player skin selection based on .playerskin cvar string
+Graphic over the user to show they are typing a message/in the console/in the menu
+Maps.cfg support for maplists
+Add admin options (remote admin and voting, players can vote for level change)
+Telefragging (and message for being telefragged)
+Add a cvar for: Weapon switch time, starting health
+
+
+*********************************
+*************MENU****************
+Add more options to 'Player' menu: Crosshair selection, FOV, Team color (choose one of 4, red, blue, green, yellow)
+Create game 'game options' menu, with the sv cvars and any other game related cvars
+Create game 'weapon options' menu, with the g_balance weapon cvars
+Add ability to select gamecfg options (as checkmarks, you check off the various options)
+Maplist.cfg editing
+
+
+*********************************
+************Engine***************
 Player models holding weapon models
-Lan searching in the menu
-
-1. Player skin selection based on .playerskin cvar string
-2. Graphic over the user to show they are typing a message/in the console/in the menu
-3. Maps.cfg support for maplists, and editing of this in the menu
-4. Add admin options (remote admin and voting, players can vote for level change)
-5. Playername "has (numberoffrags) frags in a row", after 3 frags
-6. Telefragging (and message for being telefragged)
-7. Add weapons/electro_fly and Add weapons/missile_fly (for rocket and hagar)
-8. Use shell only for the rocket explosion, not the grenade 
-9. Smoke and Spark effect for use in levels
-10. Envmap to shaders
-11. Add a water/slime/lava shader
-12. Create game 'game options' menu
-13. Add 'GAME' options menu, with: Sbar alpha, Jpeg Screenshots, Show Framerate
-14. Add more options to 'Player' menu: Crosshair selection, FOV, Team color (choose one of 3, red, blue, green)
-15. Add 'Input' options menu, with: Invert Mouse (negate m_pitch), Mouse Speed 
-16. Add GLslang, and gl_texturemode to effects menu options
-
+Lan searching for the menu
+Add a water/slime/lava shader
 
 
 *********************************
@@ -42,17 +43,10 @@ Lan searching in the menu
 
 *********************************
 ************GAMECFG *************
+2;   /// nothing here yet
+8;  /// No self damage - not done
+64; /// Teams - not done
 
-1;   /// Nex Arena
-2;   /// Spawn Protection
-4;   /// Strength gain
-8;   /// Fast health regeneration
-16;  /// Rocket Arena
-32;  /// No self damage
-64;  /// Air control
-128; /// Weapons Stay
-256; /// FullBright player models
-512; /// Teams
 
 *********************************
 ************GAME MODS ***********
