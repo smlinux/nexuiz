@@ -347,11 +347,7 @@ void ImpactEffect (entity ent, float weapontype)
 	}
 	else if (weapontype == IT_HAGAR)
 	{
-		//b = crandom();
-		//if (b < 0)
-			effect (org2, "models/sprites/dpexplosion1.spr32", 0, 20, 30);
-		//else
-		//	effect (org2, "models/sprites/dpexplosion2.spr32", 0, 20, 30);
+		effect (org2, "models/sprites/dpexplosion2.spr32", 0, 20, 30);
 		sound (ent, CHAN_BODY, "weapons/Rocket_Impact.wav", 1, ATTN_NORM);
 	}
 	else if (weapontype == IT_ELECTRO)	// Secondary fire

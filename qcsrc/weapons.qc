@@ -329,11 +329,12 @@ float W_CheckAmmo (void)
 	return FALSE;
 }
 
-void FireRailgunBullet (vector src, float bdamage, vector dir)
+void FireRailgunBullet (vector src, float bdamage, vector dir, float spread)
 {
 	vector	v, lastpos;
 	entity	saveself, last;
-
+	vector	org;
+	org = self.origin + self.view_ofs;
 	if (bdamage < 1)
 		return;
 
@@ -342,7 +343,7 @@ void FireRailgunBullet (vector src, float bdamage, vector dir)
 
 	while (bdamage > 0)
 	{
-		traceline_hitcorpse (self, lastpos + dir * 2, lastpos + dir*8192, FALSE, last);
+		traceline_hitcorpse (self, org, org + v_forward * 4096 + v_right * crandom () * spread + v_up * crandom () * spread, FALSE, self);
 		last = trace_ent;
 		lastpos = trace_endpos;
 		if (trace_fraction != 1.0)
@@ -376,10 +377,10 @@ void fireBullet (vector dir, float spread, float damage, float dtype)
 	if ((trace_fraction != 1.0) && (trace_ent != self) && (pointcontents (trace_endpos) != CONTENT_SKY))
 	{
 		if (trace_ent == world)
-			te_spike (trace_endpos);
+			te_gunshot (trace_endpos);
 		else if (trace_ent.classname == "case")
 		{
-//			te_spike (trace_endpos);
+//			te_gunshot (trace_endpos);
 			Damage (self, trace_endpos, trace_ent, 0, damage, dir * damage);
 		}
 		else if (trace_ent.classname == "player" || trace_ent.classname == "corpse" || trace_ent.classname == "gib")
@@ -633,17 +634,7 @@ void W_Electro_Touch (void)
 	WriteCoord (MSG_BROADCAST, 0);
 	WriteByte (MSG_BROADCAST, 155);
 
-	// LordHavoc: why damage only flesh?
-	//if (other.classname == "player" || other.classname == "corpse" || other.classname == "gib")
-	{
-		if (random () < 0.5)
-			sound (other, CHAN_IMPACT, "misc/BodyImpact1.wav", 1, ATTN_NORM);
-		else
-			sound (other, CHAN_IMPACT, "misc/BodyImpact2.wav", 1, ATTN_NORM);
-		dir = normalize(self.velocity);
-		Damage (self.owner, self.origin, other, 0, 50, dir * 80);
-	}
-
+	RadiusDamage (self.owner, self, 0, 50, 10, 70, world, 50);
 	remove (self);
 }
 
@@ -673,65 +664,76 @@ void W_Electro_Attack (void)
 	proj.nextthink = time + 3;
 
 	self.attack_finished = time + 0.6;
-	self.ammo_cells = self.ammo_cells - 0.25;
+	self.ammo_cells = self.ammo_cells - 1;
 }
 
-void W_Plasma_Touch (void)
+void W_Plasma_Explode (entity ignore)
 {
-	vector dir;
-	dir = normalize(self.velocity);
-	// LordHavoc: why damage only flesh?
-	//if (other.classname == "player" || other.classname == "corpse" || other.classname == "gib")
-		Damage (self.owner, self.origin, other, 0, 15, dir * 30);
+	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+	WriteByte (MSG_BROADCAST, 79);
+	WriteCoord (MSG_BROADCAST, self.origin_x);
+	WriteCoord (MSG_BROADCAST, self.origin_y);
+	WriteCoord (MSG_BROADCAST, self.origin_z);
+	WriteCoord (MSG_BROADCAST, 0);		// SeienAbunae: groan... Useless clutter
+	WriteCoord (MSG_BROADCAST, 0);
+	WriteCoord (MSG_BROADCAST, 0);
+	WriteByte (MSG_BROADCAST, 155);
 
-	ImpactEffect (self, IT_ELECTRO);
+	RadiusDamage (self.owner, self, 0, 100, 50, 100, world, 50);
 
 	remove (self);
 }
 
-const float w_plasma_anim_interval = 0.05;
-.float lifetime;
-void W_Plasma_Think (void)
+void W_Plasma_FuseExplode (void)
 {
-	float a;
+	W_Plasma_Explode (world);
+}
 
-	a = random () * 5;
-	animate_sprite(a, 5);
-
-	self.nextthink = time + w_plasma_anim_interval;
-
-	if (self.lifetime < time) // time is up
-		SUB_Remove();
+void W_Plasma_Touch (void)
+{
+	if (other.classname == "player" || other.classname == "corpse")
+		W_Plasma_Explode (other);
+	else
+		sound (self, CHAN_BODY, "weapons/Grenade_Bounce.wav", 1, ATTN_NORM);
 }
 
 void W_Electro_Attack2 (void)
 {
-	entity	proj;
+	entity	Plasma;
 
-	sound (self, CHAN_WEAPON, "weapons/LazerGun_Fire.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "weapons/Electro_fire.wav", 1, ATTN_NORM);
 
-	proj = spawn ();
-	proj.owner = self;
-	proj.classname = "plasma";
+	self.punchangle_x = -4;
 
-	proj.movetype = MOVETYPE_FLY;
-	proj.solid = SOLID_BBOX;
-	proj.effects = EF_DIMLIGHT;
+	Plasma = spawn ();
+	Plasma.owner = self;
+	Plasma.classname = "Plasma";
+	Plasma.effects = 1;
+
+	Plasma.movetype = MOVETYPE_BOUNCE;
+	Plasma.solid = SOLID_BBOX;
+
+	Plasma.takedamage = DAMAGE_YES;
+	Plasma.damageforcescale = 4;
+	Plasma.health = 1;
+	Plasma.event_hurt = W_Plasma_Explode;
+
+	setmodel (Plasma, "models/bullet.mdl");
+	setsize (Plasma, '-6 -6 -3', '6 6 3');
 
 	makevectors (self.v_angle);
+	setorigin (Plasma, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);
 
-	setmodel (proj, "models/sprites/plasmashot.spr32");
-	setsize (proj, '0 0 0', '0 0 0');
-	setorigin (proj, self.origin + self.view_ofs + v_forward * 5 + v_right * 5 + v_up * -12);
+	Plasma.velocity = v_forward * 900 + v_up * 200;
+	Plasma.angles = vectoangles (Plasma.velocity);
+	Plasma.avelocity = '150 1500 150';
 
-	proj.velocity = v_forward * 5000;
-	proj.touch = W_Plasma_Touch;
-	proj.think = W_Plasma_Think;
-	proj.nextthink = time + w_plasma_anim_interval;
-	proj.lifetime = time + 1.5;
+	Plasma.touch = W_Plasma_Touch;
+	Plasma.think = W_Plasma_FuseExplode;
+	Plasma.nextthink = time + 2;
 
-	self.attack_finished = time + 0.175;
-	self.ammo_cells = self.ammo_cells - 1;
+	self.attack_finished = time + 1;
+	self.ammo_cells = self.ammo_cells - 2;
 }
 
 void W_Crylink_Attack (void)
@@ -742,7 +744,7 @@ void W_Crylink_Attack (void)
 	org = self.origin + self.view_ofs + v_forward * 18 + v_right * 7 + v_up * -9;
 	makevectors (self.v_angle);
 
-	FireRailgunBullet (org, 25, v_forward);
+	FireRailgunBullet (org, 25, v_forward, 300);
 
 	traceline (org, self.origin + self.view_ofs + (v_forward * 4096), FALSE, self);
 
@@ -758,7 +760,7 @@ void W_Crylink_Attack (void)
 	WriteCoord (MSG_BROADCAST, self.v_angle_y);
 	WriteCoord (MSG_BROADCAST, self.v_angle_z);
 
-	te_spike (trace_endpos);
+	te_gunshot (trace_endpos);
 
 	self.ammo_cells = self.ammo_cells - 0.25;
 	self.attack_finished = time + 0.165;
@@ -800,7 +802,7 @@ void W_Nex_Attack (void)
 
 	traceline (org, self.origin + self.view_ofs + (v_forward * 4096), FALSE, self);
 
-	FireRailgunBullet (org, 90, v_forward);
+	FireRailgunBullet (org, 90, v_forward, 0);
 
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 	WriteByte (MSG_BROADCAST, 76);
@@ -842,7 +844,7 @@ void W_Hagar_Explode (void)
 {
 	ImpactEffect (self, IT_HAGAR);
 
-	RadiusDamage (self.owner, self, 0, 100, 50, 100, world, 150);
+	RadiusDamage (self.owner, self, 0, 20, 10, 50, world, 90);
 
 	remove (self);
 }
@@ -981,7 +983,7 @@ void W_Rocket_Attack (void)
 	org = self.origin + self.view_ofs + v_forward * 20 + v_right * 4 + v_up * -15;
 
 	setorigin (missile, org);
-	missile.velocity = v_forward * 2500;
+	missile.velocity = v_forward * 1200;
 	missile.angles = vectoangles (missile.velocity);
 
 	missile.touch = W_Rocket_Touch ;
@@ -1041,7 +1043,7 @@ void W_Rocket_Attack2 (void)
 	org = self.origin + self.view_ofs + v_forward * 20 + v_right * 4 + v_up * -15;
 
 	setorigin (missile, org);
-	missile.velocity = v_forward * 1500;
+	missile.velocity = v_forward * 900;
 	missile.angles = vectoangles (missile.velocity);
 
 	missile.touch = W_Rocket2_Touch;
