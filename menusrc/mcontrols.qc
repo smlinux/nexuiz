@@ -907,8 +907,8 @@ void(float keynr, float ascii) ITEM_EDITBOX_KEY =
 {
 	if(ctcall_key(keynr, ascii))
 		return;
-
-	if(ascii >= 20 && ascii <= 126)
+	
+	if(ascii >= 30 && ascii <= 126)
 	{
 		ITEM_EDITBOX_INSERT(ascii);
 	} else if(keynr == K_BACKSPACE)

@@ -3,35 +3,18 @@ Property of Alientrap
 
 Option menus
 */
-{
-	type	ITEM_WINDOW
-	name	options
-}
-// std menu stuff
-{
-	type	ITEM_REFERENCE
-	name	options_bg_ref
-	parent	options
-	link	background
-}
-{
-	type	ITEM_REFERENCE
-	name	options_mainframe
-	parent	options
-	link	mainframe
-	orderpos 1000
-}
-{
-	type	ITEM_REFERENCE
-	name	options_panel_ref
-	parent	options
-	link	opt_panel
-	origin 	"200 145"
-}
 // side panel
 {
 	type	ITEM_WINDOW
 	name	opt_panel
+	parent 	options
+	origin 	"200 145"
+}
+{
+	type	ITEM_WINDOW
+	name	opt_frame
+	parent	opt_panel
+	origin	"400 30"
 }
 // side panel entries
 {
@@ -71,29 +54,35 @@ Option menus
 	pos		"0 60"
 	action	nex_cc
 }
-// ref for the 'working' window
-{
-	type	ITEM_REFERENCE
-	name	options_settings_ref
-	parent	options
-	link	options_game
-	origin	"600 175"
-}
 // sub windows
+{
+	type 	ITEM_WINDOW
+	name	options_empty
+	parent	opt_frame
+	reinit	nex_makeselfonlyvisible
+}
 // game
 {
 	type	ITEM_WINDOW
 	name	options_game
+	parent	opt_frame
 }
 // sound
 {
 	type	ITEM_WINDOW
 	name	options_sound
+	parent	opt_frame
 }
 //controls
 {
 	type 	ITEM_WINDOW
 	name 	options_control
+	parent	opt_frame
+}
+{
+	type	ITEM_WINDOW
+	name	options_cc
+	parent	opt_frame
 }
 //////
 // CD Music Volume
@@ -227,10 +216,6 @@ Option menus
 }
 
 // color control
-{
-	type	ITEM_WINDOW
-	name	options_cc
-}
 {
 	type	ITEM_TEXTBUTTON
 	name	options_cc_reset

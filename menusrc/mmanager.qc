@@ -791,9 +791,6 @@ void(void) menu_selectdown =
 	{
 		if(ent._child != null_entity)
 		{
-			// add the history item
-			menu_pushhistory(ent._child);
-
 			if(!(ent.flag & FLAG_CHILDDRAWONLY) && !(ent.flag & FLAG_CHILDDRAWREFRESHONLY))
 			{
 				// give it a try
@@ -807,123 +804,62 @@ void(void) menu_selectdown =
 				}
 			}
 
-			// nothing found, then remove the history item
-			menu_pophistory();
+
 		}
 	} while((ent = ent._next) != null_entity);
 
 	// we didnt find anything
 	menu_selected = old_selected;
-
 }
+
 
 void(void) menu_selectup =
 {
-	entity ent;
-
-	// move up till we find a selectable item
-	// if we reach the 'main' menu without having found such an item
-	// then toggle the menu (if possible) else select the first item available
-	// if we find the active_menu on our way up, reset it, so everything gets displayed
-	// correct
-
-	ent = menu_selected;
-
-	// reset menu_selected
-	menu_selected = null_entity;
-
-	dprint("Selectup called !\n");
-
-	while(1)
-	{
-		// reset the active window if we reached it
-		if(ent == menu_activewindow)
-			menu_activewindow = null_entity;
-
-		// does a history entry exist for the current object ?
-		if(menu_history != null_entity)
-		{
-			dprint(etos(ent), " is popable !\n");
-			menu_pophistory();
-			if(menu_selectable(menu_selected))
-			{
-				dprint(etos(menu_selected), " is selectable !\n");
-				break;
-			}
-			ent = menu_selected;
-		} else
-		{
-			break;
+	local entity ent;
+	
+	// if we try to up from the current activewindow pop the history.
+	// else move up in the hierarchy and try to select and item.
+	
+	print( "Check whether menu_selected == menu_activewindow\n" );
+	if( menu_selected == menu_activewindow ) {
+		print( "Pop history\n" );
+		if( menu_history == null_entity ) {
+			print( "History empty!\n" );
+			menu_toggle();
+			// set the active window to the 'main' window
+			menu_activewindow = ent;
+			// if the menu isnt toggled then select an item now !
+			menu_selectdown();
 		}
-
-		eprint(ent);
-
-		// move up
-		/*if(ent._parent == null_entity)
-		{
-			// nothing found -> break
-			dprint("0\n");
-			break;
-		}
-		else
-		{
-			ent = ent._parent;
-		}*/
-
-		menu_selected = ent;
-		// is it selecteable ?
-		if(menu_selectable(ent))
-		{
-			// we found our item !
-			dprint("A\n");
-			break;
-		}
-
-		// try selectnext
-		menu_selectnext();
-		if(menu_selected != ent)
-		{
-			// we found it !
-			dprint("B\n");
-			break;
-		}
-		// try selectprev
-		menu_selectprev();
-		if(menu_selected != ent)
-		{
-			// we found it !
-			dprint("C\n");
-			break;
-		}
-	}
-
-	// evalute our results:
-	if(menu_selected == null_entity)
-	{
-		// something must have been selected else -> error !
-		print("Couldnt select any item !\n");
-		menu_reselect();
-	} 	// have we reached the 'main' menu ?
-	else if(menu_selected.name == MENU_NORMAL_NAME || menu_selected.name == MENU_INGAME_NAME)
-	{
-		menu_toggle();
-		// set the active window to the 'main' window
-		menu_activewindow = ent;
-		// if the menu isnt toggled then select an item now !
-		menu_selectdown();
+		menu_pophistory();
 		return;
 	}
+	
+	print( "Check whether parent exists\n" );	
+	if( menu_selected._parent == null_entity )
+		return;
+	
+	print( "Try to select the parent\n" );
+	menu_selected = menu_selected._parent;
+	if( menu_selectable( menu_selected ) )
+		return;
 
-	// does the active menu needs to be reset ?
-	if(menu_activewindow == null_entity)
-	{
-		if(menu_selected._parent)
-			menu_activewindow = ent._parent;
-		else
-			menu_activewindow = ent;
-	}
-	eprint(menu_selected);
-	eprint(menu_activewindow);
+	print( "Try to select an item after the parent\n" );
+	menu_selectnext();
+	if( menu_selectable( menu_selected ) )
+		return;
+
+	print( "Try to select an item before the parent\n" );
+	menu_selectprev();
+	if( menu_selectable( menu_selected ) )
+		return;
+
+	print( "Try to select the parent of the parent\n" );
+	menu_selectup();	
+
+	print( "Selected:\n" );
+	eprint( menu_selected );	
+	eprint( menu_activewindow );	
 };
 
 void(void) menu_reselect =
@@ -939,9 +875,10 @@ void(entity menu, float setactive) menu_jumptowindow =
 		error("Cant jump to ", menu.name, " !\n");
 
 	// add a history point
-	menu_pushhistory(menu);
-	if(setactive)
+	if(setactive) {
+		menu_pushhistory(menu);
 		menu_activewindow = menu;
+	}
 
 	// now set the selected to the first selectable child
 	menu_selected = menu;

@@ -10,6 +10,23 @@
 // global stuff
 ///
 
+void(entity item) nex_makeonlyvisible =
+{
+	local entity node;
+	
+	if( item.flag & FLAG_HIDDEN )
+		item.flag = item.flag - FLAG_HIDDEN;
+	for( node = item._next ; node ; node = node._next )
+		node.flag = item.flag | FLAG_HIDDEN;
+	for( node = item._prev ; node ; node = node._prev )
+		node.flag = item.flag | FLAG_HIDDEN;
+};
+
+void(void) nex_linkrelhack =
+{
+	self._child._parent = self;
+};
+
 void(void) nex_maketextzone =
 {
 	self.text = strzone(self.text);
@@ -93,6 +110,11 @@ void(void) _nex_cvar_slider =
 //////////////
 // main.menu
 ///
+
+void(void) nex_makeselfonlyvisible =
+{
+	nex_makeonlyvisible( self );
+};
 
 // quit menu
 
@@ -218,13 +240,10 @@ void(void) nex_display_options =
 {
 	entity ent;
 
-	if(substring(menu_activewindow.name,0,3) == "opt")
-		return;
-
-	ent = menu_getitem("options_settings_ref");
-	ent._child = menu_getitem(self.link);
-
-	menu_jumptowindow(menu_getitem("options"), true);
+	ent = menu_getitem( "options" );
+	
+	nex_makeonlyvisible( ent );
+	menu_jumptowindow( ent, false );
 };
 
 /////////////////
@@ -232,9 +251,8 @@ void(void) nex_display_options =
 
 void(void) nex_display_video =
 {
-	if(menu_activewindow.name == "video")
-		return;
-	menu_jumptowindow(menu_getitem("video"),true);
+	nex_makeonlyvisible( menu_getitem( "video" ) );
+	menu_jumptowindow( menu_getitem( "video" ), false );
 };
 
 void(void) nex_video_bpp_reinit =
@@ -549,16 +567,14 @@ void(void) nex_xp_click = // if one of the maplist entries get 'clicked' :-)
 
 void(void) nex_display_singleplayer =
 {
-	if(menu_activewindow.name == "singleplayer")
-		return;
-	menu_jumptowindow(menu_getitem("singleplayer"),true);
+	nex_makeonlyvisible( menu_getitem( "singleplayer" ) );
+	menu_jumptowindow( menu_getitem( "singleplayer"), false );
 };
 
 void(void) nex_display_multiplayer =
 {
-	if(menu_activewindow.name == "multiplayer")
-		return;
-	menu_jumptowindow(menu_getitem("multiplayer"),true);
+	nex_makeonlyvisible( menu_getitem( "multiplayer" ) );
+	menu_jumptowindow( menu_getitem( "multiplayer" ), false );
 };
 
 void(void) nex_xp_maxfrags =
@@ -650,6 +666,11 @@ void(void) nex_mp_start =
 	cmd(selectmap.name);
 	cmd(";wait;togglemenu\n");
 };
+
+void(void) nex_goto_createserver =
+{
+	menu_jumptowindow( menu_getitem( "multiplayer_frame"), false );
+}
 
 // server list
 var float slist_selected = 0;
@@ -866,9 +887,9 @@ void(void) nex_options_invmouse_refresh =
 void(void) nex_snd =
 {
 	entity ent;
-	ent = menu_getitem("options_settings_ref");
-	ent._child = menu_getitem("options_sound");
-	//menu_jumptowindow(ent, false);
+	ent = menu_getitem("options_sound");
+	nex_makeonlyvisible( ent );
+	menu_jumptowindow(ent, false);
 }
 
 void(void) nex_snd_cd_init =
@@ -902,9 +923,9 @@ void(void) nex_snd_snd_init =
 void(void) nex_cc =
 {
 	entity ent;
-	ent = menu_getitem("options_settings_ref");
-	ent._child = menu_getitem("options_cc");
-	//menu_jumptowindow(ent, false);
+	ent = menu_getitem("options_cc");
+	nex_makeonlyvisible( ent );
+	menu_jumptowindow(ent, false);
 }
 
 void(void) nex_cc_reset =
@@ -1035,9 +1056,9 @@ void(void) nex_cc_grey =
 void(void) nex_cntrl =
 {
 	entity ent;
-	ent = menu_getitem("options_settings_ref");
-	ent._child = menu_getitem("options_control");
-	//menu_jumptowindow(ent, false);
+	ent = menu_getitem("options_control");
+	nex_makeonlyvisible( ent );
+	menu_jumptowindow(ent, false);
 }
 
 const float NUMKEYS = 2;	// visible key count (first and secondary key)

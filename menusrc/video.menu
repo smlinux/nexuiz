@@ -3,38 +3,14 @@ Property of Alientrap
 
 Video menu
 */
-{
-	type	ITEM_WINDOW
-	name	video
-}
-{
-	type	ITEM_REFERENCE
-	name	video_bg_ref
-	parent	video
-	link	background
-}
-{
-	type	ITEM_REFERENCE
-	name	video_mainframe
-	parent	video
-	link	mainframe
-	orderpos 1000
-}
-// video stuff
-{
-	type 	ITEM_WINDOW
-	name	video_wnd
-	parent	video
-	origin	"512 200"
-}
 //////
 // Resolution
 ////
 // Text
 {
 	type	 	ITEM_TEXTBUTTON
-	name		video_wnd_resolution_text
-	parent		video_wnd
+	name		video_resolution_text
+	parent		video
 	text		"Resolution"
 	pos			"0 0 0"
 	//font_size	"10 10 0"
@@ -45,8 +21,8 @@ Video menu
 // Switch
 {
 	type		ITEM_TEXTSWITCH
-	name		video_wnd_resolution_switch
-	parent		video_wnd_resolution_text
+	name		video_resolution_switch
+	parent		video_resolution_text
 	pos			"10 0 0"
 	//font_size	"10 10 0"
 	flag 		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
@@ -58,8 +34,8 @@ Video menu
 // Text
 {
 	type	 	ITEM_TEXTBUTTON
-	name		video_wnd_bpp_text
-	parent		video_wnd
+	name		video_bpp_text
+	parent		video
 	text		"Bits per pixel"
 	pos			"0 15 0"
 	//font_size	"10 10 0"
@@ -70,8 +46,8 @@ Video menu
 // Switch
 {
 	type		ITEM_TEXTSWITCH
-	name		video_wnd_bpp_switch
-	parent		video_wnd_bpp_text
+	name		video_bpp_switch
+	parent		video_bpp_text
 	pos			"10 15 0"
 	//font_size	"10 10 0"
 	flag 		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
@@ -84,8 +60,8 @@ Video menu
 // Text
 {
 	type	 	ITEM_TEXTBUTTON
-	name		video_wnd_fullscreen_text
-	parent		video_wnd
+	name		video_fullscreen_text
+	parent		video
 	text		"Fullscreen"
 	pos			"0 30 0"
 	//font_size	"10 10 0"
@@ -96,8 +72,8 @@ Video menu
 // Switch
 {
 	type		ITEM_TEXTSWITCH
-	name		video_wnd_fullscreen_switch
-	parent		video_wnd_fullscreen_text
+	name		video_fullscreen_switch
+	parent		video_fullscreen_text
 	pos			"10 30 0"
 	//font_size	"10 10 0"
 	flag 		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
@@ -109,8 +85,8 @@ Video menu
 ///
 {
 	type		ITEM_TEXTBUTTON
-	name		video_wnd_apply
-	parent		video_wnd
+	name		video_apply
+	parent		video
 	pos			"10 60 0"
 	//font_size	"10 10 0"
 	flag		256		// FLAG_AUTOSETCLICK

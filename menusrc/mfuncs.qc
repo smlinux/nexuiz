@@ -301,34 +301,6 @@ void(float keynr, float ascii)	def_keyevent =
 			self._action();
 		// move to the child menu
 		menu_selectdown();
-	} else if(keynr == K_TAB)
-	{
-		/*
-		// select next and try to "go" down
-		// TODO: make a loop out of that !
-		if(self._next)
-		{
-			menu_selected = self._next;
-			menu_selectdown();
-			if(menu_selected != self._next)
-			{
-				return;
-			}
-		}
-		if(self._prev)
-		{
-			menu_selected = self._prev;
-			menu_selectdown();
-			if(menu_selected != self._prev)
-			{
-				return;
-			}
-		}
-		menu_selected = self;
-		*/
-		menu_selectup();
-		menu_selectnext();
-		menu_selectdown();
 	}
 };
 

@@ -11,25 +11,19 @@ template
 	type		ITEM_BUTTON
 	name		mainframe_nnn
 	parent 		mainframe
-	pos			"0 0"
+	pos		"0 0"
 	size		"185 58"
 	picture		"gfx/m_top_nnn"
 	picture_selected "gfx/m_top_sel_nnn"
 	picture_pressed	"gfx/m_top_sel_nnn"
 	drawflag_pressed 1 // DRAWFLAG_ADD
 }
-
 */
-{
-	type		ITEM_WINDOW
-	name		mainframe
-	origin		"201 42"
-}
 // singleplayer
 {
 	type		ITEM_BUTTON
-	name		mainframe_singleplayer
-	parent 		mainframe
+	name		mainmenu_singleplayer
+	parent 		mainmenu
 	//pos			"201 17"
 	pos			"0 0"
 	size		"185 58"
@@ -42,8 +36,8 @@ template
 // multiplayer
 {
 	type		ITEM_BUTTON
-	name		mainframe_multiplayer
-	parent 		mainframe
+	name		mainmenu_multiplayer
+	parent 		mainmenu
 	pos			"185 0"
 	size		"170 58"
 	picture		"gfx/m_top_multiplayer"
@@ -55,8 +49,8 @@ template
 // options
 {
 	type		ITEM_BUTTON
-	name		mainframe_options
-	parent 		mainframe
+	name		mainmenu_options
+	parent 		mainmenu
 	pos			"355 0"
 	size		"113 58"
 	picture		"gfx/m_top_options"
@@ -68,8 +62,8 @@ template
 // video
 {
 	type		ITEM_BUTTON
-	name		mainframe_video
-	parent 		mainframe
+	name		mainmenu_video
+	parent 		mainmenu
 	pos			"469 0"
 	size		"84 58"
 	picture		"gfx/m_top_video"
@@ -81,8 +75,8 @@ template
 // quit
 {
 	type		ITEM_BUTTON
-	name		mainframe_quit
-	parent 		mainframe
+	name		mainmenu_quit
+	parent 		mainmenu
 	pos			"553 0"
 	size		"67 58"
 	picture		"gfx/m_top_quit"
