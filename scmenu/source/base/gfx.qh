@@ -19,6 +19,8 @@ void() Gfx_Hide;
 void() Gfx_Update;
 void() Gfx_Draw;
 
+float() Gfx_GetFPS;
+
 bool( string pPic )	Gfx_IsCached;
 bool( string pPic )	Gfx_Precache;
 void( string pPic )	Gfx_Free;

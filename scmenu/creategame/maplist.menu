@@ -15,7 +15,7 @@ Item Window MapList
 		pos	'0 20'
 		size	'400 500'
 
-		init 	Nex_Action_MapList_Init
+		target	"::Data::Server::Map::List"
 	}
 	Derive Label CycleLabel
 	{
@@ -26,6 +26,8 @@ Item Window MapList
 	{
 		pos	'450 20'
 		size	'400 450'
+
+		target	"::Data::Server::Map::Cycle"
 	}
 	Item Layout Panel
 	{
@@ -36,19 +38,33 @@ Item Window MapList
 
 		Derive TextButton Add
 		{
-			normal "Add"
+			normal 	"Add"
+
+			action	Nex_Action_Cycle_Add
 		}
 		Derive TextButton Remove
 		{
-			normal "Remove"
+			normal 	"Remove"
+
+			action	Nex_Action_Cycle_Remove
 		}
 		Derive TextButton MoveUp
 		{
-			normal "Move Up"
+			normal 	"Move Up"
+
+			action	Nex_Action_Cycle_MoveUp
 		}
 		Derive TextButton MoveDown
 		{
-			normal "Move Down"
+			normal 	"Move Down"
+
+			action	Nex_Action_Cycle_MoveDown
+		}
+		Derive TextButton Clear
+		{
+			normal	"Clear"
+
+			action	Nex_Action_Cycle_Clear
 		}
 	}
 }

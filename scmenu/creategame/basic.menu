@@ -32,7 +32,7 @@ Item Window BasicOptions
 		{
 			normal	"<<"
 			pos	'20 5'
-			action	Nex_Action_Map_Prev
+			action	Nex_Action_MapSelector_Prev
 		}
 		Derive Label Name
 		{
@@ -45,11 +45,11 @@ Item Window BasicOptions
 			normal	">>"
 			pos	'348 5'
 
-			action	Nex_Action_Map_Next
+			action	Nex_Action_MapSelector_Next
 		}
-		Item Task_Job Job
+		Item Task_Job UpdateJob
 		{
-			init 	Nex_Automation_UpdateMap
+			update 	Nex_MapSelector_UpdateMap
 		}
 	}
 	Item Layout Settings
@@ -78,7 +78,7 @@ Item Window BasicOptions
 		Derive Nex_Option_EditBox Hostname
 		{
 			text	"Server Name"
-			target	"Data::CreateGame::Hostname::Text"
+			target	"Data::Server::Hostname::Text"
 		}
 		Derive Nex_Composition Gametype
 		{
@@ -89,7 +89,7 @@ Item Window BasicOptions
 			}
 			Derive SwitchButton Switch
 			{
-				target	"Data::CreateGame::ServerProgs::Switch"
+				target	"Data::Server::ServerProgs::Switch"
 				action	Nex_Action_TestOnChange
 			}
 		}
@@ -102,31 +102,31 @@ Item Window BasicOptions
 			}
 			Derive SwitchButton Switch
 			{
-				target  "Data::CreateGame::PublicServer::Switch"
+				target  "Data::Server::PublicServer::Switch"
 				action	Nex_Action_TestOnChange
 			}
 		}
 		Derive Nex_Option_EditBox FragLimit
 		{
 			text	"Frag Limit"
-			target	"Data::CreateGame::FragLimit::Text"
+			target	"Data::Server::FragLimit::Text"
 		}
 		Derive Nex_Option_EditBox TimeLimit
 		{
 			text	"Time Limit"
-			target	"Data::CreateGame::TimeLimit::Text"
+			target	"Data::Server::TimeLimit::Text"
 		}
 		Derive Nex_Option_EditBox MaxPlayer
 		{
 			text	"Max Players"
-			target	"Data::CreateGame::MaxPlayers::Text"
+			target	"Data::Server::MaxPlayers::Text"
 		}
 		Derive Nex_Line	Seperator1
 		{}
 		Derive Nex_Option_EditBox NumBots
 		{
 			text	"Bot Count"
-			target	"Data::CreateGame::NumBots::Text"
+			target	"Data::Server::NumBots::Text"
 		}
 		Derive Nex_Composition BotSkill
 		{
@@ -137,7 +137,7 @@ Item Window BasicOptions
 			}
 			Derive SwitchButton Switch
 			{
-				target	"Data::CreateGame::BotSkill::Switch"
+				target	"Data::Server::BotSkill::Switch"
 				action	Nex_Action_TestOnChange
 			}
 		}

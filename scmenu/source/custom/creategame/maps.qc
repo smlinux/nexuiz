@@ -7,6 +7,11 @@ Item_Nex_Map_Info
 ===================
 */
 
+/*
+===================
+Item_Nex_Map_Info_Destroy
+===================
+*/
 void() Item_Nex_Map_Info_Destroy =
 {
 	String_EntityFree( self, link );
@@ -15,6 +20,11 @@ void() Item_Nex_Map_Info_Destroy =
 	String_EntityFree( self, normal );
 };
 
+/*
+===================
+Item_Nex_Map_Info_Spawn
+===================
+*/
 void() Item_Nex_Map_Info_Spawn =
 {
 	String_EntityZone( self, link );
@@ -29,26 +39,27 @@ void() Item_Nex_Map_Info_Spawn =
 
 /*
 ===================
-Item_Data_Nex_Avatar
+Item_Nex_MapDB
 ===================
 */
+string _Nex_MapList_FullPath;
+string _Nex_MapList_Name;
+entity _Nex_MapList_Root;
 
-
-// Nex_Action_Map_BuildAvatarList
+/*
+===================
+Item_Nex_MapDB_EnumFiles
+===================
+*/
 // map definition format
 // name
 // rest: description text
-void() _IDNM_BuildList =
+void() Item_Nex_MapDB_EnumFiles =
 {
 	local float  	lSearchHandle;
 	local float 	lSearchSize;
 	local float 	lSearchCounter;
 	local entity	lMap;
-
-	// since we access two globals, we cant support calling BuildList multiple times, since this would leak str memory
-	//Menu_EmptyWindow( self );
-	Nex_MapList_FullPath = String_Create();
-	Nex_MapList_Name = String_Create();
 
 	lSearchHandle = search_begin( "maps/*.bsp", true, true );
 	if( lSearchHandle < 0 )
@@ -72,7 +83,10 @@ void() _IDNM_BuildList =
 			lTitle = String_Zone( lName );
 			lDescription = String_Zone( strcat( "--NO INFORMATION AVAILABLE--\n", lFilename ) );
 		} else {
+			// uncomment this line and comment the other if you have the old map info files
+			//lTitle = String_Zone( lName );
 			lTitle = String_Zone( fgets( lHandle ) );
+
 			lDescription = String_Create();
 			do {
 				local string lLine;
@@ -84,7 +98,7 @@ void() _IDNM_BuildList =
 			fclose( lHandle );
 		}
 
-		// add this avatar_info
+		// save this in a new Map_Info
 		lMap = Menu_CreateItem( "Item_Nex_Map_Info", ftos( lSearchCounter ), self.name );
 
 		lMap.link = lName;
@@ -92,8 +106,8 @@ void() _IDNM_BuildList =
 		lMap.normal = lTitle;
 		lMap.text = lDescription;
 
-		Nex_MapList_FullPath = Util_AltStringPushBack( Nex_MapList_FullPath, lName );
-		Nex_MapList_Name = Util_AltStringPushBack( Nex_MapList_Name, lTitle );
+		_Nex_MapList_FullPath = Util_AltStringPushBack( _Nex_MapList_FullPath, lName );
+		_Nex_MapList_Name = Util_AltStringPushBack( _Nex_MapList_Name, lTitle );
 
 		Menu_LinkItem( lMap );
 
@@ -112,93 +126,116 @@ void() _IDNM_BuildList =
 	self.maxValue = fabs( lMap.orderPos );
 };
 
-void() _IDNM_UpdateLink =
+/*
+===================
+Item_Nex_MapDB_Destroy
+===================
+*/
+void() Item_Nex_MapDB_Destroy =
 {
-	local float lCurrent;
-	local float lTarget;
-	local entity lMatch;
+	String_Free( _Nex_MapList_FullPath );
+	String_Free( _Nex_MapList_Name );
 
-	lCurrent = fabs( self._link.orderPos );
-	lTarget = self._realValue;
-	if( lCurrent < lTarget )
-		for( lMatch = self._link; lMatch._next && fabs( lMatch.orderPos ) != lTarget; lMatch = lMatch._next );
-	else
-		for( lMatch = self._link; lMatch._prev && fabs( lMatch.orderPos ) != lTarget; lMatch = lMatch._prev );
-	// lMatch always is valid if there are any children
-	self._link = lMatch;
-
-	self._realValue = fabs( self._link.orderPos );
-	String_EntitySet( self, value, ftos( self._realValue ) );
+	_Nex_MapList_Root = null_entity;
 };
 
-void() _IDNM_Sync =
+/*
+===================
+Item_Nex_MapDB_Spawn
+===================
+*/
+void() Item_Nex_MapDB_Spawn =
 {
-	String_EntitySet( self, value, ftos( self._realValue ) );
-	String_EntitySet( self, _syncValue, ftos( self._realValue ) );
+	if( _Nex_MapList_Root )
+		error( "There is already another Item_Nex_MapDB object!" );
+
+	_Nex_MapList_FullPath = String_Create();
+	_Nex_MapList_Name = String_Create();
+	_Nex_MapList_Root = self;
+
+	Item_Nex_MapDB_EnumFiles();
+
+	self._destroy = Item_Nex_MapDB_Destroy;
 };
 
-void() _IDNM_Send =
+/*
+===================
+Nex_MapDB_GetByName
+===================
+*/
+entity( string pPath ) Nex_MapDB_GetByPath =
 {
-	_IDNM_UpdateLink();
-	String_EntitySet( self, _syncValue, self.value );
-};
+	local entity lNode;
 
-void() _IDNM_Test_Start =
-{
-	_IDNM_UpdateLink();
-};
+	if( !_Nex_MapList_Root )
+		error( "No Item_Nex_MapDB found!" );
 
-void() _IDNM_Test_End =
-{
-	String_EntitySet( self, value, self._syncValue );
-	_IDNM_UpdateLink();
-};
-
-void() _IDNM_Reset =
-{
-	String_EntitySet( self, value, self.defValue );
-	_IDNM_Send();
-};
-
-void( float pEvent ) Item_Data_Nex_Map_DataEvent =
-{
-	switch( pEvent ) {
-	case ITEM_DATA_SYNC:
-		_IDNM_Sync();
-		break;
-	case ITEM_DATA_SEND:
-		_IDNM_Send();
-		break;
-	case ITEM_DATA_RESET:
-		_IDNM_Reset();
-		break;
-	case ITEM_DATA_TEST_START:
-		_IDNM_Test_Start();
-		break;
-	case ITEM_DATA_TEST_END:
-		_IDNM_Test_End();
-		break;
-	case ITEM_DATALINK_SET:
-		_IDNM_UpdateLink();
-		break;
+	for( lNode = _Nex_MapList_Root._child ; lNode ; lNode = lNode._next ) {
+		if( lNode.link == pPath ) {
+			return lNode;
+		}
 	}
+
+	return null_entity;
 };
 
-void() Item_Data_Nex_Map_Spawn =
+/*
+===================
+Nex_MapDB_GetByIndex
+===================
+*/
+entity( float pIndex ) Nex_MapDB_GetByIndex =
 {
-	Item_Data_Init();
+	local entity lNode;
 
-	self.flag = self.flag | FLAG_HIDDEN;
+	if( !_Nex_MapList_Root )
+		error( "No Item_Nex_MapDB found!" );
 
-	self._dataEvent = Item_Data_Nex_Map_DataEvent;
+	pIndex = fabs( pIndex );
+	for( lNode = _Nex_MapList_Root._child ; lNode ; lNode = lNode._next ) {
+		if( fabs( lNode.orderPos ) == pIndex ) {
+			return lNode;
+		}
+	}
 
-	_IDNM_BuildList();
-
-	self._link = self._child;
-	self._realValue = stof( self.defValue );
-	_IDNM_UpdateLink();
+	return null_entity;
 };
 
+/*
+===================
+Nex_MapDB_GetPathAltString
+===================
+*/
+string() Nex_MapDB_GetPathAltString =
+{
+	return _Nex_MapList_FullPath;
+};
+
+/*
+===================
+Nex_MapDB_GetNameAltString
+===================
+*/
+string() Nex_MapDB_GetNameAltString =
+{
+	return _Nex_MapList_Name;
+};
+
+/*
+===================
+Nex_MapDB_GetIndex
+===================
+*/
+float( entity pItem ) Nex_MapDB_GetIndex =
+{
+	return fabs( pItem.orderPos );
+};
+
+/*
+===================
+Item_DataLink_Nex_MapList_DataEvent
+===================
+*/
 void( float pEvent ) Item_DataLink_Nex_MapList_DataEvent =
 {
 	switch( pEvent ) {
@@ -207,22 +244,30 @@ void( float pEvent ) Item_DataLink_Nex_MapList_DataEvent =
 	case ITEM_DATA_SEND:
 		break;
 	case ITEM_DATA_RESET:
-		self._realValue = 0.0;
+		self._realValue = 1.0;
 		break;
 	case ITEM_DATA_TEST_START:
 		break;
 	case ITEM_DATA_TEST_END:
 		break;
 	case ITEM_DATALINK_SET:
+	case ITEM_DATALINK_GET:
 		self._realValue = floor( self._realValue );
-		if( self._realValue < 1.0 )
+		if( self._realValue < 1.0 ) {
 			self._realValue = 1.0;
-		if( self._realValue > self.maxValue )
+		} else if( self._realValue > self.maxValue ) {
 			self._realValue = self.maxValue;
+		}
+
 		break;
 	}
 };
 
+/*
+===================
+Item_DataLink_Nex_MapList_Destroy
+===================
+*/
 void() Item_DataLink_Nex_MapList_Destroy =
 {
 	String_EntityFree( self, valueList );
@@ -230,10 +275,15 @@ void() Item_DataLink_Nex_MapList_Destroy =
 	Item_DataLink_Switch_Destroy();
 };
 
+/*
+===================
+Item_DataLink_Nex_MapList_Spawn
+===================
+*/
 void() Item_DataLink_Nex_MapList_Spawn =
 {
 	Item_DataLink_Switch_Init();
-	String_EntityCreate( self, valueList );
+	String_EntityZone( self, valueList );
 
 	self.minValue = 1.0;
 	self.maxValue = 1.0;
@@ -241,24 +291,199 @@ void() Item_DataLink_Nex_MapList_Spawn =
 
 	self._dataEvent = Item_DataLink_Nex_MapList_DataEvent;
 	self._destroy = Item_DataLink_Nex_MapList_Destroy;
+
+	CtCall_Init();
 };
 
-void( entity pItem ) Item_DataLink_Nex_MapList_InitWithMapList =
+/*
+===================
+Item_DataLink_Nex_MapList_InitWithMapList
+===================
+*/
+void() Item_DataLink_Nex_MapList_InitWithMapList =
 {
-	String_EntitySet( pItem, valueList, Nex_MapList_FullPath );
-	String_EntitySet( pItem, descList, Nex_MapList_Name );
+	String_EntitySet( self, valueList, Nex_MapDB_GetPathAltString() );
+	String_EntitySet( self, descList, Nex_MapDB_GetNameAltString() );
 
-	Item_DataLink_Nex_MapList_UpdateRange( pItem );
+	DataLink_Nex_MapList_UpdateRange( self );
 };
 
-void( entity pItem ) Item_DataLink_Nex_MapList_UpdateRange =
+/*
+===================
+DataLink_Nex_MapList_UpdateRange
+===================
+*/
+void( entity pItem ) DataLink_Nex_MapList_UpdateRange =
 {
 	pItem.minValue = 1.0;
 	pItem.maxValue = Util_GetAltStringCount( pItem.descList );
 
-	if( pItem.maxValue > 1.0 )
+	if( pItem.maxValue >= 1 ) {
 		pItem.stepValue = 1.0;
-	else
+	} else {
+		pItem.maxValue = 1.0;
 		pItem.stepValue = 0.0;
+	}
+};
 
+/*
+===================
+DataLink_Nex_MapList_InsertEntryAfter
+===================
+*/
+void( entity pItem, string pName, string pPath ) DataLink_Nex_MapList_InsertEntryAfter =
+{
+	local float lIndex;
+
+	Raise_DataEvent( pItem, ITEM_DATALINK_GET );
+	// - 1, because minValue == 1
+	lIndex = pItem._realValue - 1;
+	pItem.descList = Util_InsAltStringItem( pItem.descList, lIndex, pName );
+	pItem.valueList = Util_InsAltStringItem( pItem.valueList, lIndex, pPath );
+
+	DataLink_Nex_MapList_UpdateRange( pItem );
+};
+
+/*
+===================
+DataLink_Nex_MapList_DeleteEntry
+===================
+*/
+void( entity pItem ) DataLink_Nex_MapList_DeleteEntry =
+{
+	local float lIndex;
+
+	if( pItem.stepValue == 0.0 )
+		return;
+
+	Raise_DataEvent( pItem, ITEM_DATALINK_GET );
+	lIndex = pItem._realValue - 1;
+	pItem.descList = Util_DelAltStringItem( pItem.descList, lIndex );
+	pItem.valueList = Util_DelAltStringItem( pItem.valueList, lIndex );
+
+	DataLink_Nex_MapList_UpdateRange( pItem );
+};
+
+/*
+===================
+DataLink_Nex_MapList_MoveEntryUp
+===================
+*/
+void( entity pItem ) DataLink_Nex_MapList_MoveEntryUp =
+{
+	local string lName;
+	local string lPath;
+	local float lIndexNew;
+	local float lIndexOld;
+
+	Raise_DataEvent( pItem, ITEM_DATALINK_GET );
+	if( pItem._realValue == 1 )
+		return;
+
+	// map 1..n to 0..n-1
+	lIndexOld = pItem._realValue - 1;
+
+	// we want to insert it up by one, ie. insert it after up by two
+	lIndexNew = lIndexOld - 2;
+
+	lName = Util_GetAltStringItem( pItem.descList, lIndexOld );
+	lPath = Util_GetAltStringItem( pItem.valueList, lIndexOld );
+
+	pItem.descList = Util_InsAltStringItem( pItem.descList, lIndexNew, String_Normal( lName ) );
+	pItem.valueList = Util_InsAltStringItem( pItem.valueList, lIndexNew, String_Normal( lPath ) );
+
+	// adjust lIndexOld for the entry that has been inserted before it
+	lIndexOld = lIndexOld + 1;
+
+	pItem.descList = Util_DelAltStringItem( pItem.descList, lIndexOld );
+	pItem.valueList = Util_DelAltStringItem( pItem.valueList, lIndexOld );
+
+	DataLink_Nex_MapList_UpdateRange( pItem );
+};
+
+/*
+===================
+DataLink_Nex_MapList_MoveEntryDown
+===================
+*/
+void( entity pItem ) DataLink_Nex_MapList_MoveEntryDown =
+{
+	local string lName;
+	local string lPath;
+	local float lIndexNew;
+	local float lIndexOld;
+
+	Raise_DataEvent( pItem, ITEM_DATALINK_GET );
+	if( pItem._realValue == pItem.maxValue )
+		return;
+
+	// map 1..n to 0..n-1
+	lIndexOld = pItem._realValue - 1;
+
+	// we want to insert it down by one
+	lIndexNew = lIndexOld + 1;
+
+	lName = Util_GetAltStringItem( pItem.descList, lIndexOld );
+	lPath = Util_GetAltStringItem( pItem.valueList, lIndexOld );
+
+	pItem.descList = Util_InsAltStringItem( pItem.descList, lIndexNew, String_Normal( lName ) );
+	pItem.valueList = Util_InsAltStringItem( pItem.valueList, lIndexNew, String_Normal( lPath ) );
+
+	pItem.descList = Util_DelAltStringItem( pItem.descList, lIndexOld );
+	pItem.valueList = Util_DelAltStringItem( pItem.valueList, lIndexOld );
+
+	DataLink_Nex_MapList_UpdateRange( pItem );
+};
+
+/*
+===================
+DataLink_Nex_MapList_SetFirst
+===================
+*/
+void( entity pItem, string pName, string pPath ) DataLink_Nex_MapList_SetFirst =
+{
+	if( pItem.stepValue == 0.0 ) {
+		pItem.descList = Util_AltStringPush( pItem.descList, pName );
+		pItem.valueList = Util_AltStringPush( pItem.valueList, pPath );
+	} else {
+		pItem.descList = Util_SetAltStringItem( pItem.descList, 0, pName );
+		pItem.valueList = Util_SetAltStringItem( pItem.valueList, 0, pPath );
+	}
+
+	DataLink_Nex_MapList_UpdateRange( pItem );
+};
+
+/*
+===================
+DataLink_Nex_MapList_Clear
+===================
+*/
+void( entity pItem ) DataLink_Nex_MapList_Clear =
+{
+	String_EntitySet( pItem, descList, "" );
+	String_EntitySet( pItem, valueList, "" );
+
+	DataLink_Nex_MapList_UpdateRange( pItem );
+};
+
+/*
+===================
+DataLink_Nex_MapList_GetCurrentName
+===================
+*/
+string( entity pItem ) DataLink_Nex_MapList_GetCurrentName =
+{
+	Raise_DataEvent( pItem, ITEM_DATALINK_GET );
+	return Util_GetAltStringItem( pItem.descList, pItem._realValue - 1 );
+};
+
+/*
+===================
+DataLink_Nex_MapList_GetCurrentPath
+===================
+*/
+string( entity pItem ) DataLink_Nex_MapList_GetCurrentPath =
+{
+	Raise_DataEvent( pItem, ITEM_DATALINK_GET );
+	return Util_GetAltStringItem( pItem.valueList, pItem._realValue - 1 );
 };

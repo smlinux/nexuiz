@@ -1,5 +1,6 @@
 // Todo list
 
+-Notify Spike that the "effectless statement" warning has a off-by-one bug
 *-Rename Item_Composition and make it not embedded by default
 *-Add support for a MOUSECLIP flag which will make the menu not pass any mouse events to the items under it
 *-Move the normal key function somewhere else perhaps??

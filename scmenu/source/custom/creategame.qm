@@ -3,56 +3,145 @@
 
 // uses target and _target
 // requires neighbors: Picture, Name, Description
-void() Nex_Automation_UpdateMap_Update =
+void() Nex_MapSelector_UpdateMap =
 {
+	local entity lInfo;
 	local entity lItem;
-	local entity lTarget;
+	local entity lSelector;
+	local float lIndex;
 
-	if( self._target.name != "Data::CreateGame::Map" )
-		self._target = Menu_GetItem( "Data::CreateGame::Map" );
+	lSelector = Menu_GetItem( "::Data::Server::Map::Selector" );
+	Raise_DataEvent( lSelector, ITEM_DATALINK_GET );
+	lIndex = lSelector._realValue;
+	lInfo = Nex_MapDB_GetByIndex( lIndex );
 
-	lTarget = self._target;
+	// If there is a new selected map, the info panel is updated accordingly
+	if( lIndex != self.minValue ) {
+		self.minValue = lIndex;
 
-	lItem = Menu_GetItem( "Picture" );
-	String_EntitySet( lItem, picture, lTarget._link.picture );
+		lItem = Menu_GetItem( "Picture" );
+		String_EntitySet( lItem, picture, lInfo.picture );
 
-	lItem = Menu_GetItem( "Name" );
-	String_EntitySet( lItem, text, lTarget._link.normal );
+		lItem = Menu_GetItem( "Name" );
+		String_EntitySet( lItem, text, lInfo.normal );
 
-	lItem = Menu_GetItem( "Description" );
-	String_EntitySet( lItem, text, lTarget._link.text );
+		lItem = Menu_GetItem( "Description" );
+		String_EntitySet( lItem, text, lInfo.text );
+	}
+
+	lItem = Menu_GetItem( "::Data::Server::Map::Cycle" );
+	DataLink_Nex_MapList_SetFirst( lItem, lInfo.normal, lInfo.link );
 };
 
-void() Nex_Automation_UpdateMap_Destroy =
+void() Nex_MapSelector_Synchronize =
 {
-	String_EntityFree( self, target );
-};
+	local entity lCycle;
+	local entity lSelector;
 
-void() Nex_Automation_UpdateMap =
-{
-	String_EntityZone( self, target );
+	lCycle = Menu_GetItem( "::Data::Server::Map::Cycle" );
+	lSelector = Menu_GetItem( "::Data::Server::Map::Selector" );
 
-	self._update = Nex_Automation_UpdateMap_Update;
-	self._destroy = Nex_Automation_UpdateMap_Destroy;
+	if( lCycle.stepValue == 0.0 ) {
+		Raise_DataEvent( lCycle, ITEM_DATA_RESET );
+	} else {
+		local string lPath;
+		local entity lMapInfo;
+
+		lPath = Util_GetAltStringItem( lCycle.valueList, 0 );
+		lMapInfo = Nex_MapDB_GetByPath( lPath );
+		String_Free( lPath );
+
+		if( lMapInfo == null_entity ) {
+			Raise_DataEvent( lCycle, ITEM_DATA_RESET );
+		} else {
+			lSelector._realValue = Nex_MapDB_GetIndex( lMapInfo );
+			Raise_DataEvent( lSelector, ITEM_DATALINK_SET );
+		}
+	}
 };
 
 // more concrete functions
-void() Nex_Action_Map_Next =
+void() Nex_Action_MapSelector_Next =
 {
 	local entity lItem;
 
-	lItem = Menu_GetItem( "Data::CreateGame::Map" );
+	lItem = Menu_GetItem( "::Data::Server::Map::Selector" );
+	Raise_DataEvent( lItem, ITEM_DATALINK_GET );
 	lItem._realValue = lItem._realValue + 1;
-	Raise_DataEvent( lItem, ITEM_DATA_SEND );
+	Raise_DataEvent( lItem, ITEM_DATALINK_SET );
 };
 
-void() Nex_Action_Map_Prev =
+void() Nex_Action_MapSelector_Prev =
 {
 	local entity lItem;
 
-	lItem = Menu_GetItem( "Data::CreateGame::Map" );
+	lItem = Menu_GetItem( "::Data::Server::Map::Selector" );
+	Raise_DataEvent( lItem, ITEM_DATALINK_GET );
 	lItem._realValue = lItem._realValue - 1;
-	Raise_DataEvent( lItem, ITEM_DATA_SEND );
+	Raise_DataEvent( lItem, ITEM_DATALINK_SET );
+};
+
+#define MAPLIST	"maplist.cfg"
+
+void() Nex_WriteCycleList =
+{
+	local float lHandle;
+	local float lCount;
+	local float lIndex;
+	local entity lCycle;
+
+	lHandle = fopen( MAPLIST, FILE_WRITE );
+	if( lHandle < 0 ) {
+		print( "menu: Failed to write ", MAPLIST, "!\n" );
+		return;
+	}
+
+	lCycle = Menu_GetItem( "::Data::Server::Map::Cycle" );
+	lCount = Util_GetAltStringCount( lCycle.valueList );
+	for( lIndex = 0 ; lIndex < lCount ; lIndex++ ) {
+		fputs( lHandle, String_Normal( Util_GetAltStringItem( lCycle.valueList, lIndex ) ) );
+		fputs( lHandle, "\n" );
+	}
+
+	fclose( lHandle );
+};
+
+void() Nex_ReadCycleList =
+{
+	local float lHandle;
+	local string lLine;
+	local entity lMapInfo;
+	local entity lCycle;
+
+	lHandle = fopen( MAPLIST, FILE_READ );
+	if( lHandle < 0 ) {
+		return;
+	}
+
+	lCycle = Menu_GetItem( "::Data::Server::Map::Cycle" );
+
+	lLine = String_Create();
+	while( 1 ) {
+		lLine = String_Set( lLine, fgets( lHandle ) );
+
+		if( lLine == "" )
+			break;
+
+		lMapInfo = Nex_MapDB_GetByPath( lLine );
+		if( lMapInfo == null_entity ) {
+			print( MAPLIST, ": Map '", lLine, "' not found in database - ignored\n" );
+			continue;
+		}
+
+		lCycle.descList = Util_AltStringPushBack( lCycle.descList, lMapInfo.normal );
+		lCycle.valueList = Util_AltStringPushBack( lCycle.valueList, lMapInfo.link );
+	}
+	String_Free( lLine );
+
+	fclose( lHandle );
+
+	DataLink_Nex_MapList_UpdateRange( lCycle );
+	Nex_MapSelector_Synchronize();
 };
 
 // TODO: Make MaxPlayers real Data items (no container with correct set behavior)
@@ -61,9 +150,9 @@ void() Nex_Action_Map_Start =
 	local entity lItem;
 	local float  lNumBots, lSkill;
 	// we need to set the following var
-	lItem = Menu_GetItem( "::Data::CreateGame::NumBots" );
+	lItem = Menu_GetItem( "::Data::Server::NumBots" );
 	lNumBots = stof( lItem.value );
-	lItem = Menu_GetItem( "::Data::CreateGame::BotSkill" );
+	lItem = Menu_GetItem( "::Data::Server::BotSkill" );
 	lSkill = stof( lItem.value );
 
 	cvar_set( "saved1", "1" );
@@ -71,22 +160,89 @@ void() Nex_Action_Map_Start =
 	cvar_set( "scratch2", ftos( lSkill * (pow(4, min(lNumBots, 8)) - 1) / 3) );
 	cvar_set( "scratch3", ftos( lSkill * (pow(4, min(lNumBots - 8, 8)) - 1) / 3) );
 	// Set maxplayers
-	lItem = Menu_GetItem( "::Data::CreateGame::MaxPlayers" );
+	lItem = Menu_GetItem( "::Data::Server::MaxPlayers" );
 	cmd( "maxplayers \"" );
 	cmd( lItem.value );
 	cmd( "\"\n" );
 
-	lItem = Menu_GetItem( "::Data::CreateGame::Map" );
+	lItem = Menu_GetItem( "::Data::Server::Map::Cycle" );
 	cmd( "map \"" );
-	cmd( lItem._link.link );
+	cmd( String_Normal( Util_GetAltStringItem( lItem.valueList, 0 ) ) );
 	cmd( "\"\n");
+
+	Nex_WriteCycleList();
 
 	// force the menu to hide
 	m_hide();
 };
 
-// init the map list
-void() Nex_Action_MapList_Init =
+// cycle list edit features
+void() Nex_Action_Cycle_Add =
 {
-	Item_DataLink_Nex_MapList_InitWithMapList( self );
+	local entity lList;
+	local entity lCycle;
+	local string lPath;
+	local string lName;
+
+	lList = Menu_GetItem( "::Data::Server::Map::List" );
+	lCycle = Menu_GetItem( "::Data::Server::Map::Cycle" );
+
+	lName = DataLink_Nex_MapList_GetCurrentName( lList );
+	lPath = DataLink_Nex_MapList_GetCurrentPath( lList );
+
+	DataLink_Nex_MapList_InsertEntryAfter( lCycle, lName, lPath );
+
+	String_Free( lName );
+	String_Free( lPath );
+
+	lCycle._realValue = lCycle._realValue + 1;
+	Raise_DataEvent( lCycle, ITEM_DATALINK_SET );
+
+	Nex_MapSelector_Synchronize();
+};
+
+void() Nex_Action_Cycle_Remove =
+{
+	local entity lCycle;
+
+	lCycle = Menu_GetItem( "::Data::Server::Map::Cycle" );
+	DataLink_Nex_MapList_DeleteEntry( lCycle );
+
+	Nex_MapSelector_Synchronize();
+};
+
+void() Nex_Action_Cycle_MoveUp =
+{
+	local entity lCycle;
+
+	lCycle = Menu_GetItem( "::Data::Server::Map::Cycle" );
+	DataLink_Nex_MapList_MoveEntryUp( lCycle );
+
+	lCycle._realValue = lCycle._realValue - 1;
+	Raise_DataEvent( lCycle, ITEM_DATALINK_SET );
+
+	Nex_MapSelector_Synchronize();
+};
+
+void() Nex_Action_Cycle_MoveDown =
+{
+	local entity lCycle;
+
+	lCycle = Menu_GetItem( "::Data::Server::Map::Cycle" );
+	DataLink_Nex_MapList_MoveEntryDown( lCycle );
+
+	lCycle._realValue = lCycle._realValue + 1;
+	Raise_DataEvent( lCycle, ITEM_DATALINK_SET );
+
+	Nex_MapSelector_Synchronize();
+};
+
+void() Nex_Action_Cycle_Clear =
+{
+	local entity lCycle;
+
+	lCycle = Menu_GetItem( "::Data::Server::Map::Cycle" );
+	DataLink_Nex_MapList_Clear( lCycle );
+
+	Nex_MapSelector_Synchronize();
 };

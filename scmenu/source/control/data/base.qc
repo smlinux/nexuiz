@@ -128,10 +128,10 @@ void() Item_DataLink_Switch_Init =
 Item_GetOrdinal
 ===================
 */
-float( entity pDataLink, float pValue ) Item_DataLink_Switch_GetOrdinal =
+float( entity pDataLink, float pValue ) DataLink_Switch_GetOrdinal =
 {
-	//if( !pDataLink )
-	//	crash();
+	if( pDataLink.stepValue == 0.0 )
+		return 0.0;
 	return (pValue - pDataLink.minValue) / pDataLink.stepValue;
 };
 

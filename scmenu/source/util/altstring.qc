@@ -65,7 +65,8 @@ string( string pStr, float pCount ) Util_GetAltStringItem =
 			lLetter = substring( pStr, lPosition, 1 );
 		}
 
-		lOut = strcat( lOut, lLetter ); // no need for strzone since there are 16 buffers and we use 2 in the for
+		// no need for strzone since there are 16 buffers and we use 2 in the for
+		lOut = strcat( lOut, lLetter );
 	}
 
 	return String_Zone( lOut ); // return a strzoned string
@@ -125,8 +126,8 @@ string( string pAlt, float pIndex, string pSet ) Util_SetAltStringItem =
 	}
 
 	lOut = String_Substring( pAlt, 0, lStart );
-	pSet = Util_AltStringPrepare( String_Normal( pSet ) );
-	lOut = strcat( lOut, String_Normal( pSet ), substring( pAlt, lPosition, lLength - lPosition ) );
+	pSet = String_Normal( Util_AltStringPrepare( String_Normal( pSet ) ) );
+	lOut = strcat( lOut, pSet, substring( pAlt, lPosition, lLength - lPosition ) );
 
 	return String_Set( pAlt, lOut );
 };
@@ -189,10 +190,43 @@ string( string pAlt, float pIndex ) Util_DelAltStringItem =
 Util_InsAltStringItem
 ===================
 */
+#ifdef UTILALTSTRING
+string( string pAlt, float pIndex, string pSet ) Util_InsAltStringItem =
+{
+	local float lCount;
+	local float lPosition;
+	local float lLength;
+	local string lLetter;
+	local string lOut;
+
+	pSet = String_Zone( pSet );
+
+	pIndex = pIndex*2 + 2; // number of ' until item starts
+	lCount = lPosition = 0;
+	for( lLength = strlen( pAlt ) ; lPosition < lLength && lCount < pIndex ; lPosition = lPosition + 1 ) {
+		lLetter = substring( pAlt, lPosition, 1 );
+
+		if( lLetter == "'" )
+			lCount = lCount + 1;
+		else if( lLetter == "\\" )
+			lPosition = lPosition + 1;
+	}
+
+	if( lCount != pIndex )
+		return pAlt;
+
+	lOut = String_Substring( pAlt, 0, lPosition );
+	pSet = String_Normal( Util_AltStringPrepare( String_Normal( pSet ) ) );
+	lOut = strcat( lOut, "'", pSet, "'", substring( pAlt, lPosition, lLength - lPosition ) );
+
+	return String_Set( pAlt, lOut );
+};
+#else
 string( string pAlt, float pIndex, string pSet ) Util_InsAltStringItem =
 {
 	return String_Set( pAlt, altstr_ins( pAlt, pIndex, pSet ) );
 };
+#endif
 
 /*
 ===================

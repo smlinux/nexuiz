@@ -85,7 +85,7 @@ void() Item_DataLink_Value_Spawn;
 void() Item_DataLink_Switch_Init;
 void() Item_DataLink_Switch_Destroy;
 
-float( entity pDataLink, float pValue ) Item_DataLink_Switch_GetOrdinal;
+float( entity pDataLink, float pValue ) DataLink_Switch_GetOrdinal;
 
 // Item_DataLink_ValueSwitch [Item_DataLink_Switch]
 // the default value for stepValue is 1
@@ -101,23 +101,28 @@ void( float pEvent ) Item_DataLink_TextSwitch_DataEvent;
 void() Item_DataLink_TextSwitch_Destroy;
 void() Item_DataLink_TextSwitch_Spawn;
 
-// Item_DataLink_FastResync [Item_DataLink]
+// Item_DataLink_FastResync [Item_DataLink] d
+// "Fast" in the sense of total performance - the data is resynced
+// at most once per frame
 .float _presstime; // no more than once a frame?
 
 void() Item_DataLink_FastResync_Spawn;
 
 // Item_DataLink_TextValue [Item_DataLink]
+// self: [string] -> link: [float]
 void() Item_DataLink_TextValue_Spawn;
 
 // Item_DataLink_TextTime [Item_DataLink]
+// self: [string] -> link: [float]
 // hour:min:sec
 void() Item_DataLink_TextTime_Spawn;
 
 // Item_DataLink_AltString [Item_DataLink]
-.float stepValue; // contains
+// self: [string] -> link: [altstring item]
+.float stepValue; // contains the index into link.value
 
 void() Item_DataLink_AltString_Spawn;
 
 // Item_DataLink_Router [Item_DataLink]
-// sets value and _realValue of alll children to the float value of self._stepValue
+// sets value and _realValue of all children to the float value of self._realValue
 void() Item_DataLink_Router_Spawn;

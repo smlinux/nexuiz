@@ -12,7 +12,7 @@ void() Item_DataLink_Value_Clamp =
 		self._realValue = self.maxValue;
 	else if( self._realValue < self.minValue )
 		self._realValue = self.minValue;
-	else // clamp is to stepValue
+	else // clamp it to(?) stepValue
 		self._realValue =  self.minValue + self.stepValue * rint( ( self._realValue - self.minValue ) / self.stepValue );
 };
 

@@ -34,7 +34,7 @@ Item Layout JoinGame
 		Derive EditBox EditBox
 		{
 			size	'700 12'
-			target	"::Data::JoinGame::QueryString::Text"
+			target	"::Data::ServerList::QueryString::Text"
 
 			action	Nex_Action_ExecuteQuery
 		}

@@ -7,7 +7,7 @@ float( string s)	     			 Util_GetAltStringCount;
 string( string s, float c )  			 Util_GetAltStringItem;
 string( string pAlt, float pIndex, string pSet ) Util_SetAltStringItem;
 string( string pAlt, float pIndex )		 Util_DelAltStringItem;
-// insert a new item after the indexed (to insert an item at the beginninge use -1)
+// insert a new item after the indexed (to insert an item at the front use -1)
 string( string pAlt, float pIndex, string pSet ) Util_InsAltStringItem;
 
 string( string pString ) 		Util_AltStringPrepare;

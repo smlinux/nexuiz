@@ -1,0 +1,994 @@
+// Property of Alientrap
+//
+// data/weapon.menu
+
+Item DataContainer Weapon
+{
+	Item Data_Cvar LaserDamage
+	{
+		cvarName	"g_balance_laser_damage"
+		defValue	15
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar LaserEdgeDamage
+	{
+		cvarName	"g_balance_laser_edgedamage"
+		defValue	15
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar LaserForce
+	{
+		cvarName	"g_balance_laser_force"
+		defValue	200
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar LaserRadius
+	{
+		cvarName	"g_balance_laser_radius"
+		defValue	50
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar LaserSpeed
+	{
+		cvarName	"g_balance_laser_speed"
+		defValue	1000
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar ShotgunDamage
+	{
+		cvarName	"g_balance_shotgun_damage"
+		defValue	3.5
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar ShotgunBullets
+	{
+		cvarName	"g_balance_shotgun_bullets"
+		defValue	10
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar UziDamage
+	{
+		cvarName	"g_balance_uzi_damage"
+		defValue	4
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar UziSpread
+	{
+		cvarName	"g_balance_uzi_spread"
+		defValue	0.1
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar UziSpread2
+	{
+		cvarName	"g_balance_uzi_spread2"
+		defValue	0.01
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar UziRefire
+	{
+		cvarName	"g_balance_uzi_refire"
+		defValue	0.05
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar GrenadeLauncherDamage
+	{
+		cvarName	"g_balance_grenadelauncher_damage"
+		defValue	65
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar GrenadeLauncherEdgeDamage
+	{
+		cvarName	"g_balance_grenadelauncher_edgedamage"
+		defValue	45
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar GrenadeLauncherForce
+	{
+		cvarName	"g_balance_grenadelauncher_force"
+		defValue	400
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar GrenadeLauncherRadius
+	{
+		cvarName	"g_balance_grenadelauncher_radius"
+		defValue	140
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar GrenadeLauncherSpeed
+	{
+		cvarName	"g_balance_grenadelauncher_speed"
+		defValue	2000
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar GrenadeLauncherSpeedUp
+	{
+		cvarName	"g_balance_grenadelauncher_speed_up"
+		defValue	200
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar GrenadeLauncherSpeed2
+	{
+		cvarName	"g_balance_grenadelauncher_speed2"
+		defValue	900
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar GrenadeLauncherSpeed2Up
+	{
+		cvarName	"g_balance_grenadelauncher_speed2_up"
+		defValue	200
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar ElectroDamage
+	{
+		cvarName	"g_balance_electro_damage"
+		defValue	90
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar ElectroEdgeDamage
+	{
+		cvarName	"g_balance_electro_edgedamage"
+		defValue	45
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar ElectroForce
+	{
+		cvarName	"g_balance_electro_force"
+		defValue	200
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar ElectroRadius
+	{
+		cvarName	"g_balance_electro_radius"
+		defValue	100
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar ElectroRefire
+	{
+		cvarName	"g_balance_electro_refire"
+		defValue	1
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar ElectroSpeed
+	{
+		cvarName	"g_balance_electro_speed"
+		defValue	2000
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar ElectroBallSpeed
+	{
+		cvarName	"g_balance_electro_ballspeed"
+		defValue	900
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar ElectroBallSpeedUp
+	{
+		cvarName	"g_balance_electro_ballspeed_up"
+		defValue	200
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar CryLinkDamage
+	{
+		cvarName	"g_balance_crylink_damage"
+		defValue	20
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar CryLinkEdgeDamage
+	{
+		cvarName	"g_balance_crylink_edgedamage"
+		defValue	0
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar CryLinkForce
+	{
+		cvarName	"g_balance_crylink_force"
+		defValue	55
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar CryLinkRadius
+	{
+		cvarName	"g_balance_crylink_radius"
+		defValue	3
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar CryLinkSpeed
+	{
+		cvarName	"g_balance_crylink_speed"
+		defValue	1800
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar CryLinkSpread
+	{
+		cvarName	"g_balance_crylink_spread"
+		defValue	0.15
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar CryLinkRefire
+	{
+		cvarName	"g_balance_crylink_refire"
+		defValue	0.4
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar NexDamage
+	{
+		cvarName	"g_balance_nex_damage"
+		defValue	200
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar HagarDamage
+	{
+		cvarName	"g_balance_hagar_damage"
+		defValue	40
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar HagarEdgeDamage
+	{
+		cvarName	"g_balance_hagar_edgedamage"
+		defValue	15
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar HagarForce
+	{
+		cvarName	"g_balance_hagar_force"
+		defValue	100
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar HagarRadius
+	{
+		cvarName	"g_balance_hagar_radius"
+		defValue	70
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar HagarSpeed
+	{
+		cvarName	"g_balance_hagar_speed"
+		defValue	3000
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar HagarSpeed2
+	{
+		cvarName	"g_balance_hagar_speed2"
+		defValue	1400
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar HagarSpeed2Up
+	{
+		cvarName	"g_balance_hagar_speed2_up"
+		defValue	100
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar RocketLauncherDamage
+	{
+		cvarName	"g_balance_rocketlauncher_damage"
+		defValue	130
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar RocketLauncherEdgeDamage
+	{
+		cvarName	"g_balance_rocketlauncher_edgedamage"
+		defValue	50
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar RocketLauncherForce
+	{
+		cvarName	"g_balance_rocketlauncher_force"
+		defValue	600
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar RocketLauncherRadius
+	{
+		cvarName	"g_balance_rocketlauncher_radius"
+		defValue	170
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar RocketLauncherSpeed
+	{
+		cvarName	"g_balance_rocketlauncher_speed"
+		defValue	850
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+}

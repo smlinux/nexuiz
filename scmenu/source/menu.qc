@@ -24,7 +24,7 @@ void() m_init =
 // required menu functions
 void( float pKey, float pAscii ) m_keydown =
 {
-	if(!Menu_Active)
+	if( !Menu_Active )
 		return;
 
 	// actually the menu is the only system that needs to react on key events
@@ -71,11 +71,11 @@ void() m_display =
 
 	// update isserver and clientstate
 	gamestatus = 0;
-	if(isserver())
+	if( isserver() )
 		gamestatus = gamestatus | GAME_ISSERVER;
-	if(clientstate() == CS_CONNECTED)
+	if( clientstate() == CS_CONNECTED )
 		gamestatus = gamestatus | GAME_CONNECTED;
-	if(cvar("developer"))
+	if( cvar("developer") )
 		gamestatus = gamestatus | GAME_DEVELOPER;
 
 	// let also the snd and gfx know (perhaps for sfx)

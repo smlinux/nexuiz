@@ -1,0 +1,280 @@
+// Property of Alientrap
+//
+// data/game.menu
+
+Item DataContainer Game
+{
+	Item Data_Cvar Instagib
+	{
+		cvarName	"g_instagib"
+		defValue	0
+
+		[DataLink_OnOffSwitch]
+	}
+	Item Data_Cvar RocketArena
+	{
+		cvarName	"g_rocketarena"
+		defValue	0
+
+		[DataLink_OnOffSwitch]
+	}
+	Item Data_Cvar Casings
+	{
+		cvarName	"g_casings"
+		defValue	0
+
+		[DataLink_OnOffSwitch]
+	}
+	Item Data_Cvar Health
+	{
+		cvarName	"g_balance_health"
+		defValue	150
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar Gravity
+	{
+		cvarName	"sv_gravity"
+		defValue	800
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar MaxSpeed
+	{
+		cvarName	"sv_maxspeed"
+		defValue	400
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar GameSpeed
+	{
+		cvarName	"slowmo"
+		defValue	1
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar MaxAirSpeed
+	{
+		cvarName	"g_balance_maxairspeed"
+		defValue	50
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar JumpHeight
+	{
+		cvarName	"g_balance_jumpheight"
+		defValue	300
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar HealthRegeneration
+	{
+		cvarName	"g_balance_healthregen"
+		defValue	0.1
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar ArmorRott
+	{
+		cvarName	"g_balance_armorrott"
+		defValue	0.1
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar SelfDamagePercent
+	{
+		cvarName	"g_balance_selfdamagepercent"
+		defValue	0.6
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar WeaponSwitchDelay
+	{
+		cvarName	"g_balance_weaponswitchdelay"
+		defValue	0.3
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar Friction
+	{
+		cvarName	"sv_friction"
+		defValue	5
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar Accelerate
+	{
+		cvarName	"sv_accelerate"
+		defValue	5.5
+
+		Item DataLink_Value Value
+		{
+			maxValue	999
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	3
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+}

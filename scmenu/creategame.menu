@@ -29,11 +29,11 @@ Item Layout CreateGame
 		}
 		Derive TextButton Configurations
 		{
-			normal		" Configurations "
+			normal		" Game Settings "
 		}
 		Derive TextButton Advanced
 		{
-			normal		" Advanced "
+			normal		" Weapon Settings "
 		}
 	}
 	Item EventWindow Panel

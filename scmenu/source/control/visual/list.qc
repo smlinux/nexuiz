@@ -12,15 +12,16 @@ void() Item_List_Draw =
 	if( !self._target )
 		return;
 
+	Raise_DataEvent( self._target, ITEM_DATALINK_GET );
 	lLines = floor( self.size_y / ( self.fontSize_y + 2 ) );
-	lStart = max( 0, floor( Item_DataLink_Switch_GetOrdinal( self._target, self._target._realValue ) - lLines / 2 ) );
-	lEnd = min( lStart + lLines, Item_DataLink_Switch_GetOrdinal( self._target, self._target.maxValue ) );
+	lStart = max( 0, floor( DataLink_Switch_GetOrdinal( self._target, self._target._realValue ) - lLines / 2 ) );
+	lEnd = min( lStart + lLines, DataLink_Switch_GetOrdinal( self._target, self._target.maxValue ) );
 
 	lPos = '0 1 0' + self.pos;
 	for( lLine = lStart ; lLine <= lEnd ; lLine++ ) {
 		local string lText;
 		lText = Util_GetAltStringItem( self._target.descList, lLine );
-		if( lLine == Item_DataLink_Switch_GetOrdinal( self._target, self._target._realValue ) ) {
+		if( lLine == DataLink_Switch_GetOrdinal( self._target, self._target._realValue ) ) {
 			if( self._state == ITEM_STATE_SELECTED )
 				Menu_DrawString( lPos, lText, self.fontSize, self.colorSelected, self.alphas_y, self.drawFlags_y );
 			else if( self._state == ITEM_STATE_PRESSED )
@@ -54,9 +55,9 @@ void() Item_List_Update =
 		local float lLines;
 
 		lLines = floor( self.size_y / ( self.fontSize_y + 2 ) );
-		lStart = max( 0, floor( Item_DataLink_Switch_GetOrdinal( self._target, self._target._realValue ) - lLines / 2 ) );
+		lStart = max( 0, floor( DataLink_Switch_GetOrdinal( self._target, self._target._realValue ) - lLines / 2 ) );
 		lItem = floor( ( Menu_Cursor_Position_y - self.pos_y ) / ( self.fontSize_y + 2 ) );
-		lItem = min( lStart + lItem, Item_DataLink_Switch_GetOrdinal( self._target, self._target.maxValue ) );
+		lItem = min( lStart + lItem, DataLink_Switch_GetOrdinal( self._target, self._target.maxValue ) );
 
 		print( ftos( lItem ), "\n" );
 
@@ -80,8 +81,6 @@ bool( float pKey, float pAscii ) Item_List_Key =
 		self._presstime = Timer_Time;
 
 		self._target._realValue = self._target._realValue + 1;
-		if( self._target._realValue > self._target.maxValue )
-			self._target._realValue = self._target.minValue;
 		Raise_DataEvent( self._target, ITEM_DATALINK_SET );
 
 		CtCall_Action();
@@ -91,9 +90,6 @@ bool( float pKey, float pAscii ) Item_List_Key =
 		self._presstime = Timer_Time;
 
 		self._target._realValue = self._target._realValue - 1;
-		if( self._target._realValue < self._target.minValue )
-			self._target._realValue = self._target.maxValue;
-
 		Raise_DataEvent( self._target, ITEM_DATALINK_SET );
 
 		CtCall_Action();

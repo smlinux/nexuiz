@@ -11,8 +11,6 @@ bool( float pKey, float pAscii ) Item_SwitchButton_Key =
 		self._presstime = Timer_Time;
 
 		self._target._realValue = self._target._realValue + 1;
-		if( self._target._realValue > self._target.maxValue )
-			self._target._realValue = self._target.minValue;
 		Raise_DataEvent( self._target, ITEM_DATALINK_SET );
 
 		CtCall_Action();
@@ -22,9 +20,6 @@ bool( float pKey, float pAscii ) Item_SwitchButton_Key =
 		self._presstime = Timer_Time;
 
 		self._target._realValue = self._target._realValue - 1;
-		if( self._target._realValue < self._target.minValue )
-			self._target._realValue = self._target.maxValue;
-
 		Raise_DataEvent( self._target, ITEM_DATALINK_SET );
 
 		CtCall_Action();

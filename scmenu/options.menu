@@ -99,10 +99,10 @@ Item Layout Options
 		#include "menu/options/player.menu"
 		#include "menu/options/color.menu"
 		#include "menu/options/effects.menu"
-		#include "menu/options/Input.menu"
-		#include "menu/options/server.menu"
-		#include "menu/options/weapon.menu"
-		#include "menu/options/weapon2.menu"
+		#include "menu/options/input.menu"
+		//#include "menu/options/server.menu"
+		//#include "menu/options/weapon.menu"
+		//#include "menu/options/weapon2.menu"
 	}
 }
 }
