@@ -867,7 +867,7 @@ void(void) menu_reselect =
 void(entity menu, float setactive) menu_jumptowindow =
 {
 	// only jump to windows
-	if(menu.type != "ITEM_WINDOW")
+	if(menu.type != "ITEM_WINDOW" && menu.type != "ITEM_REFERENCE")
 		error("Cant jump to ", menu.name, " !\n");
 
 	// add a history point

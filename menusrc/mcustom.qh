@@ -24,7 +24,7 @@ yypp	- y position
 ////
 // Menu Button
 {
-	classname	ITEM_TEXTBUTTON
+	type		ITEM_TEXTBUTTON
 	name		ppp_nnn_text
 	parent		ppp
 	text		"cccc"

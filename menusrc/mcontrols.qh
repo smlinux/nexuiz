@@ -37,7 +37,7 @@ ITEM_TEXTSWITCH
 const vector ITEM_TEXT_NORMAL_COLOR 	= '1 1 1';
 const float	 ITEM_TEXT_NORMAL_ALPHA		= 1;
 
-const vector ITEM_TEXT_SELECTED_COLOR	= '0.5 0 0';
+const vector ITEM_TEXT_SELECTED_COLOR	= '0 0 1';
 const float	 ITEM_TEXT_SELECTED_ALPHA	= 1;
 
 const vector ITEM_TEXT_PRESSED_COLOR	= '1 0 0';
@@ -60,8 +60,11 @@ const float	 ITEM_SLIDER_ALPHA	= 1;
 
 // ITEM_SLIDER
 const float	 ITEM_SLIDER_STEP		= 1;
-const float  ITEM_SLIDER_LEFT_MARGIN  = 0;
-const float	 ITEM_SLIDER_RIGHT_MARGIN = 0;
+const float  ITEM_SLIDER_LEFT_MARGIN  = 7;
+const float	 ITEM_SLIDER_RIGHT_MARGIN = 7;
+
+const string ITEM_SLIDER_DEFAULT_BAR = "gfx/m_sliderbar";
+const string ITEM_SLIDER_DEFAULT_SLIDER = "gfx/m_slider";
 
 // used only in non-picture mode
 const vector ITEM_SLIDER_BAR_COLOR_DELTA = '-0.8 -0.8 0';

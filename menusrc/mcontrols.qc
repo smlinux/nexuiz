@@ -612,12 +612,10 @@ void(float keynr, float ascii) ITEM_SLIDER_KEY =
 	if(keynr == K_LEFTARROW)
 	{
 		self.value = (rint(self.value / self.step) - 1) * self.step;
-		ITEM_SLIDER_UPDATESLIDER();
 	}
 	else if(keynr == K_RIGHTARROW)
 	{
 		self.value = (rint(self.value / self.step) + 1)* self.step;
-		ITEM_SLIDER_UPDATESLIDER();
 	}
 	else if(keynr == K_MOUSE1)
 	{
@@ -653,13 +651,14 @@ void(float keynr, float ascii) ITEM_SLIDER_KEY =
 	}
 
 	ITEM_SLIDER_UPDATESLIDER();
+	ctcall_action();
 };
 
 void(void) ITEM_SLIDER_DESTROY =
 {
-	if(self.picture != "")
+	if(self.picture != "" && self.picture != ITEM_SLIDER_DEFAULT_SLIDER)
 		gfx_unloadpic(self.picture);
-	if(self.picture_bar != "")
+	if(self.picture_bar != "" && self.picture_bar != ITEM_SLIDER_DEFAULT_BAR)
 		gfx_unloadpic(self.picture);
 	if(self.sound_increase != SOUND_INCREASE)
 		snd_unloadsound(self.sound_decrease);
@@ -673,16 +672,20 @@ void(void) ITEM_SLIDER =
 {
 	if(self.picture != "")
 		self.picture = gfx_loadpic(self.picture, MENU_ENFORCELOADING);
+	if(self.picture == "")
+		self.picture = gfx_loadpic(ITEM_SLIDER_DEFAULT_SLIDER, MENU_ENFORCELOADING);
 	if(self.picture_bar != "")
 		self.picture_bar = gfx_loadpic(self.picture_bar, MENU_ENFORCELOADING);
+	if(self.picture_bar == "")
+		self.picture_bar = gfx_loadpic(ITEM_SLIDER_DEFAULT_BAR, MENU_ENFORCELOADING);
 	if(self.sound_decrease == "")
 		self.sound_decrease = SOUND_DECREASE;
 	else
-		snd_loadsound(self.sound_decrease);
+		snd_loadsound(self.sound_decrease, MENU_ENFORCELOADING);
 	if(self.sound_increase == "")
 		self.sound_increase = SOUND_INCREASE;
 	else
-		snd_loadsound(self.sound_increase);
+		snd_loadsound(self.sound_increase, MENU_ENFORCELOADING);
 
 	if(self.color == '0 0 0')
 		self.color = ITEM_SLIDER_COLOR;
@@ -692,9 +695,9 @@ void(void) ITEM_SLIDER =
 		self.step = ITEM_SLIDER_STEP;
 	if(self.slider_size == '0 0 0')
 	{
-		if(self.picture != "")
+		/*if(self.picture != "")
 			self.slider_size = gfx_getimagesize(self.picture);
-		else
+		else*/
 			self.slider_size = ITEM_SLIDER_SIZE;
 	}
 	if(self.left_margin == 0)
@@ -790,11 +793,11 @@ void(void) ITEM_TEXTSWITCH =
 	if(self.sound_decrease == "")
 		self.sound_decrease = SOUND_DECREASE;
 	else
-		snd_loadsound(self.sound_decrease);
+		snd_loadsound(self.sound_decrease, MENU_ENFORCELOADING);
 	if(self.sound_increase == "")
 		self.sound_increase = SOUND_INCREASE;
 	else
-		snd_loadsound(self.sound_increase);
+		snd_loadsound(self.sound_increase, MENU_ENFORCELOADING);
 
 	temp = self.text;
 	self.text = getaltstring(self.value, self.text);

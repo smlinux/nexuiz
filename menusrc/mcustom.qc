@@ -89,15 +89,6 @@ void(void) _nex_cvar_slider =
 // main.menu
 ///
 
-// display the options menu
-
-void(void) nex_display_options =
-{
-	entity ent;
-	ent = menu_getitem("options");
-	menu_jumptowindow(ent, true);
-};
-
 // quit menu
 
 void(void) nex_quit_choose =
@@ -216,6 +207,21 @@ float(float keynr, float ascii) nex_quit_key =
 	return true;
 };
 
+// options menu
+
+void(void) nex_display_options =
+{
+	entity ent;
+
+	if(substring(menu_activewindow.name,0,3) == "opt")
+		return;
+
+	ent = menu_getitem("options_settings_ref");
+	ent._child = menu_getitem(self.link);
+
+	menu_jumptowindow(menu_getitem("options"), true);
+};
+
 /////////////////
 // video.menu
 
@@ -243,6 +249,27 @@ string nex_video_resolutions;
 
 void(void) nex_video_resolution_switch_reinit =
 {
+	float c, i;
+	float pos86;
+
+	c = getaltstringcount(nex_video_resolutions);
+	for(i = 0; i < c; i=i+1)
+	{
+		string s;
+		vector t;
+		s = getaltstring(i,nex_video_resolutions);
+		s = strcat("'",s,"'");
+		t = stov(s);
+		if(t_x == cvar("vid_width") && t_y == cvar("vid_height"))
+		{
+			self.value = i;
+			return;
+		}
+		if(t == '800 600 0')
+			pos86 = i;
+	}
+
+	self.value = pos86;
 };
 
 void(void) nex_video_resolution_switch =
@@ -274,6 +301,8 @@ void(void) nex_video_resolution_switch =
 
 	self.text = strzone(self.text);
 	nex_video_resolutions = strzone(nex_video_resolutions);
+
+	self.reinit = nex_video_resolution_switch;
 };
 
 void(void) nex_video_apply =
@@ -357,6 +386,100 @@ void(void) nex_options_invmouse_refresh =
 		self.value = 0;
 	else
 		self.value = 1;
+};
+
+void(void) nex_cc =
+{
+	entity ent;
+	ent = menu_getitem("options_settings_ref");
+	ent._child = menu_getitem("options_cc");
+	menu_jumptowindow(ent, false);
+}
+
+void(void) nex_cc_reset =
+{
+	cmd(
+	"v_hwgamma 1;"
+	"v_gamma 1;"
+	"v_contrast 1;"
+	"v_brightness 0;"
+	"v_color_enable 0;"
+	"v_color_black_r 0;"
+	"v_color_black_g 0;"
+	"v_color_black_b 0;"
+	"v_color_grey_r 0;"
+	"v_color_grey_g 0;"
+	"v_color_grey_b 0;"
+	"v_color_white_r 1;"
+	"v_color_white_g 1;"
+	"v_color_white_b 1;"
+	"\n");
+};
+
+void(void) nex_cc_check_hwgamma =
+{
+	if(cvar("vid_hardwaregammasupported"))
+	{
+		self.flag = FLAG_AUTOSETCLICK;
+		self.color = ITEM_TEXT_NORMAL_COLOR;
+	}
+	else
+	{
+		self.flag = FLAG_NOSELECT;
+		self.color = '0.5 0.5 0.5';
+	}
+};
+
+void(void) nex_cc_check_gamma = // used in key -- BADBAD HACKHACK
+{
+	if(cvar("v_hwgamma") && cvar("vid_hardwaregammasupported") && !cvar("v_color_enable"))
+	{
+		self.flag = FLAG_AUTOSETCLICK;
+		self.color = ITEM_TEXT_NORMAL_COLOR;
+	}
+	else
+	{
+		self.flag = FLAG_NOSELECT;
+		self.color = '0.5 0.5 0.5';
+	}
+};
+
+void(void) nex_cc_check_ncolor_enable =
+{
+	if(!cvar("v_color_enable"))
+	{
+		self.flag = FLAG_AUTOSETCLICK;
+		self.color = ITEM_TEXT_NORMAL_COLOR;
+	}
+	else
+	{
+		self.flag = FLAG_NOSELECT;
+		self.color = '0.5 0.5 0.5';
+	}
+};
+
+void(void) nex_cc_check_color_enable =
+{
+	if(cvar("v_color_enable"))
+	{
+		self.flag = FLAG_AUTOSETCLICK;
+		self.color = ITEM_TEXT_NORMAL_COLOR;
+	}
+	else
+	{
+		self.flag = FLAG_NOSELECT;
+		self.color = '0.5 0.5 0.5';
+	}
+};
+
+void(void) nex_cc_color_enable =
+{
+	cvar_set("v_color_enable","1");
+};
+
+void(void) nex_cc_ncolor_enable =
+{
+	cvar_set("v_color_enable","0");
 };
 
 ////////////////////////////////////////////////////
