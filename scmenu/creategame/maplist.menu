@@ -1,0 +1,54 @@
+// Property of Alientrap/AK
+//
+// creategame/maplist.menu
+Item Window MapList
+{
+	size '850 585'
+
+	Derive Label MapsLabel
+	{
+		pos	'0 0'
+		text	"Map List:"
+	}
+	Derive List Maps
+	{
+		pos	'0 20'
+		size	'400 500'
+
+		init 	Nex_Action_MapList_Init
+	}
+	Derive Label CycleLabel
+	{
+		pos	'450 0'
+		text	"Cycle List or some other name:"
+	}
+	Derive List Cycle
+	{
+		pos	'450 20'
+		size	'400 450'
+	}
+	Item Layout Panel
+	{
+		pos	'450 470'
+		size	'400 30'
+		direction	[Nex_DefaultHorzDirection]
+		flag 		[FlagEmbedded]
+
+		Derive TextButton Add
+		{
+			normal "Add"
+		}
+		Derive TextButton Remove
+		{
+			normal "Remove"
+		}
+		Derive TextButton MoveUp
+		{
+			normal "Move Up"
+		}
+		Derive TextButton MoveDown
+		{
+			normal "Move Down"
+		}
+	}
+}
