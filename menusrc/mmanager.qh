@@ -91,7 +91,7 @@ vector menu_cursor;
 // function pointers
 .void(void) init; 	// called once at object creation
 .void(void) reinit;
-.void(void)	destroy;
+.void(void) destroy;
 .void(void) mouse_enter;
 .void(void) mouse_leave;
 .void(void) refresh;

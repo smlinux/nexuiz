@@ -137,7 +137,7 @@ Option menus
 	name		options_sound_svolume_text
 	parent		options_sound
 	text		"Sound Volume"
-	pos			"0 15 0"
+	pos		"0 15 0"
 	//font_size	"10 10 0"
 	alignment	16		// TEXT_ALIGN_LEFTPOS
 	flag		256		// FLAG_AUTOSETCLICK
@@ -149,7 +149,7 @@ Option menus
 	type		ITEM_SLIDER
 	name		options_sound_svolume_slider
 	parent		options_sound_svolume_text
-	pos			"10 15 0"
+	pos		"10 15 0"
 	size		"100 8 0"
 	//size		"100 10 0"
 	flag		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT

@@ -150,6 +150,8 @@ float(float keynr, float ascii)  ctcall_key =
 {
 	if(self.key)
 		return self.key(keynr, ascii);
+	else
+		return false;
 };
 
 void(void)	ctcall_draw =

@@ -28,7 +28,8 @@ yypp	- y position
 	name		ppp_nnn_text
 	parent		ppp
 	text		"cccc"
-	pos			"0 yypp 0"
+	pos		"0 yypp 0"
+	origin		"0 yypp 0"
 	//font_size	"10 10 0"
 	alignment	16		// TEXT_ALIGN_LEFTPOS
 	flag		256		// FLAG_AUTOSETCLICK
@@ -39,7 +40,8 @@ yypp	- y position
 	type		ITEM_SLIDER
 	name		ppp_nnn_slider
 	parent		ppp_nnn_text
-	pos			"10 yypp 0"
+	//pos			"10 yypp 0"
+	pos		"10 0 0"
 	size		"100 8 0"
 	//size		"100 10 0"
 	flag		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
@@ -56,7 +58,8 @@ yypp	- y position
 	name		ppp_nnn_slidertext
 	parent		ppp_nnn_text
 	link		ppp_nnn_slider
-	pos			"120 yypp 0"
+	//pos			"120 yypp 0"
+	pos		"120 0 0"
 	//font_size "10 10 0"
 	maxlen		4
 	init		nex_slidertext
@@ -80,7 +83,8 @@ ssss 	- switches 'No' 'Yes'
 	name		ppp_nnn_text
 	parent		ppp
 	text		"cccc"
-	pos			"0 yypp 0"
+	pos		"0 yypp 0"
+	origin		"0 yypp 0"
 	//font_size	"10 10 0"
 	alignment	16		// TEXT_ALIGN_RIGHTPOS
 	flag		256		// FLAG_AUTOSETCLICK
@@ -91,7 +95,8 @@ ssss 	- switches 'No' 'Yes'
 	type	ITEM_TEXTSWITCH
 	name		ppp_nnn_switch
 	parent		ppp_nnn_text
-	pos			"10 yypp 0"
+	//pos		"10 yypp 0"
+	pos		"10 0 0"
 	//font_size	"10 10 0"
 	flag 		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
 	text		"ssss"

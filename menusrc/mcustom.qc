@@ -10,6 +10,15 @@
 // global stuff
 ///
 
+void() nex_setposition =
+{
+	self.pos_x = 0;
+	self.pos_y = (self.font_size_y + 5) * self.orderpos;
+	self.pos_z = 0;
+	
+	self.origin = self.pos;
+};
+
 void(entity item) nex_makeonlyvisible =
 {
 	local entity node;
