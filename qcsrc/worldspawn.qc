@@ -28,6 +28,7 @@ void worldspawn (void)
 	precache_model ("models/rocketmissile.mdl");
 	precache_model ("models/bullet.mdl");
 	precache_model ("models/casing.mdl");
+	precache_model ("models/beam.mdl");
 	
 	precache_model ("models/items/g_h1.md3");
 	precache_model ("models/items/g_h25.md3");
@@ -62,7 +63,7 @@ void worldspawn (void)
 	precache_model ("models/gibs/gib4.mdl");
 	precache_model ("models/gibs/bloodyskull.md3");
 
-	precache_sound ("weapons/lazergun_fire.wav");
+	precache_sound ("weapons/lasergun_fire.wav");
 	precache_sound ("weapons/uzi_fire.wav");
 	precache_sound ("weapons/shotgun_fire.wav");
 	precache_sound ("weapons/grenade_fire.wav");
@@ -84,6 +85,7 @@ void worldspawn (void)
 	precache_sound ("weapons/hyprbf1a.wav");
 	precache_sound ("weapons/plasmx1a.wav");
 	precache_sound ("weapons/crylink.wav");
+	precache_sound ("weapons/gunswitch.wav");
 	
 	precache_sound ("misc/bodyimpact1.wav");
 	precache_sound ("misc/bodyimpact2.wav");

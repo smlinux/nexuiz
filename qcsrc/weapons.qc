@@ -187,6 +187,8 @@ void W_SwitchWeapon (float wep)
 		return;
 	}
 
+	sound (self, CHAN_WEAPON, "weapons/gunswitch.wav", 1, ATTN_NORM);
+
 	self.weapon = nextwep;
 	W_UpdateWeapon ();
 	W_UpdateAmmo ();
@@ -261,6 +263,7 @@ void W_NextWeapon (void)
 			return;
 		}
 	}
+	sound (self, CHAN_WEAPON, "weapons/gunswitch.wav", 1, ATTN_NORM);
 }
 
 void W_PreviousWeapon (void)
@@ -329,6 +332,7 @@ void W_PreviousWeapon (void)
 			return;
 		}
 	}
+	sound (self, CHAN_WEAPON, "weapons/gunswitch.wav", 1, ATTN_NORM);
 }
 
 float W_CheckAmmo (void)
@@ -453,16 +457,16 @@ void W_Laser_Touch (void)
 	dir = normalize (self.owner.origin - self.origin);
 
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, 79);
+	WriteByte (MSG_BROADCAST, TE_FLAMEJET);
 	WriteCoord (MSG_BROADCAST, self.origin_x);
 	WriteCoord (MSG_BROADCAST, self.origin_y);
 	WriteCoord (MSG_BROADCAST, self.origin_z);
-	WriteCoord (MSG_BROADCAST, dir_x);
-	WriteCoord (MSG_BROADCAST, dir_y);
-	WriteCoord (MSG_BROADCAST, dir_z);
+	WriteCoord (MSG_BROADCAST, 0);		// SeienAbunae: groan... Useless clutter
+	WriteCoord (MSG_BROADCAST, 0);
+	WriteCoord (MSG_BROADCAST, 0);
 	WriteByte (MSG_BROADCAST, 155);
 
-	RadiusDamage (self, self.owner, 10, 15, 50, world, 200, IT_LASER);
+	RadiusDamage (self, self.owner, 20, 10, 50, world, 200, IT_LASER);
 
 	remove (self);
 }
@@ -471,7 +475,7 @@ void W_Laser_Attack (void)
 {
 	entity	missile;
 
-	sound (self, CHAN_WEAPON, "weapons/electro_fire.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "weapons/lasergun_fire.wav", 1, ATTN_NORM);
 
 	missile = spawn ();
 	missile.owner = self;
@@ -480,7 +484,7 @@ void W_Laser_Attack (void)
 	missile.movetype = MOVETYPE_FLY;
 	missile.solid = SOLID_BBOX;
 
-	setmodel (missile, "models/bullet.mdl");
+	setmodel (missile, "models/beam.mdl");
 	setsize (missile, '0 0 0', '0 0 0');
 	setorigin (missile, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);
 
@@ -489,7 +493,7 @@ void W_Laser_Attack (void)
 	missile.angles = vectoangles (missile.velocity);
 	missile.glow_color = 250; // 244, 250
 	missile.glow_size = 40;
-	missile.glow_trail = 1;	// ??? 256
+	//missile.glow_trail = 1;	// ??? 256
 	missile.touch = W_Laser_Touch;
 	missile.think = SUB_Remove;
 	missile.nextthink = time + 2;
@@ -594,7 +598,7 @@ void W_Grenade_Touch (void)
 	//if (other.classname == "player" || other.classname == "corpse")
 	//	W_Grenade_Explode (other);
 	//else
-	sound (self, CHAN_BODY, "weapons/grenade_Bounce.wav", 1, ATTN_NORM);
+	sound (self, CHAN_BODY, "weapons/grenade_bounce.wav", 1, ATTN_NORM);
 }
 
 void W_Grenade_Attack (void)
@@ -729,7 +733,7 @@ void W_Plasma_Touch (void)
 	if (other.classname == "player" || other.classname == "corpse")
 		W_Plasma_Explode (other);
 	else
-		sound (self, CHAN_BODY, "weapons/grenade_Bounce.wav", 1, ATTN_NORM);
+		sound (self, CHAN_BODY, "weapons/grenade_bounce.wav", 1, ATTN_NORM);
 }
 
 void W_Electro_Attack2 (void)
@@ -974,7 +978,7 @@ void W_Rocket_Explode (entity ignore)
 {
 	ImpactEffect (self, IT_ROCKET_LAUNCHER);
 
-	RadiusDamage (self, self.owner, 100, 50, 100, ignore, 600, IT_ROCKET_LAUNCHER);
+	RadiusDamage (self, self.owner, 130, 50, 100, ignore, 600, IT_ROCKET_LAUNCHER);
 
 	remove (self);
 }
