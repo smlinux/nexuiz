@@ -51,7 +51,7 @@ void RadiusDamage (entity attacker, entity inflictor, float deathtype, float dam
 			{
 				finaldmg = damage - max (0, 0.5 * vlen (inflictor.origin - targ.origin));
 				if (targ == attacker)
-					finaldmg = finaldmg * 0.7;	// Partial damage if the attacker hits himself
+					finaldmg = finaldmg * 0.6;	// Partial damage if the attacker hits himself
 				if (finaldmg > 0)
 					Damage (attacker, inflictor.origin, targ, deathtype, finaldmg);
 			}
