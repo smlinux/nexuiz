@@ -105,9 +105,15 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 	self.flags = FL_ITEM | itemflags;
 	setmodel (self, self.mdl);
 	if (itemflags & FL_WEAPON)
+	{
+		setorigin (self, self.origin + '0 0 12');
 		setsize (self, '-12 -12 -12', '12 12 12');
+	}
 	else
+	{
+		setorigin (self, self.origin + '0 0 8');
 		setsize (self, '-8 -8 -8', '8 8 8');
+	}
 	self.movetype = MOVETYPE_TOSS;
 	self.solid = SOLID_TRIGGER;
 	self.touch = Item_Touch;
