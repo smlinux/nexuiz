@@ -1,4 +1,45 @@
 
+void PlayerWeaponThrow (void)
+{
+	local entity	item;
+	local entity	backup;
+
+	item = spawn();
+
+	backup = self;
+	self = item;
+
+	self.origin = backup.origin - '0 0 24';
+	
+	self.velocity_z = 300;
+	self.velocity_x = -100 + (random() * 200);
+	self.velocity_y = -100 + (random() * 200);
+	self.norespawn = 1;
+
+	if	(backup.weapon == IT_LASER)
+		remove (self);
+	else if (backup.weapon == IT_UZI)
+		weapon_uzi ();
+	else if (backup.weapon == IT_SHOTGUN)
+		weapon_shotgun ();
+	else if (backup.weapon == IT_GRENADE_LAUNCHER)
+		weapon_grenadelauncher ();
+	else if (backup.weapon == IT_ELECTRO)
+		weapon_electro ();
+	else if (backup.weapon == IT_CRYLINK)
+		weapon_crylink ();
+	else if (backup.weapon == IT_NEX)
+		weapon_nex ();
+	else if (backup.weapon == IT_HAGAR)
+		weapon_hagar ();
+	else if (backup.weapon == IT_ROCKET_LAUNCHER)
+		weapon_rocketlauncher ();
+
+	self = backup;
+
+	stuffcmd(self, "chase_active 1");
+}
+
 void PlayerHurt (vector hitloc, float damage)
 {
 	te_blood (hitloc, '0 0 20', floor (damage / 2));
@@ -17,4 +58,6 @@ void PlayerDie (void)
 	self.dead_angles = self.angles;
 	self.dead_angles_x = 0;
 	self.deadflag = DEAD_DEAD;
+
+	PlayerWeaponThrow ();
 }

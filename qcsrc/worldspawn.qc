@@ -69,7 +69,7 @@ void worldspawn (void)
 	precache_sound ("weapons/Electro_fire.wav");
 	precache_sound ("weapons/Rocket_Fire.wav");
 	precache_sound ("weapons/Rocket_Impact.wav");
-	precache_sound ("weapons/Hagar_fire.wav");
+	precache_sound ("weapons/Hagar_Fire.wav");
 	precache_sound ("weapons/hagexp1.wav");
 	precache_sound ("weapons/hagexp2.wav");
 	precache_sound ("weapons/hagexp3.wav");
@@ -85,6 +85,8 @@ void worldspawn (void)
 	precache_sound ("misc/BodyImpact1.wav");
 	precache_sound ("misc/BodyImpact2.wav");
 	precache_sound ("misc/Teleport.wav");
+
+	precache_sound ("misc/ItemRespawn.wav");
 	
 	precache_sound ("player/HitGround1.wav");
 	precache_sound ("player/HitGround2.wav");

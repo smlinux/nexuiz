@@ -422,6 +422,7 @@ void W_Laser_Touch (void)
 	WriteCoord (MSG_BROADCAST, dir_y);
 	WriteCoord (MSG_BROADCAST, dir_z);
 	WriteByte (MSG_BROADCAST, 155);
+	
 
 	remove (self);
 }

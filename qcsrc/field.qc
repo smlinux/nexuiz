@@ -46,3 +46,7 @@ entity dest;
 .float death_time;
 
 .string mdl;
+
+.float	norespawn;
+.float	respawntime;
+.float	chasecam;

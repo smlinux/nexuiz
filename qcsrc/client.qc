@@ -93,6 +93,8 @@ void PutClientInServer (void)
 	
 	W_UpdateWeapon ();
 	W_UpdateAmmo ();
+
+	stuffcmd(self, "chase_active 0");
 }
 
 /*
@@ -228,6 +230,9 @@ void PlayerPreThink (void)
 			
 		self.statdraintime = time + 1;
 	}
+
+	//self.glow_color = 10; // 244, 250
+	//self.glow_size = 200;
 }
 
 /*
