@@ -52,7 +52,7 @@ void(void) nex_slidertext =
 		return;
 	}
 
-		ent = menu_getitem(self.link);
+	ent = menu_getitem(self.link);
 	if(ent == null_entity)
 	{
 		objerror("No link found for ", self.link,"\n");
@@ -386,199 +386,133 @@ void(void) nex_video_apply =
 float maxfrags;
 float maxtime;
 float maxbots;
-entity selectmap;
-var float selectnum  = 0;
-float FRAME_WIDTH;
-float PIC_WIDTH;
-float mapnum;
 
 string hostname;
 float  maxclients;
 float  publicserver;
 
-// create the mapselection frame stuff
-void(void) nex_xp_build_maplist =
+entity maps_list;
+entity maps_current;
+
+// text = info text
+// picture = picture filename
+// name = map name
+void(entity node) _nex_xp_remove =
 {
-	entity pic;
-	entity mapname;
-	entity template_text;
-	entity template_pic;
+	strunzone( node.picture );
+	strunzone( node.text );
+	strunzone( node.name );
+	remove( node );
+}
+
+void(void) _nex_xp_update =
+{
+	entity item;
+	
+	item = menu_getitem( "multiplayer_map_name" );
+	item.text = maps_current.name;
+	
+	item = menu_getitem( "multiplayer_map_picture" );
+	item.picture = maps_current.picture;
+	
+	item = menu_getitem( "multiplayer_map_info" );
+	item.text = maps_current.text;
+};
+
+void(void) nex_xp_enummaps =
+{
+	float count;
 	float searchhandle;
 	float counter;
-
-	// search through maps for all bsps and add them to the list
-	// if a picture exists for them, add it to
-	searchhandle = search_begin("maps/*.bsp",true,true);
-	if(searchhandle == -1)
-	{
-		print("menu: No maps found...\n");
+	
+	// remove the old list
+	if( maps_list ) {
+		entity node;
+		
+		node = maps_list;
+		while( node._next ) {
+			node = node._next;
+			_nex_xp_remove( node._prev );
+		}
+		_nex_xp_remove( node );
+	}
+	maps_list = maps_current = null_entity;
+	
+	searchhandle = search_begin( "maps/*.bsp", true, true );
+	if( searchhandle == -1 ) {
+		print( "menu: No maps found!\n" );
 		return;
-	}
-
-	template_text = menu_getitem("mapselection_template_text");
-	template_pic = menu_getitem("mapselection_template_picture");
-	template_text.pos_y = (template_pic.size_y - template_text.font_size_y) / 2;
-
-	// set FRAME_WIDTH
-	pic = menu_getitem("mapselection_frame");
-	FRAME_WIDTH = rint(pic.clip_size_x / template_pic.size_x);
-
-	// set PIC_WIDTH
-	PIC_WIDTH = template_pic.size_x;
-
-	// adjust the clip size of the frame
-	pic.clip_size_y = template_pic.size_y;
-
-	// adjust the selection square
-	pic = menu_getitem("mapselection_selsquare");
-
-	pic.size = template_pic.size;
-
-	mapnum = search_getsize(searchhandle);
-
-	for(counter = 0; counter < mapnum; counter = counter + 1)
-	{
-		string extstripped;
-		string allstripped;
-		float filehandle;
-
-		extstripped = search_getfilename(searchhandle, counter);
-		extstripped = substring(extstripped, 0, strlen(extstripped) - 4); // .bsp off
-		extstripped = strzone(extstripped);
-
-		allstripped = substring(extstripped, 5, 400); // maps/ off
-		allstripped = strzone(allstripped);
-
-		pic = spawn();
-		copyentity(template_pic, pic);
-
-		pic.orderpos = counter + 1;
-		pic.pos_x = counter * template_pic.size_x;
-		pic.name = strzone(allstripped);
-
-		// TODO: add support for other formats, too
-		filehandle = search_begin(strcat(extstripped,".jpg"), true, true);
-		if(filehandle != -1)
-		{
-			pic.picture = strcat(extstripped,".jpg");
-			pic.picture = strzone(pic.picture);
-			search_end(filehandle);
+	} else if( searchhandle == -2)
+		return;
+		
+	maps_list = maps_current = spawn();
+	count = search_getsize( searchhandle );
+	for( counter = 0 ; counter < count ; counter = counter + 1 ) {
+		float file;
+		string fname;
+		
+		fname = search_getfilename( searchhandle, counter );
+		fname = substring( fname, 0, strlen( fname ) -  4 );
+		fname = strzone( fname );
+		
+		//try to find the information text
+		file = fopen( strcat( fname, ".txt" ), FILE_READ );
+		if( file == -1 )
+			maps_current.text = strzone( "--NO INFORMATION AVAILABLE--" );
+		else {
+			string temp, old;
+			maps_current.text = strzone( "" );
+			do {
+				old = maps_current.text;
+				temp = fgets( file );
+				maps_current.text = strzone( strcat( old, temp, "\n" ) );
+				strunzone( old );
+			} while( temp );
+			fclose( file );
 		}
-		else
-		{
-			mapname = spawn();
-			copyentity(template_text, mapname);
-
-			mapname.name = strzone(strcat(allstripped, "_text"));
-			mapname.text = strzone(allstripped);
-
-			mapname.orderpos = counter + mapnum + 1;
-
-			mapname.pos_x = counter * template_pic.size_x;
-
-			mapname.size_x = template_pic.size_x;
-			mapname.size_y = mapname.font_size_y;
-			mapname.font_size = '0 0 0';
-
-			{
-				entity old
-				old = self;
-				self = mapname;
-				ITEM_TEXT();
-				self = old;
-			}
+		
+		//try to find the picture
+		file = search_begin( strcat( fname, ".jpg" ), true, true );
+		if( file == -1 )
+			maps_current.picture = strzone( "gfx/m_nomap" );
+		else {
+			maps_current.picture = strzone( strcat( fname, ".jpg" ) );
+			search_end( file );
 		}
-
-		if(counter == 0)
-			selectmap = pic;
-
-		strunzone(extstripped);
-		strunzone(allstripped);
+		
+		maps_current.name = strzone( substring( fname, 5, strlen( fname ) - 5 ) ); // remove the 'maps/'
+		strunzone( fname );
+		
+		// create next item and link it with the list
+		maps_current._next = spawn();
+		maps_current._next._prev = maps_current;
+		maps_current = maps_current._next;
 	}
+	// remove the last item
+	maps_current = maps_current._prev;
+	remove( maps_current._next );
+	maps_current._next = null_entity;
+	
+	search_end( searchhandle );
 
-	search_end(searchhandle);
+	maps_current = maps_list;
+	_nex_xp_update();			
 };
 
 void(void) nex_xp_prev =
 {
-	entity s;
-	if(selectnum <= 0)
-		return;
-
-	selectnum = selectnum - 1;
-	selectmap = selectmap._prev;
-
-	s = menu_getitem("mapselection_selsquare");
-	s.pos_x = selectnum * PIC_WIDTH;
-
-	// scroll left ?
-	if((mapnum - 1 - selectnum) > floor(FRAME_WIDTH / 2) && selectnum + 1 >= ceil(FRAME_WIDTH / 2)) // 2,3
-	{
-		s = menu_getitem("mapselection_frame");
-		s.origin_x = s.origin_x + PIC_WIDTH;
-	}
+	if( maps_current._prev )
+		maps_current = maps_current._prev;
+	_nex_xp_update();	
 };
 
 void(void) nex_xp_next =
 {
-	entity s;
-	if(selectnum >= mapnum - 1)
-		return;
-
-	selectnum = selectnum + 1;
-	selectmap = selectmap._next;
-
-	s = menu_getitem("mapselection_selsquare");
-	s.pos_x = selectnum * PIC_WIDTH;
-
-	// scroll right ?
-	if((mapnum - 1 - selectnum) >= floor(FRAME_WIDTH / 2) && selectnum + 1 > ceil(FRAME_WIDTH / 2)) // 2,3
-	{
-		s = menu_getitem("mapselection_frame");
-		s.origin_x = s.origin_x - PIC_WIDTH;
-	}
+	if( maps_current._next )
+		maps_current = maps_current._next;
+	_nex_xp_update();
 };
 
-void(void) nex_xp_click = // if one of the maplist entries get 'clicked' :-)
-{
-	float deltapos;
-
-	// get the position
-	// HACKHACK
-	if(self.orderpos > mapnum)
-	{
-		deltapos = self.orderpos - mapnum - selectnum - 1;
-	} else
-	{
-		deltapos = self.orderpos - selectnum - 1;
-	}
-
-	if(deltapos == 0)
-		return;
-
-	if(deltapos > 0)
-	{
-		while(deltapos > 0)
-		{
-			deltapos = deltapos - 1;
-			nex_xp_next();
-		}
-	}
-	else
-	{
-		while(deltapos < 0)
-		{
-			deltapos = deltapos + 1;
-			nex_xp_prev();
-		}
-	}
-};
-
-void(void) nex_display_singleplayer =
-{
-	nex_makeonlyvisible( menu_getitem( "singleplayer" ) );
-	menu_jumptowindow( menu_getitem( "singleplayer"), false );
-};
 
 void(void) nex_display_multiplayer =
 {
@@ -628,7 +562,7 @@ void(void) nex_sp_start =
 	cvar_set("deathmatch", ftos(1));
 	cvar_set("maxplayers", ftos(maxbots + 1));
 	cmd("map ");
-	cmd(selectmap.name);
+	cmd(maps_current.name);
 	cmd(";wait;togglemenu;wait;");
 
 	// BLACK: TODO - change this somewhen into something cleaner - see bot/bot.qc
@@ -672,13 +606,47 @@ void(void) nex_mp_start =
 	cvar_set("sv_public", ftos(publicserver));
 	cvar_set("hostname", hostname);
 	cmd("map ");
-	cmd(selectmap.name);
+	cmd(maps_current.name);
 	cmd(";wait;togglemenu\n");
 };
 
 void(void) nex_goto_createserver =
 {
 	menu_jumptowindow( menu_getitem( "multiplayer_frame"), false );
+}
+
+void(void) nex_draw_text =
+{
+	local vector drawpos;
+	local float cpos, end;
+	
+	cpos = 0;
+	drawpos = self.pos;
+	drawpos_y = drawpos_y + self.font_size_y; 
+	do {
+		local string l;
+		local float i;
+		
+		end = strlen( self.text );
+		i = cpos;
+		do {
+			l = substring( self.text, i, 1 );
+			
+			if( l == "\n" ) {
+				end = i;
+				break;
+			}
+			
+			i = i + 1;
+		} while( l != "" );
+		
+		l = substring( self.text, cpos, end - cpos );
+		if( l != "" )
+			menu_drawstring( drawpos, l, self.font_size, self.color, self.alpha, self.drawflag );
+		drawpos_y = drawpos_y + self.font_size_y;
+		
+		cpos = end + 1;
+	} while( end != strlen( self.text ) );			
 }
 
 // server list

@@ -230,3 +230,25 @@ vector(vector vec) gfx_congfxtomen =
 {
 	return (vec - menu_localorigin);
 };
+
+void(vector position, vector size, float width, vector rgb, float alpha, float flag)
+menu_drawoutline =
+{
+	local vector p, s;
+	
+	s_x = size_x;
+	s_y = width;	
+	menu_fillarea( position, s, rgb, alpha, flag );
+	
+	p_x = position_x;
+	p_y = position_y + size_y - width;
+	menu_fillarea( p, s, rgb, alpha, flag );
+	
+	s_x = width;
+	s_y = size_y;
+	menu_fillarea( position, s, rgb, alpha, flag );
+	
+	p_x = position_x + size_x - width;
+	p_y = position_y;
+	menu_fillarea( p, s, rgb, alpha, flag );	
+};

@@ -9,7 +9,7 @@ template for map selection
 /////////////////////////
 // map selection window
 // frame
-{
+/*{
 	type	ITEM_WINDOW
 	name	mapselection
 	origin	"0 30" // to allow easy editing of the posititons
@@ -92,123 +92,8 @@ template for map selection
 	//alpha	"0.2"
 	size	"1 1"
 }
-///////////////////////
-// singleplayer stuff
-// singleplayer options
-
-// max frags
-{
-	type 		ITEM_TEXTBUTTON
-	name		singleplayer_maxfrag_text
-	parent		singleplayer
-	text		"Frag Limit"
-	pos			"0 0 0"
-	//font_size	"10 10 0"
-	alignment	16		// TEXT_ALIGN_RIGHTPOS
-	flag		256		// FLAG_AUTOSETCLICK
-	key			nex_redirect_key
-}
-// Switch
-{
-	type		ITEM_EDITBOX
-	name		singleplayer_maxfrag_switch
-	parent		singleplayer_maxfrag_text
-	pos			"10 0 0"
-	//font_size	"10 10 0"
-	flag 		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
-	maxlen		3
-	text		"0"
-	refresh		nex_xp_maxfrags
-}
-// max time
-{
-	type 		ITEM_TEXTBUTTON
-	name		singleplayer_maxtime_text
-	parent		singleplayer
-	text		"Time Limit"
-	pos			"0 15 0"
-	//font_size	"10 10 0"
-	alignment	16		// TEXT_ALIGN_RIGHTPOS
-	flag		256		// FLAG_AUTOSETCLICK
-	key			nex_redirect_key
-}
-// Switch
-{
-	type		ITEM_EDITBOX
-	name		singleplayer_maxtime_switch
-	parent		singleplayer_maxtime_text
-	pos			"10 15 0"
-	//font_size	"10 10 0"
-	flag 		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
-	maxlen		3
-	text		"0"
-	refresh		nex_xp_maxtime
-}
-// max bots
-{
-	type 		ITEM_TEXTBUTTON
-	name		singleplayer_maxbots_text
-	parent		singleplayer
-	text		"Max Bots"
-	pos			"0 30 0"
-	//font_size	"10 10 0"
-	alignment	16		// TEXT_ALIGN_RIGHTPOS
-	flag		256		// FLAG_AUTOSETCLICK
-	key			nex_redirect_key
-}
-// Switch
-{
-	type		ITEM_EDITBOX
-	name		singleplayer_maxbots_switch
-	parent		singleplayer_maxbots_text
-	pos			"10 30 0"
-	//font_size	"10 10 0"
-	flag 		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
-	maxlen		2
-	text		"4"
-	refresh		nex_xp_maxbots
-}
-// map selection
-{
-	type 	ITEM_REFERENCE
-	name  	singleplayer_mapselection
-	parent	singleplayer
-	link	mapselection
-	origin 	"-300 265"
-	draw	nex_linkrelhack
-}
-// start
-{
-	type 		ITEM_TEXTBUTTON
-	name		singleplayer_start
-	parent		singleplayer
-	pos			"0 60"
-	flag		256		// FLAG_AUTOSETCLICK
-	alignment	8
-	text		"Start Game"
-	action		nex_sp_start
-}
 //////////////////////
-// multiplayer stuff
-// multiplayer selection
-{
-	type 	ITEM_TEXTBUTTON
-	name	multiplayer_create
-	parent	multiplayer
-	text	"Create Server"
-	pos		"0 0"
-	flag	256
-	action	nex_goto_createserver
-}
-{
-	type 	ITEM_TEXTBUTTON
-	name	multiplayer_join
-	parent	multiplayer
-	text	"Join a Game"
-	pos		"150 0"
-	flag	256
-	action	nex_display_serverlist
-}
+// create game
 // multiplayer options (spawn server)
 {
 	type 	ITEM_WINDOW
@@ -383,7 +268,84 @@ template for map selection
 	alignment	8
 	text		"Start Game"
 	action		nex_mp_start
+}*/
+// multiplayer map frame
+{
+	type 		ITEM_WINDOW
+	name 		multiplayer_map
+	parent		multiplayer
+	clip_pos	"0 0"
+	clip_size	"270 475"
+	reinit		nex_xp_enummaps
 }
+// <<
+{
+	type		ITEM_TEXTBUTTON
+	name		multiplayer_map_prev
+	parent		multiplayer_map
+	pos		"0 0"
+	size		"22 11"
+	text		"<<"
+	action		nex_xp_prev
+}	
+// map name
+{
+	type		ITEM_TEXT
+	name		multiplayer_map_name
+	parent		multiplayer_map
+	pos		"27 0"
+	clip_pos	"27 0"
+	size		"216 11"
+	clip_size	"216 11"
+	font_size	"11 11"
+	text		"Test"
+	alignment	1 // ALIGN_CENTER
+}
+// >>
+{
+	type		ITEM_TEXTBUTTON
+	name		multiplayer_map_next
+	parent		multiplayer_map
+	pos		"248 0"
+	size		"22 11"
+	text 		">>"
+	action		nex_xp_next
+}
+// map picture
+{
+	type 		ITEM_PICTURE
+	name		multiplayer_map_picture
+	parent		multiplayer_map
+	pos		"0 11"
+	size		"270 232"
+	picture		"gfx/m_top_singleplayer"
+}	
+// info box
+{
+	type		ITEM_CUSTOM
+	name		multiplayer_map_info
+	parent		multiplayer_map
+	clip_pos	"0 243"
+	clip_size	"270 232"
+	pos		"0 243"
+	size		"270 232"
+	flag		4 // no select
+	drawflag	0
+	color		"1 1 1"
+	alpha		1
+	font_size	"9 9"
+	draw 		nex_draw_text
+}
+// multiplayer options frame
+{
+	type		ITEM_WINDOW
+	name		multiplayer_opt
+	parent		multiplayer
+	clip_pos	"0 0 0"
+	clip_size	"350 475"
+}
+
+
 // multiplayer server list
 {
 	type 	ITEM_WINDOW

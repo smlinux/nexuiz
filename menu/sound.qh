@@ -14,7 +14,7 @@ const string SOUND_SELECT			= "misc/menu1.wav";
 const string SOUND_INCREASE			= "misc/increasevalue.wav";
 const string SOUND_DECREASE		 	= "misc/decreasevalue.wav";
 const string SOUND_ACTION			= "misc/mouseclick.wav";
-const string SOUND_STARTGAME		= "misc/startgame.wav";
+const string SOUND_STARTGAME			= "misc/startgame.wav";
 const string SOUND_ENDGAME			= "misc/endgame.wav";
 
 //  prototypes

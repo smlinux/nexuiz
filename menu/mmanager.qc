@@ -881,7 +881,13 @@ void(entity menu, float setactive) menu_jumptowindow =
 
 entity(string item_name) menu_getitem =
 {
-	return findstring(null_entity,  name, item_name);
+	entity item;
+	
+	item = findstring(null_entity,  name, item_name);
+	if( item == null_entity ) 
+		error( "Couldn't find item '", item_name, "'!" );
+	
+	return item;
 };
 
 void(entity ent) menu_removeitem =

@@ -68,3 +68,5 @@ void(void) menu_resetcliparea;
 
 vector(string pic_name) gfx_getimagesize;
 
+void(vector position, vector size, float width, vector rgb, float alpha, float flag)
+menu_drawoutline;
