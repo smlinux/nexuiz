@@ -227,14 +227,24 @@ When you press the jump key
 */
 void PlayerJump (void)
 {
-	if (!(self.flags & FL_JUMPRELEASED))
-		return;
-	if (!(self.flags & FL_ONGROUND))
+	if (self.waterlevel >= 2)
 	{
-		// jumpjet test
-		//self.velocity_z = self.velocity_z + frametime * 1500;
+		if (self.watertype == CONTENT_WATER)
+			self.velocity_z = 200;
+		else if (self.watertype == CONTENT_SLIME)
+			self.velocity_z = 80;
+		else
+			self.velocity_z = 50;
+
 		return;
 	}
+
+
+	if (!(self.flags & FL_ONGROUND))
+		return;
+
+	if (!(self.flags & FL_JUMPRELEASED))
+		return;
 
 	if (self.items & IT_SPEED)
 		self.velocity_z = self.velocity_z + POWERUP_SPEED_JUMPVELOCITY;
@@ -244,6 +254,100 @@ void PlayerJump (void)
 	self.flags = self.flags - FL_ONGROUND;
 	self.flags = self.flags - FL_JUMPRELEASED;
 }
+
+void() WaterMove =
+{
+	if (self.movetype == MOVETYPE_NOCLIP)
+		return;
+	if (self.health < 0)
+		return;
+
+	if (self.waterlevel != 3)
+	{
+		self.air_finished = time + 12;
+		self.dmg = 2;
+	}
+	else if (self.air_finished < time)
+	{	// drown!
+		if (self.pain_finished < time)
+		{
+			Damage (self, world, world, 5, DEATH_DROWN, '0 0 0', '0 0 0');
+			self.pain_finished = time + 0.5;
+		}
+	}
+	
+	if (!self.waterlevel)
+	{
+		if (self.flags & FL_INWATER)
+		{	
+			// play leave water sound
+			sound (self, CHAN_BODY, "misc/outwater.wav", 1, ATTN_NORM);
+			self.flags = self.flags - FL_INWATER;
+		}
+		return;
+	}
+
+	if (self.watertype == CONTENT_LAVA)
+	{	// do damage
+		if (self.dmgtime < time)
+		{
+			self.dmgtime = time + 0.2;
+			Damage (self, world, world, 5, DEATH_LAVA, '0 0 0', '0 0 0');
+		}
+	}
+	else if (self.watertype == CONTENT_SLIME)
+	{	// do damage
+		if (self.dmgtime < time)
+		{
+			self.dmgtime = time + 1;
+			Damage (self, world, world, 5, DEATH_SLIME, '0 0 0', '0 0 0');
+		}
+	}
+	
+	if ( !(self.flags & FL_INWATER) )
+	{	
+
+		//if (self.watertype == CONTENT_LAVA)
+		//	sound (self, CHAN_BODY, "player/inlava.wav", 1, ATTN_NORM);
+		//if (self.watertype == CONTENT_WATER)
+		//	sound (self, CHAN_BODY, "player/inh2o.wav", 1, ATTN_NORM);
+		//if (self.watertype == CONTENT_SLIME)
+		//	sound (self, CHAN_BODY, "player/slimbrn2.wav", 1, ATTN_NORM);
+
+		self.flags = self.flags + FL_INWATER;
+		self.dmgtime = 0;
+	}
+};
+
+void() CheckWaterJump =
+{
+	local vector start, end;
+
+// check for a jump-out-of-water
+	makevectors (self.angles);
+	start = self.origin;
+	start_z = start_z + 8; 
+	v_forward_z = 0;
+	normalize(v_forward);
+	end = start + v_forward*24;
+	traceline (start, end, TRUE, self);
+	if (trace_fraction < 1)
+	{	// solid at waist
+		start_z = start_z + self.maxs_z - 8;
+		end = start + v_forward*24;
+		self.movedir = trace_plane_normal * -50;
+		traceline (start, end, TRUE, self);
+		if (trace_fraction == 1)
+		{	// open at eye level
+			self.flags = self.flags | FL_WATERJUMP;
+			self.velocity_z = 225;
+			self.flags = self.flags - (self.flags & FL_JUMPRELEASED);
+			self.teleport_time = time + 2;	// safety net
+			return;
+		}
+	}
+};
+
 
 void respawn(void)
 {
@@ -405,6 +509,10 @@ void PlayerPreThink (void)
 	player_anim();
 
 	self.angles_y=self.v_angle_y + 90;   // temp
+
+	WaterMove ();
+	if (self.waterlevel == 2)
+		CheckWaterJump ();
 
 	//if (TetrisPreFrame()) return;
 }

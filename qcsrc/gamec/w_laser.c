@@ -100,8 +100,8 @@ void W_Laser_Attack (void)
 
 void W_Laser_Attack2 (void)
 {
-	makevectors(self.v_angle);
-	self.velocity = self.velocity - v_forward * 900;
+	//makevectors(self.v_angle);
+	//self.velocity = self.velocity - v_forward * 900;
 	/*
 	weapon_shotdir(18, 5, -12);
 	// self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);

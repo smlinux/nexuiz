@@ -28,7 +28,7 @@ void CreateDummy (vector org, float type)
 	self.classname = "corpse";
 	self.takedamage = DAMAGE_YES;
 	self.damageforcescale = oldself.damageforcescale;
-	self.health = 100;
+	self.health = 300;
 	self.weapon = IT_LASER;
 	setsize (self, oldself.mins, oldself.maxs);
 	setorigin (self, org);

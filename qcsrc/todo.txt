@@ -1,51 +1,28 @@
 *********************************
 *************QC******************
 
--ANIMATION/PLAYER-
-	- Jumping animation
-	- Taunting animation
-	- Use of player_skin
+1. Player skin selection based on .playerskin cvar string
+2. Known bug: User not dying when falling into the black
+3. Add weapons/electro_fly and Add weapons/missile_fly (for rocket and hagar)
+4. Don't show monsters/secrets on the bottom of the scoreboard
+5. Different text colors depending on the info (white for chatting, red for deaths)
+6. Graphic over the user to show they are typing a message/in the console/in the menu
+7. Show what item you've picked up on the top right of the screen (one graphic for health, armor, bullets, shells, cells, rockets)
+8. Change explosion for hagar, grenade, rocket. Each more powerful in that order
+9. Smoke effect for use in levels
+10. Spark effect for use in levels
+11. Maps.cfg support for maplists, and editing of this in the menu
+12. Create game 'game options' menu
+13. Option for lan searching in the join game menu
+14. Add 'GAME' options menu, with: Sbar alpha, Jpeg Screenshots, Show Framerate
+15. Add more options to 'Player' menu: Crosshair selection, FOV, Team color (choose one of 3, red, blue, green)
+16. Add 'Input' options menu, with: Invert Mouse (negate m_pitch), Mouse Speed 
 
--BUGS/OTHER-
-	- Jumping underwater should move the player up
-	- Add drowning (quake1 style)
-	- Slime should cause damage
-	- User not dying when falling into the black
-
--BOTS-
-	- Make waypoints for all levels
-	- Personalitys for the bots (names for bots with certain models)
-	- fix HORRIBLE use of weapons
-	- Secondary weapon support
-
--SOUNDS-
-	- Add a sound when hitting with uzi/shotgun, hit.wav. Use armorimpact if the enemy has armor
-	- Add electro_fly (for secondary fire)
-	- Add missile_fly (for rocket and hagar)
-
-
-*********************************
-************Engine***************
-
--2D GRAPHICS-
-	- Don't show monsters/secrets on the bottom of the scoreboard
-	- Different text colors depending on the info (white for chatting, red for deaths)
-	- Different text sizes depending on the info (deaths are slighly larger)
-	- Graphic over the user to show they are typing a message/in the console/in the menu
-
--PARTICLE EFFECTS-
-	- Small Explosion (used for hagar) (see Explosion.jpg for example of the type of explosion wanted, this should be altered for the various sizes)
-	- Medium Explosion (used for mortar)
-	- Large Explosion (used for rocket)
-	- basic spark effect for levels
-	- Smoke effect for levels
-	- Tracers for Machine gun
 
 
 *********************************
 ************ Art ****************
 -Textures-
-	- Slime textures for Slime Pit
 	- Water texture for oil rig
 	- Lava texture
 
@@ -59,58 +36,6 @@
 -ANIMATION-
 	- Adding 'flying' directions for the models (they feet should sway whatever way they are going in the air)
 
--MODELS-
-	- Electro secondary explosion animation
-	- 3 Gib models
-		- Large piece of flesh
-		- Medium piece of flesh
-		- Very small piece of flesh to create more blood and fade quickly
-
-
-*********************************
-************Menu ****************
-disconnect button
-
--Create Game-
-	-map lists
-	-create server 'Game Options' menu
-		- Select of game's .dat to use
-		- Sv_gravity, sv_accer, sv_friction, sv_maxspeed options
-
--Join Game-
-	- Lan listing
-	- Scrolling through the server list (it might show hundreds)
-
--Options-
-	-GAME-
-		- Sbar alpha (slider, change both bg and fg)
-		- Jpeg Screenshots
-		- Text Shadow
-		- Show Framerate
-		- Show Time`
-		- Show Date
-	-PLAYER-
-		- Crosshair
-		- FOV (slider)
-		- Team color (choose one of 3, red, blue, green)
-	-INPUT-
-		- Invert Mouse (negate m_pitch)
-		- Mouse Speed 
-	-EFFECTS-
-		- Three main settings, high quality, medium quality, and low quality (name the cfg files whatever and i'll place them in later)
-		Sliders:
-		- Bloom (r_bloom_intensity) (only if bloom is on)
-		- Gloss (r_shadow_gloss (1.0-2.0) (only if realtime lights are on)
-		- Bumpmap scale (r_shadow_bumpscale_basetexture 1-10) (only if realtime lights are on)
-		- Blood Opacity
-		- Particles Quality
-
-		-Decals
-		-Blood
-		-Bloom (r_bloom)
-		-Coronas (r_coronas)
-		-Realtime lights (r_shadow_realtime_world AND r_shadow_realtime_dlight)
-		-Realtime Shadows (r_shadow_realtime_world_shadows 0) (only if realtime lights are on)
 
 *********************************
 ************GAMECFG *************

@@ -80,6 +80,9 @@ entity dest;
 .float railgunhitsolidbackup;
 .vector railgunhitloc;
 
+.float		air_finished;
+.float		dmgtime;
+
 // definistions for weaponsystem
 
 .entity weaponentity;

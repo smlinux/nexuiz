@@ -521,9 +521,10 @@ void fireBullet (vector start, vector dir, float spread, float damage, float dty
 		e.nextthink = time + vlen(trace_endpos - start) / 6000;
 		e.velocity = dir * 6000;
 		e.angles = vectoangles(e.velocity);
-		setmodel (e, "models/elaser.mdl");
+		setmodel (e, "models/tracer.mdl");
 		setsize (e, '0 0 0', '0 0 0');
 		setorigin (e, start);
+		e.effects = e.effects | EF_ADDITIVE;
 	}
 
 	// FIXME - causes excessive 'tinking'. Hopefully remove "tink1.wav" from the ricochets with csqc
@@ -542,7 +543,7 @@ void fireBullet (vector start, vector dir, float spread, float damage, float dty
 				sound (self, CHAN_IMPACT, "weapons/ric3.wav", 1, ATTN_NORM);
 		}
 		else if (trace_ent.classname == "player" || trace_ent.classname == "corpse" || trace_ent.classname == "gib")
-			sound (trace_ent, CHAN_IMPACT, "misc/enemyimpact.wav", 1, ATTN_NORM);
+			sound (trace_ent, CHAN_BODY, "misc/hit.wav", 1, ATTN_NORM);
 		Damage (trace_ent, self, self, damage, dtype, trace_endpos, dir * damage * 5);
 	}
 }

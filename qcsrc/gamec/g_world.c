@@ -19,9 +19,9 @@ void worldspawn (void)
 	precache_model ("models/player/fshock.zym");
 	//precache_model ("models/player/grunt.zym");
 	//precache_model ("models/player/pyria.zym");
-	//precache_model ("models/player/lurk.zym");
+	precache_model ("models/player/lurk.zym");
 	precache_model ("models/player/visitant.zym");
-	//precache_model ("models/player/headhunter.zym");
+	precache_model ("models/player/headhunter.zym");
 	//precache_model ("models/player/jeandarc.zym");
 	precache_model ("models/player/robot.zym");
 	//precache_model ("models/player/lycanthrope.zym");
@@ -57,6 +57,7 @@ void worldspawn (void)
 	precache_model ("models/elaser.mdl");
 	precache_model ("models/ebomb.mdl");
 	precache_model ("models/plasma.mdl");
+	precache_model ("models/tracer.mdl");
 	
 	precache_model ("models/items/g_h1.md3");
 	precache_model ("models/items/g_h25.md3");
@@ -87,8 +88,8 @@ void worldspawn (void)
 	
 	precache_model ("models/gibs/eye.md3");
 	precache_model ("models/gibs/gib1.md3");
-	precache_model ("models/gibs/gib2.mdl");
-	precache_model ("models/gibs/gib3.mdl");
+	precache_model ("models/gibs/gib2.md3");
+	precache_model ("models/gibs/gib3.md3");
 	precache_model ("models/gibs/gib4.mdl");
 	precache_model ("models/gibs/bloodyskull.md3");
 
@@ -102,6 +103,8 @@ void worldspawn (void)
 	precache_sound ("weapons/nexfire.wav");
 	precache_sound ("weapons/neximpact.wav");
 	precache_sound ("weapons/electro_fire.wav");
+	precache_sound ("weapons/electro_fly.wav");
+	precache_sound ("weapons/missile_fly.wav");
 	precache_sound ("weapons/rocket_fire.wav");
 	precache_sound ("weapons/rocket_impact.wav");
 	precache_sound ("weapons/hagar_fire.wav");
@@ -123,7 +126,8 @@ void worldspawn (void)
 	precache_sound ("misc/itempickup.wav");
 	precache_sound ("misc/bodyimpact1.wav");
 	precache_sound ("misc/bodyimpact2.wav");
-	precache_sound ("misc/enemyimpact.wav");
+	precache_sound ("misc/armorimpact.wav");
+	precache_sound ("misc/hit.wav");
 	precache_sound ("misc/teleport.wav");
 	precache_sound ("misc/megahealth.wav");
 	precache_sound ("misc/mediumhealth.wav");
@@ -133,7 +137,11 @@ void worldspawn (void)
 	precache_sound ("misc/hitground2.wav");
 	precache_sound ("misc/hitground3.wav");
 	precache_sound ("misc/hitground4.wav");
-	precache_sound ("misc/talk.wav");  // temp
+	precache_sound ("misc/talk.wav");
+	precache_sound ("misc/gib_splat01.wav");
+	precache_sound ("misc/gib_splat02.wav");
+	precache_sound ("misc/gib_splat03.wav");
+	precache_sound ("misc/gib_splat04.wav");
 
 	precache_sound ("misc/itemrespawn.wav");
 

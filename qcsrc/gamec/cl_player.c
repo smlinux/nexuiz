@@ -155,15 +155,24 @@ void PlayerCorpseDamage (entity inflictor, entity attacker, float damage, float 
 		self.die_frame = 0;
 		// view just above the floor
 		self.view_ofs = '0 0 4';
+
 		// make a juicy mess
-		te_bloodshower (self.origin + self.mins, self.origin + self.maxs, 500, 2000);
+		te_bloodshower (self.origin + self.mins, self.origin + self.maxs, 800, 1000);
+		te_bloodshower (self.origin + self.mins, self.origin + self.maxs, 400, 1000);
+
 		// make a meaty mess
 		TossGib (world, "models/gibs/gib1.md3", self.origin, self.velocity);
-		TossGib (world, "models/gibs/gib2.mdl", self.origin, self.velocity);
-		TossGib (world, "models/gibs/gib3.mdl", self.origin, self.velocity);
-		TossGib (world, "models/gibs/gib4.mdl", self.origin, self.velocity);
-		TossGib (world, "models/gibs/bloodyskull.md3", self.origin, self.velocity);
+		TossGib (world, "models/gibs/gib2.md3", self.origin, self.velocity);
+		TossGib (world, "models/gibs/gib3.md3", self.origin, self.velocity);
 		TossGib (self, "models/gibs/eye.md3", self.origin, self.velocity);
+
+		TossGib (world, "models/gibs/gib4.mdl", self.origin, '500 0 450');
+		TossGib (world, "models/gibs/gib4.mdl", self.origin, '-500 0 450');
+		TossGib (world, "models/gibs/gib4.mdl", self.origin, '0 500 450');
+		TossGib (world, "models/gibs/gib4.mdl", self.origin, '0 -500 450');
+
+		TossGib (world, "models/gibs/bloodyskull.md3", self.origin, '0 0 600');
+
 		sound (trace_ent, CHAN_VOICE, "misc/gib.wav", 1, ATTN_NORM);
 	}
 }
@@ -188,6 +197,19 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 	save = bound(0, damage * 0.6, self.armorvalue);
 	take = bound(0, damage - save, damage);
 	self.armorvalue = self.armorvalue - save;
+
+	if (save > 10)
+		sound (self, CHAN_BODY, "misc/armorimpact.wav", 1, ATTN_NORM);
+	if (take > 10)
+		sound (self, CHAN_BODY, "misc/bodyimpact1.wav", 1, ATTN_NORM);
+	if (take > 30)
+		sound (self, CHAN_BODY, "misc/bodyimpact2.wav", 1, ATTN_NORM);
+
+	if (take > 50)
+		TossGib (world, "models/gibs/gib4.mdl", hitloc, force * -0.1);
+	if (take > 100)
+		TossGib (world, "models/gibs/gib4.mdl", hitloc, force * -0.1);
+
 	self.health = self.health - take;
 	self.dmg_save = self.dmg_save + save * 0.25;
 	self.dmg_take = self.dmg_take + take * 0.25;
