@@ -581,7 +581,7 @@ void W_Grenade_Explode (entity ignore)
 {
 	ImpactEffect (self, IT_GRENADE_LAUNCHER);
 
-	RadiusDamage (self, self.owner, 100, 50, 200, world, 400, IT_GRENADE_LAUNCHER);
+	RadiusDamage (self, self.owner, 65, 35, 140, world, 400, IT_GRENADE_LAUNCHER);
 
 	remove (self);
 }
@@ -645,7 +645,7 @@ void W_Grenade_Attack2 (void)
 	proj = findradius (self.origin, 50000);
 	while (proj)
 	{
-		if (proj.classname == "grenade")
+		if (proj.classname == "grenade" && proj.owner == self)
 		{
 			proj.nextthink = time;
 		}
@@ -667,7 +667,6 @@ void W_Electro_Touch (void)
 	WriteCoord (MSG_BROADCAST, 0);
 	WriteCoord (MSG_BROADCAST, 0);
 	WriteByte (MSG_BROADCAST, 155);
-
 	RadiusDamage (self, self.owner, 50, 10, 70, world, 50, IT_ELECTRO);
 	remove (self);
 }
@@ -682,10 +681,10 @@ void W_Electro_Attack (float postion)
 	proj.owner = self;
 	proj.classname = "spike";
 
-	proj.movetype = MOVETYPE_FLY;
+	proj.movetype = MOVETYPE_FLY; 
 	proj.solid = SOLID_BBOX;
 	proj.effects = 1;
-
+	
 	makevectors (self.v_angle);
 
 	setmodel (proj, "models/bullet.mdl");
@@ -700,7 +699,7 @@ void W_Electro_Attack (float postion)
 	proj.velocity = v_forward * 2500;
 	proj.touch = W_Electro_Touch;
 	proj.think = SUB_Remove;
-	proj.nextthink = time + 3;
+	proj.nextthink = time + 9;
 
 	self.attack_finished = time + 0.4;
 	self.ammo_cells = self.ammo_cells - 1;
@@ -761,7 +760,8 @@ void W_Electro_Attack2 (void)
 	setsize (Plasma, '-6 -6 -3', '6 6 3');
 
 	makevectors (self.v_angle);
-	setorigin (Plasma, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);
+
+	setorigin (Plasma, self.origin + self.view_ofs + v_forward * 18 + v_right * 3 + v_up * -14);
 
 	Plasma.velocity = v_forward * 900 + v_up * 200;
 	Plasma.angles = vectoangles (Plasma.velocity);
@@ -773,6 +773,7 @@ void W_Electro_Attack2 (void)
 
 	self.attack_finished = time + 1;
 	self.ammo_cells = self.ammo_cells - 2;
+
 }
 
 void W_Crylink_Attack (void)
@@ -983,6 +984,11 @@ void W_Rocket_Explode (entity ignore)
 	remove (self);
 }
 
+void W_Rocket_Think (void)
+{
+	W_Rocket_Explode (world);
+}
+
 void W_Rocket_Touch (void)
 {
 	if (other == self.owner)
@@ -1026,71 +1032,28 @@ void W_Rocket_Attack (void)
 	missile.angles = vectoangles (missile.velocity);
 
 	missile.touch = W_Rocket_Touch ;
-	missile.think = SUB_Remove;
-	missile.nextthink = time + 3;
+	missile.think = W_Rocket_Think;
+	missile.nextthink = time + 9;
 
 	self.attack_finished = time + 1.5;
 	self.ammo_rockets = self.ammo_rockets - 1;
 
 }
 
-void W_Rocket2_Explode (entity ignore)
-{
-	ImpactEffect (self, IT_ROCKET_LAUNCHER);
-
-	RadiusDamage (self.owner, self, 35, 15, 200, ignore, 400, IT_ROCKET_LAUNCHER);
-
-	remove (self);
-}
-
-void W_Rocket2_Touch (void)
-{
-	if (other == self.owner)
-		return;
-	else if (pointcontents (self.origin) == CONTENT_SKY)
-	{
-		remove (self);
-		return;
-	}
-	else
-		W_Rocket2_Explode (world);
-}
-
 void W_Rocket_Attack2 (void)
 {
-	entity	missile;
-	vector	org;
+	entity	proj;
+	proj = findradius (self.origin, 50000);
+	while (proj)
+	{
+		if (proj.classname == "missile" && proj.owner == self)
+		{
+			proj.nextthink = time;
+		}
+		proj = proj.chain;
+	}
 
-	//sound (self, CHAN_WEAPON, "weapons/rocket_fire.wav", 1, ATTN_NORM);
-
-	missile = spawn ();
-	missile.owner = self;
-	missile.classname = "missile";
-
-	missile.takedamage = DAMAGE_YES;
-	missile.damageforcescale = 4;
-	missile.health = 1;
-	missile.event_hurt = W_Rocket2_Explode;
-
-	missile.movetype = MOVETYPE_FLY;
-	missile.solid = SOLID_BBOX;
-	setmodel (missile, "models/rocketmissile.mdl");
-	setsize (missile, '0 0 0', '0 0 0');
-
-	makevectors (self.v_angle);
-
-	org = self.origin + self.view_ofs + v_forward * 20 + v_right * 4 + v_up * -15;
-
-	setorigin (missile, org);
-	missile.velocity = v_forward * 900;
-	missile.angles = vectoangles (missile.velocity);
-
-	missile.touch = W_Rocket2_Touch;
-	missile.think = SUB_Remove;
-	missile.nextthink = time + 1;
-
-	self.attack_finished = time + 1;
-	self.ammo_rockets = self.ammo_rockets - 1;
+	self.attack_finished = time;
 }
 
 void W_Attack (void)
@@ -1154,8 +1117,8 @@ void W_SecondaryAttack (void)
 		W_Shotgun_Attack2 ();
 	else if (self.weapon == IT_GRENADE_LAUNCHER)
 		W_Grenade_Attack2 ();
-	else if (self.weapon == IT_ELECTRO)
-		W_Electro_Attack2 ();
+	else if (self.weapon == IT_ELECTRO) 
+		W_Electro_Attack2 (); 
 	else if (self.weapon == IT_CRYLINK)
 		W_Crylink_Attack2 ();
 	else if (self.weapon == IT_NEX)

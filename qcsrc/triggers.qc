@@ -25,3 +25,6 @@ void() trigger_hurt =
 	if (!self.dmg)
 		self.dmg = 500;
 };
+
+void() target_speaker_use = {sound(self, CHAN_VOICE, self.noise, 1, 1);}
+void() target_speaker = {self.use = target_speaker_use;}

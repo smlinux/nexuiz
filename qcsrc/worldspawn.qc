@@ -6,16 +6,15 @@ void worldspawn (void)
 	BotInit();
 	precache_model ("models/player/player.zym");
 	precache_model ("models/player/dummy.zym");
-	
-	precache_model ("models/weapons/w_laser.md3");
-	precache_model ("models/weapons/w_uzi.md3");
-	precache_model ("models/weapons/w_shotgun.md3");
-	precache_model ("models/weapons/w_gl.md3");
-	precache_model ("models/weapons/w_electro.md3");
-	precache_model ("models/weapons/w_crylink.md3");
-	precache_model ("models/weapons/w_nex.md3");
-	precache_model ("models/weapons/w_hagar.md3");
-	precache_model ("models/weapons/w_rl.md3");
+
+	precache_model ("models/weapons/g_uzi.md3");
+	precache_model ("models/weapons/g_shotgun.md3");
+	precache_model ("models/weapons/g_gl.md3");
+	precache_model ("models/weapons/g_electro.md3");
+	precache_model ("models/weapons/g_crylink.md3");
+	precache_model ("models/weapons/g_nex.md3");
+	precache_model ("models/weapons/g_hagar.md3");
+	precache_model ("models/weapons/g_rl.md3");
 	
 	precache_model ("models/sprites/plasmahitwall.spr32");
 	precache_model ("models/sprites/muzzleflash.spr32");
@@ -106,6 +105,13 @@ void worldspawn (void)
 	precache_sound ("4.wav");
 	precache_sound ("5.wav");
 	precache_sound ("6.wav");
+
+	// plays music for the level if there is any
+	if (self.noise)
+	{
+        	precache_sound (self.noise);
+        	ambientsound ('0 0 0', self.noise, 1.00, ATTN_NONE);
+	}
 
 }
 

@@ -1,18 +1,16 @@
 GAMEPLAY AND DESIGN------
-- Crylink -
 - Adventure mode?
 - Finish complete song list
 
 
 MENU----
-- Server listing
 - Lan listing
 - Player model and skin selection
 - Player options (player name)
-- Music selection (possible to search music folder for ogg files?)
 - Replace Cursor graphics
 - Add menu music
 - Add deathmatch game options
+- Option to play music
 
 
 DEATHMATCH GAME OPTIONS----
@@ -22,8 +20,8 @@ DEATHMATCH GAME OPTIONS----
 - Slowmo - Game is 1/2 the speed
 - Speedy - Game is 1.5X the speed
 - Grappling hook - Option to include the grappling hook in the game
-- No powerups - Option for no powerups
-- No Strength - Option for earning the strength powerup
+- Include powerups -
+- Strength Gain - Option for players to gain the strength powerup based on amount of kills in a certian time.
 
 
 POWERUPS----
@@ -39,23 +37,32 @@ QC----
 -Add crouching
 -Add animations (crouching (when crouch is added, this includes: duck duckwalk duckidle) , Add taunt, Add dying animations)
 -Add weapon animations
--When dead, leave corpse. Fade away corpse in 10 seconds
--Target_speaker
--Teleporters
+-When dead, and not gibbed, leave corpse. Fade away corpse in 10 seconds
+-fix Teleporters
 -Spawning inside ground?
 -Electro secondary fire will be an explosion (using the DP fireball effect, with a blue skin) that will make everyone touched by it take 2x the damage normally taken for 0.4 seconds
--Shotgun secondary fire should shoot 3 auto shots
+-crylink: lightning gun which can also slow enemies : continuous lightning beam, shots 1, speed instant, damage 20, radius 15, refire 0.1, 1 cell : fires special 'stun pulse' plasma bolt, speed 2000, damage 5, radius 100, refire 0.5, 10 cells, slows affected enemies to half speed for up to 1 second (based on proximity)
+-shotgun - secondary fire - auto 3 shots fired
 
 Effects---
-- Laser, fire, and explode (no trail)
-- Nex (white trail)
+- Laser, fire, and use the current explode effect
+- Nex (white trail, make the hit effect white also)
 - Electro secondary explosion (DP fireball effect, with blue skin)
 
-
 MAPS---
-- nexdm10 lift needs to be replaced with a jumppad, more jumppads for faster map navigation
+- nexdm01 needs to be a tiny bit faster (overall is good, but certain places are extremely slow)
+- nexdm03 needs to be a lot faster, overall
+- nexdm04, main room is to slow
+- nexdm05, sky needs to be added. Slow overall
+- nexdm06, replace crylink with nex gun
 - nexdm07, has stairs you can't walk on (you need to jump on it)
-- nexdm6, replace crylink with nex gun
+- nexdm09, needs sky
+- nexdm10 lift needs to be replaced with a jumppad, more jumppads for faster map navigation
+- nexdm12, I am not sure about including this in Nexuiz.
+- nexdm15, add nexuiz weapon entities
+- nexdm16, not sure about including this one
+- nexdmbeta1, to dark
+- nexdmbeta2, not sure if it fits the nexuiz style
 
 
 AUDIO---
@@ -64,6 +71,7 @@ AUDIO---
 
 2D GRAPHICS------
 - Change hud numbers to fit hud
+- Add the alpha channel to the min hud
 - Make nexuiz icon
 - Next/Prev button
 - New menu cursor
@@ -84,4 +92,4 @@ AUDIO---
 BOTS----
 - Make waypoints for all levels
 - Animations for the bots
-- Personalitys for the bots (names for bots with certain models or skins)
+- Personalitys for the bots (names for bots with certain models)

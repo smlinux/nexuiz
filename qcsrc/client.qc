@@ -74,7 +74,7 @@ void PutClientInServer (void)
 	self.solid = SOLID_SLIDEBOX;
 	self.flags = FL_CLIENT;
 	self.takedamage = DAMAGE_YES;
-	self.health = 125;
+	self.health = 150;
 	self.damageforcescale = 2;
 
 	self.ammo_shells = 100;
@@ -209,6 +209,8 @@ void PlayerPreThink (void)
 	{
 		if (self.weapon == IT_GRENADE_LAUNCHER)
 			W_SecondaryAttack ();
+		if (self.weapon == IT_ROCKET_LAUNCHER)
+			W_SecondaryAttack ();
 		if (self.attack_finished < time && self.button0 != 1)
 			W_SecondaryAttack ();
 	}
@@ -239,7 +241,15 @@ void PlayerPreThink (void)
 
 	if (self.statdraintime < time)
 	{
+		if (self.health < 50)
+			self.health = self.health + 1;
 		if (self.health > 100)
+			self.health = self.health - 1;
+		if (self.health > 150)
+			self.health = self.health - 1;
+		if (self.health > 200)
+			self.health = self.health - 1;
+		if (self.health > 250)
 			self.health = self.health - 1;
 		if (self.armorvalue > 100)
 			self.armorvalue = self.armorvalue - 1;
