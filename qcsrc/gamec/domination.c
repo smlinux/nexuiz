@@ -184,11 +184,11 @@ void(vector org) dom_spawnpoint =
 void() dom_spawnteams =
 {
 	// LordHavoc: edit this if you want to change defaults
-	dom_spawnteam("Red", 4, "progs/dom_red.md3", 0, "misc/domclaim.wav", "", "Red team has captured a control point");
-	dom_spawnteam("Blue", 13, "progs/dom_blue.md3", 0, "misc/domclaim.wav", "", "Blue team has captured a control point");
-	dom_spawnteam("Green", 3, "progs/dom_green.md3", 0, "misc/domclaim.wav", "", "Green team has captured a control point");
-	dom_spawnteam("Yellow", 12, "progs/dom_yellow.md3", 0, "misc/domclaim.wav", "", "Yellow team has captured a control point");
-	dom_spawnteam("", 0, "progs/dom_unclaimed.md3", 0, "", "", "");
+	dom_spawnteam("Red", 4, "models/domination/dom_red.md3", 0, "domination/claim.wav", "", "Red team has captured a control point");
+	dom_spawnteam("Blue", 13, "models/domination/dom_blue.md3", 0, "domination/claim.wav", "", "Blue team has captured a control point");
+	dom_spawnteam("Green", 3, "models/domination/dom_green.md3", 0, "domination/claim.wav", "", "Green team has captured a control point");
+	dom_spawnteam("Yellow", 12, "models/domination/dom_yellow.md3", 0, "domination/claim.wav", "", "Yellow team has captured a control point");
+	dom_spawnteam("", 0, "models/domination/dom_unclaimed.md3", 0, "", "", "");
 };
 
 void() dom_delayedinit =
@@ -226,10 +226,12 @@ void() dom_init =
 	// we have to precache default models/sounds even if they might not be
 	// used because worldspawn is executed before any other entities are read,
 	// so we don't even know yet if this map is set up for domination...
-	precache_model("progs/b_g_key.mdl");
-	precache_model("progs/b_s_key.mdl");
-	precache_model("progs/end1.mdl");
-	precache_sound("doors/runetry.wav");
+	precache_model("models/domination/dom_red.md3");
+	precache_model("models/domination/dom_blue.md3");
+	precache_model("models/domination/dom_green.md3");
+	precache_model("models/domination/dom_yellow.md3");
+	precache_model("models/domination/dom_unclaimed.md3");
+	precache_sound("domination/claim.wav");
 	e = spawn();
 	e.think = dom_delayedinit;
 	e.nextthink = time + 0.1;

@@ -42,7 +42,7 @@ void(entity e) RegenFlag =
 	e.movetype = MOVETYPE_TOSS;
 	e.solid = SOLID_TRIGGER;
 	// TODO: play a sound here
-	sound (e, CHAN_AUTO, "misc/flagrgen.wav", 1, ATTN_NONE);
+	sound (e, CHAN_AUTO, self.noise3, 1, ATTN_NONE);
 	setorigin(e, e.oldorigin);
 	e.angles = e.mangle;
 	e.cnt = FLAG_BASE;
@@ -220,7 +220,7 @@ void() FlagTouch =
 				head.frags = head.frags + FLAGSCORE_CAPTURE_TEAM;
 			head = find(head, classname, "player");
 		}
-		sound (self, CHAN_AUTO, "misc/flagcap.wav", 1, ATTN_NONE);
+		sound (self, CHAN_AUTO, self.noise2, 1, ATTN_NONE);
 		ReturnFlag(other.flagcarried);
 	}
 	if (self.cnt == FLAG_BASE)
@@ -240,7 +240,7 @@ void() FlagTouch =
 		else
 			bprint(other.netname, " got the BLUE flag\n");
 		other.frags = other.frags + FLAGSCORE_PICKUP;
-		sound (self, CHAN_AUTO, "misc/flagtk.wav", 1, ATTN_NONE);
+		sound (self, CHAN_AUTO, self.noise, 1, ATTN_NONE);
 		return;
 	}
 
@@ -258,7 +258,7 @@ void() FlagTouch =
 				other.frags = other.frags + FLAGSCORE_RETURN;
 			else
 				other.frags = other.frags + FLAGSCORE_RETURNROGUE;
-			sound (self, CHAN_AUTO, "misc/flagret.wav", 1, ATTN_NONE);
+			sound (self, CHAN_AUTO, self.noise1, 1, ATTN_NONE);
 			ReturnFlag(self);
 		}
 		else if (!other.flagcarried)
@@ -275,7 +275,7 @@ void() FlagTouch =
 			else
 				bprint(other.netname, " picked up the BLUE flag\n");
 			other.frags = other.frags + FLAGSCORE_PICKUP;
-			sound (self, CHAN_AUTO, "misc/flagtk.wav", 1, ATTN_NONE);
+			sound (self, CHAN_AUTO, self.noise, 1, ATTN_NONE);
 		}
 	}
 };
@@ -288,7 +288,7 @@ Keys:
 "angle"
  viewing angle when spawning
 */
-void() info_player_team1 = {};
+void() info_player_team1 = {};//self.team = 4;self.classname = "info_player_start";info_player_start();};
 
 /*QUAKED info_player_team2 (1 0 0) (-16 -16 -24) (16 16 24)
 CTF Starting point for a player in
@@ -298,7 +298,7 @@ Keys:
 "angle"
  viewing angle when spawning
 */
-void() info_player_team2 = {};
+void() info_player_team2 = {};//self.team = 13;self.classname = "info_player_start";info_player_start();};
 
 /*QUAKED item_flag_team1 (0 0.5 0.8) (-48 -48 -24) (48 48 64)
 CTF flag for team one (Red).
@@ -308,7 +308,21 @@ Keys:
 "angle"
  Angle the flag will point
 (minus 90 degrees)
-
+"model"
+ model to use, note this needs red and blue as skins 0 and 1
+ (default models/ctf/flag.md3)
+"noise"
+ sound played when flag is picked up
+ (default ctf/take.wav)
+"noise1"
+ sound played when flag is returned by a teammate
+ (default ctf/return.wav)
+"noise2"
+ sound played when flag is captured
+ (default ctf/capture.wav)
+"noise3"
+ sound played when flag is lost in the field and respawns itself
+ (default ctf/respawn.wav)
 */
 
 void() item_flag_team1 =
@@ -317,14 +331,23 @@ void() item_flag_team1 =
 		return;
 	self.team = 5; // color 4 team (red)
 	self.items = IT_KEY2; // gold key (redish enough)
-	precache_model ("progs/flag.mdl");
-	setmodel (self, "progs/flag.mdl");
 	self.skin = 0;
-	precache_sound ("misc/flagcap.wav");
-	precache_sound ("misc/flagtk.wav");
-	precache_sound ("doors/runetry.wav");
-	self.noise = "misc/flagtk.wav";
-	self.noise1 = "doors/runetry.wav";
+	if (!self.model)
+		self.model = "models/ctf/flag.md3";
+	if (!self.noise)
+		self.noise = "ctf/take.wav";
+	if (!self.noise1)
+		self.noise1 = "ctf/return.wav";
+	if (!self.noise2)
+		self.noise2 = "ctf/capture.wav";
+	if (!self.noise3)
+		self.noise3 = "ctf/respawn.wav";
+	precache_model (self.model);
+	setmodel (self, self.model);
+	precache_sound (self.noise);
+	precache_sound (self.noise1);
+	precache_sound (self.noise2);
+	precache_sound (self.noise3);
 	setsize(self, '-16 -16 0', '16 16 74');
 	self.nextthink = time + 0.2; // start after doors etc
 	self.think = place_flag;
@@ -347,14 +370,23 @@ void() item_flag_team2 =
 		return;
 	self.team = 14; // color 13 team (blue)
 	self.items = IT_KEY1; // silver key (bluish enough)
-	precache_model ("progs/flag.mdl");
-	setmodel (self, "progs/flag.mdl");
 	self.skin = 1;
-	precache_sound ("misc/flagcap.wav");
-	precache_sound ("misc/flagtk.wav");
-	precache_sound ("doors/runetry.wav");
-	self.noise = "misc/flagtk.wav";
-	self.noise1 = "doors/runetry.wav";
+	if (!self.model)
+		self.model = "models/ctf/flag.md3";
+	if (!self.noise)
+		self.noise = "ctf/take.wav";
+	if (!self.noise1)
+		self.noise1 = "ctf/return.wav";
+	if (!self.noise2)
+		self.noise2 = "ctf/capture.wav";
+	if (!self.noise3)
+		self.noise3 = "ctf/respawn.wav";
+	precache_model (self.model);
+	setmodel (self, self.model);
+	precache_sound (self.noise);
+	precache_sound (self.noise1);
+	precache_sound (self.noise2);
+	precache_sound (self.noise3);
 	setsize(self, '-16 -16 0', '16 16 74');
 	self.nextthink = time + 0.2; // start after doors etc
 	self.think = place_flag;
