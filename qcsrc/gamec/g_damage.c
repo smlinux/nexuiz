@@ -10,8 +10,29 @@ void Obituary (entity attacker, entity targ, float deathtype)
 		else
 			s = targ.netname;
 
-		// Kills
-		if (attacker.classname == "player")
+		if (targ == attacker)                 
+		{
+			if (deathtype == IT_GRENADE_LAUNCHER)
+				bprint ("@1",s, " detonated\n");
+			else if (deathtype == IT_ELECTRO)
+				bprint ("@1",s, " played with plasma\n");
+			else if (deathtype == IT_ROCKET_LAUNCHER)
+				bprint ("@1",s, " exploded\n");
+			else if (deathtype == DEATH_HURTTRIGGER)
+				bprint ("@1",s, " ", attacker.message, "\n");
+			else if (deathtype == DEATH_KILL)
+  	            bprint (s, " couldn't take it anymore\n");
+			else if (deathtype == DEATH_FALL)
+				bprint ("@1",s, " hit the ground with a crunch\n");
+			else if (deathtype == DEATH_BIGFALL)
+				bprint ("@1",s, " fell into oblivion\n");
+			else if (deathtype == DEATH_DROWN)
+				bprint ("@1",s, " drowned\n");
+			else
+				bprint ("@1",s, " died\n");
+			self.frags = self.frags - 1;
+		}
+		else if (attacker.classname == "player")
 		{
 			if (deathtype == IT_LASER)
 				bprint ("@1",s, " was blasted by ", attacker.netname, "\n");
@@ -35,28 +56,6 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				bprint ("@1",s, " was killed by ", attacker.netname, "\n");
 
 			attacker.frags = attacker.frags + 1;
-		}
-		// Suicides or level deaths
-		else
-		{
-			if (deathtype == IT_GRENADE_LAUNCHER)
-				bprint ("@1",s, " detonated\n");
-			else if (deathtype == IT_ELECTRO)
-				bprint ("@1",s, " played with plasma\n");
-			else if (deathtype == IT_ROCKET_LAUNCHER)
-				bprint ("@1",s, " exploded\n");
-			else if (deathtype == DEATH_HURTTRIGGER)
-				bprint ("@1",s, " ", attacker.message, "\n");
-			else if (deathtype == DEATH_FALL)
-				bprint ("@1",s, " hit the ground with a crunch\n");
-			else if (deathtype == DEATH_BIGFALL)
-				bprint ("@1",s, " fell into oblivion\n");
-			else if (deathtype == DEATH_DROWN)
-				bprint ("@1",s, " drowned\n");
-			else
-				bprint ("@1",s, " died\n");
-		
-			self.frags = self.frags - 1;
 		}
 	}
 }
