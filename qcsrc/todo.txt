@@ -1,6 +1,5 @@
 GAMEPLAY AND DESIGN------
 - Crylink -
-- Shotgun -
 - Adventure mode?
 - Finish complete song list
 
@@ -23,6 +22,8 @@ DEATHMATCH GAME OPTIONS----
 - Slowmo - Game is 1/2 the speed
 - Speedy - Game is 1.5X the speed
 - Grappling hook - Option to include the grappling hook in the game
+- No powerups - Option for no powerups
+- No Strength - Option for earning the strength powerup
 
 
 POWERUPS----
@@ -43,7 +44,7 @@ QC----
 -Teleporters
 -Spawning inside ground?
 -Electro secondary fire will be an explosion (using the DP fireball effect, with a blue skin) that will make everyone touched by it take 2x the damage normally taken for 0.4 seconds
-
+-Shotgun secondary fire should shoot 3 auto shots
 
 Effects---
 - Laser, fire, and explode (no trail)
@@ -83,4 +84,4 @@ AUDIO---
 BOTS----
 - Make waypoints for all levels
 - Animations for the bots
-- Personalitys for the bots (names for bots with certain models)
+- Personalitys for the bots (names for bots with certain models or skins)
