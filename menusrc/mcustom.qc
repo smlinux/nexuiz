@@ -341,7 +341,7 @@ void(void) nex_video_apply =
 	res_y = cvar("vid_height");
 	res_z = 0;
 
-	tmp = menu_getitem("video_wnd_resolution_switch");
+	tmp = menu_getitem("video_resolution_switch");
 	set = stov(getaltstring(tmp.value, nex_video_resolutions));
 	if(set != res)
 	{
@@ -350,14 +350,14 @@ void(void) nex_video_apply =
 		changed = true;
 	}
 	// bpp test
-	tmp = menu_getitem("video_wnd_bpp_switch");
+	tmp = menu_getitem("video_bpp_switch");
 	if((tmp.value+1)*16 != cvar("vid_bitsperpixel"))
 	{
 		cvar_set("vid_bitsperpixel",ftos((tmp.value+1)*16));
 		changed = true;
 	}
 	// fullscreen changed
-	tmp = menu_getitem("video_wnd_fullscreen_switch");
+	tmp = menu_getitem("video_fullscreen_switch");
 	if(tmp.value != cvar("vid_fullscreen"))
 	{
 		cvar_set("vid_fullscreen",ftos(tmp.value));
