@@ -1,8 +1,2 @@
-- The server selection in the 'join game' menu should still be inside the nexuiz menu
-- Replace the next/prev with arrow graphics
-- Make it so when the user selects a map from the map selection, a enlarged picture of that map is shown in the center of the screen (use the same picture you used for the table), and info (read from a txt file, alike to reading the picture) is then shown under the map picture. Do this for the multiplayer menu also.
-- Add "Player" options to the options menu. Which could show a selection screen alike to map selection, but this time load the pictures files from the "zym" files in the /models/player/ folder like you do with the bsp files. Once the picture is selected, show a larger version of the picture above the player selection table. And also, load a txt file from the same directory that shows info on the model for the user to see.
-- Add a "player name:" option to the player options menu.
-- Replace "Max Bots" with just "Bots"
-- Add the current game/effects options from the darkplaces menu to the nexuiz menu
-- Fix bug when resizing
+- Replace the next/prev with arrow graphics- Add "Player" options to the options menu. Which could show a selection screen alike to map selection, but this time load the pictures files from the "zym" files in the /models/player/ folder like you do with the bsp files. Once the picture is selected, show a larger version of the picture above the player selection table. And also, load a txt file from the same directory that shows info on the model for the user to see.- Add a "player name:" option to the player options menu.- Replace "Max Bots" with just "Bots"- Add the current game/effects options from the darkplaces menu to the nexuiz menu
+bug: the singleplayer menu's text boxes do not accept backspace
