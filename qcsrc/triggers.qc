@@ -9,7 +9,7 @@ void() hurt_touch =
 	if (other.takedamage)
 	{
 		self.solid = SOLID_NOT;
-		Damage (other, self, self, self.dmg, 1, v_forward, v_forward);
+		Damage (other, self, self, self.dmg, 1, '0 0 0', '0 0 0');
 		self.think = hurt_on;
 		self.nextthink = time + 1;
 	}

@@ -442,7 +442,7 @@ void W_Laser_Attack (void)
 	setorigin (missile, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);
 
 	makevectors (self.v_angle);
-	missile.velocity = v_forward * 900;
+	missile.velocity = v_forward * 2000;
 	missile.angles = vectoangles (missile.velocity);
 	missile.glow_color = 250; // 244, 250
 	missile.glow_size = 40;
@@ -455,23 +455,12 @@ void W_Laser_Attack (void)
 	self.punchangle_y = random () - 0.5;
 	self.punchangle_z = random () - 0.5;
 
-	self.attack_finished = time + 0.3;
+	self.attack_finished = time + 0.5;
 }
 
 void W_Laser_Attack2 (void)
 {
-	entity	proj;
-	proj = findradius (self.origin, 700);
-	while (proj)
-	{
-		if (proj.classname == "grenade" || proj.classname == "rocket")
-		{
-			proj.nextthink = time;
-		}
-		proj = proj.chain;
-	}
 
-	self.attack_finished = time;
 }
 
 void W_Uzi_Attack (void)
@@ -498,7 +487,7 @@ void W_Uzi_Attack2 (void)
 
 	sound (self, CHAN_WEAPON, "weapons/shotgun_fire.wav", 1, ATTN_NORM);
 
-	bullets = 4;
+	bullets = 5;
 	if (bullets > self.ammo_nails)
 		bullets = self.ammo_nails;
 
@@ -902,7 +891,7 @@ void W_Hagar_Attack2 (void)
 	missle.takedamage = DAMAGE_YES;
 	missle.damageforcescale = 4;
 	missle.health = 1;
-	missle.event_hurt = W_Grenade_Explode;
+	missle.event_hurt = W_Hagar_Explode;
 
 	setmodel (missle, "models/hagarmissile.mdl");
 	setsize (missle, '-6 -6 -3', '6 6 3');
@@ -911,7 +900,7 @@ void W_Hagar_Attack2 (void)
 	setorigin (missle, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);
 
 	missle.velocity = v_forward * 1400 + v_up * 100;
-	missle.angles = vectoangles (missle.velocity);
+	//missle.angles = vectoangles (missle.velocity);
 	missle.avelocity = '150 1500 150';
 
 	missle.touch = W_Hagar_Touch;

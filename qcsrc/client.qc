@@ -232,6 +232,8 @@ void PlayerPreThink (void)
 
 	if (self.weapon == IT_NEX && self.button3)
 		self.viewzoom = 0.3;
+	else if (self.weapon == IT_LASER && self.button3)
+		self.viewzoom = 0.6;
 	else if (self.viewzoom != 1)
 		self.viewzoom = 1;
 
