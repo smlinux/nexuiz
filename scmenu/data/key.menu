@@ -1,0 +1,90 @@
+// Property of Alientrap
+//
+// data/key.menu
+
+Item DataContainer Key
+{
+	Item Data_Nex_Key Forward
+	{
+		target	"+forward"
+	}
+	Item Data_Nex_Key Backward
+	{
+		target	"+back"
+	}
+	Item Data_Nex_Key StrafeLeft
+	{
+		target	"+moveleft"
+	}
+	Item Data_Nex_Key StrafeRight
+	{
+		target	"+moveright"
+	}
+	Item Data_Nex_Key Jump
+	{
+		target	"+jump"
+	}
+	Item Data_Nex_Key Crouch
+	{
+		target	"+shift"
+	}
+	Item Data_Nex_Key FirePrimary
+	{
+		target	"+attack"
+	}
+	Item Data_Nex_Key FireSecondary
+	{
+		target	"+button3"
+	}
+	Item Data_Nex_Key PrevWeapon
+	{
+		target	"impulse 12"
+	}
+	Item Data_Nex_Key NextWeapon
+	{
+		target	"impulse 10"
+	}
+	Item DataContainer Weapon
+	{
+		Item Data_Nex_Key Laser
+		{
+			target	"impulse 1"
+		}
+		Item Data_Nex_Key Uzi
+		{
+			target	"impulse 2"
+		}
+		Item Data_Nex_Key Shotgun
+		{
+			target	"impulse 3"
+		}
+		Item Data_Nex_Key Grenade
+		{
+			target	"impulse 4"
+		}
+		Item Data_Nex_Key Electro
+		{
+			target	"impulse 5"
+		}
+		Item Data_Nex_Key CryLink
+		{
+			target	"impulse 6"
+		}
+		Item Data_Nex_Key NexGun
+		{
+			target	"impulse 7"
+		}
+		Item Data_Nex_Key Hagar
+		{
+			target	"impulse 8"
+		}
+		Item Data_Nex_Key Rocket
+		{
+			target	"impulse 9"
+		}
+	}
+	Item Data_Nex_Key ShowScores
+	{
+		target	"+showscores"
+	}
+}

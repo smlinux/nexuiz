@@ -1,0 +1,19 @@
+// Property of Alientrap
+//
+// data/player.menu
+
+Item DataContainer Player
+{
+	Item Data_Nex_Name Name
+	{
+		defValue	"NexPlayer"
+		Item DataLink_Text Text
+		{
+			maxValue	32
+			link		"##up"
+		}
+	}
+	Item Data_Nex_Avatar Avatar
+	{
+	}
+}

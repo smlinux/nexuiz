@@ -16,10 +16,16 @@ Item Layout CreateGame
 		Derive TextButton BasicOptions
 		{
 			normal		" Basic Options "
+
+			init		Nex_Action_JumpToPage
+			target		"Panel::BasicOptions"
 		}
 		Derive TextButton MapList
 		{
 			normal		" Map List "
+
+			init		Nex_Action_JumpToPage
+			target		"Panel::MapList"
 		}
 		Derive TextButton Configurations
 		{
@@ -36,5 +42,6 @@ Item Layout CreateGame
 		reinit	Nex_Action_MakeFirstVisible
 
 		#include "menu/creategame/basic.menu"
+		#include "menu/creategame/maplist.menu"
 	}
 }

@@ -176,3 +176,29 @@ void() Item_DataUser_Init =
 	self._destroy = Item_DataUser_Destroy;
 };
 
+/*
+===================
+Item_DataContainer_DataEvent
+===================
+*/
+void( float pEvent ) Item_DataContainer_DataEvent =
+{
+	// no support for embedded stuff yet (isnt needed imho anyway)
+	local entity lItem;
+
+	for( lItem = self._child ; lItem != null_entity ; lItem = lItem._next ) {
+		Raise_DataEvent( lItem, pEvent );
+	}
+};
+
+/*
+===================
+Item_DataContainer_Spawn
+===================
+*/
+void() Item_DataContainer_Spawn =
+{
+	Item_Container_Spawn();
+
+	self._dataEvent = Item_DataContainer_DataEvent;
+};

@@ -1,239 +1,15 @@
 // Property of Alientrap
 //
 // Cvar Definitions
-Item Container Data
+Item DataContainer Data
 {
 #define DataLink_ZeroOneValue	Derive "::DataLink_ZeroOneValue" Value {}
 #define DataLink_OnOffSwitch	Derive "::DataLink_OnOffSwitch" Switch {}
-	// v_color prefix and other color controlling cvars
-	Item Container Color
-	{
-		// normal options
-		Item Data_Cvar Gamma
-		{
-			cvarName 	"v_gamma"
-			defValue 	1.0
-			Item DataLink_Value Value
-			{
-				minValue	0.0
-				maxValue	4.0
-				stepValue	0.05
-				link		"##up"
-			}
-		}
-		Item Data_Cvar Brightness
-		{
-			cvarName	"v_brightness"
-			defValue	0.0
-			Item DataLink_Value Value
-			{
-				minValue	0.0
-				maxValue	3.0
-				stepValue	0.05
-				link		"##up"
-			}
-		}
-		Item Data_Cvar Contrast
-		{
-			cvarName	"v_contrast"
-			defValue	1.0
-			Item DataLink_Value Value
-			{
-				minValue	0.0
-				maxValue	3.0
-				stepValue	0.05
-				link		"##up"
-			}
-		}
-		Item Data_Cvar HWGamma // read-only
-		{
-			cvarName	"v_hwgamma"
-			defValue	1.0
-			Derive DataLink_OnOffSwitch Switch
-			{
-				link		"##up"
-			}
-		}
-		// extended options
-		Item Container Extended
-		{
-			Item Data_Cvar Active
-			{
-				cvarName	"v_color_enable"
-				defValue	0.0
-				Derive DataLink_OnOffSwitch Switch
-				{
-					link		"##up"
-				}
-			}
-			Item Container Low
-			{
-				Item Data_Cvar Red
-				{
-					cvarName  	"v_color_black_r"
-					defValue 	0.0
-					[DataLink_ZeroOneValue]
-				}
-				Item Data_Cvar Green
-				{
-					cvarName  	"v_color_black_g"
-					defValue 	0.0
-					[DataLink_ZeroOneValue]
-				}
-				Item Data_Cvar Blue
-				{
-					cvarName  	"v_color_black_b"
-					defValue 	0.0
-					[DataLink_ZeroOneValue]
-				}
-			}
-			Item Container Mid
-			{
-				Item Data_Cvar Red
-				{
-					cvarName  	"v_color_grey_r"
-					defValue 	0.5
-					[DataLink_ZeroOneValue]
-				}
-				Item Data_Cvar Green
-				{
-					cvarName  	"v_color_grey_g"
-					defValue 	0.5
-					[DataLink_ZeroOneValue]
-				}
-				Item Data_Cvar Blue
-				{
-					cvarName  	"v_color_grey_b"
-					defValue 	0.5
-					[DataLink_ZeroOneValue]
-				}
-			}
-			Item Container High
-			{
-				Item Data_Cvar Red
-				{
-					cvarName  	"v_color_white_r"
-					defValue 	1.0
-					[DataLink_ZeroOneValue]
-				}
-				Item Data_Cvar Green
-				{
-					cvarName  	"v_color_white_g"
-					defValue 	1.0
-					[DataLink_ZeroOneValue]
-				}
-				Item Data_Cvar Blue
-				{
-					cvarName  	"v_color_white_b"
-					defValue 	1.0
-					[DataLink_ZeroOneValue]
-				}
-			}
-		}
-	}
-	Item Container Player
-	{
-		Item Data_Nex_Name Name
-		{
-			defValue	"NexPlayer"
-			Item DataLink_Text Text
-			{
-				maxValue	32
-				link		"##up"
-			}
-		}
-		Item Data_Nex_Avatar Avatar
-		{
-		}
-	}
-	Item Container Key
-	{
-		Item Data_Nex_Key Forward
-		{
-			target	"+forward"
-		}
-		Item Data_Nex_Key Backward
-		{
-			target	"+back"
-		}
-		Item Data_Nex_Key StrafeLeft
-		{
-			target	"+moveleft"
-		}
-		Item Data_Nex_Key StrafeRight
-		{
-			target	"+moveright"
-		}
-		Item Data_Nex_Key Jump
-		{
-			target	"+jump"
-		}
-		Item Data_Nex_Key Crouch
-		{
-			target	"+shift"
-		}
+	#include "menu/data/color.menu"
+	#include "menu/data/player.menu"
+	#include "menu/data/key.menu"
+	#include "menu/data/input.menu"
 
-		Item Data_Nex_Key FirePrimary
-		{
-			target	"+attack"
-		}
-		Item Data_Nex_Key FireSecondary
-		{
-			target	"+button3"
-		}
-		Item Data_Nex_Key PrevWeapon
-		{
-			target	"impulse 12"
-		}
-		Item Data_Nex_Key NextWeapon
-		{
-			target	"impulse 10"
-		}
-		Item Container Weapon
-		{
-			Item Data_Nex_Key Laser
-			{
-				target	"impulse 1"
-			}
-			Item Data_Nex_Key Uzi
-			{
-				target	"impulse 2"
-			}
-			Item Data_Nex_Key Shotgun
-			{
-				target	"impulse 3"
-			}
-			Item Data_Nex_Key Grenade
-			{
-				target	"impulse 4"
-			}
-			Item Data_Nex_Key Electro
-			{
-				target	"impulse 5"
-			}
-			Item Data_Nex_Key CryLink
-			{
-				target	"impulse 6"
-			}
-			Item Data_Nex_Key NexGun
-			{
-				target	"impulse 7"
-			}
-			Item Data_Nex_Key Hagar
-			{
-				target	"impulse 8"
-			}
-			Item Data_Nex_Key Rocket
-			{
-				target	"impulse 9"
-			}
-		}
-
-		Item Data_Nex_Key ShowScores
-		{
-			target	"+showscores"
-		}
-	}
 	Item Container CreateGame
 	{
 		Item Data_Nex_Map Map
@@ -390,171 +166,10 @@ Item Container Data
 			}
 		}
 	}
-	Item Container Video
-	{
-		Item Data_Nex_Resolution Resolution
-		{
-			defValue	"800 600"
+	#include "menu/data/video.menu"
+	#include "menu/data/sound.menu"
+	#include "menu/data/effects.menu"
 
-			Item DataLink_TextSwitch Switch
-			{
-				valueList	"'320 240' '640 480' '800 600' '1024 768' '1280 970' '1600 1200'"
-				descList	"'320x240' '640x480' '800x600' '1024x768' '1280x970' '1600x1200'"
-				link		"##up"
-			}
-		}
-		Item Data_Cvar BPP
-		{
-			cvarName	"vid_bitsperpixel"
-
-			Item DataLink_TextSwitch Switch
-			{
-				valueList	"'16' '32'"
-				descList	"'16-bit' '32-bit'"
-				link		"##up"
-			}
-		}
-		Item Data_Cvar Fullscreen
-		{
-			cvarName	"vid_fullscreen"
-
-			Derive DataLink_OnOffSwitch Switch
-			{
-				link	"##up"
-			}
-		}
-	}
-	Item Container Sound
-	{
-		Item Data_Cvar CDVolume
-		{
-			cvarName	"bgmvolume"
-			defValue	0.5
-
-			[DataLink_ZeroOneValue]
-		}
-		Item Data_Cvar GameVolume
-		{
-			cvarName	"volume"
-			defValue	1
-
-			[DataLink_ZeroOneValue]
-		}
-		Item Data_Cvar AmbientVolume
-		{
-			cvarName	"snd_staticvolume"
-			defValue	0.5
-
-			[DataLink_ZeroOneValue]
-		}
-		Item Data_Cvar SwapStereo
-		{
-			cvarName	"snd_swapstereo"
-			defValue	0
-
-			[DataLink_OnOffSwitch]
-		}
-	}
-	Item Container Effects
-	{
-		Item Data_Cvar Particles
-		{
-			cvarName	"cl_particles"
-			defValue	1
-
-			[DataLink_OnOffSwitch]
-		}
-		Item Data_Cvar Particlequality
-		{
-			cvarName	"cl_particles_quality"
-			defValue	1
-
-			[DataLink_ZeroOneValue]
-		}
-		Item Data_Cvar Decals
-		{
-			cvarName	"cl_decals"
-			defValue	1
-
-			[DataLink_OnOffSwitch]
-		}
-		Item Data_Cvar Bloom
-		{
-			cvarName	"r_bloom"
-			defValue	1
-
-			[DataLink_OnOffSwitch]
-		}
-		Item Data_Cvar Coronas
-		{
-			cvarName	"r_coronas"
-			defValue	1
-
-			[DataLink_OnOffSwitch]
-		}
-		Item Data_Cvar Realtimelights
-		{
-			cvarName	"r_shadow_realtime_world"
-			defValue	1
-
-			[DataLink_OnOffSwitch]
-		}
-		Item Data_Cvar Realtimedlights
-		{
-			cvarName	"r_shadow_realtime_dlight"
-			defValue	1
-
-			[DataLink_OnOffSwitch]
-		}
-		Item Data_Cvar Realtimeshadows
-		{
-			cvarName	"r_shadow_realtime_world_shadows"
-			defValue	1
-
-			[DataLink_OnOffSwitch]
-		}
-		Item Data_Cvar Offsetmaps
-		{
-			cvarName	"r_shadow_glsl_offsetmapping"
-			defValue	1`
-			[DataLink_OnOffSwitch]
-		}
-		Item Data_Cvar Gloss
-		{
-			cvarName	"r_shadow_gloss"
-			defValue	1
-
-			[DataLink_OnOffSwitch]
-		}
-	}
-	Item Container Input
-	{
-		Item Data_Cvar Sensitivity
-		{
-			cvarName 	"sensitivity"
-			defValue 	6.0
-			Item DataLink_Value Value
-			{
-				minValue	0.0
-				maxValue	20.0
-				stepValue	1
-				link		"##up"
-			}
-		}
-		Item Data_Cvar InvertMouse
-		{
-			cvarName 	"m_pitch"
-			defValue 	'Off'
-			Item DataLink_ValueSwitch Switch
-			{
-				minValue	-0.022
-				maxValue	0.022
-				descList	"'On' 'Off'"
-				link		"##up"
-			}
-		}
-
-	}
 	Item Container Server
 	{
 		Item Data_Cvar Instagib
@@ -564,7 +179,7 @@ Item Container Data
 
 			[DataLink_OnOffSwitch]
 		}
-		Item Data_Cvar Rocketarena
+		Item Data_Cvar RocketArena
 		{
 			cvarName	"g_rocketarena"
 			defValue	0
@@ -620,7 +235,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar Maxspeed
+		Item Data_Cvar MaxSpeed
 		{
 			cvarName	"sv_maxspeed"
 			defValue	400
@@ -641,7 +256,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar Gamespeed
+		Item Data_Cvar GameSpeed
 		{
 			cvarName	"slowmo"
 			defValue	1
@@ -662,7 +277,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar Maxairspeed
+		Item Data_Cvar MaxAirSpeed
 		{
 			cvarName	"g_balance_maxairspeed"
 			defValue	50
@@ -683,7 +298,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar Jumpheight
+		Item Data_Cvar JumpHeight
 		{
 			cvarName	"g_balance_jumpheight"
 			defValue	300
@@ -704,7 +319,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar Healthregen
+		Item Data_Cvar HealthRegeneration
 		{
 			cvarName	"g_balance_healthregen"
 			defValue	0.1
@@ -725,7 +340,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar Armorrott
+		Item Data_Cvar ArmorRott
 		{
 			cvarName	"g_balance_armorrott"
 			defValue	0.1
@@ -746,7 +361,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar Selfdamagepercent
+		Item Data_Cvar SelfDamagePercent
 		{
 			cvarName	"g_balance_selfdamagepercent"
 			defValue	0.6
@@ -767,7 +382,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar Weaponswitchdelay
+		Item Data_Cvar WeaponSwitchDelay
 		{
 			cvarName	"g_balance_weaponswitchdelay"
 			defValue	0.3
@@ -833,7 +448,7 @@ Item Container Data
 	}
 	Item Container Weapon
 	{
-		Item Data_Cvar laserdamage
+		Item Data_Cvar LaserDamage
 		{
 			cvarName	"g_balance_laser_damage"
 			defValue	15
@@ -854,7 +469,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar laseredgedamage
+		Item Data_Cvar LaserEdgeDamage
 		{
 			cvarName	"g_balance_laser_edgedamage"
 			defValue	15
@@ -875,7 +490,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar laserforce
+		Item Data_Cvar LaserForce
 		{
 			cvarName	"g_balance_laser_force"
 			defValue	200
@@ -896,7 +511,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar laserradius
+		Item Data_Cvar LaserRadius
 		{
 			cvarName	"g_balance_laser_radius"
 			defValue	50
@@ -917,7 +532,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar laserspeed
+		Item Data_Cvar LaserSpeed
 		{
 			cvarName	"g_balance_laser_speed"
 			defValue	1000
@@ -938,7 +553,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar shotgundamage
+		Item Data_Cvar ShotgunDamage
 		{
 			cvarName	"g_balance_shotgun_damage"
 			defValue	3.5
@@ -959,7 +574,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar shotgunbullets
+		Item Data_Cvar ShotgunBullets
 		{
 			cvarName	"g_balance_shotgun_bullets"
 			defValue	10
@@ -980,7 +595,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar uzidamage
+		Item Data_Cvar UziDamage
 		{
 			cvarName	"g_balance_uzi_damage"
 			defValue	4
@@ -1001,7 +616,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar uzispread
+		Item Data_Cvar UziSpread
 		{
 			cvarName	"g_balance_uzi_spread"
 			defValue	0.1
@@ -1022,7 +637,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar uzispread2
+		Item Data_Cvar UziSpread2
 		{
 			cvarName	"g_balance_uzi_spread2"
 			defValue	0.01
@@ -1043,7 +658,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar uzirefire
+		Item Data_Cvar UziRefire
 		{
 			cvarName	"g_balance_uzi_refire"
 			defValue	0.05
@@ -1064,7 +679,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar grenadelauncherdamage
+		Item Data_Cvar GrenadeLauncherDamage
 		{
 			cvarName	"g_balance_grenadelauncher_damage"
 			defValue	65
@@ -1085,7 +700,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar grenadelauncheredgedamage
+		Item Data_Cvar GrenadeLauncherEdgeDamage
 		{
 			cvarName	"g_balance_grenadelauncher_edgedamage"
 			defValue	45
@@ -1106,7 +721,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar grenadelauncherforce
+		Item Data_Cvar GrenadeLauncherForce
 		{
 			cvarName	"g_balance_grenadelauncher_force"
 			defValue	400
@@ -1127,7 +742,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar grenadelauncherradius
+		Item Data_Cvar GrenadeLauncherRadius
 		{
 			cvarName	"g_balance_grenadelauncher_radius"
 			defValue	140
@@ -1148,7 +763,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar grenadelauncherspeed
+		Item Data_Cvar GrenadeLauncherSpeed
 		{
 			cvarName	"g_balance_grenadelauncher_speed"
 			defValue	2000
@@ -1169,7 +784,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar grenadelauncherspeedup
+		Item Data_Cvar GrenadeLauncherSpeedUp
 		{
 			cvarName	"g_balance_grenadelauncher_speed_up"
 			defValue	200
@@ -1190,7 +805,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar grenadelauncherspeed2
+		Item Data_Cvar GrenadeLauncherSpeed2
 		{
 			cvarName	"g_balance_grenadelauncher_speed2"
 			defValue	900
@@ -1211,7 +826,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar grenadelauncherspeed2up
+		Item Data_Cvar GrenadeLauncherSpeed2Up
 		{
 			cvarName	"g_balance_grenadelauncher_speed2_up"
 			defValue	200
@@ -1232,7 +847,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar electrodamage
+		Item Data_Cvar ElectroDamage
 		{
 			cvarName	"g_balance_electro_damage"
 			defValue	90
@@ -1253,7 +868,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar electroedgedamage
+		Item Data_Cvar ElectroEdgeDamage
 		{
 			cvarName	"g_balance_electro_edgedamage"
 			defValue	45
@@ -1274,7 +889,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar electroforce
+		Item Data_Cvar ElectroForce
 		{
 			cvarName	"g_balance_electro_force"
 			defValue	200
@@ -1295,7 +910,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar electroradius
+		Item Data_Cvar ElectroRadius
 		{
 			cvarName	"g_balance_electro_radius"
 			defValue	100
@@ -1316,7 +931,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar electrorefire
+		Item Data_Cvar ElectroRefire
 		{
 			cvarName	"g_balance_electro_refire"
 			defValue	1
@@ -1337,7 +952,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar electrospeed
+		Item Data_Cvar ElectroSpeed
 		{
 			cvarName	"g_balance_electro_speed"
 			defValue	2000
@@ -1358,7 +973,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar electroballspeed
+		Item Data_Cvar ElectroBallSpeed
 		{
 			cvarName	"g_balance_electro_ballspeed"
 			defValue	900
@@ -1379,7 +994,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar electroballspeedup
+		Item Data_Cvar ElectroBallSpeedUp
 		{
 			cvarName	"g_balance_electro_ballspeed_up"
 			defValue	200
@@ -1400,7 +1015,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar crylinkdamage
+		Item Data_Cvar CryLinkDamage
 		{
 			cvarName	"g_balance_crylink_damage"
 			defValue	20
@@ -1421,7 +1036,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar crylinkedgedamage
+		Item Data_Cvar CryLinkEdgeDamage
 		{
 			cvarName	"g_balance_crylink_edgedamage"
 			defValue	0
@@ -1442,7 +1057,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar crylinkforce
+		Item Data_Cvar CryLinkForce
 		{
 			cvarName	"g_balance_crylink_force"
 			defValue	55
@@ -1463,7 +1078,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar crylinkradius
+		Item Data_Cvar CryLinkRadius
 		{
 			cvarName	"g_balance_crylink_radius"
 			defValue	3
@@ -1484,7 +1099,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar crylinkspeed
+		Item Data_Cvar CryLinkSpeed
 		{
 			cvarName	"g_balance_crylink_speed"
 			defValue	1800
@@ -1505,7 +1120,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar crylinkspread
+		Item Data_Cvar CryLinkSpread
 		{
 			cvarName	"g_balance_crylink_spread"
 			defValue	0.15
@@ -1526,7 +1141,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar crylinkrefire
+		Item Data_Cvar CryLinkRefire
 		{
 			cvarName	"g_balance_crylink_refire"
 			defValue	0.4
@@ -1547,7 +1162,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar nexdamage
+		Item Data_Cvar NexDamage
 		{
 			cvarName	"g_balance_nex_damage"
 			defValue	200
@@ -1568,7 +1183,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar hagardamage
+		Item Data_Cvar HagarDamage
 		{
 			cvarName	"g_balance_hagar_damage"
 			defValue	40
@@ -1589,7 +1204,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar hagaredgedamage
+		Item Data_Cvar HagarEdgeDamage
 		{
 			cvarName	"g_balance_hagar_edgedamage"
 			defValue	15
@@ -1610,7 +1225,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar hagarforce
+		Item Data_Cvar HagarForce
 		{
 			cvarName	"g_balance_hagar_force"
 			defValue	100
@@ -1631,7 +1246,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar hagarradius
+		Item Data_Cvar HagarRadius
 		{
 			cvarName	"g_balance_hagar_radius"
 			defValue	70
@@ -1652,7 +1267,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar hagarspeed
+		Item Data_Cvar HagarSpeed
 		{
 			cvarName	"g_balance_hagar_speed"
 			defValue	3000
@@ -1673,7 +1288,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar hagarspeed2
+		Item Data_Cvar HagarSpeed2
 		{
 			cvarName	"g_balance_hagar_speed2"
 			defValue	1400
@@ -1694,7 +1309,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar hagarspeed2up
+		Item Data_Cvar HagarSpeed2Up
 		{
 			cvarName	"g_balance_hagar_speed2_up"
 			defValue	100
@@ -1715,7 +1330,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar rocketlauncherdamage
+		Item Data_Cvar RocketLauncherDamage
 		{
 			cvarName	"g_balance_rocketlauncher_damage"
 			defValue	130
@@ -1736,7 +1351,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar rocketlauncheredgedamage
+		Item Data_Cvar RocketLauncherEdgeDamage
 		{
 			cvarName	"g_balance_rocketlauncher_edgedamage"
 			defValue	50
@@ -1757,7 +1372,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar rocketlauncherforce
+		Item Data_Cvar RocketLauncherForce
 		{
 			cvarName	"g_balance_rocketlauncher_force"
 			defValue	600
@@ -1778,7 +1393,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar rocketlauncherradius
+		Item Data_Cvar RocketLauncherRadius
 		{
 			cvarName	"g_balance_rocketlauncher_radius"
 			defValue	170
@@ -1799,7 +1414,7 @@ Item Container Data
 				}
 			}
 		}
-		Item Data_Cvar rocketlauncherspeed
+		Item Data_Cvar RocketLauncherSpeed
 		{
 			cvarName	"g_balance_rocketlauncher_speed"
 			defValue	850

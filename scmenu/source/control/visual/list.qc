@@ -9,7 +9,6 @@ void() Item_List_Draw =
 	local float lEnd;
 	local vector lPos;
 
-
 	if( !self._target )
 		return;
 

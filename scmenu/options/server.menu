@@ -29,7 +29,7 @@ Item Layout Server
 	Derive Nex_Option_Switch Rocketarena
 	{
 		text	"Rocket Arena"
-		target	"::Data::Server::Rocketarena::Switch"
+		target	"::Data::Server::RocketArena::Switch"
 	}
 	Derive Nex_Option_Switch Casings
 	{
@@ -54,37 +54,37 @@ Item Layout Server
 	Derive Nex_Option_EditBox Gamespeed
 	{
 		text	"Game Speed"
-		target	"Data::Server::Gamespeed::Text"
+		target	"Data::Server::GameSpeed::Text"
 	}
 	Derive Nex_Option_EditBox Maxairspeed
 	{
 		text	"Max Air Speed"
-		target	"Data::Server::Maxairspeed::Text"
+		target	"Data::Server::MaxAirSpeed::Text"
 	}
-	Derive Nex_Option_EditBox Jumpheight
+	Derive Nex_Option_EditBox JumpHeight
 	{
 		text	"Jump height"
-		target	"Data::Server::Jumpheight::Text"
+		target	"Data::Server::JumpHeight::Text"
 	}
-	Derive Nex_Option_EditBox Healthregen
+	Derive Nex_Option_EditBox HealthRegeneration
 	{
 		text	"Regeneration Speed"
-		target	"Data::Server::Healthregen::Text"
+		target	"Data::Server::HealthRegeneration::Text"
 	}
-	Derive Nex_Option_EditBox Armorrott
+	Derive Nex_Option_EditBox ArmorRott
 	{
 		text	"Armor Rott Speed"
-		target	"Data::Server::Armorrott::Text"
+		target	"Data::Server::ArmorRott::Text"
 	}
-	Derive Nex_Option_EditBox Selfdamagepercent
+	Derive Nex_Option_EditBox SelfDamagePercent
 	{
 		text	"Self Damage Percent"
-		target	"Data::Server::Selfdamagepercent::Text"
+		target	"Data::Server::SelfDamagePercent::Text"
 	}
-	Derive Nex_Option_EditBox Weaponswitchdelay
+	Derive Nex_Option_EditBox WeaponSwitchDelay
 	{
 		text	"Weapon Switch Delay"
-		target	"Data::Server::Weaponswitchdelay::Text"
+		target	"Data::Server::WeaponSwitchDelay::Text"
 	}
 	Derive Nex_Option_EditBox Friction
 	{

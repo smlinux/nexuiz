@@ -12,10 +12,10 @@ Item Layout Effects
 		text	"Particles"
 		target	"::Data::Effects::Particles::Switch"
 	}
-	Derive Nex_Option_Slider Particlequality
+	Derive Nex_Option_Slider ParticleQuality
 	{
 		text	"Particle Quality"
-		target	"::Data::Effects::Particlequality::Value"
+		target	"::Data::Effects::ParticleQuality::Value"
 	}
 	Derive Nex_Option_Switch Decals
 	{
@@ -32,25 +32,25 @@ Item Layout Effects
 		text	"Coronas"
 		target	"::Data::Effects::Coronas::Switch"
 	}
-	Derive Nex_Option_Switch Realtimelights
+	Derive Nex_Option_Switch RealtimeLights
 	{
 		text	"Realtime World Lights"
-		target	"::Data::Effects::Realtimelights::Switch"
+		target	"::Data::Effects::RealtimeLights::Switch"
 	}
-	Derive Nex_Option_Switch Realtimedlights
+	Derive Nex_Option_Switch RealtimeDLights
 	{
 		text	"Realtime Dynamic Lights"
-		target	"::Data::Effects::Realtimedlights::Switch"
+		target	"::Data::Effects::RealtimeDLights::Switch"
 	}
-	Derive Nex_Option_Switch Realtimeshadows
+	Derive Nex_Option_Switch RealtimeShadows
 	{
 		text	"Realtime Shadows"
-		target	"::Data::Effects::Realtimeshadows::Switch"
+		target	"::Data::Effects::RealtimeShadows::Switch"
 	}
-	Derive Nex_Option_Switch Offsetmaps
+	Derive Nex_Option_Switch OffsetMaps
 	{
 		text	"Offset maps"
-		target	"::Data::Effects::Offsetmaps::Switch"
+		target	"::Data::Effects::OffsetMaps::Switch"
 	}
 	Derive Nex_Option_Switch Gloss
 	{

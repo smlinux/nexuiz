@@ -1,0 +1,76 @@
+// Property of Alientrap/AK
+//
+// data/effects.menu
+
+Item DataContainer Effects
+{
+	Item Data_Cvar Particles
+	{
+		cvarName	"cl_particles"
+		defValue	1
+
+		[DataLink_OnOffSwitch]
+	}
+	Item Data_Cvar ParticleQuality
+	{
+		cvarName	"cl_particles_quality"
+		defValue	1
+
+		[DataLink_ZeroOneValue]
+	}
+	Item Data_Cvar Decals
+	{
+		cvarName	"cl_decals"
+		defValue	1
+
+		[DataLink_OnOffSwitch]
+	}
+	Item Data_Cvar Bloom
+	{
+		cvarName	"r_bloom"
+		defValue	1
+
+		[DataLink_OnOffSwitch]
+	}
+	Item Data_Cvar Coronas
+	{
+		cvarName	"r_coronas"
+		defValue	1
+
+		[DataLink_OnOffSwitch]
+	}
+	Item Data_Cvar RealtimeLights
+	{
+		cvarName	"r_shadow_realtime_world"
+		defValue	1
+
+		[DataLink_OnOffSwitch]
+	}
+	Item Data_Cvar RealtimeDLights
+	{
+		cvarName	"r_shadow_realtime_dlight"
+		defValue	1
+
+		[DataLink_OnOffSwitch]
+	}
+	Item Data_Cvar RealtimeShadows
+	{
+		cvarName	"r_shadow_realtime_world_shadows"
+		defValue	1
+
+		[DataLink_OnOffSwitch]
+	}
+	Item Data_Cvar OffsetMaps
+	{
+		cvarName	"r_shadow_glsl_offsetmapping"
+		defValue	1`
+		[DataLink_OnOffSwitch]
+	}
+	Item Data_Cvar Gloss
+	{
+		cvarName	"r_shadow_gloss"
+		defValue	1
+
+		[DataLink_OnOffSwitch]
+	}
+}

@@ -1,0 +1,34 @@
+// Property of Alientrap
+//
+// data/sound.menu
+Item DataContainer Sound
+{
+	Item Data_Cvar CDVolume
+	{
+		cvarName	"bgmvolume"
+		defValue	0.5
+
+		[DataLink_ZeroOneValue]
+	}
+	Item Data_Cvar GameVolume
+	{
+		cvarName	"volume"
+		defValue	1
+
+		[DataLink_ZeroOneValue]
+	}
+	Item Data_Cvar AmbientVolume
+	{
+		cvarName	"snd_staticvolume"
+		defValue	0.5
+
+		[DataLink_ZeroOneValue]
+	}
+	Item Data_Cvar SwapStereo
+	{
+		cvarName	"snd_swapstereo"
+		defValue	0
+
+		[DataLink_OnOffSwitch]
+	}
+}

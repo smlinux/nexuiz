@@ -1,0 +1,37 @@
+// Property of Alientrap
+//
+// data/video.menu
+Item DataContainer Video
+{
+	Item Data_Nex_Resolution Resolution
+	{
+		defValue	"800 600"
+
+		Item DataLink_TextSwitch Switch
+		{
+			valueList	"'320 240' '640 480' '800 600' '1024 768' '1280 970' '1600 1200'"
+			descList	"'320x240' '640x480' '800x600' '1024x768' '1280x970' '1600x1200'"
+			link		"##up"
+		}
+	}
+	Item Data_Cvar BPP
+	{
+		cvarName	"vid_bitsperpixel"
+
+		Item DataLink_TextSwitch Switch
+		{
+			valueList	"'16' '32'"
+			descList	"'16-bit' '32-bit'"
+			link		"##up"
+		}
+	}
+	Item Data_Cvar Fullscreen
+	{
+		cvarName	"vid_fullscreen"
+
+		Derive DataLink_OnOffSwitch Switch
+		{
+			link	"##up"
+		}
+	}
+}

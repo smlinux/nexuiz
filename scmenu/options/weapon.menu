@@ -24,121 +24,121 @@ Item Layout Weapon
 	Derive Nex_Option_EditBox laserdamage
 	{
 		text	"Laser Damage"
-		target	"Data::Weapon::laserdamage::Text"
+		target	"Data::Weapon::LaserDamage::Text"
 	}
 	Derive Nex_Option_EditBox laseredgedamage
 	{
 		text	"Laser edge damage"
-		target	"Data::Weapon::laseredgedamage::Text"
+		target	"Data::Weapon::LaserEdgeDamage::Text"
 	}
 	Derive Nex_Option_EditBox laserforce
 	{
 		text	"Laser Push Force"
-		target	"Data::Weapon::laserforce::Text"
+		target	"Data::Weapon::LaserForce::Text"
 	}
 	Derive Nex_Option_EditBox laserradius
 	{
 		text	"Laser Radius"
-		target	"Data::Weapon::laserradius::Text"
+		target	"Data::Weapon::LaserRadius::Text"
 	}
 	Derive Nex_Option_EditBox laserspeed
 	{
 		text	"Laser Speed"
-		target	"Data::Weapon::laserspeed::Text"
+		target	"Data::Weapon::LaserSpeed::Text"
 	}
 	Derive Nex_Option_EditBox shotgundamage
 	{
 		text	"Shotgun Damage"
-		target	"Data::Weapon::shotgundamage::Text"
+		target	"Data::Weapon::ShotgunDamage::Text"
 	}
 	Derive Nex_Option_EditBox shotgunbullets
 	{
 		text	"Shotgun Bullets"
-		target	"Data::Weapon::shotgunbullets::Text"
+		target	"Data::Weapon::ShotgunBullets::Text"
 	}
 	Derive Nex_Option_EditBox uzidamage
 	{
 		text	"Uzi Damage"
-		target	"Data::Weapon::uzidamage::Text"
+		target	"Data::Weapon::UziDamage::Text"
 	}
 	Derive Nex_Option_EditBox uzispread
 	{
 		text	"Uzi Spread"
-		target	"Data::Weapon::uzispread::Text"
+		target	"Data::Weapon::UziSpread::Text"
 	}
 	Derive Nex_Option_EditBox uzispread2
 	{
 		text	"Uzi Spread2"
-		target	"Data::Weapon::uzispread2::Text"
+		target	"Data::Weapon::UziSpread2::Text"
 	}
 	Derive Nex_Option_EditBox uzirefire
 	{
 		text	"Uzi Refire"
-		target	"Data::Weapon::uzirefire::Text"
+		target	"Data::Weapon::UziRefire::Text"
 	}
 	Derive Nex_Option_EditBox grenadelauncherdamage
 	{
 		text	"Grenade Launcher Damage"
-		target	"Data::Weapon::grenadelauncherdamage::Text"
+		target	"Data::Weapon::GrenadeLauncherDamage::Text"
 	}
 	Derive Nex_Option_EditBox grenadelauncheredgedamage
 	{
 		text	"GL Edge Damage"
-		target	"Data::Weapon::grenadelauncheredgedamage::Text"
+		target	"Data::Weapon::GrenadeLauncherEdgeDamage::Text"
 	}
 	Derive Nex_Option_EditBox grenadelauncherforce
 	{
 		text	"Grenade Launcher Force"
-		target	"Data::Weapon::grenadelauncherforce::Text"
+		target	"Data::Weapon::GrenadeLauncherForce::Text"
 	}
 	Derive Nex_Option_EditBox grenadelauncherradius
 	{
 		text	"Grenade Launcher Radius"
-		target	"Data::Weapon::grenadelauncherradius::Text"
+		target	"Data::Weapon::GrenadeLauncherRadius::Text"
 	}
 	Derive Nex_Option_EditBox grenadelauncherspeed
 	{
 		text	"Grenade Launcher Speed"
-		target	"Data::Weapon::grenadelauncherspeed::Text"
+		target	"Data::Weapon::GrenadeLauncherSpeed::Text"
 	}
 	Derive Nex_Option_EditBox grenadelauncherspeedup
 	{
 		text	"Grenade Launcher Speedup"
-		target	"Data::Weapon::grenadelauncherspeedup::Text"
+		target	"Data::Weapon::GrenadeLauncherSpeedUp::Text"
 	}
 	Derive Nex_Option_EditBox grenadelauncherspeed2
 	{
 		text	"Grenade Launcher Speed2"
-		target	"Data::Weapon::grenadelauncherspeed2::Text"
+		target	"Data::Weapon::GrenadeLauncherSpeed2::Text"
 	}
 	Derive Nex_Option_EditBox grenadelauncherspeed2up
 	{
 		text	"Grenade Launcher Speed2up"
-		target	"Data::Weapon::grenadelauncherspeed2up::Text"
+		target	"Data::Weapon::GrenadeLauncherSpeed2Up::Text"
 	}
 	Derive Nex_Option_EditBox electrodamage
 	{
 		text	"Electro Damage"
-		target	"Data::Weapon::electrodamage::Text"
+		target	"Data::Weapon::ElectroDamage::Text"
 	}
 	Derive Nex_Option_EditBox electroedgedamage
 	{
 		text	"Electro Edgedamage"
-		target	"Data::Weapon::electroedgedamage::Text"
+		target	"Data::Weapon::ElectroEdgeDamage::Text"
 	}
 	Derive Nex_Option_EditBox electroforce
 	{
 		text	"Electro Force"
-		target	"Data::Weapon::electroforce::Text"
+		target	"Data::Weapon::ElectroForce::Text"
 	}
 	Derive Nex_Option_EditBox electroradius
 	{
 		text	"Electro Radius"
-		target	"Data::Weapon::electroradius::Text"
+		target	"Data::Weapon::ElectroRadius::Text"
 	}
 	Derive Nex_Option_EditBox electrorefire
 	{
 		text	"Electro Refire"
-		target	"Data::Weapon::electrorefire::Text"
+		target	"Data::Weapon::ElectroRefire::Text"
 	}
 }

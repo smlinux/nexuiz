@@ -84,3 +84,9 @@ void() Nex_Action_Map_Start =
 	// force the menu to hide
 	m_hide();
 };
+
+// init the map list
+void() Nex_Action_MapList_Init =
+{
+	Item_DataLink_Nex_MapList_InitWithMapList( self );
+};

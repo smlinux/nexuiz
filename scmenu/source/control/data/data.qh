@@ -44,7 +44,15 @@ void() Item_DataLink_Init;
 void() Item_DataLink_Destroy;
 void() Item_DataLink_Update;
 
+// Item_DataContainer [Item_Container] [implements the DATA events]
+void( float pEvent ) Item_DataContainer_DataEvent;
+void() Item_DataContainer_Spawn;
+
 // Item_Data_Container [Item_Data]
+void() Item_Data_Container_Reinit;
+void( float pEvent ) Item_Data_Container_DataEvent;
+
+void() Item_Data_Container_Spawn;
 
 // Item_Data_Cvar [Item_Data]
 .string cvarName;
