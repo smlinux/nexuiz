@@ -9,6 +9,7 @@ dpextensions.qc
 func.qc
 
 worldspawn.qc
+rain.qc
 casings.qc
 teleporters.qc
 server.qc

@@ -4,6 +4,7 @@
 entity	activator;
 string	string_null;
 entity	casing;
+entity dest;
 
 // Fields
 
@@ -35,3 +36,8 @@ entity	casing;
 .void()		think1;
 .float state;
 .float		t_length, t_width;
+
+.vector destvec;		// for rain
+.float cnt;		// for rain
+.float count;
+.float cnt2;

@@ -1,8 +1,6 @@
 
 void Teleport_Touch (void)
 {
-	entity	dest;
-	
 	if (other.health < 1)
 		return;
 	if (other.classname != "player")	// FIXME: Make missiles firable through the teleport too
