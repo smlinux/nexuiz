@@ -1,21 +1,36 @@
+SPAWNING/MISC:
+Make it so the user spawns at a random location in the map ("info_player_deathmatch")
+Add deathtypes and obituary messages
+When dead, leave corpse. Fade away corpse in 10 seconds.
 
-0: Add animation to misc_model
-0: Make gibs spawn from inside the bounding box, not at the origin
-0: Add deathtypes and obituary messages
-0: Footsteps (go threw 6 footstep sounds)
-0: Make crylink and nex way more accurate
-1: When dead the users weapon gets thrown in the air for anyone to pick up (just the weapon he was holding)
-1: when dead the powerup the user had gets thrown in the air
-1: Ability to blow up a rocket/grenade/hagar rocket with a bullet/crylink/nex bullet
-1: When a grenade/rocket/hagar rocket is in the radius (close to it, not just a health of 1) of a explosion, it blows up to
-1: Add telefragging and make teleporters nicer perhaps
-1: Add secondary fire to all weapons
- - Laser: Autoaim and kill any projectile coming (can destory rockets, grenades, hagar missiles)
- - Shotgun: Automatic fast 3 shots
-2: Add energy powerup - Makes the user run 3 times as fast, and jumps 3 times as high. 30 seconds, 2 minute respond time
-2: Add strength powerup - Basiclly the Quad. 30 seconds, 2 minute respond time
-2: Add invincible powerup -  30 seconds, 2 minute respond time
-2: Add crouching
-2: Add weapon animations. Ask Vermeulen for description.
-3: InstaGib gametype (with nex gun only)
-3: DarkMatch gametype
+WEAPONS:
+Laser: Autoaim and kill any projectile coming (can destory rockets, grenades, hagar missiles)
+Shotgun: Automatic fast 3 shots
+Add weapon animations. Ask Vermeulen for description.
+
+POWERUPS:
+Add energy powerup - Makes the user run 3 times as fast, and jumps 3 times as high. 30 seconds, 2 minute respond time
+Add strength powerup - Basiclly the Quad. 30 seconds, 2 minute respond time
+Add invincible powerup -  30 seconds, 2 minute respond time
+When dead the powerup the user had gets thrown in the air
+
+GAMETYPES:
+InstaGib gametype (with nex gun only)
+DarkMatch gametype
+
+PHYSICS:
+Ability to blow up a rocket/grenade/hagar rocket with a bullet/crylink/nex bullet
+When a grenade/rocket/hagar rocket is in the radius (close to it, not just a health of 1) of a explosion, it blows up to
+
+PLAYER MOVEMENT:
+Add telefragging and make teleporters nicer perhaps
+Add crouching
+
+ANIMATIONS:  (all player animations are in player.qc)
+Add crouching animations (when crouch is added, this includes: duck duckwalk duckjump duckidle)
+Add taunt
+Add dying animations (dead1 dead2, then switch to corpse)
+
+EFFECTS:
+New effect for the laser. No trail, red, needs to glow. Can be done entirely by model, hopefully.
+Small air burst, large air burst. Small air burst should be red, for the laser. Large air burst is for the secondary rocket fire.
