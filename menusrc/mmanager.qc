@@ -648,6 +648,7 @@ void(float keynr, float ascii) menu_keydown =
 	{
 		// call it
 		menu_keyhook(keynr, ascii);
+		return;
 	}
 	// before calling the current keydown functions, process the mouse again
 	// so only the correct item is called
