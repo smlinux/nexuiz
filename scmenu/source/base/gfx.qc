@@ -1,8 +1,26 @@
 // NG-Menu
 // base/gfx.qc
 
+float _Gfx_FPS;
+float _Gfx_LastTime;
+float _Gfx_FrameCount;
+
+void() _Gfx_UpdateFPS =
+{
+	local float lDeltaTime;
+
+	_Gfx_FrameCount = _Gfx_FrameCount + 1;
+
+	lDeltaTime = Timer_Time - _Gfx_LastTime;
+	if( GFX_SHOWFPS_DURATION < lDeltaTime ) {
+		_Gfx_FPS = _Gfx_FrameCount / lDeltaTime;
+		_Gfx_LastTime = Timer_Time;
+		_Gfx_FrameCount = 0;
+	}
+};
+
 // cvar ngmenu_menu_height
-void() gfx_updateres =
+void() _Gfx_UpdateRes =
 {
 	Gfx_Real_Width = cvar( "vid_conwidth" );
 	Gfx_Real_Height = cvar( "vid_conheight" );
@@ -25,7 +43,9 @@ void() Gfx_Init =
 	registercvar( CVAR_SCMENU_MENU_WIDTH, lWidth, CVAR_SAVE );
 	registercvar( CVAR_SCMENU_MENU_HEIGHT, lHeight, CVAR_SAVE );
 
-	gfx_updateres();
+	registercvar( CVAR_SCMENU_SHOWFPS, ftos( GFX_SHOWFPS_DEFAULT ), 0 );
+
+	_Gfx_UpdateRes();
 };
 
 void() Gfx_Quit =
@@ -43,11 +63,26 @@ void() Gfx_Hide =
 
 void() Gfx_Update =
 {
-	gfx_updateres();
+	_Gfx_UpdateRes();
+	_Gfx_UpdateFPS();
 };
 
 void() Gfx_Draw =
 {
+	if( cvar( CVAR_SCMENU_SHOWFPS ) ) {
+		local string lText;
+		local vector lScale;
+		local vector lPosition;
+
+		lText = strcat( "FPS: ", ftos( floor( _Gfx_FPS ) ) );
+		lScale = '15 15 0';
+
+		lPosition_x = 0;
+		lPosition_y = Gfx_Menu_Height - lScale_y - 5;
+		lPosition_z = 0;
+
+		Gfx_DrawString( lPosition, lText, lScale, '1.0 1.0 1.0', 1.0, 0 );
+	}
 };
 
 bool( string pPic )	Gfx_IsCached =

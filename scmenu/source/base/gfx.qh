@@ -7,6 +7,12 @@ const float GFX_MENU_DEFAULT_HEIGHT = 768;
 const string CVAR_SCMENU_MENU_WIDTH = "scmenu_menu_width";
 const string CVAR_SCMENU_MENU_HEIGHT = "scmenu_menu_height";
 
+// measurement block duration in seconds
+const float GFX_SHOWFPS_DURATION = 1.000;
+
+const float GFX_SHOWFPS_DEFAULT = 0;
+const string CVAR_SCMENU_SHOWFPS = "scmenu_showfps";
+
 float Gfx_Menu_Width;
 float Gfx_Menu_Height;
 float Gfx_Real_Width;
@@ -18,8 +24,6 @@ void() Gfx_Display;
 void() Gfx_Hide;
 void() Gfx_Update;
 void() Gfx_Draw;
-
-float() Gfx_GetFPS;
 
 bool( string pPic )	Gfx_IsCached;
 bool( string pPic )	Gfx_Precache;

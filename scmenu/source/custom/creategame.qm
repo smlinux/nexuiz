@@ -190,7 +190,11 @@ void() Nex_Action_Cycle_Add =
 	lName = DataLink_Nex_MapList_GetCurrentName( lList );
 	lPath = DataLink_Nex_MapList_GetCurrentPath( lList );
 
-	DataLink_Nex_MapList_InsertEntryAfter( lCycle, lName, lPath );
+	if( lCycle.stepValue == 1.0 ) {
+		DataLink_Nex_MapList_InsertEntryAfter( lCycle, lName, lPath );
+	} else {
+		DataLink_Nex_MapList_SetFirst( lCycle, lName, lPath );
+	}
 
 	String_Free( lName );
 	String_Free( lPath );
