@@ -297,16 +297,16 @@ void() WaterMove =
 	{	// do damage
 		if (self.dmgtime < time)
 		{
-			self.dmgtime = time + 0.2;
-			Damage (self, world, world, 5, DEATH_LAVA, '0 0 0', '0 0 0');
+			self.dmgtime = time + 0.1;
+			Damage (self, world, world, 3 * self.waterlevel, DEATH_LAVA, '0 0 0', '0 0 0');
 		}
 	}
 	else if (self.watertype == CONTENT_SLIME)
 	{	// do damage
 		if (self.dmgtime < time)
 		{
-			self.dmgtime = time + 1;
-			Damage (self, world, world, 5, DEATH_SLIME, '0 0 0', '0 0 0');
+			self.dmgtime = time + 0.1;
+			Damage (self, world, world, 1 * self.waterlevel, DEATH_SLIME, '0 0 0', '0 0 0');
 		}
 	}
 
