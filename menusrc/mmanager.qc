@@ -142,6 +142,8 @@ void(void) menu_linkwindows =
 	entity ent;
 	float x, opos;
 
+	dprint("Loading defaults if necessary\n");
+
 	ent = findstring(null_entity,name, MENU_NORMAL_NAME);
 	if(ent == null_entity)
 		loadfromdata(MENU_NORMAL_DEFAULT);
@@ -160,6 +162,8 @@ void(void) menu_linkwindows =
 	if(ent == null_entity)
 		error("Bad MENU_INGAME_DEFAULT !\n");
 
+	dprint("Verifying that each name is used only once\n");
+
 	// verify that every name is only used *once*
 	ent = null_entity;
 	while((ent = nextent(ent)) != null_entity)
@@ -174,10 +178,13 @@ void(void) menu_linkwindows =
 		}
 	}
 
+	dprint("Verification/Setting of: type, parent, next, prev and child fields\n");
+
 	// now we have to :
 	// set the parent field with parent_name
 	// set the next and prev fields
 	// set the child field
+	// check the type field
 	self = null_entity;
 	while((self = nextent(self)) != null_entity)
 	{
@@ -219,13 +226,18 @@ void(void) menu_linkwindows =
 		}
 	}
 
+	dprint("Calling the type functions\n");
+
 	// call the type functions (former classname functions)
 	ent = null_entity;
 	while((ent = nextent(ent)) != null_entity)
 	{
 		self = ent;
+		//dprint("Calling ",self.type," (", etos(self),")\n");
 		callfunction(self.type);
 	}
+
+	dprint("Orderpos is verified or set\n");
 
 	// now auto-set all ents with orderpos 0
 	self = null_entity;
@@ -243,6 +255,8 @@ void(void) menu_linkwindows =
 
 		self.orderpos = opos;
 	}
+
+	dprint("Set the _child, _prev and _next fields\n");
 
 	self = null_entity;
 	while((self = nextent(self)) != null_entity)
@@ -296,6 +310,8 @@ void(void) menu_linkwindows =
 			}
 		}
 	}
+
+	dprint("Linking windows finished.\n");
 };
 
 void(void) menu_toggle =
@@ -883,7 +899,8 @@ void(void) menu_selectup =
 	if(menu_selected == null_entity)
 	{
 		// something must have been selected else -> error !
-		error("Couldnt select any item !\n");
+		print("Couldnt select any item !\n");
+		menu_reselect();
 	} 	// have we reached the 'main' menu ?
 	else if(menu_selected.name == MENU_NORMAL_NAME || menu_selected.name == MENU_INGAME_NAME)
 	{
@@ -956,6 +973,8 @@ void(entity ent) menu_pushhistory =
 			return;
 	}*/
 
+	menu_keyhook = null_function;
+
 	his = spawn();
 
 	his.type = "MMANAGER_HISTORY";
@@ -975,6 +994,8 @@ void(void) menu_pophistory =
 	{
 		return;
 	}
+
+	menu_keyhook = null_function;
 
 	menu_selected = menu_history._child;
 	menu_activewindow = menu_history._parent;

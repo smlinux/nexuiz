@@ -167,3 +167,5 @@ void	callfunction(...) = #605;
 void	writetofile(float fhandle, entity ent) = #606;
 vector	getresolution(float number) = #608;
 string	keynumtostring(float keynum) = #609;
+string	findkeysforcommand(string command) = #610;
+

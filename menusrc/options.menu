@@ -47,6 +47,7 @@ Option menus
 	parent	opt_panel
 	text	"Controls"
 	pos		"0 15"
+	action 	nex_cntrl
 }{
 	type 	ITEM_TEXTBUTTON
 	name	opt_panel_sound
@@ -88,6 +89,11 @@ Option menus
 {
 	type	ITEM_WINDOW
 	name	options_sound
+}
+//controls
+{
+	type 	ITEM_WINDOW
+	name 	options_control
 }
 //////
 // CD Music Volume
@@ -960,4 +966,49 @@ Option menus
 	pos			"-243.75 270"
 	//size		"487.5 137.5"
 	size		"501.76 143.36"
+}
+// control menu
+// we use a special type called CONTROL_KEY
+// which uses the fields :
+// name 	has to be unique
+// text		description
+// link 	command, e.g. "+attack"
+// template
+{
+	type		ITEM_TEXTBUTTON
+	name		control_desc_template
+	//parent		options_control
+	text		"Template Desc"
+	pos			"0 15"
+	alignment	16		// TEXT_ALIGN_RIGHT
+	flag		256		// FLAG_AUTOSETCLICK
+	refresh 	nex_con_update_keys
+}
+{
+	type		ITEM_TEXT
+	name		control_key_template
+	//parent		options_control
+	pos			"100	15"
+	alignment   1
+}
+// state message - "Press a key or mouse button to set the new bind", etc.
+{
+	type 		ITEM_TEXT
+	name		options_control_statemsg
+	parent		options_control
+	text		"Hello World"
+	pos			"0 -15"
+	alignment	1
+}
+{
+	type		CONTROL_KEY
+	name		key_attack
+	text		"Fire Weapon"
+	link		"+attack"
+}
+{
+	type 		CONTROL_KEY
+	name		key_forward
+	text		"Move forward"
+	link		"+forward"
 }

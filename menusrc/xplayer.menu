@@ -12,15 +12,24 @@ template for map selection
 {
 	type	ITEM_WINDOW
 	name	mapselection
+	origin	"0 30" // to allow easy editing of the posititons
 }
 {
 	type	ITEM_WINDOW
 	name	mapselection_frame
 	parent	mapselection
-	origin	"100 0"
-	clip_pos "100 0"
-	clip_size "500 100"
+	origin	"50 0"
+	clip_pos "50 0"
+	clip_size "500 1"
 	init	nex_xp_build_maplist
+}
+// label
+{
+	type	ITEM_TEXT
+	name	mapselection_label
+	parent	mapselection
+	pos		"50 -30"
+	text	"Map Selection"
 }
 // prev button
 {
@@ -29,6 +38,7 @@ template for map selection
 	parent	mapselection
 	text	"Prev"
 	pos		"0 43.5"
+	alignment 16
 	action	nex_xp_prev
 }
 // next button
@@ -46,8 +56,8 @@ template for map selection
 	name  	mapselection_template_picture
 	parent	mapselection_frame
 	picture	"gfx/m_nomap"
-	size	"100 100"
-	pos		"-100 0 0"
+	size	"125 125"
+	pos		"-166 0 0"
 	flag	256
 	action	nex_xp_click
 }
@@ -58,7 +68,7 @@ template for map selection
 	text	template
 	alignment 1
 	font_size	"13 13 0"
-	pos		"-110 43.5 0"
+	pos		"-110 0 0"
 	flag	256
 	action 	nex_xp_click
 	//size	"100 13 0"
@@ -69,7 +79,9 @@ template for map selection
 	parent	mapselection_frame
 	color	"0.9 0.9 0.6" //"^1 0.5 0.5"
 	drawflag 2
-	size	"100 100"
+	//color	"0.9 0.9 0"
+	//alpha	"0.2"
+	size	"1 1"
 }
 ///////////////////////
 // singleplayer stuff
@@ -96,15 +108,7 @@ template for map selection
 	type 	ITEM_WINDOW
 	name	singleplayer_frame
 	parent	singleplayer
-	origin 	"600 200"
-}
-// map selection
-{
-	type 	ITEM_REFERENCE
-	name  	singleplayer_mapselection
-	parent	singleplayer_frame
-	link	mapselection
-	origin 	"-400 -100"
+	origin 	"500 175"
 }
 // max frags
 {
@@ -174,9 +178,17 @@ template for map selection
 	pos			"10 30 0"
 	//font_size	"10 10 0"
 	flag 		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
-	maxlen		3
+	maxlen		2
 	text		"4"
 	refresh		nex_xp_maxbots
+}
+// map selection
+{
+	type 	ITEM_REFERENCE
+	name  	singleplayer_mapselection
+	parent	singleplayer_frame
+	link	mapselection
+	origin 	"-300 265"
 }
 // start
 {
@@ -191,3 +203,193 @@ template for map selection
 }
 //////////////////////
 // multiplayer stuff
+{
+	type	ITEM_WINDOW
+	name	multiplayer
+}
+{
+	type	ITEM_REFERENCE
+	name	multiplayer_bg_ref
+	parent	multiplayer
+	link	background
+}
+{
+	type	ITEM_REFERENCE
+	name	multiplayer_mainframe
+	parent	multiplayer
+	link	mainframe
+	orderpos 1000
+}
+// multiplayer options
+{
+	type 	ITEM_WINDOW
+	name	multiplayer_frame
+	parent	multiplayer
+	origin 	"500 200"
+}
+// map selection
+{
+	type 	ITEM_REFERENCE
+	name  	multiplayer_mapselection
+	parent	multiplayer_frame
+	link	mapselection
+	origin 	"-300 -100"
+}
+// game name
+{
+	type 		ITEM_TEXTBUTTON
+	name		multiplayer_gamename_text
+	parent		multiplayer_frame
+	text		"Server Name"
+	pos			"0 0 0"
+	//font_size	"10 10 0"
+	alignment	16		// TEXT_ALIGN_RIGHTPOS
+	flag		256		// FLAG_AUTOSETCLICK
+	key			nex_redirect_key
+}
+// Switch
+{
+	type		ITEM_EDITBOX
+	name		multiplayer_gamename_switch
+	parent		multiplayer_gamename_text
+	pos			"10 0 0"
+	//font_size	"10 10 0"
+	flag 		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
+	text		"xxx-game (.)(.)"
+	maxlen		-1
+	refresh		nex_mp_hostname
+}
+// max frags
+{
+	type 		ITEM_TEXTBUTTON
+	name		multiplayer_maxfrag_text
+	parent		multiplayer_frame
+	text		"Frag Limit"
+	pos			"0 15 0"
+	//font_size	"10 10 0"
+	alignment	16		// TEXT_ALIGN_RIGHTPOS
+	flag		256		// FLAG_AUTOSETCLICK
+	key			nex_redirect_key
+}
+// Switch
+{
+	type		ITEM_EDITBOX
+	name		multiplayer_maxfrag_switch
+	parent		multiplayer_maxfrag_text
+	pos			"10 15 0"
+	//font_size	"10 10 0"
+	flag 		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
+	maxlen		3
+	text		"0"
+	refresh		nex_xp_maxfrags
+}
+// max time
+{
+	type 		ITEM_TEXTBUTTON
+	name		multiplayer_maxtime_text
+	parent		multiplayer_frame
+	text		"Time Limit"
+	pos			"0 30 0"
+	//font_size	"10 10 0"
+	alignment	16		// TEXT_ALIGN_RIGHTPOS
+	flag		256		// FLAG_AUTOSETCLICK
+	key			nex_redirect_key
+}
+// Switch
+{
+	type		ITEM_EDITBOX
+	name		multiplayer_maxtime_switch
+	parent		multiplayer_maxtime_text
+	pos			"10 30 0"
+	//font_size	"10 10 0"
+	flag 		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
+	maxlen		3
+	text		"0"
+	refresh		nex_xp_maxtime
+}
+// max clients
+{
+	type 		ITEM_TEXTBUTTON
+	name		multiplayer_maxclients_text
+	parent		multiplayer_frame
+	text		"Max Clients"
+	pos			"0 45 0"
+	//font_size	"10 10 0"
+	alignment	16		// TEXT_ALIGN_RIGHTPOS
+	flag		256		// FLAG_AUTOSETCLICK
+	key			nex_redirect_key
+}
+// Switch
+{
+	type		ITEM_EDITBOX
+	name		multiplayer_maxclients_switch
+	parent		multiplayer_maxclients_text
+	pos			"10 45 0"
+	//font_size	"10 10 0"
+	flag 		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
+	maxlen		2
+	text		"16"
+	refresh		nex_mp_maxclients
+}
+// max bots
+{
+	type 		ITEM_TEXTBUTTON
+	name		multiplayer_maxbots_text
+	parent		multiplayer_frame
+	text		"Max Bots"
+	pos			"0 60 0"
+	//font_size	"10 10 0"
+	alignment	16		// TEXT_ALIGN_RIGHTPOS
+	flag		256		// FLAG_AUTOSETCLICK
+	key			nex_redirect_key
+}
+// Switch
+{
+	type		ITEM_EDITBOX
+	name		multiplayer_maxbots_switch
+	parent		multiplayer_maxbots_text
+	pos			"10 60 0"
+	//font_size	"10 10 0"
+	flag 		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
+	maxlen		2
+	text		"0"
+	refresh		nex_xp_maxbots
+}
+//////
+// Public Server
+////
+// Text
+{
+	type 		ITEM_TEXTBUTTON
+	name		multiplayer_publicserv_text
+	parent		multiplayer_frame
+	text		"Public Server"
+	pos			"0 75 0"
+	//font_size	"10 10 0"
+	alignment	16		// TEXT_ALIGN_RIGHTPOS
+	flag		256		// FLAG_AUTOSETCLICK
+	key			nex_redirect_key
+}
+// Switch
+{
+	type		ITEM_TEXTSWITCH
+	name		multiplayer_publicserv_switch
+	parent		multiplayer_publicserv_text
+	pos			"10 75 0"
+	//font_size	"10 10 0"
+	flag 		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
+	text		"'No''Yes'"
+	value		1
+	switchchange nex_mp_publicserv
+}
+// start
+{
+	type 		ITEM_TEXTBUTTON
+	name		multiplayer_start
+	parent		multiplayer_frame
+	pos			"0 105"
+	flag		256		// FLAG_AUTOSETCLICK
+	alignment	8
+	text		"Start Game"
+	action		nex_mp_start
+}

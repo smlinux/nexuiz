@@ -356,9 +356,13 @@ float maxtime;
 float maxbots;
 entity selectmap;
 var float selectnum  = 0;
-float FRAME_WIDTH = 5;
-float MAPNAME_WIDTH = 100;
+float FRAME_WIDTH;
+float PIC_WIDTH;
 float mapnum;
+
+string hostname;
+float  maxclients;
+float  publicserver;
 
 // create the mapselection frame stuff
 void(void) nex_xp_build_maplist =
@@ -381,6 +385,22 @@ void(void) nex_xp_build_maplist =
 
 	template_text = menu_getitem("mapselection_template_text");
 	template_pic = menu_getitem("mapselection_template_picture");
+	template_text.pos_y = (template_pic.size_y - template_text.font_size_y) / 2;
+
+	// set FRAME_WIDTH
+	pic = menu_getitem("mapselection_frame");
+	FRAME_WIDTH = rint(pic.clip_size_x / template_pic.size_x);
+
+	// set PIC_WIDTH
+	PIC_WIDTH = template_pic.size_x;
+
+	// adjust the clip size of the frame
+	pic.clip_size_y = template_pic.size_y;
+
+	// adjust the selection square
+	pic = menu_getitem("mapselection_selsquare");
+
+	pic.size = template_pic.size;
 
 	mapnum = search_getsize(searchhandle);
 
@@ -397,34 +417,12 @@ void(void) nex_xp_build_maplist =
 		allstripped = substring(extstripped, 5, 400); // maps/ off
 		allstripped = strzone(allstripped);
 
-		mapname = spawn();
 		pic = spawn();
-
-		copyentity(template_text, mapname);
 		copyentity(template_pic, pic);
 
-		mapname.name = strzone(allstripped);
-		mapname.text = strzone(allstripped);
-
-		mapname.orderpos = counter + mapnum + 1;
-
-		mapname.pos_x = counter * MAPNAME_WIDTH;
-
-		mapname.size_x = MAPNAME_WIDTH;
-		mapname.size_y = mapname.font_size_y;
-		mapname.font_size = '0 0 0';
-
-		{
-			entity old
-			old = self;
-			self = mapname;
-			ITEM_TEXT();
-			self = old;
-		}
-
 		pic.orderpos = counter + 1;
-		pic.pos_x = counter * MAPNAME_WIDTH;
-		pic.name = strzone(strcat(allstripped,"_picture"));
+		pic.pos_x = counter * template_pic.size_x;
+		pic.name = strzone(allstripped);
 
 		// TODO: add support for other formats, too
 		filehandle = search_begin(strcat(extstripped,".jpg"), true, true);
@@ -434,9 +432,33 @@ void(void) nex_xp_build_maplist =
 			pic.picture = strzone(pic.picture);
 			search_end(filehandle);
 		}
+		else
+		{
+			mapname = spawn();
+			copyentity(template_text, mapname);
+
+			mapname.name = strzone(strcat(allstripped, "_text"));
+			mapname.text = strzone(allstripped);
+
+			mapname.orderpos = counter + mapnum + 1;
+
+			mapname.pos_x = counter * template_pic.size_x;
+
+			mapname.size_x = template_pic.size_x;
+			mapname.size_y = mapname.font_size_y;
+			mapname.font_size = '0 0 0';
+
+			{
+				entity old
+				old = self;
+				self = mapname;
+				ITEM_TEXT();
+				self = old;
+			}
+		}
 
 		if(counter == 0)
-			selectmap = mapname;
+			selectmap = pic;
 
 		strunzone(extstripped);
 		strunzone(allstripped);
@@ -455,13 +477,13 @@ void(void) nex_xp_prev =
 	selectmap = selectmap._prev;
 
 	s = menu_getitem("mapselection_selsquare");
-	s.pos_x = selectnum * 100;
+	s.pos_x = selectnum * PIC_WIDTH;
 
 	// scroll left ?
 	if((mapnum - 1 - selectnum) > floor(FRAME_WIDTH / 2) && selectnum + 1 >= ceil(FRAME_WIDTH / 2)) // 2,3
 	{
 		s = menu_getitem("mapselection_frame");
-		s.origin_x = s.origin_x + 100;
+		s.origin_x = s.origin_x + PIC_WIDTH;
 	}
 };
 
@@ -475,13 +497,13 @@ void(void) nex_xp_next =
 	selectmap = selectmap._next;
 
 	s = menu_getitem("mapselection_selsquare");
-	s.pos_x = selectnum * 100;
+	s.pos_x = selectnum * PIC_WIDTH;
 
 	// scroll right ?
 	if((mapnum - 1 - selectnum) >= floor(FRAME_WIDTH / 2) && selectnum + 1 > ceil(FRAME_WIDTH / 2)) // 2,3
 	{
 		s = menu_getitem("mapselection_frame");
-		s.origin_x = s.origin_x - 100;
+		s.origin_x = s.origin_x - PIC_WIDTH;
 	}
 };
 
@@ -498,8 +520,6 @@ void(void) nex_xp_click = // if one of the maplist entries get 'clicked' :-)
 	{
 		deltapos = self.orderpos - selectnum - 1;
 	}
-
-	print(ftos(deltapos));
 
 	if(deltapos == 0)
 		return;
@@ -529,13 +549,19 @@ void(void) nex_display_singleplayer =
 	menu_jumptowindow(menu_getitem("singleplayer"),true);
 };
 
+void(void) nex_display_multiplayer =
+{
+	if(menu_activewindow.name == "multiplayer")
+		return;
+	menu_jumptowindow(menu_getitem("multiplayer"),true);
+};
+
 void(void) nex_xp_maxfrags =
 {
 	float x;
 	x = stof(self.text);
-	x = rint(x);
+	maxfrags = rint(x);
 
-	maxfrags = x;
 	strunzone(self.text);
 	self.text = ftos(x);
 	self.text = strzone(self.text);
@@ -545,9 +571,8 @@ void(void) nex_xp_maxbots =
 {
 	float x;
 	x = stof(self.text);
-	x = rint(x);
+	maxbots = rint(x);
 
-	maxbots = x;
 	strunzone(self.text);
 	self.text = ftos(x);
 	self.text = strzone(self.text);
@@ -557,17 +582,16 @@ void(void) nex_xp_maxtime =
 {
 	float x;
 	x = stof(self.text);
-	x = rint(x);
+	maxtime = rint(x);
 
-	maxtime = x;
 	strunzone(self.text);
-	self.text = ftos(x);
+	self.text = ftos(maxtime);
 	self.text = strzone(self.text);
 };
 
 void(void) nex_sp_start =
 {
-	local float i;
+	//local float i;
 
 	cvar_set("fraglimit", ftos(maxfrags));
 	cvar_set("timelimit", ftos(maxtime));
@@ -589,6 +613,38 @@ void(void) nex_sp_start =
 	cmd("\n");
 };
 
+void(void) nex_mp_hostname =
+{
+	hostname = self.text;
+};
+
+void(void) nex_mp_maxclients =
+{
+	local float i;
+	i = stof(self.text);
+	maxclients = rint(i);
+
+	strunzone(self.text);
+	self.text = strzone(ftos(maxclients));
+};
+
+void(void) nex_mp_publicserv =
+{
+	publicserver = self.value;
+};
+
+void(void) nex_mp_start =
+{
+	cvar_set("fraglimit", ftos(maxfrags));
+	cvar_set("timelimit", ftos(maxtime));
+	cvar_set("deathmatch", ftos(1));
+	cvar_set("maxplayers", ftos(maxclients));
+	cvar_set("sv_public", ftos(publicserver));
+	cvar_set("hostname", hostname);
+	cmd("map ");
+	cmd(selectmap.name);
+	cmd(";wait;togglemenu\n");
+};
 /////////////////
 // options.menu
 ///
@@ -796,6 +852,113 @@ void(void) nex_cc_grey =
 {
 	self.refresh = nex_cc_grey_refresh;
 	self.slidermove = nex_cc_grey_move;
+};
+
+// key control stuff
+void(void) nex_cntrl =
+{
+	entity ent;
+	ent = menu_getitem("options_settings_ref");
+	ent._child = menu_getitem("options_control");
+	menu_jumptowindow(ent, false);
+}
+
+const float NUMKEYS = 2;	// visible key count (first and secondary key)
+string bindcommand;
+
+void(float keynr, float ascii) nex_con_keyhook =
+{
+	if(keynr != K_ESCAPE)
+	{
+		string tmp;
+		tmp = bind_getkeylist(bindcommand);
+		// remove the oldest binding if we need more space
+		if(getaltstringcount(tmp) >= NUMKEYS)
+			bind_unbindkey(bind_getstringforkey(stof(getaltstring(0, tmp))));
+		// bind the new key
+		bind_bindkey(bind_getstringforkey(keynr), bindcommand);
+	}
+	menu_keyhook = null_function;
+};
+
+void(void) nex_con_update_keys =
+{
+	entity ent;
+	string keystr;
+	float num;
+
+	if(!self._child)
+		return;
+
+	keystr = strzone(bind_getkeylist(self.link));
+
+	num = 0;
+
+	for(ent = self._child; ent != null_entity; ent = ent._next)
+	{
+		float keynr;
+
+		keynr = stof(getaltstring(num, keystr));
+
+		if(keynr == -1 )
+			break;
+
+		strunzone(ent.text);
+		ent.text = bind_getstringforkey(keynr);
+
+		ent.text = strzone(ent.text);
+
+		num = num + 1;
+	}
+
+	strunzone(keystr);
+};
+
+var float numkey = 0;
+void(void) CONTROL_KEY =
+{
+	entity key1, key2, desc;
+	entity temp_desc, temp_key;
+
+	temp_desc = menu_getitem("control_desc_template");
+	temp_key = menu_getitem("control_key_template");
+
+	desc = spawn();
+	copyentity(temp_desc, desc);
+
+	key1 = spawn();
+	copyentity(temp_key, key1);
+
+	key2 = spawn();
+	copyentity(temp_key, key2);
+
+	desc.name = self.text;
+	key1.name = strzone(strcat(self.text, " key1"));
+	key2.name = strzone(strcat(self.text, " key2"));
+
+	desc.pos_y = key1.pos_y = key2.pos_y = temp_desc.pos_y * numkey;
+	key2.pos_x = 2 * key2.pos_x;
+
+	desc.text = self.text;
+	desc.link = self.link;
+
+	key1.text = strzone("-");
+	key2.text = strzone("-");
+
+	desc.alignment = 0;
+
+	// set the parents
+	desc.parent = "options_control";
+	desc._parent = menu_getitem("options_control");
+
+	key1.parent = key2.parent = desc.name;
+	key1._parent = key2._parent = desc;
+
+	eprint(key1);
+	eprint(key2);
+	eprint(desc);
+
+	numkey = numkey + 1;
 };
 
 ////////////////////////////////////////////////////

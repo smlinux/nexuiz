@@ -177,8 +177,8 @@ const float FLAG_CHILDDRAWREFRESHONLY = 4096;
 .void(void) slidermove;
 
 // ITEM_TEXTSWITCH (derived from ITEM_TEXT mostly)
-.string	text;	// like above
-.float	value;	// the current displayed/selected text
+//.string	text;	// like above
+//.float	value;	// the current displayed/selected text
 
 .void(void) switchchange;
 

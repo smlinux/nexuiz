@@ -449,5 +449,6 @@ string(float keynum) bind_getstringforkey =
 
 string(string command) bind_getkeylist =
 {
+	return findkeysforcommand(command);
 };
 

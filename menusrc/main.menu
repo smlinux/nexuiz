@@ -50,6 +50,7 @@ template
 	picture_selected "gfx/m_top_sel_multiplayer"
 	picture_pressed	"gfx/m_top_sel_multiplayer"
 	drawflag_pressed 0
+	action		nex_display_multiplayer
 }
 // options
 {
@@ -114,8 +115,9 @@ template
 	type		ITEM_RECTANGLE
 	name		quitbox_wnd_bg
 	parent		quitbox_wnd
-	color		"0.1 0.1 0.1"
-	drawflag	2	// DRAWFLAG_MODULATE
+	color		"0.0 0.0 0.1"
+	alpha		0.5
+	drawflag	0	// DRAWFLAG_MODULATE
 	size		"210 80"
 }/*
 {

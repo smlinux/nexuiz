@@ -145,7 +145,7 @@ void(void) ITEM_TEXT_REFRESH =
 
 void(void) ITEM_TEXT_DRAW =
 {
-	if(self.text)
+	if(self.text != "")
 	{
 		// align to the rect pos - (pos + size)
 		vector alignpos;
@@ -955,6 +955,9 @@ void(void) ITEM_EDITBOX_REFRESH =
 		if(self.sound_selected)
 			snd_play(self.sound_selected);
 	}
+
+	if(self._cursorpos > strlen(self.text))
+		self._cursorpos = strlen(self.text);
 
 	ITEM_TEXT_REFRESH();
 };
