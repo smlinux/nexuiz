@@ -19,10 +19,10 @@ void Teleport_Touch (void)
 	// Make teleport effect where the player arrived
 	sound (other, CHAN_ITEM, "misc/Teleport.wav", 1, ATTN_NORM);
 	makevectors (dest.mangle);
-	te_teleport (dest.origin + '0 0 27' + v_forward * 32);
+	te_teleport (dest.origin + v_forward * 32);
 
 	// Relocate the player
-	setorigin (other, dest.origin + '0 0 27');
+	setorigin (other, dest.origin);
 	other.angles = dest.mangle;
 	other.fixangle = TRUE;
 	
@@ -35,6 +35,8 @@ void info_teleport_destination (void)
 {
 	self.mangle = self.angles;
 	self.angles = '0 0 0';
+
+	setorigin (self, self.origin + '0 0 27');	// To fix a mappers' habit as old as Quake
 
 	if (!self.targetname)
 		objerror ("Teleport destination without a targetname");
