@@ -57,7 +57,7 @@ void player_anim (void)
 	}
 
 
-	if (self.crouch) 
+	if (self.crouch)
 	{
 		if (self.movement_x * self.movement_x + self.movement_y * self.movement_y > 20)
 			self.frame = $duckwalk;
@@ -203,7 +203,7 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 		self.avelocity = '0 0 0';
 		// no weapon when dead
 		self.weaponmodel = "";
-		//w_clear();
+		w_clear();
 		// view from the floor
 		self.view_ofs = '0 0 -8';
 		// toss the corpse
