@@ -94,9 +94,12 @@ void() w_clear =
 	weapon_action(self.weapon, WR_CLEAR);
 	if (self.weapon != -1)
 		self.weapon = 0;
-	self.weaponentity.state = WS_CLEAR;
-	setmodel(self.weaponentity, "");
-	self.weaponentity.effects = 0;
+	if (self.weaponentity)
+	{
+		self.weaponentity.state = WS_CLEAR;
+		setmodel(self.weaponentity, "");
+		self.weaponentity.effects = 0;
+	}
 };
 
 void() w_ready =

@@ -24,7 +24,7 @@ void(float req) w_laser =
 		weapon_setup(WEP_LASER, "w_laser.zym", 0);
 	else if (req == WR_CHECKAMMO)
 		weapon_hasammo = laser_check();
-};		 
+};
 
 void W_Laser_Touch (void)
 {
@@ -51,10 +51,10 @@ void W_Laser_Touch (void)
 	WriteCoord (MSG_BROADCAST, 0);
 	WriteByte (MSG_BROADCAST, 155); */
 
-	
+
 
 	self.event_damage = nullfunction;
-	RadiusDamage (self, self.owner, 15, 20, 50, world, 200, IT_LASER);
+	RadiusDamage (self, self.owner, cvar("g_balance_laser_damage"), cvar("g_balance_laser_edgedamage"), cvar("g_balance_laser_radius"), world, cvar("g_balance_laser_force"), IT_LASER);
 	sound (self, CHAN_IMPACT, "weapons/laserimpact.wav", 1, ATTN_NORM);
 
 	remove (self);
@@ -79,7 +79,7 @@ void W_Laser_Attack (void)
 	setsize (missile, '0 0 0', '0 0 0');
 	setorigin (missile, self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -12);
 
-	missile.velocity = v_forward * 1000;
+	missile.velocity = v_forward * cvar("g_balance_laser_speed");
 	missile.velocity = missile.velocity + v_right * ( crandom() * 45 );
 	missile.velocity = missile.velocity + v_up * ( crandom() * 25 );
 	missile.angles = vectoangles (missile.velocity);
@@ -104,24 +104,24 @@ void W_Laser_Attack2 (void)
 	weapon_shotdir(18, 5, -12);
 	// self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);
 	sound (self, CHAN_WEAPON, "weapons/crylink.wav", 1, ATTN_NORM);
-	//org = self.origin + self.view_ofs + v_forward * 10 + v_right * 5 + v_up * -14;	
+	//org = self.origin + self.view_ofs + v_forward * 10 + v_right * 5 + v_up * -14;
 	FireRailgunBullet (self.shotorg, self.origin + self.shotdir*4096, 25, IT_LASER);
 	te_spark(trace_endpos, self.shotdir, 55);
 	self.attack_finished = time + 0.400;
 	*/
 }
 
-// weapon frames 
+// weapon frames
 
 void()	laser_ready_01 =	{weapon_thinkf(WFRAME_IDLE, 0.1, laser_ready_01); self.weaponentity.state = WS_READY;};
 void()	laser_select_01 =	{weapon_thinkf(-1, PLAYER_WEAPONSELECTION_DELAY, w_ready); weapon_boblayer1(PLAYER_WEAPONSELECTION_SPEED, '0 0 0');};
 void()	laser_deselect_01 =	{weapon_thinkf(-1, PLAYER_WEAPONSELECTION_DELAY, w_clear); weapon_boblayer1(PLAYER_WEAPONSELECTION_SPEED, PLAYER_WEAPONSELECTION_RANGE);};
-void()	laser_fire1_01 =	
+void()	laser_fire1_01 =
 {
 	weapon_doattack(laser_check, laser_check, W_Laser_Attack);
 	weapon_thinkf(WFRAME_FIRE1, 0.3, laser_ready_01);
 };
-void()	laser_fire2_01 =	
+void()	laser_fire2_01 =
 {
 	weapon_doattack(laser_check, laser_check, W_Laser_Attack2);
 	weapon_thinkf(WFRAME_FIRE1, 0.2, laser_ready_01);

@@ -215,7 +215,7 @@ void ImpulseCommands (void)
 	{
 		self.items = IT_LASER | IT_UZI | IT_SHOTGUN | IT_GRENADE_LAUNCHER | IT_ELECTRO | IT_CRYLINK | IT_NEX | IT_HAGAR | IT_ROCKET_LAUNCHER;
 		self.ammo_shells = 100;
-		self.ammo_nails = 100;
+		self.ammo_nails = 200;
 		self.ammo_rockets = 100;
 		self.ammo_cells = 100;
 	}

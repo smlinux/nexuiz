@@ -6,7 +6,7 @@ void() uzi_select_01;
 
 float() uzi_check =
 {
-	if (self.ammo_nails > 0)
+	if (self.ammo_nails >= 1)
 		return TRUE;
 	return FALSE;
 };
@@ -36,13 +36,13 @@ void W_Uzi_Attack (void)
 	makevectors(self.v_angle);
 	sound (self, CHAN_WEAPON, "weapons/uzi_fire.wav", 1, ATTN_NORM);
 
-	fireBullet (self.origin + self.view_ofs, v_forward, 0.025, 4, IT_UZI);
+	fireBullet (self.origin + self.view_ofs, v_forward, 0.05, cvar("g_balance_uzi_damage"), IT_UZI);
 
 	self.punchangle_x = random () - 0.5;
 	self.punchangle_y = random () - 0.5;
 	self.punchangle_z = random () - 0.5;
 
-	self.attack_finished = time + 0.075;
+	self.attack_finished = time + 0.05;
 	self.ammo_nails = self.ammo_nails - 1;
 
 	vector	org; // casing code
@@ -55,9 +55,9 @@ void W_Uzi_Attack2 (void)
 	makevectors(self.v_angle);
 	sound (self, CHAN_WEAPON, "weapons/uzi_fire.wav", 1, ATTN_NORM);
 
-	fireBullet (self.origin + self.view_ofs, v_forward, 1, 4, IT_UZI);
+	fireBullet (self.origin + self.view_ofs, v_forward, 0.01, 21, IT_UZI);
 
-	self.attack_finished = time + 0.16;
+	self.attack_finished = time + 0.3;
 	self.ammo_nails = self.ammo_nails - 1;
 
 	vector	org; // casing code
@@ -73,15 +73,12 @@ void()	uzi_fire1_01 =
 {
 	weapon_doattack(uzi_check, uzi_check, W_Uzi_Attack);
 	if (self.button0)
-		weapon_thinkf(WFRAME_FIRE1, 0.075, uzi_fire1_01);
+		weapon_thinkf(WFRAME_FIRE1, 0.05, uzi_fire1_01);
 	else
-		weapon_thinkf(WFRAME_FIRE1, 0.075, uzi_ready_01);
+		weapon_thinkf(WFRAME_FIRE1, 0.05, uzi_ready_01);
 };
 void()	uzi_fire2_01 =
 {
 	weapon_doattack(uzi_check, uzi_check, W_Uzi_Attack2);
-	if (self.button0)
-		weapon_thinkf(WFRAME_FIRE2, 0.16, uzi_fire2_01);
-	else
-		weapon_thinkf(WFRAME_FIRE2, 0.1, uzi_ready_01);
+	weapon_thinkf(WFRAME_FIRE2, 0.05, uzi_ready_01);
 };

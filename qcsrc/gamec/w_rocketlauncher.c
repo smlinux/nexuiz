@@ -5,10 +5,10 @@ void() rlauncher_deselect_01;
 void() rlauncher_select_01;
 void() W_Rocket_Attack2;
 
-float() rlauncher_check = 
+float() rlauncher_check =
 {
-	if (self.ammo_rockets > 0) 
-		return TRUE; 
+	if (self.ammo_rockets >= 3)
+		return TRUE;
 	return FALSE;
 };
 
@@ -33,22 +33,22 @@ void(float req) w_rlauncher =
 		weapon_setup(WEP_ROCKET_LAUNCHER, "w_rl.zym", IT_ROCKETS);
 	else if (req == WR_CHECKAMMO)
 		weapon_hasammo = rlauncher_check();
-};		 
+};
 
 
-void W_Rocket_Explode (entity ignore)
+void W_Rocket_Explode (void)
 {
 	ImpactEffect (self, IT_ROCKET_LAUNCHER);
 
 	self.event_damage = nullfunction;
-	RadiusDamage (self, self.owner, 130, 50, 170, ignore, 600, IT_ROCKET_LAUNCHER);
+	RadiusDamage (self, self.owner, cvar("g_balance_rocketlauncher_damage"), cvar("g_balance_rocketlauncher_edgedamage"), cvar("g_balance_rocketlauncher_radius"), world, cvar("g_balance_rocketlauncher_force"), IT_ROCKET_LAUNCHER);
 
 	remove (self);
 }
 
 void W_Rocket_Think (void)
 {
-	W_Rocket_Explode (world);
+	W_Rocket_Explode ();
 }
 
 void W_Rocket_Touch (void)
@@ -61,14 +61,14 @@ void W_Rocket_Touch (void)
 		return;
 	}
 	else
-		W_Rocket_Explode (world);
+		W_Rocket_Explode ();
 }
 
 void W_Rocket_Damage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
 {
 	self.health = self.health - damage;
 	if (self.health <= 0)
-		W_Rocket_Explode(world);
+		W_Rocket_Explode();
 }
 
 void W_Rocket_Attack (void)
@@ -95,7 +95,7 @@ void W_Rocket_Attack (void)
 	org = self.origin + self.view_ofs + v_forward * 15 + v_right * 3 + v_up * -11;
 
 	setorigin (missile, org);
-	missile.velocity = v_forward * 850;
+	missile.velocity = v_forward * cvar("g_balance_rocketlauncher_speed");
 	missile.angles = vectoangles (missile.velocity);
 
 	missile.touch = W_Rocket_Touch ;
@@ -105,7 +105,7 @@ void W_Rocket_Attack (void)
 	self.attack_finished = time + 1.2;
 
 	if (!(game & GAME_ROCKET_ARENA))
-		self.ammo_rockets = self.ammo_rockets - 1;
+		self.ammo_rockets = self.ammo_rockets - 3;
 
 	entity	flash;
 	flash = spawn ();
@@ -134,17 +134,17 @@ void W_Rocket_Attack2 (void)
 	self.attack_finished = time + 0.1;
 }
 
-// weapon frames 
+// weapon frames
 
 void()	rlauncher_ready_01 =	{weapon_thinkf(WFRAME_IDLE, 0.1, rlauncher_ready_01); self.weaponentity.state = WS_READY;};
 void()	rlauncher_select_01 =	{weapon_thinkf(-1, PLAYER_WEAPONSELECTION_DELAY, w_ready); weapon_boblayer1(PLAYER_WEAPONSELECTION_SPEED, '0 0 0');};
 void()	rlauncher_deselect_01 =	{weapon_thinkf(-1, PLAYER_WEAPONSELECTION_DELAY, w_clear); weapon_boblayer1(PLAYER_WEAPONSELECTION_SPEED, PLAYER_WEAPONSELECTION_RANGE);};
-void()	rlauncher_fire1_01 =	
+void()	rlauncher_fire1_01 =
 {
 	weapon_doattack(rlauncher_check, rlauncher_check, W_Rocket_Attack);
 	weapon_thinkf(WFRAME_FIRE1, 0.3, rlauncher_ready_01);
 };
-void()	rlauncher_fire2_01 =	
+void()	rlauncher_fire2_01 =
 {
 	weapon_doattack(rlauncher_check, rlauncher_check, W_Rocket_Attack2);
 	weapon_thinkf(WFRAME_FIRE2, 0.3, rlauncher_ready_01);

@@ -4,10 +4,10 @@ void() hagar_fire2_01;
 void() hagar_deselect_01;
 void() hagar_select_01;
 
-float() hagar_check = 
+float() hagar_check =
 {
-	if (self.ammo_rockets > 0) 
-		return TRUE; 
+	if (self.ammo_rockets >= 1)
+		return TRUE;
 	return FALSE;
 };
 
@@ -29,14 +29,14 @@ void(float req) w_hagar =
 		weapon_setup(WEP_HAGAR, "w_hagar.zym", IT_ROCKETS);
 	else if (req == WR_CHECKAMMO)
 		weapon_hasammo = hagar_check();
-};		 
+};
 
 void W_Hagar_Explode (void)
 {
 	ImpactEffect (self, IT_HAGAR);
 
 	self.event_damage = nullfunction;
-	RadiusDamage (self, self.owner, 40, 15, 70, world, 100, IT_HAGAR);
+	RadiusDamage (self, self.owner, cvar("g_balance_hagar_damage"), cvar("g_balance_hagar_edgedamage"), cvar("g_balance_hagar_radius"), world, cvar("g_balance_hagar_force"), IT_HAGAR);
 
 	remove (self);
 }
@@ -64,6 +64,7 @@ void W_Hagar_Damage (entity inflictor, entity attacker, float damage, float deat
 void W_Hagar_Attack (void)
 {
 	entity	missile;
+	float	sped;
 
 	makevectors(self.v_angle);
 	sound (self, CHAN_WEAPON, "weapons/hagar_fire.wav", 1, ATTN_NORM);
@@ -84,9 +85,8 @@ void W_Hagar_Attack (void)
 
 	setorigin (missile, self.origin + self.view_ofs + v_forward * 25 + v_right * 5 + v_up * -12);
 
-	missile.velocity = v_forward * 2000;
-	missile.velocity = missile.velocity + v_right * ( crandom() * 70 );
-	missile.velocity = missile.velocity + v_up * ( crandom() * 30 );
+	sped = cvar("g_balance_hagar_speed");
+	missile.velocity = v_forward * sped + v_right * crandom() * 0.035 * sped + v_up * crandom() * 0.015 * sped;
 	missile.angles = vectoangles (missile.velocity);
 
 	missile.touch = W_Hagar_Touch;
@@ -94,7 +94,7 @@ void W_Hagar_Attack (void)
 	missile.nextthink = time + 10;
 
 	self.attack_finished = time + 0.2;
-	self.ammo_rockets = self.ammo_rockets - 0.25;
+	self.ammo_rockets = self.ammo_rockets - 1;
 }
 
 void W_Hagar_Attack2 (void)
@@ -122,7 +122,7 @@ void W_Hagar_Attack2 (void)
 
 	setorigin (missile, self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -12);
 
-	missile.velocity = v_forward * 1400 + v_up * 100;
+	missile.velocity = v_forward * cvar("g_balance_hagar_speed2") + v_up * cvar("g_balance_hagar_speed2_up");
 	missile.angles = vectoangles (missile.velocity);
 	missile.avelocity = '100 10 10';
 
@@ -131,19 +131,19 @@ void W_Hagar_Attack2 (void)
 	missile.nextthink = time + 10;
 
 	self.attack_finished = time + 0.2;
-	self.ammo_rockets = self.ammo_rockets - 0.25;
+	self.ammo_rockets = self.ammo_rockets - 1;
 }
 
-// weapon frames 
+// weapon frames
 void()	hagar_ready_01 =	{weapon_thinkf(WFRAME_IDLE, 0.1, hagar_ready_01); self.weaponentity.state = WS_READY;};
 void()	hagar_select_01 =	{weapon_thinkf(-1, PLAYER_WEAPONSELECTION_DELAY, w_ready); weapon_boblayer1(PLAYER_WEAPONSELECTION_SPEED, '0 0 0');};
 void()	hagar_deselect_01 =	{weapon_thinkf(-1, PLAYER_WEAPONSELECTION_DELAY, w_clear); weapon_boblayer1(PLAYER_WEAPONSELECTION_SPEED, PLAYER_WEAPONSELECTION_RANGE);};
-void()	hagar_fire1_01 =	
+void()	hagar_fire1_01 =
 {
 	weapon_doattack(hagar_check, hagar_check, W_Hagar_Attack);
 	weapon_thinkf(WFRAME_FIRE1, 0.15, hagar_ready_01);
 };
-void()	hagar_fire2_01 =	
+void()	hagar_fire2_01 =
 {
 	weapon_doattack(hagar_check, hagar_check, W_Hagar_Attack2);
 	weapon_thinkf(WFRAME_FIRE2, 0.15, hagar_ready_01);

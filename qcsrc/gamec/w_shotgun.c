@@ -4,9 +4,9 @@ void() shotgun_fire2_01;
 void() shotgun_deselect_01;
 void() shotgun_select_01;
 
-float() shotgun_check = 
+float() shotgun_check =
 {
-	if (self.ammo_shells > 0)
+	if (self.ammo_shells >= 1)
 		return TRUE;
 	return FALSE;
 };
@@ -29,7 +29,7 @@ void(float req) w_shotgun =
 		weapon_setup(WEP_SHOTGUN, "w_shotgun.zym", IT_SHELLS);
 	else if (req == WR_CHECKAMMO)
 		weapon_hasammo = shotgun_check();
-};		 
+};
 
 void W_Shotgun_Attack (void)
 {
@@ -57,13 +57,15 @@ void W_Shotgun_Attack2 (void)
 {
 	float	sc;
 	float	bullets;
+	float	d;
 
 	makevectors(self.v_angle);
 	sound (self, CHAN_WEAPON, "weapons/shotgun_fire.wav", 1, ATTN_NORM);
-	bullets = 10;
+	bullets = cvar("g_balance_shotgun_bullets");
+	d = cvar("g_balance_shotgun_damage");
 
 	for (sc = bullets; sc > 0; sc = sc - 1)
-		fireBullet (self.origin + self.view_ofs, v_forward, 0.1, 3.5, IT_SHOTGUN);
+		fireBullet (self.origin + self.view_ofs, v_forward, 0.1, d, IT_SHOTGUN);
 	self.ammo_shells = self.ammo_shells - 1;
 	self.attack_finished = time + 1.4;
 
@@ -76,12 +78,12 @@ void W_Shotgun_Attack2 (void)
 	W_Smoke(org, v_forward, 12);
 }
 
-// weapon frames 
+// weapon frames
 
 void()	shotgun_ready_01 =	{weapon_thinkf(WFRAME_IDLE, 0.1, shotgun_ready_01); self.weaponentity.state = WS_READY;};
 void()	shotgun_select_01 =	{weapon_thinkf(-1, PLAYER_WEAPONSELECTION_DELAY, w_ready); weapon_boblayer1(PLAYER_WEAPONSELECTION_SPEED, '0 0 0');};
 void()	shotgun_deselect_01 =	{weapon_thinkf(-1, PLAYER_WEAPONSELECTION_DELAY, w_clear); weapon_boblayer1(PLAYER_WEAPONSELECTION_SPEED, PLAYER_WEAPONSELECTION_RANGE);};
-void()	shotgun_fire1_01 =	
+void()	shotgun_fire1_01 =
 {
 	weapon_doattack(shotgun_check, shotgun_check, W_Shotgun_Attack);
 	weapon_thinkf(WFRAME_FIRE1, 0.3, shotgun_ready_01);
@@ -91,12 +93,12 @@ void()  shotgun_fire2_03 =
         weapon_doattack(shotgun_check, shotgun_check, W_Shotgun_Attack2);
         weapon_thinkf(WFRAME_FIRE1, 0.9, shotgun_ready_01);
 }
-void()  shotgun_fire2_02 =      
+void()  shotgun_fire2_02 =
 {
         weapon_doattack(shotgun_check, shotgun_check, W_Shotgun_Attack2);
         weapon_thinkf(WFRAME_FIRE1, 0.2, shotgun_fire2_03);
 }
-void()  shotgun_fire2_01 =      
+void()  shotgun_fire2_01 =
 {
         weapon_doattack(shotgun_check, shotgun_check, W_Shotgun_Attack2);
         weapon_thinkf(WFRAME_FIRE1, 0.2, shotgun_fire2_02);

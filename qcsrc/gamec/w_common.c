@@ -102,7 +102,7 @@ float W_GetBestWeapon (entity e)
 	else if ((e.items & IT_SHOTGUN) && e.ammo_shells)
 		return IT_SHOTGUN;
 	else
-		
+
 		*/
 	return IT_LASER;
 }
@@ -625,7 +625,7 @@ void W_ThirdAttack (void)
 
 	if (!W_CheckAmmo ())
 		return;
-	
+
 	makevectors (self.v_angle);
 	//if (self.weapon == IT_LASER)
 		//W_Laser_Attack2 ();
