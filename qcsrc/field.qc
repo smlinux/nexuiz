@@ -53,4 +53,6 @@ entity dest;
 .float	respawntime;
 .float	chasecam;
 
+.float electrocount;
+
 .float	damageforcescale;

@@ -460,18 +460,28 @@ void W_Laser_Attack (void)
 
 void W_Laser_Attack2 (void)
 {
+	entity	proj;
+	proj = findradius (self.origin, 700);
+	while (proj)
+	{
+		if (proj.classname == "grenade" || proj.classname == "rocket")
+		{
+			proj.nextthink = time;
+		}
+		proj = proj.chain;
+	}
 
+	self.attack_finished = time;
 }
 
 void W_Uzi_Attack (void)
 {
 	sound (self, CHAN_WEAPON, "weapons/Uzi_Fire.wav", 1, ATTN_NORM);
 
-	fireBullet (v_forward, 300, 8, IT_SHOTGUN);
+	fireBullet (v_forward, 100, 8, IT_SHOTGUN);
 
-	self.punchangle_x = random () * -2;
-	self.punchangle_y = crandom () * 0.5;
-	self.punchangle_z = crandom () * 0.5;
+	self.punchangle = (randomvec() + '-1 0 0') * 2;
+	self.punchangle_z = 0; // don't want roll
 
 	self.attack_finished = time + 0.075;
 	self.ammo_nails = self.ammo_nails - 1;
@@ -483,37 +493,26 @@ void W_Uzi_Attack (void)
 
 void W_Uzi_Attack2 (void)
 {
-	sound (self, CHAN_WEAPON, "weapons/Uzi_Fire.wav", 1, ATTN_NORM);
-
-	fireBullet (v_forward, 3, 10, IT_SHOTGUN);
-
-	self.punchangle = '-0.5 0 0';
-
-	self.attack_finished = time + 0.3;
-	self.ammo_nails = self.ammo_nails - 1;
-
-	vector	org;
-	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 1) + (v_forward * 20);
-	SpawnCasing (org, v_forward, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 + 10) * v_up), 1);
-}
-
-void W_Shotgun_Attack (void)
-{
 	float	sc;
 
 	sound (self, CHAN_WEAPON, "weapons/Shotgun_fire.wav", 1, ATTN_NORM);
 
 	for (sc = 7; sc > 0; sc = sc - 1)
-		fireBullet (v_forward, 300, 8, IT_SHOTGUN);
+		fireBullet (v_forward, 270, 8, IT_SHOTGUN);
 
 	self.punchangle_x = -2;
 
-	self.ammo_shells = self.ammo_shells - 1;
+	self.ammo_nails = self.ammo_nails - 5;
 	self.attack_finished = time + 0.8;
 
 	vector	org; // casing code
 	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 4) + (v_forward * 15);
 	SpawnCasing (org, v_forward, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 + 10) * v_up), 2);
+}
+
+void W_Shotgun_Attack (void)
+{
+
 }
 
 void W_Shotgun_Attack2 (void)
@@ -575,7 +574,7 @@ void W_Grenade_Attack (void)
 
 	gren.touch = W_Grenade_Touch;
 	gren.think = W_Grenade_FuseExplode;
-	gren.nextthink = time + 2;
+	gren.nextthink = time + 5;
 
 	self.attack_finished = time + 1;
 	self.ammo_rockets = self.ammo_rockets - 1;
@@ -583,40 +582,18 @@ void W_Grenade_Attack (void)
 
 void W_Grenade_Attack2 (void)
 {
-	entity	gren;
+	entity	proj;
+	proj = findradius (self.origin, 50000);
+	while (proj)
+	{
+		if (proj.classname == "grenade")
+		{
+			proj.nextthink = time;
+		}
+		proj = proj.chain;
+	}
 
-	sound (self, CHAN_WEAPON, "weapons/Grenade_fire.wav", 1, ATTN_NORM);
-
-	self.punchangle_x = -4;
-
-	gren = spawn ();
-	gren.owner = self;
-	gren.classname = "grenade";
-
-	gren.movetype = MOVETYPE_TOSS;
-	gren.solid = SOLID_BBOX;
-
-	gren.takedamage = DAMAGE_YES;
-	gren.damageforcescale = 4;
-	gren.health = 1;
-	gren.event_hurt = W_Grenade_Explode;
-
-	setmodel (gren, "models/grenademodel.md3");
-	setsize (gren, '-6 -6 -3', '6 6 3');
-
-	makevectors (self.v_angle);
-	setorigin (gren, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);
-
-	gren.velocity = v_forward * 1400 + v_up * 100;
-	gren.angles = vectoangles (gren.velocity);
-	gren.avelocity = '150 1500 150';
-
-	gren.touch = W_Grenade_Explode;
-	gren.think = W_Grenade_FuseExplode;
-	gren.nextthink = time + 5;
-
-	self.attack_finished = time + 1;
-	self.ammo_rockets = self.ammo_rockets - 1;
+	self.attack_finished = time;
 }
 
 void W_Electro_Touch (void)
@@ -636,7 +613,7 @@ void W_Electro_Touch (void)
 	remove (self);
 }
 
-void W_Electro_Attack (void)
+void W_Electro_Attack (float postion)
 {
 	entity	proj;
 
@@ -654,14 +631,19 @@ void W_Electro_Attack (void)
 
 	setmodel (proj, "models/bullet.mdl");
 	setsize (proj, '0 0 0', '0 0 0');
-	setorigin (proj, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);
+	if (postion == 0)
+	setorigin (proj, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -14);
+	if (postion == 1)
+	setorigin (proj, self.origin + self.view_ofs + v_forward * 18 + v_right * 10 + v_up * -12);
+	if (postion == 2)
+	setorigin (proj, self.origin + self.view_ofs + v_forward * 18 + v_right * 15 + v_up * -14);
 
-	proj.velocity = v_forward * 3000;
+	proj.velocity = v_forward * 1000;
 	proj.touch = W_Electro_Touch;
 	proj.think = SUB_Remove;
 	proj.nextthink = time + 3;
 
-	self.attack_finished = time + 0.6;
+	self.attack_finished = time + 0.2;
 	self.ammo_cells = self.ammo_cells - 1;
 }
 
@@ -899,37 +881,37 @@ void W_Hagar_Attack (void)
 
 void W_Hagar_Attack2 (void)
 {
-	entity	missile;
-	vector	org;
+	entity	missle;
 
 	sound (self, CHAN_WEAPON, "weapons/Hagar_Fire.wav", 1, ATTN_NORM);
 
-	missile = spawn ();
-	missile.owner = self;
-	missile.classname = "rocket";
+	missle = spawn ();
+	missle.owner = self;
+	missle.classname = "rocket";
 
-	missile.takedamage = DAMAGE_YES;
-	missile.damageforcescale = 4;
-	missile.health = 1;
-	missile.event_hurt = W_Hagar_Explode;
+	missle.movetype = MOVETYPE_TOSS;
+	missle.solid = SOLID_BBOX;
 
-	missile.movetype = MOVETYPE_FLY;
-	missile.solid = SOLID_BBOX;
-	setmodel (missile, "models/hagarmissile.mdl");
-	setsize (missile, '0 0 0', '0 0 0');
+	missle.takedamage = DAMAGE_YES;
+	missle.damageforcescale = 4;
+	missle.health = 1;
+	missle.event_hurt = W_Grenade_Explode;
+
+	setmodel (missle, "models/hagarmissile.mdl");
+	setsize (missle, '-6 -6 -3', '6 6 3');
 
 	makevectors (self.v_angle);
+	setorigin (missle, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);
 
-	setorigin (missile, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);
+	missle.velocity = v_forward * 1400 + v_up * 100;
+	missle.angles = vectoangles (missle.velocity);
+	missle.avelocity = '150 1500 150';
 
-	missile.velocity = v_forward * 15000;
-	missile.angles = vectoangles (missile.velocity);
+	missle.touch = W_Hagar_Touch;
+	missle.think = SUB_Remove;
+	missle.nextthink = time + 3;
 
-	missile.touch = W_Hagar_Touch;
-	missile.think = SUB_Remove;
-	missile.nextthink = time + 1;
-
-	self.attack_finished = time + 0.7;
+	self.attack_finished = time + 0.2;
 	self.ammo_rockets = self.ammo_rockets - 0.25;
 }
 
@@ -1074,7 +1056,12 @@ void W_Attack (void)
 	else if (self.weapon == IT_GRENADE_LAUNCHER)
 		W_Grenade_Attack ();
 	else if (self.weapon == IT_ELECTRO)
-		W_Electro_Attack ();
+		{
+		W_Electro_Attack (self.electrocount);
+		self.electrocount = self.electrocount + 1;
+		if (self.electrocount == 3)
+			self.electrocount = 0;
+		}
 	else if (self.weapon == IT_CRYLINK)
 		W_Crylink_Attack ();
 	else if (self.weapon == IT_NEX)
