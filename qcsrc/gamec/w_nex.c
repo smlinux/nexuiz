@@ -36,15 +36,32 @@ void W_Nex_Attack (void)
 {
 	vector	org;
 	vector	dir;
+	vector end;
 	entity 	explosion;
 
 	sound (self, CHAN_WEAPON, "weapons/nexfire.wav", 1, ATTN_NORM);
 	self.punchangle_x = -4;
 	makevectors(self.v_angle);
-	org = self.origin + self.view_ofs + v_forward * 28 + v_right * 14 + v_up * -7;
-	te_smallflash(org);
+	org = self.origin + self.view_ofs + v_forward * 5 + v_right * 14 + v_up * -7;
 
 	FireRailgunBullet (org, self.origin + self.view_ofs + v_forward * 4096, cvar("g_balance_nex_damage"), IT_NEX);
+
+
+	org = self.origin + self.view_ofs + v_forward * 28 + v_right * 14 + v_up * -7;
+	end = self.origin + self.view_ofs + v_forward * 4096;
+	te_smallflash(org);
+		// beam effect
+	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+	WriteByte (MSG_BROADCAST, 76);
+	WriteCoord (MSG_BROADCAST, org_x);
+	WriteCoord (MSG_BROADCAST, org_y);
+	WriteCoord (MSG_BROADCAST, org_z);
+	WriteCoord (MSG_BROADCAST, end_x);
+	WriteCoord (MSG_BROADCAST, end_y);
+	WriteCoord (MSG_BROADCAST, end_z);
+	WriteCoord (MSG_BROADCAST, 0);
+	WriteCoord (MSG_BROADCAST, 0);
+	WriteCoord (MSG_BROADCAST, 0);
 
 	self.attack_finished = time + 1;
 

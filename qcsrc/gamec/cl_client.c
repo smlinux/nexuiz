@@ -238,7 +238,7 @@ void() ChatBubbleThink =
 		remove(self);
 		return;
 	}
-	setorigin(self, self.owner.origin + '0 0 10' + self.owner.maxs_z * '0 0 1');
+	setorigin(self, self.owner.origin + '0 0 15' + self.owner.maxs_z * '0 0 1');
 	if (self.owner.buttonchat)
 		self.effects = 0;
 	else

@@ -414,19 +414,6 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float deathtype
 	// go a little bit into the wall because we need to hit this wall later
 	end = trace_endpos + normalize(end - start);
 
-	// beam effect
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, 76);
-	WriteCoord (MSG_BROADCAST, start_x);
-	WriteCoord (MSG_BROADCAST, start_y);
-	WriteCoord (MSG_BROADCAST, start_z);
-	WriteCoord (MSG_BROADCAST, end_x);
-	WriteCoord (MSG_BROADCAST, end_y);
-	WriteCoord (MSG_BROADCAST, end_z);
-	WriteCoord (MSG_BROADCAST, 0);
-	WriteCoord (MSG_BROADCAST, 0);
-	WriteCoord (MSG_BROADCAST, 0);
-
 	// flash and burn the wall
 	te_plasmaburn (trace_endpos);
 
