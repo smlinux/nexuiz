@@ -33,7 +33,7 @@ entity SelectSpawnPoint (void)
 			if (spot == lastspawn)
 				return lastspawn;
 			pcount = 0;
-			thing = findradius(spot.origin, 32);
+			thing = findradius(spot.origin, 70);
 			while(thing)
 			{
 				if (thing.classname == "player")
