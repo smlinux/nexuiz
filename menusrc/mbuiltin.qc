@@ -60,6 +60,7 @@ string	precache_sound(string sample) = #29;
 
 void	crash(void)	= #72;
 void	coredump(void) = #30;
+void	stackdump(void) = #73;
 void	traceon(void) = #31;
 void	traceoff(void) = #32;
 

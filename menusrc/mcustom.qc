@@ -239,7 +239,7 @@ void(void) nex_video_fullscreen_reinit =
 	self.value = cvar("vid_fullscreen");
 };
 
-var string nex_video_resolutions = "";
+string nex_video_resolutions;
 
 void(void) nex_video_resolution_switch_reinit =
 {
@@ -251,6 +251,7 @@ void(void) nex_video_resolution_switch =
 	var float counter = 0;
 	vector t;
 
+	nex_video_resolutions = "";
 	self.text = "";
 	self.value = -1;
 
@@ -259,7 +260,9 @@ void(void) nex_video_resolution_switch =
 		if(t == '800 600 0')
 			pos86 = counter;
 		if(t_x == cvar("vid_width") && t_y == cvar("vid_height"))
+		{
 			self.value = counter;
+		}
 		counter = counter + 1;
 		self.text = strcat(self.text,"'",ftos(t_x),"x");
 		self.text = strcat(self.text,ftos(t_y),"'");
@@ -271,7 +274,6 @@ void(void) nex_video_resolution_switch =
 
 	self.text = strzone(self.text);
 	nex_video_resolutions = strzone(nex_video_resolutions);
-	self.value = 1;
 };
 
 void(void) nex_video_apply =
