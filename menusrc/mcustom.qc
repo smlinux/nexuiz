@@ -282,6 +282,8 @@ void(void) nex_video_apply =
 	float changed;
 	entity tmp;
 
+	changed = false;
+
 	// resolution test
 	res_x = cvar("vid_width");
 	res_y = cvar("vid_height");
@@ -297,7 +299,7 @@ void(void) nex_video_apply =
 	}
 	// bpp test
 	tmp = menu_getitem("video_wnd_bpp_switch");
-	if(tmp.value != cvar("vid_bitsperpixel"))
+	if((tmp.value+1)*16 != cvar("vid_bitsperpixel"))
 	{
 		cvar_set("vid_bitsperpixel",ftos((tmp.value+1)*16));
 		changed = true;
