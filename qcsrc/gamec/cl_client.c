@@ -355,7 +355,7 @@ void() CheckWaterJump =
 
 void respawn(void)
 {
-	CopyBody();
+	CopyBody(1);
 	PutClientInServer();
 }
 

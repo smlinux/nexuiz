@@ -14,7 +14,7 @@ $frame forwardleft backright backleft
 // cleaned up PlayerDie a lot
 // added CopyBody
 
-void CopyBody()
+void CopyBody(float keepvelocity)
 {
 	local entity oldself;
 	if (self.effects & EF_NODRAW)
@@ -38,7 +38,8 @@ void CopyBody()
 	self.solid = oldself.solid;
 	self.takedamage = oldself.takedamage;
 	self.think = oldself.think;
-	self.velocity = oldself.velocity;
+	if (keepvelocity == 1)
+		self.velocity = oldself.velocity;
 	self.weapon = oldself.weapon;
 	setorigin(self, oldself.origin);
 	setsize(self, '-16 -16 -24',  '16 16 5');

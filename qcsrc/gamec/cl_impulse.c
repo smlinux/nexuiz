@@ -1,4 +1,4 @@
-void CopyBody();
+void CopyBody(float keepvelocity);
 
 // changes by LordHavoc on 03/30/04
 // cleaned up dummy code
@@ -28,7 +28,7 @@ void ImpulseCommands (void)
 	else if (self.impulse == 13 && cvar("sv_cheats"))
 	{
 		makevectors (self.v_angle);
-		CopyBody();
+		CopyBody(0);
 	}
 	else if (self.impulse == 97 && !self.crouch)
 	{
