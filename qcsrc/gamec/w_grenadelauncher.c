@@ -76,7 +76,7 @@ void W_Grenade_Attack (void)
 	gren.movetype = MOVETYPE_BOUNCE;
 	gren.solid = SOLID_BBOX;
 	setmodel(gren, "models/grenademodel.md3");
-	setsize(gren, '-14 -5 -4', '16 4 5');		
+	setsize(gren, '-12 -12 -4', '12 12 4');		
 	setorigin(gren, (self.origin + self.view_ofs));
 	gren.health = 1;
 	gren.takedamage = DAMAGE_YES;
@@ -88,9 +88,6 @@ void W_Grenade_Attack (void)
 		gren.velocity_z = 200;
 	}
 	gren.avelocity_x = random () * -500 - 500;
-	gren.mins = normalize (gren.angles) * gren.mins;
-	gren.maxs = normalize (gren.angles) * gren.maxs;
-	setsize (gren, gren.mins, gren.maxs);
 	gren.angles = vectoangles (gren.velocity);
 	gren.touch = W_Grenade_Explode;
 	gren.think = W_Grenade_Explode;
