@@ -209,7 +209,7 @@ void PlayerPreThink (void)
 	{
 		if (self.weapon == IT_GRENADE_LAUNCHER)
 			W_SecondaryAttack ();
-		if (self.attack_finished < time)
+		if (self.attack_finished < time && self.button0 != 1)
 			W_SecondaryAttack ();
 	}
 

@@ -1,5 +1,7 @@
 float lastclientthink, sv_maxspeed, sv_friction, sv_accelerate, sv_stopspeed;
 float sv_edgefriction, cl_rollspeed, cl_divspeed, cl_rollangle;
+.float ladder_time;
+.entity ladder_entity;
 
 // LordHavoc:
 // Highly optimized port of SV_ClientThink from engine code to QuakeC.
@@ -124,6 +126,38 @@ void SV_PlayerPhysics() {
 		wishspeed=wishspeed+wishspeed*(1);
 	}
 
+	else if (time < self.ladder_time)
+	{
+		// on a func_ladder or swimming in func_water
+		self.velocity = self.velocity * (1 - frametime * sv_friction);
+		makevectors(self.v_angle);
+		//wishvel = v_forward * self.movement_x + v_right * self.movement_y + v_up * self.movement_z;
+		wishvel = v_forward * self.movement_x + v_right * self.movement_y + '0 0 1' * self.movement_z;
+		if (self.gravity)
+			self.velocity_z = self.velocity_z + self.gravity * sv_gravity * frametime;
+		else
+			self.velocity_z = self.velocity_z + sv_gravity * frametime;
+		if (self.ladder_entity.classname == "func_water")
+		{
+			f = vlen(wishvel);
+			if (f > self.ladder_entity.speed)
+				wishvel = wishvel * (self.ladder_entity.speed / f);
+
+			self.watertype = self.ladder_entity.skin;
+			f = self.ladder_entity.origin_z + self.ladder_entity.maxs_z;
+			if ((self.origin_z + self.view_ofs_z) < f)
+				self.waterlevel = 3;
+			else if ((self.origin_z + (self.mins_z + self.maxs_z) * 0.5) < f)
+				self.waterlevel = 2;
+			else if ((self.origin_z + self.mins_z + 1) < f)
+				self.waterlevel = 1;
+			else
+			{
+				self.waterlevel = 0;
+				self.watertype = CONTENT_EMPTY;
+			}
+		}
+	}
 	if (self.movetype == MOVETYPE_NOCLIP) // noclip
 		self.velocity = wishdir * wishspeed;
 	else if (self.flags & FL_ONGROUND) // walking

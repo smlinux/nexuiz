@@ -917,7 +917,7 @@ void W_Hagar_Attack2 (void)
 
 	missle.touch = W_Hagar_Touch;
 	missle.think = SUB_Remove;
-	missle.nextthink = time + 3;
+	missle.nextthink = time + 9;
 
 	self.attack_finished = time + 0.2;
 	self.ammo_rockets = self.ammo_rockets - 0.25;

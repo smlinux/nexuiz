@@ -56,3 +56,5 @@ entity dest;
 .float electrocount;
 
 .float	damageforcescale;
+
+.float          gravity;

@@ -60,7 +60,7 @@ Flags:
 "SILENT" - no 'windtunnel' noise
 Keys:
 "target" - acts as jump pad, hits this entity
-*/
+
 
 void() SetMovedir =
 {
@@ -76,7 +76,7 @@ void() SetMovedir =
 	
 	self.angles = '0 0 0';
 };
-
+*/
 void() trigger_push =
 {
 	if (self.angles != '0 0 0')
