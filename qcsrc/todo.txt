@@ -1,22 +1,26 @@
 *********************************
 *************QC******************
+Major Features:
+Bot Support
+Player models holding weapon models
+Lan searching in the menu
 
 1. Player skin selection based on .playerskin cvar string
-2. Known bug: User not dying when falling into the black
-3. Add weapons/electro_fly and Add weapons/missile_fly (for rocket and hagar)
-4. Don't show monsters/secrets on the bottom of the scoreboard
-5. Different text colors depending on the info (white for chatting, red for deaths)
-6. Graphic over the user to show they are typing a message/in the console/in the menu
-7. Show what item you've picked up on the top right of the screen (one graphic for health, armor, bullets, shells, cells, rockets)
-8. Change explosion for hagar, grenade, rocket. Each more powerful in that order
-9. Smoke effect for use in levels
-10. Spark effect for use in levels
-11. Maps.cfg support for maplists, and editing of this in the menu
+2. Graphic over the user to show they are typing a message/in the console/in the menu
+3. Maps.cfg support for maplists, and editing of this in the menu
+4. Add admin options (remote admin and voting, players can vote for level change)
+5. Playername "has (numberoffrags) frags in a row", after 3 frags
+6. Telefragging (and message for being telefragged)
+7. Add weapons/electro_fly and Add weapons/missile_fly (for rocket and hagar)
+8. Use shell only for the rocket explosion, not the grenade 
+9. Smoke and Spark effect for use in levels
+10. Envmap to shaders
+11. Add a water/slime/lava shader
 12. Create game 'game options' menu
-13. Option for lan searching in the join game menu
-14. Add 'GAME' options menu, with: Sbar alpha, Jpeg Screenshots, Show Framerate
-15. Add more options to 'Player' menu: Crosshair selection, FOV, Team color (choose one of 3, red, blue, green)
-16. Add 'Input' options menu, with: Invert Mouse (negate m_pitch), Mouse Speed 
+13. Add 'GAME' options menu, with: Sbar alpha, Jpeg Screenshots, Show Framerate
+14. Add more options to 'Player' menu: Crosshair selection, FOV, Team color (choose one of 3, red, blue, green)
+15. Add 'Input' options menu, with: Invert Mouse (negate m_pitch), Mouse Speed 
+16. Add GLslang, and gl_texturemode to effects menu options
 
 
 
@@ -24,7 +28,6 @@
 ************ Art ****************
 -Textures-
 	- Water texture for oil rig
-	- Lava texture
 
 -SKINS-
 	- carni
@@ -34,22 +37,22 @@
 	- specop
 
 -ANIMATION-
-	- Adding 'flying' directions for the models (they feet should sway whatever way they are going in the air)
+	- Flying animation, currently the model is in idle animation when in the air, an animation where the feet are off the ground is needed.
 
 
 *********************************
 ************GAMECFG *************
 
-1;   /// everyone gets the nex gun with infinite ammo - done
-2;   /// Spawn Protection (user is invicible for 3 seconds)
+1;   /// Nex Arena
+2;   /// Spawn Protection
 4;   /// Strength gain
-8;   /// Fast health regeneration - done
-16;  /// Rocket Arena - done
-32;  /// no self damage, so rocket jumping and such can be used a lot more
-64;  /// turns off air control
+8;   /// Fast health regeneration
+16;  /// Rocket Arena
+32;  /// No self damage
+64;  /// Air control
 128; /// Weapons Stay
-256; /// makes the players model fullbright - done
-512; /// Teamplay
+256; /// FullBright player models
+512; /// Teams
 
 *********************************
 ************GAME MODS ***********
