@@ -169,7 +169,10 @@ DeriveTemplate TextButton Nex_KeyButton
 {
 	type	"Item_Nex_KeyButton"
 }
-
+DeriveTemplate MultiLabel Nex_Credits
+{
+	type	"Item_Nex_Credits"
+}
 DeriveTemplate Label Nex_HostCache_StringField
 {
 	type	"Item_Nex_HostCache_StringField"
@@ -182,7 +185,7 @@ DeriveTemplate Label Nex_HostCache_Players
 {
 	type	"Item_Nex_HostCache_Players"
 }
-DeriveTemplate TextButton Nex_HostCache_Entry
+DeriveTemplate PictureButton Nex_HostCache_Entry
 {
 	normal		"$gfx/white"
 	drawFlags	[DrawFlagModulate]

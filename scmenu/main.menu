@@ -3,7 +3,7 @@
 // Main menu
 Item Arrangement Main
 {
-	pos		'252 30'
+	pos		'112 30'
 	direction 	'10 0'
 
 	Derive TextButton Resume
@@ -12,31 +12,46 @@ Item Arrangement Main
 		flag	[FlagConnected]
 
 	}
-	Derive TextButton Create
+	Derive PictureButton Create
 	{
-		normal 	"Create Game"
+		//normal 	"Create Game"
+		normal		"$gfx/m_top_creategame"
+		selected	"$gfx/m_top_creategame"
 
 		target 	"CreateGame"
 		init	Nex_Action_SetNormalPanelLink
 	}
-	Derive TextButton Join
+	Derive PictureButton Join
 	{
-		normal "Join Game"
+		//normal "Join Game"
+		normal		"$gfx/m_top_joingame"
+		selected	"$gfx/m_top_joingame"
 
 		target	"JoinGame"
 		action	Nex_Action_JumpToJoinGame
 	}
-	Derive TextButton Options
+	Derive PictureButton Options
 	{
-		normal 	"Options"
+		//normal 	"Options"
+		normal		"$gfx/m_top_options"
+		selected	"$gfx/m_top_options"
 
 		target	"Options"
 		init	Nex_Action_SetNormalPanelLink
 	}
-	Derive TextButton Quit
+	Derive TextButton Credits
 	{
-		normal "Quit"
-		action Nex_Quit_Action
+		normal		"Credits"
+
+		action		Nex_Credits_Action
+	}
+	Derive PictureButton Quit
+	{
+		//normal "Quit"
+		normal		"$gfx/m_top_quit"
+		selected	"$gfx/m_top_quit"
+
+		action		Nex_Quit_Action
 	}
 }
 

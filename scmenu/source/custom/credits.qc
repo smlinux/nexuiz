@@ -22,8 +22,6 @@ void() Item_Nex_Credits_Spawn =
 	self.text = lText;
 	fclose( lFile );
 
-	print( lText );
-
 	Item_MultiLabel_Spawn();
 	String_Free( lText );
 };

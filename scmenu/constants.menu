@@ -36,10 +36,10 @@
 #define DrawFlag2xModulate	"3"
 
 // Item constants
-#define DefaultFontSize 	"12 12 0"
+#define DefaultFontSize 	"11 11 0"
 
 //  Text constants
-#define DefaultTextColor 	"1 1 1"
+#define DefaultTextColor 	"0 0 0"
 #define DefaultTextAlpha	"1"
 #define DefaultTextDrawFlag	[DrawFlagNormal]
 
@@ -56,11 +56,11 @@
 #define DefaultPicAlpha		"1"
 #define DefaultPicDrawFlag	[DrawFlagNormal]
 
-#define DefaultSelPicColor	"1 1 1"
+#define DefaultSelPicColor	"0 0 1"
 #define DefaultSelPicAlpha	"1"
 #define DefaultSelPicDrawFlag	[DrawFlagNormal]
 
-#define DefaultPrePicColor	"1 1 1"
+#define DefaultPrePicColor	"0.2 0.2 1"
 #define DefaultPrePicAlpha	"1"
 #define DefaultPrePicDrawFlag	[DrawFlagNormal]
 
