@@ -160,6 +160,7 @@ float AI_AMBUSH		= 16384; // point type
 float AI_DOOR_NO_OPEN	= 32768; // read ahead
 float AI_DIFFICULT	= 65536; // route test
 float AI_TRACE_TEST	= 131072; // route test
+float AI_CARELESS	= 262144; // Electro - jumppads, bot doesn't have to touch this entity, only get close
 
 // these are flags for bots/players (dynamic/editor flags)
 float AI_OBSTRUCTED	= 1;

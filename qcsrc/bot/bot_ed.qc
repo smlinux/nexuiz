@@ -451,6 +451,14 @@ void() bot_menu_display =
 						self.current_way.b_aiflags = self.current_way.b_aiflags | AI_SUPER_JUMP;
 					self.b_menu_time = time;
 				}
+				else if (self.impulse == 8)
+				{
+					if (self.current_way.b_aiflags & AI_CARELESS)
+						self.current_way.b_aiflags = self.current_way.b_aiflags - (self.current_way.b_aiflags & AI_CARELESS);
+					else
+						self.current_way.b_aiflags = self.current_way.b_aiflags | AI_CARELESS;
+					self.b_menu_time = time;
+				}
 			}
 			if (self.impulse == 9)
 			{
@@ -881,10 +889,15 @@ void() bot_menu_display =
 			else
 				s6 = "[6] [ ] Directional      \n";
 
-			if (self.current_way.b_aiflags & AI_SUPER_JUMP)
-				s7 = "[7] [#] Super Jump       \n\n[9] >>AI Flags page 2    \n[0] >>Main Menu          \n";
-			else
-				s7 = "[7] [ ] Super Jump       \n\n[9] >>AI Flags page 2    \n[0] >>Main Menu          \n";
+			// Electro - eww
+			if ( (self.current_way.b_aiflags & AI_SUPER_JUMP) && (self.current_way.b_aiflags & AI_CARELESS) )
+				s7 = "[7] [#] Super Jump       \n[8] [#] Careless         \n[9] >>AI Flags page 2    \n[0] >>Main Menu          \n";
+			else if ( (self.current_way.b_aiflags & AI_SUPER_JUMP) && (!(self.current_way.b_aiflags & AI_CARELESS)) )
+				s7 = "[7] [#] Super Jump       \n[8] [ ] Careless         \n[9] >>AI Flags page 2    \n[0] >>Main Menu          \n";
+			else if ( (!(self.current_way.b_aiflags & AI_SUPER_JUMP)) && (self.current_way.b_aiflags & AI_CARELESS) )
+				s7 = "[7] [ ] Super Jump       \n[8] [#] Careless         \n[9] >>AI Flags page 2    \n[0] >>Main Menu          \n";
+			else if ( (!(self.current_way.b_aiflags & AI_SUPER_JUMP)) && (!(self.current_way.b_aiflags & AI_CARELESS)) )
+				s7 = "[7] [ ] Super Jump       \n[8] [ ] Careless         \n[9] >>AI Flags page 2    \n[0] >>Main Menu          \n";
 		}
 		else if (self.b_menu == MENU_FLAGS2)
 		{

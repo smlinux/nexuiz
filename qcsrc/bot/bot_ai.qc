@@ -225,6 +225,11 @@ void(entity targ) bot_check_lost =
 			}
 			else if (vlen(targ.origin - self.origin) < 32)
 				bot_lost(targ, TRUE);
+			else if (self.b_aiflags & AI_CARELESS) // Electro - better for jumppads
+			{
+				if (vlen(targ.origin - self.origin) < 128)
+					bot_lost(targ, TRUE);
+			}
 		}
 	}
 	else if (targ.classname == "temp_waypoint")
