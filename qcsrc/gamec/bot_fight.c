@@ -18,7 +18,7 @@ NO EVENT WILL RYAN "FRIKAC" SMITH BE LIABLE FOR ANY
 GENERAL, CONSEQUENTIAL, INDIRECT, INCIDENTAL,
 EXEMPLARY, OR SPECIAL DAMAGES, EVEN IF RYAN "FRIKAC"
 SMITH HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH
-DAMAGES, IRRESPECTIVE OF THE CAUSE OF SUCH DAMAGES. 
+DAMAGES, IRRESPECTIVE OF THE CAUSE OF SUCH DAMAGES.
 
 You accept this software on the condition that you
 indemnify and hold harmless Ryan "FrikaC" Smith from
@@ -26,7 +26,7 @@ any and all liability or damages to third parties,
 including attorney fees, court costs, and other
 related costs and expenses, arising out of your use
 of this software irrespective of the cause of said
-liability. 
+liability.
 
 The export from the United States or the subsequent
 reexport of this software is subject to compliance
@@ -35,10 +35,10 @@ control restrictions. You agree that in the event you
 seek to export this software, you assume full
 responsibility for obtaining all necessary export
 licenses and approvals and for assuring compliance
-with applicable reexport restrictions. 
+with applicable reexport restrictions.
 
 Any reproduction of this software must contain
-this notice in its entirety. 
+this notice in its entirety.
 
 */
 
@@ -49,21 +49,23 @@ float(entity e) bot_size_player =
 	local float sz;
 
 	sz = e.health + e.armorvalue * e.armortype;
-	if (e.weapon == 32)
+	if (e.weapon == WEP_ROCKET_LAUNCHER)
 		sz = sz + 60;
-	else if (e.weapon == 64)
+	else if (e.weapon == WEP_HAGAR)
 		sz = sz + 60;
-	else if (e.weapon == 16)
+	else if (e.weapon == WEP_NEX)
+		sz = sz + 60;
+	else if (e.weapon == WEP_CRYLINK)
 		sz = sz + 50;
-	else if (e.weapon == 8)
+	else if (e.weapon == WEP_ELECTRO)
 		sz = sz + 50;
-	else if (e.weapon == 4)
+	else if (e.weapon == WEP_GRENADE_LAUNCHER)
 		sz = sz + 40;
-	else if (e.weapon == 2)
+	else if (e.weapon == WEP_UZI)
 		sz = sz + 40;
-	else if (e.weapon == 1)
+	else if (e.weapon == WEP_SHOTGUN)
 		sz = sz + 10;
-	else if (e.weapon == 4096)
+	else if (e.weapon == WEP_LASER)
 		sz = sz - 50;
 	if (e.items & 4194304) // Quad
 		sz = sz + 200;
@@ -92,7 +94,7 @@ void() bot_dodge_stuff =
 		foedist = vlen(v);
 		foesz = bot_size_player(self.enemy);
 	}
-	else 
+	else
 	{
 		foedist = 3000;
 		foesz = 9999999;
@@ -173,7 +175,7 @@ void() bot_dodge_stuff =
 				}
 				foe = foe.chain;
 			}
-		}		
+		}
 	}
 	else
 	{
@@ -229,22 +231,24 @@ _z maximum range bot can be to be effective (lg/axe) (move in)
 
 vector(float wep) weapon_range =
 {
-	if (wep == 4096) // IT_AXE
-		return '48 0 64';
-	else if (wep == 1) // IT_SHOTGUN
+	if (wep == WEP_LASER) // IT_AXE
+		return '48 0 300';
+	else if (wep == WEP_SHOTGUN) // IT_SHOTGUN
 		return '128 0 99999';
-	else if (wep == 2) // IT_SUPER_SHOTGUN
+	else if (wep == WEP_CRYLINK) // IT_SUPER_SHOTGUN
 		return '128 0 99999';
-	else if (wep == 4) // IT_NAILGUN
+	else if (wep == WEP_UZI) // IT_NAILGUN
 		return '180 0 3000';
-	else if (wep == 8) // IT_SUPER_NAILGUN
-		return '180 0 3000';
-	else if (wep == 16) // IT_GRENADE_LAUNCHER
+	else if (wep == WEP_HAGAR) // IT_SUPER_NAILGUN
 		return '180 48 3000';
-	else if (wep == 32) // IT_ROCKET_LAUNCHER
+	else if (wep == WEP_GRENADE_LAUNCHER) // IT_GRENADE_LAUNCHER
 		return '180 48 3000';
-	else if (wep == 64) // IT_LIGHTNING
-		return '350 0 512';
+	else if (wep == WEP_ELECTRO) // IT_ROCKET_LAUNCHER
+		return '180 48 3000';
+	else if (wep == WEP_ROCKET_LAUNCHER) // IT_ROCKET_LAUNCHER
+		return '180 48 3000';
+	else if (wep == WEP_NEX) // IT_LIGHTNING
+		return '350 0 99999';
 };
 /*
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -326,7 +330,7 @@ void(float brange) bot_weapon_switch =
 	}
 };
 
-void() bot_shoot = 
+void() bot_shoot =
 {
 	// quick little function to stop making him shoot the wrong way ! Argh
 	local float g;
@@ -345,7 +349,7 @@ void() bot_shoot =
 Bot_fight_style
 
 This is the core of the bot's thinking when
-attacking an enemy. 
+attacking an enemy.
 
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 */
@@ -409,7 +413,7 @@ void() bot_fight_style =
 					self.b_chattime = 1;
 				}
 			}
-			
+
 			return;
 		}
 		else if (mysz < 140)
