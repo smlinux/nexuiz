@@ -240,7 +240,7 @@ void(void) ITEM_BUTTON_DRAW =
 
 void(void) ITEM_BUTTON_REFRESH =
 {
-	if( self.hold_pressed + self._press_time < time ) 
+	if( self.hold_pressed + self._press_time < time )
 	{
 		if( menu_selected != self && self._button_state != BUTTON_NORMAL )
 			self._button_state = BUTTON_NORMAL;
@@ -251,7 +251,7 @@ void(void) ITEM_BUTTON_REFRESH =
 				snd_play(self.sound_selected);
 		}
 	}
-	
+
 	def_refresh();
 	ctcall_refresh();
 };
@@ -260,7 +260,7 @@ void(float keynr, float ascii) ITEM_BUTTON_KEY =
 {
 	if(ctcall_key(keynr, ascii))
 		return;
-	
+
 	if(keynr == K_ENTER || keynr == K_MOUSE1)
 	{
 		self._action();
@@ -908,7 +908,7 @@ void(float keynr, float ascii) ITEM_EDITBOX_KEY =
 {
 	if(ctcall_key(keynr, ascii))
 		return;
-	
+
 	if(ascii >= 30 && ascii <= 126)
 	{
 		ITEM_EDITBOX_INSERT(ascii);
@@ -960,6 +960,13 @@ void(void) ITEM_EDITBOX_REFRESH =
 	if(self._cursorpos > strlen(self.text))
 		self._cursorpos = strlen(self.text);
 
+	// hack: we want the text to scroll if possible
+	// self.clip_pos holds the normal value
+	if(self._cursorpos >= self.size_x / self.font_size_x - 1.5 )
+		self.pos_x = self.clip_pos_x -(self._cursorpos - floor( self.size_x / self.font_size_x - 1.5)) * self.font_size_x;
+	else
+		self.pos_x = self.clip_pos_x;
+
 	ITEM_TEXT_REFRESH();
 };
 
@@ -998,6 +1005,9 @@ void(void) ITEM_EDITBOX =
 	{
 		self.pos_x = self.pos_x - self.size_x;
 	}
+
+	//init clip_pos
+	self.clip_pos = self.pos;
 
 	item_init(
 		defct_reinit,

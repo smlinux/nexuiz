@@ -817,7 +817,7 @@ void(void) menu_selectup =
 {
 	// if we try to up from the current activewindow pop the history.
 	// else move up in the hierarchy and try to select and item.
-	
+
 	//print( "Check whether menu_selected == menu_activewindow\n" );
 	if( menu_selected == menu_activewindow ) {
 		//print( "Pop history\n" );
@@ -829,11 +829,11 @@ void(void) menu_selectup =
 		menu_pophistory();
 		return;
 	}
-	
-	//print( "Check whether parent exists\n" );	
+
+	//print( "Check whether parent exists\n" );
 	if( menu_selected._parent == null_entity )
 		return;
-	
+
 	//print( "Try to select the parent\n" );
 	menu_selected = menu_selected._parent;
 	if( menu_selectable( menu_selected ) )
@@ -850,10 +850,10 @@ void(void) menu_selectup =
 		return;
 
 	//print( "Try to select the parent of the parent\n" );
-	menu_selectup();	
+	menu_selectup();
 
 	//print( "Selected:\n" );
-	//eprint( menu_selected );	
+	//eprint( menu_selected );
 };
 
 void(void) menu_reselect =
@@ -882,11 +882,11 @@ void(entity menu, float setactive) menu_jumptowindow =
 entity(string item_name) menu_getitem =
 {
 	entity item;
-	
+
 	item = findstring(null_entity,  name, item_name);
-	if( item == null_entity ) 
+	if( item == null_entity )
 		error( "Couldn't find item '", item_name, "'!" );
-	
+
 	return item;
 };
 
