@@ -46,7 +46,7 @@ void RadiusDamage (entity attacker, entity inflictor, float deathtype, float dam
 	while (targ)
 	{
 		if (targ != inflictor)
-			if (ignore && targ != ignore)
+			if ((!ignore) || ignore != targ)
 				Damage (attacker, inflictor.origin, targ, deathtype, damage - vlen (inflictor.origin - targ.origin));
 		targ = targ.chain;
 	}
