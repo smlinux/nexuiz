@@ -38,6 +38,7 @@ entity dest;
 .float	strength_finished;
 .float	speed_finished;
 .float	invincible_finished;
+.float	slowmo_finished;
 
 .vector		finaldest, finalangle; 		//plat.qc stuff
 .void()		think1;
@@ -69,3 +70,5 @@ entity dest;
 .float          gravity;
 
 .float		dmg;
+
+.vector angleoffset; // for incorrectly player models

@@ -75,40 +75,36 @@ void W_UpdateWeapon (void)
 		objerror ("Illegal weapon - please register your guns please!");
 }
 
-float W_GetBestWeapon (void)
+float W_GetBestWeapon (entity e)
 {
-	if ((self.items & IT_ROCKET_LAUNCHER) && self.ammo_rockets)
+	if ((e.items & IT_ROCKET_LAUNCHER) && e.ammo_rockets)
 		return IT_ROCKET_LAUNCHER;
-	else if ((self.items & IT_NEX) && self.ammo_cells)
+	else if ((e.items & IT_NEX) && e.ammo_cells)
 		return IT_NEX;
-	else if ((self.items & IT_HAGAR) && self.ammo_rockets)
+	else if ((e.items & IT_HAGAR) && e.ammo_rockets)
 		return IT_HAGAR;
-	else if ((self.items & IT_GRENADE_LAUNCHER) && self.ammo_rockets)
+	else if ((e.items & IT_GRENADE_LAUNCHER) && e.ammo_rockets)
 		return IT_GRENADE_LAUNCHER;
-	else if ((self.items & IT_ELECTRO) && self.ammo_cells)
+	else if ((e.items & IT_ELECTRO) && e.ammo_cells)
 		return IT_ELECTRO;
-	else if ((self.items & IT_CRYLINK) && self.ammo_cells)
+	else if ((e.items & IT_CRYLINK) && e.ammo_cells)
 		return IT_CRYLINK;
-	else if ((self.items & IT_UZI) && self.ammo_nails)
+	else if ((e.items & IT_UZI) && e.ammo_nails)
 		return IT_UZI;
-	else if ((self.items & IT_SHOTGUN) && self.ammo_shells)
+	else if ((e.items & IT_SHOTGUN) && e.ammo_shells)
 		return IT_SHOTGUN;
 	else
 		return IT_LASER;
 }
 
-void W_GiveWeapon (entity e, float wep)	// FIXME - make it 'smarter'
+void W_GiveWeapon (entity e, float wep)
 {
 	entity oldself;
 
 	if (!wep)
 		return;
 
-	if (!(e.items & wep))
-	{
-		e.items = e.items | wep;
-		e.weapon = wep;
-	}
+	e.items = e.items | wep;
 
 	oldself = self;
 	self = e;
@@ -342,7 +338,7 @@ float W_CheckAmmo (void)
 	else if (self.currentammo)
 		return TRUE;
 
-	self.weapon = W_GetBestWeapon ();
+	self.weapon = W_GetBestWeapon (self);
 	W_UpdateWeapon ();
 
 	return FALSE;
@@ -421,8 +417,6 @@ void FireRailgunBullet (vector start, vector end, float damage, float dtype)
 void fireBullet (vector dir, float spread, float damage, float dtype)
 {
 	vector	org;
-
-	makevectors (self.v_angle);
 	float r;
 
 	// use traceline_hitcorpse to make sure it can hit gibs and corpses too
@@ -485,7 +479,7 @@ void W_Laser_Touch (void)
 	
 
 	self.event_damage = SUB_Null;
-	RadiusDamage (self, self.owner, 15, 7, 50, world, 200, IT_LASER);
+	RadiusDamage (self, self.owner, 45, 21, 50, world, 600, IT_LASER);
 	sound (self, CHAN_IMPACT, "weapons/laserimpact.wav", 1, ATTN_NORM);
 
 	remove (self);
@@ -497,14 +491,13 @@ void W_Laser_Attack (void)
 
 	sound (self, CHAN_WEAPON, "weapons/crylink.wav", 1, ATTN_NORM);
 
-	makevectors (self.v_angle);
 	org = self.origin + self.view_ofs + v_forward * 10 + v_right * 5 + v_up * -14;	
 
-	FireRailgunBullet (org, self.origin + self.view_ofs + v_forward * 4096, 15, IT_CRYLINK);
+	FireRailgunBullet (org, self.origin + self.view_ofs + v_forward * 4096, 25, IT_LASER);
 
 	te_spark (trace_endpos, v_forward, 55);
 
-	self.attack_finished = time + 0.200;
+	self.attack_finished = time + 0.600;
 }
 
 void W_Laser_Attack2 (void)
@@ -524,7 +517,6 @@ void W_Laser_Attack2 (void)
 	setsize (missile, '0 0 0', '0 0 0');
 	setorigin (missile, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);
 
-	makevectors (self.v_angle);
 	missile.velocity = v_forward * 1000;
 	missile.velocity = missile.velocity + v_right * ( crandom() * 45 );
 	missile.velocity = missile.velocity + v_up * ( crandom() * 25 );
@@ -541,7 +533,7 @@ void W_Laser_Attack2 (void)
 	self.punchangle_y = random () - 0.5;
 	self.punchangle_z = random () - 0.5;
 
-	self.attack_finished = time + 0.2;
+	self.attack_finished = time + 0.6;
 }
 
 void W_Shotgun_Attack (void)
@@ -650,8 +642,6 @@ void W_Crylink_Attack (void) //(float postion)
 	proj.movetype = MOVETYPE_FLY; 
 	proj.solid = SOLID_BBOX;
 	
-	makevectors (self.v_angle);
-
 	setmodel (proj, "models/sprites/bubbles.spr");
 	setsize (proj, '0 0 0', '0 0 0');
 	setorigin (proj, self.origin + self.view_ofs + v_forward * 10 + v_right * 5 + v_up * -14);
@@ -707,8 +697,6 @@ void W_Electro_Attack (float postion)
 	proj.solid = SOLID_BBOX;
 	proj.effects = 1;
 	
-	makevectors (self.v_angle);
-
 	vector org;
 	org = self.origin + self.view_ofs + v_forward * 18 + v_right * 7 + v_up * -9;
 
@@ -814,8 +802,6 @@ void W_Electro_Attack2 (float postion)
 	setmodel (Plasma, "models/elaser.mdl");
 	setsize (Plasma, '-6 -6 -3', '6 6 3');
 
-	makevectors (self.v_angle);
-
 	if (postion == 0)
 	setorigin (Plasma, self.origin + self.view_ofs + v_forward * 18 + v_right * 0 + v_up * -14);
 	if (postion == 1)
@@ -853,8 +839,6 @@ void W_Electro_Attack3 (float postion)
 	proj.solid = SOLID_BBOX;
 	proj.effects = 1;
 	
-	makevectors (self.v_angle);
-
 	org = self.origin + self.view_ofs + v_forward * 18 + v_right * 7 + v_up * -9;
 	te_smallflash(org);
 
@@ -926,7 +910,6 @@ void W_Grenade_Attack (void)
 	setorigin(gren, (self.origin + self.view_ofs));
 	gren.health = 1;
 	gren.takedamage = DAMAGE_YES;
-	makevectors (self.v_angle);
 	if (self.v_angle_x)
 		gren.velocity = v_forward * (1200 + 1 * 800) + (v_up * 200) + (crandom () * v_right * 10) + (crandom () * v_up * 10);
 	else
@@ -972,7 +955,6 @@ void W_Grenade_Attack2 (void)
 	setmodel (gren, "models/grenademodel.md3");
 	setsize (gren, '-6 -6 -3', '6 6 3');
 
-	makevectors (self.v_angle);
 	setorigin (gren, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);
 
 	gren.velocity = v_forward * 900 + v_up * 200;
@@ -1048,8 +1030,6 @@ void W_Hagar_Attack (void)
 	setmodel (missile, "models/hagarmissile.mdl");
 	setsize (missile, '0 0 0', '0 0 0');
 
-	makevectors (self.v_angle);
-
 	setorigin (missile, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);
 
 	missile.velocity = v_forward * 2000;
@@ -1087,7 +1067,6 @@ void W_Hagar_Attack2 (void)
 	setmodel (missile, "models/fire.mdl");
 	setsize (missile, '-6 -6 -3', '6 6 3');
 
-	makevectors (self.v_angle);
 	setorigin (missile, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);
 
 	missile.velocity = v_forward * 1400 + v_up * 100;
@@ -1127,8 +1106,6 @@ void W_Nex_Attack (void)
 
 	sound (self, CHAN_WEAPON, "weapons/nexfire.wav", 1, ATTN_NORM);
 	self.punchangle_x = -4;
-
-	makevectors (self.v_angle);
 
 	org = self.origin + self.view_ofs + v_forward * 18 + v_right * 8 + v_up * -5;
 	te_smallflash(org);
@@ -1228,8 +1205,6 @@ void W_Rocket_Attack (void)
 	setmodel (missile, "models/rocketmissile.mdl");
 	setsize (missile, '0 0 0', '0 0 0');
 
-	makevectors (self.v_angle);
-
 	org = self.origin + self.view_ofs + v_forward * 20 + v_right * 4 + v_up * -15;
 
 	setorigin (missile, org);
@@ -1282,6 +1257,7 @@ void W_Attack (void)
 	if (!W_CheckAmmo ())
 		return;
 
+	makevectors (self.v_angle);
 	if (self.weapon == IT_LASER)
 		W_Laser_Attack ();
 	else if (self.weapon == IT_SHOTGUN)
@@ -1322,6 +1298,7 @@ void W_SecondaryAttack (void)
 	if (!W_CheckAmmo ())
 		return;
 
+	makevectors (self.v_angle);
 	if (self.weapon == IT_LASER)
 		W_Laser_Attack2 ();
 	else if (self.weapon == IT_SHOTGUN)
@@ -1361,6 +1338,7 @@ void W_ThirdAttack (void)
 	if (!W_CheckAmmo ())
 		return;
 	
+	makevectors (self.v_angle);
 	if (self.weapon == IT_LASER)
 		W_Laser_Attack2 ();
 	else if (self.weapon == IT_SHOTGUN)

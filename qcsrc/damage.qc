@@ -41,6 +41,13 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 	local entity oldself;
 	oldself = self;
 	self = targ;
+	if (attacker.items & IT_STRENGTH)
+	{
+		damage = damage * POWERUP_STRENGTH_DAMAGE;
+		force = force * POWERUP_STRENGTH_FORCE;
+	}
+	if (targ.items & IT_INVINCIBLE)
+		damage = damage * POWERUP_INVINCIBLE_TAKEDAMAGE;
 	// apply push
 	if (self.damageforcescale)
 	{
@@ -51,18 +58,6 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 	if (self.event_damage)
 		self.event_damage (hitloc, damage, inflictor, attacker, deathtype);
 	self = oldself;
-
-	// Sajt - added this, but I'm not sure the powerups are even implemented? This might act strange because
-	//        there is no code handled to disable powerups when their time is up...
-	if (game & GAME_STRENGTH_GAIN)
-	{
-		if (attacker.strength_finished < time)
-			attacker.strength_finished = time + 5;
-		else
-			attacker.strength_finished = attacker.strength_finished + 5;
-
-		attacker.items = attacker.items | IT_STRENGTH;
-	}
 }
 
 void RadiusDamage (entity inflictor, entity attacker, float coredamage, float edgedamage, float rad, entity ignore, float forceintensity, float deathtype)

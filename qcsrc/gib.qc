@@ -3,7 +3,7 @@ void GibDamage (vector hitloc, float damage, entity inflictor, entity attacker, 
 {
 	te_blood (self.origin + '0 0 1', '0 0 30', damage);
 	self.health = self.health - damage;
-	if (self.health <= 0)
+	if (self.health <= -300)
 	{
 		self.event_damage = SUB_Null;
 		SUB_VanishOrRemove (self);
@@ -29,7 +29,7 @@ void TossGib (entity gib, string mdlname, vector org, vector v)
 	setsize (gib, '-8 -8 -8', '8 8 8');
 	setorigin (gib, org);
 
-	gib.health = random() * 300 + 200;
+	gib.health = -1;
 	gib.takedamage = DAMAGE_YES;
 	gib.damageforcescale = 3.5;
 	gib.event_damage = GibDamage;

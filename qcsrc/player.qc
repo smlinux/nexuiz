@@ -53,7 +53,6 @@ void player_anim (void)
 			self.frame = self.dead_frame;
 		else
 			self.frame = self.die_frame;
-		SUB_SetFade (self, time + 12 + random () * 4);
 		return;
 	}
 
@@ -137,11 +136,16 @@ void SpawnThrownWeapon (vector org, float w)
 
 void PlayerCorpseDamage (vector hitloc, float damage, entity inflictor, entity attacker, float deathtype)
 {
+	local float take, save;
 	te_blood (hitloc, '0 0 20', damage);
 	// damage resistance (ignore most of the damage from a bullet or similar)
 	damage = max(damage - 5, 1);
-	self.health = self.health - damage;
-	self.dmg_take = self.dmg_take + damage;
+	save = bound(0, damage * 0.6, self.armorvalue);
+	take = bound(0, damage - save, damage);
+	self.armorvalue = self.armorvalue - save;
+	self.health = self.health - take;
+	self.dmg_save = self.dmg_save + save;
+	self.dmg_take = self.dmg_take + take;
 	self.dmg_inflictor = inflictor;
 	if (self.health <= -50)
 	{
@@ -166,6 +170,7 @@ void PlayerCorpseDamage (vector hitloc, float damage, entity inflictor, entity a
 
 void PlayerDamage (vector hitloc, float damage, entity inflictor, entity attacker, float deathtype)
 {
+	local float take, save;
 	if (attacker == self)
 		if (game & GAME_NO_SELF_DAMAGE)
 			return;
@@ -183,8 +188,12 @@ void PlayerDamage (vector hitloc, float damage, entity inflictor, entity attacke
 	if (game & GAME_INSTAGIB)
 		damage = self.health + 75;
 
-	self.health = self.health - damage;
-	self.dmg_take = self.dmg_take + damage;
+	save = bound(0, damage * 0.6, self.armorvalue);
+	take = bound(0, damage - save, damage);
+	self.armorvalue = self.armorvalue - save;
+	self.health = self.health - take;
+	self.dmg_save = self.dmg_save + save;
+	self.dmg_take = self.dmg_take + take;
 	self.dmg_inflictor = inflictor;
 	if (self.health <= 0)
 	{
@@ -229,6 +238,17 @@ void PlayerDamage (vector hitloc, float damage, entity inflictor, entity attacke
 		self.event_damage = PlayerCorpseDamage;
 		// call the corpse damage function just in case it wants to gib
 		self.event_damage(hitloc, 0, inflictor, attacker, deathtype);
+		// set up to fade out later
+		SUB_SetFade (self, time + 12 + random () * 4);
+		// Sajt - added this, but I'm not sure the powerups are even implemented? This might act strange because
+		//        there is no code handled to disable powerups when their time is up...
+		if (game & GAME_STRENGTH_GAIN)
+		{
+			if (attacker.strength_finished < time)
+				attacker.strength_finished = time;
+			attacker.strength_finished = attacker.strength_finished + 5;
+			attacker.items = attacker.items | IT_STRENGTH;
+		}
 	}
 }
 

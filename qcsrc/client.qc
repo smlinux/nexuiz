@@ -87,6 +87,13 @@ void PutClientInServer (void)
 	self.fade_time = 0;
 	self.pain_frame = 0;
 	self.pain_finished = 0;
+	self.strength_finished = 0;
+	self.invincible_finished = 0;
+	self.speed_finished = 0;
+	self.slowmo_finished = 0;
+	// players have no think function
+	self.think = SUB_Null;
+	self.nextthink = 0;
 
 	self.deadflag = DEAD_NO;
 
@@ -95,17 +102,32 @@ void PutClientInServer (void)
 
 	self.viewzoom = 0.6;
 
-	mdlrandom = crandom();
-	if (mdlrandom>-1)
+	mdlrandom = random() * 5;
+	if (mdlrandom < 1)
+	{
 		setmodel (self, "models/player/insurrectionist.zym");
-	if (mdlrandom>-0.6)
+		self.angleoffset = '0 90 0';
+	}
+	else if (mdlrandom < 2)
+	{
 		setmodel (self, "models/player/mulder.zym");
-	if (mdlrandom>-2)
+		self.angleoffset = '0 90 0';
+	}
+	else if (mdlrandom < 3)
+	{
 		setmodel (self, "models/player/marine.zym");
-	if (mdlrandom>0.2)
+		self.angleoffset = '0 90 0';
+	}
+	else if (mdlrandom < 4)
+	{
 		setmodel (self, "models/player/specop.zym");
-	if (mdlrandom>0.6)
+		self.angleoffset = '0 90 0';
+	}
+	else
+	{
 		setmodel (self, "models/player/fshock.zym");
+		self.angleoffset = '0 90 0';
+	}
 
 
 	setsize (self, PL_MIN, PL_MAX);
@@ -232,7 +254,10 @@ void PlayerJump (void)
 	if (!(self.flags & FL_JUMPRELEASED))
 		return;
 
-	self.velocity_z = self.velocity_z + 250;
+	if (self.items & IT_SPEED)
+		self.velocity_z = self.velocity_z + POWERUP_SPEED_JUMPVELOCITY;
+	else
+		self.velocity_z = self.velocity_z + JUMP_VELOCITY;
 
 	self.flags = self.flags - FL_ONGROUND;
 	self.flags = self.flags - FL_JUMPRELEASED;
@@ -242,6 +267,101 @@ void respawn(void)
 {
 	CopyBody();
 	PutClientInServer();
+}
+
+void player_powerups (void)
+{
+	if (self.items & IT_STRENGTH)
+	{
+		if (time > self.strength_finished)
+		{
+			self.items = self.items - (self.items & IT_STRENGTH);
+			sprint(self, "Strength has worn off\n");
+		}
+	}
+	else
+	{
+		if (time < self.strength_finished)
+		{
+			self.items = self.items | IT_STRENGTH;
+			sprint(self, "Strength infuses your weapons with devestating power\n");
+		}
+	}
+	if (self.items & IT_INVINCIBLE)
+	{
+		if (time > self.invincible_finished)
+		{
+			self.items = self.items - (self.items & IT_INVINCIBLE);
+			sprint(self, "Invincible has worn off\n");
+		}
+	}
+	else
+	{
+		if (time < self.invincible_finished)
+		{
+			self.items = self.items | IT_INVINCIBLE;
+			sprint(self, "Invincible shielding surrounds you\n");
+		}
+	}
+	if (self.items & IT_SPEED)
+	{
+		if (time > self.speed_finished)
+		{
+			self.items = self.items - (self.items & IT_SPEED);
+			sprint(self, "Speed has worn off\n");
+		}
+	}
+	else
+	{
+		if (time < self.speed_finished)
+		{
+			self.items = self.items | IT_SPEED;
+			sprint(self, "Speed makes you run faster than ever before\n");
+		}
+	}
+	if (self.items & IT_SLOWMO)
+	{
+		if (time > self.slowmo_finished)
+		{
+			self.items = self.items - (self.items & IT_SLOWMO);
+			sprint(self, "Slow Motion has worn off\n");
+		}
+	}
+	else
+	{
+		if (time < self.slowmo_finished)
+		{
+			self.items = self.items | IT_SLOWMO;
+			sprint(self, "Slow Motion slows time around you\n");
+		}
+	}
+	/*
+	self.items = self.items - (self.items & (IT_STRENGTH + IT_INVINCIBLE + IT_SLOWMO + IT_SPEED));
+	if (time < self.strength_finished)
+		self.items = self.items | IT_STRENGTH;
+	if (time < self.invincible_finished)
+		self.items = self.items | IT_INVINCIBLE;
+	if (time < self.slowmo_finished)
+		self.items = self.items | IT_SLOWMO;
+	if (time < self.speed_finished)
+		self.items = self.items | IT_SPEED;
+	*/
+}
+
+void player_regen (void)
+{
+	// GAME_REGENERATION does fast health regeneration up to 200. Note that your armour doesn't rot anymore either.
+	if (game & GAME_REGENERATION)
+	{
+		self.health = self.health + (200 - self.health) * 0.2 * frametime;
+		self.armorvalue = bound(0, self.armorvalue, 1000);
+	}
+	else
+	{
+		self.health = bound(0, self.health + (100 - self.health) * 0.05 * frametime, 1000);
+		if (self.armorvalue > 100)
+			self.armorvalue = bound(100, self.armorvalue + (100 - self.armorvalue) * 0.05 * frametime, 1000);
+	}
 }
 
 /*
@@ -321,49 +441,12 @@ void PlayerPreThink (void)
 	else if (self.viewzoom < 1.0)
 		self.viewzoom = min (1.0, self.viewzoom + frametime);
 
-	if (self.statdraintime < time)
-	{
-		// GAME_REGENERATION does fast health regeneration up to 200. Note that your armour doesn't rot anymore either.
-		if (game & GAME_REGENERATION)
-		{
-			if (self.health < 50)
-				self.health = self.health + 3;
-			if (self.health < 100)
-				self.health = self.health + 3;
-			if (self.health < 150)
-				self.health = self.health + 3;
-			if (self.health < 200)
-				self.health = self.health + 3;
-			self.statdraintime = time + 0.25;
-		}
-		else
-		{
-			if (self.health < 25)
-				self.health = self.health + 3;
-			if (self.health < 50)
-				self.health = self.health + 2;
-			if (self.health < 100)
-				self.health = self.health + 1;
-			if (self.health > 100)
-				self.health = self.health - 1;
-			if (self.health > 150)
-				self.health = self.health - 2;
-			if (self.health > 200)
-				self.health = self.health - 4;
-			if (self.health > 250)
-				self.health = self.health - 6;
-			if (self.armorvalue > 100)
-				self.armorvalue = self.armorvalue - 1;
-
-			self.statdraintime = time + 1;
-		}
-	}
+	player_powerups();
+	player_regen();
 	player_anim ();
 	weapon_anim ();
 
 	if (TetrisPreFrame()) return;
-	self.angles_y=self.v_angle_y + 90;   // temp
-
 }
 
 /*
