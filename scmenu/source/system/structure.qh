@@ -40,6 +40,10 @@ bool( bool pUser ) Menu_SelectUp;
 bool( bool pUser ) Menu_SelectDown;
 void( bool pUser ) Menu_Reselect;
 
+// INFO:Should only be used inside of _select event functions and only (only!) when
+// 	absolutely necessary since this is more or less a hack
+void( entity pItem, bool pUser ) Menu_CorrectSelection;
+
 void( entity pItem, bool pUser ) Menu_Select;
 void( entity pMenu, bool pMakeActive, bool pUser ) Menu_JumpToWindow;
 

@@ -1,0 +1,7 @@
+// Property of Alientrap/AK
+// custom/credits.qh
+
+// Item_Nex_Credits Item_MultiLabel
+.string target;		// filename
+
+void() Item_Nex_Credits_Spawn;

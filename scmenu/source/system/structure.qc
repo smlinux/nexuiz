@@ -296,6 +296,12 @@ void( entity pItem, bool pUser ) Menu_Select =
 	Raise_Select( Menu_ActiveItem, true, pUser );
 };
 
+void( entity pItem, bool pUser ) Menu_CorrectSelection =
+{
+	if( Menu_ActiveItem != pItem )
+		Menu_Select( pItem, pUser );
+};
+
 void( bool pUser ) Menu_Reselect =
 {
 	Raise_Select( Menu_ActiveItem, false, pUser );

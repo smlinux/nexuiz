@@ -64,6 +64,7 @@ custom/creategame/creategame.qh
 custom/joingame.qh
 custom/key.qh
 custom/video.qh
+custom/credits.qh
 
 // Source Files
 
@@ -80,6 +81,7 @@ custom/creategame.qm
 custom/key.qm
 custom/video.qm
 custom/joingame.qm
+custom/credits.qm
 
 custom/player/avatar.qc
 custom/player/name.qc
@@ -91,6 +93,7 @@ custom/visible.qc
 custom/key.qc
 custom/video.qc
 custom/joingame.qc
+custom/credits.qc
 
 // controls
 control/automation/automation.qc

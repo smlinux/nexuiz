@@ -38,7 +38,7 @@ void() Item_FloatingArea_Destroy =
 void( bool pSelect, bool pUser ) Item_FloatingArea_Select =
 {
 	if( !pSelect && self._state == ITEM_STATE_PRESSED )
-		Menu_Select( self, false );
+		Menu_CorrectSelection( self, false );
 };
 
 void() Item_FloatingArea_Spawn =
