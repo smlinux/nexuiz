@@ -17,7 +17,7 @@ f-Remove this bloody RUNFLAG_SPAWNED again
 *-Make all datalinks route all ITEM_DATA events
 -Make FLOATING window clip its movement to the parent window's size so you cant hide it this way
 -Fix orderPos in LinkChildren
--Add a slist subsystem to base!
+*-Add a slist subsystem to base!
 -Do a big naming check to smooth things out
 -Move the _menu_process stuff somewhere else
 -Only call the mouse event when the position has been changed - since all changes happens then

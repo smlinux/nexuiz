@@ -1,0 +1,9 @@
+// Property of Alientrap/AK
+// options/game.menu
+Item Window Game
+{
+	direction	[Nex_DefaultVertDirection]
+	size		'600 600'
+	origin		'300 0'
+	alignment	[AlignFirst]
+}

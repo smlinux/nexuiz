@@ -206,15 +206,15 @@ DeriveTemplate Nex_Composition Nex_Option_Slider
 	{}
 }
 DeriveTemplate Composition Nex_Option_Switch
-	{
-		direction	[Nex_DefaultHorzDirection]
+{
+	direction	[Nex_DefaultHorzDirection]
 
-		DeriveTemplate Nex_Automation_Option_Switch Automation
-		{}
-		DeriveTemplate TextButton 	Description
-		{}
-		DeriveTemplate SwitchButton	Switch
-		{
-			action	Nex_Action_TestOnChange
-		}
+	DeriveTemplate Nex_Automation_Option_Switch Automation
+	{}
+	DeriveTemplate TextButton 	Description
+	{}
+	DeriveTemplate SwitchButton	Switch
+	{
+		action	Nex_Action_TestOnChange
 	}
+}

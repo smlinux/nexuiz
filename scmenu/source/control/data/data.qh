@@ -60,6 +60,7 @@ void() Item_Data_CvarCreateSave_Spawn;
 .string value; // text
 
 // Item_DataLink_Value [Item_DataLink]
+// if maxValue <= minValue there is no max value clamping
 .float minValue;
 .float stepValue;
 .float maxValue;

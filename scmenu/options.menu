@@ -9,6 +9,13 @@ Item Layout Options
 	{
 		direction '0 10'
 
+		Derive TextButton Game
+		{
+			normal 		"Game"
+
+			init		Nex_Action_JumpToPage
+			target		"Panel::Game"
+		}
 		Derive TextButton Player
 		{
 			normal		"Player"
@@ -26,7 +33,6 @@ Item Layout Options
 		Derive TextButton Audio
 		{
 			normal 		"Audio"
-
 
 			init		Nex_Action_JumpToPage
 			target		"Panel::Sound"
@@ -58,6 +64,7 @@ Item Layout Options
 		size	'600 600'
 		reinit	Nex_Action_MakeFirstVisible
 
+		#include "menu/options/game.menu"
 		#include "menu/options/sound.menu"
 		#include "menu/options/video.menu"
 		#include "menu/options/key.menu"
