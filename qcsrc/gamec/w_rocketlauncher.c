@@ -64,7 +64,7 @@ void W_Rocket_Touch (void)
 		W_Rocket_Explode (world);
 }
 
-void W_Rocket_Damage (vector hitloc, float damage, entity inflictor, entity attacker, float deathtype)
+void W_Rocket_Damage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
 {
 	self.health = self.health - damage;
 	if (self.health <= 0)
@@ -92,7 +92,7 @@ void W_Rocket_Attack (void)
 	setmodel (missile, "models/rocketmissile.mdl");
 	setsize (missile, '0 0 0', '0 0 0');
 
-	org = self.origin + self.view_ofs + v_forward * 20 + v_right * 4 + v_up * -15;
+	org = self.origin + self.view_ofs + v_forward * 15 + v_right * 4 + v_up * -15;
 
 	setorigin (missile, org);
 	missile.velocity = v_forward * 850;

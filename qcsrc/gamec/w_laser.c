@@ -88,7 +88,7 @@ void W_Laser_Attack2 (void)
 
 	setmodel (missile, "models/laser.mdl");
 	setsize (missile, '0 0 0', '0 0 0');
-	setorigin (missile, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);
+	setorigin (missile, self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -12);
 
 	missile.velocity = v_forward * 1000;
 	missile.velocity = missile.velocity + v_right * ( crandom() * 45 );

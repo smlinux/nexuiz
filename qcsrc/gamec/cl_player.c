@@ -134,10 +134,10 @@ void SpawnThrownWeapon (vector org, float w)
 	self = oldself;
 }
 
-void PlayerCorpseDamage (vector hitloc, float damage, entity inflictor, entity attacker, float deathtype)
+void PlayerCorpseDamage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
 {
 	local float take, save;
-	te_blood (hitloc, '0 0 20', damage);
+	te_blood (hitloc, force, damage);
 	// damage resistance (ignore most of the damage from a bullet or similar)
 	damage = max(damage - 5, 1);
 	save = bound(0, damage * 0.6, self.armorvalue);
@@ -168,14 +168,14 @@ void PlayerCorpseDamage (vector hitloc, float damage, entity inflictor, entity a
 	}
 }
 
-void PlayerDamage (vector hitloc, float damage, entity inflictor, entity attacker, float deathtype)
+void PlayerDamage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
 {
 	local float take, save;
 	if (attacker == self)
 		if (game & GAME_NO_SELF_DAMAGE)
 			return;
 
-	te_blood (hitloc, '0 0 20', damage);
+	 te_blood (hitloc, force, damage);
 	if (self.pain_finished < time)		//Don't switch pain sequences like crazy
 	{
 		if (random() > 0.5)
@@ -237,7 +237,7 @@ void PlayerDamage (vector hitloc, float damage, entity inflictor, entity attacke
 		// set damage function to corpse damage
 		self.event_damage = PlayerCorpseDamage;
 		// call the corpse damage function just in case it wants to gib
-		self.event_damage(hitloc, 0, inflictor, attacker, deathtype);
+		self.event_damage(inflictor, attacker, 0, deathtype, hitloc, force);
 		// set up to fade out later
 		SUB_SetFade (self, time + 12 + random () * 4);
 		// Sajt - added this, but I'm not sure the powerups are even implemented? This might act strange because

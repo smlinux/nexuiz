@@ -392,53 +392,127 @@ void FireRailgunBullet (vector src, float bdamage, vector dir, float spread, flo
 }
 */
 
-void FireRailgunBullet (vector start, vector end, float damage, float dtype)
+void FireRailgunBullet (vector start, vector end, float bdamage, float deathtype)
 {
-	vector	dir;
+	local vector hitloc, dir, force;
+	local entity ent;
+	//local entity explosion;
 
-	dir = normalize (end - start);
-	traceline_hitcorpse (self, start, end, FALSE, self);
+	force = normalize(end - start) * (bdamage * 0.1);
 
+	// find how far the beam can go until it hits a wall
+	traceline (start, end, TRUE, self);
+	// go a little bit into the wall because we need to hit this wall later
+	end = trace_endpos + normalize(end - start);
+
+	// beam effect
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 	WriteByte (MSG_BROADCAST, 76);
 	WriteCoord (MSG_BROADCAST, start_x);
 	WriteCoord (MSG_BROADCAST, start_y);
 	WriteCoord (MSG_BROADCAST, start_z);
+	WriteCoord (MSG_BROADCAST, end_x);
+	WriteCoord (MSG_BROADCAST, end_y);
+	WriteCoord (MSG_BROADCAST, end_z);
+	WriteCoord (MSG_BROADCAST, 0);
+	WriteCoord (MSG_BROADCAST, 0);
+	WriteCoord (MSG_BROADCAST, 0);
+
+	// flash and burn the wall
+	te_plasmaburn (trace_endpos);
+
+	// flame effect at impact
+	dir = trace_plane_normal * 100;
+	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+	WriteByte (MSG_BROADCAST, TE_FLAMEJET);
 	WriteCoord (MSG_BROADCAST, trace_endpos_x);
 	WriteCoord (MSG_BROADCAST, trace_endpos_y);
 	WriteCoord (MSG_BROADCAST, trace_endpos_z);
-	WriteCoord (MSG_BROADCAST, 0);
-	WriteCoord (MSG_BROADCAST, 0);
-	WriteCoord (MSG_BROADCAST, 0);
+	WriteCoord (MSG_BROADCAST, dir_x);
+	WriteCoord (MSG_BROADCAST, dir_y);
+	WriteCoord (MSG_BROADCAST, dir_z);
+	WriteByte (MSG_BROADCAST, 255);
 
-	if ((trace_fraction != 1.0) && (trace_ent != self) && (pointcontents (trace_endpos) != CONTENT_SKY))
+	// play a sound
+	PointSound (trace_endpos, "weapons/neximpact.wav", 1, ATTN_NORM);
+
+
+	// trace multiple times until we hit a wall, each obstacle will be made
+	// non-solid so we can hit the next, while doing this we spawn effects and
+	// note down which entities were hit so we can damage them later
+	while (1)
 	{
-		if (trace_ent.classname == "case")
-		{
-			Damage (trace_ent, self, self, damage, dtype, trace_endpos, dir * damage);
-		}
-		else if (trace_ent.classname == "player" || trace_ent.classname == "corpse" || trace_ent.classname == "gib")
-		{
-			te_blood (trace_endpos, dir * damage * 16, damage);
-			Damage (trace_ent, self, self, damage, dtype, trace_endpos, dir * damage);
-		}
+		traceline_hitcorpse (self, start, end, FALSE, self);
+
+		// if it is world we can't hurt it so stop now
+		if (trace_ent == world || trace_fraction == 1)
+			break;
+
+		// make the entity non-solid so we can hit the next one
+		trace_ent.railgunhit = TRUE;
+		trace_ent.railgunhitloc = trace_endpos;
+		trace_ent.railgunhitsolidbackup = trace_ent.solid;
+
+		// stop if this is a wall
+		if (trace_ent.solid == SOLID_BSP)
+			break;
+
+		// make the entity non-solid
+		trace_ent.solid = SOLID_NOT;
 	}
+
+	// find all the entities the railgun hit and restore their solid state
+	ent = findfloat(world, railgunhit, TRUE);
+	while (ent)
+	{
+		// restore their solid type
+		ent.solid = ent.railgunhitsolidbackup;
+		ent = findfloat(ent, railgunhit, TRUE);
+	}
+
+	// spawn a temporary explosion entity for RadiusDamage calls
+	//explosion = spawn();
+
+	// find all the entities the railgun hit and hurt them
+	ent = findfloat(world, railgunhit, TRUE);
+	while (ent)
+	{
+		// get the details we need to call the damage function
+		hitloc = ent.railgunhitloc;
+		ent.railgunhitloc = '0 0 0';
+		ent.railgunhitsolidbackup = SOLID_NOT;
+		ent.railgunhit = FALSE;
+
+		// apply the damage
+		if (ent.takedamage || ent.classname == "case")
+			Damage (ent, self, self, bdamage, deathtype, hitloc, force);
+
+		// create a small explosion to throw gibs around (if applicable)
+		//setorigin (explosion, hitloc);
+		//RadiusDamage (explosion, self, 10, 0, 50, world, 300, deathtype);
+
+		// advance to the next entity
+		ent = findfloat(ent, railgunhit, TRUE);
+	}
+
+	// we're done with the explosion entity, remove it
+	//remove(explosion);
 }
 
 
-void fireBullet (vector dir, float spread, float damage, float dtype)
+void fireBullet (vector start, vector dir, float spread, float damage, float dtype)
 {
-	vector	org;
+	vector  end;
 	float r;
 
 	// use traceline_hitcorpse to make sure it can hit gibs and corpses too
-	org = self.origin + self.view_ofs;
-	traceline_hitcorpse (self, org, org + v_forward * 4096 + v_right * crandom () * spread + v_up * crandom () * spread, FALSE, self);
+	end = start + (dir + randomvec() * spread) * 1048576;
+	traceline_hitcorpse (self, start, end, FALSE, self);
 
 	// FIXME - causes excessive 'tinking'. Hopefully remove "tink1.wav" from the ricochets with csqc
-	if ((trace_fraction != 1.0) && (trace_ent != self) && (pointcontents (trace_endpos) != CONTENT_SKY))
+	if ((trace_fraction != 1.0) && (pointcontents (trace_endpos) != CONTENT_SKY))
 	{
-		if (trace_ent == world)
+		if (trace_ent.solid == SOLID_BSP)
 		{
 			pointcontents (self.origin);
 			te_gunshot (trace_endpos);
@@ -450,16 +524,9 @@ void fireBullet (vector dir, float spread, float damage, float dtype)
 			else if (r < 0.30)
 				sound (self, CHAN_IMPACT, "weapons/ric3.wav", 1, ATTN_NORM);
 		}
-		else if (trace_ent.classname == "case")
-		{
-			Damage (trace_ent, self, self, damage, dtype, trace_endpos, dir * damage);
-		}
 		else if (trace_ent.classname == "player" || trace_ent.classname == "corpse" || trace_ent.classname == "gib")
-		{
-			te_blood (trace_endpos, dir * damage * 16, damage);
-			Damage (trace_ent, self, self, damage, dtype, trace_endpos, dir * damage);
 			sound (trace_ent, CHAN_IMPACT, "misc/enemyimpact.wav", 1, ATTN_NORM);
-		}
+		Damage (trace_ent, self, self, damage, dtype, trace_endpos, dir * damage);
 	}
 }
 

@@ -58,7 +58,7 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 	}
 	// apply damage
 	if (self.event_damage)
-		self.event_damage (hitloc, damage, inflictor, attacker, deathtype);
+		self.event_damage (inflictor, attacker, damage, deathtype, hitloc, force);
 	self = oldself;
 }
 

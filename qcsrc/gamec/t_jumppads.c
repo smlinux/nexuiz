@@ -31,6 +31,9 @@ void() trigger_push_touch =
 	other.velocity = self.movedir;
 	other.flags = other.flags - (other.flags & FL_ONGROUND);
 
+	if (other.classname == "missile") 
+		other.angles = vectoangles (other.velocity); 
+
 	if (self.spawnflags & PUSH_ONCE)
 	{
 		self.touch = SUB_Null;

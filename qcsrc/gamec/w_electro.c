@@ -67,7 +67,7 @@ void() W_Electro_Attack
 	proj.effects = 1;
 	
 	vector org;
-	org = self.origin + self.view_ofs + v_forward * 18 + v_right * 7 + v_up * -9;
+	org = self.origin + self.view_ofs + v_forward * 15 + v_right * 7 + v_up * -9;
 
 	te_smallflash(org);
 
@@ -83,11 +83,11 @@ void() W_Electro_Attack
 	setmodel (proj, "models/elaser.mdl");
 	setsize (proj, '0 0 0', '0 0 0');
 	if (postion == 0)
-	setorigin (proj, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -14);
+	setorigin (proj, self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -14);
 	if (postion == 1)
-	setorigin (proj, self.origin + self.view_ofs + v_forward * 18 + v_right * 10 + v_up * -12);
+	setorigin (proj, self.origin + self.view_ofs + v_forward * 15 + v_right * 10 + v_up * -12);
 	if (postion == 2)
-	setorigin (proj, self.origin + self.view_ofs + v_forward * 18 + v_right * 15 + v_up * -14);
+	setorigin (proj, self.origin + self.view_ofs + v_forward * 15 + v_right * 15 + v_up * -14);
 
 	proj.velocity = v_forward * 9999;
 	proj.touch = W_Electro_Touch;
@@ -157,7 +157,7 @@ void W_Plasma_Touch (void)
 		sound (self, CHAN_BODY, "weapons/grenade_bounce.wav", 1, ATTN_NORM);
 }
 
-void W_Plasma_Damage (vector hitloc, float damage, entity inflictor, entity attacker, float deathtype)
+void W_Plasma_Damage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
 {
 	self.health = self.health - damage;
 	if (self.health <= 0)
@@ -184,7 +184,7 @@ void() W_Electro_Attack2
 	Plasma.solid = SOLID_BBOX;
 	
 	vector org;
-	org = self.origin + self.view_ofs + v_forward * 18 + v_right * 7 + v_up * -9;
+	org = self.origin + self.view_ofs + v_forward * 15 + v_right * 7 + v_up * -9;
 	te_smallflash(org);
 
 	Plasma.takedamage = DAMAGE_YES;
@@ -196,11 +196,11 @@ void() W_Electro_Attack2
 	setsize (Plasma, '-6 -6 -3', '6 6 3');
 
 	if (postion == 0)
-	setorigin (Plasma, self.origin + self.view_ofs + v_forward * 18 + v_right * 0 + v_up * -14);
+	setorigin (Plasma, self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -14);
 	if (postion == 1)
-	setorigin (Plasma, self.origin + self.view_ofs + v_forward * 18 + v_right * 10 + v_up * -12);
+	setorigin (Plasma, self.origin + self.view_ofs + v_forward * 15 + v_right * 10 + v_up * -12);
 	if (postion == 2)
-	setorigin (Plasma, self.origin + self.view_ofs + v_forward * 18 + v_right * 20 + v_up * -14);
+	setorigin (Plasma, self.origin + self.view_ofs + v_forward * 15 + v_right * 15 + v_up * -14);
 
 	Plasma.velocity = v_forward * 900 + v_up * 200;
 	Plasma.angles = vectoangles (Plasma.velocity);

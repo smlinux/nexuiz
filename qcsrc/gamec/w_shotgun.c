@@ -41,7 +41,7 @@ void W_Shotgun_Attack (void)
 	bullets = 10;
 
 	for (sc = bullets; sc > 0; sc = sc - 1)
-		fireBullet (v_forward, 150, 5, IT_SHOTGUN);
+		fireBullet (self.origin + self.view_ofs, v_forward, 0.05, 8, IT_SHOTGUN);
 	self.ammo_shells = self.ammo_shells - 1;
 	self.attack_finished = time + 0.7;
 

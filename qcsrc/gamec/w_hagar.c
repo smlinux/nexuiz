@@ -54,7 +54,7 @@ void W_Hagar_Touch (void)
 	W_Hagar_Explode ();
 }
 
-void W_Hagar_Damage (vector hitloc, float damage, entity inflictor, entity attacker, float deathtype)
+void W_Hagar_Damage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
 {
 	self.health = self.health - damage;
 	if (self.health <= 0)
@@ -82,13 +82,12 @@ void W_Hagar_Attack (void)
 	setmodel (missile, "models/hagarmissile.mdl");
 	setsize (missile, '0 0 0', '0 0 0');
 
-	setorigin (missile, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);
+	setorigin (missile, self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -12);
 
 	missile.velocity = v_forward * 2000;
 	missile.velocity = missile.velocity + v_right * ( crandom() * 70 );
 	missile.velocity = missile.velocity + v_up * ( crandom() * 30 );
 	missile.angles = vectoangles (missile.velocity);
-	setorigin (missile, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);
 
 	missile.touch = W_Hagar_Touch;
 	missile.think = W_Hagar_Explode;
@@ -121,7 +120,7 @@ void W_Hagar_Attack2 (void)
 	setmodel (missile, "models/hagarmissile.mdl");
 	setsize (missile, '-6 -6 -3', '6 6 3');
 
-	setorigin (missile, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);
+	setorigin (missile, self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -12);
 
 	missile.velocity = v_forward * 1400 + v_up * 100;
 	missile.angles = vectoangles (missile.velocity);

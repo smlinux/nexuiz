@@ -44,33 +44,7 @@ void W_Nex_Attack (void)
 	org = self.origin + self.view_ofs + v_forward * 18 + v_right * 8 + v_up * -5;
 	te_smallflash(org);
 
-	if (game & GAME_INSTAGIB)
-		FireRailgunBullet (org, self.origin + self.view_ofs + v_forward * 4096, 800, IT_NEX);
-	else
-		FireRailgunBullet (org, self.origin + self.view_ofs + v_forward * 4096, 100, IT_NEX);
-
-	te_plasmaburn (trace_endpos);
-
-	if (trace_fraction < 1.0)
-	{
-		dir = trace_plane_normal * 100;
-		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-		WriteByte (MSG_BROADCAST, TE_FLAMEJET);
-		WriteCoord (MSG_BROADCAST, trace_endpos_x);
-		WriteCoord (MSG_BROADCAST, trace_endpos_y);
-		WriteCoord (MSG_BROADCAST, trace_endpos_z);
-		WriteCoord (MSG_BROADCAST, dir_x);
-		WriteCoord (MSG_BROADCAST, dir_y);
-		WriteCoord (MSG_BROADCAST, dir_z);
-		WriteByte (MSG_BROADCAST, 255);
-
-		explosion = spawn ();
-		setorigin (explosion, trace_endpos);
-		RadiusDamage (explosion, self, 10, 0, 50, world, 300, IT_ROCKET_LAUNCHER);
-		remove (explosion);
-
-		PointSound (trace_endpos, "weapons/neximpact.wav", 1, ATTN_NORM);
-	}
+	FireRailgunBullet (org, self.origin + self.view_ofs + v_forward * 4096, 800, IT_NEX);
 
 	self.attack_finished = time + 1;
 

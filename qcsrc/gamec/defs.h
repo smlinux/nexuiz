@@ -3,31 +3,31 @@
 
 entity	activator;
 string	string_null;
-entity	casing;
+//entity	casing;
 entity dest;
 
 // Fields
 
-.void(vector hitloc, float damage, entity inflictor, entity attacker, float deathtype) event_damage;
+.void(entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force) event_damage;
 
-.string	wad;
-.string	map;
+//.string	wad;
+//.string	map;
 
-.float	worldtype;
+//.float	worldtype;
 .float	delay;
 .float	wait;
 .float	lip;
-.float	light_lev;
+//.float	light_lev;
 .float	speed;
-.float	style;
-.float	skill;
+//.float	style;
+//.float	skill;
 
 .string killtarget;
 
 .vector	pos1, pos2;
 .vector	mangle;
 
-.float	jump_flag;				// storing velocity_z for falling damage
+//.float	jump_flag;				// storing velocity_z for falling damage
 .float	attack_finished;
 .float	pain_finished			//Added by Supajoe
 .float	pain_frame			//"
@@ -48,7 +48,7 @@ entity dest;
 .vector destvec;		// for rain
 .float cnt;		// for rain
 .float count;
-.float cnt2;
+//.float cnt2;
 
 .float death_time;
 .float dead_time;
@@ -60,19 +60,23 @@ entity dest;
 
 .float	norespawn;
 .float	respawntime;
-.float	chasecam;
+//.float	chasecam;
 
 .float electrocount;
-.float crylinkcount;
+//.float crylinkcount;
 
 .float	damageforcescale;
 
-.float          gravity;
+//.float          gravity;
 
 .float		dmg;
 
-.vector angleoffset; // for incorrectly player models
-
+.vector angleoffset; // for incorrectly exported player models 
+    
+// for railgun damage (hitting multiple enemies) 
+.float railgunhit; 
+.float railgunhitsolidbackup; 
+.vector railgunhitloc; 
 
 // definistions for weaponsystem
 

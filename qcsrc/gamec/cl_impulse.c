@@ -16,7 +16,7 @@ void DummyThink(void)
 	PlayerPostThink();
 }
 
-void PlayerDamage (vector hitloc, float damage, entity inflictor, entity attacker, float deathtype);
+void PlayerDamage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force);
 void CreateDummy (vector org, float type)
 {
 	entity oldself;

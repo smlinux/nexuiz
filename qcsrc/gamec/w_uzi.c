@@ -36,7 +36,7 @@ void W_Uzi_Attack (void)
 	makevectors(self.v_angle);
 	sound (self, CHAN_WEAPON, "weapons/uzi_fire.wav", 1, ATTN_NORM);
 
-	fireBullet (v_forward, 100, 5, IT_UZI);
+	fireBullet (self.origin + self.view_ofs, v_forward, 0.025, 4, IT_UZI);
 
 	self.punchangle_x = random () - 0.5;
 	self.punchangle_y = random () - 0.5;
@@ -46,7 +46,7 @@ void W_Uzi_Attack (void)
 	self.ammo_nails = self.ammo_nails - 1;
 
 	vector	org; // casing code
-	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 1) + (v_forward * 20);
+	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 1) + (v_forward * 15);
 	SpawnCasing (org, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 + 10) * v_up), 2, v_forward,'0 250 0', 100, 2);
 	//W_Smoke(org, v_forward, 12);
 }
@@ -56,7 +56,7 @@ void W_Uzi_Attack2 (void)
 	makevectors(self.v_angle);
 	sound (self, CHAN_WEAPON, "weapons/uzi_fire.wav", 1, ATTN_NORM);
 
-	fireBullet (v_forward, 0, 10, IT_UZI);
+	fireBullet (self.origin + self.view_ofs, v_forward, 1, 4, IT_UZI);
 
 	self.attack_finished = time + 0.16;
 	self.ammo_nails = self.ammo_nails - 1;
