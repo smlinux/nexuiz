@@ -38,43 +38,19 @@ void Obituary (entity attacker, entity targ, float deathtype)
 
 void Damage (entity targ, entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
 {
-	entity	oldself;
-
+	local entity oldself;
 	oldself = self;
-
+	self = targ;
 	// apply push
-	if (targ.damageforcescale)
+	if (self.damageforcescale)
 	{
-		targ.velocity = targ.velocity + force * targ.damageforcescale;
-		targ.flags = targ.flags - (targ.flags & FL_ONGROUND);
+		self.velocity = self.velocity + self.damageforcescale * force;
+		self.flags = self.flags - (self.flags & FL_ONGROUND);
 	}
-
 	// apply damage
-	if (targ.takedamage)
-	{
-		targ.health = targ.health - damage;
-		targ.dmg_take = targ.dmg_take + damage;
-		targ.dmg_inflictor = inflictor;
-
-		if (targ.health <= 0)
-		{
-			Obituary (attacker, targ, deathtype);
-			if (targ.event_die)
-			{
-				self = targ;
-				targ.event_die (hitloc, damage);
-				self = oldself;
-			}
-			return;
-		}
-	}
-
-	if (targ.event_hurt)
-	{
-		self = targ;
-		self.event_hurt (hitloc, damage);
-		self = oldself;
-	}
+	if (self.event_damage)
+		self.event_damage (hitloc, damage, inflictor, attacker, deathtype);
+	self = oldself;
 }
 
 void RadiusDamage (entity inflictor, entity attacker, float coredamage, float edgedamage, float radius, entity ignore, float forceintensity, float deathtype)

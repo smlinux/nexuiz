@@ -74,8 +74,18 @@ void PutClientInServer (void)
 	self.solid = SOLID_SLIDEBOX;
 	self.flags = FL_CLIENT;
 	self.takedamage = DAMAGE_YES;
+	self.effects = 0;
 	self.health = 150;
 	self.damageforcescale = 2;
+	self.death_time = 0;
+	self.dead_time = 0;
+	self.dead_frame = 0;
+	self.die_frame = 0;
+	self.alpha = 0;
+	self.scale = 0;
+	self.fade_time = 0;
+	self.pain_frame = 0;
+	self.pain_finished = 0;
 
 	self.ammo_shells = 100;
 	self.ammo_nails = 100;
@@ -88,13 +98,14 @@ void PutClientInServer (void)
 	self.angles = spot.angles;
 	setmodel (self, "models/player/player.zym");
 	setsize (self, PL_MIN, PL_MAX);
-	setorigin (self, spot.origin);
+	setorigin (self, spot.origin + '0 0 1' * (1 - self.mins_z - 24));
+	// don't reset back to last position, even if new position is stuck in solid
+	self.oldorigin = self.origin;
 
 	self.items = IT_LASER | IT_UZI | IT_SHOTGUN | IT_GRENADE_LAUNCHER | IT_ELECTRO | IT_CRYLINK | IT_NEX | IT_HAGAR | IT_ROCKET_LAUNCHER;
 	self.weapon = IT_UZI;
 
-	self.event_hurt = PlayerHurt;
-	self.event_die = PlayerDie;
+	self.event_damage = PlayerDamage;
 
 	self.statdraintime = time + 5;
 	self.button0 = self.button1 = self.button2 = self.button3 = 0;
@@ -102,7 +113,7 @@ void PutClientInServer (void)
 	W_UpdateWeapon ();
 	W_UpdateAmmo ();
 
-	stuffcmd(self, "chase_active 0");
+	//stuffcmd(self, "chase_active 0");
 }
 
 /*
@@ -174,13 +185,6 @@ When you press the jump key
 */
 void PlayerJump (void)
 {
-	if (self.deadflag != DEAD_NO)
-	{
-		if (self.death_time < time)
-			PutClientInServer();
-
-		return;
-	}
 	if (!(self.flags & FL_ONGROUND))
 		return;
 	if (!(self.flags & FL_JUMPRELEASED))
@@ -190,6 +194,12 @@ void PlayerJump (void)
 
 	self.flags = self.flags - FL_ONGROUND;
 	self.flags = self.flags - FL_JUMPRELEASED;
+}
+
+void respawn(void)
+{
+	CopyBody();
+	PutClientInServer();
 }
 
 /*
@@ -205,32 +215,45 @@ void PlayerPreThink (void)
 	if (BotPreFrame())
 		return;
 
+	if (self.deadflag != DEAD_NO)
+	{
+		player_anim ();
+		if (self.deadflag == DEAD_DYING)
+		{
+			if (time > self.dead_time)
+				self.deadflag = DEAD_DEAD;
+		}
+		else if (self.deadflag == DEAD_DEAD)
+		{
+			if (!self.button0 && !self.button2 && !self.button3)
+				self.deadflag = DEAD_RESPAWNABLE;
+		}
+		else if (self.deadflag == DEAD_RESPAWNABLE)
+		{
+			if (self.button0 || self.button2 || self.button3)
+				respawn();
+		}
+		return;
+	}
+
 	if (self.button3)
 	{
 		if (self.weapon == IT_GRENADE_LAUNCHER)
 			W_SecondaryAttack ();
 		if (self.weapon == IT_ROCKET_LAUNCHER)
 			W_SecondaryAttack ();
-		if (self.attack_finished < time && self.button0 != 1)
+		if (self.attack_finished < time && !self.button0)
 			W_SecondaryAttack ();
 	}
-
+	
 	if (self.attack_finished < time)
-	{
-		if (self.button0)
-			W_Attack ();
-	}
-
+	if (self.button0)
+		W_Attack ();
+	
 	if (self.button2)
 		PlayerJump ();
 	else
 		self.flags = self.flags | FL_JUMPRELEASED;
-
-	if (self.deadflag != DEAD_NO)
-	{
-		self.angles = self.dead_angles;
-		return;
-	}
 
 	if (self.weapon == IT_NEX && self.button3)
 		self.viewzoom = 0.3;
@@ -256,11 +279,9 @@ void PlayerPreThink (void)
 
 		self.statdraintime = time + 1;
 	}
+	player_anim ();
+	weapon_anim ();
 
-	self.angles_y=self.v_angle_y + 90;   // temp
-
-	player_stand ();
-	weapon_stand ();
 	if (TetrisPreFrame()) return;
 }
 
@@ -276,6 +297,8 @@ void PlayerPostThink (void)
 	if (BotPostFrame())
 		return;
 
-	ImpulseCommands ();
+	if (self.health > 0)
+	if (self.impulse)
+		ImpulseCommands ();
 	if (TetrisPostFrame()) return;
 }

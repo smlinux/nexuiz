@@ -1,25 +1,27 @@
-float lastclientthink, sv_maxspeed, sv_friction, sv_accelerate, sv_stopspeed;
-float sv_edgefriction, cl_rollspeed, cl_divspeed, cl_rollangle;
+float lastclientthink, sv_maxspeed, sv_friction, sv_accelerate, sv_stopspeed, sv_edgefriction, sv_gravity;
 .float ladder_time;
 .entity ladder_entity;
 
-// LordHavoc:
-// Highly optimized port of SV_ClientThink from engine code to QuakeC.
-// No behavior changes!  This code is much shorter and probably faster than
-// the engine code :)
-
-// note that darkplaces engine will call this function if it finds it,
-// so modify for your own mods and enjoy...
-
-// note also, this code uses some builtin functions from dpextensions.qc
-// (included with darkplaces engine releases)
-
-void SV_PlayerPhysics() {
-	local vector wishvel, wishdir, v;
-	local float wishspeed, f;
+float intermission_running;
+void() SV_PlayerPhysics =
+{
+	local   vector  wishvel, wishdir, v;
+	local   float   wishspeed, f, accelerate;
 
 	if (self.movetype == MOVETYPE_NONE)
 		return;
+
+	if (time != lastclientthink)
+	{
+		lastclientthink = time;
+		sv_maxspeed = cvar("sv_maxspeed");
+		sv_friction = cvar("sv_friction");
+		sv_accelerate = cvar("sv_accelerate");
+		sv_stopspeed = cvar("sv_stopspeed");
+		sv_gravity = cvar("sv_gravity");
+	}
+
+	accelerate = sv_accelerate;
 
 	if (self.punchangle != '0 0 0')
 	{
@@ -30,31 +32,36 @@ void SV_PlayerPhysics() {
 			self.punchangle = '0 0 0';
 	}
 
-	// if dead, behave differently
-	if (self.health <= 0)
-		return;
-
-	if (time != lastclientthink)
+	if (self.punchvector != '0 0 0')
 	{
-		lastclientthink = time;
-		sv_maxspeed = cvar("sv_maxspeed");
-		sv_maxspeed = 200;
-		sv_friction = cvar("sv_friction");
-		sv_accelerate = cvar("sv_accelerate");
-		sv_stopspeed = cvar("sv_stopspeed");
-		sv_edgefriction = cvar("edgefriction");
-		// LordHavoc: this * 4 is an optimization
-		cl_rollangle = cvar("cl_rollangle") * 4;
-		// LordHavoc: this 1 / is an optimization
-		cl_divspeed = 1 / cvar("cl_rollspeed");
+		f = vlen(self.punchvector) - 30 * frametime;
+		if (f > 0)
+			self.punchvector = normalize(self.punchvector) * f;
+		else
+			self.punchvector = '0 0 0';
 	}
 
-	// show 1/3 the pitch angle and all the roll angle
-	self.angles_z = bound(-1, self.velocity * v_right * cl_divspeed, 1) * cl_rollangle;
+	// if dead, behave differently
+	if (self.deadflag)
+		return;
+
 	if (!self.fixangle)
 	{
-		self.angles_x = (self.v_angle_x + self.punchangle_x) * -0.333;
+		// show 1/3 the pitch angle and all the roll angle
+		// LordHavoc: no real interest in porting V_CalcRoll
+		//self.angles_z = V_CalcRoll (self.angles, self.velocity)*4;
+		self.angles_z = 0;
+		// LordHavoc: pitch was ugly to begin with...  removed except in water
+		if (self.waterlevel >= 2)
+			self.angles_x = self.v_angle_x;
+		else
+			self.angles_x = 0;
+		if (self.angles_x >= 180)
+			self.angles_x = self.angles_x - 360;
+		self.angles_x = (self.angles_x + self.punchangle_x) * -0.333;
 		self.angles_y = self.v_angle_y + self.punchangle_y;
+		// FIXME: zym model problem
+		self.angles_y = self.angles_y + 90;
 	}
 
 	if (self.flags & FL_WATERJUMP )
@@ -69,63 +76,40 @@ void SV_PlayerPhysics() {
 		return;
 	}
 
-	makevectors(self.v_angle);
-
-	// swim
 	if (self.waterlevel >= 2)
 	if (self.movetype != MOVETYPE_NOCLIP)
 	{
-		if (self.movement == '0 0 0')
+		// swimming
+		makevectors(self.v_angle);
+		//wishvel = v_forward * self.movement_x + v_right * self.movement_y + v_up * self.movement_z;
+		wishvel = v_forward * self.movement_x + v_right * self.movement_y + '0 0 1' * self.movement_z;
+		if (wishvel == '0 0 0')
 			wishvel = '0 0 -60'; // drift towards bottom
-		else
-			wishvel = v_forward * self.movement_x + v_right * self.movement_y + '0 0 1' * self.movement_z;
 
+		wishdir = normalize(wishvel);
 		wishspeed = vlen(wishvel);
 		if (wishspeed > sv_maxspeed)
-			wishspeed = sv_maxspeed * 0.7;
-		else
-			wishspeed = wishspeed * 0.7;
+			wishspeed = sv_maxspeed;
+		wishspeed = wishspeed * 0.7;
 
 		// water friction
-		if (self.velocity != '0 0 0')
-		{
-			f = vlen(self.velocity) * (1 - frametime * sv_friction);
-			if (f > 0)
-				self.velocity = normalize(self.velocity) * f;
-			else
-				self.velocity = '0 0 0';
-		}
-		else
-			f = 0;
+		self.velocity = self.velocity * (1 - frametime * sv_friction);
 
 		// water acceleration
-		if (wishspeed <= f)
-			return;
-
-		f = min(wishspeed - f, sv_accelerate * wishspeed * frametime);
-		self.velocity = self.velocity + normalize(wishvel) * f;
+		f = wishspeed - (self.velocity * wishdir);
+		if (f > 0)
+			self.velocity = self.velocity + wishdir * min(f, sv_accelerate * frametime * wishspeed);
 		return;
 	}
 
-	// hack to not let you back into teleporter
-	if (time < self.teleport_time && self.movement_x < 0)
-		wishvel = v_right * self.movement_y;
-	else
-		wishvel = v_forward * self.movement_x + v_right * self.movement_y;
-
-	if (self.movetype != MOVETYPE_WALK)
-		wishvel_z = self.movement_z;
-	else
-		wishvel_z = 0;
-
-	wishdir = normalize(wishvel);
-	wishspeed = vlen(wishvel);
-	if (wishspeed > sv_maxspeed)
-		wishspeed = sv_maxspeed;
-	if (self.flags & FL_ONGROUND) {
-		wishspeed=wishspeed+wishspeed*(1);
+	if (self.movetype == MOVETYPE_NOCLIP || self.movetype == MOVETYPE_FLY)
+	{
+		// noclipping or flying
+		self.velocity = self.velocity * (1 - frametime * sv_friction);
+		makevectors(self.v_angle);
+		//wishvel = v_forward * self.movement_x + v_right * self.movement_y + v_up * self.movement_z;
+		wishvel = v_forward * self.movement_x + v_right * self.movement_y + '0 0 1' * self.movement_z;
 	}
-
 	else if (time < self.ladder_time)
 	{
 		// on a func_ladder or swimming in func_water
@@ -158,10 +142,11 @@ void SV_PlayerPhysics() {
 			}
 		}
 	}
-	if (self.movetype == MOVETYPE_NOCLIP) // noclip
-		self.velocity = wishdir * wishspeed;
-	else if (self.flags & FL_ONGROUND) // walking
+	else if (self.flags & FL_ONGROUND)
 	{
+		// walking
+		makevectors(self.v_angle_y * '0 1 0');
+		wishvel = v_forward * self.movement_x + v_right * self.movement_y;
 		// friction
 		if (self.velocity_x || self.velocity_y)
 		{
@@ -169,45 +154,38 @@ void SV_PlayerPhysics() {
 			v_z = 0;
 			f = vlen(v);
 
-			// if the leading edge is over a dropoff, increase friction
-			v = self.origin + normalize(v) * 16 + '0 0 1' * self.mins_z;
-
-			traceline(v, v + '0 0 -34', TRUE, self);
-
-			// apply friction
-			if (trace_fraction == 1.0)
-			{
-				if (f < sv_stopspeed)
-					f = 1 - frametime * (sv_stopspeed / f) * sv_friction * sv_edgefriction;
-				else
-					f = 1 - frametime * sv_friction * sv_edgefriction;
-			}
+			if (f < sv_stopspeed)
+				f = 1 - frametime * (sv_stopspeed / f) * sv_friction;
 			else
-			{
-				if (f < sv_stopspeed)
-					f = 1 - frametime * (sv_stopspeed / f) * sv_friction;
-				else
-					f = 1 - frametime * sv_friction;
-			}
+				f = 1 - frametime * sv_friction;
 
-			if (f < 0)
-				self.velocity = '0 0 0';
-			else
+			if (f > 0)
 				self.velocity = self.velocity * f;
+			else
+				self.velocity = '0 0 0';
 		}
+	}
+	else
+	{
+		// airborn
+		makevectors(self.v_angle_y * '0 1 0');
+		wishvel = v_forward * self.movement_x + v_right * self.movement_y;
+		// LordHavoc: air control...
+		//accelerate = accelerate * 0.5;
+		// LordHavoc: no air control...
+		//if (vlen(wishvel) > 10)
+		//	wishvel = normalize(wishvel) * 10;
+	}
 
-		// acceleration
+	// acceleration
+	if (time >= self.teleport_time)
+	{
+		wishdir = normalize(wishvel);
+		wishspeed = vlen(wishvel);
+		if (wishspeed > sv_maxspeed)
+			wishspeed = sv_maxspeed;
 		f = wishspeed - (self.velocity * wishdir);
 		if (f > 0)
-			self.velocity = self.velocity + wishdir * min(f, sv_accelerate * frametime * wishspeed);
+			self.velocity = self.velocity + wishdir * min(f, accelerate * frametime * wishspeed);
 	}
-	else // airborne
-	{
-		if (wishspeed < 30)
-			f = wishspeed - (self.velocity * wishdir);
-		else
-			f = 30 - (self.velocity * wishdir);
-		if (f > 0)
-			self.velocity = self.velocity + wishdir * (min(f, sv_accelerate) * wishspeed * frametime);
-	}
-}
+};

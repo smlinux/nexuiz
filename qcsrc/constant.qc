@@ -150,6 +150,8 @@ float	IT_SPEED				= 32768;
 float	IT_SLOWMO				= 65536;
 
 vector	PL_VIEW_OFS				= '0 0 22';
-
 vector	PL_MIN					= '-16 -16 -24';
 vector	PL_MAX					= '16 16 32';
+//vector	PL_VIEW_OFS				= '0 0 32';
+//vector	PL_MIN					= '-16 -16 -48';
+//vector	PL_MAX					= '16 16 48';

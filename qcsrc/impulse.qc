@@ -1,39 +1,41 @@
-void dummyhurt (vector hitloc, float damage)
+
+// changes by LordHavoc on 03/30/04
+// cleaned up dummy code
+// dummies are now removed eventually after being gibbed (norespawn = TRUE)
+// dummy impulse now checks sv_cheats to prevent players from overwhelming server with dummies
+// dummies now use player code where possible
+
+void player_anim (void);
+void DummyThink(void)
 {
-	te_blood (hitloc, '0 0 20', floor (damage * 0.5));
+	self.think = DummyThink;
+	self.nextthink = time;
+	SV_PlayerPhysics();
+	PlayerPreThink();
+	//player_anim();
+	PlayerPostThink();
 }
 
-void dummydie (vector hitloc, float damage)
-{
-	vector	vel;
-
-	te_bloodshower (self.origin + self.mins, self.origin + self.maxs, 600, 500);
-
-	vel = normalize (self.origin - hitloc) * damage * 4;	// blow gibs away from impact point
-	if (vel_z > 0)
-		vel_z = vel_z * 2;	// more vertical
-	Gib (vel);
-
-	remove (self);
-}
-
+void PlayerDamage (vector hitloc, float damage, entity inflictor, entity attacker, float deathtype);
 void CreateDummy (vector org)
 {
-	entity	dummy;
-
-	dummy = spawn ();
-	dummy.solid = SOLID_SLIDEBOX;
-	dummy.movetype = MOVETYPE_TOSS;
-	dummy.classname = "corpse";
-	dummy.takedamage = DAMAGE_YES;
-	dummy.damageforcescale = 2;
-	dummy.health = 100;
-	setsize (dummy, PL_MIN, PL_MAX);
-	setorigin (dummy, org);
-	setmodel (dummy, "models/player/dummy.zym");
-
-	dummy.event_hurt = dummyhurt;
-	dummy.event_die = dummydie;
+	entity oldself;
+	oldself = self;
+	self = spawn ();
+	self.norespawn = TRUE;
+	self.solid = SOLID_SLIDEBOX;
+	self.movetype = MOVETYPE_WALK;
+	self.classname = "corpse";
+	self.takedamage = DAMAGE_YES;
+	self.damageforcescale = oldself.damageforcescale;
+	self.health = 100;
+	self.weapon = IT_LASER;
+	setsize (self, oldself.mins, oldself.maxs);
+	setorigin (self, org);
+	setmodel (self, oldself.model);
+	self.event_damage = PlayerDamage;
+	DummyThink();
+	self = oldself;
 }
 
 void ImpulseCommands (void)
@@ -45,7 +47,7 @@ void ImpulseCommands (void)
 		W_NextWeapon ();
 	else if (self.impulse == 12)
 		W_PreviousWeapon ();
-	else if (self.impulse == 13)
+	else if (self.impulse == 13 && cvar("sv_cheats"))
 	{
 		makevectors (self.v_angle);
 		CreateDummy (self.origin + self.view_ofs + v_forward * 64);

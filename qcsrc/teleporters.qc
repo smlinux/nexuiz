@@ -20,7 +20,8 @@ void Teleport_Touch (void)
 	te_teleport (dest.origin + v_forward * 32);
 
 	// Relocate the player
-	setorigin (other, dest.origin);
+	//setorigin (other, dest.origin);
+	setorigin (other, dest.origin + '0 0 1' * (1 - other.mins_z - 24));
 	other.angles = dest.mangle;
 	other.fixangle = TRUE;
 	
@@ -34,10 +35,16 @@ void info_teleport_destination (void)
 	self.mangle = self.angles;
 	self.angles = '0 0 0';
 
-	setorigin (self, self.origin + '0 0 27');	// To fix a mappers' habit as old as Quake
+	//setorigin (self, self.origin + '0 0 27');	// To fix a mappers' habit as old as Quake
+	setorigin (self, self.origin);
 
 	if (!self.targetname)
 		objerror ("Teleport destination without a targetname");
+}
+
+void misc_teleporter_dest (void)
+{
+	info_teleport_destination();
 }
 
 void trigger_teleport (void)

@@ -466,6 +466,7 @@ void W_Laser_Touch (void)
 	WriteCoord (MSG_BROADCAST, 0);
 	WriteByte (MSG_BROADCAST, 155);
 
+	self.event_damage = SUB_Null;
 	RadiusDamage (self, self.owner, 20, 10, 50, world, 200, IT_LASER);
 
 	remove (self);
@@ -581,6 +582,7 @@ void W_Grenade_Explode (entity ignore)
 {
 	ImpactEffect (self, IT_GRENADE_LAUNCHER);
 
+	self.event_damage = SUB_Null;
 	RadiusDamage (self, self.owner, 65, 35, 140, world, 400, IT_GRENADE_LAUNCHER);
 
 	remove (self);
@@ -601,6 +603,13 @@ void W_Grenade_Touch (void)
 	sound (self, CHAN_BODY, "weapons/grenade_bounce.wav", 1, ATTN_NORM);
 }
 
+void W_Grenade_Damage (vector hitloc, float damage, entity inflictor, entity attacker, float deathtype)
+{
+	self.health = self.health - damage;
+	if (self.health <= 0)
+		W_Grenade_FuseExplode();
+}
+
 void W_Grenade_Attack (void)
 {
 	entity	gren;
@@ -618,8 +627,8 @@ void W_Grenade_Attack (void)
 
 	gren.takedamage = DAMAGE_YES;
 	gren.damageforcescale = 4;
-	gren.health = 1;
-	gren.event_hurt = W_Grenade_Explode;
+	gren.health = 10;
+	gren.event_damage = W_Grenade_Damage;
 
 	setmodel (gren, "models/grenademodel.md3");
 	setsize (gren, '-6 -6 -3', '6 6 3');
@@ -667,6 +676,7 @@ void W_Electro_Touch (void)
 	WriteCoord (MSG_BROADCAST, 0);
 	WriteCoord (MSG_BROADCAST, 0);
 	WriteByte (MSG_BROADCAST, 155);
+	self.event_damage = SUB_Null;
 	RadiusDamage (self, self.owner, 50, 10, 70, world, 50, IT_ELECTRO);
 	remove (self);
 }
@@ -717,6 +727,7 @@ void W_Plasma_Explode (entity ignore)
 	WriteCoord (MSG_BROADCAST, 0);
 	WriteByte (MSG_BROADCAST, 155);
 
+	self.event_damage = SUB_Null;
 	RadiusDamage (self, self.owner, 100, 50, 100, world, 50, IT_ELECTRO);
 
 	remove (self);
@@ -733,6 +744,13 @@ void W_Plasma_Touch (void)
 		W_Plasma_Explode (other);
 	else
 		sound (self, CHAN_BODY, "weapons/grenade_bounce.wav", 1, ATTN_NORM);
+}
+
+void W_Plasma_Damage (vector hitloc, float damage, entity inflictor, entity attacker, float deathtype)
+{
+	self.health = self.health - damage;
+	if (self.health <= 0)
+		W_Plasma_FuseExplode ();
 }
 
 void W_Electro_Attack2 (void)
@@ -753,8 +771,8 @@ void W_Electro_Attack2 (void)
 
 	Plasma.takedamage = DAMAGE_YES;
 	Plasma.damageforcescale = 4;
-	Plasma.health = 1;
-	Plasma.event_hurt = W_Plasma_Explode;
+	Plasma.health = 5;
+	Plasma.event_damage = W_Plasma_Damage;
 
 	setmodel (Plasma, "models/bullet.mdl");
 	setsize (Plasma, '-6 -6 -3', '6 6 3');
@@ -815,7 +833,9 @@ void W_Crylink_Attack2 (void)
 
 	org = self.origin + self.view_ofs + v_forward * 19 + v_right * 5 + v_up * -7;
 
+	self.solid = SOLID_BBOX;
 	traceline (org, self.origin + self.view_ofs + v_forward * 4096 + v_right * (random () * 100 - 50) + v_up * (random () * 100 - 50), FALSE, self);
+	self.solid = SOLID_SLIDEBOX;
 
 	Damage (trace_ent, self, self, 10, IT_CRYLINK, trace_endpos, v_forward * 10);
 
@@ -884,6 +904,7 @@ void W_Hagar_Explode (void)
 {
 	ImpactEffect (self, IT_HAGAR);
 
+	self.event_damage = SUB_Null;
 	RadiusDamage (self, self.owner, 20, 10, 50, world, 90, IT_HAGAR);
 
 	remove (self);
@@ -902,6 +923,13 @@ void W_Hagar_Touch (void)
 	W_Hagar_Explode ();
 }
 
+void W_Hagar_Damage (vector hitloc, float damage, entity inflictor, entity attacker, float deathtype)
+{
+	self.health = self.health - damage;
+	if (self.health <= 0)
+		W_Hagar_Explode();
+}
+
 void W_Hagar_Attack (void)
 {
 	entity	missile;
@@ -915,8 +943,8 @@ void W_Hagar_Attack (void)
 
 	missile.takedamage = DAMAGE_YES;
 	missile.damageforcescale = 4;
-	missile.health = 1;
-	missile.event_hurt = W_Hagar_Explode;
+	missile.health = 10;
+	missile.event_damage = W_Hagar_Damage;
 
 	missile.movetype = MOVETYPE_FLY;
 	missile.solid = SOLID_BBOX;
@@ -954,8 +982,8 @@ void W_Hagar_Attack2 (void)
 
 	missle.takedamage = DAMAGE_YES;
 	missle.damageforcescale = 4;
-	missle.health = 1;
-	missle.event_hurt = W_Hagar_Explode;
+	missle.health = 5;
+	missle.event_damage = W_Hagar_Damage;
 
 	setmodel (missle, "models/hagarmissile.mdl");
 	setsize (missle, '-6 -6 -3', '6 6 3');
@@ -979,6 +1007,7 @@ void W_Rocket_Explode (entity ignore)
 {
 	ImpactEffect (self, IT_ROCKET_LAUNCHER);
 
+	self.event_damage = SUB_Null;
 	RadiusDamage (self, self.owner, 130, 50, 170, ignore, 600, IT_ROCKET_LAUNCHER);
 
 	remove (self);
@@ -1002,6 +1031,13 @@ void W_Rocket_Touch (void)
 		W_Rocket_Explode (world);
 }
 
+void W_Rocket_Damage (vector hitloc, float damage, entity inflictor, entity attacker, float deathtype)
+{
+	self.health = self.health - damage;
+	if (self.health <= 0)
+		W_Rocket_Explode(world);
+}
+
 void W_Rocket_Attack (void)
 {
 	entity	missile;
@@ -1015,8 +1051,8 @@ void W_Rocket_Attack (void)
 
 	missile.takedamage = DAMAGE_YES;
 	missile.damageforcescale = 4;
-	missile.health = 1;
-	missile.event_hurt = W_Rocket_Explode;
+	missile.health = 10;
+	missile.event_damage = W_Rocket_Damage;
 
 	missile.movetype = MOVETYPE_FLY;
 	missile.solid = SOLID_BBOX;

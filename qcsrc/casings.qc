@@ -5,13 +5,15 @@ void CasingTouch (void)
 		self.avelocity = '0 0 0';
 }
 
-void HitCasing (vector hitloc, float damage)
+void CasingDamage (vector hitloc, float damage, entity inflictor, entity attacker, float deathtype)
 {
 	self.flags = self.flags - (self.flags & FL_ONGROUND);
-
 	self.velocity = normalize (self.origin - hitloc) * damage * 3 + '0 0 100';
 	self.avelocity_x = random () * 500;
 	self.avelocity_y = random () * 500;
+	self.health = self.health - damage;
+	if (self.health <= 0)
+		SUB_VanishOrRemove(self);
 }
 
 void SpawnCasing (vector org, vector ang, vector vel, float ctype)
@@ -37,8 +39,7 @@ void SpawnCasing (vector org, vector ang, vector vel, float ctype)
 	casing.avelocity_x = random () * 500;
 	casing.avelocity_y = random () * 500;
 
-	casing.event_hurt = HitCasing;
-	casing.event_die = SUB_Remove;
+	casing.event_damage = CasingDamage;
 
 	casing.skin = ctype;
 

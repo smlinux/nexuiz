@@ -8,8 +8,7 @@ entity dest;
 
 // Fields
 
-.void(vector hitloc, float damage)	event_hurt;
-.void(vector hitloc, float damage)	event_die;
+.void(vector hitloc, float damage, entity inflictor, entity attacker, float deathtype) event_damage;
 
 .string	wad;
 .string	map;
@@ -44,8 +43,11 @@ entity dest;
 .float count;
 .float cnt2;
 
-.vector dead_angles;
 .float death_time;
+.float dead_time;
+.float dead_frame;
+.float die_frame;
+.float fade_time;
 
 .string mdl;
 

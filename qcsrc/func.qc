@@ -34,15 +34,36 @@ void SUB_Remove (void)
 	remove (self);
 }
 
+/*
+==================
+SUB_VanishOrRemove
+
+Makes ent invisible or removes it if ent.norespawn
+==================
+*/
+void SUB_VanishOrRemove (entity ent)
+{
+	if (ent.norespawn)
+	{
+		// remove
+		remove (ent);
+	}
+	else
+	{
+		// vanish
+		ent.effects = EF_NODRAW;
+	}
+}
+
 void SUB_SetFade_Think (void)
 {
-	if (self.alpha < 0.06)	// don't let it reach 0, lest it become fully visible again
-		remove (self);
-
-	self.alpha = self.alpha - 0.05;
-
 	self.think = SUB_SetFade_Think;
-	self.nextthink = time + 0.1;
+	self.nextthink = self.fade_time;
+	self.alpha = 1 - (time - self.fade_time) * 0.5;
+	if (self.alpha > 1)
+		self.alpha = 1;
+	if (self.alpha < 0.01)	// don't let it reach 0, lest it become fully visible again
+		SUB_VanishOrRemove(self);
 }
 
 /*
@@ -54,14 +75,8 @@ Fade 'ent' out when time >= 'when'
 */
 void SUB_SetFade (entity ent, float when)
 {
-	if (when < time)
-	{
-			ent.think = SUB_Null;
-			return;
-	}
-	
-	ent.alpha = 1.0;
-
+	ent.alpha = 1;
+	ent.fade_time = when;
 	ent.think = SUB_SetFade_Think;
 	ent.nextthink = when;
 }

@@ -133,6 +133,7 @@ Stuff mimicking sv_user.c
 
 =========================================
 */
+/*
 void() SV_UserFriction =
 {
 	local vector vel, start, stop;
@@ -333,8 +334,17 @@ void() SV_ClientThink =
 		return;
 	}
 	SV_AirMove();
-
 };
+*/
+
+void() SV_PlayerPhysics;
+.vector movement;
+void() SV_ClientThink =
+{
+	self.movevect = self.movement;
+	SV_PlayerPhysics();
+};
+
 /*
 =========================================
 
