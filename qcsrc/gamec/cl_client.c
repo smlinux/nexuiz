@@ -93,7 +93,7 @@ void PutClientInServer (void)
 	self.slowmo_finished = 0;
 	// players have no think function
 	self.think = nullfunction;
-	self.nextthink = -1;
+	self.nextthink = 0;
 
 	self.deadflag = DEAD_NO;
 
