@@ -56,7 +56,7 @@ void W_UpdateWeapon (void)
 	if (self.weapon == IT_LASER)
 		self.weaponmodel = "models/weapons/w_laser.zym";
 	else if (self.weapon == IT_UZI)
-		self.weaponmodel = "models/weapons/w_uzi.md3";
+		self.weaponmodel = "models/weapons/w_uzi.zym";
 	else if (self.weapon == IT_SHOTGUN)
 		self.weaponmodel = "models/weapons/w_shotgun.zym";
 	else if (self.weapon == IT_GRENADE_LAUNCHER)
@@ -489,7 +489,7 @@ void W_Laser_Attack (void)
 	missile.movetype = MOVETYPE_FLY;
 	missile.solid = SOLID_BBOX;
 
-	setmodel (missile, "models/bullet.mdl");
+	setmodel (missile, "models/laser.mdl");
 	setsize (missile, '0 0 0', '0 0 0');
 	setorigin (missile, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);
 
@@ -503,6 +503,8 @@ void W_Laser_Attack (void)
 	missile.touch = W_Laser_Touch;
 	missile.think = SUB_Remove;
 	missile.nextthink = time + 9;
+
+	missile.effects = missile.effects | EF_ADDITIVE;
 
 	self.punchangle_x = random () - 0.5;
 	self.punchangle_y = random () - 0.5;
@@ -524,7 +526,7 @@ void W_Laser_Attack2 (void)
 	missile.movetype = MOVETYPE_FLY;
 	missile.solid = SOLID_BBOX;
 
-	setmodel (missile, "models/bullet.mdl");
+	setmodel (missile, "models/laser.mdl");
 	setsize (missile, '0 0 0', '0 0 0');
 	setorigin (missile, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);
 
@@ -536,6 +538,8 @@ void W_Laser_Attack2 (void)
 	missile.touch = W_Laser_Touch;
 	missile.think = SUB_Remove;
 	missile.nextthink = time + 2;
+
+	missile.effects = missile.effects | EF_ADDITIVE;
 
 	self.punchangle_x = random () - 0.5;
 	self.punchangle_y = random () - 0.5;
@@ -687,7 +691,7 @@ void W_Grenade_Attack (void)
 
 	gren.velocity = v_forward * 900 + v_up * 200;
 	gren.angles = vectoangles (gren.velocity);
-	gren.avelocity = '150 1500 150';
+	gren.avelocity = '100 150 100';
 
 	gren.touch = W_Grenade_Touch;
 	gren.think = W_Grenade_FuseExplode;
@@ -789,9 +793,19 @@ void W_Electro_Attack (float postion)
 
 	vector org;
 	org = self.origin + self.view_ofs + v_forward * 18 + v_right * 7 + v_up * -9;
+
 	te_smallflash(org);
 
-	setmodel (proj, "models/bullet.mdl");
+	//entity	flash;
+	//flash = spawn ();
+	//flash.drawonlytoclient;
+	//setorigin (flash, org);
+	//setmodel (flash, "models/flash.md3");
+	//flash.velocity = v_forward * 9;
+	//flash.angles = vectoangles (flash.velocity);
+	//SUB_SetFade (flash, time + 0 + random () * 4);
+
+	setmodel (proj, "models/laser.mdl");
 	setsize (proj, '0 0 0', '0 0 0');
 	if (postion == 0)
 	setorigin (proj, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -14);
@@ -803,7 +817,7 @@ void W_Electro_Attack (float postion)
 	proj.velocity = v_forward * 9999;
 	proj.touch = W_Electro_Touch;
 	proj.think = SUB_Remove;
-	proj.nextthink = time + 9;
+	proj.nextthink = time + 1.5;
 
 	proj.effects = proj.effects | EF_ADDITIVE;
 
@@ -877,7 +891,7 @@ void W_Electro_Attack2 (float postion)
 	Plasma.health = 5;
 	Plasma.event_damage = W_Plasma_Damage;
 
-	setmodel (Plasma, "models/bullet.mdl");
+	setmodel (Plasma, "models/laser.mdl");
 	setsize (Plasma, '-6 -6 -3', '6 6 3');
 
 	makevectors (self.v_angle);
@@ -891,7 +905,7 @@ void W_Electro_Attack2 (float postion)
 
 	Plasma.velocity = v_forward * 900 + v_up * 200;
 	Plasma.angles = vectoangles (Plasma.velocity);
-	Plasma.avelocity = '150 1500 150';
+	Plasma.avelocity = '0 0 0';
 
 	Plasma.touch = W_Plasma_Touch;
 	Plasma.think = W_Plasma_FuseExplode;
@@ -908,6 +922,7 @@ void W_Electro_Attack3 (float postion)
 {
 
 	entity	proj;
+	float hitcount;
 
 	sound (self, CHAN_WEAPON, "weapons/electro_fire.wav", 1, ATTN_NORM);
 
@@ -936,7 +951,7 @@ void W_Electro_Attack3 (float postion)
 
 	proj.velocity = v_forward * 9999;
 	proj.think = W_Electro_Touch;
-	proj.nextthink = time + 1;
+	proj.nextthink = time + 8;
 
 	proj.effects = proj.effects | EF_ADDITIVE;
 
@@ -954,12 +969,23 @@ void W_Crylink_Touch (void)
 	remove (self);
 }
 
-void W_Crylink_Attack (void)
+void W_Crylink_Attack (void) //(float postion)
 {
 	vector	org;
 
 	sound (self, CHAN_WEAPON, "weapons/crylink.wav", 1, ATTN_NORM);
-	org = self.origin + self.view_ofs + v_forward * 18 + v_right * 7 + v_up * -9;
+
+	//if (postion==1)
+	//	org = self.origin + self.view_ofs + v_forward * 18 + v_right * 9 + v_up * -27;
+	//if (postion==2)
+	//	org = self.origin + self.view_ofs + v_forward * 18 + v_right * 18 + v_up * -13;
+	//if (postion==3)
+	//	org = self.origin + self.view_ofs + v_forward * 18 + v_right * 9 + v_up * -6;
+	//if (postion==4)
+	//	org = self.origin + self.view_ofs + v_forward * 18 + v_right * 0 + v_up * -13;
+
+	org = self.origin + self.view_ofs + v_forward * 10 + v_right * 5 + v_up * -14;	
+
 	makevectors (self.v_angle);
 
 	FireRailgunBullet (org, 25, v_forward, IT_CRYLINK);
@@ -1004,7 +1030,7 @@ void W_Crylink_Attack2 (void)
 	setsize (proj, '0 0 0', '0 0 0');
 	setorigin (proj, self.origin + self.view_ofs + v_forward * 10 + v_right * 5 + v_up * -14);
 
-	proj.velocity = v_forward * 1000;
+	proj.velocity = v_forward * 5000;
 	proj.velocity = proj.velocity + v_right * ( crandom() * 50 );
 	proj.velocity = proj.velocity + v_up * ( crandom() * 50 );
 	proj.touch = W_Crylink_Touch;
@@ -1178,7 +1204,7 @@ void W_Hagar_Attack2 (void)
 	missile.health = 5;
 	missile.event_damage = W_Hagar_Damage;
 
-	setmodel (missile, "models/bullet.mdl");
+	setmodel (missile, "models/fire.mdl");
 	setsize (missile, '-6 -6 -3', '6 6 3');
 
 	makevectors (self.v_angle);
@@ -1186,7 +1212,7 @@ void W_Hagar_Attack2 (void)
 
 	missile.velocity = v_forward * 1400 + v_up * 100;
 	missile.angles = vectoangles (missile.velocity);
-	missile.avelocity = '150 1500 150';
+	missile.avelocity = '0 0 0';
 
 	missile.touch = W_Hagar_Touch;
 	missile.think = W_Hagar_Fireball;

@@ -97,6 +97,8 @@ void PutClientInServer (void)
 
 	self.view_ofs = PL_VIEW_OFS;
 	self.angles = spot.angles;
+
+	self.viewzoom = 0.6;
 	
 	mdlrandom = crandom();
 	if (mdlrandom>-0.9)
@@ -133,6 +135,7 @@ void PutClientInServer (void)
 	setorigin (self, spot.origin + '0 0 1' * (1 - self.mins_z - 24));
 	// don't reset back to last position, even if new position is stuck in solid
 	self.oldorigin = self.origin;
+	//self.effects = self.effects | EF_FULLBRIGHT;
 
 	self.items = IT_LASER | IT_UZI| IT_SHOTGUN | IT_GRENADE_LAUNCHER | IT_ELECTRO | IT_CRYLINK | IT_NEX | IT_HAGAR | IT_ROCKET_LAUNCHER;
 	self.weapon = IT_UZI;
@@ -298,9 +301,9 @@ void PlayerPreThink (void)
 		self.flags = self.flags | FL_JUMPRELEASED;
 
 	if (self.weapon == IT_NEX && self.button3)
-		self.viewzoom = 0.3;
+		self.viewzoom = 0.4;
 	else if (self.viewzoom != 1)
-		self.viewzoom = 1;
+		self.viewzoom = self.viewzoom + 0.1;
 
 	if (self.statdraintime < time)
 	{

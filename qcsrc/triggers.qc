@@ -11,19 +11,18 @@ void() hurt_touch =
 		self.solid = SOLID_NOT;
 		Damage (other, self, self, self.dmg, 1, '0 0 0', '0 0 0');
 		self.think = hurt_on;
-		self.nextthink = time + 1;
+		self.nextthink = time + 0.1;
 	}
 
 	return;
 };
 
 
-void() trigger_hurt =
+void() trigger_hurt =       // this doesn't work
 {
 	InitTrigger ();
 	self.touch = hurt_touch;
-	if (!self.dmg)
-		self.dmg = 500;
+	self.dmg = 300;
 };
 
 void() target_speaker_use = {sound(self, CHAN_VOICE, self.noise, 1, 1);}

@@ -46,37 +46,6 @@ void() trigger_push_findtarget =
 		objerror("trigger_push: target not found\n");
 };
 
-/*QUAKED trigger_push (.5 .5 .5) ? PUSH_ONCE SILENT
-Improved version of normal trigger_push.
-
-Pushes anything that touches it,
-or acts as a jump pad, hitting "target"
-at the apogee (peak) of the jump.
-
-Target should be an info_notnull.
-
-Flags:
-"PUSH_ONCE" - removes itself after push
-"SILENT" - no 'windtunnel' noise
-Keys:
-"target" - acts as jump pad, hits this entity
-
-
-void() SetMovedir =
-{
-	if (self.angles == '0 -1 0')
-		self.movedir = '0 0 1';
-	else if (self.angles == '0 -2 0')
-		self.movedir = '0 0 -1';
-	else
-	{
-		makevectors (self.angles);
-		self.movedir = v_forward;
-	}
-	
-	self.angles = '0 0 0';
-};
-*/
 void() trigger_push =
 {
 	if (self.angles != '0 0 0')

@@ -42,6 +42,9 @@ void worldspawn (void)
 	precache_model ("models/bullet.mdl");
 	precache_model ("models/casing.mdl");
 	precache_model ("models/beam.mdl");
+	precache_model ("models/flash.md3");
+	precache_model ("models/laser.mdl");
+	precache_model ("models/fire.mdl");
 	
 	precache_model ("models/items/g_h1.md3");
 	precache_model ("models/items/g_h25.md3");
@@ -50,7 +53,6 @@ void worldspawn (void)
 	precache_model ("models/items/g_a1.md3");
 	precache_model ("models/items/g_a25.md3");
 	
-	precache_model ("models/weapons/w_uzi.md3");
 	precache_model ("models/weapons/w_uzi.zym");
 	precache_model ("models/weapons/w_laser.zym");
 	precache_model ("models/weapons/w_shotgun.zym");

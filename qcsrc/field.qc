@@ -58,6 +58,7 @@ entity dest;
 .float	chasecam;
 
 .float electrocount;
+.float crylinkcount;
 
 .float	damageforcescale;
 
