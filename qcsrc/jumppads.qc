@@ -104,3 +104,9 @@ void() trigger_push =
 		self.nextthink = time + 0.2;
 	}
 };
+
+
+void() target_push =
+{
+	trigger_push();
+};
