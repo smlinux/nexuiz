@@ -526,7 +526,7 @@ template for map selection
 	flag 		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
 	maxlen		2
 	text		"16"
-	action		nex_xp_maxclients
+	refresh		nex_xp_maxclients
 }
 // start
 {
