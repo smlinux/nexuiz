@@ -131,7 +131,7 @@ float	MSG_INIT				= 3;
 
 // Deathtypes (weapon deathtypes are the IT_* constants below)
 float	DEATH_FALL				= 10000;
-float	DEATH_BIGFALL			= 10001;
+float	DEATH_TELEFRAG			= 10001;
 float	DEATH_DROWN				= 10002;
 float	DEATH_HURTTRIGGER		= 10003;
 float	DEATH_LAVA				= 10004;

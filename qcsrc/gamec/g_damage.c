@@ -10,7 +10,7 @@ void Obituary (entity attacker, entity targ, float deathtype)
 		else
 			s = targ.netname;
 
-		if (targ == attacker)                 
+		if (targ == attacker)
 		{
 			if (deathtype == IT_GRENADE_LAUNCHER)
 				bprint ("^1",s, " detonated\n");
@@ -18,20 +18,23 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				bprint ("^1",s, " played with plasma\n");
 			else if (deathtype == IT_ROCKET_LAUNCHER)
 				bprint ("^1",s, " exploded\n");
-			else if (deathtype == DEATH_HURTTRIGGER)
-				bprint ("^1",s, " ", attacker.message, "\n");
 			else if (deathtype == DEATH_KILL)
-  	            bprint ("^1",s, " couldn't take it anymore\n");
-			else if (deathtype == DEATH_FALL)
-				bprint ("^1",s, " hit the ground with a crunch\n");
-			else if (deathtype == DEATH_BIGFALL)
-				bprint ("^1",s, " fell into oblivion\n");
-			else if (deathtype == DEATH_DROWN)
-				bprint ("^1",s, " drowned\n");
+				bprint ("^1",s, " couldn't take it anymore\n");
 			else
-				bprint ("^1",s, " died\n");
-			self.frags = self.frags - 1;
-			targ.killcount = 0;
+				bprint ("^1",s, " couldn't resist the urge to targ immolate\n");
+			targ.frags = targ.frags - 1;
+			if (targ.killcount > 2)
+				bprint ("^1",s," ended it all with a ",ftos(targ.killcount)," kill spree\n");
+		}
+		else if (teamplay && attacker.team == targ.team)
+		{
+			bprint ("^1", attacker.netname, " mows down a teammate\n");
+			attacker.frags = attacker.frags - 1;
+			if (targ.killcount > 2)
+				bprint ("^1",s,"'s ",ftos(targ.killcount)," kill spree was endeded by a teammate!\n");
+			if (attacker.killcount > 2)
+				bprint ("^1",attacker.netname," ended a ",ftos(attacker.killcount)," kill spree by killing a teammate\n");
+			attacker.killcount = 0;
 		}
 		else if (attacker.classname == "player")
 		{
@@ -53,19 +56,37 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				bprint ("^1",s, " was pummeled by ", attacker.netname, "\n");
 			else if (deathtype == IT_ROCKET_LAUNCHER)
 				bprint ("^1",s, " blasted by ", attacker.netname, "\n");
-			else if (deathtype == WEP_TELEPORTER)
+			else if (deathtype == DEATH_TELEFRAG)
 				bprint ("^1",s, " was telefragged by ", attacker.netname, "\n");
 			else
 				bprint ("^1",s, " was killed by ", attacker.netname, "\n");
 
 			attacker.frags = attacker.frags + 1;
 			if (targ.killcount > 2)
-				bprint ("^1",attacker.netname," has stopped ",s,"'s ",targ.killcount," kill spree\n");
-			targ.killcount = 0;
+				bprint ("^1",s,"'s ", ftos(targ.killcount), " kill spree was ended by ", attacker.netname, "\n");
 			attacker.killcount = attacker.killcount + 1;
 			if (attacker.killcount > 2)
 				bprint ("^1",attacker.netname," has ",ftos(attacker.killcount)," kills in a row\n");
 		}
+		else
+		{
+			if (deathtype == DEATH_HURTTRIGGER)
+				bprint ("^1",s, " ", attacker.message, "\n");
+			else if (deathtype == DEATH_DROWN)
+				bprint ("^1",s, " drowned\n");
+			else if (deathtype == DEATH_SLIME)
+				bprint ("^1",s, " was slimed\n");
+			else if (deathtype == DEATH_LAVA)
+				bprint ("^1",s, " turned into hot slag\n");
+			else if (deathtype == DEATH_FALL)
+				bprint ("^1",s, " hit the ground with a crunch\n");
+			targ.frags = targ.frags - 1;
+			if (targ.killcount > 2)
+				bprint ("^1",s," died with a ",ftos(targ.killcount)," kill spree\n");
+		}
+		// FIXME: this should go in PutClientInServer
+		if (targ.killcount)
+			targ.killcount = 0;
 	}
 }
 
@@ -74,11 +95,19 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 	local entity oldself;
 	oldself = self;
 	self = targ;
+	// nullify damage if teamplay is on
+	if (teamplay)
+	if (attacker.team)
+	if (attacker.team == targ.team)
+	if (teamplay == 1 || (teamplay == 3 && attacker != targ))
+		damage = 0;
+	// apply strength multiplier
 	if (attacker.items & IT_STRENGTH)
 	{
 		damage = damage * POWERUP_STRENGTH_DAMAGE;
 		force = force * POWERUP_STRENGTH_FORCE;
 	}
+	// apply invincibility multiplier
 	if (targ.items & IT_INVINCIBLE)
 		damage = damage * POWERUP_INVINCIBLE_TAKEDAMAGE;
 	// apply push

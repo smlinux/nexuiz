@@ -11,6 +11,7 @@ void StartFrame (void)
 	sv_friction = cvar ("sv_friction");
 	sv_accelerate = cvar ("sv_accelerate");
 	sv_stopspeed = cvar ("sv_stopspeed");
+	teamplay = cvar ("teamplay");
 
 	BotFrame ();
 }
