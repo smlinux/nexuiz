@@ -270,10 +270,12 @@ void PlayerPreThink (void)
 		return;
 	}
 
-	if (self.attack_finished < time && !self.button0 && !self.button3)
 	if (self.button4)
 	{
-		W_ThirdAttack ();
+		if (self.weapon == IT_ROCKET_LAUNCHER)
+			W_ThirdAttack ();
+		if (self.attack_finished < time && !self.button0 && !self.button3)
+			W_ThirdAttack ();
 	}
 
 	if (self.button3)

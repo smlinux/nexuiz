@@ -904,6 +904,47 @@ void W_Electro_Attack2 (float postion)
 
 }
 
+void W_Electro_Attack3 (float postion)
+{
+
+	entity	proj;
+
+	sound (self, CHAN_WEAPON, "weapons/electro_fire.wav", 1, ATTN_NORM);
+
+	proj = spawn ();
+	proj.owner = self;
+	proj.classname = "spike";
+
+	proj.movetype = MOVETYPE_BOUNCEMISSILE; 
+	proj.solid = SOLID_BBOX;
+	proj.effects = 1;
+	
+	makevectors (self.v_angle);
+
+	vector org;
+	org = self.origin + self.view_ofs + v_forward * 18 + v_right * 7 + v_up * -9;
+	te_smallflash(org);
+
+	setmodel (proj, "models/bullet.mdl");
+	setsize (proj, '0 0 0', '0 0 0');
+	if (postion == 0)
+	setorigin (proj, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -14);
+	if (postion == 1)
+	setorigin (proj, self.origin + self.view_ofs + v_forward * 18 + v_right * 10 + v_up * -12);
+	if (postion == 2)
+	setorigin (proj, self.origin + self.view_ofs + v_forward * 18 + v_right * 15 + v_up * -14);
+
+	proj.velocity = v_forward * 9999;
+	proj.think = W_Electro_Touch;
+	proj.nextthink = time + 1;
+
+	proj.effects = proj.effects | EF_ADDITIVE;
+
+	self.attack_finished = time + 0.4;
+	self.ammo_cells = self.ammo_cells - 1;
+
+}
+
 void W_Crylink_Touch (void)
 {
 	vector dir;
@@ -1282,6 +1323,24 @@ void W_Rocket_Attack2 (void)
 }
 
 
+void W_Rocket_Attack3 (void)
+{
+	entity	proj;
+	proj = findradius (self.origin, 50000);
+	while (proj)
+	{
+		if (proj.classname == "missile" && proj.owner == self)
+		{
+			proj.velocity = proj.velocity - v_up * 500;
+			proj.velocity = proj.velocity - v_forward * 10;
+		}
+		proj = proj.chain;
+	}
+
+	self.attack_finished = time;
+}
+
+
 void W_Attack (void)
 {
 	if (self.deadflag != DEAD_NO)
@@ -1383,7 +1442,7 @@ void W_ThirdAttack (void)
 	else if (self.weapon == IT_GRENADE_LAUNCHER)
 		W_Grenade_Attack3 ();
 	else if (self.weapon == IT_ELECTRO) {
-		W_Electro_Attack2 (self.electrocount);
+		W_Electro_Attack3 (self.electrocount);
 		self.electrocount = self.electrocount + 1;
 		if (self.electrocount == 3)
 			self.electrocount = 0;
@@ -1395,7 +1454,7 @@ void W_ThirdAttack (void)
 	else if (self.weapon == IT_HAGAR)
 		W_Hagar_Attack3 ();
 	else if (self.weapon == IT_ROCKET_LAUNCHER)
-		W_Rocket_Attack2 ();
+		W_Rocket_Attack3 ();
 
 	W_UpdateAmmo ();
 }
