@@ -119,6 +119,10 @@ DeriveTemplate TextButton ValueButton
 {
 	type 	"Item_ValueButton"
 }
+DeriveTemplate PictureButton PictureValueButton
+{
+	type	"Item_ValueButton"
+}
 DeriveTemplate Label MultiLabel
 {
 	type 	"Item_MultiLabel"

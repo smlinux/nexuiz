@@ -3,6 +3,12 @@
 Item Window ColorControl
 {
 	size	  '600 600'
+	Derive Picture Table1
+	{
+		picture "gfx/table1"
+		size	'600 600'
+	}
+
 	Item Layout Layout
 	{
 		direction [Nex_DefaultVertDirection]

@@ -1,44 +1,55 @@
 // Property of Alientrap/AK
 // options/key.menu
-Item Layout Video
+Item Window Video
 {
-	direction	[Nex_DefaultVertDirection]
-	size		'600 600'
-	origin		'300 50'
-	alignment	[AlignFirst]
+	size	'600 600'
 
-	DeriveTemplate Composition Nex_Video_Option_Switch
+	Derive Picture Table1
 	{
-		direction	[Nex_DefaultHorzDirection]
+		picture "gfx/table1"
+		size	'600 600'
+	}
 
-		DeriveTemplate Nex_Automation_Option_Switch Automation
-		{}
-		DeriveTemplate TextButton 	Description
-		{}
-		DeriveTemplate SwitchButton	Switch
-		{}
-	}
-	Derive Nex_Video_Option_Switch Resolution
+	Item Layout Layout
 	{
-		text	"Resolution"
-		target	"::Data::Video::Resolution::Switch"
-	}
-	Derive Nex_Video_Option_Switch Bpp
-	{
-		text	"Bits Per Pixel"
-		target	"::Data::Video::BPP::Switch"
-	}
-	Derive Nex_Video_Option_Switch Fullscreen
-	{
-		text	"Fullscreen"
-		target	"::Data::Video::Fullscreen::Switch"
-	}
-	Derive Nex_Void Seperator1
-	{}
-	Derive PictureButton Apply
-	{
-		normal		"$gfx/m_apply"
+		direction	[Nex_DefaultVertDirection]
+		size		'600 600'
+		origin		'300 50'
+		alignment	[AlignFirst]
 
-		action	Nex_Action_Video_Apply
+		DeriveTemplate Composition Nex_Video_Option_Switch
+		{
+			direction	[Nex_DefaultHorzDirection]
+
+			DeriveTemplate Nex_Automation_Option_Switch Automation
+			{}
+			DeriveTemplate TextButton 	Description
+			{}
+			DeriveTemplate SwitchButton	Switch
+			{}
+		}
+		Derive Nex_Video_Option_Switch Resolution
+		{
+			text	"Resolution"
+			target	"::Data::Video::Resolution::Switch"
+		}
+		Derive Nex_Video_Option_Switch Bpp
+		{
+			text	"Bits Per Pixel"
+			target	"::Data::Video::BPP::Switch"
+		}
+		Derive Nex_Video_Option_Switch Fullscreen
+		{
+			text	"Fullscreen"
+			target	"::Data::Video::Fullscreen::Switch"
+		}
+		Derive Nex_Void Seperator1
+		{}
+		Derive PictureButton Apply
+		{
+			normal		"$gfx/m_apply"
+
+			action	Nex_Action_Video_Apply
+		}
 	}
 }

@@ -16,4 +16,17 @@ Item DataContainer Player
 	Item Data_Nex_Avatar Avatar
 	{
 	}
+	Item Data_Nex_Color TeamColor
+	{
+		defValue	"4"	// Red
+
+		Item DataLink_TextSwitch TextSwitch
+		{
+			// Red Blue Green Yellow
+			valueList 	"'4' '13' '3' '12'"
+			descList	"'$gfx/m_redsquare' '$gfx/m_bluesquare' '$gfx/m_greensquare' '$gfx/m_yellowsquare'"
+
+			link		"##up"
+		}
+	}
 }

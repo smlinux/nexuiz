@@ -3,18 +3,12 @@
 
 Item Window Options
 {
-	Derive Picture Table1
+	Item Layout Options
 	{
-		picture "gfx/table1"
-		pos	'150 0'
-		size	'700 600'
-	}
-Item Layout Options
-{
-	direction '20 0'
+		direction '20 0'
 
-	Item Arrangement Menu
-	{
+		Item Arrangement Menu
+		{
 		direction '0 10'
 
 		Derive TextButton Player

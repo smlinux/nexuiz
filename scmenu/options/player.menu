@@ -4,10 +4,16 @@ Item Window Player
 {
 	size	  '700 600'
 
+	Derive Picture Table1
+	{
+		picture "gfx/table1"
+		size	'700 600'
+	}
+
 	Item Window Avatar
 	{
 		size	'300 600'
-		pos	'50 50'
+		pos	'20 20'
 		flag	[FlagEmbedded]
 
 		Derive Picture Picture
@@ -54,9 +60,9 @@ Item Window Player
 	}
 	Item Layout Settings
 	{
-		pos		'330 50'
-		origin		'200 0'
-		size		'400 600'
+		pos		'320 20'
+		size		'380 600'
+		origin		'190 0'
 		flag		[FlagEmbedded]
 		alignment	[AlignFirst]
 		direction	[Nex_DefaultVertDirection]
@@ -72,6 +78,24 @@ Item Window Player
 			{
 				size 	'182 20'
 				target	"Data::Player::Name::Text"
+			}
+		}
+		Derive Nex_Composition TeamColor
+		{
+			text	"Team color"
+			target	"::Data::Player::TeamColor::TextSwitch"
+
+			Derive Nex_Automation_Option_Slider Automation
+			{}
+			Derive TextButton Description
+			{}
+			Derive Slider Slider
+			{}
+			Derive PictureValueButton Value
+			{
+				color		"1.0 1.0 1.0"
+				colorPressed	"1.0 1.0 1.0"
+				colorSelected	"1.0 1.0 1.0"
 			}
 		}
 		Derive Nex_Void Seperator1

@@ -24,3 +24,8 @@ void() Item_Data_Nex_Avatar_Spawn;
 // Item_Data_Nex_Name [Item_Data]
 void( float pEvent ) Item_Data_Nex_Name_DataEvent;
 void() Item_Data_Nex_Name_Spawn;
+
+// see control/data/data.qh
+// Item_Data_Nex_Color [Item_Data]
+void( float pEvent ) Item_Data_Nex_Color_DataEvent;
+void() Item_Data_Nex_Color_Spawn;

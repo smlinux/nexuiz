@@ -60,8 +60,6 @@ void() Item_Data_Nex_Name_Spawn =
 {
 	Item_Data_Init();
 
-	self.flag = self.flag | FLAG_HIDDEN;
-
 	self._reinit = _IDNN_Sync;
 	self._dataEvent = Item_Data_Nex_Name_DataEvent;
 };

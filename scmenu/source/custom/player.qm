@@ -59,9 +59,6 @@ void() Nex_Action_Player_Apply =
 {
 	local entity lItem;
 
-	lItem = Menu_GetItem( "Data::Player::Avatar" );
-	Raise_DataEvent( lItem, ITEM_DATA_SEND );
-
-	lItem = Menu_GetItem( "Data::Player::Name" );
+	lItem = Menu_GetItem( "Data::Player" );
 	Raise_DataEvent( lItem, ITEM_DATA_SEND );
 };
