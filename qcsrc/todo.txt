@@ -15,18 +15,8 @@
 	- 25 Armor, Armor Shard, 100 Armor (25 armor with new skin)
 
 -DEATHMATCH GAME OPTIONS-
-	- Done: Instagib - Everyone starts with Nex gun and infinite ammo, instagib.
 	- Grappling hook - Option to include the grappling hook in the game
-	- Done: Quick Strength Gain - Short Strength powerup given for every kill
-	- Done: Quick Health Regeneration - Very fast health Regeneration
-	- Done: Rocket Arena - Everyone starts with just the rocket launcher and infinite ammo
-	- Done: No Self Damage - Turn off damaging yourself, no health taken with rocket/grenade/laser jumps
-	- Done: Complete Air Control - User can move the same way in the air as on the ground
-	- Done: Low Gravity - Turns gravity from 800 to 200
-	- Done: Fullbright Players - Every player model is full bright
-
-	Sajt: One thing I haven't touched with these is some of the items, like health and armour. Should these be removed on certain
-	      gametypes? (I removed weapons and ammo on rocket-arena and instagib...)
+	- Complete Air Control - User can move the same way in the air as on the ground
 
 -POWERUPS-
 	- Strength - Player model turns completely white. This is alike to the painkiller powerup, the users screen with turn mostly white, they will be able to run twice as fast, their weapon will automaticly be a railgun with radius damage equal to the rocket launcher. They have 100 health, or 15 seconds (if the 100 health is taken away the powerup is gone). This powerup can also be earned, with kills in a short amount of time. If the user gets about 8 kills in 13 seconds, this powerup is given to the user.
@@ -38,12 +28,14 @@
 
 -WEAPONS-
 	-Shotgun - secondary fire - auto 3 shots fired
+	-Electro - Replace secondary fire with third fire with one bounce
 
 -BUGS/OTHER-
 	- Add quake1/halflife entity support (just the weapons)
 	- Weird bug where the user starts firing from the other side of the screen, mostly happens with laser/crylink
 	- Players alpha turning negative
 	- People not dying when falling into the black
+	- change the player's solid to SOLID_BBOX before the traceline and back after, so that the uzi affects corpses
 
 -BOTS-
 	- Make waypoints for all levels
@@ -56,20 +48,16 @@
 -PARTICLE EFFECTS-
 	- Crylink (white trail, make the hit effect white also)
 	- Electro secondary explosion (smaller DP fireball effect, with blue skin)
-	- Blue Smoke for electro gun
 	- Grey Smoke for Uzi, Shotgun
-	- New effect for the laser missile and explosion
+	- New effect for the laser explosion
 	- New Nexgun beam and explosion
 	- Hagar explosion
 	- Spark effect for levels
-	- Fire Effect for levels
 
 -3D GRAPHICS-
 	- Add DPshader
 	- Bloom effect to the glow models
-	- Bumpmapping on regular models
 	- Decal clipping
-	- Shadows/bumpmapping to zym models
 
 -2D GRAPHICS-
 	- Flashing Red numbers when low ammo/health, rather than just red
@@ -114,5 +102,9 @@
 	- Machine sound
 
 -WEAPONS-
-	- Change Electro sound
+	- Change Electro fire sound
 	- Add crylink pulse sound
+	- Missile sounds for electro, rocket
+
+-OTHER-
+	- Gib Splat sound

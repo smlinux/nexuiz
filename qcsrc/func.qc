@@ -64,7 +64,7 @@ void SUB_SetFade_Think (void)
 		self.alpha = 1;
 	if (self.alpha < 0.01)	// don't let it reach 0, lest it become fully visible again
 		SUB_VanishOrRemove(self);
-	//if (self.flags & FL_CLIENT && self.deadflag == DEAD_NO) objerror("Fading on non-corpse client!\n");
+	if (self.flags & FL_CLIENT && self.deadflag == DEAD_NO) objerror("Fading on non-corpse client!\n");
 }
 
 /*
@@ -371,11 +371,6 @@ void ImpactEffect (entity ent, float weapontype)
 		sound (ent, CHAN_BODY, "weapons/hagexp2.wav", 1, ATTN_NORM);
 		else if (b<1)
 		sound (ent, CHAN_BODY, "weapons/hagexp3.wav", 1, ATTN_NORM);
-	}
-	else if (weapontype == IT_ELECTRO)	// Secondary fire
-	{
-		effect (org2, "models/sprites/plasmahitwall.spr32", 0, 20, 50);
-		sound (ent, CHAN_BODY, "weapons/plasma_hit.wav", 1, ATTN_NORM);
 	}
 }
 

@@ -18,6 +18,8 @@ void DoAliases() {
     if (self.hasaliases)
 	return;
 
+    AddImpulse(self, "weapnext", 10);
+    AddImpulse(self, "weapnext", 12);
     AddImpulse(self, "+crouch", 97);
     AddImpulse(self, "-crouch", 98);
     AddImpulse(self, "bot_add", 100);

@@ -77,12 +77,7 @@ void W_UpdateWeapon (void)
 
 float W_GetBestWeapon (void)
 {
-	if (game & GAME_INSTAGIB)
-		return IT_NEX;
-	else if (game & GAME_ROCKET_ARENA)
-		return IT_ROCKET_LAUNCHER;
-
-	else if ((self.items & IT_ROCKET_LAUNCHER) && self.ammo_rockets)
+	if ((self.items & IT_ROCKET_LAUNCHER) && self.ammo_rockets)
 		return IT_ROCKET_LAUNCHER;
 	else if ((self.items & IT_HAGAR) && self.ammo_rockets)
 		return IT_HAGAR;
@@ -128,9 +123,6 @@ void W_SwitchWeapon (float wep)
 {
 	float		nextwep;
 	var float	noammo = FALSE;
-
-	if (game & (GAME_INSTAGIB | GAME_ROCKET_ARENA))
-		return;
 
 	if (wep == 1)
 		nextwep = IT_LASER;
@@ -207,9 +199,6 @@ void W_NextWeapon (void)
 {
 	float	noammo;
 
-	if (game & (GAME_INSTAGIB | GAME_ROCKET_ARENA))
-		return;
-
 	while (TRUE)
 	{
 		noammo = FALSE;
@@ -277,9 +266,6 @@ void W_NextWeapon (void)
 void W_PreviousWeapon (void)
 {
 	float	noammo;
-
-	if (game & (GAME_INSTAGIB | GAME_ROCKET_ARENA))
-		return;
 
 	while (TRUE)
 	{
@@ -485,6 +471,7 @@ void W_Laser_Touch (void)
 
 	dir = normalize (self.owner.origin - self.origin);
 
+	/*
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 	WriteByte (MSG_BROADCAST, TE_FLAMEJET);
 	WriteCoord (MSG_BROADCAST, self.origin_x);
@@ -493,7 +480,9 @@ void W_Laser_Touch (void)
 	WriteCoord (MSG_BROADCAST, 0);		// SeienAbunae: groan... Useless clutter
 	WriteCoord (MSG_BROADCAST, 0);
 	WriteCoord (MSG_BROADCAST, 0);
-	WriteByte (MSG_BROADCAST, 155);
+	WriteByte (MSG_BROADCAST, 155); */
+
+	
 
 	self.event_damage = SUB_Null;
 	RadiusDamage (self, self.owner, 15, 7, 50, world, 200, IT_LASER);
@@ -578,10 +567,11 @@ void W_Uzi_Attack (void)
 {
 	sound (self, CHAN_WEAPON, "weapons/uzi_fire.wav", 1, ATTN_NORM);
 
-	fireBullet (v_forward, 100, 6, IT_UZI);
+	fireBullet (v_forward, 100, 8, IT_UZI);
 
-	//self.punchangle = (randomvec() + '-1 0 0') * 2;
-	//self.punchangle_z = 0; // don't want roll
+	self.punchangle_x = random () - 0.5;
+	self.punchangle_y = random () - 0.5;
+	self.punchangle_z = random () - 0.5;
 
 	self.attack_finished = time + 0.075;
 	self.ammo_nails = self.ammo_nails - 1;
@@ -606,9 +596,9 @@ void W_Uzi_Attack2 (void)
 	sound (self, CHAN_WEAPON, "weapons/uzi_fire_secondary.wav", 1, ATTN_NORM);
 
 	for (sc = bullets; sc > 0; sc = sc - 1)
-		fireBullet (v_forward, 400, 8, IT_SHOTGUN);
+		fireBullet (v_forward, 400, 10, IT_SHOTGUN);
 
-	//self.punchangle_x = -2;
+	self.punchangle_x = -1.5;
 
 	self.ammo_nails = self.ammo_nails - bullets;
 	self.attack_finished = time + 0.4;
@@ -622,7 +612,7 @@ void W_Uzi_Attack3 (void)
 {
 	sound (self, CHAN_WEAPON, "weapons/uzi_fire.wav", 1, ATTN_NORM);
 
-	fireBullet (v_forward, 0, 6, IT_UZI);
+	fireBullet (v_forward, 0, 10, IT_UZI);
 
 	self.attack_finished = time + 0.16;
 	self.ammo_nails = self.ammo_nails - 1;
@@ -830,7 +820,7 @@ void W_Electro_Attack (float postion)
 	//flash.angles = vectoangles (flash.velocity);
 	//SUB_SetFade (flash, time + 0 + random () * 4);
 
-	setmodel (proj, "models/laser.mdl");
+	setmodel (proj, "models/elaser.mdl");
 	setsize (proj, '0 0 0', '0 0 0');
 	if (postion == 0)
 	setorigin (proj, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -14);
@@ -916,7 +906,7 @@ void W_Electro_Attack2 (float postion)
 	Plasma.health = 5;
 	Plasma.event_damage = W_Plasma_Damage;
 
-	setmodel (Plasma, "models/laser.mdl");
+	setmodel (Plasma, "models/elaser.mdl");
 	setsize (Plasma, '-6 -6 -3', '6 6 3');
 
 	makevectors (self.v_angle);
@@ -1011,7 +1001,7 @@ void W_Crylink_Attack (void) //(float postion)
 
 	FireRailgunBullet (org, self.origin + self.view_ofs + v_forward * 4096, 25, IT_CRYLINK);
 
-	te_gunshot (trace_endpos);
+	te_spark (trace_endpos, v_forward, 55);
 
 	self.ammo_cells = self.ammo_cells - 0.25;
 	self.attack_finished = time + 0.165;
@@ -1101,20 +1091,13 @@ void W_Nex_Attack2 (void)
 
 }
 
-void() W_Drunkmissile = 
-{
-        self.velocity = ((self.velocity + ((v_right * 61.000) * crandom ())) + ((v_up * 61.000) * crandom ()));
-        self.nextthink = time + 0.1;
-        self.think = W_Drunkmissile;
-};
-
 
 void W_Hagar_Explode (void)
 {
 	ImpactEffect (self, IT_HAGAR);
 
 	self.event_damage = SUB_Null;
-	RadiusDamage (self, self.owner, 30, 15, 50, world, 90, IT_HAGAR);
+	RadiusDamage (self, self.owner, 40, 15, 70, world, 100, IT_HAGAR);
 
 	remove (self);
 }
@@ -1220,38 +1203,19 @@ void W_Hagar_Attack2 (void)
 
 void W_Hagar_Attack3 (void)
 {
-	entity	missile;
+	entity	proj;
+	proj = findradius (self.origin, 50000);
+	while (proj)
+	{
+		if (proj.classname == "missile" && proj.owner == self)
+		{
+			proj.velocity = proj.velocity - v_up * 500;
+			proj.velocity = proj.velocity - v_forward * 1000;
+		}
+		proj = proj.chain;
+	}
 
-	sound (self, CHAN_WEAPON, "weapons/hagar_fire.wav", 1, ATTN_NORM);
-
-	missile = spawn ();
-	missile.owner = self;
-	missile.classname = "missile";
-
-	missile.takedamage = DAMAGE_YES;
-	missile.damageforcescale = 4;
-	missile.health = 10;
-	missile.event_damage = W_Hagar_Damage;
-
-	missile.movetype = MOVETYPE_FLY;
-	missile.solid = SOLID_BBOX;
-	setmodel (missile, "models/hagarmissile.mdl");
-	setsize (missile, '0 0 0', '0 0 0');
-
-	makevectors (self.v_angle);
-
-	setorigin (missile, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);
-
-	missile.velocity = v_forward * 1000;
-	missile.angles = vectoangles (missile.velocity);
-	setorigin (missile, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);
-
-	missile.touch = W_Hagar_Touch;
-	missile.think = W_Drunkmissile;
-	missile.nextthink = time + 0.01;
-
-	self.attack_finished = time + 0.2;
-	self.ammo_rockets = self.ammo_rockets - 0.25;
+	self.attack_finished = time;
 }
 
 void W_Rocket_Explode (entity ignore)
@@ -1347,19 +1311,7 @@ void W_Rocket_Attack2 (void)
 
 void W_Rocket_Attack3 (void)
 {
-	entity	proj;
-	proj = findradius (self.origin, 50000);
-	while (proj)
-	{
-		if (proj.classname == "missile" && proj.owner == self)
-		{
-			proj.velocity = proj.velocity - v_up * 500;
-			proj.velocity = proj.velocity - v_forward * 10;
-		}
-		proj = proj.chain;
-	}
 
-	self.attack_finished = time;
 }
 
 

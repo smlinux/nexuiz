@@ -52,6 +52,7 @@ void worldspawn (void)
 	precache_model ("models/beam.mdl");
 	precache_model ("models/flash.md3");
 	precache_model ("models/laser.mdl");
+	precache_model ("models/elaser.mdl");
 	precache_model ("models/fire.mdl");
 	
 	precache_model ("models/items/g_h1.md3");
