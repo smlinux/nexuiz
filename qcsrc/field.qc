@@ -41,3 +41,6 @@ entity dest;
 .float cnt;		// for rain
 .float count;
 .float cnt2;
+
+.vector dead_angles;
+.float death_time;

@@ -973,6 +973,14 @@ void W_Rocket_Attack2 (void)
 
 void W_Attack (void)
 {
+	if (self.deadflag != DEAD_NO)
+	{
+		if (self.death_time < time)
+			PutClientInServer();
+
+		return;
+	}
+
 	if (!W_CheckAmmo ())
 		return;
 
@@ -1000,6 +1008,14 @@ void W_Attack (void)
 
 void W_SecondaryAttack (void)
 {
+	if (self.deadflag != DEAD_NO)
+	{
+		if (self.death_time < time)
+			PutClientInServer();
+
+		return;
+	}
+
 	if (!W_CheckAmmo ())
 		return;
 

@@ -69,10 +69,10 @@ void PutClientInServer (void)
 	self.takedamage = DAMAGE_YES;
 	self.health = 125;
 	
-	self.ammo_shells = 100;//
-	self.ammo_nails = 100;//
+	self.ammo_shells = 100;
+	self.ammo_nails = 100;
 	self.ammo_rockets = 100;
-	self.ammo_cells = 100;//
+	self.ammo_cells = 100;
 	
 	self.deadflag = DEAD_NO;
 	
@@ -186,13 +186,19 @@ void PlayerPreThink (void)
 {
 	if (BotPreFrame())
 		return;
-
+		
 	if (self.attack_finished < time)
 	{
 		if (self.button0)
 			W_Attack ();
 		else if (self.button3)
 			W_SecondaryAttack ();
+	}
+
+	if (self.deadflag != DEAD_NO)
+	{
+		self.angles = self.dead_angles;
+		return;
 	}
 
 	if (self.weapon == IT_NEX && self.button3)
