@@ -187,7 +187,7 @@ Called when a client types 'kill' in the console
 */
 void ClientKill (void)
 {
-
+	Damage(self, self, self, 100000, DEATH_KILL, self.origin, '0 0 0');
 }
 
 /*

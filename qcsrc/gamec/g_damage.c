@@ -23,6 +23,8 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				bprint (s, " should have used a different weapon\n");
 			else if (deathtype == IT_ROCKET_LAUNCHER)
 				bprint (s, " exploded\n");
+			else if (deathtype == DEATH_KILL)
+				bprint (s, " couldn't take it anymore\n");
 			else
 				bprint (s, " competes for the Darwin awards\n");
 

@@ -136,6 +136,7 @@ float	DEATH_DROWN				= 10002;
 float	DEATH_HURTTRIGGER		= 10003;
 float	DEATH_LAVA				= 10004;
 float	DEATH_SLIME				= 10005;
+float	DEATH_KILL				= 10006;
 
 float	IT_LASER				= 4096;
 float	IT_SHOTGUN				= 1;
