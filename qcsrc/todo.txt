@@ -1,5 +1,4 @@
 SPAWNING/MISC:
-Make it so the user spawns at a random location in the map ("info_player_deathmatch")
 Add deathtypes and obituary messages
 When dead, leave corpse. Fade away corpse in 10 seconds.
 A corpse should gib if -30 health
