@@ -3,7 +3,6 @@ float maxclients; // set by worldspawn code
 float numdecors;
 float maxdecors;
 .float createdtime;
-.void() th_gib;
 
 //void(vector org, entity en, vector dir, float splattype, float importance) newbloodsplat;
 //void(vector org, float bodydamage, float armordamage, vector vel, float damgtype) genericbleedfunc;

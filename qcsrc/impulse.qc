@@ -16,7 +16,7 @@ void DummyThink(void)
 	PlayerPostThink();
 }
 
-void PlayerDamage (vector hitloc, float damage, entity inflictor, entity attacker, float deathtype);
+void PlayerDamage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force);
 void CreateDummy (vector org, float type)
 {
 	entity oldself;
@@ -73,7 +73,7 @@ void ImpulseCommands (void)
 		W_NextWeapon ();
 	else if (self.impulse == 12)
 		W_PreviousWeapon ();
-	else if (self.impulse == 13 && cvar("sv_cheats"))
+	else if (self.impulse == 13)
 	{
 		makevectors (self.v_angle);
 		CreateDummy (self.origin + self.view_ofs + v_forward * 64, 1);

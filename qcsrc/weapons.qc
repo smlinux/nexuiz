@@ -344,90 +344,129 @@ float W_CheckAmmo (void)
 	return FALSE;
 }
 
-/*
-void FireRailgunBullet (vector src, float bdamage, vector dir, float spread, float deathtype)
+// LordHavoc: rewrote the railgun code
+void FireRailgunBullet (vector start, vector end, float bdamage, float deathtype)
 {
-	vector	v, lastpos;
-	entity	saveself, last;
-	vector	org;
-	org = self.origin + self.view_ofs;
-	if (bdamage < 1)
-		return;
+	local vector hitloc, dir, force;
+	local entity ent;
+	//local entity explosion;
 
-	last = self;
-	lastpos = src;
+	force = normalize(end - start) * (bdamage * 0.1);
 
-	while (bdamage > 0)
-	{
-		traceline_hitcorpse (self, org, org + v_forward * 4096 + v_right * crandom () * spread + v_up * crandom () * spread, FALSE, self);
-		last = trace_ent;
-		lastpos = trace_endpos;
-		if (trace_fraction != 1.0)
-		{
-			if (pointcontents(trace_endpos - dir*4) == CONTENT_SKY)
-				return;
+	// find how far the beam can go until it hits a wall
+	traceline (start, end, TRUE, self);
+	// go a little bit into the wall because we need to hit this wall later
+	end = trace_endpos + normalize(end - start);
 
-			if (trace_ent.takedamage || trace_ent.classname == "case")
-			{
-				if (trace_ent.classname == "player" || trace_ent.classname == "corpse" || trace_ent.classname == "gib")
-					te_blood (trace_endpos, dir * bdamage * 16, bdamage);
-				Damage (trace_ent, self, self, bdamage, deathtype, trace_endpos, dir * bdamage);
-			}
-		}
-		if (last.solid == SOLID_BSP)
-			bdamage = 0;
-	}
-}
-*/
-
-void FireRailgunBullet (vector start, vector end, float damage, float dtype)
-{
-	vector	dir;
-
-	dir = normalize (end - start);
-	traceline_hitcorpse (self, start, end, FALSE, self);
-
+	// beam effect
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 	WriteByte (MSG_BROADCAST, 76);
 	WriteCoord (MSG_BROADCAST, start_x);
 	WriteCoord (MSG_BROADCAST, start_y);
 	WriteCoord (MSG_BROADCAST, start_z);
+	WriteCoord (MSG_BROADCAST, end_x);
+	WriteCoord (MSG_BROADCAST, end_y);
+	WriteCoord (MSG_BROADCAST, end_z);
+	WriteCoord (MSG_BROADCAST, 0);
+	WriteCoord (MSG_BROADCAST, 0);
+	WriteCoord (MSG_BROADCAST, 0);
+
+	// flash and burn the wall
+	te_plasmaburn (trace_endpos);
+
+	// flame effect at impact
+	dir = trace_plane_normal * 100;
+	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+	WriteByte (MSG_BROADCAST, TE_FLAMEJET);
 	WriteCoord (MSG_BROADCAST, trace_endpos_x);
 	WriteCoord (MSG_BROADCAST, trace_endpos_y);
 	WriteCoord (MSG_BROADCAST, trace_endpos_z);
-	WriteCoord (MSG_BROADCAST, 0);
-	WriteCoord (MSG_BROADCAST, 0);
-	WriteCoord (MSG_BROADCAST, 0);
+	WriteCoord (MSG_BROADCAST, dir_x);
+	WriteCoord (MSG_BROADCAST, dir_y);
+	WriteCoord (MSG_BROADCAST, dir_z);
+	WriteByte (MSG_BROADCAST, 255);
 
-	if ((trace_fraction != 1.0) && (trace_ent != self) && (pointcontents (trace_endpos) != CONTENT_SKY))
+	// play a sound
+	PointSound (trace_endpos, "weapons/neximpact.wav", 1, ATTN_NORM);
+
+
+	// trace multiple times until we hit a wall, each obstacle will be made
+	// non-solid so we can hit the next, while doing this we spawn effects and
+	// note down which entities were hit so we can damage them later
+	while (1)
 	{
-		if (trace_ent.classname == "case")
-		{
-			Damage (trace_ent, self, self, damage, dtype, trace_endpos, dir * damage);
-		}
-		else if (trace_ent.classname == "player" || trace_ent.classname == "corpse" || trace_ent.classname == "gib")
-		{
-			te_blood (trace_endpos, dir * damage * 16, damage);
-			Damage (trace_ent, self, self, damage, dtype, trace_endpos, dir * damage);
-		}
+		traceline_hitcorpse (self, start, end, FALSE, self);
+
+		// if it is world we can't hurt it so stop now
+		if (trace_ent == world || trace_fraction == 1)
+			break;
+
+		// make the entity non-solid so we can hit the next one
+		trace_ent.railgunhit = TRUE;
+		trace_ent.railgunhitloc = trace_endpos;
+		trace_ent.railgunhitsolidbackup = trace_ent.solid;
+
+		// stop if this is a wall
+		if (trace_ent.solid == SOLID_BSP)
+			break;
+
+		// make the entity non-solid
+		trace_ent.solid = SOLID_NOT;
 	}
+
+	// find all the entities the railgun hit and restore their solid state
+	ent = findfloat(world, railgunhit, TRUE);
+	while (ent)
+	{
+		// restore their solid type
+		ent.solid = ent.railgunhitsolidbackup;
+		ent = findfloat(ent, railgunhit, TRUE);
+	}
+
+	// spawn a temporary explosion entity for RadiusDamage calls
+	//explosion = spawn();
+
+	// find all the entities the railgun hit and hurt them
+	ent = findfloat(world, railgunhit, TRUE);
+	while (ent)
+	{
+		// get the details we need to call the damage function
+		hitloc = ent.railgunhitloc;
+		ent.railgunhitloc = '0 0 0';
+		ent.railgunhitsolidbackup = SOLID_NOT;
+		ent.railgunhit = FALSE;
+
+		// apply the damage
+		if (ent.takedamage || ent.classname == "case")
+			Damage (ent, self, self, bdamage, deathtype, hitloc, force);
+
+		// create a small explosion to throw gibs around (if applicable)
+		//setorigin (explosion, hitloc);
+		//RadiusDamage (explosion, self, 10, 0, 50, world, 300, deathtype);
+
+		// advance to the next entity
+		ent = findfloat(ent, railgunhit, TRUE);
+	}
+
+	// we're done with the explosion entity, remove it
+	//remove(explosion);
 }
 
-
-void fireBullet (vector dir, float spread, float damage, float dtype)
+void fireBullet (vector start, vector dir, float spread, float damage, float dtype)
 {
-	vector	org;
+	vector	end;
 	float r;
 
 	// use traceline_hitcorpse to make sure it can hit gibs and corpses too
-	org = self.origin + self.view_ofs;
-	traceline_hitcorpse (self, org, org + v_forward * 4096 + v_right * crandom () * spread + v_up * crandom () * spread, FALSE, self);
+	end = start + (dir + randomvec() * spread) * 1048576;
+	traceline_hitcorpse (self, start, end, FALSE, self);
 
 	// FIXME - causes excessive 'tinking'. Hopefully remove "tink1.wav" from the ricochets with csqc
-	if ((trace_fraction != 1.0) && (trace_ent != self) && (pointcontents (trace_endpos) != CONTENT_SKY))
+	if ((trace_fraction != 1.0) && (pointcontents (trace_endpos) != CONTENT_SKY))
 	{
-		if (trace_ent == world)
+		if (trace_ent.solid == SOLID_BSP)
 		{
+			// FIXME: add a tink1.wav so te_spike can be used instead of te_gunshot some of the time, to save some bandwidth
 			pointcontents (self.origin);
 			te_gunshot (trace_endpos);
 			r = random ();
@@ -438,16 +477,9 @@ void fireBullet (vector dir, float spread, float damage, float dtype)
 			else if (r < 0.30)
 				sound (self, CHAN_IMPACT, "weapons/ric3.wav", 1, ATTN_NORM);
 		}
-		else if (trace_ent.classname == "case")
-		{
-			Damage (trace_ent, self, self, damage, dtype, trace_endpos, dir * damage);
-		}
 		else if (trace_ent.classname == "player" || trace_ent.classname == "corpse" || trace_ent.classname == "gib")
-		{
-			te_blood (trace_endpos, dir * damage * 16, damage);
-			Damage (trace_ent, self, self, damage, dtype, trace_endpos, dir * damage);
 			sound (trace_ent, CHAN_IMPACT, "misc/enemyimpact.wav", 1, ATTN_NORM);
-		}
+		Damage (trace_ent, self, self, damage, dtype, trace_endpos, dir * damage);
 	}
 }
 
@@ -515,7 +547,7 @@ void W_Laser_Attack2 (void)
 
 	setmodel (missile, "models/laser.mdl");
 	setsize (missile, '0 0 0', '0 0 0');
-	setorigin (missile, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);
+	setorigin (missile, self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -12);
 
 	missile.velocity = v_forward * 1000;
 	missile.velocity = missile.velocity + v_right * ( crandom() * 45 );
@@ -546,7 +578,7 @@ void W_Shotgun_Attack (void)
 	bullets = 10;
 
 	for (sc = bullets; sc > 0; sc = sc - 1)
-		fireBullet (v_forward, 150, 8, IT_SHOTGUN);
+		fireBullet (self.origin + self.view_ofs, v_forward, 0.05, 8, IT_SHOTGUN);
 
 	self.ammo_shells = self.ammo_shells - 1;
 	self.attack_finished = time + 0.7;
@@ -565,7 +597,7 @@ void W_Uzi_Attack (void)
 {
 	sound (self, CHAN_WEAPON, "weapons/uzi_fire.wav", 1, ATTN_NORM);
 
-	fireBullet (v_forward, 100, 8, IT_UZI);
+	fireBullet (self.origin + self.view_ofs, v_forward, 0.025, 8, IT_UZI);
 
 	self.punchangle_x = random () - 0.5;
 	self.punchangle_y = random () - 0.5;
@@ -575,7 +607,7 @@ void W_Uzi_Attack (void)
 	self.ammo_nails = self.ammo_nails - 1;
 
 	vector	org; // casing code
-	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 1) + (v_forward * 20);
+	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 1) + (v_forward * 15);
 	SpawnCasing (org, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 + 10) * v_up), 2, v_forward,'0 250 0', 100, 2);
 	//W_Smoke(org, v_forward, 12);
 }
@@ -594,7 +626,7 @@ void W_Uzi_Attack2 (void)
 	sound (self, CHAN_WEAPON, "weapons/uzi_fire_secondary.wav", 1, ATTN_NORM);
 
 	for (sc = bullets; sc > 0; sc = sc - 1)
-		fireBullet (v_forward, 400, 10, IT_SHOTGUN);
+		fireBullet (self.origin + self.view_ofs, v_forward, 0.1, 10, IT_UZI);
 
 	self.punchangle_x = -1.5;
 
@@ -610,13 +642,13 @@ void W_Uzi_Attack3 (void)
 {
 	sound (self, CHAN_WEAPON, "weapons/uzi_fire.wav", 1, ATTN_NORM);
 
-	fireBullet (v_forward, 0, 10, IT_UZI);
+	fireBullet (self.origin + self.view_ofs, v_forward, 0, 10, IT_UZI);
 
 	self.attack_finished = time + 0.16;
 	self.ammo_nails = self.ammo_nails - 1;
 
 	vector	org; // casing code
-	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 1) + (v_forward * 20);
+	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 1) + (v_forward * 15);
 	SpawnCasing (org, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 + 10) * v_up), 2, v_forward,'0 250 0', 100, 2);
 }
 
@@ -698,7 +730,7 @@ void W_Electro_Attack (float postion)
 	proj.effects = 1;
 	
 	vector org;
-	org = self.origin + self.view_ofs + v_forward * 18 + v_right * 7 + v_up * -9;
+	org = self.origin + self.view_ofs + v_forward * 15 + v_right * 7 + v_up * -9;
 
 	te_smallflash(org);
 
@@ -714,11 +746,11 @@ void W_Electro_Attack (float postion)
 	setmodel (proj, "models/elaser.mdl");
 	setsize (proj, '0 0 0', '0 0 0');
 	if (postion == 0)
-	setorigin (proj, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -14);
+	setorigin (proj, self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -14);
 	if (postion == 1)
-	setorigin (proj, self.origin + self.view_ofs + v_forward * 18 + v_right * 10 + v_up * -12);
+	setorigin (proj, self.origin + self.view_ofs + v_forward * 15 + v_right * 10 + v_up * -12);
 	if (postion == 2)
-	setorigin (proj, self.origin + self.view_ofs + v_forward * 18 + v_right * 15 + v_up * -14);
+	setorigin (proj, self.origin + self.view_ofs + v_forward * 15 + v_right * 15 + v_up * -14);
 
 	proj.velocity = v_forward * 9999;
 	proj.touch = W_Electro_Touch;
@@ -788,7 +820,7 @@ void W_Plasma_Touch (void)
 		sound (self, CHAN_BODY, "weapons/grenade_bounce.wav", 1, ATTN_NORM);
 }
 
-void W_Plasma_Damage (vector hitloc, float damage, entity inflictor, entity attacker, float deathtype)
+void W_Plasma_Damage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
 {
 	self.health = self.health - damage;
 	if (self.health <= 0)
@@ -812,7 +844,7 @@ void W_Electro_Attack2 (float postion)
 	Plasma.solid = SOLID_BBOX;
 	
 	vector org;
-	org = self.origin + self.view_ofs + v_forward * 18 + v_right * 7 + v_up * -9;
+	org = self.origin + self.view_ofs + v_forward * 15 + v_right * 7 + v_up * -9;
 	te_smallflash(org);
 
 	Plasma.takedamage = DAMAGE_YES;
@@ -824,11 +856,11 @@ void W_Electro_Attack2 (float postion)
 	setsize (Plasma, '-6 -6 -3', '6 6 3');
 
 	if (postion == 0)
-	setorigin (Plasma, self.origin + self.view_ofs + v_forward * 18 + v_right * 0 + v_up * -14);
+	setorigin (Plasma, self.origin + self.view_ofs + v_forward * 15 + v_right * 0 + v_up * -14);
 	if (postion == 1)
-	setorigin (Plasma, self.origin + self.view_ofs + v_forward * 18 + v_right * 10 + v_up * -12);
+	setorigin (Plasma, self.origin + self.view_ofs + v_forward * 15 + v_right * 10 + v_up * -12);
 	if (postion == 2)
-	setorigin (Plasma, self.origin + self.view_ofs + v_forward * 18 + v_right * 20 + v_up * -14);
+	setorigin (Plasma, self.origin + self.view_ofs + v_forward * 15 + v_right * 20 + v_up * -14);
 
 	Plasma.velocity = v_forward * 900 + v_up * 200;
 	Plasma.angles = vectoangles (Plasma.velocity);
@@ -860,17 +892,17 @@ void W_Electro_Attack3 (float postion)
 	proj.solid = SOLID_BBOX;
 	proj.effects = 1;
 	
-	org = self.origin + self.view_ofs + v_forward * 18 + v_right * 7 + v_up * -9;
+	org = self.origin + self.view_ofs + v_forward * 15 + v_right * 7 + v_up * -9;
 	te_smallflash(org);
 
 	setmodel (proj, "models/bullet.mdl");
 	setsize (proj, '0 0 0', '0 0 0');
 	if (postion == 0)
-	setorigin (proj, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -14);
+	setorigin (proj, self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -14);
 	if (postion == 1)
-	setorigin (proj, self.origin + self.view_ofs + v_forward * 18 + v_right * 10 + v_up * -12);
+	setorigin (proj, self.origin + self.view_ofs + v_forward * 15 + v_right * 10 + v_up * -12);
 	if (postion == 2)
-	setorigin (proj, self.origin + self.view_ofs + v_forward * 18 + v_right * 15 + v_up * -14);
+	setorigin (proj, self.origin + self.view_ofs + v_forward * 15 + v_right * 15 + v_up * -14);
 
 	proj.velocity = v_forward * 9999;
 	proj.think = W_Electro_Touch;
@@ -883,7 +915,7 @@ void W_Electro_Attack3 (float postion)
 
 }
 
-void W_Grenade_Explode (entity ignore)
+void W_Grenade_Explode (void)
 {
 	ImpactEffect (self, IT_GRENADE_LAUNCHER);
 
@@ -893,25 +925,21 @@ void W_Grenade_Explode (entity ignore)
 	remove (self);
 }
 
-void W_Grenade_FuseExplode (void)
-{
-	W_Grenade_Explode (world);
-}
 
 
 void W_Grenade_Touch (void)
 {
 	if (other.classname == "player" || other.classname == "corpse")
-		W_Grenade_Explode (other);
+		W_Grenade_Explode ();
 	else
-	sound (self, CHAN_BODY, "weapons/grenade_bounce.wav", 1, ATTN_NORM);
+		sound (self, CHAN_BODY, "weapons/grenade_bounce.wav", 1, ATTN_NORM);
 }
 
-void W_Grenade_Damage (vector hitloc, float damage, entity inflictor, entity attacker, float deathtype)
+void W_Grenade_Damage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
 {
 	self.health = self.health - damage;
 	if (self.health <= 0)
-		W_Grenade_FuseExplode();
+		W_Grenade_Explode();
 }
 
 void W_Grenade_Attack (void)
@@ -927,25 +955,16 @@ void W_Grenade_Attack (void)
 	gren.movetype = MOVETYPE_BOUNCE;
 	gren.solid = SOLID_BBOX;
 	setmodel(gren, "models/grenademodel.md3");
-	setsize(gren, '-14 -5 -4', '16 4 5');		
-	setorigin(gren, (self.origin + self.view_ofs));
+	setsize(gren, '-6 -6 -3', '6 6 3');		
+	setorigin(gren, self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -12);
 	gren.health = 1;
 	gren.takedamage = DAMAGE_YES;
-	if (self.v_angle_x)
-		gren.velocity = v_forward * (1200 + 1 * 800) + (v_up * 200) + (crandom () * v_right * 10) + (crandom () * v_up * 10);
-	else
-	{
-		gren.velocity = aim (self, 10000) * (1200 + 1 * 800);
-		gren.velocity_z = 200;
-	}
+	gren.velocity = v_forward * 2000 + v_up * 200;
 	gren.avelocity_x = random () * -500 - 500;
-	gren.mins = normalize (gren.angles) * gren.mins;
-	gren.maxs = normalize (gren.angles) * gren.maxs;
-	setsize (gren, gren.mins, gren.maxs);
 	gren.angles = vectoangles (gren.velocity);
 	gren.touch = W_Grenade_Explode;
 	gren.think = W_Grenade_Explode;
-	gren.nextthink = time + 3;
+	gren.nextthink = time + 30;
 	self.ammo_rockets = self.ammo_rockets - 1;
 
 
@@ -976,15 +995,15 @@ void W_Grenade_Attack2 (void)
 	setmodel (gren, "models/grenademodel.md3");
 	setsize (gren, '-6 -6 -3', '6 6 3');
 
-	setorigin (gren, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);
+	setorigin (gren, self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -12);
 
 	gren.velocity = v_forward * 900 + v_up * 200;
 	gren.angles = vectoangles (gren.velocity);
 	gren.avelocity = '100 150 100';
 
 	gren.touch = W_Grenade_Explode;
-	//gren.think = W_Grenade_FuseExplode;
-	//gren.nextthink = time + 5;
+	gren.think = W_Grenade_Explode;
+	gren.nextthink = time + 30;
 
 	self.attack_finished = time + 1;
 	self.ammo_rockets = self.ammo_rockets - 1;
@@ -1019,7 +1038,7 @@ void W_Hagar_Touch (void)
 	W_Hagar_Explode ();
 }
 
-void W_Hagar_Damage (vector hitloc, float damage, entity inflictor, entity attacker, float deathtype)
+void W_Hagar_Damage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
 {
 	self.health = self.health - damage;
 	if (self.health <= 0)
@@ -1046,13 +1065,13 @@ void W_Hagar_Attack (void)
 	setmodel (missile, "models/hagarmissile.mdl");
 	setsize (missile, '0 0 0', '0 0 0');
 
-	setorigin (missile, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);
+	setorigin (missile, self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -12);
 
 	missile.velocity = v_forward * 2000;
 	missile.velocity = missile.velocity + v_right * ( crandom() * 70 );
 	missile.velocity = missile.velocity + v_up * ( crandom() * 30 );
 	missile.angles = vectoangles (missile.velocity);
-	setorigin (missile, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);
+	setorigin (missile, self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -12);
 
 	missile.touch = W_Hagar_Touch;
 	missile.think = W_Hagar_Explode;
@@ -1083,7 +1102,7 @@ void W_Hagar_Attack2 (void)
 	setmodel (missile, "models/hagarmissile.mdl");
 	setsize (missile, '-6 -6 -3', '6 6 3');
 
-	setorigin (missile, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);
+	setorigin (missile, self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -12);
 
 	missile.velocity = v_forward * 1400 + v_up * 100;
 	missile.angles = vectoangles (missile.velocity);
@@ -1117,42 +1136,17 @@ void W_Hagar_Attack3 (void)
 void W_Nex_Attack (void)
 {
 	vector	org;
-	vector	dir;
-	entity 	explosion;
 
 	sound (self, CHAN_WEAPON, "weapons/nexfire.wav", 1, ATTN_NORM);
 	self.punchangle_x = -4;
 
-	org = self.origin + self.view_ofs + v_forward * 18 + v_right * 8 + v_up * -5;
+	org = self.origin + self.view_ofs + v_forward * 15 + v_right * 8 + v_up * -5;
 	te_smallflash(org);
 
-	if (game & GAME_INSTAGIB)
+	//if (game & GAME_INSTAGIB)
 		FireRailgunBullet (org, self.origin + self.view_ofs + v_forward * 4096, 800, IT_NEX);
-	else
-		FireRailgunBullet (org, self.origin + self.view_ofs + v_forward * 4096, 100, IT_NEX);
-
-	te_plasmaburn (trace_endpos);
-
-	if (trace_fraction < 1.0)
-	{
-		dir = trace_plane_normal * 100;
-		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-		WriteByte (MSG_BROADCAST, TE_FLAMEJET);
-		WriteCoord (MSG_BROADCAST, trace_endpos_x);
-		WriteCoord (MSG_BROADCAST, trace_endpos_y);
-		WriteCoord (MSG_BROADCAST, trace_endpos_z);
-		WriteCoord (MSG_BROADCAST, dir_x);
-		WriteCoord (MSG_BROADCAST, dir_y);
-		WriteCoord (MSG_BROADCAST, dir_z);
-		WriteByte (MSG_BROADCAST, 255);
-
-		explosion = spawn ();
-		setorigin (explosion, trace_endpos);
-		RadiusDamage (explosion, self, 10, 0, 50, world, 300, IT_ROCKET_LAUNCHER);
-		remove (explosion);
-
-		PointSound (trace_endpos, "weapons/neximpact.wav", 1, ATTN_NORM);
-	}
+	//else
+	//	FireRailgunBullet (org, self.origin + self.view_ofs + v_forward * 4096, 100, IT_NEX);
 
 	self.attack_finished = time + 1;
 
@@ -1193,7 +1187,7 @@ void W_Rocket_Touch (void)
 		W_Rocket_Explode (world);
 }
 
-void W_Rocket_Damage (vector hitloc, float damage, entity inflictor, entity attacker, float deathtype)
+void W_Rocket_Damage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
 {
 	self.health = self.health - damage;
 	if (self.health <= 0)
@@ -1221,7 +1215,7 @@ void W_Rocket_Attack (void)
 	setmodel (missile, "models/rocketmissile.mdl");
 	setsize (missile, '0 0 0', '0 0 0');
 
-	org = self.origin + self.view_ofs + v_forward * 20 + v_right * 4 + v_up * -15;
+	org = self.origin + self.view_ofs + v_forward * 15 + v_right * 4 + v_up * -15;
 
 	setorigin (missile, org);
 	missile.velocity = v_forward * 850;

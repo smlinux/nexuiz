@@ -1,4 +1,5 @@
 
+// these just prevent warnings in map load
 .float  roomtype;
 .float  radius;
 .float  pitch;

@@ -1,5 +1,5 @@
 float lastclientthink, sv_maxspeed, sv_friction, sv_accelerate, sv_stopspeed;
-float sv_edgefriction, cl_rollspeed, cl_divspeed, cl_rollangle;
+float sv_edgefriction, /*cl_rollspeed, */cl_divspeed, cl_rollangle;
 .float ladder_time;
 .entity ladder_entity;
 

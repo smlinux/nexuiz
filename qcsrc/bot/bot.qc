@@ -106,7 +106,7 @@ for all variable in the bot...
 // ----- entity fields ---
 .float	wallhug, keys, oldkeys, ishuman;
 .float	b_frags, b_clientno, b_shirt, b_pants; 
-.float	priority, ai_time, b_sound, missile_speed;
+.float	/*priority, */ai_time, b_sound, missile_speed;
 .float	portal_time, b_skill, switch_wallhug;
 .float	b_aiflags, b_num, b_chattime;
 .float	b_menu, b_menu_time, b_menu_value;
@@ -116,7 +116,7 @@ for all variable in the bot...
 .entity	target1, target2, target3, target4;
 .entity	_next, _last;
 .entity	current_way;
-.vector	b_angle, b_dest, mouse_emu, obs_dir;
+.vector	b_angle, /*b_dest, */mouse_emu, obs_dir;
 .vector	movement, b_dir;
 .vector dyn_dest;
 

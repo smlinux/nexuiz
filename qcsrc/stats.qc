@@ -1,5 +1,5 @@
 
 // Accuracy
-.float shots;
-.float hits;
+//.float shots;
+//.float hits;
 

@@ -106,9 +106,6 @@ void() SUB_UseTargets =
 
 };
 
-entity stemp, otemp, s, old;
-
-
 void() trigger_reactivate =
 {
 	self.solid = SOLID_TRIGGER;
@@ -196,7 +193,7 @@ void() multi_touch =
 	multi_trigger ();
 };
 
-void multi_eventdamage (vector hitloc, float damage, entity inflictor, entity attacker, float deathtype)
+void multi_eventdamage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
 {
 	if (!self.takedamage)
 		return;
@@ -300,8 +297,6 @@ void() trigger_relay =
 
 void() counter_use =
 {
-	local string junk;
-
 	self.count = self.count - 1;
 	if (self.count < 0)
 		return;
