@@ -21,7 +21,7 @@
 	- Done: Quick Health Regeneration - Very fast health Regeneration
 	- Done: Rocket Arena - Everyone starts with just the rocket launcher and infinite ammo
 	- Done: No Self Damage - Turn off damaging yourself, no health taken with rocket/grenade/laser jumps
-	- Complete Air Control - User can move the same way in the air as on the ground
+	- Done: Complete Air Control - User can move the same way in the air as on the ground
 	- Done: Low Gravity - Turns gravity from 800 to 200
 	- Done: Fullbright Players - Every player model is full bright
 
