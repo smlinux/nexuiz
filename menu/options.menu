@@ -119,7 +119,17 @@ Option menus
 	parent 	options_player_model
 	picture	"gfx/m_nomap" //TODO: rename m_nomap somewhen
 	pos	"0 0"
-	size	"200 252"
+	//size	"200 252"
+	size	"200 263"
+}
+{
+	type 	ITEM_RECTANGLE
+	name	options_player_model_backgroundlayer
+	parent	options_player_model
+	pos	"0 252"
+	size	"200 11"
+	color	"0.6 0.6 0.6"
+	drawflag 2
 }
 {
 	type 	ITEM_TEXTBUTTON
