@@ -398,7 +398,7 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float deathtype
 	local entity ent;
 	//local entity explosion;
 
-	force = normalize(end - start) * (bdamage * 0.1);
+	force = normalize(end - start) * 800; //(bdamage * 10);
 
 	// find how far the beam can go until it hits a wall
 	traceline (start, end, TRUE, self);

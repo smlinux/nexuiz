@@ -36,13 +36,13 @@ void W_Uzi_Attack (void)
 	makevectors(self.v_angle);
 	sound (self, CHAN_WEAPON, "weapons/uzi_fire.wav", 1, ATTN_NORM);
 
-	fireBullet (self.origin + self.view_ofs, v_forward, 0.05, cvar("g_balance_uzi_damage"), IT_UZI);
+	fireBullet (self.origin + self.view_ofs, v_forward, 0.01, cvar("g_balance_uzi_damage"), IT_UZI);
 
 	self.punchangle_x = random () - 0.5;
 	self.punchangle_y = random () - 0.5;
 	self.punchangle_z = random () - 0.5;
 
-	self.attack_finished = time + 0.05;
+	self.attack_finished = time + 0.2;
 	self.ammo_nails = self.ammo_nails - 1;
 
 	vector	org; // casing code

@@ -6,7 +6,7 @@ void() trigger_push_touch =
 	local float flighttime, dist, grav;
 	local vector org;
 
-	if (other.classname != "player")
+	if (other.classname != "player" && other.classname != "gib" && other.classname != "missile" && other.classname != "casing" && other.classname != "grenade")
 		return;
 
 	if (!self.target)
@@ -18,7 +18,8 @@ void() trigger_push_touch =
 
 	org = other.origin;
 
-	sound (other, CHAN_ITEM, "misc/jumppad.wav", 1, ATTN_NORM);
+	if (other.classname == "player")
+		sound (other, CHAN_ITEM, "misc/jumppad.wav", 1, ATTN_NORM);
 
 	// figure out how long it will take to hit the point considering gravity
 	grav = cvar("sv_gravity");

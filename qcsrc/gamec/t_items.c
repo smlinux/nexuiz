@@ -107,12 +107,12 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 	setmodel (self, self.mdl);
 	if (itemflags & FL_WEAPON)
 	{
-		setorigin (self, self.origin + '0 0 12');
+		setorigin (self, self.origin + '0 0 22');
 		setsize (self, '-12 -12 -12', '12 12 12');
 	}
 	else
 	{
-		setorigin (self, self.origin + '0 0 8');
+		setorigin (self, self.origin + '0 0 15');
 		setsize (self, '-8 -8 -8', '8 8 8');
 	}
 	self.movetype = MOVETYPE_TOSS;
@@ -123,15 +123,15 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 void weapon_uzi (void) {self.ammo_nails = 30;StartItem ("models/weapons/g_uzi.md3", "weapons/weaponpickup.wav", 15, "Uzi", IT_UZI, FL_WEAPON);}
 void weapon_shotgun (void) {self.ammo_shells = 15;StartItem ("models/weapons/g_shotgun.md3", "weapons/weaponpickup.wav", 15, "Shotgun", IT_SHOTGUN, FL_WEAPON);}
 void weapon_grenadelauncher (void) {self.ammo_rockets = 15;StartItem ("models/weapons/g_gl.md3", "weapons/weaponpickup.wav", 15, "Grenade Launcher", IT_GRENADE_LAUNCHER, FL_WEAPON);}
-void weapon_electro (void) {self.ammo_cells = 15;StartItem ("models/weapons/g_electro.md3", "weapons/weaponpickup.wav", 15, "Electro", IT_ELECTRO, FL_WEAPON);}
-void weapon_crylink (void) {self.ammo_cells = 15;StartItem ("models/weapons/g_crylink.md3", "weapons/weaponpickup.wav", 15, "Crylink", IT_CRYLINK, FL_WEAPON);}
-void weapon_nex (void) {self.ammo_cells = 15;StartItem ("models/weapons/g_nex.md3", "weapons/weaponpickup.wav", 15, "Nex Gun", IT_NEX, FL_WEAPON);}
+void weapon_electro (void) {self.ammo_cells = 25;StartItem ("models/weapons/g_electro.md3", "weapons/weaponpickup.wav", 15, "Electro", IT_ELECTRO, FL_WEAPON);}
+void weapon_crylink (void) {self.ammo_cells = 25;StartItem ("models/weapons/g_crylink.md3", "weapons/weaponpickup.wav", 15, "Crylink", IT_CRYLINK, FL_WEAPON);}
+void weapon_nex (void) {self.ammo_cells = 25;StartItem ("models/weapons/g_nex.md3", "weapons/weaponpickup.wav", 15, "Nex Gun", IT_NEX, FL_WEAPON);}
 void weapon_hagar (void) {self.ammo_rockets = 15;StartItem ("models/weapons/g_hagar.md3", "weapons/weaponpickup.wav", 15, "Hagar", IT_HAGAR, FL_WEAPON);}
 void weapon_rocketlauncher (void) {self.ammo_rockets = 15;StartItem ("models/weapons/g_rl.md3", "weapons/weaponpickup.wav", 15, "Rocket Launcher", IT_ROCKET_LAUNCHER, FL_WEAPON);}
 
 void item_rockets (void) {self.ammo_rockets = 15;StartItem ("models/items/a_rockets.md3", "misc/itempickup.wav", 15, "rockets", IT_ROCKETS, 0);}
 void item_bullets (void) {self.ammo_nails = 30;StartItem ("models/items/a_bullets.mdl", "misc/itempickup.wav", 15, "bullets", IT_NAILS, 0);}
-void item_cells (void) {self.ammo_cells = 15;StartItem ("models/items/a_cells.md3", "misc/itempickup.wav", 15, "cells", IT_CELLS, 0);}
+void item_cells (void) {self.ammo_cells = 25;StartItem ("models/items/a_cells.md3", "misc/itempickup.wav", 15, "cells", IT_CELLS, 0);}
 void item_shells (void) {self.ammo_shells = 15;StartItem ("models/items/a_shells.md3", "misc/itempickup.wav", 15, "shells", IT_SHELLS, 0);}
 
 void item_armor1 (void) {self.armorvalue = 5;StartItem ("models/items/g_a1.md3", "misc/itempickup.wav", 15, "Armor Shard", 0, 0);}

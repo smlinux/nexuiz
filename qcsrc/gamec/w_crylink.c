@@ -35,43 +35,48 @@ void(float req) w_crylink =
 void W_Crylink_Touch (void)
 {
 	self.event_damage = nullfunction;
-	te_smallflash(self.origin);
+	//te_smallflash(self.origin);
 	RadiusDamage (self, self.owner, cvar("g_balance_crylink_damage"), cvar("g_balance_crylink_edgedamage"), cvar("g_balance_crylink_radius"), world, cvar("g_balance_crylink_force"), IT_CRYLINK);
 	remove (self);
 }
 
 void W_Crylink_Attack (void) //(float postion)
 {
-	entity	proj;
+	float counter;
 
-	sound (self, CHAN_WEAPON, "weapons/crylink2.wav", 1, ATTN_NORM);
-
-	makevectors(self.v_angle);
-	proj = spawn ();
-	proj.owner = self;
-	proj.classname = "spike";
-
-	proj.movetype = MOVETYPE_FLY;
-	proj.solid = SOLID_BBOX;
-
-	setmodel (proj, "models/plasma.mdl");
-	setsize (proj, '0 0 0', '0 0 0');
-	setorigin (proj, self.origin + self.view_ofs + v_forward * 10 + v_right * 5 + v_up * -14);
-
-	proj.velocity = v_forward * cvar("g_balance_crylink_speed");
-	proj.velocity = proj.velocity + v_right * ( crandom() * 50 );
-	proj.velocity = proj.velocity + v_up * ( crandom() * 50 );
-	proj.touch = W_Crylink_Touch;
-	proj.think = SUB_Remove;
-	proj.nextthink = time + 9;
-
-	proj.glow_color = 10;
-	proj.glow_size = 30;
-
-	proj.effects = proj.effects | EF_ADDITIVE;
-
-	self.attack_finished = time + 0.20;
+	sound (self, CHAN_WEAPON, "weapons/shotgun_fire.wav", 1, ATTN_NORM);
+	self.attack_finished = time + 0.7;
 	self.ammo_cells = self.ammo_cells - 1;
+
+	while (counter < 5)
+	{
+		entity	proj;
+
+		makevectors(self.v_angle);
+		proj = spawn ();
+		proj.owner = self;
+		proj.classname = "spike";
+
+		proj.movetype = MOVETYPE_FLY;
+		proj.solid = SOLID_BBOX;
+
+		setmodel (proj, "models/plasma.mdl");
+		setsize (proj, '0 0 0', '0 0 0');
+		setorigin (proj, self.origin + self.view_ofs + v_forward * 10 + v_right * 5 + v_up * -14);
+
+		proj.velocity = v_forward * cvar("g_balance_crylink_speed");
+		proj.velocity = proj.velocity + v_right * ( crandom() * 50 );
+		proj.velocity = proj.velocity + v_up * ( crandom() * 50 );
+		proj.touch = W_Crylink_Touch;
+		proj.think = SUB_Remove;
+		proj.nextthink = time + 9;
+
+		proj.glow_color = 10;
+		proj.glow_size = 20;
+
+		proj.effects = proj.effects | EF_ADDITIVE;
+		counter = counter + 1;
+	}
 }
 
 void W_Crylink_Attack2 (void)

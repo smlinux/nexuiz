@@ -39,67 +39,6 @@ void(float req) w_electro =
 };
 
 
-void W_Electro_Touch (void)
-{
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, 79);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
-	WriteCoord (MSG_BROADCAST, 0);		// SeienAbunae: groan... Useless clutter
-	WriteCoord (MSG_BROADCAST, 0);		// Sajt: Yeah.. I agree with him
-	WriteCoord (MSG_BROADCAST, 0);
-	WriteByte (MSG_BROADCAST, 155);
-	self.event_damage = nullfunction;
-	RadiusDamage (self, self.owner, cvar("g_balance_electro_shot_damage"), cvar("g_balance_electro_shot_edgedamage"), cvar("g_balance_electro_shot_radius"), world, cvar("g_balance_electro_shot_force"), IT_ELECTRO);
-	sound (self, CHAN_IMPACT, "weapons/plasmahit.wav", 1, ATTN_NORM);
-	remove (self);
-}
-
-void() W_Electro_Attack
-{
-	entity	proj;
-	float postion;
-
-	postion = self.electrocount;
-	makevectors(self.v_angle);
-	sound (self, CHAN_WEAPON, "weapons/electro_fire.wav", 1, ATTN_NORM);
-
-	proj = spawn ();
-	proj.owner = self;
-	proj.classname = "spike";
-
-	proj.movetype = MOVETYPE_FLY;
-	proj.solid = SOLID_BBOX;
-	proj.effects = 1;
-
-	vector org;
-	org = self.origin + self.view_ofs + v_forward * 15 + v_right * 7 + v_up * -9;
-
-	te_smallflash(org);
-
-	setmodel (proj, "models/elaser.mdl");
-	setsize (proj, '0 0 0', '0 0 0');
-	if (postion == 0)
-	setorigin (proj, self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -14);
-	if (postion == 1)
-	setorigin (proj, self.origin + self.view_ofs + v_forward * 15 + v_right * 10 + v_up * -12);
-	if (postion == 2)
-	setorigin (proj, self.origin + self.view_ofs + v_forward * 15 + v_right * 15 + v_up * -14);
-
-	proj.velocity = v_forward * cvar("g_balance_electro_shot_speed");
-	proj.touch = W_Electro_Touch;
-	proj.think = SUB_Remove;
-	proj.nextthink = time + 1.5;
-
-	proj.angles = vectoangles (proj.velocity);
-
-	proj.effects = proj.effects | EF_ADDITIVE;
-
-	self.attack_finished = time + 0.4;
-	self.ammo_cells = self.ammo_cells - 1;
-}
-
 void W_Plasma_Explode (entity ignore)
 {
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
@@ -139,6 +78,56 @@ void W_Plasma_Damage (entity inflictor, entity attacker, float damage, float dea
 	self.health = self.health - damage;
 	if (self.health <= 0)
 		W_Plasma_FuseExplode ();
+}
+
+void W_Plasma_Think ()
+{
+	self.velocity = self.velocity * 1.2;
+}
+
+
+void() W_Electro_Attack
+{
+	entity	proj;
+	float postion;
+
+	postion = self.electrocount;
+	makevectors(self.v_angle);
+	sound (self, CHAN_WEAPON, "weapons/electro_fire.wav", 1, ATTN_NORM);
+
+	proj = spawn ();
+	proj.owner = self;
+	proj.classname = "spike";
+
+	proj.movetype = MOVETYPE_FLY;
+	proj.solid = SOLID_BBOX;
+	proj.effects = 1;
+
+	vector org;
+	org = self.origin + self.view_ofs + v_forward * 15 + v_right * 7 + v_up * -9;
+
+	te_smallflash(org);
+
+	setmodel (proj, "models/elaser.mdl");
+	setsize (proj, '0 0 0', '0 0 0');
+	if (postion == 0)
+	setorigin (proj, self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -14);
+	if (postion == 1)
+	setorigin (proj, self.origin + self.view_ofs + v_forward * 15 + v_right * 10 + v_up * -12);
+	if (postion == 2)
+	setorigin (proj, self.origin + self.view_ofs + v_forward * 15 + v_right * 15 + v_up * -14);
+
+	proj.velocity = v_forward * cvar("g_balance_electro_shot_speed");
+	proj.touch = W_Plasma_Explode;
+	proj.think = W_Plasma_Think;
+	proj.nextthink = time + 0.1;
+
+	proj.angles = vectoangles (proj.velocity);
+
+	proj.effects = proj.effects | EF_ADDITIVE;
+
+	self.attack_finished = time + 0.4;
+	self.ammo_cells = self.ammo_cells - 1;
 }
 
 void() W_Electro_Attack2

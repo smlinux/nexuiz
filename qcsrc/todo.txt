@@ -10,9 +10,6 @@
 	- Jumping underwater should move the player up
 	- Add drowning (quake1 style)
 	- Slime should cause damage
-	- Ticking when a gib/shell falls on a jumppad
-	- Weapon still showing when dead
-	- User needs to drop the weapon they were holding when dead
 	- User not dying when falling into the black
 
 -BOTS-
@@ -44,9 +41,6 @@
 	- Smoke effect for levels
 	- Tracers for Machine gun
 
--WISHLIST-
-	- Offset mapping
-
 
 *********************************
 ************ Art ****************
@@ -65,10 +59,17 @@
 -ANIMATION-
 	- Adding 'flying' directions for the models (they feet should sway whatever way they are going in the air)
 
+-MODELS-
+	- Electro secondary explosion animation
+	- 3 Gib models
+		- Large piece of flesh
+		- Medium piece of flesh
+		- Very small piece of flesh to create more blood and fade quickly
 
 
 *********************************
 ************Menu ****************
+disconnect button
 
 -Create Game-
 	-map lists
@@ -93,7 +94,7 @@
 		- FOV (slider)
 		- Team color (choose one of 3, red, blue, green)
 	-INPUT-
-		- Invert Mouse
+		- Invert Mouse (negate m_pitch)
 		- Mouse Speed 
 	-EFFECTS-
 		- Three main settings, high quality, medium quality, and low quality (name the cfg files whatever and i'll place them in later)
