@@ -5,12 +5,22 @@ Item Window Normal
 {
 	key	Nex_Global_Key
 	size	'1024 768'
+	Derive Rect Modulate
+	{
+		color		'0.6 0.6 0.7'
+		drawFlag	[DrawFlagModulate]
+	}
+	Derive Rect AddLevel
+	{
+		color		'0.3 0.3 0.3'
+		drawFlag	[DrawFlagAdditive]
+	}
 	Derive Picture NexuizLogo
 	{
-		picture "gfx/m_background"
-		pos	'0 0'
-		alpha	0.5
-		size	'1024 768'
+		picture	 	"gfx/m_background"
+		pos		'0 0'
+		size		'1024 768'
+		alpha		0.5
 
 Ignore
 {

@@ -62,7 +62,7 @@ Item Window CreditsWnd
 				Derive Nex_Credits Credits
 				{
 					alignment	[AlignCenter]
-					target		"asdbetacredits.txt"
+					target		"betacredits.txt"
 				}
 			}
 

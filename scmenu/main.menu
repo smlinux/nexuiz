@@ -3,15 +3,9 @@
 // Main menu
 Item Arrangement Main
 {
-	pos		'112 30'
+	pos		'29 30'
 	direction 	'10 0'
 
-	Derive TextButton Resume
-	{
-		normal 	"Resume"
-		flag	[FlagConnected]
-
-	}
 	Derive PictureButton Create
 	{
 		//normal 	"Create Game"
@@ -39,9 +33,11 @@ Item Arrangement Main
 		target	"Options"
 		init	Nex_Action_SetNormalPanelLink
 	}
-	Derive TextButton Credits
+	Derive PictureButton Credits
 	{
-		normal		"Credits"
+		//normal	"Credits"
+		normal		"$gfx/m_top_credits"
+		selected	"$gfx/m_top_credits"
 
 		action		Nex_Credits_Action
 	}

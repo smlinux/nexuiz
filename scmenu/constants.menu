@@ -56,11 +56,11 @@
 #define DefaultPicAlpha		"1"
 #define DefaultPicDrawFlag	[DrawFlagNormal]
 
-#define DefaultSelPicColor	"0 0 1"
+#define DefaultSelPicColor	"0.2 0.2 1"
 #define DefaultSelPicAlpha	"1"
 #define DefaultSelPicDrawFlag	[DrawFlagNormal]
 
-#define DefaultPrePicColor	"0.2 0.2 1"
+#define DefaultPrePicColor	"1 0.2 0.2"
 #define DefaultPrePicAlpha	"1"
 #define DefaultPrePicDrawFlag	[DrawFlagNormal]
 
