@@ -173,5 +173,7 @@ void() W_WeaponFrame =
 		boblayer_x = diff*cos(self.weaponentity.destvec_x);
 		self.weaponentity.finaldest = boblayer;
 	}
+	else
+		self.weaponentity.finaldest = '0 0 0';
 	self.weaponentity.origin = realorg + boblayer + layer1 - self.weaponentity.view_ofs;
 };
