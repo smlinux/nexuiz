@@ -1015,6 +1015,30 @@ Option menus
 	alignment	1
 }
 {
+	type 		CONTROL_KEY
+	name		key_forward
+	text		"Move forward"
+	link		"+forward"
+}
+{
+	type 		CONTROL_KEY
+	name		key_back
+	text		"Move back"
+	link		"+back"
+}
+{
+	type 		CONTROL_KEY
+	name		key_moveright
+	text		"Move right"
+	link		"+moveright"
+}
+{
+	type 		CONTROL_KEY
+	name		key_moveleft
+	text		"Move left"
+	link		"+moveleft"
+}
+{
 	type		CONTROL_KEY
 	name		key_attack
 	text		"Fire Weapon"
@@ -1022,7 +1046,91 @@ Option menus
 }
 {
 	type 		CONTROL_KEY
-	name		key_forward
-	text		"Move forward"
-	link		"+forward"
+	name		key_SecondaryAttack
+	text		"Secondary Attack"
+	link		"+button3"
+}
+{
+	type 		CONTROL_KEY
+	name		key_jump
+	text		"Jump"
+	link		"+jump"
+}
+{
+	type 		CONTROL_KEY
+	name		key_crouch
+	text		"Crouch"
+	link		"+shift"
+}
+{
+	type 		CONTROL_KEY
+	name		key_weapnext
+	text		"Next Weapon"
+	link		"weapnext"
+}
+{
+	type 		CONTROL_KEY
+	name		key_weapprev
+	text		"Prev Weapon"
+	link		"weapprev"
+}
+{
+	type 		CONTROL_KEY
+	name		key_showscores
+	text		"Show Scores"
+	link		"+showscores"
+}
+{
+	type 		CONTROL_KEY
+	name		key_weapon1
+	text		"Select Laser"
+	link		"impulse 1"
+}
+{
+	type 		CONTROL_KEY
+	name		key_weapon2
+	text		"Select Uzi"
+	link		"impulse 2"
+}
+{
+	type 		CONTROL_KEY
+	name		key_weapon3
+	text		"Select Shotgun"
+	link		"impulse 3"
+}
+{
+	type 		CONTROL_KEY
+	name		key_weapon4
+	text		"Select Grenade"
+	link		"impulse 4"
+}
+{
+	type 		CONTROL_KEY
+	name		key_weapon5
+	text		"Select Electro"
+	link		"impulse 5"
+}
+{
+	type 		CONTROL_KEY
+	name		key_weapon6
+	text		"Select Crylink"
+	link		"impulse 6"
+}
+{
+	type 		CONTROL_KEY
+	name		key_weapon7
+	text		"Select Nexgun"
+	link		"impulse 7"
+}
+{
+	type 		CONTROL_KEY
+	name		key_weapon8
+	text		"Select Hagar"
+	link		"impulse 8"
+}
+{
+	type 		CONTROL_KEY
+	name		key_weapon9
+	text		"Select Rocket"
+	link		"impulse 9"
 }
