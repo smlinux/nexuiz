@@ -83,11 +83,6 @@ void AddMultiDamage (entity hit, float damage)
 		multi_damage = multi_damage + damage;
 }
 
-float crandom (void)	// -1.0 to 1.0
-{
-	return 2 * (random () - 0.5);
-}
-
 void FireBullets (float shotcount, vector dir, vector spread)
 {
 	vector	direction;

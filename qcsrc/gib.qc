@@ -1,15 +1,4 @@
 
-void GibFade (void)
-{
-	if (self.alpha < 0.06)	// don't let it reach 0, lest it become fully visible again O_o
-		remove (self);
-		
-	self.alpha = self.alpha - 0.05;
-	
-	self.nextthink = time + 0.1;
-	self.think = GibFade;
-}
-
 void GibSplat (void)
 {
 	te_blood (self.origin + '0 0 1', '0 0 30', 8);
@@ -45,8 +34,7 @@ void TossGib (string mdlname, vector org, vector v)
 	gib.avelocity = '300 300 300';
 	gib.alpha = 1;
 
-	gib.think = GibFade;
-	gib.nextthink = time + 16 + random () * 4;
+	SUB_SetFade (gib, time + 16 + random () * 4);
 }
 
 void Gib (vector vel)

@@ -384,18 +384,13 @@ void W_Laser_Attack (void)
 }
 
 void W_Uzi_Attack (void)
-{
-	float	oldsolid;
-	
+{	
 	sound (self, CHAN_WEAPON, "weapons/Uzi_Fire.wav", 1, ATTN_NORM);
 	
 	makevectors (self.v_angle);
 	
-	// change to SOLID_BBOX so the traceline will hit SOLID_CORPSE stuff
-	oldsolid = self.solid;
-	self.solid = SOLID_BBOX;
-	traceline (self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * 4096, FALSE, self);
-	self.solid = oldsolid;
+	// use traceline_hitcorpse to make sure it can hit gibs and corpses too
+	traceline_hitcorpse (self, self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * 4096, FALSE, self);
 	
 	// FIXME - causes excessive 'tinking'. Hopefully remove "tink1.wav" from the ricochets with csqc
 	if ((trace_fraction != 1.0) && (trace_ent != self) && (pointcontents (trace_endpos) != CONTENT_SKY))
@@ -434,10 +429,9 @@ void W_Shotgun_Attack (void)
 
 void W_Grenade_Explode (void)
 {
-	sound (self, CHAN_BODY, "weapons/Grenade_Impact.wav", 1, ATTN_NORM);
-	
 	te_explosion (self.origin);
-	
+	RadiusDamage (self.owner, self, 0, 100);
+	sound (self, CHAN_BODY, "weapons/Grenade_Impact.wav", 1, ATTN_NORM);
 	remove (self);
 }
 
@@ -487,6 +481,32 @@ void W_Grenade_Attack (void)
 	self.attack_finished = time + 1;
 }
 
+void W_Electro_Touch (void)
+{
+	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+	WriteByte (MSG_BROADCAST, 79);
+	WriteCoord (MSG_BROADCAST, self.origin_x);
+	WriteCoord (MSG_BROADCAST, self.origin_y);
+	WriteCoord (MSG_BROADCAST, self.origin_z);
+	WriteCoord (MSG_BROADCAST, 0);		// SeienAbunae: groan... Useless clutter
+	WriteCoord (MSG_BROADCAST, 0);
+	WriteCoord (MSG_BROADCAST, 0);
+	WriteByte (MSG_BROADCAST, 155);
+	
+	if (other.classname == "player" || other.classname == "corpse" || other.classname == "gib")
+	{
+		Damage (self.owner, self.origin, other, 0, 40);
+		// SeienAbunae: the impact sound doesn't seem to play when the victim dies instead of being hurt
+		// Maybe it's not that big of a deal
+		if (random () < 0.5)
+			sound (other, CHAN_IMPACT, "misc/BodyImpact1.wav", 1, ATTN_NORM);
+		else
+			sound (other, CHAN_IMPACT, "misc/BodyImpact2.wav", 1, ATTN_NORM);
+	}
+	
+	remove (self);
+}
+
 void W_Electro_Attack (void)
 {
 	entity	proj;
@@ -510,19 +530,19 @@ void W_Electro_Attack (void)
 	setorigin (proj, org);
 	
 	proj.velocity = v_forward * 3000;
-	proj.touch = SUB_Remove;//W_Electro_Touch;
+	proj.touch = W_Electro_Touch;
 	proj.think = SUB_Remove;
-	proj.nextthink = time + 1;
+	proj.nextthink = time + 3;
 	
 	self.attack_finished = time + 0.6;
 }
 
 void W_Nex_Smite (void)
 {
-	
+
 }
 
-void W_Nex_Attack (void)	// three network message, not including sounds :P
+void W_Nex_Attack (void)
 {
 	vector	org;
 	vector	dir;
