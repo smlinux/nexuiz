@@ -102,7 +102,7 @@ void W_Rocket_Attack (void)
 	missile.think = W_Rocket_Think;
 	missile.nextthink = time + 9;
 
-	self.attack_finished = time + 1.5;
+	self.attack_finished = time + 1.2;
 
 	if (!(game & GAME_ROCKET_ARENA))
 		self.ammo_rockets = self.ammo_rockets - 1;

@@ -527,7 +527,7 @@ void fireBullet (vector start, vector dir, float spread, float damage, float dty
 		}
 		else if (trace_ent.classname == "player" || trace_ent.classname == "corpse" || trace_ent.classname == "gib")
 			sound (trace_ent, CHAN_IMPACT, "misc/enemyimpact.wav", 1, ATTN_NORM);
-		Damage (trace_ent, self, self, damage, dtype, trace_endpos, dir * damage);
+		Damage (trace_ent, self, self, damage, dtype, trace_endpos, dir * damage * 5);
 	}
 }
 

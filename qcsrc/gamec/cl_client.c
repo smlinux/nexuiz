@@ -338,7 +338,7 @@ void player_regen (void)
 	{
 		self.health = bound(0, self.health + (100 - self.health) * 0.05 * frametime, 1000);
 		if (self.armorvalue > 100)
-			self.armorvalue = bound(100, self.armorvalue + (100 - self.armorvalue) * 0.05 * frametime, 1000);
+			self.armorvalue = bound(100, self.armorvalue + (100 - self.armorvalue) * 0.1 * frametime, 1000);
 	}
 }
 

@@ -35,6 +35,8 @@ void(float imp) W_SwitchWeapon
 	}
 	else
 		self.switchweapon = imp;
+
+	sound (self, CHAN_WEAPON, "weapons/weapon_switch.wav", 1, ATTN_NORM);
 };
 	
 // next weapon
@@ -51,6 +53,8 @@ void() W_NextWeapon =
 			weaponwant = WEP_FIRST;
 	}
 	self.switchweapon = weaponwant;
+	
+	sound (self, CHAN_WEAPON, "weapons/weapon_switch.wav", 1, ATTN_NORM);
 };
 
 // prev weapon
@@ -67,6 +71,8 @@ void() W_PreviousWeapon =
 			weaponwant = WEP_LAST;
 	}
 	self.switchweapon = weaponwant;
+
+	sound (self, CHAN_WEAPON, "weapons/weapon_switch.wav", 1, ATTN_NORM);
 };
 
 // Bringed back weapon frame

@@ -123,7 +123,7 @@ void weapon_hagar (void) {self.ammo_rockets = 10;StartItem ("models/weapons/g_ha
 void weapon_rocketlauncher (void) {self.ammo_rockets = 10;StartItem ("models/weapons/g_rl.md3", "weapons/weaponpickup.wav", 30, "Rocket Launcher", IT_ROCKET_LAUNCHER, FL_WEAPON);}
 
 void item_rockets (void) {self.ammo_rockets = 25;StartItem ("models/items/a_rockets.md3", "misc/itempickup.wav", 30, "rockets", IT_ROCKETS, 0);}
-void item_bullets (void) {self.ammo_nails = 100;StartItem ("models/items/a_bullets.zym", "misc/itempickup.wav", 30, "bullets", IT_NAILS, 0);}
+void item_bullets (void) {self.ammo_nails = 100;StartItem ("models/items/a_bullets.mdl", "misc/itempickup.wav", 30, "bullets", IT_NAILS, 0);}
 void item_cells (void) {self.ammo_cells = 50;StartItem ("models/items/a_cells.md3", "misc/itempickup.wav", 30, "cells", IT_CELLS, 0);}
 void item_shells (void) {self.ammo_shells = 50;StartItem ("models/items/a_shells.md3", "misc/itempickup.wav", 30, "shells", IT_SHELLS, 0);}
 

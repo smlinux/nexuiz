@@ -1,19 +1,15 @@
 *********************************
 *************QC******************
 
-
--MOVEMENT-
-	- Getting shot from bullets should push you back
-
 -ANIMATION/PLAYER-
 	- Jumping animation
 	- Taunting animation
 	- Use of player_skin
 
 -BUGS/OTHER-
-	- Add quake1/halflife entity support (just the weapons)
 	- Jumping underwater should move the player up
 	- Add drowning (quake1 style)
+	- Slime should cause damage
 	- Ticking when a gib/shell falls on a jumppad
 	- Weapon still showing when dead
 	- User needs to drop the weapon they were holding when dead
@@ -33,16 +29,6 @@
 
 *********************************
 ************Engine***************
--MENU-
-	- Lan listing
-	- Maplists
-	- Replace Cursor graphics
-	- Add menu music
-	- Option to play music
-	- Scrolling through the server list (it might show hundreds)
-	- create server 'Game Options' menu
-		- Select of game's .dat to use
-		- Sv_gravity, sv_accer, sv_friction, sv_maxspeed options
 
 -2D GRAPHICS-
 	- Don't show monsters/secrets on the bottom of the scoreboard
@@ -51,22 +37,19 @@
 	- Graphic over the user to show they are typing a message/in the console/in the menu
 
 -PARTICLE EFFECTS-
-	- Crylink plasma effect shown in crylink1.jpg or crylink3.jpg
-	- Crylink hitting wall effect, exploding into many different particles effected by gravity (many different metal particles) shown in crylink2.jpg (example from q2max)
 	- Small Explosion (used for hagar) (see Explosion.jpg for example of the type of explosion wanted, this should be altered for the various sizes)
 	- Medium Explosion (used for mortar)
 	- Large Explosion (used for rocket)
-	- The Nex explosion (where the beam hits) should be a small shower of purple sparks
 	- basic spark effect for levels
 	- Smoke effect for levels
+	- Tracers for Machine gun
 
 -WISHLIST-
-	- GLSL for faster nonshadowed lights
 	- Offset mapping
 
 
 *********************************
-************2d Art **************
+************ Art ****************
 -Textures-
 	- Slime textures for Slime Pit
 	- Water texture for oil rig
@@ -79,5 +62,69 @@
 	- female shock
 	- specop
 
--OTHER-
-	- Add flash (alike to rocket launcher) for electro
+-ANIMATION-
+	- Adding 'flying' directions for the models (they feet should sway whatever way they are going in the air)
+
+
+
+*********************************
+************Menu ****************
+
+-Create Game-
+	-map lists
+	-create server 'Game Options' menu
+		- Select of game's .dat to use
+		- Sv_gravity, sv_accer, sv_friction, sv_maxspeed options
+
+-Join Game-
+	- Lan listing
+	- Scrolling through the server list (it might show hundreds)
+
+-Options-
+	-GAME-
+		- Sbar alpha (slider, change both bg and fg)
+		- Jpeg Screenshots
+		- Text Shadow
+		- Show Framerate
+		- Show Time`
+		- Show Date
+	-PLAYER-
+		- Crosshair
+		- FOV (slider)
+		- Team color (choose one of 3, red, blue, green)
+	-INPUT-
+		- Invert Mouse
+		- Mouse Speed 
+	-EFFECTS-
+		- Three main settings, high quality, medium quality, and low quality (name the cfg files whatever and i'll place them in later)
+		Sliders:
+		- Bloom (r_bloom_intensity) (only if bloom is on)
+		- Gloss (r_shadow_gloss (1.0-2.0) (only if realtime lights are on)
+		- Bumpmap scale (r_shadow_bumpscale_basetexture 1-10) (only if realtime lights are on)
+		- Blood Opacity
+		- Particles Quality
+
+		-Decals
+		-Blood
+		-Bloom (r_bloom)
+		-Coronas (r_coronas)
+		-Realtime lights (r_shadow_realtime_world AND r_shadow_realtime_dlight)
+		-Realtime Shadows (r_shadow_realtime_world_shadows 0) (only if realtime lights are on)
+
+*********************************
+************GAMECFG *************
+
+1;   /// everyone gets the nex gun with infinite ammo - done
+2;   /// Spawn Protection (user is invicible for 3 seconds)
+4;   /// Strength gain
+8;   /// Fast health regeneration - done
+16;  /// Rocket Arena - done
+32;  /// no self damage, so rocket jumping and such can be used a lot more
+64;  /// turns off air control
+128; /// Weapons Stay
+256; /// makes the players model fullbright - done
+512; /// Teamplay
+
+*********************************
+************GAME MODS ***********
+When a final version of the gamecode is made, the game will be given out to many quake1 mod authors to create their own nexuiz gamemode to be included in the final release. These may support the normal deathmatch gamecfg options or not.

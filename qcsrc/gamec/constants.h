@@ -110,7 +110,7 @@ float	CHAN_BODY				= 4;
 float	CHAN_IMPACT				= 5;
 
 float	ATTN_NONE				= 0;
-float	ATTN_NORM				= 1;
+float	ATTN_NORM				= 0.5;
 float	ATTN_IDLE				= 2;
 float	ATTN_STATIC				= 3;
 
