@@ -1,19 +1,42 @@
 
 void Obituary (entity attacker, entity targ, float deathtype)
 {
+	local string s;
 	if (targ.classname == "player" || targ.classname == "corpse")
 	{
+		s = targ.netname; 
 		if (targ.classname == "corpse")
-			bprint ("A corpse");
+			s = "A corpse";
+		if (targ == attacker)
+		{
+			if (deathtype == IT_LASER) {bprint(s);bprint(" was unable to resist the urge to self-immolate\n");}
+			else if (deathtype == IT_GRENADE_LAUNCHER) {bprint(s);bprint(" detonated\n");}
+			else if (deathtype == IT_ELECTRO) {bprint(s);bprint(" played with plasma\n");}
+			else if (deathtype == IT_HAGAR) {bprint(s);bprint(" should have used a different weapon\n");}
+			else if (deathtype == IT_ROCKET_LAUNCHER) {bprint(s);bprint(" exploded\n");}
+			else {bprint(s);bprint(" competes for the darwin awards\n");}
+		}
+		else if (attacker.classname == "player")
+		{
+			if (deathtype == IT_LASER) {bprint(s);bprint(" was a victim of laser surgeon ");bprint(attacker.netname);bprint("\n");}
+			else if (deathtype == IT_UZI) {bprint(s);bprint(" was gunned down by ");bprint(attacker.netname);bprint("\n");}
+			else if (deathtype == IT_SHOTGUN) {bprint(s);bprint(" was gunned down by ");bprint(attacker.netname);bprint("\n");}
+			else if (deathtype == IT_GRENADE_LAUNCHER) {bprint(s);bprint(" was blasted by ");bprint(attacker.netname);bprint("\n");}
+			else if (deathtype == IT_ELECTRO) {bprint(s);bprint(" bathed in plasma from ");bprint(attacker.netname);bprint("\n");}
+			else if (deathtype == IT_CRYLINK) {bprint(s);bprint(" was zapped by ");bprint(attacker.netname);bprint("\n");}
+			else if (deathtype == IT_NEX) {bprint(s);bprint(" sports a new hole from ");bprint(attacker.netname);bprint("\n");}
+			else if (deathtype == IT_HAGAR) {bprint(s);bprint(" was pummeled by ");bprint(attacker.netname);bprint("\n");}
+			else if (deathtype == IT_ROCKET_LAUNCHER) {bprint(s);bprint(" was given a lesson in rocketry by ");bprint(attacker.netname);bprint("\n");}
+			else {bprint(s);bprint(" was killed by ");bprint(attacker.netname);bprint("\n");}
+		}
 		else
-			bprint (targ.netname);
-		bprint (" was killed by ");
-		bprint (attacker.netname);
-		bprint ("\n");
+		{
+			{bprint(s);bprint(" died\n");}
+		}
 	}
 }
 
-void Damage (entity attacker, vector hitloc, entity targ, float deathtype, float damage, vector force)
+void Damage (entity targ, entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
 {
 	entity	oldself;
 
@@ -30,6 +53,8 @@ void Damage (entity attacker, vector hitloc, entity targ, float deathtype, float
 	if (targ.takedamage)
 	{
 		targ.health = targ.health - damage;
+		targ.dmg_take = targ.dmg_take + damage;
+		targ.dmg_inflictor = inflictor;
 
 		if (targ.health <= 0)
 		{
@@ -52,7 +77,7 @@ void Damage (entity attacker, vector hitloc, entity targ, float deathtype, float
 	}
 }
 
-void RadiusDamage (entity attacker, entity inflictor, float deathtype, float coredamage, float edgedamage, float radius, entity ignore, float forceintensity)
+void RadiusDamage (entity inflictor, entity attacker, float coredamage, float edgedamage, float radius, entity ignore, float forceintensity, float deathtype)
 {
 	entity	targ;
 	float	finaldmg;
@@ -87,8 +112,8 @@ void RadiusDamage (entity attacker, entity inflictor, float deathtype, float cor
 				// round up a little on the damage to ensure full damage on impacts
 				// and turn the distance into a fraction of the radius
 				power = 1 - ((vlen (diff) - 2) / radius);
-				bprint(" ");
-				bprint(ftos(power));
+				//bprint(" ");
+				//bprint(ftos(power));
 				if (power > 0)
 				{
 					if (power > 1)
@@ -98,7 +123,7 @@ void RadiusDamage (entity attacker, entity inflictor, float deathtype, float cor
 					if (targ == attacker)
 						finaldmg = finaldmg * 0.6;	// Partial damage if the attacker hits himself
 					if (finaldmg > 0)
-						Damage (attacker, inflictor.origin, targ, deathtype, finaldmg, force);
+						Damage (targ, inflictor, attacker, finaldmg, deathtype, inflictor.origin, force);
 				}
 			}
 		targ = targ.chain;
@@ -139,9 +164,8 @@ void AddMultiDamage (entity hit, float damage, vector force)
 	multi_damage = multi_damage + damage;
 	multi_force = multi_force + force;
 }
-*/
 
-void FireBullets (float shotcount, vector dir, vector spread)
+void FireBullets (float shotcount, vector dir, vector spread, float deathtype)
 {
 	vector	direction;
 	vector	source;
@@ -172,7 +196,7 @@ void FireBullets (float shotcount, vector dir, vector spread)
 				te_gunshot (org);
 			// LordHavoc: better to use normal damage
 			//AddMultiDamage (trace_ent, 4, direction * 4);
-			Damage (self, trace_endpos, trace_ent, 0, 4, direction * 4);
+			Damage (trace_ent, self, self, 4, deathtype, trace_endpos, direction * 4);
 		}
 
 		shotcount = shotcount + 1;
@@ -181,3 +205,4 @@ void FireBullets (float shotcount, vector dir, vector spread)
 	// LordHavoc: better to use normal damage
 	//ApplyMultiDamage ();
 }
+*/

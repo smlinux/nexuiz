@@ -329,7 +329,7 @@ float W_CheckAmmo (void)
 	return FALSE;
 }
 
-void FireRailgunBullet (vector src, float bdamage, vector dir, float spread)
+void FireRailgunBullet (vector src, float bdamage, vector dir, float spread, float deathtype)
 {
 	vector	v, lastpos;
 	entity	saveself, last;
@@ -355,7 +355,7 @@ void FireRailgunBullet (vector src, float bdamage, vector dir, float spread)
 			{
 				if (trace_ent.classname == "player" || trace_ent.classname == "corpse" || trace_ent.classname == "gib")
 					te_blood (trace_endpos, dir * bdamage * 16, bdamage);
-				Damage (self, trace_endpos, trace_ent, 0, bdamage, dir * bdamage);
+				Damage (trace_ent, self, self, bdamage, deathtype, trace_endpos, dir * bdamage);
 			}
 		}
 		if (last.solid == SOLID_BSP)
@@ -381,12 +381,12 @@ void fireBullet (vector dir, float spread, float damage, float dtype)
 		else if (trace_ent.classname == "case")
 		{
 //			te_gunshot (trace_endpos);
-			Damage (self, trace_endpos, trace_ent, 0, damage, dir * damage);
+			Damage (trace_ent, self, self, damage, dtype, trace_endpos, dir * damage);
 		}
 		else if (trace_ent.classname == "player" || trace_ent.classname == "corpse" || trace_ent.classname == "gib")
 		{
 			te_blood (trace_endpos, dir * damage * 16, damage);
-			Damage (self, trace_endpos, trace_ent, 0, damage, dir * damage);
+			Damage (trace_ent, self, self, damage, dtype, trace_endpos, dir * damage);
 			if (random () < 0.5)
 				sound (trace_ent, CHAN_IMPACT, "misc/bodyimpact1.wav", 1, ATTN_NORM);
 			else
@@ -419,7 +419,7 @@ void W_Laser_Touch (void)
 	WriteCoord (MSG_BROADCAST, dir_z);
 	WriteByte (MSG_BROADCAST, 155);
 
-	RadiusDamage (self.owner, self, 0, 10, 15, 50, world, 200);
+	RadiusDamage (self, self.owner, 10, 15, 50, world, 200, IT_LASER);
 
 	remove (self);
 }
@@ -498,10 +498,9 @@ void W_Uzi_Attack2 (void)
 
 	sound (self, CHAN_WEAPON, "weapons/shotgun_fire.wav", 1, ATTN_NORM);
 
-	if (self.ammo_nails<8)
+	bullets = 4;
+	if (bullets > self.ammo_nails)
 		bullets = self.ammo_nails;
-	else
-		bullets = 4;
 
 	for (sc = bullets; sc > 0; sc = sc - 1)
 		fireBullet (v_forward, 270, 8, IT_SHOTGUN);
@@ -530,7 +529,7 @@ void W_Grenade_Explode (entity ignore)
 {
 	ImpactEffect (self, IT_GRENADE_LAUNCHER);
 
-	RadiusDamage (self.owner, self, 0, 100, 50, 200, world, 400);
+	RadiusDamage (self, self.owner, 100, 50, 200, world, 400, IT_GRENADE_LAUNCHER);
 
 	remove (self);
 }
@@ -617,7 +616,7 @@ void W_Electro_Touch (void)
 	WriteCoord (MSG_BROADCAST, 0);
 	WriteByte (MSG_BROADCAST, 155);
 
-	RadiusDamage (self.owner, self, 0, 50, 10, 70, world, 50);
+	RadiusDamage (self, self.owner, 50, 10, 70, world, 50, IT_ELECTRO);
 	remove (self);
 }
 
@@ -667,7 +666,7 @@ void W_Plasma_Explode (entity ignore)
 	WriteCoord (MSG_BROADCAST, 0);
 	WriteByte (MSG_BROADCAST, 155);
 
-	RadiusDamage (self.owner, self, 0, 100, 50, 100, world, 50);
+	RadiusDamage (self, self.owner, 100, 50, 100, world, 50, IT_ELECTRO);
 
 	remove (self);
 }
@@ -732,7 +731,7 @@ void W_Crylink_Attack (void)
 	org = self.origin + self.view_ofs + v_forward * 18 + v_right * 7 + v_up * -9;
 	makevectors (self.v_angle);
 
-	FireRailgunBullet (org, 25, v_forward, 300);
+	FireRailgunBullet (org, 25, v_forward, 300, IT_CRYLINK);
 
 	traceline (org, self.origin + self.view_ofs + (v_forward * 4096), FALSE, self);
 
@@ -765,7 +764,7 @@ void W_Crylink_Attack2 (void)
 
 	traceline (org, self.origin + self.view_ofs + v_forward * 4096 + v_right * (random () * 100 - 50) + v_up * (random () * 100 - 50), FALSE, self);
 
-	Damage (self, trace_endpos, trace_ent, 0, 10, v_forward * 10);
+	Damage (trace_ent, self, self, 10, IT_CRYLINK, trace_endpos, v_forward * 10);
 
 	te_lightning1 (self, org, trace_endpos);
 
@@ -790,7 +789,7 @@ void W_Nex_Attack (void)
 
 	traceline (org, self.origin + self.view_ofs + (v_forward * 4096), FALSE, self);
 
-	FireRailgunBullet (org, 90, v_forward, 0);
+	FireRailgunBullet (org, 90, v_forward, 0, IT_NEX);
 
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 	WriteByte (MSG_BROADCAST, 76);
@@ -832,7 +831,7 @@ void W_Hagar_Explode (void)
 {
 	ImpactEffect (self, IT_HAGAR);
 
-	RadiusDamage (self.owner, self, 0, 20, 10, 50, world, 90);
+	RadiusDamage (self, self.owner, 20, 10, 50, world, 90, IT_HAGAR);
 
 	remove (self);
 }
@@ -927,7 +926,7 @@ void W_Rocket_Explode (entity ignore)
 {
 	ImpactEffect (self, IT_ROCKET_LAUNCHER);
 
-	RadiusDamage (self.owner, self, 0, 100, 50, 100, ignore, 600);
+	RadiusDamage (self, self.owner, 100, 50, 100, ignore, 600, IT_ROCKET_LAUNCHER);
 
 	remove (self);
 }
@@ -987,7 +986,7 @@ void W_Rocket2_Explode (entity ignore)
 {
 	ImpactEffect (self, IT_ROCKET_LAUNCHER);
 
-	RadiusDamage (self.owner, self, 0, 35, 15, 200, ignore, 400);
+	RadiusDamage (self.owner, self, 35, 15, 200, ignore, 400, IT_ROCKET_LAUNCHER);
 
 	remove (self);
 }

@@ -4,7 +4,6 @@ Teleporter doesn't work
 
 SPAWNING/MISC:
 Make it so the user spawns at a random location in the map ("info_player_deathmatch")
-Add deathtypes and obituary messages
 When dead, leave corpse. Fade away corpse in 10 seconds.
 
 WEAPONS:
@@ -12,9 +11,9 @@ Laser: Autoaim and kill any projectile coming (can destory rockets, grenades, ha
 Add weapon animations. Ask Vermeulen for description. I am hoping for a client side moving of the weapon, moving it back depending on how powerful the shot was, and moving with the users jumps/runs/stafing/hits etc.
 
 POWERUPS:
-Add energy powerup - Makes the user run 3 times as fast, and jumps 3 times as high. 30 seconds, 2 minute respond time
-Add strength powerup - Basiclly the Quad. 30 seconds, 2 minute respond time
-Add invincible powerup -  30 seconds, 2 minute respond time
+Add energy powerup - Makes the user run 3 times as fast, and jumps 3 times as high. 30 seconds, 2 minute respawn time
+Add strength powerup - Basiclly the Quad. 30 seconds, 2 minute respawn time
+Add invincible powerup -  30 seconds, 2 minute respawn time
 When dead the powerup the user had gets thrown in the air
 
 GAMETYPES:
@@ -24,6 +23,7 @@ DarkMatch gametype
 PHYSICS:
 Ability to blow up a rocket/grenade/hagar rocket with a bullet/crylink/nex bullet
 When a grenade/rocket/hagar rocket is in the radius (close to it, not just a health of 1) of a explosion, it blows up to
+Add liquid damage
 
 PLAYER MOVEMENT:
 Add telefragging and make teleporters nicer perhaps
