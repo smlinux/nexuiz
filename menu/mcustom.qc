@@ -863,6 +863,9 @@ void() _nex_player_model_update =
 {
 	entity item;
 	
+	if( !mlist_list )
+		return;
+	
 	cvar_set( player_name_cvar, mlist_current.name );
 	//cvar_set( player_model_cvar, mlist_current.picture_selected );
 	//cvar_set( player_skin_cvar, mlist_current.picture_pressed );
@@ -889,6 +892,7 @@ void(void) nex_player_buildlist =
 	float shandle;
 	float count;
 	float counter;
+	float loaded;
 	entity hit;
 	
 	// remove the old player list
@@ -915,6 +919,7 @@ void(void) nex_player_buildlist =
 	count = search_getsize( shandle );
 	mlist_list = mlist_current = spawn();
 	hit = null_entity;
+	loaded = 0;
 	for ( counter = 0 ; counter < count ; counter = counter + 1 ) {
 		string dname;
 		string dpicture;
@@ -966,6 +971,8 @@ void(void) nex_player_buildlist =
 		mlist_current.picture_selected = dmodel;
 		mlist_current.text = dtext;
 		
+		loaded = loaded + 1;
+		
 		mlist_current._next = spawn();
 		mlist_current._next._prev = mlist_current;
 		mlist_current = mlist_current._next;
@@ -976,6 +983,12 @@ void(void) nex_player_buildlist =
 	remove( mlist_current );
 	
 	search_end( shandle );
+	
+	if( loaded == 0 ) {
+		print( "No model description files found in models/player\n" );
+		mlist_list = mlist_current = null_entity;
+	} else
+		print( ftos( loaded ), " model description files loaded from models/player\n" );
 	
 	if( hit )
 		mlist_current = hit;
