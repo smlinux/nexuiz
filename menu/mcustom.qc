@@ -536,7 +536,7 @@ void(void) nex_xp_maxbots =
 {
 	float x;
 	x = stof(self.text);
-	maxbots = min( rint(x), maxclients - 1 );
+	maxbots = min( fabs(rint(x)), maxclients - 1, 16 ); // 16 is currently max in frikbot - see below
 
 	strunzone(self.text);
 	self.text = ftos(x);
@@ -586,15 +586,27 @@ void(void) nex_xp_skilllevel =
 
 void(void) nex_xp_start =
 {
-	cvar_set("fraglimit", ftos(maxfrags));
-	cvar_set("timelimit", ftos(maxtime));
-	cvar_set("deathmatch", ftos(1));
-	cvar_set("maxplayers", ftos(maxclients));
-	cvar_set("sv_public", ftos(publicserver));
-	cvar_set("hostname", hostname);
-	cmd("map ");
-	cmd(maps_current.name);
-	cmd(";wait;togglemenu\n");
+	cvar_set( "fraglimit", ftos( maxfrags ) );
+	cvar_set( "timelimit", ftos( maxtime ) );
+	cvar_set( "deathmatch", "1" );
+	
+	cmd( "maxplayers " );
+	cmd( ftos( maxclients ) );
+	cmd( "\n" );
+	
+	cvar_set( "sv_public", ftos( publicserver ) );
+	cvar_set( "hostname", hostname );
+	
+	// see bot/bot.qc: BotInit
+	cvar_set( "saved1", "1" );
+	cvar_set( "scratch1", ftos( pow( 2, maxbots ) - 1 ) );
+	cvar_set( "scratch2", ftos( skilllevel * (pow(4, min(maxbots, 8)) - 1) / 3) );
+	cvar_set( "scratch3", ftos( skilllevel * (pow(4, min(maxbots - 8, 8)) - 1) / 3) );
+	
+	cmd( "map " );
+	cmd( maps_current.name );
+	cmd( "\n" );
+	cmd( "togglemenu\n" );
 };
 
 void(void) nex_goto_createserver =

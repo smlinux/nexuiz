@@ -499,7 +499,7 @@ template for map selection
 	pos		"10 75 0"
 	//font_size	"10 10 0"
 	flag 		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
-	text		"'N00b' 'Normal' 'Hard'"
+	text		"'N00b' 'Normal' 'Hard' 'Masochist'"
 	value		1
 	switchchange 	nex_xp_skilllevel
 	init		nex_xp_skilllevel
@@ -514,7 +514,7 @@ template for map selection
 	//font_size	"10 10 0"
 	alignment	16		// TEXT_ALIGN_RIGHTPOS
 	flag		256		// FLAG_AUTOSETCLICK
-	key			nex_redirect_key
+	key		nex_redirect_key
 }
 // Switch
 {
@@ -526,7 +526,7 @@ template for map selection
 	flag 		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
 	maxlen		2
 	text		"16"
-	refresh		nex_xp_maxclients
+	action		nex_xp_maxclients
 }
 // start
 {
