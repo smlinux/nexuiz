@@ -1,0 +1,282 @@
+// Property of Alientrap/AK
+// options/key.menu
+Item Window KeyControl
+{
+	Item Layout Layout
+	{
+		size	  '600 600'
+		origin	  '300 0'
+		alignment [AlignCenter]
+		direction [Nex_DefaultVertDirection]
+		flag	  [FlagEmbedded]
+
+		Derive MultiLabel Description
+		{
+			size 	'500 24'
+			text
+	"Press [Enter] or [Mouse1] to change a key binding.\nPress [Delete] to remove the binding."
+		}
+
+		// table: name key1 key2
+		Item Layout TableDesc
+		{
+			size	'600 15'
+			direction '10 0'
+
+			Derive Rect Action
+			{
+				size	'200 15'
+				color	'0.5 0.5 0.5'
+				alpha	0.5
+
+				Derive Label Label
+				{
+					text	"Action"
+				}
+			}
+			Derive Rect Key1
+			{
+				pos 	'210 0'
+				size	'190 15'
+				color	'0.5 0.5 0.5'
+				alpha	0.5
+
+				Derive Label Label
+				{
+					text	"Key/Button 1"
+				}
+			}
+			Derive Rect Key2
+			{
+				pos 	'410 0'
+				size	'190 15'
+				color	'0.5 0.5 0.5'
+				alpha	0.5
+
+				Derive Label Label
+				{
+					text	"Key/Button 2"
+				}
+			}
+		}
+		Item ScrollWindow Scroll
+		{
+			size	'600 400'
+			flag	[FlagEmbedded]
+			Item Arrangement Keys
+			{
+				direction 	[Nex_DefaultVertDirection]
+				flag		[FlagEmbedded]
+
+				Template Layout Nex_Key_Template
+				{
+					size	'600 12'
+					flag	[FlagEmbedded]
+					direction '10 0'
+
+					Template Automation_Job Job
+					{
+						action Nex_Automation_Key
+					}
+					Derive Label Action
+					{
+						size	'200 12'
+					}
+					Template DataLink_AltString Link1
+					{
+						flag		[FlagHidden]
+						stepValue 	0
+					}
+					DeriveTemplate Nex_KeyButton Key1
+					{
+						pos	'210 0'
+						size	'190 12'
+						target	"##down"
+						action	Nex_Action_KeyButton
+
+						Item DataLink_FastResync Resync
+						{
+							link	"Link1"
+						}
+					}
+					Template DataLink_AltString Link2
+					{
+						flag		[FlagHidden]
+						stepValue 	1
+					}
+					DeriveTemplate Nex_KeyButton Key2
+					{
+						pos	'410 0'
+						size	'190 12'
+						target	"##down"
+						action	Nex_Action_KeyButton
+
+						Item DataLink_FastResync Resync
+						{
+							link	"Link2"
+						}
+					}
+				}
+				DeriveTemplate Label Title
+				{
+					fontSize '13 13'
+					color	 '1.0 0.6 0.6'
+				}
+				Derive Title GroupMovement
+				{
+					text	"[Movement]"
+				}
+				Derive Nex_Key_Template Forward
+				{
+					text	"Move Forward"
+					target	"Data::Key::Forward"
+				}
+				Derive Nex_Key_Template Backward
+				{
+					text	"Move Backward"
+					target 	"Data::Key::Backward"
+				}
+				Derive Nex_Key_Template Left
+				{
+					text	"Strafe Left"
+					target	"Data::Key::StrafeLeft"
+				}
+				Derive Nex_Key_Template Right
+				{
+					text	"Strafe Right"
+					target	"Data::Key::StrafeRight"
+				}
+				Derive Nex_Key_Template Jump
+				{
+					text	"Jump"
+					target	"Data::Key::Jump"
+				}
+				Derive Nex_Key_Template Crouch
+				{
+					text	"Crouch"
+					target	"Data::Key::Crouch"
+				}
+				Derive Nex_Void Seperator1
+				{}
+				Derive Title GroupFight
+				{
+					text	"[Fight]"
+				}
+				Derive Nex_Key_Template Primary
+				{
+					text	"Primary Attack"
+					target	"Data::Key::FirePrimary"
+				}
+				Derive Nex_Key_Template	Secondary
+				{
+					text	"Secondary Attack"
+					target 	"Data::Key::FireSecondary"
+				}
+				Derive Nex_Key_Template PrevWeapon
+				{
+					text	"Previous Weapon"
+					target	"Data::Key::PrevWeapon"
+				}
+				Derive Nex_Key_Template NextWeapon
+				{
+					text 	"Next Weapon"
+					target	"Data::Key::NextWeapon"
+				}
+				Derive Nex_Void Seperator2
+				{}
+				Derive Title Weapons
+				{
+					text 	"[Weapon]"
+				}
+				Derive Nex_Key_Template Laser
+				{
+					text	"Laser"
+					target	"Data::Key::Weapon::Laser"
+				}
+				Derive Nex_Key_Template Uzi
+				{
+					text	"Uzi"
+					target	"Data::Key::Weapon::Uzi"
+				}
+				Derive Nex_Key_Template Shotgun
+				{
+					text	"Shotgun"
+					target	"Data::Key::Weapon::Shotgun"
+				}
+				Derive Nex_Key_Template Grenade
+				{
+					text	"Uzi"
+					target	"Data::Key::Weapon::Grenade"
+				}
+				Derive Nex_Key_Template Electro
+				{
+					text	"Electro"
+					target	"Data::Key::Weapon::Electro"
+				}
+				Derive Nex_Key_Template CryLink
+				{
+					text	"CryLink"
+					target	"Data::Key::Weapon::CryLink"
+				}
+				Derive Nex_Key_Template NexGun
+				{
+					text	"NexGun"
+					target	"Data::Key::Weapon::NexGun"
+				}
+				Derive Nex_Key_Template Hagar
+				{
+					text	"Hagar"
+					target	"Data::Key::Weapon::Hagar"
+				}
+				Derive Nex_Key_Template Rocket
+				{
+					text	"Rocket"
+					target	"Data::Key::Weapon::Rocket"
+				}
+			}
+		}
+		Item Layout Buttons
+		{
+			flag	[FlagEmbedded]
+		}
+	}
+
+	// info window
+	Item Window InfoWindow
+	{
+		size	'300 50'
+		pos	'150 200'
+		flag	[FlagHidden]
+
+		Derive Rect Background
+		{
+			color		'0.1 0.1 0.1'
+			drawFlag 	[DrawFlagModulate]
+			flag		[FlagSealOffMouse]
+
+			Derive Rect Layer
+			{
+				color		'0.2 0.2 0.2'
+				drawFlag	[DrawFlagAdditive]
+			}
+		}
+		Item Window TextContainer
+		{
+			pos	'2 2'
+			size	'296 46'
+			Derive Rect Background
+			{
+				color		'0.1 0.1 0.1'
+				drawFlag	[DrawFlagAdditive]
+			}
+			Derive MultiLabel Info
+			{
+				pos	'3 3'
+				wrap 	24
+				text	"Now press the key you want to bind or press [Escape] to abort."
+			}
+		}
+	}
+}
+
+

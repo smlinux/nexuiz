@@ -1,0 +1,112 @@
+// DP/Nex Menu
+// control/data/data.qh
+
+enum {
+	ITEM_DATA_SYNC,	 // sync with the engine or whatever else this is linked to
+	ITEM_DATA_SEND,	 // set it
+	ITEM_DATA_RESET, // use the default value
+	ITEM_DATA_TEST_START,	// set it but dont sync our backup
+	ITEM_DATA_TEST_END,	// set our backup
+	ITEM_DATALINK_SET,
+	ITEM_DATALINK_GET
+};
+
+void( entity pItem, float pEvent ) Raise_DataEvent;
+
+// [Item_Data]
+.string value;		// current value in the menu
+.string defValue;	// default value (set for the menu)
+.string _syncValue;	// last value that is known from the real source
+
+.void( float pEvent ) _dataEvent;
+
+void() Item_Data_Init;
+void() Item_Data_Destroy;
+
+// [Item_DataUser]
+// In this case the target field points to a Item_Data* item
+.string target;
+.entity _target;
+
+void() Item_DataUser_Update;
+void() Item_DataUser_Init;
+void() Item_DataUser_Destroy;
+
+// [Item_DataLink]
+// links to a [Item_Data] object
+.string link;
+.entity _link;
+.string value;
+
+.void( float pEvent ) _dataEvent;
+
+void() Item_DataLink_Init;
+void() Item_DataLink_Destroy;
+void() Item_DataLink_Update;
+
+// Item_Data_Container [Item_Data]
+
+// Item_Data_Cvar [Item_Data]
+.string cvarName;
+
+void( float pEvent ) Item_Data_Cvar_DataEvent;
+void() Item_Data_Cvar_Spawn;
+
+// Item_Data_CvarCreateSave Item_Data_Cvar
+void() Item_Data_CvarCreateSave_Spawn;
+
+// Item_DataLink_Text [Item_DataLink]
+.float maxValue; // max length of the string (-1 for infinity)
+.string value; // text
+
+// Item_DataLink_Value [Item_DataLink]
+.float minValue;
+.float stepValue;
+.float maxValue;
+.float _realValue;
+
+.string value; // read-only is most cases, but supplies are version of the data that can be displayed
+
+void() Item_DataLink_Value_Clamp;
+void() Item_DataLink_Value_Spawn;
+
+// [Item_DataLink_Switch] Item_DataLink_Value
+.string descList; // a altstring containing description strings
+
+void() Item_DataLink_Switch_Init;
+void() Item_DataLink_Switch_Destroy;
+
+// Item_DataLink_ValueSwitch [Item_DataLink_Switch]
+// the default value for stepValue is 1
+// maxValue is calculated if it is 0
+
+void() Item_DataLink_ValueSwitch_Spawn;
+
+// Item_DataLink_TextSwitch [Item_DataLink_Switch]
+// minValue is 0, stepValue is 1, maxValue is the number of items in descList/valueList
+.string valueList; // contains the values for the different
+
+void( float pEvent ) Item_DataLink_TextSwitch_DataEvent;
+void() Item_DataLink_TextSwitch_Destroy;
+void() Item_DataLink_TextSwitch_Spawn;
+
+// Item_DataLink_FastResync [Item_DataLink]
+.float _presstime; // no more than once a frame?
+
+void() Item_DataLink_FastResync_Spawn;
+
+// Item_DataLink_TextValue [Item_DataLink]
+void() Item_DataLink_TextValue_Spawn;
+
+// Item_DataLink_TextTime [Item_DataLink]
+// hour:min:sec
+void() Item_DataLink_TextTime_Spawn;
+
+// Item_DataLink_AltString [Item_DataLink]
+.float stepValue; // contains
+
+void() Item_DataLink_AltString_Spawn;
+
+// Item_DataLink_Router [Item_DataLink]
+// sets value and _realValue of alll children to the float value of self._stepValue
+void() Item_DataLink_Router_Spawn;

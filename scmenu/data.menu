@@ -1,0 +1,458 @@
+// Property of Alientrap
+//
+// Cvar Definitions
+Item Container Data
+{
+#define DataLink_ZeroOneValue	Derive "::DataLink_ZeroOneValue" Value {}
+#define DataLink_OnOffSwitch	Derive "::DataLink_OnOffSwitch" Switch {}
+	// v_color prefix and other color controlling cvars
+	Item Container Color
+	{
+		// normal options
+		Item Data_Cvar Gamma
+		{
+			cvarName 	"v_gamma"
+			defValue 	1.0
+			Item DataLink_Value Value
+			{
+				minValue	0.0
+				maxValue	4.0
+				stepValue	0.05
+				link		"##up"
+			}
+		}
+		Item Data_Cvar Brightness
+		{
+			cvarName	"v_brightness"
+			defValue	0.0
+			Item DataLink_Value Value
+			{
+				minValue	0.0
+				maxValue	3.0
+				stepValue	0.05
+				link		"##up"
+			}
+		}
+		Item Data_Cvar Contrast
+		{
+			cvarName	"v_contrast"
+			defValue	1.0
+			Item DataLink_Value Value
+			{
+				minValue	0.0
+				maxValue	3.0
+				stepValue	0.05
+				link		"##up"
+			}
+		}
+		Item Data_Cvar HWGamma // read-only
+		{
+			cvarName	"v_hwgamma"
+			defValue	1.0
+			Derive DataLink_OnOffSwitch Switch
+			{
+				link		"##up"
+			}
+		}
+		// extended options
+		Item Container Extended
+		{
+			Item Data_Cvar Active
+			{
+				cvarName	"v_color_enable"
+				defValue	0.0
+				Derive DataLink_OnOffSwitch Switch
+				{
+					link		"##up"
+				}
+			}
+			Item Container Low
+			{
+				Item Data_Cvar Red
+				{
+					cvarName  	"v_color_black_r"
+					defValue 	0.0
+					[DataLink_ZeroOneValue]
+				}
+				Item Data_Cvar Green
+				{
+					cvarName  	"v_color_black_g"
+					defValue 	0.0
+					[DataLink_ZeroOneValue]
+				}
+				Item Data_Cvar Blue
+				{
+					cvarName  	"v_color_black_b"
+					defValue 	0.0
+					[DataLink_ZeroOneValue]
+				}
+			}
+			Item Container Mid
+			{
+				Item Data_Cvar Red
+				{
+					cvarName  	"v_color_grey_r"
+					defValue 	0.5
+					[DataLink_ZeroOneValue]
+				}
+				Item Data_Cvar Green
+				{
+					cvarName  	"v_color_grey_g"
+					defValue 	0.5
+					[DataLink_ZeroOneValue]
+				}
+				Item Data_Cvar Blue
+				{
+					cvarName  	"v_color_grey_b"
+					defValue 	0.5
+					[DataLink_ZeroOneValue]
+				}
+			}
+			Item Container High
+			{
+				Item Data_Cvar Red
+				{
+					cvarName  	"v_color_white_r"
+					defValue 	1.0
+					[DataLink_ZeroOneValue]
+				}
+				Item Data_Cvar Green
+				{
+					cvarName  	"v_color_white_g"
+					defValue 	1.0
+					[DataLink_ZeroOneValue]
+				}
+				Item Data_Cvar Blue
+				{
+					cvarName  	"v_color_white_b"
+					defValue 	1.0
+					[DataLink_ZeroOneValue]
+				}
+			}
+		}
+	}
+	Item Container Player
+	{
+		Item Data_Nex_Name Name
+		{
+			defValue	"NexPlayer"
+			Item DataLink_Text Text
+			{
+				maxValue	32
+				link		"##up"
+			}
+		}
+		Item Data_Nex_Avatar Avatar
+		{
+		}
+	}
+	Item Container Key
+	{
+		Item Data_Nex_Key Forward
+		{
+			target	"+forward"
+		}
+		Item Data_Nex_Key Backward
+		{
+			target	"+back"
+		}
+		Item Data_Nex_Key StrafeLeft
+		{
+			target	"+moveleft"
+		}
+		Item Data_Nex_Key StrafeRight
+		{
+			target	"+moveright"
+		}
+		Item Data_Nex_Key Jump
+		{
+			target	"+jump"
+		}
+		Item Data_Nex_Key Crouch
+		{
+			target	"+shift"
+		}
+
+		Item Data_Nex_Key FirePrimary
+		{
+			target	"+attack"
+		}
+		Item Data_Nex_Key FireSecondary
+		{
+			target	"+button3"
+		}
+		Item Data_Nex_Key PrevWeapon
+		{
+			target	"impulse 10"
+		}
+		Item Data_Nex_Key NextWeapon
+		{
+			target	"impulse 12"
+		}
+		Item Container Weapon
+		{
+			Item Data_Nex_Key Laser
+			{
+				target	"impulse 1"
+			}
+			Item Data_Nex_Key Uzi
+			{
+				target	"impulse 2"
+			}
+			Item Data_Nex_Key Shotgun
+			{
+				target	"impulse 3"
+			}
+			Item Data_Nex_Key Grenade
+			{
+				target	"impulse 4"
+			}
+			Item Data_Nex_Key Electro
+			{
+				target	"impulse 5"
+			}
+			Item Data_Nex_Key CryLink
+			{
+				target	"impulse 6"
+			}
+			Item Data_Nex_Key NexGun
+			{
+				target	"impulse 7"
+			}
+			Item Data_Nex_Key Hagar
+			{
+				target	"impulse 8"
+			}
+			Item Data_Nex_Key Rocket
+			{
+				target	"impulse 9"
+			}
+		}
+
+		Item Data_Nex_Key ShowScores
+		{
+			target	"+showscores"
+		}
+	}
+	Item Container CreateGame
+	{
+		Item Data_Nex_Map Map
+		{
+			defValue 	0
+		}
+		Item Data_Cvar Hostname
+		{
+			cvarName	"hostname"
+			defValue	"Nexuiz Server"
+
+			Item DataLink_Text Text
+			{
+				link		"##up"
+				maxValue	64
+			}
+		}
+		Item Data_CvarCreateSave MaxPlayers
+		{
+			cvarName	"_nex_maxplayers"
+			defValue	8
+
+			Item DataLink_Value Value
+			{
+				link		"##up"
+				minValue	1
+				stepValue	1
+				maxValue	32
+			}
+			Item DataLink_Text Text
+			{
+				link		"##down"
+				maxValue	5
+
+				Item DataLink_TextValue TextValue
+				{
+					link	"##up prev"
+				}
+			}
+		}
+		Item Data_Cvar TimeLimit
+		{
+			cvarName	"timelimit"
+			defValue	0
+
+			Item DataLink_Value Value
+			{
+				maxValue	86400
+				link 		"##up"
+			}
+			Item DataLink_Text Text
+			{
+				maxValue	8
+				link		"##down"
+
+				Item DataLink_TextTime TextTime
+				{
+					link	"##up prev"
+				}
+			}
+		}
+		Item Data_Cvar FragLimit
+		{
+			cvarName	"fraglimit"
+			defValue	20
+
+			Item DataLink_Value Value
+			{
+				maxValue	999
+				link		"##up"
+			}
+			Item DataLink_Text Text
+			{
+				maxValue	3
+				link		"##down"
+
+				Item DataLink_TextValue TextValue
+				{
+					link	"##up prev"
+				}
+			}
+		}
+		Item Data_Cvar ServerProgs
+		{
+			cvarName 	"sv_progs"
+			defValue	"progs.dat"
+
+			Item DataLink_Nex_ModSwitch Switch
+			{
+				link	"##up"
+			}
+		}
+		Item Data_CvarCreateSave NumBots
+		{
+			// TODO: add support for this in FrikQcc
+			cvarName	"nex_numbots"
+			defValue	8
+
+			Item DataLink_Value Value
+			{
+				maxValue 	16
+				link		"##up"
+			}
+			Item DataLink_Text Text
+			{
+				maxValue	5
+				link		"##down"
+
+				Item DataLink_TextValue TextValue
+				{
+					link	"##up prev"
+				}
+			}
+		}
+		Item Data_CvarCreateSave BotSkill
+		{
+			// TODO: add support for this in FrikQcc
+			cvarName	"nex_botskill"
+			// from 0 to 3
+			defValue	0
+
+			Item DataLink_ValueSwitch Switch
+			{
+				minValue	0
+				stepValue	1
+				maxValue	3
+				descList	"'Beginner''Easy''Medium''Hard'"
+
+				link		"##up"
+			}
+		}
+		Item Data_Cvar PublicServer
+		{
+			cvarName	"sv_public"
+			defValue 	1
+
+			Item DataLink_ValueSwitch Switch
+			{
+				maxValue 	1
+				descList	"'Disabled''Enabled'"
+
+				link		"##up"
+			}
+		}
+	}
+	Item Container JoinGame
+	{
+		Item Data_Container QueryString
+		{
+			Item DataLink_Text Text
+			{
+				maxValue	1024
+				link		"##up"
+			}
+		}
+	}
+	Item Container Video
+	{
+		Item Data_Nex_Resolution Resolution
+		{
+			defValue	"800 600"
+
+			Item DataLink_TextSwitch Switch
+			{
+				valueList	"'320 240' '640 480' '800 600' '1024 768' '1280 970' '1600 1200'"
+				descList	"'320x240' '640x480' '800x600' '1024x768' '1280x970' '1600x1200'"
+				link		"##up"
+			}
+		}
+		Item Data_Cvar BPP
+		{
+			cvarName	"vid_bitsperpixel"
+
+			Item DataLink_TextSwitch Switch
+			{
+				valueList	"'16' '32'"
+				descList	"'16-bit' '32-bit'"
+				link		"##up"
+			}
+		}
+		Item Data_Cvar Fullscreen
+		{
+			cvarName	"vid_fullscreen"
+
+			Derive DataLink_OnOffSwitch Switch
+			{
+				link	"##up"
+			}
+		}
+	}
+	Item Container Sound
+	{
+		Item Data_Cvar CDVolume
+		{
+			cvarName	"bgmvolume"
+			defValue	0.5
+
+			[DataLink_ZeroOneValue]
+		}
+		Item Data_Cvar GameVolume
+		{
+			cvarName	"volume"
+			defValue	1
+
+			[DataLink_ZeroOneValue]
+		}
+		Item Data_Cvar AmbientVolume
+		{
+			cvarName	"snd_staticvolume"
+			defValue	0.5
+
+			[DataLink_ZeroOneValue]
+		}
+		Item Data_Cvar SwapStereo
+		{
+			cvarName	"snd_swapstereo"
+			defValue	0
+
+			[DataLink_OnOffSwitch]
+		}
+	}
+}

@@ -1,0 +1,146 @@
+// Property of Alientrap/AK
+//
+// creategame.menu
+Item Window CreateGame
+{
+	size	'800 650'
+	Item Window Map
+	{
+		size '350 650'
+		flag [FlagEmbedded]
+
+		Derive Picture Picture
+		{
+			picture "gfx/m_white"
+			size	'350 300'
+			pos	'0 14'
+		}
+		Derive MultiLabel Description
+		{
+			pos	'0 314'
+			size	'350 336'
+			wrap	29
+		}
+		Derive TextButton Prev
+		{
+			normal	"<<"
+
+			action	Nex_Action_Map_Prev
+		}
+		Derive Label Name
+		{
+			alignment	[AlignCenter]
+			size		'302 14'
+			pos		'24 0'
+		}
+		Derive TextButton Next
+		{
+			normal	">>"
+			pos	'326 0'
+
+			action	Nex_Action_Map_Next
+		}
+		Item Task_Job Job
+		{
+			init 	Nex_Automation_UpdateMap
+		}
+	}
+	Item Layout Settings
+	{
+		pos		'350 0'
+		size		'450 650'
+		origin		'175 0'
+		alignment	[AlignFirst]
+		direction	[Nex_DefaultVertDirection]
+		flag 		[FlagEmbedded]
+
+		DeriveTemplate Nex_Composition Nex_Option_EditBox
+		{
+			DeriveTemplate Nex_Automation_Option_EditBox Automation
+			{}
+			DeriveTemplate TextButton Description
+			{}
+			DeriveTemplate EditBox EditBox
+			{
+				size 	'260 12'
+				action  Nex_Action_TestOnChange
+				select  Nex_Action_TestOnSelect
+			}
+		}
+
+		Derive Nex_Option_EditBox Hostname
+		{
+			text	"Server Name"
+			target	"Data::CreateGame::Hostname::Text"
+		}
+		Derive Nex_Composition Gametype
+		{
+			Derive TextButton Description
+			{
+				normal	"Game Mode"
+				link	"##next"
+			}
+			Derive SwitchButton Switch
+			{
+				target	"Data::CreateGame::ServerProgs::Switch"
+				action	Nex_Action_TestOnChange
+			}
+		}
+		Derive Nex_Composition PublicServer
+		{
+			Derive TextButton Description
+			{
+				normal	"Public Server"
+				link	"##next"
+			}
+			Derive SwitchButton Switch
+			{
+				target  "Data::CreateGame::PublicServer::Switch"
+				action	Nex_Action_TestOnChange
+			}
+		}
+		Derive Nex_Option_EditBox FragLimit
+		{
+			text	"Frag Limit"
+			target	"Data::CreateGame::FragLimit::Text"
+		}
+		Derive Nex_Option_EditBox TimeLimit
+		{
+			text	"Time Limit"
+			target	"Data::CreateGame::TimeLimit::Text"
+		}
+		Derive Nex_Option_EditBox MaxPlayer
+		{
+			text	"Max Players"
+			target	"Data::CreateGame::MaxPlayers::Text"
+		}
+		Derive Nex_Line	Seperator1
+		{}
+		Derive Nex_Option_EditBox NumBots
+		{
+			text	"Bot Count"
+			target	"Data::CreateGame::NumBots::Text"
+		}
+		Derive Nex_Composition BotSkill
+		{
+			Derive TextButton Description
+			{
+				normal	"Skill Level"
+				link	"##next"
+			}
+			Derive SwitchButton Switch
+			{
+				target	"Data::CreateGame::BotSkill::Switch"
+				action	Nex_Action_TestOnChange
+			}
+		}
+		Derive Nex_Void Seperator2
+		{}
+		Derive TextButton StartMap
+		{
+			normal	"Start"
+
+			action	Nex_Action_Map_Start
+		}
+	}
+}

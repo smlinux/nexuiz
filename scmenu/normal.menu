@@ -1,0 +1,61 @@
+// Property of Alientrap
+//
+// Normal main menu
+Item Window Normal
+{
+	key	Nex_Global_Key
+	size	'1024 768'
+	Derive Rect BackgroundMod
+	{
+		pos	'0 0'
+		color	"0 0 0"
+		alpha	0.5
+Ignore
+{
+		Item Effect_Float AlphaPulse
+		{
+			targetFloat 	 alpha
+			startFloat	 0.8
+			endFloat	 0.4
+			time		 '2 2 -1'
+			interpolForward  FX_SquareInterpolation
+			interpolBackward FX_SquareInterpolation
+		}
+		Item Effect_Vector ColorPulse
+		{
+			targetVector 	color
+			startVector	"0 0 0"
+			endVector	"0.1 0 0.05"
+			time		'2 2 -1'
+			interpolForward FX_SquareInterpolation
+			interpolBackward FX_SquareInterpolation
+		}
+}
+	}
+
+	// Include the main menu as first sub window
+	#include "menu/main.menu"
+
+	Item Task_Job PanelReinit
+	{
+		init 	Nex_Action_SetLinkOnReinit
+		target	"Panel::NexuizLogo"
+	}
+	Item Reference Panel
+	{
+		pos	'62 80'
+		size	'900 650'
+
+		// The first thing you should see is our cool logo!
+		Derive Picture NexuizLogo
+		{
+			picture "gfx/m_strength"
+			pos	'100 0'
+			size	'600 600'
+		}
+	}
+
+	#include "menu/quit.menu"
+}
+
+

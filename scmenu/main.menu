@@ -1,0 +1,43 @@
+// Property of Alientrap
+//
+// Main menu
+Item Arrangement Main
+{
+	pos		'252 30'
+	direction 	'10 0'
+
+	Derive TextButton Resume
+	{
+		normal 	"Resume"
+		flag	[FlagConnected]
+
+	}
+	Derive TextButton Create
+	{
+		normal 	"Create Game"
+
+		target 	"CreateGame"
+		init	Nex_Action_SetNormalPanelLink
+	}
+	Derive TextButton Join
+	{
+		normal "Join Game"
+
+		target	"JoinGame"
+		action	Nex_Action_JumpToJoinGame
+	}
+	Derive TextButton Options
+	{
+		normal 	"Options"
+
+		target	"Options"
+		init	Nex_Action_SetNormalPanelLink
+	}
+	Derive TextButton Quit
+	{
+		normal "Quit"
+		action Nex_Quit_Action
+	}
+}
+
+

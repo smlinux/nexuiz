@@ -1,0 +1,31 @@
+// Property of Alientrap/AK
+// options/sound.menu
+Item Layout Sound
+{
+	direction	[Nex_DefaultVertDirection]
+	size		'600 600'
+	origin		'300 0'
+	alignment	[AlignFirst]
+
+
+	Derive Nex_Option_Slider MusicVolume
+	{
+		text	"CD Volume"
+		target	"::Data::Sound::CDVolume::Value"
+	}
+	Derive Nex_Option_Slider GameVolume
+	{
+		text	"Game Volume"
+		target	"::Data::Sound::GameVolume::Value"
+	}
+	Derive Nex_Option_Slider AmbientVolume
+	{
+		text	"Ambient Volume"
+		target	"::Data::Sound::AmbientVolume::Value"
+	}
+	Derive Nex_Option_Switch SwapStereo
+	{
+		text	"Swap Stereo"
+		target	"::Data::Sound::SwapStereo::Switch"
+	}
+}

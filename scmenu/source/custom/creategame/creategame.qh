@@ -1,0 +1,30 @@
+// Property of Alientrap/AK
+// custom/player/avatar.qh
+
+// Item_Nex_Map_Info
+// its a valid item nevertheless
+.string normal;		// contains the map name
+.string picture; 	// contains the picture that should be displayed
+.string text; 		// contains the description text
+.string link;		// contains the path to the map
+
+void() Item_Nex_Map_Info_Destroy;
+void() Item_Nex_Map_Info_Spawn;
+
+// see control/data/data.qh
+// Item_Data_Nex_Map Item_DataLink_Value (implements more or less)
+// _realValue should be a integer in the range 1..n where n is the number of found maps
+.entity _link;
+
+void( float pEvent ) Item_Data_Nex_Map_DataEvent;
+void() Item_Data_Nex_Map_Spawn;
+
+// see control/data/data.qh
+// Item_Data_Nex_Name [Item_Data]
+void( float pEvent ) Item_Data_Nex_Name_DataEvent;
+void() Item_Data_Nex_Name_Spawn;
+
+// see control/data/data.qh
+// Item_DataLink_Nex_ModSwitch Item_DataLink_TextSwitch
+
+void() Item_DataLink_Nex_ModSwitch_Spawn;

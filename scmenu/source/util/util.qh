@@ -1,0 +1,22 @@
+// NG-Menu
+// util/util.qh
+
+// empty functions for every return type
+void() Util_NullFunction;
+bool() Util_TrueFunction;
+bool() Util_FalseFunction;
+string() Util_StringFuntion;
+vector() Util_VectorFunction;
+entity() Util_EntityFunction;
+
+// function typedefs
+
+typedef void() voidFunction;
+typedef float() floatFunction;
+typedef string() stringFunction;
+typedef vector() vectorFunction;
+
+
+
+
+

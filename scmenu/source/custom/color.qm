@@ -1,0 +1,46 @@
+// Property of Alientrap/AK
+// custom/color.qm
+
+void() Nex_Action_Color_Cancel =
+{
+#define ConCat(A,B) #A#B
+#define Reset(pName) Raise_DataEvent(Menu_GetItem(ConCat("::Data::Color::",#pName)), ITEM_DATA_TEST_END)
+	Reset( "Brightness" );
+	Reset( "Contrast" );
+	Reset( "Gamma" );
+	Reset( "HWGamma" );
+	Reset( "Extended::Active" );
+	Reset( "Extended::Low::Red" );
+	Reset( "Extended::Low::Green" );
+	Reset( "Extended::Low::Blue" );
+	Reset( "Extended::Mid::Red" );
+	Reset( "Extended::Mid::Green" );
+	Reset( "Extended::Mid::Blue" );
+	Reset( "Extended::High::Red" );
+	Reset( "Extended::High::Green" );
+	Reset( "Extended::High::Blue" );
+#undef ConCat
+#undef Reset
+};
+
+void() Nex_Action_Color_Reset =
+{
+#define ConCat(A,B) #A#B
+#define Reset(pName) Raise_DataEvent(Menu_GetItem(ConCat("::Data::Color::",#pName)), ITEM_DATA_RESET)
+	Reset( "Brightness" );
+	Reset( "Contrast" );
+	Reset( "Gamma" );
+	Reset( "HWGamma" );
+	Reset( "Extended::Active" );
+	Reset( "Extended::Low::Red" );
+	Reset( "Extended::Low::Green" );
+	Reset( "Extended::Low::Blue" );
+	Reset( "Extended::Mid::Red" );
+	Reset( "Extended::Mid::Green" );
+	Reset( "Extended::Mid::Blue" );
+	Reset( "Extended::High::Red" );
+	Reset( "Extended::High::Green" );
+	Reset( "Extended::High::Blue" );
+#undef ConCat
+#undef Reset
+};

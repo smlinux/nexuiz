@@ -1,0 +1,15 @@
+// DP/Nex Menu
+// base/hostcache.qh
+
+float HostCache_ViewCount;
+float HostCache_TotalCount;
+float HostCache_MasterQueryCount;
+float HostCache_MasterReplyCount;
+float HostCache_ServerQueryCount;
+float HostCache_ServerReplyCount;
+float HostCache_SortField;
+float HostCache_SortDescending;
+
+void() HostCache_Update;
+void() HostCache_ResortViewSet;
+void() HostCache_RefreshHostCache;

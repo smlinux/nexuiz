@@ -1,0 +1,21 @@
+// DP/Nex Menu
+// control/fx/fx.qh
+
+// Note: the time components are arranged this way because I want to be able to nest effects
+// [Item_Fx_Mutator]
+.vector time; // <totalTime, startTime, (elapsedTime / totalTime)> all values from 0 to 1, so the parent can vary in its length
+.string target;
+.entity _target;
+
+bool() Item_Fx_Mutator_IsActive;
+void() Item_Fx_Destroy;
+void() Item_Fx_Init;
+void() Item_UpdateTarget;
+
+// Item_Fx_Effect [Item_Fx_Mutator]
+
+void() Item_Fx_Effect_Update;
+void() Item_Fx_Effect_Spawn;
+
+// Item_Fx_Effect_Control
+

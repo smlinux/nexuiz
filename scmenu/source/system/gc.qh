@@ -1,0 +1,14 @@
+// DP/Nex Menu
+// system/gc.qh
+
+float Menu_GarbageFrameCount;
+float Menu_GarbageToggleCount;
+
+void() Menu_InitGarbageStats;
+void() Menu_ResetGarbageStats;
+
+bool( entity pItem ) Menu_CheckForGarbage; // also removes it, only checks for framedelete
+
+void( bool pToggle ) Menu_CollectGarbage;
+void( entity pItem ) Menu_DeleteAfterFrame;
+void( entity pItem ) Menu_DeleteAfterToggle;

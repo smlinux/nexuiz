@@ -1,0 +1,72 @@
+// Property of Alientrap/AK
+// options/player.menu
+Item Window Player
+{
+	size	  '600 600'
+
+	Item Window Avatar
+	{
+		size	'250 600'
+		flag	[FlagEmbedded]
+
+		Derive Picture Picture
+		{
+			size	'250 400'
+			picture "gfx/m_white"
+		}
+		Derive MultiLabel Description
+		{
+			size	'250 200'
+			pos	'0 400'
+			wrap 	20
+		}
+		Derive TextButton Prev
+		{
+			pos 	'0 0'
+			normal	"<<"
+
+			action	Nex_Action_Avatar_Prev
+		}
+		Derive Label Name
+		{
+			pos		'24 0'
+			size		'202 12'
+			alignment	[AlignCenter]
+		}
+		Derive TextButton Next
+		{
+			pos	'226 0'
+			normal	">>"
+
+			action	Nex_Action_Avatar_Next
+		}
+		Item Task_Job Job
+		{
+			init  	Nex_Automation_UpdateAvatar
+		}
+	}
+	Item Layout Settings
+	{
+		pos		'250 0'
+		origin		'175 0'
+		size		'350 600'
+		flag		[FlagEmbedded]
+		alignment	[AlignFirst]
+		direction	[Nex_DefaultVertDirection]
+
+		Derive Nex_Composition Name
+		{
+			Derive TextButton Description
+			{
+				normal	"Player name"
+				link	"EditBox"
+			}
+			Derive EditBox EditBox
+			{
+				size 	'156 20'
+				target	"Data::Player::Name::Text"
+				action  Nex_Action_TestOnChange
+			}
+		}
+	}
+}

@@ -1,0 +1,86 @@
+// Property of Alientrap
+// custom/creategame.qm
+
+// uses target and _target
+// requires neighbors: Picture, Name, Description
+void() Nex_Automation_UpdateMap_Update =
+{
+	local entity lItem;
+	local entity lTarget;
+
+	if( self._target.name != "Data::CreateGame::Map" )
+		self._target = Menu_GetItem( "Data::CreateGame::Map" );
+
+	lTarget = self._target;
+
+	lItem = Menu_GetItem( "Picture" );
+	String_EntitySet( lItem, picture, lTarget._link.picture );
+
+	lItem = Menu_GetItem( "Name" );
+	String_EntitySet( lItem, text, lTarget._link.normal );
+
+	lItem = Menu_GetItem( "Description" );
+	String_EntitySet( lItem, text, lTarget._link.text );
+};
+
+void() Nex_Automation_UpdateMap_Destroy =
+{
+	String_EntityFree( self, target );
+};
+
+void() Nex_Automation_UpdateMap =
+{
+	String_EntityZone( self, target );
+
+	self._update = Nex_Automation_UpdateMap_Update;
+	self._destroy = Nex_Automation_UpdateMap_Destroy;
+};
+
+// more concrete functions
+void() Nex_Action_Map_Next =
+{
+	local entity lItem;
+
+	lItem = Menu_GetItem( "Data::CreateGame::Map" );
+	lItem._realValue = lItem._realValue + 1;
+	Raise_DataEvent( lItem, ITEM_DATA_SEND );
+};
+
+void() Nex_Action_Map_Prev =
+{
+	local entity lItem;
+
+	lItem = Menu_GetItem( "Data::CreateGame::Map" );
+	lItem._realValue = lItem._realValue - 1;
+	Raise_DataEvent( lItem, ITEM_DATA_SEND );
+};
+
+// TODO: Make MaxPlayers real Data items (no container with correct set behavior)
+void() Nex_Action_Map_Start =
+{
+	local entity lItem;
+	local float  lNumBots, lSkill;
+	// we need to set the following var
+	lItem = Menu_GetItem( "::Data::CreateGame::NumBots" );
+	lNumBots = stof( lItem.value );
+	lItem = Menu_GetItem( "::Data::CreateGame::BotSkill" );
+	lSkill = stof( lItem.value );
+
+	cvar_set( "saved1", "1" );
+	cvar_set( "scratch1", ftos( pow( 2, lNumBots ) - 1 ) );
+	cvar_set( "scratch2", ftos( lSkill * (pow(4, min(lNumBots, 8)) - 1) / 3) );
+	cvar_set( "scratch3", ftos( lSkill * (pow(4, min(lNumBots - 8, 8)) - 1) / 3) );
+	// Set maxplayers
+	lItem = Menu_GetItem( "::Data::CreateGame::MaxPlayers" );
+	cmd( "maxplayers \"" );
+	cmd( lItem.value );
+	cmd( "\"\n" );
+
+	lItem = Menu_GetItem( "::Data::CreateGame::Map" );
+	cmd( "map \"" );
+	cmd( lItem._link.link );
+	cmd( "\"\n");
+
+	// force the menu to hide
+	m_hide();
+};
