@@ -391,8 +391,41 @@ void FireRailgunBullet (vector src, float bdamage, vector dir, float spread, flo
 	}
 }
 */
-
 void FireRailgunBullet (vector start, vector end, float damage, float dtype)
+{
+	vector	v, lastpos;
+	entity	saveself, last;
+	vector	org;
+	org = self.origin + self.view_ofs;
+	if (bdamage < 1)
+		return;
+
+	last = self;
+	lastpos = src;
+
+	while (bdamage > 0)
+	{
+		traceline_hitcorpse (self, org, org + v_forward * 4096 + v_right * crandom () * spread + v_up * crandom () * spread, FALSE, self);
+		last = trace_ent;
+		lastpos = trace_endpos;
+		if (trace_fraction != 1.0)
+		{
+			if (pointcontents(trace_endpos - dir*4) == CONTENT_SKY)
+				return;
+
+			if (trace_ent.takedamage || trace_ent.classname == "case")
+			{
+				if (trace_ent.classname == "player" || trace_ent.classname == "corpse" || trace_ent.classname == "gib")
+					te_blood (trace_endpos, dir * bdamage * 16, bdamage);
+				Damage (trace_ent, self, self, bdamage, deathtype, trace_endpos, dir * bdamage);
+			}
+		}
+		if (last.solid == SOLID_BSP)
+			bdamage = 0;
+	}
+}
+
+void FireLaser (vector start, vector end, float damage, float dtype)
 {
 	vector	dir;
 
