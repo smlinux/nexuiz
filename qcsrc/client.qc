@@ -94,7 +94,7 @@ void PutClientInServer (void)
 	self.angles = spot.angles;
 
 	self.viewzoom = 0.6;
-	
+
 	mdlrandom = crandom();
 	if (mdlrandom>-0.9)
 		setmodel (self, "models/player/insurrectionist.zym");
@@ -325,16 +325,14 @@ void PlayerPreThink (void)
 	else
 		self.flags = self.flags | FL_JUMPRELEASED;
 
-	if (self.weapon == IT_NEX)
+	if (self.button3)
 	{
-		if (self.button3)
-		{
+		if (self.weapon == IT_NEX)
 			if (self.viewzoom > 0.4)
 				self.viewzoom = max (0.4, self.viewzoom - frametime * 2);
-		}
-		else if (self.viewzoom < 1.0)
-			self.viewzoom = min (1.0, self.viewzoom + frametime);
 	}
+	else if (self.viewzoom < 1.0)
+		self.viewzoom = min (1.0, self.viewzoom + frametime);
 
 	if (self.statdraintime < time)
 	{
