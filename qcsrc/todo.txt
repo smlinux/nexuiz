@@ -1,20 +1,20 @@
 *********************************
+*********General*****************
+- 7 more tracks needed, one for each map
+
+*********************************
 *************QC******************
-Better Bot Support, fix jumping bug
 Player skin selection based on .playerskin cvar string
 Graphic over the user to show they are typing a message/in the console/in the menu
-Maps.cfg support for maplists
-Add admin options (remote admin and voting, players can vote for level change)
+Intermission, Level changing (use maps.cfg)
 Telefragging (and message for being telefragged)
-Add a cvar for: Weapon switch time, starting health
+Teams
+Prevent people from selecting no model or no skin (so they can't be some triangle as their model and cheat)
 
 
 *********************************
 *************MENU****************
 Add more options to 'Player' menu: Crosshair selection, FOV, Team color (choose one of 4, red, blue, green, yellow)
-Create game 'game options' menu, with the sv cvars and any other game related cvars
-Create game 'weapon options' menu, with the g_balance weapon cvars
-Add ability to select gamecfg options (as checkmarks, you check off the various options)
 Maplist.cfg editing
 
 
@@ -22,31 +22,17 @@ Maplist.cfg editing
 ************Engine***************
 Player models holding weapon models
 Lan searching for the menu
-Add a water/slime/lava shader
+Updated Scoreboard: http://www.planetquake.com/ud/TFmatch.jpg
+no shell for rgb explosion
 
 
 *********************************
 ************ Art ****************
--Textures-
-	- Water texture for oil rig
-
--SKINS-
-	- carni
-	- grunt
-	- headhunter
-	- female shock
-	- specop
+-Replace backround graphic (more tech style, keep health/armor/ammo graphics)
+-Replace numbers
 
 -ANIMATION-
 	- Flying animation, currently the model is in idle animation when in the air, an animation where the feet are off the ground is needed.
-
-
-*********************************
-************GAMECFG *************
-2;   /// nothing here yet
-8;  /// No self damage - not done
-64; /// Teams - not done
-
 
 *********************************
 ************GAME MODS ***********
