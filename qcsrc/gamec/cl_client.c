@@ -1,4 +1,3 @@
-
 void info_player_start (void)
 {
 	self.classname = "info_player_deathmatch";
@@ -206,6 +205,9 @@ void ClientConnect (void)
 	ClientInRankings();
 	bprint ("^3",self.netname);
 	bprint (" connected\n");
+	stuffcmd(self, "exec maps/");
+	stuffcmd(self, mapname);
+	stuffcmd(self, ".cfg\n");
 }
 
 /*
@@ -459,6 +461,9 @@ void PlayerPreThink (void)
 
 	if (BotPreFrame())
 		return;
+
+	if (self.view_ofs == '0 0 0')
+		return;		// intermission or finale
 
 	if (self.deadflag != DEAD_NO)
 	{
