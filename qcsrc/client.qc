@@ -78,7 +78,7 @@ void PutClientInServer (void)
 	
 	self.view_ofs = PL_VIEW_OFS;
 	self.angles = spot.angles;
-	setmodel (self, "models/player/player.zym");
+	setmodel (self, "models/player/mulder.md3");
 	setsize (self, PL_MIN, PL_MAX);
 	setorigin (self, spot.origin);
 	

@@ -30,23 +30,23 @@ void W_UpdateAmmo (void)
 void W_UpdateWeapon (void)
 {
 	if (self.weapon == IT_LASER)
-		self.weaponmodel = "models/w_lazer.zym";
+		self.weaponmodel = "models/weapons/w_lazer.zym";
 	else if (self.weapon == IT_UZI)
-		self.weaponmodel = "models/w_uzi.md3";
+		self.weaponmodel = "models/weapons/w_uzi.md3";
 	else if (self.weapon == IT_SHOTGUN)
-		self.weaponmodel = "models/w_shotgun.md3";
+		self.weaponmodel = "models/weapons/w_shotgun.md3";
 	else if (self.weapon == IT_GRENADE_LAUNCHER)
-		self.weaponmodel = "models/w_gl.md3";
+		self.weaponmodel = "models/weapons/w_gl.md3";
 	else if (self.weapon == IT_ELECTRO)
-		self.weaponmodel = "models/w_electro.md3";
+		self.weaponmodel = "models/weapons/w_electro.md3";
 	else if (self.weapon == IT_CRYLINK)
-		self.weaponmodel = "models/w_crylink.md3";
+		self.weaponmodel = "models/weapons/w_crylink.md3";
 	else if (self.weapon == IT_NEX)
-		self.weaponmodel = "models/w_nex.md3";
+		self.weaponmodel = "models/weapons/w_nex.md3";
 	else if (self.weapon == IT_HAGAR)
-		self.weaponmodel = "models/w_hagar.md3";
+		self.weaponmodel = "models/weapons/w_hagar.md3";
 	else if (self.weapon == IT_ROCKET_LAUNCHER)
-		self.weaponmodel = "models/w_rl.md3";
+		self.weaponmodel = "models/weapons/w_rl.md3";
 	else
 		objerror ("Illegal weapon - please register your guns please!");
 }
@@ -654,7 +654,7 @@ void W_Electro_Attack2 (void)
 	
 	makevectors (self.v_angle);
 	
-	setmodel (proj, "models/plasmashot.spr32");
+	setmodel (proj, "models/sprites/plasmashot.spr32");
 	setsize (proj, '0 0 0', '0 0 0');
 	setorigin (proj, self.origin + self.view_ofs + v_forward * 5 + v_right * 5 + v_up * -12);
 	

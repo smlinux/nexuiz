@@ -39,11 +39,12 @@ void TossGib (string mdlname, vector org, vector v)
 
 void Gib (vector vel)
 {
-	TossGib ("models/gib1.zym", self.origin, vel);
-	TossGib ("models/gib2.zym", self.origin, vel);
-	TossGib ("models/gib3.zym", self.origin, vel);
-	TossGib ("models/gib1.zym", self.origin, vel);
-	TossGib ("models/gib2.zym", self.origin, vel);
-	TossGib ("models/gib3.zym", self.origin, vel);
-	TossGib ("models/bloodyskull.md3", self.origin, vel);
+	TossGib ("models/gibs/gib1.mdl", self.origin, vel);
+	TossGib ("models/gibs/gib2.mdl", self.origin, vel);
+	TossGib ("models/gibs/gib3.mdl", self.origin, vel);
+	TossGib ("models/gibs/gib4.mdl", self.origin, vel);
+	TossGib ("models/gibs/gib1.mdl", self.origin, vel);
+	TossGib ("models/gibs/gib2.mdl", self.origin, vel);
+	TossGib ("models/gibs/bloodyskull.md3", self.origin, vel);
+	TossGib ("models/gibs/eye.md3", self.origin, vel);
 }

@@ -335,24 +335,23 @@ void ImpactEffect (entity ent, float weapontype)
 	if (weapontype == IT_ROCKET_LAUNCHER)
 	{
 		te_explosion (org2);
-		effect (org2, "models/dpexplosion.spr32", 0, 20, 30);
+		effect (org2, "models/sprites/dpexplosion.spr32", 0, 20, 30);
 		sound (ent, CHAN_BODY, "weapons/Rocket_Impact.wav", 1, ATTN_NORM);
 	}
 	else if (weapontype == IT_GRENADE_LAUNCHER)
 	{
 		te_explosion (org2);
-		effect (org2, "models/dpexplosion.spr32", 0, 20, 30);
+		effect (org2, "models/sprites/dpexplosion.spr32", 0, 20, 30);
 		sound (ent, CHAN_BODY, "weapons/Grenade_Impact.wav", 1, ATTN_NORM);
 	}
 	else if (weapontype == IT_HAGAR)
 	{
-		te_explosion (org2);
-		effect (org2, "models/dpexplosion.spr32", 0, 20, 40);
+		effect (org2, "models/sprites/dpexplosion.spr32", 0, 20, 40);
 		sound (ent, CHAN_BODY, "weapons/Rocket_Impact.wav", 1, ATTN_NORM);
 	}
 	else if (weapontype == IT_ELECTRO)	// Secondary fire
 	{
-		effect (org2, "models/plasmahitwall.spr32", 0, 20, 50);
+		effect (org2, "models/sprites/plasmahitwall.spr32", 0, 20, 50);
 		sound (ent, CHAN_BODY, "weapons/Plasma_Hit.wav", 1, ATTN_NORM);
 	}
 }

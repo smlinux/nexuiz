@@ -76,7 +76,7 @@ void StartWeapon (void)
 
 void weapon_uzi (void)
 {
-	self.mdl = "models/g_uzi.md3";
+	self.mdl = "models/weapons/g_uzi.md3";
 	self.items = IT_UZI;
 	self.ammo_nails = 50;
 	self.netname = "Uzi";
@@ -85,7 +85,7 @@ void weapon_uzi (void)
 
 void weapon_shotgun (void)
 {
-	self.mdl = "models/g_shotgun.md3";
+	self.mdl = "models/weapons/g_shotgun.md3";
 	self.items = IT_SHOTGUN;
 	self.ammo_shells = 10;
 	self.netname = "Shotgun";
@@ -94,7 +94,7 @@ void weapon_shotgun (void)
 
 void weapon_grenadelauncher (void)
 {
-	self.mdl = "models/g_gl.md3";
+	self.mdl = "models/weapons/g_gl.md3";
 	self.items = IT_GRENADE_LAUNCHER;
 	self.ammo_rockets = 3;
 	self.netname = "Grenade Launcher";
@@ -103,7 +103,7 @@ void weapon_grenadelauncher (void)
 
 void weapon_electro (void)
 {
-	self.mdl = "models/g_electro.md3";
+	self.mdl = "models/weapons/g_electro.md3";
 	self.items = IT_ELECTRO;
 	self.ammo_cells = 10;
 	self.netname = "Electro";
@@ -112,7 +112,7 @@ void weapon_electro (void)
 
 void weapon_crylink (void)
 {
-	self.mdl = "models/g_crylink.md3";
+	self.mdl = "models/weapons/g_crylink.md3";
 	self.items = IT_CRYLINK;
 	self.ammo_cells = 10;
 	self.netname = "Crylink";
@@ -121,7 +121,7 @@ void weapon_crylink (void)
 
 void weapon_nex (void)
 {
-	self.mdl = "models/g_nex.md3";
+	self.mdl = "models/weapons/g_nex.md3";
 	self.items = IT_NEX;
 	self.ammo_cells = 10;
 	self.netname = "Nex Gun";
@@ -130,7 +130,7 @@ void weapon_nex (void)
 
 void weapon_hagar (void)
 {
-	self.mdl = "models/g_hagar.md3";
+	self.mdl = "models/weapons/g_hagar.md3";
 	self.items = IT_HAGAR;
 	self.ammo_rockets = 6;
 	self.netname = "Hagar";
@@ -139,7 +139,7 @@ void weapon_hagar (void)
 
 void weapon_rocketlauncher (void)
 {
-	self.mdl = "models/g_rl.md3";
+	self.mdl = "models/weapons/g_rl.md3";
 	self.items = IT_ROCKET_LAUNCHER;
 	self.ammo_rockets = 5;
 	self.netname = "Rocket Launcher";
@@ -148,7 +148,7 @@ void weapon_rocketlauncher (void)
 
 void item_rockets (void)
 {
-	self.mdl = "models/a_rockets.md3";
+	self.mdl = "models/items/a_rockets.md3";
 	self.ammo_rockets = 25;
 	self.netname = "rockets";
 	StartItem ();
@@ -156,7 +156,7 @@ void item_rockets (void)
 
 void item_bullets (void)
 {
-	self.mdl = "models/a_bullets.zym";
+	self.mdl = "models/items/a_bullets.zym";
 	self.ammo_nails = 100;
 	self.netname = "bullets";
 	StartItem ();
@@ -164,7 +164,7 @@ void item_bullets (void)
 
 void item_cells (void)
 {
-	self.mdl = "models/a_cells.md3";
+	self.mdl = "models/items/a_cells.md3";
 	self.ammo_cells = 50;
 	self.netname = "cells";
 	StartItem ();
@@ -172,7 +172,7 @@ void item_cells (void)
 
 void item_shells (void)
 {
-	self.mdl = "models/a_shells.md3";
+	self.mdl = "models/items/a_shells.md3";
 	self.ammo_shells = 50;
 	self.netname = "shells";
 	StartItem ();
@@ -180,7 +180,7 @@ void item_shells (void)
 
 void item_strength (void)
 {
-	self.mdl = "models/g_strength.zym";
+	self.mdl = "models/items/g_strength.zym";
 	self.items = IT_STRENGTH;
 	self.netname = "Strength Powerup";
 	StartItem ();
@@ -188,7 +188,7 @@ void item_strength (void)
 
 void item_invincible (void)
 {
-	self.mdl = "models/g_invincible.zym";
+	self.mdl = "models/items/g_invincible.zym";
 	self.items = IT_INVINCIBLE;
 	self.netname = "Invulnerability";
 	StartItem ();
@@ -196,7 +196,7 @@ void item_invincible (void)
 
 void item_speed (void)
 {
-	self.mdl = "models/g_speed.zym";
+	self.mdl = "models/items/g_speed.zym";
 	self.items = IT_SPEED;
 	self.netname = "Speed Powerup";
 	StartItem ();
@@ -204,7 +204,7 @@ void item_speed (void)
 
 void item_slowmo (void)
 {
-	self.mdl = "models/g_slowmo.zym";
+	self.mdl = "models/items/g_slowmo.zym";
 	self.items = IT_SLOWMO;
 	self.netname = "Slow Motion!";
 	StartItem ();
@@ -212,7 +212,7 @@ void item_slowmo (void)
 
 void item_armor1 (void)
 {
-	self.mdl = "models/g_a1.md3";
+	self.mdl = "models/items/g_a1.md3";
 	self.armorvalue = 1;
 	self.netname = "Armor Shard";
 	StartItem ();
@@ -220,7 +220,7 @@ void item_armor1 (void)
 
 void item_armor25 (void)
 {
-	self.mdl = "models/g_a25.md3";
+	self.mdl = "models/items/g_a25.md3";
 	self.armorvalue = 25;
 	self.netname = "Armor";
 	StartItem ();
@@ -228,7 +228,7 @@ void item_armor25 (void)
 
 void item_health1 (void)
 {
-	self.mdl = "models/g_h1.md3";
+	self.mdl = "models/items/g_h1.md3";
 	self.max_health = 1;
 	self.netname = "1 health";
 	StartItem ();
@@ -236,7 +236,7 @@ void item_health1 (void)
 
 void item_health25 (void)
 {
-	self.mdl = "models/g_h25.md3";
+	self.mdl = "models/items/g_h25.md3";
 	self.max_health = 25;
 	self.netname = "25 health";
 	StartItem ();
@@ -244,7 +244,7 @@ void item_health25 (void)
 
 void item_health100 (void)
 {
-	self.mdl = "models/g_h100.md3";
+	self.mdl = "models/items/g_h100.md3";
 	self.max_health = 100;
 	self.netname = "100 health";
 	StartItem ();
