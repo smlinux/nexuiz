@@ -5,7 +5,7 @@ builtin.qc
 constant.qc
 field.qc			// Should rename this, it has fields and globals
 
-bot/maps/map_mattrye2.qc
+bot/maps/map_mattrye1_nex.qc
 bot/bot.qc
 bot/bot_way.qc
 bot/bot_fight.qc 
