@@ -1,5 +1,3 @@
-.vector		finaldest, finalangle;
-.void()		think1;
 
 /*
 =============

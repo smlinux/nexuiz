@@ -29,3 +29,8 @@ string	string_null;
 .float	jump_flag;				// storing velocity_z for falling damage
 .float	attack_finished;
 .float	statdraintime;			// record the one-second intervals between draining health and armour when they're over 100
+
+.vector		finaldest, finalangle; 		//plat.qc stuff
+.void()		think1;
+.float state;
+.float		t_length, t_width;

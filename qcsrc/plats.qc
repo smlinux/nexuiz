@@ -6,9 +6,6 @@ void() plat_go_down;
 void() plat_crush;
 float PLAT_LOW_TRIGGER = 1;
 
-.float state;
-.float		t_length, t_width;
-
 void() plat_spawn_inside_trigger =
 {
 	local entity trigger;
