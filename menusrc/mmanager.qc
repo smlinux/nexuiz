@@ -267,7 +267,6 @@ void(void) menu_linkwindows =
 		// find orderpos - x (starting with x = 1)
 		x = self.orderpos;
 
-		print(ftos(x),"\n");
 		while(x > 1)
 		{
 			x = x - 1;

@@ -354,7 +354,6 @@ void(void) nex_video_apply =
 float maxfrags;
 float maxtime;
 float maxbots;
-string mapname = "e1m1";
 entity selectmap;
 var float selectnum  = 0;
 float FRAME_WIDTH = 5;
@@ -443,8 +442,6 @@ void(void) nex_xp_build_maplist =
 		strunzone(allstripped);
 	}
 
-	print(ftos(mapnum),"\n");
-
 	search_end(searchhandle);
 };
 
@@ -455,6 +452,7 @@ void(void) nex_xp_prev =
 		return;
 
 	selectnum = selectnum - 1;
+	selectmap = selectmap._prev;
 
 	s = menu_getitem("mapselection_selsquare");
 	s.pos_x = selectnum * 100;
@@ -474,6 +472,7 @@ void(void) nex_xp_next =
 		return;
 
 	selectnum = selectnum + 1;
+	selectmap = selectmap._next;
 
 	s = menu_getitem("mapselection_selsquare");
 	s.pos_x = selectnum * 100;
@@ -573,20 +572,21 @@ void(void) nex_sp_start =
 	cvar_set("fraglimit", ftos(maxfrags));
 	cvar_set("timelimit", ftos(maxtime));
 	cvar_set("deathmatch", ftos(1));
+	cvar_set("maxplayers", ftos(maxbots + 1));
 	cmd("map ");
-	cmd(mapname);
-	cmd(";wait\n");
+	cmd(selectmap.name);
+	cmd(";wait;togglemenu;wait;");
 
-	/*for(i = 0; i < maxbots; i = i + 1)
+	// BLACK: TODO - change this somewhen into something cleaner - see bot/bot.qc
+	//if(maxbots && maxbots <= (99 - 40 + 1))
 	{
-		cmd("impulse 100;wait;wait;");
-	}*/
-	cmd("scratch1 ");
-	cmd(ftos(maxbots));
+		string t;
+		t = strcat("impulse ", ftos(40 + maxbots - 1));
+		cmd(t);
+		print(t);
+	}
 
 	cmd("\n");
-
-	menu_toggle();
 };
 
 /////////////////
