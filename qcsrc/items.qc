@@ -3,7 +3,7 @@ void Item_Respawn (void)
 {
 	self.model = self.mdl;		// restore original model
 	self.solid = SOLID_TRIGGER;	// allow it to be touched again
-	sound (self, CHAN_VOICE, "misc/ItemRespawn.wav", 1, ATTN_NORM);	// play respawn sound
+	sound (self, CHAN_VOICE, "misc/itemrespawn.wav", 1, ATTN_NORM);	// play respawn sound
 	setorigin (self, self.origin);
 }
 
@@ -58,7 +58,7 @@ void Item_Touch (void)
 	
 	self = oldself;
 	
-	sound (self, CHAN_BODY, "weapons/WeaponPickup.wav", 1, ATTN_NORM);
+	sound (self, CHAN_BODY, "weapons/weaponpickup.wav", 1, ATTN_NORM);
 
 	if (self.norespawn)
 	{

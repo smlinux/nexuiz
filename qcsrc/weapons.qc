@@ -388,9 +388,9 @@ void fireBullet (vector dir, float spread, float damage, float dtype)
 			te_blood (trace_endpos, dir * damage * 16, damage);
 			Damage (self, trace_endpos, trace_ent, 0, damage, dir * damage);
 			if (random () < 0.5)
-				sound (trace_ent, CHAN_IMPACT, "misc/BodyImpact1.wav", 1, ATTN_NORM);
+				sound (trace_ent, CHAN_IMPACT, "misc/bodyimpact1.wav", 1, ATTN_NORM);
 			else
-				sound (trace_ent, CHAN_IMPACT, "misc/BodyImpact2.wav", 1, ATTN_NORM);
+				sound (trace_ent, CHAN_IMPACT, "misc/bodyimpact2.wav", 1, ATTN_NORM);
 		}
 	}
 }
@@ -428,7 +428,7 @@ void W_Laser_Attack (void)
 {
 	entity	missile;
 
-	sound (self, CHAN_WEAPON, "weapons/Electro_fire.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "weapons/electro_fire.wav", 1, ATTN_NORM);
 
 	missile = spawn ();
 	missile.owner = self;
@@ -476,7 +476,7 @@ void W_Laser_Attack2 (void)
 
 void W_Uzi_Attack (void)
 {
-	sound (self, CHAN_WEAPON, "weapons/Uzi_Fire.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "weapons/uzi_Fire.wav", 1, ATTN_NORM);
 
 	fireBullet (v_forward, 100, 6, IT_UZI);
 
@@ -496,7 +496,7 @@ void W_Uzi_Attack2 (void)
 	float	sc;
 	float	bullets;
 
-	sound (self, CHAN_WEAPON, "weapons/Shotgun_fire.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "weapons/shotgun_fire.wav", 1, ATTN_NORM);
 
 	if (self.ammo_nails<8)
 		bullets = self.ammo_nails;
@@ -547,14 +547,14 @@ void W_Grenade_Touch (void)
 	//if (other.classname == "player" || other.classname == "corpse")
 	//	W_Grenade_Explode (other);
 	//else
-	sound (self, CHAN_BODY, "weapons/Grenade_Bounce.wav", 1, ATTN_NORM);
+	sound (self, CHAN_BODY, "weapons/grenade_Bounce.wav", 1, ATTN_NORM);
 }
 
 void W_Grenade_Attack (void)
 {
 	entity	gren;
 
-	sound (self, CHAN_WEAPON, "weapons/Grenade_fire.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "weapons/grenade_fire.wav", 1, ATTN_NORM);
 
 	self.punchangle_x = -4;
 
@@ -584,7 +584,7 @@ void W_Grenade_Attack (void)
 	gren.think = W_Grenade_FuseExplode;
 	gren.nextthink = time + 5;
 
-	self.attack_finished = time + 1;
+	self.attack_finished = time + 0.8;
 	self.ammo_rockets = self.ammo_rockets - 1;
 }
 
@@ -625,7 +625,7 @@ void W_Electro_Attack (float postion)
 {
 	entity	proj;
 
-	sound (self, CHAN_WEAPON, "weapons/Electro_fire.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "weapons/electro_fire.wav", 1, ATTN_NORM);
 
 	proj = spawn ();
 	proj.owner = self;
@@ -651,7 +651,7 @@ void W_Electro_Attack (float postion)
 	proj.think = SUB_Remove;
 	proj.nextthink = time + 3;
 
-	self.attack_finished = time + 0.2;
+	self.attack_finished = time + 0.4;
 	self.ammo_cells = self.ammo_cells - 1;
 }
 
@@ -682,14 +682,14 @@ void W_Plasma_Touch (void)
 	if (other.classname == "player" || other.classname == "corpse")
 		W_Plasma_Explode (other);
 	else
-		sound (self, CHAN_BODY, "weapons/Grenade_Bounce.wav", 1, ATTN_NORM);
+		sound (self, CHAN_BODY, "weapons/grenade_Bounce.wav", 1, ATTN_NORM);
 }
 
 void W_Electro_Attack2 (void)
 {
 	entity	Plasma;
 
-	sound (self, CHAN_WEAPON, "weapons/Electro_fire.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "weapons/electro_fire.wav", 1, ATTN_NORM);
 
 	self.punchangle_x = -4;
 
@@ -778,7 +778,7 @@ void W_Nex_Attack (void)
 	vector	org;
 	vector	dir;
 
-	sound (self, CHAN_WEAPON, "weapons/NexFire.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "weapons/nexfire.wav", 1, ATTN_NORM);
 	//self.effects = EF_MUZZLEFLASH;
 	self.punchangle_x = -4;
 
@@ -855,7 +855,7 @@ void W_Hagar_Attack (void)
 	entity	missile;
 	vector	org;
 
-	sound (self, CHAN_WEAPON, "weapons/Hagar_Fire.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "weapons/hagar_fire.wav", 1, ATTN_NORM);
 
 	missile = spawn ();
 	missile.owner = self;
@@ -891,7 +891,7 @@ void W_Hagar_Attack2 (void)
 {
 	entity	missle;
 
-	sound (self, CHAN_WEAPON, "weapons/Hagar_Fire.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "weapons/hagar_fire.wav", 1, ATTN_NORM);
 
 	missle = spawn ();
 	missle.owner = self;
@@ -950,7 +950,7 @@ void W_Rocket_Attack (void)
 	entity	missile;
 	vector	org;
 
-	sound (self, CHAN_WEAPON, "weapons/Rocket_Fire.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "weapons/rocket_fire.wav", 1, ATTN_NORM);
 
 	missile = spawn ();
 	missile.owner = self;
@@ -1010,7 +1010,7 @@ void W_Rocket_Attack2 (void)
 	entity	missile;
 	vector	org;
 
-	//sound (self, CHAN_WEAPON, "weapons/Rocket_Fire.wav", 1, ATTN_NORM);
+	//sound (self, CHAN_WEAPON, "weapons/rocket_fire.wav", 1, ATTN_NORM);
 
 	missile = spawn ();
 	missile.owner = self;

@@ -62,37 +62,37 @@ void worldspawn (void)
 	precache_model ("models/gibs/gib4.mdl");
 	precache_model ("models/gibs/bloodyskull.md3");
 
-	precache_sound ("weapons/LazerGun_Fire.wav");
-	precache_sound ("weapons/Uzi_Fire.wav");
-	precache_sound ("weapons/Shotgun_fire.wav");
-	precache_sound ("weapons/Grenade_fire.wav");
-	precache_sound ("weapons/Grenade_Impact.wav");
-	precache_sound ("weapons/Grenade_Bounce.wav");
-	precache_sound ("weapons/NexFire.wav");
-	precache_sound ("weapons/NexImpact.wav");
-	precache_sound ("weapons/Electro_fire.wav");
-	precache_sound ("weapons/Rocket_Fire.wav");
-	precache_sound ("weapons/Rocket_Impact.wav");
-	precache_sound ("weapons/Hagar_Fire.wav");
+	precache_sound ("weapons/lazergun_fire.wav");
+	precache_sound ("weapons/uzi_fire.wav");
+	precache_sound ("weapons/shotgun_fire.wav");
+	precache_sound ("weapons/grenade_fire.wav");
+	precache_sound ("weapons/grenade_impact.wav");
+	precache_sound ("weapons/grenade_bounce.wav");
+	precache_sound ("weapons/nexfire.wav");
+	precache_sound ("weapons/neximpact.wav");
+	precache_sound ("weapons/electro_fire.wav");
+	precache_sound ("weapons/rocket_Fire.wav");
+	precache_sound ("weapons/rocket_impact.wav");
+	precache_sound ("weapons/hagar_fire.wav");
 	precache_sound ("weapons/hagexp1.wav");
 	precache_sound ("weapons/hagexp2.wav");
 	precache_sound ("weapons/hagexp3.wav");
 	precache_sound ("weapons/ric1.wav");
 	precache_sound ("weapons/ric2.wav");
 	precache_sound ("weapons/ric3.wav");
-	precache_sound ("weapons/WeaponPickup.wav");
+	precache_sound ("weapons/weaponpickup.wav");
 	precache_sound ("weapons/hyprbf1a.wav");
 	precache_sound ("weapons/plasmx1a.wav");
 	precache_sound ("weapons/crylink.wav");
 	
-	precache_sound ("misc/BodyImpact1.wav");
-	precache_sound ("misc/BodyImpact2.wav");
-	precache_sound ("misc/Teleport.wav");
+	precache_sound ("misc/bodyimpact1.wav");
+	precache_sound ("misc/bodyimpact2.wav");
+	precache_sound ("misc/teleport.wav");
 
-	precache_sound ("misc/ItemRespawn.wav");
+	precache_sound ("misc/itemrespawn.wav");
 	
-	precache_sound ("player/HitGround1.wav");
-	precache_sound ("player/HitGround2.wav");
+	precache_sound ("player/hitground1.wav");
+	precache_sound ("player/hitground2.wav");
 	precache_sound ("demon/dland2.wav");
 }
 
