@@ -225,7 +225,7 @@ template for map selection
 	type 	ITEM_WINDOW
 	name	multiplayer_frame
 	parent	multiplayer
-	origin 	"500 200"
+	origin 	"500 320"
 }
 // map selection
 {
@@ -233,7 +233,7 @@ template for map selection
 	name  	multiplayer_mapselection
 	parent	multiplayer_frame
 	link	mapselection
-	origin 	"-300 -100"
+	origin 	"-300 -225"
 }
 // game name
 {
