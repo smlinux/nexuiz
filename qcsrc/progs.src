@@ -28,6 +28,7 @@ server.qc
 stats.qc
 gib.qc
 damage.qc
+triggers.qc
 weapons.qc
 items.qc
 halflife.nc

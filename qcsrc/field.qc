@@ -58,3 +58,5 @@ entity dest;
 .float	damageforcescale;
 
 .float          gravity;
+
+.float		dmg;
