@@ -205,12 +205,18 @@ void PlayerPreThink (void)
 	if (BotPreFrame())
 		return;
 
+	if (self.button3)
+	{
+		if (self.weapon == IT_GRENADE_LAUNCHER)
+			W_SecondaryAttack ();
+		if (self.attack_finished < time)
+			W_SecondaryAttack ();
+	}
+
 	if (self.attack_finished < time)
 	{
 		if (self.button0)
 			W_Attack ();
-		else if (self.button3)
-			W_SecondaryAttack ();
 	}
 
 	if (self.button2)
