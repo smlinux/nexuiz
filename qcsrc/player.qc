@@ -131,7 +131,5 @@ void PlayerDie (vector hitloc, float damage)
 		vel_z = vel_z * 2;	// more vertical
 	Gib (vel);
 
-	SUB_SetFade (self, time);
-
 	PlayerWeaponThrow ();
 }

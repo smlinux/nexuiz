@@ -673,7 +673,7 @@ void W_Electro_Attack (void)
 	proj.nextthink = time + 3;
 
 	self.attack_finished = time + 0.6;
-	self.ammo_cells = self.ammo_cells - 1;
+	self.ammo_cells = self.ammo_cells - 0.25;
 }
 
 void W_Plasma_Touch (void)

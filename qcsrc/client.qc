@@ -40,7 +40,7 @@ entity SelectSpawnPoint (void)
 
 	if (spot == world)
 	{
-		spot = findchain (classname, "info_player_start");
+		spot = findchain (classname, "info_player_deathmatch");
 		if (spot == world)
 			error ("No startpoint found\n");
 		return spot;

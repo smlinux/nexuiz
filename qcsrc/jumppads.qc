@@ -28,6 +28,7 @@ void() trigger_push_touch =
 	self.movedir_z = flighttime * grav;
 
 	other.velocity = self.movedir;
+	other.flags = other.flags - (other.flags & FL_ONGROUND);
 
 	if (self.spawnflags & PUSH_ONCE)
 	{

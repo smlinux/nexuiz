@@ -2,6 +2,7 @@ SPAWNING/MISC:
 Make it so the user spawns at a random location in the map ("info_player_deathmatch")
 Add deathtypes and obituary messages
 When dead, leave corpse. Fade away corpse in 10 seconds.
+A corpse should gib if -30 health
 
 WEAPONS:
 Laser: Autoaim and kill any projectile coming (can destory rockets, grenades, hagar missiles)
@@ -9,9 +10,9 @@ Shotgun: Automatic fast 3 shots
 Add weapon animations. Ask Vermeulen for description.
 
 POWERUPS:
-Add energy powerup - Makes the user run 3 times as fast, and jumps 3 times as high. 30 seconds, 2 minute respond time
-Add strength powerup - Basiclly the Quad. 30 seconds, 2 minute respond time
-Add invincible powerup -  30 seconds, 2 minute respond time
+Add energy powerup - Makes the user run 3 times as fast, and jumps 3 times as high. 30 seconds, 2 minute respond time. Not sure about the effect for this.
+Add strength powerup - Basiclly the Quad. 30 seconds, 2 minute respond time. Not sure what to do for the effect for this gun.
+Add invincible powerup -  30 seconds, 2 minute respond time. Make the user and his weapons (from his view also) be 3/4 transparent.
 When dead the powerup the user had gets thrown in the air
 
 GAMETYPES:
