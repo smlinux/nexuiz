@@ -262,10 +262,16 @@ void PlayerPreThink (void)
 		}
 		else if (self.deadflag == DEAD_RESPAWNABLE)
 		{
-			if (self.button0 || self.button2 || self.button3)
+			if (self.button0 || self.button2 || self.button3  || self.button4)
 				respawn();
 		}
 		return;
+	}
+
+	if (self.attack_finished < time && !self.button0 && !self.button3)
+	if (self.button4)
+	{
+		W_ThirdAttack ();
 	}
 
 	if (self.button3)

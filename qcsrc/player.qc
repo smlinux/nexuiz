@@ -151,7 +151,7 @@ void PlayerCorpseDamage (vector hitloc, float damage, entity inflictor, entity a
 		// make a juicy mess
 		te_bloodshower (self.origin + self.mins, self.origin + self.maxs, 600, 500);
 		// make a meaty mess
-		TossGib (world, "models/gibs/gib1.mdl", self.origin, self.velocity);
+		TossGib (world, "models/gibs/gib1.md3", self.origin, self.velocity);
 		TossGib (world, "models/gibs/gib2.mdl", self.origin, self.velocity);
 		TossGib (world, "models/gibs/gib3.mdl", self.origin, self.velocity);
 		TossGib (world, "models/gibs/gib4.mdl", self.origin, self.velocity);

@@ -17,6 +17,7 @@ void worldspawn (void)
 	precache_model ("models/player/insurrectionist.zym");
 	precache_model ("models/player/lycanthrope.zym");
 	precache_model ("models/player/robot.zym");
+	precache_model ("models/player/shock.zym");
 
 	precache_model ("models/weapons/g_uzi.md3");
 	precache_model ("models/weapons/g_shotgun.md3");
@@ -68,13 +69,14 @@ void worldspawn (void)
 	precache_model ("models/items/g_speed.zym");
 	
 	precache_model ("models/gibs/eye.md3");
-	precache_model ("models/gibs/gib1.mdl");
+	precache_model ("models/gibs/gib1.md3");
 	precache_model ("models/gibs/gib2.mdl");
 	precache_model ("models/gibs/gib3.mdl");
 	precache_model ("models/gibs/gib4.mdl");
 	precache_model ("models/gibs/bloodyskull.md3");
 
 	precache_sound ("weapons/lasergun_fire.wav");
+	precache_sound ("weapons/laserimpact.wav");
 	precache_sound ("weapons/uzi_fire.wav");
 	precache_sound ("weapons/shotgun_fire.wav");
 	precache_sound ("weapons/grenade_fire.wav");
@@ -97,9 +99,12 @@ void worldspawn (void)
 	precache_sound ("weapons/plasmx1a.wav");
 	precache_sound ("weapons/crylink.wav");
 	precache_sound ("weapons/gunswitch.wav");
+	precache_sound ("weapons/plasmahit.wav");
 	
+	precache_sound ("misc/itempickup.wav");
 	precache_sound ("misc/bodyimpact1.wav");
 	precache_sound ("misc/bodyimpact2.wav");
+	precache_sound ("misc/enemyimpact.wav");
 	precache_sound ("misc/teleport.wav");
 
 	precache_sound ("misc/itemrespawn.wav");

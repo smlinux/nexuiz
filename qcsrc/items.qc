@@ -19,17 +19,22 @@ void Item_Touch (void)
 	if (other.health <= 0)
 		return;
 		
-	if (self.ammo_shells)
+	if (self.ammo_shells){
 		other.ammo_shells = min (other.ammo_shells + self.ammo_shells, 100);
-	if (self.ammo_nails)
+		sound (self, CHAN_BODY, "misc/itempickup.wav", 1, ATTN_NORM); }
+	if (self.ammo_nails){
 		other.ammo_nails = min (other.ammo_nails + self.ammo_nails, 200);
-	if (self.ammo_rockets)
+		sound (self, CHAN_BODY, "misc/itempickup.wav", 1, ATTN_NORM); }
+	if (self.ammo_rockets){
 		other.ammo_rockets = min (other.ammo_rockets + self.ammo_rockets, 100);
-	if (self.ammo_cells)
+		sound (self, CHAN_BODY, "misc/itempickup.wav", 1, ATTN_NORM); }
+	if (self.ammo_cells) {
 		other.ammo_cells = min (other.ammo_cells + self.ammo_cells, 100);
+		sound (self, CHAN_BODY, "misc/itempickup.wav", 1, ATTN_NORM); }
 		
 	if (self.flags & FL_WEAPON)
 	{
+		sound (self, CHAN_BODY, "weapons/weaponpickup.wav", 1, ATTN_NORM);
 		if (self.items & IT_UZI)					W_GiveWeapon (other, IT_UZI);
 		else if (self.items & IT_SHOTGUN)			W_GiveWeapon (other, IT_SHOTGUN);
 		else if (self.items & IT_GRENADE_LAUNCHER)	W_GiveWeapon (other, IT_GRENADE_LAUNCHER);
@@ -40,8 +45,9 @@ void Item_Touch (void)
 		else if (self.items & IT_CRYLINK)			W_GiveWeapon (other, IT_CRYLINK);
 	}
 		
-	if (self.max_health)
+	if (self.max_health){
 		other.health = min (other.health + self.max_health, 250);
+		sound (self, CHAN_BODY, "misc/itempickup.wav", 1, ATTN_NORM);}
 	
 	if (other.classname == "player")
 	{
@@ -58,7 +64,6 @@ void Item_Touch (void)
 	
 	self = oldself;
 	
-	sound (self, CHAN_BODY, "weapons/weaponpickup.wav", 1, ATTN_NORM);
 
 	if (self.norespawn)
 	{

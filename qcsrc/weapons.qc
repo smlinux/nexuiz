@@ -434,10 +434,7 @@ void fireBullet (vector dir, float spread, float damage, float dtype)
 		{
 			te_blood (trace_endpos, dir * damage * 16, damage);
 			Damage (trace_ent, self, self, damage, dtype, trace_endpos, dir * damage);
-			if (random () < 0.5)
-				sound (trace_ent, CHAN_IMPACT, "misc/bodyimpact1.wav", 1, ATTN_NORM);
-			else
-				sound (trace_ent, CHAN_IMPACT, "misc/bodyimpact2.wav", 1, ATTN_NORM);
+			sound (trace_ent, CHAN_IMPACT, "misc/enemyimpact.wav", 1, ATTN_NORM);
 		}
 	}
 }
@@ -468,6 +465,7 @@ void W_Laser_Touch (void)
 
 	self.event_damage = SUB_Null;
 	RadiusDamage (self, self.owner, 15, 7, 50, world, 200, IT_LASER);
+	sound (self, CHAN_IMPACT, "weapons/laserimpact.wav", 1, ATTN_NORM);
 
 	remove (self);
 }
@@ -491,14 +489,14 @@ void W_Laser_Attack (void)
 
 	makevectors (self.v_angle);
 	missile.velocity = v_forward * 1000;
-	missile.velocity = missile.velocity + v_right * ( crandom() * 25 );
+	missile.velocity = missile.velocity + v_right * ( crandom() * 45 );
 	missile.velocity = missile.velocity + v_up * ( crandom() * 25 );
 	missile.angles = vectoangles (missile.velocity);
 	missile.glow_color = 250; // 244, 250
 	missile.glow_size = 30;
 	missile.touch = W_Laser_Touch;
 	missile.think = SUB_Remove;
-	missile.nextthink = time + 2;
+	missile.nextthink = time + 9;
 
 	self.punchangle_x = random () - 0.5;
 	self.punchangle_y = random () - 0.5;
@@ -707,6 +705,7 @@ void W_Electro_Touch (void)
 	WriteByte (MSG_BROADCAST, 155);
 	self.event_damage = SUB_Null;
 	RadiusDamage (self, self.owner, 50, 10, 70, world, 50, IT_ELECTRO);
+	sound (self, CHAN_IMPACT, "weapons/plasmahit.wav", 1, ATTN_NORM);
 	remove (self);
 }
 
@@ -766,6 +765,7 @@ void W_Plasma_Explode (entity ignore)
 
 	self.event_damage = SUB_Null;
 	RadiusDamage (self, self.owner, 100, 50, 100, world, 50, IT_ELECTRO);
+	sound (self, CHAN_IMPACT, "weapons/plasmahit.wav", 1, ATTN_NORM);
 
 	remove (self);
 }
@@ -853,6 +853,36 @@ void W_Crylink_Touch (void)
 
 void W_Crylink_Attack (void)
 {
+	vector	org;
+
+	sound (self, CHAN_WEAPON, "weapons/crylink.wav", 1, ATTN_NORM);
+	org = self.origin + self.view_ofs + v_forward * 18 + v_right * 7 + v_up * -9;
+	makevectors (self.v_angle);
+
+	FireRailgunBullet (org, 25, v_forward, IT_CRYLINK);
+
+	traceline (org, self.origin + self.view_ofs + (v_forward * 4096), FALSE, self);
+
+	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+	WriteByte (MSG_BROADCAST, 76);
+	WriteCoord (MSG_BROADCAST, org_x);
+	WriteCoord (MSG_BROADCAST, org_y);
+	WriteCoord (MSG_BROADCAST, org_z);
+	WriteCoord (MSG_BROADCAST, trace_endpos_x);
+	WriteCoord (MSG_BROADCAST, trace_endpos_y);
+	WriteCoord (MSG_BROADCAST, trace_endpos_z);
+	WriteCoord (MSG_BROADCAST, self.v_angle_x);
+	WriteCoord (MSG_BROADCAST, self.v_angle_y);
+	WriteCoord (MSG_BROADCAST, self.v_angle_z);
+
+	te_gunshot (trace_endpos);
+
+	self.ammo_cells = self.ammo_cells - 0.25;
+	self.attack_finished = time + 0.165;
+}
+
+void W_Crylink_Attack2 (void)
+{
 
 	entity	proj;
 
@@ -881,39 +911,8 @@ void W_Crylink_Attack (void)
 	proj.glow_color = 10;
 	proj.glow_size = 30;
 
-	self.attack_finished = time + 0.080;
+	self.attack_finished = time + 0.20;
 	self.ammo_cells = self.ammo_cells - 0.2;
-}
-
-
-void W_Crylink_Attack2 (void)
-{
-	vector	org;
-
-	sound (self, CHAN_WEAPON, "weapons/crylink.wav", 1, ATTN_NORM);
-	org = self.origin + self.view_ofs + v_forward * 18 + v_right * 7 + v_up * -9;
-	makevectors (self.v_angle);
-
-	FireRailgunBullet (org, 25, v_forward, IT_CRYLINK);
-
-	traceline (org, self.origin + self.view_ofs + (v_forward * 4096), FALSE, self);
-
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, 76);
-	WriteCoord (MSG_BROADCAST, org_x);
-	WriteCoord (MSG_BROADCAST, org_y);
-	WriteCoord (MSG_BROADCAST, org_z);
-	WriteCoord (MSG_BROADCAST, trace_endpos_x);
-	WriteCoord (MSG_BROADCAST, trace_endpos_y);
-	WriteCoord (MSG_BROADCAST, trace_endpos_z);
-	WriteCoord (MSG_BROADCAST, self.v_angle_x);
-	WriteCoord (MSG_BROADCAST, self.v_angle_y);
-	WriteCoord (MSG_BROADCAST, self.v_angle_z);
-
-	te_gunshot (trace_endpos);
-
-	self.ammo_cells = self.ammo_cells - 0.25;
-	self.attack_finished = time + 0.165;
 }
 
 void W_Nex_Attack (void)
@@ -962,7 +961,7 @@ void W_Nex_Attack (void)
 	WriteCoord (MSG_BROADCAST, dir_z);
 	WriteByte (MSG_BROADCAST, 255);
 
-	PointSound (trace_endpos, "weapons/NexImpact.wav", 1, ATTN_NORM);
+	PointSound (trace_endpos, "weapons/neximpact.wav", 1, ATTN_NORM);
 
 	self.attack_finished = time + 1;
 	self.ammo_cells = self.ammo_cells - 1;
@@ -973,6 +972,14 @@ void W_Nex_Attack2 (void)
 
 }
 
+void() W_Drunkmissile = 
+{
+        self.velocity = ((self.velocity + ((v_right * 61.000) * crandom ())) + ((v_up * 61.000) * crandom ()));
+        self.nextthink = time + 0.1;
+        self.think = W_Drunkmissile;
+};
+
+
 void W_Hagar_Explode (void)
 {
 	ImpactEffect (self, IT_HAGAR);
@@ -981,6 +988,11 @@ void W_Hagar_Explode (void)
 	RadiusDamage (self, self.owner, 20, 10, 50, world, 90, IT_HAGAR);
 
 	remove (self);
+}
+
+void W_Hagar_Fireball (void)
+{
+	self.effects = self.effects | EF_FLAME;
 }
 
 void W_Hagar_Touch (void)
@@ -1003,11 +1015,6 @@ void W_Hagar_Damage (vector hitloc, float damage, entity inflictor, entity attac
 		W_Hagar_Explode();
 }
 
-void W_Hagar_Fireball (void)
-{
-	self.effects = self.effects | EF_FLAME;
-}
-
 void W_Hagar_Attack (void)
 {
 	entity	missile;
@@ -1026,7 +1033,7 @@ void W_Hagar_Attack (void)
 
 	missile.movetype = MOVETYPE_FLY;
 	missile.solid = SOLID_BBOX;
-	setmodel (missile, "models/bullet.mdl");
+	setmodel (missile, "models/hagarmissile.mdl");
 	setsize (missile, '0 0 0', '0 0 0');
 
 	makevectors (self.v_angle);
@@ -1034,14 +1041,14 @@ void W_Hagar_Attack (void)
 	setorigin (missile, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);
 
 	missile.velocity = v_forward * 2000;
-	missile.velocity = missile.velocity + v_right * ( crandom() * 50 );
-	missile.velocity = missile.velocity + v_up * ( crandom() * 50 );
+	missile.velocity = missile.velocity + v_right * ( crandom() * 70 );
+	missile.velocity = missile.velocity + v_up * ( crandom() * 30 );
 	missile.angles = vectoangles (missile.velocity);
 	setorigin (missile, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);
 
 	missile.touch = W_Hagar_Touch;
-	missile.think = W_Hagar_Fireball;
-	missile.nextthink = time + 0.05;
+	missile.think = W_Hagar_Explode;
+	missile.nextthink = time + 10;
 
 	self.attack_finished = time + 0.2;
 	self.ammo_rockets = self.ammo_rockets - 0.25;
@@ -1078,6 +1085,43 @@ void W_Hagar_Attack2 (void)
 	missile.touch = W_Hagar_Touch;
 	missile.think = W_Hagar_Fireball;
 	missile.nextthink = time + 0.05;
+
+	self.attack_finished = time + 0.2;
+	self.ammo_rockets = self.ammo_rockets - 0.25;
+}
+
+void W_Hagar_Attack3 (void)
+{
+	entity	missile;
+	vector	org;
+
+	sound (self, CHAN_WEAPON, "weapons/hagar_fire.wav", 1, ATTN_NORM);
+
+	missile = spawn ();
+	missile.owner = self;
+	missile.classname = "missile";
+
+	missile.takedamage = DAMAGE_YES;
+	missile.damageforcescale = 4;
+	missile.health = 10;
+	missile.event_damage = W_Hagar_Damage;
+
+	missile.movetype = MOVETYPE_FLY;
+	missile.solid = SOLID_BBOX;
+	setmodel (missile, "models/hagarmissile.mdl");
+	setsize (missile, '0 0 0', '0 0 0');
+
+	makevectors (self.v_angle);
+
+	setorigin (missile, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);
+
+	missile.velocity = v_forward * 1000;
+	missile.angles = vectoangles (missile.velocity);
+	setorigin (missile, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);
+
+	missile.touch = W_Hagar_Touch;
+	missile.think = W_Drunkmissile;
+	missile.nextthink = time + 0.01;
 
 	self.attack_finished = time + 0.2;
 	self.ammo_rockets = self.ammo_rockets - 0.25;
@@ -1172,6 +1216,45 @@ void W_Rocket_Attack2 (void)
 	self.attack_finished = time;
 }
 
+
+void W_Rocket_Attack3 (void)
+{
+	entity	missile;
+	vector	org;
+
+	sound (self, CHAN_WEAPON, "weapons/rocket_fire.wav", 1, ATTN_NORM);
+
+	missile = spawn ();
+	missile.owner = self;
+	missile.classname = "missile";
+
+	missile.takedamage = DAMAGE_YES;
+	missile.damageforcescale = 4;
+	missile.health = 10;
+	missile.event_damage = W_Rocket_Damage;
+
+	missile.movetype = MOVETYPE_FLY;
+	missile.solid = SOLID_BBOX;
+	setmodel (missile, "models/rocketmissile.mdl");
+	setsize (missile, '0 0 0', '0 0 0');
+
+	makevectors (self.v_angle);
+
+	org = self.origin + self.view_ofs + v_forward * 20 + v_right * 4 + v_up * -15;
+
+	setorigin (missile, org);
+	missile.velocity = v_forward * 1200;
+	missile.angles = vectoangles (missile.velocity);
+
+	missile.touch = W_Rocket_Touch ;
+	missile.think = W_Drunkmissile;
+	missile.nextthink = time + 0.2;
+
+	self.attack_finished = time + 1.5;
+	self.ammo_rockets = self.ammo_rockets - 1;
+
+}
+
 void W_Attack (void)
 {
 	if (self.deadflag != DEAD_NO)
@@ -1247,6 +1330,40 @@ void W_SecondaryAttack (void)
 		W_Hagar_Attack2 ();
 	else if (self.weapon == IT_ROCKET_LAUNCHER)
 		W_Rocket_Attack2 ();
+
+	W_UpdateAmmo ();
+}
+
+void W_ThirdAttack (void)
+{
+	if (self.deadflag != DEAD_NO)
+	{
+		if (self.death_time < time)
+			PutClientInServer();
+
+		return;
+	}
+
+	if (!W_CheckAmmo ())
+		return;
+
+	if (self.weapon == IT_LASER)
+		W_Laser_Attack2 ();
+	else if (self.weapon == IT_UZI)
+		W_Uzi_Attack2 ();
+	else if (self.weapon == IT_SHOTGUN)
+		W_Shotgun_Attack2 ();
+	else if (self.weapon == IT_GRENADE_LAUNCHER)
+		W_Grenade_Attack2 ();
+	//else if (self.weapon == IT_ELECTRO) 
+	else if (self.weapon == IT_CRYLINK)
+		W_Crylink_Attack2 ();
+	else if (self.weapon == IT_NEX)
+		W_Nex_Attack2 ();
+	else if (self.weapon == IT_HAGAR)
+		W_Hagar_Attack3 ();
+	else if (self.weapon == IT_ROCKET_LAUNCHER)
+		W_Rocket_Attack3 ();
 
 	W_UpdateAmmo ();
 }
