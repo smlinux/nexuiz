@@ -41,13 +41,20 @@ void Damage (entity attacker, vector hitloc, entity targ, float deathtype, float
 void RadiusDamage (entity attacker, entity inflictor, float deathtype, float damage, entity ignore)
 {
 	entity	targ;
+	float	finaldmg;
 
 	targ = findradius (inflictor.origin, damage);
 	while (targ)
 	{
 		if (targ != inflictor)
-			if ((!ignore) || ignore != targ)
-				Damage (attacker, inflictor.origin, targ, deathtype, damage - vlen (inflictor.origin - targ.origin));
+			if (ignore != targ)
+			{
+				finaldmg = damage - max (0, 0.5 * vlen (inflictor.origin - targ.origin));
+				if (targ == attacker)
+					finaldmg = finaldmg * 0.7;	// Partial damage if the attacker hits himself
+				if (finaldmg > 0)
+					Damage (attacker, inflictor.origin, targ, deathtype, finaldmg);
+			}
 		targ = targ.chain;
 	}
 }
