@@ -94,6 +94,14 @@ void worldspawn (void)
 	precache_sound ("player/hitground1.wav");
 	precache_sound ("player/hitground2.wav");
 	precache_sound ("demon/dland2.wav");
+
+	precache_sound ("1.wav");
+	precache_sound ("2.wav");
+	precache_sound ("3.wav");
+	precache_sound ("4.wav");
+	precache_sound ("5.wav");
+	precache_sound ("6.wav");
+
 }
 
 void light (void)

@@ -1,3 +1,19 @@
+float TE_SMOKE =77;
+void (vector vec) WriteVec =
+{
+		WriteCoord (MSG_BROADCAST, vec_x);
+		WriteCoord (MSG_BROADCAST, vec_y);
+		WriteCoord (MSG_BROADCAST, vec_z);
+}
+void (vector org, vector dir, float counts) W_Smoke =
+{
+		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+		WriteByte (MSG_BROADCAST, TE_SMOKE);
+		WriteVec (org);
+		WriteVec (dir);
+		WriteByte (MSG_BROADCAST, counts);
+}
+
 // increments sprite frame, loops when end is hit.. simple
 void animate_sprite (float startframe, float frame_count)
 {
@@ -492,7 +508,7 @@ void W_Laser_Attack2 (void)
 
 void W_Uzi_Attack (void)
 {
-	sound (self, CHAN_WEAPON, "weapons/uzi_Fire.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "weapons/uzi_fire.wav", 1, ATTN_NORM);
 
 	fireBullet (v_forward, 100, 6, IT_UZI);
 
@@ -505,6 +521,7 @@ void W_Uzi_Attack (void)
 	vector	org; // casing code
 	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 1) + (v_forward * 20);
 	SpawnCasing (org, v_forward, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 + 10) * v_up), 1);
+	W_Smoke(org, v_forward, 12);
 }
 
 void W_Uzi_Attack2 (void)
@@ -533,7 +550,22 @@ void W_Uzi_Attack2 (void)
 
 void W_Shotgun_Attack (void)
 {
+	float	sc;
+	float	bullets;
 
+	sound (self, CHAN_WEAPON, "weapons/shotgun_fire.wav", 1, ATTN_NORM);
+
+	bullets = 10;
+
+	for (sc = bullets; sc > 0; sc = sc - 1)
+		fireBullet (v_forward, 150, 8, IT_SHOTGUN);
+
+	self.ammo_shells = self.ammo_shells - 1;
+	self.attack_finished = time + 0.7;
+
+	vector	org; // casing code
+	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 4) + (v_forward * 15);
+	SpawnCasing (org, v_forward, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 + 10) * v_up), 2);
 }
 
 void W_Shotgun_Attack2 (void)
@@ -661,7 +693,7 @@ void W_Electro_Attack (float postion)
 	if (postion == 2)
 	setorigin (proj, self.origin + self.view_ofs + v_forward * 18 + v_right * 15 + v_up * -14);
 
-	proj.velocity = v_forward * 1000;
+	proj.velocity = v_forward * 2500;
 	proj.touch = W_Electro_Touch;
 	proj.think = SUB_Remove;
 	proj.nextthink = time + 3;
