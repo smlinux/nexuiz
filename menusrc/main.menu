@@ -37,6 +37,7 @@ template
 	picture_selected "gfx/m_top_sel_singleplayer"
 	picture_pressed	"gfx/m_top_sel_singleplayer"
 	drawflag_pressed 0
+	action		nex_display_singleplayer
 }
 // multiplayer
 {

@@ -114,7 +114,7 @@ const float CVAR_INT = 1;
 const float CVAR_STEP = 4;
 
 .entity _link;
-.float 	maxlen;
+//.float 	maxlen; // <- ITEM_EDITBOX
 void(void) nex_cvar_slider; // set reinit to this
 void(void) _nex_cvar_slider_refresh;
 void(void) _nex_cvar_slider;

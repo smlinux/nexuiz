@@ -127,6 +127,7 @@ entity(entity start, .entity find1, entity match, .float find2, float match2) fi
 		if(start.find2 == match2)
 			break;
 	}
+
 	return start;
 	/*while((start = findentity(start,find1,match))!=null_entity)
 		if(start.find2 == match2)
@@ -266,6 +267,7 @@ void(void) menu_linkwindows =
 		// find orderpos - x (starting with x = 1)
 		x = self.orderpos;
 
+		print(ftos(x),"\n");
 		while(x > 1)
 		{
 			x = x - 1;
@@ -347,78 +349,112 @@ void(entity par, float selectstate) menu_processmouse =
 	// and try to find an object whose click rect fits to the mouse coords
 	entity ent;
 	vector old_cursor, local_cursor;
+	vector old_c_size, old_c_pos, clipped_size;
 
 	ent = par._child;
 	if(ent == null_entity)
 		return;
+
+	if(menu_clip_size != '0 0 0')
+	{
+		clipped_size = cliprectsize(gfx_conmentogfx(par.clip_pos),par.clip_size, menu_clip_pos, menu_clip_size);
+	}
+	else
+	{
+		clipped_size = par.clip_size;
+	}
+
+	if(clipped_size != '0 0 0')
+	{
+		// do clip the clip area
+		// save the old
+		old_c_pos = menu_clip_pos;
+		old_c_size = menu_clip_size;
+
+		// clip the position
+		menu_clip_pos = cliprectpos(gfx_conmentogfx(par.clip_pos), par.clip_size, menu_clip_pos, menu_clip_size);
+		menu_clip_size = clipped_size;
+	}
 
 	menu_localorigin = menu_localorigin + par.origin;
 
 	old_cursor = menu_cursor;
 	local_cursor = gfx_congfxtomen(cursor);
 
-	do
+	//print(vtos(cursor)," ");print(vtos(menu_clip_pos)," ");print(vtos(menu_clip_size),"\n");
+
+	if(inrect(cursor, menu_clip_pos, menu_clip_size) || menu_clip_size == '0 0 0')
 	{
-		// if not visible, continue to the next item
-		if(menu_isvisible(ent))
+		do
 		{
-			old_cursor = menu_cursor;
-			menu_cursor = local_cursor;
-			if(inrect(local_cursor, ent.click_pos, ent.click_size))
+			// if not visible, continue to the next item
+			if(menu_isvisible(ent))
 			{
-				// call mouse_enter event ?
-				if(!(ent.flag & _FLAG_MOUSEINAREA) && menu_hasevents(ent))
+				old_cursor = menu_cursor;
+				menu_cursor = local_cursor;
+				if(inrect(local_cursor, ent.click_pos, ent.click_size))
 				{
-					raise_mouse_enter(ent);
+					// call mouse_enter event ?
+					if(!(ent.flag & _FLAG_MOUSEINAREA) && menu_hasevents(ent))
+					{
+						raise_mouse_enter(ent);
 
-					ent.flag = ent.flag | _FLAG_MOUSEINAREA;
-				}
+						ent.flag = ent.flag | _FLAG_MOUSEINAREA;
+					}
 
-				// select it ?
-				if(menu_selectable(ent) && selectstate != MENU_SELECT_NEVER)
-				{
-					menu_selected = ent;
-				}
-				else if(selectstate == MENU_SELECT_ALWAYS)
-				{
-					if(menu_hasevents(ent))
+					// select it ?
+					if(menu_selectable(ent) && selectstate != MENU_SELECT_NEVER)
 					{
 						menu_selected = ent;
 					}
-				}
-			}
-			else
-			{
-				// call mouse_leave event ?
-				if((ent.flag & _FLAG_MOUSEINAREA) && menu_hasevents(ent))
-				{
-					raise_mouse_leave(ent);
-
-					// this only works if _FLAG_MOUSEINAREA is set
-					ent.flag = ent.flag - _FLAG_MOUSEINAREA;
-				}
-			}
-
-			if(menu_selected != ent)
-				menu_cursor = old_cursor;
-
-
-			// if ent has children recurse through them
-			if(ent._child != null_entity)
-			{
-				if((ent.flag & FLAG_CHILDDRAWONLY) || (ent.flag & FLAG_CHILDDRAWREFRESHONLY))
-				{
-					menu_processmouse(ent, MENU_SELECT_NEVER);
+					else if(selectstate == MENU_SELECT_ALWAYS)
+					{
+						if(menu_hasevents(ent))
+						{
+							menu_selected = ent;
+						}
+					}
 				}
 				else
 				{
-					menu_processmouse(ent, selectstate);
+					// call mouse_leave event ?
+					if((ent.flag & _FLAG_MOUSEINAREA) && menu_hasevents(ent))
+					{
+						raise_mouse_leave(ent);
+
+						// this only works if _FLAG_MOUSEINAREA is set
+						ent.flag = ent.flag - _FLAG_MOUSEINAREA;
+					}
+				}
+
+				if(menu_selected != ent)
+					menu_cursor = old_cursor;
+
+
+				// if ent has children recurse through them
+				if(ent._child != null_entity)
+				{
+					if((ent.flag & FLAG_CHILDDRAWONLY) || (ent.flag & FLAG_CHILDDRAWREFRESHONLY))
+					{
+						menu_processmouse(ent, MENU_SELECT_NEVER);
+					}
+					else
+					{
+						menu_processmouse(ent, selectstate);
+					}
 				}
 			}
-		}
-	} while((ent = ent._next) != null_entity);
+		} while((ent = ent._next) != null_entity);
+	}
 
 	menu_localorigin = menu_localorigin - par.origin;
+
+	// restore the old menu_clip vars if necessary
+	if(clipped_size != '0 0 0')
+	{
+		menu_clip_size = old_c_size;
+		menu_clip_pos = old_c_pos;
+	}
 };
 
 void(void) menu_frame =
@@ -434,7 +470,9 @@ void(void) menu_frame =
 	}*/
 	// if mouse moved, process it
 	if(cursor_rel != '0 0 0')
+	{
 		menu_processmouse(menu_activewindow, MENU_SELECT_SELECTABLE);
+	}
 
 }
 

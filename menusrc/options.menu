@@ -53,6 +53,7 @@ Option menus
 	parent	opt_panel
 	text	"Sound"
 	pos		"0 30"
+	action 	nex_snd
 }
 {
 	type 	ITEM_TEXTBUTTON
@@ -75,7 +76,7 @@ Option menus
 	name	options_settings_ref
 	parent	options
 	link	options_game
-	origin	"400 200"
+	origin	"600 175"
 }
 // sub windows
 // game
@@ -83,11 +84,146 @@ Option menus
 	type	ITEM_WINDOW
 	name	options_game
 }
+// sound
+{
+	type	ITEM_WINDOW
+	name	options_sound
+}
+//////
+// CD Music Volume
+////
+// Menu Button
+{
+	type		ITEM_TEXTBUTTON
+	name		options_sound_cdvolume_text
+	parent		options_sound
+	text		"CD Music Volume"
+	pos			"0 0 0"
+	//font_size	"10 10 0"
+	alignment	16		// TEXT_ALIGN_LEFTPOS
+	flag		256		// FLAG_AUTOSETCLICK
+	key			nex_redirect_key	// redirects input to the child
+	reinit		nex_snd_cd_init
+	refresh		nex_snd_cd_init
+}
+// Slider
+{
+	type		ITEM_SLIDER
+	name		options_sound_cdvolume_slider
+	parent		options_sound_cdvolume_text
+	pos			"10 0 0"
+	size		"100 8 0"
+	//size		"100 10 0"
+	flag		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
+	cvarname	"bgmvolume"
+	cvartype	4		// CVAR_STEP
+	min_value	0
+	max_value	1
+	step		0.1
+	init		nex_cvar_slider
+}
+// Text
+{
+	type 		ITEM_TEXT
+	name		options_sound_cdvolume_slidertext
+	parent		options_sound_cdvolume_text
+	link		options_sound_cdvolume_slider
+	pos			"120 0 0"
+	//font_size "10 10 0"
+	maxlen		4
+	init		nex_slidertext
+}
+//////
+// Sound Volume
+////
+// Menu Button
+{
+	type		ITEM_TEXTBUTTON
+	name		options_sound_svolume_text
+	parent		options_sound
+	text		"Sound Volume"
+	pos			"0 15 0"
+	//font_size	"10 10 0"
+	alignment	16		// TEXT_ALIGN_LEFTPOS
+	flag		256		// FLAG_AUTOSETCLICK
+	key			nex_redirect_key	// redirects input to the child
+	refresh		nex_snd_snd_init
+}
+// Slider
+{
+	type		ITEM_SLIDER
+	name		options_sound_svolume_slider
+	parent		options_sound_svolume_text
+	pos			"10 15 0"
+	size		"100 8 0"
+	//size		"100 10 0"
+	flag		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
+	cvarname	"volume"
+	cvartype	4		// CVAR_STEP
+	min_value	0
+	max_value	1
+	step		0.1
+	init		nex_cvar_slider
+}
+// Text
+{
+	type 		ITEM_TEXT
+	name		options_sound_svolume_slidertext
+	parent		options_sound_svolume_text
+	link		options_sound_svolume_slider
+	pos			"120 15 0"
+	//font_size "10 10 0"
+	maxlen		4
+	init		nex_slidertext
+}
+//////
+// Ambient Volume
+////
+// Menu Button
+{
+	type		ITEM_TEXTBUTTON
+	name		options_sound_avolume_text
+	parent		options_sound
+	text		"Ambient Volume"
+	pos			"0 30 0"
+	//font_size	"10 10 0"
+	alignment	16		// TEXT_ALIGN_LEFTPOS
+	flag		256		// FLAG_AUTOSETCLICK
+	key			nex_redirect_key	// redirects input to the child
+	refresh		nex_snd_snd_init
+}
+// Slider
+{
+	type		ITEM_SLIDER
+	name		options_sound_avolume_slider
+	parent		options_sound_avolume_text
+	pos			"10 30 0"
+	size		"100 8 0"
+	//size		"100 10 0"
+	flag		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
+	cvarname	"snd_staticvolume"
+	cvartype	4		// CVAR_STEP
+	min_value	0
+	max_value	1
+	step		0.1
+	init		nex_cvar_slider
+}
+// Text
+{
+	type 		ITEM_TEXT
+	name		options_sound_avolume_slidertext
+	parent		options_sound_avolume_text
+	link		options_sound_avolume_slider
+	pos			"120 30 0"
+	//font_size "10 10 0"
+	maxlen		4
+	init		nex_slidertext
+}
+
 // color control
 {
 	type	ITEM_WINDOW
 	name	options_cc
-	origin	"200"
 }
 {
 	type	ITEM_TEXTBUTTON
@@ -477,7 +613,7 @@ Option menus
 	alignment	16		// TEXT_ALIGN_LEFTPOS
 	flag		256		// FLAG_AUTOSETCLICK
 	key			nex_redirect_key	// redirects input to the child
-	refresh 	nex_cc_check_color_enable
+	refresh 	nex_cc_check_grey
 }
 // Slider
 {
@@ -521,7 +657,7 @@ Option menus
 	alignment	16		// TEXT_ALIGN_LEFTPOS
 	flag		256		// FLAG_AUTOSETCLICK
 	key			nex_redirect_key	// redirects input to the child
-	refresh		nex_cc_check_color_enable
+	refresh		nex_cc_check_grey
 }
 // Slider
 {
@@ -565,7 +701,7 @@ Option menus
 	alignment	16		// TEXT_ALIGN_LEFTPOS
 	flag		256		// FLAG_AUTOSETCLICK
 	key			nex_redirect_key	// redirects input to the child
-	refresh		nex_cc_check_color_enable
+	refresh		nex_cc_check_grey
 }
 // Slider
 {
@@ -609,7 +745,7 @@ Option menus
 	alignment	16		// TEXT_ALIGN_LEFTPOS
 	flag		256		// FLAG_AUTOSETCLICK
 	key			nex_redirect_key	// redirects input to the child
-	refresh		nex_cc_check_color_enable
+	refresh		nex_cc_check_grey
 }
 // Slider
 {
@@ -822,5 +958,6 @@ Option menus
 	parent		options_cc
 	picture		"gfx/m_cc_pattern"
 	pos			"-243.75 270"
-	size		"487.5 137.5"
+	//size		"487.5 137.5"
+	size		"501.76 143.36"
 }

@@ -45,7 +45,7 @@ void(void) _nex_slidertext_refresh =
 
 float(float keynr, float ascii) nex_redirect_key =
 {
-	if(keynr == K_ENTER || keynr == K_LEFTARROW || keynr == K_RIGHTARROW || (keynr >= K_MOUSE1 && keynr <= K_MOUSE10))
+	if((ascii>=20 && ascii <= 126) || keynr == K_BACKSPACE || keynr == K_ENTER || keynr == K_LEFTARROW || keynr == K_RIGHTARROW || (keynr >= K_MOUSE1 && keynr <= K_MOUSE10))
 	{
 		raise_key(self._child, keynr, ascii);
 		return true;
@@ -345,6 +345,248 @@ void(void) nex_video_apply =
 	{
 		cmd("vid_restart\n");
 	}
+};
+
+/////////////////
+// xplayer.menu
+///
+
+float maxfrags;
+float maxtime;
+float maxbots;
+string mapname = "e1m1";
+entity selectmap;
+var float selectnum  = 0;
+float FRAME_WIDTH = 5;
+float MAPNAME_WIDTH = 100;
+float mapnum;
+
+// create the mapselection frame stuff
+void(void) nex_xp_build_maplist =
+{
+	entity pic;
+	entity mapname;
+	entity template_text;
+	entity template_pic;
+	float searchhandle;
+	float counter;
+
+	// search through maps for all bsps and add them to the list
+	// if a picture exists for them, add it to
+	searchhandle = search_begin("maps/*.bsp",true,true);
+	if(searchhandle == -1)
+	{
+		print("menu: No maps found...\n");
+		return;
+	}
+
+	template_text = menu_getitem("mapselection_template_text");
+	template_pic = menu_getitem("mapselection_template_picture");
+
+	mapnum = search_getsize(searchhandle);
+
+	for(counter = 0; counter < mapnum; counter = counter + 1)
+	{
+		string extstripped;
+		string allstripped;
+		float filehandle;
+
+		extstripped = search_getfilename(searchhandle, counter);
+		extstripped = substring(extstripped, 0, strlen(extstripped) - 4); // .bsp off
+		extstripped = strzone(extstripped);
+
+		allstripped = substring(extstripped, 5, 400); // maps/ off
+		allstripped = strzone(allstripped);
+
+		mapname = spawn();
+		pic = spawn();
+
+		copyentity(template_text, mapname);
+		copyentity(template_pic, pic);
+
+		mapname.name = strzone(allstripped);
+		mapname.text = strzone(allstripped);
+
+		mapname.orderpos = counter + mapnum + 1;
+
+		mapname.pos_x = counter * MAPNAME_WIDTH;
+
+		mapname.size_x = MAPNAME_WIDTH;
+		mapname.size_y = mapname.font_size_y;
+		mapname.font_size = '0 0 0';
+
+		{
+			entity old
+			old = self;
+			self = mapname;
+			ITEM_TEXT();
+			self = old;
+		}
+
+		pic.orderpos = counter + 1;
+		pic.pos_x = counter * MAPNAME_WIDTH;
+		pic.name = strzone(strcat(allstripped,"_picture"));
+
+		// TODO: add support for other formats, too
+		filehandle = search_begin(strcat(extstripped,".jpg"), true, true);
+		if(filehandle != -1)
+		{
+			pic.picture = strcat(extstripped,".jpg");
+			pic.picture = strzone(pic.picture);
+			search_end(filehandle);
+		}
+
+		if(counter == 0)
+			selectmap = mapname;
+
+		strunzone(extstripped);
+		strunzone(allstripped);
+	}
+
+	print(ftos(mapnum),"\n");
+
+	search_end(searchhandle);
+};
+
+void(void) nex_xp_prev =
+{
+	entity s;
+	if(selectnum <= 0)
+		return;
+
+	selectnum = selectnum - 1;
+
+	s = menu_getitem("mapselection_selsquare");
+	s.pos_x = selectnum * 100;
+
+	// scroll left ?
+	if((mapnum - 1 - selectnum) > floor(FRAME_WIDTH / 2) && selectnum + 1 >= ceil(FRAME_WIDTH / 2)) // 2,3
+	{
+		s = menu_getitem("mapselection_frame");
+		s.origin_x = s.origin_x + 100;
+	}
+};
+
+void(void) nex_xp_next =
+{
+	entity s;
+	if(selectnum >= mapnum - 1)
+		return;
+
+	selectnum = selectnum + 1;
+
+	s = menu_getitem("mapselection_selsquare");
+	s.pos_x = selectnum * 100;
+
+	// scroll right ?
+	if((mapnum - 1 - selectnum) >= floor(FRAME_WIDTH / 2) && selectnum + 1 > ceil(FRAME_WIDTH / 2)) // 2,3
+	{
+		s = menu_getitem("mapselection_frame");
+		s.origin_x = s.origin_x - 100;
+	}
+};
+
+void(void) nex_xp_click = // if one of the maplist entries get 'clicked' :-)
+{
+	float deltapos;
+
+	// get the position
+	// HACKHACK
+	if(self.orderpos > mapnum)
+	{
+		deltapos = self.orderpos - mapnum - selectnum - 1;
+	} else
+	{
+		deltapos = self.orderpos - selectnum - 1;
+	}
+
+	print(ftos(deltapos));
+
+	if(deltapos == 0)
+		return;
+
+	if(deltapos > 0)
+	{
+		while(deltapos > 0)
+		{
+			deltapos = deltapos - 1;
+			nex_xp_next();
+		}
+	}
+	else
+	{
+		while(deltapos < 0)
+		{
+			deltapos = deltapos + 1;
+			nex_xp_prev();
+		}
+	}
+};
+
+void(void) nex_display_singleplayer =
+{
+	if(menu_activewindow.name == "singleplayer")
+		return;
+	menu_jumptowindow(menu_getitem("singleplayer"),true);
+};
+
+void(void) nex_xp_maxfrags =
+{
+	float x;
+	x = stof(self.text);
+	x = rint(x);
+
+	maxfrags = x;
+	strunzone(self.text);
+	self.text = ftos(x);
+	self.text = strzone(self.text);
+};
+
+void(void) nex_xp_maxbots =
+{
+	float x;
+	x = stof(self.text);
+	x = rint(x);
+
+	maxbots = x;
+	strunzone(self.text);
+	self.text = ftos(x);
+	self.text = strzone(self.text);
+};
+
+void(void) nex_xp_maxtime =
+{
+	float x;
+	x = stof(self.text);
+	x = rint(x);
+
+	maxtime = x;
+	strunzone(self.text);
+	self.text = ftos(x);
+	self.text = strzone(self.text);
+};
+
+void(void) nex_sp_start =
+{
+	local float i;
+
+	cvar_set("fraglimit", ftos(maxfrags));
+	cvar_set("timelimit", ftos(maxtime));
+	cvar_set("deathmatch", ftos(1));
+	cmd("map ");
+	cmd(mapname);
+	cmd(";wait\n");
+
+	/*for(i = 0; i < maxbots; i = i + 1)
+	{
+		cmd("impulse 100;wait;wait;");
+	}*/
+	cmd("scratch1 ");
+	cmd(ftos(maxbots));
+
+	cmd("\n");
+
+	menu_toggle();
 };
 
 /////////////////

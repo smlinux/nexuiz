@@ -37,7 +37,7 @@ const string MENU_INGAME_DEFAULT =
 
 // insert the files here
 var string MENU_FILENAME_LIST =
-"menu/normal.menu menu/main.menu menu/background.menu menu/video.menu menu/options.menu"
+"menu/normal.menu menu/main.menu menu/background.menu menu/video.menu menu/options.menu menu/xplayer.menu"
 
 const float MENU_ALLOWINGAME = FALSE;
 

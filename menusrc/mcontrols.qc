@@ -832,7 +832,7 @@ void(void) ITEM_EDITBOX_DRAW =
 	if(self.text != "")
 		ITEM_TEXT_DRAW();
 
-	if(mod(time * 1000, 1000 / EDITBOX_CURSOR_FREQ) > 500 / EDITBOX_CURSOR_FREQ)
+	if(self._button_state == BUTTON_NORMAL || mod(time * 1000, 1000 / EDITBOX_CURSOR_FREQ) > 500 / EDITBOX_CURSOR_FREQ)
 		return;
 
 	csize_x = 1.5;
@@ -841,10 +841,7 @@ void(void) ITEM_EDITBOX_DRAW =
 	cpos = self.pos;
 	cpos_x = cpos_x + self._cursorpos * self.font_size_x;
 
-	if(self._button_state == BUTTON_NORMAL)
-		menu_fillarea(cpos, csize, self.color, self.alpha, self.drawflag);
-	else
-		menu_fillarea(cpos, csize, self.color_selected, self.alpha_selected, self.drawflag_selected);
+	menu_fillarea(cpos, csize, self.color_selected, self.alpha_selected, self.drawflag_selected);
 };
 
 void(float ascii) ITEM_EDITBOX_INSERT =
@@ -863,7 +860,7 @@ void(float ascii) ITEM_EDITBOX_INSERT =
 		strunzone(self.text);
 		self.text = strcat(firsthalf, chr(ascii));
 		self.text = strcat(self.text, secondhalf);
-		if(self.maxlen > 0 && strlen(self.text) > self.maxlen)
+		if(self.maxlen >= 0 && strlen(self.text) > self.maxlen)
 		{
 			// remove the last char(s)
 			self.text = substring(self.text, 0, self.maxlen);
@@ -942,14 +939,14 @@ void(float keynr, float ascii) ITEM_EDITBOX_KEY =
 		ITEM_EDITBOX_RIGHT();
 	}
 	else
-		def_keyevent(key, ascii);
+		def_keyevent(keynr, ascii);
 
 	snd_play(self.sound_pressed);
 };
 
 void(void) ITEM_EDITBOX_REFRESH =
 {
-	if(menu_selected != self)
+	if(menu_selected != self && menu_selected != self._parent)
 		self._button_state = BUTTON_NORMAL;
 	else if(self._button_state == BUTTON_NORMAL)
 	{
@@ -987,9 +984,16 @@ void(void) ITEM_EDITBOX =
 	if(self.alpha_selected == 0)
 		self.alpha_selected = ITEM_PICTURE_SELECTED_ALPHA;
 
-	ITEM_TEXT();
-
 	self.text = strzone(self.text);
+
+	ITEM_TEXT_REFRESH();
+	if(self.alignment & TEXT_ALIGN_CENTERPOS)
+	{
+		self.pos_x = self.pos_x - self.size_x / 2;
+	} else	if(self.alignment & TEXT_ALIGN_LEFTPOS)
+	{
+		self.pos_x = self.pos_x - self.size_x;
+	}
 
 	item_init(
 		defct_reinit,
