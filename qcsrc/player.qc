@@ -153,6 +153,7 @@ void PlayerCorpseDamage (vector hitloc, float damage, entity inflictor, entity a
 		TossGib (world, "models/gibs/gib4.mdl", self.origin, self.velocity);
 		TossGib (world, "models/gibs/bloodyskull.md3", self.origin, self.velocity);
 		TossGib (self, "models/gibs/eye.md3", self.origin, self.velocity);
+		sound (trace_ent, CHAN_IMPACT, "misc/gib.wav", 1, ATTN_NORM);
 	}
 }
 
