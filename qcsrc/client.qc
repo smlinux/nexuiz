@@ -21,7 +21,7 @@ entity SelectSpawnPoint (void)
 	float	pcount;
 
 	spot = findchain (classname, "info_player_deathmatch");
-	
+
 	while (spot)
 	{
 		pcount = 0;
@@ -34,10 +34,10 @@ entity SelectSpawnPoint (void)
 		}
 		if (!pcount)
 			return spot;
-			
+
 		spot = spot.chain;
 	}
-	
+
 	if (spot == world)
 	{
 		spot = findchain (classname, "info_player_start");
@@ -45,7 +45,7 @@ entity SelectSpawnPoint (void)
 			error ("No startpoint found\n");
 		return spot;
 	}
-	
+
 	return spot;
 }
 
@@ -60,38 +60,39 @@ Called when a client spawns in the server
 void PutClientInServer (void)
 {
 	entity	spot;
-	
+
 	spot = SelectSpawnPoint ();
-	
+
 	self.classname = "player";
 	self.movetype = MOVETYPE_WALK;
 	self.solid = SOLID_SLIDEBOX;
 	self.flags = FL_CLIENT;
 	self.takedamage = DAMAGE_YES;
 	self.health = 125;
-	
+	self.damageforcescale = 2;
+
 	self.ammo_shells = 100;
 	self.ammo_nails = 100;
 	self.ammo_rockets = 100;
 	self.ammo_cells = 100;
-	
+
 	self.deadflag = DEAD_NO;
-	
+
 	self.view_ofs = PL_VIEW_OFS;
 	self.angles = spot.angles;
 	setmodel (self, "models/player/player.zym");
 	setsize (self, PL_MIN, PL_MAX);
 	setorigin (self, spot.origin);
-	
+
 	self.items = IT_LASER | IT_UZI | IT_SHOTGUN | IT_GRENADE_LAUNCHER | IT_ELECTRO | IT_CRYLINK | IT_NEX | IT_HAGAR | IT_ROCKET_LAUNCHER;
 	self.weapon = IT_UZI;
-	
+
 	self.event_hurt = PlayerHurt;
 	self.event_die = PlayerDie;
-	
+
 	self.statdraintime = time + 5;
 	self.button0 = self.button1 = self.button2 = self.button3 = 0;
-	
+
 	W_UpdateWeapon ();
 	W_UpdateAmmo ();
 
@@ -105,7 +106,7 @@ SetNewParms
 */
 void SetNewParms (void)
 {
-	
+
 }
 
 /*
@@ -115,7 +116,7 @@ SetChangeParms
 */
 void SetChangeParms (void)
 {
-	
+
 }
 
 /*
@@ -127,7 +128,7 @@ Called when a client types 'kill' in the console
 */
 void ClientKill (void)
 {
-	
+
 }
 
 /*
@@ -178,9 +179,9 @@ void PlayerJump (void)
 		return;
 	if (!(self.flags & FL_JUMPRELEASED))
 		return;
-	
+
 	self.velocity_z = self.velocity_z + 270;
-	
+
 	self.flags = self.flags - FL_ONGROUND;
 	self.flags = self.flags - FL_JUMPRELEASED;
 }
@@ -197,7 +198,7 @@ void PlayerPreThink (void)
 {
 	if (BotPreFrame())
 		return;
-		
+
 	if (self.attack_finished < time)
 	{
 		if (self.button0)
@@ -221,17 +222,17 @@ void PlayerPreThink (void)
 		self.viewzoom = 0.1;
 	else if (self.viewzoom != 1)
 		self.viewzoom = 1;
-		
+
 	if (self.statdraintime < time)
 	{
 		if (self.health > 100)
 			self.health = self.health - 1;
 		if (self.armorvalue > 100)
 			self.armorvalue = self.armorvalue - 1;
-			
+
 		self.statdraintime = time + 1;
 	}
-	
+
 	self.angles_y=self.v_angle_y + 90;   // temp
 
 	player_stand ();

@@ -30,6 +30,7 @@ void SpawnCasing (vector org, vector ang, vector vel, float ctype)
 
 	casing.health = 120;
 	casing.takedamage = DAMAGE_YES;
+	casing.damageforcescale = 5;
 	casing.velocity = vel;
 	casing.owner = self;
 	casing.angles = vectoangles (ang);

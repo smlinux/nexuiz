@@ -52,3 +52,5 @@ entity dest;
 .float	norespawn;
 .float	respawntime;
 .float	chasecam;
+
+.float	damageforcescale;

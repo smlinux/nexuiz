@@ -13,68 +13,108 @@ void Obituary (entity attacker, entity targ, float deathtype)
 	}
 }
 
-void Damage (entity attacker, vector hitloc, entity targ, float deathtype, float damage)
+void Damage (entity attacker, vector hitloc, entity targ, float deathtype, float damage, vector force)
 {
 	entity	oldself;
-	
+
+	oldself = self;
+
+	// apply push
+	if (targ.damageforcescale)
+	{
+		targ.velocity = targ.velocity + force * targ.damageforcescale;
+		targ.flags = targ.flags - (targ.flags & FL_ONGROUND);
+	}
+
+	// apply damage
 	if (targ.takedamage)
 	{
 		targ.health = targ.health - damage;
-
-		oldself = self;
-		self = targ;
 
 		if (targ.health <= 0)
 		{
 			Obituary (attacker, targ, deathtype);
 			if (targ.event_die)
+			{
+				self = targ;
 				targ.event_die (hitloc, damage);
-			//return;	// self = oldself;return;
+				self = oldself;
+			}
+			return;
 		}
-		else if (targ.event_hurt)
-			targ.event_hurt (hitloc, damage);
-
-		self = oldself;
 	}
-	else if (targ.event_hurt)	// For casings, etc that aren't damageable (cheap, I know :P)
+
+	if (targ.event_hurt)
 	{
-		oldself = self;
 		self = targ;
-
-		targ.event_hurt (hitloc, damage);
-
+		self.event_hurt (hitloc, damage);
 		self = oldself;
 	}
 }
 
-void RadiusDamage (entity attacker, entity inflictor, float deathtype, float damage, entity ignore)
+void RadiusDamage (entity attacker, entity inflictor, float deathtype, float coredamage, float edgedamage, float radius, entity ignore, float forceintensity)
 {
 	entity	targ;
 	float	finaldmg;
+	float	power;
+	vector	blastorigin;
+	vector	force;
+	vector	m1;
+	vector	m2;
+	vector	nearest;
+	vector	diff;
 
-	targ = findradius (inflictor.origin, damage);
+	blastorigin = (inflictor.origin + (inflictor.mins + inflictor.maxs) * 0.5);
+
+	targ = findradius (blastorigin, radius);
 	while (targ)
 	{
 		if (targ != inflictor)
 			if (ignore != targ)
 			{
-				finaldmg = damage - max (0, 0.5 * vlen (inflictor.origin - targ.origin));
-				if (targ == attacker)
-					finaldmg = finaldmg * 0.6;	// Partial damage if the attacker hits himself
-				if (finaldmg > 0)
-					Damage (attacker, inflictor.origin, targ, deathtype, finaldmg);
+				// LordHavoc: measure distance to nearest point on target (not origin)
+				// (this guarentees 100% damage on a touch impact)
+				nearest = blastorigin;
+				m1 = targ.origin + targ.mins;
+				m2 = targ.origin + targ.maxs;
+				if (nearest_x < m1_x) nearest_x = m1_x;
+				if (nearest_y < m1_y) nearest_y = m1_y;
+				if (nearest_z < m1_z) nearest_z = m1_z;
+				if (nearest_x > m2_x) nearest_x = m2_x;
+				if (nearest_y > m2_y) nearest_y = m2_y;
+				if (nearest_z > m2_z) nearest_z = m2_z;
+				diff = nearest - blastorigin;
+				// round up a little on the damage to ensure full damage on impacts
+				// and turn the distance into a fraction of the radius
+				power = 1 - ((vlen (diff) - 2) / radius);
+				bprint(" ");
+				bprint(ftos(power));
+				if (power > 0)
+				{
+					if (power > 1)
+						power = 1;
+					finaldmg = coredamage * power + edgedamage * (1 - power);
+					force = normalize(diff) * (finaldmg / coredamage) * forceintensity;
+					if (targ == attacker)
+						finaldmg = finaldmg * 0.6;	// Partial damage if the attacker hits himself
+					if (finaldmg > 0)
+						Damage (attacker, inflictor.origin, targ, deathtype, finaldmg, force);
+				}
 			}
 		targ = targ.chain;
 	}
 }
 
+/*
 entity	multi_ent;
 float	multi_damage;
+vector	multi_force;
 
 void ClearMultiDamage (void)
 {
 	multi_ent = world;
 	multi_damage = 0;
+	multi_force = '0 0 0';
 }
 
 void ApplyMultiDamage (void)
@@ -82,23 +122,24 @@ void ApplyMultiDamage (void)
 	if (!multi_ent)
 		return;
 
-	Damage (self, multi_ent.origin, multi_ent, 0, multi_damage);
+	Damage (self, multi_ent.origin, multi_ent, 0, multi_damage, multi_force);
 }
 
-void AddMultiDamage (entity hit, float damage)
+void AddMultiDamage (entity hit, float damage, vector force)
 {
 	if (!hit)
 		return;
-		
+
 	if (hit != multi_ent)
 	{
 		ApplyMultiDamage ();
-		multi_damage = damage;
+		ClearMultiDamage ();
 		multi_ent = hit;
 	}
-	else
-		multi_damage = multi_damage + damage;
+	multi_damage = multi_damage + damage;
+	multi_force = multi_force + force;
 }
+*/
 
 void FireBullets (float shotcount, vector dir, vector spread)
 {
@@ -106,37 +147,37 @@ void FireBullets (float shotcount, vector dir, vector spread)
 	vector	source;
 	vector	vel;
 	vector	org;
-	
+
 	makevectors (self.v_angle);
-	
+
 	source = self.origin + v_forward * 10;	// FIXME
 	source_x = self.absmin_z + self.size_z * 0.7;	// ??? whaddabout view_ofs
-	
-	ClearMultiDamage ();
+
+	// LordHavoc: better to use normal damage
+	//ClearMultiDamage ();
 	while (shotcount > 0)
 	{
 		direction = dir + crandom () * spread_x * v_right + crandom () * spread_y * v_up;
-		
+
 		traceline (source, source + direction * 2048, FALSE, self);
 		if (trace_fraction != 1.0)
 		{
 			vel = normalize (direction + v_up * crandom () + v_right * crandom ());
 			vel = vel + 2 * trace_plane_normal;
 			vel = vel * 200;
-			
+
 			org = trace_endpos - direction * 4;
-			
-			if (trace_ent.takedamage)
-			{
-				//te_blood (
-				AddMultiDamage (trace_ent, 4);
-			}
-			else
+
+			if (!trace_ent.takedamage)
 				te_gunshot (org);
+			// LordHavoc: better to use normal damage
+			//AddMultiDamage (trace_ent, 4, direction * 4);
+			Damage (self, trace_endpos, trace_ent, 0, 4, direction * 4);
 		}
-		
+
 		shotcount = shotcount + 1;
 	}
-	
-	ApplyMultiDamage ();
+
+	// LordHavoc: better to use normal damage
+	//ApplyMultiDamage ();
 }
