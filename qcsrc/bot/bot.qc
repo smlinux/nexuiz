@@ -88,7 +88,8 @@ ClientDisconnected(); // FrikBot
 void() bot_map_load =
 {
 	// place your qc loaded waypoints here
-	map_mattrye2();
+	if (mapname == "mattrye1_nex")
+		map_mattrye1_nex();
 };
 
 /*
