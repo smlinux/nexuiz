@@ -1,0 +1,16 @@
+This is a small todo list, which doesn't have all the needed things but whatever.
+You can add whatever you want to this black, and I'll try to do as many of these items as I can also.
+
+
+BUGS:
+- The user has to exit from every single menu he has seen, he should just have to click "esc" twice, once to get out of every menu and get back to what it started like (with the nexuiz logo in the center), and another to exit the menu entirly (if ingame).
+
+SP MENU:
+- No need to center the map that is currently selected. Just highlight it, that is all.
+- Next and prev buttons should be replaced with arrows
+- This is just an idea, but since we have so much extra room on the SP menu maybe we should show a large version of the map image selected? We could have 5 pictures to choose from (and then use the prev and next button to go through all the maps, exactly like it is now), and whatever map is selected could have its image enlarged in the top of the screen above all the other options (I mean a big image seperate from the 5 images)
+
+MP MENU:
+
+
+Options:
