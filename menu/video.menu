@@ -1,0 +1,97 @@
+/*
+Property of Alientrap
+
+Video menu
+*/
+//////
+// Resolution
+////
+// Text
+{
+	type	 	ITEM_TEXTBUTTON
+	name		video_resolution_text
+	parent		video
+	text		"Resolution"
+	pos			"0 0 0"
+	//font_size	"10 10 0"
+	alignment	16		// TEXT_ALIGN_RIGHTPOS
+	flag		256		// FLAG_AUTOSETCLICK
+	key			nex_redirect_key
+}
+// Switch
+{
+	type		ITEM_TEXTSWITCH
+	name		video_resolution_switch
+	parent		video_resolution_text
+	pos			"10 0 0"
+	//font_size	"10 10 0"
+	flag 		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
+	init		nex_video_resolution_switch
+}
+//////
+// Bits per pixel
+////
+// Text
+{
+	type	 	ITEM_TEXTBUTTON
+	name		video_bpp_text
+	parent		video
+	text		"Bits per pixel"
+	pos			"0 15 0"
+	//font_size	"10 10 0"
+	alignment	16		// TEXT_ALIGN_RIGHTPOS
+	flag		256		// FLAG_AUTOSETCLICK
+	key			nex_redirect_key
+}
+// Switch
+{
+	type		ITEM_TEXTSWITCH
+	name		video_bpp_switch
+	parent		video_bpp_text
+	pos			"10 15 0"
+	//font_size	"10 10 0"
+	flag 		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
+	text		"'16''32'"
+	reinit		nex_video_bpp_reinit
+}
+//////
+// Fullscreen
+////
+// Text
+{
+	type	 	ITEM_TEXTBUTTON
+	name		video_fullscreen_text
+	parent		video
+	text		"Fullscreen"
+	pos			"0 30 0"
+	//font_size	"10 10 0"
+	alignment	16		// TEXT_ALIGN_RIGHTPOS
+	flag		256		// FLAG_AUTOSETCLICK
+	key			nex_redirect_key
+}
+// Switch
+{
+	type		ITEM_TEXTSWITCH
+	name		video_fullscreen_switch
+	parent		video_fullscreen_text
+	pos			"10 30 0"
+	//font_size	"10 10 0"
+	flag 		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
+	text		"'Off''On'"
+	reinit		nex_video_fullscreen_reinit
+}
+/////
+// Apply
+///
+{
+	type		ITEM_TEXTBUTTON
+	name		video_apply
+	parent		video
+	pos			"10 60 0"
+	//font_size	"10 10 0"
+	flag		256		// FLAG_AUTOSETCLICK
+	text		"Apply"
+	action		nex_video_apply
+}
+
+

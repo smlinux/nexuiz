@@ -1,0 +1,222 @@
+/*
+Property of Alientrap
+
+Normal main menu
+*/
+{
+	type 		ITEM_WINDOW
+	name		main
+	parent		normal
+	origin		"0 0 0"
+}
+{
+	type		ITEM_WINDOW
+	name		background
+	parent		main
+	origin		"0 0 0"
+}
+// main menu
+{
+	type		ITEM_WINDOW
+	name		mainmenu
+	parent		main
+	origin		"201 42"
+}
+{
+	type		ITEM_WINDOW
+	name		mainframe
+	parent		mainmenu
+	origin 		"-201 -42"	
+	orderpos	1
+}
+/*
+template
+
+// nnn
+{
+	type		ITEM_BUTTON
+	name		mainframe_nnn
+	parent 		mainframe
+	pos		"0 0"
+	size		"185 58"
+	picture		"gfx/m_top_nnn"
+	picture_selected "gfx/m_top_sel_nnn"
+	picture_pressed	"gfx/m_top_sel_nnn"
+	drawflag_pressed 1 // DRAWFLAG_ADD
+}
+*/
+// singleplayer
+{
+	type		ITEM_BUTTON
+	name		mainmenu_singleplayer
+	parent 		mainmenu
+	//pos			"201 17"
+	pos		"0 0"
+	size		"185 58"
+	picture		"gfx/m_top_singleplayer"
+	picture_selected "gfx/m_top_sel_singleplayer"
+	picture_pressed	"gfx/m_top_sel_singleplayer"
+	drawflag_pressed 0
+	action		nex_display_singleplayer
+}
+// multiplayer
+{
+	type		ITEM_BUTTON
+	name		mainmenu_multiplayer
+	parent 		mainmenu
+	pos		"185 0"
+	size		"170 58"
+	picture		"gfx/m_top_multiplayer"
+	picture_selected "gfx/m_top_sel_multiplayer"
+	picture_pressed	"gfx/m_top_sel_multiplayer"
+	drawflag_pressed 0
+	action		nex_display_multiplayer
+}
+// options
+{
+	type		ITEM_BUTTON
+	name		mainmenu_options
+	parent 		mainmenu
+	pos		"355 0"
+	size		"113 58"
+	picture		"gfx/m_top_options"
+	picture_selected "gfx/m_top_sel_options"
+	picture_pressed	"gfx/m_top_sel_options"
+	drawflag_pressed 0
+	action		nex_display_options
+}
+// video
+{
+	type		ITEM_BUTTON
+	name		mainmenu_video
+	parent 		mainmenu
+	pos		"469 0"
+	size		"84 58"
+	picture		"gfx/m_top_video"
+	picture_selected "gfx/m_top_sel_video"
+	picture_pressed	"gfx/m_top_sel_video"
+	drawflag_pressed 0
+	action		nex_display_video
+}
+// quit
+{
+	type		ITEM_BUTTON
+	name		mainmenu_quit
+	parent 		mainmenu
+	pos		"553 0"
+	size		"67 58"
+	picture		"gfx/m_top_quit"
+	picture_selected "gfx/m_top_sel_quit"
+	picture_pressed	"gfx/m_top_sel_quit"
+	drawflag_pressed 0
+	action		nex_quit
+}
+// frame windows
+{
+	type		ITEM_PICTURE
+	name		main_strength
+	parent		mainframe
+	picture		"gfx/m_strength"
+	pos		"220 72 0"
+	size		"577 533 0"
+	drawflag	1
+	reinit		nex_makeselfonlyvisible
+}
+{
+	type 		ITEM_WINDOW
+	name		singleplayer
+	parent		mainframe
+	origin 		"500 175"
+}
+{
+	type		ITEM_WINDOW
+	name		multiplayer
+	parent  	mainframe
+	origin		"350 100"
+}
+{
+	type		ITEM_WINDOW
+	name		options
+	parent 		mainframe
+}
+{
+	type 		ITEM_WINDOW
+	name		video
+	parent		mainframe
+	origin		"512 200"
+}
+// quit window
+{
+	type		ITEM_WINDOW
+	name		quitbox
+}
+// nice hack so I dont have to change the menu manager
+{
+	type		ITEM_REFERENCE
+	name		quitbox_ref
+	parent		quitbox
+	flag		1024	// FLAG_CHILDDRAWONLY
+}
+// quit stuff
+{
+	type		ITEM_WINDOW
+	name		quitbox_wnd
+	parent		quitbox
+	origin 		"407 344"
+}
+// quit box
+{
+	type		ITEM_RECTANGLE
+	name		quitbox_wnd_bg
+	parent		quitbox_wnd
+	color		"0.0 0.0 0.1"
+	alpha		0.5
+	drawflag	0	// DRAWFLAG_MODULATE
+	size		"210 80"
+}/*
+{
+	type		ITEM_TEXT
+	name		quitbox_wnd_text1
+	parent		quitbox_wnd
+	pos			"10 10"
+}
+{
+	type		ITEM_TEXT
+	name		quitbox_wnd_text2
+	parent		quitbox_wnd
+	pos			"10 30"
+}*/
+{
+	type		ITEM_TEXT
+	name		quitbox_wnd_text
+	parent		quitbox_wnd
+	text		"Exit Game ?"
+	size		"200 13"
+	font_size	"13 13"
+	alignment	1
+	pos			"10 10"
+}
+// yes
+{
+	type		ITEM_TEXTBUTTON
+	name		quitbox_wnd_yes
+	parent		quitbox_wnd
+	pos			"10 50"
+	text		"Yes"
+	action		nex_quit_yes
+	key			nex_quit_key
+	orderpos	101
+}
+// no
+{
+	type		ITEM_TEXTBUTTON
+	name		quitbox_wnd_no
+	parent		quitbox_wnd
+	pos			"180 50"
+	text		"No"
+	action		nex_quit_no
+	key			nex_quit_key
+	orderpos	100
+}
+
+
