@@ -191,6 +191,15 @@ void ImpulseCommands (void)
 		setmodel (self, "models/player/lycanthrope.zym");
 		setsize (self, PL_MIN, PL_MAX);
 	}
+	else if (self.impulse == 37 && !self.crouch)
+	{
+		self.crouch = TRUE;
+		self.view_ofs_z = self.view_ofs_z - 20;
+	}
+	else if (self.impulse == 38 && self.crouch) {
+		self.crouch = FALSE;
+		self.view_ofs_z = self.view_ofs_z + 20;
+	}
 	else if (self.impulse == 99)
 	{
 		self.items = IT_LASER | IT_UZI | IT_SHOTGUN | IT_GRENADE_LAUNCHER | IT_ELECTRO | IT_CRYLINK | IT_NEX | IT_HAGAR | IT_ROCKET_LAUNCHER;

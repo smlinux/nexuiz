@@ -32,6 +32,7 @@ entity dest;
 .float	pain_finished			//Added by Supajoe
 .float	pain_frame			//"
 .float	statdraintime;			// record the one-second intervals between draining health and armour when they're over 100
+.float  crouch;	// Crouching or not?
 
 .vector		finaldest, finalangle; 		//plat.qc stuff
 .void()		think1;

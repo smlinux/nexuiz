@@ -57,6 +57,8 @@ void player_anim (void)
 		return;
 	}
 	/* LordHavoc: crouching was canceled
+	   diGGer: crouching was resumed :)
+	*/
 	if (self.crouch)
 	{
 		// duck
@@ -65,9 +67,7 @@ void player_anim (void)
 		else
 			self.frame = $duckidle;
 	}
-	else
-	*/
-	if ((self.movement_x * self.movement_x + self.movement_y * self.movement_y) > 20)
+	else if ((self.movement_x * self.movement_x + self.movement_y * self.movement_y) > 20)
 	{
 		if (self.movement_x > 0 && self.movement_y == 0)
 			self.frame = $run;
