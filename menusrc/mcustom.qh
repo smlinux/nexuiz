@@ -36,7 +36,7 @@ yypp	- y position
 }
 // Slider
 {
-	classname	ITEM_SLIDER
+	type		ITEM_SLIDER
 	name		ppp_nnn_slider
 	parent		ppp_nnn_text
 	pos			"10 yypp 0"
@@ -52,7 +52,7 @@ yypp	- y position
 }
 // Text
 {
-	classname 	ITEM_TEXT
+	type 		ITEM_TEXT
 	name		ppp_nnn_slidertext
 	parent		ppp_nnn_text
 	link		ppp_nnn_slider
@@ -76,7 +76,7 @@ ssss 	- switches 'No' 'Yes'
 ////
 // Text
 {
-	classname 	ITEM_TEXTBUTTON
+	type 	ITEM_TEXTBUTTON
 	name		ppp_nnn_text
 	parent		ppp
 	text		"cccc"
@@ -88,7 +88,7 @@ ssss 	- switches 'No' 'Yes'
 }
 // Switch
 {
-	classname	ITEM_TEXTSWITCH
+	type	ITEM_TEXTSWITCH
 	name		ppp_nnn_switch
 	parent		ppp_nnn_text
 	pos			"10 yypp 0"

@@ -157,7 +157,7 @@ void(void) nex_quit_choose =
 
 void(void) nex_quit =
 {
-	entity ent;
+/*	entity ent;
 	// choose a quit message
 	nex_quit_choose();
 
@@ -166,7 +166,14 @@ void(void) nex_quit =
 	ent.flag = ent.flag | FLAG_CHILDDRAWONLY;
 	ent = menu_getitem("quit");
 	ent.flag = FLAG_NOSELECT;
-	menu_jumptowindow(ent, false);
+	menu_jumptowindow(ent, false);*/
+	entity ent;
+
+	// change the flags
+	ent = menu_getitem("quitbox_ref");
+	ent._child = menu_activewindow;
+	ent = menu_getitem("quitbox");
+	menu_jumptowindow(ent, true);
 };
 
 void(void) nex_quit_yes =
@@ -176,7 +183,7 @@ void(void) nex_quit_yes =
 
 void(void) nex_quit_no =
 {
-	entity ent;
+/*	entity ent;
 
 	ent = menu_getitem("quit_msg_0");
 	strunzone(ent.text);
@@ -188,6 +195,7 @@ void(void) nex_quit_no =
 	ent.flag = FLAG_HIDDEN;
 	ent = menu_getitem("main");
 	ent.flag = ent.flag - FLAG_CHILDDRAWONLY;
+	menu_selectup();*/
 	menu_selectup();
 };
 
@@ -206,6 +214,104 @@ float(float keynr, float ascii) nex_quit_key =
 	if(ascii == 'N' || ascii == 'n' || keynr == K_ESCAPE)
 		nex_quit_no();
 	return true;
+};
+
+/////////////////
+// video.menu
+
+void(void) nex_display_video =
+{
+	if(menu_activewindow.name == "video")
+		return;
+	menu_jumptowindow(menu_getitem("video"),true);
+};
+
+void(void) nex_video_bpp_reinit =
+{
+	if(cvar("vid_bitsperpixel") == 32)
+		self.value = 1;
+	else
+		self.value = 0;
+};
+
+void(void) nex_video_fullscreen_reinit =
+{
+	self.value = cvar("vid_fullscreen");
+};
+
+var string nex_video_resolutions = "";
+
+void(void) nex_video_resolution_switch_reinit =
+{
+};
+
+void(void) nex_video_resolution_switch =
+{
+	var float pos86 = 0;
+	var float counter = 0;
+	vector t;
+
+	self.text = "";
+	self.value = -1;
+
+	while((t = getresolution(counter)) != '0 0 0')
+	{
+		if(t == '800 600 0')
+			pos86 = counter;
+		if(t_x == cvar("vid_width") && t_y == cvar("vid_height"))
+			self.value = counter;
+		counter = counter + 1;
+		self.text = strcat(self.text,"'",ftos(t_x),"x");
+		self.text = strcat(self.text,ftos(t_y),"'");
+		nex_video_resolutions = strcat(nex_video_resolutions,vtos(t));
+	}
+
+	if(self.value == -1)
+		self.value = pos86;
+
+	self.text = strzone(self.text);
+	nex_video_resolutions = strzone(nex_video_resolutions);
+	self.value = 1;
+};
+
+void(void) nex_video_apply =
+{
+	vector set, res;
+	float changed;
+	entity tmp;
+
+	// resolution test
+	res_x = cvar("vid_width");
+	res_y = cvar("vid_height");
+	res_z = 0;
+
+	tmp = menu_getitem("video_wnd_resolution_switch");
+	set = stov(getaltstring(tmp.value, nex_video_resolutions));
+	if(set != res)
+	{
+		cvar_set("vid_width",ftos(set_x));
+		cvar_set("vid_height",ftos(set_y));
+		changed = true;
+	}
+	// bpp test
+	tmp = menu_getitem("video_wnd_bpp_switch");
+	if(tmp.value != cvar("vid_bitsperpixel"))
+	{
+		cvar_set("vid_bitsperpixel",ftos((tmp.value+1)*16));
+		changed = true;
+	}
+	// fullscreen changed
+	tmp = menu_getitem("video_wnd_fullscreen_switch");
+	if(tmp.value != cvar("vid_fullscreen"))
+	{
+		cvar_set("vid_fullscreen",ftos(tmp.value));
+		changed = true;
+	}
+
+	if(changed)
+	{
+		cmd("vid_restart\n");
+	}
 };
 
 /////////////////

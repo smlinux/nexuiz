@@ -306,6 +306,7 @@ void(float keynr, float ascii)	def_keyevent =
 	} else if(keynr == K_TAB)
 	{
 		// select next and try to "go" down
+		// TODO: make a loop out of that !
 		if(self._next)
 		{
 			menu_selected = self._next;

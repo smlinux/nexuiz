@@ -22,39 +22,32 @@ void(void) ITEM_WINDOW =
 		defct_mouse_leave,
 		defct_action,
 		defct_refresh);
+
+	ctcall_init();
 };
 
 //////////////////
 // ITEM_REFERENCE
 ///
 
-void(void) ITEM_REFERENCE_REINIT =
-{
-	self._child = menu_getitem(self.link);
-	if(self._child == null_entity)
-	{
-		print(self.name, " removed, cause link ", self.link, " not found\n");
-		remove(self);	// no need to call terminate
-		return;
-	}
-
-	ctcall_init();
-
-	self._reinit = defct_reinit;
-};
-
 void(void) ITEM_REFERENCE =
 {
 	self.flag = self.flag | FLAG_NOSELECT | FLAG_DRAWONLY;
 
-	if(self.link == "")
+	// if there is no link, this is a dynamic reference
+	if(self.link != "")
 	{
-		remove(self);	// no need to call terminate
-		return;
+		self._child = menu_getitem(self.link);
+		if(self._child == null_entity)
+		{
+			print(self.name, " removed, cause link ", self.link, " not found\n");
+			remove(self);	// no need to call terminate
+			return;
+		}
 	}
 
 	item_init(
-		ITEM_REFERENCE_REINIT,
+		defct_reinit,
 		defct_destroy,
 		defct_key,
 		defct_draw,
@@ -62,6 +55,8 @@ void(void) ITEM_REFERENCE =
 		defct_mouse_leave,
 		defct_action,
 		defct_refresh);
+
+	ctcall_init();
 };
 
 ////////////////
@@ -71,6 +66,7 @@ void(void) ITEM_REFERENCE =
 void(void) ITEM_CUSTOM =
 {
 	item_init(defct_reinit,	defct_destroy, defct_key, defct_draw, defct_mouse_enter, defct_mouse_leave, defct_action, defct_refresh);
+	ctcall_init();
 };
 
 /////////////////
@@ -119,6 +115,8 @@ void(void) ITEM_PICTURE =
 		defct_mouse_leave,
 		defct_action,
 		defct_refresh);
+
+	ctcall_init();
 };
 
 /////////////
@@ -193,6 +191,8 @@ void(void) ITEM_TEXT =
 		defct_mouse_leave,
 		defct_action,
 		ITEM_TEXT_REFRESH);
+
+	ctcall_init();
 };
 
 /////////////////
@@ -218,6 +218,8 @@ void(void) ITEM_RECTANGLE =
 		defct_mouse_leave,
 		defct_action,
 		defct_refresh);
+
+	ctcall_init();
 };
 
 ////////////////
@@ -340,6 +342,8 @@ void(void) ITEM_BUTTON =
 		defct_mouse_leave,
 		defct_action,
 		ITEM_BUTTON_REFRESH);
+
+	ctcall_init();
 };
 
 ////////////////////
@@ -504,7 +508,7 @@ void(void) ITEM_TEXTBUTTON_REINIT =
 {
 	self._button_state = BUTTON_NORMAL;
 
-	ctcall_init();
+	ctcall_reinit();
 };
 
 void(void) ITEM_TEXTBUTTON =
@@ -556,6 +560,8 @@ void(void) ITEM_TEXTBUTTON =
 		defct_mouse_leave,
 		ITEM_TEXTBUTTON_ACTION,
 		ITEM_TEXTBUTTON_REFRESH);
+
+	ctcall_init();
 };
 
 // ITEM_SLIDER
@@ -577,7 +583,7 @@ void(void) ITEM_SLIDER_DRAW =
 
 	// draw the slider
 	slider_pos = self.pos;
-	slider_pos_x = slider_pos_x + ((self.size_x - self.slider_size_x) / (self.max_value - self.min_value)) * (self.value - self.min_value);
+	slider_pos_x = slider_pos_x + self.left_margin + ((self.size_x - self.slider_size_x - self.left_margin - self.right_margin) / (self.max_value - self.min_value)) * (self.value - self.min_value);
 	if(self.picture != "")
 	{
 		menu_drawpic(slider_pos, self.picture, self.slider_size, self.color, self.alpha, self.drawflag);
@@ -614,7 +620,18 @@ void(float keynr, float ascii) ITEM_SLIDER_KEY =
 	{
 		if(inrect(menu_cursor, self.pos, self.size))
 		{
-			self.value = self.min_value + ((menu_cursor_x - self.slider_size_x / 2) - self.pos_x) * ((self.max_value - self.min_value) / (self.size_x - self.slider_size_x));
+			if(menu_cursor_x - self.pos_x <= self.left_margin)
+			{
+				self.value = (rint(self.value / self.step) - 1)* self.step;
+			}
+			else if(menu_cursor_x - self.pos_x >= self.size_x - self.right_margin)
+			{
+				self.value = (rint(self.value / self.step) + 1)* self.step;
+			}
+			else
+			{
+				self.value = self.min_value + ((menu_cursor_x - self.slider_size_x / 2) - self.pos_x - self.left_margin) * ((self.max_value - self.min_value) / (self.size_x - self.slider_size_x - self.left_margin - self.right_margin));
+			}
 		}
 	}
 	else
@@ -659,6 +676,10 @@ void(void) ITEM_SLIDER =
 		else
 			self.slider_size = ITEM_SLIDER_SIZE;
 	}
+	if(self.left_margin == 0)
+		self.left_margin = ITEM_SLIDER_LEFT_MARGIN;
+	if(self.right_margin == 0)
+		self.right_margin = ITEM_SLIDER_RIGHT_MARGIN;
 
 	item_init(
 		defct_reinit,
@@ -669,6 +690,8 @@ void(void) ITEM_SLIDER =
 		defct_mouse_leave,
 		defct_action,
 		defct_refresh);
+
+	ctcall_init();
 };
 
 // ITEM_TEXTSWITCH
@@ -746,6 +769,8 @@ void(void) ITEM_TEXTSWITCH =
 		defct_mouse_leave,
 		defct_action,
 		ITEM_TEXTSWITCH_REFRESH);
+
+	ctcall_init();
 };
 
 /*

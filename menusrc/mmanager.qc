@@ -218,6 +218,14 @@ void(void) menu_linkwindows =
 		}
 	}
 
+	// call the type functions (former classname functions)
+	ent = null_entity;
+	while((ent = nextent(ent)) != null_entity)
+	{
+		self = ent;
+		callfunction(self.type);
+	}
+
 	// now auto-set all ents with orderpos 0
 	self = null_entity;
 	while((self = findfloat(self,orderpos, 0)) != null_entity)
@@ -287,14 +295,6 @@ void(void) menu_linkwindows =
 			}
 		}
 	}
-
-	// call the type functions (former classname functions)
-	ent = null_entity;
-	while((ent = nextent(ent)) != null_entity)
-	{
-		self = ent;
-		callfunction(self.type);
-	}
 };
 
 void(void) menu_toggle =
@@ -337,7 +337,7 @@ void(void) menu_performreinit =
 	menu_selectdown();
 };
 
-void(entity par, float selectalways) menu_processmouse =
+void(entity par, float selectstate) menu_processmouse =
 {
 	// self is parent
 	// loop through all childs
@@ -372,11 +372,11 @@ void(entity par, float selectalways) menu_processmouse =
 				}
 
 				// select it ?
-				if(menu_selectable(ent))
+				if(menu_selectable(ent) && selectstate != MENU_SELECT_NEVER)
 				{
 					menu_selected = ent;
 				}
-				else if(selectalways)
+				else if(selectstate == MENU_SELECT_ALWAYS)
 				{
 					if(menu_hasevents(ent))
 					{
@@ -403,7 +403,14 @@ void(entity par, float selectalways) menu_processmouse =
 			// if ent has children recurse through them
 			if(ent._child != null_entity)
 			{
-				menu_processmouse(ent, selectalways);
+				if((ent.flag & FLAG_CHILDDRAWONLY) || (ent.flag & FLAG_CHILDDRAWREFRESHONLY))
+				{
+					menu_processmouse(ent, MENU_SELECT_NEVER);
+				}
+				else
+				{
+					menu_processmouse(ent, selectstate);
+				}
 			}
 		}
 	} while((ent = ent._next) != null_entity);
@@ -424,7 +431,7 @@ void(void) menu_frame =
 	}*/
 	// if mouse moved, process it
 	if(cursor_rel != '0 0 0')
-		menu_processmouse(menu_activewindow, false);
+		menu_processmouse(menu_activewindow, MENU_SELECT_SELECTABLE);
 
 }
 
@@ -487,11 +494,6 @@ void(entity menu) menu_drawwindow =
 				menu_drawwindow(ent);
 			}
 
-			// reset the clip area to the current menu's
-			if(menu_clip_size != '0 0 0')
-				gfx_setcliparea(menu_clip_pos, menu_clip_size);
-			else
-				gfx_resetcliparea();
 		}
 	} while((ent = ent._next) != null_entity);
 
@@ -503,7 +505,13 @@ void(entity menu) menu_drawwindow =
 		menu_clip_size = old_c_size;
 		menu_clip_pos = old_c_pos;
 	}
-};
+
+	// reset the clip area of the old menu
+	if(menu_clip_size != '0 0 0')
+		gfx_setcliparea(menu_clip_pos, menu_clip_size);
+	else
+		gfx_resetcliparea();
+}
 
 void(void) menu_draw =
 {
@@ -585,7 +593,7 @@ void(float keynr, float ascii) menu_keydown =
 		entity key_selected;
 		key_selected = menu_selected;
 		menu_selected = null_entity;
-		menu_processmouse(menu_activewindow, true);
+		menu_processmouse(menu_activewindow, MENU_SELECT_ALWAYS);
 		// if we find anything, we give it the key event, perhaps it can use it
 		if(menu_selected != key_selected)
 		{
@@ -719,14 +727,17 @@ void(void) menu_selectdown =
 			// add the history item
 			menu_pushhistory(ent._child);
 
-			// give it a try
-			menu_selected = ent;
-			menu_selectdown();
-
-			// found one ?
-			if(menu_selected != ent)
+			if(!(ent.flag & FLAG_CHILDDRAWONLY) && !(ent.flag & FLAG_CHILDDRAWREFRESHONLY))
 			{
-				return;
+				// give it a try
+				menu_selected = ent;
+				menu_selectdown();
+
+				// found one ?
+				if(menu_selected != ent)
+				{
+					return;
+				}
 			}
 
 			// nothing found, then remove the history item
@@ -754,39 +765,50 @@ void(void) menu_selectup =
 	// reset menu_selected
 	menu_selected = null_entity;
 
-	print("Selectup called !\n");
+	dprint("Selectup called !\n");
 
 	while(1)
 	{
-		eprint(ent);
-
-		// does a history entry exist for the current object ?
-		if(menu_verifyhistory(ent))
-		{
-			menu_pophistory();
-			break;
-		}
-
 		// reset the active window if we reached it
 		if(ent == menu_activewindow)
 			menu_activewindow = null_entity;
 
+		// does a history entry exist for the current object ?
+		if(menu_history != null_entity)
+		{
+			dprint(etos(ent), " is popable !\n");
+			menu_pophistory();
+			if(menu_selectable(menu_selected))
+			{
+				dprint(etos(menu_selected), " is selectable !\n");
+				break;
+			}
+			ent = menu_selected;
+		} else
+		{
+			break;
+		}
+
+		eprint(ent);
+
 		// move up
-		if(ent._parent == null_entity)
+		/*if(ent._parent == null_entity)
 		{
 			// nothing found -> break
+			dprint("0\n");
 			break;
 		}
 		else
 		{
 			ent = ent._parent;
-		}
+		}*/
 
 		menu_selected = ent;
 		// is it selecteable ?
 		if(menu_selectable(ent))
 		{
 			// we found our item !
+			dprint("A\n");
 			break;
 		}
 
@@ -795,6 +817,7 @@ void(void) menu_selectup =
 		if(menu_selected != ent)
 		{
 			// we found it !
+			dprint("B\n");
 			break;
 		}
 		// try selectprev
@@ -802,6 +825,7 @@ void(void) menu_selectup =
 		if(menu_selected != ent)
 		{
 			// we found it !
+			dprint("C\n");
 			break;
 		}
 	}
@@ -830,6 +854,8 @@ void(void) menu_selectup =
 		else
 			menu_activewindow = ent;
 	}
+	eprint(menu_selected);
+	eprint(menu_activewindow);
 };
 
 void(void) menu_reselect =

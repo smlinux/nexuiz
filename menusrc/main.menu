@@ -73,6 +73,7 @@ template
 	picture_selected "gfx/m_top_sel_video"
 	picture_pressed	"gfx/m_top_sel_video"
 	drawflag_pressed 0
+	action		nex_display_video
 }
 // quit
 {
@@ -85,4 +86,80 @@ template
 	picture_selected "gfx/m_top_sel_quit"
 	picture_pressed	"gfx/m_top_sel_quit"
 	drawflag_pressed 0
+	action		nex_quit
 }
+// quit window
+{
+	type		ITEM_WINDOW
+	name		quitbox
+}
+// nice hack so I dont have to change the menu manager
+{
+	type		ITEM_REFERENCE
+	name		quitbox_ref
+	parent		quitbox
+	flag		1024	// FLAG_CHILDDRAWONLY
+}
+// quit stuff
+{
+	type		ITEM_WINDOW
+	name		quitbox_wnd
+	parent		quitbox
+	origin 		"407 344"
+}
+// quit box
+{
+	type		ITEM_RECTANGLE
+	name		quitbox_wnd_bg
+	parent		quitbox_wnd
+	color		"0.1 0.1 0.1"
+	drawflag	2	// DRAWFLAG_MODULATE
+	size		"210 80"
+}/*
+{
+	type		ITEM_TEXT
+	name		quitbox_wnd_text1
+	parent		quitbox_wnd
+	pos			"10 10"
+}
+{
+	type		ITEM_TEXT
+	name		quitbox_wnd_text2
+	parent		quitbox_wnd
+	pos			"10 30"
+}*/
+{
+	type		ITEM_TEXT
+	name		quitbox_wnd_text
+	parent		quitbox_wnd
+	text		"Exit Game ?"
+	size		"200 13"
+	font_size	"13 13"
+	alignment	1
+	pos			"10 10"
+}
+// yes
+{
+	type		ITEM_TEXTBUTTON
+	name		quitbox_wnd_yes
+	parent		quitbox_wnd
+	pos			"10 50"
+	text		"Yes"
+	action		nex_quit_yes
+	key			nex_quit_key
+	orderpos	101
+}
+// no
+{
+	type		ITEM_TEXTBUTTON
+	name		quitbox_wnd_no
+	parent		quitbox_wnd
+	pos			"180 50"
+	text		"No"
+	action		nex_quit_no
+	key			nex_quit_key
+	orderpos	100
+}
+
+
+

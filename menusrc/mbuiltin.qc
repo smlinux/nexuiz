@@ -157,4 +157,4 @@ float	getmousetarget(void)	  = #604;
 float	isfunction(string function_name) = #607;
 void	callfunction(...) = #605;
 void	writetofile(float fhandle, entity ent) = #606;
-
+vector	getresolution(float number) = #608;

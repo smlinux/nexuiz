@@ -6,6 +6,11 @@
 ///////////////////////////////////////////////
 // constants
 
+// menu_processmous states
+const float MENU_SELECT_SELECTABLE = 0;
+const float MENU_SELECT_ALWAYS = 1;
+const float MENU_SELECT_NEVER  = 2;
+
 const float MENU_NORMAL = 0;
 const float MENU_INGAME = 1;
 
@@ -32,7 +37,7 @@ const string MENU_INGAME_DEFAULT =
 
 // insert the files here
 var string MENU_FILENAME_LIST =
-"menu/normal.menu menu/main.menu menu/background.menu"
+"menu/normal.menu menu/main.menu menu/background.menu menu/video.menu"
 
 const float MENU_ALLOWINGAME = FALSE;
 

@@ -131,4 +131,8 @@ void(void) m_shutdown =
 
 	// shutdown graphic
 	gfx_shutdown();
+
+	// make sure everything is reset
+	setkeydest(KEY_GAME);
+	setmousetarget(MT_CLIENT);
 };
