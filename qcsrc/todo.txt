@@ -24,5 +24,6 @@
 2: Add Quake door and button support
 2: Add crouching
 2: Add weapon animations. Ask Vermeulen for description.
-3: CTF gametype (How are we handling changing of gametypes?) - same CTF as always
 3: InstaGib gametype (with nex gun only)
+3: DarkMatch gametype
+3: Maybe a gametype similar to deathmatch 7 in the Darkplaces mod? Spawn bots at 25 health, and give them a certian weapon?
