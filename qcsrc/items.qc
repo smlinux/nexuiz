@@ -244,42 +244,6 @@ void item_shells (void)
 	StartItem ();
 }
 
-void item_strength (void)
-{
-	self.mdl = "models/items/g_strength.zym";
-	self.items = IT_STRENGTH;
-	self.netname = "Strength Powerup";
-	self.respawntime = 120;
-	StartItem ();
-}
-
-void item_invincible (void)
-{
-	self.mdl = "models/items/g_invincible.zym";
-	self.items = IT_INVINCIBLE;
-	self.netname = "Invulnerability";
-	self.respawntime = 120;
-	StartItem ();
-}
-
-void item_speed (void)
-{
-	self.mdl = "models/items/g_speed.zym";
-	self.items = IT_SPEED;
-	self.netname = "Speed Powerup";
-	self.respawntime = 120;
-	StartItem ();
-}
-
-void item_slowmo (void)
-{
-	self.mdl = "models/items/g_slowmo.zym";
-	self.items = IT_SLOWMO;
-	self.netname = "Slow Motion!";
-	self.respawntime = 120;
-	StartItem ();
-}
-
 void item_armor1 (void)
 {
 	self.mdl = "models/items/g_a1.md3";
@@ -334,4 +298,44 @@ void misc_models (void)
 	setsize (self, self.mins, self.maxs);
 }
 
+
+/*
+
+void item_strength (void)
+{
+	self.mdl = "models/items/g_strength.zym";
+	self.items = IT_STRENGTH;
+	self.netname = "Strength Powerup";
+	self.respawntime = 120;
+	StartItem ();
+}
+
+void item_invincible (void)
+{
+	self.mdl = "models/items/g_invincible.zym";
+	self.items = IT_INVINCIBLE;
+	self.netname = "Invulnerability";
+	self.respawntime = 120;
+	StartItem ();
+}
+
+void item_speed (void)
+{
+	self.mdl = "models/items/g_speed.zym";
+	self.items = IT_SPEED;
+	self.netname = "Speed Powerup";
+	self.respawntime = 120;
+	StartItem ();
+}
+
+void item_slowmo (void)
+{
+	self.mdl = "models/items/g_slowmo.zym";
+	self.items = IT_SLOWMO;
+	self.netname = "Slow Motion!";
+	self.respawntime = 120;
+	StartItem ();
+}
+
+*/
 

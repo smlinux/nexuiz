@@ -74,7 +74,6 @@
 	- A large piece of flesh for gib model
 	- Large Rocket model (for rocket launcher)
 	- Small rocket model (for Hagar)
-	- Casing model
 
 -2D GRAPHICS-
 	- Change hud numbers to fit hud
@@ -117,3 +116,15 @@
 
 -OTHER-
 	- Gib Splat sound
+
+*********************************
+*************MAPS****************
+Nexdm01 -
+
+Nexdm02 -
+
+Nexdm03 -
+
+Nexdm04 -
+
+Nexdm05 -

@@ -116,7 +116,8 @@ void worldspawn (void)
 	precache_sound ("misc/megahealth.wav");
 	precache_sound ("misc/mediumhealth.wav");
 	precache_sound ("misc/gib.wav");
-	precache_sound ("misc/talk.wav");
+	precache_sound ("misc/jumppad.wav");
+	precache_sound ("misc/talk.wav");  // temp
 
 	precache_sound ("misc/itemrespawn.wav");
 	

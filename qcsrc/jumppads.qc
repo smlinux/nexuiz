@@ -1,7 +1,6 @@
 float PUSH_ONCE			= 1;
 float PUSH_SILENT		= 2;
 
-// TODO: add sounds
 void() trigger_push_touch =
 {
 	local float flighttime, dist, grav;
@@ -11,6 +10,8 @@ void() trigger_push_touch =
 		return;
 
 	org = other.origin;
+
+	sound (other, CHAN_ITEM, "misc/jumppad.wav", 1, ATTN_NORM);
 
 	// figure out how long it will take to hit the point considering gravity
 	grav = cvar("sv_gravity");
