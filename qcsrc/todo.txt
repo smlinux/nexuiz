@@ -63,7 +63,6 @@ AUDIO---
 
 2D GRAPHICS------
 - Change hud numbers to fit hud
-- Add the alpha channel to the min hud
 - Make nexuiz icon
 - Next/Prev button
 - New menu cursor

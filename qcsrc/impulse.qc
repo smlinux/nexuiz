@@ -50,6 +50,6 @@ void ImpulseCommands (void)
 		makevectors (self.v_angle);
 		CreateDummy (self.origin + self.view_ofs + v_forward * 64);
 	}
-
+	TetrisImpulses();
 	self.impulse = 0;
 }

@@ -250,6 +250,7 @@ void PlayerPreThink (void)
 	self.angles_y=self.v_angle_y + 90;   // temp
 
 	player_stand ();
+	if (TetrisPreFrame()) return;
 }
 
 /*
@@ -265,4 +266,5 @@ void PlayerPostThink (void)
 		return;
 
 	ImpulseCommands ();
+	if (TetrisPostFrame()) return;
 }

@@ -34,6 +34,7 @@ items.qc
 halflife.nc
 quake3.nc
 quake1.nc
+tetris.qc
 impulse.qc
 player.qc
 client.qc

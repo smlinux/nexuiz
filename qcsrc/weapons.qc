@@ -56,7 +56,7 @@ void W_UpdateWeapon (void)
 	if (self.weapon == IT_LASER)
 		self.weaponmodel = "models/weapons/w_laser.md3";
 	else if (self.weapon == IT_UZI)
-		self.weaponmodel = "models/weapons/w_uzi.md3";
+		self.weaponmodel = "models/weapons/uzi.zym";
 	else if (self.weapon == IT_SHOTGUN)
 		self.weaponmodel = "models/weapons/w_shotgun.md3";
 	else if (self.weapon == IT_GRENADE_LAUNCHER)
