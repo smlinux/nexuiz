@@ -51,11 +51,13 @@ void SV_PlayerPhysics() {
 
 	// show 1/3 the pitch angle and all the roll angle
 	self.angles_z = bound(-1, self.velocity * v_right * cl_divspeed, 1) * cl_rollangle;
-	if (!self.fixangle)
+/*	if (!self.fixangle)
 	{
 		self.angles_x = (self.v_angle_x + self.punchangle_x) * -0.333;
 		self.angles_y = self.v_angle_y + self.punchangle_y;
-	}
+	}*/
+	
+	if (self.crouch) self.movement = self.movement * 0.5; /* Quick try by diGGer */
 
 	if (self.flags & FL_WATERJUMP )
 	{
@@ -194,6 +196,7 @@ void SV_PlayerPhysics() {
 				self.velocity = '0 0 0';
 			else
 				self.velocity = self.velocity * f;
+			
 		}
 
 		// acceleration
