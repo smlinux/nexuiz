@@ -479,8 +479,6 @@ void W_Uzi_Attack (void)
 	vector	org; // casing code
 	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 1) + (v_forward * 20);
 	SpawnCasing (org, v_forward, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 + 10) * v_up), 1);
-
-	self.effects = self.effects | EF_MUZZLEFLASH;
 }
 
 void W_Uzi_Attack2 (void)
@@ -893,7 +891,7 @@ void W_Hagar_Attack (void)
 
 	missile.touch = W_Hagar_Touch;
 	missile.think = SUB_Remove;
-	missile.nextthink = time + 1;
+	missile.nextthink = time + 3;
 
 	self.attack_finished = time + 0.2;
 	self.ammo_rockets = self.ammo_rockets - 0.25;
@@ -988,7 +986,7 @@ void W_Rocket_Attack (void)
 
 	missile.touch = W_Rocket_Touch ;
 	missile.think = SUB_Remove;
-	missile.nextthink = time + 1;
+	missile.nextthink = time + 3;
 
 	self.attack_finished = time + 1.5;
 	self.ammo_rockets = self.ammo_rockets - 1;

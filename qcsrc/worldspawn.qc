@@ -5,6 +5,7 @@ void worldspawn (void)
 	lastspawn = world;
 	BotInit();
 	precache_model ("models/player/player.zym");
+	precache_model ("models/player/dummy.zym");
 	
 	precache_model ("models/weapons/w_laser.md3");
 	precache_model ("models/weapons/w_uzi.md3");

@@ -94,6 +94,7 @@ void PlayerWeaponThrow (void)
 	self = backup;
 
 	stuffcmd(self, "chase_active 1");
+	setmodel (self, "models/gibs/gib1.mdl");
 }
 
 void PlayerHurt (vector hitloc, float damage)
