@@ -1,6 +1,7 @@
 
 void info_player_start (void)
 {
+	self.classname = "info_player_deathmatch";
 }
 
 void info_player_deathmatch (void)
