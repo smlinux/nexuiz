@@ -2,6 +2,7 @@ $frame die1 die2 draw duck duckwalk duckjump duckidle idle
 $frame jump pain1 pain2 shoot taunt run runbackwards
 $frame strafeleft straferight dead1 dead2
 
+//Begin change by Supajoe on 11:44 PM EST 11/16/03 (Subject: Player animations)
 void player_run (void);
 void player_stand (void)
 {
@@ -9,7 +10,11 @@ void player_stand (void)
 		player_run ();
 	else
 	{
-			self.frame = $idle;
+		if (self.attack_finished > time)
+			self.frame = $shoot;
+		else if (self.pain_finished > time)
+			self.frame = self.pain_frame;
+		else	self.frame = $idle;
 
 		self.think = player_stand;
 		self.nextthink = time + 0.05;
@@ -18,30 +23,32 @@ void player_stand (void)
 
 void player_run (void)
 {
-	vector	ang;
-	float	a;
-
 	if (!self.movement_x && !self.movement_y)	// ?
 		player_stand ();
 	else
 	{
-		ang = vectoangles (self.velocity);
-
-		a = angc (self.v_angle_y, ang_y);
-		
-		if (a < 45 && a >= -45)
-			self.frame = $run;
-		else if (a < 135 && a >= 45)
-			self.frame = $straferight;
-		else if (a >= -135 && a < -45)
-			self.frame = $strafeleft;
-		else
-			self.frame = $runbackwards;
+		if (self.movement_x != 0)	//Forward or backward movement
+			{
+				if (self.movement_x > 0)	//Are we moving forward or backward?
+					self.frame = $run;
+				else	self.frame = $runbackwards;
+			}
+		else if (self.movement_y != 0)	//Right or left movement
+			{
+				if (self.movement_y > 0)	//Are we moving right or left?
+					self.frame = $straferight;
+				else	self.frame = $strafeleft;
+			}
+		else if (self.attack_finished > time)
+			self.frame = $shoot;
+		else if (self.pain_finished > time)
+			self.frame = self.pain_frame;
 
 		self.think = player_run;
 		self.nextthink = time + 0.05;
 	}
 }
+//End change by Supajoe on 11:44 PM EST 11/16/03 (Subject: Player animations)
 
 void PlayerWeaponThrow (void)
 {
@@ -87,6 +94,15 @@ void PlayerWeaponThrow (void)
 void PlayerHurt (vector hitloc, float damage)
 {
 	te_blood (hitloc, '0 0 20', floor (damage / 2));
+
+	if (self.pain_finished < time)		//Don't switch pain sequences like crazy
+		{
+		if (random() > 0.5)
+			self.pain_frame = $pain1;
+		else	self.pain_frame = $pain2;
+
+		self.pain_finished = time + 0.5;	//Supajoe
+		}
 }
 
 void PlayerDie (void)
@@ -102,6 +118,11 @@ void PlayerDie (void)
 	self.dead_angles = self.angles;
 	self.dead_angles_x = 0;
 	self.deadflag = DEAD_DEAD;
+
+//Supajoe: Working on this
+//	if (random() > 0.5)
+//		self.frame = $die1;
+//	else	self.frame = $die2;
 
 	PlayerWeaponThrow ();
 }

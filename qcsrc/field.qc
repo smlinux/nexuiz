@@ -30,6 +30,8 @@ entity dest;
 
 .float	jump_flag;				// storing velocity_z for falling damage
 .float	attack_finished;
+.float	pain_finished			//Added by Supajoe
+.float	pain_frame			//"
 .float	statdraintime;			// record the one-second intervals between draining health and armour when they're over 100
 
 .vector		finaldest, finalangle; 		//plat.qc stuff

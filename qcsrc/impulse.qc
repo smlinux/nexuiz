@@ -1,4 +1,3 @@
-
 void dummyhurt (vector hitloc, float damage)
 {
 	te_blood (hitloc, '0 0 20', floor (damage * 0.5));

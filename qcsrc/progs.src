@@ -1,4 +1,4 @@
-../data/progs.dat
+../../data/progs.dat
 
 sys.qc
 builtin.qc
