@@ -325,10 +325,16 @@ void PlayerPreThink (void)
 	else
 		self.flags = self.flags | FL_JUMPRELEASED;
 
-	if (self.weapon == IT_NEX && self.button3)
-		self.viewzoom = 0.4;
-	else if (self.viewzoom != 1)
-		self.viewzoom = self.viewzoom + 0.1;
+	if (self.weapon == IT_NEX)
+	{
+		if (self.button3)
+		{
+			if (self.viewzoom > 0.4)
+				self.viewzoom = max (0.4, self.viewzoom - frametime * 2);
+		}
+		else if (self.viewzoom < 1.0)
+			self.viewzoom = min (1.0, self.viewzoom + frametime);
+	}
 
 	if (self.statdraintime < time)
 	{
