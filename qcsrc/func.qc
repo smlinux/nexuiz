@@ -353,8 +353,6 @@ void ImpactEffect (entity ent, float weapontype)
 	if (weapontype == IT_ROCKET_LAUNCHER)
 	{
 		te_explosion (org2);
-		te_explosion (org2);
-		te_explosion (org2);
 		effect (org2, "models/sprites/dpexplosion1.spr32", 0, 20, 40);
 		sound (ent, CHAN_BODY, "weapons/rocket_impact.wav", 1, ATTN_NORM);
 	}

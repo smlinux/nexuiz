@@ -20,7 +20,7 @@
 	- Invincible - Player model turns completely red. Completely invincible from normal attacks. The users view will be tinted red.
 
 -ANIMATION-
-	- Jumping animation
+	-Jumping animation
 
 -WEAPONS-
 	-Shotgun - secondary fire - auto 3 shots fired
@@ -29,7 +29,7 @@
 -BUGS/OTHER-
 	- Add quake1/halflife entity support (just the weapons)
 	- Weird bug where the user starts firing from the other side of the screen, mostly happens with laser/crylink
-	- Players alpha turning negative
+	- corpses not fading away
 	- People not dying when falling into the black
 	- change the player's solid to SOLID_BBOX before the traceline and back after, so that the uzi affects corpses
 
@@ -51,6 +51,7 @@
 	- New Nexgun beam and explosion
 	- Hagar explosion (less spamy)
 	- Spark effect for levels
+	- Rocket launcher explosion, more powerful
 
 -3D GRAPHICS-
 	- Add DPshader
@@ -112,7 +113,7 @@
 	- Missile sounds for electro, rocket
 
 -ITEMS-
-	- Armor
+	- Armor pickup sound
 
 -OTHER-
 	- Gib Splat sound
