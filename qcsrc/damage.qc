@@ -65,7 +65,7 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 	}
 }
 
-void RadiusDamage (entity inflictor, entity attacker, float coredamage, float edgedamage, float radius, entity ignore, float forceintensity, float deathtype)
+void RadiusDamage (entity inflictor, entity attacker, float coredamage, float edgedamage, float rad, entity ignore, float forceintensity, float deathtype)
 {
 	entity	targ;
 	float	finaldmg;
@@ -79,7 +79,7 @@ void RadiusDamage (entity inflictor, entity attacker, float coredamage, float ed
 
 	blastorigin = (inflictor.origin + (inflictor.mins + inflictor.maxs) * 0.5);
 
-	targ = findradius (blastorigin, radius);
+	targ = findradius (blastorigin, rad);
 	while (targ)
 	{
 		if (targ != inflictor)
@@ -99,7 +99,7 @@ void RadiusDamage (entity inflictor, entity attacker, float coredamage, float ed
 				diff = nearest - blastorigin;
 				// round up a little on the damage to ensure full damage on impacts
 				// and turn the distance into a fraction of the radius
-				power = 1 - ((vlen (diff) - 2) / radius);
+				power = 1 - ((vlen (diff) - 2) / rad);
 				//bprint(" ");
 				//bprint(ftos(power));
 				if (power > 0)
