@@ -136,7 +136,7 @@ void PlayerCorpseDamage (vector hitloc, float damage, entity inflictor, entity a
 	self.health = self.health - damage;
 	self.dmg_take = self.dmg_take + damage;
 	self.dmg_inflictor = inflictor;
-	if (self.health <= -70)
+	if (self.health <= -50)
 	{
 		// don't use any animations as a gib
 		self.frame = 0;

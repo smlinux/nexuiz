@@ -736,7 +736,7 @@ void W_Electro_Attack (float postion)
 	if (postion == 2)
 	setorigin (proj, self.origin + self.view_ofs + v_forward * 18 + v_right * 15 + v_up * -14);
 
-	proj.velocity = v_forward * 2500;
+	proj.velocity = v_forward * 9999;
 	proj.touch = W_Electro_Touch;
 	proj.think = SUB_Remove;
 	proj.nextthink = time + 9;
@@ -920,7 +920,6 @@ void W_Nex_Attack (void)
 	entity 	explosion;
 
 	sound (self, CHAN_WEAPON, "weapons/nexfire.wav", 1, ATTN_NORM);
-	//self.effects = EF_MUZZLEFLASH;
 	self.punchangle_x = -4;
 
 	makevectors (self.v_angle);
@@ -987,7 +986,7 @@ void W_Hagar_Explode (void)
 	ImpactEffect (self, IT_HAGAR);
 
 	self.event_damage = SUB_Null;
-	RadiusDamage (self, self.owner, 20, 10, 50, world, 90, IT_HAGAR);
+	RadiusDamage (self, self.owner, 30, 15, 50, world, 90, IT_HAGAR);
 
 	remove (self);
 }
