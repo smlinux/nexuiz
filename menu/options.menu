@@ -78,6 +78,7 @@ Option menus
 	type 	ITEM_WINDOW
 	name 	options_control
 	parent	opt_frame
+	origin	"-40 40" // balance out the -40 for the info texts
 }
 {
 	type	ITEM_WINDOW
