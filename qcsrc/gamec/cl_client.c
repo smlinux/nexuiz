@@ -105,6 +105,9 @@ void PutClientInServer (void)
 
 	self.viewzoom = 0.6;
 
+	// Savage: Insufficient check for invalid playermodels
+	if(strlen(self.playermodel) < 15) self.playermodel = "models/player/marine.zym";
+	
 	setmodel (self, self.playermodel);
 	self.skin = stof(self.playerskin);
 	self.crouch = FALSE;
