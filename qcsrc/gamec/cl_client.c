@@ -51,7 +51,7 @@ entity SelectSpawnPoint (void)
 	spot = find (world, classname, "info_player_start");
 	if (!spot)
 		error ("PutClientInServer: no info_player_start on level");
-	
+
 	return spot;
 }
 
@@ -227,10 +227,14 @@ When you press the jump key
 */
 void PlayerJump (void)
 {
-	if (!(self.flags & FL_ONGROUND))
-		return;
 	if (!(self.flags & FL_JUMPRELEASED))
 		return;
+	if (!(self.flags & FL_ONGROUND))
+	{
+		// jumpjet test
+		//self.velocity_z = self.velocity_z + frametime * 1500;
+		return;
+	}
 
 	if (self.items & IT_SPEED)
 		self.velocity_z = self.velocity_z + POWERUP_SPEED_JUMPVELOCITY;
