@@ -112,3 +112,6 @@ void() target_push =
 {
 	trigger_push();
 };
+
+void() info_notnull = {};
+void() info_targetposition = {};
