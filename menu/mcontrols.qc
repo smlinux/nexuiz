@@ -747,20 +747,20 @@ void(void) ITEM_TEXTSWITCH_REFRESH =
 
 void(float keynr, float ascii)	ITEM_TEXTSWITCH_KEY =
 {
-	float old;
-	old = self.value;
-
+	float dir;
 	if(ctcall_key(keynr, ascii))
 		return;
 
 	if(keynr == K_LEFTARROW || keynr == K_MOUSE2)
 	{
+		dir = 1;
 		self.value = self.value - 1;
 		if(self.value < 0)
 			self.value = getaltstringcount(self.text) - 1;
 	}
 	else if(keynr == K_RIGHTARROW || keynr == K_MOUSE1 || keynr == K_ENTER)
 	{
+		dir = -1;
 		self.value = self.value + 1;
 		if(self.value > getaltstringcount(self.text) - 1)
 			self.value = 0;
@@ -770,9 +770,9 @@ void(float keynr, float ascii)	ITEM_TEXTSWITCH_KEY =
 		return;
 	}
 	// play sound
-	if(old < self.value)
+	if( dir == -1 )
 		snd_play(self.sound_increase);
-	else if(self.value < old)
+	else if( dir == 1 )
 		snd_play(self.sound_decrease);
 
 	if(self.switchchange)
@@ -928,8 +928,7 @@ void(float keynr, float ascii) ITEM_EDITBOX_KEY =
 		}
 	} else if(keynr == K_ENTER)
 	{
-		if(self._action)
-			self._action();
+		self._action();
 		//snd_play(self.sound_action);
 	} else if(keynr == K_LEFTARROW)
 	{
