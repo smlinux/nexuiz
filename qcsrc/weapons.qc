@@ -526,7 +526,7 @@ void W_Electro_Attack (void)
 	makevectors (self.v_angle);
 	org = self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12;
 	
-	setmodel (proj, "progs/bullet.mdl");
+	setmodel (proj, "models/bullet.mdl");
 	setsize (proj, '0 0 0', '0 0 0');
 	setorigin (proj, org);
 	
@@ -654,21 +654,29 @@ void W_Rocket_Attack (void)
 void W_Crylink_Attack (void)
 {
 	vector	org;
-	vector	dir;
 	
-//	sound (self, CHAN_WEAPON, "weapons/NexFire.wav", 1, ATTN_NORM);
-//	self.punchangle_x = -3;
-//	self.punchangle_y = random () * 2 - 1;
-	
+	sound (self, CHAN_WEAPON, "weapons/crylink.wav", 1, ATTN_NORM);
+	org = self.origin + self.view_ofs + v_forward * 18 + v_right * 7 + v_up * -9;
 	makevectors (self.v_angle);
 
-	org = self.origin + self.view_ofs + v_forward * 19 + v_right * 5 + v_up * -7;
-	
-	traceline (org, self.origin + self.view_ofs + v_forward * 4096 + v_right * (random () * 100 - 50) + v_up * (random () * 100 - 50), FALSE, self);
-	
-	te_lightning1 (self, org, trace_endpos);
-	
-	self.attack_finished = time + 0.075;
+	// FIXME: make it accurate!
+
+	traceline (org, self.origin + self.view_ofs + (v_forward * 4096), FALSE, self);
+
+	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+	WriteByte (MSG_BROADCAST, 76);
+	WriteCoord (MSG_BROADCAST, org_x);
+	WriteCoord (MSG_BROADCAST, org_y);
+	WriteCoord (MSG_BROADCAST, org_z);
+	WriteCoord (MSG_BROADCAST, trace_endpos_x);
+	WriteCoord (MSG_BROADCAST, trace_endpos_y);
+	WriteCoord (MSG_BROADCAST, trace_endpos_z);
+	WriteCoord (MSG_BROADCAST, self.v_angle_x);
+	WriteCoord (MSG_BROADCAST, self.v_angle_y);
+	WriteCoord (MSG_BROADCAST, self.v_angle_z);
+
+	self.ammo_cells = self.ammo_cells - 1;
+	self.attack_finished = time + 0.125;
 }
 
 void W_Attack (void)
