@@ -493,8 +493,10 @@ void PlayerPreThink (void)
 		m2 = self.maxs;
 		setmodel (self, self.playermodel);
 		setsize (self, m1, m2);
-		self.skin = stof(self.playerskin);
 	}
+
+	if (self.skin != stof(self.playerskin))
+		self.skin = stof(self.playerskin);
 
 	W_WeaponFrame();
 
