@@ -1211,7 +1211,6 @@ related functions.
 void() BotImpulses =
 {
 	local float f;
-
 	if (self.impulse == 100)
 	{
 		f = cvar("skill");

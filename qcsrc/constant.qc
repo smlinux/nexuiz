@@ -176,8 +176,8 @@ float	game;	// set to "gamecfg" on worldspawn
 
 
 float	POWERUP_SPEED_MOVEMENT	= 3; // movement multiplier for speed powerup
-float	POWERUP_SPEED_JUMPVELOCITY = 540; // how much jump velocity with speed powerup
-float	JUMP_VELOCITY = 270; // normal jump velocity
+float	POWERUP_SPEED_JUMPVELOCITY = 640; // how much jump velocity with speed powerup
+float	JUMP_VELOCITY = 300; // normal jump velocity
 
 float	POWERUP_STRENGTH_DAMAGE	= 2; // damage multiplier for strength powerup
 float	POWERUP_STRENGTH_FORCE	= 4; // force multiplier for strength powerup

@@ -479,7 +479,7 @@ void W_Laser_Touch (void)
 	
 
 	self.event_damage = SUB_Null;
-	RadiusDamage (self, self.owner, 45, 21, 50, world, 600, IT_LASER);
+	RadiusDamage (self, self.owner, 15, 20, 50, world, 200, IT_LASER);
 	sound (self, CHAN_IMPACT, "weapons/laserimpact.wav", 1, ATTN_NORM);
 
 	remove (self);
@@ -533,7 +533,7 @@ void W_Laser_Attack2 (void)
 	self.punchangle_y = random () - 0.5;
 	self.punchangle_z = random () - 0.5;
 
-	self.attack_finished = time + 0.6;
+	self.attack_finished = time + 0.3;
 }
 
 void W_Shotgun_Attack (void)
@@ -985,11 +985,6 @@ void W_Hagar_Explode (void)
 	remove (self);
 }
 
-void W_Hagar_Fireball (void)
-{
-	self.effects = self.effects | EF_FLAME;
-}
-
 void W_Hagar_Touch (void)
 {
 	if (other == self.owner)
@@ -1050,7 +1045,7 @@ void W_Hagar_Attack2 (void)
 {
 	entity	missile;
 
-	sound (self, CHAN_WEAPON, "weapons/hagar_fire2.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "weapons/hagar_fire1.wav", 1, ATTN_NORM);
 
 	missile = spawn ();
 	missile.owner = self;
@@ -1064,18 +1059,18 @@ void W_Hagar_Attack2 (void)
 	missile.health = 5;
 	missile.event_damage = W_Hagar_Damage;
 
-	setmodel (missile, "models/fire.mdl");
+	setmodel (missile, "models/hagarmissile.mdl");
 	setsize (missile, '-6 -6 -3', '6 6 3');
 
 	setorigin (missile, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);
 
 	missile.velocity = v_forward * 1400 + v_up * 100;
 	missile.angles = vectoangles (missile.velocity);
-	missile.avelocity = '0 0 0';
+	missile.avelocity = '100 10 10';
 
 	missile.touch = W_Hagar_Touch;
-	missile.think = W_Hagar_Fireball;
-	missile.nextthink = time + 0.05;
+	missile.think = W_Hagar_Explode;
+	missile.nextthink = time + 10;
 
 	self.attack_finished = time + 0.2;
 	self.ammo_rockets = self.ammo_rockets - 0.25;

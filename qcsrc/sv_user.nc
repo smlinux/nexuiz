@@ -184,8 +184,8 @@ void SV_PlayerPhysics()
 		}
 	}
 	else if (!(game & GAME_NO_AIR_CONTROL))
-		if (wishspeed > 80)
-			wishspeed = 80;
+		if (wishspeed > 180)
+			wishspeed = 180;
 
 	// acceleration
 	f = wishspeed - (self.velocity * wishdir);
