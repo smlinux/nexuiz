@@ -50,6 +50,7 @@ Ignore
 
 	Item Task_Job PanelReinit
 	{
+		// this is a automation init function (dont change this to reinit!)
 		init 	Nex_Action_SetLinkOnReinit
 		target	"Panel::NexuizLogo"
 	}

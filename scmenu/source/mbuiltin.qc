@@ -127,7 +127,8 @@ float   validstring(string str) = #81;
 float 	altstr_count(string str) = #82;
 string  altstr_prepare(string str) = #83;
 string  altstr_get(string str, float num) = #84;
-string  altstr_set(string str, float num, string set) = #85
+string  altstr_set(string str, float num, string set) = #85;
+string 	altstr_ins(string str, float num, string set) = #86;
 
 /////////////////////////////////////////////////
 // Write* Functions

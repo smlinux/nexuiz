@@ -35,11 +35,8 @@ Item_Data_Nex_Avatar
 
 
 // Nex_Action_Map_BuildAvatarList
-// model definition format
+// map definition format
 // name
-// picture\n
-// skin filename\n
-// model filename\n
 // rest: description text
 void() _IDNM_BuildList =
 {
@@ -48,7 +45,10 @@ void() _IDNM_BuildList =
 	local float 	lSearchCounter;
 	local entity	lMap;
 
-	Menu_EmptyWindow( self );
+	// since we access two globals, we cant support calling BuildList multiple times, since this would leak str memory
+	//Menu_EmptyWindow( self );
+	Nex_MapList_FullPath = String_Create();
+	Nex_MapList_Name = String_Create();
 
 	lSearchHandle = search_begin( "maps/*.bsp", true, true );
 	if( lSearchHandle < 0 )
@@ -61,15 +61,18 @@ void() _IDNM_BuildList =
 		local string 	lStripped;
 		local string 	lName;
 		local string	lDescription;
+		local string	lTitle;
 
 		lFilename = search_getfilename( lSearchHandle, lSearchCounter );
 		lStripped = String_Zone( substring( lFilename, 0, strlen( lFilename ) - 4 ) );
 		lName = String_Zone( substring( lStripped, 5, 100000 ) );
 
 		lHandle = fopen( strcat( lStripped, ".txt" ), FILE_READ );
-		if( lHandle < 0 )
+		if( lHandle < 0 ) {
+			lTitle = String_Zone( lName );
 			lDescription = String_Zone( strcat( "--NO INFORMATION AVAILABLE--\n", lFilename ) );
-		else {
+		} else {
+			lTitle = String_Zone( fgets( lHandle ) );
 			lDescription = String_Create();
 			do {
 				local string lLine;
@@ -86,11 +89,15 @@ void() _IDNM_BuildList =
 
 		lMap.link = lName;
 		lMap.picture = lStripped;
-		lMap.normal = lName;
+		lMap.normal = lTitle;
 		lMap.text = lDescription;
+
+		Nex_MapList_FullPath = Util_AltStringPushBack( Nex_MapList_FullPath, lName );
+		Nex_MapList_Name = Util_AltStringPushBack( Nex_MapList_Name, lTitle );
 
 		Menu_LinkItem( lMap );
 
+		String_Free( lTitle );
 		String_Free( lName );
 		String_Free( lStripped );
 		String_Free( lDescription );
@@ -190,4 +197,68 @@ void() Item_Data_Nex_Map_Spawn =
 	self._link = self._child;
 	self._realValue = stof( self.defValue );
 	_IDNM_UpdateLink();
+};
+
+void( float pEvent ) Item_DataLink_Nex_MapList_DataEvent =
+{
+	switch( pEvent ) {
+	case ITEM_DATA_SYNC:
+		break;
+	case ITEM_DATA_SEND:
+		break;
+	case ITEM_DATA_RESET:
+		self._realValue = 0.0;
+		break;
+	case ITEM_DATA_TEST_START:
+		break;
+	case ITEM_DATA_TEST_END:
+		break;
+	case ITEM_DATALINK_SET:
+		self._realValue = floor( self._realValue );
+		if( self._realValue < 1.0 )
+			self._realValue = 1.0;
+		if( self._realValue > self.maxValue )
+			self._realValue = self.maxValue;
+		break;
+	}
+};
+
+void() Item_DataLink_Nex_MapList_Destroy =
+{
+	String_EntityFree( self, valueList );
+
+	Item_DataLink_Switch_Destroy();
+};
+
+void() Item_DataLink_Nex_MapList_Spawn =
+{
+	Item_DataLink_Switch_Init();
+	String_EntityCreate( self, valueList );
+
+	self.minValue = 1.0;
+	self.maxValue = 1.0;
+	self.stepValue = 0.0;
+
+	self._dataEvent = Item_DataLink_Nex_MapList_DataEvent;
+	self._destroy = Item_DataLink_Nex_MapList_Destroy;
+};
+
+void( entity pItem ) Item_DataLink_Nex_MapList_InitWithMapList =
+{
+	String_EntitySet( pItem, valueList, Nex_MapList_FullPath );
+	String_EntitySet( pItem, descList, Nex_MapList_Name );
+
+	Item_DataLink_Nex_MapList_UpdateRange( pItem );
+};
+
+void( entity pItem ) Item_DataLink_Nex_MapList_UpdateRange =
+{
+	pItem.minValue = 1.0;
+	pItem.maxValue = Util_GetAltStringCount( pItem.descList );
+
+	if( pItem.maxValue > 1.0 )
+		pItem.stepValue = 1.0;
+	else
+		pItem.stepValue = 0.0;
+
 };

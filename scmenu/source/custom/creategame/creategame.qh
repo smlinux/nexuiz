@@ -1,6 +1,9 @@
 // Property of Alientrap/AK
 // custom/player/avatar.qh
 
+string Nex_MapList_FullPath;
+string Nex_MapList_Name;
+
 // Item_Nex_Map_Info
 // its a valid item nevertheless
 .string normal;		// contains the map name
@@ -23,6 +26,15 @@ void() Item_Data_Nex_Map_Spawn;
 // Item_Data_Nex_Name [Item_Data]
 void( float pEvent ) Item_Data_Nex_Name_DataEvent;
 void() Item_Data_Nex_Name_Spawn;
+
+// Item_DataLink_Nex_MapList [Item_DataLink_Switch]
+// contains the full .bsp path in value and the text/map name in desc
+// this is just a placeholder data item - it only keeps a set
+void( float pEvent ) Item_DataLink_Nex_MapList_DataEvent;
+void() Item_DataLink_Nex_MapList_Spawn;
+
+void( entity pItem ) Item_DataLink_Nex_MapList_InitWithMapList;
+void( entity pItem ) Item_DataLink_Nex_MapList_UpdateRange;
 
 // see control/data/data.qh
 // Item_DataLink_Nex_ModSwitch Item_DataLink_TextSwitch

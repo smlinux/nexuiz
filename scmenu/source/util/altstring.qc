@@ -186,6 +186,16 @@ string( string pAlt, float pIndex ) Util_DelAltStringItem =
 
 /*
 ===================
+Util_InsAltStringItem
+===================
+*/
+string( string pAlt, float pIndex, string pSet ) Util_InsAltStringItem =
+{
+	return String_Set( pAlt, altstr_ins( pAlt, pIndex, pSet ) );
+};
+
+/*
+===================
 Util_AltStringPrepare
 ===================
 */
@@ -223,7 +233,17 @@ Util_AltStringPush
 */
 string( string pAlt, string pPush ) Util_AltStringPush =
 {
-	return String_Set( pAlt, strcat( "'", String_Normal( Util_AltStringPrepare( pPush ) ), "'", pAlt ) );
+	return String_Set( pAlt, strcat( "'", altstr_prepare( pPush ), "'", pAlt ) );
+};
+
+/*
+===================
+Util_AltStringPushBack
+===================
+*/
+string( string pAlt, string pPush ) 	Util_AltStringPushBack =
+{
+	return String_Set( pAlt, strcat( pAlt, "'", altstr_prepare( pPush ), "'" ) );
 };
 
 /*

@@ -97,6 +97,24 @@ Template EditBox EditBox
 	soundMove	[DefaultIncreaseSound]
 	soundKey	[DefaultDecreaseSound]
 }
+Template List List
+{
+	fontSize	[DefaultFontSize]
+	color		[DefaultTextColor]
+	colorSelected	[DefaultSelTextColor]
+	colorPressed	[DefaultPreTextColor]
+	colorInactive	[DefaultInaTextColor]
+	alphas_x	[DefaultTextAlpha]
+	alphas_y 	[DefaultSelTextAlpha]
+	alphas_z	[DefaultPreTextAlpha]
+	alphaInactive	[DefaultInaTextAlpha]
+	drawFlags_x	[DefaultTextDrawFlag]
+	drawFlags_y	[DefaultSelTextDrawFlag]
+	drawFlags_z	[DefaultPreTextDrawFlag]
+	drawFlagInactive [DefaultInaTextDrawFlag]
+	soundSelected	[DefaultSelectSound]
+	soundPressed	[DefaultPressSound]
+}
 DeriveTemplate TextButton ValueButton
 {
 	type 	"Item_ValueButton"
