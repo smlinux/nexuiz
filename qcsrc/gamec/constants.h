@@ -158,9 +158,15 @@ float	IT_INVINCIBLE			= 16384;
 float	IT_SPEED				= 32768;
 float	IT_SLOWMO				= 65536;
 
+float	IT_KEY1					= 131072;
+float	IT_KEY2					= 262144;
+
 vector	PL_VIEW_OFS				= '0 0 35';
 vector	PL_MIN					= '-16 -16 -24';
 vector	PL_MAX					= '16 16 45';
+vector	PL_CROUCH_VIEW_OFS		= '0 0 15';
+vector	PL_CROUCH_MIN			= '-16 -16 -24';
+vector	PL_CROUCH_MAX			= '16 16 25';
 
 // Sajt - added these, just as constants. Not sure how you want them actually put in the game, but I just
 // did this so at least they worked

@@ -9,7 +9,7 @@ gamec/extensions.h
 
 gamec/bot.c
 gamec/bot_way.c
-gamec/bot_fight.c 
+gamec/bot_fight.c
 gamec/bot_ai.c
 gamec/bot_misc.c
 gamec/bot_phys.c
@@ -58,3 +58,7 @@ gamec/cl_impulse.c
 gamec/cl_player.c
 gamec/cl_client.c
 gamec/t_plats.c
+
+gamec/ctf.c
+gamec/domination.c
+

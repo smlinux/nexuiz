@@ -1,5 +1,7 @@
 entity	lastspawn;
 
+void() dom_init;
+
 void worldspawn (void)
 {
 	lastspawn = world;
@@ -192,6 +194,8 @@ void worldspawn (void)
 	// 63 testing
 	lightstyle(63, "a");
 
+	if (cvar("g_domination"))
+		dom_init();
 }
 
 void light (void)
@@ -199,17 +203,136 @@ void light (void)
 	makestatic (self);
 }
 
+// reads and alters data/maplist.cfg (sliding it one line), and returns a
+// strzoned string containing the next map
+#define MAPLIST	"maplist.cfg"
+string() Nex_RotateMapList =
+{
+	local float lHandle;
+	local string lNextMap;
+	local string lCurrentMap;
+	local string lBuffer;
+
+	lHandle = fopen( MAPLIST, FILE_READ );
+	if( lHandle < 0 ) {
+		fclose( lHandle );
+		// restart the current map if no other map is not found
+		return strzone( mapname );
+	}
+
+	// get the first line that will be moved to the end later
+	lCurrentMap = strzone( fgets( lHandle ) );
+	if( !lCurrentMap ) {
+		fclose( lHandle );
+		// restart the current map if no other map is not found
+		return strzone( mapname );
+	}
+
+	// now get the second line which is the map that should be loaded next
+	lBuffer = fgets( lHandle );
+	// if there isnt a second line, nothing needs to be rotated
+	if( !lBuffer ) {
+		fclose( lHandle );
+		strunzone( lCurrentMap );
+		// restart the current map if no other map is not found
+		return strzone( mapname );
+	}
+
+	// since lBuffer holds the next map, it is assigned to nextmap
+	lNextMap = strzone( lBuffer );
+
+	// since fgets uses its own buffer we need to move lBuffer to a tempstring
+	// before reading the next line (or lBuffer will be lost)
+	lBuffer = strcat( lBuffer );
+
+	// read in the rest of the list
+	while( 1 )  {
+		local string lLine;
+
+		lLine = fgets( lHandle );
+		if( !lLine ) {
+			break;
+		}
+
+		lBuffer = strcat( lBuffer, "\n", lLine );
+	}
+	// rotate the list
+	lBuffer = strcat( lBuffer, "\n", lCurrentMap );
+
+	// dismiss lCurrentmap now
+	strunzone( lCurrentMap );
+
+	// and close the file handle
+	fclose( lHandle );
+
+	// open the maplist for output this one
+	lHandle = fopen( MAPLIST, FILE_WRITE );
+	if( lHandle < 0 ) {
+		// this shouldnt happen!
+		// print a warning/error message
+		dprint( "Couldn't open ", MAPLIST, " for output!\n" );
+
+		strunzone( lNextMap );
+
+		// we return the currently running map
+		return strzone( mapname );
+	}
+
+	fputs( lHandle, lBuffer );
+
+	fclose( lHandle );
+
+	return lNextMap;
+};
+
 float gameover;
 float intermission_running;
 float intermission_exittime;
-string nextmap;
+float alreadychangedlevel;
 
 void() GotoNextMap =
 {
+	local string nextmap;
+	if (alreadychangedlevel)
+		return;
+	alreadychangedlevel = TRUE;
 	if (cvar("samelevel"))	// if samelevel is set, stay on same level
 		changelevel (mapname);
 	else
+	{
+		/*
+		//local entity pos;
+		local float fh;
+		local string line;
+
+		// restart current map if no cycle is found
+		nextmap = mapname;
+		fh = fopen("maplist.cfg", FILE_READ);
+		if (fh >= 0)
+		{
+			while (1)
+			{
+				line = fgets(fh);
+				if (!line)
+					break;
+				if (line == mapname)
+				{
+					line = fgets(fh);
+					if (!line)
+						break;
+					nextmap = line;
+					break;
+				}
+			}
+			fclose(fh);
+		}
 		changelevel (nextmap);
+		*/
+
+		nextmap = Nex_RotateMapList();
+		changelevel (nextmap);
+		strunzone (nextmap);
+	}
 };
 
 
@@ -225,7 +348,7 @@ void() IntermissionThink =
 	if (time < intermission_exittime)
 		return;
 
-	if (!self.button0 && !self.button1 && !self.button2)
+	if (time < intermission_exittime + 60 && !self.button0 && !self.button1 && !self.button2 && !self.button3)
 		return;
 
 	GotoNextMap ();
@@ -293,32 +416,6 @@ only called if a time or frag limit has expired
 */
 void() NextLevel =
 {
-	//local entity pos;
-	local float fh;
-	local string line;
-
-	// restart current map if no cycle is found
-	nextmap = mapname;
-	fh = fopen("maplist.cfg", FILE_READ);
-	if (fh >= 0)
-	{
-		while (1)
-		{
-			line = fgets(fh);
-			if (!line)
-				break;
-			if (line == mapname)
-			{
-				line = fgets(fh);
-				if (!line)
-					break;
-				nextmap = line;
-				break;
-			}
-		}
-		fclose(fh);
-	}
-
 	gameover = TRUE;
 
 	intermission_running = 1;
@@ -375,12 +472,15 @@ void() CheckRules =
 	local	float		timelimit;
 	local	float		fraglimit;
 
-	if (gameover)	// someone else quit the game already
+	if (intermission_running)
+	if (time >= intermission_exittime + 60)
 	{
-		if (time >= intermission_exittime + 60)
-			GotoNextMap();
+		GotoNextMap();
 		return;
 	}
+
+	if (gameover)	// someone else quit the game already
+		return;
 
 	timelimit = cvar("timelimit") * 60;
 	fraglimit = cvar("fraglimit");

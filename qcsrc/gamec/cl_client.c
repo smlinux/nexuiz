@@ -96,7 +96,6 @@ void PutClientInServer (void)
 
 	self.deadflag = DEAD_NO;
 
-	self.view_ofs = PL_VIEW_OFS;
 	self.angles = spot.angles;
 	self.fixangle = TRUE; // turn this way immediately
 	self.velocity = '0 0 0';
@@ -108,6 +107,8 @@ void PutClientInServer (void)
 
 	setmodel (self, self.playermodel);
 	self.skin = stof(self.playerskin);
+	self.crouch = FALSE;
+	self.view_ofs = PL_VIEW_OFS;
 	setsize (self, PL_MIN, PL_MAX);
 	setorigin (self, spot.origin + '0 0 1' * (1 - self.mins_z - 24));
 	// don't reset back to last position, even if new position is stuck in solid
@@ -420,13 +421,13 @@ void PlayerPreThink (void)
 	if (BotPreFrame())
 		return;
 
+	CheckRules();
+
 	if (intermission_running)
 	{
 		IntermissionThink ();	// otherwise a button could be missed between
 		return;					// the think tics
 	}
-
-	CheckRules();
 
 	if (self.deadflag != DEAD_NO)
 	{
@@ -448,6 +449,29 @@ void PlayerPreThink (void)
 				respawn();
 		}
 		return;
+	}
+
+	if (self.button5)
+	{
+		if (!self.crouch)
+		{
+			self.crouch = TRUE;
+			self.view_ofs = PL_CROUCH_VIEW_OFS;
+			setsize (self, PL_CROUCH_MIN, PL_CROUCH_MAX);
+		}
+	}
+	else
+	{
+		if (self.crouch)
+		{
+			tracebox(self.origin, PL_MIN, PL_MAX, self.origin, FALSE, self);
+			if (!trace_startsolid)
+			{
+				self.crouch = FALSE;
+				self.view_ofs = PL_VIEW_OFS;
+				setsize (self, PL_MIN, PL_MAX);
+			}
+		}
 	}
 
 	if (self.playermodel != self.model)
@@ -503,6 +527,7 @@ void PlayerPostThink (void)
 	float soundrandom;
 	if (BotPostFrame())
 		return;
+	CheckRules();
 	if (self.health > 0)
 	if (self.impulse)
 		ImpulseCommands ();
