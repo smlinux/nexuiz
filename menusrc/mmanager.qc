@@ -660,6 +660,7 @@ void(float keynr, float ascii) menu_keydown =
 		key_selected = menu_selected;
 		menu_selected = null_entity;
 		menu_processmouse(menu_activewindow, MENU_SELECT_ALWAYS);
+
 		// if we find anything, we give it the key event, perhaps it can use it
 		if(menu_selected != key_selected)
 		{

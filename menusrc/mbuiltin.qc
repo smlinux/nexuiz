@@ -74,7 +74,7 @@ float	cos(float f)  = #39;
 float	sqrt(float f)  = #40;
 vector	randomvec(void)  = #41;
 
-float	registercvar(string name, string value)  = #42; // returns 1 if success
+float	registercvar(string name, string value, float flags)  = #42; // returns 1 if success
 float	min(float f,...)  = #43;
 float	max(float f,...)  = #44;
 float	bound(float min,float value, float max)  = #45;
@@ -168,4 +168,7 @@ void	writetofile(float fhandle, entity ent) = #606;
 vector	getresolution(float number) = #608;
 string	keynumtostring(float keynum) = #609;
 string	findkeysforcommand(string command) = #610;
+
+float	gethostcachevalue(float type) = #611;
+string	gethostcachestring(float type, float hostnr) = #612;
 

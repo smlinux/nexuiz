@@ -220,12 +220,105 @@ template for map selection
 	link	mainframe
 	orderpos 1000
 }
-// multiplayer options
+// multiplayer selection
+{
+	type	ITEM_WINDOW
+	name	multiplayer_subframe
+	parent  multiplayer
+	origin	"350 100"
+}
+{
+	type 	ITEM_TEXTBUTTON
+	name	multiplayer_subframe_create
+	parent	multiplayer_subframe
+	text	"Create Server"
+	pos		"0 0"
+	flag	256
+}
+{
+	type 	ITEM_TEXTBUTTON
+	name	multiplayer_subframe_join
+	parent	multiplayer_subframe
+	text	"Join a Game"
+	pos		"150 0"
+	flag	256
+	action	nex_display_serverlist
+}
+// multiplayer server list
+{
+	type 	ITEM_WINDOW
+	name	serverlist
+}
+// link the background_rect
+{
+	type 	ITEM_PICTURE
+	name	serverlist_background
+	picture "gfx/m_slist_bg"
+	parent	serverlist
+}
+// info text 1
+{
+	type 	ITEM_TEXT
+	name	serverlist_info1
+	parent	serverlist
+	text	"INFO TEXT 1"
+	pos		"0 20"
+	size	"1024 11"
+	font_size "11 11"
+	alignment 1
+	refresh	slist_info1
+	flag 	0
+}
+{
+	type 	ITEM_TEXT
+	name	serverlist_info2
+	parent	serverlist
+	text	"INFO TEXT 2"
+	pos		"0 32"
+	font_size "11 11"
+	size	"1024 11"
+	alignment 1
+	refresh slist_info2
+	flag 	0
+}
+// clip rect for the slist
+{
+	type 	ITEM_WINDOW
+	name	serverlist_cliprect
+	parent	serverlist
+	flag 	512
+	size	"940 600"
+	origin	"50 50"
+}
+{
+	type 	ITEM_CUSTOM
+	name	serverlist_slist
+	parent	serverlist_cliprect
+	draw	slist_draw
+	init	slist_init
+	key		slist_key
+	refresh	slist_refresh
+	flag	256 //FLAG_AUTOSETCLICK
+
+	font_size "11 11"
+
+	// this specifies the text bar drawing behavior
+	color	"1 1 1"
+	alpha	1
+	drawflag 0
+
+	//this specifies the selection bar drawing behavior
+	color_selected "1 0 0"
+	alpha_selected 0.2
+	drawflag_selected 0
+}
+
+// multiplayer options (spawn server)
 {
 	type 	ITEM_WINDOW
 	name	multiplayer_frame
 	parent	multiplayer
-	origin 	"500 320"
+	origin 	"500 350"
 }
 // map selection
 {

@@ -10,6 +10,11 @@
 // global stuff
 ///
 
+void(void) nex_maketextzone =
+{
+	self.text = strzone(self.text);
+};
+
 void(void) nex_slidertext =
 {
 	entity ent;
@@ -21,7 +26,7 @@ void(void) nex_slidertext =
 		return;
 	}
 
-	ent = menu_getitem(self.link);
+		ent = menu_getitem(self.link);
 	if(ent == null_entity)
 	{
 		objerror("No link found for ", self.link,"\n");
@@ -148,7 +153,7 @@ void(void) nex_quit_choose =
 
 void(void) nex_quit =
 {
-/*	entity ent;
+/*  entity ent;
 	// choose a quit message
 	nex_quit_choose();
 
@@ -174,7 +179,7 @@ void(void) nex_quit_yes =
 
 void(void) nex_quit_no =
 {
-/*	entity ent;
+/*  entity ent;
 
 	ent = menu_getitem("quit_msg_0");
 	strunzone(ent.text);
@@ -645,6 +650,178 @@ void(void) nex_mp_start =
 	cmd(selectmap.name);
 	cmd(";wait;togglemenu\n");
 };
+
+// server list
+var float slist_selected = 0;
+var float slist_start   = 0;
+float slist_estimatedsize;
+
+void(void) nex_display_serverlist =
+{
+	if(menu_activewindow.name == "serverlist")
+		return;
+	menu_jumptowindow(menu_getitem("serverlist"),true);
+	cmd("net_slist\n");
+};
+
+// use a ITEM_TEXT as base item for this
+// we need another item to clip the slist
+// (another reason for a new menu qc!)
+void(void) slist_draw =
+{
+	float c;
+	vector pos;
+	float listsize;
+
+	//print("slist drawing...", ftos(listsize), "\n");
+
+	pos = '0 0 0'; // the upper item sets the origin
+	listsize = gethostcachevalue(SLIST_HOSTCACHECOUNT);
+	if(!listsize)
+	{
+		menu_drawstring(pos, "No Servers", self.font_size, self.color, self.alpha, self.drawflag);
+		return;
+	}
+
+	for(c = 0; c < slist_estimatedsize + 1; c = c + 1)
+	{
+		string line;
+
+		if(listsize <= slist_start + c)
+			break;
+
+		//print("drawing ", ftos(c),"\n");
+
+		if(slist_selected - slist_start == c)
+		{
+			vector s;
+			s = self.size;
+			s_y = self.font_size_y * 2;
+
+			menu_fillarea(pos, s, self.color_selected, self.alpha_selected * (sin(time * 9) + 1) / 2, self.drawflag_selected);
+		}
+
+		line = gethostcachestring(SLIST_LINE1, slist_start + c);
+
+		menu_drawstring(pos, line, self.font_size, self.color, self.alpha, self.drawflag);
+
+		pos_y = pos_y + self.font_size_y;
+
+		line = gethostcachestring(SLIST_LINE2, slist_start + c);
+
+		menu_drawstring(pos, line, self.font_size, self.color, self.alpha, self.drawflag);
+
+		pos_y = pos_y + self.font_size_y;
+	}
+};
+
+void(void) slist_init =
+{
+	self.size = self._parent.size;
+	slist_estimatedsize = self.size_y / self.font_size_y / 2;
+};
+
+void(void) slist_refresh =
+{
+	float hostcachesize;
+
+	hostcachesize = gethostcachevalue(SLIST_HOSTCACHECOUNT);
+	if(slist_start >= hostcachesize)
+		slist_start = ceil(hostcachesize - slist_estimatedsize);
+	if(slist_start < 0)
+		slist_start = 0;
+	if(slist_selected >= hostcachesize)
+		slist_selected = hostcachesize;
+};
+
+void(void) slist_join =
+{
+	string cname;
+	cname = gethostcachestring(SLIST_CNAME, slist_selected);
+
+	if(cname != "")
+	{
+		cmd("connect ");
+		cmd(cname);
+		cmd(" ;togglemenu\n");
+	}
+};
+
+float(float keynr, float ascii ) slist_key =
+{
+	float listsize;
+
+	if(keynr == K_UPARROW)
+	{
+		if(slist_selected > 0)
+			slist_selected = slist_selected - 1;
+		if(slist_start > slist_selected)
+			slist_start = slist_selected;
+		return TRUE;
+	} else if(keynr == K_DOWNARROW)
+	{
+		listsize = gethostcachevalue(SLIST_HOSTCACHECOUNT);
+		if(slist_selected < listsize - 1)
+			slist_selected = slist_selected + 1;
+		if(slist_start + slist_estimatedsize - 0.5 < slist_selected)
+			slist_start = ceil(slist_selected - slist_estimatedsize + 0.5);
+		return TRUE;
+	} else if(keynr == K_ENTER)
+	{
+		slist_join();
+		return TRUE;
+	} else if(keynr == K_SPACE)
+	{
+		cmd("net_slist\n");
+		return TRUE;
+	} else if(keynr == K_MOUSE1)
+	{
+		float pos;
+
+		listsize = gethostcachevalue(SLIST_HOSTCACHECOUNT);
+		pos = floor(menu_cursor_y / self.font_size_y / 2);
+
+		 if(pos + slist_start == slist_selected)
+			slist_join();
+		else if(pos + slist_start < listsize)
+			slist_selected = pos;
+		return TRUE;
+	}
+	return FALSE;
+};
+
+void(void) slist_info1 =
+{
+	float query, reply;
+	string temp;
+
+	query = gethostcachevalue(SLIST_MASTERQUERYCOUNT);
+	reply = gethostcachevalue(SLIST_MASTERREPLYCOUNT);
+
+	strunzone(self.text);
+
+	temp = strcat(ftos(reply), "/");
+	temp = strcat(temp, ftos(query), " Master Servers");
+
+	self.text = strzone(temp);
+};
+
+void(void) slist_info2 =
+{
+	float query, reply;
+	string temp;
+
+	query = gethostcachevalue(SLIST_SERVERQUERYCOUNT);
+	reply = gethostcachevalue(SLIST_SERVERREPLYCOUNT);
+
+	strunzone(self.text);
+
+	temp = strcat(ftos(reply), "/");
+	temp = strcat(temp, ftos(query), " Game Servers");
+
+	self.text = strzone(temp);
+};
+
 /////////////////
 // options.menu
 ///
@@ -691,7 +868,7 @@ void(void) nex_snd =
 	entity ent;
 	ent = menu_getitem("options_settings_ref");
 	ent._child = menu_getitem("options_sound");
-	menu_jumptowindow(ent, false);
+	//menu_jumptowindow(ent, false);
 }
 
 void(void) nex_snd_cd_init =
@@ -727,7 +904,7 @@ void(void) nex_cc =
 	entity ent;
 	ent = menu_getitem("options_settings_ref");
 	ent._child = menu_getitem("options_cc");
-	menu_jumptowindow(ent, false);
+	//menu_jumptowindow(ent, false);
 }
 
 void(void) nex_cc_reset =
@@ -860,7 +1037,7 @@ void(void) nex_cntrl =
 	entity ent;
 	ent = menu_getitem("options_settings_ref");
 	ent._child = menu_getitem("options_control");
-	menu_jumptowindow(ent, false);
+	//menu_jumptowindow(ent, false);
 }
 
 const float NUMKEYS = 2;	// visible key count (first and secondary key)
@@ -1013,7 +1190,7 @@ void(void) setbrightness =
 	cvar_set("scr_conbrightness",ftos(self.value));
 };
 
-void(void)	nex_main_exit =
+void(void)  nex_main_exit =
 {
 	entity e;
 	e = menu_getitem("MAIN_MENU");
@@ -1048,7 +1225,7 @@ float(float keynr, float ascii) nex_main_exit_key =
 	return false;
 }
 
-void(void) 	dorestart =
+void(void)  dorestart =
 {
 	cmd("menu_restart\n");
 };
