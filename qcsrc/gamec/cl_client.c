@@ -142,7 +142,7 @@ void PutClientInServer (void)
 	{
 		self.items = IT_LASER | IT_SHOTGUN;
 		self.switchweapon = WEP_SHOTGUN;
-		self.ammo_shells = 35;
+		self.ammo_shells = 50;
 		self.ammo_nails = 0;
 		self.ammo_rockets = 0;
 		self.ammo_cells = 0;
@@ -207,7 +207,7 @@ Called when a client connects to the server
 void ClientConnect (void)
 {
 	ClientInRankings();
-	bprint ("^3",self.netname);
+	bprint ("^4",self.netname);
 	bprint (" connected\n");
 	stuffcmd(self, "exec maps/");
 	stuffcmd(self, mapname);
@@ -224,7 +224,7 @@ Called when a client disconnects from the server
 void ClientDisconnect (void)
 {
 	ClientDisconnected();
-	bprint ("^3",self.netname);
+	bprint ("^4",self.netname);
 	bprint (" disconnected\n");
 }
 
@@ -257,7 +257,7 @@ void() UpdateChatBubble =
 		self.chatbubbleentity.think = ChatBubbleThink;
 		self.chatbubbleentity.nextthink = time;
 		setmodel(self.chatbubbleentity, "models/misc/chatbubble.spr");
-		setorigin(self.chatbubbleentity, self.origin + '0 0 10' + self.maxs_z * '0 0 1');
+		setorigin(self.chatbubbleentity, self.origin + '0 0 15' + self.maxs_z * '0 0 1');
 		self.chatbubbleentity.effects = EF_NODRAW;
 	}
 }
@@ -400,28 +400,31 @@ void player_powerups (void)
 	if (self.items & IT_STRENGTH)
 	{
 		self.effects = self.effects | EF_BLUE;
+		self.effects = self.effects | EF_ADDITIVE;
 		if (time > self.strength_finished)
 		{
 			self.items = self.items - (self.items & IT_STRENGTH);
-			sprint(self, "Strength has worn off\n");
+			sprint(self, "^3Strength has worn off\n");
 		}
 	}
 	else
 	{
 		self.effects = self.effects - (self.effects & EF_BLUE);
+		self.effects = self.effects - (self.effects & EF_ADDITIVE);
 		if (time < self.strength_finished)
 		{
 			self.items = self.items | IT_STRENGTH;
-			sprint(self, "^5Strength infuses your weapons with devestating power\n");
+			sprint(self, "^3Strength infuses your weapons with devestating power\n");
 		}
 	}
 	if (self.items & IT_INVINCIBLE)
 	{
 		self.effects = self.effects | EF_RED;
+		self.effects = self.effects | EF_ADDITIVE;
 		if (time > self.invincible_finished)
 		{
 			self.items = self.items - (self.items & IT_INVINCIBLE);
-			sprint(self, "^5Invincible has worn off\n");
+			sprint(self, "^3Invincible has worn off\n");
 		}
 	}
 	else
@@ -430,7 +433,7 @@ void player_powerups (void)
 		if (time < self.invincible_finished)
 		{
 			self.items = self.items | IT_INVINCIBLE;
-			sprint(self, "Invincible shielding surrounds you\n");
+			sprint(self, "^3Invincible shielding surrounds you\n");
 		}
 	}
 }

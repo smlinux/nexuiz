@@ -32,6 +32,11 @@ void ImpulseCommands (void)
 		CopyBody(1);
 		self.velocity = self.velocity - v_forward * 300;
 	}
+	else if (self.impulse == 14 && cvar("sv_cheats"))
+	{
+		makevectors (self.v_angle);
+		CopyBody(0);
+	}
 	else if (self.impulse == 99 && cvar("sv_cheats"))
 	{
 		self.items = IT_LASER | IT_UZI | IT_SHOTGUN | IT_GRENADE_LAUNCHER | IT_ELECTRO | IT_CRYLINK | IT_NEX | IT_HAGAR | IT_ROCKET_LAUNCHER;

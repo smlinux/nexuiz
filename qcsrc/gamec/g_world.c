@@ -143,6 +143,7 @@ void worldspawn (void)
 	precache_sound ("misc/gib_splat02.wav");
 	precache_sound ("misc/gib_splat03.wav");
 	precache_sound ("misc/gib_splat04.wav");
+	precache_sound ("misc/powerup.wav");
 
 	precache_sound ("misc/itemrespawn.wav");
 

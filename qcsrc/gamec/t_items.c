@@ -27,14 +27,14 @@ void Item_Touch (void)
 	_switchweapon = other.switchweapon == w_getbestweapon(other);
 
 	if (self.ammo_shells){
-		other.ammo_shells = min (other.ammo_shells + self.ammo_shells, 100);
+		other.ammo_shells = min (other.ammo_shells + self.ammo_shells, 999);
 	}
 	if (self.ammo_nails)
-		other.ammo_nails = min (other.ammo_nails + self.ammo_nails, 200);
+		other.ammo_nails = min (other.ammo_nails + self.ammo_nails, 999);
 	if (self.ammo_rockets)
-		other.ammo_rockets = min (other.ammo_rockets + self.ammo_rockets, 100);
+		other.ammo_rockets = min (other.ammo_rockets + self.ammo_rockets, 999);
 	if (self.ammo_cells)
-		other.ammo_cells = min (other.ammo_cells + self.ammo_cells, 100);
+		other.ammo_cells = min (other.ammo_cells + self.ammo_cells, 999);
 
 	if (self.items & IT_UZI)				W_GiveWeapon (other, IT_UZI, "Machine gun");
 	if (self.items & IT_SHOTGUN)			W_GiveWeapon (other, IT_SHOTGUN, "Shotgun");
@@ -120,6 +120,10 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 	self.solid = SOLID_TRIGGER;
 	self.touch = Item_Touch;
 	
+	if (itemflags & FL_POWERUP)
+	{
+		self.effects = self.effects | EF_ADDITIVE;
+	}
 	
 	// Savage: remove thrown items after a certain period of time ("garbage collection")
 	if(self.norespawn) {
@@ -149,8 +153,8 @@ void item_health1 (void) {self.max_health = 5;StartItem ("models/items/g_h1.md3"
 void item_health25 (void) {self.max_health = 25;StartItem ("models/items/g_h25.md3", "misc/mediumhealth.wav", 15, "25 Health", 0, 0);}
 void item_health100 (void) {self.max_health = 100;StartItem ("models/items/g_h100.md3", "misc/megahealth.wav", 30, "100 Health", 0, 0);}
 
-void item_strength (void) {self.strength_finished = 30;StartItem ("models/items/g_strength.md3", "misc/itempickup.wav", 120, "Strength Powerup", IT_STRENGTH, 0);}
-void item_invincible (void) {self.invincible_finished = 30;StartItem ("models/items/g_invincible.md3", "misc/itempickup.wav", 120, "Invulnerability", IT_INVINCIBLE, 0);}
+void item_strength (void) {self.strength_finished = 30;StartItem ("models/items/g_strength.md3", "misc/powerup.wav", 120, "Strength Powerup", IT_STRENGTH, FL_POWERUP);}
+void item_invincible (void) {self.invincible_finished = 30;StartItem ("models/items/g_invincible.md3", "misc/powerup.wav", 120, "Invulnerability", IT_INVINCIBLE, FL_POWERUP);}
 
 void misc_models (void)
 {

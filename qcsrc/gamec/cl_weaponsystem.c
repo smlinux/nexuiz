@@ -28,7 +28,7 @@ void() CL_ExteriorWeaponentity_Think =
 	if (self.modelindex != self.owner.weaponentity.modelindex || self.dmg != self.owner.modelindex)
 	{
 		self.modelindex = self.owner.weaponentity.modelindex;
-		self.model = self.owner.weaponentity.model;
+		self.model = "models/weapons/w_shotgun.md3";
 		self.dmg = self.owner.modelindex;
 		setattachment(self, self.owner, "weapon");
 		// if that didn't find a tag, hide the exterior weapon model

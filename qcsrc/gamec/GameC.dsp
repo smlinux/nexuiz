@@ -117,10 +117,6 @@ SOURCE=.\sys.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\cl_aliases.c
-# End Source File
-# Begin Source File
-
 SOURCE=.\cl_client.c
 # End Source File
 # Begin Source File
@@ -203,6 +199,14 @@ SOURCE=.\bot_way.c
 # Begin Group "game"
 
 # PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\ctf.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\domination.c
+# End Source File
 # Begin Source File
 
 SOURCE=.\g_casings.c
