@@ -172,7 +172,7 @@ Option menus
 	font_size	"9 9"
 	draw 		nex_draw_text
 }
-// game name
+// player name
 {
 	type 		ITEM_TEXTBUTTON
 	name		options_player_opt_playername
@@ -180,7 +180,7 @@ Option menus
 	text		"Player Name"
 	pos		"0 0 0"
 	clip_pos	"10 0 0"
-	clip_size	"100 11 0"
+	clip_size	"200 20 0"
 	//font_size	"10 10 0"
 	alignment	16		// TEXT_ALIGN_RIGHTPOS
 	flag		256		// FLAG_AUTOSETCLICK

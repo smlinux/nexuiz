@@ -844,7 +844,8 @@ void(void) nex_player_init =
 	mlist_saved = strzone( str_cvar( player_model_cvar ) );
 
 	ent = menu_getitem( "options_player_opt_playername_switch" );
-	ent.text = str_cvar( player_name_cvar);
+	strunzone( ent.text );
+	ent.text = strzone( str_cvar( player_name_cvar ) );
 };
 
 void(void) nex_player_name =
