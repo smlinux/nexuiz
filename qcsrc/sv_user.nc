@@ -76,7 +76,7 @@ void SV_PlayerPhysics() {
 		if (self.movement == '0 0 0')
 			wishvel = '0 0 -60'; // drift towards bottom
 		else
-			wishvel = v_forward * self.movement_x + v_right * self.movement_y + v_up * self.movement_z;
+			wishvel = v_forward * self.movement_x + v_right * self.movement_y + '0 0 1' * self.movement_z;
 
 		wishspeed = vlen(wishvel);
 		if (wishspeed > sv_maxspeed)
