@@ -1,0 +1,61 @@
+// Property of Alientrap/AK
+// options/key.menu
+Item Layout Effects
+{
+	direction	[Nex_DefaultVertDirection]
+	size		'600 600'
+	origin		'300 0'
+	alignment	[AlignFirst]
+
+	Derive Nex_Option_Switch Particles
+	{
+		text	"Particles"
+		target	"::Data::Effects::Particles::Switch"
+	}
+	Derive Nex_Option_Slider Particlequality
+	{
+		text	"Particle Quality"
+		target	"::Data::Effects::Particlequality::Value"
+	}
+	Derive Nex_Option_Switch Decals
+	{
+		text	"Decals"
+		target	"::Data::Effects::Decals::Switch"
+	}
+	Derive Nex_Option_Switch Bloom
+	{
+		text	"Bloom"
+		target	"::Data::Effects::Bloom::Switch"
+	}
+	Derive Nex_Option_Switch Coronas
+	{
+		text	"Coronas"
+		target	"::Data::Effects::Coronas::Switch"
+	}
+	Derive Nex_Option_Switch Realtimelights
+	{
+		text	"Realtime World Lights"
+		target	"::Data::Effects::Realtimelights::Switch"
+	}
+	Derive Nex_Option_Switch Realtimedlights
+	{
+		text	"Realtime Dynamic Lights"
+		target	"::Data::Effects::Realtimedlights::Switch"
+	}
+	Derive Nex_Option_Switch Realtimeshadows
+	{
+		text	"Realtime Shadows"
+		target	"::Data::Effects::Realtimeshadows::Switch"
+	}
+	Derive Nex_Option_Switch Offsetmaps
+	{
+		text	"Offset maps"
+		target	"::Data::Effects::Offsetmaps::Switch"
+	}
+	Derive Nex_Option_Switch Gloss
+	{
+		text	"Gloss"
+		target	"::Data::Effects::Gloss::Switch"
+	}
+
+}

@@ -9,20 +9,12 @@ Item Layout Options
 	{
 		direction '0 10'
 
-		Derive TextButton Game
-		{
-			normal 		"Game"
-		}
 		Derive TextButton Player
 		{
 			normal		"Player"
 
 			init 		Nex_Action_JumpToPage
 			target		"Panel::Player"
-		}
-		Derive TextButton Input
-		{
-			normal		"Input"
 		}
 		Derive TextButton Controls
 		{
@@ -34,6 +26,10 @@ Item Layout Options
 		Derive TextButton Audio
 		{
 			normal 		"Audio"
+
+
+			init		Nex_Action_JumpToPage
+			target		"Panel::Sound"
 		}
 		Derive TextButton Video
 		{
@@ -52,6 +48,17 @@ Item Layout Options
 		Derive TextButton Effects
 		{
 			normal		"Effects"
+
+			init		Nex_Action_JumpToPage
+			target		"Panel::Effects"
+		}
+		Derive Text Game
+		{
+			normal 		"Game"
+		}
+		Derive Text Input
+		{
+			normal		"Input"
 		}
 	}
 	Item EventWindow Panel
@@ -64,5 +71,6 @@ Item Layout Options
 		#include "menu/options/key.menu"
 		#include "menu/options/player.menu"
 		#include "menu/options/color.menu"
+		#include "menu/options/effects.menu"
 	}
 }
