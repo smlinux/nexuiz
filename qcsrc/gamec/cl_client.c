@@ -105,7 +105,7 @@ void PutClientInServer (void)
 	self.viewzoom = 0.6;
 
 	setmodel (self, self.playermodel);
-	self.skin = self.playerskin;
+	self.skin = stof(self.playerskin);
 	setsize (self, PL_MIN, PL_MAX);
 	setorigin (self, spot.origin + '0 0 1' * (1 - self.mins_z - 24));
 	// don't reset back to last position, even if new position is stuck in solid
@@ -494,7 +494,7 @@ void PlayerPreThink (void)
 		m2 = self.maxs;
 		setmodel (self, self.playermodel);
 		setsize (self, m1, m2);
-		self.skin = self.playerskin;
+		self.skin = stof(self.playerskin);
 	}
 
 	W_WeaponFrame();
