@@ -78,15 +78,15 @@ void SV_PlayerPhysics() {
 	if (self.movetype != MOVETYPE_NOCLIP)
 	{
 		if (self.movement == '0 0 0')
-			wishvel = '0 0 -60'; // drift towards bottom
+			wishvel = '0 0 -30'; // drift towards bottom
 		else
 			wishvel = v_forward * self.movement_x + v_right * self.movement_y + '0 0 1' * self.movement_z;
 
 		wishspeed = vlen(wishvel);
 		if (wishspeed > sv_maxspeed)
-			wishspeed = sv_maxspeed * 0.7;
+			wishspeed = sv_maxspeed * 1.4;
 		else
-			wishspeed = wishspeed * 0.7;
+			wishspeed = wishspeed * 1.4;
 
 		// water friction
 		if (self.velocity != '0 0 0')
