@@ -240,17 +240,18 @@ void(void) ITEM_BUTTON_DRAW =
 
 void(void) ITEM_BUTTON_REFRESH =
 {
-
-	if((self.hold_pressed + self._press_time < time && self._button_state == BUTTON_PRESSED) || (menu_selected != self && self._button_state == BUTTON_SELECTED))
+	if( self.hold_pressed + self._press_time < time ) 
 	{
-		self._button_state = BUTTON_NORMAL;
+		if( menu_selected != self && self._button_state != BUTTON_NORMAL )
+			self._button_state = BUTTON_NORMAL;
+		else if( menu_selected == self && self._button_state != BUTTON_SELECTED)
+		{
+			self._button_state = BUTTON_SELECTED;
+			if(self.sound_selected)
+				snd_play(self.sound_selected);
+		}
 	}
-	if(menu_selected == self && self._button_state == BUTTON_NORMAL)
-	{
-		self._button_state = BUTTON_SELECTED;
-		if(self.sound_selected)
-			snd_play(self.sound_selected);
-	}
+	
 	def_refresh();
 	ctcall_refresh();
 };
@@ -259,7 +260,7 @@ void(float keynr, float ascii) ITEM_BUTTON_KEY =
 {
 	if(ctcall_key(keynr, ascii))
 		return;
-
+	
 	if(keynr == K_ENTER || keynr == K_MOUSE1)
 	{
 		self._action();
@@ -340,7 +341,7 @@ void(void) ITEM_BUTTON =
 		ITEM_BUTTON_DRAW,
 		defct_mouse_enter,
 		defct_mouse_leave,
-		defct_action,
+		ITEM_BUTTON_ACTION,
 		ITEM_BUTTON_REFRESH);
 
 	ctcall_init();

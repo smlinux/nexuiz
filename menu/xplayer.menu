@@ -33,21 +33,30 @@ template for map selection
 }
 // prev button
 {
-	type 	ITEM_TEXTBUTTON
+	type 	ITEM_BUTTON
 	name	mapselection_prev
 	parent	mapselection
-	text	"Prev"
-	pos		"0 43.5"
-	alignment 16
+	picture	"gfx/m_arrow"
+	picture_selected "gfx/m_arrow"
+	picture_pressed	"gfx/m_arrow"
+	color_selected	"0.5 0.5 1"
+	color_pressed	"1 0.2 0.2"
+	pos	"0 43.5"
+	size	"50 50"
 	action	nex_xp_prev
 }
 // next button
 {
-	type	ITEM_TEXTBUTTON
+	type	ITEM_BUTTON
 	name	mapselection_next
 	parent	mapselection
-	text	"Next"
-	pos		"600 43.5"
+	picture	"gfx/m_arrow_i"
+	picture_selected "gfx/m_arrow_i"
+	picture_pressed	"gfx/m_arrow_i"
+	color_selected	"0.5 0.5 1"
+	color_pressed	"1 0.2 0.2"
+	pos	"550 43.5"
+	size 	"50 50"
 	action	nex_xp_next
 }
 // template used to create the different pictures
