@@ -59,6 +59,7 @@ template
 	picture_pressed	"gfx/m_top_sel_singleplayer"*/
 	drawflag_pressed 0
 	action		nex_display_creategame
+	sound_pressed	"misc/menu2.wav"
 }
 // multiplayer
 {
@@ -74,6 +75,7 @@ template
 	drawflag_pressed 0
 	//action		nex_display_multiplayer
 	action		nex_display_serverlist
+	sound_pressed	"misc/menu2.wav"
 }
 // options
 {
@@ -87,6 +89,7 @@ template
 	picture_pressed	"gfx/m_top_sel_options"
 	drawflag_pressed 0
 	action		nex_display_options
+	sound_pressed	"misc/menu2.wav"
 }
 // video
 {
@@ -100,6 +103,7 @@ template
 	picture_pressed	"gfx/m_top_sel_video"
 	drawflag_pressed 0
 	action		nex_display_video
+	sound_pressed	"misc/menu2.wav"
 }
 // quit
 {
