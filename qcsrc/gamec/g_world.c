@@ -130,11 +130,11 @@ void worldspawn (void)
 	precache_sound ("misc/jumppad.wav");
 	precache_sound ("misc/hitground1.wav");
 	precache_sound ("misc/hitground2.wav");
+	precache_sound ("misc/hitground3.wav");
+	precache_sound ("misc/hitground4.wav");
 	precache_sound ("misc/talk.wav");  // temp
 
 	precache_sound ("misc/itemrespawn.wav");
-	
-	precache_sound ("demon/dland2.wav");
 
 
 	// plays music for the level if there is any

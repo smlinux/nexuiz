@@ -102,67 +102,7 @@ void PutClientInServer (void)
 
 	self.viewzoom = 0.6;
 
-	mdlrandom = random() * 15;
-	if (mdlrandom < 1)
-	{
-		setmodel (self, "models/player/insurrectionist.zym");
-	}
-	else if (mdlrandom < 2)
-	{
-		setmodel (self, "models/player/mulder.zym");
-	}
-	else if (mdlrandom < 3)
-	{
-		setmodel (self, "models/player/marine.zym");
-	}
-	else if (mdlrandom < 4)
-	{
-		setmodel (self, "models/player/specop.zym");
-	}
-	else if (mdlrandom < 5)
-	{
-		setmodel (self, "models/player/grunt.zym");
-	}
-	else if (mdlrandom < 6)
-	{
-		setmodel (self, "models/player/pryia.zym");
-	}
-	else if (mdlrandom < 7)
-	{
-		setmodel (self, "models/player/lurk.zym");
-	}
-	else if (mdlrandom < 8)
-	{
-		setmodel (self, "models/player/visitant.zym");
-	}
-	else if (mdlrandom < 9)
-	{
-		setmodel (self, "models/player/headhunter.zym");
-	}
-	else if (mdlrandom < 10)
-	{
-		setmodel (self, "models/player/jeandarc.zym");
-	}
-	else if (mdlrandom < 11)
-	{
-		setmodel (self, "models/player/robot.zym");
-	}
-	else if (mdlrandom < 12)
-	{
-		setmodel (self, "models/player/lycanthrope.zym");
-	}
-	else if (mdlrandom < 13)
-	{
-		setmodel (self, "models/player/shock.zym");
-	}
-	else if (mdlrandom < 14)
-	{
-		setmodel (self, "models/player/carni.zym");
-	}
-	else
-	{
-		setmodel (self, "models/player/fshock.zym");
-	}
+	setmodel (self, self.playermodel);
 
 	setsize (self, PL_MIN, PL_MAX);
 	setorigin (self, spot.origin + '0 0 1' * (1 - self.mins_z - 24));
@@ -473,6 +413,7 @@ Called every frame for each client after the physics are run
 */
 void PlayerPostThink (void)
 {
+	float soundrandom;
 	if (BotPostFrame())
 		return;
 	if (self.health > 0)
@@ -486,12 +427,15 @@ void PlayerPostThink (void)
 		{
 			if (self.jump_flag < -100 && !self.watertype == CONTENT_WATER) // HitGround
 			{
-				// HitGround sound, FIXME: add landing animation
-				if (random() < 0.5)
+				soundrandom = random() * 3;
+				if (soundrandom < 1)
 					sound (self, CHAN_BODY, "misc/hitground1.wav", 1, ATTN_NORM);
-				else
+				if (soundrandom < 2)
 					sound (self, CHAN_BODY, "misc/hitground2.wav", 1, ATTN_NORM);
-
+				if (soundrandom < 3)
+					sound (self, CHAN_BODY, "misc/hitground3.wav", 1, ATTN_NORM);
+				if (soundrandom < 4)
+					sound (self, CHAN_BODY, "misc/hitground4.wav", 1, ATTN_NORM);
 				if (self.jump_flag < -650) // landing damage
 				{
 					local float dm;

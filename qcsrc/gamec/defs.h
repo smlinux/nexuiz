@@ -3,6 +3,7 @@
 
 entity	activator;
 string	string_null;
+
 //entity	casing;
 entity dest;
 
@@ -57,6 +58,9 @@ entity dest;
 .float fade_time;
 
 .string mdl;
+
+.string playermodel;
+.string playerskin;
 
 .float	norespawn;
 .float	respawntime;
