@@ -1,7 +1,6 @@
 void() rlauncher_ready_01;
 void() rlauncher_fire1_01;
 void() rlauncher_fire2_01;
-void() rlauncher_fire3_01;
 void() rlauncher_deselect_01;
 void() rlauncher_select_01;
 void() W_Rocket_Attack2;
@@ -24,8 +23,6 @@ void(float req) w_rlauncher =
 		if (time < self.attack_finished)
 			W_Rocket_Attack2();
 	}
-	else if (req == WR_FIRE3)
-		weapon_prepareattack(rlauncher_check, rlauncher_check, rlauncher_fire3_01, 1.5);
 	else if (req == WR_RAISE)
 		rlauncher_select_01();
 	else if (req == WR_UPDATECOUNTS)
@@ -127,12 +124,6 @@ void W_Rocket_Attack2 (void)
 	self.attack_finished = time + 0.1;
 }
 
-
-void W_Rocket_Attack3 (void)
-{
-
-}
-
 // weapon frames 
 
 void()	rlauncher_ready_01 =	{weapon_thinkf(WFRAME_IDLE, 0.1, rlauncher_ready_01); self.weaponentity.state = WS_READY;};
@@ -146,10 +137,5 @@ void()	rlauncher_fire1_01 =
 void()	rlauncher_fire2_01 =	
 {
 	weapon_doattack(rlauncher_check, rlauncher_check, W_Rocket_Attack2);
-	weapon_thinkf(WFRAME_FIRE2, 0.3, rlauncher_ready_01);
-};
-void()	rlauncher_fire3_01 =	
-{
-	weapon_doattack(rlauncher_check, rlauncher_check, W_Rocket_Attack3);
 	weapon_thinkf(WFRAME_FIRE2, 0.3, rlauncher_ready_01);
 };

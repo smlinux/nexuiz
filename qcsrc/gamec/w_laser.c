@@ -1,7 +1,6 @@
 void() laser_ready_01;
 void() laser_fire1_01;
 void() laser_fire2_01;
-void() laser_fire3_01;
 void() laser_deselect_01;
 void() laser_select_01;
 
@@ -15,8 +14,6 @@ void(float req) w_laser =
 		weapon_prepareattack(laser_check, laser_check, laser_fire1_01, 0.4);
 	else if (req == WR_FIRE2)
 		weapon_prepareattack(laser_check, laser_check, laser_fire2_01, 0.3);
-	else if (req == WR_FIRE3)
-		weapon_prepareattack(laser_check, laser_check, laser_fire3_01, 0.3);
 	else if (req == WR_RAISE)
 		laser_select_01();
 	else if (req == WR_UPDATECOUNTS)
@@ -123,11 +120,6 @@ void()	laser_fire1_01 =
 	weapon_thinkf(WFRAME_FIRE1, 0.3, laser_ready_01);
 };
 void()	laser_fire2_01 =	
-{
-	weapon_doattack(laser_check, laser_check, W_Laser_Attack2);
-	weapon_thinkf(WFRAME_FIRE1, 0.2, laser_ready_01);
-};
-void()	laser_fire3_01 =	
 {
 	weapon_doattack(laser_check, laser_check, W_Laser_Attack2);
 	weapon_thinkf(WFRAME_FIRE1, 0.2, laser_ready_01);

@@ -1,7 +1,6 @@
 void() shotgun_ready_01;
 void() shotgun_fire1_01;
 void() shotgun_fire2_01;
-void() shotgun_fire3_01;
 void() shotgun_deselect_01;
 void() shotgun_select_01;
 
@@ -20,8 +19,6 @@ void(float req) w_shotgun =
 		weapon_prepareattack(shotgun_check, shotgun_check, shotgun_fire1_01, 0.7);
 	else if (req == WR_FIRE2)
 		weapon_prepareattack(shotgun_check, shotgun_check, shotgun_fire2_01, 0.7);
-	else if (req == WR_FIRE3)
-		weapon_prepareattack(shotgun_check, shotgun_check, shotgun_fire3_01, 0.7);
 	else if (req == WR_RAISE)
 		shotgun_select_01();
 	else if (req == WR_UPDATECOUNTS)
@@ -72,10 +69,3 @@ void()	shotgun_fire2_01 =
 	weapon_doattack(shotgun_check, shotgun_check, W_Shotgun_Attack2);
 	weapon_thinkf(WFRAME_FIRE2, 0.5, shotgun_ready_01);
 };
-void()	shotgun_fire3_01 =	
-{
-	weapon_doattack(shotgun_check, shotgun_check, W_Shotgun_Attack2);
-	weapon_thinkf(WFRAME_FIRE2, 0.5, shotgun_ready_01);
-};
-
-

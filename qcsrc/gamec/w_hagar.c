@@ -1,7 +1,6 @@
 void() hagar_ready_01;
 void() hagar_fire1_01;
 void() hagar_fire2_01;
-void() hagar_fire3_01;
 void() hagar_deselect_01;
 void() hagar_select_01;
 
@@ -20,8 +19,6 @@ void(float req) w_hagar =
 		weapon_prepareattack(hagar_check, hagar_check, hagar_fire1_01, 0.2);
 	else if (req == WR_FIRE2)
 		weapon_prepareattack(hagar_check, hagar_check, hagar_fire2_01, 0.2);
-	else if (req == WR_FIRE3)
-		weapon_prepareattack(hagar_check, hagar_check, hagar_fire3_01, 0);
 	else if (req == WR_RAISE)
 		hagar_select_01();
 	else if (req == WR_UPDATECOUNTS)
@@ -138,25 +135,6 @@ void W_Hagar_Attack2 (void)
 	self.ammo_rockets = self.ammo_rockets - 0.25;
 }
 
-void W_Hagar_Attack3 (void)
-{
-	entity	proj;
-	makevectors(self.v_angle);
-	proj = findradius (self.origin, 50000);
-	while (proj)
-	{
-		if (proj.classname == "missile" && proj.owner == self)
-		{
-			proj.velocity = proj.velocity - v_up * 500;
-			proj.velocity = proj.velocity - v_forward * 1000;
-		}
-		proj = proj.chain;
-	}
-
-	self.attack_finished = time;
-}
-
-
 // weapon frames 
 void()	hagar_ready_01 =	{weapon_thinkf(WFRAME_IDLE, 0.1, hagar_ready_01); self.weaponentity.state = WS_READY;};
 void()	hagar_select_01 =	{weapon_thinkf(-1, PLAYER_WEAPONSELECTION_DELAY, w_ready); weapon_boblayer1(PLAYER_WEAPONSELECTION_SPEED, '0 0 0');};
@@ -169,11 +147,6 @@ void()	hagar_fire1_01 =
 void()	hagar_fire2_01 =	
 {
 	weapon_doattack(hagar_check, hagar_check, W_Hagar_Attack2);
-	weapon_thinkf(WFRAME_FIRE2, 0.15, hagar_ready_01);
-};
-void()	hagar_fire3_01 =	
-{
-	weapon_doattack(hagar_check, hagar_check, W_Hagar_Attack3);
 	weapon_thinkf(WFRAME_FIRE2, 0.15, hagar_ready_01);
 };
 

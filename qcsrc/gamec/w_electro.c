@@ -1,7 +1,6 @@
 void() electro_ready_01;
 void() electro_fire1_01;
 void() electro_fire2_01;
-void() electro_fire3_01;
 void() electro_deselect_01;
 void() electro_select_01;
 
@@ -20,8 +19,6 @@ void(float req) w_electro =
 		weapon_prepareattack(electro_check, electro_check, electro_fire1_01, 0.4);
 	else if (req == WR_FIRE2)
 		weapon_prepareattack(electro_check, electro_check, electro_fire2_01, 2);
-	else if (req == WR_FIRE3)
-		weapon_prepareattack(electro_check, electro_check, electro_fire3_01, 0.4);
 	else if (req == WR_RAISE)
 		electro_select_01();
 	else if (req == WR_UPDATECOUNTS)
@@ -195,7 +192,7 @@ void() W_Electro_Attack2
 	Plasma.health = 5;
 	Plasma.event_damage = W_Plasma_Damage;
 
-	setmodel (Plasma, "models/elaser.mdl");
+	setmodel (Plasma, "models/ebomb.mdl");
 	setsize (Plasma, '-6 -6 -3', '6 6 3');
 
 	if (postion == 0)
@@ -207,7 +204,9 @@ void() W_Electro_Attack2
 
 	Plasma.velocity = v_forward * 900 + v_up * 200;
 	Plasma.angles = vectoangles (Plasma.velocity);
-	Plasma.avelocity = '0 0 0';
+	Plasma.avelocity_y = random () * -500 - 500;
+	Plasma.avelocity_x = random () * -500 - 500;
+	Plasma.avelocity_z = random () * -500 - 500;
 
 	Plasma.touch = W_Plasma_Touch;
 	Plasma.think = W_Plasma_FuseExplode;
@@ -219,48 +218,6 @@ void() W_Electro_Attack2
 	self.ammo_cells = self.ammo_cells - 2;
 
 }
-
-void() W_Electro_Attack3 
-{
-	entity	proj;
-	vector org;
-	float postion;
-
-	postion = self.electrocount;
-	makevectors(self.v_angle);
-	sound (self, CHAN_WEAPON, "weapons/electro_fire.wav", 1, ATTN_NORM);
-
-	proj = spawn ();
-	proj.owner = self;
-	proj.classname = "spike";
-
-	proj.movetype = MOVETYPE_BOUNCEMISSILE; 
-	proj.solid = SOLID_BBOX;
-	proj.effects = 1;
-	
-	org = self.origin + self.view_ofs + v_forward * 18 + v_right * 7 + v_up * -9;
-	te_smallflash(org);
-
-	setmodel (proj, "models/bullet.mdl");
-	setsize (proj, '0 0 0', '0 0 0');
-	if (postion == 0)
-	setorigin (proj, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -14);
-	if (postion == 1)
-	setorigin (proj, self.origin + self.view_ofs + v_forward * 18 + v_right * 10 + v_up * -12);
-	if (postion == 2)
-	setorigin (proj, self.origin + self.view_ofs + v_forward * 18 + v_right * 15 + v_up * -14);
-
-	proj.velocity = v_forward * 9999;
-	proj.think = W_Electro_Touch;
-	proj.nextthink = time + 8;
-
-	proj.effects = proj.effects | EF_ADDITIVE;
-
-	self.attack_finished = time + 0.4;
-	self.ammo_cells = self.ammo_cells - 1;
-
-}
-
 
 // weapon frames 
 
@@ -280,16 +237,6 @@ void()	electro_fire1_01 =
 void()	electro_fire2_01 =	
 {
 	weapon_doattack(electro_check, electro_check, W_Electro_Attack2);
-
-	self.electrocount = self.electrocount + 1;
-		if (self.electrocount == 3)
-			self.electrocount = 0;
-
-	weapon_thinkf(WFRAME_FIRE2, 0.3, electro_ready_01);
-};
-void()	electro_fire3_01 =	
-{
-	weapon_doattack(electro_check, electro_check, W_Electro_Attack3);
 
 	self.electrocount = self.electrocount + 1;
 		if (self.electrocount == 3)

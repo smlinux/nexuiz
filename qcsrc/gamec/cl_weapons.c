@@ -106,8 +106,6 @@ void() W_WeaponFrame =
 		weapon_action(self.weapon, WR_FIRE1);
 	if (self.button3)
 		weapon_action(self.weapon, WR_FIRE2);
-	if (self.button4)
-		weapon_action(self.weapon, WR_FIRE3);
 
 	// do weapon think
 	if (time >= self.weapon_nextthink)

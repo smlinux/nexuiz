@@ -1,7 +1,6 @@
 void() nex_ready_01;
 void() nex_fire1_01;
 void() nex_fire2_01;
-void() nex_fire3_01;
 void() nex_deselect_01;
 void() nex_select_01;
 
@@ -20,8 +19,6 @@ void(float req) w_nex =
 		weapon_prepareattack(nex_check, nex_check, nex_fire1_01, 1);
 	else if (req == WR_FIRE2)
 		weapon_prepareattack(nex_check, nex_check, nex_fire2_01, 1);
-	else if (req == WR_FIRE3)
-		weapon_prepareattack(nex_check, nex_check, nex_fire3_01, 1);
 	else if (req == WR_RAISE)
 		nex_select_01();
 	else if (req == WR_UPDATECOUNTS)
@@ -100,10 +97,4 @@ void()	nex_fire2_01 =
 	weapon_doattack(nex_check, nex_check, W_Nex_Attack);
 	weapon_thinkf(WFRAME_FIRE2, 0.5, nex_ready_01);
 };
-void()	nex_fire3_01 =	
-{
-	weapon_doattack(nex_check, nex_check, W_Nex_Attack);
-	weapon_thinkf(WFRAME_FIRE2, 0.5, nex_ready_01);
-};
-
 

@@ -1,7 +1,6 @@
 void() glauncher_ready_01;
 void() glauncher_fire1_01;
 void() glauncher_fire2_01;
-void() glauncher_fire3_01;
 void() glauncher_deselect_01;
 void() glauncher_select_01;
 
@@ -20,8 +19,6 @@ void(float req) w_glauncher =
 		weapon_prepareattack(glauncher_check, glauncher_check, glauncher_fire1_01, 0.8);
 	else if (req == WR_FIRE2)
 		weapon_prepareattack(glauncher_check, glauncher_check, glauncher_fire2_01, 1);
-	else if (req == WR_FIRE3)
-		weapon_prepareattack(glauncher_check, glauncher_check, glauncher_fire3_01, 0.3);
 	else if (req == WR_RAISE)
 		glauncher_select_01();
 	else if (req == WR_UPDATECOUNTS)
@@ -142,11 +139,6 @@ void W_Grenade_Attack2 (void)
 	self.ammo_rockets = self.ammo_rockets - 1;
 }
 
-void W_Grenade_Attack3 (void)
-{
-	makevectors(self.v_angle);
-}
-
 // weapon frames 
 
 void()	glauncher_ready_01 =	{weapon_thinkf(WFRAME_IDLE, 0.1, glauncher_ready_01); self.weaponentity.state = WS_READY;};
@@ -162,9 +154,3 @@ void()	glauncher_fire2_01 =
 	weapon_doattack(glauncher_check, glauncher_check, W_Grenade_Attack2);
 	weapon_thinkf(WFRAME_FIRE2, 0.8, glauncher_ready_01);
 };
-void()	glauncher_fire3_01 =	
-{
-	weapon_doattack(glauncher_check, glauncher_check, W_Grenade_Attack3);
-	weapon_thinkf(WFRAME_FIRE2, 0.3, glauncher_ready_01);
-};
-

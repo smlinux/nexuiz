@@ -1,7 +1,6 @@
 void() crylink_ready_01;
 void() crylink_fire1_01;
 void() crylink_fire2_01;
-void() crylink_fire3_01;
 void() crylink_deselect_01;
 void() crylink_select_01;
 
@@ -20,8 +19,6 @@ void(float req) w_crylink =
 		weapon_prepareattack(crylink_check, crylink_check, crylink_fire1_01, 0.2);
 	else if (req == WR_FIRE2)
 		weapon_prepareattack(crylink_check, crylink_check, crylink_fire2_01, 0.2);
-	else if (req == WR_FIRE3)
-		weapon_prepareattack(crylink_check, crylink_check, crylink_fire3_01, 0.2);
 	else if (req == WR_RAISE)
 		crylink_select_01();
 	else if (req == WR_UPDATECOUNTS)
@@ -57,7 +54,7 @@ void W_Crylink_Attack (void) //(float postion)
 	proj.movetype = MOVETYPE_FLY; 
 	proj.solid = SOLID_BBOX;
 	
-	setmodel (proj, "models/sprites/bubbles.spr");
+	setmodel (proj, "models/plasma.mdl");
 	setsize (proj, '0 0 0', '0 0 0');
 	setorigin (proj, self.origin + self.view_ofs + v_forward * 10 + v_right * 5 + v_up * -14);
 
@@ -70,6 +67,8 @@ void W_Crylink_Attack (void) //(float postion)
 
 	proj.glow_color = 10;
 	proj.glow_size = 30;
+
+	proj.effects = proj.effects | EF_ADDITIVE;
 
 	self.attack_finished = time + 0.20;
 	self.ammo_cells = self.ammo_cells - 0.2;

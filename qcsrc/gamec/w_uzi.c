@@ -1,7 +1,6 @@
 void() uzi_ready_01;
 void() uzi_fire1_01;
 void() uzi_fire2_01;
-void() uzi_fire3_01;
 void() uzi_deselect_01;
 void() uzi_select_01;
 
@@ -20,8 +19,6 @@ void(float req) w_uzi =
 		weapon_prepareattack(uzi_check, uzi_check, uzi_fire1_01, 0.075);
 	else if (req == WR_FIRE2)
 		weapon_prepareattack(uzi_check, uzi_check, uzi_fire2_01, 0.4);
-	else if (req == WR_FIRE3)
-		weapon_prepareattack(uzi_check, uzi_check, uzi_fire3_01, 0.16);
 	else if (req == WR_RAISE)
 		uzi_select_01();
 	else if (req == WR_UPDATECOUNTS)
@@ -56,33 +53,6 @@ void W_Uzi_Attack (void)
 
 void W_Uzi_Attack2 (void)
 {
-	float	sc;
-	float	bullets;
-
-	makevectors(self.v_angle);
-	sound (self, CHAN_WEAPON, "weapons/shotgun_fire.wav", 1, ATTN_NORM);
-
-	bullets = 5;
-	if (bullets > self.ammo_nails)
-		bullets = self.ammo_nails;
-
-	sound (self, CHAN_WEAPON, "weapons/uzi_fire_secondary.wav", 1, ATTN_NORM);
-
-	for (sc = bullets; sc > 0; sc = sc - 1)
-		fireBullet (v_forward, 400, 10, IT_SHOTGUN);
-
-	self.punchangle_x = -1.5;
-
-	self.ammo_nails = self.ammo_nails - bullets;
-	self.attack_finished = time + 0.4;
-
-	vector	org; // casing code
-	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 4) + (v_forward * 15);
-	SpawnCasing (org, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 + 10) * v_up), 2, v_forward,'0 250 0', 100, 3);
-}
-
-void W_Uzi_Attack3 (void)
-{
 	makevectors(self.v_angle);
 	sound (self, CHAN_WEAPON, "weapons/uzi_fire.wav", 1, ATTN_NORM);
 
@@ -111,13 +81,8 @@ void()	uzi_fire1_01 =
 void()	uzi_fire2_01 =	
 {
 	weapon_doattack(uzi_check, uzi_check, W_Uzi_Attack2);
-	weapon_thinkf(WFRAME_FIRE2, 0.4, uzi_ready_01);
-};
-void()	uzi_fire3_01 =	
-{
-	weapon_doattack(uzi_check, uzi_check, W_Uzi_Attack3);
 	if (self.button0)
-		weapon_thinkf(WFRAME_FIRE2, 0.16, uzi_fire3_01);
+		weapon_thinkf(WFRAME_FIRE2, 0.16, uzi_fire2_01);
 	else
 		weapon_thinkf(WFRAME_FIRE2, 0.1, uzi_ready_01);
 };
