@@ -460,6 +460,8 @@ Called every frame for each client before the physics are run
 .float attack_finished;
 void PlayerPreThink (void)
 {
+	local vector m1, m2;
+
 	//if (BotPreFrame())
 	//	return;
 
@@ -483,6 +485,14 @@ void PlayerPreThink (void)
 				respawn();
 		}
 		return;
+	}
+
+	if (self.playermodel != self.model)
+	{
+		m1 = self.mins;
+		m2 = self.maxs;
+		setmodel (self, self.playermodel);
+		setsize (self, m1, m2);
 	}
 
 	W_WeaponFrame();
