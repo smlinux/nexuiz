@@ -344,25 +344,13 @@ void() trigger_counter =
 	self.use = counter_use;
 };
 
-void() hurt_on =
-{
-	self.solid = SOLID_TRIGGER;
-	self.nextthink = -1;
-};
-
-void() hurt_off =
-{
-	self.solid = SOLID_NOT;
-	self.think = hurt_on;
-	self.nextthink = time + 1;
-};
-
+.float triggerhurttime;
 void() hurt_touch =
 {
 	if (other.takedamage)
+	if (other.triggerhurttime < time)
 	{
-		self.think = hurt_off;
-		self.nextthink = time;
+		other.triggerhurttime = time + 1;
 		Damage (other, self, self, self.dmg, DEATH_HURTTRIGGER, '0 0 0', '0 0 0');
 	}
 
