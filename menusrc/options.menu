@@ -1,0 +1,826 @@
+/*
+Property of Alientrap
+
+Option menus
+*/
+{
+	type	ITEM_WINDOW
+	name	options
+}
+// std menu stuff
+{
+	type	ITEM_REFERENCE
+	name	options_bg_ref
+	parent	options
+	link	background
+}
+{
+	type	ITEM_REFERENCE
+	name	options_mainframe
+	parent	options
+	link	mainframe
+	orderpos 1000
+}
+{
+	type	ITEM_REFERENCE
+	name	options_panel_ref
+	parent	options
+	link	opt_panel
+	origin 	"200 145"
+}
+// side panel
+{
+	type	ITEM_WINDOW
+	name	opt_panel
+}
+// side panel entries
+{
+	type 	ITEM_TEXTBUTTON
+	name	opt_panel_game
+	parent	opt_panel
+	text	"Game"
+	pos		"0 0"
+}
+{
+	type 	ITEM_TEXTBUTTON
+	name	opt_panel_controls
+	parent	opt_panel
+	text	"Controls"
+	pos		"0 15"
+}{
+	type 	ITEM_TEXTBUTTON
+	name	opt_panel_sound
+	parent	opt_panel
+	text	"Sound"
+	pos		"0 30"
+}
+{
+	type 	ITEM_TEXTBUTTON
+	name	opt_panel_effects
+	parent	opt_panel
+	text	"Effects"
+	pos		"0 45"
+}
+{
+	type 	ITEM_TEXTBUTTON
+	name	opt_panel_colctrl
+	parent	opt_panel
+	text	"Color Control"
+	pos		"0 60"
+	action	nex_cc
+}
+// ref for the 'working' window
+{
+	type	ITEM_REFERENCE
+	name	options_settings_ref
+	parent	options
+	link	options_game
+	origin	"400 200"
+}
+// sub windows
+// game
+{
+	type	ITEM_WINDOW
+	name	options_game
+}
+// color control
+{
+	type	ITEM_WINDOW
+	name	options_cc
+	origin	"200"
+}
+{
+	type	ITEM_TEXTBUTTON
+	name	options_cc_reset
+	parent	options_cc
+	text	"Reset to defaults"
+	pos		"0 0"
+	alignment	16
+	action	nex_cc_reset
+}
+//////
+// Hardware Gamma Control
+////
+// Text
+{
+	type 	ITEM_TEXTBUTTON
+	name		options_cc_hwgamma_text
+	parent		options_cc
+	text		"Hardware Gamma Control"
+	pos			"0 15 0"
+	//font_size	"10 10 0"
+	alignment	16		// TEXT_ALIGN_RIGHTPOS
+	flag		256		// FLAG_AUTOSETCLICK
+	key			nex_redirect_key
+	reinit		nex_cc_check_hwgamma
+}
+// Switch
+{
+	type	ITEM_TEXTSWITCH
+	name		options_cc_hwgamma_switch
+	parent		options_cc_hwgamma_text
+	pos			"10 15 0"
+	//font_size	"10 10 0"
+	flag 		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
+	text		"'Off''On'"
+	cvarname	"v_hwgamma"
+	cvartype	1		// CVAR_INT
+	reinit		nex_cvar_slider	// can use it also here
+}
+//////
+// Gamma
+////
+// Menu Button
+{
+	type		ITEM_TEXTBUTTON
+	name		options_cc_gamma_text
+	parent		options_cc
+	text		"Gamma"
+	pos			"0 30 0"
+	//font_size	"10 10 0"
+	alignment	16		// TEXT_ALIGN_LEFTPOS
+	flag		256		// FLAG_AUTOSETCLICK
+	key			nex_redirect_key	// redirects input to the child
+	refresh 	nex_cc_check_gamma
+}
+// Slider
+{
+	type		ITEM_SLIDER
+	name		options_cc_gamma_slider
+	parent		options_cc_gamma_text
+	pos			"10 30 0"
+	size		"100 10 0"
+	//size		"100 10 0"
+	flag		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
+	cvarname	"v_gamma"
+	cvartype	4		// CVAR_STEP
+	min_value	1
+	max_value	5
+	step		0.125
+	init		nex_cvar_slider
+	action		nex_cc_ncolor_enable
+}
+// Text
+{
+	type 		ITEM_TEXT
+	name		options_cc_gamma_slidertext
+	parent		options_cc_gamma_text
+	link		options_cc_gamma_slider
+	pos			"120 30 0"
+	//font_size "10 10 0"
+	maxlen		4
+	init		nex_slidertext
+}
+//////
+// Contrast
+////
+// Menu Button
+{
+	type		ITEM_TEXTBUTTON
+	name		options_cc_contrast_text
+	parent		options_cc
+	text		"Contrast"
+	pos			"0 45 0"
+	//font_size	"10 10 0"
+	alignment	16		// TEXT_ALIGN_LEFTPOS
+	flag		256		// FLAG_AUTOSETCLICK
+	key			nex_redirect_key	// redirects input to the child
+	refresh		nex_cc_check_ncolor_enable
+}
+// Slider
+{
+	type		ITEM_SLIDER
+	name		options_cc_contrast_slider
+	parent		options_cc_contrast_text
+	pos			"10 45 0"
+	size		"100 8 0"
+	//size		"100 10 0"
+	flag		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
+	cvarname	"v_contrast"
+	cvartype	4		// CVAR_STEP
+	min_value	1
+	max_value	5
+	step		0.125
+	init		nex_cvar_slider
+	action		nex_cc_ncolor_enable
+}
+// Text
+{
+	type 		ITEM_TEXT
+	name		options_cc_contrast_slidertext
+	parent		options_cc_contrast_text
+	link		options_cc_contrast_slider
+	pos			"120 45 0"
+	//font_size "10 10 0"
+	maxlen		4
+	init		nex_slidertext
+}
+//////
+// Brightness
+////
+// Menu Button
+{
+	type		ITEM_TEXTBUTTON
+	name		options_cc_brightness_text
+	parent		options_cc
+	text		"Brightness"
+	pos			"0 60 0"
+	//font_size	"10 10 0"
+	alignment	16		// TEXT_ALIGN_LEFTPOS
+	flag		256		// FLAG_AUTOSETCLICK
+	key			nex_redirect_key	// redirects input to the child
+	refresh		nex_cc_check_ncolor_enable
+}
+// Slider
+{
+	type		ITEM_SLIDER
+	name		options_cc_brightness_slider
+	parent		options_cc_brightness_text
+	pos			"10 60 0"
+	size		"100 8 0"
+	//size		"100 10 0"
+	flag		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
+	cvarname	"v_brightness"
+	cvartype	4		// CVAR_STEP
+	min_value	0
+	max_value	0.8
+	step		0.05
+	init		nex_cvar_slider
+	action		nex_cc_ncolor_enable
+}
+// Text
+{
+	type 		ITEM_TEXT
+	name		options_cc_brightness_slidertext
+	parent		options_cc_brightness_text
+	link		options_cc_brightness_slider
+	pos			"120 60 0"
+	//font_size "10 10 0"
+	maxlen		4
+	init		nex_slidertext
+}
+//////
+// Color Level Controls
+////
+// Text
+{
+	type 	ITEM_TEXTBUTTON
+	name		options_cc_color_level_controls_text
+	parent		options_cc
+	text		"Color Level Controls"
+	pos			"0 75 0"
+	//font_size	"10 10 0"
+	alignment	16		// TEXT_ALIGN_RIGHTPOS
+	flag		256		// FLAG_AUTOSETCLICK
+	key			nex_redirect_key
+}
+// Switch
+{
+	type	ITEM_TEXTSWITCH
+	name		options_cc_color_level_controls_switch
+	parent		options_cc_color_level_controls_text
+	pos			"10 75 0"
+	//font_size	"10 10 0"
+	flag 		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
+	text		"'Off''On'"
+	cvarname	"v_color_enable"
+	cvartype	1		// CVAR_INT
+	reinit		nex_cvar_slider	// can use it also here
+}
+//////
+// Black: Red
+////
+// Menu Button
+{
+	type		ITEM_TEXTBUTTON
+	name		options_cc_black_red_text
+	parent		options_cc
+	text		"Black: Red  "
+	pos			"0 90 0"
+	//font_size	"10 10 0"
+	alignment	16		// TEXT_ALIGN_LEFTPOS
+	flag		256		// FLAG_AUTOSETCLICK
+	key			nex_redirect_key	// redirects input to the child
+	refresh 	nex_cc_check_color_enable
+}
+// Slider
+{
+	type		ITEM_SLIDER
+	name		options_cc_black_red_slider
+	parent		options_cc_black_red_text
+	pos			"10 90 0"
+	size		"100 8 0"
+	//size		"100 10 0"
+	flag		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
+	cvarname	"v_color_black_r"
+	cvartype	4		// CVAR_STEP
+	min_value	0
+	max_value	0.80
+	step		0.125
+	init		nex_cvar_slider
+	action		nex_cc_color_enable
+}
+// Text
+{
+	type 		ITEM_TEXT
+	name		options_cc_black_red_slidertext
+	parent		options_cc_black_red_text
+	link		options_cc_black_red_slider
+	pos			"120 90 0"
+	//font_size "10 10 0"
+	maxlen		4
+	init		nex_slidertext
+}
+//////
+// Black: Green
+////
+// Menu Button
+{
+	type		ITEM_TEXTBUTTON
+	name		options_cc_black_green_text
+	parent		options_cc
+	text		"Black: Green"
+	pos			"0 105 0"
+	//font_size	"10 10 0"
+	alignment	16		// TEXT_ALIGN_LEFTPOS
+	flag		256		// FLAG_AUTOSETCLICK
+	key			nex_redirect_key	// redirects input to the child
+	refresh		nex_cc_check_color_enable
+}
+// Slider
+{
+	type		ITEM_SLIDER
+	name		options_cc_black_green_slider
+	parent		options_cc_black_green_text
+	pos			"10 105 0"
+	size		"100 8 0"
+	//size		"100 10 0"
+	flag		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
+	cvarname	"v_color_black_g"
+	cvartype	4		// CVAR_STEO
+	min_value	0
+	max_value	0.80
+	step		0.125
+	init		nex_cvar_slider
+	action		nex_cc_color_enable
+}
+// Text
+{
+	type 		ITEM_TEXT
+	name		options_cc_black_green_slidertext
+	parent		options_cc_black_green_text
+	link		options_cc_black_green_slider
+	pos			"120 105 0"
+	//font_size "10 10 0"
+	maxlen		4
+	init		nex_slidertext
+}
+//////
+// Black: Blue
+////
+// Menu Button
+{
+	type		ITEM_TEXTBUTTON
+	name		options_cc_black_blue_text
+	parent		options_cc
+	text		"Black: Blue "
+	pos			"0 120 0"
+	//font_size	"10 10 0"
+	alignment	16		// TEXT_ALIGN_LEFTPOS
+	flag		256		// FLAG_AUTOSETCLICK
+	key			nex_redirect_key	// redirects input to the child
+	refresh		nex_cc_check_color_enable
+}
+// Slider
+{
+	type		ITEM_SLIDER
+	name		options_cc_black_blue_slider
+	parent		options_cc_black_blue_text
+	pos			"10 120 0"
+	size		"100 8 0"
+	//size		"100 10 0"
+	flag		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
+	cvarname	"v_color_black_b"
+	cvartype	4		// CVAR_STEP
+	min_value	0
+	max_value	0.80
+	step		0.125
+	init		nex_cvar_slider
+	action		nex_cc_color_enable
+}
+// Text
+{
+	type 		ITEM_TEXT
+	name		options_cc_black_blue_slidertext
+	parent		options_cc_black_blue_text
+	link		options_cc_black_blue_slider
+	pos			"120 120 0"
+	//font_size "10 10 0"
+	maxlen		4
+	init		nex_slidertext
+}
+//////
+// Black: Grey
+////
+// Menu Button
+{
+	type		ITEM_TEXTBUTTON
+	name		options_cc_black_grey_text
+	parent		options_cc
+	text		"Black: Grey "
+	pos			"0 135 0"
+	//font_size	"10 10 0"
+	alignment	16		// TEXT_ALIGN_LEFTPOS
+	flag		256		// FLAG_AUTOSETCLICK
+	key			nex_redirect_key	// redirects input to the child
+	refresh		nex_cc_check_color_enable
+}
+// Slider
+{
+	type		ITEM_SLIDER
+	name		options_cc_black_grey_slider
+	parent		options_cc_black_grey_text
+	pos			"10 135 0"
+	size		"100 8 0"
+	//size		"100 10 0"
+	flag		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
+	cvarname	"v_color_black"
+	cvartype	1		// CVAR_INT
+	min_value	0
+	max_value	0.8
+	step		0.125
+	init		nex_cc_grey
+	action		nex_cc_color_enable
+}
+// Text
+{
+	type 		ITEM_TEXT
+	name		options_cc_black_grey_slidertext
+	parent		options_cc_black_grey_text
+	link		options_cc_black_grey_slider
+	pos			"120 135 0"
+	//font_size "10 10 0"
+	maxlen		4
+	init		nex_slidertext
+}
+//////
+// Grey: Red
+////
+// Menu Button
+{
+	type		ITEM_TEXTBUTTON
+	name		options_cc_grey_red_text
+	parent		options_cc
+	text		"Grey: Red  "
+	pos			"0 150 0"
+	//font_size	"10 10 0"
+	alignment	16		// TEXT_ALIGN_LEFTPOS
+	flag		256		// FLAG_AUTOSETCLICK
+	key			nex_redirect_key	// redirects input to the child
+	refresh 	nex_cc_check_color_enable
+}
+// Slider
+{
+	type		ITEM_SLIDER
+	name		options_cc_grey_red_slider
+	parent		options_cc_grey_red_text
+	pos			"10 150 0"
+	size		"100 8 0"
+	//size		"100 10 0"
+	flag		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
+	cvarname	"v_color_grey_r"
+	cvartype	4		// CVAR_STEP
+	min_value	0
+	max_value	0.80
+	step		0.125
+	init		nex_cvar_slider
+	action		nex_cc_color_enable
+}
+// Text
+{
+	type 		ITEM_TEXT
+	name		options_cc_grey_red_slidertext
+	parent		options_cc_grey_red_text
+	link		options_cc_grey_red_slider
+	pos			"120 150 0"
+	//font_size "10 10 0"
+	maxlen		4
+	init		nex_slidertext
+}
+//////
+// Grey: Green
+////
+// Menu Button
+{
+	type		ITEM_TEXTBUTTON
+	name		options_cc_grey_green_text
+	parent		options_cc
+	text		"Grey: Green"
+	pos			"0 165 0"
+	//font_size	"10 10 0"
+	alignment	16		// TEXT_ALIGN_LEFTPOS
+	flag		256		// FLAG_AUTOSETCLICK
+	key			nex_redirect_key	// redirects input to the child
+	refresh		nex_cc_check_color_enable
+}
+// Slider
+{
+	type		ITEM_SLIDER
+	name		options_cc_grey_green_slider
+	parent		options_cc_grey_green_text
+	pos			"10 165 0"
+	size		"100 8 0"
+	//size		"100 10 0"
+	flag		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
+	cvarname	"v_color_grey_g"
+	cvartype	4		// CVAR_STEO
+	min_value	0
+	max_value	0.80
+	step		0.125
+	init		nex_cvar_slider
+	action		nex_cc_color_enable
+}
+// Text
+{
+	type 		ITEM_TEXT
+	name		options_cc_grey_green_slidertext
+	parent		options_cc_grey_green_text
+	link		options_cc_grey_green_slider
+	pos			"120 165 0"
+	//font_size "10 10 0"
+	maxlen		4
+	init		nex_slidertext
+}
+//////
+// Grey: Blue
+////
+// Menu Button
+{
+	type		ITEM_TEXTBUTTON
+	name		options_cc_grey_blue_text
+	parent		options_cc
+	text		"Grey: Blue "
+	pos			"0 180 0"
+	//font_size	"10 10 0"
+	alignment	16		// TEXT_ALIGN_LEFTPOS
+	flag		256		// FLAG_AUTOSETCLICK
+	key			nex_redirect_key	// redirects input to the child
+	refresh		nex_cc_check_color_enable
+}
+// Slider
+{
+	type		ITEM_SLIDER
+	name		options_cc_grey_blue_slider
+	parent		options_cc_grey_blue_text
+	pos			"10 180 0"
+	size		"100 8 0"
+	//size		"100 10 0"
+	flag		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
+	cvarname	"v_color_grey_b"
+	cvartype	4		// CVAR_STEP
+	min_value	0
+	max_value	0.80
+	step		0.125
+	init		nex_cvar_slider
+	action		nex_cc_color_enable
+}
+// Text
+{
+	type 		ITEM_TEXT
+	name		options_cc_grey_blue_slidertext
+	parent		options_cc_grey_blue_text
+	link		options_cc_grey_blue_slider
+	pos			"120 180 0"
+	//font_size "10 10 0"
+	maxlen		4
+	init		nex_slidertext
+}
+//////
+// Grey: Grey
+////
+// Menu Button
+{
+	type		ITEM_TEXTBUTTON
+	name		options_cc_grey_grey_text
+	parent		options_cc
+	text		"Grey: Grey "
+	pos			"0 195 0"
+	//font_size	"10 10 0"
+	alignment	16		// TEXT_ALIGN_LEFTPOS
+	flag		256		// FLAG_AUTOSETCLICK
+	key			nex_redirect_key	// redirects input to the child
+	refresh		nex_cc_check_color_enable
+}
+// Slider
+{
+	type		ITEM_SLIDER
+	name		options_cc_grey_grey_slider
+	parent		options_cc_grey_grey_text
+	pos			"10 195 0"
+	size		"100 8 0"
+	//size		"100 10 0"
+	flag		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
+	cvarname	"v_color_grey"
+	cvartype	1		// CVAR_INT
+	min_value	0
+	max_value	0.8
+	step		0.125
+	init		nex_cc_grey
+	action		nex_cc_color_enable
+}
+// Text
+{
+	type 		ITEM_TEXT
+	name		options_cc_grey_grey_slidertext
+	parent		options_cc_grey_grey_text
+	link		options_cc_grey_grey_slider
+	pos			"120 195 0"
+	//font_size "10 10 0"
+	maxlen		4
+	init		nex_slidertext
+}
+//////
+// White: Red
+////
+// Menu Button
+{
+	type		ITEM_TEXTBUTTON
+	name		options_cc_white_red_text
+	parent		options_cc
+	text		"White: Red  "
+	pos			"0 210 0"
+	//font_size	"10 10 0"
+	alignment	16		// TEXT_ALIGN_LEFTPOS
+	flag		256		// FLAG_AUTOSETCLICK
+	key			nex_redirect_key	// redirects input to the child
+	refresh 	nex_cc_check_color_enable
+}
+// Slider
+{
+	type		ITEM_SLIDER
+	name		options_cc_white_red_slider
+	parent		options_cc_white_red_text
+	pos			"10 210 0"
+	size		"100 8 0"
+	//size		"100 10 0"
+	flag		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
+	cvarname	"v_color_white_r"
+	cvartype	4		// CVAR_STEP
+	min_value	0
+	max_value	0.80
+	step		0.125
+	init		nex_cvar_slider
+	action		nex_cc_color_enable
+}
+// Text
+{
+	type 		ITEM_TEXT
+	name		options_cc_white_red_slidertext
+	parent		options_cc_white_red_text
+	link		options_cc_white_red_slider
+	pos			"120 210 0"
+	//font_size "10 10 0"
+	maxlen		4
+	init		nex_slidertext
+}
+//////
+// White: Green
+////
+// Menu Button
+{
+	type		ITEM_TEXTBUTTON
+	name		options_cc_white_green_text
+	parent		options_cc
+	text		"White: Green"
+	pos			"0 225 0"
+	//font_size	"10 10 0"
+	alignment	16		// TEXT_ALIGN_LEFTPOS
+	flag		256		// FLAG_AUTOSETCLICK
+	key			nex_redirect_key	// redirects input to the child
+	refresh		nex_cc_check_color_enable
+}
+// Slider
+{
+	type		ITEM_SLIDER
+	name		options_cc_white_green_slider
+	parent		options_cc_white_green_text
+	pos			"10 225 0"
+	size		"100 8 0"
+	//size		"100 10 0"
+	flag		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
+	cvarname	"v_color_white_g"
+	cvartype	4		// CVAR_STEO
+	min_value	0
+	max_value	0.80
+	step		0.125
+	init		nex_cvar_slider
+	action		nex_cc_color_enable
+}
+// Text
+{
+	type 		ITEM_TEXT
+	name		options_cc_white_green_slidertext
+	parent		options_cc_white_green_text
+	link		options_cc_white_green_slider
+	pos			"120 225 0"
+	//font_size "10 10 0"
+	maxlen		4
+	init		nex_slidertext
+}
+//////
+// White: Blue
+////
+// Menu Button
+{
+	type		ITEM_TEXTBUTTON
+	name		options_cc_white_blue_text
+	parent		options_cc
+	text		"White: Blue "
+	pos			"0 240 0"
+	//font_size	"10 10 0"
+	alignment	16		// TEXT_ALIGN_LEFTPOS
+	flag		256		// FLAG_AUTOSETCLICK
+	key			nex_redirect_key	// redirects input to the child
+	refresh		nex_cc_check_color_enable
+}
+// Slider
+{
+	type		ITEM_SLIDER
+	name		options_cc_white_blue_slider
+	parent		options_cc_white_blue_text
+	pos			"10 240 0"
+	size		"100 8 0"
+	//size		"100 10 0"
+	flag		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
+	cvarname	"v_color_white_b"
+	cvartype	4		// CVAR_STEP
+	min_value	0
+	max_value	0.80
+	step		0.125
+	init		nex_cvar_slider
+	action		nex_cc_color_enable
+}
+// Text
+{
+	type 		ITEM_TEXT
+	name		options_cc_white_blue_slidertext
+	parent		options_cc_white_blue_text
+	link		options_cc_white_blue_slider
+	pos			"120 240 0"
+	//font_size "10 10 0"
+	maxlen		4
+	init		nex_slidertext
+}
+//////
+// White: Grey
+////
+// Menu Button
+{
+	type		ITEM_TEXTBUTTON
+	name		options_cc_white_grey_text
+	parent		options_cc
+	text		"White: Grey "
+	pos			"0 255 0"
+	//font_size	"10 10 0"
+	alignment	16		// TEXT_ALIGN_LEFTPOS
+	flag		256		// FLAG_AUTOSETCLICK
+	key			nex_redirect_key	// redirects input to the child
+	refresh		nex_cc_check_color_enable
+}
+// Slider
+{
+	type		ITEM_SLIDER
+	name		options_cc_white_grey_slider
+	parent		options_cc_white_grey_text
+	pos			"10 255 0"
+	size		"100 8 0"
+	//size		"100 10 0"
+	flag		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
+	cvarname	"v_color_white"
+	cvartype	1		// CVAR_INT
+	min_value	0
+	max_value	0.8
+	step		0.125
+	init		nex_cc_grey
+	action		nex_cc_color_enable
+}
+// Text
+{
+	type 		ITEM_TEXT
+	name		options_cc_white_grey_slidertext
+	parent		options_cc_white_grey_text
+	link		options_cc_white_grey_slider
+	pos			"120 255 0"
+	//font_size "10 10 0"
+	maxlen		4
+	init		nex_slidertext
+}
+// dither pattern
+{
+	type		ITEM_PICTURE
+	name		options_cc_pattern_pic
+	parent		options_cc
+	picture		"gfx/m_cc_pattern"
+	pos			"-243.75 270"
+	size		"487.5 137.5"
+}
