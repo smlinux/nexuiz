@@ -3,8 +3,9 @@
 sys.qc
 builtin.qc
 constant.qc
-dpextensions.qc
 field.qc			// Should rename this, it has fields and globals
+
+dpextensions.qc
 func.qc
 
 worldspawn.qc
