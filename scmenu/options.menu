@@ -52,14 +52,6 @@ Item Layout Options
 			init		Nex_Action_JumpToPage
 			target		"Panel::Effects"
 		}
-		Derive Text Game
-		{
-			normal 		"Game"
-		}
-		Derive Text Input
-		{
-			normal		"Input"
-		}
 	}
 	Item EventWindow Panel
 	{
