@@ -1,0 +1,94 @@
+// Property of Alientrap/AK
+// options/server.menu
+Item Layout Server
+{
+	direction	[Nex_DefaultVertDirection]
+	size		'600 600'
+	origin		'300 50'
+	alignment	[AlignFirst]
+
+	DeriveTemplate Nex_Composition Nex_Option_EditBox
+	{
+		DeriveTemplate Nex_Automation_Option_EditBox Automation
+		{}
+		DeriveTemplate TextButton Description
+		{}
+		DeriveTemplate EditBox EditBox
+		{
+			size 	'260 12'
+			action  Nex_Action_TestOnChange
+			select  Nex_Action_TestOnSelect
+		}
+	}
+
+	Derive Nex_Option_Switch Instagib
+	{
+		text	"Instagib"
+		target	"::Data::Server::Instagib::Switch"
+	}
+	Derive Nex_Option_Switch Rocketarena
+	{
+		text	"Rocket Arena"
+		target	"::Data::Server::Rocketarena::Switch"
+	}
+	Derive Nex_Option_EditBox Health
+	{
+		text	"Starting Health"
+		target	"Data::Server::Health::Text"
+	}
+	Derive Nex_Option_EditBox Gravity
+	{
+		text	"Level Gravity"
+		target	"Data::Server::Gravity::Text"
+	}
+	Derive Nex_Option_EditBox Maxspeed
+	{
+		text	"Player Maxspeed"
+		target	"Data::Server::Health::Text"
+	}
+	Derive Nex_Option_EditBox Gamespeed
+	{
+		text	"Game Speed"
+		target	"Data::Server::Gamespeed::Text"
+	}
+	Derive Nex_Option_EditBox Maxairspeed
+	{
+		text	"Max Air Speed"
+		target	"Data::Server::Maxairspeed::Text"
+	}
+	Derive Nex_Option_EditBox Jumpheight
+	{
+		text	"Jump height"
+		target	"Data::Server::Jumpheight::Text"
+	}
+	Derive Nex_Option_EditBox Healthregen
+	{
+		text	"Regeneration Speed"
+		target	"Data::Server::Healthregen::Text"
+	}
+	Derive Nex_Option_EditBox Armorrott
+	{
+		text	"Armor Rott Speed"
+		target	"Data::Server::Armorrott::Text"
+	}
+	Derive Nex_Option_EditBox Selfdamagepercent
+	{
+		text	"Self Damage Percent"
+		target	"Data::Server::Selfdamagepercent::Text"
+	}
+	Derive Nex_Option_EditBox Weaponswitchdelay
+	{
+		text	"Weapon Switch Delay"
+		target	"Data::Server::Weaponswitchdelay::Text"
+	}
+	Derive Nex_Option_EditBox Friction
+	{
+		text	"Player Friction"
+		target	"Data::Server::Friction::Text"
+	}
+	Derive Nex_Option_EditBox Accelerate
+	{
+		text	"Player Accelerate"
+		target	"Data::Server::Accelerate::Text"
+	}
+}

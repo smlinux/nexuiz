@@ -183,11 +183,11 @@ Item Container Data
 		}
 		Item Data_Nex_Key PrevWeapon
 		{
-			target	"impulse 10"
+			target	"impulse 12"
 		}
 		Item Data_Nex_Key NextWeapon
 		{
-			target	"impulse 12"
+			target	"impulse 10"
 		}
 		Item Container Weapon
 		{

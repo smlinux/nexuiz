@@ -1,0 +1,21 @@
+// Property of Alientrap/AK
+// options/input.menu
+Item Layout Input
+{
+	direction	[Nex_DefaultVertDirection]
+	size		'600 600'
+	origin		'300 50'
+	alignment	[AlignFirst]
+
+
+	Derive Nex_Option_Slider Sensitivity
+	{
+		text	"Sensitivity"
+		target	"::Data::Input::Sensitivity::Value"
+	}
+	Derive Nex_Option_Switch InvertMouse
+	{
+		text	"Invert Mouse"
+		target	"::Data::Input::InvertMouse::Switch"
+	}
+}

@@ -1,0 +1,144 @@
+// Property of Alientrap/AK
+// options/weapon.menu
+Item Layout Weapon
+{
+	direction	[Nex_DefaultVertDirection]
+	size		'600 600'
+	origin		'300 50'
+	alignment	[AlignFirst]
+
+	DeriveTemplate Nex_Composition Nex_Option_EditBox
+	{
+		DeriveTemplate Nex_Automation_Option_EditBox Automation
+		{}
+		DeriveTemplate TextButton Description
+		{}
+		DeriveTemplate EditBox EditBox
+		{
+			size 	'260 12'
+			action  Nex_Action_TestOnChange
+			select  Nex_Action_TestOnSelect
+		}
+	}
+
+	Derive Nex_Option_EditBox laserdamage
+	{
+		text	"Laser Damage"
+		target	"Data::Weapon::laserdamage::Text"
+	}
+	Derive Nex_Option_EditBox laseredgedamage
+	{
+		text	"Laser edge damage"
+		target	"Data::Weapon::laseredgedamage::Text"
+	}
+	Derive Nex_Option_EditBox laserforce
+	{
+		text	"Laser Push Force"
+		target	"Data::Weapon::laserforce::Text"
+	}
+	Derive Nex_Option_EditBox laserradius
+	{
+		text	"Laser Radius"
+		target	"Data::Weapon::laserradius::Text"
+	}
+	Derive Nex_Option_EditBox laserspeed
+	{
+		text	"Laser Speed"
+		target	"Data::Weapon::laserspeed::Text"
+	}
+	Derive Nex_Option_EditBox shotgundamage
+	{
+		text	"Shotgun Damage"
+		target	"Data::Weapon::shotgundamage::Text"
+	}
+	Derive Nex_Option_EditBox shotgunbullets
+	{
+		text	"Shotgun Bullets"
+		target	"Data::Weapon::shotgunbullets::Text"
+	}
+	Derive Nex_Option_EditBox uzidamage
+	{
+		text	"Uzi Damage"
+		target	"Data::Weapon::uzidamage::Text"
+	}
+	Derive Nex_Option_EditBox uzispread
+	{
+		text	"Uzi Spread"
+		target	"Data::Weapon::uzispread::Text"
+	}
+	Derive Nex_Option_EditBox uzispread2
+	{
+		text	"Uzi Spread2"
+		target	"Data::Weapon::uzispread2::Text"
+	}
+	Derive Nex_Option_EditBox uzirefire
+	{
+		text	"Uzi Refire"
+		target	"Data::Weapon::uzirefire::Text"
+	}
+	Derive Nex_Option_EditBox grenadelauncherdamage
+	{
+		text	"Grenade Launcher Damage"
+		target	"Data::Weapon::grenadelauncherdamage::Text"
+	}
+	Derive Nex_Option_EditBox grenadelauncheredgedamage
+	{
+		text	"GL Edge Damage"
+		target	"Data::Weapon::grenadelauncheredgedamage::Text"
+	}
+	Derive Nex_Option_EditBox grenadelauncherforce
+	{
+		text	"Grenade Launcher Force"
+		target	"Data::Weapon::grenadelauncherforce::Text"
+	}
+	Derive Nex_Option_EditBox grenadelauncherradius
+	{
+		text	"Grenade Launcher Radius"
+		target	"Data::Weapon::grenadelauncherradius::Text"
+	}
+	Derive Nex_Option_EditBox grenadelauncherspeed
+	{
+		text	"Grenade Launcher Speed"
+		target	"Data::Weapon::grenadelauncherspeed::Text"
+	}
+	Derive Nex_Option_EditBox grenadelauncherspeedup
+	{
+		text	"Grenade Launcher Speedup"
+		target	"Data::Weapon::grenadelauncherspeedup::Text"
+	}
+	Derive Nex_Option_EditBox grenadelauncherspeed2
+	{
+		text	"Grenade Launcher Speed2"
+		target	"Data::Weapon::grenadelauncherspeed2::Text"
+	}
+	Derive Nex_Option_EditBox grenadelauncherspeed2up
+	{
+		text	"Grenade Launcher Speed2up"
+		target	"Data::Weapon::grenadelauncherspeed2up::Text"
+	}
+	Derive Nex_Option_EditBox electrodamage
+	{
+		text	"Electro Damage"
+		target	"Data::Weapon::electrodamage::Text"
+	}
+	Derive Nex_Option_EditBox electroedgedamage
+	{
+		text	"Electro Edgedamage"
+		target	"Data::Weapon::electroedgedamage::Text"
+	}
+	Derive Nex_Option_EditBox electroforce
+	{
+		text	"Electro Force"
+		target	"Data::Weapon::electroforce::Text"
+	}
+	Derive Nex_Option_EditBox electroradius
+	{
+		text	"Electro Radius"
+		target	"Data::Weapon::electroradius::Text"
+	}
+	Derive Nex_Option_EditBox electrorefire
+	{
+		text	"Electro Refire"
+		target	"Data::Weapon::electrorefire::Text"
+	}
+}

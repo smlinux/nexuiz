@@ -1,0 +1,139 @@
+// Property of Alientrap/AK
+// options/weapon2.menu
+Item Layout Weapon2
+{
+	direction	[Nex_DefaultVertDirection]
+	size		'600 600'
+	origin		'300 50'
+	alignment	[AlignFirst]
+
+	DeriveTemplate Nex_Composition Nex_Option_EditBox
+	{
+		DeriveTemplate Nex_Automation_Option_EditBox Automation
+		{}
+		DeriveTemplate TextButton Description
+		{}
+		DeriveTemplate EditBox EditBox
+		{
+			size 	'260 12'
+			action  Nex_Action_TestOnChange
+			select  Nex_Action_TestOnSelect
+		}
+	}
+
+	Derive Nex_Option_EditBox electrospeed
+	{
+		text	"Electro Speed"
+		target	"Data::Weapon::electrospeed::Text"
+	}
+	Derive Nex_Option_EditBox electroballspeed
+	{
+		text	"Electroball Speed"
+		target	"Data::Weapon::electroballspeed::Text"
+	}
+	Derive Nex_Option_EditBox electroballspeedup
+	{
+		text	"Electroball Speed up"
+		target	"Data::Weapon::electroballspeedup::Text"
+	}
+	Derive Nex_Option_EditBox crylinkdamage
+	{
+		text	"Crylink Damage"
+		target	"Data::Weapon::crylinkdamage::Text"
+	}
+	Derive Nex_Option_EditBox crylinkedgedamage
+	{
+		text	"Crylink Edgedamage"
+		target	"Data::Weapon::crylinkedgedamage::Text"
+	}
+	Derive Nex_Option_EditBox crylinkforce
+	{
+		text	"Crylink Force"
+		target	"Data::Weapon::crylinkforce::Text"
+	}
+	Derive Nex_Option_EditBox crylinkradius
+	{
+		text	"Crylink Radius"
+		target	"Data::Weapon::crylinkradius::Text"
+	}
+	Derive Nex_Option_EditBox crylinkspeed
+	{
+		text	"Crylink Speed"
+		target	"Data::Weapon::crylinkspeed::Text"
+	}
+	Derive Nex_Option_EditBox crylinkspread
+	{
+		text	"Crylink Spread"
+		target	"Data::Weapon::crylinkspread::Text"
+	}
+	Derive Nex_Option_EditBox crylinkrefire
+	{
+		text	"Crylink Refire"
+		target	"Data::Weapon::crylinkrefire::Text"
+	}
+	Derive Nex_Option_EditBox nexdamage
+	{
+		text	"Nex Damage"
+		target	"Data::Weapon::nexdamage::Text"
+	}
+	Derive Nex_Option_EditBox hagardamage
+	{
+		text	"Hagar Damage"
+		target	"Data::Weapon::hagardamage::Text"
+	}
+	Derive Nex_Option_EditBox hagaredgedamage
+	{
+		text	"Hagar Edge Damage"
+		target	"Data::Weapon::hagaredgedamage::Text"
+	}
+	Derive Nex_Option_EditBox hagarforce
+	{
+		text	"Hagar Force"
+		target	"Data::Weapon::hagarforce::Text"
+	}
+	Derive Nex_Option_EditBox hagarradius
+	{
+		text	"Hagar Radius"
+		target	"Data::Weapon::hagarradius::Text"
+	}
+	Derive Nex_Option_EditBox hagarspeed
+	{
+		text	"Hagar Speed"
+		target	"Data::Weapon::hagarspeed::Text"
+	}
+	Derive Nex_Option_EditBox hagarspeed2
+	{
+		text	"Hagar Speed2"
+		target	"Data::Weapon::hagarspeed2::Text"
+	}
+	Derive Nex_Option_EditBox hagarspeed2up
+	{
+		text	"Hagar Speed2 up"
+		target	"Data::Weapon::hagarspeed2up::Text"
+	}
+	Derive Nex_Option_EditBox rocketlauncherdamage
+	{
+		text	"Rocket Launcher Damage"
+		target	"Data::Weapon::rocketlauncherdamage::Text"
+	}
+	Derive Nex_Option_EditBox rocketlauncheredgedamage
+	{
+		text	"RL Edge Damage"
+		target	"Data::Weapon::rocketlauncheredgedamage::Text"
+	}
+	Derive Nex_Option_EditBox rocketlauncherforce
+	{
+		text	"Rocket Launcher Force"
+		target	"Data::Weapon::rocketlauncherforce::Text"
+	}
+	Derive Nex_Option_EditBox rocketlauncherradius
+	{
+		text	"Rocket Launcher Radius"
+		target	"Data::Weapon::rocketlauncherradius::Text"
+	}
+	Derive Nex_Option_EditBox rocketlauncherspeed
+	{
+		text	"Rocket Launcher Speed"
+		target	"Data::Weapon::rocketlauncherspeed::Text"
+	}
+}
