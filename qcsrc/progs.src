@@ -1,0 +1,19 @@
+../data/progs.dat
+
+sys.qc
+builtin.qc
+constant.qc
+dpextensions.qc
+field.qc			// Should rename this, it has fields and globals
+func.qc
+
+worldspawn.qc
+server.qc
+stats.qc
+gib.qc
+damage.qc
+weapons.qc
+items.qc
+impulse.qc
+player.qc
+client.qc
