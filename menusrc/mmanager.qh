@@ -19,20 +19,20 @@ const string MENU_INGAME_NAME = "ingame";
 const string MENU_NORMAL_DEFAULT =
 "// default normal menu\n"
 "{\n"
-"	\"classname\" 	\"ITEM_WINDOW\"\n"
+"	\"type\" 	\"ITEM_WINDOW\"\n"
 "	\"name\"		\"normal\"\n"
 "}";
 
 const string MENU_INGAME_DEFAULT =
 "// default ingame menu\n"
 "{\n"
-"	\"classname\" 	\"ITEM_WINDOW\"\n"
+"	\"type\" 	\"ITEM_WINDOW\"\n"
 "	\"name\"		\"ingame\"\n"
 "}";
 
 // insert the files here
 var string MENU_FILENAME_LIST =
-"menu/main.menu menu/options.menu"
+"menu/normal.menu menu/main.menu menu/background.menu"
 
 const float MENU_ALLOWINGAME = FALSE;
 
@@ -54,6 +54,9 @@ vector menu_cursor;
 ///////////
 // fields
 ///
+
+// controly type
+.string type;
 
 // managing stuff
 .entity _parent;

@@ -32,7 +32,7 @@ yypp	- y position
 	//font_size	"10 10 0"
 	alignment	16		// TEXT_ALIGN_LEFTPOS
 	flag		256		// FLAG_AUTOSETCLICK
-	key			dpmod_redirect_key	// redirects input to the child
+	key			nex_redirect_key	// redirects input to the child
 }
 // Slider
 {
@@ -48,7 +48,7 @@ yypp	- y position
 	min_value	240
 	max_value	1536
 	step		25.92
-	reinit		dpmod_cvar_slider
+	init		nex_cvar_slider
 }
 // Text
 {
@@ -59,7 +59,7 @@ yypp	- y position
 	pos			"120 yypp 0"
 	//font_size "10 10 0"
 	maxlen		4
-	reinit		dpmod_slidertext
+	init		nex_slidertext
 }
 
 Text switch with text :
@@ -84,7 +84,7 @@ ssss 	- switches 'No' 'Yes'
 	//font_size	"10 10 0"
 	alignment	16		// TEXT_ALIGN_RIGHTPOS
 	flag		256		// FLAG_AUTOSETCLICK
-	key			dpmod_redirect_key
+	key			nex_redirect_key
 }
 // Switch
 {
@@ -97,7 +97,7 @@ ssss 	- switches 'No' 'Yes'
 	text		"ssss"
 	cvarname	"ccvv"
 	cvartype	1		// CVAR_INT
-	reinit		dpmod_cvar_slider	// can use it also here
+	reinit		nex_cvar_slider	// can use it also here
 }
 
 */
@@ -115,36 +115,35 @@ const float CVAR_STEP = 4;
 
 .entity _link;
 .float 	maxlen;
-void(void) dpmod_cvar_slider; // set reinit to this
-void(void) _dpmod_cvar_slider_reinit;
-void(void) _dpmod_cvar_slider_refresh;
-void(void) _dpmod_cvar_slider;
+void(void) nex_cvar_slider; // set reinit to this
+void(void) _nex_cvar_slider_refresh;
+void(void) _nex_cvar_slider;
 
-float(float keynr, float ascii) dpmod_redirect_key;
+float(float keynr, float ascii) nex_redirect_key;
 
-void(void) dpmod_slidertext;
-void(void) _dpmod_slidertext_refresh;
+void(void) nex_slidertext;
+void(void) _nex_slidertext_refresh;
 
 // option menu stuff
-void(void) dpmod_options_alwaysrun_switchchange;
-void(void) dpmod_options_alwaysrun_refresh;
+void(void) nex_options_alwaysrun_switchchange;
+void(void) nex_options_alwaysrun_refresh;
 
-void(void) dpmod_options_invmouse_switchchange;
-void(void) dpmod_options_invmouse_refresh;
+void(void) nex_options_invmouse_switchchange;
+void(void) nex_options_invmouse_refresh;
 
 // quit message stuff
 const float DPMOD_QUIT_MSG_COUNT = 4;
 
-string[4] dpmod_quitmsg =
+string[4] nex_quitmsg =
 "'Tired of fragging''already ?'",
 "'Quit now and forfeit''your bodycount ?'",
 "'Are you sure you''want to quit ?'",
 "'Off to do something''constructive ?'";
 
-float dpmod_quitrequest;
+float nex_quitrequest;
 
-void(void) dpmod_quit_choose;
-void(void) dpmod_quit;
-void(void) dpmod_quit_yes;
-void(void) dpmod_quit_no;
-float(float keynr, float ascii) dpmod_quit_key;
+void(void) nex_quit_choose;
+void(void) nex_quit;
+void(void) nex_quit_yes;
+void(void) nex_quit_no;
+float(float keynr, float ascii) nex_quit_key;

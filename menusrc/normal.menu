@@ -1,0 +1,34 @@
+/*
+Property of Alientrap
+
+Normal main menu
+*/
+{
+	type 		ITEM_WINDOW
+	name		main
+	parent		normal
+	origin		"0 0 0"
+}
+{
+	type 		ITEM_REFERENCE
+	name		main_background
+	parent		main
+	link		background
+}
+{
+	type		ITEM_REFERENCE
+	name		main_mainframe
+	parent		main
+	orderpos	100
+	link		mainframe
+}
+{
+	type		ITEM_PICTURE
+	name		main_strength
+	parent		main
+	picture		"gfx/m_strength"
+	pos			"220 72 0"
+	size		"577 533 0"
+	drawflag	1
+}
+

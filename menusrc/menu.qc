@@ -103,6 +103,8 @@ void(void) m_toggle =
 		gfx_toggle();
 		snd_toggle();
 
+		cursor_toggle();
+
 		// let the menu manager know
 		menu_performreinit();
 	} else

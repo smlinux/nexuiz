@@ -10,7 +10,7 @@
 // global stuff
 ///
 
-void(void) dpmod_slidertext =
+void(void) nex_slidertext =
 {
 	entity ent;
 	if(self.link == "")
@@ -31,11 +31,10 @@ void(void) dpmod_slidertext =
 
 	self.flag = self.flag | FLAG_DRAWREFRESHONLY;
 
-	self.init = null_function;
-	self.refresh = _dpmod_slidertext_refresh;
+	self.refresh = _nex_slidertext_refresh;
 };
 
-void(void) _dpmod_slidertext_refresh =
+void(void) _nex_slidertext_refresh =
 {
 	self.text = ftos(self._link.value);
 	if(self.maxlen > 0)
@@ -44,7 +43,7 @@ void(void) _dpmod_slidertext_refresh =
 	self.size = '0 0 0';
 };
 
-float(float keynr, float ascii) dpmod_redirect_key =
+float(float keynr, float ascii) nex_redirect_key =
 {
 	if(keynr == K_ENTER || keynr == K_LEFTARROW || keynr == K_RIGHTARROW || (keynr >= K_MOUSE1 && keynr <= K_MOUSE10))
 	{
@@ -54,26 +53,20 @@ float(float keynr, float ascii) dpmod_redirect_key =
 	return false;
 };
 
-void(void) dpmod_cvar_slider =
+void(void) nex_cvar_slider =
 {
 	self.value = cvar(self.cvarname);
-	self.slidermove = self.switchchange = _dpmod_cvar_slider;
-	self.init = _dpmod_cvar_slider_reinit;
-	self.refresh = _dpmod_cvar_slider_refresh;
+	self.slidermove = self.switchchange = _nex_cvar_slider;
+	self.refresh = _nex_cvar_slider_refresh;
 };
 
-void(void) _dpmod_cvar_slider_refresh =
+void(void) _nex_cvar_slider_refresh =
 {
 	if(self.cvartype == CVAR_INT || self.cvartype == CVAR_FLOAT || self.cvartype == CVAR_STEP)
 		self.value = cvar(self.cvarname);
 };
 
-void(void) _dpmod_cvar_slider_reinit =
-{
-	self.value = cvar(self.cvarname);
-};
-
-void(void) _dpmod_cvar_slider =
+void(void) _nex_cvar_slider =
 {
 	if(self.cvarname == "")
 		return;
@@ -98,7 +91,7 @@ void(void) _dpmod_cvar_slider =
 
 // display the options menu
 
-void(void) dpmod_display_options =
+void(void) nex_display_options =
 {
 	entity ent;
 	ent = menu_getitem("options");
@@ -107,66 +100,66 @@ void(void) dpmod_display_options =
 
 // quit menu
 
-void(void) dpmod_quit_choose =
+void(void) nex_quit_choose =
 {
 	entity e;
 	// because of the missing support for real array, we have to do it the stupid way
 	// (we also have to use strzone for the text, cause it the temporary strings wont work
 	// for it)
-	if(dpmod_quitrequest == 0)
+	if(nex_quitrequest == 0)
 	{
 		e = menu_getitem("quit_msg_0");
-		e.text = getaltstring(0,dpmod_quitmsg_0);
+		e.text = getaltstring(0,nex_quitmsg_0);
 	}
-	if(dpmod_quitrequest == 1)
+	if(nex_quitrequest == 1)
 	{
 		e = menu_getitem("quit_msg_0");
-		e.text = getaltstring(0,dpmod_quitmsg_1);
+		e.text = getaltstring(0,nex_quitmsg_1);
 	}
-	if(dpmod_quitrequest == 2)
+	if(nex_quitrequest == 2)
 	{
 		e = menu_getitem("quit_msg_0");
-		e.text = getaltstring(0,dpmod_quitmsg_2);
+		e.text = getaltstring(0,nex_quitmsg_2);
 	}
-	if(dpmod_quitrequest == 3)
+	if(nex_quitrequest == 3)
 	{
 		e = menu_getitem("quit_msg_0");
-		e.text = getaltstring(0,dpmod_quitmsg_3);
+		e.text = getaltstring(0,nex_quitmsg_3);
 	}
 	e.text = strzone(e.text);
 
-	if(dpmod_quitrequest == 0)
+	if(nex_quitrequest == 0)
 	{
 		e = menu_getitem("quit_msg_1");
-		e.text = getaltstring(1,dpmod_quitmsg_0);
+		e.text = getaltstring(1,nex_quitmsg_0);
 	}
-	if(dpmod_quitrequest == 1)
+	if(nex_quitrequest == 1)
 	{
 		e = menu_getitem("quit_msg_1");
-		e.text = getaltstring(1,dpmod_quitmsg_1);
+		e.text = getaltstring(1,nex_quitmsg_1);
 	}
-	if(dpmod_quitrequest == 2)
+	if(nex_quitrequest == 2)
 	{
 		e = menu_getitem("quit_msg_1");
-		e.text = getaltstring(1,dpmod_quitmsg_2);
+		e.text = getaltstring(1,nex_quitmsg_2);
 	}
-	if(dpmod_quitrequest == 3)
+	if(nex_quitrequest == 3)
 	{
 		e = menu_getitem("quit_msg_1");
-		e.text = getaltstring(1,dpmod_quitmsg_3);
+		e.text = getaltstring(1,nex_quitmsg_3);
 	}
 	e.text = strzone(e.text);
 
-	dpmod_quitrequest = dpmod_quitrequest + 1;
-	if(dpmod_quitrequest == DPMOD_QUIT_MSG_COUNT)
-		dpmod_quitrequest = 0;
+	nex_quitrequest = nex_quitrequest + 1;
+	if(nex_quitrequest == DPMOD_QUIT_MSG_COUNT)
+		nex_quitrequest = 0;
 };
 
-void(void) dpmod_quit =
+void(void) nex_quit =
 {
 	entity ent;
 	// choose a quit message
-	dpmod_quit_choose();
+	nex_quit_choose();
 
 	// change the flags
 	ent = menu_getitem("main");
@@ -176,12 +169,12 @@ void(void) dpmod_quit =
 	menu_jumptowindow(ent, false);
 };
 
-void(void) dpmod_quit_yes =
+void(void) nex_quit_yes =
 {
 	cmd("quit\n");
 };
 
-void(void) dpmod_quit_no =
+void(void) nex_quit_no =
 {
 	entity ent;
 
@@ -198,7 +191,7 @@ void(void) dpmod_quit_no =
 	menu_selectup();
 };
 
-float(float keynr, float ascii) dpmod_quit_key =
+float(float keynr, float ascii) nex_quit_key =
 {
 	if(keynr == K_LEFTARROW)
 		return false;
@@ -209,9 +202,9 @@ float(float keynr, float ascii) dpmod_quit_key =
 	if(keynr == K_MOUSE1)
 		return false;
 	if(ascii == 'Y' || ascii == 'y')
-		dpmod_quit_yes();
+		nex_quit_yes();
 	if(ascii == 'N' || ascii == 'n' || keynr == K_ESCAPE)
-		dpmod_quit_no();
+		nex_quit_no();
 	return true;
 };
 
@@ -219,7 +212,7 @@ float(float keynr, float ascii) dpmod_quit_key =
 // options.menu
 ///
 
-void(void) dpmod_options_alwaysrun_switchchange =
+void(void) nex_options_alwaysrun_switchchange =
 {
 	if(self.value)
 	{
@@ -233,7 +226,7 @@ void(void) dpmod_options_alwaysrun_switchchange =
 	}
 };
 
-void(void) dpmod_options_alwaysrun_refresh =
+void(void) nex_options_alwaysrun_refresh =
 {
 	if(cvar("cl_forwardspeed") > 200)
 		self.value = 1;
@@ -241,14 +234,14 @@ void(void) dpmod_options_alwaysrun_refresh =
 		self.value = 0;
 };
 
-void(void) dpmod_options_invmouse_switchchange =
+void(void) nex_options_invmouse_switchchange =
 {
 	float old;
 	old = 0 - cvar("m_pitch");
 	cvar_set("m_pitch",ftos(old));
 };
 
-void(void) dpmod_options_invmouse_refresh =
+void(void) nex_options_invmouse_refresh =
 {
 	if(cvar("m_pitch") > 0)
 		self.value = 0;
@@ -269,7 +262,7 @@ void(void) setbrightness =
 	cvar_set("scr_conbrightness",ftos(self.value));
 };
 
-void(void)	dpmod_main_exit =
+void(void)	nex_main_exit =
 {
 	entity e;
 	e = menu_getitem("MAIN_MENU");
@@ -279,7 +272,7 @@ void(void)	dpmod_main_exit =
 	menu_jumptowindow(e, false);
 };
 
-void(void) dpmod_main_exit_no =
+void(void) nex_main_exit_no =
 {
 	entity e;
 	e = menu_getitem("MAIN_EXIT_MENU");
@@ -289,16 +282,16 @@ void(void) dpmod_main_exit_no =
 	menu_selectup();
 };
 
-void(void) dpmod_main_exit_yes =
+void(void) nex_main_exit_yes =
 {
 	cmd("quit\n");
 };
 
-float(float keynr, float ascii) dpmod_main_exit_key =
+float(float keynr, float ascii) nex_main_exit_key =
 {
 	if(keynr == K_ESCAPE)
 	{
-		dpmod_main_exit_no();
+		nex_main_exit_no();
 		return true;
 	}
 	return false;
@@ -307,4 +300,14 @@ float(float keynr, float ascii) dpmod_main_exit_key =
 void(void) 	dorestart =
 {
 	cmd("menu_restart\n");
+};
+
+void(void) nex_text_cur_x =
+{
+	self.text = ftos(rint(cursor_x));
+};
+
+void(void) nex_text_cur_y =
+{
+	self.text = ftos(rint(cursor_y));
 };

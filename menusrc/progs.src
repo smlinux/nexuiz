@@ -6,7 +6,7 @@
 // this is absolutly beta
 ///////////////////////////////////////////////
 // menu.dat destination path
-../../menu.dat
+../data/menu.dat
 
 // these are the default qc header files
 msys.qc

@@ -5,8 +5,8 @@
 // AK contains all gfx prototypes, etc.
 ///////////////////////////////////////////////
 
-const float GFX_WIDTH = 800;
-const float GFX_HEIGHT = 600;
+const float GFX_WIDTH = 1024;
+const float GFX_HEIGHT = 768;
 
 float vid_conwidth;
 float vid_conheight;

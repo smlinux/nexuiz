@@ -191,7 +191,7 @@ void(void) defct_x =
 };
 
 */
-// defct_init not needed cause its the same like the classname function
+// defct_init not needed cause its the same like the type function
 
 void(void) defct_reinit =
 {

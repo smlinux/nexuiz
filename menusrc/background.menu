@@ -1,0 +1,54 @@
+/*
+Property of Alientrap
+
+Background description
+*/
+// background of the normal menu
+{
+	type		ITEM_WINDOW
+	name		background
+	origin		"0 0 0"
+}
+{
+	type		ITEM_RECTANGLE
+	name		background_rect
+	parent		background
+	pos			"0 0 0"
+	size		"1024 768 0"
+	color		"0.5 0.5 0.5"
+	drawflag	2 	// DRAWFLAG_2XMODULATE
+}
+{
+	type		ITEM_PICTURE
+	name		background_pic
+	parent		background
+	picture		"gfx/m_background"
+	size		"1024 768 0"
+	pos			"0 0 0"
+	drawflag	0
+}
+// developer stuff
+{
+	type		ITEM_TEXT
+	name		background_x
+	parent		background
+	orderpos	100
+	pos			"954 748"
+	font_size	"10 10 0"
+	text		"000"
+	refresh		nex_text_cur_x
+	alignment	2	// TEXT_ALIGN_RIGHT
+	flag		2080
+}
+{
+	type		ITEM_TEXT
+	name		background_y
+	parent		background
+	orderpos	101
+	pos			"994 748"
+	font_size	"10 10 0"
+	text		"000"
+	refresh		nex_text_cur_y
+	alignment	2	// TEXT_ALIGN_RIGHT
+	flag		2080
+}

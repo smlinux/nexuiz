@@ -14,6 +14,9 @@ const float CT_GLOW			= 8;
 
 const float	CURSOR_SCALE	= 1;
 
+const vector CURSOR_COLOR	= '1 1 1';
+const float	 CURSOR_TRANSPARENCY = 1;
+
 // cursor speed
 const float CURSOR_SPEED = 0.75;
 
@@ -50,6 +53,7 @@ vector cursor_speed;
 
 void(void) cursor_init;
 void(void) cursor_reset;
+void(void) cursor_toggle;
 void(void) cursor_frame;
 void(void) cursor_draw;
 void(void) cursor_shutdown;

@@ -13,8 +13,15 @@ void(void) cursor_reset =
 	cursor_rel = '0 0 0';
 
 	cursor_last_frame_time = time;
-	cursor_color = '1 1 1';
-	cursor_transparency = 1;
+	cursor_color = CURSOR_COLOR;
+	cursor_transparency = CURSOR_TRANSPARENCY;
+	cursor_type = CT_NORMAL;
+};
+
+void(void) cursor_toggle =
+{
+	cursor_x = rint(GFX_WIDTH /2);
+	cursor_y = rint(GFX_HEIGHT /2);
 	cursor_type = CT_NORMAL;
 };
 

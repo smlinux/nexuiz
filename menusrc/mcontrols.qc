@@ -85,6 +85,13 @@ void(void) ITEM_PICTURE_DRAW =
 	ctcall_draw();
 };
 
+void(void) ITEM_PICTURE_DESTROY =
+{
+	gfx_unloadpic(self.picture);
+
+	ctcall_destroy();
+};
+
 void(void) ITEM_PICTURE =
 {
 	if(self.picture == "")
@@ -105,7 +112,7 @@ void(void) ITEM_PICTURE =
 
 	item_init(
 		defct_reinit,
-		defct_destroy,
+		ITEM_PICTURE_DESTROY,
 		defct_key,
 		ITEM_PICTURE_DRAW,
 		defct_mouse_enter,
@@ -274,14 +281,25 @@ void(void) ITEM_BUTTON_REINIT =
 	ctcall_reinit();
 };
 
+void(void) ITEM_BUTTON_DESTROY =
+{
+	gfx_unloadpic(self.picture);
+	gfx_unloadpic(self.picture_selected);
+	gfx_unloadpic(self.picture_pressed);
+
+	ctcall_destroy();
+};
+
 void(void) ITEM_BUTTON =
 {
 	if(self.picture == "" || self.picture_selected == "" || self.picture_pressed == "")
-		// a picture has to have a picture
+		// a picture has to have pictures
 		remove(self);	// no need to call terminate
 
 	// load the picture if it isnt loaded already
 	gfx_loadpic(self.picture, MENU_ENFORCELOADING);
+	gfx_loadpic(self.picture_selected, MENU_ENFORCELOADING);
+	gfx_loadpic(self.picture_pressed, MENU_ENFORCELOADING);
 
 	if(self.sound_selected != "")
 		snd_loadsound(self.sound_selected, SOUND_ENFORCELOADING);
@@ -315,7 +333,7 @@ void(void) ITEM_BUTTON =
 
 	item_init(
 		ITEM_BUTTON_REINIT,
-		defct_destroy,
+		ITEM_BUTTON_DESTROY,
 		ITEM_BUTTON_KEY,
 		ITEM_BUTTON_DRAW,
 		defct_mouse_enter,
@@ -607,6 +625,16 @@ void(float keynr, float ascii) ITEM_SLIDER_KEY =
 	// play sound
 	snd_play(self.sound_changed);
 	ITEM_SLIDER_UPDATESLIDER();
+};
+
+void(void) ITEM_SLIDER_DESTROY =
+{
+	if(self.picture != "")
+		gfx_unloadpic(self.picture);
+	if(self.picture_bar != "")
+		gfx_unloadpic(self.picture);
+
+	ctcall_destroy();
 };
 
 void(void) ITEM_SLIDER =
