@@ -15,6 +15,8 @@ void() m_init =
 
 	Key_Init();
 
+	HostCache_Init();
+
 	// init menu
 	Menu_Init();
 };

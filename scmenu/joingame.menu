@@ -50,8 +50,8 @@ Item Layout JoinGame
 			{
 				normal		"Ping"
 
-				action 		Nex_Action_JoinGame_SortBy
-				stepValue	[SListFieldPing]
+				init 		Nex_Action_JoinGame_SortBy
+				target		"ping"
 			}
 		}
 		Derive Theme Name
@@ -61,8 +61,8 @@ Item Layout JoinGame
 			{
 				normal		"Server Name"
 
-				action 		Nex_Action_JoinGame_SortBy
-				stepValue	[SListFieldName]
+				init 		Nex_Action_JoinGame_SortBy
+				target		"name"
 			}
 		}
 		Derive Theme Map
@@ -72,8 +72,8 @@ Item Layout JoinGame
 			{
 				normal		"Map Name"
 
-				action 		Nex_Action_JoinGame_SortBy
-				stepValue	[SListFieldMap]
+				init 		Nex_Action_JoinGame_SortBy
+				target		"map"
 			}
 		}
 		Derive Theme Players
@@ -88,8 +88,8 @@ Item Layout JoinGame
 				{
 					normal		"NP"
 
-					action 		Nex_Action_JoinGame_SortBy
-					stepValue	[SListFieldNumPlayers]
+					init 		Nex_Action_JoinGame_SortBy
+					target		"numplayers"
 				}
 				Derive Label	Slash
 				{
@@ -99,8 +99,8 @@ Item Layout JoinGame
 				{
 					normal		"MP"
 
-					action 		Nex_Action_JoinGame_SortBy
-					stepValue	[SListFieldMaxPlayers]
+					init 		Nex_Action_JoinGame_SortBy
+					target		"maxplayers"
 				}
 			}
 		}
@@ -111,8 +111,8 @@ Item Layout JoinGame
 			{
 				normal		"Mod Name"
 
-				action 		Nex_Action_JoinGame_SortBy
-				stepValue	[SListFieldMod]
+				init 		Nex_Action_JoinGame_SortBy
+				target		"mod"
 			}
 		}
 	}
@@ -135,20 +135,20 @@ Item Layout JoinGame
 				{
 					pos		'0 0'
 					size		[SList_Ping]
-					stepValue	[SListFieldPing]
+					target		"ping"
 					alignment	[AlignRight]
 				}
 				DeriveTemplate Nex_HostCache_StringField Name
 				{
 					pos		'52 0'
 					size		[SList_Name]
-					stepValue	[SListFieldName]
+					target		"name"
 				}
 				DeriveTemplate Nex_HostCache_StringField Map
 				{
 					pos		'546 0'
 					size		[SList_Map]
-					stepValue	[SListFieldMap]
+					target		"map"
 				}
 				DeriveTemplate Nex_HostCache_Players Players
 				{
@@ -160,7 +160,7 @@ Item Layout JoinGame
 				{
 					pos		'730 0'
 					size		[SList_Mod]
-					stepValue	[SListFieldMod]
+					target		"mod"
 				}
 			}
 			Item Automation_Job Generator

@@ -1,14 +1,18 @@
 // DP/Nex Menu
 // base/hostcache.qc
 
-float HostCache_ViewCount;
-float HostCache_TotalCount;
-float HostCache_MasterQueryCount;
-float HostCache_MasterReplyCount;
-float HostCache_ServerQueryCount;
-float HostCache_ServerReplyCount;
-float HostCache_SortField;
-float HostCache_SortDescending;
+void() HostCache_Init =
+{
+	SLIST_FIELD_CNAME = gethostcacheindexforkey( "cname" );
+	SLIST_FIELD_PING = gethostcacheindexforkey( "ping" );
+	SLIST_FIELD_GAME = gethostcacheindexforkey( "game" );
+	SLIST_FIELD_MOD = gethostcacheindexforkey( "mod" );
+	SLIST_FIELD_MAP = gethostcacheindexforkey( "map" );
+	SLIST_FIELD_NAME = gethostcacheindexforkey( "name" );
+	SLIST_FIELD_MAXPLAYERS = gethostcacheindexforkey( "maxplayers" );
+	SLIST_FIELD_NUMPLAYERS = gethostcacheindexforkey( "numplayers" );
+	SLIST_FIELD_PROTOCOL = gethostcacheindexforkey( "protocol" );
+};
 
 void() HostCache_Update =
 {

@@ -219,17 +219,6 @@ float SLIST_SERVERREPLYCOUNT 	= 5;
 float SLIST_SORTFIELD		= 6;
 float SLIST_SORTDESCENDING	= 7;
 
-float SLIST_FIELD_CNAME		= 0;
-float SLIST_FIELD_PING		= 1;
-float SLIST_FIELD_GAME		= 2;
-float SLIST_FIELD_MOD		= 3;
-float SLIST_FIELD_MAP		= 4;
-float SLIST_FIELD_NAME		= 5;
-float SLIST_FIELD_MAXPLAYERS	= 6;
-float SLIST_FIELD_NUMPLAYERS	= 7;
-float SLIST_FIELD_PROTOCOL	= 8;
-float SLIST_FIELD_COUNT		= 9; // not a real field (just so you can use it in a for loop
-
 float SLIST_LEGACY_LINE1 	= 1024;
 float SLIST_LEGACY_LINE2 	= 1025;
 

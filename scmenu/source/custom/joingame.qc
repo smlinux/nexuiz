@@ -48,7 +48,7 @@ void() Item_Nex_HostCache_StringField_Update =
 	if( HostCache_ViewCount <= self._parent.stepValue )
 		return;
 	lMaxLen = floor( self.size_x / self.fontSize_x );
-	String_EntitySet( self, text, gethostcachestring( self.stepValue, self._parent.stepValue ) );
+	String_EntitySet( self, text, gethostcachestring( self._realValue, self._parent.stepValue ) );
 	if( lMaxLen < strlen( self.text ) )
 		String_EntitySet( self, text, strcat( substring( self.text, 0, lMaxLen - 3 ), "..." ) );
 
@@ -59,6 +59,7 @@ void() Item_Nex_HostCache_StringField_Spawn =
 {
 	Item_Label_Spawn();
 
+	self._realValue = gethostcacheindexforkey( self.target );
 	self._update = Item_Nex_HostCache_StringField_Update;
 };
 
@@ -70,7 +71,7 @@ void() Item_Nex_HostCache_ValueField_Update =
 {
 	if( HostCache_ViewCount <= self._parent.stepValue )
 		return;
-	String_EntitySet( self, text, ftos( gethostcachenumber( self.stepValue, self._parent.stepValue ) ) );
+	String_EntitySet( self, text, ftos( gethostcachenumber( self._realValue, self._parent.stepValue ) ) );
 
 	Item_Label_Update();
 };
@@ -79,6 +80,7 @@ void() Item_Nex_HostCache_ValueField_Spawn =
 {
 	Item_Label_Spawn();
 
+	self._realValue = gethostcacheindexforkey( self.target );
 	self._update = Item_Nex_HostCache_ValueField_Update;
 };
 

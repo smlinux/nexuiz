@@ -199,3 +199,5 @@ void 	resorthostcache(void) = #618;
 void	sethostcachesort(float fld, float descending) = #619;
 void	refreshhostcache(void) = #620;
 float	gethostcachenumber(float fld, float hostnr) = #621;
+float	gethostcacheindexforkey(string key) = #622;
+void	addwantedhostcachekey(string key) = #623;

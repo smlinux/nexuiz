@@ -86,14 +86,3 @@
 #define DefaultCursorColor	"1 1 1"
 #define DefaultCursorFlashColor "1 1 1"
 
-// slist field constants
-#define SListFieldCName		0
-#define SListFieldPing		1
-#define SListFieldGame		2
-#define SListFieldMod		3
-#define SListFieldMap		4
-#define SListFieldName		5
-#define SListFieldMaxPlayers	6
-#define SListFieldNumPlayers	7
-#define SListFieldProtocol	8
-

@@ -2,13 +2,19 @@
 // custom/joingame.qm
 
 // stepValue should contain the field name
+void() Nex_Action_JoinGame_SortBy_Action =
+{
+	if( HostCache_SortField == self._realValue )
+		sethostcachesort( self._realValue, !HostCache_SortDescending );
+	else
+		sethostcachesort( self._realValue, true );
+	HostCache_ResortViewSet();
+};
+
 void() Nex_Action_JoinGame_SortBy =
 {
-	if( HostCache_SortField == self.stepValue )
-		sethostcachesort( self.stepValue, !HostCache_SortDescending );
-	else
-		sethostcachesort( self.stepValue, true );
-	HostCache_ResortViewSet();
+	self._realValue = gethostcacheindexforkey( self.target );
+	self.action = Nex_Action_JoinGame_SortBy_Action;
 };
 
 void() Nex_Automation_CreateEntries =
@@ -45,6 +51,7 @@ void() Nex_Action_JumpToJoinGame =
 	local entity lItem;
 
 	resethostcachemasks();
+	sethostcachesort( SLIST_FIELD_PING, false );
 	HostCache_RefreshHostCache();
 
 	lItem = Menu_GetItem( "Normal::Panel" );

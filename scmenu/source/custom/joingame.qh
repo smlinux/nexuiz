@@ -12,13 +12,15 @@ void() Item_Nex_HostCache_Entry_Update;
 void() Item_Nex_HostCache_Entry_Spawn;
 
 // Item_Nex_HostCache_StringField Item_Label
-.float stepValue; // contains the field number
+.float _realValue; // contains the field number
+.string target; // wont be zoned
 
 void() Item_Nex_HostCache_StringField_Update;
 void() Item_Nex_HostCache_StringField_Spawn;
 
 // Item_Nex_HostCache_ValueField Item_Label
-.float stepValue; // contains the field number
+.float _realValue; // contains the field number
+.string target; // wont be zoned
 
 void() Item_Nex_HostCache_ValueField_Update;
 void() Item_Nex_HostCache_ValueField_Spawn;
