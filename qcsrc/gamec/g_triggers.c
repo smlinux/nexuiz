@@ -47,8 +47,8 @@ void() SUB_UseTargets =
 		t.target = self.target;
 		return;
 	}
-	
-	
+
+
 //
 // print the message
 //
@@ -73,7 +73,7 @@ void() SUB_UseTargets =
 			remove (t);
 		} while ( 1 );
 	}
-	
+
 //
 // fire targets
 //
@@ -99,7 +99,7 @@ void() SUB_UseTargets =
 			activator = act;
 		} while ( 1 );
 	}
-	
+
 
 };
 
@@ -153,10 +153,10 @@ void() multi_trigger =
 	self.takedamage = DAMAGE_NO;
 
 	activator = self.enemy;
-	
+
 	SUB_UseTargets();
 
-	if (self.wait > 0)	
+	if (self.wait > 0)
 	{
 		self.think = multi_wait;
 		self.nextthink = time + self.wait;
@@ -181,7 +181,7 @@ void() multi_touch =
 {
 	if (other.classname != "player")
 		return;
-	
+
 // if the trigger has an angles field, check player's facing direction
 	if (self.movedir != '0 0 0')
 	{
@@ -189,7 +189,7 @@ void() multi_touch =
 		if (v_forward * self.movedir < 0)
 			return;		// not facing the right way
 	}
-	
+
 	self.enemy = other;
 	multi_trigger ();
 };
@@ -236,7 +236,7 @@ void() trigger_multiple =
 		precache_sound ("misc/trigger1.wav");
 		self.noise = "misc/trigger1.wav";
 	}
-	
+
 	if (!self.wait)
 		self.wait = 0.2;
 	self.use = multi_use;
@@ -303,7 +303,7 @@ void() counter_use =
 	self.count = self.count - 1;
 	if (self.count < 0)
 		return;
-	
+
 	if (self.count != 0)
 	{
 		if (activator.classname == "player"
@@ -320,7 +320,7 @@ void() counter_use =
 		}
 		return;
 	}
-	
+
 	if (activator.classname == "player"
 	&& (self.spawnflags & SPAWNFLAG_NOMESSAGE) == 0)
 		centerprint(activator, "Sequence completed!");
@@ -350,14 +350,20 @@ void() hurt_on =
 	self.nextthink = -1;
 };
 
+void() hurt_off =
+{
+	self.solid = SOLID_NOT;
+	self.think = hurt_on;
+	self.nextthink = time + 1;
+};
+
 void() hurt_touch =
 {
 	if (other.takedamage)
 	{
-		self.solid = SOLID_NOT;
+		self.think = hurt_off;
+		self.nextthink = time;
 		Damage (other, self, self, self.dmg, DEATH_HURTTRIGGER, '0 0 0', '0 0 0');
-		self.think = hurt_on;
-		self.nextthink = time + 1;
 	}
 
 	return;
@@ -395,7 +401,7 @@ if(self.noise) {
 void() sparksthink =
 {
   self.nextthink = time + 0.1;
-  
+
   if(random() < self.wait) {
     te_spark(self.origin,'0 0 -1',self.cnt);
   }
@@ -406,12 +412,12 @@ void() func_sparks =
 {
   self.think = sparksthink;
   self.nextthink = time + 0.2;
- 
-  // self.cnt is the amount of sparks that one burst will spawn 
+
+  // self.cnt is the amount of sparks that one burst will spawn
   if(self.cnt < 1) {
     self.cnt = 25.0; // nice default value
   }
-  
+
   // self.wait is the probability that a sparkthink will spawn a spark shower
   // range: 0 - 1, but 0 makes little sense, so...
   if(self.wait < 0.05) {
