@@ -187,8 +187,6 @@ void W_SwitchWeapon (float wep)
 		return;
 	}
 
-	sound (self, CHAN_WEAPON, "weapons/gunswitch.wav", 1, ATTN_NORM);
-
 	self.weapon = nextwep;
 	W_UpdateWeapon ();
 	W_UpdateAmmo ();
@@ -263,7 +261,6 @@ void W_NextWeapon (void)
 			return;
 		}
 	}
-	sound (self, CHAN_WEAPON, "weapons/gunswitch.wav", 1, ATTN_NORM);
 }
 
 void W_PreviousWeapon (void)
@@ -332,7 +329,6 @@ void W_PreviousWeapon (void)
 			return;
 		}
 	}
-	sound (self, CHAN_WEAPON, "weapons/gunswitch.wav", 1, ATTN_NORM);
 }
 
 float W_CheckAmmo (void)
