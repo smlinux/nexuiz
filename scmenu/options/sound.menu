@@ -10,7 +10,7 @@ Item Layout Sound
 
 	Derive Nex_Option_Slider MusicVolume
 	{
-		text	"CD Volume"
+		text	"Music Volume"
 		target	"::Data::Sound::CDVolume::Value"
 	}
 	Derive Nex_Option_Slider GameVolume
