@@ -884,6 +884,13 @@ string(float n) argv = #442;
 //description:
 //sv_jumpstep allows stepping up onto stairs while airborn, sv_stepheight controls how high a single step can be.
 
+// NEXUIZ_PLAYERMODEL
+// NEXUIZ_PLAYERSKIN
+//idea:
+//darkplaces implementation: Black
+.string playermodel; // contains the name of the model set by a client with playermodel
+.string playerskin; // contains the name of the skin set by a client with playerskin
+
 // UNFINISHED section
 //DP_QC_BOTCLIENT
 //idea: LordHavoc
