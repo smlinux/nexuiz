@@ -47,31 +47,31 @@ template
 */
 // singleplayer
 {
-	type		ITEM_TEXTBUTTON
+	type		ITEM_BUTTON
 	name		mainmenu_creategame
 	parent 		mainmenu
 	//pos			"201 17"
 	pos		"0 0"
 	size		"185 58"
-	text		"Create Game"
-	/*picture		"gfx/m_top_singleplayer"
+	//text		"Create Game"
+	picture		"gfx/m_top_singleplayer"
 	picture_selected "gfx/m_top_sel_singleplayer"
-	picture_pressed	"gfx/m_top_sel_singleplayer"*/
+	picture_pressed	"gfx/m_top_sel_singleplayer"
 	drawflag_pressed 0
 	action		nex_display_creategame
 	sound_pressed	"misc/menu2.wav"
 }
 // multiplayer
 {
-	type		ITEM_TEXTBUTTON
+	type		ITEM_BUTTON
 	name		mainmenu_joingame
 	parent 		mainmenu
 	pos		"185 0"
 	size		"170 58"
-	text		"Join Game"
-	/*picture		"gfx/m_top_multiplayer"
+	//text		"Join Game"
+	picture		"gfx/m_top_multiplayer"
 	picture_selected "gfx/m_top_sel_multiplayer"
-	picture_pressed	"gfx/m_top_sel_multiplayer"*/
+	picture_pressed	"gfx/m_top_sel_multiplayer"
 	drawflag_pressed 0
 	//action		nex_display_multiplayer
 	action		nex_display_serverlist

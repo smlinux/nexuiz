@@ -26,17 +26,25 @@ Option menus
 }
 {
 	type 	ITEM_TEXTBUTTON
+	name 	opt_panel_player
+	parent	opt_panel
+	text 	"Player"
+	pos	"0 15"
+	action	nex_player
+}
+{
+	type 	ITEM_TEXTBUTTON
 	name	opt_panel_controls
 	parent	opt_panel
 	text	"Controls"
-	pos		"0 15"
+	pos		"0 30"
 	action 	nex_cntrl
 }{
 	type 	ITEM_TEXTBUTTON
 	name	opt_panel_sound
 	parent	opt_panel
 	text	"Sound"
-	pos		"0 30"
+	pos		"0 45"
 	action 	nex_snd
 }
 {
@@ -44,14 +52,14 @@ Option menus
 	name	opt_panel_effects
 	parent	opt_panel
 	text	"Effects"
-	pos		"0 45"
+	pos		"0 60"
 }
 {
 	type 	ITEM_TEXTBUTTON
 	name	opt_panel_colctrl
 	parent	opt_panel
 	text	"Color Control"
-	pos		"0 60"
+	pos		"0 75"
 	action	nex_cc
 }
 // sub windows
@@ -61,11 +69,13 @@ Option menus
 	parent	opt_frame
 	reinit	nex_makeselfonlyvisible
 }
-// game
+// player
 {
 	type	ITEM_WINDOW
-	name	options_game
+	name	options_player
 	parent	opt_frame
+	origin	"-250 0"
+	init	nex_player_init
 }
 // sound
 {
@@ -85,6 +95,74 @@ Option menus
 	name	options_cc
 	parent	opt_frame
 }
+// player panel
+{
+	type	ITEM_WINDOW
+	name	options_player_model
+	parent	options_player
+	origin		"0 0 0"
+	clip_pos 	"0 0 0"
+	clip_size	"200 400"
+	reinit	nex_player_buildlist
+}
+{
+	type	ITEM_WINDOW
+	name	options_player_opt
+	parent	options_player
+	origin		"300 0"
+	clip_pos	"200 0"
+	clip_size	"200 400"
+}
+{
+	type	ITEM_PICTURE
+	name	options_player_model_picture
+	parent 	options_player_model
+	picture	"gfx/m_nomap" //TODO: rename m_nomap somewhen
+	pos	"0 0"
+	size	"200 252"
+}
+{
+	type 	ITEM_TEXTBUTTON
+	name	options_player_model_prev
+	parent	options_player_model
+	text	"<<"
+	pos	"0 252"
+	action	nex_player_model_prev
+}
+{
+	type 	ITEM_TEXT
+	name	options_player_model_name
+	parent	options_player_model
+	pos		"100.5 252"
+	clip_pos 	"22 252"
+	clip_size	"157 263"
+	alignment	1
+}
+{
+	type	ITEM_TEXTBUTTON
+	name	options_player_model_next
+	parent	options_player_model
+	text	">>"
+	pos	"179 252"	
+	action	nex_player_model_next
+}
+// info box
+{
+	type		ITEM_CUSTOM
+	name		options_player_model_info
+	parent		options_player_model
+	clip_pos	"0 253"
+	clip_size	"200 147"
+	pos		"0 253"
+	size		"200 147"
+	flag		4 // no select
+	drawflag	0
+	color		"1 1 1"
+	alpha		1
+	font_size	"9 9"
+	draw 		nex_draw_text
+}
+	
 //////
 // CD Music Volume
 ////

@@ -823,6 +823,192 @@ void(void) slist_info2 =
 // options.menu
 ///
 
+// player options
+var entity mlist_list = null_entity;
+entity mlist_current;
+string mlist_saved;
+string player_model_cvar = "player_model";
+string player_name_cvar = "m_player_name";
+string player_skin_cvar = "player_skin";
+
+void(void) nex_player_init =
+{
+	// used by the qc
+	//registercvar( player_model_cvar, "", CVAR_SAVE );
+	//registercvar( player_skin_cvar, "", CVAR_SAVE );
+	
+	if( mlist_saved )
+		strunzone( mlist_saved );
+	mlist_saved = strzone( str_cvar( player_name_cvar ) );
+	registercvar( player_name_cvar, "", CVAR_SAVE );
+}
+
+// name = name
+// picture_selected = model name
+// picture_pressed = skin name
+// picture = picture
+// text = desc text
+void(entity e) _nex_player_remove =
+{
+	strunzone( e.name );
+	strunzone( e.picture_selected );
+	strunzone( e.picture_pressed );
+	strunzone( e.picture );
+	strunzone( e.text );
+	
+	remove( e );
+};
+
+void() _nex_player_model_update =
+{
+	entity item;
+	
+	cvar_set( player_name_cvar, mlist_current.name );
+	//cvar_set( player_model_cvar, mlist_current.picture_selected );
+	//cvar_set( player_skin_cvar, mlist_current.picture_pressed );
+	
+	item = menu_getitem( "options_player_model_name" );
+	item.text = mlist_current.name;
+	
+	item = menu_getitem( "options_player_model_picture" );
+	item.picture = mlist_current.picture;
+	
+	item = menu_getitem( "options_player_model_info" );
+	item.text = mlist_current.text;
+};
+
+/*
+.mdef file format
+name
+picture\n
+skin filename\n
+model filename\n
+rest text*/
+void(void) nex_player_buildlist =
+{
+	float shandle;
+	float count;
+	float counter;
+	entity hit;
+	
+	// remove the old player list
+	if( mlist_list ) {
+		entity node;
+		
+		// save the old selected model
+		mlist_saved = strzone( mlist_current.name );
+		
+		node = mlist_list;
+		while( node._next ) {
+			node = node._next;
+			_nex_player_remove( node._prev );
+		}
+		_nex_player_remove( node );
+		
+		mlist_list = mlist_current = null_entity;
+	}
+	
+	shandle = search_begin( "models/player/*.txt", false, true );
+	if( shandle < 0 )
+		return;
+	
+	count = search_getsize( shandle );
+	mlist_list = mlist_current = spawn();
+	hit = null_entity;
+	for ( counter = 0 ; counter < count ; counter = counter + 1 ) {
+		string dname;
+		string dpicture;
+		string dskin;
+		string dmodel;
+		string dtext;
+		
+		float handle;
+		
+		handle = fopen( search_getfilename( handle, counter ), FILE_READ );
+
+		if( handle < 0 )
+			continue;
+		
+		dname = strzone( fgets( handle ) ); 
+		dpicture = strzone( fgets( handle ) );
+		dskin = strzone( fgets( handle ) );
+		dmodel = strzone( fgets( handle ) );
+		{
+			string temp, old;
+			dtext = strzone( "" );
+			do {
+				old = dtext;
+				temp = fgets( handle );
+				dtext = strzone( strcat( old, temp, "\n" ) );
+				strunzone( old );
+			} while( temp );
+		}
+			
+		if( !dname || !dpicture || !dskin || !dmodel || !dtext ) {
+			print( "Bad model definition file '", search_getfilename( shandle, counter ), "'\n" );
+			
+			strunzone( dname );
+			strunzone( dpicture );
+			strunzone( dskin );
+			strunzone( dmodel );
+			
+			fclose( handle );
+			continue;
+		}
+		
+		// is this the previous selected model?
+		if( dname == mlist_saved )
+			hit = mlist_current;
+		
+		mlist_current.name = dname;
+		mlist_current.picture = dpicture;
+		mlist_current.picture_pressed = dskin;
+		mlist_current.picture_selected = dmodel;
+		mlist_current.text = dtext;
+		
+		mlist_current._next = spawn();
+		mlist_current._next._prev = mlist_current;
+		mlist_current = mlist_current._next;
+		
+		fclose( handle );
+	}
+	mlist_current._prev._next = null_entity;
+	remove( mlist_current );
+	
+	search_end( shandle );
+	
+	if( hit )
+		mlist_current = hit;
+	else
+		mlist_current = mlist_list;
+	
+	_nex_player_model_update();			
+};
+
+void(void) nex_player_model_next =
+{
+	if( mlist_current._next )
+		mlist_current = mlist_current._next;
+	_nex_player_model_update();
+};
+
+void(void) nex_player_model_prev =
+{
+	if( mlist_current._prev )
+		mlist_current = mlist_current._prev;
+	_nex_player_model_update();
+}
+
+void(void) nex_player =
+{
+	entity ent;
+	ent = menu_getitem("options_player");
+	nex_makeonlyvisible( ent );
+	menu_jumptowindow(ent, false);
+};
+
+// old/other options
+
 void(void) nex_options_alwaysrun_switchchange =
 {
 	if(self.value)
