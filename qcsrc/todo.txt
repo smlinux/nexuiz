@@ -16,6 +16,7 @@
  - Laser: Autoaim and kill any projectile coming (can destory rockets, grenades, hagar missiles)
  - Shotgun: Automatic fast 3 shots
  - Rocket: A rocket, than when it hits a wall/player, it is an airburst which blows everything near it away (including players, and the person who shot it)
+1: Make extra fun things like shooting shell casings and gibs optional by cvar
 2: Add energy powerup - Makes the user run 3 times as fast, and jumps 3 times as high. 30 seconds, 2 minute respond time
 2: Add strength powerup - Basiclly the Quad. 30 seconds, 2 minute respond time
 2: Add invincible powerup -  30 seconds, 2 minute respond time
