@@ -10,18 +10,13 @@ void() trigger_push_touch =
 	if (!other.health)
 		return;
 
-	// where the center is
-	//org = (self.absmin + self.absmax) * 0.5;
 	org = other.origin;
 
 	// figure out how long it will take to hit the point considering gravity
 	grav = cvar("sv_gravity");
 	flighttime = sqrt((self.enemy.origin_z - org_z) / (0.5 * grav));
 	if (!flighttime)
-	{
-	//	remove(self);
 		return;
-	}
 
 	// how far in X and Y to move
 	self.movedir = (self.enemy.origin - org);
