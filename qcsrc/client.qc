@@ -348,19 +348,28 @@ void player_powerups (void)
 	*/
 }
 
+float calcregen(float current, float gaingoal, float gainmax, float gainrate, float draingoal, float drainmax, float drainrate)
+{
+	if (current < gaingoal)
+		return min(gaingoal, current + max(gainmax, (gaingoal - current) * gainrate) * frametime);
+	else if (current > draingoal)
+		return max(draingoal, current - max(drainmax, (current - draingoal) * drainrate) * frametime);
+	else
+		return current;
+}
+
 void player_regen (void)
 {
 	// GAME_REGENERATION does fast health regeneration up to 200. Note that your armour doesn't rot anymore either.
 	if (game & GAME_REGENERATION)
 	{
-		self.health = self.health + (200 - self.health) * 0.2 * frametime;
+		self.health = calcregen(bound(0, self.health, 1000), 200, 5, 0.2, 200, 1, 0.025);
 		self.armorvalue = bound(0, self.armorvalue, 1000);
 	}
 	else
 	{
-		self.health = bound(0, self.health + (100 - self.health) * 0.05 * frametime, 1000);
-		if (self.armorvalue > 100)
-			self.armorvalue = bound(100, self.armorvalue + (100 - self.armorvalue) * 0.05 * frametime, 1000);
+		self.health = calcregen(bound(0, self.health, 1000), 100, 2, 0.025, 100, 2, 0.025);
+		self.armorvalue = calcregen(bound(0, self.armorvalue, 1000), 0, 2, 0.025, 100, 2, 0.025);
 	}
 }
 
