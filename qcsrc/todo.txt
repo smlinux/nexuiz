@@ -14,7 +14,6 @@
 1: Ability to blow up a rocket/grenade/hagar rocket with a bullet/crylink/nex bullet
 1: When a grenade/rocket/hagar rocket is in the radius (close to it, not just a health of 1) of a explosion, it blows up to
 1: Add telefragging and make teleporters nicer perhaps
-1: Local Damage (just the the head and body)
 1: Add secondary fire to all weapons
 	- Laser: Autoaim and kill any projectile coming (can destory rockets, grenades, hagar missiles)
 	- Shotgun: Automatic fast 3 shots
@@ -25,8 +24,6 @@
 2: Add Quake trigger support
 2: Add Quake door and button support
 2: Add crouching
-2: Make the plasma sprite animated (it has animation frames already)
 2: Add weapon animations (shotgun.md3 only so far)
-2: Add FrikBots with support for Nexuiz weapons and gametypes
 3: CTF gametype (How are we handling changing of gametypes?) - same CTF as always
 3: InstaGib gametype (with nex gun only)
