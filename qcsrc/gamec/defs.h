@@ -82,6 +82,8 @@ entity dest;
 .float		air_finished;
 .float		dmgtime;
 
+.float		killcount;
+
 // definistions for weaponsystem
 
 .entity weaponentity;

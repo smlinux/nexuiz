@@ -56,6 +56,10 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				bprint ("@1",s, " was killed by ", attacker.netname, "\n");
 
 			attacker.frags = attacker.frags + 1;
+			targ.killcount = 0;
+			attacker.killcount = attacker.killcount + 1;
+			if (attacker.killcount > 2)
+				bprint ("@1",attacker.netname," has ",ftos(attacker.killcount)," kills in a row\n");
 		}
 	}
 }

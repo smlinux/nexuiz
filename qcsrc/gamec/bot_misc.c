@@ -55,100 +55,45 @@ string(float r) BotName =
 	self.b_num = r;
 	if (r == 1)
 	{	
-		self.b_pants = 11;
-		self.b_shirt = 0; 
-		return "Vincent";
+		self.playermodel = "models/player/visitant.zym";
+		return "Visitant";
 	}
 	else if (r == 2)
 	{
-		self.b_pants = 1;
-		self.b_shirt = 3;
-		return "Bishop";
+		self.playermodel = "models/player/marine.zym";
+		return "Marine";
 	}
 	else if (r == 3)
 	{	
-		self.b_pants = 13;
-		self.b_shirt = 2;
-		return "Nomad";
+		self.playermodel = "models/player/specop.zym";
+		return "Specop";
 	}
 	else if (r == 4)
 	{
-		self.b_pants = 7;
-		self.b_shirt = 6;
-		return "Hudson";
+		self.playermodel = "models/player/mulder.zym";
+		return "Mulder";
 	} 
 	else if (r == 5)
 	{
-		self.b_pants = 12;
-		self.b_shirt = 6;
-		return "Lore";
+		self.playermodel = "models/player/fshock.zym";
+		return "fShock";
 	}
 	else if (r == 6)
 	{
-		self.b_pants = 4;
-		self.b_shirt = 4;
-		return "Servo";
+		self.playermodel = "models/player/lurk.zym";
+		return "Lurk";
 	}
 	else if (r == 7)
 	{
-		self.b_pants = 2;
-		self.b_shirt = 5;
-		return "Gort";
+		self.playermodel = "models/player/headhunter.zym";
+		return "HeadHunter";
 	} 
-	else if (r == 8)
+	else
 	{	
-		self.b_pants = 10;
-		self.b_shirt = 3;
-		return "Kryten";
+		self.playermodel = "models/player/robot.zym";
+		return "Robot";
 	}
-	else if (r == 9)
-	{
-		self.b_pants = 9;
-		self.b_shirt = 4;
-		return "Pimp Bot";
-	}
-	else if (r == 10)
-	{
-		self.b_pants = 4;
-		self.b_shirt = 7;
-		return "Max";
-	}
-	else if (r == 11)
-	{
-		self.b_pants = 3;
-		self.b_shirt = 11;
-		return "Marvin";
-	} 
-	else if (r == 12)
-	{
-		self.b_pants = 13;
-		self.b_shirt = 12;
-		return "Erwin";
-	}
-	else if (r == 13)
-	{
-		self.b_pants = 11;
-		self.b_shirt = 2;
-		return "FrikBot";
-	}
-	else if (r == 14)
-	{
-		self.b_pants = 0;
-		self.b_shirt = 2;
-		return "Krosis";
-	}
-	else if (r == 15)
-	{
-		self.b_pants = 8;
-		self.b_shirt = 9;
-		return "Gypsy";
-	}
-	else if (r == 16)
-	{
-		self.b_pants = 5;
-		self.b_shirt = 10;
-		return "Hal";
-	}
+
 };
 string () PickARandomName =
 {

@@ -3,7 +3,7 @@ entity	lastspawn;
 void worldspawn (void)
 {
 	lastspawn = world;
-	//BotInit();
+	BotInit();
 
 	game = cvar ("gamecfg");	// load game options
 

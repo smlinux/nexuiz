@@ -88,8 +88,8 @@ ClientDisconnected(); // FrikBot
 void() bot_map_load =
 {
 	// place your qc loaded waypoints here
-	if (mapname == "mattrye1_nex")
-		map_mattrye1_nex();
+	//if (mapname == "mattrye1_nex")
+	//	map_mattrye1_nex();
 };
 
 /*
@@ -1211,11 +1211,11 @@ related functions.
 void() BotImpulses =
 {
 	local float f;
-	//if (self.impulse == 100)
-	//{
-	//	f = cvar("skill");
-	//	BotConnect(0, 0, f);
-	//}
+	if (self.impulse == 100)
+	{
+		f = cvar("skill");
+		BotConnect(0, 0, f);
+	}
 	if (self.impulse == 101)
 	{
 		f = cvar("skill");

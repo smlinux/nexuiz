@@ -12,5 +12,5 @@ void StartFrame (void)
 	sv_accelerate = cvar ("sv_accelerate");
 	sv_stopspeed = cvar ("sv_stopspeed");
 
-	//BotFrame ();
+	BotFrame ();
 }

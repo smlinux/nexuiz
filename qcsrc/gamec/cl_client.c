@@ -200,7 +200,7 @@ Called when a client connects to the server
 */
 void ClientConnect (void)
 {
-	//ClientInRankings();
+	ClientInRankings();
 	bprint (self.netname);
 	bprint (" connected\n");
 }
@@ -214,7 +214,7 @@ Called when a client disconnects from the server
 */
 void ClientDisconnect (void)
 {
-	//ClientDisconnected();
+	ClientDisconnected();
 	bprint (self.netname);
 	bprint (" disconnected\n");
 }
@@ -463,8 +463,8 @@ void PlayerPreThink (void)
 {
 	local vector m1, m2;
 
-	//if (BotPreFrame())
-	//	return;
+	if (BotPreFrame())
+		return;
 
 	if (self.deadflag != DEAD_NO)
 	{
@@ -537,8 +537,8 @@ Called every frame for each client after the physics are run
 void PlayerPostThink (void)
 {
 	float soundrandom;
-	//if (BotPostFrame())
-	//	return;
+	if (BotPostFrame())
+		return;
 	if (self.health > 0)
 	if (self.impulse)
 		ImpulseCommands ();
