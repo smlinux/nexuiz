@@ -39,14 +39,14 @@ void W_UpdateWeapon (void)
 		self.weaponmodel = "models/w_gl.md3";
 	else if (self.weapon == IT_ELECTRO)
 		self.weaponmodel = "models/w_electro.md3";
+	else if (self.weapon == IT_CRYLINK)
+		self.weaponmodel = "models/w_crylink.md3";
 	else if (self.weapon == IT_NEX)
 		self.weaponmodel = "models/w_nex.md3";
 	else if (self.weapon == IT_HAGAR)
 		self.weaponmodel = "models/w_hagar.md3";
 	else if (self.weapon == IT_ROCKET_LAUNCHER)
 		self.weaponmodel = "models/w_rl.md3";
-	else if (self.weapon == IT_CRYLINK)
-		self.weaponmodel = "models/w_crylink.md3";
 	else
 		objerror ("Illegal weapon - please register your guns please!");
 }
@@ -128,28 +128,29 @@ void W_SwitchWeapon (float wep)
 	}
 	else if (wep == 6)
 	{
-		nextwep = IT_NEX;
+		nextwep = IT_CRYLINK;
 		if (!self.ammo_cells)
 			noammo = TRUE;
 	}
 	else if (wep == 7)
 	{
-		nextwep = IT_HAGAR;
-		if (!self.ammo_rockets)
+		nextwep = IT_NEX;
+		if (!self.ammo_cells)
 			noammo = TRUE;
 	}
 	else if (wep == 8)
 	{
-		nextwep = IT_ROCKET_LAUNCHER;
+		nextwep = IT_HAGAR;
 		if (!self.ammo_rockets)
 			noammo = TRUE;
 	}
 	else if (wep == 9)
 	{
-		nextwep = IT_CRYLINK;
-		if (!self.ammo_cells)
+		nextwep = IT_ROCKET_LAUNCHER;
+		if (!self.ammo_rockets)
 			noammo = TRUE;
 	}
+
 	
 	if (!(self.items & nextwep))
 	{
@@ -206,15 +207,21 @@ void W_NextWeapon (void)
 		}
 		else if (self.weapon == IT_ELECTRO)
 		{
+			self.weapon = IT_CRYLINK;
+			if (!self.ammo_cells)
+			noammo = TRUE;
+		}
+		else if (self.weapon == IT_CRYLINK)
+		{
 			self.weapon = IT_NEX;
 			if (!self.ammo_cells)
-				noammo = TRUE;
+			noammo = TRUE;
 		}
 		else if (self.weapon == IT_NEX)
 		{
 			self.weapon = IT_HAGAR;
 			if (!self.ammo_rockets)
-				noammo = TRUE;
+			noammo = TRUE;
 		}
 		else if (self.weapon == IT_HAGAR)
 		{
@@ -222,13 +229,7 @@ void W_NextWeapon (void)
 			if (!self.ammo_rockets)
 				noammo = TRUE;
 		}
-		else if (self.weapon == IT_ROCKET_LAUNCHER)
-		{
-			self.weapon = IT_CRYLINK;
-			if (!self.ammo_cells)
-				noammo = TRUE;
-		}
-		
+
 		if ((self.items & self.weapon) && !noammo)
 		{
 			W_UpdateWeapon ();
@@ -266,9 +267,15 @@ void W_PreviousWeapon (void)
 			if (!self.ammo_rockets)
 				noammo = TRUE;
 		}
-		else if (self.weapon == IT_NEX)
+		else if (self.weapon == IT_CRYLINK)
 		{
 			self.weapon = IT_ELECTRO;
+			if (!self.ammo_cells)
+				noammo = TRUE;
+		}
+		else if (self.weapon == IT_NEX)
+		{
+			self.weapon = IT_CRYLINK;
 			if (!self.ammo_cells)
 				noammo = TRUE;
 		}
@@ -284,16 +291,10 @@ void W_PreviousWeapon (void)
 			if (!self.ammo_rockets)
 				noammo = TRUE;
 		}
-		else if (self.weapon == IT_CRYLINK)
+		else if (self.weapon == IT_LASER)
 		{
 			self.weapon = IT_ROCKET_LAUNCHER;
 			if (!self.ammo_rockets)
-				noammo = TRUE;
-		}
-		else if (self.weapon == IT_LASER)
-		{
-			self.weapon = IT_CRYLINK;
-			if (!self.ammo_cells)
 				noammo = TRUE;
 		}
 		
@@ -685,12 +686,12 @@ void W_Attack (void)
 		W_Grenade_Attack ();
 	else if (self.weapon == IT_ELECTRO)
 		W_Electro_Attack ();
+	else if (self.weapon == IT_CRYLINK)
+		W_Crylink_Attack ();
 	else if (self.weapon == IT_NEX)
 		W_Nex_Attack ();
 	else if (self.weapon == IT_HAGAR)
 		W_Hagar_Attack ();
 	else if (self.weapon == IT_ROCKET_LAUNCHER)
 		W_Rocket_Attack ();
-	else if (self.weapon == IT_CRYLINK)
-		W_Crylink_Attack ();
 }
