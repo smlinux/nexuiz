@@ -75,8 +75,8 @@ Fade 'ent' out when time >= 'when'
 */
 void SUB_SetFade (entity ent, float when)
 {
-	if (self.flags & FL_CLIENT) // && self.deadflag != DEAD_NO)
-		return;
+	//if (ent.flags & FL_CLIENT) // && ent.deadflag != DEAD_NO)
+	//	return;
 	ent.alpha = 1;
 	ent.fade_time = when;
 	ent.think = SUB_SetFade_Think;

@@ -17,6 +17,8 @@ $frame forwardleft backright backleft
 void CopyBody()
 {
 	local entity oldself;
+	if (self.effects & EF_NODRAW)
+		return;
 	oldself = self;
 	self = spawn();
 	self.angles = oldself.angles;
