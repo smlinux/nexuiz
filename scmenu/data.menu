@@ -528,5 +528,32 @@ Item Container Data
 			[DataLink_OnOffSwitch]
 		}
 	}
+	Item Container Input
+	{
+		Item Data_Cvar Sensitivity
+		{
+			cvarName 	"sensitivity"
+			defValue 	6.0
+			Item DataLink_Value Value
+			{
+				minValue	0.0
+				maxValue	20.0
+				stepValue	1
+				link		"##up"
+			}
+		}
+		Item Data_Cvar InvertMouse
+		{
+			cvarName 	"m_pitch"
+			defValue 	'Off'
+			Item DataLink_ValueSwitch Switch
+			{
+				minValue	-0.022
+				maxValue	0.022
+				descList	"'On' 'Off'"
+				link		"##up"
+			}
+		}
 
+	}
 }

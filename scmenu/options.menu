@@ -51,6 +51,13 @@ Item Layout Options
 			init		Nex_Action_JumpToPage
 			target		"Panel::Effects"
 		}
+		Derive TextButton Input
+		{
+			normal		"Input"
+
+			init		Nex_Action_JumpToPage
+			target		"Panel::Input"
+		}
 	}
 	Item EventWindow Panel
 	{
@@ -63,5 +70,6 @@ Item Layout Options
 		#include "menu/options/player.menu"
 		#include "menu/options/color.menu"
 		#include "menu/options/effects.menu"
+		#include "menu/options/Input.menu"
 	}
 }

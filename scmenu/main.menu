@@ -6,15 +6,6 @@ Item Arrangement Main
 	pos		'29 30'
 	direction 	'10 0'
 
-	Derive PictureButton Create
-	{
-		//normal 	"Create Game"
-		normal		"$gfx/m_top_creategame"
-		selected	"$gfx/m_top_creategame"
-
-		target 	"CreateGame"
-		init	Nex_Action_SetNormalPanelLink
-	}
 	Derive PictureButton Join
 	{
 		//normal "Join Game"
@@ -23,6 +14,15 @@ Item Arrangement Main
 
 		target	"JoinGame"
 		action	Nex_Action_JumpToJoinGame
+	}
+	Derive PictureButton Create
+	{
+		//normal 	"Create Game"
+		normal		"$gfx/m_top_creategame"
+		selected	"$gfx/m_top_creategame"
+
+		target 	"CreateGame"
+		init	Nex_Action_SetNormalPanelLink
 	}
 	Derive PictureButton Options
 	{
