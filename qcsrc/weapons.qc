@@ -1169,7 +1169,7 @@ void W_Hagar_Attack2 (void)
 {
 	entity	missile;
 
-	sound (self, CHAN_WEAPON, "weapons/hagar_fire.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "weapons/hagar_fire2.wav", 1, ATTN_NORM);
 
 	missile = spawn ();
 	missile.owner = self;

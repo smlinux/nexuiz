@@ -102,6 +102,7 @@ void worldspawn (void)
 	precache_sound ("weapons/rocket_fire.wav");
 	precache_sound ("weapons/rocket_impact.wav");
 	precache_sound ("weapons/hagar_fire.wav");
+	precache_sound ("weapons/hagar_fire2.wav");
 	precache_sound ("weapons/hagexp1.wav");
 	precache_sound ("weapons/hagexp2.wav");
 	precache_sound ("weapons/hagexp3.wav");
