@@ -37,14 +37,15 @@ void worldspawn (void)
 	precache_model ("models/items/g_a1.md3");
 	precache_model ("models/items/g_a25.md3");
 	
-	precache_model ("models/weapons/g_uzi.md3");
-	precache_model ("models/weapons/g_shotgun.md3");
-	precache_model ("models/weapons/g_gl.md3");
-	precache_model ("models/weapons/g_electro.md3");
-	precache_model ("models/weapons/g_crylink.md3");
-	precache_model ("models/weapons/g_nex.md3");
-	precache_model ("models/weapons/g_hagar.md3");
-	precache_model ("models/weapons/g_rl.md3");
+	precache_model ("models/weapons/w_uzi.zym");
+	precache_model ("models/weapons/w_laser.zym");
+	precache_model ("models/weapons/w_shotgun.zym");
+	precache_model ("models/weapons/w_gl.zym");
+	precache_model ("models/weapons/w_electro.zym");
+	precache_model ("models/weapons/w_crylink.zym");
+	precache_model ("models/weapons/w_nex.zym");
+	precache_model ("models/weapons/w_hagar.zym");
+	precache_model ("models/weapons/w_rl.zym");
 	
 	precache_model ("models/items/a_shells.md3");
 	precache_model ("models/items/a_cells.md3");
@@ -105,7 +106,6 @@ void worldspawn (void)
 	precache_sound ("4.wav");
 	precache_sound ("5.wav");
 	precache_sound ("6.wav");
-	precache_model ("models/weapons/uzi.zym");
 
 }
 

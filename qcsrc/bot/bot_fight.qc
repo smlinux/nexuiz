@@ -229,22 +229,22 @@ _z maximum range bot can be to be effective (lg/axe) (move in)
 
 vector(float wep) weapon_range =
 {
-	if (wep == 4096) // IT_AXE
-		return '48 0 64';
-	else if (wep == 1) // IT_SHOTGUN
+	if (wep == 4096) // IT_LASER
+		return '128 0 3000';
+	else if (wep == 1) // IT_UZI
 		return '128 0 99999';
-	else if (wep == 2) // IT_SUPER_SHOTGUN
+	else if (wep == 2) // IT_SHOTGUN
 		return '128 0 99999';
-	else if (wep == 4) // IT_NAILGUN
-		return '180 0 3000';
-	else if (wep == 8) // IT_SUPER_NAILGUN
-		return '180 0 3000';
-	else if (wep == 16) // IT_GRENADE_LAUNCHER
+	else if (wep == 4) // IT_GRENADE_LAUNCHER
 		return '180 48 3000';
-	else if (wep == 32) // IT_ROCKET_LAUNCHER
-		return '180 48 3000';
+	else if (wep == 8) // IT_ELECTRO
+		return '180 0 3000';
+	else if (wep == 16) // IT_CRYLINK
+		return '350 0 99999';
+	else if (wep == 32) // IT_NEX
+		return '350 0 99999';
 	else if (wep == 64) // IT_LIGHTNING
-		return '350 0 512';
+		return '180 48 3000';
 };
 /*
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

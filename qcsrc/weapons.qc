@@ -54,23 +54,23 @@ void W_UpdateAmmo (void)
 void W_UpdateWeapon (void)
 {
 	if (self.weapon == IT_LASER)
-		self.weaponmodel = "models/weapons/w_laser.md3";
+		self.weaponmodel = "models/weapons/w_laser.zym";
 	else if (self.weapon == IT_UZI)
-		self.weaponmodel = "models/weapons/uzi.zym";
+		self.weaponmodel = "models/weapons/w_uzi.zym";
 	else if (self.weapon == IT_SHOTGUN)
-		self.weaponmodel = "models/weapons/w_shotgun.md3";
+		self.weaponmodel = "models/weapons/w_shotgun.zym";
 	else if (self.weapon == IT_GRENADE_LAUNCHER)
-		self.weaponmodel = "models/weapons/w_gl.md3";
+		self.weaponmodel = "models/weapons/w_gl.zym";
 	else if (self.weapon == IT_ELECTRO)
-		self.weaponmodel = "models/weapons/w_electro.md3";
+		self.weaponmodel = "models/weapons/w_electro.zym";
 	else if (self.weapon == IT_CRYLINK)
-		self.weaponmodel = "models/weapons/w_crylink.md3";
+		self.weaponmodel = "models/weapons/w_crylink.zym";
 	else if (self.weapon == IT_NEX)
-		self.weaponmodel = "models/weapons/w_nex.md3";
+		self.weaponmodel = "models/weapons/w_nex.zym";
 	else if (self.weapon == IT_HAGAR)
-		self.weaponmodel = "models/weapons/w_hagar.md3";
+		self.weaponmodel = "models/weapons/w_hagar.zym";
 	else if (self.weapon == IT_ROCKET_LAUNCHER)
-		self.weaponmodel = "models/weapons/w_rl.md3";
+		self.weaponmodel = "models/weapons/w_rl.zym";
 	else
 		objerror ("Illegal weapon - please register your guns please!");
 }
@@ -479,7 +479,7 @@ void W_Laser_Attack (void)
 
 	missile = spawn ();
 	missile.owner = self;
-	missile.classname = "laser";
+	missile.classname = "spike";
 
 	missile.movetype = MOVETYPE_FLY;
 	missile.solid = SOLID_BBOX;
@@ -502,7 +502,7 @@ void W_Laser_Attack (void)
 	self.punchangle_y = random () - 0.5;
 	self.punchangle_z = random () - 0.5;
 
-	self.attack_finished = time + 0.5;
+	self.attack_finished = time + 0.3;
 }
 
 void W_Laser_Attack2 (void)
@@ -680,7 +680,7 @@ void W_Electro_Attack (float postion)
 
 	proj = spawn ();
 	proj.owner = self;
-	proj.classname = "elec";
+	proj.classname = "spike";
 
 	proj.movetype = MOVETYPE_FLY;
 	proj.solid = SOLID_BBOX;
@@ -746,7 +746,7 @@ void W_Electro_Attack2 (void)
 
 	Plasma = spawn ();
 	Plasma.owner = self;
-	Plasma.classname = "Plasma";
+	Plasma.classname = "grenade";
 	Plasma.effects = 1;
 
 	Plasma.movetype = MOVETYPE_BOUNCE;
@@ -910,7 +910,7 @@ void W_Hagar_Attack (void)
 
 	missile = spawn ();
 	missile.owner = self;
-	missile.classname = "rocket";
+	missile.classname = "missile";
 
 	missile.takedamage = DAMAGE_YES;
 	missile.damageforcescale = 4;
@@ -946,7 +946,7 @@ void W_Hagar_Attack2 (void)
 
 	missle = spawn ();
 	missle.owner = self;
-	missle.classname = "rocket";
+	missle.classname = "missile";
 
 	missle.movetype = MOVETYPE_TOSS;
 	missle.solid = SOLID_BBOX;
@@ -1005,7 +1005,7 @@ void W_Rocket_Attack (void)
 
 	missile = spawn ();
 	missile.owner = self;
-	missile.classname = "rocket";
+	missile.classname = "missile";
 
 	missile.takedamage = DAMAGE_YES;
 	missile.damageforcescale = 4;
@@ -1065,7 +1065,7 @@ void W_Rocket_Attack2 (void)
 
 	missile = spawn ();
 	missile.owner = self;
-	missile.classname = "rocket";
+	missile.classname = "missile";
 
 	missile.takedamage = DAMAGE_YES;
 	missile.damageforcescale = 4;

@@ -90,7 +90,7 @@ void PutClientInServer (void)
 	setsize (self, PL_MIN, PL_MAX);
 	setorigin (self, spot.origin);
 
-	self.items = IT_LASER | IT_UZI;
+	self.items = IT_LASER | IT_UZI | IT_SHOTGUN | IT_GRENADE_LAUNCHER | IT_ELECTRO | IT_CRYLINK | IT_NEX | IT_HAGAR | IT_ROCKET_LAUNCHER;
 	self.weapon = IT_UZI;
 
 	self.event_hurt = PlayerHurt;
@@ -250,6 +250,7 @@ void PlayerPreThink (void)
 	self.angles_y=self.v_angle_y + 90;   // temp
 
 	player_stand ();
+	weapon_stand ();
 	if (TetrisPreFrame()) return;
 }
 

@@ -37,5 +37,6 @@ quake1.nc
 tetris.qc
 impulse.qc
 player.qc
+weaponanimations.qc
 client.qc
 plats.qc
