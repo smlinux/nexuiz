@@ -984,7 +984,7 @@ void(void) ITEM_EDITBOX_REFRESH =
 
 	// hack: we want the text to scroll if possible
 	// self.clip_pos holds the normal value
-	if(self._cursorpos >= self.size_x / self.font_size_x - 1.5 )
+	if( self._cursorpos >= self.size_x / self.font_size_x - 1.5 && self.maxlen > self.size_x / self.font_size_x )
 		self.pos_x = self.clip_pos_x -(self._cursorpos - floor( self.size_x / self.font_size_x - 1.5)) * self.font_size_x;
 	else
 		self.pos_x = self.clip_pos_x;

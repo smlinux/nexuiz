@@ -423,9 +423,9 @@ template for map selection
 	parent		creategame_opt_maxfrag_text
 	pos		"10 30 0"
 	//font_size	"10 10 0"
-	flag 		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
+	flag 		260	// FLAG_AUTOSETCLICK | FLAG_NOSELECT
 	maxlen		3
-	text		"0"
+	text		"0  "
 	refresh		nex_xp_maxfrags
 }
 // max time
@@ -449,7 +449,7 @@ template for map selection
 	//font_size	"10 10 0"
 	flag 		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
 	maxlen		3
-	text		"0"
+	text		"0  "
 	refresh		nex_xp_maxtime
 }
 // max bots
@@ -473,7 +473,7 @@ template for map selection
 	//font_size	"10 10 0"
 	flag 		260		// FLAG_AUTOSETCLICK | FLAG_NOSELECT
 	maxlen		2
-	text		"0"
+	text		"0 "
 	refresh		nex_xp_maxbots
 }
 //////
