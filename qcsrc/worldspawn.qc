@@ -1,7 +1,8 @@
 
 void worldspawn (void)
 {
-	precache_model ("models/player/mulder.md3");
+	BotInit();
+	precache_model ("models/player/player.zym");
 	
 	precache_model ("models/weapons/w_lazer.zym");
 	precache_model ("models/weapons/w_uzi.md3");

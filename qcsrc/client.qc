@@ -78,7 +78,7 @@ void PutClientInServer (void)
 	
 	self.view_ofs = PL_VIEW_OFS;
 	self.angles = spot.angles;
-	setmodel (self, "models/player/mulder.md3");
+	setmodel (self, "models/player/player.zym");
 	setsize (self, PL_MIN, PL_MAX);
 	setorigin (self, spot.origin);
 	
@@ -135,6 +135,7 @@ Called when a client connects to the server
 */
 void ClientConnect (void)
 {
+	ClientInRankings();
 	bprint (self.netname);
 	bprint (" connected\n");
 }
@@ -148,6 +149,7 @@ Called when a client disconnects from the server
 */
 void ClientDisconnect (void)
 {
+	ClientDisconnected();
 	bprint (self.netname);
 	bprint (" disconnected\n");
 }
@@ -182,6 +184,9 @@ Called every frame for each client before the physics are run
 .float attack_finished;
 void PlayerPreThink (void)
 {
+	if (BotPreFrame())
+		return;
+
 	if (self.attack_finished < time)
 	{
 		if (self.button0)
@@ -220,5 +225,8 @@ Called every frame for each client after the physics are run
 */
 void PlayerPostThink (void)
 {
+	if (BotPostFrame())
+		return;
+
 	ImpulseCommands ();
 }

@@ -30,7 +30,7 @@ void CreateDummy (vector org)
 	dummy.health = 100;
 	setsize (dummy, PL_MIN, PL_MAX);
 	setorigin (dummy, org);
-	setmodel (dummy, "models/player/mulder.md3");
+	setmodel (dummy, "models/player/player.zym");
 	
 	dummy.event_hurt = dummyhurt;
 	dummy.event_die = dummydie;

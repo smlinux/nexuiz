@@ -1,9 +1,15 @@
+void CasingTouch ()
+{
+	self.angles_x = 0;
+}
+
 void SpawnCasing (vector org, vector ang, vector vel, float ctype)
 {
 	casing = spawn ();
 	casing.classname = "casing";
 	casing.movetype = MOVETYPE_BOUNCE;
 	casing.solid = SOLID_CORPSE;
+	casing.touch = CasingTouch;
 
 	casing.effects = EF_LOWPRECISION;
 
