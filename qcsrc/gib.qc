@@ -34,7 +34,7 @@ void TossGib (string mdlname, vector org, vector v)
 	gib.avelocity = '300 300 300';
 	gib.alpha = 1;
 
-	SUB_SetFade (gib, time + 16 + random () * 4);
+	SUB_SetFade (gib, time + 12 + random () * 4);
 }
 
 void Gib (vector vel)
@@ -43,8 +43,6 @@ void Gib (vector vel)
 	TossGib ("models/gibs/gib2.mdl", self.origin, vel);
 	TossGib ("models/gibs/gib3.mdl", self.origin, vel);
 	TossGib ("models/gibs/gib4.mdl", self.origin, vel);
-	TossGib ("models/gibs/gib1.mdl", self.origin, vel);
-	TossGib ("models/gibs/gib2.mdl", self.origin, vel);
 	TossGib ("models/gibs/bloodyskull.md3", self.origin, vel);
 	TossGib ("models/gibs/eye.md3", self.origin, vel);
 }

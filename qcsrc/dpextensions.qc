@@ -1,32 +1,46 @@
 
-//DarkPlaces supported extension list, draft version 1.03
-
-//DP_QC_BOTCLIENT
-//idea: LordHavoc
-//darkplaces implementation: LordHavoc
-//builtin definitions:
-//entity() spawnclient = #; // like spawn but for client slots (also calls relevant connect/spawn functions), returns world if no clients available
-//void(entity e) removeclient = #; // like remove but for client slots (also calls relevant disconnect functions)
-//description:
-//functions to allow bots to use client slots with no hacks, some notes:
-//.netname controls name on scoreboard (so be sure to set it)
-//.frags controls score on scoreboard (this is expected)
-//.clientcolors controls coloring on scoreboard (this determines player colors exactly like the "color" command, except for using )
-
-//unassigned stuff:  (need to write up specs but haven't yet)
-.vector punchvector; // DP_SV_PUNCHVECTOR
-.float  ping; // DP_SV_PING
+//DarkPlaces supported extension list, draft version 1.04
 
 //checkextension function
 //idea: expected by almost everyone
 //darkplaces implementation: LordHavoc
 float(string s) checkextension = #99;
-//description: check if (cvar("pr_checkextension")) before calling this, this is the only guarenteed extension to be present in the extension system, it allows you to check if an extension is available, by name, to check for an extension use code like this:
+//description:
+//check if (cvar("pr_checkextension")) before calling this, this is the only
+//guarenteed extension to be present in the extension system, it allows you
+//to check if an extension is available, by name, to check for an extension
+//use code like this:
 //// (it is recommended this code be placed in worldspawn or a worldspawn called function somewhere)
 //if (cvar("pr_checkextension"))
 //if (checkextension("DP_SV_SETCOLOR"))
 //	ext_setcolor = TRUE;
 //from then on you can check ext_setcolor to know if that extension is available
+
+//DP_QC_TRACE_MOVETYPES
+//idea: LordHavoc
+//darkplaces implementation: id Software
+//constant definitions:
+float MOVE_NORMAL = 0; // same as FALSE
+float MOVE_NOMONSTERS = 1; // same as TRUE
+float MOVE_MISSILE = 2; // save as movement with .movetype == MOVETYPE_FLYMISSILE
+//description:
+//this extension does nothing (do not check for it), it only documents existing MOVE_ values that were never defined in defs.qc, these are passed as the 'nomonsters' parameter to traceline/tracebox
+
+//DP_QC_TRACE_MOVETYPE_WORLDONLY
+//idea: LordHavoc
+//darkplaces implementation: LordHavoc
+//constant definitions:
+float MOVE_WORLDONLY = 3;
+//description:
+//allows traces to hit only world (see DP_QC_TRACE_MOVETYPES for how to use this)
+
+//DP_QC_TRACE_MOVETYPE_HITMODEL
+//idea: LordHavoc
+//darkplaces implementation: LordHavoc
+//constant definitions:
+float MOVE_HITMODEL = 4;
+//description:
+//allows traces to hit alias models (not sprites!) instead of entity boxes (see DP_QC_TRACE_MOVETYPES for how to use this)
 
 // LordHavoc: HIGHLY experimental, do not implement this in other engines
 //DP_CGAME
@@ -99,7 +113,7 @@ float   EF_RED          = 128;
 //effects bit:
 float   EF_STARDUST     = 2048;
 //description:
-//entity emits bouncing sparkles in every direction (it is doubtful anyone would want to use this effect)
+//entity emits bouncing sparkles in every direction
 
 //entity attributes used for rendering/networking:
 //idea: Nehahra
@@ -253,6 +267,46 @@ game/override/gfx/conchars.tga
 game/textures/gfx/conchars.tga
 game/gfx/conchars.tga
 */
+
+//DP_GFX_QUAKE3MODELTAGS
+//idea: id Software
+//darkplaces implementation: LordHavoc
+//field definitions:
+.entity tag_entity; // entity this is attached to (call setattachment to set this)
+.float tag_index; // which tag on that entity (0 is relative to the entity, > 0 is an index into the tags on the model if it has any) (call setattachment to set this)
+//builtin definitions:
+void(entity e, entity tagentity, string tagname) setattachment = #443; // attachs e to a tag on tagentity (note: use "" to attach to entity origin/angles instead of a tag)
+//description:
+//allows entities to be visually attached to model tags (which follow animations perfectly) on other entities, for example attaching a weapon to a player's hand, or upper body attached to lower body, allowing it to change angles and frame separately (note: origin and angles are relative to the tag, use '0 0 0' for both if you want it to follow exactly, this is similar to viewmodelforclient's behavior).
+//note 2: if the tag is not found, it defaults to "" (attach to origin/angles of entity)
+//note 3: attaching to world turns off attachment
+//note 4: the entity that this is attached to must be visible for this to work
+
+//DP_GFX_SKINFILES
+//idea: LordHavoc
+//darkplaces implementation: LordHavoc
+//description:
+//alias models (mdl, md2, md3) can have .skin files to replace conventional texture naming, these have a naming format such as:
+//progs/test.md3_0.skin
+//progs/test.md3_1.skin
+//...
+//
+//these files contain replace commands (replace meshname shadername), example:
+//replace "helmet" "progs/test/helmet1.tga" // this is a mesh shader replacement
+//replace "teamstripes" "progs/test/redstripes.tga"
+//replace "visor" "common/nodraw" // this makes the visor mesh invisible
+////it is not possible to rename tags using this format
+//
+//Or the Quake3 syntax (100% compatible with Quake3's .skin files):
+//helmet,progs/test/helmet1.tga // this is a mesh shader replacement
+//teamstripes,progs/test/redstripes.tga
+//visor,common/nodraw // this makes the visor mesh invisible
+//tag_camera, // this defines that the first tag in the model is called tag_camera
+//tag_test, // this defines that the second tag in the model is called tag_test
+//
+//any names that are not replaced are automatically show up as a grey checkerboard to indicate the error status, and "common/nodraw" is a special case that is invisible.
+//this feature is intended to allow multiple skin sets on md3 models (which otherwise only have one skin set).
+//other commands might be added someday but it is not expected.
 
 //DP_HALFLIFE_MAP
 //idea: LordHavoc
@@ -596,7 +650,7 @@ void(vector mincorner, vector maxcorner, float explosionspeed, float howmany) te
 //builtin definitions:
 void(vector org, float radius, float lifetime, vector color) te_customflash = #417;
 //temp entity definitions:
-//float TE_CUSTOMFLASH = 72;
+//float TE_CUSTOMFLASH = 73;
 //protocol:
 //vector origin
 //byte radius ((MSG_ReadByte() + 1) * 8, meaning 8-2048 unit radius)
@@ -708,7 +762,7 @@ void(vector org) te_explosionquad = #415;
 //builtin definitions:
 void(vector org) te_smallflash = #416;
 //temp entity definitions:
-//float TE_SMALLFLASH = 71;
+//float TE_SMALLFLASH = 72;
 //protocol:
 //vector origin
 //description:
@@ -799,7 +853,7 @@ float FILE_WRITE = 2;
 //idea: KrimZon
 //darkplaces implementation: KrimZon, LordHavoc
 //engine-called QC prototypes:
-//void(string s) SV_ParseCommand;
+//void(string s) SV_ParseClientCommand;
 //builtin definitions:
 void(entity e, string s) clientcommand = #440;
 float(string s) tokenize = #441;
@@ -829,5 +883,25 @@ string(float n) argv = #442;
 //sv_stepheight (default 18)
 //description:
 //sv_jumpstep allows stepping up onto stairs while airborn, sv_stepheight controls how high a single step can be.
+
+// UNFINISHED section
+//DP_QC_BOTCLIENT
+//idea: LordHavoc
+//darkplaces implementation: LordHavoc
+//builtin definitions:
+// FIXME: these need numbers assigned, and they need to be added to the engine!
+//entity() spawnclient = #; // like spawn but for client slots (also calls relevant connect/spawn functions), returns world if no clients available
+//void(entity e) removeclient = #; // like remove but for client slots (also calls relevant disconnect functions)
+//description:
+//functions to allow bots to use client slots with no hacks, some notes:
+.string netname; //controls name on scoreboard (so be sure to set it for a bot)
+.float frags; //controls score on scoreboard (this is expected)
+.float clientcolors; //controls coloring on scoreboard (this determines player colors exactly like the "color" command, except for using a single number that contains pants and shirt colors (pants + shirt * 16, 0-255 potentially), so be sure to set it for a bot)
+//note also that these fields can be set on a real client to change the relevant settings.
+//see also DP_SV_SETCOLOR extension for another way to manipulate clientcolors (made obsolete by this extension).
+
+//unassigned stuff:  (need to write up specs but haven't yet)
+.vector punchvector; // DP_SV_PUNCHVECTOR
+.float  ping; // DP_SV_PING
 
 

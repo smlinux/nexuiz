@@ -2,11 +2,9 @@
 
 0: Add velocity for damage (rocket jumps, etc)
 0: Add animation to misc_model
-0: Make items respawn!
 0: Make gibs spawn from inside the bounding box, not at the origin
 0: Add deathtypes and obituary messages
 0: Footsteps (go threw 6 footstep sounds)
-0: When the user dies go to chasecam mode
 0: Make crylink and nex way more accurate
 1: When dead the users weapon gets thrown in the air for anyone to pick up (just the weapon he was holding)
 1: when dead the powerup the user had gets thrown in the air

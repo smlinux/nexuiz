@@ -1,11 +1,11 @@
 // increments sprite frame, loops when end is hit.. simple
-void(float startframe, float frame_count) animate_sprite =
+void animate_sprite (float startframe, float frame_count)
 {
 	if ((self.frame - startframe) >= (frame_count - 1 ))
 		self.frame = startframe;
 	else
 		self.frame = self.frame + 1;
-};
+}
 
 void W_UpdateAmmo (void)
 {
@@ -183,14 +183,10 @@ void W_NextWeapon (void)
 {
 	float	noammo;
 
-	float	loops;
-
-// AK Let it test only every possible weapon then kick it out of the loop
-	while (loops <= 9)
+	while (TRUE)
 	{
 		noammo = FALSE;
-		
-// AK Sombody messed up the sequence (please undo if it was extra made so)
+
 		if (self.weapon == IT_ROCKET_LAUNCHER)
 			self.weapon = IT_LASER;
 		else if (self.weapon == IT_LASER)
@@ -248,8 +244,6 @@ void W_NextWeapon (void)
 			W_UpdateAmmo ();
 			return;
 		}
-		
-		loops++;
 	}
 }
 
@@ -257,13 +251,10 @@ void W_PreviousWeapon (void)
 {
 	float	noammo;
 
-	float 	loops;
-	
-// AK the same as above
-	while (loops <= 9)
+	while (TRUE)
 	{
 		noammo = FALSE;
-		
+
 		if (self.weapon == IT_UZI)
 			self.weapon = IT_LASER;
 		else if (self.weapon == IT_SHOTGUN)
@@ -321,8 +312,6 @@ void W_PreviousWeapon (void)
 			W_UpdateAmmo ();
 			return;
 		}
-		
-		loops++;
 	}
 }
 
@@ -340,10 +329,10 @@ float W_CheckAmmo (void)
 	return FALSE;
 }
 
-void(vector src, float bdamage, vector dir) FireRailgunBullet =
+void FireRailgunBullet (vector src, float bdamage, vector dir)
 {
-	local   vector  v, lastpos;		
-	local   entity  saveself, last;
+	vector	v, lastpos;		
+	entity	saveself, last;
 
 	if (bdamage < 1)
 		return;
@@ -353,23 +342,21 @@ void(vector src, float bdamage, vector dir) FireRailgunBullet =
 	
 	while (bdamage > 0)
 	{		
-		traceline (lastpos + dir * 2, lastpos + dir*8192, FALSE, last);
+		traceline_hitcorpse (self, lastpos + dir * 2, lastpos + dir*8192, FALSE, last);
 		last = trace_ent;
 		lastpos = trace_endpos;
-		if (trace_fraction != 1.0)		
-			{
-				if (pointcontents(trace_endpos - dir*4) == CONTENT_SKY)
-					return;	
+		if (trace_fraction != 1.0)
+		{
+			if (pointcontents(trace_endpos - dir*4) == CONTENT_SKY)
+				return;
 
-				if (trace_ent.takedamage)
-				{
-					Damage (self, trace_endpos, trace_ent, 0, bdamage);
-				}		
-			}
+			if (trace_ent.takedamage || trace_ent.classname == "case")
+				Damage (self, trace_endpos, trace_ent, 0, bdamage);
+		}
 		if (last.solid == SOLID_BSP)			
 			bdamage = 0;	
 	}
-};
+}
 
 void fireBullet (vector dir, float spread, float damage, float dtype)
 {
@@ -386,6 +373,11 @@ void fireBullet (vector dir, float spread, float damage, float dtype)
 	{
 		if (trace_ent == world)
 			te_spike (trace_endpos);
+		else if (trace_ent.classname == "case")
+		{
+//			te_spike (trace_endpos);
+			Damage (self, trace_endpos, trace_ent, 0, damage);
+		}
 		else if (trace_ent.classname == "player" || trace_ent.classname == "corpse" || trace_ent.classname == "gib")
 		{
 			Damage (self, trace_endpos, trace_ent, 0, damage);
@@ -441,7 +433,7 @@ void W_Laser_Attack (void)
 	missile.solid = SOLID_BBOX;
 	
 	setmodel (missile, "models/bullet.mdl");
-	setsize (missile, '-4 -4 -4', '4 4 4');
+	setsize (missile, '0 0 0', '0 0 0');
 	setorigin (missile, self.origin + self.view_ofs);
 
 	makevectors (self.v_angle);
@@ -504,15 +496,12 @@ void W_Uzi_Attack2 (void)
 
 void W_Shotgun_Attack (void)
 {
+	float	sc;
+
 	sound (self, CHAN_WEAPON, "weapons/Shotgun_fire.wav", 1, ATTN_NORM);
 
-	float	sc;
-	sc = 7;
-	while (sc > 0)
-	{
+	for (sc = 7; sc > 0; sc = sc - 1)
 		fireBullet (v_forward, 300, 8, IT_SHOTGUN);
-		sc = sc - 1;
-	}
 
 	self.punchangle_x = -2;
 
@@ -695,15 +684,15 @@ void W_Plasma_Touch (void)
 
 const float w_plasma_anim_interval = 0.05;
 .float lifetime;
-void() W_Plasma_Think =
+void W_Plasma_Think (void)
 {
 	animate_sprite(0, 5);
 	
-	self.nextthink = time+ w_plasma_anim_interval;
+	self.nextthink = time + w_plasma_anim_interval;
 
 	if (self.lifetime < time) // time is up
 		SUB_Remove();
-};
+}
 
 void W_Electro_Attack2 (void)
 {

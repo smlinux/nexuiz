@@ -17,25 +17,34 @@ void Damage (entity attacker, vector hitloc, entity targ, float deathtype, float
 {
 	entity	oldself;
 	
-	if (!targ.takedamage)
-		return;
-		
-	targ.health = targ.health - damage;
-	
-	oldself = self;
-	self = targ;
-	
-	if (targ.health <= 0)
+	if (targ.takedamage)
 	{
-		Obituary (attacker, targ, deathtype);
-		if (targ.event_die)
-			targ.event_die (hitloc, damage);
-		//return;	// self = oldself;return;
+		targ.health = targ.health - damage;
+
+		oldself = self;
+		self = targ;
+
+		if (targ.health <= 0)
+		{
+			Obituary (attacker, targ, deathtype);
+			if (targ.event_die)
+				targ.event_die (hitloc, damage);
+			//return;	// self = oldself;return;
+		}
+		else if (targ.event_hurt)
+			targ.event_hurt (hitloc, damage);
+
+		self = oldself;
 	}
-	else if (targ.event_hurt)
+	else if (targ.event_hurt)	// For casings, etc that aren't damageable (cheap, I know :P)
+	{
+		oldself = self;
+		self = targ;
+
 		targ.event_hurt (hitloc, damage);
-	
-	self = oldself;
+
+		self = oldself;
+	}
 }
 
 void RadiusDamage (entity attacker, entity inflictor, float deathtype, float damage, entity ignore)
