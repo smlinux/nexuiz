@@ -275,7 +275,7 @@ void W_PreviousWeapon (void)
 			self.weapon = IT_LASER;
 		else if (self.weapon == IT_UZI)
 		{
-			self.weapon = IT_UZI;
+			self.weapon = IT_SHOTGUN;
 			if (!self.ammo_shells)
 				noammo = TRUE;
 		}
@@ -656,7 +656,7 @@ void W_Crylink_Attack (void) //(float postion)
 	setsize (proj, '0 0 0', '0 0 0');
 	setorigin (proj, self.origin + self.view_ofs + v_forward * 10 + v_right * 5 + v_up * -14);
 
-	proj.velocity = v_forward * 5000;
+	proj.velocity = v_forward * 7000;
 	proj.velocity = proj.velocity + v_right * ( crandom() * 50 );
 	proj.velocity = proj.velocity + v_up * ( crandom() * 50 );
 	proj.touch = W_Crylink_Touch;
