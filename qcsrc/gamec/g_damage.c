@@ -13,54 +13,56 @@ void Obituary (entity attacker, entity targ, float deathtype)
 		if (targ == attacker)                 
 		{
 			if (deathtype == IT_GRENADE_LAUNCHER)
-				bprint ("@1",s, " detonated\n");
+				bprint ("^1",s, " detonated\n");
 			else if (deathtype == IT_ELECTRO)
-				bprint ("@1",s, " played with plasma\n");
+				bprint ("^1",s, " played with plasma\n");
 			else if (deathtype == IT_ROCKET_LAUNCHER)
-				bprint ("@1",s, " exploded\n");
+				bprint ("^1",s, " exploded\n");
 			else if (deathtype == DEATH_HURTTRIGGER)
-				bprint ("@1",s, " ", attacker.message, "\n");
+				bprint ("^1",s, " ", attacker.message, "\n");
 			else if (deathtype == DEATH_KILL)
-  	            bprint (s, " couldn't take it anymore\n");
+  	            bprint ("^1",s, " couldn't take it anymore\n");
 			else if (deathtype == DEATH_FALL)
-				bprint ("@1",s, " hit the ground with a crunch\n");
+				bprint ("^1",s, " hit the ground with a crunch\n");
 			else if (deathtype == DEATH_BIGFALL)
-				bprint ("@1",s, " fell into oblivion\n");
+				bprint ("^1",s, " fell into oblivion\n");
 			else if (deathtype == DEATH_DROWN)
-				bprint ("@1",s, " drowned\n");
+				bprint ("^1",s, " drowned\n");
 			else
-				bprint ("@1",s, " died\n");
+				bprint ("^1",s, " died\n");
 			self.frags = self.frags - 1;
 			targ.killcount = 0;
 		}
 		else if (attacker.classname == "player")
 		{
 			if (deathtype == IT_LASER)
-				bprint ("@1",s, " was blasted by ", attacker.netname, "\n");
+				bprint ("^1",s, " was blasted by ", attacker.netname, "\n");
 			else if (deathtype == IT_UZI)
-				bprint ("@1",s, " was riddled full of holes by ", attacker.netname, "\n");
+				bprint ("^1",s, " was riddled full of holes by ", attacker.netname, "\n");
 			else if (deathtype == IT_SHOTGUN)
-				bprint ("@1",s, " was gunned by ", attacker.netname, "\n");
+				bprint ("^1",s, " was gunned by ", attacker.netname, "\n");
 			else if (deathtype == IT_GRENADE_LAUNCHER)
-				bprint ("@1", s, " was blasted by ", attacker.netname, "\n");
+				bprint ("^1", s, " was blasted by ", attacker.netname, "\n");
 			else if (deathtype == IT_ELECTRO)
-				bprint ("@1",s, " was blasted by ", attacker.netname, "\n");
+				bprint ("^1",s, " was blasted by ", attacker.netname, "\n");
 			else if (deathtype == IT_CRYLINK)
-				bprint ("@1",s, " was blasted ", attacker.netname, "\n");
+				bprint ("^1",s, " was blasted ", attacker.netname, "\n");
 			else if (deathtype == IT_NEX)
-				bprint ("@1",s, " has been vaporized by ", attacker.netname, "\n");
+				bprint ("^1",s, " has been vaporized by ", attacker.netname, "\n");
 			else if (deathtype == IT_HAGAR)
-				bprint ("@1",s, " was pummeled by ", attacker.netname, "\n");
+				bprint ("^1",s, " was pummeled by ", attacker.netname, "\n");
 			else if (deathtype == IT_ROCKET_LAUNCHER)
-				bprint ("@1",s, " blasted by ", attacker.netname, "\n");
+				bprint ("^1",s, " blasted by ", attacker.netname, "\n");
 			else
-				bprint ("@1",s, " was killed by ", attacker.netname, "\n");
+				bprint ("^1",s, " was killed by ", attacker.netname, "\n");
 
 			attacker.frags = attacker.frags + 1;
+			if (targ.killcount > 2)
+				bprint ("^1",attacker.netname," has stopped ",s,"'s killing spree\n");
 			targ.killcount = 0;
 			attacker.killcount = attacker.killcount + 1;
 			if (attacker.killcount > 2)
-				bprint ("@1",attacker.netname," has ",ftos(attacker.killcount)," kills in a row\n");
+				bprint ("^1",attacker.netname," has ",ftos(attacker.killcount)," kills in a row\n");
 		}
 	}
 }

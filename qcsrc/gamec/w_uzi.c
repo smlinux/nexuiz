@@ -38,7 +38,7 @@ void W_Uzi_Attack (void)
 	makevectors(self.v_angle);
 	sound (self, CHAN_WEAPON, "weapons/uzi_fire.wav", 1, ATTN_NORM);
 
-	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 8) + (v_forward * 5);
+	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 8) + (v_forward * 15);
 	self.uzi_bulletcounter = self.uzi_bulletcounter + 1;
 	if (self.uzi_bulletcounter >= 4)
 		self.uzi_bulletcounter = 0;

@@ -204,7 +204,7 @@ Called when a client connects to the server
 void ClientConnect (void)
 {
 	ClientInRankings();
-	bprint (self.netname);
+	bprint ("^3",self.netname);
 	bprint (" connected\n");
 }
 
@@ -218,7 +218,7 @@ Called when a client disconnects from the server
 void ClientDisconnect (void)
 {
 	ClientDisconnected();
-	bprint (self.netname);
+	bprint ("^3",self.netname);
 	bprint (" disconnected\n");
 }
 

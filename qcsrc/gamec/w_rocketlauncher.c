@@ -84,7 +84,7 @@ void W_Rocket_Attack (void)
 
 	missile.takedamage = DAMAGE_YES;
 	missile.damageforcescale = 4;
-	missile.health = 10;
+	missile.health = 30;
 	missile.event_damage = W_Rocket_Damage;
 
 	missile.movetype = MOVETYPE_FLY;

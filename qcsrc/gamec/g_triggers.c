@@ -394,7 +394,6 @@ if(self.noise) {
 
 void() sparksthink =
 {
-  local float tmp;
   self.nextthink = time + 0.1;
   
   if(random() < self.wait) {
