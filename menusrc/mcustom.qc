@@ -482,6 +482,30 @@ void(void) nex_cc_ncolor_enable =
 	cvar_set("v_color_enable","0");
 };
 
+void(void) nex_cc_grey_refresh =
+{
+	self.value = cvar(strcat(self.cvarname,"_r"));
+	self.value = self.value + cvar(strcat(self.cvarname,"_g"));
+	self.value = self.value + cvar(strcat(self.cvarname,"_b"));
+	self.value = self.value / 3;
+};
+
+
+void(void) nex_cc_grey_move =
+{
+	string tmp;
+	tmp = ftos(self.value);
+	cvar_set(strcat(self.cvarname,"_r"), tmp);
+	cvar_set(strcat(self.cvarname,"_g"), tmp);
+	cvar_set(strcat(self.cvarname,"_b"), tmp);
+};
+
+void(void) nex_cc_grey =
+{
+	self.refresh = nex_cc_grey_refresh;
+	self.slidermove = nex_cc_grey_move;
+};
+
 ////////////////////////////////////////////////////
 // Test Stuff
 ///
