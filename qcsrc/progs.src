@@ -5,12 +5,23 @@ builtin.qc
 constant.qc
 field.qc			// Should rename this, it has fields and globals
 
+bot/maps/map_mattrye2.qc
+bot/bot.qc
+bot/bot_way.qc
+bot/bot_fight.qc 
+bot/bot_ai.qc
+bot/bot_misc.qc
+bot/bot_phys.qc
+bot/bot_move.qc
+bot/bot_ed.qc
+
 dpextensions.qc
 func.qc
 
 worldspawn.qc
 rain.qc
 casings.qc
+jumppads.qc
 teleporters.qc
 server.qc
 stats.qc
