@@ -132,7 +132,7 @@ void PutClientInServer (void)
 	// don't reset back to last position, even if new position is stuck in solid
 	self.oldorigin = self.origin;
 
-	self.items =IT_LASER | IT_UZI | IT_SHOTGUN | IT_GRENADE_LAUNCHER | IT_ELECTRO | IT_CRYLINK | IT_NEX | IT_HAGAR | IT_ROCKET_LAUNCHER;
+	self.items = IT_LASER | IT_UZI| IT_SHOTGUN | IT_GRENADE_LAUNCHER | IT_ELECTRO | IT_CRYLINK | IT_NEX | IT_HAGAR | IT_ROCKET_LAUNCHER;
 	self.weapon = IT_UZI;
 
 	self.event_damage = PlayerDamage;
@@ -289,8 +289,6 @@ void PlayerPreThink (void)
 
 	if (self.weapon == IT_NEX && self.button3)
 		self.viewzoom = 0.3;
-	else if (self.weapon == IT_LASER && self.button3)
-		self.viewzoom = 0.6;
 	else if (self.viewzoom != 1)
 		self.viewzoom = 1;
 

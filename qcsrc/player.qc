@@ -53,7 +53,7 @@ void player_anim (void)
 			self.frame = self.dead_frame;
 		else
 			self.frame = self.die_frame;
-		SUB_SetFade (self, time + 12 + random () * 4);
+		//SUB_SetFade (self, time + 12 + random () * 4);
 		return;
 	}
 	/* LordHavoc: crouching was canceled
@@ -110,7 +110,7 @@ void SpawnThrownWeapon (vector org, float w)
 	setorigin(self, org);
 	self.velocity = randomvec() * 100 + '0 0 200';
 	self.norespawn = 1;
-	SUB_SetFade(self, time + 20);
+	//SUB_SetFade(self, time + 20);
 
 	if (w == IT_UZI)
 		weapon_uzi ();

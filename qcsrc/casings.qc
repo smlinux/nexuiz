@@ -13,7 +13,7 @@ void CasingDamage (vector hitloc, float damage, entity inflictor, entity attacke
 	self.avelocity_y = random () * 500;
 	self.health = self.health - damage;
 	if (self.health <= 0)
-		SUB_VanishOrRemove(self);
+	SUB_VanishOrRemove(self);
 }
 
 void SpawnCasing (vector org, vector ang, vector vel, float ctype)

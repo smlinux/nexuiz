@@ -64,6 +64,7 @@ void SUB_SetFade_Think (void)
 		self.alpha = 1;
 	if (self.alpha < 0.01)	// don't let it reach 0, lest it become fully visible again
 		SUB_VanishOrRemove(self);
+	//if (self.flags & FL_CLIENT && self.deadflag == DEAD_NO) objerror("Fading on non-corpse client!\n");
 }
 
 /*
