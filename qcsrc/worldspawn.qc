@@ -81,6 +81,7 @@ void worldspawn (void)
 	
 	precache_sound ("misc/BodyImpact1.wav");
 	precache_sound ("misc/BodyImpact2.wav");
+	precache_sound ("misc/Teleport.wav");
 	
 	precache_sound ("player/HitGround1.wav");
 	precache_sound ("player/HitGround2.wav");

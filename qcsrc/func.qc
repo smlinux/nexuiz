@@ -5,6 +5,10 @@ void() SUB_Null;
 //void() SUB_UseTargets;
 void() SUB_Remove;
 
+void info_null (void)
+{
+	
+}
 
 /*
 ==================
