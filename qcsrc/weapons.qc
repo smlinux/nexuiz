@@ -329,6 +329,7 @@ float W_CheckAmmo (void)
 	return FALSE;
 }
 
+/*
 void FireRailgunBullet (vector src, float bdamage, vector dir, float spread, float deathtype)
 {
 	vector	v, lastpos;
@@ -362,6 +363,32 @@ void FireRailgunBullet (vector src, float bdamage, vector dir, float spread, flo
 			bdamage = 0;
 	}
 }
+*/
+
+void FireRailgunBullet (vector src, float damage, vector dir, float spread, float dtype)
+{
+	vector	org;
+
+	makevectors (self.v_angle);
+
+	// use traceline_hitcorpse to make sure it can hit gibs and corpses too
+	org = self.origin + self.view_ofs;
+	traceline_hitcorpse (self, org, org + v_forward * 4096 + v_right * crandom () * spread + v_up * crandom () * spread, FALSE, self);
+	
+	if ((trace_fraction != 1.0) && (trace_ent != self) && (pointcontents (trace_endpos) != CONTENT_SKY))
+	{
+		if (trace_ent.classname == "case")
+		{
+			Damage (trace_ent, self, self, damage, dtype, trace_endpos, dir * damage);
+		}
+		else if (trace_ent.classname == "player" || trace_ent.classname == "corpse" || trace_ent.classname == "gib")
+		{
+			te_blood (trace_endpos, dir * damage * 16, damage);
+			Damage (trace_ent, self, self, damage, dtype, trace_endpos, dir * damage);
+		}
+	}
+}
+
 
 void fireBullet (vector dir, float spread, float damage, float dtype)
 {
