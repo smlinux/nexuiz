@@ -398,16 +398,25 @@ void FireRailgunBullet (vector src, float bdamage, vector dir, float spread, flo
 }
 */
 
-void FireRailgunBullet (vector src, float damage, vector dir, float dtype)
+void FireRailgunBullet (vector start, vector end, float damage, float dtype)
 {
-	vector	org;
+	vector	dir;
 
-	makevectors (self.v_angle);
+	dir = normalize (end - start);
+	traceline_hitcorpse (self, start, end, FALSE, self);
 
-	// use traceline_hitcorpse to make sure it can hit gibs and corpses too
-	org = self.origin + self.view_ofs;
-	traceline_hitcorpse (self, org, org + v_forward * 4096 + v_right + v_up, FALSE, self);
-	
+	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+	WriteByte (MSG_BROADCAST, 76);
+	WriteCoord (MSG_BROADCAST, start_x);
+	WriteCoord (MSG_BROADCAST, start_y);
+	WriteCoord (MSG_BROADCAST, start_z);
+	WriteCoord (MSG_BROADCAST, trace_endpos_x);
+	WriteCoord (MSG_BROADCAST, trace_endpos_y);
+	WriteCoord (MSG_BROADCAST, trace_endpos_z);
+	WriteCoord (MSG_BROADCAST, 0);
+	WriteCoord (MSG_BROADCAST, 0);
+	WriteCoord (MSG_BROADCAST, 0);
+
 	if ((trace_fraction != 1.0) && (trace_ent != self) && (pointcontents (trace_endpos) != CONTENT_SKY))
 	{
 		if (trace_ent.classname == "case")
@@ -776,14 +785,13 @@ void W_Grenade_Attack3 (void)
 
 void W_Electro_Touch (void)
 {
-	vector dir;
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 	WriteByte (MSG_BROADCAST, 79);
 	WriteCoord (MSG_BROADCAST, self.origin_x);
 	WriteCoord (MSG_BROADCAST, self.origin_y);
 	WriteCoord (MSG_BROADCAST, self.origin_z);
 	WriteCoord (MSG_BROADCAST, 0);		// SeienAbunae: groan... Useless clutter
-	WriteCoord (MSG_BROADCAST, 0);
+	WriteCoord (MSG_BROADCAST, 0);		// Sajt: Yeah.. I agree with him
 	WriteCoord (MSG_BROADCAST, 0);
 	WriteByte (MSG_BROADCAST, 155);
 	self.event_damage = SUB_Null;
@@ -937,9 +945,8 @@ void W_Electro_Attack2 (float postion)
 
 void W_Electro_Attack3 (float postion)
 {
-
 	entity	proj;
-	float hitcount;
+	vector org;
 
 	sound (self, CHAN_WEAPON, "weapons/electro_fire.wav", 1, ATTN_NORM);
 
@@ -953,7 +960,6 @@ void W_Electro_Attack3 (float postion)
 	
 	makevectors (self.v_angle);
 
-	vector org;
 	org = self.origin + self.view_ofs + v_forward * 18 + v_right * 7 + v_up * -9;
 	te_smallflash(org);
 
@@ -979,7 +985,6 @@ void W_Electro_Attack3 (float postion)
 
 void W_Crylink_Touch (void)
 {
-	vector dir;
 	self.event_damage = SUB_Null;
 	te_smallflash(self.origin);
 	RadiusDamage (self, self.owner, 20, 0, 3, world, 50, IT_CRYLINK);
@@ -1001,25 +1006,10 @@ void W_Crylink_Attack (void) //(float postion)
 	//if (postion==4)
 	//	org = self.origin + self.view_ofs + v_forward * 18 + v_right * 0 + v_up * -13;
 
+	makevectors (self.v_angle);
 	org = self.origin + self.view_ofs + v_forward * 10 + v_right * 5 + v_up * -14;	
 
-	makevectors (self.v_angle);
-
-	FireRailgunBullet (org, 25, v_forward, IT_CRYLINK);
-
-	traceline (org, self.origin + self.view_ofs + (v_forward * 4096), FALSE, self);
-
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, 76);
-	WriteCoord (MSG_BROADCAST, org_x);
-	WriteCoord (MSG_BROADCAST, org_y);
-	WriteCoord (MSG_BROADCAST, org_z);
-	WriteCoord (MSG_BROADCAST, trace_endpos_x);
-	WriteCoord (MSG_BROADCAST, trace_endpos_y);
-	WriteCoord (MSG_BROADCAST, trace_endpos_z);
-	WriteCoord (MSG_BROADCAST, self.v_angle_x);
-	WriteCoord (MSG_BROADCAST, self.v_angle_y);
-	WriteCoord (MSG_BROADCAST, self.v_angle_z);
+	FireRailgunBullet (org, self.origin + self.view_ofs + v_forward * 4096, 25, IT_CRYLINK);
 
 	te_gunshot (trace_endpos);
 
@@ -1073,44 +1063,32 @@ void W_Nex_Attack (void)
 	makevectors (self.v_angle);
 
 	org = self.origin + self.view_ofs + v_forward * 18 + v_right * 8 + v_up * -5;
-
-	traceline (org, self.origin + self.view_ofs + (v_forward * 4096), FALSE, self);
-
 	te_smallflash(org);
 
-	FireRailgunBullet (org, 80, v_forward, IT_NEX);
-
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, 76);
-	WriteCoord (MSG_BROADCAST, org_x);
-	WriteCoord (MSG_BROADCAST, org_y);
-	WriteCoord (MSG_BROADCAST, org_z);
-	WriteCoord (MSG_BROADCAST, trace_endpos_x);
-	WriteCoord (MSG_BROADCAST, trace_endpos_y);
-	WriteCoord (MSG_BROADCAST, trace_endpos_z);
-	WriteCoord (MSG_BROADCAST, self.v_angle_x);
-	WriteCoord (MSG_BROADCAST, self.v_angle_y);
-	WriteCoord (MSG_BROADCAST, self.v_angle_z);
+	FireRailgunBullet (org, self.origin + self.view_ofs + v_forward * 4096, 80, IT_NEX);
 
 	te_plasmaburn (trace_endpos);
 
-	dir = trace_plane_normal * 100;
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_FLAMEJET);
-	WriteCoord (MSG_BROADCAST, trace_endpos_x);
-	WriteCoord (MSG_BROADCAST, trace_endpos_y);
-	WriteCoord (MSG_BROADCAST, trace_endpos_z);
-	WriteCoord (MSG_BROADCAST, dir_x);
-	WriteCoord (MSG_BROADCAST, dir_y);
-	WriteCoord (MSG_BROADCAST, dir_z);
-	WriteByte (MSG_BROADCAST, 255);
+	if (trace_fraction < 1.0)
+	{
+		dir = trace_plane_normal * 100;
+		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+		WriteByte (MSG_BROADCAST, TE_FLAMEJET);
+		WriteCoord (MSG_BROADCAST, trace_endpos_x);
+		WriteCoord (MSG_BROADCAST, trace_endpos_y);
+		WriteCoord (MSG_BROADCAST, trace_endpos_z);
+		WriteCoord (MSG_BROADCAST, dir_x);
+		WriteCoord (MSG_BROADCAST, dir_y);
+		WriteCoord (MSG_BROADCAST, dir_z);
+		WriteByte (MSG_BROADCAST, 255);
 
-	explosion = spawn ();
-	setorigin (explosion, trace_endpos);
-	RadiusDamage (explosion, self, 10, 0, 50, world, 300, IT_ROCKET_LAUNCHER);
-	remove (explosion);
+		explosion = spawn ();
+		setorigin (explosion, trace_endpos);
+		RadiusDamage (explosion, self, 10, 0, 50, world, 300, IT_ROCKET_LAUNCHER);
+		remove (explosion);
 
-	PointSound (trace_endpos, "weapons/neximpact.wav", 1, ATTN_NORM);
+		PointSound (trace_endpos, "weapons/neximpact.wav", 1, ATTN_NORM);
+	}
 
 	self.attack_finished = time + 1;
 
@@ -1169,7 +1147,6 @@ void W_Hagar_Damage (vector hitloc, float damage, entity inflictor, entity attac
 void W_Hagar_Attack (void)
 {
 	entity	missile;
-	vector	org;
 
 	sound (self, CHAN_WEAPON, "weapons/hagar_fire.wav", 1, ATTN_NORM);
 
@@ -1244,7 +1221,6 @@ void W_Hagar_Attack2 (void)
 void W_Hagar_Attack3 (void)
 {
 	entity	missile;
-	vector	org;
 
 	sound (self, CHAN_WEAPON, "weapons/hagar_fire.wav", 1, ATTN_NORM);
 
