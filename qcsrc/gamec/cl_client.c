@@ -99,8 +99,11 @@ void PutClientInServer (void)
 
 	self.view_ofs = PL_VIEW_OFS;
 	self.angles = spot.angles;
+	self.fixangle = TRUE; // turn this way immediately
 	self.velocity = '0 0 0';
 	self.avelocity = '0 0 0';
+	self.punchangle = '0 0 0';
+	self.punchvector = '0 0 0';
 
 	self.viewzoom = 0.6;
 
