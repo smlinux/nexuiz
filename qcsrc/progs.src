@@ -1,4 +1,4 @@
-progs.dat
+../data/progs.dat
 
 gamec/sys.h
 gamec/builtins.h
@@ -47,6 +47,5 @@ gamec/t_quake.c
 //gamec/g_tetris.c
 gamec/cl_impulse.c
 gamec/cl_player.c
-gamec/cl_aliases.c
 gamec/cl_client.c
 gamec/t_plats.c

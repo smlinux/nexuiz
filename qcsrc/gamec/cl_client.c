@@ -275,11 +275,11 @@ void() WaterMove =
 			self.pain_finished = time + 0.5;
 		}
 	}
-	
+
 	if (!self.waterlevel)
 	{
 		if (self.flags & FL_INWATER)
-		{	
+		{
 			// play leave water sound
 			sound (self, CHAN_BODY, "misc/outwater.wav", 1, ATTN_NORM);
 			self.flags = self.flags - FL_INWATER;
@@ -303,9 +303,9 @@ void() WaterMove =
 			Damage (self, world, world, 5, DEATH_SLIME, '0 0 0', '0 0 0');
 		}
 	}
-	
+
 	if ( !(self.flags & FL_INWATER) )
-	{	
+	{
 
 		//if (self.watertype == CONTENT_LAVA)
 		//	sound (self, CHAN_BODY, "player/inlava.wav", 1, ATTN_NORM);
@@ -326,7 +326,7 @@ void() CheckWaterJump =
 // check for a jump-out-of-water
 	makevectors (self.angles);
 	start = self.origin;
-	start_z = start_z + 8; 
+	start_z = start_z + 8;
 	v_forward_z = 0;
 	normalize(v_forward);
 	end = start + v_forward*24;
@@ -462,8 +462,6 @@ void PlayerPreThink (void)
 {
 	//if (BotPreFrame())
 	//	return;
-	if (!self.hasaliases)
-	    DoAliases();
 
 	if (self.deadflag != DEAD_NO)
 	{
