@@ -21,7 +21,7 @@ void Obituary (entity attacker, entity targ, float deathtype)
 			else if (deathtype == DEATH_KILL)
 				bprint ("^1",s, " couldn't take it anymore\n");
 			else
-				bprint ("^1",s, " couldn't resist the urge to targ immolate\n");
+				bprint ("^1",s, " couldn't resist the urge to self immolate\n");
 			targ.frags = targ.frags - 1;
 			if (targ.killcount > 2)
 				bprint ("^1",s," ended it all with a ",ftos(targ.killcount)," kill spree\n");
@@ -100,6 +100,8 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 	if (attacker.team)
 	if (attacker.team == targ.team)
 	if (teamplay == 1 || (teamplay == 3 && attacker != targ))
+		damage = 0;
+	if (targ.flags & FL_GODMODE)
 		damage = 0;
 	// apply strength multiplier
 	if (attacker.items & IT_STRENGTH)

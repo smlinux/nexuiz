@@ -365,6 +365,7 @@ void player_powerups (void)
 {
 	if (self.items & IT_STRENGTH)
 	{
+		self.effects = self.effects | EF_BLUE;
 		if (time > self.strength_finished)
 		{
 			self.items = self.items - (self.items & IT_STRENGTH);
@@ -373,6 +374,7 @@ void player_powerups (void)
 	}
 	else
 	{
+		self.effects = self.effects - (self.effects & EF_BLUE);
 		if (time < self.strength_finished)
 		{
 			self.items = self.items | IT_STRENGTH;
@@ -381,6 +383,7 @@ void player_powerups (void)
 	}
 	if (self.items & IT_INVINCIBLE)
 	{
+		self.effects = self.effects | EF_RED;
 		if (time > self.invincible_finished)
 		{
 			self.items = self.items - (self.items & IT_INVINCIBLE);
@@ -389,6 +392,7 @@ void player_powerups (void)
 	}
 	else
 	{
+		self.effects = self.effects - (self.effects & EF_RED);
 		if (time < self.invincible_finished)
 		{
 			self.items = self.items | IT_INVINCIBLE;
@@ -397,6 +401,7 @@ void player_powerups (void)
 	}
 	if (self.items & IT_SPEED)
 	{
+		self.effects = self.effects | EF_DIMLIGHT;
 		if (time > self.speed_finished)
 		{
 			self.items = self.items - (self.items & IT_SPEED);
@@ -405,6 +410,7 @@ void player_powerups (void)
 	}
 	else
 	{
+		self.effects = self.effects - (self.effects & EF_DIMLIGHT);
 		if (time < self.speed_finished)
 		{
 			self.items = self.items | IT_SPEED;
@@ -413,6 +419,8 @@ void player_powerups (void)
 	}
 	if (self.items & IT_SLOWMO)
 	{
+		self.effects = self.effects | EF_DIMLIGHT;
+		slowmoactive = TRUE;
 		if (time > self.slowmo_finished)
 		{
 			self.items = self.items - (self.items & IT_SLOWMO);
@@ -421,6 +429,7 @@ void player_powerups (void)
 	}
 	else
 	{
+		self.effects = self.effects - (self.effects & EF_DIMLIGHT);
 		if (time < self.slowmo_finished)
 		{
 			self.items = self.items | IT_SLOWMO;
@@ -442,7 +451,8 @@ void player_powerups (void)
 
 void player_regen (void)
 {
-	self.health = bound(0, self.health + (100 - self.health) * cvar("g_balance_healthregen") * frametime, 1000);
+	if (self.health >= 100 || time > self.pain_finished)
+		self.health = bound(0, self.health + (100 - self.health) * cvar("g_balance_healthregen") * frametime, 1000);
 	if (self.armorvalue > 100)
 		self.armorvalue = bound(100, self.armorvalue + (100 - self.armorvalue) * cvar("g_balance_armorrott") * frametime, 1000);
 }

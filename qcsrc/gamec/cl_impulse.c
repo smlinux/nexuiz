@@ -28,7 +28,9 @@ void ImpulseCommands (void)
 	else if (self.impulse == 13 && cvar("sv_cheats"))
 	{
 		makevectors (self.v_angle);
-		CopyBody(0);
+		self.velocity = self.velocity + v_forward * 300;
+		CopyBody(1);
+		self.velocity = self.velocity - v_forward * 300;
 	}
 	else if (self.impulse == 97 && !self.crouch)
 	{

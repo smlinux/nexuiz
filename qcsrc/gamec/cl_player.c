@@ -40,7 +40,7 @@ void CopyBody(float keepvelocity)
 	self.think = oldself.think;
 	if (keepvelocity == 1)
 		self.velocity = oldself.velocity;
-	self.weapon = oldself.weapon;
+	//self.weapon = oldself.weapon;
 	setorigin(self, oldself.origin);
 	setsize(self, '-16 -16 -24',  '16 16 5');
 	self = oldself;

@@ -162,10 +162,10 @@ void() W_Electro_Attack2
 	setorigin (Plasma, self.origin + self.view_ofs + v_forward * 15 + v_right * 15 + v_up * -14);
 
 	Plasma.velocity = v_forward * cvar("g_balance_electro_ballspeed") + v_up * cvar("g_balance_electro_ballspeed_up");
-	Plasma.angles = vectoangles (Plasma.velocity);
-	Plasma.avelocity_y = random () * -500 - 500;
-	Plasma.avelocity_x = random () * -500 - 500;
-	Plasma.avelocity_z = random () * -500 - 500;
+	//Plasma.angles = vectoangles (Plasma.velocity);
+	//Plasma.avelocity_y = random () * -500 - 500;
+	//Plasma.avelocity_x = random () * -500 - 500;
+	//Plasma.avelocity_z = random () * -500 - 500;
 
 	Plasma.touch = W_Plasma_Touch;
 	Plasma.think = W_Plasma_FuseExplode;
