@@ -46,7 +46,7 @@ void Obituary (entity attacker, entity targ, float deathtype)
 			else if (deathtype == IT_ELECTRO)
 				bprint ("^1",s, " was blasted by ", attacker.netname, "\n");
 			else if (deathtype == IT_CRYLINK)
-				bprint ("^1",s, " was blasted ", attacker.netname, "\n");
+				bprint ("^1",s, " was blasted by ", attacker.netname, "\n");
 			else if (deathtype == IT_NEX)
 				bprint ("^1",s, " has been vaporized by ", attacker.netname, "\n");
 			else if (deathtype == IT_HAGAR)
@@ -58,7 +58,7 @@ void Obituary (entity attacker, entity targ, float deathtype)
 
 			attacker.frags = attacker.frags + 1;
 			if (targ.killcount > 2)
-				bprint ("^1",attacker.netname," has stopped ",s,"'s killing spree\n");
+				bprint ("^1",attacker.netname," has stopped ",s,"'s ",targ.killcount," kill spree\n");
 			targ.killcount = 0;
 			attacker.killcount = attacker.killcount + 1;
 			if (attacker.killcount > 2)
