@@ -56,7 +56,7 @@ void W_UpdateWeapon (void)
 	if (self.weapon == IT_LASER)
 		self.weaponmodel = "models/weapons/w_laser.zym";
 	else if (self.weapon == IT_UZI)
-		self.weaponmodel = "models/weapons/w_uzi.zym";
+		self.weaponmodel = "models/weapons/w_uzi.md3";
 	else if (self.weapon == IT_SHOTGUN)
 		self.weaponmodel = "models/weapons/w_shotgun.zym";
 	else if (self.weapon == IT_GRENADE_LAUNCHER)
@@ -483,7 +483,7 @@ void W_Laser_Attack (void)
 	missile.movetype = MOVETYPE_FLY;
 	missile.solid = SOLID_BBOX;
 
-	setmodel (missile, "models/beam.mdl");
+	setmodel (missile, "models/bullet.mdl");
 	setsize (missile, '0 0 0', '0 0 0');
 	setorigin (missile, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);
 
@@ -518,7 +518,7 @@ void W_Laser_Attack2 (void)
 	missile.movetype = MOVETYPE_FLY;
 	missile.solid = SOLID_BBOX;
 
-	setmodel (missile, "models/beam.mdl");
+	setmodel (missile, "models/bullet.mdl");
 	setsize (missile, '0 0 0', '0 0 0');
 	setorigin (missile, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);
 
@@ -919,6 +919,7 @@ void W_Nex_Attack (void)
 {
 	vector	org;
 	vector	dir;
+	entity 	explosion;
 
 	sound (self, CHAN_WEAPON, "weapons/nexfire.wav", 1, ATTN_NORM);
 	//self.effects = EF_MUZZLEFLASH;
@@ -928,13 +929,11 @@ void W_Nex_Attack (void)
 
 	org = self.origin + self.view_ofs + v_forward * 18 + v_right * 8 + v_up * -5;
 
-	// FIXME: make it accurate!
-
 	traceline (org, self.origin + self.view_ofs + (v_forward * 4096), FALSE, self);
 
 	te_smallflash(org);
 
-	FireRailgunBullet (org, 99, v_forward, IT_NEX);
+	FireRailgunBullet (org, 80, v_forward, IT_NEX);
 
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 	WriteByte (MSG_BROADCAST, 76);
@@ -960,6 +959,11 @@ void W_Nex_Attack (void)
 	WriteCoord (MSG_BROADCAST, dir_y);
 	WriteCoord (MSG_BROADCAST, dir_z);
 	WriteByte (MSG_BROADCAST, 255);
+
+	explosion = spawn ();
+	setorigin (explosion, trace_endpos);
+	RadiusDamage (explosion, self, 10, 0, 50, world, 300, IT_ROCKET_LAUNCHER);
+	remove (explosion);
 
 	PointSound (trace_endpos, "weapons/neximpact.wav", 1, ATTN_NORM);
 

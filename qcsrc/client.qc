@@ -107,6 +107,8 @@ void PutClientInServer (void)
 		setmodel (self, "models/player/lurk.zym");
 	if (mdlrandom>-0.4)
 		setmodel (self, "models/player/grunt.zym");
+	if (mdlrandom>-0.3)
+		setmodel (self, "models/player/pyria.zym");
 	if (mdlrandom>-0.2)
 		setmodel (self, "models/player/headhunter.zym");
 	if (mdlrandom>0.0)
@@ -116,7 +118,7 @@ void PutClientInServer (void)
 	if (mdlrandom>0.2)
 		setmodel (self, "models/player/robot.zym");
 	if (mdlrandom>0.4)
-		setmodel (self, "models/player/pryia.zym");
+		setmodel (self, "models/player/pyria.zym");
 	if (mdlrandom>0.6)
 		setmodel (self, "models/player/shock.zym");
 	if (mdlrandom>0.7)

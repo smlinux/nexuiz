@@ -56,6 +56,8 @@ void CreateDummy (vector org, float type)
 		setmodel (self, "models/player/robot.zym");
 	if (type==12)
 		setmodel (self, "models/player/lycanthrope.zym");
+	if (type==13)
+		setmodel (self, "models/player/fshock.zym");
 	setsize (self, PL_MIN, PL_MAX);
 	self.event_damage = PlayerDamage;
 	DummyThink();
@@ -131,72 +133,82 @@ void ImpulseCommands (void)
 		makevectors (self.v_angle);
 		CreateDummy (self.origin + self.view_ofs + v_forward * 64, 12);
 	}
-	else if (self.impulse == 25)
+	else if (self.impulse == 25 && cvar("sv_cheats"))
+	{
+		makevectors (self.v_angle);
+		CreateDummy (self.origin + self.view_ofs + v_forward * 64, 13);
+	}
+	else if (self.impulse == 26)
 	{
 		setmodel (self, "models/player/marine.zym");
 		setsize (self, PL_MIN, PL_MAX);
 	}
-	else if (self.impulse == 26)
+	else if (self.impulse == 27)
 	{
 		setmodel (self, "models/player/grunt.zym");
 		setsize (self, PL_MIN, PL_MAX);
 	}
-	else if (self.impulse == 27)
+	else if (self.impulse == 28)
 	{
 		setmodel (self, "models/player/specop.zym");
 		setsize (self, PL_MIN, PL_MAX);
 	}
-	else if (self.impulse == 28)
+	else if (self.impulse == 29)
 	{
 		setmodel (self, "models/player/pyria.zym");
 		setsize (self, PL_MIN, PL_MAX);
 	}
-	else if (self.impulse == 29)
+	else if (self.impulse == 30)
 	{
 		setmodel (self, "models/player/lurk.zym");
 		setsize (self, PL_MIN, PL_MAX);
 	}
-	else if (self.impulse == 30)
+	else if (self.impulse == 31)
 	{
 		setmodel (self, "models/player/headhunter.zym");
 		setsize (self, PL_MIN, PL_MAX);
 	}
-	else if (self.impulse == 31)
+	else if (self.impulse == 32)
 	{
 		setmodel (self, "models/player/visitant.zym");
 		setsize (self, PL_MIN, PL_MAX);
 	}
-	else if (self.impulse == 32)
+	else if (self.impulse == 33)
 	{
 		setmodel (self, "models/player/jeandarc.zym");
 		setsize (self, PL_MIN, PL_MAX);
 	}
-	else if (self.impulse == 33)
+	else if (self.impulse == 34)
 	{
 		setmodel (self, "models/player/mulder.zym");
 		setsize (self, PL_MIN, PL_MAX);
 	}
-	else if (self.impulse == 34)
+	else if (self.impulse == 35)
 	{
 		setmodel (self, "models/player/insurrectionist.zym");
 		setsize (self, PL_MIN, PL_MAX);
 	}
-	else if (self.impulse == 35)
+	else if (self.impulse == 36)
 	{
 		setmodel (self, "models/player/robot.zym");
 		setsize (self, PL_MIN, PL_MAX);
 	}
-	else if (self.impulse == 36)
+	else if (self.impulse == 37)
 	{
 		setmodel (self, "models/player/lycanthrope.zym");
 		setsize (self, PL_MIN, PL_MAX);
 	}
-	else if (self.impulse == 37 && !self.crouch)
+	else if (self.impulse == 38)
+	{
+		setmodel (self, "models/player/fshock.zym");
+		setsize (self, PL_MIN, PL_MAX);
+	}
+	else if (self.impulse == 97 && !self.crouch)
 	{
 		self.crouch = TRUE;
 		self.view_ofs_z = self.view_ofs_z - 20;
 	}
-	else if (self.impulse == 38 && self.crouch) {
+	else if (self.impulse == 98 && self.crouch) {
 		self.crouch = FALSE;
 		self.view_ofs_z = self.view_ofs_z + 20;
 	}

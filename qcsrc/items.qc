@@ -47,7 +47,7 @@ void Item_Touch (void)
 		
 	if (self.max_health){
 		other.health = min (other.health + self.max_health, 250);
-		sound (self, CHAN_BODY, "misc/itempickup.wav", 1, ATTN_NORM);}
+		sound (self, CHAN_BODY, self.noise, 1, ATTN_NORM);}
 	
 	if (other.classname == "player")
 	{
@@ -289,6 +289,7 @@ void item_health25 (void)
 void item_health100 (void)
 {
 	self.mdl = "models/items/g_h100.md3";
+	self.noise = "misc/megahealth.wav";
 	self.max_health = 100;
 	self.netname = "100 health";
 	self.respawntime = 120;

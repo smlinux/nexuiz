@@ -43,8 +43,6 @@ void CopyBody()
 	self = oldself;
 }
 
-//Begin change by Supajoe on 11:44 PM EST 11/16/03 (Subject: Player animations)
-// LordHavoc: lots of changes
 void player_anim (void)
 {
 	if (self.deadflag != DEAD_NO)
@@ -56,14 +54,12 @@ void player_anim (void)
 		//SUB_SetFade (self, time + 12 + random () * 4);
 		return;
 	}
-	/* LordHavoc: crouching was canceled
-	   diGGer: crouching was resumed :)
-	*/
+
 	if (self.crouch)
 	{
-		// duck
+		// don't duck if moving
 		if (self.movement_x * self.movement_x + self.movement_y * self.movement_y > 20)
-			self.frame = $duckwalk;
+			self.crouch = 0;
 		else
 			self.frame = $duckidle;
 	}
@@ -149,7 +145,7 @@ void PlayerCorpseDamage (vector hitloc, float damage, entity inflictor, entity a
 		// view just above the floor
 		self.view_ofs = '0 0 4';
 		// make a juicy mess
-		te_bloodshower (self.origin + self.mins, self.origin + self.maxs, 600, 500);
+		te_bloodshower (self.origin + self.mins, self.origin + self.maxs, 500, 2000);
 		// make a meaty mess
 		TossGib (world, "models/gibs/gib1.md3", self.origin, self.velocity);
 		TossGib (world, "models/gibs/gib2.mdl", self.origin, self.velocity);

@@ -18,6 +18,7 @@ void worldspawn (void)
 	precache_model ("models/player/lycanthrope.zym");
 	precache_model ("models/player/robot.zym");
 	precache_model ("models/player/shock.zym");
+	precache_model ("models/player/fshock.zym");
 
 	precache_model ("models/weapons/g_uzi.md3");
 	precache_model ("models/weapons/g_shotgun.md3");
@@ -49,6 +50,7 @@ void worldspawn (void)
 	precache_model ("models/items/g_a1.md3");
 	precache_model ("models/items/g_a25.md3");
 	
+	precache_model ("models/weapons/w_uzi.md3");
 	precache_model ("models/weapons/w_uzi.zym");
 	precache_model ("models/weapons/w_laser.zym");
 	precache_model ("models/weapons/w_shotgun.zym");
@@ -107,6 +109,7 @@ void worldspawn (void)
 	precache_sound ("misc/bodyimpact2.wav");
 	precache_sound ("misc/enemyimpact.wav");
 	precache_sound ("misc/teleport.wav");
+	precache_sound ("misc/megahealth.wav");
 
 	precache_sound ("misc/itemrespawn.wav");
 	
