@@ -27,14 +27,24 @@ void worldspawn (void)
 
 	precache_model ("models/misc/chatbubble.spr");
 
-	precache_model ("models/weapons/g_uzi.md3");
 	precache_model ("models/weapons/g_shotgun.md3");
+	precache_model ("models/weapons/g_uzi.md3");
 	precache_model ("models/weapons/g_gl.md3");
 	precache_model ("models/weapons/g_electro.md3");
 	precache_model ("models/weapons/g_crylink.md3");
 	precache_model ("models/weapons/g_nex.md3");
 	precache_model ("models/weapons/g_hagar.md3");
 	precache_model ("models/weapons/g_rl.md3");
+
+	precache_model ("models/weapons/v_laser.md3");
+	precache_model ("models/weapons/v_shotgun.md3");
+	precache_model ("models/weapons/v_uzi.md3");
+	precache_model ("models/weapons/v_gl.md3");
+	precache_model ("models/weapons/v_electro.md3");
+	precache_model ("models/weapons/v_crylink.md3");
+	precache_model ("models/weapons/v_nex.md3");
+	precache_model ("models/weapons/v_hagar.md3");
+	precache_model ("models/weapons/v_rl.md3");
 
 	precache_model ("models/sprites/plasmahitwall.spr32");
 	precache_model ("models/sprites/muzzleflash.spr32");

@@ -15,6 +15,8 @@ void() CL_Weaponentity_Think =
 		remove(self);
 		return;
 	}
+	self.effects = self.owner.effects;
+	self.alpha = self.owner.alpha;
 };
 
 void() CL_ExteriorWeaponentity_Think =
@@ -25,17 +27,24 @@ void() CL_ExteriorWeaponentity_Think =
 		remove(self);
 		return;
 	}
-	if (self.modelindex != self.owner.weaponentity.modelindex || self.dmg != self.owner.modelindex)
+	if (self.cnt != self.owner.weaponentity.modelindex || self.dmg != self.owner.modelindex)
 	{
-		self.modelindex = self.owner.weaponentity.modelindex;
-		self.model = "models/weapons/w_shotgun.md3";
+		self.cnt = self.owner.weaponentity.modelindex;
 		self.dmg = self.owner.modelindex;
-		setattachment(self, self.owner, "weapon");
+		if (self.owner.weapon == WEP_LASER) setmodel(self, "models/weapons/v_laser.md3");
+		else if (self.owner.weapon == WEP_SHOTGUN) setmodel(self, "models/weapons/v_shotgun.md3");
+		else if (self.owner.weapon == WEP_UZI) setmodel(self, "models/weapons/v_uzi.md3");
+		else if (self.owner.weapon == WEP_GRENADE_LAUNCHER) setmodel(self, "models/weapons/v_gl.md3");
+		else if (self.owner.weapon == WEP_ELECTRO) setmodel(self, "models/weapons/v_electro.md3");
+		else if (self.owner.weapon == WEP_CRYLINK) setmodel(self, "models/weapons/v_crylink.md3");
+		else if (self.owner.weapon == WEP_NEX) setmodel(self, "models/weapons/v_nex.md3");
+		else if (self.owner.weapon == WEP_HAGAR) setmodel(self, "models/weapons/v_hagar.md3");
+		else if (self.owner.weapon == WEP_ROCKET_LAUNCHER) setmodel(self, "models/weapons/v_rl.md3");
+		setattachment(self, self.owner, "bip01 r hand");
 		// if that didn't find a tag, hide the exterior weapon model
 		if (!self.tag_index)
 			self.model = "";
 	}
-	self.frame = self.owner.weaponentity.frame;
 	self.effects = self.owner.weaponentity.effects;
 };
 
