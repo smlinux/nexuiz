@@ -1,6 +1,8 @@
+entity	lastspawn;
 
 void worldspawn (void)
 {
+	lastspawn = world;
 	BotInit();
 	precache_model ("models/player/player.zym");
 	
