@@ -4,10 +4,36 @@ float PUSH_SILENT		= 2;
 // TODO: add sounds
 void() trigger_push_touch =
 {
-	if (other.health > 0)
-	{
-		other.velocity = self.movedir;
-	}
+	local float flighttime, dist, grav;
+	local vector org;
+
+	if (!other.health)
+		return;
+
+	// where the center is
+	//org = (self.absmin + self.absmax) * 0.5;
+	org = other.origin;
+
+	// figure out how long it will take to hit the point considering gravity
+	grav = cvar("sv_gravity");
+	flighttime = sqrt((self.enemy.origin_z - org_z) / (0.5 * grav));
+	//if (!flighttime)
+	//{
+	//	remove(self);
+	//	return;
+	//}
+
+	// how far in X and Y to move
+	self.movedir = (self.enemy.origin - org);
+	self.movedir_z = 0;
+	dist = vlen(self.movedir);
+
+	// finally calculate the velocity
+	self.movedir = normalize(self.movedir) * (dist / flighttime);
+	self.movedir_z = flighttime * grav;
+
+	other.velocity = self.movedir;
+
 	if (self.spawnflags & PUSH_ONCE)
 	{
 		self.touch = SUB_Null;
@@ -18,34 +44,10 @@ void() trigger_push_touch =
 
 void() trigger_push_findtarget =
 {
-	local float flighttime, dist, grav;
-	local vector org;
-
 	// find the target
 	self.enemy = find(world, targetname, self.target);
 	if (!self.enemy)
 		objerror("trigger_push: target not found\n");
-
-	// where the center is
-	org = (self.absmin + self.absmax) * 0.5;
-
-	// figure out how long it will take to hit the point considering gravity
-	grav = cvar("sv_gravity");
-	flighttime = sqrt((self.enemy.origin_z - org_z) / (0.5 * grav));
-	if (!flighttime)
-	{
-		remove(self);
-		return;
-	}
-
-	// how far in X and Y to move
-	self.movedir = (self.enemy.origin - org);
-	self.movedir_z = 0;
-	dist = vlen(self.movedir);
-
-	// finally calculate the velocity
-	self.movedir = normalize(self.movedir) * (dist / flighttime);
-	self.movedir_z = flighttime * grav;
 };
 
 /*QUAKED trigger_push (.5 .5 .5) ? PUSH_ONCE SILENT
