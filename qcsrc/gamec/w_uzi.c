@@ -48,7 +48,6 @@ void W_Uzi_Attack (void)
 	vector	org; // casing code
 	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 1) + (v_forward * 15);
 	SpawnCasing (org, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 + 10) * v_up), 2, v_forward,'0 250 0', 100, 2);
-	//W_Smoke(org, v_forward, 12);
 }
 
 void W_Uzi_Attack2 (void)

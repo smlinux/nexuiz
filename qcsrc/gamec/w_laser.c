@@ -62,17 +62,6 @@ void W_Laser_Touch (void)
 
 void W_Laser_Attack (void)
 {
-	weapon_shotdir(18, 5, -12);
-	// self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);
-	sound (self, CHAN_WEAPON, "weapons/crylink.wav", 1, ATTN_NORM);
-	//org = self.origin + self.view_ofs + v_forward * 10 + v_right * 5 + v_up * -14;	
-	FireRailgunBullet (self.shotorg, self.origin + self.shotdir*4096, 25, IT_LASER);
-	te_spark(trace_endpos, self.shotdir, 55);
-	self.attack_finished = time + 0.400;
-}
-
-void W_Laser_Attack2 (void)
-{
 	entity	missile;
 
 	makevectors(self.v_angle);
@@ -107,6 +96,19 @@ void W_Laser_Attack2 (void)
 	self.punchangle_z = random () - 0.5;
 
 	self.attack_finished = time + 0.3;
+}
+
+void W_Laser_Attack2 (void)
+{
+	/*
+	weapon_shotdir(18, 5, -12);
+	// self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);
+	sound (self, CHAN_WEAPON, "weapons/crylink.wav", 1, ATTN_NORM);
+	//org = self.origin + self.view_ofs + v_forward * 10 + v_right * 5 + v_up * -14;	
+	FireRailgunBullet (self.shotorg, self.origin + self.shotdir*4096, 25, IT_LASER);
+	te_spark(trace_endpos, self.shotdir, 55);
+	self.attack_finished = time + 0.400;
+	*/
 }
 
 // weapon frames 

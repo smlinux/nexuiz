@@ -92,7 +92,7 @@ void W_Rocket_Attack (void)
 	setmodel (missile, "models/rocketmissile.mdl");
 	setsize (missile, '0 0 0', '0 0 0');
 
-	org = self.origin + self.view_ofs + v_forward * 15 + v_right * 4 + v_up * -15;
+	org = self.origin + self.view_ofs + v_forward * 15 + v_right * 3 + v_up * -11;
 
 	setorigin (missile, org);
 	missile.velocity = v_forward * 850;
@@ -106,6 +106,16 @@ void W_Rocket_Attack (void)
 
 	if (!(game & GAME_ROCKET_ARENA))
 		self.ammo_rockets = self.ammo_rockets - 1;
+
+	entity	flash;
+	flash = spawn ();
+	//flash.drawonlytoclient;
+	setorigin (flash, org);
+	setmodel (flash, "models/flash.md3");
+	flash.velocity = v_forward * 20;
+	flash.angles = vectoangles (flash.velocity);
+	SUB_SetFade (flash, time);
+	flash.effects = flash.effects | EF_ADDITIVE;
 }
 
 void W_Rocket_Attack2 (void)

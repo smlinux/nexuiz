@@ -102,33 +102,67 @@ void PutClientInServer (void)
 
 	self.viewzoom = 0.6;
 
-	mdlrandom = random() * 5;
+	mdlrandom = random() * 15;
 	if (mdlrandom < 1)
 	{
 		setmodel (self, "models/player/insurrectionist.zym");
-		self.angleoffset = '0 90 0';
 	}
 	else if (mdlrandom < 2)
 	{
 		setmodel (self, "models/player/mulder.zym");
-		self.angleoffset = '0 90 0';
 	}
 	else if (mdlrandom < 3)
 	{
 		setmodel (self, "models/player/marine.zym");
-		self.angleoffset = '0 90 0';
 	}
 	else if (mdlrandom < 4)
 	{
 		setmodel (self, "models/player/specop.zym");
-		self.angleoffset = '0 90 0';
+	}
+	else if (mdlrandom < 5)
+	{
+		setmodel (self, "models/player/grunt.zym");
+	}
+	else if (mdlrandom < 6)
+	{
+		setmodel (self, "models/player/pryia.zym");
+	}
+	else if (mdlrandom < 7)
+	{
+		setmodel (self, "models/player/lurk.zym");
+	}
+	else if (mdlrandom < 8)
+	{
+		setmodel (self, "models/player/visitant.zym");
+	}
+	else if (mdlrandom < 9)
+	{
+		setmodel (self, "models/player/headhunter.zym");
+	}
+	else if (mdlrandom < 10)
+	{
+		setmodel (self, "models/player/jeandarc.zym");
+	}
+	else if (mdlrandom < 11)
+	{
+		setmodel (self, "models/player/robot.zym");
+	}
+	else if (mdlrandom < 12)
+	{
+		setmodel (self, "models/player/lycanthrope.zym");
+	}
+	else if (mdlrandom < 13)
+	{
+		setmodel (self, "models/player/shock.zym");
+	}
+	else if (mdlrandom < 14)
+	{
+		setmodel (self, "models/player/carni.zym");
 	}
 	else
 	{
 		setmodel (self, "models/player/fshock.zym");
-		self.angleoffset = '0 90 0';
 	}
-
 
 	setsize (self, PL_MIN, PL_MAX);
 	setorigin (self, spot.origin + '0 0 1' * (1 - self.mins_z - 24));
@@ -404,17 +438,6 @@ void PlayerPreThink (void)
 		return;
 	}
 
-/*
-	if (self.button4)
-	{
-		if (self.weapon == IT_ROCKET_LAUNCHER)
-			W_ThirdAttack ();
-		if (!(game & GAME_INSANE))
-		if (self.attack_finished < time && !self.button0 && !self.button3)
-			W_ThirdAttack ();
-	}
-*/
-
 	W_WeaponFrame();
 
 	if (self.button4)
@@ -424,24 +447,6 @@ void PlayerPreThink (void)
 	}
 	else if (self.viewzoom < 1.0)
 		self.viewzoom = min (1.0, self.viewzoom + frametime);
-
-	/* Old weapon system
-	if (self.button3)
-	{
-		if (self.weapon == IT_ROCKET_LAUNCHER)
-			W_SecondaryAttack ();
-		if (!(game & GAME_INSANE))
-			if (self.attack_finished < time && !self.button0)
-				W_SecondaryAttack ();
-		if (game & GAME_INSANE)
-			W_SecondaryAttack ();
-	}
-	
-	if (!(game & GAME_INSANE))
-	if (self.attack_finished < time)
-	if (self.button0)
-		W_Attack ();
-*/
 
 
 	if (self.button2)
@@ -453,7 +458,8 @@ void PlayerPreThink (void)
 	player_powerups();
 	player_regen();
 	player_anim();
-//	weapon_anim();
+
+	self.angles_y=self.v_angle_y + 90;   // temp
 
 	if (TetrisPreFrame()) return;
 }
@@ -472,5 +478,55 @@ void PlayerPostThink (void)
 	if (self.health > 0)
 	if (self.impulse)
 		ImpulseCommands ();
+
+	// VorteX: landing on floor, landing damage etc.
+	if (self.flags & FL_ONGROUND)
+	{
+		if (fabs(self.jump_flag) > 100)
+		{
+			if (self.jump_flag < -100 && !self.watertype == CONTENT_WATER) // HitGround
+			{
+				// HitGround sound, FIXME: add landing animation
+				if (random() < 0.5)
+					sound (self, CHAN_BODY, "misc/hitground1.wav", 1, ATTN_NORM);
+				else
+					sound (self, CHAN_BODY, "misc/hitground2.wav", 1, ATTN_NORM);
+
+				if (self.jump_flag < -650) // landing damage
+				{
+					local float dm;
+					dm = bound(0, 0.1*(fabs(self.jump_flag) - 600), 20);
+					Damage (self, world, world, dm, 1, '0 0 0', '0 0 0');
+				}
+				self.jump_flag = 0;
+			}
+		}
+	}
+	else
+	{
+		if (self.jump_flag != -10000) // not in falling death
+		{
+			self.jump_flag = self.velocity_z;
+			// check for falling into the void
+			if (self.jump_flag < -700)
+			{
+				tracebox(self.origin, self.mins, self.maxs, self.origin + '0 0 -1'*2048, MOVE_NORMAL, self);
+				if (trace_fraction == 1)
+				{// VorteX: add player falling sound here
+					self.jump_flag = -10000;
+					self.lip = time + 1;
+				}
+			}
+		}
+		else
+		{
+			if (time < self.lip)
+			{// prevent all inventory drop
+				self.weapon = 0;
+				Damage (self, world, world, 40000, 1, '0 0 0', '0 0 0');
+			}
+		}
+	}
+
 	if (TetrisPostFrame()) return;
 }

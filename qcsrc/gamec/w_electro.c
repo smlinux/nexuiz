@@ -71,15 +71,6 @@ void() W_Electro_Attack
 
 	te_smallflash(org);
 
-	//entity	flash;
-	//flash = spawn ();
-	//flash.drawonlytoclient;
-	//setorigin (flash, org);
-	//setmodel (flash, "models/flash.md3");
-	//flash.velocity = v_forward * 9;
-	//flash.angles = vectoangles (flash.velocity);
-	//SUB_SetFade (flash, time + 0 + random () * 4);
-
 	setmodel (proj, "models/elaser.mdl");
 	setsize (proj, '0 0 0', '0 0 0');
 	if (postion == 0)

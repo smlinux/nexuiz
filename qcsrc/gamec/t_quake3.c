@@ -7,7 +7,6 @@ void weapon_lightning (void) {weapon_crylink();}
 void weapon_railgun (void) {weapon_nex();}
 void weapon_bfg (void) {weapon_hagar();}
 void item_slugs (void) {item_cells();}
-void item_grenades (void) {item_grenades();}
 void item_lightning (void) {item_cells();}
 void item_armorshard (void) {item_armor1();}
 void item_armorbody (void) {item_armor25();}

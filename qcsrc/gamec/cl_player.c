@@ -114,21 +114,21 @@ void SpawnThrownWeapon (vector org, float w)
 	self.norespawn = 1;
 	//SUB_SetFade(self, time + 20);
 
-	if (w == IT_UZI)
+	if (self.switchweapon == WEP_UZI)
 		weapon_uzi ();
-	else if (w == IT_SHOTGUN)
+	else if (self.switchweapon == WEP_SHOTGUN)
 		weapon_shotgun ();
-	else if (w == IT_GRENADE_LAUNCHER)
+	else if (self.switchweapon == WEP_GRENADE_LAUNCHER)
 		weapon_grenadelauncher ();
-	else if (w == IT_ELECTRO)
+	else if (self.switchweapon == WEP_ELECTRO)
 		weapon_electro ();
-	else if (w == IT_CRYLINK)
+	else if (self.switchweapon == WEP_CRYLINK)
 		weapon_crylink ();
-	else if (w == IT_NEX)
+	else if (self.switchweapon == WEP_NEX)
 		weapon_nex ();
-	else if (w == IT_HAGAR)
+	else if (self.switchweapon == WEP_HAGAR)
 		weapon_hagar ();
-	else //if (w == IT_ROCKET_LAUNCHER)
+	else if (self.switchweapon == WEP_ROCKET_LAUNCHER)
 		weapon_rocketlauncher ();
 
 	self = oldself;
@@ -205,7 +205,7 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 		// don't spin
 		self.avelocity = '0 0 0';
 		// no weapon when dead
-		self.weaponmodel = "";
+		w_clear();
 		// view from the floor
 		self.view_ofs = '0 0 -8';
 		// toss the corpse

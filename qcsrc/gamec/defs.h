@@ -27,7 +27,7 @@ entity dest;
 .vector	pos1, pos2;
 .vector	mangle;
 
-//.float	jump_flag;				// storing velocity_z for falling damage
+.float	jump_flag;				// storing velocity_z for falling damage
 .float	attack_finished;
 .float	pain_finished			//Added by Supajoe
 .float	pain_frame			//"

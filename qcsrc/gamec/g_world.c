@@ -17,6 +17,17 @@ void worldspawn (void)
 	precache_model ("models/player/mulder.zym");
 	precache_model ("models/player/insurrectionist.zym");
 	precache_model ("models/player/fshock.zym");
+	precache_model ("models/player/grunt.zym");
+	precache_model ("models/player/pyria.zym");
+	precache_model ("models/player/lurk.zym");
+	precache_model ("models/player/visitant.zym");
+	precache_model ("models/player/headhunter.zym");
+	precache_model ("models/player/jeandarc.zym");
+	precache_model ("models/player/robot.zym");
+	precache_model ("models/player/lycanthrope.zym");
+	precache_model ("models/player/shock.zym");
+	precache_model ("models/player/carni.zym");
+
 
 	precache_model ("models/weapons/g_uzi.md3");
 	precache_model ("models/weapons/g_shotgun.md3");
@@ -32,7 +43,6 @@ void worldspawn (void)
 	precache_model ("models/sprites/plasmashot.spr32");
 	precache_model ("models/sprites/dpexplosion1.spr32");
 	precache_model ("models/sprites/dpexplosion2.spr32");
-	precache_model ("models/sprites/bubbles.spr");
 
 	precache_model ("models/grenademodel.md3");
 	precache_model ("models/hagarmissile.mdl");
@@ -47,7 +57,6 @@ void worldspawn (void)
 	precache_model ("models/elaser.mdl");
 	precache_model ("models/ebomb.mdl");
 	precache_model ("models/plasma.mdl");
-	precache_model ("models/fire.mdl");
 	
 	precache_model ("models/items/g_h1.md3");
 	precache_model ("models/items/g_h25.md3");
@@ -119,12 +128,12 @@ void worldspawn (void)
 	precache_sound ("misc/mediumhealth.wav");
 	precache_sound ("misc/gib.wav");
 	precache_sound ("misc/jumppad.wav");
+	precache_sound ("misc/hitground1.wav");
+	precache_sound ("misc/hitground2.wav");
 	precache_sound ("misc/talk.wav");  // temp
 
 	precache_sound ("misc/itemrespawn.wav");
 	
-	precache_sound ("player/hitground1.wav");
-	precache_sound ("player/hitground2.wav");
 	precache_sound ("demon/dland2.wav");
 
 

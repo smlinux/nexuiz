@@ -184,9 +184,9 @@ void SV_PlayerPhysics()
 		}
 	}
 	else if (!(game & GAME_NO_AIR_CONTROL))
-		sv_accelerate = sv_accelerate * 0.1;
-		//if (wishspeed > 50)
-		//	wishspeed = 50;
+		if (wishspeed > 50)
+			wishspeed = 50;
+		//sv_accelerate = sv_accelerate * 0.1;
 
 	self.velocity = self.velocity + wishdir * sv_accelerate * frametime * wishspeed;
 }
