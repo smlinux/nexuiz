@@ -136,7 +136,7 @@ template
 	name		creategame
 	parent  	mainframe
 	//origin		"350 100"
-	origin		"210 125"
+	origin		"210 155"
 }
 {
 	type		ITEM_WINDOW

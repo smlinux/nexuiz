@@ -275,7 +275,7 @@ template for map selection
 	name 		creategame_map
 	parent		creategame
 	clip_pos	"0 0"
-	clip_size	"270 475"
+	clip_size	"270 445"
 	reinit		nex_xp_enummaps
 }
 // <<
@@ -326,9 +326,9 @@ template for map selection
 	name		creategame_map_info
 	parent		creategame_map
 	clip_pos	"0 243"
-	clip_size	"270 232"
+	clip_size	"270 202"
 	pos		"0 243"
-	size		"270 232"
+	size		"270 202"
 	flag		4 // no select
 	drawflag	0
 	color		"1 1 1"
@@ -336,6 +336,7 @@ template for map selection
 	font_size	"9 9"
 	draw 		nex_draw_text
 }
+
 // creategame options frame
 {
 	type		ITEM_WINDOW
@@ -343,7 +344,7 @@ template for map selection
 	parent		creategame
 	origin		"436 0" //270+175
 	clip_pos	"270 0"	
-	clip_size	"350 475"
+	clip_size	"350 445"
 }
 //////
 // Server Name
