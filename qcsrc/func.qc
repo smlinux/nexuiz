@@ -355,3 +355,34 @@ void ImpactEffect (entity ent, float weapontype)
 		sound (ent, CHAN_BODY, "weapons/Plasma_Hit.wav", 1, ATTN_NORM);
 	}
 }
+
+
+/*
+==================
+Angc used for animations
+==================
+*/
+
+
+float angc (float a1, float a2)
+{
+	float	a;
+
+	while (a1 > 180)
+		a1 = a1 - 360;
+	while (a1 < -179)
+		a1 = a1 + 360;
+
+	while (a2 > 180)
+		a2 = a2 - 360;
+	while (a2 < -179)
+		a2 = a2 + 360;
+
+	a = a1 - a2;
+	while (a > 180)
+		a = a - 360;
+	while (a < -179)
+		a = a + 360;
+
+	return a;
+}

@@ -230,9 +230,10 @@ void PlayerPreThink (void)
 			
 		self.statdraintime = time + 1;
 	}
+	
+	self.angles_y=self.v_angle_y + 90;   // temp
 
-	//self.glow_color = 10; // 244, 250
-	//self.glow_size = 200;
+	player_stand ();
 }
 
 /*

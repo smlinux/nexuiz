@@ -1,3 +1,47 @@
+$frame die1 die2 draw duck duckwalk duckjump duckidle idle
+$frame jump pain1 pain2 shoot taunt run runbackwards
+$frame strafeleft straferight dead1 dead2
+
+void player_run (void);
+void player_stand (void)
+{
+	if (self.movement_x || self.movement_y)		// ?
+		player_run ();
+	else
+	{
+			self.frame = $idle;
+
+		self.think = player_stand;
+		self.nextthink = time + 0.05;
+	}
+}
+
+void player_run (void)
+{
+	vector	ang;
+	float	a;
+
+	if (!self.movement_x && !self.movement_y)	// ?
+		player_stand ();
+	else
+	{
+		ang = vectoangles (self.velocity);
+
+		a = angc (self.v_angle_y, ang_y);
+		
+		if (a < 45 && a >= -45)
+			self.frame = $run;
+		else if (a < 135 && a >= 45)
+			self.frame = $straferight;
+		else if (a >= -135 && a < -45)
+			self.frame = $strafeleft;
+		else
+			self.frame = $runbackwards;
+
+		self.think = player_run;
+		self.nextthink = time + 0.05;
+	}
+}
 
 void PlayerWeaponThrow (void)
 {
