@@ -571,6 +571,13 @@ Item Container Data
 
 			[DataLink_OnOffSwitch]
 		}
+		Item Data_Cvar Casings
+		{
+			cvarName	"g_casings"
+			defValue	0
+
+			[DataLink_OnOffSwitch]
+		}
 		Item Data_Cvar Health
 		{
 			cvarName	"g_balance_health"

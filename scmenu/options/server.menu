@@ -31,6 +31,11 @@ Item Layout Server
 		text	"Rocket Arena"
 		target	"::Data::Server::Rocketarena::Switch"
 	}
+	Derive Nex_Option_Switch Casings
+	{
+		text	"Bullet Casings"
+		target	"::Data::Server::Casings::Switch"
+	}
 	Derive Nex_Option_EditBox Health
 	{
 		text	"Starting Health"
