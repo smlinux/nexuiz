@@ -18,11 +18,13 @@
 1: Add secondary fire to all weapons
 	- Laser: Autoaim and kill any projectile coming (can destory rockets, grenades, hagar missiles)
 	- Shotgun: Automatic fast 3 shots
-	- Nex: Zoom
 	- Rocket: A rocket, than when it hits a wall/player, it is an airburst which blows everything near it away (including players, and the person who shot it)
-2: Add FrikBots with support for Nexuiz weapons and gametypes
 2: Add Quake trigger support
 2: Add Quake door and button support
-
-
-Client Side QC:
+2: Add crouching
+2: Make the plasma sprite animated (it has animation frames already)
+2: Add weapon animations (shotgun.md3 only so far)
+2: Add FrikBots with support for Nexuiz weapons and gametypes
+3: CTF gametype (How are we handling changing of gametypes?) - same CTF as always
+3: InstaGib gametype (with nex gun only)
+3: 
