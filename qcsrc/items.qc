@@ -240,3 +240,9 @@ void item_health100 (void)
 	StartItem ();
 }
 
+void misc_model (void)
+{
+	precache_model (self.model);
+	setmodel (self, self.model);
+	setsize (self, self.mins, self.maxs);
+}

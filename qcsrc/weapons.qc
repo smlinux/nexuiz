@@ -369,9 +369,9 @@ void W_Laser_Attack (void)
 	makevectors (self.v_angle);
 	missile.velocity = v_forward * 2000;
 	missile.angles = vectoangles (missile.velocity);
-	missile.glow_color = 244;
-	missile.glow_size = 32;
-	missile.glow_trail = 256;	// ???
+	missile.glow_color = 250; // 244, 250
+	missile.glow_size = 1020;
+	missile.glow_trail = 1;	// ??? 256
 	missile.touch = W_Laser_Touch;
 	missile.think = SUB_Remove;
 	missile.nextthink = time + 2;
@@ -525,7 +525,7 @@ void W_Electro_Attack (void)
 	makevectors (self.v_angle);
 	org = self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12;
 	
-	setmodel (proj, "progs/bolt.mdl");
+	setmodel (proj, "progs/bullet.mdl");
 	setsize (proj, '0 0 0', '0 0 0');
 	setorigin (proj, org);
 	

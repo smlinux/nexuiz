@@ -3,8 +3,6 @@ void worldspawn (void)
 {
 	precache_model ("models/player/player.zym");
 	
-	precache_model ("progs/bolt.mdl");	// null
-	
 	precache_model ("models/w_lazer.zym");
 	precache_model ("models/w_uzi.md3");
 	precache_model ("models/w_shotgun.md3");
