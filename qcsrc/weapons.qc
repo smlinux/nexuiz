@@ -459,29 +459,7 @@ void W_Laser_Attack (void)
 
 void W_Laser_Attack2 (void)
 {
-	vector	org;
-	entity	proj;
 
-	//org = self.fireorg;
-	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 1) + (v_forward * 20);
-	proj = findradius (self.origin, 500);
-
-	while (proj)
-	{
-		if (proj.classname == "missile" || proj.classname == "grenade")
-		{
-			//WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-			//WriteByte (MSG_BROADCAST, TE_NEX);
-			//WriteVec (org);
-			//WriteVec (proj.origin);
-			//WriteVec (self.v_angle);
-			grenade = W_Grenade_Explode;
-			//Damage (proj, self, self, 5, DT_LAZER, normalize (proj.origin - self.origin));
-		}
-		proj = proj.chain;
-	}
-
-	self.attack_finished = time + 0.6;
 }
 
 void W_Uzi_Attack (void)
