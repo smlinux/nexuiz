@@ -476,7 +476,7 @@ void W_Shotgun_Attack2 (void)
 
 void W_Grenade_Explode (entity ignore)
 {
-	Explosion (self, "weapons/Grenade_Impact.wav", 30, "grenade");
+	ImpactEffect (self, IT_GRENADE_LAUNCHER);
 
 	RadiusDamage (self.owner, self, 0, 100, world);
 
@@ -632,7 +632,9 @@ void W_Plasma_Touch (void)
 {
 	if (other.classname == "player" || other.classname == "corpse" || other.classname == "gib")
 		Damage (self.owner, self.origin, other, 0, 15);
-	Explosion (self, "weapons/Plasmahit.wav", 30, "plasma");
+
+	ImpactEffect (self, IT_ELECTRO);
+
 	remove (self);
 }
 
@@ -771,7 +773,7 @@ void W_Nex_Attack2 (void)
 
 void W_Hagar_Explode (void)
 {
-	Explosion (self, "weapons/Rocket_Impact.wav", 40, "hagar");
+	ImpactEffect (self, IT_HAGAR);
 
 	RadiusDamage (self.owner, self, 0, 100, world);
 
@@ -834,7 +836,7 @@ void W_Hagar_Attack2 (void)
 
 void W_Rocket_Explode (entity ignore)
 {
-	Explosion (self, "weapons/Rocket_Impact.wav", 30, "rocket");
+	ImpactEffect (self, IT_ROCKET_LAUNCHER);
 
 	RadiusDamage (self.owner, self, 0, 100, ignore);
 

@@ -321,25 +321,38 @@ float crandom (void)
 
 /*
 ==================
-Explosion
+ImpactEffect
 
-Plays an explosion effect
+Plays an impact effect
 ==================
 */
-void Explosion (entity ent, string snd, float fps, string weaponused)
+
+void ImpactEffect (entity ent, float weapontype)
 {
 	vector	org2;
 	org2 = findbetterlocation (ent.origin);
-
-	if (weaponused == "rocket")
-	te_explosion (org2);
-	else if (weaponused == "grenade")
-	te_explosion (org2);
 	
-	if (weaponused == "plasma")
-	effect (org2, "models/plasmahitwall.spr32", 0, 20, fps);
-	else
-	effect (org2, "models/dpexplosion.spr32", 0, 20, fps);
-
-	sound (ent, CHAN_BODY, snd, 1, ATTN_NORM);
+	if (weapontype == IT_ROCKET_LAUNCHER)
+	{
+		te_explosion (org2);
+		effect (org2, "models/dpexplosion.spr32", 0, 20, 30);
+		sound (ent, CHAN_BODY, "weapons/Rocket_Impact.wav", 1, ATTN_NORM);
+	}
+	else if (weapontype == IT_GRENADE_LAUNCHER)
+	{
+		te_explosion (org2);
+		effect (org2, "models/dpexplosion.spr32", 0, 20, 30);
+		sound (ent, CHAN_BODY, "weapons/Grenade_Impact.wav", 1, ATTN_NORM);
+	}
+	else if (weapontype == IT_HAGAR)
+	{
+		te_explosion (org2);
+		effect (org2, "models/dpexplosion.spr32", 0, 20, 40);
+		sound (ent, CHAN_BODY, "weapons/Rocket_Impact.wav", 1, ATTN_NORM);
+	}
+	else if (weapontype == IT_ELECTRO)	// Secondary fire
+	{
+		effect (org2, "models/plasmahitwall.spr32", 0, 20, 50);
+		sound (ent, CHAN_BODY, "weapons/Plasma_Hit.wav", 1, ATTN_NORM);
+	}
 }
