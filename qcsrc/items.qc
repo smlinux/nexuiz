@@ -1,5 +1,5 @@
 
-.string mdl;
+
 
 void Item_Touch (void)
 {

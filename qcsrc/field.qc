@@ -44,3 +44,5 @@ entity dest;
 
 .vector dead_angles;
 .float death_time;
+
+.string mdl;
