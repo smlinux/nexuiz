@@ -87,6 +87,7 @@ entity dest;
 // definistions for weaponsystem
 
 .entity weaponentity;
+.entity exteriorweaponentity;
 .float switchweapon;
 void(float wpn, float wrequest) weapon_action;
 float(entity cl, float wpn, float andammo) client_hasweapon;

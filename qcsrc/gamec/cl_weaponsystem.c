@@ -17,6 +17,28 @@ void() CL_Weaponentity_Think =
 	}
 };
 
+void() CL_ExteriorWeaponentity_Think =
+{
+	self.nextthink = time;
+	if (self.owner.exteriorweaponentity != self)
+	{
+		remove(self);
+		return;
+	}
+	if (self.modelindex != self.owner.weaponentity.modelindex || self.dmg != self.owner.modelindex)
+	{
+		self.modelindex = self.owner.weaponentity.modelindex;
+		self.model = self.owner.weaponentity.model;
+		self.dmg = self.owner.modelindex;
+		setattachment(self, self.owner, "weapon");
+		// if that didn't find a tag, hide the exterior weapon model
+		if (!self.tag_index)
+			self.model = "";
+	}
+	self.frame = self.owner.weaponentity.frame;
+	self.effects = self.owner.weaponentity.effects;
+};
+
 // spawning weaponentity for client
 void() CL_SpawnWeaponentity =
 {
@@ -36,6 +58,15 @@ void() CL_SpawnWeaponentity =
 	self.weaponentity.flags = 0;
 	self.weaponentity.think = CL_Weaponentity_Think;
 	self.weaponentity.nextthink = time;
+
+	self.exteriorweaponentity = spawn();
+	self.exteriorweaponentity.solid = SOLID_NOT;
+	self.exteriorweaponentity.exteriorweaponentity = self.exteriorweaponentity;
+	self.exteriorweaponentity.owner = self;
+	self.exteriorweaponentity.origin = '0 0 0';
+	self.exteriorweaponentity.angles = '0 0 0';
+	self.exteriorweaponentity.think = CL_ExteriorWeaponentity_Think;
+	self.exteriorweaponentity.nextthink = time;
 };
 
 // convertion from index (= impulse) to flag in .items
