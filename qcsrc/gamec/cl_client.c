@@ -76,7 +76,7 @@ void PutClientInServer (void)
 	self.flags = FL_CLIENT;
 	self.takedamage = DAMAGE_YES;
 	self.effects = 0;
-	self.health = 150;
+	self.health = cvar("g_balance_health");
 	self.damageforcescale = 2;
 	self.death_time = 0;
 	self.dead_time = 0;
@@ -117,7 +117,7 @@ void PutClientInServer (void)
 //	self.items = IT_LASER | IT_UZI| IT_SHOTGUN | IT_GRENADE_LAUNCHER | IT_ELECTRO | IT_CRYLINK | IT_NEX | IT_HAGAR | IT_ROCKET_LAUNCHER;
 //	self.weapon = IT_UZI;
 
-	if (game & GAME_INSTAGIB)
+	if (cvar("g_instagib") == 1)
 	{
 		self.items = IT_NEX;
 		self.switchweapon = WEP_NEX;
@@ -126,7 +126,7 @@ void PutClientInServer (void)
 		self.ammo_rockets = 0;
 		self.ammo_cells = 999;
 	}
-	else if (game & GAME_ROCKET_ARENA)
+	else if (cvar("g_rocketarena") == 1)
 	{
 		self.items = IT_ROCKET_LAUNCHER;
 		self.switchweapon = WEP_ROCKET_LAUNCHER;
@@ -139,13 +139,13 @@ void PutClientInServer (void)
 	{
 		self.items = IT_LASER | IT_SHOTGUN;
 		self.switchweapon = WEP_SHOTGUN;
-		self.ammo_shells = 25;
+		self.ammo_shells = 35;
 		self.ammo_nails = 0;
 		self.ammo_rockets = 0;
 		self.ammo_cells = 0;
 	}
 
-	if (game & GAME_FULLBRIGHT_PLAYERS)
+	if (cvar("g_fullbrightplayers") == 1)
 		self.effects = EF_FULLBRIGHT;
 
 	self.event_damage = PlayerDamage;
@@ -253,7 +253,7 @@ void PlayerJump (void)
 	if (self.items & IT_SPEED)
 		self.velocity_z = self.velocity_z + POWERUP_SPEED_JUMPVELOCITY;
 	else
-		self.velocity_z = self.velocity_z + JUMP_VELOCITY;
+		self.velocity_z = self.velocity_z + cvar("g_balance_jumpheight");
 
 	self.flags = self.flags - FL_ONGROUND;
 	self.flags = self.flags - FL_JUMPRELEASED;
@@ -440,18 +440,9 @@ void player_powerups (void)
 
 void player_regen (void)
 {
-	// GAME_REGENERATION does fast health regeneration up to 200. Note that your armour doesn't rot anymore either.
-	if (game & GAME_REGENERATION)
-	{
-		self.health = self.health + (200 - self.health) * 0.2 * frametime;
-		self.armorvalue = bound(0, self.armorvalue, 1000);
-	}
-	else
-	{
-		self.health = bound(0, self.health + (100 - self.health) * 0.05 * frametime, 1000);
-		if (self.armorvalue > 100)
-			self.armorvalue = bound(100, self.armorvalue + (100 - self.armorvalue) * 0.1 * frametime, 1000);
-	}
+	self.health = bound(0, self.health + (100 - self.health) * cvar("g_balance_healthregen") * frametime, 1000);
+	if (self.armorvalue > 100)
+		self.armorvalue = bound(100, self.armorvalue + (100 - self.armorvalue) * cvar("g_balance_armorrott") * frametime, 1000);
 }
 
 /*

@@ -217,6 +217,10 @@ SOURCE=.\g_decors.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\g_lights.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\g_subs.c
 # End Source File
 # Begin Source File

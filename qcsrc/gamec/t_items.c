@@ -85,7 +85,7 @@ void Item_Touch (void)
 
 void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, string itemname, float itemid, float itemflags)
 {
-	if (game & (GAME_INSTAGIB | GAME_ROCKET_ARENA))
+	if ((cvar("g_instagib") == 1) | (cvar("g_rocketarena") == 1))
 	{
 		remove (self);
 		return;

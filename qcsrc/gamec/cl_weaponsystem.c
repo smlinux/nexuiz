@@ -166,7 +166,7 @@ void(float x, float y, float z) weapon_shotdir =
 void(float() checkfunc1, float() checkfunc2, void() firefunc, float atktime) weapon_prepareattack =
 {
 	// Change to best weapon if failed
-	if (!(game & GAME_INSTAGIB) && !(game & GAME_ROCKET_ARENA))
+	if ((cvar("g_instagib") == 0) && (cvar("g_rocketarena") == 0))
 	{
 		if (!checkfunc1())
 		{
@@ -190,7 +190,7 @@ void(float() checkfunc1, float() checkfunc2, void() firefunc, float atktime) wea
 void(float() checkfunc1, float() checkfunc2, void() firefunc) weapon_doattack
 {
 	// Change to best weapon if failed
-	if (!(game & GAME_INSTAGIB) && !(game & GAME_ROCKET_ARENA))
+	if ((cvar("g_instagib") == 0) && (cvar("g_rocketarena") == 0))
 	{
 		if (!checkfunc1())
 		{

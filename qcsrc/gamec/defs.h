@@ -97,7 +97,7 @@ void() w_clear;
 .vector shotdir, shotorg; // new generic aiming system for all weapons (not finished yet, can be removed)
 float	weapon_hasammo; // sets by WR_CHECKAMMO request
 
-float	PLAYER_WEAPONSELECTION_DELAY = 0.3;
+//float	PLAYER_WEAPONSELECTION_DELAY = );
 float	PLAYER_WEAPONSELECTION_SPEED = 18;
 vector	PLAYER_WEAPONSELECTION_RANGE = '0 20 -40';
 

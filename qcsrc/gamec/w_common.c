@@ -350,7 +350,7 @@ void W_PreviousWeapon (void)
 */
 float W_CheckAmmo (void)
 {
-	if (game & (GAME_INSTAGIB | GAME_ROCKET_ARENA))
+	if ((cvar("g_instagib") == 1) | (cvar("g_rocketarena") == 1))
 		return TRUE;
 
 	W_UpdateAmmo ();

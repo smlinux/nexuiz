@@ -102,7 +102,7 @@ void SpawnThrownWeapon (vector org, float w)
 {
 	local entity oldself;
 
-	if (game & (GAME_INSTAGIB | GAME_ROCKET_ARENA))
+	if ((cvar("g_instagib") == 1) | (cvar("g_rocketarena") == 1))
 		return;
 	if (w == IT_LASER)
 		return;
@@ -185,9 +185,6 @@ void PlayerCorpseDamage (entity inflictor, entity attacker, float damage, float 
 void PlayerDamage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
 {
 	local float take, save;
-	if (attacker == self)
-		if (game & GAME_NO_SELF_DAMAGE)
-			return;
 
 	 te_blood (hitloc, force, damage);
 	if (self.pain_finished < time)		//Don't switch pain sequences like crazy

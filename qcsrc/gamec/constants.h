@@ -165,14 +165,10 @@ vector	PL_MAX					= '16 16 45';
 // Sajt - added these, just as constants. Not sure how you want them actually put in the game, but I just
 // did this so at least they worked
 // NOTE: instagib IS NOT compatible with rocket-arena, so make sure to prevent selecting both in a menu
-float	GAME_INSTAGIB			= 1;   /// everyone gets the nex gun with infinite ammo, and one shot kills
-float	GAME_SPAWNPROTECTION			= 2;   /// no time between shots for any gun
-float	GAME_REGENERATION		= 4;   /// Fast health regeneration
-float	GAME_NO_SELF_DAMAGE		= 8;  /// no self damage, so rocket jumping and such can be used a lot more
-float	GAME_ROCKET_ARENA		= 16;  /// Everyone starts with a rocket launcher
-float	GAME_NO_AIR_CONTROL		= 32;  /// turns off air control
-float	GAME_FULLBRIGHT_PLAYERS		= 64; /// makes the players model fullbright
-float	GAME_TEAMS		= 128; /// Teams, red/green/yellow/blue
+//float	GAME_INSTAGIB			= 1;   /// everyone gets the nex gun with infinite ammo, and one shot kills
+//float	GAME_ROCKET_ARENA		= 16;  /// Everyone starts with a rocket launcher
+//float	GAME_FULLBRIGHT_PLAYERS		= 64; /// makes the players model fullbright
+//float	GAME_TEAMS		= 128; /// Teams, red/green/yellow/blue
 
 float	game;	// set to "gamecfg" on worldspawn
 
@@ -180,7 +176,7 @@ float	game;	// set to "gamecfg" on worldspawn
 
 float	POWERUP_SPEED_MOVEMENT	= 3; // movement multiplier for speed powerup
 float	POWERUP_SPEED_JUMPVELOCITY = 640; // how much jump velocity with speed powerup
-float	JUMP_VELOCITY = 300; // normal jump velocity
+//float	JUMP_VELOCITY = ; // normal jump velocity
 
 float	POWERUP_STRENGTH_DAMAGE	= 2; // damage multiplier for strength powerup
 float	POWERUP_STRENGTH_FORCE	= 4; // force multiplier for strength powerup
