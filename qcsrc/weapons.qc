@@ -735,7 +735,7 @@ void W_Grenade_Attack2 (void)
 
 void W_Grenade_Attack3 (void)
 {
-	sound (self, CHAN_WEAPON, "weapons/Grenade_fire.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "weapons/grenade_fire.wav", 1, ATTN_NORM);
 	self.punchangle_x = -4;
 
 	entity gren;
@@ -833,6 +833,8 @@ void W_Electro_Attack (float postion)
 	proj.touch = W_Electro_Touch;
 	proj.think = SUB_Remove;
 	proj.nextthink = time + 1.5;
+
+	proj.angles = vectoangles (proj.velocity);
 
 	proj.effects = proj.effects | EF_ADDITIVE;
 
@@ -1012,7 +1014,7 @@ void W_Crylink_Attack2 (void)
 
 	entity	proj;
 
-	//sound (self, CHAN_WEAPON, "weapons/electro_fire.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "weapons/crylink2.wav", 1, ATTN_NORM);
 
 	proj = spawn ();
 	proj.owner = self;

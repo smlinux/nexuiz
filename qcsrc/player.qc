@@ -205,7 +205,7 @@ void PlayerDamage (vector hitloc, float damage, entity inflictor, entity attacke
 		// when to allow respawn
 		self.death_time = time + 2;
 		// when to switch to the dead_frame
-		self.dead_time = time + 2;
+		self.dead_time = time + 0.8;
 		if (random() < 0.5)
 		{
 			self.die_frame = $die1;

@@ -110,9 +110,8 @@ void worldspawn (void)
 	precache_sound ("weapons/ric2.wav");
 	precache_sound ("weapons/ric3.wav");
 	precache_sound ("weapons/weaponpickup.wav");
-	precache_sound ("weapons/hyprbf1a.wav");
-	precache_sound ("weapons/plasmx1a.wav");
 	precache_sound ("weapons/crylink.wav");
+	precache_sound ("weapons/crylink2.wav");
 	precache_sound ("weapons/plasmahit.wav");
 	precache_sound ("weapons/uzi_fire_secondary.wav");
 	
@@ -122,6 +121,7 @@ void worldspawn (void)
 	precache_sound ("misc/enemyimpact.wav");
 	precache_sound ("misc/teleport.wav");
 	precache_sound ("misc/megahealth.wav");
+	precache_sound ("misc/mediumhealth.wav");
 	precache_sound ("misc/gib.wav");
 
 	precache_sound ("misc/itemrespawn.wav");

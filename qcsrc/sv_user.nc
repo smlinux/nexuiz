@@ -206,10 +206,10 @@ void SV_PlayerPhysics() {
 	}
 	else if (!(game & GAME_NO_AIR_CONTROL))
 	{	
-		if (wishspeed < 30)
+		if (wishspeed < 0)
 			f = wishspeed - (self.velocity * wishdir);
 		else
-			f = 30 - (self.velocity * wishdir);
+			f = 0 - (self.velocity * wishdir);
 		if (f > 0)
 			self.velocity = self.velocity + wishdir * (min(f, sv_accelerate) * wishspeed * frametime);
 	}

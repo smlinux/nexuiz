@@ -310,6 +310,7 @@ void item_health1 (void)
 void item_health25 (void)
 {
 	self.mdl = "models/items/g_h25.md3";
+	self.noise = "misc/mediumhealth.wav";
 	self.max_health = 25;
 	self.netname = "25 health";
 	self.respawntime = 120;

@@ -67,6 +67,7 @@
 -3D GRAPHICS-
 	- New weapon model for Uzi
 	- New weapon model for Hagar
+	- 3 new basic gib models
 
 -2D GRAPHICS-
 	- Change hud numbers to fit hud
