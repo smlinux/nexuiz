@@ -2,28 +2,28 @@
 // add new weapons here
 void(float wpn, float wrequest) weapon_action =
 {
-	if (wpn == WEP_LASER)				
+	if (wpn == WEP_LASER)
 		w_laser(wrequest);
-	else if (wpn == WEP_SHOTGUN) 
+	else if (wpn == WEP_SHOTGUN)
 		w_shotgun(wrequest);
-	else if (wpn == WEP_UZI) 
+	else if (wpn == WEP_UZI)
 		w_uzi(wrequest);
-	else if (wpn == WEP_GRENADE_LAUNCHER) 
+	else if (wpn == WEP_GRENADE_LAUNCHER)
 		w_glauncher(wrequest);
-	else if (wpn == WEP_ELECTRO) 
+	else if (wpn == WEP_ELECTRO)
 		w_electro(wrequest);
-	else if (wpn == WEP_CRYLINK) 
+	else if (wpn == WEP_CRYLINK)
 		w_crylink(wrequest);
-	else if (wpn == WEP_NEX) 
+	else if (wpn == WEP_NEX)
 		w_nex(wrequest);
-	else if (wpn == WEP_HAGAR) 
+	else if (wpn == WEP_HAGAR)
 		w_hagar(wrequest);
-	else if (wpn == WEP_ROCKET_LAUNCHER) 
+	else if (wpn == WEP_ROCKET_LAUNCHER)
 		w_rlauncher(wrequest);
-};	
+};
 
-// switch between weapons 
-void(float imp) W_SwitchWeapon 
+// switch between weapons
+void(float imp) W_SwitchWeapon
 {
 	weapon_hasammo = TRUE;
 	if (!client_hasweapon(self, imp, TRUE))
@@ -35,26 +35,28 @@ void(float imp) W_SwitchWeapon
 	}
 	else
 		self.switchweapon = imp;
-
-	sound (self, CHAN_WEAPON, "weapons/weapon_switch.wav", 1, ATTN_NORM);
 };
-	
+
 // next weapon
 void() W_NextWeapon =
 {
 	local float weaponwant;
 
-	weaponwant = self.weapon + 1;
+	weaponwant = self.switchweapon + 1;
+	if (weaponwant < WEP_FIRST)
+		weaponwant = WEP_LAST;
+	if (weaponwant > WEP_LAST)
+		weaponwant = WEP_FIRST;
 	weapon_hasammo = TRUE;
 	while(!client_hasweapon(self, weaponwant, TRUE))
 	{
 		weaponwant = weaponwant + 1;
+		if (weaponwant < WEP_FIRST)
+			weaponwant = WEP_LAST;
 		if (weaponwant > WEP_LAST)
 			weaponwant = WEP_FIRST;
 	}
 	self.switchweapon = weaponwant;
-	
-	sound (self, CHAN_WEAPON, "weapons/weapon_switch.wav", 1, ATTN_NORM);
 };
 
 // prev weapon
@@ -62,49 +64,48 @@ void() W_PreviousWeapon =
 {
 	local float weaponwant;
 
-	weaponwant = self.weapon - 1;
+	weaponwant = self.switchweapon - 1;
+	if (weaponwant < WEP_FIRST)
+		weaponwant = WEP_LAST;
+	if (weaponwant > WEP_LAST)
+		weaponwant = WEP_FIRST;
 	weapon_hasammo = TRUE;
 	while(!client_hasweapon(self, weaponwant, TRUE))
 	{
 		weaponwant = weaponwant - 1;
 		if (weaponwant < WEP_FIRST)
 			weaponwant = WEP_LAST;
+		if (weaponwant > WEP_LAST)
+			weaponwant = WEP_FIRST;
 	}
 	self.switchweapon = weaponwant;
-
-	sound (self, CHAN_WEAPON, "weapons/weapon_switch.wav", 1, ATTN_NORM);
 };
 
 // Bringed back weapon frame
 void() W_WeaponFrame =
 {
-	if (!self.weaponentity || self.health <= 0) 
+	if (!self.weaponentity || self.health <= 0)
 		return; // Dead player can't use weapons and injure impulse commands
-	
+
 	// Change weapon
-	if (self.switchweapon > 0)
-	{ 
-		if (self.weapon == self.switchweapon)
-			self.switchweapon = FALSE; // same weapon
-		else
+	if (self.weapon != self.switchweapon)
+	{
+		if (self.weaponentity.state == WS_CLEAR)
 		{
-			if (self.weaponentity.state == WS_CLEAR)
-			{
-				self.weaponentity.state = WS_RAISE;
-				weapon_action(self.switchweapon, WR_SETUP);
-				// VorteX: add player model weapon select frame here
-				// setcustomframe(PlayerWeaponRaise);
-				weapon_action(self.weapon, WR_UPDATECOUNTS);
-				weapon_action(self.weapon, WR_RAISE);
-				self.switchweapon = FALSE;
-			}
-			else if (self.weaponentity.state == WS_READY)
-			{
-				self.weaponentity.state = WS_DROP;
-				// VorteX: add player model weapon deselect frame here
-				// setcustomframe(PlayerWeaponDrop);
-				weapon_action(self.weapon, WR_DROP);
-			}
+			self.weaponentity.state = WS_RAISE;
+			weapon_action(self.switchweapon, WR_SETUP);
+			// VorteX: add player model weapon select frame here
+			// setcustomframe(PlayerWeaponRaise);
+			weapon_action(self.weapon, WR_UPDATECOUNTS);
+			weapon_action(self.weapon, WR_RAISE);
+		}
+		else if (self.weaponentity.state == WS_READY)
+		{
+			sound (self, CHAN_WEAPON, "weapons/weapon_switch.wav", 1, ATTN_NORM);
+			self.weaponentity.state = WS_DROP;
+			// VorteX: add player model weapon deselect frame here
+			// setcustomframe(PlayerWeaponDrop);
+			weapon_action(self.weapon, WR_DROP);
 		}
 	}
 
@@ -156,20 +157,20 @@ void() W_WeaponFrame =
 		// Y axis
 		diff = bobintensity*framespeed/300;
 		self.weaponentity.destvec_y = self.weaponentity.destvec_y + frametime*10;
-		boblayer_y = diff*cos(self.weaponentity.destvec_y + 90); 
+		boblayer_y = diff*cos(self.weaponentity.destvec_y + 90);
 		// Z axis
 		diff = bobintensity*framespeed/540;
 		self.weaponentity.destvec_z = self.weaponentity.destvec_z + frametime*20;
-		boblayer_z = diff*cos(self.weaponentity.destvec_z); 
+		boblayer_z = diff*cos(self.weaponentity.destvec_z);
 		self.weaponentity.finaldest = boblayer;
 	}
 	else if (self.waterlevel > 0)
 	{// swim, all velocity matters
-		// X axis 
+		// X axis
 		framespeed = vlen(self.velocity);
 		diff = bobintensity*framespeed/100;
 		self.weaponentity.destvec_x = self.weaponentity.destvec_x + frametime*6;
-		boblayer_x = diff*cos(self.weaponentity.destvec_x); 
+		boblayer_x = diff*cos(self.weaponentity.destvec_x);
 		self.weaponentity.finaldest = boblayer;
 	}
 	self.weaponentity.origin = realorg + boblayer + layer1 - self.weaponentity.view_ofs;

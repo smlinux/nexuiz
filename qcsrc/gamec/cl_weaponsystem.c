@@ -5,7 +5,17 @@
   Bring back W_Weaponframe
 
 ===========================================================================
-*/ 
+*/
+
+void() CL_Weaponentity_Think =
+{
+	self.nextthink = time;
+	if (self.owner.weaponentity != self)
+	{
+		remove(self);
+		return;
+	}
+};
 
 // spawning weaponentity for client
 void() CL_SpawnWeaponentity =
@@ -24,41 +34,51 @@ void() CL_SpawnWeaponentity =
 	self.weaponentity.angles = '0 0 0';
 	self.weaponentity.viewmodelforclient = self;
 	self.weaponentity.flags = 0;
+	self.weaponentity.think = CL_Weaponentity_Think;
+	self.weaponentity.nextthink = time;
 };
 
 // convertion from index (= impulse) to flag in .items
 float(float index) weapon_translateindextoflag =
 {
-	if (index == WEP_LASER) 
+	if (index == WEP_LASER)
 		return IT_LASER;
-	else if (index == WEP_SHOTGUN) 
+	else if (index == WEP_SHOTGUN)
 		return IT_SHOTGUN;
-	else if (index == WEP_UZI) 
+	else if (index == WEP_UZI)
 		return IT_UZI;
-	else if (index == WEP_GRENADE_LAUNCHER) 
+	else if (index == WEP_GRENADE_LAUNCHER)
 		return IT_GRENADE_LAUNCHER;
 	else if (index == WEP_ELECTRO)
 		return IT_ELECTRO;
-	else if (index == WEP_CRYLINK) 
+	else if (index == WEP_CRYLINK)
 		return IT_CRYLINK;
-	else if (index == WEP_NEX) 
+	else if (index == WEP_NEX)
 		return IT_NEX;
-	else if (index == WEP_HAGAR) 
+	else if (index == WEP_HAGAR)
 		return IT_HAGAR;
 	else if (index == WEP_ROCKET_LAUNCHER)
 		return IT_ROCKET_LAUNCHER;
+	return IT_LASER;
 };
 
 float(entity cl, float wpn, float andammo) client_hasweapon =
 {
 	local float itemcode;
+	local entity oldself;
 
+	weapon_hasammo = TRUE;
+	if (wpn < WEP_FIRST || wpn > WEP_LAST)
+		return FALSE;
 	itemcode = weapon_translateindextoflag(wpn);
 	if (cl.items & itemcode)
 	{
 		if (andammo)
 		{
+			oldself = self;
+			self = cl;
 			weapon_action(wpn, WR_CHECKAMMO);
+			self = oldself;
 			if (weapon_hasammo)
 				return TRUE;
 			return FALSE;
@@ -71,7 +91,7 @@ float(entity cl, float wpn, float andammo) client_hasweapon =
 // Weapon subs
 void() w_clear =
 {
-	weapon_action(self.weapon, WR_CLEAR); 
+	weapon_action(self.weapon, WR_CLEAR);
 	if (self.weapon != -1)
 		self.weapon = 0;
 	self.weaponentity.state = WS_CLEAR;
@@ -82,31 +102,33 @@ void() w_clear =
 void() w_ready =
 {
 	self.weaponentity.state = WS_READY;
-	weapon_action(self.weapon, WR_IDLE); 
+	weapon_action(self.weapon, WR_IDLE);
 };
 
 // FIXME: add qw-style client-custom weaponrating (cl_weaponrating)?
-void() w_bestweapon
+float(entity e) w_getbestweapon
 {// add new weapons here
-	weapon_hasammo = TRUE;
-	if (client_hasweapon(self, WEP_ROCKET_LAUNCHER, TRUE))
-		self.switchweapon = WEP_ROCKET_LAUNCHER;
-	else if (client_hasweapon(self, WEP_NEX, TRUE))
-		self.switchweapon = WEP_NEX;
-	else if (client_hasweapon(self, WEP_HAGAR, TRUE))
-		self.switchweapon = WEP_HAGAR;
-	else if (client_hasweapon(self, WEP_GRENADE_LAUNCHER, TRUE))
-		self.switchweapon = WEP_GRENADE_LAUNCHER;
-	else if (client_hasweapon(self, WEP_ELECTRO, TRUE))
-		self.switchweapon = WEP_ELECTRO;
-	else if (client_hasweapon(self, WEP_CRYLINK, TRUE))
-		self.switchweapon = WEP_CRYLINK;
-	else if (client_hasweapon(self, WEP_UZI, TRUE))
-		self.switchweapon = WEP_UZI;
-	else if (client_hasweapon(self, WEP_SHOTGUN, TRUE))
-		self.switchweapon = WEP_SHOTGUN;
+	if (client_hasweapon(e, WEP_ROCKET_LAUNCHER, TRUE))
+		return WEP_ROCKET_LAUNCHER;
+	else if (client_hasweapon(e, WEP_NEX, TRUE))
+		return WEP_NEX;
+	else if (client_hasweapon(e, WEP_HAGAR, TRUE))
+		return WEP_HAGAR;
+	else if (client_hasweapon(e, WEP_GRENADE_LAUNCHER, TRUE))
+		return WEP_GRENADE_LAUNCHER;
+	else if (client_hasweapon(e, WEP_ELECTRO, TRUE))
+		return WEP_ELECTRO;
+	else if (client_hasweapon(e, WEP_CRYLINK, TRUE))
+		return WEP_CRYLINK;
+	else if (client_hasweapon(e, WEP_UZI, TRUE))
+		return WEP_UZI;
+	else if (client_hasweapon(e, WEP_SHOTGUN, TRUE))
+		return WEP_SHOTGUN;
 	else
-		self.switchweapon = WEP_LASER;
+	{
+		weapon_hasammo = TRUE;
+		return WEP_LASER;
+	}
 };
 
 // Setup weapon for client (after this raise frame will be launched)
@@ -146,17 +168,17 @@ void(float() checkfunc1, float() checkfunc2, void() firefunc, float atktime) wea
 		if (!checkfunc1())
 		{
 			if (!checkfunc2())
-				w_bestweapon();
+				self.switchweapon = w_getbestweapon(self);
 			return;
 		}
 	}
 	// Don't do shot if previos attack  not finished
 	if (!(game & GAME_INSANE))
-		if (time < self.attack_finished) 	    
-			return; 
+		if (time < self.attack_finished)
+			return;
 	// Can't do shot if changing weapon
 	if (!(game & GAME_INSANE))
-		if (self.weaponentity.state != WS_READY)	
+		if (self.weaponentity.state != WS_READY)
 			return;
 
 	self.attack_finished = time + atktime;
@@ -172,7 +194,7 @@ void(float() checkfunc1, float() checkfunc2, void() firefunc) weapon_doattack
 		if (!checkfunc1())
 		{
 			if (!checkfunc2())
-				w_bestweapon();
+				self.switchweapon = w_getbestweapon(self);
 			return;
 		}
 	}

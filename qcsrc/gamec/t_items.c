@@ -24,7 +24,7 @@ void Item_Touch (void)
 
 	// if the player is using their best weapon before items are given, they
 	// probably want to switch to an even better weapon after items are given
-	_switchweapon = other.weapon == W_GetBestWeapon(other);
+	_switchweapon = other.switchweapon == w_getbestweapon(other);
 
 	if (self.ammo_shells)
 		other.ammo_shells = min (other.ammo_shells + self.ammo_shells, 100);
@@ -69,10 +69,11 @@ void Item_Touch (void)
 	self = other;
 
 	if (_switchweapon)
-		self.weapon = W_GetBestWeapon(self);
+		self.switchweapon = w_getbestweapon(self);
 
-	W_UpdateWeapon ();
-	W_UpdateAmmo ();
+	//W_UpdateWeapon ();
+	//W_UpdateAmmo ();
+	weapon_action(self.weapon, WR_UPDATECOUNTS);
 
 	self = oldself;
 
