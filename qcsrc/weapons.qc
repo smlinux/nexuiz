@@ -408,8 +408,6 @@ void W_Laser_Touch (void)
 
 	dir = normalize (self.owner.origin - self.origin);
 
-	sound (self, CHAN_BODY, "weapons/NexImpact.wav", 1, ATTN_NORM);
-
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 	WriteByte (MSG_BROADCAST, 79);
 	WriteCoord (MSG_BROADCAST, self.origin_x);
@@ -420,7 +418,7 @@ void W_Laser_Touch (void)
 	WriteCoord (MSG_BROADCAST, dir_z);
 	WriteByte (MSG_BROADCAST, 155);
 
-	Damage(self.owner, self.origin, other, 0, 20, dir * 40);
+	RadiusDamage (self.owner, self, 0, 10, 15, 50, world, 200);
 
 	remove (self);
 }
@@ -443,10 +441,10 @@ void W_Laser_Attack (void)
 	setorigin (missile, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);
 
 	makevectors (self.v_angle);
-	missile.velocity = v_forward * 2000;
+	missile.velocity = v_forward * 900;
 	missile.angles = vectoangles (missile.velocity);
 	missile.glow_color = 250; // 244, 250
-	missile.glow_size = 1020;
+	missile.glow_size = 40;
 	missile.glow_trail = 1;	// ??? 256
 	missile.touch = W_Laser_Touch;
 	missile.think = SUB_Remove;
@@ -461,7 +459,29 @@ void W_Laser_Attack (void)
 
 void W_Laser_Attack2 (void)
 {
+	vector	org;
+	entity	proj;
 
+	//org = self.fireorg;
+	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 1) + (v_forward * 20);
+	proj = findradius (self.origin, 500);
+
+	while (proj)
+	{
+		if (proj.classname == "missile" || proj.classname == "grenade")
+		{
+			//WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+			//WriteByte (MSG_BROADCAST, TE_NEX);
+			//WriteVec (org);
+			//WriteVec (proj.origin);
+			//WriteVec (self.v_angle);
+			grenade = W_Grenade_Explode;
+			//Damage (proj, self, self, 5, DT_LAZER, normalize (proj.origin - self.origin));
+		}
+		proj = proj.chain;
+	}
+
+	self.attack_finished = time + 0.6;
 }
 
 void W_Uzi_Attack (void)
@@ -743,8 +763,6 @@ void W_Crylink_Attack (void)
 	sound (self, CHAN_WEAPON, "weapons/crylink.wav", 1, ATTN_NORM);
 	org = self.origin + self.view_ofs + v_forward * 18 + v_right * 7 + v_up * -9;
 	makevectors (self.v_angle);
-
-	// FIXME: make it accurate!
 
 	FireRailgunBullet (org, 25, v_forward);
 
