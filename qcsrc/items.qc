@@ -3,6 +3,8 @@
 
 void Item_Touch (void)
 {
+	entity	oldself;
+
 	if (other.classname != "player" && other.classname != "bot")
 		return;
 	if (other.health <= 0)
@@ -38,6 +40,14 @@ void Item_Touch (void)
 		sprint (other, self.netname);
 		sprint (other, "\n");
 	}
+	
+	oldself = self;
+	self = other;
+	
+	W_UpdateWeapon ();
+	W_UpdateAmmo ();
+	
+	self = oldself;
 	
 	sound (self, CHAN_BODY, "weapons/WeaponPickup.wav", 1, ATTN_NORM);
 	

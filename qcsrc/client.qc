@@ -182,8 +182,13 @@ Called every frame for each client before the physics are run
 .float attack_finished;
 void PlayerPreThink (void)
 {
-	if (self.button0 && self.attack_finished < time)
-		W_Attack ();
+	if (self.attack_finished < time)
+	{
+		if (self.button0)
+			W_Attack ();
+		else if (self.button3)
+			W_SecondaryAttack ();
+	}
 	
 	if (self.button2)
 		PlayerJump ();

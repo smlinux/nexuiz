@@ -384,14 +384,22 @@ void W_Laser_Attack (void)
 	self.attack_finished = time + 0.3;
 }
 
+void W_Laser_Attack2 (void)
+{
+	
+}
+
 void W_Uzi_Attack (void)
-{	
+{
+	vector	org;
+
 	sound (self, CHAN_WEAPON, "weapons/Uzi_Fire.wav", 1, ATTN_NORM);
 	
 	makevectors (self.v_angle);
 	
 	// use traceline_hitcorpse to make sure it can hit gibs and corpses too
-	traceline_hitcorpse (self, self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * 4096, FALSE, self);
+	org = self.origin + self.view_ofs;
+	traceline_hitcorpse (self, org, org + v_forward * 4096 + v_right * crandom () * 300 + v_up * crandom () * 300, FALSE, self);
 	
 	// FIXME - causes excessive 'tinking'. Hopefully remove "tink1.wav" from the ricochets with csqc
 	if ((trace_fraction != 1.0) && (trace_ent != self) && (pointcontents (trace_endpos) != CONTENT_SKY))
@@ -400,7 +408,7 @@ void W_Uzi_Attack (void)
 			te_spike (trace_endpos);
 		else if (trace_ent.classname == "player" || trace_ent.classname == "corpse" || trace_ent.classname == "gib")
 		{
-			Damage (self.owner, trace_endpos, trace_ent, 0, 8);
+			Damage (self, trace_endpos, trace_ent, 0, 8);
 			if (random () < 0.5)
 				sound (trace_ent, CHAN_IMPACT, "misc/BodyImpact1.wav", 1, ATTN_NORM);
 			else
@@ -409,10 +417,42 @@ void W_Uzi_Attack (void)
 	}
 	
 	self.punchangle_x = random () * -2;
-	self.punchangle_y = random () - 0.5;
-	self.punchangle_z = random () - 0.5;
+	self.punchangle_y = crandom () * 0.5;
+	self.punchangle_z = crandom () * 0.5;
 	
 	self.attack_finished = time + 0.075;
+	self.ammo_nails = self.ammo_nails - 1;
+}
+
+void W_Uzi_Attack2 (void)
+{
+	vector	org;
+
+	sound (self, CHAN_WEAPON, "weapons/Uzi_Fire.wav", 1, ATTN_NORM);
+	
+	makevectors (self.v_angle);
+	
+	// use traceline_hitcorpse to make sure it can hit gibs and corpses too
+	org = self.origin + self.view_ofs;
+	traceline_hitcorpse (self, org, org + v_forward * 8192, FALSE, self);
+	
+	if ((trace_fraction != 1.0) && (trace_ent != self) && (pointcontents (trace_endpos) != CONTENT_SKY))
+	{
+		if (trace_ent == world)
+			te_spike (trace_endpos);
+		else if (trace_ent.classname == "player" || trace_ent.classname == "corpse" || trace_ent.classname == "gib")
+		{
+			Damage (self, trace_endpos, trace_ent, 0, 12);
+			if (random () < 0.5)
+				sound (trace_ent, CHAN_IMPACT, "misc/BodyImpact1.wav", 1, ATTN_NORM);
+			else
+				sound (trace_ent, CHAN_IMPACT, "misc/BodyImpact2.wav", 1, ATTN_NORM);
+		}
+	}
+	
+	self.punchangle = '-0.5 0 0';
+	
+	self.attack_finished = time + 0.3;
 	self.ammo_nails = self.ammo_nails - 1;
 }
 
@@ -457,7 +497,6 @@ void W_Grenade_Touch (void)
 void W_Grenade_Attack (void)
 {
 	entity	gren;
-	vector	org;
 	
 	sound (self, CHAN_WEAPON, "weapons/Grenade_fire.wav", 1, ATTN_NORM);
 	
@@ -473,14 +512,13 @@ void W_Grenade_Attack (void)
 	gren.takedamage = DAMAGE_YES;
 	gren.health = 1;
 	gren.event_hurt = W_Grenade_Explode;
-	
-	org = self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12;
-	
+
 	setmodel (gren, "models/grenademodel.md3");
 	setsize (gren, '0 0 0', '0 0 0');
-	setorigin (gren, org);
 	
 	makevectors (self.v_angle);
+	setorigin (gren, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);
+
 	gren.velocity = v_forward * 900 + v_up * 200;
 	gren.angles = vectoangles (gren.velocity);
 	gren.avelocity = '150 1500 150';
@@ -488,6 +526,43 @@ void W_Grenade_Attack (void)
 	gren.touch = W_Grenade_Touch;
 	gren.think = W_Grenade_FuseExplode;
 	gren.nextthink = time + 2;
+	
+	self.attack_finished = time + 1;
+	self.ammo_rockets = self.ammo_rockets - 1;
+}
+
+void W_Grenade_Attack2 (void)
+{
+	entity	gren;
+	
+	sound (self, CHAN_WEAPON, "weapons/Grenade_fire.wav", 1, ATTN_NORM);
+	
+	self.punchangle_x = -4;
+	
+	gren = spawn ();
+	gren.owner = self;
+	gren.classname = "grenade";
+	
+	gren.movetype = MOVETYPE_TOSS;
+	gren.solid = SOLID_BBOX;
+	
+	gren.takedamage = DAMAGE_YES;
+	gren.health = 1;
+	gren.event_hurt = W_Grenade_Explode;
+	
+	setmodel (gren, "models/grenademodel.md3");
+	setsize (gren, '0 0 0', '0 0 0');
+	
+	makevectors (self.v_angle);
+	setorigin (gren, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);
+	
+	gren.velocity = v_forward * 1400 + v_up * 100;
+	gren.angles = vectoangles (gren.velocity);
+	gren.avelocity = '150 1500 150';
+	
+	gren.touch = W_Grenade_Explode;
+	gren.think = W_Grenade_FuseExplode;
+	gren.nextthink = time + 5;
 	
 	self.attack_finished = time + 1;
 	self.ammo_rockets = self.ammo_rockets - 1;
@@ -522,7 +597,6 @@ void W_Electro_Touch (void)
 void W_Electro_Attack (void)
 {
 	entity	proj;
-	vector	org;
 	
 	sound (self, CHAN_WEAPON, "weapons/Electro_fire.wav", 1, ATTN_NORM);
 	
@@ -535,11 +609,10 @@ void W_Electro_Attack (void)
 	proj.effects = 1;
 	
 	makevectors (self.v_angle);
-	org = self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12;
 	
 	setmodel (proj, "models/bullet.mdl");
 	setsize (proj, '0 0 0', '0 0 0');
-	setorigin (proj, org);
+	setorigin (proj, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);
 	
 	proj.velocity = v_forward * 3000;
 	proj.touch = W_Electro_Touch;
@@ -547,6 +620,43 @@ void W_Electro_Attack (void)
 	proj.nextthink = time + 3;
 	
 	self.attack_finished = time + 0.6;
+	self.ammo_cells = self.ammo_cells - 1;
+}
+
+void W_Plasma_Touch (void)
+{
+	if (other.classname == "player" || other.classname == "corpse" || other.classname == "gib")
+		Damage (self.owner, self.origin, other, 0, 15);
+
+	remove (self);
+}
+
+void W_Electro_Attack2 (void)
+{
+	entity	proj;
+	
+	sound (self, CHAN_WEAPON, "weapons/LazerGun_Fire.wav", 1, ATTN_NORM);
+	
+	proj = spawn ();
+	proj.owner = self;
+	proj.classname = "plasma";
+	
+	proj.movetype = MOVETYPE_FLY;
+	proj.solid = SOLID_BBOX;
+	proj.effects = EF_DIMLIGHT;
+	
+	makevectors (self.v_angle);
+	
+	setmodel (proj, "models/plasmashot.spr32");
+	setsize (proj, '0 0 0', '0 0 0');
+	setorigin (proj, self.origin + self.view_ofs + v_forward * 24 + v_right * 9 + v_up * -20);
+	
+	proj.velocity = v_forward * 5000;
+	proj.touch = W_Plasma_Touch;
+	proj.think = SUB_Remove;
+	proj.nextthink = time + 1.5;
+
+	self.attack_finished = time + 0.175;
 	self.ammo_cells = self.ammo_cells - 1;
 }
 
@@ -757,6 +867,9 @@ void W_Rocket_Attack (void)
 
 void W_Attack (void)
 {
+	if (!W_CheckAmmo ())
+		return;
+
 	if (self.weapon == IT_LASER)
 		W_Laser_Attack ();
 	else if (self.weapon == IT_UZI)
@@ -776,7 +889,32 @@ void W_Attack (void)
 	else if (self.weapon == IT_ROCKET_LAUNCHER)
 		W_Rocket_Attack ();
 
+	W_UpdateAmmo ();
+}
+
+void W_SecondaryAttack (void)
+{
 	if (!W_CheckAmmo ())
 		return;
 
+	if (self.weapon == IT_LASER)
+		W_Laser_Attack2 ();
+	else if (self.weapon == IT_UZI)
+		W_Uzi_Attack2 ();
+	else if (self.weapon == IT_SHOTGUN)
+		SUB_Null ();
+	else if (self.weapon == IT_GRENADE_LAUNCHER)
+		W_Grenade_Attack2 ();
+	else if (self.weapon == IT_ELECTRO)
+		W_Electro_Attack2 ();
+	else if (self.weapon == IT_CRYLINK)
+		SUB_Null ();
+	else if (self.weapon == IT_NEX)
+		SUB_Null ();
+	else if (self.weapon == IT_HAGAR)
+		SUB_Null ();
+	else if (self.weapon == IT_ROCKET_LAUNCHER)
+		SUB_Null ();
+
+	W_UpdateAmmo ();
 }
