@@ -331,22 +331,27 @@ void ImpactEffect (entity ent, float weapontype)
 {
 	vector	org2;
 	org2 = findbetterlocation (ent.origin);
+	float b;
 	
 	if (weapontype == IT_ROCKET_LAUNCHER)
 	{
 		te_explosion (org2);
-		effect (org2, "models/sprites/dpexplosion.spr32", 0, 20, 30);
+		effect (org2, "models/sprites/dpexplosion1.spr32", 0, 20, 40);
 		sound (ent, CHAN_BODY, "weapons/Rocket_Impact.wav", 1, ATTN_NORM);
 	}
 	else if (weapontype == IT_GRENADE_LAUNCHER)
 	{
 		te_explosion (org2);
-		effect (org2, "models/sprites/dpexplosion.spr32", 0, 20, 30);
+		effect (org2, "models/sprites/dpexplosion1.spr32", 0, 20, 30);
 		sound (ent, CHAN_BODY, "weapons/Grenade_Impact.wav", 1, ATTN_NORM);
 	}
 	else if (weapontype == IT_HAGAR)
 	{
-		effect (org2, "models/sprites/dpexplosion.spr32", 0, 20, 40);
+		b = crandom();
+		if (b < 0)
+			effect (org2, "models/sprites/dpexplosion1.spr32", 0, 20, 30);
+		else
+			effect (org2, "models/sprites/dpexplosion2.spr32", 0, 20, 30);
 		sound (ent, CHAN_BODY, "weapons/Rocket_Impact.wav", 1, ATTN_NORM);
 	}
 	else if (weapontype == IT_ELECTRO)	// Secondary fire

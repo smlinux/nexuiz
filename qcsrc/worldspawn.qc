@@ -17,7 +17,8 @@ void worldspawn (void)
 	precache_model ("models/sprites/plasmahitwall.spr32");
 	precache_model ("models/sprites/muzzleflash.spr32");
 	precache_model ("models/sprites/plasmashot.spr32");
-	precache_model ("models/sprites/dpexplosion.spr32");
+	precache_model ("models/sprites/dpexplosion1.spr32");
+	precache_model ("models/sprites/dpexplosion2.spr32");
 	
 	precache_model ("models/grenademodel.md3");
 	precache_model ("models/hagarmissile.mdl");

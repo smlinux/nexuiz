@@ -434,7 +434,7 @@ void W_Laser_Attack (void)
 	
 	setmodel (missile, "models/bullet.mdl");
 	setsize (missile, '0 0 0', '0 0 0');
-	setorigin (missile, self.origin + self.view_ofs);
+	setorigin (missile, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);
 
 	makevectors (self.v_angle);
 	missile.velocity = v_forward * 2000;
@@ -473,7 +473,7 @@ void W_Uzi_Attack (void)
 
 	vector	org; // casing code
 	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 1) + (v_forward * 20);
-	SpawnCasing (org, v_forward, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 + 10) * v_up), 2);
+	SpawnCasing (org, v_forward, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 + 10) * v_up), 1);
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
 }
@@ -491,7 +491,7 @@ void W_Uzi_Attack2 (void)
 
 	vector	org;
 	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 1) + (v_forward * 20);
-	SpawnCasing (org, v_forward, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 + 10) * v_up), 2);
+	SpawnCasing (org, v_forward, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 + 10) * v_up), 1);
 }
 
 void W_Shotgun_Attack (void)
@@ -510,7 +510,7 @@ void W_Shotgun_Attack (void)
 
 	vector	org; // casing code
 	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 4) + (v_forward * 15);
-	SpawnCasing (org, v_forward, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 + 10) * v_up), 1);
+	SpawnCasing (org, v_forward, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 + 10) * v_up), 2);
 }
 
 void W_Shotgun_Attack2 (void)
@@ -686,7 +686,10 @@ const float w_plasma_anim_interval = 0.05;
 .float lifetime;
 void W_Plasma_Think (void)
 {
-	animate_sprite(0, 5);
+	float a;
+
+	a = random () * 5;
+	animate_sprite(a, 5);
 	
 	self.nextthink = time + w_plasma_anim_interval;
 
@@ -874,13 +877,13 @@ void W_Hagar_Attack (void)
 	setsize (missile, '0 0 0', '0 0 0');
 	
 	makevectors (self.v_angle);
-	
-	org = self.origin + self.view_ofs + v_forward * 20 + v_right * 4 + v_up * -15;
-	
-	setorigin (missile, org);
+
+	setorigin (missile, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);	
+
 	missile.velocity = v_forward * 2000;
 	missile.angles = vectoangles (missile.velocity);
-	
+	setorigin (missile, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);	
+
 	missile.touch = W_Hagar_Touch;
 	missile.think = SUB_Remove;
 	missile.nextthink = time + 1;
@@ -911,9 +914,8 @@ void W_Hagar_Attack2 (void)
 	
 	makevectors (self.v_angle);
 	
-	org = self.origin + self.view_ofs + v_forward * 20 + v_right * 4 + v_up * -15;
+	setorigin (missile, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);
 	
-	setorigin (missile, org);
 	missile.velocity = v_forward * 15000;
 	missile.angles = vectoangles (missile.velocity);
 	
