@@ -6,8 +6,15 @@ void() trigger_push_touch =
 	local float flighttime, dist, grav;
 	local vector org;
 
-	if (!other.health)
+	if (other.classname != "player")
 		return;
+
+	if (!self.target)
+	{
+		other.velocity = self.movedir;
+		other.flags = other.flags - (other.flags & FL_ONGROUND);
+		return;
+	}
 
 	org = other.origin;
 
@@ -31,8 +38,8 @@ void() trigger_push_touch =
 	other.velocity = self.movedir;
 	other.flags = other.flags - (other.flags & FL_ONGROUND);
 
-	if (other.classname == "missile") 
-		other.angles = vectoangles (other.velocity); 
+	if (other.classname == "missile")
+		other.angles = vectoangles (other.velocity);
 
 	if (self.spawnflags & PUSH_ONCE)
 	{
@@ -47,7 +54,10 @@ void() trigger_push_findtarget =
 	// find the target
 	self.enemy = find(world, targetname, self.target);
 	if (!self.enemy)
+	{
 		objerror("trigger_push: target not found\n");
+		remove(self);
+	}
 };
 
 void() trigger_push =
@@ -78,6 +88,6 @@ void() trigger_push =
 	}
 };
 
-void() target_push = { trigger_push(); };
+void() target_push = {};
 void() info_notnull = {};
 void() target_position = {};
