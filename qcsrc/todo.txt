@@ -1,0 +1,34 @@
+
+
+0: Finish the primary fire of the shotgun
+0: Fix the initial grenade velocity to be like Quake's, maybe a bit faster
+0: Add weather entities
+0: Add animation to misc_model
+0: Make items respawn!
+0: Make gibs spawn from inside the bounding box, not at the origin
+0: Make gibs fly away from the origin depending on the power of the hit (such as if i gib him just barely, it doesn't go that far, but if i hit him straight on with a Nex the gibs go very far)
+0: Add deathtypes and obituary messages
+0: Casing
+0: Footsteps (go threw 6 footstep sounds)
+1: Ability to blow away Casing and Gibs with explosions
+1: Ability to blow up a rocket/grenade/hagar rocket with a bullet/crylink/nex bullet
+1: When a grenade/rocket/hagar rocket is in the radius (close to it, not just a health of 1) of a explosion, it blows up to
+1: Add Q3-style jumppads
+1: Add teleporters
+1: Local Damage (just the the head and body)
+2: Add FrikBots with support for Nexuiz weapons and gametypes
+2: Add Quake trigger support
+2: Add Quake door and button support
+2: Add secondary fire to all weapons
+	- Laser: Autoaim and kill any projectile coming (can destory rockets, grenades, hagar missiles)
+	- Uzi: Very accurate, low fire rate
+	- Shotgun: Automatic fast 3 shots
+	- Grenade Launcher: Shoots a grenade further, and when it hits anything it blows up (no time limit)
+	- Electro: Plasma
+	- Crylink: A white stream similar to the lighting gun
+	- Nex: Zoom
+	- Hagar: A very fast hagar rocket, low rate of fire
+	- Rocket: A rocket, than when it hits a wall/player, it is an airburst which blows everything near it away (including players, and the person who shot it)
+
+
+Client Side QC:
