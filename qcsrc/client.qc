@@ -136,10 +136,10 @@ void PutClientInServer (void)
 	}
 	else
 	{
-		self.items = IT_LASER | IT_UZI;
-		self.weapon = IT_UZI;
+		self.items = IT_LASER;
+		self.weapon = IT_LASER;
 		self.ammo_shells = 0;
-		self.ammo_nails = 200;
+		self.ammo_nails = 0;
 		self.ammo_rockets = 0;
 		self.ammo_cells = 0;
 	}
@@ -293,11 +293,13 @@ void PlayerPreThink (void)
 
 	if (self.button3)
 	{
-		if (self.weapon == IT_GRENADE_LAUNCHER)
+		if (self.weapon == IT_ROCKET_LAUNCHER)
 			W_SecondaryAttack ();
 		if (!(game & GAME_INSANE))
 			if (self.attack_finished < time && !self.button0)
 				W_SecondaryAttack ();
+		if (game & GAME_INSANE)
+			W_SecondaryAttack ();
 	}
 	
 	if (!(game & GAME_INSANE))

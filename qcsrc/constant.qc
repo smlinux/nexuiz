@@ -130,8 +130,8 @@ float	MSG_ALL					= 2;
 float	MSG_INIT				= 3;
 
 float	IT_LASER				= 4096;
-float	IT_UZI					= 1;
-float	IT_SHOTGUN				= 2;
+float	IT_SHOTGUN				= 1;
+float	IT_UZI					= 2;
 float	IT_GRENADE_LAUNCHER		= 4;
 float	IT_ELECTRO				= 8;
 float	IT_CRYLINK				= 16;

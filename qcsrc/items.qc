@@ -267,7 +267,7 @@ void item_health1 (void)
 	self.mdl = "models/items/g_h1.md3";
 	self.max_health = 1;
 	self.netname = "1 health";
-	self.respawntime = 120;
+	self.respawntime = 30;
 	StartItem ();
 }
 
@@ -277,7 +277,7 @@ void item_health25 (void)
 	self.noise = "misc/mediumhealth.wav";
 	self.max_health = 25;
 	self.netname = "25 health";
-	self.respawntime = 120;
+	self.respawntime = 100;
 	StartItem ();
 }
 
@@ -287,7 +287,7 @@ void item_health100 (void)
 	self.noise = "misc/megahealth.wav";
 	self.max_health = 100;
 	self.netname = "100 health";
-	self.respawntime = 120;
+	self.respawntime = 200;
 	StartItem ();
 }
 
