@@ -302,6 +302,7 @@ void PlayerPreThink (void)
 	{
 		if (self.weapon == IT_ROCKET_LAUNCHER)
 			W_ThirdAttack ();
+		if (!(game & GAME_INSANE))
 		if (self.attack_finished < time && !self.button0 && !self.button3)
 			W_ThirdAttack ();
 	}
@@ -312,10 +313,12 @@ void PlayerPreThink (void)
 			W_SecondaryAttack ();
 		if (self.weapon == IT_ROCKET_LAUNCHER)
 			W_SecondaryAttack ();
-		if (self.attack_finished < time && !self.button0)
-			W_SecondaryAttack ();
+		if (!(game & GAME_INSANE))
+			if (self.attack_finished < time && !self.button0)
+				W_SecondaryAttack ();
 	}
 	
+	if (!(game & GAME_INSANE))
 	if (self.attack_finished < time)
 	if (self.button0)
 		W_Attack ();
