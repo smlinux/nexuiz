@@ -155,7 +155,8 @@ const float FLAG_CHILDDRAWREFRESHONLY = 4096;
 // ITEM_SLIDER
 //.string 	picture_slider; = picture
 .string		picture_bar;
-.string		sound_changed;
+.string		sound_increase;
+.string		sound_decrease;
 
 .float		min_value;
 .float		max_value;

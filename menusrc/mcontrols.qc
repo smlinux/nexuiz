@@ -603,6 +603,9 @@ void(void) ITEM_SLIDER_UPDATESLIDER =
 
 void(float keynr, float ascii) ITEM_SLIDER_KEY =
 {
+	float old;
+	old = self.value;
+
 	if(ctcall_key(keynr, ascii))
 		return;
 
@@ -640,7 +643,15 @@ void(float keynr, float ascii) ITEM_SLIDER_KEY =
 		return;
 	}
 	// play sound
-	snd_play(self.sound_changed);
+	if(old < self.value)
+	{
+		snd_play(self.sound_increase);
+	}
+	else if(self.value < old)
+	{
+		snd_play(self.sound_decrease);
+	}
+
 	ITEM_SLIDER_UPDATESLIDER();
 };
 
@@ -650,6 +661,10 @@ void(void) ITEM_SLIDER_DESTROY =
 		gfx_unloadpic(self.picture);
 	if(self.picture_bar != "")
 		gfx_unloadpic(self.picture);
+	if(self.sound_increase != SOUND_INCREASE)
+		snd_unloadsound(self.sound_decrease);
+	if(self.sound_increase != SOUND_INCREASE)
+		snd_unloadsound(self.sound_increase);
 
 	ctcall_destroy();
 };
@@ -660,8 +675,14 @@ void(void) ITEM_SLIDER =
 		self.picture = gfx_loadpic(self.picture, MENU_ENFORCELOADING);
 	if(self.picture_bar != "")
 		self.picture_bar = gfx_loadpic(self.picture_bar, MENU_ENFORCELOADING);
-	if(self.sound_changed == "")
-		self.sound_changed = SOUND_CHANGE;
+	if(self.sound_decrease == "")
+		self.sound_decrease = SOUND_DECREASE;
+	else
+		snd_loadsound(self.sound_decrease);
+	if(self.sound_increase == "")
+		self.sound_increase = SOUND_INCREASE;
+	else
+		snd_loadsound(self.sound_increase);
 
 	if(self.color == '0 0 0')
 		self.color = ITEM_SLIDER_COLOR;
@@ -722,6 +743,9 @@ void(void) ITEM_TEXTSWITCH_REFRESH =
 
 void(float keynr, float ascii)	ITEM_TEXTSWITCH_KEY =
 {
+	float old;
+	old = self.value;
+
 	if(ctcall_key(keynr, ascii))
 		return;
 
@@ -741,19 +765,36 @@ void(float keynr, float ascii)	ITEM_TEXTSWITCH_KEY =
 		def_keyevent(keynr, ascii);
 		return;
 	}
-	snd_play(self.sound_changed);
+	// play sound
+	if(old < self.value)
+		snd_play(self.sound_increase);
+	else if(self.value < old)
+		snd_play(self.sound_decrease);
+
 	if(self.switchchange)
 		self.switchchange();
 };
+
+void(void) ITEM_TEXTSWITCH_DESTROY =
+{
+	if(self.sound_increase != SOUND_INCREASE)
+		snd_unloadsound(self.sound_decrease);
+	if(self.sound_increase != SOUND_INCREASE)
+		snd_unloadsound(self.sound_increase);
+}
 
 void(void) ITEM_TEXTSWITCH =
 {
 	string temp;
 
-	if(self.sound_changed != "")
-		snd_loadsound(self.sound_changed, SOUND_ENFORCELOADING);
+	if(self.sound_decrease == "")
+		self.sound_decrease = SOUND_DECREASE;
 	else
-		self.sound_changed = SOUND_CHANGE;
+		snd_loadsound(self.sound_decrease);
+	if(self.sound_increase == "")
+		self.sound_increase = SOUND_INCREASE;
+	else
+		snd_loadsound(self.sound_increase);
 
 	temp = self.text;
 	self.text = getaltstring(self.value, self.text);
@@ -762,7 +803,7 @@ void(void) ITEM_TEXTSWITCH =
 
 	item_init(
 		defct_reinit,
-		defct_destroy,
+		ITEM_TEXTSWITCH_DESTROY,
 		ITEM_TEXTSWITCH_KEY,
 		ITEM_TEXTSWITCH_DRAW,
 		defct_mouse_enter,

@@ -8,8 +8,11 @@
 void(void) snd_init =
 {
 	snd_loadsound(SOUND_SELECT, SOUND_ENFORCELOADING);
-	snd_loadsound(SOUND_CHANGE, SOUND_ENFORCELOADING);
+	snd_loadsound(SOUND_INCREASE, SOUND_ENFORCELOADING);
+	snd_loadsound(SOUND_DECREASE, SOUND_ENFORCELOADING);
 	snd_loadsound(SOUND_ACTION, SOUND_ENFORCELOADING);
+	snd_loadsound(SOUND_STARTGAME, SOUND_ENFORCELOADING);
+	snd_loadsound(SOUND_ENDGAME, SOUND_ENFORCELOADING);
 };
 
 void(void) snd_frame =
@@ -27,8 +30,11 @@ void(float keynr, float ascii) snd_keydown =
 void(void) snd_shutdown =
 {
 	snd_unloadsound(SOUND_SELECT);
-	snd_unloadsound(SOUND_CHANGE);
+	snd_unloadsound(SOUND_INCREASE);
+	snd_unloadsound(SOUND_DECREASE);
 	snd_unloadsound(SOUND_ACTION);
+	snd_unloadsound(SOUND_STARTGAME);
+	snd_unloadsound(SOUND_ENDGAME);
 };
 
 void(string sound_name) snd_play =
