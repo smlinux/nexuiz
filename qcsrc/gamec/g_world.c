@@ -25,6 +25,7 @@ void worldspawn (void)
 	//precache_model ("models/player/shock.zym");
 	//precache_model ("models/player/carni.zym");
 
+	precache_model ("models/misc/chatbubble.spr");
 
 	precache_model ("models/weapons/g_uzi.md3");
 	precache_model ("models/weapons/g_shotgun.md3");

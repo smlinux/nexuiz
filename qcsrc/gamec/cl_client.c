@@ -225,6 +225,40 @@ void ClientDisconnect (void)
 	bprint (" disconnected\n");
 }
 
+.entity chatbubbleentity;
+.float buttonchat;
+void() ChatBubbleThink =
+{
+	self.nextthink = time;
+	if (!self.owner.modelindex || self.owner.chatbubbleentity != self)
+	{
+		remove(self);
+		return;
+	}
+	setorigin(self, self.owner.origin + '0 0 10' + self.owner.maxs_z * '0 0 1');
+	if (self.owner.buttonchat)
+		self.effects = EF_NODRAW;
+	else
+		self.effects = 0;
+};
+
+void() UpdateChatBubble =
+{
+	if (!self.modelindex)
+		return;
+	// spawn a chatbubble entity if needed
+	if (!self.chatbubbleentity)
+	{
+		self.chatbubbleentity = spawn();
+		self.chatbubbleentity.owner = self;
+		self.chatbubbleentity.think = ChatBubbleThink;
+		self.chatbubbleentity.nextthink = time;
+		setmodel(self.chatbubbleentity, "models/misc/chatbubble.spr");
+		setorigin(self.chatbubbleentity, self.origin + '0 0 10' + self.maxs_z * '0 0 1');
+		self.chatbubbleentity.effects = EF_NODRAW;
+	}
+}
+
 /*
 =============
 PlayerJump
@@ -528,7 +562,8 @@ void PlayerPostThink (void)
 	if (BotPostFrame())
 		return;
 	CheckRules();
-	if (self.health > 0)
+	UpdateChatBubble();
+	if (self.deadflag == DEAD_NO)
 	if (self.impulse)
 		ImpulseCommands ();
 	if (intermission_running)
