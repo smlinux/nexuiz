@@ -146,19 +146,7 @@ void() SV_UserFriction =
 	if (!sped)
 		return;
 
-// if the leading edge is over a dropoff, increase friction
-
-	start_x = stop_x = self.origin_x + vel_x / (sped * 16);
-	start_y = stop_y = self.origin_y + vel_y / (sped * 16);
-	start_z = self.origin_z + self.mins_z;
-	stop_z = start_z - 34;
-
-	traceline(start, stop, TRUE, self);
-
-	if (trace_fraction == 1)
-		friction = sv_friction * 2; // 2 is default edgefriction, removed for QW compatability
-	else
-                friction = sv_friction;
+    friction = sv_friction;
      if (sped < sv_stopspeed)
 		newspeed = sped - real_frametime * sv_stopspeed * friction;
 	else

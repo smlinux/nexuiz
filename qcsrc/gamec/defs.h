@@ -75,8 +75,6 @@ entity dest;
 
 .float		dmg;
 
-.vector angleoffset; // for incorrectly exported player models
-
 // for railgun damage (hitting multiple enemies)
 .float railgunhit;
 .float railgunhitsolidbackup;

@@ -1,5 +1,4 @@
-float lastclientthink, sv_maxspeed, sv_friction, sv_accelerate, sv_stopspeed;
-float sv_edgefriction, cl_rollspeed, cl_divspeed, cl_rollangle;
+float sv_maxspeed, sv_friction, sv_accelerate, sv_stopspeed;
 .float ladder_time;
 .entity ladder_entity;
 
@@ -24,25 +23,11 @@ void SV_PlayerPhysics()
 	if (self.health <= 0)
 		return;
 
-	if (time != lastclientthink)
-	{
-		lastclientthink = time;
-		sv_maxspeed = cvar("sv_maxspeed");
-		sv_friction = cvar("sv_friction");
-		sv_accelerate = cvar("sv_accelerate");
-		sv_stopspeed = cvar("sv_stopspeed");
-		sv_edgefriction = cvar("edgefriction");
-		// LordHavoc: this * 4 is an optimization
-		cl_rollangle = cvar("cl_rollangle") * 4;
-		// LordHavoc: this 1 / is an optimization
-		cl_divspeed = 1 / cvar("cl_rollspeed");
-	}
-
 	// show 1/3 the pitch angle and all the roll angle
 	self.angles_x = 0;
 	self.angles_y = self.v_angle_y; // FIXME: rotate the models, not the entity!
-	self.angles_z = bound(-1, self.velocity * v_right * cl_divspeed, 1) * cl_rollangle;
-	self.angles = self.angles + self.angleoffset;
+	self.angles_z = 0;
+
 /*	if (!self.fixangle)
 	{
 		self.angles_x = (self.v_angle_x + self.punchangle_x) * -0.333;
@@ -156,26 +141,11 @@ void SV_PlayerPhysics()
 			v_z = 0;
 			f = vlen(v);
 
-			// if the leading edge is over a dropoff, increase friction
-			v = self.origin + normalize(v) * 16 + '0 0 1' * self.mins_z;
-
-			traceline(v, v + '0 0 -34', TRUE, self);
-
 			// apply friction
-			if (trace_fraction == 1.0)
-			{
-				if (f < sv_stopspeed)
-					f = 1 - frametime * (sv_stopspeed / f) * sv_friction * sv_edgefriction;
-				else
-					f = 1 - frametime * sv_friction * sv_edgefriction;
-			}
+			if (f < sv_stopspeed)
+				f = 1 - frametime * (sv_stopspeed / f) * sv_friction;
 			else
-			{
-				if (f < sv_stopspeed)
-					f = 1 - frametime * (sv_stopspeed / f) * sv_friction;
-				else
-					f = 1 - frametime * sv_friction;
-			}
+				f = 1 - frametime * sv_friction;
 
 			if (f < 0)
 				self.velocity = '0 0 0';

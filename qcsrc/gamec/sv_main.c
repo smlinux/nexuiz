@@ -12,8 +12,5 @@ void StartFrame (void)
 	sv_accelerate = cvar ("sv_accelerate");
 	sv_stopspeed = cvar ("sv_stopspeed");
 
-	cl_rollangle = cvar ("cl_rollangle") * 4;
-	cl_divspeed = 1 / cvar ("cl_rollspeed");
-
 	BotFrame ();
 }
