@@ -1,5 +1,3 @@
-void(vector tdest, float tspeed, void() func) SUB_CalcMove;
-void(entity ent, vector tdest, float tspeed, void() func) SUB_CalcMoveEnt;
 void(vector destangle, float tspeed, void() func) SUB_CalcAngleMove;
 void()  SUB_CalcMoveDone;
 void() SUB_CalcAngleMoveDone;
@@ -62,6 +60,123 @@ void SUB_SetFade (entity ent, float when)
 
 	ent.think = SUB_SetFade_Think;
 	ent.nextthink = when;
+}
+
+/*
+=============
+SUB_CalcMove
+
+calculate self.velocity and self.nextthink to reach dest from
+self.origin traveling at speed
+===============
+*/
+void SUB_CalcMoveDone (void)
+{
+	// After moving, set origin to exact final destination
+	
+	setorigin (self, self.finaldest);
+	self.velocity = '0 0 0';
+	self.nextthink = -1;
+	if (self.think1)
+		self.think1 ();
+}
+
+void SUB_CalcMove (vector tdest, float tspeed, void() func)
+{
+	vector	delta;
+	float	traveltime;
+	
+	if (!tspeed)
+		objerror ("No speed is defined!");
+	
+	self.think1 = func;
+	self.finaldest = tdest;
+	self.think = SUB_CalcMoveDone;
+	
+	if (tdest == self.origin)
+	{
+		self.velocity = '0 0 0';
+		self.nextthink = self.ltime + 0.1;
+		return;
+	}
+	
+	delta = tdest - self.origin;
+	traveltime = vlen (delta) / tspeed;
+	
+	if (traveltime < 0.1)
+	{
+		self.velocity = '0 0 0';
+		self.nextthink = self.ltime + 0.1;
+		return;
+	}
+	
+	self.velocity = delta * (1/traveltime);	// QuakeC doesn't allow vector/float division
+	
+	self.nextthink = self.ltime + traveltime;
+}
+
+void SUB_CalcMoveEnt (entity ent, vector tdest, float tspeed, void() func)
+{
+	entity	oldself;
+	
+	oldself = self;
+	self = ent;
+	
+	SUB_CalcMove (tdest, tspeed, func);
+	
+	self = oldself;
+}
+
+/*
+=============
+SUB_CalcAngleMove
+
+calculate self.avelocity and self.nextthink to reach destangle from
+self.angles rotating 
+
+The calling function should make sure self.think is valid
+===============
+*/
+void SUB_CalcAngleMoveDone (void)
+{
+	// After rotating, set angle to exact final angle
+	self.angles = self.finalangle;
+	self.avelocity = '0 0 0';
+	self.nextthink = -1;
+	if (self.think1)
+		self.think1 ();
+}
+
+void SUB_CalcAngleMove (vector destangle, float tspeed, void() func)
+{
+	vector	delta;
+	float	traveltime;
+	
+	if (!tspeed)
+		objerror ("No speed is defined!");
+
+	delta = destangle = self.angles;
+	traveltime = vlen (delta) / tspeed;
+	
+	self.avelocity = delta * (1 / traveltime);
+	
+	self.think1 = func;
+	self.finalangle = destangle;
+	
+	self.think = SUB_CalcAngleMoveDone;
+	self.nextthink = self.ltime + traveltime;
+}
+
+void SUB_CalcAngleMoveEnt (entity ent, vector destangle, float tspeed, void() func)
+{
+	entity	oldself;
+	
+	oldself = self;
+	self = ent;
+	
+	SUB_CalcAngleMove (destangle, tspeed, func);
+	
+	self = oldself;
 }
 
 /*
