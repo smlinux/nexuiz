@@ -189,8 +189,8 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 	take = bound(0, damage - save, damage);
 	self.armorvalue = self.armorvalue - save;
 	self.health = self.health - take;
-	self.dmg_save = self.dmg_save + save;
-	self.dmg_take = self.dmg_take + take;
+	self.dmg_save = self.dmg_save + save * 0.25;
+	self.dmg_take = self.dmg_take + take * 0.25;
 	self.dmg_inflictor = inflictor;
 	if (self.health <= 0)
 	{
