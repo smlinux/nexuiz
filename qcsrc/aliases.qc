@@ -20,6 +20,11 @@ void DoAliases() {
 
     AddImpulse(self, "+crouch", 37);
     AddImpulse(self, "-crouch", 38);
+    AddImpulse(self, "bot_add", 100);
+    AddImpulse(self, "bot_add2", 101);
+    AddImpulse(self, "bot_kick", 102);
+    AddImpulse(self, "bot_cam", 102);
+    AddImpulse(self, "bot_wayedit", 102);
 
     self.hasaliases = TRUE;
 };
