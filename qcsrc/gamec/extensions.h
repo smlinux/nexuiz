@@ -124,16 +124,13 @@ float   EF_STARDUST     = 2048;
 //description:
 //controls opacity of the entity, 0.0 is forced to be 1.0 (otherwise everything would be invisible), use -1 if you want to make something invisible, 1.0 is solid (like normal).
 
-/*
-//NOTE: no longer supported by darkplaces because no one used it
-//DP_ENT_COLORMOD // no longer supported
+//DP_ENT_COLORMOD
 //idea: LordHavoc
 //darkplaces implementation: LordHavoc
 //field definition:
 .vector colormod;
 //description:
-//controls color of the entity, '0 0 0', is forced to be '1 1 1' (otherwise everything would be black), used for tinting objects, for instance using '1 0.6 0.4' on an ogre would give you an orange ogre (order is red green blue).
-*/
+//controls color of the entity, '0 0 0', is forced to be '1 1 1' (otherwise everything would be black), used for tinting objects, for instance using '1 0.6 0.4' on an ogre would give you an orange ogre (order is red green blue), note the colors can go up to '8 8 8' (8x as bright as normal).
 
 //DP_ENT_CUSTOMCOLORMAP
 //idea: LordHavoc

@@ -262,6 +262,21 @@ void() UpdateChatBubble =
 	}
 }
 
+// LordHavoc: this hack will be removed when proper _pants/_shirt layers are
+// added to the model skins
+void() UpdateColorModHack =
+{
+	local float c;
+	c = self.clientcolors & 15;
+	// LordHavoc: only bothering to support white, green, red, yellow, blue
+	     if (c ==  0) self.colormod = '1.00 1.00 1.00';
+	else if (c ==  3) self.colormod = '0.10 1.73 0.10';
+	else if (c ==  4) self.colormod = '1.73 0.10 0.10';
+	else if (c == 12) self.colormod = '1.22 1.22 0.10';
+	else if (c == 13) self.colormod = '0.10 0.10 1.73';
+	else self.colormod = '1 1 1';
+};
+
 /*
 =============
 PlayerJump
@@ -569,6 +584,7 @@ void PlayerPostThink (void)
 		return;
 	CheckRules();
 	UpdateChatBubble();
+	UpdateColorModHack();
 	if (self.deadflag == DEAD_NO)
 	if (self.impulse)
 		ImpulseCommands ();
