@@ -44,7 +44,7 @@ void Obituary (entity attacker, entity targ, float deathtype)
 			else if (deathtype == IT_CRYLINK)
 				bprint (s, " was zapped by ", attacker.netname, "\n");
 			else if (deathtype == IT_NEX)
-				bprint (s, " sports a new hole from ", attacker.netname, "\n");
+				bprint (s, " has been vaporized by ", attacker.netname, "\n");
 			else if (deathtype == IT_HAGAR)
 				bprint (s, " was pummeled by ", attacker.netname, "\n");
 			else if (deathtype == IT_ROCKET_LAUNCHER)

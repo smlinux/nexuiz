@@ -99,6 +99,8 @@ void PutClientInServer (void)
 
 	self.view_ofs = PL_VIEW_OFS;
 	self.angles = spot.angles;
+	self.velocity = '0 0 0';
+	self.avelocity = '0 0 0';
 
 	self.viewzoom = 0.6;
 
@@ -197,7 +199,7 @@ Called when a client connects to the server
 */
 void ClientConnect (void)
 {
-	ClientInRankings();
+	//ClientInRankings();
 	bprint (self.netname);
 	bprint (" connected\n");
 }
@@ -211,7 +213,7 @@ Called when a client disconnects from the server
 */
 void ClientDisconnect (void)
 {
-	ClientDisconnected();
+	//ClientDisconnected();
 	bprint (self.netname);
 	bprint (" disconnected\n");
 }
@@ -350,8 +352,8 @@ Called every frame for each client before the physics are run
 .float attack_finished;
 void PlayerPreThink (void)
 {
-	if (BotPreFrame())
-		return;
+	//if (BotPreFrame())
+	//	return;
 	if (!self.hasaliases)
 	    DoAliases();
 
@@ -400,7 +402,7 @@ void PlayerPreThink (void)
 
 	self.angles_y=self.v_angle_y + 90;   // temp
 
-	if (TetrisPreFrame()) return;
+	//if (TetrisPreFrame()) return;
 }
 
 /*
@@ -413,8 +415,8 @@ Called every frame for each client after the physics are run
 void PlayerPostThink (void)
 {
 	float soundrandom;
-	if (BotPostFrame())
-		return;
+	//if (BotPostFrame())
+	//	return;
 	if (self.health > 0)
 	if (self.impulse)
 		ImpulseCommands ();
@@ -438,7 +440,7 @@ void PlayerPostThink (void)
 				if (self.jump_flag < -650) // landing damage
 				{
 					local float dm;
-					dm = bound(0, 0.1*(fabs(self.jump_flag) - 600), 20);
+					dm = bound(0, 0.1*(fabs(self.jump_flag) - 600), 5);
 					Damage (self, world, world, dm, DEATH_FALL, '0 0 0', '0 0 0');
 				}
 				self.jump_flag = 0;
@@ -471,5 +473,5 @@ void PlayerPostThink (void)
 		}
 	}
 
-	if (TetrisPostFrame()) return;
+	//if (TetrisPostFrame()) return;
 }

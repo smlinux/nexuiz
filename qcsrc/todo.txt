@@ -1,38 +1,29 @@
-Needed Very soon-
-	- User always drops rocket launcher when dead
-	- Use of player_skin
-	- Weapon still showing when dead
-
-
-*********************************
-************MENU*****************
-
-- Lan listing
-- Player model and skin selection
-- Replace Cursor graphics
-- Add menu music
-- Add deathmatch game options
-- Option to play music
-- Scrolling through the server list (it might show hundreds)
-
-
 *********************************
 *************QC******************
 
--ANIMATION-
-	-Jumping animation
-	-Taunting animation
+
+-MOVEMENT-
+	- Getting shot from bullets should push you back
+
+-ANIMATION/PLAYER-
+	- Jumping animation
+	- Taunting animation
+	- Use of player_skin
 
 -BUGS/OTHER-
 	- Add quake1/halflife entity support (just the weapons)
 	- Jumping underwater should move the player up
 	- Add drowning (quake1 style)
+	- Ticking when a gib/shell falls on a jumppad
+	- Weapon still showing when dead
+	- User needs to drop the weapon they were holding when dead
+	- User not dying when falling into the black
 
 -BOTS-
 	- Make waypoints for all levels
 	- Personalitys for the bots (names for bots with certain models)
 	- fix HORRIBLE use of weapons
-	- Secondary weapon support (rocket launcher might be difficult)
+	- Secondary weapon support
 
 -SOUNDS-
 	- Add a sound when hitting with uzi/shotgun, hit.wav. Use armorimpact if the enemy has armor
@@ -42,62 +33,40 @@ Needed Very soon-
 
 *********************************
 ************Engine***************
+-MENU-
+	- Lan listing
+	- Maplists
+	- Replace Cursor graphics
+	- Add menu music
+	- Option to play music
+	- Scrolling through the server list (it might show hundreds)
+	- create server 'Game Options' menu
+		- Select of game's .dat to use
+		- Sv_gravity, sv_accer, sv_friction, sv_maxspeed options
+
+-2D GRAPHICS-
+	- Don't show monsters/secrets on the bottom of the scoreboard
+	- Different text colors depending on the info (white for chatting, red for deaths)
+	- Different text sizes depending on the info (deaths are slighly larger)
+	- Graphic over the user to show they are typing a message/in the console/in the menu
 
 -PARTICLE EFFECTS-
-- Crylink plasma effect shown in crylink1.jpg or crylink3.jpg
-- Crylink hitting wall effect, exploding into many different particles effected by gravity (many different metal particles) shown in crylink2.jpg (example from q2max)
-- Laser plasma effect, equal to crylink but red in color and much smaller, explosion equal also
-- Large Smoke effect to be shown infront of the players view when firing rocket launcher
-- Small smoke effect to be shown infront of the players view when firing hagar
-- Small Explosion (used for hagar) (see Explosion.jpg for example of the type of explosion wanted, this should be altered for the various sizes)
-- Medium Explosion (used for mortar)
-- Large Explosion (used for rocket)
-- Electro Explosion (the current one is alike to this example but if there is anyway to alter it to look more like electro.jpg)
-- The Nex beam should be a purple electric type effect similar to the graphics shown on the nex weapon (nex_glow.jpg)
-- The Nex explosion (where the beam hits) should be a small shower of purple sparks
-- basic spark effect for levels
-- Smoke effect for levels (see d3smoke.jpg)
-- Electro glow trail needs to be more visible when firing the primary fire, currently it is too fast to see 
+	- Crylink plasma effect shown in crylink1.jpg or crylink3.jpg
+	- Crylink hitting wall effect, exploding into many different particles effected by gravity (many different metal particles) shown in crylink2.jpg (example from q2max)
+	- Small Explosion (used for hagar) (see Explosion.jpg for example of the type of explosion wanted, this should be altered for the various sizes)
+	- Medium Explosion (used for mortar)
+	- Large Explosion (used for rocket)
+	- The Nex explosion (where the beam hits) should be a small shower of purple sparks
+	- basic spark effect for levels
+	- Smoke effect for levels
 
--2D GRAPHICS
-- Don't show monsters/secrets on the bottom of the scoreboard
-- Center console text (when not in the console, again for chating)
-- Different text colors depending on the info (white for chatting, red for deaths, etc)
-- Graphic over the user to show they are typing a message/in the console/in the menu
+-WISHLIST-
+	- GLSL for faster nonshadowed lights
+	- Offset mapping
 
--OTHER
-	- Downloading maps/models/textures from server
-	- Maplists
-
-*********************************
-*****3d Art and animation********
-
--3D GRAPHICS-
-	- New weapon model for Uzi
-	- New weapon model for Hagar
-	- New weapon model for grenade launcher
-	- A small piece of flesh for Gib model
-	- A medium piece of flesh for gib model
-	- A large piece of flesh for gib model
-	- Large Rocket model (for rocket launcher)
-	- Small rocket model (for Hagar)
-	- Teleporter model
-
--SHADERS
-	- Make dpshaders for the laser-crylink-nex
-	- Convert quake3 shaders for the evil textures to DPshader
-	- Use envmap for rocket launcher
-	- Pulsing glow effect for the laser/Nex/Crylink
-	- Electric wave effect for g_electro model
-	- Glowing White/Red/Yellow scrolling effect for Strength/Invinicable/Speed
 
 *********************************
 ************2d Art **************
-
--2D GRAPHICS-
-	- Next/Prev button
-	- New menu cursor
-
 -Textures-
 	- Slime textures for Slime Pit
 	- Water texture for oil rig
@@ -110,34 +79,5 @@ Needed Very soon-
 	- female shock
 	- specop
 
--MENU-
-	- "Apply" graphic
-	- Arrow graphics
-	- Fullscreen loading screen (when loading maps)
-
-
-*********************************
-*************AUDIO***************
-
--LEVELS-
-	- Add spark sounds to levels
-	- Machine sound
-
--WEAPONS-
-	- Change Electro fire sound
-	- Missile sounds for electro, rocket
-
--ITEMS-
-	- Armor pickup sound
-
-*********************************
-*************MAPS****************
-Nexdm01 -
-
-Nexdm02 -
- 	- Water, either more jumppads around the rig, or we need to take out the water completely
-Nexdm03 -
-
-Nexdm04 -
-
-Nexdm05 -
+-OTHER-
+	- Add flash (alike to rocket launcher) for electro

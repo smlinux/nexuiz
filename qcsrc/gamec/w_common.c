@@ -421,6 +421,7 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float deathtype
 	// flash and burn the wall
 	te_plasmaburn (trace_endpos);
 
+	/*
 	// flame effect at impact
 	dir = trace_plane_normal * 100;
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
@@ -432,7 +433,7 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float deathtype
 	WriteCoord (MSG_BROADCAST, dir_y);
 	WriteCoord (MSG_BROADCAST, dir_z);
 	WriteByte (MSG_BROADCAST, 255);
-
+	*/
 	// play a sound
 	PointSound (trace_endpos, "weapons/neximpact.wav", 1, ATTN_NORM);
 

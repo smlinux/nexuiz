@@ -185,9 +185,6 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 		self.pain_finished = time + 0.5;	//Supajoe
 	}
 
-	if (game & GAME_INSTAGIB)
-		damage = self.health + 75;
-
 	save = bound(0, damage * 0.6, self.armorvalue);
 	take = bound(0, damage - save, damage);
 	self.armorvalue = self.armorvalue - save;
@@ -205,7 +202,8 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 		// don't spin
 		self.avelocity = '0 0 0';
 		// no weapon when dead
-		w_clear();
+		self.weaponmodel = "";
+		//w_clear();
 		// view from the floor
 		self.view_ofs = '0 0 -8';
 		// toss the corpse

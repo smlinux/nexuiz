@@ -41,7 +41,7 @@ void W_Nex_Attack (void)
 	sound (self, CHAN_WEAPON, "weapons/nexfire.wav", 1, ATTN_NORM);
 	self.punchangle_x = -4;
 	makevectors(self.v_angle);
-	org = self.origin + self.view_ofs + v_forward * 18 + v_right * 8 + v_up * -5;
+	org = self.origin + self.view_ofs + v_forward * 28 + v_right * 14 + v_up * -7;
 	te_smallflash(org);
 
 	FireRailgunBullet (org, self.origin + self.view_ofs + v_forward * 4096, 800, IT_NEX);

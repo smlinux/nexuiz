@@ -219,6 +219,6 @@ void ImpulseCommands (void)
 		self.ammo_rockets = 100;
 		self.ammo_cells = 100;
 	}
-	TetrisImpulses();
+	//TetrisImpulses();
 	self.impulse = 0;
 }

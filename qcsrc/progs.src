@@ -5,16 +5,6 @@ gamec/builtins.h
 gamec/constants.h
 gamec/defs.h		// Should rename this, it has fields and globals
 
-gamec/bot_maps.c
-gamec/bot.c
-gamec/bot_way.c
-gamec/bot_fight.c 
-gamec/bot_ai.c
-gamec/bot_misc.c
-gamec/bot_phys.c
-gamec/bot_move.c
-gamec/bot_ed.c
-
 gamec/extensions.h
 
 gamec/g_subs.c
@@ -54,7 +44,7 @@ gamec/t_items.c
 gamec/t_halflife.c
 gamec/t_quake3.c
 gamec/t_quake.c
-gamec/g_tetris.c
+//gamec/g_tetris.c
 gamec/cl_impulse.c
 gamec/cl_player.c
 gamec/cl_aliases.c
