@@ -983,6 +983,8 @@ Option menus
 	alignment	16		// TEXT_ALIGN_RIGHT
 	flag		256		// FLAG_AUTOSETCLICK
 	refresh 	nex_con_update_keys
+	action		nex_con_action_key
+	key			nex_con_key
 }
 {
 	type		ITEM_TEXT
@@ -993,11 +995,23 @@ Option menus
 }
 // state message - "Press a key or mouse button to set the new bind", etc.
 {
-	type 		ITEM_TEXT
-	name		options_control_statemsg
+	type 		ITEM_TEXTSWITCH
+	name		options_control_statemsg1
 	parent		options_control
-	text		"Hello World"
-	pos			"0 -15"
+	text		"'[Enter] Assign a new binding''Press the desired key'"
+	pos			"-100 -40"
+	size 		"200	0"
+	font_size	"11 11"
+	alignment	1
+}
+{
+	type 		ITEM_TEXTSWITCH
+	name		options_control_statemsg2
+	parent		options_control
+	text		"'[Del] Remove all bindings''[Escape] to abort'"
+	pos			"-100 -25"
+	size 		"200	0"
+	font_size	"11 11"
 	alignment	1
 }
 {

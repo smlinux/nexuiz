@@ -52,6 +52,7 @@ void(void)	ctcall_refresh;
 void(string key) 				 bind_unbindkey;
 string(float keynr) 			 bind_getstringforkey;
 string(string command) 			 bind_getkeylist; // returns altstring containing keynrs
+void(float num, string command)  bind_limitbinds;
 void(string key, string command) bind_bindkey;
 
 // control event function initializer

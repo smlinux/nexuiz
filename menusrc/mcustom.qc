@@ -868,17 +868,57 @@ string bindcommand;
 
 void(float keynr, float ascii) nex_con_keyhook =
 {
+	entity ent;
+
+	//dprint("nex_con_keyhook called !\n");
+
 	if(keynr != K_ESCAPE)
 	{
 		string tmp;
 		tmp = bind_getkeylist(bindcommand);
-		// remove the oldest binding if we need more space
-		if(getaltstringcount(tmp) >= NUMKEYS)
-			bind_unbindkey(bind_getstringforkey(stof(getaltstring(0, tmp))));
+		// remove the binds if we need more space
+		bind_limitbinds(NUMKEYS - 1, bindcommand);
 		// bind the new key
 		bind_bindkey(bind_getstringforkey(keynr), bindcommand);
 	}
+
+	ent = menu_getitem("options_control_statemsg1");
+	ent.value = 0;
+
+	ent = menu_getitem("options_control_statemsg2");
+	ent.value = 0;
+
 	menu_keyhook = null_function;
+};
+
+void(void) nex_con_action_key =
+{
+	entity ent;
+
+	bindcommand = self.link;
+
+	//dprint("action called");
+
+	menu_keyhook = nex_con_keyhook;
+
+	ent = menu_getitem("options_control_statemsg1");
+	ent.value = 1;
+
+	ent = menu_getitem("options_control_statemsg2");
+	ent.value = 1;
+};
+
+float(float keynr, float ascii) nex_con_key =
+{
+	if(keynr == K_DEL)
+	{
+		// the user wants to unbind this action
+		//dprint("Removing binds for '", self.link,"'\n");
+		bind_limitbinds(0, self.link);
+		return true;
+	}
+
+	return false;
 };
 
 void(void) nex_con_update_keys =
@@ -900,13 +940,12 @@ void(void) nex_con_update_keys =
 
 		keynr = stof(getaltstring(num, keystr));
 
-		if(keynr == -1 )
-			break;
-
 		strunzone(ent.text);
-		ent.text = bind_getstringforkey(keynr);
 
-		ent.text = strzone(ent.text);
+		if(keynr == -1 )
+			ent.text = strzone("-");
+		else
+			ent.text = strzone(bind_getstringforkey(keynr));
 
 		num = num + 1;
 	}
@@ -954,9 +993,9 @@ void(void) CONTROL_KEY =
 	key1.parent = key2.parent = desc.name;
 	key1._parent = key2._parent = desc;
 
-	eprint(key1);
-	eprint(key2);
-	eprint(desc);
+	//eprint(key1);
+	//eprint(key2);
+	//eprint(desc);
 
 	numkey = numkey + 1;
 };

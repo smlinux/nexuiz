@@ -434,12 +434,12 @@ string(float n, string s) getaltstring =
 
 void(string key) bind_unbindkey =
 {
-	cmd(strcat("unbind",key,"\n"));
+	cmd(strcat("unbind ",key,"\n"));
 };
 
 void(string key, string command) bind_bindkey =
 {
-	cmd(strcat("bind",key," ",command,"\n"));
+	cmd(strcat("bind ",key," ",command,"\n"));
 };
 
 string(float keynum) bind_getstringforkey =
@@ -452,3 +452,38 @@ string(string command) bind_getkeylist =
 	return findkeysforcommand(command);
 };
 
+void(float num, string command) bind_limitbinds =
+{
+	float maxnum;
+	float counter;
+	string keystr;
+
+	keystr = strzone(bind_getkeylist(command));
+
+	maxnum = getaltstringcount(keystr);
+	if(num > maxnum)
+		num = maxnum;
+
+	//dprint("num = ", ftos(num),"\n");
+	//dprint("maxnum = ", ftos(maxnum), "\n");
+
+	counter = 0;
+	while(counter < maxnum)
+	{
+		float keynum;
+
+		keynum = stof(getaltstring(counter, keystr));
+
+		//dprint(ftos(keynum),"\n");
+
+		if(keynum == -1)
+			break;
+
+		if(counter >= num)
+			bind_unbindkey(bind_getstringforkey(keynum));
+
+		counter = counter + 1;
+	}
+
+	strunzone(keystr);
+};
