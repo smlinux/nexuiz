@@ -150,8 +150,8 @@ void W_Grenade_Attack3 (void)
 // weapon frames 
 
 void()	glauncher_ready_01 =	{weapon_thinkf(WFRAME_IDLE, 0.1, glauncher_ready_01); self.weaponentity.state = WS_READY;};
-void()	glauncher_select_01 =	{weapon_thinkf(-1, 0.3, w_ready); weapon_boblayer1(16, '0 0 0');};
-void()	glauncher_deselect_01 =	{weapon_thinkf(-1, 0.3, w_clear); weapon_boblayer1(16, '0 20 -40');};
+void()	glauncher_select_01 =	{weapon_thinkf(-1, PLAYER_WEAPONSELECTION_DELAY, w_ready); weapon_boblayer1(PLAYER_WEAPONSELECTION_SPEED, '0 0 0');};
+void()	glauncher_deselect_01 =	{weapon_thinkf(-1, PLAYER_WEAPONSELECTION_DELAY, w_clear); weapon_boblayer1(PLAYER_WEAPONSELECTION_SPEED, PLAYER_WEAPONSELECTION_RANGE);};
 void()	glauncher_fire1_01 =	
 {
 	weapon_doattack(glauncher_check, glauncher_check, W_Grenade_Attack);

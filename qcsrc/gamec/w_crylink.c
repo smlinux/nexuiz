@@ -48,7 +48,8 @@ void W_Crylink_Attack (void) //(float postion)
 	entity	proj;
 
 	sound (self, CHAN_WEAPON, "weapons/crylink2.wav", 1, ATTN_NORM);
-
+	
+	makevectors(self.v_angle);
 	proj = spawn ();
 	proj.owner = self;
 	proj.classname = "spike";
@@ -83,8 +84,8 @@ void W_Crylink_Attack2 (void)
 
 // weapon frames 
 void()	crylink_ready_01 =	{weapon_thinkf(WFRAME_IDLE, 0.1, crylink_ready_01); self.weaponentity.state = WS_READY;};
-void()	crylink_select_01 =	{weapon_thinkf(-1, 0.3, w_ready); weapon_boblayer1(16, '0 0 0');};
-void()	crylink_deselect_01 =	{weapon_thinkf(-1, 0.3, w_clear); weapon_boblayer1(16, '0 20 -40');};
+void()	crylink_select_01 =	{weapon_thinkf(-1, PLAYER_WEAPONSELECTION_DELAY, w_ready); weapon_boblayer1(PLAYER_WEAPONSELECTION_SPEED, '0 0 0');};
+void()	crylink_deselect_01 =	{weapon_thinkf(-1, PLAYER_WEAPONSELECTION_DELAY, w_clear); weapon_boblayer1(PLAYER_WEAPONSELECTION_SPEED, PLAYER_WEAPONSELECTION_RANGE);};
 void()	crylink_fire1_01 =	
 {
 	weapon_doattack(crylink_check, crylink_check, W_Crylink_Attack);

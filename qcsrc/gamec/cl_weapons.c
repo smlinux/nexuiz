@@ -70,9 +70,6 @@ void() W_PreviousWeapon =
 };
 
 // Bringed back weapon frame
-float	JUMPBOUND_STARTSPEED	= 120;
-float	JUMPBOUND_MAXAMP		= 6;
-float	JUMPBOUND_MINAMP		= 0.5;
 void() W_WeaponFrame =
 {
 	if (!self.weaponentity || self.health <= 0) 

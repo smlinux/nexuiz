@@ -4,6 +4,7 @@ void() rlauncher_fire2_01;
 void() rlauncher_fire3_01;
 void() rlauncher_deselect_01;
 void() rlauncher_select_01;
+void() W_Rocket_Attack2;
 
 float() rlauncher_check = 
 {
@@ -19,7 +20,10 @@ void(float req) w_rlauncher =
 	else if (req == WR_FIRE1)
 		weapon_prepareattack(rlauncher_check, rlauncher_check, rlauncher_fire1_01, 1.5);
 	else if (req == WR_FIRE2)
-		weapon_prepareattack(rlauncher_check, rlauncher_check, rlauncher_fire2_01, 1.5);
+	{
+		if (time < self.attack_finished)
+			W_Rocket_Attack2();
+	}
 	else if (req == WR_FIRE3)
 		weapon_prepareattack(rlauncher_check, rlauncher_check, rlauncher_fire3_01, 1.5);
 	else if (req == WR_RAISE)
@@ -120,7 +124,7 @@ void W_Rocket_Attack2 (void)
 		proj = proj.chain;
 	}
 
-	self.attack_finished = time;
+	self.attack_finished = time + 0.1;
 }
 
 
@@ -132,8 +136,8 @@ void W_Rocket_Attack3 (void)
 // weapon frames 
 
 void()	rlauncher_ready_01 =	{weapon_thinkf(WFRAME_IDLE, 0.1, rlauncher_ready_01); self.weaponentity.state = WS_READY;};
-void()	rlauncher_select_01 =	{weapon_thinkf(-1, 0.3, w_ready); weapon_boblayer1(16, '0 0 0');};
-void()	rlauncher_deselect_01 =	{weapon_thinkf(-1, 0.3, w_clear); weapon_boblayer1(16, '0 20 -40');};
+void()	rlauncher_select_01 =	{weapon_thinkf(-1, PLAYER_WEAPONSELECTION_DELAY, w_ready); weapon_boblayer1(PLAYER_WEAPONSELECTION_SPEED, '0 0 0');};
+void()	rlauncher_deselect_01 =	{weapon_thinkf(-1, PLAYER_WEAPONSELECTION_DELAY, w_clear); weapon_boblayer1(PLAYER_WEAPONSELECTION_SPEED, PLAYER_WEAPONSELECTION_RANGE);};
 void()	rlauncher_fire1_01 =	
 {
 	weapon_doattack(rlauncher_check, rlauncher_check, W_Rocket_Attack);

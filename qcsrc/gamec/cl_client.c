@@ -158,9 +158,9 @@ void PutClientInServer (void)
 	}
 	else
 	{
-		self.items = IT_LASER;
-		self.switchweapon = WEP_LASER;
-		self.ammo_shells = 0;
+		self.items = IT_LASER | IT_SHOTGUN;
+		self.switchweapon = WEP_SHOTGUN;
+		self.ammo_shells = 25;
 		self.ammo_nails = 0;
 		self.ammo_rockets = 0;
 		self.ammo_cells = 0;

@@ -69,7 +69,7 @@ void W_Laser_Attack (void)
 	// self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);
 	sound (self, CHAN_WEAPON, "weapons/crylink.wav", 1, ATTN_NORM);
 	//org = self.origin + self.view_ofs + v_forward * 10 + v_right * 5 + v_up * -14;	
-	FireLaser (self.shotorg, self.origin + self.shotdir*4096, 25, IT_LASER);
+	FireRailgunBullet (self.shotorg, self.origin + self.shotdir*4096, 25, IT_LASER);
 	te_spark(trace_endpos, self.shotdir, 55);
 	self.attack_finished = time + 0.400;
 }
@@ -115,8 +115,8 @@ void W_Laser_Attack2 (void)
 // weapon frames 
 
 void()	laser_ready_01 =	{weapon_thinkf(WFRAME_IDLE, 0.1, laser_ready_01); self.weaponentity.state = WS_READY;};
-void()	laser_select_01 =	{weapon_thinkf(-1, 0.3, w_ready); weapon_boblayer1(16, '0 0 0');};
-void()	laser_deselect_01 =	{weapon_thinkf(-1, 0.3, w_clear); weapon_boblayer1(16, '0 20 -40');};
+void()	laser_select_01 =	{weapon_thinkf(-1, PLAYER_WEAPONSELECTION_DELAY, w_ready); weapon_boblayer1(PLAYER_WEAPONSELECTION_SPEED, '0 0 0');};
+void()	laser_deselect_01 =	{weapon_thinkf(-1, PLAYER_WEAPONSELECTION_DELAY, w_clear); weapon_boblayer1(PLAYER_WEAPONSELECTION_SPEED, PLAYER_WEAPONSELECTION_RANGE);};
 void()	laser_fire1_01 =	
 {
 	weapon_doattack(laser_check, laser_check, W_Laser_Attack);

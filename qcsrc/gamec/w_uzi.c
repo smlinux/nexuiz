@@ -39,7 +39,7 @@ void W_Uzi_Attack (void)
 	makevectors(self.v_angle);
 	sound (self, CHAN_WEAPON, "weapons/uzi_fire.wav", 1, ATTN_NORM);
 
-	fireBullet (v_forward, 100, 8, IT_UZI);
+	fireBullet (v_forward, 100, 5, IT_UZI);
 
 	self.punchangle_x = random () - 0.5;
 	self.punchangle_y = random () - 0.5;
@@ -98,8 +98,8 @@ void W_Uzi_Attack3 (void)
 // weapon frames 
 
 void()	uzi_ready_01 =	{weapon_thinkf(WFRAME_IDLE, 0.1, uzi_ready_01); self.weaponentity.state = WS_READY;};
-void()	uzi_select_01 =	{weapon_thinkf(-1, 0.3, w_ready); weapon_boblayer1(16, '0 0 0');};
-void()	uzi_deselect_01 =	{weapon_thinkf(-1, 0.3, w_clear); weapon_boblayer1(16, '0 20 -40');};
+void()	uzi_select_01 =	{weapon_thinkf(-1, PLAYER_WEAPONSELECTION_DELAY, w_ready); weapon_boblayer1(PLAYER_WEAPONSELECTION_SPEED, '0 0 0');};
+void()	uzi_deselect_01 =	{weapon_thinkf(-1, PLAYER_WEAPONSELECTION_DELAY, w_clear); weapon_boblayer1(PLAYER_WEAPONSELECTION_SPEED, PLAYER_WEAPONSELECTION_RANGE);};
 void()	uzi_fire1_01 =	
 {
 	weapon_doattack(uzi_check, uzi_check, W_Uzi_Attack);
