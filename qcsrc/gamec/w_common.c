@@ -123,7 +123,7 @@ void W_GiveWeapon (entity e, float wep, string name)
 
 	if (other.classname == "player")
 	{
-		sprint (other, "You got the ");
+		sprint (other, "You got the ^2");
 		sprint (other, name);
 		sprint (other, "\n");
 	}
