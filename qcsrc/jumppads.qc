@@ -104,5 +104,6 @@ void() trigger_push =
 	}
 };
 
+void() target_push = { trigger_push(); };
 void() info_notnull = {};
 void() target_position = {};
