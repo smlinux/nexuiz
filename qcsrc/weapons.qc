@@ -324,12 +324,10 @@ void(vector src, float bdamage, vector dir) FireRailgunBullet =
 {
 	local   vector  v, lastpos;		
 	local   entity  saveself, last;
-	local   float   damageratio, s, d, dt;
 
 	if (bdamage < 1)
 		return;
 
-	//damageratio = damage / bdamage;
 	last = self;
 	lastpos = src;
 	
@@ -342,24 +340,15 @@ void(vector src, float bdamage, vector dir) FireRailgunBullet =
 			{
 				if (pointcontents(trace_endpos - dir*4) == CONTENT_SKY)
 					return;	
-				
-				if (trace_ent.solid == SOLID_BSP)
-				{	
-					//newblastmark (trace_endpos, trace_ent, trace_plane_normal, 0);				
-					//v = randomvec() * 100 + '0 0 225' - dir * 50 - trace_plane_normal * 100;								//SpawnDust(trace_endpos - dir * 2, v);
-					//v = randomvec() * 100 + '0 0 225' - dir * 50 - trace_plane_normal * 100;								//SpawnDust(trace_endpos - dir * 2, v);
-					//v = randomvec() * 100 + '0 0 225' - dir * 50 - trace_plane_normal * 100;								//SpawnDust(trace_endpos - dir * 2, v);
-				}
 
 				if (trace_ent.takedamage)
 				{
-				Damage (self, trace_endpos, trace_ent, 0, bdamage);
+					Damage (self, trace_endpos, trace_ent, 0, bdamage);
 				}		
 			}
 		if (last.solid == SOLID_BSP)			
 			bdamage = 0;	
 	}
-	//weaponwakeup(lastpos, self);
 };
 
 void fireBullet (vector dir, float spread, float damage, float dtype)
