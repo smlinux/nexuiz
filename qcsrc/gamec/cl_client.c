@@ -240,9 +240,9 @@ void() ChatBubbleThink =
 	}
 	setorigin(self, self.owner.origin + '0 0 10' + self.owner.maxs_z * '0 0 1');
 	if (self.owner.buttonchat)
-		self.effects = EF_NODRAW;
-	else
 		self.effects = 0;
+	else
+		self.effects = EF_NODRAW;
 };
 
 void() UpdateChatBubble =
