@@ -37,7 +37,7 @@ Small air burst, large air burst. Small air burst should be red, for the laser. 
 The glow texture on the nex gun needs to fade in and out depending on the users fire rate.
 
 Quake3 entities needed:
-Add func_rotating, func_bobbing, func_group, func_train
+Add func_group
 Target_speaker
 Trigger_hurt
 And if possible: Func_Door, Func_Pendulum (although not used by any nexuiz maps)

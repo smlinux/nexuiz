@@ -193,7 +193,7 @@ void() func_plat =
 };
 
 
-
+/*
 void() train_next;
 void() func_train_find;
 
@@ -288,4 +288,159 @@ void() func_train =
 	setorigin (self, self.origin);
 	self.nextthink = self.ltime + 0.1;
 	self.think = func_train_find;
+};
+*/
+
+void() train_next;
+void() train_wait =
+{
+	self.think = train_next;
+	self.nextthink = self.ltime + self.wait;
+};
+
+void() train_next =
+{
+	local entity targ;
+	targ = find(world, targetname, self.target);
+	self.target = targ.target;
+	if (!self.target)
+		objerror("train_next: no next target");
+	self.wait = targ.wait;
+	if (!self.wait)
+		self.wait = 0.1;
+	if (targ.speed)
+		SUB_CalcMove(targ.origin - self.mins, targ.speed, train_wait);
+	else
+		SUB_CalcMove(targ.origin - self.mins, self.speed, train_wait);
+};
+
+void() func_train_find =
+{
+	local entity targ;
+	targ = find(world, targetname, self.target);
+	self.target = targ.target;
+	setorigin(self, targ.origin - self.mins);
+	self.nextthink = self.ltime + 1; 
+	self.think = train_next;
+};
+
+/*QUAKED func_train (0 .5 .8) ?
+Ridable platform, targets path_corner path to follow.
+speed : speed the train moves (can be overridden by each path_corner)
+target : targetname of first path_corner (starts here)
+*/
+void() func_train =
+{
+	if (!self.target)
+		objerror("func_train without a target");
+	if (!self.speed)
+		self.speed = 100;
+
+	self.solid = SOLID_BSP;
+	self.movetype = MOVETYPE_PUSH;
+
+	setmodel(self, self.model);
+	setsize(self, self.mins, self.maxs);
+	setorigin(self, self.origin);
+
+	// wait for targets to spawn
+	self.nextthink = self.ltime + 0.1;
+	self.think = func_train_find;
+};
+
+/*QUAKED func_rotating (0 .5 .8) ? - - X_AXIS Y_AXIS
+Brush model that spins in place on one axis (default Z).
+speed : speed to rotate (in degrees per second)
+noise : path/name of looping .wav file to play.
+*/
+void() func_rotating =
+{
+	if (self.noise)
+	{
+		precache_sound(self.noise);
+		ambientsound(self.origin, self.noise, 1, ATTN_IDLE);
+	}
+	if (!self.speed)
+		self.speed = 100;
+	// FIXME: test if this turns the right way, then remove this comment (negate as needed)
+	if (self.spawnflags & 4) // X (untested)
+		self.avelocity = '0 0 1' * self.speed;
+	// FIXME: test if this turns the right way, then remove this comment (negate as needed)
+	else if (self.spawnflags & 8) // Y (untested)
+		self.avelocity = '1 0 0' * self.speed;
+	// FIXME: test if this turns the right way, then remove this comment (negate as needed)
+	else // Z
+		self.avelocity = '0 1 0' * self.speed;
+
+	self.solid = SOLID_BSP;
+	self.movetype = MOVETYPE_PUSH;
+
+	setmodel(self, self.model);
+	setsize(self, self.mins, self.maxs);
+	setorigin(self, self.origin);
+
+	// wait for targets to spawn
+	self.nextthink = self.ltime + 999999999;
+	self.think = SUB_Null;
+};
+
+.float height;
+.float phase;
+void() func_bobbing_controller_think =
+{
+	local vector v;
+	self.nextthink = time + 0.1;
+	// calculate sinewave using makevectors
+	makevectors((time * self.owner.cnt + self.owner.phase) * '0 1 0');
+	v = self.owner.destvec + self.owner.movedir * v_forward_y;
+	// * 10 so it will arrive in 0.1 sec
+	self.owner.velocity = (v - self.owner.origin) * 10;
+};
+
+/*QUAKED func_bobbing (0 .5 .8) ? X_AXIS Y_AXIS
+Brush model that moves back and forth on one axis (default Z).
+speed : how long one cycle takes in seconds (default 4)
+height : how far the cycle moves (default 32)
+phase : cycle timing adjustment (0-1 as a fraction of the cycle, default 0)
+noise : path/name of looping .wav file to play.
+*/
+void() func_bobbing =
+{
+	local entity controller;
+	if (self.noise)
+	{
+		precache_sound(self.noise);
+		ambientsound(self.origin, self.noise, 1, ATTN_IDLE);
+	}
+	if (!self.speed)
+		self.speed = 4;
+	if (!self.height)
+		self.height = 32;
+	// center of bobbing motion
+	self.destvec = self.origin;
+	// time scale to get degrees
+	self.cnt = 360 / self.speed;
+	// how far to bob
+	if (self.spawnflags & 1) // X
+		self.movedir = '1 0 0' * self.height;
+	else if (self.spawnflags & 2) // Y
+		self.movedir = '0 1 0' * self.height;
+	else // Z
+		self.movedir = '0 0 1' * self.height;
+
+	self.solid = SOLID_BSP;
+	self.movetype = MOVETYPE_PUSH;
+
+	setmodel(self, self.model);
+	setsize(self, self.mins, self.maxs);
+	setorigin(self, self.origin);
+
+	// wait for targets to spawn
+	controller = spawn();
+	controller.classname = "func_bobbing_controller";
+	controller.owner = self;
+	controller.nextthink = time + 1;
+	controller.think = func_bobbing_controller_think;
+	self.nextthink = self.ltime + 999999999;
+	self.think = SUB_Null;
 };
