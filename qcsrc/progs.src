@@ -37,5 +37,6 @@ tetris.qc
 impulse.qc
 player.qc
 weaponanimations.qc
+aliases.qc
 client.qc
 plats.qc

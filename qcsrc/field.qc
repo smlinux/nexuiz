@@ -33,6 +33,7 @@ entity dest;
 .float	pain_frame			//"
 .float	statdraintime;			// record the one-second intervals between draining health and armour when they're over 100
 .float  crouch;	// Crouching or not?
+.float  hasaliases; // Has aliases (like +crouch) binded or not?
 
 .vector		finaldest, finalangle; 		//plat.qc stuff
 .void()		think1;

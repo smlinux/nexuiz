@@ -244,6 +244,8 @@ void PlayerPreThink (void)
 {
 	if (BotPreFrame())
 		return;
+	if (!self.hasaliases)
+	    DoAliases();
 
 	if (self.deadflag != DEAD_NO)
 	{
