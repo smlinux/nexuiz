@@ -1,6 +1,6 @@
-void GibDamage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
+void GibTouch ()
 {
-	te_blood (self.origin + '0 0 1', '0 0 30', damage);
+	te_blood (self.origin + '0 0 1', '0 0 30', 10);
 
 	float r;
 	r = random ();
@@ -12,9 +12,8 @@ void GibDamage (entity inflictor, entity attacker, float damage, float deathtype
 			sound (self, CHAN_IMPACT, "misc/gib_splat03.wav", 1, ATTN_NORM);
 	else if (r < 0.75)
 			sound (self, CHAN_IMPACT, "misc/gib_splat04.wav", 1, ATTN_NORM);
-
-	self.health = self.health - damage;
-	if (self.health <= -300)
+	self.health = self.health - 11;
+	if (self.health <= -12)
 	{
 		self.event_damage = nullfunction;
 		SUB_VanishOrRemove (self);
@@ -25,7 +24,7 @@ void GibDamage (entity inflictor, entity attacker, float damage, float deathtype
 // TossGib now takes a gib entity so it can be used for tossing heads
 // gib.velocity now uses randomvec() instead of a bunch of manual random calls
 // merged Gib() into PlayerGib()
-void TossGib (entity gib, string mdlname, vector org, vector v)
+void TossGib (entity gib, string mdlname, vector org, vector v, float destroyontouch)
 {
 	if (gib == world)
 	{
@@ -43,7 +42,9 @@ void TossGib (entity gib, string mdlname, vector org, vector v)
 	gib.health = -1;
 	gib.takedamage = DAMAGE_YES;
 	gib.damageforcescale = 3.5;
-	gib.event_damage = GibDamage;
+	//gib.event_damage = GibDamage;
+	if (destroyontouch == 1)
+		gib.touch = GibTouch;
 
 	gib.velocity = v + randomvec() * 450;
 	gib.avelocity = randomvec() * 300;

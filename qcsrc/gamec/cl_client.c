@@ -105,6 +105,7 @@ void PutClientInServer (void)
 	self.viewzoom = 0.6;
 
 	setmodel (self, self.playermodel);
+	self.skin = self.playerskin;
 	setsize (self, PL_MIN, PL_MAX);
 	setorigin (self, spot.origin + '0 0 1' * (1 - self.mins_z - 24));
 	// don't reset back to last position, even if new position is stuck in solid
@@ -493,6 +494,7 @@ void PlayerPreThink (void)
 		m2 = self.maxs;
 		setmodel (self, self.playermodel);
 		setsize (self, m1, m2);
+		self.skin = self.playerskin;
 	}
 
 	W_WeaponFrame();
@@ -551,11 +553,11 @@ void PlayerPostThink (void)
 				soundrandom = random() * 4;
 				if (soundrandom < 1)
 					sound (self, CHAN_BODY, "misc/hitground1.wav", 1, ATTN_NORM);
-				if (soundrandom < 2)
+				else if (soundrandom < 2)
 					sound (self, CHAN_BODY, "misc/hitground2.wav", 1, ATTN_NORM);
-				if (soundrandom < 3)
+				else if (soundrandom < 3)
 					sound (self, CHAN_BODY, "misc/hitground3.wav", 1, ATTN_NORM);
-				if (soundrandom < 4)
+				else if (soundrandom < 4)
 					sound (self, CHAN_BODY, "misc/hitground4.wav", 1, ATTN_NORM);
 				if (self.jump_flag < -650) // landing damage
 				{

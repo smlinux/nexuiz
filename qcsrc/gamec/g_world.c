@@ -46,17 +46,19 @@ void worldspawn (void)
 
 	precache_model ("models/grenademodel.md3");
 	precache_model ("models/hagarmissile.mdl");
-	precache_model ("models/rocketmissile.mdl");
+	precache_model ("models/rocket.md3");
 	precache_model ("models/bullet.mdl");
 	precache_model ("models/casing_bronze.mdl");
 	precache_model ("models/casing_shell.mdl");
 	precache_model ("models/casing_steel.mdl");
 	precache_model ("models/beam.mdl");
 	precache_model ("models/flash.md3");
+	precache_model ("models/nexflash.md3");
 	precache_model ("models/laser.mdl");
 	precache_model ("models/elaser.mdl");
 	precache_model ("models/ebomb.mdl");
 	precache_model ("models/plasma.mdl");
+	precache_model ("models/plasmatrail.mdl");
 	precache_model ("models/tracer.mdl");
 	
 	precache_model ("models/items/g_h1.md3");
@@ -90,7 +92,10 @@ void worldspawn (void)
 	precache_model ("models/gibs/gib1.md3");
 	precache_model ("models/gibs/gib2.md3");
 	precache_model ("models/gibs/gib3.md3");
-	precache_model ("models/gibs/gib4.mdl");
+	precache_model ("models/gibs/gib4.md3");
+	precache_model ("models/gibs/gib5.md3");
+	precache_model ("models/gibs/gib6.md3");
+	precache_model ("models/gibs/chunk.mdl");
 	precache_model ("models/gibs/bloodyskull.md3");
 
 	precache_sound ("weapons/lasergun_fire.wav");

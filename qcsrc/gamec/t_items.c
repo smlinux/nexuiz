@@ -26,8 +26,9 @@ void Item_Touch (void)
 	// probably want to switch to an even better weapon after items are given
 	_switchweapon = other.switchweapon == w_getbestweapon(other);
 
-	if (self.ammo_shells)
+	if (self.ammo_shells){
 		other.ammo_shells = min (other.ammo_shells + self.ammo_shells, 100);
+	}
 	if (self.ammo_nails)
 		other.ammo_nails = min (other.ammo_nails + self.ammo_nails, 200);
 	if (self.ammo_rockets)
@@ -35,14 +36,14 @@ void Item_Touch (void)
 	if (self.ammo_cells)
 		other.ammo_cells = min (other.ammo_cells + self.ammo_cells, 100);
 
-	if (self.items & IT_UZI)				W_GiveWeapon (other, IT_UZI);
-	if (self.items & IT_SHOTGUN)			W_GiveWeapon (other, IT_SHOTGUN);
-	if (self.items & IT_GRENADE_LAUNCHER)	W_GiveWeapon (other, IT_GRENADE_LAUNCHER);
-	if (self.items & IT_ELECTRO)			W_GiveWeapon (other, IT_ELECTRO);
-	if (self.items & IT_NEX)				W_GiveWeapon (other, IT_NEX);
-	if (self.items & IT_HAGAR)				W_GiveWeapon (other, IT_HAGAR);
-	if (self.items & IT_ROCKET_LAUNCHER)	W_GiveWeapon (other, IT_ROCKET_LAUNCHER);
-	if (self.items & IT_CRYLINK)			W_GiveWeapon (other, IT_CRYLINK);
+	if (self.items & IT_UZI)				W_GiveWeapon (other, IT_UZI, "Machine gun");
+	if (self.items & IT_SHOTGUN)			W_GiveWeapon (other, IT_SHOTGUN, "Shotgun");
+	if (self.items & IT_GRENADE_LAUNCHER)	W_GiveWeapon (other, IT_GRENADE_LAUNCHER, "Mortar");
+	if (self.items & IT_ELECTRO)			W_GiveWeapon (other, IT_ELECTRO, "Electro");
+	if (self.items & IT_NEX)				W_GiveWeapon (other, IT_NEX, "Nex");
+	if (self.items & IT_HAGAR)				W_GiveWeapon (other, IT_HAGAR, "Hagar");
+	if (self.items & IT_ROCKET_LAUNCHER)	W_GiveWeapon (other, IT_ROCKET_LAUNCHER, "Rocket Launcher");
+	if (self.items & IT_CRYLINK)			W_GiveWeapon (other, IT_CRYLINK, "Crylink");
 
 	if (self.strength_finished)
 		other.strength_finished = max(other.strength_finished, time) + self.strength_finished;
@@ -57,13 +58,6 @@ void Item_Touch (void)
 		other.health = other.health + self.max_health;
 	if (self.armorvalue)
 		other.armorvalue = other.armorvalue + self.armorvalue;
-
-	if (other.classname == "player")
-	{
-		sprint (other, "You got the ");
-		sprint (other, self.netname);
-		sprint (other, "\n");
-	}
 
 	oldself = self;
 	self = other;

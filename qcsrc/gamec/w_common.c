@@ -107,7 +107,7 @@ float W_GetBestWeapon (entity e)
 	return IT_LASER;
 }
 
-void W_GiveWeapon (entity e, float wep)
+void W_GiveWeapon (entity e, float wep, string name)
 {
 	entity oldself;
 
@@ -120,6 +120,15 @@ void W_GiveWeapon (entity e, float wep)
 	self = e;
 
 	weapon_action(self.weapon, WR_UPDATECOUNTS);
+
+	if (other.classname == "player")
+	{
+		sprint (other, "You got the ");
+		sprint (other, name);
+		sprint (other, "\n");
+	}
+
+	
 /*
 	W_UpdateWeapon ();
 	W_UpdateAmmo ();

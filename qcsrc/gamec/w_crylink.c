@@ -41,6 +41,7 @@ void W_Crylink_Touch (void)
 	RadiusDamage (self, self.owner, cvar("g_balance_crylink_damage"), cvar("g_balance_crylink_edgedamage"), cvar("g_balance_crylink_radius"), world, cvar("g_balance_crylink_force"), IT_CRYLINK);
 	self.touch = nullfunction;
 	self.norespawn = TRUE;
+	setmodel (self, "models/plasma.mdl");
 	self.gravity = 1;
 	self.glow_size = 0;
 	self.glow_color = 0;
@@ -70,7 +71,7 @@ void W_Crylink_Attack (void) //(float postion)
 		proj.solid = SOLID_BBOX;
 		proj.gravity = 0.001;
 
-		setmodel (proj, "models/plasma.mdl");
+		setmodel (proj, "models/plasmatrail.mdl");
 		setsize (proj, '0 0 0', '0 0 0');
 		setorigin (proj, self.origin + self.view_ofs + v_forward * 10 + v_right * 5 + v_up * -14);
 
@@ -78,6 +79,8 @@ void W_Crylink_Attack (void) //(float postion)
 		proj.touch = W_Crylink_Touch;
 		proj.think = SUB_Remove;
 		proj.nextthink = time + 9;
+
+		proj.angles = vectoangles (proj.velocity);
 
 		proj.glow_color = 10;
 		proj.glow_size = 20;
@@ -109,7 +112,7 @@ void W_Crylink_Attack2 (void)
 		proj.solid = SOLID_BBOX;
 		proj.gravity = 0.001;
 
-		setmodel (proj, "models/plasma.mdl");
+		setmodel (proj, "models/plasmatrail.mdl");
 		setsize (proj, '0 0 0', '0 0 0');
 		setorigin (proj, self.origin + self.view_ofs + v_forward * 10 + v_right * 5 + v_up * -14);
 
@@ -117,6 +120,8 @@ void W_Crylink_Attack2 (void)
 		proj.touch = W_Crylink_Touch;
 		proj.think = SUB_Remove;
 		proj.nextthink = time + 9;
+
+		proj.angles = vectoangles (proj.velocity);
 
 		proj.glow_color = 10;
 		proj.glow_size = 20;

@@ -50,6 +50,17 @@ void W_Nex_Attack (void)
 
 	if (!(game & GAME_INSTAGIB))
 		self.ammo_cells = self.ammo_cells - 5;
+
+	entity	flash;
+	flash = spawn ();
+	//flash.drawonlytoclient;
+	org = self.origin + self.view_ofs + v_forward * 33 + v_right * 14 + v_up * -7;
+	setorigin (flash, org);
+	setmodel (flash, "models/nexflash.md3");
+	flash.velocity = v_forward * 20;
+	flash.angles = vectoangles (flash.velocity);
+	SUB_SetFade (flash, time);
+	flash.effects = flash.effects | EF_ADDITIVE;
 }
 
 void W_Nex_Attack2 (void)

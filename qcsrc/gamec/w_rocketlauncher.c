@@ -89,7 +89,7 @@ void W_Rocket_Attack (void)
 
 	missile.movetype = MOVETYPE_FLY;
 	missile.solid = SOLID_BBOX;
-	setmodel (missile, "models/rocketmissile.mdl");
+	setmodel (missile, "models/rocket.md3");
 	setsize (missile, '0 0 0', '0 0 0');
 
 	org = self.origin + self.view_ofs + v_forward * 15 + v_right * 3 + v_up * -11;

@@ -82,8 +82,9 @@ void W_Hagar_Attack (void)
 	missile.solid = SOLID_BBOX;
 	setmodel (missile, "models/hagarmissile.mdl");
 	setsize (missile, '0 0 0', '0 0 0');
+	missile.scale = 0.4;
 
-	setorigin (missile, self.origin + self.view_ofs + v_forward * 25 + v_right * 5 + v_up * -12);
+	setorigin (missile, self.origin + self.view_ofs + v_forward * 25 + v_right * 5 + v_up * -8);
 
 	sped = cvar("g_balance_hagar_speed");
 	missile.velocity = v_forward * sped + v_right * crandom() * 0.035 * sped + v_up * crandom() * 0.015 * sped;
@@ -120,7 +121,9 @@ void W_Hagar_Attack2 (void)
 	setmodel (missile, "models/hagarmissile.mdl");
 	setsize (missile, '-6 -6 -3', '6 6 3');
 
-	setorigin (missile, self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -12);
+	setorigin (missile, self.origin + self.view_ofs + v_forward * 25 + v_right * 5 + v_up * -8);
+
+	missile.scale = 0.4;
 
 	missile.velocity = v_forward * cvar("g_balance_hagar_speed2") + v_up * cvar("g_balance_hagar_speed2_up");
 	missile.angles = vectoangles (missile.velocity);
