@@ -114,21 +114,21 @@ void SpawnThrownWeapon (vector org, float w)
 	self.norespawn = 1;
 	//SUB_SetFade(self, time + 20);
 
-	if (self.switchweapon == WEP_UZI)
+	if (w == WEP_UZI)
 		weapon_uzi ();
-	else if (self.switchweapon == WEP_SHOTGUN)
+	else if (w == WEP_SHOTGUN)
 		weapon_shotgun ();
-	else if (self.switchweapon == WEP_GRENADE_LAUNCHER)
+	else if (w == WEP_GRENADE_LAUNCHER)
 		weapon_grenadelauncher ();
-	else if (self.switchweapon == WEP_ELECTRO)
+	else if (w == WEP_ELECTRO)
 		weapon_electro ();
-	else if (self.switchweapon == WEP_CRYLINK)
+	else if (w == WEP_CRYLINK)
 		weapon_crylink ();
-	else if (self.switchweapon == WEP_NEX)
+	else if (w == WEP_NEX)
 		weapon_nex ();
-	else if (self.switchweapon == WEP_HAGAR)
+	else if (w == WEP_HAGAR)
 		weapon_hagar ();
-	else if (self.switchweapon == WEP_ROCKET_LAUNCHER)
+	else if (w == WEP_ROCKET_LAUNCHER)
 		weapon_rocketlauncher ();
 
 	self = oldself;
@@ -194,6 +194,8 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 	self.dmg_inflictor = inflictor;
 	if (self.health <= 0)
 	{
+		// throw a weapon
+		SpawnThrownWeapon (self.origin + (self.mins + self.maxs) * 0.5, self.weapon);
 		// print an obituary message
 		Obituary (attacker, self, deathtype);
 		// make the corpse upright (not tilted)
@@ -230,8 +232,6 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 		}
 		// start the animation
 		player_anim();
-		// throw a weapon
-		SpawnThrownWeapon (self.origin + (self.mins + self.maxs) * 0.5, self.weapon);
 		// set damage function to corpse damage
 		self.event_damage = PlayerCorpseDamage;
 		// call the corpse damage function just in case it wants to gib
