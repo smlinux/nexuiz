@@ -106,12 +106,12 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 	// apply strength multiplier
 	if (attacker.items & IT_STRENGTH)
 	{
-		damage = damage * POWERUP_STRENGTH_DAMAGE;
-		force = force * POWERUP_STRENGTH_FORCE;
+		damage = damage * cvar("g_balance_powerup_strength_damage");
+		force = force * cvar("g_balance_powerup_strength_force");
 	}
 	// apply invincibility multiplier
 	if (targ.items & IT_INVINCIBLE)
-		damage = damage * POWERUP_INVINCIBLE_TAKEDAMAGE;
+		damage = damage * cvar("g_balance_powerup_invincible_takedamage");
 	// apply push
 	if (self.damageforcescale)
 	{

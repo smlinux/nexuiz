@@ -625,10 +625,10 @@ float(entity thing) priority_for_thing =
 			thisp = 65;
 		else if (thing.classname == "item_invincible") // IT_INVINCIBLE
 			thisp = 65;
-		else if (thing.classname == "item_speed") // IT_SPEED
-			thisp = 65;
-		else if (thing.classname == "item_slowmo") // IT_SLOWMO
-			thisp = 65;
+		//else if (thing.classname == "item_speed") // IT_SPEED
+		//	thisp = 65;
+		//else if (thing.classname == "item_slowmo") // IT_SLOWMO
+		//	thisp = 65;
 		else if (thing.classname == "item_health")
 		{
 			if (thing.spawnflags & 2)

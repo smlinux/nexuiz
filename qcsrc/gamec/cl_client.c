@@ -88,8 +88,8 @@ void PutClientInServer (void)
 	self.pain_finished = 0;
 	self.strength_finished = 0;
 	self.invincible_finished = 0;
-	self.speed_finished = 0;
-	self.slowmo_finished = 0;
+	//self.speed_finished = 0;
+	//self.slowmo_finished = 0;
 	// players have no think function
 	self.think = nullfunction;
 	self.nextthink = 0;
@@ -107,7 +107,7 @@ void PutClientInServer (void)
 
 	// Savage: Insufficient check for invalid playermodels
 	if(strlen(self.playermodel) < 15) self.playermodel = "models/player/marine.zym";
-	
+
 	setmodel (self, self.playermodel);
 	self.skin = stof(self.playerskin);
 	self.crouch = FALSE;

@@ -156,8 +156,8 @@ float	IT_CELLS				= 2048;
 
 float	IT_STRENGTH				= 8192;
 float	IT_INVINCIBLE			= 16384;
-float	IT_SPEED				= 32768;
-float	IT_SLOWMO				= 65536;
+//float	IT_SPEED				= 32768;
+//float	IT_SLOWMO				= 65536;
 
 float	IT_KEY1					= 131072;
 float	IT_KEY2					= 262144;
@@ -180,8 +180,8 @@ vector	PL_CROUCH_MAX			= '16 16 25';
 float	game;	// set to "gamecfg" on worldspawn
 
 
-float	POWERUP_STRENGTH_DAMAGE	= 2; // damage multiplier for strength powerup
-float	POWERUP_STRENGTH_FORCE	= 4; // force multiplier for strength powerup
+//float	POWERUP_STRENGTH_DAMAGE	= 2; // damage multiplier for strength powerup
+//float	POWERUP_STRENGTH_FORCE	= 4; // force multiplier for strength powerup
 
-float	POWERUP_INVINCIBLE_TAKEDAMAGE	= 0.2; // received damage multiplier for invincible powerup
+//float	POWERUP_INVINCIBLE_TAKEDAMAGE	= 0.2; // received damage multiplier for invincible powerup
 

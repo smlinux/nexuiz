@@ -46,13 +46,13 @@ void Item_Touch (void)
 	if (self.items & IT_CRYLINK)			W_GiveWeapon (other, IT_CRYLINK, "Crylink");
 
 	if (self.strength_finished)
-		other.strength_finished = max(other.strength_finished, time) + self.strength_finished;
+		other.strength_finished = max(other.strength_finished, time) + cvar("g_balance_powerup_strength_time");
 	if (self.invincible_finished)
-		other.invincible_finished = max(other.invincible_finished, time) + self.invincible_finished;
-	if (self.speed_finished)
-		other.speed_finished = max(other.speed_finished, time) + self.speed_finished;
-	if (self.slowmo_finished)
-		other.slowmo_finished = max(other.slowmo_finished, time) + self.slowmo_finished;
+		other.invincible_finished = max(other.invincible_finished, time) + cvar("g_balance_powerup_invincible_time");
+	//if (self.speed_finished)
+	//	other.speed_finished = max(other.speed_finished, time) + cvar("g_balance_powerup_speed_time");
+	//if (self.slowmo_finished)
+	//	other.slowmo_finished = max(other.slowmo_finished, time) + (cvar("g_balance_powerup_slowmo_time") * cvar("g_balance_powerup_slowmo_speed"));
 
 	if (self.max_health)
 		other.health = other.health + self.max_health;
@@ -119,18 +119,18 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 	self.movetype = MOVETYPE_TOSS;
 	self.solid = SOLID_TRIGGER;
 	self.touch = Item_Touch;
-	
+
 	if (itemflags & FL_POWERUP)
 	{
 		self.effects = self.effects | EF_ADDITIVE;
 	}
-	
+
 	// Savage: remove thrown items after a certain period of time ("garbage collection")
 	if(self.norespawn) {
 		self.think = RemoveItem;
 		self.nextthink = time + 60;
-	}	
-	
+	}
+
 }
 
 void weapon_uzi (void) {self.ammo_nails = 30;StartItem ("models/weapons/g_uzi.md3", "weapons/weaponpickup.wav", 15, "Uzi", IT_UZI, FL_WEAPON);}
@@ -155,6 +155,8 @@ void item_health100 (void) {self.max_health = 100;StartItem ("models/items/g_h10
 
 void item_strength (void) {self.strength_finished = 30;StartItem ("models/items/g_strength.md3", "misc/powerup.wav", 120, "Strength Powerup", IT_STRENGTH, FL_POWERUP);}
 void item_invincible (void) {self.invincible_finished = 30;StartItem ("models/items/g_invincible.md3", "misc/powerup.wav", 120, "Invulnerability", IT_INVINCIBLE, FL_POWERUP);}
+//void item_speed (void) {self.speed_finished = 30;StartItem ("models/items/g_speed.md3", "misc/powerup.wav", 120, "Speed Powerup", IT_SPEED, FL_POWERUP);}
+//void item_slowmo (void) {self.slowmo_finished = 30;StartItem ("models/items/g_slowmo.md3", "misc/powerup.wav", 120, "Slow Motion", IT_SLOWMO, FL_POWERUP);}
 
 void misc_models (void)
 {

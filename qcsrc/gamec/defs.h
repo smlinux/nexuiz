@@ -36,9 +36,9 @@ entity dest;
 .float  crouch;	// Crouching or not?
 
 .float	strength_finished;
-.float	speed_finished;
+//.float	speed_finished;
 .float	invincible_finished;
-.float	slowmo_finished;
+//.float	slowmo_finished;
 
 .vector		finaldest, finalangle; 		//plat.qc stuff
 .void()		think1;

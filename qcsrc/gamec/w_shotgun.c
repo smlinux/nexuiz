@@ -37,6 +37,7 @@ void W_Shotgun_Attack (void)
 	float	sc;
 	float	bullets;
 	float	d;
+	float	spread;
 
 	makevectors(self.v_angle);
 	sound (self, CHAN_WEAPON, "weapons/shotgun_fire.wav", 1, ATTN_NORM);
@@ -44,8 +45,9 @@ void W_Shotgun_Attack (void)
 	d = cvar("g_balance_shotgun_damage");
 
 	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 8) + (v_forward * 5);
+	spread = cvar("g_balance_shotgun_spread");
 	for (sc = 0;sc < bullets;sc = sc + 1)
-		fireBullet (org, v_forward, 0.1, d, IT_SHOTGUN, sc < 3);
+		fireBullet (org, v_forward, spread, d, IT_SHOTGUN, sc < 3);
 	self.ammo_shells = self.ammo_shells - 1;
 	self.attack_finished = time + 0.7;
 

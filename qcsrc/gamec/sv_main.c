@@ -5,9 +5,6 @@ StartFrame
 Called before each frame by the server
 =============
 */
-float slowmoactive;
-float slowmowasactive;
-float slowmooldvalue;
 void StartFrame (void)
 {
 	local string s;
