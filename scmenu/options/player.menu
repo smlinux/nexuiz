@@ -11,6 +11,7 @@ Item Window Player
 
 		Derive Picture Picture
 		{
+			pos 	'0 20'
 			size	'300 400'
 			picture "gfx/m_white"
 		}
