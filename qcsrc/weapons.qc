@@ -1,7 +1,7 @@
 // increments sprite frame, loops when end is hit.. simple
 void(float startframe, float frame_count) animate_sprite =
 {
-	if (self.frame >= (frame_count - 1))
+	if ((self.frame - startframe) >= (frame_count - 1 ))
 		self.frame = startframe;
 	else
 		self.frame = self.frame + 1;
@@ -692,17 +692,14 @@ void W_Plasma_Touch (void)
 	remove (self);
 }
 
-.float animthink;
+const float w_plasma_anim_interval = 0.05;
 .float lifetime;
 void() W_Plasma_Think =
 {
-	if (self.animthink < time)
-	{
-		animate_sprite(0, 5);
-		self.animthink = time + 0.05; // 20fps?
-	}
-	self.nextthink = time;
-	self.think = W_Plasma_Think;
+	animate_sprite(0, 5);
+	
+	self.nextthink = time+ w_plasma_anim_interval;
+
 	if (self.lifetime < time) // time is up
 		SUB_Remove();
 };
@@ -730,7 +727,7 @@ void W_Electro_Attack2 (void)
 	proj.velocity = v_forward * 5000;
 	proj.touch = W_Plasma_Touch;
 	proj.think = W_Plasma_Think;
-	proj.nextthink = time;
+	proj.nextthink = time + w_plasma_anim_interval;
 	proj.lifetime = time + 1.5;
 
 	self.attack_finished = time + 0.175;
