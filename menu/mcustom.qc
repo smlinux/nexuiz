@@ -701,18 +701,26 @@ void(void) slist_draw =
 		line = gethostcachestring(SLIST_LINE1, slist_start + c);
 
 		if( !line || line == "" )
-			line = "Empty";
+			line = strzone( "Empty" );
+		else
+			line = strzone( strcat( chr(127), line ) );
+
 		menu_drawstring(pos, line, self.font_size, self.color, self.alpha, self.drawflag);
 
 		pos_y = pos_y + self.font_size_y;
 
+		strunzone( line );
 		line = gethostcachestring(SLIST_LINE2, slist_start + c);
 
 		if( !line || line == "" )
-			line = "Empty";
-		menu_drawstring(pos, line, self.font_size, self.color, self.alpha, self.drawflag);
+			line = strzone( "Empty" );
+		else
+			line = strzone( strcat( chr(127), line ) );
 
+		menu_drawstring(pos, line, self.font_size, self.color, self.alpha, self.drawflag);
 		pos_y = pos_y + self.font_size_y;
+
+		strunzone( line );
 	}
 };
 
