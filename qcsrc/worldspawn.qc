@@ -79,6 +79,7 @@ void worldspawn (void)
 	precache_sound ("weapons/WeaponPickup.wav");
 	precache_sound ("weapons/hyprbf1a.wav");
 	precache_sound ("weapons/plasmx1a.wav");
+	precache_sound ("weapons/crylink.wav");
 	
 	precache_sound ("misc/BodyImpact1.wav");
 	precache_sound ("misc/BodyImpact2.wav");

@@ -1,4 +1,3 @@
-
 void W_UpdateAmmo (void)
 {
 	self.items = self.items - (self.items & (IT_NAILS | IT_SHELLS | IT_ROCKETS | IT_CELLS));
@@ -321,6 +320,48 @@ float W_CheckAmmo (void)
 	return FALSE;
 }
 
+void(vector src, float bdamage, vector dir) FireRailgunBullet =
+{
+	local   vector  v, lastpos;		
+	local   entity  saveself, last;
+	local   float   damageratio, s, d, dt;
+
+	if (bdamage < 1)
+		return;
+
+	//damageratio = damage / bdamage;
+	last = self;
+	lastpos = src;
+	
+	while (bdamage > 0)
+	{		
+		traceline (lastpos + dir * 2, lastpos + dir*8192, FALSE, last);
+		last = trace_ent;
+		lastpos = trace_endpos;
+		if (trace_fraction != 1.0)		
+			{
+				if (pointcontents(trace_endpos - dir*4) == CONTENT_SKY)
+					return;	
+				
+				if (trace_ent.solid == SOLID_BSP)
+				{	
+					//newblastmark (trace_endpos, trace_ent, trace_plane_normal, 0);				
+					//v = randomvec() * 100 + '0 0 225' - dir * 50 - trace_plane_normal * 100;								//SpawnDust(trace_endpos - dir * 2, v);
+					//v = randomvec() * 100 + '0 0 225' - dir * 50 - trace_plane_normal * 100;								//SpawnDust(trace_endpos - dir * 2, v);
+					//v = randomvec() * 100 + '0 0 225' - dir * 50 - trace_plane_normal * 100;								//SpawnDust(trace_endpos - dir * 2, v);
+				}
+
+				if (trace_ent.takedamage)
+				{
+				Damage (self, trace_endpos, trace_ent, 0, bdamage);
+				}		
+			}
+		if (last.solid == SOLID_BSP)			
+			bdamage = 0;	
+	}
+	//weaponwakeup(lastpos, self);
+};
+
 void fireBullet (vector dir, float spread, float damage, float dtype)
 {
 	vector	org;
@@ -431,6 +472,8 @@ void W_Uzi_Attack (void)
 	vector	org; // casing code
 	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 1) + (v_forward * 20);
 	SpawnCasing (org, v_forward, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 + 10) * v_up), 2);
+
+	self.effects = self.effects | EF_MUZZLEFLASH;
 }
 
 void W_Uzi_Attack2 (void)
@@ -679,6 +722,8 @@ void W_Crylink_Attack (void)
 
 	// FIXME: make it accurate!
 
+	FireRailgunBullet (org, 25, v_forward);	
+
 	traceline (org, self.origin + self.view_ofs + (v_forward * 4096), FALSE, self);
 
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
@@ -709,15 +754,13 @@ void W_Crylink_Attack2 (void)
 	org = self.origin + self.view_ofs + v_forward * 19 + v_right * 5 + v_up * -7;
 	
 	traceline (org, self.origin + self.view_ofs + v_forward * 4096 + v_right * (random () * 100 - 50) + v_up * (random () * 100 - 50), FALSE, self);
+
+	Damage (self, trace_endpos, trace_ent, 0, 20);	
 	
 	te_lightning1 (self, org, trace_endpos);
 	
+	self.ammo_cells = self.ammo_cells - 0.25;
 	self.attack_finished = time + 0.075;
-}
-
-void W_Nex_Smite (void)
-{
-
 }
 
 void W_Nex_Attack (void)
@@ -735,8 +778,11 @@ void W_Nex_Attack (void)
 	
 	// FIXME: iterate to hit multiple guys
 	// FIXME: make it accurate!
+
 	traceline (org, self.origin + self.view_ofs + (v_forward * 4096), FALSE, self);
-	
+
+	FireRailgunBullet (org, 90, v_forward);	
+
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 	WriteByte (MSG_BROADCAST, 76);
 	WriteCoord (MSG_BROADCAST, org_x);
@@ -833,7 +879,38 @@ void W_Hagar_Attack (void)
 
 void W_Hagar_Attack2 (void)
 {
-
+	entity	missile;
+	vector	org;
+	
+	sound (self, CHAN_WEAPON, "weapons/Hagar_Fire.wav", 1, ATTN_NORM);
+	
+	missile = spawn ();
+	missile.owner = self;
+	missile.classname = "rocket";
+	
+	missile.takedamage = DAMAGE_YES;
+	missile.health = 1;
+	missile.event_hurt = W_Hagar_Explode;
+	
+	missile.movetype = MOVETYPE_FLY;
+	missile.solid = SOLID_BBOX;
+	setmodel (missile, "models/hagarmissile.mdl");
+	setsize (missile, '0 0 0', '0 0 0');
+	
+	makevectors (self.v_angle);
+	
+	org = self.origin + self.view_ofs + v_forward * 20 + v_right * 4 + v_up * -15;
+	
+	setorigin (missile, org);
+	missile.velocity = v_forward * 15000;
+	missile.angles = vectoangles (missile.velocity);
+	
+	missile.touch = W_Hagar_Touch;
+	missile.think = SUB_Remove;
+	missile.nextthink = time + 1;
+	
+	self.attack_finished = time + 0.7;
+	self.ammo_rockets = self.ammo_rockets - 0.25;
 }
 
 void W_Rocket_Explode (entity ignore)

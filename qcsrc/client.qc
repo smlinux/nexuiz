@@ -189,6 +189,11 @@ void PlayerPreThink (void)
 		else if (self.button3)
 			W_SecondaryAttack ();
 	}
+
+	if (self.weapon == IT_NEX && self.button3)
+		self.viewzoom = 0.1;
+	else if (self.viewzoom != 1)
+		self.viewzoom = 1;
 	
 	if (self.button2)
 		PlayerJump ();
