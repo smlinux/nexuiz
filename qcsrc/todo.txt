@@ -7,14 +7,12 @@
 0: Add deathtypes and obituary messages
 0: Footsteps (go threw 6 footstep sounds)
 0: When the user dies go to chasecam mode
-0: Respawn code (when the user hits fire)
 0: Make crylink and nex way more accurate
 1: When dead the users weapon gets thrown in the air for anyone to pick up (just the weapon he was holding)
 1: when dead the powerup the user had gets thrown in the air
 1: Ability to blow away Casing and Gibs with explosions
 1: Ability to blow up a rocket/grenade/hagar rocket with a bullet/crylink/nex bullet
 1: When a grenade/rocket/hagar rocket is in the radius (close to it, not just a health of 1) of a explosion, it blows up to
-1: Add Q3-style jumppads
 1: Add telefragging and make teleporters nicer perhaps
 1: Local Damage (just the the head and body)
 1: Add secondary fire to all weapons
