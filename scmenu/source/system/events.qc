@@ -338,9 +338,6 @@ void() Menu_Frame =
 	Sys_Debug_Frame();
 
 	Menu_UpdateRunFlags();
-	// process the update event
-	Menu_Process_Setup();
-	Menu_ProcessUpdate( Menu_ActiveWindow, MENU_PROCESS_UPDATE );
 
 	Menu_Process_Setup();
 	// if mouse was moved, select an item
@@ -358,6 +355,11 @@ void() Menu_Frame =
 		}
 	} else // just update mouseinarea
 		Menu_ProcessMouse( Menu_ActiveWindow, MENU_SELECT_NEVER );
+
+	// process the update event
+	Menu_Process_Setup();
+	Menu_ProcessUpdate( Menu_ActiveWindow, MENU_PROCESS_UPDATE );
+
 
 	Menu_CollectGarbage( false );
 }

@@ -3,12 +3,13 @@
 *-Rename Item_Composition and make it not embedded by default
 *-Add support for a MOUSECLIP flag which will make the menu not pass any mouse events to the items under it
 *-Move the normal key function somewhere else perhaps??
---Write a test menu
+*--Write a test menu ^^
 --Unroll as menu recursive functions as possible
 f-Remove this bloody RUNFLAG_SPAWNED again
 *-Only spawn an item once(even if its tried to spawn it multiple times)
 -Think about the layout alignment and improve it
--Calculate the clip sizes and positions only once in PROCESS_RUNFLAG
+*-Calculate the clip sizes and positions only once in PROCESS_RUNFLAG
+--Rewrite *all* controls and the event handler to have the origin change before the current event function
 -Add #enum and #enumflags to the parser
 -Add effect support to all bloody items, use fixed names - if non existent ignore - change Menu_GetItem to a non-erroring version for this
 -Add extended # commands like #add or #and, #complement, etc.
@@ -20,7 +21,7 @@ f-Remove this bloody RUNFLAG_SPAWNED again
 *-Add a slist subsystem to base!
 -Do a big naming check to smooth things out
 -Move the _menu_process stuff somewhere else
--Only call the mouse event when the position has been changed - since all changes happens then
+s-Only call the mouse event when the position has been changed - since all changes happens then
 -Perhaps make the RUNFLAGs be reset every frame for all items?
 -Spend some time writing docs for the API - preferably at http://wiki.quakesrc.org :/
 -Write a parser readme file explaining every tiny, little bit of it

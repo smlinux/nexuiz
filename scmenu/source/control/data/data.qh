@@ -77,6 +77,8 @@ void() Item_DataLink_Value_Spawn;
 void() Item_DataLink_Switch_Init;
 void() Item_DataLink_Switch_Destroy;
 
+float( entity pDataLink, float pValue ) Item_DataLink_Switch_GetOrdinal;
+
 // Item_DataLink_ValueSwitch [Item_DataLink_Switch]
 // the default value for stepValue is 1
 // maxValue is calculated if it is 0

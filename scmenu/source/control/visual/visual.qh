@@ -63,6 +63,7 @@ void() Item_MultiLabel_Spawn;
 .string normal;
 .string selected;
 .string pressed;
+.vector color;
 .vector colorSelected;
 .vector colorPressed;
 .vector drawFlags; // x = normal; y = selected; z = pressed
@@ -160,6 +161,33 @@ void() Item_ValueButton_Spawn;
 // Item_SwitchButton Item_ValueButton
 bool( float pKey, float pAscii ) Item_SwitchButton_Key;
 void() Item_SwitchButton_Spawn;
+
+// Item_List [Item_DataUser]
+.vector fontSize;
+.vector colorSelected;
+.vector colorPressed;
+.vector colorInactive;
+.vector drawFlags; // x = normal; y = selected; z = pressed
+.float drawFlagInactive;
+.vector alphas;
+.float alphaInactive;
+.string soundSelected;
+.string soundPressed;
+.float _presstime;
+.float _state;
+
+// cevents supported by Item_List
+.event init;
+.event reinit;
+.event destroy;
+.event action;
+
+void() Item_List_Draw;
+void() Item_List_Update;
+void( bool pSelect, bool pUser ) Item_List_Select;
+bool( float pKey, float pAscii ) Item_List_Key;
+void() Item_List_Destroy;
+void() Item_List_Spawn;
 
 // Item_FloatingArea
 // When you click on the area, the target will move with the mouse cursor until you click again

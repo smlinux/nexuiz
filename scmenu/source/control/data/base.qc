@@ -123,6 +123,18 @@ void() Item_DataLink_Switch_Init =
 	self._destroy = Item_DataLink_Switch_Destroy;
 };
 
+/*
+===================
+Item_GetOrdinal
+===================
+*/
+float( entity pDataLink, float pValue ) Item_DataLink_Switch_GetOrdinal =
+{
+	//if( !pDataLink )
+	//	crash();
+	return (pValue - pDataLink.minValue) / pDataLink.stepValue;
+};
+
 ////////////////////
 // [Item_DataUser]
 ///

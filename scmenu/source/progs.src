@@ -121,6 +121,7 @@ control/window/scroll.qc
 control/window/eventwindow.qc
 control/window/frame.qc
 
+control/visual/list.qc
 control/visual/button.qc
 control/visual/editbox.qc
 control/visual/label.qc

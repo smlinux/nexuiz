@@ -113,7 +113,7 @@ void( entity pEntity ) Raise_MouseLeave;
 void( entity pEntity ) Raise_Update;
 void( entity pEntity, bool pSelect, bool pUser ) Raise_Select;
 
-// safe call the normal control functions (only used by the mcontrols function)
+// safe call the event control functions (only used by the mcontrols function)
 void()	CtCall_Init;
 void()	CtCall_Reinit;
 void()	CtCall_Destroy;
