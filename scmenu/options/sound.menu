@@ -4,7 +4,7 @@ Item Layout Sound
 {
 	direction	[Nex_DefaultVertDirection]
 	size		'600 600'
-	origin		'300 0'
+	origin		'300 50'
 	alignment	[AlignFirst]
 
 

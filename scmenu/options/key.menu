@@ -5,7 +5,7 @@ Item Window KeyControl
 	Item Layout Layout
 	{
 		size	  '800 600'
-		origin	  '400 0'
+		origin	  '440 0'
 		alignment [AlignCenter]
 		direction [Nex_DefaultVertDirection]
 		flag	  [FlagEmbedded]
@@ -61,7 +61,7 @@ Item Window KeyControl
 		}
 		Item ScrollWindow Scroll
 		{
-			size	'800 450'
+			size	'800 650'
 			flag	[FlagEmbedded]
 			Item Arrangement Keys
 			{

@@ -6,37 +6,43 @@ Item Window CreateGame
 	size	'800 650'
 	Item Window Map
 	{
-		size '350 650'
+		size '550 650'
 		flag [FlagEmbedded]
 
+		Derive Picture Table3
+		{
+			picture "gfx/table2"
+			pos	'0 0'
+			size	'400 600'
+		}
 		Derive Picture Picture
 		{
 			picture "gfx/m_white"
 			size	'350 300'
-			pos	'0 14'
+			pos	'20 20'
 		}
 		Derive MultiLabel Description
 		{
-			pos	'0 314'
+			pos	'20 320'
 			size	'350 336'
 			wrap	29
 		}
 		Derive TextButton Prev
 		{
 			normal	"<<"
-
+			pos	'20 5'
 			action	Nex_Action_Map_Prev
 		}
 		Derive Label Name
 		{
 			alignment	[AlignCenter]
 			size		'302 14'
-			pos		'24 0'
+			pos		'24 4'
 		}
 		Derive TextButton Next
 		{
 			normal	">>"
-			pos	'326 0'
+			pos	'331 5'
 
 			action	Nex_Action_Map_Next
 		}
@@ -47,7 +53,7 @@ Item Window CreateGame
 	}
 	Item Layout Settings
 	{
-		pos		'350 0'
+		pos		'450 50'
 		size		'450 650'
 		origin		'175 0'
 		alignment	[AlignFirst]

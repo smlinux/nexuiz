@@ -1,6 +1,14 @@
 // Property of Alientrap/AK
 // Options menu
 
+Item Window Options
+{
+	Derive Picture Table1
+	{
+		picture "gfx/table1"
+		pos	'150 0'
+		size	'700 600'
+	}
 Item Layout Options
 {
 	direction '20 0'
@@ -58,10 +66,31 @@ Item Layout Options
 			init		Nex_Action_JumpToPage
 			target		"Panel::Input"
 		}
+		Derive TextButton Server
+		{
+			normal		"Gameplay"
+
+			init		Nex_Action_JumpToPage
+			target		"Panel::Server"
+		}
+		Derive TextButton Weapon
+		{
+			normal		"Weapons"
+
+			init		Nex_Action_JumpToPage
+			target		"Panel::Weapon"
+		}
+		Derive TextButton Weapon2
+		{
+			normal		"More Weapons"
+
+			init		Nex_Action_JumpToPage
+			target		"Panel::Weapon2"
+		}
 	}
 	Item EventWindow Panel
 	{
-		size	'700 600'
+		size	'700 800'
 		reinit	Nex_Action_MakeFirstVisible
 
 		#include "menu/options/sound.menu"
@@ -71,5 +100,9 @@ Item Layout Options
 		#include "menu/options/color.menu"
 		#include "menu/options/effects.menu"
 		#include "menu/options/Input.menu"
+		#include "menu/options/server.menu"
+		#include "menu/options/weapon.menu"
+		#include "menu/options/weapon2.menu"
 	}
+}
 }

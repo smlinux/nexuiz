@@ -1,6 +1,15 @@
 // Property of Alientrap/AK
 //
 // joingame.menu
+
+Item Window JoinGame
+{
+	Derive Picture Table3
+	{
+		picture "gfx/table3"
+		pos	'0 0'
+		size	'900 550'
+	}
 Item Layout JoinGame
 {
 	size		'900 650'
@@ -175,4 +184,5 @@ Item Layout JoinGame
 
 		action 	Nex_Action_RefreshSlist
 	}
+}
 }
