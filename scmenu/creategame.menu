@@ -1,152 +1,184 @@
 // Property of Alientrap/AK
 //
 // creategame.menu
-Item Window CreateGame
+Item Layout CreateGame
 {
-	size	'800 650'
-	Item Window Map
+	size	'850 650'
+	alignment [AlignLeft]
+	direction [Nex_DefaultVertDirection]
+
+	Item Layout Bar
 	{
-		size '550 650'
-		flag [FlagEmbedded]
+		size	  '850 20'
+		alignment [AlignLeft]
+		direction [Nex_DefaultHorzDirection]
 
-		Derive Picture Table3
+		Derive TextButton BasicOptions
 		{
-			picture "gfx/table2"
-			pos	'0 0'
-			size	'400 600'
+			normal		" Basic Options "
 		}
-		Derive Picture Picture
+		Derive TextButton MapList
 		{
-			picture "gfx/m_white"
-			size	'350 300'
-			pos	'20 20'
+			normal		" Map List "
 		}
-		Derive MultiLabel Description
+		Derive TextButton Configurations
 		{
-			pos	'20 320'
-			size	'350 336'
-			wrap	29
+			normal		" Configurations "
 		}
-		Derive TextButton Prev
+		Derive TextButton Advanced
 		{
-			normal	"<<"
-			pos	'20 5'
-			action	Nex_Action_Map_Prev
-		}
-		Derive Label Name
-		{
-			alignment	[AlignCenter]
-			size		'302 14'
-			pos		'24 4'
-		}
-		Derive TextButton Next
-		{
-			normal	">>"
-			pos	'331 5'
-
-			action	Nex_Action_Map_Next
-		}
-		Item Task_Job Job
-		{
-			init 	Nex_Automation_UpdateMap
+			normal		" Advanced "
 		}
 	}
-	Item Layout Settings
+
+	Item Window BasicOptions
 	{
-		pos		'450 50'
-		size		'450 650'
-		origin		'175 0'
-		alignment	[AlignFirst]
-		direction	[Nex_DefaultVertDirection]
-		flag 		[FlagEmbedded]
+		size '850 585'
 
-		DeriveTemplate Nex_Composition Nex_Option_EditBox
+		Item Window Map
 		{
-			DeriveTemplate Nex_Automation_Option_EditBox Automation
+			size '400 585'
+			flag [FlagEmbedded]
+
+			Derive Picture Table3
+			{
+				picture "gfx/table2"
+				pos	'0 0'
+				size	'400 585'
+			}
+			Derive Picture Picture
+			{
+				picture "gfx/m_white"
+				size	'350 300'
+				pos	'20 20'
+			}
+			Derive MultiLabel Description
+			{
+				pos	'20 320'
+				size	'350 285'
+				wrap	31
+			}
+			Derive TextButton Prev
+			{
+				normal	"<<"
+				pos	'20 5'
+				action	Nex_Action_Map_Prev
+			}
+			Derive Label Name
+			{
+				alignment	[AlignCenter]
+				size		'306 14'
+				pos		'44 4'
+			}
+			Derive TextButton Next
+			{
+				normal	">>"
+				pos	'348 5'
+
+				action	Nex_Action_Map_Next
+			}
+			Item Task_Job Job
+			{
+				init 	Nex_Automation_UpdateMap
+			}
+		}
+		Item Layout Settings
+		{
+			pos		'400 0'
+			size		'450 585'
+			origin		'225 0'
+			alignment	[AlignFirst]
+			direction	[Nex_DefaultVertDirection]
+			flag 		[FlagEmbedded]
+
+			DeriveTemplate Nex_Composition Nex_Option_EditBox
+			{
+				DeriveTemplate Nex_Automation_Option_EditBox Automation
+				{}
+				DeriveTemplate TextButton Description
+				{}
+				DeriveTemplate EditBox EditBox
+				{
+					size 	'200 12'
+					action  Nex_Action_TestOnChange
+					select  Nex_Action_TestOnSelect
+				}
+			}
+
+			Derive Nex_Option_EditBox Hostname
+			{
+				text	"Server Name"
+				target	"Data::CreateGame::Hostname::Text"
+			}
+			Derive Nex_Composition Gametype
+			{
+				Derive TextButton Description
+				{
+					normal	"Game Mode"
+					link	"##next"
+				}
+				Derive SwitchButton Switch
+				{
+					target	"Data::CreateGame::ServerProgs::Switch"
+					action	Nex_Action_TestOnChange
+				}
+			}
+			Derive Nex_Composition PublicServer
+			{
+				Derive TextButton Description
+				{
+					normal	"Public Server"
+					link	"##next"
+				}
+				Derive SwitchButton Switch
+				{
+					target  "Data::CreateGame::PublicServer::Switch"
+					action	Nex_Action_TestOnChange
+				}
+			}
+			Derive Nex_Option_EditBox FragLimit
+			{
+				text	"Frag Limit"
+				target	"Data::CreateGame::FragLimit::Text"
+			}
+			Derive Nex_Option_EditBox TimeLimit
+			{
+				text	"Time Limit"
+				target	"Data::CreateGame::TimeLimit::Text"
+			}
+			Derive Nex_Option_EditBox MaxPlayer
+			{
+				text	"Max Players"
+				target	"Data::CreateGame::MaxPlayers::Text"
+			}
+			Derive Nex_Line	Seperator1
 			{}
-			DeriveTemplate TextButton Description
+			Derive Nex_Option_EditBox NumBots
+			{
+				text	"Bot Count"
+				target	"Data::CreateGame::NumBots::Text"
+			}
+			Derive Nex_Composition BotSkill
+			{
+				Derive TextButton Description
+				{
+					normal	"Skill Level"
+					link	"##next"
+				}
+				Derive SwitchButton Switch
+				{
+					target	"Data::CreateGame::BotSkill::Switch"
+					action	Nex_Action_TestOnChange
+				}
+			}
+			Derive Nex_Void Seperator2
 			{}
-			DeriveTemplate EditBox EditBox
+			Derive PictureButton Start
 			{
-				size 	'260 12'
-				action  Nex_Action_TestOnChange
-				select  Nex_Action_TestOnSelect
-			}
-		}
+				normal		"$gfx/m_start"
 
-		Derive Nex_Option_EditBox Hostname
-		{
-			text	"Server Name"
-			target	"Data::CreateGame::Hostname::Text"
-		}
-		Derive Nex_Composition Gametype
-		{
-			Derive TextButton Description
-			{
-				normal	"Game Mode"
-				link	"##next"
+				action	Nex_Action_Map_Start
 			}
-			Derive SwitchButton Switch
-			{
-				target	"Data::CreateGame::ServerProgs::Switch"
-				action	Nex_Action_TestOnChange
-			}
-		}
-		Derive Nex_Composition PublicServer
-		{
-			Derive TextButton Description
-			{
-				normal	"Public Server"
-				link	"##next"
-			}
-			Derive SwitchButton Switch
-			{
-				target  "Data::CreateGame::PublicServer::Switch"
-				action	Nex_Action_TestOnChange
-			}
-		}
-		Derive Nex_Option_EditBox FragLimit
-		{
-			text	"Frag Limit"
-			target	"Data::CreateGame::FragLimit::Text"
-		}
-		Derive Nex_Option_EditBox TimeLimit
-		{
-			text	"Time Limit"
-			target	"Data::CreateGame::TimeLimit::Text"
-		}
-		Derive Nex_Option_EditBox MaxPlayer
-		{
-			text	"Max Players"
-			target	"Data::CreateGame::MaxPlayers::Text"
-		}
-		Derive Nex_Line	Seperator1
-		{}
-		Derive Nex_Option_EditBox NumBots
-		{
-			text	"Bot Count"
-			target	"Data::CreateGame::NumBots::Text"
-		}
-		Derive Nex_Composition BotSkill
-		{
-			Derive TextButton Description
-			{
-				normal	"Skill Level"
-				link	"##next"
-			}
-			Derive SwitchButton Switch
-			{
-				target	"Data::CreateGame::BotSkill::Switch"
-				action	Nex_Action_TestOnChange
-			}
-		}
-		Derive Nex_Void Seperator2
-		{}
-				Derive PictureButton Start
-		{
-			normal		"$gfx/m_start"
-
-			action	Nex_Action_Map_Start
 		}
 	}
 }
