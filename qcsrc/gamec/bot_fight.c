@@ -231,23 +231,23 @@ _z maximum range bot can be to be effective (lg/axe) (move in)
 
 vector(float wep) weapon_range =
 {
-	if (wep == WEP_LASER) // IT_AXE
+	if (wep == IT_LASER) // IT_AXE
 		return '48 0 300';
-	else if (wep == WEP_SHOTGUN) // IT_SHOTGUN
+	else if (wep == IT_SHOTGUN) // IT_SHOTGUN
 		return '128 0 99999';
-	else if (wep == WEP_CRYLINK) // IT_SUPER_SHOTGUN
+	else if (wep == IT_CRYLINK) // IT_SUPER_SHOTGUN
 		return '128 0 99999';
-	else if (wep == WEP_UZI) // IT_NAILGUN
+	else if (wep == IT_UZI) // IT_NAILGUN
 		return '180 0 3000';
-	else if (wep == WEP_HAGAR) // IT_SUPER_NAILGUN
+	else if (wep == IT_HAGAR) // IT_SUPER_NAILGUN
 		return '180 48 3000';
-	else if (wep == WEP_GRENADE_LAUNCHER) // IT_GRENADE_LAUNCHER
+	else if (wep == IT_GRENADE_LAUNCHER) // IT_GRENADE_LAUNCHER
 		return '180 48 3000';
-	else if (wep == WEP_ELECTRO) // IT_ROCKET_LAUNCHER
+	else if (wep == IT_ELECTRO) // IT_ROCKET_LAUNCHER
 		return '180 48 3000';
-	else if (wep == WEP_ROCKET_LAUNCHER) // IT_ROCKET_LAUNCHER
+	else if (wep == IT_ROCKET_LAUNCHER) // IT_ROCKET_LAUNCHER
 		return '180 48 3000';
-	else if (wep == WEP_NEX) // IT_LIGHTNING
+	else if (wep == IT_NEX) // IT_LIGHTNING
 		return '350 0 99999';
 };
 /*
@@ -266,44 +266,18 @@ void(float brange) bot_weapon_switch =
 	local vector v;
 
 	it = self.items & 127;
+	pulse = 0;
 
 	while(it)
 	{
-		if ((self.ammo_rockets >= 1) && (it & 32))
-		{
-			flag = 32;
-			pulse = 7;
-		}
-		else if (self.waterlevel <= 1 && self.ammo_cells >= 1 && (it & 64))
-		{
-			flag = 64;
-			pulse = 8;
-		}
-		else if(self.ammo_nails >= 2 && (it & 8))
-		{
-			flag = 8;
-			pulse = 5;
-		}
-		else if ((self.ammo_rockets >= 1) && (it & 16))
-		{
-			flag = 16;
-			pulse = 6;
-		}
-		else if(self.ammo_shells >= 2 && (it & 2))
-		{
-			flag = 2;
-			pulse = 3;
-		}
-		else if(self.ammo_nails >= 1 && (it & 4))
-		{
-			flag = 4;
-			pulse = 4;
-		}
-		else if(self.ammo_shells >= 1 && (it & 1))
-		{
-			flag = 1;
-			pulse = 2;
-		}
+		if ((self.ammo_rockets >= 3) && (it & IT_ROCKET_LAUNCHER)){flag = IT_ROCKET_LAUNCHER;pulse = 9;}
+		else if ((self.ammo_rockets >= 1) && (it & IT_HAGAR)){flag = IT_HAGAR;pulse = 8;}
+		else if ((self.ammo_cells >= 5) && (it & IT_NEX)){flag = IT_NEX;pulse = 7;}
+		else if ((self.ammo_cells >= 1) && (it & IT_CRYLINK)){flag = IT_CRYLINK;pulse = 6;}
+		else if ((self.ammo_cells >= 2) && (it & IT_ELECTRO)){flag = IT_ELECTRO;pulse = 5;}
+		else if ((self.ammo_rockets >= 3) && (it & IT_GRENADE_LAUNCHER)){flag = IT_GRENADE_LAUNCHER;pulse = 4;}
+		else if ((self.ammo_nails >= 1) && (it & IT_UZI)){flag = IT_UZI;pulse = 3;}
+		else if ((self.ammo_shells >= 1) && (it & IT_SHOTGUN)){flag = IT_SHOTGUN;pulse = 2;}
 		else
 		{
 			if (pulse)
