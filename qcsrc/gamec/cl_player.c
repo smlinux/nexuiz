@@ -264,15 +264,6 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 		self.event_damage(inflictor, attacker, 0, deathtype, hitloc, force);
 		// set up to fade out later
 		SUB_SetFade (self, time + 12 + random () * 4);
-		// Sajt - added this, but I'm not sure the powerups are even implemented? This might act strange because
-		//        there is no code handled to disable powerups when their time is up...
-		if (game & GAME_STRENGTH_GAIN)
-		{
-			if (attacker.strength_finished < time)
-				attacker.strength_finished = time;
-			attacker.strength_finished = attacker.strength_finished + 5;
-			attacker.items = attacker.items | IT_STRENGTH;
-		}
 	}
 }
 

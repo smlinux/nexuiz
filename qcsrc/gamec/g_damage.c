@@ -31,6 +31,7 @@ void Obituary (entity attacker, entity targ, float deathtype)
 			else
 				bprint ("@1",s, " died\n");
 			self.frags = self.frags - 1;
+			targ.killcount = 0;
 		}
 		else if (attacker.classname == "player")
 		{

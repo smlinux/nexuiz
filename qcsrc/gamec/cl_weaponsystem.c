@@ -176,11 +176,9 @@ void(float() checkfunc1, float() checkfunc2, void() firefunc, float atktime) wea
 		}
 	}
 	// Don't do shot if previos attack  not finished
-	if (!(game & GAME_INSANE))
 		if (time < self.attack_finished)
 			return;
 	// Can't do shot if changing weapon
-	if (!(game & GAME_INSANE))
 		if (self.weaponentity.state != WS_READY)
 			return;
 

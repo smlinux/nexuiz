@@ -166,14 +166,13 @@ vector	PL_MAX					= '16 16 45';
 // did this so at least they worked
 // NOTE: instagib IS NOT compatible with rocket-arena, so make sure to prevent selecting both in a menu
 float	GAME_INSTAGIB			= 1;   /// everyone gets the nex gun with infinite ammo, and one shot kills
-float	GAME_INSANE			= 2;   /// no time between shots for any gun
-float 	GAME_STRENGTH_GAIN		= 4;   /// NOT DONE
-float	GAME_REGENERATION		= 8;   /// Fast health regeneration
+float	GAME_SPAWNPROTECTION			= 2;   /// no time between shots for any gun
+float	GAME_REGENERATION		= 4;   /// Fast health regeneration
+float	GAME_NO_SELF_DAMAGE		= 8;  /// no self damage, so rocket jumping and such can be used a lot more
 float	GAME_ROCKET_ARENA		= 16;  /// Everyone starts with a rocket launcher
-float	GAME_NO_SELF_DAMAGE		= 32;  /// no self damage, so rocket jumping and such can be used a lot more
-float	GAME_NO_AIR_CONTROL		= 64;  /// turns off air control
-float	GAME_LOW_GRAVITY		= 128; /// has 1/4 of the gravity
-float	GAME_FULLBRIGHT_PLAYERS		= 256; /// makes the players model fullbright
+float	GAME_NO_AIR_CONTROL		= 32;  /// turns off air control
+float	GAME_FULLBRIGHT_PLAYERS		= 64; /// makes the players model fullbright
+float	GAME_TEAMS		= 128; /// Teams, red/green/yellow/blue
 
 float	game;	// set to "gamecfg" on worldspawn
 

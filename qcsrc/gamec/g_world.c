@@ -7,11 +7,6 @@ void worldspawn (void)
 
 	game = cvar ("gamecfg");	// load game options
 
-	if (game & GAME_LOW_GRAVITY)
-		localcmd ("sv_gravity 200\n");
-	else
-		localcmd ("sv_gravity 800\n");
-
 	precache_model ("models/player/marine.zym");
 	precache_model ("models/player/specop.zym");
 	precache_model ("models/player/mulder.zym");
