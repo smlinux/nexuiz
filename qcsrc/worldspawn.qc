@@ -13,6 +13,7 @@ void worldspawn (void)
 	precache_model ("models/w_hagar.md3");
 	precache_model ("models/w_rl.md3");
 	
+	precache_model ("models/plasmahitwall.spr32");
 	precache_model ("models/muzzleflash.spr32");
 	precache_model ("models/plasmashot.spr32");
 	precache_model ("models/dpexplosion.spr32");
@@ -22,6 +23,7 @@ void worldspawn (void)
 	precache_model ("models/rocketmissile.mdl");
 	precache_model ("models/bullet.mdl");
 	precache_model ("models/casing.mdl");
+	precache_model ("progs/bolt.mdl");
 	
 	precache_model ("models/g_h1.md3");
 	precache_model ("models/g_h25.md3");

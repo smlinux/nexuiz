@@ -326,13 +326,20 @@ Explosion
 Plays an explosion effect
 ==================
 */
-void Explosion (entity ent, string snd, float fps)
+void Explosion (entity ent, string snd, float fps, string weaponused)
 {
 	vector	org2;
-	
 	org2 = findbetterlocation (ent.origin);
-	
+
+	if (weaponused == "rocket")
 	te_explosion (org2);
+	else if (weaponused == "grenade")
+	te_explosion (org2);
+	
+	if (weaponused == "plasma")
+	effect (org2, "models/plasmahitwall.spr32", 0, 20, fps);
+	else
 	effect (org2, "models/dpexplosion.spr32", 0, 20, fps);
+
 	sound (ent, CHAN_BODY, snd, 1, ATTN_NORM);
 }

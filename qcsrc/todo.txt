@@ -19,11 +19,7 @@
 1: Local Damage (just the the head and body)
 1: Add secondary fire to all weapons
 	- Laser: Autoaim and kill any projectile coming (can destory rockets, grenades, hagar missiles)
-	- Uzi: Very accurate, low fire rate
 	- Shotgun: Automatic fast 3 shots
-	- Grenade Launcher: Shoots a grenade further, and when it hits anything it blows up (no time limit)
-	- Electro: Plasma
-	- Crylink: A white stream similar to the lighting gun
 	- Nex: Zoom
 	- Hagar: A very fast hagar rocket, low rate of fire
 	- Rocket: A rocket, than when it hits a wall/player, it is an airburst which blows everything near it away (including players, and the person who shot it)

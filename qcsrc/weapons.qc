@@ -469,9 +469,14 @@ void W_Shotgun_Attack (void)
 	self.attack_finished = time + 0.8;
 }
 
+void W_Shotgun_Attack2 (void)
+{
+
+}
+
 void W_Grenade_Explode (entity ignore)
 {
-	Explosion (self, "weapons/Grenade_Impact.wav", 30);
+	Explosion (self, "weapons/Grenade_Impact.wav", 30, "grenade");
 
 	RadiusDamage (self.owner, self, 0, 100, world);
 
@@ -627,7 +632,7 @@ void W_Plasma_Touch (void)
 {
 	if (other.classname == "player" || other.classname == "corpse" || other.classname == "gib")
 		Damage (self.owner, self.origin, other, 0, 15);
-
+	Explosion (self, "weapons/Plasmahit.wav", 30, "plasma");
 	remove (self);
 }
 
@@ -649,7 +654,7 @@ void W_Electro_Attack2 (void)
 	
 	setmodel (proj, "models/plasmashot.spr32");
 	setsize (proj, '0 0 0', '0 0 0');
-	setorigin (proj, self.origin + self.view_ofs + v_forward * 24 + v_right * 9 + v_up * -20);
+	setorigin (proj, self.origin + self.view_ofs + v_forward * 5 + v_right * 5 + v_up * -12);
 	
 	proj.velocity = v_forward * 5000;
 	proj.touch = W_Plasma_Touch;
@@ -688,6 +693,22 @@ void W_Crylink_Attack (void)
 
 	self.ammo_cells = self.ammo_cells - 0.25;
 	self.attack_finished = time + 0.165;
+}
+
+void W_Crylink_Attack2 (void)
+{
+	vector	org;
+	vector	dir;
+	
+	makevectors (self.v_angle);
+
+	org = self.origin + self.view_ofs + v_forward * 19 + v_right * 5 + v_up * -7;
+	
+	traceline (org, self.origin + self.view_ofs + v_forward * 4096 + v_right * (random () * 100 - 50) + v_up * (random () * 100 - 50), FALSE, self);
+	
+	te_lightning1 (self, org, trace_endpos);
+	
+	self.attack_finished = time + 0.075;
 }
 
 void W_Nex_Smite (void)
@@ -743,9 +764,14 @@ void W_Nex_Attack (void)
 	self.ammo_cells = self.ammo_cells - 1;
 }
 
+void W_Nex_Attack2 (void)
+{
+
+}
+
 void W_Hagar_Explode (void)
 {
-	Explosion (self, "weapons/Rocket_Impact.wav", 40);
+	Explosion (self, "weapons/Rocket_Impact.wav", 40, "hagar");
 
 	RadiusDamage (self.owner, self, 0, 100, world);
 
@@ -801,9 +827,14 @@ void W_Hagar_Attack (void)
 	self.ammo_rockets = self.ammo_rockets - 0.25;
 }
 
+void W_Hagar_Attack2 (void)
+{
+
+}
+
 void W_Rocket_Explode (entity ignore)
 {
-	Explosion (self, "weapons/Rocket_Impact.wav", 30);
+	Explosion (self, "weapons/Rocket_Impact.wav", 30, "rocket");
 
 	RadiusDamage (self.owner, self, 0, 100, ignore);
 
@@ -865,6 +896,11 @@ void W_Rocket_Attack (void)
 	
 }
 
+void W_Rocket_Attack2 (void)
+{
+
+}
+
 void W_Attack (void)
 {
 	if (!W_CheckAmmo ())
@@ -902,19 +938,19 @@ void W_SecondaryAttack (void)
 	else if (self.weapon == IT_UZI)
 		W_Uzi_Attack2 ();
 	else if (self.weapon == IT_SHOTGUN)
-		SUB_Null ();
+		W_Shotgun_Attack2 ();
 	else if (self.weapon == IT_GRENADE_LAUNCHER)
 		W_Grenade_Attack2 ();
 	else if (self.weapon == IT_ELECTRO)
 		W_Electro_Attack2 ();
 	else if (self.weapon == IT_CRYLINK)
-		SUB_Null ();
+		W_Crylink_Attack2 ();
 	else if (self.weapon == IT_NEX)
-		SUB_Null ();
+		W_Nex_Attack2 ();
 	else if (self.weapon == IT_HAGAR)
-		SUB_Null ();
+		W_Hagar_Attack2 ();
 	else if (self.weapon == IT_ROCKET_LAUNCHER)
-		SUB_Null ();
+		W_Rocket_Attack2 ();
 
 	W_UpdateAmmo ();
 }
