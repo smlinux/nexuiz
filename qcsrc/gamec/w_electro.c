@@ -4,14 +4,7 @@ void() electro_fire2_01;
 void() electro_deselect_01;
 void() electro_select_01;
 
-float() electro_check1 =
-{
-	if (self.ammo_cells > 1)
-		return TRUE;
-	return FALSE;
-};
-
-float() electro_check2 =
+float() electro_check =
 {
 	if (self.ammo_cells > 2)
 		return TRUE;
@@ -23,9 +16,9 @@ void(float req) w_electro =
 	if (req == WR_IDLE)
 		electro_ready_01();
 	else if (req == WR_FIRE1)
-		weapon_prepareattack(electro_check1, electro_check1, electro_fire1_01, 0.4);
+		weapon_prepareattack(electro_check, electro_check, electro_fire1_01, 0.4);
 	else if (req == WR_FIRE2)
-		weapon_prepareattack(electro_check1, electro_check2, electro_fire2_01, 2);
+		weapon_prepareattack(electro_check, electro_check, electro_fire2_01, 2);
 	else if (req == WR_RAISE)
 		electro_select_01();
 	else if (req == WR_UPDATECOUNTS)
@@ -35,7 +28,7 @@ void(float req) w_electro =
 	else if (req == WR_SETUP)
 		weapon_setup(WEP_ELECTRO, "w_electro.zym", IT_CELLS);
 	else if (req == WR_CHECKAMMO)
-		weapon_hasammo = electro_check1();
+		weapon_hasammo = electro_check();
 };
 
 
@@ -54,7 +47,7 @@ void W_Plasma_Explode (entity ignore)
 	te_customflash (self.origin, 5000, 10, '0 0 1');
 
 	self.event_damage = nullfunction;
-	RadiusDamage (self, self.owner, cvar("g_balance_electro_grenade_damage"), cvar("g_balance_electro_grenade_edgedamage"), cvar("g_balance_electro_grenade_radius"), world, cvar("g_balance_electro_grenade_force"), IT_ELECTRO);
+	RadiusDamage (self, self.owner, cvar("g_balance_electro_damage"), cvar("g_balance_electro_edgedamage"), cvar("g_balance_electro_radius"), world, cvar("g_balance_electro_force"), IT_ELECTRO);
 	sound (self, CHAN_IMPACT, "weapons/plasmahit.wav", 1, ATTN_NORM);
 
 	remove (self);
@@ -117,7 +110,7 @@ void() W_Electro_Attack
 	if (postion == 2)
 	setorigin (proj, self.origin + self.view_ofs + v_forward * 15 + v_right * 15 + v_up * -14);
 
-	proj.velocity = v_forward * cvar("g_balance_electro_shot_speed");
+	proj.velocity = v_forward * cvar("g_balance_electro_speed");
 	proj.touch = W_Plasma_Explode;
 	proj.think = W_Plasma_Think;
 	proj.nextthink = time + 0.1;
@@ -126,8 +119,8 @@ void() W_Electro_Attack
 
 	proj.effects = proj.effects | EF_ADDITIVE;
 
-	self.attack_finished = time + 0.4;
-	self.ammo_cells = self.ammo_cells - 1;
+	self.attack_finished = time + cvar("g_balance_electro_refire");
+	self.ammo_cells = self.ammo_cells - 2;
 }
 
 void() W_Electro_Attack2
@@ -168,7 +161,7 @@ void() W_Electro_Attack2
 	if (postion == 2)
 	setorigin (Plasma, self.origin + self.view_ofs + v_forward * 15 + v_right * 15 + v_up * -14);
 
-	Plasma.velocity = v_forward * cvar("g_balance_electro_grenade_speed") + v_up * cvar("g_balance_electro_grenade_speed_up");
+	Plasma.velocity = v_forward * cvar("g_balance_electro_ballspeed") + v_up * cvar("g_balance_electro_ballspeed_up");
 	Plasma.angles = vectoangles (Plasma.velocity);
 	Plasma.avelocity_y = random () * -500 - 500;
 	Plasma.avelocity_x = random () * -500 - 500;
@@ -180,7 +173,7 @@ void() W_Electro_Attack2
 
 	Plasma.effects = Plasma.effects | EF_ADDITIVE;
 
-	self.attack_finished = time + 1;
+	self.attack_finished = time + cvar("g_balance_electro_refire");
 	self.ammo_cells = self.ammo_cells - 2;
 
 }
@@ -192,7 +185,7 @@ void()	electro_select_01 =	{weapon_thinkf(-1, PLAYER_WEAPONSELECTION_DELAY, w_re
 void()	electro_deselect_01 =	{weapon_thinkf(-1, PLAYER_WEAPONSELECTION_DELAY, w_clear); weapon_boblayer1(PLAYER_WEAPONSELECTION_SPEED, PLAYER_WEAPONSELECTION_RANGE);};
 void()	electro_fire1_01 =
 {
-	weapon_doattack(electro_check1, electro_check1, W_Electro_Attack);
+	weapon_doattack(electro_check, electro_check, W_Electro_Attack);
 
 	self.electrocount = self.electrocount + 1;
 		if (self.electrocount == 3)
@@ -202,7 +195,7 @@ void()	electro_fire1_01 =
 };
 void()	electro_fire2_01 =
 {
-	weapon_doattack(electro_check1, electro_check2, W_Electro_Attack2);
+	weapon_doattack(electro_check, electro_check, W_Electro_Attack2);
 
 	self.electrocount = self.electrocount + 1;
 		if (self.electrocount == 3)

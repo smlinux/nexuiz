@@ -16,7 +16,7 @@ void(float req) w_uzi =
 	if (req == WR_IDLE)
 		uzi_ready_01();
 	else if (req == WR_FIRE1)
-		weapon_prepareattack(uzi_check, uzi_check, uzi_fire1_01, 0.075);
+		weapon_prepareattack(uzi_check, uzi_check, uzi_fire1_01, cvar("g_balance_uzi_refire"));
 	else if (req == WR_FIRE2)
 		weapon_prepareattack(uzi_check, uzi_check, uzi_fire2_01, 0.4);
 	else if (req == WR_RAISE)
@@ -31,37 +31,45 @@ void(float req) w_uzi =
 		weapon_hasammo = uzi_check();
 };
 
+.float uzi_bulletcounter;
 void W_Uzi_Attack (void)
 {
+	local vector org;
 	makevectors(self.v_angle);
 	sound (self, CHAN_WEAPON, "weapons/uzi_fire.wav", 1, ATTN_NORM);
 
-	fireBullet (self.origin + self.view_ofs, v_forward, 0.01, cvar("g_balance_uzi_damage"), IT_UZI);
+	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 8) + (v_forward * 5);
+	self.uzi_bulletcounter = self.uzi_bulletcounter + 1;
+	if (self.uzi_bulletcounter >= 4)
+		self.uzi_bulletcounter = 0;
+	fireBullet (org, v_forward, cvar("g_balance_uzi_spread"), cvar("g_balance_uzi_damage"), IT_UZI, self.uzi_bulletcounter == 0);
 
 	self.punchangle_x = random () - 0.5;
 	self.punchangle_y = random () - 0.5;
 	self.punchangle_z = random () - 0.5;
 
-	self.attack_finished = time + 0.2;
-	self.ammo_nails = self.ammo_nails - 1;
+	//self.attack_finished = time + 0.2;
+	self.ammo_nails = self.ammo_nails - 0.25;
 
-	vector	org; // casing code
-	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 1) + (v_forward * 15);
+	// casing code
+	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 8) + (v_forward * 10);
 	SpawnCasing (org, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 + 10) * v_up), 2, v_forward,'0 250 0', 100, 2);
 }
 
 void W_Uzi_Attack2 (void)
 {
+	local vector org;
 	makevectors(self.v_angle);
 	sound (self, CHAN_WEAPON, "weapons/uzi_fire.wav", 1, ATTN_NORM);
 
-	fireBullet (self.origin + self.view_ofs, v_forward, 0.01, 21, IT_UZI);
+	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 8) + (v_forward * 5);
+	fireBullet (org, v_forward, cvar("g_balance_uzi_spread2"), 21, IT_UZI);
 
-	self.attack_finished = time + 0.3;
-	self.ammo_nails = self.ammo_nails - 1;
+	//self.attack_finished = time + 0.3;
+	self.ammo_nails = self.ammo_nails - 0.25;
 
-	vector	org; // casing code
-	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 1) + (v_forward * 20);
+	// casing code
+	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 8) + (v_forward * 10);
 	SpawnCasing (org, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 + 10) * v_up), 2, v_forward,'0 250 0', 100, 2);
 }
 // weapon frames

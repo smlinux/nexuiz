@@ -33,28 +33,7 @@ void(float req) w_shotgun =
 
 void W_Shotgun_Attack (void)
 {
-	float	sc;
-	float	bullets;
-
-	makevectors(self.v_angle);
-	sound (self, CHAN_WEAPON, "weapons/shotgun_fire.wav", 1, ATTN_NORM);
-	bullets = 10;
-
-	for (sc = bullets; sc > 0; sc = sc - 1)
-		fireBullet (self.origin + self.view_ofs, v_forward, 0.1, 3.5, IT_SHOTGUN);
-	self.ammo_shells = self.ammo_shells - 1;
-	self.attack_finished = time + 0.7;
-
-	vector	org; // casing code
-	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 4) + (v_forward * 15);
-	SpawnCasing (org, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 + 10) * v_up), 2, v_forward,'0 250 0', 100, 1);
-	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 4) + (v_forward * 20);
-	W_Smoke(org, v_forward, 12);
-	//te_smallflash(org);
-}
-
-void W_Shotgun_Attack2 (void)
-{
+	local vector org;
 	float	sc;
 	float	bullets;
 	float	d;
@@ -64,18 +43,18 @@ void W_Shotgun_Attack2 (void)
 	bullets = cvar("g_balance_shotgun_bullets");
 	d = cvar("g_balance_shotgun_damage");
 
-	for (sc = bullets; sc > 0; sc = sc - 1)
-		fireBullet (self.origin + self.view_ofs, v_forward, 0.1, d, IT_SHOTGUN);
+	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 8) + (v_forward * 5);
+	for (sc = 0;sc < bullets;sc = sc + 1)
+		fireBullet (org, v_forward, 0.1, d, IT_SHOTGUN, sc < 3);
 	self.ammo_shells = self.ammo_shells - 1;
-	self.attack_finished = time + 1.4;
+	self.attack_finished = time + 0.7;
 
-	self.punchangle_x = -5;
-
-	vector	org; // casing code
-	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 4) + (v_forward * 15);
+	// casing code
+	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 8) + (v_forward * 10);
 	SpawnCasing (org, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 + 10) * v_up), 2, v_forward,'0 250 0', 100, 1);
-	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 4) + (v_forward * 20);
+	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 8) + (v_forward * 20);
 	W_Smoke(org, v_forward, 12);
+	//te_smallflash(org);
 }
 
 // weapon frames
@@ -90,16 +69,19 @@ void()	shotgun_fire1_01 =
 };
 void()  shotgun_fire2_03 =
 {
-        weapon_doattack(shotgun_check, shotgun_check, W_Shotgun_Attack2);
-        weapon_thinkf(WFRAME_FIRE1, 0.9, shotgun_ready_01);
+	self.punchangle_x = -5;
+	weapon_doattack(shotgun_check, shotgun_check, W_Shotgun_Attack);
+	weapon_thinkf(WFRAME_FIRE1, 0.9, shotgun_ready_01);
 }
 void()  shotgun_fire2_02 =
 {
-        weapon_doattack(shotgun_check, shotgun_check, W_Shotgun_Attack2);
-        weapon_thinkf(WFRAME_FIRE1, 0.2, shotgun_fire2_03);
+	self.punchangle_x = -5;
+	weapon_doattack(shotgun_check, shotgun_check, W_Shotgun_Attack);
+	weapon_thinkf(WFRAME_FIRE1, 0.2, shotgun_fire2_03);
 }
 void()  shotgun_fire2_01 =
 {
-        weapon_doattack(shotgun_check, shotgun_check, W_Shotgun_Attack2);
-        weapon_thinkf(WFRAME_FIRE1, 0.2, shotgun_fire2_02);
+	self.punchangle_x = -5;
+	weapon_doattack(shotgun_check, shotgun_check, W_Shotgun_Attack);
+	weapon_thinkf(WFRAME_FIRE1, 0.2, shotgun_fire2_02);
 }

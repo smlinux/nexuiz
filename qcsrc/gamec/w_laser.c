@@ -13,7 +13,7 @@ void(float req) w_laser =
 	else if (req == WR_FIRE1)
 		weapon_prepareattack(laser_check, laser_check, laser_fire1_01, 0.4);
 	else if (req == WR_FIRE2)
-		weapon_prepareattack(laser_check, laser_check, laser_fire2_01, 0.3);
+		weapon_prepareattack(laser_check, laser_check, laser_fire2_01, 0.7);
 	else if (req == WR_RAISE)
 		laser_select_01();
 	else if (req == WR_UPDATECOUNTS)
@@ -100,6 +100,8 @@ void W_Laser_Attack (void)
 
 void W_Laser_Attack2 (void)
 {
+	makevectors(self.v_angle);
+	self.velocity = self.velocity - v_forward * 900;
 	/*
 	weapon_shotdir(18, 5, -12);
 	// self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);
@@ -124,6 +126,6 @@ void()	laser_fire1_01 =
 void()	laser_fire2_01 =
 {
 	weapon_doattack(laser_check, laser_check, W_Laser_Attack2);
-	weapon_thinkf(WFRAME_FIRE1, 0.2, laser_ready_01);
+	weapon_thinkf(WFRAME_FIRE1, 0.3, laser_ready_01);
 };
 

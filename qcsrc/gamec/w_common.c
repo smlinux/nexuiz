@@ -500,15 +500,31 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float deathtype
 	//remove(explosion);
 }
 
-
-void fireBullet (vector start, vector dir, float spread, float damage, float dtype)
+void fireBullet (vector start, vector dir, float spread, float damage, float dtype, float tracer)
 {
 	vector  end;
 	float r;
+	local entity e;
 
 	// use traceline_hitcorpse to make sure it can hit gibs and corpses too
-	end = start + (dir + randomvec() * spread) * 1048576;
+	dir = dir + randomvec() * spread;
+	end = start + dir * 4096;
 	traceline_hitcorpse (self, start, end, FALSE, self);
+
+	if (tracer)
+	{
+		e = spawn();
+		e.owner = self;
+		e.movetype = MOVETYPE_FLY;
+		e.solid = SOLID_NOT;
+		e.think = SUB_Remove;
+		e.nextthink = time + vlen(trace_endpos - start) / 6000;
+		e.velocity = dir * 6000;
+		e.angles = vectoangles(e.velocity);
+		setmodel (e, "models/elaser.mdl");
+		setsize (e, '0 0 0', '0 0 0');
+		setorigin (e, start);
+	}
 
 	// FIXME - causes excessive 'tinking'. Hopefully remove "tink1.wav" from the ricochets with csqc
 	if ((trace_fraction != 1.0) && (pointcontents (trace_endpos) != CONTENT_SKY))

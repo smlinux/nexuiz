@@ -4,6 +4,8 @@ void() crylink_fire2_01;
 void() crylink_deselect_01;
 void() crylink_select_01;
 
+.float gravity;
+
 float() crylink_check =
 {
 	if (self.ammo_cells >= 1)
@@ -37,15 +39,61 @@ void W_Crylink_Touch (void)
 	self.event_damage = nullfunction;
 	//te_smallflash(self.origin);
 	RadiusDamage (self, self.owner, cvar("g_balance_crylink_damage"), cvar("g_balance_crylink_edgedamage"), cvar("g_balance_crylink_radius"), world, cvar("g_balance_crylink_force"), IT_CRYLINK);
-	remove (self);
+	self.touch = nullfunction;
+	self.norespawn = TRUE;
+	self.gravity = 1;
+	self.glow_size = 0;
+	self.glow_color = 0;
+	self.think = SUB_Remove;
+	SUB_SetFade(self, time);
+	//remove (self);
 }
 
 void W_Crylink_Attack (void) //(float postion)
 {
 	float counter;
 
-	sound (self, CHAN_WEAPON, "weapons/shotgun_fire.wav", 1, ATTN_NORM);
-	self.attack_finished = time + 0.7;
+	sound (self, CHAN_WEAPON, "weapons/crylink.wav", 1, ATTN_NORM);
+	self.attack_finished = time + cvar("g_balance_crylink_refire");
+	self.ammo_cells = self.ammo_cells - 1;
+
+	while (counter < 7)
+	{
+		entity	proj;
+
+		makevectors(self.v_angle);
+		proj = spawn ();
+		proj.owner = self;
+		proj.classname = "spike";
+
+		proj.movetype = MOVETYPE_BOUNCE;
+		proj.solid = SOLID_BBOX;
+		proj.gravity = 0.001;
+
+		setmodel (proj, "models/plasma.mdl");
+		setsize (proj, '0 0 0', '0 0 0');
+		setorigin (proj, self.origin + self.view_ofs + v_forward * 10 + v_right * 5 + v_up * -14);
+
+		proj.velocity = (v_forward + (counter / 7) * randomvec() * cvar("g_balance_crylink_spread")) * cvar("g_balance_crylink_speed");
+		proj.touch = W_Crylink_Touch;
+		proj.think = SUB_Remove;
+		proj.nextthink = time + 9;
+
+		proj.glow_color = 10;
+		proj.glow_size = 20;
+
+		proj.effects = proj.effects | EF_ADDITIVE;
+		proj.effects = proj.effects | EF_LOWPRECISION;
+		counter = counter + 1;
+	}
+}
+
+void W_Crylink_Attack2 (void)
+{
+	float counter;
+
+	sound (self, CHAN_WEAPON, "weapons/crylink.wav", 1, ATTN_NORM);
+	self.attack_finished = time + cvar("g_balance_crylink_refire");
 	self.ammo_cells = self.ammo_cells - 1;
 
 	while (counter < 5)
@@ -57,16 +105,15 @@ void W_Crylink_Attack (void) //(float postion)
 		proj.owner = self;
 		proj.classname = "spike";
 
-		proj.movetype = MOVETYPE_FLY;
+		proj.movetype = MOVETYPE_BOUNCE;
 		proj.solid = SOLID_BBOX;
+		proj.gravity = 0.001;
 
 		setmodel (proj, "models/plasma.mdl");
 		setsize (proj, '0 0 0', '0 0 0');
 		setorigin (proj, self.origin + self.view_ofs + v_forward * 10 + v_right * 5 + v_up * -14);
 
-		proj.velocity = v_forward * cvar("g_balance_crylink_speed");
-		proj.velocity = proj.velocity + v_right * ( crandom() * 50 );
-		proj.velocity = proj.velocity + v_up * ( crandom() * 50 );
+		proj.velocity = (v_forward + (counter / 2 - 1) * v_right * cvar("g_balance_crylink_spread")) * cvar("g_balance_crylink_speed");
 		proj.touch = W_Crylink_Touch;
 		proj.think = SUB_Remove;
 		proj.nextthink = time + 9;
@@ -75,14 +122,9 @@ void W_Crylink_Attack (void) //(float postion)
 		proj.glow_size = 20;
 
 		proj.effects = proj.effects | EF_ADDITIVE;
+		proj.effects = proj.effects | EF_LOWPRECISION;
 		counter = counter + 1;
 	}
-}
-
-void W_Crylink_Attack2 (void)
-{
-
-
 }
 
 
@@ -97,7 +139,7 @@ void()	crylink_fire1_01 =
 };
 void()	crylink_fire2_01 =
 {
-	weapon_doattack(crylink_check, crylink_check, W_Crylink_Attack);
+	weapon_doattack(crylink_check, crylink_check, W_Crylink_Attack2);
 	weapon_thinkf(WFRAME_FIRE1, 0.15, crylink_ready_01);
 };
 void()	crylink_fire3_01 =
