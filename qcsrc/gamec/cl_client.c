@@ -462,8 +462,13 @@ void PlayerPreThink (void)
 	if (BotPreFrame())
 		return;
 
-	if (self.view_ofs == '0 0 0')
-		return;		// intermission or finale
+	if (intermission_running)
+	{
+		IntermissionThink ();	// otherwise a button could be missed between
+		return;					// the think tics
+	}
+
+	CheckRules();
 
 	if (self.deadflag != DEAD_NO)
 	{
@@ -543,6 +548,8 @@ void PlayerPostThink (void)
 	if (self.health > 0)
 	if (self.impulse)
 		ImpulseCommands ();
+	if (intermission_running)
+		return;		// intermission or finale
 
 	// VorteX: landing on floor, landing damage etc.
 	// LordHavoc: removed 'big fall' death code that VorteX added

@@ -32,7 +32,7 @@ void worldspawn (void)
 	precache_model ("models/weapons/g_nex.md3");
 	precache_model ("models/weapons/g_hagar.md3");
 	precache_model ("models/weapons/g_rl.md3");
-	
+
 	precache_model ("models/sprites/plasmahitwall.spr32");
 	precache_model ("models/sprites/muzzleflash.spr32");
 	precache_model ("models/sprites/plasmashot.spr32");
@@ -55,14 +55,14 @@ void worldspawn (void)
 	precache_model ("models/plasma.mdl");
 	precache_model ("models/plasmatrail.mdl");
 	precache_model ("models/tracer.mdl");
-	
+
 	precache_model ("models/items/g_h1.md3");
 	precache_model ("models/items/g_h25.md3");
 	precache_model ("models/items/g_h100.md3");
-	
+
 	precache_model ("models/items/g_a1.md3");
 	precache_model ("models/items/g_a25.md3");
-	
+
 	precache_model ("models/weapons/w_uzi.zym");
 	precache_model ("models/weapons/w_laser.zym");
 	precache_model ("models/weapons/w_shotgun.zym");
@@ -72,17 +72,17 @@ void worldspawn (void)
 	precache_model ("models/weapons/w_nex.zym");
 	precache_model ("models/weapons/w_hagar.zym");
 	precache_model ("models/weapons/w_rl.zym");
-	
+
 	precache_model ("models/items/a_shells.md3");
 	precache_model ("models/items/a_cells.md3");
 	precache_model ("models/items/a_rockets.md3");
 	precache_model ("models/items/a_bullets.mdl");
-	
+
 	precache_model ("models/items/g_strength.zym");
 	precache_model ("models/items/g_invincible.zym");
 	precache_model ("models/items/g_slowmo.zym");
 	precache_model ("models/items/g_speed.zym");
-	
+
 	precache_model ("models/gibs/eye.md3");
 	precache_model ("models/gibs/gib1.md3");
 	precache_model ("models/gibs/gib2.md3");
@@ -122,7 +122,7 @@ void worldspawn (void)
 	precache_sound ("weapons/uzi_fire_secondary.wav");
 	precache_sound ("weapons/tink1.wav");
 	precache_sound ("weapons/weapon_switch.wav");
-	
+
 	precache_sound ("misc/itempickup.wav");
 	precache_sound ("misc/bodyimpact1.wav");
 	precache_sound ("misc/bodyimpact2.wav");
@@ -155,40 +155,40 @@ void worldspawn (void)
 
 		// 0 normal
 	lightstyle(0, "m");
-	
+
 	// 1 FLICKER (first variety)
 	lightstyle(1, "mmnmmommommnonmmonqnmmo");
-	
+
 	// 2 SLOW STRONG PULSE
 	lightstyle(2, "abcdefghijklmnopqrstuvwxyzyxwvutsrqponmlkjihgfedcba");
-	
+
 	// 3 CANDLE (first variety)
 	lightstyle(3, "mmmmmaaaaammmmmaaaaaabcdefgabcdefg");
-	
+
 	// 4 FAST STROBE
 	lightstyle(4, "mamamamamama");
-	
+
 	// 5 GENTLE PULSE 1
 	lightstyle(5,"jklmnopqrstuvwxyzyxwvutsrqponmlkj");
-	
+
 	// 6 FLICKER (second variety)
 	lightstyle(6, "nmonqnmomnmomomno");
-	
+
 	// 7 CANDLE (second variety)
 	lightstyle(7, "mmmaaaabcdefgmmmmaaaammmaamm");
-	
+
 	// 8 CANDLE (third variety)
 	lightstyle(8, "mmmaaammmaaammmabcdefaaaammmmabcdefmmmaaaa");
-	
+
 	// 9 SLOW STROBE (fourth variety)
 	lightstyle(9, "aaaaaaaazzzzzzzz");
-	
+
 	// 10 FLUORESCENT FLICKER
 	lightstyle(10, "mmamammmmammamamaaamammma");
 
 	// 11 SLOW PULSE NOT FADE TO BLACK
 	lightstyle(11, "abcdefghijklmnopqrrqponmlkjihgfedcba");
-	
+
 	// styles 32-62 are assigned by the light program for switchable lights
 
 	// 63 testing
@@ -200,3 +200,202 @@ void light (void)
 {
 	makestatic (self);
 }
+
+float gameover;
+float intermission_running;
+float intermission_exittime;
+string nextmap;
+
+void() GotoNextMap =
+{
+	if (cvar("samelevel"))	// if samelevel is set, stay on same level
+		changelevel (mapname);
+	else
+		changelevel (nextmap);
+};
+
+
+/*
+============
+IntermissionThink
+
+When the player presses attack or jump, change to the next level
+============
+*/
+void() IntermissionThink =
+{
+	if (time < intermission_exittime)
+		return;
+
+	if (!self.button0 && !self.button1 && !self.button2)
+		return;
+
+	GotoNextMap ();
+};
+
+/*
+============
+FindIntermission
+
+Returns the entity to view from
+============
+*/
+/*
+entity() FindIntermission =
+{
+	local	entity spot;
+	local	float cyc;
+
+// look for info_intermission first
+	spot = find (world, classname, "info_intermission");
+	if (spot)
+	{	// pick a random one
+		cyc = random() * 4;
+		while (cyc > 1)
+		{
+			spot = find (spot, classname, "info_intermission");
+			if (!spot)
+				spot = find (spot, classname, "info_intermission");
+			cyc = cyc - 1;
+		}
+		return spot;
+	}
+
+// then look for the start position
+	spot = find (world, classname, "info_player_start");
+	if (spot)
+		return spot;
+
+// testinfo_player_start is only found in regioned levels
+	spot = find (world, classname, "testplayerstart");
+	if (spot)
+		return spot;
+
+// then look for the start position
+	spot = find (world, classname, "info_player_deathmatch");
+	if (spot)
+		return spot;
+
+	//objerror ("FindIntermission: no spot");
+	return world;
+};
+*/
+
+/*
+===============================================================================
+
+RULES
+
+===============================================================================
+*/
+
+/*
+go to the next level for deathmatch
+only called if a time or frag limit has expired
+*/
+void() NextLevel =
+{
+	//local entity pos;
+	local float fh;
+	local string line;
+
+	// restart current map if no cycle is found
+	nextmap = mapname;
+	fh = fopen("maplist.cfg", FILE_READ);
+	if (fh >= 0)
+	{
+		while (1)
+		{
+			line = fgets(fh);
+			if (!line)
+				break;
+			if (line == mapname)
+			{
+				line = fgets(fh);
+				if (!line)
+					break;
+				nextmap = line;
+				break;
+			}
+		}
+		fclose(fh);
+	}
+
+	gameover = TRUE;
+
+	intermission_running = 1;
+
+// enforce a wait time before allowing changelevel
+	intermission_exittime = time + 5;
+
+	WriteByte (MSG_ALL, SVC_CDTRACK);
+	WriteByte (MSG_ALL, 3);
+	WriteByte (MSG_ALL, 3);
+
+	//pos = FindIntermission ();
+
+	other = find (world, classname, "player");
+	while (other != world)
+	{
+		//other.nextthink = time + 0.5;
+		other.takedamage = DAMAGE_NO;
+		other.solid = SOLID_NOT;
+		other.movetype = MOVETYPE_NONE;
+		other.angles = other.v_angle;
+		other.angles_x = other.angles_x * -1;
+		/*
+		if (pos != world);
+		{
+			other.modelindex = 0;
+			other.weaponentity = world; // remove weapon model
+			other.view_ofs = '0 0 0';
+			other.angles = other.v_angle = pos.mangle;
+			if (!other.angles)
+			{
+				other.angles = other.v_angle = pos.angles;
+				other.v_angle_x = other.v_angle_x * -1;
+			}
+			other.fixangle = TRUE;		// turn this way immediately
+			setorigin (other, pos.origin);
+		}
+		*/
+		other = find (other, classname, "player");
+	}
+
+	WriteByte (MSG_ALL, SVC_INTERMISSION);
+};
+
+/*
+============
+CheckRules
+
+Exit deathmatch games upon conditions
+============
+*/
+void() CheckRules =
+{
+	local	float		timelimit;
+	local	float		fraglimit;
+
+	if (gameover)	// someone else quit the game already
+	{
+		if (time >= intermission_exittime + 60)
+			GotoNextMap();
+		return;
+	}
+
+	timelimit = cvar("timelimit") * 60;
+	fraglimit = cvar("fraglimit");
+
+	if (timelimit && time >= timelimit)
+	{
+		NextLevel ();
+		return;
+	}
+
+	if (fraglimit && self.frags >= fraglimit)
+	{
+		NextLevel ();
+		return;
+	}
+};

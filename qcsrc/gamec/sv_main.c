@@ -14,4 +14,5 @@ void StartFrame (void)
 	teamplay = cvar ("teamplay");
 
 	BotFrame ();
+	CheckRules ();
 }

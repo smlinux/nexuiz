@@ -911,6 +911,7 @@ frame, the ai_time limits it's actual updating
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 */
 float stagger_think;
+float intermission_running;
 
 void() BotAI =
 {
@@ -946,7 +947,7 @@ void() BotAI =
 		else
 			return;
 	}
-	if (self.view_ofs == '0 0 0')
+	if (intermission_running)
 		bot_start_topic(7);
 	stagger_think = time;
 
