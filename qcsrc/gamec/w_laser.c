@@ -40,7 +40,6 @@ void W_Laser_Touch (void)
 
 	dir = normalize (self.owner.origin - self.origin);
 
-	/*
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 	WriteByte (MSG_BROADCAST, TE_FLAMEJET);
 	WriteCoord (MSG_BROADCAST, self.origin_x);
@@ -49,7 +48,7 @@ void W_Laser_Touch (void)
 	WriteCoord (MSG_BROADCAST, 0);		// SeienAbunae: groan... Useless clutter
 	WriteCoord (MSG_BROADCAST, 0);
 	WriteCoord (MSG_BROADCAST, 0);
-	WriteByte (MSG_BROADCAST, 155); */
+	WriteByte (MSG_BROADCAST, 155);
 
 
 

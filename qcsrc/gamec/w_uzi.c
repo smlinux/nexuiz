@@ -52,8 +52,11 @@ void W_Uzi_Attack (void)
 	self.ammo_nails = self.ammo_nails - 0.25;
 
 	// casing code
-	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 8) + (v_forward * 10);
-	SpawnCasing (org, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 + 10) * v_up), 2, v_forward,'0 250 0', 100, 2);
+	if (cvar("g_casings") == 1)
+	{
+		org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 8) + (v_forward * 10);
+		SpawnCasing (org, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 + 10) * v_up), 2, v_forward,'0 250 0', 100, 2);
+	}
 }
 
 void W_Uzi_Attack2 (void)
