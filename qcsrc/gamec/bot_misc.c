@@ -17,7 +17,7 @@ NO EVENT WILL RYAN "FRIKAC" SMITH BE LIABLE FOR ANY
 GENERAL, CONSEQUENTIAL, INDIRECT, INCIDENTAL,
 EXEMPLARY, OR SPECIAL DAMAGES, EVEN IF RYAN "FRIKAC"
 SMITH HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH
-DAMAGES, IRRESPECTIVE OF THE CAUSE OF SUCH DAMAGES. 
+DAMAGES, IRRESPECTIVE OF THE CAUSE OF SUCH DAMAGES.
 
 You accept this software on the condition that you
 indemnify and hold harmless Ryan "FrikaC" Smith from
@@ -25,7 +25,7 @@ any and all liability or damages to third parties,
 including attorney fees, court costs, and other
 related costs and expenses, arising out of your use
 of this software irrespective of the cause of said
-liability. 
+liability.
 
 The export from the United States or the subsequent
 reexport of this software is subject to compliance
@@ -34,10 +34,10 @@ control restrictions. You agree that in the event you
 seek to export this software, you assume full
 responsibility for obtaining all necessary export
 licenses and approvals and for assuring compliance
-with applicable reexport restrictions. 
+with applicable reexport restrictions.
 
 Any reproduction of this software must contain
-this notice in its entirety. 
+this notice in its entirety.
 
 */
 
@@ -54,7 +54,7 @@ string(float r) BotName =
 {
 	self.b_num = r;
 	if (r == 1)
-	{	
+	{
 		self.playermodel = "models/player/visitant.zym";
 		return "Visitant";
 	}
@@ -64,7 +64,7 @@ string(float r) BotName =
 		return "Marine";
 	}
 	else if (r == 3)
-	{	
+	{
 		self.playermodel = "models/player/specop.zym";
 		return "Specop";
 	}
@@ -72,7 +72,7 @@ string(float r) BotName =
 	{
 		self.playermodel = "models/player/mulder.zym";
 		return "Mulder";
-	} 
+	}
 	else if (r == 5)
 	{
 		self.playermodel = "models/player/fshock.zym";
@@ -87,9 +87,9 @@ string(float r) BotName =
 	{
 		self.playermodel = "models/player/headhunter.zym";
 		return "HeadHunter";
-	} 
+	}
 	else
-	{	
+	{
 		self.playermodel = "models/player/robot.zym";
 		return "Robot";
 	}
@@ -139,7 +139,7 @@ b_originator == self
  11 - lag
 b_originator == targ
 
- 
+
 */
 void(float tpic) bot_start_topic =
 {
@@ -158,7 +158,7 @@ void() bot_chat =
 	if (b_options & OPT_NOCHAT)
 		return;
 	r = ceil (random() * 6);
-	
+
 	if (self.b_chattime > time)
 	{
 		if (self.b_skill < 2)
@@ -345,7 +345,7 @@ void() bot_chat =
 				else
 				{
 					BotSay(": lo\n");
-					bot_start_topic(0);	
+					bot_start_topic(0);
 				}
 			}
 		}
@@ -471,7 +471,7 @@ void() bot_chat =
 /*
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-Kick A Bot. 
+Kick A Bot.
 
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 */
@@ -484,7 +484,7 @@ void() KickABot =
 	{
 		if (!(ty.ishuman))
 		{
-			
+
 			BotDisconnect(ty);
 			ty.ishuman = TRUE;
 			ty = world;
@@ -499,7 +499,7 @@ void() KickABot =
 /*
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-Simplified origin checking. 
+Simplified origin checking.
 
 God, I wish I had inline
 
@@ -527,10 +527,10 @@ float (entity targ) fisible =
 {
 	local vector	spot1, org;
 	local float thruwater, pc1, pc2;
-	
+
 	org = realorigin(targ);
 	spot1 = self.origin + self.view_ofs;
-	
+
 	if (targ.solid == SOLID_BSP)
 	{
 		traceline (spot1, org, TRUE, self);
@@ -548,10 +548,10 @@ float (entity targ) fisible =
 			thruwater = FALSE;
 		else if (pc1 == CONTENT_LAVA)
 			return FALSE;
-		else	
+		else
 			thruwater = TRUE;
 	}
-	
+
 	if (pc1 < -1) // targ's origin is in water or other liquid
 	{
 		if (pc2 != pc1)
@@ -608,7 +608,7 @@ float (entity targ) fisible =
 /*
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-Wisible 
+Wisible
 
 goes through movable brushes/entities, used
 for waypoints
@@ -624,7 +624,7 @@ float (entity targ1, entity targ2) wisible =
 
 	spot1 = targ1.origin;
 	spot2 = realorigin(targ2);
-	
+
 	ignore = self;
 	do
 	{
@@ -634,7 +634,7 @@ float (entity targ1, entity targ2) wisible =
 	} while ((trace_ent != world) && (trace_fraction != 1));
 	if (trace_endpos == spot2)
 		return TRUE;
-	else 
+	else
 		return FALSE;
 };
 
@@ -657,6 +657,7 @@ float (entity targ) sisible =
 		return TRUE;
 	else if (trace_fraction == 1)
 		return TRUE;
+	return FALSE;
 };
 /*
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -668,7 +669,7 @@ subtracts one angle from another
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 */
 
-float (float y1, float y2) angcomp = 
+float (float y1, float y2) angcomp =
 {
 	y1 = frik_anglemod(y1);
 	y2 = frik_anglemod(y2);
@@ -705,7 +706,7 @@ float (entity targ) fov =
 	g = angcomp(self.v_angle_y, yawn_y);
 	if (fabs(g) > 60)
 		return FALSE;
- 
+
 	return TRUE;
 };
 
