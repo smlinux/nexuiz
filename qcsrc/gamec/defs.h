@@ -29,8 +29,8 @@ entity dest;
 
 .float	jump_flag;				// storing velocity_z for falling damage
 .float	attack_finished;
-.float	pain_finished			//Added by Supajoe
-.float	pain_frame			//"
+.float	pain_finished;			//Added by Supajoe
+.float	pain_frame;			//"
 .float	statdraintime;			// record the one-second intervals between draining health and armour when they're over 100
 .float  crouch;	// Crouching or not?
 .float  hasaliases; // Has aliases (like +crouch) binded or not?
@@ -71,12 +71,12 @@ entity dest;
 
 .float		dmg;
 
-.vector angleoffset; // for incorrectly exported player models 
-    
-// for railgun damage (hitting multiple enemies) 
-.float railgunhit; 
-.float railgunhitsolidbackup; 
-.vector railgunhitloc; 
+.vector angleoffset; // for incorrectly exported player models
+
+// for railgun damage (hitting multiple enemies)
+.float railgunhit;
+.float railgunhitsolidbackup;
+.vector railgunhitloc;
 
 // definistions for weaponsystem
 
@@ -111,14 +111,14 @@ float WR_RAISE		  = 5;	// select frame
 float WR_FIRE1		  = 6;  // primary fire frame
 float WR_FIRE2		  = 7;  // secondary fire
 float WR_FIRE3		  = 8;  // third fire
-float WR_CHECKAMMO	  = 9;  // checks ammo for weapon 
+float WR_CHECKAMMO	  = 9;  // checks ammo for weapon
 float WR_CLEAR		  = 10;  // runs afted deselecting frames, remove weapon parts (if presented). This useful for quake3-style chaingun
 
 // Weapon indexes
 float WEP_LASER				= 1; // float	IT_LASER				= 4096;
 float WEP_SHOTGUN			= 2; // float	IT_SHOTGUN				= 1;
 float WEP_UZI				= 3; // float	IT_UZI					= 2;
-float WEP_GRENADE_LAUNCHER	= 4; // float	IT_GRENADE_LAUNCHER		= 4; 
+float WEP_GRENADE_LAUNCHER	= 4; // float	IT_GRENADE_LAUNCHER		= 4;
 float WEP_ELECTRO			= 5; // float	IT_ELECTRO				= 8;
 float WEP_CRYLINK			= 6; // float	IT_CRYLINK				= 16;
 float WEP_NEX				= 7; // float	IT_NEX					= 32;
