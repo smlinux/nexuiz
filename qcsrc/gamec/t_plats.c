@@ -113,7 +113,7 @@ void() plat_crush =
 
 void() plat_use =
 {
-	self.use = SUB_Null;
+	self.use = nullfunction;
 	if (self.state != 4)
 		objerror ("plat_use: not in up state");
 	plat_go_down();
@@ -381,7 +381,7 @@ void() func_rotating =
 
 	// wait for targets to spawn
 	self.nextthink = self.ltime + 999999999;
-	self.think = SUB_Null;
+	self.think = nullfunction;
 };
 
 .float height;
@@ -442,5 +442,5 @@ void() func_bobbing =
 	controller.nextthink = time + 1;
 	controller.think = func_bobbing_controller_think;
 	self.nextthink = self.ltime + 999999999;
-	self.think = SUB_Null;
+	self.think = nullfunction;
 };

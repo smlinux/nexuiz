@@ -129,6 +129,12 @@ float	MSG_ONE					= 1;
 float	MSG_ALL					= 2;
 float	MSG_INIT				= 3;
 
+// Deathtypes (weapon deathtypes are the IT_* constants below)
+float	DEATH_FALL				= 10000;
+float	DEATH_BIGFALL			= 10001;
+float	DEATH_DROWN				= 10002;
+float	DEATH_HURTTRIGGER		= 10003;
+
 float	IT_LASER				= 4096;
 float	IT_SHOTGUN				= 1;
 float	IT_UZI					= 2;
@@ -152,11 +158,6 @@ float	IT_SLOWMO				= 65536;
 vector	PL_VIEW_OFS				= '0 0 35';
 vector	PL_MIN					= '-16 -16 -24';
 vector	PL_MAX					= '16 16 45';
-
-//vector	PL_VIEW_OFS				= '0 0 32';
-//vector	PL_MIN					= '-16 -16 -48';
-//vector	PL_MAX					= '16 16 48';
-
 
 // Sajt - added these, just as constants. Not sure how you want them actually put in the game, but I just
 // did this so at least they worked

@@ -40,7 +40,7 @@ void W_Rocket_Explode (entity ignore)
 {
 	ImpactEffect (self, IT_ROCKET_LAUNCHER);
 
-	self.event_damage = SUB_Null;
+	self.event_damage = nullfunction;
 	RadiusDamage (self, self.owner, 130, 50, 170, ignore, 600, IT_ROCKET_LAUNCHER);
 
 	remove (self);

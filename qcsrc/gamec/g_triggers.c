@@ -92,11 +92,8 @@ void() SUB_UseTargets =
 			otemp = other;
 			self = t;
 			other = stemp;
-			if (self.use != SUB_Null)
-			{
-				if (self.use)
-					self.use ();
-			}
+			if (self.use)
+				self.use ();
 			self = stemp;
 			other = otemp;
 			activator = act;
@@ -167,7 +164,8 @@ void() multi_trigger =
 	else
 	{	// we can't just remove (self) here, because this is a touch function
 		// called wheil C code is looping through area links...
-		self.touch = SUB_Null;
+		self.touch = nullfunction;
+
 		self.nextthink = time + 0.1;
 		self.think = SUB_Remove;
 	}
@@ -357,7 +355,7 @@ void() hurt_touch =
 	if (other.takedamage)
 	{
 		self.solid = SOLID_NOT;
-		Damage (other, self, self, self.dmg, 1, '0 0 0', '0 0 0');
+		Damage (other, self, self, self.dmg, DEATH_HURTTRIGGER, '0 0 0', '0 0 0');
 		self.think = hurt_on;
 		self.nextthink = time + 1;
 	}
@@ -376,6 +374,8 @@ void() trigger_hurt =
 	self.touch = hurt_touch;
 	if (!self.dmg)
 		self.dmg = 5;
+	if (!self.message)
+		self.message = "was in the wrong place.";
 };
 
 //void() target_speaker_use = {sound(self, CHAN_VOICE, self.noise, 1, 1);}

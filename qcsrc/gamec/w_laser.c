@@ -53,7 +53,7 @@ void W_Laser_Touch (void)
 
 	
 
-	self.event_damage = SUB_Null;
+	self.event_damage = nullfunction;
 	RadiusDamage (self, self.owner, 15, 20, 50, world, 200, IT_LASER);
 	sound (self, CHAN_IMPACT, "weapons/laserimpact.wav", 1, ATTN_NORM);
 

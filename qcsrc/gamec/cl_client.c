@@ -92,8 +92,8 @@ void PutClientInServer (void)
 	self.speed_finished = 0;
 	self.slowmo_finished = 0;
 	// players have no think function
-	self.think = SUB_Null;
-	self.nextthink = 0;
+	self.think = nullfunction;
+	self.nextthink = -1;
 
 	self.deadflag = DEAD_NO;
 
@@ -103,7 +103,6 @@ void PutClientInServer (void)
 	self.viewzoom = 0.6;
 
 	setmodel (self, self.playermodel);
-
 	setsize (self, PL_MIN, PL_MAX);
 	setorigin (self, spot.origin + '0 0 1' * (1 - self.mins_z - 24));
 	// don't reset back to last position, even if new position is stuck in solid
@@ -440,7 +439,7 @@ void PlayerPostThink (void)
 				{
 					local float dm;
 					dm = bound(0, 0.1*(fabs(self.jump_flag) - 600), 20);
-					Damage (self, world, world, dm, 1, '0 0 0', '0 0 0');
+					Damage (self, world, world, dm, DEATH_FALL, '0 0 0', '0 0 0');
 				}
 				self.jump_flag = 0;
 			}
@@ -467,7 +466,7 @@ void PlayerPostThink (void)
 			if (time < self.lip)
 			{// prevent all inventory drop
 				self.weapon = 0;
-				Damage (self, world, world, 40000, 1, '0 0 0', '0 0 0');
+				Damage (self, world, world, 40000, DEATH_BIGFALL, '0 0 0', '0 0 0');
 			}
 		}
 	}

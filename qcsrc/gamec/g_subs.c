@@ -1,25 +1,13 @@
+nosave var void nullfunction (void);
+
 void(vector destangle, float tspeed, void() func) SUB_CalcAngleMove;
 void()  SUB_CalcMoveDone;
 void() SUB_CalcAngleMoveDone;
-void() SUB_Null;
 //void() SUB_UseTargets;
 void() SUB_Remove;
 
 void info_null (void)
 {
-	
-}
-
-/*
-==================
-SUB_Null
-
-Do nothing
-==================
-*/
-void SUB_Null (void)
-{
-	
 }
 
 /*

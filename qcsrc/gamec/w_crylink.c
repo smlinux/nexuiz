@@ -34,7 +34,7 @@ void(float req) w_crylink =
 
 void W_Crylink_Touch (void)
 {
-	self.event_damage = SUB_Null;
+	self.event_damage = nullfunction;
 	te_smallflash(self.origin);
 	RadiusDamage (self, self.owner, 45, 0, 3, world, 55, IT_CRYLINK);
 	remove (self);

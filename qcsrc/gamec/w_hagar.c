@@ -35,7 +35,7 @@ void W_Hagar_Explode (void)
 {
 	ImpactEffect (self, IT_HAGAR);
 
-	self.event_damage = SUB_Null;
+	self.event_damage = nullfunction;
 	RadiusDamage (self, self.owner, 40, 15, 70, world, 100, IT_HAGAR);
 
 	remove (self);

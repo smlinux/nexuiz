@@ -1,40 +1,69 @@
 
 void Obituary (entity attacker, entity targ, float deathtype)
 {
-	local string s;
+	string	s;
+
 	if (targ.classname == "player" || targ.classname == "corpse")
 	{
-		s = targ.netname; 
 		if (targ.classname == "corpse")
 			s = "A corpse";
+		else
+			s = targ.netname;
+
+		// Suicides
 		if (targ == attacker)
 		{
-			if (deathtype == IT_LASER) {bprint(s);bprint(" was unable to resist the urge to self-immolate\n");}
-			else if (deathtype == IT_GRENADE_LAUNCHER) {bprint(s);bprint(" detonated\n");}
-			else if (deathtype == IT_ELECTRO) {bprint(s);bprint(" played with plasma\n");}
-			else if (deathtype == IT_HAGAR) {bprint(s);bprint(" should have used a different weapon\n");}
-			else if (deathtype == IT_ROCKET_LAUNCHER) {bprint(s);bprint(" exploded\n");}
-			else {bprint(s);bprint(" competes for the darwin awards\n");}
+			if (deathtype == IT_LASER)
+				bprint (s, " was unable to resist the urge to self-immolate\n");
+			else if (deathtype == IT_GRENADE_LAUNCHER)
+				bprint (s, " detonated\n");
+			else if (deathtype == IT_ELECTRO)
+				bprint (s, " played with plasma\n");
+			else if (deathtype == IT_HAGAR)
+				bprint (s, " should have used a different weapon\n");
+			else if (deathtype == IT_ROCKET_LAUNCHER)
+				bprint (s, " exploded\n");
+			else
+				bprint (s, " competes for the Darwin awards\n");
+
 			self.frags = self.frags - 1;
 		}
+		// Kills
 		else if (attacker.classname == "player")
 		{
-			if (deathtype == IT_LASER) {bprint(s);bprint(" was a victim of laser surgeon ");bprint(attacker.netname);bprint("\n");}
-			else if (deathtype == IT_UZI) {bprint(s);bprint(" was gunned down by ");bprint(attacker.netname);bprint("\n");}
-			else if (deathtype == IT_SHOTGUN) {bprint(s);bprint(" was gunned down by ");bprint(attacker.netname);bprint("\n");}
-			else if (deathtype == IT_GRENADE_LAUNCHER) {bprint(s);bprint(" was blasted by ");bprint(attacker.netname);bprint("\n");}
-			else if (deathtype == IT_ELECTRO) {bprint(s);bprint(" bathed in plasma from ");bprint(attacker.netname);bprint("\n");}
-			else if (deathtype == IT_CRYLINK) {bprint(s);bprint(" was zapped by ");bprint(attacker.netname);bprint("\n");}
-			else if (deathtype == IT_NEX) {bprint(s);bprint(" sports a new hole from ");bprint(attacker.netname);bprint("\n");}
-			else if (deathtype == IT_HAGAR) {bprint(s);bprint(" was pummeled by ");bprint(attacker.netname);bprint("\n");}
-			else if (deathtype == IT_ROCKET_LAUNCHER) {bprint(s);bprint(" was given a lesson in rocketry by ");bprint(attacker.netname);bprint("\n");}
-			else {bprint(s);bprint(" was killed by ");bprint(attacker.netname);bprint("\n");}
+			if (deathtype == IT_LASER)
+				bprint (s, " was a victim of laser surgeon ", attacker.netname, "\n");
+			else if (deathtype == IT_UZI)
+				bprint (s, " was riddled full of holes by ", attacker.netname, "\n");
+			else if (deathtype == IT_SHOTGUN)
+				bprint (s, " was gunned by ", attacker.netname, "\n");
+			else if (deathtype == IT_GRENADE_LAUNCHER)
+				bprint (s, " was blasted by ", attacker.netname, "\n");
+			else if (deathtype == IT_ELECTRO)
+				bprint (s, " bathed in ", attacker.netname, "'s plasma\n");
+			else if (deathtype == IT_CRYLINK)
+				bprint (s, " was zapped by ", attacker.netname, "\n");
+			else if (deathtype == IT_NEX)
+				bprint (s, " sports a new hole from ", attacker.netname, "\n");
+			else if (deathtype == IT_HAGAR)
+				bprint (s, " was pummeled by ", attacker.netname, "\n");
+			else if (deathtype == IT_ROCKET_LAUNCHER)
+				bprint (s, " was given a lesson in rocketry by ", attacker.netname, "\n");
+			else
+				bprint (s, " was killed by ", attacker.netname, "\n");
+
 			attacker.frags = attacker.frags + 1;
 		}
+		else if (deathtype == DEATH_HURTTRIGGER)
+			bprint (s, " ", attacker.message, "\n");
+		else if (deathtype == DEATH_FALL)
+			bprint (s, " hit the ground with a crunch\n");
+		else if (deathtype == DEATH_BIGFALL)
+			bprint (s, " fell into oblivion\n");
+		else if (deathtype == DEATH_DROWN)
+			bprint (s, " wished he had gills\n");
 		else
-		{
-			{bprint(s);bprint(" died\n");}
-		}
+			bprint (s, " died\n");
 	}
 }
 

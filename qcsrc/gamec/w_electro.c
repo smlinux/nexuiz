@@ -43,7 +43,7 @@ void W_Electro_Touch (void)
 	WriteCoord (MSG_BROADCAST, 0);		// Sajt: Yeah.. I agree with him
 	WriteCoord (MSG_BROADCAST, 0);
 	WriteByte (MSG_BROADCAST, 155);
-	self.event_damage = SUB_Null;
+	self.event_damage = nullfunction;
 	RadiusDamage (self, self.owner, 50, 10, 70, world, 50, IT_ELECTRO);
 	sound (self, CHAN_IMPACT, "weapons/plasmahit.wav", 1, ATTN_NORM);
 	remove (self);
@@ -107,7 +107,7 @@ void W_Plasma_Explode (entity ignore)
 
 	te_customflash (self.origin, 5000, 10, '0 0 1');
 
-	self.event_damage = SUB_Null;
+	self.event_damage = nullfunction;
 	RadiusDamage (self, self.owner, 100, 50, 100, world, 50, IT_ELECTRO);
 	sound (self, CHAN_IMPACT, "weapons/plasmahit.wav", 1, ATTN_NORM);
 
@@ -128,7 +128,7 @@ void W_Plasma_Explode2 (entity ignore)
 
 	te_customflash (self.origin, 5000, 10, '0 0 1');
 
-	self.event_damage = SUB_Null;
+	self.event_damage = nullfunction;
 	RadiusDamage (self, self.owner, 150, 50, 150, world, 150, IT_ELECTRO);
 	sound (self, CHAN_IMPACT, "weapons/plasmahit.wav", 1, ATTN_NORM);
 

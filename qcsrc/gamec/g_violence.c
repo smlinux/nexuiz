@@ -5,7 +5,7 @@ void GibDamage (entity inflictor, entity attacker, float damage, float deathtype
 	self.health = self.health - damage;
 	if (self.health <= -300)
 	{
-		self.event_damage = SUB_Null;
+		self.event_damage = nullfunction;
 		SUB_VanishOrRemove (self);
 	}
 }

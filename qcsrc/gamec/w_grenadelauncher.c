@@ -31,35 +31,29 @@ void(float req) w_glauncher =
 		weapon_hasammo = glauncher_check();
 };		 
 
-void W_Grenade_Explode (entity ignore)
+void W_Grenade_Explode (void)
 {
 	ImpactEffect (self, IT_GRENADE_LAUNCHER);
 
-	self.event_damage = SUB_Null;
+	self.event_damage = nullfunction;
 	RadiusDamage (self, self.owner, 65, 35, 140, world, 400, IT_GRENADE_LAUNCHER);
 
 	remove (self);
 }
 
-void W_Grenade_FuseExplode (void)
-{
-	W_Grenade_Explode (world);
-}
-
-
 void W_Grenade_Touch (void)
 {
 	if (other.classname == "player" || other.classname == "corpse")
-		W_Grenade_Explode (other);
+		W_Grenade_Explode ();
 	else
 	sound (self, CHAN_BODY, "weapons/grenade_bounce.wav", 1, ATTN_NORM);
 }
 
-void W_Grenade_Damage (vector hitloc, float damage, entity inflictor, entity attacker, float deathtype)
+void W_Grenade_Damage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
 {
 	self.health = self.health - damage;
 	if (self.health <= 0)
-		W_Grenade_FuseExplode();
+		W_Grenade_Explode();
 }
 
 void W_Grenade_Attack (void)
@@ -76,22 +70,17 @@ void W_Grenade_Attack (void)
 	gren.movetype = MOVETYPE_BOUNCE;
 	gren.solid = SOLID_BBOX;
 	setmodel(gren, "models/grenademodel.md3");
-	setsize(gren, '-12 -12 -4', '12 12 4');		
-	setorigin(gren, (self.origin + self.view_ofs));
+	setsize(gren, '-6 -6 -3', '6 6 3');		
+	setorigin(gren, self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -12);
 	gren.health = 1;
 	gren.takedamage = DAMAGE_YES;
-	if (self.v_angle_x)
-		gren.velocity = v_forward * (1200 + 1 * 800) + (v_up * 200) + (crandom () * v_right * 10) + (crandom () * v_up * 10);
-	else
-	{
-		gren.velocity = aim (self, 10000) * (1200 + 1 * 800);
-		gren.velocity_z = 200;
-	}
+	gren.velocity = v_forward * 2000 + v_up * 200;
 	gren.avelocity_x = random () * -500 - 500;
+	setsize (gren, gren.mins, gren.maxs);
 	gren.angles = vectoangles (gren.velocity);
 	gren.touch = W_Grenade_Explode;
 	gren.think = W_Grenade_Explode;
-	gren.nextthink = time + 3;
+	gren.nextthink = time + 30;
 	self.ammo_rockets = self.ammo_rockets - 1;
 
 
@@ -122,7 +111,7 @@ void W_Grenade_Attack2 (void)
 	setmodel (gren, "models/grenademodel.md3");
 	setsize (gren, '-6 -6 -3', '6 6 3');
 
-	setorigin (gren, self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);
+	setorigin (gren, self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -12);
 
 	gren.velocity = v_forward * 900 + v_up * 200;
 	gren.angles = vectoangles (gren.velocity);
