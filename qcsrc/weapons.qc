@@ -494,16 +494,22 @@ void W_Uzi_Attack (void)
 void W_Uzi_Attack2 (void)
 {
 	float	sc;
+	float	bullets;
 
 	sound (self, CHAN_WEAPON, "weapons/Shotgun_fire.wav", 1, ATTN_NORM);
 
-	for (sc = 7; sc > 0; sc = sc - 1)
+	if (self.ammo_nails<8)
+		bullets = self.ammo_nails;
+	else
+		bullets = 8;
+
+	for (sc = bullets; sc > 0; sc = sc - 1)
 		fireBullet (v_forward, 270, 8, IT_SHOTGUN);
 
 	self.punchangle_x = -2;
 
-	self.ammo_nails = self.ammo_nails - 5;
-	self.attack_finished = time + 0.8;
+	self.ammo_nails = self.ammo_nails - bullets;
+	self.attack_finished = time + 0.4;
 
 	vector	org; // casing code
 	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 4) + (v_forward * 15);
