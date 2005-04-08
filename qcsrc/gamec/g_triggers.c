@@ -351,7 +351,7 @@ void() hurt_touch =
 	if (other.triggerhurttime < time)
 	{
 		other.triggerhurttime = time + 1;
-		Damage (other, self, self, self.dmg, DEATH_HURTTRIGGER, '0 0 0', '0 0 0');
+		Damage (other, self, self, self.dmg, DEATH_HURTTRIGGER, other.origin, '0 0 0');
 	}
 
 	return;

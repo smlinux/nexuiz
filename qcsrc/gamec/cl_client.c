@@ -327,7 +327,7 @@ void() WaterMove =
 	{	// drown!
 		if (self.pain_finished < time)
 		{
-			Damage (self, world, world, 5, DEATH_DROWN, '0 0 0', '0 0 0');
+			Damage (self, world, world, 5, DEATH_DROWN, self.origin, '0 0 0');
 			self.pain_finished = time + 0.5;
 		}
 	}
@@ -347,7 +347,7 @@ void() WaterMove =
 		if (self.dmgtime < time)
 		{
 			self.dmgtime = time + 0.1;
-			Damage (self, world, world, 3 * self.waterlevel, DEATH_LAVA, '0 0 0', '0 0 0');
+			Damage (self, world, world, 3 * self.waterlevel, DEATH_LAVA, self.origin, '0 0 0');
 		}
 	}
 	else if (self.watertype == CONTENT_SLIME)
@@ -355,7 +355,7 @@ void() WaterMove =
 		if (self.dmgtime < time)
 		{
 			self.dmgtime = time + 0.1;
-			Damage (self, world, world, 1 * self.waterlevel, DEATH_SLIME, '0 0 0', '0 0 0');
+			Damage (self, world, world, 1 * self.waterlevel, DEATH_SLIME, self.origin, '0 0 0');
 		}
 	}
 
@@ -412,10 +412,10 @@ void respawn(void)
 
 void player_powerups (void)
 {
+	self.effects = self.effects - (self.effects & (EF_RED | EF_BLUE | EF_ADDITIVE | EF_FULLBRIGHT));
 	if (self.items & IT_STRENGTH)
 	{
-		self.effects = self.effects | EF_BLUE;
-		self.effects = self.effects | EF_ADDITIVE;
+		self.effects = self.effects | (EF_BLUE | EF_ADDITIVE | EF_FULLBRIGHT);
 		if (time > self.strength_finished)
 		{
 			self.items = self.items - (self.items & IT_STRENGTH);
@@ -424,8 +424,6 @@ void player_powerups (void)
 	}
 	else
 	{
-		self.effects = self.effects - (self.effects & EF_BLUE);
-		self.effects = self.effects - (self.effects & EF_ADDITIVE);
 		if (time < self.strength_finished)
 		{
 			self.items = self.items | IT_STRENGTH;
@@ -434,8 +432,7 @@ void player_powerups (void)
 	}
 	if (self.items & IT_INVINCIBLE)
 	{
-		self.effects = self.effects | EF_RED;
-		self.effects = self.effects | EF_ADDITIVE;
+		self.effects = self.effects | (EF_RED | EF_ADDITIVE | EF_FULLBRIGHT);
 		if (time > self.invincible_finished)
 		{
 			self.items = self.items - (self.items & IT_INVINCIBLE);
@@ -444,7 +441,6 @@ void player_powerups (void)
 	}
 	else
 	{
-		self.effects = self.effects - (self.effects & EF_RED);
 		if (time < self.invincible_finished)
 		{
 			self.items = self.items | IT_INVINCIBLE;
@@ -610,7 +606,7 @@ void PlayerPostThink (void)
 			{
 				local float dm;
 				dm = bound(0, 0.1*(fabs(self.jump_flag) - 600), 5);
-				Damage (self, world, world, dm, DEATH_FALL, '0 0 0', '0 0 0');
+				Damage (self, world, world, dm, DEATH_FALL, self.origin, '0 0 0');
 			}
 			self.jump_flag = 0;
 		}
