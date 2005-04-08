@@ -49,7 +49,7 @@ void W_Uzi_Attack (void)
 	self.punchangle_z = random () - 0.5;
 
 	//self.attack_finished = time + 0.2;
-	self.ammo_nails = self.ammo_nails - 0.25;
+	self.ammo_nails = self.ammo_nails - 1;
 
 	// casing code
 	if (cvar("g_casings") == 1)
