@@ -40,10 +40,10 @@ void ImpulseCommands (void)
 	else if (self.impulse == 99 && cvar("sv_cheats"))
 	{
 		self.items = IT_LASER | IT_UZI | IT_SHOTGUN | IT_GRENADE_LAUNCHER | IT_ELECTRO | IT_CRYLINK | IT_NEX | IT_HAGAR | IT_ROCKET_LAUNCHER;
-		self.ammo_shells = 100;
-		self.ammo_nails = 200;
-		self.ammo_rockets = 100;
-		self.ammo_cells = 100;
+		self.ammo_shells = 999;
+		self.ammo_nails = 999;
+		self.ammo_rockets = 999;
+		self.ammo_cells = 999;
 	}
 	//TetrisImpulses();
 	self.impulse = 0;
