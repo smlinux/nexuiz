@@ -2,18 +2,18 @@
 // options/key.menu
 Item Window KeyControl
 {
-	size	'600 600'
+	size	'700 600'
 
 	Derive Picture Table1
 	{
 		picture "gfx/table1"
-		size	'600 600'
+		size	'700 600'
 	}
 
 	Item Layout Layout
 	{
-		size	  '800 600'
-		origin	  '440 0'
+		size	  '700 600'
+		origin	  '380 0'
 		alignment [AlignCenter]
 		direction [Nex_DefaultVertDirection]
 		flag	  [FlagEmbedded]
@@ -28,7 +28,7 @@ Item Window KeyControl
 		// table: name key1 key2
 		Item Layout TableDesc
 		{
-			size	'800 15'
+			size	'700 15'
 			direction '10 0'
 
 			Derive Rect Action
@@ -69,7 +69,7 @@ Item Window KeyControl
 		}
 		Item ScrollWindow Scroll
 		{
-			size	'800 650'
+			size	'700 650'
 			flag	[FlagEmbedded]
 			Item Arrangement Keys
 			{
@@ -128,7 +128,7 @@ Item Window KeyControl
 				DeriveTemplate Label Title
 				{
 					fontSize '13 13'
-					color	 '1.0 0.6 0.6'
+					color	 '0.5 0.3 0.3'
 				}
 				Derive Title GroupMovement
 				{
