@@ -81,8 +81,11 @@
 // Slider
 #define DefaultSliderBar	"gfx/m_sliderbar"
 #define DefaultSlider		"gfx/m_slider"
+#define DefaultSliderBarSize	"144 12"
+#define DefaultSliderSize	"12 12"
 #define DefaultProportions	"0.073107 0.853785 0.073107"
 #define DefaultDirection	"0.5 0.5"
+
 
 // EditBoxs
 #define DefaultCursorSize	"1.375 12 0"

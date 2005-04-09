@@ -70,8 +70,8 @@ Template Slider Slider
 	pictureSlider	[DefaultSlider]
 	proportions	[DefaultProportions]
 	direction	[DefaultDirection]
-	size		'144 12'
-	sizeSlider	'12 12'
+	size		[DefaultSliderBarSize]
+	sizeSlider	[DefaultSliderSize]
 }
 Template EditBox EditBox
 {
@@ -155,6 +155,23 @@ Template DataLink_Value DataLink_ZeroOneValue
 	stepValue	0.05
 	link		"##up"
 }
+Template DataLink_Value DataLink_SettingValue
+{
+	minValue	0.0
+	maxValue	999.0
+	stepValue	0.01
+	link		"##up"
+}
+Template DataLink_Text DataLink_SettingText
+{
+	maxValue	9
+	link		"##down"
+
+	Template DataLink_TextValue DataLink_TextValue
+	{
+		link	"##up prev"
+	}
+}
 //////////////////////////////////////////////////////////////////////////////////
 // Nexuiz specialized items
 //////////////////////////////////////////////////////////////////////////////////
@@ -213,7 +230,6 @@ DeriveTemplate PictureButton Nex_HostCache_Entry
 	drawFlags	[DrawFlagModulate]
 	type		"Item_Nex_HostCache_Entry"
 }
-
 DeriveTemplate Nex_Composition Nex_Option_Slider
 {
 	DeriveTemplate Nex_Automation_Option_Slider Automation

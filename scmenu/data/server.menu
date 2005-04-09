@@ -85,21 +85,7 @@ Item DataContainer Server
 		cvarName	"fraglimit"
 		defValue	20
 
-		Item DataLink_Value Value
-		{
-			maxValue	999
-			link		"##up"
-		}
-		Item DataLink_Text Text
-		{
-			maxValue	3
-			link		"##down"
-
-			Item DataLink_TextValue TextValue
-			{
-				link	"##up prev"
-			}
-		}
+		[DataLink_Setting]
 	}
 	Item Data_Cvar ServerProgs
 	{
