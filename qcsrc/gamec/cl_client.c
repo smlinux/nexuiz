@@ -269,7 +269,8 @@ void() UpdateColorModHack =
 	local float c;
 	c = self.clientcolors & 15;
 	// LordHavoc: only bothering to support white, green, red, yellow, blue
-	     if (c ==  0) self.colormod = '1.00 1.00 1.00';
+	     if (teamplay == 0) self.colormod = '0 0 0';
+	else if (c ==  0) self.colormod = '1.00 1.00 1.00';
 	else if (c ==  3) self.colormod = '0.10 1.73 0.10';
 	else if (c ==  4) self.colormod = '1.73 0.10 0.10';
 	else if (c == 12) self.colormod = '1.22 1.22 0.10';
