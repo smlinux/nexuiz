@@ -27,11 +27,13 @@ void() CL_ExteriorWeaponentity_Think =
 		remove(self);
 		return;
 	}
-	if (self.cnt != self.owner.weaponentity.modelindex || self.dmg != self.owner.modelindex)
+	if (self.cnt != self.owner.weaponentity.modelindex || self.dmg != self.owner.modelindex || self.deadflag != self.owner.deadflag)
 	{
 		self.cnt = self.owner.weaponentity.modelindex;
 		self.dmg = self.owner.modelindex;
-		if (self.owner.weapon == WEP_LASER) setmodel(self, "models/weapons/v_laser.md3");
+		self.deadflag = self.owner.deadflag;
+		if (self.owner.deadflag) self.model = "";
+		else if (self.owner.weapon == WEP_LASER) setmodel(self, "models/weapons/v_laser.md3");
 		else if (self.owner.weapon == WEP_SHOTGUN) setmodel(self, "models/weapons/v_shotgun.md3");
 		else if (self.owner.weapon == WEP_UZI) setmodel(self, "models/weapons/v_uzi.md3");
 		else if (self.owner.weapon == WEP_GRENADE_LAUNCHER) setmodel(self, "models/weapons/v_gl.md3");
