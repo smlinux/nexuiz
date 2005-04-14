@@ -80,31 +80,20 @@ Item Window Basic
 			text	"Server Name"
 			target	"Data::Server::Hostname::Text"
 		}
-		Derive Nex_Composition Gametype
+		Derive Nex_Option_Switch GameType
 		{
-			Derive TextButton Description
-			{
-				normal	"Game Mode"
-				link	"##next"
-			}
-			Derive SwitchButton Switch
-			{
-				target	"Data::Server::ServerProgs::Switch"
-				action	Nex_Action_TestOnChange
-			}
+			text	"Game Mode"
+			target	"Data::Server::ServerProgs::Switch"
 		}
-		Derive Nex_Composition PublicServer
+		Derive Nex_Option_Switch TeamPlay
 		{
-			Derive TextButton Description
-			{
-				normal	"Public Server"
-				link	"##next"
-			}
-			Derive SwitchButton Switch
-			{
-				target  "Data::Server::PublicServer::Switch"
-				action	Nex_Action_TestOnChange
-			}
+			text	"Teamplay:"
+			target	"::Data::Server::TeamPlay::Switch"
+		}
+		Derive Nex_Option_Switch PublicServer
+		{
+			text	"Public Server"
+			target  "Data::Server::PublicServer::Switch"
 		}
 		Derive Nex_Option_EditBox FragLimit
 		{
@@ -128,18 +117,10 @@ Item Window Basic
 			text	"Bot Count"
 			target	"Data::Server::NumBots::Text"
 		}
-		Derive Nex_Composition BotSkill
+		Derive Nex_Option_Switch BotSkill
 		{
-			Derive TextButton Description
-			{
-				normal	"Skill Level"
-				link	"##next"
-			}
-			Derive SwitchButton Switch
-			{
-				target	"Data::Server::BotSkill::Switch"
-				action	Nex_Action_TestOnChange
-			}
+			text	"Skill Level"
+			target	"Data::Server::BotSkill::Switch"
 		}
 		Derive Nex_Void Seperator2
 		{}

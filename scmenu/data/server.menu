@@ -149,4 +149,19 @@ Item DataContainer Server
 			link		"##up"
 		}
 	}
+	Item Data_Cvar TeamPlay
+	{
+		cvarName	"teamplay"
+		defValue	0
+
+		Item DataLink_ValueSwitch Switch
+		{
+			minValue	0
+			stepValue	1
+			maxValue	3
+			descList	"'Off' 'No Friendly/Self Fire' 'Friendly Fire' 'No Friendly Fire'"
+
+			link		"##up"
+		}
+	}
 }
