@@ -28,10 +28,10 @@ string() Item_DataLink_ClampedValue =
 	if( self.stepValue == floor( self.stepValue ) )
 		return ftos( self._realValue );
 	// Get the integer length
-	lLen = strlen( ftos( rint( self._realValue + 0.375 ) ) );
+	lLen = strlen( ftos( rint( self._realValue  ) ) );
 	// Now add the step length
 	lClampedStep = rint( 1.0 / (self.stepValue - floor( self.stepValue )) );
-	lLen += 1 + strlen( ftos( lClampedStep ) );
+	lLen += strlen( ftos( lClampedStep ) );
 	return substring( ftos( self._realValue ), 0, lLen );
 }
 

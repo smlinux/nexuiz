@@ -51,5 +51,11 @@ Item Window Video
 
 			action	Nex_Action_Video_Apply
 		}
+		Derive TextButton Reset
+		{
+			normal	"Reset to default"
+			init	Nex_Action_ResetData
+			target	"::Data::Video"
+		}
 	}
 }

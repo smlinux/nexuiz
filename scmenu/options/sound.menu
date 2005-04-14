@@ -38,5 +38,13 @@ Item Window Sound
 			text	"Swap Stereo"
 			target	"::Data::Sound::SwapStereo::Switch"
 		}
+		Derive Nex_Void Seperator1
+		{}
+		Derive TextButton Reset
+		{
+			normal	"Reset to default"
+			init	Nex_Action_ResetData
+			target	"::Data::Sound"
+		}
 	}
 }

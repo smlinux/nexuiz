@@ -276,5 +276,13 @@ Item ScrollWindow Weapon
 			text	"Rocket Launcher Speed"
 			target	"Data::Weapon::RocketLauncherSpeed::Text"
 		}
+		Derive Nex_Line	Seperator
+		{}
+		Derive TextButton Reset
+		{
+			normal	"Reset to default"
+			init	Nex_Action_ResetData
+			target	"::Data::Weapon"
+		}
 	}
 }

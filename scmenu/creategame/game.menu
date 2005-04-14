@@ -97,4 +97,12 @@ Item Layout Game
 		text	"Player Accelerate"
 		target	"Data::Game::Accelerate::Text"
 	}
+	Derive Nex_Line	Seperator
+	{}
+	Derive TextButton Reset
+	{
+		normal	"Reset to default"
+		init	Nex_Action_ResetData
+		target	"::Data::Game"
+	}
 }

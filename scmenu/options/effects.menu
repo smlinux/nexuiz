@@ -67,5 +67,13 @@ Item Window Effects
 			text	"Gloss"
 			target	"::Data::Effects::Gloss::Switch"
 		}
+		Derive Nex_Line	Seperator
+		{}
+		Derive TextButton Reset
+		{
+			normal	"Reset to default"
+			init	Nex_Action_ResetData
+			target	"::Data::Effects"
+		}
 	}
 }

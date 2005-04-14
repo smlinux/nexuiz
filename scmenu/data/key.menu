@@ -6,85 +6,106 @@ Item DataContainer Key
 {
 	Item Data_Nex_Key Forward
 	{
-		target	"+forward"
+		target		"+forward"
+		defValue	"'W' 'UpArrow'"
 	}
 	Item Data_Nex_Key Backward
 	{
-		target	"+back"
+		target		"+back"
+		defValue	"'S' 'DownArrow'"
 	}
 	Item Data_Nex_Key StrafeLeft
 	{
-		target	"+moveleft"
+		target		"+moveleft"
+		defValue	"'A'"
 	}
 	Item Data_Nex_Key StrafeRight
 	{
-		target	"+moveright"
+		target		"+moveright"
+		defValue	"'D'"
 	}
 	Item Data_Nex_Key Jump
 	{
-		target	"+jump"
+		target		"+jump"
+		defValue	"'Enter' 'Space'"
 	}
 	Item Data_Nex_Key Crouch
 	{
-		target	"+shift"
+		target		"+shift"
+		defValue	"'Shift'"
+
 	}
 	Item Data_Nex_Key FirePrimary
 	{
-		target	"+attack"
+		target		"+attack"
+		defValue	"'Crtl' 'Mouse1'"
 	}
 	Item Data_Nex_Key FireSecondary
 	{
-		target	"+button3"
+		target		"+button3"
+		defValue	"'Mouse2'"
 	}
 	Item Data_Nex_Key PrevWeapon
 	{
-		target	"impulse 12"
+		target		"impulse 12"
+		defValue	"'MWHEELDOWN'"
 	}
 	Item Data_Nex_Key NextWeapon
 	{
-		target	"impulse 10"
+		target		"impulse 10"
+		defValue	"'MWHEELUP'"
 	}
 	Item DataContainer Weapon
 	{
 		Item Data_Nex_Key Laser
 		{
-			target	"impulse 1"
+			target		"impulse 1"
+			defValue	"'1'"
 		}
 		Item Data_Nex_Key Uzi
 		{
-			target	"impulse 2"
+			target		"impulse 2"
+			defValue	"'2'"
 		}
 		Item Data_Nex_Key Shotgun
 		{
-			target	"impulse 3"
+			target		"impulse 3"
+			defValue	"'3'"
 		}
 		Item Data_Nex_Key Grenade
 		{
-			target	"impulse 4"
+			target		"impulse 4"
+			defValue	"'4'"
 		}
 		Item Data_Nex_Key Electro
 		{
-			target	"impulse 5"
+			target		"impulse 5"
+			defValue	"'5'"
 		}
 		Item Data_Nex_Key CryLink
 		{
-			target	"impulse 6"
+			target		"impulse 6"
+			defValue	"'6'"
 		}
 		Item Data_Nex_Key NexGun
 		{
-			target	"impulse 7"
+			target		"impulse 7"
+			defValue	"'7' 'CapsLock'"
 		}
 		Item Data_Nex_Key Hagar
 		{
-			target	"impulse 8"
+			target		"impulse 8"
+			defValue	"'8'"
 		}
 		Item Data_Nex_Key Rocket
 		{
-			target	"impulse 9"
+			target		"impulse 9"
+			defValue	"'9'"
 		}
 	}
 	Item Data_Nex_Key ShowScores
 	{
-		target	"+showscores"
+		target		"+showscores"
+		defValue	"'Tab'"
 	}
 }

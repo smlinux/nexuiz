@@ -17,6 +17,7 @@ Item DataContainer Video
 	Item Data_Cvar BPP
 	{
 		cvarName	"vid_bitsperpixel"
+		defValue	"32"
 
 		Item DataLink_TextSwitch Switch
 		{

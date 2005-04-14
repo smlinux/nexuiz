@@ -2,7 +2,7 @@
 // options/input.menu
 Item Window Input
 {
-	szie	'600 600'
+	size	'600 600'
 
 	Derive Picture Table1
 	{
@@ -27,6 +27,14 @@ Item Window Input
 		{
 			text	"Invert Mouse"
 			target	"::Data::Input::InvertMouse::Switch"
+		}
+		Derive Nex_Line	Seperator
+		{}
+		Derive TextButton Reset
+		{
+			normal	"Reset to default"
+			init	Nex_Action_ResetData
+			target	"::Data::Input"
 		}
 	}
 }

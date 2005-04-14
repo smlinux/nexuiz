@@ -40,10 +40,10 @@ void() _IDNK_Reset =
 	lCount = Util_GetAltStringCount( self.defValue );
 	Key_LimitBinds( 0, self.target );
 
-	for( lCounter = 0 ; lCounter < lCount ; ++lCounter ) {
-		lKey = Util_GetAltStringItem( self.value, lCounter );
+	for( lCounter = 0 ; lCounter < lCount ; lCounter++ ) {
+		lKey = Util_GetAltStringItem( self.defValue, lCounter );
 		Key_Bind( lKey, self.target );
-		String_EntitySet( self, value, strcat( self.value, "'", Key_GetNum( lKey ), "'" ) );
+		String_EntitySet( self, value, strcat( self.value, " '", Key_GetNum( lKey ), "'" ) );
 		String_Free( lKey );
 	}
 

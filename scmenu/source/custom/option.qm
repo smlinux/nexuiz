@@ -1,6 +1,27 @@
 // Property of Alientrap
 // custom/option.qm
 
+// uses .target to determine the target data item (or container)
+
+void() Nex_Action_ResetData_Destroy =
+{
+	String_EntityFree( self, target );
+};
+
+void() Nex_Action_ResetData_Action =
+{
+	Raise_DataEvent( Menu_GetItem( self.target ), ITEM_DATA_RESET );
+};
+
+void() Nex_Action_ResetData =
+{
+	String_EntityZone( self, target );
+
+	self.destroy = Nex_Action_ResetData_Destroy;
+	self.action = Nex_Action_ResetData_Action;
+};
+
+
 // link is the name of the datalink
 .string target;
 // text is the description text
