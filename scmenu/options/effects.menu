@@ -66,7 +66,7 @@ Item Window Effects
 		}
 		Derive Nex_Option_Switch GLslang
 		{
-			text	"GLslang Realtime Lights"
+			text	"OpenGl2 Realtime Lights"
 			target	"::Data::Effects::Glslang::Switch"
 		}
 		Derive Nex_Option_Switch Gloss
