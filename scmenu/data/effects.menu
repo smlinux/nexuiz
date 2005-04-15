@@ -15,8 +15,13 @@ Item DataContainer Effects
 	{
 		cvarName	"cl_particles_quality"
 		defValue	1
-
-		[DataLink_ZeroOneValue]
+		Item DataLink_Value Value
+		{
+			minValue	0.0
+			maxValue	4.0
+			stepValue	1
+			link		"##up"
+		}
 	}
 	Item Data_Cvar Decals
 	{
@@ -60,10 +65,10 @@ Item DataContainer Effects
 
 		[DataLink_OnOffSwitch]
 	}
-	Item Data_Cvar OffsetMaps
+	Item Data_Cvar Glslang
 	{
-		cvarName	"r_shadow_glsl_offsetmapping"
-		defValue	1`
+		cvarName	"r_shadow_glsl"
+		defValue	1
 		[DataLink_OnOffSwitch]
 	}
 	Item Data_Cvar Gloss

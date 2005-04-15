@@ -10,11 +10,18 @@ Item Window Effects
 		size	'600 600'
 	}
 
+	Derive MultiLabel Description
+	{
+		size 	'600 100'
+		text
+	"\n\n\n  See the Nexiuz Readme for more infomation. \n  Realtime lighting/Bloom features require \n  high end computers to run fast."
+	}
+
 	Item Layout Layout
 	{
 		direction	[Nex_DefaultVertDirection]
 		size		'600 600'
-		origin		'300 50'
+		origin		'300 80'
 		alignment	[AlignFirst]
 
 		Derive Nex_Option_Switch Particles
@@ -57,10 +64,10 @@ Item Window Effects
 			text	"Realtime Shadows"
 			target	"::Data::Effects::RealtimeShadows::Switch"
 		}
-		Derive Nex_Option_Switch OffsetMaps
+		Derive Nex_Option_Switch GLslang
 		{
-			text	"Offset maps"
-			target	"::Data::Effects::OffsetMaps::Switch"
+			text	"GLslang Realtime Lights"
+			target	"::Data::Effects::Glslang::Switch"
 		}
 		Derive Nex_Option_Switch Gloss
 		{
