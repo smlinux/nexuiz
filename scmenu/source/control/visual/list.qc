@@ -100,10 +100,14 @@ bool( float pKey, float pAscii ) Item_List_Key =
 		CtCall_Action();
 		return true;
 	} else if( pKey == K_MOUSE1 ) {
+		Sound_Play( self.soundPressed );
+		self._presstime = Timer_Time;
+
 		self._target._realValue = _IL_GetItemUnderCursor() * self._target.stepValue + self._target.minValue;
 		Raise_DataEvent( self._target, ITEM_DATALINK_SET );
 
 		CtCall_Action();
+		return true;
 	}
 	return false;
 };
