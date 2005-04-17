@@ -31,7 +31,8 @@ Item Window Player
 		{
 			size	'300 200'
 			pos	'0 400'
-			wrap 	20
+			wrap	27
+			fontSize '11 11 0'
 		}
 		Derive TextButton Prev
 		{

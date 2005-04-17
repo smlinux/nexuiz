@@ -26,3 +26,6 @@ float gamestatus;
 
 //#define USEFUNCTIONS
 #define UTILALTSTRING
+
+#pragma keyword enable ifstring
+

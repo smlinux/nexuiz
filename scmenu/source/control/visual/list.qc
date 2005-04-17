@@ -1,6 +1,20 @@
 // DP/Nex Menu
 // control/visual/list.qc
 
+float() _IL_GetItemUnderCursor =
+{
+	local float lItem;
+	local float lStart;
+	local float lLines;
+
+	lLines = floor( self.size_y / ( self.fontSize_y + 2 ) );
+	lStart = max( 0, floor( DataLink_Switch_GetOrdinal( self._target, self._target._realValue ) - lLines / 2 ) );
+	lItem = floor( ( Menu_Cursor_Position_y - self.pos_y ) / ( self.fontSize_y + 2 ) );
+	lItem = min( lStart + lItem, DataLink_Switch_GetOrdinal( self._target, self._target.maxValue ) );
+
+	return lItem;
+}
+
 void() Item_List_Draw =
 {
 	local float lStart;
@@ -8,6 +22,7 @@ void() Item_List_Draw =
 	local float lLine;
 	local float lEnd;
 	local vector lPos;
+	local float lItemUnderCursor;
 
 	if( !self._target )
 		return;
@@ -16,6 +31,12 @@ void() Item_List_Draw =
 	lLines = floor( self.size_y / ( self.fontSize_y + 2 ) );
 	lStart = max( 0, floor( DataLink_Switch_GetOrdinal( self._target, self._target._realValue ) - lLines / 2 ) );
 	lEnd = min( lStart + lLines, DataLink_Switch_GetOrdinal( self._target, self._target.maxValue ) );
+
+	if( self._state == ITEM_STATE_NORMAL ) {
+		lItemUnderCursor = -1;
+	} else {
+		lItemUnderCursor =  _IL_GetItemUnderCursor();
+	}
 
 	lPos = '0 1 0' + self.pos;
 	for( lLine = lStart ; lLine <= lEnd ; lLine++ ) {
@@ -28,11 +49,13 @@ void() Item_List_Draw =
 				Menu_DrawString( lPos, lText, self.fontSize, self.colorPressed, self.alphas_z, self.drawFlags_z );
 			else
 				Menu_DrawString( lPos, lText, self.fontSize, self.colorInactive, self.alphaInactive, self.drawFlagInactive );
+		} else if( lLine == lItemUnderCursor ) {
+			Menu_DrawString( lPos, lText, self.fontSize, self.colorInactive, self.alphaInactive, self.drawFlagInactive );
 		} else {
 			Menu_DrawString( lPos, lText, self.fontSize, self.color, self.alphas_x, self.drawFlags_x );
 		}
 
-		lPos_y = lPos_y + self.fontSize_y + 1;
+		lPos_y = lPos_y + self.fontSize_y + 2;
 
 		String_Free( lText );
 	}
@@ -48,24 +71,6 @@ void() Item_List_Update =
 		self._state = ITEM_STATE_SELECTED;
 	else
 		self._state = ITEM_STATE_NORMAL;
-
-	/*if( Menu_HasRunFlag( self, RUNFLAG_MOUSEINAREA ) ) {
-		local float lItem;
-		local float lStart;
-		local float lLines;
-
-		lLines = floor( self.size_y / ( self.fontSize_y + 2 ) );
-		lStart = max( 0, floor( DataLink_Switch_GetOrdinal( self._target, self._target._realValue ) - lLines / 2 ) );
-		lItem = floor( ( Menu_Cursor_Position_y - self.pos_y ) / ( self.fontSize_y + 2 ) );
-		lItem = min( lStart + lItem, DataLink_Switch_GetOrdinal( self._target, self._target.maxValue ) );
-
-		print( ftos( lItem ), "\n" );
-
-		self._target._realValue = lItem * self._target.stepValue + self._target.minValue;
-		Raise_DataEvent( self._target, ITEM_DATALINK_SET );
-
-		CtCall_Action();
-	}*/
 };
 
 void( bool pSelect, bool pUser ) Item_List_Select =
@@ -94,6 +99,11 @@ bool( float pKey, float pAscii ) Item_List_Key =
 
 		CtCall_Action();
 		return true;
+	} else if( pKey == K_MOUSE1 ) {
+		self._target._realValue = _IL_GetItemUnderCursor() * self._target.stepValue + self._target.minValue;
+		Raise_DataEvent( self._target, ITEM_DATALINK_SET );
+
+		CtCall_Action();
 	}
 	return false;
 };

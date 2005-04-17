@@ -27,6 +27,7 @@ Item Window Basic
 			pos	'20 320'
 			size	'350 285'
 			wrap	31
+			fontSize '11 11 0'
 		}
 		Derive TextButton Prev
 		{

@@ -119,6 +119,7 @@ void() Nex_ReadCycleList =
 	}
 
 	lCycle = Menu_GetItem( "::Data::Server::Map::Cycle" );
+	DataLink_Nex_MapList_Clear( lCycle );
 
 	lLine = String_Create();
 	while( 1 ) {
