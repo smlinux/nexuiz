@@ -113,18 +113,21 @@ Item Window Basic
 		}
 		Derive Nex_Line	Seperator1
 		{}
-		//Derive Nex_Option_EditBox NumBots
-		//{
-		//	text	"Bot Count"
-		//	target	"Data::Server::NumBots::Text"
-		//}
-		//Derive Nex_Option_Switch BotSkill
-		//{
-		//	text	"Skill Level"
-		//	target	"Data::Server::BotSkill::Switch"
-		//}
-		//Derive Nex_Void Seperator2
-		//{}
+		Ignore
+		{
+			Derive Nex_Option_EditBox NumBots
+			{
+				text	"Bot Count"
+				target	"Data::Server::NumBots::Text"
+			}
+			Derive Nex_Option_Switch BotSkill
+			{
+				text	"Skill Level"
+				target	"Data::Server::BotSkill::Switch"
+			}
+			Derive Nex_Void Seperator2
+			{}
+		}
 		Derive PictureButton Start
 		{
 			normal		"$gfx/m_start"
