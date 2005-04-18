@@ -312,6 +312,7 @@ void PlayerJump (void)
 	self.flags = self.flags - FL_JUMPRELEASED;
 }
 
+.float watersound_finished;
 void() WaterMove =
 {
 	if (self.movetype == MOVETYPE_NOCLIP)
@@ -341,6 +342,17 @@ void() WaterMove =
 			self.flags = self.flags - FL_INWATER;
 		}
 		return;
+	}
+
+	if (self.watersound_finished < time)
+	{
+		self.watersound_finished = time + 0.5;
+		if (self.watertype == CONTENT_LAVA)
+			sound (self, CHAN_BODY, "player/lava.wav", 1, ATTN_NORM);
+		if (self.watertype == CONTENT_SLIME)
+			sound (self, CHAN_BODY, "player/slime.wav", 1, ATTN_NORM);
+		//if (self.watertype == CONTENT_WATER)
+		//	sound (self, CHAN_BODY, "player/water.wav", 1, ATTN_NORM);
 	}
 
 	if (self.watertype == CONTENT_LAVA)
