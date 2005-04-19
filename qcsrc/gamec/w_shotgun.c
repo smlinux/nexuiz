@@ -16,9 +16,9 @@ void(float req) w_shotgun =
 	if (req == WR_IDLE)
 		shotgun_ready_01();
 	else if (req == WR_FIRE1)
-		weapon_prepareattack(shotgun_check, shotgun_check, shotgun_fire1_01, 0.7);
+		weapon_prepareattack(shotgun_check, shotgun_check, shotgun_fire1_01, cvar("g_balance_shotgun_refire"));
 	else if (req == WR_FIRE2)
-		weapon_prepareattack(shotgun_check, shotgun_check, shotgun_fire2_01, 0.7);
+		weapon_prepareattack(shotgun_check, shotgun_check, shotgun_fire2_01, cvar("g_balance_shotgun_refire2"));
 	else if (req == WR_RAISE)
 		shotgun_select_01();
 	else if (req == WR_UPDATECOUNTS)
@@ -49,7 +49,6 @@ void W_Shotgun_Attack (void)
 	for (sc = 0;sc < bullets;sc = sc + 1)
 		fireBullet (org, v_forward, spread, d, IT_SHOTGUN, sc < 3);
 	self.ammo_shells = self.ammo_shells - 1;
-	self.attack_finished = time + 0.7;
 
 	// casing code
 	if (cvar("g_casings") == 1)
@@ -61,6 +60,8 @@ void W_Shotgun_Attack (void)
 	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 8) + (v_forward * 20);
 	W_Smoke(org, v_forward, 12);
 	//te_smallflash(org);
+
+	self.punchangle_x = -5;
 }
 
 // weapon frames
@@ -71,23 +72,20 @@ void()	shotgun_deselect_01 =	{weapon_thinkf(-1, cvar("g_balance_weaponswitchdela
 void()	shotgun_fire1_01 =
 {
 	weapon_doattack(shotgun_check, shotgun_check, W_Shotgun_Attack);
-	weapon_thinkf(WFRAME_FIRE1, 0.3, shotgun_ready_01);
+	weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_shotgun_refire3"), shotgun_ready_01);
 };
 void()  shotgun_fire2_03 =
 {
-	self.punchangle_x = -5;
 	weapon_doattack(shotgun_check, shotgun_check, W_Shotgun_Attack);
-	weapon_thinkf(WFRAME_FIRE1, 0.9, shotgun_ready_01);
+	weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_shotgun_refire3"), shotgun_ready_01);
 }
 void()  shotgun_fire2_02 =
 {
-	self.punchangle_x = -5;
 	weapon_doattack(shotgun_check, shotgun_check, W_Shotgun_Attack);
-	weapon_thinkf(WFRAME_FIRE1, 0.2, shotgun_fire2_03);
+	weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_shotgun_refire3"), shotgun_fire2_03);
 }
 void()  shotgun_fire2_01 =
 {
-	self.punchangle_x = -5;
 	weapon_doattack(shotgun_check, shotgun_check, W_Shotgun_Attack);
-	weapon_thinkf(WFRAME_FIRE1, 0.2, shotgun_fire2_02);
+	weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_shotgun_refire3"), shotgun_fire2_02);
 }

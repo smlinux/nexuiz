@@ -123,8 +123,8 @@ void() W_WeaponFrame =
 	local float bobintensity, q1pitching, framespeed, diff;
 	local vector vel, realorg, layer1, layer2, boblayer;
 
-	bobintensity = cvar("cl_weapon_bobintensity"); // weapon bob intensity
-	q1pitching = fabs(cvar("cl_weapon_q1pitching")); // q1 style of "bob" when looking up and down
+	bobintensity = cvar("g_viewweapon_bobintensity"); // weapon bob intensity
+	q1pitching = fabs(cvar("g_viewweapon_q1pitching")); // q1 style of "bob" when looking up and down
 
 	realorg = self.weaponentity.origin + self.weaponentity.view_ofs;
 	realorg = realorg - self.weaponentity.finaldest; // finaldest is last bob position

@@ -16,9 +16,9 @@ void(float req) w_electro =
 	if (req == WR_IDLE)
 		electro_ready_01();
 	else if (req == WR_FIRE1)
-		weapon_prepareattack(electro_check, electro_check, electro_fire1_01, 0.4);
+		weapon_prepareattack(electro_check, electro_check, electro_fire1_01, cvar("g_balance_electro_refire"));
 	else if (req == WR_FIRE2)
-		weapon_prepareattack(electro_check, electro_check, electro_fire2_01, 2);
+		weapon_prepareattack(electro_check, electro_check, electro_fire2_01, cvar("g_balance_electro_refire"));
 	else if (req == WR_RAISE)
 		electro_select_01();
 	else if (req == WR_UPDATECOUNTS)
@@ -119,7 +119,6 @@ void() W_Electro_Attack
 
 	proj.effects = proj.effects | EF_ADDITIVE;
 
-	self.attack_finished = time + cvar("g_balance_electro_refire");
 	self.ammo_cells = self.ammo_cells - 2;
 }
 
@@ -132,7 +131,7 @@ void() W_Electro_Attack2
 	makevectors(self.v_angle);
 	sound (self, CHAN_WEAPON, "weapons/electro_fire.wav", 1, ATTN_NORM);
 
-	self.punchangle_x = -4;
+	self.punchangle_x = -2;
 
 	Plasma = spawn ();
 	Plasma.owner = self;
@@ -173,7 +172,6 @@ void() W_Electro_Attack2
 
 	Plasma.effects = Plasma.effects | EF_ADDITIVE;
 
-	self.attack_finished = time + cvar("g_balance_electro_refire");
 	self.ammo_cells = self.ammo_cells - 2;
 
 }

@@ -75,7 +75,8 @@ void PutClientInServer (void)
 	self.flags = FL_CLIENT;
 	self.takedamage = DAMAGE_YES;
 	self.effects = 0;
-	self.health = cvar("g_balance_health");
+	self.health = cvar("g_balance_health_start");
+	self.armorvalue = cvar("g_balance_armor_start");
 	self.damageforcescale = 2;
 	self.death_time = 0;
 	self.dead_time = 0;
@@ -449,7 +450,7 @@ void player_powerups (void)
 		if (time > self.invincible_finished)
 		{
 			self.items = self.items - (self.items & IT_INVINCIBLE);
-			sprint(self, "^3Invincible has worn off\n");
+			sprint(self, "^3Shield has worn off\n");
 		}
 	}
 	else
@@ -457,17 +458,25 @@ void player_powerups (void)
 		if (time < self.invincible_finished)
 		{
 			self.items = self.items | IT_INVINCIBLE;
-			sprint(self, "^3Invincible shielding surrounds you\n");
+			sprint(self, "^3Shield surrounds you\n");
 		}
 	}
 }
 
 void player_regen (void)
 {
-	if (self.health >= 100 || time > self.pain_finished)
-		self.health = bound(0, self.health + (100 - self.health) * cvar("g_balance_healthregen") * frametime, 1000);
-	if (self.armorvalue > 100)
-		self.armorvalue = bound(100, self.armorvalue + (100 - self.armorvalue) * cvar("g_balance_armorrott") * frametime, 1000);
+	local float maxh;
+	local float maxa;
+	maxh = cvar("g_balance_health_stable");
+	maxa = cvar("g_balance_armor_stable");
+	if (self.health > maxh)
+		self.health = bound(0, self.health + (maxh - self.health) * cvar("g_balance_health_rot") * frametime, 1000);
+	else if (time > self.pain_finished)
+		self.health = bound(0, self.health + (maxh- self.health) * cvar("g_balance_health_regen") * frametime, 1000);
+	if (self.armorvalue > maxa)
+		self.armorvalue = bound(0, self.armorvalue + (maxa - self.armorvalue) * cvar("g_balance_armor_rot") * frametime, 1000);
+	else if (time > self.pain_finished)
+		self.armorvalue = bound(0, self.armorvalue + (maxa - self.armorvalue) * cvar("g_balance_armor_regen") * frametime, 1000);
 }
 
 /*

@@ -16,9 +16,9 @@ void(float req) w_hagar =
 	if (req == WR_IDLE)
 		hagar_ready_01();
 	else if (req == WR_FIRE1)
-		weapon_prepareattack(hagar_check, hagar_check, hagar_fire1_01, 0.2);
+		weapon_prepareattack(hagar_check, hagar_check, hagar_fire1_01, cvar("g_balance_hagar_refire"));
 	else if (req == WR_FIRE2)
-		weapon_prepareattack(hagar_check, hagar_check, hagar_fire2_01, 0.2);
+		weapon_prepareattack(hagar_check, hagar_check, hagar_fire2_01, cvar("g_balance_hagar_refire"));
 	else if (req == WR_RAISE)
 		hagar_select_01();
 	else if (req == WR_UPDATECOUNTS)
@@ -94,8 +94,8 @@ void W_Hagar_Attack (void)
 	missile.think = W_Hagar_Explode;
 	missile.nextthink = time + 10;
 
-	self.attack_finished = time + 0.2;
 	self.ammo_rockets = self.ammo_rockets - 1;
+	self.punchangle_x = -2;
 }
 
 void W_Hagar_Attack2 (void)
@@ -133,8 +133,8 @@ void W_Hagar_Attack2 (void)
 	missile.think = W_Hagar_Explode;
 	missile.nextthink = time + 10;
 
-	self.attack_finished = time + 0.2;
 	self.ammo_rockets = self.ammo_rockets - 1;
+	self.punchangle_x = -2;
 }
 
 // weapon frames

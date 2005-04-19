@@ -1,6 +1,5 @@
 void() laser_ready_01;
 void() laser_fire1_01;
-void() laser_fire2_01;
 void() laser_deselect_01;
 void() laser_select_01;
 
@@ -11,9 +10,7 @@ void(float req) w_laser =
 	if (req == WR_IDLE)
 		laser_ready_01();
 	else if (req == WR_FIRE1)
-		weapon_prepareattack(laser_check, laser_check, laser_fire1_01, 0.4);
-	else if (req == WR_FIRE2)
-		weapon_prepareattack(laser_check, laser_check, laser_fire2_01, 0.7);
+		weapon_prepareattack(laser_check, laser_check, laser_fire1_01, cvar("g_balance_laser_refire"));
 	else if (req == WR_RAISE)
 		laser_select_01();
 	else if (req == WR_UPDATECOUNTS)
@@ -79,8 +76,6 @@ void W_Laser_Attack (void)
 	setorigin (missile, self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -12);
 
 	missile.velocity = v_forward * cvar("g_balance_laser_speed");
-	missile.velocity = missile.velocity + v_right * ( crandom() * 45 );
-	missile.velocity = missile.velocity + v_up * ( crandom() * 25 );
 	missile.angles = vectoangles (missile.velocity);
 	missile.glow_color = 250; // 244, 250
 	missile.glow_size = 30;
@@ -89,27 +84,6 @@ void W_Laser_Attack (void)
 	missile.nextthink = time + 9;
 
 	missile.effects = missile.effects | EF_ADDITIVE;
-
-	self.punchangle_x = random () - 0.5;
-	self.punchangle_y = random () - 0.5;
-	self.punchangle_z = random () - 0.5;
-
-	self.attack_finished = time + 0.3;
-}
-
-void W_Laser_Attack2 (void)
-{
-	//makevectors(self.v_angle);
-	//self.velocity = self.velocity - v_forward * 900;
-	/*
-	weapon_shotdir(18, 5, -12);
-	// self.origin + self.view_ofs + v_forward * 18 + v_right * 5 + v_up * -12);
-	sound (self, CHAN_WEAPON, "weapons/crylink.wav", 1, ATTN_NORM);
-	//org = self.origin + self.view_ofs + v_forward * 10 + v_right * 5 + v_up * -14;
-	FireRailgunBullet (self.shotorg, self.origin + self.shotdir*4096, 25, IT_LASER);
-	te_spark(trace_endpos, self.shotdir, 55);
-	self.attack_finished = time + 0.400;
-	*/
 }
 
 // weapon frames
@@ -120,11 +94,6 @@ void()	laser_deselect_01 =	{weapon_thinkf(-1, cvar("g_balance_weaponswitchdelay"
 void()	laser_fire1_01 =
 {
 	weapon_doattack(laser_check, laser_check, W_Laser_Attack);
-	weapon_thinkf(WFRAME_FIRE1, 0.3, laser_ready_01);
-};
-void()	laser_fire2_01 =
-{
-	weapon_doattack(laser_check, laser_check, W_Laser_Attack2);
 	weapon_thinkf(WFRAME_FIRE1, 0.3, laser_ready_01);
 };
 

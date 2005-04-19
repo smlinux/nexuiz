@@ -16,9 +16,9 @@ void(float req) w_nex =
 	if (req == WR_IDLE)
 		nex_ready_01();
 	else if (req == WR_FIRE1)
-		weapon_prepareattack(nex_check, nex_check, nex_fire1_01, 1);
+		weapon_prepareattack(nex_check, nex_check, nex_fire1_01, cvar("g_balance_nex_refire"));
 	else if (req == WR_FIRE2)
-		weapon_prepareattack(nex_check, nex_check, nex_fire2_01, 1);
+		weapon_prepareattack(nex_check, nex_check, nex_fire2_01, cvar("g_balance_nex_refire"));
 	else if (req == WR_RAISE)
 		nex_select_01();
 	else if (req == WR_UPDATECOUNTS)
@@ -40,7 +40,7 @@ void W_Nex_Attack (void)
 	entity 	explosion;
 
 	sound (self, CHAN_WEAPON, "weapons/nexfire.wav", 1, ATTN_NORM);
-	self.punchangle_x = -4;
+	self.punchangle_x = -5;
 	makevectors(self.v_angle);
 	org = self.origin + self.view_ofs + v_forward * 5 + v_right * 14 + v_up * -7;
 
@@ -62,8 +62,6 @@ void W_Nex_Attack (void)
 	WriteCoord (MSG_BROADCAST, 0);
 	WriteCoord (MSG_BROADCAST, 0);
 	WriteCoord (MSG_BROADCAST, 0);
-
-	self.attack_finished = time + 1;
 
 	if (cvar("g_instagib") == 0)
 		self.ammo_cells = self.ammo_cells - 5;

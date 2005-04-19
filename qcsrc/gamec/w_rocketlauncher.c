@@ -17,7 +17,7 @@ void(float req) w_rlauncher =
 	if (req == WR_IDLE)
 		rlauncher_ready_01();
 	else if (req == WR_FIRE1)
-		weapon_prepareattack(rlauncher_check, rlauncher_check, rlauncher_fire1_01, 1.5);
+		weapon_prepareattack(rlauncher_check, rlauncher_check, rlauncher_fire1_01, cvar("g_balance_rocketlauncher_refire"));
 	else if (req == WR_FIRE2)
 	{
 		if (time < self.attack_finished)
@@ -102,8 +102,6 @@ void W_Rocket_Attack (void)
 	missile.think = W_Rocket_Think;
 	missile.nextthink = time + 9;
 
-	self.attack_finished = time + 1.2;
-
 	if (cvar("g_rocketarena") == 0)
 		self.ammo_rockets = self.ammo_rockets - 3;
 
@@ -116,6 +114,7 @@ void W_Rocket_Attack (void)
 	flash.angles = vectoangles (flash.velocity);
 	SUB_SetFade (flash, time);
 	flash.effects = flash.effects | EF_ADDITIVE;
+	self.punchangle_x = -4;
 }
 
 void W_Rocket_Attack2 (void)

@@ -18,9 +18,9 @@ void(float req) w_crylink =
 	if (req == WR_IDLE)
 		crylink_ready_01();
 	else if (req == WR_FIRE1)
-		weapon_prepareattack(crylink_check, crylink_check, crylink_fire1_01, 0.2);
+		weapon_prepareattack(crylink_check, crylink_check, crylink_fire1_01, cvar("g_balance_crylink_refire"));
 	else if (req == WR_FIRE2)
-		weapon_prepareattack(crylink_check, crylink_check, crylink_fire2_01, 0.2);
+		weapon_prepareattack(crylink_check, crylink_check, crylink_fire2_01, cvar("g_balance_crylink_refire"));
 	else if (req == WR_RAISE)
 		crylink_select_01();
 	else if (req == WR_UPDATECOUNTS)
@@ -57,8 +57,8 @@ void W_Crylink_Attack (void) //(float postion)
 	float counter;
 
 	sound (self, CHAN_WEAPON, "weapons/crylink.wav", 1, ATTN_NORM);
-	self.attack_finished = time + cvar("g_balance_crylink_refire");
 	self.ammo_cells = self.ammo_cells - 1;
+	self.punchangle_x = -2;
 
 	while (counter < 7)
 	{
@@ -84,8 +84,8 @@ void W_Crylink_Attack (void) //(float postion)
 
 		proj.angles = vectoangles (proj.velocity);
 
-		proj.glow_color = 10;
-		proj.glow_size = 20;
+		//proj.glow_color = 10;
+		//proj.glow_size = 20;
 
 		proj.effects = proj.effects | EF_ADDITIVE;
 		proj.effects = proj.effects | EF_LOWPRECISION;
@@ -98,8 +98,8 @@ void W_Crylink_Attack2 (void)
 	float counter;
 
 	sound (self, CHAN_WEAPON, "weapons/crylink.wav", 1, ATTN_NORM);
-	self.attack_finished = time + cvar("g_balance_crylink_refire");
 	self.ammo_cells = self.ammo_cells - 1;
+	self.punchangle_x = -2;
 
 	while (counter < 5)
 	{
@@ -125,8 +125,8 @@ void W_Crylink_Attack2 (void)
 
 		proj.angles = vectoangles (proj.velocity);
 
-		proj.glow_color = 10;
-		proj.glow_size = 20;
+		//proj.glow_color = 10;
+		//proj.glow_size = 20;
 
 		proj.effects = proj.effects | EF_ADDITIVE;
 		proj.effects = proj.effects | EF_LOWPRECISION;

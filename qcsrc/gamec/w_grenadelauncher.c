@@ -16,9 +16,9 @@ void(float req) w_glauncher =
 	if (req == WR_IDLE)
 		glauncher_ready_01();
 	else if (req == WR_FIRE1)
-		weapon_prepareattack(glauncher_check, glauncher_check, glauncher_fire1_01, 0.8);
+		weapon_prepareattack(glauncher_check, glauncher_check, glauncher_fire1_01, cvar("g_balance_grenadelauncher_refire"));
 	else if (req == WR_FIRE2)
-		weapon_prepareattack(glauncher_check, glauncher_check, glauncher_fire2_01, 1);
+		weapon_prepareattack(glauncher_check, glauncher_check, glauncher_fire2_01, cvar("g_balance_grenadelauncher_refire"));
 	else if (req == WR_RAISE)
 		glauncher_select_01();
 	else if (req == WR_UPDATECOUNTS)
@@ -82,9 +82,6 @@ void W_Grenade_Attack (void)
 	gren.think = W_Grenade_Explode;
 	gren.nextthink = time + 30;
 	self.ammo_rockets = self.ammo_rockets - 3;
-
-
-	self.attack_finished = time + 0.8;
 }
 
 void W_Grenade_Attack2 (void)
@@ -93,7 +90,6 @@ void W_Grenade_Attack2 (void)
 	entity	gren;
 	makevectors(self.v_angle);
 	sound (self, CHAN_WEAPON, "weapons/grenade_fire.wav", 1, ATTN_NORM);
-
 	self.punchangle_x = -4;
 
 	gren = spawn ();
@@ -121,7 +117,6 @@ void W_Grenade_Attack2 (void)
 	//gren.think = W_Grenade_FuseExplode;
 	//gren.nextthink = time + 5;
 
-	self.attack_finished = time + 1;
 	self.ammo_rockets = self.ammo_rockets - 3;
 }
 
