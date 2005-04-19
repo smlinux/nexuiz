@@ -197,15 +197,14 @@ void() Item_List_Spawn;
 bool( float pKey, float pAscii ) Item_FloatingArea_Key;
 void() Item_FloatingArea_Update;
 void() Item_FloatingArea_Spawn;
-/*
-// Item_HScrollBar
+
+// Item_VScrollBar
 // target should point to a ScrollWindow
-.float minValue;
-.float maxValue;
-.vector current;
 .string target;
 .entity _target;
-// TODO: Add pictureSlider support
 
-void() Item_HScrollBar_Spawn;*/
+void() Item_VScrollBar_Draw;
+bool( float pKey, float Ascii ) Item_VScrollBar_Key;
+void() Item_VScrollBar_Update;
+void() Item_VScrollBar_Spawn;
 

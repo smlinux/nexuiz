@@ -7,8 +7,19 @@ void() Item_ScrollWindow_Update =
 	local float lOldLevel;
 	local entity lParent;
 
-	if( !Menu_IsVisible( self ) || !_Menu_IsEmbeddedParentOf( Menu_ActiveItem, self._child ) )
+	// reset _link and return if the window isnt owner of the currently selected item
+	if( !Menu_IsVisible( self ) || !_Menu_IsEmbeddedParentOf( Menu_ActiveItem, self._child ) ) {
+		self._link = null_entity;
 		return;
+	}
+	// if the window has been selected just now, we set _link and scroll to its position
+	// if the selection has changed we also scroll down
+	// only if nothing has changed, we do nothing, too (this makes scrollbar support possible)
+	if( self._link == Menu_ActiveItem ) {
+		return;
+	} else {
+		self._link = Menu_ActiveItem;
+	}
 
 	// find the lLevel
 	lLevel = Menu_ActiveItem.pos_y;

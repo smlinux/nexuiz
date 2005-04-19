@@ -46,6 +46,7 @@ void() Item_Arrangement_Spawn;
 // It will adapt its origin to always make the currently selected item visible
 // There always has to be only *one* child window, that has a valid size
 .vector direction; // first is space between frame and item
+.entity _link; // used to determine changes of the ActiveItem
 
 void() Item_ScrollWindow_Update;
 void() Item_ScrollWindow_Spawn;
