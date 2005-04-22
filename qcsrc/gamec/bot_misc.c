@@ -56,42 +56,158 @@ string(float r) BotName =
 	if (r == 1)
 	{
 		self.playermodel = "models/player/visitant.zym";
+		self.playerskin = "0";
 		return "Visitant";
 	}
 	else if (r == 2)
 	{
 		self.playermodel = "models/player/marine.zym";
+		self.playerskin = "0";
 		return "Marine";
 	}
 	else if (r == 3)
 	{
 		self.playermodel = "models/player/specop.zym";
+		self.playerskin = "0";
 		return "Specop";
 	}
 	else if (r == 4)
 	{
-		self.playermodel = "models/player/mulder.zym";
-		return "Mulder";
+		self.playermodel = "models/player/nexus.zym";
+		self.playerskin = "0";
+		return "Nexus";
 	}
 	else if (r == 5)
 	{
-		self.playermodel = "models/player/fshock.zym";
-		return "fShock";
+		self.playermodel = "models/player/skadi.zym";
+		self.playerskin = "0";
+		return "Skadi";
 	}
 	else if (r == 6)
 	{
 		self.playermodel = "models/player/lurk.zym";
+		self.playerskin = "0";
 		return "Lurk";
 	}
 	else if (r == 7)
 	{
 		self.playermodel = "models/player/headhunter.zym";
+		self.playerskin = "0";
 		return "HeadHunter";
+	}
+	else if (r == 8)
+	{
+		self.playermodel = "models/player/carni.zym";
+		self.playerskin = "0";
+		return "Carni";
+	}
+	else if (r == 9)
+	{
+		self.playermodel = "models/player/grunt.zym";
+		self.playerskin = "0";
+		return "Grunt";
+	}
+	else if (r == 10)
+	{
+		self.playermodel = "models/player/insurrectionist.zym";
+		self.playerskin = "0";
+		return "Insurrectionist";
+	}
+	else if (r == 11)
+	{
+		self.playermodel = "models/player/jeandarc.zym";
+		self.playerskin = "0";
+		return "Jeandarc";
+	}
+	else if (r == 12)
+	{
+		self.playermodel = "models/player/lycanthrope.zym";
+		self.playerskin = "0";
+		return "Lycanthrope";
+	}
+	else if (r == 13)
+	{
+		self.playermodel = "models/player/pyria.zym";
+		self.playerskin = "0";
+		return "Pyria";
+	}
+	else if (r == 14)
+	{
+		self.playermodel = "models/player/shock.zym";
+		self.playerskin = "0";
+		return "Shock";
+	}
+	else if (r == 15)
+	{
+		self.playermodel = "models/player/marine.zym";
+		self.playerskin = "1";
+		return "Private";
+	}
+	else if (r == 16)
+	{
+		self.playermodel = "models/player/nexus.zym";
+		self.playerskin = "1";
+		return "Mulder";
+	}
+	else if (r == 17)
+	{
+		self.playermodel = "models/player/skadi.zym";
+		self.playerskin = "1";
+		return "Elite";
+	}
+	else if (r == 18)
+	{
+		self.playermodel = "models/player/lurk.zym";
+		self.playerskin = "1";
+		return "Reptile";
+	}
+	else if (r == 19)
+	{
+		self.playermodel = "models/player/crash.zym";
+		self.playerskin = "2";
+		return "mechanical";
+	}
+	else if (r == 20)
+	{
+		self.playermodel = "models/player/crash.zym";
+		self.playerskin = "1";
+		return "Quark";
+	}
+	else if (r == 21)
+	{
+		self.playermodel = "models/player/insurrectionist.zym";
+		self.playerskin = "1";
+		return "Anarchist";
+	}
+	else if (r == 22)
+	{
+		self.playermodel = "models/player/jeandarc.zym";
+		self.playerskin = "1";
+		return "Heroine";
+	}
+	else if (r == 23)
+	{
+		self.playermodel = "models/player/lycanthrope.zym";
+		self.playerskin = "1";
+		return "Wolf";
+	}
+	else if (r == 24)
+	{
+		self.playermodel = "models/player/pyria.zym";
+		self.playerskin = "1";
+		return "Soldier";
+	}
+	else if (r == 25)
+	{
+		self.playermodel = "models/player/rebel.zym";
+		self.playerskin = "0";
+		return "Rebel";
 	}
 	else
 	{
-		self.playermodel = "models/player/robot.zym";
-		return "Robot";
+		self.playermodel = "models/player/crash.zym";
+		self.playerskin = "0";
+		return "Crash";
 	}
 
 };
@@ -155,7 +271,7 @@ void(float tpic) bot_start_topic =
 void() bot_chat =
 {
 	local float r;
-	if (b_options & OPT_NOCHAT)
+//	if (b_options & OPT_NOCHAT)
 		return;
 	r = ceil (random() * 6);
 

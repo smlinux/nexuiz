@@ -360,7 +360,7 @@ void() IntermissionThink =
 	if (time < intermission_exittime)
 		return;
 
-	if (time < intermission_exittime + 60 && !self.button0 && !self.button1 && !self.button2 && !self.button3)
+	if (time < intermission_exittime + 10 && !self.button0 && !self.button1 && !self.button2 && !self.button3)
 		return;
 
 	GotoNextMap ();

@@ -94,7 +94,7 @@ void player_anim (void)
 		self.frame = $idle;
 
 	if (!(self.flags & FL_ONGROUND))
-		self.frame = $idle;
+		self.frame = $jump;
 }
 //End change by Supajoe on 11:44 PM EST 11/16/03 (Subject: Player animations)
 

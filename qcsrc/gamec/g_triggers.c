@@ -385,7 +385,7 @@ if(self.noise) {
 };
 
 
-
+/*
 void() sparksthink =
 {
   self.nextthink = time + 0.1;
@@ -418,7 +418,7 @@ void() func_sparks =
     ambientsound (self.origin, self.noise, 1, ATTN_STATIC);
   }
 }
-
+*/
 
 
 /*
