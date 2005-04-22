@@ -8,7 +8,7 @@ Item Window JoinGame
 	{
 		picture "gfx/table3"
 		pos	'0 0'
-		size	'900 550'
+		size	'900 555'
 	}
 Item Layout JoinGame
 {
@@ -125,57 +125,69 @@ Item Layout JoinGame
 			}
 		}
 	}
-	Item ScrollWindow Scroll
+	Item Window Scroll
 	{
 		flag	[FlagEmbedded]
 		size	'900 500'
 
-		Item Arrangement Slist
+		Item ScrollWindow ScrollArea
 		{
-			direction	'0 1 0'
-			flag		[FlagEmbedded]
+			flag	[FlagEmbedded]
+			size 	'870 500'
 
-			DeriveTemplate Nex_HostCache_Entry Entry
+			Item Arrangement Slist
 			{
-				size		'852 15'
-				action		Nex_Action_EntryConnect
+				direction	'0 1 0'
+				flag		[FlagEmbedded]
 
-				DeriveTemplate Nex_HostCache_ValueField Ping
+				DeriveTemplate Nex_HostCache_Entry Entry
 				{
-					pos		'0 0'
-					size		[SList_Ping]
-					target		"ping"
-					alignment	[AlignRight]
+					size		'852 15'
+					action		Nex_Action_EntryConnect
+
+					DeriveTemplate Nex_HostCache_ValueField Ping
+					{
+						pos		'0 0'
+						size		[SList_Ping]
+						target		"ping"
+						alignment	[AlignRight]
+					}
+					DeriveTemplate Nex_HostCache_StringField Name
+					{
+						pos		'52 0'
+						size		[SList_Name]
+						target		"name"
+					}
+					DeriveTemplate Nex_HostCache_StringField Map
+					{
+						pos		'546 0'
+						size		[SList_Map]
+						target		"map"
+					}
+					DeriveTemplate Nex_HostCache_Players Players
+					{
+						pos		'668 0'
+						size		[SList_Players]
+						alignment	[AlignRight]
+					}
+					DeriveTemplate Nex_HostCache_StringField Mod
+					{
+						pos		'730 0'
+						size		[SList_Mod]
+						target		"mod"
+					}
 				}
-				DeriveTemplate Nex_HostCache_StringField Name
+				Item Automation_Job Generator
 				{
-					pos		'52 0'
-					size		[SList_Name]
-					target		"name"
-				}
-				DeriveTemplate Nex_HostCache_StringField Map
-				{
-					pos		'546 0'
-					size		[SList_Map]
-					target		"map"
-				}
-				DeriveTemplate Nex_HostCache_Players Players
-				{
-					pos		'668 0'
-					size		[SList_Players]
-					alignment	[AlignRight]
-				}
-				DeriveTemplate Nex_HostCache_StringField Mod
-				{
-					pos		'730 0'
-					size		[SList_Mod]
-					target		"mod"
+					action Nex_Automation_CreateEntries
 				}
 			}
-			Item Automation_Job Generator
-			{
-				action Nex_Automation_CreateEntries
-			}
+		}
+		Item VScrollBar Scroller
+		{
+			pos	'870 0'
+			size	'20 100'
+			target	"##prev"
 		}
 	}
 	Derive PictureButton Refresh
