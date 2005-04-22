@@ -6,9 +6,9 @@ const float _VSB_DOWN_HEIGHT = 20;
 const float _VSB_PRECISION = 5;
 const float _VSB_MINHEIGHT = 10;
 
-const vector _VSB_CLICKAREA_COLOR = '1.0 0.0 0.0';
-const vector _VSB_SCOLLER_COLOR	= '0.0 1.0 0.0';
-const vector _VSB_SCROLLAREA_COLOR = '0.0 0.0 1.0';
+const vector _VSB_CLICKAREA_COLOR = '1 1 1';
+const vector _VSB_SCOLLER_COLOR	= '0.9 0.9 0.9';
+const vector _VSB_SCROLLAREA_COLOR = '0.3 0.3 0.3';
 
 // scroller == scroll button
 float() _IVSB_GetSizeOfScroller = {
