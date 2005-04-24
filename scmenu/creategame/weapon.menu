@@ -47,6 +47,31 @@ Item Window Weapon
 				}
 			}
 
+			Derive Nex_Option_EditBox InvincibleTakedamage
+			{
+				text	"Invincible Take Damage"
+				target	"Data::Weapon::InvincibleTakedamage::Text"
+			}
+			Derive Nex_Option_EditBox InvincibleTime
+			{
+				text	"Invincible Time"
+				target	"Data::Weapon::InvincibleTime::Text"
+			}
+			Derive Nex_Option_EditBox Strengthdamage
+			{
+				text	"Strength Damage"
+				target	"Data::Weapon::Strengthdamage::Text"
+			}
+			Derive Nex_Option_EditBox Strengthforce
+			{
+				text	"Strength Force"
+				target	"Data::Weapon::Strengthforce::Text"
+			}
+			Derive Nex_Option_EditBox Strengthtime
+			{
+				text	"Strengh Time"
+				target	"Data::Weapon::Strengthtime::Text"
+			}
 			Derive Nex_Option_EditBox LaserDamage
 			{
 				text	"Laser Damage"
@@ -72,6 +97,11 @@ Item Window Weapon
 				text	"Laser Speed"
 				target	"Data::Weapon::LaserSpeed::Text"
 			}
+			Derive Nex_Option_EditBox Laserrefire
+			{
+				text	"Laser Refire"
+				target	"Data::Weapon::Laserrefire::Text"
+			}
 			Derive Nex_Option_EditBox ShotgunDamage
 			{
 				text	"Shotgun Damage"
@@ -81,6 +111,26 @@ Item Window Weapon
 			{
 				text	"Shotgun Bullets"
 				target	"Data::Weapon::ShotgunBullets::Text"
+			}
+			Derive Nex_Option_EditBox Shotgunspread
+			{
+				text	"Shotgun Spread"
+				target	"Data::Weapon::Shotgunspread::Text"
+			}
+			Derive Nex_Option_EditBox ShotgunRefire
+			{
+				text	"Shotgun Refire"
+				target	"Data::Weapon::ShotgunRefire::Text"
+			}
+			Derive Nex_Option_EditBox ShotgunRefire2
+			{
+				text	"Shotgun Refire2"
+				target	"Data::Weapon::ShotgunRefire2::Text"
+			}
+			Derive Nex_Option_EditBox ShotgunRefire3
+			{
+				text	"Shotgun Refire3"
+				target	"Data::Weapon::ShotgunRefire3::Text"
 			}
 			Derive Nex_Option_EditBox UziDamage
 			{
@@ -101,6 +151,16 @@ Item Window Weapon
 			{
 				text	"Uzi Refire"
 				target	"Data::Weapon::UziRefire::Text"
+			}
+			Derive Nex_Option_EditBox UziRefire2
+			{
+				text	"Uzi Refire2"
+				target	"Data::Weapon::UziRefire2::Text"
+			}
+			Derive Nex_Option_EditBox UziDamage2
+			{
+				text	"Uzi Damage2"
+				target	"Data::Weapon::UziDamage2::Text"
 			}
 			Derive Nex_Option_EditBox GrenadeLauncherDamage
 			{
@@ -141,6 +201,11 @@ Item Window Weapon
 			{
 				text	"Grenade Launcher Speed2up"
 				target	"Data::Weapon::GrenadeLauncherSpeed2Up::Text"
+			}
+			Derive Nex_Option_EditBox GrenadeLauncherrefire
+			{
+				text	"Grenade Launcher Refire"
+				target	"Data::Weapon::GrenadeLauncherrefire::Text"
 			}
 			Derive Nex_Option_EditBox ElectroDamage
 			{
@@ -222,6 +287,11 @@ Item Window Weapon
 				text	"Nex Damage"
 				target	"Data::Weapon::NexDamage::Text"
 			}
+			Derive Nex_Option_EditBox NexRefire
+			{
+				text	"Nex Refire"
+				target	"Data::Weapon::Nexrefire::Text"
+			}
 			Derive Nex_Option_EditBox HagarDamage
 			{
 				text	"Hagar Damage"
@@ -281,6 +351,11 @@ Item Window Weapon
 			{
 				text	"Rocket Launcher Speed"
 				target	"Data::Weapon::RocketLauncherSpeed::Text"
+			}
+			Derive Nex_Option_EditBox RocketLauncherRefire
+			{
+				text	"Rocket Launcher Refire"
+				target	"Data::Weapon::RocketLauncherrefire::Text"
 			}
 			Derive Nex_Line	Seperator
 			{}

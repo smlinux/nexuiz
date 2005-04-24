@@ -37,10 +37,20 @@ Item Layout Game
 		text	"Bullet Casings"
 		target	"::Data::Game::Casings::Switch"
 	}
-	Derive Nex_Option_EditBox Health
+	Derive Nex_Option_EditBox HealthStart
 	{
 		text	"Starting Health"
-		target	"Data::Game::Health::Text"
+		target	"Data::Game::HealthStart::Text"
+	}
+	Derive Nex_Option_EditBox HealthRot
+	{
+		text	"Health Rot"
+		target	"Data::Game::HealthRot::Text"
+	}
+	Derive Nex_Option_EditBox HealthStable
+	{
+		text	"Health Stable"
+		target	"Data::Game::HealthStable::Text"
 	}
 	Derive Nex_Option_EditBox Gravity
 	{
@@ -69,13 +79,28 @@ Item Layout Game
 	}
 	Derive Nex_Option_EditBox HealthRegeneration
 	{
-		text	"Regeneration Speed"
+		text	"Health Regeneration Speed"
 		target	"Data::Game::HealthRegeneration::Text"
 	}
 	Derive Nex_Option_EditBox ArmorRott
 	{
 		text	"Armor Rott Speed"
 		target	"Data::Game::ArmorRott::Text"
+	}
+	Derive Nex_Option_EditBox ArmorRegen
+	{
+		text	"Armor Regeneration Speed"
+		target	"Data::Game::ArmorRegen::Text"
+	}
+	Derive Nex_Option_EditBox ArmorStable
+	{
+		text	"Armor Stable"
+		target	"Data::Game::ArmorStable::Text"
+	}
+	Derive Nex_Option_EditBox ArmorStart
+	{
+		text	"Armor Start"
+		target	"Data::Game::ArmorStart::Text"
 	}
 	Derive Nex_Option_EditBox SelfDamagePercent
 	{
