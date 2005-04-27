@@ -216,7 +216,7 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 	self.dmg_save = self.dmg_save + save * 0.25;
 	self.dmg_take = self.dmg_take + take * 0.25;
 	self.dmg_inflictor = inflictor;
-	if (self.health <= 1)
+	if (self.health <= 2)
 	{
 		// throw a weapon
 		SpawnThrownWeapon (self.origin + (self.mins + self.maxs) * 0.5, self.weapon);

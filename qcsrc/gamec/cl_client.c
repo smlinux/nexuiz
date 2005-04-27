@@ -508,7 +508,7 @@ void PlayerPreThink (void)
 		weapon_freeze();
 		if (self.deadflag == DEAD_DYING)
 		{
-			if (time > self.death_time)
+			if (time > self.dead_time)
 				self.deadflag = DEAD_DEAD;
 		}
 		else if (self.deadflag == DEAD_DEAD)
