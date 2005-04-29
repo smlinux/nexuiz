@@ -87,7 +87,8 @@ void W_Crylink_Attack (void) //(float postion)
 		//proj.glow_color = 10;
 		//proj.glow_size = 20;
 
-		proj.effects = proj.effects | EF_ADDITIVE;
+		proj.effects = proj.effects | EF_FULLBRIGHT;
+		//proj.effects = proj.effects | EF_ADDITIVE;
 		proj.effects = proj.effects | EF_LOWPRECISION;
 		counter = counter + 1;
 	}
@@ -128,7 +129,8 @@ void W_Crylink_Attack2 (void)
 		//proj.glow_color = 10;
 		//proj.glow_size = 20;
 
-		proj.effects = proj.effects | EF_ADDITIVE;
+		proj.effects = proj.effects | EF_FULLBRIGHT;
+		//proj.effects = proj.effects | EF_ADDITIVE;
 		proj.effects = proj.effects | EF_LOWPRECISION;
 		counter = counter + 1;
 	}
