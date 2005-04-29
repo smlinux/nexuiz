@@ -18,11 +18,13 @@ void(float req) w_rlauncher =
 		rlauncher_ready_01();
 	else if (req == WR_FIRE1)
 		weapon_prepareattack(rlauncher_check, rlauncher_check, rlauncher_fire1_01, cvar("g_balance_rocketlauncher_refire"));
+	/*
 	else if (req == WR_FIRE2)
 	{
 		if (time < self.attack_finished)
 			W_Rocket_Attack2();
 	}
+	*/
 	else if (req == WR_RAISE)
 		rlauncher_select_01();
 	else if (req == WR_UPDATECOUNTS)
@@ -48,14 +50,24 @@ void W_Rocket_Explode (void)
 
 void W_Rocket_Think (void)
 {
-	W_Rocket_Explode ();
+	self.nextthink = time;
+	if (time > self.cnt)
+	{
+		W_Rocket_Explode ();
+		return;
+	}
+	if (self.owner)
+	{
+		if (self.owner.deadflag)
+			self.owner = self;
+		else if (self.owner.weapon == WEP_ROCKET_LAUNCHER && self.owner.button3)
+			W_Rocket_Explode ();
+	}
 }
 
 void W_Rocket_Touch (void)
 {
-	if (other == self.owner)
-		return;
-	else if (pointcontents (self.origin) == CONTENT_SKY)
+	if (pointcontents (self.origin) == CONTENT_SKY)
 	{
 		remove (self);
 		return;
@@ -100,7 +112,8 @@ void W_Rocket_Attack (void)
 
 	missile.touch = W_Rocket_Touch ;
 	missile.think = W_Rocket_Think;
-	missile.nextthink = time + 9;
+	missile.nextthink = time;
+	missile.cnt = time + 9;
 
 	if (cvar("g_rocketarena") == 0)
 		self.ammo_rockets = self.ammo_rockets - 3;
@@ -117,6 +130,7 @@ void W_Rocket_Attack (void)
 	self.punchangle_x = -4;
 }
 
+/*
 void W_Rocket_Attack2 (void)
 {
 	entity	proj;
@@ -132,6 +146,7 @@ void W_Rocket_Attack2 (void)
 
 	self.attack_finished = time + 0.1;
 }
+*/
 
 // weapon frames
 
@@ -143,8 +158,10 @@ void()	rlauncher_fire1_01 =
 	weapon_doattack(rlauncher_check, rlauncher_check, W_Rocket_Attack);
 	weapon_thinkf(WFRAME_FIRE1, 0.3, rlauncher_ready_01);
 };
+/*
 void()	rlauncher_fire2_01 =
 {
 	weapon_doattack(rlauncher_check, rlauncher_check, W_Rocket_Attack2);
 	weapon_thinkf(WFRAME_FIRE2, 0.3, rlauncher_ready_01);
 };
+*/
