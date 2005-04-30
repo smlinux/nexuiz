@@ -9,22 +9,6 @@ void worldspawn (void)
 
 	game = cvar ("gamecfg");	// load game options
 
-	precache_model ("models/player/marine.zym");
-	precache_model ("models/player/specop.zym");
-	precache_model ("models/player/mulder.zym");
-	precache_model ("models/player/insurrectionist.zym");
-	precache_model ("models/player/fshock.zym");
-	//precache_model ("models/player/grunt.zym");
-	//precache_model ("models/player/pyria.zym");
-	precache_model ("models/player/lurk.zym");
-	precache_model ("models/player/visitant.zym");
-	precache_model ("models/player/headhunter.zym");
-	//precache_model ("models/player/jeandarc.zym");
-	precache_model ("models/player/robot.zym");
-	//precache_model ("models/player/lycanthrope.zym");
-	//precache_model ("models/player/shock.zym");
-	//precache_model ("models/player/carni.zym");
-
 	precache_model ("models/misc/chatbubble.spr");
 
 	precache_model ("models/weapons/g_shotgun.md3");
@@ -154,6 +138,10 @@ void worldspawn (void)
 	precache_sound ("misc/gib_splat03.wav");
 	precache_sound ("misc/gib_splat04.wav");
 	precache_sound ("misc/powerup.wav");
+	precache_sound ("misc/h20hit.wav");
+
+	precache_sound ("player/slime.wav");
+	precache_sound ("player/lava.wav");
 
 	precache_sound ("misc/itemrespawn.wav");
 
