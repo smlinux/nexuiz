@@ -31,7 +31,7 @@ Item DataContainer Key
 	}
 	Item Data_Nex_Key Crouch
 	{
-		target		"+shift"
+		target		"+crouch"
 		defValue	"'Shift'"
 
 	}
