@@ -21,6 +21,9 @@ Item DataContainer Server
 		}
 		Item DataLink_Nex_MapList Cycle
 		{
+		}
+		Item Task_Job ReInitMapList
+		{
 			reinit 	Nex_ReadCycleList
 		}
 	}
