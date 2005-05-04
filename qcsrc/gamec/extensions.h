@@ -16,6 +16,14 @@ float(string s) checkextension = #99;
 //	ext_setcolor = TRUE;
 //from then on you can check ext_setcolor to know if that extension is available
 
+//DP_QC_CVAR_STRING
+//idea: Paul Timofeyev
+//DarkPlaces implementation: Paul Timofeyev, LordHavoc
+//builtin definitions:
+string(string s) cvar_string = #448;
+//description:
+//returns the value of a cvar, as a tempstring.
+
 //DP_QC_TRACE_MOVETYPES
 //idea: LordHavoc
 //darkplaces implementation: id Software

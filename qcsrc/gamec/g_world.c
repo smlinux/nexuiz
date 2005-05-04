@@ -203,6 +203,7 @@ void light (void)
 	makestatic (self);
 }
 
+/*
 // reads and alters data/maplist.cfg (sliding it one line), and returns a
 // strzoned string containing the next map
 #define MAPLIST	"maplist.cfg"
@@ -284,6 +285,7 @@ string() Nex_RotateMapList =
 
 	return lNextMap;
 };
+*/
 
 float gameover;
 float intermission_running;
@@ -293,6 +295,8 @@ float alreadychangedlevel;
 void() GotoNextMap =
 {
 	local string nextmap;
+	local float n, nummaps;
+	local string s;
 	if (alreadychangedlevel)
 		return;
 	alreadychangedlevel = TRUE;
@@ -300,6 +304,7 @@ void() GotoNextMap =
 		changelevel (mapname);
 	else
 	{
+		// method 1
 		/*
 		//local entity pos;
 		local float fh;
@@ -328,10 +333,30 @@ void() GotoNextMap =
 		}
 		changelevel (nextmap);
 		*/
-
-		nextmap = Nex_RotateMapList();
+		// method 2
+		//nextmap = Nex_RotateMapList();
+		//changelevel (nextmap);
+		//strunzone (nextmap);
+		// method 3
+		s = cvar_string("g_maplist");
+		nummaps = tokenize(s);
+		// if no map list, restart current one
+		nextmap = mapname;
+		if (nummaps >= 1)
+		{
+			n = 0;
+			while (n < nummaps)
+			{
+				if (argv(n) == mapname)
+					break;
+				n = n + 1;
+			}
+			n = n + 1;
+			if (n >= nummaps)
+				n = 0;
+			nextmap = argv(n);
+		}
 		changelevel (nextmap);
-		strunzone (nextmap);
 	}
 };
 
