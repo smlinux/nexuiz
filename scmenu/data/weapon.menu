@@ -35,7 +35,7 @@ Item DataContainer Weapon
 	Item Data_Cvar Strengthtime
 	{
 		cvarName	"g_balance_powerup_strength_time"
-		defValue	4
+		defValue	30
 
 		[DataLink_Setting]
 	}
@@ -434,7 +434,7 @@ Item DataContainer Weapon
 	Item Data_Cvar RocketLauncherrefire
 	{
 		cvarName	"g_balance_rocketlauncher_refire"
-		defValue	850
+		defValue	1.2
 
 		[DataLink_Setting]
 	}

@@ -69,7 +69,7 @@ Item Window Weapon
 			}
 			Derive Nex_Option_EditBox Strengthtime
 			{
-				text	"Strengh Time"
+				text	"Strength Time"
 				target	"Data::Weapon::Strengthtime::Text"
 			}
 			Derive Nex_Option_EditBox LaserDamage
