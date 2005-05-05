@@ -88,7 +88,6 @@ bool( float pKey, float pAscii ) Item_List_Key =
 		self._target._realValue = self._target._realValue + 1;
 		Raise_DataEvent( self._target, ITEM_DATALINK_SET );
 
-		CtCall_Action();
 		return true;
 	} else if( pKey == K_UPARROW ) {
 		Sound_Play( self.soundPressed );
@@ -97,16 +96,22 @@ bool( float pKey, float pAscii ) Item_List_Key =
 		self._target._realValue = self._target._realValue - 1;
 		Raise_DataEvent( self._target, ITEM_DATALINK_SET );
 
-		CtCall_Action();
 		return true;
 	} else if( pKey == K_MOUSE1 ) {
+		local float lSelected;
 		Sound_Play( self.soundPressed );
-		self._presstime = Timer_Time;
 
-		self._target._realValue = _IL_GetItemUnderCursor() * self._target.stepValue + self._target.minValue;
-		Raise_DataEvent( self._target, ITEM_DATALINK_SET );
+		lSelected = _IL_GetItemUnderCursor() * self._target.stepValue + self._target.minValue;
+		// double-click?
+		if( self._presstime + ITEM_BUTTON_ACTIONTIME > Timer_Time && lSelected == self._target._realValue ) {
+			CtCall_Action();
+		} else {
+			self._presstime = Timer_Time;
 
-		CtCall_Action();
+			self._target._realValue = lSelected;
+			Raise_DataEvent( self._target, ITEM_DATALINK_SET );
+		}
+
 		return true;
 	}
 	return false;

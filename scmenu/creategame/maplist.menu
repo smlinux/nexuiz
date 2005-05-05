@@ -16,6 +16,7 @@ Item Window MapList
 		size	'425 500'
 
 		target	"::Data::Server::Map::List"
+		action	Nex_Action_Cycle_Add
 	}
 	Derive Label CycleLabel
 	{
@@ -28,6 +29,7 @@ Item Window MapList
 		size	'425 450'
 
 		target	"::Data::Server::Map::Cycle"
+		action	Nex_Action_Cycle_Remove
 	}
 	Item Layout Panel
 	{

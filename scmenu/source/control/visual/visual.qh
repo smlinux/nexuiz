@@ -180,7 +180,7 @@ void() Item_SwitchButton_Spawn;
 .event init;
 .event reinit;
 .event destroy;
-.event action;
+.event action; // called on double-click
 
 void() Item_List_Draw;
 void() Item_List_Update;
