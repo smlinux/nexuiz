@@ -44,7 +44,7 @@ void W_Plasma_Explode (entity ignore)
 	WriteCoord (MSG_BROADCAST, 0);
 	WriteByte (MSG_BROADCAST, 155);
 
-	te_customflash (self.origin, 5000, 10, '0 0 1');
+	te_customflash (self.origin, 500, 0.5, '0 0 1');
 
 	self.event_damage = nullfunction;
 	RadiusDamage (self, self.owner, cvar("g_balance_electro_damage"), cvar("g_balance_electro_edgedamage"), cvar("g_balance_electro_radius"), world, cvar("g_balance_electro_force"), IT_ELECTRO);
