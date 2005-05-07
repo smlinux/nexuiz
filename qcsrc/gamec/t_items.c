@@ -19,8 +19,12 @@ void Item_Respawn (void)
 
 void Item_Touch (void)
 {
+
 	local entity oldself;
 	local float	_switchweapon;
+	
+	// Savage: Remove the respawn effect if still present
+	if(self.effects == EF_STARDUST) self.effects = 0;
 
 	if (self.solid != SOLID_TRIGGER)
 		return;
