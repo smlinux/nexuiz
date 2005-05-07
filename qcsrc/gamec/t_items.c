@@ -1,3 +1,6 @@
+void Item_ClearRespawnEffect (void) {
+	self.effects = 0;
+}
 
 void Item_Respawn (void)
 {
@@ -5,6 +8,13 @@ void Item_Respawn (void)
 	self.solid = SOLID_TRIGGER;	// allow it to be touched again
 	sound (self, CHAN_VOICE, "misc/itemrespawn.wav", 1, ATTN_NORM);	// play respawn sound
 	setorigin (self, self.origin);
+	
+	// Savage: Add simple Respawn effect and make sure it gets removed
+	if(self.effects == 0) {
+		self.effects = EF_STARDUST;
+		self.think = Item_ClearRespawnEffect;
+		self.nextthink = time + 0.1;
+	}
 }
 
 void Item_Touch (void)
