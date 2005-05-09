@@ -6,7 +6,7 @@ Item DataContainer Sound
 	Item Data_Cvar CDVolume
 	{
 		cvarName	"bgmvolume"
-		defValue	0.5
+		defValue	1
 
 		[DataLink_ZeroOneValue]
 	}
