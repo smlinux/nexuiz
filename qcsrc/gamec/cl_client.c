@@ -109,6 +109,7 @@ void PutClientInServer (void)
 	// Savage: Insufficient check for invalid playermodels
 	if(strlen(self.playermodel) < 15) self.playermodel = "models/player/marine.zym";
 
+	precache_model (self.playermodel);
 	setmodel (self, self.playermodel);
 	self.skin = stof(self.playerskin);
 	self.crouch = FALSE;
@@ -551,6 +552,7 @@ void PlayerPreThink (void)
 	{
 		m1 = self.mins;
 		m2 = self.maxs;
+		precache_model (self.playermodel);
 		setmodel (self, self.playermodel);
 		setsize (self, m1, m2);
 	}

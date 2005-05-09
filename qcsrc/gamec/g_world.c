@@ -143,6 +143,11 @@ void worldspawn (void)
 	precache_sound ("player/slime.wav");
 	precache_sound ("player/lava.wav");
 
+	precache_sound ("announcer/1fragleft.wav");
+	precache_sound ("announcer/2fragsleft.wav");
+	precache_sound ("announcer/3fragsleft.wav");
+	precache_sound ("announcer/1minuteremains.wav");
+
 	precache_sound ("misc/itemrespawn.wav");
 
 
@@ -203,7 +208,7 @@ void light (void)
 	makestatic (self);
 }
 
-/*
+
 // reads and alters data/maplist.cfg (sliding it one line), and returns a
 // strzoned string containing the next map
 #define MAPLIST	"maplist.cfg"
@@ -285,12 +290,12 @@ string() Nex_RotateMapList =
 
 	return lNextMap;
 };
-*/
 
 float gameover;
 float intermission_running;
 float intermission_exittime;
 float alreadychangedlevel;
+
 
 void() GotoNextMap =
 {
@@ -305,7 +310,7 @@ void() GotoNextMap =
 	else
 	{
 		// method 1
-		/*
+		
 		//local entity pos;
 		local float fh;
 		local string line;
@@ -332,12 +337,13 @@ void() GotoNextMap =
 			fclose(fh);
 		}
 		changelevel (nextmap);
-		*/
+		
 		// method 2
 		//nextmap = Nex_RotateMapList();
 		//changelevel (nextmap);
 		//strunzone (nextmap);
 		// method 3
+		/*
 		s = cvar_string("g_maplist");
 		nummaps = tokenize(s);
 		// if no map list, restart current one
@@ -357,6 +363,7 @@ void() GotoNextMap =
 			nextmap = argv(n);
 		}
 		changelevel (nextmap);
+		*/
 	}
 };
 
@@ -515,6 +522,30 @@ void() CheckRules =
 		NextLevel ();
 		return;
 	}
+
+	if (timelimit && time + 60 = timelimit)
+	{
+		sound (self, CHAN_BODY, "announcer/1minuteremains.wav", 1, ATTN_NORM);
+		return;
+	}
+
+
+	if (self.frags + 1 == fraglimit && self.fragsleft != 1)
+	{
+		sound (self, CHAN_VOICE, "announcer/1fragleft.wav", 1, ATTN_NORM);
+		self.fragsleft = 1;
+	}
+	if (self.frags + 2 == fraglimit && self.fragsleft != 2)
+	{
+		sound (self, CHAN_VOICE, "announcer/2fragsleft.wav", 1, ATTN_NORM);
+		self.fragsleft = 2;
+	}
+	if (self.frags + 3 == fraglimit && self.fragsleft != 3)
+	{
+		sound (self, CHAN_VOICE, "announcer/3fragsleft.wav", 1, ATTN_NORM);
+		self.fragsleft = 3;
+	}
+	
 
 	if (fraglimit && self.frags >= fraglimit)
 	{
