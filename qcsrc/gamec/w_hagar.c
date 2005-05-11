@@ -1,6 +1,5 @@
 void() hagar_ready_01;
 void() hagar_fire1_01;
-void() hagar_fire2_01;
 void() hagar_deselect_01;
 void() hagar_select_01;
 
@@ -15,10 +14,8 @@ void(float req) w_hagar =
 {
 	if (req == WR_IDLE)
 		hagar_ready_01();
-	else if (req == WR_FIRE1)
+	else if (req == WR_FIRE1 || req == WR_FIRE2)
 		weapon_prepareattack(hagar_check, hagar_check, hagar_fire1_01, cvar("g_balance_hagar_refire"));
-	else if (req == WR_FIRE2)
-		weapon_prepareattack(hagar_check, hagar_check, hagar_fire2_01, cvar("g_balance_hagar_refire"));
 	else if (req == WR_RAISE)
 		hagar_select_01();
 	else if (req == WR_UPDATECOUNTS)
@@ -63,78 +60,44 @@ void W_Hagar_Damage (entity inflictor, entity attacker, float damage, float deat
 
 void W_Hagar_Attack (void)
 {
-	entity	missile;
-	float	sped;
+	local entity missile;
+	local vector org;
 
-	makevectors(self.v_angle);
 	sound (self, CHAN_WEAPON, "weapons/hagar_fire.wav", 1, ATTN_NORM);
+	self.ammo_rockets = self.ammo_rockets - 1;
+	self.punchangle_x = -2;
+	org = self.origin + self.view_ofs + v_forward * 25 + v_right * 5 + v_up * -8;
 
 	missile = spawn ();
 	missile.owner = self;
 	missile.classname = "missile";
-
-	missile.takedamage = DAMAGE_YES;
-	missile.damageforcescale = 4;
-	missile.health = 10;
-	missile.event_damage = W_Hagar_Damage;
-
-	missile.movetype = MOVETYPE_FLY;
+	missile.touch = W_Hagar_Touch;
+	missile.think = W_Hagar_Explode;
+	missile.nextthink = time + 10;
 	missile.solid = SOLID_BBOX;
+	missile.scale = 0.4; // BUG: the model is too big
+	setorigin (missile, org);
 	setmodel (missile, "models/hagarmissile.mdl");
 	setsize (missile, '0 0 0', '0 0 0');
-	missile.scale = 0.4;
+	//missile.takedamage = DAMAGE_YES;
+	//missile.damageforcescale = 4;
+	//missile.health = 10;
+	//missile.event_damage = W_Hagar_Damage;
+	missile.effects = EF_LOWPRECISION;
 
-	setorigin (missile, self.origin + self.view_ofs + v_forward * 25 + v_right * 5 + v_up * -8);
+	if (self.button3)
+	{
+		missile.movetype = MOVETYPE_TOSS;
+		missile.velocity = v_forward * cvar("g_balance_hagar_speed2") + v_up * cvar("g_balance_hagar_speed2_up");
+		missile.avelocity = '100 10 10';
+	}
+	else
+	{
+		missile.movetype = MOVETYPE_FLY;
+		missile.velocity = (v_forward + v_right * crandom() * 0.035 + v_up * crandom() * 0.015) * cvar("g_balance_hagar_speed");
+	}
 
-	sped = cvar("g_balance_hagar_speed");
-	missile.velocity = v_forward * sped + v_right * crandom() * 0.035 * sped + v_up * crandom() * 0.015 * sped;
 	missile.angles = vectoangles (missile.velocity);
-
-	missile.touch = W_Hagar_Touch;
-	missile.think = W_Hagar_Explode;
-	missile.nextthink = time + 10;
-
-	self.ammo_rockets = self.ammo_rockets - 1;
-	self.punchangle_x = -2;
-}
-
-void W_Hagar_Attack2 (void)
-{
-	entity	missile;
-
-	sound (self, CHAN_WEAPON, "weapons/hagar_fire.wav", 1, ATTN_NORM);
-
-	makevectors(self.v_angle);
-
-	missile = spawn ();
-	missile.owner = self;
-	missile.classname = "missile";
-
-	missile.movetype = MOVETYPE_TOSS;
-	missile.solid = SOLID_BBOX;
-
-	missile.takedamage = DAMAGE_YES;
-	missile.damageforcescale = 4;
-	missile.health = 5;
-	missile.event_damage = W_Hagar_Damage;
-
-	setmodel (missile, "models/hagarmissile.mdl");
-	setsize (missile, '-6 -6 -3', '6 6 3');
-
-	setorigin (missile, self.origin + self.view_ofs + v_forward * 25 + v_right * 5 + v_up * -8);
-
-	missile.scale = 0.4;
-
-	missile.velocity = v_forward * cvar("g_balance_hagar_speed2") + v_up * cvar("g_balance_hagar_speed2_up");
-	missile.angles = vectoangles (missile.velocity);
-	missile.avelocity = '100 10 10';
-
-	missile.touch = W_Hagar_Touch;
-	missile.think = W_Hagar_Explode;
-	missile.nextthink = time + 10;
-
-	self.ammo_rockets = self.ammo_rockets - 1;
-	self.punchangle_x = -2;
 }
 
 // weapon frames
@@ -145,10 +108,5 @@ void()	hagar_fire1_01 =
 {
 	weapon_doattack(hagar_check, hagar_check, W_Hagar_Attack);
 	weapon_thinkf(WFRAME_FIRE1, 0.15, hagar_ready_01);
-};
-void()	hagar_fire2_01 =
-{
-	weapon_doattack(hagar_check, hagar_check, W_Hagar_Attack2);
-	weapon_thinkf(WFRAME_FIRE2, 0.15, hagar_ready_01);
 };
 

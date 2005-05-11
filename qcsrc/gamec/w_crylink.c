@@ -1,6 +1,5 @@
 void() crylink_ready_01;
 void() crylink_fire1_01;
-void() crylink_fire2_01;
 void() crylink_deselect_01;
 void() crylink_select_01;
 
@@ -17,10 +16,8 @@ void(float req) w_crylink =
 {
 	if (req == WR_IDLE)
 		crylink_ready_01();
-	else if (req == WR_FIRE1)
+	else if (req == WR_FIRE1 || req == WR_FIRE2)
 		weapon_prepareattack(crylink_check, crylink_check, crylink_fire1_01, cvar("g_balance_crylink_refire"));
-	else if (req == WR_FIRE2)
-		weapon_prepareattack(crylink_check, crylink_check, crylink_fire2_01, cvar("g_balance_crylink_refire"));
 	else if (req == WR_RAISE)
 		crylink_select_01();
 	else if (req == WR_UPDATECOUNTS)
@@ -52,61 +49,20 @@ void W_Crylink_Touch (void)
 	//remove (self);
 }
 
-void W_Crylink_Attack (void) //(float postion)
+void W_Crylink_Attack (void)
 {
-	float counter;
+	local float counter;
+	local vector org;
+	local entity proj;
 
 	sound (self, CHAN_WEAPON, "weapons/crylink.wav", 1, ATTN_NORM);
 	self.ammo_cells = self.ammo_cells - 1;
 	self.punchangle_x = -2;
-
-	while (counter < 7)
-	{
-		entity	proj;
-
-		makevectors(self.v_angle);
-		proj = spawn ();
-		proj.owner = self;
-		proj.classname = "spike";
-
-		proj.movetype = MOVETYPE_BOUNCE;
-		proj.solid = SOLID_BBOX;
-		proj.gravity = 0.001;
-
-		setmodel (proj, "models/plasmatrail.mdl");
-		setsize (proj, '0 0 0', '0 0 0');
-		setorigin (proj, self.origin + self.view_ofs + v_forward * 10 + v_right * 5 + v_up * -14);
-
-		proj.velocity = (v_forward + (counter / 7) * randomvec() * cvar("g_balance_crylink_spread")) * cvar("g_balance_crylink_speed");
-		proj.touch = W_Crylink_Touch;
-		proj.think = SUB_Remove;
-		proj.nextthink = time + 9;
-
-		proj.angles = vectoangles (proj.velocity);
-
-		//proj.glow_color = 10;
-		//proj.glow_size = 20;
-
-		proj.effects = proj.effects | EF_FULLBRIGHT;
-		//proj.effects = proj.effects | EF_ADDITIVE;
-		proj.effects = proj.effects | EF_LOWPRECISION;
-		counter = counter + 1;
-	}
-}
-
-void W_Crylink_Attack2 (void)
-{
-	float counter;
-
-	sound (self, CHAN_WEAPON, "weapons/crylink.wav", 1, ATTN_NORM);
-	self.ammo_cells = self.ammo_cells - 1;
-	self.punchangle_x = -2;
+	org = self.origin + self.view_ofs + v_forward * 10 + v_right * 5 + v_up * -14;
+	te_smallflash(org);
 
 	while (counter < 5)
 	{
-		entity	proj;
-
-		makevectors(self.v_angle);
 		proj = spawn ();
 		proj.owner = self;
 		proj.classname = "spike";
@@ -117,16 +73,18 @@ void W_Crylink_Attack2 (void)
 
 		setmodel (proj, "models/plasmatrail.mdl");
 		setsize (proj, '0 0 0', '0 0 0');
-		setorigin (proj, self.origin + self.view_ofs + v_forward * 10 + v_right * 5 + v_up * -14);
+		setorigin (proj, org);
 
-		proj.velocity = (v_forward + (counter / 2 - 1) * v_right * cvar("g_balance_crylink_spread")) * cvar("g_balance_crylink_speed");
+		if (self.button3)
+			proj.velocity = (v_forward + (counter / 2 - 1) * v_right * cvar("g_balance_crylink_spread")) * cvar("g_balance_crylink_speed");
+		else
+			proj.velocity = (v_forward + (counter / 5) * randomvec() * cvar("g_balance_crylink_spread")) * cvar("g_balance_crylink_speed");
 		proj.touch = W_Crylink_Touch;
 		proj.think = SUB_Remove;
 		proj.nextthink = time + 9;
 
 		proj.angles = vectoangles (proj.velocity);
 
-		//proj.glow_color = 10;
 		//proj.glow_size = 20;
 
 		proj.effects = proj.effects | EF_FULLBRIGHT;
@@ -142,16 +100,6 @@ void()	crylink_ready_01 =	{weapon_thinkf(WFRAME_IDLE, 0.1, crylink_ready_01); se
 void()	crylink_select_01 =	{weapon_thinkf(-1, cvar("g_balance_weaponswitchdelay"), w_ready); weapon_boblayer1(PLAYER_WEAPONSELECTION_SPEED, '0 0 0');};
 void()	crylink_deselect_01 =	{weapon_thinkf(-1, cvar("g_balance_weaponswitchdelay"), w_clear); weapon_boblayer1(PLAYER_WEAPONSELECTION_SPEED, PLAYER_WEAPONSELECTION_RANGE);};
 void()	crylink_fire1_01 =
-{
-	weapon_doattack(crylink_check, crylink_check, W_Crylink_Attack);
-	weapon_thinkf(WFRAME_FIRE1, 0.15, crylink_ready_01);
-};
-void()	crylink_fire2_01 =
-{
-	weapon_doattack(crylink_check, crylink_check, W_Crylink_Attack2);
-	weapon_thinkf(WFRAME_FIRE1, 0.15, crylink_ready_01);
-};
-void()	crylink_fire3_01 =
 {
 	weapon_doattack(crylink_check, crylink_check, W_Crylink_Attack);
 	weapon_thinkf(WFRAME_FIRE1, 0.15, crylink_ready_01);

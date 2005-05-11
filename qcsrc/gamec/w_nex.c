@@ -1,6 +1,5 @@
 void() nex_ready_01;
 void() nex_fire1_01;
-void() nex_fire2_01;
 void() nex_deselect_01;
 void() nex_select_01;
 
@@ -17,8 +16,6 @@ void(float req) w_nex =
 		nex_ready_01();
 	else if (req == WR_FIRE1)
 		weapon_prepareattack(nex_check, nex_check, nex_fire1_01, cvar("g_balance_nex_refire"));
-	else if (req == WR_FIRE2)
-		weapon_prepareattack(nex_check, nex_check, nex_fire2_01, cvar("g_balance_nex_refire"));
 	else if (req == WR_RAISE)
 		nex_select_01();
 	else if (req == WR_UPDATECOUNTS)
@@ -34,23 +31,20 @@ void(float req) w_nex =
 
 void W_Nex_Attack (void)
 {
-	vector	org;
-	vector	dir;
-	vector end;
-	entity 	explosion;
+	local vector org;
+	local vector end;
+	local entity flash;
 
 	sound (self, CHAN_WEAPON, "weapons/nexfire.wav", 1, ATTN_NORM);
 	self.punchangle_x = -5;
-	makevectors(self.v_angle);
 	org = self.origin + self.view_ofs + v_forward * 5 + v_right * 14 + v_up * -7;
 
 	FireRailgunBullet (org, self.origin + self.view_ofs + v_forward * 4096, cvar("g_balance_nex_damage"), IT_NEX);
 
-
 	org = self.origin + self.view_ofs + v_forward * 28 + v_right * 14 + v_up * -7;
 	end = self.origin + self.view_ofs + v_forward * 4096;
 	te_smallflash(org);
-		// beam effect
+	// beam effect
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 	WriteByte (MSG_BROADCAST, 76);
 	WriteCoord (MSG_BROADCAST, org_x);
@@ -66,21 +60,14 @@ void W_Nex_Attack (void)
 	if (cvar("g_instagib") == 0)
 		self.ammo_cells = self.ammo_cells - 5;
 
-	entity	flash;
 	flash = spawn ();
-	//flash.drawonlytoclient;
 	org = self.origin + self.view_ofs + v_forward * 33 + v_right * 14 + v_up * -7;
 	setorigin (flash, org);
 	setmodel (flash, "models/nexflash.md3");
 	flash.velocity = v_forward * 20;
 	flash.angles = vectoangles (flash.velocity);
 	SUB_SetFade (flash, time);
-	flash.effects = flash.effects | EF_ADDITIVE;
-}
-
-void W_Nex_Attack2 (void)
-{
-	makevectors(self.v_angle);
+	flash.effects = flash.effects | EF_ADDITIVE | EF_FULLBRIGHT;
 }
 
 // weapon frames
@@ -91,10 +78,5 @@ void()	nex_fire1_01 =
 {
 	weapon_doattack(nex_check, nex_check, W_Nex_Attack);
 	weapon_thinkf(WFRAME_FIRE1, 0.3, nex_ready_01);
-};
-void()	nex_fire2_01 =
-{
-	weapon_doattack(nex_check, nex_check, W_Nex_Attack);
-	weapon_thinkf(WFRAME_FIRE2, 0.5, nex_ready_01);
 };
 

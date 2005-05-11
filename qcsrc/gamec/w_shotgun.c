@@ -39,7 +39,6 @@ void W_Shotgun_Attack (void)
 	float	d;
 	float	spread;
 
-	makevectors(self.v_angle);
 	sound (self, CHAN_WEAPON, "weapons/shotgun_fire.wav", 1, ATTN_NORM);
 	bullets = cvar("g_balance_shotgun_bullets");
 	d = cvar("g_balance_shotgun_damage");
@@ -53,8 +52,8 @@ void W_Shotgun_Attack (void)
 	// casing code
 	if (cvar("g_casings") == 1)
 	{
-	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 8) + (v_forward * 10);
-	SpawnCasing (org, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 + 10) * v_up), 2, v_forward,'0 250 0', 100, 1);
+		org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 8) + (v_forward * 10);
+		SpawnCasing (org, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 + 10) * v_up), 2, v_forward,'0 250 0', 100, 1);
 	}
 
 	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 8) + (v_forward * 20);

@@ -1,9 +1,7 @@
 void() rlauncher_ready_01;
 void() rlauncher_fire1_01;
-void() rlauncher_fire2_01;
 void() rlauncher_deselect_01;
 void() rlauncher_select_01;
-void() W_Rocket_Attack2;
 
 float() rlauncher_check =
 {
@@ -18,13 +16,6 @@ void(float req) w_rlauncher =
 		rlauncher_ready_01();
 	else if (req == WR_FIRE1)
 		weapon_prepareattack(rlauncher_check, rlauncher_check, rlauncher_fire1_01, cvar("g_balance_rocketlauncher_refire"));
-	/*
-	else if (req == WR_FIRE2)
-	{
-		if (time < self.attack_finished)
-			W_Rocket_Attack2();
-	}
-	*/
 	else if (req == WR_RAISE)
 		rlauncher_select_01();
 	else if (req == WR_UPDATECOUNTS)
@@ -85,10 +76,15 @@ void W_Rocket_Damage (entity inflictor, entity attacker, float damage, float dea
 
 void W_Rocket_Attack (void)
 {
-	entity	missile;
-	vector	org;
-	makevectors (self.v_angle);
+	local entity missile;
+	local entity flash;
+	local vector org;
 	sound (self, CHAN_WEAPON, "weapons/rocket_fire.wav", 1, ATTN_NORM);
+	if (cvar("g_rocketarena") == 0)
+		self.ammo_rockets = self.ammo_rockets - 3;
+	self.punchangle_x = -4;
+	org = self.origin + self.view_ofs + v_forward * 15 + v_right * 3 + v_up * -11;
+	te_smallflash(org);
 
 	missile = spawn ();
 	missile.owner = self;
@@ -104,49 +100,23 @@ void W_Rocket_Attack (void)
 	setmodel (missile, "models/rocket.md3");
 	setsize (missile, '0 0 0', '0 0 0');
 
-	org = self.origin + self.view_ofs + v_forward * 15 + v_right * 3 + v_up * -11;
-
 	setorigin (missile, org);
 	missile.velocity = v_forward * cvar("g_balance_rocketlauncher_speed");
 	missile.angles = vectoangles (missile.velocity);
 
-	missile.touch = W_Rocket_Touch ;
+	missile.touch = W_Rocket_Touch;
 	missile.think = W_Rocket_Think;
 	missile.nextthink = time;
 	missile.cnt = time + 9;
 
-	if (cvar("g_rocketarena") == 0)
-		self.ammo_rockets = self.ammo_rockets - 3;
-
-	entity	flash;
 	flash = spawn ();
-	//flash.drawonlytoclient;
 	setorigin (flash, org);
 	setmodel (flash, "models/flash.md3");
 	flash.velocity = v_forward * 20;
 	flash.angles = vectoangles (flash.velocity);
 	SUB_SetFade (flash, time);
-	flash.effects = flash.effects | EF_ADDITIVE;
-	self.punchangle_x = -4;
+	flash.effects = flash.effects | EF_ADDITIVE | EF_FULLBRIGHT;
 }
-
-/*
-void W_Rocket_Attack2 (void)
-{
-	entity	proj;
-	proj = findradius (self.origin, 50000);
-	while (proj)
-	{
-		if (proj.classname == "missile" && proj.owner == self)
-		{
-			proj.nextthink = time;
-		}
-		proj = proj.chain;
-	}
-
-	self.attack_finished = time + 0.1;
-}
-*/
 
 // weapon frames
 
@@ -158,10 +128,4 @@ void()	rlauncher_fire1_01 =
 	weapon_doattack(rlauncher_check, rlauncher_check, W_Rocket_Attack);
 	weapon_thinkf(WFRAME_FIRE1, 0.3, rlauncher_ready_01);
 };
-/*
-void()	rlauncher_fire2_01 =
-{
-	weapon_doattack(rlauncher_check, rlauncher_check, W_Rocket_Attack2);
-	weapon_thinkf(WFRAME_FIRE2, 0.3, rlauncher_ready_01);
-};
-*/
+

@@ -1,6 +1,5 @@
 void() glauncher_ready_01;
 void() glauncher_fire1_01;
-void() glauncher_fire2_01;
 void() glauncher_deselect_01;
 void() glauncher_select_01;
 
@@ -15,10 +14,8 @@ void(float req) w_glauncher =
 {
 	if (req == WR_IDLE)
 		glauncher_ready_01();
-	else if (req == WR_FIRE1)
+	else if (req == WR_FIRE1 || req == WR_FIRE2)
 		weapon_prepareattack(glauncher_check, glauncher_check, glauncher_fire1_01, cvar("g_balance_grenadelauncher_refire"));
-	else if (req == WR_FIRE2)
-		weapon_prepareattack(glauncher_check, glauncher_check, glauncher_fire2_01, cvar("g_balance_grenadelauncher_refire"));
 	else if (req == WR_RAISE)
 		glauncher_select_01();
 	else if (req == WR_UPDATECOUNTS)
@@ -46,7 +43,7 @@ void W_Grenade_Touch (void)
 	if (other.classname == "player" || other.classname == "corpse")
 		W_Grenade_Explode ();
 	else
-	sound (self, CHAN_BODY, "weapons/grenade_bounce.wav", 1, ATTN_NORM);
+		sound (self, CHAN_BODY, "weapons/grenade_bounce.wav", 1, ATTN_NORM);
 }
 
 void W_Grenade_Damage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
@@ -58,11 +55,14 @@ void W_Grenade_Damage (entity inflictor, entity attacker, float damage, float de
 
 void W_Grenade_Attack (void)
 {
-	makevectors(self.v_angle);
+	local entity gren;
+	local vector org;
+
 	sound (self, CHAN_WEAPON, "weapons/grenade_fire.wav", 1, ATTN_NORM);
 	self.punchangle_x = -4;
-
-	entity gren;
+	self.ammo_rockets = self.ammo_rockets - 3;
+	org = self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -12;
+	te_smallflash(org);
 
 	gren = spawn ();
 	gren.owner = self;
@@ -71,53 +71,30 @@ void W_Grenade_Attack (void)
 	gren.solid = SOLID_BBOX;
 	setmodel(gren, "models/grenademodel.md3");
 	setsize(gren, '-6 -6 -3', '6 6 3');
-	setorigin(gren, self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -12);
-	gren.health = 1;
-	gren.takedamage = DAMAGE_YES;
-	gren.velocity = v_forward * cvar("g_balance_grenadelauncher_speed") + v_up * cvar("g_balance_grenadelauncher_speed_up");
-	gren.avelocity_x = random () * -500 - 500;
-	setsize (gren, gren.mins, gren.maxs);
+	setorigin(gren, org);
+
+	if (self.button3)
+	{
+		gren.nextthink = time + 2.5;
+		gren.think = W_Grenade_Explode;
+		gren.touch = W_Grenade_Touch;
+		gren.takedamage = DAMAGE_YES;
+		gren.health = 10;
+		gren.damageforcescale = 4;
+		gren.event_damage = W_Grenade_Damage;
+		gren.velocity = v_forward * cvar("g_balance_grenadelauncher_speed2") + v_up * cvar("g_balance_grenadelauncher_speed2_up");
+		gren.avelocity = '100 150 100';
+	}
+	else
+	{
+		gren.nextthink = time + 30;
+		gren.think = W_Grenade_Explode;
+		gren.touch = W_Grenade_Explode;
+		gren.velocity = v_forward * cvar("g_balance_grenadelauncher_speed") + v_up * cvar("g_balance_grenadelauncher_speed_up");
+		gren.avelocity_x = random () * -500 - 500;
+	}
+
 	gren.angles = vectoangles (gren.velocity);
-	gren.touch = W_Grenade_Explode;
-	gren.think = W_Grenade_Explode;
-	gren.nextthink = time + 30;
-	self.ammo_rockets = self.ammo_rockets - 3;
-}
-
-void W_Grenade_Attack2 (void)
-{
-
-	entity	gren;
-	makevectors(self.v_angle);
-	sound (self, CHAN_WEAPON, "weapons/grenade_fire.wav", 1, ATTN_NORM);
-	self.punchangle_x = -4;
-
-	gren = spawn ();
-	gren.owner = self;
-	gren.classname = "grenade";
-
-	gren.movetype = MOVETYPE_BOUNCE;
-	gren.solid = SOLID_BBOX;
-
-	gren.takedamage = DAMAGE_YES;
-	gren.damageforcescale = 4;
-	gren.health = 10;
-	gren.event_damage = W_Grenade_Damage;
-
-	setmodel (gren, "models/grenademodel.md3");
-	setsize (gren, '-6 -6 -3', '6 6 3');
-
-	setorigin (gren, self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -12);
-
-	gren.velocity = v_forward * cvar("g_balance_grenadelauncher_speed2") + v_up * cvar("g_balance_grenadelauncher_speed2_up");
-	gren.angles = vectoangles (gren.velocity);
-	gren.avelocity = '100 150 100';
-
-	gren.touch = W_Grenade_Explode;
-	//gren.think = W_Grenade_FuseExplode;
-	//gren.nextthink = time + 5;
-
-	self.ammo_rockets = self.ammo_rockets - 3;
 }
 
 // weapon frames
@@ -129,9 +106,4 @@ void()	glauncher_fire1_01 =
 {
 	weapon_doattack(glauncher_check, glauncher_check, W_Grenade_Attack);
 	weapon_thinkf(WFRAME_FIRE1, 0.3, glauncher_ready_01);
-};
-void()	glauncher_fire2_01 =
-{
-	weapon_doattack(glauncher_check, glauncher_check, W_Grenade_Attack2);
-	weapon_thinkf(WFRAME_FIRE2, 0.8, glauncher_ready_01);
 };

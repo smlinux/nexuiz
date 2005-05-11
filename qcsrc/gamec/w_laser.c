@@ -47,6 +47,7 @@ void W_Laser_Touch (void)
 	WriteCoord (MSG_BROADCAST, 0);
 	WriteByte (MSG_BROADCAST, 155);
 
+	te_customflash(self.origin, 160, 0.2, '1 0 0');
 
 
 	self.event_damage = nullfunction;
@@ -58,32 +59,33 @@ void W_Laser_Touch (void)
 
 void W_Laser_Attack (void)
 {
-	entity	missile;
-
-	makevectors(self.v_angle);
+	local entity missile;
+	local vector org;
 
 	sound (self, CHAN_WEAPON, "weapons/lasergun_fire.wav", 1, ATTN_NORM);
+	org = self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -12;
+	//te_customflash(org, 160, 0.2, '1 0 0');
 
 	missile = spawn ();
 	missile.owner = self;
-	missile.classname = "spike";
+	missile.classname = "laserbolt";
 
 	missile.movetype = MOVETYPE_FLY;
 	missile.solid = SOLID_BBOX;
 
 	setmodel (missile, "models/laser.mdl");
 	setsize (missile, '0 0 0', '0 0 0');
-	setorigin (missile, self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -12);
+	setorigin (missile, org);
 
 	missile.velocity = v_forward * cvar("g_balance_laser_speed");
 	missile.angles = vectoangles (missile.velocity);
-	missile.glow_color = 250; // 244, 250
-	missile.glow_size = 30;
+	//missile.glow_color = 250; // 244, 250
+	//missile.glow_size = 120;
 	missile.touch = W_Laser_Touch;
 	missile.think = SUB_Remove;
 	missile.nextthink = time + 9;
 
-	missile.effects = missile.effects | EF_ADDITIVE;
+	missile.effects = EF_FULLBRIGHT | EF_ADDITIVE | EF_LOWPRECISION;
 }
 
 // weapon frames

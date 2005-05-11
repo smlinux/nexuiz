@@ -14,9 +14,7 @@ void(float req) w_uzi =
 {
 	if (req == WR_IDLE)
 		uzi_ready_01();
-	else if (req == WR_FIRE1)
-		weapon_prepareattack(uzi_check, uzi_check, uzi_fire1_01, cvar("g_balance_uzi_refire"));
-	else if (req == WR_FIRE2)
+	else if (req == WR_FIRE1 || req == WR_FIRE2)
 		weapon_prepareattack(uzi_check, uzi_check, uzi_fire1_01, cvar("g_balance_uzi_refire"));
 	else if (req == WR_RAISE)
 		uzi_select_01();
@@ -34,21 +32,19 @@ void(float req) w_uzi =
 void W_Uzi_Attack (void)
 {
 	local vector org;
-	makevectors(self.v_angle);
 	sound (self, CHAN_WEAPON, "weapons/uzi_fire.wav", 1, ATTN_NORM);
-
+	self.ammo_nails = self.ammo_nails - 1;
+	self.punchangle_x = random () - 0.5;
+	self.punchangle_y = random () - 0.5;
 	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 8) + (v_forward * 15);
+
+	// this attack_finished just enforces a cooldown at the end of a burst
+	self.attack_finished = time + cvar("g_balance_uzi_refire2");
+
 	if (self.uzi_bulletcounter == 1)
 		fireBullet (org, v_forward, cvar("g_balance_uzi_spread2"), cvar("g_balance_uzi_damage2"), IT_UZI, (self.uzi_bulletcounter & 3) == 0);
 	else
 		fireBullet (org, v_forward, cvar("g_balance_uzi_spread"), cvar("g_balance_uzi_damage"), IT_UZI, (self.uzi_bulletcounter & 3) == 0);
-
-	self.punchangle_x = random () - 0.5;
-	self.punchangle_y = random () - 0.5;
-
-	self.ammo_nails = self.ammo_nails - 1;
-	// this attack_finished just enforces a cooldown at the end of a burst
-	self.attack_finished = time + cvar("g_balance_uzi_refire2");
 
 	// casing code
 	if (cvar("g_casings") == 1)

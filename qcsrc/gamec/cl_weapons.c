@@ -87,6 +87,8 @@ void() W_WeaponFrame =
 	if (!self.weaponentity || self.health <= 0)
 		return; // Dead player can't use weapons and injure impulse commands
 
+	makevectors(self.v_angle);
+
 	// Change weapon
 	if (self.weapon != self.switchweapon)
 	{
@@ -121,7 +123,7 @@ void() W_WeaponFrame =
 
 	// weapon bobbing and script actions
 	local float bobintensity, q1pitching, framespeed, diff;
-	local vector vel, realorg, layer1, layer2, boblayer;
+	local vector vel, realorg, layer1, boblayer;
 
 	bobintensity = cvar("g_viewweapon_bobintensity"); // weapon bob intensity
 	q1pitching = fabs(cvar("g_viewweapon_q1pitching")); // q1 style of "bob" when looking up and down
