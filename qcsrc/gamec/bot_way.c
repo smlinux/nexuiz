@@ -18,7 +18,7 @@ NO EVENT WILL RYAN "FRIKAC" SMITH BE LIABLE FOR ANY
 GENERAL, CONSEQUENTIAL, INDIRECT, INCIDENTAL,
 EXEMPLARY, OR SPECIAL DAMAGES, EVEN IF RYAN "FRIKAC"
 SMITH HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH
-DAMAGES, IRRESPECTIVE OF THE CAUSE OF SUCH DAMAGES. 
+DAMAGES, IRRESPECTIVE OF THE CAUSE OF SUCH DAMAGES.
 
 You accept this software on the condition that you
 indemnify and hold harmless Ryan "FrikaC" Smith from
@@ -26,7 +26,7 @@ any and all liability or damages to third parties,
 including attorney fees, court costs, and other
 related costs and expenses, arising out of your use
 of this software irrespective of the cause of said
-liability. 
+liability.
 
 The export from the United States or the subsequent
 reexport of this software is subject to compliance
@@ -35,10 +35,10 @@ control restrictions. You agree that in the event you
 seek to export this software, you assume full
 responsibility for obtaining all necessary export
 licenses and approvals and for assuring compliance
-with applicable reexport restrictions. 
+with applicable reexport restrictions.
 
 Any reproduction of this software must contain
-this notice in its entirety. 
+this notice in its entirety.
 
 */
 
@@ -206,7 +206,7 @@ entity(entity start) FindWayPoint =
 
 	org = realorigin(self);
 
-	t = way_head; 
+	t = way_head;
 	if (start != world)
 	{
 		dst = vlen(start.origin - org);
@@ -235,7 +235,7 @@ entity(entity start) FindWayPoint =
 			}
 		}
 		t = t._next;
-	} 
+	}
 	return best;
 };
 
@@ -249,7 +249,7 @@ Waypoint Spawning Code
 
 entity way_foot; // Ugh. Do I need a foot for this or not?
 
-entity(vector org) make_waypoint = 
+entity(vector org) make_waypoint =
 {
 	local entity point;
 	point = spawn();
@@ -259,7 +259,7 @@ entity(vector org) make_waypoint =
 	point.movetype = MOVETYPE_NONE;
 	point.items = -1;
 	setorigin(point, org);
-	
+
 	setsize(point, PL_MIN, PL_MAX);
 	waypoints = waypoints + 1;
 	if (!way_head)
@@ -276,7 +276,7 @@ entity(vector org) make_waypoint =
 
 	point.count = waypoints;
 	if (waypoint_mode > WM_LOADED) // editor modes
-		setmodel(point, "progs/s_bubble.spr"); 
+		setmodel(point, "progs/s_bubble.spr");
 	return point;
 };
 
@@ -322,7 +322,7 @@ void() DynamicWaypoint =
 				dynlink = dynpoint = 1;
 			editor = 1;
 		}
-	}	
+	}
 	else if (waypoint_mode == WM_DYNAMIC)
 		dynlink = dynpoint = 1;
 
@@ -339,7 +339,7 @@ void() DynamicWaypoint =
 
 // don't waypoint in single player
 	if (max_clients < 2)
-		return; 
+		return;
 // if you're dead
 	else if (self.health <= 0)
 	{
@@ -435,7 +435,7 @@ void() DynamicWaypoint =
 		}
 	}
 
-	if (frik_recognize_plat(FALSE)) 
+	if (frik_recognize_plat(FALSE))
 	{
 		if (vlen(trace_ent.velocity) > 0)
 		{
@@ -478,7 +478,7 @@ void() DynamicWaypoint =
 	}
 	self.current_way = t;
 	self.dyn_flags = 0;
-	
+
 	self.dyn_dest = self.origin + self.view_ofs;
 
 	if (frik_recognize_plat(FALSE))
@@ -528,7 +528,7 @@ entity(float num) WaypointForNum =
 	return world;
 };
 
-void() FixThisWaypoint = 
+void() FixThisWaypoint =
 {
 	self.enemy.target1 = WaypointForNum(self.enemy.b_pants);
 	self.enemy.target2 = WaypointForNum(self.enemy.b_skill);
@@ -605,7 +605,7 @@ entity(string s) FindThing =
 		{
 			dst = tdst;
 			best = t;
-		} 
+		}
 		t = find(t, classname, s);
 	}
 	return best;
@@ -643,9 +643,9 @@ entity(entity lastone) FindRoute =
 				dst = tdst;
 				best = t;
 			}
-		} 
+		}
 		t = t._next;
-	} 
+	}
 	return best;
 };
 /*
@@ -715,7 +715,7 @@ void(entity this) mark_path =
 	// ugh, better way to find players please!!!
 	if (this.classname != "player")
 		this.current_way = t;
-		
+
 	if (t.enemy == world)
 	{
 		bot_lost(this, FALSE);
@@ -733,7 +733,7 @@ void(entity this) mark_path =
 		if (t == self.last_way)
 			return;
 		t.b_sound = t.b_sound | flag;
-		t = t.enemy; 	
+		t = t.enemy;
 	}
 };
 
@@ -751,7 +751,7 @@ tripping the runaway loop counter
 void(entity e2, float b_bit) FollowLink =
 {
 	local float dist;
-	
+
 	if (self.b_aiflags & b_bit)
 		dist = self.items;
 	else
@@ -848,7 +848,7 @@ void() WaypointThink =
 begin_route and bot_get_path
 
 PLEASE NOTE: bot_get_path replaces the old
-calls to begin_route. 
+calls to begin_route.
 
 Routing isn't done all at once now, but in two
 stages, the bot will calc a route *THEN*
@@ -863,7 +863,7 @@ float() begin_route =
 {
 	if (busy_waypoints > 0)
 		return FALSE;
-	
+
 	if (route_table != world)
 	{
 		if (!route_table.ishuman)
@@ -886,7 +886,7 @@ float() begin_route =
 		busy_waypoints = 1;
 		return TRUE;
 	}
-	else 
+	else
 	{
 		route_table = world;
 		busy_waypoints = 0;
@@ -927,12 +927,12 @@ BSP/QC Waypoint loading
 */
 
 void() waypoint =
-{	
+{
 	self.search_time = time;
 	self.solid = SOLID_TRIGGER;
 	self.movetype = MOVETYPE_NONE;
 	setorigin(self, self.origin);
-	
+
 	setsize(self, PL_MIN, PL_MAX);
 	waypoints = waypoints + 1;
 	if (!way_head)
@@ -983,7 +983,7 @@ Temporary Marker code
 */
 
 void(vector org) SpawnTempWaypoint =
-{	
+{
 	local entity tep;
 
 	if (!self.temp_way)

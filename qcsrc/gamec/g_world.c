@@ -310,7 +310,7 @@ void() GotoNextMap =
 	else
 	{
 		// method 1
-		
+
 		//local entity pos;
 		local float fh;
 		local string line;
@@ -337,7 +337,7 @@ void() GotoNextMap =
 			fclose(fh);
 		}
 		changelevel (nextmap);
-		
+
 		// method 2
 		//nextmap = Nex_RotateMapList();
 		//changelevel (nextmap);
@@ -545,7 +545,7 @@ void() CheckRules =
 		sound (self, CHAN_VOICE, "announcer/3fragsleft.wav", 1, ATTN_NORM);
 		self.fragsleft = 3;
 	}
-	
+
 
 	if (fraglimit && self.frags >= fraglimit)
 	{

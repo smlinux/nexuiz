@@ -18,7 +18,7 @@ NO EVENT WILL RYAN "FRIKAC" SMITH BE LIABLE FOR ANY
 GENERAL, CONSEQUENTIAL, INDIRECT, INCIDENTAL,
 EXEMPLARY, OR SPECIAL DAMAGES, EVEN IF RYAN "FRIKAC"
 SMITH HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH
-DAMAGES, IRRESPECTIVE OF THE CAUSE OF SUCH DAMAGES. 
+DAMAGES, IRRESPECTIVE OF THE CAUSE OF SUCH DAMAGES.
 
 You accept this software on the condition that you
 indemnify and hold harmless Ryan "FrikaC" Smith from
@@ -26,7 +26,7 @@ any and all liability or damages to third parties,
 including attorney fees, court costs, and other
 related costs and expenses, arising out of your use
 of this software irrespective of the cause of said
-liability. 
+liability.
 
 The export from the United States or the subsequent
 reexport of this software is subject to compliance
@@ -35,10 +35,10 @@ control restrictions. You agree that in the event you
 seek to export this software, you assume full
 responsibility for obtaining all necessary export
 licenses and approvals and for assuring compliance
-with applicable reexport restrictions. 
+with applicable reexport restrictions.
 
 Any reproduction of this software must contain
-this notice in its entirety. 
+this notice in its entirety.
 
 */
 
@@ -142,7 +142,7 @@ void() DumpWaypoints;
 \n
 \n
 \n
-[0] >>Main Menu          \n 
+[0] >>Main Menu          \n
 
 -- Waylist Management --\n
 [1] Delete ALL Waypoints \n
@@ -400,7 +400,7 @@ void() bot_menu_display =
 						self.current_way.b_aiflags = self.current_way.b_aiflags - (self.current_way.b_aiflags & AI_DOORFLAG);
 					else
 						self.current_way.b_aiflags = self.current_way.b_aiflags | AI_DOORFLAG;
-	
+
 					self.b_menu_time = time;
 				}
 				else if (self.impulse == 2)
@@ -481,7 +481,7 @@ void() bot_menu_display =
 					if (self.current_way.b_aiflags & AI_DIFFICULT)
 						self.current_way.b_aiflags = self.current_way.b_aiflags - (self.current_way.b_aiflags & AI_DIFFICULT);
 					else
-						self.current_way.b_aiflags = self.current_way.b_aiflags | AI_DIFFICULT;								self.b_menu_time = time;	
+						self.current_way.b_aiflags = self.current_way.b_aiflags | AI_DIFFICULT;								self.b_menu_time = time;
 				}
 				else if (self.impulse == 2)
 				{
@@ -827,7 +827,7 @@ void() bot_menu_display =
 			}
 		}
 		self.impulse = 0;
-		
+
 	}
 	if (self.b_menu_time < time)
 	{
@@ -838,7 +838,7 @@ void() bot_menu_display =
 				s2 = "[6] [#] Noclip           \n";
 			else
 				s2 = "[6] [ ] Noclip           \n";
-			
+
 			if (self.flags & FL_GODMODE)
 				s3 = "[7] [#] Godmode          \n";
 			else
@@ -944,7 +944,7 @@ void() bot_menu_display =
 		else if (self.b_menu == MENU_WAYLIST)
 		{
 			s1 = "-- Waylist Management --\n[1] Delete ALL Waypoints \n[2] Dump Waypoints       \n[3] Check For Errors     \n[4] Save Waypoints       \n";
-			
+
 			if (waypoint_mode == WM_EDITOR_DYNAMIC)
 				s2 = "[5] [#] Dynamic Mode     \n[6] [#] Dynamic Link     \n";
 			else if (waypoint_mode == WM_EDITOR_DYNLINK)
@@ -1053,7 +1053,7 @@ void() bot_way_edit =
 /*
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-Waypoint Saving to file. 
+Waypoint Saving to file.
 
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 */
@@ -1070,7 +1070,7 @@ void() PrintWaypoint =
 	local entity t;
 	local float needcolon;
 	local string h;
-	
+
 	if (self.enemy == world)
 		t = way_head;
 	else
@@ -1194,7 +1194,7 @@ void() PrintWaypoint =
 	bytecounter = bytecounter + 19;
 	if (t.count != 1)
 		h = ftos(t.b_aiflags * 4 + 2);
-	else 
+	else
 		h = ftos(t.b_aiflags * 4 + 1);
 	bprint(h);
 	bprint ("; wait\n");
@@ -1205,7 +1205,7 @@ void() PrintWaypoint =
 // to allow for 100+ waypoints, we need to trick the runaway loop counter
 void() DumpWaypoints =
 {
-	bytecounter = 50; 
+	bytecounter = 50;
 	filecount = 1;
 
 	bprint("// ");
@@ -1229,7 +1229,7 @@ void() PrintQCWaypoint =
 {
 	local entity t;
 	local string h;
-	
+
 	if (self.enemy == world)
 		t = way_head;
 	else

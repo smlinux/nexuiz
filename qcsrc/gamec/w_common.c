@@ -128,7 +128,7 @@ void W_GiveWeapon (entity e, float wep, string name)
 		sprint (other, "\n");
 	}
 
-	
+
 /*
 	W_UpdateWeapon ();
 	W_UpdateAmmo ();

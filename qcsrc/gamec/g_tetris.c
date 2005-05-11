@@ -36,7 +36,7 @@ float TETKEY_ROTRIGHT = 32;
 
 float PIECES = 7;
 
-.float line1, line2, line3, line4, line5, line6, line7, 
+.float line1, line2, line3, line4, line5, line6, line7,
 line8, line9, line10, line11, line12, line13, line14, line15,
 line16, line17, line18, line19, line20;
 
@@ -202,7 +202,7 @@ float(float x, float y) GetSquare =
 void (float x, float y, float val) SetSquare =
 {
 	float dat;
-	
+
 	dat = GetLine(y);
 	dat  = SetXBlock(x, dat, val & 3);
 	SetLine(y, dat);
@@ -215,8 +215,8 @@ vector(float pc) PieceShape =
 
 /*
 1 =
- ## 
- ## 
+ ##
+ ##
 */
 	if (pc == 1)
 		return '20 20 0'; // 1 * 4 + 1 * 16
@@ -279,7 +279,7 @@ float(float x, float y, float rot, float pc) PieceMetric =
 {
 	float t;
 	vector piece_dat;
-		
+
 	// return bits of a piece
 	if (rot == 1) // 90 degrees
 	{
@@ -319,7 +319,7 @@ Draw
 */
 
 
-/* some prydon gate functions to make life easier.... 
+/* some prydon gate functions to make life easier....
 
 somewhat modified because we don't need all the fanciness Prydon Gate is capable of
 
@@ -361,7 +361,7 @@ void (float ln) DrawLine =
 {
 	float x, d;
 	WriteChar(MSG_ONE, TET_BORDER);
-	
+
 	for (x = 1; x <= TET_WIDTH; x = x + 1)
 	{
 		d = GetSquare(x, ln);
@@ -381,7 +381,7 @@ void (float pc, float ln) DrawPiece =
 	if (color == 0) // 4
 		color = 1;
 	WriteChar(MSG_ONE, TET_SPACE); // pad to 6
-	
+
 	piece_dat = PieceShape(pc);
 	if (ln == 1)
 		piece_ln = piece_dat_x;
@@ -393,7 +393,7 @@ void (float pc, float ln) DrawPiece =
 		if (d)
 			WriteChar(MSG_ONE, TET_BLOCKS + d);
 		else
-			WriteChar(MSG_ONE, TET_SPACE);	
+			WriteChar(MSG_ONE, TET_SPACE);
 	}
 	WriteChar(MSG_ONE, TET_SPACE);	// pad to 6
 }
@@ -444,7 +444,7 @@ void() Draw_Tetris =
 		WriteChar(MSG_ONE, TET_BORDER);
 	p6(' ', ' ', ' ', ' ', ' ', ' ');
 	WriteChar(MSG_ONE, 10);
-	WriteChar(MSG_ONE, 0);	
+	WriteChar(MSG_ONE, 0);
 }
 /*
 *********************************
@@ -458,13 +458,13 @@ Game Functions
 void() ResetTetris =
 {
 	float i;
-	
+
 	for (i=1; i<=TET_LINES; i = i + 1)
 		SetLine(i, 0);
 	self.piece_pos = '0 0 0';
 	self.piece_type = 0;
 	self.next_piece = self.tet_lines = self.tet_score = 0;
-	
+
 };
 
 void () Tet_GameOver =
@@ -493,18 +493,18 @@ void(float n) TetAddScore =
 {
 	self.tet_score = self.tet_score + n;
 	if (self.tet_score > tet_high_score)
-		tet_high_score = self.tet_score; 
+		tet_high_score = self.tet_score;
 };
-float CheckMetrics(float piece, float orgx, float orgy, float rot) = 
+float CheckMetrics(float piece, float orgx, float orgy, float rot) =
 {
 	// check to see if the piece, if moved to the locations will overlap
-	
+
 	float x, y;
 	// why did I start counting from 1, damnit
 	orgx = orgx - 1;
 	orgy = orgy - 1;
-	
-	for (y = 1; y < 5; y = y + 1)	
+
+	for (y = 1; y < 5; y = y + 1)
 	{
 		for (x = 1; x < 5; x = x + 1)
 		{
@@ -522,13 +522,13 @@ float CheckMetrics(float piece, float orgx, float orgy, float rot) =
 
 void ClearPiece(float piece, float orgx, float orgy, float rot) =
 {
-	
+
 	float x, y;
 	// why did I start counting from 1, damnit
 	orgx = orgx - 1;
 	orgy = orgy - 1;
-	
-	for (y = 1; y < 5; y = y + 1)	
+
+	for (y = 1; y < 5; y = y + 1)
 	{
 		for (x = 1; x < 5; x = x + 1)
 		{
@@ -550,8 +550,8 @@ void CementPiece(float piece, float orgx, float orgy, float rot) =
 	color = piece & 3;
 	if (color == 0) // 4
 		color = 1;
-		
-	for (y = 1; y < 5; y = y + 1)	
+
+	for (y = 1; y < 5; y = y + 1)
 	{
 		for (x = 1; x < 5; x = x + 1)
 		{
@@ -596,8 +596,8 @@ void(float keyss) HandleGame =
 	if (self.tet_time > time)
 		return;
 	self.tet_time = time + 0.1;
-	
-	
+
+
 	if (self.piece_type == 0)
 	{
 		self.piece_pos = '5 1 0'; // that's about middle top, we count from 1 ARGH
@@ -612,7 +612,7 @@ void(float keyss) HandleGame =
 	}
 	else
 		ClearPiece(self.piece_type, self.piece_pos_x, self.piece_pos_y, self.piece_pos_z);
-	
+
 	// next we need to check the piece metrics against what's on the level
 	// based on the key order
 
@@ -625,13 +625,13 @@ void(float keyss) HandleGame =
 	else if (keyss & TETKEY_ROTRIGHT)
 		check_pos_z = check_pos_z + 1;
 	else if (keyss & TETKEY_ROTLEFT)
-		check_pos_z = check_pos_z - 1;		
+		check_pos_z = check_pos_z - 1;
 	// bounds check
 	if (check_pos_z > 3)
 		check_pos_z = 0;
 	else if (check_pos_z < 0)
 		check_pos_z = 3;
-	
+
 	// reality check
 	if (CheckMetrics(self.piece_type, check_pos_x, check_pos_y, check_pos_z))
 		self.piece_pos = check_pos;
@@ -684,7 +684,7 @@ float() TetrisPreFrame =
 {
 	if (!self.tetris_on)
 		return 0;
-	
+
 	self.tet_org = self.origin;
 	if (self.tet_time > time)
 		return 1;
@@ -696,7 +696,7 @@ float(float v) frik_anglemoda =
 {
 	return v - floor(v/360) * 360;
 };
-float (float y1, float y2) angcompa = 
+float (float y1, float y2) angcompa =
 {
 	y1 = frik_anglemoda(y1);
 	y2 = frik_anglemoda(y2);
@@ -715,9 +715,9 @@ float() TetrisPostFrame =
 {
 	vector mov;
 	float keysa, norm;
-	
+
 	keysa = 0;
-	
+
 	if (!self.tetris_on)
 		return 0;
 	if (self.origin != self.tet_org)
@@ -726,7 +726,7 @@ float() TetrisPostFrame =
 		self.origin = self.tet_org;
 
 		norm = angcompa(self.v_angle_y, mov_y);
-	
+
 		if (norm > -80 && norm < 80)
 			keysa = keysa | TETKEY_UP;
 		if (norm > 10 && norm < 170)

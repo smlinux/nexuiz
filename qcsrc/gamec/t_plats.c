@@ -16,13 +16,13 @@ void() plat_spawn_inside_trigger =
 	trigger.movetype = MOVETYPE_NONE;
 	trigger.solid = SOLID_TRIGGER;
 	trigger.enemy = self;
-	
+
 	tmin = self.mins + '25 25 0';
 	tmax = self.maxs - '25 25 -8';
 	tmin_z = tmax_z - (self.pos1_z - self.pos2_z + 8);
 	if (self.spawnflags & PLAT_LOW_TRIGGER)
 		tmax_z = tmin_z + 8;
-	
+
 	if (self.size_x <= 50)
 	{
 		tmin_x = (self.mins_x + self.maxs_x) / 2;
@@ -33,7 +33,7 @@ void() plat_spawn_inside_trigger =
 		tmin_y = (self.mins_y + self.maxs_y) / 2;
 		tmax_y = tmin_y + 1;
 	}
-	
+
 	setsize (trigger, tmin, tmax);
 };
 
@@ -69,7 +69,7 @@ void() plat_center_touch =
 {
 	if (other.classname != "player")
 		return;
-		
+
 	if (other.health <= 0)
 		return;
 
@@ -87,7 +87,7 @@ void() plat_outside_touch =
 
 	if (other.health <= 0)
 		return;
-		
+
 	self = self.enemy;
 	if (self.state == 1)
 		plat_go_down ();
@@ -165,7 +165,7 @@ void() func_plat =
 	self.classname = "plat";
 	self.solid = SOLID_BSP;
 	self.movetype = MOVETYPE_PUSH;
-	setorigin (self, self.origin);	
+	setorigin (self, self.origin);
 	setmodel (self, self.model);
 	setsize (self, self.mins , self.maxs);
 
@@ -178,7 +178,7 @@ void() func_plat =
 
 	self.use = plat_trigger_use;
 
-	plat_spawn_inside_trigger ();	// the "start moving" trigger	
+	plat_spawn_inside_trigger ();	// the "start moving" trigger
 
 	if (self.targetname)
 	{
@@ -219,7 +219,7 @@ void() train_wait =
 	}
 	else
 		self.nextthink = self.ltime + 0.1;
-	
+
 	self.think = train_next;
 };
 
@@ -255,7 +255,7 @@ void() func_train_find =
 
 
 void() func_train =
-{	
+{
 	if (!self.speed)
 		self.speed = 100;
 	if (!self.target)
@@ -320,7 +320,7 @@ void() func_train_find =
 	targ = find(world, targetname, self.target);
 	self.target = targ.target;
 	setorigin(self, targ.origin - self.mins);
-	self.nextthink = self.ltime + 1; 
+	self.nextthink = self.ltime + 1;
 	self.think = train_next;
 };
 

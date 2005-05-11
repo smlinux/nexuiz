@@ -38,7 +38,7 @@ void() dynlight_think =
 void() dynlight_find_aiment =
 {
 	local entity targ;
-	
+
 	targ = find(world, targetname, self.target);
 	self.movetype = MOVETYPE_FOLLOW;
 	self.aiment = targ;
@@ -52,11 +52,11 @@ void() dynlight_find_aiment =
 void() dynlight_find_path =
 {
 	local entity targ;
-	
+
 	targ = find(world, targetname, self.target);
 	self.target = targ.target;
 	setorigin (self, targ.origin);
-	self.nextthink = self.ltime + 0.1; 
+	self.nextthink = self.ltime + 0.1;
 	self.think = train_next;
 };
 void() dynlight_use =

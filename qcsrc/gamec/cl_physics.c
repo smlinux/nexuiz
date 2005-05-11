@@ -33,7 +33,7 @@ void SV_PlayerPhysics()
 		self.angles_x = (self.v_angle_x + self.punchangle_x) * -0.333;
 		self.angles_y = self.v_angle_y + self.punchangle_y;
 	}*/
-	
+
 	if (self.flags & FL_WATERJUMP )
 	{
 		self.velocity_x = self.movedir_x;

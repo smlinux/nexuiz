@@ -23,7 +23,7 @@ NO EVENT WILL RYAN "FRIKAC" SMITH BE LIABLE FOR ANY
 GENERAL, CONSEQUENTIAL, INDIRECT, INCIDENTAL,
 EXEMPLARY, OR SPECIAL DAMAGES, EVEN IF RYAN "FRIKAC"
 SMITH HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH
-DAMAGES, IRRESPECTIVE OF THE CAUSE OF SUCH DAMAGES. 
+DAMAGES, IRRESPECTIVE OF THE CAUSE OF SUCH DAMAGES.
 
 You accept this software on the condition that you
 indemnify and hold harmless Ryan "FrikaC" Smith from
@@ -31,7 +31,7 @@ any and all liability or damages to third parties,
 including attorney fees, court costs, and other
 related costs and expenses, arising out of your use
 of this software irrespective of the cause of said
-liability. 
+liability.
 
 The export from the United States or the subsequent
 reexport of this software is subject to compliance
@@ -40,10 +40,10 @@ control restrictions. You agree that in the event you
 seek to export this software, you assume full
 responsibility for obtaining all necessary export
 licenses and approvals and for assuring compliance
-with applicable reexport restrictions. 
+with applicable reexport restrictions.
 
 Any reproduction of this software must contain
-this notice in its entirety. 
+this notice in its entirety.
 
 */
 
@@ -66,35 +66,35 @@ void() CL_KeyMove = // CL_BaseMove + CL_AdjustAngles
 	if (self.keys != self.oldkeys)
 	{
 		self.movement = '0 0 0';
-		self.movement_y = self.movement_y + (350 * CL_KeyState(KEY_MOVERIGHT)); 
+		self.movement_y = self.movement_y + (350 * CL_KeyState(KEY_MOVERIGHT));
 		// 350 is the default cl_sidespeed
-		self.movement_y = self.movement_y - (350 * CL_KeyState(KEY_MOVELEFT)); 
+		self.movement_y = self.movement_y - (350 * CL_KeyState(KEY_MOVELEFT));
 		// 350 is the default cl_sidespeed
-		self.movement_x = self.movement_x + (200 * CL_KeyState(KEY_MOVEFORWARD)); 
+		self.movement_x = self.movement_x + (200 * CL_KeyState(KEY_MOVEFORWARD));
 		// 200 is the default cl_forwardspeed
-		self.movement_x = self.movement_x - (200 * CL_KeyState(KEY_MOVEBACK)); 
+		self.movement_x = self.movement_x - (200 * CL_KeyState(KEY_MOVEBACK));
 		// 200 is the default cl_backspeed
-		self.movement_z = self.movement_z + (200 * CL_KeyState(KEY_MOVEUP)); 
+		self.movement_z = self.movement_z + (200 * CL_KeyState(KEY_MOVEUP));
 		// 200 is the default cl_upspeed
-		self.movement_z = self.movement_z - (200 * CL_KeyState(KEY_MOVEDOWN)); 
+		self.movement_z = self.movement_z - (200 * CL_KeyState(KEY_MOVEDOWN));
 		// 200 is the default cl_upspeed
 		if (!self.b_aiflags & AI_PRECISION)
-			self.movement = self.movement * 2; 
+			self.movement = self.movement * 2;
 		// 2 is the default cl_movespeedkey & bot always has +speed
 	}
 	self.oldkeys = self.keys;
 
 	if (self.b_skill != 2) // use mouse emulation
 	{
-		anglespeed = 1.5 * real_frametime; 
+		anglespeed = 1.5 * real_frametime;
 		// 1.5 is the default cl_anglespeedkey & bot always has +speed
-		self.v_angle_y = self.v_angle_y + anglespeed * CL_KeyState(KEY_LOOKLEFT) * 140; 
+		self.v_angle_y = self.v_angle_y + anglespeed * CL_KeyState(KEY_LOOKLEFT) * 140;
 		// 140 is default cl_yawspeed
-		self.v_angle_y = self.v_angle_y - anglespeed * CL_KeyState(KEY_LOOKRIGHT) * 140; 
+		self.v_angle_y = self.v_angle_y - anglespeed * CL_KeyState(KEY_LOOKRIGHT) * 140;
 		// 140 is default cl_yawspeed
-		self.v_angle_x = self.v_angle_x - anglespeed * CL_KeyState(KEY_LOOKUP) * 150; 
+		self.v_angle_x = self.v_angle_x - anglespeed * CL_KeyState(KEY_LOOKUP) * 150;
 		// 150 is default cl_pitchspeed
-		self.v_angle_x = self.v_angle_x + anglespeed * CL_KeyState(KEY_LOOKDOWN) * 150; 
+		self.v_angle_x = self.v_angle_x + anglespeed * CL_KeyState(KEY_LOOKDOWN) * 150;
 		// 150 is default cl_pitchspeed
 	}
 	else
@@ -107,11 +107,11 @@ void() CL_KeyMove = // CL_BaseMove + CL_AdjustAngles
 			if (vlen(self.mouse_emu) > 180)
 				self.mouse_emu = normalize(self.mouse_emu) * 180;
 		}
-		else 
+		else
 			self.mouse_emu = view * (1 / real_frametime);
 		self.v_angle = self.v_angle + self.mouse_emu * real_frametime;
 
-		
+
 	}
 	if (self.v_angle_x > 80)
 		self.v_angle_x = 80;
@@ -197,7 +197,7 @@ void(vector wishvel) SV_AirAccelerate =
 	accelspeed = 10 * sv_accelerate * wishspd * real_frametime;
 	if (accelspeed > addspeed)
 		accelspeed = addspeed;
-	
+
 	self.velocity = self.velocity + accelspeed * wishvel;
 };
 
@@ -215,8 +215,8 @@ void(vector wishvel) SV_Accelerate =
 	accelspeed = sv_accelerate * wishspd * real_frametime;
 	if (accelspeed > addspeed)
 		accelspeed = addspeed;
-	
-	self.velocity = self.velocity + accelspeed * wishvel;	
+
+	self.velocity = self.velocity + accelspeed * wishvel;
 };
 void() SV_WaterMove =
 {
@@ -224,7 +224,7 @@ void() SV_WaterMove =
         local float wishspeed, addspeed, cspeed, newspeed;
 	makevectors(self.v_angle);
 	wishvel = v_right * self.movement_y + v_forward * self.movement_x;
-	
+
 	if (self.movement == '0 0 0')
                 wishvel_z = wishvel_z - 60;
 	else
@@ -289,13 +289,13 @@ void() SV_AirMove =
 		SV_AirAccelerate (wishvel);
 };
 
-void() SV_ClientThink = 
+void() SV_ClientThink =
 {
 	local vector vangle;
 
 	if (self.movetype == MOVETYPE_NONE)
 		return;
-	DropPunchAngle(); 
+	DropPunchAngle();
 	if (self.health <= 0)
 		return;
 	self.v_angle_z = 0; // V_CalcRoll removed, sucks
@@ -341,7 +341,7 @@ float() SV_RunThink  =
 	if (thinktime < time)
 		thinktime = time;
 	self.nextthink = 0;
-	time = thinktime; 
+	time = thinktime;
 	other = world;
 	makevectors(self.v_angle); // hack
 	self.think();
@@ -384,23 +384,23 @@ float() SV_CheckWater =
 
 };
 void() RemoveThud = // well sometimes
-{ 
+{
 	local entity oself;
 	if (other == world)
 	{
 		if (self.flags & FL_ONGROUND)
 		{
-			self.flags = self.flags - FL_ONGROUND; 
+			self.flags = self.flags - FL_ONGROUND;
 		}
 	}
 	else
 	{
-		if (other.solid == SOLID_BSP && (self.flags & FL_ONGROUND))	
+		if (other.solid == SOLID_BSP && (self.flags & FL_ONGROUND))
 		{
 			// RM: Does this break anything?
 			// If not, then some more thuds have been removed.
 			self.flags = self.flags - FL_ONGROUND;
-		}		
+		}
 		if (other == self.owner)
 			return;
 		if (self.owner.solid == SOLID_NOT)
@@ -429,7 +429,7 @@ void() SV_CheckOnGround =
 		self.origin = org;
 	v = org;
 	v_z = self.maxs_z + org_z + 1;
-	traceline (org, v, TRUE, self); 
+	traceline (org, v, TRUE, self);
 	if ((self.waterlevel == 3) && (self.movetype == MOVETYPE_WALK))
 		self.flags = self.flags - FL_ONGROUND;
 	else if ((trace_plane_normal_z <= 0.7) && (trace_fraction != 1))
@@ -447,32 +447,32 @@ void() SV_CheckOnGround =
 float(vector dir) botCheckForStep =
 {
 	local vector currentorigin, v;
-	local float currentflags, yaw, stepdistance, movedistance; 
+	local float currentflags, yaw, stepdistance, movedistance;
 	currentorigin = self.origin;
-	currentflags = self.flags; 
-	self.flags = FL_ONGROUND | FL_PARTIALGROUND; 
+	currentflags = self.flags;
+	self.flags = FL_ONGROUND | FL_PARTIALGROUND;
 	dir = normalize(dir);
 	dir_z = 0;
-	yaw = vectoyaw(dir); 
+	yaw = vectoyaw(dir);
 	if(walkmove(yaw, 3))
-	{	
+	{
 		if(droptofloor(0,0))
-		{	
+		{
 			stepdistance = self.origin_z - currentorigin_z;
 			v = self.origin - currentorigin;
 			v_z = 0;
-			movedistance = vlen(v); 
+			movedistance = vlen(v);
 			if((stepdistance > 0 && stepdistance <= 16) && movedistance != 0)
 			{
 				self.flags = currentflags | FL_PARTIALGROUND;
 				return 1;
 			}
 		}
-	}	
+	}
 	self.flags = currentflags;
 	setorigin(self, currentorigin);
 	return 0;
-}; 
+};
 // this is merely here to fix a problem with e3m5
 void(vector dir) BruteForceStep =
 {
@@ -507,7 +507,7 @@ void() PostPhysics =
 	self.velocity = self.velocity - self.phys_obj.dest1 + self.phys_obj.velocity;
 	if (self.phys_obj.dest2 == self.origin)
 	{
-		setorigin(self, self.phys_obj.origin); 
+		setorigin(self, self.phys_obj.origin);
 		// might've been moved during other person's physics
 		// (teleporters / plats)
 
@@ -535,7 +535,7 @@ void() PostPhysics =
 						else
 						{
 							if (dst > 1)
-								frik_obstructed(obstr, FALSE); 
+								frik_obstructed(obstr, FALSE);
 
 							org = self.origin;
 							self.flags = cflags;
@@ -550,7 +550,7 @@ void() PostPhysics =
 									// if no steps were found, bot is really obstucted
 									BruteForceStep(self.phys_obj.dest1);
 								}
-							}	
+							}
 						}
 					}
 				}
@@ -587,7 +587,7 @@ void() SV_FlyMove =
 
 	setmodel (self.phys_obj, string_null);
 	self.phys_obj.movetype = MOVETYPE_STEP;
-	
+
 	self.phys_obj.solid = SOLID_TRIGGER;
 	self.phys_obj.touch = RemoveThud;
 	setsize(self.phys_obj, self.mins, self.maxs);
@@ -631,7 +631,7 @@ void() SV_Physics_Client =
 		BotAI();
 
 	}
-	else if ((self.movetype == MOVETYPE_WALK) || (self.movetype == MOVETYPE_STEP)) 
+	else if ((self.movetype == MOVETYPE_WALK) || (self.movetype == MOVETYPE_STEP))
 	{
 		if (!SV_RunThink())
 			return;

@@ -18,7 +18,7 @@ NO EVENT WILL RYAN "FRIKAC" SMITH BE LIABLE FOR ANY
 GENERAL, CONSEQUENTIAL, INDIRECT, INCIDENTAL,
 EXEMPLARY, OR SPECIAL DAMAGES, EVEN IF RYAN "FRIKAC"
 SMITH HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH
-DAMAGES, IRRESPECTIVE OF THE CAUSE OF SUCH DAMAGES. 
+DAMAGES, IRRESPECTIVE OF THE CAUSE OF SUCH DAMAGES.
 
 You accept this software on the condition that you
 indemnify and hold harmless Ryan "FrikaC" Smith from
@@ -26,7 +26,7 @@ any and all liability or damages to third parties,
 including attorney fees, court costs, and other
 related costs and expenses, arising out of your use
 of this software irrespective of the cause of said
-liability. 
+liability.
 
 The export from the United States or the subsequent
 reexport of this software is subject to compliance
@@ -35,10 +35,10 @@ control restrictions. You agree that in the event you
 seek to export this software, you assume full
 responsibility for obtaining all necessary export
 licenses and approvals and for assuring compliance
-with applicable reexport restrictions. 
+with applicable reexport restrictions.
 
 Any reproduction of this software must contain
-this notice in its entirety. 
+this notice in its entirety.
 
 */
 
@@ -113,7 +113,7 @@ float(vector sdir) frik_KeysForDir =
 	{
 		// Everything is tested against 60 degrees,
 		// this allows the bot to overlap the keys
-		// 30 degrees on each diagonal  45 degrees 
+		// 30 degrees on each diagonal  45 degrees
 		// might look more realistic
 
  		keydir = vectoangles(sdir);
@@ -184,7 +184,7 @@ void(vector whichway, float danger) frik_obstructed =
 		disway_y = whichway_x * -1;
 		self.wallhug = vlen(org - (self.origin + disway)) > dist;
 		self.b_aiflags = self.b_aiflags | AI_OBSTRUCTED;
-		
+
 	}
 	else
 	{
@@ -254,7 +254,7 @@ void() frik_obstacles =
 	ang = normalize(ang);
 	traceline(start - (ang * 10), start + (ang * 10), TRUE, self);
 	if ((trace_fraction != 1) || trace_startsolid)
-		return; // gap is only 20 wide, walkable	
+		return; // gap is only 20 wide, walkable
 	ang = self.velocity;
 	ang_z = 0;
 	dist = ((540 / sv_gravity) * vlen(ang))/* + 32*/;
@@ -281,7 +281,7 @@ void() frik_obstacles =
 	{
 		ang = normalize(ang);
 		//look for a ledge
-		traceline(self.origin, self.origin + (ang * (test + 20)), TRUE, self); 
+		traceline(self.origin, self.origin + (ang * (test + 20)), TRUE, self);
 		if (trace_fraction != 1)
 		{
 			if (conts < -3) // bad stuff down dare
@@ -338,7 +338,7 @@ void() frik_obstacles =
 /*
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-After frik_obstructed, the bot uses the 
+After frik_obstructed, the bot uses the
 following funtion to move "around" the obstacle
 
 I have no idea how well it will work
@@ -360,7 +360,7 @@ void() frik_dodge_obstruction =
 	}
 
 	// perform a walkmove check to see if the obs_dir is still obstructed
-	// walkmove is less forgiving than frik_obstacles, so I dunno 
+	// walkmove is less forgiving than frik_obstacles, so I dunno
 	// how well this will work
 
 	oflags = self.flags;
@@ -387,7 +387,7 @@ void() frik_dodge_obstruction =
 		}
 		self.keys = self.keys & 960 + frik_KeysForDir(way);
 	}
-	
+
 	// fix the bot
 
 	self.origin = org;
@@ -458,7 +458,7 @@ float(vector weird) frik_walkmove =
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 The "hook" method of navigation. This nav
-system is copyrighted 1999 by Ryan "Frika C" 
+system is copyrighted 1999 by Ryan "Frika C"
 Smith, keep that in mind when you steal it.
 
 I brought this back because normal roaming
