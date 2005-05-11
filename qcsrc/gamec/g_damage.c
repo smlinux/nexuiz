@@ -43,7 +43,7 @@ void Obituary (entity attacker, entity targ, float deathtype)
 			{
 				checkrules_firstblood = TRUE;
 				sound(world, CHAN_AUTO, "announcer/firstblood.wav", 1, ATTN_NONE);
-				bprint(attacker.netname, " drew first blood");
+				bprint("^1",attacker.netname, " drew first blood", "\n");
 			}
 
 			if (deathtype == IT_LASER)
