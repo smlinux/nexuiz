@@ -1,4 +1,5 @@
 
+float checkrules_firstblood;
 void Obituary (entity attacker, entity targ, float deathtype)
 {
 	string	s;
@@ -38,6 +39,13 @@ void Obituary (entity attacker, entity targ, float deathtype)
 		}
 		else if (attacker.classname == "player")
 		{
+			if (!checkrules_firstblood)
+			{
+				checkrules_firstblood = TRUE;
+				sound(world, CHAN_AUTO, "announcer/firstblood.wav", 1, ATTN_NONE);
+				bprint(attacker.netname, " drew first blood");
+			}
+
 			if (deathtype == IT_LASER)
 				bprint ("^1",s, " was blasted by ", attacker.netname, "\n");
 			else if (deathtype == IT_UZI)

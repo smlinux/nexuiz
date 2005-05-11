@@ -20,7 +20,6 @@ entity dest;
 .float	lip;
 //.float	light_lev;
 .float	speed;
-.float fragsleft;
 //.float	style;
 //.float	skill;
 

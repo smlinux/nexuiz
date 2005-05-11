@@ -7,7 +7,6 @@ Called before each frame by the server
 */
 void StartFrame (void)
 {
-	local string s;
 	sv_maxspeed = cvar ("sv_maxspeed");
 	sv_friction = cvar ("sv_friction");
 	sv_accelerate = cvar ("sv_accelerate");
@@ -15,5 +14,5 @@ void StartFrame (void)
 	teamplay = cvar ("teamplay");
 
 	BotFrame ();
-	CheckRules ();
+	CheckRules_World ();
 }

@@ -147,6 +147,7 @@ void worldspawn (void)
 	precache_sound ("announcer/2fragsleft.wav");
 	precache_sound ("announcer/3fragsleft.wav");
 	precache_sound ("announcer/1minuteremains.wav");
+	precache_sound ("announcer/firstblood.wav");
 
 	precache_sound ("misc/itemrespawn.wav");
 
@@ -300,8 +301,8 @@ float alreadychangedlevel;
 void() GotoNextMap =
 {
 	local string nextmap;
-	local float n, nummaps;
-	local string s;
+	//local float n, nummaps;
+	//local string s;
 	if (alreadychangedlevel)
 		return;
 	alreadychangedlevel = TRUE;
@@ -494,15 +495,44 @@ void() NextLevel =
 
 /*
 ============
-CheckRules
+CheckRules_Player
 
 Exit deathmatch games upon conditions
 ============
 */
-void() CheckRules =
+void() CheckRules_Player =
 {
-	local	float		timelimit;
-	local	float		fraglimit;
+	local float fraglimit;
+
+	if (gameover)	// someone else quit the game already
+		return;
+
+	fraglimit = cvar("fraglimit");
+	if (fraglimit && self.frags >= fraglimit)
+	{
+		NextLevel ();
+		return;
+	}
+};
+
+float checkrules_oneminutewarning;
+float checkrules_leaderfrags;
+entity checkrules_leader;
+
+/*
+============
+CheckRules_World
+
+Exit deathmatch games upon conditions
+============
+*/
+void() CheckRules_World =
+{
+	local float timelimit;
+	local float fraglimit;
+	local float checkrules_oldleaderfrags;
+	local entity checkrules_oldleader;
+	local entity head;
 
 	if (intermission_running)
 	if (time >= intermission_exittime + 60)
@@ -523,33 +553,41 @@ void() CheckRules =
 		return;
 	}
 
-	if (timelimit && time + 60 = timelimit)
+	if (!checkrules_oneminutewarning && timelimit && time > timelimit - 60)
 	{
-		sound (self, CHAN_BODY, "announcer/1minuteremains.wav", 1, ATTN_NORM);
-		return;
+		checkrules_oneminutewarning = TRUE;
+		sound(world, CHAN_AUTO, "announcer/1minuteremains.wav", 1, ATTN_NONE);
 	}
 
-
-	if (self.frags + 1 == fraglimit && self.fragsleft != 1)
+	checkrules_oldleader = checkrules_leader;
+	checkrules_oldleaderfrags = checkrules_leaderfrags;
+	checkrules_leaderfrags = 0;
+	checkrules_leader = world;
+	head = findchain(classname, "player");
+	while (head)
 	{
-		sound (self, CHAN_VOICE, "announcer/1fragleft.wav", 1, ATTN_NORM);
-		self.fragsleft = 1;
+		if (checkrules_leaderfrags < head.frags)
+		{
+			checkrules_leaderfrags = head.frags;
+			checkrules_leader = head;
+		}
+		head = head.chain;
 	}
-	if (self.frags + 2 == fraglimit && self.fragsleft != 2)
+	if (checkrules_leaderfrags <= 0)
 	{
-		sound (self, CHAN_VOICE, "announcer/2fragsleft.wav", 1, ATTN_NORM);
-		self.fragsleft = 2;
+		checkrules_leader = world;
+		checkrules_leaderfrags = 0;
 	}
-	if (self.frags + 3 == fraglimit && self.fragsleft != 3)
+	checkrules_leaderfrags = floor(checkrules_leaderfrags);
+	if (checkrules_leaderfrags != checkrules_oldleaderfrags)
 	{
-		sound (self, CHAN_VOICE, "announcer/3fragsleft.wav", 1, ATTN_NORM);
-		self.fragsleft = 3;
+		if (checkrules_leaderfrags == fraglimit - 1)
+			sound(world, CHAN_AUTO, "announcer/1fragleft.wav", 1, ATTN_NONE);
+		else if (checkrules_leaderfrags == fraglimit - 2)
+			sound(world, CHAN_AUTO, "announcer/2fragsleft.wav", 1, ATTN_NONE);
+		else if (checkrules_leaderfrags == fraglimit - 3)
+			sound(world, CHAN_AUTO, "announcer/3fragsleft.wav", 1, ATTN_NONE);
 	}
-
-
-	if (fraglimit && self.frags >= fraglimit)
-	{
-		NextLevel ();
-		return;
-	}
+	if (checkrules_leader != checkrules_oldleader && checkrules_leaderfrags > checkrules_oldleaderfrags)
+		bprint(checkrules_leader.netname, " has taken the lead with ", ftos(checkrules_leaderfrags), " frags\n");
 };

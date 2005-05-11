@@ -65,7 +65,6 @@ Called when a client spawns in the server
 void PutClientInServer (void)
 {
 	entity	spot;
-	float mdlrandom;
 
 	spot = SelectSpawnPoint ();
 
@@ -495,7 +494,7 @@ void PlayerPreThink (void)
 	if (BotPreFrame())
 		return;
 
-	CheckRules();
+	CheckRules_Player();
 
 	if (intermission_running)
 	{
@@ -602,7 +601,7 @@ void PlayerPostThink (void)
 	float soundrandom;
 	if (BotPostFrame())
 		return;
-	CheckRules();
+	CheckRules_Player();
 	UpdateChatBubble();
 	UpdateColorModHack();
 	if (self.deadflag == DEAD_NO)
