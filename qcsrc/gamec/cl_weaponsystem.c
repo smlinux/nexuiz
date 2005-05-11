@@ -179,7 +179,7 @@ float(entity e) w_getbestweapon
 // Setup weapon for client (after this raise frame will be launched)
 void(float windex, string wmodel, float hudammo) weapon_setup =
 {
-	local string wdir, weaponmdl;
+	local string weaponmdl;
 
 	self.items = self.items - (self.items & (IT_SHELLS | IT_NAILS | IT_ROCKETS | IT_CELLS));
 	self.items = self.items | hudammo;

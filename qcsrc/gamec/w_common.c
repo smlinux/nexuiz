@@ -403,7 +403,7 @@ void FireRailgunBullet (vector src, float bdamage, vector dir, float spread, flo
 
 void FireRailgunBullet (vector start, vector end, float bdamage, float deathtype)
 {
-	local vector hitloc, dir, force;
+	local vector hitloc, force;
 	local entity ent;
 	//local entity explosion;
 

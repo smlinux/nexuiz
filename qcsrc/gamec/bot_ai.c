@@ -506,9 +506,7 @@ confused
 
 void() bot_path =
 {
-
 	local entity jj, tele;
-	local vector org;
 
 	bot_check_lost(self.target1);
 	if (!self.target1)
@@ -1030,6 +1028,6 @@ void() BotAI =
 
 	if (self.b_aiflags)
 		bot_handle_ai();
-	else
-		bot_chat(); // don't want chat to screw him up if he's rjing or something
+	//else
+	//	bot_chat(); // don't want chat to screw him up if he's rjing or something
 };

@@ -135,7 +135,7 @@ Stuff mimicking sv_user.c
 */
 void() SV_UserFriction =
 {
-	local vector vel, start, stop;
+	local vector vel;
 	local float sped, friction, newspeed;
 
       vel = self.velocity;
