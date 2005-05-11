@@ -102,7 +102,12 @@ void() Item_Nex_MapDB_EnumFiles =
 		lMap = Menu_CreateItem( "Item_Nex_Map_Info", ftos( lSearchCounter ), self.name );
 
 		lMap.link = lName;
-		lMap.picture = lStripped;
+		// check the picture
+		if( Gfx_Precache( lStripped ) ) {
+			lMap.picture = lStripped;
+		} else {
+			lMap.picture = "gfx/m_nomap";
+		}
 		lMap.normal = lTitle;
 		lMap.text = lDescription;
 
