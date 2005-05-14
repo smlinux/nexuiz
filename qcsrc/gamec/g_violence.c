@@ -14,7 +14,7 @@ void GibDamage (entity inflictor, entity attacker, float damage, float deathtype
 	self.health = self.health - damage;
 	if (self.health <= -12)
 	{
-		self.event_damage = nullfunction;
+		self.event_damage = SUB_Null;
 		SUB_VanishOrRemove (self);
 	}
 }
@@ -32,10 +32,7 @@ void GibTouch ()
 void TossGib (entity gib, string mdlname, vector org, vector v, float destroyontouch)
 {
 	if (gib == world)
-	{
 		gib = spawn ();
-		gib.norespawn = TRUE;
-	}
 	gib.classname = "gib";
 	gib.movetype = MOVETYPE_BOUNCE;
 	gib.solid = SOLID_CORPSE;

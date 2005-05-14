@@ -40,7 +40,7 @@ void W_Plasma_Explode (void)
 	WriteCoord (MSG_BROADCAST, 0);
 	WriteByte (MSG_BROADCAST, 155);
 
-	self.event_damage = nullfunction;
+	self.event_damage = SUB_Null;
 	RadiusDamage (self, self.owner, cvar("g_balance_electro_damage"), cvar("g_balance_electro_edgedamage"), cvar("g_balance_electro_radius"), world, cvar("g_balance_electro_force"), IT_ELECTRO);
 	sound (self, CHAN_IMPACT, "weapons/plasmahit.wav", 1, ATTN_NORM);
 

@@ -33,7 +33,7 @@ void W_Rocket_Explode (void)
 {
 	ImpactEffect (self, IT_ROCKET_LAUNCHER);
 
-	self.event_damage = nullfunction;
+	self.event_damage = SUB_Null;
 	RadiusDamage (self, self.owner, cvar("g_balance_rocketlauncher_damage"), cvar("g_balance_rocketlauncher_edgedamage"), cvar("g_balance_rocketlauncher_radius"), world, cvar("g_balance_rocketlauncher_force"), IT_ROCKET_LAUNCHER);
 
 	remove (self);

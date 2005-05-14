@@ -33,12 +33,12 @@ void(float req) w_crylink =
 
 void W_Crylink_Touch (void)
 {
-	self.event_damage = nullfunction;
+	self.event_damage = SUB_Null;
 	//te_smallflash(self.origin);
 	RadiusDamage (self, self.owner, cvar("g_balance_crylink_damage"), cvar("g_balance_crylink_edgedamage"), cvar("g_balance_crylink_radius"), world, cvar("g_balance_crylink_force"), IT_CRYLINK);
-	self.touch = nullfunction;
-	self.norespawn = TRUE;
+	self.touch = SUB_Null;
 	setmodel (self, "models/plasma.mdl");
+	setsize (self, '0 0 0', '0 0 0');
 	self.gravity = 1;
 	self.glow_size = 0;
 	self.glow_color = 0;

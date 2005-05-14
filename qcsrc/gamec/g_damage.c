@@ -109,8 +109,6 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 	if (attacker.team == targ.team)
 	if (teamplay == 1 || (teamplay == 3 && attacker != targ))
 		damage = 0;
-	if (targ.flags & FL_GODMODE)
-		damage = 0;
 	// apply strength multiplier
 	if (attacker.items & IT_STRENGTH)
 	{

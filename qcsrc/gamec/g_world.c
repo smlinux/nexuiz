@@ -588,6 +588,6 @@ void() CheckRules_World =
 		else if (checkrules_leaderfrags == fraglimit - 3)
 			sound(world, CHAN_AUTO, "announcer/3fragsleft.wav", 1, ATTN_NONE);
 	}
-	if (checkrules_leader != checkrules_oldleader && checkrules_leaderfrags > checkrules_oldleaderfrags)
+	if (checkrules_leader != checkrules_oldleader)// && checkrules_leaderfrags > checkrules_oldleaderfrags)
 		bprint("^1",checkrules_leader.netname, " has taken the lead with ", ftos(checkrules_leaderfrags), " frags\n");
 };

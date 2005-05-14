@@ -5,7 +5,7 @@ void() glauncher_select_01;
 
 float() glauncher_check =
 {
-	if (self.ammo_rockets >= 3)
+	if (self.ammo_rockets >= 2)
 		return TRUE;
 	return FALSE;
 };
@@ -32,7 +32,7 @@ void W_Grenade_Explode (void)
 {
 	ImpactEffect (self, IT_GRENADE_LAUNCHER);
 
-	self.event_damage = nullfunction;
+	self.event_damage = SUB_Null;
 	RadiusDamage (self, self.owner, cvar("g_balance_grenadelauncher_damage"), cvar("g_balance_grenadelauncher_edgedamage"), cvar("g_balance_grenadelauncher_radius"), world, cvar("g_balance_grenadelauncher_force"), IT_GRENADE_LAUNCHER);
 
 	remove (self);
@@ -60,7 +60,7 @@ void W_Grenade_Attack (void)
 
 	sound (self, CHAN_WEAPON, "weapons/grenade_fire.wav", 1, ATTN_NORM);
 	self.punchangle_x = -4;
-	self.ammo_rockets = self.ammo_rockets - 3;
+	self.ammo_rockets = self.ammo_rockets - 2;
 	org = self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -12;
 	te_smallflash(org);
 

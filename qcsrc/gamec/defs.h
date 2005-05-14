@@ -61,7 +61,6 @@ entity dest;
 .string playermodel;
 .string playerskin;
 
-.float	norespawn;
 .float	respawntime;
 //.float	chasecam;
 

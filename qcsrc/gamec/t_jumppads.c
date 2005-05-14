@@ -44,7 +44,7 @@ void() trigger_push_touch =
 
 	if (self.spawnflags & PUSH_ONCE)
 	{
-		self.touch = nullfunction;
+		self.touch = SUB_Null;
 		self.think = SUB_Remove;
 		self.nextthink = time;
 	}

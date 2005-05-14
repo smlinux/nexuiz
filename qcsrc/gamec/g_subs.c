@@ -1,4 +1,4 @@
-nosave var void nullfunction (void);
+void() SUB_Null = {};
 
 void(vector destangle, float tspeed, void() func) SUB_CalcAngleMove;
 void()  SUB_CalcMoveDone;
@@ -26,20 +26,20 @@ void SUB_Remove (void)
 ==================
 SUB_VanishOrRemove
 
-Makes ent invisible or removes it if ent.norespawn
+Makes client invisible or removes non-client
 ==================
 */
 void SUB_VanishOrRemove (entity ent)
 {
-	if (ent.norespawn)
-	{
-		// remove
-		remove (ent);
-	}
-	else
+	if (ent.flags & FL_CLIENT)
 	{
 		// vanish
 		ent.effects = EF_NODRAW;
+	}
+	else
+	{
+		// remove
+		remove (ent);
 	}
 }
 

@@ -50,7 +50,7 @@ void W_Laser_Touch (void)
 	te_customflash(self.origin, 160, 0.2, '1 0 0');
 
 
-	self.event_damage = nullfunction;
+	self.event_damage = SUB_Null;
 	RadiusDamage (self, self.owner, cvar("g_balance_laser_damage"), cvar("g_balance_laser_edgedamage"), cvar("g_balance_laser_radius"), world, cvar("g_balance_laser_force"), IT_LASER);
 	sound (self, CHAN_IMPACT, "weapons/laserimpact.wav", 1, ATTN_NORM);
 

@@ -33,7 +33,6 @@ void CopyBody(float keepvelocity)
 	self.modelindex = oldself.modelindex;
 	self.movetype = oldself.movetype;
 	self.nextthink = oldself.nextthink;
-	self.norespawn = TRUE;
 	self.skin = oldself.skin;
 	self.solid = oldself.solid;
 	self.takedamage = oldself.takedamage;
@@ -109,10 +108,11 @@ void SpawnThrownWeapon (vector org, float w)
 
 	oldself = self;
 	self = spawn();
+	// this will cause it to be removed later
+	self.classname = "droppedweapon";
 
 	setorigin(self, org);
 	self.velocity = randomvec() * 100 + '0 0 200';
-	self.norespawn = 1;
 	//SUB_SetFade(self, time + 20);
 
 	if (w == WEP_UZI)
@@ -198,7 +198,6 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 
 	save = bound(0, damage * 0.6, self.armorvalue);
 	take = bound(0, damage - save, damage);
-	self.armorvalue = self.armorvalue - save;
 
 	if (save > 10)
 		sound (self, CHAN_BODY, "misc/armorimpact.wav", 1, ATTN_NORM);
@@ -212,9 +211,13 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 	if (take > 100)
 		TossGib (world, "models/gibs/chunk.mdl", hitloc, force * -0.1,1);
 
-	self.health = self.health - take;
-	self.dmg_save = self.dmg_save + save * 0.25;
-	self.dmg_take = self.dmg_take + take * 0.25;
+	if (!(self.flags & FL_GODMODE))
+	{
+		self.armorvalue = self.armorvalue - save;
+		self.health = self.health - take;
+	}
+	self.dmg_save = self.dmg_save + max(save - 10, 0);
+	self.dmg_take = self.dmg_take + max(take - 10, 0);
 	self.dmg_inflictor = inflictor;
 	if (self.health <= 2)
 	{

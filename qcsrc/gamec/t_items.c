@@ -40,9 +40,8 @@ void Item_Touch (void)
 	// probably want to switch to an even better weapon after items are given
 	_switchweapon = other.switchweapon == w_getbestweapon(other);
 
-	if (self.ammo_shells){
+	if (self.ammo_shells)
 		other.ammo_shells = min (other.ammo_shells + self.ammo_shells, 999);
-	}
 	if (self.ammo_nails)
 		other.ammo_nails = min (other.ammo_nails + self.ammo_nails, 999);
 	if (self.ammo_rockets)
@@ -85,7 +84,7 @@ void Item_Touch (void)
 
 	self = oldself;
 
-	if (self.norespawn)
+	if (self.classname == "droppedweapon")
 		remove (self);
 	else
 	{
@@ -135,15 +134,17 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 	self.touch = Item_Touch;
 
 	if (itemflags & FL_POWERUP)
-	{
 		self.effects = self.effects | EF_ADDITIVE;
-	}
 
 	// Savage: remove thrown items after a certain period of time ("garbage collection")
-	if(self.norespawn) {
+	if (self.classname == "droppedweapon")
+	{
 		self.think = RemoveItem;
 		self.nextthink = time + 60;
 	}
+
+	if (cvar("g_fullbrightitems"))
+		self.effects = self.effects | EF_FULLBRIGHT;
 
 }
 

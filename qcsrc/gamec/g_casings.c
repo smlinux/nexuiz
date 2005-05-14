@@ -5,7 +5,7 @@ void() casingtouch =
 	if (time >= self.attack_finished)
 	sound (self, CHAN_WEAPON, "weapons/tink1.wav", 0.5, ATTN_NORM);
 	self.attack_finished = time + 0.2;
-	//self.touch = nullfunction; // one tink is enough
+	//self.touch = SUB_Null; // one tink is enough
 	//self.dest = self.origin - self.groundentity.origin;
 };
 
