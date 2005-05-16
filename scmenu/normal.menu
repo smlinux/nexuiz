@@ -1,10 +1,16 @@
 // Property of Alientrap
 //
 // Normal main menu
+Item Task_Job WelcomeSound
+{
+	target	"announcer/welcometonexuiz.wav"
+	reinit	Nex_Action_PlaySoundOnce
+}
 Item Window Normal
 {
 	key	Nex_Global_Key
 	size	'1024 768'
+
 	Derive Rect Modulate
 	{
 		color		'0.6 0.6 0.7'

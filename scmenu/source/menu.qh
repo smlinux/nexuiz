@@ -25,7 +25,7 @@ bool Menu_Active;	// is set when the menu is active
 float gamestatus;
 
 //#define USEFUNCTIONS
-#define UTILALTSTRING
+//#define UTILALTSTRING
 
 #pragma keyword enable ifstring
 

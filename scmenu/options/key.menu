@@ -12,14 +12,14 @@ Item Window KeyControl
 
 	Item Layout Layout
 	{
-		size	  '700 600'
-		origin	  '380 0'
-		alignment [AlignCenter]
-		direction [Nex_DefaultVertDirection]
-		flag	  [FlagEmbedded]
+		pos		'30 0'
+		size	 	'700 600'
+		direction 	[Nex_DefaultVertDirection]
+		flag	  	[FlagEmbedded]
 
 		Derive MultiLabel Description
 		{
+			pos	'0 50'
 			size 	'600 24'
 			text
 	"Press [Enter] or [Mouse1] to change a key binding.\nPress [Delete] to remove the binding."
@@ -28,6 +28,7 @@ Item Window KeyControl
 		// table: name key1 key2
 		Item Layout TableDesc
 		{
+			pos	'0 0'
 			size	'600 15'
 			direction '10 0'
 
