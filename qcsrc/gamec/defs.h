@@ -55,6 +55,7 @@ entity dest;
 .float dead_frame;
 .float die_frame;
 .float fade_time;
+.float fade_rate;
 
 .string mdl;
 

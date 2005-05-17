@@ -47,11 +47,10 @@ void SUB_SetFade_Think (void)
 {
 	self.think = SUB_SetFade_Think;
 	self.nextthink = self.fade_time;
-	self.alpha = 1 - (time - self.fade_time) * 0.5;
-	if (self.alpha > 1)
-		self.alpha = 1;
-	if (self.alpha < 0.01)	// don't let it reach 0, lest it become fully visible again
+	self.alpha = 1 - (time - self.fade_time) * self.fade_rate;
+	if (self.alpha < 0.01)
 		SUB_VanishOrRemove(self);
+	self.alpha = bound(0.01, self.alpha, 1);
 }
 
 /*
@@ -61,11 +60,12 @@ SUB_SetFade
 Fade 'ent' out when time >= 'when'
 ==================
 */
-void SUB_SetFade (entity ent, float when)
+void SUB_SetFade (entity ent, float when, float fadetime)
 {
 	//if (ent.flags & FL_CLIENT) // && ent.deadflag != DEAD_NO)
 	//	return;
 	//ent.alpha = 1;
+	ent.fade_rate = 1/fadetime;
 	ent.fade_time = when;
 	ent.think = SUB_SetFade_Think;
 	ent.nextthink = when;

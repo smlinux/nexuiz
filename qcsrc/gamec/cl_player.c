@@ -113,7 +113,7 @@ void SpawnThrownWeapon (vector org, float w)
 
 	setorigin(self, org);
 	self.velocity = randomvec() * 100 + '0 0 200';
-	//SUB_SetFade(self, time + 20);
+	SUB_SetFade(self, time + 20, 1);
 
 	if (w == WEP_UZI)
 		weapon_uzi ();
@@ -264,7 +264,7 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 		// call the corpse damage function just in case it wants to gib
 		self.event_damage(inflictor, attacker, 0, deathtype, hitloc, force);
 		// set up to fade out later
-		SUB_SetFade (self, time + 12 + random () * 4);
+		SUB_SetFade (self, time + 12 + random () * 4, 1);
 	}
 }
 

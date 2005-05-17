@@ -45,7 +45,7 @@ void W_Crylink_Touch (void)
 	self.think = SUB_Remove;
 	//self.movetype = MOVETYPE_NONE;
 	self.effects = EF_LOWPRECISION;
-	SUB_SetFade(self, time);
+	SUB_SetFade(self, time, 1);
 	//remove (self);
 }
 
