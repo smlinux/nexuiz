@@ -317,13 +317,18 @@ void() GotoNextMap =
 		local string line;
 
 		// restart current map if no cycle is found
-		nextmap = mapname;
+		nextmap = strzone(mapname);
 		fh = fopen("maplist.cfg", FILE_READ);
 		if (fh >= 0)
 		{
 			while (1)
 			{
 				line = fgets(fh);
+				if (nextmap == mapname)
+				{
+					strunzone(nextmap);
+					nextmap = strzone(line);
+				}
 				if (!line)
 					break;
 				if (line == mapname)
@@ -331,13 +336,15 @@ void() GotoNextMap =
 					line = fgets(fh);
 					if (!line)
 						break;
-					nextmap = line;
+					strunzone(nextmap);
+					nextmap = strzone(line);
 					break;
 				}
 			}
 			fclose(fh);
 		}
 		changelevel (nextmap);
+		strunzone(nextmap);
 
 		// method 2
 		//nextmap = Nex_RotateMapList();
