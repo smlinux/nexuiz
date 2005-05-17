@@ -23,16 +23,15 @@ void Item_Touch (void)
 	local entity oldself;
 	local float	_switchweapon;
 
-	// Savage: Remove the respawn effect if still present
-	if(self.effects == EF_STARDUST) self.effects = 0;
-
+	if (other.classname != "player")
+		return;
+	if (other.deadflag)
+		return;
 	if (self.solid != SOLID_TRIGGER)
 		return;
-
-	if (other.classname != "player" && other.classname != "bot")
-		return;
-	if (other.health <= 0)
-		return;
+	// Savage: Remove the respawn effect if still present
+	if(self.effects == EF_STARDUST)
+		self.effects = 0;
 
 	sound (self, CHAN_BODY, self.noise, 1, ATTN_NORM);
 
