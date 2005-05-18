@@ -39,6 +39,8 @@ void CopyBody(float keepvelocity)
 	self.think = oldself.think;
 	if (keepvelocity == 1)
 		self.velocity = oldself.velocity;
+	self.fade_time = oldself.fade_time;
+	self.fade_rate = oldself.fade_rate;
 	//self.weapon = oldself.weapon;
 	setorigin(self, oldself.origin);
 	setsize(self, '-16 -16 -24',  '16 16 5');
