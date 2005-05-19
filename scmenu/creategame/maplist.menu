@@ -21,7 +21,7 @@ Item Window MapList
 	Derive Label CycleLabel
 	{
 		pos	'475 0'
-		text	"Cycle List or some other name:"
+		text	"Cycle List:"
 	}
 	Derive List Cycle
 	{

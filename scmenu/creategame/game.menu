@@ -84,7 +84,7 @@ Item Layout Game
 	}
 	Derive Nex_Option_EditBox ArmorRott
 	{
-		text	"Armor Rott Speed"
+		text	"Armor Rot Speed"
 		target	"Data::Game::ArmorRott::Text"
 	}
 	Derive Nex_Option_EditBox ArmorRegen
