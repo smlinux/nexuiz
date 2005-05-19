@@ -52,6 +52,7 @@ void worldspawn (void)
 	precache_model ("models/plasma.mdl");
 	precache_model ("models/plasmatrail.mdl");
 	precache_model ("models/tracer.mdl");
+	precache_model ("models/uziflash.md3");
 
 	precache_model ("models/items/g_h1.md3");
 	precache_model ("models/items/g_h25.md3");

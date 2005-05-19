@@ -32,6 +32,7 @@ void(float req) w_uzi =
 void W_Uzi_Attack (void)
 {
 	local vector org;
+	entity flash;
 	sound (self, CHAN_WEAPON, "weapons/uzi_fire.wav", 1, ATTN_NORM);
 	self.ammo_nails = self.ammo_nails - 1;
 	self.punchangle_x = random () - 0.5;
@@ -52,6 +53,18 @@ void W_Uzi_Attack (void)
 		org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 8) + (v_forward * 10);
 		SpawnCasing (org, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 + 10) * v_up), 2, v_forward,'0 250 0', 100, 2);
 	}
+
+	flash = spawn ();
+	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 10) + (v_forward * 40);
+	setorigin (flash, org);
+	setmodel (flash, "models/uziflash.md3");
+	flash.velocity = v_forward * 20;
+	flash.angles = vectoangles (flash.velocity);
+	flash.angles_z=flash.v_angle_z + random () * 180; 
+	flash.scale = 0.75;
+	SUB_SetFade (flash, time, 0.2);
+	flash.effects = flash.effects | EF_ADDITIVE | EF_FULLBRIGHT;
+
 }
 // weapon frames
 

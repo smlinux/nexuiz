@@ -90,7 +90,6 @@ void() W_Electro_Attack
 		self.electrocount = 0;
 		org = self.origin + self.view_ofs + v_forward * 15 + v_right * 15 + v_up * -14;
 	}
-	te_smallflash(org);
 
 	proj = spawn ();
 	proj.classname = "plasma";

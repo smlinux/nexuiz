@@ -62,7 +62,6 @@ void W_Grenade_Attack (void)
 	self.punchangle_x = -4;
 	self.ammo_rockets = self.ammo_rockets - 2;
 	org = self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -12;
-	te_smallflash(org);
 
 	gren = spawn ();
 	gren.owner = self;
