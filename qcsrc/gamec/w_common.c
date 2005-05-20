@@ -401,6 +401,7 @@ void FireRailgunBullet (vector src, float bdamage, vector dir, float spread, flo
 }
 */
 
+vector railgun_hitlocation;
 void FireRailgunBullet (vector start, vector end, float bdamage, float deathtype)
 {
 	local vector hitloc, force;
@@ -413,26 +414,6 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float deathtype
 	traceline (start, end, TRUE, self);
 	// go a little bit into the wall because we need to hit this wall later
 	end = trace_endpos + normalize(end - start);
-
-	// flash and burn the wall
-	te_plasmaburn (trace_endpos);
-
-	/*
-	// flame effect at impact
-	dir = trace_plane_normal * 100;
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_FLAMEJET);
-	WriteCoord (MSG_BROADCAST, trace_endpos_x);
-	WriteCoord (MSG_BROADCAST, trace_endpos_y);
-	WriteCoord (MSG_BROADCAST, trace_endpos_z);
-	WriteCoord (MSG_BROADCAST, dir_x);
-	WriteCoord (MSG_BROADCAST, dir_y);
-	WriteCoord (MSG_BROADCAST, dir_z);
-	WriteByte (MSG_BROADCAST, 255);
-	*/
-	// play a sound
-	PointSound (trace_endpos, "weapons/neximpact.wav", 1, ATTN_NORM);
-
 
 	// trace multiple times until we hit a wall, each obstacle will be made
 	// non-solid so we can hit the next, while doing this we spawn effects and

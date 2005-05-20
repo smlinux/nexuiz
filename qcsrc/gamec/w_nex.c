@@ -38,24 +38,45 @@ void W_Nex_Attack (void)
 	sound (self, CHAN_WEAPON, "weapons/nexfire.wav", 1, ATTN_NORM);
 	self.punchangle_x = -5;
 	org = self.origin + self.view_ofs + v_forward * 5 + v_right * 14 + v_up * -7;
-
-	FireRailgunBullet (org, self.origin + self.view_ofs + v_forward * 4096, cvar("g_balance_nex_damage"), IT_NEX);
-
-	org = self.origin + self.view_ofs + v_forward * 28 + v_right * 14 + v_up * -7;
 	end = self.origin + self.view_ofs + v_forward * 4096;
-	te_smallflash(org);
+
+	FireRailgunBullet (org, end, cvar("g_balance_nex_damage"), IT_NEX);
+
+	// trace as if shot started inside gun
+	traceline (org, end, TRUE, self);
+	// show as if shot started outside of gun
+	org = self.origin + self.view_ofs + v_forward * 28 + v_right * 14 + v_up * -7;
+	// muzzleflash light
+	te_smallflash (org);
 	// beam effect
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 	WriteByte (MSG_BROADCAST, 76);
 	WriteCoord (MSG_BROADCAST, org_x);
 	WriteCoord (MSG_BROADCAST, org_y);
 	WriteCoord (MSG_BROADCAST, org_z);
-	WriteCoord (MSG_BROADCAST, end_x);
-	WriteCoord (MSG_BROADCAST, end_y);
-	WriteCoord (MSG_BROADCAST, end_z);
+	WriteCoord (MSG_BROADCAST, trace_endpos_x);
+	WriteCoord (MSG_BROADCAST, trace_endpos_y);
+	WriteCoord (MSG_BROADCAST, trace_endpos_z);
 	WriteCoord (MSG_BROADCAST, 0);
 	WriteCoord (MSG_BROADCAST, 0);
 	WriteCoord (MSG_BROADCAST, 0);
+	// flash and burn the wall
+	te_plasmaburn (trace_endpos);
+	/*
+	// flame effect at impact
+	dir = trace_plane_normal * 100;
+	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+	WriteByte (MSG_BROADCAST, TE_FLAMEJET);
+	WriteCoord (MSG_BROADCAST, trace_endpos_x);
+	WriteCoord (MSG_BROADCAST, trace_endpos_y);
+	WriteCoord (MSG_BROADCAST, trace_endpos_z);
+	WriteCoord (MSG_BROADCAST, dir_x);
+	WriteCoord (MSG_BROADCAST, dir_y);
+	WriteCoord (MSG_BROADCAST, dir_z);
+	WriteByte (MSG_BROADCAST, 255);
+	*/
+	// play a sound
+	PointSound (trace_endpos, "weapons/neximpact.wav", 1, ATTN_NORM);
 
 	if (cvar("g_instagib") == 0)
 		self.ammo_cells = self.ammo_cells - 5;
