@@ -54,6 +54,24 @@ entity SelectSpawnPoint (void)
 	return spot;
 }
 
+/*
+=============
+CheckPlayerModel
+
+Checks if the argument string can be a valid playermodel.
+Returns a valid one in doubt.
+=============
+*/
+string CheckPlayerModel(string playermodel) {
+	if( substring(playermodel,0,14) != "models/player/") playermodel = "models/player/marine.zym";
+
+	/* Possible Fixme: Check if server can open the model?
+	   This would kill, custom models, however. */
+
+	return playermodel;
+
+}
+
 
 /*
 =============
@@ -105,8 +123,8 @@ void PutClientInServer (void)
 
 	self.viewzoom = 0.6;
 
-	// Savage: Insufficient check for invalid playermodels
-	if( substring(self.playermodel,0,14) != "models/player/") self.playermodel = "models/player/marine.zym";
+	
+	self.playermodel = CheckPlayerModel(self.playermodel);
 
 	precache_model (self.playermodel);
 	setmodel (self, self.playermodel);
@@ -549,6 +567,7 @@ void PlayerPreThink (void)
 
 	if (self.playermodel != self.model)
 	{
+		self.playermodel = CheckPlayerModel(self.playermodel);
 		m1 = self.mins;
 		m2 = self.maxs;
 		precache_model (self.playermodel);
