@@ -106,7 +106,7 @@ void PutClientInServer (void)
 	self.viewzoom = 0.6;
 
 	// Savage: Insufficient check for invalid playermodels
-	if(strlen(self.playermodel) < 15) self.playermodel = "models/player/marine.zym";
+	if( substring(self.playermodel,0,14) != "models/player/") self.playermodel = "models/player/marine.zym";
 
 	precache_model (self.playermodel);
 	setmodel (self, self.playermodel);
