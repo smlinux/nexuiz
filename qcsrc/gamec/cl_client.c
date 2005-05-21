@@ -66,10 +66,9 @@ string CheckPlayerModel(string playermodel) {
 	if( substring(playermodel,0,14) != "models/player/") playermodel = "models/player/marine.zym";
 
 	/* Possible Fixme: Check if server can open the model?
-	   This would kill, custom models, however. */
+	   This would kill custom models, however. */
 
 	return playermodel;
-
 }
 
 
