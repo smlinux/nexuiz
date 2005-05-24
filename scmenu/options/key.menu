@@ -197,6 +197,11 @@ Item Window KeyControl
 						text 	"Next Weapon"
 						target	"Data::Key::NextWeapon"
 					}
+					Derive Nex_Key_Template Zoom
+					{
+						text 	"Zoom"
+						target	"Data::Key::Zoom"
+					}
 					Derive Nex_Void Seperator2
 					{}
 					Derive Title Weapons

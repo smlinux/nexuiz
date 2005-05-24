@@ -55,6 +55,11 @@ Item DataContainer Key
 		target		"impulse 10"
 		defValue	"'MWHEELUP'"
 	}
+	Item Data_Nex_Key Zoom
+	{
+		target		"+zoom"
+		defValue	"'Mouse3'"
+	}
 	Item DataContainer Weapon
 	{
 		Item Data_Nex_Key Laser
