@@ -336,6 +336,9 @@ float( entity pItem, float pMode, float pSelectMode, float pKey, float pAscii ) 
 void() Menu_Frame =
 {
 	Sys_Debug_Frame();
+	if( sys_debug_halt ) {
+		return;
+	}
 
 	Menu_UpdateRunFlags();
 
@@ -366,6 +369,9 @@ void() Menu_Frame =
 
 void() Menu_Draw =
 {
+	if( sys_debug_halt ) {
+		return;
+	}
 	// if Menu_ActiveWindow is visible loop though it
 	if( Menu_IsVisible( Menu_ActiveWindow ) )
 	{
@@ -378,6 +384,10 @@ void() Menu_Draw =
 
 void( float pKey, float pAscii) Menu_Key =
 {
+	if( sys_debug_halt ) {
+		return;
+	}
+
 	// is a keyhook set ?
 	if( Menu_KeyHook != Util_NullFunction ) {
 		// call it

@@ -35,7 +35,7 @@ Sys_Debug_Frame
 */
 void() Sys_Debug_Frame =
 {
-	local float lTemp1, lTemp2;
+	local float lTemp1, lTemp2, lStep;
 	sys_debug = cvar( SYSTEM_CVAR_DEBUG );
 	if( sys_debug ) {
 		sys_debug_ref = cvar( SYSTEM_CVAR_DEBUG_REF );
@@ -48,9 +48,16 @@ void() Sys_Debug_Frame =
 
 		sys_debug_mouse = cvar( SYSTEM_CVAR_DEBUG_MOUSE );
 
-		if( cvar( SYSTEM_CVAR_DEBUG_STEP ) ) {
-			m_hide();
+		lStep = cvar( SYSTEM_CVAR_DEBUG_STEP );
+		if( lStep == 1 ) {
+			sys_debug_halt = true;
+		} else if( lStep == 2 ) {
+			sys_debug_halt = false;
+			cvar_set( SYSTEM_CVAR_DEBUG_STEP, "1" );
+
 			print( "Menu: -- Step: Time:", ftos( gettime() ), "\n" );
+		} else {
+			sys_debug_halt = false;
 		}
 
 		sys_debug_runflag = cvar( SYSTEM_CVAR_DEBUG_RUNFLAG );
@@ -116,6 +123,7 @@ void() Sys_Debug_Frame =
 
 
 	} else {
+		sys_debug_halt = false;
 		sys_debug_ref = false;
 		sys_debug_area = false;
 		sys_debug_sound = false;

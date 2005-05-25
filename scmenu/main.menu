@@ -6,7 +6,12 @@ Item Arrangement Main
 	pos		'29 30'
 	direction 	'10 0'
 
-	Derive PictureButton Join
+	DeriveTemplate PictureButton MainButton
+	{
+		soundPressed 	"misc/menu2.wav"
+	}
+
+	Derive MainButton Join
 	{
 		//normal "Join Game"
 		normal		"$gfx/m_top_joingame"
@@ -15,7 +20,7 @@ Item Arrangement Main
 		target	"JoinGame"
 		action	Nex_Action_JumpToJoinGame
 	}
-	Derive PictureButton Create
+	Derive MainButton Create
 	{
 		//normal 	"Create Game"
 		normal		"$gfx/m_top_creategame"
@@ -24,7 +29,7 @@ Item Arrangement Main
 		target 	"CreateGame"
 		init	Nex_Action_SetNormalPanelLink
 	}
-	Derive PictureButton Options
+	Derive MainButton Options
 	{
 		//normal 	"Options"
 		normal		"$gfx/m_top_options"
@@ -33,7 +38,7 @@ Item Arrangement Main
 		target	"Options"
 		init	Nex_Action_SetNormalPanelLink
 	}
-	Derive PictureButton Credits
+	Derive MainButton Credits
 	{
 		//normal	"Credits"
 		normal		"$gfx/m_top_credits"
@@ -41,7 +46,7 @@ Item Arrangement Main
 
 		action		Nex_Credits_Action
 	}
-	Derive PictureButton Quit
+	Derive MainButton Quit
 	{
 		//normal "Quit"
 		normal		"$gfx/m_top_quit"

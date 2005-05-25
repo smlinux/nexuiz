@@ -32,6 +32,9 @@ void( float pEvent ) Item_DataLink_TextSwitch_DataEvent =
 			if( String_Normal( Util_GetAltStringItem( self.valueList, lPos ) ) == self._link.value )
 				break;
 
+		if( lPos == lCount ) {
+			lPos = 0;
+		}
 		self._realValue = lPos;
 		String_EntitySet( self, value, String_Normal( Util_GetAltStringItem( self.descList, lPos ) ) );
 	} else

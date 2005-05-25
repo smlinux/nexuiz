@@ -28,4 +28,4 @@ float gamestatus;
 //#define UTILALTSTRING
 
 #pragma keyword enable ifstring
-
+#pragma keyword enable lo

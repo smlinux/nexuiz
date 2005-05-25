@@ -17,6 +17,8 @@ const string 	SYSTEM_CVAR_DEBUG		= "scmenu_debug";
 const string 	SYSTEM_CVAR_DEBUG_REF 		= "scmenu_debug_ref";
 const string 	SYSTEM_CVAR_DEBUG_SOUND		= "scmenu_debug_sound";
 const string 	SYSTEM_CVAR_DEBUG_AREA		= "scmenu_debug_area";
+
+// 0 for normal, 1 for halted, 2 for new step
 const string	SYSTEM_CVAR_DEBUG_STEP		= "scmenu_debug_step";
 
 // 0 for no info, 1 for local position, 2 for absolute position
@@ -62,6 +64,8 @@ bool sys_debug_mgfx;
 float sys_debug_mouse;
 float sys_debug_structure;
 float sys_debug_parser;
+
+bool sys_debug_halt;
 
 float sys_debug_process_filter;
 

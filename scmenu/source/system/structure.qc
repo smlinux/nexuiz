@@ -349,12 +349,15 @@ bool( entity pEntity, float pRunFlag ) Menu_HasRunFlag =
 entity( entity pOrigin, string pName, bool pThrow ) Menu_GetItemEx =
 {
 	local entity lItem;
+	local string lFirstTwo;
+
+	lFirstTwo = substring( pName, 0, 2 );
 
 	// FIXME: perhaps add another function or do this in some other way
-	if( substring( pName, 0, 2 ) == "::" )
+	if( lFirstTwo == "::" )
 		lItem = findstring( null_entity,  name, substring( pName, 2, 100000 ) );
 	// support for direction tokens, init token ##
-	else if( substring( pName, 0, 2 ) == "##" ) {
+	else if( lFirstTwo == "##" ) {
 		local string lToken;
 		local float lCount, lCounter;
 		lItem = pOrigin;
@@ -466,12 +469,18 @@ void( entity pItem ) _Menu_PrintRunFlag =
 
 void( entity pItem ) Menu_SetRunFlag =
 {
+	local float lFlag;
+	local float lRunFlag;
+
+	lFlag = pItem.flag;
+
 	// RUNFLAG_TEMPLATE
-	if( pItem.flag & FLAG_TEMPLATE )
+	if( lFlag & FLAG_TEMPLATE )
 		pItem._runFlag = pItem._runFlag | RUNFLAG_TEMPLATE;
 	// RUNFLAG_HADMOUSE,
-	if( pItem._runFlag & RUNFLAG_MOUSEINAREA )
-		pItem._runFlag = (pItem._runFlag - RUNFLAG_MOUSEINAREA) | RUNFLAG_HADMOUSE;
+	lRunFlag = pItem._runFlag;
+	if(lRunFlag & RUNFLAG_MOUSEINAREA )
+		pItem._runFlag = (lRunFlag - RUNFLAG_MOUSEINAREA) | RUNFLAG_HADMOUSE;
 	// RUNFLAG_MOUSEINAREA,
 	// these will be handled in MENU_PROCESS_MOUSE
 	// RUNFLAG_CHILDDRAWONLY,
@@ -484,22 +493,24 @@ void( entity pItem ) Menu_SetRunFlag =
 	if( Menu_Clip_Size == '0 0 0' && Menu_Clip_Position != '0 0 0' )
 		pItem._runFlag = pItem._runFlag | RUNFLAG_CLIPPED;
 	// RUNFLAG_HIDDEN
-	if( ( pItem.flag & FLAG_HIDDEN  ) ||
-	    ( pItem._runFlag & RUNFLAG_TEMPLATE ) ||
-	    ( ( pItem.flag & FLAG_SERVERONLY ) && !( gamestatus & GAME_ISSERVER ) ) ||
-	    ( ( pItem.flag & FLAG_CONNECTEDONLY ) && !( gamestatus & GAME_CONNECTED ) ) ||
-	    ( ( pItem.flag & FLAG_DEVELOPERONLY ) && !( gamestatus & GAME_DEVELOPER ) ) )
-		pItem._runFlag = pItem._runFlag | RUNFLAG_HIDDEN;
+	lRunFlag = pItem._runFlag;
+	if( ( lFlag & FLAG_HIDDEN  ) ||
+	    ( lRunFlag & RUNFLAG_TEMPLATE ) ||
+	    ( ( lFlag & FLAG_SERVERONLY ) && !( gamestatus & GAME_ISSERVER ) ) ||
+	    ( ( lFlag & FLAG_CONNECTEDONLY ) && !( gamestatus & GAME_CONNECTED ) ) ||
+	    ( ( lFlag & FLAG_DEVELOPERONLY ) && !( gamestatus & GAME_DEVELOPER ) ) )
+		pItem._runFlag = lRunFlag | RUNFLAG_HIDDEN;
 	// RUNFLAG_NOSELECT
-	if( ( pItem.flag & FLAG_NOSELECT ) ||
-	    ( pItem.flag & FLAG_DRAWONLY ) ||
-	    ( pItem.flag & FLAG_DRAWUPDATEONLY ) ||
-	    ( pItem.flag & FLAG_EMBEDDED ) ||
-	    ( pItem._runFlag & RUNFLAG_TEMPLATE ) ||
-	    ( pItem._runFlag & RUNFLAG_HIDDEN ) ||
-	    ( pItem._runFlag & RUNFLAG_CHILDDRAWONLY ) ||
-	    ( pItem._runFlag & RUNFLAG_CHILDDRAWUPDATEONLY ) )
-		pItem._runFlag = pItem._runFlag | RUNFLAG_NOSELECT;
+	lRunFlag = pItem._runFlag;
+	if( ( lFlag & FLAG_NOSELECT ) ||
+	    ( lFlag & FLAG_DRAWONLY ) ||
+	    ( lFlag & FLAG_DRAWUPDATEONLY ) ||
+	    ( lFlag & FLAG_EMBEDDED ) ||
+	    ( lRunFlag & RUNFLAG_TEMPLATE ) ||
+	    ( lRunFlag & RUNFLAG_HIDDEN ) ||
+	    ( lRunFlag & RUNFLAG_CHILDDRAWONLY ) ||
+	    ( lRunFlag & RUNFLAG_CHILDDRAWUPDATEONLY ) )
+		pItem._runFlag = lRunFlag | RUNFLAG_NOSELECT;
 
 	_Menu_PrintRunFlag( pItem );
 };
