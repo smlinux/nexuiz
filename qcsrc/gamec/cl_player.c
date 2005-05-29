@@ -43,7 +43,8 @@ void CopyBody(float keepvelocity)
 	self.fade_rate = oldself.fade_rate;
 	//self.weapon = oldself.weapon;
 	setorigin(self, oldself.origin);
-	setsize(self, '-16 -16 -24',  '16 16 5');
+	setsize(self, oldself.mins, oldself.maxs);//'-16 -16 -24',  '16 16 5');
+	self.oldorigin = oldself.origin;
 	self = oldself;
 }
 
@@ -52,7 +53,11 @@ void player_anim (void)
 	if (self.deadflag != DEAD_NO)
 	{
 		if (time > self.dead_time)
+		{
+			if (self.maxs_z > 5)
+				setsize(self, '-16 -16 -24', '16 16 5');
 			self.frame = self.dead_frame;
+		}
 		else
 			self.frame = self.die_frame;
 		return;
