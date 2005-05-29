@@ -36,6 +36,8 @@ void TossGib (entity gib, string mdlname, vector org, vector v, float destroyont
 	gib.classname = "gib";
 	gib.movetype = MOVETYPE_BOUNCE;
 	gib.solid = SOLID_CORPSE;
+	gib.skin = 0;
+	gib.effects = 0;
 
 	setmodel (gib, mdlname);
 	setsize (gib, '-8 -8 -8', '8 8 8');
