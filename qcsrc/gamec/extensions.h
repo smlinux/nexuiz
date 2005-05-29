@@ -548,6 +548,58 @@ float SOLID_CORPSE = 5;
 //description:
 //the engine supports .spr32 sprites.
 
+//DP_SV_BOTCLIENT
+//idea: LordHavoc
+//darkplaces implementation: LordHavoc
+//constants:
+float CLIENTTYPE_DISCONNECTED = 0;
+float CLIENTTYPE_REAL = 1;
+float CLIENTTYPE_BOT = 2;
+float CLIENTTYPE_NOTACLIENT = 3;
+//builtin definitions:
+entity() spawnclient = #454; // like spawn but for client slots (also calls relevant connect/spawn functions), returns world if no clients available
+float(entity clent) clienttype = #455; // returns one of the CLIENTTYPE_* constants
+//description:
+//spawns a client with no network connection, to allow bots to use client slots with no hacks.
+//How to use:
+/*
+	// to spawn a bot
+	local entity oldself;
+	oldself = self;
+	self = spawnclient();
+	if (!self)
+	{
+		bprint("Can not add bot, server full.\n");
+		self = oldself;
+		return;
+	}
+	self.netname = "Yoyobot";
+	self.clientcolors = 12 * 16 + 4; // yellow (12) shirt and red (4) pants
+	ClientConnect();
+	PutClientInServer();
+	self = oldself;
+
+	// to remove all bots
+	local entity head;
+	head = find(world, classname, "player");
+	while (head)
+	{
+		if (clienttype(head) == CLIENTTYPE_BOT)
+			dropclient(head);
+		head = find(head, classname, "player");
+	}
+
+	// to identify if a client is a bot (for example in PlayerPreThink)
+	if (clienttype(self) == CLIENTTYPE_BOT)
+		botthink();
+*/
+//see also DP_SV_CLIENTCOLORS DP_SV_CLIENTNAME DP_SV_DROPCLIENT
+//How it works:
+//creates a new client, calls SetNewParms and stores the parms, and returns the client.
+//this intentionally does not call SV_SendServerinfo to allow the QuakeC a chance to set the netname and clientcolors fields before actually spawning the bot by calling ClientConnect and PutClientInServer manually
+//on level change ClientConnect and PutClientInServer are called by the engine to spawn in the bot (this is why clienttype() exists to tell you on the next level what type of client this is).
+//parms work the same on bot clients as they do on real clients, and do carry from level to level
+
 //DP_SV_CLIENTCOLORS
 //idea: LordHavoc
 //darkplaces implementation: LordHavoc
@@ -880,6 +932,26 @@ string(float n) argv = #442;
 //description:
 //shows that the engine supports the "play2" console command (plays a sound without spatialization).
 
+//PRYDON_CLIENTCURSOR
+//idea: FrikaC
+//darkplaces implementation: LordHavoc
+//effects bit:
+float EF_SELECTABLE = 16384; // allows cursor to highlight entity (brighten)
+//field definitions:
+.float cursor_active; // true if cl_prydoncursor mode is on
+.vector cursor_screen; // screen position of cursor as -1 to +1 in _x and _y (_z unused)
+.vector cursor_trace_start; // position of camera
+.vector cursor_trace_endpos; // position of cursor in world (as traced from camera)
+.entity cursor_trace_ent; // entity the cursor is pointing at (server forces this to world if the entity is currently free at time of receipt)
+//cvar definitions:
+//cl_prydoncursor (0/1+, default 0, 1 and above use cursors named gfx/prydoncursor%03i.lmp - or .tga and such if DP_GFX_EXTERNALTEXTURES is implemented)
+//description:
+//shows that the engine supports the cl_prydoncursor cvar, this puts a clientside mouse pointer on the screen and feeds input to the server for the QuakeC to use as it sees fit.
+//the mouse pointer triggers button4 if cursor is at left edge of screen, button5 if at right edge of screen, button6 if at top edge of screen, button7 if at bottom edge of screen.
+//the clientside trace skips transparent entities (except those marked EF_SELECTABLE).
+//the selected entity highlights only if EF_SELECTABLE is set, a typical selection method would be doubling the brightness of the entity by some means (such as colormod[] *= 2).
+//intended to be used by Prydon Gate.
+
 //TW_SV_STEPCONTROL
 //idea: Transfusion
 //darkplaces implementation: LordHavoc
@@ -895,22 +967,6 @@ string(float n) argv = #442;
 //darkplaces implementation: Black
 .string playermodel; // contains the name of the model set by a client with playermodel
 .string playerskin; // contains the name of the skin set by a client with playerskin
-
-// UNFINISHED section
-//DP_QC_BOTCLIENT
-//idea: LordHavoc
-//darkplaces implementation: LordHavoc
-//builtin definitions:
-// FIXME: these need numbers assigned, and they need to be added to the engine!
-//entity() spawnclient = #; // like spawn but for client slots (also calls relevant connect/spawn functions), returns world if no clients available
-//void(entity e) removeclient = #; // like remove but for client slots (also calls relevant disconnect functions)
-//description:
-//functions to allow bots to use client slots with no hacks, some notes:
-.string netname; //controls name on scoreboard (so be sure to set it for a bot)
-.float frags; //controls score on scoreboard (this is expected)
-.float clientcolors; //controls coloring on scoreboard (this determines player colors exactly like the "color" command, except for using a single number that contains pants and shirt colors (pants + shirt * 16, 0-255 potentially), so be sure to set it for a bot)
-//note also that these fields can be set on a real client to change the relevant settings.
-//see also DP_SV_SETCOLOR extension for another way to manipulate clientcolors (made obsolete by this extension).
 
 //unassigned stuff:  (need to write up specs but haven't yet)
 .vector punchvector; // DP_SV_PUNCHVECTOR
