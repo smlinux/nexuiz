@@ -42,7 +42,7 @@ void Obituary (entity attacker, entity targ, float deathtype)
 			if (!checkrules_firstblood)
 			{
 				checkrules_firstblood = TRUE;
-				sound(world, CHAN_AUTO, "announcer/firstblood.wav", 1, ATTN_NONE);
+				//sound(world, CHAN_AUTO, "announcer/firstblood.wav", 1, ATTN_NONE);
 				bprint("^1",attacker.netname, " drew first blood", "\n");
 			}
 
