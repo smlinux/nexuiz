@@ -161,9 +161,9 @@ void item_bullets (void) {self.ammo_nails = 120;StartItem ("models/items/a_bulle
 void item_cells (void) {self.ammo_cells = 25;StartItem ("models/items/a_cells.md3", "misc/itempickup.wav", 15, "cells", IT_CELLS, 0);}
 void item_shells (void) {self.ammo_shells = 15;StartItem ("models/items/a_shells.md3", "misc/itempickup.wav", 15, "shells", IT_SHELLS, 0);}
 
-void item_armor1 (void) {self.armorvalue = 5;StartItem ("models/items/g_a1.md3", "misc/itempickup.wav", 15, "Armor Shard", 0, 0);}
-void item_armor25 (void) {self.armorvalue = 100;StartItem ("models/items/g_a25.md3", "misc/itempickup.wav", 30, "Armor", 0, 0);}
-void item_health1 (void) {self.max_health = 5;StartItem ("models/items/g_h1.md3", "misc/itempickup.wav", 15, "5 Health", 0, 0);}
+void item_armor1 (void) {self.armorvalue = 5;StartItem ("models/items/g_a1.md3", "misc/armor1.wav", 15, "Armor Shard", 0, 0);}
+void item_armor25 (void) {self.armorvalue = 100;StartItem ("models/items/g_a25.md3", "misc/armor25.wav", 30, "Armor", 0, 0);}
+void item_health1 (void) {self.max_health = 5;StartItem ("models/items/g_h1.md3", "misc/minihealth.wav", 15, "5 Health", 0, 0);}
 void item_health25 (void) {self.max_health = 25;StartItem ("models/items/g_h25.md3", "misc/mediumhealth.wav", 15, "25 Health", 0, 0);}
 void item_health100 (void) {self.max_health = 100;StartItem ("models/items/g_h100.md3", "misc/megahealth.wav", 30, "100 Health", 0, 0);}
 

@@ -33,8 +33,9 @@ void worldspawn (void)
 	precache_model ("models/sprites/plasmahitwall.spr32");
 	precache_model ("models/sprites/muzzleflash.spr32");
 	precache_model ("models/sprites/plasmashot.spr32");
-	precache_model ("models/sprites/dpexplosion1.spr32");
-	precache_model ("models/sprites/dpexplosion2.spr32");
+	precache_model ("models/sprites/rocketexplosion.spr32");
+	precache_model ("models/sprites/hagarexplosion.spr32");
+	precache_model ("models/sprites/grenadeexplosion.spr32");
 
 	precache_model ("models/grenademodel.md3");
 	precache_model ("models/hagarmissile.mdl");
@@ -104,7 +105,6 @@ void worldspawn (void)
 	precache_sound ("weapons/rocket_fire.wav");
 	precache_sound ("weapons/rocket_impact.wav");
 	precache_sound ("weapons/hagar_fire.wav");
-	precache_sound ("weapons/hagar_fire2.wav");
 	precache_sound ("weapons/hagexp1.wav");
 	precache_sound ("weapons/hagexp2.wav");
 	precache_sound ("weapons/hagexp3.wav");
@@ -115,10 +115,11 @@ void worldspawn (void)
 	precache_sound ("weapons/crylink.wav");
 	precache_sound ("weapons/crylink2.wav");
 	precache_sound ("weapons/plasmahit.wav");
-	precache_sound ("weapons/uzi_fire_secondary.wav");
 	precache_sound ("weapons/tink1.wav");
 	precache_sound ("weapons/weapon_switch.wav");
 
+	precache_sound ("misc/armor25.wav");
+	precache_sound ("misc/armor1.wav");
 	precache_sound ("misc/itempickup.wav");
 	precache_sound ("misc/bodyimpact1.wav");
 	precache_sound ("misc/bodyimpact2.wav");
@@ -127,6 +128,7 @@ void worldspawn (void)
 	precache_sound ("misc/teleport.wav");
 	precache_sound ("misc/megahealth.wav");
 	precache_sound ("misc/mediumhealth.wav");
+	precache_sound ("misc/minihealth.wav");
 	precache_sound ("misc/gib.wav");
 	precache_sound ("misc/jumppad.wav");
 	precache_sound ("misc/hitground1.wav");
@@ -139,18 +141,16 @@ void worldspawn (void)
 	precache_sound ("misc/gib_splat03.wav");
 	precache_sound ("misc/gib_splat04.wav");
 	precache_sound ("misc/powerup.wav");
-	precache_sound ("misc/h20hit1.wav");
+	precache_sound ("misc/h20hit.wav");
 
+	precache_sound ("plats/medplat1.wav");
+	precache_sound ("plats/medplat2.wav");
+	
 	precache_sound ("player/slime.wav");
 	precache_sound ("player/lava.wav");
 
-	precache_sound ("announcer/1fragleft.wav");
-	precache_sound ("announcer/2fragsleft.wav");
-	precache_sound ("announcer/3fragsleft.wav");
-	precache_sound ("announcer/1minuteremains.wav");
-	precache_sound ("announcer/firstblood.wav");
-
 	precache_sound ("misc/itemrespawn.wav");
+
 
 
 	// plays music for the level if there is any

@@ -598,7 +598,7 @@ void PlayerPreThink (void)
 	player_regen();
 	player_anim();
 
-	self.angles_y=self.v_angle_y + 90;   // temp
+	//self.angles_y=self.v_angle_y + 90;   // temp
 
 	WaterMove ();
 	if (self.waterlevel == 2)

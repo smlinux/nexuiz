@@ -1210,7 +1210,7 @@ related functions.
 
 void() BotImpulses =
 {
-	local float f;
+/*	local float f;
 	if (self.impulse == 100)
 	{
 		f = cvar("skill");
@@ -1231,7 +1231,8 @@ void() BotImpulses =
 		return;
 
 	self.impulse = 0;
-};
+*/
+ };
 
 
 

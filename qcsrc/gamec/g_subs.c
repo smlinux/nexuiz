@@ -341,18 +341,18 @@ void ImpactEffect (entity ent, float weapontype)
 	if (weapontype == IT_ROCKET_LAUNCHER)
 	{
 		te_explosion (org2);
-		effect (org2, "models/sprites/dpexplosion1.spr32", 0, 20, 40);
+		effect (org2, "models/sprites/rocketexplosion.spr32", 0, 20, 40);
 		sound (ent, CHAN_BODY, "weapons/rocket_impact.wav", 1, ATTN_NORM);
 	}
 	else if (weapontype == IT_GRENADE_LAUNCHER)
 	{
 		te_explosion (org2);
-		effect (org2, "models/sprites/dpexplosion1.spr32", 0, 20, 30);
+		effect (org2, "models/sprites/grenadeexplosion.spr32", 0, 20, 30);
 		sound (ent, CHAN_BODY, "weapons/grenade_impact.wav", 1, ATTN_NORM);
 	}
 	else if (weapontype == IT_HAGAR)
 	{
-		effect (org2, "models/sprites/dpexplosion2.spr32", 0, 20, 30);
+		effect (org2, "models/sprites/hagarexplosion.spr32", 0, 20, 30);
 		b = crandom();
 		if (b<-0.7)
 		sound (ent, CHAN_BODY, "weapons/hagexp1.wav", 1, ATTN_NORM);

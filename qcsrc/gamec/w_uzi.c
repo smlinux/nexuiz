@@ -62,6 +62,7 @@ void W_Uzi_Attack (void)
 	flash.angles = vectoangles (flash.velocity);
 	flash.angles_z=flash.v_angle_z + random () * 180; 
 	flash.scale = 0.75;
+	flash.alpha = 0.5;
 	SUB_SetFade (flash, time, 0.2);
 	flash.effects = flash.effects | EF_ADDITIVE | EF_FULLBRIGHT;
 
