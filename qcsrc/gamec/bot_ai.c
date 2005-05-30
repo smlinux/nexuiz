@@ -658,16 +658,6 @@ float(entity thing) priority_for_thing =
 			if (self.armorvalue < 100)
 				thisp = thisp + 25;
 		}
-		else if (thing.model == "progs/armor.mdl")
-		{
-			if (self.armorvalue < 200)
-			{
-				if (thing.skin == 2)
-					thisp = 60;
-				else if (self.armorvalue < 100)
-					thisp = thisp + 25;
-			}
-		}
 		else if (thing.classname == "weapon_shotgun")
 		{
 			if (!(self.items & IT_SHOTGUN))

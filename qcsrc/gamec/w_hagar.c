@@ -30,7 +30,17 @@ void(float req) w_hagar =
 
 void W_Hagar_Explode (void)
 {
-	ImpactEffect (self, IT_HAGAR);
+	vector	org2;
+	float b;
+	org2 = findbetterlocation (self.origin);
+	effect (org2, "models/sprites/hagarexplosion.spr32", 0, 20, 30);
+	b = crandom();
+	if (b<-0.7)
+		sound (self, CHAN_BODY, "weapons/hagexp1.wav", 1, ATTN_NORM);
+	else if (b<0.4)
+		sound (self, CHAN_BODY, "weapons/hagexp2.wav", 1, ATTN_NORM);
+	else if (b<1)
+		sound (self, CHAN_BODY, "weapons/hagexp3.wav", 1, ATTN_NORM);
 
 	self.event_damage = SUB_Null;
 	RadiusDamage (self, self.owner, cvar("g_balance_hagar_damage"), cvar("g_balance_hagar_edgedamage"), cvar("g_balance_hagar_radius"), world, cvar("g_balance_hagar_force"), IT_HAGAR);

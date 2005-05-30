@@ -207,11 +207,11 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 	take = bound(0, damage - save, damage);
 
 	if (save > 10)
-		sound (self, CHAN_BODY, "misc/armorimpact.wav", 1, ATTN_NORM);
+		sound (self, CHAN_IMPACT, "misc/armorimpact.wav", 1, ATTN_NORM);
 	if (take > 10)
-		sound (self, CHAN_BODY, "misc/bodyimpact1.wav", 1, ATTN_NORM);
+		sound (self, CHAN_IMPACT, "misc/bodyimpact1.wav", 1, ATTN_NORM);
 	if (take > 30)
-		sound (self, CHAN_BODY, "misc/bodyimpact2.wav", 1, ATTN_NORM);
+		sound (self, CHAN_IMPACT, "misc/bodyimpact2.wav", 1, ATTN_NORM);
 
 	if (take > 50)
 		TossGib (world, "models/gibs/chunk.mdl", hitloc, force * -0.1,1);

@@ -87,6 +87,27 @@ void() W_WeaponFrame =
 	if (!self.weaponentity || self.health <= 0)
 		return; // Dead player can't use weapons and injure impulse commands
 
+	if (cvar("g_antilag"))
+	{
+		// if aiming at a player and the original trace won't hit that player
+		// anymore, try aiming at the player's new position
+		if (self.cursor_trace_ent)
+		{
+			if (self.cursor_trace_ent.takedamage)
+			{
+				traceline(self.origin + self.view_ofs, self.cursor_trace_endpos, FALSE, self);
+				if (trace_ent != self.cursor_trace_ent)
+				{
+					traceline(self.origin + self.view_ofs, self.cursor_trace_ent.origin + (self.cursor_trace_ent.mins + self.cursor_trace_ent.maxs) * 0.5, FALSE, self);
+					if (trace_ent == self.cursor_trace_ent)
+						self.cursor_trace_endpos = trace_endpos;
+				}
+			}
+		}
+		self.v_angle = vectoangles(self.cursor_trace_endpos - (self.origin + self.view_ofs));
+		self.v_angle_x = 0 - self.v_angle_x;
+	}
+
 	makevectors(self.v_angle);
 
 	// Change weapon

@@ -1019,11 +1019,11 @@ void() bot_way_edit =
 		t = way_head;
 		while (t)
 		{
-			setmodel(t, "progs/s_bubble.spr"); // show the waypoints
+			setmodel(t, "progs/s_bubble.spr"); // show the waypoints // file missing from nexuiz
 			t = t._next;
 		}
 		if (self.current_way)
-			setmodel(self.current_way, "progs/s_light.spr");
+			setmodel(self.current_way, "progs/s_light.spr"); // file missing from nexuiz
 	}
 	else
 	{

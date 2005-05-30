@@ -276,7 +276,7 @@ entity(vector org) make_waypoint =
 
 	point.count = waypoints;
 	if (waypoint_mode > WM_LOADED) // editor modes
-		setmodel(point, "progs/s_bubble.spr");
+		setmodel(point, "progs/s_bubble.spr"); // file missing from nexuiz
 	return point;
 };
 
@@ -422,9 +422,9 @@ void() DynamicWaypoint =
 					}
 					if (editor)
 					{
-						setmodel(t, "progs/s_light.spr");
+						setmodel(t, "progs/s_light.spr"); // file missing from nexuiz
 						if (self.current_way)
-							setmodel(self.current_way, "progs/s_bubble.spr");
+							setmodel(self.current_way, "progs/s_bubble.spr"); // file missing from nexuiz
 					}
 				}
 				self.current_way = t;
@@ -472,9 +472,9 @@ void() DynamicWaypoint =
 
 	if (editor)
 	{
-		setmodel(t, "progs/s_light.spr");
+		setmodel(t, "progs/s_light.spr"); // file missing from nexuiz
 		if (self.current_way)
-			setmodel(self.current_way, "progs/s_bubble.spr");
+			setmodel(self.current_way, "progs/s_bubble.spr"); // file missing from nexuiz
 	}
 	self.current_way = t;
 	self.dyn_flags = 0;

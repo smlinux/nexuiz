@@ -31,7 +31,11 @@ void(float req) w_rlauncher =
 
 void W_Rocket_Explode (void)
 {
-	ImpactEffect (self, IT_ROCKET_LAUNCHER);
+	vector	org2;
+	org2 = findbetterlocation (self.origin);
+	te_explosion (org2);
+	effect (org2, "models/sprites/rocketexplosion.spr32", 0, 20, 40);
+	sound (self, CHAN_BODY, "weapons/rocket_impact.wav", 1, ATTN_NORM);
 
 	self.event_damage = SUB_Null;
 	RadiusDamage (self, self.owner, cvar("g_balance_rocketlauncher_damage"), cvar("g_balance_rocketlauncher_edgedamage"), cvar("g_balance_rocketlauncher_radius"), world, cvar("g_balance_rocketlauncher_force"), IT_ROCKET_LAUNCHER);
@@ -108,6 +112,7 @@ void W_Rocket_Attack (void)
 	missile.think = W_Rocket_Think;
 	missile.nextthink = time;
 	missile.cnt = time + 9;
+	sound (missile, CHAN_BODY, "weapons/rocket_fly.wav", 0.4, ATTN_NORM);
 
 	flash = spawn ();
 	setorigin (flash, org);

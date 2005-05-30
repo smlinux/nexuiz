@@ -42,7 +42,7 @@ void W_Plasma_Explode (void)
 
 	self.event_damage = SUB_Null;
 	RadiusDamage (self, self.owner, cvar("g_balance_electro_damage"), cvar("g_balance_electro_edgedamage"), cvar("g_balance_electro_radius"), world, cvar("g_balance_electro_force"), IT_ELECTRO);
-	sound (self, CHAN_IMPACT, "weapons/plasmahit.wav", 1, ATTN_NORM);
+	sound (self, CHAN_BODY, "weapons/electro_impact.wav", 1, ATTN_NORM);
 
 	remove (self);
 }
@@ -52,7 +52,7 @@ void W_Plasma_Touch (void)
 	if (other.classname == "player" || other.classname == "corpse")
 		W_Plasma_Explode ();
 	else
-		sound (self, CHAN_BODY, "weapons/grenade_bounce.wav", 1, ATTN_NORM);
+		sound (self, CHAN_IMPACT, "weapons/grenade_bounce.wav", 1, ATTN_NORM);
 }
 
 void W_Plasma_Damage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
@@ -121,6 +121,7 @@ void() W_Electro_Attack
 		setmodel(proj, "models/elaser.mdl");
 		setsize(proj, '0 0 0', '0 0 0');
 	}
+	sound (proj, CHAN_BODY, "weapons/electro_fly.wav", 1, ATTN_NORM);
 }
 
 // weapon frames

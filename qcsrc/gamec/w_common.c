@@ -513,11 +513,11 @@ void fireBullet (vector start, vector dir, float spread, float damage, float dty
 			te_gunshot (trace_endpos);
 			r = random ();
 			if (r < 0.10)
-				sound (self, CHAN_IMPACT, "weapons/ric1.wav", 1, ATTN_NORM);
+				PointSound (trace_endpos, "weapons/ric1.wav", 1, ATTN_NORM);
 			else if (r < 0.20)
-				sound (self, CHAN_IMPACT, "weapons/ric2.wav", 1, ATTN_NORM);
+				PointSound (trace_endpos, "weapons/ric2.wav", 1, ATTN_NORM);
 			else if (r < 0.30)
-				sound (self, CHAN_IMPACT, "weapons/ric3.wav", 1, ATTN_NORM);
+				PointSound (trace_endpos, "weapons/ric3.wav", 1, ATTN_NORM);
 		}
 		else if (trace_ent.classname == "player" || trace_ent.classname == "corpse" || trace_ent.classname == "gib")
 			sound (self, CHAN_BODY, "misc/hit.wav", 1, ATTN_NORM);

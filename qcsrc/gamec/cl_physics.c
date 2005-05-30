@@ -1,6 +1,12 @@
-float sv_maxspeed, sv_friction, sv_accelerate, sv_stopspeed;
+float sv_accelerate;
+float sv_maxairspeed;
+float sv_friction;
+float sv_maxspeed;
+float sv_stopspeed;
+float sv_gravity;
 .float ladder_time;
 .entity ladder_entity;
+.float gravity;
 
 void SV_PlayerPhysics()
 {
@@ -19,20 +25,25 @@ void SV_PlayerPhysics()
 			self.punchangle = '0 0 0';
 	}
 
+	if (self.punchvector != '0 0 0')
+	{
+		f = vlen(self.punchvector) - 30 * frametime;
+		if (f > 0)
+			self.punchvector = normalize(self.punchvector) * f;
+		else
+			self.punchvector = '0 0 0';
+	}
+
 	// if dead, behave differently
-	if (self.health <= 0)
+	if (self.deadflag)
 		return;
 
-	// show 1/3 the pitch angle and all the roll angle
-	self.angles_x = 0;
-	self.angles_y = self.v_angle_y; // FIXME: rotate the models, not the entity!
-	self.angles_z = 0;
-
-/*	if (!self.fixangle)
+	if (!self.fixangle)
 	{
-		self.angles_x = (self.v_angle_x + self.punchangle_x) * -0.333;
-		self.angles_y = self.v_angle_y + self.punchangle_y;
-	}*/
+		self.angles_x = 0;
+		self.angles_y = self.v_angle_y;
+		self.angles_z = 0;
+	}
 
 	if (self.flags & FL_WATERJUMP )
 	{
@@ -43,52 +54,66 @@ void SV_PlayerPhysics()
 			self.flags = self.flags - (self.flags & FL_WATERJUMP);
 			self.teleport_time = 0;
 		}
-		return;
 	}
-
-	makevectors(self.v_angle);
-
-	if (self.movetype == MOVETYPE_NOCLIP)
+	else if (self.movetype == MOVETYPE_NOCLIP || self.movetype == MOVETYPE_FLY)
 	{
-		// noclip
-		self.velocity = v_forward * self.movement_x + v_right * self.movement_y + '0 0 1' * self.movement_z;
-		return;
-	}
-
-	if (self.waterlevel >= 2)
-	{
-		// swimming
-		// friction
+		// noclipping or flying
 		self.velocity = self.velocity * (1 - frametime * sv_friction);
+		makevectors(self.v_angle);
+		//wishvel = v_forward * self.movement_x + v_right * self.movement_y + v_up * self.movement_z;
 		wishvel = v_forward * self.movement_x + v_right * self.movement_y + '0 0 1' * self.movement_z;
+		// acceleration
 		wishdir = normalize(wishvel);
 		wishspeed = vlen(wishvel);
 		if (wishspeed > sv_maxspeed)
 			wishspeed = sv_maxspeed;
-		if (self.crouch)
-			wishspeed = wishspeed * 0.5;
-		wishspeed = wishspeed * 0.6;
-		// acceleration
+		if (time >= self.teleport_time)
+		{
+			f = wishspeed - (self.velocity * wishdir);
+			if (f > 0)
+				self.velocity = self.velocity + wishdir * min(f, sv_accelerate * frametime * wishspeed);
+		}
+	}
+	else if (self.waterlevel >= 2)
+	{
+		// swimming
+		makevectors(self.v_angle);
+		//wishvel = v_forward * self.movement_x + v_right * self.movement_y + v_up * self.movement_z;
+		wishvel = v_forward * self.movement_x + v_right * self.movement_y + '0 0 1' * self.movement_z;
+		if (wishvel == '0 0 0')
+			wishvel = '0 0 -60'; // drift towards bottom
+
+		wishdir = normalize(wishvel);
+		wishspeed = vlen(wishvel);
+		if (wishspeed > sv_maxspeed)
+			wishspeed = sv_maxspeed;
+		wishspeed = wishspeed * 0.7;
+
+		// water friction
+		self.velocity = self.velocity * (1 - frametime * sv_friction);
+
+		// water acceleration
 		f = wishspeed - (self.velocity * wishdir);
 		if (f > 0)
 			self.velocity = self.velocity + wishdir * min(f, sv_accelerate * frametime * wishspeed);
-		return;
 	}
-
-	if (time < self.ladder_time)
+	else if (time < self.ladder_time)
 	{
 		// on a func_ladder or swimming in func_water
+		self.velocity = self.velocity * (1 - frametime * sv_friction);
+		makevectors(self.v_angle);
+		//wishvel = v_forward * self.movement_x + v_right * self.movement_y + v_up * self.movement_z;
 		wishvel = v_forward * self.movement_x + v_right * self.movement_y + '0 0 1' * self.movement_z;
-		wishdir = normalize(wishvel);
-		wishspeed = vlen(wishvel);
-		if (wishspeed > sv_maxspeed)
-			wishspeed = sv_maxspeed;
-		if (self.crouch)
-			wishspeed = wishspeed * 0.5;
+		if (self.gravity)
+			self.velocity_z = self.velocity_z + self.gravity * sv_gravity * frametime;
+		else
+			self.velocity_z = self.velocity_z + sv_gravity * frametime;
 		if (self.ladder_entity.classname == "func_water")
 		{
-			if (wishspeed > self.ladder_entity.speed)
-				wishspeed = self.ladder_entity.speed;
+			f = vlen(wishvel);
+			if (f > self.ladder_entity.speed)
+				wishvel = wishvel * (self.ladder_entity.speed / f);
+
 			self.watertype = self.ladder_entity.skin;
 			f = self.ladder_entity.origin_z + self.ladder_entity.maxs_z;
 			if ((self.origin_z + self.view_ofs_z) < f)
@@ -103,53 +128,65 @@ void SV_PlayerPhysics()
 				self.watertype = CONTENT_EMPTY;
 			}
 		}
-		// friction
-		self.velocity = self.velocity * (1 - frametime * sv_friction);
 		// acceleration
-		f = wishspeed - (self.velocity * wishdir);
-		if (f > 0)
-			self.velocity = self.velocity + wishdir * min(f, sv_accelerate * frametime * wishspeed);
-		return;
+		wishdir = normalize(wishvel);
+		wishspeed = vlen(wishvel);
+		if (wishspeed > sv_maxspeed)
+			wishspeed = sv_maxspeed;
+		if (time >= self.teleport_time)
+		{
+			f = wishspeed - (self.velocity * wishdir);
+			if (f > 0)
+				self.velocity = self.velocity + wishdir * min(f, sv_accelerate * frametime * wishspeed);
+		}
 	}
-
-	// calculate wishvel/wishdir/wishspeed for normal walking
-	makevectors(self.v_angle_y * '0 1 0');
-	// hack to not let you back into teleporter
-	if (time < self.teleport_time && self.movement_x < 0)
-		wishvel = v_right * self.movement_y;
-	else
-		wishvel = v_forward * self.movement_x + v_right * self.movement_y;
-	wishdir = normalize(wishvel);
-	wishspeed = vlen(wishvel);
-	if (wishspeed > sv_maxspeed)
-		wishspeed = sv_maxspeed;
-	if (self.crouch)
-		wishspeed = wishspeed * 0.5;
-
-	if (self.flags & FL_ONGROUND) // walking
+	else if (self.flags & FL_ONGROUND)
 	{
+		// walking
+		makevectors(self.v_angle_y * '0 1 0');
+		wishvel = v_forward * self.movement_x + v_right * self.movement_y;
 		// friction
 		if (self.velocity_x || self.velocity_y)
 		{
 			v = self.velocity;
 			v_z = 0;
 			f = vlen(v);
-
-			// apply friction
 			if (f < sv_stopspeed)
 				f = 1 - frametime * (sv_stopspeed / f) * sv_friction;
 			else
 				f = 1 - frametime * sv_friction;
-
-			if (f < 0)
-				self.velocity = '0 0 0';
-			else
+			if (f > 0)
 				self.velocity = self.velocity * f;
+			else
+				self.velocity = '0 0 0';
+		}
+		// acceleration
+		wishdir = normalize(wishvel);
+		wishspeed = vlen(wishvel);
+		if (wishspeed > sv_maxspeed)
+			wishspeed = sv_maxspeed;
+		if (time >= self.teleport_time)
+		{
+			f = wishspeed - (self.velocity * wishdir);
+			if (f > 0)
+				self.velocity = self.velocity + wishdir * min(f, sv_accelerate * frametime * wishspeed);
 		}
 	}
-	else if (wishspeed > cvar("g_balance_maxairspeed"))
-			wishspeed = cvar("g_balance_maxairspeed");
-		//sv_accelerate = sv_accelerate * 0.1;
-
-	self.velocity = self.velocity + wishdir * sv_accelerate * frametime * wishspeed;
-}
+	else
+	{
+		// airborn
+		makevectors(self.v_angle_y * '0 1 0');
+		wishvel = v_forward * self.movement_x + v_right * self.movement_y;
+		// acceleration
+		wishdir = normalize(wishvel);
+		wishspeed = vlen(wishvel);
+		if (wishspeed > sv_maxairspeed)
+			wishspeed = sv_maxairspeed;
+		if (time >= self.teleport_time)
+		{
+			f = wishspeed;// - (self.velocity * wishdir);
+			if (f > 0)
+				self.velocity = self.velocity + wishdir * min(f, sv_accelerate * frametime * wishspeed);
+		}
+	}
+};

@@ -89,7 +89,7 @@ void PutClientInServer (void)
 	self.movetype = MOVETYPE_WALK;
 	self.solid = SOLID_SLIDEBOX;
 	self.flags = FL_CLIENT;
-	self.takedamage = DAMAGE_YES;
+	self.takedamage = DAMAGE_AIM;
 	self.effects = 0;
 	self.health = cvar("g_balance_health_start");
 	self.armorvalue = cvar("g_balance_armor_start");
@@ -122,7 +122,7 @@ void PutClientInServer (void)
 
 	self.viewzoom = 0.6;
 
-	
+
 	self.playermodel = CheckPlayerModel(self.playermodel);
 
 	precache_model (self.playermodel);
@@ -227,9 +227,16 @@ void ClientConnect (void)
 	ClientInRankings();
 	bprint ("^4",self.netname);
 	bprint (" connected\n");
-	stuffcmd(self, "exec maps/");
-	stuffcmd(self, mapname);
-	stuffcmd(self, ".cfg\n");
+	stuffcmd(self, strcat("exec maps/", mapname, ".cfg\n"));
+	// send prediction settings to the client
+	stuffcmd(self, strcat("cl_movement_maxspeed ", ftos(cvar("sv_maxspeed")), "\n"));
+	stuffcmd(self, strcat("cl_movement_maxairspeed ", ftos(cvar("sv_maxairspeed")), "\n"));
+	stuffcmd(self, strcat("cl_movement_accelerate ", ftos(cvar("sv_accelerate")), "\n"));
+	stuffcmd(self, strcat("cl_movement_friction ", ftos(cvar("sv_friction")), "\n"));
+	stuffcmd(self, strcat("cl_movement_stopspeed ", ftos(cvar("sv_stopspeed")), "\n"));
+	stuffcmd(self, strcat("cl_movement_jumpvelocity ", ftos(cvar("g_balance_jumpheight")), "\n"));
+	stuffcmd(self, strcat("cl_movement_stepheight ", ftos(cvar("sv_stepheight")), "\n"));
+	stuffcmd(self, strcat("cl_movement_edgefriction 0\n"));
 }
 
 /*

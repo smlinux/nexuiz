@@ -194,7 +194,7 @@ float		bot_count, b_options;
 float		waypoint_mode, dump_mode;
 float		waypoints, direct_route;
 float		sv_friction, sv_gravity;
-float		sv_accelerate, sv_maxspeed, sv_stopspeed;
+float		sv_accelerate, sv_maxairspeed, sv_maxspeed, sv_stopspeed;
 entity	fixer;
 entity	route_table;
 entity	b_temp1, b_temp2, b_temp3;
@@ -749,8 +749,8 @@ void() BotInit =
 		numents = numents + 1;
 		ent = nextent(ent);
 	}
-	precache_model("progs/s_light.spr");
-	precache_model("progs/s_bubble.spr");
+	//precache_model("progs/s_light.spr"); // file missing from nexuiz
+	//precache_model("progs/s_bubble.spr"); // file missing from nexuiz
 	// the bots return!
 	b_options = cvar("saved1");
 	if (coop || (b_options & OPT_SAVEBOTS))
@@ -1169,6 +1169,7 @@ void() BotFrame =
 	local float num;
 
 	// for the sake of speed
+	sv_maxairspeed = cvar("sv_maxairspeed");
 	sv_maxspeed = cvar("sv_maxspeed");
 	sv_gravity = cvar("sv_gravity");
 	sv_friction = cvar("sv_friction");
