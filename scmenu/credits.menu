@@ -9,14 +9,19 @@ Item Window CreditsWnd
 
 	Derive Rect Background
 	{
-		color		'0.1 0.1 0.1'
-		drawFlag 	[DrawFlagModulate]
 		flag		[FlagSealOffMouse]
-
-		Derive Rect Layer
+		color		'0.0 0.0 0.0'
+		alpha		0.8
+		Ignore
 		{
-			color		'0.3 0.3 0.3'
-			drawFlag	[DrawFlagAdditive]
+			color		'0.1 0.1 0.1'
+			drawFlag 	[DrawFlagModulate]
+
+			Derive Rect Layer
+			{
+				color		'0.3 0.3 0.3'
+				drawFlag	[DrawFlagAdditive]
+			}
 		}
 	}
 	Item Layout Layout
@@ -32,10 +37,12 @@ Item Window CreditsWnd
 			target		"##up up"
 			Derive Rect Background
 			{
-				color		'0.5 0.5 0.5'
+				//color		'0.5 0.5 0.5'
+				color		'0.05 0.05 0.05'
 			}
 			Derive TextButton Caption
 			{
+				color		'1.0 1.0 1.0'
 				size		'400 11'
 				alignment 	[AlignCenter]
 				normal		"Credits"
@@ -61,6 +68,7 @@ Item Window CreditsWnd
 
 				Derive Nex_Credits Credits
 				{
+					color		'1.0 1.0 1.0'
 					alignment	[AlignCenter]
 					target		"betacredits.txt"
 				}
@@ -68,6 +76,7 @@ Item Window CreditsWnd
 
 			Derive TextButton Close
 			{
+				color	'1.0 1.0 1.0'
 				normal	"Close"
 				action	Nex_Credits_Toggle
 			}

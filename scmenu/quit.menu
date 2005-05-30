@@ -9,14 +9,19 @@ Item Window QuitWnd
 
 	Derive Rect Background
 	{
-		color		'0.1 0.1 0.1'
-		drawFlag 	[DrawFlagModulate]
 		flag		[FlagSealOffMouse]
+		color		'0 0 0'
+		alpha		0.8
+		Ignore {
+			color		'0.1 0.1 0.1'
+			drawFlag 	[DrawFlagModulate]
 
-		Derive Rect Layer
-		{
-			color		'0.3 0.3 0.3'
-			drawFlag	[DrawFlagAdditive]
+
+			Derive Rect Layer
+			{
+				color		'0.3 0.3 0.3'
+				drawFlag	[DrawFlagAdditive]
+			}
 		}
 	}
 	Item Layout Layout
@@ -32,10 +37,12 @@ Item Window QuitWnd
 			target		"##up up"
 			Derive Rect Background
 			{
-				color		'0.5 0.5 0.5'
+				//color		'0.5 0.5 0.5'
+				color		'0.05 0.05 0.05'
 			}
 			Derive TextButton Caption
 			{
+				color		'1.0 1.0 1.0'
 				size		'400 11'
 				alignment 	[AlignCenter]
 				normal		"Quit Window"
@@ -44,6 +51,7 @@ Item Window QuitWnd
 		}
 		Derive Label Text
 		{
+			color		'1.0 1.0 1.0'
 			text		"Do you really want to quit?"
 		}
 		Item Arrangement Buttons
@@ -53,11 +61,13 @@ Item Window QuitWnd
 
 			Derive TextButton Yes
 			{
+				color	'1.0 1.0 1.0'
 				normal	"Yes"
 				action	Nex_Quit_Yes
 			}
 			Derive TextButton No
 			{
+				color	'1.0 1.0 1.0'
 				normal	"No"
 				action	Nex_Quit_No
 			}

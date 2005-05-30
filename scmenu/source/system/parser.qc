@@ -159,7 +159,6 @@ void() Parser_ParseDefine =
 			return;
 		}
 
-
 	lDefine = spawn();
 	lDefine.type = "Parser_Define";
 	lDefine.name = String_Zone( Parser_Token );
