@@ -586,7 +586,7 @@ void PlayerPreThink (void)
 
 	W_WeaponFrame();
 
-	if (self.button4)
+	if (self.button4 || (self.weapon == WEP_NEX && self.button3))
 	{
 		if (self.viewzoom > 0.4)
 			self.viewzoom = max (0.4, self.viewzoom - frametime * 2);
