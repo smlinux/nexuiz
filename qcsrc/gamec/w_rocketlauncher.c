@@ -34,7 +34,7 @@ void W_Rocket_Explode (void)
 	vector	org2;
 	org2 = findbetterlocation (self.origin);
 	te_explosion (org2);
-	effect (org2, "models/sprites/rocketexplosion.spr32", 0, 20, 40);
+	effect (org2, "models/sprites/rocketexplosion.spr32", 0, 26, 30);
 	sound (self, CHAN_BODY, "weapons/rocket_impact.wav", 1, ATTN_NORM);
 
 	self.event_damage = SUB_Null;
