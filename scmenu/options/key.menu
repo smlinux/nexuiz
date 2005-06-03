@@ -213,20 +213,21 @@ Item Window KeyControl
 						text	"Laser"
 						target	"Data::Key::Weapon::Laser"
 					}
-					Derive Nex_Key_Template Uzi
-					{
-						text	"Uzi"
-						target	"Data::Key::Weapon::Uzi"
-					}
 					Derive Nex_Key_Template Shotgun
 					{
 						text	"Shotgun"
 						target	"Data::Key::Weapon::Shotgun"
 					}
-					Derive Nex_Key_Template Grenade
+					Derive Nex_Key_Template Machingun
 					{
-						text	"Uzi"
-						target	"Data::Key::Weapon::Grenade"
+						text	"Machinegun"
+						target	"Data::Key::Weapon::Machinegun"
+					}
+
+					Derive Nex_Key_Template Mortar
+					{
+						text	"Mortar"
+						target	"Data::Key::Weapon::Mortar"
 					}
 					Derive Nex_Key_Template Electro
 					{

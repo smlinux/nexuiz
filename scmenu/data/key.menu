@@ -67,17 +67,17 @@ Item DataContainer Key
 			target		"impulse 1"
 			defValue	"'1'"
 		}
-		Item Data_Nex_Key Uzi
+		Item Data_Nex_Key Shotgun
 		{
 			target		"impulse 2"
 			defValue	"'2'"
 		}
-		Item Data_Nex_Key Shotgun
+		Item Data_Nex_Key Machinegun
 		{
 			target		"impulse 3"
 			defValue	"'3'"
 		}
-		Item Data_Nex_Key Grenade
+		Item Data_Nex_Key Mortar
 		{
 			target		"impulse 4"
 			defValue	"'4'"

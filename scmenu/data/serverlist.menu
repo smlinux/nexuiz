@@ -4,8 +4,10 @@
 
 Item DataContainer ServerList
 {
-	Item Data_Container QueryString
+	Item Data_CvarCreateSave QueryString
 	{
+		cvarName	"scmenu_querystring"
+
 		Item DataLink_Text Text
 		{
 			maxValue	1024
