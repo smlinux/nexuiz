@@ -1,10 +1,7 @@
-entity	lastspawn;
-
 void() dom_init;
 
 void worldspawn (void)
 {
-	lastspawn = world;
 	BotInit();
 
 	game = cvar ("gamecfg");	// load game options

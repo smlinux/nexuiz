@@ -16,38 +16,36 @@ Finds a point to respawn
 */
 entity SelectSpawnPoint (void)
 {
-	local entity spot, thing;
-	local float pcount;
+	local entity spot, thing, best, player, playerlist;
+	local float pcount, rating, bestrating;
 
 	spot = find (world, classname, "testplayerstart");
 	if (spot)
 		return spot;
 
-	spot = lastspawn;
-	while (1)
+	best = world;
+	bestrating = -1;
+	playerlist = findchain(classname, "player");
+	spot = find(world, classname, "info_player_deathmatch");
+	while (spot)
 	{
-		spot = find(spot, classname, "info_player_deathmatch");
-		if (spot != world)
+		rating = random() * 256;
+		player = playerlist;
+		while (player)
 		{
-			if (spot == lastspawn)
-				return lastspawn;
-			pcount = 0;
-			thing = findradius(spot.origin, 70);
-			while(thing)
-			{
-				if (thing.classname == "player")
-					pcount = pcount + 1;
-				thing = thing.chain;
-			}
-			if (pcount == 0)
-			{
-				lastspawn = spot;
-				return spot;
-			}
+			if (player != self)
+				rating = rating + vlen(player.origin - spot.origin);
+			player = player.chain;
 		}
+		if (bestrating < rating)
+		{
+			best = spot;
+			bestrating = rating;
+		}
+		spot = find(spot, classname, "info_player_deathmatch");
 	}
+	spot = best;
 
-	spot = find (world, classname, "info_player_start");
 	if (!spot)
 		error ("PutClientInServer: no info_player_start on level");
 
