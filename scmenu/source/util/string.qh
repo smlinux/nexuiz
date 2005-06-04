@@ -20,3 +20,4 @@ void( entity pEntity, .string pField ) 			String_EntityCreate;
 void( entity pEntity, .string pField ) 			String_EntityZone;
 void( entity pEntity, .string pField, string pSet ) 	String_EntitySet;
 void( entity pEntity, .string pField ) 			String_EntityFree;
+

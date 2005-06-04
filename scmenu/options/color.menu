@@ -16,21 +16,6 @@ Item Window ColorControl
 		origin	  '300 50'
 		alignment [AlignFirst]
 
-		// We want to see the changes immediatelly
-		DeriveTemplate Nex_Composition Nex_Color_Option_Slider
-		{
-			DeriveTemplate Nex_Automation_Option_Slider Automation
-			{}
-			DeriveTemplate TextButton 	Description
-			{}
-			DeriveTemplate Slider 		Slider
-			{
-				action	Nex_Action_TestOnChange
-			}
-			DeriveTemplate ValueButton 	Value
-			{}
-		}
-
 		Derive Nex_Option_Slider Brightness
 		{
 			text	"Brightness"

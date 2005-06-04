@@ -158,7 +158,7 @@ Template DataLink_Value DataLink_ZeroOneValue
 Template DataLink_Value DataLink_SettingValue
 {
 	minValue	0.0
-	maxValue	999.0
+	maxValue	9999.0
 	stepValue	0.01
 	link		"##up"
 }

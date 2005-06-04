@@ -76,6 +76,12 @@ String_EntitySet
 */
 void( entity pEntity, .string pField, string pSet ) String_EntitySet =
 {
+#ifdef AVOIDSTRZONES
+	if( pEntity.pField == pSet ) {
+		return;
+	}
+#endif
+
 	strunzone( pEntity.pField );
 	pEntity.pField = strzone( pSet );
 };
@@ -118,6 +124,11 @@ String_Set
 */
 string( string pStr, string pSet ) String_Set =
 {
+#ifdef AVOIDSTRZONES
+	if( pStr == pSet ) {
+		return pStr;
+	}
+#endif
 	strunzone( pStr );
 	return strzone( pSet );
 };

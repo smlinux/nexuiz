@@ -44,13 +44,16 @@ void() Item_Nex_HostCache_Entry_Spawn =
 void() Item_Nex_HostCache_StringField_Update =
 {
 	local float lMaxLen;
+	local string lString;
 
 	if( HostCache_ViewCount <= self._parent.stepValue )
 		return;
 	lMaxLen = floor( self.size_x / self.fontSize_x );
-	String_EntitySet( self, text, gethostcachestring( self._realValue, self._parent.stepValue ) );
-	if( lMaxLen < strlen( self.text ) )
-		String_EntitySet( self, text, strcat( substring( self.text, 0, lMaxLen - 3 ), "..." ) );
+	lString = gethostcachestring( self._realValue, self._parent.stepValue );
+	if( lMaxLen < strlen( lString ) ) {
+		lString = strcat( substring( lString, 0, lMaxLen - 3 ), "..." );
+	}
+	String_EntitySet( self, text, lString );
 
 	Item_Label_Update();
 };

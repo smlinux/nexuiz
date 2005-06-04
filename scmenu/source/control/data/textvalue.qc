@@ -4,7 +4,7 @@
 void( float pEvent ) Item_DataLink_TextValue_DataEvent =
 {
 	Item_DataLink_Update();
-	
+
 	if( pEvent == ITEM_DATALINK_SET ) {
 		self._link._realValue = stof( self.value );
 		Raise_DataEvent( self._link, ITEM_DATALINK_SET );

@@ -93,8 +93,23 @@ string	substring(string s, float start, float length)  = #54;
 
 vector	stov(string s)  = #55;
 
+#ifdef PROFILESTRZONE
+string	_strzone(string s)  = #56;
+void	_strunzone(string s) = #57;
+
+string( string s ) strzone =
+{
+	return _strzone( s );
+};
+
+void( string s ) strunzone =
+{
+	return _strunzone( s );
+};
+#else
 string	strzone(string s)  = #56;
 void	strunzone(string s) = #57;
+#endif
 
 float	tokenize(string s)  = #58
 string	argv(float n)  = #59;

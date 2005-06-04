@@ -32,8 +32,13 @@ void( float pEvent ) Item_DataLink_TextSwitch_DataEvent =
 			if( String_Normal( Util_GetAltStringItem( self.valueList, lPos ) ) == self._link.value )
 				break;
 
-		if( lPos == lCount ) {
-			lPos = 0;
+		if( lPos > lCount ) {
+			// if there is no match test for a custom entry
+			if( Util_GetAltStringCount( self.descList ) > lCount ) {
+				lPos++;
+			} else {
+				lPos = 0;
+			}
 		}
 		self._realValue = lPos;
 		String_EntitySet( self, value, String_Normal( Util_GetAltStringItem( self.descList, lPos ) ) );
@@ -52,13 +57,13 @@ void() Item_DataLink_TextSwitch_Spawn =
 	Item_DataLink_Switch_Init();
 	String_EntityZone( self, valueList );
 
-	self.minValue = 0;
+	self.minValue = 0.0;
 	if( self.maxValue == 0.0 )
-		self.maxValue = Util_GetAltStringCount( self.descList ) - 1;
+		self.maxValue = Util_GetAltStringCount( self.valueList ) - 1;
 	if( self.maxValue == 0.0 )
 		self.stepValue = 0.0;
 	else
-		self.stepValue = 1;
+		self.stepValue = 1.0;
 
 	self._destroy = Item_DataLink_TextSwitch_Destroy;
 	self._dataEvent = Item_DataLink_TextSwitch_DataEvent;

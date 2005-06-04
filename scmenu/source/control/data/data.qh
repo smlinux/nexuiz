@@ -88,12 +88,15 @@ void() Item_DataLink_Switch_Destroy;
 float( entity pDataLink, float pValue ) DataLink_Switch_GetOrdinal;
 
 // Item_DataLink_ValueSwitch [Item_DataLink_Switch]
+// to add support for a case when there is no value list match, add one more entry to desc list
+// describing the case (i.g. 'Custom'), if you dont it will set the first desc/value entry as default
 // the default value for stepValue is 1
 // maxValue is calculated if it is 0
 
 void() Item_DataLink_ValueSwitch_Spawn;
 
 // Item_DataLink_TextSwitch [Item_DataLink_Switch]
+// if you want a s
 // minValue is 0, stepValue is 1, maxValue is the number of items in descList/valueList
 .string valueList; // contains the values for the different
 
