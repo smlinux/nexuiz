@@ -5,6 +5,18 @@
 // AK contains all menu functions (especially the required ones)
 ///////////////////////////////////////////////
 
+void() m_updategamestate =
+{
+	// update isserver and clientstate
+	gamestatus = 0;
+	if( isserver() )
+		gamestatus = gamestatus | GAME_ISSERVER;
+	if( clientstate() == CS_CONNECTED )
+		gamestatus = gamestatus | GAME_CONNECTED;
+	if( cvar("developer") )
+		gamestatus = gamestatus | GAME_DEVELOPER;
+};
+
 void() m_init =
 {
 	// init graphic
@@ -49,8 +61,18 @@ void() m_frame =
 
 void() m_draw =
 {
-	if( !Menu_Active )
-		return;
+	m_updategamestate();
+
+
+	if( !Menu_Active ) {
+		// test whether we want to force it to be displayed
+		if( !(gamestatus & GAME_CONNECTED) && !(gamestatus & GAME_DEVELOPER) ) {
+			m_display();
+		}
+		else {
+			return;
+		}
+	}
 
 	// call m_frame cause draw is the only menu function called once per frame
 	m_frame();
@@ -69,14 +91,7 @@ void() m_display =
 {
 	Menu_Active = true;
 
-	// update isserver and clientstate
-	gamestatus = 0;
-	if( isserver() )
-		gamestatus = gamestatus | GAME_ISSERVER;
-	if( clientstate() == CS_CONNECTED )
-		gamestatus = gamestatus | GAME_CONNECTED;
-	if( cvar("developer") )
-		gamestatus = gamestatus | GAME_DEVELOPER;
+	m_updategamestate();
 
 	// let also the snd and gfx know (perhaps for sfx)
 	Gfx_Display();

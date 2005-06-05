@@ -395,13 +395,13 @@ void( float pKey, float pAscii) Menu_Key =
 	     Menu_ProcessKey( Menu_ActiveWindow, pKey, pAscii ) != MENU_EVENT_PROCESSED )
 		// If it goes really wrong:
 		if( pKey == K_ESCAPE )
-			if( cvar( "developer" ) )
+			if( gamestatus & GAME_DEVELOPER )
 				error( " K_ESCAPE wasnt processed!\n" );
 			else {
 				Menu_Toggle();
 				cmd( "menu_restart\n" );
 			}
-		else if( cvar( "developer" ) ) {
+		else if( gamestatus & GAME_DEVELOPER ) {
 			print( " Key ", ftos( pKey ), " ('" );
 			print( chr( pAscii ), "') wasn't processed!\n" );
 		}
@@ -410,7 +410,7 @@ void( float pKey, float pAscii) Menu_Key =
 bool() Menu_Toggle =
 {
 	// only let the qc toggle the menu if we are ingame or a developer
-	if( gamestatus & GAME_CONNECTED || cvar( "developer" ) ) {
+	if( gamestatus & GAME_CONNECTED || gamestatus & GAME_DEVELOPER ) {
 		// then allow toggling
 		m_hide();
 		return true;
