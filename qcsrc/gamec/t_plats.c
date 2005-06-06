@@ -443,4 +443,7 @@ void() func_bobbing =
 	controller.think = func_bobbing_controller_think;
 	self.nextthink = self.ltime + 999999999;
 	self.think = SUB_Null;
+	
+	// Savage: Reduce bandwith, critical on e.g. nexdm02
+	self.effects |= EF_LOWPRECISION;
 };
