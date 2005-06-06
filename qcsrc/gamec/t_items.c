@@ -1,5 +1,5 @@
 void Item_ClearRespawnEffect (void) {
-	self.effects = 0;
+	self.effects = self.effects - (self.effects & EF_STARDUST);
 }
 
 void Item_Respawn (void)
@@ -10,11 +10,9 @@ void Item_Respawn (void)
 	setorigin (self, self.origin);
 
 	// Savage: Add simple Respawn effect and make sure it gets removed
-	if(self.effects == 0) {
-		self.effects = EF_STARDUST;
-		self.think = Item_ClearRespawnEffect;
-		self.nextthink = time + 0.1;
-	}
+	self.effects = EF_STARDUST;
+	self.think = Item_ClearRespawnEffect;
+	self.nextthink = time + 0.1;
 }
 
 void Item_Touch (void)
@@ -30,8 +28,7 @@ void Item_Touch (void)
 	if (self.solid != SOLID_TRIGGER)
 		return;
 	// Savage: Remove the respawn effect if still present
-	if(self.effects == EF_STARDUST)
-		self.effects = 0;
+	self.effects = self.effects - (self.effects & EF_STARDUST);
 
 	sound (self, CHAN_BODY, self.noise, 1, ATTN_NORM);
 

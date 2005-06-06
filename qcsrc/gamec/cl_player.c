@@ -139,6 +139,9 @@ void SpawnThrownWeapon (vector org, float w)
 	else if (w == WEP_ROCKET_LAUNCHER)
 		weapon_rocketlauncher ();
 
+	// making absolutely sure...
+	self.classname = "droppedweapon";
+
 	self = oldself;
 }
 
