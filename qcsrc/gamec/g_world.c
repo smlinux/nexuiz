@@ -143,8 +143,8 @@ void worldspawn (void)
 	// plays music for the level if there is any
 	if (self.noise)
 	{
-        	precache_sound (self.noise);
-        	ambientsound ('0 0 0', self.noise, 1.00, ATTN_NONE);
+		precache_sound (self.noise);
+		ambientsound ('0 0 0', self.noise, 1.00, ATTN_NONE);
 	}
 
 		// 0 normal
@@ -288,7 +288,7 @@ float alreadychangedlevel;
 
 void() GotoNextMap =
 {
-	local string nextmap;
+	//local string nextmap;
 	//local float n, nummaps;
 	//local string s;
 	if (alreadychangedlevel)
@@ -298,6 +298,21 @@ void() GotoNextMap =
 		changelevel (mapname);
 	else
 	{
+		// method 0
+		local float lCurrent;
+		local float lSize;
+
+		lSize = tokenize( cvar_string( "g_maplist" ) );
+		lCurrent = cvar( "g_maplist_index" );
+
+		lCurrent = lCurrent + 1;
+		if( lCurrent >= lSize ) {
+			lCurrent = 0;
+		}
+
+		cvar_set( "g_maplist_index", ftos( lCurrent ) );
+		changelevel( argv( lCurrent ) );
+		/*
 		// method 1
 
 		//local entity pos;
@@ -332,7 +347,7 @@ void() GotoNextMap =
 			fclose(fh);
 		}
 		changelevel (nextmap);
-		strunzone(nextmap);
+		strunzone(nextmap);*/
 
 		// method 2
 		//nextmap = Nex_RotateMapList();
