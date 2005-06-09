@@ -75,7 +75,8 @@ void( string pNamespace ) Parser_IncludeFile;
 
 void( string pFilename, string pNamespace ) Parser_ParseFile;
 
-void( string pMain ) Parser_ParseMenu;
+void( string pPluginDir ) Parser_ParsePlugins;
+void( string pMain, string pPluginDir ) Parser_ParseMenu;
 
 void() Parser_Init;
 void() Parser_Quit;

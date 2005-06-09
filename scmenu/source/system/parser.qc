@@ -519,7 +519,36 @@ void() Parser_Quit =
 	String_Free( Parser_FileList );
 };
 
-void( string pMain ) Parser_ParseMenu =
+void( string pPluginDir ) Parser_ParsePlugins =
+{
+	local float lSearchHandle;
+	local float lCounter, lCount;
+
+	lSearchHandle = search_begin( strcat( pPluginDir, "/*.plugin" ), true, true );
+	if( lSearchHandle < 0 ) {
+		return;
+	}
+
+	lCount = search_getsize( lSearchHandle );
+
+	for( lCounter = 0 ; lCounter < lCount ; lCounter++ ) {
+		local string pPlugin;
+
+		Parser_FileList = String_Set( Parser_FileList, "" );
+
+		pPlugin = String_Zone( search_getfilename( lSearchHandle, lCounter ) );
+		Parser_FileList = Util_AltStringPush( Parser_FileList, pPlugin );
+
+		Parser_ParseFile( pPlugin, "" );
+
+		_Parser_Print( PARSER_INFO, strcat( "Plugin '", pPlugin, "': files parsed: ", Parser_FileList ) );
+		String_Free( pPlugin );
+	}
+
+	search_end( lSearchHandle );
+};
+
+void( string pMain, string pPluginDir ) Parser_ParseMenu =
 {
 	Parser_Init();
 
@@ -529,7 +558,12 @@ void( string pMain ) Parser_ParseMenu =
 	Parser_ParseFile( pMain, "" );
 
 	_Parser_Print( PARSER_INFO, strcat( "Files parsed: ", Parser_FileList ) );
-
 	String_Free( pMain );
+
+	// plugins
+	if( pPluginDir != "" ) {
+		Parser_ParsePlugins( pPluginDir );
+	}
+
 	Parser_Quit();
 };

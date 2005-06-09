@@ -226,6 +226,15 @@ float() Nex_Management_GetType =
 	return stof( lTypeData.value );
 };
 
+string() Nex_Management_GetTypeName =
+{
+	local entity lTypeSwitch;
+
+	lTypeSwitch = Menu_GetItem( "::Data::Management::ConfigType::Switch" );
+	Raise_DataEvent( lTypeSwitch, ITEM_DATALINK_GET );
+	return String_Zone( lTypeSwitch.value );
+};
+
 void( float pType ) Nex_Management_SetType =
 {
 	local entity lItem;
@@ -296,6 +305,7 @@ void() Nex_Action_Management_Load =
 {
 	local entity lItem;
 	local string lQuestion;
+	local string lTitle;
 
 	lItem = Menu_GetItem( "::Data::Management::Filename" );
 	if( lItem.value == "" ) {
@@ -303,9 +313,11 @@ void() Nex_Action_Management_Load =
 		return;
 	}
 
+	lTitle = String_Zone( strcat( "Loading ", String_Normal( Nex_Management_GetTypeName() ) ) );
 	lQuestion = String_Zone( strcat( "Do you want to load '", lItem.value, "'?" ) );
-	Nex_MessageBox( "Loading", lQuestion, "Yes", "No", Nex_Action_Management_LoadConfig, Util_NullFunction );
+	Nex_MessageBox( lTitle, lQuestion, "Yes", "No", Nex_Action_Management_LoadConfig, Util_NullFunction );
 	String_Free( lQuestion );
+	String_Free( lTitle );
 };
 
 void() Nex_Action_Management_SaveConfig =
@@ -321,7 +333,7 @@ void() Nex_Action_Management_SaveConfig =
 	lContainer = Nex_Management_GetContainer( lType );
 	lFilename = Menu_GetItem( "::Data::Management::Filename" );
 	if( lFilename.value == "" ) {
-		Nex_MessageBox( "Loading", "You must specify a filename!", "Ok", "", Util_NullFunction, Util_NullFunction );
+		Nex_MessageBox( "Saving", "You must specify a filename!", "Ok", "", Util_NullFunction, Util_NullFunction );
 		return;
 	}
 	lHandle = fopen( strcat( lFileList.selected, "/", lFilename.value, ".", lFileList.normal ), FILE_WRITE );
@@ -348,6 +360,8 @@ void() Nex_Action_Management_Save =
 	local entity lFilename;
 	local float lHandle;
 
+	print( "Bla\n" );
+
 	lFileList = Nex_Management_GetFileList( Nex_Management_GetType() );
 	lFilename = Menu_GetItem( "::Data::Management::Filename" );
 
@@ -358,10 +372,14 @@ void() Nex_Action_Management_Save =
 		fclose( lHandle );
 	} else if( lHandle > 0 ) {
 		local string lQuestion;
+		local string lTitle;
 
+		lTitle = String_Zone( strcat( "Saving ", String_Normal( Nex_Management_GetTypeName() ) ) );
+		print( lTitle, "\n" );
 		lQuestion = String_Zone( strcat( "Do you want to overwrite '", lFilename.value, "'?" ) );
-		Nex_MessageBox( "Saving", lQuestion, "Yes", "No", Nex_Action_Management_SaveConfig, Util_NullFunction );
+		Nex_MessageBox( lTitle, lQuestion, "Yes", "No", Nex_Action_Management_SaveConfig, Util_NullFunction );
 		String_Free( lQuestion );
+		String_Free( lTitle );
 	}
 };
 

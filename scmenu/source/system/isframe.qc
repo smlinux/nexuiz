@@ -15,7 +15,7 @@ void() Menu_Init =
 
 void() Menu_Load =
 {
-	Parser_ParseMenu( MENU_MAINFILE );
+	Parser_ParseMenu( MENU_MAINFILE, MENU_PLUGINDIR );
 
 	Menu_LinkWindows();
 };

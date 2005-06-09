@@ -11,7 +11,8 @@ Nex_MessageBox =
 
 	lItem = Menu_GetItem( "MessageBoxWnd::Layout::Title::Caption" );
 	String_EntitySet( lItem, normal, pTitle );
-	lItem.size = '0 0 0';
+	// reset its size since this one has to be centered and AlignCenter takes care of everything
+	//lItem.size = '0 0 0';
 
 	lItem = Menu_GetItem( "MessageBoxWnd::Layout::Text" );
 	String_EntitySet( lItem, text, pText );
