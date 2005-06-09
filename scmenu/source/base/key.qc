@@ -14,6 +14,18 @@ void() Key_Display =
 	setkeydest( KEY_MENU );
 };
 
+void() Key_Update =
+{
+#ifdef BRAVEMENU
+	// make sure that we have the input focus
+	setkeydest( KEY_MENU );
+#else
+	if( getkeydest() != KEY_MENU ) {
+		m_hide();
+	}
+#endif
+};
+
 void() Key_Hide =
 {
 	setkeydest( KEY_GAME );

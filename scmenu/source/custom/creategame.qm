@@ -81,70 +81,6 @@ void() Nex_Action_MapSelector_Prev =
 	Raise_DataEvent( lItem, ITEM_DATALINK_SET );
 };
 
-#define MAPLIST	"maplist.cfg"
-
-void() Nex_WriteCycleList =
-{
-	local float lHandle;
-	local float lCount;
-	local float lIndex;
-	local entity lCycle;
-
-	lHandle = fopen( MAPLIST, FILE_WRITE );
-	if( lHandle < 0 ) {
-		print( "menu: Failed to write ", MAPLIST, "!\n" );
-		return;
-	}
-
-	lCycle = Menu_GetItem( "::Data::Server::Map::Cycle" );
-	lCount = Util_GetAltStringCount( lCycle.valueList );
-	for( lIndex = 0 ; lIndex < lCount ; lIndex++ ) {
-		fputs( lHandle, String_Normal( Util_GetAltStringItem( lCycle.valueList, lIndex ) ) );
-		fputs( lHandle, "\n" );
-	}
-
-	fclose( lHandle );
-};
-
-void() Nex_ReadCycleList =
-{
-	local float lHandle;
-	local string lLine;
-	local entity lMapInfo;
-	local entity lCycle;
-
-	lHandle = fopen( MAPLIST, FILE_READ );
-	if( lHandle < 0 ) {
-		return;
-	}
-
-	lCycle = Menu_GetItem( "::Data::Server::Map::Cycle" );
-	DataLink_Nex_MapList_Clear( lCycle );
-
-	lLine = String_Create();
-	while( 1 ) {
-		lLine = String_Set( lLine, fgets( lHandle ) );
-
-		if( lLine == "" )
-			break;
-
-		lMapInfo = Nex_MapDB_GetByPath( lLine );
-		if( lMapInfo == null_entity ) {
-			print( MAPLIST, ": Map '", lLine, "' not found in database - ignored\n" );
-			continue;
-		}
-
-		lCycle.descList = Util_AltStringPushBack( lCycle.descList, lMapInfo.normal );
-		lCycle.valueList = Util_AltStringPushBack( lCycle.valueList, lMapInfo.link );
-	}
-	String_Free( lLine );
-
-	fclose( lHandle );
-
-	DataLink_Nex_MapList_UpdateRange( lCycle );
-	Nex_MapSelector_Synchronize();
-};
-
 // TODO: Make MaxPlayers real Data items (no container with correct set behavior)
 void() Nex_Action_Map_Start =
 {
@@ -171,7 +107,7 @@ void() Nex_Action_Map_Start =
 	cmd( String_Normal( Util_GetAltStringItem( lItem.valueList, 0 ) ) );
 	cmd( "\"\n");
 
-	Nex_WriteCycleList();
+	Raise_DataEvent( lItem, ITEM_DATA_SEND );
 
 	// force the menu to hide
 	m_hide();
@@ -250,4 +186,196 @@ void() Nex_Action_Cycle_Clear =
 	DataLink_Nex_MapList_Clear( lCycle );
 
 	Nex_MapSelector_Synchronize();
+};
+
+// mangement
+
+entity( float pType ) Nex_Management_GetFileList =
+{
+	switch( pType ) {
+		case 0:
+			return Menu_GetItem( "::Data::Management::FileList::Weapon" );
+		case 1:
+			return Menu_GetItem( "::Data::Management::FileList::Game" );
+		case 2:
+			return Menu_GetItem( "::Data::Management::FileList::MapList" );
+	}
+	crash();
+	return null_entity;
+};
+
+entity( float pType ) Nex_Management_GetContainer =
+{
+	switch( pType ) {
+		case 0:
+			return Menu_GetItem( "::Data::Weapon" );
+		case 1:
+			return Menu_GetItem( "::Data::Game" );
+		case 2:
+			return Menu_GetItem( "::Data::Server::Map::Cycle" );
+	}
+	crash();
+	return null_entity;
+};
+
+float() Nex_Management_GetType =
+{
+	local entity lTypeData;
+
+	lTypeData = Menu_GetItem( "::Data::Management::ConfigType" );
+	return stof( lTypeData.value );
+};
+
+void( float pType ) Nex_Management_SetType =
+{
+	local entity lItem;
+	local entity lList;
+	local entity lTypeData;
+
+	lTypeData = Menu_GetItem( "::Data::Management::ConfigType" );
+	String_EntitySet( lTypeData, value, ftos( pType ) );
+	Raise_DataEvent( lTypeData, ITEM_DATALINK_SET );
+
+	// update the filename
+	/*lItem = Menu_GetItem( "::Data::Management::Filename::Text" );
+	String_EntitySet( lItem, value, "" );
+	Raise_DataEvent( lItem, ITEM_DATALINK_SET );*/
+
+	lItem = Menu_GetItem( "FileList" );
+	lList = Nex_Management_GetFileList( pType );
+	String_EntitySet( lItem, target, lList.name );
+};
+
+void() Nex_Action_CopyToFilename =
+{
+	local entity lItem;
+
+	if( !self._target ) {
+		return;
+	}
+
+	Raise_DataEvent( self._target, ITEM_DATALINK_GET );
+
+	lItem = Menu_GetItem( "::Data::Management::Filename::Text" );
+	String_EntitySet( lItem, value, self._target.value );
+	Raise_DataEvent( lItem, ITEM_DATALINK_SET );
+};
+
+void() Nex_Update_Management_SyncData =
+{
+	if( self._realValue < Timer_Time && self._realValue > 0.0 ) {
+		Raise_DataEvent( Nex_Management_GetContainer( Nex_Management_GetType() ), ITEM_DATA_SYNC );
+		self._realValue = 0.0;
+	}
+};
+
+void() Nex_Action_Management_Refresh =
+{
+	local entity lItem;
+
+	lItem = Menu_GetItem( "::Data::Management::FileList" );
+	Raise_DataEvent( lItem, ITEM_DATA_SYNC );
+};
+
+void() Nex_Action_Management_LoadConfig =
+{
+	local entity lFileList;
+	local entity lFilenameData;
+	local entity lSyncItem;
+
+	lFileList = Nex_Management_GetFileList( Nex_Management_GetType() );
+	lFilenameData = Menu_GetItem( "::Data::Management::Filename" );
+
+	cmd( strcat( "exec \"", lFileList.selected, "/", lFilenameData.value, ".", lFileList.normal, "\"\n" ) );
+
+	lSyncItem = Menu_GetItem( "CreateGame::Panel::Management::SyncCategory" );
+	lSyncItem._realValue = Timer_Time;
+};
+
+void() Nex_Action_Management_Load =
+{
+	local entity lItem;
+	local string lQuestion;
+
+	lItem = Menu_GetItem( "::Data::Management::Filename" );
+	if( lItem.value == "" ) {
+		Nex_MessageBox( "Loading", "You must specify a filename!", "Ok", "", Util_NullFunction, Util_NullFunction );
+		return;
+	}
+
+	lQuestion = String_Zone( strcat( "Do you want to load '", lItem.value, "'?" ) );
+	Nex_MessageBox( "Loading", lQuestion, "Yes", "No", Nex_Action_Management_LoadConfig, Util_NullFunction );
+	String_Free( lQuestion );
+};
+
+void() Nex_Action_Management_SaveConfig =
+{
+	local float lType;
+	local entity lFileList;
+	local entity lFilename;
+	local entity lContainer;
+	local float lHandle;
+
+	lType = Nex_Management_GetType();
+	lFileList = Nex_Management_GetFileList( lType );
+	lContainer = Nex_Management_GetContainer( lType );
+	lFilename = Menu_GetItem( "::Data::Management::Filename" );
+	if( lFilename.value == "" ) {
+		Nex_MessageBox( "Loading", "You must specify a filename!", "Ok", "", Util_NullFunction, Util_NullFunction );
+		return;
+	}
+	lHandle = fopen( strcat( lFileList.selected, "/", lFilename.value, ".", lFileList.normal ), FILE_WRITE );
+
+	if( lHandle < 0 ) {
+		return;
+	}
+
+	Data_ExecString_BeginUse();
+	Raise_DataEvent( lContainer, ITEM_DATA_SAVE_EXECSTRING );
+
+	fputs( lHandle, Data_ExecString );
+
+	Data_ExecString_EndUse();
+
+	fclose( lHandle );
+
+	Nex_Action_Management_Refresh();
+};
+
+void() Nex_Action_Management_Save =
+{
+	local entity lFileList;
+	local entity lFilename;
+	local float lHandle;
+
+	lFileList = Nex_Management_GetFileList( Nex_Management_GetType() );
+	lFilename = Menu_GetItem( "::Data::Management::Filename" );
+
+	lHandle = fopen( strcat( lFileList.selected, "/", lFilename.value, ".", lFileList.normal ), FILE_READ );
+
+	if( lHandle == ERR_CANNOTOPEN ) {
+		Nex_Action_Management_SaveConfig();
+		fclose( lHandle );
+	} else if( lHandle > 0 ) {
+		local string lQuestion;
+
+		lQuestion = String_Zone( strcat( "Do you want to overwrite '", lFilename.value, "'?" ) );
+		Nex_MessageBox( "Saving", lQuestion, "Yes", "No", Nex_Action_Management_SaveConfig, Util_NullFunction );
+		String_Free( lQuestion );
+	}
+};
+
+void() Nex_Action_Management_TypeWeapon =
+{
+	Nex_Management_SetType( 0 );
+};
+
+void() Nex_Action_Management_TypeGame =
+{
+	Nex_Management_SetType( 1 );
+};
+
+void() Nex_Action_Management_TypeMapList =
+{
+	Nex_Management_SetType( 2 );
 };

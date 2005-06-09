@@ -74,8 +74,12 @@ Ignore
 		}
 	}
 
-	#include "menu/credits.menu"
-	#include "menu/quit.menu"
+// global floating windows
+#include "menu/credits.menu"
+#include "menu/messagebox.menu"
+#include "menu/quit.menu"
 }
+
+
 
 

@@ -175,7 +175,7 @@ Template DataLink_Text DataLink_SettingText
 //////////////////////////////////////////////////////////////////////////////////
 // Nexuiz specialized items
 //////////////////////////////////////////////////////////////////////////////////
-#define Nex_DefaultHorzDirection	'10 0 0'
+#define Nex_DefaultHorzDirection	'20 0 0'
 #define Nex_DefaultVertDirection	'0 10 0'
 Template Automation_Job Nex_Automation_Option_Slider
 {

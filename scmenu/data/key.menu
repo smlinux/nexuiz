@@ -113,4 +113,9 @@ Item DataContainer Key
 		target		"+showscores"
 		defValue	"'Tab'"
 	}
+	Item Data_Nex_Key ToggleConsole
+	{
+		target		"toggleconsole"
+		defValue	""
+	}
 }

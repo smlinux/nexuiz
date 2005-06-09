@@ -3,6 +3,7 @@
 
 void() Key_Init;
 void() Key_Quit;
+void() Key_Update;
 void() Key_Display;
 void() Key_Hide;
 

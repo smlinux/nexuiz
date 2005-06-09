@@ -4,7 +4,7 @@
 const string	CURSOR_PATH		= "gfx/m_cursor"; //"ui/mousepointer.tga";
 
 string Cursor_Current;
-var void() Cursor_Animation;
+var void() Cursor_Animation = __NULL__;
 
 vector Cursor_Relative;
 vector Cursor_Position;

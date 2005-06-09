@@ -35,6 +35,10 @@ void() Item_Data_Cvar_Test_End =
 	cvar_set( self.cvarName, self._syncValue );
 };
 
+void() Item_Data_Cvar_Save_ExecString = {
+	Data_ExecString = String_Append( Data_ExecString, strcat( "set \"", self.cvarName, "\" \"", self.value, "\"\n" ) );
+};
+
 void( float pEvent ) Item_Data_Cvar_DataEvent =
 {
 	switch( pEvent ) {
@@ -52,6 +56,9 @@ void( float pEvent ) Item_Data_Cvar_DataEvent =
 		break;
 	case ITEM_DATA_TEST_END:
 		Item_Data_Cvar_Test_End();
+		break;
+	case ITEM_DATA_SAVE_EXECSTRING:
+		Item_Data_Cvar_Save_ExecString();
 		break;
 	}
 };

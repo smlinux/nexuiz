@@ -1,5 +1,5 @@
 // Property of Alientrap/AK
-// custom/player/avatar.qm
+// custom/creategame/maps.qc
 
 /*
 ===================
@@ -236,6 +236,70 @@ float( entity pItem ) Nex_MapDB_GetIndex =
 	return fabs( pItem.orderPos );
 };
 
+void() Item_DataLink_Nex_MapList_Save =
+{
+	local float lCount;
+	local float lIndex;
+	local string lOutput;
+
+	lOutput = String_Create();
+
+	lCount = Util_GetAltStringCount( self.valueList );
+	for( lIndex = 0 ; lIndex < lCount ; lIndex++ ) {
+		lOutput = String_Append( lOutput, strcat( "\'", String_Normal( Util_GetAltStringItem( self.valueList, lIndex ) ), "\'" ) );
+	}
+
+	cvar_set( self.cvarName, lOutput );
+	cvar_set( strcat( self.cvarName, "_index" ), "0" );
+
+	String_Free( lOutput );
+};
+
+void() Item_DataLink_Nex_MapList_Load =
+{
+	local string lEntry;
+	local entity lMapInfo;
+	local float lCounter;
+	local float lCount;
+
+	DataLink_Nex_MapList_Clear( self );
+
+	lCount = tokenize( str_cvar( self.cvarName ) );
+
+	lEntry = String_Create();
+	for( lCounter = 0 ; lCounter < lCount ; lCounter++ ) {
+		lEntry = String_Set( lEntry, argv( lCounter ) );
+
+		lMapInfo = Nex_MapDB_GetByPath( lEntry );
+		if( lMapInfo == null_entity ) {
+			print( self.cvarName, ": Map '", lEntry, "' not found in database - ignored\n" );
+			continue;
+		}
+
+		self.descList = Util_AltStringPushBack( self.descList, lMapInfo.normal );
+		self.valueList = Util_AltStringPushBack( self.valueList, lMapInfo.link );
+	}
+	String_Free( lEntry );
+
+	DataLink_Nex_MapList_UpdateRange( self );
+	Nex_MapSelector_Synchronize();
+};
+
+void() Item_DataLink_Nex_MapList_ExecString =
+{
+	local float lCount;
+	local float lIndex;
+
+	Data_ExecString = String_Append( Data_ExecString, strcat( "set \"", self.cvarName, "_index\" \"0\"\nset \"", self.cvarName, "\" \"" ) );
+
+	lCount = Util_GetAltStringCount( self.valueList );
+	for( lIndex = 0 ; lIndex < lCount ; lIndex++ ) {
+		Data_ExecString = String_Append( Data_ExecString, strcat( "\'", String_Normal( Util_GetAltStringItem( self.valueList, lIndex ) ), "\'" ) );
+	}
+
+	Data_ExecString = String_Append( Data_ExecString, "\"\n" );
+};
+
 /*
 ===================
 Item_DataLink_Nex_MapList_DataEvent
@@ -245,8 +309,14 @@ void( float pEvent ) Item_DataLink_Nex_MapList_DataEvent =
 {
 	switch( pEvent ) {
 	case ITEM_DATA_SYNC:
+		if( self.cvarName != "" ) {
+			Item_DataLink_Nex_MapList_Load();
+		}
 		break;
 	case ITEM_DATA_SEND:
+		if( self.cvarName != "" ) {
+			Item_DataLink_Nex_MapList_Save();
+		}
 		break;
 	case ITEM_DATA_RESET:
 		self._realValue = 1.0;
@@ -254,6 +324,11 @@ void( float pEvent ) Item_DataLink_Nex_MapList_DataEvent =
 	case ITEM_DATA_TEST_START:
 		break;
 	case ITEM_DATA_TEST_END:
+		break;
+	case ITEM_DATA_SAVE_EXECSTRING:
+		if( self.cvarName != "" ) {
+			Item_DataLink_Nex_MapList_ExecString();
+		}
 		break;
 	case ITEM_DATALINK_SET:
 	case ITEM_DATALINK_GET:
@@ -268,6 +343,11 @@ void( float pEvent ) Item_DataLink_Nex_MapList_DataEvent =
 	}
 };
 
+void() IDLNML_Reinit =
+{
+	Raise_DataEvent( self, ITEM_DATA_SYNC );
+};
+
 /*
 ===================
 Item_DataLink_Nex_MapList_Destroy
@@ -276,6 +356,7 @@ Item_DataLink_Nex_MapList_Destroy
 void() Item_DataLink_Nex_MapList_Destroy =
 {
 	String_EntityFree( self, valueList );
+	String_EntityFree( self, cvarName );
 
 	Item_DataLink_Switch_Destroy();
 };
@@ -289,11 +370,18 @@ void() Item_DataLink_Nex_MapList_Spawn =
 {
 	Item_DataLink_Switch_Init();
 	String_EntityZone( self, valueList );
+	String_EntityZone( self, cvarName );
+
+	if( self.cvarName != "" ) {
+		registercvar( self.cvarName, "", CVAR_SAVE );
+		registercvar( strcat( self.cvarName, "_index" ), "", CVAR_SAVE );
+	}
 
 	self.minValue = 1.0;
 	self.maxValue = 1.0;
 	self.stepValue = 0.0;
 
+	self._reinit = IDLNML_Reinit;
 	self._dataEvent = Item_DataLink_Nex_MapList_DataEvent;
 	self._destroy = Item_DataLink_Nex_MapList_Destroy;
 

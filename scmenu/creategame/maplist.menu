@@ -34,7 +34,7 @@ Item Window MapList
 	Item Layout Panel
 	{
 		pos	'475 470'
-		size	'400 30'
+		size	'425 30'
 		direction	[Nex_DefaultHorzDirection]
 		flag 		[FlagEmbedded]
 

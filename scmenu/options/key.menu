@@ -254,6 +254,22 @@ Item Window KeyControl
 						text	"Rocket"
 						target	"Data::Key::Weapon::Rocket"
 					}
+					Derive Nex_Void Seperator3
+					{}
+					Derive Title Misc
+					{
+						text 	"[Miscellaneous]"
+					}
+					Derive Nex_Key_Template ShowScores
+					{
+						text	"Show Scores"
+						target	"Data::Key::ShowScores"
+					}
+					Derive Nex_Key_Template ToggleConsole
+					{
+						text	"Toggle Console"
+						target	"Data::Key::ToggleConsole"
+					}
 				}
 			}
 			Item VScrollBar Scroller

@@ -65,6 +65,7 @@ custom/joingame.qh
 custom/key.qh
 custom/video.qh
 custom/credits.qh
+custom/messagebox.qh
 
 // Source Files
 
@@ -89,12 +90,14 @@ custom/player/color.qc
 
 custom/creategame/maps.qc
 custom/creategame/mods.qc
+custom/creategame/filelist.qc
 
 custom/visible.qc
 custom/key.qc
 custom/video.qc
 custom/joingame.qc
 custom/credits.qc
+custom/messagebox.qc
 
 // controls
 control/automation/automation.qc

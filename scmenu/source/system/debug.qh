@@ -8,7 +8,7 @@ const string	SYSTEM_CVAR_VERSION			= "scmenu_version";
 
 const string 	SYSTEM_CVAR_VERSION_BUILDDATE_VALUE	= __DATE__;
 const string 	SYSTEM_CVAR_VERSION_BUILDTIME_VALUE	= __TIME__;
-const string 	SYSTEM_CVAR_VERSION_VALUE		= "beta";
+const string 	SYSTEM_CVAR_VERSION_VALUE		= "prerelease";
 
 // system cvars
 

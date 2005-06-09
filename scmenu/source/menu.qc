@@ -49,6 +49,8 @@ void() m_frame =
 
 	HostCache_Update();
 
+	Key_Update();
+
 	// graphic frame
 	Gfx_Update();
 

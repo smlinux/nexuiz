@@ -21,10 +21,8 @@ Item DataContainer Server
 		}
 		Item DataLink_Nex_MapList Cycle
 		{
-		}
-		Item Task_Job ReInitMapList
-		{
-			reinit 	Nex_ReadCycleList
+			// creates x and x_index (CVAR_SAVE)
+			cvarName	"g_maplist"
 		}
 	}
 

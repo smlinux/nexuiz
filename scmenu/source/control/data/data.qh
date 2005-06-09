@@ -7,11 +7,17 @@ enum {
 	ITEM_DATA_RESET, // use the default value
 	ITEM_DATA_TEST_START,	// set it but dont sync our backup
 	ITEM_DATA_TEST_END,	// set our backup
+	ITEM_DATA_SAVE_EXECSTRING, // stroes the value and the name in such a way in a string that executing it will restore the value and the state (if possible)
 	ITEM_DATALINK_SET,
 	ITEM_DATALINK_GET
 };
 
 void( entity pItem, float pEvent ) Raise_DataEvent;
+
+// ExecString used to store the data for the ITEM_DATA_SAVE_EXECSTRING event
+string Data_ExecString;
+void() Data_ExecString_BeginUse;
+void() Data_ExecString_EndUse;
 
 // [Item_Data]
 .string value;		// current value in the menu
@@ -104,7 +110,7 @@ void( float pEvent ) Item_DataLink_TextSwitch_DataEvent;
 void() Item_DataLink_TextSwitch_Destroy;
 void() Item_DataLink_TextSwitch_Spawn;
 
-// Item_DataLink_FastResync [Item_DataLink] d
+// Item_DataLink_FastResync [Item_DataLink]
 // "Fast" in the sense of total performance - the data is resynced
 // at most once per frame
 .float _presstime; // no more than once a frame?

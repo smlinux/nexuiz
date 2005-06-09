@@ -1,0 +1,5 @@
+// Property of Alientrap/AK
+// custom/messagebox.qh
+
+void( string pTitle, string pText, string pLeftButton, string pRightButton, event pLeftEvent, event pRightEvent )
+Nex_MessageBox;

@@ -19,6 +19,26 @@ void( entity pItem, float pEvent ) Raise_DataEvent =
 	self = lOld;
 };
 
+/*
+===================
+Data_ExecString_BeginUse
+===================
+*/
+void() Data_ExecString_BeginUse =
+{
+	Data_ExecString = String_Create();
+};
+
+/*
+===================
+Data_ExecString_EndUse
+===================
+*/
+void() Data_ExecString_EndUse =
+{
+	String_Free( Data_ExecString);
+};
+
 /////////////////////
 // [Item_Data]
 ///

@@ -1,5 +1,5 @@
 // Property of Alientrap/AK
-// custom/player/avatar.qh
+// custom/creategame/creategame.qh
 
 // Item_Nex_Map_Info
 // its a valid item nevertheless
@@ -33,6 +33,7 @@ void() Item_Data_Nex_Name_Spawn;
 // Item_DataLink_Nex_MapList [Item_DataLink_Switch]
 // contains the full .bsp path in value and the text/map name in desc
 // this is just a placeholder data item - it only keeps a set
+.string cvarName; // name of the maplist cvar
 .event init; // if you want to initialize it
 void( float pEvent ) Item_DataLink_Nex_MapList_DataEvent;
 void() Item_DataLink_Nex_MapList_Spawn;
@@ -58,3 +59,12 @@ string( entity pItem ) DataLink_Nex_MapList_GetCurrentPath;
 // Item_DataLink_Nex_ModSwitch Item_DataLink_TextSwitch
 
 void() Item_DataLink_Nex_ModSwitch_Spawn;
+
+//Item_DataLink_Nex_FileList [Item_DataLink_TextSwitch]
+.string normal; // contains the file extension
+.string selected; // contains the path
+.string valueList;
+
+void( float pEvent ) Item_DataLink_Nex_FileList_DataEvent;
+void() Item_DataLink_Nex_FileList_Destroy;
+void() Item_DataLink_Nex_FileList_Spawn;

@@ -3,6 +3,9 @@
 //////////////////////////////////////////////////
 // AK FIXME: Create perhaps a special builtin file for the common cmds
 
+//#define PROFILESTRZONE
+#define FIXEDFOPEN
+
 void 	checkextension(string ext) = #1;
 
 // error cmds
@@ -81,7 +84,11 @@ float	bound(float min,float value, float max)  = #45;
 float	pow(float a, float b)  = #46;
 void	copyentity(entity src, entity dst)  = #47;
 
+#ifdef FIXEDFOPEN
+float 	_fopen( string filename, float mode ) = #48;
+#else
 float	fopen(string filename, float mode)  = #48;
+#endif
 void	fclose(float fhandle)  = #49;
 string	fgets(float fhandle)  = #50;
 void	fputs(float fhandle, string s)  = #51;
@@ -217,3 +224,23 @@ void	refreshhostcache(void) = #620;
 float	gethostcachenumber(float fld, float hostnr) = #621;
 float	gethostcacheindexforkey(string key) = #622;
 void	addwantedhostcachekey(string key) = #623;
+
+#ifdef FIXEDFOPEN
+float 	fopen( string filename, float mode ) =
+{
+	local float handle;
+	if( mode == FILE_READ ) {
+		return _fopen( filename, mode );
+	}
+
+	// check for data/
+	filename = strzone( filename );
+	if( substring( filename, 0, 5 ) != "data/" ) {
+		print( "menu: fopen: all output must go into data/!\n" );
+		return -1;
+	}
+	handle = _fopen( substring( filename, 5, 10000 ), mode );
+	strunzone( filename );
+	return handle;
+};
+#endif

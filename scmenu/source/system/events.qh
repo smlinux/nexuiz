@@ -28,7 +28,7 @@ vector Menu_Cursor_Position;
 
 // key hook - only as long as there is no history change or the menu is closed
 entity Menu_KeyHook_Target;
-var void( float pKey, float pAscii ) Menu_KeyHook;
+var void( float pKey, float pAscii ) Menu_KeyHook = __NULL__;
 
 ///////////////
 // prototypes
