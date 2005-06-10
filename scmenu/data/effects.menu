@@ -65,7 +65,7 @@ Item DataContainer Effects
 
 		[DataLink_OnOffSwitch]
 	}
-	Item Data_Cvar Glslang
+	Item Data_Cvar GLSL
 	{
 		cvarName	"r_shadow_glsl"
 		defValue	1
@@ -75,6 +75,13 @@ Item DataContainer Effects
 	{
 		cvarName	"r_shadow_gloss"
 		defValue	1
+
+		[DataLink_OnOffSwitch]
+	}
+	Item Data_Cvar ShowFPS
+	{
+		cvarName	"showfps"
+		defValue	"0"
 
 		[DataLink_OnOffSwitch]
 	}

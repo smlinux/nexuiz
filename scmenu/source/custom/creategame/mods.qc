@@ -16,8 +16,7 @@ void() _IDLNMS_Build =
 	local float 	lSearchSize;
 	local float 	lSearchCounter;
 
-	// FIXME: most stupid builtin bug ever: search only finds /*.modinfo, but fopen only opens *.modinfo
-	lSearchHandle = search_begin( "/*.modinfo", true, true );
+	lSearchHandle = search_begin( "*.modinfo", true, true );
 	if( lSearchHandle < 0 ) {
 		String_EntitySet( self, valueList, "'progs.dat'" );
 		String_EntitySet( self, descList, "'Deathmatch'" );
@@ -34,7 +33,8 @@ void() _IDLNMS_Build =
 		local string 	lLine;
 
 		lFilename = search_getfilename( lSearchHandle, lSearchCounter );
-		lHandle = fopen( substring( lFilename, 1, 100000 ), FILE_READ );
+		print( lFilename, "\n" );
+		lHandle = fopen( lFilename, FILE_READ );
 		if( lHandle < 0 ) {
 			print( "Menu: Couldn't open modinfo file '", lFilename, "'\n" );
 			continue;

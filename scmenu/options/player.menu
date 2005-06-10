@@ -104,6 +104,11 @@ Item Window Player
 			text	"Field of View"
 			target	"::Data::Player::FOV::Value"
 		}
+		Derive Nex_Option_Slider ViewSize
+		{
+			text	"View Size"
+			target	"::Data::Player::ViewSize::Value"
+		}
 		Derive Nex_Void Seperator1
 		{}
 		Derive PictureButton Apply

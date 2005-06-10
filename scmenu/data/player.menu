@@ -32,13 +32,26 @@ Item DataContainer Player
 	Item Data_Cvar FOV
 	{
 		cvarName	"FOV"
-		defValue	90
+		defValue	"90"
 
 		Item DataLink_Value Value
 		{
 			minValue	60.0
 			maxValue	150.0
 			stepValue	1.0
+			link		"##up"
+		}
+	}
+	Item Data_Cvar ViewSize
+	{
+		cvarName	"viewsize"
+		defValue	"110"
+
+		Item DataLink_Value Value
+		{
+			minValue	30.0
+			maxValue	120.0
+			stepValue	10
 			link		"##up"
 		}
 	}

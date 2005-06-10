@@ -30,9 +30,6 @@ Item DataContainer Video
 	{
 		cvarName	"vid_fullscreen"
 
-		Derive DataLink_OnOffSwitch Switch
-		{
-			link	"##up"
-		}
+		[DataLink_OnOffSwitch]
 	}
 }
