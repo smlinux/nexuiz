@@ -118,4 +118,39 @@ Item DataContainer Key
 		target		"toggleconsole"
 		defValue	""
 	}
+	Item Data_Nex_Key Message
+	{
+		target		"messagemode"
+		bind		"'t'"
+	}
+	Item Data_Nex_Key TeamMessage
+	{
+		target		"messagemode2"
+		bind		"'r' 'y'"
+	}
+	Item Data_Nex_Key Pause
+	{
+		target		"pause"
+		bind		"'pause'"
+	}
+	Item Data_Nex_Key Screenshot
+	{
+		target		"screenshot"
+		bind		"F12"
+	}
+	Item Data_Nex_Key Quit
+	{
+		target		"quit"
+		bind		"'F10'"
+	}
+	Item Data_Nex_Key ViewSmaller
+	{
+		target		"sizedown"
+		bind		"-"
+	}
+	Item Data_Nex_Key ViewBigger
+	{
+		target		"sizeup"
+		bind		"="
+	}
 }

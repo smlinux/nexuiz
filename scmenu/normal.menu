@@ -63,7 +63,7 @@ Ignore
 	Item Reference Panel
 	{
 		pos	'62 127'
-		size	'900 650'
+		size	'938 650'
 
 		// The first thing you should see is our cool logo!
 		Derive Picture NexuizLogo

@@ -55,4 +55,37 @@ Item DataContainer Player
 			link		"##up"
 		}
 	}
+	Item DataContainer Crosshair
+	{
+		Item Data_Cvar Type
+		{
+			cvarName	"crosshair"
+			defValue	"1"
+
+			Item DataLink_ValueSwitch Switch
+			{
+				minValue 0
+				stepValue 1
+				maxValue 5
+
+				descList	"'' '$gfx/crosshair1.tga' '$gfx/crosshair2.tga' '$gfx/crosshair3.tga' '$gfx/crosshair4.tga' '$gfx/crosshair5.tga'"
+
+				link		"##up"
+			}
+		}
+		Item Data_Cvar	Size
+		{
+			cvarName	"crosshair_size"
+			defValue	"1"
+
+			Item DataLink_Value Value
+			{
+				minValue	1.0
+				maxValue	5.0
+				stepValue	0.5
+
+				link		"##up"
+			}
+		}
+	}
 }

@@ -270,6 +270,41 @@ Item Window KeyControl
 						text	"Toggle Console"
 						target	"Data::Key::ToggleConsole"
 					}
+					Derive Nex_Key_Template Message
+					{
+						text	"Message"
+						target	"Data::Key::Message"
+					}
+					Derive Nex_Key_Template TeamMessage
+					{
+						text	"Team Message"
+						target	"Data::Key::TeamMessage"
+					}
+					Derive Nex_Key_Template Pause
+					{
+						text	"Pause"
+						target	"Data::Key::Pause"
+					}
+					Derive Nex_Key_Template Screenshot
+					{
+						text	"Screenshot"
+						target	"Data::Key::Screenshot"
+					}
+					Derive Nex_Key_Template Quit
+					{
+						text	"Quit Nexuiz"
+						target	"Data::Key::Quit"
+					}
+					Derive Nex_Key_Template ViewSmaller
+					{
+						text	"Decrease Viewsize"
+						target	"Data::Key::ViewSmaller"
+					}
+					Derive Nex_Key_Template ViewBigger
+					{
+						text	"Increase Viewsize"
+						target	"Data::Key::ViewBigger"
+					}
 				}
 			}
 			Item VScrollBar Scroller

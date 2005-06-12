@@ -25,14 +25,17 @@ string() Item_DataLink_ClampedValue =
 {
 	local float lLen;
 	local float lClampedStep;
-	if( self.stepValue == floor( self.stepValue ) )
+	local float lInverseClamped;
+	lClampedStep = self.stepValue - floor( self.stepValue );
+	if( lClampedStep == 0.0 )
 		return ftos( self._realValue );
-	// Get the integer length
-	lLen = strlen( ftos( rint( self._realValue  ) ) );
-	// Now add the step length
-	lClampedStep = rint( 1.0 / (self.stepValue - floor( self.stepValue )) );
-	lLen += strlen( ftos( lClampedStep ) );
-	return substring( ftos( self._realValue ), 0, lLen );
+	// get the integer length
+	lLen = strlen( ftos( floor( self._realValue ) ) );
+	// Example data: 0.1 -> 10 - 1 = 9; 0.9 -> 1.^1 - 0.1 = 1.0^1 ; 0.01 -> 100 - 1 = 99 ; 0.09 -> 11.^1 - 0.1 = 10.0^1
+	lInverseClamped = 1.0 / lClampedStep - 0.1;
+	// add the fraction length and 1 for the .
+	lLen += strlen( ftos( floor( lInverseClamped ) ) ) + 1;
+	return substring( ftos( self._realValue + 0.0001 ), 0, lLen );
 }
 
 /*
