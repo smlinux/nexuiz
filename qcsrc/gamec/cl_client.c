@@ -578,6 +578,10 @@ void PlayerPreThink (void)
 		setmodel (self, self.playermodel);
 		setsize (self, m1, m2);
 	}
+	
+	// Savage: Check for nameless players
+	if (strlen(self.netname) < 1)
+		self.netname = "Player";
 
 	if (self.skin != stof(self.playerskin))
 		self.skin = stof(self.playerskin);
