@@ -4,7 +4,7 @@
 
 Item DataContainer Weapon
 {
-	Item Data_Cvar InvincibleTakedamage
+	Item Data_Cvar InvincibleTakeDamage
 	{
 		cvarName	"g_balance_powerup_invincible_takedamage"
 		defValue	0.2
@@ -18,21 +18,21 @@ Item DataContainer Weapon
 
 		[DataLink_Setting]
 	}
-	Item Data_Cvar Strengthdamage
+	Item Data_Cvar StrengthDamage
 	{
 		cvarName	"g_balance_powerup_strength_damage"
 		defValue	3
 
 		[DataLink_Setting]
 	}
-	Item Data_Cvar Strengthforce
+	Item Data_Cvar StrengthForce
 	{
 		cvarName	"g_balance_powerup_strength_force"
 		defValue	4
 
 		[DataLink_Setting]
 	}
-	Item Data_Cvar Strengthtime
+	Item Data_Cvar StrengthTime
 	{
 		cvarName	"g_balance_powerup_strength_time"
 		defValue	30
@@ -88,6 +88,13 @@ Item DataContainer Weapon
 
 		[DataLink_Setting]
 	}
+	Item Data_Cvar ShotgunDamage2
+	{
+		cvarName	"g_balance_shotgun_damage2"
+		defValue	6
+
+		[DataLink_Setting]
+	}
 	Item Data_Cvar ShotgunBullets
 	{
 		cvarName	"g_balance_shotgun_bullets"
@@ -95,7 +102,7 @@ Item DataContainer Weapon
 
 		[DataLink_Setting]
 	}
-	Item Data_Cvar Shotgunspread
+	Item Data_Cvar ShotgunSpread
 	{
 		cvarName	"g_balance_shotgun_spread"
 		defValue	0.07
@@ -221,10 +228,17 @@ Item DataContainer Weapon
 
 		[DataLink_Setting]
 	}
-	Item Data_Cvar GrenadeLauncherrefire
+	Item Data_Cvar GrenadeLauncherRefire
 	{
 		cvarName	"g_balance_grenadelauncher_refire"
 		defValue	0.8
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar GrenadeLauncherRefire2
+	{
+		cvarName	"g_balance_grenadelauncher_refire2"
+		defValue	0.6
 
 		[DataLink_Setting]
 	}
@@ -333,6 +347,13 @@ Item DataContainer Weapon
 
 		[DataLink_Setting]
 	}
+	Item Data_Cvar CryLinkShots
+	{
+		cvarName	"g_balance_crylink_shots"
+		defValue	7
+
+		[DataLink_Setting]
+	}
 	Item Data_Cvar NexDamage
 	{
 		cvarName	"g_balance_nex_damage"
@@ -393,6 +414,13 @@ Item DataContainer Weapon
 	{
 		cvarName	"g_balance_hagar_speed2_up"
 		defValue	100
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar HagarSpread
+	{
+		cvarName	"g_balance_hagar_spread"
+		defValue	0
 
 		[DataLink_Setting]
 	}

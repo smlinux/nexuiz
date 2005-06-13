@@ -69,7 +69,7 @@ Item DataContainer Game
 	}
 	Item Data_Cvar MaxAirSpeed
 	{
-		cvarName	"g_balance_maxairspeed"
+		cvarName	"sv_maxairspeed"
 		defValue	50
 
 		[DataLink_Setting]

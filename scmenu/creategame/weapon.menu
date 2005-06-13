@@ -47,30 +47,30 @@ Item Window Weapon
 				}
 			}
 
-			Derive Nex_Option_EditBox InvincibleTakedamage
+			Derive Nex_Option_EditBox InvincibleTakeDamage
 			{
 				text	"Invincible Take Damage"
-				target	"Data::Weapon::InvincibleTakedamage::Text"
+				target	"Data::Weapon::InvincibleTakeDamage::Text"
 			}
 			Derive Nex_Option_EditBox InvincibleTime
 			{
 				text	"Invincible Time"
 				target	"Data::Weapon::InvincibleTime::Text"
 			}
-			Derive Nex_Option_EditBox Strengthdamage
+			Derive Nex_Option_EditBox StrengthDamage
 			{
 				text	"Strength Damage"
-				target	"Data::Weapon::Strengthdamage::Text"
+				target	"Data::Weapon::StrengthDamage::Text"
 			}
-			Derive Nex_Option_EditBox Strengthforce
+			Derive Nex_Option_EditBox StrengthForce
 			{
 				text	"Strength Force"
-				target	"Data::Weapon::Strengthforce::Text"
+				target	"Data::Weapon::StrengthForce::Text"
 			}
-			Derive Nex_Option_EditBox Strengthtime
+			Derive Nex_Option_EditBox StrengthTime
 			{
 				text	"Strength Time"
-				target	"Data::Weapon::Strengthtime::Text"
+				target	"Data::Weapon::StrengthTime::Text"
 			}
 			Derive Nex_Option_EditBox LaserDamage
 			{
@@ -107,15 +107,20 @@ Item Window Weapon
 				text	"Shotgun Damage"
 				target	"Data::Weapon::ShotgunDamage::Text"
 			}
+			Derive Nex_Option_EditBox ShotgunDamage2
+			{
+				text	"Shotgun Damage 2"
+				target	"Data::Weapon::ShotgunDamage2::Text"
+			}
 			Derive Nex_Option_EditBox ShotgunBullets
 			{
 				text	"Shotgun Bullets"
 				target	"Data::Weapon::ShotgunBullets::Text"
 			}
-			Derive Nex_Option_EditBox Shotgunspread
+			Derive Nex_Option_EditBox ShotgunSpread
 			{
 				text	"Shotgun Spread"
-				target	"Data::Weapon::Shotgunspread::Text"
+				target	"Data::Weapon::ShotgunSpread::Text"
 			}
 			Derive Nex_Option_EditBox ShotgunRefire
 			{
@@ -202,10 +207,15 @@ Item Window Weapon
 				text	"Grenade Launcher Speed2up"
 				target	"Data::Weapon::GrenadeLauncherSpeed2Up::Text"
 			}
-			Derive Nex_Option_EditBox GrenadeLauncherrefire
+			Derive Nex_Option_EditBox GrenadeLauncherRefire
 			{
 				text	"Grenade Launcher Refire"
-				target	"Data::Weapon::GrenadeLauncherrefire::Text"
+				target	"Data::Weapon::GrenadeLauncherRefire::Text"
+			}
+			Derive Nex_Option_EditBox GrenadeLauncherRefire2
+			{
+				text	"Grenade Launcher Refire2"
+				target	"Data::Weapon::GrenadeLauncherRefire2::Text"
 			}
 			Derive Nex_Option_EditBox ElectroDamage
 			{
@@ -282,6 +292,11 @@ Item Window Weapon
 				text	"CryLink Refire"
 				target	"Data::Weapon::CryLinkRefire::Text"
 			}
+			Derive Nex_Option_EditBox CryLinkShots
+			{
+				text	"CryLink Shots"
+				target	"Data::Weapon::CryLinkShots::Text"
+			}
 			Derive Nex_Option_EditBox NexDamage
 			{
 				text	"Nex Damage"
@@ -326,6 +341,11 @@ Item Window Weapon
 			{
 				text	"Hagar Speed2 up"
 				target	"Data::Weapon::HagarSpeed2Up::Text"
+			}
+			Derive Nex_Option_EditBox HagarSpread
+			{
+				text	"Hagar Spread"
+				target	"Data::Weapon::HagarSpread::Text"
 			}
 			Derive Nex_Option_EditBox RocketLauncherDamage
 			{
