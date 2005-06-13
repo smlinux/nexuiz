@@ -243,10 +243,8 @@ DeriveTemplate Nex_Composition Nex_Option_Slider
 	DeriveTemplate ValueButton 	Value
 	{}
 }
-DeriveTemplate Composition Nex_Option_Switch
+DeriveTemplate Nex_Composition Nex_Option_Switch
 {
-	direction	[Nex_DefaultHorzDirection]
-
 	DeriveTemplate Nex_Automation_Option_Switch Automation
 	{}
 	DeriveTemplate TextButton 	Description

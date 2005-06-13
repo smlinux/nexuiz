@@ -14,7 +14,7 @@ void() IDLNFL_Sync = {
 	local float lMaskStart, lMaskedLength;
 	local float lCounter;
 
-	lHandle = search_begin( strcat( self.selected, "/*.", self.normal ), true, true );
+	lHandle = search_begin( strcat( self.selected, "*.", self.normal ), true, true );
 	if( lHandle < 0 ) {
 		return;
 	}
@@ -23,8 +23,8 @@ void() IDLNFL_Sync = {
 	String_EntitySet( self, valueList, "" );
 	String_EntitySet( self, descList, "" );
 
-	lMaskStart = strlen( self.selected ) + 1;
-	lMaskedLength = lMaskStart + strlen( self.normal) + 1;
+	lMaskStart = strlen( self.selected );
+	lMaskedLength = lMaskStart + strlen( self.normal) + 1; // +1 because of the '.'
 	for( lCounter = 0 ; lCounter < lCount ; lCounter++ ) {
 		local string lFilename;
 

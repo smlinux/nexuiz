@@ -86,10 +86,9 @@
 #define DefaultProportions	"0.073107 0.853785 0.073107"
 #define DefaultDirection	"0.5 0.5"
 
-
 // EditBoxs
 #define DefaultCursorSize	"1.375 12 0"
 #define DefaultCursorFlashSize	"1.375 12 0"
-#define DefaultCursorColor	"1 1 1"
-#define DefaultCursorFlashColor "1 1 1"
+#define DefaultCursorColor	"0 0 0"
+#define DefaultCursorFlashColor "0 0 0"
 

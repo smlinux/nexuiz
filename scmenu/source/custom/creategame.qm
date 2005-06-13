@@ -295,7 +295,7 @@ void() Nex_Action_Management_LoadConfig =
 	lFileList = Nex_Management_GetFileList( Nex_Management_GetType() );
 	lFilenameData = Menu_GetItem( "::Data::Management::Filename" );
 
-	cmd( strcat( "exec \"", lFileList.selected, "/", lFilenameData.value, ".", lFileList.normal, "\"\n" ) );
+	cmd( strcat( "exec \"", lFileList.selected, lFilenameData.value, ".", lFileList.normal, "\"\n" ) );
 
 	lSyncItem = Menu_GetItem( "CreateGame::Panel::Management::SyncCategory" );
 	lSyncItem._realValue = Timer_Time;
@@ -336,7 +336,7 @@ void() Nex_Action_Management_SaveConfig =
 		Nex_MessageBox( "Saving", "You must specify a filename!", "Ok", "", Util_NullFunction, Util_NullFunction );
 		return;
 	}
-	lHandle = fopen( strcat( lFileList.selected, "/", lFilename.value, ".", lFileList.normal ), FILE_WRITE );
+	lHandle = fopen( strcat( lFileList.selected, lFilename.value, ".", lFileList.normal ), FILE_WRITE );
 
 	if( lHandle < 0 ) {
 		return;
@@ -360,8 +360,6 @@ void() Nex_Action_Management_Save =
 	local entity lFilename;
 	local float lHandle;
 
-	print( "Bla\n" );
-
 	lFileList = Nex_Management_GetFileList( Nex_Management_GetType() );
 	lFilename = Menu_GetItem( "::Data::Management::Filename" );
 
@@ -369,10 +367,11 @@ void() Nex_Action_Management_Save =
 
 	if( lHandle == ERR_CANNOTOPEN ) {
 		Nex_Action_Management_SaveConfig();
-		fclose( lHandle );
 	} else if( lHandle > 0 ) {
 		local string lQuestion;
 		local string lTitle;
+
+		fclose( lHandle );
 
 		lTitle = String_Zone( strcat( "Saving ", String_Normal( Nex_Management_GetTypeName() ) ) );
 		print( lTitle, "\n" );

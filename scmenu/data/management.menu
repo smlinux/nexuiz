@@ -27,19 +27,19 @@ Item DataContainer Management
 		Item DataLink_Nex_FileList Weapon
 		{
 			normal		"cfg"
-			selected	"data/config/weapon"
+			selected	"data/config/weapon/"
 		}
 
 		Item DataLink_Nex_FileList Game
 		{
 			normal		"cfg"
-			selected	"data/config/game"
+			selected	"data/config/game/"
 		}
 
 		Item DataLink_Nex_FileList MapList
 		{
 			normal		"cfg"
-			selected	"data/config/maplist"
+			selected	"data/config/maplist/"
 		}
 	}
 }

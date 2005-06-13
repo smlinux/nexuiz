@@ -63,7 +63,7 @@ Item Window Player
 	{
 		pos		'320 20'
 		size		'440 600'
-		origin		'160 0'
+		origin		'180 0'
 		flag		[FlagEmbedded]
 		alignment	[AlignFirst]
 		direction	[Nex_DefaultVertDirection]
