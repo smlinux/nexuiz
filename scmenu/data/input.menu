@@ -27,5 +27,11 @@ Item DataContainer Input
 			link		"##up"
 		}
 	}
+	Item Data_Cvar MouseFilter
+	{
+		cvarName	"m_filter"
+		defValue	0
 
+		[DataLink_OnOffSwitch]
+	}	
 }

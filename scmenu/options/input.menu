@@ -28,6 +28,11 @@ Item Window Input
 			text	"Invert Mouse"
 			target	"::Data::Input::InvertMouse::Switch"
 		}
+		Derive Nex_Option_Switch MouseFilter
+		{
+			text	"Mouse Filter"
+			target	"::Data::Input::MouseFilter::Switch"
+		}		
 		Derive Nex_Line	Seperator
 		{}
 		Derive TextButton Reset
