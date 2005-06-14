@@ -49,21 +49,32 @@ Item Window Effects
 			text	"Coronas"
 			target	"::Data::Effects::Coronas::Switch"
 		}
+
+		Derive Nex_Line	SeperatorRTLights
+		{}		
 		Derive Nex_Option_Switch RealtimeLights
 		{
 			text	"Realtime World Lights"
 			target	"::Data::Effects::RealtimeLights::Switch"
+		}
+		Derive Nex_Option_Switch RealtimeShadows
+		{
+			text	"Realtime World Shadows"
+			target	"::Data::Effects::RealtimeShadows::Switch"
 		}
 		Derive Nex_Option_Switch RealtimeDLights
 		{
 			text	"Realtime Dynamic Lights"
 			target	"::Data::Effects::RealtimeDLights::Switch"
 		}
-		Derive Nex_Option_Switch RealtimeShadows
+		Derive Nex_Option_Switch RealtimeDLightShadows
 		{
-			text	"Realtime Shadows"
-			target	"::Data::Effects::RealtimeShadows::Switch"
+			text	"Realt. Dyn. Lights Shad."
+			target	"::Data::Effects::RealtimeDLightShadows::Switch"
 		}
+
+		Derive Nex_Line	SeperatorGFXFeatures
+		{}		
 		Derive Nex_Option_Switch GLSL
 		{
 			text	"OpenGL 2.0 Shaders"
@@ -79,7 +90,7 @@ Item Window Effects
 			text	"Show FPS"
 			target	"::Data::Effects::ShowFPS::Switch"
 		}
-		Derive Nex_Line	Seperator
+		Derive Nex_Line	SeperatorReset
 		{}
 		Derive TextButton Reset
 		{

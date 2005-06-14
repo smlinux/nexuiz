@@ -65,6 +65,13 @@ Item DataContainer Effects
 
 		[DataLink_OnOffSwitch]
 	}
+	Item Data_Cvar RealtimeDLightShadows
+	{
+		cvarName	"r_shadow_realtime_dlight_shadows"
+		defValue	1
+
+		[DataLink_OnOffSwitch]
+	}	
 	Item Data_Cvar GLSL
 	{
 		cvarName	"r_shadow_glsl"
