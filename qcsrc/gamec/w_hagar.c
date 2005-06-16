@@ -76,7 +76,7 @@ void W_Hagar_Attack (void)
 	sound (self, CHAN_WEAPON, "weapons/hagar_fire.wav", 1, ATTN_NORM);
 	self.ammo_rockets = self.ammo_rockets - 1;
 	self.punchangle_x = -2;
-	org = self.origin + self.view_ofs + v_forward * 25 + v_right * 5 + v_up * -8;
+	org = self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -8;
 
 	missile = spawn ();
 	missile.owner = self;
