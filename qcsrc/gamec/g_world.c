@@ -6,6 +6,24 @@ void worldspawn (void)
 
 	game = cvar ("gamecfg");	// load game options
 
+	// Precache all player models
+	// Workaround for "invisible players"
+	precache_model("models/player/carni.zym");
+	precache_model("models/player/crash.zym");
+	precache_model("models/player/grunt.zym");
+	precache_model("models/player/headhunter.zym");
+	precache_model("models/player/insurrectionist.zym");
+	precache_model("models/player/jeandarc.zym");
+	precache_model("models/player/lurk.zym");
+	precache_model("models/player/lycanthrope.zym");
+	precache_model("models/player/marine.zym");
+	precache_model("models/player/nexus.zym");
+	precache_model("models/player/pyria.zym");
+	precache_model("models/player/shock.zym");
+	precache_model("models/player/skadi.zym");
+	precache_model("models/player/specop.zym");
+	precache_model("models/player/visitant.zym");
+
 	//precache_model ("progs/beam.mdl");
 	precache_model ("models/bullet.mdl");
 	precache_model ("models/casing_bronze.mdl");
