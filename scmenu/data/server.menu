@@ -165,4 +165,51 @@ Item DataContainer Server
 			link		"##up"
 		}
 	}
+	Item Data_Cvar ServerFrameTime
+	{
+		cvarName	"sys_ticrate"
+		defValue	"0.05"
+
+		Item DataLink_Value Value
+		{
+			minValue	0.01	// 100 fps
+			maxValue	0.10	// 10 fps
+			stepValue	0.005
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	5
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar ServerMaxRate
+	{
+		cvarName	"sv_maxrate"
+		defValue	"10000"
+
+		Item DataLink_Value Value
+		{
+			minValue	1000.0
+			maxValue	25000.0
+			stepValue	1000.0
+
+			link		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	5
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
 }

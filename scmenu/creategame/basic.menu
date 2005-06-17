@@ -128,6 +128,18 @@ Item Window Basic
 			Derive Nex_Void Seperator2
 			{}
 		}
+		Derive Nex_Option_EditBox ServerFrameTime
+		{
+			text	"Server Period"
+			target	"Data::Server::ServerFrameTime::Text"
+		}
+		Derive Nex_Option_EditBox ServerMaxRate
+		{
+			text	"Server Max Rate"
+			target	"Data::Server::ServerMaxRate::Text"
+		}
+		Derive Nex_Line	Seperator3
+		{}
 		Derive PictureButton Start
 		{
 			normal		"$gfx/m_start"
