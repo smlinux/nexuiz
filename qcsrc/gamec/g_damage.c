@@ -128,6 +128,11 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 	if (self.event_damage)
 		self.event_damage (inflictor, attacker, damage, deathtype, hitloc, force);
 	self = oldself;
+	
+	// Savage: vampire mode
+	if(cvar("g_vampire") && targ.classname == "player" && attacker.classname == "player" && attacker != targ) {
+		attacker.health += damage;		
+	}
 }
 
 void RadiusDamage (entity inflictor, entity attacker, float coredamage, float edgedamage, float rad, entity ignore, float forceintensity, float deathtype)
