@@ -18,6 +18,13 @@ Item DataContainer Game
 
 		[DataLink_OnOffSwitch]
 	}
+	Item Data_Cvar Vampire
+	{
+		cvarName	"g_vampire"
+		defValue	0
+
+		[DataLink_OnOffSwitch]
+	}	
 	Item Data_Cvar Casings
 	{
 		cvarName	"g_casings"

@@ -32,6 +32,11 @@ Item Layout Game
 		text	"Rocket Arena"
 		target	"::Data::Game::RocketArena::Switch"
 	}
+	Derive Nex_Option_Switch Vampire
+	{
+		text	"Vampire Mode"
+		target	"::Data::Game::Vampire::Switch"
+	}
 	Derive Nex_Option_Switch Casings
 	{
 		text	"Bullet Casings"
