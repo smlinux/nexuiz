@@ -100,13 +100,15 @@ Item DataContainer Server
 	}
 	Item Data_CvarCreateSave NumBots
 	{
-		// ?? TODO: add support for this in Game QC?
-		cvarName	"nex_numbots"
+		cvarName	"bot_number"
 		defValue	0
 
 		Item DataLink_Value Value
 		{
-			maxValue 	16
+			minValue	0
+			stepValue	1
+			maxValue 	64
+
 			link		"##up"
 		}
 		Item DataLink_Text Text
@@ -123,16 +125,16 @@ Item DataContainer Server
 	Item Data_CvarCreateSave BotSkill
 	{
 		// TODO: add support for this in FrikQcc
-		cvarName	"nex_botskill"
-		// from 0 to 3
-		defValue	0
+		cvarName	"skill"
+		// from 0 to 10
+		defValue	5
 
 		Item DataLink_ValueSwitch Switch
 		{
 			minValue	0
 			stepValue	1
-			maxValue	3
-			descList	"'Beginner''Easy''Medium''Hard'"
+			maxValue	10
+			descList	"'Dumb, very''You will win''You can win''You might win''Beginner''Intermediate''Advanced''Expert''Assassin''Godlike'"
 
 			link		"##up"
 		}

@@ -85,17 +85,7 @@ void() Nex_Action_MapSelector_Prev =
 void() Nex_Action_Map_Start =
 {
 	local entity lItem;
-	local float  lNumBots, lSkill;
-	// we need to set the following var
-	lItem = Menu_GetItem( "::Data::Server::NumBots" );
-	lNumBots = stof( lItem.value );
-	lItem = Menu_GetItem( "::Data::Server::BotSkill" );
-	lSkill = stof( lItem.value );
 
-	cvar_set( "saved1", "1" );
-	cvar_set( "scratch1", ftos( pow( 2, lNumBots ) - 1 ) );
-	cvar_set( "scratch2", ftos( lSkill * (pow(4, min(lNumBots, 8)) - 1) / 3) );
-	cvar_set( "scratch3", ftos( lSkill * (pow(4, min(lNumBots - 8, 8)) - 1) / 3) );
 	// Set maxplayers
 	lItem = Menu_GetItem( "::Data::Server::MaxPlayers" );
 	cmd( "maxplayers \"" );

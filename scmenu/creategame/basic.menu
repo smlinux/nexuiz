@@ -113,21 +113,18 @@ Item Window Basic
 		}
 		Derive Nex_Line	Seperator1
 		{}
-		Ignore
+		Derive Nex_Option_EditBox NumBots
 		{
-			Derive Nex_Option_EditBox NumBots
-			{
-				text	"Bot Count"
-				target	"Data::Server::NumBots::Text"
-			}
-			Derive Nex_Option_Switch BotSkill
-			{
-				text	"Skill Level"
-				target	"Data::Server::BotSkill::Switch"
-			}
-			Derive Nex_Void Seperator2
-			{}
+			text	"Bot Count"
+			target	"Data::Server::NumBots::Text"
 		}
+		Derive Nex_Option_Switch BotSkill
+		{
+			text	"Skill Level"
+			target	"Data::Server::BotSkill::Switch"
+		}
+		Derive Nex_Line Seperator2
+		{}
 		Derive Nex_Option_EditBox ServerFrameTime
 		{
 			text	"Server Frame Time"
@@ -138,7 +135,7 @@ Item Window Basic
 			text	"Server Max Rate"
 			target	"Data::Server::ServerMaxRate::Text"
 		}
-		Derive Nex_Line	Seperator3
+		Derive Nex_Void	Seperator3
 		{}
 		Derive PictureButton Start
 		{
