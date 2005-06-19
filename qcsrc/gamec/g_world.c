@@ -2,7 +2,6 @@ void() dom_init;
 
 void worldspawn (void)
 {
-	BotInit();
 
 	game = cvar ("gamecfg");	// load game options
 

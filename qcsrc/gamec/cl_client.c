@@ -222,7 +222,6 @@ Called when a client connects to the server
 */
 void ClientConnect (void)
 {
-	ClientInRankings();
 	bprint ("^4",self.netname);
 	bprint (" connected\n");
 	stuffcmd(self, strcat("exec maps/", mapname, ".cfg\n"));
@@ -246,7 +245,6 @@ Called when a client disconnects from the server
 */
 void ClientDisconnect (void)
 {
-	ClientDisconnected();
 	bprint ("^4",self.netname);
 	bprint (" disconnected\n");
 }
@@ -513,8 +511,7 @@ void PlayerPreThink (void)
 {
 	local vector m1, m2;
 
-	if (BotPreFrame())
-		return;
+//	MauveBot_AI();
 
 	CheckRules_Player();
 
@@ -628,8 +625,6 @@ Called every frame for each client after the physics are run
 void PlayerPostThink (void)
 {
 	float soundrandom;
-	if (BotPostFrame())
-		return;
 	CheckRules_Player();
 	UpdateChatBubble();
 	UpdateColorModHack();

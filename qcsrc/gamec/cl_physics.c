@@ -13,6 +13,8 @@ void SV_PlayerPhysics()
 	local vector wishvel, wishdir, v;
 	local float wishspeed, f;
 
+	MauveBot_AI();
+
 	if (self.movetype == MOVETYPE_NONE)
 		return;
 

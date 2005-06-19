@@ -135,3 +135,20 @@ float WEP_ROCKET_LAUNCHER	= 9; // float	IT_ROCKET_LAUNCHER		= 128;
 // For weapon cycling commands
 float WEP_FIRST				= 1;
 float WEP_LAST				= 9;
+
+void(entity e, float chan, string samp, float vol, float atten) sound = #8;
+void(entity client, string s)	stuffcmd = #21;
+void(entity client, string s)	sprint = #24;
+vector(entity e, float sped)	aim = #44;
+void(entity client, string s)	centerprint = #73;
+void(entity e)			setspawnparms = #78;
+void(float to, float f)		WriteByte = #52;
+void(float to, float f)		WriteChar = #53;
+void(float to, float f)		WriteShort = #54;
+void(float to, float f)		WriteLong = #55;
+void(float to, float f)		WriteCoord = #56;
+void(float to, float f)		WriteAngle = #57;
+void(float to, string s)	WriteString	= #58;
+void(float to, entity s)	WriteEntity	= #59;
+.vector dest1, dest2;
+void(entity clent) dropclient = #453;
