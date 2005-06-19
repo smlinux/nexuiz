@@ -88,7 +88,7 @@ Item Window Basic
 		}
 		Derive Nex_Option_Switch TeamPlay
 		{
-			text	"Teamplay:"
+			text	"Teamplay"
 			target	"::Data::Server::TeamPlay::Switch"
 		}
 		Derive Nex_Option_Switch PublicServer
@@ -130,7 +130,7 @@ Item Window Basic
 		}
 		Derive Nex_Option_EditBox ServerFrameTime
 		{
-			text	"Server Period"
+			text	"Server Frame Time"
 			target	"Data::Server::ServerFrameTime::Text"
 		}
 		Derive Nex_Option_EditBox ServerMaxRate
