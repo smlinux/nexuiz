@@ -21,6 +21,7 @@ void CopyBody(float keepvelocity)
 		return;
 	oldself = self;
 	self = spawn();
+	self.iscreature = oldself.iscreature;
 	self.angles = oldself.angles;
 	self.avelocity = oldself.avelocity;
 	self.classname = "body";
@@ -29,6 +30,8 @@ void CopyBody(float keepvelocity)
 	self.event_damage = oldself.event_damage;
 	self.frame = oldself.frame;
 	self.health = oldself.health;
+	self.armorvalue = oldself.armorvalue;
+	self.armortype = oldself.armortype;
 	self.model = oldself.model;
 	self.modelindex = oldself.modelindex;
 	self.movetype = oldself.movetype;
@@ -39,6 +42,7 @@ void CopyBody(float keepvelocity)
 	self.think = oldself.think;
 	if (keepvelocity == 1)
 		self.velocity = oldself.velocity;
+	self.oldvelocity = self.velocity;
 	self.fade_time = oldself.fade_time;
 	self.fade_rate = oldself.fade_rate;
 	//self.weapon = oldself.weapon;
@@ -151,13 +155,33 @@ void PlayerCorpseDamage (entity inflictor, entity attacker, float damage, float 
 	te_blood (hitloc, force, damage);
 	// damage resistance (ignore most of the damage from a bullet or similar)
 	damage = max(damage - 5, 1);
+
 	save = bound(0, damage * 0.6, self.armorvalue);
 	take = bound(0, damage - save, damage);
-	self.armorvalue = self.armorvalue - save;
-	self.health = self.health - take;
-	self.dmg_save = self.dmg_save + save;
-	self.dmg_take = self.dmg_take + take;
+
+	if (save > 10)
+		sound (self, CHAN_IMPACT, "misc/armorimpact.wav", 1, ATTN_NORM);
+	else if (take > 30)
+		sound (self, CHAN_IMPACT, "misc/bodyimpact2.wav", 1, ATTN_NORM);
+	else if (take > 10)
+		sound (self, CHAN_IMPACT, "misc/bodyimpact1.wav", 1, ATTN_NORM);
+
+	if (take > 50)
+		TossGib (world, "models/gibs/chunk.mdl", hitloc, force * -0.1,1);
+	if (take > 100)
+		TossGib (world, "models/gibs/chunk.mdl", hitloc, force * -0.2,1);
+
+	if (!(self.flags & FL_GODMODE))
+	{
+		self.armorvalue = self.armorvalue - save;
+		self.health = self.health - take;
+		// pause regeneration for 5 seconds
+		self.pauseregen_finished = max(self.pauseregen_finished, time + 5);
+	}
+	self.dmg_save = self.dmg_save + save;//max(save - 10, 0);
+	self.dmg_take = self.dmg_take + take;//max(take - 10, 0);
 	self.dmg_inflictor = inflictor;
+
 	if (self.health <= -50)
 	{
 		// don't use any animations as a gib
@@ -196,7 +220,7 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 {
 	local float take, save;
 
-	 te_blood (hitloc, force, damage);
+	te_blood (hitloc, force, damage);
 	if (self.pain_finished < time)		//Don't switch pain sequences like crazy
 	{
 		if (random() > 0.5)
@@ -211,23 +235,25 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 
 	if (save > 10)
 		sound (self, CHAN_IMPACT, "misc/armorimpact.wav", 1, ATTN_NORM);
-	if (take > 10)
-		sound (self, CHAN_IMPACT, "misc/bodyimpact1.wav", 1, ATTN_NORM);
-	if (take > 30)
+	else if (take > 30)
 		sound (self, CHAN_IMPACT, "misc/bodyimpact2.wav", 1, ATTN_NORM);
+	else if (take > 10)
+		sound (self, CHAN_IMPACT, "misc/bodyimpact1.wav", 1, ATTN_NORM);
 
 	if (take > 50)
 		TossGib (world, "models/gibs/chunk.mdl", hitloc, force * -0.1,1);
 	if (take > 100)
-		TossGib (world, "models/gibs/chunk.mdl", hitloc, force * -0.1,1);
+		TossGib (world, "models/gibs/chunk.mdl", hitloc, force * -0.2,1);
 
 	if (!(self.flags & FL_GODMODE))
 	{
 		self.armorvalue = self.armorvalue - save;
 		self.health = self.health - take;
+		// pause regeneration for 5 seconds
+		self.pauseregen_finished = max(self.pauseregen_finished, time + 5);
 	}
-	self.dmg_save = self.dmg_save + max(save - 10, 0);
-	self.dmg_take = self.dmg_take + max(take - 10, 0);
+	self.dmg_save = self.dmg_save + save;//max(save - 10, 0);
+	self.dmg_take = self.dmg_take + take;//max(take - 10, 0);
 	self.dmg_inflictor = inflictor;
 	if (self.health <= 2)
 	{

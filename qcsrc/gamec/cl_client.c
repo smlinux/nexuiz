@@ -7,6 +7,70 @@ void info_player_deathmatch (void)
 {
 }
 
+float spawn_goodspots, spawn_badspots;
+entity Spawn_ClassifyPoints(entity firstspot, entity playerlist, float mindist, float goodspotnum, float badspotnum)
+{
+	local entity spot, player;
+	local float pcount;
+	spawn_goodspots = 0;
+	spawn_badspots = 0;
+	spot = firstspot;
+	while (spot)
+	{
+		pcount = 0;
+		player = playerlist;
+		while (player)
+		{
+			if (player != self)
+			if (vlen(player.origin - spot.origin) < 100)
+				pcount = pcount + 1;
+			player = player.chain;
+		}
+		if (pcount)
+		{
+			if (spawn_goodspots >= badspotnum)
+				return spot;
+			spawn_badspots = spawn_badspots + 1;
+		}
+		else
+		{
+			if (spawn_goodspots >= goodspotnum)
+				return spot;
+			spawn_goodspots = spawn_goodspots + 1;
+		}
+		spot = find(spot, classname, "info_player_deathmatch");
+	}
+	return firstspot;
+}
+
+entity Spawn_FurthestPoint(entity firstspot, entity playerlist)
+{
+	local entity best, spot, player;
+	local float bestrating, rating;
+	best = world;
+	bestrating = -1000000;
+	spot = firstspot;
+	while (spot)
+	{
+		rating = 1000000000;
+		player = playerlist;
+		while (player)
+		{
+			if (player != self)
+				rating = min(rating, vlen(player.origin - spot.origin));
+			player = player.chain;
+		}
+		rating = rating + random() * 16;
+		if (bestrating < rating)
+		{
+			best = spot;
+			bestrating = rating;
+		}
+		spot = find(spot, classname, "info_player_deathmatch");
+	}
+	return best;
+}
+
 /*
 =============
 SelectSpawnPoint
@@ -16,35 +80,32 @@ Finds a point to respawn
 */
 entity SelectSpawnPoint (void)
 {
-	local entity spot, thing, best, player, playerlist;
-	local float pcount, rating, bestrating;
+	local entity spot, firstspot, playerlist;
 
 	spot = find (world, classname, "testplayerstart");
 	if (spot)
 		return spot;
 
-	best = world;
-	bestrating = -1;
 	playerlist = findchain(classname, "player");
-	spot = find(world, classname, "info_player_deathmatch");
-	while (spot)
+	firstspot = find(world, classname, "info_player_deathmatch");
+	Spawn_ClassifyPoints(firstspot, playerlist, 100, 1000000, 1000000);
+	// first check if there are ANY good spots
+	if (spawn_goodspots > 0)
 	{
-		rating = random() * 256;
-		player = playerlist;
-		while (player)
-		{
-			if (player != self)
-				rating = rating + vlen(player.origin - spot.origin);
-			player = player.chain;
-		}
-		if (bestrating < rating)
-		{
-			best = spot;
-			bestrating = rating;
-		}
-		spot = find(spot, classname, "info_player_deathmatch");
+		// good spots exist, there is 50/50 chance of choosing a random good
+		// spot or the furthest spot
+		// (this means that roughly every other spawn will be furthest, so you
+		// usually won't get fragged at spawn twice in a row)
+		if (random() > 0.5)
+			spot = Spawn_ClassifyPoints(firstspot, playerlist, 100, min(floor(random() * spawn_goodspots), spawn_goodspots - 1), 1000000);
+		else
+			spot = Spawn_FurthestPoint(firstspot, playerlist);
 	}
-	spot = best;
+	else
+	{
+		// no good spots exist, pick a random bad spot
+		spot = Spawn_ClassifyPoints(firstspot, playerlist, 100, 1000000, min(floor(random() * spawn_badspots), spawn_badspots - 1));
+	}
 
 	if (!spot)
 		error ("PutClientInServer: no info_player_start on level");
@@ -60,13 +121,13 @@ Checks if the argument string can be a valid playermodel.
 Returns a valid one in doubt.
 =============
 */
-string CheckPlayerModel(string playermodel) {
-	if( substring(playermodel,0,14) != "models/player/") playermodel = "models/player/marine.zym";
+string CheckPlayerModel(string plyermodel) {
+	if( substring(plyermodel,0,14) != "models/player/") plyermodel = "models/player/marine.zym";
 
 	/* Possible Fixme: Check if server can open the model?
 	   This would kill custom models, however. */
 
-	return playermodel;
+	return plyermodel;
 }
 
 
@@ -84,6 +145,7 @@ void PutClientInServer (void)
 	spot = SelectSpawnPoint ();
 
 	self.classname = "player";
+	self.iscreature = TRUE;
 	self.movetype = MOVETYPE_WALK;
 	self.solid = SOLID_SLIDEBOX;
 	self.flags = FL_CLIENT;
@@ -91,6 +153,9 @@ void PutClientInServer (void)
 	self.effects = 0;
 	self.health = cvar("g_balance_health_start");
 	self.armorvalue = cvar("g_balance_armor_start");
+	self.pauserotarmor_finished = time + 10;
+	self.pauserothealth_finished = time + 10;
+	self.pauseregen_finished = 0;
 	self.damageforcescale = 2;
 	self.death_time = 0;
 	self.dead_time = 0;
@@ -117,6 +182,7 @@ void PutClientInServer (void)
 	self.avelocity = '0 0 0';
 	self.punchangle = '0 0 0';
 	self.punchvector = '0 0 0';
+	self.oldvelocity = self.velocity;
 
 	self.viewzoom = 0.6;
 
@@ -260,10 +326,10 @@ void() ChatBubbleThink =
 		return;
 	}
 	setorigin(self, self.owner.origin + '0 0 15' + self.owner.maxs_z * '0 0 1');
-	if (self.owner.buttonchat)
-		self.effects = 0;
+	if (self.owner.buttonchat && !self.owner.deadflag)
+		self.model = self.mdl;
 	else
-		self.effects = EF_NODRAW;
+		self.model = "";
 };
 
 void() UpdateChatBubble =
@@ -275,11 +341,13 @@ void() UpdateChatBubble =
 	{
 		self.chatbubbleentity = spawn();
 		self.chatbubbleentity.owner = self;
+		self.chatbubbleentity.exteriormodeltoclient = self;
 		self.chatbubbleentity.think = ChatBubbleThink;
 		self.chatbubbleentity.nextthink = time;
 		setmodel(self.chatbubbleentity, "models/misc/chatbubble.spr");
 		setorigin(self.chatbubbleentity, self.origin + '0 0 15' + self.maxs_z * '0 0 1');
-		self.chatbubbleentity.effects = EF_NODRAW;
+		self.chatbubbleentity.mdl = self.chatbubbleentity.model;
+		self.chatbubbleentity.model = "";
 	}
 }
 
@@ -328,85 +396,11 @@ void PlayerJump (void)
 		return;
 
 	self.velocity_z = self.velocity_z + cvar("g_balance_jumpheight");
+	self.oldvelocity_z = self.velocity_z;
 
 	self.flags = self.flags - FL_ONGROUND;
 	self.flags = self.flags - FL_JUMPRELEASED;
 }
-
-.float watersound_finished;
-void() WaterMove =
-{
-	if (self.movetype == MOVETYPE_NOCLIP)
-		return;
-	if (self.health < 0)
-		return;
-
-	if (self.waterlevel != 3)
-	{
-		self.air_finished = time + 12;
-		self.dmg = 2;
-	}
-	else if (self.air_finished < time)
-	{	// drown!
-		if (self.pain_finished < time)
-		{
-			Damage (self, world, world, 5, DEATH_DROWN, self.origin, '0 0 0');
-			self.pain_finished = time + 0.5;
-		}
-	}
-
-	if (!self.waterlevel)
-	{
-		if (self.flags & FL_INWATER)
-		{
-			// play leave water sound
-			self.flags = self.flags - FL_INWATER;
-		}
-		return;
-	}
-
-	if (self.watersound_finished < time)
-	{
-		self.watersound_finished = time + 0.5;
-		if (self.watertype == CONTENT_LAVA)
-			sound (self, CHAN_BODY, "player/lava.wav", 1, ATTN_NORM);
-		if (self.watertype == CONTENT_SLIME)
-			sound (self, CHAN_BODY, "player/slime.wav", 1, ATTN_NORM);
-		//if (self.watertype == CONTENT_WATER)
-		//	sound (self, CHAN_BODY, "player/water.wav", 1, ATTN_NORM);
-	}
-
-	if (self.watertype == CONTENT_LAVA)
-	{	// do damage
-		if (self.dmgtime < time)
-		{
-			self.dmgtime = time + 0.1;
-			Damage (self, world, world, 3 * self.waterlevel, DEATH_LAVA, self.origin, '0 0 0');
-		}
-	}
-	else if (self.watertype == CONTENT_SLIME)
-	{	// do damage
-		if (self.dmgtime < time)
-		{
-			self.dmgtime = time + 0.1;
-			Damage (self, world, world, 1 * self.waterlevel, DEATH_SLIME, self.origin, '0 0 0');
-		}
-	}
-
-	if ( !(self.flags & FL_INWATER) )
-	{
-
-		//if (self.watertype == CONTENT_LAVA)
-		//	sound (self, CHAN_BODY, "player/inlava.wav", 1, ATTN_NORM);
-		//if (self.watertype == CONTENT_WATER)
-		//	sound (self, CHAN_BODY, "player/inh2o.wav", 1, ATTN_NORM);
-		//if (self.watertype == CONTENT_SLIME)
-		//	sound (self, CHAN_BODY, "player/slimbrn2.wav", 1, ATTN_NORM);
-
-		self.flags = self.flags + FL_INWATER;
-		self.dmgtime = 0;
-	}
-};
 
 void() CheckWaterJump =
 {
@@ -489,14 +483,19 @@ void player_regen (void)
 	local float maxa;
 	maxh = cvar("g_balance_health_stable");
 	maxa = cvar("g_balance_armor_stable");
+	if (time > self.pauserothealth_finished)
 	if (self.health > maxh)
 		self.health = bound(0, self.health + (maxh - self.health) * cvar("g_balance_health_rot") * frametime, 1000);
-	else if (time > self.pain_finished)
-		self.health = bound(0, self.health + (maxh- self.health) * cvar("g_balance_health_regen") * frametime, 1000);
+	if (time > self.pauserotarmor_finished)
 	if (self.armorvalue > maxa)
 		self.armorvalue = bound(0, self.armorvalue + (maxa - self.armorvalue) * cvar("g_balance_armor_rot") * frametime, 1000);
-	else if (time > self.pain_finished)
-		self.armorvalue = bound(0, self.armorvalue + (maxa - self.armorvalue) * cvar("g_balance_armor_regen") * frametime, 1000);
+	if (time > self.pauseregen_finished)
+	{
+		if (self.health < maxh)
+			self.health = bound(0, self.health + (maxh- self.health) * cvar("g_balance_health_regen") * frametime, 1000);
+		if (self.armorvalue < maxa)
+			self.armorvalue = bound(0, self.armorvalue + (maxa - self.armorvalue) * cvar("g_balance_armor_regen") * frametime, 1000);
+	}
 }
 
 /*
@@ -506,7 +505,6 @@ PlayerPreThink
 Called every frame for each client before the physics are run
 =============
 */
-.float attack_finished;
 void PlayerPreThink (void)
 {
 	local vector m1, m2;
@@ -575,7 +573,7 @@ void PlayerPreThink (void)
 		setmodel (self, self.playermodel);
 		setsize (self, m1, m2);
 	}
-	
+
 	// Savage: Check for nameless players
 	if (strlen(self.netname) < 1) {
 		self.netname = "Player";
@@ -608,7 +606,6 @@ void PlayerPreThink (void)
 
 	//self.angles_y=self.v_angle_y + 90;   // temp
 
-	WaterMove ();
 	if (self.waterlevel == 2)
 		CheckWaterJump ();
 
@@ -624,7 +621,6 @@ Called every frame for each client after the physics are run
 */
 void PlayerPostThink (void)
 {
-	float soundrandom;
 	CheckRules_Player();
 	UpdateChatBubble();
 	UpdateColorModHack();
@@ -633,33 +629,6 @@ void PlayerPostThink (void)
 		ImpulseCommands ();
 	if (intermission_running)
 		return;		// intermission or finale
-
-	// VorteX: landing on floor, landing damage etc.
-	// LordHavoc: removed 'big fall' death code that VorteX added
-	if (self.flags & FL_ONGROUND)
-	{
-		if (self.jump_flag < -100 && !self.watertype == CONTENT_WATER) // HitGround
-		{
-			soundrandom = random() * 4;
-			if (soundrandom < 1)
-				sound (self, CHAN_BODY, "misc/hitground1.wav", 1, ATTN_NORM);
-			else if (soundrandom < 2)
-				sound (self, CHAN_BODY, "misc/hitground2.wav", 1, ATTN_NORM);
-			else if (soundrandom < 3)
-				sound (self, CHAN_BODY, "misc/hitground3.wav", 1, ATTN_NORM);
-			else if (soundrandom < 4)
-				sound (self, CHAN_BODY, "misc/hitground4.wav", 1, ATTN_NORM);
-			if (self.jump_flag < -650) // landing damage
-			{
-				local float dm;
-				dm = bound(0, 0.1*(fabs(self.jump_flag) - 600), 5);
-				Damage (self, world, world, dm, DEATH_FALL, self.origin, '0 0 0');
-			}
-			self.jump_flag = 0;
-		}
-	}
-	else
-		self.jump_flag = self.velocity_z;
 
 	//if (TetrisPostFrame()) return;
 }

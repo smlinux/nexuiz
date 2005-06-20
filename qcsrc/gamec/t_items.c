@@ -27,6 +27,8 @@ void Item_Touch (void)
 		return;
 	if (self.solid != SOLID_TRIGGER)
 		return;
+	if (self.health && other.health >= other.max_health)
+		return;
 	// Savage: Remove the respawn effect if still present
 	self.effects = self.effects - (self.effects & EF_STARDUST);
 
@@ -64,9 +66,17 @@ void Item_Touch (void)
 	//	other.slowmo_finished = max(other.slowmo_finished, time) + (cvar("g_balance_powerup_slowmo_time") * cvar("g_balance_powerup_slowmo_speed"));
 
 	if (self.max_health)
+	{
 		other.health = other.health + self.max_health;
+		other.pauserothealth_finished = max(other.pauserothealth_finished, time + 5);
+	}
+	if (self.health && other.health < other.max_health)
+		other.health = min(other.health + self.health, other.max_health);
 	if (self.armorvalue)
+	{
 		other.armorvalue = other.armorvalue + self.armorvalue;
+		other.pauserotarmor_finished = max(other.pauserotarmor_finished, time + 5);
+	}
 
 	oldself = self;
 	self = other;

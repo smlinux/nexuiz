@@ -104,7 +104,7 @@ void W_Hagar_Attack (void)
 	else
 	{
 		missile.movetype = MOVETYPE_FLY;
-		missile.velocity = (v_forward + v_right * crandom() * 0.035 + v_up * crandom() * 0.015) * cvar("g_balance_hagar_speed");
+		missile.velocity = (v_forward + randomvec() * cvar("g_balance_hagar_spread")) * cvar("g_balance_hagar_speed");
 	}
 
 	missile.angles = vectoangles (missile.velocity);

@@ -30,12 +30,17 @@ void(float req) w_crylink =
 		weapon_hasammo = crylink_check();
 };
 
-
+.entity realowner;
 void W_Crylink_Touch (void)
 {
-	self.event_damage = SUB_Null;
+	RadiusDamage (self, self.realowner, cvar("g_balance_crylink_damage"), cvar("g_balance_crylink_edgedamage"), cvar("g_balance_crylink_radius"), world, cvar("g_balance_crylink_force"), IT_CRYLINK);
 	//te_smallflash(self.origin);
-	RadiusDamage (self, self.owner, cvar("g_balance_crylink_damage"), cvar("g_balance_crylink_edgedamage"), cvar("g_balance_crylink_radius"), world, cvar("g_balance_crylink_force"), IT_CRYLINK);
+	if (other.takedamage == DAMAGE_AIM)
+	{
+		remove (self);
+		return;
+	}
+	self.owner = world;
 	self.touch = SUB_Null;
 	setmodel (self, "models/plasma.mdl");
 	setsize (self, '0 0 0', '0 0 0');
@@ -43,7 +48,7 @@ void W_Crylink_Touch (void)
 	self.glow_size = 0;
 	self.glow_color = 0;
 	self.think = SUB_Remove;
-	//self.movetype = MOVETYPE_NONE;
+	self.movetype = MOVETYPE_NONE;
 	self.effects = EF_LOWPRECISION;
 	SUB_SetFade(self, time, 1);
 	//remove (self);
@@ -51,7 +56,7 @@ void W_Crylink_Touch (void)
 
 void W_Crylink_Attack (void)
 {
-	local float counter;
+	local float counter, shots;
 	local vector org;
 	local entity proj;
 
@@ -61,10 +66,13 @@ void W_Crylink_Attack (void)
 	org = self.origin + self.view_ofs + v_forward * 10 + v_right * 5 + v_up * -14;
 	te_smallflash(org);
 
-	while (counter < 5)
+	shots = cvar("g_balance_crylink_shots");
+	if (!shots)
+		shots = 5;
+	while (counter < shots)
 	{
 		proj = spawn ();
-		proj.owner = self;
+		proj.realowner = proj.owner = self;
 		proj.classname = "spike";
 
 		proj.movetype = MOVETYPE_BOUNCE;
@@ -76,9 +84,9 @@ void W_Crylink_Attack (void)
 		setorigin (proj, org);
 
 		if (self.button3)
-			proj.velocity = (v_forward + (counter / 2 - 1) * v_right * cvar("g_balance_crylink_spread")) * cvar("g_balance_crylink_speed");
+			proj.velocity = (v_forward + ((counter / shots) * 2 - 1) * v_right * cvar("g_balance_crylink_spread")) * cvar("g_balance_crylink_speed");
 		else
-			proj.velocity = (v_forward + (counter / 5) * randomvec() * cvar("g_balance_crylink_spread")) * cvar("g_balance_crylink_speed");
+			proj.velocity = (v_forward + randomvec() * cvar("g_balance_crylink_spread")) * cvar("g_balance_crylink_speed");
 		proj.touch = W_Crylink_Touch;
 		proj.think = SUB_Remove;
 		proj.nextthink = time + 9;

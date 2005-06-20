@@ -28,7 +28,6 @@ entity dest;
 .vector	pos1, pos2;
 .vector	mangle;
 
-.float	jump_flag;				// storing velocity_z for falling damage
 .float	attack_finished;
 .float	pain_finished;			//Added by Supajoe
 .float	pain_frame;			//"
@@ -83,6 +82,15 @@ entity dest;
 .float		dmgtime;
 
 .float		killcount;
+
+.float watersound_finished;
+.float iscreature;
+.vector oldvelocity;
+
+.float pauseregen_finished;
+.float pauserothealth_finished;
+.float pauserotarmor_finished;
+.float attack_finished;
 
 // definistions for weaponsystem
 

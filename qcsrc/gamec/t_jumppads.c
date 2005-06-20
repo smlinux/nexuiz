@@ -36,7 +36,7 @@ void() trigger_push_touch =
 	self.movedir = normalize(self.movedir) * (dist / flighttime);
 	self.movedir_z = flighttime * grav;
 
-	other.velocity = self.movedir;
+	other.oldvelocity = other.velocity = self.movedir;
 	other.flags = other.flags - (other.flags & FL_ONGROUND);
 
 	if (other.classname == "missile")

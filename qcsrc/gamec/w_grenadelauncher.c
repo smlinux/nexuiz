@@ -14,8 +14,10 @@ void(float req) w_glauncher =
 {
 	if (req == WR_IDLE)
 		glauncher_ready_01();
-	else if (req == WR_FIRE1 || req == WR_FIRE2)
+	else if (req == WR_FIRE1)
 		weapon_prepareattack(glauncher_check, glauncher_check, glauncher_fire1_01, cvar("g_balance_grenadelauncher_refire"));
+	else if (req == WR_FIRE2)
+		weapon_prepareattack(glauncher_check, glauncher_check, glauncher_fire1_01, cvar("g_balance_grenadelauncher_refire2"));
 	else if (req == WR_RAISE)
 		glauncher_select_01();
 	else if (req == WR_UPDATECOUNTS)
@@ -44,7 +46,7 @@ void W_Grenade_Explode (void)
 
 void W_Grenade_Touch (void)
 {
-	if (other.classname == "player" || other.classname == "corpse")
+	if (other.takedamage == DAMAGE_AIM)
 		W_Grenade_Explode ();
 	else
 		sound (self, CHAN_IMPACT, "weapons/grenade_bounce.wav", 1, ATTN_NORM);

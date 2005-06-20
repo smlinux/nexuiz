@@ -12,7 +12,7 @@ void GibDamage (entity inflictor, entity attacker, float damage, float deathtype
 		sound (self, CHAN_IMPACT, "misc/gib_splat04.wav", 1, ATTN_NORM);
 	te_blood (self.origin + '0 0 1', '0 0 30', 10);
 	self.health = self.health - damage;
-	if (self.health <= -12)
+	if (self.health <= -200)
 	{
 		self.event_damage = SUB_Null;
 		SUB_VanishOrRemove (self);
@@ -22,7 +22,7 @@ void GibDamage (entity inflictor, entity attacker, float damage, float deathtype
 
 void GibTouch ()
 {
-	GibDamage (other, other, 11, 0, self.origin, '0 0 0');
+	GibDamage (other, other, 1000, 0, self.origin, '0 0 0');
 }
 
 // changes by LordHavoc on 03/30/04
@@ -32,8 +32,12 @@ void GibTouch ()
 void TossGib (entity gib, string mdlname, vector org, vector v, float destroyontouch)
 {
 	if (gib == world)
+	{
 		gib = spawn ();
+		gib.deadflag = DEAD_DEAD;
+	}
 	gib.classname = "gib";
+	gib.iscreature = TRUE;
 	gib.movetype = MOVETYPE_BOUNCE;
 	gib.solid = SOLID_CORPSE;
 	gib.skin = 0;
@@ -52,6 +56,7 @@ void TossGib (entity gib, string mdlname, vector org, vector v, float destroyont
 
 	gib.velocity = v + randomvec() * 450;
 	gib.avelocity = randomvec() * 300;
+	gib.oldvelocity = gib.velocity;
 
 	SUB_SetFade (gib, time + 12 + random () * 4, 1);
 }

@@ -401,7 +401,6 @@ void FireRailgunBullet (vector src, float bdamage, vector dir, float spread, flo
 }
 */
 
-vector railgun_hitlocation;
 void FireRailgunBullet (vector start, vector end, float bdamage, float deathtype)
 {
 	local vector hitloc, force;
