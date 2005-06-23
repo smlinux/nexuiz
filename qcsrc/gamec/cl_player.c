@@ -156,7 +156,7 @@ void PlayerCorpseDamage (entity inflictor, entity attacker, float damage, float 
 	// damage resistance (ignore most of the damage from a bullet or similar)
 	damage = max(damage - 5, 1);
 
-	save = bound(0, damage * 0.6, self.armorvalue);
+	save = bound(0, damage * cvar("g_balance_armor_blockpercent"), self.armorvalue);
 	take = bound(0, damage - save, damage);
 
 	if (save > 10)
@@ -230,7 +230,7 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 		self.pain_finished = time + 0.5;	//Supajoe
 	}
 
-	save = bound(0, damage * 0.6, self.armorvalue);
+	save = bound(0, damage * cvar("g_balance_armor_blockpercent"), self.armorvalue);
 	take = bound(0, damage - save, damage);
 
 	if (save > 10)
