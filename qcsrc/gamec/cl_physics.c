@@ -60,6 +60,8 @@ void SV_PlayerPhysics()
 	else if (self.movetype == MOVETYPE_NOCLIP || self.movetype == MOVETYPE_FLY)
 	{
 		// noclipping or flying
+		self.flags = self.flags - (self.flags & FL_ONGROUND);
+
 		self.velocity = self.velocity * (1 - frametime * sv_friction);
 		makevectors(self.v_angle);
 		//wishvel = v_forward * self.movement_x + v_right * self.movement_y + v_up * self.movement_z;
@@ -79,6 +81,8 @@ void SV_PlayerPhysics()
 	else if (self.waterlevel >= 2)
 	{
 		// swimming
+		self.flags = self.flags - (self.flags & FL_ONGROUND);
+
 		makevectors(self.v_angle);
 		//wishvel = v_forward * self.movement_x + v_right * self.movement_y + v_up * self.movement_z;
 		wishvel = v_forward * self.movement_x + v_right * self.movement_y + '0 0 1' * self.movement_z;
@@ -102,6 +106,8 @@ void SV_PlayerPhysics()
 	else if (time < self.ladder_time)
 	{
 		// on a func_ladder or swimming in func_water
+		self.flags = self.flags - (self.flags & FL_ONGROUND);
+
 		self.velocity = self.velocity * (1 - frametime * sv_friction);
 		makevectors(self.v_angle);
 		//wishvel = v_forward * self.movement_x + v_right * self.movement_y + v_up * self.movement_z;
