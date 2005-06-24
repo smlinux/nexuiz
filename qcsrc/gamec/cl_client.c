@@ -309,6 +309,7 @@ ClientDisconnect
 Called when a client disconnects from the server
 =============
 */
+.entity chatbubbleentity;
 void ClientDisconnect (void)
 {
 	bprint ("^4",self.netname);
@@ -321,7 +322,6 @@ void ClientDisconnect (void)
 	}
 }
 
-.entity chatbubbleentity;
 .float buttonchat;
 void() ChatBubbleThink =
 {
