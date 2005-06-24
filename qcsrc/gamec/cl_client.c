@@ -313,6 +313,12 @@ void ClientDisconnect (void)
 {
 	bprint ("^4",self.netname);
 	bprint (" disconnected\n");
+
+	if (self.chatbubbleentity)
+	{
+		remove (self.chatbubbleentity);
+		self.chatbubbleentity = world;
+	}
 }
 
 .entity chatbubbleentity;
