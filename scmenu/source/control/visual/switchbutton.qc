@@ -22,7 +22,7 @@ bool( float pKey, float pAscii ) Item_SwitchButton_Key =
 		Sound_Play( self.soundPressed );
 		self._presstime = Timer_Time;
 
-		self._target._realValue = self._target._realValue - self._target.stepValue;;
+		self._target._realValue = self._target._realValue - self._target.stepValue;
 		if( self._target._realValue < self._target.minValue )
 			self._target._realValue = self._target.maxValue;
 
