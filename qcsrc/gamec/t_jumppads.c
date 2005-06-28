@@ -1,6 +1,7 @@
 float PUSH_ONCE			= 1;
 float PUSH_SILENT		= 2;
 
+.float pushltime;
 void() trigger_push_touch =
 {
 	local float flighttime, dist, grav;
@@ -36,8 +37,11 @@ void() trigger_push_touch =
 	self.movedir = normalize(self.movedir) * (dist / flighttime);
 	self.movedir_z = flighttime * grav;
 
-	other.oldvelocity = other.velocity = self.movedir;
 	other.flags = other.flags - (other.flags & FL_ONGROUND);
+	// reset tracking of oldvelocity for impact damage (sudden velocity changes)
+	other.oldvelocity = other.velocity = self.movedir;
+	// reset tracking of who pushed you into a hazard (for kill credit)
+	other.pushltime = 0;
 
 	if (other.classname == "missile")
 		other.angles = vectoangles (other.velocity);

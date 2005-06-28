@@ -66,6 +66,16 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				bprint ("^1",s, " was blasted by ", attacker.netname, "\n");
 			else if (deathtype == DEATH_TELEFRAG)
 				bprint ("^1",s, " was telefragged by ", attacker.netname, "\n");
+			else if (deathtype == DEATH_DROWN)
+				bprint ("^1",s, " was drowned by ", attacker.netname, "\n");
+			else if (deathtype == DEATH_SLIME)
+				bprint ("^1",s, " was slimed by ", attacker.netname, "\n");
+			else if (deathtype == DEATH_LAVA)
+				bprint ("^1",s, " was cooked by ", attacker.netname, "\n");
+			else if (deathtype == DEATH_FALL)
+				bprint ("^1",s, " was grounded by ", attacker.netname, "\n");
+			else if (deathtype == DEATH_HURTTRIGGER)
+				bprint ("^1",s, " was thrown into a world of hurt by ", attacker.netname, "\n");
 			else
 				bprint ("^1",s, " was killed by ", attacker.netname, "\n");
 
@@ -78,7 +88,7 @@ void Obituary (entity attacker, entity targ, float deathtype)
 		}
 		else
 		{
-			if (deathtype == DEATH_HURTTRIGGER)
+			if (deathtype == DEATH_HURTTRIGGER && attacker.message != "")
 				bprint ("^1",s, " ", attacker.message, "\n");
 			else if (deathtype == DEATH_DROWN)
 				bprint ("^1",s, " drowned\n");
@@ -88,6 +98,8 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				bprint ("^1",s, " turned into hot slag\n");
 			else if (deathtype == DEATH_FALL)
 				bprint ("^1",s, " hit the ground with a crunch\n");
+			else
+				bprint ("^1",s, " died\n");
 			targ.frags = targ.frags - 1;
 			if (targ.killcount > 2)
 				bprint ("^1",s," died with a ",ftos(targ.killcount)," kill spree\n");

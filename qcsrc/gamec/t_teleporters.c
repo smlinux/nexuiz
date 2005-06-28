@@ -71,6 +71,10 @@ void Teleport_Touch (void)
 	other.velocity = '0 0 0';
 
 	other.flags = other.flags - (other.flags & FL_ONGROUND);
+	// reset tracking of oldvelocity for impact damage (sudden velocity changes)
+	other.oldvelocity = other.velocity;
+	// reset tracking of who pushed you into a hazard (for kill credit)
+	other.pushltime = 0;
 }
 
 void info_teleport_destination (void)

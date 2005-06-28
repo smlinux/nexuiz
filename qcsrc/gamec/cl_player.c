@@ -14,6 +14,9 @@ $frame forwardleft backright backleft
 // cleaned up PlayerDie a lot
 // added CopyBody
 
+.entity pusher;
+.float pushltime;
+
 void CopyBody(float keepvelocity)
 {
 	local entity oldself;
@@ -255,6 +258,24 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 	self.dmg_save = self.dmg_save + save;//max(save - 10, 0);
 	self.dmg_take = self.dmg_take + take;//max(take - 10, 0);
 	self.dmg_inflictor = inflictor;
+
+	if(attacker == self)
+	{
+		self.pushltime = 0;
+	}
+	else if(attacker.classname == "player" || attacker.classname == "gib")
+	{
+		self.pusher = attacker;
+		self.pushltime = time + cvar("g_maxpushtime");
+	}
+	else if(time < self.pushltime)
+	{
+		attacker = self.pusher;
+		self.pushltime = max(self.pushltime, time + 0.6);
+	}
+	else
+		self.pushltime = 0;
+
 	if (self.health <= 2)
 	{
 		// throw a weapon
