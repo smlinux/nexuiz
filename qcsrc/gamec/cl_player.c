@@ -261,7 +261,9 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 
 	if(attacker == self)
 	{
-		self.pushltime = 0;
+		// don't reset pushltime for self damage as it may be an attempt to
+		// escape a lava pit or similar
+		//self.pushltime = 0;
 	}
 	else if(attacker.classname == "player" || attacker.classname == "gib")
 	{
