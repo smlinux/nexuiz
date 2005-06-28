@@ -73,10 +73,10 @@ void CreatureFrame (void)
 			// check for falling damage
 			dm = vlen(self.velocity - self.oldvelocity);
 			if (self.deadflag)
-				dm = dm - 100;
+				dm = (dm - cvar("g_balance_falldamage_deadminspeed")) * cvar("g_balance_falldamage_factor");
 			else
 			{
-				if (dm >= 100 && self.oldvelocity_z < self.velocity_z)
+				if (self.oldvelocity_z < self.velocity_z - 100)
 				{
 					local float soundrandom;
 					soundrandom = random() * 4;
@@ -89,10 +89,10 @@ void CreatureFrame (void)
 					else if (soundrandom < 4)
 						sound (self, CHAN_BODY, "misc/hitground4.wav", 1, ATTN_NORM);
 				}
-				dm = min(dm - 600, 1000);
+				dm = min((dm - cvar("g_balance_falldamage_minspeed")) * cvar("g_balance_falldamage_factor"), cvar("g_balance_falldamage_maxdamage"));
 			}
 			if (dm > 0)
-				Damage (self, world, world, dm * 0.05, DEATH_FALL, self.origin, '0 0 0');
+				Damage (self, world, world, dm, DEATH_FALL, self.origin, '0 0 0');
 			self.oldvelocity = self.velocity;
 		}
 		self = findfloat(self, iscreature, TRUE);
