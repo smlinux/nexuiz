@@ -1,4 +1,5 @@
-../../data/progs.dat: *.nc *.qc bot/*.qc bot/maps/*.qc Makefile progs.src
+.PHONY: ../../data/progs.dat
+../../data/progs.dat: 
 	frikqcc /O2 -warn 2 || true
 
 clean:

@@ -217,7 +217,6 @@ void light (void)
 
 // reads and alters data/maplist.cfg (sliding it one line), and returns a
 // strzoned string containing the next map
-#define MAPLIST	"maplist.cfg"
 string() Nex_RotateMapList =
 {
 	local float lHandle;
@@ -225,7 +224,7 @@ string() Nex_RotateMapList =
 	local string lCurrentMap;
 	local string lBuffer;
 
-	lHandle = fopen( MAPLIST, FILE_READ );
+	lHandle = fopen( "maplist.cfg", FILE_READ );
 	if( lHandle < 0 ) {
 		fclose( lHandle );
 		// restart the current map if no other map is not found
@@ -278,11 +277,11 @@ string() Nex_RotateMapList =
 	fclose( lHandle );
 
 	// open the maplist for output this one
-	lHandle = fopen( MAPLIST, FILE_WRITE );
+	lHandle = fopen( "maplist.cfg", FILE_WRITE );
 	if( lHandle < 0 ) {
 		// this shouldnt happen!
 		// print a warning/error message
-		dprint( "Couldn't open ", MAPLIST, " for output!\n" );
+		dprint( "Couldn't open ", "maplist.cfg", " for output!\n" );
 
 		strunzone( lNextMap );
 
