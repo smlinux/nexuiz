@@ -51,13 +51,9 @@ void W_Rocket_Think (void)
 		W_Rocket_Explode ();
 		return;
 	}
-	if (self.owner)
-	{
-		if (self.owner.deadflag)
-			self.owner = self;
-		else if (self.owner.weapon == WEP_ROCKET_LAUNCHER && self.owner.button3)
-			W_Rocket_Explode ();
-	}
+	if (self.owner.weapon == WEP_ROCKET_LAUNCHER)
+	if (self.owner.button3)
+		W_Rocket_Explode ();
 }
 
 void W_Rocket_Touch (void)

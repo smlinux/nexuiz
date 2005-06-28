@@ -37,7 +37,7 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				bprint ("^1",attacker.netname," ended a ",ftos(attacker.killcount)," kill spree by killing a teammate\n");
 			attacker.killcount = 0;
 		}
-		else if (attacker.classname == "player")
+		else if (attacker.classname == "player" || attacker.classname == "gib")
 		{
 			if (!checkrules_firstblood)
 			{
@@ -128,10 +128,10 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 	if (self.event_damage)
 		self.event_damage (inflictor, attacker, damage, deathtype, hitloc, force);
 	self = oldself;
-	
+
 	// Savage: vampire mode
 	if(cvar("g_vampire") && targ.classname == "player" && attacker.classname == "player" && attacker != targ) {
-		attacker.health += damage;		
+		attacker.health += damage;
 	}
 }
 
