@@ -2,6 +2,8 @@
 MauveBot v1.0 for Nexuiz
 */
 
+float intermission_running;
+
 .float skill_level;
 
 .float ai_time;
@@ -273,7 +275,8 @@ void() remove_MauveBot =
 			if (flo == i)
 			{
 				dropclient(ent);
-				bot_number = bot_number - 1;
+				if (bot_number > 0)
+					bot_number = bot_number - 1;
 				return;
 			}
 			i = i + 1;
@@ -480,14 +483,22 @@ void() DodgeProjectile =
 
 void() MauveBot_AI =
 {
+	
 	if (clienttype(self) != CLIENTTYPE_BOT)
 	{
+		local entity ent;
 		local float flo;
-		flo = cvar("bot_number");
 
-		if (flo > bot_number)
-			add_MauveBot();
-		else if (flo < bot_number)
+		if (time >= 3)
+		{
+			flo = cvar("bot_number");
+	
+			if (flo > bot_number)
+				add_MauveBot();
+			else if (flo < bot_number)
+				remove_MauveBot();
+		}
+		else
 			remove_MauveBot();
 		return;
 	}
