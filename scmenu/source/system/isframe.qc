@@ -248,6 +248,12 @@ void() Menu_PerformReinit =
 	// reset the key hook (if necessary at all)
 	Menu_KeyHook = Util_NullFunction;
 
+	// choose which menu to display
+	if( MENU_ALLOWINGAME && ( gamestatus & GAME_CONNECTED ) )
+		Menu_ActiveWindow = findstring( null_entity, name, MENU_INGAME_NAME );
+	else
+		Menu_ActiveWindow = findstring( null_entity, name, MENU_NORMAL_NAME );
+
 	// and reinit all menu items
 	self = null_entity;
 	while( (self = nextent( self ) ) != null_entity ) {
@@ -259,12 +265,6 @@ void() Menu_PerformReinit =
 
 		Raise_Reinit( self ); // always call reinit
 	}
-
-	// choose which menu to display
-	if( MENU_ALLOWINGAME && ( gamestatus & GAME_CONNECTED ) )
-		Menu_ActiveWindow = findstring( null_entity, name, MENU_INGAME_NAME );
-	else
-		Menu_ActiveWindow = findstring( null_entity, name, MENU_NORMAL_NAME );
 
 	// run one runflag frame to (re)init the runflags
 	Menu_UpdateRunFlags();
