@@ -264,7 +264,7 @@ void() Item_DataLink_Nex_MapList_Load =
 
 	DataLink_Nex_MapList_Clear( self );
 
-	lCount = tokenize( str_cvar( self.cvarName ) );
+	lCount = tokenize( cvar_string( self.cvarName ) );
 
 	lEntry = String_Create();
 	for( lCounter = 0 ; lCounter < lCount ; lCounter++ ) {

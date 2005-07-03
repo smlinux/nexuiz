@@ -100,7 +100,7 @@ void() Sys_Debug_Frame =
 			break;
 		}
 
-		lTemp1 = tokenize( str_cvar( SYSTEM_CVAR_DEBUG_PROCESS_FILTER ) );
+		lTemp1 = tokenize( cvar_string( SYSTEM_CVAR_DEBUG_PROCESS_FILTER ) );
 		sys_debug_process_filter = 0;
 		for( lTemp2 = 0 ; lTemp2 < lTemp1 ; ++lTemp2 )
 			if( argv( lTemp2 ) == "runflag" )
@@ -114,7 +114,7 @@ void() Sys_Debug_Frame =
 			else if( argv( lTemp2 ) == "key" )
 				sys_debug_process_filter = sys_debug_process_filter | MENU_PROCESS_KEY;
 
-		lTemp1 = tokenize( str_cvar( SYSTEM_CVAR_DEBUG_PARSER ) );
+		lTemp1 = tokenize( cvar_string( SYSTEM_CVAR_DEBUG_PARSER ) );
 		sys_debug_parser = 0;
 		for( lTemp2 = 0 ; lTemp2 < lTemp1 ; ++lTemp2 )
 			if( argv( lTemp2 ) == "info" )

@@ -33,7 +33,8 @@ void	cmd(string command) = #13;
 // cvar cmds
 
 float 	cvar(string name) = #14;
-const string str_cvar(string name) = #71;
+const string cvar_string(string name) = #71;
+const string cvar_defstring(string name) = #89;
 void	cvar_set(string name, string value) = #15;
 
 void	dprint(string text,...) = #16;
@@ -57,6 +58,9 @@ entity	findentity(entity start, .entity _field, entity match) = #25;
 entity	findchainstring(.string _field, string match) = #26;
 entity	findchainfloat(.float _field, float match) = #27;
 entity	findchainentity(.entity _field, entity match) = #27;
+
+entity	findflags(entity start, .float field, float match) = #87;
+entity	findchainflags(.float field, float match) = #88;
 
 string	precache_file(string file) = #28;
 string	precache_sound(string sample) = #29;

@@ -9,7 +9,7 @@ Item_Data_Nex_Name
 
 void() _IDNN_Sync =
 {
-	String_EntitySet( self, value, str_cvar( "_cl_name" ) );
+	String_EntitySet( self, value, cvar_string( "_cl_name" ) );
 	String_EntitySet( self, _syncValue, self.value );
 };
 void() _IDNN_Send =

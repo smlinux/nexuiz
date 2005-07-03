@@ -130,8 +130,8 @@ void() _IDNA_Sync =
 	local string lModel, lSkin;
 	local entity lMatch;
 
-	lModel = String_Zone( str_cvar( "_cl_playermodel" ) );
-	lSkin = String_Zone( str_cvar( "_cl_playerskin" ) );
+	lModel = String_Zone( cvar_string( "_cl_playermodel" ) );
+	lSkin = String_Zone( cvar_string( "_cl_playerskin" ) );
 
 	for( lMatch = self._child ; lMatch._next ; lMatch = lMatch._next )
 		if( lMatch.target == lModel && lMatch.link == lSkin )

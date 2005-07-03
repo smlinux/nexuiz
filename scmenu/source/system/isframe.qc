@@ -65,7 +65,8 @@ void( entity pParent ) Menu_LinkChildren =
 		lOverwrite = finddef( null_entity, parent, pParent.name, orderPos, lOrder );
 		if( lOverwrite == lChild )
 			lChild.orderPos = lOrder;
-		else if( lOverwrite ) { // insert lOverwrite in front of lChild
+		else if( lOverwrite ) {
+			// insert lOverwrite in front of lChild
 			local entity lOPrevious;
 
 			lOPrevious = findentity( null_entity, chain, lOverwrite );

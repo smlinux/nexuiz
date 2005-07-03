@@ -9,7 +9,7 @@ Item_Data_Cvar
 
 void() Item_Data_Cvar_Sync =
 {
-	String_EntitySet( self, _syncValue, str_cvar( self.cvarName ) );
+	String_EntitySet( self, _syncValue, cvar_string( self.cvarName ) );
 	String_EntitySet( self, value, self._syncValue );
 };
 
@@ -21,7 +21,11 @@ void() Item_Data_Cvar_Send =
 
 void() Item_Data_Cvar_Reset =
 {
-	String_EntitySet( self, value, self.defValue );
+	if( self.defValue ) {
+		String_EntitySet( self, value, self.defValue );
+	} else {
+		String_EntitySet( self, value, cvar_defstring( self.cvarName ) );
+	}
 	Item_Data_Cvar_Send();
 };
 

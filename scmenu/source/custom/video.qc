@@ -3,7 +3,7 @@
 
 void() _IDNR_Sync =
 {
-	String_EntitySet( self, value, strcat( str_cvar( "vid_width" ), " ", str_cvar( "vid_height" ) ) );
+	String_EntitySet( self, value, strcat( cvar_string( "vid_width" ), " ", cvar_string( "vid_height" ) ) );
 	String_EntitySet( self, _syncValue, self.value );
 };
 
