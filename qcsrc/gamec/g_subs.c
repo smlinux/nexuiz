@@ -34,7 +34,10 @@ void SUB_VanishOrRemove (entity ent)
 	if (ent.flags & FL_CLIENT)
 	{
 		// vanish
-		ent.effects = EF_NODRAW;
+		ent.model = "";
+		ent.effects = 0;
+		ent.glow_size = 0;
+		ent.pflags = 0;
 	}
 	else
 	{

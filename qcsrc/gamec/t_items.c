@@ -139,9 +139,6 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 	self.solid = SOLID_TRIGGER;
 	self.touch = Item_Touch;
 
-	if (itemflags & FL_POWERUP)
-		self.effects = self.effects | EF_ADDITIVE;
-
 	// Savage: remove thrown items after a certain period of time ("garbage collection")
 	if (self.classname == "droppedweapon")
 	{
@@ -174,8 +171,8 @@ void item_health1 (void) {self.max_health = 5;StartItem ("models/items/g_h1.md3"
 void item_health25 (void) {self.max_health = 25;StartItem ("models/items/g_h25.md3", "misc/mediumhealth.wav", 15, "25 Health", 0, 0);}
 void item_health100 (void) {self.max_health = 100;StartItem ("models/items/g_h100.md3", "misc/megahealth.wav", 30, "100 Health", 0, 0);}
 
-void item_strength (void) {self.strength_finished = 30;StartItem ("models/items/g_strength.md3", "misc/powerup.wav", 120, "Strength Powerup", IT_STRENGTH, FL_POWERUP);}
-void item_invincible (void) {self.invincible_finished = 30;StartItem ("models/items/g_invincible.md3", "misc/powerup.wav", 120, "Invulnerability", IT_INVINCIBLE, FL_POWERUP);}
+void item_strength (void) {self.strength_finished = 30;self.effects = EF_ADDITIVE;StartItem ("models/items/g_strength.md3", "misc/powerup.wav", 120, "Strength Powerup", IT_STRENGTH, FL_POWERUP);}
+void item_invincible (void) {self.invincible_finished = 30;self.effects = EF_ADDITIVE;StartItem ("models/items/g_invincible.md3", "misc/powerup.wav", 120, "Invulnerability", IT_INVINCIBLE, FL_POWERUP);}
 //void item_speed (void) {self.speed_finished = 30;StartItem ("models/items/g_speed.md3", "misc/powerup.wav", 120, "Speed Powerup", IT_SPEED, FL_POWERUP);}
 //void item_slowmo (void) {self.slowmo_finished = 30;StartItem ("models/items/g_slowmo.md3", "misc/powerup.wav", 120, "Slow Motion", IT_SLOWMO, FL_POWERUP);}
 

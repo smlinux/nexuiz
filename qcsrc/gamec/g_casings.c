@@ -65,7 +65,7 @@ void(vector org, vector vel, float randomvel, vector ang, vector avel, float ran
 	e.think = casingthink;
 	e.touch = casingtouch;
 	//e.knockedloosefunc = casingknockedloosefunc;
-	//e.effects = EF_LOWPRECISION;
+	e.effects = EF_LOWPRECISION;
 	e.createdtime = time;
 	if (casingtype == 1)
 	{

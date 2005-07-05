@@ -178,6 +178,7 @@ void PutClientInServer (void)
 	self.deadflag = DEAD_NO;
 
 	self.angles = spot.angles;
+	self.angles_z = 0; // never spawn tilted even if the spot says to
 	self.fixangle = TRUE; // turn this way immediately
 	self.velocity = '0 0 0';
 	self.avelocity = '0 0 0';
@@ -230,9 +231,6 @@ void PutClientInServer (void)
 		self.ammo_rockets = 0;
 		self.ammo_cells = 0;
 	}
-
-	if (cvar("g_fullbrightplayers") == 1)
-		self.effects = EF_FULLBRIGHT;
 
 	self.event_damage = PlayerDamage;
 
@@ -482,6 +480,8 @@ void player_powerups (void)
 			sprint(self, "^3Shield surrounds you\n");
 		}
 	}
+	if (cvar("g_fullbrightplayers"))
+		self.effects = self.effects | EF_FULLBRIGHT;
 }
 
 void player_regen (void)

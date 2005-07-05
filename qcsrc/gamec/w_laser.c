@@ -85,7 +85,7 @@ void W_Laser_Attack (void)
 	missile.think = SUB_Remove;
 	missile.nextthink = time + 9;
 
-	missile.effects = EF_FULLBRIGHT | EF_ADDITIVE | EF_LOWPRECISION;
+	missile.effects = EF_FULLBRIGHT | EF_FULLBRIGHT | EF_LOWPRECISION;
 }
 
 // weapon frames

@@ -116,7 +116,7 @@ void W_Rocket_Attack (void)
 	flash.velocity = v_forward * 20;
 	flash.angles = vectoangles (flash.velocity);
 	SUB_SetFade (flash, time, 0.4);
-	flash.effects = flash.effects | EF_ADDITIVE | EF_FULLBRIGHT;
+	flash.effects = flash.effects | EF_ADDITIVE | EF_FULLBRIGHT | EF_LOWPRECISION;
 }
 
 // weapon frames

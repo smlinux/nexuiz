@@ -952,6 +952,26 @@ float EF_SELECTABLE = 16384; // allows cursor to highlight entity (brighten)
 //the selected entity highlights only if EF_SELECTABLE is set, a typical selection method would be doubling the brightness of the entity by some means (such as colormod[] *= 2).
 //intended to be used by Prydon Gate.
 
+//TENEBRAE_GFX_DLIGHTS
+//idea: Tenebrae
+//darkplaces implementation: LordHavoc
+//fields:
+.float light_lev; // radius (does not affect brightness), typical value 350
+.vector color; // color (does not affect radius), typical value '1 1 1' (bright white), can be up to '255 255 255' (nuclear blast)
+.float style; // light style (like normal light entities, flickering torches or switchable, etc)
+.float pflags; // flags (see PFLAGS_ constants)
+.vector angles; // orientation of the light
+.float skin; // cubemap filter number, can be 1-255 (0 is assumed to be none, and tenebrae only allows 16-255), this selects a projective light filter, a value of 1 loads cubemaps/1posx.tga and cubemaps/1negx.tga and posy, negy, posz, and negz, similar to skybox but some sides need to be rotated or flipped
+//constants:
+float PFLAGS_NOSHADOW = 1; // light does not cast shadows
+float PFLAGS_CORONA = 2; // light has a corona flare
+float PFLAGS_FULLDYNAMIC = 128; // light enable (without this set no light is produced!)
+//description:
+//more powerful dynamic light settings
+//warning: it is best not to use cubemaps on a light entity that has a model, as using a skin number that a model does not have will cause issues in glquake, and produce warnings in darkplaces (use developer 1 to see them)
+//changes compared to tenebrae (because they're too 'leet' for standards):
+//EF_FULLDYNAMIC effects flag replaced by PFLAGS_FULLDYNAMIC flag (EF_FULLDYNAMIC conflicts with EF_NODRAW)
+
 //TW_SV_STEPCONTROL
 //idea: Transfusion
 //darkplaces implementation: LordHavoc

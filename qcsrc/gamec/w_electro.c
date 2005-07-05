@@ -109,7 +109,7 @@ void() W_Electro_Attack
 	if (self.button3)
 	{
 		self.ammo_cells = self.ammo_cells - 1;
-		proj.effects = EF_ADDITIVE;
+		proj.effects = EF_FULLBRIGHT;
 		proj.movetype = MOVETYPE_BOUNCE;
 		proj.velocity = v_forward * cvar("g_balance_electro_ballspeed") + v_up * cvar("g_balance_electro_ballspeed_up");
 		proj.touch = W_Plasma_Touch;
@@ -124,7 +124,7 @@ void() W_Electro_Attack
 	*/
 	{
 		self.ammo_cells = self.ammo_cells - 2;
-		proj.effects = EF_BRIGHTFIELD | EF_ADDITIVE;
+		proj.effects = EF_BRIGHTFIELD | EF_FULLBRIGHT;
 		proj.movetype = MOVETYPE_FLY;
 		proj.velocity = v_forward * cvar("g_balance_electro_speed");
 		proj.angles = vectoangles(proj.velocity);
@@ -173,7 +173,7 @@ void() W_Electro_Attack2
 	//if (self.button3)
 	{
 		self.ammo_cells = self.ammo_cells - 1;
-		proj.effects = EF_ADDITIVE;
+		proj.effects = EF_FULLBRIGHT;
 		proj.movetype = MOVETYPE_BOUNCE;
 		proj.velocity = v_forward * cvar("g_balance_electro_ballspeed") + v_up * cvar("g_balance_electro_ballspeed_up");
 		proj.touch = W_Plasma_Touch;
@@ -188,7 +188,7 @@ void() W_Electro_Attack2
 	/*
 	{
 		self.ammo_cells = self.ammo_cells - 2;
-		proj.effects = EF_BRIGHTFIELD | EF_ADDITIVE;
+		proj.effects = EF_BRIGHTFIELD | EF_FULLBRIGHT;
 		proj.movetype = MOVETYPE_FLY;
 		proj.velocity = v_forward * cvar("g_balance_electro_speed");
 		proj.angles = vectoangles(proj.velocity);
