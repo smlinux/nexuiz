@@ -110,11 +110,19 @@ void Obituary (entity attacker, entity targ, float deathtype)
 	}
 }
 
+// these are updated by each Damage call for use in button triggering and such
+entity damage_targ;
+entity damage_inflictor;
+entity damage_attacker;
+
 void Damage (entity targ, entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
 {
 	local entity oldself;
 	oldself = self;
 	self = targ;
+	damage_targ = targ;
+	damage_inflictor = inflictor;
+	damage_attacker = attacker;
 	// nullify damage if teamplay is on
 	if (teamplay)
 	if (attacker.team)
