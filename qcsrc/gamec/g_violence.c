@@ -36,7 +36,10 @@ void TossGib (entity gib, string mdlname, vector org, vector v, float destroyont
 		gib = spawn ();
 		gib.deadflag = DEAD_DEAD;
 	}
-	gib.classname = "gib";
+
+	// don't set his classname to something else or it'll screw up a lot of stuff
+	if(gib.classname != "player")
+		gib.classname = "gib";
 	gib.iscreature = TRUE;
 	gib.movetype = MOVETYPE_BOUNCE;
 	gib.solid = SOLID_CORPSE;

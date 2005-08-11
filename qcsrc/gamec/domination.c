@@ -15,21 +15,70 @@ dom_init();
 Note: The only teams who can use dom control points are identified by dom_team entities (if none exist these default to red and blue and use only quake models/sounds).
 */
 
+
 void() dom_spawnteams;
 
 void() dompointthink =
 {
 	local entity head;
-	self.nextthink = time + 3;
+	float waittime;
+	float fragamt;
+	if (gameover)	// game has ended, don't keep giving points
+		return;
+
+	waittime = cvar("g_domination_point_rate");
+	if(!waittime)
+		waittime = self.wait;
+	self.nextthink = time + waittime;
+
 	if (!self.goalentity.netname)
 		return;
+
+
+	fragamt = cvar("g_domination_point_amt");
+	if(!fragamt)
+		fragamt = self.frags;
+
 	head = find(head, classname, "player");
 	while (head)
 	{
 		if (head.team == self.goalentity.team)
-			head.frags = head.frags + 1;
+			head.frags = head.frags + fragamt;
 		head = find(head, classname, "player");
 	}
+	self.goalentity.frags = self.goalentity.frags + fragamt;
+};
+
+void dompoint_captured ()
+{
+	local entity head;
+
+	head = self.enemy;
+
+	self.cnt = -1;
+
+	self.goalentity = head;
+	self.model = head.mdl;
+	self.modelindex = head.dmg;
+	self.skin = head.skin;
+
+	//bprint(head.message);
+	//bprint("\n");
+
+	//bprint(^3head.netname);
+	//bprint(head.netname);
+	//bprint(self.message);
+	//bprint("\n");
+
+	bprint(strcat("^3", head.netname, self.message, "\n"));
+
+	if (head.noise != "")
+		sound(self, CHAN_BODY, head.noise, 1, ATTN_NORM);
+	if (head.noise1 != "")
+		sound(self, CHAN_VOICE, head.noise1, 1, ATTN_NONE);
+
+	self.nextthink = time + cvar("g_domination_point_rate");
+	self.think = dompointthink;
 };
 
 void() dompointtouch =
@@ -39,6 +88,9 @@ void() dompointtouch =
 		return;
 	if (other.health < 1)
 		return;
+	if(self.cnt > 0 && self.cnt == other.team)
+		return;
+
 	// only valid teams can claim it
 	head = find(world, classname, "dom_team");
 	while (head && head.team != other.team)
@@ -46,21 +98,28 @@ void() dompointtouch =
 	if (!head || head.netname == "" || head == self.goalentity)
 		return;
 
+	// delay capture
+
+	self.cnt = other.team;
+	self.enemy = head;
+	self.nextthink = time + cvar("g_domination_point_capturetime");
+	self.think = dompoint_captured;
+
+	// go to neutral team in the mean time
+
+	head = find(world, classname, "dom_team");
+	while (head && head.netname != "")
+		head = find(head, classname, "dom_team");
+	if(head == world)
+		return;
+
 	self.goalentity = head;
 	self.model = head.mdl;
 	self.modelindex = head.dmg;
 	self.skin = head.skin;
-
-	bprint(head.message);
-	bprint("\n");
-
-	if (head.noise != "")
-		sound(self, CHAN_BODY, head.noise, 1, ATTN_NORM);
-	if (head.noise1 != "")
-		sound(self, CHAN_VOICE, head.noise1, 1, ATTN_NONE);
 };
 
-/*QUAKED dom_team (0 .5 .8) (-16 -16 -24) (16 16 32)
+/*QUAKED dom_team (0 .5 .8) (-32 -32 -24) (32 32 32)
 Team declaration for Domination gameplay, this allows you to decide what team
 names and control point models are used in your map.
 
@@ -69,7 +128,7 @@ can have netname set!  The nameless team owns all control points at start.
 
 Keys:
 "netname"
- Name of the team (for example Red, Blue, Green, Yellow, Life, Death, etc)
+ Name of the team (for example Red Team, Blue Team, Green Team, Yellow Team, Life, Death, etc)
 "cnt"
  Scoreboard color of the team (for example 4 is red and 13 is blue)
 "model"
@@ -84,10 +143,6 @@ Keys:
 "noise1"
  Narrator speech to play when this team captures a point.
  (this is a global sound, like "Red team has captured a control point")
-"message"
- Message to show when a team captures a point
- (for example "Red team has captured a control point", or
-  "The forces of light have captured a mana well")
 */
 
 void() dom_team =
@@ -122,26 +177,239 @@ void() dom_controlpoint_setup =
 	setmodel(self, head.mdl);
 	self.skin = head.skin;
 
+	self.cnt = -1;
+
+	if(!self.message)
+		self.message = " has captured a control point";
+
+	if(!self.frags)
+		self.frags = 1;
+	if(!self.wait)
+		self.wait = 5;
+
 	self.think = dompointthink;
 	self.nextthink = time;
 	self.touch = dompointtouch;
 	self.solid = SOLID_TRIGGER;
-	setsize(self, '-16 -16 -24', '16 16 32');
+	setsize(self, '-32 -32 -24', '32 32 32');
 	setorigin(self, self.origin);
 	droptofloor(0, 0);
 };
 
+
+
+// player has joined game, get him on a team
+// depreciated
+/*void dom_player_join_team(entity pl)
+{
+	entity head;
+	float c1, c2, c3, c4, totalteams, smallestteam, smallestteam_count, selectedteam;
+	float balance_teams, force_balance, balance_type;
+
+	balance_teams = cvar("g_balance_teams");
+	balance_teams = cvar("g_balance_teams_force");
+
+	c1 = c2 = c3 = c4 = -1;
+	totalteams = 0;
+
+	// first find out what teams are allowed
+	head = find(world, classname, "dom_team");
+	while(head)
+	{
+		if(head.netname != "")
+		{
+			//if(head.team == pl.team)
+			//	selected = head;
+			if(head.team == COLOR_TEAM1)
+			{
+					c1 = 0;
+			}
+			if(head.team == COLOR_TEAM2)
+			{
+					c2 = 0;
+			}
+			if(head.team == COLOR_TEAM3)
+			{
+					c3 = 0;
+			}
+			if(head.team == COLOR_TEAM4)
+			{
+					c4 = 0;
+			}
+		}
+		head = find(head, classname, "dom_team");
+	}
+
+	// make sure there are at least 2 teams to join
+	if(c1 >= 0)
+		totalteams = totalteams + 1;
+	if(c2 >= 0)
+		totalteams = totalteams + 1;
+	if(c3 >= 0)
+		totalteams = totalteams + 1;
+	if(c4 >= 0)
+		totalteams = totalteams + 1;
+
+	if(totalteams <= 1)
+		error("dom_player_join_team: Too few teams available for domination\n");
+
+	// whichever teams that are available are set to 0 instead of -1
+
+	// if we don't care what team he ends up on, put him on whatever team he entered as.
+	// if he's not on a valid team, then put him on the smallest team
+	if(!balance_teams && !force_balance)
+	{
+		if(     c1 >= 0 && pl.team == COLOR_TEAM1)
+			selectedteam = pl.team;
+		else if(c2 >= 0 && pl.team == COLOR_TEAM2)
+			selectedteam = pl.team;
+		else if(c3 >= 0 && pl.team == COLOR_TEAM3)
+			selectedteam = pl.team;
+		else if(c4 >= 0 && pl.team == COLOR_TEAM4)
+			selectedteam = pl.team;
+		else
+			selectedteam = -1;
+		if(selectedteam > 0)
+		{
+			SetPlayerColors(pl, selectedteam - 1);
+			return;
+		}
+		// otherwise end up on the smallest team (handled below)
+	}
+
+	// now count how many players are on each team already
+
+	head = find(world, classname, "player");
+	while(head)
+	{
+		//if(head.netname != "")
+		{
+			if(head.team == COLOR_TEAM1)
+			{
+				if(c1 >= 0)
+					c1 = c1 + 1;
+			}
+			if(head.team == COLOR_TEAM2)
+			{
+				if(c2 >= 0)
+					c2 = c2 + 1;
+			}
+			if(head.team == COLOR_TEAM3)
+			{
+				if(c3 >= 0)
+					c3 = c3 + 1;
+			}
+			if(head.team == COLOR_TEAM4)
+			{
+				if(c4 >= 0)
+					c4 = c4 + 1;
+			}
+		}
+		head = find(head, classname, "player");
+	}
+
+	// c1...c4 now have counts of each team
+	// figure out which is smallest, giving priority to the team the player is already on as a tie-breaker
+
+	smallestteam = 0;
+	smallestteam_count = 999;
+
+	// 2 gives priority to what team you're already on, 1 goes in order
+	balance_type = 1;
+
+	if(balance_type == 1)
+	{
+		if(c1 >= 0 && c1 < smallestteam_count)
+		{
+			smallestteam = 1;
+			smallestteam_count = c1;
+		}
+		if(c2 >= 0 && c2 < smallestteam_count)
+		{
+			smallestteam = 2;
+			smallestteam_count = c2;
+		}
+		if(c3 >= 0 && c3 < smallestteam_count)
+		{
+			smallestteam = 3;
+			smallestteam_count = c3;
+		}
+		if(c4 >= 0 && c4 < smallestteam_count)
+		{
+			smallestteam = 4;
+			smallestteam_count = c4;
+		}
+	}
+	else
+	{
+		if(c1 >= 0 && (c1 < smallestteam_count || 
+					(c1 == smallestteam_count && self.team == COLOR_TEAM1) ) )
+		{
+			smallestteam = 1;
+			smallestteam_count = c1;
+		}
+		if(c2 >= 0 && c2 < (c2 < smallestteam_count || 
+					(c2 == smallestteam_count && self.team == COLOR_TEAM2) ) )
+		{
+			smallestteam = 2;
+			smallestteam_count = c2;
+		}
+		if(c3 >= 0 && c3 < (c3 < smallestteam_count || 
+					(c3 == smallestteam_count && self.team == COLOR_TEAM3) ) )
+		{
+			smallestteam = 3;
+			smallestteam_count = c3;
+		}
+		if(c4 >= 0 && c4 < (c4 < smallestteam_count || 
+					(c4 == smallestteam_count && self.team == COLOR_TEAM4) ) )
+		{
+			smallestteam = 4;
+			smallestteam_count = c4;
+		}
+	}
+
+	if(smallestteam == 1)
+	{
+		selectedteam = COLOR_TEAM1 - 1;
+	}
+	if(smallestteam == 2)
+	{
+		selectedteam = COLOR_TEAM2 - 1;
+	}
+	if(smallestteam == 3)
+	{
+		selectedteam = COLOR_TEAM3 - 1;
+	}
+	if(smallestteam == 4)
+	{
+		selectedteam = COLOR_TEAM4 - 1;
+	}
+
+	SetPlayerColors(pl, selectedteam);
+}
+*/
 /*QUAKED dom_controlpoint (0 .5 .8) (-16 -16 -24) (16 16 32)
 Control point for Domination gameplay.
 */
 void() dom_controlpoint =
 {
+	if(!cvar("g_domination"))
+	{
+		remove(self);
+		return;
+	}
 	self.think = dom_controlpoint_setup;
 	self.nextthink = time + 0.1;
+
+	if(!self.scale)
+		self.scale = 0.6;
+
+	if(!self.glow_size)
+		self.glow_size = 50;
 };
 
 // code from here on is just to support maps that don't have control point and team entities
-void(string teamname, float teamcolor, string pointmodel, float pointskin, string capsound, string capnarration, string capmessage) dom_spawnteam =
+void dom_spawnteam (string teamname, float teamcolor, string pointmodel, float pointskin, string capsound, string capnarration, string capmessage) 
 {
 	local entity oldself;
 	oldself = self;
@@ -181,19 +449,28 @@ void(vector org) dom_spawnpoint =
 	self = oldself;
 };
 
+// spawn some default teams if the map is not set up for domination
 void() dom_spawnteams =
 {
+	float numteams;
+
+	numteams = cvar("g_domination_default_teams");
 	// LordHavoc: edit this if you want to change defaults
 	dom_spawnteam("Red", 4, "models/domination/dom_red.md3", 0, "domination/claim.wav", "", "Red team has captured a control point");
 	dom_spawnteam("Blue", 13, "models/domination/dom_blue.md3", 0, "domination/claim.wav", "", "Blue team has captured a control point");
-	dom_spawnteam("Green", 3, "models/domination/dom_green.md3", 0, "domination/claim.wav", "", "Green team has captured a control point");
-	dom_spawnteam("Yellow", 12, "models/domination/dom_yellow.md3", 0, "domination/claim.wav", "", "Yellow team has captured a control point");
+	if(numteams > 2)
+		dom_spawnteam("Green", 3, "models/domination/dom_green.md3", 0, "domination/claim.wav", "", "Green team has captured a control point");
+	if(numteams > 3)
+		dom_spawnteam("Yellow", 12, "models/domination/dom_yellow.md3", 0, "domination/claim.wav", "", "Yellow team has captured a control point");
 	dom_spawnteam("", 0, "models/domination/dom_unclaimed.md3", 0, "", "", "");
 };
 
 void() dom_delayedinit =
 {
 	local entity head;
+
+	self.think = SUB_Remove;
+	self.nextthink = time;
 	// if no teams are found, spawn defaults
 	if (find(world, classname, "dom_team") == world)
 		dom_spawnteams();
@@ -235,5 +512,9 @@ void() dom_init =
 	e = spawn();
 	e.think = dom_delayedinit;
 	e.nextthink = time + 0.1;
+
+	// teamplay is always on in domination, defaults to hurt self but not teammates
+	//if(!cvar("teamplay"))
+	//	cvar_set("teamplay", "3");
 };
 

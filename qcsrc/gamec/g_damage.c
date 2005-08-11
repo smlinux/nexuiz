@@ -1,5 +1,17 @@
 
 float checkrules_firstblood;
+
+void GiveFrags (entity attacker, entity targ, float f)
+{
+	if(f > 0 && cvar("g_domination") && cvar("g_domination_disable_frags"))
+		return;
+	else if(f > 0 && cvar("g_runematch"))
+		f = RunematchHandleFrags(attacker, targ, f);
+
+	if(f)
+		attacker.frags = attacker.frags + f;
+}
+
 void Obituary (entity attacker, entity targ, float deathtype)
 {
 	string	s;
@@ -22,15 +34,17 @@ void Obituary (entity attacker, entity targ, float deathtype)
 			else if (deathtype == DEATH_KILL)
 				bprint ("^1",s, " couldn't take it anymore\n");
 			else
-				bprint ("^1",s, " couldn't resist the urge to self immolate\n");
-			targ.frags = targ.frags - 1;
+				bprint ("^1",s, " couldn't resist the urge to self-destruct\n");
+			GiveFrags(attacker, targ, -1);
+			//targ.frags = targ.frags - 1;
 			if (targ.killcount > 2)
 				bprint ("^1",s," ended it all with a ",ftos(targ.killcount)," kill spree\n");
 		}
 		else if (teamplay && attacker.team == targ.team)
 		{
 			bprint ("^1", attacker.netname, " mows down a teammate\n");
-			attacker.frags = attacker.frags - 1;
+			GiveFrags(attacker, targ, -1);
+			//attacker.frags = attacker.frags - 1;
 			if (targ.killcount > 2)
 				bprint ("^1",s,"'s ",ftos(targ.killcount)," kill spree was endeded by a teammate!\n");
 			if (attacker.killcount > 2)
@@ -79,7 +93,8 @@ void Obituary (entity attacker, entity targ, float deathtype)
 			else
 				bprint ("^1",s, " was killed by ", attacker.netname, "\n");
 
-			attacker.frags = attacker.frags + 1;
+			GiveFrags(attacker, targ, 1);
+			//attacker.frags = attacker.frags + 1;
 			if (targ.killcount > 2)
 				bprint ("^1",s,"'s ", ftos(targ.killcount), " kill spree was ended by ", attacker.netname, "\n");
 			attacker.killcount = attacker.killcount + 1;
@@ -100,7 +115,8 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				bprint ("^1",s, " hit the ground with a crunch\n");
 			else
 				bprint ("^1",s, " died\n");
-			targ.frags = targ.frags - 1;
+			GiveFrags(targ, targ, -1);
+			//targ.frags = targ.frags - 1;
 			if (targ.killcount > 2)
 				bprint ("^1",s," died with a ",ftos(targ.killcount)," kill spree\n");
 		}
@@ -120,9 +136,9 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 	local entity oldself;
 	oldself = self;
 	self = targ;
-	damage_targ = targ;
-	damage_inflictor = inflictor;
-	damage_attacker = attacker;
+        damage_targ = targ;
+        damage_inflictor = inflictor;
+        damage_attacker = attacker;	
 	// nullify damage if teamplay is on
 	if (teamplay)
 	if (attacker.team)
@@ -138,6 +154,42 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 	// apply invincibility multiplier
 	if (targ.items & IT_INVINCIBLE)
 		damage = damage * cvar("g_balance_powerup_invincible_takedamage");
+
+
+	if(cvar("g_runematch"))
+	{
+		// apply strength rune
+		if (attacker.runes & RUNE_STRENGTH)
+		{
+			if(attacker.runes & CURSE_WEAK) // have both curse & rune
+			{
+				damage = damage * cvar("g_balance_rune_strength_combo_damage");
+				force = force * cvar("g_balance_rune_strength_combo_force");
+			}
+			else
+			{
+				damage = damage * cvar("g_balance_rune_strength_damage");
+				force = force * cvar("g_balance_rune_strength_force");
+			}
+		}
+		else if (attacker.runes & CURSE_WEAK)
+		{
+			damage = damage * cvar("g_balance_curse_weak_damage");
+			force = force * cvar("g_balance_curse_weak_force");
+		}
+
+		// apply defense rune
+		if (targ.runes & RUNE_DEFENSE)
+		{
+			if (targ.runes & CURSE_VULNER) // have both curse & rune
+				damage = damage * cvar("g_balance_rune_defense_combo_takedamage");
+			else
+				damage = damage * cvar("g_balance_rune_defense_takedamage");
+		}
+		else if (targ.runes & CURSE_VULNER)
+			damage = damage * cvar("g_balance_curse_vulner_takedamage");
+	}
+
 	// apply push
 	if (self.damageforcescale)
 	{
@@ -149,9 +201,44 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 		self.event_damage (inflictor, attacker, damage, deathtype, hitloc, force);
 	self = oldself;
 
-	// Savage: vampire mode
-	if(cvar("g_vampire") && targ.classname == "player" && attacker.classname == "player" && attacker != targ) {
-		attacker.health += damage;
+	if(targ.classname == "player" && attacker.classname == "player" && attacker != targ && attacker.health > 2)
+	{
+		// Savage: vampire mode
+		if(cvar("g_vampire"))
+		{
+			attacker.health += damage;
+		}
+		if(cvar("g_runematch"))
+		{
+			if (attacker.runes & RUNE_VAMPIRE)
+			{
+			// apply vampire rune
+				if (attacker.runes & CURSE_EMPATHY) // have the curse too
+				{
+					//attacker.health = attacker.health + damage * cvar("g_balance_rune_vampire_combo_absorb");
+					attacker.health = bound(
+						3, 
+						attacker.health + damage * cvar("g_balance_rune_vampire_combo_absorb"), 
+						1000);
+				}
+				else
+				{
+					//attacker.health = attacker.health + damage * cvar("g_balance_rune_vampire_absorb");
+					attacker.health = bound(
+						3, 
+						attacker.health + damage * cvar("g_balance_rune_vampire_absorb"), 
+						1000);
+				}
+			}
+			// apply empathy curse
+			else if (attacker.runes & CURSE_EMPATHY)
+			{
+				attacker.health = bound(
+					3, 
+					attacker.health + damage * cvar("g_balance_curse_empathy_takedamage"), 
+					attacker.health);
+			}
+		}
 	}
 }
 

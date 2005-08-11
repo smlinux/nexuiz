@@ -1,11 +1,11 @@
 
 .entity flagcarried;
 
-float FLAGSCORE_PICKUP        =  1;
-float FLAGSCORE_RETURN        =  5; // returned by owner team
-float FLAGSCORE_RETURNROGUE   = 10; // returned by rogue team
-float FLAGSCORE_CAPTURE       =  5;
-float FLAGSCORE_CAPTURE_TEAM  = 20;
+//float FLAGSCORE_PICKUP        =  1;
+//float FLAGSCORE_RETURN        =  5; // returned by owner team
+//float FLAGSCORE_RETURNROGUE   = 10; // returned by rogue team
+//float FLAGSCORE_CAPTURE       =  5;
+//float FLAGSCORE_CAPTURE_TEAM  = 20;
 
 float FLAG_BASE = 1;
 float FLAG_CARRY = 2;
@@ -90,7 +90,7 @@ void(entity e) DropFlag =
 	setorigin(e, p.origin - '0 0 24');
 	e.cnt = FLAG_DROPPED;
 	e.velocity = '0 0 300';
-	e.pain_finished = time + 30;
+	e.pain_finished = time + cvar("g_ctf_flag_returntime");//30;
 };
 
 void() FlagThink =
@@ -164,7 +164,7 @@ void() FlagThink =
 	}
 	*/
 	self.angles = e.angles + '0 0 -45';
-	setorigin (self, e.origin + '0 0 -16' - f*v + v_right * 22);
+	setorigin (self, e.origin + '0 0 0' - f*v + v_right * 22);
 	self.nextthink = time + 0.01;
 };
 
@@ -212,12 +212,12 @@ void() FlagTouch =
 			else
 				bprint(other.netname, " captured the BLUE flag in ", ftos(t), ", failing to break the previous record of", ftos(flagcaptimerecord), " seconds\n");
 		}
-		other.frags = other.frags + FLAGSCORE_CAPTURE;
+		other.frags = other.frags + cvar("g_ctf_flagscore_capture");//FLAGSCORE_CAPTURE;
 		head = find(head, classname, "player");
 		while (head)
 		{
-			if (head.team == self.goalentity.team)
-				head.frags = head.frags + FLAGSCORE_CAPTURE_TEAM;
+			if (head.team == self.team)
+				head.frags = head.frags + cvar("g_ctf_flagscore_capture_team");//FLAGSCORE_CAPTURE_TEAM;
 			head = find(head, classname, "player");
 		}
 		sound (self, CHAN_AUTO, self.noise2, 1, ATTN_NONE);
@@ -239,7 +239,7 @@ void() FlagTouch =
 			bprint(other.netname, " got the RED flag\n");
 		else
 			bprint(other.netname, " got the BLUE flag\n");
-		other.frags = other.frags + FLAGSCORE_PICKUP;
+		other.frags = other.frags + cvar("g_ctf_flagscore_pickup");//FLAGSCORE_PICKUP;
 		sound (self, CHAN_AUTO, self.noise, 1, ATTN_NONE);
 		return;
 	}
@@ -255,9 +255,9 @@ void() FlagTouch =
 			else
 				bprint(other.netname, " returned the BLUE flag\n");
 			if (other.team == 5 || other.team == 14)
-				other.frags = other.frags + FLAGSCORE_RETURN;
+				other.frags = other.frags + cvar("g_ctf_flagscore_return");//FLAGSCORE_RETURN;
 			else
-				other.frags = other.frags + FLAGSCORE_RETURNROGUE;
+				other.frags = other.frags + cvar("g_ctf_flagscore_return_rogue");//FLAGSCORE_RETURNROGUE;
 			sound (self, CHAN_AUTO, self.noise1, 1, ATTN_NONE);
 			ReturnFlag(self);
 		}
@@ -274,7 +274,7 @@ void() FlagTouch =
 				bprint(other.netname, " picked up the RED flag\n");
 			else
 				bprint(other.netname, " picked up the BLUE flag\n");
-			other.frags = other.frags + FLAGSCORE_PICKUP;
+			other.frags = other.frags + cvar("g_ctf_flagscore_pickup");//FLAGSCORE_PICKUP;
 			sound (self, CHAN_AUTO, self.noise, 1, ATTN_NONE);
 		}
 	}
@@ -288,7 +288,12 @@ Keys:
 "angle"
  viewing angle when spawning
 */
-void() info_player_team1 = {};//self.team = 4;self.classname = "info_player_start";info_player_start();};
+void() info_player_team1 = 
+{
+	if(!cvar("g_ctf"))
+		self.classname = "info_player_deathmatch";
+};
+//self.team = 4;self.classname = "info_player_start";info_player_start();};
 
 /*QUAKED info_player_team2 (1 0 0) (-16 -16 -24) (16 16 24)
 CTF Starting point for a player in
@@ -298,9 +303,46 @@ Keys:
 "angle"
  viewing angle when spawning
 */
-void() info_player_team2 = {};//self.team = 13;self.classname = "info_player_start";info_player_start();};
+void() info_player_team2 =
+{
+	if(!cvar("g_ctf"))
+		self.classname = "info_player_deathmatch";
+};
+//self.team = 13;self.classname = "info_player_start";info_player_start();};
 
-/*QUAKED item_flag_team1 (0 0.5 0.8) (-48 -48 -24) (48 48 64)
+/*QUAKED info_player_team3 (1 0 0) (-16 -16 -24) (16 16 24)
+CTF Starting point for a player in
+team three (Green).
+
+Keys:
+"angle"
+ viewing angle when spawning
+*/
+void() info_player_team3 =
+{
+	if(!cvar("g_ctf"))
+		self.classname = "info_player_deathmatch";
+};
+
+
+/*QUAKED info_player_team4 (1 0 0) (-16 -16 -24) (16 16 24)
+CTF Starting point for a player in
+team four (Magenta).
+
+Keys:
+"angle"
+ viewing angle when spawning
+*/
+void() info_player_team4 =
+{
+	if(!cvar("g_ctf"))
+		self.classname = "info_player_deathmatch";
+};
+
+
+
+
+/*QUAKED item_flag_team1 (0 0.5 0.8) (-48 -48 -37) (48 48 37)
 CTF flag for team one (Red).
 Multiple are allowed.
 
@@ -329,11 +371,14 @@ void() item_flag_team1 =
 {
 	if (!cvar("g_ctf"))
 		return;
+	//if(!cvar("teamplay"))
+	//	cvar_set("teamplay", "3");
+
 	self.team = 5; // color 4 team (red)
 	self.items = IT_KEY2; // gold key (redish enough)
 	self.skin = 0;
 	if (!self.model)
-		self.model = "models/ctf/flag.md3";
+		self.model = "models/ctf/flag_red.md3";
 	if (!self.noise)
 		self.noise = "ctf/take.wav";
 	if (!self.noise1)
@@ -348,9 +393,15 @@ void() item_flag_team1 =
 	precache_sound (self.noise1);
 	precache_sound (self.noise2);
 	precache_sound (self.noise3);
-	setsize(self, '-16 -16 0', '16 16 74');
+	setsize(self, '-16 -16 -37', '16 16 37');
+	setorigin(self, self.origin + '0 0 37');
 	self.nextthink = time + 0.2; // start after doors etc
 	self.think = place_flag;
+
+	if(!self.scale)
+		self.scale = 0.6;
+	if(!self.glow_size)
+		self.glow_size = 50;
 };
 
 /*QUAKED item_flag_team2 (0 0.5 0.8) (-48 -48 -24) (48 48 64)
@@ -368,11 +419,14 @@ void() item_flag_team2 =
 {
 	if (!cvar("g_ctf"))
 		return;
+	//if(!cvar("teamplay"))
+	//	cvar_set("teamplay", "3");
+
 	self.team = 14; // color 13 team (blue)
 	self.items = IT_KEY1; // silver key (bluish enough)
 	self.skin = 1;
 	if (!self.model)
-		self.model = "models/ctf/flag.md3";
+		self.model = "models/ctf/flag_blue.md3";
 	if (!self.noise)
 		self.noise = "ctf/take.wav";
 	if (!self.noise1)
@@ -387,8 +441,79 @@ void() item_flag_team2 =
 	precache_sound (self.noise1);
 	precache_sound (self.noise2);
 	precache_sound (self.noise3);
-	setsize(self, '-16 -16 0', '16 16 74');
+	setsize(self, '-16 -16 -37', '16 16 37');
+	setorigin(self, self.origin + '0 0 37');
 	self.nextthink = time + 0.2; // start after doors etc
 	self.think = place_flag;
+
+	if(!self.scale)
+		self.scale = 0.6;
+	if(!self.glow_size)
+		self.glow_size = 50;
+};
+
+
+/*QUAKED ctf_team (0 .5 .8) (-16 -16 -24) (16 16 32)
+Team declaration for CTF gameplay, this allows you to decide what team
+names and control point models are used in your map.
+
+Note: If you use ctf_team entities you must define at least 2!  However, unlike
+domination, you don't need to make a blank one too.
+
+Keys:
+"netname"
+ Name of the team (for example Red, Blue, Green, Yellow, Life, Death, Offense, Defense, etc)
+"cnt"
+ Scoreboard color of the team (for example 4 is red and 13 is blue)
+
+*/
+
+void() ctf_team =
+{
+	self.classname = "ctf_team";
+	self.team = self.cnt + 1;
+};
+
+// code from here on is just to support maps that don't have control point and team entities
+void ctf_spawnteam (string teamname, float teamcolor)
+{
+	local entity oldself;
+	oldself = self;
+	self = spawn();
+	self.classname = "ctf_team";
+	self.netname = teamname;
+	self.cnt = teamcolor;
+
+	ctf_team();
+
+	self = oldself;
+};
+
+// spawn some default teams if the map is not set up for ctf
+void() ctf_spawnteams =
+{
+	float numteams;
+
+	numteams = 2;//cvar("g_ctf_default_teams");
+
+	ctf_spawnteam("Red", 4);
+	ctf_spawnteam("Blue", 13);
+};
+
+void() ctf_delayedinit =
+{
+	self.think = SUB_Remove;
+	self.nextthink = time;
+	// if no teams are found, spawn defaults
+	if (find(world, classname, "ctf_team") == world)
+		ctf_spawnteams();
+};
+
+void() ctf_init =
+{
+	local entity e;
+	e = spawn();
+	e.think = ctf_delayedinit;
+	e.nextthink = time + 0.1;
 };
 

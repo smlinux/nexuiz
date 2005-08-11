@@ -1,4 +1,4 @@
-../data/progs.dat
+../../progs.dat
 
 gamec/sys.h
 gamec/builtins.h
@@ -7,11 +7,18 @@ gamec/defs.h		// Should rename this, it has fields and globals
 
 gamec/extensions.h
 
+gamec/miscfunctions.c
+
 gamec/mauvebot.c
 
 gamec/g_subs.c
 
+gamec/runematch.c
+
 gamec/cl_physics.c
+
+
+gamec/teamplay.c
 
 gamec/g_world.c
 gamec/g_decors.c
@@ -54,4 +61,3 @@ gamec/t_plats.c
 
 gamec/ctf.c
 gamec/domination.c
-

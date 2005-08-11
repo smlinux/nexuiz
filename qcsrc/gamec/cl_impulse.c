@@ -34,6 +34,23 @@ void ImpulseCommands (void)
 	}
 	else if (self.impulse == 14 && cvar("sv_cheats"))
 		CopyBody(0);
+	else if (self.impulse == 15 && cvar("sv_cheats"))
+	{
+		sprint(self, strcat("origin = ", vtos(self.origin), "\n"));
+	}
+	else if (self.impulse == 16 && cvar("sv_cheats"))
+	{
+		float i;
+		string s;
+		i=1;
+		while(i <= 10)
+		{
+			s = ftos(i);
+			sprint(self, strcat(s, ": ^", s, "color\n"));
+			i = i + 1;
+		}
+		sprint(self, strcat("origin = ", vtos(self.origin), "\n"));
+	}
 	else if (self.impulse == 99 && cvar("sv_cheats"))
 	{
 		self.items = IT_LASER | IT_UZI | IT_SHOTGUN | IT_GRENADE_LAUNCHER | IT_ELECTRO | IT_CRYLINK | IT_NEX | IT_HAGAR | IT_ROCKET_LAUNCHER;

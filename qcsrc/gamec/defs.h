@@ -160,3 +160,18 @@ void(float to, string s)	WriteString	= #58;
 void(float to, entity s)	WriteEntity	= #59;
 .vector dest1, dest2;
 void(entity clent) dropclient = #453;
+
+float gameover;
+float intermission_running;
+float intermission_exittime;
+float alreadychangedlevel;
+
+
+.float	isbot;	// true if this client is actually a bot
+
+.float runes;
+
+
+.float welcomemessage_time;
+.float welcomemessage_time2;
+

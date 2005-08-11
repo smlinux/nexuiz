@@ -78,16 +78,31 @@ SelectSpawnPoint
 Finds a point to respawn
 =============
 */
-entity SelectSpawnPoint (void)
+entity SelectSpawnPoint (float anypoint)
 {
 	local entity spot, firstspot, playerlist;
+	string spotname;
 
 	spot = find (world, classname, "testplayerstart");
 	if (spot)
 		return spot;
 
+	spotname = "info_player_deathmatch";
+
+	if(!anypoint && cvar("g_ctf") )
+	{
+		if(self.team == 5)//4)
+			spotname = "info_player_team1";
+		if(self.team == 14)//13)
+			spotname = "info_player_team2";
+		if(self.team == 4)//3)
+			spotname = "info_player_team3";
+		if(self.team == 13)//12)
+			spotname = "info_player_team4";
+	}
+
 	playerlist = findchain(classname, "player");
-	firstspot = find(world, classname, "info_player_deathmatch");
+	firstspot = find(world, classname, spotname);
 	Spawn_ClassifyPoints(firstspot, playerlist, 100, 1000000, 1000000);
 	// first check if there are ANY good spots
 	if (spawn_goodspots > 0)
@@ -108,7 +123,12 @@ entity SelectSpawnPoint (void)
 	}
 
 	if (!spot)
-		error ("PutClientInServer: no info_player_start on level");
+	{
+		if(anypoint)
+			error ("PutClientInServer: no start points on level");
+		else // try again with deathmatch spots
+			spot = SelectSpawnPoint(TRUE);
+	}
 
 	return spot;
 }
@@ -142,7 +162,7 @@ void PutClientInServer (void)
 {
 	entity	spot;
 
-	spot = SelectSpawnPoint ();
+	spot = SelectSpawnPoint (FALSE);
 
 	self.classname = "player";
 	self.iscreature = TRUE;
@@ -175,9 +195,12 @@ void PutClientInServer (void)
 	self.think = SUB_Null;
 	self.nextthink = 0;
 
+	self.runes = 0;
+
 	self.deadflag = DEAD_NO;
 
 	self.angles = spot.angles;
+
 	self.angles_z = 0; // never spawn tilted even if the spot says to
 	self.fixangle = TRUE; // turn this way immediately
 	self.velocity = '0 0 0';
@@ -285,10 +308,36 @@ ClientConnect
 Called when a client connects to the server
 =============
 */
+string ColoredTeamName(float t);
+//void dom_player_join_team(entity pl);
 void ClientConnect (void)
 {
+	self.classname = "player_joining";
+
+	//if(cvar("g_domination"))
+	//	dom_player_join_team(self);
+
+	JoinBestTeam(self, FALSE);
+
+	self.classname = "player";
+
+
+
 	bprint ("^4",self.netname);
-	bprint (" connected\n");
+	bprint (" connected");
+
+	if(cvar("g_domination") || cvar("g_ctf"))
+	{
+		bprint(" and joined the ");
+		bprint(ColoredTeamName(self.team));
+	}
+
+	bprint("\n");
+
+	self.welcomemessage_time = time + cvar("welcome_message_time");
+	self.welcomemessage_time2 = 0;
+
+
 	stuffcmd(self, strcat("exec maps/", mapname, ".cfg\n"));
 	// send prediction settings to the client
 	stuffcmd(self, strcat("cl_movement_maxspeed ", ftos(cvar("sv_maxspeed")), "\n"));
@@ -319,6 +368,7 @@ void ClientDisconnect (void)
 		remove (self.chatbubbleentity);
 		self.chatbubbleentity = world;
 	}
+	DropAllRunes(self);
 }
 
 .float buttonchat;
@@ -381,6 +431,9 @@ When you press the jump key
 */
 void PlayerJump (void)
 {
+	float mjumpheight;
+
+	mjumpheight = cvar("g_balance_jumpheight");
 	if (self.waterlevel >= 2)
 	{
 		if (self.watertype == CONTENT_WATER)
@@ -400,7 +453,22 @@ void PlayerJump (void)
 	if (!(self.flags & FL_JUMPRELEASED))
 		return;
 
-	self.velocity_z = self.velocity_z + cvar("g_balance_jumpheight");
+	if(cvar("g_runematch"))
+	{
+		if(self.runes & RUNE_SPEED)
+		{
+			if(self.runes & CURSE_SLOW)
+				mjumpheight = mjumpheight * cvar("g_balance_rune_speed_combo_jumpheight");
+			else
+				mjumpheight = mjumpheight * cvar("g_balance_rune_speed_jumpheight");
+		}
+		else if(self.runes & CURSE_SLOW)
+		{
+			mjumpheight = mjumpheight * cvar("g_balance_curse_slow_jumpheight");
+		}
+	}
+
+	self.velocity_z = self.velocity_z + mjumpheight;
 	self.oldvelocity_z = self.velocity_z;
 
 	self.flags = self.flags - FL_ONGROUND;
@@ -480,28 +548,80 @@ void player_powerups (void)
 			sprint(self, "^3Shield surrounds you\n");
 		}
 	}
+	
 	if (cvar("g_fullbrightplayers"))
-		self.effects = self.effects | EF_FULLBRIGHT;
+		self.effects = EF_FULLBRIGHT;
+	
 }
 
 void player_regen (void)
 {
-	local float maxh;
-	local float maxa;
+	float maxh, maxa, max_mod, regen_mod, rot_mod;
 	maxh = cvar("g_balance_health_stable");
 	maxa = cvar("g_balance_armor_stable");
-	if (time > self.pauserothealth_finished)
-	if (self.health > maxh)
-		self.health = bound(0, self.health + (maxh - self.health) * cvar("g_balance_health_rot") * frametime, 1000);
-	if (time > self.pauserotarmor_finished)
-	if (self.armorvalue > maxa)
-		self.armorvalue = bound(0, self.armorvalue + (maxa - self.armorvalue) * cvar("g_balance_armor_rot") * frametime, 1000);
-	if (time > self.pauseregen_finished)
+
+	if(cvar("g_runematch"))
 	{
-		if (self.health < maxh)
-			self.health = bound(0, self.health + (maxh- self.health) * cvar("g_balance_health_regen") * frametime, 1000);
-		if (self.armorvalue < maxa)
-			self.armorvalue = bound(0, self.armorvalue + (maxa - self.armorvalue) * cvar("g_balance_armor_regen") * frametime, 1000);
+		max_mod = regen_mod = rot_mod = 1;
+		if (self.runes & RUNE_REGEN)
+		{
+			if (self.runes & CURSE_VENOM) // do we have both rune/curse?
+			{
+				regen_mod = cvar("g_balance_rune_regen_combo_regenrate");
+				max_mod = cvar("g_balance_rune_regen_combo_hpmod");
+			}
+			else
+			{
+				regen_mod = cvar("g_balance_rune_regen_regenrate");
+				max_mod = cvar("g_balance_rune_regen_hpmod");
+			}
+		}
+		else if (self.runes & CURSE_VENOM)
+		{
+			max_mod = cvar("g_balance_curse_venom_hpmod");
+			if (self.runes & RUNE_REGEN) // do we have both rune/curse?
+				rot_mod = cvar("g_balance_rune_regen_combo_rotrate");
+			else
+				rot_mod = cvar("g_balance_curse_venom_rotrate");
+			//if (!self.runes & RUNE_REGEN)
+			//	rot_mod = cvar("g_balance_curse_venom_rotrate");
+		}
+		maxh = maxh * max_mod;
+		//maxa = maxa * max_mod;
+
+		if (time > self.pauserotarmor_finished)
+		{
+			if (self.armorvalue > maxa)
+				self.armorvalue = bound(0, self.armorvalue + (maxa - self.armorvalue) * cvar("g_balance_armor_rot") * frametime, 1000);
+		}
+		if (time > self.pauserothealth_finished)
+		{
+			if (self.health > maxh)
+				self.health = bound(0, self.health + (maxh - self.health) * rot_mod*cvar("g_balance_health_rot") * frametime, 1000);
+		}
+		if (time > self.pauseregen_finished)
+		{
+			if (self.health < maxh)
+				self.health = bound(0, self.health + (maxh- self.health) * regen_mod*cvar("g_balance_health_regen") * frametime, 1000);
+			if (self.armorvalue < maxa)
+				self.armorvalue = bound(0, self.armorvalue + (maxa - self.armorvalue) * cvar("g_balance_armor_regen") * frametime, 1000);
+		}
+	}
+	else
+	{
+		if (time > self.pauserothealth_finished)
+		if (self.health > maxh)
+			self.health = bound(0, self.health + (maxh - self.health) * cvar("g_balance_health_rot") * frametime, 1000);
+		if (time > self.pauserotarmor_finished)
+		if (self.armorvalue > maxa)
+			self.armorvalue = bound(0, self.armorvalue + (maxa - self.armorvalue) * cvar("g_balance_armor_rot") * frametime, 1000);
+		if (time > self.pauseregen_finished)
+		{
+			if (self.health < maxh)
+				self.health = bound(0, self.health + (maxh- self.health) * cvar("g_balance_health_regen") * frametime, 1000);
+			if (self.armorvalue < maxa)
+				self.armorvalue = bound(0, self.armorvalue + (maxa - self.armorvalue) * cvar("g_balance_armor_regen") * frametime, 1000);
+		}
 	}
 }
 
@@ -517,6 +637,9 @@ void PlayerPreThink (void)
 	local vector m1, m2;
 
 //	MauveBot_AI();
+
+//	if(self.netname == "Wazat")
+//		bprint(strcat(self.classname, "\n"));
 
 	CheckRules_Player();
 
@@ -637,5 +760,6 @@ void PlayerPostThink (void)
 	if (intermission_running)
 		return;		// intermission or finale
 
+	PrintWelcomeMessage(self);
 	//if (TetrisPostFrame()) return;
 }

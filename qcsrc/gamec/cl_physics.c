@@ -11,7 +11,8 @@ float sv_gravity;
 void SV_PlayerPhysics()
 {
 	local vector wishvel, wishdir, v;
-	local float wishspeed, f;
+	local float wishspeed, f, maxspd_mod, spd, maxairspd, airaccel;
+	string temps;
 
 	MauveBot_AI();
 
@@ -34,6 +35,38 @@ void SV_PlayerPhysics()
 			self.punchvector = normalize(self.punchvector) * f;
 		else
 			self.punchvector = '0 0 0';
+	}
+
+	maxspd_mod = 1;
+
+	if(cvar("g_runematch"))
+	{
+		if(self.runes & RUNE_SPEED)
+		{
+			if(self.runes & CURSE_SLOW)
+				maxspd_mod = maxspd_mod * cvar("g_balance_rune_speed_combo_moverate");
+			else
+				maxspd_mod = maxspd_mod * cvar("g_balance_rune_speed_moverate");
+		}
+		else if(self.runes & CURSE_SLOW)
+		{
+			maxspd_mod = maxspd_mod * cvar("g_balance_curse_slow_moverate");
+		}
+	}
+
+	spd = sv_maxspeed * maxspd_mod;
+
+	if(self.speed != spd)
+	{
+		self.speed = spd;
+		temps = ftos(spd);
+		stuffcmd(self, strcat("cl_forwardspeed ", temps, "\n"));
+		stuffcmd(self, strcat("cl_backspeed ", temps, "\n"));
+		stuffcmd(self, strcat("cl_sidespeed ", temps, "\n"));
+		stuffcmd(self, strcat("cl_upspeed ", temps, "\n"));
+
+		temps = ftos(sv_accelerate * maxspd_mod);
+		stuffcmd(self, strcat("cl_movement_accelerate ", temps));
 	}
 
 	// if dead, behave differently
@@ -69,13 +102,13 @@ void SV_PlayerPhysics()
 		// acceleration
 		wishdir = normalize(wishvel);
 		wishspeed = vlen(wishvel);
-		if (wishspeed > sv_maxspeed)
-			wishspeed = sv_maxspeed;
+		if (wishspeed > sv_maxspeed*maxspd_mod)
+			wishspeed = sv_maxspeed*maxspd_mod;
 		if (time >= self.teleport_time)
 		{
 			f = wishspeed - (self.velocity * wishdir);
 			if (f > 0)
-				self.velocity = self.velocity + wishdir * min(f, sv_accelerate * frametime * wishspeed);
+				self.velocity = self.velocity + wishdir * min(f, sv_accelerate*maxspd_mod * frametime * wishspeed);
 		}
 	}
 	else if (self.waterlevel >= 2)
@@ -91,8 +124,8 @@ void SV_PlayerPhysics()
 
 		wishdir = normalize(wishvel);
 		wishspeed = vlen(wishvel);
-		if (wishspeed > sv_maxspeed)
-			wishspeed = sv_maxspeed;
+		if (wishspeed > sv_maxspeed*maxspd_mod)
+			wishspeed = sv_maxspeed*maxspd_mod;
 		wishspeed = wishspeed * 0.7;
 
 		// water friction
@@ -101,7 +134,7 @@ void SV_PlayerPhysics()
 		// water acceleration
 		f = wishspeed - (self.velocity * wishdir);
 		if (f > 0)
-			self.velocity = self.velocity + wishdir * min(f, sv_accelerate * frametime * wishspeed);
+			self.velocity = self.velocity + wishdir * min(f, sv_accelerate*maxspd_mod * frametime * wishspeed);
 	}
 	else if (time < self.ladder_time)
 	{
@@ -145,7 +178,7 @@ void SV_PlayerPhysics()
 		{
 			f = wishspeed - (self.velocity * wishdir);
 			if (f > 0)
-				self.velocity = self.velocity + wishdir * min(f, sv_accelerate * frametime * wishspeed);
+				self.velocity = self.velocity + wishdir * min(f, sv_accelerate*maxspd_mod * frametime * wishspeed);
 		}
 	}
 	else if (self.flags & FL_ONGROUND)
@@ -171,34 +204,44 @@ void SV_PlayerPhysics()
 		// acceleration
 		wishdir = normalize(wishvel);
 		wishspeed = vlen(wishvel);
-		if (wishspeed > sv_maxspeed)
-			wishspeed = sv_maxspeed;
+		if (wishspeed > sv_maxspeed*maxspd_mod)
+			wishspeed = sv_maxspeed*maxspd_mod;
 		if (self.button5) // crouch
 			wishspeed = wishspeed * 0.5;
 		if (time >= self.teleport_time)
 		{
 			f = wishspeed - (self.velocity * wishdir);
 			if (f > 0)
-				self.velocity = self.velocity + wishdir * min(f, sv_accelerate * frametime * wishspeed);
+				self.velocity = self.velocity + wishdir * min(f, sv_accelerate*maxspd_mod * frametime * wishspeed);
 		}
 	}
 	else
 	{
+		if(maxspd_mod < 1)
+		{
+			maxairspd = sv_maxairspeed*maxspd_mod;
+			airaccel = sv_accelerate*maxspd_mod;
+		}
+		else
+		{
+			maxairspd = sv_maxairspeed;
+			airaccel = sv_accelerate;
+		}
 		// airborn
 		makevectors(self.v_angle_y * '0 1 0');
 		wishvel = v_forward * self.movement_x + v_right * self.movement_y;
 		// acceleration
 		wishdir = normalize(wishvel);
 		wishspeed = vlen(wishvel);
-		if (wishspeed > sv_maxairspeed)
-			wishspeed = sv_maxairspeed;
+		if (wishspeed > maxairspd)
+			wishspeed = maxairspd;
 		if (self.button5) // crouch
 			wishspeed = wishspeed * 0.5;
 		if (time >= self.teleport_time)
 		{
 			f = wishspeed;// - (self.velocity * wishdir);
 			if (f > 0)
-				self.velocity = self.velocity + wishdir * min(f, sv_accelerate * frametime * wishspeed);
+				self.velocity = self.velocity + wishdir * min(f, airaccel * frametime * wishspeed);
 		}
 	}
 };

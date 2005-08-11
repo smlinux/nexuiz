@@ -257,8 +257,26 @@ void(entity ent, float recoil) weapon_recoil =
 void(float fr, float t, void() func) weapon_thinkf =
 {
 	if (fr >= 0)
+	{
 		if (self.weaponentity != world)
 			self.weaponentity.frame = fr;
+	}
+
+	if(cvar("g_runematch"))
+	{
+		if(self.runes & RUNE_SPEED)
+		{
+			if(self.runes & CURSE_SLOW)
+				t = t * cvar("g_balance_rune_speed_combo_atkrate");
+			else
+				t = t * cvar("g_balance_rune_speed_atkrate");
+		}
+		else if(self.runes & CURSE_SLOW)
+		{
+			t = t * cvar("g_balance_curse_slow_atkrate");
+		}
+	}
+
 	// VorteX: haste can be added here
 	self.weapon_nextthink = time + t;
 	self.weapon_think = func;

@@ -13,3 +13,30 @@ void item_health (void) {if (self.spawnflags & 2) item_health100();else item_hea
 //item_spikes
 //item_health
 
+
+
+// garbage function to reduce warnings in compiling about unused variables
+void junk_function ()
+{
+	self.exteriormodeltoclient = world;
+	self.glow_trail = 0;
+	self.tag_entity = world;
+	self.button6 = 0;
+	self.button7 = 0;
+	self.button8 = 0;
+	self.pitch_speed = 0;
+	self.drawonlytoclient = world;
+	self.nodrawtoclient = world;
+	self.cursor_active = 0;
+	self.cursor_screen = '0 0 0';
+	self.cursor_trace_start = '0 0 0';
+	self.ping = 0;
+	self.roomtype = 0;
+	self.radius = 0;
+	self.pitch = 0;
+	self.renderamt = 0;
+	self.rendermode = 0;
+	self.rendercolor = '0 0 0';
+	bprint(ftos(sv_maxairspeed), "\n");
+}
+

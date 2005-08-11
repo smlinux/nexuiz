@@ -108,6 +108,7 @@ StartFrame
 Called before each frame by the server
 =============
 */
+void RuneMatchGivePoints();
 void StartFrame (void)
 {
 	sv_maxairspeed = cvar("sv_maxairspeed");
@@ -119,4 +120,8 @@ void StartFrame (void)
 
 	CreatureFrame ();
 	CheckRules_World ();
+
+	AuditTeams();
+
+	RuneMatchGivePoints();
 }

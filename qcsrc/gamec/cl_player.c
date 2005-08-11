@@ -219,6 +219,9 @@ void PlayerCorpseDamage (entity inflictor, entity attacker, float damage, float 
 	}
 }
 
+void DropAllRunes(entity pl);
+
+
 void PlayerDamage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
 {
 	local float take, save;
@@ -280,6 +283,8 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 
 	if (self.health <= 2)
 	{
+		DropAllRunes(self);
+
 		// throw a weapon
 		SpawnThrownWeapon (self.origin + (self.mins + self.maxs) * 0.5, self.weapon);
 		// print an obituary message

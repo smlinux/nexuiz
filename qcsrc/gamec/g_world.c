@@ -1,9 +1,6 @@
-void() dom_init;
 
 void worldspawn (void)
 {
-
-	game = cvar ("gamecfg");	// load game options
 
 	// Precache all player models
 	// Workaround for "invisible players"
@@ -205,8 +202,9 @@ void worldspawn (void)
 	// 63 testing
 	lightstyle(63, "a");
 
-	if (cvar("g_domination"))
-		dom_init();
+	InitGameplayMode();
+	//if (cvar("g_domination"))
+	//	dom_init();
 }
 
 void light (void)
@@ -296,22 +294,29 @@ string() Nex_RotateMapList =
 	return lNextMap;
 };
 
-float gameover;
-float intermission_running;
-float intermission_exittime;
-float alreadychangedlevel;
-
-
 void() GotoNextMap =
 {
 	//local string nextmap;
 	//local float n, nummaps;
 	//local string s;
+	string exit_cfg;
 	if (alreadychangedlevel)
 		return;
 	alreadychangedlevel = TRUE;
+
+	// if an exit cfg is defined by exiting map, exec it.
+	exit_cfg = cvar_string("exit_cfg");
+	if(exit_cfg != "")
+		localcmd(strcat("exec \"", exit_cfg, "\"\n"));
+
+	ResetGameCvars();
+
+
 	if (cvar("samelevel"))	// if samelevel is set, stay on same level
-		changelevel (mapname);
+	{
+		localcmd(strcat("exec \"maps/", mapname, ".mapcfg\"\n"));
+		//changelevel (mapname);
+	}
 	else
 	{
 		// method 0
@@ -327,7 +332,12 @@ void() GotoNextMap =
 		}
 
 		cvar_set( "g_maplist_index", ftos( lCurrent ) );
-		changelevel( argv( lCurrent ) );
+
+
+		localcmd(strcat("exec \"maps/", argv( lCurrent ), ".mapcfg\"\n"));
+		//changelevel( argv( lCurrent ) );
+
+
 		/*
 		// method 1
 
@@ -533,11 +543,26 @@ void() CheckRules_Player =
 	if (gameover)	// someone else quit the game already
 		return;
 
+	// fixme: don't check players; instead check dom_team and ctf_team entities
+
 	fraglimit = cvar("fraglimit");
-	if (fraglimit && self.frags >= fraglimit)
+
+	if(cvar("g_domination"))
 	{
-		NextLevel ();
-		return;
+		// fixme: check team frags, not players!
+		if (fraglimit && self.frags >= fraglimit)
+		{
+			NextLevel ();
+			return;
+		}
+	}
+	else
+	{
+		if (fraglimit && self.frags >= fraglimit)
+		{
+			NextLevel ();
+			return;
+		}
 	}
 };
 
