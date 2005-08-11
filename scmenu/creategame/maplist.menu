@@ -38,23 +38,23 @@ Item Window MapList
 		flag 		[FlagEmbedded]
 		direction 	'50 0'
 
-		DeriveTemplate Nex_Composition Nex_Option_EditBox
+		DeriveTemplate Nex_Composition Nex_Option_MapType
 		{
-			DeriveTemplate Nex_Automation_Option_EditBox Automation
+			DeriveTemplate Nex_Automation_Option_Switch Automation
 			{}
 			DeriveTemplate TextButton Description
 			{}
-			DeriveTemplate EditBox EditBox
+			DeriveTemplate SwitchButton Switch
 			{
-				size 	'260 12'
-				action  Nex_Action_TestOnChange
-				select  Nex_Action_TestOnSelect
+				size 	'200 12'
+				action  Nex_Action_Maplist_ChangeMapType
 			}
 		}
-		Derive Nex_Option_EditBox MapType
+
+		Derive Nex_Option_MapType MapQuery
 		{
 			text	"Map Type"
-			target	"Data::Server::MapType::Switch"
+			target	"Data::Server::Map::Query::Switch"
 		}
 	}
 

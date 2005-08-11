@@ -6,6 +6,19 @@ Item DataContainer Server
 {
 	Item DataContainer Map
 	{
+		Item Data_Container Query
+		{
+			defValue	"maps/*.mapcfg"
+			value "maps/*.mapcfg"
+
+			Item DataLink_TextSwitch Switch
+			{
+				valueList	"'maps/*.mapcfg' 'maps/dm_*.mapcfg' 'maps/tdm_*.mapcfg' 'maps/dom_*.mapcfg' 'maps/ctf_*.mapcfg' 'maps/rune_*.mapcfg'"
+				descList	"'List All''Classic Deathmatch''Team Deathmatch''Domination''Capture The Flag''Rune Match'"
+
+				link		"##up"
+			}
+		}
 		Item Nex_MapDB DataBase
 		{
 		}
@@ -215,22 +228,4 @@ Item DataContainer Server
 			}
 		}
 	}
-
-
-	Item Data_Cvar MapType
-	{
-		cvarName	"menu_map_type"
-		defValue	1
-
-		Item DataLink_ValueSwitch Switch
-		{
-			minValue	1
-			stepValue	1
-			maxValue	6
-			descList	"'List All''Classic Deathmatch''Team Deathmatch''Domination''Capture The Flag''Rune Match'"
-
-			link		"##up"
-		}
-	}
-
 }

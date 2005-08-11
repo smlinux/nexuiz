@@ -16,7 +16,7 @@ Item Window Basic
 			DeriveTemplate SwitchButton Switch
 			{
 				size 	'200 12'
-				action  Nex_MapDB_RefreshFiles
+				action  Nex_Action_Maplist_ChangeMapType
 			}
 		}
 
@@ -65,7 +65,7 @@ Item Window Basic
 		{
 			pos '50 5'
 			text	"Filter"
-			target	"Data::Server::MapType::Switch"
+			target	"Data::Server::Map::Query::Switch"
 		}
 		Item Task_Job UpdateJob
 		{
@@ -81,7 +81,7 @@ Item Window Basic
 		direction	[Nex_DefaultVertDirection]
 		flag 		[FlagEmbedded]
 
-		DeriveTemplate Nex_Composition Nex_Option_EditBox
+		DeriveTemplate Nex_Composition Option_EditBox
 		{
 			DeriveTemplate Nex_Automation_Option_EditBox Automation
 			{}
@@ -95,7 +95,7 @@ Item Window Basic
 			}
 		}
 
-		Derive Nex_Option_EditBox Hostname
+		Derive Option_EditBox Hostname
 		{
 			text	"Server Name"
 			target	"Data::Server::Hostname::Text"
@@ -115,14 +115,14 @@ Item Window Basic
 			text	"Public Server"
 			target  "Data::Server::PublicServer::Switch"
 		}
-		Derive Nex_Option_EditBox MaxPlayer
+		Derive Option_EditBox MaxPlayer
 		{
 			text	"Max Players"
 			target	"Data::Server::MaxPlayers::Text"
 		}
 		Derive Nex_Line	Seperator1
 		{}
-		Derive Nex_Option_EditBox NumBots
+		Derive Option_EditBox NumBots
 		{
 			text	"Bot Count"
 			target	"Data::Server::NumBots::Text"
@@ -134,12 +134,12 @@ Item Window Basic
 		}
 		Derive Nex_Line Seperator2
 		{}
-		Derive Nex_Option_EditBox ServerFrameTime
+		Derive Option_EditBox ServerFrameTime
 		{
 			text	"Server Frame Time"
 			target	"Data::Server::ServerFrameTime::Text"
 		}
-		Derive Nex_Option_EditBox ServerMaxRate
+		Derive Option_EditBox ServerMaxRate
 		{
 			text	"Server Max Rate"
 			target	"Data::Server::ServerMaxRate::Text"

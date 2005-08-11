@@ -46,12 +46,9 @@ string _Nex_MapList_FullPath;
 string _Nex_MapList_Name;
 entity _Nex_MapList_Root;
 
-
-
-
 /*
 ===================
-Nex_MapDB_RefreshFiles
+Item_Nex_MapDB_RefreshFiles
 ===================
 */
 
@@ -69,8 +66,8 @@ Nex_MapDB_RefreshFiles
 
 void() Nex_MapDB_RefreshFiles =
 {
-	local entity oldself;
-	oldself = self;
+	local entity lOldSelf;
+	lOldSelf = self;
 
 	Nex_Action_TestOnChange();
 
@@ -83,26 +80,7 @@ void() Nex_MapDB_RefreshFiles =
 
 	self = _Nex_MapList_Root;
 	Item_Nex_MapDB_EnumFiles();
-
-
-	self = Menu_GetItem( "::Data::Server::Map::Selector" );
-	Item_DataLink_Nex_MapList_InitWithMapList();
-	//DataLink_Nex_MapList_UpdateRange(self);
-	//Item_DataLink_Nex_MapList_Load();
-
-
-	// fixme: need to change which map the map selector is pointing to right now
-
-	Raise_DataEvent( self, ITEM_DATALINK_GET );
-	if(self._realValue > self.maxValue)
-		self._realValue = self.maxValue;
-	Raise_DataEvent( self, ITEM_DATALINK_SET );
-
-	//Nex_MapSelector_UpdateMap();
-	//Nex_MapSelector_Synchronize();
-
-
-	self = oldself; 
+	self = lOldSelf;
 };
 
 /*
@@ -118,39 +96,12 @@ void() Item_Nex_MapDB_EnumFiles =
 	local float  	lSearchHandle;
 	local float 	lSearchSize;
 	local float 	lSearchCounter;
-	local entity	lMap;//, lMapType;
-	local string    map_query;
-	local float	lMapType;
+	local entity	lMap;
+	local entity	lMapQuery;
 
-	lMapType = cvar("menu_map_type");
-	//lMapType = Menu_GetItem( "::Data::Server::MapType" );
-	if(lMapType == 6)//.value == "Rune Match")
-	{
-		map_query = "maps/rune_*.mapcfg";
-	}
-	else if(lMapType == 5)//.value == "CTF")
-	{
-		map_query = "maps/ctf_*.mapcfg";
-	}
-	else if(lMapType == 4)//.value == "Domination")
-	{
-		map_query = "maps/dom_*.mapcfg";
-	}
-	else if(lMapType == 3)//.value == "Team Deathmatch")
-	{
-		map_query = "maps/tdm_*.mapcfg";
-	}
-	else if(lMapType == 2)//.value == "Classic Deathmatch")
-	{
-		map_query = "maps/dm_*.mapcfg";
-	}
-	else // list all
-	{
-		map_query = "maps/*.mapcfg";
-	}
+	lMapQuery = Menu_GetItem( "::Data::Server::Map::Query" );
 
-
-	lSearchHandle = search_begin( map_query, true, true ); // "maps/*.mapcfg"
+	lSearchHandle = search_begin( lMapQuery.value, true, true );
 	if( lSearchHandle < 0 )
 		return;
 	for( lSearchSize = search_getsize( lSearchHandle ), lSearchCounter = 0;
@@ -165,7 +116,7 @@ void() Item_Nex_MapDB_EnumFiles =
 		local string	lTitle;
 
 		lFilename = search_getfilename( lSearchHandle, lSearchCounter );
-		lStripped = String_Zone( substring( lFilename, 0, strlen( lFilename ) - 7 ) ); // - 4
+		lStripped = String_Zone( substring( lFilename, 0, strlen( lFilename ) - 7 ) );
 		lName = String_Zone( substring( lStripped, 5, 100000 ) );
 
 		lHandle = fopen( strcat( lStripped, ".txt" ), FILE_READ );

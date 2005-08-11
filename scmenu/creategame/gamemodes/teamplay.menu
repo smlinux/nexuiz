@@ -5,20 +5,6 @@ Item Layout Teamplay
 	origin		'450 0'
 	alignment	[AlignFirst]
 
-	DeriveTemplate Nex_Composition Nex_Option_EditBox
-	{
-		DeriveTemplate Nex_Automation_Option_EditBox Automation
-		{}
-		DeriveTemplate TextButton Description
-		{}
-		DeriveTemplate EditBox EditBox
-		{
-			size 	'260 12'
-			action  Nex_Action_TestOnChange
-			select  Nex_Action_TestOnSelect
-		}
-	}
-
 	Derive Nex_Option_EditBox FragLimit
 	{
 		text	"Frag Limit Override"

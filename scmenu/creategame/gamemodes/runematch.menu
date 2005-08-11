@@ -30,23 +30,6 @@ Item Layout Runematch
 				}
 			}
 
-			DeriveTemplate Nex_Composition Nex_Option_EditBox
-			{
-				DeriveTemplate Nex_Automation_Option_EditBox Automation
-				{}
-				DeriveTemplate TextButton Description
-				{}
-				DeriveTemplate EditBox EditBox
-				{
-					size 	'260 12'
-					action  Nex_Action_TestOnChange
-					select  Nex_Action_TestOnSelect
-				}
-			}
-
-
-
-
 			Derive Nex_Option_EditBox TimeLimit
 			{
 				text	"Time Limit Override"
@@ -58,7 +41,7 @@ Item Layout Runematch
 				text	"Score Limit Override"
 				target	"Data::Runematch::RunematchFragLimit::Text"
 			}
-		
+
 			Derive Nex_Option_EditBox PointAmt
 			{
 				text	"Score per Rune"
@@ -99,7 +82,7 @@ Item Layout Runematch
 				text	"Max Runes to Drop on Death"
 				target	"Data::Runematch::MaxRunesToDrop::Text"
 			}
-		
+
 			Derive Nex_Line	SeperatorStrength
 			{}
 			Derive Nex_Option_EditBox StrengthDamage
@@ -132,8 +115,8 @@ Item Layout Runematch
 				text	"Combined Force"
 				target	"Data::Runematch::StrengthComboForce::Text"
 			}
-		
-		
+
+
 			Derive Nex_Line	SeperatorDefense
 			{}
 			Derive Nex_Option_EditBox DefenseDamage
@@ -151,8 +134,8 @@ Item Layout Runematch
 				text	"Combined TakeDamage"
 				target	"Data::Runematch::DefenseComboDamage::Text"
 			}
-		
-		
+
+
 			Derive Nex_Line	SeperatorVampire
 			{}
 			Derive Nex_Option_EditBox VampireDamage
@@ -170,8 +153,8 @@ Item Layout Runematch
 				text	"Combined Absorb or Take"
 				target	"Data::Runematch::VampireComboDamage::Text"
 			}
-		
-		
+
+
 			Derive Nex_Line	SeperatorRegen
 			{}
 			Derive Nex_Option_EditBox RegenHP
@@ -209,8 +192,8 @@ Item Layout Runematch
 				text	"Combined Degenerate Speed"
 				target	"Data::Runematch::RegenComboDegenSpeed::Text"
 			}
-		
-		
+
+
 			Derive Nex_Line	SeperatorSpeed
 			{}
 			Derive Nex_Option_EditBox SpeedMoverate

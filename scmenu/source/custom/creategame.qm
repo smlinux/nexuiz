@@ -15,6 +15,18 @@ void() Nex_MapSelector_UpdateMap =
 	lIndex = lSelector._realValue;
 	lInfo = Nex_MapDB_GetByIndex( lIndex );
 
+	if( lInfo == null_entity ) {
+		lItem = Menu_GetItem( "Picture" );
+		String_EntitySet( lItem, picture, "gfx/m_nomap" );
+
+		lItem = Menu_GetItem( "Name" );
+		String_EntitySet( lItem, text, "No maps found" );
+
+		lItem = Menu_GetItem( "Description" );
+		String_EntitySet( lItem, text, "---" );
+		return;
+	}
+
 	// If there is a new selected map, the info panel is updated accordingly
 	if( lIndex != self.minValue ) {
 		self.minValue = lIndex;
@@ -95,7 +107,7 @@ void() Nex_Action_Map_Start =
 
 	lItem = Menu_GetItem( "::Data::Server::Map::Cycle" );
 
-	// if an old exit cfg file was set up, exec it 
+	// if an old exit cfg file was set up, exec it
 	// to reset old values before starting the server
 	exit_cfg = cvar_string("exit_cfg");
 	if(exit_cfg)
@@ -397,4 +409,33 @@ void() Nex_Action_Management_TypeGame =
 void() Nex_Action_Management_TypeMapList =
 {
 	Nex_Management_SetType( 2 );
+};
+
+// FIXME: hackish
+void() Nex_Action_Maplist_ChangeMapType = {
+	local entity lOldSelf;
+
+	// HACK
+	Nex_Action_TestOnChange();
+
+	lOldSelf = self;
+
+	Nex_MapDB_RefreshFiles();
+
+	self = Menu_GetItem( "::Data::Server::Map::Selector" );
+	Item_DataLink_Nex_MapList_InitWithMapList();
+	//DataLink_Nex_MapList_UpdateRange(self);
+	//Item_DataLink_Nex_MapList_Load();
+
+	// fixme: need to change which map the map selector is pointing to right now
+
+	Raise_DataEvent( self, ITEM_DATALINK_GET );
+	if(self._realValue > self.maxValue)
+		self._realValue = self.maxValue;
+	Raise_DataEvent( self, ITEM_DATALINK_SET );
+
+	//Nex_MapSelector_UpdateMap();
+	//Nex_MapSelector_Synchronize();
+
+	self = lOldSelf;
 };

@@ -33,20 +33,6 @@ Item Window Weapon
 				}
 			}
 
-			DeriveTemplate Nex_Composition Nex_Option_EditBox
-			{
-				DeriveTemplate Nex_Automation_Option_EditBox Automation
-				{}
-				DeriveTemplate TextButton Description
-				{}
-				DeriveTemplate EditBox EditBox
-				{
-					size 	'260 12'
-					action  Nex_Action_TestOnChange
-					select  Nex_Action_TestOnSelect
-				}
-			}
-
 			Derive Nex_Option_EditBox InvincibleTakeDamage
 			{
 				text	"Invincible Take Damage"

@@ -13,6 +13,9 @@ void() Item_Nex_Map_Info_Spawn;
 
 // Map ""database"" Singleton Item_Nex_MapDB
 
+// AK late function (doesnt fit and breaks singleton abstraction) FIXME
+void() Nex_MapDB_RefreshFiles;
+
 // pRoot should be an item with no other children
 void() Item_Nex_MapDB_EnumFiles;
 void() Item_Nex_MapDB_Destroy;
