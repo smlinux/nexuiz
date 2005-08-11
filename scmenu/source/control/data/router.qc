@@ -1,7 +1,7 @@
 // DP/Nex Menu
 // control/data/router.qc
 
-void( float pEvent ) Item_DataLink_Router_DataEvent =
+void( float pEvent ) Item_DataLink_Splitter_DataEvent =
 {
 	local entity lChild;
 
@@ -24,9 +24,9 @@ void( float pEvent ) Item_DataLink_Router_DataEvent =
 	}
 };
 
-void() Item_DataLink_Router_Spawn =
+void() Item_DataLink_Splitter_Spawn =
 {
 	Item_DataLink_Init();
 
-	self._dataEvent = Item_DataLink_Router_DataEvent;
+	self._dataEvent = Item_DataLink_Splitter_DataEvent;
 };

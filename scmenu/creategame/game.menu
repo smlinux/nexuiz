@@ -1,138 +1,56 @@
-// Property of Alientrap/AK
-//
-// creategame/game.menu
 Item Layout Game
 {
-	direction	[Nex_DefaultVertDirection]
-	size 		'900 585'
-	origin		'450 0'
-	alignment	[AlignFirst]
+	direction '20 0'
 
-	DeriveTemplate Nex_Composition Nex_Option_EditBox
+	Item Arrangement Menu
 	{
-		DeriveTemplate Nex_Automation_Option_EditBox Automation
-		{}
-		DeriveTemplate TextButton Description
-		{}
-		DeriveTemplate EditBox EditBox
+		direction '0 10'
+
+		Derive TextButton Teamplay
 		{
-			size 	'260 12'
-			action  Nex_Action_TestOnChange
-			select  Nex_Action_TestOnSelect
+			normal		"DM & Teamplay"
+
+			init 		Nex_Action_JumpToPage
+			target		"Panel::Teamplay"
+		}
+		Derive TextButton CTF
+		{
+			normal		"CTF"
+
+			init 		Nex_Action_JumpToPage
+			target		"Panel::CTF"
+		}
+		Derive TextButton Domination
+		{
+			normal		"Domination"
+
+			init		Nex_Action_JumpToPage
+			target		"Panel::Domination"
+		}
+		Derive TextButton Runematch
+		{
+			normal		"Rune Match"
+
+			init		Nex_Action_JumpToPage
+			target		"Panel::Runematch"
+		}
+		Derive TextButton GameMisc
+		{
+			normal		"Misc"
+
+			init 		Nex_Action_JumpToPage
+			target		"Panel::GameMisc"
 		}
 	}
+	Item EventWindow Panel
+	{
+		size	'760 800'
+		reinit	Nex_Action_MakeFirstVisible
 
-	Derive Nex_Option_Switch Instagib
-	{
-		text	"Instagib"
-		target	"::Data::Game::Instagib::Switch"
-	}
-	Derive Nex_Option_Switch Rocketarena
-	{
-		text	"Rocket Arena"
-		target	"::Data::Game::RocketArena::Switch"
-	}
-	Derive Nex_Option_Switch Vampire
-	{
-		text	"Vampire Mode"
-		target	"::Data::Game::Vampire::Switch"
-	}
-	Derive Nex_Option_Switch Casings
-	{
-		text	"Bullet Casings"
-		target	"::Data::Game::Casings::Switch"
-	}
-	Derive Nex_Option_EditBox HealthStart
-	{
-		text	"Starting Health"
-		target	"Data::Game::HealthStart::Text"
-	}
-	Derive Nex_Option_EditBox HealthRot
-	{
-		text	"Health Rot"
-		target	"Data::Game::HealthRot::Text"
-	}
-	Derive Nex_Option_EditBox HealthStable
-	{
-		text	"Health Stable"
-		target	"Data::Game::HealthStable::Text"
-	}
-	Derive Nex_Option_EditBox Gravity
-	{
-		text	"Level Gravity"
-		target	"Data::Game::Gravity::Text"
-	}
-	Derive Nex_Option_EditBox Maxspeed
-	{
-		text	"Player Maxspeed"
-		target	"Data::Game::MaxSpeed::Text"
-	}
-	Derive Nex_Option_EditBox Gamespeed
-	{
-		text	"Game Speed"
-		target	"Data::Game::GameSpeed::Text"
-	}
-	Derive Nex_Option_EditBox Maxairspeed
-	{
-		text	"Max Air Speed"
-		target	"Data::Game::MaxAirSpeed::Text"
-	}
-	Derive Nex_Option_EditBox JumpHeight
-	{
-		text	"Jump height"
-		target	"Data::Game::JumpHeight::Text"
-	}
-	Derive Nex_Option_EditBox HealthRegeneration
-	{
-		text	"Health Regeneration Speed"
-		target	"Data::Game::HealthRegeneration::Text"
-	}
-	Derive Nex_Option_EditBox ArmorRott
-	{
-		text	"Armor Rot Speed"
-		target	"Data::Game::ArmorRott::Text"
-	}
-	Derive Nex_Option_EditBox ArmorRegen
-	{
-		text	"Armor Regeneration Speed"
-		target	"Data::Game::ArmorRegen::Text"
-	}
-	Derive Nex_Option_EditBox ArmorStable
-	{
-		text	"Armor Stable"
-		target	"Data::Game::ArmorStable::Text"
-	}
-	Derive Nex_Option_EditBox ArmorStart
-	{
-		text	"Armor Start"
-		target	"Data::Game::ArmorStart::Text"
-	}
-	Derive Nex_Option_EditBox SelfDamagePercent
-	{
-		text	"Self Damage Percent"
-		target	"Data::Game::SelfDamagePercent::Text"
-	}
-	Derive Nex_Option_EditBox WeaponSwitchDelay
-	{
-		text	"Weapon Switch Delay"
-		target	"Data::Game::WeaponSwitchDelay::Text"
-	}
-	Derive Nex_Option_EditBox Friction
-	{
-		text	"Player Friction"
-		target	"Data::Game::Friction::Text"
-	}
-	Derive Nex_Option_EditBox Accelerate
-	{
-		text	"Player Accelerate"
-		target	"Data::Game::Accelerate::Text"
-	}
-	Derive Nex_Line	Seperator
-	{}
-	Derive TextButton Reset
-	{
-		normal	"Reset to default"
-		init	Nex_Action_ResetData
-		target	"::Data::Game"
+		#include "menu/creategame/gamemodes/gamemisc.menu"
+		#include "menu/creategame/gamemodes/teamplay.menu"
+		#include "menu/creategame/gamemodes/ctf.menu"
+		#include "menu/creategame/gamemodes/domination.menu"
+		#include "menu/creategame/gamemodes/runematch.menu"
 	}
 }

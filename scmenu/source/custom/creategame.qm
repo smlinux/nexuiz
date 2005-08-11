@@ -85,6 +85,7 @@ void() Nex_Action_MapSelector_Prev =
 void() Nex_Action_Map_Start =
 {
 	local entity lItem;
+	local string exit_cfg;
 
 	// Set maxplayers
 	lItem = Menu_GetItem( "::Data::Server::MaxPlayers" );
@@ -93,9 +94,20 @@ void() Nex_Action_Map_Start =
 	cmd( "\"\n" );
 
 	lItem = Menu_GetItem( "::Data::Server::Map::Cycle" );
-	cmd( "map \"" );
+
+	// if an old exit cfg file was set up, exec it 
+	// to reset old values before starting the server
+	exit_cfg = cvar_string("exit_cfg");
+	if(exit_cfg)
+	{
+		cmd( "exec ");
+		cmd( exit_cfg );
+		cmd( "\n" );
+	}
+	// exec the game reset cfg and then the mapcfg
+	cmd( "exec game_reset.cfg \nwait \nexec \"maps/" );
 	cmd( String_Normal( Util_GetAltStringItem( lItem.valueList, 0 ) ) );
-	cmd( "\"\n");
+	cmd( ".mapcfg\"\n");
 
 	Raise_DataEvent( lItem, ITEM_DATA_SEND );
 

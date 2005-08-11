@@ -14,9 +14,11 @@ void( float pEvent ) Item_DataLink_FastResync_DataEvent =
 		}
 		Raise_DataEvent( self._link, ITEM_DATALINK_GET );
 		String_EntitySet( self, value, self._link.value );
+		self._realValue = self._link._realValue;
 	} else if( pEvent == ITEM_DATALINK_SET ) {
 		if( self._link ) {
 			String_EntitySet( self._link, value, self.value );
+			self._link._realValue = self._realValue;
 			Raise_DataEvent( self._link, ITEM_DATALINK_SET );
 		}
 	} else

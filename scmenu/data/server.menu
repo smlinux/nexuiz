@@ -62,7 +62,7 @@ Item DataContainer Server
 	}
 	Item Data_Cvar TimeLimit
 	{
-		cvarName	"timelimit"
+		cvarName	"timelimit_override"
 		defValue	0
 
 		Item DataLink_Value Value
@@ -83,7 +83,7 @@ Item DataContainer Server
 	}
 	Item Data_Cvar FragLimit
 	{
-		cvarName	"fraglimit"
+		cvarName	"fraglimit_override"
 		defValue	20
 
 		[DataLink_Setting]
@@ -96,6 +96,22 @@ Item DataContainer Server
 		Item DataLink_Nex_ModSwitch Switch
 		{
 			link	"##up"
+		}
+	}
+	Item Data_Cvar GameMode
+	{
+		cvarName	"gamecfg"
+		// from 1 to 4
+		defValue	1
+
+		Item DataLink_ValueSwitch Switch
+		{
+			minValue	1
+			stepValue	1
+			maxValue	4
+			descList	"'Classic Deathmatch''Team Deathmatch''Domination''Capture The Flag'"
+
+			link		"##up"
 		}
 	}
 	Item Data_CvarCreateSave NumBots
@@ -152,21 +168,6 @@ Item DataContainer Server
 			link		"##up"
 		}
 	}
-	Item Data_Cvar TeamPlay
-	{
-		cvarName	"teamplay"
-		defValue	0
-
-		Item DataLink_ValueSwitch Switch
-		{
-			minValue	0
-			stepValue	1
-			maxValue	3
-			descList	"'Off' 'No Friendly/Self Fire' 'Friendly Fire' 'No Friendly Fire'"
-
-			link		"##up"
-		}
-	}
 	Item Data_Cvar ServerFrameTime
 	{
 		cvarName	"sys_ticrate"
@@ -214,4 +215,22 @@ Item DataContainer Server
 			}
 		}
 	}
+
+
+	Item Data_Cvar MapType
+	{
+		cvarName	"menu_map_type"
+		defValue	1
+
+		Item DataLink_ValueSwitch Switch
+		{
+			minValue	1
+			stepValue	1
+			maxValue	6
+			descList	"'List All''Classic Deathmatch''Team Deathmatch''Domination''Capture The Flag''Rune Match'"
+
+			link		"##up"
+		}
+	}
+
 }

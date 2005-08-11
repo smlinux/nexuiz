@@ -7,12 +7,12 @@ Item Window MapList
 
 	Derive Label MapsLabel
 	{
-		pos	'0 0'
+		pos	'0 20'
 		text	"Map List:"
 	}
 	Derive List Maps
 	{
-		pos	'0 20'
+		pos	'0 40'
 		size	'425 500'
 
 		target	"::Data::Server::Map::List"
@@ -20,17 +20,44 @@ Item Window MapList
 	}
 	Derive Label CycleLabel
 	{
-		pos	'475 0'
+		pos	'475 20'
 		text	"Cycle List:"
 	}
 	Derive List Cycle
 	{
-		pos	'475 20'
+		pos	'475 40'
 		size	'425 450'
 
 		target	"::Data::Server::Map::Cycle"
 		action	Nex_Action_Cycle_Remove
 	}
+	Item Layout MapOptions
+	{
+		pos	'0 0'
+		size	'900 20'
+		flag 		[FlagEmbedded]
+		direction 	'50 0'
+
+		DeriveTemplate Nex_Composition Nex_Option_EditBox
+		{
+			DeriveTemplate Nex_Automation_Option_EditBox Automation
+			{}
+			DeriveTemplate TextButton Description
+			{}
+			DeriveTemplate EditBox EditBox
+			{
+				size 	'260 12'
+				action  Nex_Action_TestOnChange
+				select  Nex_Action_TestOnSelect
+			}
+		}
+		Derive Nex_Option_EditBox MapType
+		{
+			text	"Map Type"
+			target	"Data::Server::MapType::Switch"
+		}
+	}
+
 	Item Layout Panel
 	{
 		pos	'475 470'

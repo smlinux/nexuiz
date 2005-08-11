@@ -1,0 +1,84 @@
+Item Layout Domination
+{
+	direction	[Nex_DefaultVertDirection]
+	size 		'900 585'
+	origin		'450 0'
+	alignment	[AlignFirst]
+
+	DeriveTemplate Nex_Composition Nex_Option_EditBox
+	{
+		DeriveTemplate Nex_Automation_Option_EditBox Automation
+		{}
+		DeriveTemplate TextButton Description
+		{}
+		DeriveTemplate EditBox EditBox
+		{
+			size 	'260 12'
+			action  Nex_Action_TestOnChange
+			select  Nex_Action_TestOnSelect
+		}
+	}
+
+	//Derive Nex_Option_Switch Domination_Active
+	//{
+	//	text	"Play Domination"
+	//	target	"::Data::Domination::Domination_Active::Switch"
+	//}
+	Derive Nex_Option_EditBox TimeLimit
+	{
+		text	"Time Limit Override"
+		// use the same one from the basic menu
+		target	"Data::Server::TimeLimit::Text"
+	}
+	Derive Nex_Option_EditBox DomFragLimit
+	{
+		text	"Score Limit Override"
+		target	"Data::Domination::DomFragLimit::Text"
+	}
+
+	Derive Nex_Option_Switch DisableFrags
+	{
+		text	"No Scores From Kills"
+		target	"::Data::Domination::DisableFrags::Switch"
+	}
+	//Derive Nex_Option_Switch BalanceTeamPoints
+	//{
+	//	text	"Team Size Affects Points"
+	//	target	"::Data::Domination::BalanceTeamPoints::Switch"
+	//}
+	Derive Nex_Option_EditBox PointAmt
+	{
+		text	"Domination Score Amount"
+		target	"Data::Domination::PointAmt::Text"
+	}
+	Derive Nex_Option_EditBox PointRate
+	{
+		text	"Score Frequency"
+		target	"Data::Domination::PointRate::Text"
+	}
+	Derive Nex_Option_EditBox CaptureTime
+	{
+		text	"DomPoint Capture Delay"
+		target	"::Data::Domination::CaptureTime::Text"
+	}
+	//Derive Nex_Option_EditBox DefaultNumTeams
+	//{
+	//	text	"Default # of Teams on Non-Domination Maps (2-4)"
+	//	target	"::Data::Domination::DefaultNumTeams::Text"
+	//}
+	Derive Nex_Option_Switch DefaultNumTeams
+	{
+		text	"Default # of teams"
+		target	"Data::Domination::DefaultNumTeams::Switch"
+	}
+
+
+	Derive Nex_Line	Seperator
+	{}
+	Derive TextButton Reset
+	{
+		normal	"Reset to default"
+		init	Nex_Action_ResetData
+		target	"::Data::CTF"
+	}
+}

@@ -46,6 +46,65 @@ string _Nex_MapList_FullPath;
 string _Nex_MapList_Name;
 entity _Nex_MapList_Root;
 
+
+
+
+/*
+===================
+Nex_MapDB_RefreshFiles
+===================
+*/
+
+	/*  fixme:
+
+<Black> use a switch for gametypes
+<Black> and just set the action field to Nex_MapDB_RefreshFiles
+
+<Black> Better to write a new action function though..
+<Black> And call Nex_Action_TestOnChange to set the Data value
+<Black> then set up the filter and then call RefreshFiles
+<Black> or if you put the filter handling into RefrehFiles just call TestOnChange and then RefreshFiles
+	*/
+
+
+void() Nex_MapDB_RefreshFiles =
+{
+	local entity oldself;
+	oldself = self;
+
+	Nex_Action_TestOnChange();
+
+	Menu_EmptyWindow( _Nex_MapList_Root );
+
+	String_Free( _Nex_MapList_FullPath );
+	String_Free( _Nex_MapList_Name );
+	_Nex_MapList_FullPath = String_Create();
+	_Nex_MapList_Name = String_Create();
+
+	self = _Nex_MapList_Root;
+	Item_Nex_MapDB_EnumFiles();
+
+
+	self = Menu_GetItem( "::Data::Server::Map::Selector" );
+	Item_DataLink_Nex_MapList_InitWithMapList();
+	//DataLink_Nex_MapList_UpdateRange(self);
+	//Item_DataLink_Nex_MapList_Load();
+
+
+	// fixme: need to change which map the map selector is pointing to right now
+
+	Raise_DataEvent( self, ITEM_DATALINK_GET );
+	if(self._realValue > self.maxValue)
+		self._realValue = self.maxValue;
+	Raise_DataEvent( self, ITEM_DATALINK_SET );
+
+	//Nex_MapSelector_UpdateMap();
+	//Nex_MapSelector_Synchronize();
+
+
+	self = oldself; 
+};
+
 /*
 ===================
 Item_Nex_MapDB_EnumFiles
@@ -59,9 +118,39 @@ void() Item_Nex_MapDB_EnumFiles =
 	local float  	lSearchHandle;
 	local float 	lSearchSize;
 	local float 	lSearchCounter;
-	local entity	lMap;
+	local entity	lMap;//, lMapType;
+	local string    map_query;
+	local float	lMapType;
 
-	lSearchHandle = search_begin( "maps/*.bsp", true, true );
+	lMapType = cvar("menu_map_type");
+	//lMapType = Menu_GetItem( "::Data::Server::MapType" );
+	if(lMapType == 6)//.value == "Rune Match")
+	{
+		map_query = "maps/rune_*.mapcfg";
+	}
+	else if(lMapType == 5)//.value == "CTF")
+	{
+		map_query = "maps/ctf_*.mapcfg";
+	}
+	else if(lMapType == 4)//.value == "Domination")
+	{
+		map_query = "maps/dom_*.mapcfg";
+	}
+	else if(lMapType == 3)//.value == "Team Deathmatch")
+	{
+		map_query = "maps/tdm_*.mapcfg";
+	}
+	else if(lMapType == 2)//.value == "Classic Deathmatch")
+	{
+		map_query = "maps/dm_*.mapcfg";
+	}
+	else // list all
+	{
+		map_query = "maps/*.mapcfg";
+	}
+
+
+	lSearchHandle = search_begin( map_query, true, true ); // "maps/*.mapcfg"
 	if( lSearchHandle < 0 )
 		return;
 	for( lSearchSize = search_getsize( lSearchHandle ), lSearchCounter = 0;
@@ -70,12 +159,13 @@ void() Item_Nex_MapDB_EnumFiles =
 
 		local string	lFilename;
 		local string 	lStripped;
+		local string 	lPic;
 		local string 	lName;
 		local string	lDescription;
 		local string	lTitle;
 
 		lFilename = search_getfilename( lSearchHandle, lSearchCounter );
-		lStripped = String_Zone( substring( lFilename, 0, strlen( lFilename ) - 4 ) );
+		lStripped = String_Zone( substring( lFilename, 0, strlen( lFilename ) - 7 ) ); // - 4
 		lName = String_Zone( substring( lStripped, 5, 100000 ) );
 
 		lHandle = fopen( strcat( lStripped, ".txt" ), FILE_READ );
@@ -86,6 +176,11 @@ void() Item_Nex_MapDB_EnumFiles =
 			// uncomment this line and comment the other if you have the old map info files
 			//lTitle = String_Zone( lName );
 			lTitle = String_Zone( fgets( lHandle ) );
+			lPic = fgets( lHandle ); // also get picture
+			if(lPic)
+			{
+				lStripped = String_Zone( lPic );
+			}
 
 			lDescription = String_Create();
 			do {

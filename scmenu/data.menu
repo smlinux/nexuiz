@@ -19,7 +19,14 @@ Item DataContainer Data
 	#include "menu/data/serverlist.menu"
 
 	#include "menu/data/server.menu"
-	#include "menu/data/game.menu"
+
+	// game modes
+	#include "menu/data/gamemodes/gamemisc.menu"
+	#include "menu/data/gamemodes/teamplay.menu"
+	#include "menu/data/gamemodes/ctf.menu"
+	#include "menu/data/gamemodes/domination.menu"
+	#include "menu/data/gamemodes/runematch.menu"
+
 	#include "menu/data/weapon.menu"
 	#include "menu/data/management.menu"
 }

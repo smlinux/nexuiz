@@ -24,9 +24,7 @@ void( string pSnd ) Sound_Free =
 
 void( string pSnd) Sound_Play =
 {
-	if( pSnd ) {
-		_Sound_DPrint( strcat( "Playing sound '", pSnd, "'\n" ) );
-		localsound( pSnd );
-	}
+	_Sound_DPrint( strcat( "Playing sound '", pSnd, "'\n" ) );
+	localsound( pSnd );
 };
 

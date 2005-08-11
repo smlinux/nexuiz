@@ -7,6 +7,19 @@ Item Window Basic
 
 	Item Window Map
 	{
+		DeriveTemplate Nex_Composition Nex_Option_MapType
+		{
+			DeriveTemplate Nex_Automation_Option_Switch Automation
+			{}
+			DeriveTemplate TextButton Description
+			{}
+			DeriveTemplate SwitchButton Switch
+			{
+				size 	'200 12'
+				action  Nex_MapDB_RefreshFiles
+			}
+		}
+
 		size '400 585'
 		flag [FlagEmbedded]
 
@@ -20,11 +33,11 @@ Item Window Basic
 		{
 			picture "gfx/m_white"
 			size	'350 300'
-			pos	'20 20'
+			pos	'20 40'
 		}
 		Derive MultiLabel Description
 		{
-			pos	'20 320'
+			pos	'20 340'
 			size	'350 285'
 			wrap	31
 			fontSize '11 11 0'
@@ -32,21 +45,27 @@ Item Window Basic
 		Derive TextButton Prev
 		{
 			normal	"<<"
-			pos	'20 5'
+			pos	'20 25'
 			action	Nex_Action_MapSelector_Prev
 		}
 		Derive Label Name
 		{
 			alignment	[AlignCenter]
 			size		'306 14'
-			pos		'44 4'
+			pos		'44 24'
 		}
 		Derive TextButton Next
 		{
 			normal	">>"
-			pos	'348 5'
+			pos	'348 25'
 
 			action	Nex_Action_MapSelector_Next
+		}
+		Derive Nex_Option_MapType MapType
+		{
+			pos '50 5'
+			text	"Filter"
+			target	"Data::Server::MapType::Switch"
 		}
 		Item Task_Job UpdateJob
 		{
@@ -81,30 +100,20 @@ Item Window Basic
 			text	"Server Name"
 			target	"Data::Server::Hostname::Text"
 		}
+		//Derive Nex_Option_Switch GameMode
+		//{
+		//	text	"Game Mode"
+		//	target	"::Data::Server::GameMode::Switch"
+		//}
 		Derive Nex_Option_Switch GameType
 		{
-			text	"Game Mode"
+			text	"Mod"
 			target	"Data::Server::ServerProgs::Switch"
-		}
-		Derive Nex_Option_Switch TeamPlay
-		{
-			text	"Teamplay"
-			target	"::Data::Server::TeamPlay::Switch"
 		}
 		Derive Nex_Option_Switch PublicServer
 		{
 			text	"Public Server"
 			target  "Data::Server::PublicServer::Switch"
-		}
-		Derive Nex_Option_EditBox FragLimit
-		{
-			text	"Frag Limit"
-			target	"Data::Server::FragLimit::Text"
-		}
-		Derive Nex_Option_EditBox TimeLimit
-		{
-			text	"Time Limit"
-			target	"Data::Server::TimeLimit::Text"
 		}
 		Derive Nex_Option_EditBox MaxPlayer
 		{

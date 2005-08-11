@@ -132,6 +132,6 @@ void() Item_DataLink_TextTime_Spawn;
 
 void() Item_DataLink_AltString_Spawn;
 
-// Item_DataLink_Router [Item_DataLink]
+// Item_DataLink_Splitter [Item_DataLink]
 // sets value and _realValue of all children to the float value of self._realValue
-void() Item_DataLink_Router_Spawn;
+void() Item_DataLink_Splitter_Spawn;

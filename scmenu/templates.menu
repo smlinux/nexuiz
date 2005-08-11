@@ -37,7 +37,7 @@ Template Button TextButton
 	drawFlags_x	[DefaultTextDrawFlag]
 	drawFlags_y	[DefaultSelTextDrawFlag]
 	drawFlags_z	[DefaultPreTextDrawFlag]
-	//soundSelected	[DefaultSelectSound]
+	soundSelected	[DefaultSelectSound]
 	soundPressed	[DefaultPressSound]
 }
 Template Button PictureButton
@@ -63,7 +63,7 @@ Template Slider Slider
 	alphas_y	[DefaultSelPicAlpha]
 	drawFlags_x	[DefaultPicDrawFlag]
 	drawFlags_y	[DefaultSelPicDrawFlag]
-	//soundSelected	[DefaultSelectSound]
+	soundSelected	[DefaultSelectSound]
 	soundIncrease	[DefaultIncreaseSound]
 	soundDecrease	[DefaultDecreaseSound]
 	picture		[DefaultSliderBar]
@@ -93,7 +93,7 @@ Template EditBox EditBox
 	drawFlagsCursor_y [DefaultSelTextDrawFlag]
 	sizeCursor	[DefaultCursorSize]
 	sizeCursorFlash [DefaultCursorFlashSize]
-	//soundSelected	[DefaultSelectSound]
+	soundSelected	[DefaultSelectSound]
 	soundMove	[DefaultIncreaseSound]
 	soundKey	[DefaultDecreaseSound]
 }

@@ -1,0 +1,143 @@
+// Property of Alientrap/AK
+//
+// creategame/game.menu
+Item Layout GameMisc
+{
+	direction	[Nex_DefaultVertDirection]
+	size 		'900 585'
+	origin		'450 0'
+	alignment	[AlignFirst]
+
+	DeriveTemplate Nex_Composition Nex_Option_EditBox
+	{
+		DeriveTemplate Nex_Automation_Option_EditBox Automation
+		{}
+		DeriveTemplate TextButton Description
+		{}
+		DeriveTemplate EditBox EditBox
+		{
+			size 	'260 12'
+			action  Nex_Action_TestOnChange
+			select  Nex_Action_TestOnSelect
+		}
+	}
+
+	Derive Nex_Option_EditBox JoinMessageTime
+	{
+		text	"Join Message Display Time"
+		target	"Data::GameMisc::JoinMessageTime::Text"
+	}
+	Derive Nex_Option_Switch Instagib
+	{
+		text	"Instagib"
+		target	"::Data::GameMisc::Instagib::Switch"
+	}
+	Derive Nex_Option_Switch Rocketarena
+	{
+		text	"Rocket Arena"
+		target	"::Data::GameMisc::RocketArena::Switch"
+	}
+	Derive Nex_Option_Switch Vampire
+	{
+		text	"Vampire Mode"
+		target	"::Data::GameMisc::Vampire::Switch"
+	}
+	Derive Nex_Option_Switch Casings
+	{
+		text	"Bullet Casings"
+		target	"::Data::GameMisc::Casings::Switch"
+	}
+	Derive Nex_Option_EditBox HealthStart
+	{
+		text	"Starting Health"
+		target	"Data::GameMisc::HealthStart::Text"
+	}
+	Derive Nex_Option_EditBox HealthRot
+	{
+		text	"Health Rot"
+		target	"Data::GameMisc::HealthRot::Text"
+	}
+	Derive Nex_Option_EditBox HealthStable
+	{
+		text	"Health Stable"
+		target	"Data::GameMisc::HealthStable::Text"
+	}
+	Derive Nex_Option_EditBox Gravity
+	{
+		text	"Level Gravity"
+		target	"Data::GameMisc::Gravity::Text"
+	}
+	Derive Nex_Option_EditBox Maxspeed
+	{
+		text	"Player Maxspeed"
+		target	"Data::GameMisc::MaxSpeed::Text"
+	}
+	Derive Nex_Option_EditBox Gamespeed
+	{
+		text	"Game Speed"
+		target	"Data::GameMisc::GameSpeed::Text"
+	}
+	Derive Nex_Option_EditBox Maxairspeed
+	{
+		text	"Max Air Speed"
+		target	"Data::GameMisc::MaxAirSpeed::Text"
+	}
+	Derive Nex_Option_EditBox JumpHeight
+	{
+		text	"Jump height"
+		target	"Data::GameMisc::JumpHeight::Text"
+	}
+	Derive Nex_Option_EditBox HealthRegeneration
+	{
+		text	"Health Regeneration Speed"
+		target	"Data::GameMisc::HealthRegeneration::Text"
+	}
+	Derive Nex_Option_EditBox ArmorRott
+	{
+		text	"Armor Rot Speed"
+		target	"Data::GameMisc::ArmorRott::Text"
+	}
+	Derive Nex_Option_EditBox ArmorRegen
+	{
+		text	"Armor Regeneration Speed"
+		target	"Data::GameMisc::ArmorRegen::Text"
+	}
+	Derive Nex_Option_EditBox ArmorStable
+	{
+		text	"Armor Stable"
+		target	"Data::GameMisc::ArmorStable::Text"
+	}
+	Derive Nex_Option_EditBox ArmorStart
+	{
+		text	"Armor Start"
+		target	"Data::GameMisc::ArmorStart::Text"
+	}
+	Derive Nex_Option_EditBox SelfDamagePercent
+	{
+		text	"Self Damage Percent"
+		target	"Data::GameMisc::SelfDamagePercent::Text"
+	}
+	Derive Nex_Option_EditBox WeaponSwitchDelay
+	{
+		text	"Weapon Switch Delay"
+		target	"Data::GameMisc::WeaponSwitchDelay::Text"
+	}
+	Derive Nex_Option_EditBox Friction
+	{
+		text	"Player Friction"
+		target	"Data::GameMisc::Friction::Text"
+	}
+	Derive Nex_Option_EditBox Accelerate
+	{
+		text	"Player Accelerate"
+		target	"Data::GameMisc::Accelerate::Text"
+	}
+	Derive Nex_Line	Seperator
+	{}
+	Derive TextButton Reset
+	{
+		normal	"Reset to default"
+		init	Nex_Action_ResetData
+		target	"::Data::GameMisc"
+	}
+}
