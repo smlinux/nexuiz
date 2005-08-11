@@ -27,7 +27,7 @@ void() place_flag =
 	self.nextthink = time + 0.1;
 	self.cnt = FLAG_BASE;
 	self.mangle = self.angles;
-	self.effects = self.effects | EF_DIMLIGHT;
+	self.effects = self.effects | EF_DIMLIGHT | EF_LOWPRECISION;
 	if (!droptofloor(0, 0))
 	{
 		dprint("Flag fell out of level at ", vtos(self.origin), "\n");

@@ -595,6 +595,9 @@ void spawn_runes()
 
 		e.alpha = e.enemy.alpha = cvar("g_runematch_rune_alpha");//0.78;
 		e.effects = e.enemy.effects = cvar("g_runematch_rune_effects");//EF_ADDITIVE;// | EF_FULLBRIGHT;
+		
+		// Savage: Save some bandwidth
+		self.effects |= EF_LOWPRECISION;
 
 		e.glow_size = e.enemy.glow_size = cvar("g_runematch_rune_glow_size");
 		e.glow_color = e.enemy.glow_color = cvar("g_runematch_rune_glow_color");
