@@ -405,7 +405,7 @@ void() dom_controlpoint =
 		self.scale = 0.6;
 
 	if(!self.glow_size)
-		self.glow_size = 50;
+		self.glow_size = cvar("g_domination_point_glow");
 };
 
 // code from here on is just to support maps that don't have control point and team entities
