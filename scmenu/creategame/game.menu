@@ -39,7 +39,7 @@ Item Layout Game
 			normal		"Misc"
 
 			init 		Nex_Action_JumpToPage
-			target		"Panel::GameMisc"
+			target		"Panel::Misc"
 		}
 	}
 	Item EventWindow Panel

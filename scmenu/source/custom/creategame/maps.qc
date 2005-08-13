@@ -44,44 +44,10 @@ Item_Nex_MapDB
 */
 string _Nex_MapList_FullPath;
 string _Nex_MapList_Name;
+string _Nex_MapList_FilteredFullPath;
+string _Nex_MapList_FilteredName;
+string _Nex_MapList_Filter;
 entity _Nex_MapList_Root;
-
-/*
-===================
-Item_Nex_MapDB_RefreshFiles
-===================
-*/
-
-	/*  fixme:
-
-<Black> use a switch for gametypes
-<Black> and just set the action field to Nex_MapDB_RefreshFiles
-
-<Black> Better to write a new action function though..
-<Black> And call Nex_Action_TestOnChange to set the Data value
-<Black> then set up the filter and then call RefreshFiles
-<Black> or if you put the filter handling into RefrehFiles just call TestOnChange and then RefreshFiles
-	*/
-
-
-void() Nex_MapDB_RefreshFiles =
-{
-	local entity lOldSelf;
-	lOldSelf = self;
-
-	Nex_Action_TestOnChange();
-
-	Menu_EmptyWindow( _Nex_MapList_Root );
-
-	String_Free( _Nex_MapList_FullPath );
-	String_Free( _Nex_MapList_Name );
-	_Nex_MapList_FullPath = String_Create();
-	_Nex_MapList_Name = String_Create();
-
-	self = _Nex_MapList_Root;
-	Item_Nex_MapDB_EnumFiles();
-	self = lOldSelf;
-};
 
 /*
 ===================
@@ -93,15 +59,12 @@ Item_Nex_MapDB_EnumFiles
 // rest: description text
 void() Item_Nex_MapDB_EnumFiles =
 {
-	local float  	lSearchHandle;
-	local float 	lSearchSize;
-	local float 	lSearchCounter;
-	local entity	lMap;
-	local entity	lMapQuery;
+	local float lSearchHandle;
+	local float lSearchSize;
+	local float lSearchCounter;
+	local entity lMap;
 
-	lMapQuery = Menu_GetItem( "::Data::Server::Map::Query" );
-
-	lSearchHandle = search_begin( lMapQuery.value, true, true );
+	lSearchHandle = search_begin( "maps/*.mapcfg", true, true );
 	if( lSearchHandle < 0 )
 		return;
 	for( lSearchSize = search_getsize( lSearchHandle ), lSearchCounter = 0;
@@ -170,6 +133,9 @@ void() Item_Nex_MapDB_EnumFiles =
 
 	search_end( lSearchHandle );
 
+	_Nex_MapList_FilteredFullPath = String_Set( _Nex_MapList_FilteredFullPath, _Nex_MapList_FullPath );
+	_Nex_MapList_FilteredName = String_Set( _Nex_MapList_FilteredName, _Nex_MapList_Name );
+
 	Menu_LinkChildren( self );
 
 	self.minValue = 1;
@@ -186,6 +152,9 @@ void() Item_Nex_MapDB_Destroy =
 {
 	String_Free( _Nex_MapList_FullPath );
 	String_Free( _Nex_MapList_Name );
+	String_Free( _Nex_MapList_FilteredFullPath );
+	String_Free( _Nex_MapList_FilteredName );
+	String_Free( _Nex_MapList_Filter );
 
 	_Nex_MapList_Root = null_entity;
 };
@@ -202,6 +171,9 @@ void() Item_Nex_MapDB_Spawn =
 
 	_Nex_MapList_FullPath = String_Create();
 	_Nex_MapList_Name = String_Create();
+	_Nex_MapList_FilteredFullPath = String_Create();
+	_Nex_MapList_FilteredName = String_Create();
+	_Nex_MapList_Filter = String_Create();
 	_Nex_MapList_Root = self;
 
 	Item_Nex_MapDB_EnumFiles();
@@ -232,9 +204,36 @@ entity( string pPath ) Nex_MapDB_GetByPath =
 
 /*
 ===================
-Nex_MapDB_GetByIndex
+Nex_MapDB_GetFilteredByIndex
 ===================
 */
+entity( float pIndex ) Nex_MapDB_GetFilteredByIndex =
+{
+	local entity lNode;
+	local float lFilteredIndex;
+
+	if( !_Nex_MapList_Root )
+		error( "No Item_Nex_MapDB found!" );
+
+	pIndex = fabs( pIndex );
+	lFilteredIndex = 0;
+	for( lNode = _Nex_MapList_Root._child ; lNode ; lNode = lNode._next ) {
+		if( substring( lNode.link, 0, strlen( _Nex_MapList_Filter ) ) == _Nex_MapList_Filter ) {
+			++lFilteredIndex;
+		}
+		if( pIndex == lFilteredIndex ) {
+			return lNode;
+		}
+	}
+
+	return null_entity;
+};
+
+/*
+===================
+Nex_MapDB_GetByIndex
+===================
+*//*
 entity( float pIndex ) Nex_MapDB_GetByIndex =
 {
 	local entity lNode;
@@ -250,6 +249,62 @@ entity( float pIndex ) Nex_MapDB_GetByIndex =
 	}
 
 	return null_entity;
+};*/
+
+/*
+===================
+Nex_MapDB_FilterMaps
+===================
+*/
+void( string pPrefix ) Nex_MapDB_FilterMaps =
+{
+	local float lPrefixLength;
+	local float lCounter;
+	local float lSize;
+
+	_Nex_MapList_Filter = String_Set( _Nex_MapList_Filter, pPrefix );
+
+	_Nex_MapList_FilteredFullPath = String_Set( _Nex_MapList_FilteredFullPath, "" );
+	_Nex_MapList_FilteredName = String_Set( _Nex_MapList_FilteredName, "" );
+
+	lPrefixLength = strlen( pPrefix );
+	lSize = Util_GetAltStringCount( _Nex_MapList_FullPath );
+	for( lCounter = 0 ; lCounter < lSize ; ++lCounter ) {
+		local string lPath;
+
+		lPath = Util_GetAltStringItem( _Nex_MapList_FullPath, lCounter );
+		if( substring( lPath, 0, lPrefixLength ) == pPrefix ) {
+			local string lName;
+			lName = Util_GetAltStringItem( _Nex_MapList_Name, lCounter );
+
+			_Nex_MapList_FilteredFullPath = Util_AltStringPushBack( _Nex_MapList_FilteredFullPath, lPath );
+			_Nex_MapList_FilteredName = Util_AltStringPushBack( _Nex_MapList_FilteredName, lName );
+
+			String_Free( lName );
+		}
+
+		String_Free( lPath );
+	}
+};
+
+/*
+===================
+Nex_MapDB_GetFilteredPathAltString
+===================
+*/
+string() Nex_MapDB_GetFilteredPathAltString =
+{
+	return _Nex_MapList_FilteredFullPath;
+}
+
+/*
+===================
+Nex_MapDB_GetFilteredNameAltString
+===================
+*/
+string() Nex_MapDB_GetFilteredNameAltString =
+{
+	return _Nex_MapList_FilteredName;
 };
 
 /*
@@ -274,14 +329,30 @@ string() Nex_MapDB_GetNameAltString =
 
 /*
 ===================
-Nex_MapDB_GetIndex
+Nex_MapDB_GetFilteredIndex
 ===================
 */
-float( entity pItem ) Nex_MapDB_GetIndex =
+float( entity pItem ) Nex_MapDB_GetFilteredIndex =
 {
-	return fabs( pItem.orderPos );
+	local float lIndex;
+	local float lCount;
+
+	lCount = Util_GetAltStringCount( _Nex_MapList_FilteredFullPath );
+	for( lIndex = 0 ; lIndex < lCount ; ++lIndex ) {
+		local string lPath;
+		lPath = String_Normal( Util_GetAltStringItem( _Nex_MapList_FilteredFullPath, lIndex ) );
+		if( lPath == pItem.link ) {
+			return lCount + 1;
+		}
+	}
+	return 1;
 };
 
+/*
+===================
+Item_DataLink_Nex_MapList_Save
+===================
+*/
 void() Item_DataLink_Nex_MapList_Save =
 {
 	local float lCount;
@@ -301,6 +372,11 @@ void() Item_DataLink_Nex_MapList_Save =
 	String_Free( lOutput );
 };
 
+/*
+===================
+Item_DataLink_Nex_MapList_Load
+===================
+*/
 void() Item_DataLink_Nex_MapList_Load =
 {
 	local string lEntry;
@@ -331,6 +407,11 @@ void() Item_DataLink_Nex_MapList_Load =
 	Nex_MapSelector_Synchronize();
 };
 
+/*
+===================
+Item_DataLink_Nex_MapList_ExecString
+===================
+*/
 void() Item_DataLink_Nex_MapList_ExecString =
 {
 	local float lCount;
@@ -389,6 +470,11 @@ void( float pEvent ) Item_DataLink_Nex_MapList_DataEvent =
 	}
 };
 
+/*
+===================
+IDLNML_Reinit
+===================
+*/
 void() IDLNML_Reinit =
 {
 	Raise_DataEvent( self, ITEM_DATA_SYNC );
@@ -441,9 +527,10 @@ Item_DataLink_Nex_MapList_InitWithMapList
 */
 void() Item_DataLink_Nex_MapList_InitWithMapList =
 {
-	String_EntitySet( self, valueList, Nex_MapDB_GetPathAltString() );
-	String_EntitySet( self, descList, Nex_MapDB_GetNameAltString() );
+	String_EntitySet( self, valueList, Nex_MapDB_GetFilteredPathAltString() );
+	String_EntitySet( self, descList, Nex_MapDB_GetFilteredNameAltString() );
 
+	self._realValue = 1.0;
 	DataLink_Nex_MapList_UpdateRange( self );
 };
 

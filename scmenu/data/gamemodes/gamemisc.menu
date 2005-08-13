@@ -2,7 +2,7 @@
 //
 // data/gamemisc.menu
 
-Item DataContainer GameMisc
+Item DataContainer Misc
 {
 	Item Data_Cvar JoinMessageTime
 	{
@@ -31,7 +31,7 @@ Item DataContainer GameMisc
 		defValue	0
 
 		[DataLink_OnOffSwitch]
-	}	
+	}
 	Item Data_Cvar Casings
 	{
 		cvarName	"g_casings"

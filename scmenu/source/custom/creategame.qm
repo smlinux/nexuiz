@@ -13,7 +13,7 @@ void() Nex_MapSelector_UpdateMap =
 	lSelector = Menu_GetItem( "::Data::Server::Map::Selector" );
 	Raise_DataEvent( lSelector, ITEM_DATALINK_GET );
 	lIndex = lSelector._realValue;
-	lInfo = Nex_MapDB_GetByIndex( lIndex );
+	lInfo = Nex_MapDB_GetFilteredByIndex( lIndex );
 
 	if( lInfo == null_entity ) {
 		lItem = Menu_GetItem( "Picture" );
@@ -27,19 +27,14 @@ void() Nex_MapSelector_UpdateMap =
 		return;
 	}
 
-	// If there is a new selected map, the info panel is updated accordingly
-	if( lIndex != self.minValue ) {
-		self.minValue = lIndex;
+	lItem = Menu_GetItem( "Picture" );
+	String_EntitySet( lItem, picture, lInfo.picture );
 
-		lItem = Menu_GetItem( "Picture" );
-		String_EntitySet( lItem, picture, lInfo.picture );
+	lItem = Menu_GetItem( "Name" );
+	String_EntitySet( lItem, text, lInfo.normal );
 
-		lItem = Menu_GetItem( "Name" );
-		String_EntitySet( lItem, text, lInfo.normal );
-
-		lItem = Menu_GetItem( "Description" );
-		String_EntitySet( lItem, text, lInfo.text );
-	}
+	lItem = Menu_GetItem( "Description" );
+	String_EntitySet( lItem, text, lInfo.text );
 
 	lItem = Menu_GetItem( "::Data::Server::Map::Cycle" );
 	DataLink_Nex_MapList_SetFirst( lItem, lInfo.normal, lInfo.link );
@@ -66,7 +61,7 @@ void() Nex_MapSelector_Synchronize =
 		if( lMapInfo == null_entity ) {
 			Raise_DataEvent( lCycle, ITEM_DATA_RESET );
 		} else {
-			lSelector._realValue = Nex_MapDB_GetIndex( lMapInfo );
+			lSelector._realValue = Nex_MapDB_GetFilteredIndex( lMapInfo );
 			Raise_DataEvent( lSelector, ITEM_DATALINK_SET );
 		}
 	}
@@ -142,6 +137,7 @@ void() Nex_Action_Cycle_Add =
 	lPath = DataLink_Nex_MapList_GetCurrentPath( lList );
 
 	if( lCycle.stepValue == 1.0 ) {
+		print( "Before: ", ftos( lCycle._realValue ), "\n" );
 		DataLink_Nex_MapList_InsertEntryAfter( lCycle, lName, lPath );
 	} else {
 		DataLink_Nex_MapList_SetFirst( lCycle, lName, lPath );
@@ -152,6 +148,8 @@ void() Nex_Action_Cycle_Add =
 
 	lCycle._realValue = lCycle._realValue + 1;
 	Raise_DataEvent( lCycle, ITEM_DATALINK_SET );
+
+	print( "After: ", ftos( lCycle._realValue ), "\n" );
 
 	Nex_MapSelector_Synchronize();
 };
@@ -200,6 +198,25 @@ void() Nex_Action_Cycle_Clear =
 	DataLink_Nex_MapList_Clear( lCycle );
 
 	Nex_MapSelector_Synchronize();
+};
+
+
+void() Nex_Action_Maplist_ChangeMapType = {
+	local entity lMapQuery;
+	local entity lOldSelf;
+
+	lMapQuery = Menu_GetItem( "::Data::Server::Map::Query" );
+
+	Raise_DataEvent( self._target, ITEM_DATALINK_SET );
+
+	Nex_MapDB_FilterMaps( lMapQuery.value );
+
+	// kind of a hack
+	self = Menu_GetItem( "::Data::Server::Map::Selector" );
+	Item_DataLink_Nex_MapList_InitWithMapList();
+	self = Menu_GetItem( "::Data::Server::Map::List" );
+	Item_DataLink_Nex_MapList_InitWithMapList();
+	self = lOldSelf;
 };
 
 // mangement
@@ -409,33 +426,4 @@ void() Nex_Action_Management_TypeGame =
 void() Nex_Action_Management_TypeMapList =
 {
 	Nex_Management_SetType( 2 );
-};
-
-// FIXME: hackish
-void() Nex_Action_Maplist_ChangeMapType = {
-	local entity lOldSelf;
-
-	// HACK
-	Nex_Action_TestOnChange();
-
-	lOldSelf = self;
-
-	Nex_MapDB_RefreshFiles();
-
-	self = Menu_GetItem( "::Data::Server::Map::Selector" );
-	Item_DataLink_Nex_MapList_InitWithMapList();
-	//DataLink_Nex_MapList_UpdateRange(self);
-	//Item_DataLink_Nex_MapList_Load();
-
-	// fixme: need to change which map the map selector is pointing to right now
-
-	Raise_DataEvent( self, ITEM_DATALINK_GET );
-	if(self._realValue > self.maxValue)
-		self._realValue = self.maxValue;
-	Raise_DataEvent( self, ITEM_DATALINK_SET );
-
-	//Nex_MapSelector_UpdateMap();
-	//Nex_MapSelector_Synchronize();
-
-	self = lOldSelf;
 };

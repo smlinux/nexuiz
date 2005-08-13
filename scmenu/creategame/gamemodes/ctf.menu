@@ -8,37 +8,37 @@ Item Layout CTF
 	Derive Nex_Option_EditBox CaptureLimit
 	{
 		text	"CTF Point Limit Override"
-		target	"Data::CTF::CaptureLimit::Text"
+		target	"Data::Game::CTF::CaptureLimit::Text"
 	}
 	Derive Nex_Option_EditBox FlagReturnTime
 	{
 		text	"Flag Return Time"
-		target	"::Data::CTF::FlagReturnTime::Text"
+		target	"::Data::Game::CTF::FlagReturnTime::Text"
 	}
 	Derive Nex_Option_EditBox FragsCapture
 	{
 		text	"Capture Points (player)"
-		target	"Data::CTF::FragsCapture::Text"
+		target	"Data::Game::CTF::FragsCapture::Text"
 	}
 	Derive Nex_Option_EditBox FragsCaptureTeam
 	{
 		text	"Capture Points (team)"
-		target	"::Data::CTF::FragsCaptureTeam::Text"
+		target	"::Data::Game::CTF::FragsCaptureTeam::Text"
 	}
 	Derive Nex_Option_EditBox FragsPickup
 	{
 		text	"Flag Pickup Points"
-		target	"Data::CTF::FragsPickup::Text"
+		target	"Data::Game::CTF::FragsPickup::Text"
 	}
 	Derive Nex_Option_EditBox FragsReturn
 	{
 		text	"Return Flag Points (ally)"
-		target	"::Data::CTF::FragsReturn::Text"
+		target	"::Data::Game::CTF::FragsReturn::Text"
 	}
 	Derive Nex_Option_EditBox FragsReturnRogue
 	{
 		text	"Return Flag Points (rogue team)"
-		target	"::Data::CTF::FragsReturnRogue::Text"
+		target	"::Data::Game::CTF::FragsReturnRogue::Text"
 	}
 
 
@@ -49,6 +49,6 @@ Item Layout CTF
 	{
 		normal	"Reset to default"
 		init	Nex_Action_ResetData
-		target	"::Data::CTF"
+		target	"::Data::Game::CTF"
 	}
 }

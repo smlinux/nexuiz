@@ -8,7 +8,7 @@ Item Layout Domination
 	//Derive Nex_Option_Switch Domination_Active
 	//{
 	//	text	"Play Domination"
-	//	target	"::Data::Domination::Domination_Active::Switch"
+	//	target	"::Data::Game::Domination::Domination_Active::Switch"
 	//}
 	Derive Nex_Option_EditBox TimeLimit
 	{
@@ -19,43 +19,43 @@ Item Layout Domination
 	Derive Nex_Option_EditBox DomFragLimit
 	{
 		text	"Score Limit Override"
-		target	"Data::Domination::DomFragLimit::Text"
+		target	"Data::Game::Domination::DomFragLimit::Text"
 	}
 
 	Derive Nex_Option_Switch DisableFrags
 	{
 		text	"No Scores From Kills"
-		target	"::Data::Domination::DisableFrags::Switch"
+		target	"::Data::Game::Domination::DisableFrags::Switch"
 	}
 	//Derive Nex_Option_Switch BalanceTeamPoints
 	//{
 	//	text	"Team Size Affects Points"
-	//	target	"::Data::Domination::BalanceTeamPoints::Switch"
+	//	target	"::Data::Game::Domination::BalanceTeamPoints::Switch"
 	//}
 	Derive Nex_Option_EditBox PointAmt
 	{
 		text	"Domination Score Amount"
-		target	"Data::Domination::PointAmt::Text"
+		target	"Data::Game::Domination::PointAmt::Text"
 	}
 	Derive Nex_Option_EditBox PointRate
 	{
 		text	"Score Frequency"
-		target	"Data::Domination::PointRate::Text"
+		target	"Data::Game::Domination::PointRate::Text"
 	}
 	Derive Nex_Option_EditBox CaptureTime
 	{
 		text	"DomPoint Capture Delay"
-		target	"::Data::Domination::CaptureTime::Text"
+		target	"::Data::Game::Domination::CaptureTime::Text"
 	}
 	//Derive Nex_Option_EditBox DefaultNumTeams
 	//{
 	//	text	"Default # of Teams on Non-Domination Maps (2-4)"
-	//	target	"::Data::Domination::DefaultNumTeams::Text"
+	//	target	"::Data::Game::Domination::DefaultNumTeams::Text"
 	//}
 	Derive Nex_Option_Switch DefaultNumTeams
 	{
 		text	"Default # of teams"
-		target	"Data::Domination::DefaultNumTeams::Switch"
+		target	"Data::Game::Domination::DefaultNumTeams::Switch"
 	}
 
 
@@ -65,6 +65,6 @@ Item Layout Domination
 	{
 		normal	"Reset to default"
 		init	Nex_Action_ResetData
-		target	"::Data::CTF"
+		target	"::Data::Game::Domination"
 	}
 }

@@ -1,7 +1,7 @@
 // Property of Alientrap/AK
 //
 // creategame/game.menu
-Item Layout GameMisc
+Item Layout Misc
 {
 	direction	[Nex_DefaultVertDirection]
 	size 		'900 585'
@@ -11,112 +11,112 @@ Item Layout GameMisc
 	Derive Nex_Option_EditBox JoinMessageTime
 	{
 		text	"Join Message Display Time"
-		target	"Data::GameMisc::JoinMessageTime::Text"
+		target	"Data::Game::Misc::JoinMessageTime::Text"
 	}
 	Derive Nex_Option_Switch Instagib
 	{
 		text	"Instagib"
-		target	"::Data::GameMisc::Instagib::Switch"
+		target	"::Data::Game::Misc::Instagib::Switch"
 	}
 	Derive Nex_Option_Switch Rocketarena
 	{
 		text	"Rocket Arena"
-		target	"::Data::GameMisc::RocketArena::Switch"
+		target	"::Data::Game::Misc::RocketArena::Switch"
 	}
 	Derive Nex_Option_Switch Vampire
 	{
 		text	"Vampire Mode"
-		target	"::Data::GameMisc::Vampire::Switch"
+		target	"::Data::Game::Misc::Vampire::Switch"
 	}
 	Derive Nex_Option_Switch Casings
 	{
 		text	"Bullet Casings"
-		target	"::Data::GameMisc::Casings::Switch"
+		target	"::Data::Game::Misc::Casings::Switch"
 	}
 	Derive Nex_Option_EditBox HealthStart
 	{
 		text	"Starting Health"
-		target	"Data::GameMisc::HealthStart::Text"
+		target	"Data::Game::Misc::HealthStart::Text"
 	}
 	Derive Nex_Option_EditBox HealthRot
 	{
 		text	"Health Rot"
-		target	"Data::GameMisc::HealthRot::Text"
+		target	"Data::Game::Misc::HealthRot::Text"
 	}
 	Derive Nex_Option_EditBox HealthStable
 	{
 		text	"Health Stable"
-		target	"Data::GameMisc::HealthStable::Text"
+		target	"Data::Game::Misc::HealthStable::Text"
 	}
 	Derive Nex_Option_EditBox Gravity
 	{
 		text	"Level Gravity"
-		target	"Data::GameMisc::Gravity::Text"
+		target	"Data::Game::Misc::Gravity::Text"
 	}
 	Derive Nex_Option_EditBox Maxspeed
 	{
 		text	"Player Maxspeed"
-		target	"Data::GameMisc::MaxSpeed::Text"
+		target	"Data::Game::Misc::MaxSpeed::Text"
 	}
 	Derive Nex_Option_EditBox Gamespeed
 	{
 		text	"Game Speed"
-		target	"Data::GameMisc::GameSpeed::Text"
+		target	"Data::Game::Misc::GameSpeed::Text"
 	}
 	Derive Nex_Option_EditBox Maxairspeed
 	{
 		text	"Max Air Speed"
-		target	"Data::GameMisc::MaxAirSpeed::Text"
+		target	"Data::Game::Misc::MaxAirSpeed::Text"
 	}
 	Derive Nex_Option_EditBox JumpHeight
 	{
 		text	"Jump height"
-		target	"Data::GameMisc::JumpHeight::Text"
+		target	"Data::Game::Misc::JumpHeight::Text"
 	}
 	Derive Nex_Option_EditBox HealthRegeneration
 	{
 		text	"Health Regeneration Speed"
-		target	"Data::GameMisc::HealthRegeneration::Text"
+		target	"Data::Game::Misc::HealthRegeneration::Text"
 	}
 	Derive Nex_Option_EditBox ArmorRott
 	{
 		text	"Armor Rot Speed"
-		target	"Data::GameMisc::ArmorRott::Text"
+		target	"Data::Game::Misc::ArmorRott::Text"
 	}
 	Derive Nex_Option_EditBox ArmorRegen
 	{
 		text	"Armor Regeneration Speed"
-		target	"Data::GameMisc::ArmorRegen::Text"
+		target	"Data::Game::Misc::ArmorRegen::Text"
 	}
 	Derive Nex_Option_EditBox ArmorStable
 	{
 		text	"Armor Stable"
-		target	"Data::GameMisc::ArmorStable::Text"
+		target	"Data::Game::Misc::ArmorStable::Text"
 	}
 	Derive Nex_Option_EditBox ArmorStart
 	{
 		text	"Armor Start"
-		target	"Data::GameMisc::ArmorStart::Text"
+		target	"Data::Game::Misc::ArmorStart::Text"
 	}
 	Derive Nex_Option_EditBox SelfDamagePercent
 	{
 		text	"Self Damage Percent"
-		target	"Data::GameMisc::SelfDamagePercent::Text"
+		target	"Data::Game::Misc::SelfDamagePercent::Text"
 	}
 	Derive Nex_Option_EditBox WeaponSwitchDelay
 	{
 		text	"Weapon Switch Delay"
-		target	"Data::GameMisc::WeaponSwitchDelay::Text"
+		target	"Data::Game::Misc::WeaponSwitchDelay::Text"
 	}
 	Derive Nex_Option_EditBox Friction
 	{
 		text	"Player Friction"
-		target	"Data::GameMisc::Friction::Text"
+		target	"Data::Game::Misc::Friction::Text"
 	}
 	Derive Nex_Option_EditBox Accelerate
 	{
 		text	"Player Accelerate"
-		target	"Data::GameMisc::Accelerate::Text"
+		target	"Data::Game::Misc::Accelerate::Text"
 	}
 	Derive Nex_Line	Seperator
 	{}
@@ -124,6 +124,6 @@ Item Layout GameMisc
 	{
 		normal	"Reset to default"
 		init	Nex_Action_ResetData
-		target	"::Data::GameMisc"
+		target	"::Data::Game::Misc"
 	}
 }
