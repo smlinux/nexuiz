@@ -391,7 +391,7 @@ void() look_for_stuff =
 	{
                 if (item.flags & FL_CLIENT)
 		{
-			if (item != self)
+			if (item != self && !(cvar("teamplay") && (item.clientcolors == self.clientcolors)))
 			{
 				if ((item.health > 0) && (!item.deadflag))
 				{
