@@ -204,7 +204,7 @@ void InitGameplayMode()
 
 void PrintWelcomeMessage(entity pl)
 {
-	string s, temp;
+	string s, grap_msg, temp;
 	float colored;
 
 	if(self.welcomemessage_time < time)
@@ -216,6 +216,8 @@ void PrintWelcomeMessage(entity pl)
 	colored = 0;
 	if(colored)
 	{
+		if(cvar("g_grappling_hook"))
+			grap_msg = strzone("\n\nBind a key to ^1+hook^8 to use the grappling hook\n");
 
 		s = strcat("Match type is ^1", gamemode_name, "^8\n");
 		s = strzone(s);
@@ -230,18 +232,23 @@ void PrintWelcomeMessage(entity pl)
 		{
 			s = strcat(temp,
 			"You are on ", ColoredTeamName(pl.team), "^8\n\n",
-			"Go to ^1Menu->Options->Player^8 to change your name, model & team\n"
+			"Go to ^1Menu->Options->Player^8 to change your name, model & team\n",
+			grap_msg
 			);
 		}
 		else
 		{
 			s = strcat(temp,
-			"Go to ^1Menu->Options->Player^8 to change your name & model\n"
+			"Go to ^1Menu->Options->Player^8 to change your name & model\n",
+			grap_msg
 			);
 		}
 	}
 	else
 	{
+		if(cvar("g_grappling_hook"))
+			grap_msg = strzone("\n\nBind a key to +hook to use the grappling hook\n");
+
 		s = strcat("Match type is ", gamemode_name, "\n");
 		s = strzone(s);
 
@@ -255,13 +262,15 @@ void PrintWelcomeMessage(entity pl)
 		{
 			s = strcat(temp,
 			"You are on ", TeamName(pl.team), "\n\n",
-			"Go to Menu->Options->Player to\nchange your name, model & team\n"
+			"Go to Menu->Options->Player to\nchange your name, model & team\n",
+			grap_msg
 			);
 		}
 		else
 		{
 			s = strcat(temp,
-			"Go to Menu->Options->Player to change your name & model\n"
+			"Go to Menu->Options->Player to change your name & model\n",
+			grap_msg
 			);
 		}
 	}

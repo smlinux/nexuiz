@@ -1,4 +1,4 @@
-../../progs.dat
+../progs.dat
 
 gamec/sys.h
 gamec/builtins.h
@@ -61,3 +61,4 @@ gamec/t_plats.c
 
 gamec/ctf.c
 gamec/domination.c
+gamec/g_hook.c

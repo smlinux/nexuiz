@@ -175,3 +175,14 @@ float alreadychangedlevel;
 .float welcomemessage_time;
 .float welcomemessage_time2;
 
+// Wazat's grappling hook
+.entity		hook;
+void GrapplingHookFrame();
+void RemoveGrapplingHook(entity pl);
+void SetGrappleHookBindings();
+// hook impulses
+float GRAPHOOK_FIRE		= 20;
+float GRAPHOOK_RELEASE		= 21;
+// (note: you can change the hook impulse #'s to whatever you please)
+.float hook_time;
+

@@ -185,3 +185,5 @@ float	game;	// set to "gamecfg" on worldspawn
 
 //float	POWERUP_INVINCIBLE_TAKEDAMAGE	= 0.2; // received damage multiplier for invincible powerup
 
+
+float TE_BEAM		= 13;		// grappling hook

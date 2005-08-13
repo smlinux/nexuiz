@@ -163,7 +163,9 @@ void PutClientInServer (void)
 	entity	spot;
 
 	spot = SelectSpawnPoint (FALSE);
-
+	
+	RemoveGrapplingHook(self); // Wazat's Grappling Hook
+	
 	self.classname = "player";
 	self.iscreature = TRUE;
 	self.movetype = MOVETYPE_WALK;
@@ -194,6 +196,8 @@ void PutClientInServer (void)
 	// players have no think function
 	self.think = SUB_Null;
 	self.nextthink = 0;
+
+	self.hook_time = 0;
 
 	self.runes = 0;
 
@@ -348,6 +352,9 @@ void ClientConnect (void)
 	stuffcmd(self, strcat("cl_movement_jumpvelocity ", ftos(cvar("g_balance_jumpheight")), "\n"));
 	stuffcmd(self, strcat("cl_movement_stepheight ", ftos(cvar("sv_stepheight")), "\n"));
 	stuffcmd(self, strcat("cl_movement_edgefriction 0\n"));
+	
+	// Wazat's grappling hook
+	SetGrappleHookBindings();	
 }
 
 /*
