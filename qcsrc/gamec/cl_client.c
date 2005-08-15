@@ -719,6 +719,8 @@ void PlayerPreThink (void)
 
 	if (self.skin != stof(self.playerskin))
 		self.skin = stof(self.playerskin);
+	
+	GrapplingHookFrame();
 
 	W_WeaponFrame();
 
