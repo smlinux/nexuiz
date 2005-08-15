@@ -11,21 +11,21 @@ Item DataContainer Misc
 
 		[DataLink_Setting]
 	}
-	Item Data_Cvar Grapple
+	Item Data_CvarCreateSave Grapple
 	{
 		cvarName	"g_grappling_hook"
 		defValue	0
 
 		[DataLink_OnOffSwitch]
 	}
-	Item Data_Cvar GrappleFireSpeed
+	Item Data_CvarCreateSave GrappleFireSpeed
 	{
 		cvarName	"g_balance_grapplehook_speed_fly"
 		defValue	1200
 
 		[DataLink_Setting]
 	}
-	Item Data_Cvar GrapplePullSpeed
+	Item Data_CvarCreateSave GrapplePullSpeed
 	{
 		cvarName	"g_balance_grapplehook_speed_pull"
 		defValue	1000
