@@ -13,6 +13,21 @@ Item Layout Misc
 		text	"Join Message Display Time"
 		target	"Data::Game::Misc::JoinMessageTime::Text"
 	}
+	Derive Nex_Option_Switch Grapple
+	{
+		text	"Grappling Hook Enabled"
+		target	"::Data::Game::Misc::Grapple::Switch"
+	}
+	Derive Nex_Option_EditBox GrappleFireSpeed
+	{
+		text	"Grappling Hook Fire Speed"
+		target	"Data::Game::Misc::GrappleFireSpeed::Text"
+	}
+	Derive Nex_Option_EditBox GrapplePullSpeed
+	{
+		text	"Grappling Hook Pull Speed"
+		target	"Data::Game::Misc::GrapplePullSpeed::Text"
+	}
 	Derive Nex_Option_Switch Instagib
 	{
 		text	"Instagib"
