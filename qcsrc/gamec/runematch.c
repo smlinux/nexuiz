@@ -599,8 +599,8 @@ void spawn_runes()
 		// Savage: Save some bandwidth
 		self.effects |= EF_LOWPRECISION;
 
-		e.glow_size = e.enemy.glow_size = cvar("g_runematch_rune_glow_size");
-		e.glow_color = e.enemy.glow_color = cvar("g_runematch_rune_glow_color");
+		//e.glow_size = e.enemy.glow_size = cvar("g_runematch_rune_glow_size");
+		//e.glow_color = e.enemy.glow_color = cvar("g_runematch_rune_glow_color");
 
 		// this spot is taken
 		spot.owner = e;

@@ -213,7 +213,7 @@ void PrintWelcomeMessage(entity pl)
 		return;
 	self.welcomemessage_time2 = time + 0.8;
 
-	colored = 0;
+	colored = 1;
 	if(colored)
 	{
 		if(cvar("g_grappling_hook"))

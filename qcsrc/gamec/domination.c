@@ -18,37 +18,6 @@ Note: The only teams who can use dom control points are identified by dom_team e
 
 void() dom_spawnteams;
 
-void() dompointthink =
-{
-	local entity head;
-	float waittime;
-	float fragamt;
-	if (gameover)	// game has ended, don't keep giving points
-		return;
-
-	waittime = cvar("g_domination_point_rate");
-	if(!waittime)
-		waittime = self.wait;
-	self.nextthink = time + waittime;
-
-	if (!self.goalentity.netname)
-		return;
-
-
-	fragamt = cvar("g_domination_point_amt");
-	if(!fragamt)
-		fragamt = self.frags;
-
-	head = find(head, classname, "player");
-	while (head)
-	{
-		if (head.team == self.goalentity.team)
-			head.frags = head.frags + fragamt;
-		head = find(head, classname, "player");
-	}
-	self.goalentity.frags = self.goalentity.frags + fragamt;
-};
-
 void dompoint_captured ()
 {
 	local entity head;
@@ -77,8 +46,73 @@ void dompoint_captured ()
 	if (head.noise1 != "")
 		sound(self, CHAN_VOICE, head.noise1, 1, ATTN_NONE);
 
-	self.nextthink = time + cvar("g_domination_point_rate");
-	self.think = dompointthink;
+	//self.nextthink = time + cvar("g_domination_point_rate");
+	//self.think = dompointthink;
+	self.delay = time + cvar("g_domination_point_rate");
+};
+
+void AnimateDomPoint()
+{
+	if(self.pain_finished > time)
+		return;
+	self.pain_finished = time + self.t_width;
+	if(self.nextthink > self.pain_finished)
+		self.nextthink = self.pain_finished;
+
+	self.frame = self.frame + 1;
+	if(self.frame > self.t_length)
+		self.frame = 0;
+}
+
+void() dompointthink =
+{
+	local entity head;
+	float waittime;
+	float fragamt;
+
+	self.nextthink = time + 0.1;
+
+	//self.frame = self.frame + 1;
+	//if(self.frame > 119)
+	//	self.frame = 0;
+	AnimateDomPoint();
+
+	// give points
+
+	if (gameover)	// game has ended, don't keep giving points
+		return;
+
+	if(self.delay > time)
+		return;
+
+	if(self.state == 1)
+	{
+		self.state = 0;
+		dompoint_captured();
+		return;
+	}
+
+	waittime = cvar("g_domination_point_rate");
+	if(!waittime)
+		waittime = self.wait;
+	self.delay = time + waittime;
+
+	if (!self.goalentity.netname)
+		return;
+
+
+	fragamt = cvar("g_domination_point_amt");
+	if(!fragamt)
+		fragamt = self.frags;
+
+	head = find(head, classname, "player");
+	while (head)
+	{
+		if (head.team == self.goalentity.team)
+			head.frags = head.frags + fragamt;
+		head = find(head, classname, "player");
+	}
+	self.goalentity.frags = self.goalentity.frags + fragamt;
 };
 
 void() dompointtouch =
@@ -102,9 +136,11 @@ void() dompointtouch =
 
 	self.cnt = other.team;
 	self.enemy = head;
-	self.nextthink = time + cvar("g_domination_point_capturetime");
-	self.think = dompoint_captured;
 
+	self.state = 1;
+	self.delay = time + cvar("g_domination_point_capturetime");
+	//self.nextthink = time + cvar("g_domination_point_capturetime");
+	//self.think = dompoint_captured;
 	// go to neutral team in the mean time
 
 	head = find(world, classname, "dom_team");
@@ -187,12 +223,17 @@ void() dom_controlpoint_setup =
 	if(!self.wait)
 		self.wait = 5;
 
+	if(!self.t_width)
+		self.t_width = 0.1; // frame animation rate
+	if(!self.t_length)
+		self.t_length = 119; // maximum frame
+
 	self.think = dompointthink;
 	self.nextthink = time;
 	self.touch = dompointtouch;
 	self.solid = SOLID_TRIGGER;
 	setsize(self, '-32 -32 -24', '32 32 32');
-	setorigin(self, self.origin);
+	setorigin(self, self.origin + '0 0 20');
 	droptofloor(0, 0);
 };
 
@@ -404,8 +445,9 @@ void() dom_controlpoint =
 	if(!self.scale)
 		self.scale = 0.6;
 
-	if(!self.glow_size)
-		self.glow_size = cvar("g_domination_point_glow");
+	//if(!self.glow_size)
+	//	self.glow_size = cvar("g_domination_point_glow");
+	self.effects = self.effects | EF_FULLBRIGHT;	
 };
 
 // code from here on is just to support maps that don't have control point and team entities

@@ -56,7 +56,7 @@ void RemoveGrapplingHook(entity pl)
 	if(pl.movetype == MOVETYPE_FLY)
 		pl.movetype = MOVETYPE_WALK;
 
-	pl.hook_time = time + 0.5;
+	pl.hook_time = time + 0.0;
 }
 
 void GrapplingHookThink()
@@ -76,7 +76,7 @@ void GrapplingHookThink()
 
 	if(self.state == 1)
 	{
-		pullspeed = 1000;
+		pullspeed = cvar("g_balance_grapplehook_speed_pull");//1000;
 		minlength = 50;
 		dir = self.origin - org;
 		dist = vlen(dir);
@@ -157,7 +157,7 @@ void FireGrapplingHook (void)
 
 	missile.state = 0; // not latched onto anything
 
-	missile.velocity = v_forward * 1200;//cvar("g_balance_grapplehook_speed");
+	missile.velocity = v_forward * cvar("g_balance_grapplehook_speed_fly");
 	missile.angles = vectoangles (missile.velocity);
 	//missile.glow_color = 250; // 244, 250
 	//missile.glow_size = 120;

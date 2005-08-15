@@ -71,28 +71,31 @@ void CreatureFrame (void)
 				self.dmg = 2;
 			}
 			// check for falling damage
-			dm = vlen(self.velocity - self.oldvelocity);
-			if (self.deadflag)
-				dm = (dm - cvar("g_balance_falldamage_deadminspeed")) * cvar("g_balance_falldamage_factor");
-			else
+			if(!self.hook.state)
 			{
-				if (self.oldvelocity_z < self.velocity_z - 100)
+				dm = vlen(self.velocity - self.oldvelocity);
+				if (self.deadflag)
+					dm = (dm - cvar("g_balance_falldamage_deadminspeed")) * cvar("g_balance_falldamage_factor");
+				else
 				{
-					local float soundrandom;
-					soundrandom = random() * 4;
-					if (soundrandom < 1)
-						sound (self, CHAN_BODY, "misc/hitground1.wav", 1, ATTN_NORM);
-					else if (soundrandom < 2)
-						sound (self, CHAN_BODY, "misc/hitground2.wav", 1, ATTN_NORM);
-					else if (soundrandom < 3)
-						sound (self, CHAN_BODY, "misc/hitground3.wav", 1, ATTN_NORM);
-					else if (soundrandom < 4)
-						sound (self, CHAN_BODY, "misc/hitground4.wav", 1, ATTN_NORM);
+					if (self.oldvelocity_z < self.velocity_z - 100)
+					{
+						local float soundrandom;
+						soundrandom = random() * 4;
+						if (soundrandom < 1)
+							sound (self, CHAN_BODY, "misc/hitground1.wav", 1, ATTN_NORM);
+						else if (soundrandom < 2)
+							sound (self, CHAN_BODY, "misc/hitground2.wav", 1, ATTN_NORM);
+						else if (soundrandom < 3)
+							sound (self, CHAN_BODY, "misc/hitground3.wav", 1, ATTN_NORM);
+						else if (soundrandom < 4)
+							sound (self, CHAN_BODY, "misc/hitground4.wav", 1, ATTN_NORM);
+					}
+					dm = min((dm - cvar("g_balance_falldamage_minspeed")) * cvar("g_balance_falldamage_factor"), cvar("g_balance_falldamage_maxdamage"));
 				}
-				dm = min((dm - cvar("g_balance_falldamage_minspeed")) * cvar("g_balance_falldamage_factor"), cvar("g_balance_falldamage_maxdamage"));
+				if (dm > 0)
+					Damage (self, world, world, dm, DEATH_FALL, self.origin, '0 0 0');
 			}
-			if (dm > 0)
-				Damage (self, world, world, dm, DEATH_FALL, self.origin, '0 0 0');
 			self.oldvelocity = self.velocity;
 		}
 		self = findfloat(self, iscreature, TRUE);

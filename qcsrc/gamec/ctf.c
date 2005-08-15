@@ -16,6 +16,11 @@ void() FlagTouch;
 
 void() place_flag =
 {
+	if(!self.t_width)
+		self.t_width = 0.1; // frame animation rate
+	if(!self.t_length)
+		self.t_length = 119; // maximum frame
+		
 	self.mdl = self.model;
 	self.flags = FL_ITEM;
 	self.solid = SOLID_TRIGGER;
@@ -27,7 +32,7 @@ void() place_flag =
 	self.nextthink = time + 0.1;
 	self.cnt = FLAG_BASE;
 	self.mangle = self.angles;
-	self.effects = self.effects | EF_DIMLIGHT | EF_LOWPRECISION;
+	//self.effects = self.effects | EF_DIMLIGHT;
 	if (!droptofloor(0, 0))
 	{
 		dprint("Flag fell out of level at ", vtos(self.origin), "\n");
@@ -93,6 +98,19 @@ void(entity e) DropFlag =
 	e.pain_finished = time + cvar("g_ctf_flag_returntime");//30;
 };
 
+void AnimateFlag()
+{
+	if(self.delay > time)
+		return;
+	self.delay = time + self.t_width;
+	if(self.nextthink > self.delay)
+		self.nextthink = self.delay;
+
+	self.frame = self.frame + 1;
+	if(self.frame > self.t_length)
+		self.frame = 0;
+}
+
 void() FlagThink =
 {
 	local entity e;
@@ -100,6 +118,8 @@ void() FlagThink =
 	local float f;
 
 	self.nextthink = time + 0.1;
+	
+	AnimateFlag();
 
 	if (self.cnt == FLAG_BASE)
 		return;
@@ -400,8 +420,10 @@ void() item_flag_team1 =
 
 	if(!self.scale)
 		self.scale = 0.6;
-	if(!self.glow_size)
-		self.glow_size = 50;
+	//if(!self.glow_size)
+	//	self.glow_size = 50;
+	
+	self.effects = self.effects | EF_FULLBRIGHT | EF_LOWPRECISION;
 };
 
 /*QUAKED item_flag_team2 (0 0.5 0.8) (-48 -48 -24) (48 48 64)
@@ -448,8 +470,10 @@ void() item_flag_team2 =
 
 	if(!self.scale)
 		self.scale = 0.6;
-	if(!self.glow_size)
-		self.glow_size = 50;
+	//if(!self.glow_size)
+	//	self.glow_size = 50;
+	
+	self.effects = self.effects | EF_FULLBRIGHT | EF_LOWPRECISION;
 };
 
 
