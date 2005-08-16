@@ -261,6 +261,14 @@ void() FlagTouch =
 			bprint(other.netname, " got the BLUE flag\n");
 		other.frags = other.frags + cvar("g_ctf_flagscore_pickup");//FLAGSCORE_PICKUP;
 		sound (self, CHAN_AUTO, self.noise, 1, ATTN_NONE);
+		
+		local entity player;
+		player = find(world, classname, "player");
+		while(player) {
+			if(player.team == self.team) centerprint(player, "The enemy got your flag! Retrieve it!");
+			player = find(player, classname, "player");
+		}
+		
 		return;
 	}
 
@@ -296,6 +304,13 @@ void() FlagTouch =
 				bprint(other.netname, " picked up the BLUE flag\n");
 			other.frags = other.frags + cvar("g_ctf_flagscore_pickup");//FLAGSCORE_PICKUP;
 			sound (self, CHAN_AUTO, self.noise, 1, ATTN_NONE);
+
+			local entity player;
+			player = find(world, classname, "player");
+			while(player) {
+				if(player.team == self.team) centerprint(player, "The enemy got your flag! Retrieve it!");
+				player = find(player, classname, "player");
+			}			
 		}
 	}
 };
