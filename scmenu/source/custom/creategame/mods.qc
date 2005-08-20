@@ -33,7 +33,6 @@ void() _IDLNMS_Build =
 		local string 	lLine;
 
 		lFilename = search_getfilename( lSearchHandle, lSearchCounter );
-		print( lFilename, "\n" );
 		lHandle = fopen( lFilename, FILE_READ );
 		if( lHandle < 0 ) {
 			print( "Menu: Couldn't open modinfo file '", lFilename, "'\n" );

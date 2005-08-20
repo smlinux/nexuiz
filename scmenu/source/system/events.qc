@@ -109,13 +109,24 @@ void( entity pItem ) _Menu_Env_SetupOrigin =
 void( entity pItem ) _Menu_ProcessRunFlag =
 {
 	local entity lChild;
+	local bool lWasHidden;
+	local float lOldRunFlag;
 
 	_Menu_Process_Debug_Print( strcat( "R ", pItem.name, "\n" ) );
 
 	// setup the cache and the Menu_* variables
 	_Menu_Env_SetupClipArea( pItem );
 
+	lWasHidden = Menu_HasRunFlag( pItem, RUNFLAG_HIDDEN );
+
+	lOldRunFlag = pItem._runFlag;
 	Menu_SetRunFlag( pItem );
+
+	// AK LATE: This should speed up things a bit
+	if( /*lOldRunFlag == pItem._runFlag &&*/ lWasHidden && Menu_HasRunFlag( pItem, RUNFLAG_HIDDEN ) ) {
+		_Menu_Process_Debug_Print( "Aborted branching (RUNFLAG_HIDDEN)\n" );
+		return;
+	}
 
 	// we adjust the origin for the children
 	_Menu_Env_SetupOrigin( pItem );

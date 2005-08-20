@@ -342,7 +342,7 @@ float( entity pItem ) Nex_MapDB_GetFilteredIndex =
 		local string lPath;
 		lPath = String_Normal( Util_GetAltStringItem( _Nex_MapList_FilteredFullPath, lIndex ) );
 		if( lPath == pItem.link ) {
-			return lCount + 1;
+			return lIndex + 1;
 		}
 	}
 	return 1;
