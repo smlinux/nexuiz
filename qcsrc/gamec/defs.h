@@ -14,6 +14,9 @@ entity dest;
 //.string	wad;
 //.string	map;
 
+// is this client a remote administrator?
+.float adminstatus;
+
 //.float	worldtype;
 .float	delay;
 .float	wait;
