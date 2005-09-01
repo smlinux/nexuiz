@@ -62,3 +62,5 @@ gamec/t_plats.c
 gamec/ctf.c
 gamec/domination.c
 gamec/g_hook.c
+
+gamec/clientcommands.c
