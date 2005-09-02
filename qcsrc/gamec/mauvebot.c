@@ -360,7 +360,7 @@ void() MauveToGoal =
 	}	
 
 	dir = normalize(diff);
-	dir = dir * cvar("cl_forwardspeed");// - (self.velocity - dir * (self.velocity * dir));
+	dir = dir * cvar("sv_maxspeed");// - (self.velocity - dir * (self.velocity * dir));
 
 	makevectors(self.v_angle);
 	self.movement_x = dir * v_forward;
