@@ -42,49 +42,49 @@ Item DataContainer Weapon
 	Item Data_Cvar LaserDamage
 	{
 		cvarName	"g_balance_laser_damage"
-		defValue	15
+		defValue	35
 
 		[DataLink_Setting]
 	}
 	Item Data_Cvar LaserEdgeDamage
 	{
 		cvarName	"g_balance_laser_edgedamage"
-		defValue	15
+		defValue	10
 
 		[DataLink_Setting]
 	}
 	Item Data_Cvar LaserForce
 	{
 		cvarName	"g_balance_laser_force"
-		defValue	200
+		defValue	400
 
 		[DataLink_Setting]
 	}
 	Item Data_Cvar LaserRadius
 	{
 		cvarName	"g_balance_laser_radius"
-		defValue	50
+		defValue	70
 
 		[DataLink_Setting]
 	}
 	Item Data_Cvar LaserSpeed
 	{
 		cvarName	"g_balance_laser_speed"
-		defValue	1000
+		defValue	9000
 
 		[DataLink_Setting]
 	}
 	Item Data_Cvar Laserrefire
 	{
 		cvarName	"g_balance_laser_refire"
-		defValue	0.3
+		defValue	0.7
 
 		[DataLink_Setting]
 	}
 	Item Data_Cvar ShotgunDamage
 	{
 		cvarName	"g_balance_shotgun_damage"
-		defValue	3.5
+		defValue	6
 
 		[DataLink_Setting]
 	}
@@ -119,7 +119,7 @@ Item DataContainer Weapon
 	Item Data_Cvar ShotgunRefire2
 	{
 		cvarName	"g_balance_shotgun_refire2"
-		defValue	1.3
+		defValue	1.5
 
 		[DataLink_Setting]
 	}
@@ -133,14 +133,14 @@ Item DataContainer Weapon
 	Item Data_Cvar UziDamage
 	{
 		cvarName	"g_balance_uzi_damage"
-		defValue	4
+		defValue	16
 
 		[DataLink_Setting]
 	}
 	Item Data_Cvar UziSpread
 	{
 		cvarName	"g_balance_uzi_spread"
-		defValue	0.1
+		defValue	0.05
 
 		[DataLink_Setting]
 	}
@@ -154,14 +154,14 @@ Item DataContainer Weapon
 	Item Data_Cvar UziRefire
 	{
 		cvarName	"g_balance_uzi_refire"
-		defValue	0.05
+		defValue	0.1
 
 		[DataLink_Setting]
 	}
 	Item Data_Cvar UziDamage2
 	{
 		cvarName	"g_balance_uzi_damage2"
-		defValue	15
+		defValue	30
 
 		[DataLink_Setting]
 	}
@@ -182,7 +182,7 @@ Item DataContainer Weapon
 	Item Data_Cvar GrenadeLauncherEdgeDamage
 	{
 		cvarName	"g_balance_grenadelauncher_edgedamage"
-		defValue	45
+		defValue	35
 
 		[DataLink_Setting]
 	}
@@ -217,7 +217,7 @@ Item DataContainer Weapon
 	Item Data_Cvar GrenadeLauncherSpeed2
 	{
 		cvarName	"g_balance_grenadelauncher_speed2"
-		defValue	900
+		defValue	1400
 
 		[DataLink_Setting]
 	}
@@ -231,7 +231,7 @@ Item DataContainer Weapon
 	Item Data_Cvar GrenadeLauncherRefire
 	{
 		cvarName	"g_balance_grenadelauncher_refire"
-		defValue	0.8
+		defValue	0.7
 
 		[DataLink_Setting]
 	}
@@ -252,7 +252,7 @@ Item DataContainer Weapon
 	Item Data_Cvar ElectroEdgeDamage
 	{
 		cvarName	"g_balance_electro_edgedamage"
-		defValue	45
+		defValue	0
 
 		[DataLink_Setting]
 	}
@@ -266,14 +266,14 @@ Item DataContainer Weapon
 	Item Data_Cvar ElectroRadius
 	{
 		cvarName	"g_balance_electro_radius"
-		defValue	100
+		defValue	150
 
 		[DataLink_Setting]
 	}
 	Item Data_Cvar ElectroRefire
 	{
 		cvarName	"g_balance_electro_refire"
-		defValue	1
+		defValue	0.9
 
 		[DataLink_Setting]
 	}
@@ -329,21 +329,21 @@ Item DataContainer Weapon
 	Item Data_Cvar CryLinkSpeed
 	{
 		cvarName	"g_balance_crylink_speed"
-		defValue	1800
+		defValue	6000
 
 		[DataLink_Setting]
 	}
 	Item Data_Cvar CryLinkSpread
 	{
 		cvarName	"g_balance_crylink_spread"
-		defValue	0.15
+		defValue	0.10
 
 		[DataLink_Setting]
 	}
 	Item Data_Cvar CryLinkRefire
 	{
 		cvarName	"g_balance_crylink_refire"
-		defValue	0.4
+		defValue	0.8
 
 		[DataLink_Setting]
 	}
@@ -357,7 +357,7 @@ Item DataContainer Weapon
 	Item Data_Cvar NexDamage
 	{
 		cvarName	"g_balance_nex_damage"
-		defValue	200
+		defValue	175
 
 		[DataLink_Setting]
 	}
@@ -420,7 +420,7 @@ Item DataContainer Weapon
 	Item Data_Cvar HagarSpread
 	{
 		cvarName	"g_balance_hagar_spread"
-		defValue	0
+		defValue	0.025
 
 		[DataLink_Setting]
 	}
@@ -462,7 +462,7 @@ Item DataContainer Weapon
 	Item Data_Cvar RocketLauncherrefire
 	{
 		cvarName	"g_balance_rocketlauncher_refire"
-		defValue	1.2
+		defValue	1
 
 		[DataLink_Setting]
 	}
