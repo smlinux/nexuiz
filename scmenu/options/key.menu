@@ -171,6 +171,11 @@ Item Window KeyControl
 						text	"Crouch"
 						target	"Data::Key::Crouch"
 					}
+					Derive Nex_Key_Template Hook
+					{
+						text	"Grappling Hook"
+						target	"Data::Key::Hook"
+					}
 					Derive Nex_Void Seperator1
 					{}
 					Derive Title GroupFight
