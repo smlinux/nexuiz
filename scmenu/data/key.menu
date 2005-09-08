@@ -42,17 +42,17 @@ Item DataContainer Key
 	}
 	Item Data_Nex_Key FireSecondary
 	{
-		target		"+button3"
+		target		"+attack2"
 		defValue	"'Mouse2'"
 	}
 	Item Data_Nex_Key PrevWeapon
 	{
-		target		"impulse 12"
+		target		"weapprev"
 		defValue	"'MWHEELDOWN'"
 	}
 	Item Data_Nex_Key NextWeapon
 	{
-		target		"impulse 10"
+		target		"weapnext"
 		defValue	"'MWHEELUP'"
 	}
 	Item Data_Nex_Key Zoom
