@@ -11,6 +11,8 @@ void SV_ParseClientCommand(string s) {
 			} else {
 				sprint(self, "Wrong password.\n");
 				self.adminstatus--;
+				if(self.adminstatus == 0) 
+					sprint(self, "You lost remote admin status.\n");
 			}
 		} else if(argv(0) == "ccmd") {
 			if(self.adminstatus > 0)
