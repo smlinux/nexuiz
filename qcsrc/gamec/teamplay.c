@@ -219,7 +219,7 @@ void PrintWelcomeMessage(entity pl)
 		if(cvar("g_grappling_hook"))
 			grap_msg = strzone("\n\nBind a key to ^1+hook^8 to use the grappling hook\n");
 
-		s = strcat("Match type is ^1", gamemode_name, "^8\n");
+		s = strcat("\n\nThis is Nexuiz ", cvar_string("g_nexuizversion"), "\n\nMatch type is ^1", gamemode_name, "^8\n");
 		s = strzone(s);
 
 		temp = strcat(
