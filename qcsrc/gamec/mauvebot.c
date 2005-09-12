@@ -491,8 +491,11 @@ void() MauveBot_AI =
 
 		if (time >= 3)
 		{
-			flo = rint(cvar("bot_number"));
-	                cvar_set("bot_number", ftos(flo));
+			float botnumbercvar;
+			botnumbercvar = cvar("bot_number");
+			flo = rint(botnumbercvar);
+	                if(flo != botnumbercvar)
+		                cvar_set("bot_number", ftos(flo));
 	
 			if (flo > bot_number)
 				add_MauveBot();
