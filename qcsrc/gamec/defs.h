@@ -178,6 +178,18 @@ float alreadychangedlevel;
 .float welcomemessage_time;
 .float welcomemessage_time2;
 
+// stahl's voting
+string votecalled;
+entity votecaller;
+.float vote_finished;
+.float vote_next;
+.float vote_vote;
+float VoteAllowed(string vote);
+void VoteCount();
+void VoteDo(entity voter);
+void VoteTimeout(entity voter);
+void VoteReset();
+
 // Wazat's grappling hook
 .entity		hook;
 void GrapplingHookFrame();

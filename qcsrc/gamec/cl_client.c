@@ -193,6 +193,7 @@ void PutClientInServer (void)
 	self.pushltime = 0;
 	//self.speed_finished = 0;
 	//self.slowmo_finished = 0;
+	self.vote_finished = 0;
 	// players have no think function
 	self.think = SUB_Null;
 	self.nextthink = 0;
@@ -738,6 +739,11 @@ void PlayerPreThink (void)
 	else
 		self.flags = self.flags | FL_JUMPRELEASED;
 
+	if (self.vote_finished > 0 // this player has called a vote
+	    && time > self.vote_finished) // time is up
+	{
+		VoteCount();
+	}
 
 	player_powerups();
 	player_regen();
