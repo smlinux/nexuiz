@@ -61,7 +61,7 @@ void SV_ParseClientCommand(string s) {
 				} else if(time < self.vote_next) {
 					sprint(self, strcat("^1You have to wait ^2", ftos(self.vote_next - time), "^1 seconds before you can again call a vote.\n"));
 				} else if(VoteAllowed(strcat(argv(2)))) { // strcat seems to be necessary
-					votecalled = strcat(vote); // strcat seems to be necessary
+					votecalled = strzone(vote);
 					votecaller = self; // remember who called the vote
 					self.vote_vote = 1; // of course you vote yes
 					self.vote_finished = time + 60; // vote may run this long
