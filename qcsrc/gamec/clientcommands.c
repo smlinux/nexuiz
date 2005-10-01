@@ -36,9 +36,17 @@ void SV_ParseClientCommand(string s) {
 		}
 	} else if(argv(0) == "vote") {
 		if(argv(1) == "help") {
-			sprint(self, "^1You can use vote with \"^2help^1\" \"^2status^1\" \"^2call^1\" \"^2stop^1\" \"^2yes^1\" \"^2no^1\".\n");
+			sprint(self, "^1You can use voting with \"^2cmd vote help^1\" \"^2cmd vote status^1\" \"^2cmd vote call ^3COMMAND ARGUMENTS^1\" \"^2cmd vote stop^1\" \"^2cmd vote yes^1\" \"^2cmd vote no^1\".\n");
+			sprint(self, "^1Or if your version is up to date you can use these aliases \"^2vhelp^1\" \"^2vstatus^1\" \"^2vcall ^3COMMAND ARGUMENTS^1\" \"^2vstop^1\" \"^2vyes^1\" \"^2vno^1\".\n");
+			sprint(self, "^1\"^2help^1\" shows this info.\n");
+			sprint(self, "^1\"^2status^1\" shows if there is a vote called and who called it.\n");
+			sprint(self, "^1\"^2call^1\" is used to call a vote. See the list of allowed commands.\n");
+			sprint(self, "^1If more then 50% of the players vote yes the vote is executed.\n");
+			sprint(self, "^1If more then 50% of the players vote no the vote fails.\n");
+			sprint(self, "^1\"^2stop^1\" can be used by the vote caller to stop a vote and maybe correct it.\n");
+			sprint(self, "^1\"^2yes^1\" and \"^2no^1\" to make your vote.\n");
 			sprint(self, "^1You can call a vote with these commands:\n");
-			sprint(self, strcat("^2", cvar_string("sv_vote_allowed"), "\n"));
+			sprint(self, strcat("^1\"^2vcall^1\" ^3", cvar_string("sv_vote_allowed"), "^1 and further ^3arguments^1\n"));
 		} else if(argv(1) == "status") {
 			if(votecalled == "") {
 				sprint(self, "^1No vote called.\n");
@@ -56,6 +64,29 @@ void SV_ParseClientCommand(string s) {
 					index++;
 				}
 
+				// necessary for some of the string operations
+				vote = strzone(vote);
+
+				// now we remove some things that could be misused
+				index = 0;
+				local float found;
+				found = FALSE;
+				local float votelength;
+				votelength = strlen(vote);
+				while(!found && index < votelength)
+				{
+					local string badchar;
+					badchar = substring(vote, index, 1);
+					if(badchar == ";"
+					   || badchar == "\n")
+					{
+						found = TRUE;
+					} else {
+						index++;
+					}
+				}
+				vote = substring(vote, 0, index);
+
 				if(vote == "") {
 					sprint(self, "^1You have to vote for something.\n");
 				} else if(time < self.vote_next) {
@@ -64,8 +95,8 @@ void SV_ParseClientCommand(string s) {
 					votecalled = strzone(vote);
 					votecaller = self; // remember who called the vote
 					self.vote_vote = 1; // of course you vote yes
-					self.vote_finished = time + 60; // vote may run this long
-					self.vote_next = time + 300; // no more votes from that player for this long
+					self.vote_finished = time + cvar("sv_vote_timeout");
+					self.vote_next = time + cvar("sv_vote_wait");
 					bprint(strcat("^3Vote for \"^1", votecalled, "^3\" called by \"", self.netname, "^3\".\n"));
 					VoteCount(); // needed if you are the only one
 				} else {
@@ -93,7 +124,7 @@ void SV_ParseClientCommand(string s) {
 			} else if(self.vote_vote == 0
 				  || cvar("sv_vote_change")) {
 				self.vote_vote = 1;
-				if(cvar_string("sv_vote_singlecount") == "") {
+				if(!cvar("sv_vote_singlecount")) {
 					VoteCount();
 				}
 			} else {
@@ -105,7 +136,7 @@ void SV_ParseClientCommand(string s) {
 			} else if(self.vote_vote == 0
 				  || cvar("sv_vote_change")) {
 				self.vote_vote = -1;
-				if(cvar_string("sv_vote_singlecount") == "") {
+				if(!cvar("sv_vote_singlecount")) {
 					VoteCount();
 				}
 			} else {
