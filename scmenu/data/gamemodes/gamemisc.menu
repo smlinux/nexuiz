@@ -53,6 +53,13 @@ Item DataContainer Misc
 
 		[DataLink_OnOffSwitch]
 	}
+	Item Data_Cvar MidAir
+	{
+		cvarName	"g_midair"
+		defValue	0
+
+		[DataLink_OnOffSwitch]
+	}
 	Item Data_Cvar Casings
 	{
 		cvarName	"g_casings"

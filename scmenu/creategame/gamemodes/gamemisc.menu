@@ -43,6 +43,11 @@ Item Layout Misc
 		text	"Vampire Mode"
 		target	"::Data::Game::Misc::Vampire::Switch"
 	}
+	Derive Nex_Option_Switch MidAir
+	{
+		text	"MidAir"
+		target	"::Data::Game::Misc::MidAir::Switch"
+	}
 	Derive Nex_Option_Switch Casings
 	{
 		text	"Bullet Casings"
