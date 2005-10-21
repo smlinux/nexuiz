@@ -79,7 +79,8 @@ void() W_Electro_Attack
 
 	self.punchangle_x = -2;
 
-	self.ammo_cells = self.ammo_cells - 2;
+	if (cvar("g_use_ammunition"))
+		self.ammo_cells = self.ammo_cells - 2;
 
 	if (self.electrocount == 0)
 	{
@@ -123,7 +124,8 @@ void() W_Electro_Attack
 	else
 	*/
 	{
-		self.ammo_cells = self.ammo_cells - 2;
+		if (cvar("g_use_ammunition"))
+			self.ammo_cells = self.ammo_cells - 2;
 		proj.effects = EF_BRIGHTFIELD | EF_FULLBRIGHT;
 		proj.movetype = MOVETYPE_FLY;
 		proj.velocity = v_forward * cvar("g_balance_electro_speed");
@@ -172,7 +174,8 @@ void() W_Electro_Attack2
 
 	//if (self.button3)
 	{
-		self.ammo_cells = self.ammo_cells - 1;
+		if (cvar("g_use_ammunition"))
+			self.ammo_cells = self.ammo_cells - 1;
 		proj.effects = EF_FULLBRIGHT;
 		proj.movetype = MOVETYPE_BOUNCE;
 		proj.velocity = v_forward * cvar("g_balance_electro_ballspeed") + v_up * cvar("g_balance_electro_ballspeed_up");

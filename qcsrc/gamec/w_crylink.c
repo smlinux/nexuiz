@@ -61,7 +61,8 @@ void W_Crylink_Attack (void)
 	local entity proj;
 
 	sound (self, CHAN_WEAPON, "weapons/crylink.wav", 1, ATTN_NORM);
-	self.ammo_cells = self.ammo_cells - 1;
+	if (cvar("g_use_ammunition"))
+		self.ammo_cells = self.ammo_cells - 1;
 	self.punchangle_x = -2;
 	org = self.origin + self.view_ofs + v_forward * 10 + v_right * 5 + v_up * -14;
 	te_smallflash(org);

@@ -34,7 +34,8 @@ void W_Uzi_Attack (void)
 	local vector org;
 	entity flash;
 	sound (self, CHAN_WEAPON, "weapons/uzi_fire.wav", 1, ATTN_NORM);
-	self.ammo_nails = self.ammo_nails - 1;
+	if (cvar("g_use_ammunition"))
+		self.ammo_nails = self.ammo_nails - 1;
 	self.punchangle_x = random () - 0.5;
 	self.punchangle_y = random () - 0.5;
 	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 8) + (v_forward * 15);

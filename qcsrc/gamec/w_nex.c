@@ -78,7 +78,7 @@ void W_Nex_Attack (void)
 	// play a sound
 	PointSound (trace_endpos, "weapons/neximpact.wav", 1, ATTN_NORM);
 
-	if (cvar("g_instagib") == 0)
+	if (cvar("g_use_ammunition"))
 		self.ammo_cells = self.ammo_cells - 5;
 
 	flash = spawn ();

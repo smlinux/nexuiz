@@ -115,7 +115,7 @@ void SpawnThrownWeapon (vector org, float w)
 {
 	local entity oldself;
 
-	if ((cvar("g_instagib") == 1) || (cvar("g_rocketarena") == 1))
+	if (!cvar("g_pickup_items"))
 		return;
 	if (w == IT_LASER)
 		return;

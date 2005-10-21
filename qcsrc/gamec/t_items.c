@@ -111,7 +111,7 @@ void RemoveItem(void) = {
 
 void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, string itemname, float itemid, float itemflags)
 {
-	if ((cvar("g_instagib") == 1) | (cvar("g_rocketarena") == 1))
+	if (!cvar("g_pickup_items"))
 	{
 		remove (self);
 		return;

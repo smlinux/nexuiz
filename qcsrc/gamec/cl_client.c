@@ -229,35 +229,63 @@ void PutClientInServer (void)
 	// don't reset back to last position, even if new position is stuck in solid
 	self.oldorigin = self.origin;
 
-//	self.items = IT_LASER | IT_UZI| IT_SHOTGUN | IT_GRENADE_LAUNCHER | IT_ELECTRO | IT_CRYLINK | IT_NEX | IT_HAGAR | IT_ROCKET_LAUNCHER;
-//	self.weapon = IT_UZI;
-
-	if (cvar("g_instagib") == 1)
-	{
-		self.items = IT_NEX;
-		self.switchweapon = WEP_NEX;
-		self.ammo_shells = 0;
-		self.ammo_nails = 0;
-		self.ammo_rockets = 0;
+	if (cvar("g_use_ammunition")) {
+		self.ammo_shells = cvar("g_start_ammo_shells");
+		self.ammo_nails = cvar("g_start_ammo_nails");
+		self.ammo_rockets = cvar("g_start_ammo_rockets");
+		self.ammo_cells = cvar("g_start_ammo_cells");
+	} else {
+		self.ammo_shells = 999;
+		self.ammo_nails = 999;
+		self.ammo_rockets = 999;
 		self.ammo_cells = 999;
 	}
-	else if (cvar("g_rocketarena") == 1)
+
+	self.items = 0;
+	if (cvar("g_start_weapon_laser"))
 	{
-		self.items = IT_ROCKET_LAUNCHER;
-		self.switchweapon = WEP_ROCKET_LAUNCHER;
-		self.ammo_shells = 0;
-		self.ammo_nails = 0;
-		self.ammo_rockets = 999;
-		self.ammo_cells = 0;
+		self.items = self.items | IT_LASER;
+		self.switchweapon = WEP_LASER;
 	}
-	else
+	if (cvar("g_start_weapon_shotgun"))
 	{
-		self.items = IT_LASER | IT_SHOTGUN;
+		self.items = self.items | IT_SHOTGUN;
 		self.switchweapon = WEP_SHOTGUN;
-		self.ammo_shells = 50;
-		self.ammo_nails = 0;
-		self.ammo_rockets = 0;
-		self.ammo_cells = 0;
+	}
+	if (cvar("g_start_weapon_uzi"))
+	{
+		self.items = self.items | IT_UZI;
+		self.switchweapon = WEP_UZI;
+	}
+	if (cvar("g_start_weapon_grenadelauncher"))
+	{
+		self.items = self.items | IT_GRENADE_LAUNCHER;
+		self.switchweapon = WEP_GRENADE_LAUNCHER;
+	}
+	if (cvar("g_start_weapon_electro"))
+	{
+		self.items = self.items | IT_ELECTRO;
+		self.switchweapon = WEP_ELECTRO;
+	}
+	if (cvar("g_start_weapon_crylink"))
+	{
+		self.items = self.items | IT_CRYLINK;
+		self.switchweapon = WEP_CRYLINK;
+	}
+	if (cvar("g_start_weapon_nex"))
+	{
+		self.items = self.items | IT_NEX;
+		self.switchweapon = WEP_NEX;
+	}
+	if (cvar("g_start_weapon_hagar"))
+	{
+		self.items = self.items | IT_HAGAR;
+		self.switchweapon = WEP_HAGAR;
+	}
+	if (cvar("g_start_weapon_rocketlauncher"))
+	{
+		self.items = self.items | IT_ROCKET_LAUNCHER;
+		self.switchweapon = WEP_ROCKET_LAUNCHER;
 	}
 
 	self.event_damage = PlayerDamage;

@@ -66,7 +66,8 @@ void W_Grenade_Attack (void)
 
 	sound (self, CHAN_WEAPON, "weapons/grenade_fire.wav", 1, ATTN_NORM);
 	self.punchangle_x = -4;
-	self.ammo_rockets = self.ammo_rockets - 2;
+	if (cvar("g_use_ammunition"))
+		self.ammo_rockets = self.ammo_rockets - 2;
 	org = self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -12;
 
 	gren = spawn ();

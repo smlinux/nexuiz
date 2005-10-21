@@ -50,7 +50,8 @@ void W_Shotgun_Attack (void)
 	spread = cvar("g_balance_shotgun_spread");
 	for (sc = 0;sc < bullets;sc = sc + 1)
 		fireBullet (org, v_forward, spread, d, IT_SHOTGUN, sc < 3);
-	self.ammo_shells = self.ammo_shells - 1;
+	if (cvar("g_use_ammunition"))
+		self.ammo_shells = self.ammo_shells - 1;
 
 	// casing code
 	if (cvar("g_casings") >= 1)

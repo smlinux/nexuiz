@@ -350,7 +350,7 @@ void W_PreviousWeapon (void)
 */
 float W_CheckAmmo (void)
 {
-	if ((cvar("g_instagib") == 1) | (cvar("g_rocketarena") == 1))
+	if (!cvar("g_use_ammunition"))
 		return TRUE;
 
 	W_UpdateAmmo ();

@@ -207,15 +207,11 @@ void(float x, float y, float z) weapon_shotdir =
 // perform weapon to attack (weaponstate and attack_finished check is here)
 void(float() checkfunc1, float() checkfunc2, void() firefunc, float atktime) weapon_prepareattack =
 {
-	// Change to best weapon if failed
-	if ((cvar("g_instagib") == 0) && (cvar("g_rocketarena") == 0))
+	if (!checkfunc1())
 	{
-		if (!checkfunc1())
-		{
-			if (!checkfunc2())
-				self.switchweapon = w_getbestweapon(self);
-			return;
-		}
+		if (!checkfunc2())
+			self.switchweapon = w_getbestweapon(self);
+		return;
 	}
 	// Don't do shot if previos attack  not finished
 		if (time < self.attack_finished)
@@ -231,15 +227,11 @@ void(float() checkfunc1, float() checkfunc2, void() firefunc, float atktime) wea
 // perform weapon attack
 void(float() checkfunc1, float() checkfunc2, void() firefunc) weapon_doattack
 {
-	// Change to best weapon if failed
-	if ((cvar("g_instagib") == 0) && (cvar("g_rocketarena") == 0))
+	if (!checkfunc1())
 	{
-		if (!checkfunc1())
-		{
-			if (!checkfunc2())
-				self.switchweapon = w_getbestweapon(self);
-			return;
-		}
+		if (!checkfunc2())
+			self.switchweapon = w_getbestweapon(self);
+		return;
 	}
 	self.weaponentity.state = WS_INUSE;
 	firefunc();

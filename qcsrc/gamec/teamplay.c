@@ -200,6 +200,34 @@ void InitGameplayMode()
 		runematch_init();
 	else if (game == GAME_TEAM_DEATHMATCH)//cvar("g_runematch"))
 		tdm_init();
+
+	// be backwards compatible
+	if (cvar("g_instagib")) {
+		cvar_set("g_start_weapon_laser", ftos(FALSE));
+		cvar_set("g_start_weapon_shotgun", ftos(FALSE));
+		cvar_set("g_start_weapon_uzi", ftos(FALSE));
+		cvar_set("g_start_weapon_grenadelauncher", ftos(FALSE));
+		cvar_set("g_start_weapon_electro", ftos(FALSE));
+		cvar_set("g_start_weapon_crylink", ftos(FALSE));
+		cvar_set("g_start_weapon_nex", ftos(TRUE));
+		cvar_set("g_start_weapon_hagar", ftos(FALSE));
+		cvar_set("g_start_weapon_rocketlauncher", ftos(FALSE));
+		cvar_set("g_pickup_items", ftos(FALSE));
+		cvar_set("g_use_ammunition", ftos(FALSE));
+	}
+	if (cvar("g_rocketarena")) {
+		cvar_set("g_start_weapon_laser", ftos(FALSE));
+		cvar_set("g_start_weapon_shotgun", ftos(FALSE));
+		cvar_set("g_start_weapon_uzi", ftos(FALSE));
+		cvar_set("g_start_weapon_grenadelauncher", ftos(FALSE));
+		cvar_set("g_start_weapon_electro", ftos(FALSE));
+		cvar_set("g_start_weapon_crylink", ftos(FALSE));
+		cvar_set("g_start_weapon_nex", ftos(FALSE));
+		cvar_set("g_start_weapon_hagar", ftos(FALSE));
+		cvar_set("g_start_weapon_rocketlauncher", ftos(TRUE));
+		cvar_set("g_pickup_items", ftos(FALSE));
+		cvar_set("g_use_ammunition", ftos(FALSE));
+	}
 }
 
 void PrintWelcomeMessage(entity pl)
