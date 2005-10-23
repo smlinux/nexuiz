@@ -66,7 +66,7 @@ void SV_PlayerPhysics()
 		stuffcmd(self, strcat("cl_upspeed ", temps, "\n"));
 
 		temps = ftos(sv_accelerate * maxspd_mod);
-		stuffcmd(self, strcat("cl_movement_accelerate ", temps));
+		stuffcmd(self, strcat("cl_movement_accelerate ", temps, "\n"));
 	}
 
 	// if dead, behave differently
