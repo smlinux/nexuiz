@@ -104,7 +104,9 @@ void InitGameplayMode()
 
 	// FIXME: also set a message or game mode name to print to players when the join
 
+	// set both here, gamemode can override it later
 	timelimit_override = cvar("timelimit_override");
+	fraglimit_override = cvar("fraglimit_override");
 
 	if(game == GAME_DOMINATION || cvar("g_domination"))
 	{
@@ -187,9 +189,9 @@ void InitGameplayMode()
 	}*/
 
 	// enforce the server's universal frag/time limits
-	if(fraglimit_override)
+	if(fraglimit_override >= 0)
 		cvar_set("fraglimit", ftos(fraglimit_override));
-	if(timelimit_override)
+	if(timelimit_override >= 0)
 		cvar_set("timelimit", ftos(timelimit_override));
 
 	if (game == GAME_DOMINATION)//cvar("g_domination"))
