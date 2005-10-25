@@ -13,9 +13,25 @@ Item DataContainer CTF
 	Item Data_Cvar CaptureLimit
 	{
 		cvarName	"g_ctf_capture_limit"
-		defValue	0
+		defValue	-1
 
-		[DataLink_Setting]
+		Item DataLink_Value Value
+		{
+			minValue	-1
+			maxValue	9999.0
+			stepValue	1
+			link 		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	8
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
 	}
 	Item Data_Cvar FlagReturnTime
 	{

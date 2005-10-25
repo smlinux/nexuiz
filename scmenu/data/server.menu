@@ -76,11 +76,13 @@ Item DataContainer Server
 	Item Data_Cvar TimeLimit
 	{
 		cvarName	"timelimit_override"
-		defValue	0
+		defValue	-1
 
 		Item DataLink_Value Value
 		{
+			minValue	-1
 			maxValue	86400
+			stepValue	1
 			link 		"##up"
 		}
 		Item DataLink_Text Text
@@ -88,7 +90,7 @@ Item DataContainer Server
 			maxValue	8
 			link		"##down"
 
-			Item DataLink_TextTime TextTime
+			Item DataLink_TextValue TextValue
 			{
 				link	"##up prev"
 			}
@@ -97,9 +99,25 @@ Item DataContainer Server
 	Item Data_Cvar FragLimit
 	{
 		cvarName	"fraglimit_override"
-		defValue	20
+		defValue	-1
 
-		[DataLink_Setting]
+		Item DataLink_Value Value
+		{
+			minValue	-1
+			maxValue	9999.0
+			stepValue	1
+			link 		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	8
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
 	}
 	Item Data_Cvar ServerProgs
 	{

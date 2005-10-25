@@ -5,15 +5,15 @@ Item Layout Teamplay
 	origin		'450 0'
 	alignment	[AlignFirst]
 
-	Derive Nex_Option_EditBox FragLimit
-	{
-		text	"Frag Limit Override"
-		target	"Data::Server::FragLimit::Text"
-	}
 	Derive Nex_Option_EditBox TimeLimit
 	{
-		text	"Time Limit Override"
+		text	"Time Limit Override (disable: -1)"
 		target	"Data::Server::TimeLimit::Text"
+	}
+	Derive Nex_Option_EditBox FragLimit
+	{
+		text	"Frag Limit Override (disable: -1)"
+		target	"Data::Server::FragLimit::Text"
 	}
 	Derive Nex_Option_Switch DMForceTeamplay
 	{

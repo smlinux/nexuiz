@@ -7,9 +7,25 @@ Item DataContainer Runematch
 	Item Data_Cvar RunematchFragLimit
 	{
 		cvarName	"g_runematch_point_limit"
-		defValue	0
+		defValue	-1
 
-		[DataLink_Setting]
+		Item DataLink_Value Value
+		{
+			minValue	-1
+			maxValue	9999.0
+			stepValue	1
+			link 		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	8
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
 	}
 	Item Data_Cvar PointAmt
 	{
@@ -138,13 +154,47 @@ Item DataContainer Runematch
 	{
 		cvarName	"g_balance_curse_empathy_takedamage"
 		defValue	-0.6
-		[DataLink_Setting]
+
+		Item DataLink_Value Value
+		{
+			minValue	-1
+			maxValue	0
+			stepValue	0.01
+			link 		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	8
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
 	}
 	Item Data_Cvar VampireComboDamage
 	{
 		cvarName	"g_balance_rune_vampire_combo_absorb"
 		defValue	-0.2
-		[DataLink_Setting]
+
+		Item DataLink_Value Value
+		{
+			minValue	-1
+			maxValue	0
+			stepValue	0.01
+			link 		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	8
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
 	}
 
 
