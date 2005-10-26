@@ -486,7 +486,6 @@ void() MauveBot_AI =
 	
 	if (clienttype(self) != CLIENTTYPE_BOT)
 	{
-		local entity ent;
 		local float flo;
 
 		if (time >= 3)

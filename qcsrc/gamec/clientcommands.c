@@ -1,4 +1,6 @@
 void SV_ParseClientCommand(string s) {
+	local float index;
+
 	tokenize(s);
 
 	if(argv(0) == "clogin") {
@@ -10,7 +12,8 @@ void SV_ParseClientCommand(string s) {
 				sprint(self, "You now have remote admin status.\n");
 			} else {
 				sprint(self, "Wrong password.\n");
-				self.adminstatus--;
+				// use of -- produces compiler warning in the if() line???
+				self.adminstatus = self.adminstatus - 1;
 				if(self.adminstatus == 0)
 					sprint(self, "You lost remote admin status.\n");
 			}
@@ -22,7 +25,6 @@ void SV_ParseClientCommand(string s) {
 			if(self.adminstatus > 0) {
 				local string command;
 				command = argv(1);
-				local float index;
 				index = 2;
 				while(argv(index) != "") {
 					command = strcat(command, " ", argv(index));
@@ -57,7 +59,6 @@ void SV_ParseClientCommand(string s) {
 			if(votecalled == "") {
 				local string vote;
 				vote = argv(2);
-				local float index;
 				index = 3;
 				while(argv(index) != "") {
 					vote = strcat(vote, " ", argv(index));

@@ -37,6 +37,9 @@ void junk_function ()
 	self.renderamt = 0;
 	self.rendermode = 0;
 	self.rendercolor = '0 0 0';
+	self.light_lev = 0;
+	self.color = '0 0 0';
+	self.style = 0;
 	bprint(ftos(sv_maxairspeed), "\n");
 }
 
