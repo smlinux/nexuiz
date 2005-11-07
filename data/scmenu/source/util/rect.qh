@@ -1,0 +1,27 @@
+// NG Menu
+// util/rect.qh
+
+// rect utils
+// a rect def. consists of 2 vectors (pos & size)
+bool( vector pPoint, vector pPos, vector pSize ) Util_InRect;
+vector( vector pPoint, vector pClipPos, vector pClipSize ) Util_GetClipDelta;
+//vector( vector pPoint, vector pPos, vector pSize ) Util_ClipPoint;
+// clips the rect [pPos, pSize] against [pClipPos, pClipSize] retuns the clipped size
+vector( vector pPos, vector pSize, vector pClipPos, vector pClipSize ) Util_ClipRect;
+
+bool( vector pPos1, vector pSize1, vector pPos2, vector pSize2 ) Util_RectInRect;
+
+// clip stack functions
+string( string pStack ) Util_ClipStack_Reset;
+string( string pStack, vector pPos, vector pSize ) Util_ClipStack_Push;
+string( string pStack ) Util_ClipStack_Pop;
+
+vector( string pStack ) Util_ClipStack_GetPosition;
+vector( string pStack ) Util_ClipStack_GetSize;
+
+// origin stack functions
+string( string pStack ) Util_OriginStack_Reset;
+string( string pStack, vector pOrigin ) Util_OriginStack_Push;
+string( string pStack ) Util_OriginStack_Pop;
+
+vector( string pStack ) Util_OriginStack_Get;

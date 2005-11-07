@@ -1,0 +1,65 @@
+// Property of Alientrap
+// custom/key.qm
+
+// link is the name of the datalink
+.string target;
+// text is the description text
+.string text;
+
+/*
+===================
+Nex_Automation_Key
+===================
+*/
+// Embedded in a window with the following subitems: Action, Link1, Link2
+void() Nex_Automation_Key =
+{
+	local entity lAction, lLink1, lLink2;
+
+	if( !self._parent.target ) {
+		objerror( "Bad target '", self._parent.target, "'" );
+		return;
+	}
+
+	// Get the children
+	lAction = Menu_GetItem( "Action" );
+	lLink1 = Menu_GetItem( "Link1" );
+	lLink2 = Menu_GetItem( "Link2" );
+
+	// Now set the properties
+	// (will be strzoned later by the Spawn functions)
+	lAction.text = self._parent.text;
+
+	lLink1.link = self._parent.target;
+	lLink2.link = self._parent.target;
+};
+
+// more specific functions
+// Menu_KeyHook_Target points to Link1/2
+void( float pKey, float pAscii ) Nex_Key_KeyHook =
+{
+	local entity lItem;
+	if( pKey != K_ESCAPE ) {
+		String_EntitySet( Menu_KeyHook_Target, value, ftos( pKey ) );
+		Raise_DataEvent( Menu_KeyHook_Target, ITEM_DATALINK_SET );
+		Raise_DataEvent( Menu_KeyHook_Target, ITEM_DATA_TEST_START );
+	}
+	// hide the info window again
+	lItem = Menu_GetItemEx( Menu_KeyHook_Target, "InfoWindow", true );
+	lItem.flag = lItem.flag | FLAG_HIDDEN;
+
+	Menu_KeyHook = Util_NullFunction;
+};
+
+void() Nex_Action_KeyButton =
+{
+	local entity lItem;
+
+	Menu_KeyHook_Target = self._target._link;
+	Menu_KeyHook = Nex_Key_KeyHook;
+
+	// show the info window
+	lItem = Menu_GetItem( "InfoWindow" );
+	lItem.flag = lItem.flag - (lItem.flag & FLAG_HIDDEN);
+};
+

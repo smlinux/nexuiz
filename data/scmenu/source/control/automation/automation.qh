@@ -1,0 +1,30 @@
+// DP/Nex Menu
+// control/automation/automation.qh
+
+// [Item_Automation]
+void() Item_Automation_Init;
+
+// Item_Automation_ForEach [Item_Automation]
+.string target;		// target type (with Item_)
+.string link;	   	// "" for current namespace, else path to objects
+.entity _current; 	// current entity
+
+.event action;
+
+void() Item_Automation_ForEach_Spawn;
+
+// Item_Automation_Job [Item_Automation]
+.event action;
+
+// [Item_Task]
+void() Item_Task_Init;
+
+void() Item_Automation_Job_Spawn;
+
+// Item_Task_Job [Item_Task]
+.event init;
+.event reinit;
+.event update;
+.event destroy;
+
+void() Item_Task_Job_Spawn;

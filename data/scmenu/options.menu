@@ -1,0 +1,75 @@
+// Property of Alientrap/AK
+// Options menu
+
+Item Layout Options
+{
+	direction '20 0'
+
+	Item Arrangement Menu
+	{
+		direction '0 10'
+
+		Derive TextButton Player
+		{
+			normal		"Player"
+
+			init 		Nex_Action_JumpToPage
+			target		"Panel::Player"
+		}
+		Derive TextButton Controls
+		{
+			normal		"Controls"
+
+			init		Nex_Action_JumpToPage
+			target		"Panel::KeyControl"
+		}
+		Derive TextButton Audio
+		{
+			normal 		"Audio"
+
+			init		Nex_Action_JumpToPage
+			target		"Panel::Sound"
+		}
+		Derive TextButton Video
+		{
+			normal		"Video"
+
+			init		Nex_Action_JumpToPage
+			target		"Panel::Video"
+		}
+		Derive TextButton ColorControl
+		{
+			normal		"Color Control"
+
+			init		Nex_Action_JumpToPage
+			target		"Panel::ColorControl"
+		}
+		Derive TextButton Effects
+		{
+			normal		"Effects"
+
+			init		Nex_Action_JumpToPage
+			target		"Panel::Effects"
+		}
+		Derive TextButton Input
+		{
+			normal		"Input"
+
+			init		Nex_Action_JumpToPage
+			target		"Panel::Input"
+		}
+	}
+	Item EventWindow Panel
+	{
+		size	'760 800'
+		reinit	Nex_Action_MakeFirstVisible
+
+		#include "menu/options/sound.menu"
+		#include "menu/options/video.menu"
+		#include "menu/options/key.menu"
+		#include "menu/options/player.menu"
+		#include "menu/options/color.menu"
+		#include "menu/options/effects.menu"
+		#include "menu/options/input.menu"
+	}
+}

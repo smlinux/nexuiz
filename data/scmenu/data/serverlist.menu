@@ -1,0 +1,17 @@
+// Property of Alientrap
+//
+// data/serverlist.menu
+
+Item DataContainer ServerList
+{
+	Item Data_CvarCreateSave QueryString
+	{
+		cvarName	"scmenu_querystring"
+
+		Item DataLink_Text Text
+		{
+			maxValue	1024
+			link		"##up"
+		}
+	}
+}

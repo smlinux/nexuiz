@@ -1,0 +1,95 @@
+// Property of Alientrap/AK
+//
+// data/effects.menu
+
+Item DataContainer Effects
+{
+	Item Data_Cvar Particles
+	{
+		cvarName	"cl_particles"
+		defValue	1
+
+		[DataLink_OnOffSwitch]
+	}
+	Item Data_Cvar ParticleQuality
+	{
+		cvarName	"cl_particles_quality"
+		defValue	1
+		Item DataLink_Value Value
+		{
+			minValue	0.0
+			maxValue	4.0
+			stepValue	1
+			link		"##up"
+		}
+	}
+	Item Data_Cvar Decals
+	{
+		cvarName	"cl_decals"
+		defValue	1
+
+		[DataLink_OnOffSwitch]
+	}
+	Item Data_Cvar Bloom
+	{
+		cvarName	"r_bloom"
+		defValue	1
+
+		[DataLink_OnOffSwitch]
+	}
+	Item Data_Cvar Coronas
+	{
+		cvarName	"r_coronas"
+		defValue	1
+
+		[DataLink_OnOffSwitch]
+	}
+	Item Data_Cvar RealtimeLights
+	{
+		cvarName	"r_shadow_realtime_world"
+		defValue	1
+
+		[DataLink_OnOffSwitch]
+	}
+	Item Data_Cvar RealtimeDLights
+	{
+		cvarName	"r_shadow_realtime_dlight"
+		defValue	1
+
+		[DataLink_OnOffSwitch]
+	}
+	Item Data_Cvar RealtimeShadows
+	{
+		cvarName	"r_shadow_realtime_world_shadows"
+		defValue	0
+
+		[DataLink_OnOffSwitch]
+	}
+	Item Data_Cvar RealtimeDLightShadows
+	{
+		cvarName	"r_shadow_realtime_world_dlightshadows"
+		defValue	0
+
+		[DataLink_OnOffSwitch]
+	}	
+	Item Data_Cvar GLSL
+	{
+		cvarName	"r_shadow_glsl"
+		defValue	1
+		[DataLink_OnOffSwitch]
+	}
+	Item Data_Cvar Gloss
+	{
+		cvarName	"r_shadow_gloss"
+		defValue	1
+
+		[DataLink_OnOffSwitch]
+	}
+	Item Data_Cvar ShowFPS
+	{
+		cvarName	"showfps"
+		defValue	"0"
+
+		[DataLink_OnOffSwitch]
+	}
+}

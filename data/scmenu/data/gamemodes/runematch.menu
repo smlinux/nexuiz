@@ -1,0 +1,300 @@
+// Property of Alientrap
+//
+// data/ctf.menu
+
+Item DataContainer Runematch
+{
+	Item Data_Cvar RunematchFragLimit
+	{
+		cvarName	"g_runematch_point_limit"
+		defValue	-1
+
+		Item DataLink_Value Value
+		{
+			minValue	-1
+			maxValue	9999.0
+			stepValue	1
+			link 		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	8
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar PointAmt
+	{
+		cvarName	"g_runematch_pointamt"
+		defValue	1
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar PointRate
+	{
+		cvarName	"g_runematch_pointrate"
+		defValue	5
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar RuneRespawnTime
+	{
+		cvarName	"g_runematch_respawntime"
+		defValue	15
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar RuneShuffleTime
+	{
+		cvarName	"g_runematch_shuffletime"
+		defValue	30
+
+		[DataLink_Setting]
+	}
+
+	Item Data_Cvar FragsKilledbyRuneholder
+	{
+		cvarName	"g_runematch_frags_killedby_runeholder"
+		defValue	4
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar FragsKilledRuneholder
+	{
+		cvarName	"g_runematch_frags_killed_runeholder"
+		defValue	5
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar FragsKillNoRunes
+	{
+		cvarName	"g_runematch_frags_norune"
+		defValue	0
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar MaxRunesToDrop
+	{
+		cvarName	"g_runematch_drop_runes_max"
+		defValue	2
+
+		[DataLink_Setting]
+	}
+
+
+	Item Data_Cvar StrengthDamage
+	{
+		cvarName	"g_balance_rune_strength_damage"
+		defValue	2.0
+		[DataLink_Setting]
+	}
+	Item Data_Cvar StrengthForce
+	{
+		cvarName	"g_balance_rune_strength_force"
+		defValue	1.5
+		[DataLink_Setting]
+	}
+	Item Data_Cvar WeaknessDamage
+	{
+		cvarName	"g_balance_curse_weak_damage"
+		defValue	0.5
+		[DataLink_Setting]
+	}
+	Item Data_Cvar WeaknessForce
+	{
+		cvarName	"g_balance_curse_weak_force"
+		defValue	0.5
+		[DataLink_Setting]
+	}
+	Item Data_Cvar StrengthComboDamage
+	{
+		cvarName	"g_balance_rune_strength_combo_damage"
+		defValue	0.9
+		[DataLink_Setting]
+	}
+	Item Data_Cvar StrengthComboForce
+	{
+		cvarName	"g_balance_rune_strength_combo_force"
+		defValue	1.0
+		[DataLink_Setting]
+	}
+
+
+	Item Data_Cvar DefenseDamage
+	{
+		cvarName	"g_balance_rune_defense_takedamage"
+		defValue	0.5
+		[DataLink_Setting]
+	}
+	Item Data_Cvar VulnerDamage
+	{
+		cvarName	"g_balance_curse_vulner_takedamage"
+		defValue	2.0
+		[DataLink_Setting]
+	}
+	Item Data_Cvar DefenseComboDamage
+	{
+		cvarName	"g_balance_rune_defense_combo_takedamage"
+		defValue	1.0
+		[DataLink_Setting]
+	}
+
+
+	Item Data_Cvar VampireDamage
+	{
+		cvarName	"g_balance_rune_vampire_absorb"
+		defValue	0.5
+		[DataLink_Setting]
+	}
+	Item Data_Cvar EmpathyDamage
+	{
+		cvarName	"g_balance_curse_empathy_takedamage"
+		defValue	-0.6
+
+		Item DataLink_Value Value
+		{
+			minValue	-1
+			maxValue	0
+			stepValue	0.01
+			link 		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	8
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar VampireComboDamage
+	{
+		cvarName	"g_balance_rune_vampire_combo_absorb"
+		defValue	-0.2
+
+		Item DataLink_Value Value
+		{
+			minValue	-1
+			maxValue	0
+			stepValue	0.01
+			link 		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	8
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+
+
+	Item Data_Cvar RegenHP
+	{
+		cvarName	"g_balance_rune_regen_hpmod"
+		defValue	1.75
+		[DataLink_Setting]
+	}
+	Item Data_Cvar VenomHP
+	{
+		cvarName	"g_balance_curse_venom_hpmod"
+		defValue	0.6
+		[DataLink_Setting]
+	}
+	Item Data_Cvar RegenComboHP
+	{
+		cvarName	"g_balance_rune_regen_combo_hpmod"
+		defValue	0.9
+		[DataLink_Setting]
+	}
+	Item Data_Cvar RegenSpeed
+	{
+		cvarName	"g_balance_rune_regen_regenrate"
+		defValue	3.0
+		[DataLink_Setting]
+	}
+	Item Data_Cvar VenomSpeed
+	{
+		cvarName	"g_balance_curse_venom_rotrate"
+		defValue	3.0
+		[DataLink_Setting]
+	}
+	Item Data_Cvar RegenComboRegenSpeed
+	{
+		cvarName	"g_balance_rune_regen_combo_regenrate"
+		defValue	0.5
+		[DataLink_Setting]
+	}
+	Item Data_Cvar RegenComboDegenSpeed
+	{
+		cvarName	"g_balance_rune_regen_combo_rotrate"
+		defValue	1.5
+		[DataLink_Setting]
+	}
+
+
+	Item Data_Cvar SpeedMoverate
+	{
+		cvarName	"g_balance_rune_speed_moverate"
+		defValue	1.5
+		[DataLink_Setting]
+	}
+	Item Data_Cvar SlowMoverate
+	{
+		cvarName	"g_balance_curse_slow_moverate"
+		defValue	0.6
+		[DataLink_Setting]
+	}
+	Item Data_Cvar SpeedComboMoverate
+	{
+		cvarName	"g_balance_rune_speed_combo_moverate"
+		defValue	0.9
+		[DataLink_Setting]
+	}
+	Item Data_Cvar SpeedAtkrate
+	{
+		cvarName	"g_balance_rune_speed_atkrate"
+		defValue	0.6
+		[DataLink_Setting]
+	}
+	Item Data_Cvar SlowAtkrate
+	{
+		cvarName	"g_balance_curse_slow_atkrate"
+		defValue	1.75
+		[DataLink_Setting]
+	}
+	Item Data_Cvar SpeedComboAtkrate
+	{
+		cvarName	"g_balance_rune_speed_combo_atkrate"
+		defValue	1.2
+		[DataLink_Setting]
+	}
+	Item Data_Cvar SpeedJumpHeight
+	{
+		cvarName	"g_balance_rune_speed_jumpheight"
+		defValue	2.5
+		[DataLink_Setting]
+	}
+	Item Data_Cvar SlowJumpHeight
+	{
+		cvarName	"g_balance_curse_slow_jumpheight"
+		defValue	1.0
+		[DataLink_Setting]
+	}
+	Item Data_Cvar SpeedComboJumpHeight
+	{
+		cvarName	"g_balance_rune_speed_combo_jumpheight"
+		defValue	1.0
+		[DataLink_Setting]
+	}
+
+}

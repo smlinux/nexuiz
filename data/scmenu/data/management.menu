@@ -1,0 +1,46 @@
+// Property of Alientrap
+//
+// data/management.menu
+
+Item DataContainer Management
+{
+	Item Data_Container Filename
+	{
+		Item DataLink_Text Text
+		{
+			maxValue	26
+			link		"##up"
+		}
+	}
+
+	Item Data_Container ConfigType
+	{
+		Item DataLink_ValueSwitch Switch
+		{
+			descList	"'Weapon Config' 'Game Config' 'Maplist'"
+			link		"##up"
+		}
+	}
+
+	Item DataContainer FileList
+	{
+		Item DataLink_Nex_FileList Weapon
+		{
+			normal		"cfg"
+			selected	"data/config/weapon/"
+		}
+
+		Item DataLink_Nex_FileList Game
+		{
+			normal		"cfg"
+			selected	"data/config/game/"
+		}
+
+		Item DataLink_Nex_FileList MapList
+		{
+			normal		"cfg"
+			selected	"data/config/maplist/"
+		}
+	}
+}
+

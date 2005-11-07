@@ -1,0 +1,79 @@
+// Property of Alientrap
+//
+// data/ctf.menu
+
+Item DataContainer CTF
+{
+	//Item Data_Cvar CTF_Active
+	//{
+	//	cvarName	"g_ctf"
+	//	defValue	0
+	//	[DataLink_OnOffSwitch]
+	//}
+	Item Data_Cvar CaptureLimit
+	{
+		cvarName	"g_ctf_capture_limit"
+		defValue	-1
+
+		Item DataLink_Value Value
+		{
+			minValue	-1
+			maxValue	9999.0
+			stepValue	1
+			link 		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	8
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar FlagReturnTime
+	{
+		cvarName	"g_ctf_flag_returntime"
+		defValue	20
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar FragsCapture
+	{
+		cvarName	"g_ctf_flagscore_capture"
+		defValue	5
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar FragsCaptureTeam
+	{
+		cvarName	"g_ctf_flagscore_capture_team"
+		defValue	20
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar FragsPickup
+	{
+		cvarName	"g_ctf_flagscore_pickup"
+		defValue	1
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar FragsReturn
+	{
+		cvarName	"g_ctf_flagscore_return"
+		defValue	5
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar FragsReturnRogue
+	{
+		cvarName	"g_ctf_flagscore_return_rogue"
+		defValue	10
+
+		[DataLink_Setting]
+	}
+
+}

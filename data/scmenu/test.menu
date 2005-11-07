@@ -1,0 +1,21 @@
+// DP/Nex Menu
+// Test Menu
+Item Window Normal
+{
+	pos	'100 100'
+	size	'800 500'
+
+	Item Window Test1
+	{
+		pos 	'10 10'
+		origin	'20 20'
+		size	'100 100'
+	}
+	Item Window Test2
+	{
+		pos	'200 200'
+		origin	'100 100'
+		size	'300 300'
+	}
+}
+

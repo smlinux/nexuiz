@@ -1,0 +1,294 @@
+// Property of Alientrap
+//
+// data/gamemisc.menu
+
+Item DataContainer Misc
+{
+	Item Data_Cvar JoinMessageTime
+	{
+		cvarName	"welcome_message_time"
+		defValue	8
+
+		[DataLink_Setting]
+	}
+	Item Data_CvarCreateSave Grapple
+	{
+		cvarName	"g_grappling_hook"
+		defValue	0
+
+		[DataLink_OnOffSwitch]
+	}
+	Item Data_CvarCreateSave GrappleFireSpeed
+	{
+		cvarName	"g_balance_grapplehook_speed_fly"
+		defValue	1200
+
+		[DataLink_Setting]
+	}
+	Item Data_CvarCreateSave GrapplePullSpeed
+	{
+		cvarName	"g_balance_grapplehook_speed_pull"
+		defValue	1000
+
+		[DataLink_Setting]
+	}	
+	Item Data_Cvar StartLaser
+	{
+		cvarName	"g_start_weapon_laser"
+		defValue	1
+
+		[DataLink_OnOffSwitch]
+	}
+	Item Data_Cvar StartShotgun
+	{
+		cvarName	"g_start_weapon_shotgun"
+		defValue	1
+
+		[DataLink_OnOffSwitch]
+	}
+	Item Data_Cvar StartUzi
+	{
+		cvarName	"g_start_weapon_uzi"
+		defValue	0
+
+		[DataLink_OnOffSwitch]
+	}
+	Item Data_Cvar StartGrenadelauncher
+	{
+		cvarName	"g_start_weapon_grenadelauncher"
+		defValue	0
+
+		[DataLink_OnOffSwitch]
+	}
+	Item Data_Cvar StartElectro
+	{
+		cvarName	"g_start_weapon_electro"
+		defValue	0
+
+		[DataLink_OnOffSwitch]
+	}
+	Item Data_Cvar StartCrylink
+	{
+		cvarName	"g_start_weapon_crylink"
+		defValue	0
+
+		[DataLink_OnOffSwitch]
+	}
+	Item Data_Cvar StartNex
+	{
+		cvarName	"g_start_weapon_nex"
+		defValue	0
+
+		[DataLink_OnOffSwitch]
+	}
+	Item Data_Cvar StartHagar
+	{
+		cvarName	"g_start_weapon_hagar"
+		defValue	0
+
+		[DataLink_OnOffSwitch]
+	}
+	Item Data_Cvar StartRocketlauncher
+	{
+		cvarName	"g_start_weapon_rocketlauncher"
+		defValue	0
+
+		[DataLink_OnOffSwitch]
+	}
+	Item Data_Cvar StartShells
+	{
+		cvarName	"g_start_ammo_shells"
+		defValue	50
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar StartNails
+	{
+		cvarName	"g_start_ammo_nails"
+		defValue	0
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar StartRockets
+	{
+		cvarName	"g_start_ammo_rockets"
+		defValue	0
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar StartCells
+	{
+		cvarName	"g_start_ammo_cells"
+		defValue	0
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar UseAmmunition
+	{
+		cvarName	"g_use_ammunition"
+		defValue	1
+
+		[DataLink_OnOffSwitch]
+	}
+	Item Data_Cvar PickupItems
+	{
+		cvarName	"g_pickup_items"
+		defValue	1
+
+		[DataLink_OnOffSwitch]
+	}
+	Item Data_Cvar Instagib
+	{
+		cvarName	"g_instagib"
+		defValue	0
+
+		[DataLink_OnOffSwitch]
+	}
+	Item Data_Cvar RocketArena
+	{
+		cvarName	"g_rocketarena"
+		defValue	0
+
+		[DataLink_OnOffSwitch]
+	}
+	Item Data_Cvar Vampire
+	{
+		cvarName	"g_vampire"
+		defValue	0
+
+		[DataLink_OnOffSwitch]
+	}
+	Item Data_Cvar MidAir
+	{
+		cvarName	"g_midair"
+		defValue	0
+
+		[DataLink_OnOffSwitch]
+	}
+	Item Data_Cvar Casings
+	{
+		cvarName	"g_casings"
+		defValue	0
+
+		[DataLink_OnOffSwitch]
+	}
+	Item Data_Cvar HealthStart
+	{
+		cvarName	"g_balance_health_start"
+		defValue	150
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar HealthRot
+	{
+		cvarName	"g_balance_health_rot"
+		defValue	0.1
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar HealthStable
+	{
+		cvarName	"g_balance_health_stable"
+		defValue	100
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar Gravity
+	{
+		cvarName	"sv_gravity"
+		defValue	800
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar MaxSpeed
+	{
+		cvarName	"sv_maxspeed"
+		defValue	400
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar GameSpeed
+	{
+		cvarName	"slowmo"
+		defValue	1
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar MaxAirSpeed
+	{
+		cvarName	"sv_maxairspeed"
+		defValue	50
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar JumpHeight
+	{
+		cvarName	"g_balance_jumpheight"
+		defValue	300
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar HealthRegeneration
+	{
+		cvarName	"g_balance_health_regen"
+		defValue	0.1
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar ArmorRott
+	{
+		cvarName	"g_balance_armor_rot"
+		defValue	0.1
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar ArmorRegen
+	{
+		cvarName	"g_balance_armor_regen"
+		defValue	0
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar ArmorStable
+	{
+		cvarName	"g_balance_armor_stable"
+		defValue	100
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar ArmorStart
+	{
+		cvarName	"g_balance_armor_start"
+		defValue	0
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar SelfDamagePercent
+	{
+		cvarName	"g_balance_selfdamagepercent"
+		defValue	0.6
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar WeaponSwitchDelay
+	{
+		cvarName	"g_balance_weaponswitchdelay"
+		defValue	0.3
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar Friction
+	{
+		cvarName	"sv_friction"
+		defValue	5
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar Accelerate
+	{
+		cvarName	"sv_accelerate"
+		defValue	5.5
+
+		[DataLink_Setting]
+	}
+}

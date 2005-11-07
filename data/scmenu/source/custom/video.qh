@@ -1,0 +1,9 @@
+// Property of Alientrap
+// custom/video.qh
+
+// Item_Data_Nex_Resolution [Item_Data]
+.string value; // contains the current resolution in the format "width height"
+
+void() Item_Data_Nex_Resolution_Spawn;
+
+

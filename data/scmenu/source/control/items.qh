@@ -1,0 +1,99 @@
+// DP/Nex Menu
+// control/items.qh
+
+/*
+Items/Controls:
+
+This control is supported/required by the menu manager :
+Item_Window
+Item_Reference
+
+Item_Layout
+
+The rest is not required:
+Item_Custom
+
+Item_Picture
+
+Item_Text
+
+Item_Rect
+
+ITEM_BUTTON
+ITEM_TEXTBUTTON
+
+
+
+ITEM_SLIDER
+
+ITEM_TEXTSWITCH
+*/
+
+// INFO: some information about the spawn functions
+// INFO: Since I dont want another namespace clutching all spawn functions will have a nice and neat
+// INFO: "_Spawn" suffix.
+
+// item constants
+
+const float ITEM_ALIGN_LEFT = 0;
+enumflags {
+	ITEM_ALIGN_CENTER,
+	ITEM_ALIGN_RIGHT,
+	ITEM_ALIGN_FIX_RIGHT,	// |text - actually this isnt necessary
+	ITEM_ALIGN_FIX_CENTER,	// te|xt
+	ITEM_ALIGN_FIX_LEFT,	// text|
+	ITEM_ALIGN_FIRST	// for layouts: Item| ... with | being the origin
+};
+
+// flags constant
+
+enumflags {
+	FLAG_TEMPLATE,			// this is a template do not touch, do not draw - actually dont do anything with it
+	FLAG_EMBEDDED,			// the item cant be selected and all its children are embedded into its parent
+	FLAG_HIDDEN,			// events wont be called and it wont be drawn, etc.
+	FLAG_NOSELECT,			// cant be selected (but events will be called)
+	FLAG_CONNECTEDONLY,		// only if connected (i.e. playing)
+	FLAG_SERVERONLY,		// only displayed if server
+	FLAG_DEVELOPERONLY,		// only displayed if developer
+	FLAG_DRAWONLY,			// only the draw event will be called
+	FLAG_CHILDDRAWONLY,		// used to make the children only drawable
+	FLAG_DRAWUPDATEONLY,		// only the draw and update event get called
+	FLAG_CHILDDRAWUPDATEONLY,	// only the draw and refresh events are called for children
+	FLAG_SEALOFFMOUSE		// used to seal all items under the item with this flag off from mouse events
+	// TODO: real seal off all events (not only items not being selected)
+};
+
+// [Item_Link] [Item}
+.entity _link; // item link
+
+void() Item_Link_Init;
+void() Item_Link_Destroy;
+void() Item_Link_Update;
+bool( float pKey, float pAscii ) Item_Link_Key;
+void() Item_Link_MouseEnter;
+
+bool() Item_Link_IsSelected;
+
+// [Item_Cinematic]
+.string link; // full name of the video
+.string normal; // normal name used with cachepic
+
+void() Item_Cinematic_Destroy;
+void() Item_Cinematic_Init;
+
+// Item_Cinematic_Loop [Item_Cinematic]
+void() Item_Cinematic_Loop_Spawn;
+
+// Item_Container
+// used for non-visible, non-selectable data
+void() Item_Container_Spawn;
+
+// Parser_Define
+.string name;
+.string value;
+
+/*
+// ITEM_EDITBOX (derived from ITEM_TEXT mostly)
+.string format; // //wildcards are * for each letter except the next after it - \* for * and * / space ' ' for one letter e.g. "   .   .   .   " for an ip field
+.float maxlen; // -1 for infinite
+.float _cursorpos;*/

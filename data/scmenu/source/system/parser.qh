@@ -1,0 +1,82 @@
+// DP/Nex Menu
+// system/parser.qh
+
+enum {
+	PARSER_TT_ITEM,
+	PARSER_TT_TEMPLATE,
+	PARSER_TT_DERIVE,
+	PARSER_TT_DERIVETEMPLATE,
+	PARSER_TT_DEFINE,
+	PARSER_TT_UNDEF,
+	PARSER_TT_IGNORE,
+	PARSER_TT_NAMESPACE,
+	PARSER_TT_INCLUDE,
+	PARSER_TT_BRACEOPEN,
+	PARSER_TT_BRACECLOSE,
+	PARSER_TT_BRACKETOPEN,
+	PARSER_TT_BRACKETCLOSE,
+	PARSER_TT_TOKEN,
+	PARSER_TT_SIZE
+};
+
+// FIXME: FTEQCC: const string PARSER_TT_TEXT[PARSER_TT_SIZE] = {
+const string PARSER_TT_TEXT[14] = {
+	"Item", "Template", "Derive", "DeriveTemplate", "Define", "#undef", "Ignore", "Namespace",
+	"#include", "{", "}", "[", "]", "Token"
+};
+
+const float PARSER_NORMAL = 0;
+enumflags {
+	PARSER_INFO,
+	PARSER_HIGH,
+	PARSER_LOW
+};
+
+const float Parser_MaxIncludeDepth = 32;
+
+string Parser_FileList;
+float  Parser_IncludeDepth;
+
+entity Parser_DefineChain;
+
+string Parser_Filename;
+float  Parser_LineNumber;
+
+float  Parser_File;
+string Parser_Line;
+
+float   Parser_NumTokens;
+float   Parser_TokenNum;
+string  Parser_Token;
+float 	Parser_TokenType;
+
+bool() Parser_GetToken;
+float() Parser_GetTokenType;
+
+void() Parser_ParseDefine;
+void() Parser_ProcessDefine;
+void() Parser_ParseUndef;
+
+void( float pType ) Parser_Expect;
+
+void( string pInfo ) Parser_Error;
+void( float pLevel, string pInfo ) Parser_Print;
+
+entity( string pNamespace ) Parser_ParseItem;
+entity( string pNamespace ) Parser_DeriveItem;
+string( string pNamespace, string pEntityText ) Parser_ParseEntity;
+void( string pNamespace ) Parser_ParseDefinition;
+void( string pNamespace ) Parser_ParseNamespace;
+void() Parser_ParseIgnore;
+
+void( entity pSource, entity pTarget ) Parser_CloneChildren;
+
+void( string pNamespace ) Parser_IncludeFile;
+
+void( string pFilename, string pNamespace ) Parser_ParseFile;
+
+void( string pPluginDir ) Parser_ParsePlugins;
+void( string pMain, string pPluginDir ) Parser_ParseMenu;
+
+void() Parser_Init;
+void() Parser_Quit;

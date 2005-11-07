@@ -1,0 +1,210 @@
+// DP/Nex Menu
+// control/visual/visual.qh
+
+// Item states
+enum {
+	ITEM_STATE_NORMAL,
+	ITEM_STATE_SELECTED,
+	ITEM_STATE_PRESSED
+};
+
+// Item_Picture
+.string picture;
+.vector color;
+.float 	alpha;
+.float  drawFlag;
+
+void() Item_Picture_Draw;
+void() Item_Picture_Destroy;
+void() Item_Picture_Spawn;
+
+// Item_Rect
+.vector color;
+.float 	alpha;
+.float  drawFlag;
+
+void() Item_Rect_Draw;
+void() Item_Rect_Spawn;
+
+// Item_Label
+.vector color;
+.float 	alpha;
+.float  drawFlag;
+.string text;
+.vector fontSize;
+.float	alignment;
+
+void() Item_Label_Draw;
+void() Item_Label_Update;
+void() Item_Label_Destroy;
+void() Item_Label_Spawn;
+
+// Item_MultiLabel implements Item_Label
+// multiline label
+.vector color;
+.float 	alpha;
+.float  drawFlag;
+.string text;
+.vector fontSize;
+.float	alignment;
+.float  wrap;	// 0 for no wrapping
+
+void() Item_MultiLabel_Update;
+void() Item_MultiLabel_Draw;
+void() Item_MultiLabel_Destroy;
+void() Item_MultiLabel_Spawn;
+
+// Item_Button [Item_Link]
+// add $ to the text if you want to use pictures
+// e.g. $gfx/menu_newgame
+// if selected is "" then it falls back to normal
+// if pressed is "" then it falls back to selected or normal (see above)
+.vector fontSize;
+.string normal;
+.string selected;
+.string pressed;
+.vector color;
+.vector colorSelected;
+.vector colorPressed;
+.vector drawFlags; // x = normal; y = selected; z = pressed
+.vector alphas;
+.string soundSelected;
+.string soundPressed;
+.float _presstime;
+.float _state;
+
+// cevents supported by Item_Button
+.event init;
+.event reinit;
+.event destroy;
+.event action;
+
+void() Item_Button_Draw;
+void() Item_Button_Update;
+void( bool pSelect, bool pUser ) Item_Button_Select;
+bool( float pKey, float pAscii ) Item_Button_Key;
+void() Item_Button_Destroy;
+void() Item_Button_Spawn;
+
+// Item_Slider [Item_DataUser]
+// Item_Slider changes link's value when the slider is moved
+// the slider is x-centered but not y
+.vector proportions; // x is left margin, y is slider width and z is right margin (sum should be 1)
+.string picture; // picture of the background
+.string pictureSlider; // picture of the slider
+.string soundSelected;
+.string soundIncrease;
+.string soundDecrease;
+.vector sizeSlider; // size of the slider
+.vector direction; // y values of the slider: _x for the start and _y for the end (as percentages of size_y)
+// only has normal and selected
+.vector color;
+.vector colorSelected;
+.vector drawFlags;
+.vector alphas;
+
+// cevents supported by Item_Slider
+.event init;
+.event reinit;
+.event action; // called when the slider is changed
+.event destroy;
+
+void( bool pSelect, bool pUser ) Item_Slider_Select;
+void() Item_Slider_Draw;
+bool( float pKey, float pAscii ) Item_Slider_Key;
+void() Item_Slider_Destroy;
+void() Item_Slider_Spawn;
+
+// Item_EditBox [Item_DataUser]
+.vector color;
+.vector colorSelected;
+.vector colorPressed;
+.vector alphas;
+.vector drawFlags;
+
+.vector colorCursor;
+.vector colorCursorFlash;
+.vector sizeCursor;
+.vector sizeCursorFlash;
+.vector alphasCursor;
+.vector drawFlagsCursor;
+
+.string soundSelected;
+.string soundKey;
+.string soundMove;
+
+.float _presstime;
+.float _state;
+.float _cursorPos;
+
+// cevents supported by Item_EditBox
+.event init;
+.event reinit;
+.event action; // called when the return key is pressed
+.event destroy;
+.selectEvent select;
+
+void() Item_EditBox_Draw;
+void() Item_EditBox_Update;
+bool( float pKey, float pAscii ) Item_EditBox_Key;
+void( bool pSelect, bool pUser ) Item_EditBox_Select;
+void() Item_EditBox_Destroy;
+void() Item_EditBox_Reinit;
+void() Item_EditBox_Spawn;
+
+// Item_ValueButton [Item_Button] [Item_DataUser] FIXME: actually this is bad practice
+
+void() Item_ValueButton_Update;
+void() Item_ValueButton_Destroy;
+void() Item_ValueButton_Spawn;
+
+// Item_SwitchButton Item_ValueButton
+bool( float pKey, float pAscii ) Item_SwitchButton_Key;
+void() Item_SwitchButton_Spawn;
+
+// Item_List [Item_DataUser]
+.vector fontSize;
+.vector colorSelected;
+.vector colorPressed;
+.vector colorInactive;
+.vector drawFlags; // x = normal; y = selected; z = pressed
+.float drawFlagInactive;
+.vector alphas;
+.float alphaInactive;
+.string soundSelected;
+.string soundPressed;
+.float _presstime;
+.float _state;
+
+// cevents supported by Item_List
+.event init;
+.event reinit;
+.event destroy;
+.event action; // called on double-click
+
+void() Item_List_Draw;
+void() Item_List_Update;
+void( bool pSelect, bool pUser ) Item_List_Select;
+bool( float pKey, float pAscii ) Item_List_Key;
+void() Item_List_Destroy;
+void() Item_List_Spawn;
+
+// Item_FloatingArea
+// When you click on the area, the target will move with the mouse cursor until you click again
+.float _state;
+.string target;
+.entity _target;
+bool( float pKey, float pAscii ) Item_FloatingArea_Key;
+void() Item_FloatingArea_Update;
+void() Item_FloatingArea_Spawn;
+
+// Item_VScrollBar
+// target should point to a ScrollWindow
+.string target;
+.entity _target;
+
+void() Item_VScrollBar_Draw;
+bool( float pKey, float Ascii ) Item_VScrollBar_Key;
+void() Item_VScrollBar_Update;
+void() Item_VScrollBar_Spawn;
+

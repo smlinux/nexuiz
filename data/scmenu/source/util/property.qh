@@ -1,0 +1,27 @@
+// NG Menu
+// util/property.qh
+
+// INFO: the property functions:
+// INFO: to save some entity fields I support property strings, which use altstrings to manage a dynamic
+// INFO: range of properties
+// INFO: "'nameOfProp''Value''nameOfProp''Value'.."
+// INFO: for speed reasons most of the Property_* functions assume that the property string has been validated
+// INFO: by Property_Validate
+// more or less generic functions
+string() 			Property_Create;
+string( string pString ) 	Property_Zone;
+string( string pString ) 	Propery_Free;
+bool( string pString ) 	Property_Validate;
+
+bool( string pString, string pName ) 				Property_Exists;
+string( string pString, string pName, string pInitValue ) 	Property_Register; // doesnt change anything if the property does already exist
+string( string pString, string pName, string pValue )	  	Property_Set; // errors if the property isnt found
+//string( string pString, string pName, string pValue ) 	  Property_Set; // if the property doesnt exist yet, it adds it
+string( string pString, string pOldName, string pNewName ) 	Property_Rename;
+string( string pString, string pName )			  	Property_Delete;
+
+string( string pString, string pName )	Property_Get;
+string( string pString, string pName ) 	Property_GetString;
+float( string pString, string pName ) 	Property_GetFloat;
+vector( string pString, string pName ) 	Property_GetVector;
+entity( string pString, string pName ) 	Property_GetEntity;

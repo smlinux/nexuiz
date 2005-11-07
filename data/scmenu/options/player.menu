@@ -1,0 +1,138 @@
+// Property of Alientrap/AK
+// options/player.menu
+Item Window Player
+{
+	size	  '760 600'
+
+	Derive Picture Table1
+	{
+		picture "gfx/table1"
+		size	'760 600'
+	}
+
+	Item Window Avatar
+	{
+		size	'300 600'
+		pos	'20 20'
+		flag	[FlagEmbedded]
+
+		Derive Picture Picture
+		{
+			size	'300 400'
+			picture "gfx/m_white"
+		}
+		Derive Rect Overlay
+		{
+			size		'300 15'
+			drawFlag 	[DrawFlagAdditive]
+			alpha		0.4
+		}
+		Derive MultiLabel Description
+		{
+			size	'300 200'
+			pos	'0 400'
+			wrap	27
+			fontSize '11 11 0'
+		}
+		Derive TextButton Prev
+		{
+			pos 	'0 0'
+			normal	"<<"
+
+			action	Nex_Action_Avatar_Prev
+		}
+		Derive Label Name
+		{
+			pos		'24 0'
+			size		'276 12'
+			alignment	[AlignCenter]
+		}
+		Derive TextButton Next
+		{
+			pos	'278 0'
+			normal	">>"
+
+			action	Nex_Action_Avatar_Next
+		}
+		Item Task_Job Job
+		{
+			init  	Nex_Automation_UpdateAvatar
+		}
+	}
+	Item Layout Settings
+	{
+		pos		'320 20'
+		size		'440 600'
+		origin		'180 0'
+		flag		[FlagEmbedded]
+		alignment	[AlignFirst]
+		direction	[Nex_DefaultVertDirection]
+
+		Derive Nex_Composition Name
+		{
+			Derive TextButton Description
+			{
+				normal	"Player name"
+				link	"EditBox"
+			}
+			Derive EditBox EditBox
+			{
+				size 	'182 20'
+				target	"Data::Player::Name::Text"
+			}
+		}
+		Derive Nex_Composition TeamColor
+		{
+			text	"Team color"
+			target	"::Data::Player::TeamColor::TextSwitch"
+
+			Derive Nex_Automation_Option_Slider Automation
+			{}
+			Derive TextButton Description
+			{}
+			Derive Slider Slider
+			{}
+			Derive PictureValueButton Value
+			{
+				color		"1.0 1.0 1.0"
+				colorPressed	"1.0 1.0 1.0"
+				colorSelected	"1.0 1.0 1.0"
+			}
+		}
+		Derive Nex_Option_Slider FOV
+		{
+			text	"Field of View"
+			target	"::Data::Player::FOV::Value"
+		}
+		Derive Nex_Option_Slider ViewSize
+		{
+			text	"View Size"
+			target	"::Data::Player::ViewSize::Value"
+		}
+		Derive Nex_Option_Slider CrosshairType
+		{
+			text	"Crosshair Type"
+			target	"::Data::Player::Crosshair::Type::Switch"
+		}
+		Derive Nex_Option_Slider CrosshairSize
+		{
+			text	"Crosshair Size"
+			target	"::Data::Player::Crosshair::Size::Value"
+		}
+		Derive Nex_Void Seperator1
+		{}
+		Derive PictureButton Apply
+		{
+			normal		"$gfx/m_apply"
+
+			action	Nex_Action_Player_Apply
+		}
+		Derive TextButton Reset
+		{
+			alignment [AlignRight]
+			normal	"Reset"
+			init	Nex_Action_ResetData
+			target	"::Data::Player"
+		}
+	}
+}

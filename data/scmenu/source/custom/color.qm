@@ -1,0 +1,12 @@
+// Property of Alientrap/AK
+// custom/color.qm
+
+void() Nex_Action_Color_Cancel =
+{
+	Raise_DataEvent( Menu_GetItem( "::Data::Color" ), ITEM_DATA_TEST_END );
+};
+
+void() Nex_Action_Color_Reset =
+{
+	Raise_DataEvent( Menu_GetItem( "::Data::Color" ), ITEM_DATA_RESET );
+};

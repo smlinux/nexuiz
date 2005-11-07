@@ -1,0 +1,13 @@
+// DP/Nex Menu
+// control/constants.qh
+
+const string ITEM_SOUND_NOSELECT		= "misc/temp.wav";
+
+// Item_Button
+
+const float ITEM_BUTTON_ACTIONTIME		= 0.2;
+
+// ITEM_EDITBOX constantes
+const float	ITEM_EDITBOX_CURSOR_FREQ = 2;
+const float	ITEM_EDITBOX_FLASHTIME = 0.1;
+const float 	ITEM_EDITBOX_SCROLLDISTANCE = 1.5;

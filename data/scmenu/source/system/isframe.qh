@@ -1,0 +1,57 @@
+// DP/Nex Menu
+// system/isframe.qh
+
+// define these menus in the menu def files or dont
+// if not defined there will be added default items
+const string MENU_NORMAL_NAME = "Normal";
+const string MENU_INGAME_NAME = "Ingame";
+
+const string MENU_NORMAL_DEFAULT =
+"// default normal menu\n"
+"{\n"
+"	\"type\" 	\"Item_Window\"\n"
+"	\"name\"	\"Normal\"\n"
+"}";
+
+const string MENU_INGAME_DEFAULT =
+"// default ingame menu\n"
+"{\n"
+"	\"type\" 	\"Item_Window\"\n"
+"	\"name\"		\"Ingame\"\n"
+"}";
+
+// insert the files here
+var string MENU_MAINFILE = "menu/menu";
+var string MENU_PLUGINDIR = "menu/plugin";
+
+const bool MENU_ALLOWINGAME = false;
+
+///////////////
+// prototypes
+///
+
+// used for global managing
+void() Menu_Init;
+// loads all files the file lists consists of
+void() Menu_Load;
+// used to reset the menu states everytime the menu is activated
+void() Menu_PerformReinit;
+// called when the hide event is processed
+void() Menu_Hide;
+// unload the menu
+void() Menu_Shutdown;
+
+// For runtime addition of items, there is one function:
+// it supposes that the Item has already been embedded into its parent
+void( entity pItem ) Menu_LinkItem; // does also link all children and call their spawn function if necessary
+void( entity pWindow ) Menu_LinkWindow;
+
+ // to make life easier
+entity( string pType, string pName, string pParent ) Menu_CreateItem;
+entity( entity pTemplate, string pName, string pParent, bool pTree ) Menu_DeriveItem;
+
+void( entity pItem, string pData ) Menu_AddEntityData;
+
+// these functions are pretty private, so dont call them !
+void( entity pParent ) Menu_LinkChildren;
+void() Menu_LinkWindows;

@@ -1,0 +1,67 @@
+// Property of Alientrap/Ak
+// custom/credits.qm
+
+void() Nex_Credits_SetSizeX =
+{
+	local entity lItem;
+
+	lItem = Menu_GetItem( "Credits" );
+	lItem.size_x = self._parent.size_x;
+};
+
+void() Nex_Credits_Scroll =
+{
+	local entity lItem, lTarget;
+
+	lItem = Menu_GetItem( "Credits" );
+	lTarget = self._parent;
+
+	lTarget.origin = lTarget.origin - Timer_Delta * self.direction;
+	if( self.direction_x ) {
+		if( lTarget.origin_x < -lItem.size_x )
+			lTarget.origin_x = lTarget.size_x;
+		if( lTarget.origin_x > lItem.size_x )
+			lTarget.origin_x = -lItem.size_x;
+	}
+	if( self.direction_y ) {
+		if( lTarget.origin_y < -lItem.size_y )
+			lTarget.origin_y = lTarget.size_y;
+		if( lTarget.origin_y > lItem.size_y )
+			lTarget.origin_y = -lItem.size_y;
+	}
+};
+
+void() Nex_Credits_Toggle =
+{
+	local entity lEntity;
+
+	lEntity = Menu_GetItem( "CreditsWnd" );
+	if( lEntity.flag & FLAG_HIDDEN ) {
+		lEntity.flag = lEntity.flag - FLAG_HIDDEN;
+		Menu_Select( Menu_GetItem( "CreditsWnd::Layout::Items::Close" ), false );
+	} else {
+		lEntity.flag = lEntity.flag + FLAG_HIDDEN;
+		Menu_Reselect( false );
+	}
+}
+
+bool( float pKey, float pAscii ) Nex_Credits_Key =
+{
+	if( pKey == K_ESCAPE ) {
+		Nex_Credits_Toggle();
+		return true;
+	}
+	return false;
+};
+
+void() Nex_Credits_Action =
+{
+	local entity lEntity;
+
+	lEntity = Menu_GetItem( "CreditsWnd" );
+	if( lEntity.flag & FLAG_HIDDEN )
+		lEntity.flag = lEntity.flag - FLAG_HIDDEN;
+	Menu_Select( Menu_GetItem( "CreditsWnd::Layout::Items::Close" ), false );
+	lEntity = Menu_GetItem( "CreditsWnd::Layout::Items::Scroller" );
+	lEntity.origin_y = lEntity.size_y;
+}

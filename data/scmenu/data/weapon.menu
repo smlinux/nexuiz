@@ -1,0 +1,469 @@
+// Property of Alientrap
+//
+// data/weapon.menu
+
+Item DataContainer Weapon
+{
+	Item Data_Cvar InvincibleTakeDamage
+	{
+		cvarName	"g_balance_powerup_invincible_takedamage"
+		defValue	0.2
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar InvincibleTime
+	{
+		cvarName	"g_balance_powerup_invincible_time"
+		defValue	30
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar StrengthDamage
+	{
+		cvarName	"g_balance_powerup_strength_damage"
+		defValue	3
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar StrengthForce
+	{
+		cvarName	"g_balance_powerup_strength_force"
+		defValue	4
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar StrengthTime
+	{
+		cvarName	"g_balance_powerup_strength_time"
+		defValue	30
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar LaserDamage
+	{
+		cvarName	"g_balance_laser_damage"
+		defValue	35
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar LaserEdgeDamage
+	{
+		cvarName	"g_balance_laser_edgedamage"
+		defValue	10
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar LaserForce
+	{
+		cvarName	"g_balance_laser_force"
+		defValue	400
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar LaserRadius
+	{
+		cvarName	"g_balance_laser_radius"
+		defValue	70
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar LaserSpeed
+	{
+		cvarName	"g_balance_laser_speed"
+		defValue	9000
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar Laserrefire
+	{
+		cvarName	"g_balance_laser_refire"
+		defValue	0.7
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar ShotgunDamage
+	{
+		cvarName	"g_balance_shotgun_damage"
+		defValue	6
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar ShotgunDamage2
+	{
+		cvarName	"g_balance_shotgun_damage2"
+		defValue	6
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar ShotgunBullets
+	{
+		cvarName	"g_balance_shotgun_bullets"
+		defValue	10
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar ShotgunSpread
+	{
+		cvarName	"g_balance_shotgun_spread"
+		defValue	0.07
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar ShotgunRefire
+	{
+		cvarName	"g_balance_shotgun_refire"
+		defValue	0.7
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar ShotgunRefire2
+	{
+		cvarName	"g_balance_shotgun_refire2"
+		defValue	1.5
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar ShotgunRefire3
+	{
+		cvarName	"g_balance_shotgun_refire3"
+		defValue	0.2
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar UziDamage
+	{
+		cvarName	"g_balance_uzi_damage"
+		defValue	16
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar UziSpread
+	{
+		cvarName	"g_balance_uzi_spread"
+		defValue	0.05
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar UziSpread2
+	{
+		cvarName	"g_balance_uzi_spread2"
+		defValue	0.01
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar UziRefire
+	{
+		cvarName	"g_balance_uzi_refire"
+		defValue	0.1
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar UziDamage2
+	{
+		cvarName	"g_balance_uzi_damage2"
+		defValue	30
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar UziRefire2
+	{
+		cvarName	"g_balance_uzi_refire2"
+		defValue	0.2
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar GrenadeLauncherDamage
+	{
+		cvarName	"g_balance_grenadelauncher_damage"
+		defValue	65
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar GrenadeLauncherEdgeDamage
+	{
+		cvarName	"g_balance_grenadelauncher_edgedamage"
+		defValue	35
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar GrenadeLauncherForce
+	{
+		cvarName	"g_balance_grenadelauncher_force"
+		defValue	400
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar GrenadeLauncherRadius
+	{
+		cvarName	"g_balance_grenadelauncher_radius"
+		defValue	140
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar GrenadeLauncherSpeed
+	{
+		cvarName	"g_balance_grenadelauncher_speed"
+		defValue	2000
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar GrenadeLauncherSpeedUp
+	{
+		cvarName	"g_balance_grenadelauncher_speed_up"
+		defValue	200
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar GrenadeLauncherSpeed2
+	{
+		cvarName	"g_balance_grenadelauncher_speed2"
+		defValue	1400
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar GrenadeLauncherSpeed2Up
+	{
+		cvarName	"g_balance_grenadelauncher_speed2_up"
+		defValue	200
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar GrenadeLauncherRefire
+	{
+		cvarName	"g_balance_grenadelauncher_refire"
+		defValue	0.7
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar GrenadeLauncherRefire2
+	{
+		cvarName	"g_balance_grenadelauncher_refire2"
+		defValue	0.6
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar ElectroDamage
+	{
+		cvarName	"g_balance_electro_damage"
+		defValue	90
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar ElectroEdgeDamage
+	{
+		cvarName	"g_balance_electro_edgedamage"
+		defValue	0
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar ElectroForce
+	{
+		cvarName	"g_balance_electro_force"
+		defValue	200
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar ElectroRadius
+	{
+		cvarName	"g_balance_electro_radius"
+		defValue	150
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar ElectroRefire
+	{
+		cvarName	"g_balance_electro_refire"
+		defValue	0.9
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar ElectroSpeed
+	{
+		cvarName	"g_balance_electro_speed"
+		defValue	2000
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar ElectroBallSpeed
+	{
+		cvarName	"g_balance_electro_ballspeed"
+		defValue	900
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar ElectroBallSpeedUp
+	{
+		cvarName	"g_balance_electro_ballspeed_up"
+		defValue	200
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar CryLinkDamage
+	{
+		cvarName	"g_balance_crylink_damage"
+		defValue	20
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar CryLinkEdgeDamage
+	{
+		cvarName	"g_balance_crylink_edgedamage"
+		defValue	0
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar CryLinkForce
+	{
+		cvarName	"g_balance_crylink_force"
+		defValue	55
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar CryLinkRadius
+	{
+		cvarName	"g_balance_crylink_radius"
+		defValue	3
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar CryLinkSpeed
+	{
+		cvarName	"g_balance_crylink_speed"
+		defValue	6000
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar CryLinkSpread
+	{
+		cvarName	"g_balance_crylink_spread"
+		defValue	0.10
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar CryLinkRefire
+	{
+		cvarName	"g_balance_crylink_refire"
+		defValue	0.8
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar CryLinkShots
+	{
+		cvarName	"g_balance_crylink_shots"
+		defValue	7
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar NexDamage
+	{
+		cvarName	"g_balance_nex_damage"
+		defValue	175
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar Nexrefire
+	{
+		cvarName	"g_balance_nex_refire"
+		defValue	1
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar HagarDamage
+	{
+		cvarName	"g_balance_hagar_damage"
+		defValue	40
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar HagarEdgeDamage
+	{
+		cvarName	"g_balance_hagar_edgedamage"
+		defValue	15
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar HagarForce
+	{
+		cvarName	"g_balance_hagar_force"
+		defValue	100
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar HagarRadius
+	{
+		cvarName	"g_balance_hagar_radius"
+		defValue	70
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar HagarSpeed
+	{
+		cvarName	"g_balance_hagar_speed"
+		defValue	3000
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar HagarSpeed2
+	{
+		cvarName	"g_balance_hagar_speed2"
+		defValue	1400
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar HagarSpeed2Up
+	{
+		cvarName	"g_balance_hagar_speed2_up"
+		defValue	100
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar HagarSpread
+	{
+		cvarName	"g_balance_hagar_spread"
+		defValue	0.025
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar RocketLauncherDamage
+	{
+		cvarName	"g_balance_rocketlauncher_damage"
+		defValue	130
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar RocketLauncherEdgeDamage
+	{
+		cvarName	"g_balance_rocketlauncher_edgedamage"
+		defValue	50
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar RocketLauncherForce
+	{
+		cvarName	"g_balance_rocketlauncher_force"
+		defValue	600
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar RocketLauncherRadius
+	{
+		cvarName	"g_balance_rocketlauncher_radius"
+		defValue	170
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar RocketLauncherSpeed
+	{
+		cvarName	"g_balance_rocketlauncher_speed"
+		defValue	850
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar RocketLauncherrefire
+	{
+		cvarName	"g_balance_rocketlauncher_refire"
+		defValue	1
+
+		[DataLink_Setting]
+	}
+}
