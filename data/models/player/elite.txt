@@ -1,0 +1,10 @@
+Elite
+models/player/elite
+1
+models/player/skadi.zym
+
+Human Fighter
+
+Sex: Female
+Weight: 120 lb
+Age: 21

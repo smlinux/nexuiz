@@ -1,0 +1,10 @@
+Private
+models/player/private
+1
+models/player/marine.zym
+
+Human Soldier
+
+Sex: Male
+Weight: 195 lb
+Age: 31

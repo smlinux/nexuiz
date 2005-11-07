@@ -1,0 +1,387 @@
+{
+"classname" "worldspawn"
+"message" "Ruins Of Slaugther By H.Reaper"
+}
+{
+"classname" "item_strength"
+"origin" "-93 -1185 28"
+}
+{
+"classname" "item_health25"
+"origin" "-25 -1098 28"
+}
+{
+"classname" "item_rockets"
+"origin" "215 -1481 -108"
+}
+{
+"classname" "item_cells"
+"origin" "381 -1479 -108"
+}
+{
+"classname" "item_armor25"
+"origin" "511 -1472 -108"
+}
+{
+"classname" "weapon_hagar"
+"origin" "578 -1545 51"
+}
+{
+"classname" "item_cells"
+"origin" "424 -1668 51"
+}
+{
+"classname" "item_rockets"
+"origin" "424 -1702 51"
+}
+{
+"classname" "item_health1"
+"origin" "305 -1561 51"
+}
+{
+"origin" "256 -1561 51"
+"classname" "item_health1"
+}
+{
+"classname" "item_health1"
+"origin" "210 -1561 51"
+}
+{
+"origin" "166 -1560 69"
+"classname" "item_health1"
+}
+{
+"classname" "item_health1"
+"origin" "113 -1561 91"
+}
+{
+"classname" "item_armor25"
+"origin" "-334 -1715 123"
+}
+{
+"classname" "item_health1"
+"origin" "-423 -1828 123"
+}
+{
+"classname" "item_rockets"
+"origin" "-657 -1831 123"
+}
+{
+"classname" "weapon_electro"
+"origin" "-545 -1693 123"
+}
+{
+"classname" "item_shells"
+"origin" "-961 -1586 123"
+}
+{
+"classname" "item_cells"
+"origin" "-1093 -1504 123"
+}
+{
+"classname" "item_health100"
+"origin" "-1089 -1172 123"
+}
+{
+"classname" "item_health25"
+"origin" "-1000 -815 123"
+}
+{
+"classname" "item_bullets"
+"origin" "-829 -721 123"
+}
+{
+"classname" "item_health1"
+"origin" "-593 -351 100"
+}
+{
+"origin" "-520 -258 83"
+"classname" "item_health1"
+}
+{
+"classname" "item_health1"
+"origin" "-390 -202 71"
+}
+{
+"origin" "-284 -707 146"
+"classname" "item_cells"
+}
+{
+"classname" "item_cells"
+"origin" "-284 -670 146"
+}
+{
+"classname" "item_health25"
+"origin" "417 -893 192"
+}
+{
+"classname" "item_cells"
+"origin" "912 -912 147"
+}
+{
+"classname" "item_armor25"
+"origin" "943 -671 147"
+}
+{
+"classname" "item_shells"
+"origin" "1203 -837 32"
+}
+{
+"classname" "item_health25"
+"origin" "1203 -795 32"
+}
+{
+"classname" "item_rockets"
+"origin" "1203 -754 32"
+}
+{
+"classname" "weapon_crylink"
+"origin" "474 -464 53"
+}
+{
+"classname" "item_armor1"
+"origin" "416 -362 -151"
+}
+{
+"origin" "416 -320 -151"
+"classname" "item_armor1"
+}
+{
+"classname" "item_armor1"
+"origin" "416 -278 -151"
+}
+{
+"origin" "416 -235 -151"
+"classname" "item_armor1"
+}
+{
+"classname" "item_armor1"
+"origin" "416 -193 -151"
+}
+{
+"origin" "416 -151 -151"
+"classname" "item_armor1"
+}
+{
+"classname" "item_armor1"
+"origin" "416 -107 -151"
+}
+{
+"classname" "item_health1"
+"origin" "415 292 -112"
+}
+{
+"origin" "-143 114 44"
+"classname" "item_cells"
+}
+{
+"classname" "item_cells"
+"origin" "-143 66 44"
+}
+{
+"classname" "item_rockets"
+"origin" "-143 24 44"
+}
+{
+"classname" "info_player_deathmatch"
+"origin" "0 0 32"
+}
+{
+"dmg" "100"
+"spawnflags" "12"
+"classname" "trigger_hurt"
+"model" "*1"
+}
+{
+"angle" "180"
+"origin" "960 -640 32"
+"classname" "info_player_deathmatch"
+}
+{
+"classname" "info_player_deathmatch"
+"origin" "1200 -536 32"
+"angle" "360"
+}
+{
+"angle" "360"
+"origin" "-424 -568 160"
+"classname" "info_player_deathmatch"
+}
+{
+"classname" "info_player_deathmatch"
+"origin" "-544 -1136 128"
+"angle" "360"
+}
+{
+"angle" "90"
+"origin" "-160 -1216 32"
+"classname" "info_player_deathmatch"
+}
+{
+"classname" "info_player_deathmatch"
+"origin" "576 -1704 60"
+"angle" "90"
+}
+{
+"angle" "90"
+"origin" "416 -64 -144"
+"classname" "info_player_deathmatch"
+}
+{
+"classname" "info_player_deathmatch"
+"origin" "-1008 -1312 104"
+"angle" "90"
+}
+{
+"angle" "90"
+"origin" "-544 -1832 136"
+"classname" "info_player_deathmatch"
+}
+{
+"origin" "1280 -640 32"
+"classname" "weapon_grenadelauncher"
+}
+{
+"origin" "66 2 44"
+"classname" "weapon_shotgun"
+}
+{
+"origin" "-640 -768 160"
+"classname" "weapon_rocketlauncher"
+"wait" "10"
+}
+{
+"classname" "trigger_hurt"
+"spawnflags" "12"
+"dmg" "100"
+"model" "*2"
+}
+{
+"random" "15"
+"wait" "30"
+"spawnflags" "4"
+"noise" "sound/misc/Ambient_03.wav"
+"origin" "344 -304 -88"
+"classname" "target_speaker"
+}
+{
+"spawnflags" "4"
+"wait" "120"
+"noise" "sound/misc/Ambient_02.wav"
+"random" "10"
+"origin" "120 -24 256"
+"classname" "target_speaker"
+}
+{
+"classname" "target_speaker"
+"origin" "-296 -1720 168"
+"noise" "sound/misc/Ambient_03.wav"
+"spawnflags" "4"
+"wait" "30"
+"random" "15"
+}
+{
+"spawnflags" "4"
+"wait" "30"
+"noise" "sound/misc/Ambient_04.wav"
+"origin" "536 104 -200"
+"classname" "target_speaker"
+}
+{
+"classname" "target_speaker"
+"origin" "752 120 -440"
+"random" "10"
+"noise" "sound/misc/Ambient_05.wav"
+"wait" "30"
+"spawnflags" "4"
+}
+{
+"spawnflags" "1"
+"noise" "sound/misc/Ambient_07.wav"
+"origin" "-576 -1440 176"
+"classname" "target_speaker"
+}
+{
+"classname" "target_speaker"
+"origin" "-192 -1440 176"
+"noise" "sound/misc/Ambient_07.wav"
+"spawnflags" "1"
+}
+{
+"spawnflags" "1"
+"noise" "sound/misc/Ambient_07.wav"
+"origin" "-760 -1728 176"
+"classname" "target_speaker"
+}
+{
+"classname" "dom_team"
+"netname" ""
+"model" "models/domination/dom_unclaimed.md3"
+}
+{
+"classname" "dom_team"
+"netname" "^4Blue Team^3"
+"cnt" "13"
+"noise" "domination/claim.wav"
+"noise1" "domination/claim.wav"
+"message" "Blue team has captured a control point"
+"model" "models/domination/dom_blue.md3"
+}
+{
+"classname" "dom_team"
+"netname" "^1Red Team^3"
+"cnt" "4"
+"noise" "domination/claim.wav"
+"noise1" "domination/claim.wav"
+"message" "Red team has captured a control point"
+"model" "models/domination/dom_red.md3"
+}
+{
+"classname" "dom_controlpoint"
+"origin" "-540 -1560 96"
+}
+{
+"classname" "dom_controlpoint"
+"origin" "-100 -1190 124"
+}
+{
+"classname" "dom_controlpoint"
+"origin" "1220 -320 32"
+"angle" "-45"
+}
+{
+"classname" "runematch_spawn_point"
+"origin" "-540 -1560 96"
+}
+{
+"classname" "runematch_spawn_point"
+"origin" "-100 -1190 124"
+}
+{
+"classname" "runematch_spawn_point"
+"origin" "1220 -320 32"
+}
+{
+"classname" "runematch_spawn_point"
+"origin" "360 -1260 -102"
+}
+{
+"classname" "runematch_spawn_point"
+"origin" "410 120 -156"
+}
+{
+"classname" "runematch_spawn_point"
+"origin" "710 -1630 48"
+}
+{
+"classname" "runematch_spawn_point"
+"origin" "940 -780 142"
+}
+{
+"classname" "runematch_spawn_point"
+"origin" "-370 -780 152"
+}
+{
+"classname" "runematch_spawn_point"
+"origin" "-30  60  32"
+}

@@ -1,0 +1,16 @@
+Basement (dom_nexdm01)
+maps/nexdm01
+
+A small map designed for fast
+constant gameplay
+
+Players: 2-4
+
+Weapons: Machine Gun, Mortar,
+Electro, Crylink, Hagar
+
+Gametype:
+Domination
+
+Author:
+Garth Hendy

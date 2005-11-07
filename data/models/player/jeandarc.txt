@@ -1,0 +1,10 @@
+Jean D Arc
+models/player/jeandarc
+0
+models/player/jeandarc.zym
+
+Human Fighter
+
+Sex: Female
+Weight: 108 lb
+Age: 14

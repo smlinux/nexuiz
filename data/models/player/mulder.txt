@@ -1,0 +1,9 @@
+Mulder
+models/player/mulder
+1
+models/player/nexus.zym
+
+Nexuiz's Soldier
+
+Weight: 532 lb
+Age: 251

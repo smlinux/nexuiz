@@ -1,0 +1,20 @@
+Bleach (dom_nexdm02)
+maps/nexdm02
+
+A large multiple arena map
+
+Players: 8-12
+
+Teams: 4
+
+Weapons: Machine Gun, Mortar,
+Electro, Crylink, Hagar,
+Rocket Launcher
+
+Powerups: Strength
+
+Gametype:
+Domination
+
+Author:
+Paul Evers

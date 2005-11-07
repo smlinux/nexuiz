@@ -1,0 +1,481 @@
+{
+"light" "25"
+"classname" "worldspawn"
+}
+{
+"target" "t1"
+"classname" "trigger_push"
+"model" "*1"
+}
+{
+"origin" "32 456 -8"
+"classname" "item_strength"
+}
+{
+"targetname" "t6"
+"origin" "-1088 1240 216"
+"classname" "target_position"
+}
+{
+"classname" "item_armor1"
+"origin" "-936 1128 8"
+}
+{
+"origin" "-936 1176 8"
+"classname" "item_armor1"
+}
+{
+"origin" "-1256 640 -24"
+"classname" "item_health25"
+}
+{
+"origin" "-1256 784 -24"
+"classname" "item_rockets"
+}
+{
+"origin" "288 -256 -152"
+"classname" "weapon_grenadelauncher"
+}
+{
+"origin" "-1120 968 144"
+"classname" "weapon_crylink"
+}
+{
+"angle" "180"
+"classname" "item_health25"
+"origin" "176 1240 -16"
+}
+{
+"angle" "180"
+"origin" "176 1336 -16"
+"classname" "item_health25"
+}
+{
+"targetname" "t5"
+"origin" "920 1312 192"
+"classname" "target_position"
+}
+{
+"targetname" "t1"
+"origin" "-472 -840 16"
+"classname" "target_position"
+}
+{
+"classname" "info_player_deathmatch"
+"origin" "-200 464 24"
+}
+{
+"classname" "trigger_teleport"
+"target" "t2"
+"model" "*2"
+}
+{
+"classname" "trigger_teleport"
+"target" "t3"
+"model" "*3"
+}
+{
+"classname" "misc_teleporter_dest"
+"origin" "1216 304 -8"
+"angle" "90"
+"targetname" "t2"
+}
+{
+"angle" "180"
+"origin" "-704 232 40"
+"classname" "misc_teleporter_dest"
+"targetname" "t3"
+}
+{
+"classname" "weapon_hagar"
+"origin" "-992 -800 88"
+}
+{
+"classname" "item_armor25"
+"origin" "-924 -144 88"
+}
+{
+"classname" "trigger_push"
+"target" "t4"
+"model" "*4"
+}
+{
+"classname" "target_position"
+"origin" "32 712 216"
+"targetname" "t4"
+}
+{
+"classname" "item_armor1"
+"origin" "1760 304 -16"
+}
+{
+"origin" "1752 360 -16"
+"classname" "item_armor1"
+}
+{
+"classname" "item_armor1"
+"origin" "1736 416 -16"
+}
+{
+"origin" "1704 472 -16"
+"classname" "item_armor1"
+}
+{
+"classname" "item_armor1"
+"origin" "1656 520 -16"
+}
+{
+"classname" "item_health100"
+"origin" "1696 -264 -16"
+}
+{
+"classname" "weapon_rocketlauncher"
+"origin" "1344 -128 -144"
+}
+{
+"classname" "item_bullets"
+"origin" "-16 -104 -8"
+}
+{
+"origin" "80 -104 -8"
+"classname" "item_bullets"
+}
+{
+"classname" "trigger_push"
+"target" "t6"
+"model" "*5"
+}
+{
+"classname" "trigger_push"
+"target" "t5"
+"model" "*6"
+}
+{
+"classname" "item_cells"
+"origin" "528 1448 144"
+}
+{
+"classname" "item_cells"
+"origin" "608 1448 144"
+}
+{
+"classname" "item_health25"
+"origin" "-408 -448 -8"
+}
+{
+"origin" "-464 -448 -8"
+"classname" "item_health25"
+}
+{
+"classname" "func_sparks"
+"origin" "-472 40 -8"
+}
+{
+"angle" "90"
+"origin" "1304 -488 -144"
+"classname" "item_rockets"
+}
+{
+"origin" "1368 1312 8"
+"classname" "weapon_electro"
+}
+{
+"origin" "1024 896 -16"
+"classname" "item_cells"
+}
+{
+"classname" "item_cells"
+"origin" "1408 896 -16"
+}
+{
+"origin" "1208 -752 0"
+"classname" "item_armor1"
+}
+{
+"classname" "item_armor1"
+"origin" "1280 -824 0"
+}
+{
+"origin" "1376 -872 0"
+"classname" "item_armor1"
+}
+{
+"classname" "item_armor1"
+"origin" "1512 -872 0"
+}
+{
+"origin" "1608 -824 0"
+"classname" "item_armor1"
+}
+{
+"classname" "item_armor1"
+"origin" "1664 -776 0"
+}
+{
+"origin" "1704 -712 0"
+"classname" "item_armor1"
+}
+{
+"angle" "135"
+"origin" "568 -800 -128"
+"classname" "item_health25"
+}
+{
+"classname" "item_health25"
+"origin" "200 -800 -128"
+"angle" "45"
+}
+{
+"angle" "135"
+"origin" "16 -256 -176"
+"classname" "item_rockets"
+}
+{
+"angle" "315"
+"classname" "item_rockets"
+"origin" "-240 -256 -176"
+}
+{
+"angle" "270"
+"origin" "-920 1624 8"
+"classname" "item_health25"
+}
+{
+"angle" "270"
+"classname" "item_health25"
+"origin" "-824 1624 8"
+}
+{
+"origin" "32 -24 24"
+"classname" "weapon_nex"
+}
+{
+"origin" "-464 200 32"
+"classname" "item_health1"
+}
+{
+"classname" "item_health1"
+"origin" "-464 264 32"
+}
+{
+"origin" "-464 328 32"
+"classname" "item_health1"
+}
+{
+"classname" "item_health1"
+"origin" "-464 392 32"
+}
+{
+"origin" "-464 456 32"
+"classname" "item_health1"
+}
+{
+"origin" "192 -920 8"
+"classname" "item_health1"
+}
+{
+"classname" "item_health1"
+"origin" "256 -920 8"
+}
+{
+"origin" "320 -920 8"
+"classname" "item_health1"
+}
+{
+"classname" "item_health1"
+"origin" "384 -920 8"
+}
+{
+"origin" "448 -920 8"
+"classname" "item_health1"
+}
+{
+"classname" "item_health1"
+"origin" "512 -920 8"
+}
+{
+"origin" "576 -920 8"
+"classname" "item_health1"
+}
+{
+"classname" "item_health1"
+"origin" "640 -920 8"
+}
+{
+"origin" "-936 1032 8"
+"classname" "item_armor1"
+}
+{
+"classname" "item_armor1"
+"origin" "-936 1080 8"
+}
+{
+"classname" "item_armor1"
+"origin" "-936 936 8"
+}
+{
+"origin" "-936 984 8"
+"classname" "item_armor1"
+}
+{
+"origin" "480 -808 -128"
+"classname" "item_cells"
+}
+{
+"classname" "item_cells"
+"origin" "256 -808 -128"
+}
+{
+"origin" "-288 1344 16"
+"classname" "item_cells"
+}
+{
+"classname" "item_cells"
+"origin" "-192 1344 16"
+}
+{
+"origin" "-96 1344 16"
+"classname" "item_cells"
+}
+{
+"classname" "item_rockets"
+"origin" "-1056 -384 -24"
+}
+{
+"origin" "-1056 -576 -24"
+"classname" "item_rockets"
+}
+{
+"origin" "536 1336 200"
+"classname" "info_player_deathmatch"
+}
+{
+"origin" "-80 -240 40"
+"classname" "info_player_deathmatch"
+}
+{
+"angle" "315"
+"origin" "960 888 40"
+"classname" "info_player_deathmatch"
+}
+{
+"angle" "270"
+"origin" "-672 1032 192"
+"classname" "info_player_deathmatch"
+}
+{
+"origin" "-1040 -448 8"
+"classname" "info_player_deathmatch"
+}
+{
+"angle" "315"
+"origin" "1144 120 -120"
+"classname" "info_player_deathmatch"
+}
+{
+"classname" "dom_team"
+"netname" ""
+"model" "models/domination/dom_unclaimed.md3"
+}
+{
+"classname" "dom_team"
+"netname" "^4Blue Team^3"
+"cnt" "13"
+"noise" "domination/claim.wav"
+"noise1" "domination/claim.wav"
+"message" "Blue team has captured a control point"
+"model" "models/domination/dom_blue.md3"
+}
+{
+"classname" "dom_team"
+"netname" "^1Red Team^3"
+"cnt" "4"
+"noise" "domination/claim.wav"
+"noise1" "domination/claim.wav"
+"message" "Red team has captured a control point"
+"model" "models/domination/dom_red.md3"
+}
+{
+"classname" "dom_team"
+"netname" "^2Green Team^3"
+"cnt" "3"
+"noise" "domination/claim.wav"
+"noise1" "domination/claim.wav"
+"message" "Green team has captured a control point"
+"model" "models/domination/dom_green.md3"
+}
+{
+"classname" "dom_controlpoint"
+"message" " has captured the ^1Hallways"
+"origin" "-206.0 -488.8 -150.0"
+"frags" "3"
+"wait" "5"
+}
+{
+"classname" "dom_controlpoint"
+"message" " has captured the ^1Lavaroom"
+"origin" "1457.1  19.9 -110.0"
+"frags" "1"
+"wait" "5"
+}
+{
+"classname" "dom_controlpoint"
+"message" " controls the ^1Nex & Strength"
+"origin" "-259.8 299.3  5"
+"frags" "1"
+"wait" "5"
+}
+{
+"classname" "dom_controlpoint"
+"message" " has captured the ^1Upper Platform"
+"origin" "539.7 1206.0 182.0"
+"frags" "1"
+"wait" "5"
+}
+{
+"classname" "dom_controlpoint"
+"message" " has captured the ^1Teleport Room"
+"origin" "-1000.0 636.2 -16.0"
+"frags" "1"
+"wait" "5"
+}
+{
+"classname" "runematch_spawn_point"
+"origin" "-210 -490 -150"
+}
+{
+"classname" "runematch_spawn_point"
+"origin" "1460 20 -110"
+}
+{
+"classname" "runematch_spawn_point"
+"origin" "-260 300 5"
+}
+{
+"classname" "runematch_spawn_point"
+"origin" "540 1210 182"
+}
+{
+"classname" "runematch_spawn_point"
+"origin" "-1000 640 -16"
+}
+{
+"classname" "runematch_spawn_point"
+"origin" "-1140 1320 -16"
+}
+{
+"classname" "runematch_spawn_point"
+"origin" "-920 -280 -8"
+}
+{
+"classname" "runematch_spawn_point"
+"origin" "1450 -860 -8"
+}
+{
+"classname" "runematch_spawn_point"
+"origin" "720 -750 -8"
+}
+{
+"classname" "runematch_spawn_point"
+"origin" "1230 620 -8"
+}

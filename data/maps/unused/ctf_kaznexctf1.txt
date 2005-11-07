@@ -1,0 +1,14 @@
+Ivy (ctf_kaznexctf1)
+maps/kaznexctf1
+
+Opposing bases in a natural setting.
+
+Players: 2-8
+
+Weapons: Shotgun, MachineGun, Electro
+
+Gametype:
+Capture the Flag
+
+Author:
+Clinton "Kaziganthe" Freeman

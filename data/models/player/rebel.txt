@@ -1,0 +1,10 @@
+Rebel
+models/player/rebel
+1
+models/player/shock.zym
+
+Human Warrior
+
+Sex: Male
+Weight: 194 lb
+Age: 21

@@ -1,0 +1,7 @@
+exec default.cfg
+exec config.cfg
+exec autoexec.cfg
+stuffcmds
+startdemos
+play announcer/welcometonexuiz.wav
+

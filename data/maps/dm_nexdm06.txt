@@ -1,0 +1,17 @@
+Starship (dm_nexdm06)
+maps/nexdm06
+
+A sprawling complex
+
+Players: 4-6
+
+Weapons: Machine Gun, Electro,
+Crylink, Nex, Rocket Launcher
+
+Powerups: Strength
+
+Recommended Gametypes:
+Deathmatch
+
+Author:
+Chris Matz

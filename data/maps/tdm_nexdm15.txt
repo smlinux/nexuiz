@@ -1,0 +1,20 @@
+Oilrig (tdm_nexdm15)
+maps/nexdm15
+
+A very large open map designed
+after an offshore oil rig.
+
+Players: 3-6
+
+Weapons: Shotgun, Uzi, Electro,Nex, Hagar
+
+Powerups: Invincibility,
+Strength
+
+Gametype:
+Team Deathmatch
+
+Author:
+Dustin Geeraert
+Garth Hendy
+

@@ -1,0 +1,10 @@
+Pyria
+models/player/pyria
+0
+models/player/pyria.zym
+
+Necro Warrior
+
+Sex: Female
+Weight: 125 lb
+Age: 53

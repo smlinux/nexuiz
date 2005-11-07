@@ -1,0 +1,10 @@
+Carni
+models/player/carni
+0
+models/player/carni.zym
+
+Mutated Warrior
+
+Sex: Male
+Weight: 236 lb
+Age: 15

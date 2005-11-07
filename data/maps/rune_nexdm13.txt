@@ -1,0 +1,15 @@
+Dismal (rune_nexdm13)
+maps/nexdm13
+
+Small space map
+
+Players: 2-4
+
+Weapons: Electro, Nex, 
+Hagar
+
+Gametype:
+Runematch
+
+Author:
+"HReaper"

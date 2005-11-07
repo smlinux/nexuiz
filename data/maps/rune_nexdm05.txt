@@ -1,0 +1,17 @@
+Downer  (rune_nexdm05)
+maps/nexdm05
+
+A multilevel map
+
+Players: 3-4
+
+Weapons: Electro,
+Rocket Launcher
+
+Gametype
+Runematch
+
+Author:
+Eric Sambach
+Maik Merten
+

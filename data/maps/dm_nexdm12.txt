@@ -1,0 +1,16 @@
+Evil Space  (dm_nexdm12)
+maps/nexdm12
+
+A dark space map
+
+Players: 2-4
+
+Weapons: Machine Gun, Electro,
+Nex, Rocket Launcher
+
+Recommended Gametypes:
+Instagib
+Deathmatch
+
+Author:
+Yves Allaire

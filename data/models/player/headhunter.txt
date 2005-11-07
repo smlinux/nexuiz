@@ -1,0 +1,10 @@
+headhunter
+models/player/headhunter
+0
+models/player/headhunter.zym
+
+Mutated Warrior
+
+Sex: Male
+Weight: 254 lb
+Age: 34

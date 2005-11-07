@@ -1,0 +1,10 @@
+Crash
+models/player/crash
+0
+models/player/crash.zym
+
+Mechanical 
+Destruction
+
+Weight: 305 lb
+Age: 4 months

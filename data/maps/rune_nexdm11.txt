@@ -1,0 +1,18 @@
+RuinsofSlaughter(rune_nexdm11)
+maps/nexdm11
+
+A ruined arena.
+
+Players: 3-6
+
+Weapons: Electro, Crylink,
+Hagar, Rocket Launcher
+
+Powerups: Strength
+
+Gametype:
+Runematch
+
+Author:
+"HReaper"
+

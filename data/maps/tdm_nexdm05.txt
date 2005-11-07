@@ -1,0 +1,17 @@
+Downer  (tdm_nexdm05)
+maps/nexdm05
+
+A multilevel map
+
+Players: 3-4
+
+Weapons: Electro,
+Rocket Launcher
+
+Gametype:
+Team Deathmatch
+
+Author:
+Eric Sambach
+Maik Merten
+

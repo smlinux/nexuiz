@@ -1,0 +1,5 @@
+set g_tdm 1
+
+set fraglimit 20
+set timelimit 15
+changelevel nexdm04

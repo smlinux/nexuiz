@@ -1,0 +1,10 @@
+Heroine
+models/player/heroine
+1
+models/player/jeandarc.zym
+
+Solo Fighter
+
+Sex: Female
+Weight: 111 lb
+Age: 23

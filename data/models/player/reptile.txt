@@ -1,0 +1,9 @@
+Reptile
+models/player/reptile
+1
+models/player/lurk.zym
+
+Reptilian Combatant
+
+Weight: 176 lb
+Age: 32

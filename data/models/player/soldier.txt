@@ -1,0 +1,10 @@
+Soldier
+models/player/soldier
+1
+models/player/pyria.zym
+
+Human Soldier
+
+Sex: Female
+Weight: 124 lb
+Age: 23

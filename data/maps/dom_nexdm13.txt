@@ -1,0 +1,17 @@
+Dismal (dom_nexdm13)
+maps/nexdm13
+
+Small space map
+
+Players: 2-6
+
+Teams: 2
+
+Weapons: Electro, Nex, 
+Hagar
+
+Gametype:
+Domination
+
+Author:
+"HReaper"

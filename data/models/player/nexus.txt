@@ -1,0 +1,9 @@
+Nexus
+models/player/nexus
+0
+models/player/nexus.zym
+
+Nexuiz's Soldier
+
+Weight: 621 lb
+Age: 313

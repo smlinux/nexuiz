@@ -1,0 +1,10 @@
+Wolf
+models/player/wolf
+1
+models/player/lycanthrope.zym
+
+Monsterous Opponent
+
+Sex: Male
+Weight: 245 lb
+Age: 29

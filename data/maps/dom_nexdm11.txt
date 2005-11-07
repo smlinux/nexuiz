@@ -1,0 +1,20 @@
+RuinsofSlaughter(dom_nexdm11)
+maps/nexdm11
+
+A ruined arena.
+
+Players: 4-6
+
+Teams: 2
+
+Weapons: Electro, Crylink,
+Hagar, Rocket Launcher
+
+Powerups: Strength
+
+Gametype:
+Domination
+
+Author:
+"HReaper"
+

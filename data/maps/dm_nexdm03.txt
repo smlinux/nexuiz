@@ -1,0 +1,18 @@
+The Slime Pit  (dm_nexdm03)
+maps/nexdm03
+
+An industrial arena
+
+Players: 3-5
+
+Weapons: Machine Gun, Mortar,
+Electro, Nex, Hagar,
+Rocket Launcher
+
+Recommended Gametypes:
+Deathmatch
+
+Author:
+Mattrew Rye
+Garth Hendy
+Maik Merten

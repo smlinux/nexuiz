@@ -1,0 +1,15 @@
+Step by Step (rune_nexdm14)
+maps/nexdm14
+
+Open arena map
+
+Players: 2-4
+
+Weapons: Shotgun, Electro, Nex,Rocket Launcher
+
+Gametype:
+Runematch
+
+Author:
+"HReaper"
+

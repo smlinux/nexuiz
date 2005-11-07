@@ -1,0 +1,13 @@
+ // set up the exit cfg so we can reset values to what they were before
+exit_cfg "maps/ctf_nexctf01_exit.cfg"
+ // make a backup
+set BACKUP_g_balance_laser_force $g_balance_laser_force
+ // map-customized values here
+g_balance_laser_force 100
+// on with the map stuff
+
+g_ctf 1
+
+fraglimit 100
+timelimit 20
+changelevel nexctf01

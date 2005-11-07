@@ -1,0 +1,19 @@
+Silver City (dom_nexdm16)
+maps/nexdm16
+
+A very large very open map
+
+Players: 4-16
+
+Teams: 4
+
+Weapons: Machine Gun, Mortar,
+Electro, Crylink, Hagar,
+Rocket Launcher
+
+Gametype:
+Domination
+
+Author:
+Forest Hale
+Garth Hendy

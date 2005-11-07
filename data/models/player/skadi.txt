@@ -1,0 +1,10 @@
+Skadi
+models/player/skadi
+0
+models/player/skadi.zym
+
+Necro Warrior
+
+Sex: Female
+Weight: 115 lb
+Age: 63

@@ -1,0 +1,11 @@
+Grunt
+models/player/grunt
+0
+models/player/grunt.zym
+
+Half Mechanical 
+Human Fighter
+
+Sex: Male
+Weight: 375 lb
+Age: 53

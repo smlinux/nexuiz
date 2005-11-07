@@ -1,0 +1,18 @@
+The Blody Tower (tznex01)
+maps/tznex01.jpg
+
+Close quartes map, fast 
+and fraggy };P
+
+Players: 2-6
+
+Weapons: Uzi, Mortar,
+Hagar.
+
+Powerups: none
+
+Gametype:
+Team Deathmatch
+
+Author:
+Jakob MG (tZork)

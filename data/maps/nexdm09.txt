@@ -1,0 +1,18 @@
+Aneurysm (nexdm09)
+
+A multiple arena map with
+complex flow
+
+Players: 3-6
+
+Weapons: Shotgun, Mortar,
+Crylink, Nex, Rocket Launcher
+
+Powerups: Strength
+
+Recommended Gametypes:
+Deathmatch
+Rocket arena
+
+Author:
+Paul Evers

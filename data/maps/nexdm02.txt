@@ -1,0 +1,19 @@
+Bleach (nexdm02)
+
+A large multiple arena map
+
+Players: 6-12
+
+Weapons: Machine Gun, Mortar,
+Electro, Crylink, Hagar,
+Rocket Launcher
+
+Powerups: Strength
+
+Recommended Gametypes:
+Deathmatch
+Rocket arena
+Instagib
+
+Author:
+Paul Evers

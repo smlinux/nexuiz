@@ -1,0 +1,15 @@
+Basement CTF (ctf_nexctf01)
+maps/nexctf01
+
+Re-make of nexdm01,
+"The Basement" for CTF.
+
+Players: 2-8
+
+Weapons: Shotgun, MachineGun, Electro, Hagar, Mortar
+
+Gametype:
+Capture the Flag
+
+Author:
+Clinton "Kaziganthe" Freeman

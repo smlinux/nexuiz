@@ -1,0 +1,18 @@
+Aneurysm (tdm_nexdm09)
+maps/nexdm09
+
+A multiple arena map with
+complex flow
+
+Players: 3-6
+
+Weapons: Shotgun, Mortar,
+Crylink, Nex, Rocket Launcher
+
+Powerups: Strength
+
+Gametype:
+Team Deathmatch
+
+Author:
+Paul Evers

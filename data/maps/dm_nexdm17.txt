@@ -1,0 +1,21 @@
+Diesel Power (dm_nexdm17)
+maps/nexdm17
+
+A large multiple arena map
+
+Players: 6-12
+
+Weapons: Mortar,Electro, 
+Crylink, Hagar,
+Rocket Launcher
+
+Powerups: Strength
+
+Recommended Gametypes:
+Team Deathmatch
+Deathmatch
+Rocket arena
+Instagib
+
+Author:
+Paul Evers

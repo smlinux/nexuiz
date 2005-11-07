@@ -1,0 +1,17 @@
+Step by Step (dom_nexdm14)
+maps/nexdm14
+
+Open arena map
+
+Players: 4-6
+
+Teams: 2
+
+Weapons: Shotgun, Electro, Nex,Rocket Launcher
+
+Gametype:
+Domination
+
+Author:
+"HReaper"
+

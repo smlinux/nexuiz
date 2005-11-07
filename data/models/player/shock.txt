@@ -1,0 +1,10 @@
+Shock Trooper
+models/player/shock
+0
+models/player/shock.zym
+
+Necro Warrior
+
+Sex: Male
+Weight: 145 lb
+Age: 65

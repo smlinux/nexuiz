@@ -1,0 +1,10 @@
+Fricka
+models/player/fricka
+1
+models/player/visitant.zym
+
+Mutated Warrior
+
+Sex: Female
+Weight: 126 lb
+Age: 16

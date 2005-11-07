@@ -1,0 +1,17 @@
+Silver City (rune_nexdm16)
+maps/nexdm16
+
+A very large very open map
+
+Players: 4-16
+
+Weapons: Machine Gun, Mortar,
+Electro, Crylink, Hagar,
+Rocket Launcher
+
+Gametype:
+Runematch
+
+Author:
+Forest Hale
+Garth Hendy

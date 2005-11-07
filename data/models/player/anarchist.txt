@@ -1,0 +1,10 @@
+Anarchist
+models/player/anarchist
+1
+models/player/insurrectionist.zym
+
+Rebelling Human
+
+Sex: Male
+Weight: 186 lb
+Age: 47

@@ -1,0 +1,5 @@
+set g_ctf 1
+
+set fraglimit 40
+set timelimit 20
+changelevel kaznexctf1

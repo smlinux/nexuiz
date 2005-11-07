@@ -1,0 +1,19 @@
+Downer  (dom_nexdm05)
+maps/nexdm05
+
+A multilevel map
+
+Players: 4-6
+
+Teams: 2
+
+Weapons: Electro,
+Rocket Launcher
+
+Gametype:
+Domination
+
+Author:
+Eric Sambach
+Maik Merten
+

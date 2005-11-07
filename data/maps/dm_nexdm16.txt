@@ -1,0 +1,18 @@
+Silver City (dm_nexdm16)
+maps/nexdm16
+
+A very large very open map
+
+Players: 4-16
+
+Weapons: Machine Gun, Mortar,
+Electro, Crylink, Hagar,
+Rocket Launcher
+
+Recommended Gametypes:
+Instagib with low gravity
+Deathmatch
+
+Author:
+Forest Hale
+Garth Hendy

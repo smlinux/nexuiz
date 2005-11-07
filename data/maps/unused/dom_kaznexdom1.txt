@@ -1,0 +1,14 @@
+Forest Domination (dom_kaznexdom1)
+maps/kaznexdom1
+
+A small forest surrounded on all sides by large rocks. Teams will fight to control the two opposing rock outcroppings.
+
+Players: 2-8
+
+Weapons: Shotgun, MachineGun, Mortar, Rocket Launcher
+
+Recommended Gametypes:
+CTF, DOM
+
+Author:
+Clinton "Kaziganthe" Freeman

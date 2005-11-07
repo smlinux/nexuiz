@@ -1,0 +1,19 @@
+The Blody Tower (tznex01)
+
+Close quartes map. 
+Created with CTF in mind.
+
+Players: 2-6
+
+Weapons: Uzi, Mortar,
+Hagar.
+
+Powerups: none
+
+Recommended Gametypes:
+Capture The Flag
+Team Deathmatch
+Deathmatch
+
+Author:
+Jakob MG (tZork)
