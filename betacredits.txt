@@ -3,7 +3,7 @@ to donate to the development team
 
 
 
-Core Team:
+Team:
 
 
 
@@ -15,64 +15,87 @@ Forest "LordHavoc" Hale
 Lead Programmer and Co-Designer
 
 
-Kurt Dereli
-Lead Artist
+
+In alphabetical order
+(nickname or surname)
+
 
 
 Andreas "Black" Kirsch
 Programmer
+
+Kurt Dereli
+Lead Artist
+
+
+Dan "Digger" Korostelev
+QC programmer
+
+
+Yves "EviLair" Allaire 
+Artist
+
+
+Stephan "esteel" Stahl
+Programmer
+
+
+
+Jody Gallagher
+Modeler
 
 
 Fabien "H. Reaper" Tschirhart 
 Lead Level Designer
 
 
-Rick "Rat" Kelley
-Lead Animator, Skinner 
-
-
-Yves "EviLair" Allaire 
-Artist
-
-Chris "Wazat" Hale
-Programmer
-
-
-
-
-
-
-Team:
-
-Gottfried "Toddd" Hofmann
-Sound FX 
-
-SavageX
-Levels, Code, Sound 
-
-MauveBib
-Bot Programmer
-
 "Innovati"
 Menu Artist
 
-Jody Gallagher
-Modeler
-
-Paul "Strahlemann" Evers
-Level Designer
 
 Juergen "LowDragon" Timm
 Hagar Model
 
+
+MauveBib
+Bot Programmer
+
+
+Peter "Morphed" Pielak
+2d Artist
+
+
+
+Rick "Rat" Kelley
+Lead Animator, Skinner 
+
+
+SavageX
+Levels, Code, Sound 
+
+
+Paul "Strahlemann" Evers
+Level Designer
+
+
+Gottfried "Toddd" Hofmann
+Sound FX 
+
+
+Marko "Urre" Permanto
+Bot Programmer
+
+
+Dan "Wazat" Hale
+Programmer
+
+
 Attila "WW3" Houtkooper
 2d Artist
 
+
 Garth "Zombie" Hendy
 Level Designer
-
-Dan "Digger" Korostelev
-QC programmer
 
 
 
@@ -81,6 +104,8 @@ Thanks:
 
 
 Gerd "Elysis" Raudenbusch
+
+Spirit
 
 Cheapalert
 
@@ -104,23 +129,17 @@ Jitspoe
 
 NoelCower
 
-Spirit of 85
-
 Brain Younds
 
 Spike
 
 Petithomme
 
-Morphed
-
 Tei
 
 Munyul
 
 Mathieu "Elric" Olivier
-
-Urre
 
 SomeGuy
 
