@@ -384,10 +384,6 @@
 "origin" "431 -72 315"
 }
 {
-"classname" "item_armor25"
-"origin" "407 1177 283"
-}
-{
 "classname" "dom_team"
 "netname" ""
 "model" "models/domination/dom_unclaimed.md3"

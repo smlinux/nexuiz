@@ -8252,3 +8252,24 @@ evil4_d_techwalls/d_tech_drkwall
 "light" "100"
 "_color" "0.978616 1.000000 0.819195"
 }
+// entity 242
+{
+"angle" "360"
+"classname" "misc_model"
+"origin" "-896 648 512"
+"model" "models/mapobjects/el_wlight/el_wlight.md3"
+}
+// entity 243
+{
+"_color" "0.978616 1.000000 0.819195"
+"classname" "light"
+"origin" "-872 648 512"
+"light" "5"
+}
+// entity 244
+{
+"light" "50"
+"origin" "-784 648 512"
+"classname" "light"
+"_color" "0.978616 1.000000 0.819195"
+}
