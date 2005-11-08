@@ -40,7 +40,6 @@ Stephan "esteel" Stahl
 Programmer
 
 
-
 Jody Gallagher
 Modeler
 
@@ -63,7 +62,6 @@ Bot Programmer
 
 Peter "Morphed" Pielak
 2d Artist
-
 
 
 Rick "Rat" Kelley
@@ -158,8 +156,6 @@ Edgenetwork
 Clinton "Kaziganthe" Freeman
 
 Jakob MG (tZork)
-
-Stahl
 
 BigMac
 
