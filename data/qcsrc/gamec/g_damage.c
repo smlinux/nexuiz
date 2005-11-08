@@ -133,9 +133,7 @@ entity damage_attacker;
 
 void Damage (entity targ, entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
 {
-
-
-	if (gameover && deathtype != DEATH_KILL)
+	if (gameover)
 		return;
 
 	local entity oldself;
