@@ -100,6 +100,7 @@ entity dest;
 .entity weaponentity;
 .entity exteriorweaponentity;
 .float switchweapon;
+.float autoswitch;
 void(float wpn, float wrequest) weapon_action;
 float(entity cl, float wpn, float andammo) client_hasweapon;
 void() w_clear;

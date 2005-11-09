@@ -249,6 +249,7 @@ void() add_MauveBot =
 
 	ClientConnect();
 	PutClientInServer();
+	self.autoswitch = 1; // bots currently need autoswitching
 	self.skill_level = cvar("skill");
 	if (self.skill_level > 10)
 		self.skill_level = 10;

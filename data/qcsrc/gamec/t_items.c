@@ -34,9 +34,10 @@ void Item_Touch (void)
 
 	sound (self, CHAN_BODY, self.noise, 1, ATTN_NORM);
 
+	// in case the player has autoswitch enabled do the following:
 	// if the player is using their best weapon before items are given, they
 	// probably want to switch to an even better weapon after items are given
-	_switchweapon = other.switchweapon == w_getbestweapon(other);
+	_switchweapon = (other.autoswitch && (other.switchweapon == w_getbestweapon(other)));
 
 	if (self.ammo_shells)
 		other.ammo_shells = min (other.ammo_shells + self.ammo_shells, 999);

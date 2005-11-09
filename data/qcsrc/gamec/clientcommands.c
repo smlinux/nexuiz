@@ -147,6 +147,15 @@ void SV_ParseClientCommand(string s) {
 			// ignore this?
 			sprint(self, "^1Unknown vote command.\n");
 		}
+	} else if(argv(0) == "autoswitch") {
+		self.autoswitch = stof(argv(1));
+		local string autoswitchmsg;
+		if (self.autoswitch) {
+			autoswitchmsg = "on";
+		} else {
+			autoswitchmsg = "off";
+		}
+		sprint(self, strcat("^1autoswitch turned ", autoswitchmsg, "\n"));
 	} else {
 		clientcommand(self,s);
 	}
