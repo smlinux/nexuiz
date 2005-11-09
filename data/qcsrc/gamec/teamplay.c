@@ -274,11 +274,11 @@ void PrintWelcomeMessage(entity pl)
 			);
 		}
 
-		if (cvar_string("g_mutatormsg")) {
+		if (cvar_string("g_mutatormsg") != "") {
 			s = strcat(s, "\n\nSpecial gameplay tips: ", cvar_string("g_mutatormsg"));
 		}
 
-		if (cvar_string("sv_motd")) {
+		if (cvar_string("sv_motd") != "") {
 			s = strcat(s, "\n\nMOTD: ", cvar_string("sv_motd"));
 		}
 	}

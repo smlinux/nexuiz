@@ -148,7 +148,8 @@ void SV_ParseClientCommand(string s) {
 			sprint(self, "^1Unknown vote command.\n");
 		}
 	} else if(argv(0) == "autoswitch") {
-		self.autoswitch = stof(argv(1));
+		// be backwards compatible with older clients (enabled)
+		self.autoswitch = ("0" != argv(1));
 		local string autoswitchmsg;
 		if (self.autoswitch) {
 			autoswitchmsg = "on";
@@ -162,7 +163,7 @@ void SV_ParseClientCommand(string s) {
 			versionmsg = "^1client is too old to get versioninfo.\nUPDATE!!! (http://www.nexuiz.com)^8";
 			// either that or someone wants to be funny
 		} else if (argv(1) != cvar_string("g_nexuizversion")) {
-			versionmsg = strcat("^4client version (", argv(1), ") and server version are different.\nYou might have to update!!!^8");
+			versionmsg = strcat("^3client version (", argv(1), ") and server version are different.\nYou might have to update!!!^8");
 		} else {
 			versionmsg = strcat("^2client version (", argv(1), ") and server version are the same.^8");
 		}
