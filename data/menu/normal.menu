@@ -23,7 +23,7 @@ Item Window Normal
 	}
 	Derive Picture NexuizLogo
 	{
-		picture	 	"gfx/m_background"
+		picture	 	"gfx/background"
 		pos		'0 0'
 		size		'1024 768'
 		alpha		0.5
@@ -58,20 +58,12 @@ Ignore
 	{
 		// this is a automation init function (dont change this to reinit!)
 		init 	Nex_Action_SetLinkOnReinit
-		target	"Panel::NexuizLogo"
+		//target	"Panel::NexuizLogo"
 	}
 	Item Reference Panel
 	{
 		pos	'62 127'
 		size	'938 650'
-
-		// The first thing you should see is our cool logo!
-		Derive Picture NexuizLogo
-		{
-			picture "gfx/m_strength"
-			pos	'100 30'
-			size	'700 600'
-		}
 	}
 
 // global floating windows
@@ -79,7 +71,3 @@ Ignore
 #include "menu/messagebox.menu"
 #include "menu/quit.menu"
 }
-
-
-
-

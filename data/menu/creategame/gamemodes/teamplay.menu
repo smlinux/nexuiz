@@ -2,7 +2,7 @@ Item Layout Teamplay
 {
 	direction	[Nex_DefaultVertDirection]
 	size 		'900 585'
-	origin		'450 0'
+	origin		'600 50'
 	alignment	[AlignFirst]
 
 	Derive Nex_Option_EditBox TimeLimit

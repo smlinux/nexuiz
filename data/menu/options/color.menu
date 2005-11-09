@@ -2,19 +2,21 @@
 // options/color.menu
 Item Window ColorControl
 {
-	size	  '600 600'
-	Derive Picture Table1
+	Derive Picture Table6
 	{
-		picture "gfx/table1"
-		size	'600 600'
+		picture "gfx/options_background"
+		size	'734 540'
+		pos	'146 35'
 	}
+
 
 	Item Layout Layout
 	{
-		direction [Nex_DefaultVertDirection]
-		size	  '600 600'
-		origin	  '300 50'
-		alignment [AlignFirst]
+		pos		'156 45'
+		size		'440 800'
+		origin		'280 0'
+		alignment	[AlignFirst]
+		direction	[Nex_DefaultVertDirection]
 
 		Derive Nex_Option_Slider Brightness
 		{

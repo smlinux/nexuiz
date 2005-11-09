@@ -1,6 +1,7 @@
 Item Layout Runematch
 {
 	size	'800 585'
+	origin	'200 50'
 	flag	[FlagEmbedded]
 
 	Item ScrollWindow ScrollWindow

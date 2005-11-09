@@ -2,39 +2,40 @@
 // options/key.menu
 Item Window KeyControl
 {
-	size	'700 600'
-
-	Derive Picture Table1
+	Derive Picture Table6
 	{
-		picture "gfx/table1"
-		size	'700 600'
+		picture "gfx/options_background"
+		size	'734 540'
+		pos	'146 35'
+	}
+
+	Derive MultiLabel Description
+	{
+		pos	'156 45'
+		size 	'600 24'
+		text
+			"Press [Enter] or [Mouse1] to change a key binding.\nPress [Delete] to remove the binding."
 	}
 
 	Item Layout Layout
 	{
-		pos		'30 0'
-		size	 	'700 600'
-		direction 	[Nex_DefaultVertDirection]
+		pos		'156 74'
+		size		'734 490'
+		origin		'280 0'
+		alignment	[AlignFirst]
+		direction	[Nex_DefaultVertDirection]
 		flag	  	[FlagEmbedded]
-
-		Derive MultiLabel Description
-		{
-			pos	'0 50'
-			size 	'600 24'
-			text
-	"Press [Enter] or [Mouse1] to change a key binding.\nPress [Delete] to remove the binding."
-		}
 
 		// table: name key1 key2
 		Item Layout TableDesc
 		{
 			pos	'0 0'
-			size	'600 15'
+			size	'860 15'
 			direction '10 0'
 
 			Derive Rect Action
 			{
-				size	'200 15'
+				size	'280 15'
 				color	'0.5 0.5 0.5'
 				alpha	0.5
 
@@ -45,7 +46,7 @@ Item Window KeyControl
 			}
 			Derive Rect Key1
 			{
-				pos 	'210 0'
+				pos 	'490 0'
 				size	'190 15'
 				color	'0.5 0.5 0.5'
 				alpha	0.5
@@ -57,7 +58,7 @@ Item Window KeyControl
 			}
 			Derive Rect Key2
 			{
-				pos 	'410 0'
+				pos 	'690 0'
 				size	'190 15'
 				color	'0.5 0.5 0.5'
 				alpha	0.5
@@ -70,22 +71,24 @@ Item Window KeyControl
 		}
 		Item Window Temp
 		{
-			size 	'700 500'
+			size 	'1360 440'
+			origin	'580 0'
 			flag	[FlagEmbedded]
 
 			Item ScrollWindow Scroll
 			{
-				size	'600 500'
+				size	'860 440'
 				flag	[FlagEmbedded]
 
 				Item Arrangement Keys
-				{
+ 				{
 					direction 	[Nex_DefaultVertDirection]
 					flag		[FlagEmbedded]
 
 					Template Layout Nex_Key_Template
 					{
-						size	'600 12'
+						pos	'0 0'
+						size	'860 12'
 						flag	[FlagEmbedded]
 						direction '10 0'
 
@@ -95,7 +98,7 @@ Item Window KeyControl
 						}
 						Derive Label Action
 						{
-							size	'200 12'
+							size	'280 12'
 						}
 						Template DataLink_AltString Link1
 						{
@@ -104,7 +107,7 @@ Item Window KeyControl
 						}
 						DeriveTemplate Nex_KeyButton Key1
 						{
-							pos	'210 0'
+							pos	'810 0'
 							size	'190 12'
 							target	"##down"
 							action	Nex_Action_KeyButton
@@ -314,7 +317,7 @@ Item Window KeyControl
 			}
 			Item VScrollBar Scroller
 			{
-				pos	'610 0'
+				pos	'680 0'
 				size	'20 100'
 				target 	"##prev"
 			}
@@ -364,10 +367,8 @@ Item Window KeyControl
 			{
 				pos	'3 3'
 				wrap 	24
-				text	"Now press the key you want to bind or press [Escape] to abort."
+				text	"Now press the key you \nwant to bind or \npress [Escape] to abort."
 			}
 		}
 	}
 }
-
-

@@ -3,10 +3,12 @@
 // creategame/basic.menu
 Item Window Basic
 {
-	size '900 585'
-
 	Item Window Map
 	{
+		pos	'0 50'
+		size '400 585'
+		flag [FlagEmbedded]
+
 		DeriveTemplate Nex_Composition Nex_Option_MapType
 		{
 			DeriveTemplate Nex_Automation_Option_Switch Automation
@@ -20,46 +22,68 @@ Item Window Basic
 			}
 		}
 
-		size '400 585'
-		flag [FlagEmbedded]
-
-		Derive Picture Table3
+		Derive Picture PrevPicture
 		{
-			picture "gfx/table2"
-			pos	'0 0'
-			size	'400 585'
-		}
-		Derive Picture Picture
-		{
-			picture "gfx/m_white"
-			size	'350 300'
-			pos	'20 40'
-		}
-		Derive MultiLabel Description
-		{
-			pos	'20 340'
-			size	'350 285'
-			wrap	31
-			fontSize '11 11 0'
+			size	'30 18'
+			picture "gfx/create_map_nav"
+			pos	'30 25'
 		}
 		Derive TextButton Prev
 		{
 			normal	"<<"
-			pos	'20 25'
+			pos	'33 29'
 			action	Nex_Action_MapSelector_Prev
+		}
+		Derive Picture NamePicture
+		{
+			picture		"gfx/create_map_nav_background"
+			size		'305 18'
+			pos		'60 24'
 		}
 		Derive Label Name
 		{
 			alignment	[AlignCenter]
+			color		"1 1 1"
 			size		'306 14'
-			pos		'44 24'
+			pos		'64 29'
+		}
+		Derive Picture NextPicture
+		{
+			size	'30 18'
+			picture "gfx/create_map_nav"
+			pos	'366 25'
 		}
 		Derive TextButton Next
 		{
 			normal	">>"
-			pos	'348 25'
+			pos	'369 29'
 
 			action	Nex_Action_MapSelector_Next
+		}
+		Derive Picture Table1
+		{
+			picture "gfx/create_map_border"
+			pos	'20 35'
+			size	'385 275'
+		}
+		Derive Picture Picture
+		{
+			picture "gfx/m_white"
+			size	'323 226'
+			pos	'51 60'
+		}
+		Derive Picture Table2
+		{
+			picture "gfx/create_map_desc_background"
+			pos	'20 295'
+			size	'385 245'
+		}
+		Derive MultiLabel Description
+		{
+			pos	'38 298'
+			size	'383 285'
+			wrap	32
+			fontSize '11 11 0'
 		}
 		Derive Nex_Option_MapType MapType
 		{
@@ -74,7 +98,7 @@ Item Window Basic
 	}
 	Item Layout Settings
 	{
-		pos		'400 0'
+		pos		'400 80'
 		size		'500 585'
 		origin		'250 0'
 		alignment	[AlignFirst]
@@ -148,7 +172,7 @@ Item Window Basic
 		{}
 		Derive PictureButton Start
 		{
-			normal		"$gfx/m_start"
+			normal		"$gfx/create_b_start"
 
 			action	Nex_Action_Map_Start
 		}

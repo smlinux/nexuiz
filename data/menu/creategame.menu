@@ -3,15 +3,19 @@
 // creategame.menu
 Item Layout CreateGame
 {
-	size	'900 630'
-	alignment [AlignLeft]
-	direction [Nex_DefaultVertDirection]
+	Derive Picture Table1
+	{
+		picture "gfx/create_background"
+		pos	'0 0'
+		size	'910 610'
+	}
 
 	Item Layout Bar
 	{
-		size	  '900 20'
+		size	  '910 60'
 		alignment [AlignLeft]
 		direction '32 0 0'
+		origin	  '40 30'
 
 		Derive TextButton BasicOptions
 		{
@@ -51,7 +55,6 @@ Item Layout CreateGame
 	}
 	Item EventWindow Panel
 	{
-		size '900 585'
 		reinit	Nex_Action_MakeFirstVisible
 
 		#include "menu/creategame/basic.menu"

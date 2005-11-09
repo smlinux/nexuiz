@@ -4,24 +4,30 @@
 
 Item Window JoinGame
 {
-	Derive Picture Table3
+	Derive Picture Table1
 	{
-		picture "gfx/table3"
-		pos	'0 0'
-		size	'900 555'
+		picture "gfx/join_border"
+		size	'910 610'
+	}
+	Derive Picture Table2
+	{
+		picture "gfx/join_background"
+		pos	'28 32'
+		size	'854 481'
 	}
 	Item Layout JoinGame
 	{
-		size		'900 650'
-		direction	'0 10'
+		size		'872 501'
+		direction	'0 8'
 		alignment	[AlignCenter]
-		origin		'450 0'
-#define SList_Ping	'50 15'
-#define SList_Name	'492 15'
-#define SList_Map	'120 15'
-#define SList_Players	'60 15'
-#define SList_Mod	'120 15'
-#define SList_Direction '2 0'
+		origin		'460 44'
+
+		#define SList_Ping	'50 15'
+		#define SList_Name	'467 15'
+		#define SList_Map	'120 15'
+		#define SList_Players	'70 15'
+		#define SList_Mod	'90 15'
+		#define SList_Direction '2 0'
 
 		Derive Nex_Composition Query
 		{
@@ -33,7 +39,7 @@ Item Window JoinGame
 			}
 			Derive EditBox EditBox
 			{
-				size	'700 12'
+				size	'650 12'
 				target	"::Data::ServerList::QueryString::Text"
 
 				action	Nex_Action_ExecuteQuery
@@ -44,7 +50,7 @@ Item Window JoinGame
 		{
 			direction	[SList_Direction]
 			flag		[FlagEmbedded]
-			size		'900 15'
+			size		'844 15'
 
 			DeriveTemplate Rect Theme
 			{
@@ -128,12 +134,12 @@ Item Window JoinGame
 		Item Window Scroll
 		{
 			flag	[FlagEmbedded]
-			size	'900 500'
+			size	'844 416'
 
 			Item ScrollWindow ScrollArea
 			{
 				flag	[FlagEmbedded]
-				size 	'870 500'
+				size 	'824 416'
 
 				Item Arrangement Slist
 				{
@@ -142,7 +148,7 @@ Item Window JoinGame
 
 					DeriveTemplate Nex_HostCache_Entry Entry
 					{
-						size		'852 15'
+						size		'824 15'
 						action		Nex_Action_EntryConnect
 
 						DeriveTemplate Nex_HostCache_ValueField Ping
@@ -160,19 +166,18 @@ Item Window JoinGame
 						}
 						DeriveTemplate Nex_HostCache_StringField Map
 						{
-							pos		'546 0'
+							pos		'519 0'
 							size		[SList_Map]
 							target		"map"
 						}
 						DeriveTemplate Nex_HostCache_Players Players
 						{
-							pos		'668 0'
+							pos		'641 0'
 							size		[SList_Players]
-							alignment	[AlignRight]
 						}
 						DeriveTemplate Nex_HostCache_StringField Mod
 						{
-							pos		'730 0'
+							pos		'713 0'
 							size		[SList_Mod]
 							target		"mod"
 						}
@@ -185,16 +190,17 @@ Item Window JoinGame
 			}
 			Item VScrollBar Scroller
 			{
-				pos	'870 0'
+				pos	'814 0'
 				size	'20 100'
 				target	"##prev"
 			}
 		}
-		Derive PictureButton Refresh
-		{
-			normal		"$gfx/m_refresh"
+	}
+	Derive PictureButton Refresh
+	{
+		pos	'395 522'
+		normal	"$gfx/join_b_refresh"
 
-			action 	Nex_Action_RefreshSlist
-		}
+		action 	Nex_Action_RefreshSlist
 	}
 }

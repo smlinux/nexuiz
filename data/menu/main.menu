@@ -3,7 +3,7 @@
 // Main menu
 Item Arrangement Main
 {
-	pos		'29 30'
+	pos		'132 9'
 	direction 	'10 0'
 
 	DeriveTemplate PictureButton MainButton
@@ -13,44 +13,39 @@ Item Arrangement Main
 
 	Derive MainButton Join
 	{
-		//normal "Join Game"
-		normal		"$gfx/m_top_joingame"
-		selected	"$gfx/m_top_joingame"
+		normal		"$gfx/b_join"
+		selected	"$gfx/b_join_u"
 
 		target	"JoinGame"
 		action	Nex_Action_JumpToJoinGame
 	}
 	Derive MainButton Create
 	{
-		//normal 	"Create Game"
-		normal		"$gfx/m_top_creategame"
-		selected	"$gfx/m_top_creategame"
+		normal		"$gfx/b_create"
+		selected	"$gfx/b_create_u"
 
 		target 	"CreateGame"
 		init	Nex_Action_SetNormalPanelLink
 	}
 	Derive MainButton Options
 	{
-		//normal 	"Options"
-		normal		"$gfx/m_top_options"
-		selected	"$gfx/m_top_options"
+		normal		"$gfx/b_options"
+		selected	"$gfx/b_options_u"
 
 		target	"Options"
 		init	Nex_Action_SetNormalPanelLink
 	}
 	Derive MainButton Credits
 	{
-		//normal	"Credits"
-		normal		"$gfx/m_top_credits"
-		selected	"$gfx/m_top_credits"
+		normal		"$gfx/b_credits"
+		selected	"$gfx/b_credits_u"
 
 		action		Nex_Credits_Action
 	}
 	Derive MainButton Quit
 	{
-		//normal "Quit"
-		normal		"$gfx/m_top_quit"
-		selected	"$gfx/m_top_quit"
+		normal		"$gfx/b_quit"
+		selected	"$gfx/b_quit_u"
 
 		action		Nex_Quit_Action
 	}

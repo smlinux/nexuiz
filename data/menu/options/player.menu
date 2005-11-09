@@ -2,54 +2,73 @@
 // options/player.menu
 Item Window Player
 {
-	size	  '760 600'
-
-	Derive Picture Table1
+	Derive Picture Table6
 	{
-		picture "gfx/table1"
-		size	'760 600'
+		picture "gfx/options_background"
+		size	'734 540'
+		pos	'146 35'
 	}
 
 	Item Window Avatar
 	{
 		size	'300 600'
-		pos	'20 20'
+		pos	'156 45'
 		flag	[FlagEmbedded]
 
+		Derive Picture Table7
+		{
+			picture "gfx/options_playerpic_border"
+			size	'320 420'
+			pos	'-10 5'
+		}
 		Derive Picture Picture
 		{
-			size	'300 400'
+			size	'263 360'
 			picture "gfx/m_white"
-		}
-		Derive Rect Overlay
-		{
-			size		'300 15'
-			drawFlag 	[DrawFlagAdditive]
-			alpha		0.4
+			pos	'19 36'
 		}
 		Derive MultiLabel Description
 		{
 			size	'300 200'
-			pos	'0 400'
+			pos	'10 415'
 			wrap	27
 			fontSize '11 11 0'
 		}
+		Derive Picture PrevPicture
+		{
+			size	'30 18'
+			picture "gfx/options_playerpic_nav"
+			pos	'0 0'
+		}
 		Derive TextButton Prev
 		{
-			pos 	'0 0'
+			pos 	'3 3'
 			normal	"<<"
 
 			action	Nex_Action_Avatar_Prev
 		}
+		Derive Picture NamePicture
+		{
+			size	'240 18'
+			picture "gfx/options_playerpic_nav_background"
+			pos	'30 0'
+		}
 		Derive Label Name
 		{
-			pos		'24 0'
-			size		'276 12'
+			pos		'30 4'
+			color		"1 1 1"
+			size		'270 12'
 			alignment	[AlignCenter]
+		}
+		Derive Picture NextPicture
+		{
+			size	'30 18'
+			picture "gfx/options_playerpic_nav"
+			pos	'270 0'
 		}
 		Derive TextButton Next
 		{
-			pos	'278 0'
+			pos	'275 3'
 			normal	">>"
 
 			action	Nex_Action_Avatar_Next
@@ -61,7 +80,7 @@ Item Window Player
 	}
 	Item Layout Settings
 	{
-		pos		'320 20'
+		pos		'455 50'
 		size		'440 600'
 		origin		'180 0'
 		flag		[FlagEmbedded]
@@ -123,7 +142,7 @@ Item Window Player
 		{}
 		Derive PictureButton Apply
 		{
-			normal		"$gfx/m_apply"
+			normal		"$gfx/options_b_apply"
 
 			action	Nex_Action_Player_Apply
 		}

@@ -2,9 +2,10 @@ Item Layout Game
 {
 	direction '20 0'
 
-	Item Arrangement Menu
+	Item Layout Menu
 	{
 		direction '0 10'
+		origin	  '30 50'
 
 		Derive TextButton Teamplay
 		{
@@ -44,7 +45,7 @@ Item Layout Game
 	}
 	Item EventWindow Panel
 	{
-		size	'760 800'
+		size	'900 800'
 		reinit	Nex_Action_MakeFirstVisible
 
 		#include "menu/creategame/gamemodes/gamemisc.menu"

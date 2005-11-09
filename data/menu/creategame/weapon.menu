@@ -5,10 +5,11 @@ Item Window Weapon
 {
 	size	'900 585'
 	flag	[FlagEmbedded]
+	pos  '30 50'
 
 	Item ScrollWindow ScrollWindow
 	{
-		size 	'880 585'
+		size 	'820 530'
 		flag	[FlagEmbedded]
 
 		Item Arrangement Arrangement
@@ -20,7 +21,7 @@ Item Window Weapon
 			// hack to make the arrangement have a set width
 			Item Window FixWidth
 			{
-				size	'900 0'
+				size	'870 0'
 				Derive Nex_Void Left
 				{
 					pos	'0 0'
@@ -375,7 +376,7 @@ Item Window Weapon
 	}
 	Item VScrollBar Scroller
 	{
-		pos	'880 0'
+		pos	'830 0'
 		size	'20 100'
 		target	"##prev"
 	}

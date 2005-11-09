@@ -1,7 +1,7 @@
 // NG Menu
 // cursor qh
 
-const string	CURSOR_PATH		= "gfx/m_cursor"; //"ui/mousepointer.tga";
+const string	CURSOR_PATH		= "gfx/cursor"; //"ui/mousepointer.tga";
 
 string Cursor_Current;
 var void() Cursor_Animation = __NULL__;

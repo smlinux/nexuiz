@@ -79,8 +79,8 @@
 #define DefaultEndSound		"misc/endgame.wav"
 
 // Slider
-#define DefaultSliderBar	"gfx/m_sliderbar"
-#define DefaultSlider		"gfx/m_slider"
+#define DefaultSliderBar	"gfx/options_scroll"
+#define DefaultSlider		"gfx/options_scroll_scroller"
 #define DefaultSliderBarSize	"144 12"
 #define DefaultSliderSize	"12 12"
 #define DefaultProportions	"0.073107 0.853785 0.073107"

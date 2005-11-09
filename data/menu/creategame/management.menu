@@ -7,7 +7,7 @@ Item Layout Management
 	flag		[FlagEmbedded]
 	alignment 	[AlignCenter]
 	direction 	'0 20'
-	origin		'450 0'
+	origin		'450 80'
 
 	Item Arrangement ConfigType
 	{
