@@ -178,6 +178,7 @@ float alreadychangedlevel;
 
 .float welcomemessage_time;
 .float welcomemessage_time2;
+.string versionmessage;
 
 // stahl's voting
 string votecalled;

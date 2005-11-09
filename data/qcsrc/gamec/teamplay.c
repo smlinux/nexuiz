@@ -249,7 +249,7 @@ void PrintWelcomeMessage(entity pl)
 		if(cvar("g_grappling_hook"))
 			grap_msg = strzone("\n\nBind a key to ^1+hook^8 to use the grappling hook\n");
 
-		s = strcat("\n\nThis is Nexuiz ", cvar_string("g_nexuizversion"), "\n\nMatch type is ^1", gamemode_name, "^8\n");
+		s = strcat("\n\nThis is Nexuiz ", cvar_string("g_nexuizversion"), "\n", self.versionmessage, "^8\n\nMatch type is ^1", gamemode_name, "^8\n");
 		s = strzone(s);
 
 		temp = strcat(
@@ -272,6 +272,14 @@ void PrintWelcomeMessage(entity pl)
 			"Go to ^1Menu->Options->Player^8 to change your name & model\n",
 			grap_msg
 			);
+		}
+
+		if (cvar_string("g_mutatormsg")) {
+			s = strcat(s, "\n\nSpecial gameplay tips: ", cvar_string("g_mutatormsg"));
+		}
+
+		if (cvar_string("sv_motd")) {
+			s = strcat(s, "\n\nMOTD: ", cvar_string("sv_motd"));
 		}
 	}
 	else

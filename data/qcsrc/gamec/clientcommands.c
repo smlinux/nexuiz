@@ -156,6 +156,17 @@ void SV_ParseClientCommand(string s) {
 			autoswitchmsg = "off";
 		}
 		sprint(self, strcat("^1autoswitch turned ", autoswitchmsg, "\n"));
+	} else if(argv(0) == "clientversion") {
+		local string versionmsg;
+		if (argv(1) == "$g_nexuizversion") {
+			versionmsg = "^1client is too old to get versioninfo.\nUPDATE!!! (http://www.nexuiz.com)^8";
+			// either that or someone wants to be funny
+		} else if (argv(1) != cvar_string("g_nexuizversion")) {
+			versionmsg = strcat("^4client version (", argv(1), ") and server version are different.\nYou might have to update!!!^8");
+		} else {
+			versionmsg = strcat("^2client version (", argv(1), ") and server version are the same.^8");
+		}
+		self.versionmessage = strzone(versionmsg);
 	} else {
 		clientcommand(self,s);
 	}
