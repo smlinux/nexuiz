@@ -6,7 +6,7 @@ Item Layout Runematch
 
 	Item ScrollWindow ScrollWindow
 	{
-		size 	'780 585'
+		size 	'780 535'
 		flag	[FlagEmbedded]
 
 		Item Arrangement Arrangement

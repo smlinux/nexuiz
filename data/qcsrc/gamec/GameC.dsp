@@ -243,6 +243,10 @@ SOURCE=.\g_violence.c
 
 SOURCE=.\g_world.c
 # End Source File
+# Begin Source File
+
+SOURCE=.\teamplay.c
+# End Source File
 # End Group
 # Begin Group "map"
 

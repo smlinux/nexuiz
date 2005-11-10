@@ -7,6 +7,67 @@
 ===========================================================================
 */
 
+void LaserTarget_Think()
+{
+	entity e;
+	vector offset;
+	float uselaser;
+	uselaser = 0;
+
+	// list of weapons that will use the laser, and the options that enable it
+	if(self.owner.laser_on && self.owner.weapon == WEP_ROCKET_LAUNCHER && cvar("g_homing_missile"))
+		uselaser = 1;
+	// example
+	//if(self.owner.weapon == WEP_ELECTRO && cvar("g_homing_electro"))
+	//	uselaser = 1;
+
+
+
+	// if a laser-enabled weapon isn't selected, delete any existing laser and quit
+	if(!uselaser)
+	{
+		// rocket launcher isn't selected, so no laser target.
+		if(self.lasertarget != world)
+		{
+			remove(self.lasertarget);
+			self.lasertarget = world;
+		}
+		return;
+	}
+
+	if(!self.lasertarget)
+	{
+		// we don't have a lasertarget entity, so spawn one
+		//bprint("create laser target\n");
+		e = self.lasertarget = spawn();
+		e.owner = self.owner;			// Its owner is my owner
+		e.classname = "laser_target";
+		e.movetype = MOVETYPE_NOCLIP;	// don't touch things
+		setmodel(e, "models/laser_dot.mdl");	// what it looks like
+		e.scale = 1.25;				// make it larger
+		e.alpha = 0.25;				// transparency
+		e.colormod = '255 0 0' * (1/255) * 8;	// change colors
+		e.effects = EF_FULLBRIGHT;
+		// make it dynamically glow
+		// you should avoid over-using this, as it can slow down the player's computer.
+		e.glow_color = 251; // red color
+		e.glow_size = 12;
+	}
+	else
+		e = self.lasertarget;
+
+	// move the laser dot to where the player is looking
+
+	makevectors(self.owner.v_angle); // set v_forward etc to the direction the player is looking
+	offset = '0 0 26' + v_right*3;
+	traceline(self.owner.origin + offset, self.owner.origin + offset + v_forward * 2048, FALSE, self); // trace forward until you hit something, like a player or wall
+	setorigin(e, trace_endpos + v_forward*8); // move me to where the traceline ended
+	if(trace_plane_normal != '0 0 0')
+		e.angles = vectoangles(trace_plane_normal);
+	else
+		e.angles = vectoangles(v_forward);
+}
+
 void() CL_Weaponentity_Think =
 {
 	self.nextthink = time;
@@ -17,6 +78,9 @@ void() CL_Weaponentity_Think =
 	}
 	self.effects = self.owner.effects;
 	self.alpha = self.owner.alpha;
+
+	// create or update the lasertarget entity
+	LaserTarget_Think();
 };
 
 void() CL_ExteriorWeaponentity_Think =

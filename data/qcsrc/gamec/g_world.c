@@ -90,6 +90,10 @@ void worldspawn (void)
 	precache_model ("models/weapons/w_rl.zym");
 	precache_model ("models/weapons/w_shotgun.zym");
 	precache_model ("models/weapons/w_uzi.zym");
+
+	// laser for laser-guided weapons
+	precache_model ("models/laser_dot.mdl");
+
 	precache_sound ("announcer/1fragleft.wav");
 	precache_sound ("announcer/1minuteremains.wav");
 	precache_sound ("announcer/2fragsleft.wav");

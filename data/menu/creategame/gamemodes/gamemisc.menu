@@ -9,7 +9,7 @@ Item Layout Misc
 
 	Item ScrollWindow ScrollWindow
 	{
-		size 	'780 585'
+		size 	'780 535'
 		flag	[FlagEmbedded]
 
 		Item Arrangement Arrangement
@@ -152,6 +152,11 @@ Item Layout Misc
 			{
 				text	"Vampire Mode"
 				target	"::Data::Game::Misc::Vampire::Switch"
+			}
+			Derive Nex_Option_Switch HomingRocket
+			{
+				text	"Laser-Guide Rockets"
+				target	"::Data::Game::Misc::HomingRocket::Switch"
 			}
 			Derive Nex_Option_Switch MidAir
 			{

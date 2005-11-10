@@ -158,6 +158,13 @@ Item DataContainer Misc
 
 		[DataLink_OnOffSwitch]
 	}
+	Item Data_Cvar HomingRocket
+	{
+		cvarName	"g_homing_missile"
+		defValue	0
+
+		[DataLink_OnOffSwitch]
+	}
 	Item Data_Cvar MidAir
 	{
 		cvarName	"g_midair"

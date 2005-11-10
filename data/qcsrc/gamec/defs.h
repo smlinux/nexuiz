@@ -203,3 +203,6 @@ float GRAPHOOK_RELEASE		= 21;
 // (note: you can change the hook impulse #'s to whatever you please)
 .float hook_time;
 
+// Laser target for laser-guided weapons
+.entity lasertarget;
+.float laser_on;

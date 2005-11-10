@@ -364,6 +364,21 @@ Item Window Weapon
 				text	"Rocket Launcher Refire"
 				target	"Data::Weapon::RocketLauncherrefire::Text"
 			}
+			Derive Nex_Option_EditBox RocketLauncherGuidedSpeed
+			{
+				text	"Guided Rocket Launcher Speed"
+				target	"Data::Weapon::RocketLauncherGuidedSpeed::Text"
+			}
+			Derive Nex_Option_EditBox RocketLauncherGuidedTurnRate
+			{
+				text	"Guided Rocket Launcher Turn Rate"
+				target	"Data::Weapon::RocketLauncherGuidedTurnRate::Text"
+			}
+			Derive Nex_Option_Switch RocketLauncherGuidedAllowSteal
+			{
+				text	"Guided Rocket Launcher Allow Confusion"
+				target	"Data::Weapon::RocketLauncherGuidedAllowSteal::Switch"
+			}
 			Derive Nex_Line	Seperator
 			{}
 			Derive TextButton Reset

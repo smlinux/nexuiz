@@ -466,4 +466,25 @@ Item DataContainer Weapon
 
 		[DataLink_Setting]
 	}
+	Item Data_Cvar RocketLauncherGuidedSpeed
+	{
+		cvarName	"g_balance_rocketlauncher_homing_speed"
+		defValue	650
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar RocketLauncherGuidedTurnRate
+	{
+		cvarName	"g_balance_rocketlauncher_homing_turnrate"
+		defValue	0.5
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar RocketLauncherGuidedAllowSteal
+	{
+		cvarName	"g_balance_rocketlauncher_homing_allow_steal"
+		defValue	1
+
+		[DataLink_OnOffSwitch]
+	}
 }
