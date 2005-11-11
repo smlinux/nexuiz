@@ -255,7 +255,7 @@ Item Layout Misc
 				text	"Player Accelerate"
 				target	"Data::Game::Misc::Accelerate::Text"
 			}
-			Derive Nex_Line	Seperator
+			Derive Nex_Line	SeperatorSpec
 			{}
 			Derive Nex_Option_Switch SpecMode
 			{
@@ -267,7 +267,7 @@ Item Layout Misc
 				text	"Defaultmodel"
 				target	"Data::Game::Misc::DefaultModel::Switch"
 			}
-			Derive Nex_Line	Seperator
+			Derive Nex_Line	SeperatorReset
 			{}
 			Derive TextButton Reset
 			{
