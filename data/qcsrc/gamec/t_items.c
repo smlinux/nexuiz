@@ -130,6 +130,7 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 	{
 		setorigin (self, self.origin + '0 0 22');
 		setsize (self, '-12 -12 -12', '12 12 12');
+		self.colormap = 178;
 	}
 	else
 	{
