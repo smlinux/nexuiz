@@ -144,6 +144,8 @@ void worldspawn (void)
 	precache_sound ("weapons/hagexp1.ogg");
 	precache_sound ("weapons/hagexp2.ogg");
 	precache_sound ("weapons/hagexp3.ogg");
+	precache_sound ("weapons/hook_fire.ogg");
+	precache_sound ("weapons/hook_impact.ogg");
 	precache_sound ("weapons/lasergun_fire.ogg");
 	precache_sound ("weapons/laserimpact.ogg");
 	precache_sound ("weapons/nexfire.ogg");
