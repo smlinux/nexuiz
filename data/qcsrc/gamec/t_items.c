@@ -130,7 +130,10 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 	{
 		setorigin (self, self.origin + '0 0 22');
 		setsize (self, '-12 -12 -12', '12 12 12');
-		self.colormap = 178;
+		
+		// FIXME: weapon pickups should have a proper 'team' color (something neutral)
+		// This would be the right place to do this
+		// doesn't work: setcolor(self,178.0);
 	}
 	else
 	{
