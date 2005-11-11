@@ -48,24 +48,81 @@ void W_Plasma_Explode (void)
 		RadiusDamage (self, self.owner, cvar("g_balance_electro_damage") * 0.33, cvar("g_balance_electro_edgedamage") * 0.33, cvar("g_balance_electro_radius"), world, cvar("g_balance_electro_force") * 0.33, IT_ELECTRO);
 	else
 		RadiusDamage (self, self.owner, cvar("g_balance_electro_damage"), cvar("g_balance_electro_edgedamage"), cvar("g_balance_electro_radius"), world, cvar("g_balance_electro_force"), IT_ELECTRO);
-	sound (self, CHAN_BODY, "weapons/electro_impact.wav", 1, ATTN_NORM);
+	sound (self, CHAN_BODY, "weapons/electro_impact.ogg", 1, ATTN_NORM);
 
 	remove (self);
 }
 
+void W_Plasma_Explode_Combo (void) {
+	float  combocoredamage;
+	float  comboedgedamage;
+	vector org2;
+		
+	combocoredamage = cvar("g_balance_electro_combo_coredamage");
+	comboedgedamage = cvar("g_balance_electro_combo_edgedamage");
+
+	org2 = findbetterlocation (self.origin);
+	effect (org2, "models/sprites/electrocombo.spr32", 0, 30, 30);
+	sound (self, CHAN_BODY, "weapons/electro_impact_combo.ogg", 1, ATTN_NORM);
+	
+	self.event_damage = SUB_Null;
+	if (self.movetype == MOVETYPE_BOUNCE)
+		RadiusDamage (self, self.owner, (cvar("g_balance_electro_damage") * 0.33) + combocoredamage, (cvar("g_balance_electro_edgedamage") * 0.33) + comboedgedamage, cvar("g_balance_electro_radius"), world, cvar("g_balance_electro_force") * 0.33, IT_ELECTRO);
+	else
+		RadiusDamage (self, self.owner, cvar("g_balance_electro_damage") + combocoredamage, cvar("g_balance_electro_edgedamage") + comboedgedamage, cvar("g_balance_electro_radius"), world, cvar("g_balance_electro_force"), IT_ELECTRO);
+	te_customflash(org2, 150, 5, '0.5 0.5 1');
+	te_explosionrgb(org2, '0.5 0.5 1');
+	remove (self);	
+}
+
+void W_Plasma_Check_Combo (void) {
+	entity	targ;
+	vector	blastorigin;	
+	float   combotarget;
+	float 	rad;
+	rad = cvar("g_balance_electro_radius");
+	blastorigin = (self.origin + (self.mins + self.maxs) * 0.5);
+	targ = findradius (blastorigin, rad / 2);
+	combotarget = 0;
+	while (targ) {	
+		if (targ != self) {
+			if (world != targ) {
+				if (targ.classname == "plasma") {
+					combotarget = 1;
+				}
+			}
+		}
+		targ = targ.chain;
+	}
+	
+	if (combotarget == 1) {
+		self.classname = "plasma_chain";
+		W_Plasma_Explode_Combo ();
+	} else {
+		W_Plasma_Explode ();
+	}
+}
+
 void W_Plasma_Touch (void)
 {
-	if (other.takedamage == DAMAGE_AIM)
+	if (other.takedamage == DAMAGE_AIM) {
 		W_Plasma_Explode ();
-	else
-		sound (self, CHAN_IMPACT, "weapons/grenade_bounce.wav", 1, ATTN_NORM);
+	} else {
+		sound (self, CHAN_IMPACT, "weapons/electro_bounce.ogg", 1, ATTN_NORM);
+	}
 }
 
 void W_Plasma_Damage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
 {
-	self.health = self.health - damage;
-	if (self.health <= 0)
-		W_Plasma_Explode ();
+	if(inflictor.classname == "plasma_chain") {
+		self.classname = "plasma_chain";
+		W_Plasma_Explode_Combo ();
+	} else {
+		self.health = self.health - damage;
+		if (self.health <= 0) {
+			W_Plasma_Explode ();
+		}
+	}
 }
 
 void() W_Electro_Attack
@@ -75,7 +132,7 @@ void() W_Electro_Attack
 	local float postion;
 
 	postion = self.electrocount;
-	sound (self, CHAN_WEAPON, "weapons/electro_fire.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "weapons/electro_fire.ogg", 1, ATTN_NORM);
 
 	self.punchangle_x = -2;
 
@@ -99,7 +156,7 @@ void() W_Electro_Attack
 	}
 
 	proj = spawn ();
-	proj.classname = "plasma";
+	proj.classname = "plasma_prim";
 	proj.owner = self;
 	proj.think = W_Plasma_Explode;
 	proj.nextthink = time + 2;
@@ -130,7 +187,7 @@ void() W_Electro_Attack
 		proj.movetype = MOVETYPE_FLY;
 		proj.velocity = v_forward * cvar("g_balance_electro_speed");
 		proj.angles = vectoangles(proj.velocity);
-		proj.touch = W_Plasma_Explode;
+		proj.touch = W_Plasma_Check_Combo;
 		setmodel(proj, "models/elaser.mdl");
 		setsize(proj, '0 0 0', '0 0 0');
 	}
@@ -144,7 +201,7 @@ void() W_Electro_Attack2
 	local float postion;
 
 	postion = self.electrocount;
-	sound (self, CHAN_WEAPON, "weapons/electro_fire.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "weapons/electro_fire2.ogg", 1, ATTN_NORM);
 
 	self.punchangle_x = -2;
 
@@ -176,7 +233,9 @@ void() W_Electro_Attack2
 	{
 		if (cvar("g_use_ammunition"))
 			self.ammo_cells = self.ammo_cells - 1;
-		proj.effects = EF_FULLBRIGHT;
+		proj.effects = EF_ADDITIVE;
+		proj.glow_size = 50;
+		proj.glow_color = 45;
 		proj.movetype = MOVETYPE_BOUNCE;
 		proj.velocity = v_forward * cvar("g_balance_electro_ballspeed") + v_up * cvar("g_balance_electro_ballspeed_up");
 		proj.touch = W_Plasma_Touch;

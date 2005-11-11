@@ -122,7 +122,7 @@ void GrapplingHookTouch (void)
 	}
 
 	self.event_damage = SUB_Null; // fixme: ability to dislodge a player by damaging hook?
-	sound (self, CHAN_BODY, "weapons/laserimpact.wav", 1, ATTN_NORM);
+	sound (self, CHAN_BODY, "weapons/hook_impact.ogg", 1, ATTN_NORM);
 
 	self.state = 1;
 	self.think = GrapplingHookThink;
@@ -139,7 +139,7 @@ void FireGrapplingHook (void)
 
 	makevectors(self.v_angle);
 
-	sound (self, CHAN_WEAPON, "weapons/lasergun_fire.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "weapons/hook_fire.ogg", 1, ATTN_NORM);
 	org = self.origin + self.view_ofs + v_forward * 15 - v_right * 5 + v_up * -12;
 	te_customflash(org, 160, 0.2, '1 0 0');
 

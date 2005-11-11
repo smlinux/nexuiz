@@ -52,7 +52,7 @@ void W_Laser_Touch (void)
 
 	self.event_damage = SUB_Null;
 	RadiusDamage (self, self.owner, cvar("g_balance_laser_damage"), cvar("g_balance_laser_edgedamage"), cvar("g_balance_laser_radius"), world, cvar("g_balance_laser_force"), IT_LASER);
-	sound (self, CHAN_BODY, "weapons/laserimpact.wav", 1, ATTN_NORM);
+	sound (self, CHAN_BODY, "weapons/laserimpact.ogg", 1, ATTN_NORM);
 
 	remove (self);
 }
@@ -62,7 +62,7 @@ void W_Laser_Attack (void)
 	local entity missile;
 	local vector org;
 
-	sound (self, CHAN_WEAPON, "weapons/lasergun_fire.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "weapons/lasergun_fire.ogg", 1, ATTN_NORM);
 	org = self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -12;
 	//te_customflash(org, 160, 0.2, '1 0 0');
 

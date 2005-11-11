@@ -36,7 +36,7 @@ void W_Grenade_Explode (void)
 	org2 = findbetterlocation (self.origin);
 	te_explosion (org2);
 	effect (org2, "models/sprites/grenadeexplosion.spr32", 0, 20, 30);
-	sound (self, CHAN_BODY, "weapons/grenade_impact.wav", 1, ATTN_NORM);
+	sound (self, CHAN_BODY, "weapons/grenade_impact.ogg", 1, ATTN_NORM);
 
 	self.event_damage = SUB_Null;
 	RadiusDamage (self, self.owner, cvar("g_balance_grenadelauncher_damage"), cvar("g_balance_grenadelauncher_edgedamage"), cvar("g_balance_grenadelauncher_radius"), world, cvar("g_balance_grenadelauncher_force"), IT_GRENADE_LAUNCHER);
@@ -49,7 +49,7 @@ void W_Grenade_Touch (void)
 	if (other.takedamage == DAMAGE_AIM)
 		W_Grenade_Explode ();
 	else
-		sound (self, CHAN_IMPACT, "weapons/grenade_bounce.wav", 1, ATTN_NORM);
+		sound (self, CHAN_IMPACT, "weapons/grenade_bounce.ogg", 1, ATTN_NORM);
 }
 
 void W_Grenade_Damage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
@@ -64,7 +64,7 @@ void W_Grenade_Attack (void)
 	local entity gren;
 	local vector org;
 
-	sound (self, CHAN_WEAPON, "weapons/grenade_fire.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "weapons/grenade_fire.ogg", 1, ATTN_NORM);
 	self.punchangle_x = -4;
 	if (cvar("g_use_ammunition"))
 		self.ammo_rockets = self.ammo_rockets - 2;

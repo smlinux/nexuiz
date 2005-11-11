@@ -168,6 +168,11 @@ void SV_ParseClientCommand(string s) {
 			versionmsg = strcat("^2client version (", argv(1), ") and server version are the same.^8");
 		}
 		self.versionmessage = strzone(versionmsg);
+	} else if(argv(0) == "spectate") {
+		if(self.classname == "player" && cvar("sv_spectate") == 1) {
+			self.classname = "observer";
+			PutClientInServer();
+		}
 	} else {
 		clientcommand(self,s);
 	}

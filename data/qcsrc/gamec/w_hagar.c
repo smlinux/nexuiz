@@ -33,14 +33,15 @@ void W_Hagar_Explode (void)
 	vector	org2;
 	float b;
 	org2 = findbetterlocation (self.origin);
+	te_explosion (org2);
 	effect (org2, "models/sprites/hagarexplosion.spr32", 0, 19, 30);
 	b = crandom();
 	if (b<-0.7)
-		sound (self, CHAN_BODY, "weapons/hagexp1.wav", 1, ATTN_NORM);
+		sound (self, CHAN_BODY, "weapons/hagexp1.ogg", 1, ATTN_NORM);
 	else if (b<0.4)
-		sound (self, CHAN_BODY, "weapons/hagexp2.wav", 1, ATTN_NORM);
+		sound (self, CHAN_BODY, "weapons/hagexp2.ogg", 1, ATTN_NORM);
 	else if (b<1)
-		sound (self, CHAN_BODY, "weapons/hagexp3.wav", 1, ATTN_NORM);
+		sound (self, CHAN_BODY, "weapons/hagexp3.ogg", 1, ATTN_NORM);
 
 	self.event_damage = SUB_Null;
 	RadiusDamage (self, self.owner, cvar("g_balance_hagar_damage"), cvar("g_balance_hagar_edgedamage"), cvar("g_balance_hagar_radius"), world, cvar("g_balance_hagar_force"), IT_HAGAR);
@@ -73,7 +74,7 @@ void W_Hagar_Attack (void)
 	local entity missile;
 	local vector org;
 
-	sound (self, CHAN_WEAPON, "weapons/hagar_fire.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "weapons/hagar_fire.ogg", 1, ATTN_NORM);
 	if (cvar("g_use_ammunition"))
 		self.ammo_rockets = self.ammo_rockets - 1;
 	self.punchangle_x = -2;

@@ -987,6 +987,7 @@ void(float whichteam, float whatbot, float whatskill) BotConnect =
 	SetNewParms();
 	self.ishuman = 2;
 	ClientConnect();
+	self.classname = "player";
 	PutClientInServer();
 
 	// this is risky... could corrupt .way files if done wrong

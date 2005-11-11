@@ -150,35 +150,31 @@ string CheckPlayerModel(string plyermodel) {
 	return plyermodel;
 }
 
-
 /*
 =============
-PutClientInServer
+PutObserverInServer
 
-Called when a client spawns in the server
+putting a client as observer in the server
 =============
 */
-void PutClientInServer (void)
+void PutObserverInServer (void)
 {
 	entity	spot;
-
 	spot = SelectSpawnPoint (FALSE);
-	
 	RemoveGrapplingHook(self); // Wazat's Grappling Hook
-	
-	self.classname = "player";
-	self.iscreature = TRUE;
-	self.movetype = MOVETYPE_WALK;
-	self.solid = SOLID_SLIDEBOX;
-	self.flags = FL_CLIENT;
-	self.takedamage = DAMAGE_AIM;
+
+	self.classname = "observer";
+	self.health = 666;
+	self.takedamage = DAMAGE_NO;
+	self.solid = SOLID_NOT;
+	self.movetype = MOVETYPE_NOCLIP;
+	self.armorvalue = 666;
 	self.effects = 0;
-	self.health = cvar("g_balance_health_start");
 	self.armorvalue = cvar("g_balance_armor_start");
-	self.pauserotarmor_finished = time + 10;
-	self.pauserothealth_finished = time + 10;
+	self.pauserotarmor_finished = 0;
+	self.pauserothealth_finished = 0;
 	self.pauseregen_finished = 0;
-	self.damageforcescale = 2;
+	self.damageforcescale = 0;
 	self.death_time = 0;
 	self.dead_time = 0;
 	self.dead_frame = 0;
@@ -191,115 +187,202 @@ void PutClientInServer (void)
 	self.strength_finished = 0;
 	self.invincible_finished = 0;
 	self.pushltime = 0;
-	//self.speed_finished = 0;
-	//self.slowmo_finished = 0;
 	self.vote_finished = 0;
-	// players have no think function
 	self.think = SUB_Null;
 	self.nextthink = 0;
-
 	self.hook_time = 0;
-
 	self.runes = 0;
-
 	self.deadflag = DEAD_NO;
-
 	self.angles = spot.angles;
-
-	self.angles_z = 0; // never spawn tilted even if the spot says to
-	self.fixangle = TRUE; // turn this way immediately
-	self.velocity = '0 0 0';
-	self.avelocity = '0 0 0';
-	self.punchangle = '0 0 0';
-	self.punchvector = '0 0 0';
-	self.oldvelocity = self.velocity;
-
-	self.viewzoom = 0.6;
-
-
-	self.playermodel = CheckPlayerModel(self.playermodel);
-
-	precache_model (self.playermodel);
-	setmodel (self, self.playermodel);
-	self.skin = stof(self.playerskin);
+	self.angles_z = 0; 
+	self.fixangle = TRUE; 
 	self.crouch = FALSE;
 	self.view_ofs = PL_VIEW_OFS;
-	setsize (self, PL_MIN, PL_MAX);
 	setorigin (self, spot.origin + '0 0 1' * (1 - self.mins_z - 24));
-	// don't reset back to last position, even if new position is stuck in solid
 	self.oldorigin = self.origin;
-
-	if (cvar("g_use_ammunition")) {
-		self.ammo_shells = cvar("g_start_ammo_shells");
-		self.ammo_nails = cvar("g_start_ammo_nails");
-		self.ammo_rockets = cvar("g_start_ammo_rockets");
-		self.ammo_cells = cvar("g_start_ammo_cells");
-	} else {
-		self.ammo_shells = 999;
-		self.ammo_nails = 999;
-		self.ammo_rockets = 999;
-		self.ammo_cells = 999;
-	}
-
 	self.items = 0;
-	if (cvar("g_start_weapon_laser"))
-	{
-		self.items = self.items | IT_LASER;
-		self.switchweapon = WEP_LASER;
-	}
-	if (cvar("g_start_weapon_shotgun"))
-	{
-		self.items = self.items | IT_SHOTGUN;
-		self.switchweapon = WEP_SHOTGUN;
-	}
-	if (cvar("g_start_weapon_uzi"))
-	{
-		self.items = self.items | IT_UZI;
-		self.switchweapon = WEP_UZI;
-	}
-	if (cvar("g_start_weapon_grenadelauncher"))
-	{
-		self.items = self.items | IT_GRENADE_LAUNCHER;
-		self.switchweapon = WEP_GRENADE_LAUNCHER;
-	}
-	if (cvar("g_start_weapon_electro"))
-	{
-		self.items = self.items | IT_ELECTRO;
-		self.switchweapon = WEP_ELECTRO;
-	}
-	if (cvar("g_start_weapon_crylink"))
-	{
-		self.items = self.items | IT_CRYLINK;
-		self.switchweapon = WEP_CRYLINK;
-	}
-	if (cvar("g_start_weapon_nex"))
-	{
-		self.items = self.items | IT_NEX;
-		self.switchweapon = WEP_NEX;
-	}
-	if (cvar("g_start_weapon_hagar"))
-	{
-		self.items = self.items | IT_HAGAR;
-		self.switchweapon = WEP_HAGAR;
-	}
-	if (cvar("g_start_weapon_rocketlauncher"))
-	{
-		self.items = self.items | IT_ROCKET_LAUNCHER;
-		self.switchweapon = WEP_ROCKET_LAUNCHER;
-	}
+	self.model = "";
+	self.modelindex = 0;
+	self.weapon = 0;
+	self.weaponmodel = "";
+	self.weaponframe = 0;
+	self.weaponentity = world;
+	self.killcount = -666;
+	self.frags = -666;
+ 	stuffcmd(self, "set viewsize 120 \n");
+	bprint (strcat("^4", self.netname, " is spectating now\n"));
+}
 
-	self.event_damage = PlayerDamage;
 
-	self.statdraintime = time + 5;
-	self.button0 = self.button1 = self.button2 = self.button3 = 0;
+/*
+=============
+PutClientInServer
 
-	/*
-	W_UpdateWeapon();
-	W_UpdateAmmo();
-	*/
-	CL_SpawnWeaponentity();
+Called when a client spawns in the server
+=============
+*/
+void PutClientInServer (void)
+{	
+	if(self.classname == "player") {
+		entity	spot;
 
-	//stuffcmd(self, "chase_active 0");
+		spot = SelectSpawnPoint (FALSE);
+		
+		RemoveGrapplingHook(self); // Wazat's Grappling Hook
+	
+		self.classname = "player";
+		self.iscreature = TRUE;
+		self.movetype = MOVETYPE_WALK;
+		self.solid = SOLID_SLIDEBOX;
+		self.flags = FL_CLIENT;
+		self.takedamage = DAMAGE_AIM;
+		self.effects = 0;
+		self.health = cvar("g_balance_health_start");
+		self.armorvalue = cvar("g_balance_armor_start");
+		self.pauserotarmor_finished = time + 10;
+		self.pauserothealth_finished = time + 10;
+		self.pauseregen_finished = 0;
+		self.damageforcescale = 2;
+		self.death_time = 0;
+		self.dead_time = 0;
+		self.dead_frame = 0;
+		self.die_frame = 0;
+		self.alpha = 0;
+		self.scale = 0;
+		self.fade_time = 0;
+		self.pain_frame = 0;
+		self.pain_finished = 0;
+		self.strength_finished = 0;
+		self.invincible_finished = 0;
+		self.pushltime = 0;
+		//self.speed_finished = 0;
+		//self.slowmo_finished = 0;
+		self.vote_finished = 0;
+		// players have no think function
+		self.think = SUB_Null;
+		self.nextthink = 0;
+
+		self.hook_time = 0;
+	
+		self.runes = 0;
+
+		self.deadflag = DEAD_NO;
+
+		self.angles = spot.angles;
+
+		self.angles_z = 0; // never spawn tilted even if the spot says to
+		self.fixangle = TRUE; // turn this way immediately
+		self.velocity = '0 0 0';
+		self.avelocity = '0 0 0';
+		self.punchangle = '0 0 0';
+		self.punchvector = '0 0 0';
+		self.oldvelocity = self.velocity;
+	
+		self.viewzoom = 0.6;
+
+		if(cvar("sv_defaultcharacter") == 1) {
+			local string defaultmodel;
+			defaultmodel = CheckPlayerModel(cvar_string("sv_defaultplayermodel"));
+
+			precache_model (defaultmodel);
+			setmodel (self, defaultmodel);
+			self.skin = stof(cvar_string("sv_defaultplayerskin"));
+		} else {
+			self.playermodel = CheckPlayerModel(self.playermodel);
+
+			precache_model (self.playermodel);
+			setmodel (self, self.playermodel);
+			self.skin = stof(self.playerskin);
+		
+		}
+		
+		self.crouch = FALSE;
+		self.view_ofs = PL_VIEW_OFS;
+		setsize (self, PL_MIN, PL_MAX);
+		setorigin (self, spot.origin + '0 0 1' * (1 - self.mins_z - 24));
+		// don't reset back to last position, even if new position is stuck in solid
+		self.oldorigin = self.origin;
+
+		if (cvar("g_use_ammunition")) {
+			self.ammo_shells = cvar("g_start_ammo_shells");
+			self.ammo_nails = cvar("g_start_ammo_nails");
+			self.ammo_rockets = cvar("g_start_ammo_rockets");
+			self.ammo_cells = cvar("g_start_ammo_cells");
+		} else {
+			self.ammo_shells = 999;
+			self.ammo_nails = 999;
+			self.ammo_rockets = 999;
+			self.ammo_cells = 999;
+		}
+
+		self.items = 0;
+		if (cvar("g_start_weapon_laser"))
+		{
+			self.items = self.items | IT_LASER;
+			self.switchweapon = WEP_LASER;
+		}
+		if (cvar("g_start_weapon_shotgun"))
+		{
+			self.items = self.items | IT_SHOTGUN;
+			self.switchweapon = WEP_SHOTGUN;
+		}
+		if (cvar("g_start_weapon_uzi"))
+		{
+			self.items = self.items | IT_UZI;
+			self.switchweapon = WEP_UZI;
+		}
+		if (cvar("g_start_weapon_grenadelauncher"))
+		{
+			self.items = self.items | IT_GRENADE_LAUNCHER;
+			self.switchweapon = WEP_GRENADE_LAUNCHER;
+		}
+		if (cvar("g_start_weapon_electro"))
+		{
+			self.items = self.items | IT_ELECTRO;
+			self.switchweapon = WEP_ELECTRO;
+		}
+		if (cvar("g_start_weapon_crylink"))
+		{
+			self.items = self.items | IT_CRYLINK;
+			self.switchweapon = WEP_CRYLINK;
+		}
+		if (cvar("g_start_weapon_nex"))
+		{
+			self.items = self.items | IT_NEX;
+			self.switchweapon = WEP_NEX;
+		}
+		if (cvar("g_start_weapon_hagar"))
+		{
+			self.items = self.items | IT_HAGAR;
+			self.switchweapon = WEP_HAGAR;
+		}
+		if (cvar("g_start_weapon_rocketlauncher"))
+		{
+			self.items = self.items | IT_ROCKET_LAUNCHER;
+			self.switchweapon = WEP_ROCKET_LAUNCHER;
+		}
+	
+		self.event_damage = PlayerDamage;
+	
+		self.statdraintime = time + 5;
+		self.button0 = self.button1 = self.button2 = self.button3 = 0;
+	
+		if(self.frags == -666 && self.killcount == -666) {
+			self.killcount = 0;
+			self.frags = 0;
+		}
+	
+		/*
+		W_UpdateWeapon();
+		W_UpdateAmmo();
+		*/
+		CL_SpawnWeaponentity();
+	
+		//stuffcmd(self, "chase_active 0");
+	 	stuffcmd(self, "set viewsize $tmpviewsize \n");
+	} else if(self.classname == "observer") {
+		PutObserverInServer ();
+	}
 }
 
 /*
@@ -352,10 +435,14 @@ void ClientConnect (void)
 
 	JoinBestTeam(self, FALSE);
 
-	self.classname = "player";
-
-
-
+	if(cvar("sv_spectate") == 1) {
+		self.classname = "observer";	
+	} else {
+		self.classname = "player";		
+	}
+	
+	stuffcmd(self, "set tmpviewsize $viewsize \n");
+	
 	bprint ("^4",self.netname);
 	bprint (" connected");
 
@@ -369,7 +456,6 @@ void ClientConnect (void)
 
 	self.welcomemessage_time = time + cvar("welcome_message_time");
 	self.welcomemessage_time2 = 0;
-
 
 	stuffcmd(self, strcat("exec maps/", mapname, ".cfg\n"));
 	// send prediction settings to the client
@@ -412,6 +498,7 @@ void ClientDisconnect (void)
 		self.chatbubbleentity = world;
 	}
 	DropAllRunes(self);
+	stuffcmd(self, "set viewsize $tmpviewsize \n");
 }
 
 .float buttonchat;
@@ -451,7 +538,7 @@ void() UpdateChatBubble =
 
 // LordHavoc: this hack will be removed when proper _pants/_shirt layers are
 // added to the model skins
-void() UpdateColorModHack =
+/*void() UpdateColorModHack =
 {
 	local float c;
 	c = self.clientcolors & 15;
@@ -463,8 +550,14 @@ void() UpdateColorModHack =
 	else if (c == 12) self.colormod = '1.22 1.22 0.10';
 	else if (c == 13) self.colormod = '0.10 0.10 1.73';
 	else self.colormod = '1 1 1';
-};
+};*/
 
+void UpdatePlayerColors () {
+	if(self.weaponentity) {
+		self.weaponentity.colormap = self.colormap;
+		self.exteriorweaponentity.colormap = self.colormap;
+   	}
+}
 /*
 =============
 PlayerJump
@@ -669,6 +762,58 @@ void player_regen (void)
 }
 
 /*
+======================
+spectate mode routines
+======================
+*/
+void SpectateCopy(entity spectatee) {
+	self.armortype = spectatee.armortype;
+	self.armorvalue = spectatee.armorvalue;
+	self.currentammo = spectatee.currentammo;
+	self.effects = spectatee.effects;
+	self.health = spectatee.health;
+	self.impulse = 0;
+	self.items = spectatee.items;
+	self.punchangle = spectatee.punchangle;
+	self.view_ofs = spectatee.view_ofs;
+	self.v_angle = spectatee.v_angle;
+	self.viewzoom = spectatee.viewzoom;
+	setorigin(self, spectatee.origin);
+	setsize(self, spectatee.mins, spectatee.maxs);
+}
+
+void SpectateUpdate() {
+	if (self != self.enemy) {
+		SpectateCopy(self.enemy);
+		msg_entity = self;
+		WriteByte(MSG_ONE, SVC_SETANGLE);
+		WriteAngle(MSG_ONE, self.enemy.v_angle_x);
+		WriteAngle(MSG_ONE, self.enemy.v_angle_y);
+		WriteAngle(MSG_ONE, self.enemy.v_angle_z);
+	}
+}
+
+float SpectateNext() {
+	other = find(self.enemy, classname, "player");
+	if (!other) {
+		other = find(other, classname, "player");
+	}
+	if (other) {
+		self.enemy = other;
+	}
+	if(self.enemy.classname == "player") {
+		msg_entity = self;
+		WriteByte(MSG_ONE, SVC_SETVIEW);
+		WriteEntity(MSG_ONE, self.enemy);
+	 	stuffcmd(self, "set viewsize $tmpviewsize \n");
+		SpectateUpdate();
+		return 1;
+	} else {
+		return 0;
+	}
+}
+
+/*
 =============
 PlayerPreThink
 
@@ -677,119 +822,188 @@ Called every frame for each client before the physics are run
 */
 void PlayerPreThink (void)
 {
-	local vector m1, m2;
+	if(self.classname == "player") {
+		local vector m1, m2;
 
-//	MauveBot_AI();
+//		MauveBot_AI();
 
-//	if(self.netname == "Wazat")
-//		bprint(strcat(self.classname, "\n"));
+//		if(self.netname == "Wazat")
+//			bprint(strcat(self.classname, "\n"));
 
-	CheckRules_Player();
+		CheckRules_Player();
 
-	if (intermission_running)
-	{
-		IntermissionThink ();	// otherwise a button could be missed between
-		return;					// the think tics
-	}
-
-	if (self.deadflag != DEAD_NO)
-	{
-		player_anim();
-		weapon_freeze();
-		if (self.deadflag == DEAD_DYING)
+		if (intermission_running)
 		{
-			if (time > self.dead_time)
-				self.deadflag = DEAD_DEAD;
+			IntermissionThink ();	// otherwise a button could be missed between
+			return;					// the think tics
 		}
-		else if (self.deadflag == DEAD_DEAD)
-		{
-			if (!self.button0 && !self.button2 && !self.button3)
-				self.deadflag = DEAD_RESPAWNABLE;
-		}
-		else if (self.deadflag == DEAD_RESPAWNABLE)
-		{
-			if (self.button0 || self.button2 || self.button3  || self.button4)
-				respawn();
-		}
-		return;
-	}
 
-	if (self.button5)
-	{
-		if (!self.crouch)
+		if (self.deadflag != DEAD_NO)
 		{
-			self.crouch = TRUE;
-			self.view_ofs = PL_CROUCH_VIEW_OFS;
-			setsize (self, PL_CROUCH_MIN, PL_CROUCH_MAX);
-		}
-	}
-	else
-	{
-		if (self.crouch)
-		{
-			tracebox(self.origin, PL_MIN, PL_MAX, self.origin, FALSE, self);
-			if (!trace_startsolid)
+			player_anim();
+			weapon_freeze();
+			if (self.deadflag == DEAD_DYING)
 			{
-				self.crouch = FALSE;
-				self.view_ofs = PL_VIEW_OFS;
-				setsize (self, PL_MIN, PL_MAX);
+				if (time > self.dead_time)
+					self.deadflag = DEAD_DEAD;
+			}
+			else if (self.deadflag == DEAD_DEAD)
+			{
+				if (!self.button0 && !self.button2 && !self.button3)
+					self.deadflag = DEAD_RESPAWNABLE;
+			}
+			else if (self.deadflag == DEAD_RESPAWNABLE)
+			{
+				if (self.button0 || self.button2 || self.button3  || self.button4)
+					respawn();
+			}
+			return;
+		}
+
+		if (self.button5)
+		{
+			if (!self.crouch)
+			{
+				self.crouch = TRUE;
+				self.view_ofs = PL_CROUCH_VIEW_OFS;
+				setsize (self, PL_CROUCH_MIN, PL_CROUCH_MAX);
 			}
 		}
-	}
+		else
+		{
+			if (self.crouch)
+			{
+				tracebox(self.origin, PL_MIN, PL_MAX, self.origin, FALSE, self);
+				if (!trace_startsolid)
+				{
+					self.crouch = FALSE;
+					self.view_ofs = PL_VIEW_OFS;
+					setsize (self, PL_MIN, PL_MAX);
+				}
+			}
+		}
 
-	if (self.playermodel != self.model)
-	{
-		self.playermodel = CheckPlayerModel(self.playermodel);
-		m1 = self.mins;
-		m2 = self.maxs;
-		precache_model (self.playermodel);
-		setmodel (self, self.playermodel);
-		setsize (self, m1, m2);
-	}
+		if(cvar("sv_defaultcharacter") == 1) {
+			local string defaultmodel;
+			defaultmodel = CheckPlayerModel(cvar_string("sv_defaultplayermodel"));
+			
+			if (defaultmodel != self.model)
+			{
+				m1 = self.mins;
+				m2 = self.maxs;
+				precache_model (defaultmodel);
+				setmodel (self, defaultmodel);
+				setsize (self, m1, m2);
+			}
 
-	// Savage: Check for nameless players
-	if (strlen(self.netname) < 1) {
-		self.netname = "Player";
-		stuffcmd(self, "name Player\n");
-	}
+			if (self.skin != stof(cvar_string("sv_defaultplayerskin")))
+				self.skin = stof(cvar_string("sv_defaultplayerskin"));
+		} else {
+			if (self.playermodel != self.model)
+			{
+				self.playermodel = CheckPlayerModel(self.playermodel);
+				m1 = self.mins;
+				m2 = self.maxs;
+				precache_model (self.playermodel);
+				setmodel (self, self.playermodel);
+				setsize (self, m1, m2);
+			}
 
-	if (self.skin != stof(self.playerskin))
-		self.skin = stof(self.playerskin);
+			if (self.skin != stof(self.playerskin))
+				self.skin = stof(self.playerskin);
+		}
+		// Savage: Check for nameless players
+		if (strlen(self.netname) < 1) {
+			self.netname = "Player";
+			stuffcmd(self, "name Player\n");
+		}
 	
-	GrapplingHookFrame();
+		GrapplingHookFrame();
 
-	W_WeaponFrame();
+		W_WeaponFrame();
 
-	if (self.button4 || (self.weapon == WEP_NEX && self.button3))
-	{
-		if (self.viewzoom > 0.4)
-			self.viewzoom = max (0.4, self.viewzoom - frametime * 2);
+		if (self.button4 || (self.weapon == WEP_NEX && self.button3))
+		{
+			if (self.viewzoom > 0.4)
+				self.viewzoom = max (0.4, self.viewzoom - frametime * 2);
+		}
+		else if (self.viewzoom < 1.0)
+			self.viewzoom = min (1.0, self.viewzoom + frametime);
+
+
+		if (self.button2)
+			PlayerJump ();
+		else
+			self.flags = self.flags | FL_JUMPRELEASED;
+
+		if (self.vote_finished > 0 // this player has called a vote
+		    && time > self.vote_finished) // time is up
+		{
+			VoteCount();
+		}
+
+		player_powerups();
+		player_regen();
+		player_anim();
+
+		//self.angles_y=self.v_angle_y + 90;   // temp
+
+		if (self.waterlevel == 2)
+			CheckWaterJump ();
+
+		//if (TetrisPreFrame()) return;
+	} else if(self.classname == "observer") {
+		if (self.flags & FL_JUMPRELEASED) {                                                                                                                           
+			if (self.button2) {
+				self.flags = self.flags & !FL_JUMPRELEASED;
+				self.classname = "player";
+				bprint (strcat("^4", self.netname, " is playing now\n"));
+				PutClientInServer();
+				centerprint(self,"");
+				return;
+			} else if(self.button0) {
+				self.flags = self.flags & !FL_JUMPRELEASED;
+				if(SpectateNext() == 1) {
+					self.classname = "spectator";
+				} 
+			}
+        } else {
+        	if (!(self.button0 || self.button2)) {
+				self.flags = self.flags | FL_JUMPRELEASED;
+        	}
+		}
+		centerprint(self, strcat("\n", "\n", "\n", "press jump to play", "\n", "press attack to spectate other players"));
+	} else if(self.classname == "spectator") {
+		if (self.flags & FL_JUMPRELEASED) {
+			if(self.button0) {
+				self.flags = self.flags & !FL_JUMPRELEASED;
+				if(SpectateNext() == 1) {
+					self.classname = "spectator";
+				} else {
+					self.classname = "observer";
+					msg_entity = self;                                                                                                                                                     
+					WriteByte(MSG_ONE, SVC_SETVIEW);                                                                                                                                       
+					WriteEntity(MSG_ONE, self);   
+					PutClientInServer();					
+				}
+			} else if (self.button3) {
+				self.flags = self.flags & !FL_JUMPRELEASED;
+				self.classname = "observer";
+				msg_entity = self;                                                                                                                                                     
+				WriteByte(MSG_ONE, SVC_SETVIEW);                                                                                                                                       
+				WriteEntity(MSG_ONE, self);   
+				PutClientInServer();
+			} else {
+				SpectateUpdate();
+			}
+        } else {
+        	if (!(self.button0 || self.button3)) {
+				self.flags = self.flags | FL_JUMPRELEASED;
+        	}
+		}
+		centerprint(self, strcat("spectating ", self.enemy.netname, "\n", "\n", "\n", "press attack for next player", "\n", "press attack2 for free fly mode"));
 	}
-	else if (self.viewzoom < 1.0)
-		self.viewzoom = min (1.0, self.viewzoom + frametime);
-
-
-	if (self.button2)
-		PlayerJump ();
-	else
-		self.flags = self.flags | FL_JUMPRELEASED;
-
-	if (self.vote_finished > 0 // this player has called a vote
-	    && time > self.vote_finished) // time is up
-	{
-		VoteCount();
-	}
-
-	player_powerups();
-	player_regen();
-	player_anim();
-
-	//self.angles_y=self.v_angle_y + 90;   // temp
-
-	if (self.waterlevel == 2)
-		CheckWaterJump ();
-
-	//if (TetrisPreFrame()) return;
+	
 }
 
 /*
@@ -801,15 +1015,21 @@ Called every frame for each client after the physics are run
 */
 void PlayerPostThink (void)
 {
-	CheckRules_Player();
-	UpdateChatBubble();
-	UpdateColorModHack();
-	if (self.deadflag == DEAD_NO)
-	if (self.impulse)
-		ImpulseCommands ();
-	if (intermission_running)
-		return;		// intermission or finale
+	if(self.classname == "player") {
+		CheckRules_Player();
+		UpdateChatBubble();
+		UpdatePlayerColors();
+		if (self.deadflag == DEAD_NO)
+		if (self.impulse)
+			ImpulseCommands ();
+		if (intermission_running)
+			return;		// intermission or finale
 
-	PrintWelcomeMessage(self);
-	//if (TetrisPostFrame()) return;
+		PrintWelcomeMessage(self);
+		//if (TetrisPostFrame()) return;
+	} else if (self.classname == "observer") {
+		//do nothing
+	} else if (self.classname == "spectator") {
+		//do nothing
+	}
 }

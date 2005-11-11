@@ -95,7 +95,7 @@ entity dest;
 .float pauserotarmor_finished;
 .float attack_finished;
 
-// definistions for weaponsystem
+// definitions for weaponsystem
 
 .entity weaponentity;
 .entity exteriorweaponentity;

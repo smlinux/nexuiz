@@ -248,6 +248,7 @@ void() add_MauveBot =
 	self.netname = PickARandomName();
 
 	ClientConnect();
+	self.classname = "player";
 	PutClientInServer();
 	self.autoswitch = 1; // bots currently need autoswitching
 	self.skill_level = cvar("skill");

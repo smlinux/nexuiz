@@ -257,6 +257,18 @@ Item Layout Misc
 			}
 			Derive Nex_Line	Seperator
 			{}
+			Derive Nex_Option_Switch SpecMode
+			{
+				text	"Spectate"
+				target	"Data::Game::Misc::SpecMode::Switch"
+			}
+			Derive Nex_Option_Switch DefaultModel
+			{
+				text	"Defaultmodel"
+				target	"Data::Game::Misc::DefaultModel::Switch"
+			}
+			Derive Nex_Line	Seperator
+			{}
 			Derive TextButton Reset
 			{
 				normal	"Reset to default"

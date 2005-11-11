@@ -7,7 +7,7 @@ void() trigger_push_touch =
 	local float flighttime, dist, grav;
 	local vector org;
 
-	if (other.classname != "player" && other.classname != "corpse" && other.classname != "body" && other.classname != "gib" && other.classname != "missile" && other.classname != "casing" && other.classname != "grenade" && other.classname != "plasma")
+	if (other.classname != "player" && other.classname != "corpse" && other.classname != "body" && other.classname != "gib" && other.classname != "missile" && other.classname != "casing" && other.classname != "grenade" && other.classname != "plasma" && other.classname != "plasma_prim" && other.classname != "plasma_chain")
 		return;
 
 	if (!self.target)
