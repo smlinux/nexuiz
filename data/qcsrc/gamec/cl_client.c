@@ -209,7 +209,7 @@ void PutObserverInServer (void)
 	self.weaponentity = world;
 	self.killcount = -666;
 	self.frags = -666;
- 	stuffcmd(self, "set viewsize 120 \n");
+ 	//stuffcmd(self, "set viewsize 120 \n");
 	bprint (strcat("^4", self.netname, " is spectating now\n"));
 }
 
@@ -379,7 +379,7 @@ void PutClientInServer (void)
 		CL_SpawnWeaponentity();
 	
 		//stuffcmd(self, "chase_active 0");
-	 	stuffcmd(self, "set viewsize $tmpviewsize \n");
+	 	//stuffcmd(self, "set viewsize $tmpviewsize \n");
 	} else if(self.classname == "observer") {
 		PutObserverInServer ();
 	}
@@ -441,7 +441,7 @@ void ClientConnect (void)
 		self.classname = "player";		
 	}
 	
-	stuffcmd(self, "set tmpviewsize $viewsize \n");
+	//stuffcmd(self, "set tmpviewsize $viewsize \n");
 	
 	bprint ("^4",self.netname);
 	bprint (" connected");
@@ -498,7 +498,7 @@ void ClientDisconnect (void)
 		self.chatbubbleentity = world;
 	}
 	DropAllRunes(self);
-	stuffcmd(self, "set viewsize $tmpviewsize \n");
+	//stuffcmd(self, "set viewsize $tmpviewsize \n");
 }
 
 .float buttonchat;
@@ -805,7 +805,7 @@ float SpectateNext() {
 		msg_entity = self;
 		WriteByte(MSG_ONE, SVC_SETVIEW);
 		WriteEntity(MSG_ONE, self.enemy);
-	 	stuffcmd(self, "set viewsize $tmpviewsize \n");
+	 	//stuffcmd(self, "set viewsize $tmpviewsize \n");
 		SpectateUpdate();
 		return 1;
 	} else {
