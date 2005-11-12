@@ -132,7 +132,7 @@ void InitGameplayMode()
 		gamemode_name = "Capture the Flag";
 		teams_matter = 1;
 	}
-	else if(game == GAME_RUNEMATCH || cvar("g_runematch"))
+	else if((game == GAME_RUNEMATCH || cvar("g_runematch")) && !cvar("g_minstagib"))
 	{
 		game = GAME_RUNEMATCH;
 		cvar_set("g_runematch", "1");
@@ -230,11 +230,15 @@ void InitGameplayMode()
 		cvar_set("g_pickup_items", ftos(FALSE));
 		cvar_set("g_use_ammunition", ftos(FALSE));
 	}
+	if (cvar("g_minstagib")) {
+		cvar_set("g_pickup_items", ftos(FALSE));
+		cvar_set("g_use_ammunition", ftos(TRUE));
+	}
 }
 
 void PrintWelcomeMessage(entity pl)
 {
-	string s, grap_msg, temp;
+	string s, grap_msg, temp, temp2;
 	float colored;
 
 	if(self.welcomemessage_time < time)
@@ -244,12 +248,16 @@ void PrintWelcomeMessage(entity pl)
 	self.welcomemessage_time2 = time + 0.8;
 
 	colored = 1;
+
 	if(colored)
 	{
+		if(cvar("g_minstagib"))
+			temp2 = strcat("^2Minstagib ^1", gamemode_name);
+		
 		if(cvar("g_grappling_hook"))
 			grap_msg = strzone("\n\nBind a key to ^1+hook^8 to use the grappling hook\n");
 
-		s = strcat("\n\nThis is Nexuiz ", cvar_string("g_nexuizversion"), "\n", self.versionmessage, "^8\n\nMatch type is ^1", gamemode_name, "^8\n");
+		s = strcat("\n\nThis is Nexuiz ", cvar_string("g_nexuizversion"), "\n", self.versionmessage, "^8\n\nMatch type is ^1", temp2, "^8\n");
 		s = strzone(s);
 
 		temp = strcat(
@@ -284,10 +292,13 @@ void PrintWelcomeMessage(entity pl)
 	}
 	else
 	{
+		if(cvar("g_minstagib"))
+			temp2 = strcat("Minstagib ", gamemode_name);
+		
 		if(cvar("g_grappling_hook"))
 			grap_msg = strzone("\n\nBind a key to +hook to use the grappling hook\n");
 
-		s = strcat("Match type is ", gamemode_name, "\n");
+		s = strcat("Match type is ", temp2, "\n");
 		s = strzone(s);
 
 		temp = strcat(

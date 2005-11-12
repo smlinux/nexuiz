@@ -162,7 +162,20 @@ void worldspawn (void)
 	precache_sound ("weapons/weapon_switch.wav");
 	precache_sound ("weapons/weaponpickup.wav");
 
-
+	// announcer sounds
+	precache_sound ("announce/male/kill10.ogg");
+	precache_sound ("announce/male/kill15.ogg");
+	precache_sound ("announce/male/kill20.ogg");
+	precache_sound ("announce/male/kill25.ogg");
+	precache_sound ("announce/male/kill3.ogg");
+	precache_sound ("announce/male/kill30.ogg");
+	precache_sound ("announce/male/kill4.ogg");
+	precache_sound ("announce/male/kill5.ogg");
+	precache_sound ("announce/male/kill6.ogg");
+	precache_sound ("announce/male/mapkill1.ogg");
+	precache_sound ("announce/robotic/last_second_save.ogg");
+	precache_sound ("announce/robotic/narrowly_averted.ogg");
+	precache_sound ("minstagib/mockery.ogg");
 
 	// plays music for the level if there is any
 	if (self.noise)
@@ -535,7 +548,6 @@ void() NextLevel =
 		*/
 		other = find (other, classname, "player");
 	}
-
 	WriteByte (MSG_ALL, SVC_INTERMISSION);
 };
 

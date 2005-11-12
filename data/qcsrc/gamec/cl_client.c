@@ -210,7 +210,7 @@ void PutObserverInServer (void)
 	self.killcount = -666;
 	self.frags = -666;
  	//stuffcmd(self, "set viewsize 120 \n");
-	bprint (strcat("^4", self.netname, " is spectating now\n"));
+	bprint (strcat("^4", self.netname, "^4 is spectating now\n"));
 }
 
 
@@ -361,7 +361,19 @@ void PutClientInServer (void)
 			self.items = self.items | IT_ROCKET_LAUNCHER;
 			self.switchweapon = WEP_ROCKET_LAUNCHER;
 		}
-	
+
+		if(cvar("g_minstagib"))
+		{
+			self.health = 100;
+			self.armorvalue = 0;
+			self.items = IT_NEX;
+			self.switchweapon = WEP_NEX;
+			self.ammo_cells = cvar("g_minstagib_ammo_start");
+			self.extralives = 0;
+			self.jump_interval = time;
+			stuffcmd(self, strcat("crosshair_static ", self.crosshair_static, "\n"));
+		}
+ 	
 		self.event_damage = PlayerDamage;
 	
 		self.statdraintime = time + 5;
@@ -444,7 +456,7 @@ void ClientConnect (void)
 	//stuffcmd(self, "set tmpviewsize $viewsize \n");
 	
 	bprint ("^4",self.netname);
-	bprint (" connected");
+	bprint ("^4 connected");
 
 	if(cvar("g_domination") || cvar("g_ctf"))
 	{
@@ -467,7 +479,6 @@ void ClientConnect (void)
 	stuffcmd(self, strcat("cl_movement_jumpvelocity ", ftos(cvar("g_balance_jumpheight")), "\n"));
 	stuffcmd(self, strcat("cl_movement_stepheight ", ftos(cvar("sv_stepheight")), "\n"));
 	stuffcmd(self, strcat("cl_movement_edgefriction 0\n"));
-	
 	// Wazat's grappling hook
 	SetGrappleHookBindings();	
 
@@ -477,6 +488,9 @@ void ClientConnect (void)
 
 	// get version info from player
 	stuffcmd(self, "cmd clientversion $g_nexuizversion\n");
+
+	// get crosshair_static
+	stuffcmd(self, "cmd crosshair $crosshair_static\n");
 }
 
 /*
@@ -490,7 +504,7 @@ Called when a client disconnects from the server
 void ClientDisconnect (void)
 {
 	bprint ("^4",self.netname);
-	bprint (" disconnected\n");
+	bprint ("^4 disconnected\n");
 
 	if (self.chatbubbleentity)
 	{
@@ -604,6 +618,11 @@ void PlayerJump (void)
 		}
 	}
 
+	if(cvar("g_minstagib") && (self.items & IT_INVINCIBLE))
+	{
+		mjumpheight = mjumpheight * cvar("g_balance_rune_speed_jumpheight");
+	}
+
 	self.velocity_z = self.velocity_z + mjumpheight;
 	self.oldvelocity_z = self.velocity_z;
 
@@ -649,6 +668,50 @@ void respawn(void)
 
 void player_powerups (void)
 {
+	if (cvar("g_minstagib"))
+	{
+		self.effects = EF_FULLBRIGHT;
+		if (self.items & IT_STRENGTH)
+		{
+			self.effects = EF_NODRAW;
+			if (time > self.strength_finished)
+			{
+				self.items = self.items - (self.items & IT_STRENGTH);
+				stuffcmd(self, strcat("crosshair_static ", self.crosshair_static, "\n"));
+				sprint(self, "^3Invisibility has worn off\n");
+			}
+		}
+		else
+		{
+			if (time < self.strength_finished)
+			{
+				stuffcmd(self, "crosshair_static 1\n");
+				self.items = self.items | IT_STRENGTH;
+				sprint(self, "^3You are invisible\n");
+			}
+		}
+				
+		if (self.items & IT_INVINCIBLE)
+		{
+			if (time > self.invincible_finished)
+			{
+				self.items = self.items - (self.items & IT_INVINCIBLE);
+				//stuffcmd(self, strcat("crosshair_static ", ftos(self.crosshair_static), "\n"));
+				sprint(self, "^3Speed has worn off\n");
+			}
+		}
+		else
+		{
+			if (time < self.invincible_finished)
+			{
+				stuffcmd(self, "crosshair_static 1\n");
+				self.items = self.items | IT_INVINCIBLE;
+				sprint(self, "^3You are on speed\n");
+			}
+		}
+		return;
+	}
+	
 	self.effects = self.effects - (self.effects & (EF_RED | EF_BLUE | EF_ADDITIVE | EF_FULLBRIGHT));
 	if (self.items & IT_STRENGTH)
 	{
@@ -695,6 +758,13 @@ void player_regen (void)
 	float maxh, maxa, max_mod, regen_mod, rot_mod;
 	maxh = cvar("g_balance_health_stable");
 	maxa = cvar("g_balance_armor_stable");
+
+	if (cvar("g_minstagib"))
+	{
+		maxh = 100;
+		maxa = 0;
+		return;
+	}
 
 	if(cvar("g_runematch"))
 	{
@@ -924,7 +994,15 @@ void PlayerPreThink (void)
 
 		if (self.button4 || (self.weapon == WEP_NEX && self.button3))
 		{
-			if (self.viewzoom > 0.4)
+			if (cvar("g_minstagib") && self.button3)
+			{
+				if (self.jump_interval <= (time + 0.1))
+				{
+					self.jump_interval = time + 1;
+					weapon_doattack(laser_check, laser_check, W_Laser_Attack);
+				}
+			}
+			else if (self.viewzoom > 0.4)
 				self.viewzoom = max (0.4, self.viewzoom - frametime * 2);
 		}
 		else if (self.viewzoom < 1.0)
@@ -957,7 +1035,7 @@ void PlayerPreThink (void)
 			if (self.button2) {
 				self.flags = self.flags & !FL_JUMPRELEASED;
 				self.classname = "player";
-				bprint (strcat("^4", self.netname, " is playing now\n"));
+				bprint (strcat("^4", self.netname, "^4 is playing now\n"));
 				PutClientInServer();
 				centerprint(self,"");
 				return;

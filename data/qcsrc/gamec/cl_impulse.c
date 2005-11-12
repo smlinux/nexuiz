@@ -19,11 +19,11 @@ void DummyThink(void)
 
 void ImpulseCommands (void)
 {
-	if (self.impulse >= 1 && self.impulse <= 9)
+	if (self.impulse >= 1 && self.impulse <= 9 && !cvar("g_minstagib"))
 		W_SwitchWeapon (self.impulse);
-	else if (self.impulse == 10)
+	else if (self.impulse == 10 && !cvar("g_minstagib"))
 		W_NextWeapon ();
-	else if (self.impulse == 12)
+	else if (self.impulse == 12 && !cvar("g_minstagib"))
 		W_PreviousWeapon ();
 	else if (self.impulse == 13 && cvar("sv_cheats"))
 	{

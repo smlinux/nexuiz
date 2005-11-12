@@ -39,7 +39,7 @@ void dompoint_captured ()
 	//bprint(self.message);
 	//bprint("\n");
 
-	bprint(strcat("^3", head.netname, self.message, "\n"));
+	bprint(strcat("^3", head.netname, "^3", self.message, "\n"));
 
 	if (head.noise != "")
 		sound(self, CHAN_BODY, head.noise, 1, ATTN_NORM);

@@ -2,13 +2,101 @@ void() nex_ready_01;
 void() nex_fire1_01;
 void() nex_deselect_01;
 void() nex_select_01;
+void() nex_selfkill;
 
 float() nex_check =
 {
-	if (self.ammo_cells >= 5)
-		return TRUE;
+	if (cvar("g_minstagib"))
+	{
+		if (self.ammo_cells >= 1)
+			return TRUE;
+	} else {
+		if (self.ammo_cells >= 5)
+			return TRUE;
+	}
 	return FALSE;
 };
+
+void nex_selfkill (void)
+{
+	if (!cvar("g_minstagib"))
+		return;
+
+	if (self.ammo_cells <= 0)
+	{
+		if (self.health == 5)
+		{
+			centerprint(self, "you're dead now...\n");
+			Damage(self, self, self, 5, DEATH_NOAMMO, self.origin, '0 0 0');
+			stuffcmd(self, "play2 announce/robotic/termination.ogg\n");
+		}
+		if (self.health == 10)
+		{
+			centerprint(self, "^11^7 second left to find some ammo\n");
+			Damage(self, self, self, 5, DEATH_NOAMMO, self.origin, '0 0 0');
+			stuffcmd(self, "play2 announce/robotic/1p.ogg\n");
+		}
+		if (self.health == 20)
+		{
+			centerprint(self, "^12^7 seconds left to find some ammo\n");
+			Damage(self, self, self, 10, DEATH_NOAMMO, self.origin, '0 0 0');
+			stuffcmd(self, "play2 announce/robotic/2p.ogg\n");
+		}
+		if (self.health == 30)
+		{
+			centerprint(self, "^13^7 seconds left to find some ammo\n");
+			Damage(self, self, self, 10, DEATH_NOAMMO, self.origin, '0 0 0');
+			stuffcmd(self, "play2 announce/robotic/3p.ogg\n");
+		}
+		if (self.health == 40)
+		{
+			centerprint(self, "^14^7 seconds left to find some ammo\n");
+			Damage(self, self, self, 10, DEATH_NOAMMO, self.origin, '0 0 0');
+			stuffcmd(self, "play2 announce/robotic/4p.ogg\n");
+		}
+		if (self.health == 50)
+		{
+			centerprint(self, "^15^7 seconds left to find some ammo\n");
+			Damage(self, self, self, 10, DEATH_NOAMMO, self.origin, '0 0 0');
+			stuffcmd(self, "play2 announce/robotic/5p.ogg\n");
+		}
+		if (self.health == 60)
+		{
+			centerprint(self, "^36^7 seconds left to find some ammo\n");
+			Damage(self, self, self, 10, DEATH_NOAMMO, self.origin, '0 0 0');
+			stuffcmd(self, "play2 announce/robotic/6.ogg\n");
+		}
+		if (self.health == 70)
+		{
+			centerprint(self, "^37^7 seconds left to find some ammo\n");
+			Damage(self, self, self, 10, DEATH_NOAMMO, self.origin, '0 0 0');
+			stuffcmd(self, "play2 announce/robotic/7.ogg\n");
+		}
+		if (self.health == 80)
+		{
+			centerprint(self, "^38^7 seconds left to find some ammo\n");
+			Damage(self, self, self, 10, DEATH_NOAMMO, self.origin, '0 0 0');
+			stuffcmd(self, "play2 announce/robotic/8.ogg\n");
+		}
+		if (self.health == 90)
+		{
+			centerprint(self, "^39^7 seconds left to find some ammo\n");
+			Damage(self, self, self, 10, DEATH_NOAMMO, self.origin, '0 0 0');
+			stuffcmd(self, "play2 announce/robotic/9.ogg\n");
+		}
+		if (self.health == 100)
+		{
+			weapon_prepareattack(nex_check, nex_check, nex_fire1_01, 1.0);
+			centerprint(self, "get some ammo or\nyou'll be dead in ^310^7 seconds...");
+			Damage(self, self, self, 10, DEATH_NOAMMO, self.origin, '0 0 0');
+			stuffcmd(self, "play2 announce/robotic/10.ogg\n");
+		}
+		
+	}
+	self.think = nex_selfkill;
+	self.nextthink = time + 1;
+	
+}
 
 void(float req) w_nex =
 {
@@ -40,7 +128,11 @@ void W_Nex_Attack (void)
 	org = self.origin + self.view_ofs + v_forward * 5 + v_right * 14 + v_up * -7;
 	end = self.origin + self.view_ofs + v_forward * 4096;
 
-	FireRailgunBullet (org, end, cvar("g_balance_nex_damage"), IT_NEX);
+	// assure that nexdamage is high enough in minstagib
+	if (cvar("g_minstagib"))
+		FireRailgunBullet (org, end, 200, IT_NEX);
+	else
+		FireRailgunBullet (org, end, cvar("g_balance_nex_damage"), IT_NEX);
 
 	// trace as if shot started inside gun
 	traceline (org, end, TRUE, self);
@@ -79,7 +171,12 @@ void W_Nex_Attack (void)
 	PointSound (trace_endpos, "weapons/neximpact.ogg", 1, ATTN_NORM);
 
 	if (cvar("g_use_ammunition"))
-		self.ammo_cells = self.ammo_cells - 5;
+	{
+		if (cvar("g_minstagib"))
+			self.ammo_cells = self.ammo_cells - 1;
+		else
+			self.ammo_cells = self.ammo_cells - 5;
+	}
 
 	flash = spawn ();
 	org = self.origin + self.view_ofs + v_forward * 33 + v_right * 14 + v_up * -7;
@@ -93,7 +190,7 @@ void W_Nex_Attack (void)
 
 // weapon frames
 void()	nex_ready_01 =	{weapon_thinkf(WFRAME_IDLE, 0.1, nex_ready_01); self.weaponentity.state = WS_READY;};
-void()	nex_select_01 =	{weapon_thinkf(-1, cvar("g_balance_weaponswitchdelay"), w_ready); weapon_boblayer1(PLAYER_WEAPONSELECTION_SPEED, '0 0 0');};
+void()	nex_select_01 =	{weapon_thinkf(-1, cvar("g_balance_weaponswitchdelay"), w_ready); weapon_boblayer1(PLAYER_WEAPONSELECTION_SPEED, '0 0 0'); nex_selfkill();};
 void()	nex_deselect_01 =	{weapon_thinkf(-1, cvar("g_balance_weaponswitchdelay"), w_clear); weapon_boblayer1(PLAYER_WEAPONSELECTION_SPEED, PLAYER_WEAPONSELECTION_RANGE);};
 void()	nex_fire1_01 =
 {

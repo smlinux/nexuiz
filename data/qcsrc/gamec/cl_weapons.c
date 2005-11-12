@@ -2,6 +2,13 @@
 // add new weapons here
 void(float wpn, float wrequest) weapon_action =
 {
+	if (cvar("g_minstagib"))
+	{
+		if (wpn == WEP_NEX)
+			w_nex(wrequest);
+		return;
+	}
+	
 	if (wpn == WEP_LASER)
 		w_laser(wrequest);
 	else if (wpn == WEP_SHOTGUN)

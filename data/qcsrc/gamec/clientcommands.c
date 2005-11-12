@@ -173,6 +173,8 @@ void SV_ParseClientCommand(string s) {
 			self.classname = "observer";
 			PutClientInServer();
 		}
+	} else if(argv(0) == "crosshair") {
+		self.crosshair_static = argv(1);
 	} else {
 		clientcommand(self,s);
 	}

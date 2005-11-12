@@ -81,9 +81,9 @@ void(entity e) DropFlag =
 	}
 	bprint(p.netname);
 	if (e.team == 5)
-		bprint(" lost the RED flag\n");
+		bprint("^7 lost the RED flag\n");
 	else
-		bprint(" lost the BLUE flag\n");
+		bprint("^7 lost the BLUE flag\n");
 	if (p.flagcarried == e)
 		p.flagcarried = world;
 	e.owner = world;
@@ -213,25 +213,25 @@ void() FlagTouch =
 		if (flagcaptimerecord == 0)
 		{
 			if (other.flagcarried.team == 5)
-				bprint(other.netname, " captured the RED flag in ", ftos(t), " seconds\n");
+				bprint(other.netname, "^7 captured the RED flag in ", ftos(t), " seconds\n");
 			else
-				bprint(other.netname, " captured the BLUE flag in ", ftos(t), " seconds\n");
+				bprint(other.netname, "^7 captured the BLUE flag in ", ftos(t), " seconds\n");
 			flagcaptimerecord = t;
 		}
 		else if (t < flagcaptimerecord)
 		{
 			if (other.flagcarried.team == 5)
-				bprint(other.netname, " captured the RED flag in ", ftos(t), ", breaking the previous record of", ftos(flagcaptimerecord), " seconds\n");
+				bprint(other.netname, "^7 captured the RED flag in ", ftos(t), ", breaking the previous record of", ftos(flagcaptimerecord), " seconds\n");
 			else
-				bprint(other.netname, " captured the BLUE flag in ", ftos(t), ", breaking the previous record of", ftos(flagcaptimerecord), " seconds\n");
+				bprint(other.netname, "^7 captured the BLUE flag in ", ftos(t), ", breaking the previous record of", ftos(flagcaptimerecord), " seconds\n");
 			flagcaptimerecord = t;
 		}
 		else
 		{
 			if (other.flagcarried.team == 5)
-				bprint(other.netname, " captured the RED flag in ", ftos(t), ", failing to break the previous record of", ftos(flagcaptimerecord), " seconds\n");
+				bprint(other.netname, "^7 captured the RED flag in ", ftos(t), ", failing to break the previous record of", ftos(flagcaptimerecord), " seconds\n");
 			else
-				bprint(other.netname, " captured the BLUE flag in ", ftos(t), ", failing to break the previous record of", ftos(flagcaptimerecord), " seconds\n");
+				bprint(other.netname, "^7 captured the BLUE flag in ", ftos(t), ", failing to break the previous record of", ftos(flagcaptimerecord), " seconds\n");
 		}
 		other.frags = other.frags + cvar("g_ctf_flagscore_capture");//FLAGSCORE_CAPTURE;
 		head = find(head, classname, "player");
@@ -257,9 +257,9 @@ void() FlagTouch =
 		other.flagcarried = self;
 		self.cnt = FLAG_CARRY;
 		if (other.flagcarried.team == 5)
-			bprint(other.netname, " got the RED flag\n");
+			bprint(other.netname, "^7 got the RED flag\n");
 		else
-			bprint(other.netname, " got the BLUE flag\n");
+			bprint(other.netname, "^7 got the BLUE flag\n");
 		other.frags = other.frags + cvar("g_ctf_flagscore_pickup");//FLAGSCORE_PICKUP;
 		sound (self, CHAN_AUTO, self.noise, 1, ATTN_NONE);
 		
@@ -279,9 +279,9 @@ void() FlagTouch =
 		{
 			// return flag
 			if (self.team == 5)
-				bprint(other.netname, " returned the RED flag\n");
+				bprint(other.netname, "^7 returned the RED flag\n");
 			else
-				bprint(other.netname, " returned the BLUE flag\n");
+				bprint(other.netname, "^7 returned the BLUE flag\n");
 			if (other.team == 5 || other.team == 14)
 				other.frags = other.frags + cvar("g_ctf_flagscore_return");//FLAGSCORE_RETURN;
 			else
@@ -299,9 +299,9 @@ void() FlagTouch =
 			other.flagcarried = self;
 			self.cnt = FLAG_CARRY;
 			if (self.team == 5)
-				bprint(other.netname, " picked up the RED flag\n");
+				bprint(other.netname, "^7 picked up the RED flag\n");
 			else
-				bprint(other.netname, " picked up the BLUE flag\n");
+				bprint(other.netname, "^7 picked up the BLUE flag\n");
 			other.frags = other.frags + cvar("g_ctf_flagscore_pickup");//FLAGSCORE_PICKUP;
 			sound (self, CHAN_AUTO, self.noise, 1, ATTN_NONE);
 

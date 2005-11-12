@@ -54,6 +54,11 @@ void SV_PlayerPhysics()
 		}
 	}
 
+	if(cvar("g_minstagib") && (self.items & IT_INVINCIBLE))
+	{
+		maxspd_mod = maxspd_mod * cvar("g_balance_rune_speed_moverate");
+	}
+
 	spd = sv_maxspeed * maxspd_mod;
 
 	if(self.speed != spd)

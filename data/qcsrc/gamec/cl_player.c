@@ -116,6 +116,7 @@ void SpawnThrownWeapon (vector org, float w)
 	local entity oldself;
 
 	if (!cvar("g_pickup_items"))
+	if (!cvar("g_minstagib"))
 		return;
 	if (w == IT_LASER)
 		return;
@@ -236,8 +237,16 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 		self.pain_finished = time + 0.5;	//Supajoe
 	}
 
-	save = bound(0, damage * cvar("g_balance_armor_blockpercent"), self.armorvalue);
-	take = bound(0, damage - save, damage);
+	if (!cvar("g_minstagib"))
+	{
+		save = bound(0, damage * cvar("g_balance_armor_blockpercent"), self.armorvalue);
+		take = bound(0, damage - save, damage);
+	}
+	else
+	{
+		save = 0;
+		take = damage;
+	}
 
 	if (save > 10)
 		sound (self, CHAN_IMPACT, "misc/armorimpact.wav", 1, ATTN_NORM);

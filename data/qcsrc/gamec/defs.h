@@ -206,3 +206,8 @@ float GRAPHOOK_RELEASE		= 21;
 // Laser target for laser-guided weapons
 .entity lasertarget;
 .float laser_on;
+
+// minstagib vars
+.float extralives;
+.float jump_interval;    // laser refire
+.string crosshair_static;
