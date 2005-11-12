@@ -281,28 +281,121 @@ void minstagib_items (float itemid)
 
 }
 
-void weapon_uzi (void) {self.ammo_nails = 120;StartItem ("models/weapons/g_uzi.md3", "weapons/weaponpickup.wav", 15, "Uzi", IT_UZI, FL_WEAPON);}
-void weapon_shotgun (void) {self.ammo_shells = 15;StartItem ("models/weapons/g_shotgun.md3", "weapons/weaponpickup.wav", 15, "Shotgun", IT_SHOTGUN, FL_WEAPON);}
-void weapon_grenadelauncher (void) {self.ammo_rockets = 15;StartItem ("models/weapons/g_gl.md3", "weapons/weaponpickup.wav", 15, "Grenade Launcher", IT_GRENADE_LAUNCHER, FL_WEAPON);}
-void weapon_electro (void) {self.ammo_cells = 25;StartItem ("models/weapons/g_electro.md3", "weapons/weaponpickup.wav", 15, "Electro", IT_ELECTRO, FL_WEAPON);}
-void weapon_crylink (void) {self.ammo_cells = 25;StartItem ("models/weapons/g_crylink.md3", "weapons/weaponpickup.wav", 15, "Crylink", IT_CRYLINK, FL_WEAPON);}
-void weapon_nex (void) {if (cvar("g_minstagib")) {minstagib_items(IT_CELLS);} else {self.ammo_cells = 25;StartItem ("models/weapons/g_nex.md3", "weapons/weaponpickup.wav", 15, "Nex Gun", IT_NEX, FL_WEAPON);}}
-void weapon_hagar (void) {self.ammo_rockets = 15;StartItem ("models/weapons/g_hagar.md3", "weapons/weaponpickup.wav", 15, "Hagar", IT_HAGAR, FL_WEAPON);}
-void weapon_rocketlauncher (void) {if (cvar("g_minstagib")) {minstagib_items(IT_CELLS);} else {self.ammo_rockets = 15;StartItem ("models/weapons/g_rl.md3", "weapons/weaponpickup.wav", 15, "Rocket Launcher", IT_ROCKET_LAUNCHER, FL_WEAPON);}}
+void weapon_uzi (void) {
+	self.ammo_nails = 120;
+	StartItem ("models/weapons/g_uzi.md3", "weapons/weaponpickup.wav", 15, "Uzi", IT_UZI, FL_WEAPON);
+}
 
-void item_rockets (void) {self.ammo_rockets = 15;StartItem ("models/items/a_rockets.md3", "misc/itempickup.wav", 15, "rockets", IT_ROCKETS, 0);}
-void item_bullets (void) {self.ammo_nails = 120;StartItem ("models/items/a_bullets.mdl", "misc/itempickup.wav", 15, "bullets", IT_NAILS, 0);}
-void item_cells (void) {self.ammo_cells = 25;StartItem ("models/items/a_cells.md3", "misc/itempickup.wav", 15, "cells", IT_CELLS, 0);}
-void item_shells (void) {self.ammo_shells = 15;StartItem ("models/items/a_shells.md3", "misc/itempickup.wav", 15, "shells", IT_SHELLS, 0);}
+void weapon_shotgun (void) {
+	self.ammo_shells = 15;
+	StartItem ("models/weapons/g_shotgun.md3", "weapons/weaponpickup.wav", 15, "Shotgun", IT_SHOTGUN, FL_WEAPON);
+}
 
-void item_armor1 (void) {self.armorvalue = 5;StartItem ("models/items/g_a1.md3", "misc/armor1.wav", 15, "Armor Shard", 0, 0);}
-void item_armor25 (void) {self.armorvalue = 100;StartItem ("models/items/g_a25.md3", "misc/armor25.wav", 30, "Armor", 0, 0);}
-void item_health1 (void) {self.max_health = 5;StartItem ("models/items/g_h1.md3", "misc/minihealth.wav", 15, "5 Health", 0, 0);}
-void item_health25 (void) {self.max_health = 25;StartItem ("models/items/g_h25.md3", "misc/mediumhealth.wav", 15, "25 Health", 0, 0);}
-void item_health100 (void) {if(cvar("g_minstagib")) {minstagib_items(IT_NAILS);} else {self.max_health = 100;StartItem ("models/items/g_h100.md3", "misc/megahealth.wav", 30, "100 Health", 0, 0);}}
+void weapon_grenadelauncher (void) {
+	self.ammo_rockets = 15;
+	StartItem ("models/weapons/g_gl.md3", "weapons/weaponpickup.wav", 15, "Grenade Launcher", IT_GRENADE_LAUNCHER, FL_WEAPON);
+}
 
-void item_strength (void) {if(cvar("g_minstagib")) {minstagib_items(IT_STRENGTH);} else {self.strength_finished = 30;self.effects = EF_ADDITIVE;StartItem ("models/items/g_strength.md3", "misc/powerup.wav", 120, "Strength Powerup", IT_STRENGTH, FL_POWERUP);}}
-void item_invincible (void) {if(cvar("g_minstagib")) {minstagib_items(IT_INVINCIBLE);} else {self.invincible_finished = 30;self.effects = EF_ADDITIVE;StartItem ("models/items/g_invincible.md3", "misc/powerup.wav", 120, "Invulnerability", IT_INVINCIBLE, FL_POWERUP);}}
+void weapon_electro (void) {
+	self.ammo_cells = 25;
+	StartItem ("models/weapons/g_electro.md3", "weapons/weaponpickup.wav", 15, "Electro", IT_ELECTRO, FL_WEAPON);
+}
+
+void weapon_crylink (void) {
+	self.ammo_cells = 25;
+	StartItem ("models/weapons/g_crylink.md3", "weapons/weaponpickup.wav", 15, "Crylink", IT_CRYLINK, FL_WEAPON);
+}
+
+void weapon_nex (void) {
+	if (cvar("g_minstagib")) {
+		minstagib_items(IT_CELLS);
+	} else {
+		self.ammo_cells = 25;
+		StartItem ("models/weapons/g_nex.md3", "weapons/weaponpickup.wav", 15, "Nex Gun", IT_NEX, FL_WEAPON);
+	}
+}
+
+void weapon_hagar (void) {
+	self.ammo_rockets = 15;
+	StartItem ("models/weapons/g_hagar.md3", "weapons/weaponpickup.wav", 15, "Hagar", IT_HAGAR, FL_WEAPON);
+}
+
+void weapon_rocketlauncher (void) {
+	if (cvar("g_minstagib")) {
+		minstagib_items(IT_CELLS);
+	} else {
+		self.ammo_rockets = 15;
+		StartItem ("models/weapons/g_rl.md3", "weapons/weaponpickup.wav", 15, "Rocket Launcher", IT_ROCKET_LAUNCHER, FL_WEAPON);
+	}
+}
+
+void item_rockets (void) {
+	self.ammo_rockets = 15;
+	StartItem ("models/items/a_rockets.md3", "misc/itempickup.wav", 15, "rockets", IT_ROCKETS, 0);
+}
+
+void item_bullets (void) {
+	self.ammo_nails = 120;
+	StartItem ("models/items/a_bullets.mdl", "misc/itempickup.wav", 15, "bullets", IT_NAILS, 0);
+}
+
+void item_cells (void) {
+	self.ammo_cells = 25;
+	StartItem ("models/items/a_cells.md3", "misc/itempickup.wav", 15, "cells", IT_CELLS, 0);
+}
+
+void item_shells (void) {
+	self.ammo_shells = 15;
+	StartItem ("models/items/a_shells.md3", "misc/itempickup.wav", 15, "shells", IT_SHELLS, 0);
+}
+
+void item_armor1 (void) {
+	self.armorvalue = 5;
+	StartItem ("models/items/g_a1.md3", "misc/armor1.wav", 15, "Armor Shard", 0, 0);
+}
+
+void item_armor25 (void) {
+	self.armorvalue = 100;
+	StartItem ("models/items/g_a25.md3", "misc/armor25.wav", 30, "Armor", 0, 0);
+}
+
+void item_health1 (void) {
+	self.max_health = 5;
+	StartItem ("models/items/g_h1.md3", "misc/minihealth.wav", 15, "5 Health", 0, 0);
+}
+
+void item_health25 (void) {
+	self.max_health = 25;
+	StartItem ("models/items/g_h25.md3", "misc/mediumhealth.wav", 15, "25 Health", 0, 0);
+}
+
+void item_health100 (void) {
+	if(cvar("g_minstagib")) {
+		minstagib_items(IT_NAILS);
+	} else {
+		self.max_health = 100;
+		StartItem ("models/items/g_h100.md3", "misc/megahealth.wav", 30, "100 Health", 0, 0);
+	}
+}
+
+void item_strength (void) {
+	if(cvar("g_minstagib")) {
+		minstagib_items(IT_STRENGTH);
+	} else {
+		self.strength_finished = 30;
+		self.effects = EF_ADDITIVE;StartItem ("models/items/g_strength.md3", "misc/powerup.wav", 120, "Strength Powerup", IT_STRENGTH, FL_POWERUP);
+	}
+}
+
+void item_invincible (void) {
+	if(cvar("g_minstagib")) {
+		minstagib_items(IT_INVINCIBLE);
+	} else {
+		self.invincible_finished = 30;
+		self.effects = EF_ADDITIVE;
+		StartItem ("models/items/g_invincible.md3", "misc/powerup.wav", 120, "Invulnerability", IT_INVINCIBLE, FL_POWERUP);
+	}
+}
 //void item_speed (void) {self.speed_finished = 30;StartItem ("models/items/g_speed.md3", "misc/powerup.wav", 120, "Speed Powerup", IT_SPEED, FL_POWERUP);}
 //void item_slowmo (void) {self.slowmo_finished = 30;StartItem ("models/items/g_slowmo.md3", "misc/powerup.wav", 120, "Slow Motion", IT_SLOWMO, FL_POWERUP);}
 
