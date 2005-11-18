@@ -163,6 +163,11 @@ void PutObserverInServer (void)
 	spot = SelectSpawnPoint (FALSE);
 	RemoveGrapplingHook(self); // Wazat's Grappling Hook
 
+	if(self.frags == 0)
+		bprint (strcat("^4", self.netname, "^4 has no more lives left\n"));
+	else if(self.killcount != -666)
+		bprint (strcat("^4", self.netname, "^4 is spectating now\n"));
+
 	self.classname = "observer";
 	self.health = 666;
 	self.takedamage = DAMAGE_NO;
@@ -208,9 +213,10 @@ void PutObserverInServer (void)
 	self.weaponframe = 0;
 	self.weaponentity = world;
 	self.killcount = -666;
-	self.frags = -666;
+	if(!cvar("g_lms"))
+		self.frags = -666;
  	//stuffcmd(self, "set viewsize 120 \n");
-	bprint (strcat("^4", self.netname, "^4 is spectating now\n"));
+//	bprint (strcat("^4", self.netname, "^4 is spectating now\n"));
 }
 
 
@@ -223,6 +229,10 @@ Called when a client spawns in the server
 */
 void PutClientInServer (void)
 {	
+	// player is dead and becomes observer
+	if(cvar("g_lms") && self.frags < 1)
+		self.classname = "observer";
+
 	if(self.classname == "player") {
 		entity	spot;
 
@@ -303,7 +313,14 @@ void PutClientInServer (void)
 		// don't reset back to last position, even if new position is stuck in solid
 		self.oldorigin = self.origin;
 
-		if (cvar("g_use_ammunition")) {
+		if(cvar("g_lms"))
+		{
+			self.ammo_shells = cvar("g_lms_start_ammo_shells");
+			self.ammo_nails = cvar("g_lms_start_ammo_nails");
+			self.ammo_rockets = cvar("g_lms_start_ammo_rockets");
+			self.ammo_cells = cvar("g_lms_start_ammo_cells");
+		}
+		else if (cvar("g_use_ammunition")) {
 			self.ammo_shells = cvar("g_start_ammo_shells");
 			self.ammo_nails = cvar("g_start_ammo_nails");
 			self.ammo_rockets = cvar("g_start_ammo_rockets");
@@ -316,50 +333,64 @@ void PutClientInServer (void)
 		}
 
 		self.items = 0;
-		if (cvar("g_start_weapon_laser"))
+		if (cvar("g_start_weapon_laser") || cvar("g_lms"))
 		{
 			self.items = self.items | IT_LASER;
 			self.switchweapon = WEP_LASER;
 		}
-		if (cvar("g_start_weapon_shotgun"))
+		if (cvar("g_start_weapon_shotgun") || cvar("g_lms"))
 		{
 			self.items = self.items | IT_SHOTGUN;
 			self.switchweapon = WEP_SHOTGUN;
 		}
-		if (cvar("g_start_weapon_uzi"))
+		if (cvar("g_start_weapon_uzi") || cvar("g_lms"))
 		{
 			self.items = self.items | IT_UZI;
 			self.switchweapon = WEP_UZI;
 		}
-		if (cvar("g_start_weapon_grenadelauncher"))
+		if (cvar("g_start_weapon_grenadelauncher") || cvar("g_lms"))
 		{
 			self.items = self.items | IT_GRENADE_LAUNCHER;
 			self.switchweapon = WEP_GRENADE_LAUNCHER;
 		}
-		if (cvar("g_start_weapon_electro"))
+		if (cvar("g_start_weapon_electro") || cvar("g_lms"))
 		{
 			self.items = self.items | IT_ELECTRO;
 			self.switchweapon = WEP_ELECTRO;
 		}
-		if (cvar("g_start_weapon_crylink"))
+		if (cvar("g_start_weapon_crylink") || cvar("g_lms"))
 		{
 			self.items = self.items | IT_CRYLINK;
 			self.switchweapon = WEP_CRYLINK;
 		}
-		if (cvar("g_start_weapon_nex"))
+		if (cvar("g_start_weapon_nex") || cvar("g_lms"))
 		{
 			self.items = self.items | IT_NEX;
 			self.switchweapon = WEP_NEX;
 		}
-		if (cvar("g_start_weapon_hagar"))
+		if (cvar("g_start_weapon_hagar") || cvar("g_lms"))
 		{
 			self.items = self.items | IT_HAGAR;
 			self.switchweapon = WEP_HAGAR;
 		}
-		if (cvar("g_start_weapon_rocketlauncher"))
+		if (cvar("g_start_weapon_rocketlauncher") || cvar("g_lms"))
 		{
 			self.items = self.items | IT_ROCKET_LAUNCHER;
 			self.switchweapon = WEP_ROCKET_LAUNCHER;
+		}
+
+		if(cvar("g_instagib"))
+		{
+			self.items = IT_NEX;
+			self.switchweapon = WEP_NEX;
+			self.ammo_cells = 999;
+		}
+
+		if(cvar("g_rocketarena"))
+		{
+			self.items = IT_ROCKET_LAUNCHER;
+			self.switchweapon = WEP_ROCKET_LAUNCHER;
+			self.ammo_rockets = 999;
 		}
 
 		if(cvar("g_minstagib"))
@@ -371,7 +402,8 @@ void PutClientInServer (void)
 			self.ammo_cells = cvar("g_minstagib_ammo_start");
 			self.extralives = 0;
 			self.jump_interval = time;
-			stuffcmd(self, strcat("crosshair_static ", self.crosshair_static, "\n"));
+			if(self.crosshair_static == "0")
+				stuffcmd(self, strcat("crosshair_static 0\n"));
 		}
  	
 		self.event_damage = PlayerDamage;
@@ -447,7 +479,7 @@ void ClientConnect (void)
 
 	JoinBestTeam(self, FALSE);
 
-	if(cvar("sv_spectate") == 1) {
+	if(cvar("sv_spectate") == 1 && !cvar("g_lms")) {
 		self.classname = "observer";	
 	} else {
 		self.classname = "player";		
@@ -491,6 +523,27 @@ void ClientConnect (void)
 
 	// get crosshair_static
 	stuffcmd(self, "cmd crosshair $crosshair_static\n");
+
+	if(cvar("g_lms"))
+	{
+		self.frags = cvar("fraglimit");
+		// no fraglimit was set, so player gets 999 lives
+		if(self.frags < 1)
+			self.frags = 999;
+
+		// disallow player to join after the worst player has lost g_lms_last_join lives
+		// if "g_lms_join_anytime" new players spawn with same amount of lives as the worst active player
+		if((cvar("fraglimit") - cvar("g_lms_last_join")) > lms_lowest_lives && !cvar("g_lms_join_anytime"))
+		{
+			self.frags = -1;
+			lms_dead_count += 1;
+		}
+		else if(cvar("fraglimit") > lms_lowest_lives)
+		{
+			self.frags = lms_lowest_lives;
+		}
+	}
+	player_count += 1;
 }
 
 /*
@@ -512,6 +565,11 @@ void ClientDisconnect (void)
 		self.chatbubbleentity = world;
 	}
 	DropAllRunes(self);
+	// decrease player count for lms
+	player_count -= 1;
+	// player was dead, decrease dead count
+	if(cvar("g_lms") && self.frags < 1)
+		lms_dead_count -= 1;
 	//stuffcmd(self, "set viewsize $tmpviewsize \n");
 }
 
@@ -677,7 +735,8 @@ void player_powerups (void)
 			if (time > self.strength_finished)
 			{
 				self.items = self.items - (self.items & IT_STRENGTH);
-				stuffcmd(self, strcat("crosshair_static ", self.crosshair_static, "\n"));
+				if(self.crosshair_static == "0")
+					stuffcmd(self, strcat("crosshair_static 0\n"));
 				sprint(self, "^3Invisibility has worn off\n");
 			}
 		}
@@ -924,7 +983,12 @@ void PlayerPreThink (void)
 			}
 			else if (self.deadflag == DEAD_RESPAWNABLE)
 			{
-				if (self.button0 || self.button2 || self.button3  || self.button4)
+				if (self.button0  || 
+				    self.button2  || 
+				    self.button3  || 
+				    self.button4  || 
+				    cvar("g_lms") || 
+				    cvar("g_forced_respawn"))
 					respawn();
 			}
 			return;
@@ -1035,7 +1099,8 @@ void PlayerPreThink (void)
 			if (self.button2) {
 				self.flags = self.flags & !FL_JUMPRELEASED;
 				self.classname = "player";
-				bprint (strcat("^4", self.netname, "^4 is playing now\n"));
+				if(!cvar("g_lms"))
+					bprint (strcat("^4", self.netname, "^4 is playing now\n"));
 				PutClientInServer();
 				centerprint(self,"");
 				return;
@@ -1050,7 +1115,12 @@ void PlayerPreThink (void)
 				self.flags = self.flags | FL_JUMPRELEASED;
         	}
 		}
-		centerprint(self, strcat("\n", "\n", "\n", "press jump to play", "\n", "press attack to spectate other players"));
+		if(cvar("g_lms") && self.frags == 0)
+			centerprint(self, "\n\n\n^1You have no more lives left\nwait for next round\n\n\n^7press attack to spectate other players");
+		else if(cvar("g_lms") && self.frags == -1)
+			centerprint(self, "\n\n\n^1Match has already begun\nwait for next round\n\n\n^7press attack to spectate other players");
+		else
+			centerprint(self, "\n\n\npress jump to play\npress attack to spectate other players");
 	} else if(self.classname == "spectator") {
 		if (self.flags & FL_JUMPRELEASED) {
 			if(self.button0) {
@@ -1076,10 +1146,10 @@ void PlayerPreThink (void)
 			}
         } else {
         	if (!(self.button0 || self.button3)) {
-				self.flags = self.flags | FL_JUMPRELEASED;
+			self.flags = self.flags | FL_JUMPRELEASED;
         	}
 		}
-		centerprint(self, strcat("spectating ", self.enemy.netname, "\n", "\n", "\n", "press attack for next player", "\n", "press attack2 for free fly mode"));
+		centerprint(self, strcat("spectating ", self.enemy.netname, "\n\n\n^7press attack for next player\npress attack2 for free fly mode"));
 	}
 	
 }

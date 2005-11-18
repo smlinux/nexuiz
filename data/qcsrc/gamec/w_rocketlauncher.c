@@ -217,7 +217,7 @@ void W_Rocket_Attack (void)
 	local entity flash;
 	local vector org;
 	sound (self, CHAN_WEAPON, "weapons/rocket_fire.wav", 1, ATTN_NORM);
-	if (cvar("g_use_ammunition"))
+	if (cvar("g_use_ammunition") && !cvar("g_rocketarena"))
 		self.ammo_rockets = self.ammo_rockets - 3;
 	self.punchangle_x = -4;
 	org = self.origin + self.view_ofs + v_forward * 15 + v_right * 3 + v_up * -11;

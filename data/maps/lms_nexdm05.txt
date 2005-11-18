@@ -1,0 +1,19 @@
+Downer (lms_nexdm05)
+maps/nexdm05
+
+A multilevel map
+
+Players: 3-4
+
+Weapons: Electro,
+Rocket Launcher
+
+Recommended Gametypes:
+Deathmatch
+Rocket Arena
+Last Man Standing
+
+Author:
+Eric Sambach
+Maik Merten
+

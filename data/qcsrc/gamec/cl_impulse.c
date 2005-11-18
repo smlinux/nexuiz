@@ -59,6 +59,19 @@ void ImpulseCommands (void)
 		self.ammo_rockets = 999;
 		self.ammo_cells = 999;
 	}
+	// lms debug
+	else if(self.impulse == 66)
+	{
+		bprint("^3total:    ");
+		bprint(ftos(player_count));
+		bprint("\n");
+		bprint("^3dead:     ");
+		bprint(ftos(lms_dead_count));
+		bprint("\n");
+		bprint("^3lowest:   ");
+		bprint(ftos(lms_lowest_lives));
+		bprint("\n");
+	}
 	//TetrisImpulses();
 	self.impulse = 0;
 }

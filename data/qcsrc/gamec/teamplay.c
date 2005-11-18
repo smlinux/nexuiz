@@ -7,8 +7,9 @@ float COLOR_TEAM4	= 13; // yellow
 float GAME_DEATHMATCH		= 1;
 float GAME_TEAM_DEATHMATCH	= 2;
 float GAME_DOMINATION		= 3;
-float GAME_CTF				= 4;
+float GAME_CTF			= 4;
 float GAME_RUNEMATCH		= 5;
+float GAME_LMS			= 6;
 
 // client counts for each team
 float c1, c2, c3, c4;
@@ -73,6 +74,7 @@ void ResetGameCvars()
 	cvar_set("g_domination", "0");
 	cvar_set("g_ctf", "0");
 	cvar_set("g_runematch", "0");
+	cvar_set("g_lms", "0");
 	cvar_set("teamplay", "0");
 
 
@@ -170,6 +172,15 @@ void InitGameplayMode()
 
 		fraglimit_override = cvar("fraglimit_override");
 	}
+	else if(game == GAME_LMS || cvar("g_lms"))
+	{
+		game = GAME_LMS;
+		cvar_set("g_lms", "1");
+		fraglimit_override = cvar("fraglimit_override");
+		gamemode_name = "Last Man Standing";
+		teams_matter = 0;
+		lms_lowest_lives = 999;
+	}
 	else
 	{
 		// we can only assume...
@@ -203,36 +214,21 @@ void InitGameplayMode()
 	else if (game == GAME_TEAM_DEATHMATCH)//cvar("g_runematch"))
 		tdm_init();
 
-	// be backwards compatible
-	if (cvar("g_instagib")) {
-		cvar_set("g_start_weapon_laser", ftos(FALSE));
-		cvar_set("g_start_weapon_shotgun", ftos(FALSE));
-		cvar_set("g_start_weapon_uzi", ftos(FALSE));
-		cvar_set("g_start_weapon_grenadelauncher", ftos(FALSE));
-		cvar_set("g_start_weapon_electro", ftos(FALSE));
-		cvar_set("g_start_weapon_crylink", ftos(FALSE));
-		cvar_set("g_start_weapon_nex", ftos(TRUE));
-		cvar_set("g_start_weapon_hagar", ftos(FALSE));
-		cvar_set("g_start_weapon_rocketlauncher", ftos(FALSE));
-		cvar_set("g_pickup_items", ftos(FALSE));
-		cvar_set("g_use_ammunition", ftos(FALSE));
+	// those mutators rule each other out
+	if(cvar("g_minstagib"))
+	{
+		cvar_set("g_instagib", "0");
+		cvar_set("g_rocketarena", "0");
 	}
-	if (cvar("g_rocketarena")) {
-		cvar_set("g_start_weapon_laser", ftos(FALSE));
-		cvar_set("g_start_weapon_shotgun", ftos(FALSE));
-		cvar_set("g_start_weapon_uzi", ftos(FALSE));
-		cvar_set("g_start_weapon_grenadelauncher", ftos(FALSE));
-		cvar_set("g_start_weapon_electro", ftos(FALSE));
-		cvar_set("g_start_weapon_crylink", ftos(FALSE));
-		cvar_set("g_start_weapon_nex", ftos(FALSE));
-		cvar_set("g_start_weapon_hagar", ftos(FALSE));
-		cvar_set("g_start_weapon_rocketlauncher", ftos(TRUE));
-		cvar_set("g_pickup_items", ftos(FALSE));
-		cvar_set("g_use_ammunition", ftos(FALSE));
+	if(cvar("g_instagib"))
+	{
+		cvar_set("g_minstagib", "0");
+		cvar_set("g_rocketarena", "0");
 	}
-	if (cvar("g_minstagib")) {
-		cvar_set("g_pickup_items", ftos(FALSE));
-		cvar_set("g_use_ammunition", ftos(TRUE));
+	if(cvar("g_rocketarena"))
+	{
+		cvar_set("g_instagib", "0");
+		cvar_set("g_minstagib", "0");
 	}
 }
 
@@ -253,6 +249,8 @@ void PrintWelcomeMessage(entity pl)
 	{
 		if(cvar("g_minstagib"))
 			temp2 = strcat("^2Minstagib ^1", gamemode_name);
+		else
+			temp2 = gamemode_name;
 		
 		if(cvar("g_grappling_hook"))
 			grap_msg = strzone("\n\nBind a key to ^1+hook^8 to use the grappling hook\n");
@@ -261,7 +259,7 @@ void PrintWelcomeMessage(entity pl)
 		s = strzone(s);
 
 		temp = strcat(
-			"\n\n\n^8Welcome, ", pl.netname, "\n",
+			"\n\n\n^8Welcome, ", pl.netname, "^8\n",
 			s
 			);
 		temp = strzone(temp);
@@ -359,7 +357,7 @@ void SetPlayerTeam(entity pl, float t, float s, float noprint)
 	if(!noprint && t != s)
 	{
 		//bprint(strcat(pl.netname, " has changed to ", TeamNoName(t), "\n"));
-		bprint(strcat(pl.netname, " has changed from ", TeamNoName(s), " to ", TeamNoName(t), "\n"));
+		bprint(strcat(pl.netname, "^7 has changed from ", TeamNoName(s), " to ", TeamNoName(t), "\n"));
 	}
 }
 

@@ -1,0 +1,17 @@
+DSI (lms_nexdm07)
+maps/nexdm07
+
+SciFi Arena
+
+Players: 3-5
+
+Weapons: Machine Gun, Mortar,
+Electro, Hagar, Crylink,
+Rocket Launcher
+
+Recommended Gametypes:
+Deathmatch
+Last Man Standing
+
+Author:
+Yves Allaire

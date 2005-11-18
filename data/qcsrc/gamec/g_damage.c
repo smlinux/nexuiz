@@ -7,6 +7,18 @@ void GiveFrags (entity attacker, entity targ, float f)
 		return;
 	else if(f > 0 && cvar("g_runematch"))
 		f = RunematchHandleFrags(attacker, targ, f);
+	else if(cvar("g_lms"))
+	{
+		// count remaining lives, not frags in lms
+		targ.frags -= 1;
+		// keep track of the worst players lives
+		if(targ.frags < lms_lowest_lives)
+			lms_lowest_lives = targ.frags;	
+		// player has no more lives left
+		if (!targ.frags)
+			lms_dead_count += 1;
+		return;
+	}
 
 	if(f)
 		attacker.frags = attacker.frags + f;
@@ -28,7 +40,7 @@ void Obituary (entity attacker, entity targ, float deathtype)
 			if (deathtype == DEATH_NOAMMO)
 				centerprint(targ, strcat("^1You were killed for running out of ammo...\n\n\n"));
 			else
-				centerprint(targ, strcat("^1You killed your dumb self!\n\n\n"));
+				centerprint(targ, strcat("^1You killed your own dumb self!\n\n\n"));
 			
 			if (deathtype == IT_GRENADE_LAUNCHER)
 				bprint ("^1",s, "^1 detonated\n");
@@ -40,7 +52,7 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				bprint ("^1",s, "^1 couldn't take it anymore\n");
 			else if (deathtype == DEATH_NOAMMO)
 			{
-				bprint ("^7",s, " ^7suicided after wasting all his ammo\n");
+				bprint ("^7",s, " ^7committed suicide. What's the point of living without ammo?\n");
 				sound (self, CHAN_BODY, "minstagib/mockery.ogg", 1, ATTN_NONE);
 			}
 			else

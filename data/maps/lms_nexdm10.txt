@@ -1,0 +1,21 @@
+StormKeep (lms_nexdm10)
+maps/nexdm10
+
+A large slow paced
+medieval complex
+
+Players: 4-6
+
+Weapons: Mortar, Electro,
+Crylink, Nex, Hagar,
+Rocket Launcher
+
+Powerups: Strength
+
+Recommended Gametypes:
+Deathmatch
+Last Man Standing
+
+Author:
+William Libert
+Maik Merten

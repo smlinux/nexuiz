@@ -44,11 +44,11 @@ void Item_Touch (void)
 		{
 			// play some cool sounds ;)
 			centerprint(other, "\n");
-			if (other.health <= 5)
-				stuffcmd(other, "play2 misc/save.ogg\n");
-			else if (other.health < 50)
-				stuffcmd(other, "play2 misc/averted.ogg\n");
-			else
+			if(other.health <= 5)
+				stuffcmd(other, "play2 announce/robotic/last_second_save.ogg\n");
+			else if(other.health < 50)
+				stuffcmd(other, "play2 announce/robotic/narrowly_averted.ogg\n");
+			else if(self.items == IT_CELLS)
 				stuffcmd(other, "play2 announce/robotic/ammo.ogg\n");
 			
 			if (self.items & IT_NEX)
@@ -157,7 +157,7 @@ void RemoveItem(void) = {
 
 void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, string itemname, float itemid, float itemflags)
 {
-	if (!cvar("g_pickup_items") && !cvar("g_minstagib"))
+	if (!cvar("g_pickup_items") && !cvar("g_minstagib") && !cvar("g_lms"))
 	{
 		remove (self);
 		return;
@@ -172,6 +172,18 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 			remove (self);
 			return;
 		}
+	}
+
+	if(cvar("g_lms") && (self.classname != "droppedweapon"))
+	{
+		remove(self);
+		return;
+	}
+
+	if(cvar("g_instagib") || cvar("g_rocketarena"))
+	{
+		remove(self);
+		return;
 	}
 
 	self.mdl = itemmodel;

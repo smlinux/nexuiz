@@ -1,0 +1,17 @@
+Dismal (lms_nexdm13)
+maps/nexdm13
+
+Small space map
+
+Players: 2-4
+
+Weapons: Electro, Nex, 
+Hagar
+
+Recommended Gametypes:
+Deathmatch
+Instagib
+Last Man Standing
+
+Author:
+"HReaper"

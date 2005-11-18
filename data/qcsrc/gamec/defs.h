@@ -4,6 +4,10 @@
 entity	activator;
 string	string_null;
 
+float player_count;
+float lms_dead_count;
+float lms_lowest_lives;
+
 //entity	casing;
 entity dest;
 

@@ -170,7 +170,7 @@ void W_Nex_Attack (void)
 	// play a sound
 	PointSound (trace_endpos, "weapons/neximpact.ogg", 1, ATTN_NORM);
 
-	if (cvar("g_use_ammunition"))
+	if (cvar("g_use_ammunition") && !cvar("g_instagib"))
 	{
 		if (cvar("g_minstagib"))
 			self.ammo_cells = self.ammo_cells - 1;

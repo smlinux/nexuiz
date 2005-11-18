@@ -277,6 +277,11 @@ void() remove_MauveBot =
 			if (flo == i)
 			{
 				dropclient(ent);
+				// decrease player count for lms
+				player_count -= 1;
+				// bot was dead, so decrease dead count too
+				if(cvar("g_lms") && self.frags < 1)
+					lms_dead_count -= 1;
 				if (bot_number > 0)
 					bot_number = bot_number - 1;
 				return;

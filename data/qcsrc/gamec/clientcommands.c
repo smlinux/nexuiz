@@ -169,6 +169,8 @@ void SV_ParseClientCommand(string s) {
 		}
 		self.versionmessage = strzone(versionmsg);
 	} else if(argv(0) == "spectate") {
+		if(cvar("g_lms"))
+			return; // don't allow spectating in lms, unless player runs out of lives
 		if(self.classname == "player" && cvar("sv_spectate") == 1) {
 			self.classname = "observer";
 			PutClientInServer();

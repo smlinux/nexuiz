@@ -578,7 +578,7 @@ void() CheckRules_Player =
 			return;
 		}
 	}
-	else
+	else if(!cvar("g_lms"))
 	{
 		if (fraglimit && self.frags >= fraglimit)
 		{
@@ -632,6 +632,17 @@ void() CheckRules_World =
 		sound(world, CHAN_AUTO, "announcer/1minuteremains.wav", 1, ATTN_NONE);
 	}
 
+	// last man camping winning conditions
+	if(cvar("g_lms"))
+	{
+		// goto next map if only one player is alive or 
+		// if there is only one player as spectator (could happen with g_lms_join_anytime 1)
+		if((player_count > 1 && (player_count - lms_dead_count) <= 1) || 
+		  (player_count == 1 && lms_dead_count == 1))
+			NextLevel ();
+		return;
+	}
+	
 	checkrules_oldleader = checkrules_leader;
 	checkrules_oldleaderfrags = checkrules_leaderfrags;
 	checkrules_leaderfrags = 0;

@@ -1,0 +1,18 @@
+Basement (lms_nexdm01)
+maps/nexdm01
+
+A small map designed for fast
+constant gameplay
+
+Players: 2-4
+
+Weapons: Machine Gun, Mortar,
+Electro, Crylink, Hagar
+
+Recommended Gametypes:
+Deathmatch
+Rocket Arena
+Last Man Standing
+
+Author:
+Garth Hendy
