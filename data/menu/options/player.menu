@@ -80,9 +80,9 @@ Item Window Player
 	}
 	Item Layout Settings
 	{
-		pos		'455 50'
-		size		'440 600'
-		origin		'180 0'
+		pos		'460 50'
+		size		'445 600'
+		origin		'185 0'
 		flag		[FlagEmbedded]
 		alignment	[AlignFirst]
 		direction	[Nex_DefaultVertDirection]
@@ -137,6 +137,11 @@ Item Window Player
 		{
 			text	"Crosshair Size"
 			target	"::Data::Player::Crosshair::Size::Value"
+		}
+		Derive Nex_Option_Switch WeaponAutoswitch
+		{
+			text	"Weapon autoswitch"
+			target	"::Data::Player::WeaponAutoswitch::Switch"
 		}
 		Derive Nex_Void Seperator1
 		{}

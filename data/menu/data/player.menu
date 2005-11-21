@@ -55,6 +55,13 @@ Item DataContainer Player
 			link		"##up"
 		}
 	}
+	Item Data_Cvar WeaponAutoswitch
+	{
+		cvarName	"cl_autoswitch"
+		defValue	1
+
+		[DataLink_OnOffSwitch]
+	}
 	Item DataContainer Crosshair
 	{
 		Item Data_Cvar Type
