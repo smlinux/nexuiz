@@ -15,7 +15,7 @@ void() _IDNC_Sync =
 
 	// color = shirt * 16 + pants
 	lPants = cvar( "_cl_color" ) & 15;
-	bprint("Pants: ", ftos(lPants), "\n");
+	//bprint("Pants: ", ftos(lPants), "\n");
 
 	String_EntitySet( self, value, ftos( lPants ) );
 	String_EntitySet( self, _syncValue, self.value );
@@ -89,7 +89,7 @@ void() _IDNCS_Sync =
 	// color = shirt * 16 + pants
 	lShirt = (cvar( "_cl_color" ) / 16) & 15;
 	
-	bprint("Shirt: ", ftos(lShirt), "\n");
+	//bprint("Shirt: ", ftos(lShirt), "\n");
 
 	String_EntitySet( self, value, ftos( lShirt ) );
 	String_EntitySet( self, _syncValue, self.value );
