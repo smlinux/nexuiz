@@ -8,6 +8,8 @@ Item_Data_Nex_Color
 ===================
 */
 
+string pantscolor;
+
 void() _IDNC_Sync =
 {
 	local float lPants;
@@ -23,9 +25,14 @@ void() _IDNC_Sync =
 
 void() _IDNC_Send =
 {
-	local float lShirt;
-	lShirt = (cvar( "_cl_color" ) / 16) & 15;	
-	cmd( strcat( "color ", ftos( lShirt), " ", self.value, "\n" ) );
+
+	// set global value "pantscolor" to our nice new value
+	// *could* be directly exectued via a color command
+	// BUT the shirt color send method will then pickup the old value
+	// (as _cl_color isn't updated immediately)
+	// which will result in resetting the pants color to its old value
+	pantscolor = self.value;
+	
 	String_EntitySet( self, _syncValue, self.value );
 };
 
@@ -97,9 +104,9 @@ void() _IDNCS_Sync =
 
 void() _IDNCS_Send =
 {
-	local float lPants;
-	lPants = cvar( "_cl_color" ) & 15;
-	cmd( strcat( "color ", self.value , " ", ftos( lPants ) , "\n" ) );
+	
+	cmd( strcat( "color ", self.value , " ", pantscolor , "\n" ) );
+	
 	String_EntitySet( self, _syncValue, self.value );
 };
 
