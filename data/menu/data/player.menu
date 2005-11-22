@@ -29,6 +29,19 @@ Item DataContainer Player
 			link		"##up"
 		}
 	}
+	Item Data_Nex_ColorShirt ShirtColor
+	{
+		defValue	"4"	// Red
+
+		Item DataLink_TextSwitch TextSwitch
+		{
+			// Red Blue Green Yellow
+			valueList 	"'4' '13' '3' '12'"
+			descList	"'$gfx/m_redsquare' '$gfx/m_bluesquare' '$gfx/m_greensquare' '$gfx/m_yellowsquare'"
+
+			link		"##up"
+		}
+	}
 	Item Data_Cvar FOV
 	{
 		cvarName	"FOV"

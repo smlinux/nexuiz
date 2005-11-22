@@ -118,6 +118,24 @@ Item Window Player
 				colorSelected	"1.0 1.0 1.0"
 			}
 		}
+		Derive Nex_Composition ShirtColor
+		{
+			text	"Shirt color"
+			target	"::Data::Player::ShirtColor::TextSwitch"
+
+			Derive Nex_Automation_Option_Slider Automation
+			{}
+			Derive TextButton Description
+			{}
+			Derive Slider Slider
+			{}
+			Derive PictureValueButton Value
+			{
+				color		"1.0 1.0 1.0"
+				colorPressed	"1.0 1.0 1.0"
+				colorSelected	"1.0 1.0 1.0"
+			}
+		}		
 		Derive Nex_Option_Slider FOV
 		{
 			text	"Field of View"
