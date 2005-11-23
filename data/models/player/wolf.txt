@@ -1,6 +1,6 @@
 Wolf
 models/player/wolf
-1
+0
 models/player/lycanthrope.zym
 
 Monsterous Opponent
