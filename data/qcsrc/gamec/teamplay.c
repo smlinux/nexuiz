@@ -338,11 +338,19 @@ void SetPlayerColors(entity pl, float color)
 	//pl.clientcolors = pl.clientcolors - (pl.clientcolors & 15) + cl;
 	pl.clientcolors = 16*cl + cl;*/
 
-	setcolor(pl, 16*color + color);
+	if(teamplay) {
+		setcolor(pl, 16*color + color);
+	} else {
+		float shirt;
+		shirt = (pl.clientcolors & 240) / 16;
+		setcolor(pl, 16*shirt + color);	
+	}
 }
 
 void SetPlayerTeam(entity pl, float t, float s, float noprint)
 {
+
+	
 	float color;
 	if(t == 4)
 		color = COLOR_TEAM4 - 1;
@@ -352,7 +360,10 @@ void SetPlayerTeam(entity pl, float t, float s, float noprint)
 		color = COLOR_TEAM2 - 1;
 	else
 		color = COLOR_TEAM1 - 1;
-	setcolor(pl, 16*color + color);
+	
+	
+	SetPlayerColors(pl,color);
+
 
 	if(!noprint && t != s)
 	{
@@ -682,7 +693,6 @@ void SV_ChangeTeam(float color)
 	// not changing teams
 	if(scolor == dcolor)
 	{
-		//setcolor(self, 16*color + color);
 		//bprint("same team change\n");
 		SetPlayerTeam(self, dteam, steam, TRUE);
 		return;
@@ -761,7 +771,6 @@ void SV_ChangeTeam(float color)
 //	bprint(strcat("allow change teams from ", ftos(steam), " to ", ftos(dteam), "\n"));
 
 	SetPlayerTeam(self, dteam, steam, FALSE);
-	//setcolor(self, 16*dcolor + dcolor);
 }
 
 
