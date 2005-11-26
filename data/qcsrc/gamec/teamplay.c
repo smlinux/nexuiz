@@ -342,8 +342,11 @@ void SetPlayerColors(entity pl, float color)
 		setcolor(pl, 16*color + color);
 	} else {
 		float shirt;
-		shirt = (pl.clientcolors & 240) / 16;
-		setcolor(pl, 16*shirt + color);	
+		shirt = pl.clientcolors & 0xF0;
+		setcolor(pl, shirt + color);
+		/*bprint("CLIENTCOLORS");
+		bprint(ftos(pl.clientcolors));
+		bprint("\n");*/
 	}
 }
 
