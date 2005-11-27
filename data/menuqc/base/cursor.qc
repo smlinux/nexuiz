@@ -36,8 +36,8 @@ void() Cursor_Draw =
 	local vector lSize;
 
 	lSize = Gfx_GetImageSize( Cursor_Current ) * Cursor_Scale;
-	lPos_x = Cursor_Position_x + lSize_x * Cursor_Offset_x;
-	lPos_y = Cursor_Position_y + lSize_y * Cursor_Offset_y;
+	lPos_x = Cursor_Position_x - lSize_x * Cursor_Offset_x;
+	lPos_y = Cursor_Position_y - lSize_y * Cursor_Offset_y;
 	lPos_z = 0.0;
 
 	Gfx_DrawPic( lPos, Cursor_Current, lSize, Cursor_Color, Cursor_Transparency, Cursor_Flag );

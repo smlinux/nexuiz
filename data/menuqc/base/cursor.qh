@@ -16,7 +16,8 @@ float 	Cursor_Transparency 	= 1.0;
 vector  Cursor_Color		= '1.0 1.0 1.0';
 float	Cursor_Scale		= 1.0;
 float 	Cursor_Flag		= 0;
-vector 	Cursor_Offset		= '-0.5 -0.5 0';
+// center of the cursor
+vector 	Cursor_Offset		= '0 0 0';
 
 void() Cursor_Init;
 void() Cursor_Quit;
