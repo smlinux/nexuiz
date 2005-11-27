@@ -16,17 +16,20 @@ Item Window Normal
 		color		'0.6 0.6 0.7'
 		drawFlag	[DrawFlagModulate]
 	}
+Ignore
+{
 	Derive Rect AddLevel
 	{
 		color		'0.3 0.3 0.3'
 		drawFlag	[DrawFlagAdditive]
 	}
+}
 	Derive Picture NexuizLogo
 	{
 		picture	 	"gfx/background"
 		pos		'0 0'
 		size		'1024 768'
-		alpha		0.5
+		//alpha		0.5
 
 Ignore
 {
