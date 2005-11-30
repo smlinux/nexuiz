@@ -1,0 +1,19 @@
+Nexuiz Arena CTF (dom_nexctf02)
+maps/nexctf02
+
+Medium-sized CTF-Map
+
+Players: 4-10
+
+Weapons:Machinegun, Mortar, Nex, 
+        Rocket Launcher,Electro,
+        Crylink, Hagar
+
+Powerups: Mega Health, Speed, 
+          Strength
+
+Gametype:
+Domination
+	
+Author:
+Strahlemann

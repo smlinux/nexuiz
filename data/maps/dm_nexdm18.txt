@@ -1,0 +1,19 @@
+Nexuiz Arena (dm_nexdm18)
+maps/nexdm18
+
+Small DM-Level, best suited 
+for 2 players
+
+Players: 2-4
+
+Weapons:Machinegun, Mortar, Nex, 
+Rocket Launcher,Electro, 
+Crylink, Hagar
+
+Powerups: Mega Health
+
+Gametype:
+Deathmatch
+	
+Author:
+Strahlemann
