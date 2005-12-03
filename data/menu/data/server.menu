@@ -13,8 +13,8 @@ Item DataContainer Server
 
 			Item DataLink_TextSwitch Switch
 			{
-				valueList	"'' 'dm_' 'tdm_' 'dom_' 'ctf_' 'rune_'"
-				descList	"'List All''Classic Deathmatch''Team Deathmatch''Domination''Capture The Flag''Rune Match'"
+				valueList	"'' 'dm_' 'tdm_' 'dom_' 'ctf_' 'rune_' 'lms_'"
+				descList	"'List All''Classic Deathmatch''Team Deathmatch''Domination''Capture The Flag''Rune Match''Last Man Standing'"
 
 				link		"##up"
 			}
@@ -129,6 +129,8 @@ Item DataContainer Server
 			link	"##up"
 		}
 	}
+Ignore
+{
 	Item Data_Cvar GameMode
 	{
 		cvarName	"gamecfg"
@@ -145,6 +147,7 @@ Item DataContainer Server
 			link		"##up"
 		}
 	}
+}
 	Item Data_CvarCreateSave NumBots
 	{
 		cvarName	"bot_number"
