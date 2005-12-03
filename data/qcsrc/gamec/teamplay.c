@@ -12,9 +12,6 @@ float GAME_RUNEMATCH		= 5;
 float GAME_LMS			= 6;
 
 
-// FIXME: get rid of this and use proper parameters instead
-float shirtcolor;
-
 // client counts for each team
 float c1, c2, c3, c4;
 // # of bots on those teams
@@ -346,11 +343,9 @@ void SetPlayerColors(entity pl, float color)
 		setcolor(pl, 16*color + color);
 	} else {
 		float shirt;
-		//shirt = pl.clientcolors & 0xF0;
-		setcolor(pl, shirtcolor * 16 + color);
-		/*bprint("CLIENTCOLORS");
-		bprint(ftos(pl.clientcolors));
-		bprint("\n");*/
+		shirt = pl.clientcolors & 0xF0;
+		setcolor(pl, shirt + color);
+		
 	}
 }
 
@@ -677,10 +672,14 @@ void SV_ChangeTeam(float color)
 {
 	float scolor, dcolor, steam, dteam, dbotcount, scount, dcount;
 
-	shirtcolor = (color & 240)/16;
+	
 
 	scolor = self.clientcolors & 15;
 	dcolor = color & 15;
+	
+	// store shirt color in .clientcolors
+	// this will get overwritten in teamplay modes later
+	setcolor(self, color & 240, scolor);
 
 	if(scolor == COLOR_TEAM1 - 1)
 		steam = 1;
