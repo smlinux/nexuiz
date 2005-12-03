@@ -55,8 +55,10 @@ Menu Artist
 KadaverJack
 Programmer
 
+
 lcatlnx
 Code and Sound
+
 
 Juergen "LowDragon" Timm
 Hagar Model
@@ -166,5 +168,3 @@ Jakob MG (tZork)
 BigMac
 
 Mephisto
-
-KadaverJack
