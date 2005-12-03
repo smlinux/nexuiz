@@ -193,6 +193,8 @@ float   flagcaptimerecord;
 
 void() FlagTouch =
 {
+	if(gameover) return;
+	
 	local float t;
 	local entity head;
 	local entity player;
@@ -233,6 +235,7 @@ void() FlagTouch =
 			else
 				bprint(other.netname, "^7 captured the BLUE flag in ", ftos(t), ", failing to break the previous record of", ftos(flagcaptimerecord), " seconds\n");
 		}
+		
 		other.frags = other.frags + cvar("g_ctf_flagscore_capture");//FLAGSCORE_CAPTURE;
 		head = find(head, classname, "player");
 		while (head)

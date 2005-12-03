@@ -3,6 +3,9 @@ float checkrules_firstblood;
 
 void GiveFrags (entity attacker, entity targ, float f)
 {
+	
+	if(gameover) return;
+	
 	if(f > 0 && cvar("g_domination") && cvar("g_domination_disable_frags"))
 		return;
 	else if(f > 0 && cvar("g_runematch"))
