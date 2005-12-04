@@ -519,7 +519,7 @@ void ClientConnect (void)
 	stuffcmd(self, "cmd autoswitch $cl_autoswitch\n");
 
 	// get version info from player
-	stuffcmd(self, "cmd clientversion $g_nexuizversion_gamedata\n");
+	stuffcmd(self, "cmd clientversion $g_nexuizversion_major\n");
 
 	// get crosshair_static
 	stuffcmd(self, "cmd crosshair $crosshair_static\n");

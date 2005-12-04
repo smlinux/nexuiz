@@ -159,11 +159,16 @@ void SV_ParseClientCommand(string s) {
 		sprint(self, strcat("^1autoswitch turned ", autoswitchmsg, "\n"));
 	} else if(argv(0) == "clientversion") {
 		local string versionmsg;
-		if (argv(1) == "$g_nexuizversion_gamedata") {
+		if (argv(1) == "$g_nexuizversion_major") {
 			versionmsg = "^1client is too old to get versioninfo.\nUPDATE!!! (http://www.nexuiz.com)^8";
 			// either that or someone wants to be funny
-		} else if (stof(argv(1)) != cvar("g_nexuizversion_gamedata")) {
-			versionmsg = "^3client version and server version are different.\nYou might have to update!!!^8";
+		} else if (stof(argv(1)) != cvar("g_nexuizversion_major")) {
+			if(stof(argv(1)) < cvar("g_nexuizversion_major")) {
+				versionmsg = "^3Your client version is outdated.\nPlease update!!!^8";
+			} else {
+				versionmsg = "^3This server is using an outdated Nexuiz version.\nThis can lead to problems.^8";
+			}
+			
 		} else {
 			versionmsg = "^2client version and server version are the same.^8";
 		}
