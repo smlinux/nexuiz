@@ -238,25 +238,35 @@ void PrintWelcomeMessage(entity pl)
 	string s, grap_msg, temp, temp2;
 	float colored;
 
-	if(self.welcomemessage_time < time)
+	/*if(self.welcomemessage_time < time)
 		return;
 	if(self.welcomemessage_time2 > time)
 		return;
-	self.welcomemessage_time2 = time + 0.8;
-
+	self.welcomemessage_time2 = time + 0.8; */
+	
 	colored = 1;
 
 	if(colored)
 	{
+		
+		
 		if(cvar("g_minstagib"))
-			temp2 = strcat("^2Minstagib ^1", gamemode_name);
+			temp2 = strcat(temp2, "^2Minstagib ^1", gamemode_name);
 		else
-			temp2 = gamemode_name;
+			temp2 = strcat(temp2, gamemode_name);
 		
 		if(cvar("g_grappling_hook"))
 			grap_msg = strzone("\n\nBind a key to ^1+hook^8 to use the grappling hook\n");
 
-		s = strcat("\n\nThis is Nexuiz ", cvar_string("g_nexuizversion"), "\n", self.versionmessage, "^8\n\nMatch type is ^1", temp2, "^8\n");
+		s = strcat(s, "\n\nThis is Nexuiz ", cvar_string("g_nexuizversion"), "\n", self.versionmessage, "^8\n\nMatch type is ^1", temp2, "^8\n");
+		
+		if(self.classname == "observer" || self.classname == "spectator") {
+			s = strcat(s,"^7\n\n\npress jump to play\npress attack to spectate other players\n\n");
+		}
+		
+		if(self.classname == "spectator")	
+			s = strcat(s, "spectating ", self.enemy.netname, "\n\n^7press attack for next player\npress attack2 for free fly mode\n");
+		
 		s = strzone(s);
 
 		temp = strcat(

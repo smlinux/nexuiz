@@ -1095,7 +1095,8 @@ void PlayerPreThink (void)
 
 		//if (TetrisPreFrame()) return;
 	} else if(self.classname == "observer") {
-		if (self.flags & FL_JUMPRELEASED) {                                                                                                                           
+	        PrintWelcomeMessage(self);
+		if (self.flags & FL_JUMPRELEASED) {
 			if (self.button2) {
 				self.flags = self.flags & !FL_JUMPRELEASED;
 				self.classname = "player";
@@ -1119,9 +1120,10 @@ void PlayerPreThink (void)
 			centerprint(self, "\n\n\n^1You have no more lives left\nwait for next round\n\n\n^7press attack to spectate other players");
 		else if(cvar("g_lms") && self.frags == -1)
 			centerprint(self, "\n\n\n^1Match has already begun\nwait for next round\n\n\n^7press attack to spectate other players");
-		else
-			centerprint(self, "\n\n\npress jump to play\npress attack to spectate other players");
+		//else
+			//centerprint(self, "\n\n\npress jump to play\npress attack to spectate other players");
 	} else if(self.classname == "spectator") {
+		PrintWelcomeMessage(self);
 		if (self.flags & FL_JUMPRELEASED) {
 			if(self.button0) {
 				self.flags = self.flags & !FL_JUMPRELEASED;
@@ -1149,7 +1151,8 @@ void PlayerPreThink (void)
 			self.flags = self.flags | FL_JUMPRELEASED;
         	}
 		}
-		centerprint(self, strcat("spectating ", self.enemy.netname, "\n\n\n^7press attack for next player\npress attack2 for free fly mode"));
+		//centerprint(self, strcat("spectating ", self.enemy.netname, "\n\n\n^7press attack for next player\npress attack2 for free fly mode"));
+		
 	}
 	
 }
@@ -1173,7 +1176,7 @@ void PlayerPostThink (void)
 		if (intermission_running)
 			return;		// intermission or finale
 
-		PrintWelcomeMessage(self);
+		//PrintWelcomeMessage(self);
 		//if (TetrisPostFrame()) return;
 	} else if (self.classname == "observer") {
 		//do nothing
