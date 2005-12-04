@@ -264,8 +264,6 @@ void PrintWelcomeMessage(entity pl)
 			s = strcat(s,"^7\n\n\npress jump to play\npress attack to spectate other players\n\n");
 		}
 		
-		if(self.classname == "spectator")	
-			s = strcat(s, "spectating ", self.enemy.netname, "\n\n^7press attack for next player\npress attack2 for free fly mode\n");
 		
 		s = strzone(s);
 
