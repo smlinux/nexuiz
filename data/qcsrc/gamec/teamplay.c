@@ -244,6 +244,9 @@ void PrintWelcomeMessage(entity pl)
 		return;
 	self.welcomemessage_time2 = time + 0.8; */
 	
+	if(self.welcomemessage_time2 > time) return;
+	self.welcomemessage_time2 = time + 1.0;
+	
 	colored = 1;
 
 	if(colored)
