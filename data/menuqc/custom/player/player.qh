@@ -21,9 +21,14 @@ void( float pEvent ) Item_Data_Nex_Avatar_DataEvent;
 void() Item_Data_Nex_Avatar_Spawn;
 
 // see control/data/data.qh
-// Item_Data_Nex_Name [Item_Data]
-void( float pEvent ) Item_Data_Nex_Name_DataEvent;
-void() Item_Data_Nex_Name_Spawn;
+// Item_Data_Nex_ShirtColor Item_DataLink_Value
+void( float pEvent ) Item_DataLink_Nex_ShirtColor_DataEvent;
+void() Item_DataLink_Nex_ShirtColor_Spawn;
+
+// see control/data/data.qh
+// Item_Data_Nex_PantsColor Item_DataLink_Value
+void( float pEvent ) Item_DataLink_Nex_PantsColor_DataEvent;
+void() Item_DataLink_Nex_PantsColor_Spawn;
 
 // see control/data/data.qh
 // Item_Data_Nex_Color [Item_Data]

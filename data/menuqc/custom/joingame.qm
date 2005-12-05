@@ -34,9 +34,7 @@ void() Nex_Automation_CreateEntries =
 
 void() Nex_Action_EntryConnect =
 {
-	cmd( "connect \"" );
-	cmd( gethostcachestring( SLIST_FIELD_CNAME, self.stepValue ) );
-	cmd( "\"\n" );
+	cmd( "connect \"", gethostcachestring( SLIST_FIELD_CNAME, self.stepValue ), "\"\n" );
 
 	m_hide();
 };

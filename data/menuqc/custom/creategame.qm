@@ -96,9 +96,7 @@ void() Nex_Action_Map_Start =
 
 	// Set maxplayers
 	lItem = Menu_GetItem( "::Data::Server::MaxPlayers" );
-	cmd( "maxplayers \"" );
-	cmd( lItem.value );
-	cmd( "\"\n" );
+	cmd( "maxplayers \"", lItem.value, "\"\n" );
 
 	lItem = Menu_GetItem( "::Data::Server::Map::Cycle" );
 	Raise_DataEvent( lItem, ITEM_DATA_SEND );
@@ -108,14 +106,10 @@ void() Nex_Action_Map_Start =
 	exit_cfg = cvar_string("exit_cfg");
 	if(exit_cfg)
 	{
-		cmd( "exec ");
-		cmd( exit_cfg );
-		cmd( "\n" );
+		cmd( "exec ", exit_cfg, "\n" );
 	}
 	// exec the game reset cfg and then the mapcfg
-	cmd( "exec game_reset.cfg \nwait \nexec \"maps/" );
-	cmd( String_Normal( Util_GetAltStringItem( lItem.valueList, 0 ) ) );
-	cmd( ".mapcfg\"\n");
+	cmd( "exec game_reset.cfg \nwait \nexec \"maps/", String_Normal( Util_GetAltStringItem( lItem.valueList, 0 ) ), ".mapcfg\"\n" );
 
 	// force the menu to hide
 	m_hide();

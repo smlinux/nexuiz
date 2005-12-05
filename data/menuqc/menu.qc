@@ -68,7 +68,7 @@ void() m_draw =
 
 	if( !Menu_Active ) {
 		// test whether we want to force it to be displayed
-		if( !(gamestatus & GAME_CONNECTED) && !(gamestatus & GAME_DEVELOPER) ) {
+		if( !(gamestatus & GAME_CONNECTED) && !(gamestatus & GAME_DEVELOPER) && cvar_string( "menu_directmenu" ) != "" ) {
 			m_display();
 		}
 		else {

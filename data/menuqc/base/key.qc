@@ -33,7 +33,7 @@ void() Key_Hide =
 
 void( string pKey ) Key_Unbind =
 {
-	cmd( strcat( "unbind ", pKey, "\n" ) );
+	cmd( "unbind ", pKey, "\n" );
 };
 
 string( float pKey ) Key_GetName =
@@ -53,7 +53,7 @@ string( string pCommand ) Key_GetBindList =
 
 void(string pKey, string pCommand) Key_Bind =
 {
-	cmd( strcat( "bind \"", pKey, "\" \"", pCommand, "\"\n" ) );
+	cmd( "bind \"", pKey, "\" \"", pCommand, "\"\n" );
 };
 
 void(float pNum, string pCommand)  Key_LimitBinds =

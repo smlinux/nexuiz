@@ -171,8 +171,8 @@ void() _IDNA_RawSet =
 {
 	_IDNA_UpdateLink();
 
-	cmd( strcat( "playermodel \"", self._link.target, "\";" ) );
-	cmd( strcat( "playerskin \"", self._link.link, "\"\n" ) );
+	cmd( "playermodel \"", self._link.target, "\";" );
+	cmd( "playerskin \"", self._link.link, "\"\n" );
 };
 
 void() _IDNA_Send =

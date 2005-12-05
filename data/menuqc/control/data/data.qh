@@ -69,6 +69,12 @@ void() Item_Data_Cvar_Spawn;
 // Item_Data_CvarCreateSave Item_Data_Cvar
 void() Item_Data_CvarCreateSave_Spawn;
 
+// Item_Data_ServerCvar Item_Data_Cvar
+.string syncCmd;
+
+void( float pEvent ) Item_Data_ServerCvar_DataEvent;
+void() Item_Data_ServerCvar_Spawn;
+
 // Item_DataLink_Text [Item_DataLink]
 .float maxValue; // max length of the string (-1 for infinity)
 .string value; // text
@@ -83,6 +89,7 @@ void() Item_Data_CvarCreateSave_Spawn;
 .string value; // read-only is most cases, but supplies are version of the data that can be displayed
 
 void() Item_DataLink_Value_Clamp;
+string() Item_DataLink_Value_ClampedText;
 void() Item_DataLink_Value_Spawn;
 
 // [Item_DataLink_Switch] Item_DataLink_Value

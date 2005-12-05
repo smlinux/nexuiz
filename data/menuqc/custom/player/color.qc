@@ -1,6 +1,11 @@
 // Property of Alientrap/AK
 // custom/player/color.qc
 
+/*
+color/_cl_color
+
+color = shirt * 16 + pants
+*/
 
 /*
 ===================
@@ -8,49 +13,45 @@ Item_Data_Nex_Color
 ===================
 */
 
-string pantscolor;
+void( string pValue ) _IDNC_SendSyncCmd = {
+	local float lPants, lShirt, lCombined;
+
+	lCombined = stof( pValue );
+	lPants = lCombined & 0x0F;
+	lShirt = (lCombined & 0xF0) / 16;
+
+	cmd( "color ", ftos( lPants ), " ", ftos( lShirt ), "\n" );
+	print( "%color ", ftos( lPants ), " ", ftos( lShirt ), "\n" );
+};
 
 void() _IDNC_Sync =
 {
-	local float lPants;
-
-
-	// color = shirt * 16 + pants
-	lPants = cvar( "_cl_color" ) & 15;
-	//bprint("Pants: ", ftos(lPants), "\n");
-
-	String_EntitySet( self, value, ftos( lPants ) );
+	String_EntitySet( self, value, cvar_string( "_cl_color" ) );
 	String_EntitySet( self, _syncValue, self.value );
 };
 
 void() _IDNC_Send =
 {
+	_IDNC_SendSyncCmd( self.value );
 
-	// set global value "pantscolor" to our nice new value
-	// *could* be directly exectued via a color command
-	// BUT the shirt color send method will then pickup the old value
-	// (as _cl_color isn't updated immediately)
-	// which will result in resetting the pants color to its old value
-	pantscolor = self.value;
-	
 	String_EntitySet( self, _syncValue, self.value );
 };
 
 void() _IDNC_Test_Start =
 {
-	cmd( strcat( "color \"", self.value, "\"\n" ) );
+	_IDNC_SendSyncCmd( self.value );
 };
 
 void() _IDNC_Test_End =
 {
 	String_EntitySet( self, value, self._syncValue );
-	cmd( strcat( "color \"", self.value, "\"\n" ) );
+	_IDNC_SendSyncCmd( self.value );
 };
 
 void() _IDNC_Reset =
 {
 	String_EntitySet( self, value, self.defValue );
-	_IDNN_Send();
+	_IDNC_Send();
 };
 
 void( float pEvent ) Item_Data_Nex_Color_DataEvent =
@@ -82,78 +83,96 @@ void() Item_Data_Nex_Color_Spawn =
 	self._dataEvent = Item_Data_Nex_Color_DataEvent;
 };
 
-
 /*
 ===================
-Item_Data_Nex_ColorShirt
+Item_DataLink_Nex_PantsColor
 ===================
 */
 
-void() _IDNCS_Sync =
+void( float pEvent ) Item_DataLink_Nex_PantsColor_DataEvent =
 {
-	local float lShirt;
+	Item_DataLink_Update();
 
-	// color = shirt * 16 + pants
-	lShirt = (cvar( "_cl_color" ) / 16) & 15;
-	
-	//bprint("Shirt: ", ftos(lShirt), "\n");
+	if( pEvent == ITEM_DATALINK_SET ) {
+		Item_DataLink_Value_Clamp();
+		if( self._link ) {
+			local float lShirt;
+			local float lNewColor;
 
-	String_EntitySet( self, value, ftos( lShirt ) );
-	String_EntitySet( self, _syncValue, self.value );
+			self._realValue = stof( self.value );
+
+			lShirt = (stof( self._link.value ) & 0xF0) / 16;
+			lNewColor = self._realValue + lShirt * 16;
+
+			self._link._realValue = lNewColor;
+			String_EntitySet( self._link, value, Util_FloatToClampedText( lNewColor, 1.0 ) );
+
+			Raise_DataEvent( self._link, ITEM_DATALINK_SET );
+		}
+	} else if( !self._link )
+		return;
+	else if( pEvent == ITEM_DATALINK_GET ) {
+		Raise_DataEvent( self._link, ITEM_DATALINK_GET );
+		self._realValue = stof( self._link.value ) & 0x0F;
+
+		Item_DataLink_Value_Clamp();
+		String_EntitySet( self, value, Item_DataLink_Value_ClampedText() );
+	} else
+		Raise_DataEvent( self._link, pEvent );
 };
 
-void() _IDNCS_Send =
+void() Item_DataLink_Nex_PantsColor_Spawn =
 {
-	
-	cmd( strcat( "color ", self.value , " ", pantscolor , "\n" ) );
-	
-	String_EntitySet( self, _syncValue, self.value );
+	Item_DataLink_Value_Spawn();
+
+	self.stepValue = 1.0;
+
+	self._dataEvent = Item_DataLink_Nex_PantsColor_DataEvent;
 };
 
+/*
+===================
+Item_DataLink_Nex_ShirtColor
+===================
+*/
 
-void() _IDNCS_Test_Start =
+void( float pEvent ) Item_DataLink_Nex_ShirtColor_DataEvent =
 {
-	//cmd( strcat( "color \"", self.value, "\"\n" ) );
+	Item_DataLink_Update();
+
+	if( pEvent == ITEM_DATALINK_SET ) {
+		Item_DataLink_Value_Clamp();
+		if( self._link ) {
+			local float lPants;
+			local float lNewColor;
+
+			self._realValue = stof( self.value );
+
+			lPants = stof( self._link.value ) & 0x0F;
+			lNewColor = self._realValue * 16 + lPants;
+
+			self._link._realValue = lNewColor;
+			String_EntitySet( self._link, value, Util_FloatToClampedText( lNewColor, 1.0 ) );
+
+			Raise_DataEvent( self._link, ITEM_DATALINK_SET );
+		}
+	} else if( !self._link )
+		return;
+	else if( pEvent == ITEM_DATALINK_GET ) {
+		Raise_DataEvent( self._link, ITEM_DATALINK_GET );
+		self._realValue = (stof( self._link.value ) & 0xF0) / 16;
+
+		Item_DataLink_Value_Clamp();
+		String_EntitySet( self, value, Item_DataLink_Value_ClampedText() );
+	} else
+		Raise_DataEvent( self._link, pEvent );
 };
 
-void() _IDNCS_Test_End =
+void() Item_DataLink_Nex_ShirtColor_Spawn =
 {
-	String_EntitySet( self, value, self._syncValue );
-	//cmd( strcat( "color \"", self.value, "\"\n" ) );
-};
+	Item_DataLink_Value_Spawn();
 
+	self.stepValue = 1.0;
 
-void() _IDNCS_Reset =
-{
-	String_EntitySet( self, value, self.defValue );
-	_IDNN_Send();
-};
-
-void( float pEvent ) Item_Data_Nex_ColorShirt_DataEvent =
-{
-	switch( pEvent ) {
-	case ITEM_DATA_SYNC:
-		_IDNCS_Sync();
-		break;
-	case ITEM_DATA_SEND:
-		_IDNCS_Send();
-		break;
-	case ITEM_DATA_RESET:
-		_IDNCS_Reset();
-		break;
-	case ITEM_DATA_TEST_START:
-		_IDNCS_Test_Start();
-		break;
-	case ITEM_DATA_TEST_END:
-		_IDNCS_Test_End();
-		break;
-	}
-};
-
-void() Item_Data_Nex_ColorShirt_Spawn =
-{
-	Item_Data_Init();
-
-	self._reinit = _IDNCS_Sync;
-	self._dataEvent = Item_Data_Nex_ColorShirt_DataEvent;
+	self._dataEvent = Item_DataLink_Nex_ShirtColor_DataEvent;
 };

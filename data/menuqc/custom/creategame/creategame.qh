@@ -31,11 +31,6 @@ string() Nex_MapDB_GetFilteredNameAltString;
 string() Nex_MapDB_GetPathAltString;
 string() Nex_MapDB_GetNameAltString;
 
-// see control/data/data.qh
-// Item_Data_Nex_Name [Item_Data]
-void( float pEvent ) Item_Data_Nex_Name_DataEvent;
-void() Item_Data_Nex_Name_Spawn;
-
 // Item_DataLink_Nex_MapList [Item_DataLink_Switch]
 // contains the full .bsp path in value and the text/map name in desc
 // this is just a placeholder data item - it only keeps a set

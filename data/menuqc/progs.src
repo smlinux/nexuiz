@@ -85,7 +85,6 @@ custom/joingame.qm
 custom/credits.qm
 
 custom/player/avatar.qc
-custom/player/name.qc
 custom/player/color.qc
 
 custom/creategame/maps.qc

@@ -28,7 +28,7 @@ vector 	vectoangles(vector v)	= #11;
 
 float	random(void)  = #12;
 
-void	cmd(string command) = #13;
+void	cmd(string command, ...) = #13;
 
 // cvar cmds
 

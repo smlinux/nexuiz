@@ -103,16 +103,20 @@ Item Window Player
 		Derive Nex_Composition TeamColor
 		{
 			text	"Team color"
-			target	"::Data::Player::TeamColor::TextSwitch"
+			target	"::Data::Player::Color::TeamColor::TextSwitch"
 
 			Derive Nex_Automation_Option_Slider Automation
 			{}
 			Derive TextButton Description
 			{}
 			Derive Slider Slider
-			{}
+			{
+				action  Nex_Action_TestOnChange
+			}
 			Derive PictureValueButton Value
 			{
+				fontSize	[DefaultFontSize]
+
 				color		"1.0 1.0 1.0"
 				colorPressed	"1.0 1.0 1.0"
 				colorSelected	"1.0 1.0 1.0"
@@ -121,21 +125,25 @@ Item Window Player
 		Derive Nex_Composition ShirtColor
 		{
 			text	"Shirt color"
-			target	"::Data::Player::ShirtColor::TextSwitch"
+			target	"::Data::Player::Color::ShirtColor::TextSwitch"
 
 			Derive Nex_Automation_Option_Slider Automation
 			{}
 			Derive TextButton Description
 			{}
 			Derive Slider Slider
-			{}
+			{
+				action  Nex_Action_TestOnChange
+			}
 			Derive PictureValueButton Value
 			{
+				fontSize	[DefaultFontSize]
+
 				color		"1.0 1.0 1.0"
 				colorPressed	"1.0 1.0 1.0"
 				colorSelected	"1.0 1.0 1.0"
 			}
-		}		
+		}
 		Derive Nex_Option_Slider FOV
 		{
 			text	"Field of View"
