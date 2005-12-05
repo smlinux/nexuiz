@@ -98,6 +98,7 @@ entity dest;
 .float pauserothealth_finished;
 .float pauserotarmor_finished;
 .float attack_finished;
+.string item_pickupsound;
 
 // definitions for weaponsystem
 

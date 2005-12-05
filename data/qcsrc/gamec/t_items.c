@@ -124,6 +124,8 @@ void Item_Touch (void)
 		}
 	}
 
+	sound (other, CHAN_AUTO, self.item_pickupsound, 1, ATTN_NORM);
+	
 	oldself = self;
 	self = other;
 
@@ -187,7 +189,8 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 	}
 
 	self.mdl = itemmodel;
-	self.noise = pickupsound;
+	//self.noise = pickupsound;
+	self.item_pickupsound = pickupsound;
 	// let mappers override respawntime
 	if (!self.respawntime)
 		self.respawntime = defaultrespawntime;
