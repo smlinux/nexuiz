@@ -60,7 +60,7 @@ void W_Crylink_Attack (void)
 	local vector org;
 	local entity proj;
 
-	sound (self, CHAN_WEAPON, "weapons/crylink.ogg", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "weapons/crylink_fire.ogg", 1, ATTN_NORM);
 	if (cvar("g_use_ammunition"))
 		self.ammo_cells = self.ammo_cells - 1;
 	self.punchangle_x = -2;

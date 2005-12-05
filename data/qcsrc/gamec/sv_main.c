@@ -83,13 +83,13 @@ void CreatureFrame (void)
 						local float soundrandom;
 						soundrandom = random() * 4;
 						if (soundrandom < 1)
-							sound (self, CHAN_BODY, "misc/hitground1.wav", 1, ATTN_NORM);
+							sound (self, CHAN_BODY, "misc/hitground1.ogg", 1, ATTN_NORM);
 						else if (soundrandom < 2)
-							sound (self, CHAN_BODY, "misc/hitground2.wav", 1, ATTN_NORM);
+							sound (self, CHAN_BODY, "misc/hitground2.ogg", 1, ATTN_NORM);
 						else if (soundrandom < 3)
-							sound (self, CHAN_BODY, "misc/hitground3.wav", 1, ATTN_NORM);
+							sound (self, CHAN_BODY, "misc/hitground3.ogg", 1, ATTN_NORM);
 						else if (soundrandom < 4)
-							sound (self, CHAN_BODY, "misc/hitground4.wav", 1, ATTN_NORM);
+							sound (self, CHAN_BODY, "misc/hitground4.ogg", 1, ATTN_NORM);
 					}
 					dm = min((dm - cvar("g_balance_falldamage_minspeed")) * cvar("g_balance_falldamage_factor"), cvar("g_balance_falldamage_maxdamage"));
 				}

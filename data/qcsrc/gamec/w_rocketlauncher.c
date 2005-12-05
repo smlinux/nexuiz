@@ -23,7 +23,7 @@ void(float req) w_rlauncher =
 		{
 			self.exteriorweaponentity.attack_finished = time + 0.4;
 			self.laser_on = !self.laser_on;
-			sound (self, CHAN_AUTO, "weapons/tink1.wav", 1, ATTN_NORM);
+			sound (self, CHAN_AUTO, "weapons/tink1.ogg", 1, ATTN_NORM);
 		}
 	}
 	else if (req == WR_RAISE)
@@ -45,7 +45,7 @@ void W_Rocket_Explode (void)
 	org2 = findbetterlocation (self.origin);
 	te_explosion (org2);
 	effect (org2, "models/sprites/rocketexplosion.spr32", 0, 26, 30);
-	sound (self, CHAN_BODY, "weapons/rocket_impact.wav", 1, ATTN_NORM);
+	sound (self, CHAN_BODY, "weapons/rocket_impact.ogg", 1, ATTN_NORM);
 
 	self.event_damage = SUB_Null;
 	RadiusDamage (self, self.owner, cvar("g_balance_rocketlauncher_damage"), cvar("g_balance_rocketlauncher_edgedamage"), cvar("g_balance_rocketlauncher_radius"), world, cvar("g_balance_rocketlauncher_force"), IT_ROCKET_LAUNCHER);
@@ -216,7 +216,7 @@ void W_Rocket_Attack (void)
 	local entity missile;
 	local entity flash;
 	local vector org;
-	sound (self, CHAN_WEAPON, "weapons/rocket_fire.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "weapons/rocket_fire.ogg", 1, ATTN_NORM);
 	if (cvar("g_use_ammunition") && !cvar("g_rocketarena"))
 		self.ammo_rockets = self.ammo_rockets - 3;
 	self.punchangle_x = -4;

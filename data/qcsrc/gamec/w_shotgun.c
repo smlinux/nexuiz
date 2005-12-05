@@ -39,7 +39,7 @@ void W_Shotgun_Attack (void)
 	float	d;
 	float	spread;
 
-	sound (self, CHAN_WEAPON, "weapons/shotgun_fire.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "weapons/shotgun_fire.ogg", 1, ATTN_NORM);
 	bullets = cvar("g_balance_shotgun_bullets");
 	if (self.button3)
 		d = cvar("g_balance_shotgun_damage2");

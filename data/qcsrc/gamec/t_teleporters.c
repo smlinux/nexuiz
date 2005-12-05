@@ -48,7 +48,7 @@ void Teleport_Touch (void)
 		return;
 
 	// Make teleport effect where the player left
-	sound (other, CHAN_ITEM, "misc/teleport.wav", 1, ATTN_NORM);
+	sound (other, CHAN_ITEM, "misc/teleport.ogg", 1, ATTN_NORM);
 	te_teleport (other.origin);
 
 	dest = find (world, targetname, self.target);
@@ -56,7 +56,7 @@ void Teleport_Touch (void)
 		objerror ("Teleporter with nonexistant target");
 
 	// Make teleport effect where the player arrived
-	sound (other, CHAN_ITEM, "misc/teleport.wav", 1, ATTN_NORM);
+	sound (other, CHAN_ITEM, "misc/teleport.ogg", 1, ATTN_NORM);
 	makevectors (dest.mangle);
 	te_teleport (dest.origin + v_forward * 32);
 

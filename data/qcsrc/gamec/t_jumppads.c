@@ -20,7 +20,7 @@ void() trigger_push_touch =
 	org = other.origin;
 
 	if (other.classname == "player")
-		sound (other, CHAN_ITEM, "misc/jumppad.wav", 1, ATTN_NORM);
+		sound (other, CHAN_ITEM, "misc/jumppad.ogg", 1, ATTN_NORM);
 
 	// figure out how long it will take to hit the point considering gravity
 	grav = cvar("sv_gravity");
