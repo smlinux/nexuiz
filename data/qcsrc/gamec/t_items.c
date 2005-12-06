@@ -6,7 +6,7 @@ void Item_Respawn (void)
 {
 	self.model = self.mdl;		// restore original model
 	self.solid = SOLID_TRIGGER;	// allow it to be touched again
-	sound (self, CHAN_VOICE, "misc/itemrespawn.wav", 1, ATTN_NORM);	// play respawn sound
+	sound (self, CHAN_VOICE, "misc/itemrespawn.ogg", 1, ATTN_NORM);	// play respawn sound
 	setorigin (self, self.origin);
 
 	// Savage: Add simple Respawn effect and make sure it gets removed
@@ -376,7 +376,7 @@ void item_armor25 (void) {
 
 void item_health1 (void) {
 	self.max_health = 5;
-	StartItem ("models/items/g_h1.md3", "misc/minihealth.wav", 15, "5 Health", 0, 0);
+	StartItem ("models/items/g_h1.md3", "misc/minihealth.ogg", 15, "5 Health", 0, 0);
 }
 
 void item_health25 (void) {

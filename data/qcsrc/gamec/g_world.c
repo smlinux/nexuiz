@@ -117,11 +117,11 @@ void worldspawn (void)
 	precache_sound ("misc/hitground3.ogg");
 	precache_sound ("misc/hitground4.ogg");
 	precache_sound ("misc/itempickup.ogg");
-	precache_sound ("misc/itemrespawn.wav");
+	precache_sound ("misc/itemrespawn.ogg");
 	precache_sound ("misc/jumppad.ogg");
 	precache_sound ("misc/mediumhealth.ogg");
 	precache_sound ("misc/megahealth.ogg");
-	precache_sound ("misc/minihealth.wav");
+	precache_sound ("misc/minihealth.ogg");
 	precache_sound ("misc/powerup.ogg");
 	precache_sound ("misc/powerup_shield.ogg");
 	precache_sound ("misc/talk.wav");
