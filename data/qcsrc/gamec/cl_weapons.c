@@ -29,6 +29,138 @@ void(float wpn, float wrequest) weapon_action =
 		w_rlauncher(wrequest);
 };
 
+// think function for tossed weapons
+void() thrown_wep_think =
+{
+	self.solid = SOLID_TRIGGER;
+	SUB_SetFade(self, time + 20, 1);
+	setorigin(self, self.origin);
+};
+
+// toss current weapon
+void() W_ThrowWeapon
+{
+	local float w;
+	local entity wep, e;
+	
+	e = self;
+	wep = spawn();
+	self = wep;
+	w = e.weapon;
+	setorigin(wep, e.origin);
+	makevectors(e.angles);
+	wep.velocity = e.velocity * 0.5 + v_forward * 750;
+	SUB_SetFade(wep, time + 20, 1);
+
+	if(w == WEP_SHOTGUN)
+	{
+		w = IT_SHOTGUN;
+		if(!(e.items & w))
+		{
+			remove(wep);
+			return;
+		}
+		weapon_shotgun();
+		wep.ammo_shells = 1;
+		e.ammo_shells -= 1;
+	}
+	else if(w == WEP_UZI)
+	{	
+		w = IT_UZI;
+		if(!(e.items & w))
+		{
+			remove(wep);
+			return;
+		}
+		weapon_uzi();
+		wep.ammo_nails = 1;
+		e.ammo_nails -= 1;
+	}
+	else if(w == WEP_GRENADE_LAUNCHER)
+	{
+		w = IT_GRENADE_LAUNCHER;
+		if(!(e.items & w))
+		{
+			remove(wep);
+			return;
+		}
+		weapon_grenadelauncher();
+		wep.ammo_rockets = 1;
+		e.ammo_rockets -= 1;
+	}
+	else if(w == WEP_ELECTRO)
+	{
+		w = IT_ELECTRO;
+		if(!(e.items & w))
+		{
+			remove(wep);
+			return;
+		}
+		weapon_electro();
+		wep.ammo_cells = 1;
+		e.ammo_cells -= 1;
+	}
+	else if(w == WEP_CRYLINK)
+	{
+		w = IT_CRYLINK;
+		if(!(e.items & w))
+		{
+			remove(wep);
+			return;
+		}
+		weapon_crylink();
+		wep.ammo_cells = 1;
+		e.ammo_cells -= 1;
+	}
+	else if(w == WEP_NEX)
+	{
+		w = IT_NEX;
+		if(!(e.items & w))
+		{
+			remove(wep);
+			return;
+		}
+		weapon_nex();
+		wep.ammo_cells = 1;
+		e.ammo_cells -= 1;
+	}
+	else if(w == WEP_HAGAR)
+	{
+		w = IT_HAGAR;
+		if(!(e.items & w))
+		{
+			remove(wep);
+			return;
+		}
+		weapon_hagar();
+		wep.ammo_rockets = 1;
+		e.ammo_rockets -= 1;
+	}
+	else if(w == WEP_ROCKET_LAUNCHER)
+	{
+		w = IT_ROCKET_LAUNCHER;
+		if(!(e.items & w))
+		{
+			remove(wep);
+			return;
+		}
+		weapon_rocketlauncher();
+		wep.ammo_rockets = 1;
+		e.ammo_rockets -= 1;
+	}
+
+	if(e.items & w)
+		sprint(e, strcat("You dropped the ^2", wep.netname, "\n"));
+	wep.solid = SOLID_NOT;
+	setorigin(wep, wep.origin);
+	wep.nextthink = time + 0.25;
+	wep.think = thrown_wep_think;		
+	wep.classname = "droppedweapon";
+	e.items = e.items - (e.items & w);
+	e.switchweapon = w_getbestweapon(e);
+	self = e;
+};
+
 // switch between weapons
 void(float imp) W_SwitchWeapon
 {

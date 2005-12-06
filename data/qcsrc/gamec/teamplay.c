@@ -235,8 +235,7 @@ void InitGameplayMode()
 
 void PrintWelcomeMessage(entity pl)
 {
-	string s, grap_msg, temp, temp2;
-	float colored;
+	string s, grap_msg, temp, mutator;
 
 	/*if(self.welcomemessage_time < time)
 		return;
@@ -247,93 +246,58 @@ void PrintWelcomeMessage(entity pl)
 	if(self.welcomemessage_time2 > time) return;
 	self.welcomemessage_time2 = time + 1.0;
 	
-	colored = 1;
+	if(cvar("g_minstagib"))
+		mutator = "^2Minstagib ^1";
+	else if(cvar("g_instagib"))
+		mutator = "^2Instagib ^1";
+	else if(cvar("g_rocketarena"))
+		mutator = "^2Rocketarena ^1";
+	else
+		mutator = "";
+		
+	if(cvar("g_grappling_hook"))
+		grap_msg = strzone("\n\nBind a key to ^1+hook^8 to use the grappling hook\n");
 
-	if(colored)
+	s = strcat(s, "\n\nThis is Nexuiz ", cvar_string("g_nexuizversion"), "\n", self.versionmessage);
+	s = strcat(s, "^8\n\nMatch type is ^1", mutator, gamemode_name, "^8\n");
+		
+	if(self.classname == "observer" || self.classname == "spectator") {
+		s = strcat(s,"^7\n\n\npress jump to play\npress attack to spectate other players\n\n");
+	}
+		
+		
+	s = strzone(s);
+
+	temp = strcat(
+		"\n\n\n^8Welcome, ", pl.netname, "^8\n",
+		s
+		);
+	temp = strzone(temp);
+
+	if(teams_matter)
 	{
-		
-		
-		if(cvar("g_minstagib"))
-			temp2 = strcat(temp2, "^2Minstagib ^1", gamemode_name);
-		else
-			temp2 = strcat(temp2, gamemode_name);
-		
-		if(cvar("g_grappling_hook"))
-			grap_msg = strzone("\n\nBind a key to ^1+hook^8 to use the grappling hook\n");
-
-		s = strcat(s, "\n\nThis is Nexuiz ", cvar_string("g_nexuizversion"), "\n", self.versionmessage, "^8\n\nMatch type is ^1", temp2, "^8\n");
-		
-		if(self.classname == "observer" || self.classname == "spectator") {
-			s = strcat(s,"^7\n\n\npress jump to play\npress attack to spectate other players\n\n");
-		}
-		
-		
-		s = strzone(s);
-
-		temp = strcat(
-			"\n\n\n^8Welcome, ", pl.netname, "^8\n",
-			s
-			);
-		temp = strzone(temp);
-
-		if(teams_matter)
-		{
-			s = strcat(temp,
-			"You are on ", ColoredTeamName(pl.team), "^8\n\n",
-			"Go to ^1Menu->Options->Player^8 to change your name, model & team\n",
-			grap_msg
-			);
-		}
-		else
-		{
-			s = strcat(temp,
-			"Go to ^1Menu->Options->Player^8 to change your name & model\n",
-			grap_msg
-			);
-		}
-
-		if (cvar_string("g_mutatormsg") != "") {
-			s = strcat(s, "\n\nSpecial gameplay tips: ", cvar_string("g_mutatormsg"));
-		}
-
-		if (cvar_string("sv_motd") != "") {
-			s = strcat(s, "\n\nMOTD: ", cvar_string("sv_motd"));
-		}
+		s = strcat(temp,
+		"You are on ", ColoredTeamName(pl.team), "^8\n\n",
+		"Go to ^1Menu->Options->Player^8 to change your name, model & team\n",
+		grap_msg
+		);
 	}
 	else
 	{
-		if(cvar("g_minstagib"))
-			temp2 = strcat("Minstagib ", gamemode_name);
-		
-		if(cvar("g_grappling_hook"))
-			grap_msg = strzone("\n\nBind a key to +hook to use the grappling hook\n");
-
-		s = strcat("Match type is ", temp2, "\n");
-		s = strzone(s);
-
-		temp = strcat(
-			"\n\n\nWelcome, ", pl.netname, "\n",
-			s
-			);
-		temp = strzone(temp);
-
-		if(teams_matter)
-		{
-			s = strcat(temp,
-			"You are on ", TeamName(pl.team), "\n\n",
-			"Go to Menu->Options->Player to\nchange your name, model & team\n",
-			grap_msg
-			);
-		}
-		else
-		{
-			s = strcat(temp,
-			"Go to Menu->Options->Player to change your name & model\n",
-			grap_msg
-			);
-		}
+		s = strcat(temp,
+		"Go to ^1Menu->Options->Player^8 to change your name & model\n",
+		grap_msg
+		);
 	}
 
+	if (cvar_string("g_mutatormsg") != "") {
+		s = strcat(s, "\n\nSpecial gameplay tips: ", cvar_string("g_mutatormsg"));
+	}
+
+	if (cvar_string("sv_motd") != "") {
+		s = strcat(s, "\n\nMOTD: ", cvar_string("sv_motd"));
+	}
+		
 	centerprint(pl, s);
 	//sprint(pl, s);
 

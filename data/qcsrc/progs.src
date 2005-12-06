@@ -47,12 +47,12 @@ gamec/w_crylink.c
 gamec/w_nex.c
 gamec/w_hagar.c
 gamec/w_rocketlauncher.c
-gamec/cl_weapons.c
 
 gamec/t_items.c
 gamec/t_halflife.c
 gamec/t_quake3.c
 gamec/t_quake.c
+gamec/cl_weapons.c
 //gamec/g_tetris.c
 gamec/cl_impulse.c
 gamec/cl_player.c
@@ -62,5 +62,7 @@ gamec/t_plats.c
 gamec/ctf.c
 gamec/domination.c
 gamec/g_hook.c
+
+gamec/t_swamp.c
 
 gamec/clientcommands.c

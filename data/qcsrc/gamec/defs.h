@@ -215,4 +215,7 @@ float GRAPHOOK_RELEASE		= 21;
 // minstagib vars
 .float extralives;
 .float jump_interval;    // laser refire
-.string crosshair_static;
+
+//swamp 
+.float in_swamp;              // bool
+.entity swampslug;            // Uses this to release from swamp ("untouch" fix)

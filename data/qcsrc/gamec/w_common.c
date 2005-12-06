@@ -519,7 +519,8 @@ void fireBullet (vector start, vector dir, float spread, float damage, float dty
 				PointSound (trace_endpos, "weapons/ric3.ogg", 1, ATTN_NORM);
 		}
 		else if (trace_ent.classname == "player" || trace_ent.classname == "corpse" || trace_ent.classname == "gib")
-			sound (self, CHAN_BODY, "misc/hit.wav", 1, ATTN_NORM);
+			stuffcmd(self, "play2 misc/hit.wav\n");
+			//sound (self, CHAN_BODY, "misc/hit.wav", 1, ATTN_NORM);
 		Damage (trace_ent, self, self, damage, dtype, trace_endpos, dir * damage * 5);
 	}
 }

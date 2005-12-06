@@ -51,6 +51,18 @@ void ImpulseCommands (void)
 		}
 		sprint(self, strcat("origin = ", vtos(self.origin), "\n"));
 	}
+	// throw weapon
+	else if (self.impulse == 17 && self.weapon != WEP_LASER &&
+		 !cvar("g_minstagib") && !cvar("g_instagib") && !cvar("g_rocketarena"))
+	{
+		W_ThrowWeapon();
+	}
+	else if(self.impulse == 18)
+	{
+		self.welcomemessage_time = time + cvar("welcome_message_time");
+		self.welcomemessage_time2 = 0; 
+		PrintWelcomeMessage(self);
+	}
 	else if (self.impulse == 99 && cvar("sv_cheats"))
 	{
 		self.items = IT_LASER | IT_UZI | IT_SHOTGUN | IT_GRENADE_LAUNCHER | IT_ELECTRO | IT_CRYLINK | IT_NEX | IT_HAGAR | IT_ROCKET_LAUNCHER;
@@ -58,19 +70,6 @@ void ImpulseCommands (void)
 		self.ammo_nails = 999;
 		self.ammo_rockets = 999;
 		self.ammo_cells = 999;
-	}
-	// lms debug
-	else if(self.impulse == 66)
-	{
-		bprint("^3total:    ");
-		bprint(ftos(player_count));
-		bprint("\n");
-		bprint("^3dead:     ");
-		bprint(ftos(lms_dead_count));
-		bprint("\n");
-		bprint("^3lowest:   ");
-		bprint(ftos(lms_lowest_lives));
-		bprint("\n");
 	}
 	//TetrisImpulses();
 	self.impulse = 0;

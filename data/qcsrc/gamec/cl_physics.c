@@ -7,11 +7,12 @@ float sv_gravity;
 .float ladder_time;
 .entity ladder_entity;
 .float gravity;
+.float swamp_slowdown;
 
 void SV_PlayerPhysics()
 {
 	local vector wishvel, wishdir, v;
-	local float wishspeed, f, maxspd_mod, spd, maxairspd, airaccel;
+	local float wishspeed, f, maxspd_mod, spd, maxairspd, airaccel, swapspd_mod;
 	string temps;
 
 	MauveBot_AI();
@@ -59,7 +60,14 @@ void SV_PlayerPhysics()
 		maxspd_mod = maxspd_mod * cvar("g_balance_rune_speed_moverate");
 	}
 
+	swapspd_mod = 1;
+	if(self.in_swamp != 0) {
+		swapspd_mod = self.swamp_slowdown; //cvar("g_balance_swamp_moverate");
+	}
+
+
 	spd = sv_maxspeed * maxspd_mod;
+	spd = sv_maxspeed * swapspd_mod;
 
 	if(self.speed != spd)
 	{

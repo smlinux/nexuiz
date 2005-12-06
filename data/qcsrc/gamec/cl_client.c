@@ -402,8 +402,6 @@ void PutClientInServer (void)
 			self.ammo_cells = cvar("g_minstagib_ammo_start");
 			self.extralives = 0;
 			self.jump_interval = time;
-			if(self.crosshair_static == "0")
-				stuffcmd(self, strcat("crosshair_static 0\n"));
 		}
  	
 		self.event_damage = PlayerDamage;
@@ -520,9 +518,6 @@ void ClientConnect (void)
 
 	// get version info from player
 	stuffcmd(self, "cmd clientversion $g_nexuizversion_major\n");
-
-	// get crosshair_static
-	stuffcmd(self, "cmd crosshair $crosshair_static\n");
 
 	if(cvar("g_lms"))
 	{
@@ -735,8 +730,6 @@ void player_powerups (void)
 			if (time > self.strength_finished)
 			{
 				self.items = self.items - (self.items & IT_STRENGTH);
-				if(self.crosshair_static == "0")
-					stuffcmd(self, strcat("crosshair_static 0\n"));
 				sprint(self, "^3Invisibility has worn off\n");
 			}
 		}
@@ -744,7 +737,6 @@ void player_powerups (void)
 		{
 			if (time < self.strength_finished)
 			{
-				stuffcmd(self, "crosshair_static 1\n");
 				self.items = self.items | IT_STRENGTH;
 				sprint(self, "^3You are invisible\n");
 			}
@@ -755,7 +747,6 @@ void player_powerups (void)
 			if (time > self.invincible_finished)
 			{
 				self.items = self.items - (self.items & IT_INVINCIBLE);
-				//stuffcmd(self, strcat("crosshair_static ", ftos(self.crosshair_static), "\n"));
 				sprint(self, "^3Speed has worn off\n");
 			}
 		}
@@ -763,7 +754,6 @@ void player_powerups (void)
 		{
 			if (time < self.invincible_finished)
 			{
-				stuffcmd(self, "crosshair_static 1\n");
 				self.items = self.items | IT_INVINCIBLE;
 				sprint(self, "^3You are on speed\n");
 			}
