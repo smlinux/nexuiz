@@ -1,4 +1,4 @@
-Nexuiz Arena (dom_nexdm18)
+Running Man (dom_nexdm18)
 maps/nexdm18
 
 Small Level, best suited 
@@ -16,4 +16,4 @@ Gametype:
 Domination
 	
 Author:
-Strahlemann
+Paul Evers

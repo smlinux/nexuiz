@@ -1,4 +1,4 @@
-Nexuiz Arena (tdm_nexdm18)
+Running Man (tdm_nexdm18)
 maps/nexdm18
 
 Small Level, best suited 
@@ -15,4 +15,4 @@ Gametype:
 Team Deathmatch
 	
 Author:
-Strahlemann
+Paul Evers

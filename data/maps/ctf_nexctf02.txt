@@ -1,4 +1,4 @@
-Nexuiz Arena CTF (ctf_nexctf02)
+Running Man CTF (ctf_nexctf02)
 maps/nexctf02
 
 Medium-sized CTF-Map
@@ -16,4 +16,4 @@ Gametype:
 Capture the Flag
 	
 Author:
-Strahlemann
+Paul Evers

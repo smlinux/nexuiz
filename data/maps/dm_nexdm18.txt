@@ -1,4 +1,4 @@
-Nexuiz Arena (dm_nexdm18)
+Running Man (dm_nexdm18)
 maps/nexdm18
 
 Small DM-Level, best suited 
@@ -16,4 +16,4 @@ Gametype:
 Deathmatch
 	
 Author:
-Strahlemann
+Paul Evers

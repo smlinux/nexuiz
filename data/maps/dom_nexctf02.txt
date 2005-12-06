@@ -1,4 +1,4 @@
-Nexuiz Arena CTF (dom_nexctf02)
+Running Man CTF (dom_nexctf02)
 maps/nexctf02
 
 Medium-sized CTF-Map
@@ -16,4 +16,4 @@ Gametype:
 Domination
 	
 Author:
-Strahlemann
+Paul Evers
