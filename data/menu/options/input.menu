@@ -2,13 +2,6 @@
 // options/input.menu
 Item Window Input
 {
-	Derive Picture Table6
-	{
-		picture "gfx/options_background"
-		size	'734 540'
-		pos	'146 35'
-	}
-
 	Item Layout Layout
 	{
 		pos		'156 45'
@@ -32,7 +25,7 @@ Item Window Input
 		{
 			text	"Mouse Filter"
 			target	"::Data::Input::MouseFilter::Switch"
-		}		
+		}
 		Derive Nex_Line	Seperator
 		{}
 		Derive TextButton Reset

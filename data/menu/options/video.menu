@@ -2,13 +2,6 @@
 // options/key.menu
 Item Window Video
 {
-	Derive Picture Table6
-	{
-		picture "gfx/options_background"
-		size	'734 540'
-		pos	'146 35'
-	}
-
 	Item Layout Layout
 	{
 		pos		'156 45'

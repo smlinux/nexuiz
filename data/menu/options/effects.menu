@@ -2,13 +2,6 @@
 // options/key.menu
 Item Window Effects
 {
-	Derive Picture Table6
-	{
-		picture "gfx/options_background"
-		size	'734 540'
-		pos	'146 35'
-	}
-
 	Derive MultiLabel Description
 	{
 		size 	'600 100'
@@ -52,7 +45,7 @@ Item Window Effects
 		}
 
 		Derive Nex_Line	SeperatorRTLights
-		{}		
+		{}
 		Derive Nex_Option_Switch RealtimeLights
 		{
 			text	"Realtime World Lights"
@@ -75,7 +68,7 @@ Item Window Effects
 		}
 
 		Derive Nex_Line	SeperatorGFXFeatures
-		{}		
+		{}
 		Derive Nex_Option_Switch GLSL
 		{
 			text	"OpenGL 2.0 Shaders"

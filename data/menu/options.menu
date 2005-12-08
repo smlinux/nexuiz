@@ -21,7 +21,7 @@ Item Layout Options
 			size		'118 47'
 
 			init 		Nex_Action_JumpToPage
-			target		"Panel::Player"
+			target		"Dummy::Panel::Player"
 		}
 		Derive PictureButton Controls
 		{
@@ -30,7 +30,7 @@ Item Layout Options
 			size		'118 47'
 
 			init		Nex_Action_JumpToPage
-			target		"Panel::KeyControl"
+			target		"Dummy::Panel::KeyControl"
 		}
 		Derive PictureButton Audio
 		{
@@ -39,7 +39,7 @@ Item Layout Options
 			size		'118 47'
 
 			init		Nex_Action_JumpToPage
-			target		"Panel::Sound"
+			target		"Dummy::Panel::Sound"
 		}
 		Derive PictureButton Video
 		{
@@ -48,7 +48,7 @@ Item Layout Options
 			size		'118 47'
 
 			init		Nex_Action_JumpToPage
-			target		"Panel::Video"
+			target		"Dummy::Panel::Video"
 		}
 		Derive PictureButton ColorControl
 		{
@@ -57,7 +57,7 @@ Item Layout Options
 			size		'118 47'
 
 			init		Nex_Action_JumpToPage
-			target		"Panel::ColorControl"
+			target		"Dummy::Panel::ColorControl"
 		}
 		Derive PictureButton Effects
 		{
@@ -66,7 +66,7 @@ Item Layout Options
 			size		'118 47'
 
 			init		Nex_Action_JumpToPage
-			target		"Panel::Effects"
+			target		"Dummy::Panel::Effects"
 		}
 		Derive PictureButton Input
 		{
@@ -75,19 +75,29 @@ Item Layout Options
 			size		'118 47'
 
 			init		Nex_Action_JumpToPage
-			target		"Panel::Input"
+			target		"Dummy::Panel::Input"
 		}
 	}
-	Item EventWindow Panel
+	Item Window Dummy
 	{
-		reinit	Nex_Action_MakeFirstVisible
+		Derive Picture Table6
+		{
+			picture "gfx/options_background"
+			size	'734 540'
+			pos	'146 35'
+		}
 
-		#include "menu/options/player.menu"
-		#include "menu/options/key.menu"
-		#include "menu/options/sound.menu"
-		#include "menu/options/video.menu"
-		#include "menu/options/color.menu"
-		#include "menu/options/effects.menu"
-		#include "menu/options/input.menu"
+		Item EventWindow Panel
+		{
+			reinit	Nex_Action_MakeFirstVisible
+
+			#include "menu/options/player.menu"
+			#include "menu/options/key.menu"
+			#include "menu/options/sound.menu"
+			#include "menu/options/video.menu"
+			#include "menu/options/color.menu"
+			#include "menu/options/effects.menu"
+			#include "menu/options/input.menu"
+		}
 	}
 }
