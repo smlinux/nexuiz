@@ -7,8 +7,13 @@ const float _VSB_PRECISION = 5;
 const float _VSB_MINHEIGHT = 10;
 
 const vector _VSB_CLICKAREA_COLOR = '1 1 1';
-const vector _VSB_SCOLLER_COLOR	= '0.9 0.9 0.9';
-const vector _VSB_SCROLLAREA_COLOR = '0.3 0.3 0.3';
+const vector _VSB_SCOLLER_COLOR	= '1 1 1';
+const vector _VSB_SCROLLAREA_COLOR = '1 1 1';
+
+// todo: maybe  use fields to retrieve the picture names?
+const string _VSB_SCOLLER_PICTURE = "gfx/scroll_scroller";
+const string _VSB_SCROLLAREA_PICTURE = "gfx/scroll_background";
+const string _VSB_BUTTON_PICTURE = "gfx/scroll_up";
 
 // scroller == scroll button
 float() _IVSB_GetSizeOfScroller = {
@@ -38,19 +43,19 @@ void() Item_VScrollBar_Draw = {
 	lPosition = self.pos;
 	lSize = self.size;
 	lSize_y = _VSB_UP_HEIGHT;
-	Menu_Fill( lPosition, lSize, _VSB_CLICKAREA_COLOR, 1.0, 0 );
+	Menu_DrawPicture( lPosition, _VSB_BUTTON_PICTURE, lSize, _VSB_CLICKAREA_COLOR, 1.0, 0 );
 
 	lPosition_y = self.pos_y + _VSB_UP_HEIGHT;
 	lSize_y = self.size_y - _VSB_UP_HEIGHT - _VSB_DOWN_HEIGHT;
-	Menu_Fill( lPosition, lSize, _VSB_SCROLLAREA_COLOR, 1.0, 0 );
+	Menu_DrawPicture( lPosition, _VSB_SCROLLAREA_PICTURE,lSize, _VSB_SCROLLAREA_COLOR, 1.0, 0 );
 
 	lPosition_y = self.pos_y + self.size_y - _VSB_DOWN_HEIGHT;
 	lSize_y = _VSB_DOWN_HEIGHT;
-	Menu_Fill( lPosition, lSize, _VSB_CLICKAREA_COLOR, 1.0, 0 );
+	Menu_DrawPicture( lPosition, _VSB_BUTTON_PICTURE, lSize, _VSB_CLICKAREA_COLOR, 1.0, 0 );
 
 	lSize_y = _IVSB_GetSizeOfScroller();
 	lPosition_y = self.pos_y + _VSB_UP_HEIGHT - self._target.origin_y * (self.size_y - _VSB_DOWN_HEIGHT - _VSB_UP_HEIGHT - lSize_y) / (self._target._child.size_y - self.size_y);
-	Menu_Fill( lPosition, lSize, _VSB_SCOLLER_COLOR, 1.0, 0 );
+	Menu_DrawPicture( lPosition, _VSB_SCOLLER_PICTURE, lSize, _VSB_SCOLLER_COLOR, 1.0, 0 );
 };
 
 void() _IVSB_RangeBound = {
