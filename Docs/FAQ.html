@@ -1,0 +1,266 @@
+<!--  AFT (Almost Free Text) source file for Nexuiz FAQ -->
+<!--  use AFT v5.096 or later (http://www.maplefish.com/todd/aft.html) -->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<title>Nexuiz 1.3 FAQ</title>
+	<meta name="author" content="">
+	<meta name="GENERATOR" content = "Almost Free Text v5.096; Copyright 1996-2005 Todd Coram. All rights reserved.">
+<style type="text/css">
+  <!--
+html { background: #eee; color: #000; }
+
+body { background: #eee; color: #000; margin: 0; padding: 0;}
+
+div.body {
+	background: #fff; color: #000;
+	margin: 0 1em 0 1em; padding: 1em;
+	font-family: serif;
+	font-size: 1em; line-height: 1.2em;
+	border-width: 0 1px 0 1px;
+	border-style: solid;
+	border-color: #aaa;
+}
+
+div.block {
+	background: #F8F8FF; color: #000;
+	margin: 1em; padding: 0 1em 0 1em;
+	border-width: 1px;
+	border-style: solid;
+	border-color: #909090;
+}
+
+table {
+	background: #F8F8F8; color: #000;
+	margin: 1em;
+	border-width: 0 0 0 1px;
+	border-style: solid;
+	border-color: #C0C0C0;
+}
+
+td {
+	border-width: 0 1px 1px 0;
+	border-style: solid;
+	border-color: #C0C0C0;
+}
+
+th {
+	background: #F8F8FF;
+	border-width: 1px 1px 2px 0;
+	border-style: solid;
+	border-color: #C0C0C0;
+}
+
+
+/* body text, headings, and rules */
+
+p { margin: 0; text-indent: 0em; margin: 0 0 0.5em 0 }
+
+h1, h2, h3, h4, h5, h6 {
+	color: #206020; background: transparent;
+	font-family: Optima, Arial, Helvetica, sans-serif;
+	font-weight: normal;
+}
+
+h1 { font-size: 1.69em; margin: 1.4em 0 0.4em 0; }
+h2 { font-size: 1.44em; margin: 1.4em 0 0.4em 0; }
+h3 { font-size: 1.21em; margin: 1.4em 0 0.4em 0; }
+h4 { font-size: 1.00em; margin: 1.4em 0 0.4em 0; }
+h5 { font-size: 0.81em; margin: 1.4em 0 0.4em 0; }
+h6 { font-size: 0.64em; margin: 1.4em 0 0.4em 0; }
+
+hr {
+	color: transparent; background: transparent;
+	height: 0px; margin: 0.6em 0;
+	border-width: 1px ;
+	border-style: solid;
+	border-color: #999;
+}
+
+/* bulleted lists and definition lists */
+
+ul { margin: 0 1em 0.6em 2em; padding: 0; }
+li { margin: 0.4em 0 0 0; }
+
+dl { margin: 0.6em 1em 0.6em 2em; }
+dt { color: #206020; }
+
+tt { color: #602020; }
+
+/* links */
+
+a.link {
+	color: #33c; background: transparent;
+	text-decoration: none;
+}
+
+a:hover {
+	color: #000; background: transparent;
+}
+
+body > a {
+	font-family: Optima, Arial, Helvetica, sans-serif;
+	font-size: 0.81em;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	color: #206020; background: transparent;
+	font-family: Optima, Arial, Helvetica, sans-serif;
+	font-weight: normal;
+}
+
+  -->
+</style>
+</head>
+<body>
+<div class="body">
+
+<br><center><h1><a name="AFT-top">Nexuiz 1.3 FAQ</a></h1></center>
+<center><a class="link" href="http://nexuiz.com">http://nexuiz.com</a>&nbsp;&nbsp;<a class="link" href="http://alientrap.org">http://alientrap.org</a></center>
+<hr>
+<!--  AFT Table of Contents (auto generated) -->
+<ul>
+<li> <a class="link" href="#Troubleshooting">Troubleshooting</a></li>
+<ul>
+<li> <a class="link" href="#How do I install Nexuiz?">How do I install Nexuiz?</a></li>
+<li> <a class="link" href="#When I start Nexuiz all I see is a black screen with some checkered squares">When I start Nexuiz all I see is a black screen with some checkered squares</a></li>
+<li> <a class="link" href="#The sound is broken, it crackles and stutters">The sound is broken, it crackles and stutters</a></li>
+<li> <a class="link" href="#When I join a server or after a map change I see nothing but a black screen, but I can still move and shoot">When I join a server or after a map change I see nothing but a black screen, but I can still move and shoot</a></li>
+</ul>
+<li> <a class="link" href="#Server setup">Server setup</a></li>
+<ul>
+<li> <a class="link" href="#How do I start a server?">How do I start a server?</a></li>
+<li> <a class="link" href="#Which ports do I have to open in firewall/forward from my router to run a server?">Which ports do I have to open in firewall/forward from my router to run a server?</a></li>
+</ul>
+<li> <a class="link" href="#General questions">General questions</a></li>
+<ul>
+<li> <a class="link" href="#How do I install new maps?">How do I install new maps?</a></li>
+<li> <a class="link" href="#How can I place a shortcut to Nexuiz on my Linux desktop?">How can I place a shortcut to Nexuiz on my Linux desktop?</a></li>
+<li> <a class="link" href="#How do I open the console?">How do I open the console?</a></li>
+<li> <a class="link" href="#What console commands/variables are there?">What console commands/variables are there?</a></li>
+<li> <a class="link" href="#How can I speed up my frame rate?">How can I speed up my frame rate?</a></li>
+<li> <a class="link" href="#How can I activate colors in my name?">How can I activate colors in my name?</a>
+
+</li>
+</ul>
+</ul>
+<hr>
+<!-- Start SectLevel1 -->
+<h2><a name="Troubleshooting">Troubleshooting</a></h2>
+<!-- Start SectLevel2 -->
+<h3><a name="How do I install Nexuiz?">How do I install Nexuiz?</a></h3>
+<p class="Body">
+Just unzip the <tt>nexuiz13.zip</tt> file. You can do this with any archive program (like <a class="link" href="http://7zip.org">7zip</a>). It's very important to remain the directory structure while unpacking (in WinZip this option is called &quot;Use folder names&quot;). The directory structure should look like this afterwards:
+<div class="block"><pre>
+Nexuiz
+|-- data
+|   |-- data*.pk3
+|-- *.exe
+|-- *.dll
+`-- nexuiz-linux-*
+</pre></div>
+</p>
+<!--End Section 2-->
+<h3><a name="When I start Nexuiz all I see is a black screen with some checkered squares">When I start Nexuiz all I see is a black screen with some checkered squares</a></h3>
+<p class="Body">
+This happens when the engine can't load the data*.pk3 file. The reasons could be:
+<ol>
+<li> you unpacked the zip file without folder names (see <a class="link" href="#How do I install Nexuiz?">How do I install Nexuiz?</a>)</li>
+<li> on Linux: the current directory is not your Nexuiz/ folder (see <a class="link" href="#How can I place a shortcut to Nexuiz on my Linux desktop?">How can I place a shortcut to Nexuiz on my Linux desktop?</a>)</li>
+<li> your download might be corrupted</li>
+</ol>
+</p>
+<!--End Section 2-->
+<h3><a name="The sound is broken, it crackles and stutters">The sound is broken, it crackles and stutters</a></h3>
+<p class="Body">
+Try run <tt>nexuiz-sdl.exe</tt> (on Windows) or <tt>nexuiz-linux-686-sdl</tt> (on Linux). This version usually performs better on newer sound cards than <tt>nexuiz.exe</tt>/<tt>nexuiz-linux-686-glx</tt>.
+</p>
+<!--End Section 2-->
+<h3><a name="When I join a server or after a map change I see nothing but a black screen, but I can still move and shoot">When I join a server or after a map change I see nothing but a black screen, but I can still move and shoot</a></h3>
+<p class="Body">
+This is probably because you don't have the map, that's running on the server. There is no map/content download in Nexuiz at the moment so you have to get the map the old fashioned way. Most servers will have a download URL in their name or welcome message. There is also a <a class="link" href="http://savage747.sa.funpic.de/wiki/pmwiki.php?n=Main.CustomMaps">wiki page</a> dedicated to new maps.
+</p>
+<!--End Section 2-->
+<!-- End SectLevel2 -->
+<!--End Section 1-->
+<h2><a name="Server setup">Server setup</a></h2>
+<!-- Start SectLevel2 -->
+<h3><a name="How do I start a server?">How do I start a server?</a></h3>
+<p class="Body">
+There's a tutorial on how to setup up an dedicated server in this <a class="link" href="http://www.nexuiz.com/forums/index.php?showtopic=1236">forum post</a>.
+</p>
+<!--End Section 2-->
+<h3><a name="Which ports do I have to open in firewall/forward from my router to run a server?">Which ports do I have to open in firewall/forward from my router to run a server?</a></h3>
+<p class="Body">
+The default port is 26000 UDP. You can change that by starting Nexuiz with <tt>nexuiz-sdl.exe -port &lt;port&gt;</tt> (on Windows) or <tt>nexuiz-linux-686-sdl -port &lt;port&gt;</tt> (on Linux).
+To add the command line argument on Windows, create a new shortcut to <tt>nexuiz-sdl.exe</tt> and right click on it. Select properties and <tt>-port &lt;port&gt;</tt> in the &quot;Target:&quot; line. Be sure that the &quot;Start in:&quot; line contains the full path to your Nexuiz folder and clock &quot;OK&quot;.
+</p>
+<!--End Section 2-->
+<!-- End SectLevel2 -->
+<!--End Section 1-->
+<h2><a name="General questions">General questions</a></h2>
+<!-- Start SectLevel2 -->
+<h3><a name="How do I install new maps?">How do I install new maps?</a></h3>
+<p class="Body">
+Maps usually ship as *.pk3 file. All you have to do is to copy this file to your <tt>Nexuiz/data/</tt> directory.
+</p>
+<!--End Section 2-->
+<h3><a name="How can I place a shortcut to Nexuiz on my Linux desktop?">How can I place a shortcut to Nexuiz on my Linux desktop?</a></h3>
+<p class="Body">
+Before you can create a desktop/menu item you have to create a little shell script. Open a text editor (like gedit or kate) and paste the following lines:
+<div class="block"><pre>
+#!/bin/sh
+cd /path/to/Nexuiz		# replace this with the full path to your Nexuiz folder
+./nexuiz-linux-686-sdl &quot;$@&quot;	# or ./nexuiz-linux-x86_64-sdl if you're using an AMD64/EM64T distributions
+</pre></div>
+Save this in your Nexuiz directory as <tt>nexuiz.sh</tt>. Now you have to make this file executable by opening a xterm/konsole and typing:
+<div class="block"><pre>
+cd /path/to/Nexuiz
+chmod a+x nexuiz.sh
+</pre></div>
+Finally you can add the <tt>nexuiz.sh</tt> file to your desktop like any other program.
+</p>
+<!--End Section 2-->
+<h3><a name="How do I open the console?">How do I open the console?</a></h3>
+<p class="Body">
+Press <tt>[shift]+[escape]</tt>. To close it press <tt>[escape]</tt>
+</p>
+<!--End Section 2-->
+<h3><a name="What console commands/variables are there?">What console commands/variables are there?</a></h3>
+<p class="Body">
+You can get a list of variables by entering <tt>cvarlist</tt> on the console. <tt>cmdlist</tt> will give you a list of available commands. An annotated version of that output can be found at the <a class="link" href="http://savage747.sa.funpic.de/wiki/pmwiki.php?n=Main.ConsoleCommands">Nexuiz wiki</a>.
+</p>
+<!--End Section 2-->
+<h3><a name="How can I speed up my frame rate?">How can I speed up my frame rate?</a></h3>
+<p class="Body">
+The greatest performance boost can be achieved by turning off dynamic lights and shadows. Bloom is also quite resource intensive. On older graphics cards or on-board/notebook chips with little video ram you can try to lower the texture resolution. To do this open the console and type <tt>gl_picmip #; r_restart</tt> (where # is a number between 0 and 10, 0 is the highest quality).
+</p>
+<!--End Section 2-->
+<h3><a name="How can I activate colors in my name?">How can I activate colors in my name?</a></h3>
+<p class="Body">
+Colors can be used in nicknames and chat messages by typing ^ followed by a number between 0 and 9.
+</p>
+<!-- 2 columns --><center><table cellspacing="0">
+<caption>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    </caption>
+<tr><th> code   </th><th> color&nbsp;&nbsp;     </th></tr>
+<tr><td> ^0     </td><td> black&nbsp;&nbsp;     </td></tr>
+<tr><td> ^1     </td><td> red&nbsp;&nbsp;</td></tr>
+<tr><td> ^2     </td><td> green&nbsp;&nbsp;     </td></tr>
+<tr><td> ^3     </td><td> yellow&nbsp;&nbsp;    </td></tr>
+<tr><td> ^4     </td><td> blue&nbsp;&nbsp;      </td></tr>
+<tr><td> ^5     </td><td> aqua&nbsp;&nbsp;      </td></tr>
+<tr><td> ^6     </td><td> pink&nbsp;&nbsp;      </td></tr>
+<tr><td> ^7     </td><td> white&nbsp;&nbsp;     </td></tr>
+<tr><td> ^8     </td><td> light grey&nbsp;&nbsp;</td></tr>
+<tr><td> ^9     </td><td> dark grey&nbsp;&nbsp; </td></tr>
+</table></center>
+<!--End Section 2-->
+<!-- End SectLevel2 -->
+<!--End Section 1-->
+<!-- End SectLevel1 -->
+<hr>
+<br>
+<p align="right"> <small>This document was generated using <a class="link" href="http://www.maplefish.com/todd/aft.html">AFT v5.096</a></small> </p>
+</body>
+</html>
+

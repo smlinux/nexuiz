@@ -1,0 +1,104 @@
+#--- AFT (Almost Free Text) source file for Nexuiz FAQ
+#--- use AFT v5.096 or later (http://www.maplefish.com/todd/aft.html)
+
+*Title: Nexuiz 1.3 FAQ
+			http://nexuiz.com	http://alientrap.org
+
+------
+
+*TOC
+
+------
+
+* Troubleshooting
+
+** How do I install Nexuiz?
+Just unzip the |nexuiz13.zip| file. You can do this with any archive program (like [7zip (http://7zip.org)]). It's very important to remain the directory structure while unpacking (in WinZip this option is called "Use folder names"). The directory structure should look like this afterwards:
+^<<
+Nexuiz
+|-- data
+|   |-- data*.pk3
+|-- *.exe
+|-- *.dll
+`-- nexuiz-linux-*
+^>>
+
+** When I start Nexuiz all I see is a black screen with some checkered squares
+This happens when the engine can't load the data*.pk3 file. The reasons could be:
+	1. you unpacked the zip file without folder names (see [How do I install Nexuiz?])
+	2. on Linux: the current directory is not your Nexuiz/ folder (see [How can I place a shortcut to Nexuiz on my Linux desktop?])
+	3. your download might be corrupted
+
+** The sound is broken, it crackles and stutters
+Try run |nexuiz-sdl.exe| (on Windows) or |nexuiz-linux-686-sdl| (on Linux). This version usually performs better on newer sound cards than |nexuiz.exe|/|nexuiz-linux-686-glx|.
+
+** When I join a server or after a map change I see nothing but a black screen, but I can still move and shoot
+This is probably because you don't have the map, that's running on the server. There is no map/content download in Nexuiz at the moment so you have to get the map the old fashioned way. Most servers will have a download URL in their name or welcome message. There is also a [wiki page (http://savage747.sa.funpic.de/wiki/pmwiki.php?n=Main.CustomMaps)] dedicated to new maps.
+
+
+
+* Server setup
+
+** How do I start a server?
+There's a tutorial on how to setup up an dedicated server in this [forum post (http://www.nexuiz.com/forums/index.php?showtopic=1236)].
+
+** Which ports do I have to open in firewall/forward from my router to run a server?
+The default port is 26000 UDP. You can change that by starting Nexuiz with |nexuiz-sdl.exe -port <port>| (on Windows) or |nexuiz-linux-686-sdl -port <port>| (on Linux).
+To add the command line argument on Windows, create a new shortcut to |nexuiz-sdl.exe| and right click on it. Select properties and |-port <port>| in the "Target:" line. Be sure that the "Start in:" line contains the full path to your Nexuiz folder and clock "OK".
+
+
+
+* General questions
+
+** How do I install new maps?
+Maps usually ship as *.pk3 file. All you have to do is to copy this file to your |Nexuiz/data/| directory.
+
+** How can I place a shortcut to Nexuiz on my Linux desktop?
+Before you can create a desktop/menu item you have to create a little shell script. Open a text editor (like gedit or kate) and paste the following lines:
+^<<
+#!/bin/sh
+cd /path/to/Nexuiz		# replace this with the full path to your Nexuiz folder
+./nexuiz-linux-686-sdl "$@"	# or ./nexuiz-linux-x86_64-sdl if you're using an AMD64/EM64T distributions
+^>>
+Save this in your Nexuiz directory as |nexuiz.sh|. Now you have to make this file executable by opening a xterm/konsole and typing:
+^<<
+cd /path/to/Nexuiz
+chmod a+x nexuiz.sh
+^>>
+Finally you can add the |nexuiz.sh| file to your desktop like any other program.
+
+** How do I open the console?
+Press |\[shift]+\[escape]|. To close it press |\[escape]|
+
+** What console commands/variables are there?
+You can get a list of variables by entering |cvarlist| on the console. |cmdlist| will give you a list of available commands. An annotated version of that output can be found at the [Nexuiz wiki (http://savage747.sa.funpic.de/wiki/pmwiki.php?n=Main.ConsoleCommands)].
+
+** How can I speed up my frame rate?
+The greatest performance boost can be achieved by turning off dynamic lights and shadows. Bloom is also quite resource intensive. On older graphics cards or on-board/notebook chips with little video ram you can try to lower the texture resolution. To do this open the console and type |gl__picmip #; r__restart| (where # is a number between 0 and 10, 0 is the highest quality).
+
+** How can I activate colors in my name?
+Colors can be used in nicknames and chat messages by typing ^ followed by a number between 0 and 9.
+
+	!                            !
+	! code   ! color             !
+	!----------------------------!
+	! ^0     ! black             !
+	!----------------------------!
+	! ^1     ! red               !
+	!----------------------------!
+	! ^2     ! green             !
+	!----------------------------!
+	! ^3     ! yellow            !
+	!----------------------------!
+	! ^4     ! blue              !
+	!----------------------------!
+	! ^5     ! aqua              !
+	!----------------------------!
+	! ^6     ! pink              !
+	!----------------------------!
+	! ^7     ! white             !
+	!----------------------------!
+	! ^8     ! light grey        !
+	!----------------------------!
+	! ^9     ! dark grey         !
+	!----------------------------!
