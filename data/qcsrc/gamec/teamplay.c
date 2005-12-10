@@ -278,21 +278,6 @@ void PrintWelcomeMessage(entity pl)
 		);
 	temp = strzone(temp);
 
-	if(teams_matter)
-	{
-		s = strcat(temp,
-		"You are on ", ColoredTeamName(pl.team), "^8\n\n",
-		"Go to ^1Menu->Options->Player^8 to change your name, model & team\n",
-		grap_msg
-		);
-	}
-	else
-	{
-		s = strcat(temp,
-		"Go to ^1Menu->Options->Player^8 to change your name & model\n",
-		grap_msg
-		);
-	}
 
 	if (cvar_string("g_mutatormsg") != "") {
 		s = strcat(s, "\n\nSpecial gameplay tips: ", cvar_string("g_mutatormsg"));

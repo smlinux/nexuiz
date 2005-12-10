@@ -1090,13 +1090,19 @@ void PlayerPreThink (void)
 	        
 		if (self.flags & FL_JUMPRELEASED) {
 			if (self.button2) {
-				self.flags = self.flags & !FL_JUMPRELEASED;
-				self.classname = "player";
-				if(!cvar("g_lms"))
-					bprint (strcat("^4", self.netname, "^4 is playing now\n"));
-				PutClientInServer();
-				centerprint(self,"");
-				return;
+				if(!cvar("teamplay")) {
+					self.flags = self.flags & !FL_JUMPRELEASED;
+					self.classname = "player";
+					if(!cvar("g_lms"))
+						bprint (strcat("^4", self.netname, "^4 is playing now\n"));
+					PutClientInServer();
+					centerprint(self,"");
+					return;
+				} else {
+					self.flags = self.flags & !FL_JUMPRELEASED;
+					stuffcmd(self,"menu_showteamselect\n");
+					return;
+				}
 			} else if(self.button0) {
 				self.flags = self.flags & !FL_JUMPRELEASED;
 				if(SpectateNext() == 1) {
