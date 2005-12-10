@@ -654,7 +654,7 @@ void SV_ChangeTeam(float color)
 	
 	// store shirt color in .clientcolors
 	// this will get overwritten in teamplay modes later
-	setcolor(self, color & 240, scolor);
+	setcolor(self, color & 240 + scolor);
 
 	if(scolor == COLOR_TEAM1 - 1)
 		steam = 1;
