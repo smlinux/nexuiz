@@ -475,7 +475,9 @@ void ClientConnect (void)
 	//if(cvar("g_domination"))
 	//	dom_player_join_team(self);
 
-	JoinBestTeam(self, FALSE);
+	//JoinBestTeam(self, FALSE);
+	if(cvar("teamplay")) stuffcmd(self,"menu_showteamselect\n");
+	
 
 	if(cvar("sv_spectate") == 1 && !cvar("g_lms")) {
 		self.classname = "observer";	
