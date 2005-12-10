@@ -27,3 +27,22 @@ void() Nex_Action_PlaySoundOnce =
 	}
 	Menu_DeleteAfterToggle( self );
 };
+
+// execute a console cmd on action
+void() Nex_Action_ConsoleCmd_Destroy =
+{
+	String_EntityFree( self, syncCmd );
+};
+
+void() Nex_Action_ConsoleCmd_Action =
+{
+	cmd( self.syncCmd );
+}
+
+void() Nex_Action_ConsoleCmd =
+{
+	String_EntityZone( self, syncCmd );
+
+	self.destroy = Nex_Action_ConsoleCmd_Destroy;
+	self.action = Nex_Action_ConsoleCmd_Action;
+};

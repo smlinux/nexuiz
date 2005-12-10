@@ -21,7 +21,7 @@ void( string pValue ) _IDNC_SendSyncCmd = {
 	lShirt = (lCombined & 0xF0) / 16;
 
 	cmd( "color ", ftos( lPants ), " ", ftos( lShirt ), "\n" );
-	print( "%color ", ftos( lPants ), " ", ftos( lShirt ), "\n" );
+	//print( "%color ", ftos( lPants ), " ", ftos( lShirt ), "\n" );
 };
 
 void() _IDNC_Sync =

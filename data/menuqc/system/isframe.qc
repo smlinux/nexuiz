@@ -250,10 +250,10 @@ void() Menu_PerformReinit =
 	Menu_KeyHook = Util_NullFunction;
 
 	// choose which menu to display
-	// AK 05: added support for menu_directmenu
-	if( cvar_string( "menu_directmenu" ) != "" ) {
-		Menu_ActiveWindow = findstring( null_entity, name, cvar_string( "menu_directmenu" ) );
-		cvar_set( "menu_directmenu", "" );
+	// AK 05: added support for scmenu_directmenu
+	if( cvar_string( "scmenu_directmenu" ) != "" ) {
+		Menu_ActiveWindow = findstring( null_entity, name, cvar_string( "scmenu_directmenu" ) );
+		cvar_set( "scmenu_directmenu", "" );
 	} else if( MENU_ALLOWINGAME && ( gamestatus & GAME_CONNECTED ) )
 		Menu_ActiveWindow = findstring( null_entity, name, MENU_INGAME_NAME );
 	else
