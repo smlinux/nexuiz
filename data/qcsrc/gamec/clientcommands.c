@@ -168,7 +168,7 @@ void SV_ParseClientCommand(string s) {
 			} else {
 				versionmsg = "^3This server is using an outdated Nexuiz version.\nThis can lead to problems.^8";
 			}
-			
+
 		} else {
 			versionmsg = "^2client version and server version are the same.^8";
 		}
@@ -179,6 +179,29 @@ void SV_ParseClientCommand(string s) {
 		if(self.classname == "player" && cvar("sv_spectate") == 1) {
 			self.classname = "observer";
 			PutClientInServer();
+		}
+	} else if(argv(0) == "join") {
+		self.classname = "player";
+		// TODO: I have no idea whether this is needed or not
+		if(!cvar("g_lms")) {
+			bprint (strcat("^4", self.netname, "^4 is playing now\n"));
+		}
+		PutClientInServer();
+	} else if( argv(0) == "selectteam" ) {
+		if( argv(1) == "none" ) {
+			SV_ChangeTeam( 0 );
+		} else if( argv(1) == "red" ) {
+			SV_ChangeTeam( COLOR_TEAM_RED - 1 );
+		} else if( argv(1) == "blue" ) {
+			SV_ChangeTeam( COLOR_TEAM_BLUE - 1 );
+		} else if( argv(1) == "green" ) {
+			SV_ChangeTeam( COLOR_TEAM_GREEN - 1 );
+		} else if( argv(1) == "yellow" ) {
+			SV_ChangeTeam( COLOR_TEAM_YELLOW - 1 );
+		} else if( argv(1) == "auto" ) {
+			JoinBestTeam( self, 0 );
+		} else {
+			sprint( self, strcat( "selectteam none/red/blue/green/yellow/auto - \"", argv(1), "\" not recognised\n" ) );
 		}
 	} else {
 		clientcommand(self,s);

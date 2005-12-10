@@ -3,6 +3,10 @@ float COLOR_TEAM2	= 14; // blue
 float COLOR_TEAM3	= 4;  // green
 float COLOR_TEAM4	= 13; // yellow
 
+#define COLOR_TEAM_RED		COLOR_TEAM1
+#define COLOR_TEAM_BLUE 	COLOR_TEAM2
+#define COLOR_TEAM_GREEN	COLOR_TEAM3
+#define COLOR_TEAM_YELLOW	COLOR_TEAM4
 
 float GAME_DEATHMATCH		= 1;
 float GAME_TEAM_DEATHMATCH	= 2;
@@ -26,26 +30,26 @@ float	audit_teams_time;
 string TeamName(float t)
 {
 	// fixme: Search for team entities and get their .netname's!
-	if(t == COLOR_TEAM1)
+	if(t == COLOR_TEAM_RED)
 		return "Red Team";
-	if(t == COLOR_TEAM2)
+	if(t == COLOR_TEAM_BLUE)
 		return "Blue Team";
-	if(t == COLOR_TEAM3)
+	if(t == COLOR_TEAM_GREEN)
 		return "Green Team";
-	if(t == COLOR_TEAM4)
+	if(t == COLOR_TEAM_YELLOW)
 		return "Yellow Team";
 	return "Neutral Team";
 }
 string ColoredTeamName(float t)
 {
 	// fixme: Search for team entities and get their .netname's!
-	if(t == COLOR_TEAM1)
+	if(t == COLOR_TEAM_RED)
 		return "^1Red Team^7";
-	if(t == COLOR_TEAM2)
+	if(t == COLOR_TEAM_BLUE)
 		return "^4Blue Team^7";
-	if(t == COLOR_TEAM3)
+	if(t == COLOR_TEAM_GREEN)
 		return "^2Green Team^7";
-	if(t == COLOR_TEAM4)
+	if(t == COLOR_TEAM_YELLOW)
 		return "^3Yellow Team^7";
 	return "Neutral Team";
 }
@@ -242,10 +246,10 @@ void PrintWelcomeMessage(entity pl)
 	if(self.welcomemessage_time2 > time)
 		return;
 	self.welcomemessage_time2 = time + 0.8; */
-	
+
 	if(self.welcomemessage_time2 > time) return;
 	self.welcomemessage_time2 = time + 1.0;
-	
+
 	if(cvar("g_minstagib"))
 		mutator = "^2Minstagib ^1";
 	else if(cvar("g_instagib"))
@@ -254,18 +258,18 @@ void PrintWelcomeMessage(entity pl)
 		mutator = "^2Rocketarena ^1";
 	else
 		mutator = "";
-		
+
 	if(cvar("g_grappling_hook"))
 		grap_msg = strzone("\n\nBind a key to ^1+hook^8 to use the grappling hook\n");
 
 	s = strcat(s, "\n\nThis is Nexuiz ", cvar_string("g_nexuizversion"), "\n", self.versionmessage);
 	s = strcat(s, "^8\n\nMatch type is ^1", mutator, gamemode_name, "^8\n");
-		
+
 	if(self.classname == "observer" || self.classname == "spectator") {
 		s = strcat(s,"^7\n\n\npress jump to play\npress attack to spectate other players\n\n");
 	}
-		
-		
+
+
 	s = strzone(s);
 
 	temp = strcat(
@@ -297,7 +301,7 @@ void PrintWelcomeMessage(entity pl)
 	if (cvar_string("sv_motd") != "") {
 		s = strcat(s, "\n\nMOTD: ", cvar_string("sv_motd"));
 	}
-		
+
 	centerprint(pl, s);
 	//sprint(pl, s);
 
@@ -320,14 +324,12 @@ void SetPlayerColors(entity pl, float color)
 		float shirt;
 		shirt = pl.clientcolors & 0xF0;
 		setcolor(pl, shirt + color);
-		
+
 	}
 }
 
 void SetPlayerTeam(entity pl, float t, float s, float noprint)
 {
-
-	
 	float color;
 	if(t == 4)
 		color = COLOR_TEAM4 - 1;
@@ -337,8 +339,8 @@ void SetPlayerTeam(entity pl, float t, float s, float noprint)
 		color = COLOR_TEAM2 - 1;
 	else
 		color = COLOR_TEAM1 - 1;
-	
-	
+
+
 	SetPlayerColors(pl,color);
 
 
@@ -504,7 +506,7 @@ float FindSmallestTeam(entity pl, float ignore_pl)
 			error("Too few teams available for team deathmatch\n");
 	}
 
-	
+
 	// count how many players are in each team
 	if(ignore_pl)
 		GetTeamCounts(world);
@@ -548,25 +550,25 @@ float FindSmallestTeam(entity pl, float ignore_pl)
 	}
 	else
 	{
-		if(c1 >= 0 && (c1 < smallestteam_count || 
+		if(c1 >= 0 && (c1 < smallestteam_count ||
 					(c1 == smallestteam_count && self.team == COLOR_TEAM1) ) )
 		{
 			smallestteam = 1;
 			smallestteam_count = c1;
 		}
-		if(c2 >= 0 && c2 < (c2 < smallestteam_count || 
+		if(c2 >= 0 && c2 < (c2 < smallestteam_count ||
 					(c2 == smallestteam_count && self.team == COLOR_TEAM2) ) )
 		{
 			smallestteam = 2;
 			smallestteam_count = c2;
 		}
-		if(c3 >= 0 && c3 < (c3 < smallestteam_count || 
+		if(c3 >= 0 && c3 < (c3 < smallestteam_count ||
 					(c3 == smallestteam_count && self.team == COLOR_TEAM3) ) )
 		{
 			smallestteam = 3;
 			smallestteam_count = c3;
 		}
-		if(c4 >= 0 && c4 < (c4 < smallestteam_count || 
+		if(c4 >= 0 && c4 < (c4 < smallestteam_count ||
 					(c4 == smallestteam_count && self.team == COLOR_TEAM4) ) )
 		{
 			smallestteam = 4;
@@ -618,7 +620,7 @@ float JoinBestTeam(entity pl, float only_return_best)
 
 
 	if(!only_return_best)
-	{		
+	{
 		if(smallest == 1)
 		{
 			SetPlayerColors(pl, COLOR_TEAM1 - 1);
@@ -647,14 +649,12 @@ void SV_ChangeTeam(float color)
 {
 	float scolor, dcolor, steam, dteam, dbotcount, scount, dcount;
 
-	
+	scolor = self.clientcolors & 0x0F;
+	dcolor = color & 0x0F;
 
-	scolor = self.clientcolors & 15;
-	dcolor = color & 15;
-	
 	// store shirt color in .clientcolors
 	// this will get overwritten in teamplay modes later
-	setcolor(self, color & 240 + scolor);
+	setcolor(self, color & 0xF0 + scolor);
 
 	if(scolor == COLOR_TEAM1 - 1)
 		steam = 1;
@@ -896,7 +896,7 @@ void ShufflePlayerOutOfTeam (float source_team)
 }
 
 // part of g_balance_teams_force
-// occasionally perform an audit of the teams to make 
+// occasionally perform an audit of the teams to make
 // sure they're more or less balanced in player count.
 void AuditTeams()
 {
