@@ -69,6 +69,10 @@ Ignore
 		size	'938 650'
 	}
 
+	//Derive TextButton
+	//{
+	//}
+
 // global floating windows
 #include "menu/credits.menu"
 #include "menu/messagebox.menu"

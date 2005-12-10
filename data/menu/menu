@@ -14,4 +14,6 @@
 
 #include "menu/ingame.menu"
 
+#include "menu/teamselect.menu"
+
 //}
