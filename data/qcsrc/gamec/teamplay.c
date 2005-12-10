@@ -1,12 +1,8 @@
 float COLOR_TEAM1	= 5;  // red
 float COLOR_TEAM2	= 14; // blue
-float COLOR_TEAM3	= 4;  // green
+float COLOR_TEAM3	= 10;  // pink
 float COLOR_TEAM4	= 13; // yellow
 
-#define COLOR_TEAM_RED		COLOR_TEAM1
-#define COLOR_TEAM_BLUE 	COLOR_TEAM2
-#define COLOR_TEAM_GREEN	COLOR_TEAM3
-#define COLOR_TEAM_YELLOW	COLOR_TEAM4
 
 float GAME_DEATHMATCH		= 1;
 float GAME_TEAM_DEATHMATCH	= 2;
@@ -30,26 +26,26 @@ float	audit_teams_time;
 string TeamName(float t)
 {
 	// fixme: Search for team entities and get their .netname's!
-	if(t == COLOR_TEAM_RED)
+	if(t == COLOR_TEAM1)
 		return "Red Team";
-	if(t == COLOR_TEAM_BLUE)
+	if(t == COLOR_TEAM2)
 		return "Blue Team";
-	if(t == COLOR_TEAM_GREEN)
-		return "Green Team";
-	if(t == COLOR_TEAM_YELLOW)
+	if(t == COLOR_TEAM3)
+		return "Pink Team";
+	if(t == COLOR_TEAM4)
 		return "Yellow Team";
 	return "Neutral Team";
 }
 string ColoredTeamName(float t)
 {
 	// fixme: Search for team entities and get their .netname's!
-	if(t == COLOR_TEAM_RED)
+	if(t == COLOR_TEAM1)
 		return "^1Red Team^7";
-	if(t == COLOR_TEAM_BLUE)
+	if(t == COLOR_TEAM2)
 		return "^4Blue Team^7";
-	if(t == COLOR_TEAM_GREEN)
-		return "^2Green Team^7";
-	if(t == COLOR_TEAM_YELLOW)
+	if(t == COLOR_TEAM3)
+		return "^6Pink Team^7";
+	if(t == COLOR_TEAM4)
 		return "^3Yellow Team^7";
 	return "Neutral Team";
 }
@@ -61,7 +57,7 @@ string TeamNoName(float t)
 	if(t == 2)
 		return "Blue Team";
 	if(t == 3)
-		return "Green Team";
+		return "Pink Team";
 	if(t == 4)
 		return "Yellow Team";
 	return "Neutral Team";
