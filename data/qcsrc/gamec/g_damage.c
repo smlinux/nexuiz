@@ -56,7 +56,7 @@ void Obituary (entity attacker, entity targ, float deathtype)
 			else if (deathtype == DEATH_NOAMMO)
 			{
 				bprint ("^7",s, " ^7committed suicide. What's the point of living without ammo?\n");
-				sound (self, CHAN_BODY, "minstagib/mockery.ogg", 1, ATTN_NONE);
+				//sound (self, CHAN_BODY, "minstagib/mockery.ogg", 1, ATTN_NONE);
 			}
 			else
 				bprint ("^1",s, "^1 couldn't resist the urge to self-destruct\n");
@@ -84,7 +84,7 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				checkrules_firstblood = TRUE;
 				//sound(world, CHAN_AUTO, "announcer/firstblood.wav", 1, ATTN_NONE);
 				if (cvar("g_minstagib"))
-					sound(world, CHAN_AUTO, "announce/male/mapkill1.ogg", 1, ATTN_NONE);
+					//sound(world, CHAN_AUTO, "announce/male/mapkill1.ogg", 1, ATTN_NONE);
 				bprint("^1",attacker.netname, "^1 drew first blood", "\n");
 			}
 
@@ -136,50 +136,39 @@ void Obituary (entity attacker, entity targ, float deathtype)
 
 			if (attacker.killcount == 3)
 			{
-				bprint (attacker.netname,"^7 made a ^1Multikill\n");
-				stuffcmd(attacker, "play2 announce/male/kill3.ogg\n");
-			}
-			else if (attacker.killcount == 4)
-			{
-				bprint (attacker.netname,"^7 made a ^1Ultrakill\n");
-				stuffcmd(attacker, "play2 announce/male/kill4.ogg\n");
+				bprint (attacker.netname,"^7 made a ^1TRIPLE FRAG\n");
+				stuffcmd(attacker, "play2 announcer/male/triple_frag.ogg\n");
 			}
 			else if (attacker.killcount == 5)
 			{
-				bprint (attacker.netname,"^7 made a ^1MONSTERKILL\n");
-				stuffcmd(attacker, "play2 announce/male/kill5.ogg\n");
-			}
-			else if (attacker.killcount == 6)
-			{
-				bprint (attacker.netname,"^7 is on a ^1Killingspree\n");
-				stuffcmd(attacker, "play2 announce/male/kill6.ogg\n");
+				bprint (attacker.netname,"^7 made a ^1FIVE FRAG COMBO\n");
+				stuffcmd(attacker, "play2 announcer/male/five_frag_combo.ogg\n");
 			}
 			else if (attacker.killcount == 10)
 			{
-				bprint (attacker.netname,"^7 is on a ^1Rampage\n");
-				sound(world, CHAN_AUTO, "announce/male/kill10.ogg", 1, ATTN_NONE);
+				bprint (attacker.netname,"^7 is a bit annoyed\n");
+				stuffcmd(attacker, "play2 announcer/male/girlfriend.ogg\n");
 			}
 			else if (attacker.killcount == 15)
 			{
-				bprint (attacker.netname,"^7 is ^1Dominating\n");
-				sound(world, CHAN_AUTO, "announce/male/kill15.ogg", 1, ATTN_NONE);
+				bprint (attacker.netname,"^7 is maybe a terrorist!\n");
+				stuffcmd(attacker, "play2 announcer/male/worldwide.ogg\n");
 			}
 			else if (attacker.killcount == 20)
 			{
-				bprint (attacker.netname,"^7 is ^1Unstoppable\n");
-				sound(world, CHAN_AUTO, "announce/male/kill20.ogg", 1, ATTN_NONE);
+				bprint (attacker.netname,"^7 has done a massacre!\n");
+				stuffcmd(attacker, "play2 announcer/male/massacre.ogg\n");
 			}
 			else if (attacker.killcount == 25)
 			{
-				bprint (attacker.netname,"^7 is ^1Godlike\n");
-				sound(world, CHAN_AUTO, "announce/male/kill25.ogg", 1, ATTN_NONE);
+				bprint (attacker.netname,"^7 is a death incarnation!\n");
+				stuffcmd(attacker, "play2 announcer/male/death_incarnate.ogg\n");
 			}
-			else if (attacker.killcount >= 30)
+			else if (attacker.killcount == 30)
 			{
-				bprint (attacker.netname,"^7 is ^1Cheating!!!\n");
-				sound(world, CHAN_AUTO, "announce/male/kill30.ogg", 1, ATTN_NONE);
+				bprint (attacker.netname,"^7 is maybe a aimbotter?!\n");
+				stuffcmd(attacker, "play2 announcer/male/aimbotting.ogg\n");
 			}
-
 		}
 		else
 		{
@@ -199,6 +188,13 @@ void Obituary (entity attacker, entity targ, float deathtype)
 			else
 				bprint ("^1",s, "^1 died\n");
 			GiveFrags(targ, targ, -1);
+			if(targ.frags == -5) {
+				stuffcmd(targ, "play2 announcer/male/looked_funny.ogg\n");
+			}
+			else if(targ.frags == -10) {
+				stuffcmd(targ, "play2 announcer/male/suck.ogg\n");
+			} 
+			
 			//targ.frags = targ.frags - 1;
 			if (targ.killcount > 2)
 				bprint ("^1",s,"^1 died with a ",ftos(targ.killcount)," kill spree\n");
@@ -250,7 +246,7 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 		}
 		else if (deathtype == IT_NEX && targ.items & IT_STRENGTH)
 		{
-			stuffcmd(attacker, "play2 announce/male/lucky_shot.ogg\n");
+			stuffcmd(attacker, "play2 announcer/male/yoda.ogg\n");
 		}
 		if (deathtype == IT_LASER)
 		{
@@ -263,6 +259,11 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 				force = '0 0 0';
 				attacker = targ;
 			}
+		}
+	} else {
+		if (deathtype == IT_NEX && !(attacker.flags & FL_ONGROUND) && !(targ.flags & FL_ONGROUND) && attacker.killcount != 3 && attacker.killcount != 5 && attacker.killcount != 10 && attacker.killcount != 15 && attacker.killcount != 20 && attacker.killcount != 25 && attacker.killcount != 30)
+		{
+			stuffcmd(attacker, "play2 announcer/male/yoda.ogg\n");
 		}
 	}
 	

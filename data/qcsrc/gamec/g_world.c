@@ -99,7 +99,7 @@ void worldspawn (void)
 	precache_sound ("announcer/1minuteremains.wav");
 	precache_sound ("announcer/2fragsleft.wav");
 	precache_sound ("announcer/3fragsleft.wav");
-	precache_sound ("announcer/welcometonexuiz.wav");
+	precache_sound ("announcer/male/welcome.ogg");
 	precache_sound ("misc/armor1.wav");
 	precache_sound ("misc/armor25.wav");
 	precache_sound ("misc/armorimpact.wav");
@@ -163,19 +163,33 @@ void worldspawn (void)
 	precache_sound ("weapons/weaponpickup.ogg");
 
 	// announcer sounds
-	precache_sound ("announce/male/kill10.ogg");
-	precache_sound ("announce/male/kill15.ogg");
-	precache_sound ("announce/male/kill20.ogg");
-	precache_sound ("announce/male/kill25.ogg");
-	precache_sound ("announce/male/kill3.ogg");
-	precache_sound ("announce/male/kill30.ogg");
-	precache_sound ("announce/male/kill4.ogg");
-	precache_sound ("announce/male/kill5.ogg");
-	precache_sound ("announce/male/kill6.ogg");
-	precache_sound ("announce/male/mapkill1.ogg");
-	precache_sound ("announce/robotic/last_second_save.ogg");
-	precache_sound ("announce/robotic/narrowly_averted.ogg");
-	precache_sound ("minstagib/mockery.ogg");
+	//precache_sound ("announce/male/kill10.ogg");
+	//precache_sound ("announce/male/kill15.ogg");
+	//precache_sound ("announce/male/kill20.ogg");
+	//precache_sound ("announce/male/kill25.ogg");
+	//precache_sound ("announce/male/kill3.ogg");
+	//precache_sound ("announce/male/kill30.ogg");
+	//precache_sound ("announce/male/kill4.ogg");
+	//precache_sound ("announce/male/kill5.ogg");
+	//precache_sound ("announce/male/kill6.ogg");
+	//precache_sound ("announce/male/mapkill1.ogg");
+	//precache_sound ("announce/robotic/last_second_save.ogg");
+	//precache_sound ("announce/robotic/narrowly_averted.ogg");
+	//precache_sound ("minstagib/mockery.ogg");
+	
+	precache_sound ("announcer/male/aimbotting.ogg");
+	precache_sound ("announcer/male/botlike.ogg");
+	precache_sound ("announcer/male/death_incarnate.ogg");	
+	precache_sound ("announcer/male/five_frag_combo.ogg");
+	precache_sound ("announcer/male/girlfriend.ogg");
+	precache_sound ("announcer/male/looked_funny.ogg");	
+	precache_sound ("announcer/male/massacre.ogg");
+	precache_sound ("announcer/male/suck.ogg");
+	precache_sound ("announcer/male/triple_frag.ogg");	
+	precache_sound ("announcer/male/voltage.ogg");
+	precache_sound ("announcer/male/worldwide.ogg");	
+	precache_sound ("announcer/male/yoda.ogg");	
+	
 
 	// plays music for the level if there is any
 	if (self.noise)
