@@ -196,14 +196,14 @@ void SV_ParseClientCommand(string s) {
 			SV_ChangeTeam( COLOR_TEAM1 - 1 );
 		} else if( argv(1) == "blue" ) {
 			SV_ChangeTeam( COLOR_TEAM2 - 1 );
-		} else if( argv(1) == "green" ) {
+		} else if( argv(1) == "green" || argv(1) == "pink" ) {
 			SV_ChangeTeam( COLOR_TEAM3 - 1 );
 		} else if( argv(1) == "yellow" ) {
 			SV_ChangeTeam( COLOR_TEAM4 - 1 );
 		} else if( argv(1) == "auto" ) {
 			JoinBestTeam( self, 0 );
 		} else {
-			sprint( self, strcat( "selectteam none/red/blue/green/yellow/auto - \"", argv(1), "\" not recognised\n" ) );
+			sprint( self, strcat( "selectteam none/red/blue/pink/yellow/auto - \"", argv(1), "\" not recognised\n" ) );
 		}
 	} else {
 		clientcommand(self,s);

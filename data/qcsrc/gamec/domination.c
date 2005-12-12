@@ -501,7 +501,7 @@ void() dom_spawnteams =
 	dom_spawnteam("Red", 4, "models/domination/dom_red.md3", 0, "domination/claim.wav", "", "Red team has captured a control point");
 	dom_spawnteam("Blue", 13, "models/domination/dom_blue.md3", 0, "domination/claim.wav", "", "Blue team has captured a control point");
 	if(numteams > 2)
-		dom_spawnteam("Green", 3, "models/domination/dom_green.md3", 0, "domination/claim.wav", "", "Green team has captured a control point");
+		dom_spawnteam("Pink", 9, "models/domination/dom_pink.md3", 0, "domination/claim.wav", "", "Pink team has captured a control point");
 	if(numteams > 3)
 		dom_spawnteam("Yellow", 12, "models/domination/dom_yellow.md3", 0, "domination/claim.wav", "", "Yellow team has captured a control point");
 	dom_spawnteam("", 0, "models/domination/dom_unclaimed.md3", 0, "", "", "");
@@ -547,7 +547,7 @@ void() dom_init =
 	// so we don't even know yet if this map is set up for domination...
 	precache_model("models/domination/dom_red.md3");
 	precache_model("models/domination/dom_blue.md3");
-	precache_model("models/domination/dom_green.md3");
+	precache_model("models/domination/dom_pink.md3");
 	precache_model("models/domination/dom_yellow.md3");
 	precache_model("models/domination/dom_unclaimed.md3");
 	precache_sound("domination/claim.wav");

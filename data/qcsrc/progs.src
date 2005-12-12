@@ -17,6 +17,8 @@ gamec/runematch.c
 
 gamec/cl_physics.c
 
+gamec/g_violence.c
+gamec/g_damage.c
 
 gamec/teamplay.c
 
@@ -29,9 +31,6 @@ gamec/t_teleporters.c
 
 gamec/sv_main.c
 gamec/sv_stats.c
-
-gamec/g_violence.c
-gamec/g_damage.c
 
 gamec/g_triggers.c
 

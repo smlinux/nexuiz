@@ -434,12 +434,12 @@
 }
 {
 "classname" "dom_team"
-"netname" "^2Green Team^3"
-"cnt" "3"
+"netname" "^6Pink Team^3"
+"cnt" "9"
 "noise" "domination/claim.wav"
 "noise1" "domination/claim.wav"
-"message" "Green team has captured a control point"
-"model" "models/domination/dom_green.md3"
+"message" "Pink team has captured a control point"
+"model" "models/domination/dom_pink.md3"
 }
 {
 "classname" "dom_team"

@@ -180,6 +180,7 @@ void InitGameplayMode()
 		fraglimit_override = cvar("fraglimit_override");
 		gamemode_name = "Last Man Standing";
 		teams_matter = 0;
+		cvar_set("teamplay", "0");
 		lms_lowest_lives = 999;
 	}
 	else
@@ -312,6 +313,25 @@ void SetPlayerColors(entity pl, float color)
 void SetPlayerTeam(entity pl, float t, float s, float noprint)
 {
 	float color;
+
+	// remap invalid teams in dom & ctf
+	if(cvar("g_ctf") && t == 3)
+		t = 2;
+	else if(cvar("g_ctf") && t == 4)
+		t = 1;
+	else if(cvar("g_domination") && cvar("g_domination_default_teams") < 3)
+	{
+		if(t == 3)
+			t = 2;
+		else if(t == 4)
+			t = 1;
+	}
+	else if(cvar("g_domination") && cvar("g_domination_default_teams") < 4)
+	{
+		if(t == 4)
+			t = 1;
+	}
+		
 	if(t == 4)
 		color = COLOR_TEAM4 - 1;
 	else if(t == 3)
@@ -324,12 +344,15 @@ void SetPlayerTeam(entity pl, float t, float s, float noprint)
 
 	SetPlayerColors(pl,color);
 
-
 	if(!noprint && t != s)
 	{
 		//bprint(strcat(pl.netname, " has changed to ", TeamNoName(t), "\n"));
 		bprint(strcat(pl.netname, "^7 has changed from ", TeamNoName(s), " to ", TeamNoName(t), "\n"));
 	}
+	
+	// kill player when changing teams
+	if(teams_matter && self.classname == "player" && self.deadflag == DEAD_NO)
+		Damage(self, self, self, 100000, DEATH_KILL, self.origin, '0 0 0');
 }
 
 

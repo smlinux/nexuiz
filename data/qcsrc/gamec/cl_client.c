@@ -163,7 +163,7 @@ void PutObserverInServer (void)
 	spot = SelectSpawnPoint (FALSE);
 	RemoveGrapplingHook(self); // Wazat's Grappling Hook
 
-	if(self.frags == 0)
+	if(self.frags == 0 && cvar("g_lms"))
 		bprint (strcat("^4", self.netname, "^4 has no more lives left\n"));
 	else if(self.killcount != -666)
 		bprint (strcat("^4", self.netname, "^4 is spectating now\n"));
