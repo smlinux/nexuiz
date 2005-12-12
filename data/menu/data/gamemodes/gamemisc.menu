@@ -172,6 +172,83 @@ Item DataContainer Misc
 
 		[DataLink_OnOffSwitch]
 	}
+	Item Data_Cvar MinstaGibMode
+	{
+		cvarName	"g_minstagib"
+		defValue	0
+
+		[DataLink_OnOffSwitch]
+	}
+	Item Data_Cvar MinstaGibLives
+	{
+		cvarName	"g_minstagib_extralives"
+		defValue	2
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar MinstaGibAmmoStart
+	{
+		cvarName	"g_minstagib_ammo_start"
+		defValue	10
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar MinstaGibAmmoDrop
+	{
+		cvarName	"g_minstagib_ammo_drop"
+		defValue	5
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar LMSMode
+	{
+		cvarName	"g_lms"
+		defValue	0
+
+		[DataLink_OnOffSwitch]
+	}
+	Item Data_Cvar LMSStartingShells
+	{
+		cvarName	"g_lms_start_ammo_shells"
+		defValue	30
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar LMSStartingNails
+	{
+		cvarName	"g_lms_start_ammo_nails"
+		defValue	100
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar LMSStartingRockets
+	{
+		cvarName	"g_lms_start_ammo_rockets"
+		defValue	30
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar LMSStartingCells
+	{
+		cvarName	"g_lms_start_ammo_cells"
+		defValue	30
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar LMSJoin
+	{
+		cvarName	"g_lms_join_anytime"
+		defValue	1
+
+		[DataLink_OnOffSwitch]
+	}
+	Item Data_Cvar LMSLastJoin
+	{
+		cvarName	"g_lms_last_join"
+		defValue	3
+
+		[DataLink_Setting]
+	}
 	Item Data_Cvar Casings
 	{
 		cvarName	"g_casings"

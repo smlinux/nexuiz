@@ -140,12 +140,12 @@ Item Layout Misc
 			{}
 			Derive Nex_Option_Switch Instagib
 			{
-				text	"Instagib (better use above)"
+				text	"Simple Instagib"
 				target	"::Data::Game::Misc::Instagib::Switch"
 			}
 			Derive Nex_Option_Switch Rocketarena
 			{
-				text	"Rocket Arena (better use above)"
+				text	"Rocket Arena"
 				target	"::Data::Game::Misc::RocketArena::Switch"
 			}
 			Derive Nex_Option_Switch Vampire
@@ -162,6 +162,65 @@ Item Layout Misc
 			{
 				text	"MidAir"
 				target	"::Data::Game::Misc::MidAir::Switch"
+			}
+			Derive Nex_Line	SeperatorMinstagib
+			{}
+			Derive Nex_Option_Switch MinstaGibMode
+			{
+				text	"MinstaGib (improved Instagib)"
+				target	"::Data::Game::Misc::MinstaGibMode::Switch"
+			}
+			Derive Nex_Option_EditBox MinstaGibLives
+			{
+				text	"Extra Lives per powerup"
+				target	"::Data::Game::Misc::MinstaGibLives::Text"
+			}
+			Derive Nex_Option_EditBox MinstaGibAmmoStart
+			{
+				text	"Starting ammo"
+				target	"::Data::Game::Misc::MinstaGibAmmoStart::Text"
+			}
+			Derive Nex_Option_EditBox MinstaGibAmmoDrop
+			{
+				text	"Ammo dropped or picked up"
+				target	"::Data::Game::Misc::MinstaGibAmmoDrop::Text"
+			}
+			Derive Nex_Line	SeperatorLMS
+			{}
+			Derive Nex_Option_Switch LMSMode
+			{
+				text	"Last Man Standing"
+				target	"::Data::Game::Misc::LMSMode::Switch"
+			}
+			Derive Nex_Option_EditBox LMSStartingShells
+			{
+				text	"Starting shells"
+				target	"::Data::Game::Misc::LMSStartingShells::Text"
+			}
+			Derive Nex_Option_EditBox LMSStartingNails
+			{
+				text	"Starting bullets"
+				target	"::Data::Game::Misc::LMSStartingNails::Text"
+			}
+			Derive Nex_Option_EditBox LMSStartingRockets
+			{
+				text	"Starting rockets"
+				target	"::Data::Game::Misc::LMSStartingRockets::Text"
+			}
+			Derive Nex_Option_EditBox LMSStartingCells
+			{
+				text	"Starting cells"
+				target	"::Data::Game::Misc::LMSStartingCells::Text"
+			}
+			Derive Nex_Option_Switch LMSJoin
+			{
+				text	"Join anytime"
+				target	"::Data::Game::Misc::LMSJoin::Switch"
+			}
+			Derive Nex_Option_EditBox LMSLastJoin
+			{
+				text	"Min. lives left to join"
+				target	"::Data::Game::Misc::LMSLastJoin::Text"
 			}
 			Derive Nex_Line	SeperatorOthers
 			{}
