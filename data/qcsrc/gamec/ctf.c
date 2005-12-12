@@ -223,17 +223,17 @@ void() FlagTouch =
 		else if (t < flagcaptimerecord)
 		{
 			if (other.flagcarried.team == 5)
-				bprint(other.netname, "^7 captured the RED flag in ", ftos(t), ", breaking the previous record of", ftos(flagcaptimerecord), " seconds\n");
+				bprint(other.netname, "^7 captured the RED flag in ", ftos(t), ", breaking the previous record of ", ftos(flagcaptimerecord), " seconds\n");
 			else
-				bprint(other.netname, "^7 captured the BLUE flag in ", ftos(t), ", breaking the previous record of", ftos(flagcaptimerecord), " seconds\n");
+				bprint(other.netname, "^7 captured the BLUE flag in ", ftos(t), ", breaking the previous record of ", ftos(flagcaptimerecord), " seconds\n");
 			flagcaptimerecord = t;
 		}
 		else
 		{
 			if (other.flagcarried.team == 5)
-				bprint(other.netname, "^7 captured the RED flag in ", ftos(t), ", failing to break the previous record of", ftos(flagcaptimerecord), " seconds\n");
+				bprint(other.netname, "^7 captured the RED flag in ", ftos(t), ", failing to break the previous record of ", ftos(flagcaptimerecord), " seconds\n");
 			else
-				bprint(other.netname, "^7 captured the BLUE flag in ", ftos(t), ", failing to break the previous record of", ftos(flagcaptimerecord), " seconds\n");
+				bprint(other.netname, "^7 captured the BLUE flag in ", ftos(t), ", failing to break the previous record of ", ftos(flagcaptimerecord), " seconds\n");
 		}
 		
 		other.frags = other.frags + cvar("g_ctf_flagscore_capture");//FLAGSCORE_CAPTURE;
