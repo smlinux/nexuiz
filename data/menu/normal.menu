@@ -3,7 +3,7 @@
 // Normal main menu
 Item Task_Job WelcomeSound
 {
-	target	"announcer/welcometonexuiz.wav"
+	target	"announcer/male/welcome.ogg"
 	reinit	Nex_Action_PlaySoundOnce
 }
 Item Window Normal

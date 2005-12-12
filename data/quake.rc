@@ -3,5 +3,5 @@ exec config.cfg
 exec autoexec.cfg
 stuffcmds
 startdemos
-play announcer/welcometonexuiz.wav
+play announcer/male/welcome.ogg
 
