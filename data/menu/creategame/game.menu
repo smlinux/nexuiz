@@ -35,6 +35,13 @@ Item Layout Game
 			init		Nex_Action_JumpToPage
 			target		"Panel::Runematch"
 		}
+		Derive TextButton LMS
+		{
+			normal		"Last Man Standing"
+
+			init		Nex_Action_JumpToPage
+			target		"Panel::LMS"
+		}
 		Derive TextButton GameMisc
 		{
 			normal		"Misc"
@@ -53,5 +60,6 @@ Item Layout Game
 		#include "menu/creategame/gamemodes/ctf.menu"
 		#include "menu/creategame/gamemodes/domination.menu"
 		#include "menu/creategame/gamemodes/runematch.menu"
+		#include "menu/creategame/gamemodes/lms.menu"
 	}
 }

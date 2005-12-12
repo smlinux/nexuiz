@@ -1,0 +1,54 @@
+Item Layout LMS
+{
+	direction	[Nex_DefaultVertDirection]
+	size 		'900 585'
+	origin		'600 50'
+	alignment	[AlignFirst]
+
+	Derive Nex_Option_Switch LMSMode
+	{
+		text	"Last Man Standing"
+		target	"::Data::Game::LMS::LMSMode::Switch"
+	}
+	Derive Nex_Option_EditBox LMSStartingShells
+	{
+		text	"Starting shells"
+		target	"::Data::Game::LMS::LMSStartingShells::Text"
+	}
+	Derive Nex_Option_EditBox LMSStartingNails
+	{
+		text	"Starting bullets"
+		target	"::Data::Game::LMS::LMSStartingNails::Text"
+	}
+	Derive Nex_Option_EditBox LMSStartingRockets
+	{
+		text	"Starting rockets"
+		target	"::Data::Game::LMS::LMSStartingRockets::Text"
+	}
+	Derive Nex_Option_EditBox LMSStartingCells
+	{
+		text	"Starting cells"
+		target	"::Data::Game::LMS::LMSStartingCells::Text"
+	}
+	Derive Nex_Option_Switch LMSJoin
+	{
+		text	"Join anytime"
+		target	"::Data::Game::LMS::LMSJoin::Switch"
+	}
+	Derive Nex_Option_EditBox LMSLastJoin
+	{
+		text	"Min. lives left to join"
+		target	"::Data::Game::LMS::LMSLastJoin::Text"
+	}
+
+
+
+	Derive Nex_Line	Seperator
+	{}
+	Derive TextButton Reset
+	{
+		normal	"Reset to default"
+		init	Nex_Action_ResetData
+		target	"::Data::Game::LMS"
+	}
+}

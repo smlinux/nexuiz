@@ -10,4 +10,5 @@ Item DataContainer Game
 	#include "menu/data/gamemodes/ctf.menu"
 	#include "menu/data/gamemodes/domination.menu"
 	#include "menu/data/gamemodes/runematch.menu"
+	#include "menu/data/gamemodes/lms.menu"
 }
