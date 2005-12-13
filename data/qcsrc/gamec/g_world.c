@@ -95,11 +95,6 @@ void worldspawn (void)
 	// laser for laser-guided weapons
 	precache_model ("models/laser_dot.mdl");
 
-	precache_sound ("announcer/1fragleft.wav");
-	precache_sound ("announcer/1minuteremains.wav");
-	precache_sound ("announcer/2fragsleft.wav");
-	precache_sound ("announcer/3fragsleft.wav");
-	precache_sound ("announcer/male/welcome.ogg");
 	precache_sound ("misc/armor1.wav");
 	precache_sound ("misc/armor25.wav");
 	precache_sound ("misc/armorimpact.wav");
@@ -162,7 +157,6 @@ void worldspawn (void)
 	precache_sound ("weapons/weapon_switch.ogg");
 	precache_sound ("weapons/weaponpickup.ogg");
 
-	// announcer sounds
 	//precache_sound ("announce/male/kill10.ogg");
 	//precache_sound ("announce/male/kill15.ogg");
 	//precache_sound ("announce/male/kill20.ogg");
@@ -176,21 +170,28 @@ void worldspawn (void)
 	//precache_sound ("announce/robotic/last_second_save.ogg");
 	//precache_sound ("announce/robotic/narrowly_averted.ogg");
 	//precache_sound ("minstagib/mockery.ogg");
-	
-	precache_sound ("announcer/male/aimbotting.ogg");
-	precache_sound ("announcer/male/botlike.ogg");
-	precache_sound ("announcer/male/death_incarnate.ogg");	
-	precache_sound ("announcer/male/five_frag_combo.ogg");
-	precache_sound ("announcer/male/girlfriend.ogg");
-	precache_sound ("announcer/male/looked_funny.ogg");	
-	precache_sound ("announcer/male/massacre.ogg");
-	precache_sound ("announcer/male/suck.ogg");
-	precache_sound ("announcer/male/triple_frag.ogg");	
-	precache_sound ("announcer/male/voltage.ogg");
-	precache_sound ("announcer/male/worldwide.ogg");	
-	precache_sound ("announcer/male/yoda.ogg");	
-	
 
+	// announcer sounds - male	
+	precache_sound ("announcer/male/03kills.ogg");	
+	precache_sound ("announcer/male/05kills.ogg");	
+	precache_sound ("announcer/male/10kills.ogg");	
+	precache_sound ("announcer/male/15kills.ogg");	
+	precache_sound ("announcer/male/20kills.ogg");	
+	precache_sound ("announcer/male/25kills.ogg");	
+	precache_sound ("announcer/male/30kills.ogg");	
+	precache_sound ("announcer/male/botlike.ogg");	
+	precache_sound ("announcer/male/electrobitch.ogg");	
+	precache_sound ("announcer/male/welcome.ogg");	
+	precache_sound ("announcer/male/yoda.ogg");	
+
+	// announcer sounds - robotic
+	precache_sound ("announcer/robotic/1fragleft.ogg");
+	precache_sound ("announcer/robotic/1minuteremains.ogg");
+	precache_sound ("announcer/robotic/2fragsleft.ogg");
+	precache_sound ("announcer/robotic/3fragsleft.ogg");
+	precache_sound ("announcer/robotic/lastsecond.ogg");
+	precache_sound ("announcer/robotic/narrowly.ogg");
+	
 	// plays music for the level if there is any
 	if (self.noise)
 	{
@@ -643,7 +644,7 @@ void() CheckRules_World =
 	if (!checkrules_oneminutewarning && timelimit && time > timelimit - 60)
 	{
 		checkrules_oneminutewarning = TRUE;
-		sound(world, CHAN_AUTO, "announcer/1minuteremains.wav", 1, ATTN_NONE);
+		sound(world, CHAN_AUTO, "announcer/robotic/1minuteremains.ogg", 1, ATTN_NONE);
 	}
 
 	// last man camping winning conditions
@@ -680,11 +681,11 @@ void() CheckRules_World =
 	if (checkrules_leaderfrags != checkrules_oldleaderfrags)
 	{
 		if (checkrules_leaderfrags == fraglimit - 1)
-			sound(world, CHAN_AUTO, "announcer/1fragleft.wav", 1, ATTN_NONE);
+			sound(world, CHAN_AUTO, "announcer/robotic/1fragleft.ogg", 1, ATTN_NONE);
 		else if (checkrules_leaderfrags == fraglimit - 2)
-			sound(world, CHAN_AUTO, "announcer/2fragsleft.wav", 1, ATTN_NONE);
+			sound(world, CHAN_AUTO, "announcer/robotic/2fragsleft.ogg", 1, ATTN_NONE);
 		else if (checkrules_leaderfrags == fraglimit - 3)
-			sound(world, CHAN_AUTO, "announcer/3fragsleft.wav", 1, ATTN_NONE);
+			sound(world, CHAN_AUTO, "announcer/robotic/3fragsleft.ogg", 1, ATTN_NONE);
 	}
 //	if (checkrules_leader != checkrules_oldleader)// && checkrules_leaderfrags > checkrules_oldleaderfrags)
 //		bprint("^1",checkrules_leader.netname, " has taken the lead with ", ftos(checkrules_leaderfrags), " frags\n");

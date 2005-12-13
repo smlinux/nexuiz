@@ -137,37 +137,37 @@ void Obituary (entity attacker, entity targ, float deathtype)
 			if (attacker.killcount == 3)
 			{
 				bprint (attacker.netname,"^7 made a ^1TRIPLE FRAG\n");
-				stuffcmd(attacker, "play2 announcer/male/triple_frag.ogg\n");
+				stuffcmd(attacker, "play2 announcer/male/03kills.ogg\n");
 			}
 			else if (attacker.killcount == 5)
 			{
 				bprint (attacker.netname,"^7 made a ^1FIVE FRAG COMBO\n");
-				stuffcmd(attacker, "play2 announcer/male/five_frag_combo.ogg\n");
+				stuffcmd(attacker, "play2 announcer/male/05kills.ogg\n");
 			}
 			else if (attacker.killcount == 10)
 			{
-				bprint (attacker.netname,"^7 is a bit annoyed\n");
-				stuffcmd(attacker, "play2 announcer/male/girlfriend.ogg\n");
+				bprint (attacker.netname,"^7 is on a ^1RAGE\n");
+				stuffcmd(attacker, "play2 announcer/male/10kills.ogg\n");
 			}
 			else if (attacker.killcount == 15)
 			{
-				bprint (attacker.netname,"^7 is maybe a terrorist!\n");
-				stuffcmd(attacker, "play2 announcer/male/worldwide.ogg\n");
+				bprint (attacker.netname,"^7 has done a ^1MASSACRE!\n");
+				stuffcmd(attacker, "play2 announcer/male/15kills.ogg\n");
 			}
 			else if (attacker.killcount == 20)
 			{
-				bprint (attacker.netname,"^7 has done a massacre!\n");
-				stuffcmd(attacker, "play2 announcer/male/massacre.ogg\n");
+				bprint (attacker.netname,"^7 is ^1UNHUMAN!\n");
+				stuffcmd(attacker, "play2 announcer/male/20kills.ogg\n");
 			}
 			else if (attacker.killcount == 25)
 			{
-				bprint (attacker.netname,"^7 is a death incarnation!\n");
-				stuffcmd(attacker, "play2 announcer/male/death_incarnate.ogg\n");
+				bprint (attacker.netname,"^7 is a ^1DEATH INCARNATION!\n");
+				stuffcmd(attacker, "play2 announcer/male/25kills.ogg\n");
 			}
 			else if (attacker.killcount == 30)
 			{
-				bprint (attacker.netname,"^7 is maybe a aimbotter?!\n");
-				stuffcmd(attacker, "play2 announcer/male/aimbotting.ogg\n");
+				bprint (attacker.netname,"^7 is maybe a ^1AIMBOTTER?!\n");
+				stuffcmd(attacker, "play2 announcer/male/30kills.ogg\n");
 			}
 		}
 		else
@@ -189,10 +189,7 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				bprint ("^1",s, "^1 died\n");
 			GiveFrags(targ, targ, -1);
 			if(targ.frags == -5) {
-				stuffcmd(targ, "play2 announcer/male/looked_funny.ogg\n");
-			}
-			else if(targ.frags == -10) {
-				stuffcmd(targ, "play2 announcer/male/suck.ogg\n");
+				stuffcmd(targ, "play2 announcer/male/botlike.ogg\n");
 			} 
 			
 			//targ.frags = targ.frags - 1;

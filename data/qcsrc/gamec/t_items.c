@@ -45,9 +45,9 @@ void Item_Touch (void)
 			// play some cool sounds ;)
 			centerprint(other, "\n");
 			if(other.health <= 5)
-				stuffcmd(other, "play2 announce/robotic/last_second_save.ogg\n");
+				stuffcmd(other, "play2 announcer/robotic/lastsecond.ogg\n");
 			else if(other.health < 50)
-				stuffcmd(other, "play2 announce/robotic/narrowly_averted.ogg\n");
+				stuffcmd(other, "play2 announcer/robotic/narrowly.ogg\n");
 			else if(self.items == IT_CELLS)
 				stuffcmd(other, "play2 announce/robotic/ammo.ogg\n");
 			
