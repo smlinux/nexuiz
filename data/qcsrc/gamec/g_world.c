@@ -240,6 +240,10 @@ void worldspawn (void)
 	// 63 testing
 	lightstyle(63, "a");
 
+	player_count = 0;
+	lms_dead_count = 0;
+	lms_lowest_lives = 0;
+
 	InitGameplayMode();
 	//if (cvar("g_domination"))
 	//	dom_init();
@@ -563,6 +567,7 @@ void() NextLevel =
 		*/
 		other = find (other, classname, "player");
 	}
+
 	WriteByte (MSG_ALL, SVC_INTERMISSION);
 };
 
@@ -631,7 +636,7 @@ void() CheckRules_World =
 
 	if (gameover)	// someone else quit the game already
 		return;
-
+bprint("====  ", ftos(bot_number), "\n");
 	timelimit = cvar("timelimit") * 60;
 	fraglimit = cvar("fraglimit");
 
@@ -652,8 +657,8 @@ void() CheckRules_World =
 	{
 		// goto next map if only one player is alive or 
 		// if there is only one player as spectator (could happen with g_lms_join_anytime 1)
-		if((player_count > 1 && (player_count - lms_dead_count) <= 1) || 
-		  (player_count == 1 && lms_dead_count == 1))
+		if(((player_count + bot_number) > 1 && ((player_count + bot_number) - lms_dead_count) <= 1) || 
+		  ((player_count + bot_number) == 1 && lms_dead_count == 1))
 			NextLevel ();
 		return;
 	}

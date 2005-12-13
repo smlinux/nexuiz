@@ -9,18 +9,18 @@ gamec/extensions.h
 
 gamec/miscfunctions.c
 
-gamec/mauvebot.c
-
 gamec/g_subs.c
 
 gamec/runematch.c
 
-gamec/cl_physics.c
 
 gamec/g_violence.c
 gamec/g_damage.c
 
 gamec/teamplay.c
+
+gamec/mauvebot.c
+gamec/cl_physics.c
 
 gamec/g_world.c
 gamec/g_decors.c

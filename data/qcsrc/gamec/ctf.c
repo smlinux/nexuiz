@@ -463,7 +463,7 @@ void() item_flag_team2 =
 
 	self.team = 14; // color 13 team (blue)
 	self.items = IT_KEY1; // silver key (bluish enough)
-	self.skin = 1;
+	self.skin = 0;
 	if (!self.model)
 		self.model = "models/ctf/flag_blue.md3";
 	if (!self.noise)

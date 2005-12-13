@@ -25,8 +25,8 @@ string(float r) BotName =
 	if (r == 1)
 	{
 		self.playermodel = "models/player/visitant.zym";
-		self.playerskin = "0";
-		return "Visitant";
+		self.playerskin = "1";
+		return "Fricka";
 	}
 	else if (r == 2)
 	{
@@ -84,101 +84,46 @@ string(float r) BotName =
 	}
 	else if (r == 11)
 	{
-		self.playermodel = "models/player/jeandarc.zym";
-		self.playerskin = "0";
-		return "Jeandarc";
-	}
-	else if (r == 12)
-	{
 		self.playermodel = "models/player/lycanthrope.zym";
 		self.playerskin = "0";
 		return "Lycanthrope";
 	}
-	else if (r == 13)
+	else if (r == 12)
 	{
 		self.playermodel = "models/player/pyria.zym";
 		self.playerskin = "0";
 		return "Pyria";
 	}
-	else if (r == 14)
+	else if (r == 13)
 	{
 		self.playermodel = "models/player/shock.zym";
 		self.playerskin = "0";
 		return "Shock";
 	}
-	else if (r == 15)
-	{
-		self.playermodel = "models/player/marine.zym";
-		self.playerskin = "1";
-		return "Private";
-	}
-	else if (r == 16)
-	{
-		self.playermodel = "models/player/nexus.zym";
-		self.playerskin = "1";
-		return "Mulder";
-	}
-	else if (r == 17)
-	{
-		self.playermodel = "models/player/skadi.zym";
-		self.playerskin = "1";
-		return "Elite";
-	}
-	else if (r == 18)
+	else if (r == 14)
 	{
 		self.playermodel = "models/player/lurk.zym";
 		self.playerskin = "1";
 		return "Reptile";
 	}
-	else if (r == 19)
+	else if (r == 15)
 	{
 		self.playermodel = "models/player/crash.zym";
-		self.playerskin = "2";
-		return "mechanical";
-	}
-	else if (r == 20)
-	{
-		self.playermodel = "models/player/crash.zym";
-		self.playerskin = "1";
+		self.playerskin = "0";
 		return "Quark";
 	}
-	else if (r == 21)
+	else if (r == 16)
 	{
 		self.playermodel = "models/player/insurrectionist.zym";
 		self.playerskin = "1";
 		return "Anarchist";
 	}
-	else if (r == 22)
+	else if (r == 17)
 	{
-		self.playermodel = "models/player/jeandarc.zym";
+		self.playermodel = "models/player/carni.zym";
 		self.playerskin = "1";
-		return "Heroine";
+		return "Armored Carni";
 	}
-	else if (r == 23)
-	{
-		self.playermodel = "models/player/lycanthrope.zym";
-		self.playerskin = "1";
-		return "Wolf";
-	}
-	else if (r == 24)
-	{
-		self.playermodel = "models/player/pyria.zym";
-		self.playerskin = "1";
-		return "Soldier";
-	}
-	else if (r == 25)
-	{
-		self.playermodel = "models/player/shock.zym";
-		self.playerskin = "1";
-		return "Rebel";
-	}
-	else
-	{
-		self.playermodel = "models/player/crash.zym";
-		self.playerskin = "0";
-		return "Crash";
-	}
-
 };
 
 string () PickARandomName =
@@ -195,7 +140,7 @@ string () PickARandomName =
 		t = find(t, classname, "player");
 	}
 
-	if (y > 25)
+	if (y > 17)
 	{
 		self.playermodel = "models/player/marine.zym";
 		self.playerskin = "0";
@@ -205,7 +150,7 @@ string () PickARandomName =
 	y = TRUE;
 	while(y)
 	{
-		test = ceil(random() * 25);
+		test = ceil(random() * 17);
 		h = BotName(test);
 		t = find(world, netname, h);
 		if (t == world)
@@ -231,22 +176,21 @@ void() add_MauveBot =
 		self = oldself;
 		return;
 	}
-	
-	flo = floor(random() * 5);
-	if (flo == 0)
-		self.clientcolors = 0;
-	else if (flo == 1)
-		self.clientcolors = 3;
-	else if (flo == 2)
-		self.clientcolors = 4;
-	else if (flo == 3)
-		self.clientcolors = 12;
-	else if (flo == 4)
-		self.clientcolors = 13;
-	self.clientcolors = self.clientcolors + self.clientcolors * 16;
+
+	if(teamplay)
+	{
+		// keep teams balanced
+		JoinBestTeam(self, 0);
+	}
+	else
+	{
+		// MORE COLORS!!!!! :P
+		flo = floor(random() * 15);
+		self.clientcolors = flo + flo * 16;
+	}
 
 	self.netname = PickARandomName();
-
+ 
 	ClientConnect();
 	self.classname = "player";
 	PutClientInServer();
@@ -277,9 +221,8 @@ void() remove_MauveBot =
 			if (flo == i)
 			{
 				dropclient(ent);
-				// decrease player count for lms
-				player_count -= 1;
-				// bot was dead, so decrease dead count too
+
+				// bot was dead, so decrease dead count
 				if(cvar("g_lms") && self.frags < 1)
 					lms_dead_count -= 1;
 				if (bot_number > 0)

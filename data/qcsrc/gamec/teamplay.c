@@ -1,6 +1,6 @@
 float COLOR_TEAM1	= 5;  // red
 float COLOR_TEAM2	= 14; // blue
-float COLOR_TEAM3	= 10;  // pink
+float COLOR_TEAM3	= 10; // pink
 float COLOR_TEAM4	= 13; // yellow
 
 
@@ -20,7 +20,7 @@ float cb1, cb2, cb3, cb4;
 
 float g_domination, g_ctf, g_tdm;
 
-float	audit_teams_time;
+float audit_teams_time;
 
 
 string TeamName(float t)
@@ -351,7 +351,7 @@ void SetPlayerTeam(entity pl, float t, float s, float noprint)
 	}
 	
 	// kill player when changing teams
-	if(teams_matter && self.classname == "player" && self.deadflag == DEAD_NO)
+	if(teams_matter && self.classname == "player" && self.deadflag == DEAD_NO && (color + 1) != self.team)
 		Damage(self, self, self, 100000, DEATH_KILL, self.origin, '0 0 0');
 }
 

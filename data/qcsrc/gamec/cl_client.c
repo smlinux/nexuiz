@@ -229,6 +229,21 @@ Called when a client spawns in the server
 */
 void PutClientInServer (void)
 {	
+	if(clienttype(self) ==  CLIENTTYPE_BOT)
+	{
+		if(cvar("g_lms"))
+		{
+			if(self.frags < 0)
+			{
+				self.classname = "player";
+			}
+		}
+		else
+		{
+			self.classname = "player";
+		}
+	}
+	
 	// player is dead and becomes observer
 	if(cvar("g_lms") && self.frags < 1)
 		self.classname = "observer";
@@ -540,7 +555,9 @@ void ClientConnect (void)
 			self.frags = lms_lowest_lives;
 		}
 	}
-	player_count += 1;
+
+	if(clienttype(self) !=  CLIENTTYPE_BOT)
+		player_count += 1;
 }
 
 /*
@@ -563,7 +580,8 @@ void ClientDisconnect (void)
 	}
 	DropAllRunes(self);
 	// decrease player count for lms
-	player_count -= 1;
+	if(clienttype(self) !=  CLIENTTYPE_BOT)
+		player_count -= 1;
 	// player was dead, decrease dead count
 	if(cvar("g_lms") && self.frags < 1)
 		lms_dead_count -= 1;

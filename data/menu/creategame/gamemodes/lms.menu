@@ -5,11 +5,6 @@ Item Layout LMS
 	origin		'600 50'
 	alignment	[AlignFirst]
 
-	Derive Nex_Option_Switch LMSMode
-	{
-		text	"Last Man Standing"
-		target	"::Data::Game::LMS::LMSMode::Switch"
-	}
 	Derive Nex_Option_EditBox LMSStartingShells
 	{
 		text	"Starting shells"
