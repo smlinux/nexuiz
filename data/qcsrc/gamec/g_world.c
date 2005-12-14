@@ -636,7 +636,7 @@ void() CheckRules_World =
 
 	if (gameover)	// someone else quit the game already
 		return;
-bprint("====  ", ftos(bot_number), "\n");
+
 	timelimit = cvar("timelimit") * 60;
 	fraglimit = cvar("fraglimit");
 
