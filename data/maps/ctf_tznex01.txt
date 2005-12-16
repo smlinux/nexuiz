@@ -1,4 +1,4 @@
-The Blody Tower (tznex01)
+The Bloody Tower (ctf_tznex01)
 maps/tznex01.jpg
 
 Close quartes map, fast 
