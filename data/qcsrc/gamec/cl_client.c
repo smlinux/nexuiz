@@ -536,6 +536,12 @@ void ClientConnect (void)
 	// get version info from player
 	stuffcmd(self, "cmd clientversion $g_nexuizversion_major\n");
 
+	// set cvar for team scoreboard
+	if(teams_matter)
+		stuffcmd(self, "set teamplay 1\n");
+	else
+		stuffcmd(self, "set teamplay 0\n");
+
 	if(cvar("g_lms"))
 	{
 		self.frags = cvar("fraglimit");

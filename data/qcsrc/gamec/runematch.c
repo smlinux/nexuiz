@@ -65,30 +65,30 @@ string RuneName(float r)
 
 vector RuneColormod(float r)
 {
-	vector color;
+	vector _color;
 	if(r == RUNE_STRENGTH)
-		color = '255 0 0';
+		_color = '255 0 0';
 	if(r == RUNE_DEFENSE)
-		color = '0 0 255';//'0 102 255';//
+		_color = '0 0 255';//'0 102 255';//
 	if(r == RUNE_REGEN)
-		color = '0 204 0';//'0 255 0';
+		_color = '0 204 0';//'0 255 0';
 	if(r == RUNE_SPEED)
-		color = 0.35*'185 185 0';//255 230 0';//'255 255 0';
+		_color = 0.35*'185 185 0';//255 230 0';//'255 255 0';
 	if(r == RUNE_VAMPIRE)
-		color = '64 0 128';//'108 0 217';//'128 0 255';//'179 0 204';//
+		_color = '64 0 128';//'108 0 217';//'128 0 255';//'179 0 204';//
 
 	if(r == CURSE_WEAK)
-		color = '255 0 0';
+		_color = '255 0 0';
 	if(r == CURSE_VULNER)
-		color = '0 0 255';//'0 102 255';//
+		_color = '0 0 255';//'0 102 255';//
 	if(r == CURSE_VENOM)
-		color = '0 204 0';//'0 255 0';
+		_color = '0 204 0';//'0 255 0';
 	if(r == CURSE_SLOW)
-		color = 0.5*'185 185 0';//'255 255 0';
+		_color = 0.5*'185 185 0';//'255 255 0';
 	if(r == CURSE_EMPATHY)
-		color = '179 0 204';//'128 0 255';
+		_color = '179 0 204';//'128 0 255';
 
-	return color * (1 / 255) * cvar("g_runematch_rune_color_strength");
+	return _color * (1 / 255) * cvar("g_runematch_rune_color_strength");
 }
 
 float count_rune_spawnpoints()
@@ -255,9 +255,9 @@ void rune_respawn()
 entity FindRune(entity own, string clname, float r)
 {
 	entity rune;
-	float count, c;
+	float _count, c;
 
-	c = count = 0;
+	c = _count = 0;
 	rune = world;
 
 	do
@@ -269,8 +269,8 @@ entity FindRune(entity own, string clname, float r)
 			break;
 		if(rune.owner == own)
 		{
-			count = count + 1;
-			if(count >= r)
+			_count = _count + 1;
+			if(_count >= r)
 				return rune;
 			if(r <= 1)
 				return rune;

@@ -124,6 +124,12 @@ string(float r) BotName =
 		self.playerskin = "1";
 		return "Armored Carni";
 	}
+	else
+	{
+		self.playermodel = "models/player/carni.zym";
+		self.playerskin = "0";
+		return "Carni";
+	}
 };
 
 string () PickARandomName =

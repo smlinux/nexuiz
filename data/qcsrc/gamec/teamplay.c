@@ -291,7 +291,7 @@ void PrintWelcomeMessage(entity pl)
 }
 
 
-void SetPlayerColors(entity pl, float color)
+void SetPlayerColors(entity pl, float _color)
 {
 	/*string s;
 	s = ftos(cl);
@@ -301,18 +301,18 @@ void SetPlayerColors(entity pl, float color)
 	pl.clientcolors = 16*cl + cl;*/
 
 	if(teamplay) {
-		setcolor(pl, 16*color + color);
+		setcolor(pl, 16*_color + _color);
 	} else {
 		float shirt;
 		shirt = pl.clientcolors & 0xF0;
-		setcolor(pl, shirt + color);
+		setcolor(pl, shirt + _color);
 
 	}
 }
 
 void SetPlayerTeam(entity pl, float t, float s, float noprint)
 {
-	float color;
+	float _color;
 
 	// remap invalid teams in dom & ctf
 	if(cvar("g_ctf") && t == 3)
@@ -333,26 +333,25 @@ void SetPlayerTeam(entity pl, float t, float s, float noprint)
 	}
 		
 	if(t == 4)
-		color = COLOR_TEAM4 - 1;
+		_color = COLOR_TEAM4 - 1;
 	else if(t == 3)
-		color = COLOR_TEAM3 - 1;
+		_color = COLOR_TEAM3 - 1;
 	else if(t == 2)
-		color = COLOR_TEAM2 - 1;
+		_color = COLOR_TEAM2 - 1;
 	else
-		color = COLOR_TEAM1 - 1;
+		_color = COLOR_TEAM1 - 1;
 
+	// kill player when changing teams
+	if(teams_matter && pl.classname == "player" && pl.deadflag == DEAD_NO && pl.team != (_color + 1))
+		Damage(pl, pl, pl, 100000, DEATH_KILL, pl.origin, '0 0 0');
 
-	SetPlayerColors(pl,color);
+	SetPlayerColors(pl,_color);
 
 	if(!noprint && t != s)
 	{
 		//bprint(strcat(pl.netname, " has changed to ", TeamNoName(t), "\n"));
 		bprint(strcat(pl.netname, "^7 has changed from ", TeamNoName(s), " to ", TeamNoName(t), "\n"));
 	}
-	
-	// kill player when changing teams
-	if(teams_matter && self.classname == "player" && self.deadflag == DEAD_NO && (color + 1) != self.team)
-		Damage(self, self, self, 100000, DEATH_KILL, self.origin, '0 0 0');
 }
 
 
@@ -409,19 +408,19 @@ void CheckAllowedTeams ()
 		{
 			if(head.team == COLOR_TEAM1)
 			{
-					c1 = 0;
+				c1 = 0;
 			}
 			if(head.team == COLOR_TEAM2)
 			{
-					c2 = 0;
+				c2 = 0;
 			}
 			if(head.team == COLOR_TEAM3)
 			{
-					c3 = 0;
+				c3 = 0;
 			}
 			if(head.team == COLOR_TEAM4)
 			{
-					c4 = 0;
+				c4 = 0;
 			}
 		}
 		head = find(head, classname, teament_name);
@@ -642,23 +641,25 @@ float JoinBestTeam(entity pl, float only_return_best)
 			SetPlayerColors(pl, COLOR_TEAM4 - 1);
 		}
 		else
+		{
 			error("smallest team: invalid team\n");
+		}
 	}
 
 	return smallest;
 }
 
 
-void SV_ChangeTeam(float color)
+void SV_ChangeTeam(float _color)
 {
 	float scolor, dcolor, steam, dteam, dbotcount, scount, dcount;
 
 	scolor = self.clientcolors & 0x0F;
-	dcolor = color & 0x0F;
+	dcolor = _color & 0x0F;
 
 	// store shirt color in .clientcolors
 	// this will get overwritten in teamplay modes later
-	setcolor(self, color & 0xF0 + scolor);
+	setcolor(self, _color & 0xF0 + scolor);
 
 	if(scolor == COLOR_TEAM1 - 1)
 		steam = 1;
@@ -753,7 +754,8 @@ void SV_ChangeTeam(float color)
 	}
 
 	// reduce frags during a team change
-	self.frags = floor(self.frags * (cvar("g_changeteam_fragtransfer") / 100));
+	if(teamplay && self.classname == "player" && self.team != (dcolor + 1))
+		self.frags = floor(self.frags * (cvar("g_changeteam_fragtransfer") / 100));
 
 //	bprint(strcat("allow change teams from ", ftos(steam), " to ", ftos(dteam), "\n"));
 
