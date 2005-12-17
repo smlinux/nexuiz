@@ -95,7 +95,7 @@ Item Window Player
 		}
 		Derive Nex_Composition TeamColor
 		{
-			text	"Team color"
+			text	"Pants color"
 			target	"::Data::Player::Color::TeamColor::TextSwitch"
 
 			Derive Nex_Automation_Option_Slider Automation
