@@ -186,16 +186,23 @@ float alreadychangedlevel;
 .string versionmessage;
 
 // stahl's voting
-string votecalled;
+float votecalled;
+string votecalledvote;
+float votecalledmaster;
 entity votecaller;
+.float vote_master;
 .float vote_finished;
 .float vote_next;
 .float vote_vote;
+void VoteThink();
+string VoteParse();
 float VoteAllowed(string vote);
-void VoteCount();
-void VoteDo(entity voter);
-void VoteTimeout(entity voter);
 void VoteReset();
+void VoteAccept();
+void VoteReject();
+void VoteTimeout();
+void VoteStop(entity stopper);
+void VoteCount();
 
 // Wazat's grappling hook
 .entity		hook;

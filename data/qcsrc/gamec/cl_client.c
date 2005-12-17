@@ -1088,12 +1088,6 @@ void PlayerPreThink (void)
 		else
 			self.flags = self.flags | FL_JUMPRELEASED;
 
-		if (self.vote_finished > 0 // this player has called a vote
-		    && time > self.vote_finished) // time is up
-		{
-			VoteCount();
-		}
-
 		player_powerups();
 		player_regen();
 		player_anim();
@@ -1171,7 +1165,7 @@ void PlayerPreThink (void)
 		centerprint(self, strcat("spectating ", self.enemy.netname, "\n\n\n^7press attack for next player\npress attack2 for free fly mode"));
 		
 	}
-	
+	VoteThink();
 }
 
 /*
