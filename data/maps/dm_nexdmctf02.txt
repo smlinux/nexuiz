@@ -1,7 +1,7 @@
-Running Man CTF (dm_nexctf02)
+Running Man (dm_nexctf02)
 maps/nexctf02
 
-Medium-sized CTF-Map
+Medium-sized Map
 
 Players: 4-10
 
