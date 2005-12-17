@@ -1,7 +1,7 @@
 The Bloody Tower (ctf_tznex01)
 maps/tznex01.jpg
 
-Close quartes map, fast 
+Close quarters map, fast 
 and fraggy };P
 
 Players: 2-6
