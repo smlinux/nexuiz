@@ -1,7 +1,7 @@
 The Slime Pit  (rune_nexdm03)
 maps/nexdm03
 
-An industrial arena
+An industrial arena.
 
 Players: 3-5
 
@@ -9,8 +9,7 @@ Weapons: Machine Gun, Mortar,
 Electro, Nex, Hagar,
 Rocket Launcher
 
-Gametype:
-Runematch
+Gametype: Runematch
 
 Author:
 Mattrew Rye

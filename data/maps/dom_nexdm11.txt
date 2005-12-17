@@ -12,9 +12,7 @@ Hagar, Rocket Launcher
 
 Powerups: Strength
 
-Gametype:
-Domination
+Gametype: Domination
 
 Author:
 "HReaper"
-

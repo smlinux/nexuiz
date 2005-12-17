@@ -1,7 +1,7 @@
 Glow Arena (tdm_nexdm08)
 maps/nexdm08
 
-A small arena map
+A small arena map.
 
 Players: 2-5
 
@@ -9,8 +9,7 @@ Weapons: Machine Gun, Mortar,
 Electro, Crylink,
 Rocket Launcher
 
-Gametype:
-Team Deathmatch
+Gametype: Team Deathmatch
 
 Author:
 Garth Hendy

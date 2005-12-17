@@ -1,17 +1,15 @@
 Downer  (tdm_nexdm05)
 maps/nexdm05
 
-A multilevel map
+A multilevel map.
 
 Players: 3-4
 
-Weapons: Electro,
-Rocket Launcher
+Weapons: Electro, Mortar,
+Rocket Launcher, Machine Gun
 
-Gametype:
-Team Deathmatch
+Gametype: Team Deathmatch
 
 Author:
 Eric Sambach
 Maik Merten
-

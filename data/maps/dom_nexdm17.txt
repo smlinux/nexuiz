@@ -1,20 +1,19 @@
 Diesel Power (dom_nexdm17)
 maps/nexdm17
 
-A large multiple arena map
+A large multiple arena map.
 
 Players: 9-12
 
 Teams: 3
 
-Weapons: Mortar,Electro, 
-Crylink, Hagar,
+Weapons: Mortar, Electro, 
+Crylink, Hagar, Nexgun,
 Rocket Launcher
 
 Powerups: Strength
 
-Gametype:
-Domination
+Gametype: Domination
 
 Author:
 Paul Evers

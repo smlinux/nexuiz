@@ -1,19 +1,18 @@
-StormKeep  (dm_nexdm10)
+StormKeep (dm_nexdm10)
 maps/nexdm10
 
 A large slow paced
-medieval complex
+medieval complex.
 
 Players: 4-6
 
 Weapons: Mortar, Electro,
-Crylink, Nex, Hagar,
+Crylink, Nexgun, Hagar,
 Rocket Launcher
 
 Powerups: Strength
 
-Recommended Gametypes:
-Deathmatch
+Gametype: Deathmatch
 
 Author:
 William Libert

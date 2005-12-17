@@ -2,18 +2,15 @@ Running Man (dm_nexdm18)
 maps/nexdm18
 
 Small DM-Level, best suited 
-for 2 players
+for 2 players.
 
 Players: 2-4
 
-Weapons:Machinegun, Mortar, Nex, 
-Rocket Launcher,Electro, 
-Crylink, Hagar
+Weapons: Mortar, Nexgun, 
+Rocket Launcher, Electro, 
+Crylink, Hagar, Machine Gun
 
-Powerups: Mega Health
+Gametype: Deathmatch
 
-Gametype:
-Deathmatch
-	
 Author:
 Paul Evers

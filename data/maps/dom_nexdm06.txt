@@ -1,19 +1,18 @@
 Starship (dom_nexdm06)
 maps/nexdm06
 
-A sprawling complex
+A sprawling complex.
 
 Players: 4-6
 
 Teams: 2
 
 Weapons: Machine Gun, Electro,
-Crylink, Nex, Rocket Launcher
+Crylink, Nexgun, Rocket Launcher
 
 Powerups: Strength
 
-Gametype:
-Domination
+Gametype: Domination
 
 Author:
 Chris Matz

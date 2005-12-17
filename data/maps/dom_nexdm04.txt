@@ -1,19 +1,18 @@
 Skyway (dom_nexdm04)
 maps/nexdm04
 
-Vertical arena
+Vertical arena.
 
 Players: 4-6
 
 Teams: 2
 
 Weapons: Machine Gun, Mortar,
-Electro, Nex, Rocket Launcher
+Electro, Nexgun, Rocket Launcher
 
 Powerups: Strength
 
-Gametype:
-Domination
+Gametype: Domination
 
 Author:
 Mattrew Rye

@@ -1,15 +1,14 @@
 Step by Step (tdm_nexdm14)
 maps/nexdm14
 
-Open arena map
+Open arena map.
 
 Players: 2-4
 
-Weapons: Shotgun, Electro, Nex,Rocket Launcher
+Weapons: Electro, Machine Gun,
+Crylink, Rocket Launcher
 
-Gametype:
-Team Deathmatch
+Gametype: Team Deathmatch
 
 Author:
 "HReaper"
-

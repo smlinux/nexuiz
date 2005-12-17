@@ -1,7 +1,7 @@
 The Slime Pit  (dom_nexdm03)
 maps/nexdm03
 
-An industrial arena
+An industrial arena.
 
 Players: 4-6
 
@@ -11,8 +11,7 @@ Weapons: Machine Gun, Mortar,
 Electro, Nex, Hagar,
 Rocket Launcher
 
-Gametype:
-Domination
+Gametype: Domination
 
 Author:
 Mattrew Rye

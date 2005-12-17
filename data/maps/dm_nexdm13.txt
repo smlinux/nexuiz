@@ -5,12 +5,12 @@ Small space map
 
 Players: 2-4
 
-Weapons: Electro, Nex, 
+Weapons: Electro, Nexgun,
 Hagar
 
-Recommended Gametypes:
-Deathmatch
-Instagib
+Powerups: Strength
+
+Gametype: Deathmatch
 
 Author:
 "HReaper"

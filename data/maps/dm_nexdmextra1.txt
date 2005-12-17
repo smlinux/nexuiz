@@ -1,7 +1,7 @@
 Q1Dm6 Remake (dm_nexdmextra1)
 maps/nexdmextra1
 
-The Dark Zone returns
+The Dark Zone returns.
 
 Players: 2-6
 
@@ -9,8 +9,7 @@ Weapons: Machine Gun, Mortar,
 Electro, Crylink, Hagar,
 Rocket Launcher
 
-Recommended Gametypes:
-Deathmatch
+Gametype: Deathmatch
 
 Author:
 Maik Merten

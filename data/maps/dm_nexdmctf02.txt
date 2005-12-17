@@ -1,19 +1,17 @@
-Running Man (dm_nexctf02)
+Running Man (dm_nexdmctf02)
 maps/nexctf02
 
 Medium-sized Map
 
 Players: 4-10
 
-Weapons:Machinegun, Mortar, Nex, 
-        Rocket Launcher,Electro,
-        Crylink, Hagar
+Weapons: Machine Gun, Mortar,
+Nexgun, Rocket Launcher,
+Electro, Crylink, Hagar
 
-Powerups: Mega Health, Speed, 
-          Strength
+Powerups: Speed, Strength
 
-Gametype:
-Deathmatch
-	
+Gametype: Deathmatch
+
 Author:
 Paul Evers

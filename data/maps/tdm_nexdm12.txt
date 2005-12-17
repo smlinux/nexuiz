@@ -1,15 +1,14 @@
 Evil Space  (tdm_nexdm12)
 maps/nexdm12
 
-A dark space map
+A dark space map.
 
 Players: 2-4
 
 Weapons: Machine Gun, Electro,
-Nex, Rocket Launcher
+Nexgun, Rocket Launcher
 
-Gametype:
-Team Deathmatch
+Gametype: Team Deathmatch
 
 Author:
 Yves Allaire

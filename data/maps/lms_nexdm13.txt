@@ -5,13 +5,7 @@ Small space map
 
 Players: 2-4
 
-Weapons: Electro, Nex, 
-Hagar
-
-Recommended Gametypes:
-Deathmatch
-Instagib
-Last Man Standing
+Gametype: Last Man Standing
 
 Author:
 "HReaper"

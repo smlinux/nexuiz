@@ -1,17 +1,11 @@
 Evil Space  (lms_nexdm12)
 maps/nexdm12
 
-A dark space map
+A dark space map.
 
 Players: 2-4
 
-Weapons: Machine Gun, Electro,
-Nex, Rocket Launcher
-
-Recommended Gametypes:
-Instagib
-Deathmatch
-Last Man Standing
+Gametype: Last Man Standing
 
 Author:
 Yves Allaire

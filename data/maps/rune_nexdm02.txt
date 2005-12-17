@@ -1,7 +1,7 @@
 Bleach (rune_nexdm02)
 maps/nexdm02
 
-A large multiple arena map
+A large multiple arena map.
 
 Players: 6-12
 
@@ -11,8 +11,7 @@ Rocket Launcher
 
 Powerups: Strength
 
-Gametype:
-Runematch
+Gametype: Runematch
 
 Author:
 Paul Evers

@@ -1,7 +1,7 @@
 Bleach (dm_nexdm02)
 maps/nexdm02
 
-A large multiple arena map
+A large multiple arena map.
 
 Players: 6-12
 
@@ -11,10 +11,7 @@ Rocket Launcher
 
 Powerups: Strength
 
-Recommended Gametypes:
-Deathmatch
-Rocket arena
-Instagib
+Gametype: Deathmatch
 
 Author:
 Paul Evers

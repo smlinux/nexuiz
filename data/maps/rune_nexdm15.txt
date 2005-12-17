@@ -6,15 +6,14 @@ after an offshore oil rig.
 
 Players: 3-6
 
-Weapons: Shotgun, Uzi, Electro,Nex, Hagar
+Weapons: Machine Gun, Electro,
+Nexgun, Hagar, Mortar
 
 Powerups: Invincibility,
 Strength
 
-Gametype:
-Runematch
+Gametype: Runematch
 
 Author:
 Dustin Geeraert
 Garth Hendy
-

@@ -2,18 +2,17 @@ Aneurysm (dm_nexdm09)
 maps/nexdm09
 
 A multiple arena map with
-complex flow
+complex flow.
 
 Players: 3-6
 
-Weapons: Shotgun, Mortar,
-Crylink, Nex, Rocket Launcher
+Weapons: Mortar, Crylink,
+Nexgun, Rocket Launcher,
+Electro, Machine Gun
 
 Powerups: Strength
 
-Recommended Gametypes:
-Deathmatch
-Rocket arena
+Gametype: Deathmatch
 
 Author:
 Paul Evers

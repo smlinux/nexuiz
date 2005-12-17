@@ -3,15 +3,14 @@ maps/nexdm13
 
 Small space map
 
-Players: 2-6
+Players: 4-6
 
-Teams: 2
-
-Weapons: Electro, Nex, 
+Weapons: Electro, Nexgun,
 Hagar
 
-Gametype:
-Domination
+Powerups: Strength
+
+Gametype: Domination
 
 Author:
 "HReaper"

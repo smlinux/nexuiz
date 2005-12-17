@@ -10,9 +10,7 @@ Hagar, Rocket Launcher
 
 Powerups: Strength
 
-Gametype:
-Runematch
+Gametype: Runematch
 
 Author:
 "HReaper"
-

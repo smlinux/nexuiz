@@ -6,13 +6,10 @@ and fraggy };P
 
 Players: 2-6
 
-Weapons: Uzi, Mortar
-Hagar.
+Weapons: Machine Gun, Mortar,
+Hagar
 
-Powerups: none
-
-Gametype:
-Capture The Flag
+Gametype: Capture The Flag
 
 Author:
 Jakob MG (tZork)

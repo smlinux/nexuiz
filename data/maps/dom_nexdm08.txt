@@ -1,7 +1,7 @@
 Glow Arena (dom_nexdm08)
 maps/nexdm08
 
-A small arena map
+A small arena map.
 
 Players: 2-4
 
@@ -11,8 +11,7 @@ Weapons: Machine Gun, Mortar,
 Electro, Crylink,
 Rocket Launcher
 
-Gametype:
-Domination
+Gametype: Domination
 
 Author:
 Garth Hendy

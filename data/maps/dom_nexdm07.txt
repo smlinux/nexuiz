@@ -1,7 +1,7 @@
 DSI (dom_nexdm07)
 maps/nexdm07
 
-Sci Fi Arena
+Sci-Fi Arena.
 
 Players: 4-6
 
@@ -11,8 +11,7 @@ Weapons: Machine Gun, Mortar,
 Electro, Hagar, Crylink,
 Rocket Launcher
 
-Gametype:
-Domination
+Gametype: Domination
 
 Author:
 Yves Allaire

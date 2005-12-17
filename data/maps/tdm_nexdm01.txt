@@ -2,15 +2,14 @@ Basement (tdm_nexdm01)
 maps/nexdm01
 
 A small map designed for fast
-constant gameplay
+constant gameplay.
 
 Players: 2-4
 
 Weapons: Machine Gun, Mortar,
 Electro, Crylink, Hagar
 
-Gametype:
-Team Deathmatch
+Gametype: Team Deathmatch
 
 Author:
 Garth Hendy

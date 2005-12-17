@@ -8,15 +8,14 @@ Players: 6-9
 
 Teams: 3
 
-Weapons: Shotgun, Uzi, Electro,Nex, Hagar
+Weapons: Machine Gun, Electro,
+Nexgun, Hagar, Mortar
 
 Powerups: Invincibility,
 Strength
 
-Gametype:
-Domination
+Gametype: Domination
 
 Author:
 Dustin Geeraert
 Garth Hendy
-

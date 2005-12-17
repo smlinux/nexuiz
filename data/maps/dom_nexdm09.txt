@@ -2,19 +2,19 @@ Aneurysm (dom_nexdm09)
 maps/nexdm09
 
 A multiple arena map with
-complex flow
+complex flow.
 
 Players: 3-6
 
 Teams: 3
 
-Weapons: Shotgun, Mortar,
-Crylink, Nex, Rocket Launcher
+Weapons: Mortar, Crylink,
+Nexgun, Rocket Launcher,
+Electro, Machine Gun
 
 Powerups: Strength
 
-Gametype:
-Domination
+Gametype: Domination
 
 Author:
 Paul Evers

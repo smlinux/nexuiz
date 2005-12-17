@@ -1,17 +1,16 @@
 Step by Step (dom_nexdm14)
 maps/nexdm14
 
-Open arena map
+Open arena map.
 
 Players: 4-6
 
 Teams: 2
 
-Weapons: Shotgun, Electro, Nex,Rocket Launcher
+Weapons: Electro, Machine Gun,
+Crylink, Rocket Launcher
 
-Gametype:
-Domination
+Gametype: Domination
 
 Author:
 "HReaper"
-

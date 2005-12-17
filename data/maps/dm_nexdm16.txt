@@ -1,17 +1,16 @@
 Silver City (dm_nexdm16)
 maps/nexdm16
 
-A very large very open map
+A very large very open map.
 
 Players: 4-16
 
-Weapons: Machine Gun, Mortar,
-Electro, Crylink, Hagar,
-Rocket Launcher
+Weapons: Mortar, Electro,
+Hagar, Rocket Launcher
 
-Recommended Gametypes:
-Instagib with low gravity
-Deathmatch
+Powerups: Strength
+
+Gametype: Deathmatch
 
 Author:
 Forest Hale

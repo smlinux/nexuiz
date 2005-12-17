@@ -5,11 +5,10 @@ Small space map
 
 Players: 4-6
 
-Weapons: Electro, Nex, 
+Weapons: Electro, Nexgun,
 Hagar
 
-Gametype:
-Capture the Flag
+Gametype: Capture the Flag
 
 Author:
 "HReaper"
