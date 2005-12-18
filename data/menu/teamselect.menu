@@ -67,6 +67,6 @@ Item Window TeamSelect
 		size	'186 66'
 		normal	"$gfx/tpink"
 
-		syncCmd	"cmd selectteam green; cmd join; togglemenu\n"
+		syncCmd	"cmd selectteam pink; cmd join; togglemenu\n"
 	}
 }

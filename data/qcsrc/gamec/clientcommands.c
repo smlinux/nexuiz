@@ -202,12 +202,11 @@ void SV_ParseClientCommand(string s) {
 	} else if( argv(0) == "selectteam" ) {
 		if( argv(1) == "none" ) {
 			SV_ChangeTeam( 0 );
-			PutClientInServer();
 		} else if( argv(1) == "red" ) {
 			SV_ChangeTeam( COLOR_TEAM1 - 1 );
 		} else if( argv(1) == "blue" ) {
 			SV_ChangeTeam( COLOR_TEAM2 - 1 );
-		} else if( argv(1) == "green" || argv(1) == "pink" ) {
+		} else if( argv(1) == "pink" ) {
 			SV_ChangeTeam( COLOR_TEAM3 - 1 );
 		} else if( argv(1) == "yellow" ) {
 			SV_ChangeTeam( COLOR_TEAM4 - 1 );
