@@ -1,0 +1,200 @@
+// Property of Alientrap/AK
+//
+// joingame.menu
+
+Item Window JoinGame
+{
+	Derive Picture Table3
+	{
+		picture "gfx/table3"
+		pos	'0 0'
+		size	'900 555'
+	}
+	Item Layout JoinGame
+	{
+		size		'900 650'
+		direction	'0 10'
+		alignment	[AlignCenter]
+		origin		'450 0'
+#define SList_Ping	'50 15'
+#define SList_Name	'492 15'
+#define SList_Map	'120 15'
+#define SList_Players	'60 15'
+#define SList_Mod	'120 15'
+#define SList_Direction '2 0'
+
+		Derive Nex_Composition Query
+		{
+			Derive TextButton Description
+			{
+				normal		"Query String:"
+
+				link		"##next"
+			}
+			Derive EditBox EditBox
+			{
+				size	'700 12'
+				target	"::Data::ServerList::QueryString::Text"
+
+				action	Nex_Action_ExecuteQuery
+			}
+		}
+
+		Item Layout TableDesc
+		{
+			direction	[SList_Direction]
+			flag		[FlagEmbedded]
+			size		'900 15'
+
+			DeriveTemplate Rect Theme
+			{
+				color	'0.5 0.5 0.5'
+				alpha	0.5
+				flag	[FlagEmbedded]
+			}
+			Derive Theme Ping
+			{
+				size	[SList_Ping]
+				Derive TextButton Text
+				{
+					normal		"Ping"
+
+					init 		Nex_Action_JoinGame_SortBy
+					target		"ping"
+				}
+			}
+			Derive Theme Name
+			{
+				size	[SList_Name]
+				Derive TextButton Text
+				{
+					normal		"Server Name"
+
+					init 		Nex_Action_JoinGame_SortBy
+					target		"name"
+				}
+			}
+			Derive Theme Map
+			{
+				size	[SList_Map]
+				Derive TextButton Text
+				{
+					normal		"Map Name"
+
+					init 		Nex_Action_JoinGame_SortBy
+					target		"map"
+				}
+			}
+			Derive Theme Players
+			{
+				size	[SList_Players]
+				Item Arrangement Glue
+				{
+					direction	'0.001 0 0'
+					flag		[FlagEmbedded]
+
+					Derive TextButton NumPlayers
+					{
+						normal		"NP"
+
+						init 		Nex_Action_JoinGame_SortBy
+						target		"numplayers"
+					}
+					Derive Label	Slash
+					{
+						text		"/"
+					}
+					Derive TextButton MaxPlayers
+					{
+						normal		"MP"
+
+						init 		Nex_Action_JoinGame_SortBy
+						target		"maxplayers"
+					}
+				}
+			}
+			Derive Theme Mod
+			{
+				size	[SList_Mod]
+				Derive TextButton Text
+				{
+					normal		"Mod Name"
+
+					init 		Nex_Action_JoinGame_SortBy
+					target		"mod"
+				}
+			}
+		}
+		Item Window Scroll
+		{
+			flag	[FlagEmbedded]
+			size	'900 500'
+
+			Item ScrollWindow ScrollArea
+			{
+				flag	[FlagEmbedded]
+				size 	'870 500'
+
+				Item Arrangement Slist
+				{
+					direction	'0 1 0'
+					flag		[FlagEmbedded]
+
+					DeriveTemplate Nex_HostCache_Entry Entry
+					{
+						size		'852 15'
+						action		Nex_Action_EntryConnect
+
+						DeriveTemplate Nex_HostCache_ValueField Ping
+						{
+							pos		'0 0'
+							size		[SList_Ping]
+							target		"ping"
+							alignment	[AlignRight]
+						}
+						DeriveTemplate Nex_HostCache_StringField Name
+						{
+							pos		'52 0'
+							size		[SList_Name]
+							target		"name"
+						}
+						DeriveTemplate Nex_HostCache_StringField Map
+						{
+							pos		'546 0'
+							size		[SList_Map]
+							target		"map"
+						}
+						DeriveTemplate Nex_HostCache_Players Players
+						{
+							pos		'668 0'
+							size		[SList_Players]
+							alignment	[AlignRight]
+						}
+						DeriveTemplate Nex_HostCache_StringField Mod
+						{
+							pos		'730 0'
+							size		[SList_Mod]
+							target		"mod"
+						}
+					}
+					Item Automation_Job Generator
+					{
+						action Nex_Automation_CreateEntries
+					}
+				}
+			}
+			Item VScrollBar Scroller
+			{
+				pos	'870 0'
+				size	'20 100'
+				target	"##prev"
+			}
+		}
+		Derive PictureButton Refresh
+		{
+			normal		"$gfx/m_refresh"
+
+			action 	Nex_Action_RefreshSlist
+		}
+	}
+}

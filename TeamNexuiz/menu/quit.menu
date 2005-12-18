@@ -1,0 +1,76 @@
+// Property of Alientrap
+//
+// Quit window
+Item Window QuitWnd
+{
+	pos 	'300 300'
+	size	'400 80'
+	flag	[FlagHidden]
+
+	Derive Rect Background
+	{
+		flag		[FlagSealOffMouse]
+		color		'0 0 0'
+		alpha		0.8
+		Ignore {
+			color		'0.1 0.1 0.1'
+			drawFlag 	[DrawFlagModulate]
+
+
+			Derive Rect Layer
+			{
+				color		'0.3 0.3 0.3'
+				drawFlag	[DrawFlagAdditive]
+			}
+		}
+	}
+	Item Layout Layout
+	{
+		origin		'200 0'
+		direction 	'0.0 10'
+		flag		[FlagEmbedded]
+		alignment 	[AlignCenter]
+
+		Item FloatingArea Title
+		{
+			size		'400 13'
+			target		"##up up"
+			Derive Rect Background
+			{
+				//color		'0.5 0.5 0.5'
+				color		'0.05 0.05 0.05'
+			}
+			Derive TextButton Caption
+			{
+				color		'1.0 1.0 1.0'
+				size		'400 11'
+				alignment 	[AlignCenter]
+				normal		"Quit Window"
+				link		"##up"
+			}
+		}
+		Derive Label Text
+		{
+			color		'1.0 1.0 1.0'
+			text		"Do you really want to quit?"
+		}
+		Item Arrangement Buttons
+		{
+			direction	'40 0'
+			key		Nex_Quit_Key
+
+			Derive TextButton Yes
+			{
+				color	'1.0 1.0 1.0'
+				normal	"Yes"
+				action	Nex_Quit_Yes
+			}
+			Derive TextButton No
+			{
+				color	'1.0 1.0 1.0'
+				normal	"No"
+				action	Nex_Quit_No
+			}
+		}
+	}
+}
