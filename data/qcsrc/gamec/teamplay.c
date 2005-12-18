@@ -313,25 +313,7 @@ void SetPlayerColors(entity pl, float _color)
 void SetPlayerTeam(entity pl, float t, float s, float noprint)
 {
 	float _color;
-
-	// remap invalid teams in dom & ctf
-	if(cvar("g_ctf") && t == 3)
-		t = 2;
-	else if(cvar("g_ctf") && t == 4)
-		t = 1;
-	else if(cvar("g_domination") && cvar("g_domination_default_teams") < 3)
-	{
-		if(t == 3)
-			t = 2;
-		else if(t == 4)
-			t = 1;
-	}
-	else if(cvar("g_domination") && cvar("g_domination_default_teams") < 4)
-	{
-		if(t == 4)
-			t = 1;
-	}
-		
+	
 	if(t == 4)
 		_color = COLOR_TEAM4 - 1;
 	else if(t == 3)
@@ -340,10 +322,6 @@ void SetPlayerTeam(entity pl, float t, float s, float noprint)
 		_color = COLOR_TEAM2 - 1;
 	else
 		_color = COLOR_TEAM1 - 1;
-
-	// kill player when changing teams
-	if(teams_matter && pl.classname == "player" && pl.deadflag == DEAD_NO && pl.team != (_color + 1))
-		Damage(pl, pl, pl, 100000, DEATH_KILL, pl.origin, '0 0 0');
 
 	SetPlayerColors(pl,_color);
 
@@ -678,6 +656,24 @@ void SV_ChangeTeam(float _color)
 	else if(dcolor == COLOR_TEAM4 - 1)
 		dteam = 4;
 
+	// remap invalid teams in dom & ctf
+	if(cvar("g_ctf") && dteam == 3)
+		dteam = 2;
+	else if(cvar("g_ctf") && dteam == 4)
+		dteam = 1;
+	else if(cvar("g_domination") && cvar("g_domination_default_teams") < 3)
+	{
+		if(dteam == 3)
+			dteam = 2;
+		else if(dteam == 4)
+			dteam = 1;
+	}
+	else if(cvar("g_domination") && cvar("g_domination_default_teams") < 4)
+	{
+		if(dteam == 4)
+			dteam = 1;
+	}
+	
 	// not changing teams
 	if(scolor == dcolor)
 	{
@@ -688,6 +684,16 @@ void SV_ChangeTeam(float _color)
 
 	if(cvar("teamplay"))
 	{
+		if(self.classname == "player" && steam != dteam)
+		{
+			// kill player when changing teams
+			if(self.deadflag == DEAD_NO)
+				self.event_damage(self, self, 10000, DEATH_KILL, self.origin, '0 0 0');
+		
+			// reduce frags during a team change
+			self.frags = floor(self.frags * (cvar("g_changeteam_fragtransfer") / 100));
+		}
+		
 		if(cvar("g_changeteam_banned"))
 		{
 			sprint(self, "Team changes not allowed\n");
@@ -752,10 +758,6 @@ void SV_ChangeTeam(float _color)
 			}
 		}
 	}
-
-	// reduce frags during a team change
-	if(teamplay && self.classname == "player" && self.team != (dcolor + 1))
-		self.frags = floor(self.frags * (cvar("g_changeteam_fragtransfer") / 100));
 
 //	bprint(strcat("allow change teams from ", ftos(steam), " to ", ftos(dteam), "\n"));
 
