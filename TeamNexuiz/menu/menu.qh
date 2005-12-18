@@ -1,0 +1,35 @@
+///////////////////////////////////////////////
+// Menu Header File
+///////////////////////
+// This file belongs to dpmod/darkplaces
+// AK contains all common constants, etc.
+///////////////////////////////////////////////
+// constants
+
+const float GAME_ISSERVER 	= 1;
+const float GAME_CONNECTED	= 2;
+const float GAME_DEVELOPER	= 4;
+
+const float INFINITY  = 10000000.0;
+
+// prototypes
+
+typedef float bool;
+
+// global vars
+
+//float time; 		// important for animations, etc.
+bool Menu_Active;	// is set when the menu is active
+
+// updated every time toggle is called
+float gamestatus;
+
+//#define USEFUNCTIONS
+//#define UTILALTSTRING
+
+#define AVOIDSTRZONES
+
+// get rid of __NULL__ sets again!
+
+#pragma keyword enable ifstring
+#pragma keyword enable lo

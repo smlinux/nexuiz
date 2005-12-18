@@ -1,0 +1,51 @@
+Parser documentation/.menu docs:
+==================================
+
+A token is a sequence of letters that are not whitespaces.
+If the parser expects something, it will error out if it doesnt find the expected token/type.
+
+The parser supports the following token types which refer to the keyword:
+
+Type				Keyword
+-----				-------
+ITEM				Item
+TEMPLATE			Template
+DERIVE				Derive
+DERIVETEMPLATE			DeriveTemplate
+NAMESPACE			Namespace
+IGNORE				Ignore
+DEFINE				#define
+UNDEF				#undef
+INCLUDE				#include
+BRACEOPEN			{
+BRACECLOSE			}
+BRACKETOPEN			[
+BRACKETCLOSE			]
+TOKEN				any other token
+
+You can use either the " or the ' to start a string - mind to use the same char to finish it!
+DP only supports the \n and \\ escape chars currently.
+
+Now Im going to explain the behavior of the parser after it encounters a specific token:
+
+Ignore
+
+ The parser expects a { next and reads over everything until it encounters the corresponding }.
+ Mind that corresponding means you can comment out/make it ignore bigger parts of the .menu files,
+ since it keeps the number { while parsing and only exits from the ignore loop if it has found the
+ same count of }.
+
+ Example:
+
+	Ignore {
+		blabla {
+		  { blub }
+		   { } }
+	}
+
+Item
+
+ The parser expects an item type/control name next, eg. Rect or Window and afterwards the name
+ of the item that should be defined. Next expects a { and then a number of key value pairs that
+ define the entity or one of the other keywords. You can nest everything in everything
+
