@@ -1,4 +1,4 @@
-lurk
+Lurk
 models/player/lurk
 0
 models/player/lurk.zym

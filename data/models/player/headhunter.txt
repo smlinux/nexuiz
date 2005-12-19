@@ -1,4 +1,4 @@
-headhunter
+Headhunter
 models/player/headhunter
 0
 models/player/headhunter.zym

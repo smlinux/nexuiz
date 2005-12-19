@@ -124,6 +124,12 @@ string(float r) BotName =
 		self.playerskin = "1";
 		return "Armored Carni";
 	}
+	else if (r == 18)
+	{
+		self.playermodel = "models/player/nexus.zym";
+		self.playerskin = "1";
+		return "Mulder";
+	}
 	else
 	{
 		self.playermodel = "models/player/carni.zym";
@@ -146,7 +152,7 @@ string () PickARandomName =
 		t = find(t, classname, "player");
 	}
 
-	if (y > 17)
+	if (y > 18)
 	{
 		self.playermodel = "models/player/marine.zym";
 		self.playerskin = "0";
@@ -156,7 +162,7 @@ string () PickARandomName =
 	y = TRUE;
 	while(y)
 	{
-		test = ceil(random() * 17);
+		test = ceil(random() * 18);
 		h = BotName(test);
 		t = find(world, netname, h);
 		if (t == world)
