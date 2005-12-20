@@ -133,14 +133,6 @@
 "origin" "1344 -128 -144"
 }
 {
-"classname" "item_bullets"
-"origin" "-16 -104 -8"
-}
-{
-"origin" "80 -104 -8"
-"classname" "item_bullets"
-}
-{
 "classname" "trigger_push"
 "target" "t6"
 "model" "*5"
