@@ -644,3 +644,77 @@
 "target" "t5"
 "model" "*10"
 }
+{
+"classname" "dom_team"
+"netname" "^4Blue Team^3"
+"cnt" "13"
+"noise" "domination/claim.wav"
+"noise1" "domination/claim.wav"
+"message" "Blue team has captured a control point"
+"model" "models/domination/dom_blue.md3"
+}
+{
+"classname" "dom_team"
+"netname" "^1Red Team^3"
+"cnt" "4"
+"noise" "domination/claim.wav"
+"noise1" "domination/claim.wav"
+"message" "Red team has captured a control point"
+"model" "models/domination/dom_red.md3"
+}
+{
+"classname" "dom_team"
+"netname" "^6Pink Team^3"
+"cnt" "9"
+"noise" "domination/claim.wav"
+"noise1" "domination/claim.wav"
+"message" "Pink team has captured a control point"
+"model" "models/domination/dom_pink.md3"
+}
+
+{
+"classname" "dom_controlpoint"
+"origin" "1886 390 -648"
+"message" "^3 has captured the ^Bottom"
+
+}
+{
+"classname" "dom_controlpoint"
+"origin" "-275 864 -616"
+"message" "^3 has captured the ^1Cottage"
+
+}
+{
+"classname" "dom_controlpoint"
+"origin" "0 128 24"
+"message" "^3 has captured the ^1Stairs"
+
+}
+{
+"classname" "dom_controlpoint"
+"origin" "1340 -386 328"
+"message" "^3 has captured the ^1Megahealth"
+}
+{
+"classname" "dom_controlpoint"
+"origin" "1760 380 152"
+"angle" "90"
+"message" "^3 has captured the ^1Megahealth Tower"
+
+}
+{
+"classname" "dom_controlpoint"
+"origin" "640 -300 -328"
+"message" "^3 has captured the ^1Spiral Staircase"
+}
+{
+"classname" "dom_controlpoint"
+"origin" "300 -160 448"
+"message" "^3 has captured the ^1Upper Stairs"
+}
+{
+"classname" "dom_controlpoint"
+"origin" "660 -450 150"
+"angle" "90"
+"message" "^3 has captured the ^1Upper Stairs Room"
+}
