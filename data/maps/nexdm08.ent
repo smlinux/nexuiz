@@ -179,18 +179,22 @@
 {
 "classname" "dom_controlpoint"
 "origin" "-1086 0 32"
+"message" "^3 has captured the ^1Main Arena"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "-1860 128 360"
+"message" "^3 has captured the ^1Arena Bridge"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "-28 0 280"
+"message" "^3 has captured the ^1Mortar Bridge"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "-456 0 -168"
+"message" "^3 has captured the ^1Red Glow Hallway"
 }
 {
 "classname" "runematch_spawn_point"

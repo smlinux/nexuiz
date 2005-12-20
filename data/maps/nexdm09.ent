@@ -736,28 +736,34 @@
 "classname" "dom_controlpoint"
 "origin" "1220 1840 36"
 "angle" "-45"
+"message" "^3 has captured the ^1Round Corner"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "580 712 32"
+"message" "^3 has captured the ^1Upper Main Room"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "-322 126 16"
+"message" "^3 has captured the ^1Strength Room"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "350 -206 -200"
 "angle" "90"
+"message" "^3 has captured the ^1Lower Main Room"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "1040 1326 -200"
+"message" "^3 has captured the ^1Nex"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "-890 1700  80"
 "angle" "-45"
+"message" "^3 has captured the ^1Bridge"
 }
 {
 "classname" "runematch_spawn_point"

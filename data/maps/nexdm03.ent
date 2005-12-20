@@ -226,22 +226,27 @@
 "classname" "dom_controlpoint"
 "origin" "-254 -72 -56"
 "angle" "90"
+"message" "^3 has captured the ^1Slime Alley"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "528 192 352"
+"message" "^3 has captured the ^1Upper Nex-Room"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "528 -660 -56"
+"message" "^3 has captured the ^1Electro"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "-628 575 352"
+"message" "^3 has captured the ^1Mortar Bridge"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "-1650 0 160"
+"message" "^3 has captured the ^1MG Room"
 }
 {
 "classname" "runematch_spawn_point"

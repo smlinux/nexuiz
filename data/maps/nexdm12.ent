@@ -366,18 +366,26 @@
 {
 "classname" "dom_controlpoint"
 "origin" "1150 460 -232"
+"message" "^3 has captured a ^1Side Platform"
+
 }
 {
 "classname" "dom_controlpoint"
 "origin" "620 300 -88"
+"message" "^3 has captured the ^1Upper Platform"
+
 }
 {
 "classname" "dom_controlpoint"
 "origin" "-1150 170 -232"
+"message" "^3 has captured a ^1Side Platform"
+
 }
 {
 "classname" "dom_controlpoint"
 "origin" "-350 970 -424"
+"message" "^3 has captured the ^1Lower Platform"
+
 }
 {
 "classname" "runematch_spawn_point"

@@ -453,74 +453,91 @@
 {
 "classname" "dom_controlpoint"
 "origin" "-300 0 1816"
+"message" "^3 has captured the ^1Top"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "-240 -10 1376"
+"message" "^3 has captured the ^1Upper Megahealth"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "1450 1430 984"
 "angle" "45"
+"message" "^3 has captured a ^1 Platform"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "1450 -1430 984"
 "angle" "-45"
+"message" "^3 has captured a ^1Platform"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "-1450 -1430 984"
 "angle" "45"
+"message" "^3 has captured a ^1Platform"
+
 }
 {
 "classname" "dom_controlpoint"
 "origin" "-1450 1430 984"
 "angle" "-45"
+"message" "^3 has captured a ^1Platform"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "1970 -250 -296"
+"message" "^3 has captured a ^1Bottom Controlpoint"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "-1500 -1800 -296"
 "angle" "90"
+"message" "^3 has captured the ^1Bottom Mortar"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "330 -220 24"
+"message" "^3 has captured the ^1Rocket Launcher"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "-1500 -225 24"
 "angle" "90"
+"message" "^3 has captured the ^1Hallway"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "150 1850 24"
 "angle" "90"
+"message" "^3 has captured a ^1Middle Controlpoint"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "2000 -230  24"
+"message" "^3 has captured a ^1Middle Controlpoint"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "1060 -140 216"
+"message" "^3 has captured the ^1Middle Mortar"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "-1500 -1800 216"
 "angle" "90"
+"message" "^3 has captured a ^1Middle Controlpoint"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "-1500 740 216"
+"message" "^3 has captured a ^1Middle Controlpoint"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "1337 1190 216"
+"message" "^3 has captured the ^1 1337 Controlpoint"
 }
 {
 "classname" "runematch_spawn_point"

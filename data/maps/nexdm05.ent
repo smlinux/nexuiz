@@ -331,18 +331,22 @@
 "classname" "dom_controlpoint"
 "origin" "-30 1700 24"
 "angle" "90"
+"message" "^3 has captured the ^1Middle Floor"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "336 668 -200"
+"message" "^3 has captured the ^1Lower Floor"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "355 1294 216"
+"message" "^3 has captured the ^1Upper Floor"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "-800 800 216"
+"message" "^3 has captured the ^1Megahealth"
 }
 {
 "classname" "runematch_spawn_point"

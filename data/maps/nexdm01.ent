@@ -194,6 +194,7 @@
 {
 "classname" "dom_controlpoint"
 "origin" "430 20 70"
+"message" "^3 has captured the ^1Main Room"
 }
 {
 "classname" "dom_controlpoint"

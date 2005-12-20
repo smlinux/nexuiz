@@ -339,15 +339,21 @@
 {
 "classname" "dom_controlpoint"
 "origin" "-540 -1560 96"
+"message" "^3 has captured the ^1Electro"
+
 }
 {
 "classname" "dom_controlpoint"
 "origin" "-100 -1190 124"
+"message" "^3 has captured the ^1Main Area"
+
 }
 {
 "classname" "dom_controlpoint"
 "origin" "1220 -320 32"
 "angle" "-45"
+"message" "^3 has captured the ^1Hallway"
+
 }
 {
 "classname" "runematch_spawn_point"

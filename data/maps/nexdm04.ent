@@ -407,24 +407,29 @@
 {
 "classname" "dom_controlpoint"
 "origin" "-560 400 288"
+"message" "^3 has captured the ^1Nex"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "-65 1350 112"
 "angle" "90"
+"message" "^3 has captured the ^1Electro"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "1170 230 430"
+"message" "^3 has captured the ^1Viewpoint"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "620 400 984"
 "angle" "45"
+"message" "^3 has captured a ^1Skyway"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "190 70 792"
+"message" "^3 has captured a ^1Skyway"
 }
 {
 "classname" "runematch_spawn_point"

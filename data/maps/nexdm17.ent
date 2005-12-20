@@ -1360,44 +1360,54 @@
 "classname" "dom_controlpoint"
 "origin" "-20 -600 24"
 "angle" "-45"
+"message" "^3 has captured the ^1Main Arena"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "-700 880 -232"
+"message" "^3 has captured the ^1Electro"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "-70 860 216"
 "angle" "90"
+"message" "^3 has captured the ^1Nex"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "1680 -1360 -473"
+"message" "^3 has captured the ^1Lower Lifts"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "1000 -550 -744"
+"message" "^3 has captured the ^1Lower Arena"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "1290 690 -424"
+"message" "^3 has captured the ^1Lower Rocket Launcher"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "700 460 -104"
+"message" "^3 has captured the ^1Rocket Launcher"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "1800 -1720 -200"
 "angle" "90"
+"message" "^3 has captured the ^1Jump"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "2440 -100 -296"
+"message" "^3 has captured the ^1Hole"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "1380 -60 -1000"
+"message" "^3 has captured the ^1Bottom"
 }
 {
 "classname" "runematch_spawn_point"

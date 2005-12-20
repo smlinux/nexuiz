@@ -1958,53 +1958,65 @@
 {
 "classname" "dom_controlpoint"
 "origin" "0 32 32"
+"message" "^3 has captured the ^1Electro Gun"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "1000 32 464"
+"message" "^3 has captured the ^1Upper Hallway"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "2000 932 464"
+"message" "^3 has captured an ^1Upper Hallway-Corner"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "2000 -882 464"
+"message" "^3 has captured an ^1Upper Hallway-Corner"
 }
 {
 "classname" "dom_controlpoint"
-"origin" "3500 -500 464"
+"origin" "3500 -500 480"
+"message" "^3 has captured the ^1Megahealth"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "3000 -700 124"
+"message" "^3 has captured the ^1Spiral Stairs"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "3040 -1250 -152"
+"message" "^3 has captured the ^1Strength"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "3040 200 160"
 "angle" "90"
+"message" "^3 has captured the ^1Teleporter"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "3540 1025 -144"
 "angle" "90"
+"message" "^3 has captured the ^1Lower Ramp"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "3200 1270 440"
+"message" "^3 has captured the ^1Upper Ramp"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "2550 32 -144"
 "angle" "90"
+"message" "^3 has captured the ^1Generator"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "1500 32 -102"
+"message" "^3 has captured ^1Generator Stairs"
 }
 {
 "classname" "runematch_spawn_point"
