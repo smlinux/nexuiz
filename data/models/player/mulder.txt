@@ -1,5 +1,5 @@
 Mulder
-models/player/nexus
+models/player/mulder
 1
 models/player/nexus.zym
 
