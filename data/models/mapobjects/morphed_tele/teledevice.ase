@@ -12,7 +12,7 @@
 *MATERIAL_LIST {
 	*MATERIAL_COUNT 2
 	*MATERIAL 0 {
-		*MATERIAL_NAME "telepad.tga"
+		*MATERIAL_NAME "models/mapobjects/morphed_tele/telepad.tga"
 		*MATERIAL_CLASS "Standard"
 		*MATERIAL_AMBIENT 0.5882	0.5882	0.5882
 		*MATERIAL_DIFFUSE 0.5882	0.5882	0.5882
@@ -31,7 +31,7 @@
 			*MAP_CLASS "Bitmap"
 			*MAP_SUBNO 1
 			*MAP_AMOUNT 1.0000
-			*BITMAP "C:\Documents and Settings\Morph\Pulpit\Zymotic\mech\tele\telepad.tga"
+			*BITMAP "models/mapobjects/morphed_tele/telepad.tga"
 			*MAP_TYPE Screen
 			*UVW_U_OFFSET 0.0000
 			*UVW_V_OFFSET 0.0000
@@ -51,7 +51,7 @@
 			*MAP_CLASS "Bitmap"
 			*MAP_SUBNO 5
 			*MAP_AMOUNT 1.0000
-			*BITMAP "C:\Documents and Settings\Morph\Pulpit\Zymotic\mech\tele\telepad_glow.tga"
+			*BITMAP "/models/mapobjects/morphed_tele/telepad_glow.tga"
 			*MAP_TYPE Screen
 			*UVW_U_OFFSET 0.0000
 			*UVW_V_OFFSET 0.0000
@@ -87,7 +87,7 @@
 			*MAP_CLASS "Bitmap"
 			*MAP_SUBNO 1
 			*MAP_AMOUNT 1.0000
-			*BITMAP "C:\Documents and Settings\Morph\Pulpit\Zymotic\mech\tele\teledevice.tga"
+			*BITMAP "models/mapobjects/morphed_tele/teledevice.tga"
 			*MAP_TYPE Screen
 			*UVW_U_OFFSET 0.0000
 			*UVW_V_OFFSET 0.0000
@@ -107,7 +107,7 @@
 			*MAP_CLASS "Bitmap"
 			*MAP_SUBNO 5
 			*MAP_AMOUNT 1.0000
-			*BITMAP "C:\Documents and Settings\Morph\Pulpit\Zymotic\mech\tele\telepad_glow.tga"
+			*BITMAP "models/mapobjects/morphed_tele/telepad_glow.tga"
 			*MAP_TYPE Screen
 			*UVW_U_OFFSET 0.0000
 			*UVW_V_OFFSET 0.0000
