@@ -63,3 +63,4 @@ void	ambientsound (vector pos, string samp, float vol, float atten)			= #74;
 string	precache_model2 (string s)							= #75;
 string	precache_sound2 (string s)							= #76;
 string	precache_file2 (string s)							= #77;
+entity(.float fld, float match) findchainflags = #450;

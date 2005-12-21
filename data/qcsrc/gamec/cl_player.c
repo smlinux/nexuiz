@@ -279,6 +279,10 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 	}
 	else if(attacker.classname == "player" || attacker.classname == "gib")
 	{
+		if (self.bottype == BOTTYPE_URREBOT)
+		if (!self.enemy)
+		if (vlen(self.origin - attacker.origin) < 1000)
+			self.enemy = attacker;
 		self.pusher = attacker;
 		self.pushltime = time + cvar("g_maxpushtime");
 	}

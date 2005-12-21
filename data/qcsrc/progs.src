@@ -9,6 +9,14 @@ gamec/extensions.h
 
 gamec/miscfunctions.c
 
+gamec/bots.c		// definitions and shared stuff between both Urrebot and Mauvebot // Urre
+gamec/mauvebot.c	// altered a tad to work together with Urrebots
+gamec/urrebot_load.qc
+gamec/urrebot_nn_use.qc
+gamec/urrebot_nn_search.qc
+gamec/urrebot_ai_goals.qc
+gamec/urrebot_ai_main.qc
+
 gamec/g_subs.c
 
 gamec/runematch.c
@@ -19,7 +27,7 @@ gamec/g_damage.c
 
 gamec/teamplay.c
 
-gamec/mauvebot.c
+// gamec/mauvebot.c
 gamec/cl_physics.c
 
 gamec/g_world.c

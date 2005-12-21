@@ -15,7 +15,14 @@ void SV_PlayerPhysics()
 	local float wishspeed, f, maxspd_mod, spd, maxairspd, airaccel, swapspd_mod;
 	string temps;
 
-	MauveBot_AI();
+	// MauveBot_AI();
+	if (clienttype(self) == CLIENTTYPE_BOT)
+	{
+		if (self.bottype == BOTTYPE_MAUVEBOT)
+			MauveBot_AI();
+		else if (self.bottype == BOTTYPE_URREBOT)
+			UrreBotThink();
+	}
 
 	if (self.movetype == MOVETYPE_NONE)
 		return;

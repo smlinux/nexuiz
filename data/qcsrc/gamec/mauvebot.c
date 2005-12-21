@@ -2,24 +2,6 @@
 MauveBot v1.0 for Nexuiz
 */
 
-float intermission_running;
-
-.float skill_level;
-
-.float ai_time;
-.float threat;
-.entity dodgeent;
-
-float THREAT_UNFLAGGED = 0;
-float THREAT_IGNORE = -1;
-
-float DODGE_DIST = 500;
-float SEARCH_DIST = 1000;
-
-.float search_time;
-
-float bot_number;
-
 string(float r) BotName =
 {
 	if (r == 1)
@@ -175,7 +157,7 @@ string () PickARandomName =
 void() add_MauveBot =
 {
 	local entity oldself;
-	local float flo;
+	local float shirt, pants;
 	local string str;
 
 	oldself = self;
@@ -196,9 +178,9 @@ void() add_MauveBot =
 	}
 	else
 	{
-		// MORE COLORS!!!!! :P
-		flo = floor(random() * 15);
-		self.clientcolors = flo + flo * 16;
+		shirt = floor(random()*15);
+		pants = floor(random()*15);
+		self.clientcolors = pants + shirt * 16;
 	}
 
 	self.netname = PickARandomName();
@@ -230,18 +212,20 @@ void() remove_MauveBot =
 	{
 		if (clienttype(ent) == CLIENTTYPE_BOT)
 		{
-			if (flo == i)
+			if (ent.bottype == BOTTYPE_MAUVEBOT) // Urre
 			{
-				dropclient(ent);
-
-				// bot was dead, so decrease dead count
-				if(cvar("g_lms") && self.frags < 1)
-					lms_dead_count -= 1;
-				if (bot_number > 0)
-					bot_number = bot_number - 1;
-				return;
+				if (flo == i)
+				{
+					dropclient(ent);
+					// bot was dead, so decrease dead count
+					if(cvar("g_lms") && self.frags < 1)
+						lms_dead_count -= 1;
+					if (bot_number > 0)
+						bot_number = bot_number - 1;
+					return;
+				}
+				i = i + 1;
 			}
-			i = i + 1;
 		}
 		ent = find(ent, classname, "player");
 	}
@@ -353,19 +337,16 @@ void() look_for_stuff =
 	{
                 if (item.flags & FL_CLIENT)
 		{
+			if (!(item.flags & FL_NOTARGET) || item.frags != -666) // -666 is spec/obs
 			if (item != self && !(cvar("teamplay") && (item.clientcolors == self.clientcolors)))
+			if ((item.health > 0) && (!item.deadflag))
+			if (visible(item))
 			{
-				if ((item.health > 0) && (!item.deadflag))
+				tdist = vlen(item.origin - self.origin);
+				if (tdist < dist)
 				{
-					if (visible(item))
-					{
-						tdist = vlen(item.origin - self.origin);
-						if (tdist < dist)
-						{
-							best = item;
-							dist = tdist;
-						}
-					}
+					best = item;
+					dist = tdist;
 				}
 			}
 		}
@@ -445,7 +426,7 @@ void() DodgeProjectile =
 
 void() MauveBot_AI =
 {
-	
+/*
 	if (clienttype(self) != CLIENTTYPE_BOT)
 	{
 		local float flo;
@@ -467,7 +448,7 @@ void() MauveBot_AI =
 			remove_MauveBot();
 		return;
 	}
-
+*/
 	self.button0 = 0;
 	self.button2 = 0;
 	self.button3 = 0;

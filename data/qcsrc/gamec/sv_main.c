@@ -120,6 +120,7 @@ void StartFrame (void)
 	sv_accelerate = cvar ("sv_accelerate");
 	sv_stopspeed = cvar ("sv_stopspeed");
 	teamplay = cvar ("teamplay");
+	skill = cvar("skill");
 
 	CreatureFrame ();
 	CheckRules_World ();
@@ -127,4 +128,5 @@ void StartFrame (void)
 	AuditTeams();
 
 	RuneMatchGivePoints();
+	Bots_Shared();
 }
