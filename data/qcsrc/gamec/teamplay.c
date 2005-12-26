@@ -300,13 +300,15 @@ void SetPlayerColors(entity pl, float _color)
 	//pl.clientcolors = pl.clientcolors - (pl.clientcolors & 15) + cl;
 	pl.clientcolors = 16*cl + cl;*/
 
+	float pants, shirt; 
+	pants = _color & 0x0F;
+	shirt = _color & 0xF0;
+	
+	
 	if(teamplay) {
-		setcolor(pl, 16*_color + _color);
+		setcolor(pl, 16*pants + pants);
 	} else {
-		float shirt;
-		shirt = pl.clientcolors & 0xF0;
-		setcolor(pl, shirt + _color);
-
+		setcolor(pl, shirt + pants);
 	}
 }
 
@@ -637,7 +639,10 @@ void SV_ChangeTeam(float _color)
 
 	// store shirt color in .clientcolors
 	// this will get overwritten in teamplay modes later
-	setcolor(self, _color & 0xF0 + scolor);
+	if(!cvar("teamplay")) {
+		SetPlayerColors(self, _color);
+		return;
+	}
 
 	if(scolor == COLOR_TEAM1 - 1)
 		steam = 1;
