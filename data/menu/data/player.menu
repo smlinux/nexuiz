@@ -31,8 +31,8 @@ Item DataContainer Player
 			Item DataLink_TextSwitch TextSwitch
 			{
 				// Red Blue Green Yellow
-				valueList 	"'0' '4' '13' '3' '12'"
-				descList	"'None' '$gfx/m_redsquare' '$gfx/m_bluesquare' '$gfx/m_greensquare' '$gfx/m_yellowsquare'"
+				valueList 	"'0' '1' '2' '3' '4' '5' '6' '7' '8' '9' '10' '11' '12' '13' '14'"
+				descList	"'None' '$gfx/1' '$gfx/2' '$gfx/3' '$gfx/4' '$gfx/5' '$gfx/6' '$gfx/7' '$gfx/8' '$gfx/9' '$gfx/10' '$gfx/11' '$gfx/12' '$gfx/13' '$gfx/14' "
 
 				link		"##up"
 			}
@@ -44,8 +44,8 @@ Item DataContainer Player
 			Item DataLink_TextSwitch TextSwitch
 			{
 				// Red Blue Green Yellow
-				valueList 	"'0' '4' '13' '3' '12'"
-				descList	"'None' '$gfx/m_redsquare' '$gfx/m_bluesquare' '$gfx/m_greensquare' '$gfx/m_yellowsquare'"
+				valueList 	"'0' '1' '2' '3' '4' '5' '6' '7' '8' '9' '10' '11' '12' '13' '14'"
+				descList	"'None' '$gfx/1' '$gfx/2' '$gfx/3' '$gfx/4' '$gfx/5' '$gfx/6' '$gfx/7' '$gfx/8' '$gfx/9' '$gfx/10' '$gfx/11' '$gfx/12' '$gfx/13' '$gfx/14' "
 
 				link		"##up"
 			}
