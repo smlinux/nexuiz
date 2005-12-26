@@ -634,15 +634,14 @@ void SV_ChangeTeam(float _color)
 {
 	float scolor, dcolor, steam, dteam, dbotcount, scount, dcount;
 
-	scolor = self.clientcolors & 0x0F;
-	dcolor = _color & 0x0F;
-
-	// store shirt color in .clientcolors
-	// this will get overwritten in teamplay modes later
+	// in normal deathmatch we can just apply the color and we're done
 	if(!cvar("teamplay")) {
 		SetPlayerColors(self, _color);
 		return;
 	}
+	
+	scolor = self.clientcolors & 0x0F;
+	dcolor = _color & 0x0F;
 
 	if(scolor == COLOR_TEAM1 - 1)
 		steam = 1;
