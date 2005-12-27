@@ -47,7 +47,7 @@ The default port is 26000 UDP. You can change that by starting Nexuiz with |nexu
 To add the command line argument on Windows, create a new shortcut to |nexuiz-sdl.exe| and right click on it. Select properties and |-port <port>| in the "Target:" line. Be sure that the "Start in:" line contains the full path to your Nexuiz folder and clock "OK".
 
 ** Is there some kind of rcon?
-Yes, but it is not compatible with Quake rcon (so you can't use quake rcon tools). To enable it enter |set sv__clientcommands 1| on your server console. Don't forget to set a password with |set sv__clientcommands__password hackme|. Now you can become admin ingame by entering |cl hackme| on the client console. To issue commands enter |cc <command>| (e.g. |cc restart| or |cc chmap dm_nexdm12|).
+Yes, but it is not compatible with Quake rcon (so you can't use quake rcon tools). To enable it enter |set sv__clientcommands 1| on your server console. Don't forget to set a password with |set sv__clientcommands__password hackme|. Now you can become admin ingame by entering |ccl hackme| on the client console. To issue commands enter |cc <command>| (e.g. |cc restart| or |cc chmap dm_nexdm12|).
 
 ** How can i kick people who are using special characters in their names?
 Enter |status| at the console. You will see a list of all players. In front of their names you will see a number (the player id). You can kick the player you don't like with |kick # <player id> <reason>| (notice the space after #).
