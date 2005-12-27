@@ -48,6 +48,8 @@ void() UrreBotRemove =
 				}
 				if (actualurrebots > 0)
 					actualurrebots -= 1;
+				if(cvar("g_lms") && self.frags < 1)
+					lms_dead_count -= 1;
 				dropclient(ent);
 			}
 		}

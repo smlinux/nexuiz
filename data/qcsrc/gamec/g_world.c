@@ -655,11 +655,17 @@ void() CheckRules_World =
 	// last man camping winning conditions
 	if(cvar("g_lms"))
 	{
+		local float clients;
+		clients = player_count + bot_number + actualurrebots;
+
+		if(lms_dead_count < 0)
+			lms_dead_count = 0;
+		
 		// goto next map if only one player is alive or 
 		// if there is only one player as spectator (could happen with g_lms_join_anytime 1)
-		if(((player_count + bot_number) > 1 && ((player_count + bot_number) - lms_dead_count) <= 1) || 
-		  ((player_count + bot_number) == 1 && lms_dead_count == 1))
-			NextLevel ();
+		if((clients > 1 && (clients - lms_dead_count) <= 1) || 
+		  (clients == 1 && lms_dead_count == 1))
+			NextLevel();
 		return;
 	}
 	

@@ -49,6 +49,7 @@ void() W_ThrowWeapon
 	w = e.weapon;
 	setorigin(wep, e.origin);
 	makevectors(e.angles);
+	wep.classname = "droppedweapon";
 	wep.velocity = e.velocity * 0.5 + v_forward * 750;
 	SUB_SetFade(wep, time + 20, 1);
 

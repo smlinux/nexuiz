@@ -30,7 +30,7 @@ This happens when the engine can't load the data*.pk3 file. The reasons could be
 	3. your download might be corrupted
 
 ** The sound is broken, it crackles and stutters
-Try run |nexuiz-sdl.exe| (on Windows) or |nexuiz-linux-686-sdl| (on Linux). This version usually performs better on newer sound cards than |nexuiz.exe|/|nexuiz-linux-686-glx|.
+Try run |nexuiz-sdl.exe| (on Windows) or |nexuiz-linux-x86-sdl| (on Linux). This version usually performs better on newer sound cards than |nexuiz.exe|/|nexuiz-linux-686-glx|.
 
 ** When I join a server or after a map change I see nothing but a black screen, but I can still move and shoot
 This is probably because you don't have the map, that's running on the server. There is no map/content download in Nexuiz at the moment so you have to get the map the old fashioned way. Most servers will have a download URL in their name or welcome message. There is also a [wiki page (http://savage747.sa.funpic.de/wiki/pmwiki.php?n=Main.CustomMaps)] dedicated to new maps.
@@ -43,9 +43,14 @@ This is probably because you don't have the map, that's running on the server. T
 There's a tutorial on how to setup up an dedicated server in this [forum post (http://www.nexuiz.com/forums/index.php?showtopic=1236)].
 
 ** Which ports do I have to open in firewall/forward from my router to run a server?
-The default port is 26000 UDP. You can change that by starting Nexuiz with |nexuiz-sdl.exe -port <port>| (on Windows) or |nexuiz-linux-686-sdl -port <port>| (on Linux).
+The default port is 26000 UDP. You can change that by starting Nexuiz with |nexuiz-sdl.exe -port <port>| (on Windows) or |nexuiz-linux-x86-sdl -port <port>| (on Linux).
 To add the command line argument on Windows, create a new shortcut to |nexuiz-sdl.exe| and right click on it. Select properties and |-port <port>| in the "Target:" line. Be sure that the "Start in:" line contains the full path to your Nexuiz folder and clock "OK".
 
+** Is there some kind of rcon?
+Yes, but it is not compatible with Quake rcon (so you can't use quake rcon tools). To enable it enter |set sv__clientcommands 1| on your server console. Don't forget to set a password with |set sv__clientcommands__password hackme|. Now you can become admin ingame by entering |cl hackme| on the client console. To issue commands enter |cc <command>| (e.g. |cc restart| or |cc chmap dm_nexdm12|).
+
+** How can i kick people who are using special characters in their names?
+Enter |status| at the console. You will see a list of all players. In front of their names you will see a number (the player id). You can kick the player you don't like with |kick # <player id> <reason>| (notice the space after #).
 
 
 * General questions
@@ -58,7 +63,7 @@ Before you can create a desktop/menu item you have to create a little shell scri
 ^<<
 #!/bin/sh
 cd /path/to/Nexuiz		# replace this with the full path to your Nexuiz folder
-./nexuiz-linux-686-sdl "$@"	# or ./nexuiz-linux-x86_64-sdl if you're using an AMD64/EM64T distributions
+./nexuiz-linux-x86-sdl "$@"	# or ./nexuiz-linux-x86_64-sdl if you're using an AMD64/EM64T distributions
 ^>>
 Save this in your Nexuiz directory as |nexuiz.sh|. Now you have to make this file executable by opening a xterm/konsole and typing:
 ^<<
@@ -102,3 +107,8 @@ Colors can be used in nicknames and chat messages by typing ^ followed by a numb
 	!----------------------------!
 	! ^9     ! dark grey         !
 	!----------------------------!
+
+** How do i watch/record demos?
+To record a demo: open the console and type |rec <name>|. The demo file will be stored in |~/.nexuiz/data/demos/<name>.dem| (Linux) or |Nexuiz/data/demos/<name>.dem| (Windows).
+To watch a demo: open the console and type |ply <name>| (|name| is the filename without extension). If you downloaded a demo, copy it to |Nexuiz/data/demos| first.
+You can list all your demo files by typing |dem| on the console. Some usefull keybindings for viewing demos are listed [here (http://www.nexuiz.com/forums/index.php?showtopic=1766&st=0&p=13400&#entry13400)].

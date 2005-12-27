@@ -192,7 +192,7 @@ void() UrreBotEvalTargets =
 	e = findradius(v1, 1500);
 	while (e)
 	{
-		if (!(e.flags & FL_NOTARGET) || e.frags != -666) // -666 is spec/obs
+		if (!(e.flags & FL_NOTARGET) || e.killcount != -666) // -666 is spec/obs
 		if (e.flags & FL_CLIENT)
 		if (e != self)
 		if (!e.deadflag)

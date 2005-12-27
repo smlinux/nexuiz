@@ -209,7 +209,7 @@ entity damage_attacker;
 
 void Damage (entity targ, entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
 {
-	if (gameover)
+	if (gameover || targ.killcount == -666)
 		return;
 
 	local entity oldself;

@@ -48,8 +48,9 @@ void Item_Touch (void)
 				stuffcmd(other, "play2 announcer/robotic/lastsecond.ogg\n");
 			else if(other.health < 50)
 				stuffcmd(other, "play2 announcer/robotic/narrowly.ogg\n");
-			else if(self.items == IT_CELLS)
-				stuffcmd(other, "play2 announce/robotic/ammo.ogg\n");
+			// sound not available
+			// else if(self.items == IT_CELLS)
+			//	stuffcmd(other, "play2 announce/robotic/ammo.ogg\n");
 			
 			if (self.items & IT_NEX)
 				W_GiveWeapon (other, IT_NEX, "Nex");
@@ -61,7 +62,8 @@ void Item_Touch (void)
 		// extralife powerup
 		if (self.max_health)
 		{
-			stuffcmd(other, "play2 announce/robotic/extra.ogg\nplay2 announce/robotic/_lives.ogg\n");
+			// sound not available
+			// stuffcmd(other, "play2 announce/robotic/extra.ogg\nplay2 announce/robotic/_lives.ogg\n");
 			other.extralives = other.extralives + cvar("g_minstagib_extralives");
 			other.armorvalue = other.extralives;
 			sprint(other, "^3You picked up some extra lives\n");
@@ -70,14 +72,16 @@ void Item_Touch (void)
 		// invis powerup
 		if (self.strength_finished)
 		{
-			stuffcmd(other, "play2 announce/robotic/invisible.ogg\n");
+			// sound not available
+			// stuffcmd(other, "play2 announce/robotic/invisible.ogg\n");
 			other.strength_finished = max(other.strength_finished, time) + cvar("g_balance_powerup_strength_time");
 		}
 		
 		// speed powerup
 		if (self.invincible_finished)
 		{
-			stuffcmd(other, "play2 announce/robotic/speed.ogg\n");
+			// sound not available
+			// stuffcmd(other, "play2 announce/robotic/speed.ogg\n");
 			other.invincible_finished = max(other.invincible_finished, time) + cvar("g_balance_powerup_strength_time");
 		}
 	}
@@ -280,7 +284,7 @@ void minstagib_items (float itemid)
 	{
 		self.max_health = 1;
 		StartItem ("models/items/g_h100.md3", 
-			"misc/powerup.ogg", 120, 
+			"misc/megahealth.ogg", 120, 
 			"Extralife", IT_NAILS, FL_POWERUP);
 
 	}

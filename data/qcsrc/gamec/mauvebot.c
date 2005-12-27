@@ -337,7 +337,7 @@ void() look_for_stuff =
 	{
                 if (item.flags & FL_CLIENT)
 		{
-			if (!(item.flags & FL_NOTARGET) || item.frags != -666) // -666 is spec/obs
+			if (!(item.flags & FL_NOTARGET) || item.killcount != -666) // -666 is spec/obs
 			if (item != self && !(cvar("teamplay") && (item.clientcolors == self.clientcolors)))
 			if ((item.health > 0) && (!item.deadflag))
 			if (visible(item))

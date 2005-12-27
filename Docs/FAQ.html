@@ -131,6 +131,8 @@ h1, h2, h3, h4, h5, h6 {
 <ul>
 <li> <a class="link" href="#How do I start a server?">How do I start a server?</a></li>
 <li> <a class="link" href="#Which ports do I have to open in firewall/forward from my router to run a server?">Which ports do I have to open in firewall/forward from my router to run a server?</a></li>
+<li> <a class="link" href="#Is there some kind of rcon?">Is there some kind of rcon?</a></li>
+<li> <a class="link" href="#How can i kick people who are using special characters in their names?">How can i kick people who are using special characters in their names?</a></li>
 </ul>
 <li> <a class="link" href="#General questions">General questions</a></li>
 <ul>
@@ -139,7 +141,8 @@ h1, h2, h3, h4, h5, h6 {
 <li> <a class="link" href="#How do I open the console?">How do I open the console?</a></li>
 <li> <a class="link" href="#What console commands/variables are there?">What console commands/variables are there?</a></li>
 <li> <a class="link" href="#How can I speed up my frame rate?">How can I speed up my frame rate?</a></li>
-<li> <a class="link" href="#How can I activate colors in my name?">How can I activate colors in my name?</a>
+<li> <a class="link" href="#How can I activate colors in my name?">How can I activate colors in my name?</a></li>
+<li> <a class="link" href="#How do i watch/record demos?">How do i watch/record demos?</a>
 
 </li>
 </ul>
@@ -173,7 +176,7 @@ This happens when the engine can't load the data*.pk3 file. The reasons could be
 <!--End Section 2-->
 <h3><a name="The sound is broken, it crackles and stutters">The sound is broken, it crackles and stutters</a></h3>
 <p class="Body">
-Try run <tt>nexuiz-sdl.exe</tt> (on Windows) or <tt>nexuiz-linux-686-sdl</tt> (on Linux). This version usually performs better on newer sound cards than <tt>nexuiz.exe</tt>/<tt>nexuiz-linux-686-glx</tt>.
+Try run <tt>nexuiz-sdl.exe</tt> (on Windows) or <tt>nexuiz-linux-x86-sdl</tt> (on Linux). This version usually performs better on newer sound cards than <tt>nexuiz.exe</tt>/<tt>nexuiz-linux-686-glx</tt>.
 </p>
 <!--End Section 2-->
 <h3><a name="When I join a server or after a map change I see nothing but a black screen, but I can still move and shoot">When I join a server or after a map change I see nothing but a black screen, but I can still move and shoot</a></h3>
@@ -192,8 +195,18 @@ There's a tutorial on how to setup up an dedicated server in this <a class="link
 <!--End Section 2-->
 <h3><a name="Which ports do I have to open in firewall/forward from my router to run a server?">Which ports do I have to open in firewall/forward from my router to run a server?</a></h3>
 <p class="Body">
-The default port is 26000 UDP. You can change that by starting Nexuiz with <tt>nexuiz-sdl.exe -port &lt;port&gt;</tt> (on Windows) or <tt>nexuiz-linux-686-sdl -port &lt;port&gt;</tt> (on Linux).
+The default port is 26000 UDP. You can change that by starting Nexuiz with <tt>nexuiz-sdl.exe -port &lt;port&gt;</tt> (on Windows) or <tt>nexuiz-linux-x86-sdl -port &lt;port&gt;</tt> (on Linux).
 To add the command line argument on Windows, create a new shortcut to <tt>nexuiz-sdl.exe</tt> and right click on it. Select properties and <tt>-port &lt;port&gt;</tt> in the &quot;Target:&quot; line. Be sure that the &quot;Start in:&quot; line contains the full path to your Nexuiz folder and clock &quot;OK&quot;.
+</p>
+<!--End Section 2-->
+<h3><a name="Is there some kind of rcon?">Is there some kind of rcon?</a></h3>
+<p class="Body">
+Yes, but it is not compatible with Quake rcon (so you can't use quake rcon tools). To enable it enter <tt>set sv_clientcommands 1</tt> on your server console. Don't forget to set a password with <tt>set sv_clientcommands_password hackme</tt>. Now you can become admin ingame by entering <tt>cl hackme</tt> on the client console. To issue commands enter <tt>cc &lt;command&gt;</tt> (e.g. <tt>cc restart</tt> or <tt>cc chmap dm_nexdm12</tt>).
+</p>
+<!--End Section 2-->
+<h3><a name="How can i kick people who are using special characters in their names?">How can i kick people who are using special characters in their names?</a></h3>
+<p class="Body">
+Enter <tt>status</tt> at the console. You will see a list of all players. In front of their names you will see a number (the player id). You can kick the player you don't like with <tt>kick # &lt;player id&gt; &lt;reason&gt;</tt> (notice the space after #).
 </p>
 <!--End Section 2-->
 <!-- End SectLevel2 -->
@@ -211,7 +224,7 @@ Before you can create a desktop/menu item you have to create a little shell scri
 <div class="block"><pre>
 #!/bin/sh
 cd /path/to/Nexuiz		# replace this with the full path to your Nexuiz folder
-./nexuiz-linux-686-sdl &quot;$@&quot;	# or ./nexuiz-linux-x86_64-sdl if you're using an AMD64/EM64T distributions
+./nexuiz-linux-x86-sdl &quot;$@&quot;	# or ./nexuiz-linux-x86_64-sdl if you're using an AMD64/EM64T distributions
 </pre></div>
 Save this in your Nexuiz directory as <tt>nexuiz.sh</tt>. Now you have to make this file executable by opening a xterm/konsole and typing:
 <div class="block"><pre>
@@ -254,6 +267,13 @@ Colors can be used in nicknames and chat messages by typing ^ followed by a numb
 <tr><td> ^8     </td><td> light grey&nbsp;&nbsp;</td></tr>
 <tr><td> ^9     </td><td> dark grey&nbsp;&nbsp; </td></tr>
 </table></center>
+<!--End Section 2-->
+<h3><a name="How do i watch/record demos?">How do i watch/record demos?</a></h3>
+<p class="Body">
+To record a demo: open the console and type <tt>rec &lt;name&gt;</tt>. The demo file will be stored in <tt>~/.nexuiz/data/demos/&lt;name&gt;.dem</tt> (Linux) or <tt>Nexuiz/data/demos/&lt;name&gt;.dem</tt> (Windows).
+To watch a demo: open the console and type <tt>ply &lt;name&gt;</tt> (<tt>name</tt> is the filename without extension). If you downloaded a demo, copy it to <tt>Nexuiz/data/demos</tt> first.
+You can list all your demo files by typing <tt>dem</tt> on the console. Some usefull keybindings for viewing demos are listed <a class="link" href="http://www.nexuiz.com/forums/index.php?showtopic=1766&amp;st=0&amp;p=13400&amp;#entry13400">here</a>.
+</p>
 <!--End Section 2-->
 <!-- End SectLevel2 -->
 <!--End Section 1-->

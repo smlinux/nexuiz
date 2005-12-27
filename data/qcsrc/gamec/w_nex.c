@@ -28,68 +28,68 @@ void nex_selfkill (void)
 		{
 			centerprint(self, "you're dead now...\n");
 			Damage(self, self, self, 5, DEATH_NOAMMO, self.origin, '0 0 0');
-			stuffcmd(self, "play2 announce/robotic/termination.ogg\n");
+			// stuffcmd(self, "play2 announcer/robotic/termination.ogg\n");
 		}
 		if (self.health == 10)
 		{
 			centerprint(self, "^11^7 second left to find some ammo\n");
 			Damage(self, self, self, 5, DEATH_NOAMMO, self.origin, '0 0 0');
-			stuffcmd(self, "play2 announce/robotic/1p.ogg\n");
+			// stuffcmd(self, "play2 announcer/robotic/1.ogg\n");
 		}
 		if (self.health == 20)
 		{
 			centerprint(self, "^12^7 seconds left to find some ammo\n");
 			Damage(self, self, self, 10, DEATH_NOAMMO, self.origin, '0 0 0');
-			stuffcmd(self, "play2 announce/robotic/2p.ogg\n");
+			// stuffcmd(self, "play2 announcer/robotic/2.ogg\n");
 		}
 		if (self.health == 30)
 		{
 			centerprint(self, "^13^7 seconds left to find some ammo\n");
 			Damage(self, self, self, 10, DEATH_NOAMMO, self.origin, '0 0 0');
-			stuffcmd(self, "play2 announce/robotic/3p.ogg\n");
+			// stuffcmd(self, "play2 announcer/robotic/3.ogg\n");
 		}
 		if (self.health == 40)
 		{
 			centerprint(self, "^14^7 seconds left to find some ammo\n");
 			Damage(self, self, self, 10, DEATH_NOAMMO, self.origin, '0 0 0');
-			stuffcmd(self, "play2 announce/robotic/4p.ogg\n");
+			// stuffcmd(self, "play2 announcer/robotic/4.ogg\n");
 		}
 		if (self.health == 50)
 		{
 			centerprint(self, "^15^7 seconds left to find some ammo\n");
 			Damage(self, self, self, 10, DEATH_NOAMMO, self.origin, '0 0 0');
-			stuffcmd(self, "play2 announce/robotic/5p.ogg\n");
+			// stuffcmd(self, "play2 announcer/robotic/5.ogg\n");
 		}
 		if (self.health == 60)
 		{
 			centerprint(self, "^36^7 seconds left to find some ammo\n");
 			Damage(self, self, self, 10, DEATH_NOAMMO, self.origin, '0 0 0');
-			stuffcmd(self, "play2 announce/robotic/6.ogg\n");
+			// stuffcmd(self, "play2 announcer/robotic/6.ogg\n");
 		}
 		if (self.health == 70)
 		{
 			centerprint(self, "^37^7 seconds left to find some ammo\n");
 			Damage(self, self, self, 10, DEATH_NOAMMO, self.origin, '0 0 0');
-			stuffcmd(self, "play2 announce/robotic/7.ogg\n");
+			// stuffcmd(self, "play2 announcer/robotic/7.ogg\n");
 		}
 		if (self.health == 80)
 		{
 			centerprint(self, "^38^7 seconds left to find some ammo\n");
 			Damage(self, self, self, 10, DEATH_NOAMMO, self.origin, '0 0 0');
-			stuffcmd(self, "play2 announce/robotic/8.ogg\n");
+			// stuffcmd(self, "play2 announcer/robotic/8.ogg\n");
 		}
 		if (self.health == 90)
 		{
 			centerprint(self, "^39^7 seconds left to find some ammo\n");
 			Damage(self, self, self, 10, DEATH_NOAMMO, self.origin, '0 0 0');
-			stuffcmd(self, "play2 announce/robotic/9.ogg\n");
+			// stuffcmd(self, "play2 announcer/robotic/9.ogg\n");
 		}
 		if (self.health == 100)
 		{
 			weapon_prepareattack(nex_check, nex_check, nex_fire1_01, 1.0);
 			centerprint(self, "get some ammo or\nyou'll be dead in ^310^7 seconds...");
 			Damage(self, self, self, 10, DEATH_NOAMMO, self.origin, '0 0 0');
-			stuffcmd(self, "play2 announce/robotic/10.ogg\n");
+			// stuffcmd(self, "play2 announcer/robotic/10.ogg\n");
 		}
 		
 	}

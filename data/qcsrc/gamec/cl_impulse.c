@@ -52,8 +52,9 @@ void ImpulseCommands (void)
 		sprint(self, strcat("origin = ", vtos(self.origin), "\n"));
 	}
 	// throw weapon
-	else if (self.impulse == 17 && self.weapon != WEP_LASER &&
-		 !cvar("g_minstagib") && !cvar("g_instagib") && !cvar("g_rocketarena"))
+	else if (self.impulse == 17 && self.weapon != WEP_LASER 
+			&& !cvar("g_minstagib") && !cvar("g_instagib") 
+			&& !cvar("g_rocketarena") && !cvar("g_lms") && cvar("g_pickup_items"))
 	{
 		W_ThrowWeapon();
 	}

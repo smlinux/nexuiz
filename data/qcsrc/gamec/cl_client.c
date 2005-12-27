@@ -231,17 +231,7 @@ void PutClientInServer (void)
 {	
 	if(clienttype(self) ==  CLIENTTYPE_BOT)
 	{
-		if(cvar("g_lms"))
-		{
-			if(self.frags < 0)
-			{
-				self.classname = "player";
-			}
-		}
-		else
-		{
-			self.classname = "player";
-		}
+		self.classname = "player";
 	}
 	
 	// player is dead and becomes observer
