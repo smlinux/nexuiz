@@ -20,7 +20,7 @@ Item Window ColorControl
 			text	"Contrast"
 			target	"::Data::Color::Contrast::Value"
 		}
-		Derive Nex_Option_Slider HWGamma
+		Derive Nex_Option_Switch HWGamma
 		{
 			text	"HW Gamma Support"
 			target	"::Data::Color::HWGamma::Switch"
