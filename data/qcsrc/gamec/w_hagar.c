@@ -34,7 +34,7 @@ void W_Hagar_Explode (void)
 	float b;
 	org2 = findbetterlocation (self.origin);
 	te_explosion (org2);
-	effect (org2, "models/sprites/hagarexplosion.spr32", 0, 19, 30);
+	effect (org2, "models/sprites/hagar.spr", 0, 12, 25);
 	b = crandom();
 	if (b<-0.7)
 		sound (self, CHAN_BODY, "weapons/hagexp1.ogg", 1, ATTN_NORM);

@@ -56,13 +56,13 @@ void worldspawn (void)
 	precache_model ("models/plasma.mdl");
 	precache_model ("models/plasmatrail.mdl");
 	precache_model ("models/rocket.md3");
-	precache_model ("models/sprites/grenadeexplosion.spr32");
-	precache_model ("models/sprites/hagarexplosion.spr32");
+	precache_model ("models/sprites/grenexpl.spr");
+	precache_model ("models/sprites/hagar.spr");
 	precache_model ("models/sprites/muzzleflash.spr32");
 	precache_model ("models/sprites/electrocombo.spr32");
 	//precache_model ("models/sprites/plasmahitwall.spr32");
 	//precache_model ("models/sprites/plasmashot.spr32");
-	precache_model ("models/sprites/rocketexplosion.spr32");
+	precache_model ("models/sprites/rockexpl.spr");
 	precache_model ("models/tracer.mdl");
 	precache_model ("models/uziflash.md3");
 	precache_model ("models/weapons/g_crylink.md3");
