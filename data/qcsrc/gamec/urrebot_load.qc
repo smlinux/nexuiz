@@ -511,7 +511,7 @@ void() LoadNavNodes =
 	length = strlen(world.model);
 	length = length - 5;
 	s = substring(world.model, 5, length);
-	s = strcat(s, ".nnl");
+	s = strcat("maps/", s, ".nnl");
 
 	file = fopen(s, FILE_READ);
 
