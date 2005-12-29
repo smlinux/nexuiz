@@ -32,7 +32,7 @@ Item Window ColorControl
 		}
 		Derive Nex_Line	Seperator1
 		{}
-		Derive Nex_Option_Slider ExtendedControl
+		Derive Nex_Option_Switch ExtendedControl
 		{
 			text	"Color Control"
 			target	"::Data::Color::Extended::Active::Switch"
