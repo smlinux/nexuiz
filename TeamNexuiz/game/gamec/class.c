@@ -488,6 +488,8 @@ void (float classnum) SetMaxAmmoFor =
 	self.maxammo_rockets = 40;
 	self.no_grenades_1 = 4;
 	self.clip_rockets = 4;
+	self.tp_grenades_1 = 1;
+	self.tp_grenades_2 = 0;
 
 	if (classnum == CLASS_SCOUT)		// Scout Supplies
 	{
@@ -496,6 +498,7 @@ void (float classnum) SetMaxAmmoFor =
 		self.maxammo_cells = 40;
 		self.maxammo_rockets = 40;
 		self.clip_crylink = CLIP_MAX_CRYLINK;
+		self.tp_grenades_1 = 9;
 	}
 	else if (classnum == 2) {		// Spy supplies
 		self.maxammo_shells = 150;
@@ -505,6 +508,7 @@ void (float classnum) SetMaxAmmoFor =
 	}
 	else if (classnum == CLASS_SOLDIER) {
 		self.maxammo_rockets = 40;
+		self.tp_grenades_2 = 3;
 	}
 	else if (classnum == CLASS_PYRO) {
 		self.clip_pipegrenades = 6;

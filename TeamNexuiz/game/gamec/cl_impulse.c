@@ -69,7 +69,7 @@ void ImpulseCommands (void)
 			}
 	}
 	if (self.impulse == 69) {
-		local entity isneardoor;
+/*		local entity isneardoor;
 		local string st;
 		isneardoor = findradius (self.origin, 200);
 		while (isneardoor)
@@ -83,7 +83,8 @@ void ImpulseCommands (void)
 				return;
 			}
 			isneardoor = isneardoor.chain;
-		}
+		}*/
+		TeamFortress_Build (2);
 	}
 	if (self.impulse == 8) {
 	TeamFortress_ThrowGrenade(); }
@@ -91,10 +92,10 @@ void ImpulseCommands (void)
 	{
 		TeamFortress_PrimeGrenade();
 	}
-/*	if ((self.impulse == 151))		// GREN TYPE 2
+	if ((self.impulse == 151))		// GREN TYPE 2
 	{
 		TeamFortress_PrimeGrenade();
-	}*/
+	}
 	if ((self.impulse == 152))
 	{
 		TeamFortress_ThrowGrenade();

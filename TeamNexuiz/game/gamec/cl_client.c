@@ -1213,6 +1213,7 @@ void SV_ParseClientCommand (string s)
 	if (c == "changeclass")
 	{
 		stuffcmd(self, "set scmenu_directmenu ClassSelect; togglemenu\n");
+		return;
 	}
 	if (c == "selectteam")
     {
@@ -1236,6 +1237,7 @@ void SV_ParseClientCommand (string s)
 			TeamFortress_TeamSet (1);
 			PutClientInServer ();
 		}
+		return;
 	}
 	if (c == "selectclass")
     {
@@ -1324,6 +1326,7 @@ void SV_ParseClientCommand (string s)
 			}
 			TeamFortress_ChangeClass();
 		}
+		return;
 	}
 	else
 	{

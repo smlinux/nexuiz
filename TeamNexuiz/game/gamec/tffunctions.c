@@ -1866,7 +1866,9 @@ void (float rweapon, float amount) DoReload =
 		return;
 
 	weapon_action(self.weapon, WR_UPDATECOUNTS); // update ammo now
-	sprint(self, "Reloading...\n");
+	if (rweapon != 5)
+		sprint(self, "Reloading...\n");
+
 	if (rweapon == 2)		// CryLink (flak cannon)
 	{
 		rtime = (amount * .80);
@@ -1881,6 +1883,10 @@ void (float rweapon, float amount) DoReload =
 	{
 		rtime = (amount * 1.05);
 		self.clip_pipegrenades = 6;
+	}
+	if (rweapon == 5)		// Building something... (senrtry gun, tesla, etc.)
+	{
+		rtime = amount;
 	}
 
 	self.weaponentity.pos1 = PLAYER_WEAPONSELECTION_RANGE;
@@ -1940,7 +1946,8 @@ void () Do_TFClass_Conversion =
 		{
 			self.playermodel = strcat("models/class/",cst,"_mechanical.zym");
 		}
-	}	
+	}
+	SetPlayerSpeed(self);
 };
 
 // XavioR's Random Class select
@@ -1976,6 +1983,235 @@ string () ChooseRandomClass =
 				self.class = CLASS_SPY;
 				return ("spy"); }
 		}
+	}
+};
+
+// Nail projectile and blood
+float current_yaw;
+float (float fl) anglemod =
+{
+	while (fl >= 360)
+	{
+		fl = fl - 360;
+	}
+	while (fl < 0)
+	{
+		fl = fl + 360;
+	}
+	return (fl);
+};
+
+vector () wall_velocity =
+{
+	local vector vel;
+
+	vel = normalize (self.velocity);
+	vel = normalize (((vel + (v_up * (random () - 0.5))) + (v_right * (random () - 0.5))));
+	vel = (vel + (2 * trace_plane_normal));
+	vel = (vel * 200);
+	return (vel);
+};
+
+void (vector org, float damage) SpawnBlood =
+{
+	particle (org, '0 0 0', 73, (damage * 2));
+};
+
+void (float damage) spawn_touchblood =
+{
+	local vector vel;
+
+	vel = (wall_velocity () * 0.2);
+	SpawnBlood ((self.origin + (vel * 0.01)), damage);
+};
+
+void () superspike_touch =
+{
+	local float ndmg;
+
+/*	if (self.voided)				// temp?
+	{
+		return;
+	}
+	self.voided = 1;*/
+	if (other == self.owner)
+	{
+		return;
+	}
+	if (other.solid == 1)
+	{
+		return;
+	}
+	if (pointcontents (self.origin) == -6)
+	{
+		dremove (self);
+		return;
+	}
+	if (other.takedamage)
+	{
+		spawn_touchblood (18);
+		deathmsg = self.weapon;
+		if ((deathmsg == 9))
+		{
+			ndmg = 13;
+		}
+		else
+		{
+			ndmg = 26;
+		}
+		if (self.owner.classname == "grenade")
+		{
+			TF_T_Damage (other, self, self.owner.owner, ndmg, 2, 2);
+		}
+		else
+		{
+			TF_T_Damage (other, self, self.owner, ndmg, 2, 2);
+		}
+	}
+	else
+	{
+		WriteByte (0, 23);
+		WriteByte (0, 1);
+		WriteCoord (0, self.origin_x);
+		WriteCoord (0, self.origin_y);
+		WriteCoord (0, self.origin_z);
+	}
+	dremove (self);
+};
+
+void () spike_touch =
+{
+	local float flt;
+
+	if (other.solid == 1)
+	{
+		return;
+	}
+	if (pointcontents (self.origin) == -6)
+	{
+		dremove (self);
+		return;
+	}
+	if (other.takedamage)
+	{
+		spawn_touchblood (9);
+		deathmsg = self.weapon;
+		if (self.owner.classname == "grenade")
+		{
+			TF_T_Damage (other, self, self.owner.owner, 9, 2, 2);
+		}
+		else
+		{
+			TF_T_Damage (other, self, self.owner, 9, 2, 2);
+		}
+	}
+	else
+	{
+		WriteByte (4, 23);
+		if ((self.classname == "wizspike"))
+		{
+			WriteByte (4, 7);
+		}
+		else
+		{
+			if ((self.classname == "knightspike"))
+			{
+				WriteByte (4, 8);
+			}
+			else
+			{
+				WriteByte (4, 0);
+			}
+		}
+		WriteCoord (4, self.origin_x);
+		WriteCoord (4, self.origin_y);
+		WriteCoord (4, self.origin_z);
+	}
+	dremove (self);
+};
+
+void(vector org) te_gunshot;
+float   EF_ADDITIVE/*     = 32*/;
+void () ChangeModelTime =
+{
+	if (self.owner)
+		setmodel (self.owner, self.classname);
+	dremove(self);
+};
+
+void (entity ent, string st, float wait_time) soonmodel =
+{
+	local entity x;
+	x = spawn ();
+	x.classname = st;
+	x.owner = ent;
+	x.nextthink = time + wait_time;
+	x.think = ChangeModelTime;
+};
+
+.float scale;
+
+void (vector vect_a, vector vect_b) launch_spike =
+{
+	local entity e;			// bullet trail
+
+	newmis = spawn ();
+	newmis.owner = self;
+	newmis.movetype = 9;
+	newmis.solid = 2;
+	newmis.angles = vectoangles (vect_b);
+	newmis.touch = spike_touch;
+	newmis.weapon = 3;
+	newmis.classname = "spike";
+	newmis.think = SUB_Remove;
+	newmis.nextthink = (time + 3);
+	if (deathmsg != 9)
+	{
+		setmodel (newmis, "progs/syringe.mdl");
+	}
+	setsize (newmis, '0 0 0', '0 0 0');
+	setorigin (newmis, vect_a);
+	newmis.velocity = (vect_b * 2000);
+
+		e = spawn();
+		e.owner = self;
+		e.movetype = MOVETYPE_FLY;
+		e.solid = SOLID_NOT;
+		e.think = SUB_Remove;
+		e.nextthink = time + vlen(trace_endpos - self.origin) / 6000;
+		e.velocity = vect_b * 4000;
+		e.angles = vectoangles (vect_b);
+		e.scale = .3;
+//		soonmodel (e, "models/tracer.mdl", .1);
+		setmodel (e, "models/tracer.mdl");
+		setsize (e, '0 0 0', '0 0 0');
+		setorigin (e, vect_a);
+		e.effects = e.effects | EF_ADDITIVE;
+};
+
+// TF's Ammo-Updater
+void () W_SetCurrentAmmo =
+{
+	weapon_action(self.weapon, WR_UPDATECOUNTS);
+};
+
+// TF Team Sprint
+void (float tno, entity ignore, string st) teamsprint =
+{
+	local entity te;
+
+	if ((tno == 0))
+	{
+		return;
+	}
+	te = find (world, classname, "player");
+	while (te)
+	{
+		if (((te.team_no == tno) && (te != ignore)))
+		{
+			sprint (te, st);
+		}
+		te = find (te, classname, "player");
 	}
 };
 

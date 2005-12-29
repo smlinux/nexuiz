@@ -4,6 +4,27 @@ void() dom_init;
 
 void worldspawn (void)
 {
+	// Precache all player models
+	// Workaround for "invisible players"
+	precache_model("models/class/engineer_male.zym");
+	precache_model("models/class/engineer_female.zym");
+	precache_model("models/class/engineer_other.zym");
+	precache_model("models/class/soldier_male.zym");
+	precache_model("models/class/soldier_female.zym");
+	precache_model("models/class/soldier_mechanical.zym");
+	precache_model("models/class/scout_male.zym");
+	precache_model("models/class/scout_female.zym");
+	precache_model("models/class/scout_mechanical.zym");
+	precache_model("models/class/medic_male.zym");
+	precache_model("models/class/medic_female.zym");
+	precache_model("models/class/medic_mechanical.zym");
+	precache_model("models/class/pyro_male.zym");
+	precache_model("models/class/pyro_female.zym");
+	precache_model("models/class/pyro_mechanical.zym");
+	precache_model("models/class/spy_male.zym");
+	precache_model("models/class/spy_female.zym");
+	precache_model("models/class/spy_mechanical.zym");
+
 	lastspawn = world;
 
 	// the gravity set here can be overwritten by <mapname>.cfg
@@ -193,6 +214,8 @@ void worldspawn (void)
 	precache_model ("progs/hgren2.mdl");
 	precache_model ("models/ammo/grenade/grenade.md3");
 	precache_model ("models/grenades/fragnade.md3");
+	precache_model ("models/magmine/magnetmine.md3");		// mag mine
+
 
 	// plays music for the level if there is any
 	if (self.noise)

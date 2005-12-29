@@ -34,6 +34,10 @@ void Obituary (entity attacker, entity targ, float deathtypeN)	// Renamed "death
 				bprint ("^1",s, " couldn't take it anymore\n");
 			else if (deathtypeN == 88)
 				bprint ("^1",s, " blew his own sorry ass up\n");
+			else if (deathtypeN == 35)
+				bprint ("^1",s, " is still seeing stars from his flash grenade.\n");
+			else if (deathtypeN == 9)
+				bprint ("^1",s, " nails himself to death.\n");
 			else
 				bprint ("^1",s, " couldn't resist the urge to self immolate\n");
 			targ.frags = targ.frags - 1;
@@ -87,6 +91,10 @@ void Obituary (entity attacker, entity targ, float deathtypeN)	// Renamed "death
 				bprint ("^1",s, " was telefragged by ", attacker.netname, "\n");
 			else if (deathtypeN == 88)
 				bprint ("^1",s, " exploded from ", attacker.netname, "'s grenade\n");
+			else if (deathtypeN == 35)
+				bprint ("^1",s, " sees the light of ", attacker.netname, "'s flash grenade\n");
+			else if (deathtypeN == 9)
+				bprint ("^1",s, " gets nailed to the wall from ", attacker.netname, "'s nail grenade\n");
 			else
 				bprint ("^1",s, " was killed by ", attacker.netname, "\n");
 
@@ -230,7 +238,7 @@ void RadiusDamage (entity inflictor, entity attacker, float coredamage, float ed
 	}
 }
 
-/*
+
 entity	multi_ent;
 float	multi_damage;
 vector	multi_force;
@@ -247,7 +255,8 @@ void ApplyMultiDamage (void)
 	if (!multi_ent)
 		return;
 
-	Damage (self, multi_ent.origin, multi_ent, 0, multi_damage, multi_force);
+//	Damage (self, multi_ent.origin, multi_ent, 0, multi_damage, multi_force);
+	TF_T_Damage (multi_ent, self, self, multi_damage, 2, 1);
 }
 
 void AddMultiDamage (entity hit, float damage, vector force)
@@ -265,7 +274,7 @@ void AddMultiDamage (entity hit, float damage, vector force)
 	multi_force = multi_force + force;
 }
 
-void FireBullets (float shotcount, vector dir, vector spread, float deathtype)
+/*void FireBullets (float shotcount, vector dir, vector spread, float deathtype)
 {
 	vector	direction;
 	vector	source;
@@ -304,5 +313,66 @@ void FireBullets (float shotcount, vector dir, vector spread, float deathtype)
 
 	// LordHavoc: better to use normal damage
 	//ApplyMultiDamage ();
-}
-*/
+}*/
+
+float puff_count;
+vector puff_org;
+float blood_count;
+vector blood_org;
+float (entity ent) tfvisible;
+
+void (float damage,vector dir) TraceAttack =
+{
+	local vector vel;
+	local vector org;
+
+	vel = normalize (((dir + (v_up * crandom ())) + (v_right * crandom ())));
+	vel = (vel + (2 * trace_plane_normal));
+	vel = (vel * 200);
+	org = (trace_endpos - (dir * 4));
+
+	if (tfvisible(trace_ent))
+		trace_ent.takedamage = 1;
+
+	if (trace_ent.takedamage)
+	{
+		blood_count = (blood_count + 1);
+		blood_org = org;
+		AddMultiDamage (trace_ent, damage);
+	}
+	else
+	{
+		puff_count = (puff_count + 1);
+	}
+};
+
+void (float shotcount,vector dir,vector spread) FireBullets =
+{
+	local vector direction;
+	local vector src;
+
+	makevectors (self.v_angle);
+	src = (self.origin + (v_forward * 10));
+	src_z = (self.absmin_z + (self.size_z * 0.7));
+	ClearMultiDamage ();
+	traceline (src, (src + (dir * 2048)), 0.000000, self);
+	puff_org = (trace_endpos - (dir * 4));
+	while ((shotcount > 0.000000))
+	{
+		direction = ((dir + ((crandom () * spread_x) * v_right)) + ((crandom () * spread_y) * v_up));
+		traceline (src, (src + (direction * 2048)), 0.000000, self);
+		if ((trace_fraction != 1))
+		{
+			if ((self.weapon != 32768))
+			{
+				TraceAttack (4, direction);
+			}
+			else
+			{
+				TraceAttack (9, direction);
+			}
+		}
+		shotcount = (shotcount - 1);
+	}
+	ApplyMultiDamage ();
+};

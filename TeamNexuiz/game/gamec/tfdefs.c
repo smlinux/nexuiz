@@ -235,6 +235,30 @@ float () crandom;
 void (entity Goal, entity AP) DoGroupWork;
 void (entity Goal, entity AP) DoGoalWork;
 void () button_wait;
+void () SUB_Remove;
+
+// tfsentry
+.float undercover_team;				// is undercover as team number... Are we gonna use this one, wazat?
+.float super_damage_finished;		// turrets can get super charged too!
+//DP_QC_GETTAGINFO
+//idea: VorteX, LordHavoc (somebody else?)
+//DarkPlaces implementation: VorteX
+//builtin definitions:
+float(entity ent, string tagname) gettagindex = #451;
+vector(entity ent, float tagindex) gettaginfo = #452;
+//description:
+//gettagindex returns the number of a tag on an entity, this number is the same as set by setattachment (in the .tag_index field), allowing the qc to save a little cpu time by keeping the number around if it wishes (this could already be done by calling setattachment and saving off the tag_index).
+//gettaginfo returns the origin of the tag in worldspace and sets v_forward, v_right, and v_up to the current orientation of the tag in worldspace, this automatically resolves all dependencies (attachments, including viewmodelforclient), this means you could fire a shot from a tag on a gun entity attached to the view for example.
+
+
+//	 classes
+// engiener
+.float is_building;			// is the player in the middle of building something
+.float has_dispenser;		// player has dispenser
+.float has_sentry;			// player has sentry gun
+.float has_tesla;			// player has tesla coil
+.float has_teleporter;		// player has telepad (2 max)
+.entity barrel_ent;
 
 /******************* End Moved From Section **************/
 ///////////////////////////////////////////////////////////

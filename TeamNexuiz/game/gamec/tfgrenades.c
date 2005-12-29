@@ -1,7 +1,56 @@
 entity msg_entity;
 void () TeamFortress_GrenadePrimed;
 .float grenade_timer;
+.float FlashTime;
 void () CP_Timer;
+
+/*=======================
+ General grenade explode
+ ======================*/
+void () GrenadeExplode =
+{
+	local entity te;
+
+/*	if (self.voided)
+	{
+		return;
+	}
+	self.voided = 1;
+	if ((self.classname == "pipebomb"))
+	{
+		num_world_pipebombs = (num_world_pipebombs - 1);
+		decrement_team_pipebombs (self.team_no);
+		if (!(self.flags & 512))
+		{
+			self.weapon = 40;
+		}
+	}*/
+	if ((self.owner.has_disconnected != 1))
+	{
+		deathmsg = self.weapon;
+		T_RadiusDamage (self, self.owner, 120, world);
+	}
+/*	if ((self.no_active_nail_grens != 0))
+	{
+		self.no_active_nail_grens = 0;
+		self.owner.no_active_nail_grens = (self.owner.no_active_nail_grens - 1);
+		te = find (world, classname, "grenade");
+		while (te)
+		{
+			if (((te.owner == self.owner) && (te.no_active_nail_grens != 0)))
+			{
+				te.no_active_nail_grens = (te.no_active_nail_grens - 1);
+			}
+			te = find (te, classname, "grenade");
+		}
+	}*/
+	WriteByte (0, 23);
+	WriteByte (0, 3);
+	WriteCoord (0, self.origin_x);
+	WriteCoord (0, self.origin_y);
+	WriteCoord (0, self.origin_z);
+	BecomeExplosion ();
+};
 
 // TF Recoil? Anyhoo, this entity causes oddities :/
 void(float psize, entity p) KickPlayer = 
@@ -17,6 +66,196 @@ void(float psize, entity p) KickPlayer =
 		WriteByte(1, 35);
 	}
 };
+
+/* ================
+ Flash grenade
+  ===============*/
+void () FlashGrenadeTouch =
+{
+	sound (self, 1, "weapons/bounce.wav", 1, 1);
+	if ((self.velocity == '0 0 0'))
+	{
+		self.avelocity = '0 0 0';
+	}
+};
+
+void () FlashTimer =
+{
+	local entity te;
+	local string st;
+
+	te = self.owner;
+	te.FlashTime = (te.FlashTime - 0.100000);
+	if ((te.FlashTime <= 0.000000))
+	{
+		te.FlashTime = 0.000000;
+		stuffcmd (te, "v_cshift 0\n");
+		stuffcmd (te, "r_bloom_power 2\n");
+		stuffcmd (te, "r_bloom_intensity 1.5\n");
+		remove (self);
+		return;
+	}
+	if ((te.FlashTime < 1.700000))
+	{
+		st = ftos ((te.FlashTime * 150.000000));
+// lets add a bloom check later?
+/*
+<LordHavoc> avirox: stuffcmd(self, "cmd mycvar $mycvar\n");
+<LordHavoc> avirox: then later in your SV_ParseClientCommand() qc function you'll see a string come in like "mycvar 1"
+*/		
+		stuffcmd (te, "v_cshift ");
+		stuffcmd (te, st);
+		stuffcmd (te, " ");
+		stuffcmd (te, st);
+		stuffcmd (te, " ");
+		stuffcmd (te, st);
+		stuffcmd (te, " ");
+		stuffcmd (te, st);
+		stuffcmd (te, "\n");
+
+		// BLOOM!!! :D
+		stuffcmd (te, "r_bloom_power 1\n");
+
+		st = ftos(2 + (te.FlashTime * 10));
+		stuffcmd (te, "r_bloom_intensity ");
+		stuffcmd (te, st);
+		stuffcmd (te, "\n");
+		
+	}
+	if ((te.FlashTime >= 1.700000))
+	{
+		stuffcmd (te, "v_cshift 255 255 255 255\n");
+	}
+	if ((te.FlashTime <= 0.000000))
+	{
+		te.FlashTime = 0.000000;
+		stuffcmd (te, "v_cshift 0\n");
+		stuffcmd (te, "r_bloom_power 2\n");
+		stuffcmd (te, "r_bloom_intensity 1.5\n");
+		remove (self);
+		return;
+	}
+	self.nextthink = (time + 0.100000);
+};
+
+void () FlashGrenadeExplode =
+{
+	local float expsize;
+	local entity te;
+	local entity oldself;
+	local string st;
+
+	self.effects = (self.effects | 4);
+	WriteByte (0, 23);
+	WriteByte (0, 4);
+	WriteCoord (0, self.origin_x);
+	WriteCoord (0, self.origin_y);
+	WriteCoord (0, self.origin_z);
+	te = findradius (self.origin, 300);
+	while (te)
+	{
+		if ((te.classname == "player" && te.team_no != self.owner.team_no || te == self.owner))
+		{
+			traceline (self.origin, te.origin, 1, self);
+			if ((trace_fraction == 1))
+			{
+				if ((vlen ((self.origin - te.origin)) <= 200))
+				{
+					deathmsg = 35;
+					TF_T_Damage (te, self, self.owner, 60, 2, (16 | 4));
+				}
+				if (te.health > TF_FLARE_LIT)
+				{
+					if (te.FlashTime == TF_FLARE_LIT)
+					{
+						newmis = spawn ();
+						newmis.classname = "timer";
+						newmis.netname = "flashtimer";
+						newmis.team_no = self.owner.team_no;
+						newmis.owner = te;
+						newmis.think = FlashTimer;
+						newmis.nextthink = (time + 0.100000);
+					}
+					te.FlashTime = 4.500000;
+					stuffcmd (te, "v_cshift 255 255 255 255\n");
+				}
+			}
+		}
+		te = te.chain;
+	}
+	BecomeExplosion ();
+};
+
+/*=============
+ Nail Grenade
+ ============*/
+void() NailGrenadeTouch;
+void() NailGrenadeExplode;
+void() NailGrenadeNailEm;
+void() NailGrenadeLaunchNail;
+void() GrenadeExplode;
+
+void() NailGrenadeTouch = 
+{
+	if (other == self.owner)
+	{
+		return;
+	}
+	sound(self, TF_FLARE_OFF, "weapons/bounce.wav", TF_FLARE_OFF, TF_FLARE_OFF);
+	if (self.velocity == '0 0 0')
+	{
+		self.avelocity = '0 0 0';
+	}
+};
+
+void() NailGrenadeExplode = 
+{
+	self.movetype = 5;
+	setorigin(self, self.origin + '0 0 32');
+	self.avelocity = '0 500 0';
+	self.nextthink = time + 0.7;
+	self.think = NailGrenadeNailEm;
+};
+
+void() NailGrenadeNailEm = 
+{
+	self.velocity = '0 0 0';
+	self.nextthink = time + 0.1;
+	self.think = NailGrenadeLaunchNail;
+	self.playerclass = TF_FLARE_LIT;
+};
+
+void() NailGrenadeLaunchNail = 
+{
+	local float i;
+	local float j;
+	i = TF_FLARE_LIT;
+	while (i < TF_FLARE_OFF)
+	{
+		j = (random() + 2) * 5;
+		current_yaw = anglemod(self.angles_y + j);
+		self.angles_y = current_yaw;
+		self.angles_x = TF_FLARE_LIT;
+		self.angles_z = TF_FLARE_LIT;
+		makevectors(self.angles);
+		deathmsg = 9;
+		launch_spike(self.origin, v_forward);
+		newmis.touch = superspike_touch;
+		newmis.weapon = 9;
+		i = i + TF_FLARE_OFF;
+	}
+	self.playerclass = self.playerclass + TF_FLARE_OFF;
+	self.nextthink = time + 0.1;
+	if (self.playerclass > 40)
+	{
+		self.weapon = 9;
+		self.think = GrenadeExplode;
+	}
+};
+
+/*=====================
+  TF Gren Prime Code
+  ===================*/
 
 void() TeamFortress_ExplodePerson = 
 {
@@ -34,8 +273,8 @@ void() TeamFortress_ExplodePerson =
 	newmis.think = SUB_Null;
 //	newmis.think = NormalGrenadeExplode;
 	newmis.nextthink = time + 0.1;
-//	if (self.weapon == 1)
-//	{
+	if (self.weapon == 1)
+	{
 		newmis.touch = NormalGrenadeTouch;
 		newmis.think = NormalGrenadeExplode;
 		newmis.skin = 0;
@@ -44,9 +283,9 @@ void() TeamFortress_ExplodePerson =
 //		setmodel(newmis, "progs/hgren2.mdl");
 		setmodel(newmis, "models/grenades/fragnade.md3");
 		
-//	}
-/*	else
-	{
+	}
+	else
+/*	{
 		if (self.weapon == 2)
 		{
 			newmis.touch = ConcussionGrenadeTouch;
@@ -56,7 +295,7 @@ void() TeamFortress_ExplodePerson =
 			setmodel(newmis, "progs/hgren2.mdl");
 		}
 		else
-		{
+		{*/
 			if (self.weapon == 3)
 			{
 				newmis.touch = NailGrenadeTouch;
@@ -64,7 +303,7 @@ void() TeamFortress_ExplodePerson =
 				newmis.skin = 1;
 				newmis.avelocity = '0 300 0';
 				setmodel(newmis, "progs/biggren.mdl");
-			}
+			}/*
 			else
 			{
 				if (self.weapon == 4)
@@ -89,7 +328,7 @@ void() TeamFortress_ExplodePerson =
 					{
 						if (self.weapon == 6)
 						{
-							sprint(self.owner, 2, "Flare lit.\n");
+							sprint(self.owner, "Flare lit.\n");
 							te = spawn();
 							te.touch = SUB_Null;
 							te.think = RemoveFlare;
@@ -122,7 +361,7 @@ void() TeamFortress_ExplodePerson =
 									setmodel(newmis, "progs/grenade2.mdl");
 								}
 								else
-								{
+								{*/
 									if (self.weapon == 9)
 									{
 										newmis.touch = FlashGrenadeTouch;
@@ -130,7 +369,7 @@ void() TeamFortress_ExplodePerson =
 										newmis.skin = 1;
 										newmis.avelocity = '300 300 300';
 										setmodel(newmis, "progs/grenade2.mdl");
-									}
+									}/*
 								}
 							}
 						}
@@ -187,7 +426,7 @@ void () TeamFortress_PrimeGrenade =
 	if ((self.impulse == 150))
 	{
 		gtype = self.tp_grenades_1;
-		/*
+		
 		if ((self.tp_grenades_1 == 2))
 		{
 			gs = "Concussion grenade";
@@ -251,8 +490,8 @@ void () TeamFortress_PrimeGrenade =
 					}
 				}
 			}
-		}*/
-		gs = "Grenade";
+		}
+//		gs = "Grenade";
 
 		if ((self.no_grenades_1 > 0))
 		{
@@ -305,19 +544,21 @@ void () TeamFortress_PrimeGrenade =
 			return;
 		}
 	}
-/*	if ((self.impulse == 151))
+	if ((self.impulse == 151))
 	{
+		if (self.tp_grenades_2 == 0)
+			return;
 		gtype = self.tp_grenades_2;
-		if ((self.tp_grenades_2 == 2))
+/*		if ((self.tp_grenades_2 == 2))
 		{
 			gs = "Concussion grenade";
 		}
 		else
-		{
+		{*/
 			if ((self.tp_grenades_2 == 3))
 			{
 				gs = "Nail grenade";
-			}
+			}/*
 			else
 			{
 				if ((self.tp_grenades_2 == 4))
@@ -353,22 +594,22 @@ void () TeamFortress_PrimeGrenade =
 									if ((self.tp_grenades_2 == 9))
 									{
 										gs = "Flash grenade";
-									}
+									}*/
 									else
 									{
 										gs = "Grenade";
-									}
+									}/*
 								}
 							}
 						}
 					}
 				}
 			}
-		}
+		}*/
 		if ((self.no_grenades_2 > 0))
 		{
 			self.no_grenades_2 = (self.no_grenades_2 - 1);
-			if ((gtype == 6))
+/*			if ((gtype == 6))
 			{
 				newmis = spawn ();
 				newmis.owner = self;
@@ -397,31 +638,31 @@ void () TeamFortress_PrimeGrenade =
 				setsize (newmis, '0 0 0', '0 0 0');
 				setorigin (newmis, self.origin);
 				return;
-			}
+			}*/
 			if ((gtype == 10))
 			{
 				ptime = ftos (0.5);
-				sprint (self, 2, "Opening ");
-				sprint (self, 2, gs);
-				sprint (self, 2, "...\n");
+				sprint (self, "Opening ");
+				sprint (self, gs);
+				sprint (self, "...\n");
 			}
 			else
 			{
 				ptime = ftos (3);
-				sprint (self, 2, gs);
-				sprint (self, 2, " primed, ");
-				sprint (self, 2, ptime);
-				sprint (self, 2, " seconds...\n");
+				sprint (self, gs);
+				sprint (self, " primed, ");
+				sprint (self, ptime);
+				sprint (self, " seconds...\n");
 			}
 		}
 		else
 		{
-			sprint (self, 2, "No ");
-			sprint (self, 2, gs);
-			sprint (self, 2, "s left.\n");
+			sprint (self, "No ");
+			sprint (self, gs);
+			sprint (self, "s left.\n");
 			return;
 		}
-	}*/
+	}
 	self.tfstate = (self.tfstate | 1);
 	tGrenade = spawn ();
 	tGrenade.owner = self;
@@ -502,15 +743,23 @@ void () TeamFortress_GrenadePrimed =
 	newmis.angles = vectoangles (newmis.velocity);
 	newmis.think = SUB_Null;
 	newmis.nextthink = self.heat;
-//	if ((self.weapon == 1))
-//	{
+	if ((self.weapon == 1))
+	{
 		newmis.touch = NormalGrenadeTouch;
 		newmis.think = NormalGrenadeExplode;
 		newmis.skin = 0;
 		newmis.avelocity = '300 300 300';
 //		setmodel (newmis, "progs/hgren2.mdl");
 		setmodel(newmis, "models/grenades/fragnade.md3");
-//	}
+	}
+	else if ((self.weapon == 9))
+	{
+		newmis.touch = FlashGrenadeTouch;
+		newmis.think = FlashGrenadeExplode;
+		newmis.skin = 2;
+		newmis.avelocity = '300 300 300';
+		setmodel (newmis, "progs/hgren2.mdl");
+	}
 /*	else
 	{
 		if ((self.weapon == 2))
@@ -522,7 +771,7 @@ void () TeamFortress_GrenadePrimed =
 			setmodel (newmis, "progs/hgren2.mdl");
 		}
 		else
-		{
+		{*/
 			if ((self.weapon == 3))
 			{
 				newmis.touch = NailGrenadeTouch;
@@ -530,7 +779,7 @@ void () TeamFortress_GrenadePrimed =
 				newmis.skin = 1;
 				newmis.avelocity = '0 300 0';
 				setmodel (newmis, "progs/biggren.mdl");
-			}
+			}/*
 			else
 			{
 				if ((self.weapon == 4))

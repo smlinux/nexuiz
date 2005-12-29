@@ -206,6 +206,7 @@ void () ConvertToBackPack =
 		self.a_c = 25;
 		self.armorvalue = 100;
 		self.no_grenades_1 = 2;
+		self.no_grenades_2 = 1;
 	}
 	i_t_g ();
 };

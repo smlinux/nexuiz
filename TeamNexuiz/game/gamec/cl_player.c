@@ -192,6 +192,12 @@ void PlayerKilled (float unnatural_death, entity inflictor, entity attacker, flo
 	if(self.class == CLASS_SPY)
 		SpyDecloak();
 
+	// fixes death while reloading glitch
+	inflictor.reload_time = 0;
+	// fixes flash effects staying after death bug
+	self.FlashTime = 0;
+	stuffcmd(inflictor, "v_cshift 0 0 0 0\n");
+	
 	// throw a weapon
 	SpawnThrownWeapon (self.origin + (self.mins + self.maxs) * 0.5, self.wpn5.weapon);//self.weapon);
 	// print an obituary message
