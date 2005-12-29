@@ -9,7 +9,8 @@ Players: 6-9
 Teams: 3
 
 Weapons: Machine Gun, Electro,
-Nexgun, Hagar, Mortar
+Nexgun, Hagar, Mortar,
+Rocket Launcher
 
 Powerups: Invincibility,
 Strength
