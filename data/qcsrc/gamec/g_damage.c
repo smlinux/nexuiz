@@ -343,24 +343,25 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 				{
 					//attacker.health = attacker.health + damage * cvar("g_balance_rune_vampire_combo_absorb");
 					attacker.health = bound(
-						3, 
+						cvar("g_balance_curse_empathy_minhealth"), // LA: was 3, now 40
 						attacker.health + damage * cvar("g_balance_rune_vampire_combo_absorb"), 
-						1000);
+						cvar("g_balance_rune_vampire_maxhealth"));	// LA: was 1000, now 500
 				}
 				else
 				{
 					//attacker.health = attacker.health + damage * cvar("g_balance_rune_vampire_absorb");
 					attacker.health = bound(
-						3, 
+						attacker.health,	// LA: was 3, but changed so that you can't lose health
+											// empathy won't let you gain health in the same way...
 						attacker.health + damage * cvar("g_balance_rune_vampire_absorb"), 
-						1000);
-				}
+						cvar("g_balance_rune_vampire_maxhealth"));	// LA: was 1000, now 500
+					}
 			}
 			// apply empathy curse
 			else if (attacker.runes & CURSE_EMPATHY)
 			{
 				attacker.health = bound(
-					3, 
+					cvar("g_balance_curse_empathy_minhealth"), // LA: was 3, now 20
 					attacker.health + damage * cvar("g_balance_curse_empathy_takedamage"), 
 					attacker.health);
 			}
@@ -499,3 +500,6 @@ void FireBullets (float shotcount, vector dir, vector spread, float deathtype)
 	//ApplyMultiDamage ();
 }
 */
+
+
+
