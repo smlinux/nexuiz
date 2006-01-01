@@ -7,6 +7,7 @@ Email		: imunreal A to the T gmail D to the O to the T com
 Website		: http://urre.quakedev.com/
 Credits		: LordHavoc for teaching me a lot about QuakeC
 		  Ender for scratch tutorials
+		  Chris Voss for the menu system
 		  id Software for various good things
 		  Stribbs for inspiration to improve this editor
 
@@ -37,6 +38,11 @@ which is when it would be even remotely plausible, for performance reasons.
 This system should still cover most needs.
 
 I recommend the DarkPlaces engine, FTE might be supported in the future.
+
+A word of *WARNING* to anyone interested in checking out the sourcecode:
+This is the only project I've written merely to get it done ASAP, I did not
+plan the code *at all*, so it's probably the messiest and hardest to
+maintain/update code I've ever written. You have been warned.
 
 Controls and Impulses
 --------
@@ -145,15 +151,6 @@ Known Bugs
 
 Legal
 -----
-Authors MAY use this Quake modification as a basis for other publicly
-available work, as long as I am credited. Please send me any modifications
-you make.
-
-You may distribute this Quake modification in any electronic format as long
-as this description file remains intact and unmodified and is retained along
-with all of the files in the archive.
-
-You are not allowed to sell this Quake modification for money without my
-permission.
-
-Quake is copyrighted and trademarked, owned by id Software.
+This is a special version of the NavNodeEditor, donated to the Nexuiz team,
+thus it is released under the same license as Nexuiz. See relevant documents
+for more information.
