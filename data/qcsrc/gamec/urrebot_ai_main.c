@@ -227,7 +227,7 @@ void() UrreBotEvalTargets =
 };
 
 /* --- UrreBotAim ---
-Very crude and simple aiming*/
+Very crude and simple aiming, with some leading capability*/
 
 void() UrreBotAim =
 {
@@ -288,8 +288,8 @@ void() UrreBotAim =
 };
 
 /* --- UrreBotMove ---
-Moves towards the closest point on the next waybox in the bots list, or
-towards the item he's hunting in case they are in the same waybox*/
+Moves towards the closest point on the next goal in the bots list,
+which can be a navnode, item or domination point*/
 
 void() UrreBotMove =
 {
@@ -384,12 +384,7 @@ float() UrreBotImpulses =
 	local float dist;
 	local float cells, rockets, nails, shells;
 	local vector v;
-/*
-	cvar("g_balance_electro_radius");
-	cvar("g_balance_grenadelauncher_radius");
-	cvar("g_balance_hagar_radius");
-	cvar("g_balance_rocketlauncher_radius");
-*/
+
 	if (random() < 0.5)
 		return 0;
 
@@ -462,9 +457,11 @@ float() UrreBotImpulses =
 	return WEP_LASER;
 };
 
+/* --- BeamBox ---
+Used for some debugging, occasionally*/
+
 float BT_LIGHTNING = 0;
 float BT_BEAM = 1;
-
 void(float beamtype, vector bmins, vector bmaxs) BeamBox =
 {
 	local vector v1, v2;
@@ -565,6 +562,9 @@ void(float beamtype, vector bmins, vector bmaxs) BeamBox =
 		te_beam(world, v1, v2);
 };
 
+/* --- UrreBotPath ---
+Marks route and determines which goal is the most useful to head for*/
+
 void(float sdist) UrreBotPath =
 {
 	local float f, f2, f3;
@@ -632,9 +632,10 @@ void(float sdist) UrreBotPath =
 };
 
 /* --- UrreBotThink ---
-In this version, UrreBot does a waybox search based on time and turn
-Then it aims, moves, finds/loses stuff to shoot at, picks best weapon,
-shoots, in that order
+In this version, UrreBot does a path search based on timer and turn
+Then it aims, moves, checks if it's stuck, finds/loses stuff to shoot at,
+picks best weapon, shoots, and optionally displays debug stuff, in that
+order
 Aiming must happen before movement, because movement depends on angles
 He does not yet have any combat movement*/
 

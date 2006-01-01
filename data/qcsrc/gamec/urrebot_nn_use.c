@@ -1,4 +1,4 @@
-/* --- ClampPointToNavNodes ---
+/* --- ClampPointToSpace ---
 This function lets the bot know where to go to reach the next navnode.
 
 This is a highly optimized version, it used to also be direction based, so it
@@ -67,7 +67,7 @@ vector(vector point, entity current_space, entity goal_space) ClampPointToSpace 
 };
 
 /* --- PopRoute ---
-Traverses the bots navnode-list to get a new navnode to travel towards*/
+Traverses the bots goal-list to get a new goal to travel towards*/
 
 void() PopRoute =
 {
@@ -100,7 +100,7 @@ void() PopRoute =
 };
 
 /* --- PushRoute ---
-Adds navnodes to the bots navnode-list*/
+Adds navnodes to the bots goal-list*/
 
 void(entity e) PushRoute =
 {
@@ -128,7 +128,7 @@ void(entity e) PushRoute =
 };
 
 /* --- ClearRoute ---
-Removes all navnodes from the bots navnode-list*/
+Removes all goals from the bots goal-list*/
 
 void() ClearRoute =
 {
@@ -230,7 +230,7 @@ entity(vector org, vector minss, vector maxss) FindCurrentNavNode =
 	return best;
 };
 
-/* --- ToPointInNavNode ---
+/* --- ToPointInSpace ---
 Returns a direction towards a point, inside a navnode
 It prefers staying inside a navnode over going towards the point
 This function exists to allow the bot to drop off a platform and run
