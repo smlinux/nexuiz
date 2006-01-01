@@ -361,7 +361,7 @@ void() UrreBotMove =
 	}
 	else
 	{
-		if (!self.goalcurrent || ((self.goalcurrent.flags & FL_ITEM) && !self.goalcurrent.solid))
+		if (!self.goalcurrent || ((self.goalcurrent.flags & FL_ITEM) && !self.goalcurrent.solid) || (self.goalcurrent.classname == "dom_controlpoint" && self.goalcurrent.enemy.team == self.team))
 		{
 			self.strat_me = TRUE;
 			UrreBotPath(minisearch_distance);
