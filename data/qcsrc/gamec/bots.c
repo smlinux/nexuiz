@@ -45,8 +45,9 @@ float search_distance;
 float minisearch_distance;
 float stratsearch_distance;
 .entity goalcurrent;
+.entity goallist;
 .float strat_me;
-.float() evalfunc;
+.float(entity c_item) evalfunc;
 
 vector nullvector;
 .vector movepoint;

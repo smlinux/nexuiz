@@ -118,10 +118,6 @@ float() EEval =
 	local float f;
 
 	f = 250;
-/*
-	if (deathmatch == 2 && (self.items & IT_SUPER_SHOTGUN))
-		f = -1;
-*/
 	return f;
 };
 
@@ -130,10 +126,6 @@ float() UEval =
 	local float f;
 
 	f = 500;
-/*
-	if (deathmatch == 2 && (self.items & IT_SUPER_SHOTGUN))
-		f = -1;
-*/
 	return f;
 };
 
@@ -142,10 +134,6 @@ float() CLEval =
 	local float f;
 
 	f = 500;
-/*
-	if (deathmatch == 2 && (self.items & IT_SUPER_SHOTGUN))
-		f = -1;
-*/
 	return f;
 };
 
@@ -154,10 +142,6 @@ float() HEval =
 	local float f;
 
 	f = 500;
-/*
-	if (deathmatch == 2 && (self.items & IT_SUPER_SHOTGUN))
-		f = -1;
-*/
 	return f;
 };
 
@@ -166,10 +150,6 @@ float() NGEval =
 	local float f;
 
 	f = 200;
-/*
-	if (deathmatch == 2 && (self.items & IT_NAILGUN))
-		f = -1;
-*/
 	return f;
 };
 
@@ -178,10 +158,6 @@ float() SGEval =
 	local float f;
 
 	f = 1000;
-/*
-	if (deathmatch == 2 && (self.items & IT_SUPER_NAILGUN))
-		f = -1;
-*/
 	return f;
 };
 
@@ -190,10 +166,6 @@ float() GLEval =
 	local float f;
 
 	f = 300;
-/*
-	if (deathmatch == 2 && (self.items & IT_GRENADE_LAUNCHER))
-		f = -1;
-*/
 	return f;
 };
 
@@ -202,10 +174,6 @@ float() RLEval =
 	local float f;
 
 	f = 100;
-/*
-	if (deathmatch == 2 && (self.items & IT_ROCKET_LAUNCHER))
-		f = -1;
-*/
 	return f;
 };
 
@@ -219,6 +187,18 @@ float() StrengthEval =
 	return 50;
 };
 
+float() RuneEval =
+{
+	return 10; // this is the goal of the gamemode, so we want these things above all else
+};
+
+float(entity dompoint) DomPointEval =
+{
+	if (dompoint.enemy.team != self.team)
+		return 50;
+	return -1;
+};
+
 float() BadEval =
 {
 	return -1;
@@ -226,7 +206,7 @@ float() BadEval =
 
 /* --- ItemEvals ---
 Called at load, to give all pickable items their evaluation function
-Also assigns their current waybox (makes for faster evaluation)*/
+Also assigns their current navnode (makes for faster evaluation)*/
 
 void() ItemEvals =
 {
@@ -235,10 +215,10 @@ void() ItemEvals =
 	e = findchainflags(flags, FL_ITEM);
 	while (e)
 	{
-		e.enemy = FindCurrentNavNode((e.absmin + e.absmax)*0.5, e.mins, e.maxs);
-		if (e.enemy == world)
+		e.goallist = FindCurrentNavNode((e.absmin + e.absmax)*0.5, e.mins, e.maxs);
+		if (e.goallist == world)
 		{
-			dprint ("Warning: Found no box for item\n");
+			dprint ("Warning: Found no navnode for item\n");
 			e.evalfunc = BadEval;
 		}
 		else
@@ -281,8 +261,13 @@ void() ItemEvals =
 				e.evalfunc = StrengthEval;
 			else if (e.netname == "Invulnerability")
 				e.evalfunc = InvEval;
+			else if (e.classname == "dom_controlpoint")
+				e.evalfunc = DomPointEval;
 			else
+			{
 				dprint ("Warning: Unknown item\n");
+				e.evalfunc = BadEval;
+			}
 		}
 		e = e.chain;
 	}
@@ -301,16 +286,46 @@ void() DistEvalItems =
 	e = findchainflags(flags, FL_ITEM);
 	while (e)
 	{
-		/*
 		if (e.flags & FL_ONGROUND)
-		// if (e.classname == "BackPack")
-		if (!e.enemy)
-			e.enemy = FindCurrentNavNode((e.absmin + e.absmax)*0.5, e.mins, e.maxs);
-		*/
+		if (!e.goallist)
+		{
+			e.goallist = FindCurrentNavNode((e.absmin + e.absmax)*0.5, e.mins, e.maxs);
+			if (e.classname == "droppedweapon")
+			{
+				if (e.netname == "Uzi")
+					e.evalfunc = UEval;
+				else if (e.netname == "Shotgun")
+					e.evalfunc = SGEval;
+				else if (e.netname == "Grenade Launcher")
+					e.evalfunc = GLEval;
+				else if (e.netname == "Electro")
+					e.evalfunc = EEval;
+				else if (e.netname == "Crylink")
+					e.evalfunc = CLEval;
+				else if (e.netname == "Nex Gun")
+					e.evalfunc = NGEval;
+				else if (e.netname == "Hagar")
+					e.evalfunc = HEval;
+				else if (e.netname == "Rocket Launcher")
+					e.evalfunc = RLEval;
+				else
+				{
+					dprint ("Warning: Unknown item\n");
+					e.evalfunc = BadEval;
+				}
+			}
+			else if (e.runes)
+				e.evalfunc = RuneEval;
+			else
+			{
+				dprint ("Warning: Unknown item\n");
+				e.evalfunc = BadEval;
+			}
+		}
 
-		v = e.origin + (e.mins + e.maxs) * 0.5;
-		f = vlen(v - e.enemy.pointl);
-		e.costl = e.enemy.costl + f;
+		v = e.absmin + e.absmax * 0.5;
+		f = vlen(v - e.goallist.pointl);
+		e.costl = e.goallist.costl + f;
 		e = e.chain;
 	}
 };

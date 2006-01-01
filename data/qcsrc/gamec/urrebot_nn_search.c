@@ -22,7 +22,7 @@ float(entity from, entity to, float lflag) CheckNavNode =
 		if (to.costl > addcost)
 		{
 			to.lmark = TRUE;
-			to.enemy = from;
+			to.goallist = from;
 			to.costl = addcost;
 			to.pointl = foundpoint;
 		}
@@ -51,7 +51,7 @@ void(float sdist) MarkRoute =
 	t = navnode_chain;
 	while (t)
 	{
-		t.enemy = world;
+		t.goallist = world;
 		t.lmark = FALSE;
 		t.costl = 10000000;
 		t.pointl = '0 0 0';

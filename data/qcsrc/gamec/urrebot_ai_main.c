@@ -579,9 +579,9 @@ void(float sdist) UrreBotPath =
 	{
 		f = 0;
 		if (e.evalfunc)
-			f = e.evalfunc();
+			f = e.evalfunc(e);
 		if (f > 0)
-		if (e.enemy)
+		if (e.goallist)
 		{
 			f = f + e.costl;
 			if (f < f2)
@@ -598,7 +598,7 @@ void(float sdist) UrreBotPath =
 		while (best)
 		{
 			PushRoute(best);
-			best = best.enemy;
+			best = best.goallist;
 		}
 	}
 	else
@@ -613,7 +613,7 @@ void(float sdist) UrreBotPath =
 			while (e)
 			{
 				if (f == f2)
-				if (e.enemy)
+				if (e.goallist)
 				{
 					best = e;
 					f3 = 3;
@@ -626,7 +626,7 @@ void(float sdist) UrreBotPath =
 		while (best)
 		{
 			PushRoute(best);
-			best = best.enemy;
+			best = best.goallist;
 		}
 	}
 };
