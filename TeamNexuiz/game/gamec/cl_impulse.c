@@ -68,6 +68,44 @@ void ImpulseCommands (void)
 					DoReload (2, (CLIP_MAX_CRYLINK - self.clip_crylink));
 			}
 	}
+	if (self.impulse == 68) {
+			local entity barrel;
+ 			barrel = spawn();
+ 			barrel.mdl = "models/sentry/turr1_barrel.md3";
+ 			barrel.yaw_speed = 10;
+ 			setmodel(barrel, barrel.mdl);
+ 			setorigin(barrel, self.origin + '8 0 8');
+			barrel.angles_y = barrel.angles_y;
+
+			local entity barrel2;
+ 			barrel2 = spawn();
+ 			barrel2.mdl = "models/sentry/turr1_barrel.md3";
+ 			barrel2.yaw_speed = 10;
+			barrel2.angles_y = barrel2.angles_z + 90;
+ 			setmodel(barrel2, barrel.mdl);
+ 			setorigin(barrel2, '0 0 0');
+
+			setattachment(barrel2, barrel, "tag_barrel_bullet1");
+			
+			local float barrel_tag;
+			local vector fire_from;
+			barrel_tag = gettagindex (barrel2, "tag_barrel_bullet1");
+			fire_from = gettaginfo (barrel2, barrel_tag);
+			bprint(vtos(fire_from));
+			bprint("\n");
+
+			local entity e;
+			e = spawn();
+			e.scale = 4;
+			setmodel(e, "models/plasmatrail.mdl");
+			setorigin (e, fire_from);
+			bprint(vtos(e.origin));
+			bprint("\n");
+
+	}
+	if (self.impulse == 67) {
+		TeamFortress_Build (3);
+	}
 	if (self.impulse == 69) {
 /*		local entity isneardoor;
 		local string st;

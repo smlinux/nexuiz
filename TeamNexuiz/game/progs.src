@@ -10,6 +10,7 @@ gamec/tfitems.c			// TF Items
 gamec/tfclient.c			// TF Client-Side stuff
 gamec/tfplats.c			// TF Platforms
 gamec/tfgrenades.c		// TF Grenades
+gamec/tfmenus.c			// TF Text Menus
 
 gamec/extensions.h
 
@@ -80,6 +81,8 @@ gamec/domination.c
 gamec/mauvebot.c
 
 gamec/tfai.c				// TF AI
+gamec/tfsentry.c				// TF Sentry Gun
+gamec/tftesla.c				// TF Tesla Coil
 gamec/tfcombat.c				// TF Combat System
 gamec/tfmapitems.c			// TF Map Items
 gamec/tfbuttons.c				// TF Buttons

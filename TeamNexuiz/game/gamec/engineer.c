@@ -3,6 +3,11 @@
 void () MagnetMineTouch;
 void () MagTimer;
 void () RemoveMagnetMine;
+//tesla
+void () Tesla_Die;
+void () Tesla_Pain;
+void () Tesla_Idle;
+void () Tesla_Touch;
 
 void () SUB_NULL;
 
@@ -69,6 +74,14 @@ void () TeamFortress_EngineerBuild =
 		if ((self.is_building == 1))
 		{
 			sprint (self, "You stop building.\n");
+
+			if (self.weaponentity.pos1 != '0 0 0')
+			{
+//				self.reload_time = time;
+				self.weaponentity.pos1 = '0 0 0';
+				self.weaponentity.lip = PLAYER_WEAPONSELECTION_SPEED;
+			}
+
 			self.pausetime = 0;
 			self.tfstate = (self.tfstate - (self.tfstate & 65536));
 			TeamFortress_SetSpeed (self);
@@ -100,7 +113,7 @@ float(entity obj, entity builder) CheckArea =
 	pos = pointcontents(obj.origin);
 	if (pos == -2 || pos == -6)
 	{
-		return TF_FLARE_LIT;
+		return 0;
 	}
 	src_x = obj.origin_x + obj.maxs_x + 16;
 	src_y = obj.origin_y + obj.maxs_y + 16;
@@ -108,20 +121,20 @@ float(entity obj, entity builder) CheckArea =
 	pos = pointcontents(src);
 	if (pos == -2 || pos == -6)
 	{
-		return TF_FLARE_LIT;
+		return 0;
 	}
 	end_x = obj.origin_x + obj.mins_x - 16;
 	end_y = obj.origin_y + obj.mins_y - 16;
 	end_z = obj.origin_z + obj.mins_z - 16;
-	traceline(src, end, TF_FLARE_OFF, obj);
-	if (trace_fraction != TF_FLARE_OFF)
+	traceline(src, end, 1, obj);
+	if (trace_fraction != 1)
 	{
-		return TF_FLARE_LIT;
+		return 0;
 	}
 	pos = pointcontents(end);
 	if (pos == -2 || pos == -6)
 	{
-		return TF_FLARE_LIT;
+		return 0;
 	}
 	src_x = obj.origin_x + obj.mins_x - 16;
 	src_y = obj.origin_y + obj.maxs_y + 16;
@@ -129,41 +142,50 @@ float(entity obj, entity builder) CheckArea =
 	pos = pointcontents(src);
 	if (pos == -2 || pos == -6)
 	{
-		return TF_FLARE_LIT;
+		return 0;
 	}
 	end_x = obj.origin_x + obj.maxs_x + 16;
 	end_y = obj.origin_y + obj.mins_y - 16;
 	end_z = obj.origin_z + obj.mins_z - 16;
-	traceline(src, end, TF_FLARE_OFF, obj);
-	if (trace_fraction != TF_FLARE_OFF)
+	traceline(src, end, 1, obj);
+	if (trace_fraction != 1)
 	{
-		return TF_FLARE_LIT;
+		return 0;
 	}
 	pos = pointcontents(end);
 	if (pos == -2 || pos == -6)
 	{
-		return TF_FLARE_LIT;
+		return 0;
 	}
-	traceline(builder.origin, obj.origin, TF_FLARE_OFF, builder);
-	if (trace_fraction != TF_FLARE_OFF)
+	traceline(builder.origin, obj.origin, 1, builder);
+	if (trace_fraction != 1)
 	{
-		return TF_FLARE_LIT;
+		return 0;
 	}
-	return TF_FLARE_OFF;
+	return 1;
 };
 
 void(float objtobuild) TeamFortress_Build = 
 {
+	if (self.is_building == 1) {	// double-checks incase someone uses code with TeamFortress_EngineerBuild(number)
+		TeamFortress_EngineerBuild();
+		return;
+	}
+	if ((self.reload_time + .25) > time) { 
+		sprint(self, "You cant build while reloading.\n");
+		return; 
+	}
+
 	local float btime;
 	local entity te;
 	local vector tmp1;
 	local vector tmp2;
 	newmis = spawn();
 	makevectors(self.v_angle);
-	v_forward_z = TF_FLARE_LIT;
+	v_forward_z = 0;
 	v_forward = normalize(v_forward) * 64;
 	newmis.origin = self.origin + v_forward;
-	if (objtobuild == TF_FLARE_OFF)
+	if (objtobuild == 1)
 	{
 		if (self.has_dispenser)
 		{
@@ -189,7 +211,7 @@ void(float objtobuild) TeamFortress_Build =
 			tmp2 = '16 16 48';
 //			newmis.mdl = "progs/turrbase.mdl";
 			newmis.mdl = "models/sentry/turr1_base.md3";
-			newmis.scale = .75;
+//			newmis.scale = .75;
 			newmis.netname = "sentrygun";
 //			btime = time + 5;
 			btime = .1;
@@ -203,10 +225,11 @@ void(float objtobuild) TeamFortress_Build =
 			}
 			tmp1 = '-16 -16 0';
 			tmp2 = '16 16 48';
-			newmis.mdl = "progs/newtesla.mdl";
+			newmis.mdl = "models/engineer/tesla/tesla.md3";
+			newmis.scale = .70;			//temp -- morphed's models too freaking huge :x
 
 			newmis.netname = "tesla";
-			btime = (time + 7);
+			btime = (time + 6);
 		}
 // Begin telepad 1
 		if (objtobuild == 5)
@@ -226,20 +249,20 @@ void(float objtobuild) TeamFortress_Build =
 		}
 // End telepad 1
 	}
-	if (CheckArea(newmis, self) == TF_FLARE_LIT)
+	if (CheckArea(newmis, self) == 0)
 	{
 		sprint(self, "Not enough room to build here\n");
 		dremove(newmis);
 		return;
 	}
-	self.is_building = TF_FLARE_OFF;
+	self.is_building = 1;
 	self.immune_to_check = time + 10;
-//	self.maxspeed = TF_FLARE_LIT;			// make sure player cant move
+//	self.maxspeed = 0;			// make sure player cant move
 	self.tfstate = self.tfstate | 65536;
 /*	self.weapon = self.current_weapon;		// get rid of player's weapon model
-	self.current_weapon = TF_FLARE_LIT;
+	self.current_weapon = 0;
 	self.weaponmodel = "";
-	self.weaponframe = TF_FLARE_LIT;*/
+	self.weaponframe = 0;*/
 //	TeamFortress_SetSpeed(self);			// hmm? player cant move?
 	newmis.owner = self;
 	newmis.classname = "timer";
@@ -257,6 +280,7 @@ void(float objtobuild) TeamFortress_Build =
 	setorigin(newmis, newmis.origin);
 	newmis.flags = newmis.flags - (newmis.flags & 512);
 
+	self.velocity = '0 0 0';		// stop player movement
 	DoReload (5, (btime - time));		// Engineer build function shared with reload one
 										// 5 is for building, btime minus time is for build time
 };
@@ -273,20 +297,21 @@ void(entity bld) CheckBelowBuilding =
 	{
 		below_z = below_z - 24;
 	}
-	traceline(bld.origin, below, TF_FLARE_OFF, bld);
-	if (trace_fraction == TF_FLARE_OFF)
+	traceline(bld.origin, below, 1, bld);
+	if (trace_fraction == 1)
 	{
 		bld.movetype = 6;
 		bld.flags = bld.flags - (bld.flags & 512);
 	}
 };
 
+void () Tesla_Animate;
 void() TeamFortress_FinishedBuilding = 
 {
 	local entity oldself;
 	local vector source;
 
-	if (self.owner.is_building != TF_FLARE_OFF)
+	if (self.owner.is_building != 1)
 	{
 		return;
 	}
@@ -294,14 +319,14 @@ void() TeamFortress_FinishedBuilding =
 	self = self.owner;
 	oldself.owner = world;
 	oldself.real_owner = self;
-	self.is_building = TF_FLARE_LIT;
+	self.is_building = 0;
 	self.tfstate = self.tfstate - (self.tfstate & 65536);
 	self.current_weapon = self.weapon;
 	self.StatusRefreshTime = time + 0.1;
 	TeamFortress_SetSpeed(self);
-/*	if (oldself.weapon == TF_FLARE_OFF)
+/*	if (oldself.weapon == 1)
 	{
-		self.has_dispenser = TF_FLARE_OFF;
+		self.has_dispenser = 1;
 		sprint(self, "You finish building the dispenser.\n");
 		teamsprint(self.team_no, self, self.netname);
 		teamsprint(self.team_no, self, " has built a Dispenser.\n");
@@ -346,33 +371,33 @@ void() TeamFortress_FinishedBuilding =
 			local entity barrel;
 			barrel = spawn();
 //			barrel.mdl = "models/sentry/turr1_base.md3";
-			barrel.mdl = "models/sentry/turr1_barrel.md3";
-			barrel.scale = .75;
-			barrel.solid = 2;
+//			barrel.mdl = "models/sentry/turr1_barrel.md3";
+//			barrel.scale = .75;
+			//barrel.solid = 2;
 
 //			barrel.angles_x = barrel.angles_x - 70;
 
 //			barrel.angles_z = barrel.angles_z - 90;
-/*			barrel.angles_x = TF_FLARE_LIT;
+/*			barrel.angles_x = 0;
 			barrel.angles_y = oldself.angles_y;
-			barrel.angles_z = TF_FLARE_LIT;*/
+			barrel.angles_z = 0;*/
 //			barrel.movetype = 4;
 //			barrel.movetype = MOVETYPE_FOLL`OW;
 			barrel.yaw_speed = 10;
 //			barrel.angles_z = barrel.angles_z - 45;
-			setmodel(barrel, barrel.mdl);
+			setmodel(barrel, "models/sentry/turr1_barrel.md3");
 //			setsize(barrel, '-16 -16 0', '16 16 48');		// temp //'d
 //			setorigin(barrel, oldself.origin + '0 0 8');
 			setorigin(barrel, '0 0 0');
 			
 
-			self.has_sentry = TF_FLARE_OFF;
+			self.has_sentry = 1;
 			sprint(self, "You finish building the sentry gun.\n");
 			teamsprint(self.team_no, self, self.netname);
 			teamsprint(self.team_no, self, " has built a Sentry Gun.\n");
 			oldself.classname = "building_sentrygun_base";
 			oldself.netname = "sentry gun";
-			oldself.takedamage = TF_FLARE_LIT;
+			oldself.takedamage = 0;
 			oldself.th_die = Sentry_Die;
 			self.ammo_cells = self.ammo_cells - 130;
 			setsize(oldself, '-16 -16 0', '16 16 4');
@@ -380,13 +405,13 @@ void() TeamFortress_FinishedBuilding =
 			newmis.classname = "building_sentrygun";
 			newmis.health = 150;
 			newmis.max_health = newmis.health;
-			newmis.weapon = TF_FLARE_OFF;
+			newmis.weapon = 1;
 			newmis.th_die = Sentry_Die;
 			newmis.th_pain = Sentry_Pain;
 //			newmis.mdl = "progs/turrgun.mdl";
 			newmis.mdl = "models/sentry/turr1_body.md3";
-			newmis.scale = .75;
-			sound(oldself, 3, "weapons/tnkatck4.wav", TF_FLARE_OFF, TF_FLARE_OFF);
+//			newmis.scale = .75;
+			sound(oldself, 3, "weapons/tnkatck4.wav", 1, 1);
 			newmis.solid = 2;
 			setmodel(newmis, newmis.mdl);
 			setsize(newmis, '-16 -16 0', '16 16 48');
@@ -405,11 +430,11 @@ void() TeamFortress_FinishedBuilding =
 			newmis.think = lvl1_sentry_stand;
 			newmis.nextthink = time + 0.5;
 			newmis.yaw_speed = 10;
-			newmis.heat = TF_FLARE_LIT;
-			newmis.angles_x = TF_FLARE_LIT;
+			newmis.heat = 0;
+			newmis.angles_x = 0;
 //			newmis.angles_y = oldself.angles_y;
 			newmis.angles_y = oldself.angles_y;
-			newmis.angles_z = TF_FLARE_LIT;
+			newmis.angles_z = 0;
 			newmis.waitmin = anglemod(newmis.angles_y - 50);
 			newmis.waitmax = anglemod(newmis.angles_y + 50);
 			if (newmis.waitmin > newmis.waitmax)
@@ -427,17 +452,18 @@ void() TeamFortress_FinishedBuilding =
 			setattachment(barrel, newmis, "tag_body_barrel");
 
 
-		}/*
+		}
 		else
 		{
 //tesla
 			if ((oldself.weapon == 3))
 			{
-				self.has_tesla = TF_FLARE_OFF;
+				self.has_tesla = 1;
 				sprint (self, "You finish building the tesla coil.\n");
+				oldself.real_owner = self;
 				teamsprint (self.team_no, self, self.netname);
 				teamsprint (self.team_no, self, " has built a tesla.\n");
-				sound (oldself, 3, "weapons/guerilla_set.wav", TF_FLARE_OFF, TF_FLARE_OFF);
+				sound (oldself, 3, "weapons/guerilla_set.wav", 1, 1);
 				oldself.classname = "building_tesla";
 				oldself.netname = "tesla";
 				oldself.takedamage = 2;
@@ -453,38 +479,38 @@ void() TeamFortress_FinishedBuilding =
 				oldself.flags = (oldself.flags - (oldself.flags & 512));
 				oldself.team_no = self.team_no;
 				oldself.think = Tesla_Idle;
-//			        oldself.think = tsla_on1;
 				oldself.nextthink = (time + 2);
-//			        oldself.nextthink = time + 0.1;
-//			        oldself.has_holo = time + 2; // next Tesla_Idle run
 				oldself.touch = Tesla_Touch;
 				oldself.enemy = world;
-				oldself.maxammo_shells = TF_FLARE_LIT;
-				oldself.maxammo_nails = TF_FLARE_LIT;
-				oldself.maxammo_rockets = TF_FLARE_LIT;
+				oldself.maxammo_shells = 0;
+				oldself.maxammo_nails = 0;
+				oldself.maxammo_rockets = 0;
 				oldself.max_health = 100;
 				oldself.ammo_cells = 50;
-				oldself.tf_items = TF_FLARE_LIT;
-				if (!(self.weapons_carried & 8))
+				oldself.tf_items = 0;
+				/*if (!(self.weapons_carried & 8))
 				{
 					oldself.ammo_shells = 2;
 					oldself.ammo_nails = 2;
-					oldself.ammo_rockets = TF_FLARE_OFF;
+					oldself.ammo_rockets = 1;
 					oldself.currentammo = 5;
 					oldself.max_health = 200;
 					oldself.ammo_cells = 120;
-				}
-//				oldself.colormap = self.colormap; // Custom TF ColorMap
-//				oldself.job = 0; // Custom TF Animations timing
+				}*/
+				oldself.currentammo = 0;		// 6 Upgrades. (6 minus this number is pgrade count)
 				oldself.health = oldself.max_health;
 				oldself.waitmin = ((oldself.ammo_shells + 2) * (oldself.ammo_nails + 2));
-				oldself.waitmax = TF_FLARE_LIT;
-// 4 upgrades!
-				if (infokey(world, "balancedtesla") == "1") {
-				oldself.currentammo = 2; }
+				oldself.waitmax = 0;
+
+				// The tesla animater -- till I learn to be a better coder ;)
+				local entity tesanim;
+				tesanim = spawn();
+				tesanim.owner = oldself;
+				tesanim.think = Tesla_Animate;
+				tesanim.nextthink = oldself.nextthink;
 			}
-// TELEPAD 2 BEGIN
-	if (oldself.weapon == 5)
+// TELEPAD 2 BEGIN*/ 
+	/*if (oldself.weapon == 5)
 	{
 		self.has_teleporter = (self.has_teleporter + 1);
 		sprint (self, "You finish building the Teleporter Pad.\n");
@@ -532,8 +558,8 @@ void() TeamFortress_FinishedBuilding =
 	        oldself.all_active=0; // OfN - reset HACKER improvements
 		}
 // TELEPAD 2 END
-		}
-	}*/
+		}*/
+	}
 	W_SetCurrentAmmo();
 };
 

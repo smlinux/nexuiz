@@ -101,6 +101,12 @@ void (entity targ, entity attacker) Killed =
 		self = oself;
 		return;
 	}
+	if (self.classname == "building_tesla")
+	{
+		self.th_die ();
+		self = oself;
+		return;
+	}
 	self.enemy = attacker;
 	if ((self.flags & 32))
 	{
@@ -128,11 +134,20 @@ void (entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 
 	local float damagearmor;
 
-	if (targ.team_no < 1 && targ.classname != "func_button" && targ.classname != "door")			// TEMP
+	if (targ.team_no < 1 && targ.classname != "func_button" && targ.classname != "door" && targ.classname != "building_tesla")			// TEMP
 	{								////
 		return;						////
 	}								////
 
+	/*if (targ.classname == "building_tesla")
+	{
+		targ.health = (targ.health - take);
+		if ((targ.health <= 0))
+		{
+			Killed (targ, attacker);
+		}
+		return;
+	}*/
 	if (!targ.takedamage)
 	{
 		return;
@@ -147,7 +162,7 @@ void (entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 		{
 			damage = (damage * 4);
 		}
-		if (((targ.classname != "player") && (targ.classname != "bot")))
+		if (((targ.classname != "player") && (targ.classname != "bot") && (targ.classname != "building_tesla")))
 		{
 			if (!Activated (targ, attacker))
 			{
@@ -249,6 +264,25 @@ void (entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 		take = 1;
 	}
 	targ.health = (targ.health - take);
+
+	if (((attacker.classname == "player") && (((((((targ.classname == "player") || (targ.classname == "building_sentrygun")) || (targ.classname == "building_tesla")) || (targ.classname == "building_teleporter")) || (targ.classname == "building_camera")) || (targ.classname == "monster_helo")) || (targ.classname == "laser_drone"))))
+	{
+		if ((((targ.team_no > 0) && (targ.team_no == attacker.team_no)) && (targ != attacker)))
+		{
+			if ((teamplay & 16))
+			{
+				return;
+			}
+			else
+			{
+				if ((teamplay & 8))
+				{
+					take = take / 2;
+				}
+			}
+		}
+	}
+
 	if ((targ.armorvalue < 1))
 	{
 		targ.armorclass = 0;
@@ -283,7 +317,7 @@ void (entity targ, entity inflictor, entity attacker, float damage, float T_flag
 	local float no_damage;
 	local float moment;
 
-	if (targ.team_no < 1 && targ.classname != "func_button" && targ.classname != "door")			// TEMP
+	if (targ.team_no < 1 && targ.classname != "func_button" && targ.classname != "door" && targ.classname != "building_tesla")			// TEMP
 	{								////
 		return;						////
 	}								////
@@ -308,7 +342,7 @@ void (entity targ, entity inflictor, entity attacker, float damage, float T_flag
 		{
 			damage = (damage * 4);
 		}
-		if (((((((targ.classname != "player") && (targ.classname != "bot")) && (targ.classname != "building_sentrygun")) && (targ.classname != "building_dispenser")) && (targ.classname != "building_teleporter_entrance")) && (targ.classname != "building_teleporter_exit")))
+		if ((((((((((((targ.classname != "player") && (targ.classname != "bot")) && (targ.classname != "building_tesla")) && (targ.classname != "building_sentrygun")) && (targ.classname != "building_dispenser")) && (targ.classname != "trip_bomb")) && (targ.classname != "building_teleporter")) && (targ.classname != "building_camera")) && (targ.classname != "probe")) && (targ.classname != "monster_helo")) && (targ.classname != "laser_drone")))
 		{
 			if (!Activated (targ, attacker))
 			{
@@ -453,7 +487,8 @@ void (entity targ, entity inflictor, entity attacker, float damage, float T_flag
 		}
 		return;
 	}
-	if (((attacker.classname == "player") && (((((targ.classname == "player") || (targ.classname == "building_sentrygun")) || (targ.classname == "building_dispenser")) || (targ.classname == "building_teleporter_entrance")) || (targ.classname == "building_teleporter_exit"))))
+//	if (((attacker.classname == "player") && (((((targ.classname == "player") || (targ.classname == "building_sentrygun")) || (targ.classname == "building_dispenser")) || (targ.classname == "building_teleporter_entrance")) || (targ.classname == "building_teleporter_exit"))))
+	if (((attacker.classname == "player") && ((((((targ.classname == "player") || (targ.classname == "building_sentrygun")) || (targ.classname == "building_tesla")) || (targ.classname == "building_teleporter")) || (targ.classname == "building_camera")) || (targ.classname == "laser_drone"))))
 	{
 		if (((((targ.team_no > 0) && (targ.team_no == attacker.team_no)) && (targ != attacker)) && (T_flags & 2)))
 		{

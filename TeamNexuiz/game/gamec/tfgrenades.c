@@ -238,7 +238,7 @@ void() NailGrenadeLaunchNail =
 		self.angles_x = TF_FLARE_LIT;
 		self.angles_z = TF_FLARE_LIT;
 		makevectors(self.angles);
-		deathmsg = 9;
+		deathmsg = 99;			//temp
 		launch_spike(self.origin, v_forward);
 		newmis.touch = superspike_touch;
 		newmis.weapon = 9;

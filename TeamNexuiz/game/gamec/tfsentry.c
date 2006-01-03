@@ -420,7 +420,7 @@ void W_Sentry_Fire(vector org, vector vel, float damage)
 	spike.touch = W_NailGrenade_Spike_Poke;
 	spike.velocity = vel * 6;
 	spike.angles = vectoangles (spike.velocity);
-	spike.scale = 0.75;
+//	spike.scale = 0.75;
 
 //	setattachment(spike, self.barrel_ent, "tag_body_barrel");
 }
@@ -474,8 +474,10 @@ float () Sentry_Fire =
 	local float barrel_tag;
 	local vector fire_from;
 
+//	barrel_tag = gettagindex (self.barrel_ent, "tag_bullet");
 	barrel_tag = gettagindex (self.barrel_ent, "tag_barrel_bullet1");
 	fire_from = gettaginfo (self.barrel_ent, barrel_tag);
+
 
 /*	bprint (ftos(barrel_tag));
 	bprint ("   \n");
@@ -487,8 +489,34 @@ float () Sentry_Fire =
 	//(entity targ, entity inflictor, entity attacker, float damage) T_Damage
 //	fireBullet (fire_from, dir, .1, 2, 666, 1);
 //	T_Damage(self.enemy, self, self, 4);
-//	dir = (self.enemy.origin - fire_from);
-fire_from = fire_from + v_forward + v_up;
+//fire_from = fire_from + self.barrel_ent.view_ofs + v_forward + v_right + v_up;
+
+local entity testent;
+local entity testent2;
+
+testent = spawn ();
+testent.movetype = 0;
+testent.solid = SOLID_BBOX;
+setmodel(testent, "models/sentry/bullet.MD3");
+//setorigin(testent, fire_from);
+setattachment(testent, self.barrel_ent, "tag_barrel_bullet1");
+
+barrel_tag = gettagindex (testent, "");
+fire_from = gettaginfo (testent, barrel_tag);
+dir = (self.enemy.origin - fire_from);
+
+
+//barrel_tag = gettagindex (testent, "tag_bullet");
+//fire_from = gettaginfo (testent, testent.tag_index);
+//dir = (self.enemy.origin - fire_from);
+
+/*testent2 = spawn ();
+testent2.movetype = 0;
+testent2.solid = SOLID_BBOX;
+//testent2.scale = 5;
+setmodel(testent2, "models/plasmatrail.mdl");
+setorigin(testent2, fire_from);*/
+
 
 	W_Sentry_Fire(fire_from, dir, 4);
 

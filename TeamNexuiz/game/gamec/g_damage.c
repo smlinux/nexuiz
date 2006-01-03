@@ -36,7 +36,7 @@ void Obituary (entity attacker, entity targ, float deathtypeN)	// Renamed "death
 				bprint ("^1",s, " blew his own sorry ass up\n");
 			else if (deathtypeN == 35)
 				bprint ("^1",s, " is still seeing stars from his flash grenade.\n");
-			else if (deathtypeN == 9)
+			else if (deathtypeN == 99)
 				bprint ("^1",s, " nails himself to death.\n");
 			else
 				bprint ("^1",s, " couldn't resist the urge to self immolate\n");
@@ -95,6 +95,8 @@ void Obituary (entity attacker, entity targ, float deathtypeN)	// Renamed "death
 				bprint ("^1",s, " sees the light of ", attacker.netname, "'s flash grenade\n");
 			else if (deathtypeN == 9)
 				bprint ("^1",s, " gets nailed to the wall from ", attacker.netname, "'s nail grenade\n");
+			else if (deathtypeN == 51)	//tesla
+				bprint ("^1",s, " gets fried by ", attacker.netname, "'s tesla coil :D\n");
 			else
 				bprint ("^1",s, " was killed by ", attacker.netname, "\n");
 

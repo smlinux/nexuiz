@@ -1851,9 +1851,11 @@ void() TeamFortress_ChangeClass =
 void (float o, float m, void () g) weapon_thinkf;
 void () Reload_Restore_Weapon =
 {
-	self.owner.weaponentity.pos1 = '0 0 0';
-	self.owner.weaponentity.lip = PLAYER_WEAPONSELECTION_SPEED;
-	dremove(self);
+	if (self.owner.weaponentity.pos1 != '0 0 0')
+	{
+		self.owner.weaponentity.pos1 = '0 0 0';
+		self.owner.weaponentity.lip = PLAYER_WEAPONSELECTION_SPEED;
+	}
 };
 
 void (float rweapon, float amount) DoReload =
@@ -1895,7 +1897,8 @@ void (float rweapon, float amount) DoReload =
 	newmis.owner = self;
 	newmis.think = Reload_Restore_Weapon;
 	newmis.nextthink = time + rtime;
-	self.reload_time = time + rtime;
+	if (rweapon != 5)
+		self.reload_time = time + rtime;
 };
 
 // Xavior's self.playerclass to self.class conversion

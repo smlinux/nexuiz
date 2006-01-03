@@ -344,6 +344,10 @@ SOURCE=.\tfsentry.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\tftesla.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\w_crylink.c
 # End Source File
 # End Group

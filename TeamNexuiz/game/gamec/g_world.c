@@ -215,6 +215,7 @@ void worldspawn (void)
 	precache_model ("models/ammo/grenade/grenade.md3");
 	precache_model ("models/grenades/fragnade.md3");
 	precache_model ("models/magmine/magnetmine.md3");		// mag mine
+	precache_model ("models/sentry/turr1_barrel.md3");
 
 
 	// plays music for the level if there is any
