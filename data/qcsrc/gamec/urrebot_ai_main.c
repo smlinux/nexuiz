@@ -193,6 +193,7 @@ void() UrreBotEvalTargets =
 	while (e)
 	{
 		if (!(e.flags & FL_NOTARGET) || e.killcount != -666) // -666 is spec/obs
+		if (!(cvar("teamplay") && self.team == e.team))      // don't target teammates
 		if (e.flags & FL_CLIENT)
 		if (e != self)
 		if (!e.deadflag)
@@ -648,6 +649,9 @@ void() UrreBotThink =
 	self.button0 = 0;
 	self.button2 = 0;
 	self.impulse = 0;
+
+	if (cvar("teamplay") && self.team == self.enemy.team) // don't return fire if hit by a teammate
+		self.enemy = world;
 
 	if (self.deadflag)
 	{
