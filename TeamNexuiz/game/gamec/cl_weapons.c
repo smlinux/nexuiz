@@ -1,6 +1,7 @@
 
 // generic weapons table
 // add new weapons here
+void (float wreq) w_railgun;
 void(float wpn, float wrequest) weapon_action =
 {
 	if ((self.reload_time + .25) > time) { 
@@ -90,7 +91,7 @@ void(float wpn, float wrequest) weapon_action =
 		if (wpn == WEP1)
 			w_laser(wrequest);
 		else if (wpn == WEP2)
-			w_laser(wrequest);
+			w_railgun(wrequest);
 		else if (wpn == WEP3)
 			w_electro(wrequest);
 		else if (wpn == WEP4)
@@ -207,9 +208,21 @@ void() W_PreviousWeapon =
 	self.switchweapon = weaponwant;
 };
 
+void () Use_Function;
 // Brought back weapon frame
 void() W_WeaponFrame =
 {
+	if (self.current_menu > 0)				// calls the text menu display
+	{
+		Player_Menu ();
+		if ((self.impulse > 0) && (self.impulse < 11))
+		{
+			Menu_Input (self.impulse);
+		}
+	}
+	if(self.buttonuse)
+		Use_Function();		// for engineer and medic, though I'm putting this in engineer.c...
+
 	if (self.button0 || self.button2 || self.button3  || self.button4)
 		CheckTeamClass();
 	if (!self.weaponentity || self.health <= 0)

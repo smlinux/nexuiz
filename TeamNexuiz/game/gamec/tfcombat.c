@@ -263,7 +263,6 @@ void (entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 	{
 		take = 1;
 	}
-	targ.health = (targ.health - take);
 
 	if (((attacker.classname == "player") && (((((((targ.classname == "player") || (targ.classname == "building_sentrygun")) || (targ.classname == "building_tesla")) || (targ.classname == "building_teleporter")) || (targ.classname == "building_camera")) || (targ.classname == "monster_helo")) || (targ.classname == "laser_drone"))))
 	{
@@ -283,6 +282,7 @@ void (entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 		}
 	}
 
+	targ.health = (targ.health - take);
 	if ((targ.armorvalue < 1))
 	{
 		targ.armorclass = 0;

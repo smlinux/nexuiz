@@ -500,7 +500,7 @@ void (float classnum) SetMaxAmmoFor =
 		self.clip_crylink = CLIP_MAX_CRYLINK;
 		self.tp_grenades_1 = 9;
 	}
-	else if (classnum == 2) {		// Spy supplies
+	else if (classnum == CLASS_SPY) {		// Spy supplies
 		self.maxammo_shells = 150;
 		self.maxammo_nails = 80;
 		self.maxammo_cells = 70;
@@ -512,5 +512,9 @@ void (float classnum) SetMaxAmmoFor =
 	}
 	else if (classnum == CLASS_PYRO) {
 		self.clip_pipegrenades = 6;
+	}
+	else if (classnum == CLASS_ENGINEER) {
+		self.maxammo_cells = 200;
+		self.ammo_cells = 100;
 	}
 };

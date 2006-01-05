@@ -11,17 +11,6 @@ void () Tesla_Touch;
 
 void () SUB_NULL;
 
-// move to tfdefs:
-void () TeamFortress_FinishedBuilding;
-void () lvl1_sentry_stand;
-void (float tno, entity ignore, string st) teamsprint;
-.entity real_owner;
-.entity oldenemy;
-.float current_weapon;
-.float waitmin;
-.float waitmax;
-.void(entity attacker, float damage) th_pain;
-
 //temp
 void (entity bld) CheckBelowBuilding;
 void (entity gunhead) CheckSentry;
@@ -507,7 +496,7 @@ void() TeamFortress_FinishedBuilding =
 				tesanim = spawn();
 				tesanim.owner = oldself;
 				tesanim.think = Tesla_Animate;
-				tesanim.nextthink = oldself.nextthink;
+				tesanim.nextthink = time;
 			}
 // TELEPAD 2 BEGIN*/ 
 	/*if (oldself.weapon == 5)
@@ -759,4 +748,209 @@ void () MagnetMineTouch =
 	self.think = RemoveDudMine;
 	self.nextthink = (time + 15);
 //	dremove (self);
+};
+
+// Checks the distance between the player and the object
+void () CheckDistance =
+{
+	local vector dist;
+
+	if (!(self.owner.building.classname == "building_tesla" && self.enemy.classname == "building_dispenser")) {
+	if ((self.owner.building != self.enemy))
+	{
+		dremove (self);
+		return;
+	} }
+	dist = self.enemy.origin - self.owner.origin;
+	if ((vlen (dist) > 64.000000))
+	{
+		CenterPrint (self.owner, "\n");
+		self.owner.menu_count = 25.000000;
+		self.owner.current_menu = 1.000000;
+		self.owner.building = world;
+		dremove (self);
+		return;
+	}
+	self.nextthink = (time + 0.300000);
+};
+
+
+void (entity gun) Engineer_UseTesla =
+{
+	local entity dist_checker;
+	local string st;
+
+		if ((gun.ammo_rockets == TF_FLARE_LIT))
+		{
+			gun.maxammo_cells = 120;
+		}
+		else
+		{
+			if ((gun.ammo_rockets == TF_FLARE_OFF))
+			{
+				gun.maxammo_cells = 120;
+			}
+			else
+			{
+				if ((gun.ammo_rockets == 2))
+				{
+					gun.maxammo_cells = 200;
+				}
+				else
+				{
+					if ((gun.ammo_rockets == 3))
+					{
+						gun.maxammo_cells = 300;
+					}
+				}
+			}
+		}
+
+	sprint(self, "Èובלפט:");
+	st = ftos(gun.health);
+	sprint(self, st);
+	sprint(self, "¯");
+	st = ftos(gun.max_health);
+	sprint(self, st);
+	sprint(self, " Ãוללף:");
+	st = ftos(gun.ammo_cells);
+	sprint(self, st);
+	sprint(self, "¯");
+	st = ftos(gun.maxammo_cells);
+	sprint(self, st);
+	st = ftos ((6 - gun.currentammo));
+	sprint(self, " Õנחעבהוף Ìוזפ:");
+	sprint (self, st);
+	st = ftos ((6 - gun.currentammo));
+	sprint (self, "\n");
+	sprint(self, "Öןלפבחו:");
+	st = ftos(gun.ammo_shells);
+	sprint(self, st);
+	sprint(self, " Áםנועבחו:");
+	st = ftos(gun.ammo_nails);
+	sprint(self, st);
+	sprint(self, " Ðןקוע Óץננלש:");
+	st = ftos(gun.ammo_rockets);
+	sprint(self, st);
+	sprint(self, "\n");
+	if (gun.tf_items)
+	{
+		if ((gun.tf_items & 2))
+		{
+			sprint (self, "TeslaTurret(tm) ");
+		}
+		if ((gun.tf_items & TF_FLARE_OFF))
+		{
+			sprint (self, "Improved Targeter ");
+		}
+		if ((gun.tf_items & 1024))
+		{
+			sprint (self, "Spy Detector");
+		}
+		sprint (self, "\n");
+	}
+	self.current_menu = 18;
+	self.menu_count = 25;
+	self.building = gun;
+	dist_checker = spawn ();
+	dist_checker.classname = "timer";
+	dist_checker.owner = self;
+	dist_checker.enemy = gun;
+	dist_checker.think = CheckDistance;
+	dist_checker.nextthink = (time + 0.3);
+};
+
+void () button_fire;
+// Engineer and Medic "USE" function -- called when user presses a key bound to +use
+// replaces using wrench on sentry gun and buiaxe to heal.
+void () Use_Function =
+{
+	local vector source;
+	local vector org;
+	local vector def;
+	local float healam;
+	local entity te;
+
+	makevectors (self.v_angle);
+	source = (self.origin + '0 0 16');
+	traceline (source, (source + (v_forward * 64)), 0.000000, self);
+	if ((trace_fraction == 1))
+	{
+		return;
+	}
+	org = (trace_endpos - (v_forward * 4));
+	if ((trace_ent.goal_activation & 8))
+	{
+		if (Activated (trace_ent, self))
+		{
+			DoResults (trace_ent, self, 1);
+			if ((trace_ent.classname == "func_button"))
+			{
+				trace_ent.enemy = self;
+				other = self;
+				self = trace_ent;
+				self.dont_do_triggerwork = 1;
+				button_fire ();
+				self = other;
+			}
+		}
+		else
+		{
+			if ((trace_ent.else_goal != 0.000000))
+			{
+				te = Findgoal (trace_ent.else_goal);
+				if (te)
+				{
+					DoResults (te, self, (trace_ent.goal_result & 2));
+				}
+			}
+			else
+			{
+				sound (self, 1, "player/axhit2.wav", 1, 1);
+				WriteByte (4, 23);
+				WriteByte (4, 2);
+				WriteByte (4, 3);
+				WriteCoord (4, org_x);
+				WriteCoord (4, org_y);
+				WriteCoord (4, org_z);
+			}
+		}
+		return;
+	}
+//	if (trace_ent.takedamage)
+	if (trace_ent.classname != "player")
+	{
+		if ((trace_ent.classname == "building_dispenser"))
+		{
+			//Engineer_UseDispenser (trace_ent);
+			return;
+		}
+		else
+		{
+			if ((trace_ent.classname == "building_sentrygun"))
+			{
+				//Engineer_UseSentryGun (trace_ent);
+				return;
+			}
+			else
+			{
+				if ((trace_ent.classname == "building_sentrygun_base"))
+				{
+					if (trace_ent.oldenemy)
+					{
+						//Engineer_UseSentryGun (trace_ent.oldenemy);
+					}
+					return;
+				}
+				else
+				{
+					if ((trace_ent.classname == "building_tesla"))
+					{
+						Engineer_UseTesla (trace_ent);
+						return;
+					}
+				}
+			}
+		}
+	}
 };

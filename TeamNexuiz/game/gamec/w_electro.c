@@ -19,7 +19,8 @@ void(float req) w_electro =
 	else if (req == WR_RAISE)
 		electro_select_01();
 	else if (req == WR_UPDATECOUNTS)
-		self.currentammo = floor(self.ammo_cells / 2);
+//		self.currentammo = floor(self.ammo_cells / 2);		//why divide by 2?
+		self.currentammo = floor(self.ammo_cells);
 	else if (req == WR_DROP)
 		electro_deselect_01();
 	else if (req == WR_SETUP)

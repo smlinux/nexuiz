@@ -35,7 +35,6 @@ void ImpulseCommands (void)
 		self.impulse = 0;
 		return;
 	}
-
 	if (self.impulse == 71)
 	{
 		local string whee;
@@ -105,6 +104,7 @@ void ImpulseCommands (void)
 	}
 	if (self.impulse == 67) {
 		TeamFortress_Build (3);
+		//self.current_menu = 18;
 	}
 	if (self.impulse == 69) {
 /*		local entity isneardoor;

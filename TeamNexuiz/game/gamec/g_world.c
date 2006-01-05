@@ -118,6 +118,7 @@ void worldspawn (void)
 	precache_model ("models/weapons/v_hotbombs.md3");	// hot bombs
 	precache_model ("models/weapons/v_grapple.md3");	// grappling hook
 	precache_model ("models/weapons/v_namek.md3");		// namek
+	precache_model ("models/weapons/v_railgun.md3");	// railgun (engineer)
 
 	precache_model ("models/weapons/w_rli.zym");
 	precache_model ("models/weapons/w_flamer.zym");
@@ -125,6 +126,7 @@ void worldspawn (void)
 	precache_model ("models/weapons/w_hotbombs.zym");
 	precache_model ("models/weapons/w_grapple.zym");
 	precache_model ("models/weapons/w_namek.zym");
+	precache_model ("models/weapons/v_railgun.zym");
 
 
 	// other stuff

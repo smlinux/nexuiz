@@ -36,12 +36,23 @@ entity () FindIntermission =
 	objerror ("FindIntermission: no spot");
 };
 
+// This sets all the settings for the level including teams allowed, and lives and legal classes etc.
+// it is called only once, for the first player who joins
 void () DecodeLevelParms =
 {
 		if (parems_decoded == 1)
 			return;
-
 		else {
+			// The following allows play on Nexuiz/NexCTF maps if there is no info_tfdetect on a map
+			if (team1maxplayers == 0)
+				team1maxplayers = 4;
+			if (team2maxplayers == 0)
+				team2maxplayers = 4;
+			if (team1lives == 0)
+				team1lives = -1;
+			if (team2lives == 0)
+				team2lives = -1;
+
 			local entity decent;
 			decent = find (world, classname, "info_tfdetect");
 			if ((decent != world))
@@ -51,7 +62,7 @@ void () DecodeLevelParms =
 //				{
 					cvar_set ("teamplay", "21?TeamFortress");
 //				}
-				ParseTFDetect (decent);
+				ParseTFDetect (decent);		// This returns the map's team/class allowances
 				if (((number_of_teams <= 0.000000) || (number_of_teams >= 5.000000)))
 				{
 					number_of_teams = 4.000000;

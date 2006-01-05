@@ -2224,3 +2224,40 @@ void (entity pl, string s1, string s2) CenterPrint2 =
 	centerprint (pl, s1, s2);
 	pl.StatusRefreshTime = (time + 1.5);
 };
+
+// another ammo check caleld by the menu system. I dont know exactly what function this is for. - XavioR
+void(entity p) bound_other_ammo = 
+{
+	if (p.ammo_shells > TeamFortress_GetMaxAmmo(p, 256))
+	{
+		p.ammo_shells = TeamFortress_GetMaxAmmo(p, 256);
+	}
+	if (p.ammo_nails > TeamFortress_GetMaxAmmo(p, 512))
+	{
+		p.ammo_nails = TeamFortress_GetMaxAmmo(p, 512);
+	}
+	if (p.ammo_rockets > TeamFortress_GetMaxAmmo(p, 1024))
+	{
+		p.ammo_rockets = TeamFortress_GetMaxAmmo(p, 1024);
+	}
+	if (p.ammo_cells > TeamFortress_GetMaxAmmo(p, 2048))
+	{
+		p.ammo_cells = TeamFortress_GetMaxAmmo(p, 2048);
+	}
+/*	if (p.ammo_medikit > p.maxammo_medikit)				// addme
+	{
+		p.ammo_medikit = p.maxammo_medikit;
+	}*/
+	if (p.armorvalue > p.maxarmor)
+	{
+		p.armorvalue = p.max_armor;
+	}
+	if (p.no_grenades_1 > 4)
+	{
+		p.no_grenades_1 = 4;
+	}
+	if (p.no_grenades_2 > 4)
+	{
+		p.no_grenades_2 = 4;
+	}
+};

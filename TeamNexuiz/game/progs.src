@@ -80,6 +80,8 @@ gamec/domination.c
 
 gamec/mauvebot.c
 
+gamec/tf_w_railgun.c			// Engineer RailGun
+
 gamec/tfai.c				// TF AI
 gamec/tfsentry.c				// TF Sentry Gun
 gamec/tftesla.c				// TF Tesla Coil

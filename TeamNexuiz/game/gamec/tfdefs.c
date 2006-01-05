@@ -219,6 +219,7 @@ void (entity ent, vector tdest, float tspeed, void() func) SUB_CalcMoveEnt;
 
 // tfq3fitems
 .string is_converted_goal; // This is used to identify converted goals (helps me determine spawn in q3f maps)
+.string groupname;		   // generally gets set to blueflag or redflag
 float q3fdetect;
 .vector orig_origin;
 .string activetarget;
@@ -266,6 +267,16 @@ float modelindex_eyes    = 0;
 .entity barrel_ent;			// sentry gun's barrel entity
 .entity animation_ent;		// an object's entity that controls its animations (dirty, but effective)
 .float weapons_carried;		// used with tesla
+void () TeamFortress_FinishedBuilding;
+void () lvl1_sentry_stand;
+void (float tno, entity ignore, string st) teamsprint;
+.entity real_owner;									// The building's real owner (the one who built it)
+.entity oldenemy;
+.float current_weapon;
+.float waitmin;
+.float waitmax;
+.void(entity attacker, float damage) th_pain;		// Function the building calls when it gets hurt
+													// fixme!  XavioR
 
 /******************* End Moved From Section **************/
 ///////////////////////////////////////////////////////////
