@@ -1,6 +1,6 @@
 .PHONY: ../../data/progs.dat
 ../../data/progs.dat: 
-	frikqcc /O2 -warn 2 || true
+	fteqcc -O2
 
 clean:
 	rm -f ../../data/progs.dat progdefs.h error.log

@@ -62,7 +62,7 @@ Maps usually ship as *.pk3 file. All you have to do is to copy this file to your
 Before you can create a desktop/menu item you have to create a little shell script. Open a text editor (like gedit or kate) and paste the following lines:
 ^<<
 #!/bin/sh
-cd /path/to/Nexuiz		# replace this with the full path to your Nexuiz folder
+cd `dirname $0`
 ./nexuiz-linux-x86-sdl "$@"	# or ./nexuiz-linux-x86_64-sdl if you're using an AMD64/EM64T distributions
 ^>>
 Save this in your Nexuiz directory as |nexuiz.sh|. Now you have to make this file executable by opening a xterm/konsole and typing:
@@ -112,3 +112,18 @@ Colors can be used in nicknames and chat messages by typing ^ followed by a numb
 To record a demo: open the console and type |rec <name>|. The demo file will be stored in |~/.nexuiz/data/demos/<name>.dem| (Linux) or |Nexuiz/data/demos/<name>.dem| (Windows).
 To watch a demo: open the console and type |ply <name>| (|name| is the filename without extension). If you downloaded a demo, copy it to |Nexuiz/data/demos| first.
 You can list all your demo files by typing |dem| on the console. Some usefull keybindings for viewing demos are listed [here (http://www.nexuiz.com/forums/index.php?showtopic=1766&st=0&p=13400&#entry13400)].
+
+
+* Development
+
+** How do i set up gtkradiant to create/edit Nexuiz maps?
+There's a [detailed guide (http://www.nexuiz.com/forums/index.php?showtopic=195)] on gtkradiant setup in the forums. There are also a [Linux shell script (http://www.nexuiz.com/forums/index.php?showtopic=195&view=findpost&p=11176)] and a [Windows application (http://www.nexuiz.com/forums/index.php?showtopic=195&view=findpost&p=11838)] that will configure your gtkradiant (1.4) automagically.
+
+** Where can i get latest development versions of the source code?
+_Engine:_ instructions are available at http://icculus.org/twilight/darkplaces/download.html (you will need a [cvs client (http://www.nongnu.org/cvs/)])
+
+_Game data:_ to check out the Nexuiz svn, you'll need a [svn client (http://subversion.tigris.org/project_packages.html)]. To check out the repository with a commandline svn client, do
+^<<
+svn co svn://svn.icculus.org/nexuiz/trunk/
+^>>
+To compile the gamecode you need [fteqcc (http://sourceforge.net/project/showfiles.php?group\_id=116842&package\_id=129507)]. Just download it and run it twice, once in |data/menuqc| and once in |data/qcsrc|.
