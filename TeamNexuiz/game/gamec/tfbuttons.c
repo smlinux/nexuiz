@@ -54,15 +54,15 @@ float () button_touch =
 
 	if ((cb_prematch_time > time))
 	{
-		return;
+		return 0;
 	}
 	if ((other.classname != "player"))
 	{
-		return;
+		return 0;
 	}
 	if ((self.goal_activation & 8))
 	{
-		return;
+		return 0;
 	}
 	if ((other.playerclass == 0))
 	{
@@ -78,7 +78,7 @@ float () button_touch =
 				AttemptToActivate (te, other, self);
 			}
 		}
-		return;
+		return 0;
 	}
 	self.enemy = other;
 	button_fire ();
@@ -98,9 +98,6 @@ void () button_killed =
 
 void () func_button =
 {
-	local float gtemp;
-	local float ftemp;
-
 	if (self.activetarget != "")
 	{
 		self.target = self.activetarget;

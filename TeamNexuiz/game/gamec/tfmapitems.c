@@ -182,8 +182,6 @@ void () ReturnItem;
 
 void() MoveFlag = 
 {
-	local vector v;
-
 	if ( (prematch) )// && (self.owner.items & 131072) )
 	{
 		T_Damage (self.owner, self.owner, self.owner, 500);
@@ -216,8 +214,6 @@ void() MoveFlag =
 
 void (entity Goal) UpdateAbbreviations =
 {
-	local string st;
-
 	if ((Goal.has_abbreviated == 0))
 	{
 		if (((Goal.g_a != 0) && (Goal.goal_activation == 0)))
@@ -413,8 +409,6 @@ void (entity Goal) UpdateAbbreviations =
 
 void () TF_PlaceItem =
 {
-	local float _l_10795;
-
 	self.flags = 256.000000;
 	self.movetype = 0.000000;
 	self.velocity = '0.000000 0.000000 0.000000';
@@ -445,8 +439,6 @@ void () TF_StartItem =
 
 void () TF_PlaceGoal =
 {
-	local float _l_10808;
-
 	if ((self.classname != "info_tfgoal_timer"))
 	{
 		if ((self.goal_activation & 1.000000))
@@ -1052,9 +1044,7 @@ void(entity Goal, entity Player, entity AP, float addb) Apply_Results =
 	local entity oldself;
 	local entity te;
 	local entity oldte;
-	local float tc;
 	local float oa;
-	local string st;
 	stuffcmd(Player, "bf\n");
 	if (Goal.classname == "item_tfgoal")
 	{
@@ -1397,7 +1387,6 @@ float(entity Goal, entity AP) APMeetsCriteria =
 {
 	local float gotone;
 	local entity te;
-	local string db;
 	if (AP != world)
 	{
 		if (Goal.team_no)
@@ -2003,8 +1992,7 @@ void() DelayedResult =
 void(entity Goal, entity AP, float addb) DoResults = 
 {
 	local entity te;
-	local entity oldself;
-	local string st;
+
 	local float winners;
 
 	if (Goal.goal_state == 1)
@@ -2188,7 +2176,6 @@ void(entity Goal, entity AP, float addb) DoResults =
 
 void() tfgoal_touch = 
 {
-	local entity te;
 	if (!(self.goal_activation & 1))
 	{
 		return;
@@ -2232,7 +2219,6 @@ void() tfgoal_timer_tick =
 
 void() item_tfgoal_touch = 
 {
-	local string st;
 	local entity te;
 	if (other.is_dead == 1)		// TEMP
 	{
@@ -2271,7 +2257,6 @@ void() item_tfgoal_touch =
 
 void(entity Item, entity AP, entity Goal) tfgoalitem_GiveToPlayer = 
 {
-	local string sp;
 	Item.owner = AP;
 	if (Item.mdl != string_null)
 	{
@@ -2387,7 +2372,6 @@ void (entity Item, entity AP, float method) tfgoalitem_RemoveFromPlayer =
 	local float key1on;
 	local float key2on;
 	local float spyoff;
-	local string db1;
 	local entity DelayReturn;
 
 	if ((Item == world))
@@ -2830,7 +2814,6 @@ void() tfgoalitem_remove =
 
 void(entity Item) tfgoalitem_checkgoalreturn = 
 {
-	local string st;
 	local entity te;
 	if (Item.impulse != 0)
 	{
