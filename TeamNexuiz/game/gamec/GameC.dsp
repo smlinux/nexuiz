@@ -401,6 +401,10 @@ SOURCE=.\tfbuttons.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\tfdoors.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\tfitems.c
 # End Source File
 # Begin Source File
