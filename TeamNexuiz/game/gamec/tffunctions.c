@@ -48,7 +48,14 @@ void SV_ChangeTeam(float color)
 	if (self.team_no == 2 && color != 4)
 	{
 		setcolor(self, 4,4);
-//		stuffcmd(self, "color 4\n");
+	}
+	if (self.team_no == 3 && color != 12)
+	{
+		setcolor(self, 12,12);
+	}
+	if (self.team_no == 4 && color != 11)
+	{
+		setcolor(self, 11,11);
 	}
 };
 
@@ -2170,7 +2177,7 @@ void (vector vect_a, vector vect_b) launch_spike =
 	newmis.nextthink = (time + 3);
 	if (deathmsg != 9)
 	{
-		setmodel (newmis, "progs/syringe.mdl");
+		setmodel (newmis, "models/plasmatrail.mdl");
 	}
 	setsize (newmis, '0 0 0', '0 0 0');
 	setorigin (newmis, vect_a);

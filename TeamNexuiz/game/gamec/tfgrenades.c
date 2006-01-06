@@ -528,7 +528,7 @@ void () TeamFortress_PrimeGrenade =
 			else
 			{
 				sound (self, CHAN_WEAPON, "weapons/prime.wav", 1, ATTN_STATIC);
-				stuffcmd (self, "play weapons/gren.wav\n");
+				sound (self, CHAN_AUTO, "weapons/gren.wav", 1, ATTN_STATIC);
 				ptime = ftos (3);
 				sprint (self, gs);
 				sprint (self, " primed, ");

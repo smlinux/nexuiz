@@ -1237,6 +1237,16 @@ void SV_ParseClientCommand (string s)
 			TeamFortress_TeamSet (1);
 			PutClientInServer ();
 		}
+		if (d == "yellow" || d == "3")
+		{
+			TeamFortress_TeamSet (3);
+			PutClientInServer ();
+		}
+		if (d == "green" || d == "pink" || d == "3")		// Morphed set it to Pink in the menus. I think
+		{													// we should make it white instead.
+			TeamFortress_TeamSet (4);
+			PutClientInServer ();
+		}
 		return;
 	}
 	if (c == "selectclass")

@@ -22,6 +22,9 @@ void ImpulseCommands (void)
 {
 	local float swpn;
 
+	if (self.impulse_wait > time)	// So the GUI menus doesnt flicker
+		return;
+
 	if (self.playerclass < 1)		// Bring up menu if no team/class
 	{
 		if (self.team_no < 1)
@@ -33,6 +36,7 @@ void ImpulseCommands (void)
 			stuffcmd(self, "set scmenu_directmenu ClassSelect; togglemenu\n");
 		}
 		self.impulse = 0;
+		self.impulse_wait = time + .5;	
 		return;
 	}
 	if (self.impulse == 71)

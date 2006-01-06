@@ -123,6 +123,8 @@ void(float wpn, float wrequest) weapon_action =
 
 void () CheckTeamClass =
 {
+	if (self.impulse_wait > time)	// So the GUI menus doesnt flicker
+		return;
 	if (self.playerclass < 1)		// Bring up menu if no team/class
 	{
 		if (self.team_no < 1)
@@ -133,6 +135,7 @@ void () CheckTeamClass =
 		{
 			stuffcmd(self, "set scmenu_directmenu ClassSelect; togglemenu\n");
 		}
+		self.impulse_wait = time + .5;
 		return;
 	}
 };

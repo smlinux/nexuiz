@@ -257,6 +257,10 @@ float modelindex_null    = 0;
 .float has_turretized_tesla;			// is the player's tesla turretized?
 float modelindex_eyes    = 0;
 
+//	 non-tf files
+// cl_impulses
+.float impulse_wait;		// time when player can next use an impulse
+
 //	 classes
 // engiener
 .float is_building;			// is the player in the middle of building something
