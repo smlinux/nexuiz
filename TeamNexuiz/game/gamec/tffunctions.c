@@ -37,26 +37,33 @@ float number_of_teams; // Number of teams == IMPORTANT
 // Color/Teamchange cheat detection (using DP functions instead of tf)
 void (entity ent, float colors) setcolor;
 
+// The following controls the team color of the player in-game, since DP can control color change
+// Note: If anyone ever wants to add a spy color disguise fucntion, here's the places
 void SV_ChangeTeam(float color)
 {
-//	if (self.playerclass == 8)		// Spies can change team color right?
-//		return;
+	local float team_color;
+
 	if (self.team_no == 1 && color != 13)
 	{
-		setcolor(self, 13,13);
+//		setcolor(self, 13);		// used to use this for teams, ignore.
+		team_color = TeamFortress_TeamGetColor(1) - 1;
 	}
 	if (self.team_no == 2 && color != 4)
 	{
-		setcolor(self, 4,4);
+//		setcolor(self, 4,4);
+		team_color = TeamFortress_TeamGetColor(2) - 1;
 	}
 	if (self.team_no == 3 && color != 12)
 	{
-		setcolor(self, 12,12);
+//		setcolor(self, 12,12);
+		team_color = TeamFortress_TeamGetColor(3) - 1;
 	}
 	if (self.team_no == 4 && color != 11)
 	{
-		setcolor(self, 11,11);
+//		setcolor(self, 11,11);
+		team_color = TeamFortress_TeamGetColor(4) - 1;
 	}
+	setcolor(self, 16*team_color + team_color);
 };
 
 
@@ -985,7 +992,8 @@ void (entity Viewer, float pc, float rpc) TeamFortress_PrintClassName =
 };
 
 // Returns Team Color Value
-//				This is causing crashes in bringit -- I will attempt to fix
+//			note: this value is actually incorrect, the actual color values are the ones listed here
+//				  minus one.
 float (float tno) TeamFortress_TeamGetColor =
 {
 	if ((tno == 1))
