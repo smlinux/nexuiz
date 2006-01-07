@@ -589,16 +589,7 @@ void() CheckRules_Player =
 
 	fraglimit = cvar("fraglimit");
 
-	if(cvar("g_domination"))
-	{
-		// fixme: check team frags, not players!
-		if (fraglimit && self.frags >= fraglimit)
-		{
-			NextLevel ();
-			return;
-		}
-	}
-	else if(!cvar("g_lms"))
+	if(!cvar("g_lms") && !(cvar("teamplay") && (cvar("deathmatch") || cvar("g_runematch"))))
 	{
 		if (fraglimit && self.frags >= fraglimit)
 		{
@@ -611,6 +602,7 @@ void() CheckRules_Player =
 float checkrules_oneminutewarning;
 float checkrules_leaderfrags;
 entity checkrules_leader;
+float tdm_max_score, tdm_old_score;
 
 /*
 ============
@@ -626,7 +618,7 @@ void() CheckRules_World =
 	local float checkrules_oldleaderfrags;
 	local entity checkrules_oldleader;
 	local entity head;
-
+	
 	if (intermission_running)
 	if (time >= intermission_exittime + 60)
 	{
@@ -666,6 +658,42 @@ void() CheckRules_World =
 		if((clients > 1 && (clients - lms_dead_count) <= 1) || 
 		  (clients == 1 && lms_dead_count == 1))
 			NextLevel();
+		return;
+	}
+
+	if(cvar("teamplay") && (cvar("deathmatch") || cvar("g_runematch")) && fraglimit)
+	{
+		team1_score = team2_score = team3_score = team4_score = 0;
+		
+		head = findchain(classname, "player");
+		while (head)
+		{
+			if(head.team == COLOR_TEAM1)
+				team1_score += head.frags;
+			else if(head.team == COLOR_TEAM2)
+				team2_score += head.frags;
+			else if(head.team == COLOR_TEAM3)
+				team3_score += head.frags;
+			else if(head.team == COLOR_TEAM4)
+				team4_score += head.frags;
+			head = head.chain;
+		}
+		
+		tdm_old_score = tdm_max_score;
+		tdm_max_score = max(team1_score, team2_score, team3_score, team4_score);
+
+		if(tdm_max_score >= fraglimit)
+			NextLevel();
+
+		if(tdm_max_score != tdm_old_score)
+		{
+			if(tdm_max_score == fraglimit - 1)
+				sound(world, CHAN_AUTO, "announcer/robotic/1fragleft.ogg", 1, ATTN_NONE);
+			else if(tdm_max_score == fraglimit - 2)
+				sound(world, CHAN_AUTO, "announcer/robotic/2fragsleft.ogg", 1, ATTN_NONE);
+			else if(tdm_max_score == fraglimit - 3)
+				sound(world, CHAN_AUTO, "announcer/robotic/3fragsleft.ogg", 1, ATTN_NONE);
+		}
 		return;
 	}
 	

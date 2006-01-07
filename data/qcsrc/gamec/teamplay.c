@@ -17,7 +17,6 @@ float c1, c2, c3, c4;
 // # of bots on those teams
 float cb1, cb2, cb3, cb4;
 
-
 float g_domination, g_ctf, g_tdm;
 
 float audit_teams_time;
@@ -1015,28 +1014,15 @@ void AuditTeams()
 */
 
 
-
-
-
-void() tdm_team =
-{
-	self.classname = "tdm_team";
-	self.team = self.cnt + 1;
-};
-
 // code from here on is just to support maps that don't have team entities
 void tdm_spawnteam (string teamname, float teamcolor)
 {
-	local entity oldself;
-	oldself = self;
-	self = spawn();
-	self.classname = "tdm_team";
-	self.netname = teamname;
-	self.cnt = teamcolor;
-
-	tdm_team();
-
-	self = oldself;
+	local entity e;
+	e = spawn();
+	e.classname = "tdm_team";
+	e.netname = teamname;
+	e.cnt = teamcolor;
+	e.team = e.cnt + 1;
 };
 
 // spawn some default teams if the map is not set up for tdm

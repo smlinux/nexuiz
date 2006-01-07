@@ -8,6 +8,8 @@ float player_count;
 float lms_dead_count;
 float lms_lowest_lives;
 
+float team1_score, team2_score, team3_score, team4_score;
+
 //entity	casing;
 entity dest;
 
