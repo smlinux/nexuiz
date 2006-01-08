@@ -5,7 +5,7 @@ void() railgun_select_01;
 
 float() railgun_check =
 {
-	if (self.ammo_cells >= 5)
+	if (self.ammo_shells >= 5)
 		return TRUE;
 	return FALSE;
 };
@@ -15,15 +15,15 @@ void(float req) w_railgun =
 	if (req == WR_IDLE)
 		railgun_ready_01();
 	else if (req == WR_FIRE1)
-		weapon_prepareattack(railgun_check, railgun_check, railgun_fire1_01, cvar("g_balance_RailGun_refire"));
+		weapon_prepareattack(railgun_check, railgun_check, railgun_fire1_01, .5/*cvar("g_balance_nex_refire")*/);
 	else if (req == WR_RAISE)
 		railgun_select_01();
 	else if (req == WR_UPDATECOUNTS)
-		self.currentammo = floor(self.ammo_cells / 5);
+		self.currentammo = floor(self.ammo_shells/* / 5*/);
 	else if (req == WR_DROP)
 		railgun_deselect_01();
 	else if (req == WR_SETUP)
-		weapon_setup(WEP_RAILGUN, "w_railgun.zym", IT_CELLS);
+		weapon_setup(WEP_RAILGUN, "w_railgun.zym", IT_SHELLS);
 	else if (req == WR_CHECKAMMO)
 		weapon_hasammo = railgun_check();
 };
@@ -40,7 +40,8 @@ void W_RailGun_Attack (void)
 	org = self.origin + self.view_ofs + v_forward * 5 + v_right * 14 + v_up * -7;
 	end = self.origin + self.view_ofs + v_forward * 4096;
 
-	FireRailgunBullet (org, end, cvar("g_balance_railgun_damage"), WEP_RAILGUN);
+//	FireRailgunBullet (org, end, cvar("g_balance_railgun_damage"), WEP_RAILGUN);
+	FireRailgunBullet (org, end, 35, WEP_RAILGUN);		//temp -- i want to add area damage
 
 	// trace as if shot started inside gun
 	traceline (org, end, TRUE, self);
@@ -79,7 +80,8 @@ void W_RailGun_Attack (void)
 	PointSound (trace_endpos, "weapons/RailGunimpact.wav", 1, ATTN_NORM);
 
 	if (cvar("g_instagib") == 0)
-		self.ammo_cells = self.ammo_cells - 5;
+//		self.ammo_cells = self.ammo_cells - 5;
+		self.ammo_shells = self.ammo_shells - 5;
 
 	flash = spawn ();
 	org = self.origin + self.view_ofs + v_forward * 33 + v_right * 14 + v_up * -7;
@@ -98,5 +100,6 @@ void()	railgun_deselect_01 =	{weapon_thinkf(-1, cvar("g_balance_weaponswitchdela
 void()	railgun_fire1_01 =
 {
 	weapon_doattack(railgun_check, railgun_check, W_RailGun_Attack);
-	weapon_thinkf(WFRAME_FIRE1, 0.3, railgun_ready_01);
+//	weapon_thinkf(WFRAME_FIRE1, 0.3, railgun_ready_01);
+	weapon_thinkf(WFRAME_FIRE1, 0.9, railgun_ready_01);
 };

@@ -1912,8 +1912,8 @@ void (float rweapon, float amount) DoReload =
 	newmis.owner = self;
 	newmis.think = Reload_Restore_Weapon;
 	newmis.nextthink = time + rtime;
-	if (rweapon != 5)
-		self.reload_time = time + rtime;
+
+	self.reload_time = time + rtime;
 };
 
 // Xavior's self.playerclass to self.class conversion

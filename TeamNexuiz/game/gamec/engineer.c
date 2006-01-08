@@ -66,7 +66,7 @@ void () TeamFortress_EngineerBuild =
 
 			if (self.weaponentity.pos1 != '0 0 0')
 			{
-//				self.reload_time = time;
+				self.reload_time = time;
 				self.weaponentity.pos1 = '0 0 0';
 				self.weaponentity.lip = PLAYER_WEAPONSELECTION_SPEED;
 			}
@@ -756,22 +756,23 @@ void () CheckDistance =
 	local vector dist;
 
 	if (!(self.owner.building.classname == "building_tesla" && self.enemy.classname == "building_dispenser")) {
-	if ((self.owner.building != self.enemy))
+	if (self.owner.building != self.enemy)
 	{
 		dremove (self);
 		return;
 	} }
 	dist = self.enemy.origin - self.owner.origin;
-	if ((vlen (dist) > 64.000000))
+//	if (vlen (dist) > 64)
+	if (vlen (dist) > 84)
 	{
 		CenterPrint (self.owner, "\n");
-		self.owner.menu_count = 25.000000;
-		self.owner.current_menu = 1.000000;
+		self.owner.menu_count = 25;
+		self.owner.current_menu = 1;
 		self.owner.building = world;
 		dremove (self);
 		return;
 	}
-	self.nextthink = (time + 0.300000);
+	self.nextthink = (time + 0.3);
 };
 
 
@@ -865,6 +866,10 @@ void () button_fire;
 // replaces using wrench on sentry gun and buiaxe to heal.
 void () Use_Function =
 {
+	if (self.impulse_wait > time)	// So when the player holds down the use button it doesnt spam sprints
+		return;
+	self.impulse_wait = time + .5;	// shared with gui menu .impulse_wait
+
 	local vector source;
 	local vector org;
 	local vector def;
@@ -873,7 +878,7 @@ void () Use_Function =
 
 	makevectors (self.v_angle);
 	source = (self.origin + '0 0 16');
-	traceline (source, (source + (v_forward * 64)), 0.000000, self);
+	traceline (source, (source + (v_forward * 64)), 0, self);
 	if ((trace_fraction == 1))
 	{
 		return;
@@ -896,7 +901,7 @@ void () Use_Function =
 		}
 		else
 		{
-			if ((trace_ent.else_goal != 0.000000))
+			if ((trace_ent.else_goal != 0))
 			{
 				te = Findgoal (trace_ent.else_goal);
 				if (te)

@@ -201,6 +201,7 @@ void () ConvertToBackPack =
 	{
 		self.health = 50;
 		self.ammo_nails = 50;
+		self.ammo_shells = 20;
 		self.ammo_nails = 100;
 		self.ammo_rockets = 15;
 		self.a_c = 25;

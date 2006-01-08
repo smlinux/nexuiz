@@ -430,6 +430,8 @@ void FireRailgunBullet (vector src, float bdamage, vector dir, float spread, flo
 */
 
 //vector railgun_hitlocation;
+.vector head_shot_vector;
+.float leg_damage;
 void FireRailgunBullet (vector start, vector end, float bdamage, float deathtype)
 {
 	local vector hitloc, force;
@@ -442,6 +444,91 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float deathtype
 	traceline (start, end, TRUE, self);
 	// go a little bit into the wall because we need to hit this wall later
 	end = trace_endpos + normalize(end - start);
+
+	local float dam_mult;
+	local float zdif;
+	local float use_this;
+	local float tracline;
+	local float x;
+	local vector f;
+	local vector g;
+	local vector h;
+
+	if (trace_ent && deathtype == WEP_RAILGUN)			// Area damage?
+	{
+		if ((trace_ent.classname == "player"))
+		{
+			f = (trace_endpos - start);
+			g_x = trace_endpos_x;
+			g_y = trace_endpos_y;
+			g_z = 0;
+			h_x = trace_ent.origin_x;
+			h_y = trace_ent.origin_y;
+			h_z = 0;
+			x = vlen ((g - h));
+			f = ((normalize (f) * x) + trace_endpos);
+			zdif = (f_z - trace_ent.origin_z);
+			deathmsg = 18;
+			trace_ent.head_shot_vector = '0 0 0';
+			if (zdif < 0)
+			{
+				dam_mult = 0.5;
+				if ((trace_ent.team_no != self.team_no))
+				{
+					trace_ent.leg_damage = (trace_ent.leg_damage + 1);
+					TeamFortress_SetSpeed (trace_ent);
+					deathmsg = 28;
+					T_Damage (trace_ent, self, self, (self.heat * dam_mult));
+				}
+				if ((trace_ent.health > 0))
+				{
+					if ((trace_ent.team_no == self.team_no))
+					{
+						sprint (self, "Stop shooting team mates!!!\n");
+					}
+					else
+					{
+						sprint (trace_ent, "Leg injury!\n");
+						sprint (self, "Leg shot - that'll slow him down!\n");
+					}
+				}
+				return;
+			}
+			else
+			{
+				if (zdif > 20)
+				{
+					dam_mult = 3;
+					stuffcmd (trace_ent, "bf\n");
+					deathmsg = 29;
+					if ((trace_ent.health > 0))
+					{
+						if ((trace_ent.team_no == self.team_no))
+						{
+							sprint (self, "Stop shooting team mates!!!\n");
+						}
+						else
+						{
+							trace_ent.head_shot_vector = (trace_ent.origin - self.origin);
+							deathmsg = 29;
+							T_Damage (trace_ent, self, self, (self.heat * dam_mult));
+							sound (self, 0, "speech/excelent.wav", 1, 0);
+//							if ((trace_ent.health > 0))
+//							{
+//								sprint (trace_ent, 0, "Head injury!\n");
+//								sprint (self, 1, "Head shot - that's gotta hurt!\n");
+//							}
+						}
+						return;
+					}
+					else
+					{
+						deathmsg = 18;
+					}
+				}
+			}
+		}
+	}
 
 	// trace multiple times until we hit a wall, each obstacle will be made
 	// non-solid so we can hit the next, while doing this we spawn effects and

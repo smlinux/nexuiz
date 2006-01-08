@@ -93,9 +93,11 @@ void(float wpn, float wrequest) weapon_action =
 		else if (wpn == WEP2)
 			w_railgun(wrequest);
 		else if (wpn == WEP3)
-			w_electro(wrequest);
+			w_shotgun(wrequest);
+			//w_electro(wrequest);
 		else if (wpn == WEP4)
-			w_rlauncher(wrequest);
+			w_electro(wrequest);
+			//w_rlauncher(wrequest);
 	}
 	else
 	{
