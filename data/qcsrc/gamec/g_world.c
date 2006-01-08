@@ -354,7 +354,12 @@ void() GotoNextMap =
 	ResetGameCvars();
 
 
-	if (cvar("samelevel"))	// if samelevel is set, stay on same level
+	if (cvar("lastlevel"))
+	{
+		localcmd(strcat("set lastlevel 0\n"));
+		localcmd(strcat("togglemenu\n"));
+	}
+	else if (cvar("samelevel")) // if samelevel is set, stay on same level
 	{
 		localcmd(strcat("exec \"maps/", mapname, ".mapcfg\"\n"));
 		//changelevel (mapname);

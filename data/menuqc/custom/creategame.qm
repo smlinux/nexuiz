@@ -115,6 +115,24 @@ void() Nex_Action_Map_Start =
 	m_hide();
 };
 
+void() Nex_Action_Instant_Action =
+{
+	local string exit_cfg;
+
+	// if an old exit cfg file was set up, exec it
+	// to reset old values before starting the server
+	exit_cfg = cvar_string("exit_cfg");
+	if(exit_cfg)
+	{
+		cmd( "exec ", exit_cfg, "\n" );
+	}
+	// exec the game reset cfg and then the mapcfg
+	cmd( "exec game_reset.cfg \nwait \nexec \"maps/nexdm01.instantaction\"\n" );
+
+	// force the menu to hide
+	m_hide();
+};
+
 // cycle list edit features
 void() Nex_Action_Cycle_Add =
 {
