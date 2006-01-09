@@ -124,6 +124,10 @@ void W_Nex_Attack (void)
 	local entity flash;
 
 	sound (self, CHAN_WEAPON, "weapons/nexfire.ogg", 1, ATTN_NORM);
+	if (self.items & IT_STRENGTH) {
+		sound (self, CHAN_AUTO, "weapons/strength_fire.ogg", 1, ATTN_NORM);
+	}
+	
 	self.punchangle_x = -5;
 	org = self.origin + self.view_ofs + v_forward * 5 + v_right * 14 + v_up * -7;
 	end = self.origin + self.view_ofs + v_forward * 4096;

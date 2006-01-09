@@ -65,6 +65,10 @@ void W_Grenade_Attack (void)
 	local vector org;
 
 	sound (self, CHAN_WEAPON, "weapons/grenade_fire.ogg", 1, ATTN_NORM);
+	if (self.items & IT_STRENGTH) {
+		sound (self, CHAN_AUTO, "weapons/strength_fire.ogg", 1, ATTN_NORM);
+	}
+	
 	self.punchangle_x = -4;
 	if (cvar("g_use_ammunition"))
 		self.ammo_rockets = self.ammo_rockets - 2;

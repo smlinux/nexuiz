@@ -34,6 +34,10 @@ void W_Uzi_Attack (void)
 	local vector org;
 	entity flash;
 	sound (self, CHAN_WEAPON, "weapons/uzi_fire.ogg", 1, ATTN_NORM);
+	if (self.items & IT_STRENGTH) {
+		sound (self, CHAN_AUTO, "weapons/strength_fire.ogg", 1, ATTN_NORM);
+	}
+	
 	if (cvar("g_use_ammunition"))
 		self.ammo_nails = self.ammo_nails - 1;
 	self.punchangle_x = random () - 0.5;

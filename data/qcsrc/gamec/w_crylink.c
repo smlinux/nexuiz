@@ -61,6 +61,10 @@ void W_Crylink_Attack (void)
 	local entity proj;
 
 	sound (self, CHAN_WEAPON, "weapons/crylink_fire.ogg", 1, ATTN_NORM);
+	if (self.items & IT_STRENGTH) {
+		sound (self, CHAN_AUTO, "weapons/strength_fire.ogg", 1, ATTN_NORM);
+	}
+	
 	if (cvar("g_use_ammunition"))
 		self.ammo_cells = self.ammo_cells - 1;
 	self.punchangle_x = -2;

@@ -75,6 +75,10 @@ void W_Hagar_Attack (void)
 	local vector org;
 
 	sound (self, CHAN_WEAPON, "weapons/hagar_fire.ogg", 1, ATTN_NORM);
+	if (self.items & IT_STRENGTH) {
+		sound (self, CHAN_AUTO, "weapons/strength_fire.ogg", 1, ATTN_NORM);
+	}
+	
 	if (cvar("g_use_ammunition"))
 		self.ammo_rockets = self.ammo_rockets - 1;
 	self.punchangle_x = -2;

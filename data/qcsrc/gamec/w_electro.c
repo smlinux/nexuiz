@@ -133,6 +133,9 @@ void() W_Electro_Attack
 
 	postion = self.electrocount;
 	sound (self, CHAN_WEAPON, "weapons/electro_fire.ogg", 1, ATTN_NORM);
+	if (self.items & IT_STRENGTH) {
+		sound (self, CHAN_AUTO, "weapons/strength_fire.ogg", 1, ATTN_NORM);
+	}
 
 	self.punchangle_x = -2;
 
@@ -202,7 +205,10 @@ void() W_Electro_Attack2
 
 	postion = self.electrocount;
 	sound (self, CHAN_WEAPON, "weapons/electro_fire2.ogg", 1, ATTN_NORM);
-
+	if (self.items & IT_STRENGTH) {
+		sound (self, CHAN_AUTO, "weapons/strength_fire.ogg", 1, ATTN_NORM);
+	}
+	
 	self.punchangle_x = -2;
 
 	if (self.electrocount == 0)
