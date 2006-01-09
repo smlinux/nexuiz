@@ -332,6 +332,10 @@ SOURCE=.\w_laser.c
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\w_healgun.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\w_uzi.c
 # End Source File
 # End Group

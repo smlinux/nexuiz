@@ -51,6 +51,7 @@ gamec/w_flamer.c
 gamec/w_hotbombs.c
 gamec/w_hook.c
 gamec/w_namek.c
+gamec/w_healgun.c
 gamec/cl_weapons.c
 
 gamec/t_items.c

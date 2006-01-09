@@ -18,6 +18,18 @@ entity damage_attacker;
 float rj;	// not sure, really..
 
 
+float is_ally (entity targ, entity attacker) {
+	if(targ.team_no == attacker.team_no)
+		return 1;
+
+	// civilian class
+	//if(targ.class == CLASS_CIVILIAN)
+	//	return 2;
+
+	return 0;
+}
+
+
 // COMBAT
 void () monster_death_use =
 {

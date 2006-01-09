@@ -158,17 +158,19 @@ void ImpulseCommands (void)
 					self.switchweapon = WEP1;
 			}
 		}
-		else
-			if (self.reload_time < time) { 
+		else if (self.reload_time < time) { 
 				W_SwitchWeapon (self.impulse); }
 	}
-	else if (self.impulse == 10)
+	else if (self.impulse == 10) {
 		if (self.reload_time < time) { 
 			W_NextWeapon (); }
-	else if (self.impulse == 12)
+	}
+	else if (self.impulse == 12) {
 		if (self.reload_time < time) { 
 			W_PreviousWeapon (); }
-	else if (self.impulse == 13 && cvar("sv_cheats"))
+	}
+		
+	if (self.impulse == 13 && cvar("sv_cheats"))
 	{
 		makevectors (self.v_angle);
 		self.velocity = self.velocity + v_forward * 300;

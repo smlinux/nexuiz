@@ -2,6 +2,7 @@
 // generic weapons table
 // add new weapons here
 void (float wreq) w_railgun;
+void (float wreq) w_healgun;
 void(float wpn, float wrequest) weapon_action =
 {
 	if ((self.reload_time + .25) > time) { 
@@ -78,9 +79,9 @@ void(float wpn, float wrequest) weapon_action =
 	else if(self.class == CLASS_MEDIC)
 	{
 		if (wpn == WEP1)
-			w_shotgun(wrequest);
+			w_healgun(wrequest);
 		else if (wpn == WEP2)
-			w_electro(wrequest);
+			w_shotgun(wrequest);
 		else if (wpn == WEP3)
 			w_laser(wrequest);
 		else if (wpn == WEP4)
