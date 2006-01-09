@@ -232,7 +232,7 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 	if (teamplay == 1 || (teamplay == 3 && attacker != targ))
 		damage = 0;
 	
-	if(damage > 0 && attackerIsAPlayer)
+	if(damage > 0 && attackerIsAPlayer && targ != attacker && clienttype(attacker) == CLIENTTYPE_REAL)
 		stuffcmd(attacker, "play2 misc/hit.wav\n");
 	
 	if (cvar("g_minstagib"))
