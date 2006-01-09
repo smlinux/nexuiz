@@ -1227,14 +1227,14 @@ void SV_ParseClientCommand (string s)
 			TeamFortress_TeamPutPlayerInTeam();
 			PutClientInServer ();
 		}
-		if (d == "red" || d == "2")
-		{
-			TeamFortress_TeamSet (2);
-			PutClientInServer ();
-		}
 		if (d == "blue" || d == "1")
 		{
 			TeamFortress_TeamSet (1);
+			PutClientInServer ();
+		}
+		if (d == "red" || d == "2")
+		{
+			TeamFortress_TeamSet (2);
 			PutClientInServer ();
 		}
 		if (d == "yellow" || d == "3")
@@ -1242,7 +1242,7 @@ void SV_ParseClientCommand (string s)
 			TeamFortress_TeamSet (3);
 			PutClientInServer ();
 		}
-		if (d == "green" || d == "pink" || d == "3")		// Morphed set it to Pink in the menus. I think
+		if (d == "green" || d == "pink" || d == "4")		// Morphed set it to Pink in the menus. I think
 		{													// we should make it white instead.
 			TeamFortress_TeamSet (4);
 			PutClientInServer ();
