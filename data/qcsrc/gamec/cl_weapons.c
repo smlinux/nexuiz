@@ -8,7 +8,7 @@ void(float wpn, float wrequest) weapon_action =
 			w_nex(wrequest);
 		return;
 	}
-	
+
 	if (wpn == WEP_LASER)
 		w_laser(wrequest);
 	else if (wpn == WEP_SHOTGUN)
@@ -42,7 +42,7 @@ void() W_ThrowWeapon
 {
 	local float w;
 	local entity wep, e;
-	
+
 	e = self;
 	wep = spawn();
 	self = wep;
@@ -66,7 +66,7 @@ void() W_ThrowWeapon
 		e.ammo_shells -= 1;
 	}
 	else if(w == WEP_UZI)
-	{	
+	{
 		w = IT_UZI;
 		if(!(e.items & w))
 		{
@@ -155,7 +155,7 @@ void() W_ThrowWeapon
 	wep.solid = SOLID_NOT;
 	setorigin(wep, wep.origin);
 	wep.nextthink = time + 0.25;
-	wep.think = thrown_wep_think;		
+	wep.think = thrown_wep_think;
 	wep.classname = "droppedweapon";
 	e.items = e.items - (e.items & w);
 	e.switchweapon = w_getbestweapon(e);
@@ -232,16 +232,15 @@ void() W_WeaponFrame =
 		// if aiming at a player and the original trace won't hit that player
 		// anymore, try aiming at the player's new position
 		if (self.cursor_trace_ent)
+		if (self.cursor_trace_ent.takedamage)
+		if (self.weapon == WEP_NEX || self.weapon == WEP_SHOTGUN || self.weapon == WEP_UZI)
 		{
-			if (self.cursor_trace_ent.takedamage)
+			traceline(self.origin + self.view_ofs, self.cursor_trace_endpos, FALSE, self);
+			if (trace_ent != self.cursor_trace_ent)
 			{
-				traceline(self.origin + self.view_ofs, self.cursor_trace_endpos, FALSE, self);
-				if (trace_ent != self.cursor_trace_ent)
-				{
-					traceline(self.origin + self.view_ofs, self.cursor_trace_ent.origin + (self.cursor_trace_ent.mins + self.cursor_trace_ent.maxs) * 0.5, FALSE, self);
-					if (trace_ent == self.cursor_trace_ent)
-						self.cursor_trace_endpos = trace_endpos;
-				}
+				traceline(self.origin + self.view_ofs, self.cursor_trace_ent.origin + (self.cursor_trace_ent.mins + self.cursor_trace_ent.maxs) * 0.5, FALSE, self);
+				if (trace_ent == self.cursor_trace_ent)
+					self.cursor_trace_endpos = trace_endpos;
 			}
 		}
 		self.v_angle = vectoangles(self.cursor_trace_endpos - (self.origin + self.view_ofs));
