@@ -212,6 +212,13 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 	if (gameover || targ.killcount == -666)
 		return;
 
+	local float attackerIsAPlayer;
+	if(attacker.classname = "player") {
+		attackerIsAPlayer = 1;
+	} else {
+		attackerIsAPlayer = 0;
+	}
+	
 	local entity oldself;
 	oldself = self;
 	self = targ;
@@ -225,7 +232,7 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 	if (teamplay == 1 || (teamplay == 3 && attacker != targ))
 		damage = 0;
 	
-	if(damage > 0)
+	if(damage > 0 && attackerIsAPlayer)
 		stuffcmd(attacker, "play2 misc/hit.wav\n");
 	
 	if (cvar("g_minstagib"))
@@ -246,7 +253,7 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 		}
 		else if (deathtype == IT_NEX && targ.items & IT_STRENGTH)
 		{
-			stuffcmd(attacker, "play2 announcer/male/yoda.ogg\n");
+			if(attackerIsAPlayer) stuffcmd(attacker, "play2 announcer/male/yoda.ogg\n");
 		}
 		if (deathtype == IT_LASER)
 		{
@@ -263,7 +270,7 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 	} else {
 		if (deathtype == IT_NEX && !(attacker.flags & FL_ONGROUND) && !(targ.flags & FL_ONGROUND) && attacker.killcount != 3 && attacker.killcount != 5 && attacker.killcount != 10 && attacker.killcount != 15 && attacker.killcount != 20 && attacker.killcount != 25 && attacker.killcount != 30)
 		{
-			stuffcmd(attacker, "play2 announcer/male/yoda.ogg\n");
+			if(attackerIsAPlayer)  stuffcmd(attacker, "play2 announcer/male/yoda.ogg\n");
 		}
 	}
 	
