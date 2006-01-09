@@ -225,6 +225,9 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 	if (teamplay == 1 || (teamplay == 3 && attacker != targ))
 		damage = 0;
 	
+	if(damage > 0)
+		stuffcmd(attacker, "play2 misc/hit.wav\n");
+	
 	if (cvar("g_minstagib"))
 	{
 		if ((deathtype == DEATH_FALL)  || 
@@ -239,7 +242,7 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 			damage = 0;
 			targ.armorvalue = targ.extralives;
 			stuffcmd(targ, "play2 misc/hit.wav\n");
-			stuffcmd(attacker, "play2 misc/hit.wav\n");
+			//stuffcmd(attacker, "play2 misc/hit.wav\n");
 		}
 		else if (deathtype == IT_NEX && targ.items & IT_STRENGTH)
 		{
