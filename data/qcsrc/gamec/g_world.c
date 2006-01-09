@@ -156,6 +156,7 @@ void worldspawn (void)
 	precache_sound ("weapons/uzi_fire.ogg");
 	precache_sound ("weapons/weapon_switch.ogg");
 	precache_sound ("weapons/weaponpickup.ogg");
+	precache_sound ("weapons/strength_fire.ogg");
 
 	//precache_sound ("announce/male/kill10.ogg");
 	//precache_sound ("announce/male/kill15.ogg");
