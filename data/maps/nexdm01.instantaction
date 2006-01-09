@@ -1,6 +1,8 @@
 set exit_cfg "maps/exit.instantaction"
 set BACKUP_bot_number $bot_number
 set bot_number 3
+set BACKUP_skill $skill
+set skill 3
 set lastlevel 1
 
 set fraglimit 10
