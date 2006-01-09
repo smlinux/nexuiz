@@ -100,6 +100,9 @@ float CLIP_MAX_CRYLINK = 8;
 float CLIP_MAX_ROCKETS = 4;
 float CLIP_MAX_PIPEGRENADES = 6;
 
+.vector head_shot_vector;		// vector railgun_hitlocation
+.float leg_damage;				// amount of times a player has been hit in the legs
+
 .float is_dead;			// temp		// player is dead
 
 .float immune_to_check;		// How long player is immune to cheat check?

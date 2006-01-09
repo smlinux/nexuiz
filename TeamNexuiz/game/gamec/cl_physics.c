@@ -72,6 +72,16 @@ void SV_PlayerPhysics()
 	// determine the max speed this class can move at
 	SetPlayerSpeed(self);
 	classmaxspeed = self.speed;
+
+	if (self.leg_damage)			// Railgun does leg damage :D
+	{
+		if ((self.leg_damage > 6))
+		{
+			self.leg_damage = 6;
+		}
+		classmaxspeed = (classmaxspeed * ((10 - self.leg_damage) / 10));
+	}
+
 	if(classmaxspeed < 0)
 		classmaxspeed = sv_maxspeed;
 

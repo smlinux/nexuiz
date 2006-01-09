@@ -269,8 +269,8 @@ void () Tesla_Die =
 /*	ThrowGib ("progs/tgib1.mdl", -70);			// use other explosion method?
 	ThrowGib ("progs/tgib2.mdl", -70);
 	ThrowGib ("progs/tgib3.mdl", -70);*/
-	WriteByte (4, 23);
-	WriteByte (4, 3);
+	WriteByte (MSG_BROADCAST, 23);
+	WriteByte (MSG_BROADCAST, 3);
 	WriteCoord (4, self.origin_x);
 	WriteCoord (4, self.origin_y);
 	WriteCoord (4, self.origin_z);
@@ -345,8 +345,8 @@ float () Tesla_Fire =
 	}
 	self.effects = (self.effects | 8);
 	deathmsg = 51;
-	WriteByte (4, 23);
-	WriteByte (4, 6);
+	WriteByte (MSG_BROADCAST, 23);
+	WriteByte (MSG_BROADCAST, 6);
 	WriteEntity (4, self);
 	WriteCoord (4, self.origin_x);
 	WriteCoord (4, self.origin_y);

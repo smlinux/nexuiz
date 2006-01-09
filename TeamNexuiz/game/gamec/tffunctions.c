@@ -290,7 +290,7 @@ void (entity p) TeamFortress_SetSpeed =
 		p.maxfbspeed = (p.maxfbspeed / 2);
 		p.maxstrafespeed = (p.maxstrafespeed / 2);
 	}
-	/* (p.leg_damage)			// No leg damage if no snipers, eh?
+/*	if (p.leg_damage)			// Railgun does leg damage :D -- check cl_physics.c
 	{
 		if ((p.leg_damage > 6))
 		{

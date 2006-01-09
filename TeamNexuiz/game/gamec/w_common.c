@@ -429,9 +429,6 @@ void FireRailgunBullet (vector src, float bdamage, vector dir, float spread, flo
 }
 */
 
-//vector railgun_hitlocation;
-.vector head_shot_vector;
-.float leg_damage;
 void FireRailgunBullet (vector start, vector end, float bdamage, float deathtype)
 {
 	local vector hitloc, force;
@@ -441,6 +438,9 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float deathtype
 	force = normalize(end - start) * 800; //(bdamage * 10);
 
 	// find how far the beam can go until it hits a wall
+	//traceline (start, end, MOVE_HITMODEL, self);		// doing this enables checking against model
+														// geometry -- leaving it disabled for now since
+														// it's a cpu hog.
 	traceline (start, end, TRUE, self);
 	// go a little bit into the wall because we need to hit this wall later
 	end = trace_endpos + normalize(end - start);
@@ -454,7 +454,8 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float deathtype
 	local vector g;
 	local vector h;
 
-	if (trace_ent && deathtype == WEP_RAILGUN)			// Area damage?
+	traceline_hitcorpse (self, start, end, FALSE, self);
+	if (trace_ent/* && deathtype == WEP_RAILGUN*/)			// Area damage?
 	{
 		if ((trace_ent.classname == "player"))
 		{
@@ -478,7 +479,8 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float deathtype
 					trace_ent.leg_damage = (trace_ent.leg_damage + 1);
 					TeamFortress_SetSpeed (trace_ent);
 					deathmsg = 28;
-					T_Damage (trace_ent, self, self, (self.heat * dam_mult));
+					bdamage = bdamage * .8;
+					//T_Damage (trace_ent, self, self, (self.heat * dam_mult));
 				}
 				if ((trace_ent.health > 0))
 				{
@@ -492,7 +494,7 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float deathtype
 						sprint (self, "Leg shot - that'll slow him down!\n");
 					}
 				}
-				return;
+				//return;
 			}
 			else
 			{
@@ -511,7 +513,8 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float deathtype
 						{
 							trace_ent.head_shot_vector = (trace_ent.origin - self.origin);
 							deathmsg = 29;
-							T_Damage (trace_ent, self, self, (self.heat * dam_mult));
+							bdamage = floor(bdamage * 3.5);
+//							T_Damage (trace_ent, self, self, (self.heat * dam_mult));
 							sound (self, 0, "speech/excelent.wav", 1, 0);
 //							if ((trace_ent.health > 0))
 //							{
@@ -519,7 +522,7 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float deathtype
 //								sprint (self, 1, "Head shot - that's gotta hurt!\n");
 //							}
 						}
-						return;
+						//return;
 					}
 					else
 					{

@@ -41,7 +41,7 @@ void W_RailGun_Attack (void)
 	end = self.origin + self.view_ofs + v_forward * 4096;
 
 //	FireRailgunBullet (org, end, cvar("g_balance_railgun_damage"), WEP_RAILGUN);
-	FireRailgunBullet (org, end, 35, WEP_RAILGUN);		//temp -- i want to add area damage
+	FireRailgunBullet (org, end, 35, WEP_RAILGUN);		//temp till I add damage var
 
 	// trace as if shot started inside gun
 	traceline (org, end, TRUE, self);

@@ -481,6 +481,7 @@ void ClassPostThink()
 */
 void (float classnum) SetMaxAmmoFor =
 {
+	self.leg_damage = 0;		//temp here //so leg damage doesnt stay on player respawn
 	// if no class is found, it will just default to these
 	self.maxammo_shells = 200;
 	self.maxammo_nails = 200;
