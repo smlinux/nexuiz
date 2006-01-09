@@ -213,7 +213,7 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 		return;
 
 	local float attackerIsAPlayer;
-	if(attacker.classname = "player") {
+	if(attacker.classname == "player") {
 		attackerIsAPlayer = 1;
 	} else {
 		attackerIsAPlayer = 0;
