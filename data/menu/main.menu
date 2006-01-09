@@ -54,7 +54,7 @@ Item Layout Main
 	}
 	Item Layout MainInsta
 	{
-		origin		'440 690'
+		origin		'465 736'
 
 		DeriveTemplate PictureButton MainButton
 		{
@@ -63,8 +63,9 @@ Item Layout Main
 	
 		Derive MainButton InstantAction
 		{
+			size		'110 30'
 			normal		"$gfx/b_instantaction"
-			selected	"$gfx/b_instantaction_u"
+//			selected	"$gfx/b_instantaction_u"
 	
 			action		Nex_Action_Instant_Action
 		}
