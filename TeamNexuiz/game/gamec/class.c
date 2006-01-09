@@ -503,9 +503,10 @@ void (float classnum) SetMaxAmmoFor =
 	}
 	else if (classnum == CLASS_SPY) {		// Spy supplies
 		self.maxammo_shells = 150;
-		self.maxammo_nails = 80;
+		self.maxammo_nails = 200;		// MAC10 uses nails
 		self.maxammo_cells = 70;
 		self.maxammo_rockets = 15;
+		self.ammo_nails = 100;
 	}
 	else if (classnum == CLASS_SOLDIER) {
 		self.maxammo_rockets = 40;

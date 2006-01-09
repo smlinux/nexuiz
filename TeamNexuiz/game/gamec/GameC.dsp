@@ -324,6 +324,10 @@ SOURCE=.\w_shotgun.c
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\tf_w_mac10.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\w_laser.c
 # End Source File
 # End Group

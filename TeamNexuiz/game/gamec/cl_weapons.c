@@ -3,6 +3,7 @@
 // add new weapons here
 void (float wreq) w_railgun;
 void (float wreq) w_healgun;
+void (float wreq) w_mac;
 void(float wpn, float wrequest) weapon_action =
 {
 	if ((self.reload_time + .25) > time) { 
@@ -48,11 +49,13 @@ void(float wpn, float wrequest) weapon_action =
 		if (wpn == WEP1)
 			w_laser(wrequest);
 		else if (wpn == WEP2)
-			w_uzi(wrequest);
+			w_uzi(wrequest);		//later be replaced with tranq gun
 		else if (wpn == WEP3)
-			w_uzi(wrequest);
+			w_shotgun(wrequest);
+//			w_uzi(wrequest);
 		else if (wpn == WEP4)
-			w_uzi(wrequest);
+			w_mac(wrequest);
+//			w_uzi(wrequest);
 	}
 	else if(self.class == CLASS_SOLDIER)
 	{

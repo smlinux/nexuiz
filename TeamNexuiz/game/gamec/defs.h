@@ -145,6 +145,7 @@ float WEP_GRAPPLE			= 14;
 float WEP_NAMEK				= 15;
 float WEP_RAILGUN			= 16;
 float WEP_HEALGUN			= 17;
+float WEP_MAC				= 18;
 
 float WEP_SCOUT_SPECIAL		= 50;
 float WEP_SPY_SPECIAL		= 51;

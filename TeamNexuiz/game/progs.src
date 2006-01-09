@@ -82,6 +82,7 @@ gamec/domination.c
 gamec/mauvebot.c
 
 gamec/tf_w_railgun.c			// Engineer RailGun
+gamec/tf_w_mac10.c			// Spy MAC10
 
 gamec/tfdoors.c				// TF Doors
 gamec/tfai.c				// TF AI
