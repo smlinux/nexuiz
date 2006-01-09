@@ -62,7 +62,7 @@ void W_Plasma_Explode_Combo (void) {
 	comboedgedamage = cvar("g_balance_electro_combo_edgedamage");
 
 	org2 = findbetterlocation (self.origin);
-	effect (org2, "models/sprites/electrocombo.spr32", 0, 30, 30);
+	effect (org2, "models/sprites/electrocombo.spr32", 0, 30, 35);
 	sound (self, CHAN_BODY, "weapons/electro_impact_combo.ogg", 1, ATTN_NORM);
 	
 	self.event_damage = SUB_Null;
@@ -70,7 +70,7 @@ void W_Plasma_Explode_Combo (void) {
 		RadiusDamage (self, self.owner, (cvar("g_balance_electro_damage") * 0.33) + combocoredamage, (cvar("g_balance_electro_edgedamage") * 0.33) + comboedgedamage, cvar("g_balance_electro_radius"), world, cvar("g_balance_electro_force") * 0.33, IT_ELECTRO);
 	else
 		RadiusDamage (self, self.owner, cvar("g_balance_electro_damage") + combocoredamage, cvar("g_balance_electro_edgedamage") + comboedgedamage, cvar("g_balance_electro_radius"), world, cvar("g_balance_electro_force"), IT_ELECTRO);
-	te_customflash(org2, 150, 5, '0.5 0.5 1');
+	//te_customflash(org2, 150, 5, '0.5 0.5 1');
 	te_explosionrgb(org2, '0.5 0.5 1');
 	remove (self);	
 }

@@ -42,11 +42,10 @@ void(float req) w_rlauncher =
 void W_Rocket_Explode (void)
 {
 	vector	org2;
+	sound (self, CHAN_BODY, "weapons/rocket_impact.ogg", 1, ATTN_NORM);
 	org2 = findbetterlocation (self.origin);
 	te_explosion (org2);
-	effect (org2, "models/sprites/rockexpl.spr", 0, 12, 25);
-	sound (self, CHAN_BODY, "weapons/rocket_impact.ogg", 1, ATTN_NORM);
-
+	effect (org2, "models/sprites/rockexpl.spr", 0, 12, 35);
 	self.event_damage = SUB_Null;
 	RadiusDamage (self, self.owner, cvar("g_balance_rocketlauncher_damage"), cvar("g_balance_rocketlauncher_edgedamage"), cvar("g_balance_rocketlauncher_radius"), world, cvar("g_balance_rocketlauncher_force"), IT_ROCKET_LAUNCHER);
 
@@ -55,7 +54,6 @@ void W_Rocket_Explode (void)
 		if(cvar("g_homing_missile"))
 				  self.owner.attack_finished = time + cvar("g_balance_rocketlauncher_refire");
 	}
-
 	remove (self);
 }
 

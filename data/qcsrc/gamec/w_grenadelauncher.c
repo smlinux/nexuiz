@@ -35,7 +35,7 @@ void W_Grenade_Explode (void)
 	vector	org2;
 	org2 = findbetterlocation (self.origin);
 	te_explosion (org2);
-	effect (org2, "models/sprites/grenexpl.spr", 0, 12, 25);
+	effect (org2, "models/sprites/grenexpl.spr", 0, 12, 35);
 	sound (self, CHAN_BODY, "weapons/grenade_impact.ogg", 1, ATTN_NORM);
 
 	self.event_damage = SUB_Null;
