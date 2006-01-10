@@ -119,7 +119,7 @@ void(float req) w_nex =
 
 void W_Nex_Attack (void)
 {
-	local vector org;
+	local vector org, org2;
 	local vector end;
 	local entity flash;
 
@@ -141,9 +141,10 @@ void W_Nex_Attack (void)
 	// trace as if shot started inside gun
 	traceline (org, end, TRUE, self);
 	// show as if shot started outside of gun
-	org = self.origin + self.view_ofs + v_forward * 28 + v_right * 14 + v_up * -7;
+	org = self.origin + self.view_ofs + v_forward * 35 + v_right * 14 + v_up * -8;
+	org2 = self.origin + self.view_ofs + v_forward * 52 + v_right * 14 + v_up * -8;
 	// muzzleflash light
-	te_smallflash (org);
+	te_smallflash (org2);
 	// beam effect
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 	WriteByte (MSG_BROADCAST, 76);
