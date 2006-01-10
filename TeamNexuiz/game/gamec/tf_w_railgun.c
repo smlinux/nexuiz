@@ -37,7 +37,8 @@ void W_RailGun_Attack (void)
 
 	sound (self, CHAN_WEAPON, "weapons/RailGunfire.wav", 1, ATTN_NORM);
 	self.punchangle_x = -5;
-	org = self.origin + self.view_ofs + v_forward * 5 + v_right * 14 + v_up * -7;
+//	org = self.origin + self.view_ofs + v_forward * 5 + v_right * 14 + v_up * -7;
+	org = self.origin + self.view_ofs + v_forward * 5 + v_right * 1 + v_up * -1;	// better accuracy
 	end = self.origin + self.view_ofs + v_forward * 4096;
 
 //	FireRailgunBullet (org, end, cvar("g_balance_railgun_damage"), WEP_RAILGUN);
