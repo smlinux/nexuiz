@@ -178,6 +178,7 @@ void (float classnum) SetMaxAmmoFor;
 /******************* Moved from:**************************/
 //tffunctions
 .float nextpc;		// for qued next player class -- we gonna use this?
+.float DropFlagDelay;		// next time player can drop a flag
 void (string halias, float himpulse1, float himpulse2) TeamFortress_Alias;
 string () ChooseRandomClass;
 
@@ -212,6 +213,7 @@ void (entity inflictor, entity attacker, float damage, entity ignore) T_RadiusDa
 .float has_item_from_group;
 .float remove_item_group;
 .float return_item_no;
+.entity tent;				// player who touches flag (touch ent?)
 
 // tfplats
 .float height;
@@ -292,3 +294,8 @@ void (float tno, entity ignore, string st) teamsprint;
 float toggleflags;
 .float is_unabletospy;		// picking up tfgoal makes the spy unable to go undercover
 .float owned_by;		// Item is owned by team #
+
+/***************** Impulse Defs **********************/
+///////////////////////////////////////////////////////
+/*****************************************************/
+float DROP_FLAG_IMPULSE =		203;

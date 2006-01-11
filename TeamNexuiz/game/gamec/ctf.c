@@ -59,7 +59,7 @@ void(entity e) ReturnFlag =
 	RegenFlag(e);
 };
 
-void(entity e) DropFlag =
+/*void(entity e) DropFlag =			// Gold - using TF function for this one :x
 {
 	local entity p;
 
@@ -91,7 +91,7 @@ void(entity e) DropFlag =
 	e.cnt = FLAG_DROPPED;
 	e.velocity = '0 0 300';
 	e.pain_finished = time + 30;
-};
+};*/
 
 void() FlagThink =
 {

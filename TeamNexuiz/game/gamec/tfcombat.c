@@ -1,9 +1,8 @@
-void () T_MissileTouch;
 void () info_player_start;
 void (entity targ, entity attacker) ClientObituary;
 void (entity Goal, entity AP, float addb) DoResults;
 float (entity Goal, entity AP) Activated;
-float (entity targ, entity attacker, float damage) TeamEqualiseDamage;
+float (entity targ, entity attacker, float damage) TeamEqualiseDamage; // TBA Add function for this
 
 // Death MSG Caller
 float deathmsg;	// Gonna have to make this work with NexTF's
@@ -33,10 +32,6 @@ float is_ally (entity targ, entity attacker) {
 // COMBAT
 void () monster_death_use =
 {
-	local entity ent;
-	local entity otemp;
-	local entity stemp;
-
 	if ((self.flags & 1))
 	{
 		self.flags = (self.flags - 1);
@@ -99,7 +94,6 @@ float (entity targ, entity inflictor) CanDamage =
 void (entity targ, entity attacker) Killed =
 {
 	local entity oself;
-	local string db;
 
 	oself = self;
 	self = targ;
@@ -635,7 +629,6 @@ void (entity inflictor, entity attacker, float damage, entity ignore) T_RadiusDa
 {
 	local float points;
 	local entity head;
-	local entity te;
 	local vector org;							////
 
 	head = findradius (inflictor.origin, (damage + 40));

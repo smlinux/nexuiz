@@ -9,8 +9,6 @@ void () CP_Timer;
  ======================*/
 void () GrenadeExplode =
 {
-	local entity te;
-
 /*	if (self.voided)
 	{
 		return;
@@ -30,7 +28,8 @@ void () GrenadeExplode =
 		deathmsg = self.weapon;
 		T_RadiusDamage (self, self.owner, 120, world);
 	}
-/*	if ((self.no_active_nail_grens != 0))
+/*	local entity te;
+	if ((self.no_active_nail_grens != 0))
 	{
 		self.no_active_nail_grens = 0;
 		self.owner.no_active_nail_grens = (self.owner.no_active_nail_grens - 1);
@@ -140,10 +139,7 @@ void () FlashTimer =
 
 void () FlashGrenadeExplode =
 {
-	local float expsize;
 	local entity te;
-	local entity oldself;
-	local string st;
 
 	self.effects = (self.effects | 4);
 	WriteByte (0, 23);
@@ -259,7 +255,7 @@ void() NailGrenadeLaunchNail =
 
 void() TeamFortress_ExplodePerson = 
 {
-	local entity te;
+//	local entity te;
 	self.owner.tfstate = self.owner.tfstate - (self.owner.tfstate & 1);
 	KickPlayer(-2, self.owner);		// Doesnt wanna work right
 	newmis = spawn();

@@ -85,7 +85,6 @@ void () Menu_EngineerFix_Tesla =
 // Tesla Menu Input
 void (float inp) Menu_EngineerFix_Tesla_Input =
 {
-	local string temp;
 	local float cost;
 	local float maxcells;
 

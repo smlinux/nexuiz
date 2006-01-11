@@ -1,4 +1,5 @@
 void CopyBody(float keepvelocity);
+void () DropFlag;
 
 // changes by LordHavoc on 03/30/04
 // cleaned up dummy code
@@ -39,6 +40,11 @@ void ImpulseCommands (void)
 		self.impulse_wait = time + .5;	
 		return;
 	}
+	if (self.impulse == DROP_FLAG_IMPULSE)
+	{
+		DropFlag();
+	}
+
 	if (self.impulse == 71)
 	{
 		local string whee;

@@ -451,6 +451,10 @@ SOURCE=.\tfdefs.c
 
 SOURCE=.\tffunctions.c
 # End Source File
+# Begin Source File
+
+SOURCE=.\tfmenus.c
+# End Source File
 # End Group
 # Begin Group "TF Client"
 

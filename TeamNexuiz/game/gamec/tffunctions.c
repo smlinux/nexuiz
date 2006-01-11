@@ -16,7 +16,7 @@ entity newmis;		// This is what tf uses for spawning entities
 .float has_disconnected;	//has the player disconnected?
 .float no_grenades_1;
 .float no_grenades_2;
-.float no_grenades_3;
+//.float no_grenades_3;		//player has no gren3? Thought we should use this for the impulse 30/31 class specials
 .float pausetime;	// not sure
 float team1lives;
 float team2lives;
@@ -26,10 +26,10 @@ float team1maxplayers;
 float team2maxplayers;
 float team3maxplayers;
 float team4maxplayers;
-float team1advantage;
-float team2advantage;
+/*float team1advantage;			// might implement this later -- this is used in the function that
+float team2advantage;			//// displays messages like: "Team blah has an advantage of X players"
 float team3advantage;
-float team4advantage;
+float team4advantage;*/
 
 // stuff that still needs a function
 float number_of_teams; // Number of teams == IMPORTANT
@@ -81,6 +81,7 @@ void () DoTFAliases =
 		TeamFortress_Alias("+gren2", 151, TF_FLARE_LIT);
 		TeamFortress_Alias("-gren1", 152, TF_FLARE_LIT);
 		TeamFortress_Alias("-gren2", 152, TF_FLARE_LIT);
+		TeamFortress_Alias("dropflag", DROP_FLAG_IMPULSE, TF_FLARE_LIT);
 };
 
 void (entity tempent) dremove =
@@ -124,7 +125,6 @@ entity (float gno) Findgoal =
 void(entity Goal, entity AP, entity ActivatingGoal) AttemptToActivate = 
 {
 	local entity te;
-	local string st;
 	if (Activated(Goal, AP))
 	{
 		if (ActivatingGoal == Goal)
@@ -646,8 +646,6 @@ string (float tno) TeamFortress_TeamGetColorString =
 // Is civilian?
 float (float tno) TeamFortress_TeamIsCivilian =
 {
-	local entity te;
-
 	if ((tno == 1))
 	{
 		if ((civilianteams & 1))
@@ -1746,10 +1744,8 @@ void () TeamFortress_DisplayLegalClasses =
 // TF class change/select function
 void() TeamFortress_ChangeClass = 
 {
-	local entity spot;
-	local entity te;
-	local float tc;
-	local string st;
+//	local float tc;
+//	local string st;
 
 	self.impulse += 100;		//temp
 
@@ -1771,8 +1767,8 @@ void() TeamFortress_ChangeClass =
 			return;
 		}
 /*		tc = IsRestrictedClass(self.impulse - 100);			// TBA ADD THIS FUNCTION
-		if (tc != 0)
-		{
+		if (tc != 0)										// it's actually a megatf fucntion
+		{													// -- gonna need cvars for it
 			if (tc > 0)
 			{
 				sprint(self, "That class is restricted to ");
@@ -2099,8 +2095,6 @@ void () superspike_touch =
 
 void () spike_touch =
 {
-	local float flt;
-
 	if (other.solid == 1)
 	{
 		return;
@@ -2276,3 +2270,70 @@ void(entity p) bound_other_ammo =
 		p.no_grenades_2 = 4;
 	}
 };
+
+// TF Drop Flag Function
+void () tfgoalitem_dropthink;
+void () item_tfgoal_touch;
+void () DropFlag =
+{
+	local entity Item;
+	local entity te;
+	local float f;
+	local string st;
+
+	te = find (world, classname, "item_tfgoal");
+	while (te)
+	{
+		if (te.owner == self)
+		{
+			Item = te;
+		}
+		te = find (te, classname, "item_tfgoal");
+	}
+
+	if (Item == world)
+	{
+		sprint (self, "You don't have the flag.\n");	
+		return;
+	}
+
+	// Delay
+	if (self.DropFlagDelay > time)
+	{
+		sprint (self, "Can't drop again for another ");	
+		f = ceil(self.DropFlagDelay - time);
+		st = ftos(f);
+		sprint (self, st);
+		sprint (self, " seconds.\n");	
+		return;
+	}
+	self.DropFlagDelay = time + 10;
+	//
+
+	// Flash of particles
+	WriteByte(4, 23);
+	WriteByte(4, 11);
+	WriteCoord(4, self.origin_x);
+	WriteCoord(4, self.origin_y);
+	WriteCoord(4, self.origin_z);
+
+	tfgoalitem_RemoveFromPlayer(Item, self, 2);
+
+	setorigin (Item, self.origin - '0 0 -24');	// - vf*(16));// - '0 0 15');	//Item.origin = self.origin + v_forward*56 + '0 0 8';
+	Item.velocity = '0 0 1';		//((vf * 150) + '0 0 150';
+							//gold.  i didn't even have to change the origin, just the velocity. used to be '0 0 150'
+	Item.goal_state = 2;
+	Item.movetype = 6;
+	Item.solid = TF_FLARE_OFF;
+	setsize(Item, '-16 -16 0', '16 16 56');
+	if (Item.mdl != string_null)
+	{
+		setmodel(Item, Item.mdl);
+	}
+	Item.option5 = time + 2;
+	Item.tent = self;
+	
+	Item.nextthink = time + 5;
+	Item.think = tfgoalitem_dropthink;
+	Item.touch = item_tfgoal_touch;
+}

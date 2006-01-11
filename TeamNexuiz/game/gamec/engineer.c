@@ -1,4 +1,4 @@
-.float option, opton5;
+.float option;
 .float has_mine;
 void () MagnetMineTouch;
 void () MagTimer;
@@ -9,7 +9,7 @@ void () Tesla_Pain;
 void () Tesla_Idle;
 void () Tesla_Touch;
 
-void () SUB_NULL;
+void() SUB_NULL = {};
 
 //temp
 void (entity bld) CheckBelowBuilding;
@@ -166,7 +166,6 @@ void(float objtobuild) TeamFortress_Build =
 	}
 
 	local float btime;
-	local entity te;
 	local vector tmp1;
 	local vector tmp2;
 	newmis = spawn();
@@ -298,7 +297,6 @@ void () Tesla_Animate;
 void() TeamFortress_FinishedBuilding = 
 {
 	local entity oldself;
-	local vector source;
 
 	if (self.owner.is_building != 1)
 	{
@@ -872,8 +870,6 @@ void () Use_Function =
 
 	local vector source;
 	local vector org;
-	local vector def;
-	local float healam;
 	local entity te;
 
 	makevectors (self.v_angle);

@@ -390,8 +390,8 @@ void() trigger_counter =
 	self.use = counter_use;
 };
 
-.float triggerhurttime;
-/*void() hurt_touch =
+/*.float triggerhurttime;
+void() hurt_touch =
 {
 	if (other.takedamage)
 	if (other.triggerhurttime < time)

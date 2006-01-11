@@ -81,8 +81,6 @@ float prematch;
 .float rv_g;
 .vector goal_min, goal_max;
 
-.entity tent;
-
 // Prototypes
 // Team Functions
 void(float tno, float scoretoadd) TeamFortress_TeamIncreaseScore;

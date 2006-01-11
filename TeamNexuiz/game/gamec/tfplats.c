@@ -193,8 +193,6 @@ void() plat_use =
 
 void() func_plat = 
 {
-	local entity t;
-
 	// Q3F/ETF support
 	if (self.allowteams == "red")
 	{
@@ -376,7 +374,6 @@ void() followtrain =
 
 void() func_train = 
 {
-	local entity bob;
 	if (CheckExistence() == 0)
 	{
 		dremove(self);

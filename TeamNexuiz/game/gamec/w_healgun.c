@@ -30,7 +30,6 @@ void(float req) w_healgun =
 		weapon_hasammo = healgun_check();
 };
 
-.float healgun_bulletcounter;
 void W_Healgun_Attack (void)
 {
 	local vector org;

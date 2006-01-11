@@ -447,8 +447,6 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float deathtype
 
 	local float dam_mult;
 	local float zdif;
-	local float use_this;
-	local float tracline;
 	local float x;
 	local vector f;
 	local vector g;

@@ -1193,7 +1193,7 @@ void PlayerPostThink (void)
 void SV_ParseClientCommand (string s)
 {
 	local float args;
-	local float h;
+//	local float h;
 	local string c;
 	local string d;
 	local string f;
