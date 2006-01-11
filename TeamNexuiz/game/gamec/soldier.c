@@ -216,6 +216,6 @@ void BecomeSoldier(float portion)
 	self.ammo_nails = floor(150 * portion);
 	self.ammo_rockets = floor(12 * portion);
 	self.ammo_cells = floor(0 * portion);
-	self.playerclass = 3;		// TF P.C.
+	self.playerclass = TF_CLASS_SOLDIER;		// TF P.C.
 	SetMaxAmmoFor (CLASS_SOLDIER);
 }

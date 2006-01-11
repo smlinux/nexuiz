@@ -23,7 +23,7 @@ void(float req) w_railgun =
 	else if (req == WR_DROP)
 		railgun_deselect_01();
 	else if (req == WR_SETUP)
-		weapon_setup(WEP_RAILGUN, "w_railgun.zym", IT_SHELLS);
+		weapon_setup(WEP_RAILGUN, "w_nex.zym", IT_SHELLS);
 	else if (req == WR_CHECKAMMO)
 		weapon_hasammo = railgun_check();
 };

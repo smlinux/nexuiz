@@ -211,7 +211,7 @@ void BecomeSpy(float portion)
 	self.ammo_nails = floor(50 * portion);
 	self.ammo_rockets = floor(3 * portion);
 	self.ammo_cells = floor(0 * portion);
-	self.playerclass = 8;		// TF P.C.
+	self.playerclass = TF_CLASS_SPY;		// TF P.C.
 	SetMaxAmmoFor (2);
 	// fixme: also have off-hand grenade, different for each class
 	// where to do that?

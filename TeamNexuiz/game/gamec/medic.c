@@ -119,6 +119,6 @@ void BecomeMedic(float portion)
 	self.ammo_nails = floor(50 * portion);
 	self.ammo_rockets = floor(0 * portion);
 	self.ammo_cells = floor(0 * portion);
-	self.playerclass = 5;		// TF P.C.
+	self.playerclass = TF_CLASS_MEDIC;		// TF P.C.
 	SetMaxAmmoFor (16);
 }

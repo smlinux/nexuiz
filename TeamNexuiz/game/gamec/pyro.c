@@ -174,6 +174,6 @@ void BecomePyro(float portion)
 	self.ammo_nails = floor(150 * portion);
 	self.ammo_rockets = floor(14 * portion);
 	self.ammo_cells = floor(6 * portion);
-	self.playerclass = 7;		// TF P.C.
+	self.playerclass = TF_CLASS_PYRO;		// TF P.C.
 	SetMaxAmmoFor (8);
 }

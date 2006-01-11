@@ -634,7 +634,7 @@ void BecomeEngineer(float portion)
 	self.ammo_nails = floor(20 * portion);
 	self.ammo_rockets = floor(1 * portion);
 	self.ammo_cells = floor(0 * portion);
-	self.playerclass = 9;		// TF P.C.
+	self.playerclass = TF_CLASS_ENGINEER;		// TF P.C.
 	SetMaxAmmoFor (32);
 }
 

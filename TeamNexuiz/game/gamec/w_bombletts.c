@@ -22,7 +22,7 @@ void(float req) w_bombletts =
 		bombletts_deselect_01();
 	else if (req == WR_SETUP)
 	{
-		weapon_setup(WEP_BOMBLETTS, "w_bombletts.zym", IT_ROCKETS);
+		weapon_setup(WEP_BOMBLETTS, "w_nadelauncher.zym", IT_ROCKETS);
 		//self.weaponentity.colormod = '0 4 0';
 		//self.weaponentity.scale = 0.65;
 	}

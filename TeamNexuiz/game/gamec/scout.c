@@ -152,6 +152,6 @@ void BecomeScout(float portion)
 	self.ammo_nails = floor(150 * portion);
 	self.ammo_rockets = floor(0 * portion);
 	self.ammo_cells = floor(0 * portion);
-	self.playerclass = 1;		// TF P.C.
+	self.playerclass = TF_CLASS_SCOUT;		// TF P.C.
 	SetMaxAmmoFor (1);
 }

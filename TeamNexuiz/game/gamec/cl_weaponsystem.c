@@ -43,12 +43,12 @@ void() CL_ExteriorWeaponentity_Think =
 		else if (self.owner.wpn == WEP_NEX) setmodel(self, "models/weapons/v_nex.md3");
 		else if (self.owner.wpn == WEP_HAGAR) setmodel(self, "models/weapons/v_hagar.md3");
 		else if (self.owner.wpn == WEP_ROCKET_LAUNCHER) setmodel(self, "models/weapons/v_rl.md3");
-		else if (self.owner.wpn == WEP_BOMBLETTS) setmodel(self, "models/weapons/v_bombletts.md3");
+		else if (self.owner.wpn == WEP_BOMBLETTS) setmodel(self, "models/weapons/v_nadelauncher.md3");
 		else if (self.owner.wpn == WEP_ROCKET_INCENDIARY) setmodel(self, "models/weapons/v_rli.md3");
 		else if (self.owner.wpn == WEP_HOTBOMBS) setmodel(self, "models/weapons/v_hotbombs.md3");
 		else if (self.owner.wpn == WEP_GRAPPLE) setmodel(self, "models/weapons/v_grapple.md3");
 		else if (self.owner.wpn == WEP_NAMEK) setmodel(self, "models/weapons/v_namek.md3");
-		else if (self.owner.wpn == WEP_RAILGUN) setmodel(self, "models/weapons/v_railgun.md3");
+		else if (self.owner.wpn == WEP_RAILGUN) setmodel(self, "models/weapons/v_nex.md3");
 		else if (self.owner.wpn == WEP_MAC) setmodel(self, "models/weapons/v_mac.md3");
 		setattachment(self, self.owner, "bip01 r hand");
 		// if that didn't find a tag, hide the exterior weapon model
