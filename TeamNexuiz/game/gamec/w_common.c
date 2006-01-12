@@ -467,6 +467,8 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float deathtype
 			x = vlen ((g - h));
 			f = ((normalize (f) * x) + trace_endpos);
 			zdif = (f_z - trace_ent.origin_z);
+//			bprint(ftos(zdif));
+//			bprint("\n");
 			deathmsg = 18;
 			trace_ent.head_shot_vector = '0 0 0';
 			if (zdif < 0)
@@ -511,7 +513,11 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float deathtype
 						{
 							trace_ent.head_shot_vector = (trace_ent.origin - self.origin);
 							deathmsg = 29;
-							bdamage = floor(bdamage * 3.5);
+//							bdamage = floor(bdamage * 3.5);
+							if (zdif > 31)
+								bdamage = floor(bdamage * 15.5);
+							else
+								bdamage = floor(bdamage * 2.5);
 //							T_Damage (trace_ent, self, self, (self.heat * dam_mult));
 							sound (self, 0, "speech/excelent.wav", 1, 0);
 //							if ((trace_ent.health > 0))

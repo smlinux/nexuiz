@@ -164,7 +164,7 @@ void (entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 	}
 	if ((attacker.classname == "player"))
 	{
-		if ((attacker.super_damage_finished > time))
+		if ((attacker.strength_finished > time))
 		{
 			damage = (damage * 4);
 		}
@@ -344,7 +344,7 @@ void (entity targ, entity inflictor, entity attacker, float damage, float T_flag
 	if ((attacker.classname == "player"))
 	{
 		damage = (damage * 0.9);
-		if ((attacker.super_damage_finished > time))
+		if ((attacker.strength_finished > time))
 		{
 			damage = (damage * 4);
 		}
