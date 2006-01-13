@@ -1,0 +1,16 @@
+Running Man (rune_nexdm18_1on1remix)
+maps/nexdm18_1on1remix
+
+DM-Level especially designed
+for 1on1 Matches.
+
+Players: 2-4
+
+Weapons: Mortar, Nexgun, 
+Rocket Launcher, Electro, 
+Crylink, Hagar, Machine Gun
+
+Gametype: Rune Match
+
+Author:
+Paul Evers

@@ -1,0 +1,16 @@
+Running Man (dm_nexdm18)
+maps/nexdm18
+
+Small DM-Level, best suited 
+for 2 players.
+
+Players: 2-4
+
+Weapons: Mortar, Nexgun, 
+Rocket Launcher, Electro, 
+Crylink, Hagar, Machine Gun
+
+Gametype: Last Man Standing
+
+Author:
+Paul Evers
