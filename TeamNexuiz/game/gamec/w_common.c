@@ -438,10 +438,10 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float deathtype
 	force = normalize(end - start) * 800; //(bdamage * 10);
 
 	// find how far the beam can go until it hits a wall
-	//traceline (start, end, MOVE_HITMODEL, self);		// doing this enables checking against model
+	traceline (start, end, MOVE_HITMODEL, self);		// doing this enables checking against model
 														// geometry -- leaving it disabled for now since
 														// it's a cpu hog.
-	traceline (start, end, TRUE, self);
+	//traceline (start, end, TRUE, self);
 	// go a little bit into the wall because we need to hit this wall later
 	end = trace_endpos + normalize(end - start);
 
@@ -453,7 +453,7 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float deathtype
 	local vector h;
 
 	traceline_hitcorpse (self, start, end, FALSE, self);
-	if (trace_ent/* && deathtype == WEP_RAILGUN*/)			// Area damage?
+	if (trace_ent/* && deathtype == WEP_RAILGUN*/)			// Area damage!
 	{
 		if ((trace_ent.classname == "player"))
 		{
@@ -467,42 +467,22 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float deathtype
 			x = vlen ((g - h));
 			f = ((normalize (f) * x) + trace_endpos);
 			zdif = (f_z - trace_ent.origin_z);
-//			bprint(ftos(zdif));
-//			bprint("\n");
+			bprint(ftos(zdif));
+			bprint("\n");
 			deathmsg = 18;
 			trace_ent.head_shot_vector = '0 0 0';
-			if (zdif < 0)
+			if (trace_ent.crouch == 1)		// Damage enemy that's crouching
 			{
-				dam_mult = 0.5;
-				if ((trace_ent.team_no != self.team_no))
+				if (zdif < -5)
 				{
-					trace_ent.leg_damage = (trace_ent.leg_damage + 1);
-					TeamFortress_SetSpeed (trace_ent);
-					deathmsg = 28;
-					bdamage = bdamage * .8;
-					//T_Damage (trace_ent, self, self, (self.heat * dam_mult));
-				}
-				if ((trace_ent.health > 0))
-				{
-					if ((trace_ent.team_no == self.team_no))
+					dam_mult = 0.5;
+					if ((trace_ent.team_no != self.team_no))
 					{
-						sprint (self, "Stop shooting team mates!!!\n");
+						trace_ent.leg_damage = (trace_ent.leg_damage + 1);
+						TeamFortress_SetSpeed (trace_ent);
+						deathmsg = 28;
+						bdamage = bdamage * .8;
 					}
-					else
-					{
-						sprint (trace_ent, "Leg injury!\n");
-						sprint (self, "Leg shot - that'll slow him down!\n");
-					}
-				}
-				//return;
-			}
-			else
-			{
-				if (zdif > 20)
-				{
-					dam_mult = 3;
-					stuffcmd (trace_ent, "bf\n");
-					deathmsg = 29;
 					if ((trace_ent.health > 0))
 					{
 						if ((trace_ent.team_no == self.team_no))
@@ -511,26 +491,104 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float deathtype
 						}
 						else
 						{
-							trace_ent.head_shot_vector = (trace_ent.origin - self.origin);
-							deathmsg = 29;
-//							bdamage = floor(bdamage * 3.5);
-							if (zdif > 31)
-								bdamage = floor(bdamage * 15.5);
-							else
-								bdamage = floor(bdamage * 2.5);
-//							T_Damage (trace_ent, self, self, (self.heat * dam_mult));
-							sound (self, 0, "speech/excelent.wav", 1, 0);
-//							if ((trace_ent.health > 0))
-//							{
-//								sprint (trace_ent, 0, "Head injury!\n");
-//								sprint (self, 1, "Head shot - that's gotta hurt!\n");
-//							}
+							sprint (trace_ent, "Leg injury!\n");
+							sprint (self, "Leg shot - that'll slow him down!\n");
 						}
-						//return;
 					}
-					else
+				}
+				else
+				{
+					if (zdif > 5)
 					{
-						deathmsg = 18;
+						dam_mult = 3;
+						stuffcmd (trace_ent, "bf\n");
+						deathmsg = 29;
+						if ((trace_ent.health > 0))
+						{
+							if ((trace_ent.team_no == self.team_no))
+							{
+								sprint (self, "Stop shooting team mates!!!\n");
+							}
+							else
+							{
+								trace_ent.head_shot_vector = (trace_ent.origin - self.origin);
+								deathmsg = 29;
+								if (zdif > 9.1)
+									bdamage = floor(bdamage * 15.5);
+								else
+									bdamage = floor(bdamage * 2.5);
+								sound (self, 0, "speech/excelent.wav", 1, 0);
+							}
+						}
+						else
+						{
+							deathmsg = 18;
+						}
+					}
+				}
+			}
+			else {					// Damage standing enemy
+				if (zdif < 0)
+				{
+					dam_mult = 0.5;
+					if ((trace_ent.team_no != self.team_no))
+					{
+						trace_ent.leg_damage = (trace_ent.leg_damage + 1);
+						TeamFortress_SetSpeed (trace_ent);
+						deathmsg = 28;
+						bdamage = bdamage * .8;
+						//T_Damage (trace_ent, self, self, (self.heat * dam_mult));
+					}
+					if ((trace_ent.health > 0))
+					{
+						if ((trace_ent.team_no == self.team_no))
+						{
+							sprint (self, "Stop shooting team mates!!!\n");
+						}
+						else
+						{
+							sprint (trace_ent, "Leg injury!\n");
+							sprint (self, "Leg shot - that'll slow him down!\n");
+						}
+					}
+					//return;
+				}
+				else
+				{
+					if (zdif > 20)
+					{
+						dam_mult = 3;
+						stuffcmd (trace_ent, "bf\n");
+						deathmsg = 29;
+						if ((trace_ent.health > 0))
+						{
+							if ((trace_ent.team_no == self.team_no))
+							{
+								sprint (self, "Stop shooting team mates!!!\n");
+							}
+							else
+							{
+								trace_ent.head_shot_vector = (trace_ent.origin - self.origin);
+								deathmsg = 29;
+//								bdamage = floor(bdamage * 3.5);
+								if (zdif > 31)
+									bdamage = floor(bdamage * 15.5);
+								else
+									bdamage = floor(bdamage * 2.5);
+//								T_Damage (trace_ent, self, self, (self.heat * dam_mult));
+								sound (self, 0, "speech/excelent.wav", 1, 0);
+//								if ((trace_ent.health > 0))
+//								{
+//									sprint (trace_ent, 0, "Head injury!\n");
+//									sprint (self, 1, "Head shot - that's gotta hurt!\n");
+//								}
+							}
+							//return;
+						}
+						else
+						{
+							deathmsg = 18;
+						}
 					}
 				}
 			}
