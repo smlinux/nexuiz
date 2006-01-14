@@ -233,6 +233,25 @@ void InitGameplayMode()
 	}
 }
 
+string GetClientVersionMessage(float v) {
+	local string versionmsg;
+	if (v == 1) {
+		versionmsg = "^1client is too old to get versioninfo.\n\n\n### YOU WON'T BE ABLE TO PLAY ON THIS SERVER ###\n\n\nUPDATE!!! (http://www.nexuiz.com)^8";
+		// either that or someone wants to be funny
+	} else if (v != cvar("g_nexuizversion_major")) {
+		if(v < cvar("g_nexuizversion_major")) {
+			versionmsg = "^3Your client version is outdated.\n\n\n### YOU WON'T BE ABLE TO PLAY ON THIS SERVER ###\n\n\nPlease update!!!^8";
+		} else {
+			versionmsg = "^3This server is using an outdated Nexuiz version.\n\n\n ### THIS SERVER IS INCOMPATIBLE AND THUS YOU CANNOT JOIN ###.^8";
+		}
+	} else {
+		versionmsg = "^2client version and server version are the same.^8";
+	}
+	return strzone(versionmsg);
+
+}
+
+
 void PrintWelcomeMessage(entity pl)
 {
 	string s, grap_msg, temp, mutator;
@@ -258,10 +277,13 @@ void PrintWelcomeMessage(entity pl)
 	if(cvar("g_grappling_hook"))
 		grap_msg = strzone("\n\nBind a key to ^1+hook^8 to use the grappling hook\n");
 
-	s = strcat(s, "\n\nThis is Nexuiz ", cvar_string("g_nexuizversion"), "\n", self.versionmessage);
+	local string versionmessage;
+	versionmessage = GetClientVersionMessage(self.version);
+	
+	s = strcat(s, "\n\nThis is Nexuiz ", cvar_string("g_nexuizversion"), "\n", versionmessage);
 	s = strcat(s, "^8\n\nMatch type is ^1", mutator, gamemode_name, "^8\n");
 
-	if(self.classname == "observer" || self.classname == "spectator") {
+	if((self.classname == "observer" || self.classname == "spectator") && self.version == cvar("g_nexuizversion_major")) {
 		s = strcat(s,"^7\n\n\npress jump to play\npress attack to spectate other players\n\n");
 	}
 

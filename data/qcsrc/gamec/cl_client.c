@@ -481,7 +481,7 @@ void ClientConnect (void)
 	//	dom_player_join_team(self);
 
 	//JoinBestTeam(self, FALSE);
-	if(cvar("teamplay")) stuffcmd(self,"menu_showteamselect\n");
+	if(cvar("teamplay") && self.version == cvar("g_nexuizversion_major")) stuffcmd(self,"menu_showteamselect\n");
 	
 
 	if(cvar("sv_spectate") == 1 && !cvar("g_lms")) {
@@ -1097,7 +1097,7 @@ void PlayerPreThink (void)
 	} else if(self.classname == "observer") {
 	        
 		if (self.flags & FL_JUMPRELEASED) {
-			if (self.button2) {
+			if (self.button2 && self.version == cvar("g_nexuizversion_major")) {
 				if(!cvar("teamplay")) {
 					self.flags = self.flags & !FL_JUMPRELEASED;
 					self.classname = "player";
@@ -1111,7 +1111,7 @@ void PlayerPreThink (void)
 					stuffcmd(self,"menu_showteamselect\n");
 					return;
 				}
-			} else if(self.button0) {
+			} else if(self.button0 && self.version == cvar("g_nexuizversion_major")) {
 				self.flags = self.flags & !FL_JUMPRELEASED;
 				if(SpectateNext() == 1) {
 					self.classname = "spectator";

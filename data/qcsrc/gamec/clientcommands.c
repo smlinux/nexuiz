@@ -171,19 +171,12 @@ void SV_ParseClientCommand(string s) {
 	} else if(argv(0) == "clientversion") {
 		local string versionmsg;
 		if (argv(1) == "$g_nexuizversion_major") {
-			versionmsg = "^1client is too old to get versioninfo.\nUPDATE!!! (http://www.nexuiz.com)^8";
+			//versionmsg = "^1client is too old to get versioninfo.\nUPDATE!!! (http://www.nexuiz.com)^8";
 			// either that or someone wants to be funny
-		} else if (stof(argv(1)) != cvar("g_nexuizversion_major")) {
-			if(stof(argv(1)) < cvar("g_nexuizversion_major")) {
-				versionmsg = "^3Your client version is outdated.\nPlease update!!!^8";
-			} else {
-				versionmsg = "^3This server is using an outdated Nexuiz version.\nThis can lead to problems.^8";
-			}
-
+			self.version = 1;
 		} else {
-			versionmsg = "^2client version and server version are the same.^8";
+			self.version = stof(argv(1));
 		}
-		self.versionmessage = strzone(versionmsg);
 	} else if(argv(0) == "spectate") {
 		if(cvar("g_lms"))
 			return; // don't allow spectating in lms, unless player runs out of lives
