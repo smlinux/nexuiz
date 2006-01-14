@@ -3,7 +3,7 @@
 "classname" "worldspawn"
 }
 {
-"target" "t1"
+"target" "hagarjump"
 "classname" "trigger_push"
 "model" "*1"
 }
@@ -12,7 +12,7 @@
 "classname" "item_strength"
 }
 {
-"targetname" "t6"
+"targetname" "crylinkjump"
 "origin" "-1088 1240 216"
 "classname" "target_position"
 }
@@ -51,40 +51,18 @@
 "classname" "item_health25"
 }
 {
-"targetname" "t5"
+"targetname" "electrojump"
 "origin" "920 1312 192"
 "classname" "target_position"
 }
 {
-"targetname" "t1"
+"targetname" "hagarjump"
 "origin" "-472 -840 16"
 "classname" "target_position"
 }
 {
 "classname" "info_player_deathmatch"
 "origin" "-200 464 24"
-}
-{
-"classname" "trigger_teleport"
-"target" "t2"
-"model" "*2"
-}
-{
-"classname" "trigger_teleport"
-"target" "t3"
-"model" "*3"
-}
-{
-"classname" "misc_teleporter_dest"
-"origin" "1216 304 -8"
-"angle" "90"
-"targetname" "t2"
-}
-{
-"angle" "180"
-"origin" "-704 232 40"
-"classname" "misc_teleporter_dest"
-"targetname" "t3"
 }
 {
 "classname" "weapon_hagar"
@@ -96,13 +74,13 @@
 }
 {
 "classname" "trigger_push"
-"target" "t4"
-"model" "*4"
+"target" "strengthjump"
+"model" "*2"
 }
 {
 "classname" "target_position"
 "origin" "32 712 216"
-"targetname" "t4"
+"targetname" "strengthjump"
 }
 {
 "classname" "item_armor1"
@@ -134,13 +112,13 @@
 }
 {
 "classname" "trigger_push"
-"target" "t6"
-"model" "*5"
+"target" "crylinkjump"
+"model" "*3"
 }
 {
 "classname" "trigger_push"
-"target" "t5"
-"model" "*6"
+"target" "electrojump"
+"model" "*4"
 }
 {
 "classname" "item_cells"
@@ -358,6 +336,33 @@
 {
 "origin" "-1040 -448 8"
 "classname" "info_player_deathmatch"
+}
+{
+"angle" "315"
+"origin" "1144 120 -120"
+"classname" "info_player_deathmatch"
+}
+{
+"target" "tele1"
+"classname" "trigger_teleport"
+"model" "*5"
+}
+{
+"target" "tele2"
+"classname" "trigger_teleport"
+"model" "*6"
+}
+{
+"targetname" "tele1"
+"angle" "90"
+"origin" "1216 312 0"
+"classname" "misc_teleporter_dest"
+}
+{
+"targetname" "tele2"
+"classname" "misc_teleporter_dest"
+"origin" "-704 232 40"
+"angle" "180"
 }
 {
 "angle" "315"

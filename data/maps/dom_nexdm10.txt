@@ -19,3 +19,4 @@ Gametype: Domination
 Author:
 William Libert
 Maik Merten
+Paul Evers

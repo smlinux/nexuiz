@@ -11,3 +11,4 @@ Gametype: Last Man Standing
 Author:
 William Libert
 Maik Merten
+Paul Evers
