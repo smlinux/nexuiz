@@ -118,6 +118,20 @@ void() Nex_Action_Map_Start =
 void() Nex_Action_Instant_Action =
 {
 	local string exit_cfg;
+	local float randommap;
+	local float lSearchHandle;
+	local float lSearchSize;
+	local string lFilename;
+
+	lSearchHandle = search_begin( "maps/*.instantaction", true, true );
+	if( lSearchHandle < 0 )
+		return;
+
+	lSearchSize = search_getsize( lSearchHandle );
+	randommap = random() * lSearchSize;
+	lFilename = search_getfilename( lSearchHandle, randommap );
+
+	search_end( lSearchHandle );
 
 	// if an old exit cfg file was set up, exec it
 	// to reset old values before starting the server
@@ -127,7 +141,7 @@ void() Nex_Action_Instant_Action =
 		cmd( "exec ", exit_cfg, "\n" );
 	}
 	// exec the game reset cfg and then the mapcfg
-	cmd( "exec game_reset.cfg \nwait \nexec \"maps/nexdm01.instantaction\"\n" );
+	cmd( strcat( "exec game_reset.cfg \n wait \n exec \"", lFilename, "\"\n") );
 
 	// force the menu to hide
 	m_hide();
