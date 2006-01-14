@@ -564,6 +564,7 @@ Called when a client disconnects from the server
 =============
 */
 .entity chatbubbleentity;
+.entity teambubbleentity;
 void ClientDisconnect (void)
 {
 	bprint ("^4",self.netname);
@@ -574,6 +575,13 @@ void ClientDisconnect (void)
 		remove (self.chatbubbleentity);
 		self.chatbubbleentity = world;
 	}
+	
+	if (self.teambubbleentity)
+	{
+		remove (self.teambubbleentity);
+		self.teambubbleentity = world;
+	}
+	
 	DropAllRunes(self);
 	// decrease player count for lms
 	if(clienttype(self) !=  CLIENTTYPE_BOT)
@@ -616,6 +624,46 @@ void() UpdateChatBubble =
 		setorigin(self.chatbubbleentity, self.origin + '0 0 15' + self.maxs_z * '0 0 1');
 		self.chatbubbleentity.mdl = self.chatbubbleentity.model;
 		self.chatbubbleentity.model = "";
+	}
+}
+
+
+void() TeamBubbleThink =
+{
+	self.nextthink = time;
+	if (!self.owner.modelindex || self.owner.teambubbleentity != self)
+	{
+		remove(self);
+		return;
+	}
+	setorigin(self, self.owner.origin + '0 0 15' + self.owner.maxs_z * '0 0 1');
+	if (self.owner.buttonchat || self.owner.deadflag)
+		self.model = "";
+	else
+		self.model = self.mdl;
+	
+};
+
+.float() customizeentityforclient;
+float() ChatBubble_customizeentityforclient = {return self.owner.team == other.team;};
+
+void() UpdateTeamBubble =
+{
+	if (!self.modelindex || !cvar("teamplay"))
+		return;
+	// spawn a teambubble entity if needed
+	if (!self.teambubbleentity && cvar("teamplay"))
+	{
+		self.teambubbleentity = spawn();
+		self.teambubbleentity.owner = self;
+		self.teambubbleentity.exteriormodeltoclient = self;
+		self.teambubbleentity.think = TeamBubbleThink;
+		self.teambubbleentity.nextthink = time;
+		setmodel(self.teambubbleentity, "models/misc/teambubble.spr");
+		setorigin(self.teambubbleentity, self.origin + '0 0 15' + self.maxs_z * '0 0 1');
+		self.teambubbleentity.mdl = self.teambubbleentity.model;
+		self.teambubbleentity.model = self.teambubbleentity.mdl;
+		self.teambubbleentity.customizeentityforclient = ChatBubble_customizeentityforclient;
 	}
 }
 
@@ -1176,6 +1224,7 @@ void PlayerPostThink (void)
 	if(self.classname == "player") {
 		CheckRules_Player();
 		UpdateChatBubble();
+		UpdateTeamBubble();
 		UpdatePlayerColors();
 		if (self.deadflag == DEAD_NO)
 		if (self.impulse)
