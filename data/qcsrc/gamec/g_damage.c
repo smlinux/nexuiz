@@ -67,7 +67,7 @@ void Obituary (entity attacker, entity targ, float deathtype)
 		}
 		else if (teamplay && attacker.team == targ.team)
 		{
-			centerprint(attacker, strcat("^1Moron! You killed a teammate!\n\n\n"));
+			centerprint(attacker, strcat("^1Moron! You fragged a teammate!\n\n\n"));
 			bprint ("^1", attacker.netname, "^1 mows down a teammate\n");
 			GiveFrags(attacker, targ, -1);
 			//attacker.frags = attacker.frags - 1;
@@ -88,8 +88,8 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				bprint("^1",attacker.netname, "^1 drew first blood", "\n");
 			}
 
-			centerprint(attacker, strcat("^4You killed ^7", s, "\n\n\n"));
-			centerprint(targ, strcat("^1You were killed by ^7", attacker.netname, "\n\n\n"));
+			centerprint(attacker, strcat("^4You fragged ^7", s, "\n\n\n"));
+			centerprint(targ, strcat("^1You were fragged by ^7", attacker.netname, "\n\n\n"));
 			
 			if (deathtype == IT_LASER)
 				bprint ("^1",s, "^1 was blasted by ", attacker.netname, "\n");
@@ -124,7 +124,7 @@ void Obituary (entity attacker, entity targ, float deathtype)
 			else if (deathtype == DEATH_HURTTRIGGER)
 				bprint ("^1",s, "^1 was thrown into a world of hurt by ", attacker.netname, "\n");
 			else
-				bprint ("^1",s, "^1 was killed by ", attacker.netname, "\n");
+				bprint ("^1",s, "^1 was fragged by ", attacker.netname, "\n");
 
 			GiveFrags(attacker, targ, 1);
 			//attacker.frags = attacker.frags + 1;
@@ -132,7 +132,7 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				bprint ("^1",s,"'s ^1", ftos(targ.killcount), " kill spree was ended by ", attacker.netname, "\n");
 			attacker.killcount = attacker.killcount + 1;
 			if (attacker.killcount > 2)
-				bprint ("^1",attacker.netname,"^1 has ",ftos(attacker.killcount)," kills in a row\n");
+				bprint ("^1",attacker.netname,"^1 has ",ftos(attacker.killcount)," frags in a row\n");
 
 			if (attacker.killcount == 3)
 			{
