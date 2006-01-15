@@ -81,6 +81,7 @@ gamec/domination.c
 
 gamec/mauvebot.c
 
+gamec/tf_w_pistol.c			// (Every Class?) Pistol
 gamec/tf_w_railgun.c			// Engineer RailGun
 gamec/tf_w_mac10.c			// Spy MAC10
 
