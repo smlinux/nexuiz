@@ -222,7 +222,7 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 	if (teamplay)
 	if (attacker.team)
 	if (attacker.team == targ.team)
-	if (teamplay == 1 || (teamplay == 3 && attacker != targ))
+	if ((teamplay == 1 || teamplay == 3) && attacker != targ)
 		damage = 0;
 	
 	if(damage > 0 && targ != attacker && clienttype(attacker) == CLIENTTYPE_REAL && targ.classname == "player")

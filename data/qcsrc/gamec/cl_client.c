@@ -414,7 +414,7 @@ void PutClientInServer (void)
 		self.statdraintime = time + 5;
 		self.button0 = self.button1 = self.button2 = self.button3 = 0;
 	
-		if(self.frags == -666 && self.killcount == -666) {
+		if(self.killcount == -666) {
 			self.killcount = 0;
 			self.frags = 0;
 		}
