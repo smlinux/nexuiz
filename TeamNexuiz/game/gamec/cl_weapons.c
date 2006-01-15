@@ -4,6 +4,7 @@
 void (float wreq) w_railgun;
 void (float wreq) w_healgun;
 void (float wreq) w_mac;
+void (float wreq) w_pistol;
 void(float wpn, float wrequest) weapon_action =
 {
 	if ((self.reload_time + .25) > time) { 
@@ -60,11 +61,14 @@ void(float wpn, float wrequest) weapon_action =
 	else if(self.class == CLASS_SOLDIER)
 	{
 		if (wpn == WEP1)
-			w_shotgun(wrequest);
+			w_pistol(wrequest);
+			//w_shotgun(wrequest);
 		else if (wpn == WEP2)
-			w_namek(wrequest);
+			w_shotgun(wrequest);
+			//w_namek(wrequest);
 		else if (wpn == WEP3)
-			w_electro(wrequest);
+			w_namek(wrequest);
+//			w_electro(wrequest);
 		else if (wpn == WEP4)
 			w_rlauncher(wrequest);
 	}
@@ -292,10 +296,18 @@ void() W_WeaponFrame =
 	}
 
 	if (self.button0)
+	{
+		if (self.pistol_fired == 1)				// code so that if fire is held down with pistol,
+		{										//// it will not keep firing automatically.
+			self.next_pistol_fire = time + .2;
+		}
 		weapon_action(self.weapon, WR_FIRE1);
+	}
 	if (self.button3)
 		weapon_action(self.weapon, WR_FIRE2);
 
+	if (!self.button0 && self.pistol_fired == 1)
+		self.pistol_fired = 0;
 	// do weapon think
 	if (time >= self.weapon_nextthink)
 		if (self.weapon_nextthink > 0)

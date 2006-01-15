@@ -488,7 +488,8 @@ void (float classnum) SetMaxAmmoFor =
 	self.maxammo_cells = 40;
 	self.maxammo_rockets = 40;
 	self.no_grenades_1 = 4;
-	self.clip_rockets = 4;
+	self.clip_rockets = CLIP_MAX_ROCKETS;
+	self.clip_pistol = CLIP_MAX_PISTOL;
 	self.tp_grenades_1 = 1;
 	self.tp_grenades_2 = 0;
 
@@ -509,6 +510,7 @@ void (float classnum) SetMaxAmmoFor =
 		self.ammo_nails = 100;
 	}
 	else if (classnum == CLASS_SOLDIER) {
+		self.ammo_rockets = 62;			//translates to 20
 		self.maxammo_rockets = 40;
 		self.tp_grenades_2 = 3;
 	}

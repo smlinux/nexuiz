@@ -93,9 +93,11 @@ float blueflagexists;
 
 // Weapon Clips
 .float reload_time;
+.float clip_pistol;
 .float clip_crylink;
 .float clip_rockets;
 .float clip_pipegrenades;
+float CLIP_MAX_PISTOL = 10;
 float CLIP_MAX_CRYLINK = 8;
 float CLIP_MAX_ROCKETS = 4;
 float CLIP_MAX_PIPEGRENADES = 6;
@@ -153,6 +155,10 @@ float CLIP_MAX_PIPEGRENADES = 6;
 // MENU STUFF
 .float current_menu;
 .float menu_count;
+
+.float pistol_fired;				// has the pistol been fired? 1 - yes, 2- no
+.float next_pistol_fire;			// pistol cannot be fired again until this value < time
+									//// check W_WeaponFrame for more detail on these 2
 
 .float heat;		// What tf uses for powering up weapons. Could be useful later?
 
@@ -299,3 +305,4 @@ float toggleflags;
 ///////////////////////////////////////////////////////
 /*****************************************************/
 float DROP_FLAG_IMPULSE =		203;
+float RELOAD_IMPULSE =			70;

@@ -21,7 +21,8 @@ void DummyThink(void)
 void CopyBody2(float keepvelocity, float testbody);
 void ImpulseCommands (void)
 {
-	local float swpn;
+	local float swpn;	// returns self.weapon amount -- the slot that weapon is in (WEP1, WEP2 etc)
+	local float awpn;	// returns self.wpn amount (WEP_PISTOL, WEP_NEX etc.)
 
 	if (self.impulse_wait > time)	// So the GUI menus doesnt flicker
 		return;
@@ -61,6 +62,11 @@ void ImpulseCommands (void)
 	}
 	if (self.impulse == 70) {		// reload impulse
 		swpn = self.weapon;
+		awpn = self.wpn;
+
+			if (awpn == WEP_PISTOL)
+				DoReload (1, (CLIP_MAX_PISTOL - self.clip_pistol));
+
 			if(self.class == CLASS_SOLDIER)
 			{
 				if (swpn == WEP4)

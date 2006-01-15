@@ -82,6 +82,7 @@ void () DoTFAliases =
 		TeamFortress_Alias("-gren1", 152, TF_FLARE_LIT);
 		TeamFortress_Alias("-gren2", 152, TF_FLARE_LIT);
 		TeamFortress_Alias("dropflag", DROP_FLAG_IMPULSE, TF_FLARE_LIT);
+		TeamFortress_Alias("reload", RELOAD_IMPULSE, TF_FLARE_LIT);
 };
 
 void (entity tempent) dremove =
@@ -1882,6 +1883,11 @@ void (float rweapon, float amount) DoReload =
 	if (rweapon != 5)
 		sprint(self, "Reloading...\n");
 
+	if (rweapon == 1)		// Pistol
+	{
+		rtime = (amount * .35);
+		self.clip_pistol = CLIP_MAX_PISTOL;
+	}
 	if (rweapon == 2)		// CryLink (flak cannon)
 	{
 		rtime = (amount * .80);

@@ -15,7 +15,7 @@ void(float req) w_flamer =
 	if (req == WR_IDLE)
 		flamer_ready_01();
 	else if (req == WR_FIRE1 || req == WR_FIRE2)
-		weapon_prepareattack(flamer_check, flamer_check, flamer_fire1_01, cvar("g_balance_flamer_refire"));
+		weapon_prepareattack(flamer_check, flamer_check, flamer_fire1_01, .09);
 	else if (req == WR_RAISE)
 		flamer_select_01();
 	else if (req == WR_UPDATECOUNTS)
@@ -23,7 +23,7 @@ void(float req) w_flamer =
 	else if (req == WR_DROP)
 		flamer_deselect_01();
 	else if (req == WR_SETUP)
-		weapon_setup(WEP_FLAMER, "w_flamer.zym", IT_ROCKETS);
+		weapon_setup(WEP_FLAMER, "w_flamethrower.zym", IT_ROCKETS);
 	else if (req == WR_CHECKAMMO)
 		weapon_hasammo = flamer_check();
 };
@@ -101,7 +101,7 @@ void W_Flamer_Attack (void)
 
 	sound (self, CHAN_WEAPON, "weapons/flamer.wav", 1, ATTN_NORM);
 	self.ammo_nails = self.ammo_nails - 4;
-	org = self.origin + self.view_ofs + v_forward * 1 + v_right * 5 + v_up * -8;
+	org = self.origin + self.view_ofs + v_forward * 1 + v_right * 14 + v_up * -5;
 
 	missile = spawn ();
 	missile.owner = self;
@@ -130,10 +130,28 @@ void W_Flamer_Attack (void)
 void()	flamer_ready_01 =	{weapon_thinkf(WFRAME_IDLE, 0.1, flamer_ready_01); self.weaponentity.state = WS_READY;};
 void()	flamer_select_01 =	{weapon_thinkf(-1, cvar("g_balance_weaponswitchdelay"), w_ready); weapon_boblayer1(PLAYER_WEAPONSELECTION_SPEED, '0 0 0');};
 void()	flamer_deselect_01 =	{weapon_thinkf(-1, cvar("g_balance_weaponswitchdelay"), w_clear); weapon_boblayer1(PLAYER_WEAPONSELECTION_SPEED, PLAYER_WEAPONSELECTION_RANGE);};
+
+void()	flamer_fire1_02 =
+{
+	if (self.button0 || self.button3)
+	{
+		weapon_doattack(flamer_check, flamer_check, W_Flamer_Attack);
+		weapon_thinkf(WFRAME_FIRE1, 0.09, flamer_fire1_02);
+		weapon_prepareattack(flamer_check, flamer_check, SUB_Null, .09);
+	}
+	else
+		weapon_thinkf(WFRAME_FIRE1, 0.09, flamer_ready_01);
+};
 void()	flamer_fire1_01 =
 {
 	weapon_doattack(flamer_check, flamer_check, W_Flamer_Attack);
-	//weapon_thinkf(WFRAME_IDLE, 0.003, flamer_ready_01);
-	flamer_ready_01();
+	weapon_thinkf(WFRAME_FIRE1, 0.09, flamer_fire1_02);
 };
+/*
+void()	flamer_fire1_01 =
+{
+	weapon_doattack(flamer_check, flamer_check, W_Flamer_Attack);
+	weapon_thinkf(WFRAME_FIRE1, 0.003, flamer_ready_01);
+	//flamer_ready_01();
+};*/
 

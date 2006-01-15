@@ -393,6 +393,10 @@ SOURCE=.\cl_weaponsystem.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\tf_w_pistol.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\w_common.c
 # End Source File
 # Begin Source File

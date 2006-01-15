@@ -676,7 +676,10 @@ void fireBullet2 (vector start, vector dir, float spread, float damage, float dt
 		e.solid = SOLID_NOT;
 		e.think = SUB_Remove;
 		e.nextthink = time + vlen(trace_endpos - start) / 6000;
-		e.velocity = dir * 6000;
+		if (dtype == WEP_PISTOL)			// if pistol, show slower bullet
+			e.velocity = dir * 1750;
+		else
+			e.velocity = dir * 6000;
 		e.angles = vectoangles(e.velocity);
 		setmodel (e, "models/tracer.mdl");
 		setsize (e, '0 0 0', '0 0 0');

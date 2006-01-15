@@ -211,7 +211,7 @@ void BecomeSoldier(float portion)
 	SetPlayerSpeed(self);
 
 	self.items = IT_WEP1 | IT_WEP2 | IT_WEP3 | IT_WEP4;
-	self.switchweapon = WEP3;
+	self.switchweapon = WEP4;		// used to be WEP3
 	self.ammo_shells = floor(20 * portion);
 	self.ammo_nails = floor(150 * portion);
 	self.ammo_rockets = floor(12 * portion);

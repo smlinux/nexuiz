@@ -50,6 +50,8 @@ void() CL_ExteriorWeaponentity_Think =
 		else if (self.owner.wpn == WEP_NAMEK) setmodel(self, "models/weapons/v_namek.md3");
 		else if (self.owner.wpn == WEP_RAILGUN) setmodel(self, "models/weapons/v_nex.md3");
 		else if (self.owner.wpn == WEP_MAC) setmodel(self, "models/weapons/v_mac.md3");
+		else if (self.owner.wpn == WEP_FLAMER) setmodel(self, "models/weapons/v_flamethrower.md3");
+		else if (self.owner.wpn == WEP_PISTOL) setmodel(self, "models/weapons/v_soldpistol.md3");
 		setattachment(self, self.owner, "bip01 r hand");
 		// if that didn't find a tag, hide the exterior weapon model
 		if (!self.tag_index)

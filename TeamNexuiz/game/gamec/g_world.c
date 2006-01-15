@@ -120,6 +120,7 @@ void worldspawn (void)
 	precache_model ("models/weapons/v_namek.md3");		// namek
 	precache_model ("models/weapons/v_railgun.md3");	// railgun (engineer)
 	precache_model ("models/weapons/v_mac.md3");		// MAC10 (spy)
+	precache_model ("models/weapons/v_soldpistol.md3");	// Pistol
 
 	precache_model ("models/weapons/w_rli.zym");
 	precache_model ("models/weapons/w_flamer.zym");
@@ -129,6 +130,7 @@ void worldspawn (void)
 	precache_model ("models/weapons/w_namek.zym");
 	precache_model ("models/weapons/w_railgun.zym");
 	precache_model ("models/weapons/w_mac.zym");
+	precache_model ("models/weapons/w_soldpistol.zym");
 
 
 	// other stuff
