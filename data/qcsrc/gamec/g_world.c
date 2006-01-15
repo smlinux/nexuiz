@@ -52,6 +52,7 @@ void worldspawn (void)
 	precache_model ("models/items/g_strength.md3");
 	precache_model ("models/laser.mdl");
 	precache_model ("models/misc/chatbubble.spr");
+	precache_model ("models/misc/teambubble.spr");
 	precache_model ("models/nexflash.md3");
 	precache_model ("models/plasma.mdl");
 	precache_model ("models/plasmatrail.mdl");

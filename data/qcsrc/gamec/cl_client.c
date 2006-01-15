@@ -645,7 +645,7 @@ void() TeamBubbleThink =
 };
 
 .float() customizeentityforclient;
-float() ChatBubble_customizeentityforclient = {return (self.owner.team == other.team && other.frags > -666);};
+float() ChatBubble_customizeentityforclient = {return (self.owner.team == other.team && other.killcount > -666);};
 
 void() UpdateTeamBubble =
 {

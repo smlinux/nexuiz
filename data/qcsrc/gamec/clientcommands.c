@@ -169,7 +169,6 @@ void SV_ParseClientCommand(string s) {
 		}
 		sprint(self, strcat("^1autoswitch turned ", autoswitchmsg, "\n"));
 	} else if(argv(0) == "clientversion") {
-		local string versionmsg;
 		if (argv(1) == "$g_nexuizversion_major") {
 			//versionmsg = "^1client is too old to get versioninfo.\nUPDATE!!! (http://www.nexuiz.com)^8";
 			// either that or someone wants to be funny
