@@ -290,10 +290,10 @@ float CheckForClassChange()
 
 	// don't monitor the player's model when he's dead.
 	// this means he can change class when dead and respawn as the new class.
-	if(self.health <= 0) // fixme: or if player is an observer
-		return 0;
+	//if(self.health <= 0) // fixme: or if player is an observer
+	//	return 0;
 
-	//bprint("healthy\n");
+	bprint("healthy\n");
 
 	if(self.playermodel == self.mdl)
 		return 0; // haven't changed models since last legitimate change

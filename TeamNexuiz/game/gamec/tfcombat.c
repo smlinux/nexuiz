@@ -154,6 +154,26 @@ void (entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 		}
 		return;
 	}*/
+	if (targ.pain_finished < time)		//Don't switch pain sequences like crazy
+	{
+		if (random() > 0.5)
+			targ.pain_frame = $pain1;
+		else
+			targ.pain_frame = $pain2;
+		targ.pain_finished = time + 0.5;	//Supajoe
+	}
+	if(targ.class == CLASS_MEDIC)
+	{
+		if(deathmsg == DEATH_BURNING)
+			damage = 0;	// being on fire or near burning targets does nothing to medics
+		// the flame thrower, flame rockets, and hotbombs also do minimal damage
+		else if(deathmsg == WEP_FLAMER ||
+				deathmsg == WEP_ROCKET_INCENDIARY ||
+				deathmsg == WEP_HOTBOMBS)
+			damage = damage * cvar("g_balance_class_medic_flame_takedamage");
+	}
+
+
 	if (!targ.takedamage)
 	{
 		return;
@@ -264,6 +284,19 @@ void (entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 	take = bound(0, damage - save, damage);
 	targ.armorvalue = targ.armorvalue - damagearmor;
 	DelayArmorRegen(targ);
+
+	// if being telefragged or killed by a death trigger etc, don't block that
+/*	if(PlayerShouldDie(inflictor, attacker, damage, deathtype))
+	{
+		if(take < damage)
+			take = damage; // deal full damage
+	}
+	else
+	{*/
+		// keep the damage the armor allowed through, and further reduce it if the player is using the shield
+		if(targ.class == CLASS_SCOUT)
+			take = SpecialShieldProtect(take);
+//	}
 
 	if (((take < 1) && (take != 0)))
 	{

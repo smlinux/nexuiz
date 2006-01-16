@@ -100,17 +100,17 @@ void Obituary (entity attacker, entity targ, float deathtypeN)	// Renamed "death
 			else if (deathtypeN == RAILGUN_HEADSHOT)
 				bprint ("^1",s, "'s head gets blown away by ", attacker.netname, "'s railgun shot\n");
 			else if (deathtypeN == RAILGUN_CHESTSHOT)
-				bprint ("^1",s, " gets shot in the chese by ", attacker.netname, "'s railgun shot\n");
+				bprint ("^1",s, " gets shot in the chest by ", attacker.netname, "'s railgun shot\n");
 			else if (deathtypeN == RAILGUN_BODYSHOT)
 				bprint ("^1",s, " is swiss-cheesed by ", attacker.netname, "'s railgun shot\n");
 			else if (deathtypeN == RAILGUN_LEGSHOT)
 				bprint ("^1",s, "'s legs are blown off by ", attacker.netname, "'s railgun shot\n");
 			else if (deathtypeN == PISTOL_LEGSHOT)
-				bprint ("^1",s, " knee-caps ", attacker.netname, " with his postol\n");
+				bprint ("^1",s, " is knee-capped by ", attacker.netname, "'s pistol\n");
 			else if (deathtypeN == PISTOL_BODYSHOT)
-				bprint ("^1",s, " is hot up by ", attacker.netname, "'s postol\n");
+				bprint ("^1",s, " is shot up by ", attacker.netname, "'s pistol\n");
 			else if (deathtypeN == PISTOL_HEADSHOT)
-				bprint ("^1",s, "'s head is popped by ", attacker.netname, "'s postol\n");
+				bprint ("^1",s, "'s head is popped by ", attacker.netname, "'s pistol\n");
 			else
 				bprint ("^1",s, " was killed by ", attacker.netname, "\n");
 

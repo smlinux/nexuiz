@@ -555,6 +555,7 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float deathtype
 						{
 							sprint (trace_ent, "Leg injury!\n");
 							sprint (self, "Leg shot - that'll slow him down!\n");
+							deathmsg = RAILGUN_LEGSHOT;
 						}
 					}
 					//return;
@@ -712,7 +713,7 @@ float (entity a, vector start, vector end, float flt, entity b) FindBodyDamage =
 //						TeamFortress_SetSpeed (trace_ent);
 						return LEGSHOT;
 					}
-					if ((trace_ent.health > 0))
+/*					if ((trace_ent.health > 0))
 					{
 						if ((trace_ent.team_no == self.team_no))
 						{
@@ -723,7 +724,7 @@ float (entity a, vector start, vector end, float flt, entity b) FindBodyDamage =
 							sprint (trace_ent, "Leg injury!\n");
 							sprint (self, "Leg shot - that'll slow him down!\n");
 						}
-					}
+					}*/
 				}
 				else
 				{
@@ -733,11 +734,11 @@ float (entity a, vector start, vector end, float flt, entity b) FindBodyDamage =
 						stuffcmd (trace_ent, "bf\n");
 						if ((trace_ent.health > 0))
 						{
-							if ((trace_ent.team_no == self.team_no))
+							/*if ((trace_ent.team_no == self.team_no))
 							{
 								sprint (self, "Stop shooting team mates!!!\n");
 							}
-							else
+							else*/
 							{
 								trace_ent.head_shot_vector = (trace_ent.origin - self.origin);
 								deathmsg = 29;
@@ -759,12 +760,13 @@ float (entity a, vector start, vector end, float flt, entity b) FindBodyDamage =
 				}
 			}
 			else {					// Damage standing enemy
-				if (zdif < 0)
+//				if (zdif < 0)
+				if (zdif < 3)
 				{
 					dam_mult = 0.5;
 					if ((trace_ent.team_no != self.team_no))
 					{
-						trace_ent.leg_damage = (trace_ent.leg_damage + 1);
+						//trace_ent.leg_damage = (trace_ent.leg_damage + 1); // no leg dmg?
 //						TeamFortress_SetSpeed (trace_ent);
 						return LEGSHOT;
 					}
@@ -789,11 +791,11 @@ float (entity a, vector start, vector end, float flt, entity b) FindBodyDamage =
 						stuffcmd (trace_ent, "bf\n");
 						if ((trace_ent.health > 0))
 						{
-							if ((trace_ent.team_no == self.team_no))
+							/*if ((trace_ent.team_no == self.team_no))
 							{
 								sprint (self, "Stop shooting team mates!!!\n");
 							}
-							else
+							else*/
 							{
 								trace_ent.head_shot_vector = (trace_ent.origin - self.origin);
 								if (zdif > 31)
@@ -829,12 +831,12 @@ void fireBullet2 (vector start, vector dir, float spread, float damage, float dt
 	end = start + dir * 4096;
 	traceline_hitcorpse (self, start, end, FALSE, self);
 
-	if (dtype = WEP_PISTOL)			// if pistol weapon, apply area damage
+	if (dtype == WEP_PISTOL)			// if pistol weapon, apply area damage
 	{
 		bdamage = FindBodyDamage (self, start, end, FALSE, self);
 		if (bdamage == HEADSHOT)
 		{
-			damage = damage * 3;
+			damage = damage * 2.5;
 			dtype = PISTOL_HEADSHOT;
 		}
 		else if (bdamage == LEGSHOT)

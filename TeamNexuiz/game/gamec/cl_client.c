@@ -1302,6 +1302,8 @@ void SV_ParseClientCommand (string s)
 				{
 					self.playermodel = strcat("models/class/",cname,"_mechanical.zym");
 				}
+				if (self.is_dead == 1)		// if player is dead, can change class
+					CheckForClassChange();
 			}
 		}
 		else			// if no class is chosen
