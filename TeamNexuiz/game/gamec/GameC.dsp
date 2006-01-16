@@ -449,6 +449,10 @@ SOURCE=.\tfcombat.c
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\tf_constants.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\tfdefs.c
 # End Source File
 # Begin Source File

@@ -8,8 +8,8 @@ float (entity targ, entity attacker, float damage) TeamEqualiseDamage; // TBA Ad
 float deathmsg;	// Gonna have to make this work with NexTF's
 
 //compiler-satisfying vars (Add these to defs)
-.void() th_die;									// Note to self: figure out wtf these 2 do
-.void(entity attacker, float damage) th_pain;	////
+.void() th_die;									// The function that gets executed when something "dies"
+.void(entity attacker, float damage) th_pain;	// Function that's executed when an entity gets hit(?)
 float skill;	// Skill level. Moot in NexTF (no SP, and bots use some other var)
 .float super_damage_finished; //quad damage over <- convert this to work with nex!
 entity damage_attacker;

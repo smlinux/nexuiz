@@ -304,3 +304,9 @@ void() CheckIfQ3FTrigger =			// Handles trigger_multiples from Q3F/ETF -- called
 	if (self.holding == "oneflag" && self.allowteams == "red")
 		ConvertToGoal (2);
 };
+
+// func_hud is not valid in Team:Nexuiz (dont know if it will ever be)
+void () func_hud =
+{
+	dremove(self);
+};
