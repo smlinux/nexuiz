@@ -107,7 +107,12 @@ void player_anim (void)
 		self.frame = $idle;
 
 	if (!(self.flags & FL_ONGROUND))
-		self.frame = $jump;
+	{
+		if (self.crouch)
+			self.frame = $duckidle;		// if player is crouching while in air, show crouch frame
+		else
+			self.frame = $jump;
+	}
 }
 //End change by Supajoe on 11:44 PM EST 11/16/03 (Subject: Player animations)
 
