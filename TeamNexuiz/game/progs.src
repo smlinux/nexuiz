@@ -5,6 +5,7 @@ gamec/builtins.h
 gamec/constants.h
 gamec/defs.h		// Should rename this, it has fields and globals
 gamec/tfdefs.c			// TF Defs File
+gamec/tf_constants.c		// TF Constants (impulses, death messages etc)
 gamec/tffunctions.c		// TF Functions
 gamec/tfitems.c			// TF Items
 gamec/tfclient.c			// TF Client-Side stuff
