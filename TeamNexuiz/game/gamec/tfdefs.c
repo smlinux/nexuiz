@@ -301,8 +301,3 @@ float toggleflags;
 .float is_unabletospy;		// picking up tfgoal makes the spy unable to go undercover
 .float owned_by;		// Item is owned by team #
 
-/***************** Impulse Defs **********************/
-///////////////////////////////////////////////////////
-/*****************************************************/
-float DROP_FLAG_IMPULSE =		203;
-float RELOAD_IMPULSE =			70;

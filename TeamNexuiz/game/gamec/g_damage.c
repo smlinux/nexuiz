@@ -97,6 +97,20 @@ void Obituary (entity attacker, entity targ, float deathtypeN)	// Renamed "death
 				bprint ("^1",s, " gets nailed to the wall from ", attacker.netname, "'s nail grenade\n");
 			else if (deathtypeN == 51)	//tesla
 				bprint ("^1",s, " gets fried by ", attacker.netname, "'s tesla coil :D\n");
+			else if (deathtypeN == RAILGUN_HEADSHOT)
+				bprint ("^1",s, "'s head gets blown away by ", attacker.netname, "'s railgun shot\n");
+			else if (deathtypeN == RAILGUN_CHESTSHOT)
+				bprint ("^1",s, " gets shot in the chese by ", attacker.netname, "'s railgun shot\n");
+			else if (deathtypeN == RAILGUN_BODYSHOT)
+				bprint ("^1",s, " is swiss-cheesed by ", attacker.netname, "'s railgun shot\n");
+			else if (deathtypeN == RAILGUN_LEGSHOT)
+				bprint ("^1",s, "'s legs are blown off by ", attacker.netname, "'s railgun shot\n");
+			else if (deathtypeN == PISTOL_LEGSHOT)
+				bprint ("^1",s, " knee-caps ", attacker.netname, " with his postol\n");
+			else if (deathtypeN == PISTOL_BODYSHOT)
+				bprint ("^1",s, " is hot up by ", attacker.netname, "'s postol\n");
+			else if (deathtypeN == PISTOL_HEADSHOT)
+				bprint ("^1",s, "'s head is popped by ", attacker.netname, "'s postol\n");
 			else
 				bprint ("^1",s, " was killed by ", attacker.netname, "\n");
 
