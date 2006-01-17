@@ -5,6 +5,7 @@
 /*****************************************************/
 float DROP_FLAG_IMPULSE =		203;
 float RELOAD_IMPULSE =			70;
+float FEIGN_IMPULSE =			204;
 
 
 /******************* Death Messages ********************/
@@ -28,3 +29,4 @@ float BODYSHOT =				0;
 float LEGSHOT =					1;
 float CHESTSHOT =				2;
 float HEADSHOT =				3;
+vector PL_FEIGN_VIEW_OFS		= '0 0 10';		// feign view offset

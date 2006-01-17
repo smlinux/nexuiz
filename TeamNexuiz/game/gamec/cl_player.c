@@ -96,6 +96,11 @@ void player_anim (void)
 		return;
 	}
 
+	if (self.is_feigning == 1)
+	{
+		self.frame = self.die_frame;
+		return;
+	}
 
 	if (self.crouch)
 	{

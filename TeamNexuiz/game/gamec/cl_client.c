@@ -484,6 +484,8 @@ void PutClientInServer (void)
 	self.poison_damage = 0;
 	self.poison_rate = 0;
 
+	self.is_feigning = 0;
+
 	// if the player is supposed to change model (and hence class) on respawn, do it.
 	if(self.change_mdl_on_respawn != "")
 	{

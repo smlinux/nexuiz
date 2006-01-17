@@ -155,6 +155,11 @@ void ImpulseCommands (void)
 		TeamFortress_ThrowGrenade();
 	}
 
+	if (self.impulse == FEIGN_IMPULSE)
+	{
+		TeamNexuiz_Feign();
+	}
+
 	if (self.impulse >= 1 && self.impulse <= 5)
 	{
 		if(self.buttonuse)

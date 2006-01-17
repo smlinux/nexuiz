@@ -7,7 +7,7 @@ void (float wreq) w_mac;
 void (float wreq) w_pistol;
 void(float wpn, float wrequest) weapon_action =
 {
-	if ((self.reload_time + .25) > time) { 
+	if ((self.reload_time + .25) > time || self.is_feigning == 1) { 
 		return; }
 	if (wpn == WEP5)
 	{

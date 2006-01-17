@@ -293,7 +293,7 @@ float CheckForClassChange()
 	//if(self.health <= 0) // fixme: or if player is an observer
 	//	return 0;
 
-	bprint("healthy\n");
+//	bprint("healthy\n");
 
 	if(self.playermodel == self.mdl)
 		return 0; // haven't changed models since last legitimate change
@@ -361,7 +361,7 @@ float CheckForClassChange()
 		sprint(self, "You have no lives left.\n");
 		return 0;
 	}
-	if (!IsLegalClass(tfcl))
+	if (!IsLegalClass(tfcl))		// Checks if class is legal for the map
 	{
 		self.playermodel = self.mdl;	// return to old model
 		ResetPlayerModel(self);
@@ -378,7 +378,11 @@ float CheckForClassChange()
 		self.change_mdl_on_respawn = strzone(self.change_mdl_on_respawn);
 		self.playermodel = self.model;
 		if (self.team_no > 0)
-			sprint(self, "You will change class after you die\n");
+		{
+			sprint (self, "After dying, you will return as a ");
+			TeamFortress_PrintClassName (self, cl, (self.tfstate & 8));
+		}
+//			sprint(self, "You will change class after you die\n");
 		return 0;
 	}
 
@@ -481,6 +485,7 @@ void ClassPostThink()
 */
 void (float classnum) SetMaxAmmoFor =
 {
+	self.is_feigning = 0;
 	self.leg_damage = 0;		//temp here //so leg damage doesnt stay on player respawn
 	// if no class is found, it will just default to these
 	self.maxammo_shells = 200;

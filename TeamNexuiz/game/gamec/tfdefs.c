@@ -91,6 +91,9 @@ float blueflagexists;
 .void() th_missile;
 .void() th_melee;
 
+// spy feign
+.float is_feigning;
+
 // Weapon Clips
 .float reload_time;
 .float clip_pistol;

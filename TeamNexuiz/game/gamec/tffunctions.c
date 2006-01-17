@@ -2343,3 +2343,17 @@ void () DropFlag =
 	Item.think = tfgoalitem_dropthink;
 	Item.touch = item_tfgoal_touch;
 }
+
+void () TeamNexuiz_GunDown =		//brings first-person gun model down
+{
+	self.weaponentity.pos1 = PLAYER_WEAPONSELECTION_RANGE;
+	self.weaponentity.lip = PLAYER_WEAPONSELECTION_SPEED;
+};
+void () TeamNexuiz_GunUp =			//brings first-person gun model up
+{
+	if (self.weaponentity.pos1 != '0 0 0')
+	{
+		self.weaponentity.pos1 = '0 0 0';
+		self.weaponentity.lip = PLAYER_WEAPONSELECTION_SPEED;
+	}
+};

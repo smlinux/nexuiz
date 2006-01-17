@@ -216,3 +216,83 @@ void BecomeSpy(float portion)
 	// fixme: also have off-hand grenade, different for each class
 	// where to do that?
 }
+
+/*void () Switch_View_Think =
+{
+	if (self.health < 1)
+		dremove(self);
+	self.owner.view_ofs = self.view_ofs * self.health;
+
+	self.health = self.health - 1;
+	self.nextthink = time;
+
+};
+
+void (vector vchange) Switch_View =
+{
+	local entity viewchanger;
+	local vector changevec;
+
+	changevec = ((self.view_ofs - vchange) * .10);
+
+	viewchanger = spawn();
+	viewchanger.think = Switch_View_Think;
+	viewchanger.nextthink = time;
+	viewchanger.owner = self;
+	viewchanger.view_ofs = changevec;
+	viewchanger.health = 10;
+};*/
+
+void () Switch_View_Think =
+{
+	if (time > self.button1 + self.health)
+ 		dremove(self);
+ 	self.owner.view_ofs = self.owner.view_ofs - ((self.view_ofs * frametime) * (1 / self.health));
+ 	self.nextthink = time;
+};
+void (vector vchange, float change_spd) Switch_View =
+{
+ 	local entity viewchanger;
+ 	local vector changevec;
+ 	changevec = self.view_ofs - vchange;
+ 	viewchanger = spawn();
+ 	viewchanger.think = Switch_View_Think;
+ 	viewchanger.nextthink = time;
+ 	viewchanger.owner = self;
+ 	viewchanger.view_ofs = changevec;
+ 	viewchanger.health = change_spd;
+	viewchanger.button1 = time;
+}
+
+// Spy Feign
+void () TeamNexuiz_Feign =
+{
+	if (self.playerclass != TF_CLASS_SPY)
+		return;
+	if ((self.reload_time + .25) > time)
+		return;
+	if (self.health <= 0)
+		return;
+	if (!(self.flags & FL_ONGROUND))
+	{
+		sprint(self, "You cannot feign mid-air\n");
+		return;
+	}
+	self.velocity = '0 0 0';
+	if (self.is_feigning == 1)
+	{
+		self.is_feigning = 0;
+		setsize(self, PL_MIN, PL_MAX);
+		Switch_View(PL_VIEW_OFS, .3);
+		//self.view_ofs = PL_VIEW_OFS;
+		TeamNexuiz_GunUp();
+	}
+	else
+	{
+		self.is_feigning = 1;
+		setsize(self, '-16 -16 -24', '16 16 5');
+		Switch_View(PL_FEIGN_VIEW_OFS, .3);
+		TeamNexuiz_GunDown();
+		//self.view_ofs = PL_FEIGN_VIEW_OFS;
+	}
+};

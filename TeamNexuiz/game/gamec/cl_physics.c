@@ -34,8 +34,11 @@ void MauveBot_AI();
 
 void SV_PlayerPhysics()
 {
-	if (self.is_building == 1/* && self.reload_time > time*/)
+	if (self.is_building == 1 || self.is_feigning == 1)
+	{
+		self.velocity = '0 0 0';
 		return;
+	}
 
 	local vector wishvel, wishdir, v;
 	local float wishspeed, prevspeed, f;
