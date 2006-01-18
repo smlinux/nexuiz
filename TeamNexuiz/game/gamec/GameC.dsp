@@ -471,6 +471,10 @@ SOURCE=.\tfmenus.c
 
 SOURCE=.\tfclient.c
 # End Source File
+# Begin Source File
+
+SOURCE=.\tfhud.c
+# End Source File
 # End Group
 # Begin Group "TF Weaponry"
 

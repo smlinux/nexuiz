@@ -278,21 +278,41 @@ void () TeamNexuiz_Feign =
 		sprint(self, "You cannot feign mid-air\n");
 		return;
 	}
+	local entity at_spot;
+	local float intgr;
+
 	self.velocity = '0 0 0';
 	if (self.is_feigning == 1)
 	{
-		self.is_feigning = 0;
-		setsize(self, PL_MIN, PL_MAX);
-		Switch_View(PL_VIEW_OFS, .3);
-		//self.view_ofs = PL_VIEW_OFS;
-		TeamNexuiz_GunUp();
+		at_spot = findradius(self.origin, 64);		// search for someone to make sure no-one is standing on
+		intgr = 1;									//// the player when he tries to get up
+		while (at_spot != world)
+		{
+			if (at_spot.classname == "player" && at_spot.is_dead != 1 && at_spot != self)
+			{
+				intgr = 0;
+			}
+			at_spot = at_spot.chain;
+		}
+		if (intgr == 0)
+		{
+			sprint(self, "You can't get up while someone is standing on you.\n");
+			return;
+		}
+		else
+		{
+			self.is_feigning = 0;
+			setsize(self, PL_MIN, PL_MAX);
+			Switch_View(PL_VIEW_OFS, .3);
+			TeamNexuiz_GunUp();
+		}
 	}
 	else
 	{
 		self.is_feigning = 1;
+		TeamFortress_ThrowGrenade();		// Toss any primed grenades while feigning
 		setsize(self, '-16 -16 -24', '16 16 5');
 		Switch_View(PL_FEIGN_VIEW_OFS, .3);
 		TeamNexuiz_GunDown();
-		//self.view_ofs = PL_FEIGN_VIEW_OFS;
 	}
 };

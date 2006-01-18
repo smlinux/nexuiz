@@ -2277,7 +2277,12 @@ void(entity Item, entity AP, entity Goal) tfgoalitem_GiveToPlayer =
 	if (Item.items & 133701)
 	{
 		AP.items = AP.items | 262144;
-		AP.effects = AP.effects | 128;
+		if (Item.team_no == 1)
+			AP.effects = AP.effects | EF_BLUE;
+		else if (Item.team_no == 2)
+			AP.effects = AP.effects | EF_RED;
+		else
+			AP.effects = AP.effects | 128;
 		newmis = spawn();
 		newmis.owner = AP;
 		newmis.movetype = 4;
