@@ -165,7 +165,10 @@ float(float index) weapon_translateindextoflag =
 		return IT_HAGAR;
 	else if (index == WEP_ROCKET_LAUNCHER)
 		return IT_ROCKET_LAUNCHER;
-	return IT_LASER;
+	else if (index == WEP_LASER)
+		return IT_LASER;
+	else
+		return 0;
 };
 
 float(entity cl, float wpn, float andammo) client_hasweapon =
@@ -233,11 +236,10 @@ float(entity e) w_getbestweapon
 		return WEP_UZI;
 	else if (client_hasweapon(e, WEP_SHOTGUN, TRUE))
 		return WEP_SHOTGUN;
-	else
-	{
-		weapon_hasammo = TRUE;
+	else if (client_hasweapon(e, WEP_LASER, FALSE))
 		return WEP_LASER;
-	}
+	else
+		return 0;
 };
 
 // Setup weapon for client (after this raise frame will be launched)

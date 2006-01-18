@@ -180,7 +180,9 @@ void(float imp) W_SwitchWeapon
 // next weapon
 void() W_NextWeapon =
 {
-	local float weaponwant;
+	local float weaponwant, maxtries;
+
+	maxtries = WEP_LAST;
 
 	weaponwant = self.switchweapon + 1;
 	if (weaponwant < WEP_FIRST)
@@ -190,6 +192,10 @@ void() W_NextWeapon =
 	weapon_hasammo = TRUE;
 	while(!client_hasweapon(self, weaponwant, TRUE))
 	{
+		if(!maxtries)
+			return;
+		
+		maxtries -= 1;
 		weaponwant = weaponwant + 1;
 		if (weaponwant < WEP_FIRST)
 			weaponwant = WEP_LAST;
@@ -202,8 +208,10 @@ void() W_NextWeapon =
 // prev weapon
 void() W_PreviousWeapon =
 {
-	local float weaponwant;
+	local float weaponwant, maxtries;
 
+	maxtries = WEP_LAST;
+	
 	weaponwant = self.switchweapon - 1;
 	if (weaponwant < WEP_FIRST)
 		weaponwant = WEP_LAST;
@@ -212,6 +220,10 @@ void() W_PreviousWeapon =
 	weapon_hasammo = TRUE;
 	while(!client_hasweapon(self, weaponwant, TRUE))
 	{
+		if(!maxtries)
+			return;
+			
+		maxtries -= 1;
 		weaponwant = weaponwant - 1;
 		if (weaponwant < WEP_FIRST)
 			weaponwant = WEP_LAST;
