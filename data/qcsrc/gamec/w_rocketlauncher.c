@@ -5,7 +5,7 @@ void() rlauncher_select_01;
 
 float() rlauncher_check =
 {
-	if (self.attack_finished > time  // don't switch while guiding a missile
+	if ((self.attack_finished > time && self.weapon == WEP_ROCKET_LAUNCHER)  // don't switch while guiding a missile
 		|| self.ammo_rockets >= 3)
 		return TRUE;
 	return FALSE;
