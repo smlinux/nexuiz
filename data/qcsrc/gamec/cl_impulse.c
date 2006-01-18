@@ -60,8 +60,6 @@ void ImpulseCommands (void)
 	}
 	else if(self.impulse == 18)
 	{
-		self.welcomemessage_time = time + cvar("welcome_message_time");
-		self.welcomemessage_time2 = 0; 
 		PrintWelcomeMessage(self);
 	}
 	else if (self.impulse == 99 && cvar("sv_cheats"))

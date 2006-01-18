@@ -254,7 +254,7 @@ string GetClientVersionMessage(float v) {
 
 void PrintWelcomeMessage(entity pl)
 {
-	string s, grap_msg, temp, mutator;
+	string s, grap_msg, mutator;
 
 	/*if(self.welcomemessage_time < time)
 		return;
@@ -273,9 +273,12 @@ void PrintWelcomeMessage(entity pl)
 		mutator = "^2Rocketarena ^1";
 	else
 		mutator = "";
-
+	
+	if(cvar("g_midair"))
+		mutator = strcat("^2Midair ^1", mutator);
+		
 	if(cvar("g_grappling_hook"))
-		grap_msg = strzone("\n\nBind a key to ^1+hook^8 to use the grappling hook\n");
+		grap_msg = strzone("\n\nGrappling hook is enabled\nBind a key to ^1+hook^8 to use the grappling hook\n");
 
 	local string versionmessage;
 	versionmessage = GetClientVersionMessage(self.version);
@@ -289,26 +292,25 @@ void PrintWelcomeMessage(entity pl)
 
 
 	s = strzone(s);
-
-	temp = strcat(
-		"\n\n\n^8Welcome, ", pl.netname, "^8\n",
-		s
-		);
-	temp = strzone(temp);
+	
+	if (cvar("g_grappling_hook"))
+		s = strcat(s, "\n\n^8Grappling hook is enabled, press 'e' to use it\n");
 
 
 	if (cvar_string("g_mutatormsg") != "") {
-		s = strcat(s, "\n\nSpecial gameplay tips: ", cvar_string("g_mutatormsg"));
+		s = strcat(s, "\n\n^8Special gameplay tips: ^7", cvar_string("g_mutatormsg"));
 	}
 
 	if (cvar_string("sv_motd") != "") {
-		s = strcat(s, "\n\nMOTD: ", cvar_string("sv_motd"));
+		s = strcat(s, "\n\n^8MOTD: ^7", cvar_string("sv_motd"));
 	}
+	
+	s = strzone(s);
 
 	centerprint(pl, s);
 	//sprint(pl, s);
 
-	strunzone(temp);
+	strunzone(s);
 }
 
 
