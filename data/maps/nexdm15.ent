@@ -646,6 +646,11 @@
 }
 {
 "classname" "dom_team"
+"netname" ""
+"model" "models/domination/dom_unclaimed.md3"
+}
+{
+"classname" "dom_team"
 "netname" "^4Blue Team^3"
 "cnt" "13"
 "noise" "domination/claim.wav"
