@@ -2281,8 +2281,6 @@ void(entity Item, entity AP, entity Goal) tfgoalitem_GiveToPlayer =
 			AP.effects = AP.effects | EF_BLUE;
 		else if (Item.team_no == 2)
 			AP.effects = AP.effects | EF_RED;
-		else
-			AP.effects = AP.effects | 128;
 		newmis = spawn();
 		newmis.owner = AP;
 		newmis.movetype = 4;
@@ -2294,40 +2292,42 @@ void(entity Item, entity AP, entity Goal) tfgoalitem_GiveToPlayer =
 		newmis.skin = 2;
 		setmodel(newmis, Item.mdl);
 		setorigin(newmis, AP.origin);
+		//eprint(AP);
 	}
-	else {
-	if (Item.items & 131072)
+	else 
 	{
-		AP.items = AP.items | 131072;
-		AP.effects = AP.effects | 64;
-		newmis = spawn();
-		newmis.owner = AP;
-		newmis.movetype = 4;
-		newmis.solid = 0;
-		setsize(newmis, '0 0 0', '0 0 0');
-		newmis.angles = AP.angles;
-		newmis.nextthink = time + 0.5;
-		newmis.think = MoveFlag;
-		newmis.skin = 1;
-		setmodel(newmis, "progs/tf_flag.mdl");
-		setorigin(newmis, AP.origin);
-	}
-	if (Item.items & 262144)
-	{
-		AP.items = AP.items | 262144;
-		AP.effects = AP.effects | 128;
-		newmis = spawn();
-		newmis.owner = AP;
-		newmis.movetype = 4;
-		newmis.solid = 0;
-		setsize(newmis, '0 0 0', '0 0 0');
-		newmis.angles = AP.angles;
-		newmis.nextthink = time + 0.5;
-		newmis.think = MoveFlag;
-		newmis.skin = 2;
-		setmodel(newmis, "progs/tf_flag.mdl");
-		setorigin(newmis, AP.origin);
-	}
+		if (Item.items & 131072)
+		{
+			AP.items = AP.items | 131072;
+			AP.effects = AP.effects | 64;
+			newmis = spawn();
+			newmis.owner = AP;
+			newmis.movetype = 4;
+			newmis.solid = 0;
+			setsize(newmis, '0 0 0', '0 0 0');
+			newmis.angles = AP.angles;
+			newmis.nextthink = time + 0.5;
+			newmis.think = MoveFlag;
+			newmis.skin = 1;
+			setmodel(newmis, "progs/tf_flag.mdl");
+			setorigin(newmis, AP.origin);
+		}
+		if (Item.items & 262144)
+		{
+			AP.items = AP.items | 262144;
+			AP.effects = AP.effects | 128;
+			newmis = spawn();
+			newmis.owner = AP;
+			newmis.movetype = 4;
+			newmis.solid = 0;
+			setsize(newmis, '0 0 0', '0 0 0');
+			newmis.angles = AP.angles;
+			newmis.nextthink = time + 0.5;
+			newmis.think = MoveFlag;
+			newmis.skin = 2;
+			setmodel(newmis, "progs/tf_flag.mdl");
+			setorigin(newmis, AP.origin);
+		}
 	}
 	if (Goal != Item)
 	{
@@ -2341,7 +2341,7 @@ void(entity Item, entity AP, entity Goal) tfgoalitem_GiveToPlayer =
 	{
 		AP.is_unabletospy = 1;
 	}*/
-	if (AP.class == 2 && (Item.goal_result & 16))
+	if (AP.class == CLASS_SPY && (Item.goal_result & 16))
 	{
 		AP.is_unabletospy = 1;
 	}
@@ -2899,6 +2899,24 @@ void() info_player_team2 =
 	self.team_no = 1;
 	self.goal_effects = 1;
 	self.team_str_home = "ts1";
+};
+
+void() info_player_team3 = 
+{
+	CTF_Map = 1;
+	self.classname = "info_player_teamspawn";
+	self.team_no = 3;
+	self.goal_effects = 1;
+	self.team_str_home = "ts3";
+};
+
+void() info_player_team4 = 
+{
+	CTF_Map = 1;
+	self.classname = "info_player_teamspawn";
+	self.team_no = 4;
+	self.goal_effects = 1;
+	self.team_str_home = "ts4";
 };
 
 void() item_flag_team2 = 
