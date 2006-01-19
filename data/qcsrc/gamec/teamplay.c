@@ -254,7 +254,7 @@ string GetClientVersionMessage(float v) {
 
 void PrintWelcomeMessage(entity pl)
 {
-	string s, grap_msg, mutator, temp;
+	string s, mutator, modifications;
 
 	/*if(self.welcomemessage_time < time)
 		return;
@@ -271,22 +271,35 @@ void PrintWelcomeMessage(entity pl)
 		mutator = "^2Instagib ^1";
 	else if(cvar("g_rocketarena"))
 		mutator = "^2Rocketarena ^1";
-	
-	if(cvar("g_midair"))
-		temp = "midair";
-	if(cvar("g_vampire"))
-		temp = strcat("vampire  ", temp);
-	if(cvar("g_homing_missile"))
-		temp = strcat("homing missiles  ", temp);
-		
+
+	if(cvar("g_midair")) {
+		// to protect against unheedingly made changes
+		if (modifications) {
+			modifications = strcat(modifications, ", ");
+		}
+		modifications = "midair";
+	}
+	if(cvar("g_vampire")) {
+		if (modifications) {
+			modifications = strcat(modifications, ", ");
+		}
+		modifications = strcat(modifications, "vampire");
+	}
+	if(cvar("g_homing_missile")) {
+		if (modifications) {
+			modifications = strcat(modifications, ", ");
+		}
+		modifications = strcat(modifications, "homing missiles");
+	}
+
 	local string versionmessage;
 	versionmessage = GetClientVersionMessage(self.version);
-	
+
 	s = strcat(s, "\n\nThis is Nexuiz ", cvar_string("g_nexuizversion"), "\n", versionmessage);
 	s = strcat(s, "^8\n\nmatch type is ^1", mutator, gamemode_name, "^8\n");
 
-	if(temp != "")
-		s = strcat(s, "^8\nactive modifications: ^3", temp, "^8\n");
+	if(modifications != "")
+		s = strcat(s, "^8\nactive modifications: ^3", modifications, "^8\n");
 
 	if((self.classname == "observer" || self.classname == "spectator") && self.version == cvar("g_nexuizversion_major")) {
 		s = strcat(s,"^7\n\n\npress jump to play\npress attack to spectate other players\n\n");
@@ -294,10 +307,9 @@ void PrintWelcomeMessage(entity pl)
 
 
 	s = strzone(s);
-	
+
 	if (cvar("g_grappling_hook"))
 		s = strcat(s, "\n\n^8grappling hook is enabled, press 'e' to use it\n");
-
 
 	if (cvar_string("g_mutatormsg") != "") {
 		s = strcat(s, "\n\n^8special gameplay tips: ^7", cvar_string("g_mutatormsg"));
@@ -306,7 +318,7 @@ void PrintWelcomeMessage(entity pl)
 	if (cvar_string("sv_motd") != "") {
 		s = strcat(s, "\n\n^8MOTD: ^7", cvar_string("sv_motd"));
 	}
-	
+
 	s = strzone(s);
 
 	centerprint(pl, s);
@@ -325,11 +337,11 @@ void SetPlayerColors(entity pl, float _color)
 	//pl.clientcolors = pl.clientcolors - (pl.clientcolors & 15) + cl;
 	pl.clientcolors = 16*cl + cl;*/
 
-	float pants, shirt; 
+	float pants, shirt;
 	pants = _color & 0x0F;
 	shirt = _color & 0xF0;
-	
-	
+
+
 	if(teamplay) {
 		setcolor(pl, 16*pants + pants);
 	} else {
@@ -340,7 +352,7 @@ void SetPlayerColors(entity pl, float _color)
 void SetPlayerTeam(entity pl, float t, float s, float noprint)
 {
 	float _color;
-	
+
 	if(t == 4)
 		_color = COLOR_TEAM4 - 1;
 	else if(t == 3)
@@ -664,7 +676,7 @@ void SV_ChangeTeam(float _color)
 		SetPlayerColors(self, _color);
 		return;
 	}
-	
+
 	scolor = self.clientcolors & 0x0F;
 	dcolor = _color & 0x0F;
 
@@ -702,7 +714,7 @@ void SV_ChangeTeam(float _color)
 		if(dteam == 4)
 			dteam = 1;
 	}
-	
+
 	// not changing teams
 	if(scolor == dcolor)
 	{
@@ -718,11 +730,11 @@ void SV_ChangeTeam(float _color)
 			// kill player when changing teams
 			if(self.deadflag == DEAD_NO)
 				self.event_damage(self, self, 10000, DEATH_KILL, self.origin, '0 0 0');
-		
+
 			// reduce frags during a team change
 			self.frags = floor(self.frags * (cvar("g_changeteam_fragtransfer") / 100));
 		}
-		
+
 		if(cvar("g_changeteam_banned"))
 		{
 			sprint(self, "Team changes not allowed\n");
