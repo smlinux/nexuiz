@@ -254,7 +254,7 @@ string GetClientVersionMessage(float v) {
 
 void PrintWelcomeMessage(entity pl)
 {
-	string s, grap_msg, mutator;
+	string s, grap_msg, mutator, temp;
 
 	/*if(self.welcomemessage_time < time)
 		return;
@@ -271,20 +271,22 @@ void PrintWelcomeMessage(entity pl)
 		mutator = "^2Instagib ^1";
 	else if(cvar("g_rocketarena"))
 		mutator = "^2Rocketarena ^1";
-	else
-		mutator = "";
 	
 	if(cvar("g_midair"))
-		mutator = strcat("^2Midair ^1", mutator);
+		temp = "midair";
+	if(cvar("g_vampire"))
+		temp = strcat("vampire  ", temp);
+	if(cvar("g_homing_missile"))
+		temp = strcat("homing missiles  ", temp);
 		
-	if(cvar("g_grappling_hook"))
-		grap_msg = strzone("\n\nGrappling hook is enabled\nBind a key to ^1+hook^8 to use the grappling hook\n");
-
 	local string versionmessage;
 	versionmessage = GetClientVersionMessage(self.version);
 	
 	s = strcat(s, "\n\nThis is Nexuiz ", cvar_string("g_nexuizversion"), "\n", versionmessage);
-	s = strcat(s, "^8\n\nMatch type is ^1", mutator, gamemode_name, "^8\n");
+	s = strcat(s, "^8\n\nmatch type is ^1", mutator, gamemode_name, "^8\n");
+
+	if(temp != "")
+		s = strcat(s, "^8\nactive modifications: ^3", temp, "^8\n");
 
 	if((self.classname == "observer" || self.classname == "spectator") && self.version == cvar("g_nexuizversion_major")) {
 		s = strcat(s,"^7\n\n\npress jump to play\npress attack to spectate other players\n\n");
@@ -294,11 +296,11 @@ void PrintWelcomeMessage(entity pl)
 	s = strzone(s);
 	
 	if (cvar("g_grappling_hook"))
-		s = strcat(s, "\n\n^8Grappling hook is enabled, press 'e' to use it\n");
+		s = strcat(s, "\n\n^8grappling hook is enabled, press 'e' to use it\n");
 
 
 	if (cvar_string("g_mutatormsg") != "") {
-		s = strcat(s, "\n\n^8Special gameplay tips: ^7", cvar_string("g_mutatormsg"));
+		s = strcat(s, "\n\n^8special gameplay tips: ^7", cvar_string("g_mutatormsg"));
 	}
 
 	if (cvar_string("sv_motd") != "") {
