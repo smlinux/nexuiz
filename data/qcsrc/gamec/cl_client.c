@@ -95,7 +95,7 @@ entity SelectSpawnPoint (float anypoint)
 			spotname = "info_player_team1";
 		if(self.team == 14)//13)
 			spotname = "info_player_team2";
-		if(self.team == 4)//3)
+		if(self.team == 10)//9)
 			spotname = "info_player_team3";
 		if(self.team == 13)//12)
 			spotname = "info_player_team4";
