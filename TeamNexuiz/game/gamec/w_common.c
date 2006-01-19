@@ -698,7 +698,7 @@ float (entity a, vector start, vector end, float flt, entity b) FindBodyDamage =
 			x = vlen ((g - h));
 			f = ((normalize (f) * x) + trace_endpos);
 			zdif = (f_z - trace_ent.origin_z);
-			bprint(ftos(zdif));
+			bprint(ftos(x));
 			bprint("\n");
 			deathmsg = 18;
 			trace_ent.head_shot_vector = '0 0 0';

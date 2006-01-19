@@ -165,6 +165,8 @@ float CLIP_MAX_PIPEGRENADES = 6;
 
 .float heat;		// What tf uses for powering up weapons. Could be useful later?
 
+.float uses_bloom;		// Does the client have bloom enabled? (used for flash bloom effect)
+
 entity otemp;
 entity stemp;
 

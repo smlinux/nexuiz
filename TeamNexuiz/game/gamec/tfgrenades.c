@@ -89,19 +89,17 @@ void () FlashTimer =
 	{
 		te.FlashTime = 0.000000;
 		stuffcmd (te, "v_cshift 0\n");
-		stuffcmd (te, "r_bloom_power 2\n");
-		stuffcmd (te, "r_bloom_intensity 1.5\n");
+		if (te.uses_bloom)
+		{
+			stuffcmd (te, "r_bloom_power 2\n");
+			stuffcmd (te, "r_bloom_intensity 1.5\n");
+		}
 		remove (self);
 		return;
 	}
 	if ((te.FlashTime < 1.700000))
 	{
-		st = ftos ((te.FlashTime * 150.000000));
-// lets add a bloom check later?
-/*
-<LordHavoc> avirox: stuffcmd(self, "cmd mycvar $mycvar\n");
-<LordHavoc> avirox: then later in your SV_ParseClientCommand() qc function you'll see a string come in like "mycvar 1"
-*/		
+		st = ftos ((te.FlashTime * 150.000000));	
 		stuffcmd (te, "v_cshift ");
 		stuffcmd (te, st);
 		stuffcmd (te, " ");
@@ -113,12 +111,14 @@ void () FlashTimer =
 		stuffcmd (te, "\n");
 
 		// BLOOM!!! :D
-		stuffcmd (te, "r_bloom_power 1\n");
-
-		st = ftos(2 + (te.FlashTime * 10));
-		stuffcmd (te, "r_bloom_intensity ");
-		stuffcmd (te, st);
-		stuffcmd (te, "\n");
+		if (te.uses_bloom)
+		{
+			stuffcmd (te, "r_bloom_power 1\n");
+			st = ftos(2 + (te.FlashTime * 10));
+			stuffcmd (te, "r_bloom_intensity ");
+			stuffcmd (te, st);
+			stuffcmd (te, "\n");
+		}
 		
 	}
 	if ((te.FlashTime >= 1.700000))
@@ -171,6 +171,7 @@ void () FlashGrenadeExplode =
 						newmis.owner = te;
 						newmis.think = FlashTimer;
 						newmis.nextthink = (time + 0.100000);
+						stuffcmd(te, "cmd check_val r_bloom $r_bloom\n");		// checks if the client has bloom enabled
 					}
 					te.FlashTime = 4.500000;
 					stuffcmd (te, "v_cshift 255 255 255 255\n");

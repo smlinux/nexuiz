@@ -107,3 +107,50 @@ void () execute_changelevel =
 	}
 	WriteByte (2, 30);
 };
+
+.entity teambubble_needhealth;		// displays when player's health is below 30%
+.entity teambubble_friendly;		// displays that player is friendly teammate
+//repeated defs:
+.float buttonchat;
+.entity exteriormodeltoclient;
+
+void() TeamBubbleThink =
+{
+	self.nextthink = time;
+	if (!self.owner.modelindex || self.owner.teambubble_friendly != self)
+	{
+		remove(self);
+		return;
+	}
+	setorigin(self, self.owner.origin + '0 0 15' + self.owner.maxs_z * '0 0 1');
+	if (self.owner.buttonchat || self.owner.deadflag)
+		self.model = "";
+	else
+		self.model = self.mdl;
+	
+};
+
+.float() customizeentityforclient;		// new DP extension used for the team bubble
+float() ChatBubble_customizeentityforclient = {return (self.owner.team_no == other.team_no && other.killcount > -666);};
+
+
+
+void() UpdateTeamBubble =
+{
+	if (!self.modelindex || !cvar("teamplay"))
+		return;
+	// spawn a teambubble entity if needed
+	if (!self.teambubble_friendly && cvar("teamplay"))
+	{
+		self.teambubble_friendly = spawn();
+		self.teambubble_friendly.owner = self;
+		self.teambubble_friendly.exteriormodeltoclient = self;
+		self.teambubble_friendly.think = TeamBubbleThink;
+		self.teambubble_friendly.nextthink = time;
+		setmodel(self.teambubble_friendly, "models/team/team.sp2");
+		setorigin(self.teambubble_friendly, self.origin + '0 0 15' + self.maxs_z * '0 0 1');
+		self.teambubble_friendly.mdl = self.teambubble_friendly.model;
+		self.teambubble_friendly.model = self.teambubble_friendly.mdl;
+		self.teambubble_friendly.customizeentityforclient = ChatBubble_customizeentityforclient;
+	}
+}

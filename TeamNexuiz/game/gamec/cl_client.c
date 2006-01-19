@@ -635,12 +635,30 @@ ClientDisconnect
 Called when a client disconnects from the server
 =============
 */
+.entity chatbubbleentity;
 void ClientDisconnect (void)
 {
 	//ClientDisconnected();
 	self.has_disconnected = 1;
 	bprint ("^4",self.netname);
 	bprint (" disconnected\n");
+
+	if (self.chatbubbleentity)
+	{
+		remove (self.chatbubbleentity);
+		self.chatbubbleentity = world;
+	}
+	
+	if (self.teambubble_friendly)
+	{
+		remove (self.teambubble_friendly);
+		self.teambubble_friendly = world;
+	}
+	if (self.teambubble_needhealth)
+	{
+		remove (self.teambubble_needhealth);
+		self.teambubble_needhealth = world;
+	}
 }
 
 .entity chatbubbleentity;
@@ -1144,6 +1162,7 @@ void PlayerPostThink (void)
 	CheckRules_Player();
 	UpdateChatBubble();
 	UpdateColorModHack();
+	UpdateTeamBubble();
 	if (self.deadflag == DEAD_NO)
 	if (self.impulse)
 		ImpulseCommands ();
@@ -1341,6 +1360,16 @@ void SV_ParseClientCommand (string s)
 			TeamFortress_ChangeClass();
 		}
 		return;
+	}
+	else if (c == "check_val")
+	{
+		if (d == "r_bloom")
+		{
+			if (f == "1")
+				self.uses_bloom = 1;
+			else
+				self.uses_bloom = 0;
+		}
 	}
 	else
 	{
