@@ -636,7 +636,7 @@ void() TeamBubbleThink =
 		remove(self);
 		return;
 	}
-	setorigin(self, self.owner.origin + '0 0 15' + self.owner.maxs_z * '0 0 1');
+//	setorigin(self, self.owner.origin + '0 0 15' + self.owner.maxs_z * '0 0 1');  // bandwidth hog. setattachment does this now
 	if (self.owner.buttonchat || self.owner.deadflag)
 		self.model = "";
 	else
@@ -660,7 +660,9 @@ void() UpdateTeamBubble =
 		self.teambubbleentity.think = TeamBubbleThink;
 		self.teambubbleentity.nextthink = time;
 		setmodel(self.teambubbleentity, "models/misc/teambubble.spr");
-		setorigin(self.teambubbleentity, self.origin + '0 0 15' + self.maxs_z * '0 0 1');
+//		setorigin(self.teambubbleentity, self.origin + '0 0 15' + self.maxs_z * '0 0 1');
+		setorigin(self.teambubbleentity, self.teambubbleentity.origin + '0 0 15' + self.maxs_z * '0 0 1');
+		setattachment(self.teambubbleentity, self, "");  // sticks to moving player better, also conserves bandwidth
 		self.teambubbleentity.mdl = self.teambubbleentity.model;
 		self.teambubbleentity.model = self.teambubbleentity.mdl;
 		self.teambubbleentity.customizeentityforclient = ChatBubble_customizeentityforclient;
