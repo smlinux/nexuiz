@@ -58,7 +58,15 @@ void W_Crylink_Attack (void)
 {
 	local float counter, shots;
 	local vector org;
+	local vector end;
 	local entity proj;
+	
+	local vector trueaim;
+	org = self.origin + self.view_ofs;
+	end = self.origin + self.view_ofs + v_forward * 4096;
+	traceline(org,end,TRUE,self);
+	
+	trueaim = trace_endpos;
 
 	sound (self, CHAN_WEAPON, "weapons/crylink_fire.ogg", 1, ATTN_NORM);
 	if (self.items & IT_STRENGTH) {
@@ -89,9 +97,9 @@ void W_Crylink_Attack (void)
 		setorigin (proj, org);
 
 		if (self.button3)
-			proj.velocity = (v_forward + ((counter / shots) * 2 - 1) * v_right * cvar("g_balance_crylink_spread")) * cvar("g_balance_crylink_speed");
+			proj.velocity = (normalize(trueaim - org) + ((counter / shots) * 2 - 1) * v_right * cvar("g_balance_crylink_spread")) * cvar("g_balance_crylink_speed");
 		else
-			proj.velocity = (v_forward + randomvec() * cvar("g_balance_crylink_spread")) * cvar("g_balance_crylink_speed");
+			proj.velocity = (normalize(trueaim - org) + randomvec() * cvar("g_balance_crylink_spread")) * cvar("g_balance_crylink_speed");
 		proj.touch = W_Crylink_Touch;
 		proj.think = SUB_Remove;
 		proj.nextthink = time + 9;
