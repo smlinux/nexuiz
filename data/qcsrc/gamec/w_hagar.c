@@ -73,6 +73,15 @@ void W_Hagar_Attack (void)
 {
 	local entity missile;
 	local vector org;
+	local vector end;
+	local vector trueaim;
+	
+	org = self.origin + self.view_ofs;
+	end = self.origin + self.view_ofs + v_forward * 4096;
+	traceline(org,end,TRUE,self);
+	
+	trueaim = trace_endpos;
+	
 
 	sound (self, CHAN_WEAPON, "weapons/hagar_fire.ogg", 1, ATTN_NORM);
 	if (self.items & IT_STRENGTH) {
@@ -104,13 +113,13 @@ void W_Hagar_Attack (void)
 	if (self.button3)
 	{
 		missile.movetype = MOVETYPE_TOSS;
-		missile.velocity = v_forward * cvar("g_balance_hagar_speed2") + v_up * cvar("g_balance_hagar_speed2_up");
+		missile.velocity = normalize(trueaim - org) * cvar("g_balance_hagar_speed2") + v_up * cvar("g_balance_hagar_speed2_up");
 		missile.avelocity = '100 10 10';
 	}
 	else
 	{
 		missile.movetype = MOVETYPE_FLY;
-		missile.velocity = (v_forward + randomvec() * cvar("g_balance_hagar_spread")) * cvar("g_balance_hagar_speed");
+		missile.velocity = (normalize(trueaim - org) + randomvec() * cvar("g_balance_hagar_spread")) * cvar("g_balance_hagar_speed");
 	}
 
 	missile.angles = vectoangles (missile.velocity);
