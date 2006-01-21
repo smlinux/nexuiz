@@ -214,6 +214,14 @@ void W_Rocket_Attack (void)
 	local entity missile;
 	local entity flash;
 	local vector org;
+	local vector end;
+	
+	local vector trueaim;
+	org = self.origin + self.view_ofs;
+	end = self.origin + self.view_ofs + v_forward * 4096;
+	traceline(org,end,TRUE,self);
+	trueaim = trace_endpos;
+	
 	sound (self, CHAN_WEAPON, "weapons/rocket_fire.ogg", 1, ATTN_NORM);
 	if (self.items & IT_STRENGTH) {
 		sound (self, CHAN_AUTO, "weapons/strength_fire.ogg", 1, ATTN_NORM);
@@ -241,9 +249,9 @@ void W_Rocket_Attack (void)
 
 	setorigin (missile, org);
 	if(cvar("g_homing_missile") && self.laser_on)
-		missile.velocity = v_forward * cvar("g_balance_rocketlauncher_homing_speed");
+		missile.velocity = normalize(trueaim - org) * cvar("g_balance_rocketlauncher_homing_speed");
 	else
-		missile.velocity = v_forward * cvar("g_balance_rocketlauncher_speed");
+		missile.velocity = normalize(trueaim - org) * cvar("g_balance_rocketlauncher_speed");
 	missile.angles = vectoangles (missile.velocity);
 
 	missile.touch = W_Rocket_Touch;
