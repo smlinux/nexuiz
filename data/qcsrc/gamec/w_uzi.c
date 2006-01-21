@@ -32,6 +32,15 @@ void(float req) w_uzi =
 void W_Uzi_Attack (void)
 {
 	local vector org;
+	local vector end;
+	local vector trueaim;
+	
+	org = self.origin + self.view_ofs;
+	end = self.origin + self.view_ofs + v_forward * 4096;
+	traceline(org,end,TRUE,self);
+	
+	trueaim = trace_endpos;
+	
 	entity flash;
 	sound (self, CHAN_WEAPON, "weapons/uzi_fire.ogg", 1, ATTN_NORM);
 	if (self.items & IT_STRENGTH) {
@@ -48,9 +57,9 @@ void W_Uzi_Attack (void)
 	self.attack_finished = time + cvar("g_balance_uzi_refire2");
 
 	if (self.uzi_bulletcounter == 1)
-		fireBullet (org, v_forward, cvar("g_balance_uzi_spread2"), cvar("g_balance_uzi_damage2"), IT_UZI, (self.uzi_bulletcounter & 3) == 0);
+		fireBullet (org, normalize(trueaim - org), cvar("g_balance_uzi_spread2"), cvar("g_balance_uzi_damage2"), IT_UZI, (self.uzi_bulletcounter & 3) == 0);
 	else
-		fireBullet (org, v_forward, cvar("g_balance_uzi_spread"), cvar("g_balance_uzi_damage"), IT_UZI, (self.uzi_bulletcounter & 3) == 0);
+		fireBullet (org, normalize(trueaim - org), cvar("g_balance_uzi_spread"), cvar("g_balance_uzi_damage"), IT_UZI, (self.uzi_bulletcounter & 3) == 0);
 
 	// casing code
 	if (cvar("g_casings") >= 2)
