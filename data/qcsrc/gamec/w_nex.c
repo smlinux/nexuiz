@@ -123,14 +123,22 @@ void W_Nex_Attack (void)
 	local vector end;
 	local entity flash;
 
+	local vector trueaim;
+	
 	sound (self, CHAN_WEAPON, "weapons/nexfire.ogg", 1, ATTN_NORM);
 	if (self.items & IT_STRENGTH) {
 		sound (self, CHAN_AUTO, "weapons/strength_fire.ogg", 1, ATTN_NORM);
 	}
 	
 	self.punchangle_x = -5;
-	org = self.origin + self.view_ofs + v_forward * 5 + v_right * 14 + v_up * -7;
+	org = self.origin + self.view_ofs;
 	end = self.origin + self.view_ofs + v_forward * 4096;
+	
+	traceline(org,end,TRUE,self);
+	
+	trueaim = trace_endpos;
+	
+	org = self.origin + self.view_ofs + v_forward * 5 + v_right * 14 + v_up * -7;
 
 	// assure that nexdamage is high enough in minstagib
 	if (cvar("g_minstagib"))
@@ -139,7 +147,7 @@ void W_Nex_Attack (void)
 		FireRailgunBullet (org, end, cvar("g_balance_nex_damage"), IT_NEX);
 
 	// trace as if shot started inside gun
-	traceline (org, end, TRUE, self);
+	traceline (org, trueaim, TRUE, self);
 	// show as if shot started outside of gun
 	org = self.origin + self.view_ofs + v_forward * 35 + v_right * 14 + v_up * -8;
 	org2 = self.origin + self.view_ofs + v_forward * 52 + v_right * 14 + v_up * -8;
