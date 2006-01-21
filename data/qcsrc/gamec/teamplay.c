@@ -702,14 +702,14 @@ void SV_ChangeTeam(float _color)
 		dteam = 2;
 	else if(cvar("g_ctf") && dteam == 4)
 		dteam = 1;
-	else if(cvar("g_domination") && cvar("g_domination_default_teams") < 3)
+	else if((cvar("g_domination") && cvar("g_domination_default_teams") < 3) || (cvar("g_tdm") && cvar("g_tdm_teams") < 3))
 	{
 		if(dteam == 3)
 			dteam = 2;
 		else if(dteam == 4)
 			dteam = 1;
 	}
-	else if(cvar("g_domination") && cvar("g_domination_default_teams") < 4)
+	else if((cvar("g_domination") && cvar("g_domination_default_teams") < 4) || (cvar("g_tdm") && cvar("g_tdm_teams") < 4))
 	{
 		if(dteam == 4)
 			dteam = 1;
