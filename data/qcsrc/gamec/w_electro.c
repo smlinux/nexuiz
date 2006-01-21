@@ -129,7 +129,14 @@ void() W_Electro_Attack
 {
 	local entity proj;
 	local vector org;
+	local vector end;
 	local float postion;
+	
+	local vector trueaim;
+	org = self.origin + self.view_ofs;
+	end = self.origin + self.view_ofs + v_forward * 4096;
+	traceline(org,end,TRUE,self);
+	trueaim = trace_endpos;
 
 	postion = self.electrocount;
 	sound (self, CHAN_WEAPON, "weapons/electro_fire.ogg", 1, ATTN_NORM);
@@ -172,7 +179,7 @@ void() W_Electro_Attack
 		self.ammo_cells = self.ammo_cells - 1;
 		proj.effects = EF_FULLBRIGHT;
 		proj.movetype = MOVETYPE_BOUNCE;
-		proj.velocity = v_forward * cvar("g_balance_electro_ballspeed") + v_up * cvar("g_balance_electro_ballspeed_up");
+		proj.velocity = normalize(trueaim - org) * cvar("g_balance_electro_ballspeed") + v_up * cvar("g_balance_electro_ballspeed_up");
 		proj.touch = W_Plasma_Touch;
 		setmodel(proj, "models/ebomb.mdl");
 		setsize(proj, '-6 -6 -3', '6 6 3');
@@ -188,7 +195,7 @@ void() W_Electro_Attack
 			self.ammo_cells = self.ammo_cells - 2;
 		proj.effects = EF_BRIGHTFIELD | EF_FULLBRIGHT;
 		proj.movetype = MOVETYPE_FLY;
-		proj.velocity = v_forward * cvar("g_balance_electro_speed");
+		proj.velocity = normalize(trueaim - org) * cvar("g_balance_electro_speed");
 		proj.angles = vectoangles(proj.velocity);
 		proj.touch = W_Plasma_Check_Combo;
 		setmodel(proj, "models/elaser.mdl");
