@@ -142,9 +142,9 @@ void W_Nex_Attack (void)
 
 	// assure that nexdamage is high enough in minstagib
 	if (cvar("g_minstagib"))
-		FireRailgunBullet (org, end, 200, IT_NEX);
+		FireRailgunBullet (org, trueaim, 200, IT_NEX);
 	else
-		FireRailgunBullet (org, end, cvar("g_balance_nex_damage"), IT_NEX);
+		FireRailgunBullet (org, trueaim, cvar("g_balance_nex_damage"), IT_NEX);
 
 	// trace as if shot started inside gun
 	traceline (org, trueaim, TRUE, self);
