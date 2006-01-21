@@ -34,10 +34,20 @@ void(float req) w_shotgun =
 void W_Shotgun_Attack (void)
 {
 	local vector org;
+	local vector end;
 	float	sc;
 	float	bullets;
 	float	d;
 	float	spread;
+	
+	local vector trueaim;
+	org = self.origin + self.view_ofs;
+	end = self.origin + self.view_ofs + v_forward * 4096;
+	traceline(org,end,TRUE,self);
+	
+	trueaim = trace_endpos;
+	
+	
 
 	sound (self, CHAN_WEAPON, "weapons/shotgun_fire.ogg", 1, ATTN_NORM);
 	if (self.items & IT_STRENGTH) {
@@ -53,7 +63,7 @@ void W_Shotgun_Attack (void)
 	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 8) + (v_forward * 5);
 	spread = cvar("g_balance_shotgun_spread");
 	for (sc = 0;sc < bullets;sc = sc + 1)
-		fireBullet (org, v_forward, spread, d, IT_SHOTGUN, sc < 3);
+		fireBullet (org, normalize(trueaim - org), spread, d, IT_SHOTGUN, sc < 3);
 	if (cvar("g_use_ammunition"))
 		self.ammo_shells = self.ammo_shells - 1;
 
