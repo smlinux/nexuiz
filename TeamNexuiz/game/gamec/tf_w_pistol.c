@@ -41,17 +41,26 @@ void W_Pistol_Attack (void)
 	float	d;
 	float	spread;
 
+	local vector end;
+	local vector trueaim;
+	org = self.origin + self.view_ofs;
+	end = self.origin + self.view_ofs + v_forward * 4096;
+	traceline(org,end,TRUE,self);
+	
+	trueaim = trace_endpos;
+
 	sound (self, CHAN_WEAPON, "weapons/pistol_fire.wav", 1, ATTN_NORM);
 	bullets = cvar("g_balance_pistol_bullets");
 
 	d = cvar("g_balance_pistol_damage");
 
-	org = self.origin + self.view_ofs + (v_right * 1) - (v_up * 1) + (v_forward * 40);
+	org = self.origin + self.view_ofs + (v_right * 1) - (v_up * 1) + (v_forward * 25);
 	spread = cvar("g_balance_pistol_spread");
 	for (sc = 0;sc < bullets;sc = sc + 1)
 //		fireBullet (org, v_forward, spread, d, IT_PISTOL, sc < 3);
-		fireBullet (org, v_forward, spread, d, WEP_PISTOL, sc < 3);
-	self.ammo_shells = self.ammo_shells - 1;
+		fireBullet (org, normalize(trueaim - org), spread, d, WEP_PISTOL, sc < 3);
+	if (cvar("g_use_ammunition"))
+		self.ammo_shells = self.ammo_shells - 1;
 
 /*		local entity e;
 		e = spawn();

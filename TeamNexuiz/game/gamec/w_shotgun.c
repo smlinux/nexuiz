@@ -39,6 +39,14 @@ void W_Shotgun_Attack (void)
 	float	d;
 	float	spread;
 
+	local vector end;
+	local vector trueaim;
+	org = self.origin + self.view_ofs;
+	end = self.origin + self.view_ofs + v_forward * 4096;
+	traceline(org,end,TRUE,self);
+	
+	trueaim = trace_endpos;
+
 	sound (self, CHAN_WEAPON, "weapons/shotgun_fire.wav", 1, ATTN_NORM);
 	bullets = cvar("g_balance_shotgun_bullets");
 	d = cvar("g_balance_shotgun_damage");
@@ -46,7 +54,7 @@ void W_Shotgun_Attack (void)
 	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 8) + (v_forward * 5);
 	spread = cvar("g_balance_shotgun_spread");
 	for (sc = 0;sc < bullets;sc = sc + 1)
-		fireBullet2 (org, v_forward, spread, d, WEP_SHOTGUN, sc < 3, cvar("g_balance_shotgun_force"));
+		fireBullet2 (org, normalize(trueaim - org), spread, d, WEP_SHOTGUN, sc < 3, cvar("g_balance_shotgun_force"));
 	self.currentammo = self.currentammo - 1;
 
 	// casing code
