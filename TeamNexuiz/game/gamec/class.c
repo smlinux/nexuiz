@@ -518,6 +518,7 @@ void (float classnum) SetMaxAmmoFor =
 		self.ammo_rockets = 62;			//translates to 20
 		self.maxammo_rockets = 40;
 		self.tp_grenades_2 = 3;
+		self.no_grenades_2 = 1;
 	}
 	else if (classnum == CLASS_PYRO) {
 		self.clip_pipegrenades = 6;

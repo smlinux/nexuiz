@@ -163,6 +163,18 @@ void SoldierSpecial()
 		return;
 	self.special_time = time + cvar("g_balance_ricochet_firerate");
 
+	if (self.next_nuke > time)
+	{
+		sprint(self, "You have to wait 2 minutes before you can use the Ricochet Rocket again\n");
+		return;
+	}
+	if (self.no_grenades_2 < 2)
+	{
+		sprint(self, "You need more type 2 grenades to use the Ricochet Rocket\n");
+		return;
+	}
+	self.next_nuke = time + 120;
+
 	local vector org;
 
 	sound (self, CHAN_WEAPON, "weapons/rocket_fire.wav", 1, ATTN_NORM);

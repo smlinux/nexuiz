@@ -171,6 +171,8 @@ float CLIP_MAX_PIPEGRENADES = 6;
 .float next_pistol_fire;			// pistol cannot be fired again until this value < time
 									//// check W_WeaponFrame for more detail on these 2
 
+// WEAPON STUFF
+.float next_nuke;
 .float heat;		// What tf uses for powering up weapons. Could be useful later?
 
 .float uses_bloom;		// Does the client have bloom enabled? (used for flash bloom effect)
