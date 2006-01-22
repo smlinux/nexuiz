@@ -792,9 +792,10 @@ void player_powerups (void)
 		self.effects = EF_FULLBRIGHT;
 		if (self.items & IT_STRENGTH)
 		{
-			self.effects = EF_NODRAW;
 			if (time > self.strength_finished)
 			{
+				self.alpha = 1;
+				self.exteriorweaponentity.alpha = 1;
 				self.items = self.items - (self.items & IT_STRENGTH);
 				sprint(self, "^3Invisibility has worn off\n");
 			}
@@ -803,6 +804,8 @@ void player_powerups (void)
 		{
 			if (time < self.strength_finished)
 			{
+				self.alpha = cvar("g_minstagib_invis_alpha");
+				self.exteriorweaponentity.alpha = cvar("g_minstagib_invis_alpha");
 				self.items = self.items | IT_STRENGTH;
 				sprint(self, "^3You are invisible\n");
 			}
