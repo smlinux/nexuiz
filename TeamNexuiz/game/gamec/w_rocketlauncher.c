@@ -83,8 +83,20 @@ void W_Rocket_Attack (void)
 	local entity missile;
 	local entity flash;
 	local vector org;
-	sound (self, CHAN_WEAPON, "weapons/rocket_fire.wav", 1, ATTN_NORM);
-	if (cvar("g_rocketarena") == 0)
+	local vector end;
+	
+	local vector trueaim;
+	org = self.origin + self.view_ofs;
+	end = self.origin + self.view_ofs + v_forward * 4096;
+	traceline(org,end,TRUE,self);
+	trueaim = trace_endpos;
+	
+	sound (self, CHAN_WEAPON, "weapons/rocket_fire.ogg", 1, ATTN_NORM);
+	if (self.items & IT_STRENGTH) {
+		sound (self, CHAN_AUTO, "weapons/strength_fire.ogg", 1, ATTN_NORM);
+	}
+	
+	if (cvar("g_use_ammunition") && !cvar("g_rocketarena"))
 		self.ammo_rockets = self.ammo_rockets - 3;
 	self.punchangle_x = -4;
 	org = self.origin + self.view_ofs + v_forward * 15 + v_right * 3 + v_up * -11;
@@ -105,7 +117,7 @@ void W_Rocket_Attack (void)
 	setsize (missile, '0 0 0', '0 0 0');
 
 	setorigin (missile, org);
-	missile.velocity = v_forward * cvar("g_balance_rocketlauncher_speed");
+	missile.velocity = normalize(trueaim - org) * cvar("g_balance_rocketlauncher_speed");
 	missile.angles = vectoangles (missile.velocity);
 
 	missile.touch = W_Rocket_Touch;
@@ -120,7 +132,7 @@ void W_Rocket_Attack (void)
 	flash.velocity = v_forward * 20;
 	flash.angles = vectoangles (flash.velocity);
 	SUB_SetFade (flash, time, 0.4);
-	flash.effects = flash.effects | EF_ADDITIVE | EF_FULLBRIGHT;
+	flash.effects = flash.effects | EF_ADDITIVE | EF_FULLBRIGHT | EF_LOWPRECISION;
 	self.clip_rockets = self.clip_rockets - 1;
 	if (self.clip_rockets == 0)
 	{

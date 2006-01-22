@@ -32,9 +32,23 @@ void(float req) w_uzi =
 void W_Uzi_Attack (void)
 {
 	local vector org;
+	local vector end;
+	local vector trueaim;
+	
+	org = self.origin + self.view_ofs;
+	end = self.origin + self.view_ofs + v_forward * 4096;
+	traceline(org,end,TRUE,self);
+	
+	trueaim = trace_endpos;
+	
 	entity flash;
-	sound (self, CHAN_WEAPON, "weapons/uzi_fire.wav", 1, ATTN_NORM);
-	self.ammo_nails = self.ammo_nails - 1;
+	sound (self, CHAN_WEAPON, "weapons/uzi_fire.ogg", 1, ATTN_NORM);
+	if (self.items & IT_STRENGTH) {
+		sound (self, CHAN_AUTO, "weapons/strength_fire.ogg", 1, ATTN_NORM);
+	}
+	
+	if (cvar("g_use_ammunition"))
+		self.ammo_nails = self.ammo_nails - 1;
 	self.punchangle_x = random () - 0.5;
 	self.punchangle_y = random () - 0.5;
 	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 8) + (v_forward * 15);
@@ -43,9 +57,9 @@ void W_Uzi_Attack (void)
 	self.attack_finished = time + cvar("g_balance_uzi_refire2");
 
 	if (self.uzi_bulletcounter == 1)
-		fireBullet (org, v_forward, cvar("g_balance_uzi_spread2"), cvar("g_balance_uzi_damage2"), WEP_UZI, (self.uzi_bulletcounter & 3) == 0);
+		fireBullet (org, normalize(trueaim - org), cvar("g_balance_uzi_spread2"), cvar("g_balance_uzi_damage2"), IT_UZI, (self.uzi_bulletcounter & 3) == 0);
 	else
-		fireBullet (org, v_forward, cvar("g_balance_uzi_spread"), cvar("g_balance_uzi_damage"), WEP_UZI, (self.uzi_bulletcounter & 3) == 0);
+		fireBullet (org, normalize(trueaim - org), cvar("g_balance_uzi_spread"), cvar("g_balance_uzi_damage"), IT_UZI, (self.uzi_bulletcounter & 3) == 0);
 
 	// casing code
 	if (cvar("g_casings") >= 2)
@@ -60,11 +74,11 @@ void W_Uzi_Attack (void)
 	setmodel (flash, "models/uziflash.md3");
 	flash.velocity = v_forward * 20;
 	flash.angles = vectoangles (flash.velocity);
-	flash.angles_z=flash.v_angle_z + random () * 180; 
+	flash.angles_z=flash.v_angle_z + random () * 180;
 	flash.scale = 0.75;
 	flash.alpha = 0.5;
 	SUB_SetFade (flash, time, 0.2);
-	flash.effects = flash.effects | EF_ADDITIVE | EF_FULLBRIGHT;
+	flash.effects = flash.effects | EF_ADDITIVE | EF_FULLBRIGHT | EF_LOWPRECISION;
 
 }
 // weapon frames

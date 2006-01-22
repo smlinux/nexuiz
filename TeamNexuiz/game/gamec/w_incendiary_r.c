@@ -113,8 +113,16 @@ void W_IncendiaryRocket_Attack (void)
 	local entity missile;
 	local entity flash;
 	local vector org;
+	local vector end;
+
+	local vector trueaim;
+	org = self.origin + self.view_ofs;
+	end = self.origin + self.view_ofs + v_forward * 4096;
+	traceline(org,end,TRUE,self);
+	trueaim = trace_endpos;
+
 	sound (self, CHAN_WEAPON, "weapons/rocket_fire.wav", 1, ATTN_NORM);
-	if (cvar("g_rocketarena") == 0)
+	if (cvar("g_rocketarena") == 0 && cvar("g_use_ammunition") == 1)
 		self.ammo_rockets = self.ammo_rockets - 5;
 	self.punchangle_x = -4;
 	org = self.origin + self.view_ofs + v_forward * 15 + v_right * 3 + v_up * -11;
@@ -135,7 +143,7 @@ void W_IncendiaryRocket_Attack (void)
 	setsize (missile, '0 0 0', '0 0 0');
 
 	setorigin (missile, org);
-	missile.velocity = v_forward * cvar("g_balance_incendiaryrocket_speed");
+	missile.velocity = normalize(trueaim - org) * cvar("g_balance_incendiaryrocket_speed");
 	missile.angles = vectoangles (missile.velocity);
 
 	missile.touch = W_IncendiaryRocket_Touch;

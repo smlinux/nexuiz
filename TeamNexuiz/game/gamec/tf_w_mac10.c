@@ -36,8 +36,19 @@ void W_Mac_Attack (void)
 {
 	local vector org;
 	entity flash;
+	local vector end;
+
+	local vector trueaim;
+	
+	org = self.origin + self.view_ofs;
+	end = self.origin + self.view_ofs + v_forward * 4096;
+	traceline(org,end,TRUE,self);
+	
+	trueaim = trace_endpos;
+
 	sound (self, CHAN_WEAPON, "weapons/mac_fire.wav", 1, ATTN_NORM);
-	self.ammo_nails = self.ammo_nails - 1;
+	if (cvar("g_use_ammunition"))
+		self.ammo_nails = self.ammo_nails - 1;
 	self.punchangle_x = random () - 0.5;
 	self.punchangle_y = random () - 0.5;
 	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 8) + (v_forward * 15);
@@ -46,9 +57,9 @@ void W_Mac_Attack (void)
 	self.attack_finished = time + cvar("g_balance_mac_refire2");
 
 	if (self.mac_bulletcounter == 1)
-		fireBullet (org, v_forward, cvar("g_balance_mac_spread2"), cvar("g_balance_mac_damage2"), WEP_MAC, (self.mac_bulletcounter & 3) == 0);
+		fireBullet (org, normalize(trueaim - org), cvar("g_balance_mac_spread2"), cvar("g_balance_mac_damage2"), WEP_MAC, (self.mac_bulletcounter & 3) == 0);
 	else
-		fireBullet (org, v_forward, cvar("g_balance_mac_spread"), cvar("g_balance_mac_damage"), WEP_MAC, (self.mac_bulletcounter & 3) == 0);
+		fireBullet (org, normalize(trueaim - org), cvar("g_balance_mac_spread"), cvar("g_balance_mac_damage"), WEP_MAC, (self.mac_bulletcounter & 3) == 0);
 
 	// casing code
 	if (cvar("g_casings") >= 2)

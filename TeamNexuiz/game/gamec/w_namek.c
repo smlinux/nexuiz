@@ -116,8 +116,8 @@ void W_Namek_Attack2()
 	org = self.origin + self.view_ofs + v_forward * 15 + v_right * 10 + v_up * -14;
 	brange = cvar("g_balance_namek_range2");
 
-	FireNamekBullet(org + '0 0 1', v_forward * cvar("g_balance_namek_speed2"), cvar("g_balance_namek_damage2"), brange);
-	FireNamekBullet(org - '0 0 2', v_forward * cvar("g_balance_namek_speed2"), cvar("g_balance_namek_damage2"), brange);
+	FireNamekBullet(org + '0 0 1', v_forward * cvar("g_balance_namek_speed2") + v_up * 16 + v_right * -5, cvar("g_balance_namek_damage2"), brange);
+	FireNamekBullet(org - '0 0 2', v_forward * cvar("g_balance_namek_speed2") + v_up * 16 + v_right * -5, cvar("g_balance_namek_damage2"), brange);
 }
 
 // weapon frames

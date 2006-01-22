@@ -35,17 +35,27 @@ void W_RailGun_Attack (void)
 	local vector end;
 	local entity flash;
 
-	sound (self, CHAN_WEAPON, "weapons/RailGunfire.wav", 1, ATTN_NORM);
+	local vector trueaim;
+	
+	sound (self, CHAN_WEAPON, "weapons/nexfire.ogg", 1, ATTN_NORM);
+	if (self.items & IT_STRENGTH) {
+		sound (self, CHAN_AUTO, "weapons/strength_fire.ogg", 1, ATTN_NORM);
+	}
+	
 	self.punchangle_x = -5;
-//	org = self.origin + self.view_ofs + v_forward * 5 + v_right * 14 + v_up * -7;
-	org = self.origin + self.view_ofs + v_forward * 5 + v_right * 1 + v_up * -1;	// better accuracy
+	org = self.origin + self.view_ofs;
 	end = self.origin + self.view_ofs + v_forward * 4096;
+	
+	traceline(org,end,TRUE,self);
+	
+	trueaim = trace_endpos;
+	
+	org = self.origin + self.view_ofs + v_forward * 5 + v_right * 14 + v_up * -7;
 
-//	FireRailgunBullet (org, end, cvar("g_balance_railgun_damage"), WEP_RAILGUN);
-	FireRailgunBullet (org, end, 35, WEP_RAILGUN);		//temp till I add damage var
+	FireRailgunBullet (org, trueaim, cvar("g_balance_railgun_damage"), IT_NEX);
 
 	// trace as if shot started inside gun
-	traceline (org, end, TRUE, self);
+	traceline (org, trueaim, TRUE, self);
 	// show as if shot started outside of gun
 	org = self.origin + self.view_ofs + v_forward * 28 + v_right * 14 + v_up * -7;
 	// muzzleflash light
@@ -80,7 +90,7 @@ void W_RailGun_Attack (void)
 	// play a sound
 	PointSound (trace_endpos, "weapons/RailGunimpact.wav", 1, ATTN_NORM);
 
-	if (cvar("g_instagib") == 0)
+	if (cvar("g_use_ammunition") && cvar("g_instagib") == 0)
 //		self.ammo_cells = self.ammo_cells - 5;
 		self.ammo_shells = self.ammo_shells - 5;
 
