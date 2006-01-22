@@ -8,6 +8,7 @@
 // Menus/Menu Input references
 void () Menu_EngineerFix_Tesla;
 void (float inp) Menu_EngineerFix_Tesla_Input;
+void () Menu_Need_TeamNexuiz;
 
 // Resets the menu
 void() ResetMenu = 
@@ -45,6 +46,10 @@ void () Player_Menu =
 	{
 		Menu_EngineerFix_Tesla ();
 	}
+	else if (self.current_menu == MENU_NEED_TN)
+	{
+		Menu_Need_TeamNexuiz ();
+	}
 	else
 	{
 		self.current_menu = TF_FLARE_LIT;
@@ -81,6 +86,11 @@ void () Menu_EngineerFix_Tesla =
 {
 	CenterPrint (self, "Tesla Modification Lab: ^16^7 Upgrades Max\n[^11^7] Upgrade Voltage           - 1u\n[^12^7] Upgrade Amperage          - 1u\n[^13^7] Upgrade Power Supply      - 1u\n[^14^7] Make TeslaTurret(tm)      - 2u\n[^15^7] Improved Targeting System - 2u\n[^16^7] Add Spy Detector          - 4u\n[^17^7] Repair and Recharge           \n[^18^7] Dismantle                     \n[^19^7] Îןפטימח                       ");
 };
+
+void () Menu_Need_TeamNexuiz =
+{
+		CenterPrint(self, "^7Hello, welcome to a Team:Nexuiz server version ",TN_VERSION,"\n\n^5If you see this message it means that\n you do not have the Team:Nexuiz mod installed.\n\n^3To get the mod, please follow the instructions at:\nhttp://avirox.devretro.com/temp/teamnexuiz/TN_how_to.txt\n");
+}
 
 // Tesla Menu Input
 void (float inp) Menu_EngineerFix_Tesla_Input =

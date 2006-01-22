@@ -88,7 +88,8 @@ void (float tno) ConvertToFlag =
 		self.goal_no = 100;		// Temp Goal Number, can be overridden by a "goal" def in the entity
 	}
 	self.classname = "item_tfgoal";
-	self.message = self.carried_message;
+	if (self.carried_message)
+		self.message = self.carried_message;
 
 	self.d_t = "the ≈Œ≈ÕŸ ÏÔÛÙ your flag!\n";		// The enemy stole your flag msg
 	self.b_o = "Your flag has been stolen!\n";
@@ -200,7 +201,6 @@ void () ConvertToBackPack =
 	if (!(self.ammo_nails || self.ammo_cells || self.ammo_rockets || self.health))
 	{
 		self.health = 50;
-		self.ammo_nails = 50;
 		self.ammo_shells = 20;
 		self.ammo_nails = 100;
 		self.ammo_rockets = 15;

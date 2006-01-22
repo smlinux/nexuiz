@@ -3,6 +3,8 @@
 *************************************/
 
 /********************* General ***************************/
+string TN_VERSION =				"alpha .01";
+
 float TF_FLARE_LIT = 0;		// Woes of a decompiler, eh?
 float TF_FLARE_OFF = 1;		////
 float CTF_Map;
@@ -32,6 +34,12 @@ float illegalclasses2;
 float illegalclasses3;
 float illegalclasses4;
 float civilianteams;
+
+//These are the "Map_Rules" entity's class restricts.
+.float team1_scout, team1_soldier, team1_medic, team1_pyro, team1_spy, team1_engineer;
+.float team2_scout, team2_soldier, team2_medic, team2_pyro, team2_spy, team2_engineer;
+.float team3_scout, team3_soldier, team3_medic, team3_pyro, team3_spy, team3_engineer;
+.float team4_scout, team4_soldier, team4_medic, team4_pyro, team4_spy, team4_engineer;
 
 // Last Spawn Place of Team
 entity lastspawn_team1;

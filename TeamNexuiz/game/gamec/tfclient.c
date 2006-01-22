@@ -122,7 +122,7 @@ void() TeamBubbleThink =
 		remove(self);
 		return;
 	}
-	setorigin(self, self.owner.origin + '0 0 15' + self.owner.maxs_z * '0 0 1');
+	//setorigin(self, self.owner.origin + '0 0 15' + self.owner.maxs_z * '0 0 1'); //bandwidth hax
 	if (self.owner.buttonchat || self.owner.deadflag)
 		self.model = "";
 	else
@@ -132,7 +132,6 @@ void() TeamBubbleThink =
 
 .float() customizeentityforclient;		// new DP extension used for the team bubble
 float() ChatBubble_customizeentityforclient = {return (self.owner.team_no == other.team_no && other.killcount > -666);};
-
 
 
 void() UpdateTeamBubble =
@@ -148,7 +147,10 @@ void() UpdateTeamBubble =
 		self.teambubble_friendly.think = TeamBubbleThink;
 		self.teambubble_friendly.nextthink = time;
 		setmodel(self.teambubble_friendly, "models/team/team.sp2");
-		setorigin(self.teambubble_friendly, self.origin + '0 0 15' + self.maxs_z * '0 0 1');
+//		setorigin(self.teambubble_friendly, self.origin + '0 0 15' + self.maxs_z * '0 0 1');
+		setorigin(self.teambubble_friendly, self.teambubble_friendly.origin + '0 0 10' + self.maxs_z * '0 0 1');
+		setattachment(self.teambubble_friendly, self, "");
+		self.teambubble_friendly.scale = .07;
 		self.teambubble_friendly.mdl = self.teambubble_friendly.model;
 		self.teambubble_friendly.model = self.teambubble_friendly.mdl;
 		self.teambubble_friendly.customizeentityforclient = ChatBubble_customizeentityforclient;

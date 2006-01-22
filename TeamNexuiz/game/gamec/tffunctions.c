@@ -1558,9 +1558,32 @@ float (float tno) TeamFortress_TeamGetIllegalClasses =
 };
 
 // Check if legal class
+float (float pc, float tno, entity chkr) Check_Class_Scout =
+{
+	if (tno == 1 )
+	{
+	}
+
+};
+
+float (float pc, float tno, entity chkr) Check_Class_Soldier =
+{
+};
+
 float (float pc) IsLegalClass =
 {
 	local float bit;
+
+// Team:Nexuiz class check
+	local entity findme;
+	local float yesorno;
+
+	findme = find (world,classname,"class_restrictions");
+	if (pc == TF_CLASS_SCOUT)
+		yesorno = Check_Class_Scout(pc, self.team_no, findme);
+	else if (pc == TF_CLASS_SOLDIER)
+		yesorno = Check_Class_Soldier(pc, self.team_no, findme);
+
 
 /*	if (((spy_off == 1) && (pc == 8)))
 	{
@@ -1768,7 +1791,7 @@ void() TeamFortress_ChangeClass =
 			return;
 		}
 /*		tc = IsRestrictedClass(self.impulse - 100);			// TBA ADD THIS FUNCTION
-		if (tc != 0)										// it's actually a megatf fucntion
+		if (tc != 0)										// it's actually a megatf function
 		{													// -- gonna need cvars for it
 			if (tc > 0)
 			{

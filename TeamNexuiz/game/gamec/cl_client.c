@@ -211,6 +211,8 @@ entity () SelectSpawnPoint =
 	if (self.team_no < 1)
 	{
 //		self.origin_z = self.origin_z + 30;
+		self.current_menu = MENU_NEED_TN;
+
 		stuffcmd(self, "alias menu_showteamselect \"set scmenu_directmenu TeamSelect; togglemenu\"\n");
 		stuffcmd(self, "set scmenu_directmenu TeamSelect; togglemenu\n");
 
@@ -485,6 +487,7 @@ void PutClientInServer (void)
 	self.poison_rate = 0;
 
 	self.is_feigning = 0;
+	self.current_menu = 0;
 
 	// if the player is supposed to change model (and hence class) on respawn, do it.
 	if(self.change_mdl_on_respawn != "")
@@ -1277,6 +1280,7 @@ void SV_ParseClientCommand (string s)
 			sprint(self, "You must select a team to join first!\n");
 			return;
 		}
+		CenterPrint(self, "");		// clear any centerprint messages
 		if (self.playerclass > 0)		// if a class is already chosen
 		{
 			self.tfstate = self.tfstate - (self.tfstate & 8);
