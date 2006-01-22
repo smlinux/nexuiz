@@ -69,12 +69,20 @@ void() W_Electro_Attack
 	local vector org;
 	local float postion;
 
+	local vector end;
+	local vector trueaim;
+	org = self.origin + self.view_ofs;
+	end = self.origin + self.view_ofs + v_forward * 4096;
+	traceline(org,end,TRUE,self);
+	trueaim = trace_endpos;
+
 	postion = self.electrocount;
 	sound (self, CHAN_WEAPON, "weapons/electro_fire.wav", 1, ATTN_NORM);
 
 	self.punchangle_x = -2;
 
-	self.ammo_cells = self.ammo_cells - 2;
+	if (cvar("g_use_ammunition"))
+		self.ammo_cells = self.ammo_cells - 2;
 
 	if (self.electrocount == 0)
 	{
@@ -104,7 +112,7 @@ void() W_Electro_Attack
 	if (self.button3)
 	{
 		proj.movetype = MOVETYPE_BOUNCE;
-		proj.velocity = v_forward * cvar("g_balance_electro_ballspeed") + v_up * cvar("g_balance_electro_ballspeed_up");
+		proj.velocity = normalize(trueaim - org) * cvar("g_balance_electro_ballspeed") + v_up * cvar("g_balance_electro_ballspeed_up");
 		proj.touch = W_Plasma_Touch;
 		setmodel(proj, "models/ebomb.mdl");
 		setsize(proj, '-6 -6 -3', '6 6 3');
@@ -116,7 +124,7 @@ void() W_Electro_Attack
 	else
 	{
 		proj.movetype = MOVETYPE_FLY;
-		proj.velocity = v_forward * cvar("g_balance_electro_speed");
+		proj.velocity = normalize(trueaim - org) * cvar("g_balance_electro_speed");
 		proj.angles = vectoangles(proj.velocity);
 		proj.touch = W_Plasma_Explode;
 		setmodel(proj, "models/elaser.mdl");

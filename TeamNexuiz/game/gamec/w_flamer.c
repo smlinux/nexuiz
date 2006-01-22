@@ -98,6 +98,13 @@ void W_Flamer_Attack (void)
 {
 	local entity missile;
 	local vector org;
+	local vector end;
+
+	local vector trueaim;
+	org = self.origin + self.view_ofs;
+	end = self.origin + self.view_ofs + v_forward * 4096;
+	traceline(org,end,TRUE,self);
+	trueaim = trace_endpos;
 
 	sound (self, CHAN_WEAPON, "weapons/flamer.wav", 1, ATTN_NORM);
 	self.ammo_nails = self.ammo_nails - 4;
@@ -121,7 +128,8 @@ void W_Flamer_Attack (void)
 
 	missile.movetype = MOVETYPE_BOUNCE;
 	missile.gravity = -0.07; // fall lightly up
-	missile.velocity = (v_forward + v_right * crandom() * 0.035 + v_up * crandom() * 0.015) * cvar("g_balance_flamer_speed");
+//	missile.velocity = (v_forward + v_right * crandom() * 0.035 + v_up * crandom() * 0.015) * cvar("g_balance_flamer_speed");
+	missile.velocity = normalize(trueaim - org) * cvar("g_balance_flamer_speed");
 
 	missile.angles = vectoangles (missile.velocity);
 }

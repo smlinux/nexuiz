@@ -51,8 +51,8 @@ void W_Laser_Touch (void)
 
 
 	self.event_damage = SUB_Null;
-	RadiusDamage (self, self.owner, cvar("g_balance_laser_damage"), cvar("g_balance_laser_edgedamage"), cvar("g_balance_laser_radius"), world, cvar("g_balance_laser_force"), WEP_LASER);
-	sound (self, CHAN_BODY, "weapons/laserimpact.wav", 1, ATTN_NORM);
+	RadiusDamage (self, self.owner, cvar("g_balance_laser_damage"), cvar("g_balance_laser_edgedamage"), cvar("g_balance_laser_radius"), world, cvar("g_balance_laser_force"), IT_LASER);
+	sound (self, CHAN_BODY, "weapons/laserimpact.ogg", 1, ATTN_NORM);
 
 	remove (self);
 }
@@ -61,8 +61,20 @@ void W_Laser_Attack (void)
 {
 	local entity missile;
 	local vector org;
+	local vector end;
+	
+	local vector trueaim;
+	org = self.origin + self.view_ofs;
+	end = self.origin + self.view_ofs + v_forward * 4096;
+	traceline(org,end,TRUE,self);
+	
+	trueaim = trace_endpos;
 
-	sound (self, CHAN_WEAPON, "weapons/lasergun_fire.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "weapons/lasergun_fire.ogg", 1, ATTN_NORM);
+	if (self.items & IT_STRENGTH) {
+		sound (self, CHAN_AUTO, "weapons/strength_fire.ogg", 1, ATTN_NORM);
+	}
+	
 	org = self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -12;
 	//te_customflash(org, 160, 0.2, '1 0 0');
 
@@ -77,7 +89,7 @@ void W_Laser_Attack (void)
 	setsize (missile, '0 0 0', '0 0 0');
 	setorigin (missile, org);
 
-	missile.velocity = v_forward * cvar("g_balance_laser_speed");
+	missile.velocity = normalize(trueaim - org) * cvar("g_balance_laser_speed");
 	missile.angles = vectoangles (missile.velocity);
 	//missile.glow_color = 250; // 244, 250
 	//missile.glow_size = 120;
@@ -85,7 +97,7 @@ void W_Laser_Attack (void)
 	missile.think = SUB_Remove;
 	missile.nextthink = time + 9;
 
-	missile.effects = EF_FULLBRIGHT | EF_ADDITIVE | EF_LOWPRECISION;
+	missile.effects = EF_FULLBRIGHT | EF_FULLBRIGHT | EF_LOWPRECISION;
 }
 
 // weapon frames
@@ -98,4 +110,3 @@ void()	laser_fire1_01 =
 	weapon_doattack(laser_check, laser_check, W_Laser_Attack);
 	weapon_thinkf(WFRAME_FIRE1, 0.3, laser_ready_01);
 };
-

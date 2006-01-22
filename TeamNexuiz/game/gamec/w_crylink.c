@@ -54,9 +54,18 @@ void W_Crylink_Attack (void)
 	local float counter;
 	local vector org;
 	local entity proj;
+	local vector end;
+
+	local vector trueaim;
+	org = self.origin + self.view_ofs;
+	end = self.origin + self.view_ofs + v_forward * 4096;
+	traceline(org,end,TRUE,self);
+	
+	trueaim = trace_endpos;
 
 	sound (self, CHAN_WEAPON, "weapons/crylink.wav", 1, ATTN_NORM);
-	self.ammo_cells = self.ammo_cells - 1;
+	if (cvar("g_use_ammunition"))
+		self.ammo_cells = self.ammo_cells - 1;
 	self.punchangle_x = -2;
 	org = self.origin + self.view_ofs + v_forward * 10 + v_right * 5 + v_up * -14;
 	te_smallflash(org);
@@ -76,9 +85,9 @@ void W_Crylink_Attack (void)
 		setorigin (proj, org);
 
 		if (self.button3)
-			proj.velocity = (v_forward + (counter / 2 - 1) * v_right * cvar("g_balance_crylink_spread")) * cvar("g_balance_crylink_speed");
+			proj.velocity = (normalize(trueaim - org) + (counter / 2 - 1) * v_right * cvar("g_balance_crylink_spread")) * cvar("g_balance_crylink_speed");
 		else
-			proj.velocity = (v_forward + (counter / 5) * randomvec() * cvar("g_balance_crylink_spread")) * cvar("g_balance_crylink_speed");
+			proj.velocity = (normalize(trueaim - org) + (counter / 5) * randomvec() * cvar("g_balance_crylink_spread")) * cvar("g_balance_crylink_speed");
 		proj.touch = W_Crylink_Touch;
 		proj.think = SUB_Remove;
 		proj.nextthink = time + 9;
