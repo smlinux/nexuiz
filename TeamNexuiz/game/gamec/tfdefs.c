@@ -294,6 +294,7 @@ float modelindex_eyes    = 0;
 .float has_sentry;			// player has sentry gun
 .float has_tesla;			// player has tesla coil
 .float has_teleporter;		// player has telepad (2 max)
+.float has_extractor;		// player has metal extractor (3 max)
 .entity barrel_ent;			// sentry gun's barrel entity
 .entity animation_ent;		// an object's entity that controls its animations (dirty, but effective)
 .float weapons_carried;		// used with tesla

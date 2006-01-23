@@ -113,6 +113,12 @@ void (entity targ, entity attacker) Killed =
 		self = oself;
 		return;
 	}
+	if (self.th_die && self.classname != "player")		// so objects and buildings use their proper death functions
+	{
+		self.th_die ();
+		self = oself;
+		return;
+	}
 	self.enemy = attacker;
 	if ((self.flags & 32))
 	{

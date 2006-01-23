@@ -2380,3 +2380,18 @@ void () TeamNexuiz_GunUp =			//brings first-person gun model up
 		self.weaponentity.lip = PLAYER_WEAPONSELECTION_SPEED;
 	}
 };
+
+void centerprint_multi_9 (entity print_to, string str1, string str2, string str3, string str4, string str5, string str6, string str7, string str8, string str9)
+{
+	local string tmsg;
+
+	tmsg = strcat(str1, str2);
+	tmsg = strcat(tmsg, str3);
+	tmsg = strcat(tmsg, str4);
+	tmsg = strcat(tmsg, str5);
+	tmsg = strcat(tmsg, str6);
+	tmsg = strcat(tmsg, str7);
+	tmsg = strcat(tmsg, str8);
+	tmsg = strcat(tmsg, str9);
+	CenterPrint(print_to, tmsg);
+};

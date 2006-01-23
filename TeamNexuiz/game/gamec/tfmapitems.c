@@ -2512,11 +2512,11 @@ void (entity Item, entity AP, float method) tfgoalitem_RemoveFromPlayer =
 			{
 				if (((method == 2) && (Item.goal_activation & 4096)))
 				{
-					tfgoalitem_drop (Item, 1, AP);
+					tfgoalitem_drop (Item/*, 1, AP*/);
 				}
 				else
 				{
-					tfgoalitem_drop (Item, 0, AP);
+					tfgoalitem_drop (Item/*, 0, AP*/);
 				}
 			}
 			else

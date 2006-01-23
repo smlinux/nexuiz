@@ -24,7 +24,23 @@ float PISTOL_LEGSHOT =			307;
 /******************** Menus *******************/
 ////////////////////////////////////////////////
 /**********************************************/
+float MENU_ENGINEER_BUILD =		15;
+float MENU_EXTRACTOR =			26;
 float MENU_NEED_TN =			90;
+
+/****************** Build Costs ********************/
+/////////////////////////////////////////////////////
+/***************************************************/
+float BUILDING_EXTRACTOR_NEEDCELLS =	200;
+float BUILDING_DISPENSER_NEEDCELLS =	100;
+float BUILDING_SENTRY_NEEDCELLS =		50;
+float BUILDING_SENTRY_NEEDMETAL =		150;
+float BUILDING_TESLA_NEEDCELLS =		100;
+float BUILDING_TESLA_NEEDMETAL =		175;
+float BUILDING_TELEPAD_NEEDCELLS =		100;
+float BUILDING_TELEPAD_NEEDMETAL =		75;
+
+float BUILDING_EXTRACTOR_MAXMETAL =		150;
 
 /***************** misc constants **********************/
 /////////////////////////////////////////////////////////

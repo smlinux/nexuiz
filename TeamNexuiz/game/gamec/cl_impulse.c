@@ -119,7 +119,7 @@ void ImpulseCommands (void)
 
 	}
 	if (self.impulse == 67) {
-		TeamFortress_Build (3);
+		TeamFortress_Build (6);
 		//self.current_menu = 18;
 	}
 	if (self.impulse == 69) {

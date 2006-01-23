@@ -211,7 +211,8 @@ entity () SelectSpawnPoint =
 	if (self.team_no < 1)
 	{
 //		self.origin_z = self.origin_z + 30;
-		self.current_menu = MENU_NEED_TN;
+		if (!cvar("g_teamnexuiz_version"))
+			self.current_menu = MENU_NEED_TN;
 
 		stuffcmd(self, "alias menu_showteamselect \"set scmenu_directmenu TeamSelect; togglemenu\"\n");
 		stuffcmd(self, "set scmenu_directmenu TeamSelect; togglemenu\n");
@@ -1280,7 +1281,6 @@ void SV_ParseClientCommand (string s)
 			sprint(self, "You must select a team to join first!\n");
 			return;
 		}
-		CenterPrint(self, "");		// clear any centerprint messages
 		if (self.playerclass > 0)		// if a class is already chosen
 		{
 			self.tfstate = self.tfstate - (self.tfstate & 8);

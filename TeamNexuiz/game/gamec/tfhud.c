@@ -2,7 +2,7 @@
 		/*Team:Nexuiz HUD Items Code*/
 		/****************************/
 .entity grenadeoneentity;
-.entity grenadetwoentity;
+//.entity grenadetwoentity;
 
 void () CL_GrenadeOneEntity_Think =
 {

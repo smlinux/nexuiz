@@ -4,11 +4,14 @@
 
 //move to tfdefs:
 .entity building;
+.float ammo_metal;
 
 // Menus/Menu Input references
 void () Menu_EngineerFix_Tesla;
 void (float inp) Menu_EngineerFix_Tesla_Input;
 void () Menu_Need_TeamNexuiz;
+void () Menu_Engineer;
+void () Menu_EngineerFix_Extractor;
 
 // Resets the menu
 void() ResetMenu = 
@@ -50,6 +53,15 @@ void () Player_Menu =
 	{
 		Menu_Need_TeamNexuiz ();
 	}
+	else if (self.current_menu == MENU_ENGINEER_BUILD)
+	{
+		Menu_Engineer ();
+	}
+	else if (self.current_menu == MENU_EXTRACTOR)
+	{
+		Menu_EngineerFix_Extractor ();
+	}
+	
 	else
 	{
 		self.current_menu = TF_FLARE_LIT;
@@ -409,4 +421,92 @@ void (float inp) Menu_EngineerFix_Tesla_Input =
 		}
 		W_SetCurrentAmmo ();
 	}
+};
+
+// Engineer extractor
+void () Menu_EngineerFix_Extractor =
+{
+	local string level;
+	local string hp;
+	local string obj_metal;
+
+	level = ftos(self.building.ammo_cells + 1);
+	hp = ftos(self.building.health);
+	obj_metal = ftos(self.building.ammo_metal);
+
+	CenterPrint (self, "^7[^6Metal Extractor^7]\n^1Level: ^3",level,"\n^1Health: ^3",hp,"\n^1Metal: ^3",obj_metal,"\n");
+};
+
+// Engineer build menu
+void () Menu_Engineer =
+{
+	local string line1;
+	local string line2;
+	local string line3;
+	local string line4;
+	local string line5;
+
+	if (self.has_dispenser == 1)
+	{
+		line1 = "У.. Destroy Dispenser             \n";
+	}
+	else
+	{
+		if (self.ammo_cells >= BUILDING_DISPENSER_NEEDCELLS)
+		{
+			line1 = "У.. Build Ammo&Armor Dispenser    \n";
+		}
+		else
+		{
+			line1 = "                                  \n";
+		}
+	}
+	if (self.has_sentry == 1)
+	{
+		line2 = "Ф.. Destroy Sentry Gun            \n";
+	}
+	else
+	{
+		if (self.ammo_cells >= BUILDING_SENTRY_NEEDCELLS && self.ammo_metal >= BUILDING_SENTRY_NEEDMETAL)
+		{
+			line2 = "Ф.. Build Sentry Gun              \n";
+		}
+		else
+		{
+			line2 = "                                  \n";
+		}
+	}
+	if (self.has_tesla == 1)
+	{
+		line3 = "Х.. Destroy Tesla Sentry Gun      \n";
+	}
+	else
+	{
+		if (self.ammo_cells >= BUILDING_TESLA_NEEDCELLS && self.ammo_metal >= BUILDING_TESLA_NEEDMETAL)
+		{
+			line3 = "Х.. Build Tesla Sentry Gun        \n";
+		}
+		else
+		{
+			line3 = "                                  \n";
+		}
+	}
+	if (self.has_teleporter != 0) //CH messy, yes
+	{
+		if (self.has_teleporter == 1 && self.ammo_cells >= BUILDING_TELEPAD_NEEDCELLS && self.ammo_metal >= BUILDING_TELEPAD_NEEDMETAL)
+			line4 = "... Build a Teleporter Pad        \n.оо Destroy a Teleporter Pad      \n";
+		else if (self.has_teleporter == 1 && self.ammo_cells >= BUILDING_TELEPAD_NEEDCELLS && self.ammo_metal >= BUILDING_TELEPAD_NEEDMETAL)
+			line4 = ".оо Destroy a Teleporter Pad      \n";
+		if (self.has_teleporter == 2)
+			line4 = ".оо Destroy Both Teleporter Pads  \n";
+		}
+//	else if (self.ammo_cells >= 90 && self.tf_items & 131072)
+		else if (self.ammo_cells >= BUILDING_TELEPAD_NEEDCELLS && self.ammo_metal >= BUILDING_TELEPAD_NEEDMETAL)
+			line4 = "... Build a Teleporter Pad        \n                                  \n";
+		else
+			line4 = "                                  \n";
+
+	if (self.ammo_cells >= BUILDING_EXTRACTOR_NEEDCELLS)
+		line5 = " Build Extractor					   \n";
+	centerprint_multi_9 (self, "^7Engineer Build Menu\n ^3Metal: [",ftos(self.ammo_metal),"]\n^3Cells: [",ftos(self.ammo_cells),"]\n\n", line1, line2, line3, line4, line5, "... Nothing                       \n\n");
 };

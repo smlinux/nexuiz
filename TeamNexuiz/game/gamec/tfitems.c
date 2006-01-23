@@ -107,3 +107,39 @@ void () item_backpack =
 
 	ConvertToBackPack();		// finish conversion using q3f conversion func
 };
+
+// Team:Nexuiz ctf flag (needs to be capped at an item_ctf_goal
+void () item_ctf_flag =
+{
+	if (!self.allowteams)
+	{
+		bprint("Fixme!! Object located at ",vtos(self.origin)," has now allowteams property set!\n");
+		return;
+	}
+	if (!self.delay)
+		self.delay = 45;
+	if (self.allowteams == "red")
+		self.groupname = "redflag";
+	else if (self.allowteams == "blue")
+		self.groupname = "blueflag";
+
+	if (!self.carried_message)
+		self.carried_message = "You have the flag! Go capture it in your base!\n";
+	func_goalitem ();
+};
+
+// where you cap item_ctf_flag or flags spawned by tfq3fitems.c
+.string cap_message;
+void () item_ctf_goal =
+{
+	if (!self.teamscore)			// how many frags are gained by capturing
+		self.teamscore = 10;
+	if (!self.message)
+		self.message = "You цаптуред the енемы flag!\n";
+	if (!self.cap_message)
+		self.netname = "Blue brings home the Flag";
+	if (self.allowteams == "blue")
+		ConvertToFlag(1);
+	else if (self.allowteams == "red")
+		ConvertToFlag(2);
+};

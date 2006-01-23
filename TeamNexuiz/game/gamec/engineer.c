@@ -1,5 +1,6 @@
 .float option;
 .float has_mine;
+.void (entity enty) th_use;
 void () MagnetMineTouch;
 void () MagTimer;
 void () RemoveMagnetMine;
@@ -8,6 +9,9 @@ void () Tesla_Die;
 void () Tesla_Pain;
 void () Tesla_Idle;
 void () Tesla_Touch;
+// metal extractor
+void () Extractor_Idle;
+void (entity enty) Engineer_UseExtractor;
 
 void() SUB_NULL = {};
 
@@ -23,6 +27,7 @@ void () Sentry_Die;
 
 void EngineerSpecial()
 {
+	self.current_menu = MENU_ENGINEER_BUILD;
 	//	sprint(self, "Not done yet\n");	
 	// this is gonna contain build menu eventually
 };
@@ -235,6 +240,22 @@ void(float objtobuild) TeamFortress_Build =
 	
 			btime = time + 3;
 		}
+		if (objtobuild == 6)
+		{
+			if (self.has_extractor >= 3)
+			{
+				sprint(self, "You can only have 3 metal extractors.\nTry dismantling an old one.\n");
+	         dremove(newmis);
+				return;
+			}
+			tmp1 = '-16 -16 0';
+			tmp2 = '16 16 48';
+			newmis.mdl = "models/engineer/metal_extractor/power.md3";
+			//newmis.mdl = "progs/extractor.md3";
+			newmis.netname = "extractor";
+	
+			btime = time + 5;
+		}
 // End telepad 1
 	}
 	if (CheckArea(newmis, self) == 0)
@@ -263,6 +284,8 @@ void(float objtobuild) TeamFortress_Build =
 	newmis.velocity = '0 0 8';
 	newmis.movetype = 6;
 	newmis.solid = 2;
+	newmis.alpha = .5;		// slightly invisible
+	self.effects = self.effects | EF_ADDITIVE;
 	setmodel(newmis, newmis.mdl);
 	setsize(newmis, tmp1, tmp2);
 	setorigin(newmis, newmis.origin);
@@ -311,6 +334,7 @@ void() TeamFortress_FinishedBuilding =
 	self.current_weapon = self.weapon;
 	self.StatusRefreshTime = time + 0.1;
 	TeamFortress_SetSpeed(self);
+	oldself.alpha = 1;		// un-do see-through effect
 /*	if (oldself.weapon == 1)
 	{
 		self.has_dispenser = 1;
@@ -489,7 +513,7 @@ void() TeamFortress_FinishedBuilding =
 				oldself.waitmin = ((oldself.ammo_shells + 2) * (oldself.ammo_nails + 2));
 				oldself.waitmax = 0;
 
-				// The tesla animater -- till I learn to be a better coder ;)
+				// The tesla animator -- till I learn to be a better coder ;)
 				local entity tesanim;
 				tesanim = spawn();
 				tesanim.owner = oldself;
@@ -546,6 +570,48 @@ void() TeamFortress_FinishedBuilding =
 		}
 // TELEPAD 2 END
 		}*/
+		if (oldself.weapon == 6)			// metal extractor
+		{
+			self.has_extractor = self.has_extractor + 1;
+			sprint (self, "You finish building the metal extractor.\n");
+			oldself.real_owner = self;
+			teamsprint (self.team_no, self, self.netname);
+			teamsprint (self.team_no, self, " has built a metal extractor.\n");
+			sound (oldself, 3, "weapons/guerilla_set.wav", 1, 1);
+			oldself.classname = "building_extractor";
+			oldself.netname = "extractor";
+			oldself.takedamage = 2;
+			oldself.solid = 2;
+//			oldself.th_die = Extractor_Die;
+//			oldself.th_pain = Extractor_Pain;
+			self.ammo_cells = (self.ammo_cells - BUILDING_EXTRACTOR_NEEDCELLS);
+			oldself.health = 200;
+			oldself.movetype = 6;
+			oldself.colormap = self.colormap;
+			oldself.velocity = '0 0 -8';
+			oldself.avelocity = '0 0 0';
+			oldself.flags = (oldself.flags - (oldself.flags & 512));
+			oldself.team_no = self.team_no;
+			oldself.think = Extractor_Idle;
+			oldself.nextthink = (time + 1);
+//			oldself.touch = Extractor_Touch;
+			oldself.enemy = world;
+			oldself.max_health = 100;
+			oldself.ammo_metal = 10;
+			oldself.th_use = Engineer_UseExtractor;
+
+			oldself.currentammo = 0;		// 6 Upgrades. (6 minus this number is pgrade count)
+			oldself.health = oldself.max_health;
+			oldself.waitmin = ((oldself.ammo_shells + 2) * (oldself.ammo_nails + 2));
+			oldself.waitmax = 0;
+
+			// The metal extractor animator(?)
+//			local entity tesanim;
+//			tesanim = spawn();
+//			tesanim.owner = oldself;
+//			tesanim.think = Extractor_Animate;
+//			tesanim.nextthink = time;
+		}
 	}
 	W_SetCurrentAmmo();
 };
@@ -919,6 +985,12 @@ void () Use_Function =
 		return;
 	}
 //	if (trace_ent.takedamage)
+	if (trace_ent.th_use)
+	{
+		trace_ent.th_use(trace_ent);
+		return;
+	}
+
 	if (trace_ent.classname != "player")
 	{
 		if ((trace_ent.classname == "building_dispenser"))
