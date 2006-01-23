@@ -81,6 +81,22 @@ textures/stralenex1/strale_grey_box
 
 }
 
+textures/stralenex1/strale_brown_box
+{
+	qer_editorimage env/strale_grey/ygrey_up.tga
+
+	surfaceparm nolightmap
+	surfaceparm noimpact
+	surfaceparm nomarks
+	surfaceparm sky
+
+	skyparms env/strale_grey/ygrey - -
+	q3map_surfacelight 100
+	q3map_lightimage textures/strale_grey/ygrey_up.tga
+	q3map_sun .75 .65 .6 130 255 80
+
+}
+
 textures/stralenex1/stralenex5
 {
 	qer_editorimage env/stralenex5/stralenex5_up.tga
