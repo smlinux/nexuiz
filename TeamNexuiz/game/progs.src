@@ -7,13 +7,14 @@ gamec/defs.h		// Should rename this, it has fields and globals
 gamec/tfdefs.c			// TF Defs File
 gamec/tf_constants.c		// TF Constants (impulses, death messages etc)
 gamec/tffunctions.c		// TF Functions
-gamec/tfitems.c			// TF Items
-gamec/tfclient.c			// TF Client-Side stuff
 gamec/tfplats.c			// TF Platforms
 gamec/tfgrenades.c		// TF Grenades
 gamec/tfmenus.c			// TF Text Menus
 
 gamec/extensions.h
+
+gamec/tfclient.c			// TF Client-Side stuff
+gamec/tfhud.c			// TF HUD Items
 
 gamec/g_subs.c
 
@@ -90,7 +91,9 @@ gamec/tfdoors.c				// TF Doors
 gamec/tfai.c				// TF AI
 gamec/tfsentry.c				// TF Sentry Gun
 gamec/tftesla.c				// TF Tesla Coil
+gamec/tfextractor.c			// TN Metal Extractor
 gamec/tfcombat.c				// TF Combat System
 gamec/tfmapitems.c			// TF Map Items
 gamec/tfbuttons.c				// TF Buttons
 gamec/tfq3fitems.c			// Q3F to TF entity converter (partial)
+gamec/tfitems.c				// TF/TN Items
