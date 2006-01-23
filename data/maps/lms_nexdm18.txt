@@ -1,4 +1,4 @@
-Running Man (dm_nexdm18)
+Running Man (lms_nexdm18)
 maps/nexdm18
 
 Small DM-Level, best suited 

@@ -1,4 +1,4 @@
-Running Man CTF (dm_nexctf02)
+Running Man CTF (tdm_nexctf02)
 maps/nexctf02
 
 Medium-sized CTF-Map

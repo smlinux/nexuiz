@@ -1,14 +1,18 @@
-Step by Step (tdm_nexdm14)
+Aggressor (tdm_nexdm14)
 maps/nexdm14
 
-Open arena map.
+Small map with brutal fast
+vertical action.
 
 Players: 2-4
 
 Weapons: Electro, Machine Gun,
-Crylink, Rocket Launcher
+Mortar, Hagar, Rocket Launcher,
+Nex
 
 Gametype: Team Deathmatch
 
-Author:
-"HReaper"
+Layout/Architecture:
+Kevin "Tyrann" Shanahan
+Texturing/Lighting:
+Paul Evers
