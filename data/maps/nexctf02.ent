@@ -791,7 +791,7 @@
 {
 "wait" "5"
 "frags" "1"
-"message" "^3has captured the blue Main Area"
+"message" "^3 has captured the blue Main Area"
 "origin" "768 -256 224"
 "classname" "dom_controlpoint"
 }
@@ -800,20 +800,20 @@
 "frags" "1"
 "classname" "dom_controlpoint"
 "origin" "784 816 320"
-"message" "^3has captured the blue Mortar Niche"
+"message" "^3 has captured the blue Mortar Niche"
 }
 {
 "wait" "5"
 "frags" "1"
 "classname" "dom_controlpoint"
 "origin" "-1056 -208 208"
-"message" "^3has captured the blue Rocket Launcher/Teleporter"
+"message" "^3 has captured the blue Rocket Launcher/Teleporter"
 }
 {
 "wait" "5"
 "scale" "1.15"
 "frags" "2"
-"message" "^3has captured the blue Nex-Tunnel"
+"message" "^3 has captured the blue Nex-Tunnel"
 "origin" "256 -176 -384"
 "classname" "dom_controlpoint"
 }
@@ -822,7 +822,7 @@
 "frags" "1"
 "classname" "dom_controlpoint"
 "origin" "352 -656 -224"
-"message" "^3has captured the blue lower Floor"
+"message" "^3 has captured the blue lower Floor"
 }
 {
 "origin" "768 -240 224"
@@ -863,19 +863,19 @@
 {
 "classname" "dom_controlpoint"
 "origin" "-1920 2432 240"
-"message" "^3has captured red Main Area"
+"message" "^3 has captured red Main Area"
 "frags" "1"
 "wait" "5"
 }
 {
-"message" "^3has captured the red Flag Niche"
+"message" "^3 has captured the red Flag Niche"
 "origin" "-848 2448 304"
 "classname" "dom_controlpoint"
 "frags" "1"
 "wait" "5"
 }
 {
-"message" "^3has captured the red Rocket Launcher/Teleporter"
+"message" "^3 has captured the red Rocket Launcher/Teleporter"
 "origin" "-1872 608 208"
 "classname" "dom_controlpoint"
 "frags" "1"
@@ -884,13 +884,13 @@
 {
 "classname" "dom_controlpoint"
 "origin" "-1840 1920 -384"
-"message" "^3has captured the red Nex-Tunnel"
+"message" "^3 has captured the red Nex-Tunnel"
 "frags" "2"
 "scale" "1.15"
 "wait" "5"
 }
 {
-"message" "^3has captured the red lower Floor"
+"message" "^3 has captured the red lower Floor"
 "origin" "-2320 2016 -224"
 "classname" "dom_controlpoint"
 "frags" "1"
@@ -949,10 +949,10 @@
 "frags" "2"
 "classname" "dom_controlpoint"
 "origin" "-1904 -240 96"
-"message" "^3has captured the Speed Corner"
+"message" "^3 has captured the Speed Corner"
 }
 {
-"message" "^3has captured the Strength Corner"
+"message" "^3 has captured the Strength Corner"
 "origin" "-480 1184 -224"
 "classname" "dom_controlpoint"
 "frags" "1"

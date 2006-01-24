@@ -387,7 +387,7 @@
 {
 "classname" "dom_controlpoint"
 "origin" "-120.000000 -80.000000 -280.000000"
-"message" "^3has captured the Rocket Launcher Atrium"
+"message" "^3 has captured the Rocket Launcher Atrium"
 "frags" "1"
 "wait" "5"
 }
@@ -406,21 +406,21 @@
 {
 "wait" "5"
 "frags" "1"
-"message" "^3has captured the Mortar"
+"message" "^3 has captured the Mortar"
 "origin" "-340.000000 820.000000 -30.000000"
 "classname" "dom_controlpoint"
 }
 {
 "classname" "dom_controlpoint"
 "origin" "730.000000 180.000000 200.000000"
-"message" "^3has captured the Electro"
+"message" "^3 has captured the Electro"
 "frags" "1"
 "wait" "5"
 }
 {
 "wait" "5"
 "frags" "1"
-"message" "^3has captured the Corner"
+"message" "^3 has captured the Corner"
 "origin" "-780.000000 400.000000 210.000000"
 "classname" "dom_controlpoint"
 }
