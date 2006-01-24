@@ -228,3 +228,6 @@ float GRAPHOOK_RELEASE		= 21;
 //swamp 
 .float in_swamp;              // bool
 .entity swampslug;            // Uses this to release from swamp ("untouch" fix)
+
+// footstep interval
+.float nextstep;

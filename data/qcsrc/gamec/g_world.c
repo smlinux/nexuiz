@@ -108,6 +108,12 @@ void worldspawn (void)
 	precache_sound ("misc/gib_splat04.wav");
 	//precache_sound ("misc/h2ohit.wav");
 	precache_sound ("misc/hit.wav");
+	precache_sound ("misc/footstep01.wav");
+	precache_sound ("misc/footstep02.wav");
+	precache_sound ("misc/footstep03.wav");
+	precache_sound ("misc/footstep04.wav");
+	precache_sound ("misc/footstep05.wav");
+	precache_sound ("misc/footstep06.wav");
 	precache_sound ("misc/hitground1.ogg");
 	precache_sound ("misc/hitground2.ogg");
 	precache_sound ("misc/hitground3.ogg");

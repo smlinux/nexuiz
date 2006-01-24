@@ -96,6 +96,29 @@ void CreatureFrame (void)
 				if (dm > 0)
 					Damage (self, world, world, dm, DEATH_FALL, self.origin, '0 0 0');
 			}
+
+			// play stupid sounds
+			if ((self.flags & FL_ONGROUND) && (vlen(self.velocity) > sv_maxspeed * 0.6) && cvar("g_footsteps"))
+			{
+				if((time > self.nextstep) || (time < (self.nextstep - 10.0)))
+				{
+					local float steprandom;
+					self.nextstep = time + 0.3 + random() * 0.1;
+					steprandom = random() * 6;
+					if (steprandom < 1)
+						sound (self, CHAN_BODY, "misc/footstep01.wav", 1, ATTN_NORM);
+					else if (steprandom < 2)
+						sound (self, CHAN_BODY, "misc/footstep02.wav", 1, ATTN_NORM);
+					else if (steprandom < 3)
+						sound (self, CHAN_BODY, "misc/footstep03.wav", 1, ATTN_NORM);
+					else if (steprandom < 4)
+						sound (self, CHAN_BODY, "misc/footstep04.wav", 1, ATTN_NORM);
+					else if (steprandom < 5)
+						sound (self, CHAN_BODY, "misc/footstep05.wav", 1, ATTN_NORM);
+					else if (steprandom <= 6)
+						sound (self, CHAN_BODY, "misc/footstep06.wav", 1, ATTN_NORM);
+				}
+			}
 			self.oldvelocity = self.velocity;
 		}
 		self = findfloat(self, iscreature, TRUE);
