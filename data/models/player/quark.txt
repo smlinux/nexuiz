@@ -1,6 +1,6 @@
 Quark
 models/player/quark
-1
+0
 models/player/crash.zym
 
 Robot Fighter

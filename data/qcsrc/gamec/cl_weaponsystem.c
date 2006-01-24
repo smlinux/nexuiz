@@ -96,7 +96,7 @@ void() CL_ExteriorWeaponentity_Think =
 		self.cnt = self.owner.weaponentity.modelindex;
 		self.dmg = self.owner.modelindex;
 		self.deadflag = self.owner.deadflag;
-		if (self.owner.deadflag) self.model = "";
+		if (self.owner.deadflag) return;
 		else if (self.owner.weapon == WEP_LASER) setmodel(self, "models/weapons/v_laser.md3");
 		else if (self.owner.weapon == WEP_SHOTGUN) setmodel(self, "models/weapons/v_shotgun.md3");
 		else if (self.owner.weapon == WEP_UZI) setmodel(self, "models/weapons/v_uzi.md3");
