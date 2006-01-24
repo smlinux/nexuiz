@@ -3,8 +3,9 @@
 /***************** Impulse Defs **********************/
 ///////////////////////////////////////////////////////
 /*****************************************************/
-float DROP_FLAG_IMPULSE =		203;
 float RELOAD_IMPULSE =			70;
+float TELL_POSITION_IMPULSE =	205;
+float DROP_FLAG_IMPULSE =		203;
 float FEIGN_IMPULSE =			204;
 
 
@@ -28,9 +29,10 @@ float MENU_ENGINEER_BUILD =		15;
 float MENU_EXTRACTOR =			26;
 float MENU_NEED_TN =			90;
 
-/****************** Build Costs ********************/
-/////////////////////////////////////////////////////
-/***************************************************/
+/****************** Buildings ********************/
+///////////////////////////////////////////////////
+/*************************************************/
+//costs
 float BUILDING_EXTRACTOR_NEEDCELLS =	200;
 float BUILDING_DISPENSER_NEEDCELLS =	100;
 float BUILDING_SENTRY_NEEDCELLS =		50;
@@ -39,8 +41,10 @@ float BUILDING_TESLA_NEEDCELLS =		100;
 float BUILDING_TESLA_NEEDMETAL =		175;
 float BUILDING_TELEPAD_NEEDCELLS =		100;
 float BUILDING_TELEPAD_NEEDMETAL =		75;
-
+//stats
 float BUILDING_EXTRACTOR_MAXMETAL =		150;
+//misc
+float BUILDING_EXTRACTOR_CHECKRADIUS =	1200;
 
 /***************** misc constants **********************/
 /////////////////////////////////////////////////////////

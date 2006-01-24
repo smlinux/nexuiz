@@ -352,6 +352,10 @@ SOURCE=.\tf_w_railgun.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\tfextractor.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\tfsentry.c
 # End Source File
 # Begin Source File

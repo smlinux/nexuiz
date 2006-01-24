@@ -104,6 +104,7 @@ void () item_backpack =
 		self.armorvalue = stof(self.armor);
 	if ((!self.delay) && (!self.wait))
 		self.wait = 10;			// next time item can be used
+	self.give = "converted";
 
 	ConvertToBackPack();		// finish conversion using q3f conversion func
 };
@@ -113,18 +114,27 @@ void () item_ctf_flag =
 {
 	if (!self.allowteams)
 	{
-		bprint("Fixme!! Object located at ",vtos(self.origin)," has now allowteams property set!\n");
+		bprint("Fixme!! Object located at ",vtos(self.origin)," has no allowteams property set!\n");
 		return;
 	}
-	if (!self.delay)
+	if ((!self.delay) && (!self.wait))
+	{
+		self.wait = 45;			// next time item can be used
 		self.delay = 45;
-	if (self.allowteams == "red")
-		self.groupname = "redflag";
-	else if (self.allowteams == "blue")
-		self.groupname = "blueflag";
-
+	}
 	if (!self.carried_message)
 		self.carried_message = "You have the flag! Go capture it in your base!\n";
+	if (self.allowteams == "red")
+	{
+		self.mdl = "models/flags/b_flag.md3";
+		self.groupname = "redflag";
+	}
+	else if (self.allowteams == "blue")
+	{
+		self.groupname = "blueflag";
+		self.mdl = "models/flags/r_flag.md3";
+	}
+
 	func_goalitem ();
 };
 

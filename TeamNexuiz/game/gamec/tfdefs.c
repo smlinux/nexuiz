@@ -133,6 +133,7 @@ float CLIP_MAX_PIPEGRENADES = 6;
 .float maxammo_nails;
 .float maxammo_cells;
 .float maxammo_rockets;
+.float maxammo_metal;				// maximum amoutn of metal that can be carried
 .float last_impulse;
 .float real_frags;
 .float items_allowed;

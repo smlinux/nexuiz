@@ -26,6 +26,24 @@ void () Extractor_Idle =
 		self.nextthink = time + 4;
 };
 
+void () Extractor_Die =
+{
+	if (self.real_owner.has_extractor < 2)
+		sprint (self.real_owner, "Your extractor was destoyed.\n");
+	else
+		sprint (self.real_owner, "One of your extractors was destoyed.\n");
+	self.real_owner.has_extractor = self.real_owner.has_extractor - 1;
+/*	ThrowGib ("progs/tgib1.mdl", -70);			// use other explosion method?
+	ThrowGib ("progs/tgib2.mdl", -70);
+	ThrowGib ("progs/tgib3.mdl", -70);*/
+	WriteByte (2, 23);
+	WriteByte (2, 3);
+	WriteCoord (2, self.origin_x);
+	WriteCoord (2, self.origin_y);
+	WriteCoord (2, self.origin_z);
+	BecomeExplosion ();
+};
+
 void (entity gun) Engineer_UseExtractor =
 {
 	local entity dist_checker;

@@ -219,6 +219,11 @@ void ImpulseCommands (void)
 	{
 		ClassGrenade(WR_GRENADE2);
 	}
+	if (self.impulse == TELL_POSITION_IMPULSE)
+	{
+		sprint(self,vtos(self.origin));
+		sprint(self, "\n");
+	}
 
 	// model/class test
 	if(self.impulse == 57)

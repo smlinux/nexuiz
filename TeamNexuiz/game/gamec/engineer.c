@@ -11,6 +11,7 @@ void () Tesla_Idle;
 void () Tesla_Touch;
 // metal extractor
 void () Extractor_Idle;
+void () Extractor_Die;
 void (entity enty) Engineer_UseExtractor;
 
 void() SUB_NULL = {};
@@ -27,7 +28,16 @@ void () Sentry_Die;
 
 void EngineerSpecial()
 {
-	self.current_menu = MENU_ENGINEER_BUILD;
+	if (self.current_menu == MENU_ENGINEER_BUILD)
+	{
+		ResetMenu ();
+	}
+	else
+	{
+		ResetMenu ();
+		self.current_menu = MENU_ENGINEER_BUILD;
+	}
+
 	//	sprint(self, "Not done yet\n");	
 	// this is gonna contain build menu eventually
 };
@@ -248,6 +258,20 @@ void(float objtobuild) TeamFortress_Build =
 	         dremove(newmis);
 				return;
 			}
+			//check if it's near another allied extractor unit
+			local entity isnearextractor;
+			isnearextractor = findradius (newmis.origin, BUILDING_EXTRACTOR_CHECKRADIUS);
+			while (isnearextractor)
+			{
+			if (isnearextractor.classname == "building_extractor" && isnearextractor.team_no == self.team_no)
+				{
+					sprint (self, "You cannot build so close to another extractor.\n");
+					dremove(newmis);
+					return;
+				}
+				isnearextractor = isnearextractor.chain;
+			}
+
 			tmp1 = '-16 -16 0';
 			tmp2 = '16 16 48';
 			newmis.mdl = "models/engineer/metal_extractor/power.md3";
@@ -284,7 +308,7 @@ void(float objtobuild) TeamFortress_Build =
 	newmis.velocity = '0 0 8';
 	newmis.movetype = 6;
 	newmis.solid = 2;
-	newmis.alpha = .5;		// slightly invisible
+	newmis.alpha = .1;		// slightly invisible
 	self.effects = self.effects | EF_ADDITIVE;
 	setmodel(newmis, newmis.mdl);
 	setsize(newmis, tmp1, tmp2);
@@ -582,7 +606,7 @@ void() TeamFortress_FinishedBuilding =
 			oldself.netname = "extractor";
 			oldself.takedamage = 2;
 			oldself.solid = 2;
-//			oldself.th_die = Extractor_Die;
+			oldself.th_die = Extractor_Die;
 //			oldself.th_pain = Extractor_Pain;
 			self.ammo_cells = (self.ammo_cells - BUILDING_EXTRACTOR_NEEDCELLS);
 			oldself.health = 200;

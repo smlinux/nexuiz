@@ -492,6 +492,7 @@ void (float classnum) SetMaxAmmoFor =
 	self.maxammo_nails = 200;
 	self.maxammo_cells = 40;
 	self.maxammo_rockets = 40;
+	self.maxammo_metal = 0;
 	self.no_grenades_1 = 4;
 	self.clip_rockets = CLIP_MAX_ROCKETS;
 	self.clip_pistol = CLIP_MAX_PISTOL;
@@ -526,5 +527,7 @@ void (float classnum) SetMaxAmmoFor =
 	else if (classnum == CLASS_ENGINEER) {
 		self.maxammo_cells = 200;
 		self.ammo_cells = 100;
+		self.ammo_metal = 0;
+		self.maxammo_metal = 200;
 	}
 };

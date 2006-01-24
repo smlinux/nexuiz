@@ -12,6 +12,7 @@ void (float inp) Menu_EngineerFix_Tesla_Input;
 void () Menu_Need_TeamNexuiz;
 void () Menu_Engineer;
 void () Menu_EngineerFix_Extractor;
+void (float inp) Menu_EngineerFix_Extractor_Input;
 
 // Resets the menu
 void() ResetMenu = 
@@ -87,9 +88,13 @@ void(float menu_no) DisplayMenu =
 // Menu input (user can press 0 - 9)
 void(float inp) Menu_Input = 
 {
-	if ((self.current_menu == 18))
+	if (self.current_menu == 18)
 	{
 		Menu_EngineerFix_Tesla_Input (inp);
+	}
+	if (self.current_menu == MENU_EXTRACTOR)
+	{
+		Menu_EngineerFix_Extractor_Input (inp);
 	}
 };
 
@@ -434,9 +439,54 @@ void () Menu_EngineerFix_Extractor =
 	hp = ftos(self.building.health);
 	obj_metal = ftos(self.building.ammo_metal);
 
-	CenterPrint (self, "^7[^6Metal Extractor^7]\n^1Level: ^3",level,"\n^1Health: ^3",hp,"\n^1Metal: ^3",obj_metal,"\n");
+	CenterPrint (self, "^7[^6Metal Extractor^7]\n^1Level: ^3",level,"\n^1Health: ^3",hp,"\n^1Metal: ^3",obj_metal,"\n\n[^11^7] Extract Metal\n[^12^7] Repair Extractor\n[^13^7] Nothing\n");
 };
 
+void (float inp) Menu_EngineerFix_Extractor_Input =
+{
+	if (inp == 1)
+	{
+		if (self.building.ammo_metal > 0)
+		{
+			local float tmp_flt;
+			tmp_flt = self.maxammo_metal - self.ammo_metal;
+			if (tmp_flt == 0)
+				sprint(self, "You have reached your carrying capacity for metal\n");
+			else
+			{
+				if (tmp_flt > self.building.ammo_metal)
+				{
+					self.ammo_metal = self.ammo_metal + self.building.ammo_metal;
+					self.building.ammo_metal = 0;
+				}
+				else
+				{
+					if ((self.ammo_metal + self.building.ammo_metal) > self.maxammo_metal)
+					{
+						self.building.ammo_metal = self.building.ammo_metal - (self.maxammo_metal - self.ammo_metal);
+						self.ammo_metal = self.maxammo_metal;
+					}
+					else
+					{
+						self.ammo_metal = self.ammo_metal + self.building.ammo_metal;
+						self.building.ammo_metal = 0;
+					}
+				}
+			}
+		}
+		else
+		{
+			sprint(self, "There is no metal to extract from this unit\n");
+		}
+	}
+
+	if ((inp >= 1) && (inp <= 9))
+	{
+		ResetMenu ();
+		self.impulse = 0;
+		W_SetCurrentAmmo();
+	}
+};
 // Engineer build menu
 void () Menu_Engineer =
 {
@@ -508,5 +558,9 @@ void () Menu_Engineer =
 
 	if (self.ammo_cells >= BUILDING_EXTRACTOR_NEEDCELLS)
 		line5 = " Build Extractor					   \n";
-	centerprint_multi_9 (self, "^7Engineer Build Menu\n ^3Metal: [",ftos(self.ammo_metal),"]\n^3Cells: [",ftos(self.ammo_cells),"]\n\n", line1, line2, line3, line4, line5, "... Nothing                       \n\n");
+	local string strn;
+	local string metalcnt;
+	metalcnt = ftos(self.ammo_metal);
+	strn = strcat("^7Engineer Build Menu\n ^3Metal: [",metalcnt,"]\n^3Cells: [",ftos(self.ammo_cells),"]\n\n", line1, strcat(line2, line3, line4), strcat(line5, "... Nothing                       \n\n"));
+	CenterPrint(self, strn);
 };

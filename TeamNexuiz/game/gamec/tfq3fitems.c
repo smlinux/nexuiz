@@ -103,7 +103,8 @@ void (float tno) ConvertToFlag =
 //	self.impulse = 9;
 	self.items = 133701;
 
-	self.mdl = self.model;
+	if (self.model)
+		self.mdl = self.model;
 
 //	self.mdl = "models/flag.md3";
 
