@@ -1,5 +1,7 @@
 
 .entity flagcarried;
+.float next_take_time;			// the next time a player can pick up a flag (time + blah)
+								/// I used this, in part, to fix the looping score bug. - avirox
 
 //float FLAGSCORE_PICKUP        =  1;
 //float FLAGSCORE_RETURN        =  5; // returned by owner team
@@ -211,6 +213,10 @@ void() FlagTouch =
 	if (other.flagcarried) // he's got a flag
 	if (other.flagcarried.team != self.team) // capture
 	{
+		if (other.flagcarried == world)
+		{
+			return;
+		}
 		t = time - other.flagpickuptime;
 		if (flagcaptimerecord == 0)
 		{
@@ -244,14 +250,17 @@ void() FlagTouch =
 				head.frags = head.frags + cvar("g_ctf_flagscore_capture_team");//FLAGSCORE_CAPTURE_TEAM;
 			head = find(head, classname, "player");
 		}
-		sound (self, CHAN_AUTO, self.noise2, 1, ATTN_NONE);
-		ReturnFlag(other.flagcarried);
+		RegenFlag (other.flagcarried);
+		other.flagcarried = world;
+		other.next_take_time = time + 1;
 	}
 	if (self.cnt == FLAG_BASE)
 	if (other.team == 5 || other.team == 14) // only red and blue team can steal flags
 	if (other.team != self.team)
 	if (!other.flagcarried)
 	{
+		if (other.next_take_time > time)
+			return;
 		// pick up
 		other.flagpickuptime = time; // used for timing runs
 		self.solid = SOLID_NOT;
