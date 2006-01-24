@@ -12,6 +12,7 @@ entity Spawn_ClassifyPoints(entity firstspot, entity playerlist, float mindist, 
 {
 	local entity spot, player;
 	local float pcount;
+	local string spotname;
 	spawn_goodspots = 0;
 	spawn_badspots = 0;
 	spot = firstspot;
@@ -38,7 +39,20 @@ entity Spawn_ClassifyPoints(entity firstspot, entity playerlist, float mindist, 
 				return spot;
 			spawn_goodspots = spawn_goodspots + 1;
 		}
-		spot = find(spot, classname, "info_player_deathmatch");
+		if(cvar("g_ctf"))
+		{
+			if(self.team == 5)//4)
+				spotname = "info_player_team1";
+			if(self.team == 14)//13)
+				spotname = "info_player_team2";
+			if(self.team == 10)//9)
+				spotname = "info_player_team3";
+			if(self.team == 13)//12)
+				spotname = "info_player_team4";
+			spot = find(spot, classname, spotname);
+		}
+		else
+			spot = find(spot, classname, "info_player_deathmatch");
 	}
 	return firstspot;
 }
@@ -121,7 +135,6 @@ entity SelectSpawnPoint (float anypoint)
 		// no good spots exist, pick a random bad spot
 		spot = Spawn_ClassifyPoints(firstspot, playerlist, 100, 1000000, min(floor(random() * spawn_badspots), spawn_badspots - 1));
 	}
-
 	if (!spot)
 	{
 		if(anypoint)
