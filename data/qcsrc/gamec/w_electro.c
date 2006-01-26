@@ -129,14 +129,10 @@ void() W_Electro_Attack
 {
 	local entity proj;
 	local vector org;
-	local vector end;
 	local float postion;
 	
 	local vector trueaim;
-	org = self.origin + self.view_ofs;
-	end = self.origin + self.view_ofs + v_forward * 4096;
-	traceline(org,end,TRUE,self);
-	trueaim = trace_endpos;
+	trueaim = W_TrueAim();
 
 	postion = self.electrocount;
 	sound (self, CHAN_WEAPON, "weapons/electro_fire.ogg", 1, ATTN_NORM);

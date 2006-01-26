@@ -61,14 +61,9 @@ void W_Laser_Attack (void)
 {
 	local entity missile;
 	local vector org;
-	local vector end;
-	
+
 	local vector trueaim;
-	org = self.origin + self.view_ofs;
-	end = self.origin + self.view_ofs + v_forward * 4096;
-	traceline(org,end,TRUE,self);
-	
-	trueaim = trace_endpos;
+	trueaim = W_TrueAim();
 
 	sound (self, CHAN_WEAPON, "weapons/lasergun_fire.ogg", 1, ATTN_NORM);
 	if (self.items & IT_STRENGTH) {

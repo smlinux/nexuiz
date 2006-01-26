@@ -7,6 +7,26 @@
 ===========================================================================
 */
 
+vector() W_TrueAim = {
+	
+	traceline(self.origin + self.view_ofs,self.origin + self.view_ofs + v_forward * 4096,FALSE,self);
+
+	if ((self.weapon == WEP_NEX || self.weapon == WEP_SHOTGUN || self.weapon == WEP_UZI) && cvar("g_antilag"))
+	{
+		// if aiming at a player and the original trace won't hit that player
+		// anymore, try aiming at the player's new position
+				
+		if(self.cursor_trace_ent)
+		if(self.cursor_trace_ent.takedamage)
+		if(trace_ent != self.cursor_trace_ent) {
+			return self.cursor_trace_ent.origin;
+		}
+		
+	} 
+	
+	return trace_endpos;
+}
+
 void LaserTarget_Think()
 {
 	entity e;

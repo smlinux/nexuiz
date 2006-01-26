@@ -63,14 +63,10 @@ void W_Grenade_Attack (void)
 {
 	local entity gren;
 	local vector org;
-	local vector end;
+
 	
 	local vector trueaim;
-	org = self.origin + self.view_ofs;
-	end = self.origin + self.view_ofs + v_forward * 4096;
-	traceline(org,end,TRUE,self);
-	
-	trueaim = trace_endpos;
+	trueaim = W_TrueAim();
 
 	sound (self, CHAN_WEAPON, "weapons/grenade_fire.ogg", 1, ATTN_NORM);
 	if (self.items & IT_STRENGTH) {

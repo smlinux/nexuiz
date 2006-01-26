@@ -32,14 +32,9 @@ void(float req) w_uzi =
 void W_Uzi_Attack (void)
 {
 	local vector org;
-	local vector end;
+
 	local vector trueaim;
-	
-	org = self.origin + self.view_ofs;
-	end = self.origin + self.view_ofs + v_forward * 4096;
-	traceline(org,end,TRUE,self);
-	
-	trueaim = trace_endpos;
+	trueaim = W_TrueAim();
 	
 	entity flash;
 	sound (self, CHAN_WEAPON, "weapons/uzi_fire.ogg", 1, ATTN_NORM);

@@ -34,20 +34,13 @@ void(float req) w_shotgun =
 void W_Shotgun_Attack (void)
 {
 	local vector org;
-	local vector end;
 	float	sc;
 	float	bullets;
 	float	d;
 	float	spread;
 	
 	local vector trueaim;
-	org = self.origin + self.view_ofs;
-	end = self.origin + self.view_ofs + v_forward * 4096;
-	traceline(org,end,TRUE,self);
-	
-	trueaim = trace_endpos;
-	
-	
+	trueaim = W_TrueAim();
 
 	sound (self, CHAN_WEAPON, "weapons/shotgun_fire.ogg", 1, ATTN_NORM);
 	if (self.items & IT_STRENGTH) {
