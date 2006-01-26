@@ -231,3 +231,5 @@ float GRAPHOOK_RELEASE		= 21;
 
 // footstep interval
 .float nextstep;
+
+.float ready;

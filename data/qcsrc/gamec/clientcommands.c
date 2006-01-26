@@ -1,3 +1,5 @@
+void ReadyCount();
+
 void SV_ParseClientCommand(string s) {
 	local float index;
 
@@ -207,6 +209,12 @@ void SV_ParseClientCommand(string s) {
 		} else {
 			sprint( self, strcat( "selectteam none/red/blue/pink/yellow/auto - \"", argv(1), "\" not recognised\n" ) );
 		}
+	} else if(argv(0) == "ready") {
+		if(cvar("sv_ready_restart"))
+		{
+			self.ready = TRUE;
+			ReadyCount();
+		}
 	} else {
 		clientcommand(self,s);
 	}
@@ -372,4 +380,29 @@ void VoteCount() {
 	} else if(time > votecaller.vote_finished) { // vote timedout
 		VoteTimeout();
 	} // else still running
+}
+
+
+void ReadyCount()
+{
+	local entity e;
+	local float r, p;
+
+	e = find(world, classname, "player");
+
+	while(e)
+	{
+		if(clienttype(e) == CLIENTTYPE_REAL)
+		{
+			p += 1;
+			if(e.ready) r += 1;
+		}
+		e = find(e, classname, "player");
+	}
+
+	if(p && r == p)
+	{
+		bprint("^1Server is restarting...\n");
+		localcmd("restart\n");
+	}
 }
