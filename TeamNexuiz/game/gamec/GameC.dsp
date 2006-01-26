@@ -413,6 +413,10 @@ SOURCE=.\w_grenades.c
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\tf_ball.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\tfbuttons.c
 # End Source File
 # Begin Source File

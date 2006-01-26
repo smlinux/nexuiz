@@ -2395,3 +2395,4 @@ void centerprint_multi_9 (entity print_to, string str1, string str2, string str3
 	tmsg = strcat(tmsg, str9);
 	CenterPrint(print_to, tmsg);
 };
+

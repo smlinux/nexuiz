@@ -495,51 +495,63 @@ void () Menu_Engineer =
 	local string line3;
 	local string line4;
 	local string line5;
+	local string costline;
+	local string cost1;
+	local string cost2;
 
-	if (self.has_dispenser == 1)
+/*	if (self.has_dispenser == 1)
 	{
 		line1 = "“.. Destroy Dispenser             \n";
 	}
 	else
 	{
-		if (self.ammo_cells >= BUILDING_DISPENSER_NEEDCELLS)
-		{
-			line1 = "“.. Build Ammo&Armor Dispenser    \n";
-		}
-		else
-		{
-			line1 = "                                  \n";
-		}
-	}
+//		line1 = "“.. Build Ammo&Armor Dispenser    \n";
+		cost1 = "^3";
+		if (self.ammo_cells < BUILDING_DISPENSER_NEEDCELLS)
+			cost1 = "^1";
+		cost1 = strcat(cost1,"   cells^7: ",ftos(BUILDING_DISPENSER_NEEDCELLS), "\n");
+		costline = cost1;
+		line1 = strcat("“.. Build Ammo&Armor Dispenser    \n",costline,"\n");
+	}*/
 	if (self.has_sentry == 1)
 	{
-		line2 = "”.. Destroy Sentry Gun            \n";
+		line2 = "[^12^7] Destroy Sentry Gun            \n";
 	}
 	else
 	{
-		if (self.ammo_cells >= BUILDING_SENTRY_NEEDCELLS && self.ammo_metal >= BUILDING_SENTRY_NEEDMETAL)
-		{
-			line2 = "”.. Build Sentry Gun              \n";
-		}
-		else
-		{
-			line2 = "                                  \n";
-		}
+		//if (self.ammo_cells >= BUILDING_SENTRY_NEEDCELLS && self.ammo_metal >= BUILDING_SENTRY_NEEDMETAL)
+	//	{
+		cost1 = "^3";
+		cost2 = "^3";
+		if (self.ammo_cells < BUILDING_SENTRY_NEEDCELLS)
+			cost1 = "^1";
+		cost1 = strcat(cost1,"   cells^7: ",ftos(BUILDING_SENTRY_NEEDCELLS));
+		if (self.ammo_metal < BUILDING_SENTRY_NEEDMETAL)
+			cost2 = "^1";
+		cost2 = strcat(cost2,"    metal^7: ",ftos(BUILDING_SENTRY_NEEDMETAL), "\n");
+		costline = strcat(cost1," ",cost2);
+		line2 = strcat("[^12^7] Build Sentry Gun              \n",costline);
+
 	}
 	if (self.has_tesla == 1)
 	{
-		line3 = "•.. Destroy Tesla Sentry Gun      \n";
+		line3 = "[^13^7] Destroy Tesla Sentry Gun      \n";
 	}
 	else
 	{
-		if (self.ammo_cells >= BUILDING_TESLA_NEEDCELLS && self.ammo_metal >= BUILDING_TESLA_NEEDMETAL)
-		{
-			line3 = "•.. Build Tesla Sentry Gun        \n";
-		}
-		else
-		{
-			line3 = "                                  \n";
-		}
+//		if (self.ammo_cells >= BUILDING_TESLA_NEEDCELLS && self.ammo_metal >= BUILDING_TESLA_NEEDMETAL)
+//		{
+		cost1 = "^3";
+		cost2 = "^3";
+		if (self.ammo_cells < BUILDING_TESLA_NEEDCELLS)
+			cost1 = "^1";
+		cost1 = strcat(cost1,"   cells^7: ",ftos(BUILDING_TESLA_NEEDCELLS));
+		if (self.ammo_metal < BUILDING_TESLA_NEEDMETAL)
+			cost2 = "^1";
+		cost2 = strcat(cost2,"   metal^7: ",ftos(BUILDING_TESLA_NEEDMETAL), "\n");
+		costline = strcat(cost1," ",cost2);
+		line3 = strcat("[^13^7] Build Tesla Sentry Gun        \n",costline);
+
 	}
 	if (self.has_teleporter != 0) //CH messy, yes
 	{
@@ -556,11 +568,39 @@ void () Menu_Engineer =
 		else
 			line4 = "                                  \n";
 
-	if (self.ammo_cells >= BUILDING_EXTRACTOR_NEEDCELLS)
-		line5 = " Build Extractor					   \n";
+//	if (self.ammo_cells >= BUILDING_EXTRACTOR_NEEDCELLS)
+//	if (self.has_extractor > 3)
+//		line5 = "^1... Build Metal Extractor         \n";
+	
+	cost1 = "^3";
+	if (self.ammo_cells < BUILDING_EXTRACTOR_NEEDCELLS)
+		cost1 = "^1";
+	cost1 = strcat(cost1,"   cells^7: ",ftos(BUILDING_EXTRACTOR_NEEDCELLS),"                  ");
+	costline = cost1;
+	if (self.has_extractor >= 3)
+		line5 = strcat("[^16^7] ^1Build Metal Extractor         \n",costline,"\n\n");
+	else
+		line5 = strcat("[^16^7] Build Metal Extractor         \n",costline,"\n\n");
+
 	local string strn;
 	local string metalcnt;
 	metalcnt = ftos(self.ammo_metal);
+
+	// Dispenser moved down here
+	if (self.has_dispenser == 1)
+	{
+		line1 = "[^11^7] Destroy Dispenser             \n";
+	}
+	else
+	{
+		cost1 = "^3";
+		if (self.ammo_cells < BUILDING_DISPENSER_NEEDCELLS)
+			cost1 = "^1";
+		cost1 = strcat(cost1,"   cells^7: ",ftos(BUILDING_DISPENSER_NEEDCELLS),"                  ");
+		costline = cost1;
+		line1 = strcat("^7[^11^7] Build Ammo&Armor Dispenser  \n",costline,"\n");
+	}
+
 	strn = strcat("^7Engineer Build Menu\n ^3Metal: [",metalcnt,"]\n^3Cells: [",ftos(self.ammo_cells),"]\n\n", line1, strcat(line2, line3, line4), strcat(line5, "... Nothing                       \n\n"));
 	CenterPrint(self, strn);
 };
