@@ -45,6 +45,7 @@ float (entity e, float healamount, float ignore) T_Heal =
 .string shells;
 .string rockets;
 .string nails;
+.string metal;
 .string grenade1;
 .string grenade2;
 .string armor;
@@ -96,6 +97,8 @@ void () item_backpack =
 		self.ammo_rockets = stof(self.rockets);
 	if (self.nails)
 		self.ammo_nails = stof(self.nails);
+	if (self.metal)
+		self.ammo_metal = stof(self.metal);
 	if (self.grenade1)
 		self.no_grenades_1 = stof(self.grenade1);
 	if (self.grenade2)
