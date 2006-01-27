@@ -83,6 +83,8 @@ gamec/domination.c
 
 gamec/mauvebot.c
 
+gamec/tf_ball.c				// MegaTF/TN Ball&Goal
+
 gamec/tf_w_pistol.c			// (Every Class?) Pistol
 gamec/tf_w_railgun.c			// Engineer RailGun
 gamec/tf_w_mac10.c			// Spy MAC10
@@ -97,3 +99,4 @@ gamec/tfmapitems.c			// TF Map Items
 gamec/tfbuttons.c				// TF Buttons
 gamec/tfq3fitems.c			// Q3F to TF entity converter (partial)
 gamec/tfitems.c				// TF/TN Items
+gamec/tn_misc.c				// Team:Nexuiz misc fucntions/items
