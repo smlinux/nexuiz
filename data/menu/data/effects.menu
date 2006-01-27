@@ -81,7 +81,7 @@ Item DataContainer Effects
 	Item Data_Cvar Gloss
 	{
 		cvarName	"r_shadow_gloss"
-		defValue	1
+		defValue	0
 
 		[DataLink_OnOffSwitch]
 	}
