@@ -14,10 +14,13 @@
 .string active_all_message;
 .string carried_sound;
 .string holding;
+.string team_owner;
 .float gameindex;
 .float teamscore;
-.float floating;
 //.vector orig_origin;
+float RED_GOAL = 200;
+float BLUE_GOAL = 100;
+float ANY_GOAL = 50;
 
 // Q3F/ETF Maps dont have info_tfdetects, so this calls it.
 void () DoTFDetect =
@@ -65,13 +68,14 @@ void (float tno) ConvertToFlag =
 //			return;
 		self.team_no = 2;
 		self.owned_by = 1;
-		self.n_b = " took the Blue ╞ьсч!\n";
+		if (!self.n_b)
+			self.n_b = " took the Blue ╞ьсч!\n";
 		droppedmsg = " Dropped the Blue flag\n";
 		self.netname = "Red Flag";
 		redflagexists = 1;
 
 			if (!self.goal_no)
-		self.goal_no = 200;		// Temp Goal Number, can be overridden by a "goal" def in the entity
+		self.goal_no = RED_GOAL;		// Temp Goal Number, can be overridden by a "goal" def in the entity
 	}
 	if (self.allowteams == "blue")
 	{
@@ -79,14 +83,21 @@ void (float tno) ConvertToFlag =
 //			return;
 		self.team_no = 1;
 		self.owned_by = 2;
-		self.n_b = " took the Red ╞ьсч!\n";
+		if (!self.n_b)
+			self.n_b = " took the Red ╞ьсч!\n";
 		droppedmsg = " Dropped the Red flag\n";
 		self.netname = "Blue Flag";
 		blueflagexists = 1;
 
 			if (!self.goal_no)
-		self.goal_no = 100;		// Temp Goal Number, can be overridden by a "goal" def in the entity
+		self.goal_no = BLUE_GOAL;		// Temp Goal Number, can be overridden by a "goal" def in the entity
 	}
+	if (self.allowteams == "all" || tno == 0)
+	{
+		self.owned_by = 0;
+		self.goal_no = ANY_GOAL;
+	}
+
 	self.classname = "item_tfgoal";
 	if (self.carried_message)
 		self.message = self.carried_message;
@@ -119,41 +130,6 @@ void (float tno) ConvertToFlag =
 
 
 	item_tfgoal();
-};
-
-// Simulate animation for converted tfgoal backpack
-// Very unorthodox -- i cant find out why self.owner.velocity has no effect
-void () PackFloat =
-{
-	self.owner.angles_y = self.owner.angles_y + 10;
-
-	if (self.floating == -17)
-	{
-		self.floating = 9;
-	}
-	if (self.floating == 0)
-	{
-		self.floating = 9;
-	}
-	if (self.floating > 0)
-	{
-		self.owner.origin_z = self.owner.origin_z + 3;
-		self.floating = self.floating - 1;
-	}
-	if (self.floating == 0)
-	{
-		self.floating = -9;
-	}
-	if (self.floating < 0)
-	{
-		self.owner.origin_z = self.owner.origin_z - 3;
-		self.floating = self.floating + 1;
-	}
-	self.owner.movetype = 9;
-
-//	self.nextthink = (time + 0.500000);
-	self.nextthink = time + 0.01;
-	self.think = PackFloat;
 };
 
 // This is the function that will convert an item to a backpack
@@ -229,6 +205,8 @@ void() info_notnull =
 	{
 		ConvertToBackPack ();
 	}
+	if (self.groupname == "anyflag")
+		ConvertToFlag(0);
 	if (self.groupname == "blueflag")
 		ConvertToFlag(1);
 	if (self.groupname == "redflag")
@@ -241,6 +219,8 @@ void() func_goalinfo =
 	{
 		ConvertToBackPack ();
 	}
+	if (self.groupname == "anyflag")
+		ConvertToFlag(0);
 	if (self.groupname == "blueflag")
 		ConvertToFlag(1);
 	if (self.groupname == "redflag")
@@ -252,6 +232,9 @@ void() func_goalitem =
 	if (self.give != "")
 	{
 		ConvertToBackPack ();
+	}
+	if (self.groupname == "anyflag" && self.gameindex != 3) {
+		ConvertToFlag(0);
 	}
 	if (self.groupname == "blueflag" && self.gameindex != 3) {
 		ConvertToFlag(1);
@@ -265,7 +248,7 @@ void() func_goalitem =
 //This works for q3f_forts and machse and a couple other ones. 
 void(float tno) ConvertToGoal =
 {
-	if (!self.teamscore)
+	if (!self.holding)
 		return;
 	if (tno == 1)
 	{
@@ -278,6 +261,15 @@ void(float tno) ConvertToGoal =
 		self.team_no = 1;
 		self.axhitme = 100;
 		self.items_allowed = 100;
+	}
+	if (tno == 0)
+	{
+		self.axhitme = ANY_GOAL;
+		self.items_allowed = ANY_GOAL;
+		if (self.team_owner == "blue" || self.owned_by == 1)
+			self.team_no = 1;
+		else if (self.team_owner == "red" || self.owned_by == 2)
+			self.team_no = 2;
 	}
 
 	self.is_converted_goal = "yes"; // used with spawn point finder, no connnection with the actual conversion
@@ -300,6 +292,8 @@ void() CheckIfQ3FTrigger =			// Handles trigger_multiples from Q3F/ETF -- called
 		ConvertToGoal (1);
 	if (self.holding == "redflag")
 		ConvertToGoal (2);
+	if (self.holding == "anyflag")
+		ConvertToGoal (0);
 	if (self.holding == "oneflag" && self.allowteams == "blue")
 		ConvertToGoal (1);
 	if (self.holding == "oneflag" && self.allowteams == "red")

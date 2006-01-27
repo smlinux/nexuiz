@@ -7,6 +7,8 @@ float sv_gravity;
 .float ladder_time;
 .entity ladder_entity;
 .float gravity;
+.float slip_time;
+.float slip_amount;
 
 vector HorizVelocity(vector vel)
 {
@@ -252,6 +254,8 @@ void SV_PlayerPhysics()
 			v = self.velocity;
 			v_z = 0;
 			f = vlen(v);
+			if (self.slip_time > time)
+				sv_friction = sv_friction / self.slip_amount;
 			if (f < classstopspeed)//sv_stopspeed)
 				f = 1 - frametime * (classstopspeed / f) * sv_friction;//sv_stopspeed / f) * sv_friction;
 			else

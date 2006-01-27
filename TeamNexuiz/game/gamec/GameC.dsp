@@ -439,6 +439,10 @@ SOURCE=.\tfplats.c
 
 SOURCE=.\tfq3fitems.c
 # End Source File
+# Begin Source File
+
+SOURCE=.\tn_misc.c
+# End Source File
 # End Group
 # Begin Group "TF combat"
 

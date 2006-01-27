@@ -1179,7 +1179,7 @@ void(entity Goal, entity Player, entity AP, float addb) Apply_Results =
 		self = oldself;
 	}
 	//if (Player.playerclass == 8 && (Goal.goal_result & 16)) // In nextf, spy class is "2"
-	if (Player.class == 2 && (Goal.goal_result & 16))
+	if (Player.class == CLASS_SPY && (Goal.goal_result & 16))
 	{
 		self.immune_to_check = time + 4;
 		//Spy_RemoveDisguise(Player);		// Wazat -- help [incomplete]

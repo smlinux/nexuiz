@@ -5,7 +5,7 @@ entity	activator;
 string	string_null;
 
 //entity	casing;
-entity dest;
+//entity dest;
 
 // Fields
 

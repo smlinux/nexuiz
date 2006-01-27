@@ -118,6 +118,7 @@ void () item_ctf_flag =
 	if (!self.allowteams)
 	{
 		bprint("Fixme!! Object located at ",vtos(self.origin)," has no allowteams property set!\n");
+		bprint("allowteams property must be set to either red blue yellow green or any\n");
 		return;
 	}
 	if ((!self.delay) && (!self.wait))
@@ -137,6 +138,11 @@ void () item_ctf_flag =
 		self.groupname = "blueflag";
 		self.mdl = "models/flags/r_flag.md3";
 	}
+	else if (self.allowteams == "any")
+	{
+		self.groupname = "anyflag";
+//		self.mdl = "models/flags/n_flag.md3";
+	}
 
 	func_goalitem ();
 };
@@ -152,7 +158,18 @@ void () item_ctf_goal =
 	if (!self.cap_message)
 		self.netname = "Blue brings home the Flag";
 	if (self.allowteams == "blue")
-		ConvertToFlag(1);
+	{
+		self.holding = "blueflag";
+		ConvertToGoal(1);
+	}
 	else if (self.allowteams == "red")
-		ConvertToFlag(2);
+	{
+		self.holding = "redflag";
+		ConvertToGoal(2);
+	}
+	else if (self.allowteams == "any")
+	{
+		self.holding = "anyflag";
+		ConvertToGoal(0);
+	}
 };

@@ -1301,8 +1301,8 @@ float (float tno) TeamFortress_TeamSet =
 		stuffcmd (self, "\n");
 		self.team_no = tno;
 		self.lives = TeamFortress_TeamGetLives (tno);
-		//if ((self.playerclass == 0))
-		if ((self.class == 0))
+		//if ((self.class == 0))
+		if (self.playerclass == 0)
 		{
 			if (TeamFortress_TeamIsCivilian (self.team_no))
 			{
