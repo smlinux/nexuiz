@@ -265,7 +265,7 @@ void() W_WeaponFrame =
 	makevectors(self.v_angle);
 
 	// Change weapon
-	if (self.weapon != self.switchweapon)
+	if (self.weapon != self.switchweapon && self.is_feigning != 1)
 	{
 		//bprint("switching weapon: ");
 		//bprint(ftos(self.weapon));

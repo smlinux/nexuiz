@@ -416,7 +416,7 @@ void () TeamFortress_PrimeGrenade =
 	local string ptime;
 	local entity tGrenade;
 
-	if (((self.tfstate & 1) || (self.tfstate & 1024)))
+	if (((self.tfstate & 1) || (self.tfstate & 1024) || self.is_feigning == 1))
 	{
 		return;
 	}

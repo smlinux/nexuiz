@@ -141,6 +141,55 @@ void() sandball_goal =
 	self.touch = GoalTouch;
 };
 
+void() PuckTouch = 
+{
+	if (other.classname == "player" && self.last_used <= time)
+	{
+		sound(self, 3, "zombie/z_fall.wav", 0.8, TRUE);
+		self.last_used = time + 0.3;
+	}
+	if (other.classname != "player")
+	{
+		sound(self, TRUE, "zombie/z_hit.wav", TRUE, TRUE);
+	}
+	if (other.classname == "player")
+	{
+		makevectors(other.v_angle);
+		self.velocity = other.velocity + v_forward * 100/* + v_up * 200*/;
+		//self.angles = -1 * (vectoangles (self.velocity));
+		v_forward_y = 0;
+		v_forward_z = 0;
+		self.avelocity = -1 * ((v_forward * 250) + crandom() * v_right);
+		self.lastplayer = other;
+	}
+};
+
+void() PuckCheck = 
+{
+	self.movetype = 10;
+	self.nextthink = time + 15;
+	self.effects = FALSE;
+};
+
+void() puck = 
+{
+	if (CheckExistence() == FALSE)
+	{
+		dremove(self);
+		return;
+	}
+	precache_model("models/puck/puck.md3");
+	setmodel(self, "models/puck/puck.md3");
+	self.movetype = MOVETYPE_WALK;
+	setsize(self, '-16 -16 -14', '16 16 10');
+	self.solid = TRUE;
+	self.touch = PuckTouch;
+	self.classname = "ball";
+	self.think = PuckCheck;
+	self.nextthink = time + 15;
+	self.oldorigin = self.origin;
+};
+
 
 vector(vector ang) SUB_NormalizeAngles = 
 {
