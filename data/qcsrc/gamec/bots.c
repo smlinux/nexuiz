@@ -199,7 +199,7 @@ void() Bots_Shared =
 				if (bot)
 				{
 					bot.bot_type = BOT_TYPE_AUTOURRE;
-					bot_number =+ 1;
+					bot_number += 1;
 				}
 			}
 			else
@@ -208,7 +208,7 @@ void() Bots_Shared =
 				if (bot)
 				{
 					bot.bot_type = BOT_TYPE_AUTOMAUVE;
-					bot_number =+ 1;
+					bot_number += 1;
 				}
 			}
 		}
