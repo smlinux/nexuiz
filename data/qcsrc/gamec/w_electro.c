@@ -6,7 +6,14 @@ void() electro_select_01;
 
 float() electro_check =
 {
-	if (self.ammo_cells > 2)
+	if (self.ammo_cells >= 4)
+		return TRUE;
+	return FALSE;
+};
+
+float() electro_check2 =
+{
+	if (self.ammo_cells >= 1)
 		return TRUE;
 	return FALSE;
 };
@@ -307,16 +314,16 @@ void()	electro_fire1_01 =
 };
 void()  electro_fire2_03 =
 {
-	weapon_doattack(electro_check, electro_check, W_Electro_Attack2);
+	weapon_doattack(electro_check2, electro_check2, W_Electro_Attack2);
 	weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_electro_refire3"), electro_ready_01);
 }
 void()  electro_fire2_02 =
 {
-	weapon_doattack(electro_check, electro_check, W_Electro_Attack2);
+	weapon_doattack(electro_check2, electro_check2, W_Electro_Attack2);
 	weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_electro_refire3"), electro_fire2_03);
 }
 void()  electro_fire2_01 =
 {
-	weapon_doattack(electro_check, electro_check, W_Electro_Attack2);
+	weapon_doattack(electro_check2, electro_check2, W_Electro_Attack2);
 	weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_electro_refire3"), electro_fire2_02);
 }
