@@ -143,11 +143,18 @@ Known Bugs
 	the wall.
 	Cause: The DarkPlaces engine has collision issues in q3bsp, thus
 	nothing I can affect.
-	Solution: re-aim slightly and try again.
-2) Resizing sometimes doesn't go all the way.
+	Workaround: re-aim slightly and try again until it works.
+2) Resizing (most often down-sizing) sometimes doesn't go all the way.
 	Cause: Unknown.
-	Solution: Re-resize with same parameters until it reaches the desired
+	Workaround: Re-resize with same parameters until it reaches the desired
 	size.
+3) Link flags mess up after saving and loading the navnode file
+	Cause: Unknown. (I do have a clue though)
+	Workaround: save the navnode file, restart the map, load the navnode
+	file, and without making other changes, fix the flags and save again.
+	If you make flag-unrelated changes, it's likely to mess up flags on
+	closeby navnodes, at which point you need to repeat the steps. I'd
+	recommend making flag related stuff after you've made everything else.
 
 Legal
 -----
