@@ -1,6 +1,9 @@
-float BOTTYPE_MAUVEBOT = 0;
-float BOTTYPE_URREBOT = 1;
-.float bottype;
+float BOT_TYPE_AUTOURRE = 0;
+float BOT_TYPE_AUTOMAUVE = 1;
+float BOT_TYPE_URREBOT = 2;
+float BOT_TYPE_MAUVEBOT = 3;
+.float bot_type;
+float bot_number;
 
 /*
 MauveBot v1.0 for Nexuiz
@@ -22,16 +25,16 @@ float SEARCH_DIST = 1000;
 
 .float search_time;
 
-float bot_number;
+float mauvebots;
 
-void() add_MauveBot;
+entity() add_MauveBot;
 void() remove_MauveBot;
 
 /*
 UrreBot 1.5 for Nexuiz
 */
 
-entity navnode_chain, bot_chain;
+entity navnode_chain, urrebot_chain;
 float navnodes, loadstep;
 .entity list, link0, link1, link2, link3, link4, link5, link6, link7, link8, link9;
 .entity link10, link11, link12, link13, link14, link15, link16, link17, link18, link19;
@@ -73,7 +76,7 @@ float LF_REMOTE = 16;
 
 .entity plane_chain;
 
-float urrebots, actualurrebots, urrebots_strategytime, urrebots_combattime;
+float urrebots, urrebots_strategytime, urrebots_combattime;
 
 entity strategytoken;
 float strategytime;
@@ -86,7 +89,7 @@ void() UrreBotThink;
 void() LoadNavNodes;
 void() LinkNavNodes;
 void() ItemEvals;
-void() UrreBotAdd;
+entity() UrreBotAdd;
 void() UrreBotRemove;
 
 float(vector m1, vector m2, vector m3, vector m4) boxesoverlap = {return m2_x >= m3_x && m1_x <= m4_x && m2_y >= m3_y && m1_y <= m4_y && m2_z >= m3_z && m1_z <= m4_z;};
@@ -97,52 +100,117 @@ void() SUB_Remove;
 float JoinBestTeam(entity pl, float only_return_best);
 float sv_maxspeed;
 
+void() AutoBotRemove =
+{
+	local entity ent, t;
+
+	ent = findchain(classname, "player");
+	while (ent)
+	{
+		if (clienttype(ent) == CLIENTTYPE_BOT)
+		{
+			if (ent.bot_type != BOT_TYPE_URREBOT && ent.bot_type != BOT_TYPE_MAUVEBOT)
+			{
+				if (self.list)
+				{
+					if (urrebot_chain == self)
+						urrebot_chain = self.list;
+					else
+					{
+						t = find(world, classname, "player");
+						while(t)
+						{
+							if (t.list == ent)
+								t.list = ent.list;
+							t = find(t, classname, "player");
+						}
+					}
+				}
+				if (bot_number > 0)
+					bot_number -= 1;
+				//if(cvar("g_lms") && self.frags < 1) // DP_SV_BOTCLIENT handles this automaticly
+				//	lms_dead_count -= 1;
+				dropclient(ent);
+			}
+		}
+		ent = ent.chain;
+	}
+};
+
 void() Bots_Shared =
 {
-	local float flo;
+	local entity bot;
+	local float f;
 
 	if (time >= 3)
 	{
-		// MauveBots
-		flo = cvar("bot_number");
-		if (flo > bot_number)
-			add_MauveBot();
-		else if (flo < bot_number)
-			remove_MauveBot();
-
 		// UrreBots
-		urrebots = cvar("urrebots");
+		if (loadstep == 0)
+		{
+			LoadNavNodes();
+			loadstep = 1;
+			return;
+		}
+		else if (loadstep == 1)
+		{
+			LinkNavNodes();
+			loadstep = 2;
+			return;
+		}
+		else if (loadstep == 2)
+		{
+			ItemEvals();
+			loadstep = 3;
+			return;
+		}
+		f = cvar("urrebots");
 		urrebots_strategytime = cvar("urrebots_strategytime");
 		urrebots_combattime = cvar("urrebots_combattime");
 		stratsearch_distance = cvar("urrebots_stratsearch_dist");
 		minisearch_distance = cvar("urrebots_minisearch_dist");
-		if (actualurrebots < urrebots)
+		if (urrebots < f)
 		{
-			if (loadstep == 0)
-			{
-				LoadNavNodes();
-				loadstep = 1;
-				return;
-			}
-			else if (loadstep == 1)
-			{
-				LinkNavNodes();
-				loadstep = 2;
-				return;
-			}
-			else if (loadstep == 2)
-			{
-				ItemEvals();
-				loadstep = 3;
-				return;
-			}
-			UrreBotAdd();
+			bot = UrreBotAdd();
+			bot.bot_type = BOT_TYPE_URREBOT;
+			urrebots = urrebots + 1;
 		}
-		if (actualurrebots > urrebots)
+		if (urrebots > f)
 			UrreBotRemove();
+
+		// MauveBots
+		f = cvar("mauvebots");
+		if (f > mauvebots)
+		{
+			bot = add_MauveBot();
+			bot.bot_type = BOT_TYPE_MAUVEBOT;
+			mauvebots = mauvebots + 1;
+		}
+		else if (f < mauvebots)
+			remove_MauveBot();
+
+		// AutoBots
+		f = cvar("bot_number");
+		if (f > bot_number)
+		{
+			if (navnodes)
+			{
+				UrreBotAdd();
+				bot.bot_type = BOT_TYPE_AUTOURRE;
+				bot_number =+ 1;
+			}
+			else
+			{
+				add_MauveBot();
+				bot.bot_type = BOT_TYPE_AUTOMAUVE;
+				bot_number =+ 1;
+			}
+		}
+		else if (f < bot_number)
+			AutoBotRemove();
 	}
 	else
 	{
+		AutoBotRemove();
 		remove_MauveBot();
 		UrreBotRemove();
 	}

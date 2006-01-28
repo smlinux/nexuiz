@@ -597,8 +597,8 @@ void ClientDisconnect (void)
 	
 	DropAllRunes(self);
 	// decrease player count for lms
-	if(clienttype(self) !=  CLIENTTYPE_BOT)
-		player_count -= 1;
+	// if(clienttype(self) !=  CLIENTTYPE_BOT) // WHY?! bots are equally clients, let them be!
+	player_count -= 1;
 	// player was dead, decrease dead count
 	if(cvar("g_lms") && self.frags < 1)
 		lms_dead_count -= 1;

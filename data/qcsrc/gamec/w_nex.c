@@ -120,7 +120,6 @@ void(float req) w_nex =
 void W_Nex_Attack (void)
 {
 	local vector org, org2;
-	local vector end;
 	local entity flash;
 
 	local vector trueaim;

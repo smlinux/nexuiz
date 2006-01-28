@@ -154,9 +154,9 @@ string () PickARandomName =
 };
 
 // Adds a bot to the server
-void() add_MauveBot =
+entity() add_MauveBot =
 {
-	local entity oldself;
+	local entity oldself, ret;
 	local float shirt, pants;
 	local string str;
 
@@ -165,10 +165,10 @@ void() add_MauveBot =
 	if (!self)
 	{
 		bprint("Can not add bot, server full.\n");
-		str = ftos(bot_number);
-		cvar_set("bot_number", str);
+		str = ftos(mauvebots);
+		cvar_set("mauvebots", str);
 		self = oldself;
-		return;
+		return world;
 	}
 
 	if(teamplay)
@@ -194,9 +194,10 @@ void() add_MauveBot =
 		self.skill_level = 10;
 	if (self.skill_level < 1)
 		self.skill_level = 1;
+	ret = self;
 	self = oldself;
 
-	bot_number = bot_number + 1;
+	return ret;
 };
 
 void() remove_MauveBot = 
@@ -204,7 +205,7 @@ void() remove_MauveBot =
 	local float flo, i;
 	local entity ent;
 
-	flo = floor(random() * bot_number);
+	flo = floor(random() * mauvebots);
 	
 	ent = find(world, classname, "player");
 	
@@ -212,16 +213,16 @@ void() remove_MauveBot =
 	{
 		if (clienttype(ent) == CLIENTTYPE_BOT)
 		{
-			if (ent.bottype == BOTTYPE_MAUVEBOT) // Urre
+			if (ent.bot_type == BOT_TYPE_MAUVEBOT)
 			{
 				if (flo == i)
 				{
 					dropclient(ent);
 					// bot was dead, so decrease dead count
-					if(cvar("g_lms") && self.frags < 1)
-						lms_dead_count -= 1;
-					if (bot_number > 0)
-						bot_number = bot_number - 1;
+					// if(cvar("g_lms") && self.frags < 1) DP_SV_BOTCLIENT handles this automaticly
+					//	lms_dead_count -= 1;
+					if (mauvebots > 0)
+						mauvebots = mauvebots - 1;
 					return;
 				}
 				i = i + 1;
@@ -426,29 +427,6 @@ void() DodgeProjectile =
 
 void() MauveBot_AI =
 {
-/*
-	if (clienttype(self) != CLIENTTYPE_BOT)
-	{
-		local float flo;
-
-		if (time >= 3)
-		{
-			float botnumbercvar;
-			botnumbercvar = cvar("bot_number");
-			flo = rint(botnumbercvar);
-	                if(flo != botnumbercvar)
-		                cvar_set("bot_number", ftos(flo));
-	
-			if (flo > bot_number)
-				add_MauveBot();
-			else if (flo < bot_number)
-				remove_MauveBot();
-		}
-		else
-			remove_MauveBot();
-		return;
-	}
-*/
 	self.button0 = 0;
 	self.button2 = 0;
 	self.button3 = 0;

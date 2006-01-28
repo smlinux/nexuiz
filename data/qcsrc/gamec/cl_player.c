@@ -284,7 +284,7 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 	}
 	else if(attacker.classname == "player" || attacker.classname == "gib")
 	{
-		if (self.bottype == BOTTYPE_URREBOT)
+		if (self.bot_type == BOT_TYPE_URREBOT || self.bot_type == BOT_TYPE_AUTOURRE)
 		if (!self.enemy)
 		if (vlen(self.origin - attacker.origin) < 1000)
 			self.enemy = attacker;

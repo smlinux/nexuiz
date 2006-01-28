@@ -661,7 +661,7 @@ void() CheckRules_World =
 	if(cvar("g_lms"))
 	{
 		local float clients;
-		clients = player_count + bot_number + actualurrebots;
+		clients = player_count;// + bot_number + actualurrebots; // Whoever did this should read up on DP_SV_BOTCLIENT
 
 		if(lms_dead_count < 0)
 			lms_dead_count = 0;

@@ -1,29 +1,174 @@
+/* --- UrreBotSetup ---
+Issues a random funky name, random colors, playermodel and team to the bot*/
+
+void() UrreBotSetup =
+{
+	local float r, shirt, pants;
+	local string s;
+
+	r = random()*18;
+	if (r <= 1)
+		s = "GrooveMachine";
+	else if (r <= 2)
+		s = "Worm";
+	else if (r <= 3)
+		s = "ClownLock";
+	else if (r <= 4)
+		s = "DiscO";
+	else if (r <= 5)
+		s = "FunkyFresh";
+	else if (r <= 6)
+		s = "DanceWithMe";
+	else if (r <= 7)
+		s = "BodyJiggle";
+	else if (r <= 8)
+		s = "CantSwim";
+	else if (r <= 9)
+		s = "AtomicDog";
+	else if (r <= 10)
+		s = "Follower";
+	else if (r <= 11)
+		s = "BrassMonkey";
+	else if (r <= 12)
+		s = "SirNose";
+	else if (r <= 13)
+		s = "StarChild";
+	else if (r <= 14)
+		s = "GeorgeC";
+	else if (r <= 15)
+		s = "Bootsy";
+	else if (r <= 16)
+		s = "Flashlight";
+	else if (r <= 17)
+		s = "Bodysnatcher";
+	else
+		s = "Boogieboy";
+
+	self.netname = s;
+
+	r = random()*15;
+	if (r <= 1)
+	{
+		self.playermodel = "models/player/carni.zym";
+		if (random() < 0.5)
+			self.playerskin = "0";
+		else
+			self.playerskin = "1";
+	}
+	else if (r <= 2)
+	{
+		self.playermodel = "models/player/crash.zym";
+		self.playerskin = "0";
+	}
+	else if (r <= 3)
+	{
+		self.playermodel = "models/player/grunt.zym";
+		self.playerskin = "0";
+	}
+	else if (r <= 4)
+	{
+		self.playermodel = "models/player/headhunter.zym";
+		self.playerskin = "0";
+	}
+	else if (r <= 5)
+	{
+		self.playermodel = "models/player/insurrectionist.zym";
+		self.playerskin = "0";
+	}
+	else if (r <= 6)
+	{
+		self.playermodel = "models/player/jeandarc.zym";
+		self.playerskin = "0";
+	}
+	else if (r <= 7)
+	{
+		self.playermodel = "models/player/lurk.zym";
+		if (random() < 0.5)
+			self.playerskin = "0";
+		else
+			self.playerskin = "1";
+	}
+	else if (r <= 8)
+	{
+		self.playermodel = "models/player/lycanthrope.zym";
+		self.playerskin = "0";
+	}
+	else if (r <= 9)
+	{
+		self.playermodel = "models/player/marine.zym";
+		self.playerskin = "0";
+	}
+	else if (r <= 10)
+	{
+		self.playermodel = "models/player/nexus.zym";
+		if (random() < 0.5)
+			self.playerskin = "0";
+		else
+			self.playerskin = "1";
+	}
+	else if (r <= 11)
+	{
+		self.playermodel = "models/player/pyria.zym";
+		self.playerskin = "0";
+	}
+	else if (r <= 12)
+	{
+		self.playermodel = "models/player/shock.zym";
+		self.playerskin = "0";
+	}
+	else if (r <= 13)
+	{
+		self.playermodel = "models/player/skadi.zym";
+		self.playerskin = "0";
+	}
+	else if (r <= 14)
+	{
+		self.playermodel = "models/player/specop.zym";
+		self.playerskin = "0";
+	}
+	else
+	{
+		self.playermodel = "models/player/visitant.zym";
+		self.playerskin = "0";
+	}
+
+	if (teamplay)
+		JoinBestTeam(self, 0);
+	else
+	{
+		shirt = floor(random()*15);
+		pants = floor(random()*15);
+		self.clientcolors = pants + shirt * 16;
+	}
+};
+
 /* --- UrreBotAdd ---
 Adds an UrreBot to the server*/
 
-void() UrreBotAdd =
+entity() UrreBotAdd =
 {
-	local entity ent;
+	local entity ent, ret;
 
 	ent = self;
 	self = spawnclient();
 	if (!self)
 	{
 		bprint("Can not add UrreBot, server full\n");
-		cvar_set("bots", ftos(actualurrebots));
+		cvar_set("urrebots", ftos(urrebots));
 		self = ent;
-		return;
+		return world;
 	}
 	UrreBotSetup();
-	self.list = bot_chain;
-	bot_chain = self;
-	self.bottype = BOTTYPE_URREBOT;
+	self.list = urrebot_chain;
+	urrebot_chain = self;
 	ClientConnect();
 	PutClientInServer();
+	ret = self;
 	self = ent;
 
-	strategytoken = bot_chain;
-	actualurrebots = actualurrebots + 1;
+	strategytoken = urrebot_chain;
+
+	return ret;
 };
 
 /* --- UrreBotRemove ---
@@ -38,10 +183,10 @@ void() UrreBotRemove =
 	{
 		if (clienttype(ent) == CLIENTTYPE_BOT)
 		{
-			if (ent.bottype == BOTTYPE_URREBOT)
+			if (ent.bot_type == BOT_TYPE_URREBOT)
 			{
-				if (bot_chain == self)
-					bot_chain = self.list;
+				if (urrebot_chain == self)
+					urrebot_chain = self.list;
 				else
 				{
 					t = find(world, classname, "player");
@@ -52,10 +197,10 @@ void() UrreBotRemove =
 						t = find(t, classname, "player");
 					}
 				}
-				if (actualurrebots > 0)
-					actualurrebots -= 1;
-				if(cvar("g_lms") && self.frags < 1)
-					lms_dead_count -= 1;
+				if (urrebots > 0)
+					urrebots -= 1;
+				//if(cvar("g_lms") && self.frags < 1) // DP_SV_BOTCLIENT handles this automaticly
+				//	lms_dead_count -= 1;
 				dropclient(ent);
 			}
 		}
