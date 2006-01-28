@@ -194,13 +194,13 @@ void() Bots_Shared =
 		{
 			if (navnodes)
 			{
-				UrreBotAdd();
+				bot = UrreBotAdd();
 				bot.bot_type = BOT_TYPE_AUTOURRE;
 				bot_number =+ 1;
 			}
 			else
 			{
-				add_MauveBot();
+				bot = add_MauveBot();
 				bot.bot_type = BOT_TYPE_AUTOMAUVE;
 				bot_number =+ 1;
 			}
