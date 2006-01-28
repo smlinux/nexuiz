@@ -154,19 +154,20 @@ string () PickARandomName =
 };
 
 // Adds a bot to the server
-entity() add_MauveBot =
+entity(float bottype) add_MauveBot =
 {
 	local entity oldself, ret;
 	local float shirt, pants;
-	local string str;
 
 	oldself = self;
 	self = spawnclient();
 	if (!self)
 	{
 		bprint("Can not add bot, server full.\n");
-		str = ftos(mauvebots);
-		cvar_set("mauvebots", str);
+		if (bottype == BOT_TYPE_MAUVEBOT)
+			cvar_set("mauvebots", ftos(mauvebots));
+		else
+			cvar_set("bot_number", ftos(bot_number));
 		self = oldself;
 		return world;
 	}
@@ -186,7 +187,6 @@ entity() add_MauveBot =
 	self.netname = PickARandomName();
  
 	ClientConnect();
-	self.classname = "player";
 	PutClientInServer();
 	self.autoswitch = 1; // bots currently need autoswitching
 	self.skill_level = cvar("skill");

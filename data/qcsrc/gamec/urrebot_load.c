@@ -145,7 +145,7 @@ void() UrreBotSetup =
 /* --- UrreBotAdd ---
 Adds an UrreBot to the server*/
 
-entity() UrreBotAdd =
+entity(float bottype) UrreBotAdd =
 {
 	local entity ent, ret;
 
@@ -154,7 +154,10 @@ entity() UrreBotAdd =
 	if (!self)
 	{
 		bprint("Can not add UrreBot, server full\n");
-		cvar_set("urrebots", ftos(urrebots));
+		if (bottype == BOT_TYPE_URREBOT)
+			cvar_set("urrebots", ftos(urrebots));
+		else
+			cvar_set("bot_number", ftos(bot_number));
 		self = ent;
 		return world;
 	}

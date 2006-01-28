@@ -27,7 +27,7 @@ float SEARCH_DIST = 1000;
 
 float mauvebots;
 
-entity() add_MauveBot;
+entity(float bottype) add_MauveBot;
 void() remove_MauveBot;
 
 /*
@@ -89,7 +89,7 @@ void() UrreBotThink;
 void() LoadNavNodes;
 void() LinkNavNodes;
 void() ItemEvals;
-entity() UrreBotAdd;
+entity(float bottype) UrreBotAdd;
 void() UrreBotRemove;
 
 float(vector m1, vector m2, vector m3, vector m4) boxesoverlap = {return m2_x >= m3_x && m1_x <= m4_x && m2_y >= m3_y && m1_y <= m4_y && m2_z >= m3_z && m1_z <= m4_z;};
@@ -170,7 +170,7 @@ void() Bots_Shared =
 		minisearch_distance = cvar("urrebots_minisearch_dist");
 		if (urrebots < f)
 		{
-			bot = UrreBotAdd();
+			bot = UrreBotAdd(BOT_TYPE_URREBOT);
 			bot.bot_type = BOT_TYPE_URREBOT;
 			urrebots = urrebots + 1;
 		}
@@ -181,7 +181,7 @@ void() Bots_Shared =
 		f = cvar("mauvebots");
 		if (f > mauvebots)
 		{
-			bot = add_MauveBot();
+			bot = add_MauveBot(BOT_TYPE_MAUVEBOT);
 			bot.bot_type = BOT_TYPE_MAUVEBOT;
 			mauvebots = mauvebots + 1;
 		}
@@ -192,17 +192,24 @@ void() Bots_Shared =
 		f = cvar("bot_number");
 		if (f > bot_number)
 		{
+			bot = world;
 			if (navnodes)
 			{
-				bot = UrreBotAdd();
-				bot.bot_type = BOT_TYPE_AUTOURRE;
-				bot_number =+ 1;
+				bot = UrreBotAdd(BOT_TYPE_AUTOURRE);
+				if (bot)
+				{
+					bot.bot_type = BOT_TYPE_AUTOURRE;
+					bot_number =+ 1;
+				}
 			}
 			else
 			{
-				bot = add_MauveBot();
-				bot.bot_type = BOT_TYPE_AUTOMAUVE;
-				bot_number =+ 1;
+				bot = add_MauveBot(BOT_TYPE_AUTOMAUVE);
+				if (bot)
+				{
+					bot.bot_type = BOT_TYPE_AUTOMAUVE;
+					bot_number =+ 1;
+				}
 			}
 		}
 		else if (f < bot_number)
