@@ -365,6 +365,48 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 	if (self.health <= 2)
 	{
 		PlayerKilled(FALSE, inflictor, attacker, damage, deathtype, hitloc, force);
+
+		// make the corpse upright (not tilted)
+		self.angles_x = 0;
+		self.angles_z = 0;
+		// don't spin
+		self.avelocity = '0 0 0';
+		// no weapon when dead
+		self.weaponmodel = "";
+		w_clear();
+		// view from the floor
+		self.view_ofs = '0 0 -8';
+		// toss the corpse
+		self.movetype = MOVETYPE_TOSS;
+		// shootable corpse
+		self.solid = SOLID_CORPSE;
+		// don't stick to the floor
+		self.flags = self.flags - (self.flags & FL_ONGROUND);
+		// dying animation
+		self.deadflag = DEAD_DYING;
+		// when to allow respawn
+		self.death_time = time + 0.5;
+		// when to switch to the dead_frame
+		self.dead_time = time + 2;
+		if (random() < 0.5)
+		{
+			self.die_frame = $die1;
+			self.dead_frame = $dead1;
+		}
+		else
+		{
+			self.die_frame = $die2;
+			self.dead_frame = $dead2;
+		}
+		// start the animation
+		player_anim();
+		// set damage function to corpse damage
+		self.event_damage = PlayerCorpseDamage;
+		// call the corpse damage function just in case it wants to gib
+		self.event_damage(inflictor, attacker, 0, deathtype, hitloc, force);
+		// set up to fade out later
+		SUB_SetFade (self, time + 12 + random () * 4, 1);
+
 	}
 }
 

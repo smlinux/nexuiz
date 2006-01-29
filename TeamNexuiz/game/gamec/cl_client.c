@@ -919,7 +919,7 @@ void player_powerups (void)
 
 void player_regen_health (float maxh, float regen_rate_mod)
 {
-	if (self.health < maxh && time > self.health_regen_delay)
+	if (self.health < maxh && time > self.health_regen_delay && self.health > 2)		// dont regen is HP is 2
 		self.health = bound(0, self.health + regen_rate_mod*(maxh- self.health) * cvar("g_balance_health_regen") * frametime, 1000);
 }
 void player_rot_health (float maxh, float rot_rate_mod)
