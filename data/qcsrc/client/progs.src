@@ -1,0 +1,12 @@
+../../csprogs.dat
+
+defs.c
+
+csqc_constants.h
+csqc_builtins.h
+vars.h
+
+helpers.c
+view.c
+
+main.c
