@@ -1,0 +1,3 @@
+mb1 teleports to aimed location
+remove acceleration/deceleration
+add playerspeed scaler

@@ -68,7 +68,7 @@ Here follows a list of actions, assuming the default binds (mb1 and mb2 are
 mousebuttons):
 	(no help-button)
 mb1 = No effect (feel free to suggest what this button could do)
-mb2 = lock/unlock selection (unlocking will delete all clip points)
+mb2 = lock/unlock selection (*NOTE*: unlocking will delete all clip points)
 scroll-wheel = change gridsize
 	SHIFT
 mb1 = resize to aimed geometry on current axis
