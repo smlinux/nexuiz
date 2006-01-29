@@ -564,9 +564,10 @@ void() UrreBotThink =
 		traceline (v, v + v_forward*f, FALSE, self);
 		if (vlen(trace_endpos - self.aimpoint) < 150)
 		{
-			if (skill < 3)
+			if (skill < 5)
 			{
-				if (random() < 0.3)
+				f = skill*0.1;
+				if (random() < f)
 					self.button0 = 1;
 			}
 			else

@@ -159,7 +159,8 @@ void() Bots_Shared =
 		}
 		else if (loadstep == 2)
 		{
-			ItemEvals();
+			if (navnodes)
+				ItemEvals();
 			loadstep = 3;
 			return;
 		}
@@ -172,7 +173,7 @@ void() Bots_Shared =
 		{
 			bot = UrreBotAdd(BOT_TYPE_URREBOT);
 			bot.bot_type = BOT_TYPE_URREBOT;
-			urrebots = urrebots + 1;
+			urrebots += 1;
 		}
 		if (urrebots > f)
 			UrreBotRemove();
@@ -183,7 +184,7 @@ void() Bots_Shared =
 		{
 			bot = add_MauveBot(BOT_TYPE_MAUVEBOT);
 			bot.bot_type = BOT_TYPE_MAUVEBOT;
-			mauvebots = mauvebots + 1;
+			mauvebots += 1;
 		}
 		else if (f < mauvebots)
 			remove_MauveBot();
