@@ -1,4 +1,4 @@
-../progs.dat
+../../progs.dat // Needed for the new directory structure
 
 gamec/sys.h
 gamec/builtins.h
