@@ -1063,7 +1063,7 @@ void() PutClientInServer =
 	// setmodel (self, "progs/bbox.mdl");
 	setmodel (self, "progs/null.spr");
 	// setsize (self, '-16 -16 -28', '16 16 28');
-	setsize (self, '-1 -1 -1', '1 1 1');
+	setsize (self, '0 0 0', '0 0 0');
 	self.gridsize = 8;
 
 	self.navorg1 = spawn();
