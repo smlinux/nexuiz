@@ -237,6 +237,10 @@ SOURCE=.\g_world.c
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\civilian.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\class.c
 # End Source File
 # Begin Source File

@@ -1281,6 +1281,12 @@ void SV_ParseClientCommand (string s)
 			sprint(self, "You must select a team to join first!\n");
 			return;
 		}
+		if (TeamFortress_TeamIsCivilian (self.team_no))
+		{
+			self.impulse = 1;
+			TeamFortress_ChangeClass ();
+			return;
+		}
 		if (self.playerclass > 0)		// if a class is already chosen
 		{
 			self.tfstate = self.tfstate - (self.tfstate & 8);

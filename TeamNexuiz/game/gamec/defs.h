@@ -175,13 +175,14 @@ float WEP_LAST				= 5;//9;
 
 
 // class definitions
-
+// (TF-numbered class defs in tfdefs.c)
 float	CLASS_SCOUT		=  1;
 float	CLASS_SPY		=  2;
 float	CLASS_SOLDIER	=  4;
 float	CLASS_PYRO		=  8;
 float	CLASS_MEDIC		= 16;
 float	CLASS_ENGINEER	= 32;
+float	CLASS_CIVILIAN	= 64;
 
 .float team_no;
 

@@ -1856,15 +1856,15 @@ void() TeamFortress_ChangeClass =
 		}
 		return;
 	}*/
-	if (self.impulse != 1)
+	if (self.impulse != 1 && !TeamFortress_TeamIsCivilian(self.team_no))
 	{
 		self.playerclass = self.impulse - 100;
 	}
 	else
 	{
-		self.playerclass = 11;
+		self.playerclass = TF_CLASS_CIVILIAN;
 	}
-	if (self.playerclass == 10)
+	if (self.playerclass == TF_CLASS_RANDOM)
 	{		
 		sprint(self, "Random Playerclass.\n");
 		self.tfstate = self.tfstate | 8;
@@ -1955,6 +1955,9 @@ void () Do_TFClass_Conversion =
 		return;
 	}
 
+	if (self.playerclass == TF_CLASS_CIVILIAN) {
+		self.class = CLASS_CIVILIAN;
+		cst = "civilian"; }
 	if (self.playerclass == TF_CLASS_SCOUT) {
 		self.class = CLASS_SCOUT;
 		cst = "scout"; }
@@ -1981,7 +1984,11 @@ void () Do_TFClass_Conversion =
 
 	if (!self.class == cl)
 	{
-		if (cst == "engineer")
+		if (cst == "civilian")
+		{
+			self.playermodel = strcat("models/class/",cst,".zym");
+		}
+		else if (cst == "engineer")
 		{
 			self.playermodel = strcat("models/class/",cst,"_other.zym");
 		}

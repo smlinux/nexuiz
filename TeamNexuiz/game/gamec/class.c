@@ -24,6 +24,8 @@ string NameOfClass(float cl)
 		return "Medic";
 	if(cl == CLASS_ENGINEER)
 		return "Engineer";
+	if(cl == CLASS_CIVILIAN)
+		return "Civilian";
 	return "Invalid Class";
 }
 
@@ -122,6 +124,10 @@ void ChangeClass(float announce_change, float instant_change)
 	if(self.class == CLASS_ENGINEER)
 		BecomeEngineer(portion);
 
+	if(self.class == CLASS_CIVILIAN)
+		BecomeCivilian(portion);
+
+
 	// set starting health
 	if(!instant_change)//portion == 1.0)
 		self.health = ceil(self.max_health * 1.2);
@@ -214,6 +220,11 @@ void SetPlayerSpeed(entity pl)
 		s = cvar("g_balance_class_engineer_speed");
 		//m = cvar("g_balance_class_engineer_mass");
 	}
+	else if(self.class == CLASS_CIVILIAN)
+	{
+		s = cvar("g_balance_class_civilian_speed");
+	}
+
 
 
 	// fixme: if I'm in a manned turret, set my speed to 0
@@ -459,6 +470,8 @@ void ClassPreThink()
 		MedicPreThink();
 	if(self.class == CLASS_ENGINEER)
 		EngineerPreThink();
+	if(self.class == CLASS_CIVILIAN)
+		EngineerPreThink();
 }
 
 void ClassPostThink()
@@ -475,6 +488,8 @@ void ClassPostThink()
 		MedicPostThink();
 	if(self.class == CLASS_ENGINEER)
 		EngineerPostThink();
+	if(self.class == CLASS_CIVILIAN)
+		CivilianPostThink();
 }
 
 /*
