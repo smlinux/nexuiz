@@ -688,6 +688,15 @@ void() PlayerPreThink =
 					else
 						AddPlane(navcurrent, v, f);
 				}
+				else
+				{
+					makevectors (self.v_angle);
+					v = v_forward*-1;
+					traceline(self.origin, self.origin + v_forward*8192, TRUE, self);
+					f = pointcontents(trace_endpos);
+					if (f != CONTENT_SOLID || f != CONTENT_SKY)
+						setorigin(self, trace_endpos + v*8);
+				}
 			}
 		}
 		self.buttonflag = self.buttonflag | B_FLAG0;
@@ -1096,20 +1105,10 @@ void() SV_PlayerPhysics =
 	if (self.punchvector != '0 0 0')
 		self.punchvector = self.punchvector * (1 - frametime * 3);
 
-	// if dead, behave differently
-	if (self.deadflag)
-		return;
-
-	if (self.movetype == MOVETYPE_FLY || self.movetype == MOVETYPE_NOCLIP)
+	if (vlen(self.movement))
 	{
-		self.velocity = self.velocity * (1 - frametime * sv_friction);
 		makevectors(self.v_angle);
 		wishvel = v_forward * self.movement_x + v_right * self.movement_y + '0 0 1' * self.movement_z;
-	}
-
-	// acceleration
-	if (time >= self.teleport_time)
-	{
 		wishdir = normalize(wishvel);
 		wishspeed = vlen(wishvel);
 		if (wishspeed > sv_maxspeed)
@@ -1118,4 +1117,6 @@ void() SV_PlayerPhysics =
 		if (f > 0)
 			self.velocity = self.velocity + wishdir * min(f, sv_accelerate * frametime * wishspeed);
 	}
+	else
+		self.velocity = '0 0 0';
 };

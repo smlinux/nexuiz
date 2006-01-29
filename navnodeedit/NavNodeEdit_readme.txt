@@ -1,7 +1,6 @@
 Title		: NavNodeEdit
-Filename	: ...
-Version		: ?
-Date		: ?
+Version		: 0.9
+Date		: 20060129
 Author		: Marko "Urre" Permanto
 Email		: imunreal A to the T gmail D to the O to the T com
 Website		: http://urre.quakedev.com/
@@ -17,7 +16,7 @@ Quake C		: aye!
 Sound		: no
 MDL		: Yes
 Level		: no
-Gfx		: no
+Gfx		: Uh-huh
 
 Format of QuakeC (if a Quake C Mod)
 -----------------------------------
@@ -67,7 +66,7 @@ mousebutton2, impulse 101 to scrollwheel-up, impulse 102 to scrollwheel-down,
 Here follows a list of actions, assuming the default binds (mb1 and mb2 are
 mousebuttons):
 	(no help-button)
-mb1 = No effect (feel free to suggest what this button could do)
+mb1 = Teleport yourself to aimed location
 mb2 = lock/unlock selection (*NOTE*: unlocking will delete all clip points)
 scroll-wheel = change gridsize
 	SHIFT

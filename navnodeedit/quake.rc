@@ -1,10 +1,12 @@
 // load the base configuration
 exec default.cfg
 
-// navnodeedit stuff
+// navnodeedit stuff // NOTE: default.cfg is not included as you would normally
+// do for mods, all mod specific stuff is instead here, to get the default
+// graphics settings from nexuiz default.cfg
 exec navnodeedit.cfg
 
-// load the last saved configuration
+// load the last saved configuration // NOTE: included to override nexuiz binds and some settings
 exec config.cfg
 
 // run a user script file if present
