@@ -545,7 +545,7 @@ void() NextLevel =
 	intermission_running = 1;
 
 // enforce a wait time before allowing changelevel
-	intermission_exittime = time + 5;
+	intermission_exittime = time + cvar("sv_mapchange_delay");
 
 	WriteByte (MSG_ALL, SVC_CDTRACK);
 	WriteByte (MSG_ALL, 3);
@@ -562,6 +562,10 @@ void() NextLevel =
 		other.movetype = MOVETYPE_NONE;
 		other.angles = other.v_angle;
 		other.angles_x = other.angles_x * -1;
+		
+		self = other;
+		weapon_action(other.weapon, WR_IDLE);
+
 		/*
 		if (pos != world);
 		{

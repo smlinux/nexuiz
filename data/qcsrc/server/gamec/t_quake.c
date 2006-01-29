@@ -30,6 +30,7 @@ void junk_function ()
 	self.cursor_active = 0;
 	self.cursor_screen = '0 0 0';
 	self.cursor_trace_start = '0 0 0';
+	self.cursor_trace_endpos = '0 0 0';
 	self.ping = 0;
 	self.roomtype = 0;
 	self.radius = 0;

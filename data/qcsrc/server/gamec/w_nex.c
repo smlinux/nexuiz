@@ -19,7 +19,7 @@ float() nex_check =
 
 void nex_selfkill (void)
 {
-	if (!cvar("g_minstagib"))
+	if (!cvar("g_minstagib") || gameover)
 		return;
 
 	if (self.ammo_cells <= 0)

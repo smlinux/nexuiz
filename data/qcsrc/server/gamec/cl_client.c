@@ -182,7 +182,7 @@ void PutObserverInServer (void)
 		bprint (strcat("^4", self.netname, "^4 is spectating now\n"));
 
 	self.classname = "observer";
-	self.health = 666;
+	self.health = 6666;
 	self.takedamage = DAMAGE_NO;
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NOCLIP;

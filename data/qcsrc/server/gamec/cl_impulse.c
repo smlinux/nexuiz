@@ -61,6 +61,7 @@ void ImpulseCommands (void)
 	else if(self.impulse == 18)
 	{
 		PrintWelcomeMessage(self);
+		return;
 	}
 	else if (self.impulse == 99 && cvar("sv_cheats"))
 	{
