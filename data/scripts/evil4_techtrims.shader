@@ -514,6 +514,8 @@ textures/evil4_lights/l_light_w
 //
 textures/evil4_lights/mtl_l1 
 {
+	q3map_surfacelight 1000	 
+        q3map_lightimage textures/evil4_lights/mtl_l1.tga 
 	{
 		map textures/evil4_lights/mtl_l1_fx.tga 
 		//blendfunc add 

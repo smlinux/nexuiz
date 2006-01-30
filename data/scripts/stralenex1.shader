@@ -1,3 +1,43 @@
+textures/stralenex1/light_tube_green
+{
+	q3map_surfacelight 1000	 
+	qer_editorimage textures/stralenex1/light_tube_green.tga
+        q3map_lightimage textures/stralenex1/light_tube_green_glow.tga 
+	q3map_surfacelight 1000	
+	{
+		map textures/light_tube_green_glow.tga 
+		//blendfunc add 
+       tcmod scale 12 1  
+		rgbGen identity 
+		tcMod scroll 0 1 
+        
+	}
+	{
+		map textures/light_tube_green_glow.tga 
+		blendfunc add 
+       //tcmod scale 25 1   
+		rgbGen identity 
+		tcMod scroll 1 0 
+        
+	}
+	{
+		map textures/stralenex1/light_tube_green.tga 
+		blendfunc blend  
+		rgbGen identity 
+	}
+	{
+		map textures/stralenex1/light_tube_green_glow.tga 
+		blendfunc add 
+       tcmod scale 1 1  
+	}
+	{
+		map $lightmap 
+		rgbGen identity 
+		blendfunc filter 
+	}
+} 
+
+
 textures/stralenex1/e8_bluestrip
 {
 	surfaceparm nolightmap
@@ -94,6 +134,23 @@ textures/stralenex1/strale_brown_box
 	q3map_surfacelight 100
 	q3map_lightimage textures/strale_grey/ygrey_up.tga
 	q3map_sun .75 .65 .6 130 255 80
+
+}
+
+textures/stralenex1/greennebula
+{
+	qer_editorimage env/stralenex5/greennebula_bk.tga
+
+	surfaceparm nolightmap
+	surfaceparm noimpact
+	surfaceparm nomarks
+	surfaceparm sky
+
+	skyparms env/stralenex5/greennebula - -
+	q3map_surfacelight 80
+	q3map_lightimage textures/stralenex5/stralenex5_up.tga
+	q3map_sun 0.3 0.33 0.3 60 80 20
+	/*q3map_sun <red> <green> <blue> <intensity> <degrees> <elevation>*/
 
 }
 
