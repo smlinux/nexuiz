@@ -1,4 +1,4 @@
-Aggressor (dom_nexdm14)
+Aggressor (dom_nexdmextra2)
 maps/nexdm14
 
 Small map with brutal fast
