@@ -186,6 +186,7 @@ void PutObserverInServer (void)
 	self.takedamage = DAMAGE_NO;
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NOCLIP;
+	self.flags = FL_NOTARGET;
 	self.armorvalue = 666;
 	self.effects = 0;
 	self.armorvalue = cvar("g_balance_armor_start");

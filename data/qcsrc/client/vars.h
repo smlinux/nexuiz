@@ -5,7 +5,6 @@ vector pl_view_right;
 vector pl_view_up;
 
 float pl_xyspeed;
-vector pl_avelocity;
 
 vector vieworg;
 

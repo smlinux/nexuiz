@@ -26,6 +26,8 @@ void View_Update (void)
 	R_SetView(VF_ORIGIN, vieworg);
 	R_SetView(VF_ANGLES, input_angles);
 
+	cprint(ftos(input_buttons));
+
 	if(!cvar("cg_showvelocity"))
 		return;
 
