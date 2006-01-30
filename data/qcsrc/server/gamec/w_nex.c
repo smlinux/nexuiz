@@ -141,7 +141,7 @@ void W_Nex_Attack (void)
 		FireRailgunBullet (org, trueaim, cvar("g_balance_nex_damage"), IT_NEX);
 
 	// trace as if shot started inside gun
-	traceline (org, trueaim, TRUE, self);
+	traceline_hitcorpse (self,org, trueaim, TRUE, self);
 	// show as if shot started outside of gun
 	org = self.origin + self.view_ofs + v_forward * 35 + v_right * 14 + v_up * -8;
 	org2 = self.origin + self.view_ofs + v_forward * 52 + v_right * 14 + v_up * -8;
