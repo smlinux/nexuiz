@@ -1,3 +1,4 @@
+#pragma flag off fastarrays // make dp behave with new fteqcc versions. remove when dp bug with fteqcc fastarrays is fixed
 
 // DO NOT modify the contents of this file, or you will risk incompatibility with the game engine.
 

@@ -1,3 +1,6 @@
+#pragma flag off fastarrays // make dp behave with new fteqcc versions. remove when dp bug with fteqcc fastarrays is fixed
+
+
 //NOTE: THIS IS AN INTERFACE FILE. DO NOT EDIT.
 //MODIFYING THIS FILE CAN RESULT IN CRC ERRORS.
 //YOU HAVE BEEN WARNED.
