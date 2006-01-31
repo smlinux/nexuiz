@@ -891,6 +891,7 @@ void (entity Player) TeamFortress_TeamShowMemberClasses =
 };
 
 // Returns class name value
+// We use another function for the TN classnames though..
 string (float pc) TeamFortress_GetClassName =
 {
 	if ((pc == 1))			// Scout is class 1 (normal)
@@ -1558,32 +1559,290 @@ float (float tno) TeamFortress_TeamGetIllegalClasses =
 };
 
 // Check if legal class
-float (float pc, float tno, entity chkr) Check_Class_Scout =
+float (float tno, entity chkr, float NumOnTeam) Check_Class_Scout =
 {
-	if (tno == 1 )
+	if (tno == 1)
 	{
+		if (chkr.team1_scout == -1)
+			return (0);
+		if (chkr.team1_scout != 0 && chkr.team1_scout == NumOnTeam)
+			return (0);
+		else
+			return (1);
 	}
-
+	if (tno == 2)
+	{
+		if (chkr.team2_scout == -1)
+			return (0);
+		if (chkr.team2_scout != 0 && chkr.team2_scout == NumOnTeam)
+			return (0);
+		else
+			return (1);
+	}
+	if (tno == 3)
+	{
+		if (chkr.team3_scout == -1)
+			return (0);
+		if (chkr.team3_scout != 0 && chkr.team3_scout == NumOnTeam)
+			return (0);
+		else
+			return (1);
+	}
+	if (tno == 4)
+	{
+		if (chkr.team4_scout == -1)
+			return (0);
+		if (chkr.team4_scout != 0 && chkr.team4_scout == NumOnTeam)
+			return (0);
+		else
+			return (1);
+	}
 };
 
-float (float pc, float tno, entity chkr) Check_Class_Soldier =
+float (float tno, entity chkr, float NumOnTeam) Check_Class_Soldier =
 {
+	if (tno == 1)
+	{
+		if (chkr.team1_soldier == -1)
+			return (0);
+		if (chkr.team1_soldier != 0 && chkr.team1_soldier == NumOnTeam)
+			return (0);
+		else
+			return (1);
+	}
+	if (tno == 2)
+	{
+		if (chkr.team2_soldier == -1)
+			return (0);
+		if (chkr.team2_soldier != 0 && chkr.team2_soldier == NumOnTeam)
+			return (0);
+		else
+			return (1);
+	}
+	if (tno == 3)
+	{
+		if (chkr.team3_soldier == -1)
+			return (0);
+		if (chkr.team3_soldier != 0 && chkr.team3_soldier == NumOnTeam)
+			return (0);
+		else
+			return (1);
+	}
+	if (tno == 4)
+	{
+		if (chkr.team4_soldier == -1)
+			return (0);
+		if (chkr.team4_soldier != 0 && chkr.team4_soldier == NumOnTeam)
+			return (0);
+		else
+			return (1);
+	}
+};
+
+float (float tno, entity chkr, float NumOnTeam) Check_Class_Medic =
+{
+	if (tno == 1)
+	{
+		if (chkr.team1_medic == -1)
+			return (0);
+		if (chkr.team1_medic != 0 && chkr.team1_medic == NumOnTeam)
+			return (0);
+		else
+			return (1);
+	}
+	if (tno == 2)
+	{
+		if (chkr.team2_medic == -1)
+			return (0);
+		if (chkr.team2_medic != 0 && chkr.team2_medic == NumOnTeam)
+			return (0);
+		else
+			return (1);
+	}
+	if (tno == 3)
+	{
+		if (chkr.team3_medic == -1)
+			return (0);
+		if (chkr.team3_medic != 0 && chkr.team3_medic == NumOnTeam)
+			return (0);
+		else
+			return (1);
+	}
+	if (tno == 4)
+	{
+		if (chkr.team4_medic == -1)
+			return (0);
+		if (chkr.team4_medic != 0 && chkr.team4_medic == NumOnTeam)
+			return (0);
+		else
+			return (1);
+	}
+};
+
+float (float tno, entity chkr, float NumOnTeam) Check_Class_Pyro =
+{
+	if (tno == 1)
+	{
+		if (chkr.team1_pyro == -1)
+			return (0);
+		if (chkr.team1_pyro != 0 && chkr.team1_pyro == NumOnTeam)
+			return (0);
+		else
+			return (1);
+	}
+	if (tno == 2)
+	{
+		if (chkr.team2_pyro == -1)
+			return (0);
+		if (chkr.team2_pyro != 0 && chkr.team2_pyro == NumOnTeam)
+			return (0);
+		else
+			return (1);
+	}
+	if (tno == 3)
+	{
+		if (chkr.team3_pyro == -1)
+			return (0);
+		if (chkr.team3_pyro != 0 && chkr.team3_pyro == NumOnTeam)
+			return (0);
+		else
+			return (1);
+	}
+	if (tno == 4)
+	{
+		if (chkr.team4_pyro == -1)
+			return (0);
+		if (chkr.team4_pyro != 0 && chkr.team4_pyro == NumOnTeam)
+			return (0);
+		else
+			return (1);
+	}
+};
+
+float (float tno, entity chkr, float NumOnTeam) Check_Class_Engineer =
+{
+	if (tno == 1)
+	{
+		if (chkr.team1_engineer == -1)
+			return (0);
+		if (chkr.team1_engineer != 0 && chkr.team1_engineer == NumOnTeam)
+			return (0);
+		else
+			return (1);
+	}
+	if (tno == 2)
+	{
+		if (chkr.team2_engineer == -1)
+			return (0);
+		if (chkr.team2_engineer != 0 && chkr.team2_engineer == NumOnTeam)
+			return (0);
+		else
+			return (1);
+	}
+	if (tno == 3)
+	{
+		if (chkr.team3_engineer == -1)
+			return (0);
+		if (chkr.team3_engineer != 0 && chkr.team3_engineer == NumOnTeam)
+			return (0);
+		else
+			return (1);
+	}
+	if (tno == 4)
+	{
+		if (chkr.team4_engineer == -1)
+			return (0);
+		if (chkr.team4_engineer != 0 && chkr.team4_engineer == NumOnTeam)
+			return (0);
+		else
+			return (1);
+	}
+};
+
+float (float tno, entity chkr, float NumOnTeam) Check_Class_Spy =
+{
+	if (tno == 1)
+	{
+		if (chkr.team1_spy == -1)
+			return (0);
+		if (chkr.team1_spy != 0 && chkr.team1_spy == NumOnTeam)
+			return (0);
+		else
+			return (1);
+	}
+	if (tno == 2)
+	{
+		if (chkr.team2_spy == -1)
+			return (0);
+		if (chkr.team2_spy != 0 && chkr.team2_spy == NumOnTeam)
+			return (0);
+		else
+			return (1);
+	}
+	if (tno == 3)
+	{
+		if (chkr.team3_spy == -1)
+			return (0);
+		if (chkr.team3_spy != 0 && chkr.team3_spy == NumOnTeam)
+			return (0);
+		else
+			return (1);
+	}
+	if (tno == 4)
+	{
+		if (chkr.team4_spy == -1)
+			return (0);
+		if (chkr.team4_spy != 0 && chkr.team4_spy == NumOnTeam)
+			return (0);
+		else
+			return (1);
+	}
 };
 
 float (float pc) IsLegalClass =
 {
 	local float bit;
+	local float NumOnTeam;
+	local entity te;
 
 // Team:Nexuiz class check
 	local entity findme;
 	local float yesorno;
 
 	findme = find (world,classname,"class_restrictions");
-	if (pc == TF_CLASS_SCOUT)
-		yesorno = Check_Class_Scout(pc, self.team_no, findme);
-	else if (pc == TF_CLASS_SOLDIER)
-		yesorno = Check_Class_Soldier(pc, self.team_no, findme);
+//	findme = find (world, classname, "info_tfdetect");
+	if (findme)
+	{
+		// first, find the number of players of that class on a team
+		te = find (world, classname, "player");
+		while (te)
+		{
+			if (te.playerclass == pc)
+			{
+				if (te.team_no == self.team_no)
+				{
+					NumOnTeam = NumOnTeam + 1;
+				}
+			}
+			te = find (te, classname, "player");
+		}
 
+		// next we check to see if the team is allowed to have that player class and the amount per team allowed for that class
+		if (pc == TF_CLASS_SCOUT)
+			yesorno = Check_Class_Scout(self.team_no, findme, NumOnTeam);
+		else if (pc == TF_CLASS_SOLDIER)
+			yesorno = Check_Class_Soldier(self.team_no, findme, NumOnTeam);
+		else if (pc == TF_CLASS_MEDIC)
+			yesorno = Check_Class_Medic(self.team_no, findme, NumOnTeam);
+		else if (pc == TF_CLASS_PYRO)
+			yesorno = Check_Class_Pyro(self.team_no, findme, NumOnTeam);
+		else if (pc == TF_CLASS_ENGINEER)
+			yesorno = Check_Class_Engineer(self.team_no, findme, NumOnTeam);
+		else if (pc == TF_CLASS_SPY)
+			yesorno = Check_Class_Spy(self.team_no, findme, NumOnTeam);
+
+		return (yesorno);
+	}
 
 /*	if (((spy_off == 1) && (pc == 8)))
 	{
@@ -1681,7 +1940,7 @@ void () TeamFortress_DisplayLegalClasses =
 		gotone = 1;
 		sprint (self, "Scout");
 	}
-	if ((!(illegalclasses & 2) && !(ill & 2)))
+/*	if ((!(illegalclasses & 2) && !(ill & 2)))
 	{
 		if (gotone)
 		{
@@ -1689,7 +1948,7 @@ void () TeamFortress_DisplayLegalClasses =
 		}
 		gotone = 1;
 		sprint (self, "Sniper");
-	}
+	}*/
 	if ((!(illegalclasses & 4) && !(ill & 4)))
 	{
 		if (gotone)

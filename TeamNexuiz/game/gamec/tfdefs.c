@@ -40,6 +40,7 @@ float civilianteams;
 .float team2_scout, team2_soldier, team2_medic, team2_pyro, team2_spy, team2_engineer;
 .float team3_scout, team3_soldier, team3_medic, team3_pyro, team3_spy, team3_engineer;
 .float team4_scout, team4_soldier, team4_medic, team4_pyro, team4_spy, team4_engineer;
+.float team1_civilian, team2_civilian, team3_civilian, team4_civilian;
 
 // Last Spawn Place of Team
 entity lastspawn_team1;
@@ -59,8 +60,8 @@ float TF_CLASS_HWGUY = 6;		//not in NexTF
 float TF_CLASS_PYRO = 7;
 float TF_CLASS_SPY = 8;
 float TF_CLASS_ENGINEER = 9;
-float TF_CLASS_RANDOM = 10;			// Need fucntions for these 2
-float TF_CLASS_CIVILIAN = 11;		////
+float TF_CLASS_RANDOM = 10;			
+float TF_CLASS_CIVILIAN = 11;		
 .float respawn_as_new_class;	// what class the player will respawn as in accordance to tf's .playerclass
 
 // Death Message (we should incorporate this into Team:Nexuiz some time)

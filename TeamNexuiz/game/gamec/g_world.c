@@ -223,6 +223,9 @@ void worldspawn (void)
 	precache_model ("models/magmine/magnetmine.md3");		// mag mine
 	precache_model ("models/sentry/turr1_barrel.md3");
 
+	// Misc TN Stuff
+	precache_model ("models/team/team.sp2");
+
 
 	// plays music for the level if there is any
 	if (self.noise)

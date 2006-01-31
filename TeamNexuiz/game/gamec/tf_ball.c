@@ -10,21 +10,21 @@ void() BallTouch =
 {
 	if (other.classname == "player" && self.last_used <= time)
 	{
-		sound(self, 3, "zombie/z_fall.wav", 0.8, TRUE);
+		sound(self, 3, "ball/bounce_fall.wav", 0.8, TRUE);
 		self.last_used = time + 0.3;
 	}
 	if (other.classname != "player")
 	{
-		sound(self, TRUE, "zombie/z_hit.wav", TRUE, TRUE);
+		sound(self, TRUE, "ball/bounce_hit.wav", TRUE, TRUE);
 	}
 	if (other.classname == "player")
 	{
 		makevectors(other.v_angle);
 		self.velocity = other.velocity + v_forward * 100 + v_up * 200;
 		//self.angles = -1 * (vectoangles (self.velocity));
-		v_forward_y = 0;
-		v_forward_z = 0;
-		self.avelocity = -1 * ((v_forward * 250) + crandom() * v_right);
+//		v_forward_y = 0;
+//		v_forward_z = 0;
+		self.avelocity = -1 * ((v_forward * 250)/* + crandom() * v_right*/);
 		self.lastplayer = other;
 	}
 };
@@ -49,7 +49,7 @@ void() ballstart =
 void() BallStart = 
 {
 	local entity te;
-	sound(self, 3, "sandball/whistle.wav", TRUE, FALSE);
+	sound(self, 3, "ball/whistle.wav", TRUE, FALSE);
 	te = find(world, classname, "ballstart");
 	while (te)
 	{
@@ -93,7 +93,7 @@ void() GoalTouch =
 	{
 		return;
 	}
-	sound(self, 3, "sandball/goal.wav", TRUE, FALSE);
+	sound(self, 3, "ball/goal.wav", TRUE, FALSE);
 	self.last_used = time + 10;
 	te = find(world, classname, "player");
 	while (te)
@@ -129,9 +129,10 @@ void() sandball_goal =
 		return;
 	}
 	precache_model("progs/null.mdl");
-	precache_sound("sandball/goal.wav");
-	precache_sound("sandball/whistle.wav");
-	precache_sound("zombie/z_fall.wav");
+	precache_sound("ball/goal.wav");
+	precache_sound("ball/whistle.wav");
+	precache_sound("ball/bounce_fall.wav");
+	precache_sound("ball/bounce_hit.wav");
 	setmodel(self, "progs/null.mdl");
 	self.movetype = FALSE;
 	self.skin = self.team_no;
@@ -145,12 +146,12 @@ void() PuckTouch =
 {
 	if (other.classname == "player" && self.last_used <= time)
 	{
-		sound(self, 3, "zombie/z_fall.wav", 0.8, TRUE);
+		sound(self, 3, "ball/bounce_fall.wav", 0.8, TRUE);
 		self.last_used = time + 0.3;
 	}
 	if (other.classname != "player")
 	{
-		sound(self, TRUE, "zombie/z_hit.wav", TRUE, TRUE);
+		sound(self, TRUE, "ball/bounce_hit.wav", TRUE, TRUE);
 	}
 	if (other.classname == "player")
 	{

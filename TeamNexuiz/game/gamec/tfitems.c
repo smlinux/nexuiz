@@ -61,15 +61,13 @@ float (entity e, float healamount, float ignore) T_Heal =
 .float team2_scout, team2_soldier, team2_medic, team2_pyro, team2_spy, team2_engineer;
 .float team3_scout, team3_soldier, team3_medic, team3_pyro, team3_spy, team3_engineer;
 .float team4_scout, team4_soldier, team4_medic, team4_pyro, team4_spy, team4_engineer;*/
+entity infoent;			// our class restricts info entity
 
-void () Map_Rules =
+void() maprules =
 {
-	local entity infoent;		// our class restricts info entity is spaned here
-	infoent = spawn();
-	infoent.classname = "class_restrictions";
-	copyentity (self, infoent);
-
 	// Amount of teams available on a map are determined by spawn points
+
+	// Amount of players per team
 	if (self.team1limit)
 		self.ammo_medikit = stof(self.team1limit);
 	if (self.team2limit)
@@ -79,7 +77,28 @@ void () Map_Rules =
 	if (self.team4limit)
 		self.maxammo_detpack = stof(self.team4limit);
 
-	info_tfdetect();
+	if (self.team1_civilian)
+		self.maxammo_shells = -1;
+	if (self.team2_civilian)
+		self.maxammo_nails = -1;
+	if (self.team3_civilian)
+		self.maxammo_rockets = -1;
+	if (self.team4_civilian)
+		self.maxammo_cells = -1;
+
+	self.classname = "info_tfdetect";
+	ParseTFDetect(self);
+
+	infoent = spawn();
+	copyentity (self, infoent);
+	infoent.classname = "class_restrictions";
+};
+
+// older Team:Nexuiz maps use this, so i'm routing it to "maprules"
+void () Map_Rules =
+{
+	seld.classname = "maprules";
+	maprules();
 };
 
 // Team:Nexuiz backpack
