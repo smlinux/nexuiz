@@ -1,5 +1,5 @@
 Aggressor (rune_nexdmextra2)
-maps/nexdm14
+maps/nexdmextra2
 
 Small map with brutal fast
 vertical action.
