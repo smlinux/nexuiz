@@ -8,6 +8,7 @@ void View_Update (void)
 
 	vieworg = pmove_org;
 	angle_alive = input_angles;
+	makevectors(input_angles);
 
 	if(player_flags & PFL_DEAD)
 	{
@@ -22,6 +23,9 @@ void View_Update (void)
 		vieworg += PL_CROUCH_VIEW_OFS;
 	else
 		vieworg += PL_VIEW_OFS;
+
+	if(cvar("chase_active") && getstati(STAT_HEALTH) != 6666)
+		vieworg = vieworg + v_up * cvar("chase_up") - v_forward * cvar("chase_back");
 
 	R_SetView(VF_ORIGIN, vieworg);
 	R_SetView(VF_ANGLES, input_angles);
