@@ -65,9 +65,6 @@ void W_Grenade_Attack (void)
 	local vector org;
 
 	
-	local vector trueaim;
-	trueaim = W_TrueAim();
-
 	sound (self, CHAN_WEAPON, "weapons/grenade_fire.ogg", 1, ATTN_NORM);
 	if (self.items & IT_STRENGTH) {
 		sound (self, CHAN_AUTO, "weapons/strength_fire.ogg", 1, ATTN_NORM);
@@ -96,7 +93,7 @@ void W_Grenade_Attack (void)
 		gren.health = 10;
 		gren.damageforcescale = 4;
 		gren.event_damage = W_Grenade_Damage;
-		gren.velocity = normalize(trueaim - org) * cvar("g_balance_grenadelauncher_speed2") + v_up * cvar("g_balance_grenadelauncher_speed2_up");
+		gren.velocity = v_forward * cvar("g_balance_grenadelauncher_speed2") + v_up * cvar("g_balance_grenadelauncher_speed2_up");
 		gren.avelocity = '100 150 100';
 	}
 	else
@@ -104,7 +101,7 @@ void W_Grenade_Attack (void)
 		gren.nextthink = time + 30;
 		gren.think = W_Grenade_Explode;
 		gren.touch = W_Grenade_Explode;
-		gren.velocity = normalize(trueaim - org) * cvar("g_balance_grenadelauncher_speed") + v_up * cvar("g_balance_grenadelauncher_speed_up");
+		gren.velocity = v_forward * cvar("g_balance_grenadelauncher_speed") + v_up * cvar("g_balance_grenadelauncher_speed_up");
 		gren.avelocity_x = random () * -500 - 500;
 	}
 
