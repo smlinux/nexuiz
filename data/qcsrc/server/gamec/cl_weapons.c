@@ -174,7 +174,10 @@ void(float imp) W_SwitchWeapon
 			sprint(self, "You don't own that weapon\n");
 	}
 	else
+	{
+		self.cnt = self.weapon;
 		self.switchweapon = imp;
+	}
 };
 
 // next weapon
@@ -202,6 +205,7 @@ void() W_NextWeapon =
 		if (weaponwant > WEP_LAST)
 			weaponwant = WEP_FIRST;
 	}
+	self.cnt = self.weapon;
 	self.switchweapon = weaponwant;
 };
 
@@ -230,6 +234,7 @@ void() W_PreviousWeapon =
 		if (weaponwant > WEP_LAST)
 			weaponwant = WEP_FIRST;
 	}
+	self.cnt = self.weapon;
 	self.switchweapon = weaponwant;
 };
 

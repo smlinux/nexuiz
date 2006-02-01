@@ -1,7 +1,10 @@
 void() laser_ready_01;
 void() laser_fire1_01;
+void() laser_fire2_01;
 void() laser_deselect_01;
 void() laser_select_01;
+
+void() W_LastUsedWeapon;
 
 float() laser_check = {return TRUE;};
 
@@ -11,6 +14,8 @@ void(float req) w_laser =
 		laser_ready_01();
 	else if (req == WR_FIRE1)
 		weapon_prepareattack(laser_check, laser_check, laser_fire1_01, cvar("g_balance_laser_refire"));
+	else if (req == WR_FIRE2)
+		self.switchweapon = self.cnt;
 	else if (req == WR_RAISE)
 		laser_select_01();
 	else if (req == WR_UPDATECOUNTS)
@@ -97,12 +102,23 @@ void W_Laser_Attack (void)
 
 // weapon frames
 
-void()	laser_ready_01 =	{weapon_thinkf(WFRAME_IDLE, 0.1, laser_ready_01); self.weaponentity.state = WS_READY;};
-void()	laser_select_01 =	{weapon_thinkf(-1, cvar("g_balance_weaponswitchdelay"), w_ready); weapon_boblayer1(PLAYER_WEAPONSELECTION_SPEED, '0 0 0');};
-void()	laser_deselect_01 =	{weapon_thinkf(-1, cvar("g_balance_weaponswitchdelay"), w_clear); weapon_boblayer1(PLAYER_WEAPONSELECTION_SPEED, PLAYER_WEAPONSELECTION_RANGE);};
+void()	laser_ready_01 =
+{
+	weapon_thinkf(WFRAME_IDLE, 0.1, laser_ready_01);
+	self.weaponentity.state = WS_READY;
+};
+void()	laser_select_01 =	
+{
+	weapon_thinkf(-1, cvar("g_balance_weaponswitchdelay"), w_ready);
+	weapon_boblayer1(PLAYER_WEAPONSELECTION_SPEED, '0 0 0');
+};
+void()	laser_deselect_01 =
+{
+	weapon_thinkf(-1, cvar("g_balance_weaponswitchdelay"), w_clear);
+	weapon_boblayer1(PLAYER_WEAPONSELECTION_SPEED, PLAYER_WEAPONSELECTION_RANGE);
+};
 void()	laser_fire1_01 =
 {
 	weapon_doattack(laser_check, laser_check, W_Laser_Attack);
 	weapon_thinkf(WFRAME_FIRE1, 0.3, laser_ready_01);
 };
-

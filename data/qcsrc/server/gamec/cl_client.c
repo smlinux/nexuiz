@@ -432,6 +432,8 @@ void PutClientInServer (void)
 			self.killcount = 0;
 			self.frags = 0;
 		}
+
+		self.cnt = WEP_LASER;
 	
 		/*
 		W_UpdateWeapon();

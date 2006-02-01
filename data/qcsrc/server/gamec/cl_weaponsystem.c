@@ -240,6 +240,7 @@ void() w_ready =
 // FIXME: add qw-style client-custom weaponrating (cl_weaponrating)?
 float(entity e) w_getbestweapon
 {// add new weapons here
+	e.cnt = e.weapon;
 	if (client_hasweapon(e, WEP_ROCKET_LAUNCHER, TRUE))
 		return WEP_ROCKET_LAUNCHER;
 	else if (client_hasweapon(e, WEP_NEX, TRUE))
