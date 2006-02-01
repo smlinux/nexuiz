@@ -108,7 +108,7 @@ void W_Hagar_Attack (void)
 	if (self.button3)
 	{
 		missile.movetype = MOVETYPE_TOSS;
-		missile.velocity = normalize(trueaim - org) * cvar("g_balance_hagar_speed2") + v_up * cvar("g_balance_hagar_speed2_up");
+		missile.velocity = v_forward * cvar("g_balance_hagar_speed2") + v_up * cvar("g_balance_hagar_speed2_up");
 		missile.avelocity = '100 10 10';
 	}
 	else
