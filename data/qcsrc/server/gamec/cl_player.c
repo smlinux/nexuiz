@@ -24,6 +24,7 @@ void CopyBody(float keepvelocity)
 		return;
 	oldself = self;
 	self = spawn();
+	self.colormap = oldself.colormap;
 	self.iscreature = oldself.iscreature;
 	self.angles = oldself.angles;
 	self.avelocity = oldself.avelocity;
