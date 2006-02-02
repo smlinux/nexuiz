@@ -64,3 +64,4 @@ string	precache_model2 (string s)							= #75;
 string	precache_sound2 (string s)							= #76;
 string	precache_file2 (string s)							= #77;
 entity(.float fld, float match) findchainflags						= #450;
+entity(entity start, .float fld, float match) findflags					= #449;

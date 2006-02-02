@@ -233,3 +233,6 @@ float GRAPHOOK_RELEASE		= 21;
 .float nextstep;
 
 .float ready;
+
+.float deaths;
+.float jointime;

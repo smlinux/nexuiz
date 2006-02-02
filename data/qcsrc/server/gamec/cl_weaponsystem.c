@@ -106,6 +106,11 @@ void() CL_Weaponentity_Think =
 void() CL_ExteriorWeaponentity_Think =
 {
 	self.nextthink = time;
+	if(self.owner.deadflag != DEAD_NO)
+	{
+		self.model = "";
+		return;
+	}
 	if (self.owner.exteriorweaponentity != self)
 	{
 		remove(self);

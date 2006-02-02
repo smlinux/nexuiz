@@ -303,6 +303,7 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 	if (self.health <= 2)
 	{
 		DropAllRunes(self);
+		self.deaths += 1;
 
 		// throw a weapon
 		SpawnThrownWeapon (self.origin + (self.mins + self.maxs) * 0.5, self.weapon);

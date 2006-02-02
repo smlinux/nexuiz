@@ -124,6 +124,7 @@ float	EF_BRIGHTFIELD				= 1;
 float	EF_MUZZLEFLASH				= 2;
 float	EF_BRIGHTLIGHT				= 4;
 float	EF_DIMLIGHT				= 8;
+float	EF_DOUBLESIDED				= 32768;
 
 float	MSG_BROADCAST				= 0;
 float	MSG_ONE					= 1;

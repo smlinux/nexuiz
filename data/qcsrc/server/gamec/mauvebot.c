@@ -126,12 +126,12 @@ string () PickARandomName =
 	local string h;
 	local entity t;
 
-	t = find(world, classname, "player");
+	t = findflags(world, flags, FL_CLIENT);
 	while(t)
 	{
 		if (clienttype(self) == CLIENTTYPE_BOT)
 			y = y + 1;
-		t = find(t, classname, "player");
+		t = findflags(t, flags, FL_CLIENT);
 	}
 
 	if (y > 18)
@@ -207,7 +207,7 @@ void() remove_MauveBot =
 
 	flo = floor(random() * mauvebots);
 	
-	ent = find(world, classname, "player");
+	ent = findflags(world, flags, FL_CLIENT);
 	
 	while(ent)
 	{
@@ -217,10 +217,9 @@ void() remove_MauveBot =
 			{
 				if (flo == i)
 				{
+					self = ent;
+					ClientDisconnect();
 					dropclient(ent);
-					// bot was dead, so decrease dead count
-					// if(cvar("g_lms") && self.frags < 1) DP_SV_BOTCLIENT handles this automaticly
-					//	lms_dead_count -= 1;
 					if (mauvebots > 0)
 						mauvebots = mauvebots - 1;
 					return;
@@ -228,7 +227,7 @@ void() remove_MauveBot =
 				i = i + 1;
 			}
 		}
-		ent = find(ent, classname, "player");
+		ent = findflags(ent, flags, FL_CLIENT);
 	}
 };
 

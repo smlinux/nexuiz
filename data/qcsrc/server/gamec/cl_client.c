@@ -186,7 +186,7 @@ void PutObserverInServer (void)
 	self.takedamage = DAMAGE_NO;
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NOCLIP;
-	self.flags = FL_NOTARGET;
+	self.flags = FL_CLIENT | FL_NOTARGET;
 	self.armorvalue = 666;
 	self.effects = 0;
 	self.armorvalue = cvar("g_balance_armor_start");
@@ -493,6 +493,8 @@ void ClientConnect (void)
 {
 	self.classname = "player_joining";
 
+	if(player_count<0) player_count = 0;
+
 	//if(cvar("g_domination"))
 	//	dom_player_join_team(self);
 
@@ -568,8 +570,8 @@ void ClientConnect (void)
 		}
 	}
 
-	if(clienttype(self) !=  CLIENTTYPE_BOT)
-		player_count += 1;
+	player_count += 1;
+	self.jointime = time;
 }
 
 /*
@@ -600,7 +602,6 @@ void ClientDisconnect (void)
 	
 	DropAllRunes(self);
 	// decrease player count for lms
-	// if(clienttype(self) !=  CLIENTTYPE_BOT) // WHY?! bots are equally clients, let them be!
 	player_count -= 1;
 	// player was dead, decrease dead count
 	if(cvar("g_lms") && self.frags < 1)

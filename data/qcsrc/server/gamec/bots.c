@@ -128,8 +128,8 @@ void() AutoBotRemove =
 				}
 				if (bot_number > 0)
 					bot_number -= 1;
-				//if(cvar("g_lms") && self.frags < 1) // DP_SV_BOTCLIENT handles this automaticly
-				//	lms_dead_count -= 1;
+				self = ent;
+				ClientDisconnect();
 				dropclient(ent);
 			}
 		}

@@ -1,10 +1,7 @@
 void() laser_ready_01;
 void() laser_fire1_01;
-void() laser_fire2_01;
 void() laser_deselect_01;
 void() laser_select_01;
-
-void() W_LastUsedWeapon;
 
 float() laser_check = {return TRUE;};
 

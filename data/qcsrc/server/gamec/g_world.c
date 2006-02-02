@@ -534,6 +534,72 @@ RULES
 ===============================================================================
 */
 
+void() DumpStats =
+{
+	local float file, now;
+	local string gametype, s;
+
+	if(cvar("_printstats"))
+		cvar_set("_printstats", "0");
+	else if(!gameover)
+		return;
+
+	now = time;
+	
+	if (cvar("g_tdm"))
+		gametype = "tdm";
+	else if (cvar("g_ctf"))
+		gametype = "ctf";
+	else if (cvar("g_domination"))
+		gametype = "dom";
+	else if (cvar("g_runematch"))
+		gametype = "rune";
+	else
+		gametype = "dm";
+	
+	if(gameover)
+		s = ":scores:";
+	else
+		s = ":status:";
+	
+	s = strcat(s, gametype, "_", mapname, ":", ftos(now), "\n");
+
+	if(cvar("sv_logscores_console"))
+		localcmd("echo ", s);
+	if(cvar("sv_logscores_file"))
+	{
+		file = fopen(cvar_string("sv_logscores_filename"), FILE_APPEND);
+		fputs(file, s);
+	}
+
+	other = findchain(classname, "player");
+	while (other)
+	{
+		if ((clienttype(other) == CLIENTTYPE_REAL) || (clienttype(other) == CLIENTTYPE_BOT && cvar("sv_logscores_bots")))
+		{
+			s = strcat(":player:", ftos(other.frags), ":");
+			s = strcat(s, ftos(other.deaths), ":");
+			s = strcat(s, ftos(rint(now - other.jointime)), ":");
+			s = strcat(s, ftos(other.team), ":", other.netname, "\n");
+
+			if(cvar("sv_logscores_console"))
+				localcmd("echo ", s);
+			if(cvar("sv_logscores_file"))
+				fputs(file, s);
+		}
+		other = other.chain;
+	}
+
+	if(cvar("sv_logscores_console"))
+		localcmd("echo :end\n");
+	if(cvar("sv_logscores_file"))
+	{
+		fputs(file, ":end\n");
+		fclose(file);		
+	}
+}
+
+
 /*
 go to the next level for deathmatch
 only called if a time or frag limit has expired
@@ -552,8 +618,10 @@ void() NextLevel =
 	WriteByte (MSG_ALL, 3);
 
 	//pos = FindIntermission ();
+	
+	DumpStats();
 
-	other = find (world, classname, "player");
+	other = findchainflags(flags, FL_CLIENT);
 	while (other != world)
 	{
 		//other.nextthink = time + 0.5;
@@ -582,7 +650,7 @@ void() NextLevel =
 			setorigin (other, pos.origin);
 		}
 		*/
-		other = find (other, classname, "player");
+		other = other.chain;
 	}
 
 	WriteByte (MSG_ALL, SVC_INTERMISSION);
@@ -646,6 +714,8 @@ void() CheckRules_World =
 	if (gameover)	// someone else quit the game already
 		return;
 
+	DumpStats();
+
 	timelimit = cvar("timelimit") * 60;
 	fraglimit = cvar("fraglimit");
 
@@ -664,16 +734,13 @@ void() CheckRules_World =
 	// last man camping winning conditions
 	if(cvar("g_lms"))
 	{
-		local float clients;
-		clients = player_count;// + bot_number + actualurrebots; // Whoever did this should read up on DP_SV_BOTCLIENT
-
 		if(lms_dead_count < 0)
 			lms_dead_count = 0;
 		
 		// goto next map if only one player is alive or 
 		// if there is only one player as spectator (could happen with g_lms_join_anytime 1)
-		if((clients > 1 && (clients - lms_dead_count) <= 1) || 
-		  (clients == 1 && lms_dead_count == 1))
+		if((player_count > 1 && (player_count - lms_dead_count) <= 1) || 
+		  (player_count == 1 && lms_dead_count == 1))
 			NextLevel();
 		return;
 	}

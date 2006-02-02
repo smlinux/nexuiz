@@ -181,7 +181,7 @@ void() UrreBotRemove =
 {
 	local entity ent, t;
 
-	ent = findchain(classname, "player");
+	ent = findchainflags(flags, FL_CLIENT);
 	while (ent)
 	{
 		if (clienttype(ent) == CLIENTTYPE_BOT)
@@ -202,8 +202,8 @@ void() UrreBotRemove =
 				}
 				if (urrebots > 0)
 					urrebots -= 1;
-				//if(cvar("g_lms") && self.frags < 1) // DP_SV_BOTCLIENT handles this automaticly
-				//	lms_dead_count -= 1;
+				self = ent;
+				ClientDisconnect();
 				dropclient(ent);
 			}
 		}

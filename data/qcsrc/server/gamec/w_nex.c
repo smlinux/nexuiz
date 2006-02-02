@@ -136,7 +136,7 @@ void W_Nex_Attack (void)
 
 	// assure that nexdamage is high enough in minstagib
 	if (cvar("g_minstagib"))
-		FireRailgunBullet (org, trueaim, 200, IT_NEX);
+		FireRailgunBullet (org, trueaim, 1000, IT_NEX);
 	else
 		FireRailgunBullet (org, trueaim, cvar("g_balance_nex_damage"), IT_NEX);
 
