@@ -315,9 +315,32 @@
 "angle" "180"
 }
 {
+"classname" "dom_team"
+"netname" ""
+"model" "models/domination/dom_unclaimed.md3"
+}
+{
+"classname" "dom_team"
+"netname" "^4Blue Team^3"
+"cnt" "13"
+"noise" "domination/claim.wav"
+"noise1" "domination/claim.wav"
+"message" "Blue team has captured a control point"
+"model" "models/domination/dom_blue.md3"
+}
+{
+"classname" "dom_team"
+"netname" "^1Red Team^3"
+"cnt" "4"
+"noise" "domination/claim.wav"
+"noise1" "domination/claim.wav"
+"message" "Red team has captured a control point"
+"model" "models/domination/dom_red.md3"
+}
+{
 "wait" "5"
 "frags" "1"
-"message" "^3 has captured Main Area"
+"message" "^3 has captured ^1Main Area"
 "origin" "768 -256 240"
 "classname" "dom_controlpoint"
 }
@@ -326,20 +349,20 @@
 "frags" "1"
 "classname" "dom_controlpoint"
 "origin" "784 816 304"
-"message" "^3 has captured the Mortar Niche"
+"message" "^3 has captured the ^1Mortar Niche"
 }
 {
 "wait" "5"
 "frags" "1"
 "classname" "dom_controlpoint"
 "origin" "-1056 -208 208"
-"message" "^3 has captured the Rocket Launcher/Teleporter"
+"message" "^3 has captured the ^1Rocket Launcher/Teleporter"
 }
 {
 "wait" "5"
 "scale" "1.3"
 "frags" "2"
-"message" "^3 has captured the Nex-Tunnel"
+"message" "^3 has captured the ^1Nex-Tunnel"
 "origin" "256 -176 -376"
 "classname" "dom_controlpoint"
 }
@@ -348,7 +371,7 @@
 "frags" "1"
 "classname" "dom_controlpoint"
 "origin" "352 -656 -224"
-"message" "^3 has captured the lower Floor"
+"message" "^3 has captured the ^1lower Floor"
 }
 {
 "origin" "768 -240 240"

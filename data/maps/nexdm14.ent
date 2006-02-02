@@ -522,10 +522,68 @@
 "model" "*4"
 }
 {
+"classname" "dom_team"
+"netname" ""
+"model" "models/domination/dom_unclaimed.md3"
+}
+{
+"classname" "dom_team"
+"netname" "^4Blue Team^3"
+"cnt" "13"
+"noise" "domination/claim.wav"
+"noise1" "domination/claim.wav"
+"message" "Blue team has captured a control point"
+"model" "models/domination/dom_blue.md3"
+}
+{
+"classname" "dom_team"
+"netname" "^1Red Team^3"
+"cnt" "4"
+"noise" "domination/claim.wav"
+"noise1" "domination/claim.wav"
+"message" "Red team has captured a control point"
+"model" "models/domination/dom_red.md3"
+}
+{
+"classname" "dom_controlpoint"
+"origin" "192 -536 432"
+"message" "^3 has captured the ^1Mortar"
+"frags" "1"
+"wait" "5"
+}
+{
 "wait" "5"
 "frags" "1"
-"message" "^3 has captured the Rocket Launcher"
+"message" "^3 has captured the ^1Rocket Launcher"
 "origin" "608 -680 176"
+"classname" "dom_controlpoint"
+}
+{
+"wait" "5"
+"frags" "1"
+"message" "^3 has captured the ^1Nex"
+"origin" "32 -1128 688"
+"classname" "dom_controlpoint"
+}
+{
+"wait" "5"
+"frags" "1"
+"message" "^3 has captured the ^1Hagar"
+"origin" "-512 -32 696"
+"classname" "dom_controlpoint"
+}
+{
+"classname" "dom_controlpoint"
+"origin" "800 -1368 432"
+"message" "^3 has captured the ^1Skyway"
+"frags" "1"
+"wait" "5"
+}
+{
+"wait" "5"
+"frags" "1"
+"message" "^3 has captured the ^1Roof"
+"origin" "288 -488 1232"
 "classname" "dom_controlpoint"
 }
 {
@@ -533,22 +591,8 @@
 "classname" "runematch_spawn_point"
 }
 {
-"classname" "dom_controlpoint"
-"origin" "192 -536 432"
-"message" "^3 has captured the Mortar"
-"frags" "1"
-"wait" "5"
-}
-{
 "classname" "runematch_spawn_point"
 "origin" "192 -520 432"
-}
-{
-"wait" "5"
-"frags" "1"
-"message" "^3 has captured the Hagar"
-"origin" "-512 -32 696"
-"classname" "dom_controlpoint"
 }
 {
 "origin" "-224 96 688"
@@ -559,33 +603,12 @@
 "origin" "288 96 688"
 }
 {
-"wait" "5"
-"frags" "1"
-"message" "^3 has captured the Nex"
-"origin" "32 -1128 688"
-"classname" "dom_controlpoint"
-}
-{
 "origin" "32 -1112 688"
 "classname" "runematch_spawn_point"
 }
 {
-"classname" "dom_controlpoint"
-"origin" "800 -1368 432"
-"message" "^3 has captured the Skyway"
-"frags" "1"
-"wait" "5"
-}
-{
 "classname" "runematch_spawn_point"
 "origin" "800 -1352 432"
-}
-{
-"wait" "5"
-"frags" "1"
-"message" "^3 has captured the Roof"
-"origin" "288 -488 1232"
-"classname" "dom_controlpoint"
 }
 {
 "origin" "288 -472 1232"
