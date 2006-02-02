@@ -308,6 +308,10 @@ SOURCE=.\w_setrope.c
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\tf_w_proxi.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\w_electro.c
 # End Source File
 # Begin Source File

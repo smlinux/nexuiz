@@ -222,6 +222,7 @@ void worldspawn (void)
 	precache_model ("models/grenades/fragnade.md3");
 	precache_model ("models/magmine/magnetmine.md3");		// mag mine
 	precache_model ("models/sentry/turr1_barrel.md3");
+	precache_model ("models/proxi/proxymine2.md3");
 
 	// Misc TN Stuff
 	precache_model ("models/team/team.sp2");

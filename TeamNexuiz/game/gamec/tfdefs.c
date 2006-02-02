@@ -100,6 +100,10 @@ float blueflagexists;
 .void() th_missile;
 .void() th_melee;
 
+//switch teams function
+.string no_switch_team;
+.string switch_teams;
+
 // spy feign
 .float is_feigning;
 

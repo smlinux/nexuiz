@@ -516,6 +516,10 @@ testent2.solid = SOLID_BBOX;
 //testent2.scale = 5;
 setmodel(testent2, "models/plasmatrail.mdl");
 setorigin(testent2, fire_from);*/
+	dir = self.enemy.origin - self.origin;
+	makevectors(self.origin + dir);
+
+	fire_from = self.origin + v_forward * 20;
 
 
 	W_Sentry_Fire(fire_from, dir, 4);

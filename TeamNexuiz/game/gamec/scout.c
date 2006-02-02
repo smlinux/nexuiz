@@ -98,17 +98,67 @@ void ScoutSpecial()
 	ActivateSpecialShield(FALSE);
 }
 
+void () FireJetFlame =
+{
+	local entity missile;
+	local vector org;
+	local vector end;
+
+	local vector trueaim;
+	org = self.origin + self.view_ofs;
+	end = self.origin + self.view_ofs + v_forward * 4096;
+	traceline(org,end,TRUE,self);
+	trueaim = trace_endpos;
+
+	sound (self, CHAN_WEAPON, "weapons/flamer.wav", 1, ATTN_NORM);
+	self.ammo_nails = self.ammo_nails - 4;
+	org = self.origin + self.view_ofs/* + v_forward * 1 + v_right * 14 + v_up * -5*/;
+
+	missile = spawn ();
+	missile.owner = self;
+	missile.classname = "flame";
+	missile.think = W_Flamer_Dissipate;
+	missile.nextthink = time + 0.01;
+	//missile.touch = W_Flamer_Touch;
+	missile.solid = SOLID_BBOX;
+	setorigin (missile, org);
+	setmodel (missile, "models/sprites/hagarexplosion.spr32");
+	setsize (missile, '0 0 0', '0 0 0');
+	missile.effects = EF_LOWPRECISION | EF_ADDITIVE;
+	missile.alpha = 0.7;//0.3;
+	missile.scale = 0.005;//0.015;//0.15;
+	missile.colormod = '1 1 1'; // set full colors, then reduce later
+	missile.frame = random() * 4 + 2;
+
+	missile.movetype = MOVETYPE_BOUNCE;
+	missile.gravity = -0.07; // fall lightly up
+//	missile.velocity = (v_forward + v_right * crandom() * 0.035 + v_up * crandom() * 0.015) * cvar("g_balance_flamer_speed");
+	missile.velocity = normalize(trueaim - org) * 600;
+
+	missile.angles = vectoangles (missile.velocity);
+};
+
 void ScoutGrenade(float req)
 {
 	if(req == WR_GRENADE1)
 	{
-		if(W_ThrowGrenade(W_ConcussionGrenade))
-			self.grenade_time = time + cvar("g_balance_grenade_concussion_refire");
+		if (self.ammo_rockets < JETJUMP_NEEDROCKETS)
+		{
+			sprint(self, "You need more rockets to power the JetPack\n");
+			return;
+		}
+		FireJetFlame();
+		self.jump_pad = 1;
+		self.ammo_rockets = self.ammo_rockets - JETJUMP_NEEDROCKETS;
+		self.velocity = v_forward * 900 + '0 0 250' + v_up * 100;
+		self.flags = self.flags - (self.flags & FL_ONGROUND);
+		self.grenade_time = time + 2;
 	}
 	else if(req == WR_GRENADE2)
 	{
-
-		self.grenade_time = time + 2;
+		if(W_ThrowGrenade(W_ConcussionGrenade))
+			self.grenade_time = time + cvar("g_balance_grenade_concussion_refire");		
+//		self.grenade_time = time + 2;
 	}
 }
 

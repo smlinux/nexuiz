@@ -146,7 +146,7 @@ void (entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 
 	local float damagearmor;
 
-	if (targ.team_no < 1 && targ.classname != "func_button" && targ.classname != "door" && targ.classname != "building_tesla")			// TEMP
+	if (targ.team_no < 1 && targ.classname != "func_button" && targ.classname != "door" && targ.classname != "building_tesla" && targ.netname != "proxi")			// TEMP
 	{								////
 		return;						////
 	}								////
@@ -362,7 +362,7 @@ void (entity targ, entity inflictor, entity attacker, float damage, float T_flag
 	local float no_damage;
 	local float moment;
 
-	if (targ.team_no < 1 && targ.classname != "func_button" && targ.classname != "door" && targ.classname != "building_tesla")			// TEMP
+	if (targ.team_no < 1 && targ.classname != "func_button" && targ.classname != "door" && targ.classname != "building_tesla"  && targ.netname != "proxi")			// TEMP
 	{								////
 		return;						////
 	}								////

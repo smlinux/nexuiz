@@ -1265,6 +1265,74 @@ void(entity Goal, entity Player, entity AP, float addb) Apply_Results =
 			sprint(Player,"Item is missing.\n");
 		}
 	}
+	// New Team:Nexuiz function: "switch_teams" property -- switches all team-related objects to the opposite
+	//	team (ie self.team_no equal to "1" is now equal to "2" and vise verse). It will not switch team items
+	//	which have a "no_switch_team" property set.
+	if (Goal.switch_teams)
+	{
+		local entity t_ent;
+
+		t_ent = find (world,classname,"item_tfgoal");
+		while (t_ent)
+		{
+			if (t_ent.team_no && !t_ent.no_switch_team)
+			{
+				if (t_ent.team_no == 1)
+					t_ent.team_no = 2;
+				if (t_ent.team_no == 2)
+					t_ent.team_no = 1;
+			}
+			t_ent = find (t_ent, classname, "item_tfgoal");
+		}
+		t_ent = find (world,classname,"info_tfgoal");
+		while (t_ent)
+		{
+			if (t_ent.team_no && !t_ent.no_switch_team)
+			{
+				if (t_ent.team_no == 1)
+					t_ent.team_no = 2;
+				if (t_ent.team_no == 2)
+					t_ent.team_no = 1;
+			}
+			t_ent = find (t_ent, classname, "info_tfgoal");
+		}
+		t_ent = find (world,classname,"func_door");
+		while (t_ent)
+		{
+			if (t_ent.team_no && !t_ent.no_switch_team)
+			{
+				if (t_ent.team_no == 1)
+					t_ent.team_no = 2;
+				if (t_ent.team_no == 2)
+					t_ent.team_no = 1;
+			}
+			t_ent = find (t_ent, classname, "func_door");
+		}
+		t_ent = find (world,classname,"trigger_hurt");
+		while (t_ent)
+		{
+			if (t_ent.team_no && !t_ent.no_switch_team)
+			{
+				if (t_ent.team_no == 1)
+					t_ent.team_no = 2;
+				if (t_ent.team_no == 2)
+					t_ent.team_no = 1;
+			}
+			t_ent = find (t_ent, classname, "trigger_hurt");
+		}
+		t_ent = find (world,classname,"trigger_multiple");
+		while (t_ent)
+		{
+			if (t_ent.team_no && !t_ent.no_switch_team)
+			{
+				if (t_ent.team_no == 1)
+					t_ent.team_no = 2;t_ent.owned_by_team_no = 2;
+				if (t_ent.team_no == 2)
+					t_ent.team_no = 1;
+			}
+			t_ent = find (t_ent, classname, "trigger_multiple");
+		}
+	}
 	/*if (Player.autodiscard)		//Not a function in NexTF
 	{
 		oldself = self;

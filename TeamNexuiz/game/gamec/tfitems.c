@@ -97,7 +97,7 @@ void() maprules =
 // older Team:Nexuiz maps use this, so i'm routing it to "maprules"
 void () Map_Rules =
 {
-	seld.classname = "maprules";
+	self.classname = "maprules";
 	maprules();
 };
 

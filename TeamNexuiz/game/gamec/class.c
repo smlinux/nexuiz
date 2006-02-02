@@ -519,7 +519,7 @@ void (float classnum) SetMaxAmmoFor =
 		self.maxammo_shells = 200;
 		self.maxammo_nails = 200;
 		self.maxammo_cells = 40;
-		self.maxammo_rockets = 40;
+		self.maxammo_rockets = 45;
 		self.clip_crylink = CLIP_MAX_CRYLINK;
 		self.tp_grenades_1 = 9;
 	}

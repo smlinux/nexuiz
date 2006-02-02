@@ -189,18 +189,19 @@ void SoldierSpecial()
 }
 
 
-
+void () Prox;
 void SoldierGrenade(float req)
 {
 	if(req == WR_GRENADE1)
 	{
-		if(W_ThrowGrenade(W_MirvGrenade))
-			self.grenade_time = time + cvar("g_balance_grenade_mirv_refire");
+		Prox ();
+//		if(W_ThrowGrenade(W_MirvGrenade))
+//			self.grenade_time = time + cvar("g_balance_grenade_mirv_refire");
 	}
 	else if(req == WR_GRENADE2)
 	{
-		if(W_ThrowGrenade(W_FragGrenade))
-			self.grenade_time = time + cvar("g_balance_grenade_frag_refire");
+//		if(W_ThrowGrenade(W_FragGrenade))
+//			self.grenade_time = time + cvar("g_balance_grenade_frag_refire");
 	}
 }
 
