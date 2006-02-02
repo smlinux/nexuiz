@@ -71,6 +71,7 @@ gamec/soldier.c
 gamec/pyro.c
 gamec/medic.c
 gamec/engineer.c
+gamec/civilian.c
 gamec/class.c
 
 gamec/cl_impulse.c
@@ -88,6 +89,7 @@ gamec/tf_ball.c				// MegaTF/TN Ball&Goal
 gamec/tf_w_pistol.c			// (Every Class?) Pistol
 gamec/tf_w_railgun.c			// Engineer RailGun
 gamec/tf_w_mac10.c			// Spy MAC10
+gamec/tf_w_proxi.c			// Soldier Proxi Nade
 
 gamec/tfdoors.c				// TF Doors
 gamec/tfai.c				// TF AI
