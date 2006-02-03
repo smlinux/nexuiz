@@ -235,9 +235,9 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 		    (deathtype == DEATH_SLIME) || 
 		    (deathtype == DEATH_LAVA))
 			return;
-		if (targ.extralives && (deathtype == IT_NEX) && (targ.team != attacker.team || teamplay == 1 || teamplay == 3))
+		if (targ.extralives && (deathtype == IT_NEX) && damage)
 		{
-			targ.extralives = targ.extralives - 1;
+			targ.extralives -= 1;
 			centerprint(targ, strcat("^3Remaining extra lives: ",ftos(targ.extralives),"\n"));
 			damage = 0;
 			targ.armorvalue = targ.extralives;
