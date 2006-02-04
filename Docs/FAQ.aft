@@ -1,7 +1,7 @@
 #--- AFT (Almost Free Text) source file for Nexuiz FAQ
 #--- use AFT v5.096 or later (http://www.maplefish.com/todd/aft.html)
 
-*Title: Nexuiz 1.3 FAQ
+*Title: Nexuiz 1.5 FAQ
 			http://nexuiz.com	http://alientrap.org
 
 ------
@@ -13,7 +13,7 @@
 * Troubleshooting
 
 ** How do I install Nexuiz?
-Just unzip the |nexuiz13.zip| file. You can do this with any archive program (like [7zip (http://7zip.org)]). It's very important to remain the directory structure while unpacking (in WinZip this option is called "Use folder names"). The directory structure should look like this afterwards:
+Just unzip the |nexuiz15.zip| file. You can do this with any archive program (like [7zip (http://7zip.org)]). It's very important to remain the directory structure while unpacking (in WinZip this option is called "Use folder names"). The directory structure should look like this afterwards:
 ^<<
 Nexuiz
 |-- data

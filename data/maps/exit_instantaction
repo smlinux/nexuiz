@@ -1,2 +1,3 @@
 set bot_number $BACKUP_bot_number
 set skill $BACKUP_skill
+disconnect
