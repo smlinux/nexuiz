@@ -8,12 +8,13 @@ Team:
 
 
 Lee Vermeulen
-Project Leader and Co-Designer
-
+Project Founder and Co-Designer
 
 Forest "LordHavoc" Hale
 Lead Programmer and Co-Designer
 
+SavageX
+Project Maintainer
 
 
 In alphabetical order
@@ -45,7 +46,7 @@ Modeler
 
 
 Fabien "H. Reaper" Tschirhart 
-Lead Level Designer
+Co-Lead Level Designer
 
 
 "Innovati"
@@ -76,12 +77,8 @@ Rick "Rat" Kelley
 Lead Animator, Skinner 
 
 
-SavageX
-Levels, Code, Sound 
-
-
 Paul "Strahlemann" Evers
-Level Designer
+Co-Lead Level Designer
 
 
 Gottfried "Toddd" Hofmann
