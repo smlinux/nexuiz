@@ -500,7 +500,7 @@ void fireBullet (vector start, vector dir, float spread, float damage, float dty
 		setmodel (e, "models/tracer.mdl");
 		setsize (e, '0 0 0', '0 0 0');
 		setorigin (e, start);
-		e.effects = e.effects | EF_ADDITIVE | EF_FULLBRIGHT;
+		e.effects = e.effects | EF_ADDITIVE | EF_FULLBRIGHT | EF_NOSHADOW;
 	}
 
 	// FIXME - causes excessive 'tinking'. Hopefully remove "tink1.wav" from the ricochets with csqc

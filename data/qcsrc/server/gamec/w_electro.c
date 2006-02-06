@@ -196,7 +196,7 @@ void() W_Electro_Attack
 	{
 		if (cvar("g_use_ammunition"))
 			self.ammo_cells = self.ammo_cells - 2;
-		proj.effects = EF_BRIGHTFIELD | EF_FULLBRIGHT;
+		proj.effects = EF_BRIGHTFIELD | EF_FULLBRIGHT | EF_NOSHADOW;
 		proj.movetype = MOVETYPE_FLY;
 		proj.velocity = normalize(trueaim - org) * cvar("g_balance_electro_speed");
 		proj.angles = vectoangles(proj.velocity);
@@ -249,7 +249,7 @@ void() W_Electro_Attack2
 	{
 		if (cvar("g_use_ammunition"))
 			self.ammo_cells = self.ammo_cells - 1;
-		proj.effects = EF_ADDITIVE;
+		proj.effects = EF_ADDITIVE | EF_NOSHADOW;
 		proj.glow_size = 50;
 		proj.glow_color = 45;
 		proj.movetype = MOVETYPE_BOUNCE;

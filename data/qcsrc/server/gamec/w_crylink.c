@@ -103,7 +103,7 @@ void W_Crylink_Attack (void)
 
 		//proj.glow_size = 20;
 
-		proj.effects = EF_FULLBRIGHT | EF_LOWPRECISION;
+		proj.effects = EF_NOSHADOW | EF_FULLBRIGHT | EF_LOWPRECISION;
 		counter = counter + 1;
 	}
 }
