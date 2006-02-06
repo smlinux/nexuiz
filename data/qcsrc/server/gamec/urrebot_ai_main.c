@@ -184,12 +184,12 @@ void() UrreBotMove =
 					optpoint = MatchOptPoint(self.goalcurrent, self.goallist, self.link0);
 					if (optpoint)
 					{
-						bprint("^3LIST^7 succeeded!!!\n");
+						// bprint("^3LIST^7 succeeded!!!\n");
 						self.movepoint = optpoint.origin;
 					}
 					else
 					{
-						bprint("No ^3LIST^7 success\n");
+						// bprint("No ^3LIST^7 success\n");
 						self.movepoint = ClampPointToSpace(self.origin, self.goalcurrent, self.link0);
 					}
 				}
@@ -223,12 +223,12 @@ void() UrreBotMove =
 					optpoint = MatchOptPoint(self.goalcurrent, self.goallist, self.goalcurrent);
 					if (optpoint)
 					{
-						bprint("^2SINGLE^7 succeeded!!!\n");
+						// bprint("^2SINGLE^7 succeeded!!!\n");
 						self.movepoint = optpoint.origin;
 					}
 					else
 					{
-						bprint("No ^2SINGLE^7 success\n");
+						// bprint("No ^2SINGLE^7 success\n");
 						self.movepoint = ClampPointToSpace(self.origin, self.goalcurrent, self.goalcurrent);					
 					}
 				}
@@ -250,12 +250,12 @@ void() UrreBotMove =
 		optpoint = MatchOptPoint(self.goalcurrent, self.goallist, self.goalcurrent);
 		if (optpoint)
 		{
-			bprint("^2SINGLE^7 succeeded!!!\n");
+			// bprint("^2SINGLE^7 succeeded!!!\n");
 			self.movepoint = optpoint.origin;
 		}
 		else
 		{
-			bprint("No ^2SINGLE^7 success\n");
+			// bprint("No ^2SINGLE^7 success\n");
 			self.movepoint = ClampPointToSpace(self.origin, self.goalcurrent, self.goalcurrent);					
 		}
 	}

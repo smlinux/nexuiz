@@ -373,7 +373,7 @@ void(entity navn, entity l1, entity l2) SpawnOptPoint =
 		newmis.classname = "optpoint";
 		newmis.list = navn.optp_chain;
 		navn.optp_chain = newmis;
-		setmodel(newmis, "models/misc/chatbubble.spr");
+		// setmodel(newmis, "models/misc/chatbubble.spr");
 		setsize (newmis, PL_MIN, PL_MAX);
 		oldself = self;
 		self = newmis;
