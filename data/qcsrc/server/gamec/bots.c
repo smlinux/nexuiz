@@ -74,6 +74,8 @@ float LF_BAD = 4;
 float LF_BIGDROP = 8;
 float LF_REMOTE = 16;
 
+.entity optp_chain;
+
 .entity plane_chain;
 
 float urrebots, urrebots_strategytime, urrebots_combattime;
@@ -89,8 +91,10 @@ void() UrreBotThink;
 void() LoadNavNodes;
 void() LinkNavNodes;
 void() ItemEvals;
+void() OptimiseNavigation;
 entity(float bottype) UrreBotAdd;
 void() UrreBotRemove;
+vector(vector point, entity current_space, entity goal_space) ClampPointToSpace;
 
 float(vector m1, vector m2, vector m3, vector m4) boxesoverlap = {return m2_x >= m3_x && m1_x <= m4_x && m2_y >= m3_y && m1_y <= m4_y && m2_z >= m3_z && m1_z <= m4_z;};
 float(vector smins, vector smaxs, vector bmins, vector bmaxs) boxenclosed = {return smins_x >= bmins_x && smaxs_x <= bmaxs_x && smins_y >= bmins_y && smaxs_y <= bmaxs_y && smins_z >= bmins_z && smaxs_z <= bmaxs_z;};
@@ -159,9 +163,15 @@ void() Bots_Shared =
 		}
 		else if (loadstep == 2)
 		{
+			OptimiseNavigation();
+			loadstep = 3;
+			return;
+		}
+		else if (loadstep == 3)
+		{
 			if (navnodes)
 				ItemEvals();
-			loadstep = 3;
+			loadstep = 4;
 			return;
 		}
 		f = cvar("urrebots");

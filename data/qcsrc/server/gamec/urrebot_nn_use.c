@@ -66,11 +66,72 @@ vector(vector point, entity current_space, entity goal_space) ClampPointToSpace 
 	return ret_point;
 };
 
+entity (entity navn, entity from, entity to) MatchOptPoint =
+{
+	local float fr, go;
+	local entity t;
+
+	if (!from)
+		from = navn;
+	if (!to)
+		to = navn;
+	t = navn.optp_chain;
+	while (t)
+	{
+		fr = go = FALSE;
+		if (t.link0 == from)
+			fr = TRUE;
+		else if (t.link1 == from)
+			fr = TRUE;
+		else if (t.link2 == from)
+			fr = TRUE;
+		else if (t.link3 == from)
+			fr = TRUE;
+		else if (t.link4 == from)
+			fr = TRUE;
+		else if (t.link5 == from)
+			fr = TRUE;
+		else if (t.link6 == from)
+			fr = TRUE;
+		else if (t.link7 == from)
+			fr = TRUE;
+		else if (t.link8 == from)
+			fr = TRUE;
+		else if (t.link9 == from)
+			fr = TRUE;
+		if (t.link10 == to)
+			go = TRUE;
+		else if (t.link11 == to)
+			go = TRUE;
+		else if (t.link12 == to)
+			go = TRUE;
+		else if (t.link13 == to)
+			go = TRUE;
+		else if (t.link14 == to)
+			go = TRUE;
+		else if (t.link15 == to)
+			go = TRUE;
+		else if (t.link16 == to)
+			go = TRUE;
+		else if (t.link17 == to)
+			go = TRUE;
+		else if (t.link18 == to)
+			go = TRUE;
+		else if (t.link19 == to)
+			go = TRUE;
+		if (fr && go)
+			return t;
+		t = t.list;
+	}
+	return world;
+};
+
 /* --- PopRoute ---
 Traverses the bots goal-list to get a new goal to travel towards*/
 
 void() PopRoute =
 {
+	self.goallist = self.goalcurrent;
 	self.goalcurrent = self.link0;
 	self.link0 = self.link1;
 	self.link1 = self.link2;

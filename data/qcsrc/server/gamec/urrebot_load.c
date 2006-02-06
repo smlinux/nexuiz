@@ -244,6 +244,270 @@ void(entity navn, vector normal, float dist) AddPlane =
 	}
 };
 
+/* --- SpawnOptPoint ---
+This function spawns waypoints for the most used paths between navnodes as an
+optimisation*/
+
+void(entity navn, entity l1, entity l2) SpawnOptPoint =
+{
+	local float upd;
+	local vector point;
+	local entity oldself;
+	local entity l, upd_pt;
+
+	upd = FALSE;
+	point = ClampPointToSpace(ClampPointToSpace(l2.origin, l2, navn), l1, navn);
+	l = navn.optp_chain;
+	while (l)
+	{
+		if (point == l.origin)
+		{
+			upd = TRUE;
+			upd_pt = l;
+		}
+		l = l.list;
+	}
+
+	if (upd)
+	{
+		if (upd_pt.link0 != l1)
+		if (upd_pt.link1 != l1)
+		if (upd_pt.link2 != l1)
+		if (upd_pt.link3 != l1)
+		if (upd_pt.link4 != l1)
+		if (upd_pt.link5 != l1)
+		if (upd_pt.link6 != l1)
+		if (upd_pt.link7 != l1)
+		if (upd_pt.link8 != l1)
+		if (upd_pt.link9 != l1)
+		{
+			if (!upd_pt.link0)
+				upd_pt.link0 = l1;
+			else if (!upd_pt.link1)
+				upd_pt.link1 = l1;
+			else if (!upd_pt.link2)
+				upd_pt.link2 = l1;
+			else if (!upd_pt.link3)
+				upd_pt.link3 = l1;
+			else if (!upd_pt.link4)
+				upd_pt.link4 = l1;
+			else if (!upd_pt.link5)
+				upd_pt.link5 = l1;
+			else if (!upd_pt.link6)
+				upd_pt.link6 = l1;
+			else if (!upd_pt.link7)
+				upd_pt.link7 = l1;
+			else if (!upd_pt.link8)
+				upd_pt.link8 = l1;
+			else if (!upd_pt.link9)
+				upd_pt.link9 = l1;
+		}
+		upd = FALSE;
+		if (upd_pt.link10 != l2)
+		if (upd_pt.link11 != l2)
+		if (upd_pt.link12 != l2)
+		if (upd_pt.link13 != l2)
+		if (upd_pt.link14 != l2)
+		if (upd_pt.link15 != l2)
+		if (upd_pt.link16 != l2)
+		if (upd_pt.link17 != l2)
+		if (upd_pt.link18 != l2)
+		if (upd_pt.link19 != l2)
+		{
+			if (!upd_pt.link10)
+			{
+				upd_pt.link10 = l2;
+				upd = TRUE;
+			}
+			else if (!upd_pt.link11)
+			{
+				upd_pt.link11 = l2;
+				upd = TRUE;
+			}
+			else if (!upd_pt.link12)
+			{
+				upd_pt.link12 = l2;
+				upd = TRUE;
+			}
+			else if (!upd_pt.link13)
+			{
+				upd_pt.link13 = l2;
+				upd = TRUE;
+			}
+			else if (!upd_pt.link14)
+			{
+				upd_pt.link14 = l2;
+				upd = TRUE;
+			}
+			else if (!upd_pt.link15)
+			{
+				upd_pt.link15 = l2;
+				upd = TRUE;
+			}
+			else if (!upd_pt.link16)
+			{
+				upd_pt.link16 = l2;
+				upd = TRUE;
+			}
+			else if (!upd_pt.link17)
+			{
+				upd_pt.link17 = l2;
+				upd = TRUE;
+			}
+			else if (!upd_pt.link18)
+			{
+				upd_pt.link18 = l2;
+				upd = TRUE;
+			}
+			else if (!upd_pt.link19)
+			{
+				upd_pt.link19 = l2;
+				upd = TRUE;
+			}
+		}
+	}
+
+	if (!upd)
+	{
+		newmis = spawn();
+		newmis.classname = "optpoint";
+		newmis.list = navn.optp_chain;
+		navn.optp_chain = newmis;
+		setmodel(newmis, "models/misc/chatbubble.spr");
+		setsize (newmis, PL_MIN, PL_MAX);
+		oldself = self;
+		self = newmis;
+		point = ClampPointToSpace(ClampPointToSpace(l2.origin, l2, navn), l1, navn);
+		self = oldself;
+		setorigin(newmis, point);
+		newmis.link0 = l1;
+		newmis.link10 = l2;
+	}
+};
+
+void() OptimiseNavigation =
+{
+	local entity navn, l, l2;
+
+	navn = navnode_chain;
+	while (navn)
+	{
+		l = navn.optp_chain;
+		while (l)
+		{
+			l.think = SUB_Remove;
+			l.nextthink = time;
+			SpawnOptPoint(navn, l, navn);
+			if (navn.link0 != l)
+				SpawnOptPoint(navn, l, navn.link0);
+			if (navn.link1)
+			{
+				if (navn.link1 != l)
+					SpawnOptPoint(navn, l, navn.link1);
+				if (navn.link2)
+				{
+					if (navn.link2 != l)
+						SpawnOptPoint(navn, l, navn.link2);
+					if (navn.link3)
+					{
+						if (navn.link3 != l)
+							SpawnOptPoint(navn, l, navn.link3);
+						if (navn.link4)
+						{
+							if (navn.link4 != l)
+								SpawnOptPoint(navn, l, navn.link4);
+							if (navn.link5)
+							{
+								if (navn.link5 != l)
+									SpawnOptPoint(navn, l, navn.link5);
+								if (navn.link6)
+								{
+									if (navn.link6 != l)
+										SpawnOptPoint(navn, l, navn.link6);
+									if (navn.link7)
+									{
+										if (navn.link7 != l)
+											SpawnOptPoint(navn, l, navn.link7);
+										if (navn.link8)
+										{
+											if (navn.link8 != l)
+												SpawnOptPoint(navn, l, navn.link8);
+											if (navn.link9)
+											{
+												if (navn.link9 != l)
+													SpawnOptPoint(navn, l, navn.link9);
+												if (navn.link10)
+												{
+													if (navn.link10 != l)
+														SpawnOptPoint(navn, l, navn.link10);
+													if (navn.link11)
+													{
+														if (navn.link11 != l)
+															SpawnOptPoint(navn, l, navn.link11);
+														if (navn.link12)
+														{
+															if (navn.link12 != l)
+																SpawnOptPoint(navn, l, navn.link12);
+															if (navn.link13)
+															{
+																if (navn.link13 != l)
+																	SpawnOptPoint(navn, l, navn.link13);
+																if (navn.link14)
+																{
+																	if (navn.link14 != l)
+																		SpawnOptPoint(navn, l, navn.link14);
+																	if (navn.link15)
+																	{
+																		if (navn.link15 != l)
+																			SpawnOptPoint(navn, l, navn.link15);
+																		if (navn.link16)
+																		{
+																			if (navn.link16 != l)
+																				SpawnOptPoint(navn, l, navn.link16);
+																			if (navn.link17)
+																			{
+																				if (navn.link17 != l)
+																					SpawnOptPoint(navn, l, navn.link17);
+																				if (navn.link18)
+																				{
+																					if (navn.link18 != l)
+																						SpawnOptPoint(navn, l, navn.link18);
+																					if (navn.link19)
+																					if (navn.link19 != l)
+																						SpawnOptPoint(navn, l, navn.link19);
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			l = l.list;
+		}
+		navn = navn.list;
+	}
+};
+
+void(entity navn, entity linked) SpawnOptController =
+{
+	newmis = spawn();
+	newmis.classname = "optcontroller";
+	newmis.list = navn.optp_chain;
+	navn.optp_chain = newmis;
+	newmis.enemy = linked;
+};
+
 /* --- LinkNavNodes ---
 Links the navnodes and gives some special attributes (like doors, teleporters)*/
 
@@ -602,6 +866,7 @@ void() LinkNavNodes =
 						e.link19 = t;
 					else
 						dprint("WARNING: Too many linking NavNodes!\n");
+					SpawnOptController(e, t);
 				}
 				t = t.list;
 			}

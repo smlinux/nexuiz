@@ -48,7 +48,7 @@ void() UrreBotEvalTargets =
 	e = findradius(v1, 1500);
 	while (e)
 	{
-		if (!(e.flags & FL_NOTARGET) || e.killcount != -666) // -666 is spec/obs
+		if (!(e.flags & FL_NOTARGET))
 		if (!(cvar("teamplay") && self.team == e.team))      // don't target teammates
 		if (e.flags & FL_CLIENT)
 		if (e != self)
@@ -152,7 +152,7 @@ void() UrreBotMove =
 {
 	local float f, bad;
 	local vector dir, tvec;
-	local entity plane;
+	local entity plane, optpoint;
 
 	if (self.link0)
 	{
@@ -180,7 +180,16 @@ void() UrreBotMove =
 				if (self.goalcurrent.sflags & S_TELEPORT)
 					self.movepoint = self.goalcurrent.origin;
 				else
-					self.movepoint = ClampPointToSpace(self.origin, self.goalcurrent, self.link0);
+				{
+					optpoint = MatchOptPoint(self.goalcurrent, self.goallist, self.link0);
+					if (optpoint)
+						self.movepoint = optpoint.origin;
+					else
+					{
+						bprint("boo hoo!\n");
+						self.movepoint = ClampPointToSpace(self.origin, self.goalcurrent, self.link0);
+					}
+				}
 			}
 		}
 		else if (((self.goalcurrent.sflags & S_TOUCH) && boxesoverlap(self.origin + self.mins, self.origin + self.maxs, self.goalcurrent.origin + self.goalcurrent.mins, self.goalcurrent.origin + self.goalcurrent.maxs)) || boxenclosed(self.origin + self.mins, self.origin + self.maxs, self.goalcurrent.origin + self.goalcurrent.mins, self.goalcurrent.origin + self.goalcurrent.maxs))
@@ -207,7 +216,16 @@ void() UrreBotMove =
 				if (self.goalcurrent.sflags & S_TELEPORT)
 					self.movepoint = self.goalcurrent.origin;
 				else
-					self.movepoint = ClampPointToSpace(self.origin, self.goalcurrent, self.goalcurrent);
+				{
+					optpoint = MatchOptPoint(self.goalcurrent, self.goallist, self.goalcurrent);
+					if (optpoint)
+						self.movepoint = optpoint.origin;
+					else
+					{
+						bprint("boo hoo!\n");
+						self.movepoint = ClampPointToSpace(self.origin, self.goalcurrent, self.goalcurrent);					
+					}
+				}
 				if (self.movepoint == '0 0 0')
 				{
 					self.strat_me = TRUE;
@@ -223,7 +241,14 @@ void() UrreBotMove =
 			self.strat_me = TRUE;
 			UrreBotPath(minisearch_distance);
 		}
-		self.movepoint = ClampPointToSpace(self.origin, self.goalcurrent, self.goalcurrent);
+		optpoint = MatchOptPoint(self.goalcurrent, self.goallist, self.goalcurrent);
+		if (optpoint)
+			self.movepoint = optpoint.origin;
+		else
+		{
+			bprint("boo hoo!\n");
+			self.movepoint = ClampPointToSpace(self.origin, self.goalcurrent, self.goalcurrent);					
+		}
 	}
 	dir = normalize(ToPointInSpace(self.goalcurrent, self.movepoint));
 	dir = dir * sv_maxspeed;

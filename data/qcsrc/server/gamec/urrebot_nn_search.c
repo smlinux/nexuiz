@@ -5,6 +5,7 @@ float(entity from, entity to, float lflag) CheckNavNode =
 {
 	local float addcost;
 	local vector foundpoint;
+	local entity optpoint;
 
 	if (!to)
 		return FALSE;
@@ -15,7 +16,16 @@ float(entity from, entity to, float lflag) CheckNavNode =
 		if (from.sflags & S_TELEPORT) // teleporter exception
 			foundpoint = from.origin;
 		else
-			foundpoint = ClampPointToSpace(from.pointl, from, to);
+		{
+			optpoint = MatchOptPoint(from, from.goallist, to);
+			if (optpoint)
+				foundpoint = optpoint.origin;
+			else
+			{
+				bprint("boo hoo!\n");
+				foundpoint = ClampPointToSpace(from.pointl, from, to);
+			}
+		}
 		addcost = vlen(from.pointl - foundpoint);
 		addcost = addcost + from.costl;
 		if (addcost <= search_distance)
