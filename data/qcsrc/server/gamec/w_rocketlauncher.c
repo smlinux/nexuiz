@@ -254,6 +254,7 @@ void W_Rocket_Attack (void)
 	missile.think = W_Rocket_Think;
 	missile.nextthink = time;
 	missile.cnt = time + 9;
+	missile.effects = EF_NOSHADOW;
 	sound (missile, CHAN_BODY, "weapons/rocket_fly.wav", 0.4, ATTN_NORM);
 
 	flash = spawn ();

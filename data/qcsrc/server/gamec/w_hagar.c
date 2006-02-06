@@ -103,7 +103,7 @@ void W_Hagar_Attack (void)
 	//missile.damageforcescale = 4;
 	//missile.health = 10;
 	//missile.event_damage = W_Hagar_Damage;
-	missile.effects = EF_LOWPRECISION;
+	missile.effects = EF_LOWPRECISION | EF_NOSHADOW | EF_FULLBRIGHT;
 
 	if (self.button3)
 	{

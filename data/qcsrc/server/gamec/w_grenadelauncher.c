@@ -80,6 +80,7 @@ void W_Grenade_Attack (void)
 	gren.classname = "grenade";
 	gren.movetype = MOVETYPE_BOUNCE;
 	gren.solid = SOLID_BBOX;
+	gren.effects = EF_NOSHADOW;
 	setmodel(gren, "models/grenademodel.md3");
 	setsize(gren, '-6 -6 -3', '6 6 3');
 	setorigin(gren, org);
