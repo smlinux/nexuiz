@@ -621,7 +621,7 @@
 }
 {
 "classname" "info_player_team2"
-"origin" "1216 -176 -120"
+"origin" "1216 -176 -90"
 "angle" "180"
 }
 {
