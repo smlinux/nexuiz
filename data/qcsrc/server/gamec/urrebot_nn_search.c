@@ -19,10 +19,13 @@ float(entity from, entity to, float lflag) CheckNavNode =
 		{
 			optpoint = MatchOptPoint(from, from.goallist, to);
 			if (optpoint)
+			{
+				bprint("^1SEARCH^7 succeeded!!!\n");
 				foundpoint = optpoint.origin;
+			}
 			else
 			{
-				bprint("No ^1SEARCH^7 success\n");
+				// bprint("No ^1SEARCH^7 success\n");
 				foundpoint = ClampPointToSpace(from.pointl, from, to);
 			}
 		}
