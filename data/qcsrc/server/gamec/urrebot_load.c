@@ -387,7 +387,7 @@ void(entity navn, entity l1, entity l2) SpawnOptPoint =
 
 void() OptimiseNavigation =
 {
-	local entity navn, l, l2;
+	local entity navn, l;
 
 	navn = navnode_chain;
 	while (navn)
@@ -397,84 +397,84 @@ void() OptimiseNavigation =
 		{
 			l.think = SUB_Remove;
 			l.nextthink = time;
-			SpawnOptPoint(navn, l, navn);
-			if (navn.link0 != l)
-				SpawnOptPoint(navn, l, navn.link0);
+			SpawnOptPoint(navn, l.enemy, navn);
+			if (navn.link0 != l.enemy)
+				SpawnOptPoint(navn, l.enemy, navn.link0);
 			if (navn.link1)
 			{
-				if (navn.link1 != l)
-					SpawnOptPoint(navn, l, navn.link1);
+				if (navn.link1 != l.enemy)
+					SpawnOptPoint(navn, l.enemy, navn.link1);
 				if (navn.link2)
 				{
-					if (navn.link2 != l)
-						SpawnOptPoint(navn, l, navn.link2);
+					if (navn.link2 != l.enemy)
+						SpawnOptPoint(navn, l.enemy, navn.link2);
 					if (navn.link3)
 					{
-						if (navn.link3 != l)
-							SpawnOptPoint(navn, l, navn.link3);
+						if (navn.link3 != l.enemy)
+							SpawnOptPoint(navn, l.enemy, navn.link3);
 						if (navn.link4)
 						{
-							if (navn.link4 != l)
-								SpawnOptPoint(navn, l, navn.link4);
+							if (navn.link4 != l.enemy)
+								SpawnOptPoint(navn, l.enemy, navn.link4);
 							if (navn.link5)
 							{
-								if (navn.link5 != l)
-									SpawnOptPoint(navn, l, navn.link5);
+								if (navn.link5 != l.enemy)
+									SpawnOptPoint(navn, l.enemy, navn.link5);
 								if (navn.link6)
 								{
-									if (navn.link6 != l)
-										SpawnOptPoint(navn, l, navn.link6);
+									if (navn.link6 != l.enemy)
+										SpawnOptPoint(navn, l.enemy, navn.link6);
 									if (navn.link7)
 									{
-										if (navn.link7 != l)
-											SpawnOptPoint(navn, l, navn.link7);
+										if (navn.link7 != l.enemy)
+											SpawnOptPoint(navn, l.enemy, navn.link7);
 										if (navn.link8)
 										{
-											if (navn.link8 != l)
-												SpawnOptPoint(navn, l, navn.link8);
+											if (navn.link8 != l.enemy)
+												SpawnOptPoint(navn, l.enemy, navn.link8);
 											if (navn.link9)
 											{
-												if (navn.link9 != l)
-													SpawnOptPoint(navn, l, navn.link9);
+												if (navn.link9 != l.enemy)
+													SpawnOptPoint(navn, l.enemy, navn.link9);
 												if (navn.link10)
 												{
-													if (navn.link10 != l)
-														SpawnOptPoint(navn, l, navn.link10);
+													if (navn.link10 != l.enemy)
+														SpawnOptPoint(navn, l.enemy, navn.link10);
 													if (navn.link11)
 													{
-														if (navn.link11 != l)
-															SpawnOptPoint(navn, l, navn.link11);
+														if (navn.link11 != l.enemy)
+															SpawnOptPoint(navn, l.enemy, navn.link11);
 														if (navn.link12)
 														{
-															if (navn.link12 != l)
-																SpawnOptPoint(navn, l, navn.link12);
+															if (navn.link12 != l.enemy)
+																SpawnOptPoint(navn, l.enemy, navn.link12);
 															if (navn.link13)
 															{
-																if (navn.link13 != l)
-																	SpawnOptPoint(navn, l, navn.link13);
+																if (navn.link13 != l.enemy)
+																	SpawnOptPoint(navn, l.enemy, navn.link13);
 																if (navn.link14)
 																{
-																	if (navn.link14 != l)
-																		SpawnOptPoint(navn, l, navn.link14);
+																	if (navn.link14 != l.enemy)
+																		SpawnOptPoint(navn, l.enemy, navn.link14);
 																	if (navn.link15)
 																	{
-																		if (navn.link15 != l)
-																			SpawnOptPoint(navn, l, navn.link15);
+																		if (navn.link15 != l.enemy)
+																			SpawnOptPoint(navn, l.enemy, navn.link15);
 																		if (navn.link16)
 																		{
-																			if (navn.link16 != l)
-																				SpawnOptPoint(navn, l, navn.link16);
+																			if (navn.link16 != l.enemy)
+																				SpawnOptPoint(navn, l.enemy, navn.link16);
 																			if (navn.link17)
 																			{
-																				if (navn.link17 != l)
-																					SpawnOptPoint(navn, l, navn.link17);
+																				if (navn.link17 != l.enemy)
+																					SpawnOptPoint(navn, l.enemy, navn.link17);
 																				if (navn.link18)
 																				{
-																					if (navn.link18 != l)
-																						SpawnOptPoint(navn, l, navn.link18);
+																					if (navn.link18 != l.enemy)
+																						SpawnOptPoint(navn, l.enemy, navn.link18);
 																					if (navn.link19)
-																					if (navn.link19 != l)
-																						SpawnOptPoint(navn, l, navn.link19);
+																					if (navn.link19 != l.enemy)
+																						SpawnOptPoint(navn, l.enemy, navn.link19);
 																				}
 																			}
 																		}

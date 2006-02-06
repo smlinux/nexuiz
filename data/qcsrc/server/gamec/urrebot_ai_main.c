@@ -186,7 +186,7 @@ void() UrreBotMove =
 						self.movepoint = optpoint.origin;
 					else
 					{
-						bprint("boo hoo!\n");
+						bprint("No ^3LIST^7 success\n");
 						self.movepoint = ClampPointToSpace(self.origin, self.goalcurrent, self.link0);
 					}
 				}
@@ -222,7 +222,7 @@ void() UrreBotMove =
 						self.movepoint = optpoint.origin;
 					else
 					{
-						bprint("boo hoo!\n");
+						bprint("No ^2SINGLE^7 success\n");
 						self.movepoint = ClampPointToSpace(self.origin, self.goalcurrent, self.goalcurrent);					
 					}
 				}
@@ -246,7 +246,7 @@ void() UrreBotMove =
 			self.movepoint = optpoint.origin;
 		else
 		{
-			bprint("boo hoo!\n");
+			bprint("No ^2SINGLE^7 success\n");
 			self.movepoint = ClampPointToSpace(self.origin, self.goalcurrent, self.goalcurrent);					
 		}
 	}

@@ -22,7 +22,7 @@ float(entity from, entity to, float lflag) CheckNavNode =
 				foundpoint = optpoint.origin;
 			else
 			{
-				bprint("boo hoo!\n");
+				bprint("No ^1SEARCH^7 success\n");
 				foundpoint = ClampPointToSpace(from.pointl, from, to);
 			}
 		}
