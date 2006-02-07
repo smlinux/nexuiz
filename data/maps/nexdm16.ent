@@ -2,7 +2,7 @@
 "message" "LordHavoc's Red City Re-Mixed"
 "classname" "worldspawn"
 "gridsize" "1024 1024 1024"
-"sky" "med-troubadour-gray/med-troubadour-gray"
+"sky" "env/med-troubadour-gray/med-troubadour-gray"
 }
 {
 "classname" "info_player_deathmatch"
