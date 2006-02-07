@@ -1,8 +1,7 @@
 {
-"message" "LordHavoc's Red City Re-Mixed"
 "classname" "worldspawn"
+"message" "LordHavoc's Red City Re-Mixed"
 "gridsize" "1024 1024 1024"
-"sky" "env/med-troubadour-gray/med-troubadour-gray"
 }
 {
 "classname" "info_player_deathmatch"
