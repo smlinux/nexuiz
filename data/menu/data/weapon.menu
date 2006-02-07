@@ -357,7 +357,7 @@ Item DataContainer Weapon
 	Item Data_Cvar NexDamage
 	{
 		cvarName	"g_balance_nex_damage"
-		defValue	175
+		defValue	150
 
 		[DataLink_Setting]
 	}
