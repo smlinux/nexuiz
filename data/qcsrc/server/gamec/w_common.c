@@ -409,10 +409,8 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float deathtype
 
 	force = normalize(end - start) * 800; //(bdamage * 10);
 
-	// find how far the beam can go until it hits a wall
-	traceline (start, end, TRUE, self);
 	// go a little bit into the wall because we need to hit this wall later
-	end = trace_endpos + normalize(end - start);
+	end = end + normalize(end - start);
 
 	// trace multiple times until we hit a wall, each obstacle will be made
 	// non-solid so we can hit the next, while doing this we spawn effects and
@@ -427,7 +425,7 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float deathtype
 
 		// make the entity non-solid so we can hit the next one
 		trace_ent.railgunhit = TRUE;
-		trace_ent.railgunhitloc = trace_endpos;
+		trace_ent.railgunhitloc = end;
 		trace_ent.railgunhitsolidbackup = trace_ent.solid;
 
 		// stop if this is a wall

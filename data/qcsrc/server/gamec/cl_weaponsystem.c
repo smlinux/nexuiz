@@ -9,7 +9,7 @@
 
 vector() W_TrueAim = {
 	
-	traceline_hitcorpse(self,self.origin + self.view_ofs,self.origin + self.view_ofs + v_forward * 4096,FALSE,self);
+	traceline_hitcorpse(self,self.origin + self.view_ofs,self.origin + self.view_ofs + v_forward * 4096,(self.weapon == WEP_NEX),self);
 
 	if ((self.weapon == WEP_NEX || self.weapon == WEP_SHOTGUN || self.weapon == WEP_UZI) && cvar("g_antilag"))
 	{
