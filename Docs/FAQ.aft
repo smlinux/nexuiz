@@ -120,7 +120,7 @@ You can list all your demo files by typing |dem| on the console. Some usefull ke
 There's a [detailed guide (http://www.nexuiz.com/forums/index.php?showtopic=195)] on gtkradiant setup in the forums. There are also a [Linux shell script (http://www.nexuiz.com/forums/index.php?showtopic=195&view=findpost&p=11176)] and a [Windows application (http://www.nexuiz.com/forums/index.php?showtopic=195&view=findpost&p=11838)] that will configure your gtkradiant (1.4) automagically.
 
 ** Where can i get latest development versions of the source code?
-_Engine:_ instructions are available at http://icculus.org/twilight/darkplaces/download.html (you will need a [cvs client (http://www.nongnu.org/cvs/)])
+_Engine:_ instructions are available at http://icculus.org/twilight/darkplaces/download.html (you will need a [cvs client (http://www.nongnu.org/cvs/)], beta builds are available [here (http://icculus.org/twilight/darkplaces/files/)])
 
 _Game data:_ to check out the Nexuiz svn, you'll need a [svn client (http://subversion.tigris.org/project_packages.html)]. To check out the repository with a commandline svn client, do
 ^<<

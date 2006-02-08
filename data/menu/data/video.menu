@@ -32,4 +32,29 @@ Item DataContainer Video
 
 		[DataLink_OnOffSwitch]
 	}
+	Item Data_Cvar Anisotropy
+	{
+		cvarName "gl_texture_anisotropy"
+		defValue "1"
+
+		Item DataLink_TextSwitch Switch
+		{
+			valueList "'1' '2' '4' '8' '16'"
+			descList "'off' '2x' '4x' '8x' '16x'"
+			link  "##up"
+		}
+	}
+	Item Data_Cvar Picmip
+	{
+		cvarName "gl_picmip"
+		defValue "0"
+
+		Item DataLink_TextSwitch Switch
+		{
+			valueList "'0' '1' '2' '3' '4'"
+			descList "'best' 'good' 'medium' 'low' 'lowest' 'custom'"
+			link  "##up"
+		}
+	}
+
 }

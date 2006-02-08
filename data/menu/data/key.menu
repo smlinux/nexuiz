@@ -55,6 +55,11 @@ Item DataContainer Key
 		target		"weapnext"
 		defValue	"'MWHEELUP'"
 	}
+	Item Data_Nex_Key DropWeapon
+	{
+		target		"dropweapon"
+		defValue	"'BACKSPACE'"
+	}
 	Item Data_Nex_Key Zoom
 	{
 		target		"+zoom"
@@ -157,5 +162,10 @@ Item DataContainer Key
 	{
 		target		"sizeup"
 		defValue	"'='"
+	}
+	Item Data_Nex_Key ShowInfo
+	{
+		target		"+show_info"
+		defValue	"'i'"
 	}
 }

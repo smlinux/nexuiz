@@ -200,6 +200,13 @@ Item DataContainer Misc
 
 		[DataLink_Setting]
 	}
+	Item Data_Cvar MinstaGibInvisAlpha
+	{
+		cvarName	"g_minstagib_invis_alpha"
+		defValue	0.1
+
+		[DataLink_Setting]
+	}
 	Item Data_Cvar Casings
 	{
 		cvarName	"g_casings"

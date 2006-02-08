@@ -185,6 +185,11 @@ Item Layout Misc
 				text	"Ammo dropped or picked up"
 				target	"::Data::Game::Misc::MinstaGibAmmoDrop::Text"
 			}
+			Derive Nex_Option_EditBox MinstaGibInvisAlpha
+			{
+				text	"Tranparency for invisible players"
+				target	"::Data::Game::Misc::MinstaGibInvisAlpha::Text"
+			}
 			Derive Nex_Line	SeperatorOthers
 			{}
 			Derive Nex_Option_Switch Casings

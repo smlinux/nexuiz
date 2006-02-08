@@ -203,6 +203,11 @@ Item Window KeyControl
 						text 	"Zoom"
 						target	"Data::Key::Zoom"
 					}
+					Derive Nex_Key_Template DropWeapon
+					{
+						text	"Drop Weapon"
+						target	"Data::Key::DropWeapon"
+					}
 					Derive Nex_Void Seperator2
 					{}
 					Derive Title Weapons
@@ -306,6 +311,12 @@ Item Window KeyControl
 						text	"Increase Viewsize"
 						target	"Data::Key::ViewBigger"
 					}
+					Derive Nex_Key_Template ShowInfo
+					{
+						text	"Display Serverinfo"
+						target	"Data::Key::ShowInfo"
+					}
+
 				}
 			}
 			Item VScrollBar Scroller

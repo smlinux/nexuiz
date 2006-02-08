@@ -36,6 +36,16 @@ Item Window Video
 			text	"Fullscreen"
 			target	"::Data::Video::Fullscreen::Switch"
 		}
+		Derive Nex_Video_Option_Switch Anisotropy
+		{
+			text	"Anisotropic Filtering"
+			target	"::Data::Video::Anisotropy::Switch"
+		}
+		Derive Nex_Video_Option_Switch Picmip
+		{
+			text	"Texture Quality"
+			target	"::Data::Video::Picmip::Switch"
+		}
 		Derive Nex_Void Seperator1
 		{}
 		Derive PictureButton Apply

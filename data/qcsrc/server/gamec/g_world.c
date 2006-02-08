@@ -562,7 +562,7 @@ void() DumpStats =
 	else
 		s = ":status:";
 	
-	s = strcat(s, gametype, "_", mapname, ":", ftos(now), "\n");
+	s = strcat(s, gametype, "_", mapname, ":", ftos(rint(now)), "\n");
 
 	if(cvar("sv_logscores_console"))
 		localcmd("echo ", s);
