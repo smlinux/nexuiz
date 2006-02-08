@@ -331,6 +331,7 @@ void() GotoNextMap =
 			lFilename = strcat( "maps/", argv( lCurrent ), ".mapcfg" );
 			if( TryFile( lFilename ) ) {
 				localcmd(strcat("exec \"", lFilename ,"\"\n"));
+				break;
 			} else {
 				dprint( "Couldn't find '", lFilename, "'..\n" );
 			}
