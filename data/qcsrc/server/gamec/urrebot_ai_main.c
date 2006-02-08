@@ -181,17 +181,14 @@ void() UrreBotMove =
 					self.movepoint = self.goalcurrent.origin;
 				else
 				{
+					// FIXME: Disabled until fixed
+					/*
 					optpoint = MatchOptPoint(self.goalcurrent, self.goallist, self.link0);
 					if (optpoint)
-					{
-						// bprint("^3LIST^7 succeeded!!!\n");
 						self.movepoint = optpoint.origin;
-					}
 					else
-					{
-						// bprint("No ^3LIST^7 success\n");
+					*/
 						self.movepoint = ClampPointToSpace(self.origin, self.goalcurrent, self.link0);
-					}
 				}
 			}
 		}
@@ -220,17 +217,14 @@ void() UrreBotMove =
 					self.movepoint = self.goalcurrent.origin;
 				else
 				{
+					// FIXME: Disabled until fixed
+					/*
 					optpoint = MatchOptPoint(self.goalcurrent, self.goallist, self.goalcurrent);
 					if (optpoint)
-					{
-						// bprint("^2SINGLE^7 succeeded!!!\n");
 						self.movepoint = optpoint.origin;
-					}
 					else
-					{
-						// bprint("No ^2SINGLE^7 success\n");
+					*/
 						self.movepoint = ClampPointToSpace(self.origin, self.goalcurrent, self.goalcurrent);					
-					}
 				}
 				if (self.movepoint == '0 0 0')
 				{
@@ -247,17 +241,14 @@ void() UrreBotMove =
 			self.strat_me = TRUE;
 			UrreBotPath(minisearch_distance);
 		}
+		// FIXME: Disabled until fixed
+		/*
 		optpoint = MatchOptPoint(self.goalcurrent, self.goallist, self.goalcurrent);
 		if (optpoint)
-		{
-			// bprint("^2SINGLE^7 succeeded!!!\n");
 			self.movepoint = optpoint.origin;
-		}
 		else
-		{
-			// bprint("No ^2SINGLE^7 success\n");
-			self.movepoint = ClampPointToSpace(self.origin, self.goalcurrent, self.goalcurrent);					
-		}
+		*/
+			self.movepoint = ClampPointToSpace(self.origin, self.goalcurrent, self.goalcurrent);
 	}
 	dir = normalize(ToPointInSpace(self.goalcurrent, self.movepoint));
 	dir = dir * sv_maxspeed;

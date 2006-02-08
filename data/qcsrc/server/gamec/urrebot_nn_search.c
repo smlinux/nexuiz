@@ -17,17 +17,14 @@ float(entity from, entity to, float lflag) CheckNavNode =
 			foundpoint = from.origin;
 		else
 		{
+			// FIXME: Disabled until fixed
+			/*
 			optpoint = MatchOptPoint(from, from.goallist, to);
 			if (optpoint)
-			{
-				// bprint("^1SEARCH^7 succeeded!!!\n");
 				foundpoint = optpoint.origin;
-			}
 			else
-			{
-				// bprint("No ^1SEARCH^7 success\n");
+			*/
 				foundpoint = ClampPointToSpace(from.pointl, from, to);
-			}
 		}
 		addcost = vlen(from.pointl - foundpoint);
 		addcost = addcost + from.costl;

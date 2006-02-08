@@ -66,6 +66,8 @@ vector(vector point, entity current_space, entity goal_space) ClampPointToSpace 
 	return ret_point;
 };
 
+// FIXME: Disabled until fixed
+/*
 entity (entity navn, entity from, entity to) MatchOptPoint =
 {
 	local float fr, go;
@@ -125,7 +127,7 @@ entity (entity navn, entity from, entity to) MatchOptPoint =
 	}
 	return world;
 };
-
+*/
 /* --- PopRoute ---
 Traverses the bots goal-list to get a new goal to travel towards*/
 
