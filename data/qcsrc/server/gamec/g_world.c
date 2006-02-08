@@ -179,18 +179,18 @@ void worldspawn (void)
 	//precache_sound ("announce/robotic/narrowly_averted.ogg");
 	//precache_sound ("minstagib/mockery.ogg");
 
-	// announcer sounds - male	
-	precache_sound ("announcer/male/03kills.ogg");	
-	precache_sound ("announcer/male/05kills.ogg");	
-	precache_sound ("announcer/male/10kills.ogg");	
-	precache_sound ("announcer/male/15kills.ogg");	
-	precache_sound ("announcer/male/20kills.ogg");	
-	precache_sound ("announcer/male/25kills.ogg");	
-	precache_sound ("announcer/male/30kills.ogg");	
-	precache_sound ("announcer/male/botlike.ogg");	
-	precache_sound ("announcer/male/electrobitch.ogg");	
-	precache_sound ("announcer/male/welcome.ogg");	
-	precache_sound ("announcer/male/yoda.ogg");	
+	// announcer sounds - male
+	precache_sound ("announcer/male/03kills.ogg");
+	precache_sound ("announcer/male/05kills.ogg");
+	precache_sound ("announcer/male/10kills.ogg");
+	precache_sound ("announcer/male/15kills.ogg");
+	precache_sound ("announcer/male/20kills.ogg");
+	precache_sound ("announcer/male/25kills.ogg");
+	precache_sound ("announcer/male/30kills.ogg");
+	precache_sound ("announcer/male/botlike.ogg");
+	precache_sound ("announcer/male/electrobitch.ogg");
+	precache_sound ("announcer/male/welcome.ogg");
+	precache_sound ("announcer/male/yoda.ogg");
 
 	// announcer sounds - robotic
 	precache_sound ("announcer/robotic/1fragleft.ogg");
@@ -199,7 +199,7 @@ void worldspawn (void)
 	precache_sound ("announcer/robotic/3fragsleft.ogg");
 	precache_sound ("announcer/robotic/lastsecond.ogg");
 	precache_sound ("announcer/robotic/narrowly.ogg");
-	
+
 	// plays music for the level if there is any
 	if (self.noise)
 	{
@@ -262,86 +262,16 @@ void light (void)
 	makestatic (self);
 }
 
-
-// reads and alters data/maplist.cfg (sliding it one line), and returns a
-// strzoned string containing the next map
-string() Nex_RotateMapList =
+float( string pFilename ) TryFile =
 {
 	local float lHandle;
-	local string lNextMap;
-	local string lCurrentMap;
-	local string lBuffer;
-
-	lHandle = fopen( "maplist.cfg", FILE_READ );
-	if( lHandle < 0 ) {
+	lHandle = fopen( pFilename, FILE_READ );
+	if( lHandle != -1 ) {
 		fclose( lHandle );
-		// restart the current map if no other map is not found
-		return strzone( mapname );
+		return TRUE;
+	} else {
+		return FALSE;
 	}
-
-	// get the first line that will be moved to the end later
-	lCurrentMap = strzone( fgets( lHandle ) );
-	if( !lCurrentMap ) {
-		fclose( lHandle );
-		// restart the current map if no other map is not found
-		return strzone( mapname );
-	}
-
-	// now get the second line which is the map that should be loaded next
-	lBuffer = fgets( lHandle );
-	// if there isnt a second line, nothing needs to be rotated
-	if( !lBuffer ) {
-		fclose( lHandle );
-		strunzone( lCurrentMap );
-		// restart the current map if no other map is not found
-		return strzone( mapname );
-	}
-
-	// since lBuffer holds the next map, it is assigned to nextmap
-	lNextMap = strzone( lBuffer );
-
-	// since fgets uses its own buffer we need to move lBuffer to a tempstring
-	// before reading the next line (or lBuffer will be lost)
-	lBuffer = strcat( lBuffer );
-
-	// read in the rest of the list
-	while( 1 )  {
-		local string lLine;
-
-		lLine = fgets( lHandle );
-		if( !lLine ) {
-			break;
-		}
-
-		lBuffer = strcat( lBuffer, "\n", lLine );
-	}
-	// rotate the list
-	lBuffer = strcat( lBuffer, "\n", lCurrentMap );
-
-	// dismiss lCurrentmap now
-	strunzone( lCurrentMap );
-
-	// and close the file handle
-	fclose( lHandle );
-
-	// open the maplist for output this one
-	lHandle = fopen( "maplist.cfg", FILE_WRITE );
-	if( lHandle < 0 ) {
-		// this shouldnt happen!
-		// print a warning/error message
-		dprint( "Couldn't open ", "maplist.cfg", " for output!\n" );
-
-		strunzone( lNextMap );
-
-		// we return the currently running map
-		return strzone( mapname );
-	}
-
-	fputs( lHandle, lBuffer );
-
-	fclose( lHandle );
-
-	return lNextMap;
 };
 
 void() GotoNextMap =
@@ -377,21 +307,35 @@ void() GotoNextMap =
 		// method 0
 		local float lCurrent;
 		local float lSize;
+		local float lOldCurrent;
 
 		lSize = tokenize( cvar_string( "g_maplist" ) );
 		lCurrent = cvar( "g_maplist_index" );
+		lOldCurrent = lCurrent;
+		while( 1 ) {
+			local string lFilename;
 
-		lCurrent = lCurrent + 1;
-		if( lCurrent >= lSize ) {
-			lCurrent = 0;
+			lCurrent = lCurrent + 1;
+			if( lCurrent >= lSize ) {
+				lCurrent = 0;
+			}
+			if( lOldCurrent == lCurrent ) {
+				// todo
+				bprint( "Maplist is bad/messed up. Not one good mapcfg can be found in it!\n" );
+				localcmd( "disconnect\n" );
+				break;
+			}
+
+			cvar_set( "g_maplist_index", ftos( lCurrent ) );
+
+			lFilename = strcat( "maps/", argv( lCurrent ), ".mapcfg" );
+			if( TryFile( lFilename ) ) {
+				localcmd(strcat("exec \"", lFilename ,"\"\n"));
+			} else {
+				dprint( "Couldn't find '", lFilename, "'..\n" );
+			}
+			//changelevel( argv( lCurrent ) );
 		}
-
-		cvar_set( "g_maplist_index", ftos( lCurrent ) );
-
-
-		localcmd(strcat("exec \"maps/", argv( lCurrent ), ".mapcfg\"\n"));
-		//changelevel( argv( lCurrent ) );
-
 
 		/*
 		// method 1
@@ -430,10 +374,6 @@ void() GotoNextMap =
 		changelevel (nextmap);
 		strunzone(nextmap);*/
 
-		// method 2
-		//nextmap = Nex_RotateMapList();
-		//changelevel (nextmap);
-		//strunzone (nextmap);
 		// method 3
 		/*
 		s = cvar_string("g_maplist");
@@ -545,7 +485,7 @@ void() DumpStats =
 		return;
 
 	now = time;
-	
+
 	if (cvar("g_tdm"))
 		gametype = "tdm";
 	else if (cvar("g_ctf"))
@@ -556,12 +496,12 @@ void() DumpStats =
 		gametype = "rune";
 	else
 		gametype = "dm";
-	
+
 	if(gameover)
 		s = ":scores:";
 	else
 		s = ":status:";
-	
+
 	s = strcat(s, gametype, "_", mapname, ":", ftos(rint(now)), "\n");
 
 	if(cvar("sv_logscores_console"))
@@ -595,7 +535,7 @@ void() DumpStats =
 	if(cvar("sv_logscores_file"))
 	{
 		fputs(file, ":end\n");
-		fclose(file);		
+		fclose(file);
 	}
 }
 
@@ -618,7 +558,7 @@ void() NextLevel =
 	WriteByte (MSG_ALL, 3);
 
 	//pos = FindIntermission ();
-	
+
 	DumpStats();
 
 	other = findchainflags(flags, FL_CLIENT);
@@ -630,7 +570,7 @@ void() NextLevel =
 		other.movetype = MOVETYPE_NONE;
 		other.angles = other.v_angle;
 		other.angles_x = other.angles_x * -1;
-		
+
 		self = other;
 		weapon_action(other.weapon, WR_IDLE);
 
@@ -703,7 +643,7 @@ void() CheckRules_World =
 	local float checkrules_oldleaderfrags;
 	local entity checkrules_oldleader;
 	local entity head;
-	
+
 	if (intermission_running)
 	if (time >= intermission_exittime + 60)
 	{
@@ -736,10 +676,10 @@ void() CheckRules_World =
 	{
 		if(lms_dead_count < 0)
 			lms_dead_count = 0;
-		
-		// goto next map if only one player is alive or 
+
+		// goto next map if only one player is alive or
 		// if there is only one player as spectator (could happen with g_lms_join_anytime 1)
-		if((player_count > 1 && (player_count - lms_dead_count) <= 1) || 
+		if((player_count > 1 && (player_count - lms_dead_count) <= 1) ||
 		  (player_count == 1 && lms_dead_count == 1))
 			NextLevel();
 		return;
@@ -748,7 +688,7 @@ void() CheckRules_World =
 	if(cvar("teamplay") && (cvar("deathmatch") || cvar("g_runematch")) && fraglimit)
 	{
 		team1_score = team2_score = team3_score = team4_score = 0;
-		
+
 		head = findchain(classname, "player");
 		while (head)
 		{
@@ -762,7 +702,7 @@ void() CheckRules_World =
 				team4_score += head.frags;
 			head = head.chain;
 		}
-		
+
 		tdm_old_score = tdm_max_score;
 		tdm_max_score = max(team1_score, team2_score, team3_score, team4_score);
 
@@ -780,7 +720,7 @@ void() CheckRules_World =
 		}
 		return;
 	}
-	
+
 	checkrules_oldleader = checkrules_leader;
 	checkrules_oldleaderfrags = checkrules_leaderfrags;
 	checkrules_leaderfrags = 0;
