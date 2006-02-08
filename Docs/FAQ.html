@@ -181,7 +181,7 @@ This happens when the engine can't load the data*.pk3 file. The reasons could be
 <!--End Section 2-->
 <h3><a name="The sound is broken, it crackles and stutters">The sound is broken, it crackles and stutters</a></h3>
 <p class="Body">
-Try run <tt>nexuiz-sdl.exe</tt> (on Windows) or <tt>nexuiz-linux-x86-sdl</tt> (on Linux). This version usually performs better on newer sound cards than <tt>nexuiz.exe</tt>/<tt>nexuiz-linux-686-glx</tt>.
+Try run <tt>nexuiz-sdl.exe</tt> (on Windows) or <tt>nexuiz-linux-686-sdl</tt> (on Linux). This version usually performs better on newer sound cards than <tt>nexuiz.exe</tt>/<tt>nexuiz-linux-686-glx</tt>.
 </p>
 <!--End Section 2-->
 <h3><a name="When I join a server or after a map change I see nothing but a black screen, but I can still move and shoot">When I join a server or after a map change I see nothing but a black screen, but I can still move and shoot</a></h3>
@@ -200,7 +200,7 @@ There's a tutorial on how to setup up an dedicated server in this <a class="link
 <!--End Section 2-->
 <h3><a name="Which ports do I have to open in firewall/forward from my router to run a server?">Which ports do I have to open in firewall/forward from my router to run a server?</a></h3>
 <p class="Body">
-The default port is 26000 UDP. You can change that by starting Nexuiz with <tt>nexuiz-sdl.exe -port &lt;port&gt;</tt> (on Windows) or <tt>nexuiz-linux-x86-sdl -port &lt;port&gt;</tt> (on Linux).
+The default port is 26000 UDP. You can change that by starting Nexuiz with <tt>nexuiz-sdl.exe -port &lt;port&gt;</tt> (on Windows) or <tt>nexuiz-linux-686-sdl -port &lt;port&gt;</tt> (on Linux).
 To add the command line argument on Windows, create a new shortcut to <tt>nexuiz-sdl.exe</tt> and right click on it. Select properties and <tt>-port &lt;port&gt;</tt> in the &quot;Target:&quot; line. Be sure that the &quot;Start in:&quot; line contains the full path to your Nexuiz folder and clock &quot;OK&quot;.
 </p>
 <!--End Section 2-->
@@ -229,7 +229,7 @@ Before you can create a desktop/menu item you have to create a little shell scri
 <div class="block"><pre>
 #!/bin/sh
 cd `dirname $0`
-./nexuiz-linux-x86-sdl &quot;$@&quot;	# or ./nexuiz-linux-x86_64-sdl if you're using an AMD64/EM64T distributions
+./nexuiz-linux-686-sdl &quot;$@&quot;	# or ./nexuiz-linux-x86_64-sdl if you're using an AMD64/EM64T distributions
 </pre></div>
 Save this in your Nexuiz directory as <tt>nexuiz.sh</tt>. Now you have to make this file executable by opening a xterm/konsole and typing:
 <div class="block"><pre>

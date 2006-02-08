@@ -30,7 +30,7 @@ This happens when the engine can't load the data*.pk3 file. The reasons could be
 	3. your download might be corrupted
 
 ** The sound is broken, it crackles and stutters
-Try run |nexuiz-sdl.exe| (on Windows) or |nexuiz-linux-x86-sdl| (on Linux). This version usually performs better on newer sound cards than |nexuiz.exe|/|nexuiz-linux-686-glx|.
+Try run |nexuiz-sdl.exe| (on Windows) or |nexuiz-linux-686-sdl| (on Linux). This version usually performs better on newer sound cards than |nexuiz.exe|/|nexuiz-linux-686-glx|.
 
 ** When I join a server or after a map change I see nothing but a black screen, but I can still move and shoot
 This is probably because you don't have the map, that's running on the server. There is no map/content download in Nexuiz at the moment so you have to get the map the old fashioned way. Most servers will have a download URL in their name or welcome message. There is also a [wiki page (http://savage747.sa.funpic.de/wiki/pmwiki.php?n=Main.CustomMaps)] dedicated to new maps.
@@ -43,7 +43,7 @@ This is probably because you don't have the map, that's running on the server. T
 There's a tutorial on how to setup up an dedicated server in this [forum post (http://www.nexuiz.com/forums/index.php?showtopic=1236)].
 
 ** Which ports do I have to open in firewall/forward from my router to run a server?
-The default port is 26000 UDP. You can change that by starting Nexuiz with |nexuiz-sdl.exe -port <port>| (on Windows) or |nexuiz-linux-x86-sdl -port <port>| (on Linux).
+The default port is 26000 UDP. You can change that by starting Nexuiz with |nexuiz-sdl.exe -port <port>| (on Windows) or |nexuiz-linux-686-sdl -port <port>| (on Linux).
 To add the command line argument on Windows, create a new shortcut to |nexuiz-sdl.exe| and right click on it. Select properties and |-port <port>| in the "Target:" line. Be sure that the "Start in:" line contains the full path to your Nexuiz folder and clock "OK".
 
 ** Is there some kind of rcon?
@@ -63,7 +63,7 @@ Before you can create a desktop/menu item you have to create a little shell scri
 ^<<
 #!/bin/sh
 cd `dirname $0`
-./nexuiz-linux-x86-sdl "$@"	# or ./nexuiz-linux-x86_64-sdl if you're using an AMD64/EM64T distributions
+./nexuiz-linux-686-sdl "$@"	# or ./nexuiz-linux-x86_64-sdl if you're using an AMD64/EM64T distributions
 ^>>
 Save this in your Nexuiz directory as |nexuiz.sh|. Now you have to make this file executable by opening a xterm/konsole and typing:
 ^<<
