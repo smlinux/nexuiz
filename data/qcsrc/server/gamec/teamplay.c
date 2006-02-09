@@ -162,6 +162,7 @@ void InitGameplayMode()
 			gamemode_name = "Team Deathmatch";
 			ActivateTeamplay();
 			teams_matter = 1;
+			cvar_set("g_tdm", "1");
 		}
 		else
 		{

@@ -506,7 +506,7 @@ void() DumpStats =
 	s = strcat(s, gametype, "_", mapname, ":", ftos(rint(now)), "\n");
 
 	if(cvar("sv_logscores_console"))
-		localcmd("echo ", s);
+		localcmd(strcat("echo ", s));
 	if(cvar("sv_logscores_file"))
 	{
 		file = fopen(cvar_string("sv_logscores_filename"), FILE_APPEND);
@@ -524,7 +524,7 @@ void() DumpStats =
 			s = strcat(s, ftos(other.team), ":", other.netname, "\n");
 
 			if(cvar("sv_logscores_console"))
-				localcmd("echo ", s);
+				localcmd(strcat("echo ", s));
 			if(cvar("sv_logscores_file"))
 				fputs(file, s);
 		}
@@ -615,7 +615,7 @@ void() CheckRules_Player =
 
 	fraglimit = cvar("fraglimit");
 
-	if(!cvar("g_lms") && !(cvar("teamplay") && (cvar("deathmatch") || cvar("g_runematch"))))
+	if(!cvar("g_lms") && !(cvar("g_tdm") || (cvar("teamplay") && cvar("g_runematch"))))
 	{
 		if (fraglimit && self.frags >= fraglimit)
 		{
@@ -686,7 +686,7 @@ void() CheckRules_World =
 		return;
 	}
 
-	if(cvar("teamplay") && (cvar("deathmatch") || cvar("g_runematch")) && fraglimit)
+	if((cvar("g_tdm") || (cvar("teamplay") && cvar("g_runematch"))) && fraglimit)
 	{
 		team1_score = team2_score = team3_score = team4_score = 0;
 
@@ -710,6 +710,7 @@ void() CheckRules_World =
 		if(tdm_max_score >= fraglimit)
 			NextLevel();
 
+		if(!cvar("g_domination") && !cvar("g_runematch"))
 		if(tdm_max_score != tdm_old_score)
 		{
 			if(tdm_max_score == fraglimit - 1)
@@ -742,6 +743,8 @@ void() CheckRules_World =
 		checkrules_leaderfrags = 0;
 	}
 	checkrules_leaderfrags = floor(checkrules_leaderfrags);
+
+	if (!cvar("g_domination") && !cvar("g_runematch"))
 	if (checkrules_leaderfrags != checkrules_oldleaderfrags)
 	{
 		if (checkrules_leaderfrags == fraglimit - 1)
