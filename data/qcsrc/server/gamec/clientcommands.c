@@ -1,7 +1,5 @@
 void ReadyCount();
 
-.float vote_finished;
-
 void SV_ParseClientCommand(string s) {
 	local float index;
 
@@ -42,13 +40,21 @@ void SV_ParseClientCommand(string s) {
 		}
 	} else if(argv(0) == "vote") {
 		if(argv(1) == "help") {
+			local string vmasterdis;
+			if(!cvar("sv_vote_master")) {
+				vmasterdis = " ^1(disabled)";
+			}
+			local string vcalldis;
+			if(!cvar("sv_vote_call")) {
+				vcalldis = " ^1(disabled)";
+			}
 			sprint(self, "^7You can use voting with \"^2cmd vote help^7\" \"^2cmd vote status^7\" \"^2cmd vote call ^3COMMAND ARGUMENTS^7\" \"^2cmd vote stop^7\" \"^2cmd vote master^7\" \"^2cmd vote do ^3COMMAND ARGUMENTS^7\" \"^2cmd vote yes^7\" \"^2cmd vote no^7\".\n");
 			sprint(self, "^7Or if your version is up to date you can use these aliases \"^2vhelp^7\" \"^2vstatus^7\" \"^2vcall ^3COMMAND ARGUMENTS^7\" \"^2vstop^7\" \"^2vmaster^7\" \"^2vdo ^3COMMAND ARGUMENTS^7\" \"^2vyes^7\" \"^2vno^7\".\n");
 			sprint(self, "^7\"^2help^7\" shows this info.\n");
 			sprint(self, "^7\"^2status^7\" shows if there is a vote called and who called it.\n");
-			sprint(self, "^7\"^2call^7\" is used to call a vote. See the list of allowed commands.\n");
+			sprint(self, strcat("^7\"^2call^7\" is used to call a vote. See the list of allowed commands.", vcalldis, "^7\n"));
 			sprint(self, "^7\"^2stop^7\" can be used by the vote caller or an admin to stop a vote and maybe correct it.\n");
-			sprint(self, "^7\"^2master^7\" is used to call a vote to become a master.\n");
+			sprint(self, strcat("^7\"^2master^7\" is used to call a vote to become a master.", vmasterdis, "^7\n"));
 			sprint(self, "^7\"^2do^7\" If you are a master you can execute a command without a vote. See the list of allowed commands.\n");
 			sprint(self, "^7\"^2yes^7\" and \"^2no^7\" to make your vote.\n");
 			sprint(self, "^7If more then 50% of the players vote yes the vote is accepted.\n");
@@ -78,8 +84,8 @@ void SV_ParseClientCommand(string s) {
 						votecalledmaster = FALSE;
 						votecalledvote = strzone(vote);
 						votecaller = self; // remember who called the vote
+						votefinished = time + cvar("sv_vote_timeout");
 						votecaller.vote_vote = 1; // of course you vote yes
-						votecaller.vote_finished = time + cvar("sv_vote_timeout");
 						votecaller.vote_next = time + cvar("sv_vote_wait");
 						bprint(strcat("^3Vote for \"^1", votecalledvote, "^3\" called by \"^7", votecaller.netname, "^3\".\n"));
 						VoteCount(); // needed if you are the only one
@@ -108,8 +114,8 @@ void SV_ParseClientCommand(string s) {
 					votecalledmaster = TRUE;
 					votecalledvote = strzone("^3master");
 					votecaller = self; // remember who called the vote
+					votefinished = time + cvar("sv_vote_timeout");
 					votecaller.vote_vote = 1; // of course you vote yes
-					votecaller.vote_finished = time + cvar("sv_vote_timeout");
 					votecaller.vote_next = time + cvar("sv_vote_wait");
 					bprint(strcat("\"^7", votecaller.netname, "^3\" called a vote to become ^3master^3.\n"));
 					VoteCount(); // needed if you are the only one
@@ -223,8 +229,8 @@ void SV_ParseClientCommand(string s) {
 }
 
 void VoteThink() {
-	if(self.vote_finished > 0 // this player has called a vote
-	    && time > self.vote_finished) // time is up
+	if(votefinished > 0 // a vote was called
+	    && time > votefinished) // time is up
 	{
 		VoteCount();
 	}
@@ -290,7 +296,6 @@ void VoteReset() {
 		while(player)
 		{
 			player.vote_vote = 0;
-			player.vote_finished = 0;
 			player = find(player, classname, searchclass);
 		}
 
@@ -305,6 +310,7 @@ void VoteReset() {
 
 	votecalled = FALSE;
 	votecalledmaster = FALSE;
+	votefinished = 0;
 }
 
 void VoteAccept() {
@@ -379,7 +385,7 @@ void VoteCount() {
 		VoteAccept();
 	} else if((playercount / 2) < nocount) { // vote rejected
 		VoteReject();
-	} else if(time > votecaller.vote_finished) { // vote timedout
+	} else if(time > votefinished) { // vote timedout
 		VoteTimeout();
 	} // else still running
 }
