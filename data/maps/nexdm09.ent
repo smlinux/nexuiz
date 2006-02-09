@@ -694,7 +694,7 @@
 }
 {
 "classname" "item_armor25"
-"origin" "337 1014 -67"
+"origin" "345 1014 45"
 }
 {
 "classname" "item_health100"
