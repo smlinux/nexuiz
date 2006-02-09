@@ -560,6 +560,8 @@ void() NextLevel =
 
 	//pos = FindIntermission ();
 
+	VoteReset();
+
 	DumpStats();
 
 	other = findchainflags(flags, FL_CLIENT);
@@ -644,6 +646,8 @@ void() CheckRules_World =
 	local float checkrules_oldleaderfrags;
 	local entity checkrules_oldleader;
 	local entity head;
+
+	VoteThink();
 
 	if (intermission_running)
 	if (time >= intermission_exittime + 60)

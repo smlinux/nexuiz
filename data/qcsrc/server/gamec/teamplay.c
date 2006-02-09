@@ -99,6 +99,8 @@ void InitGameplayMode()
 {
 	float fraglimit_override, timelimit_override;
 
+	VoteReset();
+
 	game = cvar ("gamecfg");	// load game options
 
 	// game cvars get reset before map changes

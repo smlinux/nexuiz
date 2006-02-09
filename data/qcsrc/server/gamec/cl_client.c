@@ -206,7 +206,6 @@ void PutObserverInServer (void)
 	self.strength_finished = 0;
 	self.invincible_finished = 0;
 	self.pushltime = 0;
-	self.vote_finished = 0;
 	self.think = SUB_Null;
 	self.nextthink = 0;
 	self.hook_time = 0;
@@ -286,7 +285,6 @@ void PutClientInServer (void)
 		self.pushltime = 0;
 		//self.speed_finished = 0;
 		//self.slowmo_finished = 0;
-		self.vote_finished = 0;
 		// players have no think function
 		self.think = SUB_Null;
 		self.nextthink = 0;
@@ -1231,7 +1229,6 @@ void PlayerPreThink (void)
 		centerprint(self, strcat("spectating ", self.enemy.netname, "\n\n\n^7press attack for next player\npress attack2 for free fly mode"));
 		
 	}
-	VoteThink();
 }
 
 /*
