@@ -53,16 +53,8 @@
 "origin" "-320 -768 16"
 }
 {
-"classname" "weapon_uzi"
-"origin" "-512 -1280 -48"
-}
-{
 "classname" "item_health_small"
 "origin" "576 -1344 80"
-}
-{
-"classname" "weapon_plasmagun"
-"origin" "1216 384 16"
 }
 {
 "origin" "1080 192 72"
@@ -235,10 +227,6 @@
 "model" "*9"
 "target" "t10"
 "classname" "trigger_push"
-}
-{
-"classname" "weapon_rocketlauncher"
-"origin" "1024 -1280 80"
 }
 {
 "classname" "item_armor_combat"

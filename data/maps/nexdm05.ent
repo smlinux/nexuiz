@@ -104,10 +104,6 @@
 "classname" "target_position"
 }
 {
-"origin" "160 480 -168"
-"classname" "weapon_grenadelauncher"
-}
-{
 "origin" "160 544 344"
 "classname" "weapon_rocketlauncher"
 }

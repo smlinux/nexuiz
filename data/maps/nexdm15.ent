@@ -364,7 +364,7 @@
 }
 {
 "classname" "weapon_rocketlauncher"
-"origin" "-32 120 24"
+"origin" "-32 120 40"
 }
 {
 "classname" "item_rockets"
@@ -372,7 +372,7 @@
 }
 {
 "classname" "weapon_crylink"
-"origin" "648 520 448"
+"origin" "648 520 454"
 }
 {
 "classname" "item_cells"
