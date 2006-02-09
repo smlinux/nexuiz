@@ -8,7 +8,7 @@ Players: 3-6
 
 Weapons: Machine Gun, Electro,
 Nexgun, Hagar, Mortar,
-Rocket Launcher
+Rocket Launcher, Crylink
 
 Powerups: Invincibility,
 Strength
