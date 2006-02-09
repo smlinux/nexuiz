@@ -147,6 +147,7 @@ Adds an UrreBot to the server*/
 
 entity(float bottype) UrreBotAdd =
 {
+	local float shirt, pants;
 	local entity ent, ret;
 
 	ent = self;
@@ -161,7 +162,17 @@ entity(float bottype) UrreBotAdd =
 		self = ent;
 		return world;
 	}
-	UrreBotSetup();
+	// UrreBotSetup();
+	// Requested by Vermeulen
+	self.netname = PickARandomName();
+	if (teamplay)
+		JoinBestTeam(self, 0);
+	else
+	{
+		shirt = floor(random()*15);
+		pants = floor(random()*15);
+		self.clientcolors = pants + shirt * 16;
+	}
 	self.list = urrebot_chain;
 	urrebot_chain = self;
 	ClientConnect();
@@ -256,8 +267,13 @@ void(entity navn, entity l1, entity l2) SpawnOptPoint =
 	local entity oldself;
 	local entity l, upd_pt;
 
-	upd = FALSE;
+	newmis = spawn();
+	setsize (newmis, PL_MIN, PL_MAX);
+	oldself = self;
+	self = newmis;
 	point = ClampPointToSpace(ClampPointToSpace(l2.origin, l2, navn), l1, navn);
+	self = oldself;
+	upd = FALSE;
 	l = navn.optp_chain;
 	while (l)
 	{
@@ -265,8 +281,10 @@ void(entity navn, entity l1, entity l2) SpawnOptPoint =
 		{
 			upd = TRUE;
 			upd_pt = l;
+			l = world;
 		}
-		l = l.list;
+		else
+			l = l.list;
 	}
 
 	if (upd)
@@ -370,20 +388,15 @@ void(entity navn, entity l1, entity l2) SpawnOptPoint =
 
 	if (!upd)
 	{
-		newmis = spawn();
 		newmis.classname = "optpoint";
 		newmis.list = navn.optp_chain;
 		navn.optp_chain = newmis;
-		// setmodel(newmis, "models/misc/chatbubble.spr");
-		setsize (newmis, PL_MIN, PL_MAX);
-		oldself = self;
-		self = newmis;
-		point = ClampPointToSpace(ClampPointToSpace(l2.origin, l2, navn), l1, navn);
-		self = oldself;
 		setorigin(newmis, point);
 		newmis.link0 = l1;
 		newmis.link10 = l2;
 	}
+	else
+		remove(newmis);
 };
 
 void() OptimiseNavigation =
@@ -400,81 +413,121 @@ void() OptimiseNavigation =
 			l.nextthink = time;
 			SpawnOptPoint(navn, l.enemy, navn);
 			if (navn.link0 != l.enemy)
+			if (!(navn.lflags0 & LF_NOWALK))
+			if (!(navn.lflags0 & LF_NOLINK))
 				SpawnOptPoint(navn, l.enemy, navn.link0);
 			if (navn.link1)
 			{
 				if (navn.link1 != l.enemy)
+				if (!(navn.lflags1 & LF_NOWALK))
+				if (!(navn.lflags1 & LF_NOLINK))
 					SpawnOptPoint(navn, l.enemy, navn.link1);
 				if (navn.link2)
 				{
 					if (navn.link2 != l.enemy)
+					if (!(navn.lflags2 & LF_NOWALK))
+					if (!(navn.lflags2 & LF_NOLINK))
 						SpawnOptPoint(navn, l.enemy, navn.link2);
 					if (navn.link3)
 					{
 						if (navn.link3 != l.enemy)
+						if (!(navn.lflags3 & LF_NOWALK))
+						if (!(navn.lflags3 & LF_NOLINK))
 							SpawnOptPoint(navn, l.enemy, navn.link3);
 						if (navn.link4)
 						{
 							if (navn.link4 != l.enemy)
+							if (!(navn.lflags4 & LF_NOWALK))
+							if (!(navn.lflags4 & LF_NOLINK))
 								SpawnOptPoint(navn, l.enemy, navn.link4);
 							if (navn.link5)
 							{
 								if (navn.link5 != l.enemy)
+								if (!(navn.lflags5 & LF_NOWALK))
+								if (!(navn.lflags5 & LF_NOLINK))
 									SpawnOptPoint(navn, l.enemy, navn.link5);
 								if (navn.link6)
 								{
 									if (navn.link6 != l.enemy)
+									if (!(navn.lflags6 & LF_NOWALK))
+									if (!(navn.lflags6 & LF_NOLINK))
 										SpawnOptPoint(navn, l.enemy, navn.link6);
 									if (navn.link7)
 									{
 										if (navn.link7 != l.enemy)
+										if (!(navn.lflags7 & LF_NOWALK))
+										if (!(navn.lflags7 & LF_NOLINK))
 											SpawnOptPoint(navn, l.enemy, navn.link7);
 										if (navn.link8)
 										{
 											if (navn.link8 != l.enemy)
+											if (!(navn.lflags8 & LF_NOWALK))
+											if (!(navn.lflags8 & LF_NOLINK))
 												SpawnOptPoint(navn, l.enemy, navn.link8);
 											if (navn.link9)
 											{
 												if (navn.link9 != l.enemy)
+												if (!(navn.lflags9 & LF_NOWALK))
+												if (!(navn.lflags9 & LF_NOLINK))
 													SpawnOptPoint(navn, l.enemy, navn.link9);
 												if (navn.link10)
 												{
 													if (navn.link10 != l.enemy)
+													if (!(navn.lflags10 & LF_NOWALK))
+													if (!(navn.lflags10 & LF_NOLINK))
 														SpawnOptPoint(navn, l.enemy, navn.link10);
 													if (navn.link11)
 													{
 														if (navn.link11 != l.enemy)
+														if (!(navn.lflags11 & LF_NOWALK))
+														if (!(navn.lflags11 & LF_NOLINK))
 															SpawnOptPoint(navn, l.enemy, navn.link11);
 														if (navn.link12)
 														{
 															if (navn.link12 != l.enemy)
+															if (!(navn.lflags12 & LF_NOWALK))
+															if (!(navn.lflags12 & LF_NOLINK))
 																SpawnOptPoint(navn, l.enemy, navn.link12);
 															if (navn.link13)
 															{
 																if (navn.link13 != l.enemy)
+																if (!(navn.lflags13 & LF_NOWALK))
+																if (!(navn.lflags13 & LF_NOLINK))
 																	SpawnOptPoint(navn, l.enemy, navn.link13);
 																if (navn.link14)
 																{
 																	if (navn.link14 != l.enemy)
+																	if (!(navn.lflags14 & LF_NOWALK))
+																	if (!(navn.lflags14 & LF_NOLINK))
 																		SpawnOptPoint(navn, l.enemy, navn.link14);
 																	if (navn.link15)
 																	{
 																		if (navn.link15 != l.enemy)
+																		if (!(navn.lflags15 & LF_NOWALK))
+																		if (!(navn.lflags15 & LF_NOLINK))
 																			SpawnOptPoint(navn, l.enemy, navn.link15);
 																		if (navn.link16)
 																		{
 																			if (navn.link16 != l.enemy)
+																			if (!(navn.lflags16 & LF_NOWALK))
+																			if (!(navn.lflags16 & LF_NOLINK))
 																				SpawnOptPoint(navn, l.enemy, navn.link16);
 																			if (navn.link17)
 																			{
 																				if (navn.link17 != l.enemy)
+																				if (!(navn.lflags17 & LF_NOWALK))
+																				if (!(navn.lflags17 & LF_NOLINK))
 																					SpawnOptPoint(navn, l.enemy, navn.link17);
 																				if (navn.link18)
 																				{
 																					if (navn.link18 != l.enemy)
+																					if (!(navn.lflags18 & LF_NOWALK))
+																					if (!(navn.lflags18 & LF_NOLINK))
 																						SpawnOptPoint(navn, l.enemy, navn.link18);
 																					if (navn.link19)
 																					if (navn.link19 != l.enemy)
+																					if (!(navn.lflags19 & LF_NOWALK))
+																					if (!(navn.lflags19 & LF_NOLINK))
 																						SpawnOptPoint(navn, l.enemy, navn.link19);
 																				}
 																			}
