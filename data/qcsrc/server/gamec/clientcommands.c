@@ -1,5 +1,7 @@
 void ReadyCount();
 
+.float vote_finished;
+
 void SV_ParseClientCommand(string s) {
 	local float index;
 
