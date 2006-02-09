@@ -18,7 +18,7 @@ void Item_Respawn (void)
 void Item_Touch (void)
 {
 	local entity oldself;
-	local float	_switchweapon;
+	local float _switchweapon;
 
 	if (other.classname != "player")
 		return;
@@ -135,6 +135,8 @@ void Item_Touch (void)
 
 	if (_switchweapon)
 		self.switchweapon = w_getbestweapon(self);
+	if (self.switchweapon != self.weapon)
+		self.cnt = self.weapon;
 
 	//w_updateweapon ();
 	//w_updateammo ();

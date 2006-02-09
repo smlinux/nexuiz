@@ -245,7 +245,6 @@ void() w_ready =
 // FIXME: add qw-style client-custom weaponrating (cl_weaponrating)?
 float(entity e) w_getbestweapon
 {// add new weapons here
-	e.cnt = e.weapon;
 	if (client_hasweapon(e, WEP_ROCKET_LAUNCHER, TRUE))
 		return WEP_ROCKET_LAUNCHER;
 	else if (client_hasweapon(e, WEP_NEX, TRUE))
@@ -302,7 +301,11 @@ void(float() checkfunc1, float() checkfunc2, void() firefunc, float atktime) wea
 	if (!checkfunc1())
 	{
 		if (!checkfunc2())
+		{
 			self.switchweapon = w_getbestweapon(self);
+			if (self.switchweapon != self.weapon)
+				self.cnt = self.weapon;
+		}
 		return;
 	}
 	// Don't do shot if previos attack  not finished
@@ -322,7 +325,11 @@ void(float() checkfunc1, float() checkfunc2, void() firefunc) weapon_doattack
 	if (!checkfunc1())
 	{
 		if (!checkfunc2())
+		{
 			self.switchweapon = w_getbestweapon(self);
+			if (self.switchweapon != self.weapon)
+				self.cnt = self.weapon;
+		}
 		return;
 	}
 	self.weaponentity.state = WS_INUSE;

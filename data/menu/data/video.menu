@@ -40,7 +40,7 @@ Item DataContainer Video
 		Item DataLink_TextSwitch Switch
 		{
 			valueList "'1' '2' '4' '8' '16'"
-			descList "'off' '2x' '4x' '8x' '16x'"
+			descList "'Off' '2x' '4x' '8x' '16x'"
 			link  "##up"
 		}
 	}
@@ -52,7 +52,7 @@ Item DataContainer Video
 		Item DataLink_TextSwitch Switch
 		{
 			valueList "'0' '1' '2' '3' '4'"
-			descList "'best' 'good' 'medium' 'low' 'lowest' 'custom'"
+			descList "'Best' 'Good' 'Medium' 'Low' 'Lowest' 'Custom'"
 			link  "##up"
 		}
 	}
