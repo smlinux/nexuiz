@@ -29,8 +29,8 @@ example:
    start of a new section:	:scores:<gametype>_<mapname>:<map runtime>		(if the dump was triggered
    				   by "printstats", the line starts with :status:)
    player entry:		:player:<frags>:<deaths>:<playtime>:<team>:<nickname>	(playername might contain ":",
-   				   so be sure your parser doesn't split them)
-   sectionend:			:end
+   				   so be sure your parser doesn't split them, playtime is messured in seconds)
+   section end:			:end
 
 team colors:
    Red Team	=  5

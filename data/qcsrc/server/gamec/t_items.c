@@ -28,6 +28,8 @@ void Item_Touch (void)
 		return;
 	if (self.health && other.health >= other.max_health)
 		return;
+	if (self.owner == other)
+		return;
 	// Savage: Remove the respawn effect if still present
 	self.effects = self.effects - (self.effects & EF_STARDUST);
 
