@@ -255,11 +255,10 @@ void(entity navn, vector normal, float dist) AddPlane =
 	}
 };
 
-// FIXME: Disabled until fixed
 /* --- SpawnOptPoint ---
 This function spawns waypoints for the most used paths between navnodes as an
 optimisation*/
-/*
+
 void(entity navn, entity l1, entity l2) SpawnOptPoint =
 {
 	local float upd;
@@ -561,7 +560,7 @@ void(entity navn, entity linked) SpawnOptController =
 	navn.optp_chain = newmis;
 	newmis.enemy = linked;
 };
-*/
+
 /* --- LinkNavNodes ---
 Links the navnodes and gives some special attributes (like doors, teleporters)*/
 
@@ -920,8 +919,7 @@ void() LinkNavNodes =
 						e.link19 = t;
 					else
 						dprint("WARNING: Too many linking NavNodes!\n");
-					// FIXME: Disabled until fixed
-					// SpawnOptController(e, t);
+					SpawnOptController(e, t);
 				}
 				t = t.list;
 			}

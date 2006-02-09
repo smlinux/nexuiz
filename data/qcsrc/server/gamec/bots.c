@@ -163,15 +163,6 @@ void() Bots_Shared =
 		}
 		else if (loadstep == 2)
 		{
-			if (navnodes)
-				ItemEvals();
-			loadstep = 3;
-			return;
-		}
-		// FIXME: Disabled until fixed
-		/*
-		else if (loadstep == 2)
-		{
 			OptimiseNavigation();
 			loadstep = 3;
 			return;
@@ -183,7 +174,6 @@ void() Bots_Shared =
 			loadstep = 4;
 			return;
 		}
-		*/
 		f = cvar("urrebots");
 		urrebots_strategytime = cvar("urrebots_strategytime");
 		urrebots_combattime = cvar("urrebots_combattime");

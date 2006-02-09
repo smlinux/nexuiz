@@ -17,13 +17,10 @@ float(entity from, entity to, float lflag) CheckNavNode =
 			foundpoint = from.origin;
 		else
 		{
-			// FIXME: Disabled until fixed
-			/*
 			optpoint = MatchOptPoint(from, from.goallist, to);
 			if (optpoint)
 				foundpoint = optpoint.origin;
 			else
-			*/
 				foundpoint = ClampPointToSpace(from.pointl, from, to);
 		}
 		addcost = vlen(from.pointl - foundpoint);

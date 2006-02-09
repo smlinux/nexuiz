@@ -181,13 +181,10 @@ void() UrreBotMove =
 					self.movepoint = self.goalcurrent.origin;
 				else
 				{
-					// FIXME: Disabled until fixed
-					/*
 					optpoint = MatchOptPoint(self.goalcurrent, self.goallist, self.link0);
 					if (optpoint)
 						self.movepoint = optpoint.origin;
 					else
-					*/
 						self.movepoint = ClampPointToSpace(self.origin, self.goalcurrent, self.link0);
 				}
 			}
@@ -217,13 +214,10 @@ void() UrreBotMove =
 					self.movepoint = self.goalcurrent.origin;
 				else
 				{
-					// FIXME: Disabled until fixed
-					/*
 					optpoint = MatchOptPoint(self.goalcurrent, self.goallist, self.goalcurrent);
 					if (optpoint)
 						self.movepoint = optpoint.origin;
 					else
-					*/
 						self.movepoint = ClampPointToSpace(self.origin, self.goalcurrent, self.goalcurrent);					
 				}
 				if (self.movepoint == '0 0 0')
@@ -241,13 +235,10 @@ void() UrreBotMove =
 			self.strat_me = TRUE;
 			UrreBotPath(minisearch_distance);
 		}
-		// FIXME: Disabled until fixed
-		/*
 		optpoint = MatchOptPoint(self.goalcurrent, self.goallist, self.goalcurrent);
 		if (optpoint)
 			self.movepoint = optpoint.origin;
 		else
-		*/
 			self.movepoint = ClampPointToSpace(self.origin, self.goalcurrent, self.goalcurrent);
 	}
 	dir = normalize(ToPointInSpace(self.goalcurrent, self.movepoint));
