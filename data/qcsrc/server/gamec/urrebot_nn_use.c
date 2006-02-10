@@ -81,44 +81,98 @@ entity (entity navn, entity from, entity to) MatchOptPoint =
 		fr = go = FALSE;
 		if (t.link0 == from)
 			fr = TRUE;
-		else if (t.link1 == from)
+		if (t.link1)
+		{
+			if (t.link1 == from)
+				fr = TRUE;
+			if (t.link2)
+			{
+				if (t.link2 == from)
+					fr = TRUE;
+				if (t.link3)
+				{
+					if (t.link3 == from)
+						fr = TRUE;
+					if (t.link4)
+					{
+						if (t.link4 == from)
+							fr = TRUE;
+						if (t.link5)
+						{
+							if (t.link5 == from)
+								fr = TRUE;
+							if (t.link6)
+							{
+								if (t.link6 == from)
+									fr = TRUE;
+								if (t.link7)
+								{
+									if (t.link7 == from)
+										fr = TRUE;
+									if (t.link8)
+									{
+										if (t.link8 == from)
+											fr = TRUE;
+										if (t.link9)
+										{
+											if (t.link9 == from)
+												fr = TRUE;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		if (t.link10 == from)
 			fr = TRUE;
-		else if (t.link2 == from)
-			fr = TRUE;
-		else if (t.link3 == from)
-			fr = TRUE;
-		else if (t.link4 == from)
-			fr = TRUE;
-		else if (t.link5 == from)
-			fr = TRUE;
-		else if (t.link6 == from)
-			fr = TRUE;
-		else if (t.link7 == from)
-			fr = TRUE;
-		else if (t.link8 == from)
-			fr = TRUE;
-		else if (t.link9 == from)
-			fr = TRUE;
-		if (t.link10 == to)
-			go = TRUE;
-		else if (t.link11 == to)
-			go = TRUE;
-		else if (t.link12 == to)
-			go = TRUE;
-		else if (t.link13 == to)
-			go = TRUE;
-		else if (t.link14 == to)
-			go = TRUE;
-		else if (t.link15 == to)
-			go = TRUE;
-		else if (t.link16 == to)
-			go = TRUE;
-		else if (t.link17 == to)
-			go = TRUE;
-		else if (t.link18 == to)
-			go = TRUE;
-		else if (t.link19 == to)
-			go = TRUE;
+		if (t.link11)
+		{
+			if (t.link11 == from)
+				fr = TRUE;
+			if (t.link12)
+			{
+				if (t.link12 == from)
+					fr = TRUE;
+				if (t.link13)
+				{
+					if (t.link13 == from)
+						fr = TRUE;
+					if (t.link14)
+					{
+						if (t.link14 == from)
+							fr = TRUE;
+						if (t.link15)
+						{
+							if (t.link15 == from)
+								fr = TRUE;
+							if (t.link16)
+							{
+								if (t.link16 == from)
+									fr = TRUE;
+								if (t.link17)
+								{
+									if (t.link17 == from)
+										fr = TRUE;
+									if (t.link18)
+									{
+										if (t.link18 == from)
+											fr = TRUE;
+										if (t.link19)
+										{
+											if (t.link19 == from)
+												fr = TRUE;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 		if (fr && go)
 			return t;
 		t = t.list;
