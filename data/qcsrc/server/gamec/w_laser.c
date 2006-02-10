@@ -12,7 +12,11 @@ void(float req) w_laser =
 	else if (req == WR_FIRE1)
 		weapon_prepareattack(laser_check, laser_check, laser_fire1_01, cvar("g_balance_laser_refire"));
 	else if (req == WR_FIRE2)
-		self.switchweapon = self.cnt;
+	{
+		weapon_hasammo = TRUE;
+		if (client_hasweapon(self, self.cnt, TRUE))
+			self.switchweapon = self.cnt;
+	}
 	else if (req == WR_RAISE)
 		laser_select_01();
 	else if (req == WR_UPDATECOUNTS)
