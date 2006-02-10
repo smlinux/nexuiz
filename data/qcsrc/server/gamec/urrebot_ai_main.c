@@ -158,6 +158,7 @@ void() UrreBotMove =
 	{
 		if (boxesoverlap(self.origin + self.mins, self.origin + self.maxs, self.link0.origin + self.link0.mins, self.link0.origin + self.link0.maxs))
 		{
+			optpoint = world;
 			plane = self.link0.plane_chain;
 			while (plane)
 			{
@@ -181,7 +182,8 @@ void() UrreBotMove =
 					self.movepoint = self.goalcurrent.origin;
 				else
 				{
-					optpoint = MatchOptPoint(self.goalcurrent, self.goallist, self.link0);
+					if (urrebots_navopt)
+						optpoint = MatchOptPoint(self.goalcurrent, self.goallist, self.link0);
 					if (optpoint)
 						self.movepoint = optpoint.origin;
 					else
@@ -191,6 +193,7 @@ void() UrreBotMove =
 		}
 		else if (((self.goalcurrent.sflags & S_TOUCH) && boxesoverlap(self.origin + self.mins, self.origin + self.maxs, self.goalcurrent.origin + self.goalcurrent.mins, self.goalcurrent.origin + self.goalcurrent.maxs)) || boxenclosed(self.origin + self.mins, self.origin + self.maxs, self.goalcurrent.origin + self.goalcurrent.mins, self.goalcurrent.origin + self.goalcurrent.maxs))
 		{
+			optpoint = world;
 			plane = self.goalcurrent.plane_chain;
 			while (plane)
 			{
@@ -214,7 +217,8 @@ void() UrreBotMove =
 					self.movepoint = self.goalcurrent.origin;
 				else
 				{
-					optpoint = MatchOptPoint(self.goalcurrent, self.goallist, self.goalcurrent);
+					if (urrebots_navopt)
+						optpoint = MatchOptPoint(self.goalcurrent, self.goallist, self.goalcurrent);
 					if (optpoint)
 						self.movepoint = optpoint.origin;
 					else
@@ -230,12 +234,14 @@ void() UrreBotMove =
 	}
 	else
 	{
+		optpoint = world;
 		if (!self.goalcurrent || ((self.goalcurrent.flags & FL_ITEM) && !self.goalcurrent.solid) || (self.goalcurrent.classname == "dom_controlpoint" && self.goalcurrent.enemy.team == self.team))
 		{
 			self.strat_me = TRUE;
 			UrreBotPath(minisearch_distance);
 		}
-		optpoint = MatchOptPoint(self.goalcurrent, self.goallist, self.goalcurrent);
+		if (urrebots_navopt)
+			optpoint = MatchOptPoint(self.goalcurrent, self.goallist, self.goalcurrent);
 		if (optpoint)
 			self.movepoint = optpoint.origin;
 		else

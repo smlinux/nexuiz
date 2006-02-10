@@ -919,7 +919,8 @@ void() LinkNavNodes =
 						e.link19 = t;
 					else
 						dprint("WARNING: Too many linking NavNodes!\n");
-					SpawnOptController(e, t);
+					if (urrebots_navopt)
+						SpawnOptController(e, t);
 				}
 				t = t.list;
 			}

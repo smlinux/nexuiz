@@ -78,7 +78,7 @@ float LF_REMOTE = 16;
 
 .entity plane_chain;
 
-float urrebots, urrebots_strategytime, urrebots_combattime;
+float urrebots, urrebots_strategytime, urrebots_combattime, urrebots_navopt;
 
 entity strategytoken;
 float strategytime;
@@ -149,6 +149,11 @@ void() Bots_Shared =
 	if (time >= 3)
 	{
 		// UrreBots
+		urrebots_navopt = cvar("urrebots_navopt");
+		urrebots_strategytime = cvar("urrebots_strategytime");
+		urrebots_combattime = cvar("urrebots_combattime");
+		stratsearch_distance = cvar("urrebots_stratsearch_dist");
+		minisearch_distance = cvar("urrebots_minisearch_dist");
 		if (loadstep == 0)
 		{
 			LoadNavNodes();
@@ -163,7 +168,9 @@ void() Bots_Shared =
 		}
 		else if (loadstep == 2)
 		{
-			OptimiseNavigation();
+			if (navnodes)
+			if (urrebots_navopt)
+				OptimiseNavigation();
 			loadstep = 3;
 			return;
 		}
@@ -175,10 +182,6 @@ void() Bots_Shared =
 			return;
 		}
 		f = cvar("urrebots");
-		urrebots_strategytime = cvar("urrebots_strategytime");
-		urrebots_combattime = cvar("urrebots_combattime");
-		stratsearch_distance = cvar("urrebots_stratsearch_dist");
-		minisearch_distance = cvar("urrebots_minisearch_dist");
 		if (urrebots < f)
 		{
 			bot = UrreBotAdd(BOT_TYPE_URREBOT);

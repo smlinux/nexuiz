@@ -17,7 +17,9 @@ float(entity from, entity to, float lflag) CheckNavNode =
 			foundpoint = from.origin;
 		else
 		{
-			optpoint = MatchOptPoint(from, from.goallist, to);
+			optpoint = world;
+			if (urrebots_navopt)
+				optpoint = MatchOptPoint(from, from.goallist, to);
 			if (optpoint)
 				foundpoint = optpoint.origin;
 			else
