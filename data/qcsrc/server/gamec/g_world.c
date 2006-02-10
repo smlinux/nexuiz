@@ -255,6 +255,9 @@ void worldspawn (void)
 	InitGameplayMode();
 	//if (cvar("g_domination"))
 	//	dom_init();
+
+	// Urrebot setting
+	urrebots_navopt = cvar("urrebots_navopt");
 }
 
 void light (void)

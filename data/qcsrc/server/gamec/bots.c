@@ -149,7 +149,6 @@ void() Bots_Shared =
 	if (time >= 3)
 	{
 		// UrreBots
-		urrebots_navopt = cvar("urrebots_navopt");
 		urrebots_strategytime = cvar("urrebots_strategytime");
 		urrebots_combattime = cvar("urrebots_combattime");
 		stratsearch_distance = cvar("urrebots_stratsearch_dist");
