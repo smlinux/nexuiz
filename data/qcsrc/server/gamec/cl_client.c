@@ -882,7 +882,7 @@ void player_powerups (void)
 	}
 	
 	if (cvar("g_fullbrightplayers"))
-		self.effects = EF_FULLBRIGHT;
+		self.effects = self.effects | EF_FULLBRIGHT;
 	
 }
 
