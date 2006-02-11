@@ -167,7 +167,8 @@ void RemoveItem(void) = {
 
 void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, string itemname, float itemid, float itemflags)
 {
-	if (!cvar("g_pickup_items") && !cvar("g_minstagib") && !cvar("g_lms"))
+	if (!cvar("g_pickup_items") && !cvar("g_minstagib") && 
+			itemid != IT_STRENGTH && itemid != IT_INVINCIBLE && itemname != "100 Health")
 	{
 		remove (self);
 		return;

@@ -216,7 +216,7 @@ void PutObserverInServer (void)
 	self.fixangle = TRUE; 
 	self.crouch = FALSE;
 	self.view_ofs = PL_VIEW_OFS;
-	setorigin (self, spot.origin + '0 0 1' * (1 - self.mins_z - 24));
+	setorigin (self, spot.origin + '0 0 1' * (1 - self.mins_z - 14));
 	self.oldorigin = self.origin;
 	self.items = 0;
 	self.model = "";
@@ -543,10 +543,7 @@ void ClientConnect (void)
 	stuffcmd(self, "cmd clientversion $g_nexuizversion_major\n");
 
 	// set cvar for team scoreboard
-	if(teams_matter)
-		stuffcmd(self, "set teamplay 1\n");
-	else
-		stuffcmd(self, "set teamplay 0\n");
+	stuffcmd(self, "set teamplay ", ftos(teams_matter), "\n");
 
 	if(cvar("g_lms"))
 	{

@@ -136,6 +136,21 @@ Item Layout Misc
 				text	"Pickup items"
 				target	"::Data::Game::Misc::PickupItems::Switch"
 			}
+			Derive Nex_Option_Switch Superhealth
+			{
+				text	"Superhealth"
+				target	"::Data::Game::Misc::Superhealth::Switch"
+			}
+			Derive Nex_Option_Switch Strength
+			{
+				text	"Strength"
+				target	"::Data::Game::Misc::Strength::Switch"
+			}
+			Derive Nex_Option_Switch Shield
+			{
+				text	"Shield"
+				target	"::Data::Game::Misc::Shield::Switch"
+			}
 			Derive Nex_Line	SeperatorGamemodes
 			{}
 			Derive Nex_Option_Switch Instagib

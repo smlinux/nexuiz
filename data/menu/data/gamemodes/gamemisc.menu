@@ -137,6 +137,27 @@ Item DataContainer Misc
 
 		[DataLink_OnOffSwitch]
 	}
+	Item Data_Cvar Superhealth
+	{
+		cvarName	"g_powerup_superhealth"
+		defValue	1
+
+		[DataLink_OnOffSwitch]
+	}
+	Item Data_Cvar Strength
+	{
+		cvarName	"g_powerup_strength"
+		defValue	1
+
+		[DataLink_OnOffSwitch]
+	}
+	Item Data_Cvar Shield
+	{
+		cvarName	"g_powerup_shield"
+		defValue	1
+
+		[DataLink_OnOffSwitch]
+	}
 	Item Data_Cvar Instagib
 	{
 		cvarName	"g_instagib"

@@ -179,7 +179,9 @@ void InitGameplayMode()
 	{
 		game = GAME_LMS;
 		cvar_set("g_lms", "1");
-		fraglimit_override = cvar("fraglimit_override");
+		fraglimit_override = cvar("g_lms_lives_override");
+		if(fraglimit_override == 0)
+			fraglimit_override = -1;
 		gamemode_name = "Last Man Standing";
 		teams_matter = 0;
 		cvar_set("teamplay", "0");
