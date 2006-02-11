@@ -70,7 +70,7 @@ Item Window CreditsWnd
 				{
 					color		'1.0 1.0 1.0'
 					alignment	[AlignCenter]
-					target		"credits.txt"
+					target		"nexuiz-credits.txt"
 				}
 			}
 
