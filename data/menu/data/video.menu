@@ -47,7 +47,7 @@ Item DataContainer Video
 	Item Data_Cvar Picmip
 	{
 		cvarName "gl_picmip"
-		defValue "0"
+		defValue "1"
 
 		Item DataLink_TextSwitch Switch
 		{
