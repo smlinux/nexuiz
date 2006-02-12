@@ -10,7 +10,7 @@ void() trigger_push_touch =
 	if (other.classname != "player" && other.classname != "corpse" && other.classname != "body" && other.classname != "gib" && other.classname != "missile" && other.classname != "casing" && other.classname != "grenade" && other.classname != "plasma" && other.classname != "plasma_prim" && other.classname != "plasma_chain")
 		return;
 
-	if (other.deadflag)
+	if (other.deadflag && other.classname == "player")
 		return;
 
 	if (!self.target)
