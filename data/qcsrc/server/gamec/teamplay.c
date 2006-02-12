@@ -946,6 +946,8 @@ void ShufflePlayerOutOfTeam (float source_team)
 	}
 
 	// move the player to the new team
+	if(selected.classname == "player")
+		centerprint(selected, "You have been moved into a different team to improve team balance\n");
 	SetPlayerTeam(selected, smallestteam, source_team, FALSE);
 }
 
