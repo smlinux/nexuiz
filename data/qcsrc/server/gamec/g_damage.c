@@ -29,7 +29,7 @@ void GiveFrags (entity attacker, entity targ, float f)
 
 void Obituary (entity attacker, entity targ, float deathtype)
 {
-	string	s;
+	string	s, m;
 
 	if (targ.classname == "player" || targ.classname == "corpse")
 	{
@@ -42,6 +42,33 @@ void Obituary (entity attacker, entity targ, float deathtype)
 		{
 			if (deathtype == DEATH_NOAMMO)
 				centerprint(targ, strcat("^1You were killed for running out of ammo...\n\n\n"));
+			if (deathtype == DEATH_TEAMCHANGE)
+			{
+				m = "You are now on: ";
+				if (targ.team == 5)
+					m = strcat(m, "^1Red Team");
+				else if (targ.team == 14)
+					m = strcat(m, "^4Blue Team");
+				else if (targ.team == 10)
+					m = strcat(m, "^6Pink Team");
+				else if (targ.team == 13)
+					m = strcat(m, "^3Yellow Team");
+				centerprint(targ, m);
+			}
+			else if (deathtype == DEATH_AUTOTEAMCHANGE)
+			{
+				m = "You have been moved into a different team to improve team balance\nYou are now on: ";
+				if (targ.team == 5)
+					m = strcat(m, "^1Red Team");
+				else if (targ.team == 14)
+					m = strcat(m, "^4Blue Team");
+				else if (targ.team == 10)
+					m = strcat(m, "^6Pink Team");
+				else if (targ.team == 13)
+					m = strcat(m, "^3Yellow Team");
+				centerprint(targ, m);
+				return;
+			}				
 			else
 				centerprint(targ, strcat("^1You killed your own dumb self!\n\n\n"));
 			
@@ -58,7 +85,7 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				bprint ("^7",s, " ^7committed suicide. What's the point of living without ammo?\n");
 				//sound (self, CHAN_BODY, "minstagib/mockery.ogg", 1, ATTN_NONE);
 			}
-			else
+			else if (deathtype != DEATH_TEAMCHANGE)
 				bprint ("^1",s, "^1 couldn't resist the urge to self-destruct\n");
 			GiveFrags(attacker, targ, -1);
 			//targ.frags = targ.frags - 1;

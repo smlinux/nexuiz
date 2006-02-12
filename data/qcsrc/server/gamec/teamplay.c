@@ -730,16 +730,6 @@ void SV_ChangeTeam(float _color)
 
 	if(cvar("teamplay"))
 	{
-		if(self.classname == "player" && steam != dteam)
-		{
-			// kill player when changing teams
-			if(self.deadflag == DEAD_NO)
-				self.event_damage(self, self, 10000, DEATH_KILL, self.origin, '0 0 0');
-
-			// reduce frags during a team change
-			self.frags = floor(self.frags * (cvar("g_changeteam_fragtransfer") / 100));
-		}
-
 		if(cvar("g_changeteam_banned"))
 		{
 			sprint(self, "Team changes not allowed\n");
@@ -808,6 +798,16 @@ void SV_ChangeTeam(float _color)
 //	bprint(strcat("allow change teams from ", ftos(steam), " to ", ftos(dteam), "\n"));
 
 	SetPlayerTeam(self, dteam, steam, FALSE);
+	if(cvar("teamplay") && self.classname == "player" && steam != dteam)
+	{
+		// kill player when changing teams
+		if(self.deadflag == DEAD_NO)
+//			self.event_damage(self, self, 10000, DEATH_TEAMCHANGE, self.origin, '0 0 0');
+
+			Damage(self, self, self, 100000, DEATH_TEAMCHANGE, self.origin, '0 0 0');
+			// reduce frags during a team change
+			self.frags = floor(self.frags * (cvar("g_changeteam_fragtransfer") / 100));
+	}
 }
 
 
@@ -816,6 +816,7 @@ void ShufflePlayerOutOfTeam (float source_team)
 	float smallestteam, smallestteam_count, steam;
 	float lowest_bot_score, lowest_player_score;
 	entity head, lowest_bot, lowest_player, selected;
+	string m;
 
 	smallestteam = 0;
 	smallestteam_count = 999;
@@ -946,9 +947,20 @@ void ShufflePlayerOutOfTeam (float source_team)
 	}
 
 	// move the player to the new team
-	if(selected.classname == "player")
-		centerprint(selected, "You have been moved into a different team to improve team balance\n");
 	SetPlayerTeam(selected, smallestteam, source_team, FALSE);
+
+	if(selected.deadflag == DEAD_NO)
+			Damage(selected, selected, selected, 100000, DEATH_AUTOTEAMCHANGE, selected.origin, '0 0 0');
+	m = "You have been moved into a different team to improve team balance\nYou are now on: ";
+	if (selected.team == 5)
+		m = strcat(m, "^1Red Team");
+	else if (selected.team == 14)
+		m = strcat(m, "^4Blue Team");
+	else if (selected.team == 10)
+		m = strcat(m, "^6Pink Team");
+	else if (selected.team == 13)
+		m = strcat(m, "^3Yellow Team");
+	centerprint(selected, m);
 }
 
 // part of g_balance_teams_force
