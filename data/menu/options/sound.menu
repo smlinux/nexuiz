@@ -5,7 +5,7 @@ Item Window Sound
 	Item Layout Layout
 	{
 		pos		'156 45'
-		size		'440 800'
+		size		'700 800'
 		origin		'280 0'
 		alignment	[AlignFirst]
 		direction	[Nex_DefaultVertDirection]
