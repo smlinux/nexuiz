@@ -99,10 +99,11 @@
 {
 "classname" "item_health25"
 "origin" "272 -1024 656"
+"angle" "180"
 }
 {
 "classname" "item_rockets"
-"origin" "800 -1304 408"
+"origin" "800 -1324 408"
 }
 {
 "classname" "item_cells"
