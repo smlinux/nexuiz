@@ -10,7 +10,7 @@ Teams: 3
 
 Weapons: Machine Gun, Electro,
 Nexgun, Hagar, Mortar,
-Rocket Launcher, Crylink
+Crylink
 
 Powerups: Invincibility,
 Strength
