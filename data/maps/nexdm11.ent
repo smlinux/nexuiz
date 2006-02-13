@@ -4,11 +4,12 @@
 }
 {
 "classname" "item_strength"
-"origin" "-93 -1185 28"
+"origin" "-93 -1185 18"
 }
 {
 "classname" "item_health25"
 "origin" "-25 -1098 28"
+"angle" "180"
 }
 {
 "classname" "item_rockets"
@@ -28,11 +29,11 @@
 }
 {
 "classname" "item_cells"
-"origin" "424 -1668 51"
+"origin" "424 -1632 31"
 }
 {
 "classname" "item_rockets"
-"origin" "424 -1702 51"
+"origin" "424 -1682 41"
 }
 {
 "classname" "item_health1"
@@ -60,11 +61,12 @@
 }
 {
 "classname" "item_health1"
-"origin" "-423 -1828 123"
+"origin" "-423 -1828 103"
 }
 {
 "classname" "item_rockets"
-"origin" "-657 -1831 123"
+"origin" "-657 -1831 103"
+"angle" "90"
 }
 {
 "classname" "weapon_electro"
@@ -72,7 +74,8 @@
 }
 {
 "classname" "item_shells"
-"origin" "-961 -1586 123"
+"origin" "-961 -1586 103"
+"angle" "70"
 }
 {
 "classname" "item_cells"
@@ -85,10 +88,6 @@
 {
 "classname" "item_health25"
 "origin" "-1000 -815 123"
-}
-{
-"classname" "item_bullets"
-"origin" "-829 -721 123"
 }
 {
 "classname" "item_health1"
@@ -124,7 +123,7 @@
 }
 {
 "classname" "item_shells"
-"origin" "1203 -837 32"
+"origin" "1203 -857 32"
 }
 {
 "classname" "item_health25"
@@ -132,7 +131,7 @@
 }
 {
 "classname" "item_rockets"
-"origin" "1203 -754 32"
+"origin" "1203 -734 32"
 }
 {
 "classname" "weapon_crylink"
@@ -236,14 +235,6 @@
 "angle" "90"
 "origin" "-544 -1832 136"
 "classname" "info_player_deathmatch"
-}
-{
-"origin" "1280 -640 32"
-"classname" "weapon_grenadelauncher"
-}
-{
-"origin" "66 2 44"
-"classname" "weapon_shotgun"
 }
 {
 "origin" "-640 -768 160"

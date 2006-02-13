@@ -91,6 +91,7 @@
 {
 "origin" "-8 152 -408"
 "classname" "item_health_large"
+"angle" "90"
 }
 {
 "origin" "-1320 464 -224"
@@ -150,7 +151,7 @@
 "classname" "item_armor_combat"
 }
 {
-"origin" "-1310 676 -226"
+"origin" "-1310 636 -226"
 "classname" "item_health_small"
 }
 {
@@ -234,7 +235,7 @@
 }
 {
 "classname" "item_health_small"
-"origin" "1272 676 -226"
+"origin" "1272 606 -226"
 }
 {
 "classname" "item_armor_shard"
@@ -315,6 +316,7 @@
 {
 "origin" "1277 682 -197"
 "classname" "item_health"
+"angle" "180"
 }
 {
 "origin" "-1294 703 -197"

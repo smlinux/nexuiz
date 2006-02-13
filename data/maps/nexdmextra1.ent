@@ -118,7 +118,7 @@
 {
 "classname" "item_rockets"
 "origin" "-944 -1128 144"
-"angle" "270"
+"angle" "90"
 }
 {
 "classname" "item_shells"
@@ -379,6 +379,7 @@
 {
 "classname" "item_health"
 "origin" "-544 -1152 40"
+"angle" "90"
 }
 {
 "classname" "weapon_grenadelauncher"

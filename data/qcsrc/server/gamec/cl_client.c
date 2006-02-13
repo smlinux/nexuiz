@@ -543,7 +543,7 @@ void ClientConnect (void)
 	stuffcmd(self, "cmd clientversion $g_nexuizversion_major\n");
 
 	// set cvar for team scoreboard
-	stuffcmd(self, "set teamplay ", ftos(teams_matter), "\n");
+	stuffcmd(self, strcat("set teamplay ", ftos(teams_matter), "\n"));
 
 	if(cvar("g_lms"))
 	{

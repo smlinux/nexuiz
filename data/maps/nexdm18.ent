@@ -1,5 +1,5 @@
 {
-"message" "Running Man (1on1)"
+"message" "Running Man"
 "classname" "worldspawn"
 }
 {
@@ -135,6 +135,7 @@
 {
 "origin" "-912 -208 192"
 "classname" "item_health"
+"angle" "180"
 }
 {
 "classname" "item_armor25"
@@ -217,6 +218,7 @@
 {
 "origin" "1344 -88 16"
 "classname" "item_health25"
+"angle" "180"
 }
 {
 "origin" "1344 -24 16"

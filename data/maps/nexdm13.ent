@@ -1,5 +1,5 @@
 {
-"message" "Space Arena by H.Reaper"
+"message" "Dismal"
 "classname" "worldspawn"
 }
 {
@@ -25,10 +25,12 @@
 {
 "classname" "item_health25"
 "origin" "192 520 2"
+"angle" "-90"
 }
 {
-"origin" "191 -1298 2"
+"origin" "191 -1278 2"
 "classname" "item_health25"
+"angle" "90"
 }
 {
 "origin" "840 0 352"
@@ -55,8 +57,9 @@
 "classname" "item_health100"
 }
 {
-"origin" "2544 -1288 8"
+"origin" "2544 -1268 8"
 "classname" "item_health25"
+"angle" "90"
 }
 {
 "origin" "3120 -1160 8"
@@ -71,8 +74,9 @@
 "classname" "item_cells"
 }
 {
-"origin" "2544 528 0"
+"origin" "2544 508 0"
 "classname" "item_health25"
+"angle" "-90"
 }
 {
 "targetname" "t9"

@@ -292,7 +292,7 @@
 }
 {
 "classname" "item_health25"
-"origin" "-256 680 -584"
+"origin" "-256 710 -584"
 }
 {
 "classname" "item_health1"
@@ -332,11 +332,11 @@
 }
 {
 "classname" "item_shells"
-"origin" "-256 720 -280"
+"origin" "-256 760 -280"
 }
 {
 "classname" "item_shells"
-"origin" "-256 640 -280"
+"origin" "-256 600 -280"
 }
 {
 "classname" "item_shells"
@@ -361,10 +361,6 @@
 {
 "classname" "item_armor25"
 "origin" "296 -384 -320"
-}
-{
-"classname" "weapon_rocketlauncher"
-"origin" "-32 120 40"
 }
 {
 "classname" "item_rockets"

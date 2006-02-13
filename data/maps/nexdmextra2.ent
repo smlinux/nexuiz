@@ -250,6 +250,7 @@
 {
 "classname" "item_shells"
 "origin" "150.000000 160.000000 180.000000"
+"angle" "180"
 }
 {
 "classname" "info_null"
@@ -357,10 +358,12 @@
 {
 "origin" "100.000000 -420.000000 -180.000000"
 "classname" "item_health25"
+"angle" "90"
 }
 {
 "origin" "150.000000 100.000000 180.000000"
 "classname" "item_health25"
+"angle" "180"
 }
 {
 "origin" "-490.000000 760.000000 -60.000000"
@@ -369,6 +372,7 @@
 {
 "origin" "480.000000 440.000000 -60.000000"
 "classname" "item_health25"
+"angle" "-90"
 }
 {
 "targetname" "t136"

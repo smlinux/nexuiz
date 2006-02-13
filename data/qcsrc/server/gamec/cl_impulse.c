@@ -63,6 +63,8 @@ void ImpulseCommands (void)
 		PrintWelcomeMessage(self);
 		return;
 	}
+	else if (self.impulse == 98)
+		sprint(self, strcat("origin:  ", vtos(self.origin), "\n"));
 	else if (self.impulse == 99 && cvar("sv_cheats"))
 	{
 		self.items = IT_LASER | IT_UZI | IT_SHOTGUN | IT_GRENADE_LAUNCHER | IT_ELECTRO | IT_CRYLINK | IT_NEX | IT_HAGAR | IT_ROCKET_LAUNCHER;

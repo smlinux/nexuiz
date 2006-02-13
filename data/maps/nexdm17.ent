@@ -47,6 +47,7 @@
 {
 "origin" "2208 -64 -752"
 "classname" "item_health_large"
+"angle" "180"
 }
 {
 "classname" "item_armor_body"

@@ -371,6 +371,7 @@
 {
 "classname" "item_health25"
 "origin" "-1316 993 59"
+"angle" "180"
 }
 {
 "classname" "item_health100"
