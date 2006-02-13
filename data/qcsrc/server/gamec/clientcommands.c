@@ -117,7 +117,7 @@ void SV_ParseClientCommand(string s) {
 					votefinished = time + cvar("sv_vote_timeout");
 					votecaller.vote_vote = 1; // of course you vote yes
 					votecaller.vote_next = time + cvar("sv_vote_wait");
-					bprint(strcat("\"^7", votecaller.netname, "^3\" called a vote to become ^3master^3.\n"));
+					bprint(strcat("\"^3", votecaller.netname, "^3\" called a vote to become ^3master^3.\n"));
 					VoteCount(); // needed if you are the only one
 				}
 			} else {
@@ -382,7 +382,17 @@ void VoteCount() {
 		}
 	}
 
-	if((playercount / 2) < yescount) { // vote accepted
+	if((playercount == 1) && votecalledmaster) {
+		// if only one player is on the server becoming vote
+		// master is not allowed.  This could be used for
+		// trolling or worse. 'self' is the user who has
+		// called the vote because this function is called
+		// by SV_ParseClientCommand. Maybe all voting should
+		// be disabled for a single player?
+		sprint(self, "^1You are the only player on this server so you can not become vote master.\n");
+		votecaller.vote_next = 0;
+		VoteReset();
+	} else if((playercount / 2) < yescount) { // vote accepted
 		VoteAccept();
 	} else if((playercount / 2) < nocount) { // vote rejected
 		VoteReject();
