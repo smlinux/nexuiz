@@ -221,7 +221,7 @@ void SV_ParseClientCommand(string s) {
 		if(cvar("sv_ready_restart"))
 		{
 			self.ready = TRUE;
-			bprint(self.netname, "^2 is ready");
+			bprint(self.netname, "^2 is ready\n");
 			ReadyCount();
 		}
 	} else {
