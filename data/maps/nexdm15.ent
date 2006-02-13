@@ -56,7 +56,7 @@
 "classname" "info_player_start"
 "angle" "315"
 "origin" "416 -72 152"
-"angles" "0 0 0"
+"angles" "0 -45 0"
 }
 {
 "classname" "info_player_start"
@@ -68,19 +68,18 @@
 "classname" "info_player_start"
 "angle" "180"
 "origin" "736 200 -104"
-"angles" "0 0 0"
+"angles" "0 -145 0"
 }
 {
 "classname" "info_player_start"
-"angles" "0 0 0"
+"angles" "0 -6 0"
 "origin" "760 968 -328"
-"angle" "180"
 }
 {
 "classname" "info_player_start"
 "angle" "135"
 "origin" "744 -64 -328"
-"angles" "0 0 0"
+"angles" "0 137 0"
 }
 {
 "classname" "info_player_start"
@@ -92,7 +91,7 @@
 "classname" "info_player_start"
 "angle" "135"
 "origin" "1968 16 -640"
-"angles" "0 0 0"
+"angles" "0 117 0"
 }
 {
 "classname" "info_player_start"
@@ -104,7 +103,7 @@
 "classname" "info_player_start"
 "angle" "180"
 "origin" "712 792 -640"
-"angles" "0 0 0"
+"angles" "0 -60 0"
 }
 {
 "classname" "info_player_start"
@@ -251,7 +250,7 @@
 "classname" "info_player_start"
 "angle" "90"
 "origin" "248 40 -600"
-"angles" "0 0 0"
+"angles" "0 66 0"
 }
 {
 "classname" "trigger_push"

@@ -232,6 +232,7 @@
 {
 "classname" "item_health"
 "origin" "832 400 -416"
+"angle" "180"
 }
 {
 "classname" "item_health_small"
