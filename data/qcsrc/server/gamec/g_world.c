@@ -268,6 +268,7 @@ void light (void)
 float( string pFilename ) TryFile =
 {
 	local float lHandle;
+	dprint("TryFile(\"", pFilename, "\")\n");
 	lHandle = fopen( pFilename, FILE_READ );
 	if( lHandle != -1 ) {
 		fclose( lHandle );
@@ -286,6 +287,15 @@ void() GotoNextMap =
 	if (alreadychangedlevel)
 		return;
 	alreadychangedlevel = TRUE;
+	if (cvar("samelevel")) // if samelevel is set, stay on same level
+	{
+		// this does not work because it tries to exec maps/nexdm01.mapcfg (which doesn't exist, it should be trying maps/dm_nexdm01.mapcfg for example)
+		//localcmd(strcat("exec \"maps/", mapname, ".mapcfg\"\n"));
+		// so instead just restart the current map using the restart command (DOES NOT WORK PROPERLY WITH exit_cfg STUFF)
+		localcmd("restart\n");
+		//changelevel (mapname);
+		return;
+	}
 
 	// if an exit cfg is defined by exiting map, exec it.
 	exit_cfg = cvar_string("exit_cfg");
@@ -300,45 +310,61 @@ void() GotoNextMap =
 		localcmd(strcat("set lastlevel 0\n"));
 		localcmd(strcat("togglemenu\n"));
 	}
-	else if (cvar("samelevel")) // if samelevel is set, stay on same level
-	{
-		localcmd(strcat("exec \"maps/", mapname, ".mapcfg\"\n"));
-		//changelevel (mapname);
-	}
 	else
 	{
 		// method 0
 		local float lCurrent;
 		local float lSize;
 		local float lOldCurrent;
+		local float pass;
 
-		lSize = tokenize( cvar_string( "g_maplist" ) );
-		lCurrent = cvar( "g_maplist_index" );
-		lOldCurrent = lCurrent;
-		while( 1 ) {
-			local string lFilename;
+		pass = 0;
+		while (pass < 2)
+		{
+			pass = pass + 1;
+			local string temp;
+			temp = cvar_string( "g_maplist" );
+			dprint("g_maplist is ", temp, "\n");
+			lSize = tokenize( temp );
+			lCurrent = cvar( "g_maplist_index" );
+			lOldCurrent = lCurrent;
+			dprint(ftos(lOldCurrent), " / ", ftos(lSize), " (start)\n");
+			while( 1 ) {
+				local string lFilename;
 
-			lCurrent = lCurrent + 1;
-			if( lCurrent >= lSize ) {
-				lCurrent = 0;
+				lCurrent = lCurrent + 1;
+				dprint(ftos(lCurrent), " / ", ftos(lSize), "\n");
+				if( lCurrent >= lSize ) {
+					lCurrent = 0;
+				}
+				if( lOldCurrent == lCurrent ) {
+					// we couldn't find a valid map at all
+					if (pass == 1)
+					{
+						bprint( "Maplist is bad/messed up. Not one good mapcfg can be found in it!  Resetting it to default map list.\n" );
+						cvar_set("g_maplist", cvar_string("g_maplist_defaultlist"));
+						// let the loop restart with the default list now
+					}
+					else
+					{
+						bprint( "Both g_maplist and g_maplist_defaultlist are messed up!  complain to developers!\n" );
+						localcmd( "disconnect\n" );
+					}
+					break;
+				}
+
+				cvar_set( "g_maplist_index", ftos( lCurrent ) );
+
+				lFilename = strcat( "maps/", argv( lCurrent ), ".mapcfg" );
+				if( TryFile( lFilename ) ) {
+					localcmd(strcat("exec \"", lFilename ,"\"\n"));
+					pass = 2; // exit the outer loop
+					break;
+				} else {
+					dprint( "Couldn't find '", lFilename, "'..\n" );
+				}
+				//changelevel( argv( lCurrent ) );
 			}
-			if( lOldCurrent == lCurrent ) {
-				// todo
-				bprint( "Maplist is bad/messed up. Not one good mapcfg can be found in it!\n" );
-				localcmd( "disconnect\n" );
-				break;
-			}
-
-			cvar_set( "g_maplist_index", ftos( lCurrent ) );
-
-			lFilename = strcat( "maps/", argv( lCurrent ), ".mapcfg" );
-			if( TryFile( lFilename ) ) {
-				localcmd(strcat("exec \"", lFilename ,"\"\n"));
-				break;
-			} else {
-				dprint( "Couldn't find '", lFilename, "'..\n" );
-			}
-			//changelevel( argv( lCurrent ) );
 		}
 
 		/*
