@@ -1,8 +1,3 @@
-See Nexuiz.com for updates and how
-to donate to the development team
-
-
-
 Team:
 
 
@@ -29,20 +24,12 @@ Kurt Dereli
 Lead Artist
 
 
-Dan "Digger" Korostelev
-QC programmer
-
-
 Yves "EviLair" Allaire 
 Artist
 
 
 Stephan "esteel" Stahl
 Programmer
-
-
-Jody Gallagher
-Modeler
 
 
 Fabien "H. Reaper" Tschirhart 
@@ -55,14 +42,6 @@ Menu Artist
 
 KadaverJack
 Programmer
-
-
-lcatlnx
-Code and Sound
-
-
-Juergen "LowDragon" Timm
-Hagar Model
 
 
 MauveBib
@@ -93,10 +72,6 @@ Dan "Wazat" Hale
 Programmer
 
 
-Attila "WW3" Houtkooper
-2d Artist
-
-
 Garth "Zombie" Hendy
 Level Designer
 
@@ -105,24 +80,33 @@ Level Designer
 
 Thanks:
 
-
 Gerd "Elysis" Raudenbusch
 
 Spirit
 
+Attila "WW3" Houtkooper
+
 GreEn`mArine
+
+Dan "Digger" Korostelev
 
 Kristian "morfar" Johansson
 
 Cheapalert
 
+Jody Gallagher
+
 Donkey
 
 Vortex
 
+Juergen "LowDragon" Timm
+
 Sajt
 
 Supajoe
+
+lcatlnx
 
 Zenex
 
