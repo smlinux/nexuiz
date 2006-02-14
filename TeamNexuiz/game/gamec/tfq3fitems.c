@@ -22,6 +22,129 @@ float RED_GOAL = 200;
 float BLUE_GOAL = 100;
 float ANY_GOAL = 50;
 
+// Parse ETF/Q3F's "give" property (substrings ftw!)
+.float ammo_charge;
+.float stleng;
+float (string give_string, float st_len1, float st_len2) grabval =
+{
+	local float posneg;
+//	local float maxstl;
+	local string st;
+	posneg = 1;
+
+	st = substring(give_string, st_len1, 1);
+	if (st == "-")
+		posneg = -1;
+	
+	st = substring(give_string, st_len1 + st_len2 - 1, 1);
+	if (st == ",")
+//		self.stleng = 2;
+		self.stleng = st_len2 - 2;
+
+	else
+//		self.stleng = 3;
+		self.stleng = st_len2 - 1;
+
+	st = substring(give_string, st_len1 + 1, self.stleng);
+	return(stof(st) * posneg);
+};
+
+void (entity goal) ParseGive =
+{
+	if (goal.give == "converted")
+		return;
+	local string give_string;
+	local string st;
+	local string chargeorcell;
+	local float st_len;
+	local float en_len;
+	local entity oself;
+	st_len = 0;
+	en_len = 5;
+	give_string = self.give;
+	self = oself;
+	self = goal;
+
+	st = substring(give_string, st_len, 6);
+	while (st != "")
+	{
+		if (st == "health" )
+		{
+			st_len = st_len + 7;
+			self.health = grabval (give_string, st_len, 4);
+		}
+		else if (st == "armor=" )
+		{
+			st_len = st_len + 6;
+			self.armorvalue = grabval (give_string, st_len, 4);
+		}
+		else if (st == "ammo_s" )
+		{
+			st_len = st_len + 12;
+			self.ammo_shells = grabval (give_string, st_len, 4);
+		}
+		else if (st == "ammo_b" )
+		{
+			st_len = st_len + 13;
+			self.ammo_shells = grabval (give_string, st_len, 4);
+		}
+		else if (st == "ammo_c" )
+		{
+			chargeorcell = substring(give_string, st_len, 7);
+//			bprint(2,chargeorcell);
+//			bprint(2,"\n");
+			if (chargeorcell == "ammo_ch" )	// if it's ammo_charge, we really dont care much
+			{
+				st_len = st_len + 12;
+				self.ammo_charge = self.ammo_charge = grabval (give_string, st_len, 3);
+			}
+			else
+			{
+				st_len = st_len + 11;
+				self.ammo_cells = grabval (give_string, st_len, 4);
+			}
+		}
+		else if (st == "ammo_r" )
+		{
+			st_len = st_len + 13;
+			self.ammo_rockets = grabval (give_string, st_len, 4);
+		}
+		else if (st == "ammo_n" )
+		{
+			st_len = st_len + 11;
+			self.ammo_nails = grabval (give_string, st_len, 4);
+		}
+		else if (st == "ammo_m" )
+		{
+			st_len = st_len + 13;
+			self.ammo_medikit = grabval (give_string, st_len, 4);
+		}
+		else if (st == "score=" )
+		{
+			st_len = st_len + 6;
+			self.frags = grabval (give_string, st_len, 3);
+		}
+		else if (st == "gren1=" )
+		{
+			st_len = st_len + 6;
+			self.no_grenades_1 = grabval (give_string, st_len, 3);
+		}
+		else if (st == "gren2=" )
+		{
+			st_len = st_len + 6;
+			self.no_grenades_2 = grabval (give_string, st_len, 3);
+		}
+		st_len = st_len + self.stleng + 2;
+		st = substring(give_string, st_len, 6);
+	}
+	self.give = "";
+	oself = self;
+
+//	bprint(2, self.classname);
+//	bprint(2, " ");
+//	bprint(2, "finishes\n");
+};
+
 // Q3F/ETF Maps dont have info_tfdetects, so this calls it.
 void () DoTFDetect =
 {
@@ -137,6 +260,8 @@ void (float tno) ConvertToFlag =
 void () ConvertToBackPack =
 {
 	PossiblyDoTFDetect();
+//	ParseGive();
+
 	if (self.give == "")
 		return;
 
@@ -279,6 +404,8 @@ void(float tno) ConvertToGoal =
 	self.frags = self.teamscore;
 	self.count = self.teamscore;
 	self.classname = "i_t_g";
+
+//	ParseGive();
 
 	self.g_a = 1;
 	self.g_e = 3;

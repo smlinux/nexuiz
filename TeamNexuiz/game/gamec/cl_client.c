@@ -288,13 +288,18 @@ entity () SelectSpawnPoint =
 		}
 	}
 	spot = find (world, classname, "info_player_start");
-	if (!spot)
+	/*if (!spot)
 	{
 		spot = find (world, is_converted_goal, "yes");
+	}*/
+	spot = find(world, classname, "info_player_start");
+	if (!spot)
+	{
+		spot = find (world, classname, "info_player_intermission");
 	}
 	if (!spot)
 	{
-		spot = find (world, classname, "info_tfgoal");
+//		spot = find (world, classname, "info_tfgoal");
 	}
 	if (!spot)
 	{
@@ -404,8 +409,8 @@ void PutClientInServer (void)
 	self.jump_pad = 0;
 	spot = SelectSpawnPoint();
 //	setorigin (self, spot.origin + '0 0 1' * (1 - self.mins_z + 24));
-	setorigin (self, spot.origin + '-2 0 4' * (1 - self.mins_z + 24));
-	self.angles_y = self.angles_y + 180;
+//	setorigin (self, spot.origin + '-2 0 4' * (1 - self.mins_z + 24));
+//	self.angles_y = self.angles_y + 180;
 	return;
 	}
 	if (self.playerclass < 1)

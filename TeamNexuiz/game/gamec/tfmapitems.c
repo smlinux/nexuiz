@@ -1326,7 +1326,7 @@ void(entity Goal, entity Player, entity AP, float addb) Apply_Results =
 			if (t_ent.team_no && !t_ent.no_switch_team)
 			{
 				if (t_ent.team_no == 1)
-					t_ent.team_no = 2;t_ent.owned_by_team_no = 2;
+					t_ent.team_no = 2;t_ent.owned_by = 2;
 				if (t_ent.team_no == 2)
 					t_ent.team_no = 1;
 			}
@@ -2244,6 +2244,8 @@ void(entity Goal, entity AP, float addb) DoResults =
 
 void() tfgoal_touch = 
 {
+	if (self.give != "")
+		ParseGive(self);
 	if (!(self.goal_activation & 1))
 	{
 		return;

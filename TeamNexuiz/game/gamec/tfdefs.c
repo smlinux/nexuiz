@@ -256,7 +256,9 @@ float q3fdetect;
 .vector orig_origin;
 .string activetarget;
 .string allowteams;
+.string give;
 void () i_p_t;
+void (entity goal) ParseGive;
 
 // tfgrenades
 void () TeamFortress_PrimeGrenade;
