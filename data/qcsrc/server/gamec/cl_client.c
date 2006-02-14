@@ -554,7 +554,7 @@ void ClientConnect (void)
 
 		// disallow player to join after the worst player has lost g_lms_last_join lives
 		// if "g_lms_join_anytime" new players spawn with same amount of lives as the worst active player
-		if((cvar("fraglimit") - cvar("g_lms_last_join")) > lms_lowest_lives && !cvar("g_lms_join_anytime"))
+		if(((cvar("fraglimit") - cvar("g_lms_last_join")) > lms_lowest_lives && !cvar("g_lms_join_anytime")) || lms_lowest_lives < 1)
 		{
 			self.frags = -1;
 			lms_dead_count += 1;
