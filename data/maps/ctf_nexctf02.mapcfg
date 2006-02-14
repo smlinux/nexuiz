@@ -1,5 +1,4 @@
-g_ctf 1
-
-set fraglimit 100	
+set g_ctf 1
+set fraglimit 100
 set timelimit 20
 changelevel nexctf02

@@ -1,5 +1,4 @@
-g_tdm 1
-
-fraglimit 20
-timelimit 15
+set g_tdm 1
+set fraglimit 20
+set timelimit 15
 changelevel tznex01

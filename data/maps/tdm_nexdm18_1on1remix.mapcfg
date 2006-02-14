@@ -1,5 +1,4 @@
 set g_tdm 1
-
 set fraglimit 40
 set timelimit 15
 changelevel nexdm18_1on1remix
