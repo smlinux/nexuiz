@@ -18,8 +18,8 @@ Item DataContainer Effects
 		Item DataLink_Value Value
 		{
 			minValue	0.0
-			maxValue	4.0
-			stepValue	1
+			maxValue	1.0
+			stepValue	0.1
 			link		"##up"
 		}
 	}
