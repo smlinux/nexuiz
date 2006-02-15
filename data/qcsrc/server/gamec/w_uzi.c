@@ -5,7 +5,14 @@ void() uzi_select_01;
 
 float() uzi_check =
 {
-	if (self.ammo_nails >= 1)
+	if (self.ammo_nails >= cvar("g_balance_uzi_first_ammo"))
+		return TRUE;
+	return FALSE;
+};
+
+float() uzi_check2 =
+{
+	if (self.ammo_nails >= cvar("g_balance_uzi_sustained_ammo"))
 		return TRUE;
 	return FALSE;
 };
@@ -35,26 +42,31 @@ void W_Uzi_Attack (void)
 
 	local vector trueaim;
 	trueaim = W_TrueAim();
-	
+
 	entity flash;
 	sound (self, CHAN_WEAPON, "weapons/uzi_fire.ogg", 1, ATTN_NORM);
 	if (self.items & IT_STRENGTH) {
 		sound (self, CHAN_AUTO, "weapons/strength_fire.ogg", 1, ATTN_NORM);
 	}
-	
+
 	if (cvar("g_use_ammunition"))
-		self.ammo_nails = self.ammo_nails - 1;
+	{
+		if (self.uzi_bulletcounter == 1)
+			self.ammo_nails = self.ammo_nails - cvar("g_balance_uzi_first_ammo");
+		else
+			self.ammo_nails = self.ammo_nails - cvar("g_balance_uzi_sustained_ammo");
+	}
 	self.punchangle_x = random () - 0.5;
 	self.punchangle_y = random () - 0.5;
 	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 8) + (v_forward * 15);
 
 	// this attack_finished just enforces a cooldown at the end of a burst
-	self.attack_finished = time + cvar("g_balance_uzi_refire2");
+	self.attack_finished = time + cvar("g_balance_uzi_first_refire");
 
 	if (self.uzi_bulletcounter == 1)
-		fireBullet (org, normalize(trueaim - org), cvar("g_balance_uzi_spread2"), cvar("g_balance_uzi_damage2"), IT_UZI, (self.uzi_bulletcounter & 3) == 0);
+		fireBullet (org, normalize(trueaim - org), cvar("g_balance_uzi_first_spread"), cvar("g_balance_uzi_first_damage"), IT_UZI, (self.uzi_bulletcounter & 3) == 0);
 	else
-		fireBullet (org, normalize(trueaim - org), cvar("g_balance_uzi_spread"), cvar("g_balance_uzi_damage"), IT_UZI, (self.uzi_bulletcounter & 3) == 0);
+		fireBullet (org, normalize(trueaim - org), cvar("g_balance_uzi_sustained_spread"), cvar("g_balance_uzi_sustained_damage"), IT_UZI, (self.uzi_bulletcounter & 3) == 0);
 
 	// casing code
 	if (cvar("g_casings") >= 2)
@@ -86,16 +98,16 @@ void()	uzi_fire1_02 =
 	if (self.button0)
 	{
 		self.uzi_bulletcounter = self.uzi_bulletcounter + 1;
-		weapon_doattack(uzi_check, uzi_check, W_Uzi_Attack);
-		weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_uzi_refire"), uzi_fire1_02);
+		weapon_doattack(uzi_check2, uzi_check2, W_Uzi_Attack);
+		weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_uzi_sustained_refire"), uzi_fire1_02);
 	}
 	else
-		weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_uzi_refire"), uzi_ready_01);
+		weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_uzi_sustained_refire"), uzi_ready_01);
 };
 void()	uzi_fire1_01 =
 {
 	self.uzi_bulletcounter = 1;
 	weapon_doattack(uzi_check, uzi_check, W_Uzi_Attack);
-	weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_uzi_refire"), uzi_fire1_02);
+	weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_uzi_sustained_refire"), uzi_fire1_02);
 };
 

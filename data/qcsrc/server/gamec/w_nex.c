@@ -11,7 +11,7 @@ float() nex_check =
 		if (self.ammo_cells >= 1)
 			return TRUE;
 	} else {
-		if (self.ammo_cells >= 5)
+		if (self.ammo_cells >= cvar("g_balance_nex_ammo"))
 			return TRUE;
 	}
 	return FALSE;
@@ -91,11 +91,11 @@ void nex_selfkill (void)
 			Damage(self, self, self, 10, DEATH_NOAMMO, self.origin, '0 0 0');
 			stuffcmd(self, "play2 announcer/robotic/10.ogg\n");
 		}
-		
+
 	}
 	self.think = nex_selfkill;
 	self.nextthink = time + 1;
-	
+
 }
 
 void(float req) w_nex =
@@ -124,14 +124,14 @@ void W_Nex_Attack (void)
 
 	local vector trueaim;
 	trueaim = W_TrueAim();
-	
+
 	sound (self, CHAN_WEAPON, "weapons/nexfire.ogg", 1, ATTN_NORM);
 	if (self.items & IT_STRENGTH && !cvar("g_minstagib")) {
 		sound (self, CHAN_AUTO, "weapons/strength_fire.ogg", 1, ATTN_NORM);
 	}
-	
+
 	self.punchangle_x = -5;
-	
+
 	org = self.origin + self.view_ofs + v_forward * 5 + v_right * 14 + v_up * -7;
 
 	// assure that nexdamage is high enough in minstagib
@@ -182,7 +182,7 @@ void W_Nex_Attack (void)
 		if (cvar("g_minstagib"))
 			self.ammo_cells = self.ammo_cells - 1;
 		else
-			self.ammo_cells = self.ammo_cells - 5;
+			self.ammo_cells = self.ammo_cells - cvar("g_balance_nex_ammo");
 	}
 
 	flash = spawn ();
@@ -202,6 +202,6 @@ void()	nex_deselect_01 =	{weapon_thinkf(-1, cvar("g_balance_weaponswitchdelay"),
 void()	nex_fire1_01 =
 {
 	weapon_doattack(nex_check, nex_check, W_Nex_Attack);
-	weapon_thinkf(WFRAME_FIRE1, 0.3, nex_ready_01);
+	weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_nex_animtime"), nex_ready_01);
 };
 

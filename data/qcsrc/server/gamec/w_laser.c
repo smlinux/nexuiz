@@ -75,7 +75,7 @@ void W_Laser_Attack (void)
 	if (self.items & IT_STRENGTH) {
 		sound (self, CHAN_AUTO, "weapons/strength_fire.ogg", 1, ATTN_NORM);
 	}
-	
+
 	org = self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -12;
 	//te_customflash(org, 160, 0.2, '1 0 0');
 
@@ -96,7 +96,7 @@ void W_Laser_Attack (void)
 	//missile.glow_size = 120;
 	missile.touch = W_Laser_Touch;
 	missile.think = SUB_Remove;
-	missile.nextthink = time + 9;
+	missile.nextthink = time + cvar("g_balance_laser_lifetime");
 
 	missile.effects = EF_NOSHADOW | EF_FULLBRIGHT | EF_FULLBRIGHT | EF_LOWPRECISION;
 }
@@ -108,7 +108,7 @@ void()	laser_ready_01 =
 	weapon_thinkf(WFRAME_IDLE, 0.1, laser_ready_01);
 	self.weaponentity.state = WS_READY;
 };
-void()	laser_select_01 =	
+void()	laser_select_01 =
 {
 	weapon_thinkf(-1, cvar("g_balance_weaponswitchdelay"), w_ready);
 	weapon_boblayer1(PLAYER_WEAPONSELECTION_SPEED, '0 0 0');
@@ -121,5 +121,5 @@ void()	laser_deselect_01 =
 void()	laser_fire1_01 =
 {
 	weapon_doattack(laser_check, laser_check, W_Laser_Attack);
-	weapon_thinkf(WFRAME_FIRE1, 0.3, laser_ready_01);
+	weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_laser_animtime"), laser_ready_01);
 };

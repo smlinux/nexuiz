@@ -1,5 +1,6 @@
 void() crylink_ready_01;
 void() crylink_fire1_01;
+void() crylink_fire2_01;
 void() crylink_deselect_01;
 void() crylink_select_01;
 
@@ -7,7 +8,14 @@ void() crylink_select_01;
 
 float() crylink_check =
 {
-	if (self.ammo_cells >= 1)
+	if (self.ammo_cells >= cvar("g_balance_crylink_primary_ammo"))
+		return TRUE;
+	return FALSE;
+};
+
+float() crylink_check2 =
+{
+	if (self.ammo_cells >= cvar("g_balance_crylink_secondary_ammo"))
 		return TRUE;
 	return FALSE;
 };
@@ -16,8 +24,10 @@ void(float req) w_crylink =
 {
 	if (req == WR_IDLE)
 		crylink_ready_01();
-	else if (req == WR_FIRE1 || req == WR_FIRE2)
-		weapon_prepareattack(crylink_check, crylink_check, crylink_fire1_01, cvar("g_balance_crylink_refire"));
+	else if (req == WR_FIRE1)
+		weapon_prepareattack(crylink_check, crylink_check, crylink_fire1_01, cvar("g_balance_crylink_primary_refire"));
+	else if (req == WR_FIRE2)
+		weapon_prepareattack(crylink_check2, crylink_check2, crylink_fire2_01, cvar("g_balance_crylink_secondary_refire"));
 	else if (req == WR_RAISE)
 		crylink_select_01();
 	else if (req == WR_UPDATECOUNTS)
@@ -27,13 +37,13 @@ void(float req) w_crylink =
 	else if (req == WR_SETUP)
 		weapon_setup(WEP_CRYLINK, "w_crylink.zym", IT_CELLS);
 	else if (req == WR_CHECKAMMO)
-		weapon_hasammo = crylink_check();
+		weapon_hasammo = crylink_check() + crylink_check2();
 };
 
 .entity realowner;
 void W_Crylink_Touch (void)
 {
-	RadiusDamage (self, self.realowner, cvar("g_balance_crylink_damage"), cvar("g_balance_crylink_edgedamage"), cvar("g_balance_crylink_radius"), world, cvar("g_balance_crylink_force"), IT_CRYLINK);
+	RadiusDamage (self, self.realowner, cvar("g_balance_crylink_primary_damage"), cvar("g_balance_crylink_primary_edgedamage"), cvar("g_balance_crylink_primary_radius"), world, cvar("g_balance_crylink_primary_force"), IT_CRYLINK);
 	//te_smallflash(self.origin);
 	if (other.takedamage == DAMAGE_AIM)
 	{
@@ -44,7 +54,30 @@ void W_Crylink_Touch (void)
 	self.touch = SUB_Null;
 	setmodel (self, "models/plasma.mdl");
 	setsize (self, '0 0 0', '0 0 0');
-	self.gravity = 1;
+	self.gravity = 0;
+	self.glow_size = 0;
+	self.glow_color = 0;
+	self.think = SUB_Remove;
+	self.movetype = MOVETYPE_NONE;
+	self.effects = EF_FULLBRIGHT | EF_LOWPRECISION;
+	SUB_SetFade(self, time, 1);
+	//remove (self);
+}
+
+void W_Crylink_Touch2 (void)
+{
+	RadiusDamage (self, self.realowner, cvar("g_balance_crylink_secondary_damage"), cvar("g_balance_crylink_secondary_edgedamage"), cvar("g_balance_crylink_secondary_radius"), world, cvar("g_balance_crylink_secondary_force"), IT_CRYLINK);
+	//te_smallflash(self.origin);
+	if (other.takedamage == DAMAGE_AIM)
+	{
+		remove (self);
+		return;
+	}
+	self.owner = world;
+	self.touch = SUB_Null;
+	setmodel (self, "models/plasma.mdl");
+	setsize (self, '0 0 0', '0 0 0');
+	self.gravity = 0;
 	self.glow_size = 0;
 	self.glow_color = 0;
 	self.think = SUB_Remove;
@@ -59,7 +92,7 @@ void W_Crylink_Attack (void)
 	local float counter, shots;
 	local vector org;
 	local entity proj;
-	
+
 	local vector trueaim;
 	trueaim = W_TrueAim();
 
@@ -67,9 +100,9 @@ void W_Crylink_Attack (void)
 	if (self.items & IT_STRENGTH) {
 		sound (self, CHAN_AUTO, "weapons/strength_fire.ogg", 1, ATTN_NORM);
 	}
-	
+
 	if (cvar("g_use_ammunition"))
-		self.ammo_cells = self.ammo_cells - 1;
+		self.ammo_cells = self.ammo_cells - cvar("g_balance_crylink_primary_ammo");
 	self.punchangle_x = -2;
 	org = self.origin + self.view_ofs + v_forward * 10 + v_right * 5 + v_up * -14;
 	te_smallflash(org);
@@ -91,13 +124,61 @@ void W_Crylink_Attack (void)
 		setsize (proj, '0 0 0', '0 0 0');
 		setorigin (proj, org);
 
-		if (self.button3)
-			proj.velocity = (normalize(trueaim - org) + ((counter / shots) * 2 - 1) * v_right * cvar("g_balance_crylink_spread")) * cvar("g_balance_crylink_speed");
-		else
-			proj.velocity = (normalize(trueaim - org) + randomvec() * cvar("g_balance_crylink_spread")) * cvar("g_balance_crylink_speed");
+		proj.velocity = (normalize(trueaim - org) + randomvec() * cvar("g_balance_crylink_primary_spread")) * cvar("g_balance_crylink_primary_speed");
 		proj.touch = W_Crylink_Touch;
 		proj.think = SUB_Remove;
-		proj.nextthink = time + 9;
+		proj.nextthink = time + cvar("g_balance_crylink_primary_lifetime");
+
+		proj.angles = vectoangles (proj.velocity);
+
+		//proj.glow_size = 20;
+
+		proj.effects = EF_NOSHADOW | EF_FULLBRIGHT | EF_LOWPRECISION;
+		counter = counter + 1;
+	}
+}
+
+void W_Crylink_Attack2 (void)
+{
+	local float counter, shots;
+	local vector org;
+	local entity proj;
+
+	local vector trueaim;
+	trueaim = W_TrueAim();
+
+	sound (self, CHAN_WEAPON, "weapons/crylink_fire.ogg", 1, ATTN_NORM);
+	if (self.items & IT_STRENGTH) {
+		sound (self, CHAN_AUTO, "weapons/strength_fire.ogg", 1, ATTN_NORM);
+	}
+
+	if (cvar("g_use_ammunition"))
+		self.ammo_cells = self.ammo_cells - cvar("g_balance_crylink_secondary_ammo");
+	self.punchangle_x = -2;
+	org = self.origin + self.view_ofs + v_forward * 10 + v_right * 5 + v_up * -14;
+	te_smallflash(org);
+
+	shots = cvar("g_balance_crylink_secondary_shots");
+	if (!shots)
+		shots = 5;
+	while (counter < shots)
+	{
+		proj = spawn ();
+		proj.realowner = proj.owner = self;
+		proj.classname = "spike";
+
+		proj.movetype = MOVETYPE_BOUNCE;
+		proj.solid = SOLID_BBOX;
+		proj.gravity = 0.001;
+
+		setmodel (proj, "models/plasmatrail.mdl");
+		setsize (proj, '0 0 0', '0 0 0');
+		setorigin (proj, org);
+
+		proj.velocity = (normalize(trueaim - org) + ((counter / shots) * 2 - 1) * v_right * cvar("g_balance_crylink_secondary_spread")) * cvar("g_balance_crylink_secondary_speed");
+		proj.touch = W_Crylink_Touch2;
+		proj.think = SUB_Remove;
+		proj.nextthink = time + cvar("g_balance_crylink_secondary_lifetime");
 
 		proj.angles = vectoangles (proj.velocity);
 
@@ -116,6 +197,11 @@ void()	crylink_deselect_01 =	{weapon_thinkf(-1, cvar("g_balance_weaponswitchdela
 void()	crylink_fire1_01 =
 {
 	weapon_doattack(crylink_check, crylink_check, W_Crylink_Attack);
-	weapon_thinkf(WFRAME_FIRE1, 0.15, crylink_ready_01);
+	weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_crylink_primary_animtime"), crylink_ready_01);
+};
+void()	crylink_fire2_01 =
+{
+	weapon_doattack(crylink_check, crylink_check, W_Crylink_Attack2);
+	weapon_thinkf(WFRAME_FIRE2, cvar("g_balance_crylink_secondary_animtime"), crylink_ready_01);
 };
 

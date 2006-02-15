@@ -1,11 +1,19 @@
 void() glauncher_ready_01;
 void() glauncher_fire1_01;
+void() glauncher_fire2_01;
 void() glauncher_deselect_01;
 void() glauncher_select_01;
 
 float() glauncher_check =
 {
-	if (self.ammo_rockets >= 2)
+	if (self.ammo_rockets >= cvar("g_balance_grenadelauncher_primary_ammo"))
+		return TRUE;
+	return FALSE;
+};
+
+float() glauncher_check2 =
+{
+	if (self.ammo_rockets >= cvar("g_balance_grenadelauncher_secondary_ammo"))
 		return TRUE;
 	return FALSE;
 };
@@ -15,9 +23,9 @@ void(float req) w_glauncher =
 	if (req == WR_IDLE)
 		glauncher_ready_01();
 	else if (req == WR_FIRE1)
-		weapon_prepareattack(glauncher_check, glauncher_check, glauncher_fire1_01, cvar("g_balance_grenadelauncher_refire"));
+		weapon_prepareattack(glauncher_check, glauncher_check, glauncher_fire1_01, cvar("g_balance_grenadelauncher_primary_refire"));
 	else if (req == WR_FIRE2)
-		weapon_prepareattack(glauncher_check, glauncher_check, glauncher_fire1_01, cvar("g_balance_grenadelauncher_refire2"));
+		weapon_prepareattack(glauncher_check2, glauncher_check2, glauncher_fire2_01, cvar("g_balance_grenadelauncher_secondary_refire"));
 	else if (req == WR_RAISE)
 		glauncher_select_01();
 	else if (req == WR_UPDATECOUNTS)
@@ -27,7 +35,7 @@ void(float req) w_glauncher =
 	else if (req == WR_SETUP)
 		weapon_setup(WEP_GRENADE_LAUNCHER, "w_gl.zym", IT_ROCKETS);
 	else if (req == WR_CHECKAMMO)
-		weapon_hasammo = glauncher_check();
+		weapon_hasammo = glauncher_check() + glauncher_check2();
 };
 
 void W_Grenade_Explode (void)
@@ -39,7 +47,21 @@ void W_Grenade_Explode (void)
 	sound (self, CHAN_BODY, "weapons/grenade_impact.ogg", 1, ATTN_NORM);
 
 	self.event_damage = SUB_Null;
-	RadiusDamage (self, self.owner, cvar("g_balance_grenadelauncher_damage"), cvar("g_balance_grenadelauncher_edgedamage"), cvar("g_balance_grenadelauncher_radius"), world, cvar("g_balance_grenadelauncher_force"), IT_GRENADE_LAUNCHER);
+	RadiusDamage (self, self.owner, cvar("g_balance_grenadelauncher_primary_damage"), cvar("g_balance_grenadelauncher_primary_edgedamage"), cvar("g_balance_grenadelauncher_primary_radius"), world, cvar("g_balance_grenadelauncher_primary_force"), IT_GRENADE_LAUNCHER);
+
+	remove (self);
+}
+
+void W_Grenade_Explode2 (void)
+{
+	vector	org2;
+	org2 = findbetterlocation (self.origin);
+	te_explosion (org2);
+	effect (org2, "models/sprites/grenexpl.spr", 0, 12, 35);
+	sound (self, CHAN_BODY, "weapons/grenade_impact.ogg", 1, ATTN_NORM);
+
+	self.event_damage = SUB_Null;
+	RadiusDamage (self, self.owner, cvar("g_balance_grenadelauncher_secondary_damage"), cvar("g_balance_grenadelauncher_secondary_edgedamage"), cvar("g_balance_grenadelauncher_secondary_radius"), world, cvar("g_balance_grenadelauncher_secondary_force"), IT_GRENADE_LAUNCHER);
 
 	remove (self);
 }
@@ -47,7 +69,7 @@ void W_Grenade_Explode (void)
 void W_Grenade_Touch (void)
 {
 	if (other.takedamage == DAMAGE_AIM)
-		W_Grenade_Explode ();
+		self.think ();
 	else
 		sound (self, CHAN_IMPACT, "weapons/grenade_bounce.ogg", 1, ATTN_NORM);
 }
@@ -56,7 +78,7 @@ void W_Grenade_Damage (entity inflictor, entity attacker, float damage, float de
 {
 	self.health = self.health - damage;
 	if (self.health <= 0)
-		W_Grenade_Explode();
+		self.think ();
 }
 
 void W_Grenade_Attack (void)
@@ -64,15 +86,15 @@ void W_Grenade_Attack (void)
 	local entity gren;
 	local vector org;
 
-	
+
 	sound (self, CHAN_WEAPON, "weapons/grenade_fire.ogg", 1, ATTN_NORM);
 	if (self.items & IT_STRENGTH) {
 		sound (self, CHAN_AUTO, "weapons/strength_fire.ogg", 1, ATTN_NORM);
 	}
-	
+
 	self.punchangle_x = -4;
 	if (cvar("g_use_ammunition"))
-		self.ammo_rockets = self.ammo_rockets - 2;
+		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_grenade_primary_ammo");
 	org = self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -12;
 
 	gren = spawn ();
@@ -85,26 +107,50 @@ void W_Grenade_Attack (void)
 	setsize(gren, '-6 -6 -3', '6 6 3');
 	setorigin(gren, org);
 
-	if (self.button3)
-	{
-		gren.nextthink = time + 2.5;
-		gren.think = W_Grenade_Explode;
-		gren.touch = W_Grenade_Touch;
-		gren.takedamage = DAMAGE_YES;
-		gren.health = 10;
-		gren.damageforcescale = 4;
-		gren.event_damage = W_Grenade_Damage;
-		gren.velocity = v_forward * cvar("g_balance_grenadelauncher_speed2") + v_up * cvar("g_balance_grenadelauncher_speed2_up");
-		gren.avelocity = '100 150 100';
+	gren.nextthink = time + cvar("g_balance_grenadelauncher_primary_lifetime");
+	gren.think = W_Grenade_Explode;
+	gren.touch = W_Grenade_Explode;
+	gren.velocity = v_forward * cvar("g_balance_grenadelauncher_primary_speed") + v_up * cvar("g_balance_grenadelauncher_primary_speed_up");
+	gren.avelocity_x = random () * -500 - 500;
+
+	gren.angles = vectoangles (gren.velocity);
+}
+
+void W_Grenade_Attack2 (void)
+{
+	local entity gren;
+	local vector org;
+
+
+	sound (self, CHAN_WEAPON, "weapons/grenade_fire.ogg", 1, ATTN_NORM);
+	if (self.items & IT_STRENGTH) {
+		sound (self, CHAN_AUTO, "weapons/strength_fire.ogg", 1, ATTN_NORM);
 	}
-	else
-	{
-		gren.nextthink = time + 30;
-		gren.think = W_Grenade_Explode;
-		gren.touch = W_Grenade_Explode;
-		gren.velocity = v_forward * cvar("g_balance_grenadelauncher_speed") + v_up * cvar("g_balance_grenadelauncher_speed_up");
-		gren.avelocity_x = random () * -500 - 500;
-	}
+
+	self.punchangle_x = -4;
+	if (cvar("g_use_ammunition"))
+		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_grenadelauncher_secondary_ammo");
+	org = self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -12;
+
+	gren = spawn ();
+	gren.owner = self;
+	gren.classname = "grenade";
+	gren.movetype = MOVETYPE_BOUNCE;
+	gren.solid = SOLID_BBOX;
+	gren.effects = EF_NOSHADOW;
+	setmodel(gren, "models/grenademodel.md3");
+	setsize(gren, '-6 -6 -3', '6 6 3');
+	setorigin(gren, org);
+
+	gren.nextthink = time + cvar("g_balance_grenadelauncher_secondary_lifetime");
+	gren.think = W_Grenade_Explode2;
+	gren.touch = W_Grenade_Touch;
+	gren.takedamage = DAMAGE_YES;
+	gren.health = 10;
+	gren.damageforcescale = 4;
+	gren.event_damage = W_Grenade_Damage;
+	gren.velocity = v_forward * cvar("g_balance_grenadelauncher_secondary_speed") + v_up * cvar("g_balance_grenadelauncher_secondary_speed_up");
+	gren.avelocity = '100 150 100';
 
 	gren.angles = vectoangles (gren.velocity);
 }
@@ -117,5 +163,10 @@ void()	glauncher_deselect_01 =	{weapon_thinkf(-1, cvar("g_balance_weaponswitchde
 void()	glauncher_fire1_01 =
 {
 	weapon_doattack(glauncher_check, glauncher_check, W_Grenade_Attack);
-	weapon_thinkf(WFRAME_FIRE1, 0.3, glauncher_ready_01);
+	weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_grenadelauncher_primary_animtime"), glauncher_ready_01);
+};
+void()	glauncher_fire2_01 =
+{
+	weapon_doattack(glauncher_check, glauncher_check, W_Grenade_Attack2);
+	weapon_thinkf(WFRAME_FIRE2, cvar("g_balance_grenadelauncher_secondary_animtime"), glauncher_ready_01);
 };

@@ -6,7 +6,7 @@ void() rlauncher_select_01;
 float() rlauncher_check =
 {
 	if ((self.attack_finished > time && self.weapon == WEP_ROCKET_LAUNCHER)  // don't switch while guiding a missile
-		|| self.ammo_rockets >= 3)
+		|| self.ammo_rockets >= cvar("g_balance_rocketlauncher_ammo"))
 		return TRUE;
 	return FALSE;
 };
@@ -214,17 +214,17 @@ void W_Rocket_Attack (void)
 	local entity missile;
 	local entity flash;
 	local vector org;
-	
+
 	local vector trueaim;
 	trueaim = W_TrueAim();
-	
+
 	sound (self, CHAN_WEAPON, "weapons/rocket_fire.ogg", 1, ATTN_NORM);
 	if (self.items & IT_STRENGTH) {
 		sound (self, CHAN_AUTO, "weapons/strength_fire.ogg", 1, ATTN_NORM);
 	}
-	
+
 	if (cvar("g_use_ammunition") && !cvar("g_rocketarena"))
-		self.ammo_rockets = self.ammo_rockets - 3;
+		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_rocketlauncher_ammo");
 	self.punchangle_x = -4;
 	org = self.origin + self.view_ofs + v_forward * 15 + v_right * 3 + v_up * -11;
 	te_smallflash(org);
@@ -253,7 +253,7 @@ void W_Rocket_Attack (void)
 	missile.touch = W_Rocket_Touch;
 	missile.think = W_Rocket_Think;
 	missile.nextthink = time;
-	missile.cnt = time + 9;
+	missile.cnt = time + cvar("g_balance_rocketlauncher_lifetime");
 	missile.effects = EF_NOSHADOW;
 	sound (missile, CHAN_BODY, "weapons/rocket_fly.wav", 0.4, ATTN_NORM);
 
@@ -274,5 +274,5 @@ void()	rlauncher_deselect_01 =	{weapon_thinkf(-1, cvar("g_balance_weaponswitchde
 void()	rlauncher_fire1_01 =
 {
 	weapon_doattack(rlauncher_check, rlauncher_check, W_Rocket_Attack);
-	weapon_thinkf(WFRAME_FIRE1, 0.3, rlauncher_ready_01);
+	weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_rocketlauncher_animtime"), rlauncher_ready_01);
 };
