@@ -1158,6 +1158,14 @@ void PlayerPreThink (void)
 	PlayerLasergatePreThink();
 }
 
+// Update weapon colors
+void UpdatePlayerColors () {
+	if(self.weaponentity) {
+		self.weaponentity.colormap = self.colormap;
+		self.exteriorweaponentity.colormap = self.colormap;
+   	}
+}
+
 /*
 =============
 PlayerPostThink
@@ -1172,6 +1180,7 @@ void PlayerPostThink (void)
 	UpdateChatBubble();
 	UpdateColorModHack();
 	UpdateTeamBubble();
+	UpdatePlayerColors();
 	if (self.deadflag == DEAD_NO)
 	if (self.impulse)
 		ImpulseCommands ();

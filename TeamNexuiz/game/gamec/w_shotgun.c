@@ -47,7 +47,7 @@ void W_Shotgun_Attack (void)
 	
 	trueaim = trace_endpos;
 
-	sound (self, CHAN_WEAPON, "weapons/shotgun_fire.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "weapons/shotgun_fire.ogg", 1, ATTN_NORM);
 	bullets = cvar("g_balance_shotgun_bullets");
 	d = cvar("g_balance_shotgun_damage");
 

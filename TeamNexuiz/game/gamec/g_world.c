@@ -211,6 +211,41 @@ void worldspawn (void)
 	precache_sound ("weapons/weapon_switch.wav");
 	precache_sound ("weapons/weaponpickup.wav");
 	precache_sound ("weapons/flamer.wav");
+	// Nex 1.5 Sound Precaches
+	precache_sound ("weapons/crylink_fire.ogg");
+	precache_sound ("weapons/electro_bounce.ogg");
+	precache_sound ("weapons/electro_fire.ogg");
+	precache_sound ("weapons/electro_fire2.ogg");
+	precache_sound ("weapons/electro_fly.wav");
+	precache_sound ("weapons/electro_impact.ogg");
+	precache_sound ("weapons/electro_impact_combo.ogg");
+	precache_sound ("weapons/grenade_bounce.ogg");
+	precache_sound ("weapons/grenade_fire.ogg");
+	precache_sound ("weapons/grenade_impact.ogg");
+	precache_sound ("weapons/hagar_fire.ogg");
+	precache_sound ("weapons/hagexp1.ogg");
+	precache_sound ("weapons/hagexp2.ogg");
+	precache_sound ("weapons/hagexp3.ogg");
+	precache_sound ("weapons/hook_fire.ogg");
+	precache_sound ("weapons/hook_impact.ogg");
+	precache_sound ("weapons/lasergun_fire.ogg");
+	precache_sound ("weapons/laserimpact.ogg");
+	precache_sound ("weapons/nexfire.ogg");
+	precache_sound ("weapons/neximpact.ogg");
+	precache_sound ("weapons/ric1.ogg");
+	precache_sound ("weapons/ric2.ogg");
+	precache_sound ("weapons/ric3.ogg");
+	precache_sound ("weapons/rocket_fire.ogg");
+	precache_sound ("weapons/rocket_fly.wav");
+	precache_sound ("weapons/rocket_impact.ogg");
+	precache_sound ("weapons/shotgun_fire.ogg");
+	precache_sound ("weapons/tink1.ogg");
+	precache_sound ("weapons/uzi_fire.ogg");
+	precache_sound ("weapons/weapon_switch.ogg");
+	precache_sound ("weapons/weaponpickup.ogg");
+	precache_sound ("weapons/strength_fire.ogg");
+	// Nex 1.5 Model/Sprite Precaches
+	precache_model ("models/sprites/rockexpl.spr");
 	// TF SOUNDS & MODELS
 	precache_sound ("weapons/prime.wav");
 	precache_sound ("weapons/gren.wav");

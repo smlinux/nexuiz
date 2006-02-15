@@ -63,7 +63,7 @@ void W_Crylink_Attack (void)
 	
 	trueaim = trace_endpos;
 
-	sound (self, CHAN_WEAPON, "weapons/crylink.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "weapons/crylink.ogg", 1, ATTN_NORM);
 	if (cvar("g_use_ammunition"))
 		self.ammo_cells = self.ammo_cells - 1;
 	self.punchangle_x = -2;
