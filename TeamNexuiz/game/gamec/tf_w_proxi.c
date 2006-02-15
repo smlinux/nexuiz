@@ -166,7 +166,6 @@ void () FoundBastard =
 void () ProxArmed =
 {
 	local entity te;
-	local entity tl;
 	local vector dist;
 
 	self.velocity = '0 0 0';
