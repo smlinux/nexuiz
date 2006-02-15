@@ -2991,11 +2991,25 @@ void() info_player_team4 =
 	self.team_str_home = "ts4";
 };
 
+void () item_ctf_flag;		// Team:Nexuiz CTF flag
+void () item_ctf_goal;		// Team:Nexuiz CTF goal
 void() item_flag_team2 = 
 {
 	team2maxplayers = 4;		//TEMP
-	local entity dp;
 	CTF_Map = 1;
+
+	local entity egl;
+	egl = spawn();
+	setorigin(egl, self.origin);
+	egl.allowteams = "red";
+	egl.think = item_ctf_goal;
+	egl.nextthink = time + 0.2;
+	
+	self.allowteams = "red";
+	self.model = "models/flags/b_flag.md3";
+	item_ctf_flag();
+/*
+	local entity dp;
 	precache_model("progs/w_s_key.mdl");
 	precache_sound("ogre/ogwake.wav");
 	precache_sound("boss2/pop2.wav");
@@ -3050,14 +3064,25 @@ void() item_flag_team2 =
 	dp.goal_state = 2;
 	setsize(dp, '-16 -16 -24', '16 16 32');
 	dp.nextthink = time + 0.2;
-	dp.think = TF_PlaceGoal;
+	dp.think = TF_PlaceGoal;*/
 };
 
 void() item_flag_team1 = 
 {
 	team1maxplayers = 4;		//TEMP
-	local entity dp;
 	CTF_Map = 1;
+
+	local entity egl;
+	egl = spawn();
+	setorigin(egl, self.origin);
+	egl.allowteams = "blue";
+	egl.think = item_ctf_goal;
+	egl.nextthink = time + 0.2;
+
+	self.model = "models/flags/r_flag.md3";
+	self.allowteams = "blue";
+	item_ctf_flag();
+/*
 	precache_model("progs/tf_flag.mdl");
 	precache_sound("ogre/ogwake.wav");
 	precache_sound("boss2/pop2.wav");
@@ -3112,7 +3137,7 @@ void() item_flag_team1 =
 	dp.goal_state = 2;
 	setsize(dp, '-16 -16 -24', '16 16 32');
 	dp.nextthink = time + 0.2;
-	dp.think = TF_PlaceGoal;
+	dp.think = TF_PlaceGoal;*/
 };
 
 void() CTF_FlagCheck = 
