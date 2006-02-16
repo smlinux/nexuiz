@@ -1,7 +1,7 @@
 // entity 0
 {
 "gridsize" "128 128 256"
-"message" "Bio Factory"
+"message" "Slime Pit"
 "classname" "worldspawn"
 // brush 0
 {

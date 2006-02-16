@@ -2,7 +2,7 @@
 {
 "gridsize" "1024 1024 1024"
 "classname" "worldspawn"
-"message" "LordHavoc's Red City Re-Mixed"
+"message" "SilverCity"
 // brush 0
 {
 ( -2176 -2120 2336 ) ( -2176 -2120 -392 ) ( -2176 2120 -392 ) sav-graysky1/sav-graysky2_skybox 0 0 0 0.500000 0.500000 0 0 0
