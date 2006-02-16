@@ -255,5 +255,5 @@ void()  electro_fire2_02 =
 void()  electro_fire2_01 =
 {
 	weapon_doattack(electro_check2, electro_check2, W_Electro_Attack2);
-	weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_electro_rsecondary_animtime"), electro_fire2_02);
+	weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_electro_secondary_animtime"), electro_fire2_02);
 }
