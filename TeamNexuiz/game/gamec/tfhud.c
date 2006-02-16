@@ -13,13 +13,14 @@ void () CL_GrenadeOneEntity_Think =
 // ok this was a dumb idea >.< lets just use csqc
 void () TeamNexuiz_HUD_ShowGrenadeOne =
 {
+	precache_model("models/hud_nobul.sp2");
 	self.grenadeoneentity = spawn();
 	self.grenadeoneentity.solid = SOLID_NOT;
 	self.grenadeoneentity.owner = self;
 	self.grenadeoneentity.grenadeoneentity = self.grenadeoneentity;
-	setmodel(self.grenadeoneentity, "models/grenades/fragnade.MD3");
-	self.grenadeoneentity.scale = .07;
-	self.grenadeoneentity.origin = '10 9 0';
+	setmodel(self.grenadeoneentity, "models/hud_nobul.sp2");
+	self.grenadeoneentity.scale = .1;
+	self.grenadeoneentity.origin = '40 0 0';
 	self.grenadeoneentity.angles = '0 0 0';
 	self.grenadeoneentity.viewmodelforclient = self;
 	self.grenadeoneentity.flags = 0;

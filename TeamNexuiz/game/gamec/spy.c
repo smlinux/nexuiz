@@ -27,6 +27,52 @@ void SpyCloak()
 	self.special_time = time;
 }
 
+// From TF2.5(tm)
+float(vector veca, vector vecb) crossproduct = 
+{
+	local float result;
+	result = veca_x * vecb_y - vecb_x * veca_y;
+	return result;
+};
+
+void SpyDisarm ()
+{
+	local vector source;
+	local vector def;
+
+//	self.currentammo = 0;
+	makevectors (self.v_angle);
+	source = (self.origin + '0 0 16');
+	traceline (source, (source + (v_forward * 64)), 0, self);
+	if ((trace_fraction == 1))
+	{
+		return;
+	}
+	makevectors (trace_ent.v_angle);
+	def = v_right;
+	makevectors (self.v_angle);
+	if (trace_ent.classname == "player" && trace_ent.health > 0)
+	{
+		if (crossproduct (def, v_forward) > 0)
+		{
+			other.currentammo = 0;
+			sprint(other, "You have been disarmed!\n");
+			other.ammo_shells = 0;
+			other.ammo_cells = 0;
+			other.ammo_rockets = 0;
+			other.ammo_metal = 0;
+			other.ammo_nails = 0;
+			other.no_grenades_1 = 0;
+			other.no_grenades_2 = 0;
+			self.grenade_time = time + 10;
+		}
+		else
+		{
+			sprint(self, "You can only disarm someone from behind\n");
+		}
+	}
+};
+
 void SpySpecial()
 {
 	if(self.special_active)
@@ -42,8 +88,9 @@ void SpyGrenade(float req)
 	SpyDecloak();
 	if(req == WR_GRENADE1)
 	{
-		if( W_ThrowGrenade(W_NailGrenade) )
-			self.grenade_time = time + cvar("g_balance_grenade_nail_refire");
+//		if( W_ThrowGrenade(W_NailGrenade) )
+//			self.grenade_time = time + cvar("g_balance_grenade_nail_refire");
+		SpyDisarm();
 	}
 	else if(req == WR_GRENADE2)
 	{
