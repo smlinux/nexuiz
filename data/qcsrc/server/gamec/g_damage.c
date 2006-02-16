@@ -3,9 +3,9 @@ float checkrules_firstblood;
 
 void GiveFrags (entity attacker, entity targ, float f)
 {
-	
+
 	if(gameover) return;
-	
+
 	if(f > 0 && cvar("g_domination") && cvar("g_domination_disable_frags"))
 		return;
 	else if(f > 0 && cvar("g_runematch"))
@@ -16,7 +16,7 @@ void GiveFrags (entity attacker, entity targ, float f)
 		targ.frags -= 1;
 		// keep track of the worst players lives
 		if(targ.frags < lms_lowest_lives)
-			lms_lowest_lives = targ.frags;	
+			lms_lowest_lives = targ.frags;
 		// player has no more lives left
 		if (!targ.frags)
 			lms_dead_count += 1;
@@ -68,10 +68,10 @@ void Obituary (entity attacker, entity targ, float deathtype)
 					m = strcat(m, "^3Yellow Team");
 				centerprint(targ, m);
 				return;
-			}				
+			}
 			else
 				centerprint(targ, strcat("^1You killed your own dumb self!\n\n\n"));
-			
+
 			if (deathtype == IT_GRENADE_LAUNCHER)
 				bprint ("^1",s, "^1 detonated\n");
 			else if (deathtype == IT_ELECTRO)
@@ -110,14 +110,14 @@ void Obituary (entity attacker, entity targ, float deathtype)
 			{
 				checkrules_firstblood = TRUE;
 				//sound(world, CHAN_AUTO, "announcer/firstblood.wav", 1, ATTN_NONE);
-				if (cvar("g_minstagib"))
+				//if (cvar("g_minstagib"))
 					//sound(world, CHAN_AUTO, "announce/male/mapkill1.ogg", 1, ATTN_NONE);
 				bprint("^1",attacker.netname, "^1 drew first blood", "\n");
 			}
 
 			centerprint(attacker, strcat("^4You fragged ^7", s, "\n\n\n"));
 			centerprint(targ, strcat("^1You were fragged by ^7", attacker.netname, "\n\n\n"));
-			
+
 			if (deathtype == IT_LASER)
 				bprint ("^1",s, "^1 was blasted by ", attacker.netname, "\n");
 			else if (deathtype == IT_UZI)
@@ -217,8 +217,8 @@ void Obituary (entity attacker, entity targ, float deathtype)
 			GiveFrags(targ, targ, -1);
 			if(targ.frags == -5) {
 				stuffcmd(targ, "play2 announcer/male/botlike.ogg\n");
-			} 
-			
+			}
+
 			//targ.frags = targ.frags - 1;
 			if (targ.killcount > 2)
 				bprint ("^1",s,"^1 died with a ",ftos(targ.killcount)," kill spree\n");
@@ -238,28 +238,28 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 {
 	if (gameover || targ.killcount == -666)
 		return;
-	
+
 	local entity oldself;
 	oldself = self;
 	self = targ;
         damage_targ = targ;
         damage_inflictor = inflictor;
-        damage_attacker = attacker;	
+        damage_attacker = attacker;
 	// nullify damage if teamplay is on
 	if (teamplay)
 	if (attacker.team)
 	if (attacker.team == targ.team)
 	if ((teamplay == 1 || teamplay == 3) && attacker != targ)
 		damage = 0;
-	
+
 	if(damage > 0 && targ != attacker && clienttype(attacker) == CLIENTTYPE_REAL && targ.classname == "player")
 		stuffcmd(attacker, "play2 misc/hit.wav\n");
-	
+
 	if (cvar("g_minstagib"))
 	{
-		if ((deathtype == DEATH_FALL)  || 
-		    (deathtype == DEATH_DROWN) || 
-		    (deathtype == DEATH_SLIME) || 
+		if ((deathtype == DEATH_FALL)  ||
+		    (deathtype == DEATH_DROWN) ||
+		    (deathtype == DEATH_SLIME) ||
 		    (deathtype == DEATH_LAVA))
 			return;
 		if (targ.extralives && (deathtype == IT_NEX) && damage)
@@ -288,12 +288,12 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 			}
 		}
 	} else {
-		if (deathtype == IT_NEX && !(attacker.flags & FL_ONGROUND) && !(targ.flags & FL_ONGROUND) && attacker.killcount != 3 && attacker.killcount != 5 && attacker.killcount != 10 && attacker.killcount != 15 && attacker.killcount != 20 && attacker.killcount != 25 && attacker.killcount != 30)
+		if (deathtype == IT_NEX && !(attacker.flags & FL_ONGROUND) && !(targ.flags & FL_ONGROUND) && attacker.waterlevel < 2 && targ.waterlevel < 2 && attacker.killcount != 3 && attacker.killcount != 5 && attacker.killcount != 10 && attacker.killcount != 15 && attacker.killcount != 20 && attacker.killcount != 25 && attacker.killcount != 30)
 		{
 			if(clienttype(attacker) == CLIENTTYPE_REAL)  stuffcmd(attacker, "play2 announcer/male/yoda.ogg\n");
 		}
 	}
-	
+
 	// midair gamemode: damage only while in the air
 	if (cvar("g_midair")
 	    && self.classname == "player" // e.g. grenades take damage
@@ -374,7 +374,7 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 					//attacker.health = attacker.health + damage * cvar("g_balance_rune_vampire_combo_absorb");
 					attacker.health = bound(
 						cvar("g_balance_curse_empathy_minhealth"), // LA: was 3, now 40
-						attacker.health + damage * cvar("g_balance_rune_vampire_combo_absorb"), 
+						attacker.health + damage * cvar("g_balance_rune_vampire_combo_absorb"),
 						cvar("g_balance_rune_vampire_maxhealth"));	// LA: was 1000, now 500
 				}
 				else
@@ -383,7 +383,7 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 					attacker.health = bound(
 						attacker.health,	// LA: was 3, but changed so that you can't lose health
 											// empathy won't let you gain health in the same way...
-						attacker.health + damage * cvar("g_balance_rune_vampire_absorb"), 
+						attacker.health + damage * cvar("g_balance_rune_vampire_absorb"),
 						cvar("g_balance_rune_vampire_maxhealth"));	// LA: was 1000, now 500
 					}
 			}
@@ -392,7 +392,7 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 			{
 				attacker.health = bound(
 					cvar("g_balance_curse_empathy_minhealth"), // LA: was 3, now 20
-					attacker.health + damage * cvar("g_balance_curse_empathy_takedamage"), 
+					attacker.health + damage * cvar("g_balance_curse_empathy_takedamage"),
 					attacker.health);
 			}
 		}
