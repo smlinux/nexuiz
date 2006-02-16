@@ -19,59 +19,80 @@ void DummyThink(void)
 
 void ImpulseCommands (void)
 {
-	if (self.impulse >= 1 && self.impulse <= 9 && !cvar("g_minstagib"))
-		W_SwitchWeapon (self.impulse);
-	else if (self.impulse == 10 && !cvar("g_minstagib"))
-		W_NextWeapon ();
-	else if (self.impulse == 12 && !cvar("g_minstagib"))
-		W_PreviousWeapon ();
-	else if (self.impulse == 13 && cvar("sv_cheats"))
+	local float imp;
+	imp = self.impulse;
+	if (!imp)
+		return;
+	self.impulse = 0;
+	if (imp >= 1 && imp <= 12)
 	{
-		makevectors (self.v_angle);
-		self.velocity = self.velocity + v_forward * 300;
-		CopyBody(1);
-		self.velocity = self.velocity - v_forward * 300;
-	}
-	else if (self.impulse == 14 && cvar("sv_cheats"))
-		CopyBody(0);
-	else if (self.impulse == 15 && cvar("sv_cheats"))
-	{
-		sprint(self, strcat("origin = ", vtos(self.origin), "\n"));
-		sprint(self, strcat("angles = ", vtos(self.angles), "\n"));
-	}
-	else if (self.impulse == 16 && cvar("sv_cheats"))
-	{
-		float i;
-		string s;
-		i=1;
-		while(i <= 10)
+		// weapon switching impulses
+		// FIXME: why a g_minstagib check?  doesn't that have only one weapon?
+		if (!cvar("g_minstagib"))
 		{
-			s = ftos(i);
-			sprint(self, strcat(s, ": ^", s, "color\n"));
-			i = i + 1;
+			if (imp <= 9)
+				W_SwitchWeapon (imp);
+			else if (imp == 10)
+				W_NextWeapon ();
+			else if (imp == 12)
+				W_PreviousWeapon ();
+			else if (imp == 11) // last weapon
+				W_SwitchWeapon (self.cnt);
 		}
-		sprint(self, strcat("origin = ", vtos(self.origin), "\n"));
+	}
+	else if (imp >= 13 && imp <= 16)
+	{
+		if (cvar("sv_cheats"))
+		{
+			if (imp == 13)
+			{
+				makevectors (self.v_angle);
+				self.velocity = self.velocity + v_forward * 300;
+				CopyBody(1);
+				self.velocity = self.velocity - v_forward * 300;
+			}
+			else if (imp == 14)
+				CopyBody(0);
+			else if (imp == 15)
+			{
+				sprint(self, strcat("origin = ", vtos(self.origin), "\n"));
+				sprint(self, strcat("angles = ", vtos(self.angles), "\n"));
+			}
+			else if (imp == 16)
+			{
+				float i;
+				string s;
+				i=1;
+				while(i <= 10)
+				{
+					s = ftos(i);
+					sprint(self, strcat(s, ": ^", s, "color\n"));
+					i = i + 1;
+				}
+				sprint(self, strcat("origin = ", vtos(self.origin), "\n"));
+			}
+		}
 	}
 	// throw weapon
-	else if (self.impulse == 17 && self.weapon != WEP_LASER 
-			&& !cvar("g_minstagib") && !cvar("g_instagib") 
+	else if (imp == 17)
+	{
+		if (self.weapon != WEP_LASER
+			&& !cvar("g_minstagib") && !cvar("g_instagib")
 			&& !cvar("g_rocketarena") && !cvar("g_lms") && cvar("g_pickup_items"))
-	{
-		W_ThrowWeapon();
+			W_ThrowWeapon();
 	}
-	else if(self.impulse == 18)
-	{
+	else if(imp == 18)
 		PrintWelcomeMessage(self);
-		return;
-	}
-	else if (self.impulse == 99 && cvar("sv_cheats"))
+	else if (imp == 99)
 	{
-		self.items = IT_LASER | IT_UZI | IT_SHOTGUN | IT_GRENADE_LAUNCHER | IT_ELECTRO | IT_CRYLINK | IT_NEX | IT_HAGAR | IT_ROCKET_LAUNCHER;
-		self.ammo_shells = 999;
-		self.ammo_nails = 999;
-		self.ammo_rockets = 999;
-		self.ammo_cells = 999;
+		if (cvar("sv_cheats"))
+		{
+			self.items = IT_LASER | IT_UZI | IT_SHOTGUN | IT_GRENADE_LAUNCHER | IT_ELECTRO | IT_CRYLINK | IT_NEX | IT_HAGAR | IT_ROCKET_LAUNCHER;
+			self.ammo_shells = 999;
+			self.ammo_nails = 999;
+			self.ammo_rockets = 999;
+			self.ammo_cells = 999;
+		}
 	}
 	//TetrisImpulses();
-	self.impulse = 0;
 }
