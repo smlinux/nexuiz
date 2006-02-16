@@ -26,7 +26,7 @@ float GRAPHOOK_FIRE		= 20;
 float GRAPHOOK_RELEASE		= 21;
 // (note: you can change the hook impulse #'s to whatever you please)
 
-4. Open client.c and add this to the top of PutClientInServer(): 
+4. Open client.c and add this to the top of PutClientInServer():
 
 	RemoveGrapplingHook(self); // Wazat's Grappling Hook
 
@@ -83,7 +83,7 @@ void GrapplingHookThink()
 		dir = normalize(dir);
 
 		end = self.origin - dir*minlength;
-		
+
 		dist = vlen(end - org);
 
 		if(dist < 200)
@@ -170,6 +170,18 @@ void FireGrapplingHook (void)
 
 void GrapplingHookFrame()
 {
+	// this function has been modified for Nexuiz
+	if (self.button6 && cvar("g_grappling_hook"))
+	{
+		if (!self.hook && self.hook_time <= time)
+			FireGrapplingHook();
+	}
+	else
+	{
+		if (self.hook)
+			RemoveGrapplingHook(self);
+	}
+	/*
 	// if I have no hook or it's not pulling yet, make sure I'm not flying!
 	if((self.hook == world || !self.hook.state) && self.movetype == MOVETYPE_FLY)
 	{
@@ -181,12 +193,13 @@ void GrapplingHookFrame()
 		FireGrapplingHook();
 		return;
 	}
-	else if(self.impulse == GRAPHOOK_RELEASE)
+	else if(self.hookimpulse == GRAPHOOK_RELEASE)
 	{
 		// remove hook, reset movement type
 		RemoveGrapplingHook(self);
 		return;
 	}
+	*/
 	/*else // make sure the player's movetype is correct
 	{
 		//if(self.hook == world && self.movetype == MOVETYPE_FLY)
@@ -200,6 +213,9 @@ void GrapplingHookFrame()
 
 void SetGrappleHookBindings()
 {
+	// this function has been modified for Nexuiz
+	/*
 	stuffcmd(self, strcat("alias +hook \"impulse ", ftos(GRAPHOOK_FIRE),	"\"\n"));
 	stuffcmd(self, strcat("alias -hook \"impulse ", ftos(GRAPHOOK_RELEASE),	"\"\n"));
+	*/
 }
