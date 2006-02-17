@@ -11,6 +11,13 @@ Item DataContainer Misc
 
 		[DataLink_Setting]
 	}
+	Item Data_CvarCreateSave SpawnShieldTime
+	{
+		cvarName	"g_spawnshieldtime"
+		defValue	0
+
+		[DataLink_Setting]
+	}
 	Item Data_CvarCreateSave Grapple
 	{
 		cvarName	"g_grappling_hook"
@@ -31,7 +38,7 @@ Item DataContainer Misc
 		defValue	1000
 
 		[DataLink_Setting]
-	}	
+	}
 	Item Data_Cvar StartLaser
 	{
 		cvarName	"g_start_weapon_laser"
@@ -192,6 +199,13 @@ Item DataContainer Misc
 		defValue	0
 
 		[DataLink_OnOffSwitch]
+	}
+	Item Data_Cvar MidAirShieldTime
+	{
+		cvarName	"g_midair_shieldtime"
+		defValue	0.3
+
+		[DataLink_Setting]
 	}
 	Item Data_Cvar MinstaGibMode
 	{

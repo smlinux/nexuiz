@@ -40,6 +40,11 @@ Item Layout Misc
 				text	"Join Message Display Time"
 				target	"Data::Game::Misc::JoinMessageTime::Text"
 			}
+			Derive Nex_Option_EditBox SpawnShieldTime
+			{
+				text	"Invulnerability time after spawning"
+				target	"Data::Game::Misc::SpawnShieldTime::Text"
+			}
 			Derive Nex_Option_Switch Grapple
 			{
 				text	"Grappling Hook Enabled"
@@ -173,10 +178,17 @@ Item Layout Misc
 				text	"Laser-Guide Rockets"
 				target	"::Data::Game::Misc::HomingRocket::Switch"
 			}
+			Derive Nex_Line	SeperatorMidAir
+			{}
 			Derive Nex_Option_Switch MidAir
 			{
 				text	"MidAir"
 				target	"::Data::Game::Misc::MidAir::Switch"
+			}
+			Derive Nex_Option_EditBox MidAirShieldTime
+			{
+				text	"Invulnerability time after leaving floor"
+				target	"::Data::Game::Misc::MidAirShieldTime::Text"
 			}
 			Derive Nex_Line	SeperatorMinstagib
 			{}
