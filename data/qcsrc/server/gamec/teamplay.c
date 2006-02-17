@@ -250,7 +250,7 @@ string GetClientVersionMessage(float v) {
 			versionmsg = "^3This server is using an outdated Nexuiz version.\n\n\n ### THIS SERVER IS INCOMPATIBLE AND THUS YOU CANNOT JOIN ###.^8";
 		}
 	} else {
-		versionmsg = "^2client version and server version are the same.^8";
+		versionmsg = "^2client version and server version are compatible.^8";
 	}
 	return strzone(versionmsg);
 
