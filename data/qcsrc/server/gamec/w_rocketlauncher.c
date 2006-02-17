@@ -51,6 +51,12 @@ void W_Rocket_Explode (void)
 
 	if (self.owner.weapon == WEP_ROCKET_LAUNCHER)
 	{
+		if(self.owner.ammo_rockets < cvar("g_balance_rocketlauncher_ammo"))
+		{
+			self.owner.cnt = WEP_ROCKET_LAUNCHER;
+			self.owner.attack_finished = time;
+			self.owner.switchweapon = w_getbestweapon(self.owner);			
+		}
 		if(cvar("g_homing_missile"))
 				  self.owner.attack_finished = time + cvar("g_balance_rocketlauncher_refire");
 	}
