@@ -226,7 +226,7 @@ void SV_PlayerPhysics()
 		wishspeed = vlen(wishvel);
 		if (wishspeed > sv_maxspeed*maxspd_mod)
 			wishspeed = sv_maxspeed*maxspd_mod;
-		if (self.button5) // crouch
+		if (self.crouch)
 			wishspeed = wishspeed * 0.5;
 		if (time >= self.teleport_time)
 		{
@@ -255,7 +255,7 @@ void SV_PlayerPhysics()
 		wishspeed = vlen(wishvel);
 		if (wishspeed > maxairspd)
 			wishspeed = maxairspd;
-		if (self.button5) // crouch
+		if (self.crouch)
 			wishspeed = wishspeed * 0.5;
 		if (time >= self.teleport_time)
 		{
