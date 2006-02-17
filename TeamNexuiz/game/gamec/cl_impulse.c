@@ -160,7 +160,7 @@ void ImpulseCommands (void)
 		TeamNexuiz_Feign();
 	}
 	if (self.impulse == 153)
-		TeamNexuiz_HUD_ShowGrenadeOne();
+		TeamNexuiz_HUD_ShowSign(self, NO_AMMO_WARNING);
 	if (self.impulse >= 1 && self.impulse <= 5)
 	{
 		if(self.buttonuse)

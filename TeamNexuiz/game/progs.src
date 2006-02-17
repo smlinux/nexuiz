@@ -84,6 +84,7 @@ gamec/domination.c
 
 gamec/mauvebot.c
 
+gamec/tn_clientcommands.c		// TN Voting/Rcon/Team/Class-select etc.
 gamec/tf_ball.c				// MegaTF/TN Ball&Goal
 
 gamec/tf_w_pistol.c			// (Every Class?) Pistol

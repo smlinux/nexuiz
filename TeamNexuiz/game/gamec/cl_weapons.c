@@ -161,7 +161,8 @@ void(float imp) W_SwitchWeapon
 	if (!client_hasweapon(self, imp, TRUE))
 	{
 		if (!weapon_hasammo)
-			sprint(self, "You don't have any ammo for that weapon\n");
+//			sprint(self, "You don't have any ammo for that weapon\n");
+			TeamNexuiz_HUD_ShowSign(self, NO_AMMO_WARNING);
 		else
 			sprint(self, "You don't own that weapon\n");
 	}

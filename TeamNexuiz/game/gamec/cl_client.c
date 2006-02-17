@@ -213,11 +213,12 @@ entity () SelectSpawnPoint =
 //		self.origin_z = self.origin_z + 30;
 		if (!cvar("g_teamnexuiz_version"))
 			self.current_menu = MENU_NEED_TN;
-
-		stuffcmd(self, "alias menu_showteamselect \"set scmenu_directmenu TeamSelect; togglemenu\"\n");
-		stuffcmd(self, "set scmenu_directmenu TeamSelect; togglemenu\n");
-
-		stuffcmd(self, "alias classmenu \"impulse 73\"\n");
+		else
+		{
+			stuffcmd(self, "alias menu_showteamselect \"set scmenu_directmenu TeamSelect; togglemenu\"\n");
+			stuffcmd(self, "set scmenu_directmenu TeamSelect; togglemenu\n");
+			stuffcmd(self, "alias classmenu \"impulse 73\"\n");
+		}
 //		spot = find (world, classname, "item_tfgoal");
 //		return (spot);
 	}
@@ -299,7 +300,7 @@ entity () SelectSpawnPoint =
 	}
 	if (!spot)
 	{
-//		spot = find (world, classname, "info_tfgoal");
+		spot = find (world, classname, "info_tfgoal");
 	}
 	if (!spot)
 	{
@@ -1228,175 +1229,3 @@ void PlayerPostThink (void)
 	PlayerLasergatePostThink();
 }
 
-// Parse team join, class etc.
-void SV_ParseClientCommand (string s)
-{
-	local float args;
-//	local float h;
-	local string c;
-	local string d;
-	local string f;
-	local string g;
-	local string i;
-	args = tokenize(s);
-	c = argv(0);
-	d = argv(1);
-	f = argv(2);
-	g = argv(3);
-	i = argv(4);
-
-	if (c == "join")
-    {
-		return;
-	}
-	if (c == "changeclass")
-	{
-		stuffcmd(self, "set scmenu_directmenu ClassSelect; togglemenu\n");
-		return;
-	}
-	if (c == "selectteam")
-    {
-		if (self.team_no > 0)
-		{
-			sprint(self, "You are already on a team!\n");
-			return;
-		}
-		if (d == "auto" || d == "5")
-		{
-			TeamFortress_TeamPutPlayerInTeam();
-			PutClientInServer ();
-		}
-		if (d == "blue" || d == "1")
-		{
-			TeamFortress_TeamSet (1);
-			PutClientInServer ();
-		}
-		if (d == "red" || d == "2")
-		{
-			TeamFortress_TeamSet (2);
-			PutClientInServer ();
-		}
-		if (d == "yellow" || d == "3")
-		{
-			TeamFortress_TeamSet (3);
-			PutClientInServer ();
-		}
-		if (d == "green" || d == "pink" || d == "4")		// Morphed set it to Pink in the menus. I think
-		{													// we should make it white instead.
-			TeamFortress_TeamSet (4);
-			PutClientInServer ();
-		}
-		return;
-	}
-	if (c == "selectclass")
-    {
-		if (self.team_no < 1)
-		{
-			sprint(self, "You must select a team to join first!\n");
-			return;
-		}
-		if (TeamFortress_TeamIsCivilian (self.team_no))
-		{
-			self.impulse = 1;
-			TeamFortress_ChangeClass ();
-			return;
-		}
-		if (self.playerclass > 0)		// if a class is already chosen
-		{
-			self.tfstate = self.tfstate - (self.tfstate & 8);
-			local string cname;
-			if (d == ftos(TF_CLASS_SCOUT))
-			{
-				cname = "scout";
-			}
-			if (d == ftos(TF_CLASS_SOLDIER))
-			{
-				cname = "soldier";
-			}
-			if (d == ftos(TF_CLASS_MEDIC))
-			{
-				cname = "medic";
-			}
-			if (d == ftos(TF_CLASS_PYRO))
-			{
-				cname = "pyro";
-			}
-			if (d == ftos(TF_CLASS_ENGINEER))
-			{
-				cname = "engineer";
-			}
-			if (d == ftos(TF_CLASS_SPY))
-			{
-				cname = "spy";
-			}
-			if (d == ftos(TF_CLASS_RANDOM))
-			{
-				self.tfstate = self.tfstate | 8;
-				sprint(self, "You will respawn as a random class.\n");
-			}
-			if (cname != "")
-			{
-//				stuffcmd(self, "_cl_playermodel \"models/class/");
-//				stuffcmd(self, cname);
-//				stuffcmd(self, "_mechanical.zym\"\n");
-				if (cname == "engineer")
-				{
-					self.playermodel = strcat("models/class/",cname,"_other.zym");
-				}
-				else
-				{
-					self.playermodel = strcat("models/class/",cname,"_mechanical.zym");
-				}
-				if (self.is_dead == 1)		// if player is dead, can change class
-					CheckForClassChange();
-			}
-		}
-		else			// if no class is chosen
-		{
-			if (d == ftos(TF_CLASS_SCOUT))
-			{
-				self.impulse = TF_CLASS_SCOUT;
-			}
-			if (d == ftos(TF_CLASS_SOLDIER))
-			{
-				self.impulse = TF_CLASS_SOLDIER;
-			}
-			if (d == ftos(TF_CLASS_MEDIC))
-			{
-				self.impulse = TF_CLASS_MEDIC;
-			}
-			if (d == ftos(TF_CLASS_PYRO))
-			{
-				self.impulse = TF_CLASS_PYRO;
-			}
-			if (d == ftos(TF_CLASS_ENGINEER))
-			{
-				self.impulse = TF_CLASS_ENGINEER;
-			}
-			if (d == ftos(TF_CLASS_SPY))
-			{
-				self.impulse = TF_CLASS_SPY;
-			}
-			if (d == ftos(TF_CLASS_RANDOM))
-			{
-				self.impulse = TF_CLASS_RANDOM;
-			}
-			TeamFortress_ChangeClass();
-		}
-		return;
-	}
-	else if (c == "check_val")
-	{
-		if (d == "r_bloom")
-		{
-			if (f == "1")
-				self.uses_bloom = 1;
-			else
-				self.uses_bloom = 0;
-		}
-	}
-	else
-	{
-		clientcommand(self, s);
-	}
-};

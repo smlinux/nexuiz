@@ -483,6 +483,10 @@ SOURCE=.\tffunctions.c
 
 SOURCE=.\tfmenus.c
 # End Source File
+# Begin Source File
+
+SOURCE=.\tn_clientcommands.c
+# End Source File
 # End Group
 # Begin Group "TF Client"
 

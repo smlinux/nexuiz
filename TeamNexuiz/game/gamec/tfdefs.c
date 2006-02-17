@@ -274,6 +274,9 @@ void (entity Goal, entity AP) DoGoalWork;
 void () button_wait;
 void () SUB_Remove;
 
+// tfhud
+void (entity ownr, float selection) TeamNexuiz_HUD_ShowSign;		// show sprite icon
+
 // tfsentry
 .float super_damage_finished;		// turrets can get super charged too!
 //DP_QC_GETTAGINFO

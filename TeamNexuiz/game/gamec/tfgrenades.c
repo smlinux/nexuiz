@@ -531,6 +531,7 @@ void () TeamFortress_PrimeGrenade =
 				sprint (self, " primed, ");
 				sprint (self, ptime);
 				sprint (self, " seconds...\n");
+				TeamNexuiz_HUD_ShowSign(self, HUD_PRIME_GREN);
 			}
 		}
 		else
