@@ -1,4 +1,4 @@
-RuinsofSlaughter(dm_nexdm11)
+Ruins of Slaughter (dm_nexdm11)
 maps/nexdm11
 
 A ruined arena.
