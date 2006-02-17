@@ -14,7 +14,7 @@ Item DataContainer Effects
 	Item Data_Cvar ParticleQuality
 	{
 		cvarName	"cl_particles_quality"
-		defValue	1
+		defValue	0.5
 		Item DataLink_Value Value
 		{
 			minValue	0.0
