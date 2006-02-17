@@ -94,7 +94,7 @@ void W_Grenade_Attack (void)
 
 	self.punchangle_x = -4;
 	if (cvar("g_use_ammunition"))
-		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_grenade_primary_ammo");
+		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_grenadelauncher_primary_ammo");
 	org = self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -12;
 
 	gren = spawn ();
