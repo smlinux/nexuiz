@@ -294,13 +294,6 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 		}
 	}
 
-	// midair gamemode: damage only while in the air
-	if (cvar("g_midair")
-	    && self.classname == "player" // e.g. grenades take damage
-	    && self.flags & FL_ONGROUND) {
-		damage = 0;
-	}
-
 	// apply strength multiplier
 	if (attacker.items & IT_STRENGTH && !cvar("g_minstagib"))
 	{

@@ -267,6 +267,7 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 		TossGib (world, "models/gibs/chunk.mdl", hitloc, force * -0.2,1);
 
 	if (!(self.flags & FL_GODMODE))
+	if (time > self.spawnshieldtime)
 	{
 		self.armorvalue = self.armorvalue - save;
 		self.health = self.health - take;

@@ -267,6 +267,7 @@ void PutClientInServer (void)
 		self.effects = 0;
 		self.health = cvar("g_balance_health_start");
 		self.armorvalue = cvar("g_balance_armor_start");
+		self.spawnshieldtime = time + cvar("g_spawnshieldtime");
 		self.pauserotarmor_finished = time + 10;
 		self.pauserothealth_finished = time + 10;
 		self.pauseregen_finished = 0;
@@ -883,6 +884,17 @@ void player_powerups (void)
 	if (cvar("g_fullbrightplayers"))
 		self.effects = self.effects | EF_FULLBRIGHT;
 
+	// midair gamemode: damage only while in the air
+	// if in midair mode, being on ground grants temporary invulnerability
+	// (this is so that multishot weapon don't clear the ground flag on the
+	// first damage in the frame, leaving the player vulnerable to the
+	// remaining hits in the same frame)
+	if (self.flags & FL_ONGROUND)
+	if (cvar("g_midair"))
+		self.spawnshieldtime = max(self.spawnshieldtime, time + cvar("g_midair_shieldtime"));
+
+	if (time < self.spawnshieldtime)
+		self.effects = self.effects | (EF_ADDITIVE | EF_FULLBRIGHT);
 }
 
 void player_regen (void)

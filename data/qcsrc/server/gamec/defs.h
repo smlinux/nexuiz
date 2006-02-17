@@ -225,7 +225,7 @@ float GRAPHOOK_RELEASE		= 21;
 .float extralives;
 .float jump_interval;    // laser refire
 
-//swamp 
+//swamp
 .float in_swamp;              // bool
 .entity swampslug;            // Uses this to release from swamp ("untouch" fix)
 
@@ -236,3 +236,6 @@ float GRAPHOOK_RELEASE		= 21;
 
 .float deaths;
 .float jointime;
+
+.float spawnshieldtime;
+
