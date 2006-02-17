@@ -439,7 +439,7 @@ void RadiusDamage (entity inflictor, entity attacker, float coredamage, float ed
 						force = normalize((m1 + m2) * 0.5 - blastorigin) * (finaldmg / coredamage) * forceintensity;
 						if (targ == attacker)
 							finaldmg = finaldmg * cvar("g_balance_selfdamagepercent");	// Partial damage if the attacker hits himself
-						Damage (targ, inflictor, attacker, finaldmg, deathtype, inflictor.origin, force);
+						Damage (targ, inflictor, attacker, finaldmg, deathtype, nearest, force);
 					}
 				}
 			}
