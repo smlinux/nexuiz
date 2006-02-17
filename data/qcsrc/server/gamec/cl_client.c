@@ -182,7 +182,7 @@ void PutObserverInServer (void)
 		bprint (strcat("^4", self.netname, "^4 is spectating now\n"));
 
 	self.classname = "observer";
-	self.health = 6666;
+	self.health = -666;
 	self.takedamage = DAMAGE_NO;
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NOCLIP;
@@ -212,8 +212,8 @@ void PutObserverInServer (void)
 	self.runes = 0;
 	self.deadflag = DEAD_NO;
 	self.angles = spot.angles;
-	self.angles_z = 0; 
-	self.fixangle = TRUE; 
+	self.angles_z = 0;
+	self.fixangle = TRUE;
 	self.crouch = FALSE;
 	self.view_ofs = PL_VIEW_OFS;
 	setorigin (self, spot.origin + '0 0 1' * (1 - self.mins_z - 14));
@@ -241,12 +241,12 @@ Called when a client spawns in the server
 =============
 */
 void PutClientInServer (void)
-{	
+{
 	if(clienttype(self) ==  CLIENTTYPE_BOT)
 	{
 		self.classname = "player";
 	}
-	
+
 	// player is dead and becomes observer
 	if(cvar("g_lms") && self.frags < 1)
 		self.classname = "observer";
@@ -255,9 +255,9 @@ void PutClientInServer (void)
 		entity	spot;
 
 		spot = SelectSpawnPoint (FALSE);
-		
+
 		RemoveGrapplingHook(self); // Wazat's Grappling Hook
-	
+
 		self.classname = "player";
 		self.iscreature = TRUE;
 		self.movetype = MOVETYPE_WALK;
@@ -290,7 +290,7 @@ void PutClientInServer (void)
 		self.nextthink = 0;
 
 		self.hook_time = 0;
-	
+
 		self.runes = 0;
 
 		self.deadflag = DEAD_NO;
@@ -304,7 +304,7 @@ void PutClientInServer (void)
 		self.punchangle = '0 0 0';
 		self.punchvector = '0 0 0';
 		self.oldvelocity = self.velocity;
-	
+
 		self.viewzoom = 0.6;
 
 		if(cvar("sv_defaultcharacter") == 1) {
@@ -320,9 +320,9 @@ void PutClientInServer (void)
 			precache_model (self.playermodel);
 			setmodel (self, self.playermodel);
 			self.skin = stof(self.playerskin);
-		
+
 		}
-		
+
 		self.crouch = FALSE;
 		self.view_ofs = PL_VIEW_OFS;
 		setsize (self, PL_MIN, PL_MAX);
@@ -422,25 +422,25 @@ void PutClientInServer (void)
 			self.extralives = 0;
 			self.jump_interval = time;
 		}
- 	
+
 		self.event_damage = PlayerDamage;
-	
+
 		self.statdraintime = time + 5;
 		self.button0 = self.button1 = self.button2 = self.button3 = 0;
-	
+
 		if(self.killcount == -666) {
 			self.killcount = 0;
 			self.frags = 0;
 		}
 
 		self.cnt = WEP_LASER;
-	
+
 		/*
 		W_UpdateWeapon();
 		W_UpdateAmmo();
 		*/
 		CL_SpawnWeaponentity();
-	
+
 		//stuffcmd(self, "chase_active 0");
 	 	//stuffcmd(self, "set viewsize $tmpviewsize \n");
 	} else if(self.classname == "observer") {
@@ -500,16 +500,16 @@ void ClientConnect (void)
 
 	//JoinBestTeam(self, FALSE);
 	if(cvar("teamplay") && self.version == cvar("g_nexuizversion_major")) stuffcmd(self,"menu_showteamselect\n");
-	
+
 
 	if(cvar("sv_spectate") == 1 && !cvar("g_lms")) {
-		self.classname = "observer";	
+		self.classname = "observer";
 	} else {
-		self.classname = "player";		
+		self.classname = "player";
 	}
-	
+
 	//stuffcmd(self, "set tmpviewsize $viewsize \n");
-	
+
 	bprint ("^4",self.netname);
 	bprint ("^4 connected");
 
@@ -535,7 +535,7 @@ void ClientConnect (void)
 	stuffcmd(self, strcat("cl_movement_stepheight ", ftos(cvar("sv_stepheight")), "\n"));
 	stuffcmd(self, strcat("cl_movement_edgefriction 0\n"));
 	// Wazat's grappling hook
-	SetGrappleHookBindings();	
+	SetGrappleHookBindings();
 
 	// get autoswitch state from player
 	stuffcmd(self, "alias autoswitch \"set cl_autoswitch $1; cmd autoswitch $1\"\n");
@@ -590,13 +590,13 @@ void ClientDisconnect (void)
 		remove (self.chatbubbleentity);
 		self.chatbubbleentity = world;
 	}
-	
+
 	if (self.teambubbleentity)
 	{
 		remove (self.teambubbleentity);
 		self.teambubbleentity = world;
 	}
-	
+
 	DropAllRunes(self);
 	// decrease player count for lms
 	player_count -= 1;
@@ -655,7 +655,7 @@ void() TeamBubbleThink =
 		self.model = "";
 	else
 		self.model = self.mdl;
-	
+
 };
 
 .float() customizeentityforclient;
@@ -824,7 +824,7 @@ void player_powerups (void)
 				sprint(self, "^3You are invisible\n");
 			}
 		}
-				
+
 		if (self.items & IT_INVINCIBLE)
 		{
 			if (time > self.invincible_finished)
@@ -843,7 +843,7 @@ void player_powerups (void)
 		}
 		return;
 	}
-	
+
 	self.effects = self.effects - (self.effects & (EF_RED | EF_BLUE | EF_ADDITIVE | EF_FULLBRIGHT));
 	if (self.items & IT_STRENGTH)
 	{
@@ -879,10 +879,10 @@ void player_powerups (void)
 			sprint(self, "^3Shield surrounds you\n");
 		}
 	}
-	
+
 	if (cvar("g_fullbrightplayers"))
 		self.effects = self.effects | EF_FULLBRIGHT;
-	
+
 }
 
 void player_regen (void)
@@ -1022,7 +1022,7 @@ void PlayerPreThink (void)
 {
 	if (gameover)
 		return;
-	
+
 	if(self.classname == "player") {
 		local vector m1, m2;
 
@@ -1055,11 +1055,11 @@ void PlayerPreThink (void)
 			}
 			else if (self.deadflag == DEAD_RESPAWNABLE)
 			{
-				if (self.button0  || 
-				    self.button2  || 
-				    self.button3  || 
-				    self.button4  || 
-				    cvar("g_lms") || 
+				if (self.button0  ||
+				    self.button2  ||
+				    self.button3  ||
+				    self.button4  ||
+				    cvar("g_lms") ||
 				    cvar("g_forced_respawn"))
 					respawn();
 			}
@@ -1092,7 +1092,7 @@ void PlayerPreThink (void)
 		if(cvar("sv_defaultcharacter") == 1) {
 			local string defaultmodel;
 			defaultmodel = CheckPlayerModel(cvar_string("sv_defaultplayermodel"));
-			
+
 			if (defaultmodel != self.model)
 			{
 				m1 = self.mins;
@@ -1123,7 +1123,7 @@ void PlayerPreThink (void)
 			self.netname = "Player";
 			stuffcmd(self, "name Player\n");
 		}
-	
+
 		GrapplingHookFrame();
 
 		W_WeaponFrame();
@@ -1161,7 +1161,7 @@ void PlayerPreThink (void)
 
 		//if (TetrisPreFrame()) return;
 	} else if(self.classname == "observer") {
-	        
+
 		if (self.flags & FL_JUMPRELEASED) {
 			if (self.button2 && self.version == cvar("g_nexuizversion_major")) {
 				if(!cvar("teamplay")) {
@@ -1181,7 +1181,7 @@ void PlayerPreThink (void)
 				self.flags = self.flags & !FL_JUMPRELEASED;
 				if(SpectateNext() == 1) {
 					self.classname = "spectator";
-				} 
+				}
 			}
         	} else {
         		if (!(self.button0 || self.button2)) {
@@ -1196,7 +1196,7 @@ void PlayerPreThink (void)
 			PrintWelcomeMessage(self);
 			//centerprint(self, "\n\n\npress jump to play\npress attack to spectate other players");
 	} else if(self.classname == "spectator") {
-		
+
 		if (self.flags & FL_JUMPRELEASED) {
 			if (self.button2 && self.version == cvar("g_nexuizversion_major")) {
 				if(!cvar("teamplay")) {
@@ -1204,10 +1204,10 @@ void PlayerPreThink (void)
 					self.classname = "player";
 					if(!cvar("g_lms"))
 						bprint (strcat("^4", self.netname, "^4 is playing now\n"));
-					
+
 					msg_entity = self;
 					WriteByte(MSG_ONE, SVC_SETVIEW);
-					WriteEntity(MSG_ONE, self);  
+					WriteEntity(MSG_ONE, self);
 					PutClientInServer();
 					centerprint(self,"");
 					return;
@@ -1222,17 +1222,17 @@ void PlayerPreThink (void)
 					self.classname = "spectator";
 				} else {
 					self.classname = "observer";
-					msg_entity = self;                                                                                                                                                     
-					WriteByte(MSG_ONE, SVC_SETVIEW);                                                                                                                                       
-					WriteEntity(MSG_ONE, self);   
-					PutClientInServer();					
+					msg_entity = self;
+					WriteByte(MSG_ONE, SVC_SETVIEW);
+					WriteEntity(MSG_ONE, self);
+					PutClientInServer();
 				}
 			} else if (self.button3) {
 				self.flags = self.flags & !FL_JUMPRELEASED;
 				self.classname = "observer";
-				msg_entity = self;                                                                                                                                                     
-				WriteByte(MSG_ONE, SVC_SETVIEW);                                                                                                                                       
-				WriteEntity(MSG_ONE, self);   
+				msg_entity = self;
+				WriteByte(MSG_ONE, SVC_SETVIEW);
+				WriteEntity(MSG_ONE, self);
 				PutClientInServer();
 			} else {
 				SpectateUpdate();
@@ -1243,7 +1243,7 @@ void PlayerPreThink (void)
         	}
 		}
 		centerprint(self, strcat("spectating ", self.enemy.netname, "\n\n\n^7press jump to play\n^7press attack for next player\npress attack2 for free fly mode"));
-		
+
 	}
 }
 
