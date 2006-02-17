@@ -7,8 +7,8 @@ Players: 4-6
 
 Teams: 2
 
-Weapons: Electro, Crylink,
-Hagar, Rocket Launcher
+Weapons: Mortar, Electro,
+Crylink, Hagar, Rocket Launcher
 
 Powerups: Strength
 

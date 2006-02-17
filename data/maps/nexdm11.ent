@@ -1,6 +1,6 @@
 {
 "classname" "worldspawn"
-"message" "Ruins Of Slaugther By H.Reaper"
+"message" "Ruins Of Slaughter By H.Reaper"
 }
 {
 "classname" "item_strength"
@@ -235,6 +235,10 @@
 "angle" "90"
 "origin" "-544 -1832 136"
 "classname" "info_player_deathmatch"
+}
+{
+"classname" "weapon_grenadelauncher"
+"origin" "416 128 -128"
 }
 {
 "origin" "-640 -768 160"
