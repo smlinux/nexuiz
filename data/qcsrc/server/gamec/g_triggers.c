@@ -346,8 +346,8 @@ void() hurt_touch =
 {
 	if (!other.owner)
 	if (other.items & IT_KEY1 || other.items & IT_KEY2)
-		other.health = 0;
-		
+		other.pain_finished = time + 2;
+
 	if (other.takedamage)
 	if (other.triggerhurttime < time)
 	{

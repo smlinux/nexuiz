@@ -55,8 +55,6 @@ void(entity e) RegenFlag =
 	e.cnt = FLAG_BASE;
 	e.owner = world;
 	e.flags = FL_ITEM; // clear FL_ONGROUND and any other junk
-
-	e.health = 1;
 };
 
 void(entity e) ReturnFlag =
@@ -128,9 +126,9 @@ void() FlagThink =
 	if (self.cnt == FLAG_BASE)
 		return;
 
-	if (self.cnt == FLAG_DROPPED || !self.health)
+	if (self.cnt == FLAG_DROPPED)
 	{
-		if (time > self.pain_finished || !self.health)
+		if (time > self.pain_finished)
 		{
 			if (self.team == 5)
 				bprint("The RED flag has returned to base\n");
@@ -452,7 +450,6 @@ void() item_flag_team1 =
 	//	self.glow_size = 50;
 	
 	self.effects = self.effects | EF_FULLBRIGHT | EF_LOWPRECISION;
-	self.health = 1;
 };
 
 /*QUAKED item_flag_team2 (0 0.5 0.8) (-48 -48 -24) (48 48 64)
@@ -503,7 +500,6 @@ void() item_flag_team2 =
 	//	self.glow_size = 50;
 	
 	self.effects = self.effects | EF_FULLBRIGHT | EF_LOWPRECISION;
-	self.health = 1;
 };
 
 

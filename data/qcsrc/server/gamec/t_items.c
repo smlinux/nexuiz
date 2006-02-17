@@ -38,7 +38,7 @@ void Item_Touch (void)
 	// in case the player has autoswitch enabled do the following:
 	// if the player is using their best weapon before items are given, they
 	// probably want to switch to an even better weapon after items are given
-	_switchweapon = (other.autoswitch && (other.switchweapon == w_getbestweapon(other)));
+	_switchweapon = (other.autoswitch && (other.switchweapon == w_getbestweapon(other)) || cvar("g_minstagib"));
 
 	if (cvar("g_minstagib"))
 	{
