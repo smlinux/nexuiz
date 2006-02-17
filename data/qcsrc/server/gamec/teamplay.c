@@ -300,7 +300,7 @@ void PrintWelcomeMessage(entity pl)
 	local string versionmessage;
 	versionmessage = GetClientVersionMessage(self.version);
 
-	s = strcat(s, "\n\nThis is Nexuiz ", cvar_string("g_nexuizversion"), "\n", versionmessage);
+	s = strcat(s, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nThis is Nexuiz ", cvar_string("g_nexuizversion"), "\n", versionmessage);
 	s = strcat(s, "^8\n\nmatch type is ^1", mutator, gamemode_name, "^8\n");
 
 	if(modifications != "")
