@@ -176,7 +176,7 @@ void PutObserverInServer (void)
 	spot = SelectSpawnPoint (FALSE);
 	RemoveGrapplingHook(self); // Wazat's Grappling Hook
 
-	if(self.frags == 0 && cvar("g_lms"))
+	if(self.frags == 0 && cvar("g_lms") && self.killcount != -666)
 		bprint (strcat("^4", self.netname, "^4 has no more lives left\n"));
 	else if(self.killcount != -666)
 		bprint (strcat("^4", self.netname, "^4 is spectating now\n"));
@@ -336,6 +336,8 @@ void PutClientInServer (void)
 			self.ammo_nails = cvar("g_lms_start_ammo_nails");
 			self.ammo_rockets = cvar("g_lms_start_ammo_rockets");
 			self.ammo_cells = cvar("g_lms_start_ammo_cells");
+			self.health = cvar("g_lms_start_health");
+			self.armorvalue = cvar("g_lms_start_armor");
 		}
 		else if (cvar("g_use_ammunition")) {
 			self.ammo_shells = cvar("g_start_ammo_shells");
@@ -889,12 +891,8 @@ void player_regen (void)
 	maxh = cvar("g_balance_health_stable");
 	maxa = cvar("g_balance_armor_stable");
 
-	if (cvar("g_minstagib"))
-	{
-		maxh = 100;
-		maxa = 0;
+	if (cvar("g_minstagib") || (cvar("g_lms") && !cvar("g_lms_regenerate")))
 		return;
-	}
 
 	if(cvar("g_runematch"))
 	{
@@ -1022,6 +1020,9 @@ Called every frame for each client before the physics are run
 */
 void PlayerPreThink (void)
 {
+	if (gameover)
+		return;
+	
 	if(self.classname == "player") {
 		local vector m1, m2;
 
@@ -1197,7 +1198,25 @@ void PlayerPreThink (void)
 	} else if(self.classname == "spectator") {
 		
 		if (self.flags & FL_JUMPRELEASED) {
-			if(self.button0) {
+			if (self.button2 && self.version == cvar("g_nexuizversion_major")) {
+				if(!cvar("teamplay")) {
+					self.flags = self.flags & !FL_JUMPRELEASED;
+					self.classname = "player";
+					if(!cvar("g_lms"))
+						bprint (strcat("^4", self.netname, "^4 is playing now\n"));
+					
+					msg_entity = self;
+					WriteByte(MSG_ONE, SVC_SETVIEW);
+					WriteEntity(MSG_ONE, self);  
+					PutClientInServer();
+					centerprint(self,"");
+					return;
+				} else {
+					self.flags = self.flags & !FL_JUMPRELEASED;
+					stuffcmd(self,"menu_showteamselect\n");
+					return;
+				}
+			} else if(self.button0) {
 				self.flags = self.flags & !FL_JUMPRELEASED;
 				if(SpectateNext() == 1) {
 					self.classname = "spectator";
@@ -1223,7 +1242,7 @@ void PlayerPreThink (void)
 			self.flags = self.flags | FL_JUMPRELEASED;
         	}
 		}
-		centerprint(self, strcat("spectating ", self.enemy.netname, "\n\n\n^7press attack for next player\npress attack2 for free fly mode"));
+		centerprint(self, strcat("spectating ", self.enemy.netname, "\n\n\n^7press jump to play\n^7press attack for next player\npress attack2 for free fly mode"));
 		
 	}
 }

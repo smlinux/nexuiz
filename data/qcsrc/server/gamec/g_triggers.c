@@ -344,6 +344,10 @@ void() trigger_counter =
 .float triggerhurttime;
 void() hurt_touch =
 {
+	if (!other.owner)
+	if (other.items & IT_KEY1 || other.items & IT_KEY2)
+		other.health = 0;
+		
 	if (other.takedamage)
 	if (other.triggerhurttime < time)
 	{

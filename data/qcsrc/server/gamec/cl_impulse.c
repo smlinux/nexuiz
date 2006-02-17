@@ -27,18 +27,14 @@ void ImpulseCommands (void)
 	if (imp >= 1 && imp <= 12)
 	{
 		// weapon switching impulses
-		// FIXME: why a g_minstagib check?  doesn't that have only one weapon?
-		if (!cvar("g_minstagib"))
-		{
-			if (imp <= 9)
-				W_SwitchWeapon (imp);
-			else if (imp == 10)
-				W_NextWeapon ();
-			else if (imp == 12)
-				W_PreviousWeapon ();
-			else if (imp == 11) // last weapon
-				W_SwitchWeapon (self.cnt);
-		}
+		if (imp <= 9)
+			W_SwitchWeapon (imp);
+		else if (imp == 10)
+			W_NextWeapon ();
+		else if (imp == 12)
+			W_PreviousWeapon ();
+		else if (imp == 11) // last weapon
+			W_SwitchWeapon (self.cnt);
 	}
 	else if (imp >= 13 && imp <= 16)
 	{
