@@ -17,6 +17,42 @@ void DummyThink(void)
 	PlayerPostThink();
 }
 
+// from dpmod
+void(entity e, vector v) printsurfaceinfo =
+{
+	local float surfnum, numpoints, vnum;
+	local string s;
+	local vector n;
+	surfnum = getsurfacenearpoint(e, v);
+	if (surfnum >= 0)
+	{
+		sprint(self, "texture: ");
+		s = getsurfacetexture(e, surfnum);
+		sprint(self, s);
+		sprint(self, " normal: ");
+		n = getsurfacenormal(e, surfnum);
+		sprint(self, vtos(n));
+		sprint(self, " ");
+		numpoints = getsurfacenumpoints(e, surfnum);
+		sprint(self, ftos(numpoints));
+		sprint(self, " verts:");
+		vnum = 0;
+		while (vnum < numpoints)
+		{
+			sprint(self, " ");
+			n = getsurfacepoint(e, surfnum, vnum);
+			sprint(self, vtos(n));
+			vnum = vnum + 1;
+		}
+		sprint(self, " point tested: ");
+		sprint(self, vtos(v));
+		sprint(self, " nearest point on surface: ");
+		n = getsurfaceclippedpoint(e, surfnum, v);
+		sprint(self, vtos(n));
+		sprint(self, "\n");
+	}
+};
+
 void ImpulseCommands (void)
 {
 	local float imp;
@@ -79,6 +115,16 @@ void ImpulseCommands (void)
 	}
 	else if(imp == 18)
 		PrintWelcomeMessage(self);
+	else if(imp == 19)
+	{
+		if (cvar("sv_cheats"))
+		{
+			makevectors(self.v_angle);
+			traceline(self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * 4096, FALSE, self);
+			if (trace_fraction < 1)
+				printsurfaceinfo(trace_ent, trace_endpos);
+		}
+	}
 	else if (imp == 99)
 	{
 		if (cvar("sv_cheats"))
