@@ -1032,9 +1032,6 @@ Called every frame for each client before the physics are run
 */
 void PlayerPreThink (void)
 {
-	if (gameover)
-		return;
-
 	if(self.classname == "player") {
 		local vector m1, m2;
 
@@ -1172,6 +1169,8 @@ void PlayerPreThink (void)
 			CheckWaterJump ();
 
 		//if (TetrisPreFrame()) return;
+	} else if(gameover) {
+		return;
 	} else if(self.classname == "observer") {
 
 		if (self.flags & FL_JUMPRELEASED) {
@@ -1201,9 +1200,9 @@ void PlayerPreThink (void)
         		}
 		}
 		if(cvar("g_lms") && self.frags == 0)
-			centerprint(self, "\n\n\n^1You have no more lives left\nwait for next round\n\n\n^7press attack to spectate other players");
+			centerprint(self, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n^1You have no more lives left\nwait for next round\n\n\n^7press attack to spectate other players");
 		else if(cvar("g_lms") && self.frags == -1)
-			centerprint(self, "\n\n\n^1Match has already begun\nwait for next round\n\n\n^7press attack to spectate other players");
+			centerprint(self, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n^1Match has already begun\nwait for next round\n\n\n^7press attack to spectate other players");
 		else
 			PrintWelcomeMessage(self);
 			//centerprint(self, "\n\n\npress jump to play\npress attack to spectate other players");
@@ -1254,7 +1253,10 @@ void PlayerPreThink (void)
 			self.flags = self.flags | FL_JUMPRELEASED;
         	}
 		}
-		centerprint(self, strcat("spectating ", self.enemy.netname, "\n\n\n^7press jump to play\n^7press attack for next player\npress attack2 for free fly mode"));
+		if (cvar("g_lms") && self.frags < 1)
+			centerprint(self, strcat("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nspectating ", self.enemy.netname, "\n\n\n^7press attack for next player\npress attack2 for free fly mode"));
+		else
+			centerprint(self, strcat("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nspectating ", self.enemy.netname, "\n\n\n^7press jump to play\n^7press attack for next player\npress attack2 for free fly mode"));
 
 	}
 }

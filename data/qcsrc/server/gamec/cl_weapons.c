@@ -161,6 +161,7 @@ void() W_ThrowWeapon
 	wep.classname = "droppedweapon";
 	e.items = e.items - (e.items & w);
 	e.switchweapon = w_getbestweapon(e);
+	wep.colormap = e.colormap;
 	if (e.switchweapon != e.weapon)
 		e.cnt = e.weapon;
 	self = e;

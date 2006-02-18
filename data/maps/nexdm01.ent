@@ -45,7 +45,8 @@
 }
 {
 "classname" "item_shells"
-"origin" "644 384 -112"
+"origin" "620 384 -112"
+"angle" "-90"
 }
 {
 "classname" "item_bullets"
@@ -81,7 +82,8 @@
 }
 {
 "classname" "item_health25"
-"origin" "-184 564 -108"
+"origin" "-91 587 -108"
+"angle" "-90"
 }
 {
 "origin" "-84 -136 40"
@@ -167,6 +169,7 @@
 {
 "origin" "-215 587 -69"
 "classname" "item_rockets"
+"angle" "-90"
 }
 {
 "classname" "dom_team"

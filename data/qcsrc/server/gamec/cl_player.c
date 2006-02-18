@@ -155,6 +155,7 @@ void SpawnThrownWeapon (vector org, float w)
 
 	// making absolutely sure...
 	self.classname = "droppedweapon";
+	self.colormap = oldself.colormap;
 
 	self = oldself;
 }
