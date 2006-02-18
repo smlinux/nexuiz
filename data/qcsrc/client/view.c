@@ -10,7 +10,7 @@ void View_Update (void)
 	angle_alive = input_angles;
 	makevectors(input_angles);
 
-	if(player_flags & PFL_DEAD)
+	if(player_flags & PFL_DEAD && !spec)
 	{
 		R_SetView(VF_ORIGIN, vieworg+'0 0 4');
 		angle_alive_z = 80;
@@ -19,12 +19,12 @@ void View_Update (void)
 		return;
 	}
 
-	if(input_buttons & 16 && getstati(STAT_HEALTH) != 6666)
+	if(input_buttons & 16 && !spec)
 		vieworg += PL_CROUCH_VIEW_OFS;
 	else
 		vieworg += PL_VIEW_OFS;
 
-	if(cvar("chase_active") && getstati(STAT_HEALTH) != 6666)
+	if(cvar("chase_active") && !spec)
 		vieworg = vieworg + v_up * cvar("chase_up") - v_forward * cvar("chase_back");
 
 	R_SetView(VF_ORIGIN, vieworg);

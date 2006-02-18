@@ -1,4 +1,5 @@
 float player_flags;
+float spec;
 
 vector pl_view_forward;
 vector pl_view_right;

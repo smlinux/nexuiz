@@ -13,9 +13,10 @@ void SysParms_UPDATE (void)
 	pl_xyspeed = floor(sqrt(pmove_vel_x*pmove_vel_x + pmove_vel_y*pmove_vel_y));
 
 	f = getstati(STAT_HEALTH);
-	if(f <= 0 && !(player_flags & PFL_DEAD))
+	spec = (f == -666);
+	if(f <= 1 && !(player_flags & PFL_DEAD))
 		player_flags |= PFL_DEAD;
-	else if(f > 0 && player_flags & PFL_DEAD)
+	else if(f > 1 && player_flags & PFL_DEAD)
 		player_flags -= player_flags & (PFL_DEAD | PFL_GIBBED);
 
 	if(nxt_cmd < time)
