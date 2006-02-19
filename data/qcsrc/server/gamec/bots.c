@@ -153,35 +153,38 @@ void() Bots_Shared =
 		urrebots_combattime = cvar("urrebots_combattime");
 		stratsearch_distance = cvar("urrebots_stratsearch_dist");
 		minisearch_distance = cvar("urrebots_minisearch_dist");
-		if (loadstep == 0)
+		if (cvar("urrebots") || cvar("bot_number"))
 		{
-			LoadNavNodes();
-			loadstep = 1;
-			return;
-		}
-		else if (loadstep == 1)
-		{
-			LinkNavNodes();
-			loadstep = 2;
-			return;
-		}
-		else if (loadstep == 2)
-		{
-			if (navnodes)
-			if (urrebots_navopt)
-				OptimiseNavigation();
-			loadstep = 3;
-			return;
-		}
-		else if (loadstep == 3)
-		{
-			if (navnodes)
-				ItemEvals();
-			loadstep = 4;
-			return;
+			if (loadstep == 0)
+			{
+				LoadNavNodes();
+				loadstep = 1;
+				return;
+			}
+			else if (loadstep == 1)
+			{
+				LinkNavNodes();
+				loadstep = 2;
+				return;
+			}
+			else if (loadstep == 2)
+			{
+				if (navnodes)
+				if (urrebots_navopt)
+					OptimiseNavigation();
+				loadstep = 3;
+				return;
+			}
+			else if (loadstep == 3)
+			{
+				if (navnodes)
+					ItemEvals();
+				loadstep = 4;
+				return;
+			}
 		}
 		f = cvar("urrebots");
-		if (urrebots < f)
+		if (urrebots < f && loadstep == 4)
 		{
 			bot = UrreBotAdd(BOT_TYPE_URREBOT);
 			bot.bot_type = BOT_TYPE_URREBOT;
@@ -206,7 +209,7 @@ void() Bots_Shared =
 		if (f > bot_number)
 		{
 			bot = world;
-			if (navnodes)
+			if (navnodes && loadstep == 4)
 			{
 				bot = UrreBotAdd(BOT_TYPE_AUTOURRE);
 				if (bot)
