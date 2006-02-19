@@ -218,6 +218,7 @@ entity () SelectSpawnPoint =
 			stuffcmd(self, "alias menu_showteamselect \"set scmenu_directmenu TeamSelect; togglemenu\"\n");
 			stuffcmd(self, "set scmenu_directmenu TeamSelect; togglemenu\n");
 			stuffcmd(self, "alias classmenu \"impulse 73\"\n");
+			stuffcmd(self, "cl_bobmodel 0\n");		// So the HUD items dont bob around
 		}
 //		spot = find (world, classname, "item_tfgoal");
 //		return (spot);
