@@ -441,6 +441,8 @@ void PutClientInServer (void)
 		W_UpdateAmmo();
 		*/
 		CL_SpawnWeaponentity();
+		self.alpha = 1;
+		self.exteriorweaponentity.alpha = 1;
 
 		//stuffcmd(self, "chase_active 0");
 	 	//stuffcmd(self, "set viewsize $tmpviewsize \n");
