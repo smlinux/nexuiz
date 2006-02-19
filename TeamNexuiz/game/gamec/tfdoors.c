@@ -503,6 +503,8 @@ void() func_door =
 		self.team_no = 1;
 	}
 
+	if(self.noise2) precache_sound (self.noise2);	//tz 05 11 10
+
 	if (CheckExistence() == TF_FLARE_LIT)
 	{
 		dremove(self);
@@ -544,14 +546,16 @@ void() func_door =
 		precache_sound("misc/null.wav");
 		precache_sound("misc/null.wav");
 		self.noise1 = "misc/null.wav";
-		self.noise2 = "misc/null.wav";
+		if (!self.noise2)
+			self.noise2 = "misc/null.wav";
 	}
 	if (self.sounds == TF_FLARE_OFF)
 	{
 		precache_sound("doors/drclos4.wav");
 		precache_sound("doors/doormv1.wav");
 		self.noise1 = "doors/drclos4.wav";
-		self.noise2 = "doors/doormv1.wav";
+		if (!self.noise2)
+			self.noise2 = "doors/doormv1.wav";
 	}
 	if (self.sounds == 2)
 	{

@@ -1,3 +1,5 @@
+// Move to tfdefs:
+entity damage_attacker;			// ADD FUNCTION FOR
 
 void() SUB_UseTargets;
 
@@ -205,17 +207,39 @@ void() multi_trigger =
 	}
 };
 
+void() multi_killed = 
+{
+	self.enemy = damage_attacker;
+	multi_trigger();
+};
+
 void() multi_use =
 {
 	self.enemy = activator;
 	multi_trigger();
 };
 
-void() multi_touch =
+void() multi_touch = 
 {
+	local entity te;
 	if (other.classname != "player")
+	{
 		return;
-
+	}
+	if (other.is_dead == 1)
+		return;
+	if (!Activated(self, other))
+	{
+		if (self.else_goal != TF_FLARE_LIT)
+		{
+			te = Findgoal(self.else_goal);
+			if (te)
+			{
+				DoResults(te, other, self.goal_result & 2);
+			}
+		}
+		return;
+	}
 // if the trigger has an angles field, check player's facing direction
 	if (self.movedir != '0 0 0')
 	{
@@ -225,7 +249,7 @@ void() multi_touch =
 	}
 
 	self.enemy = other;
-	multi_trigger ();
+	multi_trigger();
 };
 
 void multi_eventdamage (vector hitloc, float damage, entity inflictor, entity attacker, float deathtype)
@@ -296,6 +320,7 @@ void() trigger_multiple =
 		if (self.spawnflags & SPAWNFLAG_NOTOUCH)
 			objerror ("health and notouch don't make sense\n");
 		self.max_health = self.health;
+		self.th_die = multi_killed;		// added by xavior
 		self.event_damage = multi_eventdamage;
 		self.takedamage = DAMAGE_YES;
 		self.solid = SOLID_BBOX;

@@ -129,7 +129,7 @@ void ChangeClass(float announce_change, float instant_change)
 
 
 	// set starting health
-	if(!instant_change)//portion == 1.0)
+	if(!instant_change && self.class != CLASS_CIVILIAN)//portion == 1.0)
 		self.health = ceil(self.max_health * 1.2);
 	else
 		self.health = self.max_health;
@@ -546,5 +546,8 @@ void (float classnum) SetMaxAmmoFor =
 		self.ammo_cells = 100;
 		self.ammo_metal = 0;
 		self.maxammo_metal = 200;
+	}
+	else if (classnum == CLASS_CIVILIAN) {
+//		self.health = 50;
 	}
 };
