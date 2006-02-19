@@ -394,7 +394,7 @@ float sv_accelerate;
 float sv_stopspeed;
 
 .float ltntime;
-.float confirm, confirm_ignore;
+.float confirm;
 
 .entity current_navnode, other_navnode;
 

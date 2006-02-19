@@ -312,8 +312,6 @@ void(entity navn) FixPlanes =
 
 void(entity navn, vector org) MoveNavNode =
 {
-	local entity e;
-
 	if (!navn)
 		return;
 	setorigin(navn, org);
@@ -418,7 +416,7 @@ void(entity navn, vector normal, float dist) AddPlane =
 
 void(entity navn, entity delplane) RemovePlane =
 {
-	local entity e, y;
+	local entity e;
 
 	e = navn.plane_chain;
 	if (e)

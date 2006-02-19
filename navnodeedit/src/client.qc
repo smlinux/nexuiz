@@ -1,6 +1,6 @@
 void(string s) SV_ParseClientCommand =
 {
-	local float f, f2, args;
+	local float f, args;
 	local string c, s1;
 	local vector v;
 	local entity navcurrent, navother;
@@ -570,7 +570,6 @@ void() PlayerPreThink =
 {
 	local float f;
 	local vector v, edge1, edge2, org, tvec, intonav; // FIXME
-	local string s;
 	local entity e, navcurrent, navother, delplane;
 
 	if (self.selmode == M_OVERLAP)
