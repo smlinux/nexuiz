@@ -78,7 +78,10 @@ void W_Grenade_Damage (entity inflictor, entity attacker, float damage, float de
 {
 	self.health = self.health - damage;
 	if (self.health <= 0)
+	{
+		self.owner = attacker;
 		self.think ();
+	}
 }
 
 void W_Grenade_Attack (void)

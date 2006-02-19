@@ -212,7 +212,10 @@ void W_Rocket_Damage (entity inflictor, entity attacker, float damage, float dea
 {
 	self.health = self.health - damage;
 	if (self.health <= 0)
+	{
+		self.owner = attacker;
 		W_Rocket_Explode();
+	}
 }
 
 void W_Rocket_Attack (void)

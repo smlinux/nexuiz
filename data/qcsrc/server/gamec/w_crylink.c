@@ -5,6 +5,7 @@ void() crylink_deselect_01;
 void() crylink_select_01;
 
 .float gravity;
+const vector proj_color = '1 0.6 0';
 
 float() crylink_check =
 {
@@ -134,6 +135,7 @@ void W_Crylink_Attack (void)
 		//proj.glow_size = 20;
 
 		proj.effects = EF_NOSHADOW | EF_FULLBRIGHT | EF_LOWPRECISION;
+		proj.colormod = proj_color;
 		counter = counter + 1;
 	}
 }
@@ -185,6 +187,7 @@ void W_Crylink_Attack2 (void)
 		//proj.glow_size = 20;
 
 		proj.effects = EF_NOSHADOW | EF_FULLBRIGHT | EF_LOWPRECISION;
+		proj.colormod = proj_color;
 		counter = counter + 1;
 	}
 }
