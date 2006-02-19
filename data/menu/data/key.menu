@@ -60,6 +60,11 @@ Item DataContainer Key
 		target		"dropweapon"
 		defValue	"'BACKSPACE'"
 	}
+	Item Data_Nex_Key WeapLast
+	{
+		target		"weaplast"
+		defValue	"'MOUSE4'"
+	}
 	Item Data_Nex_Key Zoom
 	{
 		target		"+zoom"
@@ -68,7 +73,7 @@ Item DataContainer Key
 	Item Data_Nex_Key Hook
 	{
 		target		"+hook"
-		defValue	"''"
+		defValue	"'e'"
 	}
 	Item DataContainer Weapon
 	{
@@ -168,4 +173,24 @@ Item DataContainer Key
 		target		"+show_info"
 		defValue	"'i'"
 	}
+	Item Data_Nex_Key Spec
+	{
+		target		"spec"
+		defValue	"'F3'"
+	}
+	Item Data_Nex_Key TeamSelect
+	{
+		target		"menu_showteamselect"
+		defValue	"'F5'"
+	}
+	Item Data_Nex_Key VoteYes
+	{
+		target		"vyes"
+		defValue	"'F5'"
+	}
+	Item Data_Nex_Key VoteNo
+	{
+		target		"vno"
+		defValue	"'F5'"
+	}	
 }

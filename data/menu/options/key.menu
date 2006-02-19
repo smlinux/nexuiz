@@ -208,6 +208,11 @@ Item Window KeyControl
 						text	"Drop Weapon"
 						target	"Data::Key::DropWeapon"
 					}
+					Derive Nex_Key_Template WeapLast
+					{
+						text	"Last Used Weapon"
+						target	"Data::Key::WeapLast"
+					}
 					Derive Nex_Void Seperator2
 					{}
 					Derive Title Weapons
@@ -316,7 +321,26 @@ Item Window KeyControl
 						text	"Display Serverinfo"
 						target	"Data::Key::ShowInfo"
 					}
-
+					Derive Nex_Key_Template Spec
+					{
+						text	"Become Spectator"
+						target	"Data::Key::Spec"
+					}
+					Derive Nex_Key_Template TeamSelect
+					{
+						text	"Show Teammenu"
+						target	"Data::Key::TeamSelect"
+					}
+					Derive Nex_Key_Template VoteYes
+					{
+						text	"Vote Yes"
+						target	"Data::Key::VoteYes"
+					}
+					Derive Nex_Key_Template VoteNo
+					{
+						text	"Vote No"
+						target	"Data::Key::VoteNo"
+					}
 				}
 			}
 			Item VScrollBar Scroller

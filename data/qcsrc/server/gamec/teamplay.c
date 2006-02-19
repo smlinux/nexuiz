@@ -666,6 +666,8 @@ float JoinBestTeam(entity pl, float only_return_best)
 		{
 			error("smallest team: invalid team\n");
 		}
+		if(pl.deadflag == DEAD_NO)
+			Damage(pl, pl, pl, 100000, DEATH_TEAMCHANGE, pl.origin, '0 0 0');
 	}
 
 	return smallest;
@@ -802,8 +804,6 @@ void SV_ChangeTeam(float _color)
 	{
 		// kill player when changing teams
 		if(self.deadflag == DEAD_NO)
-//			self.event_damage(self, self, 10000, DEATH_TEAMCHANGE, self.origin, '0 0 0');
-
 			Damage(self, self, self, 100000, DEATH_TEAMCHANGE, self.origin, '0 0 0');
 			// reduce frags during a team change
 			self.frags = floor(self.frags * (cvar("g_changeteam_fragtransfer") / 100));

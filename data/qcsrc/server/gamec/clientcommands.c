@@ -194,15 +194,17 @@ void SV_ParseClientCommand(string s) {
 			PutClientInServer();
 		}
 	} else if(argv(0) == "join") {
-		self.classname = "player";
-		self.frags = 0;
-		// TODO: I have no idea whether this is needed or not
-		if(!cvar("g_lms")) {
+		if (self.classname != "player")
+		{
+			self.classname = "player";
+			self.frags = 0;
 			bprint (strcat("^4", self.netname, "^4 is playing now\n"));
+			PutClientInServer();
 		}
-		PutClientInServer();
 	} else if( argv(0) == "selectteam" ) {
-		if( argv(1) == "none" ) {
+		if( !cvar("teamplay") ) {
+			sprint( self, "selecteam can only be used in teamgames\n");
+		} else if( argv(1) == "none" ) {
 			SV_ChangeTeam( 0 );
 		} else if( argv(1) == "red" ) {
 			SV_ChangeTeam( COLOR_TEAM1 - 1 );

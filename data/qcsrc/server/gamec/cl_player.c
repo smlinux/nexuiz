@@ -351,12 +351,15 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 		self.event_damage(inflictor, attacker, 0, deathtype, hitloc, force);
 		// set up to fade out later
 		SUB_SetFade (self, time + 12 + random () * 4, 1);
-	
-		msg_entity = self;
-		WriteByte (MSG_ONE, SVC_SETANGLE);
-		WriteAngle (MSG_ONE, self.v_angle_x);
-		WriteAngle (MSG_ONE, self.v_angle_y);
-		WriteAngle (MSG_ONE, 80);
+
+		if(clienttype(self) != CLIENTTYPE_BOT)
+		{
+			msg_entity = self;
+			WriteByte (MSG_ONE, SVC_SETANGLE);
+			WriteAngle (MSG_ONE, self.v_angle_x);
+			WriteAngle (MSG_ONE, self.v_angle_y);
+			WriteAngle (MSG_ONE, 80);
+		}
 	}
 }
 
