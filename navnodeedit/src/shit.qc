@@ -91,7 +91,7 @@ float(entity currentnode, entity goalnode, float flight) AdvancedTraceWalk =
 	local float result;
 	local float stepdist, fulldist, totaldist;
 	local vector goalpoint, oldorg, move;
-	local entity oldself;
+	local entity oldself, debugpoint;
 
 	oldself = self;
 	stepdist = cvar("navnodeedit_tracewalk_stepdist");
@@ -104,7 +104,7 @@ float(entity currentnode, entity goalnode, float flight) AdvancedTraceWalk =
 	setsize(self, '-18 -18 -26', '18 18 47');
 	goalpoint = ClampPointToSpace(self.origin, currentnode, goalnode);
 	setsize(self, '-16 -16 -24', '16 16 45');
-	while(vlen(self.origin - oldorg) > 2 && totaldist < fulldist)
+	while(vlen(self.origin - oldorg) > 1 && totaldist < fulldist)
 	{
 		oldorg = self.origin;
 		if (!flight)
@@ -117,7 +117,7 @@ float(entity currentnode, entity goalnode, float flight) AdvancedTraceWalk =
 		f = min(f, stepdist);
 		self.velocity = normalize(move)*f;
 		if (!flight)
-			self.velocity_z = -800;
+			self.velocity_z = (f*2)*-1;
 		t = 1;
 		bump = 0;
 		while (bump < 16)
@@ -142,6 +142,15 @@ float(entity currentnode, entity goalnode, float flight) AdvancedTraceWalk =
 			tracebox(self.origin, self.mins, self.maxs, self.origin + '0 0 -65536', TRUE, self);
 			setorigin(self, trace_endpos);
 		}
+		if (debug)
+		{
+			debugpoint = spawn();
+			debugpoint.effects = EF_NODEPTHTEST;
+			setmodel(debugpoint, "progs/point.spr");
+			setorigin(debugpoint, self.origin);
+			debugpoint.list = dasdebugpoint;
+			dasdebugpoint = debugpoint;
+		}
 		if (CheckNode(goalnode))
 		{
 			result = TRUE;
@@ -159,185 +168,188 @@ void() FlaggerThink =
 	local entity e;
 
 	self.nextthink = time;
-	if (dasnode)
+	if (!dasdebugpoint)
 	{
-		if (!(dasnode.lflags0 & LF_REMOTE))
-		if (!AdvancedTraceWalk(dasnode, dasnode.link0, FALSE))
+		if (dasnode)
 		{
-			dasnode.lflags0 = LF_NOWALK;
-			if (!AdvancedTraceWalk(dasnode, dasnode.link0, TRUE))
-				dasnode.lflags0 = LF_NOLINK;
-		}
-		if (dasnode.link1)
-		{
-			if (!(dasnode.lflags1 & LF_REMOTE))
-			if (!AdvancedTraceWalk(dasnode, dasnode.link1, FALSE))
+			if (!(dasnode.lflags0 & LF_REMOTE))
+			if (!AdvancedTraceWalk(dasnode, dasnode.link0, FALSE))
 			{
-				dasnode.lflags1 = LF_NOWALK;
-				if (!AdvancedTraceWalk(dasnode, dasnode.link1, TRUE))
-					dasnode.lflags1 = LF_NOLINK;
+				dasnode.lflags0 = LF_NOWALK;
+				if (!AdvancedTraceWalk(dasnode, dasnode.link0, TRUE))
+					dasnode.lflags0 = LF_NOLINK;
 			}
-			if (dasnode.link2)
+			if (dasnode.link1)
 			{
-				if (!(dasnode.lflags2 & LF_REMOTE))
-				if (!AdvancedTraceWalk(dasnode, dasnode.link2, FALSE))
+				if (!(dasnode.lflags1 & LF_REMOTE))
+				if (!AdvancedTraceWalk(dasnode, dasnode.link1, FALSE))
 				{
-					dasnode.lflags2 = LF_NOWALK;
-					if (!AdvancedTraceWalk(dasnode, dasnode.link2, TRUE))
-						dasnode.lflags2 = LF_NOLINK;
+					dasnode.lflags1 = LF_NOWALK;
+					if (!AdvancedTraceWalk(dasnode, dasnode.link1, TRUE))
+						dasnode.lflags1 = LF_NOLINK;
 				}
-				if (dasnode.link3)
+				if (dasnode.link2)
 				{
-					if (!(dasnode.lflags3 & LF_REMOTE))
-					if (!AdvancedTraceWalk(dasnode, dasnode.link3, FALSE))
+					if (!(dasnode.lflags2 & LF_REMOTE))
+					if (!AdvancedTraceWalk(dasnode, dasnode.link2, FALSE))
 					{
-						dasnode.lflags3 = LF_NOWALK;
-						if (!AdvancedTraceWalk(dasnode, dasnode.link3, TRUE))
-							dasnode.lflags3 = LF_NOLINK;
+						dasnode.lflags2 = LF_NOWALK;
+						if (!AdvancedTraceWalk(dasnode, dasnode.link2, TRUE))
+							dasnode.lflags2 = LF_NOLINK;
 					}
-					if (dasnode.link4)
+					if (dasnode.link3)
 					{
-						if (!(dasnode.lflags4 & LF_REMOTE))
-						if (!AdvancedTraceWalk(dasnode, dasnode.link4, FALSE))
+						if (!(dasnode.lflags3 & LF_REMOTE))
+						if (!AdvancedTraceWalk(dasnode, dasnode.link3, FALSE))
 						{
-							dasnode.lflags4 = LF_NOWALK;
-							if (!AdvancedTraceWalk(dasnode, dasnode.link4, TRUE))
-								dasnode.lflags4 = LF_NOLINK;
+							dasnode.lflags3 = LF_NOWALK;
+							if (!AdvancedTraceWalk(dasnode, dasnode.link3, TRUE))
+								dasnode.lflags3 = LF_NOLINK;
 						}
-						if (dasnode.link5)
+						if (dasnode.link4)
 						{
-							if (!(dasnode.lflags5 & LF_REMOTE))
-							if (!AdvancedTraceWalk(dasnode, dasnode.link5, FALSE))
+							if (!(dasnode.lflags4 & LF_REMOTE))
+							if (!AdvancedTraceWalk(dasnode, dasnode.link4, FALSE))
 							{
-								dasnode.lflags5 = LF_NOWALK;
-								if (!AdvancedTraceWalk(dasnode, dasnode.link5, TRUE))
-									dasnode.lflags5 = LF_NOLINK;
+								dasnode.lflags4 = LF_NOWALK;
+								if (!AdvancedTraceWalk(dasnode, dasnode.link4, TRUE))
+									dasnode.lflags4 = LF_NOLINK;
 							}
-							if (dasnode.link6)
+							if (dasnode.link5)
 							{
-								if (!(dasnode.lflags6 & LF_REMOTE))
-								if (!AdvancedTraceWalk(dasnode, dasnode.link6, FALSE))
+								if (!(dasnode.lflags5 & LF_REMOTE))
+								if (!AdvancedTraceWalk(dasnode, dasnode.link5, FALSE))
 								{
-									dasnode.lflags6 = LF_NOWALK;
-									if (!AdvancedTraceWalk(dasnode, dasnode.link6, TRUE))
-										dasnode.lflags6 = LF_NOLINK;
+									dasnode.lflags5 = LF_NOWALK;
+									if (!AdvancedTraceWalk(dasnode, dasnode.link5, TRUE))
+										dasnode.lflags5 = LF_NOLINK;
 								}
-								if (dasnode.link7)
+								if (dasnode.link6)
 								{
-									if (!(dasnode.lflags7 & LF_REMOTE))
-									if (!AdvancedTraceWalk(dasnode, dasnode.link7, FALSE))
+									if (!(dasnode.lflags6 & LF_REMOTE))
+									if (!AdvancedTraceWalk(dasnode, dasnode.link6, FALSE))
 									{
-										dasnode.lflags7 = LF_NOWALK;
-										if (!AdvancedTraceWalk(dasnode, dasnode.link7, TRUE))
-											dasnode.lflags7 = LF_NOLINK;
+										dasnode.lflags6 = LF_NOWALK;
+										if (!AdvancedTraceWalk(dasnode, dasnode.link6, TRUE))
+											dasnode.lflags6 = LF_NOLINK;
 									}
-									if (dasnode.link8)
+									if (dasnode.link7)
 									{
-										if (!(dasnode.lflags8 & LF_REMOTE))
-										if (!AdvancedTraceWalk(dasnode, dasnode.link8, FALSE))
+										if (!(dasnode.lflags7 & LF_REMOTE))
+										if (!AdvancedTraceWalk(dasnode, dasnode.link7, FALSE))
 										{
-											dasnode.lflags8 = LF_NOWALK;
-											if (!AdvancedTraceWalk(dasnode, dasnode.link8, TRUE))
-												dasnode.lflags8 = LF_NOLINK;
+											dasnode.lflags7 = LF_NOWALK;
+											if (!AdvancedTraceWalk(dasnode, dasnode.link7, TRUE))
+												dasnode.lflags7 = LF_NOLINK;
 										}
-										if (dasnode.link9)
+										if (dasnode.link8)
 										{
-											if (!(dasnode.lflags9 & LF_REMOTE))
-											if (!AdvancedTraceWalk(dasnode, dasnode.link9, FALSE))
+											if (!(dasnode.lflags8 & LF_REMOTE))
+											if (!AdvancedTraceWalk(dasnode, dasnode.link8, FALSE))
 											{
-												dasnode.lflags9 = LF_NOWALK;
-												if (!AdvancedTraceWalk(dasnode, dasnode.link9, TRUE))
-													dasnode.lflags9 = LF_NOLINK;
+												dasnode.lflags8 = LF_NOWALK;
+												if (!AdvancedTraceWalk(dasnode, dasnode.link8, TRUE))
+													dasnode.lflags8 = LF_NOLINK;
 											}
-											if (dasnode.link10)
+											if (dasnode.link9)
 											{
-												if (!(dasnode.lflags10 & LF_REMOTE))
-												if (!AdvancedTraceWalk(dasnode, dasnode.link10, FALSE))
+												if (!(dasnode.lflags9 & LF_REMOTE))
+												if (!AdvancedTraceWalk(dasnode, dasnode.link9, FALSE))
 												{
-													dasnode.lflags10 = LF_NOWALK;
-													if (!AdvancedTraceWalk(dasnode, dasnode.link10, TRUE))
-														dasnode.lflags10 = LF_NOLINK;
+													dasnode.lflags9 = LF_NOWALK;
+													if (!AdvancedTraceWalk(dasnode, dasnode.link9, TRUE))
+														dasnode.lflags9 = LF_NOLINK;
 												}
-												if (dasnode.link11)
+												if (dasnode.link10)
 												{
-													if (!(dasnode.lflags11 & LF_REMOTE))
-													if (!AdvancedTraceWalk(dasnode, dasnode.link11, FALSE))
+													if (!(dasnode.lflags10 & LF_REMOTE))
+													if (!AdvancedTraceWalk(dasnode, dasnode.link10, FALSE))
 													{
-														dasnode.lflags11 = LF_NOWALK;
-														if (!AdvancedTraceWalk(dasnode, dasnode.link11, TRUE))
-															dasnode.lflags11 = LF_NOLINK;
+														dasnode.lflags10 = LF_NOWALK;
+														if (!AdvancedTraceWalk(dasnode, dasnode.link10, TRUE))
+															dasnode.lflags10 = LF_NOLINK;
 													}
-													if (dasnode.link12)
+													if (dasnode.link11)
 													{
-														if (!(dasnode.lflags12 & LF_REMOTE))
-														if (!AdvancedTraceWalk(dasnode, dasnode.link12, FALSE))
+														if (!(dasnode.lflags11 & LF_REMOTE))
+														if (!AdvancedTraceWalk(dasnode, dasnode.link11, FALSE))
 														{
-															dasnode.lflags12 = LF_NOWALK;
-															if (!AdvancedTraceWalk(dasnode, dasnode.link12, TRUE))
-																dasnode.lflags12 = LF_NOLINK;
+															dasnode.lflags11 = LF_NOWALK;
+															if (!AdvancedTraceWalk(dasnode, dasnode.link11, TRUE))
+																dasnode.lflags11 = LF_NOLINK;
 														}
-														if (dasnode.link13)
+														if (dasnode.link12)
 														{
-															if (!(dasnode.lflags13 & LF_REMOTE))
-															if (!AdvancedTraceWalk(dasnode, dasnode.link13, FALSE))
+															if (!(dasnode.lflags12 & LF_REMOTE))
+															if (!AdvancedTraceWalk(dasnode, dasnode.link12, FALSE))
 															{
-																dasnode.lflags13 = LF_NOWALK;
-																if (!AdvancedTraceWalk(dasnode, dasnode.link13, TRUE))
-																	dasnode.lflags13 = LF_NOLINK;
+																dasnode.lflags12 = LF_NOWALK;
+																if (!AdvancedTraceWalk(dasnode, dasnode.link12, TRUE))
+																	dasnode.lflags12 = LF_NOLINK;
 															}
-															if (dasnode.link14)
+															if (dasnode.link13)
 															{
-																if (!(dasnode.lflags14 & LF_REMOTE))
-																if (!AdvancedTraceWalk(dasnode, dasnode.link14, FALSE))
+																if (!(dasnode.lflags13 & LF_REMOTE))
+																if (!AdvancedTraceWalk(dasnode, dasnode.link13, FALSE))
 																{
-																	dasnode.lflags14 = LF_NOWALK;
-																	if (!AdvancedTraceWalk(dasnode, dasnode.link14, TRUE))
-																		dasnode.lflags14 = LF_NOLINK;
+																	dasnode.lflags13 = LF_NOWALK;
+																	if (!AdvancedTraceWalk(dasnode, dasnode.link13, TRUE))
+																		dasnode.lflags13 = LF_NOLINK;
 																}
-																if (dasnode.link15)
+																if (dasnode.link14)
 																{
-																	if (!(dasnode.lflags15 & LF_REMOTE))
-																	if (!AdvancedTraceWalk(dasnode, dasnode.link15, FALSE))
+																	if (!(dasnode.lflags14 & LF_REMOTE))
+																	if (!AdvancedTraceWalk(dasnode, dasnode.link14, FALSE))
 																	{
-																		dasnode.lflags15 = LF_NOWALK;
-																		if (!AdvancedTraceWalk(dasnode, dasnode.link15, TRUE))
-																			dasnode.lflags15 = LF_NOLINK;
+																		dasnode.lflags14 = LF_NOWALK;
+																		if (!AdvancedTraceWalk(dasnode, dasnode.link14, TRUE))
+																			dasnode.lflags14 = LF_NOLINK;
 																	}
-																	if (dasnode.link16)
+																	if (dasnode.link15)
 																	{
-																		if (!(dasnode.lflags16 & LF_REMOTE))
-																		if (!AdvancedTraceWalk(dasnode, dasnode.link16, FALSE))
+																		if (!(dasnode.lflags15 & LF_REMOTE))
+																		if (!AdvancedTraceWalk(dasnode, dasnode.link15, FALSE))
 																		{
-																			dasnode.lflags16 = LF_NOWALK;
-																			if (!AdvancedTraceWalk(dasnode, dasnode.link16, TRUE))
-																				dasnode.lflags16 = LF_NOLINK;
+																			dasnode.lflags15 = LF_NOWALK;
+																			if (!AdvancedTraceWalk(dasnode, dasnode.link15, TRUE))
+																				dasnode.lflags15 = LF_NOLINK;
 																		}
-																		if (dasnode.link17)
+																		if (dasnode.link16)
 																		{
-																			if (!(dasnode.lflags17 & LF_REMOTE))
-																			if (!AdvancedTraceWalk(dasnode, dasnode.link17, FALSE))
+																			if (!(dasnode.lflags16 & LF_REMOTE))
+																			if (!AdvancedTraceWalk(dasnode, dasnode.link16, FALSE))
 																			{
-																				dasnode.lflags17 = LF_NOWALK;
-																				if (!AdvancedTraceWalk(dasnode, dasnode.link17, TRUE))
-																					dasnode.lflags17 = LF_NOLINK;
+																				dasnode.lflags16 = LF_NOWALK;
+																				if (!AdvancedTraceWalk(dasnode, dasnode.link16, TRUE))
+																					dasnode.lflags16 = LF_NOLINK;
 																			}
-																			if (dasnode.link18)
+																			if (dasnode.link17)
 																			{
-																				if (!(dasnode.lflags18 & LF_REMOTE))
-																				if (!AdvancedTraceWalk(dasnode, dasnode.link18, FALSE))
+																				if (!(dasnode.lflags17 & LF_REMOTE))
+																				if (!AdvancedTraceWalk(dasnode, dasnode.link17, FALSE))
 																				{
-																					dasnode.lflags18 = LF_NOWALK;
-																					if (!AdvancedTraceWalk(dasnode, dasnode.link18, TRUE))
-																						dasnode.lflags18 = LF_NOLINK;
+																					dasnode.lflags17 = LF_NOWALK;
+																					if (!AdvancedTraceWalk(dasnode, dasnode.link17, TRUE))
+																						dasnode.lflags17 = LF_NOLINK;
 																				}
-																				if (dasnode.link19)
+																				if (dasnode.link18)
 																				{
-																					if (!(dasnode.lflags19 & LF_REMOTE))
-																					if (!AdvancedTraceWalk(dasnode, dasnode.link19, FALSE))
+																					if (!(dasnode.lflags18 & LF_REMOTE))
+																					if (!AdvancedTraceWalk(dasnode, dasnode.link18, FALSE))
 																					{
-																						dasnode.lflags19 = LF_NOWALK;
-																						if (!AdvancedTraceWalk(dasnode, dasnode.link19, TRUE))
-																							dasnode.lflags19 = LF_NOLINK;
+																						dasnode.lflags18 = LF_NOWALK;
+																						if (!AdvancedTraceWalk(dasnode, dasnode.link18, TRUE))
+																							dasnode.lflags18 = LF_NOLINK;
+																					}
+																					if (dasnode.link19)
+																					{
+																						if (!(dasnode.lflags19 & LF_REMOTE))
+																						if (!AdvancedTraceWalk(dasnode, dasnode.link19, FALSE))
+																						{
+																							dasnode.lflags19 = LF_NOWALK;
+																							if (!AdvancedTraceWalk(dasnode, dasnode.link19, TRUE))
+																								dasnode.lflags19 = LF_NOLINK;
+																						}
 																					}
 																				}
 																			}
@@ -357,17 +369,26 @@ void() FlaggerThink =
 					}
 				}
 			}
+			dasnode = dasnode.list;
+			if (debug)
+			{
+				e = findchainflags(flags, FL_CLIENT);
+				while (e)
+				{
+					e.confirm = 0;
+					e = e.chain;		
+				}
+			}
 		}
-		dasnode = dasnode.list;
-	}
-	else
-	{
-		self.think = SUB_Remove;
-		e = findchainflags(flags, FL_CLIENT);
-		while (e)
+		else
 		{
-			e.confirm = 0;
-			e = e.chain;		
+			self.think = SUB_Remove;
+			e = findchainflags(flags, FL_CLIENT);
+			while (e)
+			{
+				e.confirm = 0;
+				e = e.chain;		
+			}
 		}
 	}
 };
@@ -376,8 +397,21 @@ void() AutoFlagger =
 {
 	local entity e;
 
-	dasnode = navnode_chain;
-	e = spawn();
-	e.think = FlaggerThink;
-	e.nextthink = time;
+	e = dasdebugpoint;
+	if (e)
+	{
+		while (e)
+		{
+			e.think = SUB_Remove;
+			e.nextthink = time;
+			e = e.list;
+		}
+	}
+	else
+	{
+		dasnode = navnode_chain;
+		e = spawn();
+		e.think = FlaggerThink;
+		e.nextthink = time;
+	}
 };

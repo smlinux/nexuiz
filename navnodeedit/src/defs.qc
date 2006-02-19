@@ -445,4 +445,6 @@ entity tracewalkent; // invisible entity that is reused for all tracewalks
 .entity navorg1, navorg2;
 
 void(float beamtype, vector bmins, vector bmaxs) BeamBox;
-entity dasnode;
+entity dasnode, dasdebugpoint;
+
+float debug;

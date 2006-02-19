@@ -24,6 +24,7 @@ void() SetChangeParms = {};
 
 void() StartFrame =
 {
+	debug = cvar("navnodeedit_debug");
 	sv_gravity = cvar("sv_gravity");
 	sv_maxspeed = cvar("sv_maxspeed");
 	sv_friction = cvar("sv_friction");
