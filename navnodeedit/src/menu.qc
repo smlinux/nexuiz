@@ -91,6 +91,15 @@ void(float i) Select =
 		self.lockselection = FALSE;
 		return;
 	}
+	else if (self.confirm == C_AUTOFLAGGER)
+	{
+		if (i == 1)
+			AutoFlagger();
+		self.current_plane = world;
+		self.confirm = C_WAIT;
+		self.lockselection = FALSE;
+		return;
+	}
 	centerprint(self, "\n");
 };
 
@@ -435,5 +444,9 @@ void() MainMenu =
 			centerprint(self, "Are you sure you wish to delete this NavNode?\n^11. Yes\n^42. No\n^7");
 		else if (self.confirm == C_DELETE_PLANE)
 			centerprint(self, "Are you sure you wish to delete this Plane?\n^11. Yes\n^42. No\n^7");
+		else if (self.confirm == C_AUTOFLAGGER)
+			centerprint(self, "Are you sure you wish to automaticly generate link flags (this will override all current link flags)?\n^11. Yes\n^42. No\n^7");
+		else if (self.confirm == C_WAIT)
+			centerprint(self, "^1PLEASE WAIT\n^7");
 	}
 };

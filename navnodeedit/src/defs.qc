@@ -393,8 +393,6 @@ float sv_friction;
 float sv_accelerate;
 float sv_stopspeed;
 
-float visibleneighbours;
-
 .float ltntime;
 .float confirm, confirm_ignore;
 
@@ -420,7 +418,9 @@ float LF_REMOTE = 16;
 
 float C_DELETE_NAVNODE = 1;
 float C_DELETE_PLANE = 2;
-float C_SAVE = 3;
+float C_AUTOFLAGGER = 3;
+float C_SAVE = 4;
+float C_WAIT = 5;
 
 .float buttonflag;
 float B_FLAG0 = 1;
@@ -445,3 +445,4 @@ entity tracewalkent; // invisible entity that is reused for all tracewalks
 .entity navorg1, navorg2;
 
 void(float beamtype, vector bmins, vector bmaxs) BeamBox;
+entity dasnode;

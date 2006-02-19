@@ -424,6 +424,8 @@ void(float i) ImpulseCommands =
 			self.lockselection = TRUE;
 		}
 	}
+	else if (i == 113)	// Runs autoflagger (FIXME: better solution? most think remote functions checking for variables in cases such as this is ugly)
+		self.confirm = C_AUTOFLAGGER;
 	else if (i == 120)	// Switches navnode in case of overlap
 	{
 		if (!self.lockselection)

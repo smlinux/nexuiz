@@ -1,6 +1,6 @@
 Title		: NavNodeEdit
-Version		: 0.9
-Date		: 20060129
+Version		: 0.91
+Date		: 20060219
 Author		: Marko "Urre" Permanto
 Email		: imunreal A to the T gmail D to the O to the T com
 Website		: http://urre.quakedev.com/
@@ -127,6 +127,7 @@ Impulse	Bind		Effect
 110	N		Spawn new navnode (requires selection to be unlocked)
 111	R		Delete current navnode
 112	P		Delete current plane
+113	L		Run AutoFlagger (experimental)
 120	O		Switches selected navnode when in overlap-selection-mode
 121	M		Switches selection mode between closest, and overlap
 122	TAB		Cycles current axis
