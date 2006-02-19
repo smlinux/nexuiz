@@ -341,6 +341,11 @@ Item Window KeyControl
 						text	"Vote No"
 						target	"Data::Key::VoteNo"
 					}
+					Derive Nex_Key_Template Ready
+					{
+						text	"Ready to restart the map"
+						target	"Data::Key::Ready"
+					}
 				}
 			}
 			Item VScrollBar Scroller

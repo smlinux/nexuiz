@@ -186,11 +186,16 @@ Item DataContainer Key
 	Item Data_Nex_Key VoteYes
 	{
 		target		"vyes"
-		defValue	"'F5'"
+		defValue	"'F1'"
 	}
 	Item Data_Nex_Key VoteNo
 	{
 		target		"vno"
-		defValue	"'F5'"
+		defValue	"'F2'"
+	}	
+	Item Data_Nex_Key Ready
+	{
+		target		"ready"
+		defValue	"'F4'"
 	}	
 }
