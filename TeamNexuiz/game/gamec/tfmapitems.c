@@ -2996,6 +2996,8 @@ void () item_ctf_goal;		// Team:Nexuiz CTF goal
 void() item_flag_team2 = 
 {
 	team2maxplayers = 4;		//TEMP
+	number_of_teams = 2;
+
 	CTF_Map = 1;
 
 	local entity egl;

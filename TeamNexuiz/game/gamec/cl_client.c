@@ -410,6 +410,7 @@ void PutClientInServer (void)
 	self.speed = -1;
 	self.jump_pad = 0;
 	spot = SelectSpawnPoint();
+	setorigin (self, spot.origin + '0 0 1' * (1 - self.mins_z - 14));
 //	setorigin (self, spot.origin + '0 0 1' * (1 - self.mins_z + 24));
 //	setorigin (self, spot.origin + '-2 0 4' * (1 - self.mins_z + 24));
 //	self.angles_y = self.angles_y + 180;

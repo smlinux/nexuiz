@@ -48,6 +48,17 @@ void () DecodeLevelParms =
 				team1maxplayers = 4;
 			if (team2maxplayers == 0)
 				team2maxplayers = 4;
+//			if (number_of_teams > 2)
+//			{
+				if (team3maxplayers == 0)
+					team3maxplayers = 4;
+				if (team4maxplayers == 0)
+					team4maxplayers = 4;
+				if (team3lives == 0)
+					team3lives = -1;
+				if (team4lives == 0)
+					team4lives = -1;
+//			}
 			if (team1lives == 0)
 				team1lives = -1;
 			if (team2lives == 0)
