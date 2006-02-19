@@ -5,7 +5,7 @@ void() crylink_deselect_01;
 void() crylink_select_01;
 
 .float gravity;
-const vector proj_color = '1 0.6 0';
+const vector proj_color = '1 1 1';
 
 float() crylink_check =
 {
