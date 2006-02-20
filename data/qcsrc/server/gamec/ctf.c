@@ -22,7 +22,7 @@ void() place_flag =
 		self.t_width = 0.1; // frame animation rate
 	if(!self.t_length)
 		self.t_length = 119; // maximum frame
-		
+
 	self.mdl = self.model;
 	self.flags = FL_ITEM;
 	self.solid = SOLID_TRIGGER;
@@ -196,7 +196,7 @@ float   flagcaptimerecord;
 void() FlagTouch =
 {
 	if(gameover) return;
-	
+
 	local float t;
 	local entity head;
 	local entity player;
@@ -241,7 +241,7 @@ void() FlagTouch =
 			else
 				bprint(other.netname, "^7 captured the BLUE flag in ", ftos(t), ", failing to break the previous record of ", ftos(flagcaptimerecord), " seconds\n");
 		}
-		
+
 		other.frags = other.frags + cvar("g_ctf_flagscore_capture");//FLAGSCORE_CAPTURE;
 		head = find(head, classname, "player");
 		while (head)
@@ -274,13 +274,13 @@ void() FlagTouch =
 			bprint(other.netname, "^7 got the BLUE flag\n");
 		other.frags = other.frags + cvar("g_ctf_flagscore_pickup");//FLAGSCORE_PICKUP;
 		sound (self, CHAN_AUTO, self.noise, 1, ATTN_NONE);
-		
+
 		player = find(world, classname, "player");
 		while(player) {
 			if(player.team == self.team) centerprint(player, "The enemy got your flag! Retrieve it!");
 			player = find(player, classname, "player");
 		}
-		
+
 		return;
 	}
 
@@ -321,7 +321,7 @@ void() FlagTouch =
 			while(player) {
 				if(player.team == self.team) centerprint(player, "The enemy got your flag! Retrieve it!");
 				player = find(player, classname, "player");
-			}			
+			}
 		}
 	}
 };
@@ -334,10 +334,10 @@ Keys:
 "angle"
  viewing angle when spawning
 */
-void() info_player_team1 = 
+void() info_player_team1 =
 {
-	if(!cvar("g_ctf"))
-		self.classname = "info_player_deathmatch";
+	self.classname = "info_player_deathmatch";
+	self.team = 5; // red
 };
 //self.team = 4;self.classname = "info_player_start";info_player_start();};
 
@@ -351,14 +351,14 @@ Keys:
 */
 void() info_player_team2 =
 {
-	if(!cvar("g_ctf"))
-		self.classname = "info_player_deathmatch";
+	self.classname = "info_player_deathmatch";
+	self.team = 14; // blue
 };
 //self.team = 13;self.classname = "info_player_start";info_player_start();};
 
 /*QUAKED info_player_team3 (1 0 0) (-16 -16 -24) (16 16 24)
 CTF Starting point for a player in
-team three (Green).
+team three (Magenta).
 
 Keys:
 "angle"
@@ -366,14 +366,14 @@ Keys:
 */
 void() info_player_team3 =
 {
-	if(!cvar("g_ctf"))
-		self.classname = "info_player_deathmatch";
+	self.classname = "info_player_deathmatch";
+	self.team = 10; // purple
 };
 
 
 /*QUAKED info_player_team4 (1 0 0) (-16 -16 -24) (16 16 24)
 CTF Starting point for a player in
-team four (Magenta).
+team four (Yellow).
 
 Keys:
 "angle"
@@ -381,8 +381,8 @@ Keys:
 */
 void() info_player_team4 =
 {
-	if(!cvar("g_ctf"))
-		self.classname = "info_player_deathmatch";
+	self.classname = "info_player_deathmatch";
+	self.team = 13; // yellow
 };
 
 
@@ -448,7 +448,7 @@ void() item_flag_team1 =
 		self.scale = 0.6;
 	//if(!self.glow_size)
 	//	self.glow_size = 50;
-	
+
 	self.effects = self.effects | EF_FULLBRIGHT | EF_LOWPRECISION;
 };
 
@@ -498,7 +498,7 @@ void() item_flag_team2 =
 		self.scale = 0.6;
 	//if(!self.glow_size)
 	//	self.glow_size = 50;
-	
+
 	self.effects = self.effects | EF_FULLBRIGHT | EF_LOWPRECISION;
 };
 

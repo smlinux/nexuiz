@@ -7,54 +7,67 @@ void info_player_deathmatch (void)
 {
 }
 
-float spawn_goodspots, spawn_badspots;
-entity Spawn_ClassifyPoints(entity firstspot, entity playerlist, float mindist, float goodspotnum, float badspotnum)
+entity Spawn_FilterOutBadSpots(entity firstspot, entity playerlist, float mindist, float teamcheck)
 {
-	local entity spot, player;
+	local entity spot, player, nextspot, previousspot, newfirstspot;
 	local float pcount;
-	local string spotname;
-	spawn_goodspots = 0;
-	spawn_badspots = 0;
+	spot = firstspot;
+	newfirstspot = world;
+	previousspot = world;
+	while (spot)
+	{
+		nextspot = spot.chain;
+		// count team mismatches as bad spots
+		if (spot.team == teamcheck)
+		{
+			pcount = 0;
+			player = playerlist;
+			while (player)
+			{
+				if (player != self)
+				if (vlen(player.origin - spot.origin) < mindist)
+					pcount = pcount + 1;
+				player = player.chain;
+			}
+			if (!pcount)
+			{
+				if (newfirstspot)
+					previousspot.chain = spot;
+				else
+					newfirstspot = spot;
+				previousspot = spot;
+				spot.chain = world;
+			}
+		}
+		spot = nextspot;
+	}
+	// if we couldn't find ANY good points, return the original list
+	if (!newfirstspot)
+		newfirstspot = firstspot;
+	return newfirstspot;
+}
+
+entity Spawn_RandomPoint(entity firstspot)
+{
+	local entity spot;
+	local float numspots;
+	// count number of spots
+	numspots = 0;
 	spot = firstspot;
 	while (spot)
 	{
-		pcount = 0;
-		player = playerlist;
-		while (player)
-		{
-			if (player != self)
-			if (vlen(player.origin - spot.origin) < 100)
-				pcount = pcount + 1;
-			player = player.chain;
-		}
-		if (pcount)
-		{
-			if (spawn_goodspots >= badspotnum)
-				return spot;
-			spawn_badspots = spawn_badspots + 1;
-		}
-		else
-		{
-			if (spawn_goodspots >= goodspotnum)
-				return spot;
-			spawn_goodspots = spawn_goodspots + 1;
-		}
-		if(cvar("g_ctf"))
-		{
-			if(self.team == 5)//4)
-				spotname = "info_player_team1";
-			if(self.team == 14)//13)
-				spotname = "info_player_team2";
-			if(self.team == 10)//9)
-				spotname = "info_player_team3";
-			if(self.team == 13)//12)
-				spotname = "info_player_team4";
-			spot = find(spot, classname, spotname);
-		}
-		else
-			spot = find(spot, classname, "info_player_deathmatch");
+		numspots = numspots + 1;
+		spot = spot.chain;
 	}
-	return firstspot;
+	// pick a random one
+	numspots = numspots * random();
+	spot = firstspot;
+	while (spot.chain && numspots >= 1)
+	{
+		numspots = numspots - 1;
+		spot = spot.chain;
+	}
+	return spot;
 }
 
 entity Spawn_FurthestPoint(entity firstspot, entity playerlist)
@@ -80,7 +93,7 @@ entity Spawn_FurthestPoint(entity firstspot, entity playerlist)
 			best = spot;
 			bestrating = rating;
 		}
-		spot = find(spot, classname, "info_player_deathmatch");
+		spot = spot.chain;
 	}
 	return best;
 }
@@ -94,6 +107,7 @@ Finds a point to respawn
 */
 entity SelectSpawnPoint (float anypoint)
 {
+	local float teamcheck;
 	local entity spot, firstspot, playerlist;
 	string spotname;
 
@@ -102,46 +116,29 @@ entity SelectSpawnPoint (float anypoint)
 		return spot;
 
 	spotname = "info_player_deathmatch";
+	teamcheck = 0;
 
 	if(!anypoint && cvar("g_ctf") )
-	{
-		if(self.team == 5)//4)
-			spotname = "info_player_team1";
-		if(self.team == 14)//13)
-			spotname = "info_player_team2";
-		if(self.team == 10)//9)
-			spotname = "info_player_team3";
-		if(self.team == 13)//12)
-			spotname = "info_player_team4";
-	}
+		teamcheck = self.team;
 
+	// get the list of players
 	playerlist = findchain(classname, "player");
-	firstspot = find(world, classname, spotname);
-	Spawn_ClassifyPoints(firstspot, playerlist, 100, 1000000, 1000000);
-	// first check if there are ANY good spots
-	if (spawn_goodspots > 0)
-	{
-		// good spots exist, there is 50/50 chance of choosing a random good
-		// spot or the furthest spot
-		// (this means that roughly every other spawn will be furthest, so you
-		// usually won't get fragged at spawn twice in a row)
-		if (random() > 0.5)
-			spot = Spawn_ClassifyPoints(firstspot, playerlist, 100, min(floor(random() * spawn_goodspots), spawn_goodspots - 1), 1000000);
-		else
-			spot = Spawn_FurthestPoint(firstspot, playerlist);
-	}
+	// get the entire list of spots
+	firstspot = findchain(classname, "info_player_deathmatch");
+	// filter out the bad ones
+	// (note this returns the original list if none survived)
+	firstspot = Spawn_FilterOutBadSpots(firstspot, playerlist, 100, teamcheck);
+
+	// there is 50/50 chance of choosing a random spot or the furthest spot
+	// (this means that roughly every other spawn will be furthest, so you
+	// usually won't get fragged at spawn twice in a row)
+	if (random() > 0.5)
+		spot = Spawn_RandomPoint(firstspot);
 	else
-	{
-		// no good spots exist, pick a random bad spot
-		spot = Spawn_ClassifyPoints(firstspot, playerlist, 100, 1000000, min(floor(random() * spawn_badspots), spawn_badspots - 1));
-	}
+		spot = Spawn_FurthestPoint(firstspot, playerlist);
+
 	if (!spot)
-	{
-		if(anypoint)
-			error ("PutClientInServer: no start points on level");
-		else // try again with deathmatch spots
-			spot = SelectSpawnPoint(TRUE);
-	}
+		error ("PutClientInServer: no start points on level");
 
 	return spot;
 }
@@ -1088,7 +1085,7 @@ void PlayerPreThink (void)
 			dist = self.oldorigin - self.origin;
 			dist_z = 0;
 			self.lms_traveled_distance += fabs(vlen(dist));
-			
+
 			if(time > self.lms_nextcheck)
 			{
 				//sprint(self, "distance: ", ftos(self.lms_traveled_distance), "\n");
