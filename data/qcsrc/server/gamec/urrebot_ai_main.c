@@ -247,7 +247,8 @@ void() UrreBotMove =
 		else
 			self.movepoint = ClampPointToSpace(self.origin, self.goalcurrent, self.goalcurrent);
 	}
-	dir = normalize(ToPointInSpace(self.goalcurrent, self.movepoint));
+//	dir = normalize(ToPointInSpace(self.goalcurrent, self.movepoint));
+	dir = ToPointInSpace(self.goalcurrent, self.movepoint);
 	dir = dir * sv_maxspeed;
 	makevectors(self.v_angle);
 	self.movement_x = dir * v_forward;
