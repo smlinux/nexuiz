@@ -57,9 +57,12 @@ vector nullvector;
 .float camptime;
 .vector campcheck;
 
-.vector aimpoint;
+//.vector aimpoint;
 .float aimtime;
-.float evaltime;
+.float aimfire;
+//.float aimblocked; // LordHavoc: prevents firing at a stale aimpoint
+.float enemytimeout;
+//.float evaltime;
 .float lead;
 
 float skill;

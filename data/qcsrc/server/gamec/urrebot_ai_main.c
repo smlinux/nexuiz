@@ -29,6 +29,7 @@ void() UrreBotEvalTargets =
 
 	v1 = self.origin + self.view_ofs;
 
+	/*
 	if (self.enemy)
 	{
 		if (self.enemy.health >= 1 && !self.enemy.deadflag)
@@ -45,6 +46,7 @@ void() UrreBotEvalTargets =
 		else
 			self.enemy = world;
 	}
+	*/
 	e = findradius(v1, 1500);
 	while (e)
 	{
@@ -65,10 +67,16 @@ void() UrreBotEvalTargets =
 					old = vlen(self.origin - (self.enemy.absmin + self.enemy.absmax)*0.5);
 					new = vlen(self.origin - v2);
 					if (new < old)
+					{
 						self.enemy = e;
+						self.enemytimeout = time + 3;
+					}
 				}
 				else
+				{
 					self.enemy = e;
+					self.enemytimeout = time + 3;
+				}
 			}
 		}
 		e = e.chain;
@@ -80,7 +88,10 @@ void() UrreBotEvalTargets =
 	else if (self.link0.sflags & S_DOOR)
 		e = self.link0.goalentity;
 	if (e.health >= 1)
+	{
 		self.enemy = e;
+		self.enemytimeout = time + 3;
+	}
 };
 
 /* --- UrreBotAim ---
@@ -88,60 +99,95 @@ Very crude and simple aiming, with some leading capability*/
 
 void() UrreBotAim =
 {
-	local float dist, skeel;
-	local vector v, desiredang, testang, diffang;
+	//local float dist;
+	local float f;
+	local float skeel;
+	local vector v, desiredang, testang, diffang, aimpoint;
 
+	if (self.deadflag)
+		return;
 	skeel = bound(1, skill, 10);
 
-	// get the desired angles to aim at
+	v = (self.enemy.absmin + self.enemy.absmax) * 0.5;
+
 	if (self.enemy)
 	{
-		v = (self.enemy.absmin + self.enemy.absmax) * 0.5;
-		if (self.enemy.classname == "door")
-			self.aimpoint = v;
+		if (time > self.enemytimeout || self.enemy.takedamage == DAMAGE_NO || self.enemy.deadflag)
+			self.enemy = world;
 		else if (self.aimtime <= time)
 		{
-			self.aimtime = time + 0.3;
-			traceline(self.origin + self.view_ofs, (self.enemy.absmin + self.enemy.absmax) * 0.5, TRUE, self);
-			if (trace_fraction == 1)
+			self.aimtime = time + 0.1; // LordHavoc: changed from time + 0.3 to time + 0.1
+			self.aimfire = FALSE;
+			if (self.enemy)
 			{
-				self.aimpoint = v + self.enemy.velocity*vlen(self.origin - v)*self.lead;
-				self.aimpoint = self.aimpoint + randomvec()*max(0, 120 - skeel*12);
+				traceline(self.origin + self.view_ofs, v, TRUE, self);
+				if (trace_fraction == 1)
+				{
+					self.enemytimeout = time + 3;
+					self.aimfire = TRUE;
+				}
 			}
 		}
-		desiredang = vectoangles(self.aimpoint - (self.origin + self.view_ofs));
 	}
-	else
-		desiredang = vectoangles(self.velocity);
-	desiredang_x = 0-desiredang_x;
 
-	if (desiredang_y <= -180)
-		desiredang_y = desiredang_y + 360;
-	else if (desiredang_y >= 180)
-		desiredang_y = desiredang_y - 360;
-	if (desiredang_x <= -180)
-		desiredang_x = desiredang_x + 360;
-	else if (desiredang_x >= 180)
-		desiredang_x = desiredang_x - 360;
+	// get the desired angles to aim at
+	desiredang = self.v_angle_y * '0 1 0';
+	aimpoint = v;
+	if (self.enemy)
+	{
+		//dprint("urrebotaim (skeel == ", ftos(skeel), ") : old aimpoint ", vtos(self.aimpoint));
+		aimpoint = v + self.enemy.velocity*vlen(self.origin - v)*self.lead;
+		//dprint(", v = ", vtos(v));
+		//dprint(", self.enemy.velocity = ", vtos(self.enemy.velocity));
+		//dprint(", vlen(self.origin - v) = ", ftos(vlen(self.origin - v)));
+		//dprint(", self.lead = ", ftos(self.lead));
+		aimpoint = aimpoint + randomvec()*max(0, 120 - skeel*12);
+		//dprint(", final aimpoint = ", vtos(self.aimpoint), "\n");
+		//eprint(self);
+		//eprint(self.enemy);
+		desiredang = vectoangles(aimpoint - (self.origin + self.view_ofs));
+	}
+	else if (vlen(self.velocity) >= 50)
+		desiredang = vectoyaw(self.velocity) * '0 1 0';
+	desiredang_x = 0-desiredang_x;
 
 	// calculate turn angles
 	testang = desiredang - self.v_angle;
 	testang_z = 0;
 
+	while (testang_y < -180)
+		testang_y = testang_y + 360;
+	while (testang_y >= 180)
+		testang_y = testang_y - 360;
+	while (testang_x < -180)
+		testang_x = testang_x + 360;
+	while (testang_x >= 180)
+		testang_x = testang_x - 360;
+
 	// turn
-	dist = vlen(testang * ((skeel + 1) * frametime));
-	if (vlen(normalize(testang) * skeel) > dist)
-	{
-		diffang = normalize(testang) * skeel;
-		dist = vlen(normalize(testang) * skeel);
-	}
-	else
-		diffang = testang * ((skeel + 1) * frametime);
-	if (dist > vlen(testang))
-		diffang = testang;
+	// LordHavoc: simplified to one line
+	diffang = testang * min(1, ((skeel * 2) * frametime));
 
 	self.v_angle = self.v_angle + diffang;
 	self.angles_y = self.v_angle_y;
+
+	if (self.aimfire)
+	if (self.enemy)
+	{
+		makevectors (self.v_angle);
+		//v = self.origin + '0 0 16';
+		v = self.origin + self.view_ofs; // neuiz trueaim
+		f = vlen(v - aimpoint);
+		traceline (v, v + v_forward*f, FALSE, self);
+		if (vlen(trace_endpos - aimpoint) < (200 - skeel * 15))
+		{
+			f = 0.1 + skeel*0.1;
+			if (f >= 1)
+				self.button0 = 1;
+			else if (random() < f)
+				self.button0 = 1;
+		}
+	}
 };
 
 /* --- UrreBotMove ---
@@ -222,7 +268,7 @@ void() UrreBotMove =
 					if (optpoint)
 						self.movepoint = optpoint.origin;
 					else
-						self.movepoint = ClampPointToSpace(self.origin, self.goalcurrent, self.goalcurrent);					
+						self.movepoint = ClampPointToSpace(self.origin, self.goalcurrent, self.goalcurrent);
 				}
 				if (self.movepoint == '0 0 0')
 				{
@@ -261,7 +307,7 @@ Returns the impulse for the best weapon in the given situation*/
 
 float() UrreBotImpulses =
 {
-	local float dist;
+	local float dist, l, w;
 	local float cells, rockets, nails, shells;
 	local vector v;
 
@@ -280,61 +326,86 @@ float() UrreBotImpulses =
 	nails = self.ammo_nails;
 	shells = self.ammo_shells;
 
-	if (dist > 300 && cells && (self.items & IT_NEX))
+	l = 0;
+	w = 0;
+
+	if (!w)
+	if (self.items & IT_NEX)
+	if (dist > 300)
+	if (cells >= cvar("g_balance_nex_ammo"))
 	{
-		self.lead = 0;
-		return WEP_NEX;
+		l = 1000000;
+		w = WEP_NEX;
 	}
-	else if (rockets)
+	if (!w)
+	if (self.items & IT_GRENADE_LAUNCHER)
+	if (dist >= 200)
+	if (dist < 2000)
+	if (rockets >= cvar("g_balance_grenadelauncher_primary_ammo"))
 	{
-		if (dist < 500)
-		if (self.items & IT_GRENADE_LAUNCHER)
-		{
-			self.lead = 1 / cvar("g_balance_grenadelauncher_speed");
-			return WEP_GRENADE_LAUNCHER;
-		}
-		if (self.items & IT_HAGAR)
-		{
-			self.lead = 1 / cvar("g_balance_hagar_speed");
-			return WEP_HAGAR;
-		}
-		else if (self.items & IT_ROCKET_LAUNCHER)
-		{
-			self.lead = 1 / cvar("g_balance_rocketlauncher_speed");
-			return WEP_ROCKET_LAUNCHER;
-		}
+		l = cvar("g_balance_grenadelauncher_primary_speed");
+		w = WEP_GRENADE_LAUNCHER;
 	}
-	else if (cells)
+	if (!w)
+	if (self.items & IT_HAGAR)
+	if (dist >= 100)
+	if (dist < 2000)
+	if (rockets >= cvar("g_balance_hagar_primary_ammo"))
 	{
-		if (self.items & IT_ELECTRO)
-		{
-			self.lead = 1 / cvar("g_balance_electro_speed");
-			return WEP_ELECTRO;
-		}
-		else if (self.items & IT_CRYLINK)
-		{
-			self.lead = 1 / cvar("g_balance_crylink_speed");
-			return WEP_CRYLINK;
-		}
+		l = cvar("g_balance_hagar_primary_speed");
+		w = WEP_HAGAR;
 	}
-	else if (nails)
+	if (!w)
+	if (self.items & IT_ROCKET_LAUNCHER)
+	if (dist >= 200)
+	if (dist < 800)
+	if (rockets >= cvar("g_balance_rocketlauncher_ammo"))
 	{
-		if (self.items & IT_UZI)
-		{
-			self.lead = 0;
-			return WEP_UZI;
-		}
+		l = cvar("g_balance_rocketlauncher_speed");
+		w = WEP_ROCKET_LAUNCHER;
 	}
-	else if (shells)
+	if (!w)
+	if (self.items & IT_ELECTRO)
+	if (dist >= 100)
+	if (dist < 2000)
+	if (cells >= cvar("g_balance_electro_primary_ammo"))
 	{
-		if (self.items & IT_SHOTGUN)
-		{
-			self.lead = 0;
-			return WEP_SHOTGUN;
-		}
+		l = cvar("g_balance_electro_primary_speed");
+		w = WEP_ELECTRO;
 	}
-	self.lead = 1 / cvar("g_balance_laser_speed");
-	return WEP_LASER;
+	if (!w)
+	if (self.items & IT_CRYLINK)
+	if (dist < 800)
+	if (cells >= cvar("g_balance_crylink_primary_ammo"))
+	{
+		l = cvar("g_balance_crylink_primary_speed");
+		w = WEP_CRYLINK;
+	}
+	if (!w)
+	if (self.items & IT_UZI)
+	if (dist < 1000)
+	if (nails >= cvar("g_balance_uzi_first_ammo"))
+	{
+		l = 1000000;
+		w = WEP_UZI;
+	}
+	if (!w)
+	if (self.items & IT_SHOTGUN)
+	if (dist < 1000)
+	if (nails >= cvar("g_balance_shotgun_primary_ammo"))
+	{
+		l = 1000000;
+		w = WEP_SHOTGUN;
+	}
+	if (!w)
+	{
+		l = cvar("g_balance_laser_speed");
+		w = WEP_LASER;
+	}
+	if (l < 1)
+		error("UrreBotImpulses: missing cvar for weapon\n");
+	self.lead = 1 / l;
+	return w;
 };
 
 /* --- BeamBox ---
@@ -521,9 +592,6 @@ He does not yet have any combat movement*/
 
 void() UrreBotThink =
 {
-	local float f;
-	local vector v;
-
 	self.movement = '0 0 0';
 	self.button0 = 0;
 	self.button2 = 0;
@@ -579,24 +647,6 @@ void() UrreBotThink =
 		self.impulse = UrreBotImpulses();
 	}
 
-	if (self.enemy)
-	{
-		makevectors (self.v_angle);
-		v = self.origin + '0 0 16';
-		f = vlen(v - self.aimpoint);
-		traceline (v, v + v_forward*f, FALSE, self);
-		if (vlen(trace_endpos - self.aimpoint) < 150)
-		{
-			if (skill < 5)
-			{
-				f = skill*0.1;
-				if (random() < f)
-					self.button0 = 1;
-			}
-			else
-				self.button0 = 1;
-		}
-	}
 	if (cvar("urrebots_debug"))
 	{
 		te_lightning1(self, self.origin, self.movepoint);
