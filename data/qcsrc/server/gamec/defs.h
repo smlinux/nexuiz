@@ -239,3 +239,5 @@ float GRAPHOOK_RELEASE		= 21;
 
 .float spawnshieldtime;
 
+.float lms_nextcheck
+.float lms_traveled_distance

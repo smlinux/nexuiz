@@ -69,6 +69,8 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				centerprint(targ, m);
 				return;
 			}
+			else if (deathtype == DEATH_CAMP)
+				centerprint(targ, strcat("^1Die camper!\n\n\n"));
 			else
 				centerprint(targ, strcat("^1You killed your own dumb self!\n\n\n"));
 
@@ -85,6 +87,8 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				bprint ("^7",s, " ^7committed suicide. What's the point of living without ammo?\n");
 				//sound (self, CHAN_BODY, "minstagib/mockery.ogg", 1, ATTN_NONE);
 			}
+			else if (deathtype == DEATH_CAMP)
+				bprint ("^1",s, "^1 thought he found a nice camping ground\n");
 			else if (deathtype != DEATH_TEAMCHANGE)
 				bprint ("^1",s, "^1 couldn't resist the urge to self-destruct\n");
 			GiveFrags(attacker, targ, -1);

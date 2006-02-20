@@ -444,6 +444,9 @@ void PutClientInServer (void)
 		self.alpha = 1;
 		self.exteriorweaponentity.alpha = 1;
 
+		self.lms_nextcheck = time + cvar("g_lms_campcheck_interval");
+		self.lms_traveled_distance = 0;
+
 		//stuffcmd(self, "chase_active 0");
 	 	//stuffcmd(self, "set viewsize $tmpviewsize \n");
 	} else if(self.classname == "observer") {
@@ -1077,6 +1080,28 @@ void PlayerPreThink (void)
 			return;
 		}
 
+		if(cvar("g_lms") && !self.deadflag && cvar("g_lms_campcheck_interval"))
+		{
+			vector dist;
+
+			// calculate player movement (in 2 dimensions only, so jumping on one spot doesn't count as movement)
+			dist = self.oldorigin - self.origin;
+			dist_z = 0;
+			self.lms_traveled_distance += fabs(vlen(dist));
+			
+			if(time > self.lms_nextcheck)
+			{
+				//sprint(self, "distance: ", ftos(self.lms_traveled_distance), "\n");
+				if(self.lms_traveled_distance < cvar("g_lms_campcheck_distance"))
+				{
+					centerprint(self, cvar_string("g_lms_campcheck_message"));
+					Damage(self, self, self, cvar("g_lms_campcheck_damage"), DEATH_CAMP, self.origin, '0 0 0');
+				}
+				self.lms_nextcheck = time + cvar("g_lms_campcheck_interval");
+				self.lms_traveled_distance = 0;
+			}
+		}
+
 		if (self.button5)
 		{
 			if (!self.crouch)
@@ -1172,6 +1197,8 @@ void PlayerPreThink (void)
 
 		//if (TetrisPreFrame()) return;
 	} else if(gameover) {
+		if (intermission_running)
+			IntermissionThink ();	// otherwise a button could be missed between
 		return;
 	} else if(self.classname == "observer") {
 

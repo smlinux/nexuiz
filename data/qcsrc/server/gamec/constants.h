@@ -144,6 +144,7 @@ float	DEATH_NOAMMO				= 10007;
 float	DEATH_SWAMP				= 10008;
 float	DEATH_TEAMCHANGE			= 10009;
 float	DEATH_AUTOTEAMCHANGE			= 10010;
+float	DEATH_CAMP				= 10011;
 
 float	IT_LASER				= 4096;
 float	IT_SHOTGUN				= 1;

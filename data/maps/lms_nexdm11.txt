@@ -1,0 +1,16 @@
+Ruins of Slaughter (lms_nexdm11)
+maps/nexdm11
+
+A ruined arena.
+
+Players: 3-6
+
+Weapons: Mortar, Electro,
+Crylink, Hagar, Rocket Launcher
+
+Powerups: Strength
+
+Gametype: Last Man Standing
+
+Author:
+"HReaper"
