@@ -17,7 +17,7 @@ Item DataContainer Effects
 		defValue	0.5
 		Item DataLink_Value Value
 		{
-			minValue	0.0
+			minValue	0.1
 			maxValue	1.0
 			stepValue	0.1
 			link		"##up"
