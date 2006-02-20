@@ -178,6 +178,11 @@ Item Layout Misc
 				text	"Laser-Guide Rockets"
 				target	"::Data::Game::Misc::HomingRocket::Switch"
 			}
+			Derive Nex_Option_Switch NoRecoil
+			{
+				text	"No Recoil (no view kick when firing weapons)"
+				target	"::Data::Game::Misc::HomingRocket::Switch"
+			}
 			Derive Nex_Line	SeperatorMidAir
 			{}
 			Derive Nex_Option_Switch MidAir

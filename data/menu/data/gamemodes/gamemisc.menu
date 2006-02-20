@@ -193,6 +193,13 @@ Item DataContainer Misc
 
 		[DataLink_OnOffSwitch]
 	}
+	Item Data_Cvar NoRecoil
+	{
+		cvarName	"g_norecoil"
+		defValue	0
+
+		[DataLink_OnOffSwitch]
+	}
 	Item Data_Cvar MidAir
 	{
 		cvarName	"g_midair"
