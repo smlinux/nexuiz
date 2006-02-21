@@ -181,19 +181,23 @@ void PlayerCorpseDamage (entity inflictor, entity attacker, float damage, float 
 		TossGib (world, "models/gibs/bloodyskull.md3", self.origin, '0 0 600',0);
 
 		TossGib (world, "models/gibs/gib1.md3", self.origin, self.velocity,0);
-		TossGib (world, "models/gibs/gib2.md3", self.origin, self.velocity,0);
-		TossGib (world, "models/gibs/gib3.md3", self.origin, self.velocity,0);
-		TossGib (world, "models/gibs/gib4.md3", self.origin, self.velocity,0);
+		//TossGib (world, "models/gibs/gib2.md3", self.origin, self.velocity,0);
+		TossGib (world, "models/gibs/gib1.mdl", self.origin, self.velocity,0);
+		//TossGib (world, "models/gibs/gib3.md3", self.origin, self.velocity,0);
+		TossGib (world, "models/gibs/gib2.mdl", self.origin, self.velocity,0);
+		//TossGib (world, "models/gibs/gib4.md3", self.origin, self.velocity,0);
+		TossGib (world, "models/gibs/gib3.mdl", self.origin, self.velocity,0);
 
 		// these destory on impact
 		TossGib (world, "models/gibs/gib5.md3", self.origin, '-500 0 450',1);
-		TossGib (world, "models/gibs/gib6.md3", self.origin, '0 500 450',1);
+		//TossGib (world, "models/gibs/gib6.md3", self.origin, '0 500 450',1);
 		TossGib (world, "models/gibs/chunk.mdl", self.origin, '0 -500 450',1);
 		TossGib (world, "models/gibs/chunk.mdl", self.origin, '500 0 450',1);
 		TossGib (world, "models/gibs/chunk.mdl", self.origin, self.velocity,1);
 		TossGib (world, "models/gibs/chunk.mdl", self.origin, '0 0 450',1);
 
 		sound (trace_ent, CHAN_VOICE, "misc/gib.wav", 1, ATTN_NORM);
+
 	}
 }
 

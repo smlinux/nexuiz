@@ -50,11 +50,14 @@ void worldspawn (void)
 	precache_model ("models/gibs/chunk.mdl");
 	precache_model ("models/gibs/eye.md3");
 	precache_model ("models/gibs/gib1.md3");
-	precache_model ("models/gibs/gib2.md3");
-	precache_model ("models/gibs/gib3.md3");
-	precache_model ("models/gibs/gib4.md3");
+	//precache_model ("models/gibs/gib2.md3");
+	//precache_model ("models/gibs/gib3.md3");
+	//precache_model ("models/gibs/gib4.md3");
 	precache_model ("models/gibs/gib5.md3");
-	precache_model ("models/gibs/gib6.md3");
+	//precache_model ("models/gibs/gib6.md3");
+	precache_model ("models/gibs/gib1.mdl");
+	precache_model ("models/gibs/gib2.mdl");
+	precache_model ("models/gibs/gib3.mdl");
 	precache_model ("models/grenademodel.md3");
 	precache_model ("models/hagarmissile.mdl");
 	precache_model ("models/items/a_bullets.mdl");
