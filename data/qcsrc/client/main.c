@@ -1,5 +1,3 @@
-float nxt_cmd;
-
 void SysParms_UPDATE (void)
 {
 	float f;
@@ -18,13 +16,6 @@ void SysParms_UPDATE (void)
 		player_flags |= PFL_DEAD;
 	else if(f > 1 && player_flags & PFL_DEAD)
 		player_flags -= player_flags & (PFL_DEAD | PFL_GIBBED);
-
-	if(nxt_cmd < time)
-	{
-		nxt_cmd = time + 5;
-		localcmd("r_showtris 0\n");
-	}
-
 }
 
 void CSQC_Ent_Update (float isnew)
