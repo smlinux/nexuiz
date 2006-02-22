@@ -199,8 +199,8 @@ void() UrreBotRemove =
 		{
 			if (ent.bot_type == BOT_TYPE_URREBOT)
 			{
-				if (urrebot_chain == self)
-					urrebot_chain = self.list;
+				if (urrebot_chain == ent)
+					urrebot_chain = ent.list;
 				else
 				{
 					t = find(world, classname, "player");
