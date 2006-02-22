@@ -190,7 +190,7 @@ removes an UrreBot from the server*/
 
 void() UrreBotRemove =
 {
-	local entity ent, t;
+	local entity ent, t, oldself;
 
 	ent = findchainflags(flags, FL_CLIENT);
 	while (ent)
@@ -213,9 +213,11 @@ void() UrreBotRemove =
 				}
 				if (urrebots > 0)
 					urrebots -= 1;
+				oldself = self;
 				self = ent;
 				ClientDisconnect();
 				dropclient(ent);
+				self = oldself;
 			}
 		}
 		ent = ent.chain;
