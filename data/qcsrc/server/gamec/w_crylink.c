@@ -108,9 +108,7 @@ void W_Crylink_Attack (void)
 	org = self.origin + self.view_ofs + v_forward * 10 + v_right * 5 + v_up * -14;
 	te_smallflash(org);
 
-	shots = cvar("g_balance_crylink_shots");
-	if (!shots)
-		shots = 5;
+	shots = cvar("g_balance_crylink_primary_shots");
 	while (counter < shots)
 	{
 		proj = spawn ();
@@ -161,8 +159,6 @@ void W_Crylink_Attack2 (void)
 	te_smallflash(org);
 
 	shots = cvar("g_balance_crylink_secondary_shots");
-	if (!shots)
-		shots = 5;
 	while (counter < shots)
 	{
 		proj = spawn ();
