@@ -130,16 +130,16 @@ void()	shotgun_fire1_01 =
 };
 void()  shotgun_fire2_03 =
 {
-	weapon_doattack(shotgun_check, shotgun_check, W_Shotgun_Attack2);
+	weapon_doattack(shotgun_check2, shotgun_check2, W_Shotgun_Attack2);
 	weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_shotgun_secondary_animtime"), shotgun_ready_01);
 }
 void()  shotgun_fire2_02 =
 {
-	weapon_doattack(shotgun_check, shotgun_check, W_Shotgun_Attack2);
+	weapon_doattack(shotgun_check2, shotgun_check2, W_Shotgun_Attack2);
 	weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_shotgun_secondary_animtime"), shotgun_fire2_03);
 }
 void()  shotgun_fire2_01 =
 {
-	weapon_doattack(shotgun_check, shotgun_check, W_Shotgun_Attack2);
+	weapon_doattack(shotgun_check2, shotgun_check2, W_Shotgun_Attack2);
 	weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_shotgun_secondary_animtime"), shotgun_fire2_02);
 }

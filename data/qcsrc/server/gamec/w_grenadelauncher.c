@@ -170,6 +170,6 @@ void()	glauncher_fire1_01 =
 };
 void()	glauncher_fire2_01 =
 {
-	weapon_doattack(glauncher_check, glauncher_check, W_Grenade_Attack2);
+	weapon_doattack(glauncher_check2, glauncher_check2, W_Grenade_Attack2);
 	weapon_thinkf(WFRAME_FIRE2, cvar("g_balance_grenadelauncher_secondary_animtime"), glauncher_ready_01);
 };

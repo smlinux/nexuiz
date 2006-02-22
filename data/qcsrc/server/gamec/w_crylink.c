@@ -204,7 +204,7 @@ void()	crylink_fire1_01 =
 };
 void()	crylink_fire2_01 =
 {
-	weapon_doattack(crylink_check, crylink_check, W_Crylink_Attack2);
+	weapon_doattack(crylink_check2, crylink_check2, W_Crylink_Attack2);
 	weapon_thinkf(WFRAME_FIRE2, cvar("g_balance_crylink_secondary_animtime"), crylink_ready_01);
 };
 

@@ -198,7 +198,7 @@ void()	hagar_fire1_01 =
 void()	hagar_fire2_01 =
 {
 	self.attack_finished = time + cvar("g_balance_hagar_secondary_refire");
-	weapon_doattack(hagar_check, hagar_check, W_Hagar_Attack2);
+	weapon_doattack(hagar_check2, hagar_check2, W_Hagar_Attack2);
 	weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_hagar_secondary_refire"), hagar_ready_01);
 };
 

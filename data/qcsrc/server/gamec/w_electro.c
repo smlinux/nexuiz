@@ -25,7 +25,7 @@ void(float req) w_electro =
 	else if (req == WR_FIRE1)
 		weapon_prepareattack(electro_check, electro_check, electro_fire1_01, cvar("g_balance_electro_primary_refire"));
 	else if (req == WR_FIRE2)
-		weapon_prepareattack(electro_check, electro_check, electro_fire2_01, cvar("g_balance_electro_secondary_refire"));
+		weapon_prepareattack(electro_check2, electro_check2, electro_fire2_01, cvar("g_balance_electro_secondary_refire"));
 	else if (req == WR_RAISE)
 		electro_select_01();
 	else if (req == WR_UPDATECOUNTS)
