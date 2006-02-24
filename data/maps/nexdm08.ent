@@ -115,6 +115,7 @@
 "classname" "info_player_deathmatch"
 }
 {
+"angle" "270"
 "origin" "3 959 55"
 "classname" "info_player_deathmatch"
 }
@@ -131,10 +132,12 @@
 "classname" "item_bullets"
 }
 {
+"angle" "90"
 "origin" "-715 -790 55"
 "classname" "info_player_deathmatch"
 }
 {
+"angle" "135"
 "origin" "-498 -790 65"
 "classname" "info_player_deathmatch"
 }
@@ -143,6 +146,7 @@
 "classname" "item_health25"
 }
 {
+"angle" "225"
 "origin" "-464 813 75"
 "classname" "info_player_deathmatch"
 }
