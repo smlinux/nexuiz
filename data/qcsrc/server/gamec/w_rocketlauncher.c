@@ -17,7 +17,7 @@ void(float req) w_rlauncher =
 		rlauncher_ready_01();
 	else if (req == WR_FIRE1)
 		weapon_prepareattack(rlauncher_check, rlauncher_check, rlauncher_fire1_01, cvar("g_balance_rocketlauncher_refire"));
-	else if (req == WR_FIRE2 && cvar("g_homing_missile"))
+	else if (req == WR_FIRE2 && cvar("g_laserguided_missile"))
 	{
 		if(self.exteriorweaponentity.attack_finished < time)
 		{
@@ -57,7 +57,7 @@ void W_Rocket_Explode (void)
 			self.owner.attack_finished = time;
 			self.owner.switchweapon = w_getbestweapon(self.owner);			
 		}
-		if(cvar("g_homing_missile"))
+		if(cvar("g_laserguided_missile"))
 				  self.owner.attack_finished = time + cvar("g_balance_rocketlauncher_refire");
 	}
 	remove (self);
@@ -143,7 +143,7 @@ void W_Rocket_Think (void)
 	}
 	if (self.owner.weapon == WEP_ROCKET_LAUNCHER)
 	{
-		if(cvar("g_homing_missile"))
+		if(cvar("g_laserguided_missile"))
 		{
 			if(!self.owner.button0)
 				self.ltime = -1; // indicate that the player has let go of the button
@@ -155,7 +155,7 @@ void W_Rocket_Think (void)
 				  return;
 			}
 
-			if(cvar("g_balance_rocketlauncher_homing_allow_steal"))
+			if(cvar("g_balance_rocketlauncher_laserguided_allow_steal"))
 			{
 				if(self.owner.laser_on)
 				{
@@ -179,7 +179,7 @@ void W_Rocket_Think (void)
 				if(!self.speed)
 					self.speed = vlen(self.velocity);
 				e = self.enemy;//self.owner.weaponentity.lasertarget;
-				turnrate = cvar("g_balance_rocketlauncher_homing_turnrate");//0.65;						// how fast to turn
+				turnrate = cvar("g_balance_rocketlauncher_laserguided_turnrate");//0.65;						// how fast to turn
 				desireddir = normalize(e.origin - self.origin);		// get direction from my position to the laser target
 				olddir = normalize(self.velocity);				// get my current direction
 				newdir = normalize((olddir + desireddir * turnrate) * 0.5);	// take the average of the 2 directions; not the best method but simple & easy
@@ -253,8 +253,8 @@ void W_Rocket_Attack (void)
 	setsize (missile, '0 0 0', '0 0 0');
 
 	setorigin (missile, org);
-	if(cvar("g_homing_missile") && self.laser_on)
-		missile.velocity = normalize(trueaim - org) * cvar("g_balance_rocketlauncher_homing_speed");
+	if(cvar("g_laserguided_missile") && self.laser_on)
+		missile.velocity = normalize(trueaim - org) * cvar("g_balance_rocketlauncher_laserguided_speed");
 	else
 		missile.velocity = normalize(trueaim - org) * cvar("g_balance_rocketlauncher_speed");
 	missile.angles = vectoangles (missile.velocity);

@@ -35,10 +35,10 @@ void LaserTarget_Think()
 	uselaser = 0;
 
 	// list of weapons that will use the laser, and the options that enable it
-	if(self.owner.laser_on && self.owner.weapon == WEP_ROCKET_LAUNCHER && cvar("g_homing_missile"))
+	if(self.owner.laser_on && self.owner.weapon == WEP_ROCKET_LAUNCHER && cvar("g_laserguided_missile"))
 		uselaser = 1;
 	// example
-	//if(self.owner.weapon == WEP_ELECTRO && cvar("g_homing_electro"))
+	//if(self.owner.weapon == WEP_ELECTRO && cvar("g_laserguided_electro"))
 	//	uselaser = 1;
 
 

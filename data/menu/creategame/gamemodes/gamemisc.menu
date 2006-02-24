@@ -173,15 +173,15 @@ Item Layout Misc
 				text	"Vampire Mode"
 				target	"::Data::Game::Misc::Vampire::Switch"
 			}
-			Derive Nex_Option_Switch HomingRocket
+			Derive Nex_Option_Switch LaserguidedRocket
 			{
-				text	"Laser-Guide Rockets"
-				target	"::Data::Game::Misc::HomingRocket::Switch"
+				text	"Laser-Guided Rockets"
+				target	"::Data::Game::Misc::LaserguidedRockets::Switch"
 			}
 			Derive Nex_Option_Switch NoRecoil
 			{
 				text	"No Recoil (no view kick when firing weapons)"
-				target	"::Data::Game::Misc::HomingRocket::Switch"
+				target	"::Data::Game::Misc::NoRecoil::Switch"
 			}
 			Derive Nex_Line	SeperatorMidAir
 			{}

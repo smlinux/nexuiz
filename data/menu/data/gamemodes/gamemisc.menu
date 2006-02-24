@@ -186,9 +186,9 @@ Item DataContainer Misc
 
 		[DataLink_OnOffSwitch]
 	}
-	Item Data_Cvar HomingRocket
+	Item Data_Cvar LaserguidedRockets
 	{
-		cvarName	"g_homing_missile"
+		cvarName	"g_laserguided_missile"
 		defValue	0
 
 		[DataLink_OnOffSwitch]

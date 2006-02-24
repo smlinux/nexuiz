@@ -290,11 +290,11 @@ void PrintWelcomeMessage(entity pl)
 		}
 		modifications = strcat(modifications, "vampire");
 	}
-	if(cvar("g_homing_missile")) {
+	if(cvar("g_laserguided_missile")) {
 		if (modifications) {
 			modifications = strcat(modifications, ", ");
 		}
-		modifications = strcat(modifications, "homing missiles");
+		modifications = strcat(modifications, "laser-guided-missiles");
 	}
 
 	local string versionmessage;
