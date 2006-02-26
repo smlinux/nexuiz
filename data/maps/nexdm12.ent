@@ -1,7 +1,7 @@
 {
 "music" "music/fla22k_03.wav"
 "ambient" "9"
-"message" "[evilspace]"
+"message" "Evil Space"
 "classname" "worldspawn"
 }
 {
