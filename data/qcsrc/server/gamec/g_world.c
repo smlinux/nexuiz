@@ -261,6 +261,15 @@ void worldspawn (void)
 
 	// Urrebot setting
 	urrebots_navopt = cvar("urrebots_navopt");
+
+	local entity head;
+	head = nextent(world);
+	maxclients = 0;
+	while(head)
+	{
+		maxclients++;
+		head = nextent(head);
+	}
 }
 
 void light (void)
@@ -676,6 +685,7 @@ void() CheckRules_World =
 	local float timelimit;
 	local float fraglimit;
 	local float checkrules_oldleaderfrags;
+	local float f;
 	local entity checkrules_oldleader;
 	local entity head;
 
@@ -792,4 +802,13 @@ void() CheckRules_World =
 	}
 //	if (checkrules_leader != checkrules_oldleader)// && checkrules_leaderfrags > checkrules_oldleaderfrags)
 //		bprint("^1",checkrules_leader.netname, " has taken the lead with ", ftos(checkrules_leaderfrags), " frags\n");
+
+	if(cvar("minplayers") >= maxclients)
+		cvar_set("minplayers", ftos(maxclients - 1));
+	
+	f = cvar("minplayers") - (player_count - bot_number);
+	
+	if(cvar("minplayers"))
+	if(cvar("bot_number") != f)
+		cvar_set("bot_number", ftos(f));
 };

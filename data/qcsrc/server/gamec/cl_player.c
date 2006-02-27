@@ -355,7 +355,7 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 		// set up to fade out later
 		SUB_SetFade (self, time + 12 + random () * 4, 1);
 
-		if(clienttype(self) != CLIENTTYPE_BOT)
+		if(clienttype(self) == CLIENTTYPE_REAL)
 		{
 			msg_entity = self;
 			WriteByte (MSG_ONE, SVC_SETANGLE);
