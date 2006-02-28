@@ -109,7 +109,7 @@ void() Nex_Action_ExecuteQuery =
 			sethostcachemasknumber( lAndPos, SLIST_FIELD_PING, 150, SLIST_TEST_LESSEQUAL );
 			++lAndPos;
 		} else if( lToken == "mediumping" ) {
-			sethostcachemasknumber( lAndPos, SLIST_FIELD_PROTOCOL, 250, SLIST_TEST_LESSEQUAL );
+			sethostcachemasknumber( lAndPos, SLIST_FIELD_PING, 250, SLIST_TEST_LESSEQUAL );
 			++lAndPos;
 		} else if( lToken == "mask" ) {
 			// start the query loop
