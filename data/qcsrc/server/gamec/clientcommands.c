@@ -179,7 +179,7 @@ void SV_ParseClientCommand(string s) {
 		}
 		sprint(self, strcat("^1autoswitch turned ", autoswitchmsg, "\n"));
 	} else if(argv(0) == "clientversion") {
-		if (argv(1) == "$g_nexuizversion_major") {
+		if (argv(1) == "$gameversion") {
 			//versionmsg = "^1client is too old to get versioninfo.\nUPDATE!!! (http://www.nexuiz.com)^8";
 			// either that or someone wants to be funny
 			self.version = 1;

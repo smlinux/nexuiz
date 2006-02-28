@@ -502,7 +502,7 @@ void ClientConnect (void)
 	//	dom_player_join_team(self);
 
 	//JoinBestTeam(self, FALSE);
-	if(cvar("teamplay") && self.version == cvar("g_nexuizversion_major")) stuffcmd(self,"menu_showteamselect\n");
+	if(cvar("teamplay") && self.version == cvar("gameversion")) stuffcmd(self,"menu_showteamselect\n");
 
 
 	if(cvar("sv_spectate") == 1 && !cvar("g_lms")) {
@@ -545,7 +545,7 @@ void ClientConnect (void)
 	stuffcmd(self, "cmd autoswitch $cl_autoswitch\n");
 
 	// get version info from player
-	stuffcmd(self, "cmd clientversion $g_nexuizversion_major\n");
+	stuffcmd(self, "cmd clientversion $gameversion\n");
 
 	// set cvar for team scoreboard
 	stuffcmd(self, strcat("set teamplay ", ftos(teams_matter), "\n"));
@@ -1200,7 +1200,7 @@ void PlayerPreThink (void)
 	} else if(self.classname == "observer") {
 
 		if (self.flags & FL_JUMPRELEASED) {
-			if (self.button2 && self.version == cvar("g_nexuizversion_major")) {
+			if (self.button2 && self.version == cvar("gameversion")) {
 				if(!cvar("teamplay")) {
 					self.flags = self.flags & !FL_JUMPRELEASED;
 					self.classname = "player";
@@ -1214,7 +1214,7 @@ void PlayerPreThink (void)
 					stuffcmd(self,"menu_showteamselect\n");
 					return;
 				}
-			} else if(self.button0 && self.version == cvar("g_nexuizversion_major")) {
+			} else if(self.button0 && self.version == cvar("gameversion")) {
 				self.flags = self.flags & !FL_JUMPRELEASED;
 				if(SpectateNext() == 1) {
 					self.classname = "spectator";
@@ -1235,7 +1235,7 @@ void PlayerPreThink (void)
 	} else if(self.classname == "spectator") {
 
 		if (self.flags & FL_JUMPRELEASED) {
-			if (self.button2 && self.version == cvar("g_nexuizversion_major")) {
+			if (self.button2 && self.version == cvar("gameversion")) {
 				if(!cvar("teamplay")) {
 					self.flags = self.flags & !FL_JUMPRELEASED;
 					self.classname = "player";

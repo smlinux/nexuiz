@@ -243,8 +243,8 @@ string GetClientVersionMessage(float v) {
 	if (v == 1) {
 		versionmsg = "^1client is too old to get versioninfo.\n\n\n### YOU WON'T BE ABLE TO PLAY ON THIS SERVER ###\n\n\nUPDATE!!! (http://www.nexuiz.com)^8";
 		// either that or someone wants to be funny
-	} else if (v != cvar("g_nexuizversion_major")) {
-		if(v < cvar("g_nexuizversion_major")) {
+	} else if (v != cvar("gameversion")) {
+		if(v < cvar("gameversion")) {
 			versionmsg = "^3Your client version is outdated.\n\n\n### YOU WON'T BE ABLE TO PLAY ON THIS SERVER ###\n\n\nPlease update!!!^8";
 		} else {
 			versionmsg = "^3This server is using an outdated Nexuiz version.\n\n\n ### THIS SERVER IS INCOMPATIBLE AND THUS YOU CANNOT JOIN ###.^8";
@@ -306,7 +306,7 @@ void PrintWelcomeMessage(entity pl)
 	if(modifications != "")
 		s = strcat(s, "^8\nactive modifications: ^3", modifications, "^8\n");
 
-	if((self.classname == "observer" || self.classname == "spectator") && self.version == cvar("g_nexuizversion_major")) {
+	if((self.classname == "observer" || self.classname == "spectator") && self.version == cvar("gameversion")) {
 		s = strcat(s,"^7\n\n\npress jump to play\npress attack to spectate other players\n\n");
 	}
 
@@ -618,7 +618,7 @@ float JoinBestTeam(entity pl, float only_return_best)
 	// find out what teams are available
 	CheckAllowedTeams();
 
-	
+
 	if(cvar("g_domination"))
 	{
 		if(cvar("g_domination_default_teams") < 3)
