@@ -204,3 +204,43 @@ void()	crylink_fire2_01 =
 	weapon_thinkf(WFRAME_FIRE2, cvar("g_balance_crylink_secondary_animtime"), crylink_ready_01);
 };
 
+/*
+// experimental lightning gun
+void W_Crylink_Attack3 (void)
+{
+	local vector org, dir;
+
+	local vector trueaim;
+	trueaim = W_TrueAim();
+
+	sound (self, CHAN_WEAPON, "weapons/crylink_fire.ogg", 1, ATTN_NORM);
+	if (self.items & IT_STRENGTH) {
+		sound (self, CHAN_AUTO, "weapons/strength_fire.ogg", 1, ATTN_NORM);
+	}
+
+	if (cvar("g_use_ammunition"))
+		self.ammo_cells = self.ammo_cells - cvar("g_balance_crylink_primary_ammo");
+	//self.punchangle_x = -2;
+	org = self.origin + self.view_ofs + v_forward * 10 + v_right * 5 + v_up * -14;
+
+	// use traceline_hitcorpse to make sure it can hit gibs and corpses too
+	dir = normalize(trueaim - org);
+	traceline_hitcorpse(self, org, org + dir * 1000, FALSE, self);
+
+	te_smallflash(org);
+	te_plasmaburn(trace_endpos);
+	te_lightning2(self, org, trace_endpos);
+
+	if (trace_fraction < 1)
+		Damage(trace_ent, self, self, cvar("g_balance_crylink_primary_damage"), IT_CRYLINK, trace_endpos, '0 0 0');
+}
+void()	crylink_fire1_01 =
+{
+	weapon_doattack(crylink_check, crylink_check, W_Crylink_Attack3);
+	if (self.button0)
+		weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_crylink_primary_animtime"), crylink_fire1_01);
+	else
+		weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_crylink_primary_animtime"), crylink_ready_01);
+};
+*/
+
