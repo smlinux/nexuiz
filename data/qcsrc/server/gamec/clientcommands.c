@@ -263,6 +263,7 @@ string VoteParse() {
 		local string badchar;
 		badchar = substring(vote, index, 1);
 		if(badchar == ";"
+		   || badchar == "\r"
 		   || badchar == "\n")
 		{
 			found = TRUE;

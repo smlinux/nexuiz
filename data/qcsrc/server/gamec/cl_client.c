@@ -581,6 +581,7 @@ ClientDisconnect
 Called when a client disconnects from the server
 =============
 */
+void(entity e) DropFlag;
 .entity chatbubbleentity;
 .entity teambubbleentity;
 void ClientDisconnect (void)
@@ -601,6 +602,10 @@ void ClientDisconnect (void)
 	}
 
 	DropAllRunes(self);
+
+	if(self.flagcarried)
+		DropFlag(self.flagcarried);
+
 	// decrease player count for lms
 	player_count -= 1;
 	// player was dead, decrease dead count

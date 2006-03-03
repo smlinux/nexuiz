@@ -544,14 +544,14 @@ void() DumpStats =
 	else
 		s = ":status:";
 
-	s = strcat(s, gametype, "_", mapname, ":", ftos(rint(now)), "\n");
+	s = strcat(s, gametype, "_", mapname, ":", ftos(rint(now)));
 
 	if(cvar("sv_logscores_console"))
-		localcmd(strcat("echo ", s));
+		localcmd(strcat("echo \"", s, "\"\n"));
 	if(cvar("sv_logscores_file"))
 	{
 		file = fopen(cvar_string("sv_logscores_filename"), FILE_APPEND);
-		fputs(file, s);
+		fputs(file, strcat(s, "\n"));
 	}
 
 	other = findchain(classname, "player");
@@ -562,10 +562,24 @@ void() DumpStats =
 			s = strcat(":player:", ftos(other.frags), ":");
 			s = strcat(s, ftos(other.deaths), ":");
 			s = strcat(s, ftos(rint(now - other.jointime)), ":");
-			s = strcat(s, ftos(other.team), ":", other.netname, "\n");
+			s = strcat(s, ftos(other.team), ":");
 
 			if(cvar("sv_logscores_console"))
-				localcmd(strcat("echo ", s));
+
+			{
+				local string scopy, ch;
+				local float i;
+				
+				scopy = "";
+				for(i = 0; i < strlen(other.netname); ++i)
+				{
+					ch = substring(other.netname, i, 1);
+					if(ch != "\"" && ch != "\r" && ch != "\n")
+						scopy = strcat(scopy, ch);
+				}
+				localcmd(strcat("echo \"", s, scopy, "\"\n"));
+			}
+			s = strcat(s, other.netname, "\n");
 			if(cvar("sv_logscores_file"))
 				fputs(file, s);
 		}

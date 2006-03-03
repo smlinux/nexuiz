@@ -1,5 +1,4 @@
 
-.entity flagcarried;
 .float next_take_time;			// the next time a player can pick up a flag (time + blah)
 								/// I used this, in part, to fix the looping score bug. - avirox
 
