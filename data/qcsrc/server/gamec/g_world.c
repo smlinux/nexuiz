@@ -564,24 +564,22 @@ void() DumpStats =
 			s = strcat(s, ftos(rint(now - other.jointime)), ":");
 			s = strcat(s, ftos(other.team), ":");
 
+			if(cvar("sv_logscores_file"))
+				fputs(file, strcat(s, other.netname, "\n"));
 			if(cvar("sv_logscores_console"))
-
 			{
-				local string scopy, ch;
+				local string ch;
 				local float i;
 				
-				scopy = "";
+				localcmd(strcat("echo \"", s));
 				for(i = 0; i < strlen(other.netname); ++i)
 				{
 					ch = substring(other.netname, i, 1);
 					if(ch != "\"" && ch != "\r" && ch != "\n")
-						scopy = strcat(scopy, ch);
+						localcmd(ch);
 				}
-				localcmd(strcat("echo \"", s, scopy, "\"\n"));
+				localcmd("\"\n");
 			}
-			s = strcat(s, other.netname, "\n");
-			if(cvar("sv_logscores_file"))
-				fputs(file, s);
 		}
 		other = other.chain;
 	}
