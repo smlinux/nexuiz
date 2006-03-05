@@ -191,6 +191,9 @@ void SV_ParseClientCommand(string s) {
 			self.classname = "observer";
 			self.frags = -2;
 			PutClientInServer();
+		} else if(cvar("teamplay") && !cvar("sv_spectate")) {
+			self.classname = "observer";
+			stuffcmd(self,"menu_showteamselect\n");
 		}
 	} else if(argv(0) == "spectate") {
 		if(cvar("g_lms"))

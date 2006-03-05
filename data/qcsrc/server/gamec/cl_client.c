@@ -502,8 +502,6 @@ void ClientConnect (void)
 	//	dom_player_join_team(self);
 
 	//JoinBestTeam(self, FALSE);
-	if(cvar("teamplay") && self.version == cvar("gameversion")) stuffcmd(self,"menu_showteamselect\n");
-
 
 	if(cvar("sv_spectate") == 1 && !cvar("g_lms")) {
 		self.classname = "observer";
@@ -1048,6 +1046,13 @@ void PlayerPreThink (void)
 //			bprint(strcat(self.classname, "\n"));
 
 		CheckRules_Player();
+
+		if(self.button7)
+			PrintWelcomeMessage(self);
+
+		if(cvar("g_lms") || !cvar("sv_spectate"))
+		if((time - self.jointime) <= cvar("welcome_message_time"))
+			PrintWelcomeMessage(self);
 
 		if (intermission_running)
 		{

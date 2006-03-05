@@ -113,8 +113,6 @@ void ImpulseCommands (void)
 			&& !cvar("g_rocketarena") && !cvar("g_lms") && cvar("g_pickup_items"))
 			W_ThrowWeapon();
 	}
-	else if(imp == 18)
-		PrintWelcomeMessage(self);
 	else if(imp == 19)
 	{
 		if (cvar("sv_cheats"))
