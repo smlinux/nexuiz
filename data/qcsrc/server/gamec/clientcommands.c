@@ -186,6 +186,12 @@ void SV_ParseClientCommand(string s) {
 		} else {
 			self.version = stof(argv(1));
 		}
+		if(self.version != cvar("gameversion"))	
+		{
+			self.classname = "observer";
+			self.frags = -2;
+			PutClientInServer();
+		}
 	} else if(argv(0) == "spectate") {
 		if(cvar("g_lms"))
 			return; // don't allow spectating in lms, unless player runs out of lives
