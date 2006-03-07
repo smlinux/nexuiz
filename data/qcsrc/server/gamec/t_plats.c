@@ -526,7 +526,9 @@ void() button_touch =
 //		dprint(activator.classname);
 //		dprint(" touched a button\n");
 //	}
-	if (!other.classname != "player")
+	if (!other)
+		return:
+	if (other.classname != "player")
 		return;
 	self.enemy = other;
 	if (other.owner)

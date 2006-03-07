@@ -3,7 +3,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
-<title>Nexuiz 1.5 FAQ</title>
+<title>Nexuiz 1.5.1 FAQ</title>
 	<meta name="author" content="">
 	<meta name="GENERATOR" content = "Almost Free Text v5.096; Copyright 1996-2005 Todd Coram. All rights reserved.">
 <style type="text/css">
@@ -115,7 +115,7 @@ h1, h2, h3, h4, h5, h6 {
 <body>
 <div class="body">
 
-<br><center><h1><a name="AFT-top">Nexuiz 1.5 FAQ</a></h1></center>
+<br><center><h1><a name="AFT-top">Nexuiz 1.5.1 FAQ</a></h1></center>
 <center><a class="link" href="http://nexuiz.com">http://nexuiz.com</a>&nbsp;&nbsp;<a class="link" href="http://alientrap.org">http://alientrap.org</a></center>
 <hr>
 <!--  AFT Table of Contents (auto generated) -->
@@ -161,8 +161,15 @@ h1, h2, h3, h4, h5, h6 {
 Just unzip the <tt>nexuiz15.zip</tt> file. You can do this with any archive program (like <a class="link" href="http://7zip.org">7zip</a>). It's very important to remain the directory structure while unpacking (in WinZip this option is called &quot;Use folder names&quot;). The directory structure should look like this afterwards:
 <div class="block"><pre>
 Nexuiz
+|-- Docs
+|-- Nexuiz-SDL.app
+|   |-- *
 |-- data
 |   |-- data*.pk3
+|-- navnodeedit
+|   |-- progs.dat
+|   |-- *.cfg
+|   |-- *
 |-- *.exe
 |-- *.dll
 `-- nexuiz-linux-*
@@ -181,7 +188,7 @@ This happens when the engine can't load the data*.pk3 file. The reasons could be
 <!--End Section 2-->
 <h3><a name="The sound is broken, it crackles and stutters">The sound is broken, it crackles and stutters</a></h3>
 <p class="Body">
-Try run <tt>nexuiz-sdl.exe</tt> (on Windows) or <tt>nexuiz-linux-686-sdl</tt> (on Linux). This version usually performs better on newer sound cards than <tt>nexuiz.exe</tt>/<tt>nexuiz-linux-686-glx</tt>.
+Try run <tt>nexuiz-sdl.exe</tt> instead of <tt>nexuiz.exe</tt> (on Windows). Adding the command line options <tt>-sndspeed 48000</tt> and/or <tt>-sndstereo</tt> can also help on some systems (on Windows, Linux, Mac).
 </p>
 <!--End Section 2-->
 <h3><a name="When I join a server or after a map change I see nothing but a black screen, but I can still move and shoot">When I join a server or after a map change I see nothing but a black screen, but I can still move and shoot</a></h3>
@@ -195,18 +202,20 @@ This is probably because you don't have the map, that's running on the server. T
 <!-- Start SectLevel2 -->
 <h3><a name="How do I start a server?">How do I start a server?</a></h3>
 <p class="Body">
-There's a tutorial on how to setup up an dedicated server in this <a class="link" href="http://www.nexuiz.com/forums/index.php?showtopic=1236">forum post</a>.
+There's a tutorial on how to setup up an dedicated server in this <a class="link" href="http://www.alientrap.org/forum/viewtopic.php?t=18">forum post</a>.
 </p>
 <!--End Section 2-->
 <h3><a name="Which ports do I have to open in firewall/forward from my router to run a server?">Which ports do I have to open in firewall/forward from my router to run a server?</a></h3>
 <p class="Body">
 The default port is 26000 UDP. You can change that by starting Nexuiz with <tt>nexuiz-sdl.exe -port &lt;port&gt;</tt> (on Windows) or <tt>nexuiz-linux-686-sdl -port &lt;port&gt;</tt> (on Linux).
-To add the command line argument on Windows, create a new shortcut to <tt>nexuiz-sdl.exe</tt> and right click on it. Select properties and <tt>-port &lt;port&gt;</tt> in the &quot;Target:&quot; line. Be sure that the &quot;Start in:&quot; line contains the full path to your Nexuiz folder and clock &quot;OK&quot;.
+To add the command line argument on Windows, create a new shortcut to <tt>nexuiz-sdl.exe</tt> and right click on it. Select properties and <tt>-port &lt;port&gt;</tt> in the &quot;Target:&quot; line. Be sure that the &quot;Start in:&quot; line contains the full path to your Nexuiz folder and click &quot;OK&quot;.
+If you follow the tutorial mentioned above you do not need this command line argument as it will be done in the config file created for the server.
 </p>
 <!--End Section 2-->
 <h3><a name="Is there some kind of rcon?">Is there some kind of rcon?</a></h3>
 <p class="Body">
-Yes, but it is not compatible with Quake rcon (so you can't use quake rcon tools). To enable it enter <tt>set sv_clientcommands 1</tt> on your server console. Don't forget to set a password with <tt>set sv_clientcommands_password hackme</tt>. Now you can become admin ingame by entering <tt>ccl hackme</tt> on the client console. To issue commands enter <tt>cc &lt;command&gt;</tt> (e.g. <tt>cc restart</tt> or <tt>cc chmap dm_nexdm12</tt>).
+Yes starting with Nexuiz 1.5.1 there is rcon (QuakeWorld compatible). To use it you must enter <tt>set rcon_password hackme</tt> in the server console or server config file. The Nexuiz client has to set the same password in the same fasion. You can then issue commands with <tt>rcon &lt;command&gt;</tt>. There are also external rcon tools but make sure you use a QW compatible rcon tool.
+There is also a feature called <tt>client side commands</tt>. To enable it enter <tt>set sv_clientcommands 1</tt> on your server console. Don't forget to set a password with <tt>set sv_clientcommands_password hackme</tt>. Now you can become admin ingame by entering <tt>ccl hackme</tt> on the client console. To issue commands enter <tt>cc &lt;command&gt;</tt> (e.g. <tt>cc restart</tt> or <tt>cc chmap dm_nexdm12</tt>).
 </p>
 <!--End Section 2-->
 <h3><a name="How can i kick people who are using special characters in their names?">How can i kick people who are using special characters in their names?</a></h3>
@@ -225,18 +234,7 @@ Maps usually ship as *.pk3 file. All you have to do is to copy this file to your
 <!--End Section 2-->
 <h3><a name="How can I place a shortcut to Nexuiz on my Linux desktop?">How can I place a shortcut to Nexuiz on my Linux desktop?</a></h3>
 <p class="Body">
-Before you can create a desktop/menu item you have to create a little shell script. Open a text editor (like gedit or kate) and paste the following lines:
-<div class="block"><pre>
-#!/bin/sh
-cd `dirname $0`
-./nexuiz-linux-686-sdl &quot;$@&quot;	# or ./nexuiz-linux-x86_64-sdl if you're using an AMD64/EM64T distributions
-</pre></div>
-Save this in your Nexuiz directory as <tt>nexuiz.sh</tt>. Now you have to make this file executable by opening a xterm/konsole and typing:
-<div class="block"><pre>
-cd /path/to/Nexuiz
-chmod a+x nexuiz.sh
-</pre></div>
-Finally you can add the <tt>nexuiz.sh</tt> file to your desktop like any other program.
+Use the script <tt>nexuiz-linux.sh</tt> instead of the binary. It will use the right version (32 or 64 bit).
 </p>
 <!--End Section 2-->
 <h3><a name="How do I open the console?">How do I open the console?</a></h3>
@@ -277,7 +275,7 @@ Colors can be used in nicknames and chat messages by typing ^ followed by a numb
 <p class="Body">
 To record a demo: open the console and type <tt>rec &lt;name&gt;</tt>. The demo file will be stored in <tt>~/.nexuiz/data/demos/&lt;name&gt;.dem</tt> (Linux) or <tt>Nexuiz/data/demos/&lt;name&gt;.dem</tt> (Windows).
 To watch a demo: open the console and type <tt>ply &lt;name&gt;</tt> (<tt>name</tt> is the filename without extension). If you downloaded a demo, copy it to <tt>Nexuiz/data/demos</tt> first.
-You can list all your demo files by typing <tt>dem</tt> on the console. Some usefull keybindings for viewing demos are listed <a class="link" href="http://www.nexuiz.com/forums/index.php?showtopic=1766&amp;st=0&amp;p=13400&amp;#entry13400">here</a>.
+You can list all your demo files by typing <tt>dem</tt> on the console. Some usefull keybindings for viewing demos are listed <a class="link" href="http://www.alientrap.org/forum/viewtopic.php?p=357#357">here</a>.
 </p>
 <!--End Section 2-->
 <!-- End SectLevel2 -->
@@ -286,7 +284,8 @@ You can list all your demo files by typing <tt>dem</tt> on the console. Some use
 <!-- Start SectLevel2 -->
 <h3><a name="How do i set up gtkradiant to create/edit Nexuiz maps?">How do i set up gtkradiant to create/edit Nexuiz maps?</a></h3>
 <p class="Body">
-There's a <a class="link" href="http://www.nexuiz.com/forums/index.php?showtopic=195">detailed guide</a> on gtkradiant setup in the forums. There are also a <a class="link" href="http://www.nexuiz.com/forums/index.php?showtopic=195&amp;view=findpost&amp;p=11176">Linux shell script</a> and a <a class="link" href="http://www.nexuiz.com/forums/index.php?showtopic=195&amp;view=findpost&amp;p=11838">Windows application</a> that will configure your gtkradiant (1.4) automagically.
+There's a <a class="link" href="http://google.com/search?q=cache:http://www.nexuiz.com/forums/index.php?showtopic=195">detailed guide</a> on gtkradiant setup in the forums.
+<!--  There are also a [Linux shell script (http://google.com/search?q=cache:http://www.nexuiz.com/forums/index.php?showtopic=195&view=findpost&p=11176)] and a [Windows application (http://google.com/search?q=cache:http://www.nexuiz.com/forums/index.php?showtopic=195&view=findpost&p=11838)] that will configure your gtkradiant (1.4) automagically. -->
 </p>
 <!--End Section 2-->
 <h3><a name="Where can i get latest development versions of the source code?">Where can i get latest development versions of the source code?</a></h3>
