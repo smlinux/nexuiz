@@ -208,6 +208,7 @@ void SV_PlayerPhysics()
 		wishvel = v_forward * self.movement_x + v_right * self.movement_y;
 		// friction
 		if (self.velocity_x || self.velocity_y)
+		if (!(self.flags & FL_JUMPRELEASED) || !self.button2) // don't apply friction if bunnyhopping
 		{
 			v = self.velocity;
 			v_z = 0;
