@@ -30,7 +30,7 @@ Nexuiz
 This happens when the engine can't load the data*.pk3 file. The reasons could be:
 	1. you unpacked the zip file without folder names (see [How do I install Nexuiz?])
 	2. on Linux: the current directory is not your Nexuiz/ folder (see [How can I place a shortcut to Nexuiz on my Linux desktop?])
-	4. your download might be corrupted
+	3. your download might be corrupted
 
 ** The sound is broken, it crackles and stutters
 Try run |nexuiz-sdl.exe| instead of |nexuiz.exe| (on Windows). Adding the command line options |-sndstereo| and/or |-sndspeed 48000| can also help on some systems (on Windows, Linux, Mac).
