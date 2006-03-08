@@ -236,6 +236,11 @@ void InitGameplayMode()
 		cvar_set("g_instagib", "0");
 		cvar_set("g_minstagib", "0");
 	}
+
+	registercvar("_motd", "");
+	registercvar("_mutatormsg", "");
+	cvar_set("_motd", linewrap(cvar_string("sv_motd"), 50));
+	cvar_set("_mutatormsg", linewrap(cvar_string("g_mutatormsg"), 50));
 }
 
 string GetClientVersionMessage(float v) {
@@ -316,12 +321,12 @@ void PrintWelcomeMessage(entity pl)
 	if (cvar("g_grappling_hook"))
 		s = strcat(s, "\n\n^8grappling hook is enabled, press 'e' to use it\n");
 
-	if (cvar_string("g_mutatormsg") != "") {
-		s = strcat(s, "\n\n^8special gameplay tips: ^7", cvar_string("g_mutatormsg"));
+	if (cvar_string("_mutatormsg") != "") {
+		s = strcat(s, "\n\n^8special gameplay tips: ^7", cvar_string("_mutatormsg"));
 	}
 
-	if (cvar_string("sv_motd") != "") {
-		s = strcat(s, "\n\n^8MOTD: ^7", cvar_string("sv_motd"));
+	if (cvar_string("_motd") != "") {
+		s = strcat(s, "\n\n^8MOTD: ^7", cvar_string("_motd"));
 	}
 
 	s = strzone(s);

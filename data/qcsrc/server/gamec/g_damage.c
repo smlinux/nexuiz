@@ -256,6 +256,15 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 	if ((teamplay == 1 || teamplay == 3) && attacker != targ)
 		damage = 0;
 
+	if(cvar("g_lms"))
+	if(targ.classname == "player")
+	if(attacker.classname == "player")
+	if(attacker != targ)
+	{
+		targ.lms_traveled_distance = cvar("g_lms_campcheck_distance");
+		attacker.lms_traveled_distance = cvar("g_lms_campcheck_distance");
+	}
+
 	if(damage > 0 && targ != attacker && clienttype(attacker) == CLIENTTYPE_REAL && targ.classname == "player")
 		stuffcmd(attacker, "play2 misc/hit.wav\n");
 

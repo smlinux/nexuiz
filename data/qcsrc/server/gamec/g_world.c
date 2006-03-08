@@ -730,6 +730,15 @@ void() CheckRules_World =
 		sound(world, CHAN_AUTO, "announcer/robotic/1minuteremains.ogg", 1, ATTN_NONE);
 	}
 
+	if(cvar("minplayers") >= maxclients)
+		cvar_set("minplayers", ftos(maxclients - 1));
+	
+	f = cvar("minplayers") - (player_count - bot_number);
+	
+	if(cvar("minplayers"))
+	if(cvar("bot_number") != f)
+		cvar_set("bot_number", ftos(f));
+	
 	// last man camping winning conditions
 	if(cvar("g_lms"))
 	{
@@ -814,13 +823,4 @@ void() CheckRules_World =
 	}
 //	if (checkrules_leader != checkrules_oldleader)// && checkrules_leaderfrags > checkrules_oldleaderfrags)
 //		bprint("^1",checkrules_leader.netname, " has taken the lead with ", ftos(checkrules_leaderfrags), " frags\n");
-
-	if(cvar("minplayers") >= maxclients)
-		cvar_set("minplayers", ftos(maxclients - 1));
-	
-	f = cvar("minplayers") - (player_count - bot_number);
-	
-	if(cvar("minplayers"))
-	if(cvar("bot_number") != f)
-		cvar_set("bot_number", ftos(f));
 };

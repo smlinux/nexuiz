@@ -441,7 +441,7 @@ void PutClientInServer (void)
 		self.alpha = 1;
 		self.exteriorweaponentity.alpha = 1;
 
-		self.lms_nextcheck = time + cvar("g_lms_campcheck_interval");
+		self.lms_nextcheck = time + cvar("g_lms_campcheck_interval")*2;
 		self.lms_traveled_distance = 0;
 
 		//stuffcmd(self, "chase_active 0");
