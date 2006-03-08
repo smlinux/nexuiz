@@ -527,7 +527,7 @@ void() button_touch =
 //		dprint(" touched a button\n");
 //	}
 	if (!other)
-		return:
+		return;
 	if (other.classname != "player")
 		return;
 	self.enemy = other;
