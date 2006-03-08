@@ -53,7 +53,7 @@ void Item_Touch (void)
 			// sound not available
 			// else if(self.items == IT_CELLS)
 			//	stuffcmd(other, "play2 announce/robotic/ammo.ogg\n");
-			
+
 			if (self.items & IT_NEX)
 				W_GiveWeapon (other, IT_NEX, "Nex");
 			if (self.ammo_cells)
@@ -78,7 +78,7 @@ void Item_Touch (void)
 			// stuffcmd(other, "play2 announce/robotic/invisible.ogg\n");
 			other.strength_finished = max(other.strength_finished, time) + cvar("g_balance_powerup_strength_time");
 		}
-		
+
 		// speed powerup
 		if (self.invincible_finished)
 		{
@@ -131,7 +131,7 @@ void Item_Touch (void)
 	}
 
 	sound (other, CHAN_AUTO, self.item_pickupsound, 1, ATTN_NORM);
-	
+
 	oldself = self;
 	self = other;
 
@@ -167,7 +167,7 @@ void RemoveItem(void) = {
 
 void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, string itemname, float itemid, float itemflags)
 {
-	if (!cvar("g_pickup_items") && !cvar("g_minstagib") && 
+	if (!cvar("g_pickup_items") && !cvar("g_minstagib") &&
 			itemid != IT_STRENGTH && itemid != IT_INVINCIBLE && itemname != "100 Health")
 	{
 		remove (self);
@@ -177,7 +177,7 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 	if (cvar("g_minstagib"))
 	{
 		// don't remove dropped items and powerups
-		if (self.classname != "droppedweapon" && 
+		if (self.classname != "droppedweapon" &&
 		    self.classname != "minstagib")
 		{
 			remove (self);
@@ -209,15 +209,15 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 	setmodel (self, self.mdl);
 	if (itemflags & FL_WEAPON)
 	{
-		setorigin (self, self.origin + '0 0 22');
+		setorigin (self, self.origin + '0 0 23');
 		setsize (self, '-12 -12 -12', '12 12 12');
-		
+
 		// neutral team color for pickup weapons
 		self.colormap = 160 * 1024 + 160;
 	}
 	else
 	{
-		setorigin (self, self.origin + '0 0 15');
+		setorigin (self, self.origin + '0 0 16');
 	//	setsize (self, '-8 -8 -5', '8 8 8');
 	}
 	self.movetype = MOVETYPE_TOSS;
@@ -247,21 +247,21 @@ void minstagib_items (float itemid)
 	if (self.classname == "droppedweapon")
 	{
 		self.ammo_cells = 25;
-		StartItem ("models/weapons/g_nex.md3", 
-			"weapons/weaponpickup.ogg", 15, 
+		StartItem ("models/weapons/g_nex.md3",
+			"weapons/weaponpickup.ogg", 15,
 			"Nex Gun", IT_NEX, FL_WEAPON);
 		return;
 	}
-	
+
 	local float rnd;
 	self.classname = "minstagib";
-	
+
 	// replace rocket launchers and nex guns with ammo cells
 	if (itemid == IT_CELLS)
 	{
 		self.ammo_cells = 1;
-		StartItem ("models/items/a_cells.md3", 
-			"misc/itempickup.ogg", 45, 
+		StartItem ("models/items/a_cells.md3",
+			"misc/itempickup.ogg", 45,
 			"Nex Ammo", IT_CELLS, 0);
 		return;
 	}
@@ -274,22 +274,22 @@ void minstagib_items (float itemid)
 		itemid = IT_NAILS;
 	else
 		itemid = IT_INVINCIBLE;
-	
+
 	// replace with invis
 	if (itemid == IT_STRENGTH)
 	{
 		self.effects = EF_ADDITIVE;
 		self.strength_finished = 30;
-		StartItem ("models/items/g_strength.md3", 
-			"misc/powerup.ogg", 120, 
+		StartItem ("models/items/g_strength.md3",
+			"misc/powerup.ogg", 120,
 			"Invisibility", IT_STRENGTH, FL_POWERUP);
 	}
 	// replace with extra lives
 	if (itemid == IT_NAILS)
 	{
 		self.max_health = 1;
-		StartItem ("models/items/g_h100.md3", 
-			"misc/megahealth.ogg", 120, 
+		StartItem ("models/items/g_h100.md3",
+			"misc/megahealth.ogg", 120,
 			"Extralife", IT_NAILS, FL_POWERUP);
 
 	}
@@ -298,8 +298,8 @@ void minstagib_items (float itemid)
 	{
 		self.effects = EF_ADDITIVE;
 		self.invincible_finished = 30;
-		StartItem ("models/items/g_invincible.md3", 
-			"misc/powerup_shield.ogg", 120, 
+		StartItem ("models/items/g_invincible.md3",
+			"misc/powerup_shield.ogg", 120,
 			"Speed", IT_INVINCIBLE, FL_POWERUP);
 	}
 
@@ -396,7 +396,7 @@ void item_health25 (void) {
 void item_health100 (void) {
 	if(!cvar("g_powerup_superhealth"))
 		return;
-	
+
 	if(cvar("g_minstagib")) {
 		minstagib_items(IT_NAILS);
 	} else {
@@ -408,7 +408,7 @@ void item_health100 (void) {
 void item_strength (void) {
 	if(!cvar("g_powerup_strength"))
 		return;
-	
+
 	if(cvar("g_minstagib")) {
 		minstagib_items(IT_STRENGTH);
 	} else {
@@ -420,7 +420,7 @@ void item_strength (void) {
 void item_invincible (void) {
 	if(!cvar("g_powerup_shield"))
 		return;
-		
+
 	if(cvar("g_minstagib")) {
 		minstagib_items(IT_INVINCIBLE);
 	} else {
