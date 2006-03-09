@@ -118,12 +118,12 @@
 "model" "*1"
 }
 {
-"origin" "904 480 -416"
+"origin" "904 480 -414"
 "classname" "item_armor_shard"
 }
 {
 "classname" "item_armor_shard"
-"origin" "904 542 -416"
+"origin" "904 542 -414"
 }
 {
 "classname" "target_speaker"
@@ -142,7 +142,7 @@
 "classname" "info_player_deathmatch"
 }
 {
-"origin" "-926 464 -416"
+"origin" "-926 464 -414"
 "classname" "item_armor_shard"
 }
 {
@@ -240,7 +240,7 @@
 }
 {
 "classname" "item_armor_shard"
-"origin" "-926 526 -416"
+"origin" "-926 526 -414"
 }
 {
 "angle" "180"
