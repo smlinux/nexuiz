@@ -199,7 +199,7 @@ void() W_Electro_Attack2
 	proj.velocity = v_forward * cvar("g_balance_electro_secondary_speed") + v_up * cvar("g_balance_electro_secondary_speed_up");
 	proj.touch = W_Plasma_Touch;
 	setmodel(proj, "models/ebomb.mdl");
-	setsize(proj, '-6 -6 -3', '6 6 3');
+	setsize(proj, '0 0 -3', '0 0 -3');
 	proj.takedamage = DAMAGE_YES;
 	proj.damageforcescale = 4;
 	proj.health = 5;
