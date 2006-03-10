@@ -217,7 +217,7 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 	}
 	else
 	{
-		setorigin (self, self.origin + '0 0 16');
+		setorigin (self, self.origin + '0 0 18');
 	//	setsize (self, '-8 -8 -5', '8 8 8');
 	}
 	self.movetype = MOVETYPE_TOSS;
