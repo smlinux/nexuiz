@@ -107,7 +107,7 @@ void W_Grenade_Attack (void)
 	gren.solid = SOLID_BBOX;
 	gren.effects = EF_NOSHADOW;
 	setmodel(gren, "models/grenademodel.md3");
-	setsize(gren, '-6 -6 -3', '6 6 3');
+	setsize(gren, '0 0 0', '0 0 0');
 	setorigin(gren, org);
 
 	gren.nextthink = time + cvar("g_balance_grenadelauncher_primary_lifetime");
@@ -142,7 +142,7 @@ void W_Grenade_Attack2 (void)
 	gren.solid = SOLID_BBOX;
 	gren.effects = EF_NOSHADOW;
 	setmodel(gren, "models/grenademodel.md3");
-	setsize(gren, '-6 -6 -3', '6 6 3');
+	setsize(gren, '0 0 -3', '0 0 -3');
 	setorigin(gren, org);
 
 	gren.nextthink = time + cvar("g_balance_grenadelauncher_secondary_lifetime");
