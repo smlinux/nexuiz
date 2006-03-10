@@ -136,7 +136,6 @@ void() AutoBotRemove =
 				if (bot_number > 0)
 					bot_number -= 1;
 				self = ent;
-				ClientDisconnect();
 				dropclient(ent);
 			}
 		}

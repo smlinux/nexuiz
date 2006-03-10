@@ -133,6 +133,8 @@ void W_Nex_Attack (void)
 	self.punchangle_x = -5;
 
 	org = self.origin + self.view_ofs + v_forward * 5 + v_right * 14 + v_up * -7;
+	traceline_hitcorpse(self, org, trueaim + normalize(trueaim - org) * 4096, TRUE, self);
+	trueaim = trace_endpos;
 
 	// assure that nexdamage is high enough in minstagib
 	if (cvar("g_minstagib"))

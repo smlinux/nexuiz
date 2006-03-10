@@ -270,6 +270,8 @@ void worldspawn (void)
 		maxclients++;
 		head = nextent(head);
 	}
+
+	cvar_set("nextmap", "");
 }
 
 void light (void)
@@ -330,6 +332,12 @@ void() GotoNextMap =
 		local float lOldCurrent;
 		local float pass;
 
+		if(TryFile(strcat("maps/", cvar_string("nextmap"), ".mapcfg")))
+		{
+			localcmd(strcat("exec \"maps/", cvar_string("nextmap"), ".mapcfg\"\n"));
+			return;
+		}
+		
 		pass = 0;
 		while (pass < 2)
 		{
@@ -730,14 +738,23 @@ void() CheckRules_World =
 		sound(world, CHAN_AUTO, "announcer/robotic/1minuteremains.ogg", 1, ATTN_NONE);
 	}
 
-	if(cvar("minplayers") >= maxclients)
-		cvar_set("minplayers", ftos(maxclients - 1));
-	
-	f = cvar("minplayers") - (player_count - bot_number);
-	
 	if(cvar("minplayers"))
-	if(cvar("bot_number") != f)
-		cvar_set("bot_number", ftos(f));
+	{
+		if(cvar("minplayers") >= maxclients)
+			cvar_set("minplayers", ftos(maxclients - 1));
+	
+		f = cvar("minplayers") - (player_count - bot_number);
+		if((player_count - bot_number) < 1)
+			f = 0;
+
+		if(cvar("bot_number") != f)
+		{
+			if(cvar("minplayers") != f)
+				cvar_set("bot_number", ftos(f));
+			else
+				cvar_set("bot_number", "0");
+		}
+	}
 	
 	// last man camping winning conditions
 	if(cvar("g_lms"))

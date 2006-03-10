@@ -218,7 +218,6 @@ void() remove_MauveBot =
 				if (flo == i)
 				{
 					self = ent;
-					ClientDisconnect();
 					dropclient(ent);
 					if (mauvebots > 0)
 						mauvebots = mauvebots - 1;

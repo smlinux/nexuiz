@@ -215,7 +215,6 @@ void() UrreBotRemove =
 					urrebots -= 1;
 				oldself = self;
 				self = ent;
-				ClientDisconnect();
 				dropclient(ent);
 				self = oldself;
 			}
