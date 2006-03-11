@@ -21,24 +21,30 @@ Nex_MessageBox =
 	lItem = Menu_GetItem( "MessageBoxWnd::Layout::Buttons::Left" );
 	String_EntitySet( lItem, normal, pLeftButton );
 	lItem.size = '0 0 0';
+	// select the left button since it has to be available
+	Menu_Select( lItem, false );
 
 	lItem = Menu_GetItem( "MessageBoxWnd::Layout::Buttons::Right" );
 	String_EntitySet( lItem, normal, pRightButton );
 	lItem.size = '0 0 0';
-	if( strlen( pRightButton ) == 0 ) {
+	if( strlen( pRightButton ) != 0 ) {
+		// select the right button since we prefer it (standard scheme is Yes No or Ok Cancel)
+		Menu_Select( lItem, false );
+
+		if( lItem.flag & FLAG_HIDDEN ) {
+			lItem.flag = lItem.flag - FLAG_HIDDEN;
+		}
+	} else {
 		lItem.flag = lItem.flag | FLAG_HIDDEN;
-	} else if( lItem.flag & FLAG_HIDDEN ) {
-		lItem.flag = lItem.flag - FLAG_HIDDEN;
 	}
 
 	Nex_MessageBox_LeftEvent = pLeftEvent;
 	Nex_MessageBox_RightEvent = pRightEvent;
 
 	lItem = Menu_GetItem( "MessageBoxWnd" );
-	if( lItem.flag & FLAG_HIDDEN )
+	if( lItem.flag & FLAG_HIDDEN ) {
 		lItem.flag = lItem.flag - FLAG_HIDDEN;
-
-	Menu_Select( Menu_GetItem( "MessageBoxWnd::Layout::Buttons::Right" ), false );
+	}
 };
 
 void() Nex_MessageBox_Hide =

@@ -495,21 +495,21 @@ void( entity pItem ) Menu_SetRunFlag =
 	// RUNFLAG_HIDDEN
 	lRunFlag = pItem._runFlag;
 	if( ( lFlag & FLAG_HIDDEN  ) ||
-	    ( lRunFlag & RUNFLAG_TEMPLATE ) ||
-	    ( ( lFlag & FLAG_SERVERONLY ) && !( gamestatus & GAME_ISSERVER ) ) ||
-	    ( ( lFlag & FLAG_CONNECTEDONLY ) && !( gamestatus & GAME_CONNECTED ) ) ||
-	    ( ( lFlag & FLAG_DEVELOPERONLY ) && !( gamestatus & GAME_DEVELOPER ) ) )
+		( lRunFlag & RUNFLAG_TEMPLATE ) ||
+		( ( lFlag & FLAG_SERVERONLY ) && !( gamestatus & GAME_ISSERVER ) ) ||
+		( ( lFlag & FLAG_CONNECTEDONLY ) && !( gamestatus & GAME_CONNECTED ) ) ||
+		( ( lFlag & FLAG_DEVELOPERONLY ) && !( gamestatus & GAME_DEVELOPER ) ) )
 		pItem._runFlag = lRunFlag | RUNFLAG_HIDDEN;
 	// RUNFLAG_NOSELECT
 	lRunFlag = pItem._runFlag;
 	if( ( lFlag & FLAG_NOSELECT ) ||
-	    ( lFlag & FLAG_DRAWONLY ) ||
-	    ( lFlag & FLAG_DRAWUPDATEONLY ) ||
-	    ( lFlag & FLAG_EMBEDDED ) ||
-	    ( lRunFlag & RUNFLAG_TEMPLATE ) ||
-	    ( lRunFlag & RUNFLAG_HIDDEN ) ||
-	    ( lRunFlag & RUNFLAG_CHILDDRAWONLY ) ||
-	    ( lRunFlag & RUNFLAG_CHILDDRAWUPDATEONLY ) )
+		( lFlag & FLAG_DRAWONLY ) ||
+		( lFlag & FLAG_DRAWUPDATEONLY ) ||
+		( lFlag & FLAG_EMBEDDED ) ||
+		( lRunFlag & RUNFLAG_TEMPLATE ) ||
+		( lRunFlag & RUNFLAG_HIDDEN ) ||
+		( lRunFlag & RUNFLAG_CHILDDRAWONLY ) ||
+		( lRunFlag & RUNFLAG_CHILDDRAWUPDATEONLY ) )
 		pItem._runFlag = lRunFlag | RUNFLAG_NOSELECT;
 
 	_Menu_PrintRunFlag( pItem );
@@ -524,11 +524,11 @@ void( entity pParent, entity pItem ) Menu_InheritRunFlag =
 		pItem._runFlag = pItem._runFlag | RUNFLAG_TEMPLATE;
 	// inherit drawonly
 	if( ( pParent._runFlag & RUNFLAG_CHILDDRAWONLY ) ||
-	    ( pParent.flag & FLAG_CHILDDRAWONLY ) )
+		( pParent.flag & FLAG_CHILDDRAWONLY ) )
 		pItem._runFlag = pItem._runFlag | RUNFLAG_CHILDDRAWONLY;
 	// inherit drawupdateonly
 	if( ( pParent._runFlag & RUNFLAG_CHILDDRAWUPDATEONLY )  ||
-	    ( pParent.flag & FLAG_CHILDDRAWUPDATEONLY ) )
+		( pParent.flag & FLAG_CHILDDRAWUPDATEONLY ) )
 		pItem._runFlag = pItem._runFlag | RUNFLAG_CHILDDRAWUPDATEONLY;
 	if( pParent._runFlag & RUNFLAG_HIDDEN )
 		pItem._runFlag = pItem._runFlag | RUNFLAG_HIDDEN;
