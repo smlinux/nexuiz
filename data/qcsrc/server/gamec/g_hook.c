@@ -47,6 +47,9 @@ And you should be done!
 
 ============================================*/
 
+.float rope_length;
+.float button6_pressed_before;
+
 void RemoveGrapplingHook(entity pl)
 {
 	if(pl.hook == world)
@@ -61,7 +64,7 @@ void RemoveGrapplingHook(entity pl)
 
 void GrapplingHookThink()
 {
-	float spd, dist, minlength, pullspeed;
+	float spd, dist, minlength, pullspeed, ropestretch, ropeairfriction, rubberforce, newlength, rubberforce_overstretch;
 	vector dir, org, end;
 	if(self.owner.health <= 0 || self.owner.hook != self)	// how did that happen?
 	{														// well, better fix it anyway
@@ -74,27 +77,68 @@ void GrapplingHookThink()
 	makevectors(self.owner.v_angle);
 	org = self.owner.origin + self.owner.view_ofs + v_forward * 15 - v_right * 5 + v_up * -12;
 
+	if(self.rope_length < 0)
+		self.rope_length = vlen(org - self.origin);
+
 	if(self.state == 1)
 	{
-		pullspeed = cvar("g_balance_grapplehook_speed_pull");//1000;
-		minlength = 50;
+		pullspeed = cvar("g_balance_grapplehook_speed_pull");//2000;
+		// speed the rope is pulled with
+
+		rubberforce = cvar("g_balance_grapplehook_force_rubber");//2000;
+		// force the rope will use if it is stretched
+
+		rubberforce_overstretch = cvar("g_balance_grapplehook_force_rubber_overstretch");//1000;
+		// force the rope will use if it is stretched
+
+		minlength = cvar("g_balance_grapplehook_length_min");//100;
+		// minimal rope length
+		// if the rope goes below this length, it isn't pulled any more
+
+		ropestretch = cvar("g_balance_grapplehook_stretch");//400;
+		// if the rope is stretched by more than this amount, more rope is
+		// given to you again
+
+		ropeairfriction = cvar("g_balance_grapplehook_airfriction");//0.2
+		// while hanging on the rope, this friction component will help you a
+		// bit to control the rope
+
 		dir = self.origin - org;
 		dist = vlen(dir);
 		dir = normalize(dir);
 
-		end = self.origin - dir*minlength;
+		if(cvar("g_grappling_hook_tarzan"))
+		{
+			// first pull the rope...
+			newlength = self.rope_length - pullspeed * 0.1;
+			newlength = max(newlength, minlength);
+			if(newlength < dist - ropestretch) // overstretched?
+			{
+				newlength = dist - ropestretch;
+				if(self.owner.velocity * dir < 0) // only if not already moving in hook direction
+					self.owner.velocity = self.owner.velocity + 0.1 * dir * rubberforce_overstretch;
+			}
+			self.rope_length = newlength;
 
-		dist = vlen(end - org);
-
-		if(dist < 200)
-			spd = dist * (pullspeed / 200);
+			// then pull the player
+			spd = bound(0, (dist - self.rope_length) / ropestretch, 1);
+			self.owner.velocity = self.owner.velocity * (1 - 0.1 * ropeairfriction);
+			self.owner.velocity = self.owner.velocity + 0.1 * dir * spd * rubberforce;
+		}
 		else
-			spd = pullspeed;
-		if(spd < 50)
-			spd = 0;
+		{
+			end = self.origin - dir*50;
+			dist = vlen(end - org);
+			if(dist < 200)
+				spd = dist * (pullspeed / 200);
+			else
+				spd = pullspeed;
+			if(spd < 50)
+				spd = 0;
+			self.owner.velocity = dir*spd;
+			self.owner.movetype = MOVETYPE_FLY;
+		}
 
-		self.owner.velocity = dir*spd;
-		self.owner.movetype = MOVETYPE_FLY;
 		self.owner.flags = self.owner.flags - (self.owner.flags & FL_ONGROUND);
 
 		org = org + dir*50; // get the beam out of the player's eyes
@@ -121,7 +165,6 @@ void GrapplingHookTouch (void)
 		return;
 	}
 
-	self.event_damage = SUB_Null; // fixme: ability to dislodge a player by damaging hook?
 	sound (self, CHAN_BODY, "weapons/hook_impact.ogg", 1, ATTN_NORM);
 
 	self.state = 1;
@@ -130,6 +173,24 @@ void GrapplingHookTouch (void)
 	self.touch = SUB_Null;
 	self.velocity = '0 0 0';
 	self.movetype = MOVETYPE_NONE;
+	self.rope_length = -1;
+}
+
+void GrapplingHook_Damage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
+{
+	if(self.health > 0)
+	{
+		self.health = self.health - damage;
+		if (self.health <= 0)
+		{
+			if(attacker != self.owner)
+			{
+				self.owner.pusher = attacker;
+				self.owner.pushltime = time + cvar("g_maxpushtime");
+			}
+			RemoveGrapplingHook(self.owner);
+		}
+	}
 }
 
 void FireGrapplingHook (void)
@@ -146,13 +207,13 @@ void FireGrapplingHook (void)
 	missile = spawn ();
 	missile.owner = self;
 	self.hook = missile;
-	missile.classname = "laserbolt";
+	missile.classname = "grapplinghook";
 
 	missile.movetype = MOVETYPE_FLY;
 	missile.solid = SOLID_BBOX;
 
-	setmodel (missile, "models/ebomb.mdl");//laser.mdl");
-	setsize (missile, '0 0 0', '0 0 0');
+	setmodel (missile, "models/ebomb.mdl"); // replace by something CENTERED!
+	setsize (missile, '-3 -3 -3', '3 3 3');
 	setorigin (missile, org);
 
 	missile.state = 0; // not latched onto anything
@@ -166,6 +227,11 @@ void FireGrapplingHook (void)
 	missile.nextthink = time + 0.1;
 
 	missile.effects = EF_FULLBRIGHT | EF_ADDITIVE | EF_LOWPRECISION;
+
+	missile.health = cvar("g_balance_grapplehook_health");//120
+	missile.event_damage = GrapplingHook_Damage;
+	missile.takedamage = DAMAGE_AIM;
+	missile.damageforcescale = 0;
 }
 
 void GrapplingHookFrame()
@@ -173,7 +239,7 @@ void GrapplingHookFrame()
 	// this function has been modified for Nexuiz
 	if (self.button6 && cvar("g_grappling_hook"))
 	{
-		if (!self.hook && self.hook_time <= time)
+		if (!self.hook && self.hook_time <= time && !self.button6_pressed_before)
 			FireGrapplingHook();
 	}
 	else
@@ -181,6 +247,7 @@ void GrapplingHookFrame()
 		if (self.hook)
 			RemoveGrapplingHook(self);
 	}
+	self.button6_pressed_before = self.button6;
 	/*
 	// if I have no hook or it's not pulling yet, make sure I'm not flying!
 	if((self.hook == world || !self.hook.state) && self.movetype == MOVETYPE_FLY)
