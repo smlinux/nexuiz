@@ -55,9 +55,16 @@ void() Nex_Action_SetNormalPanelLink_Destroy =
 	String_EntityFree( self, target );
 };
 
+void() Nex_Action_JumpToPlayerSetup;
 void() Nex_Action_SetNormalPanelLink_Action =
 {
 	local entity lItem;
+
+	if(self.target == "CreateGame" && cvar_string("_cl_name") == "Player")
+	{
+		Nex_Action_JumpToPlayerSetup();
+		return;
+	}
 
 	lItem = Menu_GetItem( "Normal::Panel" );
 	String_EntitySet( lItem, link, self.target );

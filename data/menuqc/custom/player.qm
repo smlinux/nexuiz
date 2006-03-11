@@ -62,3 +62,21 @@ void() Nex_Action_Player_Apply =
 	lItem = Menu_GetItem( "Data::Player" );
 	Raise_DataEvent( lItem, ITEM_DATA_SEND );
 };
+
+// jumps to Player setup
+void() Nex_Action_JumpToPlayerSetup =
+{
+	local entity lItem;
+	lItem = Menu_GetItem( "Normal::Panel" );
+	String_EntitySet( lItem, link, "Options" );
+
+	Raise_Update( lItem );
+	Menu_UpdateRunFlags();
+	Menu_JumpToWindow( lItem._link, false, false );
+
+	lItem = Menu_GetItem( "Options::Dummy::Panel::Player" );
+	Nex_MakeOnlyVisible( lItem );
+	Menu_JumpToWindow( lItem, false, false );
+
+	Nex_MessageBox( "Player setup", "Enter a player name first!", "OK", "", Util_NullFunction, Util_NullFunction);
+};

@@ -44,9 +44,16 @@ void() Nex_Action_RefreshSlist =
 	HostCache_RefreshHostCache();
 };
 
+void() Nex_Action_JumpToPlayerSetup;
 void() Nex_Action_JumpToJoinGame =
 {
 	local entity lItem;
+
+	if(cvar_string("_cl_name") == "Player")
+	{
+        Nex_Action_JumpToPlayerSetup();
+        return;
+	}
 
 	resethostcachemasks();
 	sethostcachesort( SLIST_FIELD_PING, false );
