@@ -2,6 +2,8 @@
 MauveBot v1.0 for Nexuiz
 */
 
+const float names = 18;
+
 string(float r) BotName =
 {
 	if (r == 1)
@@ -134,21 +136,25 @@ string () PickARandomName =
 		t = findflags(t, flags, FL_CLIENT);
 	}
 
-	if (y > 18)
+	if (y > names)
 	{
 		self.playermodel = "models/player/marine.zym";
 		self.playerskin = "0";
 		return "EJP_Tank";
 	}
 
-	y = TRUE;
+	test = ceil(random() * names);
+	y = names;
+	
 	while(y)
 	{
-		test = ceil(random() * 18);
 		h = BotName(test);
 		t = find(world, netname, h);
 		if (t == world)
 			y = FALSE;
+		else
+			--y;
+		test = math_mod(test+1, names);
 	}
 	return h;
 };
