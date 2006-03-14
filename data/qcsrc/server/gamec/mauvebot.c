@@ -2,7 +2,7 @@
 MauveBot v1.0 for Nexuiz
 */
 
-const float names = 18;
+const float names = 19;
 
 string(float r) BotName =
 {
@@ -116,9 +116,9 @@ string(float r) BotName =
 	}
 	else
 	{
-		self.playermodel = "models/player/carni.zym";
-		self.playerskin = "0";
-		return "Carni";
+		self.playermodel = "models/player/nexus.zym";
+		self.playerskin = "2";
+		return "Xolar";
 	}
 };
 
@@ -136,7 +136,7 @@ string () PickARandomName =
 		t = findflags(t, flags, FL_CLIENT);
 	}
 
-	if (y > names)
+	if (y >= names)
 	{
 		self.playermodel = "models/player/marine.zym";
 		self.playerskin = "0";
