@@ -126,9 +126,8 @@ void W_Nex_Attack (void)
 	trueaim = W_TrueAim();
 
 	sound (self, CHAN_WEAPON, "weapons/nexfire.ogg", 1, ATTN_NORM);
-	if (self.items & IT_STRENGTH && !cvar("g_minstagib")) {
+	if (self.items & IT_STRENGTH && !cvar("g_minstagib"))
 		sound (self, CHAN_AUTO, "weapons/strength_fire.ogg", 1, ATTN_NORM);
-	}
 
 	self.punchangle_x = -5;
 

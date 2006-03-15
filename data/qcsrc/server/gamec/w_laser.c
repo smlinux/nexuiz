@@ -72,11 +72,10 @@ void W_Laser_Attack (void)
 	trueaim = W_TrueAim();
 
 	sound (self, CHAN_WEAPON, "weapons/lasergun_fire.ogg", 1, ATTN_NORM);
-	if (self.items & IT_STRENGTH) {
+	if (self.items & IT_STRENGTH)
 		sound (self, CHAN_AUTO, "weapons/strength_fire.ogg", 1, ATTN_NORM);
-	}
 
-	org = self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -12;
+	org = W_MuzzleOrigin (self, '24 9 -9');
 	//te_customflash(org, 160, 0.2, '1 0 0');
 
 	missile = spawn ();

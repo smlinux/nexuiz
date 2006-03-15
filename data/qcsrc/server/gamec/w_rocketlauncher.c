@@ -228,14 +228,14 @@ void W_Rocket_Attack (void)
 	trueaim = W_TrueAim();
 
 	sound (self, CHAN_WEAPON, "weapons/rocket_fire.ogg", 1, ATTN_NORM);
-	if (self.items & IT_STRENGTH) {
+	if (self.items & IT_STRENGTH)
 		sound (self, CHAN_AUTO, "weapons/strength_fire.ogg", 1, ATTN_NORM);
-	}
 
 	if (cvar("g_use_ammunition") && !cvar("g_rocketarena"))
 		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_rocketlauncher_ammo");
 	self.punchangle_x = -4;
-	org = self.origin + self.view_ofs + v_forward * 15 + v_right * 3 + v_up * -11;
+
+	org = W_MuzzleOrigin (self, '15 3 -11');
 	te_smallflash(org);
 
 	missile = spawn ();

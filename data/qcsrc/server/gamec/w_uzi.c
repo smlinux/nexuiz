@@ -45,9 +45,8 @@ void W_Uzi_Attack (void)
 
 	entity flash;
 	sound (self, CHAN_WEAPON, "weapons/uzi_fire.ogg", 1, ATTN_NORM);
-	if (self.items & IT_STRENGTH) {
+	if (self.items & IT_STRENGTH)
 		sound (self, CHAN_AUTO, "weapons/strength_fire.ogg", 1, ATTN_NORM);
-	}
 
 	if (cvar("g_use_ammunition"))
 	{
@@ -58,7 +57,7 @@ void W_Uzi_Attack (void)
 	}
 	self.punchangle_x = random () - 0.5;
 	self.punchangle_y = random () - 0.5;
-	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 8) + (v_forward * 15);
+	org = W_MuzzleOrigin (self, '32 6 -8');
 
 	// this attack_finished just enforces a cooldown at the end of a burst
 	self.attack_finished = time + cvar("g_balance_uzi_first_refire");
@@ -68,15 +67,8 @@ void W_Uzi_Attack (void)
 	else
 		fireBullet (org, normalize(trueaim - org), cvar("g_balance_uzi_sustained_spread"), cvar("g_balance_uzi_sustained_damage"), IT_UZI, (self.uzi_bulletcounter & 3) == 0);
 
-	// casing code
-	if (cvar("g_casings") >= 2)
-	{
-		org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 8) + (v_forward * 10);
-		SpawnCasing (org, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 + 10) * v_up), 2, v_forward,'0 250 0', 100, 2);
-	}
-
 	flash = spawn ();
-	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 10) + (v_forward * 40);
+//	org = self.origin + self.view_ofs + (v_right * 6) - (v_up * 10) + (v_forward * 40);
 	setorigin (flash, org);
 	setmodel (flash, "models/uziflash.md3");
 	flash.velocity = v_forward * 20;
@@ -87,6 +79,12 @@ void W_Uzi_Attack (void)
 	SUB_SetFade (flash, time, 0.2);
 	flash.effects = flash.effects | EF_ADDITIVE | EF_FULLBRIGHT | EF_LOWPRECISION;
 
+	// casing code
+	if (cvar("g_casings") >= 2)
+	{
+		org = W_MuzzleOrigin (self, '10 6 -8');
+		SpawnCasing (org, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 + 10) * v_up), 2, v_forward,'0 250 0', 100, 2);
+	}
 }
 // weapon frames
 

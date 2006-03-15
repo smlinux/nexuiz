@@ -89,16 +89,14 @@ void W_Grenade_Attack (void)
 	local entity gren;
 	local vector org;
 
-
 	sound (self, CHAN_WEAPON, "weapons/grenade_fire.ogg", 1, ATTN_NORM);
-	if (self.items & IT_STRENGTH) {
+	if (self.items & IT_STRENGTH)
 		sound (self, CHAN_AUTO, "weapons/strength_fire.ogg", 1, ATTN_NORM);
-	}
 
 	self.punchangle_x = -4;
 	if (cvar("g_use_ammunition"))
 		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_grenadelauncher_primary_ammo");
-	org = self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -12;
+	org = W_MuzzleOrigin (self, '24 8 -8');
 
 	gren = spawn ();
 	gren.owner = self;
@@ -124,16 +122,14 @@ void W_Grenade_Attack2 (void)
 	local entity gren;
 	local vector org;
 
-
 	sound (self, CHAN_WEAPON, "weapons/grenade_fire.ogg", 1, ATTN_NORM);
-	if (self.items & IT_STRENGTH) {
+	if (self.items & IT_STRENGTH)
 		sound (self, CHAN_AUTO, "weapons/strength_fire.ogg", 1, ATTN_NORM);
-	}
 
 	self.punchangle_x = -4;
 	if (cvar("g_use_ammunition"))
 		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_grenadelauncher_secondary_ammo");
-	org = self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -12;
+	org = W_MuzzleOrigin (self, '24 8 -8');
 
 	gren = spawn ();
 	gren.owner = self;

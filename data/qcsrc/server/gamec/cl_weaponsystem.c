@@ -27,6 +27,36 @@ vector() W_TrueAim = {
 	return trace_endpos;
 }
 
+// this function allows you to spawn projectiles ahead of the player so they appear to come out of
+// the muzzle properly, but won't put shots inside walls if you're too close.
+// make sure you call makevectors first (FIXME?)
+vector W_MuzzleOrigin (entity ent, vector vecs)
+{
+	vector startorg;
+	vector idealorg;
+
+	startorg = ent.origin + ent.view_ofs - '0 0 8';
+	idealorg = ent.origin + ent.view_ofs + v_forward * vecs_x + v_right * vecs_y + v_up * vecs_z;
+
+	traceline_hitcorpse (ent, startorg, idealorg, MOVE_NORMAL, ent);
+
+// if obstructed, back off a bit so the shot will definitely hit it
+	if (trace_fraction < 1.0)
+	{
+	// FIXME! this whole thing messes up W_TrueAim... if you're up against a wall, the trueaim and the muzzle
+	// origin will be about the same distance from the player, causing the bullets to fly out at a near 90
+	// degree angle
+//		trace_endpos = trace_endpos - normalize (idealorg - startorg);
+
+
+	// nasty placeholder (well I admit you don't really notice it all... especially since the
+	// weapon model sinking into the wall provides such a nice distraction)
+		trace_endpos = startorg;
+	}
+
+	return trace_endpos;
+}
+
 void LaserTarget_Think()
 {
 	entity e;
@@ -286,15 +316,6 @@ void(float windex, string wmodel, float hudammo) weapon_setup =
 	// CL_ViswepUpdate();
 };
 
-// shot direction
-float WEAPON_MAXRELX = 14; // if more, shot can be spawned after wall surface (in empty worldspace) or inside other entity if client stands close to it
-void(float x, float y, float z) weapon_shotdir =
-{
-	makevectors(self.v_angle);
-	self.shotorg  = self.origin + self.view_ofs + v_forward*bound(0, x, WEAPON_MAXRELX) + v_right*(y + self.weaponentity.view_ofs_y) + v_up*z;
-	self.shotdir = aim(self, 1000);
-};
-
 // perform weapon to attack (weaponstate and attack_finished check is here)
 void(float() checkfunc1, float() checkfunc2, void() firefunc, float atktime) weapon_prepareattack =
 {
@@ -337,14 +358,6 @@ void(float() checkfunc1, float() checkfunc2, void() firefunc) weapon_doattack
 	if (cvar("g_norecoil"))
 		self.punchangle = '0 0 0';
 	weapon_action(self.weapon, WR_UPDATECOUNTS); // update ammo now
-};
-
-void(entity ent, float recoil) weapon_recoil =
-{
-	ent.punchangle = (randomvec() + '-1 0 0')*recoil;
-	ent.punchangle_z = 0; // don't want roll
-	if (recoil > 3) // push back if large recoil
-		ent.velocity = ent.velocity - normalize(ent.shotdir)*recoil*25;
 };
 
 void(float fr, float t, void() func) weapon_thinkf =

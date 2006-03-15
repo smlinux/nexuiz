@@ -116,7 +116,6 @@ void() w_clear;
 // VorteX: standalone think for weapons, so normal think on weaponentity can be reserved by weaponflashes (which needs update even player dies)
 .float weapon_nextthink;
 .void() weapon_think;
-.vector shotdir, shotorg; // new generic aiming system for all weapons (not finished yet, can be removed)
 float	weapon_hasammo; // sets by WR_CHECKAMMO request
 
 //float	PLAYER_WEAPONSELECTION_DELAY = );

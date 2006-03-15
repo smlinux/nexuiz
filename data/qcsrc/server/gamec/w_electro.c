@@ -109,26 +109,25 @@ void() W_Electro_Attack
 
 	postion = self.electrocount;
 	sound (self, CHAN_WEAPON, "weapons/electro_fire.ogg", 1, ATTN_NORM);
-	if (self.items & IT_STRENGTH) {
+	if (self.items & IT_STRENGTH)
 		sound (self, CHAN_AUTO, "weapons/strength_fire.ogg", 1, ATTN_NORM);
-	}
 
 	self.punchangle_x = -2;
 
 	if (self.electrocount == 0)
 	{
 		self.electrocount = 1;
-		org = self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -14;
+		org = W_MuzzleOrigin (self, '24 6 -9');
 	}
 	else if (self.electrocount == 1)
 	{
 		self.electrocount = 2;
-		org = self.origin + self.view_ofs + v_forward * 15 + v_right * 10 + v_up * -12;
+		org = W_MuzzleOrigin (self, '24 8 -7');
 	}
 	else
 	{
 		self.electrocount = 0;
-		org = self.origin + self.view_ofs + v_forward * 15 + v_right * 15 + v_up * -14;
+		org = W_MuzzleOrigin (self, '24 10 -9');
 	}
 
 	proj = spawn ();
@@ -160,26 +159,25 @@ void() W_Electro_Attack2
 
 	postion = self.electrocount;
 	sound (self, CHAN_WEAPON, "weapons/electro_fire2.ogg", 1, ATTN_NORM);
-	if (self.items & IT_STRENGTH) {
+	if (self.items & IT_STRENGTH)
 		sound (self, CHAN_AUTO, "weapons/strength_fire.ogg", 1, ATTN_NORM);
-	}
 
 	self.punchangle_x = -2;
 
 	if (self.electrocount == 0)
 	{
 		self.electrocount = 1;
-		org = self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -14;
+		org = W_MuzzleOrigin (self, '24 6 -12');
 	}
 	else if (self.electrocount == 1)
 	{
 		self.electrocount = 2;
-		org = self.origin + self.view_ofs + v_forward * 15 + v_right * 10 + v_up * -12;
+		org = W_MuzzleOrigin (self, '24 8 -10');
 	}
 	else
 	{
 		self.electrocount = 0;
-		org = self.origin + self.view_ofs + v_forward * 15 + v_right * 15 + v_up * -14;
+		org = W_MuzzleOrigin (self, '24 10 -12');
 	}
 
 	proj = spawn ();

@@ -108,16 +108,14 @@ void W_Hagar_Attack (void)
 	local vector trueaim;
 	trueaim = W_TrueAim();
 
-
 	sound (self, CHAN_WEAPON, "weapons/hagar_fire.ogg", 1, ATTN_NORM);
-	if (self.items & IT_STRENGTH) {
+	if (self.items & IT_STRENGTH)
 		sound (self, CHAN_AUTO, "weapons/strength_fire.ogg", 1, ATTN_NORM);
-	}
 
 	if (cvar("g_use_ammunition"))
 		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_hagar_primary_ammo");
 	self.punchangle_x = -2;
-	org = self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -8;
+	org = W_MuzzleOrigin (self, '18 5 -8');
 
 	missile = spawn ();
 	missile.owner = self;
@@ -150,16 +148,14 @@ void W_Hagar_Attack2 (void)
 	local vector trueaim;
 	trueaim = W_TrueAim();
 
-
 	sound (self, CHAN_WEAPON, "weapons/hagar_fire.ogg", 1, ATTN_NORM);
-	if (self.items & IT_STRENGTH) {
+	if (self.items & IT_STRENGTH)
 		sound (self, CHAN_AUTO, "weapons/strength_fire.ogg", 1, ATTN_NORM);
-	}
 
 	if (cvar("g_use_ammunition"))
 		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_hagar_secondary_ammo");
 	self.punchangle_x = -2;
-	org = self.origin + self.view_ofs + v_forward * 15 + v_right * 5 + v_up * -8;
+	org = W_MuzzleOrigin (self, '18 5 -8');
 
 	missile = spawn ();
 	missile.owner = self;

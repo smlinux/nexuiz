@@ -98,14 +98,14 @@ void W_Crylink_Attack (void)
 	trueaim = W_TrueAim();
 
 	sound (self, CHAN_WEAPON, "weapons/crylink_fire.ogg", 1, ATTN_NORM);
-	if (self.items & IT_STRENGTH) {
+	if (self.items & IT_STRENGTH)
 		sound (self, CHAN_AUTO, "weapons/strength_fire.ogg", 1, ATTN_NORM);
-	}
 
 	if (cvar("g_use_ammunition"))
 		self.ammo_cells = self.ammo_cells - cvar("g_balance_crylink_primary_ammo");
 	self.punchangle_x = -2;
-	org = self.origin + self.view_ofs + v_forward * 10 + v_right * 5 + v_up * -14;
+
+	org = W_MuzzleOrigin (self, '24 7 -8');
 	te_smallflash(org);
 
 	shots = cvar("g_balance_crylink_primary_shots");
@@ -148,14 +148,14 @@ void W_Crylink_Attack2 (void)
 	trueaim = W_TrueAim();
 
 	sound (self, CHAN_WEAPON, "weapons/crylink_fire.ogg", 1, ATTN_NORM);
-	if (self.items & IT_STRENGTH) {
+	if (self.items & IT_STRENGTH)
 		sound (self, CHAN_AUTO, "weapons/strength_fire.ogg", 1, ATTN_NORM);
-	}
 
 	if (cvar("g_use_ammunition"))
 		self.ammo_cells = self.ammo_cells - cvar("g_balance_crylink_secondary_ammo");
 	self.punchangle_x = -2;
-	org = self.origin + self.view_ofs + v_forward * 10 + v_right * 5 + v_up * -14;
+
+	org = W_MuzzleOrigin (self, '20 7 -8');
 	te_smallflash(org);
 
 	shots = cvar("g_balance_crylink_secondary_shots");
