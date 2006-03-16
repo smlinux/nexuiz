@@ -39,6 +39,20 @@ Item DataContainer Weapon
 
 		[DataLink_Setting]
 	}
+	Item Data_Cvar WeaponStay
+	{
+		cvarName	"deathmatch"
+		defValue        "1"
+		
+		Item DataLink_TextSwitch Switch
+		{
+			valueList       "'1' '2'"
+			
+			descList        "'Off' 'On'"
+			link            "##up"
+                }
+        }
+
 	Item Data_Cvar LaserDamage
 	{
 		cvarName	"g_balance_laser_damage"

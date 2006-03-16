@@ -59,6 +59,11 @@ Item Window Weapon
 				text	"Strength Time"
 				target	"Data::Weapon::StrengthTime::Text"
 			}
+			Derive Nex_Option_Switch WeaponStay
+			{
+				text	"Weapon Stay"
+				target	"Data::Weapon::WeaponStay::Switch"
+			}
 			Derive Nex_Option_EditBox LaserDamage
 			{
 				text	"Laser Damage"

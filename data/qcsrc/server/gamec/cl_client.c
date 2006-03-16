@@ -969,9 +969,9 @@ void player_regen (void)
 		if (time > self.pauseregen_finished)
 		{
 			if (self.health < maxh)
-				self.health = bound(0, self.health + (maxh- self.health) * cvar("g_balance_health_regen") * frametime, 1000);
+				 self.health = bound(0, self.health + (maxh - self.health) * cvar("g_balance_health_regen") * frametime + 0.001, 1000);
 			if (self.armorvalue < maxa)
-				self.armorvalue = bound(0, self.armorvalue + (maxa - self.armorvalue) * cvar("g_balance_armor_regen") * frametime, 1000);
+				self.armorvalue = bound(0, self.armorvalue + (maxa - self.armorvalue) * cvar("g_balance_armor_regen") * frametime + 0.001, 1000);
 		}
 	}
 }
