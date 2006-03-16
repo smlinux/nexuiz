@@ -96,7 +96,7 @@ void W_Grenade_Attack (void)
 	self.punchangle_x = -4;
 	if (cvar("g_use_ammunition"))
 		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_grenadelauncher_primary_ammo");
-	org = W_MuzzleOrigin (self, '24 8 -8');
+	org = W_MuzzleOrigin (self, '24 8 -10');
 
 	gren = spawn ();
 	gren.owner = self;
@@ -129,7 +129,7 @@ void W_Grenade_Attack2 (void)
 	self.punchangle_x = -4;
 	if (cvar("g_use_ammunition"))
 		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_grenadelauncher_secondary_ammo");
-	org = W_MuzzleOrigin (self, '24 8 -8');
+	org = W_MuzzleOrigin (self, '24 8 -10');
 
 	gren = spawn ();
 	gren.owner = self;

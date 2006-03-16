@@ -19,7 +19,7 @@
 }
 {
 "classname" "item_armor_shard"
-"origin" "-96 -184 -72"
+"origin" "-96 -184 -68"
 }
 {
 "classname" "weapon_rocketlauncher"
@@ -56,12 +56,12 @@
 "classname" "item_health"
 }
 {
-"origin" "-16 -184 -72"
+"origin" "-16 -184 -68"
 "classname" "item_armor_shard"
 }
 {
 "classname" "item_armor_shard"
-"origin" "64 -184 -72"
+"origin" "64 -184 -68"
 }
 {
 "angle" "90"
@@ -118,12 +118,12 @@
 "model" "*1"
 }
 {
-"origin" "904 480 -414"
+"origin" "904 480 -410"
 "classname" "item_armor_shard"
 }
 {
 "classname" "item_armor_shard"
-"origin" "904 542 -414"
+"origin" "904 542 -410"
 }
 {
 "classname" "target_speaker"
@@ -142,7 +142,7 @@
 "classname" "info_player_deathmatch"
 }
 {
-"origin" "-926 464 -414"
+"origin" "-926 464 -410"
 "classname" "item_armor_shard"
 }
 {
@@ -240,7 +240,7 @@
 }
 {
 "classname" "item_armor_shard"
-"origin" "-926 526 -414"
+"origin" "-926 526 -410"
 }
 {
 "angle" "180"

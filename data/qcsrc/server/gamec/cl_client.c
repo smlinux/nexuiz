@@ -1071,6 +1071,9 @@ void PlayerPreThink (void)
 			}
 			else if (self.deadflag == DEAD_DEAD)
 			{
+				if (cvar("g_lms") || cvar("g_forced_respawn"))
+					self.button0 = self.button2 = self.button3 = 0;
+				
 				if (!self.button0 && !self.button2 && !self.button3)
 					self.deadflag = DEAD_RESPAWNABLE;
 			}
@@ -1102,7 +1105,9 @@ void PlayerPreThink (void)
 				if(self.lms_traveled_distance < cvar("g_lms_campcheck_distance"))
 				{
 					centerprint(self, cvar_string("g_lms_campcheck_message"));
-					Damage(self, self, self, cvar("g_lms_campcheck_damage"), DEATH_CAMP, self.origin, '0 0 0');
+					// FIXME KadaverJack: gibbing player here causes playermodel to bounce around, instead of eye.md3
+					// I wasn't able to find out WHY that happens, so I put a workaround in place that shall prevent players from being gibbed :(
+					Damage(self, self, self, bound(0, cvar("g_lms_campcheck_damage"), self.health + self.armorvalue * cvar("g_balance_armor_blockpercent") + 5), DEATH_CAMP, self.origin, '0 0 0');
 				}
 				self.lms_nextcheck = time + cvar("g_lms_campcheck_interval");
 				self.lms_traveled_distance = 0;

@@ -102,12 +102,10 @@ void() W_Electro_Attack
 {
 	local entity proj;
 	local vector org;
-	local float postion;
 
 	local vector trueaim;
 	trueaim = W_TrueAim();
 
-	postion = self.electrocount;
 	sound (self, CHAN_WEAPON, "weapons/electro_fire.ogg", 1, ATTN_NORM);
 	if (self.items & IT_STRENGTH)
 		sound (self, CHAN_AUTO, "weapons/strength_fire.ogg", 1, ATTN_NORM);
@@ -117,17 +115,17 @@ void() W_Electro_Attack
 	if (self.electrocount == 0)
 	{
 		self.electrocount = 1;
-		org = W_MuzzleOrigin (self, '24 6 -9');
+		org = W_MuzzleOrigin (self, '24 5.5 -11');
 	}
 	else if (self.electrocount == 1)
 	{
 		self.electrocount = 2;
-		org = W_MuzzleOrigin (self, '24 8 -7');
+		org = W_MuzzleOrigin (self, '24 8 -8.1');
 	}
 	else
 	{
 		self.electrocount = 0;
-		org = W_MuzzleOrigin (self, '24 10 -9');
+		org = W_MuzzleOrigin (self, '24 10.5 -11');
 	}
 
 	proj = spawn ();
@@ -155,9 +153,7 @@ void() W_Electro_Attack2
 {
 	local entity proj;
 	local vector org;
-	local float postion;
 
-	postion = self.electrocount;
 	sound (self, CHAN_WEAPON, "weapons/electro_fire2.ogg", 1, ATTN_NORM);
 	if (self.items & IT_STRENGTH)
 		sound (self, CHAN_AUTO, "weapons/strength_fire.ogg", 1, ATTN_NORM);
