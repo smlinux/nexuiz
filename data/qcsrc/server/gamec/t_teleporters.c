@@ -19,6 +19,17 @@ void() tdeath_touch =
 		Damage (self.owner, self, self.owner, 10000, DEATH_TELEFRAG, self.owner.origin, '0 0 0');
 };
 
+void tdeath_remove()
+{
+	if (self.owner)
+	{
+		self.owner.effects = self.owner.effects - (self.owner.effects & EF_NODRAW);
+		if (self.owner.weaponentity)
+			self.owner.weaponentity.flags = self.owner.weaponentity.flags - (self.owner.weaponentity.flags & FL_FLY);
+	}
+	remove(self);
+}
+
 // org2 is where they will return to if the teleport fails
 void(vector org, entity death_owner, vector org2) spawn_tdeath =
 {
@@ -34,8 +45,13 @@ void(vector org, entity death_owner, vector org2) spawn_tdeath =
 	setorigin (death, org);
 	death.touch = tdeath_touch;
 	death.nextthink = time + 0.2;
-	death.think = SUB_Remove;
+	death.think = tdeath_remove;
 	death.owner = death_owner;
+
+	// hide entity to avoid "ghosts" between teleporter and destination caused by clientside interpolation
+	death.owner.effects = death.owner.effects | EF_NODRAW;
+	if (death.owner.weaponentity) // misuse FL_FLY to avoid EF_NODRAW on viewmodel 
+		death.owner.weaponentity.flags = death.owner.weaponentity.flags | FL_FLY;
 
 	force_retouch = 2;		// make sure even still objects get hit
 };
@@ -44,7 +60,7 @@ void Teleport_Touch (void)
 {
 	if (other.health < 1)
 		return;
-	if (other.classname != "player")	// FIXME: Make missiles firable through the teleport too
+	if (!other.flags & FL_CLIENT)	// FIXME: Make missiles firable through the teleport too
 		return;
 
 	// Make teleport effect where the player left
@@ -68,7 +84,8 @@ void Teleport_Touch (void)
 	other.angles = dest.mangle;
 	other.fixangle = TRUE;
 
-	other.velocity = '0 0 0';
+	// keep velocity but change movement direction
+	other.velocity = v_forward * vlen(other.velocity);
 
 	other.flags = other.flags - (other.flags & FL_ONGROUND);
 	// reset tracking of oldvelocity for impact damage (sudden velocity changes)

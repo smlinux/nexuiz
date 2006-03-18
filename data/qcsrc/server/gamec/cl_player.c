@@ -226,7 +226,7 @@ void PlayerCorpseDamage (entity inflictor, entity attacker, float damage, float 
 		TossGib (world, "models/gibs/chunk.mdl", self.origin, self.velocity,1);
 		TossGib (world, "models/gibs/chunk.mdl", self.origin, '0 0 450',1);
 
-		sound (trace_ent, CHAN_VOICE, "misc/gib.wav", 1, ATTN_NORM);
+		sound (self, CHAN_VOICE, "misc/gib.wav", 1, ATTN_NORM);
 	}
 }
 

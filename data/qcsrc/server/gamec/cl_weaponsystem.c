@@ -126,7 +126,13 @@ void() CL_Weaponentity_Think =
 		remove(self);
 		return;
 	}
-	self.effects = self.owner.effects;
+
+	if (self.flags & FL_FLY)
+		// owner is currently being teleported, so don't apply EF_NODRAW otherwise the viewmodel would "blink"
+		self.effects = self.owner.effects - (self.owner.effects & EF_NODRAW);
+	else
+		self.effects = self.owner.effects;
+	
 	self.alpha = self.owner.alpha;
 
 	// create or update the lasertarget entity
