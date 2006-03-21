@@ -286,7 +286,8 @@ void PutClientInServer (void)
 		// players have no think function
 		self.think = SUB_Null;
 		self.nextthink = 0;
-
+		self.weapon = 0;
+		self.switchweapon = 0;
 		self.hook_time = 0;
 
 		self.runes = 0;

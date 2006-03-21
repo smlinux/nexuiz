@@ -246,9 +246,16 @@ void() W_PreviousWeapon =
 // Bringed back weapon frame
 void() W_WeaponFrame =
 {
-	if (!self.weaponentity || self.health <= 0)
+	if (!self.weaponentity || self.health < 1)
 		return; // Dead player can't use weapons and injure impulse commands
 
+	if(!self.switchweapon)
+	{
+		self.weapon = 0;
+		self.weaponentity.state = 0;
+		return;
+	}
+		
 	makevectors(self.v_angle);
 
 	// Change weapon
