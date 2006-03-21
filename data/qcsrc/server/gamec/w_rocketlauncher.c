@@ -17,8 +17,10 @@ void(float req) w_rlauncher =
 		rlauncher_ready_01();
 	else if (req == WR_FIRE1)
 		weapon_prepareattack(rlauncher_check, rlauncher_check, rlauncher_fire1_01, cvar("g_balance_rocketlauncher_refire"));
-	else if (req == WR_FIRE2 && cvar("g_laserguided_missile"))
+	else if (req == WR_FIRE2)
 	{
+		sound (self, CHAN_BODY, "weapons/rocket_det.ogg", 0.5, ATTN_NORM);
+		if(cvar("g_laserguided_missile"))
 		if(self.exteriorweaponentity.attack_finished < time)
 		{
 			self.exteriorweaponentity.attack_finished = time + 0.4;

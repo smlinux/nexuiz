@@ -71,7 +71,16 @@ void W_Grenade_Touch (void)
 	if (other.takedamage == DAMAGE_AIM)
 		self.think ();
 	else
-		sound (self, CHAN_IMPACT, "weapons/grenade_bounce.ogg", 1, ATTN_NORM);
+	{
+		float r;
+		r = random() * 3;
+		if(r < 1)
+			sound (self, CHAN_IMPACT, "weapons/grenade_bounce1.ogg", 1, ATTN_NORM);
+		else if(r < 2)
+			sound (self, CHAN_IMPACT, "weapons/grenade_bounce2.ogg", 1, ATTN_NORM);
+		else
+			sound (self, CHAN_IMPACT, "weapons/grenade_bounce3.ogg", 1, ATTN_NORM);
+	}
 }
 
 void W_Grenade_Damage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)

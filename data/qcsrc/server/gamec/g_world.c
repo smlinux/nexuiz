@@ -142,7 +142,10 @@ void worldspawn (void)
 	precache_sound ("weapons/electro_fly.wav");
 	precache_sound ("weapons/electro_impact.ogg");
 	precache_sound ("weapons/electro_impact_combo.ogg");
-	precache_sound ("weapons/grenade_bounce.ogg");
+	//precache_sound ("weapons/grenade_bounce.ogg");
+	precache_sound ("weapons/grenade_bounce1.ogg");
+	precache_sound ("weapons/grenade_bounce2.ogg");
+	precache_sound ("weapons/grenade_bounce3.ogg");
 	precache_sound ("weapons/grenade_fire.ogg");
 	precache_sound ("weapons/grenade_impact.ogg");
 	precache_sound ("weapons/hagar_fire.ogg");
@@ -161,6 +164,7 @@ void worldspawn (void)
 	precache_sound ("weapons/rocket_fire.ogg");
 	precache_sound ("weapons/rocket_fly.wav");
 	precache_sound ("weapons/rocket_impact.ogg");
+	precache_sound ("weapons/rocket_det.ogg");
 	precache_sound ("weapons/shotgun_fire.ogg");
 	precache_sound ("weapons/tink1.ogg");
 	precache_sound ("weapons/uzi_fire.ogg");
