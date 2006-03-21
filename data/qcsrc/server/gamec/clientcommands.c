@@ -1,4 +1,5 @@
 void ReadyCount();
+float ValidateMap(string vote);
 
 void SV_ParseClientCommand(string s) {
 	local float index;
@@ -80,6 +81,8 @@ void SV_ParseClientCommand(string s) {
 					} else if(time < self.vote_next) {
 						sprint(self, strcat("^1You have to wait ^2", ftos(self.vote_next - time), "^1 seconds before you can again call a vote.\n"));
 					} else if(VoteAllowed(strcat(argv(2)))) { // strcat seems to be necessary
+						if(!ValidateMap(vote))
+							return;
 						votecalled = TRUE;
 						votecalledmaster = FALSE;
 						votecalledvote = strzone(vote);
@@ -239,6 +242,27 @@ void SV_ParseClientCommand(string s) {
 		clientcommand(self,s);
 	}
 }
+
+float ValidateMap(string vote)
+{
+	string ext;
+	
+	tokenize(vote);
+	if(argv(0) == "map")
+		ext = ".bsp";
+	else if(argv(0) == "chmap")
+		ext = ".mapcfg";
+	else
+		return TRUE;
+
+	if(!TryFile(strcat("maps/", argv(1), ext)))
+	{
+		sprint(self, strcat("^1Invalid mapname, \"^3", argv(1), "^1\" does not exist on this server.\n"));
+		return FALSE;
+	}
+	return TRUE;
+}
+
 
 void VoteThink() {
 	if(votefinished > 0 // a vote was called
