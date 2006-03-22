@@ -2,6 +2,7 @@ void() rlauncher_ready_01;
 void() rlauncher_fire1_01;
 void() rlauncher_deselect_01;
 void() rlauncher_select_01;
+.float rl_sound;
 
 float() rlauncher_check =
 {
@@ -19,7 +20,11 @@ void(float req) w_rlauncher =
 		weapon_prepareattack(rlauncher_check, rlauncher_check, rlauncher_fire1_01, cvar("g_balance_rocketlauncher_refire"));
 	else if (req == WR_FIRE2)
 	{
-		sound (self, CHAN_BODY, "weapons/rocket_det.ogg", 0.5, ATTN_NORM);
+		if(time > self.rl_sound)
+		{
+			self.rl_sound = time + 1;
+			sound (self, CHAN_BODY, "weapons/rocket_det.ogg", 0.5, ATTN_NORM);
+		}
 		if(cvar("g_laserguided_missile"))
 		if(self.exteriorweaponentity.attack_finished < time)
 		{

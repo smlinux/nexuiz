@@ -248,7 +248,7 @@ float ValidateMap(string vote)
 	string ext;
 	
 	tokenize(vote);
-	if(argv(0) == "map")
+	if(argv(0) == "map" || argv(0) == "changelevel")
 		ext = ".bsp";
 	else if(argv(0) == "chmap")
 		ext = ".mapcfg";

@@ -195,6 +195,7 @@ void PutObserverInServer (void)
 	self.dead_time = 0;
 	self.dead_frame = 0;
 	self.die_frame = 0;
+	self.deaths = 0;
 	self.alpha = 0;
 	self.scale = 0;
 	self.fade_time = 0;

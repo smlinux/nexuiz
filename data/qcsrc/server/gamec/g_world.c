@@ -297,6 +297,50 @@ float( string pFilename ) TryFile =
 	}
 };
 
+string GetMapname()
+{
+	if (game == GAME_DEATHMATCH)
+		return strcat("dm_", mapname);
+	else if (game == GAME_TEAM_DEATHMATCH)
+		return strcat("tdm_", mapname);
+	else if (game == GAME_DOMINATION)
+		return strcat("dom_", mapname);
+	else if (game == GAME_CTF)
+		return strcat("ctf_", mapname);
+	else if (game == GAME_RUNEMATCH)
+		return strcat("rune_", mapname);
+	else if (game == GAME_LMS)
+		return strcat("lms_", mapname);
+	return strcat("dm_", mapname);
+}
+
+float GetMaplistPosition()
+{
+	float pos, f;
+	string map, s;
+
+	map = strzone(GetMapname());
+	pos = 0;
+	f = tokenize(cvar_string("g_maplist"));
+
+	while(pos < f)
+	{
+		s = strzone(argv(pos));
+		if(s == map)
+		{
+			strunzone(s);
+			strunzone(map);
+			return pos;
+		}
+		strunzone(s);
+		pos++;
+	}
+
+	strunzone(map);
+	// resume normal maplist rotation if current map is not in g_maplist
+	return cvar("g_maplist_index");		 
+}
+
 void() GotoNextMap =
 {
 	//local string nextmap;
@@ -349,9 +393,16 @@ void() GotoNextMap =
 			pass = pass + 1;
 			local string temp;
 			temp = cvar_string( "g_maplist" );
+			if(temp == "")
+			{
+				bprint( "Maplist is empty!  Resetting it to default map list.\n" );
+				cvar_set("g_maplist", cvar_string("g_maplist_defaultlist"));
+				temp = cvar_string( "g_maplist" );
+			}
+			temp = strzone(temp);
 			dprint("g_maplist is ", temp, "\n");
+			lCurrent = max(0, GetMaplistPosition());
 			lSize = tokenize( temp );
-			lCurrent = cvar( "g_maplist_index" );
 			lOldCurrent = lCurrent;
 			dprint(ftos(lOldCurrent), " / ", ftos(lSize), " (start)\n");
 			while( 1 ) {
@@ -372,7 +423,7 @@ void() GotoNextMap =
 					}
 					else
 					{
-						bprint( "Both g_maplist and g_maplist_defaultlist are messed up!  complain to developers!\n" );
+						bprint( "Both g_maplist and g_maplist_defaultlist are messed up!  Complain to developers!\n" );
 						localcmd( "disconnect\n" );
 					}
 					break;
@@ -390,6 +441,7 @@ void() GotoNextMap =
 				}
 				//changelevel( argv( lCurrent ) );
 			}
+			strunzone(temp);
 		}
 
 		/*
@@ -531,33 +583,20 @@ RULES
 
 void() DumpStats =
 {
-	local float file, now;
-	local string gametype, s;
+	local float file;
+	local string s;
 
 	if(cvar("_printstats"))
 		cvar_set("_printstats", "0");
 	else if(!gameover)
 		return;
 
-	now = time;
-
-	if (cvar("g_tdm"))
-		gametype = "tdm";
-	else if (cvar("g_ctf"))
-		gametype = "ctf";
-	else if (cvar("g_domination"))
-		gametype = "dom";
-	else if (cvar("g_runematch"))
-		gametype = "rune";
-	else
-		gametype = "dm";
-
 	if(gameover)
 		s = ":scores:";
 	else
 		s = ":status:";
 
-	s = strcat(s, gametype, "_", mapname, ":", ftos(rint(now)));
+	s = strcat(s, GetMapname(), ":", ftos(rint(time)));
 
 	if(cvar("sv_logscores_console"))
 		localcmd(strcat("echo \"", s, "\"\n"));
@@ -574,7 +613,7 @@ void() DumpStats =
 		{
 			s = strcat(":player:", ftos(other.frags), ":");
 			s = strcat(s, ftos(other.deaths), ":");
-			s = strcat(s, ftos(rint(now - other.jointime)), ":");
+			s = strcat(s, ftos(rint(time - other.jointime)), ":");
 			s = strcat(s, ftos(other.team), ":");
 
 			if(cvar("sv_logscores_file"))
