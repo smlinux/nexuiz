@@ -57,7 +57,7 @@ void ImpulseCommands (void)
 {
 	local float imp;
 	imp = self.impulse;
-	if (!imp)
+	if (!imp || gameover)
 		return;
 	self.impulse = 0;
 	if (imp >= 1 && imp <= 12)

@@ -642,6 +642,10 @@ void() NextLevel =
 		self = other;
 		weapon_action(other.weapon, WR_IDLE);
 
+		if(clienttype(other) == CLIENTTYPE_REAL)
+		if(cvar("sv_autoscreenshot"))
+			stuffcmd(other, "screenshot\necho \"^5A screenshot has been taken at request of the server.\"\n");
+		
 		/*
 		if (pos != world);
 		{
