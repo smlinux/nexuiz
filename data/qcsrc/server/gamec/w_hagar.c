@@ -82,13 +82,13 @@ void W_Hagar_Explode2 (void)
 
 void W_Hagar_Touch (void)
 {
-	if (other == self.owner)
-		return;
-	else if (pointcontents (self.origin) == CONTENT_SKY)
+	if (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
 	{
-		remove (self);
+		remove(self);
 		return;
 	}
+	if (other == self.owner)
+		return;
 
 	self.think ();
 }

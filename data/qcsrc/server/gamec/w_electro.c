@@ -76,11 +76,28 @@ void W_Plasma_Explode_Combo (void) {
 
 void W_Plasma_Touch (void)
 {
+	if (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
+	{
+		sound (self, CHAN_BODY, "misc/null.wav", 1, ATTN_NORM);
+		remove(self);
+		return;
+	}
 	if (other.takedamage == DAMAGE_AIM) {
 		W_Plasma_Explode ();
 	} else {
 		sound (self, CHAN_IMPACT, "weapons/electro_bounce.ogg", 1, ATTN_NORM);
 	}
+}
+
+void W_Plasma_TouchExplode (void)
+{
+	if (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
+	{
+		sound (self, CHAN_BODY, "misc/null.wav", 1, ATTN_NORM);
+		remove(self);
+		return;
+	}
+	W_Plasma_Explode ();
 }
 
 void W_Plasma_Damage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
@@ -142,7 +159,7 @@ void() W_Electro_Attack
 	proj.movetype = MOVETYPE_FLY;
 	proj.velocity = normalize(trueaim - org) * cvar("g_balance_electro_primary_speed");
 	proj.angles = vectoangles(proj.velocity);
-	proj.touch = W_Plasma_Explode;
+	proj.touch = W_Plasma_TouchExplode;
 	setmodel(proj, "models/elaser.mdl");
 	setsize(proj, '0 0 0', '0 0 0');
 

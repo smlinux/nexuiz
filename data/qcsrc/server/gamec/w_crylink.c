@@ -44,6 +44,11 @@ void(float req) w_crylink =
 .entity realowner;
 void W_Crylink_Touch (void)
 {
+	if (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
+	{
+		remove(self);
+		return;
+	}
 	RadiusDamage (self, self.realowner, cvar("g_balance_crylink_primary_damage"), cvar("g_balance_crylink_primary_edgedamage"), cvar("g_balance_crylink_primary_radius"), world, cvar("g_balance_crylink_primary_force"), IT_CRYLINK);
 	//te_smallflash(self.origin);
 	if (other.takedamage == DAMAGE_AIM)
@@ -67,6 +72,11 @@ void W_Crylink_Touch (void)
 
 void W_Crylink_Touch2 (void)
 {
+	if (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
+	{
+		remove(self);
+		return;
+	}
 	RadiusDamage (self, self.realowner, cvar("g_balance_crylink_secondary_damage"), cvar("g_balance_crylink_secondary_edgedamage"), cvar("g_balance_crylink_secondary_radius"), world, cvar("g_balance_crylink_secondary_force"), IT_CRYLINK);
 	//te_smallflash(self.origin);
 	if (other.takedamage == DAMAGE_AIM)

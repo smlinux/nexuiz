@@ -33,13 +33,14 @@ void W_Laser_Touch (void)
 {
 	vector	dir;
 
-	if (other == self.owner)
-		return;
-	else if (pointcontents (self.origin) == CONTENT_SKY)
+	if (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
 	{
-		remove (self);
+		remove(self);
 		return;
 	}
+
+	if (other == self.owner)
+		return;
 
 	dir = normalize (self.owner.origin - self.origin);
 

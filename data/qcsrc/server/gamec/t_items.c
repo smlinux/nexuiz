@@ -99,7 +99,7 @@ void Item_Touch (void)
 				other.ammo_rockets = min (other.ammo_rockets + self.ammo_rockets, 999);
 			if (self.ammo_cells)
 				other.ammo_cells = min (other.ammo_cells + self.ammo_cells, 999);
-		
+
 			if (self.items & IT_UZI)		W_GiveWeapon (other, IT_UZI, "Machine gun");
 			if (self.items & IT_SHOTGUN)		W_GiveWeapon (other, IT_SHOTGUN, "Shotgun");
 			if (self.items & IT_GRENADE_LAUNCHER)	W_GiveWeapon (other, IT_GRENADE_LAUNCHER, "Mortar");
@@ -198,6 +198,17 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 	{
 		remove(self);
 		return;
+	}
+
+	if (self.classname == "droppedweapon")
+	{
+		// don't drop if in a NODROP zone (such as lava)
+		traceline(self.origin, self.origin, MOVE_NORMAL, self);
+		if (trace_dpstartcontents & DPCONTENTS_NODROP)
+		{
+			remove(self);
+			return;
+		}
 	}
 
 	self.mdl = itemmodel;

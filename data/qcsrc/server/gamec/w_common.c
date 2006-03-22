@@ -501,12 +501,10 @@ void fireBullet (vector start, vector dir, float spread, float damage, float dty
 		e.effects = e.effects | EF_ADDITIVE | EF_FULLBRIGHT | EF_NOSHADOW;
 	}
 
-	// FIXME - causes excessive 'tinking'. Hopefully remove "tink1.wav" from the ricochets with csqc
 	if ((trace_fraction != 1.0) && (pointcontents (trace_endpos) != CONTENT_SKY))
 	{
-		if (trace_ent.solid == SOLID_BSP)
+		if (trace_ent.solid == SOLID_BSP && !(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT))
 		{
-			pointcontents (self.origin);
 			te_gunshot (trace_endpos);
 			r = random ();
 			if (r < 0.10)

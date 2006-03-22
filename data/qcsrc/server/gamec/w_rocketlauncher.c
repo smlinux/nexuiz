@@ -57,7 +57,7 @@ void W_Rocket_Explode (void)
 		{
 			self.owner.cnt = WEP_ROCKET_LAUNCHER;
 			self.owner.attack_finished = time;
-			self.owner.switchweapon = w_getbestweapon(self.owner);			
+			self.owner.switchweapon = w_getbestweapon(self.owner);
 		}
 		if(cvar("g_laserguided_missile"))
 				  self.owner.attack_finished = time + cvar("g_balance_rocketlauncher_refire");
@@ -201,13 +201,13 @@ void W_Rocket_Think (void)
 
 void W_Rocket_Touch (void)
 {
-	if (pointcontents (self.origin) == CONTENT_SKY)
+	if (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
 	{
-		remove (self);
+		sound (self, CHAN_BODY, "misc/null.wav", 1, ATTN_NORM);
+		remove(self);
 		return;
 	}
-	else
-		W_Rocket_Explode ();
+	W_Rocket_Explode ();
 }
 
 void W_Rocket_Damage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)

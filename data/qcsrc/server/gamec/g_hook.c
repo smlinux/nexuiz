@@ -159,7 +159,9 @@ void GrapplingHookTouch (void)
 {
 	if (other == self.owner)
 		return;
-	else if (pointcontents (self.origin) == CONTENT_SKY)
+	// altered for Nexuiz
+	//else if (pointcontents (self.origin) == CONTENT_SKY)
+	else if (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
 	{
 		RemoveGrapplingHook(self.owner);
 		return;

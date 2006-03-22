@@ -876,6 +876,56 @@ void(vector org) te_plasmaburn = #433;
 //description:
 //creates a small light flash (radius 200, time 0.2) and marks the walls.
 
+//DP_TRACE_DPHITCONTENTSMASK_SURFACEINFO
+//idea: LordHavoc
+//darkplaces implementation: LordHavoc
+//globals:
+//.float dphitcontentsmask; // if non-zero on the entity passed to traceline/tracebox/tracetoss this will override the normal collidable contents rules and instead hit these contents values (for example AI can use tracelines that hit DONOTENTER if it wants to, by simply changing this field on the entity passed to traceline), this affects normal movement as well as trace calls
+float trace_dpstartcontents; // DPCONTENTS_ value at start position of trace
+//float trace_dphitcontents; // DPCONTENTS_ value of impacted surface (not contents at impact point, just contents of the surface that was hit)
+float trace_dphitq3surfaceflags; // Q3SURFACEFLAG_ value of impacted surface
+//string trace_dphittexturename; // texture name of impacted surface
+//constants:
+float DPCONTENTS_SOLID = 1; // hit a bmodel, not a bounding box
+float DPCONTENTS_WATER = 2;
+float DPCONTENTS_SLIME = 4;
+float DPCONTENTS_LAVA = 8;
+float DPCONTENTS_SKY = 16;
+float DPCONTENTS_BODY = 32; // hit a bounding box, not a bmodel
+float DPCONTENTS_CORPSE = 64; // hit a SOLID_CORPSE entity
+float DPCONTENTS_NODROP = 128; // an area where backpacks should not spawn
+float DPCONTENTS_PLAYERCLIP = 256; // blocks player movement
+float DPCONTENTS_MONSTERCLIP = 512; // blocks monster movement
+float DPCONTENTS_DONOTENTER = 1024; // AI hint brush
+float DPCONTENTS_LIQUIDSMASK = 14; // WATER | SLIME | LAVA
+float Q3SURFACEFLAG_NODAMAGE = 1;
+float Q3SURFACEFLAG_SLICK = 2; // low friction surface
+float Q3SURFACEFLAG_SKY = 4; // sky surface (also has NOIMPACT and NOMARKS set)
+float Q3SURFACEFLAG_LADDER = 8; // climbable surface
+float Q3SURFACEFLAG_NOIMPACT = 16; // projectiles should remove themselves on impact (this is set on sky)
+float Q3SURFACEFLAG_NOMARKS = 32; // projectiles should not leave marks, such as decals (this is set on sky)
+float Q3SURFACEFLAG_FLESH = 64; // projectiles should do a fleshy effect (blood?) on impact
+//float Q3SURFACEFLAG_NODRAW = 128; // compiler hint (not important to qc)
+//float Q3SURFACEFLAG_HINT = 256; // compiler hint (not important to qc)
+//float Q3SURFACEFLAG_SKIP = 512; // compiler hint (not important to qc)
+//float Q3SURFACEFLAG_NOLIGHTMAP = 1024; // compiler hint (not important to qc)
+//float Q3SURFACEFLAG_POINTLIGHT = 2048; // compiler hint (not important to qc)
+float Q3SURFACEFLAG_METALSTEPS = 4096; // walking on this surface should make metal step sounds
+float Q3SURFACEFLAG_NOSTEPS = 8192; // walking on this surface should not make footstep sounds
+//float Q3SURFACEFLAG_NONSOLID = 16384; // compiler hint (not important to qc)
+//float Q3SURFACEFLAG_LIGHTFILTER = 32768; // compiler hint (not important to qc)
+//float Q3SURFACEFLAG_ALPHASHADOW = 65536; // compiler hint (not important to qc)
+//float Q3SURFACEFLAG_NODLIGHT = 131072; // compiler hint (not important to qc)
+//float Q3SURFACEFLAG_DUST = 262144; // translucent 'light beam' effect (not important to qc)
+//description:
+//adds additional information after a traceline/tracebox/tracetoss call.
+//also (very important) sets trace_* globals before calling .touch functions,
+//this allows them to inspect the nature of the collision (for example
+//determining if a projectile hit sky), clears trace_* variables for the other
+//object in a touch event (that is to say, a projectile moving will see the
+//trace results in its .touch function, but the player it hit will see very
+//little information in the trace_ variables as it was not moving at the time)
+
 //DP_VIEWZOOM
 //idea: LordHavoc
 //darkplaces implementation: LordHavoc

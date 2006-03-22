@@ -66,8 +66,23 @@ void W_Grenade_Explode2 (void)
 	remove (self);
 }
 
-void W_Grenade_Touch (void)
+void W_Grenade_Touch1 (void)
 {
+	if (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
+	{
+		remove(self);
+		return;
+	}
+	W_Grenade_Explode ();
+}
+
+void W_Grenade_Touch2 (void)
+{
+	if (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
+	{
+		remove(self);
+		return;
+	}
 	if (other.takedamage == DAMAGE_AIM)
 		self.think ();
 	else
@@ -119,7 +134,7 @@ void W_Grenade_Attack (void)
 
 	gren.nextthink = time + cvar("g_balance_grenadelauncher_primary_lifetime");
 	gren.think = W_Grenade_Explode;
-	gren.touch = W_Grenade_Explode;
+	gren.touch = W_Grenade_Touch1;
 	gren.velocity = v_forward * cvar("g_balance_grenadelauncher_primary_speed") + v_up * cvar("g_balance_grenadelauncher_primary_speed_up");
 	gren.avelocity_x = random () * -500 - 500;
 
@@ -152,7 +167,7 @@ void W_Grenade_Attack2 (void)
 
 	gren.nextthink = time + cvar("g_balance_grenadelauncher_secondary_lifetime");
 	gren.think = W_Grenade_Explode2;
-	gren.touch = W_Grenade_Touch;
+	gren.touch = W_Grenade_Touch2;
 	gren.takedamage = DAMAGE_YES;
 	gren.health = 10;
 	gren.damageforcescale = 4;

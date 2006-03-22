@@ -39,7 +39,7 @@ void worldspawn (void)
 	//precache_model ("models/gibs/gib6.md3");
 	precache_model ("models/gibs/gib1.mdl");
 	precache_model ("models/gibs/gib2.mdl");
-	precache_model ("models/gibs/gib3.mdl");		
+	precache_model ("models/gibs/gib3.mdl");
 	precache_model ("models/grenademodel.md3");
 	precache_model ("models/hagarmissile.mdl");
 	precache_model ("models/items/a_bullets.mdl");
@@ -99,6 +99,7 @@ void worldspawn (void)
 	// laser for laser-guided weapons
 	precache_model ("models/laser_dot.mdl");
 
+	precache_sound ("misc/null.wav");
 	precache_sound ("misc/armor1.wav");
 	precache_sound ("misc/armor25.wav");
 	precache_sound ("misc/armorimpact.wav");
@@ -341,7 +342,7 @@ void() GotoNextMap =
 			localcmd(strcat("exec \"maps/", cvar_string("nextmap"), ".mapcfg\"\n"));
 			return;
 		}
-		
+
 		pass = 0;
 		while (pass < 2)
 		{
@@ -582,7 +583,7 @@ void() DumpStats =
 			{
 				local string ch;
 				local float i;
-				
+
 				localcmd(strcat("echo \"", s));
 				for(i = 0; i < strlen(other.netname); ++i)
 				{
@@ -645,7 +646,7 @@ void() NextLevel =
 		if(clienttype(other) == CLIENTTYPE_REAL)
 		if(cvar("sv_autoscreenshot"))
 			stuffcmd(other, "screenshot\necho \"^5A screenshot has been taken at request of the server.\"\n");
-		
+
 		/*
 		if (pos != world);
 		{
@@ -750,7 +751,7 @@ void() CheckRules_World =
 	{
 		if(cvar("minplayers") >= maxclients)
 			cvar_set("minplayers", ftos(maxclients - 1));
-	
+
 		f = cvar("minplayers") - (player_count - bot_number);
 		if((player_count - bot_number) < 1)
 			f = 0;
@@ -763,7 +764,7 @@ void() CheckRules_World =
 				cvar_set("bot_number", "0");
 		}
 	}
-	
+
 	// last man camping winning conditions
 	if(cvar("g_lms"))
 	{

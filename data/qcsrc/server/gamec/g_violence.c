@@ -22,6 +22,11 @@ void GibDamage (entity inflictor, entity attacker, float damage, float deathtype
 
 void GibTouch ()
 {
+	if (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
+	{
+		SUB_VanishOrRemove(self);
+		return;
+	}
 	GibDamage (other, other, 1000, 0, self.origin, '0 0 0');
 }
 
