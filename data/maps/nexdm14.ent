@@ -615,3 +615,9 @@
 "origin" "288 -472 1232"
 "classname" "runematch_spawn_point"
 }
+{
+"classname" "trigger_hurt"
+"dmg" "999"
+"spawnflags" "12"
+"model" "*5"
+}
