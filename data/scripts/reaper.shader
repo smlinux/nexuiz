@@ -537,6 +537,7 @@ textures/Reaptxt/HRSky
 	surfaceparm noimpact
 	surfaceparm nolightmap
 	surfaceparm sky
+	surfaceparm nomarks
 	q3map_sunExt 0 .7 3 10 360 80 2 16
 	q3map_skyLight 50 3
 	qer_editorimage textures/Reaptxt/HRSky.jpg
