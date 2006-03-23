@@ -882,7 +882,7 @@ void(vector org) te_plasmaburn = #433;
 //globals:
 //.float dphitcontentsmask; // if non-zero on the entity passed to traceline/tracebox/tracetoss this will override the normal collidable contents rules and instead hit these contents values (for example AI can use tracelines that hit DONOTENTER if it wants to, by simply changing this field on the entity passed to traceline), this affects normal movement as well as trace calls
 float trace_dpstartcontents; // DPCONTENTS_ value at start position of trace
-//float trace_dphitcontents; // DPCONTENTS_ value of impacted surface (not contents at impact point, just contents of the surface that was hit)
+float trace_dphitcontents; // DPCONTENTS_ value of impacted surface (not contents at impact point, just contents of the surface that was hit)
 float trace_dphitq3surfaceflags; // Q3SURFACEFLAG_ value of impacted surface
 //string trace_dphittexturename; // texture name of impacted surface
 //constants:

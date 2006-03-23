@@ -20,6 +20,12 @@ void Item_Touch (void)
 	local entity oldself;
 	local float _switchweapon;
 
+	// remove the item if it's currnetly in a NODROP brush or hits a NOIMPACT surface (such as sky)
+	if (((trace_dpstartcontents | trace_dphitcontents) & DPCONTENTS_NODROP) || (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT))
+	{
+		remove(self);
+		return;
+	}
 	if (other.classname != "player")
 		return;
 	if (other.deadflag)
