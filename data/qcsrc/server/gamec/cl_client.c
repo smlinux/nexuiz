@@ -7,6 +7,8 @@ void info_player_deathmatch (void)
 {
 }
 
+float spawn_allbad;
+float spawn_allgood;
 entity Spawn_FilterOutBadSpots(entity firstspot, entity playerlist, float mindist, float teamcheck)
 {
 	local entity spot, player, nextspot, previousspot, newfirstspot;
@@ -14,6 +16,8 @@ entity Spawn_FilterOutBadSpots(entity firstspot, entity playerlist, float mindis
 	spot = firstspot;
 	newfirstspot = world;
 	previousspot = world;
+	spawn_allgood = TRUE;
+	spawn_allbad = TRUE;
 	while (spot)
 	{
 		nextspot = spot.chain;
@@ -31,6 +35,7 @@ entity Spawn_FilterOutBadSpots(entity firstspot, entity playerlist, float mindis
 			}
 			if (!pcount)
 			{
+				spawn_allbad = FALSE;
 				if (newfirstspot)
 					previousspot.chain = spot;
 				else
@@ -38,6 +43,8 @@ entity Spawn_FilterOutBadSpots(entity firstspot, entity playerlist, float mindis
 				previousspot = spot;
 				spot.chain = world;
 			}
+			else
+				spawn_allgood = FALSE;
 		}
 		spot = nextspot;
 	}
@@ -132,7 +139,7 @@ entity SelectSpawnPoint (float anypoint)
 	// there is 50/50 chance of choosing a random spot or the furthest spot
 	// (this means that roughly every other spawn will be furthest, so you
 	// usually won't get fragged at spawn twice in a row)
-	if (random() > 0.5)
+	if (random() > 0.5 || spawn_allbad || spawn_allgood)
 		spot = Spawn_RandomPoint(firstspot);
 	else
 		spot = Spawn_FurthestPoint(firstspot, playerlist);
@@ -1075,7 +1082,7 @@ void PlayerPreThink (void)
 			{
 				if (cvar("g_lms") || cvar("g_forced_respawn"))
 					self.button0 = self.button2 = self.button3 = 0;
-				
+
 				if (!self.button0 && !self.button2 && !self.button3)
 					self.deadflag = DEAD_RESPAWNABLE;
 			}
