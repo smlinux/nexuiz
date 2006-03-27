@@ -357,39 +357,30 @@ float nixnex_nextweapon;
 
 void Nixnex_ChooseNextWeapon()
 {
-	float i, j;
-	for(i = 0; i < 10; ++i)
+	float numberof, id;
+	numberof = WEP_LAST - WEP_FIRST; // all but the current one
+	if(cvar("g_start_weapon_laser"))
+		numberof = numberof - 1;
+	id = WEP_FIRST + ceil(random() * numberof) - 1;
+
+	if(cvar("g_start_weapon_laser")) // skip the laser if needed
+		id = id + 1;
+	
+	if(id >= nixnex_weapon) // skip the current weapon
+		id = id + 1;
+	
+	if(id < WEP_FIRST) // can't happen, but to be sure...
 	{
-		j = ceil(random() * 9);
-		if(j == 1)
-			nixnex_nextweapon = WEP_LASER;
-		else if(j == 2)
-			nixnex_nextweapon = WEP_SHOTGUN;
-		else if(j == 3)
-			nixnex_nextweapon = WEP_UZI;
-		else if(j == 4)
-			nixnex_nextweapon = WEP_GRENADE_LAUNCHER;
-		else if(j == 5)
-			nixnex_nextweapon = WEP_ELECTRO;
-		else if(j == 6)
-			nixnex_nextweapon = WEP_CRYLINK;
-		else if(j == 7)
-			nixnex_nextweapon = WEP_NEX;
-		else if(j == 8)
-			nixnex_nextweapon = WEP_HAGAR;
-		else if(j == 9)
-			nixnex_nextweapon = WEP_ROCKET_LAUNCHER;
-		else
-		{
-			bprint(strcat("Programmer too stupid error: ", ftos(j), " not in 1..9\n"));
-			nixnex_nextweapon = WEP_LASER;
-			break;
-		}
-		if(nixnex_nextweapon == WEP_LASER && cvar("g_start_weapon_laser"))
-			continue;
-		if(nixnex_nextweapon != nixnex_weapon)
-			break;
+		dprint("Won't happen (id < WEP_FIRST)\n");
+		id = WEP_FIRST;
 	}
+	if(id > WEP_LAST) // either
+	{
+		dprint("Won't happen (id > WEP_LAST)\n");
+		id = WEP_LAST;
+	}
+
+	nixnex_nextweapon = id;
 }
 
 string W_Name(float weaponid)
