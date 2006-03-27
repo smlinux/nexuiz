@@ -419,6 +419,12 @@ void PutClientInServer (void)
 			self.ammo_rockets = 999;
 		}
 
+		if(cvar("g_nixnex"))
+		{
+			self.items = 0;
+			// will be done later
+		}
+
 		if(cvar("g_minstagib"))
 		{
 			self.health = 100;
@@ -441,6 +447,7 @@ void PutClientInServer (void)
 		}
 
 		self.cnt = WEP_LASER;
+		self.nixnex_lastchange_id = -1;
 
 		/*
 		W_UpdateWeapon();

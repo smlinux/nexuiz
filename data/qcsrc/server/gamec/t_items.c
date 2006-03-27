@@ -176,12 +176,15 @@ void RemoveItem(void) = {
 
 void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, string itemname, float itemid, float itemflags)
 {
-	if (!cvar("g_pickup_items") && !cvar("g_minstagib") &&
+	if (!(cvar("g_pickup_items") && !cvar("g_nixnex")) && !cvar("g_minstagib") &&
 			itemid != IT_STRENGTH && itemid != IT_INVINCIBLE && itemname != "100 Health")
 	{
 		remove (self);
 		return;
 	}
+
+	if (!self.flags & FL_WEAPON || !other.items & self.items || self.classname == "droppedweapon")
+
 
 	if (cvar("g_minstagib"))
 	{

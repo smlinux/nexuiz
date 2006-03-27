@@ -348,3 +348,130 @@ void() W_WeaponFrame =
 		self.weaponentity.finaldest = '0 0 0';
 	self.weaponentity.origin = realorg + boblayer + layer1 - self.weaponentity.view_ofs;
 };
+
+float nixnex_weapon;
+float nixnex_nextchange;
+float nixnex_nextweapon;
+.float nixnex_lastchange_id;
+.float nixnex_lastinfotime;
+
+void Nixnex_ChooseNextWeapon()
+{
+	float i, j;
+	for(i = 0; i < 10; ++i)
+	{
+		j = ceil(random() * 9);
+		if(j == 1)
+			nixnex_nextweapon = WEP_LASER;
+		else if(j == 2)
+			nixnex_nextweapon = WEP_SHOTGUN;
+		else if(j == 3)
+			nixnex_nextweapon = WEP_UZI;
+		else if(j == 4)
+			nixnex_nextweapon = WEP_GRENADE_LAUNCHER;
+		else if(j == 5)
+			nixnex_nextweapon = WEP_ELECTRO;
+		else if(j == 6)
+			nixnex_nextweapon = WEP_CRYLINK;
+		else if(j == 7)
+			nixnex_nextweapon = WEP_NEX;
+		else if(j == 8)
+			nixnex_nextweapon = WEP_HAGAR;
+		else if(j == 9)
+			nixnex_nextweapon = WEP_ROCKET_LAUNCHER;
+		else
+		{
+			bprint(strcat("Programmer too stupid error: ", ftos(j), " not in 1..9\n"));
+			nixnex_nextweapon = WEP_LASER;
+			break;
+		}
+		if(nixnex_nextweapon == WEP_LASER && cvar("g_start_weapon_laser"))
+			continue;
+		if(nixnex_nextweapon != nixnex_weapon)
+			break;
+	}
+}
+
+string W_Name(float weaponid)
+{
+	if(weaponid == WEP_LASER)             return "Laser";
+	if(weaponid == WEP_UZI)               return "Machine gun";
+	if(weaponid == WEP_SHOTGUN)           return "Shotgun";
+	if(weaponid == WEP_GRENADE_LAUNCHER)  return "Mortar";
+	if(weaponid == WEP_ELECTRO)           return "Electro";
+	if(weaponid == WEP_NEX)               return "Nex";
+	if(weaponid == WEP_HAGAR)             return "Hagar";
+	if(weaponid == WEP_ROCKET_LAUNCHER)   return "Rocket Launcher";
+	if(weaponid == WEP_CRYLINK)           return "Crylink";
+	return "@!#%'n Tuba";
+}
+
+void Nixnex_GiveCurrentWeapon()
+{
+	float dt;
+	if(cvar("g_nixnex"))
+	{
+		if(!nixnex_nextweapon)
+			Nixnex_ChooseNextWeapon();
+
+		dt = ceil(nixnex_nextchange - time);
+
+		if(dt <= 0)
+		{
+			nixnex_weapon = nixnex_nextweapon;
+			nixnex_nextweapon = 0;
+			nixnex_nextchange = time + cvar("g_balance_nixnex_nextchange");
+		}
+
+		if(nixnex_nextchange != self.nixnex_lastchange_id) // this shall only be called once per round!
+		{
+			self.nixnex_lastchange_id = nixnex_nextchange;
+			if (cvar("g_use_ammunition"))
+			{
+				self.ammo_shells = cvar("g_balance_nixnex_ammo_shells");
+				self.ammo_nails = cvar("g_balance_nixnex_ammo_nails");
+				self.ammo_rockets = cvar("g_balance_nixnex_ammo_rockets");
+				self.ammo_cells = cvar("g_balance_nixnex_ammo_cells");
+			}
+			else
+			{
+				self.ammo_shells = 999;
+				self.ammo_nails = 999;
+				self.ammo_rockets = 999;
+				self.ammo_cells = 999;
+			}
+			if(dt >= 1 && dt <= 5)
+				self.nixnex_lastinfotime = -42;
+			else
+				centerprint(self, strcat("\n\n^2Active weapon: ^3", W_Name(nixnex_weapon), "\n"));
+		}
+
+		if(self.nixnex_lastinfotime != dt)
+		{
+			self.nixnex_lastinfotime = dt; // initial value 0 should count as "not seen"
+			if(dt >= 1 && dt <= 5)
+				centerprint(self, strcat("^3", ftos(dt), "^2 seconds until weapon change...\n\nNext weapon: ^3", W_Name(nixnex_nextweapon), "\n"));
+
+			// this only happens once a second, so...
+			if(cvar("g_use_ammunition"))
+			{
+				self.ammo_shells = self.ammo_shells + cvar("g_balance_nixnex_ammoincr_shells");
+				self.ammo_nails = self.ammo_nails + cvar("g_balance_nixnex_ammoincr_nails");
+				self.ammo_rockets = self.ammo_rockets + cvar("g_balance_nixnex_ammoincr_rockets");
+				self.ammo_cells = self.ammo_cells + cvar("g_balance_nixnex_ammoincr_cells");
+				weapon_action(self.weapon, WR_UPDATECOUNTS);
+			}
+		}
+
+		self.items = self.items - (self.items & (IT_LASER | IT_SHOTGUN | IT_UZI | IT_GRENADE_LAUNCHER | IT_ELECTRO | IT_CRYLINK | IT_NEX | IT_HAGAR | IT_ROCKET_LAUNCHER));
+		if(cvar("g_start_weapon_laser"))
+			self.items = self.items + IT_LASER;
+		self.items = self.items - (self.items & weapon_translateindextoflag(nixnex_weapon)) + weapon_translateindextoflag(nixnex_weapon);
+
+		if(self.switchweapon != nixnex_weapon)
+			if(!client_hasweapon(self, self.switchweapon, TRUE))
+				if(client_hasweapon(self, nixnex_weapon, TRUE))
+					W_SwitchWeapon(nixnex_weapon);
+	}
+}
+

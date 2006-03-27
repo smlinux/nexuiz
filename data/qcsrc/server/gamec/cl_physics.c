@@ -9,11 +9,14 @@ float sv_gravity;
 .float gravity;
 .float swamp_slowdown;
 
+void Nixnex_GiveCurrentWeapon();
 void SV_PlayerPhysics()
 {
 	local vector wishvel, wishdir, v;
 	local float wishspeed, f, maxspd_mod, spd, maxairspd, airaccel, swapspd_mod;
 	string temps;
+
+	Nixnex_GiveCurrentWeapon();
 
 	// MauveBot_AI();
 	if (clienttype(self) == CLIENTTYPE_BOT)

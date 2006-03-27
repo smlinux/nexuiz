@@ -93,7 +93,7 @@ void()	uzi_select_01 =	{weapon_thinkf(-1, cvar("g_balance_weaponswitchdelay"), w
 void()	uzi_deselect_01 =	{weapon_thinkf(-1, cvar("g_balance_weaponswitchdelay"), w_clear); weapon_boblayer1(PLAYER_WEAPONSELECTION_SPEED, PLAYER_WEAPONSELECTION_RANGE);};
 void()	uzi_fire1_02 =
 {
-	if (self.button0)
+	if (self.button0 && self.weapon == self.switchweapon)
 	{
 		self.uzi_bulletcounter = self.uzi_bulletcounter + 1;
 		weapon_doattack(uzi_check2, uzi_check2, W_Uzi_Attack);
