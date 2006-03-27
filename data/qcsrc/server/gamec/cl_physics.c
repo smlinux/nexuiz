@@ -8,6 +8,7 @@ float sv_gravity;
 .entity ladder_entity;
 .float gravity;
 .float swamp_slowdown;
+.float lastflags;
 
 void Nixnex_GiveCurrentWeapon();
 void SV_PlayerPhysics()
@@ -206,25 +207,25 @@ void SV_PlayerPhysics()
 	}
 	else if (self.flags & FL_ONGROUND)
 	{
-		float friction;
 		// walking
 		makevectors(self.v_angle_y * '0 1 0');
 		wishvel = v_forward * self.movement_x + v_right * self.movement_y;
 
-		// friction
-		friction = sv_friction;
-		if ((self.flags & FL_JUMPRELEASED) && self.button2)
-			friction = friction * cvar("sv_friction_factor_bunnyhopping");//0.4
+		if(!(self.lastflags & FL_ONGROUND))
+		{
+			self.velocity = self.velocity * (1 - cvar("sv_friction_on_land"));
+		}
 
 		if (self.velocity_x || self.velocity_y)
+		if (!(self.flags & FL_JUMPRELEASED) || !self.button2)
 		{
 			v = self.velocity;
 			v_z = 0;
 			f = vlen(v);
 			if (f < sv_stopspeed)
-				f = 1 - frametime * (sv_stopspeed / f) * friction;
+				f = 1 - frametime * (sv_stopspeed / f) * sv_friction;
 			else
-				f = 1 - frametime * friction;
+				f = 1 - frametime * sv_friction;
 			if (f > 0)
 				self.velocity = self.velocity * f;
 			else
@@ -273,4 +274,5 @@ void SV_PlayerPhysics()
 				self.velocity = self.velocity + wishdir * min(f, airaccel * frametime * wishspeed);
 		}
 	}
+	self.lastflags = self.flags;
 };
