@@ -206,20 +206,25 @@ void SV_PlayerPhysics()
 	}
 	else if (self.flags & FL_ONGROUND)
 	{
+		float friction;
 		// walking
 		makevectors(self.v_angle_y * '0 1 0');
 		wishvel = v_forward * self.movement_x + v_right * self.movement_y;
+
 		// friction
+		friction = sv_friction;
+		if ((self.flags & FL_JUMPRELEASED) && self.button2)
+			friction = friction * cvar("sv_friction_factor_bunnyhopping");//0.4
+
 		if (self.velocity_x || self.velocity_y)
-		if (!(self.flags & FL_JUMPRELEASED) || !self.button2) // don't apply friction if bunnyhopping
 		{
 			v = self.velocity;
 			v_z = 0;
 			f = vlen(v);
 			if (f < sv_stopspeed)
-				f = 1 - frametime * (sv_stopspeed / f) * sv_friction;
+				f = 1 - frametime * (sv_stopspeed / f) * friction;
 			else
-				f = 1 - frametime * sv_friction;
+				f = 1 - frametime * friction;
 			if (f > 0)
 				self.velocity = self.velocity * f;
 			else
