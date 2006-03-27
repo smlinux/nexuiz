@@ -354,6 +354,7 @@ float nixnex_nextchange;
 float nixnex_nextweapon;
 .float nixnex_lastchange_id;
 .float nixnex_lastinfotime;
+.float nixnex_nextincr;
 
 void Nixnex_ChooseNextWeapon()
 {
@@ -411,7 +412,7 @@ void Nixnex_GiveCurrentWeapon()
 		{
 			nixnex_weapon = nixnex_nextweapon;
 			nixnex_nextweapon = 0;
-			nixnex_nextchange = time + cvar("g_balance_nixnex_nextchange");
+			nixnex_nextchange = time + cvar("g_balance_nixnex_roundtime");
 		}
 
 		if(nixnex_nextchange != self.nixnex_lastchange_id) // this shall only be called once per round!
@@ -431,12 +432,12 @@ void Nixnex_GiveCurrentWeapon()
 				self.ammo_rockets = 999;
 				self.ammo_cells = 999;
 			}
+			self.nixnex_nextincr = time + cvar("g_balance_nixnex_incrtime");
 			if(dt >= 1 && dt <= 5)
 				self.nixnex_lastinfotime = -42;
 			else
 				centerprint(self, strcat("\n\n^2Active weapon: ^3", W_Name(nixnex_weapon), "\n"));
 		}
-
 		if(self.nixnex_lastinfotime != dt)
 		{
 			self.nixnex_lastinfotime = dt; // initial value 0 should count as "not seen"
@@ -444,13 +445,14 @@ void Nixnex_GiveCurrentWeapon()
 				centerprint(self, strcat("^3", ftos(dt), "^2 seconds until weapon change...\n\nNext weapon: ^3", W_Name(nixnex_nextweapon), "\n"));
 
 			// this only happens once a second, so...
-			if(cvar("g_use_ammunition"))
+			if(cvar("g_use_ammunition") && time > self.nixnex_nextincr)
 			{
 				self.ammo_shells = self.ammo_shells + cvar("g_balance_nixnex_ammoincr_shells");
 				self.ammo_nails = self.ammo_nails + cvar("g_balance_nixnex_ammoincr_nails");
 				self.ammo_rockets = self.ammo_rockets + cvar("g_balance_nixnex_ammoincr_rockets");
 				self.ammo_cells = self.ammo_cells + cvar("g_balance_nixnex_ammoincr_cells");
 				weapon_action(self.weapon, WR_UPDATECOUNTS);
+				self.nixnex_nextincr = time + cvar("g_balance_nixnex_incrtime");
 			}
 		}
 
