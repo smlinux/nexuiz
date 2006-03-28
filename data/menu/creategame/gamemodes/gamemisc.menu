@@ -180,8 +180,25 @@ Item Layout Misc
 			}
 			Derive Nex_Option_Switch NoRecoil
 			{
-				text	"No Recoil (no view kick when firing weapons)"
+				text	"No Recoil"
 				target	"::Data::Game::Misc::NoRecoil::Switch"
+			}
+			Derive Nex_Line	SeperatorNixNex
+			{}
+			Derive Nex_Option_Switch NixNex
+			{
+				text	"NixNex (No Items Nexuiz)"
+				target	"::Data::Game::Misc::NixNex::Switch"
+			}
+			Derive Nex_Option_EditBox NixNexRoundTime
+			{
+				text	"Time between weapon switches"
+				target	"::Data::Game::Misc::NixNexRoundTime::Text"
+			}
+			Derive Nex_Option_EditBox NixNexIncrTime
+			{
+				text	"Time between ammo increments"
+				target	"::Data::Game::Misc::NixNexIncrTime::Text"
 			}
 			Derive Nex_Line	SeperatorMidAir
 			{}
@@ -192,7 +209,7 @@ Item Layout Misc
 			}
 			Derive Nex_Option_EditBox MidAirShieldTime
 			{
-				text	"Invulnerability time after leaving floor"
+				text	"Invuln. time after leaving floor"
 				target	"::Data::Game::Misc::MidAirShieldTime::Text"
 			}
 			Derive Nex_Line	SeperatorMinstagib
@@ -219,7 +236,7 @@ Item Layout Misc
 			}
 			Derive Nex_Option_EditBox MinstaGibInvisAlpha
 			{
-				text	"Tranparency for invisible players"
+				text	"Transparency for invisible players"
 				target	"::Data::Game::Misc::MinstaGibInvisAlpha::Text"
 			}
 			Derive Nex_Line	SeperatorOthers

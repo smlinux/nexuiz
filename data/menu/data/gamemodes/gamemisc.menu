@@ -179,6 +179,13 @@ Item DataContainer Misc
 
 		[DataLink_OnOffSwitch]
 	}
+	Item Data_Cvar NixNex
+	{
+		cvarName	"g_nixnex"
+		defValue	0
+
+		[DataLink_OnOffSwitch]
+	}
 	Item Data_Cvar Vampire
 	{
 		cvarName	"g_vampire"
@@ -199,6 +206,20 @@ Item DataContainer Misc
 		defValue	0
 
 		[DataLink_OnOffSwitch]
+	}
+	Item Data_Cvar NixNexRoundTime
+	{
+		cvarName	"g_balance_nixnex_roundtime"
+		defValue	25
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar NixNexIncrTime
+	{
+		cvarName	"g_balance_nixnex_incrtime"
+		defValue	1.6
+
+		[DataLink_Setting]
 	}
 	Item Data_Cvar MidAir
 	{

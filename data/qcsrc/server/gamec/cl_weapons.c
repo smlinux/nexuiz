@@ -443,17 +443,16 @@ void Nixnex_GiveCurrentWeapon()
 			self.nixnex_lastinfotime = dt; // initial value 0 should count as "not seen"
 			if(dt >= 1 && dt <= 5)
 				centerprint(self, strcat("^3", ftos(dt), "^2 seconds until weapon change...\n\nNext weapon: ^3", W_Name(nixnex_nextweapon), "\n"));
+		}
 
-			// this only happens once a second, so...
-			if(cvar("g_use_ammunition") && time > self.nixnex_nextincr)
-			{
-				self.ammo_shells = self.ammo_shells + cvar("g_balance_nixnex_ammoincr_shells");
-				self.ammo_nails = self.ammo_nails + cvar("g_balance_nixnex_ammoincr_nails");
-				self.ammo_rockets = self.ammo_rockets + cvar("g_balance_nixnex_ammoincr_rockets");
-				self.ammo_cells = self.ammo_cells + cvar("g_balance_nixnex_ammoincr_cells");
-				weapon_action(self.weapon, WR_UPDATECOUNTS);
-				self.nixnex_nextincr = time + cvar("g_balance_nixnex_incrtime");
-			}
+		if(cvar("g_use_ammunition") && time > self.nixnex_nextincr)
+		{
+			self.ammo_shells = self.ammo_shells + cvar("g_balance_nixnex_ammoincr_shells");
+			self.ammo_nails = self.ammo_nails + cvar("g_balance_nixnex_ammoincr_nails");
+			self.ammo_rockets = self.ammo_rockets + cvar("g_balance_nixnex_ammoincr_rockets");
+			self.ammo_cells = self.ammo_cells + cvar("g_balance_nixnex_ammoincr_cells");
+			weapon_action(self.weapon, WR_UPDATECOUNTS);
+			self.nixnex_nextincr = time + cvar("g_balance_nixnex_incrtime");
 		}
 
 		self.items = self.items - (self.items & (IT_LASER | IT_SHOTGUN | IT_UZI | IT_GRENADE_LAUNCHER | IT_ELECTRO | IT_CRYLINK | IT_NEX | IT_HAGAR | IT_ROCKET_LAUNCHER));
