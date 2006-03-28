@@ -183,23 +183,6 @@ Item Layout Misc
 				text	"No Recoil"
 				target	"::Data::Game::Misc::NoRecoil::Switch"
 			}
-			Derive Nex_Line	SeperatorNixNex
-			{}
-			Derive Nex_Option_Switch NixNex
-			{
-				text	"NixNex (No Items Nexuiz)"
-				target	"::Data::Game::Misc::NixNex::Switch"
-			}
-			Derive Nex_Option_EditBox NixNexRoundTime
-			{
-				text	"Time between weapon switches"
-				target	"::Data::Game::Misc::NixNexRoundTime::Text"
-			}
-			Derive Nex_Option_EditBox NixNexIncrTime
-			{
-				text	"Time between ammo increments"
-				target	"::Data::Game::Misc::NixNexIncrTime::Text"
-			}
 			Derive Nex_Line	SeperatorMidAir
 			{}
 			Derive Nex_Option_Switch MidAir
@@ -238,6 +221,23 @@ Item Layout Misc
 			{
 				text	"Transparency for invisible players"
 				target	"::Data::Game::Misc::MinstaGibInvisAlpha::Text"
+			}
+			Derive Nex_Line	SeperatorNixNex
+			{}
+			Derive Nex_Option_Switch NixNex
+			{
+				text	"NixNex (No Items Nexuiz)"
+				target	"::Data::Game::Misc::NixNex::Switch"
+			}
+			Derive Nex_Option_EditBox NixNexRoundTime
+			{
+				text	"Time between weapon switches"
+				target	"::Data::Game::Misc::NixNexRoundTime::Text"
+			}
+			Derive Nex_Option_EditBox NixNexIncrTime
+			{
+				text	"Time between ammo increments"
+				target	"::Data::Game::Misc::NixNexIncrTime::Text"
 			}
 			Derive Nex_Line	SeperatorOthers
 			{}
