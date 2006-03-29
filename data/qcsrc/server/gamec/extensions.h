@@ -876,7 +876,7 @@ void(vector org) te_plasmaburn = #433;
 //description:
 //creates a small light flash (radius 200, time 0.2) and marks the walls.
 
-//DP_TRACE_DPHITCONTENTSMASK_SURFACEINFO
+//DP_TRACE_HITCONTENTSMASK_SURFACEINFO
 //idea: LordHavoc
 //darkplaces implementation: LordHavoc
 //globals:
