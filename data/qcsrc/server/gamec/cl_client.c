@@ -460,6 +460,12 @@ void PutClientInServer (void)
 		self.lms_nextcheck = time + cvar("g_lms_campcheck_interval")*2;
 		self.lms_traveled_distance = 0;
 
+		if(cvar("spawn_debug"))
+		{
+				sprint(self, strcat("spawnpoint origin:  ", vtos(spot.origin), "\n"));
+				remove(spot);	// usefull for checking if there are spawnpoints, that let drop through the floor
+		}
+
 		//stuffcmd(self, "chase_active 0");
 	 	//stuffcmd(self, "set viewsize $tmpviewsize \n");
 	} else if(self.classname == "observer") {
@@ -1327,6 +1333,7 @@ void PlayerPreThink (void)
 
 	}
 }
+
 
 /*
 =============

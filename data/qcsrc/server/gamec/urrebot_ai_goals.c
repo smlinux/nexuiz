@@ -223,43 +223,43 @@ void() ItemEvals =
 		}
 		else
 		{
-			if (e.netname == "shells")
+			if (e.items & IT_SHELLS)
 				e.evalfunc = ShellsEval;
-			else if (e.netname == "bullets")
+			else if (e.items & IT_NAILS)
 				e.evalfunc = NailsEval;
-			else if (e.netname == "rockets")
+			else if (e.items & IT_ROCKETS)
 				e.evalfunc = RocketsEval;
-			else if (e.netname == "cells")
+			else if (e.items & IT_CELLS)
 				e.evalfunc = CellsEval;
-			else if (e.netname == "5 Health")
+			else if (e.max_health == 5)
 				e.evalfunc = Health5Eval;
-			else if (e.netname == "25 Health")
+			else if (e.max_health == 25)
 				e.evalfunc = Health25Eval;
-			else if (e.netname == "100 Health")
+			else if (e.max_health & 100)
 				e.evalfunc = Health100Eval;
-			else if (e.netname == "Armor Shard")
+			else if (e.armorvalue == 5)
 				e.evalfunc = Armor5Eval;
-			else if (e.netname == "Armor")
+			else if (e.armorvalue == 100)
 				e.evalfunc = Armor100Eval;				
-			else if (e.netname == "Uzi")
+			else if (e.items & IT_UZI)
 				e.evalfunc = UEval;
-			else if (e.netname == "Shotgun")
+			else if (e.items & IT_SHOTGUN)
 				e.evalfunc = SGEval;
-			else if (e.netname == "Grenade Launcher")
+			else if (e.items & IT_GRENADE_LAUNCHER)
 				e.evalfunc = GLEval;
-			else if (e.netname == "Electro")
+			else if (e.items & IT_ELECTRO)
 				e.evalfunc = EEval;
-			else if (e.netname == "Crylink")
+			else if (e.items & IT_CRYLINK)
 				e.evalfunc = CLEval;
-			else if (e.netname == "Nex Gun")
+			else if (e.items & IT_NEX)
 				e.evalfunc = NGEval;
-			else if (e.netname == "Hagar")
+			else if (e.items & IT_HAGAR)
 				e.evalfunc = HEval;
-			else if (e.netname == "Rocket Launcher")
+			else if (e.items & IT_ROCKET_LAUNCHER)
 				e.evalfunc = RLEval;
-			else if (e.netname == "Strength Powerup")
+			else if (e.items & IT_STRENGTH)
 				e.evalfunc = StrengthEval;
-			else if (e.netname == "Invulnerability")
+			else if (e.items & IT_INVINCIBLE)
 				e.evalfunc = InvEval;
 			else if (e.classname == "dom_controlpoint")
 				e.evalfunc = DomPointEval;
@@ -292,21 +292,21 @@ void() DistEvalItems =
 			e.goallist = FindCurrentNavNode((e.absmin + e.absmax)*0.5, e.mins, e.maxs);
 			if (e.classname == "droppedweapon")
 			{
-				if (e.netname == "Uzi")
+				if (e.items & IT_UZI)
 					e.evalfunc = UEval;
-				else if (e.netname == "Shotgun")
+				else if (e.items & IT_SHOTGUN)
 					e.evalfunc = SGEval;
-				else if (e.netname == "Grenade Launcher")
+				else if (e.items & IT_GRENADE_LAUNCHER)
 					e.evalfunc = GLEval;
-				else if (e.netname == "Electro")
+				else if (e.items & IT_ELECTRO)
 					e.evalfunc = EEval;
-				else if (e.netname == "Crylink")
+				else if (e.items & IT_CRYLINK)
 					e.evalfunc = CLEval;
-				else if (e.netname == "Nex Gun")
+				else if (e.items & IT_NEX)
 					e.evalfunc = NGEval;
-				else if (e.netname == "Hagar")
+				else if (e.items & IT_HAGAR)
 					e.evalfunc = HEval;
-				else if (e.netname == "Rocket Launcher")
+				else if (e.items & IT_ROCKET_LAUNCHER)
 					e.evalfunc = RLEval;
 				else
 				{

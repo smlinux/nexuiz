@@ -95,7 +95,7 @@ void Item_Touch (void)
 	}
 	else
 	{
-		if (cvar("deathmatch") != 2 || !self.flags & FL_WEAPON || !other.items & self.items || self.classname == "droppedweapon")
+		if (cvar("deathmatch") != 2 || !(self.flags & FL_WEAPON) || !(other.items & self.items) || self.classname == "droppedweapon")
 		{
 			if (self.ammo_shells)
 				other.ammo_shells = min (other.ammo_shells + self.ammo_shells, 999);
@@ -106,14 +106,14 @@ void Item_Touch (void)
 			if (self.ammo_cells)
 				other.ammo_cells = min (other.ammo_cells + self.ammo_cells, 999);
 
-			if (self.items & IT_UZI)		W_GiveWeapon (other, IT_UZI, "Machine gun");
-			if (self.items & IT_SHOTGUN)		W_GiveWeapon (other, IT_SHOTGUN, "Shotgun");
-			if (self.items & IT_GRENADE_LAUNCHER)	W_GiveWeapon (other, IT_GRENADE_LAUNCHER, "Mortar");
-			if (self.items & IT_ELECTRO)		W_GiveWeapon (other, IT_ELECTRO, "Electro");
-			if (self.items & IT_NEX)		W_GiveWeapon (other, IT_NEX, "Nex");
-			if (self.items & IT_HAGAR)		W_GiveWeapon (other, IT_HAGAR, "Hagar");
-			if (self.items & IT_ROCKET_LAUNCHER)	W_GiveWeapon (other, IT_ROCKET_LAUNCHER, "Rocket Launcher");
-			if (self.items & IT_CRYLINK)		W_GiveWeapon (other, IT_CRYLINK, "Crylink");
+			if (self.items & IT_UZI)		W_GiveWeapon (other, IT_UZI, self.netname);
+			if (self.items & IT_SHOTGUN)		W_GiveWeapon (other, IT_SHOTGUN, self.netname);
+			if (self.items & IT_GRENADE_LAUNCHER)	W_GiveWeapon (other, IT_GRENADE_LAUNCHER, self.netname);
+			if (self.items & IT_ELECTRO)		W_GiveWeapon (other, IT_ELECTRO, self.netname);
+			if (self.items & IT_NEX)		W_GiveWeapon (other, IT_NEX, self.netname);
+			if (self.items & IT_HAGAR)		W_GiveWeapon (other, IT_HAGAR, self.netname);
+			if (self.items & IT_ROCKET_LAUNCHER)	W_GiveWeapon (other, IT_ROCKET_LAUNCHER, self.netname);
+			if (self.items & IT_CRYLINK)		W_GiveWeapon (other, IT_CRYLINK, self.netname);
 		}
 
 		if (self.strength_finished)
@@ -157,7 +157,7 @@ void Item_Touch (void)
 
 	if (self.classname == "droppedweapon")
 		remove (self);
-	else if (cvar("deathmatch") != 2 || !self.flags & FL_WEAPON)
+	else if (cvar("deathmatch") != 2 || !(self.flags & FL_WEAPON))
 	{
 		self.solid = SOLID_NOT;
 		self.model = string_null;
@@ -330,27 +330,27 @@ void minstagib_items (float itemid)
 
 void weapon_uzi (void) {
 	self.ammo_nails = 120;
-	StartItem ("models/weapons/g_uzi.md3", "weapons/weaponpickup.ogg", 15, "Uzi", IT_UZI, FL_WEAPON);
+	StartItem ("models/weapons/g_uzi.md3", "weapons/weaponpickup.ogg", 15, W_Name(WEP_UZI), IT_UZI, FL_WEAPON);
 }
 
 void weapon_shotgun (void) {
 	self.ammo_shells = 15;
-	StartItem ("models/weapons/g_shotgun.md3", "weapons/weaponpickup.ogg", 15, "Shotgun", IT_SHOTGUN, FL_WEAPON);
+	StartItem ("models/weapons/g_shotgun.md3", "weapons/weaponpickup.ogg", 15, W_Name(WEP_SHOTGUN), IT_SHOTGUN, FL_WEAPON);
 }
 
 void weapon_grenadelauncher (void) {
 	self.ammo_rockets = 15;
-	StartItem ("models/weapons/g_gl.md3", "weapons/weaponpickup.ogg", 15, "Grenade Launcher", IT_GRENADE_LAUNCHER, FL_WEAPON);
+	StartItem ("models/weapons/g_gl.md3", "weapons/weaponpickup.ogg", 15, W_Name(WEP_GRENADE_LAUNCHER), IT_GRENADE_LAUNCHER, FL_WEAPON);
 }
 
 void weapon_electro (void) {
 	self.ammo_cells = 25;
-	StartItem ("models/weapons/g_electro.md3", "weapons/weaponpickup.ogg", 15, "Electro", IT_ELECTRO, FL_WEAPON);
+	StartItem ("models/weapons/g_electro.md3", "weapons/weaponpickup.ogg", 15, W_Name(WEP_ELECTRO), IT_ELECTRO, FL_WEAPON);
 }
 
 void weapon_crylink (void) {
 	self.ammo_cells = 25;
-	StartItem ("models/weapons/g_crylink.md3", "weapons/weaponpickup.ogg", 15, "Crylink", IT_CRYLINK, FL_WEAPON);
+	StartItem ("models/weapons/g_crylink.md3", "weapons/weaponpickup.ogg", 15, W_Name(WEP_CRYLINK), IT_CRYLINK, FL_WEAPON);
 }
 
 void weapon_nex (void) {
@@ -358,13 +358,13 @@ void weapon_nex (void) {
 		minstagib_items(IT_CELLS);
 	} else {
 		self.ammo_cells = 25;
-		StartItem ("models/weapons/g_nex.md3", "weapons/weaponpickup.ogg", 15, "Nex Gun", IT_NEX, FL_WEAPON);
+		StartItem ("models/weapons/g_nex.md3", "weapons/weaponpickup.ogg", 15, W_Name(WEP_NEX), IT_NEX, FL_WEAPON);
 	}
 }
 
 void weapon_hagar (void) {
 	self.ammo_rockets = 15;
-	StartItem ("models/weapons/g_hagar.md3", "weapons/weaponpickup.ogg", 15, "Hagar", IT_HAGAR, FL_WEAPON);
+	StartItem ("models/weapons/g_hagar.md3", "weapons/weaponpickup.ogg", 15, W_Name(WEP_HAGAR), IT_HAGAR, FL_WEAPON);
 }
 
 void weapon_rocketlauncher (void) {
@@ -372,7 +372,7 @@ void weapon_rocketlauncher (void) {
 		minstagib_items(IT_CELLS);
 	} else {
 		self.ammo_rockets = 15;
-		StartItem ("models/weapons/g_rl.md3", "weapons/weaponpickup.ogg", 15, "Rocket Launcher", IT_ROCKET_LAUNCHER, FL_WEAPON);
+		StartItem ("models/weapons/g_rl.md3", "weapons/weaponpickup.ogg", 15, W_Name(WEP_ROCKET_LAUNCHER), IT_ROCKET_LAUNCHER, FL_WEAPON);
 	}
 }
 

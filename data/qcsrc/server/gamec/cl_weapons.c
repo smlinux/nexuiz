@@ -387,7 +387,7 @@ void Nixnex_ChooseNextWeapon()
 string W_Name(float weaponid)
 {
 	if(weaponid == WEP_LASER)             return "Laser";
-	if(weaponid == WEP_UZI)               return "Machine gun";
+	if(weaponid == WEP_UZI)               return "Machine Gun";
 	if(weaponid == WEP_SHOTGUN)           return "Shotgun";
 	if(weaponid == WEP_GRENADE_LAUNCHER)  return "Mortar";
 	if(weaponid == WEP_ELECTRO)           return "Electro";
