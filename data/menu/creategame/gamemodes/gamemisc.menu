@@ -229,6 +229,11 @@ Item Layout Misc
 				text	"NixNex (No Items Nexuiz)"
 				target	"::Data::Game::Misc::NixNex::Switch"
 			}
+			Derive Nex_Option_Switch NixNexWithLaser
+			{
+				text	"Always carry laser"
+				target	"::Data::Game::Misc::NixNexWithLaser::Switch"
+			}
 			Derive Nex_Option_EditBox NixNexRoundTime
 			{
 				text	"Time between weapon switches"
