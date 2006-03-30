@@ -921,27 +921,31 @@ void player_powerups (void)
 
 void player_regen (void)
 {
-	float maxh, maxa, max_mod, regen_mod, rot_mod;
+	float maxh, maxa, limith, limita, max_mod, regen_mod, rot_mod, limit_mod;
 	maxh = cvar("g_balance_health_stable");
 	maxa = cvar("g_balance_armor_stable");
+	limith = cvar("g_balance_health_limit");
+	limita = cvar("g_balance_armor_limit");
 
 	if (cvar("g_minstagib") || (cvar("g_lms") && !cvar("g_lms_regenerate")))
 		return;
 
 	if(cvar("g_runematch"))
 	{
-		max_mod = regen_mod = rot_mod = 1;
+		max_mod = regen_mod = rot_mod = limit_mod = 1;
 		if (self.runes & RUNE_REGEN)
 		{
 			if (self.runes & CURSE_VENOM) // do we have both rune/curse?
 			{
 				regen_mod = cvar("g_balance_rune_regen_combo_regenrate");
 				max_mod = cvar("g_balance_rune_regen_combo_hpmod");
+				limit_mod = cvar("g_balance_rune_regen_combo_limitmod");
 			}
 			else
 			{
 				regen_mod = cvar("g_balance_rune_regen_regenrate");
 				max_mod = cvar("g_balance_rune_regen_hpmod");
+				limit_mod = cvar("g_balance_rune_regen_limitmod");
 			}
 		}
 		else if (self.runes & CURSE_VENOM)
@@ -951,6 +955,7 @@ void player_regen (void)
 				rot_mod = cvar("g_balance_rune_regen_combo_rotrate");
 			else
 				rot_mod = cvar("g_balance_curse_venom_rotrate");
+			limit_mod = cvar("g_balance_curse_venom_limitmod");
 			//if (!self.runes & RUNE_REGEN)
 			//	rot_mod = cvar("g_balance_curse_venom_rotrate");
 		}
@@ -991,6 +996,10 @@ void player_regen (void)
 				self.armorvalue = bound(0, self.armorvalue + (maxa - self.armorvalue) * cvar("g_balance_armor_regen") * frametime + 0.001, 1000);
 		}
 	}
+	if (self.health > limith)
+		self.health = limith;
+	if (self.armorvalue > limita)
+		self.armorvalue = limita;
 }
 
 /*
