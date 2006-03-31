@@ -1,6 +1,66 @@
-textures/stralenex1/light_tube_green
+textures/evil8_lights/e8minitrimlight
 {
-	q3map_surfacelight 1000	 
+	qer_editorimage textures/evil8_lights/e8minitrimlight.tga
+	q3map_lightimage textures/evil8_lights/e8minitrimlight.blend.tga
+	surfaceparm nomarks
+	q3map_surfacelight 1200
+	{
+		map textures/evil8_lights/e8minitrimlight.tga
+	}
+	{
+		map $lightmap 
+		blendfunc filter
+		tcGen lightmap 
+	}
+	{
+		map textures/evil8_lights/e8minitrimlight.blend.tga
+		blendfunc add
+	}
+}
+textures/evil8_lights/e8tinylight2k
+{
+	qer_editorimage textures/evil8_lights/e8tinylight.tga
+	q3map_lightimage textures/evil8_lights/e8tinylightcolor.tga
+	surfaceparm nomarks
+	q3map_surfacelight 2000
+	{
+		map textures/evil8_lights/e8tinylight.tga
+	}
+	{
+		map $lightmap 
+		blendfunc filter
+		tcGen lightmap 
+	}
+	{
+		map textures/evil8_lights/e8tinylight.blend.tga
+		blendfunc add
+	}
+}
+
+textures/evil8_lights/e8tinylightblue2k
+{
+	qer_editorimage textures/evil8_lights/e8tinylightblue.tga
+	q3map_lightimage textures/evil8_lights/e8tinylightbluecolor.tga
+	surfaceparm nomarks
+	q3map_surfacelight 2000
+	{
+		map textures/evil8_lights/e8tinylightblue.tga
+		blendFunc GL_DST_COLOR GL_ZERO
+		rgbGen identity
+	}
+	{
+		map $lightmap 
+		blendfunc filter
+		tcGen lightmap 
+	}
+	{
+		map textures/evil8_lights/e8tinylightblue.blend.tga
+		blendfunc add
+	}
+}
+
+textures/stralenex1/light_tube_green
+{	 
 	qer_editorimage textures/stralenex1/light_tube_green.tga
         q3map_lightimage textures/stralenex1/light_tube_green_glow.tga 
 	q3map_surfacelight 1000	
