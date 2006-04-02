@@ -48,7 +48,6 @@ void(entity e) RegenFlag =
 	e.movetype = MOVETYPE_TOSS;
 	e.solid = SOLID_TRIGGER;
 	// TODO: play a sound here
-	sound (e, CHAN_AUTO, self.noise3, 1, ATTN_NONE);
 	setorigin(e, e.oldorigin);
 	e.angles = e.mangle;
 	e.cnt = FLAG_BASE;
@@ -133,6 +132,7 @@ void() FlagThink =
 				bprint("The RED flag has returned to base\n");
 			else
 				bprint("The BLUE flag has returned to base\n");
+			sound (e, CHAN_AUTO, self.noise3, 1, ATTN_NONE);
 			ReturnFlag(self);
 		}
 		return;
@@ -249,6 +249,7 @@ void() FlagTouch =
 				head.frags = head.frags + cvar("g_ctf_flagscore_capture_team");//FLAGSCORE_CAPTURE_TEAM;
 			head = find(head, classname, "player");
 		}
+		sound (self, CHAN_AUTO, self.noise2, 1, ATTN_NONE);
 		RegenFlag (other.flagcarried);
 		other.flagcarried = world;
 		other.next_take_time = time + 1;
