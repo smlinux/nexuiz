@@ -72,6 +72,8 @@ void(entity pl) LogTeamchange =
 	string str;
 	if(!cvar("sv_logspam_console"))
 		return;
+	if(pl.playerid < 1)
+		return;
 	str = strcat(":team:", ftos(pl.playerid), ":");
 	str = strcat(str, ftos(pl.team)); 
 	ServerConsoleEcho(str, FALSE);

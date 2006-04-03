@@ -16,6 +16,17 @@ Note: The only teams who can use dom control points are identified by dom_team e
 */
 
 
+void LogDom(string mode, float team_before, entity actor)
+{
+	string s;
+	if(!cvar("sv_logspam_console"))
+		return;
+	s = strcat(":dom:", mode);
+	s = strcat(s, ":", ftos(team_before));
+	s = strcat(s, ":", ftos(actor.playerid));
+	ServerConsoleEcho(s, FALSE);
+}
+
 void() dom_spawnteams;
 
 void dompoint_captured ()
@@ -25,6 +36,9 @@ void dompoint_captured ()
 	head = self.enemy;
 
 	self.cnt = -1;
+
+	LogDom("taken", self.team, self.dmg_inflictor);
+	self.dmg_inflictor = world;
 
 	self.goalentity = head;
 	self.model = head.mdl;
@@ -134,8 +148,11 @@ void() dompointtouch =
 
 	// delay capture
 
+	self.team = self.goalentity.team; // this stores the PREVIOUS team!
+
 	self.cnt = other.team;
 	self.enemy = head;
+	self.dmg_inflictor = other;
 
 	self.state = 1;
 	self.delay = time + cvar("g_domination_point_capturetime");
