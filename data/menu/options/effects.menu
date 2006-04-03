@@ -46,6 +46,11 @@ Item Window Effects
 
 		Derive Nex_Line	SeperatorRTLights
 		{}
+		Derive Nex_Option_Switch DeluxeMapping
+		{
+			text    "Deluxemapping"
+			target  "::Data::Effects::DeluxeMapping::Switch"
+		}									
 		Derive Nex_Option_Switch RealtimeLights
 		{
 			text	"Realtime World Lights"

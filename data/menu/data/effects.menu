@@ -44,6 +44,18 @@ Item DataContainer Effects
 
 		[DataLink_OnOffSwitch]
 	}
+	Item Data_Cvar DeluxeMapping
+	{
+		cvarName "r_glsl_deluxemapping"
+		defValue "1"
+		
+		Item DataLink_TextSwitch Switch
+		{
+			valueList "'0' '1' '2'"
+			descList "'Off' 'On' 'Forced'"
+			link  "##up"
+		}
+	}
 	Item Data_Cvar RealtimeLights
 	{
 		cvarName	"r_shadow_realtime_world"

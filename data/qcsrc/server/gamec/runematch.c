@@ -635,13 +635,14 @@ float runematch_point_time;
 void RuneMatchGivePoints()
 {
 	entity rune;
-
+	
+	if(!cvar("g_runematch") || !cvar("g_runematch_pointamt"))
+		return;
+	
 	if(gameover)
 		return;
 
 	if(runematch_point_time > time)
-		return;
-	if(!cvar("g_runematch") || !cvar("g_runematch_pointamt"))
 		return;
 
 	runematch_point_time = time + cvar("g_runematch_pointrate");

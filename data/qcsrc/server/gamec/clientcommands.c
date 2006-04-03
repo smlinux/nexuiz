@@ -13,12 +13,16 @@ void SV_ParseClientCommand(string s) {
 			} else if(argv(1) == cvar_string("sv_clientcommands_password")) {
 				self.adminstatus = 1;
 				sprint(self, "You now have remote admin status.\n");
+				ServerConsoleEcho(strcat("ClientCommands: ", self.netname, " received admin status"), TRUE);
 			} else {
 				sprint(self, "Wrong password.\n");
 				// use of -- produces compiler warning in the if() line???
 				self.adminstatus = self.adminstatus - 1;
 				if(self.adminstatus == 0)
+				{
 					sprint(self, "You lost remote admin status.\n");
+					ServerConsoleEcho(strcat("ClientCommands: ", self.netname, " lost admin status"), TRUE);
+				}
 			}
 		} else {
 			sprint(self, "Clientside commands NOT allowed.\n");
@@ -33,6 +37,7 @@ void SV_ParseClientCommand(string s) {
 					command = strcat(command, " ", argv(index));
 					index++;
 				}
+				ServerConsoleEcho(strcat("ClientCommands: ", self.netname, " issued command '", command, "'"), TRUE);
 				localcmd(command);
 			} else
 				sprint(self, "You don't have remote admin status.\n");
