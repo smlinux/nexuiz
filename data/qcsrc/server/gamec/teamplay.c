@@ -67,6 +67,15 @@ void ctf_init();
 void runematch_init();
 void tdm_init();
 
+void(entity pl) LogTeamchange =
+{
+	string str;
+	if(!cvar("sv_logspam_console"))
+		return;
+	str = strcat(":team:", ftos(pl.playerid), ":");
+	str = strcat(str, ftos(pl.team)); 
+	ServerConsoleEcho(str);
+}
 
 void ResetGameCvars()
 {
@@ -379,6 +388,9 @@ void SetPlayerTeam(entity pl, float t, float s, float noprint)
 		//bprint(strcat(pl.netname, " has changed to ", TeamNoName(t), "\n"));
 		bprint(strcat(pl.netname, "^7 has changed from ", TeamNoName(s), " to ", TeamNoName(t), "\n"));
 	}
+
+	if(t != s)
+		LogTeamchange(pl);
 }
 
 
@@ -649,7 +661,10 @@ float JoinBestTeam(entity pl, float only_return_best)
 		if(selectedteam > 0)
 		{
 			if(!only_return_best)
+			{
 				SetPlayerColors(pl, selectedteam - 1);
+				LogTeamchange(pl);
+			}
 			return selectedteam;
 		}
 		// otherwise end up on the smallest team (handled below)
@@ -680,6 +695,7 @@ float JoinBestTeam(entity pl, float only_return_best)
 		{
 			error("smallest team: invalid team\n");
 		}
+		LogTeamchange(pl);
 		if(pl.deadflag == DEAD_NO)
 			Damage(pl, pl, pl, 100000, DEATH_TEAMCHANGE, pl.origin, '0 0 0');
 	}

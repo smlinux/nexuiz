@@ -27,6 +27,41 @@ void GiveFrags (entity attacker, entity targ, float f)
 		attacker.frags = attacker.frags + f;
 }
 
+void LogDeath(string mode, float deathtype, entity killer, entity killed)
+{
+	string s;
+	float w;
+	if(!cvar("sv_logspam_console"))
+		return;
+	s = strcat(":kill:", mode);
+	s = strcat(s, ":", ftos(killer.playerid));
+	s = strcat(s, ":", ftos(killed.playerid));
+	s = strcat(s, ":type=", ftos(deathtype));
+	s = strcat(s, ":items=");
+	w = killer.weapon;
+	if(w == 0)
+		w = killer.switchweapon;
+	s = strcat(s, ftos(weapon_translateindextoflag(w)));
+	if(time < killer.strength_finished)
+		s = strcat(s, "S");
+	if(time < killer.invincible_finished)
+		s = strcat(s, "I");
+	if(killer.flagcarried != world)
+		s = strcat(s, "F");
+	s = strcat(s, ":victimitems=");
+	w = killed.weapon;
+	if(w == 0)
+		w = killed.switchweapon;
+	s = strcat(s, ftos(weapon_translateindextoflag(w)));
+	if(time < killed.strength_finished)
+		s = strcat(s, "s");
+	if(time < killed.invincible_finished)
+		s = strcat(s, "i");
+	if(killed.flagcarried != world)
+		s = strcat(s, "f");
+	ServerConsoleEcho(s);
+}
+
 void Obituary (entity attacker, entity targ, float deathtype)
 {
 	string	s, m;
@@ -91,6 +126,10 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				bprint ("^1",s, "^1 thought he found a nice camping ground\n");
 			else if (deathtype != DEATH_TEAMCHANGE)
 				bprint ("^1",s, "^1 couldn't resist the urge to self-destruct\n");
+
+			if(deathtype != DEATH_TEAMCHANGE)
+				LogDeath("suicide", deathtype, targ, targ);
+
 			GiveFrags(attacker, targ, -1);
 			//targ.frags = targ.frags - 1;
 			if (targ.killcount > 2)
@@ -107,6 +146,8 @@ void Obituary (entity attacker, entity targ, float deathtype)
 			if (attacker.killcount > 2)
 				bprint ("^1",attacker.netname,"^1 ended a ",ftos(attacker.killcount)," kill spree by killing a teammate\n");
 			attacker.killcount = 0;
+
+			LogDeath("tk", deathtype, attacker, targ);
 		}
 		else if (attacker.classname == "player" || attacker.classname == "gib")
 		{
@@ -164,6 +205,8 @@ void Obituary (entity attacker, entity targ, float deathtype)
 			attacker.killcount = attacker.killcount + 1;
 			if (attacker.killcount > 2)
 				bprint ("^1",attacker.netname,"^1 has ",ftos(attacker.killcount)," frags in a row\n");
+
+			LogDeath("frag", deathtype, attacker, targ);
 
 			if (attacker.killcount == 3)
 			{
@@ -226,6 +269,8 @@ void Obituary (entity attacker, entity targ, float deathtype)
 			//targ.frags = targ.frags - 1;
 			if (targ.killcount > 2)
 				bprint ("^1",s,"^1 died with a ",ftos(targ.killcount)," kill spree\n");
+
+			LogDeath("accident", deathtype, targ, targ);
 		}
 		// FIXME: this should go in PutClientInServer
 		if (targ.killcount)

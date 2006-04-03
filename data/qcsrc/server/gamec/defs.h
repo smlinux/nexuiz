@@ -244,3 +244,6 @@ float GRAPHOOK_RELEASE		= 21;
 .float lms_traveled_distance;
 
 .entity flagcarried;
+
+.float playerid;
+float playerid_last;

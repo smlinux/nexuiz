@@ -1,4 +1,6 @@
 string W_Name(float weaponid);
+void(string s) ServerConsoleEcho;
+float(float index) weapon_translateindextoflag;
 
 float math_mod(float a, float b)
 {

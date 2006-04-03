@@ -43,6 +43,18 @@ void() place_flag =
 	self.oldorigin = self.origin;
 };
 
+void LogCTF(string mode, float flagteam, entity actor)
+{
+	string s;
+	if(!cvar("sv_logspam_console"))
+		return;
+	s = strcat(":ctf:", mode);
+	s = strcat(s, ":", ftos(flagteam));
+	if(actor != world)
+		s = strcat(s, ":", ftos(actor.playerid));
+	ServerConsoleEcho(s);
+}
+
 void(entity e) RegenFlag =
 {
 	e.movetype = MOVETYPE_TOSS;
@@ -133,6 +145,7 @@ void() FlagThink =
 			else
 				bprint("The BLUE flag has returned to base\n");
 			sound (e, CHAN_AUTO, self.noise3, 1, ATTN_NONE);
+			LogCTF("returned", self.team, world);
 			ReturnFlag(self);
 		}
 		return;
@@ -142,6 +155,7 @@ void() FlagThink =
 	if (e.classname != "player" || (e.deadflag) || (e.flagcarried != self))
 	{
 		DropFlag(self);
+		LogCTF("dropped", self.team, e);
 		return;
 	}
 
@@ -241,6 +255,7 @@ void() FlagTouch =
 				bprint(other.netname, "^7 captured the BLUE flag in ", ftos(t), ", failing to break the previous record of ", ftos(flagcaptimerecord), " seconds\n");
 		}
 
+		LogCTF("capture", other.flagcarried.team, other);
 		other.frags = other.frags + cvar("g_ctf_flagscore_capture");//FLAGSCORE_CAPTURE;
 		head = find(head, classname, "player");
 		while (head)
@@ -273,6 +288,7 @@ void() FlagTouch =
 		else
 			bprint(other.netname, "^7 got the BLUE flag\n");
 		other.frags = other.frags + cvar("g_ctf_flagscore_pickup");//FLAGSCORE_PICKUP;
+		LogCTF("steal", self.team, other);
 		sound (self, CHAN_AUTO, self.noise, 1, ATTN_NONE);
 
 		player = find(world, classname, "player");
@@ -298,6 +314,7 @@ void() FlagTouch =
 				other.frags = other.frags + cvar("g_ctf_flagscore_return");//FLAGSCORE_RETURN;
 			else
 				other.frags = other.frags + cvar("g_ctf_flagscore_return_rogue");//FLAGSCORE_RETURNROGUE;
+			LogCTF("return", self.team, other);
 			sound (self, CHAN_AUTO, self.noise1, 1, ATTN_NONE);
 			ReturnFlag(self);
 		}
@@ -315,6 +332,7 @@ void() FlagTouch =
 			else
 				bprint(other.netname, "^7 picked up the BLUE flag\n");
 			other.frags = other.frags + cvar("g_ctf_flagscore_pickup");//FLAGSCORE_PICKUP;
+			LogCTF("pickup", self.team, other);
 			sound (self, CHAN_AUTO, self.noise, 1, ATTN_NONE);
 
 			player = find(world, classname, "player");

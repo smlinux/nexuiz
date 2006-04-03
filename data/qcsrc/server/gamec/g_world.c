@@ -581,6 +581,21 @@ RULES
 ===============================================================================
 */
 
+void(string s) ServerConsoleEcho =
+{
+	local string ch;
+	local string str;
+	localcmd(strcat("echo \"", s));
+	while(strlen(str))
+	{
+		ch = substring(str, 0, 1);
+		if(ch != "\"" && ch != "\r" && ch != "\n")
+			localcmd(ch);
+		str = substring(str, 1, strlen(str) - 1);
+	}
+	localcmd("\"\n");
+}
+
 void() DumpStats =
 {
 	local float file;
@@ -619,19 +634,7 @@ void() DumpStats =
 			if(cvar("sv_logscores_file"))
 				fputs(file, strcat(s, other.netname, "\n"));
 			if(cvar("sv_logscores_console"))
-			{
-				local string ch;
-				local float i;
-
-				localcmd(strcat("echo \"", s));
-				for(i = 0; i < strlen(other.netname); ++i)
-				{
-					ch = substring(other.netname, i, 1);
-					if(ch != "\"" && ch != "\r" && ch != "\n")
-						localcmd(ch);
-				}
-				localcmd("\"\n");
-			}
+				ServerConsoleEcho(strcat(s, other.netname));
 		}
 		other = other.chain;
 	}
