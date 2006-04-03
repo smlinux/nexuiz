@@ -133,6 +133,7 @@ float	MSG_ALL					= 2;
 float	MSG_INIT				= 3;
 
 // Deathtypes (weapon deathtypes are the IT_* constants below)
+// NOTE: when adding death types, please add an explanation to Docs/spamlog.txt too.
 float	DEATH_FALL				= 10000;
 float	DEATH_TELEFRAG				= 10001;
 float	DEATH_DROWN				= 10002;
