@@ -74,7 +74,7 @@ void(entity pl) LogTeamchange =
 		return;
 	str = strcat(":team:", ftos(pl.playerid), ":");
 	str = strcat(str, ftos(pl.team)); 
-	ServerConsoleEcho(str);
+	ServerConsoleEcho(str, FALSE);
 }
 
 void ResetGameCvars()

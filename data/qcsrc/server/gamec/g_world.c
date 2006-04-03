@@ -278,7 +278,7 @@ void worldspawn (void)
 	}
 
 	if(cvar("sv_logspam_console"))
-		ServerConsoleEcho(strcat(":gamestart:", GetMapname()));
+		ServerConsoleEcho(strcat(":gamestart:", GetMapname()), FALSE);
 
 	cvar_set("nextmap", "");
 }
@@ -623,7 +623,7 @@ void() DumpStats =
 			if(cvar("sv_logscores_file"))
 				fputs(file, strcat(s, other.netname, "\n"));
 			if(cvar("sv_logscores_console"))
-				ServerConsoleEcho(strcat(s, other.netname));
+				ServerConsoleEcho(strcat(s, other.netname), TRUE);
 		}
 		other = other.chain;
 	}
@@ -647,7 +647,7 @@ void() NextLevel =
 	gameover = TRUE;
 
 	if(cvar("sv_logspam_console"))
-		ServerConsoleEcho(":gameover");
+		ServerConsoleEcho(":gameover", FALSE);
 
 	intermission_running = 1;
 

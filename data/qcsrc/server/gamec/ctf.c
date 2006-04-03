@@ -52,7 +52,7 @@ void LogCTF(string mode, float flagteam, entity actor)
 	s = strcat(s, ":", ftos(flagteam));
 	if(actor != world)
 		s = strcat(s, ":", ftos(actor.playerid));
-	ServerConsoleEcho(s);
+	ServerConsoleEcho(s, FALSE);
 }
 
 void(entity e) RegenFlag =

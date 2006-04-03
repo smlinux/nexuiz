@@ -1,17 +1,23 @@
 string W_Name(float weaponid);
 float(float index) weapon_translateindextoflag;
 
-void(string s) ServerConsoleEcho =
+void(string s, float check_dangerous) ServerConsoleEcho =
 {
 	local string ch;
-	local string str;
-	localcmd(strcat("echo \"", s));
-	while(strlen(str))
+	localcmd("echo \"");
+	if(check_dangerous)
 	{
-		ch = substring(str, 0, 1);
-		if(ch != "\"" && ch != "\r" && ch != "\n")
-			localcmd(ch);
-		str = substring(str, 1, strlen(str) - 1);
+		while(strlen(s))
+		{
+			ch = substring(s, 0, 1);
+			if(ch != "\"" && ch != "\r" && ch != "\n")
+				localcmd(ch);
+			s = substring(s, 1, strlen(s) - 1);
+		}
+	}
+	else
+	{
+		localcmd(s);
 	}
 	localcmd("\"\n");
 }

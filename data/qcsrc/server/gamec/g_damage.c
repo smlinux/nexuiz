@@ -59,7 +59,7 @@ void LogDeath(string mode, float deathtype, entity killer, entity killed)
 		s = strcat(s, "I");
 	if(killed.flagcarried != world)
 		s = strcat(s, "F");
-	ServerConsoleEcho(s);
+	ServerConsoleEcho(s, FALSE);
 }
 
 void Obituary (entity attacker, entity targ, float deathtype)

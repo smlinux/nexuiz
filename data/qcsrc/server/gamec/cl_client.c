@@ -535,10 +535,10 @@ void ClientConnect (void)
 	if(cvar("sv_logspam_console"))
 	{
 		string s;
-		ServerConsoleEcho(strcat(":join:", ftos(self.playerid), ":", self.netname));
+		ServerConsoleEcho(strcat(":join:", ftos(self.playerid), ":", self.netname), TRUE);
 		s = strcat(":team:", ftos(self.playerid), ":");
 		s = strcat(s, ftos(self.team));
-		ServerConsoleEcho(s);
+		ServerConsoleEcho(s, FALSE);
 	}
 
 	//stuffcmd(self, "set tmpviewsize $viewsize \n");
@@ -618,7 +618,7 @@ void(entity e) DropFlag;
 void ClientDisconnect (void)
 {
 	if(cvar("sv_logspam_console"))
-		ServerConsoleEcho(strcat(":part:", ftos(self.playerid), ":", self.netname));
+		ServerConsoleEcho(strcat(":part:", ftos(self.playerid)), FALSE);
 	bprint ("^4",self.netname);
 	bprint ("^4 disconnected\n");
 
