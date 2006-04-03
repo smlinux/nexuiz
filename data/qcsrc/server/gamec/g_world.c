@@ -1,3 +1,4 @@
+string GetMapname();
 
 void worldspawn (void)
 {
@@ -275,6 +276,9 @@ void worldspawn (void)
 		maxclients++;
 		head = nextent(head);
 	}
+
+	if(cvar("sv_logspam_console"))
+		ServerConsoleEcho(strcat(":gamestart:", GetMapname()));
 
 	cvar_set("nextmap", "");
 }
@@ -581,21 +585,6 @@ RULES
 ===============================================================================
 */
 
-void(string s) ServerConsoleEcho =
-{
-	local string ch;
-	local string str;
-	localcmd(strcat("echo \"", s));
-	while(strlen(str))
-	{
-		ch = substring(str, 0, 1);
-		if(ch != "\"" && ch != "\r" && ch != "\n")
-			localcmd(ch);
-		str = substring(str, 1, strlen(str) - 1);
-	}
-	localcmd("\"\n");
-}
-
 void() DumpStats =
 {
 	local float file;
@@ -656,6 +645,9 @@ only called if a time or frag limit has expired
 void() NextLevel =
 {
 	gameover = TRUE;
+
+	if(cvar("sv_logspam_console"))
+		ServerConsoleEcho(":gameover");
 
 	intermission_running = 1;
 

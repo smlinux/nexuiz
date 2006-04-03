@@ -54,11 +54,11 @@ void LogDeath(string mode, float deathtype, entity killer, entity killed)
 		w = killed.switchweapon;
 	s = strcat(s, ftos(weapon_translateindextoflag(w)));
 	if(time < killed.strength_finished)
-		s = strcat(s, "s");
+		s = strcat(s, "S");
 	if(time < killed.invincible_finished)
-		s = strcat(s, "i");
+		s = strcat(s, "I");
 	if(killed.flagcarried != world)
-		s = strcat(s, "f");
+		s = strcat(s, "F");
 	ServerConsoleEcho(s);
 }
 
