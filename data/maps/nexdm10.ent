@@ -13,9 +13,9 @@
 "classname" "item_strength"
 }
 {
-"targetname" "crylinkjump"
-"origin" "-1088 1240 216"
 "classname" "target_position"
+"targetname" "crylinkjump"
+"origin" "-1120 1240 216"
 }
 {
 "classname" "item_armor1"
