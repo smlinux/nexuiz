@@ -46,13 +46,13 @@ void() place_flag =
 void LogCTF(string mode, float flagteam, entity actor)
 {
 	string s;
-	if(!cvar("sv_logspam_console"))
+	if(!cvar("sv_logspam"))
 		return;
 	s = strcat(":ctf:", mode);
 	s = strcat(s, ":", ftos(flagteam));
 	if(actor != world)
 		s = strcat(s, ":", ftos(actor.playerid));
-	ServerConsoleEcho(s, FALSE);
+	GameLogEcho(s, FALSE);
 }
 
 void(entity e) RegenFlag =

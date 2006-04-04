@@ -19,12 +19,12 @@ Note: The only teams who can use dom control points are identified by dom_team e
 void LogDom(string mode, float team_before, entity actor)
 {
 	string s;
-	if(!cvar("sv_logspam_console"))
+	if(!cvar("sv_logspam"))
 		return;
 	s = strcat(":dom:", mode);
 	s = strcat(s, ":", ftos(team_before));
 	s = strcat(s, ":", ftos(actor.playerid));
-	ServerConsoleEcho(s, FALSE);
+	GameLogEcho(s, FALSE);
 }
 
 void() dom_spawnteams;

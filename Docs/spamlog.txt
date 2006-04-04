@@ -1,9 +1,14 @@
 cvars:
 ______________
 
-   sv_logspam_console   print frags, scores and captures to serverconsole during the match (default: 0, set to 1 to enable)
-   sv_logscores_bots    choose whether bot are included in stats or not (default: 0)
-   log_file             where the console log shall go (if unset, standard output is still used)
+   sv_logspam                    master switch (default: 0)
+   sv_logspam_files              print frags, scores and captures for separate files each match (default: 0)
+   sv_logspam_console            print frags, scores and captures to serverconsole during the match (default: 1)
+   sv_logscores_bots             choose whether bot are included in stats or not (default: 0)
+                                
+   sv_logspam_files_counter      number of matches logged until now
+   sv_logspam_files_nameprefix   file name prefix to be used (default: nexuiz)
+   sv_logspam_files_namesuffix   file name extension to be used (default: .log)
 
 log format:
 ______________

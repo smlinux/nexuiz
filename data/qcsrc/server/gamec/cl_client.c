@@ -532,13 +532,13 @@ void ClientConnect (void)
 	}
 
 	self.playerid = (playerid_last = playerid_last + 1);
-	if(cvar("sv_logspam_console"))
+	if(cvar("sv_logspam"))
 	{
 		string s;
-		ServerConsoleEcho(strcat(":join:", ftos(self.playerid), ":", self.netname), TRUE);
+		GameLogEcho(strcat(":join:", ftos(self.playerid), ":", self.netname), TRUE);
 		s = strcat(":team:", ftos(self.playerid), ":");
 		s = strcat(s, ftos(self.team));
-		ServerConsoleEcho(s, FALSE);
+		GameLogEcho(s, FALSE);
 	}
 
 	//stuffcmd(self, "set tmpviewsize $viewsize \n");
@@ -617,8 +617,8 @@ void(entity e) DropFlag;
 .entity teambubbleentity;
 void ClientDisconnect (void)
 {
-	if(cvar("sv_logspam_console"))
-		ServerConsoleEcho(strcat(":part:", ftos(self.playerid)), FALSE);
+	if(cvar("sv_logspam"))
+		GameLogEcho(strcat(":part:", ftos(self.playerid)), FALSE);
 	bprint ("^4",self.netname);
 	bprint ("^4 disconnected\n");
 

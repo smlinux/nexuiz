@@ -31,7 +31,7 @@ void LogDeath(string mode, float deathtype, entity killer, entity killed)
 {
 	string s;
 	float w;
-	if(!cvar("sv_logspam_console"))
+	if(!cvar("sv_logspam"))
 		return;
 	s = strcat(":kill:", mode);
 	s = strcat(s, ":", ftos(killer.playerid));
@@ -62,7 +62,7 @@ void LogDeath(string mode, float deathtype, entity killer, entity killed)
 		if(killed.flagcarried != world)
 			s = strcat(s, "F");
 	}
-	ServerConsoleEcho(s, FALSE);
+	GameLogEcho(s, FALSE);
 }
 
 void Obituary (entity attacker, entity targ, float deathtype)

@@ -277,8 +277,9 @@ void worldspawn (void)
 		head = nextent(head);
 	}
 
-	if(cvar("sv_logspam_console"))
-		ServerConsoleEcho(strcat(":gamestart:", GetMapname()), FALSE);
+	GameLogInit(); // prepare everything
+	if(cvar("sv_logspam"))
+		GameLogEcho(strcat(":gamestart:", GetMapname()), FALSE);
 
 	cvar_set("nextmap", "");
 }
@@ -602,8 +603,8 @@ void() DumpStats =
 
 	s = strcat(s, GetMapname(), ":", ftos(rint(time)));
 
-	if(cvar("sv_logscores_console") || cvar("sv_logspam_console"))
-		ServerConsoleEcho(s, FALSE);
+	if(cvar("sv_logscores_console") || cvar("sv_logspam"))
+		GameLogEcho(s, FALSE);
 	if(cvar("sv_logscores_file"))
 	{
 		file = fopen(cvar_string("sv_logscores_filename"), FILE_APPEND);
@@ -622,16 +623,16 @@ void() DumpStats =
 
 			if(cvar("sv_logscores_file"))
 				fputs(file, strcat(s, other.netname, "\n"));
-			if(cvar("sv_logspam_console"))
-				ServerConsoleEcho(strcat(s, ftos(other.playerid), ":", other.netname), TRUE);
+			if(cvar("sv_logspam"))
+				GameLogEcho(strcat(s, ftos(other.playerid), ":", other.netname), TRUE);
 			else if(cvar("sv_logscores_console"))
-				ServerConsoleEcho(strcat(s, other.netname), TRUE);
+				GameLogEcho(strcat(s, other.netname), TRUE);
 		}
 		other = other.chain;
 	}
 
-	if(cvar("sv_logscores_console") || cvar("sv_logspam_console"))
-		ServerConsoleEcho(":end", FALSE);
+	if(cvar("sv_logscores_console") || cvar("sv_logspam"))
+		GameLogEcho(":end", FALSE);
 	if(cvar("sv_logscores_file"))
 	{
 		fputs(file, ":end\n");
@@ -663,8 +664,10 @@ void() NextLevel =
 
 	DumpStats();
 
-	if(cvar("sv_logspam_console"))
-		ServerConsoleEcho(":gameover", FALSE);
+	if(cvar("sv_logspam"))
+		GameLogEcho(":gameover", FALSE);
+
+	GameLogClose();
 
 	other = findchainflags(flags, FL_CLIENT);
 	while (other != world)
