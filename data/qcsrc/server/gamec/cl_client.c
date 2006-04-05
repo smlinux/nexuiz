@@ -273,9 +273,9 @@ void PutClientInServer (void)
 		self.health = cvar("g_balance_health_start");
 		self.armorvalue = cvar("g_balance_armor_start");
 		self.spawnshieldtime = time + cvar("g_spawnshieldtime");
-		self.pauserotarmor_finished = time + 10;
-		self.pauserothealth_finished = time + 10;
-		self.pauseregen_finished = 0;
+		self.pauserotarmor_finished = time + cvar("g_balance_pause_armor_rot_spawn");
+		self.pauserothealth_finished = time + cvar("g_balance_pause_health_rot_spawn");
+		self.pauseregen_finished = time + cvar("g_balance_pause_health_regen_spawn");;
 		self.damageforcescale = 2;
 		self.death_time = 0;
 		self.dead_time = 0;
