@@ -187,7 +187,7 @@ void PlayerCorpseDamage (entity inflictor, entity attacker, float damage, float 
 		self.armorvalue = self.armorvalue - save;
 		self.health = self.health - take;
 		// pause regeneration for 5 seconds
-		self.pauseregen_finished = max(self.pauseregen_finished, time + 5);
+		self.pauseregen_finished = max(self.pauseregen_finished, time + cvar("g_balance_pause_health_regen"));
 	}
 	self.dmg_save = self.dmg_save + save;//max(save - 10, 0);
 	self.dmg_take = self.dmg_take + take;//max(take - 10, 0);
@@ -276,7 +276,7 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 		self.armorvalue = self.armorvalue - save;
 		self.health = self.health - take;
 		// pause regeneration for 5 seconds
-		self.pauseregen_finished = max(self.pauseregen_finished, time + 5);
+		self.pauseregen_finished = max(self.pauseregen_finished, time + cvar("g_balance_pause_health_regen"));
 	}
 	self.dmg_save = self.dmg_save + save;//max(save - 10, 0);
 	self.dmg_take = self.dmg_take + take;//max(take - 10, 0);
