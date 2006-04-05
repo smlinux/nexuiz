@@ -70,7 +70,7 @@ void tdm_init();
 void(entity pl) LogTeamchange =
 {
 	string str;
-	if(!cvar("sv_logspam"))
+	if(!cvar("sv_eventlog"))
 		return;
 	if(pl.playerid < 1)
 		return;

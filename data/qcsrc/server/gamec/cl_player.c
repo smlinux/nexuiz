@@ -307,13 +307,13 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 
 	if (self.health < 1)
 	{
-		DropAllRunes(self);
 		self.deaths += 1;
 
 		// throw a weapon
 		SpawnThrownWeapon (self.origin + (self.mins + self.maxs) * 0.5, self.weapon);
 		// print an obituary message
 		Obituary (attacker, self, deathtype);
+		DropAllRunes(self);
 		// make the corpse upright (not tilted)
 		self.angles_x = 0;
 		self.angles_z = 0;

@@ -532,7 +532,7 @@ void ClientConnect (void)
 	}
 
 	self.playerid = (playerid_last = playerid_last + 1);
-	if(cvar("sv_logspam"))
+	if(cvar("sv_eventlog"))
 	{
 		string s;
 		GameLogEcho(strcat(":join:", ftos(self.playerid), ":", self.netname), TRUE);
@@ -617,7 +617,7 @@ void(entity e) DropFlag;
 .entity teambubbleentity;
 void ClientDisconnect (void)
 {
-	if(cvar("sv_logspam"))
+	if(cvar("sv_eventlog"))
 		GameLogEcho(strcat(":part:", ftos(self.playerid)), FALSE);
 	bprint ("^4",self.netname);
 	bprint ("^4 disconnected\n");

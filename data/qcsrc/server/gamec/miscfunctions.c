@@ -30,36 +30,36 @@ void(string s, float check_dangerous) GameLogEcho =
 	string fn;
 	float matches;
 
-	if(cvar("sv_logspam_console"))
-	{
-		ServerConsoleEcho(s, check_dangerous);
-	}
-	if(cvar("sv_logspam_files"))
+	if(cvar("sv_eventlog_files"))
 	{
 		if(!logfile_open)
 		{
 			logfile_open = TRUE;
-			matches = cvar("sv_logspam_files_counter") + 1;
-			cvar_set("sv_logspam_files_counter", ftos(matches));
+			matches = cvar("sv_eventlog_files_counter") + 1;
+			cvar_set("sv_eventlog_files_counter", ftos(matches));
 			fn = ftos(matches);
 			if(strlen(fn) < 8)
 				fn = strcat(substring("00000000", 0, 8 - strlen(fn)), fn);
-			fn = strcat(cvar_string("sv_logspam_files_nameprefix"), fn, cvar_string("sv_logspam_files_namesuffix"));
+			fn = strcat(cvar_string("sv_eventlog_files_nameprefix"), fn, cvar_string("sv_eventlog_files_namesuffix"));
 			logfile = fopen(fn, FILE_APPEND);
 			dprint(strcat("\n\n\n\n**********\nlogfile id: ", ftos(logfile), "\n\n\n"));
 		}
 		if(logfile >= 0)
 			fputs(logfile, strcat(s, "\n"));
 	}
+	if(cvar("sv_eventlog_console"))
+	{
+		ServerConsoleEcho(s, check_dangerous);
+	}
 }
 
-void(string s, float check_dangerous) GameLogInit =
+void() GameLogInit =
 {
 	logfile_open = 0;
 	// will be opened later
 }
 
-void(string s, float check_dangerous) GameLogClose =
+void() GameLogClose =
 {
 	if(logfile_open && logfile >= 0)
 	{

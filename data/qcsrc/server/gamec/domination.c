@@ -19,7 +19,7 @@ Note: The only teams who can use dom control points are identified by dom_team e
 void LogDom(string mode, float team_before, entity actor)
 {
 	string s;
-	if(!cvar("sv_logspam"))
+	if(!cvar("sv_eventlog"))
 		return;
 	s = strcat(":dom:", mode);
 	s = strcat(s, ":", ftos(team_before));

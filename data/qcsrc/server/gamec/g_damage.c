@@ -27,40 +27,39 @@ void GiveFrags (entity attacker, entity targ, float f)
 		attacker.frags = attacker.frags + f;
 }
 
+string AppendItemcodes(string s, entity player)
+{
+	float w;
+	w = player.weapon;
+	if(w == 0)
+		w = player.switchweapon;
+	s = strcat(s, ftos(weapon_translateindextoflag(w)));
+	if(time < player.strength_finished)
+		s = strcat(s, "S");
+	if(time < player.invincible_finished)
+		s = strcat(s, "I");
+	if(player.flagcarried != world)
+		s = strcat(s, "F");
+	if(player.runes)
+		s = strcat(s, "|", ftos(player.runes));
+	return s;
+}
+
 void LogDeath(string mode, float deathtype, entity killer, entity killed)
 {
 	string s;
-	float w;
-	if(!cvar("sv_logspam"))
+	if(!cvar("sv_eventlog"))
 		return;
 	s = strcat(":kill:", mode);
 	s = strcat(s, ":", ftos(killer.playerid));
 	s = strcat(s, ":", ftos(killed.playerid));
 	s = strcat(s, ":type=", ftos(deathtype));
 	s = strcat(s, ":items=");
-	w = killer.weapon;
-	if(w == 0)
-		w = killer.switchweapon;
-	s = strcat(s, ftos(weapon_translateindextoflag(w)));
-	if(time < killer.strength_finished)
-		s = strcat(s, "S");
-	if(time < killer.invincible_finished)
-		s = strcat(s, "I");
-	if(killer.flagcarried != world)
-		s = strcat(s, "F");
+	s = AppendItemcodes(s, killer);
 	if(killed != killer)
 	{
 		s = strcat(s, ":victimitems=");
-		w = killed.weapon;
-		if(w == 0)
-			w = killed.switchweapon;
-		s = strcat(s, ftos(weapon_translateindextoflag(w)));
-		if(time < killed.strength_finished)
-			s = strcat(s, "S");
-		if(time < killed.invincible_finished)
-			s = strcat(s, "I");
-		if(killed.flagcarried != world)
-			s = strcat(s, "F");
+		s = AppendItemcodes(s, killed);
 	}
 	GameLogEcho(s, FALSE);
 }

@@ -46,7 +46,7 @@ void() place_flag =
 void LogCTF(string mode, float flagteam, entity actor)
 {
 	string s;
-	if(!cvar("sv_logspam"))
+	if(!cvar("sv_eventlog"))
 		return;
 	s = strcat(":ctf:", mode);
 	s = strcat(s, ":", ftos(flagteam));
