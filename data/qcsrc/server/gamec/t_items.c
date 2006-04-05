@@ -173,9 +173,13 @@ void RemoveItem(void) = {
 	remove(self);
 }
 
+.float noalign;
 
 void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, string itemname, float itemid, float itemflags)
 {
+	vector org;
+	org = self.origin;
+	
 	if (!(cvar("g_pickup_items") && !cvar("g_nixnex")) && !cvar("g_minstagib") &&
 			itemid != IT_STRENGTH && itemid != IT_INVINCIBLE && itemname != "100 Health")
 	{
@@ -253,7 +257,7 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 		self.think = RemoveItem;
 		self.nextthink = time + 60;
 	}
-	else
+	else if (!self.noalign)
 	{
 		vector z_offset;
 
@@ -273,6 +277,11 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 		self.movetype = MOVETYPE_NONE;
 		traceline(self.origin, self.origin - '0 0 1' * 1024, TRUE, self);
 		setorigin(self, trace_endpos + z_offset);
+	}
+	else
+	{
+		self.movetype = MOVETYPE_NONE;
+		setorigin(self, org);
 	}
 
 	if (cvar("g_fullbrightitems"))
