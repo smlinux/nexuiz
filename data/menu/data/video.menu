@@ -52,7 +52,7 @@ Item DataContainer Video
 		Item DataLink_TextSwitch Switch
 		{
 			valueList "'0' '1' '2' '3' '4'"
-			descList "'Best' 'Good' 'Medium' 'Low' 'Lowest' 'Custom'"
+			descList "'Best (0)' 'Good (1) ' 'Medium (2)' 'Low (3)' 'Lowest (4) ' 'Custom'"
 			link  "##up"
 		}
 	}
