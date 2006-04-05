@@ -95,26 +95,26 @@ void Item_Touch (void)
 	}
 	else
 	{
-		if (cvar("deathmatch") != 2 || !(self.flags & FL_WEAPON) || !(other.items & self.items) || self.classname == "droppedweapon")
-		{
-			if (self.ammo_shells)
-				other.ammo_shells = min (other.ammo_shells + self.ammo_shells, 999);
-			if (self.ammo_nails)
-				other.ammo_nails = min (other.ammo_nails + self.ammo_nails, 999);
-			if (self.ammo_rockets)
-				other.ammo_rockets = min (other.ammo_rockets + self.ammo_rockets, 999);
-			if (self.ammo_cells)
-				other.ammo_cells = min (other.ammo_cells + self.ammo_cells, 999);
+		if (cvar("deathmatch") == 2 && self.flags & FL_WEAPON && other.items & self.items && self.classname != "droppedweapon")
+			return;
+		
+		if (self.ammo_shells)
+			other.ammo_shells = min (other.ammo_shells + self.ammo_shells, 999);
+		if (self.ammo_nails)
+			other.ammo_nails = min (other.ammo_nails + self.ammo_nails, 999);
+		if (self.ammo_rockets)
+			other.ammo_rockets = min (other.ammo_rockets + self.ammo_rockets, 999);
+		if (self.ammo_cells)
+			other.ammo_cells = min (other.ammo_cells + self.ammo_cells, 999);
 
-			if (self.items & IT_UZI)		W_GiveWeapon (other, IT_UZI, self.netname);
-			if (self.items & IT_SHOTGUN)		W_GiveWeapon (other, IT_SHOTGUN, self.netname);
-			if (self.items & IT_GRENADE_LAUNCHER)	W_GiveWeapon (other, IT_GRENADE_LAUNCHER, self.netname);
-			if (self.items & IT_ELECTRO)		W_GiveWeapon (other, IT_ELECTRO, self.netname);
-			if (self.items & IT_NEX)		W_GiveWeapon (other, IT_NEX, self.netname);
-			if (self.items & IT_HAGAR)		W_GiveWeapon (other, IT_HAGAR, self.netname);
-			if (self.items & IT_ROCKET_LAUNCHER)	W_GiveWeapon (other, IT_ROCKET_LAUNCHER, self.netname);
-			if (self.items & IT_CRYLINK)		W_GiveWeapon (other, IT_CRYLINK, self.netname);
-		}
+		if (self.items & IT_UZI)		W_GiveWeapon (other, IT_UZI, self.netname);
+		if (self.items & IT_SHOTGUN)		W_GiveWeapon (other, IT_SHOTGUN, self.netname);
+		if (self.items & IT_GRENADE_LAUNCHER)	W_GiveWeapon (other, IT_GRENADE_LAUNCHER, self.netname);
+		if (self.items & IT_ELECTRO)		W_GiveWeapon (other, IT_ELECTRO, self.netname);
+		if (self.items & IT_NEX)		W_GiveWeapon (other, IT_NEX, self.netname);
+		if (self.items & IT_HAGAR)		W_GiveWeapon (other, IT_HAGAR, self.netname);
+		if (self.items & IT_ROCKET_LAUNCHER)	W_GiveWeapon (other, IT_ROCKET_LAUNCHER, self.netname);
+		if (self.items & IT_CRYLINK)		W_GiveWeapon (other, IT_CRYLINK, self.netname);
 
 		if (self.strength_finished)
 			other.strength_finished = max(other.strength_finished, time) + cvar("g_balance_powerup_strength_time");
@@ -157,7 +157,7 @@ void Item_Touch (void)
 
 	if (self.classname == "droppedweapon")
 		remove (self);
-	else if (cvar("deathmatch") != 2 || !(self.flags & FL_WEAPON))
+	else
 	{
 		self.solid = SOLID_NOT;
 		self.model = string_null;
