@@ -240,7 +240,7 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 	}
 	else
 	{
-		setorigin (self, self.origin + '0 0 1' * other.maxs_z + '0 0 18');
+		setorigin (self, self.origin + '0 0 25');
 	//	setsize (self, '-8 -8 -5', '8 8 8');
 	}
 	self.movetype = MOVETYPE_TOSS;
@@ -252,6 +252,27 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 	{
 		self.think = RemoveItem;
 		self.nextthink = time + 60;
+	}
+	else
+	{
+		vector z_offset;
+
+		z_offset = '0 0 1';
+
+		if (itemid == IT_SHELLS)
+			z_offset = '0 0 1' * 4;
+		else if (itemid == IT_ROCKETS)
+			z_offset = '0 0 1' * 4;
+		else if (itemid == IT_NAILS)
+			z_offset = '0 0 0';
+		else if (self.max_health == 25)
+			z_offset = '0 0 1' * 5;
+		else if (self.armorvalue == 100)
+			z_offset = '0 0 1' * 3;
+
+		self.movetype = MOVETYPE_NONE;
+		traceline(self.origin, self.origin - '0 0 1' * 1024, TRUE, self);
+		setorigin(self, trace_endpos + z_offset);
 	}
 
 	if (cvar("g_fullbrightitems"))
