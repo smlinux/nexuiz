@@ -76,6 +76,8 @@ void W_Laser_Attack (void)
 	if (self.items & IT_STRENGTH)
 		sound (self, CHAN_AUTO, "weapons/strength_fire.ogg", 1, ATTN_NORM);
 
+	self.punchangle_x = -3;
+
 	org = W_MuzzleOrigin (self, '24 9 -9');
 	//te_customflash(org, 160, 0.2, '1 0 0');
 
