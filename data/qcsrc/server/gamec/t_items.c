@@ -128,14 +128,14 @@ void Item_Touch (void)
 		if (self.max_health)
 		{
 			other.health = other.health + self.max_health;
-			other.pauserothealth_finished = max(other.pauserothealth_finished, time + 5);
+			other.pauserothealth_finished = max(other.pauserothealth_finished, time + cvar("g_balance_pause_health_rot"));
 		}
 		if (self.health && other.health < other.max_health)
 			other.health = min(other.health + self.health, other.max_health);
 		if (self.armorvalue)
 		{
 			other.armorvalue = other.armorvalue + self.armorvalue;
-			other.pauserotarmor_finished = max(other.pauserotarmor_finished, time + 5);
+			other.pauserotarmor_finished = max(other.pauserotarmor_finished, time + cvar("g_balance_pause_armor_rot"));
 		}
 	}
 
