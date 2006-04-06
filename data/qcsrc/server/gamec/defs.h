@@ -245,5 +245,7 @@ float GRAPHOOK_RELEASE		= 21;
 
 .entity flagcarried;
 
+.entity lastrocket;
+
 .float playerid;
 float playerid_last;

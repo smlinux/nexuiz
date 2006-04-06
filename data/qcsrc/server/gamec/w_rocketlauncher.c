@@ -206,6 +206,8 @@ void W_Rocket_Think (void)
 
 void W_Rocket_Touch (void)
 {
+	if(self.owner && self.owner.lastrocket == self)
+		self.owner.lastrocket = world;
 	if (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
 	{
 		sound (self, CHAN_BODY, "misc/null.wav", 1, ATTN_NORM);
@@ -247,6 +249,7 @@ void W_Rocket_Attack (void)
 
 	missile = spawn ();
 	missile.owner = self;
+	self.lastrocket = missile;
 	missile.classname = "missile";
 
 	missile.takedamage = DAMAGE_YES;

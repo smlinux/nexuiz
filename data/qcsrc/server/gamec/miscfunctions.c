@@ -42,7 +42,6 @@ void(string s, float check_dangerous) GameLogEcho =
 				fn = strcat(substring("00000000", 0, 8 - strlen(fn)), fn);
 			fn = strcat(cvar_string("sv_eventlog_files_nameprefix"), fn, cvar_string("sv_eventlog_files_namesuffix"));
 			logfile = fopen(fn, FILE_APPEND);
-			dprint(strcat("\n\n\n\n**********\nlogfile id: ", ftos(logfile), "\n\n\n"));
 		}
 		if(logfile >= 0)
 			fputs(logfile, strcat(s, "\n"));

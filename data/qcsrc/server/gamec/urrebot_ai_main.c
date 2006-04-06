@@ -110,6 +110,12 @@ void() UrreBotAim =
 
 	v = (self.enemy.absmin + self.enemy.absmax) * 0.5;
 
+	if (self.switchweapon == WEP_ELECTRO || self.switchweapon == WEP_HAGAR || self.switchweapon == WEP_LASER)
+	{
+		if(math_mod(self.playerid, 2) == 1)
+			v_z = (self.enemy.absmin_z * 0.8 + v_z * 0.2); // aim more at the floor
+	}
+
 	if (self.enemy)
 	{
 		if (time > self.enemytimeout || self.enemy.takedamage == DAMAGE_NO || self.enemy.deadflag)
@@ -186,6 +192,22 @@ void() UrreBotAim =
 				self.button0 = 1;
 			else if (random() < f)
 				self.button0 = 1;
+		}
+	}
+
+	if(self.switchweapon == WEP_ROCKET_LAUNCHER)
+	{
+		if(self.lastrocket && self.enemy)
+		{
+			if(vlen(self.lastrocket.origin - self.enemy.origin) < cvar("g_balance_rocketlauncher_radius") * 0.85)
+			{
+				if(vlen(self.lastrocket.origin - self.origin) > cvar("g_balance_rocketlauncher_radius") * 1.05)
+				{
+					f = 0.1 + skeel*0.1;
+					if (random() < f)
+						self.button3 = 1;
+				}
+			}
 		}
 	}
 };
@@ -595,6 +617,7 @@ void() UrreBotThink =
 	self.movement = '0 0 0';
 	self.button0 = 0;
 	self.button2 = 0;
+	self.button3 = 0;
 	self.impulse = 0;
 
 	if (cvar("teamplay") && self.team == self.enemy.team) // don't return fire if hit by a teammate
