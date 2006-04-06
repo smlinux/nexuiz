@@ -187,9 +187,6 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 		return;
 	}
 
-	if (!self.flags & FL_WEAPON || !other.items & self.items || self.classname == "droppedweapon")
-
-
 	if (cvar("g_minstagib"))
 	{
 		// don't remove dropped items and powerups

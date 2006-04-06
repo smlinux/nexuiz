@@ -389,6 +389,7 @@ void() GotoNextMap =
 		local float lCurrent;
 		local float lSize;
 		local float lOldCurrent;
+		local float lBeforeCurrent;
 		local float pass;
 
 		if(TryFile(strcat("maps/", cvar_string("nextmap"), ".mapcfg")))
@@ -415,6 +416,19 @@ void() GotoNextMap =
 			lSize = tokenize( temp );
 			lOldCurrent = lCurrent;
 			dprint(ftos(lOldCurrent), " / ", ftos(lSize), " (start)\n");
+
+			// if we want a random map selection...
+			if(cvar("g_maplist_selectrandom") && lSize > 1)
+			{
+				lBeforeCurrent = lCurrent - 1;
+				if(lBeforeCurrent < 0)
+					lBeforeCurrent = lSize - 1;
+				lCurrent = ceil(random() * (lSize - 1)) - 1; // random in 0..lsize-2
+				if(lCurrent >= lBeforeCurrent)
+					lCurrent += 1;
+				// choose any map except for the current one
+			}
+
 			while( 1 ) {
 				local string lFilename;
 
