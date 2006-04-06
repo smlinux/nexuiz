@@ -13,8 +13,10 @@ ______________
 log format:
 ______________
 
+   :logversion:1
    :gamestart:<gametype>_<mapname>:<matchid>
-   :join:<ID>:<nickname>
+   :join:<ID>:player:<nickname>
+   :join:<ID>:bot:<nickname>
    :part:<ID>
    :team:<ID>:<team>
    :kill:frag:<ID of killer>:<ID of victim>:type=<death type>:items=<itemstring of killer>:victimitems=<itemstring of victim>

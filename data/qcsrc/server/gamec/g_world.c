@@ -283,6 +283,7 @@ void worldspawn (void)
 		local string matchid;
 		matchid = strcat(cvar_string("sv_eventlog_files_counter"), ".");
 		matchid = strcat(matchid, ftos(random()));
+		GameLogEcho(":logversion:1", FALSE);
 		GameLogEcho(strcat(":gamestart:", GetMapname(), ":", matchid), FALSE);
 	}
 

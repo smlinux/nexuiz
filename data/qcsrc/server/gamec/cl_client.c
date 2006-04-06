@@ -275,7 +275,7 @@ void PutClientInServer (void)
 		self.spawnshieldtime = time + cvar("g_spawnshieldtime");
 		self.pauserotarmor_finished = time + cvar("g_balance_pause_armor_rot_spawn");
 		self.pauserothealth_finished = time + cvar("g_balance_pause_health_rot_spawn");
-		self.pauseregen_finished = time + cvar("g_balance_pause_health_regen_spawn");;
+		self.pauseregen_finished = time + cvar("g_balance_pause_health_regen_spawn");
 		self.damageforcescale = 2;
 		self.death_time = 0;
 		self.dead_time = 0;
@@ -535,7 +535,11 @@ void ClientConnect (void)
 	if(cvar("sv_eventlog"))
 	{
 		string s;
-		GameLogEcho(strcat(":join:", ftos(self.playerid), ":", self.netname), TRUE);
+		if(clienttype(self) == CLIENTTYPE_REAL)
+			s = "player";
+		else
+			s = "bot";
+		GameLogEcho(strcat(":join:", ftos(self.playerid), ":", s, ":", self.netname), TRUE);
 		s = strcat(":team:", ftos(self.playerid), ":");
 		s = strcat(s, ftos(self.team));
 		GameLogEcho(s, FALSE);
