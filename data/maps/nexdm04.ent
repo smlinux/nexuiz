@@ -30,54 +30,45 @@
 {
 "angle" "270"
 "classname" "info_player_deathmatch"
-"angles" "0 0 0"
 "origin" "-81 1395 119"
 }
 {
 "angle" "270"
 "classname" "info_player_deathmatch"
-"angles" "0 0 0"
 "origin" "176 1395 119"
 }
 {
 "classname" "info_player_deathmatch"
-"angles" "0 0 0"
 "origin" "-378 1395 134"
 }
 {
 "angle" "90"
 "classname" "info_player_start"
-"angles" "0 0 0"
 "origin" "111 -352 0"
 }
 {
 "angle" "90"
 "classname" "info_player_deathmatch"
-"angles" "0 0 0"
 "origin" "176 -352 0"
 }
 {
 "angle" "90"
 "classname" "info_player_deathmatch"
-"angles" "0 0 0"
 "origin" "1087 -237 308"
 }
 {
 "angle" "90"
 "classname" "info_player_deathmatch"
-"angles" "0 0 0"
 "origin" "1309 -237 308"
 }
 {
 "angle" "270"
 "classname" "info_player_deathmatch"
-"angles" "0 0 0"
 "origin" "1068 358 308"
 }
 {
 "angle" "270"
 "classname" "info_player_deathmatch"
-"angles" "0 0 0"
 "origin" "1328 358 308"
 }
 {
@@ -230,7 +221,6 @@
 {
 "angle" "135"
 "classname" "info_player_deathmatch"
-"angles" "0 0 0"
 "origin" "80 15 -1"
 }
 {

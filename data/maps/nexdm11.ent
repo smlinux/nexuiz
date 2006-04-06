@@ -135,7 +135,7 @@
 }
 {
 "classname" "weapon_crylink"
-"origin" "474 -464 53"
+"origin" "480 -520 53"
 }
 {
 "classname" "item_armor1"

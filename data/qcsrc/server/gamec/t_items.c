@@ -272,8 +272,9 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 			z_offset = '0 0 1' * 3;
 
 		self.movetype = MOVETYPE_NONE;
-		traceline(self.origin, self.origin - '0 0 1' * 1024, TRUE, self);
-		setorigin(self, trace_endpos + z_offset);
+		traceline(self.origin, self.origin - '0 0 1' * 512, TRUE, self);
+		if (trace_fraction < 1)
+			setorigin(self, trace_endpos + z_offset);
 	}
 	else
 	{

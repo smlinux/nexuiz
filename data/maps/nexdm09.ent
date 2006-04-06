@@ -147,8 +147,9 @@
 "classname" "item_health25"
 }
 {
-"origin" "1056 72 248"
+"origin" "1056 72 238"
 "classname" "weapon_grenadelauncher"
+"noalign" "1"
 }
 {
 "origin" "1136 680 272"

@@ -117,7 +117,8 @@
 {
 "classname" "weapon_uzi"
 "angles" "0 0 0"
-"origin" "-1344 -20 220"
+"origin" "-1344 -20 200"
+"noalign" "1"
 }
 {
 "classname" "item_cells"

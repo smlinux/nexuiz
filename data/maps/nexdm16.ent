@@ -294,7 +294,8 @@
 }
 {
 "classname" "item_armor25"
-"origin" "-9 1722 1467"
+"origin" "-9 1722 1417"
+"noalign" "1"
 }
 {
 "classname" "item_strength"

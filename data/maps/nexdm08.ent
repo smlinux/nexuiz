@@ -104,11 +104,11 @@
 }
 {
 "classname" "item_armor25"
-"origin" "15 -9 -133"
+"origin" "15 0 -133"
 }
 {
 "classname" "item_armor25"
-"origin" "15 -9 -133"
+"origin" "15 0 -133"
 }
 {
 "origin" "-449 4 -133"

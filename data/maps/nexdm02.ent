@@ -1472,7 +1472,8 @@
 }
 {
 "classname" "weapon_uzi"
-"origin" "680 32 32"
+"origin" "680 32 22"
+"noalign" "1"
 }
 {
 "classname" "weapon_electro"

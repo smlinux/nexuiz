@@ -4,7 +4,8 @@
 }
 {
 "classname" "weapon_rocketlauncher"
-"origin" "720 832 64"
+"origin" "720 832 27"
+"noalign" "1"
 }
 {
 "classname" "info_player_deathmatch"
