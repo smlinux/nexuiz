@@ -1,10 +1,12 @@
 void info_player_start (void)
 {
 	self.classname = "info_player_deathmatch";
+	relocate_spawnpoint();
 }
 
 void info_player_deathmatch (void)
 {
+	relocate_spawnpoint();
 }
 
 float spawn_allbad;
@@ -145,7 +147,12 @@ entity SelectSpawnPoint (float anypoint)
 		spot = Spawn_FurthestPoint(firstspot, playerlist);
 
 	if (!spot)
-		error ("PutClientInServer: no start points on level");
+	{
+		if(cvar("spawn_debug"))
+			GotoNextMap();
+		else
+			error ("PutClientInServer: no start points on level");
+	}
 
 	return spot;
 }
@@ -231,6 +238,12 @@ void PutObserverInServer (void)
 	self.weaponframe = 0;
 	self.weaponentity = world;
 	self.killcount = -666;
+	self.velocity = '0 0 0';
+	self.avelocity = '0 0 0';
+	self.punchangle = '0 0 0';
+	self.punchvector = '0 0 0';
+	self.oldvelocity = self.velocity;
+
 	if(!cvar("g_lms"))
 		self.frags = -666;
  	//stuffcmd(self, "set viewsize 120 \n");

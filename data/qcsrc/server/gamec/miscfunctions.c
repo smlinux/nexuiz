@@ -84,3 +84,20 @@ string linewrap(string s, float l)
 	}
 	return strcat(t, s);
 }
+
+vector find_floor(vector org)
+{
+	traceline(org + '0 0 5', org - '0 0 255', TRUE, self);
+	if (trace_fraction < 1)
+		return trace_endpos;
+	else
+		return org;
+}
+
+void relocate_spawnpoint()
+{
+	if(self.noalign)
+		return;
+
+	setorigin(self, find_floor(self.origin) + '0 0 30');
+}

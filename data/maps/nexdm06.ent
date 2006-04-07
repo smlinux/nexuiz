@@ -207,6 +207,7 @@
 }
 {
 "origin" "-432 -464 -168"
+"angle" "90"
 "classname" "info_player_deathmatch"
 }
 {
@@ -706,37 +707,37 @@
 {
 "classname" "info_player_team1"
 "origin" "630 -1280 88"
-"angle" "-90"
+"angle" "0"
 }
 {
 "classname" "info_player_team1"
 "origin" "770 -1280 88"
-"angle" "-90"
+"angle" "85"
 }
 {
 "classname" "info_player_team1"
 "origin" "570 -1000 -72"
-"angle" "-90"
+"angle" "-25"
 }
 {
 "classname" "info_player_team1"
 "origin" "830 -1010 -72"
-"angle" "-90"
+"angle" "90"
 }
 {
 "classname" "info_player_team1"
 "origin" "1080 -1370 88"
-"angle" "-90"
+"angle" "135"
 }
 {
 "classname" "info_player_team2"
 "origin" "-220 780 -168"
-"angle" "90"
+"angle" "-90"
 }
 {
 "classname" "info_player_team2"
 "origin" "-100 780 -168"
-"angle" "90"
+"angle" "-45"
 }
 {
 "classname" "info_player_team2"

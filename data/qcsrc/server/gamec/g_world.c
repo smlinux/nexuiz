@@ -656,7 +656,7 @@ void() DumpStats =
 		fputs(file, strcat(s, "\n"));
 	}
 
-	other = findchain(classname, "player");
+	other = findchainflags(flags, FL_CLIENT);
 	while (other)
 	{
 		if ((clienttype(other) == CLIENTTYPE_REAL) || (clienttype(other) == CLIENTTYPE_BOT && cvar("sv_logscores_bots")))

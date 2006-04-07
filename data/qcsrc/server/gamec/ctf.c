@@ -356,6 +356,7 @@ void() info_player_team1 =
 {
 	self.classname = "info_player_deathmatch";
 	self.team = 5; // red
+	relocate_spawnpoint();
 };
 //self.team = 4;self.classname = "info_player_start";info_player_start();};
 
@@ -371,6 +372,7 @@ void() info_player_team2 =
 {
 	self.classname = "info_player_deathmatch";
 	self.team = 14; // blue
+	relocate_spawnpoint();
 };
 //self.team = 13;self.classname = "info_player_start";info_player_start();};
 
@@ -386,6 +388,7 @@ void() info_player_team3 =
 {
 	self.classname = "info_player_deathmatch";
 	self.team = 10; // purple
+	relocate_spawnpoint();
 };
 
 
@@ -401,6 +404,7 @@ void() info_player_team4 =
 {
 	self.classname = "info_player_deathmatch";
 	self.team = 13; // yellow
+	relocate_spawnpoint();
 };
 
 

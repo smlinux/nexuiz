@@ -173,8 +173,6 @@ void RemoveItem(void) = {
 	remove(self);
 }
 
-.float noalign;
-
 void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, string itemname, float itemid, float itemflags)
 {
 	vector org;
@@ -272,9 +270,7 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 			z_offset = '0 0 1' * 3;
 
 		self.movetype = MOVETYPE_NONE;
-		traceline(self.origin, self.origin - '0 0 1' * 512, TRUE, self);
-		if (trace_fraction < 1)
-			setorigin(self, trace_endpos + z_offset);
+		setorigin(self, find_floor(org) + z_offset);
 	}
 	else
 	{

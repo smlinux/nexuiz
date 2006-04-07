@@ -249,3 +249,4 @@ float GRAPHOOK_RELEASE		= 21;
 
 .float playerid;
 float playerid_last;
+.float noalign;		// if set to 1, the item or spawnpoint won't be dropped to the floor
