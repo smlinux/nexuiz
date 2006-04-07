@@ -280,11 +280,36 @@ void worldspawn (void)
 	GameLogInit(); // prepare everything
 	if(cvar("sv_eventlog"))
 	{
-		local string matchid;
-		matchid = strcat(cvar_string("sv_eventlog_files_counter"), ".");
-		matchid = strcat(matchid, ftos(random()));
-		GameLogEcho(":logversion:1", FALSE);
-		GameLogEcho(strcat(":gamestart:", GetMapname(), ":", matchid), FALSE);
+		local string s;
+		GameLogEcho(":logversion:2", FALSE);
+		s = strcat(cvar_string("sv_eventlog_files_counter"), ".");
+		s = strcat(s, ftos(random()));
+		GameLogEcho(strcat(":gamestart:", GetMapname(), ":", s), FALSE);
+		s = ":gameinfo:mutators:LIST";
+		if(cvar("g_grappling_hook"))
+			s = strcat(s, ":grappling_hook");
+		if(!cvar("g_use_ammunition"))
+			s = strcat(s, ":no_use_ammunition");
+		if(!cvar("g_pickup_items"))
+			s = strcat(s, ":no_pickup_items");
+		if(cvar("g_instagib"))
+			s = strcat(s, ":instagib");
+		if(cvar("g_rocketarena"))
+			s = strcat(s, ":rockerarena");
+		if(cvar("g_nixnex"))
+			s = strcat(s, ":nixnex");
+		if(cvar("g_vampire"))
+			s = strcat(s, ":vampire");
+		if(cvar("g_laserguided_missile"))
+			s = strcat(s, ":laserguided_missile");
+		if(cvar("g_norecoil"))
+			s = strcat(s, ":norecoil");
+		if(cvar("g_midair"))
+			s = strcat(s, ":midair");
+		if(cvar("g_minstagib"))
+			s = strcat(s, ":minstagib");
+		GameLogEcho(s, FALSE);
+		GameLogEcho(":gameinfo:end", FALSE);
 	}
 
 	cvar_set("nextmap", "");

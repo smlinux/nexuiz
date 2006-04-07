@@ -13,8 +13,15 @@ ______________
 log format:
 ______________
 
-   :logversion:1
+   :logversion:2
    :gamestart:<gametype>_<mapname>:<matchid>
+   :gameinfo:mutators:LIST:mutator1:mutator2:...
+
+      (note that mutators are listed by their cvar name with g_ removed,
+      unless such a cvar is 1 by default - then the mutator is listed with
+      a no_ prefix if the cvar is 0)
+
+   :gameinfo:end
    :join:<ID>:player:<nickname>
    :join:<ID>:bot:<nickname>
    :part:<ID>
