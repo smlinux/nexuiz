@@ -187,7 +187,7 @@ void PutObserverInServer (void)
 	spot = SelectSpawnPoint (FALSE);
 	RemoveGrapplingHook(self); // Wazat's Grappling Hook
 
-	if(self.frags == 0 && cvar("g_lms") && self.killcount != -666)
+	if(self.frags <= 0 && self.frags > -666 && cvar("g_lms") && self.killcount != -666)
 		bprint (strcat("^4", self.netname, "^4 has no more lives left\n"));
 	else if(self.killcount != -666)
 		bprint (strcat("^4", self.netname, "^4 is spectating now\n"));
@@ -609,7 +609,7 @@ void ClientConnect (void)
 		// if "g_lms_join_anytime" new players spawn with same amount of lives as the worst active player
 		if(((cvar("fraglimit") - cvar("g_lms_last_join")) > lms_lowest_lives && !cvar("g_lms_join_anytime")) || lms_lowest_lives < 1)
 		{
-			self.frags = -1;
+			self.frags = -666;
 			lms_dead_count += 1;
 		}
 		else if(cvar("fraglimit") > lms_lowest_lives)
@@ -1301,9 +1301,9 @@ void PlayerPreThink (void)
 				self.flags = self.flags | FL_JUMPRELEASED;
         		}
 		}
-		if(cvar("g_lms") && self.frags == 0)
+		if(cvar("g_lms") && self.frags <= 0 && self.frags > -666)
 			centerprint(self, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n^1You have no more lives left\nwait for next round\n\n\n^7press attack to spectate other players");
-		else if(cvar("g_lms") && self.frags == -1)
+		else if(cvar("g_lms") && self.frags == -666)
 			centerprint(self, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n^1Match has already begun\nwait for next round\n\n\n^7press attack to spectate other players");
 		else
 			PrintWelcomeMessage(self);

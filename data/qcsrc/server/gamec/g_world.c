@@ -260,6 +260,7 @@ void worldspawn (void)
 	player_count = 0;
 	lms_dead_count = 0;
 	lms_lowest_lives = 0;
+	lms_next_place = 0;
 
 	InitGameplayMode();
 	//if (cvar("g_domination"))
