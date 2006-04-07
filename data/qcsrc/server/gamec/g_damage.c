@@ -33,6 +33,8 @@ string AppendItemcodes(string s, entity player)
 	w = player.weapon;
 	if(w == 0)
 		w = player.switchweapon;
+	if(w == 0)
+		w = player.cnt; // previous weapon!
 	s = strcat(s, ftos(weapon_translateindextoflag(w)));
 	if(time < player.strength_finished)
 		s = strcat(s, "S");
