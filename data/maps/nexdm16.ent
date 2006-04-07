@@ -343,7 +343,7 @@
 }
 {
 "classname" "item_armor25"
-"origin" "-1985 -230 59"
+"origin" "-1985 -230 -300"
 }
 {
 "classname" "item_rockets"
