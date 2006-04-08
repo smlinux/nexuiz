@@ -649,8 +649,10 @@ void() DumpStats =
 
 	s = strcat(s, GetMapname(), ":", ftos(rint(time)));
 
-	if(cvar("sv_logscores_console") || cvar("sv_eventlog"))
+	if(cvar("sv_eventlog") && gameover)
 		GameLogEcho(s, FALSE);
+	else if(cvar("sv_logscores_console"))
+		ServerConsoleEcho(s, FALSE);
 	if(cvar("sv_logscores_file"))
 	{
 		file = fopen(cvar_string("sv_logscores_filename"), FILE_APPEND);
@@ -669,16 +671,18 @@ void() DumpStats =
 
 			if(cvar("sv_logscores_file"))
 				fputs(file, strcat(s, other.netname, "\n"));
-			if(cvar("sv_eventlog"))
+			if(cvar("sv_eventlog") && gameover)
 				GameLogEcho(strcat(s, ftos(other.playerid), ":", other.netname), TRUE);
 			else if(cvar("sv_logscores_console"))
-				GameLogEcho(strcat(s, other.netname), TRUE);
+				ServerConsoleEcho(strcat(s, other.netname), TRUE);
 		}
 		other = other.chain;
 	}
 
-	if(cvar("sv_logscores_console") || cvar("sv_eventlog"))
+	if(cvar("sv_eventlog") && gameover)
 		GameLogEcho(":end", FALSE);
+	else if(cvar("sv_logscores_console"))
+		ServerConsoleEcho(":end", FALSE);
 	if(cvar("sv_logscores_file"))
 	{
 		fputs(file, ":end\n");
