@@ -179,7 +179,7 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 	org = self.origin;
 	
 	if (!(cvar("g_pickup_items") && !cvar("g_nixnex")) && !cvar("g_minstagib") &&
-			itemid != IT_STRENGTH && itemid != IT_INVINCIBLE && itemname != "100 Health")
+			itemid != IT_STRENGTH && itemid != IT_INVINCIBLE && itemid != IT_HEALTH)
 	{
 		remove (self);
 		return;
@@ -219,7 +219,9 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 		}
 	}
 
-	if(itemid & (IT_STRENGTH | IT_INVINCIBLE | IT_KEY1 | IT_KEY2 | IT_ROCKET_LAUNCHER | IT_HAGAR | IT_NEX | IT_CRYLINK | IT_ELECTRO | IT_GRENADE_LAUNCHER | IT_UZI | IT_SHOTGUN | IT_LASER) || itemname == "100 Health" || itemname == "Armor")
+	if(itemid & (IT_STRENGTH | IT_INVINCIBLE | IT_HEALTH | IT_ARMOR | IT_KEY1 | IT_KEY2 | 
+				IT_ROCKET_LAUNCHER | IT_HAGAR | IT_NEX | IT_CRYLINK | IT_ELECTRO | 
+				IT_GRENADE_LAUNCHER | IT_UZI | IT_SHOTGUN | IT_LASER))
 	{
 		self.target = "###item###"; // for finding the nearest item using find()
 	}
@@ -263,15 +265,15 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 		z_offset = '0 0 1';
 
 		if (itemid == IT_SHELLS)
-			z_offset = '0 0 1' * 4;
+			z_offset = '0 0 4';
 		else if (itemid == IT_ROCKETS)
-			z_offset = '0 0 1' * 4;
+			z_offset = '0 0 4';
 		else if (itemid == IT_NAILS)
 			z_offset = '0 0 0';
-		else if (self.max_health == 25)
-			z_offset = '0 0 1' * 5;
-		else if (self.armorvalue == 100)
-			z_offset = '0 0 1' * 3;
+		else if (itemid == IT_25HP)
+			z_offset = '0 0 5';
+		else if (itemid == IT_ARMOR)
+			z_offset = '0 0 3';
 
 		self.movetype = MOVETYPE_NONE;
 		setorigin(self, find_floor(org) + z_offset);
@@ -426,22 +428,22 @@ void item_shells (void) {
 
 void item_armor1 (void) {
 	self.armorvalue = 5;
-	StartItem ("models/items/g_a1.md3", "misc/armor1.wav", 15, "Armor Shard", 0, 0);
+	StartItem ("models/items/g_a1.md3", "misc/armor1.wav", 15, "Armor Shard", IT_ARMOR_SHARD, 0);
 }
 
 void item_armor25 (void) {
 	self.armorvalue = 100;
-	StartItem ("models/items/g_a25.md3", "misc/armor25.wav", 30, "Armor", 0, 0);
+	StartItem ("models/items/g_a25.md3", "misc/armor25.wav", 30, "Armor", IT_ARMOR, 0);
 }
 
 void item_health1 (void) {
 	self.max_health = 5;
-	StartItem ("models/items/g_h1.md3", "misc/minihealth.ogg", 15, "5 Health", 0, 0);
+	StartItem ("models/items/g_h1.md3", "misc/minihealth.ogg", 15, "5 Health", IT_5HP, 0);
 }
 
 void item_health25 (void) {
 	self.max_health = 25;
-	StartItem ("models/items/g_h25.md3", "misc/mediumhealth.ogg", 15, "25 Health", 0, 0);
+	StartItem ("models/items/g_h25.md3", "misc/mediumhealth.ogg", 15, "25 Health", IT_25HP, 0);
 }
 
 void item_health100 (void) {
@@ -452,7 +454,7 @@ void item_health100 (void) {
 		minstagib_items(IT_NAILS);
 	} else {
 		self.max_health = 100;
-		StartItem ("models/items/g_h100.md3", "misc/megahealth.ogg", 30, "100 Health", 0, 0);
+		StartItem ("models/items/g_h100.md3", "misc/megahealth.ogg", 30, "100 Health", IT_HEALTH, 0);
 	}
 }
 

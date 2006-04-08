@@ -231,15 +231,15 @@ void() ItemEvals =
 				e.evalfunc = RocketsEval;
 			else if (e.items & IT_CELLS)
 				e.evalfunc = CellsEval;
-			else if (e.max_health == 5)
+			else if (e.items & IT_5HP)
 				e.evalfunc = Health5Eval;
-			else if (e.max_health == 25)
+			else if (e.items & IT_25HP)
 				e.evalfunc = Health25Eval;
-			else if (e.max_health & 100)
+			else if (e.items & IT_HEALTH)
 				e.evalfunc = Health100Eval;
-			else if (e.armorvalue == 5)
+			else if (e.items & IT_ARMOR_SHARD)
 				e.evalfunc = Armor5Eval;
-			else if (e.armorvalue == 100)
+			else if (e.items & IT_ARMOR)
 				e.evalfunc = Armor100Eval;				
 			else if (e.items & IT_UZI)
 				e.evalfunc = UEval;

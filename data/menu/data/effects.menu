@@ -4,13 +4,6 @@
 
 Item DataContainer Effects
 {
-	Item Data_Cvar Particles
-	{
-		cvarName	"cl_particles"
-		defValue	1
-
-		[DataLink_OnOffSwitch]
-	}
 	Item Data_Cvar ParticleQuality
 	{
 		cvarName	"cl_particles_quality"
@@ -47,12 +40,12 @@ Item DataContainer Effects
 	Item Data_Cvar DeluxeMapping
 	{
 		cvarName "r_glsl_deluxemapping"
-		defValue "1"
+		defValue "2"
 		
 		Item DataLink_TextSwitch Switch
 		{
-			valueList "'0' '1' '2'"
-			descList "'Off' 'On' 'Forced'"
+			valueList "'0' '2'"
+			descList "'Off' 'On' 'Custom'"
 			link  "##up"
 		}
 	}

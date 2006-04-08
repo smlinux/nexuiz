@@ -165,11 +165,15 @@ float	IT_CELLS				= 2048;
 
 float	IT_STRENGTH				= 8192;
 float	IT_INVINCIBLE				= 16384;
-//float	IT_SPEED				= 32768;
-//float	IT_SLOWMO				= 65536;
+float	IT_HEALTH				= 32768;
 
 float	IT_KEY1					= 131072;
 float	IT_KEY2					= 262144;
+
+float	IT_5HP					= 524288;
+float	IT_25HP					= 1048576;
+float	IT_ARMOR_SHARD				= 2097152;
+float	IT_ARMOR				= 4194304;
 
 vector	PL_VIEW_OFS				= '0 0 35';
 vector	PL_MIN					= '-16 -16 -24';
