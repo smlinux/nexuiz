@@ -96,6 +96,8 @@ void CreatureFrame (void)
 				}
 				if (dm > 0)
 					Damage (self, world, world, dm, DEATH_FALL, self.origin, '0 0 0');
+				else if(vlen(self.velocity) > 20000)
+					Damage (self, world, world, 50 * frametime, DEATH_SHOOTING_STAR, self.origin, '0 0 0');
 			}
 
 			// play stupid sounds

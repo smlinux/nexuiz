@@ -201,6 +201,8 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				bprint ("^1",s, "^1 was cooked by ", attacker.netname, "\n");
 			else if (deathtype == DEATH_FALL)
 				bprint ("^1",s, "^1 was grounded by ", attacker.netname, "\n");
+			else if (deathtype == DEATH_SHOOTING_STAR)
+				bprint ("^1",s, "^1 was shot into space by ", attacker.netname, "\n");
 			else if (deathtype == DEATH_SWAMP)
 				bprint ("^1",s, "^1 was conserved by ", attacker.netname, "\n");
 			else if (deathtype == DEATH_HURTTRIGGER)
@@ -267,6 +269,8 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				bprint ("^1",s, "^1 turned into hot slag\n");
 			else if (deathtype == DEATH_FALL)
 				bprint ("^1",s, "^1 hit the ground with a crunch\n");
+			else if (deathtype == DEATH_SHOOTING_STAR)
+				bprint ("^1",s, "^1 became a shooting star\n");
 			else if (deathtype == DEATH_SWAMP)
 				bprint ("^1",s, "^1 is now conserved for centuries to come\n");
 			else
