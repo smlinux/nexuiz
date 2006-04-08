@@ -14,7 +14,7 @@ void Nixnex_GiveCurrentWeapon();
 void SV_PlayerPhysics()
 {
 	local vector wishvel, wishdir, v;
-	local float wishspeed, f, maxspd_mod, spd, maxairspd, airaccel, swapspd_mod;
+	local float wishspeed, f, maxspd_mod, spd, maxairspd, airaccel, swampspd_mod;
 	string temps;
 
 	Nixnex_GiveCurrentWeapon();
@@ -68,17 +68,16 @@ void SV_PlayerPhysics()
 
 	if(cvar("g_minstagib") && (self.items & IT_INVINCIBLE))
 	{
-		maxspd_mod = maxspd_mod * cvar("g_balance_rune_speed_moverate");
+		maxspd_mod = cvar("g_balance_rune_speed_moverate");
 	}
 
-	swapspd_mod = 1;
-	if(self.in_swamp != 0) {
-		swapspd_mod = self.swamp_slowdown; //cvar("g_balance_swamp_moverate");
+	swampspd_mod = 1;
+	if(self.in_swamp) {
+		swampspd_mod = self.swamp_slowdown; //cvar("g_balance_swamp_moverate");
 	}
 
 
-	spd = sv_maxspeed * maxspd_mod;
-	spd = sv_maxspeed * swapspd_mod;
+	spd = sv_maxspeed * maxspd_mod * swampspd_mod;
 
 	if(self.speed != spd)
 	{

@@ -345,8 +345,12 @@ void() trigger_counter =
 void() hurt_touch =
 {
 	if (!other.owner)
-	if (other.items & IT_KEY1 || other.items & IT_KEY2)
-		other.pain_finished = time + 2;
+	{
+		if (other.items & IT_KEY1 || other.items & IT_KEY2)	// reset flag
+			other.pain_finished = time + 2;
+		else if (other.classname == "rune")			// reset runes
+			other.nextthink = time + 1;
+	}
 
 	if (other.takedamage)
 	if (other.triggerhurttime < time)

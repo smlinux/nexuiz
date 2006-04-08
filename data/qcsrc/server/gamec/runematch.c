@@ -1,19 +1,19 @@
 
-float	RUNE_FIRST		= 1;
+float	RUNE_FIRST	= 1;
 float	RUNE_STRENGTH	= 1;
 float	RUNE_DEFENSE	= 2;
-float	RUNE_REGEN		= 4;
-float	RUNE_SPEED		= 8;
+float	RUNE_REGEN	= 4;
+float	RUNE_SPEED	= 8;
 float	RUNE_VAMPIRE	= 16;
-float	RUNE_LAST		= 16;
+float	RUNE_LAST	= 16;
 
-float	CURSE_FIRST		= 8192;
-float	CURSE_WEAK		= 8192;
+float	CURSE_FIRST	= 8192;
+float	CURSE_WEAK	= 8192;
 float	CURSE_VULNER	= 16384;
-float	CURSE_VENOM		= 32768;
-float	CURSE_SLOW		= 65536;
+float	CURSE_VENOM	= 32768;
+float	CURSE_SLOW	= 65536;
 float	CURSE_EMPATHY	= 131072;
-float	CURSE_LAST		= 131072;
+float	CURSE_LAST	= 131072;
 
 /* rune ideas:
 
@@ -35,6 +35,8 @@ void runematch_spawn_point()
 {
 	if(!cvar("g_runematch"))
 		remove(self);
+
+	setorigin(self, find_floor(self.origin) + '0 0 35');
 }
 
 string RuneName(float r)
@@ -96,15 +98,13 @@ float count_rune_spawnpoints()
 	float num;
 	entity e;
 	num = 0;
-	do
+	e = findchain(classname, "runematch_spawn_point");
+	while(e)
 	{
-		e = find(e, classname, "runematch_spawn_point");
-		if(!e)
-			break;
 		num = num + 1;
+		e = e.chain;
 
-	}while(e);
-
+	}
 	return num;
 }
 
@@ -579,6 +579,7 @@ void spawn_runes()
 		e.flags = FL_ITEM;
 		setmodel(e, "models/runematch/rune.mdl");
 		setorigin(e, spot.origin);
+		setsize(e, '0 0 -35', '0 0 0');
 
 		e.enemy = spawn();
 		e.enemy.enemy = e;
