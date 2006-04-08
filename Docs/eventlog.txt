@@ -98,6 +98,7 @@ death type:
      10009 = team change
      10010 = auto team change
      10011 = camping protection
+	 10012 = player became too fast (should never happen)
 
 There will be a log analyzer parsing this file format soon. Note that weapon
 IDs are below 10000.
