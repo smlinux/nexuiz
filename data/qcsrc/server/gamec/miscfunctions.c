@@ -161,19 +161,26 @@ void() info_location =
 string(string msg) formatmessage =
 {
 	float p;
+	float n;
 	string msg_save;
 	string escape;
 	string replacement;
 	msg_save = strzone(msg);
 	p = 0;
+	n = 7;
 	while(1)
 	{
+		if(n < 1)
+			break; // too many replacements
+		n = n - 1;
 		p = strstr(msg_save, "%", p);
 		if(p < 0)
 			break;
 		replacement = substring(msg_save, p, 2);
 		escape = substring(msg_save, p + 1, 1);
-		if(escape == "a")
+		if(escape == "%")
+			replacement = "%";
+		else if(escape == "a")
 			replacement = ftos(floor(self.armorvalue));
 		else if(escape == "h")
 			replacement = ftos(floor(self.health));
@@ -195,10 +202,8 @@ string(string msg) formatmessage =
 			else
 				replacement = "nothing";
 		}
-		dprint(strcat(ftos(p), "<", msg, "\n"));
 		msg = strcat(substring(msg_save, 0, p), replacement);
 		msg = strcat(msg, substring(msg_save, p+2, strlen(msg_save) - (p+2)));
-		dprint(strcat(ftos(p), ">", msg, "\n"));
 		strunzone(msg_save);
 		msg_save = strzone(msg);
 		p = p + 2;
