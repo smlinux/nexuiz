@@ -444,6 +444,8 @@ void() item_flag_team1 =
 
 	self.team = 5; // color 4 team (red)
 	self.items = IT_KEY2; // gold key (redish enough)
+	self.netname = "red base";
+	self.target = "###item###";
 	self.skin = 0;
 	if (!self.model)
 		self.model = "models/ctf/flag_red.md3";
@@ -494,6 +496,8 @@ void() item_flag_team2 =
 
 	self.team = 14; // color 13 team (blue)
 	self.items = IT_KEY1; // silver key (bluish enough)
+	self.netname = "blue base";
+	self.target = "###item###";
 	self.skin = 0;
 	if (!self.model)
 		self.model = "models/ctf/flag_blue.md3";

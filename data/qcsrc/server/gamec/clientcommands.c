@@ -243,6 +243,10 @@ void SV_ParseClientCommand(string s) {
 			bprint(self.netname, "^2 is ready\n");
 			ReadyCount();
 		}
+	} else if(argv(0) == "say") {
+		clientcommand(self, formatmessage(s));
+	} else if(argv(0) == "say_team") {
+		clientcommand(self, formatmessage(s));
 	} else {
 		clientcommand(self,s);
 	}
