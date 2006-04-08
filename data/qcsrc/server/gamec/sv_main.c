@@ -96,8 +96,11 @@ void CreatureFrame (void)
 				}
 				if (dm > 0)
 					Damage (self, world, world, dm, DEATH_FALL, self.origin, '0 0 0');
-				else if(vlen(self.velocity) > 100000)
-					Damage (self, world, world, 50 * frametime, DEATH_SHOOTING_STAR, self.origin, '0 0 0');
+				else if(vlen(self.velocity) > 100000 && cvar("developer"))
+				{
+					dprint(strcat(self.netname, " became too fast, please investigate: ", vtos(self.spawnorigin), "\n"));
+					Damage (self, world, world, 50000, DEATH_SHOOTING_STAR, self.origin, '0 0 0');
+				}
 			}
 
 			// play stupid sounds

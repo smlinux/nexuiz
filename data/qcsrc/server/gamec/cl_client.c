@@ -349,6 +349,7 @@ void PutClientInServer (void)
 		self.crouch = FALSE;
 		self.view_ofs = PL_VIEW_OFS;
 		setsize (self, PL_MIN, PL_MAX);
+		self.spawnorigin = spot.origin;
 		setorigin (self, spot.origin + '0 0 1' * (1 - self.mins_z - 24));
 		// don't reset back to last position, even if new position is stuck in solid
 		self.oldorigin = self.origin;
