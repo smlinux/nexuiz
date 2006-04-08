@@ -136,7 +136,7 @@ entity(vector point, .string field, string value, vector axismod) findnearest =
 	localhead = find(world, field, value);
 	while(localhead)
 	{
-		if((localhead.items == IT_KEY1 || localhead.items == IT_KEY2) && localhead.target = "###item###")
+		if((localhead.items == IT_KEY1 || localhead.items == IT_KEY2) && localhead.target == "###item###")
 			dist = localhead.oldorigin;
 		else
 			dist = localhead.origin;
@@ -152,6 +152,11 @@ entity(vector point, .string field, string value, vector axismod) findnearest =
 	}
 	return best;
 }
+
+void() info_location =
+{   
+	self.classname = "info_location";
+};  
 
 string(string msg) formatmessage =
 {
