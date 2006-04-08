@@ -34,7 +34,10 @@ spawn point for runes in runematch
 void runematch_spawn_point()
 {
 	if(!cvar("g_runematch"))
+	{
 		remove(self);
+		return;
+	}
 
 	setorigin(self, find_floor(self.origin) + '0 0 35');
 }
