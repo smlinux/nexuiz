@@ -427,6 +427,7 @@ velocityjitter 0 0 256
 effect TE_TEI_G3
 countabsolute 1
 type beam
+tex 60 60
 color 0xFFFFFF 0xFFFFFF
 size 8 8
 alpha 256 256 256
