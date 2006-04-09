@@ -9,7 +9,7 @@
 
 vector() W_TrueAim = {
 
-	traceline_hitcorpse(self,self.origin + self.view_ofs,self.origin + self.view_ofs + v_forward * 4096,FALSE,self);
+	traceline_hitcorpse(self,self.origin + self.view_ofs,self.origin + self.view_ofs + v_forward * 8192,FALSE,self);
 
 	if ((self.weapon == WEP_NEX || self.weapon == WEP_SHOTGUN || self.weapon == WEP_UZI) && cvar("g_antilag"))
 	{
@@ -110,7 +110,7 @@ void LaserTarget_Think()
 
 	makevectors(self.owner.v_angle); // set v_forward etc to the direction the player is looking
 	offset = '0 0 26' + v_right*3;
-	traceline(self.owner.origin + offset, self.owner.origin + offset + v_forward * 2048, FALSE, self); // trace forward until you hit something, like a player or wall
+	traceline(self.owner.origin + offset, self.owner.origin + offset + v_forward * 8192, FALSE, self); // trace forward until you hit something, like a player or wall
 	setorigin(e, trace_endpos + v_forward*8); // move me to where the traceline ended
 	if(trace_plane_normal != '0 0 0')
 		e.angles = vectoangles(trace_plane_normal);

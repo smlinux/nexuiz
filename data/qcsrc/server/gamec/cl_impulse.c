@@ -118,7 +118,7 @@ void ImpulseCommands (void)
 		if (cvar("sv_cheats"))
 		{
 			makevectors(self.v_angle);
-			traceline(self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * 4096, FALSE, self);
+			traceline(self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * 8192, FALSE, self);
 			if (trace_fraction < 1)
 				printsurfaceinfo(trace_ent, trace_endpos);
 		}
