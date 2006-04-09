@@ -178,7 +178,11 @@ entity(vector point, .string field, string value, vector axismod) findnearest =
 		if(trace_fraction == 1)
 		{
 			if(i != 0)
-				dprint("Nearest point is not visible, using a visible one.\n");
+			{
+				dprint("Nearest point (");
+				dprint(nearest_entity[0].netname);
+				dprint(") is not visible, using a visible one.\n");
+			}
 			return nearest_entity[i];
 		}
 	}
@@ -186,7 +190,17 @@ entity(vector point, .string field, string value, vector axismod) findnearest =
 	if(num_nearest == 0)
 		return world;
 
-	dprint("Not seeing a location point, using nearest as fallback.\n");
+	dprint("Not seeing any location point, using nearest as fallback.\n");
+	/* DEBUGGING CODE:
+	dprint("Candidates were: ");
+	for(j = 0; j < num_nearest; ++j)
+	{
+		if(j != 0)
+			dprint(", ");
+		dprint(nearest_entity[j].netname);
+	}
+	dprint("\n");
+	*/
 
 	return nearest_entity[0];
 }
@@ -219,7 +233,7 @@ string(string msg) formatmessage =
 		if(n < 1)
 			break; // too many replacements
 		n = n - 1;
-		p = strstr(msg_save, "%", p);
+		p = strstr(msg_save, "%", p); // NOTE: this destroys msg as it's a tempstring!
 		if(p < 0)
 			break;
 		replacement = substring(msg_save, p, 2);
@@ -259,6 +273,7 @@ string(string msg) formatmessage =
 		msg_save = strzone(msg);
 		p = p + 2;
 	}
+	msg = strcat(msg_save);
 	strunzone(msg_save);
 	return msg;
 }
