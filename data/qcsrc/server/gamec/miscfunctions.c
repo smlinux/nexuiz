@@ -122,17 +122,20 @@ float(string haystack, string needle, float offset) strstr =
 	return -1;
 }
 
+float NUM_NEAREST_ENTITIES = 4;
+entity nearest_entity[NUM_NEAREST_ENTITIES];
+float nearest_length[NUM_NEAREST_ENTITIES];
 entity(vector point, .string field, string value, vector axismod) findnearest =
 {
 	entity localhead;
-	entity best;
-	float bestlen;
-
+	float i;
+	float j;
 	float len;
 	vector dist;
 
-	best = world;
-	bestlen = 10000;
+	float num_nearest;
+	num_nearest = 0;
+
 	localhead = find(world, field, value);
 	while(localhead)
 	{
@@ -143,19 +146,62 @@ entity(vector point, .string field, string value, vector axismod) findnearest =
 		dist = dist - point;
 		dist = dist_x * axismod_x * '1 0 0' + dist_y * axismod_y * '0 1 0' + dist_z * axismod_z * '0 0 1';
 		len = vlen(dist);
-		if(len < bestlen)
+
+		for(i = 0; i < num_nearest; ++i)
 		{
-			bestlen = len;
-			best = localhead;
+			if(len < nearest_length[i])
+				break;
 		}
+
+		// now i tells us where to insert at
+		//   INSERTION SORT! YOU'VE SEEN IT! RUN!
+		if(i < NUM_NEAREST_ENTITIES)
+		{
+			for(j = NUM_NEAREST_ENTITIES - 1; j >= i; --j)
+			{
+				nearest_length[j + 1] = nearest_length[j];
+				nearest_entity[j + 1] = nearest_entity[j];
+			}
+			nearest_length[i] = len;
+			nearest_entity[i] = localhead;
+			if(num_nearest < NUM_NEAREST_ENTITIES)
+				num_nearest = num_nearest + 1;
+		}
+		
 		localhead = find(localhead, field, value);
 	}
-	return best;
+
+	// now use the first one from our list that we can see
+	for(i = 0; i < num_nearest; ++i)
+	{
+		traceline(point, nearest_entity[i].origin, TRUE, world);
+		if(trace_fraction == 1)
+		{
+			if(i != 0)
+				dprint("Nearest point is not visible, using a visible one.\n");
+			return nearest_entity[i];
+		}
+	}
+
+	if(num_nearest == 0)
+		return world;
+
+	dprint("Not seeing a location point, using nearest as fallback.\n");
+
+	return nearest_entity[0];
 }
+
+void() target_location =
+{   
+	self.classname = "target_location";
+	// location name in netname
+	// eventually support: count, teamgame selectors, line of sight?
+};  
 
 void() info_location =
 {   
-	self.classname = "info_location";
+	self.classname = "target_location";
+	self.message = self.netname;
 };  
 
 string(string msg) formatmessage =
@@ -187,13 +233,18 @@ string(string msg) formatmessage =
 		else if(escape == "l")
 		{
 			entity loc;
-			loc = findnearest(self.origin, classname, "info_location", '1 1 1');
-			if(!loc)
-				loc = findnearest(self.origin, target, "###item###", '1 1 4');
+			replacement = "somewhere";
+			loc = findnearest(self.origin, classname, "target_location", '1 1 1');
 			if(loc)
-				replacement = loc.netname;
+			{
+				replacement = loc.message;
+			}
 			else
-				replacement = "someplace";
+			{
+				loc = findnearest(self.origin, target, "###item###", '1 1 4');
+				if(loc)
+					replacement = loc.netname;
+			}
 		}
 		else if(escape == "x")
 		{
