@@ -58,7 +58,8 @@ void() _IDNA_BuildList =
 	lSearchHandle = search_begin( "models/player/*.txt", true, true );
 	if( lSearchHandle < 0 )
 		return;
-	for( lSearchSize = search_getsize( lSearchHandle ), lSearchCounter = 0;
+	lSearchCounter = 0;
+	for( lSearchSize = search_getsize( lSearchHandle );
 	lSearchCounter < lSearchSize; ++lSearchCounter ) {
 		local string 	lFilename;
 		local float 	lHandle;

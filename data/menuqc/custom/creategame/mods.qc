@@ -23,7 +23,8 @@ void() _IDLNMS_Build =
 		return;
 	}
 
-	for( lSearchSize = search_getsize( lSearchHandle ), lSearchCounter = 0;
+	lSearchCounter = 0;
+	for( lSearchSize = search_getsize( lSearchHandle );
 	lSearchCounter < lSearchSize; ++lSearchCounter ) {
 		local float 	lHandle;
 		local string	lFilename;
