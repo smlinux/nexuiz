@@ -671,15 +671,15 @@ lightcolor 2 1.5 0.5
 effect EF_STARDUST
 count 200
 type static
-color 0x903010 0xFFD030
+color 0x63F2EA 0x63f2EA
 size 1.5 1.5
 alpha 64 128 128
-gravity 1
+gravity -0.2
 airfriction 0.2
 liquidfriction 0.8
 originjitter 16 16 16
 velocityjitter 128 128 128
 lightradius 200
 lighttime 0
-lightcolor 1 0.7 0.3
+lightcolor 0.4 0.9 0.9
 */
