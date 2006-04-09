@@ -1,0 +1,685 @@
+effect TE_WIZSPIKE
+count 30
+type alphastatic
+color 0x372b17 0x73571f
+alpha 51 256 512
+originjitter 4 4 4
+velocityjitter 16 16 16
+
+effect TE_KNIGHTSPIKE
+count 20
+type alphastatic
+color 0x5f0700 0xcf632b
+alpha 51 256 512
+originjitter 4 4 4
+velocityjitter 16 16 16
+
+effect TE_SPIKE
+count 15
+type spark
+color 0x8f4333 0xfff31b
+size 0.4 0.4
+alpha 0 256 768
+gravity 1
+bounce -1
+velocityoffset 0 0 80
+velocityjitter 64 64 64
+
+effect TE_SPIKE
+count 4
+type smoke
+tex 0 8
+color 0x101010 0x202020
+size 3 3
+alpha 0 256 512
+originjitter 2 2 2
+velocityjitter 8 8 8
+
+effect TE_SPIKE
+countabsolute 1
+type decal
+tex 8 16
+size 3 3
+alpha 256 256 0
+originjitter 6 6 6
+
+effect TE_SPIKEQUAD
+count 15
+type spark
+color 0x8f4333 0xfff31b
+size 0.4 0.4
+alpha 0 256 768
+gravity 1
+bounce -1
+velocityoffset 0 0 80
+velocityjitter 64 64 64
+
+effect TE_SPIKEQUAD
+count 4
+type smoke
+tex 0 8
+color 0x101010 0x202020
+size 3 3
+alpha 0 256 512
+originjitter 2 2 2
+velocityjitter 8 8 8
+
+effect TE_SPIKEQUAD
+countabsolute 1
+type decal
+tex 8 16
+size 3 3
+alpha 256 256 0
+originjitter 6 6 6
+lightradius 100
+lightradiusfade 500
+lightcolor 0.15 0.15 1.5
+
+effect TE_SUPERSPIKE
+count 30
+type spark
+color 0x8f4333 0xfff31b
+size 0.4 0.4
+alpha 0 256 768
+gravity 1
+bounce -1
+velocityoffset 0 0 80
+velocityjitter 64 64 64
+
+effect TE_SUPERSPIKE
+count 8
+type smoke
+tex 0 8
+color 0x101010 0x202020
+size 3 3
+alpha 0 256 512
+originjitter 2 2 2
+velocityjitter 8 8 8
+
+effect TE_SUPERSPIKE
+countabsolute 1
+type decal
+tex 8 16
+size 3 3
+alpha 256 256 0
+originjitter 6 6 6
+
+effect TE_SUPERSPIKEQUAD
+count 30
+type spark
+color 0x8f4333 0xfff31b
+size 0.4 0.4
+alpha 0 256 768
+gravity 1
+bounce -1
+velocityoffset 0 0 80
+velocityjitter 64 64 64
+
+effect TE_SUPERSPIKEQUAD
+count 8
+type smoke
+tex 0 8
+color 0x101010 0x202020
+size 3 3
+alpha 0 256 512
+originjitter 2 2 2
+velocityjitter 8 8 8
+
+effect TE_SUPERSPIKEQUAD
+countabsolute 1
+type decal
+tex 8 16
+size 3 3
+alpha 256 256 0
+originjitter 6 6 6
+lightradius 100
+lightradiusfade 500
+lightcolor 0.15 0.15 1.5
+
+effect TE_GUNSHOT
+count 15
+type spark
+color 0x8f4333 0xfff31b
+size 0.4 0.4
+alpha 0 256 768
+gravity 1
+bounce -1
+velocityoffset 0 0 80
+velocityjitter 64 64 64
+
+effect TE_GUNSHOT
+count 4
+type smoke
+tex 0 8
+color 0x101010 0x202020
+size 3 3
+alpha 0 256 512
+originjitter 2 2 2
+velocityjitter 8 8 8
+
+effect TE_GUNSHOT
+countabsolute 1
+type decal
+tex 8 16
+size 3 3
+alpha 256 256 0
+originjitter 6 6 6
+
+effect TE_GUNSHOTQUAD
+count 15
+type spark
+color 0x8f4333 0xfff31b
+size 0.4 0.4
+alpha 0 256 768
+gravity 1
+bounce -1
+velocityoffset 0 0 80
+velocityjitter 64 64 64
+
+effect TE_GUNSHOTQUAD
+count 4
+type smoke
+tex 0 8
+color 0x101010 0x202020
+size 3 3
+alpha 0 256 512
+originjitter 2 2 2
+velocityjitter 8 8 8
+
+effect TE_GUNSHOTQUAD
+countabsolute 1
+type decal
+tex 8 16
+size 3 3
+alpha 256 256 0
+originjitter 6 6 6
+lightradius 100
+lightradiusfade 500
+lightcolor 0.15 0.15 1.5
+
+effect TE_EXPLOSION
+underwater
+count 128
+type bubble
+tex 62 62
+color 0x404040 0x808080
+size 2 2
+alpha 128 256 64
+gravity -0.125
+bounce 1.5
+liquidfriction 0.25
+originjitter 16 16 16
+velocityjitter 96 96 96
+
+effect TE_EXPLOSION
+notunderwater
+count 128
+type spark
+color 0x903010 0xFFD030
+size 1 1
+alpha 0 256 512
+gravity 1
+airfriction 0.2
+liquidfriction 0.8
+velocityoffset 0 0 80
+velocityjitter 256 256 256
+
+effect TE_EXPLOSION
+notunderwater
+count 32
+type smoke
+color 0x202020 0x404040
+tex 0 8
+size 12 12
+alpha 32 32 64
+velocityjitter 48 48 48
+
+effect TE_EXPLOSION
+countabsolute 1
+type decal
+tex 8 16
+size 48 48
+alpha 256 256 0
+originjitter 40 40 40
+
+effect TE_EXPLOSION
+lightradius 350
+lightradiusfade 700
+lightcolor 4 2 0.5
+
+effect TE_EXPLOSIONQUAD
+underwater
+count 128
+type bubble
+tex 62 62
+color 0x404040 0x808080
+size 2 2
+alpha 128 256 64
+gravity -0.125
+bounce 1.5
+liquidfriction 0.25
+originjitter 16 16 16
+velocityjitter 96 96 96
+
+effect TE_EXPLOSIONQUAD
+notunderwater
+count 128
+type spark
+color 0x903010 0xFFD030
+size 1 1
+alpha 0 256 512
+gravity 1
+airfriction 0.2
+liquidfriction 0.8
+velocityoffset 0 0 80
+velocityjitter 256 256 256
+
+effect TE_EXPLOSIONQUAD
+notunderwater
+count 32
+type smoke
+color 0x202020 0x404040
+tex 0 8
+size 12 12
+alpha 32 32 64
+velocityjitter 48 48 48
+
+effect TE_EXPLOSIONQUAD
+countabsolute 1
+type decal
+tex 8 16
+size 48 48
+alpha 256 256 0
+originjitter 40 40 40
+
+effect TE_EXPLOSIONQUAD
+lightradius 350
+lightradiusfade 700
+lightcolor 4 2 8
+
+effect TE_TAREXPLOSION
+underwater
+count 128
+type bubble
+tex 62 62
+color 0x404040 0x808080
+size 2 2
+alpha 128 256 64
+gravity -0.125
+bounce 1.5
+liquidfriction 0.25
+originjitter 16 16 16
+velocityjitter 96 96 96
+
+effect TE_TAREXPLOSION
+notunderwater
+count 128
+type spark
+color 0x903010 0xFFD030
+size 1 1
+alpha 0 256 512
+gravity 1
+airfriction 0.2
+liquidfriction 0.8
+velocityoffset 0 0 80
+velocityjitter 256 256 256
+
+effect TE_TAREXPLOSION
+notunderwater
+count 32
+type smoke
+color 0x202020 0x404040
+tex 0 8
+size 12 12
+alpha 32 32 64
+velocityjitter 48 48 48
+
+effect TE_TAREXPLOSION
+countabsolute 1
+type decal
+tex 8 16
+size 48 48
+alpha 256 256 0
+originjitter 40 40 40
+
+effect TE_TAREXPLOSION
+lightradius 600
+lightradiusfade 1200
+lightcolor 1.6 0.8 2
+
+effect TE_BLOOD
+count 0.333
+type blood
+tex 24 32
+size 8 8
+alpha 256 256 64
+bounce -1
+airfriction 1
+liquidfriction 4
+velocityjitter 64 64 64
+velocitymultiplier 1
+
+effect TE_SPARK
+count 1
+type spark
+color 0x8f4333 0xfff31b
+size 0.4 0.4
+alpha 0 256 768
+gravity 1
+bounce -1
+velocityoffset 0 0 80
+velocityjitter 64 64 64
+velocitymultiplier 1
+
+effect TE_PLASMABURN
+countabsolute 1
+type decal
+tex 8 16
+size 6 6
+alpha 256 256 0
+originjitter 6 6 6
+lightradius 200
+lightradiusfade 1000
+lightcolor 1 1 1
+
+effect TE_SMALLFLASH
+lightradius 200
+lightradiusfade 1000
+lightcolor 2 2 2
+
+effect TE_FLAMEJET
+count 1
+type smoke
+color 0x6f0f00 0xe3974f
+size 4 4
+alpha 64 128 384
+gravity -1
+bounce 1.1
+airfriction 1
+liquidfriction 4
+velocityjitter 128 128 128
+velocitymultiplier 1
+
+effect TE_LAVASPLASH
+count 64
+type alphastatic
+color 0x6f0f00 0xe3974f
+size 12 12
+alpha 256 256 256
+gravity 0.05
+originoffset 0 0 32
+originjitter 128 128 32
+velocityoffset 0 0 256
+velocityjitter 128 128 0
+
+effect TE_TELEPORT
+count 112
+type static
+color 0xA0A0A0 0xFFFFFF
+size 10 10
+alpha 64 128 256
+airfriction 1
+liquidfriction 4
+originoffset 0 0 28
+originjitter 16 16 28
+velocityjitter 0 0 256
+
+effect TE_TEI_G3
+countabsolute 1
+type beam
+color 0xFFFFFF 0xFFFFFF
+size 8 8
+alpha 256 256 256
+
+effect TE_TEI_SMOKE
+count 0.333
+type smoke
+color 0x202020 0x404040
+tex 0 8
+size 5 5
+alpha 256 256 512
+originjitter 1.5 1.5 1.5
+velocityjitter 6 6 6
+velocitymultiplier 1
+
+effect TE_TEI_BIGEXPLOSION
+underwater
+count 256
+type bubble
+tex 62 62
+color 0x404040 0x808080
+size 2 2
+alpha 128 256 48
+gravity -0.125
+bounce 1.5
+liquidfriction 0.25
+originjitter 24 24 24
+velocityjitter 144 144 144
+
+effect TE_TEI_BIGEXPLOSION
+notunderwater
+count 256
+type spark
+color 0x903010 0xFFD030
+size 1 1
+alpha 0 256 384
+gravity 1
+airfriction 0.2
+liquidfriction 0.8
+velocityoffset 0 0 120
+velocityjitter 384 384 384
+
+effect TE_TEI_BIGEXPLOSION
+notunderwater
+count 64
+type smoke
+color 0x202020 0x404040
+tex 0 8
+size 12 12
+alpha 32 32 48
+velocityjitter 72 72 72
+
+effect TE_TEI_BIGEXPLOSION
+countabsolute 1
+type decal
+tex 8 16
+size 72 72
+alpha 256 256 0
+originjitter 40 40 40
+
+effect TE_TEI_BIGEXPLOSION
+lightradius 500
+lightradiusfade 500
+lightcolor 4 2 0.5
+
+effect TE_TEI_PLASMAHIT
+count 1
+type spark
+color 0x2030FF 0x80C0FF
+size 2 2
+alpha 0 256 512
+airfriction 0.2
+liquidfriction 0.8
+velocityoffset 0 0 120
+velocityjitter 465 465 465
+
+effect TE_TEI_PLASMAHIT
+countabsolute 1
+type decal
+tex 8 16
+size 16 16
+originjitter 6 6 6
+
+effect TE_TEI_PLASMAHIT
+count 0.25
+type smoke
+color 0x202020 0x404040
+tex 0 8
+size 24 24
+alpha 32 32 64
+originjitter 20 20 20
+velocityjitter 32 32 32
+
+effect TE_TEI_PLASMAHIT
+lightradius 500
+lightradiusfade 2000
+lightcolor 0.6 1.2 2
+
+effect TR_ROCKET
+trailspacing 3
+type smoke
+color 0x303030 0x606060
+tex 0 8
+size 3 3
+alpha 32 32 32
+lightradius 200
+lighttime 0
+lightcolor 3.0 1.5 0.5
+
+effect TR_ROCKET
+notunderwater
+trailspacing 3
+type static
+color 0x801010 0xFFA020
+tex 0 8
+size 3 3
+alpha 144 144 700
+velocityjitter 20 20 20
+velocitymultiplier -0.25
+
+effect TR_ROCKET
+underwater
+trailspacing 3
+type bubble
+tex 62 62
+color 0x404040 0x808080
+size 2 2
+alpha 64 256 64
+gravity -0.25
+bounce 1.5
+liquidfriction 0.25
+velocityjitter 16 16 16
+
+effect TR_GRENADE
+notunderwater
+trailspacing 3
+type smoke
+color 0x303030 0x606060
+tex 0 8
+size 3 3
+alpha 16 16 16
+
+effect TR_GRENADE
+underwater
+trailspacing 6
+type bubble
+tex 62 62
+color 0x404040 0x808080
+size 2 2
+alpha 64 256 64
+gravity -0.25
+bounce 1.5
+liquidfriction 0.25
+velocityjitter 16 16 16
+
+effect TR_BLOOD
+trailspacing 16
+type blood
+color 0xFFFFFF 0xFFFFFF
+tex 24 32
+size 8 8
+alpha 384 384 192
+bounce -1
+airfriction 1
+liquidfriction 4
+velocityjitter 64 64 64
+velocitymultiplier 0.5
+
+effect TR_SLIGHTBLOOD
+trailspacing 32
+type blood
+color 0xFFFFFF 0xFFFFFF
+tex 24 32
+size 8 8
+alpha 384 384 192
+bounce -1
+airfriction 1
+liquidfriction 4
+velocityjitter 64 64 64
+velocitymultiplier 0.5
+
+effect TR_WIZSPIKE
+trailspacing 3
+type alphastatic
+color 0x372b17 0x73571f
+size 2 2
+alpha 64 64 192
+
+effect TR_KNIGHTSPIKE
+trailspacing 3
+type alphastatic
+color 0x5f0700 0xcf632b
+size 2 2
+alpha 64 64 192
+
+effect TR_VORESPIKE
+trailspacing 3
+type alphastatic
+color 0x502030 0x502030
+size 3 3
+alpha 64 64 96
+lightradius 200
+lighttime 0
+lightcolor 1.2 0.5 1.0
+
+effect TR_NEHAHRASMOKE
+trailspacing 7
+type alphastatic
+color 0x303030 0x606060
+tex 0 8
+size 7 7
+alpha 64 64 320
+velocityoffset 0 0 8
+velocityjitter 4 4 8
+
+effect TR_NEXUIZPLASMA
+trailspacing 4
+type alphastatic
+color 0x283880 0x283880
+size 4 4
+alpha 256 256 1024
+velocityjitter 16 16 16
+lightradius 200
+lighttime 0
+lightcolor 0.75 1.5 3.0
+velocitymultiplier -0.1
+
+effect EF_FLAME
+count 300
+type smoke
+color 0x6f0f00 0xe3974f
+size 4 4
+alpha 64 128 384
+gravity -1
+airfriction 1
+liquidfriction 4
+velocityjitter 128 128 128
+lightradius 200
+lighttime 0
+lightcolor 2 1.5 0.5
+
+effect EF_STARDUST
+count 200
+type static
+color 0x903010 0xFFD030
+size 1.5 1.5
+alpha 64 128 128
+gravity 1
+airfriction 0.2
+liquidfriction 0.8
+originjitter 16 16 16
+velocityjitter 128 128 128
+lightradius 200
+lighttime 0
+lightcolor 1 0.7 0.3
+*/
