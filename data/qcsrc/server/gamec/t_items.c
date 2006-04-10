@@ -221,7 +221,7 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 
 	if(itemid & (IT_STRENGTH | IT_INVINCIBLE | IT_HEALTH | IT_ARMOR | IT_KEY1 | IT_KEY2 | 
 				IT_ROCKET_LAUNCHER | IT_HAGAR | IT_NEX | IT_CRYLINK | IT_ELECTRO | 
-				IT_GRENADE_LAUNCHER | IT_UZI | IT_SHOTGUN | IT_LASER))
+				IT_GRENADE_LAUNCHER | IT_UZI | IT_SHOTGUN | IT_LASER) && self.classname != "droppedweapon")
 	{
 		self.target = "###item###"; // for finding the nearest item using find()
 	}

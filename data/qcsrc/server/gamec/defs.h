@@ -253,3 +253,6 @@ float playerid_last;
 .float noalign;		// if set to 1, the item or spawnpoint won't be dropped to the floor
 
 .vector spawnorigin;
+
+.vector death_origin;
+.vector killer_origin;

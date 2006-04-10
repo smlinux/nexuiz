@@ -218,6 +218,25 @@ void() info_location =
 	self.message = self.netname;
 };  
 
+string NearestLocation(vector p)
+{
+	entity loc;
+	string ret;
+	ret = "somewhere";
+	loc = findnearest(p, classname, "target_location", '1 1 1');
+	if(loc)
+	{
+		ret = loc.message;
+	}
+	else
+	{
+		loc = findnearest(p, target, "###item###", '1 1 4');
+		if(loc)
+			ret = loc.netname;
+	}
+	return ret;
+}
+
 string(string msg) formatmessage =
 {
 	float p;
@@ -245,21 +264,11 @@ string(string msg) formatmessage =
 		else if(escape == "h")
 			replacement = ftos(floor(self.health));
 		else if(escape == "l")
-		{
-			entity loc;
-			replacement = "somewhere";
-			loc = findnearest(self.origin, classname, "target_location", '1 1 1');
-			if(loc)
-			{
-				replacement = loc.message;
-			}
-			else
-			{
-				loc = findnearest(self.origin, target, "###item###", '1 1 4');
-				if(loc)
-					replacement = loc.netname;
-			}
-		}
+			replacement = NearestLocation(self.origin);
+		else if(escape == "y")
+			replacement = NearestLocation(self.cursor_trace_endpos);
+		else if(escape == "d")
+			replacement = NearestLocation(self.death_origin);
 		else if(escape == "x")
 		{
 			if(self.cursor_trace_ent)

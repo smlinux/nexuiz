@@ -286,6 +286,9 @@ void Obituary (entity attacker, entity targ, float deathtype)
 
 			LogDeath("accident", deathtype, targ, targ);
 		}
+		targ.death_origin = targ.origin;
+		if(targ != attacker)
+			targ.killer_origin = attacker.origin;
 		// FIXME: this should go in PutClientInServer
 		if (targ.killcount)
 			targ.killcount = 0;
