@@ -1179,7 +1179,7 @@ void PlayerPreThink (void)
 			}
 		}
 
-		if (self.button5)
+		if (self.button5 && !self.hook.state)
 		{
 			if (!self.crouch)
 			{
@@ -1215,8 +1215,8 @@ void PlayerPreThink (void)
 				setsize (self, m1, m2);
 			}
 
-			if (self.skin != stof(cvar_string("sv_defaultplayerskin")))
-				self.skin = stof(cvar_string("sv_defaultplayerskin"));
+			if (self.skin != cvar("sv_defaultplayerskin"))
+				self.skin = cvar("sv_defaultplayerskin");
 		} else {
 			if (self.playermodel != self.model)
 			{
