@@ -269,6 +269,24 @@ string(string msg) formatmessage =
 			replacement = NearestLocation(self.cursor_trace_endpos);
 		else if(escape == "d")
 			replacement = NearestLocation(self.death_origin);
+		else if(escape == "w")
+		{
+			float wep;
+			wep = self.weapon;
+			if(!wep)
+				wep = self.switchweapon;
+			if(!wep)
+				wep = self.cnt;
+			replacement = W_Name(wep);
+		}
+		else if(escape == "W")
+		{
+			if(self.items & IT_SHELLS) replacement = "shells";
+			else if(self.items & IT_NAILS) replacement = "bullets";
+			else if(self.items & IT_ROCKETS) replacement = "rockets";
+			else if(self.items & IT_CELLS) replacement = "cells";
+			else replacement = "batteries"; // ;)
+		}
 		else if(escape == "x")
 		{
 			if(self.cursor_trace_ent)
