@@ -283,8 +283,7 @@ void GrapplingHookFrame()
 void SetGrappleHookBindings()
 {
 	// this function has been modified for Nexuiz
-	/*
-	stuffcmd(self, strcat("alias +hook \"impulse ", ftos(GRAPHOOK_FIRE),	"\"\n"));
-	stuffcmd(self, strcat("alias -hook \"impulse ", ftos(GRAPHOOK_RELEASE),	"\"\n"));
-	*/
+	// don't remove these lines! old server or demos coud overwrite the new aliases
+	stuffcmd(self, "alias +hook +button6\n");
+	stuffcmd(self, "alias -hook -button6\n");
 }

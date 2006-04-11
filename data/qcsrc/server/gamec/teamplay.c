@@ -275,13 +275,31 @@ string GetClientVersionMessage(float v) {
 
 void PrintWelcomeMessage(entity pl)
 {
-	string s, mutator, modifications;
+	string s, mutator, modifications, newlines;
 
 	/*if(self.welcomemessage_time < time)
 		return;
 	if(self.welcomemessage_time2 > time)
 		return;
 	self.welcomemessage_time2 = time + 0.8; */
+
+	newlines = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+	
+	if(self.classname == "observer")
+	{
+		if(cvar("g_lms") && self.frags <= 0 && self.frags > -666)
+			return centerprint(self, strcat(newlines, "^1You have no more lives left\nwait for next round\n\n\n^7press attack to spectate other players"));
+		else if(cvar("g_lms") && self.frags == -666)
+			return centerprint(self, strcat(newlines, "^1Match has already begun\nwait for next round\n\n\n^7press attack to spectate other players"));
+	}
+	else if(self.classname == "spectator")
+	{
+		if (cvar("g_lms") && self.frags < 1)
+			return centerprint(self, strcat(newlines, "spectating ", self.enemy.netname, "\n\n\n^7press attack for next player\npress attack2 for free fly mode"));
+		else
+			return centerprint(self, strcat(newlines, "spectating ", self.enemy.netname, "\n\n\n^7press jump to play\n^7press attack for next player\npress attack2 for free fly mode"));
+	}
+		
 
 	if(self.welcomemessage_time2 > time) return;
 	self.welcomemessage_time2 = time + 1.0;
@@ -316,7 +334,7 @@ void PrintWelcomeMessage(entity pl)
 	local string versionmessage;
 	versionmessage = GetClientVersionMessage(self.version);
 
-	s = strcat(s, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nThis is Nexuiz ", cvar_string("g_nexuizversion"), "\n", versionmessage);
+	s = strcat(s, newlines, "This is Nexuiz ", cvar_string("g_nexuizversion"), "\n", versionmessage);
 	s = strcat(s, "^8\n\nmatch type is ^1", mutator, gamemode_name, "^8\n");
 
 	if(modifications != "")

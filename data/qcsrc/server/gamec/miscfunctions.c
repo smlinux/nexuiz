@@ -96,10 +96,71 @@ vector find_floor(vector org)
 
 void relocate_spawnpoint()
 {
-	if(self.noalign)
-		return;
+	vector org, loc;
+	string error_msg;
 
-	setorigin(self, find_floor(self.origin) + '0 0 30');
+	error_msg = "spawn point too close to a wall";
+	
+	org = find_floor(self.origin) + '0 0 30';
+
+	traceline(org, org - '18 0 0', TRUE, world);
+	if(trace_fraction < 1)
+	{
+		loc = trace_endpos;
+		traceline(loc, loc + '36 0 0', TRUE, world);
+		if(trace_fraction >= 1 && !self.noalign)
+			org = loc + '18 0 0';
+		else
+		{
+			objerror(error_msg);
+			return;
+		}
+	}
+
+	traceline (org, org - '-18 0 0', TRUE, world);
+	if (trace_fraction < 1)
+	{
+		loc = trace_endpos;
+		traceline (loc, loc + '-36 0 0', TRUE, world);
+		if(trace_fraction >= 1 && !self.noalign)
+			org = loc + '-18 0 0';
+		else
+		{
+			objerror(error_msg);
+			return;
+		}
+	}
+
+	traceline (org, org - '0 18 0' , TRUE, world);
+	if (trace_fraction < 1)
+	{
+		loc = trace_endpos;
+		traceline (loc, loc + '0 36 0', TRUE, world);
+		if(trace_fraction >= 1 && !self.noalign)
+			org = loc + '0 18 0';
+		else
+		{			
+			objerror(error_msg);
+			return;
+		}
+	}
+
+	traceline (org, org - '0 -18 0', TRUE, world);
+	if (trace_fraction < 1)
+	{
+		loc = trace_endpos;
+		traceline (loc, loc + '0 -36 0', TRUE, world);
+		if(trace_fraction >= 1 && !self.noalign)
+			org = loc + '0 -18 0';
+		else
+		{
+			objerror(error_msg);
+			return;
+		}
+	}
+	
+	if(!self.noalign)
+		setorigin(self, org);
 }
 
 // NOTE: DO NOT USE THIS FUNCTION TOO OFTEN.
@@ -289,9 +350,8 @@ string(string msg) formatmessage =
 		}
 		else if(escape == "x")
 		{
-			if(self.cursor_trace_ent)
-				replacement = self.cursor_trace_ent.netname;
-			else
+			replacement = self.cursor_trace_ent.netname;
+			if(!replacement || !self.cursor_trace_ent)
 				replacement = "nothing";
 		}
 		msg = strcat(substring(msg_save, 0, p), replacement);

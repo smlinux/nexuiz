@@ -1305,13 +1305,7 @@ void PlayerPreThink (void)
 				self.flags = self.flags | FL_JUMPRELEASED;
         		}
 		}
-		if(cvar("g_lms") && self.frags <= 0 && self.frags > -666)
-			centerprint(self, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n^1You have no more lives left\nwait for next round\n\n\n^7press attack to spectate other players");
-		else if(cvar("g_lms") && self.frags == -666)
-			centerprint(self, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n^1Match has already begun\nwait for next round\n\n\n^7press attack to spectate other players");
-		else
-			PrintWelcomeMessage(self);
-			//centerprint(self, "\n\n\npress jump to play\npress attack to spectate other players");
+		PrintWelcomeMessage(self);
 	} else if(self.classname == "spectator") {
 
 		if (self.flags & FL_JUMPRELEASED) {
@@ -1359,11 +1353,7 @@ void PlayerPreThink (void)
 			self.flags = self.flags | FL_JUMPRELEASED;
         	}
 		}
-		if (cvar("g_lms") && self.frags < 1)
-			centerprint(self, strcat("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nspectating ", self.enemy.netname, "\n\n\n^7press attack for next player\npress attack2 for free fly mode"));
-		else
-			centerprint(self, strcat("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nspectating ", self.enemy.netname, "\n\n\n^7press jump to play\n^7press attack for next player\npress attack2 for free fly mode"));
-
+		PrintWelcomeMessage(self);
 	}
 }
 

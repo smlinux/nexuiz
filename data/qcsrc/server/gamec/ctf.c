@@ -91,11 +91,8 @@ void(entity e) DropFlag =
 		dprint("FLAG: drop - owner is not carrying this flag??\n");
 		return;
 	}
-	bprint(p.netname);
-	if (e.team == 5)
-		bprint("^7 lost the RED flag\n");
-	else
-		bprint("^7 lost the BLUE flag\n");
+	bprint(strcat(p.netname, "^7 lost the ", e.netname, "\n"));
+	
 	if (p.flagcarried == e)
 		p.flagcarried = world;
 	e.owner = world;
@@ -140,10 +137,7 @@ void() FlagThink =
 	{
 		if (time > self.pain_finished)
 		{
-			if (self.team == 5)
-				bprint("The RED flag has returned to base\n");
-			else
-				bprint("The BLUE flag has returned to base\n");
+			bprint(strcat("The ", self.netname, " has returned to base\n"));
 			sound (e, CHAN_AUTO, self.noise3, 1, ATTN_NONE);
 			LogCTF("returned", self.team, world);
 			ReturnFlag(self);
@@ -233,26 +227,17 @@ void() FlagTouch =
 		t = time - other.flagpickuptime;
 		if (flagcaptimerecord == 0)
 		{
-			if (other.flagcarried.team == 5)
-				bprint(other.netname, "^7 captured the RED flag in ", ftos(t), " seconds\n");
-			else
-				bprint(other.netname, "^7 captured the BLUE flag in ", ftos(t), " seconds\n");
+			bprint(other.netname, "^7 captured the ", other.flagcarried.netname, " in ", ftos(t), " seconds\n");
 			flagcaptimerecord = t;
 		}
 		else if (t < flagcaptimerecord)
 		{
-			if (other.flagcarried.team == 5)
-				bprint(other.netname, "^7 captured the RED flag in ", ftos(t), ", breaking the previous record of ", ftos(flagcaptimerecord), " seconds\n");
-			else
-				bprint(other.netname, "^7 captured the BLUE flag in ", ftos(t), ", breaking the previous record of ", ftos(flagcaptimerecord), " seconds\n");
+			bprint(other.netname, "^7 captured the ", other.flagcarried.netname, " in ", ftos(t), ", breaking the previous record of ", ftos(flagcaptimerecord), " seconds\n");
 			flagcaptimerecord = t;
 		}
 		else
 		{
-			if (other.flagcarried.team == 5)
-				bprint(other.netname, "^7 captured the RED flag in ", ftos(t), ", failing to break the previous record of ", ftos(flagcaptimerecord), " seconds\n");
-			else
-				bprint(other.netname, "^7 captured the BLUE flag in ", ftos(t), ", failing to break the previous record of ", ftos(flagcaptimerecord), " seconds\n");
+			bprint(other.netname, "^7 captured the ", other.flagcarried.netname, " in ", ftos(t), ", failing to break the previous record of ", ftos(flagcaptimerecord), " seconds\n");
 		}
 
 		LogCTF("capture", other.flagcarried.team, other);
@@ -283,10 +268,7 @@ void() FlagTouch =
 		self.owner = other;
 		other.flagcarried = self;
 		self.cnt = FLAG_CARRY;
-		if (other.flagcarried.team == 5)
-			bprint(other.netname, "^7 got the RED flag\n");
-		else
-			bprint(other.netname, "^7 got the BLUE flag\n");
+		bprint(other.netname, "^7 got the ", self.netname, "\n");
 		other.frags = other.frags + cvar("g_ctf_flagscore_pickup");//FLAGSCORE_PICKUP;
 		LogCTF("steal", self.team, other);
 		sound (self, CHAN_AUTO, self.noise, 1, ATTN_NONE);
@@ -306,10 +288,7 @@ void() FlagTouch =
 		if (other.team == self.team || (other.team != 5 && other.team != 14))
 		{
 			// return flag
-			if (self.team == 5)
-				bprint(other.netname, "^7 returned the RED flag\n");
-			else
-				bprint(other.netname, "^7 returned the BLUE flag\n");
+			bprint(other.netname, "^7 returned the ", self.netname, "\n");
 			if (other.team == 5 || other.team == 14)
 				other.frags = other.frags + cvar("g_ctf_flagscore_return");//FLAGSCORE_RETURN;
 			else
@@ -327,10 +306,7 @@ void() FlagTouch =
 			self.owner = other;
 			other.flagcarried = self;
 			self.cnt = FLAG_CARRY;
-			if (self.team == 5)
-				bprint(other.netname, "^7 picked up the RED flag\n");
-			else
-				bprint(other.netname, "^7 picked up the BLUE flag\n");
+			bprint(other.netname, "^7 picked up the ", self.netname, "\n");
 			other.frags = other.frags + cvar("g_ctf_flagscore_pickup");//FLAGSCORE_PICKUP;
 			LogCTF("pickup", self.team, other);
 			sound (self, CHAN_AUTO, self.noise, 1, ATTN_NONE);
@@ -444,7 +420,7 @@ void() item_flag_team1 =
 
 	self.team = 5; // color 4 team (red)
 	self.items = IT_KEY2; // gold key (redish enough)
-	self.netname = "red base";
+	self.netname = "^1RED^7 flag";
 	self.target = "###item###";
 	self.skin = 0;
 	if (!self.model)
@@ -496,7 +472,7 @@ void() item_flag_team2 =
 
 	self.team = 14; // color 13 team (blue)
 	self.items = IT_KEY1; // silver key (bluish enough)
-	self.netname = "blue base";
+	self.netname = "^4BLUE^7 flag";
 	self.target = "###item###";
 	self.skin = 0;
 	if (!self.model)
