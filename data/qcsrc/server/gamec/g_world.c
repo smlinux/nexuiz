@@ -1023,13 +1023,6 @@ void() CheckRules_World =
 	timelimit = cvar("timelimit") * 60;
 	fraglimit = cvar("fraglimit");
 
-	if(!checkrules_overtimewarning && checkrules_overtimeend)
-	{
-		checkrules_overtimewarning = TRUE;
-		//sound(world, CHAN_AUTO, "announcer/robotic/1minuteremains.ogg", 1, ATTN_NONE);
-		bcenterprint("^3Now playing ^1OVERTIME^3!\n\n^3Keep fragging until we have a ^1winner^3!");
-	}
-
 	if (timelimit && time >= timelimit)
 		InitiateOvertime();
 
@@ -1037,6 +1030,13 @@ void() CheckRules_World =
 	{
 		NextLevel();
 		return;
+	}
+
+	if(!checkrules_overtimewarning && checkrules_overtimeend)
+	{
+		checkrules_overtimewarning = TRUE;
+		//sound(world, CHAN_AUTO, "announcer/robotic/1minuteremains.ogg", 1, ATTN_NONE);
+		bcenterprint("^3Now playing ^1OVERTIME^3!\n\n^3Keep fragging until we have a ^1winner^3!");
 	}
 
 	if (!checkrules_oneminutewarning && timelimit && time > timelimit - 60)
