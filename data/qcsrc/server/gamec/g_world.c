@@ -767,29 +767,231 @@ Exit deathmatch games upon conditions
 */
 void() CheckRules_Player =
 {
-	local float fraglimit;
-
 	if (gameover)	// someone else quit the game already
 		return;
 
 	// fixme: don't check players; instead check dom_team and ctf_team entities
-
-	fraglimit = cvar("fraglimit");
-
-	if(!cvar("g_lms") && !(cvar("g_tdm") || (cvar("teamplay") && cvar("g_runematch"))))
-	{
-		if (fraglimit && self.frags >= fraglimit)
-		{
-			NextLevel ();
-			return;
-		}
-	}
+	//   (div0: and that in CheckRules_World please)
 };
 
 float checkrules_oneminutewarning;
 float checkrules_leaderfrags;
-entity checkrules_leader;
 float tdm_max_score, tdm_old_score;
+
+float checkrules_equality;
+float checkrules_overtimewarning;
+float checkrules_overtimeend;
+
+void() InitiateOvertime =
+{
+	if(!checkrules_overtimeend)
+		checkrules_overtimeend = time + 60 * cvar("timelimit_maxovertime");
+}
+
+float WINNING_NO = 0; // no winner, but time limits may terminate the game
+float WINNING_YES = 1; // winner found
+float WINNING_NEVER = 2; // no winner, enter overtime if time limit is reached
+
+// LMS winning condition: game terminates if and only if there's at most one
+// one player who's living lives. Top two scores being equal cancels the time
+// limit.
+float() WinningCondition_LMS =
+{
+	entity head;
+
+	if(lms_dead_count < 0)
+		lms_dead_count = 0;
+
+	if(player_count > 1 && lms_dead_count >= player_count - 1)
+		return WINNING_YES; // He's the last man standing!
+
+	if((player_count == 1 && lms_dead_count == 1))
+	  	return WINNING_YES; // All dead... (n:n is handled by the test above)
+
+	// When we get here, we have at least two players who are actually LIVING,
+	// or one player who is still waiting for a victim to join the server. Now
+	// check if the top two players have equal score.
+
+	checkrules_leaderfrags = 0;
+	head = findchain(classname, "player");
+	checkrules_equality = FALSE;
+	while (head)
+	{
+		if(head.frags > checkrules_leaderfrags)
+			checkrules_leaderfrags = head.frags;
+		else if(head.frags > 0 && head.frags == checkrules_leaderfrags)
+			checkrules_equality = TRUE;
+		head = head.chain;
+	}
+
+	// The top two players have the same amount of lives? No timelimit then,
+	// enter overtime...
+
+	if(checkrules_equality)
+		return WINNING_NEVER;
+
+	// Top two have different scores? Way to go for our beloved TIMELIMIT!
+	return WINNING_NO;
+}
+
+// DM winning condition: game terminates if a player reached the fraglimit,
+// unless the first two players have the same score. The latter case also
+// breaks the time limit.
+float(float fraglimit) WinningCondition_MaxIndividualScore =
+{
+	float checkrules_oldleaderfrags;
+	entity head;
+
+	checkrules_oldleaderfrags = checkrules_leaderfrags;
+	checkrules_leaderfrags = 0;
+	head = findchain(classname, "player");
+	checkrules_equality = FALSE;
+	while (head)
+	{
+		if(head.frags > checkrules_leaderfrags)
+			checkrules_leaderfrags = head.frags;
+		else if(head.frags > 0 && head.frags == checkrules_leaderfrags)
+			checkrules_equality = TRUE;
+		head = head.chain;
+	}
+
+	if(checkrules_equality)
+		return WINNING_NEVER;
+
+	if(fraglimit && checkrules_leaderfrags >= fraglimit)
+		return WINNING_YES;
+
+	if (!cvar("g_runematch"))
+		if (checkrules_leaderfrags != checkrules_oldleaderfrags)
+		{
+			if (checkrules_leaderfrags == fraglimit - 1)
+				sound(world, CHAN_AUTO, "announcer/robotic/1fragleft.ogg", 1, ATTN_NONE);
+			else if (checkrules_leaderfrags == fraglimit - 2)
+				sound(world, CHAN_AUTO, "announcer/robotic/2fragsleft.ogg", 1, ATTN_NONE);
+			else if (checkrules_leaderfrags == fraglimit - 3)
+				sound(world, CHAN_AUTO, "announcer/robotic/3fragsleft.ogg", 1, ATTN_NONE);
+		}
+
+	return WINNING_NO;
+}
+
+float(float fraglimit) WinningConditionBase_Teamplay =
+{
+	tdm_old_score = tdm_max_score;
+	tdm_max_score = max(team1_score, team2_score, team3_score, team4_score);
+
+	checkrules_equality = FALSE;
+	if(tdm_max_score > 0 && (
+		  (team1_score == tdm_max_score)
+		+ (team2_score == tdm_max_score)
+		+ (team3_score == tdm_max_score)
+		+ (team4_score == tdm_max_score)
+		>= 2))
+		return WINNING_NEVER;
+
+	if(tdm_max_score >= fraglimit)
+		return WINNING_YES;
+
+	if(!cvar("g_runematch") && !cvar("g_domination"))
+		if(tdm_max_score != tdm_old_score)
+		{
+			if(tdm_max_score == fraglimit - 1)
+				sound(world, CHAN_AUTO, "announcer/robotic/1fragleft.ogg", 1, ATTN_NONE);
+			else if(tdm_max_score == fraglimit - 2)
+				sound(world, CHAN_AUTO, "announcer/robotic/2fragsleft.ogg", 1, ATTN_NONE);
+			else if(tdm_max_score == fraglimit - 3)
+				sound(world, CHAN_AUTO, "announcer/robotic/3fragsleft.ogg", 1, ATTN_NONE);
+		}
+
+	return WINNING_NO;
+}
+
+// TDM winning condition: game terminates if a team's score sum reached the
+// fraglimit, unless the first two teams have the same total score. The latter
+// case also breaks the time limit.
+float(float fraglimit) WinningCondition_MaxTeamSum =
+{
+	entity head;
+
+	team1_score = team2_score = team3_score = team4_score = 0;
+
+	head = findchain(classname, "player");
+	while (head)
+	{
+		if(head.team == COLOR_TEAM1)
+			team1_score += head.frags;
+		else if(head.team == COLOR_TEAM2)
+			team2_score += head.frags;
+		else if(head.team == COLOR_TEAM3)
+			team3_score += head.frags;
+		else if(head.team == COLOR_TEAM4)
+			team4_score += head.frags;
+		head = head.chain;
+	}
+
+	return WinningConditionBase_Teamplay(fraglimit);
+}
+
+// DOM/CTF winning condition: game terminates if the max of a team's players'
+// score reached the fraglimit, unless the first two teams have the same
+// maximum score. The latter case also breaks the time limit.
+float(float fraglimit) WinningCondition_MaxTeamMax =
+{
+	entity head;
+
+	team1_score = team2_score = team3_score = team4_score = 0;
+
+	head = findchain(classname, "player");
+	while (head)
+	{
+		if(head.team == COLOR_TEAM1)
+		{
+			if(head.frags > team1_score)
+				team1_score = head.frags;
+		}
+		else if(head.team == COLOR_TEAM2)
+		{
+			if(head.frags > team2_score)
+				team2_score = head.frags;
+		}
+		else if(head.team == COLOR_TEAM3)
+		{
+			if(head.frags > team3_score)
+				team3_score = head.frags;
+		}
+		else if(head.team == COLOR_TEAM4)
+		{
+			if(head.frags > team4_score)
+				team4_score = head.frags;
+		}
+		head = head.chain;
+	}
+
+	return WinningConditionBase_Teamplay(fraglimit);
+}
+
+
+// Add/remove bots if needed
+void() CheckRules_Minplayers =
+{
+	float f;
+
+	if(cvar("minplayers") >= maxclients)
+		cvar_set("minplayers", ftos(maxclients - 1));
+
+	f = cvar("minplayers") - (player_count - bot_number);
+	if((player_count - bot_number) < 1)
+		f = 0;
+
+	if(cvar("bot_number") != f)
+	{
+		if(cvar("minplayers") != f)
+			cvar_set("bot_number", ftos(f));
+		else
+			cvar_set("bot_number", "0");
+	}
+}
+
 
 /*
 ============
@@ -800,21 +1002,18 @@ Exit deathmatch games upon conditions
 */
 void() CheckRules_World =
 {
+	local float status;
 	local float timelimit;
 	local float fraglimit;
-	local float checkrules_oldleaderfrags;
-	local float f;
-	local entity checkrules_oldleader;
-	local entity head;
 
 	VoteThink();
 
 	if (intermission_running)
-	if (time >= intermission_exittime + 60)
-	{
-		GotoNextMap();
-		return;
-	}
+		if (time >= intermission_exittime + 60)
+		{
+			GotoNextMap();
+			return;
+		}
 
 	if (gameover)	// someone else quit the game already
 		return;
@@ -824,9 +1023,19 @@ void() CheckRules_World =
 	timelimit = cvar("timelimit") * 60;
 	fraglimit = cvar("fraglimit");
 
-	if (timelimit && time >= timelimit)
+	if(!checkrules_overtimewarning && checkrules_overtimeend)
 	{
-		NextLevel ();
+		checkrules_overtimewarning = TRUE;
+		//sound(world, CHAN_AUTO, "announcer/robotic/1minuteremains.ogg", 1, ATTN_NONE);
+		bcenterprint("^3Now playing ^1OVERTIME^3!\n\n^3Keep fragging until the ^1bitter end^3!");
+	}
+
+	if (timelimit && time >= timelimit)
+		InitiateOvertime();
+
+	if (checkrules_overtimeend && time >= checkrules_overtimeend)
+	{
+		NextLevel();
 		return;
 	}
 
@@ -837,105 +1046,35 @@ void() CheckRules_World =
 	}
 
 	if(cvar("minplayers"))
-	{
-		if(cvar("minplayers") >= maxclients)
-			cvar_set("minplayers", ftos(maxclients - 1));
+		CheckRules_Minplayers();
 
-		f = cvar("minplayers") - (player_count - bot_number);
-		if((player_count - bot_number) < 1)
-			f = 0;
-
-		if(cvar("bot_number") != f)
-		{
-			if(cvar("minplayers") != f)
-				cvar_set("bot_number", ftos(f));
-			else
-				cvar_set("bot_number", "0");
-		}
-	}
-
-	// last man camping winning conditions
+	status = WINNING_NO;
 	if(cvar("g_lms"))
 	{
-		if(lms_dead_count < 0)
-			lms_dead_count = 0;
-
-		// goto next map if only one player is alive or
-		// if there is only one player as spectator (could happen with g_lms_join_anytime 1)
-		if((player_count > 1 && (player_count - lms_dead_count) <= 1) ||
-		  (player_count == 1 && lms_dead_count == 1))
-			NextLevel();
-		return;
+		status = WinningCondition_LMS();
 	}
-
-	if((cvar("g_tdm") || (cvar("teamplay") && cvar("g_runematch"))) && fraglimit)
+	else if(fraglimit)
 	{
-		team1_score = team2_score = team3_score = team4_score = 0;
-
-		head = findchain(classname, "player");
-		while (head)
+		if(teams_matter)
 		{
-			if(head.team == COLOR_TEAM1)
-				team1_score += head.frags;
-			else if(head.team == COLOR_TEAM2)
-				team2_score += head.frags;
-			else if(head.team == COLOR_TEAM3)
-				team3_score += head.frags;
-			else if(head.team == COLOR_TEAM4)
-				team4_score += head.frags;
-			head = head.chain;
+			if(cvar("g_tdm") || cvar("g_runematch"))
+				status = WinningCondition_MaxTeamSum(fraglimit);
+			else if(cvar("g_ctf") || cvar("g_domination"))
+				status = WinningCondition_MaxTeamMax(fraglimit);
+			else
+			{
+				dprint("div0: How can this happen?\n");
+				status = WinningCondition_MaxTeamMax(fraglimit);
+			}
 		}
-
-		tdm_old_score = tdm_max_score;
-		tdm_max_score = max(team1_score, team2_score, team3_score, team4_score);
-
-		if(tdm_max_score >= fraglimit)
-			NextLevel();
-
-		if(!cvar("g_domination") && !cvar("g_runematch"))
-		if(tdm_max_score != tdm_old_score)
-		{
-			if(tdm_max_score == fraglimit - 1)
-				sound(world, CHAN_AUTO, "announcer/robotic/1fragleft.ogg", 1, ATTN_NONE);
-			else if(tdm_max_score == fraglimit - 2)
-				sound(world, CHAN_AUTO, "announcer/robotic/2fragsleft.ogg", 1, ATTN_NONE);
-			else if(tdm_max_score == fraglimit - 3)
-				sound(world, CHAN_AUTO, "announcer/robotic/3fragsleft.ogg", 1, ATTN_NONE);
-		}
-		return;
+		else
+			status = WinningCondition_MaxIndividualScore(fraglimit);
 	}
 
-	checkrules_oldleader = checkrules_leader;
-	checkrules_oldleaderfrags = checkrules_leaderfrags;
-	checkrules_leaderfrags = 0;
-	checkrules_leader = world;
-	head = findchain(classname, "player");
-	while (head)
-	{
-		if (checkrules_leaderfrags < head.frags)
-		{
-			checkrules_leaderfrags = head.frags;
-			checkrules_leader = head;
-		}
-		head = head.chain;
-	}
-	if (checkrules_leaderfrags <= 0)
-	{
-		checkrules_leader = world;
-		checkrules_leaderfrags = 0;
-	}
-	checkrules_leaderfrags = floor(checkrules_leaderfrags);
+	if(checkrules_overtimeend)
+		if(status != WINNING_NEVER)
+			status = WINNING_YES;
 
-	if (!cvar("g_domination") && !cvar("g_runematch"))
-	if (checkrules_leaderfrags != checkrules_oldleaderfrags)
-	{
-		if (checkrules_leaderfrags == fraglimit - 1)
-			sound(world, CHAN_AUTO, "announcer/robotic/1fragleft.ogg", 1, ATTN_NONE);
-		else if (checkrules_leaderfrags == fraglimit - 2)
-			sound(world, CHAN_AUTO, "announcer/robotic/2fragsleft.ogg", 1, ATTN_NONE);
-		else if (checkrules_leaderfrags == fraglimit - 3)
-			sound(world, CHAN_AUTO, "announcer/robotic/3fragsleft.ogg", 1, ATTN_NONE);
-	}
-//	if (checkrules_leader != checkrules_oldleader)// && checkrules_leaderfrags > checkrules_oldleaderfrags)
-//		bprint("^1",checkrules_leader.netname, " has taken the lead with ", ftos(checkrules_leaderfrags), " frags\n");
+	if(status == WINNING_YES)
+		NextLevel();
 };

@@ -4,6 +4,18 @@ float(float index) weapon_translateindextoflag;
 float logfile_open;
 float logfile;
 
+void(string s) bcenterprint
+{
+	entity head;
+	head = find(world, classname, "player");
+	while(head)
+	{
+		if(clienttype(head) == CLIENTTYPE_REAL)
+			centerprint(head, s);
+		head = find(head, classname, "player");
+	}
+}
+
 void(string s, float check_dangerous) ServerConsoleEcho =
 {
 	local string ch;
