@@ -37,8 +37,8 @@ string AppendItemcodes(string s, entity player)
 {
 	float w;
 	w = player.weapon;
-	if(w == 0)
-		w = player.switchweapon;
+	//if(w == 0)
+	//	w = player.switchweapon;
 	if(w == 0)
 		w = player.cnt; // previous weapon!
 	s = strcat(s, ftos(weapon_translateindextoflag(w)));
