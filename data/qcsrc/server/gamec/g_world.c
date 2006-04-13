@@ -790,7 +790,7 @@ void() InitiateOvertime =
 
 float WINNING_NO = 0; // no winner, but time limits may terminate the game
 float WINNING_YES = 1; // winner found
-float WINNING_NEVER = 2; // no winner, enter overtime if time limit is reached
+float WINNING_NEVER = -1; // no winner, enter overtime if time limit is reached
 
 // LMS winning condition: game terminates if and only if there's at most one
 // one player who's living lives. Top two scores being equal cancels the time
@@ -858,7 +858,10 @@ float(float fraglimit) WinningCondition_MaxIndividualScore =
 	if(checkrules_equality)
 		return WINNING_NEVER;
 
-	if(fraglimit && checkrules_leaderfrags >= fraglimit)
+	if(!fraglimit)
+		return WINNING_NO;
+
+	if(checkrules_leaderfrags >= fraglimit)
 		return WINNING_YES;
 
 	if (!cvar("g_runematch"))
@@ -888,6 +891,9 @@ float(float fraglimit) WinningConditionBase_Teamplay =
 		+ (team4_score == tdm_max_score)
 		>= 2))
 		return WINNING_NEVER;
+
+	if(!fraglimit)
+		return WINNING_NO;
 
 	if(tdm_max_score >= fraglimit)
 		return WINNING_YES;
@@ -1053,7 +1059,7 @@ void() CheckRules_World =
 	{
 		status = WinningCondition_LMS();
 	}
-	else if(fraglimit)
+	else
 	{
 		if(teams_matter)
 		{
