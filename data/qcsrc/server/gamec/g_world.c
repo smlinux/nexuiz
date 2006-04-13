@@ -790,7 +790,22 @@ void() InitiateOvertime =
 
 float WINNING_NO = 0; // no winner, but time limits may terminate the game
 float WINNING_YES = 1; // winner found
-float WINNING_NEVER = -1; // no winner, enter overtime if time limit is reached
+float WINNING_NEVER = 2; // no winner, enter overtime if time limit is reached
+float WINNING_STARTOVERTIME = 3; // no winner, enter overtime NOW
+
+float(float fraglimitreached, float equality) GetWinningCode =
+{
+	if(equality)
+		if(fraglimitreached)
+			return WINNING_STARTOVERTIME;
+		else
+			return WINNING_NEVER;
+	else
+		if(fraglimitreached)
+			return WINNING_YES;
+		else
+			return WINNING_NO;
+}
 
 // LMS winning condition: game terminates if and only if there's at most one
 // one player who's living lives. Top two scores being equal cancels the time
@@ -855,15 +870,6 @@ float(float fraglimit) WinningCondition_MaxIndividualScore =
 		head = head.chain;
 	}
 
-	if(checkrules_equality)
-		return WINNING_NEVER;
-
-	if(!fraglimit)
-		return WINNING_NO;
-
-	if(checkrules_leaderfrags >= fraglimit)
-		return WINNING_YES;
-
 	if (!cvar("g_runematch"))
 		if (checkrules_leaderfrags != checkrules_oldleaderfrags)
 		{
@@ -875,7 +881,7 @@ float(float fraglimit) WinningCondition_MaxIndividualScore =
 				sound(world, CHAN_AUTO, "announcer/robotic/3fragsleft.ogg", 1, ATTN_NONE);
 		}
 
-	return WINNING_NO;
+	return GetWinningCode(fraglimit && checkrules_leaderfrags >= fraglimit, checkrules_equality);
 }
 
 float(float fraglimit) WinningConditionBase_Teamplay =
@@ -883,20 +889,15 @@ float(float fraglimit) WinningConditionBase_Teamplay =
 	tdm_old_score = tdm_max_score;
 	tdm_max_score = max(team1_score, team2_score, team3_score, team4_score);
 
-	checkrules_equality = FALSE;
-	if(tdm_max_score > 0 && (
-		  (team1_score == tdm_max_score)
-		+ (team2_score == tdm_max_score)
-		+ (team3_score == tdm_max_score)
-		+ (team4_score == tdm_max_score)
-		>= 2))
-		return WINNING_NEVER;
-
-	if(!fraglimit)
-		return WINNING_NO;
-
-	if(tdm_max_score >= fraglimit)
-		return WINNING_YES;
+	checkrules_equality =
+		(tdm_max_score > 0)
+		&&
+		(
+			  (team1_score == tdm_max_score)
+			+ (team2_score == tdm_max_score)
+			+ (team3_score == tdm_max_score)
+			+ (team4_score == tdm_max_score)
+			>= 2);
 
 	if(!cvar("g_runematch") && !cvar("g_domination"))
 		if(tdm_max_score != tdm_old_score)
@@ -909,7 +910,7 @@ float(float fraglimit) WinningConditionBase_Teamplay =
 				sound(world, CHAN_AUTO, "announcer/robotic/3fragsleft.ogg", 1, ATTN_NONE);
 		}
 
-	return WINNING_NO;
+	return GetWinningCode(fraglimit && tdm_max_score >= fraglimit, checkrules_equality);
 }
 
 // TDM winning condition: game terminates if a team's score sum reached the
@@ -1075,6 +1076,12 @@ void() CheckRules_World =
 		}
 		else
 			status = WinningCondition_MaxIndividualScore(fraglimit);
+	}
+
+	if(status == WINNING_STARTOVERTIME)
+	{
+		status = WINNING_NEVER;
+		InitiateOvertime();
 	}
 
 	if(checkrules_overtimeend)
