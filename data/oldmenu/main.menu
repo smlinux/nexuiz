@@ -7,17 +7,17 @@ Item Layout Main
 	{
 		origin		'132 9'
 		direction 	'10 0'
-	
+
 		DeriveTemplate PictureButton MainButton
 		{
 			soundPressed 	"misc/menu2.wav"
 		}
-	
+
 		Derive MainButton Join
 		{
 			normal		"$gfx/b_join"
 			selected	"$gfx/b_join_u"
-	
+
 			target	"JoinGame"
 			action	Nex_Action_JumpToJoinGame
 		}
@@ -25,7 +25,7 @@ Item Layout Main
 		{
 			normal		"$gfx/b_create"
 			selected	"$gfx/b_create_u"
-	
+
 			target 	"CreateGame"
 			init	Nex_Action_SetNormalPanelLink
 		}
@@ -33,7 +33,7 @@ Item Layout Main
 		{
 			normal		"$gfx/b_options"
 			selected	"$gfx/b_options_u"
-	
+
 			target	"Options"
 			init	Nex_Action_SetNormalPanelLink
 		}
@@ -41,14 +41,14 @@ Item Layout Main
 		{
 			normal		"$gfx/b_credits"
 			selected	"$gfx/b_credits_u"
-	
+
 			action		Nex_Credits_Action
 		}
 		Derive MainButton Quit
 		{
 			normal		"$gfx/b_quit"
 			selected	"$gfx/b_quit_u"
-	
+
 			action		Nex_Quit_Action
 		}
 	}
@@ -60,13 +60,13 @@ Item Layout Main
 		{
 			soundPressed 	"misc/menu2.wav"
 		}
-	
+
 		Derive MainButton InstantAction
 		{
 			size		'110 30'
 			normal		"$gfx/b_instantaction"
 //			selected	"$gfx/b_instantaction_u"
-	
+
 			action		Nex_Action_Instant_Action
 		}
 	}

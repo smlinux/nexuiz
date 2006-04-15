@@ -21,8 +21,8 @@ const string MENU_INGAME_DEFAULT =
 "}";
 
 // insert the files here
-var string MENU_MAINFILE = "menu/menu";
-var string MENU_PLUGINDIR = "menu/plugin";
+var string MENU_MAINFILE = "oldmenu/menu";
+var string MENU_PLUGINDIR = "oldmenu/plugin";
 
 const bool MENU_ALLOWINGAME = false;
 
