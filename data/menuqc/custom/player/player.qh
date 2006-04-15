@@ -1,0 +1,36 @@
+// Property of Alientrap/AK
+// custom/player/avatar.qh
+
+// Item_Nex_Avatar_Info
+// its a valid item nevertheless
+.string normal;		// contains the avatar name
+.string target; 	// contains the model name
+.string link;   	// contains the skin name
+.string picture; 	// contains the picture that should be displayed
+.string text; 		// contains the description text
+
+void() Item_Nex_Avatar_Info_Destroy;
+void() Item_Nex_Avatar_Info_Spawn;
+
+// see control/data/data.qh
+// Item_Data_Nex_Avatar Item_DataLink_Value (implements more or less)
+// value should be a integer in the range 1..n where n is the number of found mdefs
+.entity _link;
+
+void( float pEvent ) Item_Data_Nex_Avatar_DataEvent;
+void() Item_Data_Nex_Avatar_Spawn;
+
+// see control/data/data.qh
+// Item_Data_Nex_ShirtColor Item_DataLink_Value
+void( float pEvent ) Item_DataLink_Nex_ShirtColor_DataEvent;
+void() Item_DataLink_Nex_ShirtColor_Spawn;
+
+// see control/data/data.qh
+// Item_Data_Nex_PantsColor Item_DataLink_Value
+void( float pEvent ) Item_DataLink_Nex_PantsColor_DataEvent;
+void() Item_DataLink_Nex_PantsColor_Spawn;
+
+// see control/data/data.qh
+// Item_Data_Nex_Color [Item_Data]
+void( float pEvent ) Item_Data_Nex_Color_DataEvent;
+void() Item_Data_Nex_Color_Spawn;

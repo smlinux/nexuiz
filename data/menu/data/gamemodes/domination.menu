@@ -1,0 +1,92 @@
+// Property of Alientrap
+//
+// data/ctf.menu
+
+Item DataContainer Domination
+{
+	//Item Data_Cvar Domination_Active
+	//{
+	//	cvarName	"g_domination"
+	//	defValue	0
+	//	[DataLink_OnOffSwitch]
+	//}
+	Item Data_Cvar DomFragLimit
+	{
+		cvarName	"g_domination_point_limit"
+		defValue	-1
+
+		Item DataLink_Value Value
+		{
+			minValue	-1
+			maxValue	9999.0
+			stepValue	1
+			link 		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	8
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar DisableFrags
+	{
+		cvarName	"g_domination_disable_frags"
+		defValue	0
+
+		[DataLink_OnOffSwitch]
+	}
+	//Item Data_Cvar BalanceTeamPoints
+	//{
+	//	cvarName	"g_domination_balance_team_points"
+	//	defValue	0
+
+	//	[DataLink_OnOffSwitch]
+	//}
+	Item Data_Cvar PointAmt
+	{
+		cvarName	"g_domination_point_amt"
+		defValue	1
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar PointRate
+	{
+		cvarName	"g_domination_point_rate"
+		defValue	5
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar CaptureTime
+	{
+		cvarName	"g_domination_point_capturetime"
+		defValue	0.1
+
+		[DataLink_Setting]
+	}
+	//Item Data_Cvar DefaultNumTeams
+	//{
+	//	cvarName	"g_domination_default_teams"
+	//	defValue	2
+	//	[DataLink_Setting]
+	//}
+	Item Data_Cvar DefaultNumTeams
+	{
+		cvarName	"g_domination_default_teams"
+		defValue	2
+
+		Item DataLink_ValueSwitch Switch
+		{
+			minValue	2
+			stepValue	1
+			maxValue	4
+			descList	"'Two''Three''Four'"
+
+			link		"##up"
+		}
+	}
+}

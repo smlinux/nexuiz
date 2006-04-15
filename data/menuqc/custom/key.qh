@@ -1,0 +1,13 @@
+// Property of Alientrap/AK
+// custom/key.qh
+
+// Item_Data_Nex_Key [Item_Data]
+// value is an altstring which contains all assigned key names
+//
+.string target; // action name
+
+void( float pEvent ) Item_Data_Nex_Key_DataEvent;
+void() Item_Data_Nex_Key_Spawn;
+
+// Item_Nex_KeyButton Item_Button
+void() Item_Nex_KeyButton_Spawn;

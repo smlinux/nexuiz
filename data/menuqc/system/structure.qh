@@ -1,0 +1,88 @@
+// DP/Nex Menu
+// system/structure.qh
+
+entity Menu_ActiveWindow;
+
+// points to the lowest selected menu item (that has no child item selected)
+entity Menu_ActiveItem;
+
+///////////////
+// prototypes
+///
+
+// help if you need to iterate through embedded items, too
+entity( entity pItem ) _Menu_GetParent;
+entity( entity pItem ) _Menu_GetFirst;
+entity( entity pItem ) _Menu_GetLast;
+entity( entity pItem ) _Menu_GetNext;
+entity( entity pItem ) _Menu_GetPrev;
+bool( entity pItem, entity pParent ) _Menu_IsEmbeddedParentOf;
+
+// INFO: SelectUp/Down rules:
+// INFO: Down:
+// INFO: 	1. try to select a selectable item
+// INFO:	2. try to select a subwindow
+// INFO: Up:
+// INFO: 	1. try to select the parent
+// INFO:	2. select down the parent
+// INFO:	3. select up the parent
+
+// raw select
+void() _Menu_SelectNext;
+void() _Menu_SelectPrev;
+bool() _Menu_SelectUp;
+bool() _Menu_SelectDown;
+void() _Menu_Reselect;
+
+void( bool pUser ) Menu_SelectNext;
+void( bool pUser ) Menu_SelectPrev;
+bool( bool pUser ) Menu_SelectUp;
+bool( bool pUser ) Menu_SelectDown;
+void( bool pUser ) Menu_Reselect;
+
+// INFO:Should only be used inside of _select event functions and only (only!) when
+// 	absolutely necessary since this is more or less a hack
+void( entity pItem, bool pUser ) Menu_CorrectSelection;
+
+void( entity pItem, bool pUser ) Menu_Select;
+void( entity pMenu, bool pMakeActive, bool pUser ) Menu_JumpToWindow;
+
+bool( entity pEntity ) Menu_HasEvents;
+
+#ifdef USEFUNCTIONS
+bool( entity pEntity ) Menu_IsVisible;
+bool( entity pEntity ) Menu_IsSelectable;
+bool( entity pEntity ) Menu_IsTemplate;
+bool( entity pEntity ) Menu_IsEmbedded;
+
+bool( entity pEntity, float pFlag ) Menu_HasFlag;
+bool( entity pEntity, float pRunFlag ) Menu_HasRunFlag;
+#else
+#define Menu_IsVisible(pEntity) 	(!((pEntity)._runFlag & (RUNFLAG_HIDDEN | RUNFLAG_CLIPPED)))
+#define Menu_IsSelectable(pEntity) 	(!((pEntity)._runFlag & RUNFLAG_NOSELECT))
+#define Menu_IsTemplate(pEntity)	((pEntity)._runFlag & RUNFLAG_TEMPLATE)
+#define Menu_IsEmbedded(pEntity)	((pEntity).flag & FLAG_EMBEDDED)
+
+#define Menu_HasFlag(pEntity,pFlag)		((pEntity).flag & (pFlag))
+#define Menu_HasRunFlag(pEntity,pRunFlag)	((pEntity)._runFlag & (pRunFlag))
+#endif
+
+void( entity pEntity ) Menu_SetRunFlag;
+void( entity pParent, entity pEntity ) Menu_InheritRunFlag;
+
+void() Menu_UpdateRunFlags;
+
+void( entity pWindow ) Menu_EmptyWindow;
+void( entity pEntity ) Menu_RemoveItem;
+
+entity( entity pOrigin, string pName, bool pThrow ) Menu_GetItemEx;
+entity( entity pOrigin, string pName, bool pThrow ) Menu_GetChildEx;
+
+entity( string pName ) Menu_GetItem; // pOrigin = self
+entity( string pName ) Menu_GetChild;
+
+#ifdef USEFUNCTIONS
+string( entity pItem ) Menu_GetName;	// gets the name without the parent namespace
+#else
+#define Menu_GetName(pItem)		(substring( (pItem) .name, strlen( (pItem) .parent ) + 2, 100000 ))
+#endif

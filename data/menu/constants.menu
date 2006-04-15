@@ -1,0 +1,94 @@
+// Property of Alientrap
+//
+// Constants
+
+// Item flags
+// TODO: keep this always in sync with its control/items.qh counterpart
+#define FlagTemplate		"1" 	// this is a template do not touch, do not draw - actually dont do anything with it
+#define	FlagEmbedded		"2" 	// the item cant be selected and all its children are embedded into its parent
+#define FlagHidden		"4" 	// events wont be called and it wont be drawn, etc.
+#define	FlagNoSelect		"8"	// cant be selected (but events will be called)
+#define	FlagConnected 		"16"	// only if connected (i.e. playing)
+#define	FlagServer		"32"	// only displayed if server
+#define	FlagDeveloper		"64"	// only displayed if developer
+#define	FlagDraw		"128"	// only the draw event will be called
+#define	FlagChildDraw		"256"	// used to make the children only drawable
+#define	FlagDrawUpdate		"512"	// only the draw and update event get called
+#define FlagChildDrawUpdate	"1024"	// only the draw and refresh events are called for children
+#define FlagSealOffMouse	"2048" 	// used to seal all items under the item with this flag off from mouse events
+
+#define InfiniteFloat		"10000000.0"
+#define InfiniteVector		"10000000.0 10000000.0 10000000.0"
+
+// Alignment constants
+#define AlignLeft	"0"
+#define AlignCenter	"1"
+#define	AlignRight	"2"
+#define AlignFixLeft 	"4"	// |text - actually this isnt necessary
+#define AlignFixCenter 	"8"	// te|xt
+#define AlignFixRight	"16"	// text|
+#define AlignFirst	"32"	// for layouts: item| ... | being the origin
+
+// DrawFlag constants
+#define DrawFlagNormal		"0"
+#define DrawFlagAdditive 	"1"
+#define DrawFlagModulate	"2"
+#define DrawFlag2xModulate	"3"
+
+// Item constants
+#define DefaultFontSize 	"11 11 0"
+
+//  Text constants
+#define DefaultTextColor 	"0 0 0"
+#define DefaultTextAlpha	"1"
+#define DefaultTextDrawFlag	[DrawFlagNormal]
+
+#define	DefaultSelTextColor	"0 0 1"
+#define DefaultSelTextAlpha	"1"
+#define DefaultSelTextDrawFlag	[DrawFlagNormal]
+
+#define DefaultPreTextColor	"1 0 0"
+#define DefaultPreTextAlpha	"1"
+#define DefaultPreTextDrawFlag	[DrawFlagNormal]
+
+#define DefaultInaTextColor	"0.1 0.1 0.5"
+#define DefaultInaTextAlpha	"1"
+#define DefaultInaTextDrawFlag	[DrawFlagNormal]
+
+//  Picture constants
+#define DefaultPicColor		"1 1 1"
+#define DefaultPicAlpha		"1"
+#define DefaultPicDrawFlag	[DrawFlagNormal]
+
+#define DefaultSelPicColor	"0.2 0.2 1"
+#define DefaultSelPicAlpha	"1"
+#define DefaultSelPicDrawFlag	[DrawFlagNormal]
+
+#define DefaultPrePicColor	"1 0.2 0.2"
+#define DefaultPrePicAlpha	"1"
+#define DefaultPrePicDrawFlag	[DrawFlagNormal]
+
+// Sound constants
+#define DefaultSelectSound	"misc/menu1.wav"
+#define DefaultPressSound	"misc/mouseclick.wav"
+
+#define DefaultIncreaseSound	"misc/increasevalue.wav"
+#define DefaultDecreaseSound	"misc/decreasevalue.wav"
+
+#define DefaultStartSound	"misc/startgame.wav"
+#define DefaultEndSound		"misc/endgame.wav"
+
+// Slider
+#define DefaultSliderBar	"gfx/options_scroll"
+#define DefaultSlider		"gfx/options_scroll_scroller"
+#define DefaultSliderBarSize	"144 12"
+#define DefaultSliderSize	"12 12"
+#define DefaultProportions	"0.073107 0.853785 0.073107"
+#define DefaultDirection	"0.5 0.5"
+
+// EditBoxs
+#define DefaultCursorSize	"1.375 12 0"
+#define DefaultCursorFlashSize	"1.375 12 0"
+#define DefaultCursorColor	"0 0 0"
+#define DefaultCursorFlashColor "0 0 0"
+

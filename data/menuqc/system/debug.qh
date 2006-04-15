@@ -1,0 +1,80 @@
+// SCMenu
+// system/debug.qh
+
+// version cvars (constant)
+const string 	SYSTEM_CVAR_VERSION_BUILDDATE		= "scmenu_version_builddate";
+const string 	SYSTEM_CVAR_VERSION_BUILDTIME		= "scmenu_version_buildtime";
+const string	SYSTEM_CVAR_VERSION			= "scmenu_version";
+
+const string 	SYSTEM_CVAR_VERSION_BUILDDATE_VALUE	= __DATE__;
+const string 	SYSTEM_CVAR_VERSION_BUILDTIME_VALUE	= __TIME__;
+const string 	SYSTEM_CVAR_VERSION_VALUE		= "1.3";
+
+// system cvars
+
+// 0 or 1
+const string 	SYSTEM_CVAR_DEBUG		= "scmenu_debug";
+const string 	SYSTEM_CVAR_DEBUG_REF 		= "scmenu_debug_ref";
+const string 	SYSTEM_CVAR_DEBUG_SOUND		= "scmenu_debug_sound";
+const string 	SYSTEM_CVAR_DEBUG_AREA		= "scmenu_debug_area";
+
+// 0 for normal, 1 for halted, 2 for new step
+const string	SYSTEM_CVAR_DEBUG_STEP		= "scmenu_debug_step";
+
+// 0 for no info, 1 for local position, 2 for absolute position
+const string 	SYSTEM_CVAR_DEBUG_MOUSE		= "scmenu_debug_mouse";
+
+// 0 for no output, 1 for medium output, 2 for extensive output
+const string 	SYSTEM_CVAR_DEBUG_STRUCTURE	= "scmenu_debug_structure";
+
+// NOTE: set it to 1 to make it display the data for one frame, set it to 2 to display it always
+const string 	SYSTEM_CVAR_DEBUG_RUNFLAG	= "scmenu_debug_runflag";
+const string	SYSTEM_CVAR_DEBUG_PROCESS	= "scmenu_debug_process";
+const string 	SYSTEM_CVAR_DEBUG_MGFX		= "scmenu_debug_mgfx";
+
+// parser filter, possible values: info high low
+const string 	SYSTEM_CVAR_DEBUG_PARSER	= "scmenu_debug_parser";
+
+// process_filter, possible values: runflag update draw mouse key
+const string	SYSTEM_CVAR_DEBUG_PROCESS_FILTER = "scmenu_debug_process_filter";
+
+// dump item names
+const string 	SYSTEM_CVAR_DEBUG_DUMP_NAMES = "scmenu_dumpnames";
+
+const float 	SYSTEM_CVAR_DEBUG_DEFAULT		= 0;
+const float	SYSTEM_CVAR_DEBUG_REF_DEFAULT 		= 0;
+const float 	SYSTEM_CVAR_DEBUG_RUNFLAG_DEFAULT	= 0;
+const float 	SYSTEM_CVAR_DEBUG_PROCESS_DEFAULT	= 0;
+const float 	SYSTEM_CVAR_DEBUG_MGFX_DEFAULT		= 0;
+const float	SYSTEM_CVAR_DEBUG_STRUCTURE_DEFAULT	= 0;
+const string	SYSTEM_CVAR_DEBUG_PARSER_DEFAULT	= "";
+const string	SYSTEM_CVAR_DEBUG_PROCESS_FILTER_DEFAULT= "";
+const float	SYSTEM_CVAR_DEBUG_SOUND_DEFAULT		= 0;
+const float 	SYSTEM_CVAR_DEBUG_AREA_DEFAULT		= 0;
+const float 	SYSTEM_CVAR_DEBUG_STEP_DEFAULT		= 0;
+const float 	SYSTEM_CVAR_DEBUG_MOUSE_DEFAULT		= 0;
+
+bool sys_debug;
+bool sys_debug_sound;
+bool sys_debug_ref;
+bool sys_debug_area;
+bool sys_debug_runflag;
+bool sys_debug_process;
+bool sys_debug_mgfx;
+float sys_debug_mouse;
+float sys_debug_structure;
+float sys_debug_parser;
+
+bool sys_debug_halt;
+
+float sys_debug_process_filter;
+
+vector sys_debug_cursor_localpos;
+
+void() Sys_Debug_Init;
+void() Sys_Debug_Frame;
+void() Sys_Debug_Draw;
+
+void() Sys_Debug_DumpNames;
+
+

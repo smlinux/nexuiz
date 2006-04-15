@@ -1,0 +1,60 @@
+Item Layout CTF
+{
+	direction	[Nex_DefaultVertDirection]
+	size 		'900 585'
+	origin		'600 50'
+	alignment	[AlignFirst]
+
+	Derive Nex_Option_EditBox TimeLimit
+	{
+		text	"Time Limit Override (disable: -1)"
+		// use the same one from the basic menu
+		target	"Data::Server::TimeLimit::Text"
+	}
+	Derive Nex_Option_EditBox CaptureLimit
+	{
+		text	"CTF Point Limit Override (disable: -1)"
+		target	"Data::Game::CTF::CaptureLimit::Text"
+	}
+	Derive Nex_Option_EditBox FlagReturnTime
+	{
+		text	"Flag Return Time"
+		target	"::Data::Game::CTF::FlagReturnTime::Text"
+	}
+	Derive Nex_Option_EditBox FragsCapture
+	{
+		text	"Capture Points (player)"
+		target	"Data::Game::CTF::FragsCapture::Text"
+	}
+	Derive Nex_Option_EditBox FragsCaptureTeam
+	{
+		text	"Capture Points (team)"
+		target	"::Data::Game::CTF::FragsCaptureTeam::Text"
+	}
+	Derive Nex_Option_EditBox FragsPickup
+	{
+		text	"Flag Pickup Points"
+		target	"Data::Game::CTF::FragsPickup::Text"
+	}
+	Derive Nex_Option_EditBox FragsReturn
+	{
+		text	"Return Flag Points (ally)"
+		target	"::Data::Game::CTF::FragsReturn::Text"
+	}
+	Derive Nex_Option_EditBox FragsReturnRogue
+	{
+		text	"Return Flag Points (rogue team)"
+		target	"::Data::Game::CTF::FragsReturnRogue::Text"
+	}
+
+
+
+	Derive Nex_Line	Seperator
+	{}
+	Derive TextButton Reset
+	{
+		normal	"Reset to default"
+		init	Nex_Action_ResetData
+		target	"::Data::Game::CTF"
+	}
+}

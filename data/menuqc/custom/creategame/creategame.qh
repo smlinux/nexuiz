@@ -1,0 +1,71 @@
+// Property of Alientrap/AK
+// custom/creategame/creategame.qh
+
+// Item_Nex_Map_Info
+// its a valid item nevertheless
+.string normal;		// contains the map name
+.string picture; 	// contains the picture that should be displayed
+.string text; 		// contains the description text
+.string link;		// contains the path to the map
+
+void() Item_Nex_Map_Info_Destroy;
+void() Item_Nex_Map_Info_Spawn;
+
+// Map ""database"" Singleton Item_Nex_MapDB
+
+// pRoot should be an item with no other children
+void() Item_Nex_MapDB_EnumFiles;
+void() Item_Nex_MapDB_Destroy;
+void() Item_Nex_MapDB_Spawn;
+
+void( string pPrefix ) Nex_MapDB_FilterMaps;
+
+entity( string pPath ) Nex_MapDB_GetByPath;
+//entity( float pIndex ) Nex_MapDB_GetByIndex;
+entity( float pIndex ) Nex_MapDB_GetFilteredByIndex;
+float( entity pItem ) Nex_MapDB_GetFilteredIndex;
+
+string() Nex_MapDB_GetFilteredPathAltString;
+string() Nex_MapDB_GetFilteredNameAltString;
+
+string() Nex_MapDB_GetPathAltString;
+string() Nex_MapDB_GetNameAltString;
+
+// Item_DataLink_Nex_MapList [Item_DataLink_Switch]
+// contains the full .bsp path in value and the text/map name in desc
+// this is just a placeholder data item - it only keeps a set
+.string cvarName; // name of the maplist cvar
+.event init; // if you want to initialize it
+void( float pEvent ) Item_DataLink_Nex_MapList_DataEvent;
+void() Item_DataLink_Nex_MapList_Spawn;
+
+void() Item_DataLink_Nex_MapList_InitWithMapList;
+void( entity pItem ) DataLink_Nex_MapList_UpdateRange;
+
+// MapList edit commands
+// these functions work with the entry selected by _realValue
+void( entity pItem, string pName, string pPath ) DataLink_Nex_MapList_InsertEntryAfter;
+void( entity pItem ) DataLink_Nex_MapList_DeleteEntry;
+void( entity pItem ) DataLink_Nex_MapList_MoveEntryUp;
+void( entity pItem ) DataLink_Nex_MapList_MoveEntryDown;
+// creates the first entry if necessary
+void( entity pItem, string pName, string pPath ) DataLink_Nex_MapList_SetFirst;
+void( entity pItem ) DataLink_Nex_MapList_Clear;
+
+// both functions return str zoned strings
+string( entity pItem ) DataLink_Nex_MapList_GetCurrentName;
+string( entity pItem ) DataLink_Nex_MapList_GetCurrentPath;
+
+// see control/data/data.qh
+// Item_DataLink_Nex_ModSwitch Item_DataLink_TextSwitch
+
+void() Item_DataLink_Nex_ModSwitch_Spawn;
+
+//Item_DataLink_Nex_FileList [Item_DataLink_TextSwitch]
+.string normal; // contains the file extension
+.string selected; // contains the path
+.string valueList;
+
+void( float pEvent ) Item_DataLink_Nex_FileList_DataEvent;
+void() Item_DataLink_Nex_FileList_Destroy;
+void() Item_DataLink_Nex_FileList_Spawn;

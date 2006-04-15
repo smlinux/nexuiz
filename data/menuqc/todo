@@ -1,0 +1,75 @@
+// Todo list
+
+-Clean up the Nex_ custom mess a bit
+*-Notify Spike that the "effectless statement" warning has a off-by-one bug
+*-Rename Item_Composition and make it not embedded by default
+*-Add support for a MOUSECLIP flag which will make the menu not pass any mouse events to the items under it
+*-Move the normal key function somewhere else perhaps??
+*--Write a test menu ^^
+--Unroll as menu recursive functions as possible
+f-Remove this bloody RUNFLAG_SPAWNED again
+*-Only spawn an item once(even if its tried to spawn it multiple times)
+-Think about the layout alignment and improve it
+*-Calculate the clip sizes and positions only once in PROCESS_RUNFLAG
+--Rewrite *all* controls and the event handler to have the origin change before the current event function
+-Add #enum and #enumflags to the parser
+-Add effect support to all bloody items, use fixed names - if non existent ignore - change Menu_GetItem to a non-erroring version for this
+-Add extended # commands like #add or #and, #complement, etc.
+-Rewrite isframe to allow automation to create a good amount of new items
+*-Clip the Item_DataLink_Value value strings (so it contains e.g. 1.45 instead of 1.450000)
+*-Make all datalinks route all ITEM_DATA events
+-Make FLOATING window clip its movement to the parent window's size so you cant hide it this way
+-Fix orderPos in LinkChildren
+*-Add a slist subsystem to base!
+-Do a big naming check to smooth things out
+-Move the _menu_process stuff somewhere else
+s-Only call the mouse event when the position has been changed - since all changes happens then
+-Perhaps make the RUNFLAGs be reset every frame for all items?
+-Spend some time writing docs for the API - preferably at http://wiki.quakesrc.org :/
+-Write a parser readme file explaining every tiny, little bit of it
+/-Add effects items/classes
+/-Rewrite isframe
+/-Think about when to support ctcalls and when not
+//-Add full support for the template idea or remove it
+?s-Make altstring and property conform with the new string param rules
+?s-Make the Data items support runtime changes, too
+?-Restructurize the controls
+f-Add some kind of overlay control
+f-Remove TokenType
+f-Remove support for cliparea '0 0 0'-'0 0 0' => whole plane
+s-Add a color and alpha stack to mgfx
+s-Add a current namespace global that builds the current namespace from the parent lists
+s-Add the abstract Item Item_Selectable
+s-Remove all ctcall, customizeable events
+
+*-Add ._runflags to system/item.qc - which will be used to determine visibility, etc. of items
+*-Add MENU_PROCESS_KEY to Menu_ProcessEvent
+*-Add MENU_PROCESS_RUNFLAG
+*-Add RUNFLAG_CLIPPED, so we can select items that arent visible (but arent hidden intentionally as well -> scrollwindows)
+*-Add a .userselect event  (Toddd)
+*-Add a multiline label item class
+*-Add a real #include to the parser
+*-Add a scmenu_debug_process_filter cvar (only displays information on a specific process run)
+*-Add a select event instead of userselect
+*-Add a system controlled destruction of items similar to the NG Menu's system
+*-Add direction tokens to Menu_GetItem
+*-Add layout classes
+*-Add more output to the parser (perhaps also a debug mode)
+*-Finish the goddamn design
+*-Finish the structure debug output
+*-Finish this darn #include support!!
+*-Fix the _FLAG_MOUSEINAREA bug: if the flag is set and the item is hidden somehow, it wont be unset
+*-Fix the init function calling the spawn function for templates, too
+*-Fix this strange clipping bug (items plop out of the void instead of shifting slowly in)
+*-Implement an embedded window perhaps
+*-Make FLAG_DRAWONLY and FLAG_DRAWUPDATEONLY only affect the parent item
+*-Merge as many of the debug functions (especially clientarea and parentarea)
+*-Move as many constants as possible to constants.menu
+*-Remove Item_Init - its poison to deriving classes
+*-Rename .refresh to .update and change all constants, too
+*-Rename Spawn_ to _Spawn perhaps??
+*-Rename link to target in the DataUser class
+*-Rewrite _menu_* to use the normal stack instead of an altstring stack
+*-Rewrite all controls
+*-Rewrite all gfx functions to reuse the params for conversions, etc.
+*-Update scmenu_debug_parser to also support tokens instead of pure floats

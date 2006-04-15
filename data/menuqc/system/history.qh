@@ -1,0 +1,23 @@
+// DP/Nex Menu
+// system/history.qh
+
+// MMANAGER_HISTORY
+.entity _prev;	 //	<- points to the previous history element
+.entity _child;  //	<- points to the old/calling selected item
+.entity _parent; // 	<- points to the old active window
+.entity _next;	 //	<- points to the item which the history is used for
+.event  _destroy;  //	<- points to the function that is called when the history is popped
+
+// points to the last element of the history
+entity Menu_History;
+
+///////////////
+// prototypes
+///
+typedef void() Menu_History_PopFunction;
+
+void( entity pEntity, Menu_History_PopFunction pPopFunction )	Menu_History_Push;
+void() 			Menu_History_Pop;
+bool( entity pEntity )	Menu_History_Verify;	// Verifies the target item
+void()			Menu_History_Clear;
+

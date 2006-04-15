@@ -1,0 +1,153 @@
+// Property of Alientrap
+//
+// data/gamemisc.menu
+
+Item DataContainer LMS
+{
+	Item Data_Cvar LMSLivesOverride
+	{
+		cvarName	"g_lms_lives_override"
+		defValue	-1
+
+		Item DataLink_Value Value
+		{
+			minValue	-1
+			maxValue	999.0
+			stepValue	1
+			link 		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	8
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+
+	}
+	Item Data_Cvar LMSStartingShells
+	{
+		cvarName	"g_lms_start_ammo_shells"
+		defValue	30
+
+		Item DataLink_Value Value
+		{
+			minValue	0
+			maxValue	999.0
+			stepValue	1
+			link 		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	8
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar LMSStartingNails
+	{
+		cvarName	"g_lms_start_ammo_nails"
+		defValue	100
+
+		Item DataLink_Value Value
+		{
+			minValue	0
+			maxValue	999.0
+			stepValue	1
+			link 		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	8
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar LMSStartingRockets
+	{
+		cvarName	"g_lms_start_ammo_rockets"
+		defValue	30
+
+		Item DataLink_Value Value
+		{
+			minValue	0
+			maxValue	999.0
+			stepValue	1
+			link 		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	8
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar LMSStartingCells
+	{
+		cvarName	"g_lms_start_ammo_cells"
+		defValue	30
+
+		Item DataLink_Value Value
+		{
+			minValue	0
+			maxValue	999.0
+			stepValue	1
+			link 		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	8
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar LMSJoin
+	{
+		cvarName	"g_lms_join_anytime"
+		defValue	1
+
+		[DataLink_OnOffSwitch]
+	}
+	Item Data_Cvar LMSLastJoin
+	{
+		cvarName	"g_lms_last_join"
+		defValue	3
+
+		Item DataLink_Value Value
+		{
+			minValue	0
+			maxValue	999.0
+			stepValue	1
+			link 		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	8
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+}

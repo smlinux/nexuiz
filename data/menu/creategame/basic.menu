@@ -1,0 +1,180 @@
+// Property of Alientrap/AK
+//
+// creategame/basic.menu
+Item Window Basic
+{
+	Item Window Map
+	{
+		pos	'0 50'
+		size '400 585'
+		flag [FlagEmbedded]
+
+		DeriveTemplate Nex_Composition Nex_Option_MapType
+		{
+			DeriveTemplate Nex_Automation_Option_Switch Automation
+			{}
+			DeriveTemplate TextButton Description
+			{}
+			DeriveTemplate SwitchButton Switch
+			{
+				size 	'200 12'
+				action  Nex_Action_Maplist_ChangeMapType
+			}
+		}
+
+		Derive Picture PrevPicture
+		{
+			size	'30 18'
+			picture "gfx/create_map_nav"
+			pos	'30 25'
+		}
+		Derive TextButton Prev
+		{
+			normal	"<<"
+			pos	'33 29'
+			action	Nex_Action_MapSelector_Prev
+		}
+		Derive Picture NamePicture
+		{
+			picture		"gfx/create_map_nav_background"
+			size		'305 18'
+			pos		'60 24'
+		}
+		Derive Label Name
+		{
+			alignment	[AlignCenter]
+			color		"1 1 1"
+			size		'306 14'
+			pos		'64 29'
+		}
+		Derive Picture NextPicture
+		{
+			size	'30 18'
+			picture "gfx/create_map_nav"
+			pos	'366 25'
+		}
+		Derive TextButton Next
+		{
+			normal	">>"
+			pos	'369 29'
+
+			action	Nex_Action_MapSelector_Next
+		}
+		Derive Picture Table1
+		{
+			picture "gfx/create_map_border"
+			pos	'20 35'
+			size	'385 275'
+		}
+		Derive Picture Picture
+		{
+			picture "gfx/m_white"
+			size	'323 226'
+			pos	'51 60'
+		}
+		Derive Picture Table2
+		{
+			picture "gfx/create_map_desc_background"
+			pos	'20 295'
+			size	'385 245'
+		}
+		Derive MultiLabel Description
+		{
+			pos	'38 298'
+			size	'383 285'
+			wrap	32
+			fontSize '11 11 0'
+		}
+		Derive Nex_Option_MapType MapType
+		{
+			pos '50 5'
+			text	"Filter"
+			target	"Data::Server::Map::Query::Switch"
+		}
+		Item Task_Job UpdateJob
+		{
+			update 	Nex_MapSelector_UpdateMap
+		}
+	}
+	Item Layout Settings
+	{
+		pos		'400 80'
+		size		'500 585'
+		origin		'250 0'
+		alignment	[AlignFirst]
+		direction	[Nex_DefaultVertDirection]
+		flag 		[FlagEmbedded]
+
+		DeriveTemplate Nex_Composition Option_EditBox
+		{
+			DeriveTemplate Nex_Automation_Option_EditBox Automation
+			{}
+			DeriveTemplate TextButton Description
+			{}
+			DeriveTemplate EditBox EditBox
+			{
+				size 	'200 12'
+				action  Nex_Action_TestOnChange
+				select  Nex_Action_TestOnSelect
+			}
+		}
+
+		Derive Option_EditBox Hostname
+		{
+			text	"Server Name"
+			target	"Data::Server::Hostname::Text"
+		}
+		//Derive Nex_Option_Switch GameMode
+		//{
+		//	text	"Game Mode"
+		//	target	"::Data::Server::GameMode::Switch"
+		//}
+		Derive Nex_Option_Switch GameType
+		{
+			text	"Mod"
+			target	"Data::Server::ServerProgs::Switch"
+		}
+		Derive Nex_Option_Switch PublicServer
+		{
+			text	"Public Server"
+			target  "Data::Server::PublicServer::Switch"
+		}
+		Derive Option_EditBox MaxPlayer
+		{
+			text	"Max Players"
+			target	"Data::Server::MaxPlayers::Text"
+		}
+		Derive Nex_Line	Seperator1
+		{}
+		Derive Option_EditBox NumBots
+		{
+			text	"Bot Count"
+			target	"Data::Server::NumBots::Text"
+		}
+		Derive Nex_Option_Switch BotSkill
+		{
+			text	"Skill Level"
+			target	"Data::Server::BotSkill::Switch"
+		}
+		Derive Nex_Line Seperator2
+		{}
+		Derive Option_EditBox ServerFrameTime
+		{
+			text	"Server Frame Time"
+			target	"Data::Server::ServerFrameTime::Text"
+		}
+		Derive Option_EditBox ServerMaxRate
+		{
+			text	"Server Max Rate"
+			target	"Data::Server::ServerMaxRate::Text"
+		}
+		Derive Nex_Void	Seperator3
+		{}
+		Derive PictureButton Start
+		{
+			normal		"$gfx/create_b_start"
+
+			action	Nex_Action_Map_Start
+		}
+	}
+}

@@ -1,0 +1,264 @@
+Item Layout Runematch
+{
+	size	'800 585'
+	origin	'200 50'
+	flag	[FlagEmbedded]
+
+	Item ScrollWindow ScrollWindow
+	{
+		size 	'780 535'
+		flag	[FlagEmbedded]
+
+		Item Arrangement Arrangement
+		{
+			direction	[Nex_DefaultVertDirection]
+			alignment	[AlignFirst]
+			flag		[FlagEmbedded]
+
+			// hack to make the arrangement have a set width
+			Item Window FixWidth
+			{
+				size	'800 0'
+				Derive Nex_Void Left
+				{
+					pos	'0 0'
+					size	'400 0'
+				}
+				Derive Nex_Void Right
+				{
+					pos	'400 0'
+					size	'400 0'
+				}
+			}
+
+			Derive Nex_Option_EditBox TimeLimit
+			{
+				text	"Time Limit Override (disable: -1)"
+				// use the same one from the basic menu
+				target	"Data::Server::TimeLimit::Text"
+			}
+			Derive Nex_Option_EditBox RunematchFragLimit
+			{
+				text	"Score Limit Override (disable: -1)"
+				target	"Data::Game::Runematch::RunematchFragLimit::Text"
+			}
+
+			Derive Nex_Option_EditBox PointAmt
+			{
+				text	"Score per Rune"
+				target	"Data::Game::Runematch::PointAmt::Text"
+			}
+			Derive Nex_Option_EditBox PointRate
+			{
+				text	"Rune Score Frequency"
+				target	"Data::Game::Runematch::PointRate::Text"
+			}
+			Derive Nex_Option_EditBox RuneRespawnTime
+			{
+				text	"Rune Respawn Timer After Dropped"
+				target	"Data::Game::Runematch::RuneRespawnTime::Text"
+			}
+			Derive Nex_Option_EditBox RuneShuffleTime
+			{
+				text	"Rune Position Change Timer"
+				target	"Data::Game::Runematch::RuneShuffleTime::Text"
+			}
+			Derive Nex_Option_EditBox FragsKilledbyRuneholder
+			{
+				text	"Frags When Holding Runes"
+				target	"Data::Game::Runematch::FragsKilledbyRuneholder::Text"
+			}
+			Derive Nex_Option_EditBox FragsKilledRuneholder
+			{
+				text	"Frags for Killing Rune Holders"
+				target	"Data::Game::Runematch::FragsKilledRuneholder::Text"
+			}
+			Derive Nex_Option_EditBox FragsKillNoRunes
+			{
+				text	"Other Frags (for non-rune kills)"
+				target	"Data::Game::Runematch::FragsKillNoRunes::Text"
+			}
+			Derive Nex_Option_EditBox MaxRunesToDrop
+			{
+				text	"Max Runes to Drop on Death"
+				target	"Data::Game::Runematch::MaxRunesToDrop::Text"
+			}
+
+			Derive Nex_Line	SeperatorStrength
+			{}
+			Derive Nex_Option_EditBox StrengthDamage
+			{
+				text	"Strength Damage"
+				target	"Data::Game::Runematch::StrengthDamage::Text"
+			}
+			Derive Nex_Option_EditBox StrengthForce
+			{
+				text	"Strength Force"
+				target	"Data::Game::Runematch::StrengthForce::Text"
+			}
+			Derive Nex_Option_EditBox WeaknessDamage
+			{
+				text	"Weakness Damage"
+				target	"Data::Game::Runematch::WeaknessDamage::Text"
+			}
+			Derive Nex_Option_EditBox WeaknessForce
+			{
+				text	"Weakness Force"
+				target	"Data::Game::Runematch::WeaknessForce::Text"
+			}
+			Derive Nex_Option_EditBox StrengthComboDamage
+			{
+				text	"Combined Damage"
+				target	"Data::Game::Runematch::StrengthComboDamage::Text"
+			}
+			Derive Nex_Option_EditBox StrengthComboForce
+			{
+				text	"Combined Force"
+				target	"Data::Game::Runematch::StrengthComboForce::Text"
+			}
+
+
+			Derive Nex_Line	SeperatorDefense
+			{}
+			Derive Nex_Option_EditBox DefenseDamage
+			{
+				text	"Defense TakeDamage"
+				target	"Data::Game::Runematch::DefenseDamage::Text"
+			}
+			Derive Nex_Option_EditBox VulnerDamage
+			{
+				text	"Vulnerability TakeDamage"
+				target	"Data::Game::Runematch::VulnerDamage::Text"
+			}
+			Derive Nex_Option_EditBox DefenseComboDamage
+			{
+				text	"Combined TakeDamage"
+				target	"Data::Game::Runematch::DefenseComboDamage::Text"
+			}
+
+
+			Derive Nex_Line	SeperatorVampire
+			{}
+			Derive Nex_Option_EditBox VampireDamage
+			{
+				text	"Vampire Damage Absorb"
+				target	"Data::Game::Runematch::VampireDamage::Text"
+			}
+			Derive Nex_Option_EditBox EmpathyDamage
+			{
+				text	"Empathy Damage Take"
+				target	"Data::Game::Runematch::EmpathyDamage::Text"
+			}
+			Derive Nex_Option_EditBox VampireComboDamage
+			{
+				text	"Combined Absorb or Take"
+				target	"Data::Game::Runematch::VampireComboDamage::Text"
+			}
+
+
+			Derive Nex_Line	SeperatorRegen
+			{}
+			Derive Nex_Option_EditBox RegenHP
+			{
+				text	"Vitality Health"
+				target	"Data::Game::Runematch::RegenHP::Text"
+			}
+			Derive Nex_Option_EditBox VenomHP
+			{
+				text	"Venom Health"
+				target	"Data::Game::Runematch::VenomHP::Text"
+			}
+			Derive Nex_Option_EditBox RegenComboHP
+			{
+				text	"Combined Health"
+				target	"Data::Game::Runematch::RegenComboHP::Text"
+			}
+			Derive Nex_Option_EditBox RegenSpeed
+			{
+				text	"Vitality Regenerate Speed"
+				target	"Data::Game::Runematch::RegenSpeed::Text"
+			}
+			Derive Nex_Option_EditBox VenomSpeed
+			{
+				text	"Venom Degenerate Speed"
+				target	"Data::Game::Runematch::VenomSpeed::Text"
+			}
+			Derive Nex_Option_EditBox RegenComboRegenSpeed
+			{
+				text	"Combined Regenerate Speed"
+				target	"Data::Game::Runematch::RegenComboRegenSpeed::Text"
+			}
+			Derive Nex_Option_EditBox RegenComboDegenSpeed
+			{
+				text	"Combined Degenerate Speed"
+				target	"Data::Game::Runematch::RegenComboDegenSpeed::Text"
+			}
+
+
+			Derive Nex_Line	SeperatorSpeed
+			{}
+			Derive Nex_Option_EditBox SpeedMoverate
+			{
+				text	"Speed Move Rate"
+				target	"Data::Game::Runematch::SpeedMoverate::Text"
+			}
+			Derive Nex_Option_EditBox SlowMoverate
+			{
+				text	"Slow Move Rate"
+				target	"Data::Game::Runematch::SlowMoverate::Text"
+			}
+			Derive Nex_Option_EditBox SpeedComboMoverate
+			{
+				text	"Combined Move Rate"
+				target	"Data::Game::Runematch::SpeedComboMoverate::Text"
+			}
+			Derive Nex_Option_EditBox SpeedAtkrate
+			{
+				text	"Speed Attack Rate"
+				target	"Data::Game::Runematch::SpeedAtkrate::Text"
+			}
+			Derive Nex_Option_EditBox SlowAtkrate
+			{
+				text	"Slow Attack Rate"
+				target	"Data::Game::Runematch::SlowAtkrate::Text"
+			}
+			Derive Nex_Option_EditBox SpeedComboAtkrate
+			{
+				text	"Combined Attack Rate"
+				target	"Data::Game::Runematch::SpeedComboAtkrate::Text"
+			}
+			Derive Nex_Option_EditBox SpeedJumpHeight
+			{
+				text	"Speed Jump Height"
+				target	"Data::Game::Runematch::SpeedJumpHeight::Text"
+			}
+			Derive Nex_Option_EditBox SlowJumpHeight
+			{
+				text	"Slow Jump Height"
+				target	"Data::Game::Runematch::SlowJumpHeight::Text"
+			}
+			Derive Nex_Option_EditBox SpeedComboJumpHeight
+			{
+				text	"Combined Jump Height"
+				target	"Data::Game::Runematch::SpeedComboJumpHeight::Text"
+			}
+
+
+
+			Derive Nex_Line	Seperator
+			{}
+			Derive TextButton Reset
+			{
+				normal	"Reset to default"
+				init	Nex_Action_ResetData
+				target	"::Data::Game::Runematch"
+			}
+		}
+	}
+	Item VScrollBar Scroller
+	{
+		pos	'780 0'
+		size	'20 100'
+		target	"##prev"
+	}
+}

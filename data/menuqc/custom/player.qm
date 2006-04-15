@@ -1,0 +1,82 @@
+// Property of Alientrap/AK
+// custom/player/player.qm
+
+// uses target and _target
+// requires neighbors: Picture, Name, Description
+void() Nex_Automation_UpdateAvatar_Update =
+{
+	local entity lItem;
+	local entity lTarget;
+
+	if( self._target.name != "Data::Player::Avatar" )
+		self._target = Menu_GetItem( "Data::Player::Avatar" );
+
+	lTarget = self._target;
+
+	lItem = Menu_GetItem( "Picture" );
+	String_EntitySet( lItem, picture, lTarget._link.picture );
+
+	lItem = Menu_GetItem( "Name" );
+	String_EntitySet( lItem, text, lTarget._link.normal );
+
+	lItem = Menu_GetItem( "Description" );
+	String_EntitySet( lItem, text, lTarget._link.text );
+};
+
+void() Nex_Automation_UpdateAvatar_Destroy =
+{
+	String_EntityFree( self, target );
+};
+
+void() Nex_Automation_UpdateAvatar =
+{
+	String_EntityZone( self, target );
+
+	self._update = Nex_Automation_UpdateAvatar_Update;
+	self._destroy = Nex_Automation_UpdateAvatar_Destroy;
+};
+
+// more concrete functions
+void() Nex_Action_Avatar_Next =
+{
+	local entity lItem;
+
+	lItem = Menu_GetItem( "Data::Player::Avatar" );
+	lItem._realValue = lItem._realValue + 1;
+	Raise_DataEvent( lItem, ITEM_DATALINK_SET );
+};
+
+void() Nex_Action_Avatar_Prev =
+{
+	local entity lItem;
+
+	lItem = Menu_GetItem( "Data::Player::Avatar" );
+	lItem._realValue = lItem._realValue - 1;
+	Raise_DataEvent( lItem, ITEM_DATALINK_SET );
+};
+
+void() Nex_Action_Player_Apply =
+{
+	local entity lItem;
+
+	lItem = Menu_GetItem( "Data::Player" );
+	Raise_DataEvent( lItem, ITEM_DATA_SEND );
+};
+
+// jumps to Player setup
+void() Nex_Action_JumpToPlayerSetup =
+{
+	local entity lItem;
+	lItem = Menu_GetItem( "Normal::Panel" );
+	String_EntitySet( lItem, link, "Options" );
+
+	Raise_Update( lItem );
+	Menu_UpdateRunFlags();
+	Menu_JumpToWindow( lItem._link, false, false );
+
+	lItem = Menu_GetItem( "Options::Dummy::Panel::Player" );
+	Nex_MakeOnlyVisible( lItem );
+	Menu_JumpToWindow( lItem, false, false );
+
+	Nex_MessageBox( "Player setup", "Enter a player name first!", "OK", "", Util_NullFunction, Util_NullFunction);
+};

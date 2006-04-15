@@ -1,0 +1,23 @@
+// NG Menu
+// util/string.h
+
+// INFO: A function strzones all strings that are passed as params and strzones its return param if it
+// INFO: is a string (except if the function knows that the string passed is a zone string).
+// INFO: Generally, if you only call builtin functions, you can use a temp string
+// INFO: You should know that the VM has 16 temp string buffers, so if you could count how many it takes
+// INFO: before you have to strzone something
+// TODO: convert altstring and property
+string() 				String_Create;
+string( string pStr ) 			String_Zone;	// use this for constants
+string( string pStr ) 			String_Normal;	// strunzones pStr and returns a temp buffer version of it
+string( string pStr, string pSet ) 	String_Set;	// copies pSet to a new strzoned string
+string( string pStr ) String_Free;
+
+string( string pStr, string pApp ) 			String_Append;
+string( string pStr, float pStart, float pLength ) 	String_Substring;
+
+void( entity pEntity, .string pField ) 			String_EntityCreate;
+void( entity pEntity, .string pField ) 			String_EntityZone;
+void( entity pEntity, .string pField, string pSet ) 	String_EntitySet;
+void( entity pEntity, .string pField ) 			String_EntityFree;
+

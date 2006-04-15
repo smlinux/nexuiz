@@ -1,0 +1,56 @@
+// DP/Nex Menu
+// system/events.qh
+
+// menu_processmous states
+enum {
+	MENU_SELECT_SELECTABLE,
+	MENU_SELECT_ALWAYS,
+	MENU_SELECT_NEVER
+};
+
+enum {
+	MENU_EVENT_NORMAL,
+	MENU_EVENT_CONTINUE = 0,
+	MENU_EVENT_RAISEPARENT,
+	MENU_EVENT_PROCESSED
+};
+
+enumflags { //enumflags because of the debug filter
+	MENU_PROCESS_RUNFLAG,
+	MENU_PROCESS_UPDATE,
+	MENU_PROCESS_DRAW,
+	MENU_PROCESS_MOUSE,
+	MENU_PROCESS_KEY
+};
+
+// used to build up the local coord system
+vector Menu_Cursor_Position;
+
+// key hook - only as long as there is no history change or the menu is closed
+entity Menu_KeyHook_Target;
+var void( float pKey, float pAscii ) Menu_KeyHook = __NULL__;
+
+///////////////
+// prototypes
+///
+
+void() Menu_Frame;
+void() Menu_Draw;
+void(float pKey, float pAscii) Menu_Key;
+
+// decide whether to toggle the menu
+bool() Menu_Toggle;
+
+void() Menu_Process_Setup;
+
+float( entity pItem, float pMode, float pSelectState, float pKey, float pAscii ) Menu_Process;
+#define _Menu_Process(item,mode) 	Menu_Process( item, mode, 0, 0, 0 )
+#define Menu_ProcessDraw(item)	 	_Menu_Process( item, MENU_PROCESS_DRAW )
+#define Menu_ProcessUpdate(item)	_Menu_Process( item, MENU_PROCESS_UPDATE )
+#define Menu_ProcessRunFlag(item)	_Menu_Process( item, MENU_PROCESS_RUNFLAG )
+#define Menu_ProcessMouse(item,select)  Menu_Process( item, MENU_PROCESS_MOUSE, select, 0, 0 )
+#define Menu_ProcessKey(item,key,ascii) Menu_Process( item, MENU_PROCESS_KEY, 0, key, ascii )
+
+
+
+

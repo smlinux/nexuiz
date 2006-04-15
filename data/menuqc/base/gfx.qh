@@ -1,0 +1,51 @@
+// NG-Menu
+// base/gfx.h
+
+const float GFX_MENU_DEFAULT_WIDTH = 1024;
+const float GFX_MENU_DEFAULT_HEIGHT = 768;
+
+const string CVAR_SCMENU_MENU_WIDTH = "scmenu_menu_width";
+const string CVAR_SCMENU_MENU_HEIGHT = "scmenu_menu_height";
+
+// measurement block duration in seconds
+const float GFX_SHOWFPS_DURATION = 1.000;
+
+const float GFX_SHOWFPS_DEFAULT = 0;
+const string CVAR_SCMENU_SHOWFPS = "scmenu_showfps";
+
+float Gfx_Menu_Width;
+float Gfx_Menu_Height;
+float Gfx_Real_Width;
+float Gfx_Real_Height;
+
+void() Gfx_Init;
+void() Gfx_Quit;
+void() Gfx_Display;
+void() Gfx_Hide;
+void() Gfx_Update;
+void() Gfx_Draw;
+
+bool( string pPic )	Gfx_IsCached;
+bool( string pPic )	Gfx_Precache;
+void( string pPic )	Gfx_Free;
+vector( string pPic ) 	Gfx_GetImageSize;
+
+vector( vector pPos )  Gfx_ConToMen;
+vector( vector pPos )  Gfx_MenToCon;
+
+void() Gfx_ResetClipArea;
+
+float( vector pPosition, float pCharacter, vector pScale, vector pRGB, float pAlpha, float pFlag )
+Gfx_DrawCharacter;
+
+float( vector pPosition, string pText, vector pScale, vector pRGB, float pAlpha, float pFlag )
+Gfx_DrawString;
+
+float( vector pPosition, string pPicture, vector pSize, vector pRGB, float pAlpha, float pFlag )
+Gfx_DrawPic;
+
+float( vector pPosition, vector pSize, vector pRGB, float pAlpha, float pFlag )
+Gfx_Fill;
+
+void( float pX, float pY, float pWidth, float pHeight )
+Gfx_SetClipArea;

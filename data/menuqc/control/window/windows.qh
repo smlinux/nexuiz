@@ -1,0 +1,52 @@
+// DP/Nex Menu
+// control/window/windows.qh
+
+// Item_Window
+.keyEvent key;
+
+bool( float pKey, float pAscii ) Item_Window_Key;
+void() Item_Window_Draw;
+void() Item_Window_Spawn;
+
+// Item_Frame Item_Window
+void() Item_Frame_Spawn;
+
+// Item_EventWindow Item_Window
+// has a few events
+.keyEvent key;
+.event init;
+.event reinit;
+.event destroy;
+.event update;
+
+void() Item_EventWindow_Spawn;
+
+// Item_Reference [Item]
+.string link; // window link
+
+void() Item_Reference_Update;
+void() Item_Reference_Draw;
+void() Item_Reference_Destroy;
+void() Item_Reference_Spawn;
+
+// Item_Layout Item_Window
+.vector direction; // space between the items
+.float alignment;
+
+void() Item_Layout_Spawn;
+void() Item_Layout_Update;
+
+// Item_Arrangement Item_Layout
+
+void() Item_Arrangement_CalculateSize;
+void() Item_Arrangement_Update;
+void() Item_Arrangement_Spawn;
+
+// Item_ScrollWindow Item_Window
+// It will adapt its origin to always make the currently selected item visible
+// There always has to be only *one* child window, that has a valid size
+.vector direction; // first is space between frame and item
+.entity _link; // used to determine changes of the ActiveItem
+
+void() Item_ScrollWindow_Update;
+void() Item_ScrollWindow_Spawn;

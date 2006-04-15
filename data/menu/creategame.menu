@@ -1,0 +1,66 @@
+// Property of Alientrap/AK
+//
+// creategame.menu
+Item Layout CreateGame
+{
+	Derive Picture Table1
+	{
+		picture "gfx/create_background"
+		pos	'0 0'
+		size	'910 610'
+	}
+
+	Item Layout Bar
+	{
+		size	  '910 60'
+		alignment [AlignLeft]
+		direction '32 0 0'
+		origin	  '40 30'
+
+		Derive TextButton BasicOptions
+		{
+			normal		"Basic Options"
+
+			init		Nex_Action_JumpToPage
+			target		"Panel::Basic"
+		}
+		Derive TextButton MapList
+		{
+			normal		"Map List"
+
+			init		Nex_Action_JumpToPage
+			target		"Panel::MapList"
+		}
+		Derive TextButton GameSettings
+		{
+			normal		"Game Settings"
+
+			init		Nex_Action_JumpToPage
+			target		"Panel::Game"
+		}
+		Derive TextButton WeaponSettings
+		{
+			normal		"Weapon Settings"
+
+			init		Nex_Action_JumpToPage
+			target		"Panel::Weapon"
+		}
+		Derive TextButton Management
+		{
+			normal		"Management"
+
+			init		Nex_Action_JumpToPage
+			target		"Panel::Management"
+		}
+	}
+	Item EventWindow Panel
+	{
+		reinit	Nex_Action_MakeFirstVisible
+
+		#include "menu/creategame/basic.menu"
+		#include "menu/creategame/maplist.menu"
+		#include "menu/creategame/game.menu"
+		#include "menu/creategame/weapon.menu"
+		#include "menu/creategame/management.menu"
+	}
+}

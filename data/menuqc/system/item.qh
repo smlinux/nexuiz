@@ -1,0 +1,126 @@
+// DP/Nex Menu
+// system/item.qh
+
+enumflags {
+	RUNFLAG_TEMPLATE,
+
+	RUNFLAG_HADMOUSE,
+	RUNFLAG_MOUSEINAREA,
+
+	RUNFLAG_CHILDDRAWONLY,
+	RUNFLAG_CHILDDRAWUPDATEONLY,
+
+	RUNFLAG_HIDDEN,
+	RUNFLAG_CLIPPED,	// used to distinguish between intentionally hidden and casaully hidden
+	RUNFLAG_NOSELECT,
+
+	RUNFLAG_USERSELECT,
+
+	RUNFLAG_DELETEFRAME,
+	RUNFLAG_DELETETOGGLE,
+
+	RUNFLAG_SPAWNED		// set after the spawn function has been called
+};
+
+typedef void() event;
+typedef bool(float,float) keyEvent;
+typedef void(bool,bool) selectEvent;
+
+///////////
+// [Item] fields
+///
+
+.entity chain;
+
+// controly type
+.string type;
+
+// managing stuff
+.entity _parent;
+.string parent;
+
+//.entity _history;	// used to set up the history -> selectdown prefers _history over _parent
+
+.string name;
+
+.entity _next, _prev;		// point to the next, respectively, the previous item
+
+.entity _child;			// points to the first child
+
+// updating stuff
+.float orderPos;	// if FLAG_NOSELECT or FLAG_HIDDEN is set, it cant be selected
+					// has to be set always to a correct value or to 0 then it is set
+.float flag;
+.float _runFlag;
+
+// drawing
+.vector pos;
+.vector size;
+
+.vector origin;
+
+// event cache fields
+.vector _cache_origin;
+.vector _cache_clip_pos;
+.vector _cache_clip_size;
+
+// function pointers
+.event init; 	// called once at object creation
+.event reinit;
+.event destroy;
+.event mouseEnter;
+.event mouseLeave;
+.event update;
+.selectEvent select;
+.event action;
+.event draw;
+.keyEvent key; // if it returns TRUE, the key was processed by the function
+
+// hidden function pointers - actually these are called by the manager
+// and they call the normal ones (used to make controls more generic
+.event _reinit;	// called in performreinit
+.event _destroy;	// called when the item is removed -> menu_removeitem
+.event _mouseEnter;
+.event _mouseLeave;
+.event _update;
+.selectEvent _select;
+.event _draw;
+.keyEvent _key;
+
+/////////////////////
+// Helper Functions
+///
+
+// default control functions - assign only to the _* event functions
+// (assigning to the 'normal' event functions will crash the vm !)
+// are used by ITEM_CUSTOM and can be used to test new ITEMs easily
+void()  DefCt_Reinit;
+void()	DefCt_Destroy;
+bool( float pKey, float pAscii )  DefCt_Key;
+void()	DefCt_Draw;
+void()	DefCt_MouseEnter;
+void()	DefCt_MouseLeave;
+void() 	DefCt_Update;
+void( bool pSelect, bool pUser )  DefCt_Select;
+
+// use this to raise an event from another item or function
+void( entity pEntity ) Raise_Reinit;
+void( entity pEntity ) Raise_Destroy;
+bool( entity pEntity, float pKey, float pAscii)  Raise_Key;
+void( entity pEntity ) Raise_Draw;
+void( entity pEntity ) Raise_MouseEnter;
+void( entity pEntity ) Raise_MouseLeave;
+void( entity pEntity ) Raise_Update;
+void( entity pEntity, bool pSelect, bool pUser ) Raise_Select;
+
+// safe call the event control functions (only used by the mcontrols function)
+void()	CtCall_Init;
+void()	CtCall_Reinit;
+void()	CtCall_Destroy;
+bool( float pKey, float pAscii)  CtCall_Key;
+void()	CtCall_Draw;
+void()	CtCall_MouseEnter;
+void()	CtCall_MouseLeave;
+void()	CtCall_Action;
+void()	CtCall_Update;
+void( bool pSelect, bool pUser )  CtCall_Select;

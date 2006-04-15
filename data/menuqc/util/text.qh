@@ -1,0 +1,8 @@
+// NG Menu
+// util/text.qh
+
+// text tool functions
+// returns a pair <end, nextstart, length>
+vector( string pText, vector pLast ) Util_GetEndOfLine;
+vector( string pText, vector pLast, float pWrapLength ) Util_GetEndOfWrappedLine;
+string( float pValue, float pStep ) Util_FloatToClampedText;

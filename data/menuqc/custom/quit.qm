@@ -1,0 +1,45 @@
+// Property of Alientrap/AK
+// custom/quit.qm
+
+void() Nex_Quit_Toggle =
+{
+	local entity lEntity;
+
+	lEntity = Menu_GetItem( "QuitWnd" );
+	if( lEntity.flag & FLAG_HIDDEN ) {
+		lEntity.flag = lEntity.flag - FLAG_HIDDEN;
+		Menu_Select( Menu_GetItem( "QuitWnd::Layout::Buttons::No" ), false );
+	} else {
+		lEntity.flag = lEntity.flag + FLAG_HIDDEN;
+		Menu_Reselect( false );
+	}
+}
+
+void() Nex_Quit_Action =
+{
+	local entity lEntity;
+
+	lEntity = Menu_GetItem( "QuitWnd" );
+	if( lEntity.flag & FLAG_HIDDEN )
+		lEntity.flag = lEntity.flag - FLAG_HIDDEN;
+	Menu_Select( Menu_GetItem( "QuitWnd::Layout::Buttons::No" ), false );
+}
+
+bool( float pKey, float pAscii ) Nex_Quit_Key =
+{
+	if( pKey == K_ESCAPE ) {
+		Nex_Quit_Toggle();
+		return true;
+	}
+	return false;
+};
+
+void() Nex_Quit_Yes =
+{
+	cmd( "quit\n" );
+};
+
+void() Nex_Quit_No =
+{
+	Nex_Quit_Toggle();
+};

@@ -1,0 +1,7 @@
+// NG Menu
+// util/uid.qh
+
+// used to create unique names while the menu runs
+string()		Util_CreateUID;
+string( float pNum )	Util_GetUIDName;
+float( string pNum ) 	Util_GetUIDNum;

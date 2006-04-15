@@ -1,0 +1,61 @@
+// DP/Nex Menu
+// control/fx/fx.qh
+
+// [Item_Changer]
+
+// An effect always affects its parent
+// There are two kinds of effects periodic/loop effects and task-effects
+// The difference is that a task-effect will be finished somewhen and then deactivate/remove itself
+// while a loop effect will restart
+// A loop task will have deltaTime2 set
+
+enum {
+	ITEM_STATE_FORWARD,
+	ITEM_STATE_BACKWARD
+};
+
+// [Item_Effect]
+// deltaTime2 = -1 for a task effect
+// deltaTime2 = -2 for a persistent task effect
+// endTime = -1 for a infinite loop effect
+.vector time; // <deltaTime1, deltaTime2, endTime>
+
+.union {
+	.vector targetVector;
+	.float  targetFloat;
+};
+/*
+.union {
+	struct {
+		vector startVector;
+		float startFloat;
+	};
+	struct {
+		vector endVector;
+		float endFloat;
+	};
+};*/
+.float startFloat;
+.vector startVector;
+.float endFloat;
+.vector endVector;
+
+.float _state;
+.float _presstime;
+
+// returns new value
+typedef float( float pStart, float pEnd, float pDeltaTime, float pT, float pValue ) InterpolFunction;
+
+.InterpolFunction interpolForward;
+.InterpolFunction interpolBackward;
+
+// Item_Effect_Float
+// Item_Effect_Vector
+
+void() Item_Effect_Vector_Reinit;
+void() Item_Effect_Vector_Update;
+void() Item_Effect_Vector_Spawn;
+
+// Interpolation functions
+float( float pStart, float pEnd, float pDeltaTime, float pT, float pValue ) FX_LinearInterpolation;
+float( float pStart, float pEnd, float pDeltaTime, float pT, float pValue ) FX_SquareInterpolation;

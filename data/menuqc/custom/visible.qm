@@ -1,0 +1,103 @@
+// Property of Alientrap/AK
+// custom/visible.qm
+
+// uses .target to determine the target window
+
+void() Nex_Action_MakeOnlyVisible_Destroy =
+{
+	String_EntityFree( self, target );
+};
+
+void() Nex_Action_MakeOnlyVisible_Action =
+{
+	Nex_MakeOnlyVisible( Menu_GetItem( self.target ) );
+};
+
+void() Nex_Action_MakeOnlyVisible =
+{
+	String_EntityZone( self, target );
+
+	self.destroy = Nex_Action_MakeOnlyVisible_Destroy;
+	self.action = Nex_Action_MakeOnlyVisible_Action;
+};
+
+// makes the first child as only item in the window visible
+void() Nex_Action_MakeFirstVisible =
+{
+	Nex_MakeOnlyVisible( self._child );
+};
+
+// like MakeOnlyVisible, but also jumps to the window
+void() Nex_Action_JumpToPage_Destroy =
+{
+	String_EntityFree( self, target );
+};
+
+void() Nex_Action_JumpToPage_Action =
+{
+	local entity lItem;
+	lItem = Menu_GetItem( self.target );
+	Nex_MakeOnlyVisible( lItem );
+	Menu_JumpToWindow( lItem, false, false );
+};
+
+void() Nex_Action_JumpToPage =
+{
+	String_EntityZone( self, target );
+
+	self.action = Nex_Action_JumpToPage_Action;
+	self.destroy = Nex_Action_JumpToPage_Destroy;
+};
+
+// sets the link field of Normal::Panel
+void() Nex_Action_SetNormalPanelLink_Destroy =
+{
+	String_EntityFree( self, target );
+};
+
+void() Nex_Action_JumpToPlayerSetup;
+void() Nex_Action_SetNormalPanelLink_Action =
+{
+	local entity lItem;
+
+	if(self.target == "CreateGame" && cvar_string("_cl_name") == "Player")
+	{
+		Nex_Action_JumpToPlayerSetup();
+		return;
+	}
+
+	lItem = Menu_GetItem( "Normal::Panel" );
+	String_EntitySet( lItem, link, self.target );
+
+	Raise_Update( lItem );
+	Menu_UpdateRunFlags();
+	Menu_JumpToWindow( lItem._link, false, false );
+};
+
+void() Nex_Action_SetNormalPanelLink =
+{
+	String_EntityZone( self, target );
+
+	self.destroy = Nex_Action_SetNormalPanelLink_Destroy;
+	self.action = Nex_Action_SetNormalPanelLink_Action;
+};
+
+// sets the link field of Normal::Panel on reinit
+void() Nex_Action_SetLinkOnReinit_Destroy =
+{
+	String_EntityFree( self, target );
+};
+
+void() Nex_Action_SetLinkOnReinitk_Reinit =
+{
+	String_EntitySet( Menu_GetItem( "Normal::Panel" ), link, self.target );
+};
+
+void() Nex_Action_SetLinkOnReinit =
+{
+	String_EntityZone( self, target );
+
+	self.destroy = Nex_Action_SetLinkOnReinit_Destroy;
+	self.reinit = Nex_Action_SetLinkOnReinitk_Reinit;
+};
+

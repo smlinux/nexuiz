@@ -1,0 +1,48 @@
+// Property of Alientrap/AK
+// custom/util.qm
+
+void() Nex_Action_TestOnChange =
+{
+	Raise_DataEvent( self._target, ITEM_DATA_TEST_START );
+};
+
+void( bool pSelect, bool pUser ) Nex_Action_TestOnSelect =
+{
+	if( !pSelect && pUser )
+		Raise_DataEvent( self._target, ITEM_DATA_TEST_START );
+};
+
+// play the sound specified in the target field
+void() Nex_Action_PlaySound =
+{
+	if( self.target ) {
+		Sound_Play( self.target );
+	}
+};
+
+void() Nex_Action_PlaySoundOnce =
+{
+	if( self.target ) {
+		Sound_Play( self.target );
+	}
+	Menu_DeleteAfterToggle( self );
+};
+
+// execute a console cmd on action
+void() Nex_Action_ConsoleCmd_Destroy =
+{
+	String_EntityFree( self, syncCmd );
+};
+
+void() Nex_Action_ConsoleCmd_Action =
+{
+	cmd( self.syncCmd );
+}
+
+void() Nex_Action_ConsoleCmd =
+{
+	String_EntityZone( self, syncCmd );
+
+	self.destroy = Nex_Action_ConsoleCmd_Destroy;
+	self.action = Nex_Action_ConsoleCmd_Action;
+};

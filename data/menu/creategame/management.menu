@@ -1,0 +1,90 @@
+// Property of Alientrap/AK
+//
+// creategame/management.menu
+Item Layout Management
+{
+	size		'900 585'
+	flag		[FlagEmbedded]
+	alignment 	[AlignCenter]
+	direction 	'0 20'
+	origin		'450 80'
+
+	Item Arrangement ConfigType
+	{
+		flag 		[FlagEmbedded]
+		direction 	'20 0'
+
+		Derive TextButton WeaponConfigs
+		{
+			normal	"Weapons"
+			action  Nex_Action_Management_TypeWeapon
+		}
+		Derive TextButton GameConfigs
+		{
+			normal	"Game"
+			action  Nex_Action_Management_TypeGame
+		}
+		Derive TextButton Maplists
+		{
+			normal	"Maplists"
+			action  Nex_Action_Management_TypeMapList
+		}
+	}
+
+	Item Task_Job SyncCategory
+	{
+		update 	Nex_Update_Management_SyncData
+	}
+
+	Derive List FileList
+	{
+		size	'300 340'
+		target	"::Data::Management::FileList::Weapon"
+
+		action 	Nex_Action_CopyToFilename
+	}
+
+	Item Arrangement Filename
+	{
+		flag		[FlagEmbedded]
+		direction	[Nex_DefaultHorzDirection]
+
+		Derive TextButton Label
+		{
+			normal	"Config Name :"
+			link	"##next"
+		}
+		Derive EditBox Name
+		{
+			//size	'260 11'
+			target	"::Data::Management::Filename::Text"
+
+			action  Nex_Action_TestOnChange
+			select  Nex_Action_TestOnSelect
+		}
+	}
+
+	Item Arrangement Controls
+	{
+		flag		[FlagEmbedded]
+		direction	[Nex_DefaultHorzDirection]
+
+		Derive TextButton Save
+		{
+			normal	"Save"
+			action	Nex_Action_Management_Save
+		}
+
+		Derive TextButton Load
+		{
+			normal 	"Load"
+			action 	Nex_Action_Management_Load
+		}
+
+		Derive TextButton Refresh
+		{
+			normal 	"Refresh"
+			action	Nex_Action_Management_Refresh
+		}
+	}
+}

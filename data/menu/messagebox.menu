@@ -1,0 +1,82 @@
+// Property of Alientrap
+//
+// message box window
+// messagebox.menu
+
+// MessageBoxWnd::Layout::Title::Caption
+// MessageBoxWnd::Layout::Text
+// MessageBoxWnd::Layout::Buttons::Left
+// MessageBoxWnd::Layout::Buttons::Right
+Item Window MessageBoxWnd
+{
+	pos 	'300 300'
+	size	'400 80'
+	flag	[FlagHidden]
+
+	Derive Rect Background
+	{
+		flag		[FlagSealOffMouse]
+		color		'0 0 0'
+		alpha		0.8
+		Ignore {
+			color		'0.1 0.1 0.1'
+			drawFlag 	[DrawFlagModulate]
+
+
+			Derive Rect Layer
+			{
+				color		'0.3 0.3 0.3'
+				drawFlag	[DrawFlagAdditive]
+			}
+		}
+	}
+	Item Layout Layout
+	{
+		origin		'200 0'
+		direction 	'0.0 10'
+		flag		[FlagEmbedded]
+		alignment 	[AlignCenter]
+
+		Item FloatingArea Title
+		{
+			size		'400 13'
+			target		"##up up"
+			Derive Rect Background
+			{
+				//color		'0.5 0.5 0.5'
+				color		'0.05 0.05 0.05'
+			}
+			Derive TextButton Caption
+			{
+				color		'1.0 1.0 1.0'
+				size		'400 11'
+				alignment 	[AlignCenter]
+				//normal	"Message Box Window"
+				link		"##up"
+			}
+		}
+		Derive Label Text
+		{
+			color		'1.0 1.0 1.0'
+			//text		"MessageBox Text"
+		}
+		Item Arrangement Buttons
+		{
+			direction	'40 0'
+			key		Nex_MessageBox_Key
+
+			Derive TextButton Left
+			{
+				color	'1.0 1.0 1.0'
+				//normal "Left"
+				action	Nex_MessageBox_LeftButton
+			}
+			Derive TextButton Right
+			{
+				color	'1.0 1.0 1.0'
+				//normal "Right"
+				action	Nex_MessageBox_RightButton
+			}
+		}
+	}
+}

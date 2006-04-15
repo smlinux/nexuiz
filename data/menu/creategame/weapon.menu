@@ -1,0 +1,688 @@
+// Property of Alientrap/AK
+//
+// creategame/weapon.menu
+Item Window Weapon
+{
+	size	'900 585'
+	flag	[FlagEmbedded]
+	pos  '30 50'
+
+	Item ScrollWindow ScrollWindow
+	{
+		size 	'820 530'
+		flag	[FlagEmbedded]
+
+		Item Arrangement Arrangement
+		{
+			direction	[Nex_DefaultVertDirection]
+			alignment	[AlignFirst]
+			flag		[FlagEmbedded]
+
+			// hack to make the arrangement have a set width
+			Item Window FixWidth
+			{
+				size	'870 0'
+				Derive Nex_Void Left
+				{
+					pos	'0 0'
+					size	'450 0'
+				}
+				Derive Nex_Void Right
+				{
+					pos	'450 0'
+					size	'450 0'
+				}
+			}
+
+			Derive Nex_Option_EditBox InvincibleTakeDamage
+			{
+				text	"Invincible Take Damage"
+				target	"Data::Weapon::InvincibleTakeDamage::Text"
+			}
+			Derive Nex_Option_EditBox InvincibleTime
+			{
+				text	"Invincible Time"
+				target	"Data::Weapon::InvincibleTime::Text"
+			}
+			Derive Nex_Option_EditBox StrengthDamage
+			{
+				text	"Strength Damage"
+				target	"Data::Weapon::StrengthDamage::Text"
+			}
+			Derive Nex_Option_EditBox StrengthForce
+			{
+				text	"Strength Force"
+				target	"Data::Weapon::StrengthForce::Text"
+			}
+			Derive Nex_Option_EditBox StrengthTime
+			{
+				text	"Strength Time"
+				target	"Data::Weapon::StrengthTime::Text"
+			}
+			Derive Nex_Option_Switch WeaponStay
+			{
+				text	"Weapon Stay"
+				target	"Data::Weapon::WeaponStay::Switch"
+			}
+			Derive Nex_Option_EditBox LaserDamage
+			{
+				text	"Laser Damage"
+				target	"Data::Weapon::LaserDamage::Text"
+			}
+			Derive Nex_Option_EditBox LaserEdgeDamage
+			{
+				text	"Laser edge damage"
+				target	"Data::Weapon::LaserEdgeDamage::Text"
+			}
+			Derive Nex_Option_EditBox LaserForce
+			{
+				text	"Laser Push Force"
+				target	"Data::Weapon::LaserForce::Text"
+			}
+			Derive Nex_Option_EditBox LaserRadius
+			{
+				text	"Laser Radius"
+				target	"Data::Weapon::LaserRadius::Text"
+			}
+			Derive Nex_Option_EditBox LaserSpeed
+			{
+				text	"Laser Speed"
+				target	"Data::Weapon::LaserSpeed::Text"
+			}
+			Derive Nex_Option_EditBox LaserRefire
+			{
+				text	"Laser Refire"
+				target	"Data::Weapon::LaserRefire::Text"
+			}
+			Derive Nex_Option_EditBox LaserAnimTime
+			{
+				text	"Laser Animation Time"
+				target	"Data::Weapon::LaserAnimTime::Text"
+			}
+			Derive Nex_Option_EditBox LaserLifetime
+			{
+				text	"Laser Shot Life Time"
+				target	"Data::Weapon::LaserLifetime::Text"
+			}
+			Derive Nex_Option_EditBox ShotgunPrimaryBullets
+			{
+				text	"Shotgun Primary Bullets"
+				target	"Data::Weapon::ShotgunPrimaryBullets::Text"
+			}
+			Derive Nex_Option_EditBox ShotgunPrimaryDamage
+			{
+				text	"Shotgun Primary Damage"
+				target	"Data::Weapon::ShotgunPrimaryDamage::Text"
+			}
+			Derive Nex_Option_EditBox ShotgunPrimarySpread
+			{
+				text	"Shotgun Primary Spread"
+				target	"Data::Weapon::ShotgunPrimarySpread::Text"
+			}
+			Derive Nex_Option_EditBox ShotgunPrimaryRefire
+			{
+				text	"Shotgun Primary Refire"
+				target	"Data::Weapon::ShotgunPrimaryRefire::Text"
+			}
+			Derive Nex_Option_EditBox ShotgunPrimaryAnimTime
+			{
+				text	"Shotgun Primary Animation Time"
+				target	"Data::Weapon::ShotgunPrimaryAnimTime::Text"
+			}
+			Derive Nex_Option_EditBox ShotgunPrimaryAmmo
+			{
+				text	"Shotgun Primary Ammo"
+				target	"Data::Weapon::ShotgunPrimaryAmmo::Text"
+			}
+			Derive Nex_Option_EditBox ShotgunSecondaryBullets
+			{
+				text	"Shotgun Secondary Bullets"
+				target	"Data::Weapon::ShotgunSecondaryBullets::Text"
+			}
+			Derive Nex_Option_EditBox ShotgunSecondaryDamage
+			{
+				text	"Shotgun Secondary Damage"
+				target	"Data::Weapon::ShotgunSecondaryDamage::Text"
+			}
+			Derive Nex_Option_EditBox ShotgunSecondarySpread
+			{
+				text	"Shotgun Secondary Spread"
+				target	"Data::Weapon::ShotgunSecondarySpread::Text"
+			}
+			Derive Nex_Option_EditBox ShotgunSecondaryRefire
+			{
+				text	"Shotgun Secondary Refire"
+				target	"Data::Weapon::ShotgunSecondaryRefire::Text"
+			}
+			Derive Nex_Option_EditBox ShotgunSecondaryAnimTime
+			{
+				text	"Shotgun Secondary Animation Time"
+				target	"Data::Weapon::ShotgunSecondaryAnimTime::Text"
+			}
+			Derive Nex_Option_EditBox ShotgunSecondaryAmmo
+			{
+				text	"Shotgun Secondary Ammo"
+				target	"Data::Weapon::ShotgunSecondaryAmmo::Text"
+			}
+			Derive Nex_Option_EditBox UziFirstDamage
+			{
+				text	"Uzi First-Shot Damage"
+				target	"Data::Weapon::UziFirstDamage::Text"
+			}
+			Derive Nex_Option_EditBox UziFirstSpread
+			{
+				text	"Uzi First-Shot Spread"
+				target	"Data::Weapon::UziFirstSpread::Text"
+			}
+			Derive Nex_Option_EditBox UziFirstRefire
+			{
+				text	"Uzi First-Shot Refire"
+				target	"Data::Weapon::UziFirstRefire::Text"
+			}
+			Derive Nex_Option_EditBox UziFirstAmmo
+			{
+				text	"Uzi First-Shot Ammo"
+				target	"Data::Weapon::UziFirstAmmo::Text"
+			}
+			Derive Nex_Option_EditBox UziSustainedDamage
+			{
+				text	"Uzi Sustained-Fire Damage"
+				target	"Data::Weapon::UziSustainedDamage::Text"
+			}
+			Derive Nex_Option_EditBox UziSustainedSpread
+			{
+				text	"Uzi Sustained-Fire Spread"
+				target	"Data::Weapon::UziSustainedSpread::Text"
+			}
+			Derive Nex_Option_EditBox UziSustainedRefire
+			{
+				text	"Uzi Sustained-Fire Refire"
+				target	"Data::Weapon::UziSustainedRefire::Text"
+			}
+			Derive Nex_Option_EditBox UziSustainedAmmo
+			{
+				text	"Uzi Sustained-Fire Ammo"
+				target	"Data::Weapon::UziSustainedAmmo::Text"
+			}
+			Derive Nex_Option_EditBox GrenadeLauncherPrimaryDamage
+			{
+				text	"Grenade Launcher Primary Damage"
+				target	"Data::Weapon::GrenadeLauncherPrimaryDamage::Text"
+			}
+			Derive Nex_Option_EditBox GrenadeLauncherPrimaryEdgeDamage
+			{
+				text	"Grenade Launcher Primary EdgeDamage"
+				target	"Data::Weapon::GrenadeLauncherPrimaryEdgeDamage::Text"
+			}
+			Derive Nex_Option_EditBox GrenadeLauncherPrimaryForce
+			{
+				text	"Grenade Launcher Primary Force"
+				target	"Data::Weapon::GrenadeLauncherPrimaryForce::Text"
+			}
+			Derive Nex_Option_EditBox GrenadeLauncherPrimaryRadius
+			{
+				text	"Grenade Launcher Primary Radius"
+				target	"Data::Weapon::GrenadeLauncherPrimaryRadius::Text"
+			}
+			Derive Nex_Option_EditBox GrenadeLauncherPrimarySpeed
+			{
+				text	"Grenade Launcher Primary Speed"
+				target	"Data::Weapon::GrenadeLauncherPrimarySpeed::Text"
+			}
+			Derive Nex_Option_EditBox GrenadeLauncherPrimarySpeedUp
+			{
+				text	"Grenade Launcher Primary Upward Speed"
+				target	"Data::Weapon::GrenadeLauncherPrimarySpeedUp::Text"
+			}
+			Derive Nex_Option_EditBox GrenadeLauncherPrimaryLifetime
+			{
+				text	"Grenade Launcher Primary Shot Lifetime"
+				target	"Data::Weapon::GrenadeLauncherPrimaryLifetime::Text"
+			}
+			Derive Nex_Option_EditBox GrenadeLauncherPrimaryRefire
+			{
+				text	"Grenade Launcher Primary Refire"
+				target	"Data::Weapon::GrenadeLauncherPrimaryRefire::Text"
+			}
+			Derive Nex_Option_EditBox GrenadeLauncherPrimaryAnimTime
+			{
+				text	"Grenade Launcher Primary Animation Time"
+				target	"Data::Weapon::GrenadeLauncherPrimaryAnimTime::Text"
+			}
+			Derive Nex_Option_EditBox GrenadeLauncherPrimaryAmmo
+			{
+				text	"Grenade Launcher Primary Ammo"
+				target	"Data::Weapon::GrenadeLauncherPrimaryAmmo::Text"
+			}
+			Derive Nex_Option_EditBox GrenadeLauncherSecondaryDamage
+			{
+				text	"Grenade Launcher Secondary Damage"
+				target	"Data::Weapon::GrenadeLauncherSecondaryDamage::Text"
+			}
+			Derive Nex_Option_EditBox GrenadeLauncherSecondaryEdgeDamage
+			{
+				text	"Grenade Launcher Secondary EdgeDamage"
+				target	"Data::Weapon::GrenadeLauncherSecondaryEdgeDamage::Text"
+			}
+			Derive Nex_Option_EditBox GrenadeLauncherSecondaryForce
+			{
+				text	"Grenade Launcher Secondary Force"
+				target	"Data::Weapon::GrenadeLauncherSecondaryForce::Text"
+			}
+			Derive Nex_Option_EditBox GrenadeLauncherSecondaryRadius
+			{
+				text	"Grenade Launcher Secondary Radius"
+				target	"Data::Weapon::GrenadeLauncherSecondaryRadius::Text"
+			}
+			Derive Nex_Option_EditBox GrenadeLauncherSecondarySpeed
+			{
+				text	"Grenade Launcher Secondary Speed"
+				target	"Data::Weapon::GrenadeLauncherSecondarySpeed::Text"
+			}
+			Derive Nex_Option_EditBox GrenadeLauncherSecondarySpeedUp
+			{
+				text	"Grenade Launcher Secondary Upward Speed"
+				target	"Data::Weapon::GrenadeLauncherSecondarySpeedUp::Text"
+			}
+			Derive Nex_Option_EditBox GrenadeLauncherSecondaryLifetime
+			{
+				text	"Grenade Launcher Secondary Shot Lifetime"
+				target	"Data::Weapon::GrenadeLauncherSecondaryLifetime::Text"
+			}
+			Derive Nex_Option_EditBox GrenadeLauncherSecondaryRefire
+			{
+				text	"Grenade Launcher Secondary Refire"
+				target	"Data::Weapon::GrenadeLauncherSecondaryRefire::Text"
+			}
+			Derive Nex_Option_EditBox GrenadeLauncherSecondaryAnimTime
+			{
+				text	"Grenade Launcher Secondary Animation Time"
+				target	"Data::Weapon::GrenadeLauncherSecondaryAnimTime::Text"
+			}
+			Derive Nex_Option_EditBox GrenadeLauncherSecondaryAmmo
+			{
+				text	"Grenade Launcher Secondary Ammo"
+				target	"Data::Weapon::GrenadeLauncherSecondaryAmmo::Text"
+			}
+			Derive Nex_Option_EditBox ElectroPrimaryDamage
+			{
+				text	"Electro Primary Damage"
+				target	"Data::Weapon::ElectroPrimaryDamage::Text"
+			}
+			Derive Nex_Option_EditBox ElectroPrimaryEdgeDamage
+			{
+				text	"Electro Primary EdgeDamage"
+				target	"Data::Weapon::ElectroPrimaryEdgeDamage::Text"
+			}
+			Derive Nex_Option_EditBox ElectroPrimaryForce
+			{
+				text	"Electro Primary Force"
+				target	"Data::Weapon::ElectroPrimaryForce::Text"
+			}
+			Derive Nex_Option_EditBox ElectroPrimaryRadius
+			{
+				text	"Electro Primary Radius"
+				target	"Data::Weapon::ElectroPrimaryRadius::Text"
+			}
+			Derive Nex_Option_EditBox ElectroPrimarySpeed
+			{
+				text	"Electro Primary Speed"
+				target	"Data::Weapon::ElectroPrimarySpeed::Text"
+			}
+			Derive Nex_Option_EditBox ElectroPrimaryLifetime
+			{
+				text	"Electro Primary Shot Lifetime"
+				target	"Data::Weapon::ElectroPrimaryLifetime::Text"
+			}
+			Derive Nex_Option_EditBox ElectroPrimaryRefire
+			{
+				text	"Electro Primary Refire"
+				target	"Data::Weapon::ElectroPrimaryRefire::Text"
+			}
+			Derive Nex_Option_EditBox ElectroPrimaryAnimTime
+			{
+				text	"Electro Primary Animation Time"
+				target	"Data::Weapon::ElectroPrimaryAnimTime::Text"
+			}
+			Derive Nex_Option_EditBox ElectroPrimaryAmmo
+			{
+				text	"Electro Primary Ammo"
+				target	"Data::Weapon::ElectroPrimaryAmmo::Text"
+			}
+			Derive Nex_Option_EditBox ElectroSecondaryDamage
+			{
+				text	"Electro Secondary Damage"
+				target	"Data::Weapon::ElectroSecondaryDamage::Text"
+			}
+			Derive Nex_Option_EditBox ElectroSecondaryEdgeDamage
+			{
+				text	"Electro Secondary EdgeDamage"
+				target	"Data::Weapon::ElectroSecondaryEdgeDamage::Text"
+			}
+			Derive Nex_Option_EditBox ElectroSecondaryForce
+			{
+				text	"Electro Secondary Force"
+				target	"Data::Weapon::ElectroSecondaryForce::Text"
+			}
+			Derive Nex_Option_EditBox ElectroSecondaryRadius
+			{
+				text	"Electro Secondary Radius"
+				target	"Data::Weapon::ElectroSecondaryRadius::Text"
+			}
+			Derive Nex_Option_EditBox ElectroSecondarySpeed
+			{
+				text	"Electro Secondary Speed"
+				target	"Data::Weapon::ElectroSecondarySpeed::Text"
+			}
+			Derive Nex_Option_EditBox ElectroSecondarySpeedUp
+			{
+				text	"Electro Secondary Upward Speed"
+				target	"Data::Weapon::ElectroSecondarySpeedUp::Text"
+			}
+			Derive Nex_Option_EditBox ElectroSecondaryLifetime
+			{
+				text	"Electro Secondary Shot Lifetime"
+				target	"Data::Weapon::ElectroSecondaryLifetime::Text"
+			}
+			Derive Nex_Option_EditBox ElectroSecondaryRefire
+			{
+				text	"Electro Secondary Refire"
+				target	"Data::Weapon::ElectroSecondaryRefire::Text"
+			}
+			Derive Nex_Option_EditBox ElectroSecondaryAnimTime
+			{
+				text	"Electro Secondary Animation Time"
+				target	"Data::Weapon::ElectroSecondaryAnimTime::Text"
+			}
+			Derive Nex_Option_EditBox ElectroSecondaryAmmo
+			{
+				text	"Electro Secondary Ammo"
+				target	"Data::Weapon::ElectroSecondaryAmmo::Text"
+			}
+			Derive Nex_Option_EditBox CryLinkPrimaryDamage
+			{
+				text	"CryLink Primary Damage"
+				target	"Data::Weapon::CryLinkPrimaryDamage::Text"
+			}
+			Derive Nex_Option_EditBox CryLinkPrimaryEdgeDamage
+			{
+				text	"CryLink Primary EdgeDamage"
+				target	"Data::Weapon::CryLinkPrimaryEdgeDamage::Text"
+			}
+			Derive Nex_Option_EditBox CryLinkPrimaryForce
+			{
+				text	"CryLink Primary Force"
+				target	"Data::Weapon::CryLinkPrimaryForce::Text"
+			}
+			Derive Nex_Option_EditBox CryLinkPrimaryRadius
+			{
+				text	"CryLink Primary Radius"
+				target	"Data::Weapon::CryLinkPrimaryRadius::Text"
+			}
+			Derive Nex_Option_EditBox CryLinkPrimarySpeed
+			{
+				text	"CryLink Primary Speed"
+				target	"Data::Weapon::CryLinkPrimarySpeed::Text"
+			}
+			Derive Nex_Option_EditBox CryLinkPrimarySpread
+			{
+				text	"CryLink Primary Spread"
+				target	"Data::Weapon::CryLinkPrimarySpread::Text"
+			}
+			Derive Nex_Option_EditBox CryLinkPrimaryShots
+			{
+				text	"CryLink Primary Shots"
+				target	"Data::Weapon::CryLinkPrimaryShots::Text"
+			}
+			Derive Nex_Option_EditBox CryLinkPrimaryLifetime
+			{
+				text	"CryLink Primary Shot Lifetime"
+				target	"Data::Weapon::CryLinkPrimaryLifetime::Text"
+			}
+			Derive Nex_Option_EditBox CryLinkPrimaryRefire
+			{
+				text	"CryLink Primary Refire"
+				target	"Data::Weapon::CryLinkPrimaryRefire::Text"
+			}
+			Derive Nex_Option_EditBox CryLinkPrimaryAnimTime
+			{
+				text	"CryLink Primary Animation Time"
+				target	"Data::Weapon::CryLinkPrimaryAnimTime::Text"
+			}
+			Derive Nex_Option_EditBox CryLinkPrimaryAmmo
+			{
+				text	"CryLink Primary Ammo"
+				target	"Data::Weapon::CryLinkPrimaryAmmo::Text"
+			}
+			Derive Nex_Option_EditBox CryLinkSecondaryDamage
+			{
+				text	"CryLink Secondary Damage"
+				target	"Data::Weapon::CryLinkSecondaryDamage::Text"
+			}
+			Derive Nex_Option_EditBox CryLinkSecondaryEdgeDamage
+			{
+				text	"CryLink Secondary EdgeDamage"
+				target	"Data::Weapon::CryLinkSecondaryEdgeDamage::Text"
+			}
+			Derive Nex_Option_EditBox CryLinkSecondaryForce
+			{
+				text	"CryLink Secondary Force"
+				target	"Data::Weapon::CryLinkSecondaryForce::Text"
+			}
+			Derive Nex_Option_EditBox CryLinkSecondaryRadius
+			{
+				text	"CryLink Secondary Radius"
+				target	"Data::Weapon::CryLinkSecondaryRadius::Text"
+			}
+			Derive Nex_Option_EditBox CryLinkSecondarySpeed
+			{
+				text	"CryLink Secondary Speed"
+				target	"Data::Weapon::CryLinkSecondarySpeed::Text"
+			}
+			Derive Nex_Option_EditBox CryLinkSecondarySpread
+			{
+				text	"CryLink Secondary Spread"
+				target	"Data::Weapon::CryLinkSecondarySpread::Text"
+			}
+			Derive Nex_Option_EditBox CryLinkSecondaryShots
+			{
+				text	"CryLink Secondary Shots"
+				target	"Data::Weapon::CryLinkSecondaryShots::Text"
+			}
+			Derive Nex_Option_EditBox CryLinkSecondaryLifetime
+			{
+				text	"CryLink Secondary Shot Lifetime"
+				target	"Data::Weapon::CryLinkSecondaryLifetime::Text"
+			}
+			Derive Nex_Option_EditBox CryLinkSecondaryRefire
+			{
+				text	"CryLink Secondary Refire"
+				target	"Data::Weapon::CryLinkSecondaryRefire::Text"
+			}
+			Derive Nex_Option_EditBox CryLinkSecondaryAnimTime
+			{
+				text	"CryLink Secondary Animation Time"
+				target	"Data::Weapon::CryLinkSecondaryAnimTime::Text"
+			}
+			Derive Nex_Option_EditBox CryLinkSecondaryAmmo
+			{
+				text	"CryLink Secondary Ammo"
+				target	"Data::Weapon::CryLinkSecondaryAmmo::Text"
+			}
+			Derive Nex_Option_EditBox NexDamage
+			{
+				text	"Nex Damage"
+				target	"Data::Weapon::NexDamage::Text"
+			}
+			Derive Nex_Option_EditBox NexRefire
+			{
+				text	"Nex Refire"
+				target	"Data::Weapon::NexRefire::Text"
+			}
+			Derive Nex_Option_EditBox NexAnimTime
+			{
+				text	"Nex Animation Time"
+				target	"Data::Weapon::NexAnimTime::Text"
+			}
+			Derive Nex_Option_EditBox NexAmmo
+			{
+				text	"Nex Ammo"
+				target	"Data::Weapon::NexAmmo::Text"
+			}
+			Derive Nex_Option_EditBox HagarPrimaryDamage
+			{
+				text	"Hagar Primary Damage"
+				target	"Data::Weapon::HagarPrimaryDamage::Text"
+			}
+			Derive Nex_Option_EditBox HagarPrimaryEdgeDamage
+			{
+				text	"Hagar Primary EdgeDamage"
+				target	"Data::Weapon::HagarPrimaryEdgeDamage::Text"
+			}
+			Derive Nex_Option_EditBox HagarPrimaryForce
+			{
+				text	"Hagar Primary Force"
+				target	"Data::Weapon::HagarPrimaryForce::Text"
+			}
+			Derive Nex_Option_EditBox HagarPrimaryRadius
+			{
+				text	"Hagar Primary Radius"
+				target	"Data::Weapon::HagarPrimaryRadius::Text"
+			}
+			Derive Nex_Option_EditBox HagarPrimarySpeed
+			{
+				text	"Hagar Primary Speed"
+				target	"Data::Weapon::HagarPrimarySpeed::Text"
+			}
+			Derive Nex_Option_EditBox HagarPrimaryLifetime
+			{
+				text	"Hagar Primary Shot Lifetime"
+				target	"Data::Weapon::HagarPrimaryLifetime::Text"
+			}
+			Derive Nex_Option_EditBox HagarPrimaryRefire
+			{
+				text	"Hagar Primary Refire"
+				target	"Data::Weapon::HagarPrimaryRefire::Text"
+			}
+			Derive Nex_Option_EditBox HagarPrimaryAmmo
+			{
+				text	"Hagar Primary Ammo"
+				target	"Data::Weapon::HagarPrimaryAmmo::Text"
+			}
+			Derive Nex_Option_EditBox HagarSecondaryDamage
+			{
+				text	"Hagar Secondary Damage"
+				target	"Data::Weapon::HagarSecondaryDamage::Text"
+			}
+			Derive Nex_Option_EditBox HagarSecondaryEdgeDamage
+			{
+				text	"Hagar Secondary EdgeDamage"
+				target	"Data::Weapon::HagarSecondaryEdgeDamage::Text"
+			}
+			Derive Nex_Option_EditBox HagarSecondaryForce
+			{
+				text	"Hagar Secondary Force"
+				target	"Data::Weapon::HagarSecondaryForce::Text"
+			}
+			Derive Nex_Option_EditBox HagarSecondaryRadius
+			{
+				text	"Hagar Secondary Radius"
+				target	"Data::Weapon::HagarSecondaryRadius::Text"
+			}
+			Derive Nex_Option_EditBox HagarSecondarySpeed
+			{
+				text	"Hagar Secondary Speed"
+				target	"Data::Weapon::HagarSecondarySpeed::Text"
+			}
+			Derive Nex_Option_EditBox HagarSecondarySpeedUp
+			{
+				text	"Hagar Secondary Upward Speed"
+				target	"Data::Weapon::HagarSecondarySpeedUp::Text"
+			}
+			Derive Nex_Option_EditBox HagarSecondaryLifetime
+			{
+				text	"Hagar Secondary Shot Lifetime"
+				target	"Data::Weapon::HagarSecondaryLifetime::Text"
+			}
+			Derive Nex_Option_EditBox HagarSecondaryRefire
+			{
+				text	"Hagar Secondary Refire"
+				target	"Data::Weapon::HagarSecondaryRefire::Text"
+			}
+			Derive Nex_Option_EditBox HagarSecondaryAmmo
+			{
+				text	"Hagar Secondary Ammo"
+				target	"Data::Weapon::HagarSecondaryAmmo::Text"
+			}
+			Derive Nex_Option_EditBox RocketLauncherDamage
+			{
+				text	"Rocket Launcher Damage"
+				target	"Data::Weapon::RocketLauncherDamage::Text"
+			}
+			Derive Nex_Option_EditBox RocketLauncherEdgeDamage
+			{
+				text	"RL Edge Damage"
+				target	"Data::Weapon::RocketLauncherEdgeDamage::Text"
+			}
+			Derive Nex_Option_EditBox RocketLauncherForce
+			{
+				text	"Rocket Launcher Force"
+				target	"Data::Weapon::RocketLauncherForce::Text"
+			}
+			Derive Nex_Option_EditBox RocketLauncherRadius
+			{
+				text	"Rocket Launcher Radius"
+				target	"Data::Weapon::RocketLauncherRadius::Text"
+			}
+			Derive Nex_Option_EditBox RocketLauncherSpeed
+			{
+				text	"Rocket Launcher Speed"
+				target	"Data::Weapon::RocketLauncherSpeed::Text"
+			}
+			Derive Nex_Option_EditBox RocketLauncherRefire
+			{
+				text	"Rocket Launcher Refire"
+				target	"Data::Weapon::RocketLauncherRefire::Text"
+			}
+			Derive Nex_Option_EditBox RocketLauncherAnimTime
+			{
+				text	"Rocket Launcher Animation Time"
+				target	"Data::Weapon::RocketLauncherAnimTime::Text"
+			}
+			Derive Nex_Option_EditBox RocketLauncherAmmo
+			{
+				text	"Rocket Launcher Ammo"
+				target	"Data::Weapon::RocketLauncherAmmo::Text"
+			}
+			Derive Nex_Option_EditBox RocketLauncherGuidedSpeed
+			{
+				text	"Guided Rocket Launcher Speed"
+				target	"Data::Weapon::RocketLauncherGuidedSpeed::Text"
+			}
+			Derive Nex_Option_EditBox RocketLauncherGuidedTurnRate
+			{
+				text	"Guided Rocket Launcher Turn Rate"
+				target	"Data::Weapon::RocketLauncherGuidedTurnRate::Text"
+			}
+			Derive Nex_Option_Switch RocketLauncherGuidedAllowSteal
+			{
+				text	"Guided Rocket Launcher Allow Confusion"
+				target	"Data::Weapon::RocketLauncherGuidedAllowSteal::Switch"
+			}
+			Derive Nex_Line	Seperator
+			{}
+			Derive TextButton Reset
+			{
+				normal	"Reset to default"
+				init	Nex_Action_ResetData
+				target	"::Data::Weapon"
+			}
+		}
+	}
+	Item VScrollBar Scroller
+	{
+		pos	'830 0'
+		size	'20 100'
+		target	"##prev"
+	}
+}

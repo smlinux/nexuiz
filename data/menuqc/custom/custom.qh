@@ -1,0 +1,5 @@
+// Property of Alientrap/AK
+// custom/custom.qh
+
+// Moves through all of pItem's neighbors and makes pItem the only visible item
+void( entity pItem ) Nex_MakeOnlyVisible;

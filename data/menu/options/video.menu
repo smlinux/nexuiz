@@ -1,0 +1,64 @@
+// Property of Alientrap/AK
+// options/key.menu
+Item Window Video
+{
+	Item Layout Layout
+	{
+		pos		'156 45'
+		size		'700 800'
+		origin		'280 0'
+		alignment	[AlignFirst]
+		direction	[Nex_DefaultVertDirection]
+
+		DeriveTemplate Composition Nex_Video_Option_Switch
+		{
+			direction	[Nex_DefaultHorzDirection]
+
+			DeriveTemplate Nex_Automation_Option_Switch Automation
+			{}
+			DeriveTemplate TextButton 	Description
+			{}
+			DeriveTemplate SwitchButton	Switch
+			{}
+		}
+		Derive Nex_Video_Option_Switch Resolution
+		{
+			text	"Resolution"
+			target	"::Data::Video::Resolution::Switch"
+		}
+		Derive Nex_Video_Option_Switch Bpp
+		{
+			text	"Bits Per Pixel"
+			target	"::Data::Video::BPP::Switch"
+		}
+		Derive Nex_Video_Option_Switch Fullscreen
+		{
+			text	"Fullscreen"
+			target	"::Data::Video::Fullscreen::Switch"
+		}
+		Derive Nex_Video_Option_Switch Anisotropy
+		{
+			text	"Anisotropic Filtering"
+			target	"::Data::Video::Anisotropy::Switch"
+		}
+		Derive Nex_Video_Option_Switch Picmip
+		{
+			text	"Texture Quality"
+			target	"::Data::Video::Picmip::Switch"
+		}
+		Derive Nex_Void Seperator1
+		{}
+		Derive PictureButton Apply
+		{
+			normal		"$gfx/options_b_apply"
+
+			action	Nex_Action_Video_Apply
+		}
+		Derive TextButton Reset
+		{
+			normal	"Reset to default"
+			init	Nex_Action_ResetData
+			target	"::Data::Video"
+		}
+	}
+}

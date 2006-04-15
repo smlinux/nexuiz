@@ -1,0 +1,16 @@
+// NG-Menu
+// base/key.qh
+
+void() Key_Init;
+void() Key_Quit;
+void() Key_Update;
+void() Key_Display;
+void() Key_Hide;
+
+void( string pKey ) 		 Key_Unbind;
+string( float pKey ) 		 Key_GetName;
+float( string pKey )		 Key_GetNum;
+string( string pCommand )	 Key_GetBindList; // returns altstring containing keynrs
+void( float pNum, string pCommand)  Key_LimitBinds;
+void( string pKey, string pCommand) Key_Bind;
+

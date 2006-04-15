@@ -1,0 +1,8 @@
+// NG-Menu
+// base/snd.qh
+
+bool( string pSnd )  Sound_Precache;
+
+void( string pSnd ) Sound_Free;
+
+void( string pSnd ) Sound_Play;

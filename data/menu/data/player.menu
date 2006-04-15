@@ -1,0 +1,120 @@
+// Property of Alientrap
+//
+// data/player.menu
+
+Item DataContainer Player
+{
+	Item Data_ServerCvar Name
+	{
+		cvarName	"_cl_name"
+		syncCmd		"name"
+
+		defValue	"NexPlayer"
+
+		Item DataLink_Text Text
+		{
+			maxValue	32
+			link		"##up"
+		}
+	}
+	Item Data_Nex_Avatar Avatar
+	{
+	}
+	Item Data_Nex_Color Color
+	{
+		defValue	"0"
+
+		Item DataLink_Nex_PantsColor TeamColor
+		{
+			link	"##up"
+
+			Item DataLink_TextSwitch TextSwitch
+			{
+				// Red Blue Green Yellow
+				valueList 	"'0' '1' '2' '3' '4' '5' '6' '7' '8' '9' '10' '11' '12' '13' '14'"
+				descList	"'$gfx/0' '$gfx/1' '$gfx/2' '$gfx/3' '$gfx/4' '$gfx/5' '$gfx/6' '$gfx/7' '$gfx/8' '$gfx/9' '$gfx/10' '$gfx/11' '$gfx/12' '$gfx/13' '$gfx/14' "
+
+				link		"##up"
+			}
+		}
+		Item DataLink_Nex_ShirtColor ShirtColor
+		{
+			link	"##up"
+
+			Item DataLink_TextSwitch TextSwitch
+			{
+				// Red Blue Green Yellow
+				valueList 	"'0' '1' '2' '3' '4' '5' '6' '7' '8' '9' '10' '11' '12' '13' '14'"
+				descList	"'$gfx/0' '$gfx/1' '$gfx/2' '$gfx/3' '$gfx/4' '$gfx/5' '$gfx/6' '$gfx/7' '$gfx/8' '$gfx/9' '$gfx/10' '$gfx/11' '$gfx/12' '$gfx/13' '$gfx/14' "
+
+				link		"##up"
+			}
+		}
+	}
+	Item Data_Cvar FOV
+	{
+		cvarName	"FOV"
+		defValue	"90"
+
+		Item DataLink_Value Value
+		{
+			minValue	60.0
+			maxValue	150.0
+			stepValue	1.0
+			link		"##up"
+		}
+	}
+	Item Data_Cvar ViewSize
+	{
+		cvarName	"viewsize"
+		defValue	"110"
+
+		Item DataLink_Value Value
+		{
+			minValue	30.0
+			maxValue	120.0
+			stepValue	10
+			link		"##up"
+		}
+	}
+	Item Data_Cvar WeaponAutoswitch
+	{
+		cvarName	"cl_autoswitch"
+		defValue	1
+
+		[DataLink_OnOffSwitch]
+	}
+	Item DataContainer Crosshair
+	{
+		Item Data_Cvar Type
+		{
+			cvarName	"crosshair"
+			defValue	"1"
+
+			Item DataLink_ValueSwitch Switch
+			{
+				minValue 0
+				stepValue 1
+				maxValue 6
+
+				descList	"'' '$gfx/crosshair1' '$gfx/crosshair2' '$gfx/crosshair3' '$gfx/crosshair4' '$gfx/crosshair5' '$gfx/crosshair6'"
+
+				link		"##up"
+			}
+		}
+		Item Data_Cvar	Size
+		{
+			cvarName	"crosshair_size"
+			defValue	"1"
+
+			Item DataLink_Value Value
+			{
+				minValue	0.5
+				maxValue	3.0
+				stepValue	0.1
+
+				link		"##up"
+			}
+		}
+	}
+}

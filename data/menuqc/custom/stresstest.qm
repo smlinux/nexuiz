@@ -1,0 +1,14 @@
+// Property of Alientrap/AK
+// custom/stresstest.qc
+
+void() Item_Nex_StressRepeat_Spawn =
+{
+	// at least a few times
+	local entity lItem;
+	local float lCounter;
+
+	self.flag = self.flag | FLAG_EMBEDDED;
+
+	for( lCounter = 0 ; lCounter < 100 ; ++lCounter )
+		lItem = Menu_DeriveItem( self._child, ftos( lCounter ), self._parent.name, true );
+};

@@ -1,0 +1,32 @@
+// Property of Alientrap/AK
+// custom/globalkey.qm
+
+bool( float pKey, float pAscii ) Nex_Global_Key =
+{
+	switch( pKey ) {
+	case K_UPARROW:
+	case K_KP_UPARROW:
+	case K_LEFTARROW:
+	case K_KP_LEFTARROW:
+		Menu_SelectPrev( true );
+		break;
+	case K_DOWNARROW:
+	case K_KP_DOWNARROW:
+	case K_RIGHTARROW:
+	case K_KP_RIGHTARROW:
+		Menu_SelectNext( true );
+		break;
+	case K_ESCAPE:
+	case K_MOUSE2:
+		Menu_SelectUp( true );
+		break;
+	case K_ENTER:
+		if( !Menu_SelectDown( true ) )
+			Sound_Play( ITEM_SOUND_NOSELECT );
+		break;
+	default:
+		break;
+	}
+	return true;
+};
+

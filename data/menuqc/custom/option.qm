@@ -1,0 +1,113 @@
+// Property of Alientrap
+// custom/option.qm
+
+// uses .target to determine the target data item (or container)
+
+void() Nex_Action_ResetData_Destroy =
+{
+	String_EntityFree( self, target );
+};
+
+void() Nex_Action_ResetData_Action =
+{
+	Raise_DataEvent( Menu_GetItem( self.target ), ITEM_DATA_RESET );
+};
+
+void() Nex_Action_ResetData =
+{
+	String_EntityZone( self, target );
+
+	self.destroy = Nex_Action_ResetData_Destroy;
+	self.action = Nex_Action_ResetData_Action;
+};
+
+
+// link is the name of the datalink
+.string target;
+// text is the description text
+.string text;
+
+/*
+===================
+Nex_Automation_Option_Slider
+===================
+*/
+// Embedded in a window with the following subitems: Description, Slider, Value
+void() Nex_Automation_Option_Slider =
+{
+	local entity lDescription, lSlider, lValue;
+
+	if( !self._parent.target ) {
+		objerror( "Bad target '", self._parent.target, "'" );
+		return;
+	}
+
+	// Get the children
+	lDescription = Menu_GetItem( "Description" );
+	lSlider = Menu_GetItem( "Slider" );
+	lValue = Menu_GetItem( "Value" );
+
+	// Now set the properties
+	// (will be strzoned later by the Spawn functions)
+	lDescription.normal = self._parent.text;
+	lDescription.link = lSlider.name;
+
+	lSlider.target = self._parent.target;
+
+	lValue.target = self._parent.target;
+	lValue.link = lSlider.name;
+};
+
+/*
+===================
+Nex_Automation_Option_EditBox
+===================
+*/
+// Embedded in a window with the following subitems: Description, EditBox
+void() Nex_Automation_Option_EditBox =
+{
+	local entity lDescription, lEditBox;
+
+	if( !self._parent.target ) {
+		objerror( "Bad target '", self._parent.target, "'" );
+		return;
+	}
+
+	// Get the children
+	lDescription = Menu_GetItem( "Description" );
+	lEditBox = Menu_GetItem( "EditBox" );
+
+	// Now set the properties
+	// (will be strzoned later by the Spawn functions)
+	lDescription.normal = self._parent.text;
+	lDescription.link = lEditBox.name;
+
+	lEditBox.target = self._parent.target;
+};
+
+/*
+===================
+Nex_Automation_Option_Switch
+===================
+*/
+// Embedded in a window with the following subitems: Description, Switch
+void() Nex_Automation_Option_Switch =
+{
+	local entity lDescription, lSwitch;
+
+	if( !self._parent.target ) {
+		objerror( "Bad target '", self._parent.target, "'" );
+		return;
+	}
+
+	// Get the children
+	lDescription = Menu_GetItem( "Description" );
+	lSwitch = Menu_GetItem( "Switch" );
+
+	// Now set the properties
+	// (will be strzoned later by the Spawn functions)
+	lDescription.normal = self._parent.text;
+	lDescription.link = lSwitch.name;
+
+	lSwitch.target = self._parent.target;
+};

@@ -1,0 +1,144 @@
+// DP/Nex Menu
+// control/data/data.qh
+
+enum {
+	ITEM_DATA_SYNC,	 // sync with the engine or whatever else this is linked to
+	ITEM_DATA_SEND,	 // set it
+	ITEM_DATA_RESET, // use the default value
+	ITEM_DATA_TEST_START,	// set it but dont sync our backup
+	ITEM_DATA_TEST_END,	// set our backup
+	ITEM_DATA_SAVE_EXECSTRING, // stroes the value and the name in such a way in a string that executing it will restore the value and the state (if possible)
+	ITEM_DATALINK_SET,
+	ITEM_DATALINK_GET
+};
+
+void( entity pItem, float pEvent ) Raise_DataEvent;
+
+// ExecString used to store the data for the ITEM_DATA_SAVE_EXECSTRING event
+string Data_ExecString;
+void() Data_ExecString_BeginUse;
+void() Data_ExecString_EndUse;
+
+// [Item_Data]
+.string value;		// current value in the menu
+.string defValue;	// default value (set for the menu)
+.string _syncValue;	// last value that is known from the real source
+
+.void( float pEvent ) _dataEvent;
+
+void() Item_Data_Init;
+void() Item_Data_Destroy;
+
+// [Item_DataUser]
+// In this case the target field points to a Item_Data* item
+.string target;
+.entity _target;
+
+void() Item_DataUser_Update;
+void() Item_DataUser_Init;
+void() Item_DataUser_Destroy;
+
+// [Item_DataLink]
+// links to a [Item_Data] object
+.string link;
+.entity _link;
+.string value;
+
+.void( float pEvent ) _dataEvent;
+
+void() Item_DataLink_Init;
+void() Item_DataLink_Destroy;
+void() Item_DataLink_Update;
+
+// Item_DataContainer [Item_Container] [implements the DATA events]
+void( float pEvent ) Item_DataContainer_DataEvent;
+void() Item_DataContainer_Spawn;
+
+// Item_Data_Container [Item_Data]
+void() Item_Data_Container_Reinit;
+void( float pEvent ) Item_Data_Container_DataEvent;
+
+void() Item_Data_Container_Spawn;
+
+// Item_Data_Cvar [Item_Data]
+.string cvarName;
+
+void( float pEvent ) Item_Data_Cvar_DataEvent;
+void() Item_Data_Cvar_Spawn;
+
+// Item_Data_CvarCreateSave Item_Data_Cvar
+void() Item_Data_CvarCreateSave_Spawn;
+
+// Item_Data_ServerCvar Item_Data_Cvar
+.string syncCmd;
+
+void( float pEvent ) Item_Data_ServerCvar_DataEvent;
+void() Item_Data_ServerCvar_Spawn;
+
+// Item_DataLink_Text [Item_DataLink]
+.float maxValue; // max length of the string (-1 for infinity)
+.string value; // text
+
+// Item_DataLink_Value [Item_DataLink]
+// if maxValue <= minValue there is no max value clamping
+.float minValue;
+.float stepValue;
+.float maxValue;
+.float _realValue;
+
+.string value; // read-only is most cases, but supplies are version of the data that can be displayed
+
+void() Item_DataLink_Value_Clamp;
+string() Item_DataLink_Value_ClampedText;
+void() Item_DataLink_Value_Spawn;
+
+// [Item_DataLink_Switch] Item_DataLink_Value
+.string descList; // a altstring containing description strings
+
+void() Item_DataLink_Switch_Init;
+void() Item_DataLink_Switch_Destroy;
+
+float( entity pDataLink, float pValue ) DataLink_Switch_GetOrdinal;
+
+// Item_DataLink_ValueSwitch [Item_DataLink_Switch]
+// to add support for a case when there is no value list match, add one more entry to desc list
+// describing the case (i.g. 'Custom'), if you dont it will set the first desc/value entry as default
+// the default value for stepValue is 1
+// maxValue is calculated if it is 0
+
+void() Item_DataLink_ValueSwitch_Spawn;
+
+// Item_DataLink_TextSwitch [Item_DataLink_Switch]
+// if you want a s
+// minValue is 0, stepValue is 1, maxValue is the number of items in descList/valueList
+.string valueList; // contains the values for the different
+
+void( float pEvent ) Item_DataLink_TextSwitch_DataEvent;
+void() Item_DataLink_TextSwitch_Destroy;
+void() Item_DataLink_TextSwitch_Spawn;
+
+// Item_DataLink_FastResync [Item_DataLink]
+// "Fast" in the sense of total performance - the data is resynced
+// at most once per frame
+.float _presstime; // no more than once a frame?
+
+void() Item_DataLink_FastResync_Spawn;
+
+// Item_DataLink_TextValue [Item_DataLink]
+// self: [string] -> link: [float]
+void() Item_DataLink_TextValue_Spawn;
+
+// Item_DataLink_TextTime [Item_DataLink]
+// self: [string] -> link: [float]
+// hour:min:sec
+void() Item_DataLink_TextTime_Spawn;
+
+// Item_DataLink_AltString [Item_DataLink]
+// self: [string] -> link: [altstring item]
+.float stepValue; // contains the index into link.value
+
+void() Item_DataLink_AltString_Spawn;
+
+// Item_DataLink_Splitter [Item_DataLink]
+// sets value and _realValue of all children to the float value of self._realValue
+void() Item_DataLink_Splitter_Spawn;

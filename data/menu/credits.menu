@@ -1,0 +1,85 @@
+// Property of Alientrap/AK
+//
+// credits.menu
+Item Window CreditsWnd
+{
+	pos 	'300 300'
+	size	'400 400'
+	flag	[FlagHidden]
+
+	Derive Rect Background
+	{
+		flag		[FlagSealOffMouse]
+		color		'0.0 0.0 0.0'
+		alpha		0.8
+		Ignore
+		{
+			color		'0.1 0.1 0.1'
+			drawFlag 	[DrawFlagModulate]
+
+			Derive Rect Layer
+			{
+				color		'0.3 0.3 0.3'
+				drawFlag	[DrawFlagAdditive]
+			}
+		}
+	}
+	Item Layout Layout
+	{
+		origin		'200 0'
+		direction 	[Nex_DefaultVertDirection]
+		flag		[FlagEmbedded]
+		alignment 	[AlignCenter]
+
+		Item FloatingArea Title
+		{
+			size		'400 13'
+			target		"##up up"
+			Derive Rect Background
+			{
+				//color		'0.5 0.5 0.5'
+				color		'0.05 0.05 0.05'
+			}
+			Derive TextButton Caption
+			{
+				color		'1.0 1.0 1.0'
+				size		'400 11'
+				alignment 	[AlignCenter]
+				normal		"Credits"
+				link		"##up"
+			}
+		}
+		Item Arrangement Items
+		{
+			direction 	[Nex_DefaultVertDirection]
+			key		Nex_Credits_Key
+			alignment 	[AlignCenter]
+
+			Item Window Scroller
+			{
+				size		'400 350'
+
+				Item Task_Job Job
+				{
+					direction	'0 50'
+					reinit		Nex_Credits_SetSizeX
+					update		Nex_Credits_Scroll
+				}
+
+				Derive Nex_Credits Credits
+				{
+					color		'1.0 1.0 1.0'
+					alignment	[AlignCenter]
+					target		"nexuiz-credits.txt"
+				}
+			}
+
+			Derive TextButton Close
+			{
+				color	'1.0 1.0 1.0'
+				normal	"Close"
+				action	Nex_Credits_Toggle
+			}
+		}
+	}
+}

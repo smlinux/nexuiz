@@ -1,0 +1,36 @@
+// DP/Nex Menu
+// system/mgfx.qh
+
+vector Menu_Clip_Position;
+vector Menu_Clip_Size;
+vector Menu_Origin;
+
+vector( vector pPos )  Menu_OrgToMen;
+vector( vector pPos )  Menu_MenToOrg;
+vector( vector pPos )  Menu_ConToOrg;
+vector( vector pPos )  Menu_OrgToCon;
+
+float( vector pPosition, float pCharacter, vector pScale, vector pRGB, float pAlpha, float pFlag )
+Menu_DrawCharacter;
+
+float( vector pPosition, string pText, vector pScale, vector pRGB, float pAlpha, float pFlag )
+Menu_DrawString;
+
+float( vector pPosition, string pPicture, vector pSize, vector pRGB, float pAlpha, float pFlag )
+Menu_DrawPicture;
+
+float( vector pPosition, vector pSize, vector pRGB, float pAlpha, float pFlag )
+Menu_Fill;
+
+void( float pX, float pY, float pWidth, float pHeight )
+Menu_SetClipArea;
+
+void()
+Menu_ResetClipArea;
+
+#ifdef USEFUNCTIONS
+void( string pText )
+_Menu_Process_Debug_Print;
+#endif
+
+bool _menu_process_filtered;
