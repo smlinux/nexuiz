@@ -20,6 +20,9 @@ varying vec2 TexCoordLightmap;
 varying myhvec3 CubeVector;
 varying vec3 LightVector;
 varying vec3 EyeVector;
+#ifdef USEFOG
+varying vec3 EyeVectorModelSpace;
+#endif
 
 varying myhvec3 VectorS; // direction of S texcoord (sometimes crudely called tangent)
 varying myhvec3 VectorT; // direction of T texcoord (sometimes crudely called binormal)
@@ -67,10 +70,13 @@ void main(void)
 #endif
 
 	// transform unnormalized eye direction into tangent space
-	vec3 eyeminusvertex = EyePosition - gl_Vertex.xyz;
-	EyeVector.x = dot(eyeminusvertex, gl_MultiTexCoord1.xyz);
-	EyeVector.y = dot(eyeminusvertex, gl_MultiTexCoord2.xyz);
-	EyeVector.z = dot(eyeminusvertex, gl_MultiTexCoord3.xyz);
+#ifndef USEFOG
+	vec3 EyeVectorModelSpace;
+#endif
+	EyeVectorModelSpace = EyePosition - gl_Vertex.xyz;
+	EyeVector.x = dot(EyeVectorModelSpace, gl_MultiTexCoord1.xyz);
+	EyeVector.y = dot(EyeVectorModelSpace, gl_MultiTexCoord2.xyz);
+	EyeVector.z = dot(EyeVectorModelSpace, gl_MultiTexCoord3.xyz);
 
 #ifdef MODE_LIGHTDIRECTIONMAP_MODELSPACE
 	VectorS = gl_MultiTexCoord1.xyz;
@@ -253,17 +259,19 @@ void main(void)
 	color.rgb *= myhvec3(texture2D(Texture_Lightmap, TexCoordLightmap)) * DiffuseScale + myhvec3(AmbientScale);
 #endif // MODE
 
+	color *= gl_Color;
+
 #ifdef USEGLOW
 	color.rgb += myhvec3(texture2D(Texture_Glow, TexCoord));
 #endif
 
 #ifdef USEFOG
 	// apply fog
-	myhalf fog = texture2D(Texture_FogMask, myhvec2(length(EyeVector)*FogRangeRecip, 0.0)).x;
+	myhalf fog = texture2D(Texture_FogMask, myhvec2(length(EyeVectorModelSpace)*FogRangeRecip, 0.0)).x;
 	color.rgb = color.rgb * fog + FogColor * (1.0 - fog);
 #endif
 
-	gl_FragColor = color * gl_Color;
+	gl_FragColor = color;
 }
 
 #endif // FRAGMENT_SHADER
