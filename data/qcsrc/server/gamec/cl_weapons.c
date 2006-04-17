@@ -246,6 +246,10 @@ void() W_PreviousWeapon =
 // Bringed back weapon frame
 void() W_WeaponFrame =
 {
+	if(arena_roundbased)
+	if(time < self.arena_warmup_end)
+		return;
+	
 	if (!self.weaponentity || self.health < 1)
 		return; // Dead player can't use weapons and injure impulse commands
 

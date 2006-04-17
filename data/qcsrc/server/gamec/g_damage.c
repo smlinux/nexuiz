@@ -6,7 +6,13 @@ void GiveFrags (entity attacker, entity targ, float f)
 
 	if(gameover) return;
 
-	if(f > 0 && cvar("g_domination") && cvar("g_domination_disable_frags"))
+	if(cvar("g_arena"))
+	if(cvar("g_arena_roundbased"))
+		return;
+
+	if(cvar("g_domination"))
+	if(cvar("g_domination_disable_frags"))
+	if(f > 0)
 		return;
 	else if(f > 0 && cvar("g_runematch"))
 		f = RunematchHandleFrags(attacker, targ, f);

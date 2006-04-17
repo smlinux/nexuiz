@@ -138,6 +138,7 @@ void W_Hagar_Attack (void)
 	missile.velocity = (normalize(trueaim - org) + randomvec() * cvar("g_balance_hagar_primary_spread")) * cvar("g_balance_hagar_primary_speed");
 
 	missile.angles = vectoangles (missile.velocity);
+	missile.flags = FL_PROJECTILE;
 }
 
 void W_Hagar_Attack2 (void)
@@ -179,6 +180,7 @@ void W_Hagar_Attack2 (void)
 	missile.avelocity = '100 10 10';
 
 	missile.angles = vectoangles (missile.velocity);
+	missile.flags = FL_PROJECTILE;
 }
 
 // weapon frames

@@ -42,6 +42,13 @@ Item Layout Game
 			init		Nex_Action_JumpToPage
 			target		"Panel::LMS"
 		}
+		Derive TextButton Arena
+		{
+			normal          "Arena"
+			
+			init            Nex_Action_JumpToPage
+			target          "Panel::Arena"
+		}																	
 		Derive TextButton GameMisc
 		{
 			normal		"Misc"
@@ -61,5 +68,6 @@ Item Layout Game
 		#include "menu/creategame/gamemodes/domination.menu"
 		#include "menu/creategame/gamemodes/runematch.menu"
 		#include "menu/creategame/gamemodes/lms.menu"
+		#include "menu/creategame/gamemodes/arena.menu"
 	}
 }

@@ -499,6 +499,7 @@ void fireBullet (vector start, vector dir, float spread, float damage, float dty
 		setsize (e, '0 0 0', '0 0 0');
 		setorigin (e, start);
 		e.effects = e.effects | EF_ADDITIVE | EF_FULLBRIGHT | EF_NOSHADOW;
+		e.flags = FL_PROJECTILE;
 	}
 
 	if ((trace_fraction != 1.0) && (pointcontents (trace_endpos) != CONTENT_SKY))

@@ -16,6 +16,7 @@ float	FL_WATERJUMP				= 2048;
 float	FL_JUMPRELEASED				= 4096;
 float	FL_WEAPON				= 8192;
 float	FL_POWERUP				= 16384;
+float	FL_PROJECTILE				= 32768;
 
 float	MOVETYPE_NONE				= 0;
 float	MOVETYPE_ANGLENOCLIP			= 1;

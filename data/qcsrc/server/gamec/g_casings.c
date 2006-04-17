@@ -58,7 +58,7 @@ void(vector org, vector vel, float randomvel, vector ang, vector avel, float ran
 		return;
 
 	e = newdecor();
-	//e.isdecor = TRUE;
+	e.isdecor = TRUE;
 	e.alpha = 1;
 	//e.forcescale = 15;
 	e.movetype = MOVETYPE_BOUNCE;

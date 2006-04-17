@@ -200,6 +200,10 @@ void FireGrapplingHook (void)
 	local entity missile;
 	local vector org;
 
+	if(arena_roundbased)
+	if(time < self.arena_warmup_end)
+		return;
+
 	makevectors(self.v_angle);
 
 	sound (self, CHAN_WEAPON, "weapons/hook_fire.ogg", 1, ATTN_NORM);

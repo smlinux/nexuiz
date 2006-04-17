@@ -247,6 +247,10 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 		self.pain_finished = time + 0.5;	//Supajoe
 	}
 
+	if(cvar("g_arena"))
+	if(numspawned < 2)
+		return;
+
 	if (!cvar("g_minstagib"))
 	{
 		save = bound(0, damage * cvar("g_balance_armor_blockpercent"), self.armorvalue);
@@ -363,6 +367,9 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 			WriteAngle (MSG_ONE, self.v_angle_y);
 			WriteAngle (MSG_ONE, 80);
 		}
+
+		if(cvar("g_arena"))
+			Spawnqueue_Unmark(self);
 	}
 }
 

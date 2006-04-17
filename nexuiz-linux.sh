@@ -3,6 +3,8 @@
 path=`dirname ${0}`
 link=`readlink ${0}`
 
+sndspeed=`lsmod | grep ac97 > /dev/null 2>&1 && echo "-sndspeed 48000"`
+
 [ -n "$link" ] && path=`dirname $link`
 cd "$path"
 
@@ -11,4 +13,4 @@ case "$(uname -m)" in
   *)		nexuiz="nexuiz-linux-686-sdl" ;;
 esac
 
-exec ./$nexuiz "${@}"
+echo exec ./$nexuiz $sndspeed "${@}"

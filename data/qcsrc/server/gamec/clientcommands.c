@@ -204,13 +204,14 @@ void SV_ParseClientCommand(string s) {
 			stuffcmd(self,"menu_showteamselect\n");
 		}
 	} else if(argv(0) == "spectate") {
-		if(cvar("g_lms"))
+		if(cvar("g_lms") || cvar("g_arena"))
 			return; // don't allow spectating in lms, unless player runs out of lives
 		if(self.classname == "player" && cvar("sv_spectate") == 1) {
 			self.classname = "observer";
 			PutClientInServer();
 		}
 	} else if(argv(0) == "join") {
+		if(!cvar("g_arena"))
 		if (self.classname != "player")
 		{
 			self.classname = "player";

@@ -1,0 +1,15 @@
+Glow Arena (arena_nexdm08)
+maps/nexdm08
+
+A small arena map.
+
+Players: 2-5
+
+Weapons: Machine Gun, Mortar,
+Electro, Crylink,
+Rocket Launcher
+
+Gametype: Arena
+
+Author:
+Garth Hendy

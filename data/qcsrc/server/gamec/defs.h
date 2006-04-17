@@ -13,6 +13,8 @@ float team1_score, team2_score, team3_score, team4_score;
 
 float maxclients;
 
+string newlines = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+
 //entity	casing;
 entity dest;
 
@@ -256,3 +258,5 @@ float playerid_last;
 
 .vector death_origin;
 .vector killer_origin;
+
+.float isdecor;

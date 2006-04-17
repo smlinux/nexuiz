@@ -143,6 +143,7 @@ void W_Crylink_Attack (void)
 		//proj.glow_size = 20;
 
 		proj.effects = EF_NOSHADOW | EF_FULLBRIGHT | EF_LOWPRECISION;
+		proj.flags = FL_PROJECTILE;
 		proj.colormod = proj_color;
 		counter = counter + 1;
 	}
@@ -193,6 +194,7 @@ void W_Crylink_Attack2 (void)
 		//proj.glow_size = 20;
 
 		proj.effects = EF_NOSHADOW | EF_FULLBRIGHT | EF_LOWPRECISION;
+		proj.flags = FL_PROJECTILE;
 		proj.colormod = proj_color;
 		counter = counter + 1;
 	}

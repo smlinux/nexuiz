@@ -101,6 +101,7 @@ void W_Laser_Attack (void)
 	missile.nextthink = time + cvar("g_balance_laser_lifetime");
 
 	missile.effects = EF_NOSHADOW | EF_FULLBRIGHT | EF_FULLBRIGHT | EF_LOWPRECISION;
+	missile.flags = FL_PROJECTILE;
 }
 
 // weapon frames

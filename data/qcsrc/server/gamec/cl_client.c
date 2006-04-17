@@ -187,6 +187,13 @@ void PutObserverInServer (void)
 	spot = SelectSpawnPoint (FALSE);
 	RemoveGrapplingHook(self); // Wazat's Grappling Hook
 
+	if(clienttype(self) == CLIENTTYPE_REAL)
+	{
+		msg_entity = self;
+		WriteByte(MSG_ONE, SVC_SETVIEW);
+		WriteEntity(MSG_ONE, self);
+	}
+
 	if (cvar("g_runematch"))
 		DropAllRunes(self);
 
@@ -231,7 +238,8 @@ void PutObserverInServer (void)
 	self.fixangle = TRUE;
 	self.crouch = FALSE;
 	self.view_ofs = PL_VIEW_OFS;
-	setorigin (self, spot.origin + '0 0 1' * (1 - self.mins_z - 14));
+	setorigin (self, spot.origin);
+	setsize (self, '0 0 0', '0 0 0');
 	self.oldorigin = self.origin;
 	self.items = 0;
 	self.model = "";
@@ -247,10 +255,20 @@ void PutObserverInServer (void)
 	self.punchvector = '0 0 0';
 	self.oldvelocity = self.velocity;
 
-	if(!cvar("g_lms"))
+	if(cvar("g_arena"))
+	{
+		if(self.frags != -2)
+		{
+			Spawnqueue_Insert(self);
+		}
+		else
+		{
+			Spawnqueue_Unmark(self);
+			Spawnqueue_Remove(self);
+		}
+	}
+	else if(!cvar("g_lms"))
 		self.frags = -666;
- 	//stuffcmd(self, "set viewsize 120 \n");
-//	bprint (strcat("^4", self.netname, "^4 is spectating now\n"));
 }
 
 
@@ -263,13 +281,23 @@ Called when a client spawns in the server
 */
 void PutClientInServer (void)
 {
-	if(clienttype(self) ==  CLIENTTYPE_BOT)
+	if(clienttype(self) == CLIENTTYPE_BOT)
 	{
 		self.classname = "player";
+	}
+	else if(clienttype(self) == CLIENTTYPE_REAL)
+	{
+		msg_entity = self;
+		WriteByte(MSG_ONE, SVC_SETVIEW);
+		WriteEntity(MSG_ONE, self);
 	}
 
 	// player is dead and becomes observer
 	if(cvar("g_lms") && self.frags < 1)
+		self.classname = "observer";
+		
+	if(cvar("g_arena"))
+	if(!self.spawned)
 		self.classname = "observer";
 
 	if(self.classname == "player") {
@@ -453,6 +481,9 @@ void PutClientInServer (void)
 			self.jump_interval = time;
 		}
 
+		if(cvar("g_arena"))
+			Spawnqueue_Remove(self);
+		
 		self.event_damage = PlayerDamage;
 
 		self.statdraintime = time + 5;
@@ -460,7 +491,8 @@ void PutClientInServer (void)
 
 		if(self.killcount == -666) {
 			self.killcount = 0;
-			self.frags = 0;
+			if(!cvar("g_arena"))
+				self.frags = 0;
 		}
 
 		self.cnt = WEP_LASER;
@@ -621,6 +653,11 @@ void ClientConnect (void)
 			self.frags = lms_lowest_lives;
 		}
 	}
+	else if(cvar("g_arena"))
+	{
+		self.classname = "observer";
+		Spawnqueue_Insert(self);
+	}
 
 	player_count += 1;
 	self.jointime = time;
@@ -665,7 +702,8 @@ void ClientDisconnect (void)
 	// player was dead, decrease dead count
 	if(cvar("g_lms") && self.frags < 1)
 		lms_dead_count -= 1;
-	//stuffcmd(self, "set viewsize $tmpviewsize \n");
+	else if(cvar("g_arena"))
+		Spawnqueue_Remove(self);
 }
 
 .float buttonchat;
@@ -1064,6 +1102,8 @@ void SpectateCopy(entity spectatee) {
 
 void SpectateUpdate() {
 	if (self != self.enemy) {
+		if(self.enemy.flags & FL_NOTARGET)
+			PutObserverInServer();
 		SpectateCopy(self.enemy);
 		msg_entity = self;
 		WriteByte(MSG_ONE, SVC_SETANGLE);
@@ -1136,7 +1176,7 @@ void PlayerPreThink (void)
 			}
 			else if (self.deadflag == DEAD_DEAD)
 			{
-				if (cvar("g_lms") || cvar("g_forced_respawn"))
+				if (cvar("g_lms") || cvar("g_arena") || cvar("g_forced_respawn"))
 					self.button0 = self.button2 = self.button3 = 0;
 
 				if (!self.button0 && !self.button2 && !self.button3)
@@ -1284,9 +1324,9 @@ void PlayerPreThink (void)
 				if(!cvar("teamplay")) {
 					self.flags = self.flags & !FL_JUMPRELEASED;
 					self.classname = "player";
-					if(!cvar("g_lms"))
-						bprint (strcat("^4", self.netname, "^4 is playing now\n"));
 					PutClientInServer();
+					if(self.flags & !FL_NOTARGET)
+						bprint (strcat("^4", self.netname, "^4 is playing now\n"));
 					centerprint(self,"");
 					return;
 				} else {
@@ -1316,9 +1356,6 @@ void PlayerPreThink (void)
 					if(!cvar("g_lms"))
 						bprint (strcat("^4", self.netname, "^4 is playing now\n"));
 
-					msg_entity = self;
-					WriteByte(MSG_ONE, SVC_SETVIEW);
-					WriteEntity(MSG_ONE, self);
 					PutClientInServer();
 					centerprint(self,"");
 					return;
@@ -1333,17 +1370,11 @@ void PlayerPreThink (void)
 					self.classname = "spectator";
 				} else {
 					self.classname = "observer";
-					msg_entity = self;
-					WriteByte(MSG_ONE, SVC_SETVIEW);
-					WriteEntity(MSG_ONE, self);
 					PutClientInServer();
 				}
 			} else if (self.button3) {
 				self.flags = self.flags & !FL_JUMPRELEASED;
 				self.classname = "observer";
-				msg_entity = self;
-				WriteByte(MSG_ONE, SVC_SETVIEW);
-				WriteEntity(MSG_ONE, self);
 				PutClientInServer();
 			} else {
 				SpectateUpdate();
@@ -1385,4 +1416,5 @@ void PlayerPostThink (void)
 	} else if (self.classname == "spectator") {
 		//do nothing
 	}
+	Arena_Warmup();
 }

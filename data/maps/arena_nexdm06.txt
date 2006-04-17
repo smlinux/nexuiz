@@ -1,0 +1,16 @@
+Starship (arena_nexdm06)
+maps/nexdm06
+
+A sprawling complex.
+
+Players: 4-6
+
+Weapons: Machine Gun, Electro,
+Crylink, Nexgun, Rocket Launcher
+
+Powerups: Strength
+
+Gametype: Arena
+
+Author:
+Chris Matz

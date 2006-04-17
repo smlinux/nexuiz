@@ -1,0 +1,60 @@
+// Property of Alientrap
+//
+// data/gamemisc.menu
+
+Item DataContainer Arena
+{
+	Item Data_Cvar MaxSpawned
+	{
+		cvarName	"g_arena_maxspawned"
+		defValue	2
+
+		Item DataLink_Value Value
+		{
+			minValue	2
+			maxValue	256
+			stepValue	1
+			link 		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	8
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar RoundBased
+	{
+		cvarName        "g_arena_roundbased"
+		defValue        1
+		
+		[DataLink_OnOffSwitch]
+	}
+	Item Data_Cvar Warmup
+	{
+		cvarName	"g_arena_warmup"
+		defValue	5
+
+		Item DataLink_Value Value
+		{
+			minValue	0
+			maxValue	60
+			stepValue	1
+			link 		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	60
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+}

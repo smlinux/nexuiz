@@ -275,6 +275,7 @@ void W_Rocket_Attack (void)
 	missile.cnt = time + cvar("g_balance_rocketlauncher_lifetime");
 	missile.effects = EF_NOSHADOW;
 	sound (missile, CHAN_BODY, "weapons/rocket_fly.wav", 0.4, ATTN_NORM);
+	missile.flags = FL_PROJECTILE;
 
 	flash = spawn ();
 	setorigin (flash, org);

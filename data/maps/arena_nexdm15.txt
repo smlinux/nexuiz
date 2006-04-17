@@ -1,0 +1,20 @@
+Oilrig (arena_nexdm15)
+maps/nexdm15
+
+A very large open map designed
+after an offshore oil rig.
+
+Players: 3-6
+
+Weapons: Machine Gun, Electro,
+Nexgun, Hagar, Mortar,
+Crylink
+
+Powerups: Invincibility,
+Strength
+
+Gametype: Arena
+
+Author:
+Dustin Geeraert
+Garth Hendy

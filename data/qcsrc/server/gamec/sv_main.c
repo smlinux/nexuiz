@@ -154,6 +154,8 @@ void StartFrame (void)
 	teamplay = cvar ("teamplay");
 	skill = cvar("skill");
 
+	Spawnqueue_Check();
+	
 	CreatureFrame ();
 	CheckRules_World ();
 

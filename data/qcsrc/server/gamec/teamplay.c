@@ -10,6 +10,7 @@ float GAME_DOMINATION		= 3;
 float GAME_CTF			= 4;
 float GAME_RUNEMATCH		= 5;
 float GAME_LMS			= 6;
+float GAME_ARENA		= 7;
 
 
 // client counts for each team
@@ -86,6 +87,7 @@ void ResetGameCvars()
 	cvar_set("g_ctf", "0");
 	cvar_set("g_runematch", "0");
 	cvar_set("g_lms", "0");
+	cvar_set("g_arena", "0");
 	cvar_set("teamplay", "0");
 
 
@@ -125,6 +127,7 @@ void InitGameplayMode()
 
 	if(game == GAME_DOMINATION || cvar("g_domination"))
 	{
+		ResetGameCvars();
 		game = GAME_DOMINATION;
 		cvar_set("g_domination", "1");
 
@@ -137,6 +140,7 @@ void InitGameplayMode()
 	}
 	else if(game == GAME_CTF || cvar("g_ctf"))
 	{
+		ResetGameCvars();
 		game = GAME_CTF;
 		cvar_set("g_ctf", "1");
 
@@ -171,6 +175,7 @@ void InitGameplayMode()
 
 		if(game == GAME_TEAM_DEATHMATCH || cvar("g_tdm") || cvar("deathmatch_force_teamplay"))
 		{
+			ResetGameCvars();
 			game = GAME_TEAM_DEATHMATCH;
 			gamemode_name = "Team Deathmatch";
 			ActivateTeamplay();
@@ -179,6 +184,7 @@ void InitGameplayMode()
 		}
 		else
 		{
+			ResetGameCvars();
 			game = GAME_DEATHMATCH;
 			gamemode_name = "Deathmatch";
 			teams_matter = 0;
@@ -188,6 +194,7 @@ void InitGameplayMode()
 	}
 	else if(game == GAME_LMS || cvar("g_lms"))
 	{
+		ResetGameCvars();
 		game = GAME_LMS;
 		cvar_set("g_lms", "1");
 		fraglimit_override = cvar("g_lms_lives_override");
@@ -195,12 +202,25 @@ void InitGameplayMode()
 			fraglimit_override = -1;
 		gamemode_name = "Last Man Standing";
 		teams_matter = 0;
-		cvar_set("teamplay", "0");
 		lms_lowest_lives = 999;
+	}
+	else if(game == GAME_ARENA || cvar("g_arena"))
+	{
+		ResetGameCvars();
+		game = GAME_ARENA;
+		cvar_set("g_arena", "1");
+		fraglimit_override = cvar("g_arena_point_limit");
+		maxspawned = cvar("g_arena_maxspawned");
+		if(maxspawned < 2)
+			maxspawned = 2;
+		arena_roundbased = cvar("g_arena_roundbased");
+		gamemode_name = "Arena";
+		teams_matter = 0;
 	}
 	else
 	{
 		// we can only assume...
+		ResetGameCvars();
 		gamemode_name = "Deathmatch";
 		teams_matter = 0;
 	}
@@ -275,7 +295,7 @@ string GetClientVersionMessage(float v) {
 
 void PrintWelcomeMessage(entity pl)
 {
-	string s, mutator, modifications, newlines;
+	string s, mutator, modifications;
 
 	/*if(self.welcomemessage_time < time)
 		return;
@@ -283,8 +303,6 @@ void PrintWelcomeMessage(entity pl)
 		return;
 	self.welcomemessage_time2 = time + 0.8; */
 
-	newlines = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
-	
 	if(self.classname == "observer")
 	{
 		if(cvar("g_lms") && self.frags <= 0 && self.frags > -666)
@@ -294,7 +312,7 @@ void PrintWelcomeMessage(entity pl)
 	}
 	else if(self.classname == "spectator")
 	{
-		if (cvar("g_lms") && self.frags < 1)
+		if ((cvar("g_lms") && self.frags < 1) || cvar("g_arena"))
 			return centerprint(self, strcat(newlines, "spectating ", self.enemy.netname, "\n\n\n^7press attack for next player\npress attack2 for free fly mode"));
 		else
 			return centerprint(self, strcat(newlines, "spectating ", self.enemy.netname, "\n\n\n^7press jump to play\n^7press attack for next player\npress attack2 for free fly mode"));
@@ -341,7 +359,15 @@ void PrintWelcomeMessage(entity pl)
 		s = strcat(s, "^8\nactive modifications: ^3", modifications, "^8\n");
 
 	if((self.classname == "observer" || self.classname == "spectator") && self.version == cvar("gameversion")) {
-		s = strcat(s,"^7\n\n\npress jump to play\npress attack to spectate other players\n\n");
+		if(!cvar("g_arena"))
+			s = strcat(s,"^7\n\n\npress jump to play\npress attack to spectate other players\n\n");
+		else if(self.spawnqueue_in)
+		{
+			s = strcat(s, "\n\n\n");
+			if(champion)
+				s = strcat(s, "^7current champion is: ", champion.netname, "\n\n");
+			s = strcat(s,"^7press attack to spectate other players\n\n");
+		}
 	}
 
 

@@ -111,7 +111,7 @@ void() AutoBotRemove =
 {
 	local entity ent, t;
 
-	ent = findchain(classname, "player");
+	ent = findchainflags(flags, FL_CLIENT);
 	while (ent)
 	{
 		if (clienttype(ent) == CLIENTTYPE_BOT)
@@ -124,12 +124,12 @@ void() AutoBotRemove =
 						urrebot_chain = self.list;
 					else
 					{
-						t = find(world, classname, "player");
+						t = findflags(world, flags, FL_CLIENT);
 						while(t)
 						{
 							if (t.list == ent)
 								t.list = ent.list;
-							t = find(t, classname, "player");
+							t = findflags(t, flags, FL_CLIENT);
 						}
 					}
 				}

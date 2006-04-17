@@ -13,8 +13,8 @@ Item DataContainer Server
 
 			Item DataLink_TextSwitch Switch
 			{
-				valueList	"'' 'dm_' 'tdm_' 'dom_' 'ctf_' 'rune_' 'lms_'"
-				descList	"'List All''Classic Deathmatch''Team Deathmatch''Domination''Capture The Flag''Rune Match''Last Man Standing'"
+				valueList	"'' 'dm_' 'tdm_' 'dom_' 'ctf_' 'rune_' 'lms_' 'arena_'"
+				descList	"'List All''Classic Deathmatch''Team Deathmatch''Domination''Capture The Flag''Rune Match''Last Man Standing''Arena'"
 
 				link		"##up"
 			}

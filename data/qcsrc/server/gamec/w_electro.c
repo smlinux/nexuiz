@@ -160,6 +160,7 @@ void() W_Electro_Attack
 	proj.velocity = normalize(trueaim - org) * cvar("g_balance_electro_primary_speed");
 	proj.angles = vectoangles(proj.velocity);
 	proj.touch = W_Plasma_TouchExplode;
+	proj.flags = FL_PROJECTILE;
 	setmodel(proj, "models/elaser.mdl");
 	setsize(proj, '0 0 0', '0 0 0');
 
@@ -215,6 +216,7 @@ void() W_Electro_Attack2
 	proj.damageforcescale = 4;
 	proj.health = 5;
 	proj.event_damage = W_Plasma_Damage;
+	proj.flags = FL_PROJECTILE;
 
 	sound (proj, CHAN_BODY, "weapons/electro_fly.wav", 1, ATTN_NORM);
 }

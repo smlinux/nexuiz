@@ -1,0 +1,44 @@
+Item Layout Arena
+{
+	direction	[Nex_DefaultVertDirection]
+	size 		'900 585'
+	origin		'600 50'
+	alignment	[AlignFirst]
+
+	Derive Nex_Option_EditBox TimeLimit
+	{
+		text	"Time Limit Override (disable: -1)"
+		target	"Data::Server::TimeLimit::Text"
+	}
+	Derive Nex_Option_EditBox FragLimit
+	{
+		text    "Frag Limit Override (disable: -1)"
+		target  "Data::Server::FragLimit::Text"
+	}								
+	Derive Nex_Option_EditBox MaxSpawned
+	{
+		text	"Maximum Players Spawned"
+		target	"::Data::Game::Arena::MaxSpawned::Text"
+	}
+	Derive Nex_Option_Switch RoundBased
+	{
+		text    "Spawn Players In Rounds"
+		target  "::Data::Game::Arena::RoundBased::Switch"
+	}								
+	Derive Nex_Option_EditBox Warmup
+	{
+		text	"Warmup Time"
+		target	"::Data::Game::Arena::Warmup::Text"
+	}
+
+
+
+	Derive Nex_Line	Seperator
+	{}
+	Derive TextButton Reset
+	{
+		normal	"Reset to default"
+		init	Nex_Action_ResetData
+		target	"::Data::Game::Arena"
+	}
+}

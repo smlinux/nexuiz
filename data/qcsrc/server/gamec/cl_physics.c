@@ -212,7 +212,8 @@ void SV_PlayerPhysics()
 
 		if(!(self.lastflags & FL_ONGROUND))
 		{
-			dprint(strcat("landing velocity: ", vtos(self.velocity), " (abs: ", ftos(vlen(self.velocity)), ")\n"));
+			if(cvar("speedmeter"))
+				dprint(strcat("landing velocity: ", vtos(self.velocity), " (abs: ", ftos(vlen(self.velocity)), ")\n"));
 			self.velocity = self.velocity * (1 - cvar("sv_friction_on_land"));
 		}
 

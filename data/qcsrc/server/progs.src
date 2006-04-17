@@ -20,6 +20,7 @@ gamec/urrebot_ai_main.c
 gamec/g_subs.c
 
 gamec/runematch.c
+gamec/arena.c
 
 gamec/g_violence.c
 gamec/g_damage.c

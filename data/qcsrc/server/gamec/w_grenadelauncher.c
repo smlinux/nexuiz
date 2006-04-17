@@ -139,6 +139,7 @@ void W_Grenade_Attack (void)
 	gren.avelocity_x = random () * -500 - 500;
 
 	gren.angles = vectoangles (gren.velocity);
+	gren.flags = FL_PROJECTILE;
 }
 
 void W_Grenade_Attack2 (void)
@@ -176,6 +177,7 @@ void W_Grenade_Attack2 (void)
 	gren.avelocity = '100 150 100';
 
 	gren.angles = vectoangles (gren.velocity);
+	gren.flags = FL_PROJECTILE;
 }
 
 // weapon frames

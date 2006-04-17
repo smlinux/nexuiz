@@ -139,6 +139,7 @@ void ImpulseCommands (void)
 				self.ammo_cells = 999;
 			}
 		}
+		else reset_map();
 	}
 	//TetrisImpulses();
 }

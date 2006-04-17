@@ -1,0 +1,15 @@
+Basement (arena_nexdm01)
+maps/nexdm01
+
+A small map designed for fast
+constant gameplay.
+
+Players: 2-4
+
+Weapons: Machine Gun, Mortar,
+Electro, Crylink, Hagar
+
+Gametype: Arena
+
+Author:
+Garth Hendy
