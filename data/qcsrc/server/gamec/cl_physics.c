@@ -9,6 +9,7 @@ float sv_gravity;
 .float gravity;
 .float swamp_slowdown;
 .float lastflags;
+.float lastground;
 
 void Nixnex_GiveCurrentWeapon();
 void SV_PlayerPhysics()
@@ -214,7 +215,8 @@ void SV_PlayerPhysics()
 		{
 			if(cvar("speedmeter"))
 				dprint(strcat("landing velocity: ", vtos(self.velocity), " (abs: ", ftos(vlen(self.velocity)), ")\n"));
-			self.velocity = self.velocity * (1 - cvar("sv_friction_on_land"));
+			if(self.lastground < time - 0.3)
+				self.velocity = self.velocity * (1 - cvar("sv_friction_on_land"));
 		}
 
 		if (self.velocity_x || self.velocity_y)
@@ -275,5 +277,9 @@ void SV_PlayerPhysics()
 				self.velocity = self.velocity + wishdir * min(f, airaccel * frametime * wishspeed);
 		}
 	}
+
+	if(self.flags & FL_ONGROUND)
+		self.lastground = time;
+
 	self.lastflags = self.flags;
 };
