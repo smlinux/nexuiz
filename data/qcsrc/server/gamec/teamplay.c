@@ -361,7 +361,11 @@ void PrintWelcomeMessage(entity pl)
 	if((self.classname == "observer" || self.classname == "spectator") && self.version == cvar("gameversion")) {
 		if(!cvar("g_arena"))
 			s = strcat(s,"^7\n\n\npress jump to play\npress attack to spectate other players\n\n");
-		else if(self.spawnqueue_in)
+		else if(player_count < 2 && arena_roundbased)
+		{
+			s = strcat(s, "\n\n\n^1waiting for second player to start match^7\n\n");
+		}
+		else
 		{
 			s = strcat(s, "\n\n\n");
 			if(champion)
