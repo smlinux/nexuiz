@@ -109,15 +109,21 @@ void GrapplingHookThink()
 
 		if(cvar("g_grappling_hook_tarzan"))
 		{
+			newlength = self.rope_length;
+
 			// first pull the rope...
-			newlength = self.rope_length - pullspeed * 0.1;
-			newlength = max(newlength, minlength);
-			if(newlength < dist - ropestretch) // overstretched?
+			if(!self.owner.button5) // crouch key = don't pull
 			{
-				newlength = dist - ropestretch;
-				if(self.owner.velocity * dir < 0) // only if not already moving in hook direction
-					self.owner.velocity = self.owner.velocity + 0.1 * dir * rubberforce_overstretch;
+				newlength = max(newlength - pullspeed * 0.1, minlength);
+
+				if(newlength < dist - ropestretch) // overstretched?
+				{
+					newlength = dist - ropestretch;
+					if(self.owner.velocity * dir < 0) // only if not already moving in hook direction
+						self.owner.velocity = self.owner.velocity + 0.1 * dir * rubberforce_overstretch;
+				}
 			}
+
 			self.rope_length = newlength;
 
 			// then pull the player
