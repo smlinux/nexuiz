@@ -1,6 +1,7 @@
 // textures/evil6_walls/
 
 // e6girdergrate.tga  (default grate shader)
+
 textures/evil6_walls/e6girdergrate_s
 {
 	qer_editorimage textures/evil6_walls/e6girdergrate.tga
@@ -21,6 +22,7 @@ textures/evil6_walls/e6girdergrate_s
 }
 
 // e6girdergrate2b.tga  (default grate shader)
+
 textures/evil6_walls/e6girdergrate2b_s
 {
 	qer_editorimage textures/evil6_walls/e6girdergrate2b.tga
@@ -41,6 +43,7 @@ textures/evil6_walls/e6girdergrate2b_s
 }
 
 // e6girdersupport.tga  (default grate shader)
+
 textures/evil6_walls/e6girdersupport_s
 {
 	qer_editorimage textures/evil6_walls/e6girdersupport.tga
@@ -61,6 +64,7 @@ textures/evil6_walls/e6girdersupport_s
 }
 
 // e6indsdoor.tga  (default grate shader)
+
 textures/evil6_walls/e6indsdoor_s
 {
 	qer_editorimage textures/evil6_walls/e6indsdoor.tga
@@ -82,6 +86,7 @@ textures/evil6_walls/e6indsdoor_s
 
 // e6tdoor.tga with e6tdoor_fx.tga will use this shader:
 // Tech door light effect
+
 textures/evil6_walls/e6tdoor
 {
 	qer_editorimage textures/evil6_walls/e6tdoor.tga

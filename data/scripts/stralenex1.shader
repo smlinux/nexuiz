@@ -64,28 +64,29 @@ textures/stralenex1/light_tube_green
 {
 	qer_editorimage textures/stralenex1/light_tube_green.tga
 	q3map_lightimage textures/stralenex1/light_tube_green_glow.tga
+	surfaceparm nolightmap
 	q3map_surfacelight 1000
 	{
-		map textures/light_tube_green_glow.tga
+		map textures/stralenex1/light_tube_green_glow.jpg
 		//blendfunc add
 		tcmod scale 12 1
 		rgbGen identity
 		tcMod scroll 0 1
 	}
 	{
-		map textures/light_tube_green_glow.tga
+		map textures/stralenex1/light_tube_green_glow.jpg
 		blendfunc add
 		//tcmod scale 25 1
 		rgbGen identity
 		tcMod scroll 1 0
 	}
 	{
-		map textures/stralenex1/light_tube_green.tga
+		map textures/stralenex1/light_tube_green.jpg
 		blendfunc blend
 		rgbGen identity
 	}
 	{
-		map textures/stralenex1/light_tube_green_glow.tga
+		map textures/stralenex1/light_tube_green_glow.jpg
 		blendfunc add
 		tcmod scale 1 1
 	}
@@ -214,6 +215,7 @@ textures/stralenex1/stralenex5
 }
 
 //copied from harlequin-sky.shader
+
 textures/harlequin_sky/strale_jf-nebula_sky
 {
 	qer_editorimage textures/harlequin_sky/nebula_qer1.tga

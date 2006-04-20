@@ -84,15 +84,14 @@ textures/evil8_fx/e8_jumppad02
 	surfaceparm metalsteps
 	q3map_surfacelight 100
 	{
+		map textures/evil8_fx/e8_jumppad02.tga
+		rgbGen identity
+	}
+	{
 		map textures/evil8_fx/e8_jumppad02_fx.tga
 		blendfunc add
 		tcMod rotate 360
 		tcMod stretch sin 1 0.8 1 0.4
-	}
-	{
-		map textures/evil8_fx/e8_jumppad02.tga
-		blendfunc add
-		rgbGen identity
 	}
 	{
 		map textures/evil8_fx/e8_jumppad02.tga
@@ -639,6 +638,7 @@ textures/evil8_fx/e8icon_blue
 }
 
 //doesn't work right, please edit as you see fit
+
 textures/evil8_fx/e8scuffs1
 {
 	surfaceparm nolightmap
@@ -771,6 +771,7 @@ textures/evil8_trim/e8trim_redfx
 }
 
 //not for public release :P
+
 textures/evil8_fx/e8evilspacetxt
 {
 	surfaceparm nomarks
@@ -918,6 +919,7 @@ textures/evil8_base/e8metal_red_shiney
 }
 
 //broken shader D:?
+
 textures/evil8_trim/e8trimlight
 {
 	q3map_lightimage textures/evil8_trim/e8trimlight_fx.tga
@@ -982,6 +984,7 @@ textures/evil8_trim/e8trimlight2_red
 //===========================//
 //=======floor sounds========//
 //===========================//
+
 textures/evil8_floor/e8clangfloor
 {
 	//qer_editorimage textures/evil8_floor/e8clangfloor.tga

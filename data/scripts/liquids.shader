@@ -1,6 +1,7 @@
 
 //Water for Q3texture, temp use.
 //This shader is for DarkPlaces Engine - Nexuiz
+
 textures/liquids/clear_ripple3
 {
 	qer_editorimage textures/water/pool3d_5e.jpg

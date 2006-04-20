@@ -115,6 +115,7 @@ textures/evil6_lights/e6v_light_s_nolight
 }
 
 // e6walllight.jpg with e6walllight_glow.jpg  (default q3 light shader)
+
 textures/evil6_lights/e6walllight_s_nolight
 {
 	qer_editorimage textures/evil6_lights/e6walllight.jpg

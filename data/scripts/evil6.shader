@@ -280,6 +280,7 @@ textures/evil6_floors/e6xgratebasic_s
 		blendfunc filter
 	}
 }
+
 // textures/evil6_lights/
 
 textures/evil6_lights/e6horzlight_s_nolight

@@ -1,6 +1,7 @@
 // H.Reaper Q3Shader File V 1.5
 
 //Multisampling & High Lightmap resolution
+
 textures/Reaptxt/Notext
 {
 	qer_editorimage textures/Reaptxt/Notext.jpg
@@ -24,6 +25,7 @@ textures/Reaptxt/Notext
 }
 
 //Multisampling & High Lightmap resolution
+
 textures/Reaptxt/solsjrA
 {
 	qer_editorimage textures/Reaptxt/solsjrA.tga
@@ -47,6 +49,7 @@ textures/Reaptxt/solsjrA
 }
 
 //Multisampling & High Lightmap resolution
+
 textures/Reaptxt/p1sjr
 {
 	qer_editorimage textures/Reaptxt/p1sjr.jpg
@@ -70,6 +73,7 @@ textures/Reaptxt/p1sjr
 }
 
 //Multisampling & High Lightmap resolution
+
 textures/Reaptxt/frizsjr
 {
 	qer_editorimage textures/Reaptxt/frizsjr.jpg
@@ -93,6 +97,7 @@ textures/Reaptxt/frizsjr
 }
 
 //Multisampling & High Lightmap resolution
+
 textures/Reaptxt/p1chbr
 {
 	qer_editorimage textures/Reaptxt/p1chbr.jpg
@@ -116,6 +121,7 @@ textures/Reaptxt/p1chbr
 }
 
 //Multisampling, BumpMapping Lightmap Emulation & High Lightmap resolution
+
 textures/Reaptxt/tuilestoit
 {
 	qer_editorimage textures/Reaptxt/tuilestoit.tga
@@ -140,6 +146,7 @@ textures/Reaptxt/tuilestoit
 }
 
 //Multisampling & High Lightmap resolution
+
 textures/Reaptxt/murext
 {
 	qer_editorimage textures/Reaptxt/murext.tga
@@ -163,6 +170,7 @@ textures/Reaptxt/murext
 }
 
 //Multisampling, BumpMapping Lightmap Emulation & High Lightmap resolution
+
 textures/Reaptxt/brownstone
 {
 	qer_editorimage textures/Reaptxt/brownstone.jpg
@@ -187,6 +195,7 @@ textures/Reaptxt/brownstone
 }
 
 //Multisampling & High Lightmap resolution
+
 textures/Reaptxt/Notext2
 {
 	qer_editorimage textures/Reaptxt/Notext2.jpg
@@ -210,6 +219,7 @@ textures/Reaptxt/Notext2
 }
 
 //Multisampling & High Lightmap resolution
+
 textures/Reaper_dirt/grass7
 {
 	qer_editorimage textures/Reaper_dirt/grass7.jpg
@@ -233,6 +243,7 @@ textures/Reaper_dirt/grass7
 }
 
 //Multisampling & High Lightmap resolution
+
 textures/Reaper_dirt/grass8
 {
 	qer_editorimage textures/Reaper_dirt/grass8.jpg
@@ -256,6 +267,7 @@ textures/Reaper_dirt/grass8
 }
 
 //Corona Shader, texture by HipShot
+
 textures/Reaptxt/HSglow01
 {
 	qer_editorimage textures/Reaptxt/HSglow01.jpg
@@ -275,6 +287,7 @@ textures/Reaptxt/HSglow01
 }
 
 //EnvBox Shader, EnvBox by HipShot
+
 textures/Reaptxt/rnorm
 {
 	surfaceparm noimpact
@@ -286,6 +299,7 @@ textures/Reaptxt/rnorm
 }
 
 //Fog Shader
+
 textures/Reaptxt/fog_restdusk
 {
 	qer_editorimage textures/Reaptxt/fog_restdusk.jpg
@@ -297,6 +311,7 @@ textures/Reaptxt/fog_restdusk
 }
 
 //Fog Shader
+
 textures/Reaptxt/fog_restnormal
 {
 	qer_editorimage textures/Reaptxt/fog_restnormal.jpg
@@ -308,6 +323,7 @@ textures/Reaptxt/fog_restnormal
 }
 
 //Corona Shader, texture by HipShot
+
 textures/Reaptxt/sun
 {
 	qer_editorimage textures/Reaptxt/sun.jpg
@@ -326,6 +342,7 @@ textures/Reaptxt/sun
 }
 
 //Alpha Channel, Texture by Lud
+
 textures/research_detail/lud_atomic.tga
 {
 	qer_editorimage textures/research_detail/lud_atomic.tga
@@ -340,6 +357,7 @@ textures/research_detail/lud_atomic.tga
 }
 
 //Volumetric Shadow
+
 textures/shad/shad
 {
 	qer_editorimage textures/shad/shad.tga
@@ -356,6 +374,7 @@ textures/shad/shad
 
 //Corona for lud_Corona.tga
 //This shader is for DarkPlaces Engine - Nexuiz
+
 textures/Reaptxt/lud_Corona
 {
 	qer_editorimage textures/Reaptxt/lud_Corona.tga
@@ -373,6 +392,7 @@ textures/Reaptxt/lud_Corona
 
 //Corona for sun.tga by HipShot
 //This shader is for DarkPlaces Engine - Nexuiz
+
 textures/Reaptxt/lud_Corona
 {
 	qer_editorimage textures/Reaptxt/sun.jpg
@@ -390,6 +410,7 @@ textures/Reaptxt/lud_Corona
 
 //Water for Q3texture, temp use.
 //This shader is for DarkPlaces Engine - Nexuiz
+
 textures/water/pool3d_5e
 {
 	qer_editorimage textures/water/pool3d_5e.jpg
@@ -409,6 +430,7 @@ textures/water/pool3d_5e
 
 //Water for Q3texture, temp use.
 //This shader is for DarkPlaces Engine - Nexuiz
+
 textures/liquids/slime1
 {
 	qer_editorimage textures/liquids/slime1.jpg
@@ -445,6 +467,7 @@ textures/liquids/protolava
 
 //Corona for HRglow01.tga
 //This shader is for DarkPlaces Engine - Nexuiz
+
 textures/Reaptxt/HRglow01
 {
 	qer_editorimage textures/Reaptxt/HRglow01.tga
@@ -462,6 +485,7 @@ textures/Reaptxt/HRglow01
 
 //Corona for HRglow02.tga
 //This shader is for DarkPlaces Engine - Nexuiz
+
 textures/Reaptxt/HRglow02
 {
 	qer_editorimage textures/Reaptxt/HRglow02.tga
@@ -479,6 +503,7 @@ textures/Reaptxt/HRglow02
 
 //Corona for HRglow03.tga
 //This shader is for DarkPlaces Engine - Nexuiz
+
 textures/Reaptxt/HRglow03
 {
 	qer_editorimage textures/Reaptxt/HRglow03.tga
@@ -496,6 +521,7 @@ textures/Reaptxt/HRglow03
 
 //Corona for HRsun01.tga
 //This shader is for DarkPlaces Engine - Nexuiz
+
 textures/Reaptxt/HRsun01
 {
 	qer_editorimage textures/Reaptxt/HRsun01.tga
@@ -512,6 +538,7 @@ textures/Reaptxt/HRsun01
 }
 
 //EnvBox Shader, EnvBox by H.Reaper
+
 textures/Reaptxt/HRSky
 {
 	surfaceparm noimpact
