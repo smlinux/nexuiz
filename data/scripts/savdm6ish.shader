@@ -36,6 +36,10 @@ textures/savdm6ish/wall14_5
 	{
 		map textures/savdm6ish/wall14_5.jpg
 	}
+	{
+		map $lightmap
+		blendfunc filter
+	}
 }
 
 textures/savdm6ish/wiz1_4
@@ -44,6 +48,10 @@ textures/savdm6ish/wiz1_4
 	{
 		map textures/savdm6ish/wiz1_4.jpg
 	}
+	{
+		map $lightmap
+		blendfunc filter
+	}
 }
 
 textures/savdm6ish/floor01_5
@@ -51,5 +59,9 @@ textures/savdm6ish/floor01_5
 	q3map_lightmapSampleSize 8
 	{
 		map textures/savdm6ish/floor01_5.jpg
+	}
+	{
+		map $lightmap
+		blendfunc filter
 	}
 }
