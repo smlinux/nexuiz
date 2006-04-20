@@ -20,7 +20,6 @@ void reset_map()
 {
 	float warmup;
 	
-	champion = world;
 	self = nextent(world);
 
 	warmup = cvar("g_arena_warmup");
@@ -55,20 +54,12 @@ void reset_map()
 		{
 			if(self.spawned)
 			{
-				if(self.classname == "player" && !self.deadflag)
-					champion = self;
-
-				self.classname = "player";
-
 				if(warmup)
 					self.arena_warmup_end = time + warmup;
+				PutClientInServer();
 			}
-			else
-			{
-				self.classname = "observer";
-			}
-			PutClientInServer();
-
+			else if(self.deadflag)
+				PutClientInServer();
 		}
 		self = nextent(self);
 	}
@@ -173,6 +164,14 @@ void Spawnqueue_Check()
 	if(!arena_roundbased || (next_round && next_round < time && player_count > 1))
 	{
 		next_round = 0;
+
+		if(arena_roundbased)
+		{
+			champion = find(world, classname, "player");
+			while(champion && champion.deadflag)
+				champion = find(champion, classname, "player");
+		}
+		
 		while(numspawned < maxspawned && spawnqueue_first)
 		{
 			self = spawnqueue_first;
@@ -181,11 +180,9 @@ void Spawnqueue_Check()
 
 			Spawnqueue_Remove(self);
 			Spawnqueue_Mark(self);
-			if(!arena_roundbased)
-			{
-				self.classname = "player";
-				PutClientInServer();
-			}
+		
+			self.classname = "player";
+			PutClientInServer();
 		}
 		if(arena_roundbased)
 			reset_map();

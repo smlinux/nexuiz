@@ -703,7 +703,10 @@ void ClientDisconnect (void)
 	if(cvar("g_lms") && self.frags < 1)
 		lms_dead_count -= 1;
 	else if(cvar("g_arena"))
+	{
+		Spawnqueue_Unmark(self);
 		Spawnqueue_Remove(self);
+	}
 }
 
 .float buttonchat;
