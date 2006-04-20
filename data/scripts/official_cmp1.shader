@@ -16,14 +16,12 @@ textures/amethyst7/purplenebula-cmp1/purplenebula_skybox
 	skyparms env/amethyst7/purplenebula-cmp1/purplenebula - -
 }
 
-
 //****************************************************//
 //									//
 //	The rest are modified from Evil_Lair's		//
 //	original shader files.					//
 //									//
 //****************************************************//
-
 
 textures/cmp1-dm8/e8trimlight2_pur
 {
@@ -34,14 +32,14 @@ textures/cmp1-dm8/e8trimlight2_pur
 		map textures/cmp1-dm8/e8trimlight2_pur.tga
 	}
 	{
-		map $lightmap 
+		map $lightmap
 		blendfunc filter
-		tcGen lightmap 
+		tcGen lightmap
 	}
 	{
 		map textures/cmp1-dm8/e8trimlight2_pur.blend.tga
 		blendfunc add
-		rgbGen wave sin 0.7 0.2 0 0.3 
+		rgbGen wave sin 0.7 0.2 0 0.3
 	}
 }
 
@@ -54,14 +52,14 @@ textures/cmp1-dm8/e8tinylightpur
 		map textures/cmp1-dm8/e8tinylightpur.tga
 	}
 	{
-		map $lightmap 
+		map $lightmap
 		blendfunc filter
-		tcGen lightmap 
+		tcGen lightmap
 	}
 	{
 		map textures/cmp1-dm8/e8tinylightpur.blend.tga
 		blendfunc add
-		rgbGen wave noise 0.5 0.3 0 0.2 
+		rgbGen wave noise 0.5 0.3 0 0.2
 	}
 }
 
@@ -74,14 +72,14 @@ textures/cmp1-dm8/e8lighttrim_b_pur
 		map textures/cmp1-dm8/e8lighttrim_pur.tga
 	}
 	{
-		map $lightmap 
+		map $lightmap
 		blendfunc filter
-		tcGen lightmap 
+		tcGen lightmap
 	}
 	{
 		map textures/cmp1-dm8/e8lighttrim_pur.blend.tga
 		blendfunc add
-		rgbGen wave sin 0.4 0.2 0 0.2 
+		rgbGen wave sin 0.4 0.2 0 0.2
 	}
 }
 
@@ -94,14 +92,14 @@ textures/cmp1-dm8/e8lighttrim_pur
 		map textures/cmp1-dm8/e8lighttrim_p.tga
 	}
 	{
-		map $lightmap 
+		map $lightmap
 		blendfunc filter
-		tcGen lightmap 
+		tcGen lightmap
 	}
 	{
 		map textures/cmp1-dm8/e8lighttrim_p.blend.tga
 		blendfunc add
-		rgbGen wave sin 0.4 0.2 0 0.2 
+		rgbGen wave sin 0.4 0.2 0 0.2
 	}
 }
 
@@ -117,7 +115,7 @@ textures/cmp1-dm8/e8circle_pur
 	{
 		clampmap textures/cmp1-dm8/e8circle_pur.tga
 		blendfunc blend
-		rgbGen wave sin 0.9 0.2 0 0.5 
+		rgbGen wave sin 0.9 0.2 0 0.5
 		tcMod rotate 45
 	}
 }
@@ -126,9 +124,9 @@ textures/cmp1-dm8/e8clangfloor
 {
 	surfaceparm metalsteps
 	{
-		map $lightmap 
+		map $lightmap
 		rgbGen identity
-		tcGen lightmap 
+		tcGen lightmap
 	}
 	{
 		map textures/cmp1-dm8/e8clangfloor.tga
@@ -146,7 +144,7 @@ textures/cmp1-dm8/logo
 	{
 		map textures/cmp1-dm8/logo.tga
 		blendfunc add
-		rgbGen wave sin 0.9 0.2 0 0.2 
+		rgbGen wave sin 0.9 0.2 0 0.2
 	}
 }
 
@@ -180,12 +178,11 @@ textures/cmp1-dm8/ame7glass
 	{
 		map textures/cmp1-dm8/ame7light.tga
 		blendfunc add
-		tcGen environment 
+		tcGen environment
 	}
 	{
-		map $lightmap 
+		map $lightmap
 		blendfunc filter
-		tcGen lightmap 
+		tcGen lightmap
 	}
 }
-

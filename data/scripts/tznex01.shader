@@ -13,10 +13,10 @@ textures/tznex01/stained_glass_nexlogo_blue
 		alphaFunc GE128
 	}
 	{
-		map $lightmap 
+		map $lightmap
 		blendfunc filter
 		rgbGen identity
-		tcGen lightmap 
+		tcGen lightmap
 		depthFunc equal
 	}
 }
@@ -36,11 +36,10 @@ textures/tznex01/stained_glass_nexlogo_red
 		alphaFunc GE128
 	}
 	{
-		map $lightmap 
+		map $lightmap
 		blendfunc filter
 		rgbGen identity
-		tcGen lightmap 
+		tcGen lightmap
 		depthFunc equal
 	}
 }
-

@@ -14,4 +14,3 @@ textures/skies/blacksky
 // note: Change the fourth value (100) if you want a brighter or dimmer sun
 	skyparms textures/harlequin_sky/env/nebular - -
 }
-

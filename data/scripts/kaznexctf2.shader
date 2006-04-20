@@ -5,7 +5,6 @@ textures/kaznexctf2/small_blue
 	q3map_surfacelight 500
 	q3map_lightsubdivide 128
 	surfaceparm nomarks
-
 	{
 		map textures/kaznexctf2/small_blue.tga
 	}
@@ -26,7 +25,6 @@ textures/kaznexctf2/small_red
 	q3map_surfacelight 500
 	q3map_lightsubdivide 128
 	surfaceparm nomarks
-
 	{
 		map textures/kaznexctf2/small_red.tga
 	}
@@ -47,7 +45,6 @@ textures/kaznexctf2/large_blue
 	q3map_surfacelight 500
 	q3map_lightsubdivide 128
 	surfaceparm nomarks
-
 	{
 		map textures/kaznexctf2/large_blue.tga
 	}
@@ -68,7 +65,6 @@ textures/kaznexctf2/large_red
 	q3map_surfacelight 500
 	q3map_lightsubdivide 128
 	surfaceparm nomarks
-
 	{
 		map textures/kaznexctf2/large_red.tga
 	}
@@ -88,7 +84,6 @@ textures/kaznexctf2/long_light
 	q3map_lightimage textures/kaznexctf2/long_light_glow.tga
 	q3map_surfacelight 1500
 	surfaceparm nomarks
-
 	{
 		map textures/kaznexctf2/long_light.tga
 	}
@@ -108,7 +103,6 @@ textures/kaznexctf2/small_light
 	q3map_lightimage textures/kaznexctf2/small_light_glow.tga
 	q3map_surfacelight 1500
 	surfaceparm nomarks
-
 	{
 		map textures/kaznexctf2/small_light.tga
 	}
@@ -137,10 +131,10 @@ textures/kaznexctf2/grate
 		alphaFunc GE128
 	}
 	{
-		map $lightmap 
+		map $lightmap
 		blendfunc filter
 		rgbGen identity
-		tcGen lightmap 
+		tcGen lightmap
 		depthFunc equal
 	}
 }
@@ -160,10 +154,10 @@ textures/kaznexctf2/grate2
 		alphaFunc GE128
 	}
 	{
-		map $lightmap 
+		map $lightmap
 		blendfunc filter
 		rgbGen identity
-		tcGen lightmap 
+		tcGen lightmap
 		depthFunc equal
 	}
 }

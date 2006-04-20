@@ -1,6 +1,7 @@
 common
 toxic
 blacksky
+common
 dsi
 e7
 el3dm1
@@ -26,3 +27,4 @@ sav-liquids
 stralenex1
 swamp
 tznex01
+zenex1

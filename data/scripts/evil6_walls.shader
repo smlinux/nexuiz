@@ -1,4 +1,4 @@
-// textures/evil6_walls/  
+// textures/evil6_walls/
 
 // e6girdergrate.tga  (default grate shader)
 textures/evil6_walls/e6girdergrate_s
@@ -8,7 +8,6 @@ textures/evil6_walls/e6girdergrate_s
 	surfaceparm nomarks
 	surfaceparm metalsteps
 	cull none
-
 	{
 		map textures/evil6_walls/e6girdergrate.tga
 		alphafunc GE128
@@ -29,7 +28,6 @@ textures/evil6_walls/e6girdergrate2b_s
 	surfaceparm nomarks
 	surfaceparm metalsteps
 	cull none
-
 	{
 		map textures/evil6_walls/e6girdergrate2b.tga
 		alphafunc GE128
@@ -50,7 +48,6 @@ textures/evil6_walls/e6girdersupport_s
 	surfaceparm nomarks
 	surfaceparm metalsteps
 	cull none
-
 	{
 		map textures/evil6_walls/e6girdersupport.tga
 		alphafunc GE128
@@ -71,7 +68,6 @@ textures/evil6_walls/e6indsdoor_s
 	surfaceparm nomarks
 	surfaceparm metalsteps
 	cull none
-
 	{
 		map textures/evil6_walls/e6indsdoor.tga
 		alphafunc GE128
@@ -86,28 +82,23 @@ textures/evil6_walls/e6indsdoor_s
 
 // e6tdoor.tga with e6tdoor_fx.tga will use this shader:
 // Tech door light effect
-textures/evil6_walls/e6tdoor 
-{         
-        qer_editorimage textures/evil6_walls/e6tdoor.tga 
-        
-        { 
-                map textures/evil6_walls/e6tdoor.tga 
-        } 
-        { 
-                map textures/evil6_walls/e6tdoor_fx.tga  
-                tcmod scroll -1 0  
-                blendFunc add 
-        } 
-        { 
-                map textures/evil6_walls/e6tdoor.tga 
-                blendFunc blend
-        } 
-        { 
-                map $lightmap 
-                blendFunc filter
-        } 
+textures/evil6_walls/e6tdoor
+{
+	qer_editorimage textures/evil6_walls/e6tdoor.tga
+	{
+		map textures/evil6_walls/e6tdoor.tga
+	}
+	{
+		map textures/evil6_walls/e6tdoor_fx.tga
+		tcmod scroll -1 0
+		blendFunc add
+	}
+	{
+		map textures/evil6_walls/e6tdoor.tga
+		blendFunc blend
+	}
+	{
+		map $lightmap
+		blendFunc filter
+	}
 }
-
-
-
-

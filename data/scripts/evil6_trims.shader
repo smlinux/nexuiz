@@ -2,7 +2,6 @@ textures/evil6_trims/e6btrim_light_s_nolight
 {
 	qer_editorimage textures/evil6_trims/e6btrim_light.tga
 	surfaceparm nomarks
-
 	{
 		map textures/evil6_trims/e6btrim_light.tga
 	}
@@ -19,7 +18,6 @@ textures/evil6_trims/e6btrim_light_s_nolight
 textures/evil6_trims/e6metalfan_s
 {
 	qer_editorimage textures/evil6_trims/e6metalfan.tga
-
 	{
 		map textures/evil6_trims/e6metalfan_blade.tga
 		tcmod rotate 5000
@@ -38,7 +36,6 @@ textures/evil6_trims/e6strimlight_s_nolight
 {
 	qer_editorimage textures/evil6_trims/e6strimlight.tga
 	surfaceparm nomarks
-
 	{
 		map textures/evil6_trims/e6strimlight.tga
 	}
@@ -56,7 +53,6 @@ textures/evil6_trims/e6trim_bsrlight_s_nolight
 {
 	qer_editorimage textures/evil6_trims/e6trim_bsrlight.tga
 	surfaceparm nomarks
-
 	{
 		map textures/evil6_trims/e6trim_bsrlight.tga
 	}
@@ -74,7 +70,6 @@ textures/evil6_trims/e6trim_light_s_nolight
 {
 	qer_editorimage textures/evil6_trims/e6trim_light.tga
 	surfaceparm nomarks
-
 	{
 		map textures/evil6_trims/e6trim_light.tga
 	}

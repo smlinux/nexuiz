@@ -15,15 +15,15 @@ textures/e7/e7brickfloor01jump
 		rgbGen identity
 	}
 	{
-		map $lightmap 
+		map $lightmap
 		blendfunc filter
 		rgbGen identity
-		tcGen lightmap 
+		tcGen lightmap
 	}
 	{
 		map textures/e7/e7brickfloor01jump_glow.tga
 		blendfunc add
-		rgbGen wave sin 0.5 0.8 0 1.5 
+		rgbGen wave sin 0.5 0.8 0 1.5
 	}
 }
 
@@ -34,9 +34,9 @@ textures/e7/e7mlight
 	surfaceparm nomarks
 	q3map_surfacelight 1500
 	{
-		map $lightmap 
+		map $lightmap
 		rgbGen identity
-		tcGen lightmap 
+		tcGen lightmap
 	}
 	{
 		map textures/e7/e7mlight.tga
@@ -50,7 +50,8 @@ textures/e7/e7mlight
 	}
 }
 
-//smalll light
+//small light
+
 textures/e7/e7slight
 {
 	qer_editorimage textures/e7/e7slight.tga
@@ -58,9 +59,9 @@ textures/e7/e7slight
 	surfaceparm nomarks
 	q3map_surfacelight 2500
 	{
-		map $lightmap 
+		map $lightmap
 		rgbGen identity
-		tcGen lightmap 
+		tcGen lightmap
 	}
 	{
 		map textures/e7/e7slight.tga
@@ -81,9 +82,9 @@ textures/e7/e7trimlight
 	surfaceparm nomarks
 	q3map_surfacelight 700
 	{
-		map $lightmap 
+		map $lightmap
 		rgbGen identity
-		tcGen lightmap 
+		tcGen lightmap
 	}
 	{
 		map textures/e7/e7trimlight.tga
@@ -98,9 +99,10 @@ textures/e7/e7trimlight
 }
 
 //evilgrate
+
 textures/e7/e7wgrate
 {
-    qer_editorimage textures/e7/e7wgrate.tga
+	qer_editorimage textures/e7/e7wgrate.tga
 	surfaceparm alphashadow
 	surfaceparm nomarks
 	surfaceparm metalsteps
@@ -114,15 +116,16 @@ textures/e7/e7wgrate
 		alphaFunc GE128
 	}
 	{
-		map $lightmap 
+		map $lightmap
 		blendfunc filter
 		rgbGen identity
-		tcGen lightmap 
+		tcGen lightmap
 		depthFunc equal
 	}
 }
 
 // evil lava - sorta looks bad ingame - imho
+
 textures/e7/e7sfx_lava
 {
 	qer_editorimage textures/e7/e7sfx_lava.tga
@@ -131,7 +134,7 @@ textures/e7/e7sfx_lava
 	surfaceparm nolightmap
 	surfaceparm trans
 	cull disable
-	deformVertexes wave 100 sin 3 2 0.1 0.1 
+	deformVertexes wave 100 sin 3 2 0.1 0.1
 	tessSize 128
 	q3map_surfacelight 1500
 	q3map_globaltexture
@@ -143,6 +146,7 @@ textures/e7/e7sfx_lava
 }
 
 //evil sky of impending doom :P
+
 textures/e7/e7evilsky_1
 {
 	qer_editorimage textures/e7/e7evilsky_1.tga
@@ -175,9 +179,9 @@ textures/e7/e7rain
 	surfaceparm nonsolid
 	surfaceparm trans
 	cull disable
-	deformVertexes move 3 1 0 sin 0 5 0 0.2 
-	deformVertexes move 0.6 3.3 0 sin 0 5 0 0.4 
-	deformVertexes wave 30 sin 0 10 0 0.2 
+	deformVertexes move 3 1 0 sin 0 5 0 0.2
+	deformVertexes move 0.6 3.3 0 sin 0 5 0 0.4
+	deformVertexes wave 30 sin 0 10 0 0.2
 	qer_trans 0.5
 	{
 		map textures/e7/e7rain.tga
@@ -195,20 +199,20 @@ textures/e7/e7rain
 }
 
 //dark redish sky
+
 textures/e7/e7sky_01
 {
 	qer_editorimage textures/e7/e7sky_01.tga
 	surfaceparm noimpact
 	surfaceparm nolightmap
-
-        q3map_sun .9 .9 1 65 65 68
+	q3map_sun .9 .9 1 65 65 68
 	q3map_surfacelight 150
 	skyparms - 512 -
-	{ 
-		map textures/e7/e7sky_01.tga 
-		rgbGen identity 
-		tcMod scroll 0.05 0.03 
-		tcMod scale 2 2 
+	{
+		map textures/e7/e7sky_01.tga
+		rgbGen identity
+		tcMod scroll 0.05 0.03
+		tcMod scale 2 2
 	}
 	{
 		map textures/e7/e7sky_02.tga
@@ -218,7 +222,9 @@ textures/e7/e7sky_01
 		tcMod scale 3 2
 	}
 }
+
 //jump pad 2
+
 textures/e7/e7sbrickfloor_jump
 {
 	qer_editorimage textures/e7/e7sbrickfloor_jump.tga
@@ -230,22 +236,23 @@ textures/e7/e7sbrickfloor_jump
 		rgbGen identity
 	}
 	{
-		map $lightmap 
+		map $lightmap
 		blendfunc filter
 		rgbGen identity
-		tcGen lightmap 
+		tcGen lightmap
 	}
 	{
 		map textures/e7/e7sbrickfloor_jump_glow.tga
 		blendfunc add
-		rgbGen wave sin 0.5 0.8 0 1.5 
+		rgbGen wave sin 0.5 0.8 0 1.5
 	}
 }
 
 //small grate
+
 textures/e7/e7smgrate
 {
-    qer_editorimage textures/e7/e7smgrate.tga
+	qer_editorimage textures/e7/e7smgrate.tga
 	surfaceparm alphashadow
 	surfaceparm metalsteps
 	//surfaceparm trans
@@ -258,10 +265,10 @@ textures/e7/e7smgrate
 		alphaFunc GE128
 	}
 	{
-		map $lightmap 
+		map $lightmap
 		blendfunc filter
 		rgbGen identity
-		tcGen lightmap 
+		tcGen lightmap
 		depthFunc equal
 	}
 }

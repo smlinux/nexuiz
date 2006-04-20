@@ -6,7 +6,7 @@ textures/toxic/toxic_slime
 	surfaceparm slime
 	surfaceparm trans
 	cull disable
-	deformVertexes wave 150 sin 2 5 0.25 0.1 
+	deformVertexes wave 150 sin 2 5 0.25 0.1
 	tessSize 128
 	qer_trans 0.5
 	q3map_surfacelight 1200
@@ -30,4 +30,3 @@ textures/toxic/toxic_sky
 	q3map_sun 0.75 0.65 0.6 130 255 80
 	skyParms env/strale_grey/ygrey 128 -
 }
-

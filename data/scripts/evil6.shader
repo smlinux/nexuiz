@@ -5,7 +5,6 @@ textures/evil6_floors/e6bsegrtflr128_s
 	surfaceparm nomarks
 	surfaceparm metalsteps
 	cull none
-
 	{
 		map textures/evil6_floors/e6bsegrtflr128.tga
 		alphafunc GE128
@@ -25,7 +24,6 @@ textures/evil6_floors/e6bsegrtflr256_s
 	surfaceparm nomarks
 	surfaceparm metalsteps
 	cull none
-
 	{
 		map textures/evil6_floors/e6bsegrtflr256.tga
 		alphafunc GE128
@@ -45,7 +43,6 @@ textures/evil6_floors/e6grate_flr_b_s
 	surfaceparm nomarks
 	surfaceparm metalsteps
 	cull none
-
 	{
 		map textures/evil6_floors/e6grate_flr_b.tga
 		alphafunc GE128
@@ -65,7 +62,6 @@ textures/evil6_floors/e6grate_flr_s
 	surfaceparm nomarks
 	surfaceparm metalsteps
 	cull none
-
 	{
 		map textures/evil6_floors/e6grate_flr.tga
 		alphafunc GE128
@@ -85,7 +81,6 @@ textures/evil6_floors/e6grtfloorceil_s
 	surfaceparm nomarks
 	surfaceparm metalsteps
 	cull none
-
 	{
 		map textures/evil6_floors/e6grtfloorceil.tga
 		alphafunc GE128
@@ -105,7 +100,6 @@ textures/evil6_floors/e6grate2_flr_s
 	surfaceparm nomarks
 	surfaceparm metalsteps
 	cull none
-
 	{
 		map textures/evil6_floors/e6grate2_flr.tga
 		alphafunc GE128
@@ -125,7 +119,6 @@ textures/evil6_floors/e6grate2_flr_b_s
 	surfaceparm nomarks
 	surfaceparm metalsteps
 	cull none
-
 	{
 		map textures/evil6_floors/e6grate2_flr_b.tga
 		alphafunc GE128
@@ -144,7 +137,6 @@ textures/evil6_floors/e6launchcfloor_s
 	q3map_lightimage textures/evil6_floors/e6launchcfloor_glow.tga
 	q3map_surfacelight 400
 	surfaceparm nomarks
-
 	{
 		map textures/evil6_floors/e6launchcfloor.tga
 	}
@@ -171,7 +163,6 @@ textures/evil6_floors/e6launchengine_s
 	q3map_lightimage textures/evil6_floors/e6launchengine_glow.tga
 	q3map_surfacelight 400
 	surfaceparm nomarks
-
 	{
 		map textures/evil6_floors/e6launchengine.tga
 	}
@@ -198,7 +189,6 @@ textures/evil6_floors/e6launchlfloor_s
 	q3map_lightimage textures/evil6_floors/e6launchlfloor_glow.tga
 	q3map_surfacelight 400
 	surfaceparm nomarks
-
 	{
 		map textures/evil6_floors/e6launchlfloor.tga
 	}
@@ -222,7 +212,6 @@ textures/evil6_floors/e6launchlfloor_s
 textures/evil6_floors/e6tekmtlrflr_h_full_slow
 {
 	qer_editorimage textures/evil6_floors/e6tekmtlrflr_h.tga
-
 	{
 		map textures/evil6_floors/e6tekmtlrflr_h.tga
 	}
@@ -240,7 +229,6 @@ textures/evil6_floors/e6tekmtlrflr_h_full_slow
 textures/evil6_floors/e6tekmtlrflr_h_small_noisy_fast
 {
 	qer_editorimage textures/evil6_floors/e6tekmtlrflr_h.tga
-
 	{
 		map textures/evil6_floors/e6tekmtlrflr_h.tga
 	}
@@ -262,7 +250,6 @@ textures/evil6_floors/e6xgratebasic_b_s
 	surfaceparm nomarks
 	surfaceparm metalsteps
 	cull none
-
 	{
 		map textures/evil6_floors/e6xgratebasic_b.tga
 		alphafunc GE128
@@ -282,7 +269,6 @@ textures/evil6_floors/e6xgratebasic_s
 	surfaceparm nomarks
 	surfaceparm metalsteps
 	cull none
-
 	{
 		map textures/evil6_floors/e6xgratebasic.tga
 		alphafunc GE128
@@ -301,7 +287,6 @@ textures/evil6_lights/e6horzlight_s_nolight
 	qer_editorimage textures/evil6_lights/e6horzlight.tga
 	//q3map_surfacelight ?
 	surfaceparm nomarks
-	
 	{
 		map textures/evil6_lights/e6horzlight.tga
 	}
@@ -316,17 +301,15 @@ textures/evil6_lights/e6horzlight_s_nolight
 }
 
 // e6horzovallight.jpg with e6horzovallight_blend.jpg and
-// e6mtltpnl_light_fx.jpg  
+// e6mtltpnl_light_fx.jpg
 // ( e6mtltpnl_light_fx.jpg scrolls up slowly (speed of 2) while
 // e6mtltpnl_light_blend.jpg has the normal q3 light  shader)
-// 
-// 
+
 textures/evil6_lights/e6horzovallight_s_nolight
 {
 	qer_editorimage textures/evil6_lights/e6horzovallight.tga
 	//q3map_surfacelight ?
 	surfaceparm nomarks
-	
 	{
 		map textures/evil6_lights/e6horzovallight.tga
 	}
@@ -341,15 +324,15 @@ textures/evil6_lights/e6horzovallight_s_nolight
 }
 
 // alpha channel:
+
 textures/evil6_lights/e6horzovallight_s_nolight
 {
-qer_editorimage textures/evil6_lights/e6horzovallight_a.tga
-//q3map_surfacelight ?
-surfaceparm nomarks
-	
-{
-map textures/evil6_lights/e6mtltpnl_light_fx.tga
-tcmod scroll .2 1 
+	qer_editorimage textures/evil6_lights/e6horzovallight_a.tga
+	//q3map_surfacelight ?
+	surfaceparm nomarks
+	{
+		map textures/evil6_lights/e6mtltpnl_light_fx.tga
+		tcmod scroll .2 1
 	}
 	{
 		map textures/evil6_lights/e6horzovallight_a.tga
@@ -365,13 +348,11 @@ tcmod scroll .2 1
 	}
 }
 
-
 textures/evil6_lights/e6platelight_s_nolight
 {
 	qer_editorimage textures/evil6_lights/e6platelight.tga
 	//q3map_surfacelight ?
 	surfaceparm nomarks
-	
 	{
 		map textures/evil6_lights/e6platelight.tga
 	}
@@ -386,12 +367,12 @@ textures/evil6_lights/e6platelight_s_nolight
 }
 
 // e6platelight_burnt.jpg with e6platelight_burnt_blend.jpg  (default q3 light shader)
+
 textures/evil6_lights/e6platelight_burnt_s_nolight
 {
 	qer_editorimage textures/evil6_lights/e6platelight_burnt.tga
 	//q3map_surfacelight ?
 	surfaceparm nomarks
-	
 	{
 		map textures/evil6_lights/e6platelight_burnt.tga
 	}
@@ -406,12 +387,12 @@ textures/evil6_lights/e6platelight_burnt_s_nolight
 }
 
 // e6tinylight.jpg with e6tinylight_blend.jpg  (default q3 light shader)
+
 textures/evil6_lights/e6tinylight_s_nolight
 {
 	qer_editorimage textures/evil6_lights/e6tinylight.tga
 	//q3map_surfacelight ?
 	surfaceparm nomarks
-	
 	{
 		map textures/evil6_lights/e6tinylight.tga
 	}
@@ -426,12 +407,12 @@ textures/evil6_lights/e6tinylight_s_nolight
 }
 
 // e6v_light.jpg with e6v_light_blend.jpg  (default q3 light shader)
+
 textures/evil6_lights/e6v_light_s_nolight
 {
 	qer_editorimage textures/evil6_lights/e6v_light.tga
 	//q3map_surfacelight ?
 	surfaceparm nomarks
-	
 	{
 		map textures/evil6_lights/e6v_light.tga
 	}
@@ -446,12 +427,12 @@ textures/evil6_lights/e6v_light_s_nolight
 }
 
 // e6walllight.jpg with e6walllight_blend.jpg  (default q3 light shader)
+
 textures/evil6_lights/e6walllight_s_nolight
 {
 	qer_editorimage textures/evil6_lights/e6walllight.tga
 	//q3map_surfacelight ?
 	surfaceparm nomarks
-	
 	{
 		map textures/evil6_lights/e6walllight.tga
 	}
@@ -473,7 +454,6 @@ textures/evil6_lights/e6basicstrip_blue_s_nolight
 	//q3map_surfacelight ?
 	surfaceparm nomarks
 	surfaceparm nolightmap
-	
 	{
 		map textures/evil6_lights/e6basicstrip_blue.tga
 	}
@@ -485,7 +465,6 @@ textures/evil6_lights/e6basicstrip_green_s_nolight
 	//q3map_surfacelight ?
 	surfaceparm nomarks
 	surfaceparm nolightmap
-	
 	{
 		map textures/evil6_lights/e6basicstrip_green.tga
 	}
@@ -497,7 +476,6 @@ textures/evil6_lights/e6basicstrip_orange_s_nolight
 	//q3map_surfacelight ?
 	surfaceparm nomarks
 	surfaceparm nolightmap
-	
 	{
 		map textures/evil6_lights/e6basicstrip_orange.tga
 	}
@@ -509,7 +487,6 @@ textures/evil6_lights/e6basicstrip_red_s_nolight
 	//q3map_surfacelight ?
 	surfaceparm nomarks
 	surfaceparm nolightmap
-	
 	{
 		map textures/evil6_lights/e6basicstrip_red.tga
 	}
@@ -521,7 +498,6 @@ textures/evil6_lights/e6basicstrip_white_s_nolight
 	//q3map_surfacelight ?
 	surfaceparm nomarks
 	surfaceparm nolightmap
-	
 	{
 		map textures/evil6_lights/e6basicstrip_white.tga
 	}
@@ -533,7 +509,6 @@ textures/evil6_lights/e6basicstrip_yellow_s_nolight
 	//q3map_surfacelight ?
 	surfaceparm nomarks
 	surfaceparm nolightmap
-	
 	{
 		map textures/evil6_lights/e6basicstrip_yellow.tga
 	}
@@ -546,7 +521,6 @@ textures/evil6_support/e6h_support_s
 	surfaceparm nomarks
 	surfaceparm metalsteps
 	cull none
-
 	{
 		map textures/evil6_support/e6h_support.tga
 		alphafunc GE128
@@ -566,7 +540,6 @@ textures/evil6_support/e6holestrip_s
 	surfaceparm nomarks
 	surfaceparm metalsteps
 	cull none
-
 	{
 		map textures/evil6_support/e6holestrip.tga
 		alphafunc GE128
@@ -584,7 +557,6 @@ textures/evil6_support/e6vertgrt_supp_s_nolight
 	qer_editorimage textures/evil6_support/e6vertgrt_supp.tga
 	q3map_lightimage textures/evil6_support/e6vertgrt_supp_fx.tga
 	surfaceparm nomarks
-
 	{
 		map textures/evil6_support/e6vertgrt_supp.tga
 	}
@@ -607,7 +579,6 @@ textures/evil6_support/e6vlight_supp_s_nolight
 {
 	qer_editorimage textures/evil6_support/e6vlight_supp.tga
 	surfaceparm nomarks
-
 	{
 		map textures/evil6_support/e6vlight_supp.tga
 	}
@@ -628,7 +599,6 @@ textures/evil6_support/e6x_supprt_s
 	surfaceparm nomarks
 	surfaceparm metalsteps
 	cull none
-
 	{
 		map textures/evil6_support/e6x_supprt.tga
 		alphafunc GE128
@@ -648,7 +618,6 @@ textures/evil6_support/e6xrst_supprt_s
 	surfaceparm nomarks
 	surfaceparm metalsteps
 	cull none
-
 	{
 		map textures/evil6_support/e6xrst_supprt.tga
 		alphafunc GE128
@@ -660,11 +629,11 @@ textures/evil6_support/e6xrst_supprt_s
 		blendfunc filter
 	}
 }
+
 textures/evil6_trims/e6btrim_light_s_nolight
 {
 	qer_editorimage textures/evil6_trims/e6btrim_light.tga
 	surfaceparm nomarks
-
 	{
 		map textures/evil6_trims/e6btrim_light.tga
 	}
@@ -681,7 +650,6 @@ textures/evil6_trims/e6btrim_light_s_nolight
 textures/evil6_trims/e6metalfan_s
 {
 	qer_editorimage textures/evil6_trims/e6metalfan.tga
-
 	{
 		map textures/evil6_trims/e6metalfan_blade.tga
 		tcmod rotate 5000
@@ -700,7 +668,6 @@ textures/evil6_trims/e6strimlight_s_nolight
 {
 	qer_editorimage textures/evil6_trims/e6strimlight.tga
 	surfaceparm nomarks
-
 	{
 		map textures/evil6_trims/e6strimlight.tga
 	}
@@ -718,7 +685,6 @@ textures/evil6_trims/e6trim_bsrlight_s_nolight
 {
 	qer_editorimage textures/evil6_trims/e6trim_bsrlight.tga
 	surfaceparm nomarks
-
 	{
 		map textures/evil6_trims/e6trim_bsrlight.tga
 	}
@@ -736,7 +702,6 @@ textures/evil6_trims/e6trim_light_s_nolight
 {
 	qer_editorimage textures/evil6_trims/e6trim_light.tga
 	surfaceparm nomarks
-
 	{
 		map textures/evil6_trims/e6trim_light.tga
 	}
@@ -749,9 +714,11 @@ textures/evil6_trims/e6trim_light_s_nolight
 		blendfunc add
 	}
 }
-// textures/evil6_walls/  
+
+// textures/evil6_walls/
 
 // e6girdergrate.tga  (default grate shader)
+
 textures/evil6_walls/e6girdergrate_s
 {
 	qer_editorimage textures/evil6_walls/e6girdergrate.tga
@@ -759,7 +726,6 @@ textures/evil6_walls/e6girdergrate_s
 	surfaceparm nomarks
 	surfaceparm metalsteps
 	cull none
-
 	{
 		map textures/evil6_walls/e6girdergrate.tga
 		alphafunc GE128
@@ -773,6 +739,7 @@ textures/evil6_walls/e6girdergrate_s
 }
 
 // e6girdergrate2b.tga  (default grate shader)
+
 textures/evil6_walls/e6girdergrate2b_s
 {
 	qer_editorimage textures/evil6_walls/e6girdergrate2b.tga
@@ -780,7 +747,6 @@ textures/evil6_walls/e6girdergrate2b_s
 	surfaceparm nomarks
 	surfaceparm metalsteps
 	cull none
-
 	{
 		map textures/evil6_walls/e6girdergrate2b.tga
 		alphafunc GE128
@@ -794,6 +760,7 @@ textures/evil6_walls/e6girdergrate2b_s
 }
 
 // e6girdersupport.tga  (default grate shader)
+
 textures/evil6_walls/e6girdersupport_s
 {
 	qer_editorimage textures/evil6_walls/e6girdersupport.tga
@@ -801,7 +768,6 @@ textures/evil6_walls/e6girdersupport_s
 	surfaceparm nomarks
 	surfaceparm metalsteps
 	cull none
-
 	{
 		map textures/evil6_walls/e6girdersupport.tga
 		alphafunc GE128
@@ -815,6 +781,7 @@ textures/evil6_walls/e6girdersupport_s
 }
 
 // e6indsdoor.tga  (default grate shader)
+
 textures/evil6_walls/e6indsdoor_s
 {
 	qer_editorimage textures/evil6_walls/e6indsdoor.tga
@@ -822,7 +789,6 @@ textures/evil6_walls/e6indsdoor_s
 	surfaceparm nomarks
 	surfaceparm metalsteps
 	cull none
-
 	{
 		map textures/evil6_walls/e6indsdoor.tga
 		alphafunc GE128
@@ -837,29 +803,24 @@ textures/evil6_walls/e6indsdoor_s
 
 // e6tdoor.tga with e6tdoor_fx.tga will use this shader:
 // Tech door light effect
-textures/evil6_walls/e6tdoor 
-{         
-        qer_editorimage textures/evil6_walls/e6tdoor.tga 
-        
-        { 
-                map textures/evil6_walls/e6tdoor.tga 
-        } 
-        { 
-                map textures/evil6_walls/e6tdoor_fx.tga  
-                tcmod scroll -1 0  
-                blendFunc add 
-        } 
-        { 
-                map textures/evil6_walls/e6tdoor.tga 
-                blendFunc blend
-        } 
-        { 
-                map $lightmap 
-                blendFunc filter
-        } 
+
+textures/evil6_walls/e6tdoor
+{
+	qer_editorimage textures/evil6_walls/e6tdoor.tga
+	{
+		map textures/evil6_walls/e6tdoor.tga
+	}
+	{
+		map textures/evil6_walls/e6tdoor_fx.tga
+		tcmod scroll -1 0
+		blendFunc add
+	}
+	{
+		map textures/evil6_walls/e6tdoor.tga
+		blendFunc blend
+	}
+	{
+		map $lightmap
+		blendFunc filter
+	}
 }
-
-
-
-
-

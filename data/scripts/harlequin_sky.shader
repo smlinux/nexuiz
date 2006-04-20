@@ -174,4 +174,3 @@ textures/harlequin_sky/jf-palace_noglow
 }
 
 //   ---stop cutting here---
-

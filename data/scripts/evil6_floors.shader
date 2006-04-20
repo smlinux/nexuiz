@@ -5,7 +5,6 @@ textures/evil6_floors/e6bsegrtflr128_s
 	surfaceparm nomarks
 	surfaceparm metalsteps
 	cull none
-
 	{
 		map textures/evil6_floors/e6bsegrtflr128.tga
 		alphafunc GE128
@@ -25,7 +24,6 @@ textures/evil6_floors/e6bsegrtflr256_s
 	surfaceparm nomarks
 	surfaceparm metalsteps
 	cull none
-
 	{
 		map textures/evil6_floors/e6bsegrtflr256.tga
 		alphafunc GE128
@@ -45,7 +43,6 @@ textures/evil6_floors/e6grate_flr_b_s
 	surfaceparm nomarks
 	surfaceparm metalsteps
 	cull none
-
 	{
 		map textures/evil6_floors/e6grate_flr_b.tga
 		alphafunc GE128
@@ -65,7 +62,6 @@ textures/evil6_floors/e6grate_flr_s
 	surfaceparm nomarks
 	surfaceparm metalsteps
 	cull none
-
 	{
 		map textures/evil6_floors/e6grate_flr.tga
 		alphafunc GE128
@@ -85,7 +81,6 @@ textures/evil6_floors/e6grtfloorceil_s
 	surfaceparm nomarks
 	surfaceparm metalsteps
 	cull none
-
 	{
 		map textures/evil6_floors/e6grtfloorceil.tga
 		alphafunc GE128
@@ -105,7 +100,6 @@ textures/evil6_floors/e6grate2_flr_s
 	surfaceparm nomarks
 	surfaceparm metalsteps
 	cull none
-
 	{
 		map textures/evil6_floors/e6grate2_flr.tga
 		alphafunc GE128
@@ -125,7 +119,6 @@ textures/evil6_floors/e6grate2_flr_b_s
 	surfaceparm nomarks
 	surfaceparm metalsteps
 	cull none
-
 	{
 		map textures/evil6_floors/e6grate2_flr_b.tga
 		alphafunc GE128
@@ -144,7 +137,6 @@ textures/evil6_floors/e6launchcfloor_s
 	q3map_lightimage textures/evil6_floors/e6launchcfloor_glow.tga
 	q3map_surfacelight 400
 	surfaceparm nomarks
-
 	{
 		map textures/evil6_floors/e6launchcfloor.tga
 	}
@@ -171,7 +163,6 @@ textures/evil6_floors/e6launchengine_s
 	q3map_lightimage textures/evil6_floors/e6launchengine_glow.tga
 	q3map_surfacelight 400
 	surfaceparm nomarks
-
 	{
 		map textures/evil6_floors/e6launchengine.tga
 	}
@@ -198,7 +189,6 @@ textures/evil6_floors/e6launchlfloor_s
 	q3map_lightimage textures/evil6_floors/e6launchlfloor_glow.tga
 	q3map_surfacelight 400
 	surfaceparm nomarks
-
 	{
 		map textures/evil6_floors/e6launchlfloor.tga
 	}
@@ -222,7 +212,6 @@ textures/evil6_floors/e6launchlfloor_s
 textures/evil6_floors/e6tekmtlrflr_h_full_slow
 {
 	qer_editorimage textures/evil6_floors/e6tekmtlrflr_h.tga
-
 	{
 		map textures/evil6_floors/e6tekmtlrflr_h.tga
 	}
@@ -240,7 +229,6 @@ textures/evil6_floors/e6tekmtlrflr_h_full_slow
 textures/evil6_floors/e6tekmtlrflr_h_small_noisy_fast
 {
 	qer_editorimage textures/evil6_floors/e6tekmtlrflr_h.tga
-
 	{
 		map textures/evil6_floors/e6tekmtlrflr_h.tga
 	}
@@ -262,7 +250,6 @@ textures/evil6_floors/e6xgratebasic_b_s
 	surfaceparm nomarks
 	surfaceparm metalsteps
 	cull none
-
 	{
 		map textures/evil6_floors/e6xgratebasic_b.tga
 		alphafunc GE128
@@ -282,7 +269,6 @@ textures/evil6_floors/e6xgratebasic_s
 	surfaceparm nomarks
 	surfaceparm metalsteps
 	cull none
-
 	{
 		map textures/evil6_floors/e6xgratebasic.tga
 		alphafunc GE128
