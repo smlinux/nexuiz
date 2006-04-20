@@ -1,6 +1,6 @@
-void Item_ClearRespawnEffect (void) {
-	self.effects = self.effects - (self.effects & EF_STARDUST);
-}
+//void Item_ClearRespawnEffect (void) {
+//	self.effects = self.effects - (self.effects & EF_STARDUST);
+//}
 
 void Item_Respawn (void)
 {
@@ -9,10 +9,12 @@ void Item_Respawn (void)
 	sound (self, CHAN_VOICE, "misc/itemrespawn.ogg", 1, ATTN_NORM);	// play respawn sound
 	setorigin (self, self.origin);
 
-	// Savage: Add simple Respawn effect and make sure it gets removed
-	self.effects = self.effects | EF_STARDUST;
-	self.think = Item_ClearRespawnEffect;
-	self.nextthink = time + 0.1;
+	// LordHavoc: replaced respawn stardust effect with a custom te_wizspike
+	te_wizspike(self.origin + self.mins_z * '0 0 1' + '0 0 48');
+	//// Savage: Add simple Respawn effect and make sure it gets removed
+	//self.effects = self.effects | EF_STARDUST;
+	//self.think = Item_ClearRespawnEffect;
+	//self.nextthink = time + 0.1;
 }
 
 void Item_Touch (void)
@@ -97,7 +99,7 @@ void Item_Touch (void)
 	{
 		if (cvar("deathmatch") == 2 && self.flags & FL_WEAPON && other.items & self.items && self.classname != "droppedweapon")
 			return;
-		
+
 		if (self.ammo_shells)
 			other.ammo_shells = min (other.ammo_shells + self.ammo_shells, 999);
 		if (self.ammo_nails)
@@ -177,7 +179,7 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 {
 	vector org;
 	org = self.origin;
-	
+
 	if (!(cvar("g_pickup_items") && !cvar("g_nixnex")) && !cvar("g_minstagib") &&
 			itemid != IT_STRENGTH && itemid != IT_INVINCIBLE && itemid != IT_HEALTH)
 	{
@@ -219,8 +221,8 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 		}
 	}
 
-	if(itemid & (IT_STRENGTH | IT_INVINCIBLE | IT_HEALTH | IT_ARMOR | IT_KEY1 | IT_KEY2 | 
-				IT_ROCKET_LAUNCHER | IT_HAGAR | IT_NEX | IT_CRYLINK | IT_ELECTRO | 
+	if(itemid & (IT_STRENGTH | IT_INVINCIBLE | IT_HEALTH | IT_ARMOR | IT_KEY1 | IT_KEY2 |
+				IT_ROCKET_LAUNCHER | IT_HAGAR | IT_NEX | IT_CRYLINK | IT_ELECTRO |
 				IT_GRENADE_LAUNCHER | IT_UZI | IT_SHOTGUN | IT_LASER) && self.classname != "droppedweapon")
 	{
 		self.target = "###item###"; // for finding the nearest item using find()
