@@ -112,19 +112,17 @@ void GrapplingHookThink()
 			newlength = self.rope_length;
 
 			// first pull the rope...
-			if(!self.owner.button5) // crouch key = don't pull
-			{
-				newlength = max(newlength - pullspeed * 0.1, minlength);
+			newlength = max(newlength - pullspeed * 0.1, minlength);
 
-				if(newlength < dist - ropestretch) // overstretched?
-				{
-					newlength = dist - ropestretch;
-					if(self.owner.velocity * dir < 0) // only if not already moving in hook direction
-						self.owner.velocity = self.owner.velocity + 0.1 * dir * rubberforce_overstretch;
-				}
+			if(newlength < dist - ropestretch) // overstretched?
+			{
+				newlength = dist - ropestretch;
+				if(self.owner.velocity * dir < 0) // only if not already moving in hook direction
+					self.owner.velocity = self.owner.velocity + 0.1 * dir * rubberforce_overstretch;
 			}
 
-			self.rope_length = newlength;
+			if(!self.owner.button5) // crouch key = don't pull
+				self.rope_length = newlength;
 
 			// then pull the player
 			spd = bound(0, (dist - self.rope_length) / ropestretch, 1);
