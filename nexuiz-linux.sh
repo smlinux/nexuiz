@@ -1,16 +1,16 @@
 #!/bin/sh
 
-path=`dirname ${0}`
-link=`readlink ${0}`
+path="`dirname \"${0}\"`"
+link="`readlink \"${0}\"`"
 
-sndspeed=`lsmod | grep ac97 > /dev/null 2>&1 && echo "-sndspeed 48000"`
+lsmod | grep ac97 > /dev/null 2>&1 && sndspeed="-sndspeed 48000"
 
-[ -n "$link" ] && path=`dirname $link`
-cd "$path"
+[ -n "${link}" ] && path="`dirname \"${link}\"`"
+cd "${path}"
 
 case "$(uname -m)" in
   x86_64)	nexuiz="nexuiz-linux-x86_64-sdl" ;;
   *)		nexuiz="nexuiz-linux-686-sdl" ;;
 esac
 
-echo exec ./$nexuiz $sndspeed "${@}"
+exec ./${nexuiz} ${sndspeed} "${@}"
