@@ -41,9 +41,9 @@ void(float req) w_glauncher =
 void W_Grenade_Explode (void)
 {
 	vector	org2;
-	org2 = findbetterlocation (self.origin);
+	org2 = findbetterlocation (self.origin, 12);
 	te_explosion (org2);
-	effect (org2, "models/sprites/grenexpl.spr", 0, 12, 35);
+	//effect (org2, "models/sprites/grenexpl.spr", 0, 12, 35);
 	sound (self, CHAN_BODY, "weapons/grenade_impact.ogg", 1, ATTN_NORM);
 
 	self.event_damage = SUB_Null;
@@ -55,9 +55,9 @@ void W_Grenade_Explode (void)
 void W_Grenade_Explode2 (void)
 {
 	vector	org2;
-	org2 = findbetterlocation (self.origin);
+	org2 = findbetterlocation (self.origin, 12);
 	te_explosion (org2);
-	effect (org2, "models/sprites/grenexpl.spr", 0, 12, 35);
+	//effect (org2, "models/sprites/grenexpl.spr", 0, 12, 35);
 	sound (self, CHAN_BODY, "weapons/grenade_impact.ogg", 1, ATTN_NORM);
 
 	self.event_damage = SUB_Null;

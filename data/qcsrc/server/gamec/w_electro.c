@@ -40,11 +40,13 @@ void(float req) w_electro =
 
 void W_Plasma_Explode (void)
 {
+	vector org2;
+	org2 = findbetterlocation (self.origin, 8);
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 	WriteByte (MSG_BROADCAST, 79);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
+	WriteCoord (MSG_BROADCAST, org2_x);
+	WriteCoord (MSG_BROADCAST, org2_y);
+	WriteCoord (MSG_BROADCAST, org2_z);
 	WriteCoord (MSG_BROADCAST, 0);		// SeienAbunae: groan... Useless clutter
 	WriteCoord (MSG_BROADCAST, 0);
 	WriteCoord (MSG_BROADCAST, 0);
@@ -63,8 +65,18 @@ void W_Plasma_Explode (void)
 void W_Plasma_Explode_Combo (void) {
 	vector org2;
 
-	org2 = findbetterlocation (self.origin);
-	effect (org2, "models/sprites/electrocombo.spr32", 0, 30, 35);
+	org2 = findbetterlocation (self.origin, 8);
+	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+	WriteByte (MSG_BROADCAST, 79);
+	WriteCoord (MSG_BROADCAST, org2_x);
+	WriteCoord (MSG_BROADCAST, org2_y);
+	WriteCoord (MSG_BROADCAST, org2_z);
+	WriteCoord (MSG_BROADCAST, 0);		// SeienAbunae: groan... Useless clutter
+	WriteCoord (MSG_BROADCAST, 0);
+	WriteCoord (MSG_BROADCAST, 0);
+	WriteByte (MSG_BROADCAST, 155);
+	//effect (org2, "models/sprites/electrocombo.spr32", 0, 30, 35);
+
 	sound (self, CHAN_BODY, "weapons/electro_impact_combo.ogg", 1, ATTN_NORM);
 
 	self.event_damage = SUB_Null;
@@ -105,13 +117,15 @@ void W_Plasma_Damage (entity inflictor, entity attacker, float damage, float dea
 	self.health = self.health - damage;
 	if (self.health <= 0)
 	{
+		self.takedamage = DAMAGE_NO;
+		self.nextthink = time;
 		if (inflictor.classname == "plasma_chain" || inflictor.classname == "plasma_prim")
 		{
 			self.classname = "plasma_chain";
-			W_Plasma_Explode_Combo ();
+			self.think = W_Plasma_Explode_Combo;
 		}
 		else
-			W_Plasma_Explode ();
+			self.think = W_Plasma_Explode;
 	}
 }
 

@@ -42,9 +42,9 @@ void W_Hagar_Explode (void)
 {
 	vector	org2;
 	float b;
-	org2 = findbetterlocation (self.origin);
+	org2 = findbetterlocation (self.origin, 12);
 	te_explosion (org2);
-	effect (org2, "models/sprites/hagar.spr", 0, 12, 35);
+	//effect (org2, "models/sprites/hagar.spr", 0, 12, 35);
 	b = crandom();
 	if (b<-0.7)
 		sound (self, CHAN_BODY, "weapons/hagexp1.ogg", 1, ATTN_NORM);
@@ -63,9 +63,9 @@ void W_Hagar_Explode2 (void)
 {
 	vector	org2;
 	float b;
-	org2 = findbetterlocation (self.origin);
+	org2 = findbetterlocation (self.origin, 12);
 	te_explosion (org2);
-	effect (org2, "models/sprites/hagar.spr", 0, 12, 35);
+	//effect (org2, "models/sprites/hagar.spr", 0, 12, 35);
 	b = crandom();
 	if (b<-0.7)
 		sound (self, CHAN_BODY, "weapons/hagexp1.ogg", 1, ATTN_NORM);

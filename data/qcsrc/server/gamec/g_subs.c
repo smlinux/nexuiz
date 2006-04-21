@@ -252,62 +252,32 @@ Returns a point at least 12 units away from walls
 Ripped from DPMod
 ==================
 */
-vector findbetterlocation (vector org)
+vector findbetterlocation (vector org, float mindist)
 {
 	vector	loc;
+	vector vec;
+	float c;
 
-	traceline (org, org - '12 0 0', TRUE, world);
-	if (trace_fraction < 1)
+	vec = mindist * '1 0 0';
+	c = 0;
+	while (c < 6)
 	{
-		loc = trace_endpos;
-		traceline (loc, loc + '12 0 0', TRUE, world);
-		if (trace_fraction >= 1)
-			org = loc + '12 0 0';
-	}
-
-	traceline (org, org - '-12 0 0', TRUE, world);
-	if (trace_fraction < 1)
-	{
-		loc = trace_endpos;
-		traceline (loc, loc + '-12 0 0', TRUE, world);
-		if (trace_fraction >= 1)
-			org = loc + '-12 0 0';
-	}
-
-	traceline (org, org - '0 12 0' , TRUE, world);
-	if (trace_fraction < 1)
-	{
-		loc = trace_endpos;
-		traceline (loc, loc + '0 12 0', TRUE, world);
-		if (trace_fraction >= 1)
-			org = loc + '0 12 0';
-	}
-
-	traceline (org, org - '0 -12 0', TRUE, world);
-	if (trace_fraction < 1)
-	{
-		loc = trace_endpos;
-		traceline (loc, loc + '0 -12 0', TRUE, world);
-		if (trace_fraction >= 1)
-			org = loc + '0 -12 0';
-	}
-
-	traceline (org, org - '0 0 12' , TRUE, world);
-	if (trace_fraction < 1)
-	{
-		loc = trace_endpos;
-		traceline (loc, loc + '0 0 12', TRUE, world);
-		if (trace_fraction >= 1)
-			org = loc + '0 0 12';
-	}
-
-	traceline (org, org - '0 0 -12', TRUE, world);
-	if (trace_fraction < 1)
-	{
-		loc = trace_endpos;
-		traceline (loc, loc + '0 0 -12', TRUE, world);
-		if (trace_fraction >= 1)
-			org = loc + '0 0 -12';
+		traceline (org, org + vec, TRUE, world);
+		vec = vec * -1;
+		if (trace_fraction < 1)
+		{
+			loc = trace_endpos;
+			traceline (loc, loc + vec, TRUE, world);
+			if (trace_fraction >= 1)
+				org = loc + vec;
+		}
+		if (c & 1)
+		{
+			vec_z = vec_y;
+			vec_y = vec_x;
+			vec_x = vec_z;
+		}
+		c = c + 1;
 	}
 
 	return org;

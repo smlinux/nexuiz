@@ -1,4 +1,5 @@
 /*
+// quake wizard spike impact
 effect TE_WIZSPIKE
 count 30
 type alphastatic
@@ -8,6 +9,8 @@ originjitter 4 4 4
 velocityjitter 16 16 16
 */
 
+// item respawn effect
+// flare particle and light
 effect TE_WIZSPIKE
 countabsolute 1
 type static
@@ -17,7 +20,7 @@ alpha 128 128 128
 lightradius 200
 lightradiusfade 200
 lightcolor 0.4 0.9 0.9
-
+// cloud of particles which expand rapidly and then slow to form a ball
 effect TE_WIZSPIKE
 count 100
 type static
@@ -29,6 +32,8 @@ liquidfriction 2
 originjitter 16 16 16
 velocityjitter 32 32 32
 
+/*
+// quake hell knight fireball impact
 effect TE_KNIGHTSPIKE
 count 20
 type alphastatic
@@ -36,227 +41,276 @@ color 0x5f0700 0xcf632b
 alpha 51 256 512
 originjitter 4 4 4
 velocityjitter 16 16 16
+*/
 
-effect TE_SPIKE
-count 15
-type spark
-color 0x8f4333 0xfff31b
-size 0.4 0.4
-alpha 0 256 768
-gravity 1
-bounce -1
-velocityoffset 0 0 80
-velocityjitter 64 64 64
-
-effect TE_SPIKE
-count 4
-type smoke
-tex 0 8
-color 0x101010 0x202020
-size 3 3
-alpha 0 256 512
-originjitter 2 2 2
-velocityjitter 8 8 8
-
-effect TE_SPIKE
+// laser impact
+// decal
+effect TE_KNIGHTSPIKE
 countabsolute 1
 type decal
-tex 8 16
-size 3 3
+tex 47 47
+size 24 24
 alpha 256 256 0
-originjitter 6 6 6
-
-effect TE_SPIKEQUAD
-count 15
-type spark
-color 0x8f4333 0xfff31b
-size 0.4 0.4
-alpha 0 256 768
-gravity 1
-bounce -1
-velocityoffset 0 0 80
-velocityjitter 64 64 64
-
-effect TE_SPIKEQUAD
-count 4
-type smoke
-tex 0 8
-color 0x101010 0x202020
-size 3 3
-alpha 0 256 512
-originjitter 2 2 2
-velocityjitter 8 8 8
-
-effect TE_SPIKEQUAD
-countabsolute 1
-type decal
-tex 8 16
-size 3 3
-alpha 256 256 0
-originjitter 6 6 6
-lightradius 100
-lightradiusfade 500
-lightcolor 0.15 0.15 1.5
-
-effect TE_SUPERSPIKE
-count 30
-type spark
-color 0x8f4333 0xfff31b
-size 0.4 0.4
-alpha 0 256 768
-gravity 1
-bounce -1
-velocityoffset 0 0 80
-velocityjitter 64 64 64
-
-effect TE_SUPERSPIKE
-count 8
-type smoke
-tex 0 8
-color 0x101010 0x202020
-size 3 3
-alpha 0 256 512
-originjitter 2 2 2
-velocityjitter 8 8 8
-
-effect TE_SUPERSPIKE
-countabsolute 1
-type decal
-tex 8 16
-size 3 3
-alpha 256 256 0
-originjitter 6 6 6
-
-effect TE_SUPERSPIKEQUAD
-count 30
-type spark
-color 0x8f4333 0xfff31b
-size 0.4 0.4
-alpha 0 256 768
-gravity 1
-bounce -1
-velocityoffset 0 0 80
-velocityjitter 64 64 64
-
-effect TE_SUPERSPIKEQUAD
-count 8
-type smoke
-tex 0 8
-color 0x101010 0x202020
-size 3 3
-alpha 0 256 512
-originjitter 2 2 2
-velocityjitter 8 8 8
-
-effect TE_SUPERSPIKEQUAD
-countabsolute 1
-type decal
-tex 8 16
-size 3 3
-alpha 256 256 0
-originjitter 6 6 6
-lightradius 100
-lightradiusfade 500
-lightcolor 0.15 0.15 1.5
-
-effect TE_GUNSHOT
-count 15
-type spark
-color 0x8f4333 0xfff31b
-size 0.4 0.4
-alpha 0 256 768
-gravity 1
-bounce -1
-velocityoffset 0 0 80
-velocityjitter 64 64 64
-
-effect TE_GUNSHOT
-count 4
-type smoke
-tex 0 8
-color 0x101010 0x202020
-size 3 3
-alpha 0 256 512
-originjitter 2 2 2
-velocityjitter 8 8 8
-
-effect TE_GUNSHOT
-countabsolute 1
-type decal
-tex 8 16
-size 3 3
-alpha 256 256 0
-originjitter 6 6 6
-
-effect TE_GUNSHOTQUAD
-count 15
-type spark
-color 0x8f4333 0xfff31b
-size 0.4 0.4
-alpha 0 256 768
-gravity 1
-bounce -1
-velocityoffset 0 0 80
-velocityjitter 64 64 64
-
-effect TE_GUNSHOTQUAD
-count 4
-type smoke
-tex 0 8
-color 0x101010 0x202020
-size 3 3
-alpha 0 256 512
-originjitter 2 2 2
-velocityjitter 8 8 8
-
-effect TE_GUNSHOTQUAD
-countabsolute 1
-type decal
-tex 8 16
-size 3 3
-alpha 256 256 0
-originjitter 6 6 6
-lightradius 100
-lightradiusfade 500
-lightcolor 0.15 0.15 1.5
-
-effect TE_EXPLOSION
-underwater
-count 128
-type bubble
-tex 62 62
-color 0x404040 0x808080
-size 2 2
-alpha 128 256 64
-gravity -0.125
-bounce 1.5
-liquidfriction 0.25
 originjitter 16 16 16
-velocityjitter 96 96 96
-
-effect TE_EXPLOSION
-notunderwater
-count 128
+lightradius 200
+lightradiusfade 1000
+lightcolor 4 0.2 0.2
+// flare effect
+effect TE_KNIGHTSPIKE
+countabsolute 1
+type static
+tex 39 39
+color 0xFF2010 0xFF2010
+alpha 256 256 1024
+size 24 24
+// sparks that rapidly expand and rapidly slow down to form an interesting spherical effect
+effect TE_KNIGHTSPIKE
+count 256
 type spark
-color 0x903010 0xFFD030
-size 1 1
-alpha 0 256 512
-gravity 1
-airfriction 0.2
-liquidfriction 0.8
-velocityoffset 0 0 80
+color 0x800000 0xFF8020
+alpha 256 256 1024
+size 4 4
+//bounce 1.5
+airfriction 6
+liquidfriction 6
+//originjitter 32 32 32
 velocityjitter 256 256 256
 
-effect TE_EXPLOSION
-notunderwater
-count 32
+// machinegun bullet impact
+// bullet impact decal
+effect TE_SPIKE
+countabsolute 1
+type decal
+tex 56 59
+size 5 5
+alpha 256 256 0
+originjitter 6 6 6
+// dust/smoke drifting away from the impact
+effect TE_SPIKE
+count 10
 type smoke
-color 0x202020 0x404040
 tex 0 8
-size 12 12
-alpha 32 32 64
-velocityjitter 48 48 48
+color 0x101010 0x202020
+size 6 6
+airfriction 2
+liquidfriction 2
+alpha 128 256 256
+originjitter 4 4 4
+velocityjitter 24 24 24
+// bouncing sparks
+effect TE_SPIKE
+count 20
+type spark
+color 0x8f4333 0xfff31b
+size 0.4 0.4
+alpha 0 256 256
+gravity 1
+bounce 1.5
+velocityoffset 0 0 80
+velocityjitter 64 64 64
 
+// quake effect
+// decal
+effect TE_SPIKEQUAD
+countabsolute 1
+type decal
+tex 56 59
+size 3 3
+alpha 256 256 0
+originjitter 6 6 6
+lightradius 100
+lightradiusfade 500
+lightcolor 0.15 0.15 1.5
+// dust/smoke drifting away from the impact
+effect TE_SPIKEQUAD
+count 4
+type smoke
+tex 0 8
+color 0x101010 0x202020
+size 3 3
+alpha 0 256 512
+originjitter 2 2 2
+velocityjitter 8 8 8
+// sparks that disappear on impact
+effect TE_SPIKEQUAD
+count 15
+type spark
+color 0x8f4333 0xfff31b
+size 0.4 0.4
+alpha 0 256 768
+gravity 1
+bounce -1
+velocityoffset 0 0 80
+velocityjitter 64 64 64
+
+// quake effect
+// decal
+effect TE_SUPERSPIKE
+countabsolute 1
+type decal
+tex 56 59
+size 3 3
+alpha 256 256 0
+originjitter 6 6 6
+// dust/smoke drifting away from the impact
+effect TE_SUPERSPIKE
+count 8
+type smoke
+tex 0 8
+color 0x101010 0x202020
+size 3 3
+alpha 0 256 512
+originjitter 2 2 2
+velocityjitter 8 8 8
+// sparks that disappear on impact
+effect TE_SUPERSPIKE
+count 30
+type spark
+color 0x8f4333 0xfff31b
+size 0.4 0.4
+alpha 0 256 768
+gravity 1
+bounce -1
+velocityoffset 0 0 80
+velocityjitter 64 64 64
+
+// quake effect
+// decal
+effect TE_SUPERSPIKEQUAD
+countabsolute 1
+type decal
+tex 56 59
+size 3 3
+alpha 256 256 0
+originjitter 6 6 6
+lightradius 100
+lightradiusfade 500
+lightcolor 0.15 0.15 1.5
+// dust/smoke drifting away from the impact
+effect TE_SUPERSPIKEQUAD
+count 8
+type smoke
+tex 0 8
+color 0x101010 0x202020
+size 3 3
+alpha 0 256 512
+originjitter 2 2 2
+velocityjitter 8 8 8
+// sparks that disappear on impact
+effect TE_SUPERSPIKEQUAD
+count 30
+type spark
+color 0x8f4333 0xfff31b
+size 0.4 0.4
+alpha 0 256 768
+gravity 1
+bounce -1
+velocityoffset 0 0 80
+velocityjitter 64 64 64
+
+// shotgun pellet impact
+// decal
+effect TE_GUNSHOT
+countabsolute 1
+type decal
+tex 56 59
+size 3 3
+alpha 256 256 0
+originjitter 6 6 6
+// dust/smoke drifting away from the impact
+effect TE_GUNSHOT
+count 3
+type smoke
+tex 0 8
+color 0x101010 0x202020
+size 6 6
+airfriction 2
+liquidfriction 2
+alpha 128 256 256
+originjitter 4 4 4
+velocityjitter 24 24 24
+// bouncing sparks
+effect TE_GUNSHOT
+count 10
+type spark
+color 0x8f4333 0xfff31b
+size 0.4 0.4
+alpha 0 64 64
+gravity 1
+bounce 1.5
+velocityoffset 0 0 80
+velocityjitter 64 64 64
+
+/*
+// quake effect
+// decal
+effect TE_GUNSHOTQUAD
+countabsolute 1
+type decal
+tex 56 59
+size 3 3
+alpha 256 256 0
+originjitter 6 6 6
+lightradius 100
+lightradiusfade 500
+lightcolor 0.15 0.15 1.5
+// dust/smoke drifting away from the impact
+effect TE_GUNSHOTQUAD
+count 4
+type smoke
+tex 0 8
+color 0x101010 0x202020
+size 3 3
+alpha 0 256 512
+originjitter 2 2 2
+velocityjitter 8 8 8
+// sparks that disappear on impact
+effect TE_GUNSHOTQUAD
+count 15
+type spark
+color 0x8f4333 0xfff31b
+size 0.4 0.4
+alpha 0 256 768
+gravity 1
+bounce -1
+velocityoffset 0 0 80
+velocityjitter 64 64 64
+*/
+
+// crylink impact effect
+// decal
+effect TE_GUNSHOTQUAD
+countabsolute 1
+type decal
+tex 47 47
+size 8 8
+alpha 256 256 0
+originjitter 12 12 12
+lightradius 100
+lightradiusfade 300
+lightcolor 0.5 0.5 0.5
+// purple flare effect
+effect TE_GUNSHOTQUAD
+countabsolute 1
+type static
+tex 39 39
+color 0x504060 0x504060
+size 8 8
+alpha 256 256 512
+// purple sparks
+effect TE_GUNSHOTQUAD
+count 12
+type spark
+color 0xA040C0 0xFFFFFF
+size 1 1
+alpha 128 128 384
+gravity 1
+bounce 1.5
+velocityoffset 0 0 80
+velocityjitter 128 128 128
+
+// mortar/hagar explosion (smaller than rocket)
+// decal
 effect TE_EXPLOSION
 countabsolute 1
 type decal
@@ -264,13 +318,33 @@ tex 8 16
 size 48 48
 alpha 256 256 0
 originjitter 40 40 40
-
-effect TE_EXPLOSION
 lightradius 350
 lightradiusfade 700
 lightcolor 4 2 0.5
-
-effect TE_EXPLOSIONQUAD
+// flare effect
+effect TE_EXPLOSION
+countabsolute 1
+type static
+tex 35 37
+color 0x404040 0x404040
+size 48 48
+alpha 128 128 64
+// fire effect which expands then slows
+effect TE_EXPLOSION
+notunderwater
+count 128
+type static
+tex 48 55
+color 0x902010 0xFFD080
+size 16 16
+alpha 128 128 256
+bounce 1.5
+airfriction 4
+liquidfriction 4
+originjitter 8 8 8
+velocityjitter 256 256 256
+// underwater bubbles
+effect TE_EXPLOSION
 underwater
 count 128
 type bubble
@@ -283,30 +357,68 @@ bounce 1.5
 liquidfriction 0.25
 originjitter 16 16 16
 velocityjitter 96 96 96
-
-effect TE_EXPLOSIONQUAD
+// bouncing sparks
+effect TE_EXPLOSION
 notunderwater
-count 128
+count 32
 type spark
 color 0x903010 0xFFD030
-size 1 1
-alpha 0 256 512
+size 2 2
+alpha 256 256 384
 gravity 1
 airfriction 0.2
+bounce 1.5
 liquidfriction 0.8
 velocityoffset 0 0 80
 velocityjitter 256 256 256
-
-effect TE_EXPLOSIONQUAD
-notunderwater
+/*
+// experimental black smoke
+effect TE_EXPLOSION
 count 32
-type smoke
-color 0x202020 0x404040
+type alphastatic
 tex 0 8
-size 12 12
-alpha 32 32 64
-velocityjitter 48 48 48
+color 0x000000 0x000000
+size 32 32
+alpha 128 256 512
+bounce 1.5
+airfriction 5
+liquidfriction 5
+originjitter 10 10 10
+velocityjitter 256 256 256
+*/
+/*
+// experimental debris
+effect TE_EXPLOSION
+count 32
+type alphastatic
+tex 0 8
+color 0x202020 0x404040
+size 2 4
+alpha 128 256 128
+gravity 1
+airfriction 0.4
+bounce 1.5
+liquidfriction 0.8
+velocityoffset 0 0 80
+velocityjitter 256 256 256
+*/
+/*
+// experimental dark smoke
+effect TE_EXPLOSION
+count 16
+type alphastatic
+tex 0 8
+color 0x101010 0x202020
+size 32 32
+alpha 128 256 256
+airfriction 2
+liquidfriction 2
+originjitter 24 24 24
+velocityjitter 64 64 64
+*/
 
+// quake effect
+// decal
 effect TE_EXPLOSIONQUAD
 countabsolute 1
 type decal
@@ -314,12 +426,70 @@ tex 8 16
 size 48 48
 alpha 256 256 0
 originjitter 40 40 40
-
-effect TE_EXPLOSIONQUAD
 lightradius 350
 lightradiusfade 700
 lightcolor 4 2 8
+// smoke cloud
+effect TE_EXPLOSIONQUAD
+notunderwater
+count 32
+type smoke
+color 0x202020 0x404040
+tex 0 8
+size 12 12
+alpha 32 32 64
+velocityjitter 48 48 48
+// underwater bubbles
+effect TE_EXPLOSIONQUAD
+underwater
+count 128
+type bubble
+tex 62 62
+color 0x404040 0x808080
+size 2 2
+alpha 128 256 64
+gravity -0.125
+bounce 1.5
+liquidfriction 0.25
+originjitter 16 16 16
+velocityjitter 96 96 96
+// sparks which go through walls
+effect TE_EXPLOSIONQUAD
+notunderwater
+count 128
+type spark
+color 0x903010 0xFFD030
+size 1 1
+alpha 0 256 512
+gravity 1
+airfriction 0.2
+liquidfriction 0.8
+velocityoffset 0 0 80
+velocityjitter 256 256 256
 
+// quake effect
+// decal
+effect TE_TAREXPLOSION
+countabsolute 1
+type decal
+tex 8 16
+size 48 48
+alpha 256 256 0
+originjitter 40 40 40
+lightradius 600
+lightradiusfade 1200
+lightcolor 1.6 0.8 2
+// smoke cloud
+effect TE_TAREXPLOSION
+notunderwater
+count 32
+type smoke
+color 0x202020 0x404040
+tex 0 8
+size 12 12
+alpha 32 32 64
+velocityjitter 48 48 48
+// underwater bubbles
 effect TE_TAREXPLOSION
 underwater
 count 128
@@ -333,7 +503,7 @@ bounce 1.5
 liquidfriction 0.25
 originjitter 16 16 16
 velocityjitter 96 96 96
-
+// sparks which go through walls
 effect TE_TAREXPLOSION
 notunderwater
 count 128
@@ -347,29 +517,7 @@ liquidfriction 0.8
 velocityoffset 0 0 80
 velocityjitter 256 256 256
 
-effect TE_TAREXPLOSION
-notunderwater
-count 32
-type smoke
-color 0x202020 0x404040
-tex 0 8
-size 12 12
-alpha 32 32 64
-velocityjitter 48 48 48
-
-effect TE_TAREXPLOSION
-countabsolute 1
-type decal
-tex 8 16
-size 48 48
-alpha 256 256 0
-originjitter 40 40 40
-
-effect TE_TAREXPLOSION
-lightradius 600
-lightradiusfade 1200
-lightcolor 1.6 0.8 2
-
+// bloody impact effect indicating damage
 effect TE_BLOOD
 count 0.333
 type blood
@@ -382,6 +530,7 @@ liquidfriction 4
 velocityjitter 64 64 64
 velocitymultiplier 1
 
+// sparks (quake effect)
 effect TE_SPARK
 count 1
 type spark
@@ -394,22 +543,58 @@ velocityoffset 0 0 80
 velocityjitter 64 64 64
 velocitymultiplier 1
 
+// nex impact
+// decal
 effect TE_PLASMABURN
 countabsolute 1
 type decal
-tex 8 16
-size 6 6
+tex 47 47
+size 24 24
 alpha 256 256 0
-originjitter 6 6 6
+originjitter 16 16 16
 lightradius 200
 lightradiusfade 1000
 lightcolor 1 1 1
+// flare effect
+effect TE_PLASMABURN
+countabsolute 1
+type static
+tex 37 37
+color 0x80C0FF 0x80C0FF
+size 16 16
+alpha 256 256 1024
+/*
+// experimental
+effect TE_PLASMABURN
+count 64
+type static
+color 0x2030FF 0x80C0FF
+size 2 4
+alpha 256 256 512
+bounce 1.5
+airfriction 8
+liquidfriction 8
+velocityjitter 512 512 512
+*/
+// small sparks which form a sphere as they slow down
+effect TE_PLASMABURN
+count 256
+type spark
+color 0x2030FF 0x80C0FF
+size 1 2
+alpha 256 256 1024
+bounce 2
+airfriction 8
+liquidfriction 8
+velocityjitter 128 128 128
 
+// quake effect
 effect TE_SMALLFLASH
 lightradius 200
 lightradiusfade 1000
 lightcolor 2 2 2
 
+// quake effect
 effect TE_FLAMEJET
 count 1
 type smoke
@@ -423,6 +608,7 @@ liquidfriction 4
 velocityjitter 128 128 128
 velocitymultiplier 1
 
+// quake effect
 effect TE_LAVASPLASH
 count 64
 type alphastatic
@@ -435,6 +621,7 @@ originjitter 128 128 32
 velocityoffset 0 0 256
 velocityjitter 128 128 0
 
+// player teleport effect
 effect TE_TELEPORT
 count 112
 type static
@@ -447,14 +634,45 @@ originoffset 0 0 28
 originjitter 16 16 28
 velocityjitter 0 0 256
 
+// nex beam
 effect TE_TEI_G3
 countabsolute 1
 type beam
 tex 60 60
 color 0xFFFFFF 0xFFFFFF
-size 8 8
-alpha 256 256 256
+size 4 4
+alpha 128 128 256
+/*
+// experimental
+effect TE_TEI_G3
+trailspacing 2
+type static
+color 0x202020 0x404040
+size 1 1
+alpha 256 256 512
+airfriction -4
+liquidfriction -4
+velocityjitter 8 8 8
+*/
+/*
+// experimental
+effect TE_TEI_G3
+trailspacing 1
+type static
+tex 0 8
+color 0x202020 0x404040
+size 1 1
+sizeincrease 1
+alpha 256 256 128
+gravity -0.01
+//bounce 1.5
+//airfriction 4
+//liquidfriction 4
+//velocityoffset 0 0 80
+//velocityjitter 4 4 4
+*/
 
+// smoke effect
 effect TE_TEI_SMOKE
 count 0.333
 type smoke
@@ -466,43 +684,8 @@ originjitter 1.5 1.5 1.5
 velocityjitter 6 6 6
 velocitymultiplier 1
 
-effect TE_TEI_BIGEXPLOSION
-underwater
-count 256
-type bubble
-tex 62 62
-color 0x404040 0x808080
-size 2 2
-alpha 128 256 48
-gravity -0.125
-bounce 1.5
-liquidfriction 0.25
-originjitter 24 24 24
-velocityjitter 144 144 144
-
-effect TE_TEI_BIGEXPLOSION
-notunderwater
-count 256
-type spark
-color 0x903010 0xFFD030
-size 1 1
-alpha 0 256 384
-gravity 1
-airfriction 0.2
-liquidfriction 0.8
-velocityoffset 0 0 120
-velocityjitter 384 384 384
-
-effect TE_TEI_BIGEXPLOSION
-notunderwater
-count 64
-type smoke
-color 0x202020 0x404040
-tex 0 8
-size 12 12
-alpha 32 32 48
-velocityjitter 72 72 72
-
+// rocket explosion (bigger than mortar and hagar)
+// decal
 effect TE_TEI_BIGEXPLOSION
 countabsolute 1
 type decal
@@ -510,45 +693,105 @@ tex 8 16
 size 72 72
 alpha 256 256 0
 originjitter 40 40 40
-
-effect TE_TEI_BIGEXPLOSION
 lightradius 500
 lightradiusfade 500
 lightcolor 4 2 0.5
+// flare effect
+effect TE_TEI_BIGEXPLOSION
+countabsolute 1
+type static
+tex 35 37
+color 0x404040 0x404040
+size 72 72
+alpha 128 128 64
+// fire effect
+effect TE_TEI_BIGEXPLOSION
+count 256
+type static
+tex 48 55
+color 0x902010 0xFFD080
+size 16 16
+alpha 128 128 256
+bounce 1.5
+airfriction 4
+liquidfriction 4
+originjitter 8 8 8
+velocityjitter 512 512 512
+// underwater bubbles
+effect TE_TEI_BIGEXPLOSION
+underwater
+count 256
+type bubble
+tex 62 62
+color 0x404040 0x808080
+size 2 2
+alpha 128 256 64
+gravity -0.125
+bounce 1.5
+liquidfriction 0.25
+originjitter 16 16 16
+velocityjitter 144 144 144
+// bouncing sparks
+effect TE_TEI_BIGEXPLOSION
+notunderwater
+count 128
+type spark
+color 0x903010 0xFFD030
+size 2 2
+alpha 256 256 384
+gravity 1
+airfriction 0.2
+bounce 1.5
+liquidfriction 0.8
+velocityoffset 0 0 80
+velocityjitter 384 384 384
 
+// electro explosion
+// decal
+effect TE_TEI_PLASMAHIT
+countabsolute 1
+type decal
+tex 59 59
+size 32 32
+alpha 256 256 0
+originjitter 20 20 20
+lightradius 200
+lightradiusfade 600
+lightcolor 2.4 4.8 8
+// flare effect
+effect TE_TEI_PLASMAHIT
+countabsolute 1
+type static
+tex 38 38
+color 0x80C0FF 0x80C0FF
+size 32 32
+alpha 256 256 512
+// cloud of bouncing sparks
 effect TE_TEI_PLASMAHIT
 count 1
 type spark
 color 0x2030FF 0x80C0FF
-size 2 2
-alpha 0 256 512
-airfriction 0.2
-liquidfriction 0.8
+size 2 4
+alpha 256 256 1024
+gravity 1
+bounce 1.5
 velocityoffset 0 0 120
-velocityjitter 465 465 465
-
-effect TE_TEI_PLASMAHIT
-countabsolute 1
-type decal
-tex 8 16
-size 16 16
-originjitter 6 6 6
-
+velocityjitter 512 512 512
+/*
+// inner cloud of smoke
 effect TE_TEI_PLASMAHIT
 count 0.25
 type smoke
 color 0x202020 0x404040
 tex 0 8
 size 24 24
-alpha 32 32 64
+alpha 256 256 512
 originjitter 20 20 20
 velocityjitter 32 32 32
+*/
 
-effect TE_TEI_PLASMAHIT
-lightradius 500
-lightradiusfade 2000
-lightcolor 0.6 1.2 2
-
+// rocket trail
+// smoke
 effect TR_ROCKET
 trailspacing 3
 type smoke
@@ -559,7 +802,7 @@ alpha 32 32 32
 lightradius 200
 lighttime 0
 lightcolor 3.0 1.5 0.5
-
+// fire
 effect TR_ROCKET
 notunderwater
 trailspacing 3
@@ -570,7 +813,7 @@ size 3 3
 alpha 144 144 700
 velocityjitter 20 20 20
 velocitymultiplier -0.25
-
+// bubbles
 effect TR_ROCKET
 underwater
 trailspacing 3
@@ -584,6 +827,8 @@ bounce 1.5
 liquidfriction 0.25
 velocityjitter 16 16 16
 
+// grenade trail
+// smoke
 effect TR_GRENADE
 notunderwater
 trailspacing 3
@@ -592,7 +837,7 @@ color 0x303030 0x606060
 tex 0 8
 size 3 3
 alpha 16 16 16
-
+// bubbles
 effect TR_GRENADE
 underwater
 trailspacing 6
@@ -606,6 +851,7 @@ bounce 1.5
 liquidfriction 0.25
 velocityjitter 16 16 16
 
+// normal super gorey blood trail (used by gibs)
 effect TR_BLOOD
 trailspacing 16
 type blood
@@ -619,6 +865,7 @@ liquidfriction 4
 velocityjitter 64 64 64
 velocitymultiplier 0.5
 
+// thinner blood trail (used by quake zombies)
 effect TR_SLIGHTBLOOD
 trailspacing 32
 type blood
@@ -632,6 +879,7 @@ liquidfriction 4
 velocityjitter 64 64 64
 velocitymultiplier 0.5
 
+// quake effect
 effect TR_WIZSPIKE
 trailspacing 3
 type alphastatic
@@ -639,6 +887,7 @@ color 0x372b17 0x73571f
 size 2 2
 alpha 64 64 192
 
+// quake effect
 effect TR_KNIGHTSPIKE
 trailspacing 3
 type alphastatic
@@ -646,6 +895,7 @@ color 0x5f0700 0xcf632b
 size 2 2
 alpha 64 64 192
 
+// quake effect
 effect TR_VORESPIKE
 trailspacing 3
 type alphastatic
@@ -656,16 +906,8 @@ lightradius 200
 lighttime 0
 lightcolor 1.2 0.5 1.0
 
-effect TR_NEHAHRASMOKE
-trailspacing 7
-type alphastatic
-color 0x303030 0x606060
-tex 0 8
-size 7 7
-alpha 64 64 320
-velocityoffset 0 0 8
-velocityjitter 4 4 8
-
+// electro trail
+// smokey sparky thing
 effect TR_NEXUIZPLASMA
 trailspacing 4
 type static
@@ -678,6 +920,7 @@ lighttime 0
 lightcolor 0.75 1.5 3.0
 velocitymultiplier -0.1
 
+// quake effect
 effect EF_FLAME
 count 300
 type smoke
@@ -692,6 +935,7 @@ lightradius 200
 lighttime 0
 lightcolor 2 1.5 0.5
 
+// quake effect
 effect EF_STARDUST
 count 200
 type static

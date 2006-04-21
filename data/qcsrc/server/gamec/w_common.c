@@ -506,7 +506,10 @@ void fireBullet (vector start, vector dir, float spread, float damage, float dty
 	{
 		if (trace_ent.solid == SOLID_BSP && !(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT))
 		{
-			te_gunshot (trace_endpos);
+			if (dtype == IT_SHOTGUN)
+				te_gunshot (trace_endpos);
+			else
+				te_spike (trace_endpos);
 			r = random ();
 			if (r < 0.10)
 				PointSound (trace_endpos, "weapons/ric1.ogg", 1, ATTN_NORM);

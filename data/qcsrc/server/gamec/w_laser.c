@@ -32,6 +32,7 @@ void(float req) w_laser =
 void W_Laser_Touch (void)
 {
 	vector	dir;
+	vector org2;
 
 	if (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
 	{
@@ -43,7 +44,9 @@ void W_Laser_Touch (void)
 		return;
 
 	dir = normalize (self.owner.origin - self.origin);
+	org2 = findbetterlocation (self.origin, 8);
 
+	/*
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 	WriteByte (MSG_BROADCAST, TE_FLAMEJET);
 	WriteCoord (MSG_BROADCAST, self.origin_x);
@@ -55,6 +58,9 @@ void W_Laser_Touch (void)
 	WriteByte (MSG_BROADCAST, 155);
 
 	te_customflash(self.origin, 160, 0.2, '1 0 0');
+	*/
+
+	te_knightspike(org2);
 
 
 	self.event_damage = SUB_Null;

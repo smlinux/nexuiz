@@ -161,7 +161,7 @@ void W_Nex_Attack (void)
 	WriteCoord (MSG_BROADCAST, 0);
 	WriteCoord (MSG_BROADCAST, 0);
 	// flash and burn the wall
-	te_plasmaburn (trace_endpos);
+	te_plasmaburn (findbetterlocation (trace_endpos, 6));
 	/*
 	// flame effect at impact
 	dir = trace_plane_normal * 100;

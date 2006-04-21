@@ -50,6 +50,9 @@ void W_Crylink_Touch (void)
 		return;
 	}
 	RadiusDamage (self, self.realowner, cvar("g_balance_crylink_primary_damage"), cvar("g_balance_crylink_primary_edgedamage"), cvar("g_balance_crylink_primary_radius"), world, cvar("g_balance_crylink_primary_force"), IT_CRYLINK);
+	te_gunshotquad(self.origin);
+	remove (self);
+	/*
 	//te_smallflash(self.origin);
 	if (other.takedamage == DAMAGE_AIM)
 	{
@@ -68,6 +71,7 @@ void W_Crylink_Touch (void)
 	self.effects = EF_FULLBRIGHT | EF_LOWPRECISION;
 	SUB_SetFade(self, time, 1);
 	//remove (self);
+	*/
 }
 
 void W_Crylink_Touch2 (void)
@@ -78,6 +82,9 @@ void W_Crylink_Touch2 (void)
 		return;
 	}
 	RadiusDamage (self, self.realowner, cvar("g_balance_crylink_secondary_damage"), cvar("g_balance_crylink_secondary_edgedamage"), cvar("g_balance_crylink_secondary_radius"), world, cvar("g_balance_crylink_secondary_force"), IT_CRYLINK);
+	te_gunshotquad(self.origin);
+	remove (self);
+	/*
 	//te_smallflash(self.origin);
 	if (other.takedamage == DAMAGE_AIM)
 	{
@@ -96,6 +103,7 @@ void W_Crylink_Touch2 (void)
 	self.effects = EF_FULLBRIGHT | EF_LOWPRECISION;
 	SUB_SetFade(self, time, 1);
 	//remove (self);
+	*/
 }
 
 void W_Crylink_Attack (void)
