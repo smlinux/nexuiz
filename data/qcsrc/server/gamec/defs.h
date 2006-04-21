@@ -260,3 +260,5 @@ float playerid_last;
 .vector killer_origin;
 
 .float isdecor;
+
+float default_player_alpha;

@@ -503,8 +503,8 @@ void PutClientInServer (void)
 		W_UpdateAmmo();
 		*/
 		CL_SpawnWeaponentity();
-		self.alpha = 1;
-		self.exteriorweaponentity.alpha = 1;
+		self.alpha = default_player_alpha;
+		self.exteriorweaponentity.alpha = default_player_alpha;
 
 		self.lms_nextcheck = time + cvar("g_lms_campcheck_interval")*2;
 		self.lms_traveled_distance = 0;
@@ -911,8 +911,8 @@ void player_powerups (void)
 		{
 			if (time > self.strength_finished)
 			{
-				self.alpha = 1;
-				self.exteriorweaponentity.alpha = 1;
+				self.alpha = default_player_alpha;
+				self.exteriorweaponentity.alpha = default_player_alpha;
 				self.items = self.items - (self.items & IT_STRENGTH);
 				sprint(self, "^3Invisibility has worn off\n");
 			}

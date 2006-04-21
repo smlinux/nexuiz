@@ -1,5 +1,19 @@
 string GetMapname();
 
+void SetDefaultAlpha()
+{
+	if(cvar("g_cloaked"))
+	{
+		default_player_alpha = cvar("g_balance_cloaked_alpha");
+	}
+	else
+	{
+		default_player_alpha = cvar("g_player_alpha");
+		if(default_player_alpha <= 0)
+			default_player_alpha = 1;
+	}
+}
+
 void worldspawn (void)
 {
 
@@ -314,6 +328,8 @@ void worldspawn (void)
 	}
 
 	cvar_set("nextmap", "");
+
+	SetDefaultAlpha();
 }
 
 void light (void)
@@ -1014,6 +1030,8 @@ void() CheckRules_World =
 	local float fraglimit;
 
 	VoteThink();
+
+	SetDefaultAlpha();
 
 	if (intermission_running)
 		if (time >= intermission_exittime + 60)

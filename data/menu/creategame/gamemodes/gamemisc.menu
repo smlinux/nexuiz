@@ -183,6 +183,11 @@ Item Layout Misc
 				text	"No Recoil"
 				target	"::Data::Game::Misc::NoRecoil::Switch"
 			}
+			Derive Nex_Option_Switch Cloaked
+			{
+				text	"Cloaked (almost invisible players)"
+				target	"::Data::Game::Misc::Cloaked::Switch"
+			}
 			Derive Nex_Line	SeperatorMidAir
 			{}
 			Derive Nex_Option_Switch MidAir

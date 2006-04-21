@@ -313,6 +313,8 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 	{
 		self.deaths += 1;
 
+		// become fully visible
+		self.alpha = 1;
 		// throw a weapon
 		SpawnThrownWeapon (self.origin + (self.mins + self.maxs) * 0.5, self.weapon);
 		// print an obituary message

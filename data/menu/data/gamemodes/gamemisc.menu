@@ -207,6 +207,13 @@ Item DataContainer Misc
 
 		[DataLink_OnOffSwitch]
 	}
+	Item Data_Cvar Cloaked
+	{
+		cvarName	"g_cloaked"
+		defValue	0
+
+		[DataLink_OnOffSwitch]
+	}
 	Item Data_Cvar NixNexRoundTime
 	{
 		cvarName	"g_balance_nixnex_roundtime"
