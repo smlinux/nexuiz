@@ -93,6 +93,23 @@ void W_Hagar_Touch (void)
 	self.think ();
 }
 
+void W_Hagar_Touch2 (void)
+{
+	if (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
+	{
+		remove(self);
+		return;
+	}
+	if (other == self.owner)
+		return;
+
+	if(self.cnt > 0) {
+		self.think ();
+	} else {
+		self.cnt++;
+	}
+}
+
 void W_Hagar_Damage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
 {
 	self.health = self.health - damage;
@@ -161,7 +178,8 @@ void W_Hagar_Attack2 (void)
 	missile = spawn ();
 	missile.owner = self;
 	missile.classname = "missile";
-	missile.touch = W_Hagar_Touch;
+	missile.touch = W_Hagar_Touch2;
+	missile.cnt = 0;
 	missile.think = W_Hagar_Explode;
 	missile.nextthink = time + cvar("g_balance_hagar_secondary_lifetime");
 	missile.solid = SOLID_BBOX;
@@ -175,7 +193,7 @@ void W_Hagar_Attack2 (void)
 	//missile.event_damage = W_Hagar_Damage;
 	missile.effects = EF_LOWPRECISION | EF_NOSHADOW | EF_FULLBRIGHT;
 
-	missile.movetype = MOVETYPE_TOSS;
+	missile.movetype = MOVETYPE_BOUNCEMISSILE;
 	missile.velocity = (v_forward + randomvec() * cvar("g_balance_hagar_secondary_spread")) * cvar("g_balance_hagar_secondary_speed") + v_up * cvar("g_balance_hagar_secondary_speed_up");
 	missile.avelocity = '100 10 10';
 
