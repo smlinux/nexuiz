@@ -103,8 +103,8 @@ void W_Hagar_Touch2 (void)
 	if (other == self.owner)
 		return;
 
-	if(self.cnt > 0) {
-		self.think ();
+	if(self.cnt > 0 || other.classname == "player") {
+		self.think();
 	} else {
 		self.cnt++;
 	}
