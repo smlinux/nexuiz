@@ -100,10 +100,8 @@ void W_Hagar_Touch2 (void)
 		remove(self);
 		return;
 	}
-	if (other == self.owner)
-		return;
 
-	if(self.cnt > 0 || other.classname == "player") {
+	if(self.cnt > 0 || other.takedamage == DAMAGE_AIM) {
 		self.think();
 	} else {
 		self.cnt++;
@@ -194,7 +192,7 @@ void W_Hagar_Attack2 (void)
 	missile.effects = EF_LOWPRECISION | EF_NOSHADOW | EF_FULLBRIGHT;
 
 	missile.movetype = MOVETYPE_BOUNCEMISSILE;
-	missile.velocity = (v_forward + randomvec() * cvar("g_balance_hagar_secondary_spread")) * cvar("g_balance_hagar_secondary_speed") + v_up * cvar("g_balance_hagar_secondary_speed_up");
+	missile.velocity = (normalize(trueaim - org) + randomvec() * cvar("g_balance_hagar_secondary_spread")) * cvar("g_balance_hagar_secondary_speed");
 	missile.avelocity = '100 10 10';
 
 	missile.angles = vectoangles (missile.velocity);
