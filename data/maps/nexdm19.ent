@@ -1,0 +1,226 @@
+{
+"gridsize" "76.800003 76.800003 153.600006"
+"message" "Blood Prison"
+"classname" "worldspawn"
+"_lightmapscale" "0.25"
+}
+{
+"origin" "2457.600098 1920.000122 19.200001"
+"classname" "item_health100"
+}
+{
+"origin" "3168.000244 1536.000000 259.200010"
+"classname" "item_armor25"
+}
+{
+"origin" "2457.600098 1075.200073 422.400017"
+"classname" "weapon_grenadelauncher"
+}
+{
+"origin" "1132.800049 2457.600098 -38.400002"
+"classname" "weapon_rocketlauncher"
+}
+{
+"model" "*1"
+"target" "t1"
+"classname" "trigger_teleport"
+}
+{
+"targetname" "t1"
+"angle" "90"
+"origin" "2803.200195 1920.000122 460.800018"
+"classname" "misc_teleporter_dest"
+}
+{
+"origin" "1766.400024 2688.000000 249.600010"
+"classname" "item_armor25"
+}
+{
+"origin" "2841.600098 2918.400146 268.800011"
+"classname" "weapon_electro"
+}
+{
+"origin" "2803.200195 2150.400146 422.400017"
+"classname" "item_armor1"
+}
+{
+"origin" "2803.200195 2208.000000 422.400017"
+"classname" "item_health1"
+}
+{
+"classname" "item_armor1"
+"origin" "2803.200195 2265.600098 422.400017"
+}
+{
+"classname" "item_health1"
+"origin" "2803.200195 2323.200195 422.400017"
+}
+{
+"origin" "2803.200195 2380.800049 422.400017"
+"classname" "item_armor1"
+}
+{
+"origin" "2803.200195 2438.400146 422.400017"
+"classname" "item_health1"
+}
+{
+"origin" "2803.200195 2553.600098 422.400017"
+"classname" "weapon_uzi"
+}
+{
+"angle" "180"
+"origin" "2630.400146 1190.400024 422.400017"
+"classname" "item_health25"
+}
+{
+"angle" "180"
+"classname" "item_health25"
+"origin" "2630.400146 1113.600098 422.400017"
+}
+{
+"angle" "90"
+"origin" "1574.400024 2112.000000 -38.400002"
+"classname" "item_rockets"
+}
+{
+"angle" "90"
+"classname" "item_rockets"
+"origin" "1497.600098 2112.000000 -38.400002"
+}
+{
+"angle" "90"
+"origin" "1420.800049 2112.000000 -38.400002"
+"classname" "item_cells"
+}
+{
+"angle" "360"
+"origin" "1132.800049 2208.000000 249.600010"
+"classname" "item_health25"
+}
+{
+"angle" "180"
+"classname" "item_health25"
+"origin" "1324.800049 2707.200195 249.600010"
+}
+{
+"origin" "2265.600098 2572.800049 249.600010"
+"classname" "weapon_hagar"
+}
+{
+"origin" "2227.200195 1920.000122 403.200016"
+"classname" "weapon_crylink"
+}
+{
+"angle" "180"
+"origin" "2841.600098 1382.400024 268.800011"
+"classname" "item_bullets"
+}
+{
+"angle" "180"
+"origin" "2841.600098 1440.000000 268.800011"
+"classname" "item_shells"
+}
+{
+"origin" "1833.600098 1238.400024 422.400017"
+"classname" "item_cells"
+}
+{
+"angle" "45"
+"origin" "1776.000122 1296.000000 422.400017"
+"classname" "item_rockets"
+}
+{
+"angle" "180"
+"origin" "3225.600098 1920.000122 19.200001"
+"classname" "item_health25"
+}
+{
+"angle" "270"
+"origin" "2016.000122 2208.000000 -57.600002"
+"classname" "item_health25"
+}
+{
+"angle" "180"
+"origin" "2073.600098 1708.800049 422.400017"
+"classname" "item_shells"
+}
+{
+"angle" "270"
+"origin" "2630.400146 2860.800049 249.600010"
+"classname" "item_cells"
+}
+{
+"angle" "270"
+"origin" "3072.000000 2860.800049 268.800011"
+"classname" "item_rockets"
+}
+{
+"origin" "2016.000122 1209.600098 422.400017"
+"classname" "item_armor1"
+}
+{
+"classname" "item_armor1"
+"origin" "1958.400024 1267.200073 422.400017"
+}
+{
+"origin" "1900.800049 1324.800049 422.400017"
+"classname" "item_armor1"
+}
+{
+"classname" "item_armor1"
+"origin" "1843.200073 1382.400024 422.400017"
+}
+{
+"origin" "1785.600098 1440.000000 422.400017"
+"classname" "item_armor1"
+}
+{
+"classname" "info_player_deathmatch"
+"origin" "1142.400024 2716.800049 268.800011"
+"angle" "270"
+}
+{
+"classname" "info_player_deathmatch"
+"origin" "2035.200073 1708.800049 422.400017"
+"angle" "90"
+}
+{
+"classname" "info_player_deathmatch"
+"origin" "2630.400146 1152.000000 432.000017"
+"angle" "180"
+}
+{
+"classname" "info_player_deathmatch"
+"origin" "2803.200195 1920.000122 441.600018"
+"angle" "90"
+}
+{
+"classname" "info_player_deathmatch"
+"origin" "2803.200195 2688.000000 268.800011"
+"angle" "90"
+}
+{
+"classname" "info_player_deathmatch"
+"origin" "2342.400146 2649.600098 259.200010"
+"angle" "225"
+}
+{
+"classname" "info_player_deathmatch"
+"origin" "3264.000244 1920.000122 28.800001"
+"angle" "180"
+}
+{
+"classname" "info_player_deathmatch"
+"origin" "2054.400146 2246.400146 -48.000002"
+"angle" "225"
+}
+{
+"model" "*2"
+"classname" "trigger_push"
+"target" "t2"
+}
+{
+"classname" "target_position"
+"origin" "1392.000000 2457.600098 374.400015"
+"targetname" "t2"
+}
