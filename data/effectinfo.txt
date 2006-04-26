@@ -286,9 +286,9 @@ tex 47 47
 size 8 8
 alpha 256 256 0
 originjitter 12 12 12
-lightradius 100
-lightradiusfade 300
-lightcolor 0.5 0.5 0.5
+//lightradius 100
+//lightradiusfade 300
+//lightcolor 0.5 0.5 0.5
 // purple flare effect
 effect TE_GUNSHOTQUAD
 countabsolute 1
