@@ -1,0 +1,12 @@
+exec maps/sp/_init.cfg
+
+set g_campaign 1
+set _campaign_thislevel sp/level02
+set _campaign_nextlevel sp/level03
+set _campaign_message "What could be worse than one bot? Right: TWO BOTS!"
+
+skill 2
+bot_number 2
+fraglimit 10
+
+changelevel nexdm03

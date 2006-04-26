@@ -213,6 +213,7 @@ void VoteCount();
 // campaign mode
 void CampaignInit();
 void CampaignFinish();
+string campaign_message;
 
 // Wazat's grappling hook
 .entity		hook;

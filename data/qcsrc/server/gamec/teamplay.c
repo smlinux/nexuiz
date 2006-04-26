@@ -237,10 +237,13 @@ void InitGameplayMode()
 	}*/
 
 	// enforce the server's universal frag/time limits
-	if(fraglimit_override >= 0)
-		cvar_set("fraglimit", ftos(fraglimit_override));
-	if(timelimit_override >= 0)
-		cvar_set("timelimit", ftos(timelimit_override));
+	if(!cvar("g_campaign"))
+	{
+		if(fraglimit_override >= 0)
+			cvar_set("fraglimit", ftos(fraglimit_override));
+		if(timelimit_override >= 0)
+			cvar_set("timelimit", ftos(timelimit_override));
+	}
 
 	if (game == GAME_DOMINATION)//cvar("g_domination"))
 		dom_init();
@@ -321,6 +324,12 @@ void PrintWelcomeMessage(entity pl)
 
 	if(self.welcomemessage_time2 > time) return;
 	self.welcomemessage_time2 = time + 1.0;
+
+	if(cvar("g_campaign"))
+	{
+		centerprint(pl, campaign_message);
+		return;
+	}
 
 	if(cvar("g_minstagib"))
 		mutator = "^2Minstagib ^1";

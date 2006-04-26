@@ -1,0 +1,12 @@
+exec maps/sp/_init.cfg
+
+set g_campaign 1
+set _campaign_thislevel sp/level01
+set _campaign_nextlevel sp/level02
+set _campaign_message "Here's a bot for you to kill. Have fun."
+
+skill 1
+bot_number 1
+fraglimit 10
+
+changelevel nexdm01
