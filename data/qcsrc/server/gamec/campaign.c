@@ -1,0 +1,7 @@
+void() CampaignInit =
+{
+}
+
+void() CampaignFinish =
+{
+}

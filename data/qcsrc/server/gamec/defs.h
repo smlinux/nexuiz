@@ -210,6 +210,10 @@ void VoteTimeout();
 void VoteStop(entity stopper);
 void VoteCount();
 
+// campaign mode
+void CampaignInit();
+void CampaignFinish();
+
 // Wazat's grappling hook
 .entity		hook;
 void GrapplingHookFrame();
@@ -238,6 +242,7 @@ float GRAPHOOK_RELEASE		= 21;
 
 .float ready;
 
+.float winning;
 .float deaths;
 .float jointime;
 

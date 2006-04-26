@@ -72,3 +72,5 @@ gamec/g_hook.c
 gamec/t_swamp.c
 
 gamec/clientcommands.c
+
+gamec/campaign.c

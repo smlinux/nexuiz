@@ -330,6 +330,9 @@ void worldspawn (void)
 	cvar_set("nextmap", "");
 
 	SetDefaultAlpha();
+
+	if(cvar("g_campaign"))
+		CampaignInit();
 }
 
 void light (void)
@@ -752,6 +755,9 @@ void() NextLevel =
 		if(cvar("sv_autoscreenshot"))
 			stuffcmd(other, "screenshot\necho \"^5A screenshot has been taken at request of the server.\"\n");
 
+		if(other.winning)
+			bprint(strcat(other.netname, " wins.\n"));
+
 		/*
 		if (pos != world);
 		{
@@ -770,6 +776,9 @@ void() NextLevel =
 		*/
 		other = other.chain;
 	}
+
+	if(cvar("g_campaign"))
+		CampaignFinish();
 
 	WriteByte (MSG_ALL, SVC_INTERMISSION);
 };
@@ -823,6 +832,43 @@ float(float fraglimitreached, float equality) GetWinningCode =
 			return WINNING_NO;
 }
 
+// set the .winning flag for exactly those players with a given field value
+void(.float field, float value) SetWinners =
+{
+	entity head;
+	head = findchain(classname, "player");
+	while (head)
+	{
+		head.winning = (head.field == value);
+		head = head.chain;
+	}
+}
+
+// set the .winning flag for those players with a given field value
+void(.float field, float value) AddWinners =
+{
+	entity head;
+	head = findchain(classname, "player");
+	while (head)
+	{
+		if(head.field == value)
+			head.winning = 1;
+		head = head.chain;
+	}
+}
+
+// clear the .winning flags
+void(void) ClearWinners =
+{
+	entity head;
+	head = findchain(classname, "player");
+	while (head)
+	{
+		head.winning = 0;
+		head = head.chain;
+	}
+}
+
 // LMS winning condition: game terminates if and only if there's at most one
 // one player who's living lives. Top two scores being equal cancels the time
 // limit.
@@ -855,6 +901,8 @@ float() WinningCondition_LMS =
 		head = head.chain;
 	}
 
+	SetWinners(frags, checkrules_leaderfrags);
+
 	// The top two players have the same amount of lives? No timelimit then,
 	// enter overtime...
 
@@ -886,6 +934,8 @@ float(float fraglimit) WinningCondition_MaxIndividualScore =
 		head = head.chain;
 	}
 
+	SetWinners(frags, checkrules_leaderfrags);
+
 	if (!cvar("g_runematch"))
 		if (checkrules_leaderfrags != checkrules_oldleaderfrags)
 		{
@@ -906,6 +956,7 @@ float(float fraglimit) WinningConditionBase_Teamplay =
 	tdm_max_score = max(team1_score, team2_score, team3_score, team4_score);
 
 	checkrules_equality =
+	(
 		(tdm_max_score > 0)
 		&&
 		(
@@ -913,7 +964,17 @@ float(float fraglimit) WinningConditionBase_Teamplay =
 			+ (team2_score == tdm_max_score)
 			+ (team3_score == tdm_max_score)
 			+ (team4_score == tdm_max_score)
-			>= 2);
+			>= 2));
+
+	ClearWinners();
+	if(team1_score == tdm_max_score)
+		AddWinners(team, COLOR_TEAM1);
+	if(team2_score == tdm_max_score)
+		AddWinners(team, COLOR_TEAM2);
+	if(team3_score == tdm_max_score)
+		AddWinners(team, COLOR_TEAM3);
+	if(team4_score == tdm_max_score)
+		AddWinners(team, COLOR_TEAM4);
 
 	if(!cvar("g_runematch") && !cvar("g_domination"))
 		if(tdm_max_score != tdm_old_score)
