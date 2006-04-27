@@ -144,6 +144,7 @@ textures/evil6_lights/e6basicstrip_blue_s_nolight
 	surfaceparm nolightmap
 	{
 		map textures/evil6_lights/e6basicstrip_blue.jpg
+		rgbGen identity
 	}
 }
 
@@ -155,6 +156,7 @@ textures/evil6_lights/e6basicstrip_green_s_nolight
 	surfaceparm nolightmap
 	{
 		map textures/evil6_lights/e6basicstrip_green.jpg
+		rgbGen identity
 	}
 }
 
@@ -166,6 +168,7 @@ textures/evil6_lights/e6basicstrip_orange_s_nolight
 	surfaceparm nolightmap
 	{
 		map textures/evil6_lights/e6basicstrip_orange.jpg
+		rgbGen identity
 	}
 }
 
@@ -177,6 +180,7 @@ textures/evil6_lights/e6basicstrip_red_s_nolight
 	surfaceparm nolightmap
 	{
 		map textures/evil6_lights/e6basicstrip_red.jpg
+		rgbGen identity
 	}
 }
 
@@ -188,6 +192,7 @@ textures/evil6_lights/e6basicstrip_white_s_nolight
 	surfaceparm nolightmap
 	{
 		map textures/evil6_lights/e6basicstrip_white.jpg
+		rgbGen identity
 	}
 }
 
@@ -199,5 +204,6 @@ textures/evil6_lights/e6basicstrip_yellow_s_nolight
 	surfaceparm nolightmap
 	{
 		map textures/evil6_lights/e6basicstrip_yellow.jpg
+		rgbGen identity
 	}
 }
