@@ -523,35 +523,49 @@ textures/evil4_lights/mtl_l1
 {
 	q3map_surfacelight 1000
 	q3map_lightimage textures/evil4_lights/mtl_l1.tga
-	{
-		map textures/evil4_lights/mtl_l1_fx.tga
-		//blendfunc add
-		tcmod scale 12 1
-		rgbGen identity
-		tcMod scroll 0 1
-	}
-	{
-		map textures/evil4_lights/mtl_l1_fx.tga
-		blendfunc add
-		//tcmod scale 25 1
-		rgbGen identity
-		tcMod scroll 1 0
-	}
+	// LordHavoc: replaced most of this shader
 	{
 		map textures/evil4_lights/mtl_l1.tga
-		blendfunc blend
-		rgbGen identity
-	}
-	{
-		map textures/evil4_lights/mtl_l1_fx2.tga
-		blendfunc add
-		tcmod scale 1 1
 	}
 	{
 		map $lightmap
 		rgbGen identity
 		blendfunc filter
 	}
+	{
+		map textures/evil4_lights/mtl_l1_glow.tga
+		blendfunc add
+	}
+	// LordHavoc: original shader
+	//{
+	//	map textures/evil4_lights/mtl_l1_fx.tga
+	//	//blendfunc add
+	//	tcmod scale 12 1
+	//	rgbGen identity
+	//	tcMod scroll 0 1
+	//}
+	//{
+	//	map textures/evil4_lights/mtl_l1_fx.tga
+	//	blendfunc add
+	//	//tcmod scale 25 1
+	//	rgbGen identity
+	//	tcMod scroll 1 0
+	//}
+	//{
+	//	map textures/evil4_lights/mtl_l1.tga
+	//	blendfunc blend
+	//	rgbGen identity
+	//}
+	//{
+	//	map textures/evil4_lights/mtl_l1_glow.tga
+	//	blendfunc add
+	//	tcmod scale 1 1
+	//}
+	//{
+	//	map $lightmap
+	//	rgbGen identity
+	//	blendfunc filter
+	//}
 }
 
 //border light
