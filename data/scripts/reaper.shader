@@ -424,7 +424,7 @@ textures/water/pool3d_5e
 	{
 		map textures/water/pool3d_5e.jpg
 		blendFunc add
-		rgbGen identity
+		rgbGen vertex
 	}
 }
 

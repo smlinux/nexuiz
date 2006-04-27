@@ -15,6 +15,6 @@ textures/liquids/clear_ripple3
 	{
 		map textures/water/pool3d_5e.jpg
 		blendFunc add
-		rgbGen identity
+		rgbGen vertex
 	}
 }
