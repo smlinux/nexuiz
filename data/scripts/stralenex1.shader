@@ -65,35 +65,12 @@ textures/stralenex1/light_tube_green
         q3map_lightimage textures/stralenex1/light_tube_green_glow.tga 
 	q3map_surfacelight 1000	
 	{
-		map textures/light_tube_green_glow.tga 
+		map textures/stralenex1/light_tube_green.tga 
 		//blendfunc add 
        tcmod scale 12 1  
-		rgbGen identity 
-		tcMod scroll 0 1 
+		//rgbGen identity 
+
         
-	}
-	{
-		map textures/light_tube_green_glow.tga 
-		blendfunc add 
-       //tcmod scale 25 1   
-		rgbGen identity 
-		tcMod scroll 1 0 
-        
-	}
-	{
-		map textures/stralenex1/light_tube_green.tga 
-		blendfunc blend  
-		rgbGen identity 
-	}
-	{
-		map textures/stralenex1/light_tube_green_glow.tga 
-		blendfunc add 
-       tcmod scale 1 1  
-	}
-	{
-		map $lightmap 
-		rgbGen identity 
-		blendfunc filter 
 	}
 } 
 
