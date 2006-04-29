@@ -1,26 +1,109 @@
-string campaign_savedlevel = "g_campaign_currentlevel"; // for multiple campaigns, make this a variable
-string campaign_won = "g_campaign_won"; // set to 1 once you have won
+// campaign cvars:
+//   _campaign_index: index of CURRENT map
+//   g_campaign_index: index of current LAST map (saved)
+//   g_campaign_skill: bot skill offset
 
-void() CampaignInit =
+float campaign_level;
+float campaign_won;
+
+void(string s) CampaignBailout =
 {
-	// do some checks
-	if(cvar_string(campaign_savedlevel) == "")
-		cvar_set(campaign_savedlevel, "sp/level01");
-	
-	if(cvar_string("_campaign_thislevel") == cvar_string(campaign_savedlevel))
-	{
-		cvar_set("sv_public", "0"); // just in case
-
-		campaign_message = strzone(strcat("^7SINGLEPLAYER MODE\n\n", cvar_string("_campaign_message")));
-		
-		return;
-	}
-
-	// if they fail:
+	//bprint(strcat("campaign initialization failed: ", s, "\n"));
+	error(strcat("campaign initialization failed: ", s, "\n"));
 	cvar_set("g_campaign", "0");
+	return;
 }
 
-void() CampaignFinish =
+string fstrunzone(string s)
+{
+	string t;
+	t = strcat(s);
+	strunzone(s);
+	return t;
+}
+
+// NOTE: s may not be a tempstring here
+string Campaign_wordwrap(string s, float l)
+{
+	string t;
+	string word;
+
+	float lleft;
+	float i;
+
+	float startidx;
+
+	startidx = 0;
+
+	t = strzone("");
+
+	lleft = l;
+	for(i = 0; i <= strlen(s); ++i)
+	{
+		if(i != strlen(s) && substring(s, i, 1) != " ")
+			continue;
+
+		word = substring(s, startidx, i - startidx);
+		startidx = i + 1;
+		
+		if(word == "+++")
+		{
+			t = fstrunzone(t);
+			t = strzone(strcat(t, "\n"));
+			lleft = l;
+		}
+		else if(strlen(word) < lleft)
+		{
+			t = fstrunzone(t);
+			if(lleft != l)
+			{
+				t = strcat(t, " ");
+				lleft = lleft - 1;
+			}
+			t = strzone(strcat(t, word));
+			lleft = lleft - strlen(word);
+		}
+		else
+		{
+			t = fstrunzone(t);
+			t = strzone(strcat(t, "\n", word));
+			lleft = l - strlen(word);
+		}
+	}
+	t = fstrunzone(t);
+	return t;
+}
+
+void() CampaignPreInit =
+{
+	float baseskill;
+	string title;
+	campaign_level = cvar("_campaign_index");
+	CampaignFile_Load(campaign_level, 2);
+	if(campaign_entries < 1)
+		return CampaignBailout("unknown map");
+	cvar_set("bot_number", ftos(campaign_bots[0]));
+
+	baseskill = cvar("g_campaign_skill");
+	cvar_set("skill", ftos(campaign_botskill[0] + baseskill));
+
+	title = campaign_shortdesc[0];
+	campaign_message = strzone(strcat("\n\n\n\n\n\n\n\n\n\n^1\n", title, "\n^3\n", Campaign_wordwrap(campaign_longdesc[0], 50)));
+}
+
+string GetMapname();
+void() CampaignPostInit =
+{
+	// now some sanity checks
+	string thismapname;
+	thismapname = GetMapname();
+	if(campaign_mapcfgname[0] != thismapname)
+		return CampaignBailout(strcat("wrong map: ", campaign_mapcfgname[0], " != ", thismapname));
+	cvar_set("fraglimit", ftos(campaign_fraglimit[0]));
+	cvar_set("timelimit", "0");
+}
+
+void() CampaignPreIntermission =
 {
 	entity head;
 	float won;
@@ -43,26 +126,57 @@ void() CampaignFinish =
 
 	if(won == 1 && lost == 0)
 	{
-		string level;
-
-		level = cvar_string("_campaign_nextlevel");
-
-		if(level == "")
-		{
-			bprint("SINGLEPLAYER MODE\n\nCongratulations, you're the winner.\n");
-			cvar_set(campaign_won, "1");
-			cvar_set("lastlevel", "1");
-		}
-		else
-		{
-			bprint("SINGLEPLAYER MODE\n\nCongratulations, you're the winner.\nAdvancing to next level...\n");
-			cvar_set("nextmap", cvar_string("_campaign_nextlevel"));
-			cvar_set(campaign_savedlevel, cvar_string("_campaign_nextlevel"));
-		}
+		campaign_won = 1;
+		bprint("The current level has been WON.\n");
+		// sound!
 	}
 	else
 	{
-		bprint("SINGLEPLAYER MODE\n\nYou have lost the match.\nPlaying same level again...\n");
-		cvar_set("nextmap", cvar_string("_campaign_thislevel")); // restart same level again
+		campaign_won = 0;
+		bprint("The current level has been LOST.\n");
+		// sound!
 	}
+
+	if(campaign_won)
+	{
+		if(campaign_level == cvar("g_campaign_index"))
+		{
+			// advance level
+			localcmd("set g_campaign_index ");
+			localcmd(ftos(campaign_level + 1));
+			localcmd("\n");
+		}
+	}
+}
+
+void() CampaignPostIntermission =
+{
+	// NOTE: campaign_won is 0 or 1, that is, points to the next level
+
+	if(campaign_won >= campaign_entries)
+	{
+		// last map won!
+		localcmd("set g_campaign_won 1; togglemenu\n");
+		CampaignFile_Unload();
+		return;
+	}
+
+	CampaignSetup(campaign_won);
+	CampaignFile_Unload();
+	strunzone(campaign_message);
+}
+
+
+
+void(float n) CampaignLevelWarp =
+{
+	if(!cvar("sv_cheats"))
+		return;
+	CampaignFile_Unload();
+	CampaignFile_Load(n, 1);
+	if(campaign_entries)
+		CampaignSetup(0);
+	else
+		error("Sorry, cheater. You are NOT WELCOME.");
+	CampaignFile_Unload();
 }

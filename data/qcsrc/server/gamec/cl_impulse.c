@@ -130,6 +130,10 @@ void ImpulseCommands (void)
 				traceline(self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * 65536, FALSE, self);
 			sprint(self, strcat("distance: ", ftos(fabs(vlen(trace_endpos - (self.origin + self.view_ofs)))), "\n"));
 			}
+			else if(imp == 42)
+			{
+				CampaignLevelWarp(cvar("_warplevel"));
+			}
 			else if (imp == 99)
 			{
 				self.items = IT_LASER | IT_UZI | IT_SHOTGUN | IT_GRENADE_LAUNCHER | IT_ELECTRO | IT_CRYLINK | IT_NEX | IT_HAGAR | IT_ROCKET_LAUNCHER;

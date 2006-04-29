@@ -276,6 +276,9 @@ void worldspawn (void)
 	lms_lowest_lives = 0;
 	lms_next_place = 0;
 
+	if(cvar("g_campaign"))
+		CampaignPreInit();
+
 	InitGameplayMode();
 	//if (cvar("g_domination"))
 	//	dom_init();
@@ -332,7 +335,7 @@ void worldspawn (void)
 	SetDefaultAlpha();
 
 	if(cvar("g_campaign"))
-		CampaignInit();
+		CampaignPostInit();
 }
 
 void light (void)
@@ -406,6 +409,13 @@ void() GotoNextMap =
 	if (alreadychangedlevel)
 		return;
 	alreadychangedlevel = TRUE;
+
+	if(cvar("g_campaign"))
+	{
+		CampaignPostIntermission();
+		return;
+	}
+	
 	if (cvar("samelevel")) // if samelevel is set, stay on same level
 	{
 		// this does not work because it tries to exec maps/nexdm01.mapcfg (which doesn't exist, it should be trying maps/dm_nexdm01.mapcfg for example)
@@ -778,7 +788,7 @@ void() NextLevel =
 	}
 
 	if(cvar("g_campaign"))
-		CampaignFinish();
+		CampaignPreIntermission();
 
 	WriteByte (MSG_ALL, SVC_INTERMISSION);
 };

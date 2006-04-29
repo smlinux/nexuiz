@@ -210,11 +210,6 @@ void VoteTimeout();
 void VoteStop(entity stopper);
 void VoteCount();
 
-// campaign mode
-void CampaignInit();
-void CampaignFinish();
-string campaign_message;
-
 // Wazat's grappling hook
 .entity		hook;
 void GrapplingHookFrame();

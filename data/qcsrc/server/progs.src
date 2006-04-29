@@ -7,6 +7,9 @@ gamec/defs.h		// Should rename this, it has fields and globals
 
 gamec/extensions.h
 
+gamec/campaign_common.h
+gamec/campaign.h
+
 gamec/miscfunctions.c
 
 gamec/bots.c		// definitions and shared stuff between both Urrebot and Mauvebot // Urre
@@ -74,3 +77,5 @@ gamec/t_swamp.c
 gamec/clientcommands.c
 
 gamec/campaign.c
+gamec/campaign_file.c
+gamec/campaign_setup.c

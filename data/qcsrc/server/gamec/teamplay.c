@@ -821,7 +821,7 @@ void SV_ChangeTeam(float _color)
 
 	if(cvar("teamplay"))
 	{
-		if(cvar("g_changeteam_banned"))
+		if(cvar("g_changeteam_banned") || cvar("g_campaign"))
 		{
 			sprint(self, "Team changes not allowed\n");
 			return; // changing teams is not allowed
