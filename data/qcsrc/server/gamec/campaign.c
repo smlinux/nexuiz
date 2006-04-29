@@ -146,6 +146,11 @@ void() CampaignPreIntermission =
 			localcmd(ftos(campaign_level + 1));
 			localcmd("\n");
 		}
+		if(campaign_entries < 2)
+		{
+			localcmd("set g_campaign_index 0\n");
+			localcmd("set g_campaign_won 1\n");
+		}
 	}
 }
 
@@ -153,10 +158,10 @@ void() CampaignPostIntermission =
 {
 	// NOTE: campaign_won is 0 or 1, that is, points to the next level
 
-	if(campaign_won >= campaign_entries)
+	if(campaign_won && campaign_entries < 2)
 	{
 		// last map won!
-		localcmd("set g_campaign_won 1; togglemenu\n");
+		localcmd("togglemenu\n");
 		CampaignFile_Unload();
 		return;
 	}
