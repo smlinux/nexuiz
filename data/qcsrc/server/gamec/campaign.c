@@ -9,8 +9,8 @@ float campaign_won;
 void(string s) CampaignBailout =
 {
 	//bprint(strcat("campaign initialization failed: ", s, "\n"));
-	error(strcat("campaign initialization failed: ", s, "\n"));
 	cvar_set("g_campaign", "0");
+	error(strcat("campaign initialization failed: ", s, "\n"));
 	return;
 }
 
