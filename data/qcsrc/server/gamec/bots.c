@@ -5,6 +5,8 @@ float(vector smins, vector smaxs, vector bmins, vector bmaxs) boxinsidebox = {re
 // rough simulation of walking from one point to another to test if a path
 // can be traveled, used by havocbot
 
+
+vector stepheightvec;
 float navigation_testtracewalk;
 float(entity e, vector start, vector m1, vector m2, vector end) tracewalk =
 {
@@ -112,7 +114,7 @@ float(entity e, vector start, vector m1, vector m2, vector end) tracewalk =
 			tracebox(org, m1, m2, move, FALSE, e);
 			if (trace_fraction < 1)
 			{
-				tracebox(org + '0 0 18', m1, m2, move + '0 0 18', FALSE, e);
+				tracebox(org + stepheightvec, m1, m2, move + stepheightvec, FALSE, e);
 				if (trace_fraction < 1 || trace_startsolid)
 				{
 					if (navigation_testtracewalk)
@@ -466,6 +468,7 @@ void() waypoint_think =
 	sm1 = self.origin + self.mins;
 	sm2 = self.origin + self.maxs;
 	e = find(world, classname, "waypoint");
+	stepheightvec = cvar("sv_stepheight") * '0 0 1';
 	while (e)
 	{
 		if (boxesoverlap(self.absmin, self.absmax, e.absmin, e.absmax))
