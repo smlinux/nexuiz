@@ -522,6 +522,11 @@ void PutClientInServer (void)
 	} else if(self.classname == "observer") {
 		PutObserverInServer ();
 	}
+
+	// in campaign mode, players are only counted once they are active. So
+	// update the counts NOW.
+	if(cvar("g_campaign"))
+		bot_relinkplayerlist();
 }
 
 /*

@@ -1642,6 +1642,7 @@ void() bot_think =
 entity bot_strategytoken;
 entity player_list;
 .entity nextplayer;
+.float was_playing;
 void() bot_relinkplayerlist =
 {
 	local entity e;
@@ -1654,6 +1655,23 @@ void() bot_relinkplayerlist =
 	while (e)
 	{
 		player_count = player_count + 1;
+		if(cvar("g_campaign"))
+		{
+			// only count real players, no observers unless they have already
+			// played (for LMS!)
+			if(clienttype(e) == CLIENTTYPE_REAL)
+			{
+				if(e.classname == "player")
+				{
+					e.was_playing = 1;
+				}
+				else if(!e.was_playing)
+				{
+					// do not count him!
+					player_count = player_count - 1;
+				}
+			}
+		}
 		e.nextplayer = e.chain;
 		if (clienttype(e) == CLIENTTYPE_BOT)
 		{
