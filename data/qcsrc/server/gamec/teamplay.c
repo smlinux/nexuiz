@@ -705,7 +705,7 @@ float JoinBestTeam(entity pl, float only_return_best)
 
 	// if we don't care what team he ends up on, put him on whatever team he entered as.
 	// if he's not on a valid team, then let other code put him on the smallest team
-	if(!cvar("g_balance_teams") && !cvar("g_balance_teams_force"))
+	if(!cvar("g_campaign") && !cvar("g_balance_teams") && !cvar("g_balance_teams_force"))
 	{
 		if(     c1 >= 0 && pl.team == COLOR_TEAM1)
 			selectedteam = pl.team;
@@ -821,13 +821,13 @@ void SV_ChangeTeam(float _color)
 
 	if(cvar("teamplay"))
 	{
-		if(cvar("g_changeteam_banned") || cvar("g_campaign"))
+		if(cvar("g_campaign") || cvar("g_changeteam_banned"))
 		{
 			sprint(self, "Team changes not allowed\n");
 			return; // changing teams is not allowed
 		}
 
-		if(cvar("g_balance_teams_prevent_imbalance"))
+		if(!cvar("g_campaign") && cvar("g_balance_teams_prevent_imbalance"))
 		{
 			// only allow changing to a smaller or equal size team
 
@@ -1058,6 +1058,8 @@ void ShufflePlayerOutOfTeam (float source_team)
 void AuditTeams()
 {
 	float numplayers, numteams, average;
+	if(cvar("g_campaign"))
+		return;
 	if(!cvar("g_balance_teams_force"))
 		return;
 	if(!cvar("teamplay"))
