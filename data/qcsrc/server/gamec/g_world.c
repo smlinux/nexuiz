@@ -904,7 +904,10 @@ float() WinningCondition_LMS =
 	while (head)
 	{
 		if(head.frags > checkrules_leaderfrags)
+		{
 			checkrules_leaderfrags = head.frags;
+			checkrules_equality = FALSE;
+		}
 		else if(head.frags > 0 && head.frags == checkrules_leaderfrags)
 			checkrules_equality = TRUE;
 		head = head.chain;
@@ -937,7 +940,10 @@ float(float fraglimit) WinningCondition_MaxIndividualScore =
 	while (head)
 	{
 		if(head.frags > checkrules_leaderfrags)
+		{
 			checkrules_leaderfrags = head.frags;
+			checkrules_equality = FALSE;
+		}
 		else if(head.frags > 0 && head.frags == checkrules_leaderfrags)
 			checkrules_equality = TRUE;
 		head = head.chain;
