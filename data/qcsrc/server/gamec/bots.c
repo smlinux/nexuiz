@@ -1607,7 +1607,9 @@ void() bot_think =
 
 	// calculate an aiming latency based on the skill setting
 	// (simulated network latency + naturally delayed reflexes)
-	self.ping = 0.5 - bound(0, 0.1 * cvar("skill"), 0.3);
+	self.ping = 0.7 - bound(0, 0.05 * skill, 0.6);
+	// skill 10 = ping 0.2 (adrenaline)
+	// skill 0 = ping 0.7 (slightly drunk)
 
 	// clear buttons
 	self.button0 = 0;
