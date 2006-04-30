@@ -9,6 +9,8 @@ void() Menu_Init =
 	// do one frame to make it possible to debug the parser
 	Sys_Debug_Frame();
 
+	Campaign_Init();
+
 	Menu_InitGarbageStats();
 	Menu_Load();
 };
@@ -283,6 +285,7 @@ void() Menu_Shutdown =
 	self = null_entity;
 	while( ( self = nextent( self ) ) != null_entity )
 		Raise_Destroy( self );
+	Campaign_Shutdown();
 };
 
 entity( string pType, string pName, string pParent ) Menu_CreateItem =

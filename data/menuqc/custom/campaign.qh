@@ -1,0 +1,9 @@
+// some preprocessoir magic to make the common campaign gamec code work:
+#define CAMPAIGN_MAX_ENTRIES 64
+#define localcmd cmd
+
+// jump to a level
+void Campaign_Init();
+void Campaign_Shutdown();
+void Campaign_DumpLevels(); // debug
+void Campaign_JumpLevel(float n); // call with -1 to play CURRENT level

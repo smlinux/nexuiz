@@ -67,6 +67,10 @@ custom/video.qh
 custom/credits.qh
 custom/messagebox.qh
 
+// Singleplayer campaign
+custom/campaign.qh
+../qcsrc/server/gamec/campaign_common.h
+
 // Source Files
 
 // custom (game specific)
@@ -175,5 +179,9 @@ util/rect.qc
 util/altstring.qc
 util/nfunction.qc
 
-menu.qc
+// Singleplayer campaign
+custom/campaign.qc
+../qcsrc/server/gamec/campaign_setup.c
+../qcsrc/server/gamec/campaign_file.c
 
+menu.qc
