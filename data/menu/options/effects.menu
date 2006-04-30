@@ -45,7 +45,12 @@ Item Window Effects
 		{
 			text    "Deluxemapping"
 			target  "::Data::Effects::DeluxeMapping::Switch"
-		}									
+		}
+		Derive Nex_Option_Switch OffsetMapping
+		{
+			text	"Offset Mapping"
+			target	"::Data::Effects::OffsetMapping::Switch"
+		}											
 		Derive Nex_Option_Switch RealtimeLights
 		{
 			text	"Realtime World Lights"

@@ -49,6 +49,13 @@ Item DataContainer Effects
 			link  "##up"
 		}
 	}
+	Item Data_Cvar OffsetMapping
+	{
+		cvarName	"r_glsl_offsetmapping"
+		defValue	0
+
+		[DataLink_OnOffSwitch]
+	}	
 	Item Data_Cvar RealtimeLights
 	{
 		cvarName	"r_shadow_realtime_world"
