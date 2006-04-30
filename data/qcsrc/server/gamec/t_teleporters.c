@@ -50,7 +50,7 @@ void(vector org, entity death_owner, vector org2) spawn_tdeath =
 
 	// hide entity to avoid "ghosts" between teleporter and destination caused by clientside interpolation
 	death.owner.effects = death.owner.effects | EF_NODRAW;
-	if (death.owner.weaponentity) // misuse FL_FLY to avoid EF_NODRAW on viewmodel 
+	if (death.owner.weaponentity) // misuse FL_FLY to avoid EF_NODRAW on viewmodel
 		death.owner.weaponentity.flags = death.owner.weaponentity.flags | FL_FLY;
 
 	force_retouch = 2;		// make sure even still objects get hit
@@ -67,21 +67,17 @@ void Teleport_Touch (void)
 	sound (other, CHAN_ITEM, "misc/teleport.ogg", 1, ATTN_NORM);
 	te_teleport (other.origin);
 
-	dest = find (world, targetname, self.target);
-	if (!dest)
-		objerror ("Teleporter with nonexistant target");
-
 	// Make teleport effect where the player arrived
 	sound (other, CHAN_ITEM, "misc/teleport.ogg", 1, ATTN_NORM);
-	makevectors (dest.mangle);
-	te_teleport (dest.origin + v_forward * 32);
+	makevectors (self.enemy.mangle);
+	te_teleport (self.enemy.origin + v_forward * 32);
 
-	spawn_tdeath(dest.origin, other, other.origin);
+	spawn_tdeath(self.enemy.origin, other, other.origin);
 
 	// Relocate the player
-	//setorigin (other, dest.origin);
-	setorigin (other, dest.origin + '0 0 1' * (1 - other.mins_z - 24));
-	other.angles = dest.mangle;
+	//setorigin (other, self.enemy.origin);
+	setorigin (other, self.enemy.origin + '0 0 1' * (1 - other.mins_z - 24));
+	other.angles = self.enemy.mangle;
 	other.fixangle = TRUE;
 
 	// keep velocity but change movement direction
@@ -111,6 +107,23 @@ void misc_teleporter_dest (void)
 	info_teleport_destination();
 }
 
+void teleport_findtarget (void)
+{
+	// now enable touch
+	self.touch = Teleport_Touch;
+
+	self.enemy = find (world, targetname, self.target);
+	if (!self.enemy)
+	{
+		objerror ("Teleporter with nonexistant target");
+		remove(self);
+		return;
+	}
+
+	self.dest = self.enemy.origin;
+	waypoint_spawnforteleporter(self, self.dest, 0);
+}
+
 void trigger_teleport (void)
 {
 	self.angles = '0 0 0';
@@ -123,7 +136,8 @@ void trigger_teleport (void)
 	self.model = "";
 	self.modelindex = 0;
 
-	self.touch = Teleport_Touch;
+	self.think = teleport_findtarget;
+	self.nextthink = time + 0.2;
 
 	if (!self.target)
 		objerror ("Teleporter with no target");

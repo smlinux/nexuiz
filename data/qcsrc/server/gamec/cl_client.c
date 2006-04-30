@@ -295,7 +295,7 @@ void PutClientInServer (void)
 	// player is dead and becomes observer
 	if(cvar("g_lms") && self.frags < 1)
 		self.classname = "observer";
-		
+
 	if(cvar("g_arena"))
 	if(!self.spawned)
 		self.classname = "observer";
@@ -483,8 +483,10 @@ void PutClientInServer (void)
 
 		if(cvar("g_arena"))
 			Spawnqueue_Remove(self);
-		
+
 		self.event_damage = PlayerDamage;
+
+		self.bot_attack = TRUE;
 
 		self.statdraintime = time + 5;
 		self.button0 = self.button1 = self.button2 = self.button3 = 0;
@@ -566,8 +568,11 @@ string ColoredTeamName(float t);
 void ClientConnect (void)
 {
 	self.classname = "player_joining";
+	self.flags = self.flags | FL_CLIENT;
 
 	if(player_count<0) player_count = 0;
+
+	bot_clientconnect();
 
 	//if(cvar("g_domination"))
 	//	dom_player_join_team(self);
@@ -659,7 +664,8 @@ void ClientConnect (void)
 		Spawnqueue_Insert(self);
 	}
 
-	player_count += 1;
+	bot_rebuildplayerlist();
+
 	self.jointime = time;
 }
 
@@ -697,8 +703,8 @@ void ClientDisconnect (void)
 	if(self.flagcarried)
 		DropFlag(self.flagcarried);
 
-	// decrease player count for lms
-	player_count -= 1;
+	bot_rebuildplayerlist();
+
 	// player was dead, decrease dead count
 	if(cvar("g_lms") && self.frags < 1)
 		lms_dead_count -= 1;
@@ -1108,11 +1114,16 @@ void SpectateUpdate() {
 		if(self.enemy.flags & FL_NOTARGET)
 			PutObserverInServer();
 		SpectateCopy(self.enemy);
-		msg_entity = self;
-		WriteByte(MSG_ONE, SVC_SETANGLE);
-		WriteAngle(MSG_ONE, self.enemy.v_angle_x);
-		WriteAngle(MSG_ONE, self.enemy.v_angle_y);
-		WriteAngle(MSG_ONE, self.enemy.v_angle_z);
+		self.dmg_take = self.enemy.dmg_take;
+		self.dmg_save = self.enemy.dmg_save;
+		self.dmg_inflictor = self.enemy.dmg_inflictor;
+		self.fixangle = TRUE;
+		self.angles = self.enemy.v_angle;
+		//msg_entity = self;
+		//WriteByte(MSG_ONE, SVC_SETANGLE);
+		//WriteAngle(MSG_ONE, self.enemy.v_angle_x);
+		//WriteAngle(MSG_ONE, self.enemy.v_angle_y);
+		//WriteAngle(MSG_ONE, self.enemy.v_angle_z);
 	}
 }
 
@@ -1148,8 +1159,6 @@ void PlayerPreThink (void)
 	if(self.classname == "player") {
 		local vector m1, m2;
 
-//		MauveBot_AI();
-
 //		if(self.netname == "Wazat")
 //			bprint(strcat(self.classname, "\n"));
 
@@ -1180,9 +1189,8 @@ void PlayerPreThink (void)
 			else if (self.deadflag == DEAD_DEAD)
 			{
 				if (cvar("g_lms") || cvar("g_arena") || cvar("g_forced_respawn"))
-					self.button0 = self.button2 = self.button3 = 0;
-
-				if (!self.button0 && !self.button2 && !self.button3)
+					self.deadflag = DEAD_RESPAWNABLE;
+				else if (!self.button0 && !self.button2 && !self.button3)
 					self.deadflag = DEAD_RESPAWNABLE;
 			}
 			else if (self.deadflag == DEAD_RESPAWNABLE)
@@ -1191,6 +1199,11 @@ void PlayerPreThink (void)
 				    self.button2  ||
 				    self.button3  ||
 				    self.button4  ||
+				    self.button5  ||
+				    self.button6  ||
+				    self.button7  ||
+				    self.button8  ||
+				    self.buttonuse ||
 				    cvar("g_lms") ||
 				    cvar("g_forced_respawn"))
 					respawn();

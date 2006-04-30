@@ -2,6 +2,7 @@ exec default.cfg
 exec config.cfg
 exec autoexec.cfg
 stuffcmds
-startdemos
-play announcer/male/welcome.ogg
+startdemos demo1 demo2 demo3
+//startdemos
+//play announcer/male/welcome.ogg
 

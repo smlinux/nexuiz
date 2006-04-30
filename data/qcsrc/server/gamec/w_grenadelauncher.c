@@ -22,6 +22,8 @@ void(float req) w_glauncher =
 {
 	if (req == WR_IDLE)
 		glauncher_ready_01();
+	else if (req == WR_AIM)
+		self.button0 = bot_aim(cvar("g_balance_grenadelauncher_primary_speed"), cvar("g_balance_grenadelauncher_primary_speed_up"), cvar("g_balance_grenadelauncher_primary_lifetime"), TRUE);
 	else if (req == WR_FIRE1)
 		weapon_prepareattack(glauncher_check, glauncher_check, glauncher_fire1_01, cvar("g_balance_grenadelauncher_primary_refire"));
 	else if (req == WR_FIRE2)
@@ -125,6 +127,8 @@ void W_Grenade_Attack (void)
 	gren = spawn ();
 	gren.owner = self;
 	gren.classname = "grenade";
+	gren.bot_dodge = TRUE;
+	gren.bot_dodgerating = cvar("g_balance_grenadelauncher_primary_damage");
 	gren.movetype = MOVETYPE_BOUNCE;
 	gren.solid = SOLID_BBOX;
 	gren.effects = EF_NOSHADOW;
@@ -159,6 +163,8 @@ void W_Grenade_Attack2 (void)
 	gren = spawn ();
 	gren.owner = self;
 	gren.classname = "grenade";
+	gren.bot_dodge = TRUE;
+	gren.bot_dodgerating = cvar("g_balance_grenadelauncher_secondary_damage");
 	gren.movetype = MOVETYPE_BOUNCE;
 	gren.solid = SOLID_BBOX;
 	gren.effects = EF_NOSHADOW;

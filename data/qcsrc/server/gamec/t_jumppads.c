@@ -57,15 +57,63 @@ void() trigger_push_touch =
 	}
 };
 
+.vector dest;
+
 void() trigger_push_findtarget =
 {
-	// find the target
-	self.enemy = find(world, targetname, self.target);
-	if (!self.enemy)
+	local entity e;
+	local float grav;
+	local float flighttime;
+	local float dist;
+	local vector org;
+
+	// first calculate a typical start point for the jump
+	org = (self.absmin + self.absmax) * 0.5;
+	org_z = self.absmax_z - PL_MIN_z;
+
+	if (self.target)
 	{
-		objerror("trigger_push: target not found\n");
-		remove(self);
+		// find the target
+		self.enemy = find(world, targetname, self.target);
+		if (!self.enemy)
+		{
+			objerror("trigger_push: target not found\n");
+			remove(self);
+			return;
+		}
+
+		// figure out how long it will take to hit the point considering gravity
+		grav = cvar("sv_gravity");
+		flighttime = sqrt((self.enemy.origin_z - org_z) / (0.5 * grav));
+		if (!flighttime)
+		{
+			objerror("trigger_push: jump pad with bad destination\n");
+			remove(self);
+			return;
+		}
+
+		// how far in X and Y to move
+		self.movedir = (self.enemy.origin - org);
+		self.movedir_z = 0;
+		dist = vlen(self.movedir);
+
+		// finally calculate the velocity
+		self.movedir = normalize(self.movedir) * (dist / flighttime);
+		self.movedir_z = flighttime * grav;
 	}
+	else
+		flighttime = 0;
+
+	// calculate the destination and spawn a teleporter waypoint
+	e = spawn();
+	setorigin(e, org);
+	setsize(e, PL_MIN, PL_MAX);
+	e.velocity = self.movedir;
+	tracetoss(e, e);
+	self.dest = trace_endpos;
+	remove(e);
+
+	waypoint_spawnforteleporter(self, self.dest, flighttime);
 };
 
 void() trigger_push =
@@ -81,19 +129,14 @@ void() trigger_push =
 
 	self.touch = trigger_push_touch;
 
-	// check if this is a jump pad
-	if (self.target)
-	{
-		self.think = trigger_push_findtarget;
-		self.nextthink = time + 0.2;
-	}
-	else
-	{
-		// normal push setup
-		if (!self.speed)
-			self.speed = 1000;
-		self.movedir = self.movedir * self.speed * 10;
-	}
+	// normal push setup
+	if (!self.speed)
+		self.speed = 1000;
+	self.movedir = self.movedir * self.speed * 10;
+
+	// this must be called to spawn the teleport waypoints for bots
+	self.think = trigger_push_findtarget;
+	self.nextthink = time + 0.2;
 };
 
 void() target_push = {};

@@ -1058,7 +1058,7 @@ void () fd_secret_use =
 	local float temp;
 
 	self.health = 10000;
-	//self.havocattack = TRUE;
+	self.bot_attack = TRUE;
 
 	// exit if still moving around...
 	if (self.origin != self.oldorigin)

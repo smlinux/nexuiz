@@ -102,6 +102,8 @@ void(float req) w_nex =
 {
 	if (req == WR_IDLE)
 		nex_ready_01();
+	else if (req == WR_AIM)
+		self.button0 = bot_aim(1000000, 0, 1, FALSE);
 	else if (req == WR_FIRE1)
 		weapon_prepareattack(nex_check, nex_check, nex_fire1_01, cvar("g_balance_nex_refire"));
 	else if (req == WR_RAISE)

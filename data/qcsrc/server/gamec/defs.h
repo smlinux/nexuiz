@@ -15,9 +15,6 @@ float maxclients;
 
 string newlines = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 
-//entity	casing;
-entity dest;
-
 // Fields
 
 .void(entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force) event_damage;
@@ -143,6 +140,7 @@ float WR_FIRE2		  = 7;  // secondary fire
 float WR_FIRE3		  = 8;  // third fire
 float WR_CHECKAMMO	  = 9;  // checks ammo for weapon
 float WR_CLEAR		  = 10;  // runs afted deselecting frames, remove weapon parts (if presented). This useful for quake3-style chaingun
+float WR_AIM		  = 11; // runs bot aiming code for this weapon
 
 // Weapon indexes
 float WEP_LASER				= 1; // float	IT_LASER				= 4096;
@@ -181,8 +179,6 @@ float intermission_running;
 float intermission_exittime;
 float alreadychangedlevel;
 
-
-.float	isbot;	// true if this client is actually a bot
 
 .float runes;
 

@@ -22,6 +22,8 @@ void(float req) w_electro =
 {
 	if (req == WR_IDLE)
 		electro_ready_01();
+	else if (req == WR_AIM)
+		self.button0 = bot_aim(cvar("g_balance_electro_primary_speed"), 0, cvar("g_balance_electro_primary_lifetime"), FALSE);
 	else if (req == WR_FIRE1)
 		weapon_prepareattack(electro_check, electro_check, electro_fire1_01, cvar("g_balance_electro_primary_refire"));
 	else if (req == WR_FIRE2)
@@ -162,6 +164,8 @@ void() W_Electro_Attack
 	proj = spawn ();
 	proj.classname = "plasma_prim";
 	proj.owner = self;
+	proj.bot_dodge = TRUE;
+	proj.bot_dodgerating = cvar("g_balance_electro_primary_damage");
 	proj.think = W_Plasma_Explode;
 	proj.nextthink = time + cvar("g_balance_electro_primary_lifetime");
 	proj.solid = SOLID_BBOX;
@@ -212,6 +216,8 @@ void() W_Electro_Attack2
 	proj.classname = "plasma";
 	proj.owner = self;
 	proj.think = W_Plasma_Explode;
+	proj.bot_dodge = TRUE;
+	proj.bot_dodgerating = cvar("g_balance_electro_secondary_damage");
 	proj.nextthink = time + cvar("g_balance_electro_secondary_lifetime");
 	proj.solid = SOLID_BBOX;
 	setorigin(proj, org);

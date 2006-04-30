@@ -22,6 +22,8 @@ void(float req) w_hagar =
 {
 	if (req == WR_IDLE)
 		hagar_ready_01();
+	else if (req == WR_AIM)
+		self.button0 = bot_aim(cvar("g_balance_hagar_primary_speed"), 0, cvar("g_balance_hagar_primary_lifetime"), FALSE);
 	else if (req == WR_FIRE1)
 		weapon_prepareattack(hagar_check, hagar_check, hagar_fire1_01, cvar("g_balance_hagar_primary_refire"));
 	else if (req == WR_FIRE2)
@@ -135,6 +137,8 @@ void W_Hagar_Attack (void)
 	missile = spawn ();
 	missile.owner = self;
 	missile.classname = "missile";
+	missile.bot_dodge = TRUE;
+	missile.bot_dodgerating = cvar("g_balance_hagar_primary_damage");
 	missile.touch = W_Hagar_Touch;
 	missile.think = W_Hagar_Explode;
 	missile.nextthink = time + cvar("g_balance_hagar_primary_lifetime");
@@ -176,6 +180,8 @@ void W_Hagar_Attack2 (void)
 	missile = spawn ();
 	missile.owner = self;
 	missile.classname = "missile";
+	missile.bot_dodge = TRUE;
+	missile.bot_dodgerating = cvar("g_balance_hagar_secondary_damage");
 	missile.touch = W_Hagar_Touch2;
 	missile.cnt = 0;
 	missile.think = W_Hagar_Explode;

@@ -51,7 +51,7 @@ void CopyBody(float keepvelocity)
 	self.fade_rate = oldself.fade_rate;
 	//self.weapon = oldself.weapon;
 	setorigin(self, oldself.origin);
-	setsize(self, oldself.mins, oldself.maxs);//'-16 -16 -24',  '16 16 5');
+	setsize(self, oldself.mins, oldself.maxs);
 	self.oldorigin = oldself.origin;
 	self = oldself;
 }
@@ -63,7 +63,10 @@ void player_anim (void)
 		if (time > self.dead_time)
 		{
 			if (self.maxs_z > 5)
-				setsize(self, '-16 -16 -24', '16 16 5');
+			{
+				self.maxs_z = 5;
+				setsize(self, self.mins, self.maxs);
+			}
 			self.frame = self.dead_frame;
 		}
 		else
@@ -245,6 +248,12 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 		else
 			self.pain_frame = $pain2;
 		self.pain_finished = time + 0.5;	//Supajoe
+
+		// throw off bot aim temporarily
+		local float shake;
+		shake = damage * 5 / (skill + 1);
+		self.v_angle_x = self.v_angle_x + (random() * 2 - 1) * shake;
+		self.v_angle_y = self.v_angle_y + (random() * 2 - 1) * shake;
 	}
 
 	if(cvar("g_arena"))
@@ -294,10 +303,6 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 	}
 	else if(attacker.classname == "player" || attacker.classname == "gib")
 	{
-		if (self.bot_type == BOT_TYPE_URREBOT || self.bot_type == BOT_TYPE_AUTOURRE)
-		if (!self.enemy)
-		if (vlen(self.origin - attacker.origin) < 1000)
-			self.enemy = attacker;
 		self.pusher = attacker;
 		self.pushltime = time + cvar("g_maxpushtime");
 	}
@@ -363,11 +368,12 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 
 		if(clienttype(self) == CLIENTTYPE_REAL)
 		{
-			msg_entity = self;
-			WriteByte (MSG_ONE, SVC_SETANGLE);
-			WriteAngle (MSG_ONE, self.v_angle_x);
-			WriteAngle (MSG_ONE, self.v_angle_y);
-			WriteAngle (MSG_ONE, 80);
+			self.fixangle = TRUE;
+			//msg_entity = self;
+			//WriteByte (MSG_ONE, SVC_SETANGLE);
+			//WriteAngle (MSG_ONE, self.v_angle_x);
+			//WriteAngle (MSG_ONE, self.v_angle_y);
+			//WriteAngle (MSG_ONE, 80);
 		}
 
 		if(cvar("g_arena"))

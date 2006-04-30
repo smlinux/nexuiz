@@ -155,12 +155,12 @@ void StartFrame (void)
 	skill = cvar("skill");
 
 	Spawnqueue_Check();
-	
+
 	CreatureFrame ();
 	CheckRules_World ();
 
 	AuditTeams();
 
 	RuneMatchGivePoints();
-	Bots_Shared();
+	bot_serverframe();
 }

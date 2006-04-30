@@ -22,6 +22,8 @@ void(float req) w_shotgun =
 {
 	if (req == WR_IDLE)
 		shotgun_ready_01();
+	else if (req == WR_AIM)
+		self.button0 = bot_aim(1000000, 0, 0.001, FALSE);
 	else if (req == WR_FIRE1)
 		weapon_prepareattack(shotgun_check, shotgun_check, shotgun_fire1_01, cvar("g_balance_shotgun_primary_refire"));
 	else if (req == WR_FIRE2)

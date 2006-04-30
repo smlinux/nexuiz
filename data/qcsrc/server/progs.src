@@ -12,13 +12,12 @@ gamec/campaign.h
 
 gamec/miscfunctions.c
 
-gamec/bots.c		// definitions and shared stuff between both Urrebot and Mauvebot // Urre
-gamec/mauvebot.c	// altered a tad to work together with Urrebots
-gamec/urrebot_load.c
-gamec/urrebot_nn_use.c
-gamec/urrebot_nn_search.c
-gamec/urrebot_ai_goals.c
-gamec/urrebot_ai_main.c
+// general bot utility functions and management
+gamec/bots.c
+
+// LordHavoc's bots
+gamec/havocbot_roles.c
+gamec/havocbot.c
 
 gamec/g_subs.c
 

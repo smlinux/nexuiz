@@ -16,6 +16,55 @@ void(float req) w_rlauncher =
 {
 	if (req == WR_IDLE)
 		rlauncher_ready_01();
+	else if (req == WR_AIM)
+	{
+		// aim and decide to fire if appropriate
+		self.button0 = bot_aim(cvar("g_balance_rocketlauncher_speed"), 0, cvar("g_balance_rocketlauncher_lifetime"), FALSE);
+		// decide whether to detonate rockets
+		local entity missile, targetlist, targ;
+		local float edgedamage, coredamage, edgeradius, recipricoledgeradius, d;
+		local float selfdamage, teamdamage, enemydamage;
+		edgedamage = cvar("g_balance_rocketlauncher_edgedamage");
+		coredamage = cvar("g_balance_rocketlauncher_damage");
+		edgeradius = cvar("g_balance_rocketlauncher_radius");
+		recipricoledgeradius = 1 / edgeradius;
+		selfdamage = 0;
+		teamdamage = 0;
+		enemydamage = 0;
+		targetlist = findchainfloat(bot_attack, TRUE);
+		missile = find(world, classname, "missile");
+		while (missile)
+		{
+			targ = targetlist;
+			while (targ)
+			{
+				d = vlen(targ.origin + (targ.mins + targ.maxs) * 0.5 - missile.origin);
+				d = edgedamage + (coredamage - edgedamage) * (1 - d * recipricoledgeradius);
+				// count potential damage according to type of target
+				if (targ == self)
+					selfdamage = selfdamage + d;
+				else if (targ.team == self.team && teamplay)
+					teamdamage = teamdamage + d;
+				else if (bot_shouldattack(targ))
+					enemydamage = enemydamage + d;
+				targ = targ.chain;
+			}
+			missile = find(missile, classname, "missile");
+		}
+		local float desirabledamage;
+		desirabledamage = enemydamage;
+		if (teamplay != 1 && time > self.invincible_finished && time > self.spawnshieldtime)
+			desirabledamage = desirabledamage - selfdamage * cvar("g_balance_selfdamagepercent");
+		if (self.team && teamplay == 2)
+			desirabledamage = desirabledamage - teamdamage;
+		// if we would be doing at least half of the core damage, detonate it
+		// but don't fire a new shot at the same time!
+		if (desirabledamage >= 0.5 * coredamage)
+		{
+			self.button3 = TRUE;
+			self.button0 = FALSE;
+		}
+	}
 	else if (req == WR_FIRE1)
 		weapon_prepareattack(rlauncher_check, rlauncher_check, rlauncher_fire1_01, cvar("g_balance_rocketlauncher_refire"));
 	else if (req == WR_FIRE2)
@@ -259,6 +308,8 @@ void W_Rocket_Attack (void)
 	missile.owner = self;
 	self.lastrocket = missile;
 	missile.classname = "missile";
+	missile.bot_dodge = TRUE;
+	missile.bot_dodgerating = cvar("g_balance_rocketlauncher_primary_damage") * 2; // * 2 because it can be detonated inflight which makes it even more dangerous
 
 	missile.takedamage = DAMAGE_YES;
 	missile.damageforcescale = 4;

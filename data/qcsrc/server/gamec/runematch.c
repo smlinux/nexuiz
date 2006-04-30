@@ -213,11 +213,11 @@ void rune_touch()
 	self.solid = SOLID_NOT;
 	setorigin(self, self.origin);
 
-	//sprint(other, strcat("^3You have picked up ", 
+	//sprint(other, strcat("^3You have picked up ",
 	//	RuneName(self.runes & (RUNE_LAST*2-1)), " and "));
 	//sprint(other, strcat(RuneName(self.enemy.runes & (CURSE_WEAK | CURSE_VULNER | CURSE_VENOM | CURSE_SLOW | CURSE_EMPATHY)), "\n"));
 
-	bprint(strcat("^3", other.netname, "^7 has picked up ", 
+	bprint(strcat("^3", other.netname, "^7 has picked up ",
 		RuneName(self.runes & (RUNE_LAST*2-1)), "^7 and "));
 	bprint(strcat(RuneName(self.enemy.runes & (CURSE_WEAK | CURSE_VULNER | CURSE_VENOM | CURSE_SLOW | CURSE_EMPATHY)), "\n"));
 }
@@ -309,7 +309,7 @@ void DropRune(entity pl, entity e)
 	e.velocity = '0 0 200' + '0 100 0'*crandom() + '100 0 0'*crandom();
 
 
-	bprint(strcat("^3", pl.netname, "^7 has lost ", 
+	bprint(strcat("^3", pl.netname, "^7 has lost ",
 		RuneName(e.runes & (RUNE_LAST*2-1)), "^7 and "));
 	bprint(strcat(RuneName(e.enemy.runes & (CURSE_WEAK | CURSE_VULNER | CURSE_VENOM | CURSE_SLOW | CURSE_EMPATHY)), "\n"));
 }
@@ -599,7 +599,7 @@ void spawn_runes()
 
 		e.alpha = e.enemy.alpha = cvar("g_runematch_rune_alpha");//0.78;
 		e.effects = e.enemy.effects = cvar("g_runematch_rune_effects");//EF_ADDITIVE;// | EF_FULLBRIGHT;
-		
+
 		// Savage: Save some bandwidth
 		self.effects |= EF_LOWPRECISION;
 
@@ -623,8 +623,6 @@ void runematch_init()
 {
 	if(!cvar("g_runematch"))
 		return;
-	precache_model("models/runematch/rune.mdl");
-	precache_model("models/runematch/curse.mdl");
 
 	entity e;
 	e = spawn();
@@ -639,10 +637,10 @@ float runematch_point_time;
 void RuneMatchGivePoints()
 {
 	entity rune;
-	
+
 	if(!cvar("g_runematch") || !cvar("g_runematch_pointamt"))
 		return;
-	
+
 	if(gameover)
 		return;
 

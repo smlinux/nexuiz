@@ -75,13 +75,15 @@ void worldspawn (void)
 	precache_model ("models/plasma.mdl");
 	precache_model ("models/plasmatrail.mdl");
 	precache_model ("models/rocket.md3");
-	precache_model ("models/sprites/grenexpl.spr");
-	precache_model ("models/sprites/hagar.spr");
-	precache_model ("models/sprites/muzzleflash.spr32");
-	precache_model ("models/sprites/electrocombo.spr32");
+	//precache_model ("models/sprites/grenexpl.spr");
+	precache_model ("models/runematch/rune.mdl");
+	precache_model ("models/runematch/curse.mdl");
+	//precache_model ("models/sprites/hagar.spr");
+	//precache_model ("models/sprites/muzzleflash.spr32");
+	//precache_model ("models/sprites/electrocombo.spr32");
 	//precache_model ("models/sprites/plasmahitwall.spr32");
 	//precache_model ("models/sprites/plasmashot.spr32");
-	precache_model ("models/sprites/rockexpl.spr");
+	//precache_model ("models/sprites/rockexpl.spr");
 	precache_model ("models/tracer.mdl");
 	precache_model ("models/uziflash.md3");
 	precache_model ("models/weapons/g_crylink.md3");
@@ -283,9 +285,6 @@ void worldspawn (void)
 	//if (cvar("g_domination"))
 	//	dom_init();
 
-	// Urrebot setting
-	urrebots_navopt = cvar("urrebots_navopt");
-
 	local entity head;
 	head = nextent(world);
 	maxclients = 0;
@@ -397,7 +396,7 @@ float GetMaplistPosition()
 
 	strunzone(map);
 	// resume normal maplist rotation if current map is not in g_maplist
-	return cvar("g_maplist_index");		 
+	return cvar("g_maplist_index");
 }
 
 void() GotoNextMap =
@@ -415,7 +414,7 @@ void() GotoNextMap =
 		CampaignPostIntermission();
 		return;
 	}
-	
+
 	if (cvar("samelevel")) // if samelevel is set, stay on same level
 	{
 		// this does not work because it tries to exec maps/nexdm01.mapcfg (which doesn't exist, it should be trying maps/dm_nexdm01.mapcfg for example)
@@ -1065,28 +1064,6 @@ float(float fraglimit) WinningCondition_MaxTeamMax =
 }
 
 
-// Add/remove bots if needed
-void() CheckRules_Minplayers =
-{
-	float f;
-
-	if(cvar("minplayers") >= maxclients)
-		cvar_set("minplayers", ftos(maxclients - 1));
-
-	f = cvar("minplayers") - (player_count - bot_number);
-	if((player_count - bot_number) < 1)
-		f = 0;
-
-	if(cvar("bot_number") != f)
-	{
-		if(cvar("minplayers") != f)
-			cvar_set("bot_number", ftos(f));
-		else
-			cvar_set("bot_number", "0");
-	}
-}
-
-
 /*
 ============
 CheckRules_World
@@ -1140,9 +1117,6 @@ void() CheckRules_World =
 		checkrules_oneminutewarning = TRUE;
 		sound(world, CHAN_AUTO, "announcer/robotic/1minuteremains.ogg", 1, ATTN_NONE);
 	}
-
-	if(cvar("minplayers"))
-		CheckRules_Minplayers();
 
 	status = WINNING_NO;
 	if(cvar("g_lms"))

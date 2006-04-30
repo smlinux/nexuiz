@@ -9,6 +9,8 @@ void(float req) w_laser =
 {
 	if (req == WR_IDLE)
 		laser_ready_01();
+	else if (req == WR_AIM)
+		self.button0 = bot_aim(cvar("g_balance_laser_primary_speed"), 0, cvar("g_balance_laser_primary_lifetime"), FALSE);
 	else if (req == WR_FIRE1)
 		weapon_prepareattack(laser_check, laser_check, laser_fire1_01, cvar("g_balance_laser_refire"));
 	else if (req == WR_FIRE2)
@@ -90,6 +92,8 @@ void W_Laser_Attack (void)
 	missile = spawn ();
 	missile.owner = self;
 	missile.classname = "laserbolt";
+	missile.bot_dodge = TRUE;
+	missile.bot_dodgerating = cvar("g_balance_laser_damage");
 
 	missile.movetype = MOVETYPE_FLY;
 	missile.solid = SOLID_BBOX;

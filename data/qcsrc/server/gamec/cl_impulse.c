@@ -128,7 +128,7 @@ void ImpulseCommands (void)
 			{
 				makevectors(self.v_angle);
 				traceline(self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * 65536, FALSE, self);
-			sprint(self, strcat("distance: ", ftos(fabs(vlen(trace_endpos - (self.origin + self.view_ofs)))), "\n"));
+				sprint(self, strcat("distance: ", ftos(fabs(vlen(trace_endpos - (self.origin + self.view_ofs)))), "\n"));
 			}
 			else if(imp == 42)
 			{
@@ -143,7 +143,16 @@ void ImpulseCommands (void)
 				self.ammo_cells = 999;
 			}
 		}
-		else reset_map();
 	}
+
+	if (cvar("g_waypointeditor"))
+	{
+		local entity e;
+		if (imp == 103) waypoint_spawn(self.origin, self.origin, 0);
+		else if (imp == 104) {e = navigation_findnearestwaypoint(self, FALSE);if (e) waypoint_remove(e);}
+		else if (imp == 105) waypoint_schedulerelinkall();
+		else if (imp == 106) waypoint_saveall();
+	}
+
 	//TetrisImpulses();
 }

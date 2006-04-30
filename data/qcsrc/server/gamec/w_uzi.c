@@ -21,6 +21,8 @@ void(float req) w_uzi =
 {
 	if (req == WR_IDLE)
 		uzi_ready_01();
+	else if (req == WR_AIM)
+		self.button0 = bot_aim(1000000, 0, 0.001, FALSE);
 	else if (req == WR_FIRE1 || req == WR_FIRE2)
 		weapon_prepareattack(uzi_check, uzi_check, uzi_fire1_01, cvar("g_balance_uzi_refire"));
 	else if (req == WR_RAISE)

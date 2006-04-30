@@ -1045,3 +1045,5 @@ float PFLAGS_FULLDYNAMIC = 128; // light enable (without this set no light is pr
 .float  ping; // DP_SV_PING
 
 
+.float buttonchat;
+.float buttonuse;

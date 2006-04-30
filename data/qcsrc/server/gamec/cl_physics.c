@@ -20,14 +20,8 @@ void SV_PlayerPhysics()
 
 	Nixnex_GiveCurrentWeapon();
 
-	// MauveBot_AI();
 	if (clienttype(self) == CLIENTTYPE_BOT)
-	{
-		if (self.bot_type == BOT_TYPE_MAUVEBOT || self.bot_type == BOT_TYPE_AUTOMAUVE)
-			MauveBot_AI();
-		else if (self.bot_type == BOT_TYPE_URREBOT || self.bot_type == BOT_TYPE_AUTOURRE)
-			UrreBotThink();
-	}
+		bot_think();
 
 	if (self.movetype == MOVETYPE_NONE)
 		return;

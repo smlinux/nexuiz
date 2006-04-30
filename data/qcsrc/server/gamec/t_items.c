@@ -175,7 +175,47 @@ void RemoveItem(void) = {
 	remove(self);
 }
 
-void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, string itemname, float itemid, float itemflags)
+// pickup evaluation functions
+// these functions decide how desirable an item is to the bots
+
+float(entity player, entity item) generic_pickupevalfunc = {return item.bot_pickupbasevalue;};
+
+float(entity player, entity item) weapon_pickupevalfunc =
+{
+	// if we already have the weapon, rate it 1/5th normal value
+	if ((player.items & item.items) == item.items)
+		return item.bot_pickupbasevalue * 0.2;
+	return item.bot_pickupbasevalue;
+};
+
+float(entity player, entity item) commodity_pickupevalfunc =
+{
+	float c;
+	c = 0;
+	// TODO: figure out if the player even has the weapon this ammo is for?
+	// may not affect strategy much though...
+	// find out how much ammo the player has, in terms of this ammo pickup
+	// (how many of these ammo pickups it would take to total the player's
+	// current ammo)
+	if (item.ammo_shells)
+		c = c + player.ammo_shells / item.ammo_shells;
+	if (item.ammo_nails)
+		c = c + player.ammo_nails / item.ammo_nails;
+	if (item.ammo_rockets)
+		c = c + player.ammo_rockets / item.ammo_rockets;
+	if (item.ammo_cells)
+		c = c + player.ammo_cells / item.ammo_cells;
+	if (item.armorvalue)
+		c = c + player.armorvalue / item.armorvalue;
+	if (item.health)
+		c = c + player.health / item.health / 10;
+	// the more ammo the player has, the less desirable this pickup becomes
+	c = 1 / (1 + c);
+	return item.bot_pickupbasevalue * c;
+};
+
+
+void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, string itemname, float itemid, float itemflags, float(entity player, entity item) pickupevalfunc, float pickupbasevalue)
 {
 	vector org;
 	org = self.origin;
@@ -227,6 +267,9 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 	{
 		self.target = "###item###"; // for finding the nearest item using find()
 	}
+	self.bot_pickup = TRUE;
+	self.bot_pickupevalfunc = pickupevalfunc;
+	self.bot_pickupbasevalue = pickupbasevalue;
 	self.mdl = itemmodel;
 	//self.noise = pickupsound;
 	self.item_pickupsound = pickupsound;
@@ -289,6 +332,8 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 	if (cvar("g_fullbrightitems"))
 		self.effects = self.effects | EF_FULLBRIGHT;
 
+	if (self.classname != "droppedweapon")
+		waypoint_spawnforitem(self);
 }
 
 /* replace items in minstagib
@@ -304,7 +349,7 @@ void minstagib_items (float itemid)
 		self.ammo_cells = 25;
 		StartItem ("models/weapons/g_nex.md3",
 			"weapons/weaponpickup.ogg", 15,
-			"Nex Gun", IT_NEX, FL_WEAPON);
+			"Nex Gun", IT_NEX, FL_WEAPON, generic_pickupevalfunc, 1000);
 		return;
 	}
 
@@ -317,7 +362,7 @@ void minstagib_items (float itemid)
 		self.ammo_cells = 1;
 		StartItem ("models/items/a_cells.md3",
 			"misc/itempickup.ogg", 45,
-			"Nex Ammo", IT_CELLS, 0);
+			"Nex Ammo", IT_CELLS, 0, generic_pickupevalfunc, 100);
 		return;
 	}
 
@@ -337,7 +382,7 @@ void minstagib_items (float itemid)
 		self.strength_finished = 30;
 		StartItem ("models/items/g_strength.md3",
 			"misc/powerup.ogg", 120,
-			"Invisibility", IT_STRENGTH, FL_POWERUP);
+			"Invisibility", IT_STRENGTH, FL_POWERUP, generic_pickupevalfunc, 1000);
 	}
 	// replace with extra lives
 	if (itemid == IT_NAILS)
@@ -345,7 +390,7 @@ void minstagib_items (float itemid)
 		self.max_health = 1;
 		StartItem ("models/items/g_h100.md3",
 			"misc/megahealth.ogg", 120,
-			"Extralife", IT_NAILS, FL_POWERUP);
+			"Extralife", IT_NAILS, FL_POWERUP, generic_pickupevalfunc, 1000);
 
 	}
 	// replace with ammo
@@ -355,34 +400,34 @@ void minstagib_items (float itemid)
 		self.invincible_finished = 30;
 		StartItem ("models/items/g_invincible.md3",
 			"misc/powerup_shield.ogg", 120,
-			"Speed", IT_INVINCIBLE, FL_POWERUP);
+			"Speed", IT_INVINCIBLE, FL_POWERUP, generic_pickupevalfunc, 1000);
 	}
 
 }
 
 void weapon_uzi (void) {
 	self.ammo_nails = 120;
-	StartItem ("models/weapons/g_uzi.md3", "weapons/weaponpickup.ogg", 15, W_Name(WEP_UZI), IT_UZI, FL_WEAPON);
+	StartItem ("models/weapons/g_uzi.md3", "weapons/weaponpickup.ogg", 15, W_Name(WEP_UZI), IT_UZI, FL_WEAPON, weapon_pickupevalfunc, 1000);
 }
 
 void weapon_shotgun (void) {
 	self.ammo_shells = 15;
-	StartItem ("models/weapons/g_shotgun.md3", "weapons/weaponpickup.ogg", 15, W_Name(WEP_SHOTGUN), IT_SHOTGUN, FL_WEAPON);
+	StartItem ("models/weapons/g_shotgun.md3", "weapons/weaponpickup.ogg", 15, W_Name(WEP_SHOTGUN), IT_SHOTGUN, FL_WEAPON, weapon_pickupevalfunc, 1000);
 }
 
 void weapon_grenadelauncher (void) {
 	self.ammo_rockets = 15;
-	StartItem ("models/weapons/g_gl.md3", "weapons/weaponpickup.ogg", 15, W_Name(WEP_GRENADE_LAUNCHER), IT_GRENADE_LAUNCHER, FL_WEAPON);
+	StartItem ("models/weapons/g_gl.md3", "weapons/weaponpickup.ogg", 15, W_Name(WEP_GRENADE_LAUNCHER), IT_GRENADE_LAUNCHER, FL_WEAPON, weapon_pickupevalfunc, 1000);
 }
 
 void weapon_electro (void) {
 	self.ammo_cells = 25;
-	StartItem ("models/weapons/g_electro.md3", "weapons/weaponpickup.ogg", 15, W_Name(WEP_ELECTRO), IT_ELECTRO, FL_WEAPON);
+	StartItem ("models/weapons/g_electro.md3", "weapons/weaponpickup.ogg", 15, W_Name(WEP_ELECTRO), IT_ELECTRO, FL_WEAPON, weapon_pickupevalfunc, 1000);
 }
 
 void weapon_crylink (void) {
 	self.ammo_cells = 25;
-	StartItem ("models/weapons/g_crylink.md3", "weapons/weaponpickup.ogg", 15, W_Name(WEP_CRYLINK), IT_CRYLINK, FL_WEAPON);
+	StartItem ("models/weapons/g_crylink.md3", "weapons/weaponpickup.ogg", 15, W_Name(WEP_CRYLINK), IT_CRYLINK, FL_WEAPON, weapon_pickupevalfunc, 1000);
 }
 
 void weapon_nex (void) {
@@ -390,13 +435,13 @@ void weapon_nex (void) {
 		minstagib_items(IT_CELLS);
 	} else {
 		self.ammo_cells = 25;
-		StartItem ("models/weapons/g_nex.md3", "weapons/weaponpickup.ogg", 15, W_Name(WEP_NEX), IT_NEX, FL_WEAPON);
+		StartItem ("models/weapons/g_nex.md3", "weapons/weaponpickup.ogg", 15, W_Name(WEP_NEX), IT_NEX, FL_WEAPON, weapon_pickupevalfunc, 1000);
 	}
 }
 
 void weapon_hagar (void) {
 	self.ammo_rockets = 15;
-	StartItem ("models/weapons/g_hagar.md3", "weapons/weaponpickup.ogg", 15, W_Name(WEP_HAGAR), IT_HAGAR, FL_WEAPON);
+	StartItem ("models/weapons/g_hagar.md3", "weapons/weaponpickup.ogg", 15, W_Name(WEP_HAGAR), IT_HAGAR, FL_WEAPON, weapon_pickupevalfunc, 1000);
 }
 
 void weapon_rocketlauncher (void) {
@@ -404,48 +449,48 @@ void weapon_rocketlauncher (void) {
 		minstagib_items(IT_CELLS);
 	} else {
 		self.ammo_rockets = 15;
-		StartItem ("models/weapons/g_rl.md3", "weapons/weaponpickup.ogg", 15, W_Name(WEP_ROCKET_LAUNCHER), IT_ROCKET_LAUNCHER, FL_WEAPON);
+		StartItem ("models/weapons/g_rl.md3", "weapons/weaponpickup.ogg", 15, W_Name(WEP_ROCKET_LAUNCHER), IT_ROCKET_LAUNCHER, FL_WEAPON, weapon_pickupevalfunc, 1000);
 	}
 }
 
 void item_rockets (void) {
 	self.ammo_rockets = 15;
-	StartItem ("models/items/a_rockets.md3", "misc/itempickup.ogg", 15, "rockets", IT_ROCKETS, 0);
+	StartItem ("models/items/a_rockets.md3", "misc/itempickup.ogg", 15, "rockets", IT_ROCKETS, 0, commodity_pickupevalfunc, 100);
 }
 
 void item_bullets (void) {
 	self.ammo_nails = 120;
-	StartItem ("models/items/a_bullets.mdl", "misc/itempickup.ogg", 15, "bullets", IT_NAILS, 0);
+	StartItem ("models/items/a_bullets.mdl", "misc/itempickup.ogg", 15, "bullets", IT_NAILS, 0, commodity_pickupevalfunc, 100);
 }
 
 void item_cells (void) {
 	self.ammo_cells = 25;
-	StartItem ("models/items/a_cells.md3", "misc/itempickup.ogg", 15, "cells", IT_CELLS, 0);
+	StartItem ("models/items/a_cells.md3", "misc/itempickup.ogg", 15, "cells", IT_CELLS, 0, commodity_pickupevalfunc, 100);
 }
 
 void item_shells (void) {
 	self.ammo_shells = 15;
-	StartItem ("models/items/a_shells.md3", "misc/itempickup.ogg", 15, "shells", IT_SHELLS, 0);
+	StartItem ("models/items/a_shells.md3", "misc/itempickup.ogg", 15, "shells", IT_SHELLS, 0, commodity_pickupevalfunc, 100);
 }
 
 void item_armor1 (void) {
 	self.armorvalue = 5;
-	StartItem ("models/items/g_a1.md3", "misc/armor1.wav", 15, "Armor Shard", IT_ARMOR_SHARD, 0);
+	StartItem ("models/items/g_a1.md3", "misc/armor1.wav", 15, "Armor Shard", IT_ARMOR_SHARD, 0, commodity_pickupevalfunc, 100);
 }
 
 void item_armor25 (void) {
 	self.armorvalue = 100;
-	StartItem ("models/items/g_a25.md3", "misc/armor25.wav", 30, "Armor", IT_ARMOR, 0);
+	StartItem ("models/items/g_a25.md3", "misc/armor25.wav", 30, "Armor", IT_ARMOR, 0, commodity_pickupevalfunc, 2000);
 }
 
 void item_health1 (void) {
 	self.max_health = 5;
-	StartItem ("models/items/g_h1.md3", "misc/minihealth.ogg", 15, "5 Health", IT_5HP, 0);
+	StartItem ("models/items/g_h1.md3", "misc/minihealth.ogg", 15, "5 Health", IT_5HP, 0, commodity_pickupevalfunc, 100);
 }
 
 void item_health25 (void) {
 	self.max_health = 25;
-	StartItem ("models/items/g_h25.md3", "misc/mediumhealth.ogg", 15, "25 Health", IT_25HP, 0);
+	StartItem ("models/items/g_h25.md3", "misc/mediumhealth.ogg", 15, "25 Health", IT_25HP, 0, commodity_pickupevalfunc, 500);
 }
 
 void item_health100 (void) {
@@ -456,7 +501,7 @@ void item_health100 (void) {
 		minstagib_items(IT_NAILS);
 	} else {
 		self.max_health = 100;
-		StartItem ("models/items/g_h100.md3", "misc/megahealth.ogg", 30, "100 Health", IT_HEALTH, 0);
+		StartItem ("models/items/g_h100.md3", "misc/megahealth.ogg", 30, "100 Health", IT_HEALTH, 0, commodity_pickupevalfunc, 2000);
 	}
 }
 
@@ -468,7 +513,7 @@ void item_strength (void) {
 		minstagib_items(IT_STRENGTH);
 	} else {
 		self.strength_finished = 30;
-		self.effects = EF_ADDITIVE;StartItem ("models/items/g_strength.md3", "misc/powerup.ogg", 120, "Strength Powerup", IT_STRENGTH, FL_POWERUP);
+		self.effects = EF_ADDITIVE;StartItem ("models/items/g_strength.md3", "misc/powerup.ogg", 120, "Strength Powerup", IT_STRENGTH, FL_POWERUP, generic_pickupevalfunc, 10000);
 	}
 }
 
@@ -481,11 +526,11 @@ void item_invincible (void) {
 	} else {
 		self.invincible_finished = 30;
 		self.effects = EF_ADDITIVE;
-		StartItem ("models/items/g_invincible.md3", "misc/powerup_shield.ogg", 120, "Invulnerability", IT_INVINCIBLE, FL_POWERUP);
+		StartItem ("models/items/g_invincible.md3", "misc/powerup_shield.ogg", 120, "Invulnerability", IT_INVINCIBLE, FL_POWERUP, generic_pickupevalfunc, 10000);
 	}
 }
-//void item_speed (void) {self.speed_finished = 30;StartItem ("models/items/g_speed.md3", "misc/powerup.wav", 120, "Speed Powerup", IT_SPEED, FL_POWERUP);}
-//void item_slowmo (void) {self.slowmo_finished = 30;StartItem ("models/items/g_slowmo.md3", "misc/powerup.wav", 120, "Slow Motion", IT_SLOWMO, FL_POWERUP);}
+//void item_speed (void) {self.speed_finished = 30;StartItem ("models/items/g_speed.md3", "misc/powerup.wav", 120, "Speed Powerup", IT_SPEED, FL_POWERUP, generic_pickupevalfunc, 10000);}
+//void item_slowmo (void) {self.slowmo_finished = 30;StartItem ("models/items/g_slowmo.md3", "misc/powerup.wav", 120, "Slow Motion", IT_SLOWMO, FL_POWERUP, generic_pickupevalfunc, 10000);}
 
 void misc_models (void)
 {
