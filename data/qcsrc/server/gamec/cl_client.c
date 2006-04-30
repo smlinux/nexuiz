@@ -664,7 +664,7 @@ void ClientConnect (void)
 		Spawnqueue_Insert(self);
 	}
 
-	bot_rebuildplayerlist();
+	bot_relinkplayerlist();
 
 	self.jointime = time;
 }
@@ -681,6 +681,7 @@ void(entity e) DropFlag;
 .entity teambubbleentity;
 void ClientDisconnect (void)
 {
+	float save;
 	if(cvar("sv_eventlog"))
 		GameLogEcho(strcat(":part:", ftos(self.playerid)), FALSE);
 	bprint ("^4",self.netname);
@@ -703,7 +704,10 @@ void ClientDisconnect (void)
 	if(self.flagcarried)
 		DropFlag(self.flagcarried);
 
-	bot_rebuildplayerlist();
+	save = self.flags;
+	self.flags = self.flags - (self.flags & FL_CLIENT);
+	bot_relinkplayerlist();
+	self.flags = save;
 
 	// player was dead, decrease dead count
 	if(cvar("g_lms") && self.frags < 1)

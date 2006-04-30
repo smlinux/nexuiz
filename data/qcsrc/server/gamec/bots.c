@@ -1635,12 +1635,15 @@ void() bot_think =
 };
 
 entity bot_strategytoken;
+entity player_list;
+.entity nextplayer;
 void() bot_relinkplayerlist =
 {
 	local entity e;
+	local entity prevbot;
 	player_count = 0;
 	currentbots = 0;
-	player_list = e = findchainflag(flags, FL_CLIENT);
+	player_list = e = findchainflags(flags, FL_CLIENT);
 	bot_list = world;
 	prevbot = world;
 	while (e)
@@ -1654,9 +1657,11 @@ void() bot_relinkplayerlist =
 			else
 				bot_list = e;
 			prevbot = e;
+			currentbots = currentbots + 1;
 		}
 		e = e.chain;
 	}
+	dprint(strcat("relink - ", ftos(currentbots), " bots seen.\n"));
 	bot_strategytoken = bot_list;
 };
 
@@ -1730,39 +1735,39 @@ void() botframe_showwaypointlinks =
 			//navigation_testtracewalk = FALSE;
 			if (head)
 			{
-				w = head     ;if (w) te_lightning2(w, w.origin, player.origin);
-				w = head.wp00;if (w) te_lightning2(w, w.origin, head.origin);
-				w = head.wp01;if (w) te_lightning2(w, w.origin, head.origin);
-				w = head.wp02;if (w) te_lightning2(w, w.origin, head.origin);
-				w = head.wp03;if (w) te_lightning2(w, w.origin, head.origin);
-				w = head.wp04;if (w) te_lightning2(w, w.origin, head.origin);
-				w = head.wp05;if (w) te_lightning2(w, w.origin, head.origin);
-				w = head.wp06;if (w) te_lightning2(w, w.origin, head.origin);
-				w = head.wp07;if (w) te_lightning2(w, w.origin, head.origin);
-				w = head.wp08;if (w) te_lightning2(w, w.origin, head.origin);
-				w = head.wp09;if (w) te_lightning2(w, w.origin, head.origin);
-				w = head.wp10;if (w) te_lightning2(w, w.origin, head.origin);
-				w = head.wp11;if (w) te_lightning2(w, w.origin, head.origin);
-				w = head.wp12;if (w) te_lightning2(w, w.origin, head.origin);
-				w = head.wp13;if (w) te_lightning2(w, w.origin, head.origin);
-				w = head.wp14;if (w) te_lightning2(w, w.origin, head.origin);
-				w = head.wp15;if (w) te_lightning2(w, w.origin, head.origin);
-				w = head.wp16;if (w) te_lightning2(w, w.origin, head.origin);
-				w = head.wp17;if (w) te_lightning2(w, w.origin, head.origin);
-				w = head.wp18;if (w) te_lightning2(w, w.origin, head.origin);
-				w = head.wp19;if (w) te_lightning2(w, w.origin, head.origin);
-				w = head.wp20;if (w) te_lightning2(w, w.origin, head.origin);
-				w = head.wp21;if (w) te_lightning2(w, w.origin, head.origin);
-				w = head.wp22;if (w) te_lightning2(w, w.origin, head.origin);
-				w = head.wp23;if (w) te_lightning2(w, w.origin, head.origin);
-				w = head.wp24;if (w) te_lightning2(w, w.origin, head.origin);
-				w = head.wp25;if (w) te_lightning2(w, w.origin, head.origin);
-				w = head.wp26;if (w) te_lightning2(w, w.origin, head.origin);
-				w = head.wp27;if (w) te_lightning2(w, w.origin, head.origin);
-				w = head.wp28;if (w) te_lightning2(w, w.origin, head.origin);
-				w = head.wp29;if (w) te_lightning2(w, w.origin, head.origin);
-				w = head.wp30;if (w) te_lightning2(w, w.origin, head.origin);
-				w = head.wp31;if (w) te_lightning2(w, w.origin, head.origin);
+				w = head     ;if (w) te_lightning2(world, w.origin, player.origin);
+				w = head.wp00;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp01;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp02;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp03;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp04;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp05;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp06;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp07;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp08;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp09;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp10;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp11;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp12;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp13;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp14;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp15;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp16;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp17;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp18;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp19;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp20;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp21;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp22;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp23;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp24;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp25;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp26;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp27;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp28;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp29;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp30;if (w) te_lightning2(world, w.origin, head.origin);
+				w = head.wp31;if (w) te_lightning2(world, w.origin, head.origin);
 			}
 		}
 		player = find(player, classname, "player");
