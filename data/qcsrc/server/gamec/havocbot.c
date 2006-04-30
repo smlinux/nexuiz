@@ -224,5 +224,5 @@ void() havocbot_setupbot =
 {
 	self.bot_ai = havocbot_ai;
 	// will be updated by think code
-	havocbot_chooserole_dm();
+	havocbot_chooserole();
 }

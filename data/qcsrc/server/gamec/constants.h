@@ -201,3 +201,9 @@ float	game;	// set to "gamecfg" on worldspawn
 
 
 float TE_BEAM					= 13;		// grappling hook
+
+// CTF
+float FLAG_BASE = 1;
+float FLAG_CARRY = 2;
+float FLAG_DROPPED = 3;
+

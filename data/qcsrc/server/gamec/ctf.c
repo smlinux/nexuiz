@@ -8,10 +8,6 @@
 //float FLAGSCORE_CAPTURE       =  5;
 //float FLAGSCORE_CAPTURE_TEAM  = 20;
 
-float FLAG_BASE = 1;
-float FLAG_CARRY = 2;
-float FLAG_DROPPED = 3;
-
 void() FlagThink;
 void() FlagTouch;
 

@@ -85,7 +85,10 @@ void() CampaignPreInit =
 	cvar_set("bot_number", ftos(campaign_bots[0]));
 
 	baseskill = cvar("g_campaign_skill");
-	cvar_set("skill", ftos(campaign_botskill[0] + baseskill));
+	baseskill = baseskill + campaign_botskill[0];
+	if(baseskill < 0)
+		baseskill = 0;
+	cvar_set("skill", ftos(baseskill));
 
 	title = campaign_shortdesc[0];
 	campaign_message = strzone(strcat("\n\n\n\n\n\n\n\n\n\n^1\n", title, "\n^3\n", Campaign_wordwrap(campaign_longdesc[0], 50)));
