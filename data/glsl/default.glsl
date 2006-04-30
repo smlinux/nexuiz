@@ -17,16 +17,16 @@
 varying vec2 TexCoord;
 varying vec2 TexCoordLightmap;
 
-varying myhvec3 CubeVector;
+varying vec3 CubeVector;
 varying vec3 LightVector;
 varying vec3 EyeVector;
 #ifdef USEFOG
 varying vec3 EyeVectorModelSpace;
 #endif
 
-varying myhvec3 VectorS; // direction of S texcoord (sometimes crudely called tangent)
-varying myhvec3 VectorT; // direction of T texcoord (sometimes crudely called binormal)
-varying myhvec3 VectorR; // direction of R texcoord (surface normal)
+varying vec3 VectorS; // direction of S texcoord (sometimes crudely called tangent)
+varying vec3 VectorT; // direction of T texcoord (sometimes crudely called binormal)
+varying vec3 VectorR; // direction of R texcoord (surface normal)
 
 
 
@@ -36,7 +36,7 @@ varying myhvec3 VectorR; // direction of R texcoord (surface normal)
 
 uniform vec3 LightPosition;
 uniform vec3 EyePosition;
-uniform myhvec3 LightDir;
+uniform vec3 LightDir;
 
 // TODO: get rid of tangentt (texcoord2) and use a crossproduct to regenerate it from tangents (texcoord1) and normal (texcoord3)
 
@@ -116,9 +116,9 @@ uniform myhvec3 Color_Pants;
 uniform myhvec3 Color_Shirt;
 uniform myhvec3 FogColor;
 
-uniform myhalf OffsetMapping_Scale;
-uniform myhalf OffsetMapping_Bias;
-uniform myhalf FogRangeRecip;
+uniform float OffsetMapping_Scale;
+uniform float OffsetMapping_Bias;
+uniform float FogRangeRecip;
 
 uniform myhalf AmbientScale;
 uniform myhalf DiffuseScale;
@@ -129,17 +129,18 @@ void main(void)
 {
 	// apply offsetmapping
 #ifdef USEOFFSETMAPPING
-	myhvec2 TexCoordOffset = myhvec2(TexCoord);
+	vec2 TexCoordOffset = vec2(TexCoord);
 #define TexCoord TexCoordOffset
 
-	myhvec3 eyedir = myhvec3(normalize(EyeVector));
-
-#ifdef USEOFFSETMAPPING_RELIEFMAPPING
-	myhalf depthbias = 1.0 - eyedir.z; // should this be a -?
+	vec3 eyedir = vec3(normalize(EyeVector));
+	float depthbias = 1.0 - eyedir.z; // should this be a -?
 	depthbias = 1.0 - depthbias * depthbias;
 
+#ifdef USEOFFSETMAPPING_RELIEFMAPPING
 	// 14 sample relief mapping: linear search and then binary search
-	myhvec3 OffsetVector = myhvec3(EyeVector.xy * (1.0 / EyeVector.z) * depthbias * OffsetMapping_Scale * myhvec2(-0.1, 0.1), -0.1);
+	//vec3 OffsetVector = vec3(EyeVector.xy * (1.0 / EyeVector.z) * depthbias * OffsetMapping_Scale * vec2(-0.1, 0.1), -0.1);
+	//vec3 OffsetVector = vec3(normalize(EyeVector.xy) * OffsetMapping_Scale * vec2(-0.1, 0.1), -0.1);
+	vec3 OffsetVector = vec3(eyedir.xy * OffsetMapping_Scale * vec2(-0.1, 0.1), -0.1);
 	vec3 RT = vec3(TexCoord - OffsetVector.xy * 10.0, 1.0) + OffsetVector;
 	if (RT.z > texture2D(Texture_Normal, RT.xy).a) RT += OffsetVector;
 	if (RT.z > texture2D(Texture_Normal, RT.xy).a) RT += OffsetVector;
@@ -156,23 +157,54 @@ void main(void)
 	if (RT.z > texture2D(Texture_Normal, RT.xy).a) RT += OffsetVector;OffsetVector *= 0.5;RT -= OffsetVector;
 	if (RT.z > texture2D(Texture_Normal, RT.xy).a) RT += OffsetVector;OffsetVector *= 0.5;RT -= OffsetVector;
 	TexCoord = RT.xy;
-#else
-
+#elif 1
+	// 3 sample offset mapping (only 3 samples because of ATI Radeon 9500-9800/X300 limits)
+	//vec2 OffsetVector = vec2(EyeVector.xy * (1.0 / EyeVector.z) * depthbias) * OffsetMapping_Scale * vec2(-0.333, 0.333);
+	//vec2 OffsetVector = vec2(normalize(EyeVector.xy)) * OffsetMapping_Scale * vec2(-0.333, 0.333);
+	vec2 OffsetVector = vec2(eyedir.xy) * OffsetMapping_Scale * vec2(-0.333, 0.333);
+	//TexCoord += OffsetVector * 3.0;
+	TexCoord -= OffsetVector * texture2D(Texture_Normal, TexCoord).a;
+	TexCoord -= OffsetVector * texture2D(Texture_Normal, TexCoord).a;
+	TexCoord -= OffsetVector * texture2D(Texture_Normal, TexCoord).a;
+#elif 0
+	// 10 sample offset mapping
+	//vec2 OffsetVector = vec2(EyeVector.xy * (1.0 / EyeVector.z) * depthbias) * OffsetMapping_Scale * vec2(-0.333, 0.333);
+	//vec2 OffsetVector = vec2(normalize(EyeVector.xy)) * OffsetMapping_Scale * vec2(-0.333, 0.333);
+	vec2 OffsetVector = vec2(eyedir.xy) * OffsetMapping_Scale * vec2(-0.1, 0.1);
+	//TexCoord += OffsetVector * 3.0;
+	TexCoord -= OffsetVector * texture2D(Texture_Normal, TexCoord).a;
+	TexCoord -= OffsetVector * texture2D(Texture_Normal, TexCoord).a;
+	TexCoord -= OffsetVector * texture2D(Texture_Normal, TexCoord).a;
+	TexCoord -= OffsetVector * texture2D(Texture_Normal, TexCoord).a;
+	TexCoord -= OffsetVector * texture2D(Texture_Normal, TexCoord).a;
+	TexCoord -= OffsetVector * texture2D(Texture_Normal, TexCoord).a;
+	TexCoord -= OffsetVector * texture2D(Texture_Normal, TexCoord).a;
+	TexCoord -= OffsetVector * texture2D(Texture_Normal, TexCoord).a;
+	TexCoord -= OffsetVector * texture2D(Texture_Normal, TexCoord).a;
+	TexCoord -= OffsetVector * texture2D(Texture_Normal, TexCoord).a;
+#elif 1
 	// parallax mapping as described in the paper
 	// "Parallax Mapping with Offset Limiting: A Per-Pixel Approximation of Uneven Surfaces" by Terry Welsh
 	// The paper provides code in the ARB fragment program assembly language
 	// I translated it to GLSL but may have done something wrong - SavageX
-	myhalf height = texture2D(Texture_Normal, TexCoord).a;
-	height = (height * myhalf(OffsetMapping_Scale)) + myhalf(-0.02); // scale and bias
-	TexCoordOffset += myhalf(height) * myhvec2(eyedir.x, -1.0 * eyedir.y);
-	
+	// LordHavoc: removed bias and simplified to one line
+	// LordHavoc: this is just a single sample offsetmapping...
+	TexCoordOffset += vec2(eyedir.x, -1.0 * eyedir.y) * OffsetMapping_Scale * texture2D(Texture_Normal, TexCoord).a;
+#else
+	// parallax mapping as described in the paper
+	// "Parallax Mapping with Offset Limiting: A Per-Pixel Approximation of Uneven Surfaces" by Terry Welsh
+	// The paper provides code in the ARB fragment program assembly language
+	// I translated it to GLSL but may have done something wrong - SavageX
+	float height = texture2D(Texture_Normal, TexCoord).a;
+	height = (height - 0.5) * OffsetMapping_Scale; // bias and scale
+	TexCoordOffset += height * vec2(eyedir.x, -1.0 * eyedir.y);
 #endif
 #endif
 
 	// combine the diffuse textures (base, pants, shirt)
 	vec4 color = vec4(texture2D(Texture_Color, TexCoord));
 #ifdef USECOLORMAPPING
-	color.rgb += myhvec3(texture2D(Texture_Pants, TexCoord)) * Color_Pants + myhvec3(texture2D(Texture_Shirt, TexCoord)) * Color_Shirt;
+	color.rgb += vec3(myhvec3(texture2D(Texture_Pants, TexCoord)) * myhvec3(Color_Pants) + myhvec3(texture2D(Texture_Shirt, TexCoord)) * myhvec3(Color_Shirt));
 #endif
 
 
@@ -218,11 +250,12 @@ void main(void)
 	// directional model lighting
 
 	// get the surface normal and light normal
-	myhvec3 surfacenormal = normalize(myhvec3(texture2D(Texture_Normal, TexCoord)) - 0.5);
+	myhvec3 surfacenormal = normalize(myhvec3(texture2D(Texture_Normal, TexCoord)) - myhalf(0.5));
 	myhvec3 diffusenormal = myhvec3(normalize(LightVector));
 
 	// calculate directional shading
-	color.rgb *= AmbientColor + DiffuseColor * max(dot(surfacenormal, diffusenormal), 0.0);
+	color.rgb *= vec3(myhvec3(AmbientColor) + myhvec3(DiffuseColor) * myhalf(max(dot(vec3(surfacenormal), vec3(diffusenormal)), 0.0)));
+
 #ifdef USESPECULAR
 	myhvec3 specularnormal = myhvec3(normalize(diffusenormal + myhvec3(normalize(EyeVector))));
 	color.rgb += myhvec3(texture2D(Texture_Gloss, TexCoord)) * SpecularColor * pow(max(dot(surfacenormal, specularnormal), 0.0), SpecularPower);
@@ -236,13 +269,13 @@ void main(void)
 
 	// get the surface normal and light normal
 	myhvec3 surfacenormal = normalize(myhvec3(texture2D(Texture_Normal, TexCoord)) - 0.5);
-	
-	#ifdef MODE_LIGHTDIRECTIONMAP_MODELSPACE
+
+#ifdef MODE_LIGHTDIRECTIONMAP_MODELSPACE
 	myhvec3 diffusenormal_modelspace = myhvec3(texture2D(Texture_Deluxemap, TexCoordLightmap)) - 0.5;
 	myhvec3 diffusenormal = normalize(myhvec3(dot(diffusenormal_modelspace, VectorS), dot(diffusenormal_modelspace, VectorT), dot(diffusenormal_modelspace, VectorR)));
-	#else 
+#else
 	myhvec3 diffusenormal = normalize(myhvec3(texture2D(Texture_Deluxemap, TexCoordLightmap)) - 0.5);
-	#endif
+#endif
 	// calculate directional shading
 	myhvec3 tempcolor = color.rgb * (DiffuseScale * max(dot(surfacenormal, diffusenormal), 0.0));
 #ifdef USESPECULAR
@@ -262,7 +295,7 @@ void main(void)
 	color *= gl_Color;
 
 #ifdef USEGLOW
-	color.rgb += myhvec3(texture2D(Texture_Glow, TexCoord));
+	color.rgb += texture2D(Texture_Glow, TexCoord).rgb;
 #endif
 
 #ifdef USEFOG
