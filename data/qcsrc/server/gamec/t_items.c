@@ -220,6 +220,30 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 	vector org;
 	org = self.origin;
 
+	if (self.classname != "droppedweapon" && !self.noalign)
+	{
+		vector z_offset;
+
+		z_offset = '0 0 1';
+
+		if (itemid == IT_SHELLS)
+			z_offset = '0 0 4';
+		else if (itemid == IT_ROCKETS)
+			z_offset = '0 0 4';
+		else if (itemid == IT_NAILS)
+			z_offset = '0 0 0';
+		else if (itemid == IT_25HP)
+			z_offset = '0 0 5';
+		else if (itemid == IT_ARMOR)
+			z_offset = '0 0 3';
+
+		org = find_floor(org) + z_offset;
+		setorigin(self, org);
+	}
+
+	if (self.classname != "droppedweapon")
+		waypoint_spawnforitem(self);
+
 	if (!(cvar("g_pickup_items") && !cvar("g_nixnex")) && !cvar("g_minstagib") &&
 			itemid != IT_STRENGTH && itemid != IT_INVINCIBLE && itemid != IT_HEALTH)
 	{
@@ -303,26 +327,6 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 		self.think = RemoveItem;
 		self.nextthink = time + 60;
 	}
-	else if (!self.noalign)
-	{
-		vector z_offset;
-
-		z_offset = '0 0 1';
-
-		if (itemid == IT_SHELLS)
-			z_offset = '0 0 4';
-		else if (itemid == IT_ROCKETS)
-			z_offset = '0 0 4';
-		else if (itemid == IT_NAILS)
-			z_offset = '0 0 0';
-		else if (itemid == IT_25HP)
-			z_offset = '0 0 5';
-		else if (itemid == IT_ARMOR)
-			z_offset = '0 0 3';
-
-		self.movetype = MOVETYPE_NONE;
-		setorigin(self, find_floor(org) + z_offset);
-	}
 	else
 	{
 		self.movetype = MOVETYPE_NONE;
@@ -331,9 +335,6 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 
 	if (cvar("g_fullbrightitems"))
 		self.effects = self.effects | EF_FULLBRIGHT;
-
-	if (self.classname != "droppedweapon")
-		waypoint_spawnforitem(self);
 }
 
 /* replace items in minstagib

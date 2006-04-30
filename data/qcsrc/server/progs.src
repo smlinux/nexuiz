@@ -7,8 +7,8 @@ gamec/defs.h		// Should rename this, it has fields and globals
 
 gamec/extensions.h
 
-gamec/campaign_common.h
 gamec/campaign.h
+gamec/campaign_common.h
 
 gamec/miscfunctions.c
 
