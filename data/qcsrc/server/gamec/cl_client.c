@@ -1344,8 +1344,6 @@ void PlayerPreThink (void)
 				if(!cvar("teamplay") || cvar("g_campaign")) {
 					self.flags = self.flags & !FL_JUMPRELEASED;
 					self.classname = "player";
-					if(cvar("g_campaign"))
-						JoinBestTeam(self, 0);
 					PutClientInServer();
 					if(self.flags & !FL_NOTARGET)
 						bprint (strcat("^4", self.netname, "^4 is playing now\n"));
@@ -1378,8 +1376,6 @@ void PlayerPreThink (void)
 					if(!cvar("g_lms"))
 						bprint (strcat("^4", self.netname, "^4 is playing now\n"));
 
-					if(cvar("g_campaign"))
-						JoinBestTeam(self, 0);
 					PutClientInServer();
 					centerprint(self,"");
 					return;
