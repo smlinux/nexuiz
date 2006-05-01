@@ -25,6 +25,18 @@ void(float ratingscale, vector org, float sradius) havocbot_goalrating_items =
 	}
 };
 
+void(float ratingscale, vector org, float sradius) havocbot_goalrating_waypoints =
+{
+	local entity head;
+	head = findchain(classname, "waypoint");
+	while (head)
+	{
+		if (vlen(head.origin - org) < sradius && vlen(head.origin - org) > 100)
+			navigation_routerating(head, ratingscale);
+		head = head.chain;
+	}
+};
+
 void(float ratingscale, vector org, float sradius) havocbot_goalrating_enemyplayers =
 {
 	local entity head;
@@ -386,7 +398,8 @@ void() havocbot_role_dm =
 		self.bot_strategytime = time + cvar("bot_ai_strategyinterval");
 		navigation_goalrating_start();
 		havocbot_goalrating_items(10000, self.origin, 10000);
-		//havocbot_goalrating_enemyplayers(2000, self.origin, 2000);
+		havocbot_goalrating_enemyplayers(1, self.origin, 2000);
+		//havocbot_goalrating_waypoints(1, self.origin, 1000);
 		navigation_goalrating_end();
 	}
 };
