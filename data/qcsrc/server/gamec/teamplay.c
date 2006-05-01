@@ -610,11 +610,9 @@ float FindSmallestTeam(entity pl, float ignore_pl)
 
 	// count how many players are in each team
 	if(ignore_pl)
-		GetTeamCounts(world);
-	else
 		GetTeamCounts(pl);
-
-
+	else
+		GetTeamCounts(world);
 
 	// c1...c4 now have counts of each team
 	// figure out which is smallest, giving priority to the team the player is already on as a tie-breaker
@@ -693,7 +691,6 @@ float JoinBestTeam(entity pl, float only_return_best)
 
 	// find out what teams are available
 	CheckAllowedTeams();
-
 
 	if(cvar("g_domination"))
 	{

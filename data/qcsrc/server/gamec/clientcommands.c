@@ -199,8 +199,8 @@ void SV_ParseClientCommand(string s) {
 			self.classname = "observer";
 			self.frags = -2;
 			PutClientInServer();
-		} else if(cvar("g_campaign")) {
-			JoinBestTeam(self, 0);
+		} else if(cvar("g_campaign") || cvar("g_balance_teams")) {
+			//JoinBestTeam(self, 0);
 		} else if(cvar("teamplay") && !cvar("sv_spectate")) {
 			self.classname = "observer";
 			stuffcmd(self,"menu_showteamselect\n");
@@ -237,6 +237,7 @@ void SV_ParseClientCommand(string s) {
 		} else if( argv(1) == "yellow" ) {
 			SV_ChangeTeam( COLOR_TEAM4 - 1 );
 		} else if( argv(1) == "auto" ) {
+			self.team = -1;
 			JoinBestTeam( self, 0 );
 		} else {
 			sprint( self, strcat( "selectteam none/red/blue/pink/yellow/auto - \"", argv(1), "\" not recognised\n" ) );

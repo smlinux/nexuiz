@@ -522,11 +522,6 @@ void PutClientInServer (void)
 	} else if(self.classname == "observer") {
 		PutObserverInServer ();
 	}
-
-	// in campaign mode, players are only counted once they are active. So
-	// update the counts NOW.
-	if(cvar("g_campaign"))
-		bot_relinkplayerlist();
 }
 
 /*
@@ -1346,9 +1341,13 @@ void PlayerPreThink (void)
 
 		if (self.flags & FL_JUMPRELEASED) {
 			if (self.button2 && self.version == cvar("gameversion")) {
-				if(!cvar("teamplay") || cvar("g_campaign")) {
+				if(!cvar("teamplay") || cvar("g_campaign") || cvar("g_balance_teams")) {
 					self.flags = self.flags & !FL_JUMPRELEASED;
 					self.classname = "player";
+					if(cvar("g_campaign") || cvar("g_balance_teams"))
+						JoinBestTeam(self, 0);
+					if(cvar("g_campaign"))
+						campaign_bots_may_start = 1;
 					PutClientInServer();
 					if(self.flags & !FL_NOTARGET)
 						bprint (strcat("^4", self.netname, "^4 is playing now\n"));
@@ -1375,12 +1374,16 @@ void PlayerPreThink (void)
 
 		if (self.flags & FL_JUMPRELEASED) {
 			if (self.button2 && self.version == cvar("gameversion")) {
-				if(!cvar("teamplay") || cvar("g_campaign")) {
+				if(!cvar("teamplay") || cvar("g_campaign") || cvar("g_balance_teams")) {
 					self.flags = self.flags & !FL_JUMPRELEASED;
 					self.classname = "player";
 					if(!cvar("g_lms"))
 						bprint (strcat("^4", self.netname, "^4 is playing now\n"));
 
+					if(cvar("g_campaign") || cvar("g_balance_teams"))
+						JoinBestTeam(self, 0);
+					if(cvar("g_campaign"))
+						campaign_bots_may_start = 1;
 					PutClientInServer();
 					centerprint(self,"");
 					return;

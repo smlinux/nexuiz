@@ -49,7 +49,7 @@ string Campaign_wordwrap(string s, float l)
 		if(word == "+++")
 		{
 			t = fstrunzone(t);
-			t = strzone(strcat(t, "\n"));
+			t = strzone(strcat(t, "\n\n"));
 			lleft = l;
 		}
 		else if(strlen(word) < lleft)

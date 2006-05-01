@@ -1597,6 +1597,12 @@ void() bot_think =
 	//self.bot_painintensity = self.bot_painintensity + self.bot_oldhealth - self.health;
 	//self.bot_painintensity = bound(0, self.bot_painintensity, 100);
 
+	if(cvar("g_campaign") && !campaign_bots_may_start)
+	{
+		self.nextthink = time + 0.5;
+		return;
+	}
+
 	if (self.fixangle)
 	{
 		self.v_angle = self.angles;
@@ -1642,7 +1648,6 @@ void() bot_think =
 entity bot_strategytoken;
 entity player_list;
 .entity nextplayer;
-.float was_playing;
 void() bot_relinkplayerlist =
 {
 	local entity e;
@@ -1655,23 +1660,6 @@ void() bot_relinkplayerlist =
 	while (e)
 	{
 		player_count = player_count + 1;
-		if(cvar("g_campaign"))
-		{
-			// only count real players, no observers unless they have already
-			// played (for LMS!)
-			if(clienttype(e) == CLIENTTYPE_REAL)
-			{
-				if(e.classname == "player")
-				{
-					e.was_playing = 1;
-				}
-				else if(!e.was_playing)
-				{
-					// do not count him!
-					player_count = player_count - 1;
-				}
-			}
-		}
 		e.nextplayer = e.chain;
 		if (clienttype(e) == CLIENTTYPE_BOT)
 		{
