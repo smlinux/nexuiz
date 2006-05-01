@@ -583,6 +583,7 @@ void ClientConnect (void)
 		self.classname = "observer";
 	} else {
 		self.classname = "player";
+		campaign_bots_may_start = 1;
 	}
 
 	self.playerid = (playerid_last = playerid_last + 1);
