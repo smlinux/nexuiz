@@ -1265,6 +1265,7 @@ float sv_maxspeed;
 .float bot_pickup;
 .float(entity player, entity item) bot_pickupevalfunc;
 .float bot_pickupbasevalue;
+.float bot_canfire;
 
 // used for aiming currently
 // FIXME: make the weapon code use these and then replace the calculations here with a call to the weapon code
@@ -1417,6 +1418,14 @@ void(float t, float f1, float f2, entity e1, vector v1, vector v2, vector v3, ve
 	self.bot_aimselfvelocity = v2;
 	self.bot_aimtargorigin = v3;
 	self.bot_aimtargvelocity = v4;
+	if(skill <= 0)
+		self.bot_canfire = (random() < 0.8);
+	else if(skill <= 1)
+		self.bot_canfire = (random() < 0.9);
+	else if(skill <= 2)
+		self.bot_canfire = (random() < 0.95);
+	else
+		self.bot_canfire = 1;
 };
 
 float(vector v, float maxfiredeviation) bot_aimdir =
@@ -1533,7 +1542,7 @@ float(vector v, float maxfiredeviation) bot_aimdir =
 		self.bot_firetimer = time + 0.3;
 	//dprint(" diff:", vtos(diffang), "\n");
 
-	return time < self.bot_firetimer;
+	return self.bot_canfire && (time < self.bot_firetimer);
 };
 
 vector(vector targorigin, vector targvelocity, float shotspeed, float shotdelay) bot_shotlead =

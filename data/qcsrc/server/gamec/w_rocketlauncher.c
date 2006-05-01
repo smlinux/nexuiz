@@ -20,49 +20,52 @@ void(float req) w_rlauncher =
 	{
 		// aim and decide to fire if appropriate
 		self.button0 = bot_aim(cvar("g_balance_rocketlauncher_speed"), 0, cvar("g_balance_rocketlauncher_lifetime"), FALSE);
-		// decide whether to detonate rockets
-		local entity missile, targetlist, targ;
-		local float edgedamage, coredamage, edgeradius, recipricoledgeradius, d;
-		local float selfdamage, teamdamage, enemydamage;
-		edgedamage = cvar("g_balance_rocketlauncher_edgedamage");
-		coredamage = cvar("g_balance_rocketlauncher_damage");
-		edgeradius = cvar("g_balance_rocketlauncher_radius");
-		recipricoledgeradius = 1 / edgeradius;
-		selfdamage = 0;
-		teamdamage = 0;
-		enemydamage = 0;
-		targetlist = findchainfloat(bot_attack, TRUE);
-		missile = find(world, classname, "missile");
-		while (missile)
+		if(skill >= 2) // skill 0 and 1 bots won't detonate rockets!
 		{
-			targ = targetlist;
-			while (targ)
+			// decide whether to detonate rockets
+			local entity missile, targetlist, targ;
+			local float edgedamage, coredamage, edgeradius, recipricoledgeradius, d;
+			local float selfdamage, teamdamage, enemydamage;
+			edgedamage = cvar("g_balance_rocketlauncher_edgedamage");
+			coredamage = cvar("g_balance_rocketlauncher_damage");
+			edgeradius = cvar("g_balance_rocketlauncher_radius");
+			recipricoledgeradius = 1 / edgeradius;
+			selfdamage = 0;
+			teamdamage = 0;
+			enemydamage = 0;
+			targetlist = findchainfloat(bot_attack, TRUE);
+			missile = find(world, classname, "missile");
+			while (missile)
 			{
-				d = vlen(targ.origin + (targ.mins + targ.maxs) * 0.5 - missile.origin);
-				d = edgedamage + (coredamage - edgedamage) * (1 - d * recipricoledgeradius);
-				// count potential damage according to type of target
-				if (targ == self)
-					selfdamage = selfdamage + d;
-				else if (targ.team == self.team && teamplay)
-					teamdamage = teamdamage + d;
-				else if (bot_shouldattack(targ))
-					enemydamage = enemydamage + d;
-				targ = targ.chain;
+				targ = targetlist;
+				while (targ)
+				{
+					d = vlen(targ.origin + (targ.mins + targ.maxs) * 0.5 - missile.origin);
+					d = edgedamage + (coredamage - edgedamage) * (1 - d * recipricoledgeradius);
+					// count potential damage according to type of target
+					if (targ == self)
+						selfdamage = selfdamage + d;
+					else if (targ.team == self.team && teamplay)
+						teamdamage = teamdamage + d;
+					else if (bot_shouldattack(targ))
+						enemydamage = enemydamage + d;
+					targ = targ.chain;
+				}
+				missile = find(missile, classname, "missile");
 			}
-			missile = find(missile, classname, "missile");
-		}
-		local float desirabledamage;
-		desirabledamage = enemydamage;
-		if (teamplay != 1 && time > self.invincible_finished && time > self.spawnshieldtime)
-			desirabledamage = desirabledamage - selfdamage * cvar("g_balance_selfdamagepercent");
-		if (self.team && teamplay == 2)
-			desirabledamage = desirabledamage - teamdamage;
-		// if we would be doing at least half of the core damage, detonate it
-		// but don't fire a new shot at the same time!
-		if (desirabledamage >= 0.5 * coredamage)
-		{
-			self.button3 = TRUE;
-			self.button0 = FALSE;
+			local float desirabledamage;
+			desirabledamage = enemydamage;
+			if (teamplay != 1 && time > self.invincible_finished && time > self.spawnshieldtime)
+				desirabledamage = desirabledamage - selfdamage * cvar("g_balance_selfdamagepercent");
+			if (self.team && teamplay == 2)
+				desirabledamage = desirabledamage - teamdamage;
+			// if we would be doing at least half of the core damage, detonate it
+			// but don't fire a new shot at the same time!
+			if (desirabledamage >= 0.5 * coredamage)
+			{
+				self.button3 = TRUE;
+				self.button0 = FALSE;
+			}
 		}
 	}
 	else if (req == WR_FIRE1)
