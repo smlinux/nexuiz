@@ -466,8 +466,6 @@ void() dom_controlpoint =
 	//if(!self.glow_size)
 	//	self.glow_size = cvar("g_domination_point_glow");
 	self.effects = self.effects | EF_FULLBRIGHT;	
-
-	waypoint_spawnforitem(self); // treat them as items for now
 };
 
 // code from here on is just to support maps that don't have control point and team entities
