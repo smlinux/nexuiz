@@ -176,6 +176,90 @@ string CheckPlayerModel(string plyermodel) {
 
 /*
 =============
+Client_customizeentityforclient
+
+LOD reduction
+=============
+*/
+float Client_customizeentityforclient()
+{
+#ifdef ALLOW_VARIABLE_LOD
+	// self: me
+	// other: the player viewing me
+	float distance;
+	float f;
+
+	distance = vlen(self.origin - other.origin);
+	f = (distance + 100.0) * other.cvar_cl_playerdetailreduction;
+	if(f > 10000)
+	{
+		self.modelindex = self.modelindex_lod2;
+	}
+	else if(f > 5000)
+	{
+		self.modelindex = self.modelindex_lod1;
+	}
+	else
+	{
+		self.modelindex = self.modelindex_lod0;
+	}
+#endif
+
+	return TRUE;
+}
+
+float fexists(string f)
+{
+	float fh;
+	fh = fopen(f, FILE_READ);
+	if(fh < 0)
+		return FALSE;
+	fclose(fh);
+	return TRUE;
+}
+
+void setmodel_lod(entity e, string modelname)
+{
+#ifdef ALLOW_VARIABLE_LOD
+	string s;
+
+	s = strcat(substring(modelname, 0, strlen(modelname) - 4), "_1.zym");
+	if(fexists(s))
+	{
+		precache_model(s);
+		setmodel(e, s);
+		self.modelindex_lod1 = self.modelindex;
+	}
+	else
+		self.modelindex_lod1 = -1;
+
+	s = strcat(substring(modelname, 0, strlen(modelname) - 4), "_2.zym");
+	if(fexists(s))
+	{
+		precache_model(s);
+		setmodel(e, s);
+		self.modelindex_lod2 = self.modelindex;
+	}
+	else
+		self.modelindex_lod2 = -1;
+
+	precache_model(modelname);
+	setmodel(e, modelname);
+	self.modelindex_lod0 = self.modelindex;
+	
+	if(self.modelindex_lod1 < 0)
+		self.modelindex_lod1 = self.modelindex;
+
+	if(self.modelindex_lod2 < 0)
+		self.modelindex_lod2 = self.modelindex;
+#else
+	precache_model(modelname);
+	setmodel(e, modelname);
+#endif
+}
+
+/*
+=============
 PutObserverInServer
 
 putting a client as observer in the server
@@ -361,15 +445,11 @@ void PutClientInServer (void)
 		if(cvar("sv_defaultcharacter") == 1) {
 			local string defaultmodel;
 			defaultmodel = CheckPlayerModel(cvar_string("sv_defaultplayermodel"));
-
-			precache_model (defaultmodel);
-			setmodel (self, defaultmodel);
+			setmodel_lod (self, defaultmodel);
 			self.skin = stof(cvar_string("sv_defaultplayerskin"));
 		} else {
 			self.playermodel = CheckPlayerModel(self.playermodel);
-
-			precache_model (self.playermodel);
-			setmodel (self, self.playermodel);
+			setmodel_lod (self, self.playermodel);
 			self.skin = stof(self.playerskin);
 
 		}
@@ -554,35 +634,6 @@ Called when a client types 'kill' in the console
 void ClientKill (void)
 {
 	Damage(self, self, self, 100000, DEATH_KILL, self.origin, '0 0 0');
-}
-
-/*
-=============
-Client_customizeentityforclient
-
-LOD reduction
-=============
-*/
-float Client_customizeentityforclient()
-{
-	// self: me
-	// other: the player viewing me
-	float distance;
-	float f;
-
-	return TRUE;
-	/*
-	distance = vlen(self.origin - other.origin);
-	f = (distance + 100.0) * other.cvar_cl_playerdetailreduction;
-	if(f > 1000)
-	{
-		return FALSE;
-	}
-	else
-	{
-		return TRUE;
-	}
-	*/
 }
 
 /*
@@ -1304,8 +1355,7 @@ void PlayerPreThink (void)
 			{
 				m1 = self.mins;
 				m2 = self.maxs;
-				precache_model (defaultmodel);
-				setmodel (self, defaultmodel);
+				setmodel_lod (self, defaultmodel);
 				setsize (self, m1, m2);
 			}
 
@@ -1317,8 +1367,7 @@ void PlayerPreThink (void)
 				self.playermodel = CheckPlayerModel(self.playermodel);
 				m1 = self.mins;
 				m2 = self.maxs;
-				precache_model (self.playermodel);
-				setmodel (self, self.playermodel);
+				setmodel_lod (self, self.playermodel);
 				setsize (self, m1, m2);
 			}
 

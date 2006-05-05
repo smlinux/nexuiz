@@ -262,3 +262,9 @@ float default_player_alpha;
 
 .float() customizeentityforclient;
 .float cvar_cl_playerdetailreduction;
+
+#ifdef ALLOW_VARIABLE_LOD
+.float modelindex_lod0;
+.float modelindex_lod1;
+.float modelindex_lod2;
+#endif
