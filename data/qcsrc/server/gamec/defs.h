@@ -259,3 +259,6 @@ float playerid_last;
 .float isdecor;
 
 float default_player_alpha;
+
+.float() customizeentityforclient;
+.float cvar_cl_playerdetailreduction;

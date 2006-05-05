@@ -558,6 +558,35 @@ void ClientKill (void)
 
 /*
 =============
+Client_customizeentityforclient
+
+LOD reduction
+=============
+*/
+float Client_customizeentityforclient()
+{
+	// self: me
+	// other: the player viewing me
+	float distance;
+	float f;
+
+	return TRUE;
+	/*
+	distance = vlen(self.origin - other.origin);
+	f = (distance + 100.0) * other.cvar_cl_playerdetailreduction;
+	if(f > 1000)
+	{
+		return FALSE;
+	}
+	else
+	{
+		return TRUE;
+	}
+	*/
+}
+
+/*
+=============
 ClientConnect
 
 Called when a client connects to the server
@@ -569,6 +598,8 @@ void ClientConnect (void)
 {
 	self.classname = "player_joining";
 	self.flags = self.flags | FL_CLIENT;
+
+	self.customizeentityforclient = Client_customizeentityforclient;
 
 	if(player_count<0) player_count = 0;
 
@@ -636,6 +667,9 @@ void ClientConnect (void)
 
 	// get version info from player
 	stuffcmd(self, "cmd clientversion $gameversion\n");
+
+	// get other cvars from player
+	GetCvars(0);
 
 	// set cvar for team scoreboard
 	stuffcmd(self, strcat("set teamplay ", ftos(teams_matter), "\n"));
@@ -772,7 +806,6 @@ void() TeamBubbleThink =
 
 };
 
-.float() customizeentityforclient;
 float() ChatBubble_customizeentityforclient = {return (self.owner.team == other.team && other.killcount > -666);};
 
 void() UpdateTeamBubble =

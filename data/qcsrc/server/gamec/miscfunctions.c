@@ -376,3 +376,37 @@ string(string msg) formatmessage =
 	strunzone(msg_save);
 	return msg;
 }
+
+/*
+=============
+GetCvars
+=============
+Called with:
+  0:  sends the request
+  >0: receives a cvar from name=argv(f) value=argv(f+1)
+*/
+void GetCvars_handleString(float f, .string field, string name)
+{
+	if(f)
+	{
+		if(argv(f) == name)
+			self.field = argv(f + 1);
+	}
+	else
+		stuffcmd(self, strcat("cmd reportcvar ", name, " $", name, "\n"));
+}
+void GetCvars_handleFloat(float f, .float field, string name)
+{
+	if(f)
+	{
+		if(argv(f) == name)
+			self.field = stof(argv(f + 1));
+	}
+	else
+		stuffcmd(self, strcat("cmd reportcvar ", name, " $", name, "\n"));
+}
+void GetCvars(float f)
+{
+	GetCvars_handleFloat(f, cvar_cl_playerdetailreduction, "cl_playerdetailreduction");
+}
+

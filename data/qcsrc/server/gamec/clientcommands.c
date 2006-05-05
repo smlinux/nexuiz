@@ -205,6 +205,8 @@ void SV_ParseClientCommand(string s) {
 			self.classname = "observer";
 			stuffcmd(self,"menu_showteamselect\n");
 		}
+	} else if(argv(0) == "reportcvar") {
+		GetCvars(1);
 	} else if(argv(0) == "spectate") {
 		if(cvar("g_lms") || cvar("g_arena"))
 			return; // don't allow spectating in lms, unless player runs out of lives
