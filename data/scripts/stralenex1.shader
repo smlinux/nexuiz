@@ -45,8 +45,6 @@ textures/evil8_lights/e8tinylightblue2k
 	q3map_surfacelight 2000
 	{
 		map textures/evil8_lights/e8tinylightblue.tga
-		blendFunc GL_DST_COLOR GL_ZERO
-		rgbGen identity
 	}
 	{
 		map $lightmap 
