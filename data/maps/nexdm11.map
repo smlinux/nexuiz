@@ -2,7 +2,7 @@
 // entity 0
 {
 "classname" "worldspawn"
-"message" "^2Toxic 1.1  ^7- by morfar"
+"message" "^2Toxic  ^7- by morfar"
 // brush 0
 {
 ( 136 -512 -64 ) ( 0 -512 -64 ) ( 0 -600 -64 ) common/caulk 0 0 0 0.5 0.5 0 0 0
@@ -10467,7 +10467,7 @@ evil5_wall/cretesep_mid
 ( 648 0 192 ) ( 648 0 320 ) ( 656 0 192 ) kaznexctf2/grate 128 85 0 0.5 0.5625 134217728 256 0
 ( 648 0 192 ) ( 656 0 192 ) ( 648 8 192 ) common/nodraw 0 0 0 0.5 0.5 134217728 0 0
 ( 704 8 320 ) ( 704 8 192 ) ( 704 0 320 ) common/nodraw 0 0 0 0.5 0.5 134217728 0 0
-( 656 4 320 ) ( 648 4 320 ) ( 656 4 192 ) common/nodraw 0 0 0 0.5 0.5 134217728 0 0
+( 656 8 320 ) ( 648 8 320 ) ( 656 8 192 ) common/nodraw 0 0 0 0.5 0.5 134217728 0 0
 ( 656 8 336 ) ( 656 0 336 ) ( 648 8 336 ) e7/e7brnmetal 128 72 0 0.5 0.5 134217728 0 0
 }
 // brush 1150
@@ -12794,13 +12794,13 @@ evil5_wall/cretesep_mid
 {
 "classname" "dom_controlpoint"
 "origin" "760 -96 224"
-"message" "^3 has captured the ^1left side"
+"message" "^3 has captured the ^1west side"
 }
 // entity 262
 {
 "classname" "dom_controlpoint"
 "origin" "384 -1048 224"
-"message" "^3 has captured the ^1right side"
+"message" "^3 has captured the ^1east side"
 }
 // entity 263
 {
