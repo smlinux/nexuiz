@@ -442,6 +442,8 @@ void PutClientInServer (void)
 
 		self.viewzoom = 0.6;
 
+		self.customizeentityforclient = Client_customizeentityforclient;
+
 		if(cvar("sv_defaultcharacter") == 1) {
 			local string defaultmodel;
 			defaultmodel = CheckPlayerModel(cvar_string("sv_defaultplayermodel"));
@@ -649,8 +651,6 @@ void ClientConnect (void)
 {
 	self.classname = "player_joining";
 	self.flags = self.flags | FL_CLIENT;
-
-	self.customizeentityforclient = Client_customizeentityforclient;
 
 	if(player_count<0) player_count = 0;
 

@@ -30,6 +30,18 @@ void GibTouch ()
 	GibDamage (other, other, 1000, 0, self.origin, '0 0 0');
 }
 
+
+.float gibrandom;
+.float gibmodelindex;
+float() Gib_customizeentityforclient =
+{
+	if(self.gibrandom > other.cvar_cl_nogibs)
+		self.modelindex = self.gibmodelindex;
+	else
+		self.modelindex = 0;
+	return TRUE;
+};
+
 // changes by LordHavoc on 03/30/04
 // TossGib now takes a gib entity so it can be used for tossing heads
 // gib.velocity now uses randomvec() instead of a bunch of manual random calls
@@ -50,8 +62,11 @@ void TossGib (entity gib, string mdlname, vector org, vector v, float destroyont
 	gib.solid = SOLID_CORPSE;
 	gib.skin = 0;
 	gib.effects = 0;
+	gib.gibrandom = random(); // used for customize function to reduce gibs
+	gib.customizeentityforclient = Gib_customizeentityforclient;
 
 	setmodel (gib, mdlname);
+	gib.gibmodelindex = gib.modelindex;
 	setsize (gib, '-8 -8 -8', '8 8 8');
 	setorigin (gib, org);
 
