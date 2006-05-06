@@ -35,11 +35,16 @@ void GibTouch ()
 .float gibmodelindex;
 float() Gib_customizeentityforclient =
 {
-	if(self.gibrandom > other.cvar_cl_nogibs)
-		self.modelindex = self.gibmodelindex;
-	else
-		self.modelindex = 0;
-	return TRUE;
+	if(self.classname == "player") // the eye
+	{
+		if(self.gibrandom > other.cvar_cl_nogibs)
+			self.modelindex = self.gibmodelindex;
+		else
+			self.modelindex = 0;
+		return TRUE;
+	}
+	else // other gibs - don't even need to send them
+		return self.gibrandom > other.cvar_cl_nogibs;
 };
 
 // changes by LordHavoc on 03/30/04
