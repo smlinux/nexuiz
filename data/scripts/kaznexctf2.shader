@@ -161,3 +161,19 @@ textures/kaznexctf2/grate2
 		depthFunc equal
 	}
 }
+
+textures/kaznexctf2/grate3
+{
+	qer_editorimage textures/kaznexctf2/grate3.tga
+	surfaceparm nomarks
+	surfaceparm trans
+	surfaceparm alphashadow
+	cull none
+	nopicmip
+	{
+		map textures/kaznexctf2/grate3.tga
+		//depthWrite
+		alphaFunc GT0
+		rgbgen vertex
+	}
+}
