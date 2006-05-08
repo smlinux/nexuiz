@@ -1,3 +1,13 @@
+textures/e8/e8_base1broke
+{
+	q3map_nonplanar
+	q3map_shadeAngle 75
+	{
+		map textures/e8/e8_base1broke
+		rgbGen vertex
+	}
+}
+
 textures/evil8_lights/e8btrimlight
 {
 	qer_editorimage textures/evil8_lights/e8btrimlight.tga

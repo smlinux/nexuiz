@@ -2,6 +2,16 @@
 
 //Multisampling & High Lightmap resolution
 
+textures/Reaptxt/yellowgrad
+{
+	qer_editorimage textures/Reaptxt/yellowgrad
+	surfaceparm nonsolid
+	{
+		map textures/Reaptxt/yellowgrad
+		blendfunc add	
+	}
+}
+
 textures/Reaptxt/Notext
 {
 	qer_editorimage textures/Reaptxt/Notext.jpg
