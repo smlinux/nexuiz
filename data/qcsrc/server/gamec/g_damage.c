@@ -95,8 +95,6 @@ void Obituary (entity attacker, entity targ, float deathtype)
 
 		if (targ == attacker)
 		{
-			if (deathtype == DEATH_NOAMMO)
-				centerprint(targ, strcat("^1You were killed for running out of ammo...\n\n\n"));
 			if (deathtype == DEATH_TEAMCHANGE)
 			{
 				m = "You are now on: ";
@@ -126,6 +124,10 @@ void Obituary (entity attacker, entity targ, float deathtype)
 			}
 			else if (deathtype == DEATH_CAMP)
 				centerprint(targ, strcat("^1Die camper!\n\n\n"));
+			else if (deathtype == DEATH_NOAMMO)
+				centerprint(targ, strcat("^1You were killed for running out of ammo...\n\n\n"));
+			else if (deathtype == DEATH_ROT)
+				centerprint(targ, strcat("^1You grew too old without taking your medcine\n\n\n"));			
 			else
 				centerprint(targ, strcat("^1You killed your own dumb self!\n\n\n"));
 
@@ -137,6 +139,8 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				bprint ("^1",s, "^1 exploded\n");
 			else if (deathtype == DEATH_KILL)
 				bprint ("^1",s, "^1 couldn't take it anymore\n");
+			else if (deathtype == DEATH_ROT)
+				bprint ("^1",s, "^1 died\n");
 			else if (deathtype == DEATH_NOAMMO)
 			{
 				bprint ("^7",s, " ^7committed suicide. What's the point of living without ammo?\n");

@@ -1334,8 +1334,11 @@ string(float r) bot_skinfornumber =
 
 void() bot_setnameandstuff =
 {
-	local string name;
+	local string name, prefix, suffix;
 	local float r, b, shirt, pants;
+
+	prefix = cvar_string("bot_prefix");
+	suffix = cvar_string("bot_suffix");
 
 	// this is really only a default, JoinBestTeam is called later
 	pants = bound(0, floor(random() * 13), 13);
@@ -1389,8 +1392,10 @@ void() bot_setnameandstuff =
 		// randomly pick a skin
 		bot_skinfornumber(floor(random() * BOTSKINS));
 	}
-
-	self.netname = name;
+	if(!cvar("g_campaign"))
+		self.netname = strzone(strcat(prefix, name, suffix));
+	else
+		self.netname = name;
 };
 
 float(entity e) bot_shouldattack =

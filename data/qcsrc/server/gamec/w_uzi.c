@@ -84,8 +84,8 @@ void W_Uzi_Attack (void)
 	// casing code
 	if (cvar("g_casings") >= 2)
 	{
-		org = W_MuzzleOrigin (self, '10 6 -8');
-		SpawnCasing (org, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 + 10) * v_up), 2, v_forward,'0 250 0', 100, 2);
+		org = W_MuzzleOrigin (self, '15 6 -8');
+		SpawnCasing (org, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 - 70) * v_up), 2, vectoangles(v_forward),'0 250 0', 100, 3);
 	}
 }
 // weapon frames

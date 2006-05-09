@@ -71,8 +71,8 @@ void W_Shotgun_Attack (void)
 	// casing code
 	if (cvar("g_casings") >= 1)
 	{
-		org = W_MuzzleOrigin (self, '10 10 -8');
-		SpawnCasing (org, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 + 10) * v_up), 2, v_forward,'0 250 0', 100, 1);
+		org = W_MuzzleOrigin (self, '20 10 -8');
+		SpawnCasing (org, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 - 30) * v_up), 2, vectoangles(v_forward),'0 250 0', 100, 1);
 	}
 
 	self.punchangle_x = -5;
@@ -109,8 +109,8 @@ void W_Shotgun_Attack2 (void)
 	// casing code
 	if (cvar("g_casings") >= 1)
 	{
-		org = W_MuzzleOrigin (self, '10 10 -8');
-		SpawnCasing (org, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 + 10) * v_up), 2, v_forward,'0 250 0', 100, 1);
+		org = W_MuzzleOrigin (self, '20 10 -8');
+		SpawnCasing (org, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 - 30) * v_up), 2, vectoangles(v_forward),'0 250 0', 100, 1);
 	}
 
 	self.punchangle_x = -5;

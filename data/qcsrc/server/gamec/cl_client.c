@@ -1150,9 +1150,9 @@ void player_regen (void)
 		if (time > self.pauseregen_finished)
 		{
 			if (self.health < maxh)
-				self.health = bound(0, self.health + (maxh- self.health) * regen_mod*cvar("g_balance_health_regen") * frametime, 1000);
+				self.health = bound(0, self.health + (maxh- self.health) * regen_mod*cvar("g_balance_health_regen") * frametime  + 0.001, 1000);
 			if (self.armorvalue < maxa)
-				self.armorvalue = bound(0, self.armorvalue + (maxa - self.armorvalue) * cvar("g_balance_armor_regen") * frametime, 1000);
+				self.armorvalue = bound(0, self.armorvalue + (maxa - self.armorvalue) * cvar("g_balance_armor_regen") * frametime  + 0.001, 1000);
 		}
 	}
 	else
@@ -1171,8 +1171,11 @@ void player_regen (void)
 				self.armorvalue = bound(0, self.armorvalue + (maxa - self.armorvalue) * cvar("g_balance_armor_regen") * frametime + 0.001, 1000);
 		}
 	}
+	
 	if (self.health > limith)
 		self.health = limith;
+	if(self.health < 1)
+		self.event_damage(self, self, 1, DEATH_ROT, self.origin, '0 0 0');
 	if (self.armorvalue > limita)
 		self.armorvalue = limita;
 }
