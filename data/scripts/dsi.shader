@@ -63,18 +63,12 @@ textures/dsi/dsiglass
 	surfaceparm trans
 	cull disable
 	qer_trans 0.5
+
 	{
-		map textures/dsi/dsitinfx.tga
+		map textures/dsi/dsiglass.tga
 		blendfunc add
 		rgbGen identity
-		tcGen environment
-	}
-	{
-		map $lightmap
-		blendfunc filter
-		rgbGen identity
-		tcGen lightmap
-	}
+	}	
 }
 
 textures/dsi/cmp1_logo
