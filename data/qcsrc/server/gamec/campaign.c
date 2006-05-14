@@ -91,6 +91,7 @@ void() CampaignPreInit =
 	cvar_set("skill", ftos(baseskill));
 
 	cvar_set("sv_public", "0");
+	cvar_set("pausable", "1");
 
 	title = campaign_shortdesc[0];
 	campaign_message = strzone(strcat("\n\n\n\n\n\n\n\n\n\n^1\n", title, "\n^3\n", Campaign_wordwrap(campaign_longdesc[0], 50), "\n\n^1press jump to enter the game"));
