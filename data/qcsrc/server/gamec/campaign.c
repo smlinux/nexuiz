@@ -8,9 +8,9 @@ float campaign_won;
 
 void(string s) CampaignBailout =
 {
-	//bprint(strcat("campaign initialization failed: ", s, "\n"));
 	cvar_set("g_campaign", "0");
-	error(strcat("campaign initialization failed: ", s, "\n"));
+	bprint(strcat("campaign initialization failed: ", s, "\n"));
+	//error(strcat("campaign initialization failed: ", s, "\n"));
 	return;
 }
 
@@ -89,6 +89,8 @@ void() CampaignPreInit =
 	if(baseskill < 0)
 		baseskill = 0;
 	cvar_set("skill", ftos(baseskill));
+
+	cvar_set("sv_public", "0");
 
 	title = campaign_shortdesc[0];
 	campaign_message = strzone(strcat("\n\n\n\n\n\n\n\n\n\n^1\n", title, "\n^3\n", Campaign_wordwrap(campaign_longdesc[0], 50), "\n\n^1press jump to enter the game"));
