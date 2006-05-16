@@ -560,3 +560,13 @@ textures/Reaptxt/HRSky
 	qer_editorimage textures/Reaptxt/HRSky.jpg
 	skyparms env/rsky - -
 }
+
+textures/Reaptxt/HRBlackBoxSky
+{
+	surfaceparm noimpact
+	surfaceparm nolightmap
+	surfaceparm sky
+	surfaceparm nomarks
+	qer_editorimage env/blackbox/blackbox_up.jpg
+	skyparms env/blackbox - -
+}
