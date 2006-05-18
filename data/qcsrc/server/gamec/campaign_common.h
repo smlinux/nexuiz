@@ -5,7 +5,8 @@
 // each i-th array element corresponds to the list entry campaign_offset+i
 float campaign_entries;
 float campaign_offset;
-string campaign_mapcfgname[CAMPAIGN_MAX_ENTRIES];
+string campaign_gametype[CAMPAIGN_MAX_ENTRIES];
+string campaign_mapname[CAMPAIGN_MAX_ENTRIES];
 float campaign_bots[CAMPAIGN_MAX_ENTRIES];
 float campaign_botskill[CAMPAIGN_MAX_ENTRIES];
 float campaign_fraglimit[CAMPAIGN_MAX_ENTRIES];

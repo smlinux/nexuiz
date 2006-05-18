@@ -101,10 +101,12 @@ string GetMapname();
 void() CampaignPostInit =
 {
 	// now some sanity checks
-	string thismapname;
+	string thismapname, wantedmapname;
 	thismapname = GetMapname();
-	if(campaign_mapcfgname[0] != thismapname)
-		return CampaignBailout(strcat("wrong map: ", campaign_mapcfgname[0], " != ", thismapname));
+	wantedmapname = campaign_gametype[0];
+	wantedmapname = strcat(wantedmapname, "_", campaign_mapname[0]);
+	if(wantedmapname != thismapname)
+		return CampaignBailout(strcat("wrong map: ", wantedmapname, " != ", thismapname));
 	cvar_set("fraglimit", ftos(campaign_fraglimit[0]));
 	cvar_set("timelimit", "0");
 }

@@ -7,6 +7,7 @@ float CampaignFile_Load(float offset, float n)
 	float fh;
 	float lineno;
 	float entlen;
+	float i;
 	string l;
 
 	if(n > CAMPAIGN_MAX_ENTRIES)
@@ -27,16 +28,18 @@ float CampaignFile_Load(float offset, float n)
 			if(lineno >= offset)
 			{
 				entlen = tokenize(l);
-				if(entlen != 7)
+				if(entlen != 8)
 					error("syntax error in campaign file");
 
-				campaign_mapcfgname[campaign_entries] = strzone(argv(0));
-				campaign_bots[campaign_entries] = stof(argv(1));
-				campaign_botskill[campaign_entries] = stof(argv(2));
-				campaign_fraglimit[campaign_entries] = stof(argv(3));
-				campaign_mutators[campaign_entries] = strzone(argv(4));
-				campaign_shortdesc[campaign_entries] = strzone(argv(5));
-				campaign_longdesc[campaign_entries] = strzone(argv(6));
+				i = 0;
+				campaign_gametype[campaign_entries] = strzone(argv(i++));
+				campaign_mapname[campaign_entries] = strzone(argv(i++));
+				campaign_bots[campaign_entries] = stof(argv(i++));
+				campaign_botskill[campaign_entries] = stof(argv(i++));
+				campaign_fraglimit[campaign_entries] = stof(argv(i++));
+				campaign_mutators[campaign_entries] = strzone(argv(i++));
+				campaign_shortdesc[campaign_entries] = strzone(argv(i++));
+				campaign_longdesc[campaign_entries] = strzone(argv(i++));
 				campaign_entries = campaign_entries + 1;
 
 				if(campaign_entries >= n)
@@ -55,7 +58,8 @@ void CampaignFile_Unload()
 	float i;
 	for(i = 0; i < campaign_entries; ++i)
 	{
-		strunzone(campaign_mapcfgname[i]);
+		strunzone(campaign_gametype[i]);
+		strunzone(campaign_mapname[i]);
 		strunzone(campaign_mutators[i]);
 		strunzone(campaign_shortdesc[i]);
 		strunzone(campaign_longdesc[i]);

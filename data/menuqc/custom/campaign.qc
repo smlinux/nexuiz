@@ -20,7 +20,9 @@ void Campaign_DumpLevels()
 		print("Level ");
 		print(ftos(i + campaign_offset));
 		print(": ");
-		print(campaign_mapcfgname[i]);
+		print(campaign_gametype[i]);
+		print("_");
+		print(campaign_mapname[i]);
 		print(" - ");
 		print(campaign_shortdesc[i]);
 		print("\n");
