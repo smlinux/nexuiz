@@ -3,6 +3,7 @@
 .void() havocbot_previous_role;
 .float bot_strategytime;
 .void() havocbot_role;
+float bot_ignore_bots;
 
 float(entity e) canreach =
 {
@@ -72,7 +73,7 @@ void(float ratingscale, vector org, float sradius) havocbot_goalrating_enemyplay
 	while (head)
 	{
 		if (head.health > 0)
-		if (head.team != self.team || noteam)
+		if ((noteam && (!bot_ignore_bots || clienttype(head) == CLIENTTYPE_REAL)) || head.team != self.team)
 		if (vlen(head.origin - org) < sradius)
 		{
 			t = head.frags + 25;

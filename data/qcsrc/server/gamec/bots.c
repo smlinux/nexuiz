@@ -1398,6 +1398,7 @@ void() bot_setnameandstuff =
 		self.netname = name;
 };
 
+float bot_ignore_bots; // let bots not attack other bots (only works in non-teamplay)
 float(entity e) bot_shouldattack =
 {
 	if (e.team == self.team)
@@ -1408,6 +1409,10 @@ float(entity e) bot_shouldattack =
 		if (e.team != 0)
 			return FALSE;
 	}
+	if(!teamplay)
+		if(bot_ignore_bots)
+			if(clienttype(e) == CLIENTTYPE_BOT)
+				return FALSE;
 	if (!e.takedamage)
 		return FALSE;
 	if (e.deadflag)
@@ -1874,6 +1879,8 @@ void() bot_serverframe =
 		// if there are no players, remove bots
 		bots = 0;
 	}
+
+	bot_ignore_bots = cvar("bot_ignore_bots");
 
 	// only add one bot per frame to avoid utter chaos
 	while (currentbots < bots)

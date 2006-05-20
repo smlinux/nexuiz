@@ -165,12 +165,19 @@ Checks if the argument string can be a valid playermodel.
 Returns a valid one in doubt.
 =============
 */
+string FallbackPlayerModel = "models/player/marine.zym";
 string CheckPlayerModel(string plyermodel) {
-	if( substring(plyermodel,0,14) != "models/player/") plyermodel = "models/player/marine.zym";
-
-	/* Possible Fixme: Check if server can open the model?
-	   This would kill custom models, however. */
-
+	if(strlen(plyermodel) < 4)
+		return FallbackPlayerModel;
+	if( substring(plyermodel,0,14) != "models/player/")
+		return FallbackPlayerModel;
+	else if(cvar("sv_servermodelsonly"))
+	{
+		if(substring(plyermodel,strlen(plyermodel)-4,4) != ".zym")
+			return FallbackPlayerModel;
+		if(!fexists(plyermodel))
+			return FallbackPlayerModel;
+	}
 	return plyermodel;
 }
 
@@ -205,16 +212,6 @@ float Client_customizeentityforclient()
 	}
 #endif
 
-	return TRUE;
-}
-
-float fexists(string f)
-{
-	float fh;
-	fh = fopen(f, FILE_READ);
-	if(fh < 0)
-		return FALSE;
-	fclose(fh);
 	return TRUE;
 }
 
