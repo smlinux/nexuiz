@@ -196,19 +196,25 @@ float Client_customizeentityforclient()
 	float distance;
 	float f;
 
-	distance = vlen(self.origin - other.origin);
-	f = (distance + 100.0) * other.cvar_cl_playerdetailreduction;
-	if(f > 10000)
+	if(other.cvar_cl_playerdetailreduction <= 0)
 	{
-		self.modelindex = self.modelindex_lod2;
-	}
-	else if(f > 5000)
-	{
-		self.modelindex = self.modelindex_lod1;
+		if(other.cvar_cl_playerdetailreduction <= -2)
+			self.modelindex = self.modelindex_lod2;
+		else if(other.cvar_cl_playerdetailreduction <= -1)
+			self.modelindex = self.modelindex_lod1;
+		else
+			self.modelindex = self.modelindex_lod0;
 	}
 	else
 	{
-		self.modelindex = self.modelindex_lod0;
+		distance = vlen(self.origin - other.origin);
+		f = (distance + 100.0) * other.cvar_cl_playerdetailreduction;
+		if(f > 10000)
+			self.modelindex = self.modelindex_lod2;
+		else if(f > 5000)
+			self.modelindex = self.modelindex_lod1;
+		else
+			self.modelindex = self.modelindex_lod0;
 	}
 #endif
 
