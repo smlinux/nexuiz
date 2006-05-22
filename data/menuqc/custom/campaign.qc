@@ -44,3 +44,56 @@ void Campaign_JumpLevel(float n)
 	if(n >= 0 && n < campaign_entries)
 		CampaignSetup(n);
 }
+
+float campaign_index;
+
+void() Nex_Action_Campaign_Start =
+{
+	Campaign_JumpLevel(campaign_index);
+
+	// force the menu to hide
+	m_hide();
+};
+
+void() Nex_Action_Campaign_Update =
+{
+	local entity lItem;
+	lItem = Menu_GetItem( "ShortDescription" );
+	String_EntitySet( lItem, text, campaign_shortdesc[campaign_index] );
+
+	lItem = Menu_GetItem( "LongDescription" );
+	String_EntitySet( lItem, text, campaign_longdesc[campaign_index] );
+
+	lItem = Menu_GetItem( "Picture" );
+	String_EntitySet( lItem, picture, strcat("maps/",campaign_mapname[campaign_index], ".jpg") );
+};
+
+void() Nex_Action_Campaign_Init =
+{
+	campaign_index = cvar("g_campaign_index");
+
+	Nex_Action_Campaign_Update();
+};
+
+void() Nex_Action_Campaign_Prev =
+{
+	if (campaign_index <= 0) {
+		campaign_index = min(campaign_entries, cvar("g_campaign_index"));
+	} else {
+		campaign_index -= 1;
+	}
+
+	Nex_Action_Campaign_Update();
+};
+
+void() Nex_Action_Campaign_Next =
+{
+	if (campaign_index >= min(campaign_entries, cvar("g_campaign_index"))) {
+		campaign_index = 0;
+	} else {
+		campaign_index += 1;
+	}
+
+	Nex_Action_Campaign_Update();
+};
+

@@ -6,7 +6,7 @@
 //#include "menu/test.menu"
 //Ignore {
 #include "menu/data.menu"
-
+#include "menu/campaign.menu"
 #include "menu/creategame.menu"
 #include "menu/options.menu"
 #include "menu/joingame.menu"

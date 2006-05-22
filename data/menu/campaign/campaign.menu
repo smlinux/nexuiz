@@ -1,0 +1,59 @@
+// Property of Alientrap/AK
+// options/sound.menu
+Item Window Sound
+{
+	Item Layout Layout
+	{
+		pos		'56 45'
+		size		'900 800'
+		origin		'260 0'
+		alignment	[AlignCenter]
+		direction	[Nex_DefaultVertDirection]
+
+		Derive MultiLabel ShortDescription
+		{
+			size	'523 15'
+			wrap	40
+			fontSize '11 11 0'
+		}
+		Derive Picture Picture
+		{
+			picture "gfx/m_nomap"
+			size	'523 326'
+		}
+		Derive MultiLabel LongDescription
+		{
+			size	'523 70'
+			wrap	39
+			fontSize '11 11 0'
+		}
+		Item Layout Buttons
+		{
+			pos		'56 45'
+			size		'900 800'
+			origin		'260 10'
+			direction	'30 0'
+			alignment	[AlignCenter]
+//			direction	[Nex_DefaultHorzDirection]
+
+			Derive TextButton Prev
+			{
+				normal	"<< Prev Campaign"
+				pos	'33 29'
+				action	Nex_Action_Campaign_Prev
+			}
+			Derive TextButton Next
+			{
+				normal	"Next Campaign >>"
+				pos	'369 29'
+
+				action	Nex_Action_Campaign_Next
+			}
+		}
+		Item Task_Job UpdateJob
+		{
+			update 	Nex_Action_Campaign_Update
+			init 	Nex_Action_Campaign_Init
+		}
+	}
+}

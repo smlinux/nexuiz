@@ -33,13 +33,13 @@ Item Window JoinGame
 		{
 			Derive TextButton Description
 			{
-				normal		"Query String:"
+				normal		"Server name filter:"
 
 				link		"##next"
 			}
 			Derive EditBox EditBox
 			{
-				size	'650 12'
+				size	'610 12'
 				target	"::Data::ServerList::QueryString::Text"
 
 				action	Nex_Action_ExecuteQuery
