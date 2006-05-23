@@ -390,6 +390,11 @@ if(self.noise) {
 };
 
 
+void() func_stardust {
+	self.effects = EF_STARDUST;
+}
+
+
 /*
 void() sparksthink =
 {
