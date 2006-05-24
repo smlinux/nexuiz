@@ -1,0 +1,18 @@
+Stabilized Warfare (arena)
+maps/nexdm21
+
+Medium sized map with
+a central area
+
+Players: 5
+
+Weapons: Mortar,
+Rocket Launcher, Electro, 
+Crylink, Machine Gun, Nexgun
+
+Gametype: Arena
+
+Author:
+tymo aka henning janssen
+tymo@gmx.de
+home.arcor.de/dwalinn/
