@@ -1,0 +1,18 @@
+Farewell (tdm_nexdm20)
+maps/nexdm20
+
+Small and very fast 
+Tourney Map
+
+Players: 2
+
+Weapons: Mortar,
+Rocket Launcher, Electro, 
+Crylink, Machine Gun
+
+Gametype: Team Deathmatch
+
+Author:
+tymo aka henning janssen
+tymo@gmx.de
+home.arcor.de/dwalinn/
