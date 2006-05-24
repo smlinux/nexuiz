@@ -1858,7 +1858,7 @@ void() bot_serverframe =
 
 	// add/remove bots if needed to make sure there are at least
 	// minplayers+bot_number, or remove all bots if no one is playing
-	if (realplayers)
+	if (realplayers || cvar("bot_join_empty"))
 	{
 		float realminplayers, minplayers;
 		realminplayers = cvar("minplayers");

@@ -1259,6 +1259,8 @@ void PlayerPreThink (void)
 
 		CheckRules_Player();
 
+		Nixnex_GiveCurrentWeapon();
+
 		if(self.button7)
 			PrintWelcomeMessage(self);
 

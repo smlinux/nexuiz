@@ -18,8 +18,6 @@ void SV_PlayerPhysics()
 	local float wishspeed, f, maxspd_mod, spd, maxairspd, airaccel, swampspd_mod;
 	string temps;
 
-	Nixnex_GiveCurrentWeapon();
-
 	if (clienttype(self) == CLIENTTYPE_BOT)
 		bot_think();
 
