@@ -1,55 +1,85 @@
 // Property of Alientrap/AK
-// options/sound.menu
-Item Window Sound
+// options/campaign.menu
+Item Window Campaign
 {
-	Item Layout Layout
+	Item Window Layout
 	{
-		pos		'56 45'
-		size		'900 800'
-		origin		'260 0'
-		alignment	[AlignCenter]
-		direction	[Nex_DefaultVertDirection]
+		pos	'25 20'
+		size '600 585'
+		flag [FlagEmbedded]
 
+		
+		Derive Picture PrevPicture
+		{
+			size	'30 18'
+			picture "gfx/create_map_nav"
+			pos	'30 25'
+		}
+		Derive TextButton Prev
+		{
+			normal	"<<"
+			pos	'33 29'
+			action	Nex_Action_Campaign_Prev
+		}
+				
+		Derive Picture NamePicture
+		{
+			picture		"gfx/create_map_nav_background"
+			size		'405 18'
+			pos		'60 24'
+		}
+		
 		Derive MultiLabel ShortDescription
 		{
-			size	'523 15'
+			alignment	[AlignCenter]
+			color		"1 1 1"
+			size		'405 14'
+			pos		'64 29'
+		}
+		
+		Derive Picture NextPicture
+		{
+			size	'30 18'
+			picture "gfx/create_map_nav"
+			pos	'471 25'
+		}
+		Derive TextButton Next
+		{
+			normal	">>"
+			pos	'474 29'
+
+			action	Nex_Action_Campaign_Next
+		}
+		
+		
+		Derive Picture Table1
+		{
+			picture "gfx/create_map_border"
+			pos	'70 35'
+			size	'385 275'
+		}
+				
+		Derive Picture Picture
+		{
+			picture "gfx/m_white"
+			size	'323 226'
+			pos	'101 60'
+		}
+		Derive Picture Table2
+		{
+			picture "gfx/create_map_desc_background"
+			pos	'20 295'
+			size	'500 200'
+		}
+				
+		Derive MultiLabel LongDescription
+		{
+			pos	'44 315'
+			size	'480 200'
 			wrap	40
 			fontSize '11 11 0'
 		}
-		Derive Picture Picture
-		{
-			picture "gfx/m_nomap"
-			size	'523 326'
-		}
-		Derive MultiLabel LongDescription
-		{
-			size	'523 70'
-			wrap	39
-			fontSize '11 11 0'
-		}
-		Item Layout Buttons
-		{
-			pos		'56 45'
-			size		'900 800'
-			origin		'260 10'
-			direction	'30 0'
-			alignment	[AlignCenter]
-//			direction	[Nex_DefaultHorzDirection]
 
-			Derive TextButton Prev
-			{
-				normal	"<< Prev Campaign"
-				pos	'33 29'
-				action	Nex_Action_Campaign_Prev
-			}
-			Derive TextButton Next
-			{
-				normal	"Next Campaign >>"
-				pos	'369 29'
-
-				action	Nex_Action_Campaign_Next
-			}
-		}
 		Item Task_Job UpdateJob
 		{
 			update 	Nex_Action_Campaign_Update
