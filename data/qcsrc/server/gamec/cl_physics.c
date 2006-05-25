@@ -266,21 +266,20 @@ void SV_PlayerPhysics()
 		{
 			if(cvar("sv_physicsdiv0"))
 			{
-				f = wishspeed - (self.velocity * wishdir);
+				float vel_straight;
+				float vel_z;
+				vector vel_perpend;
+				vel_straight = self.velocity * wishdir;
+				vel_z = self.velocity * '0 0 1';
+				vel_perpend = self.velocity - vel_straight * wishdir - vel_z * '0 0 1';
+
+				f = wishspeed - vel_straight;
 				if (f > 0)
-				{
-					float vel_straight;
-					float vel_z;
-					vector vel_perpend;
-					vel_straight = self.velocity * wishdir;
-					vel_z = self.velocity * '0 0 1';
-					vel_perpend = self.velocity - vel_straight * wishdir - vel_z * '0 0 1';
-
 					vel_straight = vel_straight + min(f, airaccel * frametime * wishspeed);
-					vel_perpend = vel_perpend * (1 - frametime * (wishspeed / maxairspd) * cvar("sv_physicsdiv0_friction"));
 
-					self.velocity = vel_straight * wishdir + vel_z * '0 0 1' + vel_perpend;
-				}
+				vel_perpend = vel_perpend * (1 - frametime * (wishspeed / maxairspd) * cvar("sv_physicsdiv0_friction"));
+
+				self.velocity = vel_straight * wishdir + vel_z * '0 0 1' + vel_perpend;
 			}
 			else
 			{
