@@ -264,9 +264,30 @@ void SV_PlayerPhysics()
 			wishspeed = wishspeed * 0.5;
 		if (time >= self.teleport_time)
 		{
-			f = wishspeed;// - (self.velocity * wishdir);
-			if (f > 0)
-				self.velocity = self.velocity + wishdir * min(f, airaccel * frametime * wishspeed);
+			if(cvar("sv_physicsdiv0"))
+			{
+				f = wishspeed - (self.velocity * wishdir);
+				if (f > 0)
+				{
+					float vel_straight;
+					float vel_z;
+					vector vel_perpend;
+					vel_straight = self.velocity * wishdir;
+					vel_z = self.velocity * '0 0 1';
+					vel_perpend = self.velocity - vel_straight * wishdir - vel_z * '0 0 1';
+
+					vel_straight = vel_straight + min(f, airaccel * frametime * wishspeed);
+					vel_perpend = vel_perpend * (1 - frametime * (wishspeed / maxairspd) * cvar("sv_physicsdiv0_friction"));
+
+					self.velocity = vel_straight * wishdir + vel_z * '0 0 1' + vel_perpend;
+				}
+			}
+			else
+			{
+				f = wishspeed;// - (self.velocity * wishdir);
+				if (f > 0)
+					self.velocity = self.velocity + wishdir * min(f, airaccel * frametime * wishspeed);
+			}
 		}
 	}
 
