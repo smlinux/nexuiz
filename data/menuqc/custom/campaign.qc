@@ -58,11 +58,13 @@ void() Nex_Action_Campaign_Start =
 void() Nex_Action_Campaign_Update =
 {
 	local entity lItem;
+	local string longdesc;
 	lItem = Menu_GetItem( "ShortDescription" );
 	String_EntitySet( lItem, text, campaign_shortdesc[campaign_index] );
 
 	lItem = Menu_GetItem( "LongDescription" );
-	String_EntitySet( lItem, text, campaign_longdesc[campaign_index] );
+	longdesc = Campaign_wordwrap(campaign_longdesc[campaign_index], lItem.wrap);
+	String_EntitySet( lItem, text, longdesc );
 
 	lItem = Menu_GetItem( "Picture" );
 	String_EntitySet( lItem, picture, strcat("maps/",campaign_mapname[campaign_index], ".jpg") );

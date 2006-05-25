@@ -66,3 +66,66 @@ void CampaignFile_Unload()
 	}
 	campaign_entries = 0;
 }
+
+
+// stuff to handle the campaign_longdesc field
+string fstrunzone(string s)
+{
+	string t;
+	t = strcat(s);
+	strunzone(s);
+	return t;
+}
+
+// NOTE: s may not be a tempstring here
+string Campaign_wordwrap(string s, float l)
+{
+	string t;
+	string word;
+
+	float lleft;
+	float i;
+
+	float startidx;
+
+	startidx = 0;
+
+	t = strzone("");
+
+	lleft = l;
+	for(i = 0; i <= strlen(s); ++i)
+	{
+		if(i != strlen(s) && substring(s, i, 1) != " ")
+			continue;
+
+		word = substring(s, startidx, i - startidx);
+		startidx = i + 1;
+		
+		if(word == "+++")
+		{
+			t = fstrunzone(t);
+			t = strzone(strcat(t, "\n\n"));
+			lleft = l;
+		}
+		else if(!l || (strlen(word) < lleft))
+		{
+			t = fstrunzone(t);
+			if(lleft != l)
+			{
+				t = strcat(t, " ");
+				lleft = lleft - 1;
+			}
+			t = strzone(strcat(t, word));
+			lleft = lleft - strlen(word);
+		}
+		else
+		{
+			t = fstrunzone(t);
+			t = strzone(strcat(t, "\n", word));
+			lleft = l - strlen(word);
+		}
+	}
+	t = fstrunzone(t);
+	return t;
+}
+

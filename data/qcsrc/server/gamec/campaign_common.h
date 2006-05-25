@@ -25,3 +25,6 @@ void CampaignFile_Unload();
 // Sets up the campaign for the n-th array item (meaning: campaign_offset+nth
 // level) using localcmd()
 void CampaignSetup(float n);
+
+// this wraps the campaign_longdesc field to the given field, or just replaces the linefeeds if l==0
+string Campaign_wordwrap(string s, float l)
