@@ -53,7 +53,7 @@ Item DataContainer Player
 	}
 	Item Data_Cvar FOV
 	{
-		cvarName	"FOV"
+		cvarName	"fov"
 		defValue	"90"
 
 		Item DataLink_Value Value
