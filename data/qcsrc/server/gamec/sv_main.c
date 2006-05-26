@@ -150,6 +150,9 @@ void StartFrame (void)
 	sv_maxspeed = cvar ("sv_maxspeed");
 	sv_friction = cvar ("sv_friction");
 	sv_accelerate = cvar ("sv_accelerate");
+	sv_airaccel_sideways_friction = cvar("sv_airaccel_sideways_friction");
+	sv_airaccel_qw = cvar("sv_airaccel_qw");
+
 	sv_stopspeed = cvar ("sv_stopspeed");
 	teamplay = cvar ("teamplay");
 	skill = cvar("skill");

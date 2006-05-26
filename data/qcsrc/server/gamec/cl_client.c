@@ -711,6 +711,8 @@ void ClientConnect (void)
 	stuffcmd(self, strcat("cl_movement_jumpvelocity ", ftos(cvar("g_balance_jumpheight")), "\n"));
 	stuffcmd(self, strcat("cl_movement_stepheight ", ftos(cvar("sv_stepheight")), "\n"));
 	stuffcmd(self, strcat("set cl_movement_friction_on_land ", ftos(cvar("sv_friction_on_land")), "\n"));
+	stuffcmd(self, strcat("set cl_movement_airaccel_qw ", ftos(cvar("sv_airaccel_qw")), "\n"));
+	stuffcmd(self, strcat("set cl_movement_airaccel_sideways_friction ", ftos(cvar("sv_airaccel_sideways_friction")), "\n"));
 	stuffcmd(self, strcat("cl_movement_edgefriction 0\n"));
 	// Wazat's grappling hook
 	SetGrappleHookBindings();

@@ -4,6 +4,8 @@ float sv_friction;
 float sv_maxspeed;
 float sv_stopspeed;
 float sv_gravity;
+float sv_airaccel_sideways_friction;
+float sv_airaccel_qw;
 .float ladder_time;
 .entity ladder_entity;
 .float gravity;
@@ -264,29 +266,33 @@ void SV_PlayerPhysics()
 			wishspeed = wishspeed * 0.5;
 		if (time >= self.teleport_time)
 		{
-			if(cvar("sv_physicsdiv0"))
-			{
-				float vel_straight;
-				float vel_z;
-				vector vel_perpend;
-				vel_straight = self.velocity * wishdir;
-				vel_z = self.velocity_z;
-				vel_perpend = self.velocity - vel_straight * wishdir - vel_z * '0 0 1';
+			// NOTE: this does the same as the commented out old code if:
+			//   sv_airaccel_qw 0
+			//   sv_airaccel_sideways_friction 0
+			
+			float vel_straight;
+			float vel_z;
+			vector vel_perpend;
+			vel_straight = self.velocity * wishdir;
+			vel_z = self.velocity_z;
+			vel_perpend = self.velocity - vel_straight * wishdir - vel_z * '0 0 1';
 
-				f = wishspeed - vel_straight;
-				if (f > 0)
-					vel_straight = vel_straight + min(f, airaccel * frametime * wishspeed);
+			f = wishspeed - vel_straight;
+			if(f > 0)
+				vel_straight = vel_straight + min(f, airaccel * frametime * wishspeed) * sv_airaccel_qw;
+			if(wishspeed > 0)
+				vel_straight = vel_straight + min(wishspeed, airaccel * frametime * wishspeed) * (1 - sv_airaccel_qw);
 
-				vel_perpend = vel_perpend * (1 - frametime * (wishspeed / maxairspd) * cvar("sv_physicsdiv0_friction"));
+			// anti-sideways friction to fix QW-style bunnyhopping
+			vel_perpend = vel_perpend * (1 - frametime * (wishspeed / maxairspd) * sv_airaccel_sideways_friction);
 
-				self.velocity = vel_straight * wishdir + vel_z * '0 0 1' + vel_perpend;
-			}
-			else
-			{
-				f = wishspeed;// - (self.velocity * wishdir);
-				if (f > 0)
-					self.velocity = self.velocity + wishdir * min(f, airaccel * frametime * wishspeed);
-			}
+			self.velocity = vel_straight * wishdir + vel_z * '0 0 1' + vel_perpend;
+
+			/*
+			f = wishspeed;// - (self.velocity * wishdir);
+			if (f > 0)
+				self.velocity = self.velocity + wishdir * min(f, airaccel * frametime * wishspeed);
+			*/
 		}
 	}
 
