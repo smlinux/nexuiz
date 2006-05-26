@@ -270,7 +270,7 @@ void SV_PlayerPhysics()
 				float vel_z;
 				vector vel_perpend;
 				vel_straight = self.velocity * wishdir;
-				vel_z = self.velocity * '0 0 1';
+				vel_z = self.velocity_z;
 				vel_perpend = self.velocity - vel_straight * wishdir - vel_z * '0 0 1';
 
 				f = wishspeed - vel_straight;
