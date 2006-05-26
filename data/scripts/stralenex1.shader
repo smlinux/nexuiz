@@ -216,9 +216,9 @@ textures/stralenex1/stralenex5_1
 	surfaceparm sky
 
 	skyparms env/stralenex5/stralenex5 - -
-	q3map_surfacelight 325
+	q3map_surfacelight 60
 	q3map_lightimage textures/stralenex5/stralenex5_up.tga
-	q3map_sun .627 .525 0.392 60 300 40
+	q3map_sun .627 .525 0.392 450 60 13
 	/*q3map_sun <red> <green> <blue> <intensity> <degrees> <elevation>*/
 
 }
