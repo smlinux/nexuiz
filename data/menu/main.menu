@@ -11,6 +11,7 @@ Item Layout Main
 		DeriveTemplate PictureButton MainButton
 		{
 			soundPressed 	"misc/menu2.wav"
+			colorSelected	[DefaultPicColor]
 		}
 	
 		Derive MainButton Campaign
@@ -61,13 +62,14 @@ Item Layout Main
 		DeriveTemplate PictureButton MainButton
 		{
 			soundPressed 	"misc/menu2.wav"
+			colorSelected	[DefaultPicColor]
 		}
 	
 		Derive MainButton Credits
 		{
 			size		'119 39'
 			normal		"$gfx/b_instantaction"
-//			selected	"$gfx/b_instantaction_u"
+			selected	"$gfx/b_instantaction_u"
 	
 			action		Nex_Action_Instant_Action
 		}
