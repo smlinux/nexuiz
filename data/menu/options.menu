@@ -83,8 +83,8 @@ Item Layout Options
 		Derive Picture Table6
 		{
 			picture "gfx/options_background"
-			size	'734 540'
-			pos	'146 35'
+			size	'739 546'
+			pos	'142 31'
 		}
 
 		Item EventWindow Panel

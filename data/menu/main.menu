@@ -5,7 +5,7 @@ Item Layout Main
 {
 	Item Layout MainBar
 	{
-		origin		'132 9'
+		origin		'11 17'
 		direction 	'10 0'
 	
 		DeriveTemplate PictureButton MainButton
@@ -55,7 +55,7 @@ Item Layout Main
 	}
 	Item Layout MainInsta
 	{
-		origin		'405 736'
+		origin		'11 715'
 		direction 	'10 0'
 
 		DeriveTemplate PictureButton MainButton
@@ -65,19 +65,19 @@ Item Layout Main
 	
 		Derive MainButton Credits
 		{
-			size		'110 30'
-			normal		"$gfx/b_credits"
-			selected	"$gfx/b_credits_u"
-	
-			action		Nex_Credits_Action
-		}
-		Derive MainButton InstantAction
-		{
-			size		'110 30'
+			size		'119 39'
 			normal		"$gfx/b_instantaction"
 //			selected	"$gfx/b_instantaction_u"
 	
 			action		Nex_Action_Instant_Action
+		}
+		Derive MainButton InstantAction
+		{
+			size		'119 39'
+			normal		"$gfx/b_credits"
+			selected	"$gfx/b_credits_u"
+	
+			action		Nex_Credits_Action
 		}
 	}
 }
