@@ -1,18 +1,16 @@
-Starship (dom_nexdm06)
-maps/nexdm06
+Starship (rune_starship)
+maps/starship
 
 A sprawling complex.
 
 Players: 4-6
-
-Teams: 2
 
 Weapons: Machine Gun, Electro,
 Crylink, Nexgun, Rocket Launcher
 
 Powerups: Strength
 
-Gametype: Domination
+Gametype: Runematch
 
 Author:
 Chris Matz

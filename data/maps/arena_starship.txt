@@ -1,5 +1,5 @@
-Starship (arena_nexdm06)
-maps/nexdm06
+Starship (arena_starship)
+maps/starship
 
 A sprawling complex.
 

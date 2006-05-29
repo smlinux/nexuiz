@@ -21,5 +21,5 @@ dm      farewell             3     7   20  "g_rocketarena 1"                    
 dm      warfare             3     7   15  ""                           		       "Level 19: RL arena on Farewell"        "3 bots, 15 fraglimit"
 dom     nexdm17             5     7  250  ""                                           "Level 20: Domination on Diesel Power"  "Dominate the control points to get a score of 250."
 lms     bloodprison             3     10   9  ""                                           "Level 21: LMS on Blood Prison"         "Last Man Standing: you have nine lives. +++ Make something out of it!"
-dm      nexdm06             3     10  15  ""                                           "Level 22: Starship"                    "4 bots with a 15 frag limit in this starship battle. Final level!"
+dm      starship             3     10  15  ""                                           "Level 22: Starship"                    "4 bots with a 15 frag limit in this starship battle. Final level!"
 

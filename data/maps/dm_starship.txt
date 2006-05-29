@@ -1,5 +1,5 @@
-Starship (rune_nexdm06)
-maps/nexdm06
+Starship (dm_starship)
+maps/starship
 
 A sprawling complex.
 
@@ -10,7 +10,7 @@ Crylink, Nexgun, Rocket Launcher
 
 Powerups: Strength
 
-Gametype: Runematch
+Gametype: Deathmatch
 
 Author:
 Chris Matz
