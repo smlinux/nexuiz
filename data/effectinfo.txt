@@ -109,39 +109,51 @@ bounce 1.5
 velocityoffset 0 0 80
 velocityjitter 64 64 64
 
-// quake effect
+// electro combo explosion
 // decal
 effect TE_SPIKEQUAD
 countabsolute 1
 type decal
-tex 56 59
-size 3 3
+tex 59 59
+size 64 64
 alpha 256 256 0
-originjitter 6 6 6
-lightradius 100
-lightradiusfade 500
-lightcolor 0.15 0.15 1.5
-// dust/smoke drifting away from the impact
+originjitter 34 34 34
+lightradius 400
+lightradiusfade 200
+lightcolor 2 2.5 3
+// flare effect
 effect TE_SPIKEQUAD
-count 4
+countabsolute 1
+type static
+tex 38 38
+color 0x80C0FF 0x80C0FF
+size 48 48
+alpha 256 256 128
+// large sparks
+effect TE_SPIKEQUAD
+count 20
+type static
+color 0x2030FF 0x80C0FF
+size 32 32
+alpha 256 256 256
+//gravity 1
+bounce 1.5
+airfriction 4
+liquidfriction 16
+//velocityoffset 0 0 120
+velocityjitter 512 512 512
+/*
+// inner cloud of smoke
+effect TE_SPIKEQUAD
+count 0.25
 type smoke
+color 0x202020 0x404040
 tex 0 8
-color 0x101010 0x202020
-size 3 3
-alpha 0 256 512
-originjitter 2 2 2
-velocityjitter 8 8 8
-// sparks that disappear on impact
-effect TE_SPIKEQUAD
-count 15
-type spark
-color 0x8f4333 0xfff31b
-size 0.4 0.4
-alpha 0 256 768
-gravity 1
-bounce -1
-velocityoffset 0 0 80
-velocityjitter 64 64 64
+size 24 24
+alpha 256 256 256
+originjitter 20 20 20
+velocityjitter 32 32 32
+*/
 
 // quake effect
 // decal
@@ -774,9 +786,9 @@ type spark
 color 0x2030FF 0x80C0FF
 size 2 4
 alpha 256 256 1024
-gravity 1
+//gravity 1
 bounce 1.5
-velocityoffset 0 0 120
+//velocityoffset 0 0 120
 velocityjitter 512 512 512
 /*
 // inner cloud of smoke

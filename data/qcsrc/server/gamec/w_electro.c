@@ -68,6 +68,8 @@ void W_Plasma_Explode_Combo (void) {
 	vector org2;
 
 	org2 = findbetterlocation (self.origin, 8);
+	te_spikequad(self.origin);
+	/*
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 	WriteByte (MSG_BROADCAST, 79);
 	WriteCoord (MSG_BROADCAST, org2_x);
@@ -77,6 +79,7 @@ void W_Plasma_Explode_Combo (void) {
 	WriteCoord (MSG_BROADCAST, 0);
 	WriteCoord (MSG_BROADCAST, 0);
 	WriteByte (MSG_BROADCAST, 155);
+	*/
 	//effect (org2, "models/sprites/electrocombo.spr32", 0, 30, 35);
 
 	sound (self, CHAN_BODY, "weapons/electro_impact_combo.ogg", 1, ATTN_NORM);
@@ -123,6 +126,8 @@ void W_Plasma_Damage (entity inflictor, entity attacker, float damage, float dea
 		self.nextthink = time;
 		if (inflictor.classname == "plasma_chain" || inflictor.classname == "plasma_prim")
 		{
+			// change owner to whoever caused the combo explosion
+			self.owner = inflictor.owner;
 			self.classname = "plasma_chain";
 			self.think = W_Plasma_Explode_Combo;
 		}
@@ -275,6 +280,7 @@ void()	electro_fire1_01 =
 	weapon_doattack(electro_check, electro_check, W_Electro_Attack);
 	weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_electro_primary_animtime"), electro_ready_01);
 };
+/*
 void()  electro_fire2_03 =
 {
 	weapon_doattack(electro_check2, electro_check2, W_Electro_Attack2);
@@ -289,4 +295,10 @@ void()  electro_fire2_01 =
 {
 	weapon_doattack(electro_check2, electro_check2, W_Electro_Attack2);
 	weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_electro_secondary_animtime"), electro_fire2_02);
+}
+*/
+void()  electro_fire2_01 =
+{
+	weapon_doattack(electro_check2, electro_check2, W_Electro_Attack2);
+	weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_electro_secondary_animtime"), electro_ready_01);
 }
