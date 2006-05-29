@@ -1,0 +1,358 @@
+{
+"message" "DSI by evil lair"
+"_color" "0.880543 0.939301 1.000000"
+"ambient" "20"
+"classname" "worldspawn"
+}
+{
+"nohumans" "1"
+"origin" "1376 2352 112"
+"angle" "315"
+"classname" "info_player_deathmatch"
+}
+{
+"origin" "1720 544 4"
+"classname" "item_health_small"
+}
+{
+"classname" "item_health_large"
+"origin" "1936 1160 56"
+}
+{
+"classname" "weapon_uzi"
+"origin" "2664 1980 192"
+}
+{
+"classname" "info_player_deathmatch"
+"angle" "315"
+"origin" "1060 1620 60"
+}
+{
+"classname" "item_health"
+"origin" "808 224 40"
+}
+{
+"model" "*1"
+"target" "t3"
+"classname" "trigger_push"
+}
+{
+"classname" "info_player_deathmatch"
+"angle" "225"
+"origin" "1424 1320 80"
+}
+{
+"classname" "target_position"
+"targetname" "t6"
+"origin" "2508 468 312"
+}
+{
+"origin" "436 1688 64"
+"classname" "weapon_electro"
+}
+{
+"origin" "572 1692 72"
+"angle" "270"
+"classname" "info_player_deathmatch"
+}
+{
+"origin" "1632 1516 104"
+"classname" "item_armor_shard"
+}
+{
+"origin" "1312 1824 76"
+"classname" "item_health"
+}
+{
+"classname" "target_position"
+"targetname" "t3"
+"origin" "354 772 252"
+"target" "t3"
+}
+{
+"angle" "270"
+"origin" "1694 166 6"
+"classname" "weapon_hagar"
+}
+{
+"classname" "item_armor_shard"
+"origin" "2692 1408 184"
+}
+{
+"origin" "2692 1536 184"
+"classname" "item_armor_shard"
+}
+{
+"classname" "item_armor_shard"
+"origin" "2692 1664 184"
+}
+{
+"angle" "45"
+"classname" "info_player_deathmatch"
+"origin" "536 228 48"
+}
+{
+"classname" "item_armor_shard"
+"origin" "1688 1516 104"
+}
+{
+"classname" "item_armor_shard"
+"origin" "1744 1516 104"
+}
+{
+"origin" "2692 1776 184"
+"classname" "item_armor_shard"
+}
+{
+"model" "*2"
+"target" "t6"
+"classname" "trigger_push"
+}
+{
+"origin" "2450 960 248"
+"classname" "item_armor_combat"
+}
+{
+"origin" "1376 1288 250"
+"angle" "270"
+"classname" "item_health_mega"
+}
+{
+"origin" "2676 588 64"
+"angle" "180"
+"classname" "info_player_deathmatch"
+}
+{
+"origin" "1632 1136 216"
+"classname" "ammo_lightning"
+}
+{
+"origin" "768 224 40"
+"classname" "item_health"
+}
+{
+"origin" "2024 814 244"
+"classname" "weapon_grenadelauncher"
+}
+{
+"origin" "244 772 190"
+"classname" "item_armor_combat"
+}
+{
+"origin" "724 1378 0"
+"classname" "ammo_rockets"
+}
+{
+"origin" "1640 2648 48"
+"classname" "weapon_rocketlauncher"
+}
+{
+"origin" "1664 544 4"
+"classname" "item_armor_shard"
+}
+{
+"classname" "item_armor_shard"
+"origin" "1776 544 4"
+}
+{
+"classname" "info_player_deathmatch"
+"angle" "225"
+"origin" "1920 2352 112"
+"nohumans" "1"
+}
+{
+"origin" "1888 1844 120"
+"classname" "ammo_grenades"
+}
+{
+"origin" "2328 622 248"
+"classname" "item_health"
+}
+{
+"model" "*3"
+"target" "t7"
+"classname" "trigger_push"
+}
+{
+"origin" "788 650 244"
+"classname" "weapon_lightning"
+}
+{
+"classname" "target_position"
+"targetname" "t7"
+"origin" "792 616 268"
+}
+{
+"origin" "2293 1537 91"
+"classname" "item_cells"
+}
+{
+"origin" "2293 1429 91"
+"classname" "item_cells"
+}
+{
+"origin" "2293 1324 91"
+"classname" "item_cells"
+}
+{
+"origin" "2293 1229 91"
+"classname" "item_cells"
+}
+{
+"origin" "2293 1086 91"
+"classname" "item_cells"
+}
+{
+"origin" "629 1692 99"
+"classname" "item_cells"
+}
+{
+"origin" "276 1695 99"
+"classname" "item_cells"
+}
+{
+"origin" "1809 1158 91"
+"classname" "item_health25"
+}
+{
+"origin" "1663 1098 251"
+"classname" "item_health25"
+}
+{
+"origin" "1437 2306 139"
+"classname" "item_health25"
+}
+{
+"origin" "1852 2324 139"
+"classname" "item_health25"
+}
+{
+"origin" "2665 804 283"
+"classname" "item_rockets"
+}
+
+{
+"origin" "1656 2074 139"
+"classname" "item_rockets"
+}
+{
+"origin" "1807 279 51"
+"classname" "item_rockets"
+}
+{
+"origin" "2640 635 91"
+"classname" "item_rockets"
+}
+{
+"origin" "1798 1090 91"
+"classname" "item_rockets"
+}
+{
+"origin" "1595 244 51"
+"classname" "item_rockets"
+}
+{
+"origin" "2658 946 283"
+"classname" "item_shells"
+}
+{
+"origin" "2681 643 283"
+"classname" "item_shells"
+}
+{
+"origin" "514 252 67"
+"classname" "item_shells"
+}
+{
+"origin" "1407 1312 91"
+"classname" "item_shells"
+}
+{
+"classname" "dom_team"
+"netname" ""
+"model" "models/domination/dom_unclaimed.md3"
+}
+{
+"classname" "dom_team"
+"netname" "^4Blue Team^3"
+"cnt" "13"
+"noise" "domination/claim.wav"
+"noise1" "domination/claim.wav"
+"message" "Blue team has captured a control point"
+"model" "models/domination/dom_blue.md3"
+}
+{
+"classname" "dom_team"
+"netname" "^1Red Team^3"
+"cnt" "4"
+"noise" "domination/claim.wav"
+"noise1" "domination/claim.wav"
+"message" "Red team has captured a control point"
+"model" "models/domination/dom_red.md3"
+}
+{
+"classname" "dom_controlpoint"
+"origin" "680 836 208"
+}
+{
+"classname" "dom_controlpoint"
+"origin" "1630 2220 104"
+"angle" "90"
+}
+{
+"classname" "dom_controlpoint"
+"origin" "2140 1000 216"
+}
+{
+"classname" "dom_controlpoint"
+"origin" "1700 400 10"
+}
+{
+"classname" "dom_controlpoint"
+"origin" "2580 1900 184"
+"angle" "-45"
+}
+{
+"classname" "runematch_spawn_point"
+"origin" "620 820 -40"
+}
+{
+"classname" "runematch_spawn_point"
+"origin" "1648 2220 104"
+}
+{
+"classname" "runematch_spawn_point"
+"origin" "2140 1000 216"
+}
+{
+"classname" "runematch_spawn_point"
+"origin" "1700 400 10"
+}
+{
+"classname" "runematch_spawn_point"
+"origin" "2580 1902 184"
+}
+{
+"classname" "runematch_spawn_point"
+"origin" "1910 1580 104"
+}
+{
+"classname" "runematch_spawn_point"
+"origin" "2320 950 56"
+}
+{
+"classname" "runematch_spawn_point"
+"origin" "1090 300 112"
+}
+{
+"classname" "runematch_spawn_point"
+"origin" "290 1610 64"
+}
+{
+"classname" "runematch_spawn_point"
+"origin" "1390 1050 56"
+}
+{
+"classname" "runematch_spawn_point"
+"origin" "2600 1900 184"
+}

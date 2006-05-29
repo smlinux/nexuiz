@@ -1,0 +1,17 @@
+DSI (dom_dsi)
+maps/dsi
+
+Sci-Fi Arena.
+
+Players: 4-6
+
+Teams: 2
+
+Weapons: Machine Gun, Mortar,
+Electro, Hagar, Crylink,
+Rocket Launcher
+
+Gametype: Domination
+
+Author:
+Yves Allaire

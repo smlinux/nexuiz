@@ -1,0 +1,15 @@
+DSI (rune_dsi)
+maps/dsi
+
+Sci-Fi Arena.
+
+Players: 3-5
+
+Weapons: Machine Gun, Mortar,
+Electro, Hagar, Crylink,
+Rocket Launcher
+
+Gametype: Runematch
+
+Author:
+Yves Allaire
