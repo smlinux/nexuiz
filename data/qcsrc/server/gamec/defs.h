@@ -269,3 +269,7 @@ float default_player_alpha;
 .float modelindex_lod1;
 .float modelindex_lod2;
 #endif
+
+#define NUM_JUMPPADSUSED 3
+.float jumppadcount;
+.entity jumppadsused[NUM_JUMPPADSUSED];

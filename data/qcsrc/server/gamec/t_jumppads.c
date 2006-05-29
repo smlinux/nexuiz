@@ -23,7 +23,20 @@ void() trigger_push_touch =
 	org = other.origin;
 
 	if (other.classname == "player")
+	{
+		local float i;
+		local float found;
 		sound (other, CHAN_ITEM, "misc/jumppad.ogg", 1, ATTN_NORM);
+		found = FALSE;
+		for(i = 0; i < other.jumppadcount && i < NUM_JUMPPADSUSED; ++i)
+			if(other.(jumppadsused[i]) == self)
+				found = TRUE;
+		if(!found)
+		{
+			other.(jumppadsused[math_mod(other.jumppadcount, NUM_JUMPPADSUSED)]) = self;
+			other.jumppadcount = other.jumppadcount + 1;
+		}
+	}
 
 	// figure out how long it will take to hit the point considering gravity
 	grav = cvar("sv_gravity");

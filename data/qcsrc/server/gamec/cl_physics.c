@@ -211,6 +211,9 @@ void SV_PlayerPhysics()
 				dprint(strcat("landing velocity: ", vtos(self.velocity), " (abs: ", ftos(vlen(self.velocity)), ")\n"));
 			if(self.lastground < time - 0.3)
 				self.velocity = self.velocity * (1 - cvar("sv_friction_on_land"));
+			if(self.jumppadcount > 1)
+				dprint(strcat(ftos(self.jumppadcount), "x jumppad combo\n"));
+			self.jumppadcount = 0;
 		}
 
 		if (self.velocity_x || self.velocity_y)
