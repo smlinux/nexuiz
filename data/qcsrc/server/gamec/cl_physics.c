@@ -1,7 +1,8 @@
 float sv_accelerate;
-float sv_maxairspeed;
 float sv_friction;
 float sv_maxspeed;
+float sv_airaccelerate;
+float sv_maxairspeed;
 float sv_stopspeed;
 float sv_gravity;
 float sv_airaccel_sideways_friction;
@@ -250,12 +251,12 @@ void SV_PlayerPhysics()
 		if(maxspd_mod < 1)
 		{
 			maxairspd = sv_maxairspeed*maxspd_mod;
-			airaccel = sv_accelerate*maxspd_mod;
+			airaccel = sv_airaccelerate*maxspd_mod;
 		}
 		else
 		{
 			maxairspd = sv_maxairspeed;
-			airaccel = sv_accelerate;
+			airaccel = sv_airaccelerate;
 		}
 		// airborn
 		makevectors(self.v_angle_y * '0 1 0');

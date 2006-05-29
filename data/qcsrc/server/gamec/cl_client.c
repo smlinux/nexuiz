@@ -703,10 +703,11 @@ void ClientConnect (void)
 
 	stuffcmd(self, strcat("exec maps/", mapname, ".cfg\n"));
 	// send prediction settings to the client
-	stuffcmd(self, strcat("cl_movement_maxspeed ", ftos(cvar("sv_maxspeed")), "\n"));
-	stuffcmd(self, strcat("cl_movement_maxairspeed ", ftos(cvar("sv_maxairspeed")), "\n"));
 	stuffcmd(self, strcat("cl_movement_accelerate ", ftos(cvar("sv_accelerate")), "\n"));
 	stuffcmd(self, strcat("cl_movement_friction ", ftos(cvar("sv_friction")), "\n"));
+	stuffcmd(self, strcat("cl_movement_maxspeed ", ftos(cvar("sv_maxspeed")), "\n"));
+	stuffcmd(self, strcat("cl_movement_airaccelerate ", ftos(cvar("sv_airaccelerate")), "\n"));
+	stuffcmd(self, strcat("cl_movement_maxairspeed ", ftos(cvar("sv_maxairspeed")), "\n"));
 	stuffcmd(self, strcat("cl_movement_stopspeed ", ftos(cvar("sv_stopspeed")), "\n"));
 	stuffcmd(self, strcat("cl_movement_jumpvelocity ", ftos(cvar("g_balance_jumpheight")), "\n"));
 	stuffcmd(self, strcat("cl_movement_stepheight ", ftos(cvar("sv_stepheight")), "\n"));
@@ -1062,7 +1063,7 @@ void player_powerups (void)
 		if (time < self.strength_finished)
 		{
 			self.items = self.items | IT_STRENGTH;
-			sprint(self, "^3Strength infuses your weapons with devestating power\n");
+			sprint(self, "^3Strength infuses your weapons with devastating power\n");
 		}
 	}
 	if (self.items & IT_INVINCIBLE)

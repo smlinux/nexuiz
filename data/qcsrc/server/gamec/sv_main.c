@@ -150,6 +150,7 @@ void StartFrame (void)
 	sv_maxspeed = cvar ("sv_maxspeed");
 	sv_friction = cvar ("sv_friction");
 	sv_accelerate = cvar ("sv_accelerate");
+	sv_airaccelerate = cvar("sv_airaccelerate");
 	sv_airaccel_sideways_friction = cvar("sv_airaccel_sideways_friction");
 	sv_airaccel_qw = cvar("sv_airaccel_qw");
 
