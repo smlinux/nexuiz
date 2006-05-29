@@ -13,7 +13,7 @@ float() electro_check =
 
 float() electro_check2 =
 {
-	if (self.ammo_cells >= cvar("g_balance_electro_secondary_ammo") * 3)
+	if (self.ammo_cells >= cvar("g_balance_electro_secondary_ammo"))
 		return TRUE;
 	return FALSE;
 };
