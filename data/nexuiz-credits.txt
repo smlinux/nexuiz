@@ -33,7 +33,7 @@ Programmer
 
 
 Fabien "H. Reaper" Tschirhart 
-Co-Lead Level Designer
+Level Designer
 
 
 "Innovati"
@@ -43,18 +43,19 @@ Menu Artist
 KadaverJack
 Programmer
 
-
 MauveBib
 Bot Programmer
 
 
 Peter "Morphed" Pielak
-2d Artist
+2d Artist, Menu Artist
 
 
 Rick "Rat" Kelley
 Lead Animator, Skinner 
 
+Rudolf "div0" Polzer
+Programmer
 
 Paul "Strahlemann" Evers
 Co-Lead Level Designer
@@ -157,8 +158,6 @@ BigMac
 Mephisto
 
 michaelb
-
-Rudolf "div0" Polzer
 
 dstrek
 
