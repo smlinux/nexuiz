@@ -938,16 +938,16 @@ lightcolor 2 1.5 0.5
 
 // quake effect
 effect EF_STARDUST
-count 200
+count 75
 type static
-color 0x63F2EA 0x63f2EA
-size 1.5 1.5
+color 0xfff368 0xfff368
+size 1.0 2.0
 alpha 64 128 128
-gravity -0.2
+gravity -0.1
 airfriction 0.2
 liquidfriction 0.8
-originjitter 16 16 16
-velocityjitter 128 128 128
+originjitter 16 16 64
+velocityjitter 32 32 0
 //lightradius 200
 //lighttime 0
 //lightcolor 0.4 0.9 0.9
