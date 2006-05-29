@@ -346,11 +346,11 @@ velocityjitter 256 256 256
 // underwater bubbles
 effect TE_EXPLOSION
 underwater
-count 128
+count 32
 type bubble
 tex 62 62
 color 0x404040 0x808080
-size 2 2
+size 3 3
 alpha 128 256 64
 gravity -0.125
 bounce 1.5
@@ -442,11 +442,11 @@ velocityjitter 48 48 48
 // underwater bubbles
 effect TE_EXPLOSIONQUAD
 underwater
-count 128
+count 32
 type bubble
 tex 62 62
 color 0x404040 0x808080
-size 2 2
+size 3 3
 alpha 128 256 64
 gravity -0.125
 bounce 1.5
@@ -492,11 +492,11 @@ velocityjitter 48 48 48
 // underwater bubbles
 effect TE_TAREXPLOSION
 underwater
-count 128
+count 32
 type bubble
 tex 62 62
 color 0x404040 0x808080
-size 2 2
+size 3 3
 alpha 128 256 64
 gravity -0.125
 bounce 1.5
@@ -706,6 +706,7 @@ size 72 72
 alpha 128 128 64
 // fire effect
 effect TE_TEI_BIGEXPLOSION
+notunderwater
 count 256
 type static
 tex 48 55
@@ -720,11 +721,11 @@ velocityjitter 512 512 512
 // underwater bubbles
 effect TE_TEI_BIGEXPLOSION
 underwater
-count 256
+count 64
 type bubble
 tex 62 62
 color 0x404040 0x808080
-size 2 2
+size 3 3
 alpha 128 256 64
 gravity -0.125
 bounce 1.5
@@ -816,15 +817,15 @@ velocitymultiplier -0.25
 // bubbles
 effect TR_ROCKET
 underwater
-trailspacing 3
+trailspacing 8
 type bubble
 tex 62 62
 color 0x404040 0x808080
-size 2 2
-alpha 64 256 64
-gravity -0.25
+size 1 1
+alpha 256 256 256
+gravity -0.125
 bounce 1.5
-liquidfriction 0.25
+liquidfriction 4
 velocityjitter 16 16 16
 
 // grenade trail
@@ -840,15 +841,15 @@ alpha 16 16 16
 // bubbles
 effect TR_GRENADE
 underwater
-trailspacing 6
+trailspacing 16
 type bubble
 tex 62 62
 color 0x404040 0x808080
-size 2 2
-alpha 64 256 64
-gravity -0.25
+size 1 1
+alpha 256 256 256
+gravity -0.125
 bounce 1.5
-liquidfriction 0.25
+liquidfriction 4
 velocityjitter 16 16 16
 
 // normal super gorey blood trail (used by gibs)
