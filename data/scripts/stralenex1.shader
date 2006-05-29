@@ -223,6 +223,23 @@ textures/stralenex1/stralenex5_1
 
 }
 
+textures/stralenex1/stralenex5_2
+{
+	qer_editorimage env/stralenex5/stralenex5_up.tga
+
+	surfaceparm nolightmap
+	surfaceparm noimpact
+	surfaceparm nomarks
+	surfaceparm sky
+
+	skyparms env/stralenex5/stralenex5 - -
+	q3map_surfacelight 180
+	q3map_lightimage textures/stralenex5/stralenex5_up.tga
+	q3map_sun .627 .525 0.392 450 60 13
+	/*q3map_sun <red> <green> <blue> <intensity> <degrees> <elevation>*/
+
+}
+
 //copied from harlequin-sky.shader
 textures/harlequin_sky/strale_jf-nebula_sky
 {
