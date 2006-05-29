@@ -1,0 +1,11 @@
+Dismal (lms_dismal)
+maps/dismal
+
+Small space map
+
+Players: 2-4
+
+Gametype: Last Man Standing
+
+Author:
+"HReaper"

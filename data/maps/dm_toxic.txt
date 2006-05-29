@@ -1,0 +1,20 @@
+Toxic (dm_toxic)
+maps/toxic
+
+Fast competitive map.
+
+Players: 2-6
+
+Weapons: 
+Machine Gun, Mortar,
+Electro, Nexgun 
+and Rocket Launcher
+
+Powerups:
+1 Mega Health
+
+Gametype:
+Deathmatch
+
+Author:
+morfar

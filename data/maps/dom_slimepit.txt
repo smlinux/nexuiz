@@ -1,0 +1,19 @@
+The Slime Pit  (dom_slimepit)
+maps/slimepit
+
+An industrial arena.
+
+Players: 4-6
+
+Teams: 2
+
+Weapons: Machine Gun, Mortar,
+Electro, Nex, Hagar,
+Rocket Launcher
+
+Gametype: Domination
+
+Author:
+Mattrew Rye
+Garth Hendy
+Maik Merten

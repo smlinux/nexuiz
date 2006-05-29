@@ -1,0 +1,15 @@
+DSI (tdm_dsi)
+maps/dsi
+
+Sci-Fi Arena.
+
+Players: 3-5
+
+Weapons: Machine Gun, Mortar,
+Electro, Hagar, Crylink,
+Rocket Launcher
+
+Gametype: Team Deathmatch
+
+Author:
+Yves Allaire

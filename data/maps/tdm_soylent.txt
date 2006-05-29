@@ -1,0 +1,15 @@
+Soylent Space (tdm_soylent)
+maps/soylent
+
+Medium sized vertical Level
+
+Players: 2-6
+
+Weapons: Mortar, Nexgun, 
+Rocket Launcher, Crylink, 
+Hagar, Machine Gun
+
+Gametype: Team Deathmatch
+
+Author:
+Paul Evers

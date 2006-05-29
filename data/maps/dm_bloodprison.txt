@@ -1,0 +1,16 @@
+Blood Prison (dm_bloodprison)
+maps/bloodprison
+
+Small and very fast 
+Tourney Map
+
+Players: 2
+
+Weapons: Mortar,
+Rocket Launcher, Electro, 
+Crylink, Hagar, Machine Gun
+
+Gametype: Deathmatch
+
+Author:
+Paul Evers

@@ -1,0 +1,10 @@
+set exit_cfg "maps/exit_instantaction"
+set BACKUP_bot_number $bot_number
+set bot_number 3
+set BACKUP_skill $skill
+set skill 3
+set lastlevel 1
+
+set fraglimit 10
+set timelimit 5
+changelevel basement

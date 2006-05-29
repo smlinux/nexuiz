@@ -1,0 +1,16 @@
+Dismal (dom_dismal)
+maps/dismal
+
+Small space map
+
+Players: 4-6
+
+Weapons: Electro, Nexgun,
+Hagar
+
+Powerups: Strength
+
+Gametype: Domination
+
+Author:
+"HReaper"

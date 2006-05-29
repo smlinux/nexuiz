@@ -1,0 +1,15 @@
+Downer  (dm_downer)
+maps/downer
+
+A multilevel map.
+
+Players: 3-4
+
+Weapons: Electro, Mortar,
+Rocket Launcher, Machine Gun
+
+Gametype: Deathmatch
+
+Author:
+Eric Sambach
+Maik Merten

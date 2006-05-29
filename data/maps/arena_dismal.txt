@@ -1,0 +1,16 @@
+Dismal (arena_dismal)
+maps/dismal
+
+Small space map
+
+Players: 2-4
+
+Weapons: Electro, Nexgun,
+Hagar
+
+Powerups: Strength
+
+Gametype: Arena
+
+Author:
+"HReaper"

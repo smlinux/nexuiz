@@ -1,0 +1,18 @@
+Aggressor (dm_aggressor)
+maps/aggressor
+
+Small map with brutal fast
+vertical action.
+
+Players: 2-4
+
+Weapons: Electro, Machine Gun,
+Mortar, Hagar, Rocket Launcher,
+Nex
+
+Gametype: Deathmatch
+
+Layout/Architecture:
+Kevin "Tyrann" Shanahan
+Texturing/Lighting:
+Paul Evers
