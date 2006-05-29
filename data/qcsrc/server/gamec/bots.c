@@ -1438,6 +1438,8 @@ void(float t, float f1, float f2, entity e1, vector v1, vector v2, vector v3, ve
 		self.bot_canfire = 1;
 };
 
+.float bot_badaimtime;
+.vector bot_badaimoffset;
 float(vector v, float maxfiredeviation) bot_aimdir =
 {
 /*
@@ -1489,7 +1491,12 @@ float(vector v, float maxfiredeviation) bot_aimdir =
 	//dprint(" at:", vtos(v));
 	v = normalize(v);
 	//te_lightning2(world, self.origin + self.view_ofs, self.origin + self.view_ofs + v * 200);
-	desiredang = vectoangles(v);
+	if (time >= self.bot_badaimtime)
+	{
+		self.bot_badaimtime = max(self.bot_badaimtime + 0.3, time);
+		self.bot_badaimoffset = randomvec() * bound(0, 5 - 0.5 * skill, 5);
+	}
+	desiredang = vectoangles(v) + self.bot_badaimoffset;
 	//dprint(" desired:", vtos(desiredang));
 	if (desiredang_x >= 180)
 		desiredang_x = desiredang_x - 360;
@@ -1524,7 +1531,7 @@ float(vector v, float maxfiredeviation) bot_aimdir =
 	fixedrate = cvar("bot_ai_aimskill_fixedrate") / dist;
 	blendrate = cvar("bot_ai_aimskill_blendrate");
 	r = max(fixedrate, blendrate);
-	self.v_angle = self.v_angle + diffang * bound(0, r * frametime * (skill + 1) * 0.5, 1);
+	self.v_angle = self.v_angle + diffang * bound(0, r * frametime * (skill * 0.5 + 2), 1);
 	self.v_angle_z = 0;
 	while (self.v_angle_y < -180)
 		self.v_angle_y = self.v_angle_y + 360;
@@ -1586,19 +1593,25 @@ float(float shotspeed, float shotspeedupward, float maxshottime, float applygrav
 	shotorg = self.origin + self.view_ofs;
 	shotdir = v_forward;
 	v = bot_shotlead(self.bot_aimtargorigin, self.bot_aimtargvelocity, shotspeed, self.bot_aimlatency);
-	r = vlen(v - shotorg);
+	r = bound(cvar("bot_ai_aimskill_firetolerance_mindegrees"), cvar("bot_ai_aimskill_firetolerance_distdegrees") / ((vlen(v - shotorg) + 100) * (skill + 2)), cvar("bot_ai_aimskill_firetolerance_maxdegrees"));
 	if (applygravity && self.bot_aimtarg)
 	{
 		if (!findtrajectorywithleading(shotorg, '0 0 0', '0 0 0', self.bot_aimtarg, shotspeed, shotspeedupward, maxshottime, 0, self))
 			return FALSE;
-		f = bot_aimdir(findtrajectory_velocity - shotspeedupward * '0 0 1', min(10, 720 / r));
+		f = bot_aimdir(findtrajectory_velocity - shotspeedupward * '0 0 1', r);
 	}
 	else
 	{
-		f = bot_aimdir(v - shotorg, min(10, 720 / r));
+		f = bot_aimdir(v - shotorg, r);
 		//dprint("AIM: ");dprint(vtos(self.bot_aimtargorigin));dprint(" + ");dprint(vtos(self.bot_aimtargvelocity));dprint(" * ");dprint(ftos(self.bot_aimlatency + vlen(self.bot_aimtargorigin - shotorg) / shotspeed));dprint(" = ");dprint(vtos(v));dprint(" : aimdir = ");dprint(vtos(normalize(v - shotorg)));dprint(" : ");dprint(vtos(shotdir));dprint("\n");
 		traceline(shotorg, shotorg + shotdir * 10000, FALSE, self);
+		if (trace_ent.takedamage)
 		if (trace_fraction < 1)
+		if (!bot_shouldattack(trace_ent))
+			return FALSE;
+		traceline(shotorg, self.bot_aimtargorigin, FALSE, self);
+		if (trace_fraction < 1)
+		if (trace_ent != self.enemy)
 		if (!bot_shouldattack(trace_ent))
 			return FALSE;
 	}

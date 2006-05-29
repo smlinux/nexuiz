@@ -331,6 +331,12 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 	if (attacker.team == targ.team)
 	if ((teamplay == 1 || teamplay == 3) && attacker != targ)
 		damage = 0;
+	
+	if (targ.classname == "player")
+	if (attacker.classname == "player")
+	if (!targ.isbot)
+	if (attacker.isbot)
+		damage = damage * bound(0.1, (skill + 5) * 0.1, 1);
 
 	if(cvar("g_lms"))
 	if(targ.classname == "player")
