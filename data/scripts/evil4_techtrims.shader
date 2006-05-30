@@ -235,32 +235,32 @@ textures/evil4_metals/mtltekfloor
 {
 	q3map_surfacelight 100
 	q3map_lightimage textures/evil4_metal/mtltekfloor_fx.tga
-	{
-		map textures/base_wall/chrome_env.tga
-		rgbGen identity
-		tcGen environment
-		tcmod scale .25 .25
-	}
+//	{
+//		map textures/base_wall/chrome_env.tga
+//		rgbGen identity
+//		tcGen environment
+//		tcmod scale .25 .25
+//	}
 	{
 		map textures/evil4_metals/mtltekfloor.tga
-		blendFunc GL_ONE_MINUS_SRC_ALPHA GL_SRC_ALPHA
-		rgbGen identity
+//		blendFunc GL_ONE_MINUS_SRC_ALPHA GL_SRC_ALPHA
+//		rgbGen identity
 	}
 	{
 		map $lightmap
 		blendfunc gl_dst_color gl_zero
 		rgbGen identity
 	}
-	{
-		map textures/evil4_metals/mtltekfloor_fx.tga
-		blendFunc GL_ONE GL_ONE
-		rgbGen wave sin 0.5 0.5 0 .2
-	}
-	{
-		map textures/evil4_metals/mtltekfloor_fx2.tga
-		blendFunc GL_ONE GL_ONE
-		//rgbGen wave sin 0.5 0.5 0 .2
-	}
+//	{
+//		map textures/evil4_metals/mtltekfloor_fx.tga
+//		blendFunc GL_ONE GL_ONE
+//		rgbGen wave sin 0.5 0.5 0 .2
+//	}
+//	{
+//		map textures/evil4_metals/mtltekfloor_fx2.tga
+//		blendFunc GL_ONE GL_ONE
+//		//rgbGen wave sin 0.5 0.5 0 .2
+//	}
 }
 
 textures/evil4_metals/wrnjumppad
