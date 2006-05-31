@@ -1,226 +1,225 @@
 {
-"gridsize" "76.800003 76.800003 153.600006"
-"message" "Blood Prison"
 "classname" "worldspawn"
 "_lightmapscale" "0.25"
+"message" "Blood Prison"
 }
 {
-"origin" "2457.600098 1920.000122 19.200001"
 "classname" "item_health100"
+"origin" "2048 1600 16"
 }
 {
-"origin" "3168.000244 1536.000000 259.200010"
 "classname" "item_armor25"
+"origin" "2640 1280 216"
 }
 {
-"origin" "2457.600098 1075.200073 422.400017"
 "classname" "weapon_grenadelauncher"
+"origin" "2048 896 352"
 }
 {
-"origin" "1132.800049 2457.600098 -38.400002"
 "classname" "weapon_rocketlauncher"
+"origin" "944 2048 -32"
 }
 {
-"model" "*1"
-"target" "t1"
 "classname" "trigger_teleport"
+"target" "t1"
+"model" "*1"
 }
 {
-"targetname" "t1"
-"angle" "90"
-"origin" "2803.200195 1920.000122 460.800018"
 "classname" "misc_teleporter_dest"
+"origin" "2336 1600 384"
+"angle" "90"
+"targetname" "t1"
 }
 {
-"origin" "1766.400024 2688.000000 249.600010"
 "classname" "item_armor25"
+"origin" "1472 2240 208"
 }
 {
-"origin" "2841.600098 2918.400146 268.800011"
 "classname" "weapon_electro"
-}
-{
-"origin" "2803.200195 2150.400146 422.400017"
-"classname" "item_armor1"
-}
-{
-"origin" "2803.200195 2208.000000 422.400017"
-"classname" "item_health1"
+"origin" "2368 2432 224"
 }
 {
 "classname" "item_armor1"
-"origin" "2803.200195 2265.600098 422.400017"
+"origin" "2336 1792 352"
 }
 {
 "classname" "item_health1"
-"origin" "2803.200195 2323.200195 422.400017"
+"origin" "2336 1840 352"
 }
 {
-"origin" "2803.200195 2380.800049 422.400017"
 "classname" "item_armor1"
+"origin" "2336 1888 352"
 }
 {
-"origin" "2803.200195 2438.400146 422.400017"
 "classname" "item_health1"
+"origin" "2336 1936 352"
 }
 {
-"origin" "2803.200195 2553.600098 422.400017"
+"classname" "item_armor1"
+"origin" "2336 1984 352"
+}
+{
+"classname" "item_health1"
+"origin" "2336 2032 352"
+}
+{
 "classname" "weapon_uzi"
+"origin" "2336 2128 352"
 }
 {
-"angle" "180"
-"origin" "2630.400146 1190.400024 422.400017"
 "classname" "item_health25"
-}
-{
+"origin" "2192 992 352"
 "angle" "180"
+}
+{
 "classname" "item_health25"
-"origin" "2630.400146 1113.600098 422.400017"
+"origin" "2192 928 352"
+"angle" "180"
 }
 {
-"angle" "90"
-"origin" "1574.400024 2112.000000 -38.400002"
 "classname" "item_rockets"
+"origin" "1312 1760 -32"
+"angle" "90"
 }
 {
-"angle" "90"
 "classname" "item_rockets"
-"origin" "1497.600098 2112.000000 -38.400002"
+"origin" "1248 1760 -32"
+"angle" "90"
 }
 {
-"angle" "90"
-"origin" "1420.800049 2112.000000 -38.400002"
 "classname" "item_cells"
+"origin" "1184 1760 -32"
+"angle" "90"
 }
 {
+"classname" "item_health25"
+"origin" "944 1840 208"
 "angle" "360"
-"origin" "1132.800049 2208.000000 249.600010"
-"classname" "item_health25"
 }
 {
+"classname" "item_health25"
+"origin" "1104 2256 208"
 "angle" "180"
-"classname" "item_health25"
-"origin" "1324.800049 2707.200195 249.600010"
 }
 {
-"origin" "2265.600098 2572.800049 249.600010"
 "classname" "weapon_hagar"
+"origin" "1888 2144 208"
 }
 {
-"origin" "2227.200195 1920.000122 403.200016"
 "classname" "weapon_crylink"
+"origin" "1856 1600 336"
 }
 {
-"angle" "180"
-"origin" "2841.600098 1382.400024 268.800011"
 "classname" "item_bullets"
-}
-{
+"origin" "2368 1152 224"
 "angle" "180"
-"origin" "2841.600098 1440.000000 268.800011"
+}
+{
 "classname" "item_shells"
+"origin" "2368 1200 224"
+"angle" "180"
 }
 {
-"origin" "1833.600098 1238.400024 422.400017"
 "classname" "item_cells"
+"origin" "1528 1032 352"
 }
 {
+"classname" "item_rockets"
+"origin" "1480 1080 352"
 "angle" "45"
-"origin" "1776.000122 1296.000000 422.400017"
-"classname" "item_rockets"
 }
 {
-"angle" "180"
-"origin" "3225.600098 1920.000122 19.200001"
 "classname" "item_health25"
+"origin" "2688 1600 16"
+"angle" "180"
 }
 {
+"classname" "item_health25"
+"origin" "1680 1840 -48"
 "angle" "270"
-"origin" "2016.000122 2208.000000 -57.600002"
-"classname" "item_health25"
 }
 {
-"angle" "180"
-"origin" "2073.600098 1708.800049 422.400017"
 "classname" "item_shells"
+"origin" "1728 1424 352"
+"angle" "180"
 }
 {
-"angle" "270"
-"origin" "2630.400146 2860.800049 249.600010"
 "classname" "item_cells"
+"origin" "2192 2384 208"
+"angle" "270"
 }
 {
-"angle" "270"
-"origin" "3072.000000 2860.800049 268.800011"
 "classname" "item_rockets"
-}
-{
-"origin" "2016.000122 1209.600098 422.400017"
-"classname" "item_armor1"
-}
-{
-"classname" "item_armor1"
-"origin" "1958.400024 1267.200073 422.400017"
-}
-{
-"origin" "1900.800049 1324.800049 422.400017"
-"classname" "item_armor1"
-}
-{
-"classname" "item_armor1"
-"origin" "1843.200073 1382.400024 422.400017"
-}
-{
-"origin" "1785.600098 1440.000000 422.400017"
-"classname" "item_armor1"
-}
-{
-"classname" "info_player_deathmatch"
-"origin" "1142.400024 2716.800049 268.800011"
+"origin" "2560 2384 224"
 "angle" "270"
 }
 {
-"classname" "info_player_deathmatch"
-"origin" "2035.200073 1708.800049 422.400017"
-"angle" "90"
+"classname" "item_armor1"
+"origin" "1680 1008 352"
+}
+{
+"classname" "item_armor1"
+"origin" "1632 1056 352"
+}
+{
+"classname" "item_armor1"
+"origin" "1584 1104 352"
+}
+{
+"classname" "item_armor1"
+"origin" "1536 1152 352"
+}
+{
+"classname" "item_armor1"
+"origin" "1488 1200 352"
 }
 {
 "classname" "info_player_deathmatch"
-"origin" "2630.400146 1152.000000 432.000017"
+"angle" "270"
+"origin" "952 2264 224"
+}
+{
+"classname" "info_player_deathmatch"
+"angle" "90"
+"origin" "1696 1424 352"
+}
+{
+"classname" "info_player_deathmatch"
 "angle" "180"
+"origin" "2192 960 360"
 }
 {
 "classname" "info_player_deathmatch"
-"origin" "2803.200195 1920.000122 441.600018"
 "angle" "90"
+"origin" "2336 1600 368"
 }
 {
 "classname" "info_player_deathmatch"
-"origin" "2803.200195 2688.000000 268.800011"
 "angle" "90"
+"origin" "2336 2240 224"
 }
 {
 "classname" "info_player_deathmatch"
-"origin" "2342.400146 2649.600098 259.200010"
 "angle" "225"
+"origin" "1952 2208 216"
 }
 {
 "classname" "info_player_deathmatch"
-"origin" "3264.000244 1920.000122 28.800001"
 "angle" "180"
+"origin" "2720 1600 24"
 }
 {
 "classname" "info_player_deathmatch"
-"origin" "2054.400146 2246.400146 -48.000002"
 "angle" "225"
+"origin" "1712 1872 -40"
 }
 {
-"model" "*2"
 "classname" "trigger_push"
 "target" "t2"
+"model" "*2"
 }
 {
 "classname" "target_position"
-"origin" "1392.000000 2457.600098 374.400015"
 "targetname" "t2"
+"origin" "1160 2048 312"
 }
