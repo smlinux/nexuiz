@@ -84,6 +84,13 @@ Item DataContainer Player
 
 		[DataLink_OnOffSwitch]
 	}
+	Item Data_Cvar NoGibs
+	{
+		cvarName	"cl_nogibs"
+		defValue	"0"
+	
+		[DataLink_OnOffSwitch]
+	}
 	Item DataContainer Crosshair
 	{
 		Item Data_Cvar Type

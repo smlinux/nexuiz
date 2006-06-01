@@ -162,6 +162,11 @@ Item Window Player
 			text	"Weapon autoswitch"
 			target	"::Data::Player::WeaponAutoswitch::Switch"
 		}
+		Derive Nex_Option_Switch NoGibs
+		{
+			text	"Disable gibs"
+			target	"::Data::Player::NoGibs::Switch"
+		}
 		Derive Nex_Void Seperator1
 		{}
 		Derive PictureButton Apply
