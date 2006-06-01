@@ -1,0 +1,71 @@
+// Property of Alientrap
+//
+// Quit window
+Item Window Demos
+{
+	Derive Picture Table1
+	{
+		picture "gfx/join_border"
+		size	'910 610'
+	}
+	Derive Picture Table2
+	{
+		picture "gfx/join_background"
+		pos	'28 32'
+		size	'854 481'
+	}
+
+	Item Layout Select
+	{
+		size		'872 501'
+		direction	'0 8'
+		alignment	[AlignCenter]
+		origin		'460 44'
+
+		Item Task_Job SyncCategory
+		{
+			update 	Nex_Demos_SyncData
+		}
+
+		Derive List FileList
+		{
+			size	'300 340'
+			target	"::Data::Demos::FileList::Demos"
+	
+			action 	Nex_Demos_CopyToFilename
+		}
+
+		Item Arrangement Filename
+		{
+			flag		[FlagEmbedded]
+			direction	[Nex_DefaultHorzDirection]
+	
+			Derive TextButton Label
+			{
+				normal	"Demo Name :"
+				link	"##next"
+			}
+			Derive EditBox Name
+			{
+				//size	'260 11'
+				target	"::Data::Demos::Filename::Text"
+	
+				action  Nex_Action_TestOnChange
+				select  Nex_Action_TestOnSelect
+			}
+		}
+	}
+	Item Layout Button
+	{
+		size		'872 901'
+		alignment	[AlignCenter]
+		origin		'395 552'
+		direction	'30 0'
+		
+		Derive PictureButton Start
+		{
+			normal	"$gfx/create_b_start"
+			action	Nex_Demos_Start
+		}
+	}
+}

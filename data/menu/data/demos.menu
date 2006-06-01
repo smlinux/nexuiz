@@ -1,0 +1,25 @@
+// Property of Alientrap
+//
+// data/demos.menu
+
+Item DataContainer Demos
+{
+	Item Data_Container Filename
+	{
+		Item DataLink_Text Text
+		{
+			maxValue	26
+			link		"##up"
+		}
+	}
+
+	Item DataContainer FileList
+	{
+		Item DataLink_Nex_FileList Demos
+		{
+			normal		"dem"
+			selected	"demos/"
+		}
+	}
+}
+
