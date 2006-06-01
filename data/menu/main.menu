@@ -81,5 +81,14 @@ Item Layout Main
 	
 			action		Nex_Credits_Action
 		}
+		Derive MainButton Demos
+		{
+			size		'119 39'
+			normal		"$gfx/b_demos"
+			selected	"$gfx/b_demos_u"
+	
+			target 	"Demos"
+			action		Nex_Action_SetNormalPanelLink
+		}
 	}
 }

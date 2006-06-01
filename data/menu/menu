@@ -10,6 +10,7 @@
 #include "menu/creategame.menu"
 #include "menu/options.menu"
 #include "menu/joingame.menu"
+#include "menu/demos.menu"
 #include "menu/normal.menu"
 
 #include "menu/ingame.menu"
