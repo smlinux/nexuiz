@@ -1,41 +1,17 @@
 // Property of Alientrap
 // custom/demos.qm
 
-void() Nex_Demos_CopyToFilename =
-{
-	local entity lItem;
-
-	if( !self._target ) {
-		return;
-	}
-
-	Raise_DataEvent( self._target, ITEM_DATALINK_GET );
-
-	lItem = Menu_GetItem( "::Data::Demos::Filename::Text" );
-	String_EntitySet( lItem, value, self._target.value );
-	Raise_DataEvent( lItem, ITEM_DATALINK_SET );
-};
-
 void() Nex_Demos_Start =
 {
 	local entity lFileList;
-	local entity lFilenameData;
-
 	lFileList = Menu_GetItem( "::Data::Demos::FileList::Demos" );
-	lFilenameData = Menu_GetItem( "::Data::Demos::Filename" );
 
-	cmd( strcat( "playdemo \"", lFileList.selected, lFilenameData.value, ".", lFileList.normal, "\"\n" ) );
+	if (lFileList.value) {
+		cmd( strcat( "playdemo \"", lFileList.selected, lFileList.value, ".", lFileList.normal, "\"\n" ) );
 
-	// force the menu to hide
-	m_hide();
-};
-
-void() Nex_Demos_Refresh =
-{
-	local entity lItem;
-
-	lItem = Menu_GetItem( "::Data::Demos::FileList" );
-	Raise_DataEvent( lItem, ITEM_DATA_SYNC );
+		// force the menu to hide
+		m_hide();
+	}
 };
 
 void() Nex_Demos_SyncData =

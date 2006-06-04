@@ -25,34 +25,26 @@ Item Window Demos
 		Item Task_Job SyncCategory
 		{
 			update 	Nex_Demos_SyncData
+			init 	Nex_Demos_SyncData
 		}
 
-		Derive List FileList
+		Item ScrollWindow Scroll
 		{
-			size	'300 340'
-			target	"::Data::Demos::FileList::Demos"
-	
-			action 	Nex_Demos_CopyToFilename
-		}
+			size	'800 450'
 
-		Item Arrangement Filename
+			Derive List FileList
+			{
+				size	'800 450'
+				target	"::Data::Demos::FileList::Demos"
+		
+				action 	Nex_Demos_Start
+			}
+		}
+		Item VScrollBar Scroller
 		{
-			flag		[FlagEmbedded]
-			direction	[Nex_DefaultHorzDirection]
-	
-			Derive TextButton Label
-			{
-				normal	"Demo Name :"
-				link	"##next"
-			}
-			Derive EditBox Name
-			{
-				//size	'260 11'
-				target	"::Data::Demos::Filename::Text"
-	
-				action  Nex_Action_TestOnChange
-				select  Nex_Action_TestOnSelect
-			}
+			pos	'100 0'
+			size	'20 450'
+			target	"##prev"
 		}
 	}
 	Item Layout Button
@@ -68,4 +60,37 @@ Item Window Demos
 			action	Nex_Demos_Start
 		}
 	}
+Ignore {
+	Item Layout Settings
+	{
+		size		'600 801'
+		alignment	[AlignLeft]
+		origin		'195 552'
+		direction	'0 10'
+		
+		Derive Nex_Option_Switch AutoDemo
+		{
+			text	"Record a Demo"
+			target	"Data::Demos::AutoDemo::Switch"
+		}
+		DeriveTemplate Nex_Composition Option_EditBox
+		{
+			DeriveTemplate Nex_Automation_Option_EditBox Automation
+			{}
+			DeriveTemplate TextButton Description
+			{}
+			DeriveTemplate EditBox EditBox
+			{
+				size 	'200 12'
+				action  Nex_Action_TestOnChange
+				select  Nex_Action_TestOnSelect
+			}
+		}
+		Derive Option_EditBox AutoDemoFormat
+		{
+			text	"Demo Name Format"
+			target	"Data::Demos::AutoDemoFormat::Text"
+		}
+	}
+}
 }

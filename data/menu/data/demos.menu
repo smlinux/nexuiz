@@ -4,15 +4,6 @@
 
 Item DataContainer Demos
 {
-	Item Data_Container Filename
-	{
-		Item DataLink_Text Text
-		{
-			maxValue	26
-			link		"##up"
-		}
-	}
-
 	Item DataContainer FileList
 	{
 		Item DataLink_Nex_FileList Demos
@@ -21,5 +12,23 @@ Item DataContainer Demos
 			selected	"demos/"
 		}
 	}
-}
+	Item Data_Cvar AutoDemo
+	{
+		cvarName	"cl_autodemo"
+		defValue	0
 
+		[DataLink_OnOffSwitch]
+	}
+
+	Item Data_Cvar AutoDemoFormat
+	{
+		cvarName	"cl_autodemo_nameformat"
+		defValue	"%Y-%m-%d_%H-%M"
+
+		Item DataLink_Text Text
+		{
+			link		"##up"
+			maxValue	64
+		}
+	}
+}
