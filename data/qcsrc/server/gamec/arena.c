@@ -60,6 +60,11 @@ void reset_map()
 			}
 			else if(self.deadflag)
 				PutClientInServer();
+
+			if(self.exteriorweaponentity)
+				setmodel(self.exteriorweaponentity, "");
+			if(self.weaponentity)
+				setmodel(self.weaponentity, "");
 		}
 		self = nextent(self);
 	}

@@ -1,4 +1,5 @@
 string GetMapname();
+void GotoNextMap();
 
 void SetDefaultAlpha()
 {
@@ -11,6 +12,20 @@ void SetDefaultAlpha()
 		default_player_alpha = cvar("g_player_alpha");
 		if(default_player_alpha <= 0)
 			default_player_alpha = 1;
+	}
+}
+
+void GotoFirstMap()
+{
+	if(cvar("_sv_init"))
+	{
+		cvar_set("_sv_init", "0");
+		tokenize(cvar_string("g_maplist"));
+		if(argv(0) != GetMapname())
+		{
+			cvar_set("nextmap", argv(0));
+			GotoNextMap();
+		}
 	}
 }
 
@@ -277,6 +292,8 @@ void worldspawn (void)
 	lms_dead_count = 0;
 	lms_lowest_lives = 0;
 	lms_next_place = 0;
+
+	GotoFirstMap();
 
 	if(cvar("g_campaign"))
 		CampaignPreInit();
@@ -730,7 +747,10 @@ void() NextLevel =
 	intermission_running = 1;
 
 // enforce a wait time before allowing changelevel
-	intermission_exittime = time + cvar("sv_mapchange_delay");
+	if(player_count > 0)
+		intermission_exittime = time + cvar("sv_mapchange_delay");
+	else
+		intermission_exittime = -60;
 
 	WriteByte (MSG_ALL, SVC_CDTRACK);
 	WriteByte (MSG_ALL, 3);
