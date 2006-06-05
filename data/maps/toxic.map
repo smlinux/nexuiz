@@ -11683,7 +11683,7 @@ dsi/weapspawn01
 {
 "classname" "func_rotating"
 "speed" "150"
-"noise" "sound/ambient/machine3.wav"
+"noise" "sound/ambient/fan4.wav"
 // brush 0
 {
 ( 368 320 104 ) ( 368 352 104 ) ( 344 352 104 ) common/caulk 0 0 0 0.5 0.5 0 4 0
@@ -11791,7 +11791,7 @@ dsi/weapspawn01
 {
 "classname" "func_rotating"
 "speed" "100"
-"noise" "sound/ambient/machine3.wav"
+"noise" "sound/ambient/fan4.wav"
 // brush 0
 {
 ( -392 260 240 ) ( -376 288 204 ) ( -376 260 240 ) evil3_metals/mtldrk0 -64 0 0 0.5 0.5 0 0 0
@@ -11899,7 +11899,7 @@ dsi/weapspawn01
 {
 "classname" "func_rotating"
 "speed" "-100"
-"noise" "sound/ambient/machine3.wav"
+"noise" "sound/ambient/fan4.wav"
 // brush 0
 {
 ( -457 -1408 104 ) ( -440 -1425 104 ) ( -417 -1402 104 ) common/caulk 23 7 -43 0.499992013 0.4999699891 0 4 0
@@ -12007,7 +12007,7 @@ dsi/weapspawn01
 {
 "classname" "func_rotating"
 "speed" "-150"
-"noise" "sound/ambient/machine3.wav"
+"noise" "sound/ambient/fan4.wav"
 // brush 0
 {
 ( 120 -1536 104 ) ( 144 -1536 104 ) ( 144 -1504 104 ) common/caulk 0 0 0 0.5 0.5 0 4 0
@@ -12168,7 +12168,7 @@ dsi/weapspawn01
 {
 "classname" "func_rotating"
 "speed" "-200"
-"noise" "sound/ambient/machine3.wav"
+"noise" "sound/ambient/fan4.wav"
 // brush 0
 {
 ( 1424 -1464 104 ) ( 1400 -1464 104 ) ( 1400 -1480 104 ) common/origin 0 0 0 0.5 0.5 0 14 0
@@ -13084,4 +13084,81 @@ dsi/weapspawn01
 {
 "classname" "runematch_spawn_point"
 "origin" "1408 -1472 272"
+}
+// entity 306
+{
+"classname" "target_speaker"
+"origin" "1568 392 256"
+"noise" "sound/ambient/machinerydrone01.wav"
+"spawnflags" "1"
+}
+// entity 307
+{
+"classname" "target_speaker"
+"origin" "1120 -576 410"
+"noise" "sound/ambient/sparks.ogg"
+"spawnflags" "1"
+}
+// entity 308
+{
+"classname" "target_speaker"
+"origin" "-540 -572 256"
+"noise" "sound/ambient/machinerydrone01.wav"
+"spawnflags" "1"
+}
+// entity 309
+{
+"classname" "target_speaker"
+"origin" "1408 -840 170"
+"noise" "sound/ambient/sparks.ogg"
+"spawnflags" "1"
+}
+// entity 310
+{
+"classname" "target_speaker"
+"origin" "1784 -704 306"
+"noise" "sound/ambient/sparks.ogg"
+"spawnflags" "1"
+}
+// entity 311
+{
+"classname" "target_speaker"
+"origin" "-264 -912 280"
+"spawnflags" "1"
+"noise" "sound/ambient/machine4.ogg"
+}
+// entity 312
+{
+"classname" "target_speaker"
+"origin" "-264 -240 280"
+"spawnflags" "1"
+"noise" "sound/ambient/machine2.wav"
+}
+// entity 313
+{
+"classname" "target_speaker"
+"origin" "1608 -352 312"
+"noise" "sound/ambient/machine4.ogg"
+"spawnflags" "1"
+}
+// entity 314
+{
+"classname" "target_speaker"
+"origin" "456 -352 312"
+"spawnflags" "1"
+"noise" "sound/ambient/machine3.wav"
+}
+// entity 315
+{
+"classname" "target_speaker"
+"origin" "456 -800 312"
+"spawnflags" "1"
+"noise" "sound/ambient/machine2.wav"
+}
+// entity 316
+{
+"classname" "target_speaker"
+"origin" "-184 -352 98"
+"noise" "sound/ambient/sparks.ogg"
+"spawnflags" "1"
 }
