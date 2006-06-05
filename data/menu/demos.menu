@@ -28,23 +28,34 @@ Item Window Demos
 			init 	Nex_Demos_SyncData
 		}
 
-		Item ScrollWindow Scroll
+		Derive MultiLabel Description
 		{
-			size	'800 390'
-
-			Derive List FileList
-			{
-				size	'800 390'
-				target	"::Data::Demos::FileList::Demos"
-		
-				action 	Nex_Demos_Start
-			}
+			text	"Available demos in 'data/demos':"
+			size 	'400 12'
 		}
-		Item VScrollBar Scroller
+		Item Layout FileLayout
 		{
-			pos	'100 0'
-			size	'20 450'
-			target	"##prev"
+			size	'800 370'
+			direction	'1 0'
+
+			Item ScrollWindow Scroll
+			{
+				size	'780 370'
+
+				Derive List FileList
+				{
+					size	'780 370'
+					target	"::Data::Demos::FileList::Demos"
+		
+					action 	Nex_Demos_Start
+				}
+			}
+			Item VScrollBar Scroller
+			{
+				pos	'0 0'
+				size	'20 370'
+				target	"##prev"
+			}
 		}
 		Derive PictureButton Start
 		{
