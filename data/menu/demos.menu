@@ -30,11 +30,11 @@ Item Window Demos
 
 		Item ScrollWindow Scroll
 		{
-			size	'800 450'
+			size	'800 390'
 
 			Derive List FileList
 			{
-				size	'800 450'
+				size	'800 390'
 				target	"::Data::Demos::FileList::Demos"
 		
 				action 	Nex_Demos_Start
@@ -46,31 +46,22 @@ Item Window Demos
 			size	'20 450'
 			target	"##prev"
 		}
-	}
-	Item Layout Button
-	{
-		size		'872 901'
-		alignment	[AlignCenter]
-		origin		'395 552'
-		direction	'30 0'
-		
 		Derive PictureButton Start
 		{
 			normal	"$gfx/create_b_start"
 			action	Nex_Demos_Start
 		}
 	}
-Ignore {
 	Item Layout Settings
 	{
-		size		'600 801'
+		size		'1000 200'
 		alignment	[AlignLeft]
-		origin		'195 552'
+		pos		'50 540'
 		direction	'0 10'
 		
 		Derive Nex_Option_Switch AutoDemo
 		{
-			text	"Record a Demo"
+			text	"Automaticly record a Demo when playing"
 			target	"Data::Demos::AutoDemo::Switch"
 		}
 		DeriveTemplate Nex_Composition Option_EditBox
@@ -81,7 +72,7 @@ Ignore {
 			{}
 			DeriveTemplate EditBox EditBox
 			{
-				size 	'200 12'
+				size 	'600 12'
 				action  Nex_Action_TestOnChange
 				select  Nex_Action_TestOnSelect
 			}
@@ -92,5 +83,4 @@ Ignore {
 			target	"Data::Demos::AutoDemoFormat::Text"
 		}
 	}
-}
 }

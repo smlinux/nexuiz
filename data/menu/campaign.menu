@@ -9,13 +9,6 @@ Item Layout Campaign
 		picture "gfx/join_border"
 		size	'910 610'
 	}
-	Item Layout Campaign
-	{
-		size		'872 501'
-		direction	'0 8'
-		alignment	[AlignCenter]
-		origin		'460 44'
-	}
 	Item Window Dummy
 	{
 		Derive Picture Table6

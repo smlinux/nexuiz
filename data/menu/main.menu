@@ -87,8 +87,8 @@ Item Layout Main
 			normal		"$gfx/b_demos"
 			selected	"$gfx/b_demos_u"
 	
-			target 	"Demos"
-			action		Nex_Action_SetNormalPanelLink
+			target	"Demos"
+			init	Nex_Action_SetNormalPanelLink
 		}
 	}
 }
