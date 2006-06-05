@@ -33,6 +33,24 @@ Item Window Sound
 		}
 		Derive Nex_Void Seperator1
 		{}
+		Derive Nex_Option_Switch SoundSpeed
+		{
+			text    "Frequency"
+			target  "::Data::Sound::SoundSpeed::Switch"
+		}
+		Derive Nex_Option_Switch SoundChannels
+		{
+			text    "Channels"
+			target  "::Data::Sound::SoundChannels::Switch"
+		}
+		Derive Nex_Void Seperator2
+		{}
+		Derive PictureButton Apply
+		{
+			normal		"$gfx/options_b_apply"
+
+			action	Nex_Action_Sound_Apply
+		}
 		Derive TextButton Reset
 		{
 			normal	"Reset to default"

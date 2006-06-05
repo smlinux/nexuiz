@@ -1,0 +1,7 @@
+// Property of Alientrap
+// custom/sound.qm
+
+void() Nex_Action_Sound_Apply =
+{
+	cmd( "snd_restart\n" );
+};

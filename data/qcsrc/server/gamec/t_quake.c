@@ -41,6 +41,7 @@ void junk_function ()
 	self.light_lev = 0;
 	self.color = '0 0 0';
 	self.style = 0;
+	self.jumppadsused = world;
 	bprint(ftos(sv_maxairspeed), "\n");
 }
 

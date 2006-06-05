@@ -23,7 +23,7 @@ void reset_map()
 	self = nextent(world);
 
 	warmup = cvar("g_arena_warmup");
-	
+
 	while(self)
 	{
 		if(self.classname == "droppedweapon"		// cleanup

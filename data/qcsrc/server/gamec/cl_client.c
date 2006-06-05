@@ -118,13 +118,11 @@ entity SelectSpawnPoint (float anypoint)
 {
 	local float teamcheck;
 	local entity spot, firstspot, playerlist;
-	string spotname;
 
 	spot = find (world, classname, "testplayerstart");
 	if (spot)
 		return spot;
 
-	spotname = "info_player_deathmatch";
 	teamcheck = 0;
 
 	if(!anypoint && cvar("g_ctf") )
@@ -141,7 +139,9 @@ entity SelectSpawnPoint (float anypoint)
 	// there is 50/50 chance of choosing a random spot or the furthest spot
 	// (this means that roughly every other spawn will be furthest, so you
 	// usually won't get fragged at spawn twice in a row)
-	if (random() > 0.5 || spawn_allbad || spawn_allgood)
+	if (arena_roundbased)
+		spot = Spawn_FurthestPoint(firstspot, playerlist);
+	else if (random() > 0.5 || spawn_allbad || spawn_allgood)
 		spot = Spawn_RandomPoint(firstspot);
 	else
 		spot = Spawn_FurthestPoint(firstspot, playerlist);
