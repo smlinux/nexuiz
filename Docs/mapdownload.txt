@@ -69,8 +69,8 @@ to start from:
 function findmap($filename)
 {
     # insert your database query or whatever you want here
-    if($filename == "eggandbacon.pk3")
-        return "http://mensa.ath.cx/~polzer/nexmaps/eggandbacon/eggandbacon.pk3";
+    if($filename == "foo.pk3")
+        return "http://barserver.invalid/foo.pk3";
     return FALSE;
 }
 
