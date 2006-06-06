@@ -31,7 +31,7 @@ players.
 On the server, you need to set up where to download the PK3s of the maps you
 are running. You can either use the cvar
 
-   cl_curl_defaulturl           default download URL
+   sv_curl_defaulturl           default download URL
 
 to set it to some site, or put a file in the data directory of the following
 format:
