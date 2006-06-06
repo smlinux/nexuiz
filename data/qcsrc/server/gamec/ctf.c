@@ -220,7 +220,7 @@ void() FlagTouch =
 		{
 			return;
 		}
-		t = time - other.flagpickuptime;
+		t = time - other.flagcarried.flagpickuptime;
 		if (flagcaptimerecord == 0)
 		{
 			bprint(other.netname, "^7 captured the ", other.flagcarried.netname, " in ", ftos(t), " seconds\n");
@@ -258,7 +258,7 @@ void() FlagTouch =
 		if (other.next_take_time > time)
 			return;
 		// pick up
-		other.flagpickuptime = time; // used for timing runs
+		self.flagpickuptime = time; // used for timing runs
 		self.solid = SOLID_NOT;
 		setorigin(self, self.origin); // relink
 		self.owner = other;
@@ -296,7 +296,6 @@ void() FlagTouch =
 		else if (!other.flagcarried)
 		{
 			// pick up
-			other.flagpickuptime = time; // used for timing runs
 			self.solid = SOLID_NOT;
 			setorigin(self, self.origin); // relink
 			self.owner = other;
