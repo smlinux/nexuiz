@@ -72,7 +72,7 @@ Item Window Demos
 		
 		Derive Nex_Option_Switch AutoDemo
 		{
-			text	"Automaticly record a Demo when playing"
+			text	"Automatically record a Demo when playing"
 			target	"Data::Demos::AutoDemo::Switch"
 		}
 		DeriveTemplate Nex_Composition Option_EditBox
