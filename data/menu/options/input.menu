@@ -21,6 +21,11 @@ Item Window Input
 			text	"Invert Mouse"
 			target	"::Data::Input::InvertMouse::Switch"
 		}
+		Derive Nex_Option_Slider MenuMouseSpeed
+		{
+			text	"Menu Mouse Speed"
+			target	"::Data::Input::MenuMouseSpeed::Value"
+		}
 		Derive Nex_Option_Switch MouseFilter
 		{
 			text	"Mouse Filter"

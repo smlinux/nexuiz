@@ -15,6 +15,18 @@ Item DataContainer Input
 			link		"##up"
 		}
 	}
+	Item Data_Cvar MenuMouseSpeed
+	{
+		cvarName 	"scmenu_mouse_speed"
+		defValue 	1.0
+		Item DataLink_Value Value
+		{
+			minValue	0.7
+			maxValue	3.0
+			stepValue	0.1
+			link		"##up"
+		}
+	}
 	Item Data_Cvar InvertMouse
 	{
 		cvarName 	"m_pitch"
