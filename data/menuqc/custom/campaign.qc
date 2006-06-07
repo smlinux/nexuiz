@@ -59,8 +59,11 @@ void() Nex_Action_Campaign_Update =
 {
 	local entity lItem;
 	local string longdesc;
+	local string shortdesc;
 	lItem = Menu_GetItem( "ShortDescription" );
-	String_EntitySet( lItem, text, campaign_shortdesc[campaign_index] );
+	shortdesc = campaign_shortdesc[campaign_index];
+	shortdesc = strcat("Level ", ftos(campaign_index + 1), ": ", shortdesc);
+	String_EntitySet( lItem, text,  shortdesc);
 
 	lItem = Menu_GetItem( "LongDescription" );
 	longdesc = Campaign_wordwrap(campaign_longdesc[campaign_index], lItem.wrap);
