@@ -1417,6 +1417,8 @@ float(entity e) bot_shouldattack =
 		return FALSE;
 	if (e.deadflag)
 		return FALSE;
+	if (e.buttonchat)
+		return FALSE;
 	return TRUE;
 };
 
