@@ -46,12 +46,18 @@ void() Cursor_Draw =
 void() Cursor_Update =
 {
 	local vector lRelPos;
+	local float lMenuMouseSpeed;
+	lMenuMouseSpeed = cvar("scmenu_mouse_speed");
+	if(lMenuMouseSpeed == 0)
+		lMenuMouseSpeed = 1;
+	else
+		lMenuMouseSpeed = bound(0.7, lMenuMouseSpeed, 3.0);
 
 	lRelPos = getmousepos();
 	lRelPos = Gfx_ConToMen( lRelPos );
 
-	Cursor_Relative_x = lRelPos_x * Cursor_Speed_x;
-	Cursor_Relative_y = lRelPos_y * Cursor_Speed_y;
+	Cursor_Relative_x = lRelPos_x * Cursor_Speed_x * lMenuMouseSpeed;
+	Cursor_Relative_y = lRelPos_y * Cursor_Speed_y * lMenuMouseSpeed;
 
 	Cursor_Relative_x = bound( 0.0, Cursor_Position_x + Cursor_Relative_x, Gfx_Menu_Width ) - Cursor_Position_x;
 	Cursor_Relative_y = bound( 0.0, Cursor_Position_y + Cursor_Relative_y, Gfx_Menu_Height ) - Cursor_Position_y;
