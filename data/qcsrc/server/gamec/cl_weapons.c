@@ -202,7 +202,7 @@ void() W_NextWeapon =
 	{
 		if(!maxtries)
 			return;
-		
+
 		maxtries -= 1;
 		weaponwant = weaponwant + 1;
 		if (weaponwant < WEP_FIRST)
@@ -220,7 +220,7 @@ void() W_PreviousWeapon =
 	local float weaponwant, maxtries;
 
 	maxtries = WEP_LAST;
-	
+
 	weaponwant = self.switchweapon - 1;
 	if (weaponwant < WEP_FIRST)
 		weaponwant = WEP_LAST;
@@ -231,7 +231,7 @@ void() W_PreviousWeapon =
 	{
 		if(!maxtries)
 			return;
-			
+
 		maxtries -= 1;
 		weaponwant = weaponwant - 1;
 		if (weaponwant < WEP_FIRST)
@@ -249,7 +249,7 @@ void() W_WeaponFrame =
 	if(arena_roundbased)
 	if(time < self.arena_warmup_end)
 		return;
-	
+
 	if (!self.weaponentity || self.health < 1)
 		return; // Dead player can't use weapons and injure impulse commands
 
@@ -259,7 +259,7 @@ void() W_WeaponFrame =
 		self.weaponentity.state = 0;
 		return;
 	}
-		
+
 	makevectors(self.v_angle);
 
 	// Change weapon
@@ -295,11 +295,14 @@ void() W_WeaponFrame =
 			self.weapon_think();
 
 	// weapon bobbing and script actions
-	local float bobintensity, q1pitching, framespeed, diff;
+	local float bobintensity, q1pitching, framespeed, diff, modelscale;
 	local vector vel, realorg, layer1, boblayer;
 
-	bobintensity = cvar("g_viewweapon_bobintensity"); // weapon bob intensity
-	q1pitching = fabs(cvar("g_viewweapon_q1pitching")); // q1 style of "bob" when looking up and down
+	modelscale = self.weaponentity.scale;
+	if (!modelscale)
+		modelscale = 1;
+	bobintensity = cvar("g_viewweapon_bobintensity") * modelscale; // weapon bob intensity
+	q1pitching = fabs(cvar("g_viewweapon_q1pitching")) * modelscale; // q1 style of "bob" when looking up and down
 
 	realorg = self.weaponentity.origin + self.weaponentity.view_ofs;
 	realorg = realorg - self.weaponentity.finaldest; // finaldest is last bob position
@@ -370,10 +373,10 @@ void Nixnex_ChooseNextWeapon()
 
 	if(cvar("g_nixnex_with_laser")) // skip the laser if needed
 		id = id + 1;
-	
+
 	if(id >= nixnex_weapon) // skip the current weapon
 		id = id + 1;
-	
+
 	if(id < WEP_FIRST) // can't happen, but to be sure...
 	{
 		dprint("Won't happen (id < WEP_FIRST)\n");
