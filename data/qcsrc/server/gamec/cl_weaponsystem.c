@@ -127,11 +127,11 @@ void() CL_Weaponentity_Think =
 		return;
 	}
 
+	self.effects = self.owner.effects;
+
 	if (self.flags & FL_FLY)
 		// owner is currently being teleported, so don't apply EF_NODRAW otherwise the viewmodel would "blink"
-		self.effects = self.owner.effects - (self.owner.effects & EF_NODRAW);
-	else
-		self.effects = self.owner.effects;
+		self.effects = self.effects - (self.effects & EF_NODRAW);
 	
 	self.alpha = self.owner.alpha;
 
@@ -194,6 +194,7 @@ void() CL_SpawnWeaponentity =
 	self.weaponentity.flags = 0;
 	self.weaponentity.think = CL_Weaponentity_Think;
 	self.weaponentity.nextthink = time;
+	self.weaponentity.scale = 0.3;
 
 	self.exteriorweaponentity = spawn();
 	self.exteriorweaponentity.solid = SOLID_NOT;
