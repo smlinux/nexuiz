@@ -89,17 +89,18 @@ void() CampaignPreIntermission =
 
 	if(campaign_won)
 	{
-		if(campaign_level == cvar("g_campaign_index"))
+		if(campaign_entries < 2)
+		{
+			//localcmd("set g_campaign_index 0\n");
+			// don't reset...
+			localcmd("set g_campaign_won 1\n");
+		}
+		else if(campaign_level == cvar("g_campaign_index"))
 		{
 			// advance level
 			localcmd("set g_campaign_index ");
 			localcmd(ftos(campaign_level + 1));
 			localcmd("\n");
-		}
-		if(campaign_entries < 2)
-		{
-			localcmd("set g_campaign_index 0\n");
-			localcmd("set g_campaign_won 1\n");
 		}
 	}
 }
