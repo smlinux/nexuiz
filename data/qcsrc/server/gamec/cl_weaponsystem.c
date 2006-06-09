@@ -194,7 +194,7 @@ void() CL_SpawnWeaponentity =
 	self.weaponentity.flags = 0;
 	self.weaponentity.think = CL_Weaponentity_Think;
 	self.weaponentity.nextthink = time;
-	self.weaponentity.scale = 0.3;
+	self.weaponentity.scale = 0.61;
 
 	self.exteriorweaponentity = spawn();
 	self.exteriorweaponentity.solid = SOLID_NOT;
