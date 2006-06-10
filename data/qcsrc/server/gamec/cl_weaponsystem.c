@@ -307,8 +307,11 @@ void() w_clear =
 
 void() w_ready =
 {
-	self.weaponentity.state = WS_READY;
-	weapon_thinkf(WFRAME_IDLE, 0.1, w_ready);
+	if (self.weaponentity)
+	{	
+		self.weaponentity.state = WS_READY;
+		weapon_thinkf(WFRAME_IDLE, 0.1, w_ready);
+	}
 };
 
 // FIXME: add qw-style client-custom weaponrating (cl_weaponrating)?
