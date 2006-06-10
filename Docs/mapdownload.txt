@@ -12,9 +12,9 @@ cvars for further tuning:
    cl_curl_maxspeed             maximum total speed in KiB/s (default: 100)
 
 Downloaded packages end up in the "dlcache" subdirectory of your data
-directory. They are not loaded by default. If you want to keep a package and
-make it appear in the map selection menu, you can "accept" the package by
-moving it one level up - right next to your config.cfg.
+directory and are used till you exit Nexuiz. If you want to play them
+localy or use them to setup a server of your own you can "accept" the
+packages by moving it one level up - right next to your config.cfg.
 
 You should regularily clean up your cache to save space and make the maps
 you really want available from the menu.

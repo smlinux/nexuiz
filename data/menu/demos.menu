@@ -63,6 +63,9 @@ Item Window Demos
 			action	Nex_Demos_Start
 		}
 	}
+// until its fixed in the engine..
+Ignore
+{
 	Item Layout Settings
 	{
 		size		'1000 200'
@@ -94,4 +97,5 @@ Item Window Demos
 			target	"Data::Demos::AutoDemoFormat::Text"
 		}
 	}
+}
 }

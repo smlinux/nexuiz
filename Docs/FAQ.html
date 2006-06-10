@@ -126,7 +126,6 @@ h1, h2, h3, h4, h5, h6 {
 <li> <a class="link" href="#When I start Nexuiz all I see is a black screen with some checkered squares">When I start Nexuiz all I see is a black screen with some checkered squares</a></li>
 <li> <a class="link" href="#The sound is broken, it crackles and stutters">The sound is broken, it crackles and stutters</a></li>
 <li> <a class="link" href="#When I join a server or after a map change I see nothing but a black screen, but I can still move and shoot">When I join a server or after a map change I see nothing but a black screen, but I can still move and shoot</a></li>
-<li> <a class="link" href="#Nexuiz is too slow">Nexuiz is too slow</a></li>
 </ul>
 <li> <a class="link" href="#Server setup">Server setup</a></li>
 <ul>
@@ -183,7 +182,7 @@ This happens when the engine can't load the data*.pk3 file. The reasons could be
 <ol>
 <li> you unpacked the zip file without folder names (see <a class="link" href="#How do I install Nexuiz?">How do I install Nexuiz?</a>)</li>
 <li> on Linux: the current directory is not your Nexuiz/ folder (see <a class="link" href="#How can I place a shortcut to Nexuiz on my Linux desktop?">How can I place a shortcut to Nexuiz on my Linux desktop?</a>)</li>
-<li> your download might be corrupted</li>
+<li> your download might be corrupted, please download Nexuiz again</li>
 </ol>
 </p>
 <!--End Section 2-->
@@ -194,13 +193,7 @@ Try run <tt>nexuiz-sdl.exe</tt> instead of <tt>nexuiz.exe</tt> (on Windows). Add
 <!--End Section 2-->
 <h3><a name="When I join a server or after a map change I see nothing but a black screen, but I can still move and shoot">When I join a server or after a map change I see nothing but a black screen, but I can still move and shoot</a></h3>
 <p class="Body">
-This is probably because you don't have the map, that's running on the server. There is no map/content download in Nexuiz at the moment so you have to get the map the old fashioned way. Most servers will have a download URL in their name or welcome message. There is also a <a class="link" href="http://savage747.sa.funpic.de/wiki/pmwiki.php?n=Main.CustomMaps">wiki page</a> dedicated to new maps.
-</p>
-<!--End Section 2-->
-<h3><a name="Nexuiz is too slow">Nexuiz is too slow</a></h3>
-<p class="Body">
-To speed up Nexuiz turn off some of the settings in the menu <tt>Options / Effects</tt>. Turning off some or all of the <tt>realtime effects</tt> will help the most. Other fps boots include disabeling <tt>Deluxemapping</tt>, <tt>Bloom</tt> and <tt>Coronas</tt>.
-Nexuiz does also include config files that will adjust your graphic settings. Open the console as explained in this FAQ and type <tt>exec normal.cfg</tt> to get the default setting. <tt>exec med.cfg</tt> and <tt>exec low.cfg</tt> are of lower quality but will make Nexuiz faster. <tt>exec high.cfg</tt> and <tt>exec ultra.cfg</tt> will show off what Nexuiz is able to look like but do require a very fast PC.
+This is probably because you don't have the map, that's running on the server. As Nexuiz does now support map/content download the server might be be setup to support this and you will have to get the map the old fashioned way. Those servers will have a download URL in their name or welcome message. There is also a <a class="link" href="http://savage747.sa.funpic.de/wiki/pmwiki.php?n=Main.CustomMaps">wiki page</a> dedicated to new maps.
 </p>
 <!--End Section 2-->
 <!-- End SectLevel2 -->
@@ -209,7 +202,7 @@ Nexuiz does also include config files that will adjust your graphic settings. Op
 <!-- Start SectLevel2 -->
 <h3><a name="How do I start a server?">How do I start a server?</a></h3>
 <p class="Body">
-There's a tutorial on how to setup up an dedicated server in this <a class="link" href="http://www.alientrap.org/forum/viewtopic.php?t=18">forum post</a>.
+Please take a look at the file <tt>readme.txt</tt> in the <tt>Docs/server/</tt> directory where this topic is explained.
 </p>
 <!--End Section 2-->
 <h3><a name="Which ports do I have to open in firewall/forward from my router to run a server?">Which ports do I have to open in firewall/forward from my router to run a server?</a></h3>
@@ -256,7 +249,7 @@ You can get a list of variables by entering <tt>cvarlist</tt> on the console. <t
 <!--End Section 2-->
 <h3><a name="How can I speed up my frame rate?">How can I speed up my frame rate?</a></h3>
 <p class="Body">
-The greatest performance boost can be achieved by turning off dynamic lights and shadows. Bloom is also quite resource intensive. On older graphics cards or on-board/notebook chips with little video ram you can try to lower the texture resolution. To do this open the console and type <tt>gl_picmip #; r_restart</tt> (where # is a number between 0 and 10, 0 is the highest quality).
+The greatest performance boost can be achieved by turning off dynamic lights and shadows in the menu <tt>Options / Effects</tt>. Bloom is also quite resource. Other fps boots include disabeling <tt>Deluxemapping</tt> and <tt>Coronas</tt>. On older graphics cards or on-board/notebook chips with little video ram you can try to lower the texture resolution. To do this open the console (<a class="link" href="#How do I open the console?">How do I open the console?</a>) and type <tt>gl_picmip #; r_restart</tt> (where # is a number between 0 and 10, 0 is the highest quality). Nexuiz now does also include config files that will adjust your graphic settings. Open the console as explained in and type <tt>exec normal.cfg</tt> to get the default setting. <tt>exec med.cfg</tt> and <tt>exec low.cfg</tt> are of lower quality but will make Nexuiz faster. <tt>exec high.cfg</tt> and <tt>exec ultra.cfg</tt> will show what Nexuiz is able to look like but do require a very fast PC and graphic card. Just like the <tt>gl<strong>picmip</tt> some of the settings in those config files require you to either restart Nexuiz or type <tt>vid</strong>restart</tt> in the console afterwards.
 </p>
 <!--End Section 2-->
 <h3><a name="How can I activate colors in my name?">How can I activate colors in my name?</a></h3>
@@ -280,10 +273,10 @@ Colors can be used in nicknames and chat messages by typing ^ followed by a numb
 <!--End Section 2-->
 <h3><a name="How do i watch/record demos?">How do i watch/record demos?</a></h3>
 <p class="Body">
-You can access your demos and demo settings in the <tt>Demos</tt> menu. Click on the demo you want to watch and then on <tt>Start</tt> to watch the demo.  You can enable demo recording if you click on the <tt>Off/On</tt> option besides <tt>Automaticly record a Demo when playing</tt>. The demo will be recorded as soon as you start a game or join a server.
-You can also open the console and type <tt>rec &lt;name&gt;</tt> to record a demo. The demo file will be stored in <tt>~/.nexuiz/data/demos/&lt;name&gt;.dem</tt> (Linux) or <tt>Nexuiz/data/demos/&lt;name&gt;.dem</tt> (Windows).
-To watch a demo: open the console and type <tt>ply &lt;name&gt;</tt> (<tt>name</tt> is the filename without extension). If you downloaded a demo, copy it to <tt>Nexuiz/data/demos</tt> first.
-You can list all your demo files by typing <tt>dem</tt> on the console. Some usefull keybindings for viewing demos are listed <a class="link" href="http://www.alientrap.org/forum/viewtopic.php?p=357#357">here</a>.
+You can access your demos in the <tt>Demos</tt> menu. Click on the demo you want to watch and then on <tt>Start</tt> to watch the demo. 
+To record a demo yourself open the console (<a class="link" href="#How do I open the console?">How do I open the console?</a>) and type <tt>rec &lt;name&gt;</tt> before playing. That is before starting a game or connection to a server. The demo file will be stored in <tt>~/.nexuiz/data/demos/&lt;name&gt;.dem</tt> (Linux) or <tt>Nexuiz/data/demos/&lt;name&gt;.dem</tt> (Windows).
+To watch a demo: open the console and type <tt>ply &lt;name&gt;</tt>. If you downloaded a demo, copy it to <tt>Nexuiz/data/demos</tt>. You might have to create this directory if you have never recorded a demo before.
+You can list all your demo files by typing <tt>dem</tt> on the console. Some usefull keybindings for viewing demos are listed <a class="link" href="http://www.alientrap.org/forum/viewtopic.php?p=357#357">here</a>. A simple way to automaticly record demos can be found <a class="link" href="http://www.alientrap.org/forum/viewtopic.php?t=90">here</a>
 </p>
 <!--End Section 2-->
 <!-- End SectLevel2 -->
