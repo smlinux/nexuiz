@@ -30,3 +30,20 @@ textures/toxic/toxic_sky
 	q3map_sun 0.75 0.65 0.6 130 255 80
 	skyParms env/strale_grey/ygrey 128 -
 }
+
+textures/toxic/toxic_grate
+{
+	qer_editorimage textures/kaznexctf2/grate.tga
+	surfaceparm nomarks
+	surfaceparm trans
+	surfaceparm alphashadow
+	cull none
+	nopicmip
+	nomipmaps
+	{
+		map textures/kaznexctf2/grate.tga
+		//depthWrite
+		alphaFunc GT0
+		rgbgen vertex
+	}
+}
