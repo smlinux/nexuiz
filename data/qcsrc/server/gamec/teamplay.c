@@ -275,6 +275,10 @@ void InitGameplayMode()
 	registercvar("_mutatormsg", "");
 	cvar_set("_motd", linewrap(cvar_string("sv_motd"), 50));
 	cvar_set("_mutatormsg", linewrap(cvar_string("g_mutatormsg"), 50));
+
+	g_domination = cvar("g_domination");
+	g_ctf = cvar("g_ctf");
+	g_tdm = cvar("g_tdm");
 }
 
 string GetClientVersionMessage(float v) {
@@ -682,9 +686,6 @@ float JoinBestTeam(entity pl, float only_return_best)
 {
 	float smallest, selectedteam;
 
-	g_domination = cvar("g_domination");
-	g_ctf = cvar("g_ctf");
-
 	// don't join a team if we're not playing a team game
 	if(!cvar("teamplay") && !g_domination && !g_ctf)
 		return 0;
@@ -809,12 +810,12 @@ void SV_ChangeTeam(float _color)
 			dteam = 1;
 	}
 	*/
+
 	CheckAllowedTeams();
 	if(dteam == 3 && c3 < 0)
 		dteam = 2;
 	if(dteam == 4 && c4 < 0)
 		dteam = 1;
-		
 
 	// not changing teams
 	if(scolor == dcolor)
