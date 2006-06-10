@@ -778,7 +778,7 @@ void() NextLevel =
 		other.angles_x = other.angles_x * -1;
 
 		self = other;
-		w_ready();
+		//w_ready();
 
 		if(clienttype(other) == CLIENTTYPE_REAL)
 		if(cvar("sv_autoscreenshot"))
