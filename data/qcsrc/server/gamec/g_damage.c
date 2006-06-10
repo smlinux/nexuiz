@@ -127,7 +127,7 @@ void Obituary (entity attacker, entity targ, float deathtype)
 			else if (deathtype == DEATH_NOAMMO)
 				centerprint(targ, strcat("^1You were killed for running out of ammo...\n\n\n"));
 			else if (deathtype == DEATH_ROT)
-				centerprint(targ, strcat("^1You grew too old without taking your medcine\n\n\n"));			
+				centerprint(targ, strcat("^1You grew too old without taking your medcine\n\n\n"));
 			else
 				centerprint(targ, strcat("^1You killed your own dumb self!\n\n\n"));
 
@@ -329,9 +329,9 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 	if (teamplay)
 	if (attacker.team)
 	if (attacker.team == targ.team)
-	if ((teamplay == 1 || teamplay == 3) && attacker != targ)
+	if (teamplay == 1 || (teamplay == 3 && attacker != targ))
 		damage = 0;
-	
+
 	if (targ.classname == "player")
 	if (attacker.classname == "player")
 	if (!targ.isbot)
