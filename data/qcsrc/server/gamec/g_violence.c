@@ -69,6 +69,7 @@ void TossGib (entity gib, string mdlname, vector org, vector v, float destroyont
 	gib.effects = 0;
 	gib.gibrandom = random(); // used for customize function to reduce gibs
 	gib.customizeentityforclient = Gib_customizeentityforclient;
+	gib.effects = EF_LOWPRECISION; // use less bandwidth
 
 	setmodel (gib, mdlname);
 	gib.gibmodelindex = gib.modelindex;

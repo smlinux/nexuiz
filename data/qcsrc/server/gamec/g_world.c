@@ -778,7 +778,7 @@ void() NextLevel =
 		other.angles_x = other.angles_x * -1;
 
 		self = other;
-		weapon_action(other.weapon, WR_IDLE);
+		w_ready();
 
 		if(clienttype(other) == CLIENTTYPE_REAL)
 		if(cvar("sv_autoscreenshot"))

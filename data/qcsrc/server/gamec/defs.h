@@ -110,13 +110,13 @@ string newlines = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 .entity exteriorweaponentity;
 .float switchweapon;
 .float autoswitch;
-void(float wpn, float wrequest) weapon_action;
-float(entity cl, float wpn, float andammo) client_hasweapon;
+float(float wpn, float wrequest) weapon_action;
+float(entity cl, float wpn, float andammo, float complain) client_hasweapon;
 void() w_clear;
+void() w_ready;
 // VorteX: standalone think for weapons, so normal think on weaponentity can be reserved by weaponflashes (which needs update even player dies)
 .float weapon_nextthink;
 .void() weapon_think;
-float	weapon_hasammo; // sets by WR_CHECKAMMO request
 
 //float	PLAYER_WEAPONSELECTION_DELAY = );
 float	PLAYER_WEAPONSELECTION_SPEED = 18;
@@ -130,17 +130,11 @@ float WS_INUSE			= 3; // fire state
 float WS_READY			= 4; // idle frame
 
 // weapon requests
-float WR_SETUP		  = 1;	// setup weapon data
-float WR_UPDATECOUNTS = 2;  // update ammo display
-float WR_IDLE		  = 3;  // idle frame
-float WR_DROP		  = 4;	// deselect frame
-float WR_RAISE		  = 5;	// select frame
-float WR_FIRE1		  = 6;  // primary fire frame
-float WR_FIRE2		  = 7;  // secondary fire
-float WR_FIRE3		  = 8;  // third fire
-float WR_CHECKAMMO	  = 9;  // checks ammo for weapon
-float WR_CLEAR		  = 10;  // runs afted deselecting frames, remove weapon parts (if presented). This useful for quake3-style chaingun
-float WR_AIM		  = 11; // runs bot aiming code for this weapon
+float WR_SETUP		  = 1; // setup weapon data
+float WR_THINK		  = 2; // logic to run every frame
+float WR_CHECKAMMO1	  = 3; // checks ammo for weapon
+float WR_CHECKAMMO2	  = 4; // checks ammo for weapon
+float WR_AIM		  = 5; // runs bot aiming code for this weapon
 
 // Weapon indexes
 float WEP_LASER				= 1; // float	IT_LASER				= 4096;

@@ -44,7 +44,6 @@ gamec/sv_stats.c
 gamec/g_triggers.c
 
 gamec/cl_weaponsystem.c
-gamec/cl_weaponanimations.c
 gamec/w_common.c
 gamec/w_laser.c
 gamec/w_shotgun.c

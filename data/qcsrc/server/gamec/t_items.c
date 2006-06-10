@@ -151,10 +151,6 @@ void Item_Touch (void)
 	if (self.switchweapon != self.weapon)
 		self.cnt = self.weapon;
 
-	//w_updateweapon ();
-	//w_updateammo ();
-	weapon_action(self.weapon, WR_UPDATECOUNTS);
-
 	self = oldself;
 
 	if (self.classname == "droppedweapon")

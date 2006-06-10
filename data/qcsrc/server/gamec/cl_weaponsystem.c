@@ -7,55 +7,56 @@
 ===========================================================================
 */
 
-vector() W_TrueAim = {
+// VorteX: static frame globals
+float WFRAME_FIRE1 = 0;
+float WFRAME_FIRE2 = 1;
+float WFRAME_IDLE = 2;
 
-	traceline_hitcorpse(self,self.origin + self.view_ofs,self.origin + self.view_ofs + v_forward * 8192,FALSE,self);
+void(float fr, float t, void() func) weapon_thinkf;
 
-	if ((self.weapon == WEP_NEX || self.weapon == WEP_SHOTGUN || self.weapon == WEP_UZI) && cvar("g_antilag"))
-	{
-		// if aiming at a player and the original trace won't hit that player
-		// anymore, try aiming at the player's new position
+vector w_shotorg;
+vector w_shotdir;
 
-		if(self.cursor_trace_ent)
-		if(self.cursor_trace_ent.takedamage)
-		if(trace_ent != self.cursor_trace_ent) {
-			return self.cursor_trace_ent.origin;
-		}
-
-	}
-
-	return trace_endpos;
-}
-
-// this function allows you to spawn projectiles ahead of the player so they appear to come out of
-// the muzzle properly, but won't put shots inside walls if you're too close.
+// this function calculates w_shotorg and w_shotdir based on the weapon model
+// offset, trueaim and antilag, and won't put w_shotorg inside a wall.
 // make sure you call makevectors first (FIXME?)
-vector W_MuzzleOrigin (entity ent, vector vecs)
+void(entity ent, vector vecs, float antilag, float recoil, string snd) W_SetupShot =
 {
-	vector startorg;
-	vector idealorg;
+	local vector trueaimpoint;
+	local vector startorg;
+	local vector idealorg;
 
-	startorg = ent.origin + ent.view_ofs - '0 0 8';
+	traceline_hitcorpse(self, self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * 8192, MOVE_NOMONSTERS, self);
+	trueaimpoint = trace_endpos;
+
+	// if aiming at a player and the original trace won't hit that player
+	// anymore, try aiming at the player's new position
+	if (antilag)
+	if (self.cursor_trace_ent)
+	if (self.cursor_trace_ent.takedamage)
+	if (trace_ent != self.cursor_trace_ent)
+	if (cvar("g_antilag"))
+		trueaimpoint = self.cursor_trace_ent.origin;
+
+	startorg = ent.origin + ent.view_ofs;// - '0 0 8';
 	idealorg = ent.origin + ent.view_ofs + v_forward * vecs_x + v_right * vecs_y + v_up * vecs_z;
 
-	traceline_hitcorpse (ent, startorg, idealorg, MOVE_NORMAL, ent);
+	// don't allow the shot to start inside a wall
+	traceline_hitcorpse (ent, startorg, idealorg, MOVE_NOMONSTERS, ent);
+	w_shotorg = trace_endpos;
 
-// if obstructed, back off a bit so the shot will definitely hit it
-	if (trace_fraction < 1.0)
-	{
-	// FIXME! this whole thing messes up W_TrueAim... if you're up against a wall, the trueaim and the muzzle
-	// origin will be about the same distance from the player, causing the bullets to fly out at a near 90
-	// degree angle
-//		trace_endpos = trace_endpos - normalize (idealorg - startorg);
+	w_shotdir = normalize(trueaimpoint - w_shotorg);
 
+	if (!cvar("g_norecoil"))
+		self.punchangle_x = recoil * -1;
 
-	// nasty placeholder (well I admit you don't really notice it all... especially since the
-	// weapon model sinking into the wall provides such a nice distraction)
-		trace_endpos = startorg;
-	}
+	if (snd != "")
+		sound (self, CHAN_WEAPON, snd, 1, ATTN_NORM);
 
-	return trace_endpos;
-}
+	if (self.items & IT_STRENGTH)
+	if (!cvar("g_minstagib"))
+		sound (self, CHAN_AUTO, "weapons/strength_fire.ogg", 1, ATTN_NORM);
+};
 
 void LaserTarget_Think()
 {
@@ -118,6 +119,7 @@ void LaserTarget_Think()
 		e.angles = vectoangles(v_forward);
 }
 
+.string weaponname;
 void() CL_Weaponentity_Think =
 {
 	self.nextthink = time;
@@ -126,14 +128,39 @@ void() CL_Weaponentity_Think =
 		remove(self);
 		return;
 	}
-
+	if (self.owner.deadflag != DEAD_NO)
+	{
+		self.model = "";
+		return;
+	}
+	if (self.cnt != self.owner.weapon || self.dmg != self.owner.modelindex || self.deadflag != self.owner.deadflag)
+	{
+		self.cnt = self.owner.weapon;
+		self.dmg = self.owner.modelindex;
+		self.deadflag = self.owner.deadflag;
+		if (self.owner.weaponname != "")
+			setmodel(self, strcat("models/weapons/w_", self.owner.weaponname, ".zym"));
+		else
+			self.model = "";
+	}
 	self.effects = self.owner.effects;
 
 	if (self.flags & FL_FLY)
 		// owner is currently being teleported, so don't apply EF_NODRAW otherwise the viewmodel would "blink"
 		self.effects = self.effects - (self.effects & EF_NODRAW);
-	
+
 	self.alpha = self.owner.alpha;
+
+	self.angles = '0 0 0';
+	local float f;
+	f = 0;
+	if (self.state == WS_RAISE)
+		f = (self.owner.weapon_nextthink - time) / cvar("g_balance_weaponswitchdelay");
+	else if (self.state == WS_DROP)
+		f = 1 - (self.owner.weapon_nextthink - time) / cvar("g_balance_weaponswitchdelay");
+	else if (self.state == WS_CLEAR)
+		f = 1;
+	self.angles_x = -90 * f * f;
 
 	// create or update the lasertarget entity
 	LaserTarget_Think();
@@ -142,37 +169,31 @@ void() CL_Weaponentity_Think =
 void() CL_ExteriorWeaponentity_Think =
 {
 	self.nextthink = time;
-	if(self.owner.deadflag != DEAD_NO)
-	{
-		self.model = "";
-		return;
-	}
 	if (self.owner.exteriorweaponentity != self)
 	{
 		remove(self);
 		return;
 	}
-	if (self.cnt != self.owner.weaponentity.modelindex || self.dmg != self.owner.modelindex || self.deadflag != self.owner.deadflag)
+	if (self.owner.deadflag != DEAD_NO)
 	{
-		self.cnt = self.owner.weaponentity.modelindex;
+		self.model = "";
+		return;
+	}
+	if (self.cnt != self.owner.weapon || self.dmg != self.owner.modelindex || self.deadflag != self.owner.deadflag)
+	{
+		self.cnt = self.owner.weapon;
 		self.dmg = self.owner.modelindex;
 		self.deadflag = self.owner.deadflag;
-		if (self.owner.deadflag) return;
-		else if (self.owner.weapon == WEP_LASER) setmodel(self, "models/weapons/v_laser.md3");
-		else if (self.owner.weapon == WEP_SHOTGUN) setmodel(self, "models/weapons/v_shotgun.md3");
-		else if (self.owner.weapon == WEP_UZI) setmodel(self, "models/weapons/v_uzi.md3");
-		else if (self.owner.weapon == WEP_GRENADE_LAUNCHER) setmodel(self, "models/weapons/v_gl.md3");
-		else if (self.owner.weapon == WEP_ELECTRO) setmodel(self, "models/weapons/v_electro.md3");
-		else if (self.owner.weapon == WEP_CRYLINK) setmodel(self, "models/weapons/v_crylink.md3");
-		else if (self.owner.weapon == WEP_NEX) setmodel(self, "models/weapons/v_nex.md3");
-		else if (self.owner.weapon == WEP_HAGAR) setmodel(self, "models/weapons/v_hagar.md3");
-		else if (self.owner.weapon == WEP_ROCKET_LAUNCHER) setmodel(self, "models/weapons/v_rl.md3");
+		if (self.owner.weaponname != "")
+			setmodel(self, strcat("models/weapons/v_", self.owner.weaponname, ".md3"));
+		else
+			self.model = "";
 		setattachment(self, self.owner, "bip01 r hand");
 		// if that didn't find a tag, hide the exterior weapon model
 		if (!self.tag_index)
 			self.model = "";
 	}
-	self.effects = self.owner.weaponentity.effects;
+	self.effects = self.owner.effects;
 };
 
 // spawning weaponentity for client
@@ -233,14 +254,17 @@ float(float index) weapon_translateindextoflag =
 		return 0;
 };
 
-float(entity cl, float wpn, float andammo) client_hasweapon =
+float(entity cl, float wpn, float andammo, float complain) client_hasweapon =
 {
-	local float itemcode;
+	local float itemcode, f;
 	local entity oldself;
 
-	weapon_hasammo = TRUE;
 	if (wpn < WEP_FIRST || wpn > WEP_LAST)
+	{
+		if (complain)
+			sprint(self, "Invalid weapon\n");
 		return FALSE;
+	}
 	itemcode = weapon_translateindextoflag(wpn);
 	if (cl.items & itemcode)
 	{
@@ -248,21 +272,26 @@ float(entity cl, float wpn, float andammo) client_hasweapon =
 		{
 			oldself = self;
 			self = cl;
-			weapon_action(wpn, WR_CHECKAMMO);
+			f = weapon_action(wpn, WR_CHECKAMMO1);
+			f = f + weapon_action(wpn, WR_CHECKAMMO2);
 			self = oldself;
-			if (weapon_hasammo)
-				return TRUE;
-			return FALSE;
+			if (!f)
+			{
+				if (complain)
+					sprint(self, "You don't have any ammo for that weapon\n");
+				return FALSE;
+			}
 		}
 		return TRUE;
 	}
+	if (complain)
+		sprint(self, "You don't own that weapon\n");
 	return FALSE;
 };
 
 // Weapon subs
 void() w_clear =
 {
-	weapon_action(self.weapon, WR_CLEAR);
 	if (self.weapon != -1)
 		self.weapon = 0;
 	if (self.weaponentity)
@@ -276,95 +305,65 @@ void() w_clear =
 void() w_ready =
 {
 	self.weaponentity.state = WS_READY;
-	weapon_action(self.weapon, WR_IDLE);
+	weapon_thinkf(WFRAME_IDLE, 0.1, w_ready);
 };
 
 // FIXME: add qw-style client-custom weaponrating (cl_weaponrating)?
 float(entity e) w_getbestweapon
 {// add new weapons here
-	if (client_hasweapon(e, WEP_ROCKET_LAUNCHER, TRUE))
+	if (client_hasweapon(e, WEP_ROCKET_LAUNCHER, TRUE, FALSE))
 		return WEP_ROCKET_LAUNCHER;
-	else if (client_hasweapon(e, WEP_NEX, TRUE))
+	else if (client_hasweapon(e, WEP_NEX, TRUE, FALSE))
 		return WEP_NEX;
-	else if (client_hasweapon(e, WEP_HAGAR, TRUE))
+	else if (client_hasweapon(e, WEP_HAGAR, TRUE, FALSE))
 		return WEP_HAGAR;
-	else if (client_hasweapon(e, WEP_GRENADE_LAUNCHER, TRUE))
+	else if (client_hasweapon(e, WEP_GRENADE_LAUNCHER, TRUE, FALSE))
 		return WEP_GRENADE_LAUNCHER;
-	else if (client_hasweapon(e, WEP_ELECTRO, TRUE))
+	else if (client_hasweapon(e, WEP_ELECTRO, TRUE, FALSE))
 		return WEP_ELECTRO;
-	else if (client_hasweapon(e, WEP_CRYLINK, TRUE))
+	else if (client_hasweapon(e, WEP_CRYLINK, TRUE, FALSE))
 		return WEP_CRYLINK;
-	else if (client_hasweapon(e, WEP_UZI, TRUE))
+	else if (client_hasweapon(e, WEP_UZI, TRUE, FALSE))
 		return WEP_UZI;
-	else if (client_hasweapon(e, WEP_SHOTGUN, TRUE))
+	else if (client_hasweapon(e, WEP_SHOTGUN, TRUE, FALSE))
 		return WEP_SHOTGUN;
-	else if (client_hasweapon(e, WEP_LASER, FALSE))
+	else if (client_hasweapon(e, WEP_LASER, FALSE, FALSE))
 		return WEP_LASER;
 	else
 		return 0;
 };
 
 // Setup weapon for client (after this raise frame will be launched)
-void(float windex, string wmodel, float hudammo) weapon_setup =
+void(float windex, string wname, float hudammo) weapon_setup =
 {
-	local string weaponmdl;
-
 	self.items = self.items - (self.items & (IT_SHELLS | IT_NAILS | IT_ROCKETS | IT_CELLS));
 	self.items = self.items | hudammo;
 
+	// the two weapon entities will notice this has changed and update their models
 	self.weapon = windex;
-
-	if (wmodel != "")
-	{
-		weaponmdl = strzone(strcat("models/weapons/", wmodel));
-		setmodel(self.weaponentity, weaponmdl);
-	}
-	// VorteX: update visible weapon
-	// CL_ViswepUpdate();
+	self.weaponname = wname;
 };
 
 // perform weapon to attack (weaponstate and attack_finished check is here)
-void(float() checkfunc1, float() checkfunc2, void() firefunc, float atktime) weapon_prepareattack =
+float(float secondary, float attacktime) weapon_prepareattack =
 {
-	if (!checkfunc1())
+	if (!weapon_action(self.weapon, WR_CHECKAMMO1 + secondary))
 	{
-		if (!checkfunc2())
-		{
-			self.switchweapon = w_getbestweapon(self);
-			if (self.switchweapon != self.weapon)
-				self.cnt = self.weapon;
-		}
-		return;
+		self.switchweapon = w_getbestweapon(self);
+		if (self.switchweapon != self.weapon)
+			self.cnt = self.weapon;
+		return FALSE;
 	}
-	// Don't do shot if previos attack  not finished
-		if (time < self.attack_finished)
-			return;
-	// Can't do shot if changing weapon
-		if (self.weaponentity.state != WS_READY)
-			return;
-
-	self.attack_finished = time + atktime;
-	firefunc();
-};
-
-// perform weapon attack
-void(float() checkfunc1, float() checkfunc2, void() firefunc) weapon_doattack
-{
-	if (!checkfunc1())
-	{
-		if (!checkfunc2())
-		{
-			self.switchweapon = w_getbestweapon(self);
-			if (self.switchweapon != self.weapon)
-				self.cnt = self.weapon;
-		}
-		return;
-	}
+	// don't fire if previous attack is not finished
+	if (time < self.attack_finished)
+		return FALSE;
+	// don't fire while changing weapon
+	if (self.weaponentity.state != WS_READY)
+		return FALSE;
 	self.weaponentity.state = WS_INUSE;
-	firefunc();
-	if (cvar("g_norecoil"))
-		self.punchangle = '0 0 0';
-	weapon_action(self.weapon, WR_UPDATECOUNTS); // update ammo now
+	// FIXME: this does not allow multiple shots per frame and disgards cumulative error
+	self.attack_finished = time + attacktime;
+	return TRUE;
 };
 
 void(float fr, float t, void() func) weapon_thinkf =
@@ -398,6 +397,5 @@ void(float fr, float t, void() func) weapon_thinkf =
 void(float spd, vector org) weapon_boblayer1 =
 {
 	// VorteX: haste can be added here
-	self.weaponentity.pos1 =org;
-	self.weaponentity.lip = spd;
 };
+

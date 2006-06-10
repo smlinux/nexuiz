@@ -1,102 +1,5 @@
-void() rlauncher_ready_01;
-void() rlauncher_fire1_01;
-void() rlauncher_deselect_01;
-void() rlauncher_select_01;
+
 .float rl_sound;
-
-float() rlauncher_check =
-{
-	if ((self.attack_finished > time && self.weapon == WEP_ROCKET_LAUNCHER)  // don't switch while guiding a missile
-		|| self.ammo_rockets >= cvar("g_balance_rocketlauncher_ammo"))
-		return TRUE;
-	return FALSE;
-};
-
-void(float req) w_rlauncher =
-{
-	if (req == WR_IDLE)
-		rlauncher_ready_01();
-	else if (req == WR_AIM)
-	{
-		// aim and decide to fire if appropriate
-		self.button0 = bot_aim(cvar("g_balance_rocketlauncher_speed"), 0, cvar("g_balance_rocketlauncher_lifetime"), FALSE);
-		if(skill >= 2) // skill 0 and 1 bots won't detonate rockets!
-		{
-			// decide whether to detonate rockets
-			local entity missile, targetlist, targ;
-			local float edgedamage, coredamage, edgeradius, recipricoledgeradius, d;
-			local float selfdamage, teamdamage, enemydamage;
-			edgedamage = cvar("g_balance_rocketlauncher_edgedamage");
-			coredamage = cvar("g_balance_rocketlauncher_damage");
-			edgeradius = cvar("g_balance_rocketlauncher_radius");
-			recipricoledgeradius = 1 / edgeradius;
-			selfdamage = 0;
-			teamdamage = 0;
-			enemydamage = 0;
-			targetlist = findchainfloat(bot_attack, TRUE);
-			missile = find(world, classname, "missile");
-			while (missile)
-			{
-				targ = targetlist;
-				while (targ)
-				{
-					d = vlen(targ.origin + (targ.mins + targ.maxs) * 0.5 - missile.origin);
-					d = edgedamage + (coredamage - edgedamage) * (1 - d * recipricoledgeradius);
-					// count potential damage according to type of target
-					if (targ == self)
-						selfdamage = selfdamage + d;
-					else if (targ.team == self.team && teamplay)
-						teamdamage = teamdamage + d;
-					else if (bot_shouldattack(targ))
-						enemydamage = enemydamage + d;
-					targ = targ.chain;
-				}
-				missile = find(missile, classname, "missile");
-			}
-			local float desirabledamage;
-			desirabledamage = enemydamage;
-			if (teamplay != 1 && time > self.invincible_finished && time > self.spawnshieldtime)
-				desirabledamage = desirabledamage - selfdamage * cvar("g_balance_selfdamagepercent");
-			if (self.team && teamplay == 2)
-				desirabledamage = desirabledamage - teamdamage;
-			// if we would be doing at least half of the core damage, detonate it
-			// but don't fire a new shot at the same time!
-			if (desirabledamage >= 0.5 * coredamage)
-			{
-				self.button3 = TRUE;
-				self.button0 = FALSE;
-			}
-		}
-	}
-	else if (req == WR_FIRE1)
-		weapon_prepareattack(rlauncher_check, rlauncher_check, rlauncher_fire1_01, cvar("g_balance_rocketlauncher_refire"));
-	else if (req == WR_FIRE2)
-	{
-		if(time > self.rl_sound)
-		{
-			self.rl_sound = time + 1;
-			sound (self, CHAN_BODY, "weapons/rocket_det.ogg", 0.5, ATTN_NORM);
-		}
-		if(cvar("g_laserguided_missile"))
-		if(self.exteriorweaponentity.attack_finished < time)
-		{
-			self.exteriorweaponentity.attack_finished = time + 0.4;
-			self.laser_on = !self.laser_on;
-			sound (self, CHAN_AUTO, "weapons/tink1.ogg", 1, ATTN_NORM);
-		}
-	}
-	else if (req == WR_RAISE)
-		rlauncher_select_01();
-	else if (req == WR_UPDATECOUNTS)
-		self.currentammo = self.ammo_rockets;
-	else if (req == WR_DROP)
-		rlauncher_deselect_01();
-	else if (req == WR_SETUP)
-		weapon_setup(WEP_ROCKET_LAUNCHER, "w_rl.zym", IT_ROCKETS);
-	else if (req == WR_CHECKAMMO)
-		weapon_hasammo = rlauncher_check();
-};
-
 
 void W_Rocket_Explode (void)
 {
@@ -174,21 +77,6 @@ entity FindLaserTarget(entity e, float dist_variance, float dot_variance)
 			selected = head;
 		}
 
-
-		/*
-		dot = dir * v_forward;
-		if(dot > bestdot * (1 + crandom()*dot_variance))
-		{
-			dist = vlen(head.origin - self.origin);
-			if(dist < bestdist * (1 + crandom()*dist_variance))
-			{
-				traceline(e.origin, head.origin, TRUE, self);
-				if(trace_fraction >= 1)
-				{
-				}
-			}
-		}
-		*/
 		head = find(head, classname, "laser_target");
 	}
 
@@ -291,21 +179,12 @@ void W_Rocket_Attack (void)
 {
 	local entity missile;
 	local entity flash;
-	local vector org;
-
-	local vector trueaim;
-	trueaim = W_TrueAim();
-
-	sound (self, CHAN_WEAPON, "weapons/rocket_fire.ogg", 1, ATTN_NORM);
-	if (self.items & IT_STRENGTH)
-		sound (self, CHAN_AUTO, "weapons/strength_fire.ogg", 1, ATTN_NORM);
 
 	if (cvar("g_use_ammunition") && !cvar("g_rocketarena"))
 		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_rocketlauncher_ammo");
-	self.punchangle_x = -4;
 
-	org = W_MuzzleOrigin (self, '15 3 -11');
-	te_smallflash(org);
+	W_SetupShot (self, '15 3 -11', FALSE, 5, "weapons/rocket_fire.ogg");
+	te_smallflash(w_shotorg);
 
 	missile = spawn ();
 	missile.owner = self;
@@ -324,11 +203,11 @@ void W_Rocket_Attack (void)
 	setmodel (missile, "models/rocket.md3");
 	setsize (missile, '0 0 0', '0 0 0');
 
-	setorigin (missile, org);
+	setorigin (missile, w_shotorg);
 	if(cvar("g_laserguided_missile") && self.laser_on)
-		missile.velocity = normalize(trueaim - org) * cvar("g_balance_rocketlauncher_laserguided_speed");
+		missile.velocity = w_shotdir * cvar("g_balance_rocketlauncher_laserguided_speed");
 	else
-		missile.velocity = normalize(trueaim - org) * cvar("g_balance_rocketlauncher_speed");
+		missile.velocity = w_shotdir * cvar("g_balance_rocketlauncher_speed");
 	missile.angles = vectoangles (missile.velocity);
 
 	missile.touch = W_Rocket_Touch;
@@ -340,21 +219,100 @@ void W_Rocket_Attack (void)
 	missile.flags = FL_PROJECTILE;
 
 	flash = spawn ();
-	setorigin (flash, org);
+	setorigin (flash, w_shotorg);
 	setmodel (flash, "models/flash.md3");
-	flash.velocity = v_forward * 20;
-	flash.angles = vectoangles (flash.velocity);
+	flash.angles = vectoangles (w_shotdir);
 	SUB_SetFade (flash, time, 0.4);
 	flash.effects = flash.effects | EF_ADDITIVE | EF_FULLBRIGHT | EF_LOWPRECISION;
 }
 
-// weapon frames
-
-void()	rlauncher_ready_01 =	{weapon_thinkf(WFRAME_IDLE, 0.1, rlauncher_ready_01); self.weaponentity.state = WS_READY;};
-void()	rlauncher_select_01 =	{weapon_thinkf(-1, cvar("g_balance_weaponswitchdelay"), w_ready); weapon_boblayer1(PLAYER_WEAPONSELECTION_SPEED, '0 0 0'); self.laser_on = 1;};
-void()	rlauncher_deselect_01 =	{weapon_thinkf(-1, cvar("g_balance_weaponswitchdelay"), w_clear); weapon_boblayer1(PLAYER_WEAPONSELECTION_SPEED, PLAYER_WEAPONSELECTION_RANGE);  self.laser_on = 0;};
-void()	rlauncher_fire1_01 =
+float(float req) w_rlauncher =
 {
-	weapon_doattack(rlauncher_check, rlauncher_check, W_Rocket_Attack);
-	weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_rocketlauncher_animtime"), rlauncher_ready_01);
+	if (req == WR_AIM)
+	{
+		// aim and decide to fire if appropriate
+		self.button0 = bot_aim(cvar("g_balance_rocketlauncher_speed"), 0, cvar("g_balance_rocketlauncher_lifetime"), FALSE);
+		if(skill >= 2) // skill 0 and 1 bots won't detonate rockets!
+		{
+			// decide whether to detonate rockets
+			local entity missile, targetlist, targ;
+			local float edgedamage, coredamage, edgeradius, recipricoledgeradius, d;
+			local float selfdamage, teamdamage, enemydamage;
+			edgedamage = cvar("g_balance_rocketlauncher_edgedamage");
+			coredamage = cvar("g_balance_rocketlauncher_damage");
+			edgeradius = cvar("g_balance_rocketlauncher_radius");
+			recipricoledgeradius = 1 / edgeradius;
+			selfdamage = 0;
+			teamdamage = 0;
+			enemydamage = 0;
+			targetlist = findchainfloat(bot_attack, TRUE);
+			missile = find(world, classname, "missile");
+			while (missile)
+			{
+				targ = targetlist;
+				while (targ)
+				{
+					d = vlen(targ.origin + (targ.mins + targ.maxs) * 0.5 - missile.origin);
+					d = edgedamage + (coredamage - edgedamage) * (1 - d * recipricoledgeradius);
+					// count potential damage according to type of target
+					if (targ == self)
+						selfdamage = selfdamage + d;
+					else if (targ.team == self.team && teamplay)
+						teamdamage = teamdamage + d;
+					else if (bot_shouldattack(targ))
+						enemydamage = enemydamage + d;
+					targ = targ.chain;
+				}
+				missile = find(missile, classname, "missile");
+			}
+			local float desirabledamage;
+			desirabledamage = enemydamage;
+			if (teamplay != 1 && time > self.invincible_finished && time > self.spawnshieldtime)
+				desirabledamage = desirabledamage - selfdamage * cvar("g_balance_selfdamagepercent");
+			if (self.team && teamplay == 2)
+				desirabledamage = desirabledamage - teamdamage;
+			// if we would be doing at least half of the core damage, detonate it
+			// but don't fire a new shot at the same time!
+			if (desirabledamage >= 0.5 * coredamage)
+			{
+				self.button3 = TRUE;
+				self.button0 = FALSE;
+			}
+		}
+	}
+	else if (req == WR_THINK)
+	{
+		if (self.button0)
+		if (weapon_prepareattack(0, cvar("g_balance_rocketlauncher_refire")))
+		{
+			W_Rocket_Attack();
+			weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_rocketlauncher_animtime"), w_ready);
+		}
+		if (self.button3)
+		if(time > self.rl_sound)
+		{
+			self.rl_sound = time + 1;
+			sound (self, CHAN_BODY, "weapons/rocket_det.ogg", 0.5, ATTN_NORM);
+		}
+		if (self.button3)
+		if(cvar("g_laserguided_missile"))
+		if(self.exteriorweaponentity.attack_finished < time)
+		{
+			self.exteriorweaponentity.attack_finished = time + 0.4;
+			self.laser_on = !self.laser_on;
+			sound (self, CHAN_AUTO, "weapons/tink1.ogg", 1, ATTN_NORM);
+		}
+	}
+	else if (req == WR_SETUP)
+		weapon_setup(WEP_ROCKET_LAUNCHER, "rl", IT_ROCKETS);
+	else if (req == WR_CHECKAMMO1)
+	{
+		// don't switch while guiding a missile
+		if ((self.attack_finished <= time || self.weapon != WEP_ROCKET_LAUNCHER)
+			&& self.ammo_rockets < cvar("g_balance_rocketlauncher_ammo"))
+			return FALSE;
+	}
+	else if (req == WR_CHECKAMMO2)
+		return FALSE;
+	return TRUE;
 };

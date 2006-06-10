@@ -1,21 +1,60 @@
-void() nex_ready_01;
-void() nex_fire1_01;
-void() nex_deselect_01;
-void() nex_select_01;
-void() nex_selfkill;
 
-float() nex_check =
+void W_Nex_Attack (void)
 {
+	//w_shotorg = self.origin + self.view_ofs + v_forward * 5 + v_right * 14 + v_up * -7;
+	W_SetupShot(self, '5 14 -7', TRUE, 5, "weapons/nexfire.ogg");
+
+	// assure that nexdamage is high enough in minstagib
 	if (cvar("g_minstagib"))
+		FireRailgunBullet (w_shotorg, w_shotorg + w_shotdir * 8192, 1000, IT_NEX);
+	else
+		FireRailgunBullet (w_shotorg, w_shotorg + w_shotdir * 8192, cvar("g_balance_nex_damage"), IT_NEX);
+
+	// show as if shot started outside of gun
+	// muzzleflash light
+	//te_smallflash (w_shotorg + w_shotdir * 24);
+	// beam effect
+	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+	WriteByte (MSG_BROADCAST, 76);
+	WriteCoord (MSG_BROADCAST, w_shotorg_x + w_shotdir_x * 18);
+	WriteCoord (MSG_BROADCAST, w_shotorg_y + w_shotdir_y * 18);
+	WriteCoord (MSG_BROADCAST, w_shotorg_z + w_shotdir_z * 18);
+	WriteCoord (MSG_BROADCAST, trace_endpos_x);
+	WriteCoord (MSG_BROADCAST, trace_endpos_y);
+	WriteCoord (MSG_BROADCAST, trace_endpos_z);
+	WriteCoord (MSG_BROADCAST, 0);
+	WriteCoord (MSG_BROADCAST, 0);
+	WriteCoord (MSG_BROADCAST, 0);
+	// flash and burn the wall
+	if (trace_ent.solid == SOLID_BSP && !(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT))
+		te_plasmaburn (trace_endpos - w_shotdir * 6);
+	// play a sound
+	PointSound (trace_endpos, "weapons/neximpact.ogg", 1, ATTN_NORM);
+
+	if (cvar("g_use_ammunition") && !cvar("g_instagib"))
 	{
-		if (self.ammo_cells >= 1)
-			return TRUE;
-	} else {
-		if (self.ammo_cells >= cvar("g_balance_nex_ammo"))
-			return TRUE;
+		if (cvar("g_minstagib"))
+			self.ammo_cells = self.ammo_cells - 1;
+		else
+			self.ammo_cells = self.ammo_cells - cvar("g_balance_nex_ammo");
 	}
-	return FALSE;
-};
+
+	/*
+	local entity flash;
+	flash = spawn ();
+	setorigin (flash, self.origin + self.view_ofs + v_forward * 33 + v_right * 14 + v_up * -7);
+	flash.angles = vectoangles (w_shotdir);
+	//setattachment(flash, self.weaponentity, "bone01");
+	//flash.origin = '150 0 0';
+	//setattachment(flash, self.weaponentity, "");
+	//flash.origin = '150 -16 -8';
+	//flash.angles_z = 90;
+	//flash.scale = 4;
+	setmodel (flash, "models/nexflash.md3");
+	SUB_SetFade (flash, time, 0.4);
+	flash.effects = flash.effects | EF_ADDITIVE | EF_FULLBRIGHT | EF_LOWPRECISION;
+	*/
+}
 
 void nex_selfkill (void)
 {
@@ -86,7 +125,12 @@ void nex_selfkill (void)
 		}
 		if (self.health == 100)
 		{
-			weapon_prepareattack(nex_check, nex_check, nex_fire1_01, 1.0);
+			// LordHavoc: why does this fire here?
+			if (weapon_prepareattack(0, 1))
+			{
+				W_Nex_Attack();
+				weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_nex_animtime"), w_ready);
+			}
 			centerprint(self, "get some ammo or\nyou'll be dead in ^310^7 seconds...");
 			Damage(self, self, self, 10, DEATH_NOAMMO, self.origin, '0 0 0');
 			stuffcmd(self, "play2 announcer/robotic/10.ogg\n");
@@ -98,114 +142,29 @@ void nex_selfkill (void)
 
 }
 
-void(float req) w_nex =
+float(float req) w_nex =
 {
-	if (req == WR_IDLE)
-		nex_ready_01();
-	else if (req == WR_AIM)
+	if (req == WR_AIM)
 		self.button0 = bot_aim(1000000, 0, 1, FALSE);
-	else if (req == WR_FIRE1)
-		weapon_prepareattack(nex_check, nex_check, nex_fire1_01, cvar("g_balance_nex_refire"));
-	else if (req == WR_RAISE)
-		nex_select_01();
-	else if (req == WR_UPDATECOUNTS)
-		self.currentammo = self.ammo_cells;
-	else if (req == WR_DROP)
-		nex_deselect_01();
+	else if (req == WR_THINK)
+	{
+		if (self.button0)
+		if (weapon_prepareattack(0, cvar("g_balance_nex_refire")))
+		{
+			W_Nex_Attack();
+			weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_nex_animtime"), w_ready);
+		}
+	}
 	else if (req == WR_SETUP)
-		weapon_setup(WEP_NEX, "w_nex.zym", IT_CELLS);
-	else if (req == WR_CHECKAMMO)
-		weapon_hasammo = nex_check();
-};
-
-
-void W_Nex_Attack (void)
-{
-	local vector org, org2;
-	local entity flash;
-
-	local vector trueaim;
-	trueaim = W_TrueAim();
-
-	sound (self, CHAN_WEAPON, "weapons/nexfire.ogg", 1, ATTN_NORM);
-	if (self.items & IT_STRENGTH && !cvar("g_minstagib"))
-		sound (self, CHAN_AUTO, "weapons/strength_fire.ogg", 1, ATTN_NORM);
-
-	self.punchangle_x = -5;
-
-	org = self.origin + self.view_ofs + v_forward * 5 + v_right * 14 + v_up * -7;
-	traceline_hitcorpse(self, org, trueaim + normalize(trueaim - org) * 8192, TRUE, self);
-	trueaim = trace_endpos;
-
-	// assure that nexdamage is high enough in minstagib
-	if (cvar("g_minstagib"))
-		FireRailgunBullet (org, trueaim, 1000, IT_NEX);
-	else
-		FireRailgunBullet (org, trueaim, cvar("g_balance_nex_damage"), IT_NEX);
-
-	// trace as if shot started inside gun
-	traceline_hitcorpse (self,org, trueaim, TRUE, self);
-	// show as if shot started outside of gun
-	org = self.origin + self.view_ofs + v_forward * 35 + v_right * 14 + v_up * -8;
-	org2 = self.origin + self.view_ofs + v_forward * 52 + v_right * 14 + v_up * -8;
-	// muzzleflash light
-	te_smallflash (org2);
-	// beam effect
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, 76);
-	WriteCoord (MSG_BROADCAST, org_x);
-	WriteCoord (MSG_BROADCAST, org_y);
-	WriteCoord (MSG_BROADCAST, org_z);
-	WriteCoord (MSG_BROADCAST, trace_endpos_x);
-	WriteCoord (MSG_BROADCAST, trace_endpos_y);
-	WriteCoord (MSG_BROADCAST, trace_endpos_z);
-	WriteCoord (MSG_BROADCAST, 0);
-	WriteCoord (MSG_BROADCAST, 0);
-	WriteCoord (MSG_BROADCAST, 0);
-	// flash and burn the wall
-	if (trace_ent.solid == SOLID_BSP && !(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT))
-		te_plasmaburn (findbetterlocation (trace_endpos, 6));
-	/*
-	// flame effect at impact
-	dir = trace_plane_normal * 100;
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_FLAMEJET);
-	WriteCoord (MSG_BROADCAST, trace_endpos_x);
-	WriteCoord (MSG_BROADCAST, trace_endpos_y);
-	WriteCoord (MSG_BROADCAST, trace_endpos_z);
-	WriteCoord (MSG_BROADCAST, dir_x);
-	WriteCoord (MSG_BROADCAST, dir_y);
-	WriteCoord (MSG_BROADCAST, dir_z);
-	WriteByte (MSG_BROADCAST, 255);
-	*/
-	// play a sound
-	PointSound (trace_endpos, "weapons/neximpact.ogg", 1, ATTN_NORM);
-
-	if (cvar("g_use_ammunition") && !cvar("g_instagib"))
+		weapon_setup(WEP_NEX, "nex", IT_CELLS);
+	else if (req == WR_CHECKAMMO1)
 	{
 		if (cvar("g_minstagib"))
-			self.ammo_cells = self.ammo_cells - 1;
+			return self.ammo_cells >= 1;
 		else
-			self.ammo_cells = self.ammo_cells - cvar("g_balance_nex_ammo");
+			return self.ammo_cells >= cvar("g_balance_nex_ammo");
 	}
-
-	flash = spawn ();
-	org = self.origin + self.view_ofs + v_forward * 33 + v_right * 14 + v_up * -7;
-	setorigin (flash, org);
-	setmodel (flash, "models/nexflash.md3");
-	flash.velocity = v_forward * 20;
-	flash.angles = vectoangles (flash.velocity);
-	SUB_SetFade (flash, time, 0.4);
-	flash.effects = flash.effects | EF_ADDITIVE | EF_FULLBRIGHT | EF_LOWPRECISION;
-}
-
-// weapon frames
-void()	nex_ready_01 =	{weapon_thinkf(WFRAME_IDLE, 0.1, nex_ready_01); self.weaponentity.state = WS_READY;};
-void()	nex_select_01 =	{weapon_thinkf(-1, cvar("g_balance_weaponswitchdelay"), w_ready); weapon_boblayer1(PLAYER_WEAPONSELECTION_SPEED, '0 0 0'); nex_selfkill();};
-void()	nex_deselect_01 =	{weapon_thinkf(-1, cvar("g_balance_weaponswitchdelay"), w_clear); weapon_boblayer1(PLAYER_WEAPONSELECTION_SPEED, PLAYER_WEAPONSELECTION_RANGE);};
-void()	nex_fire1_01 =
-{
-	weapon_doattack(nex_check, nex_check, W_Nex_Attack);
-	weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_nex_animtime"), nex_ready_01);
+	else if (req == WR_CHECKAMMO2)
+		return FALSE;
+	return TRUE;
 };
-

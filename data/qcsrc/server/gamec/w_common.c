@@ -26,87 +26,6 @@ void animate_sprite (float startframe, float frame_count)
 		self.frame = self.frame + 1;
 }
 
-void W_UpdateAmmo (void)
-{
-	/*
-	self.items = self.items - (self.items & (IT_NAILS | IT_SHELLS | IT_ROCKETS | IT_CELLS));
-
-	if (self.weapon == IT_LASER)
-		self.currentammo = 1;
-	else if (self.weapon == IT_SHOTGUN)
-	{
-		self.currentammo = self.ammo_shells;
-		self.items = self.items | IT_SHELLS;
-	}
-	else if (self.weapon == IT_UZI)
-	{
-		self.currentammo = self.ammo_nails;
-		self.items = self.items | IT_NAILS;
-	}
-	else if (self.weapon == IT_GRENADE_LAUNCHER || self.weapon == IT_HAGAR || self.weapon == IT_ROCKET_LAUNCHER)
-	{
-		self.currentammo = self.ammo_rockets;
-		self.items = self.items | IT_ROCKETS;
-	}
-	else if (self.weapon == IT_ELECTRO || self.weapon == IT_NEX || self.weapon == IT_CRYLINK)
-	{
-		self.currentammo = self.ammo_cells;
-		self.items = self.items | IT_CELLS;
-	}
-	*/
-}
-
-void W_UpdateWeapon (void)
-{
-	/*
-	if (self.weapon == IT_LASER)
-		self.weaponmodel = "models/weapons/w_laser.zym";
-	else if (self.weapon == IT_SHOTGUN)
-		self.weaponmodel = "models/weapons/w_shotgun.zym";
-	else if (self.weapon == IT_UZI)
-		self.weaponmodel = "models/weapons/w_uzi.zym";
-	else if (self.weapon == IT_GRENADE_LAUNCHER)
-		self.weaponmodel = "models/weapons/w_gl.zym";
-	else if (self.weapon == IT_ELECTRO)
-		self.weaponmodel = "models/weapons/w_electro.zym";
-	else if (self.weapon == IT_CRYLINK)
-		self.weaponmodel = "models/weapons/w_crylink.zym";
-	else if (self.weapon == IT_NEX)
-		self.weaponmodel = "models/weapons/w_nex.zym";
-	else if (self.weapon == IT_HAGAR)
-		self.weaponmodel = "models/weapons/w_hagar.zym";
-	else if (self.weapon == IT_ROCKET_LAUNCHER)
-		self.weaponmodel = "models/weapons/w_rl.zym";
-	else
-		objerror ("Illegal weapon - please register your guns please!");
-	*/
-}
-
-float W_GetBestWeapon (entity e)
-{
-	/*
-	if ((e.items & IT_ROCKET_LAUNCHER) && e.ammo_rockets)
-		return IT_ROCKET_LAUNCHER;
-	else if ((e.items & IT_NEX) && e.ammo_cells)
-		return IT_NEX;
-	else if ((e.items & IT_HAGAR) && e.ammo_rockets)
-		return IT_HAGAR;
-	else if ((e.items & IT_GRENADE_LAUNCHER) && e.ammo_rockets)
-		return IT_GRENADE_LAUNCHER;
-	else if ((e.items & IT_ELECTRO) && e.ammo_cells)
-		return IT_ELECTRO;
-	else if ((e.items & IT_CRYLINK) && e.ammo_cells)
-		return IT_CRYLINK;
-	else if ((e.items & IT_UZI) && e.ammo_nails)
-		return IT_UZI;
-	else if ((e.items & IT_SHOTGUN) && e.ammo_shells)
-		return IT_SHOTGUN;
-	else
-
-		*/
-	return IT_LASER;
-}
-
 void W_GiveWeapon (entity e, float wep, string name)
 {
 	entity oldself;
@@ -119,8 +38,6 @@ void W_GiveWeapon (entity e, float wep, string name)
 	oldself = self;
 	self = e;
 
-	weapon_action(self.weapon, WR_UPDATECOUNTS);
-
 	if (other.classname == "player")
 	{
 		sprint (other, "You got the ^2");
@@ -129,288 +46,33 @@ void W_GiveWeapon (entity e, float wep, string name)
 	}
 
 
-/*
-	W_UpdateWeapon ();
-	W_UpdateAmmo ();
-*/
 	self = oldself;
 }
-/*
-void W_SwitchWeapon (float wep)
-{
-	float		nextwep;
-	var float	noammo = FALSE;
 
-	if (wep == 1)
-		nextwep = IT_LASER;
-	else if (wep == 2)
-	{
-		nextwep = IT_SHOTGUN;
-		if (!self.ammo_shells)
-			noammo = TRUE;
-	}
-	else if (wep == 3)
-	{
-		nextwep = IT_UZI;
-		if (!self.ammo_nails)
-			noammo = TRUE;
-	}
-	else if (wep == 4)
-	{
-		nextwep = IT_CRYLINK;
-		if (!self.ammo_cells)
-			noammo = TRUE;
-	}
-	else if (wep == 5)
-	{
-		nextwep = IT_ELECTRO;
-		if (!self.ammo_cells)
-			noammo = TRUE;
-	}
-	else if (wep == 6)
-	{
-		nextwep = IT_GRENADE_LAUNCHER;
-		if (!self.ammo_rockets)
-			noammo = TRUE;
-	}
-	else if (wep == 7)
-	{
-		nextwep = IT_HAGAR;
-		if (!self.ammo_rockets)
-			noammo = TRUE;
-	}
-	else if (wep == 8)
-	{
-		nextwep = IT_NEX;
-		if (!self.ammo_cells)
-			noammo = TRUE;
-	}
-	else if (wep == 9)
-	{
-		nextwep = IT_ROCKET_LAUNCHER;
-		if (!self.ammo_rockets)
-			noammo = TRUE;
-	}
-
-
-	if (!(self.items & nextwep))
-	{
-		sprint (self, "You don't own that weapon\n");
-		return;
-	}
-	else if (noammo)
-	{
-		sprint (self, "You don't have any ammo for that weapon\n");
-		return;
-	}
-
-	self.weapon = nextwep;
-	W_UpdateWeapon ();
-	W_UpdateAmmo ();
-	self.attack_finished = time + 0.2;
-	if (self.viewzoom != 1)
-		self.viewzoom = 1;
-}
-
-void W_NextWeapon (void)
-{
-	float	noammo;
-
-	while (TRUE)
-	{
-		noammo = FALSE;
-
-		if (self.weapon == IT_ROCKET_LAUNCHER)
-			self.weapon = IT_LASER;
-		else if (self.weapon == IT_LASER)
-		{
-			self.weapon = IT_SHOTGUN;
-			if (!self.ammo_shells)
-				noammo = TRUE;
-		}
-		else if (self.weapon == IT_SHOTGUN)
-		{
-			self.weapon = IT_UZI;
-			if (!self.ammo_nails)
-				noammo = TRUE;
-		}
-		else if (self.weapon == IT_UZI)
-		{
-			self.weapon = IT_CRYLINK;
-			if (!self.ammo_cells)
-			noammo = TRUE;
-		}
-		else if (self.weapon == IT_CRYLINK)
-		{
-			self.weapon = IT_ELECTRO;
-			if (!self.ammo_cells)
-				noammo = TRUE;
-		}
-		else if (self.weapon == IT_ELECTRO)
-		{
-			self.weapon = IT_GRENADE_LAUNCHER;
-			if (!self.ammo_cells)
-				noammo = TRUE;
-		}
-		else if (self.weapon == IT_GRENADE_LAUNCHER)
-		{
-			self.weapon = IT_HAGAR;
-			if (!self.ammo_rockets)
-				noammo = TRUE;
-		}
-		else if (self.weapon == IT_HAGAR)
-		{
-			self.weapon = IT_NEX;
-			if (!self.ammo_rockets)
-			noammo = TRUE;
-		}
-		else if (self.weapon == IT_NEX)
-		{
-			self.weapon = IT_ROCKET_LAUNCHER;
-			if (!self.ammo_cells)
-			noammo = TRUE;
-		}
-
-		if ((self.items & self.weapon) && !noammo)
-		{
-			W_UpdateWeapon ();
-			W_UpdateAmmo ();
-			return;
-		}
-	}
-}
-
-void W_PreviousWeapon (void)
-{
-	float	noammo;
-
-	while (TRUE)
-	{
-		noammo = FALSE;
-
-		if (self.weapon == IT_SHOTGUN)
-			self.weapon = IT_LASER;
-		else if (self.weapon == IT_UZI)
-		{
-			self.weapon = IT_SHOTGUN;
-			if (!self.ammo_shells)
-				noammo = TRUE;
-		}
-		else if (self.weapon == IT_CRYLINK)
-		{
-			self.weapon = IT_UZI;
-			if (!self.ammo_nails)
-				noammo = TRUE;
-		}
-		else if (self.weapon == IT_ELECTRO)
-		{
-			self.weapon = IT_CRYLINK;
-			if (!self.ammo_cells)
-				noammo = TRUE;
-		}
-		else if (self.weapon == IT_GRENADE_LAUNCHER)
-		{
-			self.weapon = IT_ELECTRO;
-			if (!self.ammo_cells)
-				noammo = TRUE;
-		}
-		else if (self.weapon == IT_HAGAR)
-		{
-			self.weapon = IT_GRENADE_LAUNCHER;
-			if (!self.ammo_rockets)
-				noammo = TRUE;
-		}
-		else if (self.weapon == IT_NEX)
-		{
-			self.weapon = IT_HAGAR;
-			if (!self.ammo_rockets)
-				noammo = TRUE;
-		}
-		else if (self.weapon == IT_ROCKET_LAUNCHER)
-		{
-			self.weapon = IT_NEX;
-			if (!self.ammo_cells)
-				noammo = TRUE;
-		}
-		else if (self.weapon == IT_LASER)
-		{
-			self.weapon = IT_ROCKET_LAUNCHER;
-			if (!self.ammo_rockets)
-				noammo = TRUE;
-		}
-
-		if ((self.items & self.weapon) && !noammo)
-		{
-			W_UpdateWeapon ();
-			W_UpdateAmmo ();
-			return;
-		}
-	}
-}
-*/
 float W_CheckAmmo (void)
 {
 	if (!cvar("g_use_ammunition"))
 		return TRUE;
 
-	W_UpdateAmmo ();
 	if (self.weapon == IT_LASER)
 		return TRUE;
 	else if (self.currentammo)
 		return TRUE;
 
-	self.weapon = W_GetBestWeapon (self);
-	W_UpdateWeapon ();
-
 	return FALSE;
 }
 
-/*
-void FireRailgunBullet (vector src, float bdamage, vector dir, float spread, float deathtype)
-{
-	vector	v, lastpos;
-	entity	saveself, last;
-	vector	org;
-	org = self.origin + self.view_ofs;
-	if (bdamage < 1)
-		return;
-
-	last = self;
-	lastpos = src;
-
-	while (bdamage > 0)
-	{
-		traceline_hitcorpse (self, org, org + v_forward * 4096 + v_right * crandom () * spread + v_up * crandom () * spread, FALSE, self);
-		last = trace_ent;
-		lastpos = trace_endpos;
-		if (trace_fraction != 1.0)
-		{
-			if (pointcontents(trace_endpos - dir*4) == CONTENT_SKY)
-				return;
-
-			if (trace_ent.takedamage || trace_ent.classname == "case")
-			{
-				if (trace_ent.classname == "player" || trace_ent.classname == "corpse" || trace_ent.classname == "gib")
-					te_blood (trace_endpos, dir * bdamage * 16, bdamage);
-				Damage (trace_ent, self, self, bdamage, deathtype, trace_endpos, dir * bdamage);
-			}
-		}
-		if (last.solid == SOLID_BSP)
-			bdamage = 0;
-	}
-}
-*/
-
 void FireRailgunBullet (vector start, vector end, float bdamage, float deathtype)
 {
-	local vector hitloc, force;
+	local vector hitloc, force, endpoint, dir;
 	local entity ent;
 	//local entity explosion;
 
-	force = normalize(end - start) * 800; //(bdamage * 10);
+	dir = normalize(end - start);
+	force = dir * 800; //(bdamage * 10);
 
 	// go a little bit into the wall because we need to hit this wall later
-	end = end + normalize(end - start);
+	end = end + dir;
 
 	// trace multiple times until we hit a wall, each obstacle will be made
 	// non-solid so we can hit the next, while doing this we spawn effects and
@@ -418,6 +80,10 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float deathtype
 	while (1)
 	{
 		traceline_hitcorpse (self, start, end, FALSE, self);
+
+		//if (trace_ent.solid == SOLID_BSP && !(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT))
+		if (!(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT))
+			te_plasmaburn (trace_endpos - dir * 6);
 
 		// if it is world we can't hurt it so stop now
 		if (trace_ent == world || trace_fraction == 1)
@@ -435,6 +101,8 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float deathtype
 		// make the entity non-solid
 		trace_ent.solid = SOLID_NOT;
 	}
+
+	endpoint = trace_endpos;
 
 	// find all the entities the railgun hit and restore their solid state
 	ent = findfloat(world, railgunhit, TRUE);
@@ -472,6 +140,8 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float deathtype
 
 	// we're done with the explosion entity, remove it
 	//remove(explosion);
+
+	trace_endpos = endpoint;
 }
 
 void fireBullet (vector start, vector dir, float spread, float damage, float dtype, float tracer)
@@ -524,126 +194,3 @@ void fireBullet (vector start, vector dir, float spread, float damage, float dty
 		Damage (trace_ent, self, self, damage, dtype, trace_endpos, dir * damage * 5);
 	}
 }
-
-/*
-void W_Attack (void)
-{
-	if (self.deadflag != DEAD_NO)
-	{
-		if (self.death_time < time)
-			PutClientInServer();
-
-		return;
-	}
-
-	if (!W_CheckAmmo ())
-		return;
-
-	makevectors (self.v_angle);
-	//if (self.weapon == IT_LASER)
-	//	W_Laser_Attack ();
-	//if (self.weapon == IT_SHOTGUN)
-		//W_Shotgun_Attack ();
-	//else if (self.weapon == IT_UZI)
-		//W_Uzi_Attack ();
-	if (self.weapon == IT_CRYLINK)
-		W_Crylink_Attack ();
-	else if (self.weapon == IT_ELECTRO)
-		{
-		W_Electro_Attack (self.electrocount);
-		self.electrocount = self.electrocount + 1;
-		if (self.electrocount == 3)
-			self.electrocount = 0;
-		}
-	else if (self.weapon == IT_GRENADE_LAUNCHER)
-		W_Grenade_Attack ();
-	else if (self.weapon == IT_HAGAR)
-		W_Hagar_Attack ();
-	else if (self.weapon == IT_NEX)
-		W_Nex_Attack ();
-	//else if (self.weapon == IT_ROCKET_LAUNCHER)
-	//	W_Rocket_Attack ();
-
-	W_UpdateAmmo ();
-}
-
-void W_SecondaryAttack (void)
-{
-	if (self.deadflag != DEAD_NO)
-	{
-		if (self.death_time < time)
-			PutClientInServer();
-
-		return;
-	}
-
-	if (!W_CheckAmmo ())
-		return;
-
-	makevectors (self.v_angle);
-	//if (self.weapon == IT_LASER)
-		//W_Laser_Attack2 ();
-	//if (self.weapon == IT_SHOTGUN)
-		//W_Shotgun_Attack2 ();
-	//else if (self.weapon == IT_UZI)
-		//W_Uzi_Attack2 ();
-	else if (self.weapon == IT_CRYLINK)
-		W_Crylink_Attack2 ();
-	else if (self.weapon == IT_ELECTRO) {
-		W_Electro_Attack2 (self.electrocount);
-		self.electrocount = self.electrocount + 1;
-		if (self.electrocount == 3)
-			self.electrocount = 0;
-		}
-	else if (self.weapon == IT_GRENADE_LAUNCHER)
-		W_Grenade_Attack2 ();
-	else if (self.weapon == IT_HAGAR)
-		W_Hagar_Attack2 ();
-	else if (self.weapon == IT_NEX)
-		W_Nex_Attack2 ();
-	//else if (self.weapon == IT_ROCKET_LAUNCHER)
-		//W_Rocket_Attack2 ();
-
-	W_UpdateAmmo ();
-}
-
-void W_ThirdAttack (void)
-{
-	if (self.deadflag != DEAD_NO)
-	{
-		if (self.death_time < time)
-			PutClientInServer();
-
-		return;
-	}
-
-	if (!W_CheckAmmo ())
-		return;
-
-	makevectors (self.v_angle);
-	//if (self.weapon == IT_LASER)
-		//W_Laser_Attack2 ();
-	//if (self.weapon == IT_SHOTGUN)
-		//W_Shotgun_Attack2 ();
-	//else if (self.weapon == IT_UZI)
-		//W_Uzi_Attack3 ();
-	else if (self.weapon == IT_CRYLINK)
-		W_Crylink_Attack2 ();
-	else if (self.weapon == IT_ELECTRO) {
-		W_Electro_Attack3 (self.electrocount);
-		self.electrocount = self.electrocount + 1;
-		if (self.electrocount == 3)
-			self.electrocount = 0;
-		}
-	else if (self.weapon == IT_GRENADE_LAUNCHER)
-		W_Grenade_Attack3 ();
-	else if (self.weapon == IT_HAGAR)
-		W_Hagar_Attack3 ();
-	else if (self.weapon == IT_NEX)
-		W_Nex_Attack2 ();
-	//else if (self.weapon == IT_ROCKET_LAUNCHER)
-		//W_Rocket_Attack3 ();
-
-	W_UpdateAmmo ();
-}
-*/

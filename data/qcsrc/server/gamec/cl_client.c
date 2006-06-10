@@ -249,7 +249,7 @@ void setmodel_lod(entity e, string modelname)
 	precache_model(modelname);
 	setmodel(e, modelname);
 	self.modelindex_lod0 = self.modelindex;
-	
+
 	if(self.modelindex_lod1 < 0)
 		self.modelindex_lod1 = self.modelindex;
 
@@ -333,7 +333,6 @@ void PutObserverInServer (void)
 	self.modelindex = 0;
 	self.weapon = 0;
 	self.weaponmodel = "";
-	self.weaponframe = 0;
 	self.weaponentity = world;
 	self.killcount = -666;
 	self.velocity = '0 0 0';
@@ -585,10 +584,6 @@ void PutClientInServer (void)
 		self.cnt = WEP_LASER;
 		self.nixnex_lastchange_id = -1;
 
-		/*
-		W_UpdateWeapon();
-		W_UpdateAmmo();
-		*/
 		CL_SpawnWeaponentity();
 		self.alpha = default_player_alpha;
 		self.exteriorweaponentity.alpha = default_player_alpha;
@@ -1177,7 +1172,7 @@ void player_regen (void)
 				self.armorvalue = bound(0, self.armorvalue + (maxa - self.armorvalue) * cvar("g_balance_armor_regen") * frametime + 0.001, 1000);
 		}
 	}
-	
+
 	if (self.health > limith)
 		self.health = limith;
 	if(self.health < 1)
@@ -1280,7 +1275,6 @@ void PlayerPreThink (void)
 		if (self.deadflag != DEAD_NO)
 		{
 			player_anim();
-			weapon_freeze();
 			if (self.deadflag == DEAD_DYING)
 			{
 				if (time > self.dead_time)
@@ -1402,7 +1396,7 @@ void PlayerPreThink (void)
 				if (self.jump_interval <= (time + 0.1))
 				{
 					self.jump_interval = time + 1;
-					weapon_doattack(laser_check, laser_check, W_Laser_Attack);
+					W_Laser_Attack();
 				}
 			}
 			else if (self.viewzoom > 0.4)
