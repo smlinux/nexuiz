@@ -11,7 +11,7 @@ void W_Uzi_Attack (void)
 		else
 			self.ammo_nails = self.ammo_nails - cvar("g_balance_uzi_sustained_ammo");
 	}
-	W_SetupShot (self, '32 6 -8', TRUE, 0, "weapons/uzi_fire.ogg");
+	W_SetupShot (self, '15 8 -8', TRUE, 0, "weapons/uzi_fire.ogg");
 	if (!cvar("g_norecoil"))
 	{
 		self.punchangle_x = random () - 0.5;
@@ -27,7 +27,7 @@ void W_Uzi_Attack (void)
 		fireBullet (w_shotorg, w_shotdir, cvar("g_balance_uzi_sustained_spread"), cvar("g_balance_uzi_sustained_damage"), IT_UZI, (self.uzi_bulletcounter & 3) == 0);
 
 	flash = spawn ();
-	setorigin (flash, w_shotorg);
+	setorigin (flash, w_shotorg + v_forward * 17);
 	setmodel (flash, "models/uziflash.md3");
 	flash.angles = vectoangles (w_shotdir);
 	flash.angles_z=flash.v_angle_z + random () * 180;
@@ -38,7 +38,7 @@ void W_Uzi_Attack (void)
 
 	// casing code
 	if (cvar("g_casings") >= 2)
-		SpawnCasing (w_shotorg + v_forward * -17, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 - 70) * v_up), 2, vectoangles(v_forward),'0 250 0', 100, 3);
+		SpawnCasing (w_shotorg + v_forward * 10, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 - 70) * v_up), 2, vectoangles(v_forward),'0 250 0', 100, 3);
 }
 
 // weapon frames

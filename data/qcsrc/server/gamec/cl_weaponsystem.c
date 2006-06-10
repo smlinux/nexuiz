@@ -23,8 +23,6 @@ vector w_shotdir;
 void(entity ent, vector vecs, float antilag, float recoil, string snd) W_SetupShot =
 {
 	local vector trueaimpoint;
-	local vector startorg;
-	local vector idealorg;
 
 	traceline_hitcorpse(self, self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * 8192, MOVE_NOMONSTERS, self);
 	trueaimpoint = trace_endpos;
@@ -38,12 +36,17 @@ void(entity ent, vector vecs, float antilag, float recoil, string snd) W_SetupSh
 	if (cvar("g_antilag"))
 		trueaimpoint = self.cursor_trace_ent.origin;
 
+	/*
+	// don't allow the shot to start inside a wall
+	local vector startorg;
+	local vector idealorg;
 	startorg = ent.origin + ent.view_ofs;// - '0 0 8';
 	idealorg = ent.origin + ent.view_ofs + v_forward * vecs_x + v_right * vecs_y + v_up * vecs_z;
-
-	// don't allow the shot to start inside a wall
 	traceline_hitcorpse (ent, startorg, idealorg, MOVE_NOMONSTERS, ent);
 	w_shotorg = trace_endpos;
+	*/
+	// all positions in the code are now required to be inside the player box
+	w_shotorg = ent.origin + ent.view_ofs + v_forward * vecs_x + v_right * vecs_y + v_up * vecs_z;
 
 	w_shotdir = normalize(trueaimpoint - w_shotorg);
 

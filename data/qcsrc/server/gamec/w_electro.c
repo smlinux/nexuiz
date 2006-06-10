@@ -86,21 +86,7 @@ void() W_Electro_Attack
 {
 	local entity proj;
 
-	if (self.electrocount == 0)
-	{
-		self.electrocount = 1;
-		W_SetupShot (self, '24 5.5 -11', FALSE, 2, "weapons/electro_fire.ogg");
-	}
-	else if (self.electrocount == 1)
-	{
-		self.electrocount = 2;
-		W_SetupShot (self, '24 8 -8.1', FALSE, 2, "weapons/electro_fire.ogg");
-	}
-	else
-	{
-		self.electrocount = 0;
-		W_SetupShot (self, '24 10.5 -11', FALSE, 2, "weapons/electro_fire.ogg");
-	}
+	W_SetupShot (self, '15 8 -8', FALSE, 2, "weapons/electro_fire.ogg");
 
 	proj = spawn ();
 	proj.classname = "plasma_prim";
@@ -114,7 +100,7 @@ void() W_Electro_Attack
 
 	if (cvar("g_use_ammunition"))
 		self.ammo_cells = self.ammo_cells - cvar("g_balance_electro_primary_ammo");
-	proj.effects = EF_BRIGHTFIELD | EF_FULLBRIGHT | EF_NOSHADOW;
+	proj.effects = EF_BRIGHTFIELD | EF_FULLBRIGHT | EF_NOSHADOW | EF_LOWPRECISION;
 	proj.movetype = MOVETYPE_FLY;
 	proj.velocity = w_shotdir * cvar("g_balance_electro_primary_speed");
 	proj.angles = vectoangles(proj.velocity);
@@ -130,21 +116,7 @@ void() W_Electro_Attack2
 {
 	local entity proj;
 
-	if (self.electrocount == 0)
-	{
-		self.electrocount = 1;
-		W_SetupShot (self, '24 6 -12', FALSE, 2, "weapons/electro_fire2.ogg");
-	}
-	else if (self.electrocount == 1)
-	{
-		self.electrocount = 2;
-		W_SetupShot (self, '24 8 -10', FALSE, 2, "weapons/electro_fire2.ogg");
-	}
-	else
-	{
-		self.electrocount = 0;
-		W_SetupShot (self, '24 10 -12', FALSE, 2, "weapons/electro_fire2.ogg");
-	}
+	W_SetupShot (self, '15 8 -8', FALSE, 2, "weapons/electro_fire.ogg");
 
 	proj = spawn ();
 	proj.classname = "plasma";
@@ -158,9 +130,9 @@ void() W_Electro_Attack2
 
 	if (cvar("g_use_ammunition"))
 		self.ammo_cells = self.ammo_cells - cvar("g_balance_electro_secondary_ammo");
-	proj.effects = EF_ADDITIVE | EF_NOSHADOW;
-	proj.glow_size = 50;
-	proj.glow_color = 45;
+	proj.effects = EF_FULLBRIGHT | EF_NOSHADOW | EF_LOWPRECISION;
+	//proj.glow_size = 50;
+	//proj.glow_color = 45;
 	proj.movetype = MOVETYPE_BOUNCE;
 	proj.velocity = v_forward * cvar("g_balance_electro_secondary_speed") + v_up * cvar("g_balance_electro_secondary_speed_up");
 	proj.touch = W_Plasma_Touch;

@@ -183,7 +183,7 @@ void W_Rocket_Attack (void)
 	if (cvar("g_use_ammunition") && !cvar("g_rocketarena"))
 		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_rocketlauncher_ammo");
 
-	W_SetupShot (self, '15 3 -11', FALSE, 5, "weapons/rocket_fire.ogg");
+	W_SetupShot (self, '15 3 -8', FALSE, 5, "weapons/rocket_fire.ogg");
 	te_smallflash(w_shotorg);
 
 	missile = spawn ();

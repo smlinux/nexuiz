@@ -75,7 +75,7 @@ void W_Crylink_Attack (void)
 	if (cvar("g_use_ammunition"))
 		self.ammo_cells = self.ammo_cells - cvar("g_balance_crylink_primary_ammo");
 
-	W_SetupShot (self, '24 7 -8', FALSE, 2, "weapons/crylink_fire.ogg");
+	W_SetupShot (self, '15 8 -8', FALSE, 2, "weapons/crylink_fire.ogg");
 	te_smallflash(w_shotorg);
 
 	shots = cvar("g_balance_crylink_primary_shots");
@@ -119,7 +119,7 @@ void W_Crylink_Attack2 (void)
 	if (cvar("g_use_ammunition"))
 		self.ammo_cells = self.ammo_cells - cvar("g_balance_crylink_secondary_ammo");
 
-	W_SetupShot (self, '20 7 -8', FALSE, 2, "weapons/crylink_fire.ogg");
+	W_SetupShot (self, '15 8 -8', FALSE, 2, "weapons/crylink_fire.ogg");
 	te_smallflash(w_shotorg);
 
 	shots = cvar("g_balance_crylink_secondary_shots");
@@ -162,7 +162,8 @@ void W_Crylink_Attack3 (void)
 {
 	if (cvar("g_use_ammunition"))
 		self.ammo_cells = self.ammo_cells - cvar("g_balance_crylink_primary_ammo");
-	W_SetupShot(self, '10 5 -14', TRUE, 0, "weapons/crylink_fire.ogg");
+	//W_SetupShot(self, '10 5 -14', TRUE, 0, "weapons/crylink_fire.ogg");
+	W_SetupShot (self, '15 7 -8', TRUE, 0, "weapons/crylink_fire.ogg");
 
 	// use traceline_hitcorpse to make sure it can hit gibs and corpses too
 	traceline_hitcorpse(self, w_shotorg, w_shotorg + w_shotdir * 1000, FALSE, self);

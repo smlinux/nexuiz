@@ -75,9 +75,6 @@ string newlines = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 .float	respawntime;
 //.float	chasecam;
 
-.float electrocount;
-//.float crylinkcount;
-
 .float	damageforcescale;
 
 //.float          gravity;

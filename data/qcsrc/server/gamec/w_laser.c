@@ -30,7 +30,7 @@ void W_Laser_Attack (void)
 {
 	local entity missile;
 
-	W_SetupShot (self, '24 9 -9', FALSE, 3, "weapons/lasergun_fire.ogg");
+	W_SetupShot (self, '15 8 -8', FALSE, 3, "weapons/lasergun_fire.ogg");
 	//te_customflash(w_shotorg, 160, 0.2, '1 0 0');
 
 	missile = spawn ();

@@ -75,7 +75,7 @@ void W_Grenade_Attack (void)
 
 	if (cvar("g_use_ammunition"))
 		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_grenadelauncher_primary_ammo");
-	W_SetupShot (self, '24 8 -10', FALSE, 4, "weapons/grenade_fire.ogg");
+	W_SetupShot (self, '15 8 -8', FALSE, 4, "weapons/grenade_fire.ogg");
 
 	gren = spawn ();
 	gren.owner = self;
@@ -84,7 +84,7 @@ void W_Grenade_Attack (void)
 	gren.bot_dodgerating = cvar("g_balance_grenadelauncher_primary_damage");
 	gren.movetype = MOVETYPE_BOUNCE;
 	gren.solid = SOLID_BBOX;
-	gren.effects = EF_NOSHADOW;
+	gren.effects = EF_NOSHADOW | EF_LOWPRECISION;
 	setmodel(gren, "models/grenademodel.md3");
 	setsize(gren, '0 0 0', '0 0 0');
 	setorigin(gren, w_shotorg);
@@ -105,7 +105,7 @@ void W_Grenade_Attack2 (void)
 
 	if (cvar("g_use_ammunition"))
 		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_grenadelauncher_secondary_ammo");
-	W_SetupShot (self, '24 8 -10', FALSE, 4, "weapons/grenade_fire.ogg");
+	W_SetupShot (self, '15 8 -8', FALSE, 4, "weapons/grenade_fire.ogg");
 
 	gren = spawn ();
 	gren.owner = self;
@@ -114,7 +114,7 @@ void W_Grenade_Attack2 (void)
 	gren.bot_dodgerating = cvar("g_balance_grenadelauncher_secondary_damage");
 	gren.movetype = MOVETYPE_BOUNCE;
 	gren.solid = SOLID_BBOX;
-	gren.effects = EF_NOSHADOW;
+	gren.effects = EF_NOSHADOW | EF_LOWPRECISION;
 	setmodel(gren, "models/grenademodel.md3");
 	setsize(gren, '0 0 -3', '0 0 -3');
 	setorigin(gren, w_shotorg);
