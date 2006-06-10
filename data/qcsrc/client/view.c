@@ -3,9 +3,6 @@ vector angle_alive;
 
 void View_Update (void)
 {
-	float f;
-	string s;
-
 	vieworg = pmove_org;
 	angle_alive = input_angles;
 	makevectors(input_angles);
@@ -29,17 +26,4 @@ void View_Update (void)
 
 	R_SetView(VF_ORIGIN, vieworg);
 	R_SetView(VF_ANGLES, input_angles);
-
-	if(!cvar("cg_showvelocity"))
-		return;
-
-	f = pl_xyspeed;
-	if(max_ups < f)
-		max_ups = f;
-	s = ftos(f);
-	s = strcat(s, " ups");
-	drawstring('1 0 0'*vid_width + '-64 64 0', s, '8 8 0', VEC_1, 1, 0);
-	s = ftos(max_ups);
-	s = strcat(s, " max");
-	drawstring('1 0 0'*vid_width + '-64 72 0', s, '8 8 0', VEC_1, 1, 0);
 }

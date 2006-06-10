@@ -6,7 +6,9 @@ void RegisterCvar (string name, string defvalue, float save)
 
 float DotProduct (vector x, vector y)
 {
-	return (x_x*y_x + x_y*y_y + x_z*y_z);
+	// LordHavoc: why does this function exist?  vec*vec in QC is dotproduct
+	return x*y;
+	//return (x_x*y_x + x_y*y_y + x_z*y_z);
 }
 
 // dummy function to shut up compiler warnings

@@ -27,7 +27,7 @@ void CSQC_Ent_Update (float isnew)
 void CSQC_Ent_Remove ()
 {
 	remove(self);
-}; 
+};
 
 
 void CSQC_Init (void)
@@ -61,9 +61,24 @@ void CSQC_UpdateView (void)
 		R_SetView(VF_DRAWCROSSHAIR, 1);
 		R_SetView(VF_DRAWENGINESBAR, 1);
 	}
-	
+
 	R_AddEntities(MASK_NORMAL | MASK_ENGINE | MASK_ENGINEVIEWMODELS);
 	R_RenderScene();
+
+	if(cvar("cg_showvelocity"))
+	{
+		local float f;
+		local string s;
+		f = pl_xyspeed;
+		if(max_ups < f)
+			max_ups = f;
+		s = ftos(f);
+		s = strcat(s, " ups");
+		drawstring('1 0 0'*vid_width + '-64 64 0', s, '8 8 0', VEC_1, 1, 0);
+		s = ftos(max_ups);
+		s = strcat(s, " max");
+		drawstring('1 0 0'*vid_width + '-64 72 0', s, '8 8 0', VEC_1, 1, 0);
+	}
 }
 
 float CSQC_InputEvent (float event, float parama)
