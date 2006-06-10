@@ -170,6 +170,7 @@ textures/kaznexctf2/grate3
 	surfaceparm alphashadow
 	cull none
 	nopicmip
+	nomipmaps
 	{
 		map textures/kaznexctf2/grate3.tga
 		//depthWrite
