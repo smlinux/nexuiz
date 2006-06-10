@@ -364,14 +364,14 @@ textures/evil4_lights/s_light
 	q3map_surfacelight 1500
 	{
 		map textures/evil4_lights/s_light.jpg
-		blendFunc GL_DST_COLOR GL_ZERO
+		//blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
-	{
+/*	{
 		map textures/evil4_lights/s_light_blend.jpg
 		rgbGen wave sin 0.5 0.5 1 1
 		blendFunc GL_ONE GL_ONE
-	}
+	}*/
 	{
 		map $lightmap
 		rgbGen identity
