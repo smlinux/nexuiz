@@ -791,6 +791,7 @@ void SV_ChangeTeam(float _color)
 		dteam = 4;
 
 	// remap invalid teams in dom & ctf
+	/*
 	if(cvar("g_ctf") && dteam == 3)
 		dteam = 2;
 	else if(cvar("g_ctf") && dteam == 4)
@@ -807,6 +808,13 @@ void SV_ChangeTeam(float _color)
 		if(dteam == 4)
 			dteam = 1;
 	}
+	*/
+	CheckAllowedTeams();
+	if(dteam == 3 && c3 < 0)
+		dteam = 2;
+	if(dteam == 4 && c4 < 0)
+		dteam = 1;
+		
 
 	// not changing teams
 	if(scolor == dcolor)
