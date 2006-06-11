@@ -88,6 +88,7 @@ string linewrap(string s, float l)
 {
 	string t;
 
+/*
 	t = "";
 	while(l < strlen(s))
 	{
@@ -95,6 +96,13 @@ string linewrap(string s, float l)
 		s = substring(s, l+1, strlen(s));
 	}
 	return strcat(t, s);
+*/
+	// this function seems broken (character wrap, no word wrap)
+	// use WORD wrap instead... importing it from campaign code
+	s = strzone(s);
+	t = Campaign_wordwrap(s, l);
+	strunzone(s);
+	return t;
 }
 
 vector find_floor(vector org)
