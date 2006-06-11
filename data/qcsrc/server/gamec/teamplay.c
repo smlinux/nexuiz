@@ -341,6 +341,8 @@ void PrintWelcomeMessage(entity pl)
 		mutator = "^2Instagib ^1";
 	else if(cvar("g_rocketarena"))
 		mutator = "^2Rocketarena ^1";
+	else if(cvar("g_nixnex"))
+		mutator = "^2No Items Nexuiz ^1";
 
 	if(cvar("g_midair")) {
 		// to protect against unheedingly made changes
