@@ -8,7 +8,7 @@ float CampaignFile_Load(float offset, float n)
 	float lineno;
 	float entlen;
 	float i;
-	string l;
+	string l, a;
 
 	if(n > CAMPAIGN_MAX_ENTRIES)
 		n = CAMPAIGN_MAX_ENTRIES;
@@ -25,21 +25,31 @@ float CampaignFile_Load(float offset, float n)
 				continue; // empty line
 			if(substring(l, 0, 2) == "//")
 				continue; // comment
+			if(substring(l, 0, 3) == "\"//")
+				continue; // comment
 			if(lineno >= offset)
 			{
 				entlen = tokenize(l);
-				if(entlen != 8)
-					error("syntax error in campaign file");
+
+#define CAMPAIGN_GETARG0                  if(i >= entlen)
+#define CAMPAIGN_GETARG1 CAMPAIGN_GETARG0     error("syntax error in campaign file: line has not enough fields");
+#define CAMPAIGN_GETARG2 CAMPAIGN_GETARG1 a = argv(i++);
+#define CAMPAIGN_GETARG3 CAMPAIGN_GETARG2 if(a == ",")
+#define CAMPAIGN_GETARG4 CAMPAIGN_GETARG3     a = "";
+#define CAMPAIGN_GETARG5 CAMPAIGN_GETARG4 else
+#define CAMPAIGN_GETARG  CAMPAIGN_GETARG5     ++i
+// What you're seeing here is what people will do when your compiler supports
+// C-style macros but no line continuations.
 
 				i = 0;
-				campaign_gametype[campaign_entries] = strzone(argv(i++));
-				campaign_mapname[campaign_entries] = strzone(argv(i++));
-				campaign_bots[campaign_entries] = stof(argv(i++));
-				campaign_botskill[campaign_entries] = stof(argv(i++));
-				campaign_fraglimit[campaign_entries] = stof(argv(i++));
-				campaign_mutators[campaign_entries] = strzone(argv(i++));
-				campaign_shortdesc[campaign_entries] = strzone(argv(i++));
-				campaign_longdesc[campaign_entries] = strzone(argv(i++));
+				CAMPAIGN_GETARG; campaign_gametype[campaign_entries] = strzone(a);
+				CAMPAIGN_GETARG; campaign_mapname[campaign_entries] = strzone(a);
+				CAMPAIGN_GETARG; campaign_bots[campaign_entries] = stof(a);
+				CAMPAIGN_GETARG; campaign_botskill[campaign_entries] = stof(a);
+				CAMPAIGN_GETARG; campaign_fraglimit[campaign_entries] = stof(a);
+				CAMPAIGN_GETARG; campaign_mutators[campaign_entries] = strzone(a);
+				CAMPAIGN_GETARG; campaign_shortdesc[campaign_entries] = strzone(a);
+				CAMPAIGN_GETARG; campaign_longdesc[campaign_entries] = strzone(a);
 				campaign_entries = campaign_entries + 1;
 
 				if(campaign_entries >= n)
