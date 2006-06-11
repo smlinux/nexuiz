@@ -70,6 +70,10 @@ textures/stralenex1/light_tube_green
 
         
 	}
+	{
+		map $lightmap
+		rgbGen identity
+	}
 } 
 
 
