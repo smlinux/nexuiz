@@ -20,15 +20,17 @@ textures/sav-liquids/slime1
 	}
 }
 
+
 textures/sav-liquids/glass_tube
 {
-	qer_editorimage textures/evil_basewall/mtl_gray.jpg
-	qer_trans 0.5
-	cull none
+	qer_editorimage textures/dsi/dsiglass2.tga
 	surfaceparm trans
+	cull disable
+	qer_trans 0.5
+
 	{
-		map textures/evil_basewall/mtl_gray.jpg
-		blendFunc add
-		rgbGen identity
-	}
+		map textures/dsi/dsiglass2.tga
+		blendfunc blend
+		rgbGen vertex
+	}	
 }
