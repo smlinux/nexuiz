@@ -30,6 +30,13 @@ Item DataContainer Effects
 
 		[DataLink_OnOffSwitch]
 	}
+	Item Data_Cvar HDR
+	{
+		cvarName	"r_hdr"
+		defValue	0
+
+		[DataLink_OnOffSwitch]
+	}
 	Item Data_Cvar Coronas
 	{
 		cvarName	"r_coronas"

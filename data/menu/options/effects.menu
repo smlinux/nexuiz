@@ -33,6 +33,11 @@ Item Window Effects
 			text	"Bloom"
 			target	"::Data::Effects::Bloom::Switch"
 		}
+		Derive Nex_Option_Switch HDR
+		{
+			text	"High Dynamic Range (HDR)"
+			target	"::Data::Effects::HDR::Switch"
+		}
 		Derive Nex_Option_Switch Coronas
 		{
 			text	"Coronas"
