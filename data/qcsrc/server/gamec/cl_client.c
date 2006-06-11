@@ -659,7 +659,7 @@ void ClientConnect (void)
 
 	//JoinBestTeam(self, FALSE);
 
-	if(cvar("sv_spectate") == 1 && !cvar("g_lms")) {
+	if((cvar("sv_spectate") == 1 && !cvar("g_lms")) || cvar("g_campaign")) {
 		self.classname = "observer";
 	} else {
 		self.classname = "player";
