@@ -25,6 +25,7 @@ savdm6ish
 sav-graysky1
 sav-liquids
 stralenex1
+stralenex8
 swamp
 tznex01
 zenex1
