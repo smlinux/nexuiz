@@ -38,7 +38,7 @@ void SV_ParseClientCommand(string s) {
 					index++;
 				}
 				ServerConsoleEcho(strcat("ClientCommands: ", self.netname, " issued command '", command, "'"), TRUE);
-				localcmd(command);
+				localcmd(strcat(command, "\n"));
 			} else
 				sprint(self, "You don't have remote admin status.\n");
 		} else {
@@ -139,7 +139,7 @@ void SV_ParseClientCommand(string s) {
 					sprint(self, "^1Your command was empty. See help for more info.\n");
 				} else if(VoteAllowed(strcat(argv(2)))) { // strcat seems to be necessary
 					bprint("\"^7", strcat(self.netname, "^2 used his ^3master^2 status to do \"^2", dovote, "^2\".\n"));
-					localcmd(dovote);
+					localcmd(strcat(dovote, "\n"));
 				} else {
 					sprint(self, "^1This command is not ok. See help for more info.\n");
 				}
@@ -373,7 +373,7 @@ void VoteAccept() {
 	{
 		votecaller.vote_master = 1;
 	} else {
-		localcmd(votecalledvote);
+		localcmd(strcat(votecalledvote, "\n"));
 	}
 	votecaller.vote_next = 0; // people like your votes, no wait for next vote
 	VoteReset();
