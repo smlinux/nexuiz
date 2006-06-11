@@ -1415,6 +1415,9 @@ void PlayerPreThink (void)
 		player_regen();
 		player_anim();
 
+		if (cvar("g_minstagib"))
+			minstagib_ammocheck();
+
 		//self.angles_y=self.v_angle_y + 90;   // temp
 
 		if (self.waterlevel == 2)

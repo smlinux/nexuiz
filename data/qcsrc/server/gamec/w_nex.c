@@ -56,9 +56,11 @@ void W_Nex_Attack (void)
 	*/
 }
 
-void nex_selfkill (void)
+
+.float minstagib_nextthink;
+void minstagib_ammocheck (void)
 {
-	if (!cvar("g_minstagib") || gameover)
+	if (time < self.minstagib_nextthink || self.deadflag || gameover)
 		return;
 
 	if (self.ammo_cells <= 0)
@@ -125,21 +127,12 @@ void nex_selfkill (void)
 		}
 		if (self.health == 100)
 		{
-			// LordHavoc: why does this fire here?
-			if (weapon_prepareattack(0, 1))
-			{
-				W_Nex_Attack();
-				weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_nex_animtime"), w_ready);
-			}
 			centerprint(self, "get some ammo or\nyou'll be dead in ^310^7 seconds...");
 			Damage(self, self, self, 10, DEATH_NOAMMO, self.origin, '0 0 0');
 			stuffcmd(self, "play2 announcer/robotic/10.ogg\n");
 		}
-
 	}
-	self.think = nex_selfkill;
-	self.nextthink = time + 1;
-
+	self.minstagib_nextthink = time + 1;
 }
 
 float(float req) w_nex =
