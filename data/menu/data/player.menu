@@ -109,6 +109,27 @@ Item DataContainer Player
 				link		"##up"
 			}
 		}
+		Item Container Color
+		{
+			Item Data_Cvar Red
+			{
+				cvarName  	"crosshair_color_red"
+				defValue 	1
+				[DataLink_ZeroOneValue]
+			}
+			Item Data_Cvar Green
+			{
+				cvarName  	"crosshair_color_green"
+				defValue 	1
+				[DataLink_ZeroOneValue]
+			}
+			Item Data_Cvar Blue
+			{
+				cvarName  	"crosshair_color_blue"
+				defValue 	1
+				[DataLink_ZeroOneValue]
+			}
+		}
 		Item Data_Cvar	Size
 		{
 			cvarName	"crosshair_size"

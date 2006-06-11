@@ -152,6 +152,21 @@ Item Window Player
 			text	"Crosshair Type"
 			target	"::Data::Player::Crosshair::Type::Switch"
 		}
+		Derive Nex_Option_Slider CrosshairColorRed
+		{
+			text	"Crosshair Red"
+			target	"::Data::Player::Crosshair::Color::Red::Value"
+		}
+		Derive Nex_Option_Slider CrosshairColorGreen
+		{
+			text	"Crosshair Green"
+			target	"::Data::Player::Crosshair::Color::Green::Value"
+		}
+		Derive Nex_Option_Slider CrosshairColorBlue
+		{
+			text	"Crosshair Blue"
+			target	"::Data::Player::Crosshair::Color::Blue::Value"
+		}
 		Derive Nex_Option_Slider CrosshairSize
 		{
 			text	"Crosshair Size"
