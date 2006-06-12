@@ -529,6 +529,9 @@ void item_invincible (void) {
 //void item_speed (void) {self.speed_finished = 30;StartItem ("models/items/g_speed.md3", "misc/powerup.wav", 120, "Speed Powerup", IT_SPEED, FL_POWERUP, generic_pickupevalfunc, 10000);}
 //void item_slowmo (void) {self.slowmo_finished = 30;StartItem ("models/items/g_slowmo.md3", "misc/powerup.wav", 120, "Slow Motion", IT_SLOWMO, FL_POWERUP, generic_pickupevalfunc, 10000);}
 
+// compatibility:
+void item_quad (void) {self.classname = item_strength;item_strength();}
+
 void misc_models (void)
 {
 	precache_model (self.model);
