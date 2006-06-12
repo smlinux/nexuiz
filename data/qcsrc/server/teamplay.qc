@@ -76,7 +76,7 @@ void(entity pl) LogTeamchange =
 	if(pl.playerid < 1)
 		return;
 	str = strcat(":team:", ftos(pl.playerid), ":");
-	str = strcat(str, ftos(pl.team)); 
+	str = strcat(str, ftos(pl.team));
 	GameLogEcho(str, FALSE);
 }
 
@@ -273,8 +273,8 @@ void InitGameplayMode()
 
 	registercvar("_motd", "");
 	registercvar("_mutatormsg", "");
-	cvar_set("_motd", linewrap(cvar_string("sv_motd"), 50));
-	cvar_set("_mutatormsg", linewrap(cvar_string("g_mutatormsg"), 50));
+	cvar_set("_motd", wordwrap(cvar_string("sv_motd"), 50));
+	cvar_set("_mutatormsg", wordwrap(cvar_string("g_mutatormsg"), 50));
 
 	g_domination = cvar("g_domination");
 	g_ctf = cvar("g_ctf");
@@ -324,7 +324,7 @@ void PrintWelcomeMessage(entity pl)
 		else
 			return centerprint(self, strcat(newlines, "spectating ", self.enemy.netname, "\n\n\n^7press jump to play\n^7press attack for next player\npress attack2 for free fly mode"));
 	}
-		
+
 
 	if(self.welcomemessage_time2 > time) return;
 	self.welcomemessage_time2 = time + 1.0;

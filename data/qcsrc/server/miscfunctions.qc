@@ -84,27 +84,6 @@ float math_mod(float a, float b)
 	return a - (floor(a / b) * b);
 }
 
-string linewrap(string s, float l)
-{
-	string t;
-
-/*
-	t = "";
-	while(l < strlen(s))
-	{
-		t = strcat(t, substring(s, 0, l), "\n");
-		s = substring(s, l+1, strlen(s));
-	}
-	return strcat(t, s);
-*/
-	// this function seems broken (character wrap, no word wrap)
-	// use WORD wrap instead... importing it from campaign code
-	s = strzone(s);
-	t = Campaign_wordwrap(s, l);
-	strunzone(s);
-	return t;
-}
-
 vector find_floor(vector org)
 {
 	traceline(org + '0 0 5', org - '0 0 255', TRUE, self);
@@ -120,7 +99,7 @@ void relocate_spawnpoint()
 	string error_msg;
 
 	error_msg = "spawn point too close to a wall";
-	
+
 	org = find_floor(self.origin) + '0 0 30';
 
 	traceline(org, org - '18 0 0', TRUE, world);
@@ -159,7 +138,7 @@ void relocate_spawnpoint()
 		if(trace_fraction >= 1 && !self.noalign)
 			org = loc + '0 18 0';
 		else
-		{			
+		{
 			objerror(error_msg);
 			return;
 		}
@@ -178,7 +157,7 @@ void relocate_spawnpoint()
 			return;
 		}
 	}
-	
+
 	if(!self.noalign)
 		setorigin(self, org);
 }
@@ -248,7 +227,7 @@ entity(vector point, .string field, string value, vector axismod) findnearest =
 			if(num_nearest < NUM_NEAREST_ENTITIES)
 				num_nearest = num_nearest + 1;
 		}
-		
+
 		localhead = find(localhead, field, value);
 	}
 
@@ -287,17 +266,17 @@ entity(vector point, .string field, string value, vector axismod) findnearest =
 }
 
 void() target_location =
-{   
+{
 	self.classname = "target_location";
 	// location name in netname
 	// eventually support: count, teamgame selectors, line of sight?
-};  
+};
 
 void() info_location =
-{   
+{
 	self.classname = "target_location";
 	self.message = self.netname;
-};  
+};
 
 string NearestLocation(vector p)
 {

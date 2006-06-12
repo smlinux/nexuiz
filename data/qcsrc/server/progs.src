@@ -9,6 +9,8 @@ extensions.qh
 
 campaign.qh
 ../common/campaign_common.qh
+../common/util.qh
+../common/util.qc
 
 miscfunctions.qc
 

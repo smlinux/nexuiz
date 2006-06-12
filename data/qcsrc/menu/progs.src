@@ -21,6 +21,7 @@ mbuiltin.qc
 menu.qh
 
 // util functions
+../common/util.qh
 util/util.qh
 util/altstring.qh
 util/rect.qh
@@ -173,6 +174,7 @@ base/timer.qc
 base/hostcache.qc
 
 // util functions
+../common/util.qc
 util/property.qc
 util/text.qc
 util/uid.qc
