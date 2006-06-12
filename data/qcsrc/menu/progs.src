@@ -69,7 +69,7 @@ custom/messagebox.qh
 
 // Singleplayer campaign
 custom/campaign.qh
-../qcsrc/server/gamec/campaign_common.h
+../server/campaign_common.qh
 
 // Source Files
 
