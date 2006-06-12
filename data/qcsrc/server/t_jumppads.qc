@@ -7,7 +7,18 @@ void() trigger_push_touch =
 	local float flighttime, dist, grav;
 	local vector org;
 
-	if (other.classname != "player" && other.classname != "corpse" && other.classname != "body" && other.classname != "gib" && other.classname != "missile" && other.classname != "casing" && other.classname != "grenade" && other.classname != "plasma" && other.classname != "plasma_prim" && other.classname != "plasma_chain")
+	// FIXME: add a .float for whether an entity should be tossed by jumppads
+	if (other.classname != "player")
+	if (other.classname != "corpse")
+	if (other.classname != "body")
+	if (other.classname != "gib")
+	if (other.classname != "missile")
+	if (other.classname != "casing")
+	if (other.classname != "grenade")
+	if (other.classname != "plasma")
+	if (other.classname != "plasma_prim")
+	if (other.classname != "plasma_chain")
+	if (other.classname != "droppedweapon")
 		return;
 
 	if (other.deadflag && other.classname == "player")
