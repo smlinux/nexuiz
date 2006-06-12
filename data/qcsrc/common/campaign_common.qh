@@ -27,4 +27,4 @@ void CampaignFile_Unload();
 void CampaignSetup(float n);
 
 // this wraps the campaign_longdesc field to the given field, or just replaces the linefeeds if l==0
-string Campaign_wordwrap(string s, float l)
+string Campaign_wordwrap(string s, float l);
