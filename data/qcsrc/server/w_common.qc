@@ -49,19 +49,6 @@ void W_GiveWeapon (entity e, float wep, string name)
 	self = oldself;
 }
 
-float W_CheckAmmo (void)
-{
-	if (!cvar("g_use_ammunition"))
-		return TRUE;
-
-	if (self.weapon == IT_LASER)
-		return TRUE;
-	else if (self.currentammo)
-		return TRUE;
-
-	return FALSE;
-}
-
 void FireRailgunBullet (vector start, vector end, float bdamage, float deathtype)
 {
 	local vector hitloc, force, endpoint, dir;
