@@ -183,7 +183,7 @@ util/nfunction.qc
 
 // Singleplayer campaign
 custom/campaign.qc
-../server/gamec/campaign_setup.c
-../server/gamec/campaign_file.c
+../server/campaign_setup.c
+../server/campaign_file.c
 
 menu.qc
