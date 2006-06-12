@@ -162,7 +162,7 @@
 "wait" "3"
 "lip" "22"
 "model" "*2"
-"sound" "1"
+"sounds" "1"
 }
 {
 "classname" "item_health_mega"
