@@ -330,9 +330,6 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 		self.angles_z = 0;
 		// don't spin
 		self.avelocity = '0 0 0';
-		// no weapon when dead
-		self.weaponmodel = "";
-		w_clear();
 		// view from the floor
 		self.view_ofs = '0 0 -8';
 		// toss the corpse

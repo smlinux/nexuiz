@@ -899,12 +899,6 @@ void() UpdateTeamBubble =
 	else self.colormod = '1 1 1';
 };*/
 
-void UpdatePlayerColors () {
-	if(self.weaponentity) {
-		self.weaponentity.colormap = self.colormap;
-		self.exteriorweaponentity.colormap = self.colormap;
-   	}
-}
 /*
 =============
 PlayerJump
@@ -1522,7 +1516,6 @@ void PlayerPostThink (void)
 		CheckRules_Player();
 		UpdateChatBubble();
 		UpdateTeamBubble();
-		UpdatePlayerColors();
 		if (self.deadflag == DEAD_NO)
 		if (self.impulse)
 			ImpulseCommands ();

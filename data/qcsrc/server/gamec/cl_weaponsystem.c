@@ -126,6 +126,8 @@ void LaserTarget_Think()
 void() CL_Weaponentity_Think =
 {
 	self.nextthink = time;
+	if (intermission_running)
+		self.frame = WFRAME_IDLE;
 	if (self.owner.weaponentity != self)
 	{
 		remove(self);
@@ -153,6 +155,7 @@ void() CL_Weaponentity_Think =
 		self.effects = self.effects - (self.effects & EF_NODRAW);
 
 	self.alpha = self.owner.alpha;
+	self.colormap = self.owner.colormap;
 
 	self.angles = '0 0 0';
 	local float f;
@@ -197,16 +200,12 @@ void() CL_ExteriorWeaponentity_Think =
 			self.model = "";
 	}
 	self.effects = self.owner.effects;
+	self.colormap = self.owner.colormap;
 };
 
 // spawning weaponentity for client
 void() CL_SpawnWeaponentity =
 {
-	if (self.weaponentity)
-	{
-		w_clear();
-		return;
-	}
 	self.weaponentity = spawn();
 	self.weaponentity.solid = SOLID_NOT;
 	self.weaponentity.owner = self;
@@ -308,7 +307,7 @@ void() w_clear =
 void() w_ready =
 {
 	if (self.weaponentity)
-	{	
+	{
 		self.weaponentity.state = WS_READY;
 		weapon_thinkf(WFRAME_IDLE, 0.1, w_ready);
 	}

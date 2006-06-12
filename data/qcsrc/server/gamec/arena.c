@@ -19,7 +19,7 @@ void(entity e) removedecor;
 void reset_map()
 {
 	float warmup;
-	
+
 	self = nextent(world);
 
 	warmup = cvar("g_arena_warmup");
@@ -48,7 +48,7 @@ void reset_map()
 		}
 		else if(self.isdecor)
 		{
-			removedecor(self);			
+			removedecor(self);
 		}
 		else if(self.flags & FL_CLIENT)			// reset all players
 		{
@@ -60,11 +60,6 @@ void reset_map()
 			}
 			else if(self.deadflag)
 				PutClientInServer();
-
-			if(self.exteriorweaponentity)
-				setmodel(self.exteriorweaponentity, "");
-			if(self.weaponentity)
-				setmodel(self.weaponentity, "");
 		}
 		self = nextent(self);
 	}
@@ -134,10 +129,10 @@ void Arena_Warmup()
 	{
 		float f;
 		f = rint(self.arena_warmup_end - time);
-		
+
 		if(champion)
 			msg = strcat(msg, "The Champion is ", champion.netname, "^7\n\n\n");
-		
+
 		if(f)
 			msg = strcat(msg, "Round will start in ", ftos(rint(self.arena_warmup_end - time)));
 		else
@@ -147,7 +142,7 @@ void Arena_Warmup()
 		}
 
 		centerprint(self, msg);
-		
+
 		if(self.spawned)
 			self.movetype = MOVETYPE_NONE;
 	}
@@ -156,7 +151,7 @@ void Arena_Warmup()
 		self.movetype = MOVETYPE_WALK;
 		centerprint(self, "\n");
 	}
-	
+
 }
 
 float next_round;
@@ -176,7 +171,7 @@ void Spawnqueue_Check()
 			while(champion && champion.deadflag)
 				champion = find(champion, classname, "player");
 		}
-		
+
 		while(numspawned < maxspawned && spawnqueue_first)
 		{
 			self = spawnqueue_first;
@@ -185,7 +180,7 @@ void Spawnqueue_Check()
 
 			Spawnqueue_Remove(self);
 			Spawnqueue_Mark(self);
-		
+
 			self.classname = "player";
 			PutClientInServer();
 		}
