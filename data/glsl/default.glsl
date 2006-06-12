@@ -7,13 +7,13 @@
 #define myhalf half
 #define myhvec2 hvec2
 #define myhvec3 hvec3
+#define myhvec4 hvec4
 #else
 #define myhalf float
 #define myhvec2 vec2
 #define myhvec3 vec3
+#define myhvec4 vec4
 #endif
-
-uniform float SceneBrightness;
 
 varying vec2 TexCoord;
 varying vec2 TexCoordLightmap;
@@ -117,6 +117,9 @@ uniform myhvec3 Color_Pants;
 uniform myhvec3 Color_Shirt;
 uniform myhvec3 FogColor;
 
+uniform myhalf GlowScale;
+uniform myhalf SceneBrightness;
+
 uniform float OffsetMapping_Scale;
 uniform float OffsetMapping_Bias;
 uniform float FogRangeRecip;
@@ -130,7 +133,7 @@ void main(void)
 {
 	// apply offsetmapping
 #ifdef USEOFFSETMAPPING
-	vec2 TexCoordOffset = vec2(TexCoord);
+	vec2 TexCoordOffset = TexCoord;
 #define TexCoord TexCoordOffset
 
 	vec3 eyedir = vec3(normalize(EyeVector));
@@ -203,9 +206,9 @@ void main(void)
 #endif
 
 	// combine the diffuse textures (base, pants, shirt)
-	vec4 color = vec4(texture2D(Texture_Color, TexCoord));
+	myhvec4 color = myhvec4(texture2D(Texture_Color, TexCoord));
 #ifdef USECOLORMAPPING
-	color.rgb += vec3(myhvec3(texture2D(Texture_Pants, TexCoord)) * myhvec3(Color_Pants) + myhvec3(texture2D(Texture_Shirt, TexCoord)) * myhvec3(Color_Shirt));
+	color.rgb += myhvec3(texture2D(Texture_Pants, TexCoord)) * Color_Pants + myhvec3(texture2D(Texture_Shirt, TexCoord)) * Color_Shirt;
 #endif
 
 
@@ -215,14 +218,14 @@ void main(void)
 	// light source
 
 	// get the surface normal and light normal
-	myhvec3 surfacenormal = normalize(myhvec3(texture2D(Texture_Normal, TexCoord)) - 0.5);
+	myhvec3 surfacenormal = normalize(myhvec3(texture2D(Texture_Normal, TexCoord)) - myhvec3(0.5));
 	myhvec3 diffusenormal = myhvec3(normalize(LightVector));
 
 	// calculate directional shading
-	color.rgb *= (AmbientScale + DiffuseScale * max(dot(surfacenormal, diffusenormal), 0.0));
+	color.rgb *= AmbientScale + DiffuseScale * myhalf(max(float(dot(surfacenormal, diffusenormal)), 0.0));
 #ifdef USESPECULAR
-	myhvec3 specularnormal = myhvec3(normalize(diffusenormal + myhvec3(normalize(EyeVector))));
-	color.rgb += myhvec3(texture2D(Texture_Gloss, TexCoord)) * SpecularScale * pow(max(dot(surfacenormal, specularnormal), 0.0), SpecularPower);
+	myhvec3 specularnormal = normalize(diffusenormal + myhvec3(normalize(EyeVector)));
+	color.rgb += myhvec3(texture2D(Texture_Gloss, TexCoord)) * SpecularScale * pow(myhalf(max(float(dot(surfacenormal, specularnormal)), 0.0)), SpecularPower);
 #endif
 
 #ifdef USECUBEFILTER
@@ -242,7 +245,7 @@ void main(void)
 	//
 	// pow(1-(x*x+y*y+z*z), 4) is far more realistic but needs large lights to
 	// provide significant illumination, large = slow = pain.
-	color.rgb *= max(1.0 - dot(CubeVector, CubeVector), 0.0);
+	color.rgb *= myhalf(max(1.0 - dot(CubeVector, CubeVector), 0.0));
 
 
 
@@ -251,15 +254,14 @@ void main(void)
 	// directional model lighting
 
 	// get the surface normal and light normal
-	myhvec3 surfacenormal = normalize(myhvec3(texture2D(Texture_Normal, TexCoord)) - myhalf(0.5));
+	myhvec3 surfacenormal = normalize(myhvec3(texture2D(Texture_Normal, TexCoord)) - myhvec3(0.5));
 	myhvec3 diffusenormal = myhvec3(normalize(LightVector));
 
 	// calculate directional shading
-	color.rgb *= vec3(myhvec3(AmbientColor) + myhvec3(DiffuseColor) * myhalf(max(dot(vec3(surfacenormal), vec3(diffusenormal)), 0.0)));
-
+	color.rgb *= AmbientColor + DiffuseColor * myhalf(max(float(dot(surfacenormal, diffusenormal)), 0.0));
 #ifdef USESPECULAR
-	myhvec3 specularnormal = myhvec3(normalize(diffusenormal + myhvec3(normalize(EyeVector))));
-	color.rgb += myhvec3(texture2D(Texture_Gloss, TexCoord)) * SpecularColor * pow(max(dot(surfacenormal, specularnormal), 0.0), SpecularPower);
+	myhvec3 specularnormal = normalize(diffusenormal + myhvec3(normalize(EyeVector)));
+	color.rgb += myhvec3(texture2D(Texture_Gloss, TexCoord)) * SpecularColor * pow(myhalf(max(float(dot(surfacenormal, specularnormal)), 0.0)), SpecularPower);
 #endif
 
 
@@ -269,23 +271,23 @@ void main(void)
 	// deluxemap lightmapping using light vectors in modelspace (evil q3map2)
 
 	// get the surface normal and light normal
-	myhvec3 surfacenormal = normalize(myhvec3(texture2D(Texture_Normal, TexCoord)) - 0.5);
+	myhvec3 surfacenormal = normalize(myhvec3(texture2D(Texture_Normal, TexCoord)) - myhvec3(0.5));
 
 #ifdef MODE_LIGHTDIRECTIONMAP_MODELSPACE
-	myhvec3 diffusenormal_modelspace = myhvec3(texture2D(Texture_Deluxemap, TexCoordLightmap)) - 0.5;
-	myhvec3 diffusenormal = normalize(myhvec3(dot(diffusenormal_modelspace, VectorS), dot(diffusenormal_modelspace, VectorT), dot(diffusenormal_modelspace, VectorR)));
+	myhvec3 diffusenormal_modelspace = myhvec3(texture2D(Texture_Deluxemap, TexCoordLightmap)) - myhvec3(0.5);
+	myhvec3 diffusenormal = normalize(myhvec3(dot(diffusenormal_modelspace, myhvec3(VectorS)), dot(diffusenormal_modelspace, myhvec3(VectorT)), dot(diffusenormal_modelspace, myhvec3(VectorR))));
 #else
-	myhvec3 diffusenormal = normalize(myhvec3(texture2D(Texture_Deluxemap, TexCoordLightmap)) - 0.5);
+	myhvec3 diffusenormal = normalize(myhvec3(texture2D(Texture_Deluxemap, TexCoordLightmap)) - myhvec3(0.5));
 #endif
 	// calculate directional shading
-	myhvec3 tempcolor = color.rgb * (DiffuseScale * max(dot(surfacenormal, diffusenormal), 0.0));
+	myhvec3 tempcolor = color.rgb * (DiffuseScale * myhalf(max(float(dot(surfacenormal, diffusenormal)), 0.0)));
 #ifdef USESPECULAR
 	myhvec3 specularnormal = myhvec3(normalize(diffusenormal + myhvec3(normalize(EyeVector))));
-	tempcolor += myhvec3(texture2D(Texture_Gloss, TexCoord)) * SpecularScale * pow(max(dot(surfacenormal, specularnormal), 0.0), SpecularPower);
+	tempcolor += myhvec3(texture2D(Texture_Gloss, TexCoord)) * SpecularScale * pow(myhalf(max(float(dot(surfacenormal, specularnormal)), 0.0)), SpecularPower);
 #endif
 
 	// apply lightmap color
-	color.rgb = tempcolor * myhvec3(texture2D(Texture_Lightmap, TexCoordLightmap)) + color.rgb * myhvec3(AmbientScale);
+	color.rgb = tempcolor * myhvec3(texture2D(Texture_Lightmap, TexCoordLightmap)) + color.rgb * AmbientScale;
 
 
 #else // MODE none (lightmap)
@@ -293,21 +295,21 @@ void main(void)
 	color.rgb *= myhvec3(texture2D(Texture_Lightmap, TexCoordLightmap)) * DiffuseScale + myhvec3(AmbientScale);
 #endif // MODE
 
-	color *= gl_Color;
+	color *= myhvec4(gl_Color);
 
 #ifdef USEGLOW
-	color.rgb += texture2D(Texture_Glow, TexCoord).rgb;
+	color.rgb += myhvec3(texture2D(Texture_Glow, TexCoord)) * GlowScale;
 #endif
 
 #ifdef USEFOG
 	// apply fog
-	myhalf fog = texture2D(Texture_FogMask, myhvec2(length(EyeVectorModelSpace)*FogRangeRecip, 0.0)).x;
+	myhalf fog = myhalf(texture2D(Texture_FogMask, myhvec2(length(EyeVectorModelSpace)*FogRangeRecip, 0.0)).x);
 	color.rgb = color.rgb * fog + FogColor * (1.0 - fog);
 #endif
 
 	color.rgb *= SceneBrightness;
 
-	gl_FragColor = color;
+	gl_FragColor = vec4(color);
 }
 
 #endif // FRAGMENT_SHADER
