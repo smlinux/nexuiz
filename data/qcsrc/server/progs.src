@@ -8,7 +8,7 @@ defs.qh		// Should rename this, it has fields and globals
 extensions.qh
 
 campaign.qh
-campaign_common.qh
+../common/campaign_common.qh
 
 miscfunctions.qc
 
@@ -75,5 +75,5 @@ t_swamp.qc
 clientcommands.qc
 
 campaign.qc
-campaign_file.qc
-campaign_setup.qc
+../common/campaign_file.qc
+../common/campaign_setup.qc

@@ -69,7 +69,7 @@ custom/messagebox.qh
 
 // Singleplayer campaign
 custom/campaign.qh
-../server/campaign_common.qh
+../common/campaign_common.qh
 
 // Source Files
 
@@ -183,7 +183,7 @@ util/nfunction.qc
 
 // Singleplayer campaign
 custom/campaign.qc
-../server/campaign_setup.qc
-../server/campaign_file.qc
+../common/campaign_setup.qc
+../common/campaign_file.qc
 
 menu.qc
