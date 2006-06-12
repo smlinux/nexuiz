@@ -578,6 +578,7 @@ void PutClientInServer (void)
 		if(self.killcount == -666) {
 			self.killcount = 0;
 			if(!cvar("g_arena"))
+			if(!cvar("g_lms"))
 				self.frags = 0;
 		}
 
