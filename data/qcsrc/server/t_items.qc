@@ -530,7 +530,7 @@ void item_invincible (void) {
 //void item_slowmo (void) {self.slowmo_finished = 30;StartItem ("models/items/g_slowmo.md3", "misc/powerup.wav", 120, "Slow Motion", IT_SLOWMO, FL_POWERUP, generic_pickupevalfunc, 10000);}
 
 // compatibility:
-void item_quad (void) {self.classname = item_strength;item_strength();}
+void item_quad (void) {self.classname = "item_strength";item_strength();}
 
 void misc_models (void)
 {
