@@ -1,5 +1,5 @@
 "//game","mapname","bots","skill","frag","mutator-sets","description","long description"
-"dm","downer","2","1","15",,"Downer","Welcome to your first taste of campaign deathmatch! The first phrase of 5 maps will be skill 2, which should be good practice for the later maps. Two bots with fraglimit of 15"
+"dm","downer","2","1","15",,"Downer","Welcome to your first taste of campaign deathmatch! The first phase of 5 maps will be skill 2, which should be good practice for the later maps. Two bots with fraglimit of 15"
 "dm","basement","3","1","10",,"Basement","Three bots, fraglimit of 10."
 "dm","skyway","3","2","15","g_rocketarena 1","Rocket Arena on Skyway","Rocket Arena DM mode! 3 bots, everyone will start with rockets with unlimited ammo. Remember, you can detonate your rockets in midair with the secondary fire, this is useful for getting the most damage. Fraglimit of 15."
 "tdm","toxic","3","2","20",,"Team DM on Toxic","Team deathmatch. You will have one bot team mate on your team now against a team of 2. Fraglimit of 20."
