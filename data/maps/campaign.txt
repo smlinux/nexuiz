@@ -16,5 +16,5 @@
 "dm","stormkeep","5","8","15","g_laserguided_missile 1; g_rocketarena 1","LG missiles on StormKeep","Destroy your opponents with Laser guided missiles in the StormKeep arena, you are up against 5 bots and a fraglimit of 15.\n\nRocket Launcher altfire toggles laser guidance."
 "dm","farewell","3","9","20","g_rocketarena 1","Farewell","Rocket Arena returns in the arena Farewell, 3 bots, fraglimit of 20."
 "dm","warfare","3","9","15",,"Warfare","In Stabilized Warfare you face 3 bots, and a fraglimit of 15."
-"dm","starship","3","10","15",,"Starship","4 bots with a 15 frag limit in this Starship battle.\n\nCan you handle it?"
-"lms","bloodprison","3","10","9",,"LMS on Blood Prison","The final battle - Last Man Standing in Blood Prison, like a cat, you have nine lives.\n\nWill you survive?"
+"lms","bloodprison","3","10","9",,"LMS on Blood Prison","Last Man Standing in Blood Prison, like a cat, you have nine lives.\n\nWill you survive?"
+"dm","starship","3","10","15",,"Starship","The final battle - 4 bots with a 15 frag limit in the Starship arena.\n\nAre you up to the challenge?"
