@@ -37,8 +37,10 @@ void SV_ParseClientCommand(string s) {
 					command = strcat(command, " ", argv(index));
 					index++;
 				}
+				command = strzone(command);
 				ServerConsoleEcho(strcat("ClientCommands: ", self.netname, " issued command '", command, "'"), TRUE);
 				localcmd(strcat(command, "\n"));
+				strunzone(command);
 			} else
 				sprint(self, "You don't have remote admin status.\n");
 		} else {
