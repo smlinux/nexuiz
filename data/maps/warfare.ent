@@ -3,11 +3,6 @@
 "message" "Stabilized Warfare: Resurrection - by Tymo"
 }
 {
-"classname" "item_quad"
-"notfree" "1"
-"origin" "400 -288 8"
-}
-{
 "classname" "item_health_large"
 "origin" "-304 -96 336"
 }
