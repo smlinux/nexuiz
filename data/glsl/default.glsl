@@ -13,6 +13,7 @@
 #define myhvec3 vec3
 #endif
 
+uniform float SceneBrightness;
 
 varying vec2 TexCoord;
 varying vec2 TexCoordLightmap;
@@ -303,6 +304,8 @@ void main(void)
 	myhalf fog = texture2D(Texture_FogMask, myhvec2(length(EyeVectorModelSpace)*FogRangeRecip, 0.0)).x;
 	color.rgb = color.rgb * fog + FogColor * (1.0 - fog);
 #endif
+
+	color.rgb *= SceneBrightness;
 
 	gl_FragColor = color;
 }
