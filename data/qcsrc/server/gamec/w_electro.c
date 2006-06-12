@@ -109,7 +109,8 @@ void() W_Electro_Attack
 	setmodel(proj, "models/elaser.mdl");
 	setsize(proj, '0 0 0', '0 0 0');
 
-	sound (proj, CHAN_BODY, "weapons/electro_fly.wav", 1, ATTN_NORM);
+	// LordHavoc: disabled because no one likes this sound and it sometimes never stops due to packet loss
+	//sound (proj, CHAN_BODY, "weapons/electro_fly.wav", 1, ATTN_NORM);
 }
 
 void() W_Electro_Attack2
@@ -144,7 +145,8 @@ void() W_Electro_Attack2
 	proj.event_damage = W_Plasma_Damage;
 	proj.flags = FL_PROJECTILE;
 
-	sound (proj, CHAN_BODY, "weapons/electro_fly.wav", 1, ATTN_NORM);
+	// LordHavoc: disabled because no one likes this sound and it sometimes never stops due to packet loss
+	//sound (proj, CHAN_BODY, "weapons/electro_fly.wav", 1, ATTN_NORM);
 }
 
 float(float req) w_electro =
