@@ -972,6 +972,8 @@ START_OPEN causes the door to move to its destination when spawned, and operate 
 2)	base
 3)	stone chain
 4)	screechy metal
+WARNING: sounds doesn't work as intended. Just set "sound" to anything to get the basic door sound.
+FIXME: Do this properly!
 */
 
 void() func_door =
@@ -989,6 +991,14 @@ void() func_door =
 
 	self.blocked = door_blocked;
 	self.use = door_use;
+	
+	if (self.sound)
+	{
+		precache_sound ("plats/medplat1.wav");
+		precache_sound ("plats/medplat2.wav");
+		self.noise2 = "plats/medplat1.wav";
+		self.noise1 = "plats/medplat2.wav";
+	}	
 
 	if (!self.speed)
 		self.speed = 100;
