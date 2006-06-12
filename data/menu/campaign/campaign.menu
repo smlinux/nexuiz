@@ -25,7 +25,7 @@ Item Window Campaign
 		Derive Picture NamePicture
 		{
 			picture		"gfx/create_map_nav_background"
-			size		'405 18'
+			size		'409 18'
 			pos		'60 24'
 		}
 		
@@ -33,7 +33,7 @@ Item Window Campaign
 		{
 			alignment	[AlignCenter]
 			color		"1 1 1"
-			size		'405 14'
+			size		'409 14'
 			pos		'64 29'
 		}
 		
