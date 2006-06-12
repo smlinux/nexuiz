@@ -1,79 +1,79 @@
-../../progs.dat // Needed for the new directory structure
+../../progs.dat // output filename
 
-gamec/sys.h
-gamec/builtins.h
-gamec/constants.h
-gamec/defs.h		// Should rename this, it has fields and globals
+sys.qh
+builtins.qh
+constants.qh
+defs.qh		// Should rename this, it has fields and globals
 
-gamec/extensions.h
+extensions.qh
 
-gamec/campaign.h
-gamec/campaign_common.h
+campaign.qh
+campaign_common.qh
 
-gamec/miscfunctions.c
+miscfunctions.qc
 
 // general bot utility functions and management
-gamec/bots.c
+bots.qc
 
 // LordHavoc's bots
-gamec/havocbot_roles.c
-gamec/havocbot.c
+havocbot_roles.qc
+havocbot.qc
 
-gamec/g_subs.c
+g_subs.qc
 
-gamec/runematch.c
-gamec/arena.c
+runematch.qc
+arena.qc
 
-gamec/g_violence.c
-gamec/g_damage.c
+g_violence.qc
+g_damage.qc
 
-gamec/teamplay.c
+teamplay.qc
 
-gamec/cl_physics.c
+cl_physics.qc
 
-gamec/g_world.c
-gamec/g_decors.c
-gamec/g_casings.c
+g_world.qc
+g_decors.qc
+g_casings.qc
 
-gamec/t_jumppads.c
-gamec/t_teleporters.c
+t_jumppads.qc
+t_teleporters.qc
 
-gamec/sv_main.c
-gamec/sv_stats.c
+sv_main.qc
+sv_stats.qc
 
-gamec/g_triggers.c
+g_triggers.qc
 
-gamec/cl_weaponsystem.c
-gamec/w_common.c
-gamec/w_laser.c
-gamec/w_shotgun.c
-gamec/w_uzi.c
-gamec/w_grenadelauncher.c
-gamec/w_electro.c
-gamec/w_crylink.c
-gamec/w_nex.c
-gamec/w_hagar.c
-gamec/w_rocketlauncher.c
+cl_weaponsystem.qc
+w_common.qc
+w_laser.qc
+w_shotgun.qc
+w_uzi.qc
+w_grenadelauncher.qc
+w_electro.qc
+w_crylink.qc
+w_nex.qc
+w_hagar.qc
+w_rocketlauncher.qc
 
-gamec/t_items.c
-gamec/t_halflife.c
-gamec/t_quake3.c
-gamec/t_quake.c
-gamec/cl_weapons.c
-//gamec/g_tetris.c
-gamec/cl_impulse.c
-gamec/cl_player.c
-gamec/cl_client.c
-gamec/t_plats.c
+t_items.qc
+t_halflife.qc
+t_quake3.qc
+t_quake.qc
+cl_weapons.qc
+//g_tetris.qc
+cl_impulse.qc
+cl_player.qc
+cl_client.qc
+t_plats.qc
 
-gamec/ctf.c
-gamec/domination.c
-gamec/g_hook.c
+ctf.qc
+domination.qc
+g_hook.qc
 
-gamec/t_swamp.c
+t_swamp.qc
 
-gamec/clientcommands.c
+clientcommands.qc
 
-gamec/campaign.c
-gamec/campaign_file.c
-gamec/campaign_setup.c
+campaign.qc
+campaign_file.qc
+campaign_setup.qc
