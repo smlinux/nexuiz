@@ -33,6 +33,7 @@ string newlines = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 .float	speed;
 //.float	style;
 //.float	skill;
+.float	sounds;
 
 .string killtarget;
 
