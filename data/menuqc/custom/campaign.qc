@@ -66,7 +66,7 @@ void() Nex_Action_Campaign_Update =
 	String_EntitySet( lItem, text,  shortdesc);
 
 	lItem = Menu_GetItem( "LongDescription" );
-	longdesc = Campaign_wordwrap(campaign_longdesc[campaign_index], lItem.wrap);
+	longdesc = Campaign_wordwrap(campaign_longdesc[campaign_index], lItem.wrap - 1);
 	String_EntitySet( lItem, text, longdesc );
 
 	lItem = Menu_GetItem( "Picture" );
