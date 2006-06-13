@@ -534,7 +534,25 @@ void RadiusDamage (entity inflictor, entity attacker, float coredamage, float ed
 						force = normalize((m1 + m2) * 0.5 - blastorigin) * (finaldmg / coredamage) * forceintensity;
 						if (targ == attacker)
 							finaldmg = finaldmg * cvar("g_balance_selfdamagepercent");	// Partial damage if the attacker hits himself
-						Damage (targ, inflictor, attacker, finaldmg, deathtype, nearest, force);
+						// test line of sight to multiple positions on box,
+						// and do damage if any of them hit
+						local float c;
+						c = ceil(finaldmg / 10);
+						if (c > 20)
+							c = 20;
+						while (c > 0)
+						{
+							c = c - 1;
+							traceline(blastorigin, nearest, TRUE, inflictor);
+							if (trace_fraction == 1 || trace_ent == targ)
+							{
+								Damage (targ, inflictor, attacker, finaldmg, deathtype, nearest, force);
+								break;
+							}
+							nearest_x = m1_x + random() * targ.size_x;
+							nearest_y = m1_y + random() * targ.size_y;
+							nearest_z = m1_z + random() * targ.size_z;
+						}
 					}
 				}
 			}
