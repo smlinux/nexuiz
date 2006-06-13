@@ -544,7 +544,8 @@ void RadiusDamage (entity inflictor, entity attacker, float coredamage, float ed
 						{
 							c = c - 1;
 							traceline(blastorigin, nearest, TRUE, inflictor);
-							if (trace_fraction == 1 || trace_ent == targ)
+							if (trace_fraction == 1 || trace_ent == targ
+							    || cvar("g_throughfloor"))
 							{
 								Damage (targ, inflictor, attacker, finaldmg, deathtype, nearest, force);
 								break;
