@@ -1,0 +1,165 @@
+{
+"message" "Blue Sky - A quickmap by Strahlemann"
+"classname" "worldspawn"
+}
+{
+"classname" "trigger_push"
+"target" "t1"
+"model" "*1"
+}
+{
+"classname" "target_position"
+"origin" "32 -192 5248"
+"targetname" "t1"
+}
+{
+"classname" "weapon_railgun"
+"origin" "32 128 4712"
+}
+{
+"targetname" "jump1"
+"origin" "-728 -192 400"
+"classname" "target_position"
+}
+{
+"target" "jump1"
+"classname" "trigger_push"
+"model" "*2"
+}
+{
+"classname" "target_position"
+"origin" "784 -192 400"
+"targetname" "t2"
+}
+{
+"classname" "trigger_push"
+"target" "t2"
+"model" "*3"
+}
+{
+"origin" "32 -464 -344"
+"classname" "weapon_grenadelauncher"
+}
+{
+"origin" "32 368 -104"
+"classname" "weapon_electro"
+}
+{
+"classname" "weapon_electro"
+"origin" "32 -752 -104"
+}
+{
+"origin" "736 -672 96"
+"classname" "item_armor25"
+}
+{
+"classname" "item_armor25"
+"origin" "-688 272 96"
+}
+{
+"origin" "-544 -192 272"
+"classname" "weapon_rocketlauncher"
+}
+{
+"classname" "weapon_rocketlauncher"
+"origin" "600 -192 272"
+}
+{
+"origin" "768 -192 -224"
+"classname" "weapon_hagar"
+}
+{
+"classname" "weapon_hagar"
+"origin" "-704 -192 -224"
+}
+{
+"origin" "32 352 288"
+"classname" "weapon_uzi"
+}
+{
+"classname" "weapon_uzi"
+"origin" "32 -744 288"
+}
+{
+"angle" "360"
+"origin" "448 -672 -208"
+"classname" "item_health25"
+}
+{
+"angle" "360"
+"classname" "item_health25"
+"origin" "448 256 -208"
+}
+{
+"angle" "180"
+"origin" "-400 288 -224"
+"classname" "item_health25"
+}
+{
+"angle" "180"
+"classname" "item_health25"
+"origin" "-400 -640 -224"
+}
+{
+"origin" "-896 384 288"
+"classname" "item_health25"
+}
+{
+"classname" "item_health25"
+"origin" "960 -704 288"
+}
+{
+"dmg" "999"
+"classname" "trigger_hurt"
+"model" "*4"
+}
+{
+"classname" "info_player_deathmatch"
+"origin" "480 -672 -224"
+}
+{
+"classname" "info_player_deathmatch"
+"origin" "480 256 -192"
+}
+{
+"classname" "info_player_deathmatch"
+"origin" "-432 288 -216"
+"angle" "180"
+}
+{
+"angle" "180"
+"origin" "-432 -640 -216"
+"classname" "info_player_deathmatch"
+}
+{
+"classname" "info_player_deathmatch"
+"origin" "992 -96 288"
+"angle" "270"
+}
+{
+"classname" "info_player_deathmatch"
+"origin" "-928 -288 288"
+"angle" "90"
+}
+{
+"classname" "info_player_deathmatch"
+"origin" "288 416 288"
+"angle" "225"
+}
+{
+"classname" "info_player_deathmatch"
+"origin" "-224 -800 288"
+"angle" "45"
+}
+{
+"origin" "272 -464 -368"
+"classname" "item_health25"
+}
+{
+"classname" "item_health25"
+"origin" "-208 -464 -368"
+}
+{
+"origin" "32 -512 4712"
+"classname" "item_strength"
+}
