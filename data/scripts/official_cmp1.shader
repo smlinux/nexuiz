@@ -111,6 +111,7 @@ textures/cmp1-dm8/e8circle_pur
 	surfaceparm nomarks
 	surfaceparm nonsolid
 	surfaceparm trans
+	nopicmip
 	q3map_surfacelight 50
 	{
 		clampmap textures/cmp1-dm8/e8circle_pur.tga
