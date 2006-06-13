@@ -1,4 +1,4 @@
-Blue Sky (dm_bluesky)
+Blue Sky (lms_bluesky)
 maps/bluesky
 
 Small and fun map 

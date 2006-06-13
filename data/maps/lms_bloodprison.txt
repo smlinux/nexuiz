@@ -1,4 +1,4 @@
-Blood Prison (dm_bloodprison)
+Blood Prison (lms_bloodprison)
 maps/bloodprison
 
 Small and very fast 
