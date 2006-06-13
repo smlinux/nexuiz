@@ -848,6 +848,7 @@ void() TeamBubbleThink =
 	self.nextthink = time;
 	if (!self.owner.modelindex || self.owner.teambubbleentity != self)
 	{
+		self.owner.teambubbleentity = world;
 		remove(self);
 		return;
 	}
