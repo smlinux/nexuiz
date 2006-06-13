@@ -88,7 +88,7 @@ void(entity e) DropFlag =
 		return;
 	}
 	bprint(strcat(p.netname, "^7 lost the ", e.netname, "\n"));
-	
+
 	if (p.flagcarried == e)
 		p.flagcarried = world;
 	e.owner = world;
@@ -237,7 +237,10 @@ void() FlagTouch =
 		}
 
 		LogCTF("capture", other.flagcarried.team, other);
+		// give credit to the individual player
 		other.frags = other.frags + cvar("g_ctf_flagscore_capture");//FLAGSCORE_CAPTURE;
+		// give credit to all players of the team (rewards large teams)
+		// NOTE: this defaults to 0
 		head = find(head, classname, "player");
 		while (head)
 		{

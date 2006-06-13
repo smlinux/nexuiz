@@ -33,7 +33,8 @@ void dompoint_captured ()
 {
 	local entity head;
 
-	head = self.enemy;
+	// now that the delay has expired, switch to the latest team to lay claim to this point
+	head = self.aiment;
 
 	self.cnt = -1;
 
@@ -81,8 +82,9 @@ void AnimateDomPoint()
 void() dompointthink =
 {
 	local entity head;
-	float waittime;
-	float fragamt;
+	local float waittime;
+	local float teamfragamt;
+	local float individualfragamt;
 
 	self.nextthink = time + 0.1;
 
@@ -111,22 +113,41 @@ void() dompointthink =
 		waittime = self.wait;
 	self.delay = time + waittime;
 
-	if (!self.goalentity.netname)
-		return;
-
-
-	fragamt = cvar("g_domination_point_amt");
-	if(!fragamt)
-		fragamt = self.frags;
-
-	head = find(head, classname, "player");
-	while (head)
+	// give credit to all players of the team (rewards large teams)
+	// NOTE: this defaults to 0
+	if (self.goalentity.netname)
 	{
-		if (head.team == self.goalentity.team)
-			head.frags = head.frags + fragamt;
+		teamfragamt = cvar("g_domination_point_teamamt");
+
 		head = find(head, classname, "player");
+		while (head)
+		{
+			if (head.team == self.goalentity.team)
+				head.frags = head.frags + teamfragamt;
+			head = find(head, classname, "player");
+		}
 	}
-	self.goalentity.frags = self.goalentity.frags + fragamt;
+
+	// if the player left the game, we have to find another player on the same team to give credit to
+	if (!self.enemy.flags) // flags is zero on removed clients
+	{
+		head = find(head, classname, "player");
+		while (head)
+		{
+			if (head.team == self.goalentity.team)
+				self.enemy = head;
+			head = find(head, classname, "player");
+		}
+	}
+
+	// give credit to the individual player
+	if (self.enemy)
+	{
+		individualfragamt = cvar("g_domination_point_amt");
+		if(!individualfragamt)
+			individualfragamt = self.frags;
+		self.enemy.frags = self.enemy.frags + individualfragamt;
+	}
 };
 
 void() dompointtouch =
@@ -135,8 +156,6 @@ void() dompointtouch =
 	if (other.classname != "player")
 		return;
 	if (other.health < 1)
-		return;
-	if(self.cnt > 0 && self.cnt == other.team)
 		return;
 
 	// only valid teams can claim it
@@ -151,15 +170,15 @@ void() dompointtouch =
 	self.team = self.goalentity.team; // this stores the PREVIOUS team!
 
 	self.cnt = other.team;
-	self.enemy = head;
+	self.aiment = head; // team to switch to after the delay
 	self.dmg_inflictor = other;
 
 	self.state = 1;
 	self.delay = time + cvar("g_domination_point_capturetime");
 	//self.nextthink = time + cvar("g_domination_point_capturetime");
 	//self.think = dompoint_captured;
-	// go to neutral team in the mean time
 
+	// go to neutral team in the mean time
 	head = find(world, classname, "dom_team");
 	while (head && head.netname != "")
 		head = find(head, classname, "dom_team");
@@ -170,6 +189,8 @@ void() dompointtouch =
 	self.model = head.mdl;
 	self.modelindex = head.dmg;
 	self.skin = head.skin;
+
+	self.enemy = other; // individual player scoring
 };
 
 /*QUAKED dom_team (0 .5 .8) (-32 -32 -24) (32 32 32)
@@ -401,25 +422,25 @@ void() dom_controlpoint_setup =
 	}
 	else
 	{
-		if(c1 >= 0 && (c1 < smallestteam_count || 
+		if(c1 >= 0 && (c1 < smallestteam_count ||
 					(c1 == smallestteam_count && self.team == COLOR_TEAM1) ) )
 		{
 			smallestteam = 1;
 			smallestteam_count = c1;
 		}
-		if(c2 >= 0 && c2 < (c2 < smallestteam_count || 
+		if(c2 >= 0 && c2 < (c2 < smallestteam_count ||
 					(c2 == smallestteam_count && self.team == COLOR_TEAM2) ) )
 		{
 			smallestteam = 2;
 			smallestteam_count = c2;
 		}
-		if(c3 >= 0 && c3 < (c3 < smallestteam_count || 
+		if(c3 >= 0 && c3 < (c3 < smallestteam_count ||
 					(c3 == smallestteam_count && self.team == COLOR_TEAM3) ) )
 		{
 			smallestteam = 3;
 			smallestteam_count = c3;
 		}
-		if(c4 >= 0 && c4 < (c4 < smallestteam_count || 
+		if(c4 >= 0 && c4 < (c4 < smallestteam_count ||
 					(c4 == smallestteam_count && self.team == COLOR_TEAM4) ) )
 		{
 			smallestteam = 4;
@@ -465,11 +486,11 @@ void() dom_controlpoint =
 
 	//if(!self.glow_size)
 	//	self.glow_size = cvar("g_domination_point_glow");
-	self.effects = self.effects | EF_FULLBRIGHT;	
+	self.effects = self.effects | EF_FULLBRIGHT;
 };
 
 // code from here on is just to support maps that don't have control point and team entities
-void dom_spawnteam (string teamname, float teamcolor, string pointmodel, float pointskin, string capsound, string capnarration, string capmessage) 
+void dom_spawnteam (string teamname, float teamcolor, string pointmodel, float pointskin, string capsound, string capnarration, string capmessage)
 {
 	local entity oldself;
 	oldself = self;
