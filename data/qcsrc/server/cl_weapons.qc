@@ -172,6 +172,7 @@ void() W_ThrowWeapon
 // switch between weapons
 void(float imp) W_SwitchWeapon
 {
+	if (self.weapon != imp)
 	if (client_hasweapon(self, imp, TRUE, TRUE))
 	{
 		self.cnt = self.weapon;
