@@ -56,7 +56,6 @@ control/data/data.qh
 control/window/windows.qh
 control/visual/visual.qh
 control/automation/automation.qh
-//control/fx/fx.qh
 
 // custom (game specific)
 custom/custom.qh
@@ -143,10 +142,6 @@ control/visual/valuebutton.qc
 control/visual/floating.qc
 control/visual/switchbutton.qc
 control/visual/scrollbar.qc
-
-//control/fx/vector.qc
-//control/fx/float.qc
-//control/fx/interpol.qc
 
 control/cinematic.qc
 control/container.qc
