@@ -1873,7 +1873,9 @@ void() bot_serverframe =
 
 	// add/remove bots if needed to make sure there are at least
 	// minplayers+bot_number, or remove all bots if no one is playing
-	if (realplayers || cvar("bot_join_empty"))
+	// But don't remove bots immediately on level change, as the real players
+	// usually haven't rejoined yet
+	if (realplayers || cvar("bot_join_empty") || (currentbots > 0 && time < 5))
 	{
 		float realminplayers, minplayers;
 		realminplayers = cvar("minplayers");
