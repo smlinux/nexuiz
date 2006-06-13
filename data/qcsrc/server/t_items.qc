@@ -155,6 +155,8 @@ void Item_Touch (void)
 
 	if (self.classname == "droppedweapon")
 		remove (self);
+	else if(self.flags & FL_WEAPON && cvar("deathmatch") == 2)
+		return;
 	else
 	{
 		self.solid = SOLID_NOT;
@@ -207,6 +209,13 @@ float(entity player, entity item) commodity_pickupevalfunc =
 		c = c + player.health / item.health / 10;
 	// the more ammo the player has, the less desirable this pickup becomes
 	c = 1 / (1 + c);
+
+	if (cvar("deathmatch") == 2) // weapon stay is on, so weapons the player already has are of no interest
+	if (item.flags & FL_WEAPON)
+	if (self.items & item.items)
+	if (item.classname != "droppedweapon")
+		c = 0;
+
 	return item.bot_pickupbasevalue * c;
 };
 
