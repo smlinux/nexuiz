@@ -446,7 +446,7 @@ void PutClientInServer (void)
 
 		self.customizeentityforclient = Client_customizeentityforclient;
 
-		if(cvar("sv_defaultcharacter") == 1) {
+		if(cvar("sv_defaultcharacter") == 1 && !teams_matter) {
 			local string defaultmodel;
 			defaultmodel = CheckPlayerModel(cvar_string("sv_defaultplayermodel"));
 			setmodel_lod (self, defaultmodel);
@@ -1347,7 +1347,7 @@ void PlayerPreThink (void)
 			}
 		}
 
-		if(cvar("sv_defaultcharacter") == 1) {
+		if(cvar("sv_defaultcharacter") == 1 && !teams_matter) {
 			local string defaultmodel;
 			defaultmodel = CheckPlayerModel(cvar_string("sv_defaultplayermodel"));
 
