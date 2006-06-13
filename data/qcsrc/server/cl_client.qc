@@ -725,7 +725,15 @@ void ClientConnect (void)
 	GetCvars(0);
 
 	// set cvar for team scoreboard
-	stuffcmd(self, strcat("set teamplay ", ftos(teams_matter), "\n"));
+	if (teams_matter)
+	{
+		local float t;
+		t = cvar("teamplay");
+		// we have to stuff the correct teamplay value because if this is a listen server, this changes the teamplay mode of the server itself, which is bad
+		stuffcmd(self, strcat("set teamplay ", ftos(t), "\n"));
+	}
+	else
+		stuffcmd(self, strcat("set teamplay 0\n"));
 
 	if(cvar("g_lms"))
 	{
