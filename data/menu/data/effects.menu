@@ -47,11 +47,11 @@ Item DataContainer Effects
 	Item Data_Cvar DeluxeMapping
 	{
 		cvarName "r_glsl_deluxemapping"
-		defValue "2"
+		defValue "1"
 		
 		Item DataLink_TextSwitch Switch
 		{
-			valueList "'0' '2'"
+			valueList "'0' '1'"
 			descList "'Off' 'On' 'Custom'"
 			link  "##up"
 		}
