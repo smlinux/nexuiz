@@ -278,7 +278,21 @@ void() W_WeaponFrame =
 	}
 
 	// call the think code which may fire the weapon
-	weapon_action(self.weapon, WR_THINK);
+	// and do so multiple times to resolve framerate dependency issues if the
+	// server framerate is very low and the weapon fire rate very high
+	local float c;
+	c = 0;
+	while (c < 5)
+	{
+		c = c + 1;
+		weapon_action(self.weapon, WR_THINK);
+		if (self.weapon_nextthink > 0 && time >= self.weapon_nextthink)
+			self.weapon_think();
+	}
+
+	// don't let attack_finished fall behind when not firing
+	if (self.attack_finished < time)
+		self.attack_finished = time;
 
 	// update currentammo incase it has changed
 	if (self.items & IT_CELLS)
@@ -292,10 +306,6 @@ void() W_WeaponFrame =
 	else
 		self.currentammo = 1;
 
-	// do weapon think
-	if (time >= self.weapon_nextthink)
-		if (self.weapon_nextthink > 0)
-			self.weapon_think();
 };
 
 float nixnex_weapon;

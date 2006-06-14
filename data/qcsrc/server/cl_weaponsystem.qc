@@ -360,14 +360,14 @@ float(float secondary, float attacktime) weapon_prepareattack =
 		return FALSE;
 	}
 	// don't fire if previous attack is not finished
-	if (time < self.attack_finished)
+	if (self.attack_finished > time)
 		return FALSE;
 	// don't fire while changing weapon
 	if (self.weaponentity.state != WS_READY)
 		return FALSE;
 	self.weaponentity.state = WS_INUSE;
 	// FIXME: this does not allow multiple shots per frame and disgards cumulative error
-	self.attack_finished = time + attacktime;
+	self.attack_finished = max(time, self.attack_finished + attacktime);
 	return TRUE;
 };
 
