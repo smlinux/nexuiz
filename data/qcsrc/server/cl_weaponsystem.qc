@@ -366,7 +366,6 @@ float(float secondary, float attacktime) weapon_prepareattack =
 	if (self.weaponentity.state != WS_READY)
 		return FALSE;
 	self.weaponentity.state = WS_INUSE;
-	// FIXME: this does not allow multiple shots per frame and disgards cumulative error
 	self.attack_finished = max(time, self.attack_finished + attacktime);
 	return TRUE;
 };
