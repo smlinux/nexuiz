@@ -779,10 +779,6 @@ void() NextLevel =
 
 		self = other;
 
-		if(clienttype(other) == CLIENTTYPE_REAL)
-		if(cvar("sv_autoscreenshot"))
-			stuffcmd(other, "screenshot\necho \"^5A screenshot has been taken at request of the server.\"\n");
-
 		if(other.winning)
 			bprint(strcat(other.netname, " wins.\n"));
 
@@ -809,6 +805,15 @@ void() NextLevel =
 		CampaignPreIntermission();
 
 	WriteByte (MSG_ALL, SVC_INTERMISSION);
+
+	other = findchainflags(flags, FL_CLIENT);
+	while(other)
+	{
+		if(clienttype(other) == CLIENTTYPE_REAL)
+		if(cvar("sv_autoscreenshot"))
+			stuffcmd(other, "wait\nscreenshot\necho \"^5A screenshot has been taken at request of the server.\"\n");
+		other = other.chain;
+	}
 };
 
 /*
