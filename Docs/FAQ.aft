@@ -42,6 +42,9 @@ This happens when the engine can't load the data*.pk3 file. The reasons could be
 ** The sound is broken, it crackles and stutters
 Try run |nexuiz-sdl.exe| instead of |nexuiz.exe| (on Windows). Adding the command line options |-sndspeed 48000| and/or |-sndstereo| can also help on some systems (on Windows, Linux, Mac).
 
+** I can't switch to 32 bit color depth (Windows)
+Check if your desktop color depth is set to 32 bits per pixel. If it's just set to 16, Nexuiz can't switch to 32 bit mode.
+
 ** When I join a server or after a map change I see nothing but a black screen, but I can still move and shoot
 This is probably because you don't have the map, that's running on the server. As Nexuiz does now support map/content download the server might be be setup to support this and you will have to get the map the old fashioned way. Those servers will have a download URL in their name or welcome message. There is also a [wiki page (http://savage747.sa.funpic.de/wiki/pmwiki.php?n=Main.CustomMaps)] dedicated to new maps.
 
