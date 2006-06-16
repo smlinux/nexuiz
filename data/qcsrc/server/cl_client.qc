@@ -821,6 +821,7 @@ void() ChatBubbleThink =
 	self.nextthink = time;
 	if (!self.owner.modelindex || self.owner.chatbubbleentity != self)
 	{
+		self.owner.chatbubbleentity = world;
 		remove(self);
 		return;
 	}
