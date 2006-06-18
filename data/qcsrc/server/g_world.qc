@@ -780,7 +780,7 @@ void() NextLevel =
 		self = other;
 
 		if(other.winning)
-			bprint(strcat(other.netname, " wins.\n"));
+			bprint(strcat(other.netname, " ^7wins.\n"));
 
 		/*
 		if (pos != world);
