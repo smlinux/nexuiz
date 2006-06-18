@@ -240,7 +240,7 @@ void() W_PreviousWeapon =
 void() W_WeaponFrame =
 {
 	if(arena_roundbased)
-	if(time < self.arena_warmup_end)
+	if(time < warmup)
 		return;
 
 	if (!self.weaponentity || self.health < 1)

@@ -205,7 +205,7 @@ void FireGrapplingHook (void)
 	local vector org;
 
 	if(arena_roundbased)
-	if(time < self.arena_warmup_end)
+	if(time < warmup)
 		return;
 
 	makevectors(self.v_angle);

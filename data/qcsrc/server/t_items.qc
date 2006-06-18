@@ -503,6 +503,9 @@ void item_health100 (void) {
 	if(!cvar("g_powerup_superhealth"))
 		return;
 
+	if(cvar("g_arena") && !cvar("g_arena_powerups"))
+		return;
+
 	if(cvar("g_minstagib")) {
 		minstagib_items(IT_NAILS);
 	} else {
@@ -515,6 +518,9 @@ void item_strength (void) {
 	if(!cvar("g_powerup_strength"))
 		return;
 
+	if(cvar("g_arena") && !cvar("g_arena_powerups"))
+		return;
+
 	if(cvar("g_minstagib")) {
 		minstagib_items(IT_STRENGTH);
 	} else {
@@ -525,6 +531,9 @@ void item_strength (void) {
 
 void item_invincible (void) {
 	if(!cvar("g_powerup_shield"))
+		return;
+
+	if(cvar("g_arena") && !cvar("g_arena_powerups"))
 		return;
 
 	if(cvar("g_minstagib")) {

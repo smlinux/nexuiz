@@ -8,7 +8,7 @@ float arena_roundbased;
 entity spawnqueue_first;
 entity spawnqueue_last;
 entity champion;
-.float arena_warmup_end;
+float warmup;
 
 void PutObserverInServer();
 void PutClientInServer();
@@ -18,12 +18,10 @@ void(entity e) removedecor;
 
 void reset_map()
 {
-	float warmup;
-
+	if(cvar("g_arena_warmup"))
+		warmup = time + cvar("g_arena_warmup");
+	
 	self = nextent(world);
-
-	warmup = cvar("g_arena_warmup");
-
 	while(self)
 	{
 		if(self.classname == "droppedweapon"		// cleanup
@@ -53,14 +51,11 @@ void reset_map()
 		else if(self.flags & FL_CLIENT)			// reset all players
 		{
 			if(self.spawned)
-			{
-				if(warmup)
-					self.arena_warmup_end = time + warmup;
 				PutClientInServer();
-			}
-			else if(self.deadflag)
-				PutClientInServer();
+			else
+				PutObserverInServer();
 		}
+		
 		self = nextent(self);
 	}
 
@@ -119,22 +114,22 @@ void Spawnqueue_Mark(entity e)
 
 void Arena_Warmup()
 {
+	float f;
 	string msg;
 
 	if(!arena_roundbased)
 		return;
 
-	msg = newlines;
-	if(time < self.arena_warmup_end)
-	{
-		float f;
-		f = rint(self.arena_warmup_end - time);
+	f = rint(warmup - time);
 
+	msg = newlines;
+	if(time < warmup && self.spawned)
+	{
 		if(champion)
 			msg = strcat(msg, "The Champion is ", champion.netname, "^7\n\n\n");
 
 		if(f)
-			msg = strcat(msg, "Round will start in ", ftos(rint(self.arena_warmup_end - time)));
+			msg = strcat(msg, "Round will start in ", ftos(f));
 		else
 		{
 			if(self.spawned)
@@ -145,6 +140,11 @@ void Arena_Warmup()
 
 		if(self.spawned)
 			self.movetype = MOVETYPE_NONE;
+
+		self.velocity = '0 0 0';
+		self.avelocity = '0 0 0';
+		self.movement = '0 0 0';
+		self.fixangle = TRUE;
 	}
 	else if(self.movetype == MOVETYPE_NONE)
 	{
@@ -157,6 +157,9 @@ void Arena_Warmup()
 float next_round;
 void Spawnqueue_Check()
 {
+	if(time < warmup + 1)
+		return;
+
 	if(!next_round)
 	if(numspawned < 2)
 		next_round = time + 3;
@@ -172,6 +175,9 @@ void Spawnqueue_Check()
 				champion = find(champion, classname, "player");
 		}
 
+		if(arena_roundbased)
+			reset_map();
+
 		while(numspawned < maxspawned && spawnqueue_first)
 		{
 			self = spawnqueue_first;
@@ -184,7 +190,5 @@ void Spawnqueue_Check()
 			self.classname = "player";
 			PutClientInServer();
 		}
-		if(arena_roundbased)
-			reset_map();
 	}
 }

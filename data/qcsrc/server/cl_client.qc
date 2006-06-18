@@ -196,6 +196,9 @@ float Client_customizeentityforclient()
 	float distance;
 	float f;
 
+	if(self.flags & FL_NOTARGET) // we don't need LOD for spectators
+		return TRUE;
+
 	if(other.cvar_cl_playerdetailreduction <= 0)
 	{
 		if(other.cvar_cl_playerdetailreduction <= -2)
@@ -323,7 +326,8 @@ void PutObserverInServer (void)
 	self.angles = spot.angles;
 	self.angles_z = 0;
 	self.fixangle = TRUE;
-	self.crouch = FALSE;
+	self.crouch = FALSE;:q
+
 	self.view_ofs = PL_VIEW_OFS;
 	setorigin (self, spot.origin);
 	setsize (self, '0 0 0', '0 0 0');
@@ -340,6 +344,7 @@ void PutObserverInServer (void)
 	self.punchangle = '0 0 0';
 	self.punchvector = '0 0 0';
 	self.oldvelocity = self.velocity;
+	self.customizeentityforclient = Client_customizeentityforclient;
 
 	if(cvar("g_arena"))
 	{
@@ -566,7 +571,10 @@ void PutClientInServer (void)
 		}
 
 		if(cvar("g_arena"))
+		{
 			Spawnqueue_Remove(self);
+			Spawnqueue_Mark(self);
+		}
 
 		self.event_damage = PlayerDamage;
 
