@@ -326,7 +326,7 @@ void PutObserverInServer (void)
 	self.angles = spot.angles;
 	self.angles_z = 0;
 	self.fixangle = TRUE;
-	self.crouch = FALSE;:q
+	self.crouch = FALSE;
 
 	self.view_ofs = PL_VIEW_OFS;
 	setorigin (self, spot.origin);
