@@ -123,6 +123,8 @@ chmod 644 *.dll *.exe
 mkdir Nexuiz
 mv * Nexuiz/ || true
 
+find . -name .svn -exec rm -rf {} \; -prune
+
 rm -f "$zipdir/nexuiz$date$ext.zip"
 zip -9yr "$zipdir/nexuiz$date$ext.zip"           Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/data/data$date.pk3 Nexuiz/data/common-spog.pk3
 rm -f "$zipdir/nexuizengineonly$date$ext.zip"
