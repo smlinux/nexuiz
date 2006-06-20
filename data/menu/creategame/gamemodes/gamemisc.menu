@@ -50,6 +50,11 @@ Item Layout Misc
 				text	"Grappling Hook Enabled"
 				target	"::Data::Game::Misc::Grapple::Switch"
 			}
+			Derive Nex_Option_Switch ThroughFloor
+			{
+				text	"Damage Through Floor"
+				target	"::Data::Game::Misc::ThroughFloor::Switch"
+			}			
 			Derive Nex_Option_EditBox GrappleFireSpeed
 			{
 				text	"Grappling Hook Fire Speed"

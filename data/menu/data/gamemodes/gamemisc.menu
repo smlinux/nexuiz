@@ -25,6 +25,13 @@ Item DataContainer Misc
 
 		[DataLink_OnOffSwitch]
 	}
+	Item Data_CvarCreateSave ThroughFloor
+	{
+		cvarName	"g_throughfloor"
+		defValue	1
+
+		[DataLink_OnOffSwitch]
+	}	
 	Item Data_CvarCreateSave GrappleFireSpeed
 	{
 		cvarName	"g_balance_grapplehook_speed_fly"
