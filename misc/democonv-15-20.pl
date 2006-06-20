@@ -38,6 +38,9 @@ my %maps = (
 
 # opening the files
 
+push @ARGV, "$ARGV[0]-converted.dem"
+	if @ARGV == 1;
+
 die "Usage: $0 infile outfile"
 	if @ARGV != 2;
 my ($in, $out) = @ARGV;
