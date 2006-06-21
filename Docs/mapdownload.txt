@@ -33,8 +33,8 @@ are running. You can either use the cvar
 
    sv_curl_defaulturl           default download URL
 
-to set it to some site, or put a file in the data directory of the following
-format:
+to set it to some site, or put a file named "curl_urls.txt" in the data
+directory of the following format:
 
    pattern        url
    pattern        url
