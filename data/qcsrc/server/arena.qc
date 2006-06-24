@@ -144,7 +144,7 @@ void Arena_Warmup()
 		self.velocity = '0 0 0';
 		self.avelocity = '0 0 0';
 		self.movement = '0 0 0';
-		self.fixangle = TRUE;
+		//self.fixangle = TRUE;
 	}
 	else if(self.movetype == MOVETYPE_NONE)
 	{
@@ -173,10 +173,8 @@ void Spawnqueue_Check()
 			champion = find(world, classname, "player");
 			while(champion && champion.deadflag)
 				champion = find(champion, classname, "player");
-		}
-
-		if(arena_roundbased)
 			reset_map();
+		}
 
 		while(numspawned < maxspawned && spawnqueue_first)
 		{

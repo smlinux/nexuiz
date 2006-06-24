@@ -69,8 +69,8 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float deathtype
 		traceline_hitcorpse (self, start, end, FALSE, self);
 
 		//if (trace_ent.solid == SOLID_BSP && !(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT))
-		if (!(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT))
-			te_plasmaburn (trace_endpos - dir * 6);
+		//if (!(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT))
+		//	te_plasmaburn (trace_endpos - dir * 6);
 
 		// if it is world we can't hurt it so stop now
 		if (trace_ent == world || trace_fraction == 1)

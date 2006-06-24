@@ -140,7 +140,10 @@ entity SelectSpawnPoint (float anypoint)
 	// (this means that roughly every other spawn will be furthest, so you
 	// usually won't get fragged at spawn twice in a row)
 	if (arena_roundbased)
-		spot = Spawn_FurthestPoint(firstspot, playerlist);
+	{
+		firstspot = Spawn_FilterOutBadSpots(firstspot, playerlist, 800, teamcheck);
+		spot = Spawn_RandomPoint(firstspot);
+	}
 	else if (random() > 0.5 || spawn_allbad || spawn_allgood)
 		spot = Spawn_RandomPoint(firstspot);
 	else
@@ -1216,6 +1219,9 @@ void SpectateCopy(entity spectatee) {
 }
 
 void SpectateUpdate() {
+	if(!self.enemy)
+			PutObserverInServer();
+
 	if (self != self.enemy) {
 		if(self.enemy.flags & FL_NOTARGET)
 			PutObserverInServer();
@@ -1326,6 +1332,13 @@ void PlayerPreThink (void)
 			dist = self.oldorigin - self.origin;
 			dist_z = 0;
 			self.lms_traveled_distance += fabs(vlen(dist));
+
+			if(cvar("g_campaign"))
+			if(!campaign_bots_may_start)
+			{
+				self.lms_nextcheck = time + cvar("g_lms_campcheck_interval")*2;
+				self.lms_traveled_distance = 0;
+			}
 
 			if(time > self.lms_nextcheck)
 			{
@@ -1475,7 +1488,6 @@ void PlayerPreThink (void)
 		}
 		PrintWelcomeMessage(self);
 	} else if(self.classname == "spectator") {
-
 		if (self.flags & FL_JUMPRELEASED) {
 			if (self.button2 && self.version == cvar("gameversion")) {
 				if(!cvar("teamplay") || cvar("g_campaign") || cvar("g_balance_teams")) {
@@ -1511,12 +1523,13 @@ void PlayerPreThink (void)
 			} else {
 				SpectateUpdate();
 			}
-        } else {
-        	if (!(self.button0 || self.button3)) {
-			self.flags = self.flags | FL_JUMPRELEASED;
-        	}
+	        } else {
+	        	if (!(self.button0 || self.button3)) {
+				self.flags = self.flags | FL_JUMPRELEASED;
+        		}
 		}
 		PrintWelcomeMessage(self);
+		self.flags = self.flags | FL_CLIENT | FL_NOTARGET;
 	}
 }
 

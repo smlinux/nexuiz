@@ -72,8 +72,10 @@ void SV_PlayerPhysics()
 		swampspd_mod = self.swamp_slowdown; //cvar("g_balance_swamp_moverate");
 	}
 
-
-	spd = sv_maxspeed * maxspd_mod * swampspd_mod;
+	if(self.flags & FL_NOTARGET)
+		spd = sv_maxspeed * cvar("sv_spectator_speed_multiplier");
+	else
+		spd = sv_maxspeed * maxspd_mod * swampspd_mod;
 
 	if(self.speed != spd)
 	{
