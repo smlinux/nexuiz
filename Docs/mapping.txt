@@ -205,11 +205,19 @@ Here is an example entry in a .ent file that includes colored text and 3 teams:
 }
 {
 "classname" "dom_team"
-"netname" "^2Green Team"
-"cnt" "3"
+"netname" "^6Pink Team"
+"cnt" "9"
 "noise" ""
 "noise1" "domination/claim.wav"
-"model" "models/domination/dom_green.md3"
+"model" "models/domination/dom_pink.md3"
+}
+{
+"classname" "dom_team"
+"netname" "^3Yellow Team"
+"cnt" "12"
+"noise" ""
+"noise1" "domination/claim.wav"
+"model" "models/domination/dom_pink.md3"
 }
 {
 "classname" "dom_controlpoint"
@@ -249,7 +257,7 @@ Here is an example entry in a .ent file that includes colored text and 3 teams:
 }
 
 
-As you can see in the example, there are 4 dom_team ents: one blank and then Red, Green & Blue.  Each control point has a different message (giving it a special name), and the one in the hallways gives 3 frags every 5 seconds instead of just one, making it more valuable.
+As you can see in the example, there are 5 dom_team ents: one blank, Red, Blue, Pink and Yellow.  Each control point has a different message (giving it a special name), and the one in the hallways gives 3 frags every 5 seconds instead of just one, making it more valuable.
 
 
 
@@ -369,10 +377,10 @@ Blue
 Team:	14
 Color:	13
 
-Green
+Pink
 -----
-Team:	4
-Color:	3
+Team:	10
+Color:	9
 
 Yellow
 ------
@@ -393,17 +401,6 @@ Occasionally you may want to print text in color, such as team names.  Here are 
 5  Cyan
 6  Magenta
 7  White
-8  Gray
-
-
-
-
-
-
-
-
-
-
-
-
-
+8  Grey
+9  Grey
+0  Black
