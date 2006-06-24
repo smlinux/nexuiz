@@ -217,7 +217,7 @@ Here is an example entry in a .ent file that includes colored text and 3 teams:
 "cnt" "12"
 "noise" ""
 "noise1" "domination/claim.wav"
-"model" "models/domination/dom_pink.md3"
+"model" "models/domination/dom_yellow.md3"
 }
 {
 "classname" "dom_controlpoint"
