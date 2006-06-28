@@ -659,6 +659,9 @@ string ColoredTeamName(float t);
 //void dom_player_join_team(entity pl);
 void ClientConnect (void)
 {
+	local float fh;
+	local string s;
+	
 	self.classname = "player_joining";
 	self.flags = self.flags | FL_CLIENT;
 
@@ -681,7 +684,6 @@ void ClientConnect (void)
 	self.playerid = (playerid_last = playerid_last + 1);
 	if(cvar("sv_eventlog"))
 	{
-		string s;
 		if(clienttype(self) == CLIENTTYPE_REAL)
 			s = "player";
 		else
@@ -708,7 +710,19 @@ void ClientConnect (void)
 	self.welcomemessage_time = time + cvar("welcome_message_time");
 	self.welcomemessage_time2 = 0;
 
-	stuffcmd(self, strcat("exec maps/", mapname, ".cfg\n"));
+	//stuffcmd(self, strcat("exec maps/", mapname, ".cfg\n"));
+	// the client might not have that file yet!
+	fh = fopen(strcat("maps/", mapname, ".cfg"), FILE_READ);
+	if(fh >= 0)
+	{
+		while((s = fgets(fh)))
+			stuffcmd(self, strcat(s, "\n"));
+		fclose(fh);
+	}
+	// TODO: is this being used for anything else than cd tracks?
+	// Remember: SVC_CDTRACK exists. Maybe it should be used.
+	
+	
 	// send prediction settings to the client
 	stuffcmd(self, strcat("cl_movement_accelerate ", ftos(cvar("sv_accelerate")), "\n"));
 	stuffcmd(self, strcat("cl_movement_friction ", ftos(cvar("sv_friction")), "\n"));
