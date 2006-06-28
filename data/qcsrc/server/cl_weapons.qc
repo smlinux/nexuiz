@@ -161,6 +161,7 @@ void() W_ThrowWeapon
 	wep.nextthink = time + 0.5;
 	wep.think = thrown_wep_think;
 	wep.classname = "droppedweapon";
+	wep.flags = wep.flags | FL_TOSSED;
 	e.items = e.items - (e.items & w);
 	e.switchweapon = w_getbestweapon(e);
 	wep.colormap = e.colormap;

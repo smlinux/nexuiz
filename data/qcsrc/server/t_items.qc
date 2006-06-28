@@ -98,8 +98,13 @@ void Item_Touch (void)
 	}
 	else
 	{
-		if (cvar("deathmatch") == 2 && self.flags & FL_WEAPON && other.items & self.items && self.classname != "droppedweapon")
-			return;
+		if (cvar("deathmatch") == 2 || cvar("g_weapon_stay"))
+		{
+			if (self.flags & FL_WEAPON && other.items & self.items && self.classname != "droppedweapon")
+				return;
+			if (other.items & self.items && self.flags & FL_TOSSED)	// don't let players stack ammo by tossing weapons
+				return;
+		}
 
 		if (self.ammo_shells)
 			other.ammo_shells = min (other.ammo_shells + self.ammo_shells, 999);
@@ -156,7 +161,7 @@ void Item_Touch (void)
 
 	if (self.classname == "droppedweapon")
 		remove (self);
-	else if(self.flags & FL_WEAPON && cvar("deathmatch") == 2)
+	else if(self.flags & FL_WEAPON && (cvar("deathmatch") == 2 || cvar("g_weapon_stay")))
 		return;
 	else
 	{
