@@ -106,11 +106,12 @@ void Obituary (entity attacker, entity targ, float deathtype)
 					m = strcat(m, "^6Pink Team");
 				else if (targ.team == 13)
 					m = strcat(m, "^3Yellow Team");
-				centerprint(targ, m);
+				centermsg_setfor(targ, CENTERMSG_TEAMCHANGE, m);
 			}
 			else if (deathtype == DEATH_AUTOTEAMCHANGE)
 			{
-				m = "You have been moved into a different team to improve team balance\nYou are now on: ";
+				centermsg_setfor(targ, CENTERMSG_TEAMCHANGE, "You have been moved into a different team to improve team balance");
+				m = "You are now on: ";
 				if (targ.team == 5)
 					m = strcat(m, "^1Red Team");
 				else if (targ.team == 14)
@@ -119,17 +120,17 @@ void Obituary (entity attacker, entity targ, float deathtype)
 					m = strcat(m, "^6Pink Team");
 				else if (targ.team == 13)
 					m = strcat(m, "^3Yellow Team");
-				centerprint(targ, m);
+				centermsg_setfor(targ, CENTERMSG_TEAMCHANGE2, m);
 				return;
 			}
 			else if (deathtype == DEATH_CAMP)
-				centerprint(targ, strcat("^1Die camper!\n\n\n"));
+				centermsg_setfor(targ, CENTERMSG_DEATH, "^1Die camper!");
 			else if (deathtype == DEATH_NOAMMO)
-				centerprint(targ, strcat("^1You were killed for running out of ammo...\n\n\n"));
+				centermsg_setfor(targ, CENTERMSG_DEATH, "^1You were killed for running out of ammo...");
 			else if (deathtype == DEATH_ROT)
-				centerprint(targ, strcat("^1You grew too old without taking your medcine\n\n\n"));
+				centermsg_setfor(targ, CENTERMSG_DEATH, "^1You grew too old without taking your medcine");
 			else
-				centerprint(targ, strcat("^1You killed your own dumb self!\n\n\n"));
+				centermsg_setfor(targ, CENTERMSG_DEATH, "^1You killed your own dumb self!");
 
 			if (deathtype == IT_GRENADE_LAUNCHER)
 				bprint ("^1",s, "^1 detonated\n");
@@ -161,7 +162,7 @@ void Obituary (entity attacker, entity targ, float deathtype)
 		}
 		else if (teamplay && attacker.team == targ.team)
 		{
-			centerprint(attacker, strcat("^1Moron! You fragged a teammate!\n\n\n"));
+			centermsg_setfor(attacker, CENTERMSG_DEATH, "^1Moron! You fragged a teammate!");
 			bprint ("^1", attacker.netname, "^1 mows down a teammate\n");
 			GiveFrags(attacker, targ, -1);
 			//attacker.frags = attacker.frags - 1;
@@ -184,8 +185,8 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				bprint("^1",attacker.netname, "^1 drew first blood", "\n");
 			}
 
-			centerprint(attacker, strcat("^4You fragged ^7", s, "\n\n\n"));
-			centerprint(targ, strcat("^1You were fragged by ^7", attacker.netname, "\n\n\n"));
+			centermsg_setfor(attacker, CENTERMSG_KILL, strcat("^4You fragged ^7", s));
+			centermsg_setfor(targ, CENTERMSG_DEATH, strcat("^1You were fragged by ^7", attacker.netname));
 
 			if (deathtype == IT_LASER)
 				bprint ("^1",s, "^1 was blasted by ", attacker.netname, "\n");
@@ -272,7 +273,7 @@ void Obituary (entity attacker, entity targ, float deathtype)
 		}
 		else
 		{
-			centerprint(targ, strcat("^1Watch your step!\n\n\n"));
+			centermsg_setfor(targ, CENTERMSG_DEATH, "^1Watch your step!");
 			if (deathtype == DEATH_HURTTRIGGER && attacker.message != "")
 				bprint ("^1",s, "^1 ", attacker.message, "\n");
 			else if (deathtype == DEATH_DROWN)
@@ -360,7 +361,7 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 		if (targ.extralives && (deathtype == IT_NEX) && damage)
 		{
 			targ.extralives -= 1;
-			centerprint(targ, strcat("^3Remaining extra lives: ",ftos(targ.extralives),"\n"));
+			centermsg_setfor(targ, CENTERMSG_MINSTAGIB, strcat("^3Remaining extra lives: ",ftos(targ.extralives)));
 			damage = 0;
 			targ.armorvalue = targ.extralives;
 			if(clienttype(targ) == CLIENTTYPE_REAL) stuffcmd(targ, "play2 misc/hit.wav\n");
@@ -376,7 +377,7 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 			if (targ != attacker)
 			{
 				if (targ.classname == "player")
-					centerprint(attacker, "Secondary fire inflicts no damage!\n");
+					centermsg_setfor(attacker, CENTERMSG_MINSTAGIB, "Secondary fire inflicts no damage!\n");
 				damage = 0;
 				force = '0 0 0';
 				attacker = targ;

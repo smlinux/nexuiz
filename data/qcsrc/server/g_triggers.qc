@@ -54,7 +54,7 @@ void() SUB_UseTargets =
 //
 	if (activator.classname == "player" && self.message != "")
 	{
-		centerprint (activator, self.message);
+		centermsg_setfor (activator, CENTERMSG_TRIGGER, self.message);
 		if (!self.noise)
 			sound (activator, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
 	}
@@ -307,20 +307,20 @@ void() counter_use =
 		&& (self.spawnflags & SPAWNFLAG_NOMESSAGE) == 0)
 		{
 			if (self.count >= 4)
-				centerprint (activator, "There are more to go...");
+				centermsg_setfor (activator, CENTERMSG_TRIGGER, "There are more to go...");
 			else if (self.count == 3)
-				centerprint (activator, "Only 3 more to go...");
+				centermsg_setfor (activator, CENTERMSG_TRIGGER, "Only 3 more to go...");
 			else if (self.count == 2)
-				centerprint (activator, "Only 2 more to go...");
+				centermsg_setfor (activator, CENTERMSG_TRIGGER, "Only 2 more to go...");
 			else
-				centerprint (activator, "Only 1 more to go...");
+				centermsg_setfor (activator, CENTERMSG_TRIGGER, "Only 1 more to go...");
 		}
 		return;
 	}
 
 	if (activator.classname == "player"
 	&& (self.spawnflags & SPAWNFLAG_NOMESSAGE) == 0)
-		centerprint(activator, "Sequence completed!");
+		centermsg_setfor(activator, CENTERMSG_TRIGGER, "Sequence completed!");
 	self.enemy = activator;
 	multi_trigger ();
 };

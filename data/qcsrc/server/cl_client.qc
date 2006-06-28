@@ -1361,7 +1361,7 @@ void PlayerPreThink (void)
 				//sprint(self, "distance: ", ftos(self.lms_traveled_distance), "\n");
 				if(self.lms_traveled_distance < cvar("g_lms_campcheck_distance"))
 				{
-					centerprint(self, cvar_string("g_lms_campcheck_message"));
+					centermsg_set(CENTERMSG_CAMP, cvar_string("g_lms_campcheck_message"));
 					// FIXME KadaverJack: gibbing player here causes playermodel to bounce around, instead of eye.md3
 					// I wasn't able to find out WHY that happens, so I put a workaround in place that shall prevent players from being gibbed :(
 					Damage(self, self, self, bound(0, cvar("g_lms_campcheck_damage"), self.health + self.armorvalue * cvar("g_balance_armor_blockpercent") + 5), DEATH_CAMP, self.origin, '0 0 0');
@@ -1484,7 +1484,7 @@ void PlayerPreThink (void)
 					PutClientInServer();
 					if(self.flags & !FL_NOTARGET)
 						bprint (strcat("^4", self.netname, "^4 is playing now\n"));
-					centerprint(self,"");
+					centermsg_reset();
 					return;
 				} else {
 					self.flags = self.flags & !FL_JUMPRELEASED;
@@ -1517,7 +1517,7 @@ void PlayerPreThink (void)
 					if(cvar("g_campaign"))
 						campaign_bots_may_start = 1;
 					PutClientInServer();
-					centerprint(self,"");
+					centermsg_reset();
 					return;
 				} else {
 					self.flags = self.flags & !FL_JUMPRELEASED;

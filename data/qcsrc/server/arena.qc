@@ -126,17 +126,15 @@ void Arena_Warmup()
 	if(time < warmup && self.spawned)
 	{
 		if(champion)
-			msg = strcat(msg, "The Champion is ", champion.netname, "^7\n\n\n");
+			centermsg_set(CENTERMSG_ARENACHAMP, strcat("The Champion is ", champion.netname));
 
 		if(f)
-			msg = strcat(msg, "Round will start in ", ftos(f));
+			centermsg_set(CENTERMSG_ARENATIMER, strcat("Round will start in ", ftos(f)));
 		else
 		{
 			if(self.spawned)
-				msg = strcat(msg, "^1Fight!");
+				centermsg_set(CENTERMSG_ARENATIMER, "^1Fight!");
 		}
-
-		centerprint(self, msg);
 
 		if(self.spawned)
 			self.movetype = MOVETYPE_NONE;
@@ -149,7 +147,7 @@ void Arena_Warmup()
 	else if(self.movetype == MOVETYPE_NONE)
 	{
 		self.movetype = MOVETYPE_WALK;
-		centerprint(self, "\n");
+		centermsg_reset();
 	}
 
 }

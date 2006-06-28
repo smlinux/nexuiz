@@ -396,6 +396,7 @@ void GetCvars(float f)
 {
 	GetCvars_handleFloat(f, cvar_cl_playerdetailreduction, "cl_playerdetailreduction");
 	GetCvars_handleFloat(f, cvar_cl_nogibs, "cl_nogibs");
+	GetCvars_handleFloat(f, cvar_scr_centertime, "scr_centertime");
 }
 
 float fexists(string f)

@@ -395,13 +395,19 @@ void Nixnex_GiveCurrentWeapon()
 			if(dt >= 1 && dt <= 5)
 				self.nixnex_lastinfotime = -42;
 			else
-				centerprint(self, strcat("\n\n^2Active weapon: ^3", W_Name(nixnex_weapon), "\n"));
+			{
+				centermsg_free(CENTERMSG_NIXNEXCOUNT);
+				centermsg_set(CENTERMSG_NIXNEX, strcat("^2Active weapon: ^3", W_Name(nixnex_weapon)));
+			}
 		}
 		if(self.nixnex_lastinfotime != dt)
 		{
 			self.nixnex_lastinfotime = dt; // initial value 0 should count as "not seen"
 			if(dt >= 1 && dt <= 5)
-				centerprint(self, strcat("^3", ftos(dt), "^2 seconds until weapon change...\n\nNext weapon: ^3", W_Name(nixnex_nextweapon), "\n"));
+			{
+				centermsg_set(CENTERMSG_NIXNEXCOUNT, strcat("^3", ftos(dt), "^2 seconds until weapon change..."));
+				centermsg_set(CENTERMSG_NIXNEX, strcat("Next weapon: ^3", W_Name(nixnex_nextweapon)));
+			}
 		}
 
 		if(cvar("g_use_ammunition") && time > self.nixnex_nextincr)

@@ -274,7 +274,7 @@ void() FlagTouch =
 
 		player = find(world, classname, "player");
 		while(player) {
-			if(player.team == self.team) centerprint(player, "The enemy got your flag! Retrieve it!");
+			if(player.team == self.team) centermsg_setfor(player, CENTERMSG_CTF, "The enemy got your flag! Retrieve it!");
 			player = find(player, classname, "player");
 		}
 
@@ -311,7 +311,7 @@ void() FlagTouch =
 
 			player = find(world, classname, "player");
 			while(player) {
-				if(player.team == self.team) centerprint(player, "The enemy got your flag! Retrieve it!");
+				if(player.team == self.team) centermsg_setfor(player, CENTERMSG_CTF, "The enemy got your flag! Retrieve it!");
 				player = find(player, classname, "player");
 			}
 		}

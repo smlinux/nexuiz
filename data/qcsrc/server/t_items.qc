@@ -53,7 +53,8 @@ void Item_Touch (void)
 		if (self.ammo_cells)
 		{
 			// play some cool sounds ;)
-			centerprint(other, "\n");
+			centermsg_freefor(other, CENTERMSG_MINSTAGIB);
+			centermsg_freefor(other, CENTERMSG_MINSTAGIB2);
 			if(other.health <= 5)
 				stuffcmd(other, "play2 announcer/robotic/lastsecond.ogg\n");
 			else if(other.health < 50)

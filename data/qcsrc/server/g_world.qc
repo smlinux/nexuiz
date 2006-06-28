@@ -830,6 +830,7 @@ void() CheckRules_Player =
 
 	// fixme: don't check players; instead check dom_team and ctf_team entities
 	//   (div0: and that in CheckRules_World please)
+	centermsg_check();
 };
 
 float checkrules_oneminutewarning;
