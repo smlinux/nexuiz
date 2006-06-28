@@ -1,0 +1,28 @@
+// centerprint locations
+#define MAXCENTERMSG 9
+#define CENTERMSG_VOTE 0
+#define CENTERMSG_GAMEMODE1 2
+#define CENTERMSG_GAMEMODE2 3
+#define CENTERMSG_NIXNEXCOUNT 4
+#define CENTERMSG_TRIGGER 5
+#define CENTERMSG_NIXNEX 6
+#define CENTERMSG_MINSTAGIB 6
+#define CENTERMSG_MINSTAGIB2 7
+#define CENTERMSG_TEAMCHANGE 7
+#define CENTERMSG_TEAMCHANGE2 8
+#define CENTERMSG_KILL 8
+#define CENTERMSG_DEATH 8
+#define CENTERMSG_CAMP 8
+
+#define CENTERMSG_ARENACHAMP CENTERMSG_GAMEMODE1
+#define CENTERMSG_ARENATIMER CENTERMSG_GAMEMODE2
+#define CENTERMSG_CTF CENTERMSG_GAMEMODE1
+
+void centermsg_check();
+void centermsg_reset();
+void centermsg_set(float lineno, string text);
+void centermsg_setfor(entity player, float lineno, string text);
+void centermsg_free(float lineno);
+void centermsg_freefor(entity player, float lineno);
+void centermsg_setall(string s);
+void centermsg_setallfor(entity player, string s);
