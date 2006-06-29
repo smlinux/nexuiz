@@ -92,6 +92,10 @@ void SV_ParseClientCommand(string s) {
 							return;
 						votecalled = TRUE;
 						votecalledmaster = FALSE;
+						// remap chmap to gomap (forces intermission)
+						if(strlen(vote) >= 6)
+							if(substring(vote, 0, 6) == "chmap ")
+								vote = strcat("gotomap ", substring(vote, 6, strlen(vote) - 6));
 						votecalledvote = strzone(vote);
 						votecaller = self; // remember who called the vote
 						votefinished = time + cvar("sv_vote_timeout");
@@ -270,6 +274,8 @@ float ValidateMap(string vote)
 	if(argv(0) == "map" || argv(0) == "changelevel")
 		ext = ".bsp";
 	else if(argv(0) == "chmap")
+		ext = ".mapcfg";
+	else if(argv(0) == "gotomap")
 		ext = ".mapcfg";
 	else
 		return TRUE;

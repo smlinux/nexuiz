@@ -1143,7 +1143,7 @@ void() CheckRules_World =
 		bcenterprint("^3Now playing ^1OVERTIME^3!\n\n^3Keep fragging until we have a ^1winner^3!");
 	}
 
-	if (!checkrules_oneminutewarning && timelimit && time > timelimit - 60)
+	if (!checkrules_oneminutewarning && timelimit > 0 && time > timelimit - 60)
 	{
 		checkrules_oneminutewarning = TRUE;
 		sound(world, CHAN_AUTO, "announcer/robotic/1minuteremains.ogg", 1, ATTN_NONE);
