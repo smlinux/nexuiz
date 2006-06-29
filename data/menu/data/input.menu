@@ -30,7 +30,7 @@ Item DataContainer Input
 	Item Data_Cvar InvertMouse
 	{
 		cvarName 	"m_pitch"
-		defValue 	'Off'
+		defValue 	'0.022'
 		Item DataLink_ValueSwitch Switch
 		{
 			minValue	-0.022
