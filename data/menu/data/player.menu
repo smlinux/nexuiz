@@ -9,7 +9,7 @@ Item DataContainer Player
 		cvarName	"_cl_name"
 		syncCmd		"name"
 
-		defValue	"NexPlayer"
+		defValue	"Player"
 
 		Item DataLink_Text Text
 		{
@@ -22,7 +22,7 @@ Item DataContainer Player
 	}
 	Item Data_Nex_Color Color
 	{
-		defValue	"0"
+		defValue	"153"
 
 		Item DataLink_Nex_PantsColor TeamColor
 		{
