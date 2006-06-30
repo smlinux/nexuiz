@@ -288,7 +288,10 @@ void() W_WeaponFrame =
 		c = c + 1;
 		weapon_action(self.weapon, WR_THINK);
 		if (self.weapon_nextthink > 0 && time >= self.weapon_nextthink)
+		{
+			self.weapon_nextthink_lastframe = self.weapon_nextthink;
 			self.weapon_think();
+		}
 	}
 
 	// don't let attack_finished fall behind when not firing
