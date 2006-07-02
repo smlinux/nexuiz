@@ -15,6 +15,7 @@ dom_init();
 Note: The only teams who can use dom control points are identified by dom_team entities (if none exist these default to red and blue and use only quake models/sounds).
 */
 
+void() dom_controlpoint_setup;
 
 void LogDom(string mode, float team_before, entity actor)
 {
@@ -63,7 +64,10 @@ void dompoint_captured ()
 
 	//self.nextthink = time + cvar("g_domination_point_rate");
 	//self.think = dompointthink;
-	self.delay = time + cvar("g_domination_point_rate");
+	if(cvar("g_domination_point_rate"))
+		self.delay = time + cvar("g_domination_point_rate");
+	else
+		self.delay = time + self.wait;
 };
 
 void AnimateDomPoint()
@@ -101,12 +105,14 @@ void() dompointthink =
 	if(self.delay > time)
 		return;
 
+/*
 	if(self.state == 1)
 	{
 		self.state = 0;
 		dompoint_captured();
 		return;
 	}
+*/
 
 	waittime = cvar("g_domination_point_rate");
 	if(!waittime)
@@ -128,15 +134,23 @@ void() dompointthink =
 		}
 	}
 
-	// if the player left the game, we have to find another player on the same team to give credit to
-	if (!self.enemy.flags) // flags is zero on removed clients
+	// if the player left the game, changed teams or became spectator, we have to find another player on the same team to give credit to
+	if (!self.enemy.flags || self.enemy.team != self.goalentity.team || self.enemy.killcount == -666) // flags is zero on removed clients		
 	{
+		other = self.enemy;
 		head = find(head, classname, "player");
 		while (head)
 		{
 			if (head.team == self.goalentity.team)
 				self.enemy = head;
 			head = find(head, classname, "player");
+		}
+		if(self.enemy == other) // search returned no matching player, reset dom point
+		{
+			dom_controlpoint_setup();
+			self.enemy = world;
+			self.cnt = 0;
+			self.aiment = world;
 		}
 	}
 
@@ -173,8 +187,8 @@ void() dompointtouch =
 	self.aiment = head; // team to switch to after the delay
 	self.dmg_inflictor = other;
 
-	self.state = 1;
-	self.delay = time + cvar("g_domination_point_capturetime");
+	// self.state = 1;
+	// self.delay = time + cvar("g_domination_point_capturetime");
 	//self.nextthink = time + cvar("g_domination_point_capturetime");
 	//self.think = dompoint_captured;
 
@@ -191,6 +205,7 @@ void() dompointtouch =
 	self.skin = head.skin;
 
 	self.enemy = other; // individual player scoring
+	dompoint_captured();
 };
 
 /*QUAKED dom_team (0 .5 .8) (-32 -32 -24) (32 32 32)
@@ -271,7 +286,7 @@ void() dom_controlpoint_setup =
 	self.touch = dompointtouch;
 	self.solid = SOLID_TRIGGER;
 	self.flags = FL_ITEM;
-	setsize(self, '-32 -32 -24', '32 32 32');
+	setsize(self, '-32 -32 -32', '32 32 32');
 	setorigin(self, self.origin + '0 0 20');
 	droptofloor(0, 0);
 };
