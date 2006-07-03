@@ -3,7 +3,7 @@ set -ex
 
 base=`pwd`
 
-basepk3=$base/../Nexuiz/data/data20060614.pk3
+basepk3=$base/data20060614.pk3
 nexdir=$base/nexuiz
 dpdir=$base/darkplaces
 tmpdir=/tmp/NEX
@@ -76,7 +76,8 @@ for x in dedicated sdl glx; do
 	cp nexuiz-$x "$tmpdir/nexuiz-linux-x86_64-$x"
 done
 
-cp "$nexdir/nexuiz-linux.sh" "$tmpdir/"
+cp "$nexdir/nexuiz-linux-sdl.sh" "$tmpdir/"
+cp "$nexdir/nexuiz-linux-glx.sh" "$tmpdir/"
 cp "$nexdir/gpl.txt" "$tmpdir/"
 
 make clean
