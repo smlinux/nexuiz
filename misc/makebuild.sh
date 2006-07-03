@@ -89,7 +89,7 @@ cp "$nexdir/nexuiz-linux-glx.sh" "$tmpdir/"
 cp "$nexdir/gpl.txt" "$tmpdir/"
 
 make clean
-rm -f *.exe nexuiz-*
+rm -f *.exe nexuiz-* *-withdebug '.#'*
 
 cd "$nexdir/data"
 svn export . "$tmpdir/data"
@@ -146,4 +146,4 @@ rm -f "$zipdir/nexuizpatch$date$ext.zip"
 zip -9yr "$zipdir/nexuizpatch$date$ext.zip"      Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/data/datapatch$date.pk3
 
 rm -f "$zipdir/nexuizdebug$date$ext.zip"
-zip -9yr "$zipdir/nexuizdebug$date$ext.zip"      Nexuiz/gpl.txt debuginfo/*
+zip -9yr "$zipdir/nexuizdebug$date$ext.zip"      Nexuiz/gpl.txt Nexuiz/debuginfo/*
