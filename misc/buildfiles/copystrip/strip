@@ -1,0 +1,32 @@
+#!/bin/sh
+#THIS-IS-COPYSTRIP
+
+# locate original 'strip' utility
+
+stripfile=$1
+
+p=$PATH
+while [ -n "$p" ]; do
+	item=${p%%:*}/strip
+	if [ -x "$item" ]; then
+		case "`sed -n 2p "$item"`" in
+			\#THIS-IS-COPYSTRIP)
+				echo >&2 "Found myself in $item"
+				;;
+			*)
+				echo >&2 "Using $item..."
+				cp "$stripfile" "$stripfile-withdebug"
+				exec "$item" "$stripfile"
+				;;
+		esac
+	fi
+	case "$p" in
+		*:*)
+			p=${p#*:}
+			;;
+		*)
+			echo >&2 "No strip found in PATH."
+			exit 1
+			;;
+	esac
+done

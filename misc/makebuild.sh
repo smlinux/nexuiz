@@ -10,6 +10,7 @@ tmpdir=/tmp/NEX
 zipdir=/home/polzer/UT/distfiles/nex/
 mingwdlls=$base/buildfiles/w32
 osxapps=$base/buildfiles/osx
+copystrip=$base/buildfiles/copystrip
 fteqcc="fteqcc.bin -O2"
 mingw=/home/polzer/mingw32
 ia32=/chroot/fc4-i386
@@ -25,24 +26,24 @@ echo "date stamp: $date"
 
 buildosx()
 {
-	rsync --exclude "*.o" --exclude "*.d" --exclude "nexuiz-*" --delete-excluded --delete -zvaSHP . "$osxhost:$osxtemp"
-	ssh "$osxhost" ". ~/.profile && cd $osxtemp && make CC=\"gcc -arch i386 -arch ppc -isysroot /Developer/SDKs/MacOSX10.4u.sdk\" clean $*"
+	rsync --exclude "*.o" --exclude "*.d" --exclude "nexuiz-*" --delete-excluded --delete -zvaSHP . $copystrip "$osxhost:$osxtemp"
+	ssh "$osxhost" ". ~/.profile && cd $osxtemp && PATH=$osxtemp/copystrip:\$PATH make CC=\"gcc -g -arch i386 -arch ppc -isysroot /Developer/SDKs/MacOSX10.4u.sdk\" clean $*"
 	rsync --exclude "*.o" --exclude "*.d" --delete-excluded --delete -zvaSHP "$osxhost:$osxtemp/." .
 }
 
 build64()
 {
-	make "$@"
+	PATH=$copystrip:$PATH make CC="gcc -g" "$@"
 }
 
 build32()
 {
-	make CC="gcc -I$ia32/usr/include -I$ia32/usr/X11R6/include -L$ia32/usr/lib -L$ia32/usr/X11R6/lib -m32" DP_MACHINE=i686 "$@"
+	PATH=$copystrip:$PATH make CC="gcc -g -I$ia32/usr/include -I$ia32/usr/X11R6/include -L$ia32/usr/lib -L$ia32/usr/X11R6/lib -m32" DP_MACHINE=i686 "$@"
 }
 
 buildwin()
 {
-	PATH=$mingw/bin:$PATH make DP_MAKE_TARGET=mingw "$@"
+	PATH=$copystrip:$mingw/bin:$PATH make CC="gcc -g" DP_MAKE_TARGET=mingw "$@"
 }
 
 rm -rf "$tmpdir"
@@ -50,30 +51,37 @@ mkdir -p "$tmpdir"
 cd "$dpdir"
 
 cp -r "$osxapps"/*.app "$tmpdir"
-rm -f *.exe nexuiz-*
+mkdir "$tmpdir/debuginfo"
+rm -f *.exe nexuiz-* *-withdebug
 
 make clean
 buildosx sdl-nexuiz cl-nexuiz sv-nexuiz
 cp nexuiz-agl "$tmpdir/Nexuiz.app/Contents/MacOS/nexuiz-osx-ppc-agl-bin"
 cp nexuiz-dedicated "$tmpdir/nexuiz-osx-ppc-dedicated"
 cp nexuiz-sdl "$tmpdir/Nexuiz-SDL.app/Contents/MacOS/nexuiz-osx-ppc-sdl-bin"
+cp nexuiz-agl-withdebug "$tmpdir/debuginfo/nexuiz-osx-ppc-agl-bin"
+cp nexuiz-dedicated-withdebug "$tmpdir/debuginfo/nexuiz-osx-ppc-dedicated-bin"
+cp nexuiz-sdl-withdebug "$tmpdir/debuginfo/nexuiz-osx-ppc-sdl-bin"
 
 make clean
 buildwin nexuiz
 for x in -dedicated -sdl ''; do
 	cp nexuiz$x.exe "$tmpdir/nexuiz$x.exe"
+	cp nexuiz$x.exe-withdebug "$tmpdir/debuginfo/nexuiz$x.exe"
 done
 
 make clean
 build32 nexuiz
 for x in dedicated sdl glx; do
 	cp nexuiz-$x "$tmpdir/nexuiz-linux-686-$x"
+	cp nexuiz-$x-withdebug "$tmpdir/debuginfo/nexuiz-linux-686-$x"
 done
 
 make clean
 build64 nexuiz
 for x in dedicated sdl glx; do
 	cp nexuiz-$x "$tmpdir/nexuiz-linux-x86_64-$x"
+	cp nexuiz-$x-withdebug "$tmpdir/debuginfo/nexuiz-linux-x86_64-$x"
 done
 
 cp "$nexdir/nexuiz-linux-sdl.sh" "$tmpdir/"
@@ -136,3 +144,6 @@ zip -9yr "$zipdir/nexuizsource$date$ext.zip"     Nexuiz/gpl.txt                 
 zipdiff -o Nexuiz/data/datapatch$date.pk3 -f "$basepk3" -t Nexuiz/data/data$date.pk3
 rm -f "$zipdir/nexuizpatch$date$ext.zip"
 zip -9yr "$zipdir/nexuizpatch$date$ext.zip"      Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/data/datapatch$date.pk3
+
+rm -f "$zipdir/nexuizdebug$date$ext.zip"
+zip -9yr "$zipdir/nexuizdebug$date$ext.zip"      Nexuiz/gpl.txt debuginfo/*
