@@ -1,3 +1,4 @@
+void(float imp) W_SwitchWeapon;
 
 void W_Laser_Touch (void)
 {
@@ -71,8 +72,8 @@ float(float req) w_laser =
 			weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_laser_animtime"), w_ready);
 		}
 		if (self.button3)
-		if (client_hasweapon(self, self.cnt, TRUE, TRUE))
-			self.switchweapon = self.cnt;
+		if (client_hasweapon(self, self.cnt, TRUE, FALSE))
+			W_SwitchWeapon (self.cnt);
 	}
 	else if (req == WR_SETUP)
 		weapon_setup(WEP_LASER, "laser", 0);
