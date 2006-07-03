@@ -104,6 +104,7 @@ void W_Rocket_Think (void)
 				self.ltime = -1; // indicate that the player has let go of the button
 
 
+			if(self.owner.deadflag == DEAD_NO)
 			if (self.owner.button0 && self.ltime < 0) // if the player let go of the button and then pushed it again
 			{
 				  W_Rocket_Explode ();
@@ -146,6 +147,7 @@ void W_Rocket_Think (void)
 		}
 		else
 		{
+			if(self.owner.deadflag == DEAD_NO)
 			if (self.owner.button3)
 				  W_Rocket_Explode ();
 		}
