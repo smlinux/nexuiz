@@ -833,7 +833,9 @@ void ClientDisconnect (void)
 	self.flags = save;
 
 	// remove laserdot
-	remove(self.weaponentity.lasertarget);
+	if(self.weaponentity)
+		if(self.weaponentity.lasertarget)
+			remove(self.weaponentity.lasertarget);
 
 	// player was dead, decrease dead count
 	if(cvar("g_lms") && self.frags < 1)
