@@ -364,7 +364,9 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 		SUB_SetFade (self, time + 12 + random () * 4, 1);
 
 		// remove laserdot
-		remove(self.weaponentity.lasertarget);
+		if(self.weaponentity)
+			if(self.weaponentity.lasertarget)
+				remove(self.weaponentity.lasertarget);
 
 		if(clienttype(self) == CLIENTTYPE_REAL)
 		{
