@@ -832,6 +832,9 @@ void ClientDisconnect (void)
 	bot_relinkplayerlist();
 	self.flags = save;
 
+	// remove laserdot
+	remove(self.weaponentity.lasertarget);
+
 	// player was dead, decrease dead count
 	if(cvar("g_lms") && self.frags < 1)
 		lms_dead_count -= 1;
