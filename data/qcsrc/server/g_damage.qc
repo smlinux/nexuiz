@@ -348,7 +348,11 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 		attacker.lms_traveled_distance = cvar("g_lms_campcheck_distance");
 	}
 
-	if(damage > 0 && targ != attacker && clienttype(attacker) == CLIENTTYPE_REAL && targ.classname == "player")
+	if(targ != attacker)
+	if(!targ.deadflag)
+	if(damage > 0)
+	if(clienttype(attacker) == CLIENTTYPE_REAL)
+	if(targ.classname == "player")
 		stuffcmd(attacker, "play2 misc/hit.wav\n");
 
 	if (cvar("g_minstagib"))
