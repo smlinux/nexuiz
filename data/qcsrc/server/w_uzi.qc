@@ -44,7 +44,12 @@ void W_Uzi_Attack (void)
 // weapon frames
 void()	uzi_fire1_02 =
 {
-	if (self.button0 && self.weapon == self.switchweapon)
+	if(self.weapon != self.switchweapon) // abort immediately if switching
+	{
+		w_ready();
+		return;
+	}
+	if (self.button0)
 	{
 		if (!weapon_action(self.weapon, WR_CHECKAMMO2))
 		{
