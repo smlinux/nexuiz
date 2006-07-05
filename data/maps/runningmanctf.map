@@ -30355,14 +30355,14 @@ evil6_lights/e6v_light_s_nolight
 {
 "classname" "misc_model"
 "origin" "152 216 176"
-"model" "maps/strale5_lamp.ase"
+"model" "models/mapobjects/strale5_lamp.ase"
 "angle" "225"
 }
 // entity 31
 {
 "classname" "misc_model"
 "angle" "153.5"
-"model" "maps/strale5_lamp.ase"
+"model" "models/mapobjects/strale5_lamp.ase"
 "origin" "0 224 176"
 }
 // entity 32
@@ -30618,7 +30618,7 @@ evil6_lights/e6v_light_s_nolight
 {
 "classname" "misc_model"
 "angle" "135"
-"model" "maps/strale5_lamp2.ase"
+"model" "models/mapobjects/strale5_lamp2.ase"
 "origin" "928 -224 384"
 }
 // entity 44
@@ -32434,14 +32434,14 @@ evil6_lights/e6v_light_s_nolight
 {
 "classname" "misc_model"
 "angle" "45"
-"model" "maps/strale5_lamp.ase"
+"model" "models/mapobjects/strale5_lamp.ase"
 "origin" "-1448 1816 176"
 }
 // entity 185
 {
 "classname" "misc_model"
 "origin" "-1440 1664 176"
-"model" "maps/strale5_lamp.ase"
+"model" "models/mapobjects/strale5_lamp.ase"
 "angle" "116"
 }
 // entity 186
@@ -32697,7 +32697,7 @@ evil6_lights/e6v_light_s_nolight
 {
 "classname" "misc_model"
 "origin" "-1888 2592 384"
-"model" "maps/strale5_lamp2.ase"
+"model" "models/mapobjects/strale5_lamp2.ase"
 "angle" "315"
 }
 // entity 198
