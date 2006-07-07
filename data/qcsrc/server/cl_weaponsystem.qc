@@ -380,7 +380,7 @@ void(float fr, float t, void() func) weapon_thinkf =
 
 	if(self.weapon_think == w_ready && func != w_ready && self.weaponentity.state == WS_RAISE)
 	{
-		error("Tried to override initial weapon think function - should this really happen?\n");
+		backtrace("Tried to override initial weapon think function - should this really happen?");
 	}
 
 	if(cvar("g_runematch"))

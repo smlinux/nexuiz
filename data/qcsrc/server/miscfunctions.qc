@@ -408,3 +408,17 @@ float fexists(string f)
 	fclose(fh);
 	return TRUE;
 }
+
+void backtrace(string msg)
+{
+	float dev;
+	dev = cvar("developer");
+	cvar_set("developer", "1");
+	dprint("\n");
+	dprint("--- CUT HERE ---\nWARNING: ");
+	dprint(msg);
+	dprint("\n");
+	remove(world); // isn't there any better way to cause a backtrace?
+	dprint("\n--- CUT UNTIL HERE ---\n");
+	cvar_set("developer", ftos(dev));
+}
