@@ -118,7 +118,7 @@ rm -rf "$tmpdir/data/qcsrc"
 cd "$tmpdir/data"
 mv common-spog.pk3 ..
 #zip -9r ../data.pk3 .
-v=$versiontag perl -pi -e '/^set g_nexuizversion "([0-9.]*)"/ and $_ = "set g_nexuizversion \"$1$ENV{v}\"\n"' default.cfg
+v=$versiontag perl -pi -e '/^set g_nexuizversion "([0-9.]*)[^"]*"/ and $_ = "set g_nexuizversion \"$1$ENV{v}\"\n"' default.cfg
 7za a -mx=7 -tzip ../data.pk3 .
 
 cd "$tmpdir"
