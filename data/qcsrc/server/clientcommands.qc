@@ -1,6 +1,72 @@
 void ReadyCount();
 float ValidateMap(string vote);
 
+void Say(entity source, float teamsay, string msgin)
+{
+	string msgstr, colorstr;
+	entity head;
+
+	msgin = formatmessage(msgin);
+
+	if(source.team == COLOR_TEAM1)
+		colorstr = "^1";
+	else if(source.team == COLOR_TEAM2)
+		colorstr = "^4";
+	else if(source.team == COLOR_TEAM3)
+		colorstr = "^6";
+	else if(source.team == COLOR_TEAM4)
+		colorstr = "^3";
+	else
+		colorstr = "^7";
+
+	if(!teams_matter)
+		teamsay = FALSE;
+
+	if(source.classname != "player") // observers can't
+		teamsay = FALSE;
+
+	// how can we prevent the message from appearing in a listen server?
+	// for now, just give "say" back and only handle say_team
+	if(!teamsay)
+	{
+		clientcommand(self, strcat("say ", msgin));
+		return;
+	}
+
+	if(teamsay)
+		msgstr = strcat(colorstr, "(^3", source.netname, colorstr, ") ^7", msgin, "\n");
+	else
+		msgstr = strcat("^3", source.netname, "^7: ", msgin, "\n");
+
+	head = find(world, classname, "player");
+	while(head)
+	{
+		if(clienttype(head) == CLIENTTYPE_REAL)
+			if(!teamsay || (head.team == source.team))
+				sprint(head, msgstr);
+		head = find(head, classname, "player");
+	}
+
+	if(!teamsay)
+	{
+		head = find(world, classname, "observer");
+		while(head)
+		{
+			if(clienttype(head) == CLIENTTYPE_REAL)
+				sprint(head, msgstr);
+			head = find(head, classname, "observer");
+		}
+		head = find(world, classname, "spectator");
+		while(head)
+		{
+			if(clienttype(head) == CLIENTTYPE_REAL)
+				sprint(head, msgstr);
+			head = find(head, classname, "spectator");
+		}
+		ServerConsoleEcho(substring(msgstr, 0, strlen(msgstr) - 1), TRUE);
+	}
+}
+
 void SV_ParseClientCommand(string s) {
 	local float index;
 
@@ -258,9 +324,11 @@ void SV_ParseClientCommand(string s) {
 			ReadyCount();
 		}
 	} else if(argv(0) == "say") {
-		clientcommand(self, formatmessage(s));
+		Say(self, FALSE, substring(s, 4, strlen(s) - 4));
+		//clientcommand(self, formatmessage(s));
 	} else if(argv(0) == "say_team") {
-		clientcommand(self, formatmessage(s));
+		Say(self, TRUE, substring(s, 9, strlen(s) - 9));
+		//clientcommand(self, formatmessage(s));
 	} else {
 		clientcommand(self,s);
 	}
