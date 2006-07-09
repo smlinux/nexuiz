@@ -22,6 +22,14 @@ float g_domination, g_ctf, g_tdm;
 
 float audit_teams_time;
 
+void TeamchangeFrags(entity e)
+{
+	if(e.classname == "player")
+	{
+		// reduce frags during a team change
+		DistributeFragsAmongTeam(e, (e.clientcolors & 0x0F) + 1, 1 - cvar("g_changeteam_fragtransfer") / 100);
+	}
+}
 
 string TeamName(float t)
 {
@@ -104,9 +112,6 @@ void ActivateTeamplay()
 	else
 		cvar_set("teamplay", "3");
 }
-
-string gamemode_name;
-float teams_matter;
 
 void InitGameplayMode()
 {
@@ -734,6 +739,7 @@ float JoinBestTeam(entity pl, float only_return_best)
 
 	if(!only_return_best)
 	{
+		TeamchangeFrags(self);
 		if(smallest == 1)
 		{
 			SetPlayerColors(pl, COLOR_TEAM1 - 1);
@@ -896,17 +902,21 @@ void SV_ChangeTeam(float _color)
 
 //	bprint(strcat("allow change teams from ", ftos(steam), " to ", ftos(dteam), "\n"));
 
+	if(cvar("teamplay") && self.classname == "player" && steam != dteam)
+	{
+		// reduce frags during a team change
+		TeamchangeFrags(self);
+	}
+
 	SetPlayerTeam(self, dteam, steam, FALSE);
+
 	if(cvar("teamplay") && self.classname == "player" && steam != dteam)
 	{
 		// kill player when changing teams
 		if(self.deadflag == DEAD_NO)
 			Damage(self, self, self, 100000, DEATH_TEAMCHANGE, self.origin, '0 0 0');
-			// reduce frags during a team change
-			self.frags = floor(self.frags * (cvar("g_changeteam_fragtransfer") / 100));
 	}
 }
-
 
 void ShufflePlayerOutOfTeam (float source_team)
 {

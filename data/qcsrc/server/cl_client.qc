@@ -827,6 +827,8 @@ void ClientDisconnect (void)
 	if(self.flagcarried)
 		DropFlag(self.flagcarried);
 
+	DistributeFragsAmongTeam(self, self.team, 1);
+
 	save = self.flags;
 	self.flags = self.flags - (self.flags & FL_CLIENT);
 	bot_relinkplayerlist();

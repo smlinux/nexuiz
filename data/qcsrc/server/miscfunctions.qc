@@ -422,3 +422,59 @@ void backtrace(string msg)
 	dprint("\n--- CUT UNTIL HERE ---\n");
 	cvar_set("developer", ftos(dev));
 }
+
+void DistributeFragsAmongTeam(entity p, float targetteam, float factor)
+{
+	float f;
+	float d;
+	float nTeam;
+	entity head;
+
+	if(!teams_matter)
+		return;
+
+	//if(p.frags < 0)
+	//{
+	//	p.frags = 0; // do not harm the new team!
+	//	return; // won't distribute negative scores
+	//}
+
+	if(p.frags == -666)
+		return;
+	
+	f = ceil(factor * p.frags);
+	p.frags = p.frags - f;
+
+	nTeam = 0;
+	head = find(world, classname, "player");
+	while(head)
+	{
+		if(head != p)
+			if(head.team == targetteam)
+				nTeam = nTeam + 1;
+		head = find(head, classname, "player");
+	}
+
+	if(nTeam == 0)
+		return;
+
+	head = find(world, classname, "player");
+	while(head)
+	{
+		if(head != p)
+			if(head.team == targetteam)
+			{
+				d = floor(f / nTeam);
+				head.frags = head.frags + d;
+				f = f - d;
+				nTeam = nTeam - 1;
+			}
+		head = find(head, classname, "player");
+	}
+
+	if(nTeam != 0)
+		error("nPlayers in team changed!");
+	if(f != 0)
+		error(strcat("There were ", ftos(f), " frags left. BAD!"));
+}
+

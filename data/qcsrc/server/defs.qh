@@ -267,3 +267,6 @@ float default_player_alpha;
 #define NUM_JUMPPADSUSED 3
 .float jumppadcount;
 .entity jumppadsused[NUM_JUMPPADSUSED];
+
+string gamemode_name;
+float teams_matter;
