@@ -45,7 +45,7 @@ void Say(entity source, float teamsay, string msgin)
 			if(!teamsay || (head.team == source.team))
 			{
 				sprint(head, msgstr);
-				sound(head, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
+				stuffcmd(head, "play2 misc/talk.wav\n");
 			}
 		head = find(head, classname, "player");
 	}
@@ -58,7 +58,7 @@ void Say(entity source, float teamsay, string msgin)
 			if(clienttype(head) == CLIENTTYPE_REAL)
 			{
 				sprint(head, msgstr);
-				sound(head, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
+				stuffcmd(head, "play2 misc/talk.wav\n");
 			}
 			head = find(head, classname, "observer");
 		}
@@ -68,7 +68,7 @@ void Say(entity source, float teamsay, string msgin)
 			if(clienttype(head) == CLIENTTYPE_REAL)
 			{
 				sprint(head, msgstr);
-				sound(head, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
+				stuffcmd(head, "play2 misc/talk.wav\n");
 			}
 			head = find(head, classname, "spectator");
 		}
