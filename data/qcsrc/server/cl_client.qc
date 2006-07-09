@@ -290,6 +290,8 @@ void PutObserverInServer (void)
 	if (cvar("g_runematch"))
 		DropAllRunes(self);
 
+	DistributeFragsAmongTeam(self, self.team, 1);
+
 	if(self.frags <= 0 && self.frags > -666 && cvar("g_lms") && self.killcount != -666)
 		bprint (strcat("^4", self.netname, "^4 has no more lives left\n"));
 	else if(self.killcount != -666)
