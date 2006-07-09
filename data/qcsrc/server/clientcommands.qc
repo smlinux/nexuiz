@@ -43,7 +43,10 @@ void Say(entity source, float teamsay, string msgin)
 	{
 		if(clienttype(head) == CLIENTTYPE_REAL)
 			if(!teamsay || (head.team == source.team))
+			{
 				sprint(head, msgstr);
+				sound(head, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
+			}
 		head = find(head, classname, "player");
 	}
 
@@ -53,14 +56,20 @@ void Say(entity source, float teamsay, string msgin)
 		while(head)
 		{
 			if(clienttype(head) == CLIENTTYPE_REAL)
+			{
 				sprint(head, msgstr);
+				sound(head, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
+			}
 			head = find(head, classname, "observer");
 		}
 		head = find(world, classname, "spectator");
 		while(head)
 		{
 			if(clienttype(head) == CLIENTTYPE_REAL)
+			{
 				sprint(head, msgstr);
+				sound(head, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
+			}
 			head = find(head, classname, "spectator");
 		}
 		ServerConsoleEcho(substring(msgstr, 0, strlen(msgstr) - 1), TRUE);
