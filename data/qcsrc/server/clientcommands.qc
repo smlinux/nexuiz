@@ -8,6 +8,9 @@ void Say(entity source, float teamsay, string msgin)
 
 	msgin = formatmessage(msgin);
 
+	if(msgin == "")
+		return;
+
 	if(source.team == COLOR_TEAM1)
 		colorstr = "^1";
 	else if(source.team == COLOR_TEAM2)
