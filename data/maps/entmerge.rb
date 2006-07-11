@@ -127,12 +127,14 @@ map = mapparse(preprocess(mapstr))
 ent = mapparse(preprocess(entstr))
 
 submodels = []
-lights = []
+unchanged = []
 
 map.each() do |e|
 	case
 		when e['classname'] == 'light'
-			lights << e
+			unchanged << e
+		when e['classname'] == 'func_group'
+			unchanged << e
 		when e[:brushes]
 			submodels << e[:brushes]
 	end
@@ -147,7 +149,7 @@ ent.each() do |e|
 end
 
 File.open("#{base}.map", "w") do |fh|
-	mapout(ent + lights) do |l|
+	mapout(ent + unchanged) do |l|
 		fh.puts(l)
 	end
 end
