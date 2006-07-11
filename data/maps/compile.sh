@@ -18,7 +18,6 @@ sh compile.sh tznex01
 
 EOF
 
-settings_bloodprison=":-fast:-fast"
 settings_default="-samplesize 8::-deluxe -patchshadows -samples 3"
 settings_farewell="-samplesize 8 -patchmeta::-deluxe -patchshadows -samples 3"
 scale_bloodprison=1.2
