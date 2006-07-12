@@ -1098,7 +1098,7 @@ float(float fraglimit) WinningCondition_MaxTeamMax =
 	return WinningConditionBase_Teamplay(fraglimit);
 }
 
-void PrintScoreboardFor(float whichteam)
+void PrintScoreboardFor(string name, string colorcode, float whichteam)
 {
 	entity head;
 	float fragtotal;
@@ -1110,8 +1110,11 @@ void PrintScoreboardFor(float whichteam)
 	{
 		if(!whichteam || head.team == whichteam)
 		{
-			fragtotal = fragtotal + head.frags;
+			if(name != "")
+				if(!found)
+					ServerConsoleEcho(strcat(" ", colorcode, name, ":"), FALSE);
 			found = TRUE;
+			fragtotal = fragtotal + head.frags;
 			s = ftos(head.frags);
 			s = strcat(s, "/", ftos(head.deaths));
 			s = strcat(s, " @ ", ftos(head.ping));
@@ -1119,12 +1122,12 @@ void PrintScoreboardFor(float whichteam)
 				s = strcat(s, "botms");
 			else
 				s = strcat(s, "ms");
-			ServerConsoleEcho(strcat("  ", head.netname, "^7 (", s, ")"), TRUE);
+			ServerConsoleEcho(strcat("  ", colorcode, head.netname, colorcode, " (", s, ")"), TRUE);
 		}
 		head = find(head, classname, "player");
 	}
 	if(whichteam && found)
-		ServerConsoleEcho(strcat("  (total: ", ftos(fragtotal), ")"), FALSE);
+		ServerConsoleEcho(strcat(colorcode, "  (total: ", ftos(fragtotal), ")"), FALSE);
 }
 
 void PrintScoreboard()
@@ -1132,18 +1135,14 @@ void PrintScoreboard()
 	ServerConsoleEcho("Scoreboard:", FALSE);
 	if(teams_matter)
 	{
-		ServerConsoleEcho(" Red:", FALSE);
-		PrintScoreboardFor(COLOR_TEAM1);
-		ServerConsoleEcho(" Blue:", FALSE);
-		PrintScoreboardFor(COLOR_TEAM2);
-		ServerConsoleEcho(" Pink:", FALSE);
-		PrintScoreboardFor(COLOR_TEAM3);
-		ServerConsoleEcho(" Yellow:", FALSE);
-		PrintScoreboardFor(COLOR_TEAM4);
+		PrintScoreboardFor("Red", "^1", COLOR_TEAM1);
+		PrintScoreboardFor("Blue", "^4", COLOR_TEAM2);
+		PrintScoreboardFor("Pink", "^6", COLOR_TEAM3);
+		PrintScoreboardFor("Yellow", "^3", COLOR_TEAM4);
 	}
 	else
 	{
-		PrintScoreboardFor(0);
+		PrintScoreboardFor("", "^7", 0);
 	}
 	ServerConsoleEcho(".", FALSE);
 }
