@@ -919,6 +919,10 @@ float() WinningCondition_LMS =
 	if((player_count == 1 && lms_dead_count == 1))
 	  	return WINNING_YES; // All dead... (n:n is handled by the test above)
 
+	dprint("player count = "); dprint(ftos(player_count));
+	dprint(", dead count = "); dprint(ftos(lms_dead_count));
+	dprint("\n");
+
 	// When we get here, we have at least two players who are actually LIVING,
 	// or one player who is still waiting for a victim to join the server. Now
 	// check if the top two players have equal score.
@@ -1094,6 +1098,56 @@ float(float fraglimit) WinningCondition_MaxTeamMax =
 	return WinningConditionBase_Teamplay(fraglimit);
 }
 
+void PrintScoreboardFor(float whichteam)
+{
+	entity head;
+	float fragtotal;
+	string s;
+	float found;
+	found = FALSE;
+	head = find(world, classname, "player");
+	while(head)
+	{
+		if(!whichteam || head.team == whichteam)
+		{
+			fragtotal = fragtotal + head.frags;
+			found = TRUE;
+			s = ftos(head.frags);
+			s = strcat(s, "/", ftos(head.deaths));
+			s = strcat(s, " @ ", ftos(head.ping));
+			if(clienttype(head) == CLIENTTYPE_BOT)
+				s = strcat(s, "botms");
+			else
+				s = strcat(s, "ms");
+			ServerConsoleEcho(strcat("  ", head.netname, "^7 (", s, ")"), TRUE);
+		}
+		head = find(head, classname, "player");
+	}
+	if(whichteam && found)
+		ServerConsoleEcho(strcat("  (total: ", ftos(fragtotal), ")"), FALSE);
+}
+
+void PrintScoreboard()
+{
+	ServerConsoleEcho("Scoreboard:", FALSE);
+	if(teams_matter)
+	{
+		ServerConsoleEcho(" Red:", FALSE);
+		PrintScoreboardFor(COLOR_TEAM1);
+		ServerConsoleEcho(" Blue:", FALSE);
+		PrintScoreboardFor(COLOR_TEAM2);
+		ServerConsoleEcho(" Pink:", FALSE);
+		PrintScoreboardFor(COLOR_TEAM3);
+		ServerConsoleEcho(" Yellow:", FALSE);
+		PrintScoreboardFor(COLOR_TEAM4);
+	}
+	else
+	{
+		PrintScoreboardFor(0);
+	}
+	ServerConsoleEcho(".", FALSE);
+}
+
 
 /*
 ============
@@ -1123,6 +1177,12 @@ void() CheckRules_World =
 		return;
 
 	DumpStats();
+
+	if(cvar("_scoreboard"))
+	{
+		cvar_set("_scoreboard", "0");
+		PrintScoreboard();
+	}
 
 	timelimit = cvar("timelimit") * 60;
 	fraglimit = cvar("fraglimit");
