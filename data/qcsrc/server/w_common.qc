@@ -139,7 +139,7 @@ void fireBullet (vector start, vector dir, float spread, float damage, float dty
 
 	// use traceline_hitcorpse to make sure it can hit gibs and corpses too
 	dir = dir + randomvec() * spread;
-	end = start + dir * 8192;
+	end = start + dir * MAX_SHOT_DISTANCE;
 	traceline_hitcorpse (self, start, end, FALSE, self);
 
 	if (tracer)

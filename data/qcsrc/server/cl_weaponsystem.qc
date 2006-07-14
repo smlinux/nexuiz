@@ -24,7 +24,7 @@ void(entity ent, vector vecs, float antilag, float recoil, string snd) W_SetupSh
 {
 	local vector trueaimpoint;
 
-	traceline_hitcorpse(self, self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * 8192, MOVE_NOMONSTERS, self);
+	traceline_hitcorpse(self, self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * MAX_SHOT_DISTANCE, MOVE_NOMONSTERS, self);
 	trueaimpoint = trace_endpos;
 
 	// if aiming at a player and the original trace won't hit that player
@@ -114,7 +114,7 @@ void LaserTarget_Think()
 
 	makevectors(self.owner.v_angle); // set v_forward etc to the direction the player is looking
 	offset = '0 0 26' + v_right*3;
-	traceline(self.owner.origin + offset, self.owner.origin + offset + v_forward * 8192, FALSE, self); // trace forward until you hit something, like a player or wall
+	traceline(self.owner.origin + offset, self.owner.origin + offset + v_forward * MAX_SHOT_DISTANCE, FALSE, self); // trace forward until you hit something, like a player or wall
 	setorigin(e, trace_endpos + v_forward*8); // move me to where the traceline ended
 	if(trace_plane_normal != '0 0 0')
 		e.angles = vectoangles(trace_plane_normal);

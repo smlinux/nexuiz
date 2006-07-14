@@ -120,7 +120,7 @@ void ImpulseCommands (void)
 			if(imp == 19)
 			{
 				makevectors(self.v_angle);
-				traceline(self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * 8192, FALSE, self);
+				traceline(self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * MAX_SHOT_DISTANCE, FALSE, self);
 				if (trace_fraction < 1)
 					printsurfaceinfo(trace_ent, trace_endpos);
 			}

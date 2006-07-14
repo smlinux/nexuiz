@@ -6,9 +6,9 @@ void W_Nex_Attack (void)
 
 	// assure that nexdamage is high enough in minstagib
 	if (cvar("g_minstagib"))
-		FireRailgunBullet (w_shotorg, w_shotorg + w_shotdir * 8192, 1000, IT_NEX);
+		FireRailgunBullet (w_shotorg, w_shotorg + w_shotdir * MAX_SHOT_DISTANCE, 1000, IT_NEX);
 	else
-		FireRailgunBullet (w_shotorg, w_shotorg + w_shotdir * 8192, cvar("g_balance_nex_damage"), IT_NEX);
+		FireRailgunBullet (w_shotorg, w_shotorg + w_shotdir * MAX_SHOT_DISTANCE, cvar("g_balance_nex_damage"), IT_NEX);
 
 	// show as if shot started outside of gun
 	// muzzleflash light
