@@ -416,6 +416,25 @@ float GetMaplistPosition()
 	return cvar("g_maplist_index");
 }
 
+float MapHasRightSize(string map)
+{
+	// open map size restriction file
+	float fh;
+	fh = fopen(strcat("maps/", map, ".sizes"), FILE_READ);
+	if(fh >= 0)
+	{
+		float mapmin, mapmax;
+		mapmin = stof(fgets(fh));
+		mapmax = stof(fgets(fh));
+		fclose(fh);
+		if(player_count < mapmin)
+			return FALSE;
+		if(player_count > mapmax)
+			return FALSE;
+	}
+	return TRUE;
+}
+
 void() GotoNextMap =
 {
 	//local string nextmap;
@@ -463,6 +482,8 @@ void() GotoNextMap =
 		local float lOldCurrent;
 		local float lBeforeCurrent;
 		local float pass;
+		local float found_but_wrong_size;
+		found_but_wrong_size = FALSE;
 
 		if(TryFile(strcat("maps/", cvar_string("nextmap"), ".mapcfg")))
 		{
@@ -511,7 +532,7 @@ void() GotoNextMap =
 				}
 				if( lOldCurrent == lCurrent ) {
 					// we couldn't find a valid map at all
-					if (pass == 1)
+					if (pass == 1 && !found_but_wrong_size)
 					{
 						bprint( "Maplist is bad/messed up. Not one good mapcfg can be found in it!  Resetting it to default map list.\n" );
 						cvar_set("g_maplist", cvar_string("g_maplist_defaultlist"));
@@ -527,14 +548,21 @@ void() GotoNextMap =
 
 				cvar_set( "g_maplist_index", ftos( lCurrent ) );
 
-				lFilename = strcat( "maps/", argv( lCurrent ), ".mapcfg" );
+				lFilename = strzone(strcat( "maps/", argv( lCurrent ), ".mapcfg" ));
 				if( TryFile( lFilename ) ) {
-					localcmd(strcat("exec \"", lFilename ,"\"\n"));
-					pass = 2; // exit the outer loop
-					break;
+					if((pass == 2) || MapHasRightSize(argv(lCurrent)))
+					{
+						localcmd(strcat("exec \"", lFilename ,"\"\n"));
+						strunzone(lFilename);
+						pass = 2; // exit the outer loop
+						break;
+					}
+					else
+						found_but_wrong_size = TRUE;
 				} else {
 					dprint( "Couldn't find '", lFilename, "'..\n" );
 				}
+				strunzone(lFilename);
 				//changelevel( argv( lCurrent ) );
 			}
 			strunzone(temp);
@@ -1239,7 +1267,10 @@ void() CheckRules_World =
 
 	if(checkrules_overtimeend)
 		if(status != WINNING_NEVER)
+		{
+			ClearWinners();
 			status = WINNING_YES;
+		}
 
 	if(status == WINNING_YES)
 		NextLevel();
