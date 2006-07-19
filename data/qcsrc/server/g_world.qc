@@ -532,11 +532,14 @@ void() GotoNextMap =
 				}
 				if( lOldCurrent == lCurrent ) {
 					// we couldn't find a valid map at all
-					if (pass == 1 && !found_but_wrong_size)
+					if (pass == 1)
 					{
-						bprint( "Maplist is bad/messed up. Not one good mapcfg can be found in it!  Resetting it to default map list.\n" );
-						cvar_set("g_maplist", cvar_string("g_maplist_defaultlist"));
-						// let the loop restart with the default list now
+						if(!found_but_wrong_size)
+						{
+							bprint( "Maplist is bad/messed up. Not one good mapcfg can be found in it!  Resetting it to default map list.\n" );
+							cvar_set("g_maplist", cvar_string("g_maplist_defaultlist"));
+							// let the loop restart with the default list now
+						}
 					}
 					else
 					{
