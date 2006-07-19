@@ -420,18 +420,27 @@ float MapHasRightSize(string map)
 {
 	// open map size restriction file
 	float fh;
+	dprint("opensize "); dprint(map);
 	fh = fopen(strcat("maps/", map, ".sizes"), FILE_READ);
 	if(fh >= 0)
 	{
 		float mapmin, mapmax;
+		dprint(": ok, ");
 		mapmin = stof(fgets(fh));
 		mapmax = stof(fgets(fh));
 		fclose(fh);
 		if(player_count < mapmin)
+		{
+			dprint("not enough\n");
 			return FALSE;
+		}
 		if(player_count > mapmax)
+		{
+			dprint("too many\n");
 			return FALSE;
+		}
 	}
+	dprint(": not found\n");
 	return TRUE;
 }
 
@@ -540,6 +549,10 @@ void() GotoNextMap =
 							cvar_set("g_maplist", cvar_string("g_maplist_defaultlist"));
 							// let the loop restart with the default list now
 						}
+						else
+						{
+							dprint("wrong size, now trying all\n");
+						}
 					}
 					else
 					{
@@ -549,12 +562,11 @@ void() GotoNextMap =
 					break;
 				}
 
-				cvar_set( "g_maplist_index", ftos( lCurrent ) );
-
 				lFilename = strzone(strcat( "maps/", argv( lCurrent ), ".mapcfg" ));
 				if( TryFile( lFilename ) ) {
 					if((pass == 2) || MapHasRightSize(argv(lCurrent)))
 					{
+						cvar_set( "g_maplist_index", ftos( lCurrent ) );
 						localcmd(strcat("exec \"", lFilename ,"\"\n"));
 						strunzone(lFilename);
 						pass = 2; // exit the outer loop
