@@ -439,6 +439,8 @@ float MapHasRightSize(string map)
 			dprint("too many\n");
 			return FALSE;
 		}
+		dprint("right size\n");
+		return TRUE;
 	}
 	dprint(": not found\n");
 	return TRUE;
