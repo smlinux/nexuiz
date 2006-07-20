@@ -1557,7 +1557,8 @@ float(vector v, float maxfiredeviation) bot_aimdir =
 	//bprint("e ");bprintvector(diffang);bprint(" < ");bprintfloat(maxfiredeviation);bprint("\n");
 
 	// decide whether to fire this time
-	if ((normalize(v) * shotdir) >= cos(maxfiredeviation))
+	// note the maxfiredeviation is in degrees so this has to convert to radians first
+	if ((normalize(v) * shotdir) >= cos(maxfiredeviation * (3.14159265358979323846 / 180)))
 		self.bot_firetimer = time + 0.3;
 	//dprint(" diff:", vtos(diffang), "\n");
 
