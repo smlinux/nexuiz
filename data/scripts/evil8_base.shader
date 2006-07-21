@@ -458,6 +458,7 @@ textures/evil8_fx/e8red_dcl
 	surfaceparm nomarks
 	surfaceparm trans
 	surfaceparm pointlight
+	nopicmip
 	{
 		map textures/evil8_fx/e8red_dcl.tga
 		blendfunc add
@@ -470,6 +471,7 @@ textures/evil8_fx/e8blue_dcl
 	surfaceparm nomarks
 	surfaceparm trans
 	surfaceparm pointlight
+	nopicmip
 	{
 		map textures/evil8_fx/e8blue_dcl.tga
 		blendfunc add
