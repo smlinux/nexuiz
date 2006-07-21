@@ -343,7 +343,7 @@ Item DataContainer Misc
 	Item Data_Cvar MaxAirSpeed
 	{
 		cvarName	"sv_maxairspeed"
-		defValue	50
+		defValue	220
 
 		[DataLink_Setting]
 	}
@@ -399,7 +399,7 @@ Item DataContainer Misc
 	Item Data_Cvar WeaponSwitchDelay
 	{
 		cvarName	"g_balance_weaponswitchdelay"
-		defValue	0.3
+		defValue	0.15
 
 		[DataLink_Setting]
 	}
