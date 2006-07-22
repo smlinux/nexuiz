@@ -408,6 +408,12 @@ void PrintWelcomeMessage(entity pl)
 		s = strcat(s, "\n\n^8MOTD: ^7", cvar_string("_motd"));
 	}
 
+	s = strcat(s, "\n");
+	if(cvar("fraglimit"))
+		s = strcat(s, "\n^8frag limit: ^7", cvar_string("fraglimit"));
+	if(cvar("timelimit"))
+		s = strcat(s, "\n^8time limit: ^7", cvar_string("timelimit"), " minutes");
+
 	s = strzone(s);
 
 	centermsg_setallfor(pl, s);
