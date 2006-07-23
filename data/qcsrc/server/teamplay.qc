@@ -307,7 +307,7 @@ string GetClientVersionMessage(float v) {
 
 void PrintWelcomeMessage(entity pl)
 {
-	string s, mutator, modifications;
+	string s, mutator, modifications, padding;
 
 	/*if(self.welcomemessage_time < time)
 		return;
@@ -410,7 +410,13 @@ void PrintWelcomeMessage(entity pl)
 
 	s = strcat(s, "\n");
 	if(cvar("fraglimit"))
-		s = strcat(s, "\n^8frag limit: ^7", cvar_string("fraglimit"));
+	{
+		padding = "";
+		if(cvar("timelimit"))
+			padding = "        ";
+			//        " minutes"
+		s = strcat(s, "\n^8frag limit: ^7", cvar_string("fraglimit"), padding);
+	}
 	if(cvar("timelimit"))
 		s = strcat(s, "\n^8time limit: ^7", cvar_string("timelimit"), " minutes");
 

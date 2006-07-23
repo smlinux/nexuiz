@@ -86,7 +86,7 @@ void() Item_Nex_MapDB_EnumFiles =
 		lHandle = fopen( strcat( lStripped, ".txt" ), FILE_READ );
 		if( lHandle < 0 ) {
 			lTitle = String_Zone( lName );
-			lDescription = String_Zone( strcat( "--NO INFORMATION AVAILABLE--\n", lFilename ) );
+			lDescription = String_Zone( strcat( "\n--NO INFORMATION AVAILABLE--\n", lFilename ) );
 		} else {
 			// uncomment this line and comment the other if you have the old map info files
 			//lTitle = String_Zone( lName );
