@@ -68,10 +68,15 @@ void(float ratingscale, vector org, float sradius) havocbot_goalrating_enemyplay
 	local entity head;
 	local float t, noteam;
 	ratingscale = ratingscale * 1200;
-	noteam = self.team == 0 || teamplay == 0;
+	noteam = ((self.team == 0) || (teamplay == 0)); // fteqcc sucks
+	//dprint("teamplay is "); dprint(ftos(teamplay)); dprint(", own team is ");
+	//dprint(ftos(self.team)); dprint(" -> noteam is "); dprint(ftos(noteam));
+	//dprint("\n");
+
 	head = findchain(classname, "player");
 	while (head)
 	{
+		if (self != head)
 		if (head.health > 0)
 		if ((noteam && (!bot_ignore_bots || clienttype(head) == CLIENTTYPE_REAL)) || head.team != self.team)
 		if (vlen(head.origin - org) < sradius)
@@ -81,7 +86,10 @@ void(float ratingscale, vector org, float sradius) havocbot_goalrating_enemyplay
 				t = 1;
 			t = t / (head.health + head.armortype * head.armorvalue);
 			if (t > 0)
+			{
+				//dprint("found: "); dprint(head.netname); dprint("\n");
 				navigation_routerating(head, t * ratingscale);
+			}
 		}
 		head = head.chain;
 	}
