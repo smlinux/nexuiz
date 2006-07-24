@@ -73,9 +73,9 @@ void SV_PlayerPhysics()
 	}
 
 	if(self.flags & FL_NOTARGET)
-		spd = sv_maxspeed * cvar("sv_spectator_speed_multiplier");
-	else
-		spd = sv_maxspeed * maxspd_mod * swampspd_mod;
+		maxspd_mod = cvar("sv_spectator_speed_multiplier");
+
+	spd = sv_maxspeed * maxspd_mod * swampspd_mod;
 
 	if(self.speed != spd)
 	{
