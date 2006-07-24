@@ -8,9 +8,10 @@ nexdir=$base/nexuiz
 dpdir=$base/darkplaces
 tmpdir=/tmp/NEX
 zipdir=/home/polzer/UT/distfiles/nex/
-mingwdlls=$base/buildfiles/w32
-osxapps=$base/buildfiles/osx
-copystrip=$base/buildfiles/copystrip
+buildfiles=$base/buildfiles
+mingwdlls=$buildfiles/w32
+osxapps=$buildfiles/osx
+copystrip=$buildfiles/copystrip
 fteqcc="fteqcc.bin -O2"
 mingw=/home/polzer/mingw32
 ia32=/chroot/fc4-i386
@@ -119,6 +120,10 @@ cd "$tmpdir/data"
 mv common-spog.pk3 ..
 #zip -9r ../data.pk3 .
 v=$versiontag perl -pi -e '/^set g_nexuizversion "([0-9.]*)[^"]*"/ and $_ = "set g_nexuizversion \"$1$ENV{v}\"\n"' default.cfg
+if [ -n "$versiontag" ]; then
+	perl -pi -e '/^set g_nexuizversion/ and $_ = "showbrand 1\n$_"' default.cfg
+	cp "$buildfiles/brand/$versiontag.tga" gfx/brand.tga
+fi
 7za a -mx=7 -tzip ../data.pk3 .
 
 cd "$tmpdir"
@@ -143,7 +148,12 @@ zip -9yr "$zipdir/nexuizengineonly$date$ext.zip" Nexuiz/gpl.txt Nexuiz/nexuiz* N
 rm -f "$zipdir/nexuizsource$date$ext.zip"
 zip -9yr "$zipdir/nexuizsource$date$ext.zip"     Nexuiz/gpl.txt                                            Nexuiz/sources
 
-zipdiff -o Nexuiz/data/datapatch$date.pk3 -f "$basepk3" -t Nexuiz/data/data$date.pk3
+zipdiff -o "Nexuiz/data/datapatch$date.pk3" -f "$basepk3" -t Nexuiz/data/data$date.pk3
+mkdir -p gfx
+unzip "Nexuiz/data/data$date.pk3" gfx/brand.tga
+zip -9r "Nexuiz/data/datapatch$date.pk3" gfx/brand.tga
+rm -rf gfx
+
 rm -f "$zipdir/nexuizpatch$date$ext.zip"
 zip -9yr "$zipdir/nexuizpatch$date$ext.zip"      Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/data/datapatch$date.pk3
 
