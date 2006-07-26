@@ -34,7 +34,7 @@ void() thrown_wep_think
 };
 
 // toss current weapon
-void() W_ThrowWeapon
+void(vector velo, vector delta, float doreduce) W_ThrowWeapon
 {
 	local float w, ammo;
 	local entity wep, e;
@@ -43,10 +43,10 @@ void() W_ThrowWeapon
 	wep = spawn();
 	self = wep;
 	w = e.weapon;
-	setorigin(wep, e.origin);
+	setorigin(wep, e.origin + delta);
 	makevectors(e.angles);
 	wep.classname = "droppedweapon";
-	wep.velocity = e.velocity * 0.5 + v_forward * 750;
+	wep.velocity = velo; // e.velocity * 0.5 + v_forward * 750;
 	SUB_SetFade(wep, time + 20, 1);
 
 	if(w == WEP_SHOTGUN)
@@ -58,9 +58,12 @@ void() W_ThrowWeapon
 			return;
 		}
 		weapon_shotgun();
-		ammo = min(e.ammo_shells, wep.ammo_shells);
-		wep.ammo_shells = ammo;
-		e.ammo_shells -= ammo;
+		if(doreduce)
+		{
+			ammo = min(e.ammo_shells, wep.ammo_shells);
+			wep.ammo_shells = ammo;
+			e.ammo_shells -= ammo;
+		}
 	}
 	else if(w == WEP_UZI)
 	{
@@ -71,9 +74,12 @@ void() W_ThrowWeapon
 			return;
 		}
 		weapon_uzi();
-		ammo = min(e.ammo_nails, wep.ammo_nails);
-		wep.ammo_nails = ammo;
-		e.ammo_nails -= ammo;
+		if(doreduce)
+		{
+			ammo = min(e.ammo_nails, wep.ammo_nails);
+			wep.ammo_nails = ammo;
+			e.ammo_nails -= ammo;
+		}
 	}
 	else if(w == WEP_GRENADE_LAUNCHER)
 	{
@@ -84,9 +90,12 @@ void() W_ThrowWeapon
 			return;
 		}
 		weapon_grenadelauncher();
-		ammo = min(e.ammo_rockets, wep.ammo_rockets);
-		wep.ammo_rockets = ammo;
-		e.ammo_rockets -= ammo;
+		if(doreduce)
+		{
+			ammo = min(e.ammo_rockets, wep.ammo_rockets);
+			wep.ammo_rockets = ammo;
+			e.ammo_rockets -= ammo;
+		}
 	}
 	else if(w == WEP_ELECTRO)
 	{
@@ -97,9 +106,12 @@ void() W_ThrowWeapon
 			return;
 		}
 		weapon_electro();
-		ammo = min(e.ammo_cells, wep.ammo_cells);
-		wep.ammo_cells = ammo;
-		e.ammo_cells -= ammo;
+		if(doreduce)
+		{
+			ammo = min(e.ammo_cells, wep.ammo_cells);
+			wep.ammo_cells = ammo;
+			e.ammo_cells -= ammo;
+		}
 	}
 	else if(w == WEP_CRYLINK)
 	{
@@ -110,9 +122,12 @@ void() W_ThrowWeapon
 			return;
 		}
 		weapon_crylink();
-		ammo = min(e.ammo_cells, wep.ammo_cells);
-		wep.ammo_cells = ammo;
-		e.ammo_cells -= ammo;
+		if(doreduce)
+		{
+			ammo = min(e.ammo_cells, wep.ammo_cells);
+			wep.ammo_cells = ammo;
+			e.ammo_cells -= ammo;
+		}
 	}
 	else if(w == WEP_NEX)
 	{
@@ -123,9 +138,12 @@ void() W_ThrowWeapon
 			return;
 		}
 		weapon_nex();
-		ammo = min(e.ammo_cells, wep.ammo_cells);
-		wep.ammo_cells = ammo;
-		e.ammo_cells -= ammo;
+		if(doreduce)
+		{
+			ammo = min(e.ammo_cells, wep.ammo_cells);
+			wep.ammo_cells = ammo;
+			e.ammo_cells -= ammo;
+		}
 	}
 	else if(w == WEP_HAGAR)
 	{
@@ -136,9 +154,12 @@ void() W_ThrowWeapon
 			return;
 		}
 		weapon_hagar();
-		ammo = min(e.ammo_rockets, wep.ammo_rockets);
-		wep.ammo_rockets = ammo;
-		e.ammo_rockets -= ammo;
+		if(doreduce)
+		{
+			ammo = min(e.ammo_rockets, wep.ammo_rockets);
+			wep.ammo_rockets = ammo;
+			e.ammo_rockets -= ammo;
+		}
 	}
 	else if(w == WEP_ROCKET_LAUNCHER)
 	{
@@ -149,9 +170,12 @@ void() W_ThrowWeapon
 			return;
 		}
 		weapon_rocketlauncher();
-		ammo = min(e.ammo_rockets, wep.ammo_rockets);
-		wep.ammo_rockets = ammo;
-		e.ammo_rockets -= ammo;
+		if(doreduce)
+		{
+			ammo = min(e.ammo_rockets, wep.ammo_rockets);
+			wep.ammo_rockets = ammo;
+			e.ammo_rockets -= ammo;
+		}
 	}
 
 	if(e.items & w)

@@ -111,7 +111,7 @@ void ImpulseCommands (void)
 		if (self.weapon != WEP_LASER
 			&& !cvar("g_minstagib") && !cvar("g_instagib")
 			&& !cvar("g_rocketarena") && !cvar("g_lms") && cvar("g_pickup_items") && !cvar("g_nixnex"))
-			W_ThrowWeapon();
+			W_ThrowWeapon(self.velocity * 0.5 + v_forward * 750, '0 0 0', TRUE);
 	}
 	else
 	{

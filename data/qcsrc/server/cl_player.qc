@@ -122,45 +122,15 @@ void player_anim (void)
 
 void SpawnThrownWeapon (vector org, float w)
 {
-	local entity oldself;
-
 	if (!cvar("g_pickup_items"))
 	if (!cvar("g_minstagib"))
+		return;
+	if (!w)
 		return;
 	if (w == IT_LASER)
 		return;
 
-	oldself = self;
-	self = spawn();
-	// this will cause it to be removed later
-	self.classname = "droppedweapon";
-
-	setorigin(self, org);
-	self.velocity = randomvec() * 100 + '0 0 200';
-	SUB_SetFade(self, time + 20, 1);
-
-	if (w == WEP_UZI)
-		weapon_uzi ();
-	else if (w == WEP_SHOTGUN)
-		weapon_shotgun ();
-	else if (w == WEP_GRENADE_LAUNCHER)
-		weapon_grenadelauncher ();
-	else if (w == WEP_ELECTRO)
-		weapon_electro ();
-	else if (w == WEP_CRYLINK)
-		weapon_crylink ();
-	else if (w == WEP_NEX)
-		weapon_nex ();
-	else if (w == WEP_HAGAR)
-		weapon_hagar ();
-	else if (w == WEP_ROCKET_LAUNCHER)
-		weapon_rocketlauncher ();
-
-	// making absolutely sure...
-	self.classname = "droppedweapon";
-	self.colormap = oldself.colormap;
-
-	self = oldself;
+	W_ThrowWeapon(randomvec() * 100 + '0 0 200', org - self.origin, FALSE);
 }
 
 void PlayerCorpseDamage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
@@ -321,7 +291,7 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 		// become fully visible
 		self.alpha = 1;
 		// throw a weapon
-		SpawnThrownWeapon (self.origin + (self.mins + self.maxs) * 0.5, self.weapon);
+		SpawnThrownWeapon (self.origin + (self.mins + self.maxs) * 0.5, self.switchweapon);
 		// print an obituary message
 		Obituary (attacker, self, deathtype);
 		DropAllRunes(self);
