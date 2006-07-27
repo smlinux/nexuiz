@@ -28,7 +28,7 @@ Item Window MapList
 	Derive Label MapsLabel
 	{
 		pos	'0 20'
-		text	"Map List:"
+		text	"Available maps:"
 	}
 	Derive List Maps
 	{
@@ -41,7 +41,7 @@ Item Window MapList
 	Derive Label CycleLabel
 	{
 		pos	'475 20'
-		text	"Cycle List:"
+		text	"Maps in cycle:"
 	}
 	Derive List Cycle
 	{
