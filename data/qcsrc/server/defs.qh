@@ -270,3 +270,5 @@ float default_player_alpha;
 
 string gamemode_name;
 float teams_matter;
+
+float startitem_failed;
