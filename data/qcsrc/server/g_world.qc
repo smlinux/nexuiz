@@ -1282,12 +1282,13 @@ void() CheckRules_World =
 		InitiateOvertime();
 	}
 
+	if(status == WINNING_NEVER)
+		// equality cases! Nobody wins if the overtime ends in a draw.
+		ClearWinners();
+
 	if(checkrules_overtimeend)
 		if(status != WINNING_NEVER)
-		{
-			ClearWinners();
 			status = WINNING_YES;
-		}
 
 	if(status == WINNING_YES)
 		NextLevel();
