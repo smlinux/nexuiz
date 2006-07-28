@@ -42,6 +42,8 @@ void(vector velo, vector delta, float doreduce) W_ThrowWeapon
 	w = self.weapon;
 	if(w == WEP_LASER)
 		return;
+	if(w == 0)
+		return; // just in case
 
 	e = self;
 	wep = spawn();
