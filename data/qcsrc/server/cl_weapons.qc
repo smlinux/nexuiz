@@ -39,10 +39,14 @@ void(vector velo, vector delta, float doreduce) W_ThrowWeapon
 	local float w, ammo;
 	local entity wep, e;
 
+	w = self.weapon;
+	if(w == WEP_LASER)
+		return;
+
 	e = self;
 	wep = spawn();
 	self = wep;
-	w = e.weapon;
+
 	setorigin(wep, e.origin + delta);
 	makevectors(e.angles);
 	wep.classname = "droppedweapon";
@@ -58,6 +62,8 @@ void(vector velo, vector delta, float doreduce) W_ThrowWeapon
 			return;
 		}
 		weapon_shotgun();
+		if(startitem_failed)
+			return;
 		if(doreduce)
 		{
 			ammo = min(e.ammo_shells, wep.ammo_shells);
@@ -74,6 +80,8 @@ void(vector velo, vector delta, float doreduce) W_ThrowWeapon
 			return;
 		}
 		weapon_uzi();
+		if(startitem_failed)
+			return;
 		if(doreduce)
 		{
 			ammo = min(e.ammo_nails, wep.ammo_nails);
@@ -90,6 +98,8 @@ void(vector velo, vector delta, float doreduce) W_ThrowWeapon
 			return;
 		}
 		weapon_grenadelauncher();
+		if(startitem_failed)
+			return;
 		if(doreduce)
 		{
 			ammo = min(e.ammo_rockets, wep.ammo_rockets);
@@ -106,6 +116,8 @@ void(vector velo, vector delta, float doreduce) W_ThrowWeapon
 			return;
 		}
 		weapon_electro();
+		if(startitem_failed)
+			return;
 		if(doreduce)
 		{
 			ammo = min(e.ammo_cells, wep.ammo_cells);
@@ -122,6 +134,8 @@ void(vector velo, vector delta, float doreduce) W_ThrowWeapon
 			return;
 		}
 		weapon_crylink();
+		if(startitem_failed)
+			return;
 		if(doreduce)
 		{
 			ammo = min(e.ammo_cells, wep.ammo_cells);
@@ -138,6 +152,8 @@ void(vector velo, vector delta, float doreduce) W_ThrowWeapon
 			return;
 		}
 		weapon_nex();
+		if(startitem_failed)
+			return;
 		if(doreduce)
 		{
 			ammo = min(e.ammo_cells, wep.ammo_cells);
@@ -154,6 +170,8 @@ void(vector velo, vector delta, float doreduce) W_ThrowWeapon
 			return;
 		}
 		weapon_hagar();
+		if(startitem_failed)
+			return;
 		if(doreduce)
 		{
 			ammo = min(e.ammo_rockets, wep.ammo_rockets);
@@ -170,6 +188,8 @@ void(vector velo, vector delta, float doreduce) W_ThrowWeapon
 			return;
 		}
 		weapon_rocketlauncher();
+		if(startitem_failed)
+			return;
 		if(doreduce)
 		{
 			ammo = min(e.ammo_rockets, wep.ammo_rockets);
@@ -179,7 +199,8 @@ void(vector velo, vector delta, float doreduce) W_ThrowWeapon
 	}
 
 	if(e.items & w)
-		sprint(e, strcat("You dropped the ^2", wep.netname, "\n"));
+		if(e.health >= 1)
+			sprint(e, strcat("You dropped the ^2", wep.netname, "\n"));
 	wep.owner = e;
 	setorigin(wep, wep.origin);
 	wep.nextthink = time + 0.5;
