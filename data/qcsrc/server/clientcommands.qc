@@ -3,7 +3,7 @@ float ValidateMap(string vote);
 
 void Say(entity source, float teamsay, string msgin)
 {
-	string msgstr, colorstr;
+	string msgstr, colorstr, cmsgstr;
 	entity head;
 
 	msgin = formatmessage(msgin);
@@ -37,9 +37,12 @@ void Say(entity source, float teamsay, string msgin)
 	}
 
 	if(teamsay)
-		msgstr = strcat(colorstr, "(^3", source.netname, colorstr, ") ^7", msgin, "\n");
+	{
+		msgstr = strzone(strcat(colorstr, "(^3", source.netname, colorstr, ") ^7", msgin, "\n"));
+		cmsgstr = strcat(colorstr, "(^3", source.netname, colorstr, ")\n^7", wordwrap(msgin, 50));
+	}
 	else
-		msgstr = strcat("^3", source.netname, "^7: ", msgin, "\n");
+		msgstr = strzone(strcat("^3", source.netname, "^7: ", msgin, "\n"));
 
 	head = find(world, classname, "player");
 	while(head)
@@ -48,6 +51,8 @@ void Say(entity source, float teamsay, string msgin)
 			if(!teamsay || (head.team == source.team))
 			{
 				sprint(head, msgstr);
+				if(teamsay)
+					centermsg_setfor(head, CENTERMSG_TEAMSAY, cmsgstr);
 				stuffcmd(head, "play2 misc/talk.wav\n");
 			}
 		head = find(head, classname, "player");
@@ -77,6 +82,8 @@ void Say(entity source, float teamsay, string msgin)
 		}
 		ServerConsoleEcho(substring(msgstr, 0, strlen(msgstr) - 1), TRUE);
 	}
+
+	strunzone(msgstr);
 }
 
 void SV_ParseClientCommand(string s) {
