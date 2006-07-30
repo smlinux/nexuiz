@@ -37,7 +37,11 @@ void() trigger_push_touch =
 	{
 		local float i;
 		local float found;
-		sound (other, CHAN_ITEM, "misc/jumppad.ogg", 1, ATTN_NORM);
+		if(self.pushltime < time)  // prevent "snorring" sound when a player hits the jumppad more than once
+		{
+			sound (other, CHAN_ITEM, "misc/jumppad.ogg", 1, ATTN_NORM);
+			self.pushltime = time + 0.5;
+		}
 		found = FALSE;
 		for(i = 0; i < other.jumppadcount && i < NUM_JUMPPADSUSED; ++i)
 			if(other.(jumppadsused[i]) == self)

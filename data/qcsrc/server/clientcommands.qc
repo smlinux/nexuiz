@@ -1,5 +1,6 @@
 void ReadyCount();
 float ValidateMap(string vote);
+void(entity e) DropFlag;
 
 void Say(entity source, float teamsay, string msgin)
 {
@@ -302,6 +303,8 @@ void SV_ParseClientCommand(string s) {
 		if(cvar("g_lms") || cvar("g_arena"))
 			return; // don't allow spectating in lms, unless player runs out of lives
 		if(self.classname == "player" && cvar("sv_spectate") == 1) {
+			if(self.flagcarried)
+				DropFlag(self.flagcarried);
 			DistributeFragsAmongTeam(self, self.team, 1.0);
 			self.classname = "observer";
 			PutClientInServer();
