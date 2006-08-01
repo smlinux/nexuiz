@@ -61,11 +61,15 @@ void(vector velo, vector delta, float doreduce) W_ThrowWeapon
 		if(!(e.items & w))
 		{
 			remove(wep);
+			self = e;
 			return;
 		}
 		weapon_shotgun();
 		if(startitem_failed)
+		{
+			self = e;
 			return;
+		}
 		if(doreduce)
 		{
 			ammo = min(e.ammo_shells, wep.ammo_shells);
@@ -79,11 +83,15 @@ void(vector velo, vector delta, float doreduce) W_ThrowWeapon
 		if(!(e.items & w))
 		{
 			remove(wep);
+			self = e;
 			return;
 		}
 		weapon_uzi();
 		if(startitem_failed)
+		{
+			self = e;
 			return;
+		}
 		if(doreduce)
 		{
 			ammo = min(e.ammo_nails, wep.ammo_nails);
@@ -96,12 +104,16 @@ void(vector velo, vector delta, float doreduce) W_ThrowWeapon
 		w = IT_GRENADE_LAUNCHER;
 		if(!(e.items & w))
 		{
+			self = e;
 			remove(wep);
 			return;
 		}
 		weapon_grenadelauncher();
 		if(startitem_failed)
+		{
+			self = e;
 			return;
+		}
 		if(doreduce)
 		{
 			ammo = min(e.ammo_rockets, wep.ammo_rockets);
@@ -114,12 +126,16 @@ void(vector velo, vector delta, float doreduce) W_ThrowWeapon
 		w = IT_ELECTRO;
 		if(!(e.items & w))
 		{
+			self = e;
 			remove(wep);
 			return;
 		}
 		weapon_electro();
 		if(startitem_failed)
+		{
+			self = e;
 			return;
+		}
 		if(doreduce)
 		{
 			ammo = min(e.ammo_cells, wep.ammo_cells);
@@ -132,12 +148,16 @@ void(vector velo, vector delta, float doreduce) W_ThrowWeapon
 		w = IT_CRYLINK;
 		if(!(e.items & w))
 		{
+			self = e;
 			remove(wep);
 			return;
 		}
 		weapon_crylink();
 		if(startitem_failed)
+		{
+			self = e;
 			return;
+		}
 		if(doreduce)
 		{
 			ammo = min(e.ammo_cells, wep.ammo_cells);
@@ -150,12 +170,16 @@ void(vector velo, vector delta, float doreduce) W_ThrowWeapon
 		w = IT_NEX;
 		if(!(e.items & w))
 		{
+			self = e;
 			remove(wep);
 			return;
 		}
 		weapon_nex();
 		if(startitem_failed)
+		{
+			self = e;
 			return;
+		}
 		if(doreduce)
 		{
 			ammo = min(e.ammo_cells, wep.ammo_cells);
@@ -168,12 +192,16 @@ void(vector velo, vector delta, float doreduce) W_ThrowWeapon
 		w = IT_HAGAR;
 		if(!(e.items & w))
 		{
+			self = e;
 			remove(wep);
 			return;
 		}
 		weapon_hagar();
 		if(startitem_failed)
+		{
+			self = e;
 			return;
+		}
 		if(doreduce)
 		{
 			ammo = min(e.ammo_rockets, wep.ammo_rockets);
@@ -186,12 +214,16 @@ void(vector velo, vector delta, float doreduce) W_ThrowWeapon
 		w = IT_ROCKET_LAUNCHER;
 		if(!(e.items & w))
 		{
+			self = e;
 			remove(wep);
 			return;
 		}
 		weapon_rocketlauncher();
 		if(startitem_failed)
+		{
+			self = e;
 			return;
+		}
 		if(doreduce)
 		{
 			ammo = min(e.ammo_rockets, wep.ammo_rockets);
