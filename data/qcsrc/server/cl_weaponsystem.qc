@@ -229,33 +229,6 @@ void() CL_SpawnWeaponentity =
 	self.exteriorweaponentity.nextthink = time;
 };
 
-// convertion from index (= impulse) to flag in .items
-float(float index) weapon_translateindextoflag =
-{
-	if (index == WEP_LASER)
-		return IT_LASER;
-	else if (index == WEP_SHOTGUN)
-		return IT_SHOTGUN;
-	else if (index == WEP_UZI)
-		return IT_UZI;
-	else if (index == WEP_GRENADE_LAUNCHER)
-		return IT_GRENADE_LAUNCHER;
-	else if (index == WEP_ELECTRO)
-		return IT_ELECTRO;
-	else if (index == WEP_CRYLINK)
-		return IT_CRYLINK;
-	else if (index == WEP_NEX)
-		return IT_NEX;
-	else if (index == WEP_HAGAR)
-		return IT_HAGAR;
-	else if (index == WEP_ROCKET_LAUNCHER)
-		return IT_ROCKET_LAUNCHER;
-	else if (index == WEP_LASER)
-		return IT_LASER;
-	else
-		return 0;
-};
-
 float(entity cl, float wpn, float andammo, float complain) client_hasweapon =
 {
 	local float itemcode, f;
@@ -267,7 +240,7 @@ float(entity cl, float wpn, float andammo, float complain) client_hasweapon =
 			sprint(self, "Invalid weapon\n");
 		return FALSE;
 	}
-	itemcode = weapon_translateindextoflag(wpn);
+	itemcode = W_ItemCode(wpn);
 	if (cl.items & itemcode)
 	{
 		if (andammo)

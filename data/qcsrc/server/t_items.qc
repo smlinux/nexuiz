@@ -571,3 +571,57 @@ void misc_models (void)
 }
 
 
+
+
+
+floatfield Item_CounterField(float it)
+{
+	switch(it)
+	{
+		case IT_SHELLS:      return ammo_shells;
+		case IT_NAILS:       return ammo_nails;
+		case IT_ROCKETS:     return ammo_rockets;
+		case IT_CELLS:       return ammo_cells;
+		case IT_5HP:         return health;
+		case IT_25HP:        return health;
+		case IT_HEALTH:      return health;
+		case IT_ARMOR_SHARD: return armorvalue;
+		case IT_ARMOR:       return armorvalue;
+		// add more things here (health, armor)
+		default:             error("requested item has no counter field");
+	}
+}
+
+float Item_WeaponCode(float it)
+{
+	switch(it)
+	{
+		case IT_LASER:            return WEP_LASER;
+		case IT_SHOTGUN:          return WEP_SHOTGUN;
+		case IT_UZI:              return WEP_UZI;
+		case IT_GRENADE_LAUNCHER: return WEP_GRENADE_LAUNCHER;
+		case IT_ELECTRO:          return WEP_ELECTRO;
+		case IT_CRYLINK:          return WEP_CRYLINK;
+		case IT_NEX:              return WEP_NEX;
+		case IT_HAGAR:            return WEP_HAGAR;
+		case IT_ROCKET_LAUNCHER:  return WEP_ROCKET_LAUNCHER;
+		default:                  return 0;
+	}
+}
+
+spawnfunc Item_SpawnFunc(float it)
+{
+	switch(it)
+	{
+		case IT_SHOTGUN:          return weapon_shotgun;
+		case IT_UZI:              return weapon_uzi;
+		case IT_GRENADE_LAUNCHER: return weapon_grenadelauncher;
+		case IT_ELECTRO:          return weapon_electro;
+		case IT_CRYLINK:          return weapon_crylink;
+		case IT_NEX:              return weapon_nex;
+		case IT_HAGAR:            return weapon_hagar;
+		case IT_ROCKET_LAUNCHER:  return weapon_rocketlauncher;
+		// add all other item spawn functions here
+		default:                  error("requested item can't be spawned");
+	}
+}

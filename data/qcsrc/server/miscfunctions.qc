@@ -1,6 +1,3 @@
-string W_Name(float weaponid);
-float(float index) weapon_translateindextoflag;
-
 float logfile_open;
 float logfile;
 
