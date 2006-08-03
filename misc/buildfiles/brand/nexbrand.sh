@@ -4,6 +4,8 @@
 #   writes "2.0.1 RC 1" on rc1.tga
 # NOTE: unfortunately requires X-server (otherwise file-tga-save won't work... no joke)
 
+# roughly based on Spencer Kimball's "Glowing Hot" effect, included with GIMP
+
 version=$1
 versiontag=$2
 
@@ -48,7 +50,6 @@ gimp -i -b - <<EOF
 		(gimp-context-set-background '(255 255 255))
 		(gimp-edit-fill glow-layer BACKGROUND-FILL)
 		(gimp-selection-none img)
-		(gimp-drawable-set-name glow-layer "Glow Layer")
 	)
 )
 
