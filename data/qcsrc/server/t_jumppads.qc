@@ -97,8 +97,6 @@ vector(vector org, entity tgt, float ht) trigger_push_calculatevelocity =
 		// cases to test: "jump up", "jump down" with positive and negative height
 	}
 
-	dprint("trigger_push_calculatevelocity_flighttime: "); dprint(ftos(trigger_push_calculatevelocity_flighttime)); dprint("\n");
-
 	// finally calculate the velocity
 	return sdir * vs + '0 0 1' * vz;
 }
