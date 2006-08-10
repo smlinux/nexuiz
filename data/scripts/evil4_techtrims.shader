@@ -361,7 +361,7 @@ textures/evil4_lights/s_light
 {
 	qer_editorimage textures/evil4_lights/s_light.jpg
 	surfaceparm nomarks
-	q3map_surfacelight 1500
+	q3map_surfacelight 2500
 	{
 		map textures/evil4_lights/s_light.jpg
 		//blendFunc GL_DST_COLOR GL_ZERO
