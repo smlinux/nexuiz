@@ -475,15 +475,15 @@ void DistributeFragsAmongTeam(entity p, float targetteam, float factor)
 		error(strcat("There were ", ftos(f), " frags left. BAD!"));
 }
 
-string Team_ColorCode(float team)
+string Team_ColorCode(float teamid)
 {
-	if(team == COLOR_TEAM1)
+	if(teamid == COLOR_TEAM1)
 		return "^1";
-	else if(team == COLOR_TEAM2)
+	else if(teamid == COLOR_TEAM2)
 		return "^4";
-	else if(team == COLOR_TEAM3)
+	else if(teamid == COLOR_TEAM3)
 		return "^6";
-	else if(team == COLOR_TEAM4)
+	else if(teamid == COLOR_TEAM4)
 		return "^3";
 	else
 		return "^7";

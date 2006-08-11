@@ -115,7 +115,7 @@ void ImpulseCommands (void)
 	}
 	else if (imp == 18)
 	{
-		if(self.cursor_trace_ent.classname == "player")
+		if(self.last_trace_player)
 		{
 			string t;
 			string h;
@@ -123,11 +123,11 @@ void ImpulseCommands (void)
 			h = "";
 			if(teams_matter)
 			{
-				t = Team_ColorCode(self.cursor_trace_ent.team);
-				if(self.team == self.cursor_trace_ent.team)
-					h = strcat(" (", ftos(self.cursor_trace_ent.health), "% health)");
+				t = Team_ColorCode(self.last_trace_player.team);
+				if(self.team == self.last_trace_player.team)
+					h = strcat(" (", ftos(self.last_trace_player.health), "% health)");
 			}
-			centermsg_set(CENTERMSG_KILL, strcat(t, self.cursor_trace_ent.netname, h));
+			centermsg_set(CENTERMSG_KILL, strcat(t, self.last_trace_player.netname, h));
 		}
 	}
 	else

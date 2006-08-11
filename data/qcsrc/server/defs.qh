@@ -284,3 +284,5 @@ spawnfunc Item_SpawnFunc(float it);
 float W_AmmoItemCode(float wpn);
 float W_ItemCode(float wpn);
 string W_Name(float weaponid);
+
+.entity last_trace_player;
