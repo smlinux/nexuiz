@@ -12,16 +12,7 @@ void Say(entity source, float teamsay, string msgin)
 	if(msgin == "")
 		return;
 
-	if(source.team == COLOR_TEAM1)
-		colorstr = "^1";
-	else if(source.team == COLOR_TEAM2)
-		colorstr = "^4";
-	else if(source.team == COLOR_TEAM3)
-		colorstr = "^6";
-	else if(source.team == COLOR_TEAM4)
-		colorstr = "^3";
-	else
-		colorstr = "^7";
+	colorstr = Team_ColorCode(source.team);
 
 	if(!teams_matter)
 		teamsay = FALSE;
