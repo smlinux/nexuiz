@@ -25,9 +25,7 @@ vector(vector org, entity tgt, float ht) trigger_push_calculatevelocity =
 	local float grav, sdist, zdist, vs, vz, jumpheight, trajsign;
 	local vector sdir, torg;
 
-	torg = tgt.origin;
-	if(tgt.model)
-		torg = torg + (tgt.mins + tgt.maxs) * 0.5;
+	torg = tgt.origin + (tgt.mins + tgt.maxs) * 0.5;
 
 	grav = cvar("sv_gravity");
 
