@@ -410,7 +410,7 @@ void UpdateSelectedPlayer()
 				continue;
 
 			// misaimed?
-			if(dist_point_line(d, '0 0 0', v_forward) > 200)
+			if(dist_point_line(d, '0 0 0', v_forward) > 100) // about 2.5 m
 				continue;
 
 			// now find the cos of the angle...
