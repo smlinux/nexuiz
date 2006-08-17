@@ -377,7 +377,10 @@ void UpdateSelectedPlayer()
 	if(clienttype(self) != CLIENTTYPE_REAL)
 		return;
 
-	if(!self.cvar_cl_shownames)
+	if(self.cvar_cl_shownames == 0)
+		return;
+
+	if(self.cvar_cl_shownames == 1 && !teams_matter)
 		return;
 
 	// 1. cursor trace is always right

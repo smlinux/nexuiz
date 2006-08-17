@@ -88,6 +88,15 @@ void Teleport_Touch (void)
 	other.oldvelocity = other.velocity;
 	// reset tracking of who pushed you into a hazard (for kill credit)
 	other.pushltime = 0;
+
+	// stop player name display
+	{
+		entity oldself;
+		oldself = self;
+		self = other;
+		ClearSelectedPlayer();
+		self = oldself;
+	}
 }
 
 void info_teleport_destination (void)
