@@ -290,6 +290,8 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 
 		// become fully visible
 		self.alpha = 1;
+		// clear selected player display
+		ClearSelectedPlayer();
 		// throw a weapon
 		SpawnThrownWeapon (self.origin + (self.mins + self.maxs) * 0.5, self.switchweapon);
 		// print an obituary message
@@ -358,6 +360,13 @@ float UpdateSelectedPlayer_countvalue(float v)
 	return max(0, (v - 1.0) / 0.5);
 }
 
+void ClearSelectedPlayer()
+{
+	centermsg_set(CENTERMSG_POINT, "");
+	self.selected_player = world;
+	self.selected_player_display_needs_update = FALSE;
+}
+
 void UpdateSelectedPlayer()
 {
 	entity selected;
@@ -372,7 +381,7 @@ void UpdateSelectedPlayer()
 		return;
 
 	// 1. cursor trace is always right
-	if(0) // self.cursor_trace_ent && self.cursor_trace_ent.classname == "player")
+	if(self.cursor_trace_ent && self.cursor_trace_ent.classname == "player" && !self.cursor_trace_ent.deadflag)
 	{
 		selected = self.cursor_trace_ent;
 	}
@@ -383,19 +392,20 @@ void UpdateSelectedPlayer()
 		// 2. if we don't have a cursor trace, find the player which is least
 		//    mis-aimed at
 		entity p;
+		vector so;
+		so = self.origin + self.view_ofs;
 		for(p = find(world, classname, "player"); p; p = find(p, classname, "player"))
 		{
 			float c;
 			vector d;
-			d = p.origin - self.origin;
+			d = p.origin - so;
 
 			if(p == self)
 				continue;
 
-			// behind?
-			if(d * v_forward < 0)
+			if(p.deadflag)
 				continue;
-			
+
 			// misaimed?
 			if(dist_point_line(d, '0 0 0', v_forward) > 200)
 				continue;
@@ -403,10 +413,13 @@ void UpdateSelectedPlayer()
 			// now find the cos of the angle...
 			c = normalize(d) * v_forward;
 
+			if(c < 0.95) // about 18 degrees
+				continue;
+
 			if(c > selected_score)
 			{
 				// oh right... can we even see him?
-				traceline(self.origin, p.origin, MOVE_NOMONSTERS, self);
+				traceline(so, p.origin, MOVE_NOMONSTERS, self);
 				if(trace_fraction < 1)
 					continue;
 
@@ -423,7 +436,8 @@ void UpdateSelectedPlayer()
 	else
 	{
 		if(time < self.selected_player_display_timeout)
-			selected = self.selected_player;
+			if(!self.selected_player.deadflag)
+				selected = self.selected_player;
 	}
 
 	if(selected)
