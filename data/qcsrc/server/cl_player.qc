@@ -353,3 +353,123 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 	}
 }
 
+float UpdateSelectedPlayer_countvalue(float v)
+{
+	return max(0, (v - 1.0) / 0.5);
+}
+
+void UpdateSelectedPlayer()
+{
+	entity selected;
+	float selected_score;
+	selected = world;
+	selected_score = 0;
+
+	if(clienttype(self) != CLIENTTYPE_REAL)
+		return;
+
+	if(!self.cvar_cl_shownames)
+		return;
+
+	// 1. cursor trace is always right
+	if(0) // self.cursor_trace_ent && self.cursor_trace_ent.classname == "player")
+	{
+		selected = self.cursor_trace_ent;
+	}
+	else
+	{
+		makevectors(self.v_angle); // sets v_forward
+
+		// 2. if we don't have a cursor trace, find the player which is least
+		//    mis-aimed at
+		entity p;
+		for(p = find(world, classname, "player"); p; p = find(p, classname, "player"))
+		{
+			float c;
+			vector d;
+			d = p.origin - self.origin;
+
+			if(p == self)
+				continue;
+
+			// behind?
+			if(d * v_forward < 0)
+				continue;
+			
+			// misaimed?
+			if(dist_point_line(d, '0 0 0', v_forward) > 200)
+				continue;
+
+			// now find the cos of the angle...
+			c = normalize(d) * v_forward;
+
+			if(c > selected_score)
+			{
+				// oh right... can we even see him?
+				traceline(self.origin, p.origin, MOVE_NOMONSTERS, self);
+				if(trace_fraction < 1)
+					continue;
+
+				selected = p;
+				selected_score = c;
+			}
+		}
+	}
+
+	if(selected)
+	{
+		self.selected_player_display_timeout = time + self.cvar_scr_centertime;
+	}
+	else
+	{
+		if(time < self.selected_player_display_timeout)
+			selected = self.selected_player;
+	}
+
+	if(selected)
+	{
+		if(selected == self.selected_player)
+		{
+			float save;
+			save = UpdateSelectedPlayer_countvalue(self.selected_player_count);
+			self.selected_player_count = self.selected_player_count + frametime;
+			if(save != UpdateSelectedPlayer_countvalue(self.selected_player_count))
+			{
+				string namestr, healthstr;
+				if(teams_matter)
+				{
+					namestr = decolorize(selected.netname);
+					healthstr = ftos(floor(selected.health));
+					if(self.team == selected.team)
+					{
+						namestr = strcat(Team_ColorCode(selected.team), namestr, " (", healthstr, "%)");
+						self.selected_player_display_needs_update = TRUE;
+					}
+					else
+						namestr = strcat(Team_ColorCode(selected.team), namestr);
+				}
+				else
+				{
+					namestr = selected.netname;
+				}
+				centermsg_set(CENTERMSG_POINT, namestr);
+			}
+		}
+		else
+		{
+			self.selected_player = selected;
+			self.selected_player_time = time;
+			self.selected_player_count = 0;
+			self.selected_player_display_needs_update = FALSE;
+			// dprint("Selected: ", selected.netname, "\n");
+		}
+	}
+	else
+	{
+		if(self.selected_player_display_needs_update)
+		{
+			centermsg_set(CENTERMSG_POINT, "");
+			self.selected_player_display_needs_update = FALSE;
+		}
+	}
+}

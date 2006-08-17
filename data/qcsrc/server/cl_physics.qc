@@ -24,12 +24,6 @@ void SV_PlayerPhysics()
 	if (clienttype(self) == CLIENTTYPE_BOT)
 		bot_think();
 
-	// doing this HERE because this is called for every client input frame, and
-	// client input frames update this
-	if(self.cursor_trace_ent)
-		if(self.cursor_trace_ent.classname == "player")
-			self.last_trace_player = self.cursor_trace_ent;
-
 	if (self.movetype == MOVETYPE_NONE)
 		return;
 
@@ -99,6 +93,8 @@ void SV_PlayerPhysics()
 	// if dead, behave differently
 	if (self.deadflag)
 		return;
+
+	UpdateSelectedPlayer();
 
 	if (!self.fixangle)
 	{

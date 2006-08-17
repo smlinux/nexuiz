@@ -113,23 +113,6 @@ void ImpulseCommands (void)
 			&& !cvar("g_rocketarena") && !cvar("g_lms") && cvar("g_pickup_items") && !cvar("g_nixnex"))
 			W_ThrowWeapon(self.velocity * 0.5 + v_forward * 750, '0 0 0', TRUE);
 	}
-	else if (imp == 18)
-	{
-		if(self.last_trace_player)
-		{
-			string t;
-			string h;
-			t = "^3";
-			h = "";
-			if(teams_matter)
-			{
-				t = Team_ColorCode(self.last_trace_player.team);
-				if(self.team == self.last_trace_player.team)
-					h = strcat(" (", ftos(self.last_trace_player.health), "% health)");
-			}
-			centermsg_set(CENTERMSG_KILL, strcat(t, self.last_trace_player.netname, h));
-		}
-	}
 	else
 	{
 		if (cvar("sv_cheats"))

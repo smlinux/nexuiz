@@ -257,6 +257,7 @@ float default_player_alpha;
 .float cvar_cl_playerdetailreduction;
 .float cvar_cl_nogibs;
 .float cvar_scr_centertime;
+.float cvar_cl_shownames;
 
 #ifdef ALLOW_VARIABLE_LOD
 .float modelindex_lod0;
@@ -285,4 +286,9 @@ float W_AmmoItemCode(float wpn);
 float W_ItemCode(float wpn);
 string W_Name(float weaponid);
 
-.entity last_trace_player;
+void UpdateSelectedPlayer();
+.entity selected_player;
+.float selected_player_time; // when this player has been selected
+.float selected_player_count; // how long this player has been directly pointed to
+.float selected_player_display_needs_update; // are regular updates necessary? (health)
+.float selected_player_display_timeout; // when the selection will time out

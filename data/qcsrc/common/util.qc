@@ -173,3 +173,13 @@ string wordwrap(string s, float l)
 */
 }
 
+float dist_point_line(vector p, vector l0, vector ldir)
+{
+	ldir = normalize(ldir);
+	
+	// remove the component in line direction
+	p = p - (p * ldir) * ldir;
+
+	// vlen of the remaining vector
+	return vlen(p);
+}
