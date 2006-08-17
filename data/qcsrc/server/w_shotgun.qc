@@ -64,7 +64,10 @@ void()  shotgun_fire2_02 =
 float(float req) w_shotgun =
 {
 	if (req == WR_AIM)
-		self.button0 = bot_aim(1000000, 0, 0.001, FALSE);
+		if(vlen(self.origin-self.enemy.origin)>200)
+			self.button0 = bot_aim(1000000, 0, 0.001, FALSE);
+		else
+			self.button3 = bot_aim(1000000, 0, 0.001, FALSE);
 	else if (req == WR_THINK)
 	{
 		if (self.button0)

@@ -330,6 +330,12 @@ float(float t, float f1, float f2, entity e1, vector v1, vector v2, vector v3, v
 };
 
 
+// Random skill system
+.float bot_thinkskill;
+.float bot_mouseskill;
+.float bot_predictionskill;
+.float bot_offsetskill;
+
 
 // waypoint navigation system
 
@@ -1441,7 +1447,15 @@ void(float t, float f1, float f2, entity e1, vector v1, vector v2, vector v3, ve
 };
 
 .float bot_badaimtime;
+.float bot_aimthinktime;
+.vector bot_mouseaim;
 .vector bot_badaimoffset;
+.vector bot_1st_order_aimfilter;
+.vector bot_2nd_order_aimfilter;
+.vector bot_3th_order_aimfilter;
+.vector bot_4th_order_aimfilter;
+.vector bot_5th_order_aimfilter;
+.vector bot_olddesiredang;
 float(vector v, float maxfiredeviation) bot_aimdir =
 {
 /*
@@ -1496,9 +1510,9 @@ float(vector v, float maxfiredeviation) bot_aimdir =
 	if (time >= self.bot_badaimtime)
 	{
 		self.bot_badaimtime = max(self.bot_badaimtime + 0.3, time);
-		self.bot_badaimoffset = randomvec() * bound(0, 5 - 0.5 * skill, 5);
+		self.bot_badaimoffset = randomvec() * bound(0, 5 - 0.5 * (skill+self.bot_offsetskill), 5);
 	}
-	desiredang = vectoangles(v) + self.bot_badaimoffset;
+	desiredang = vectoangles(v) + self.bot_badaimoffset*cvar("bot_ai_aimskill_offset");
 	//dprint(" desired:", vtos(desiredang));
 	if (desiredang_x >= 180)
 		desiredang_x = desiredang_x - 360;
@@ -1515,6 +1529,73 @@ float(vector v, float maxfiredeviation) bot_aimdir =
 	//}
 
 	// calculate turn angles
+	diffang = (desiredang - self.bot_olddesiredang)*(1/frametime);
+	self.bot_olddesiredang = desiredang;
+	//dprint(" diff:", vtos(diffang));
+
+	// wrap yaw turn
+	while (diffang_y < -180)
+		diffang_y = diffang_y + 360;
+	while (diffang_y >  180)
+		diffang_y = diffang_y - 360;
+
+	// Here we will try to anticipate the comming aiming direction
+	self.bot_1st_order_aimfilter= self.bot_1st_order_aimfilter
+		+ (diffang                      - self.bot_1st_order_aimfilter) * bound(0, cvar("bot_ai_aimskill_order_filter_1st"),1);
+	self.bot_2nd_order_aimfilter= self.bot_2nd_order_aimfilter
+		+ (self.bot_1st_order_aimfilter - self.bot_2nd_order_aimfilter) * bound(0, cvar("bot_ai_aimskill_order_filter_2nd"),1);
+	self.bot_3th_order_aimfilter= self.bot_3th_order_aimfilter
+		+ (self.bot_2nd_order_aimfilter - self.bot_3th_order_aimfilter) * bound(0, cvar("bot_ai_aimskill_order_filter_3th"),1);
+	self.bot_4th_order_aimfilter= self.bot_4th_order_aimfilter
+		+ (self.bot_3th_order_aimfilter - self.bot_4th_order_aimfilter) * bound(0, cvar("bot_ai_aimskill_order_filter_4th"),1);
+	self.bot_5th_order_aimfilter= self.bot_5th_order_aimfilter
+		+ (self.bot_4th_order_aimfilter - self.bot_5th_order_aimfilter) * bound(0, cvar("bot_ai_aimskill_order_filter_5th"),1);
+
+	local float blend;
+	//blend = (bound(0,skill,10)*0.1)*pow(1-bound(0,skill,10)*0.05,2.5)*5.656854249; //Plot formule before changing !
+	blend = bound(0,skill,10)*0.1;
+	desiredang = desiredang + blend *
+	(
+		  self.bot_1st_order_aimfilter * cvar("bot_ai_aimskill_order_mix_1st")
+		+ self.bot_2nd_order_aimfilter * cvar("bot_ai_aimskill_order_mix_2nd")
+		+ self.bot_3th_order_aimfilter * cvar("bot_ai_aimskill_order_mix_3th")
+		+ self.bot_4th_order_aimfilter * cvar("bot_ai_aimskill_order_mix_4th")
+		+ self.bot_5th_order_aimfilter * cvar("bot_ai_aimskill_order_mix_5th")
+	);
+	while (desiredang_z < -180)
+		desiredang_z = desiredang_z + 360;
+	while (desiredang_z >  180)
+		desiredang_z = desiredang_z - 360;
+	// calculate turn angles
+	diffang = desiredang - self.bot_mouseaim;
+	//dprint(" diff:", vtos(diffang));
+
+	// wrap yaw turn
+	while (diffang_y < -180)
+		diffang_y = diffang_y + 360;
+	while (diffang_y >  180)
+		diffang_y = diffang_y - 360;
+
+	if (time >= self.bot_aimthinktime)
+	{
+		self.bot_aimthinktime = max(self.bot_aimthinktime + 0.5 - 0.05*(skill+self.bot_thinkskill), time);
+		self.bot_mouseaim = self.bot_mouseaim + diffang * (1-random()*0.1*bound(1,10-skill,10));
+	}
+
+	//self.v_angle = self.v_angle + diffang * bound(0, r * frametime * (skill * 0.5 + 2), 1);
+
+	desiredang = self.bot_mouseaim*bound(0,cvar("bot_ai_aimskill_think"),1) + desiredang * bound(0,(1-cvar("bot_ai_aimskill_think")),1);
+
+	// calculate turn angles
+	diffang = desiredang - self.v_angle;
+	//dprint(" diff:", vtos(diffang));
+
+	// wrap yaw turn
+	while (diffang_y < -180)
+		diffang_y = diffang_y + 360;
+	while (diffang_y >  180)
+		diffang_y = diffang_y - 360;
+	// calculate turn angles
 	diffang = desiredang - self.v_angle;
 	//dprint(" diff:", vtos(diffang));
 
@@ -1530,10 +1611,14 @@ float(vector v, float maxfiredeviation) bot_aimdir =
 
 	// turn
 	local float r, fixedrate, blendrate;
-	fixedrate = cvar("bot_ai_aimskill_fixedrate") / dist;
+	fixedrate = cvar("bot_ai_aimskill_fixedrate") / bound(1,dist,1000);
 	blendrate = cvar("bot_ai_aimskill_blendrate");
 	r = max(fixedrate, blendrate);
-	self.v_angle = self.v_angle + diffang * bound(0, r * frametime * (skill * 0.5 + 2), 1);
+	//self.v_angle = self.v_angle + diffang * bound(frametime, r * frametime * (2+skill*skill*0.05-random()*0.05*(10-skill)), 1);
+	self.v_angle = self.v_angle + diffang * bound(frametime, r * frametime * (2+pow(skill+self.bot_mouseskill,3)*0.005-random()), 1);
+	self.v_angle = self.v_angle * bound(0,cvar("bot_ai_aimskill_mouse"),1) + desiredang * bound(0,(1-cvar("bot_ai_aimskill_mouse")),1);
+	//self.v_angle = self.v_angle + diffang * bound(0, r * frametime * (skill * 0.5 + 2), 1);
+	//self.v_angle = self.v_angle + diffang * (1/ blendrate);
 	self.v_angle_z = 0;
 	while (self.v_angle_y < -180)
 		self.v_angle_y = self.v_angle_y + 360;
@@ -1544,6 +1629,7 @@ float(vector v, float maxfiredeviation) bot_aimdir =
 	makevectors(self.v_angle);
 	shotorg = self.origin + self.view_ofs;
 	shotdir = v_forward;
+
 	//dprint(" dir:", vtos(v_forward));
 	//te_lightning2(world, shotorg, shotorg + shotdir * 100);
 
@@ -1558,8 +1644,13 @@ float(vector v, float maxfiredeviation) bot_aimdir =
 
 	// decide whether to fire this time
 	// note the maxfiredeviation is in degrees so this has to convert to radians first
+	//if ((normalize(v) * shotdir) >= cos(maxfiredeviation * (3.14159265358979323846 / 180)))
 	if ((normalize(v) * shotdir) >= cos(maxfiredeviation * (3.14159265358979323846 / 180)))
-		self.bot_firetimer = time + 0.3;
+			self.bot_firetimer = time + 0.3/bound(1,skill*0.3,3);
+	traceline(shotorg,shotorg+shotdir*1000,FALSE,world);
+	if ( vlen(trace_endpos-shotorg)>bound(0,skill*20,20) && random()<bound(0,skill*0.5,10)*frametime*2 )
+		self.bot_canfire = 0;
+	//dprint(ftos(maxfiredeviation),"\n");
 	//dprint(" diff:", vtos(diffang), "\n");
 
 	return self.bot_canfire && (time < self.bot_firetimer);
@@ -1567,6 +1658,7 @@ float(vector v, float maxfiredeviation) bot_aimdir =
 
 vector(vector targorigin, vector targvelocity, float shotspeed, float shotdelay) bot_shotlead =
 {
+	// Try to add code here that predicts gravity effect here, no clue HOW to though ... well not yet atleast...
 	return targorigin + targvelocity * (shotdelay + vlen(targorigin - shotorg) / shotspeed);
 };
 
@@ -1596,7 +1688,11 @@ float(float shotspeed, float shotspeedupward, float maxshottime, float applygrav
 	shotorg = self.origin + self.view_ofs;
 	shotdir = v_forward;
 	v = bot_shotlead(self.bot_aimtargorigin, self.bot_aimtargvelocity, shotspeed, self.bot_aimlatency);
-	r = bound(cvar("bot_ai_aimskill_firetolerance_mindegrees"), cvar("bot_ai_aimskill_firetolerance_distdegrees") / ((vlen(v - shotorg) + 100) * (skill + 2)), cvar("bot_ai_aimskill_firetolerance_maxdegrees"));
+	local float distanceratio;
+	distanceratio =sqrt(bound(0,skill,10000))*0.3*(vlen(v-shotorg)-100)/cvar("bot_ai_aimskill_firetolerance_distdegrees");
+	distanceratio = bound(0,distanceratio,1);
+	r =  (cvar("bot_ai_aimskill_firetolerance_maxdegrees")-cvar("bot_ai_aimskill_firetolerance_mindegrees"))
+		* (1-distanceratio) + cvar("bot_ai_aimskill_firetolerance_mindegrees");
 	if (applygravity && self.bot_aimtarg)
 	{
 		if (!findtrajectorywithleading(shotorg, '0 0 0', '0 0 0', self.bot_aimtarg, shotspeed, shotspeedupward, maxshottime, 0, self))
@@ -1651,7 +1747,9 @@ void() bot_think =
 
 	// calculate an aiming latency based on the skill setting
 	// (simulated network latency + naturally delayed reflexes)
-	self.ping = 0.7 - bound(0, 0.05 * skill, 0.6);
+	//self.ping = 0.7 - bound(0, 0.05 * skill, 0.5); // moved the reflexes to bot_aimdir (under the name 'think')
+	// minimum ping 20+10 random
+	self.ping = bound(0,0.07 - bound(0, skill * 0.005,0.05)+random()*0.01,0.65); // Now holds real lag to server, and higer skill players take a less laggy server
 	// skill 10 = ping 0.2 (adrenaline)
 	// skill 0 = ping 0.7 (slightly drunk)
 
@@ -1713,6 +1811,7 @@ void() bot_relinkplayerlist =
 
 void() havocbot_setupbot;
 float JoinBestTeam(entity pl, float only_return_best);
+
 void() bot_clientconnect =
 {
 	if (clienttype(self) != CLIENTTYPE_BOT)
@@ -1722,6 +1821,10 @@ void() bot_clientconnect =
 	self.createdtime = self.nextthink;
 	JoinBestTeam(self, FALSE);
 	havocbot_setupbot();
+	self.bot_mouseskill=random()-0.5;
+	self.bot_thinkskill=random()-0.5;
+	self.bot_predictionskill=random()-0.5;
+	self.bot_offsetskill=random()-0.5;
 };
 
 entity() bot_spawn =

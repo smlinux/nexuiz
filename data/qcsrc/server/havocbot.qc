@@ -1,6 +1,7 @@
 
 .void() havocbot_role;
 void() havocbot_chooserole;
+.float havocbot_keyboardskill;
 
 vector() havocbot_dodge =
 {
@@ -51,6 +52,9 @@ vector() havocbot_dodge =
 };
 
 //.float havocbotignoretime;
+.float havocbot_keyboardtime;
+.float havocbot_ducktime;
+.vector havocbot_keyboard;
 void() havocbot_movetogoal =
 {
 	local vector destorg;
@@ -91,13 +95,14 @@ void() havocbot_movetogoal =
 	flatdir = normalize(flatdir);
 	if (!self.waterlevel)
 	{
-		if (!(self.flags & FL_ONGROUND))
-		{
-			// prevent goal checks when we can't walk
-			if (self.bot_strategytime < time + 0.1)
-				self.bot_strategytime = time + 0.1;
-			return;
-		}
+		// Since new update in air contol, we can move in air
+		//if (!(self.flags & FL_ONGROUND))
+		//{
+		//	// prevent goal checks when we can't walk
+		//	if (self.bot_strategytime < time + 0.1)
+		//		self.bot_strategytime = time + 0.1;
+		//	return;
+		//}
 
 		// jump if going toward an obstacle that doesn't look like stairs we
 		// can walk up directly
@@ -125,14 +130,79 @@ void() havocbot_movetogoal =
 		dir = flatdir;
 	}
 	dodge = havocbot_dodge();
-	dir = normalize(dir + dodge + evadeobstacle + evadelava) * 400;
-	makevectors(self.v_angle);
+	dodge = dodge * bound(0,3+skill*0.1,1);
+	evadelava = evadelava * bound(1,3-skill,3); //Noobs fear lava a lot and take more distance from it
+	traceline(self.origin, self.enemy.origin, TRUE, world);
+	if(trace_ent.classname == "player")
+		dir = dir * bound(0,skill/7,1);
+
+	dir = normalize(dir + dodge + evadeobstacle + evadelava);
+
+
+
+	// Emulate keyboard interface;
+	local vector keyboard,flatangle;
+	local float blend;
+	keyboard = self.havocbot_keyboard;
+	if (time >= self.havocbot_keyboardtime)
+	{
+		flatdir=dir; flatdir_z = 0;
+		self.havocbot_keyboardtime =
+			max(
+				self.havocbot_keyboardtime
+					+ bound(0,0.05/(skill+self.havocbot_keyboardskill),0.05)
+					+random()*bound(0,0.025/(skill+self.havocbot_keyboardskill),100)
+			, time);
+		keyboard = '0 0 0';
+		
+		flatangle = self.v_angle; flatangle_z=0;
+		makevectors(flatangle);
+		
+		local float trigger;
+		local vector v_forward_right;
+		local vector v_forward_left;
+		blend = bound(0,skill*0.1,1);
+		trigger = cvar("bot_ai_keyboard_treshold");
+		v_forward_right = normalize(v_forward + v_right);
+		v_forward_left  = normalize(v_forward - v_right);
+		// Place in reverse order !! least important direction FIRST
+		
+		if (skill > 4.5)
+		{
+			if (flatdir * v_forward_right * -1 > trigger) keyboard = v_forward_right * -1;
+			if (flatdir * v_forward_left  * -1 > trigger) keyboard = v_forward_left  * -1;
+		}
+		if (skill > 2.5)
+		{
+			if (flatdir * v_forward_right      > trigger) keyboard = v_forward_right;
+			if (flatdir * v_forward_left       > trigger) keyboard = v_forward_left;
+			if (flatdir * v_forward       *  1 > trigger) keyboard = v_forward * -1;
+		}
+		if (skill > 1.5)
+		{
+			if (flatdir * v_right              > trigger) keyboard = v_right;
+			if (flatdir * v_right         * -1 > trigger) keyboard = v_right   * -1;
+		}
+			if (flatdir * v_forward            > trigger) keyboard = v_forward;
+		//dprint(ftos(flatdir * v_forward),"\n");
+		keyboard = normalize(keyboard);
+		self.havocbot_keyboard = keyboard;
+		if (self.havocbot_ducktime>time) self.button5=TRUE;
+	}
+	blend = bound(0,vlen(self.goalcurrent.origin-self.origin)/cvar("bot_ai_keyboard_distance"),1); // When getting close move with 360 degree
+	dir = (keyboard * blend + dir * (1-blend))*cvar("sv_maxspeed");
+
 	self.movement_x = dir * v_forward;
 	self.movement_y = dir * v_right;
-	self.movement_z = dir * v_up;
+	if (self.flags & FL_INWATER) self.movement_z = dir * v_up; else self.movement_z = 0;
+	if ((dir * v_up) >= cvar("g_balance_jumpheight")*0.5 && (self.flags & FL_ONGROUND)) self.button2=1;
+	if (((dodge * v_up) > 0) && random()*frametime >= 0.2*bound(0,(10-skill)*0.1,1)) self.button2=TRUE;
+	if (((dodge * v_up) < 0) && random()*frametime >= 0.5*bound(0,(10-skill)*0.1,1)) self.havocbot_ducktime=time+0.3/bound(0.1,skill,10);
+	
 };
 
 .float havocbot_chooseenemy_finished;
+.float havocbot_stickenemy;
 void() havocbot_chooseenemy =
 {
 	local entity head, best;
@@ -143,9 +213,30 @@ void() havocbot_chooseenemy =
 		self.enemy = world;
 		return;
 	}
-	if (time < self.havocbot_chooseenemy_finished)
+	traceline(self.origin+self.view_ofs, self.enemy.origin+self.enemy.view_ofs*0.5,FALSE,world);
+	if (trace_ent.classname != "player")
+		self.havocbot_stickenemy =0;
+	else	if ( (trace_ent != self.enemy) || (vlen(self.enemy.origin - self.origin) > 1000) )
+		{
+			self.havocbot_stickenemy =0;
+			if( (self.health < 30) || (self.enemy.health < 0))
+			self.havocbot_chooseenemy_finished = time;
+		}
+	//dprint(ftos(self.havocbot_stickenemy));dprint(etos(self.enemy),"\n");
+	//dprint(ftos(time),"-");dprint(ftos(self.havocbot_chooseenemy_finished),"\n");
+	if (self.havocbot_stickenemy == 1)
+	{
+		// remain tracking him for a shot while (case he went after a small corner or pilar
+		self.havocbot_chooseenemy_finished = time + bound(0,skill*0.1,1)*1.8;
 		return;
-	self.havocbot_chooseenemy_finished = time + cvar("bot_ai_enemydetectioninterval");
+	}
+	if (time < self.havocbot_chooseenemy_finished)
+	{
+		self.havocbot_stickenemy = 1;
+		return;
+	}
+	self.havocbot_chooseenemy_finished = time + cvar("bot_ai_enemydetectioninterval")*bound(0,(11-skill)*0.1,1);
+	self.havocbot_chooseenemy_finished = time + 0.01;
 	eye = (self.origin + self.view_ofs);
 	best = world;
 	bestrating = 100000000;
@@ -167,12 +258,107 @@ void() havocbot_chooseenemy =
 		head = head.chain;
 	}
 	self.enemy = best;
+	self.havocbot_stickenemy = 1;
 };
 
 float(entity e) w_getbestweapon;
+.float havocbot_chooseweapon_timer;
+.float havocbot_chooseweapon_lastbestscore;
 void() havocbot_chooseweapon =
 {
-	self.switchweapon = w_getbestweapon(self);
+	if(self.enemy.classname!="player")
+	{
+		self.switchweapon = w_getbestweapon(self);
+		return;
+	}
+
+	local float rocket  ; rocket   =-1000;
+	local float nex     ; nex      =-1000;
+	local float hagar   ; hagar    =-1000;
+	local float grenade ; grenade  =-1000;
+	local float electro ; electro  =-1000;
+	local float crylink ; crylink  =-1000;
+	local float uzi     ; uzi      =-1000;
+	local float shotgun ; shotgun  =-1000;
+	local float laser   ; laser    =-1000;
+	local float bestscore; bestscore = 0;
+	local float bestweapon; bestweapon=self.switchweapon;
+	local float distance; distance=bound(10,vlen(self.origin-self.enemy.origin)-200,10000);
+	local float maxdelaytime=0.5;
+	local float spreadpenalty=10;
+	local float distancefromfloor;
+	traceline(self.enemy.origin,self.enemy.origin-'0 0 1000',TRUE,world);
+	distancefromfloor = self.enemy.origin_z - trace_endpos_z;
+	// Formula:
+	//	(Damage/Sec * Weapon spefic change to get that damage)
+	//	*(Time to get to target * weapon specfic hitchange bonus) / (in a time of maxdelaytime)
+	//	*(Spread change of hit) // if it applies
+	//	*(Penality for target beeing in air)
+	if (client_hasweapon(self, WEP_ROCKET_LAUNCHER, TRUE, FALSE))
+		rocket = (cvar("g_balance_rocketlauncher_damage")/cvar("g_balance_rocketlauncher_refire")*0.75)
+			* bound(0,(cvar("g_balance_rocketlauncher_speed")/distance*maxdelaytime),1)*1.5;
+	if (client_hasweapon(self, WEP_NEX, TRUE, FALSE))
+		nex = (cvar("g_balance_nex_damage")/cvar("g_balance_nex_refire")*1.0)
+			* (0.5);
+	if (client_hasweapon(self, WEP_HAGAR, TRUE, FALSE))
+		hagar = (cvar("g_balance_hagar_primary_damage")/cvar("g_balance_hagar_primary_refire")*1.0)
+			* bound(0,(cvar("g_balance_hagar_primary_speed")/distance*maxdelaytime),1)*0.2;
+	if (client_hasweapon(self, WEP_GRENADE_LAUNCHER, TRUE, FALSE))
+		grenade = (cvar("g_balance_grenadelauncher_primary_damage")/cvar("g_balance_grenadelauncher_primary_refire")*1.0)
+			* bound(0,(cvar("g_balance_grenadelauncher_primary_speed")/distance*maxdelaytime),1)*1.1;
+	if (client_hasweapon(self, WEP_ELECTRO, TRUE, FALSE))
+		electro = (cvar("g_balance_electro_primary_damage")/cvar("g_balance_electro_primary_refire")*0.75)
+			* bound(0,(cvar("g_balance_electro_primary_speed")/distance*maxdelaytime),1)*1.0;
+	if (client_hasweapon(self, WEP_CRYLINK, TRUE, FALSE))
+		crylink = (cvar("g_balance_crylink_primary_damage")/cvar("g_balance_crylink_primary_refire")*1.0)
+			* bound(0,(cvar("g_balance_crylink_primary_speed")/distance*maxdelaytime),1)*1.0
+			* bound(0,1/cvar("g_balance_crylink_primary_spread")/distance*spreadpenalty,1);
+	if (client_hasweapon(self, WEP_UZI, TRUE, FALSE))
+		uzi = (cvar("g_balance_uzi_sustained_damage")/cvar("g_balance_uzi_sustained_refire")*1.0)
+			* bound(0,1/cvar("g_balance_uzi_sustained_spread")/distance*spreadpenalty,1)*0.5;
+	if (client_hasweapon(self, WEP_SHOTGUN, TRUE, FALSE))
+		shotgun = (cvar("g_balance_shotgun_primary_damage")*cvar("g_balance_shotgun_primary_bullets")/cvar("g_balance_shotgun_primary_refire")*1.0)
+			* bound(0,1/cvar("g_balance_shotgun_primary_spread")/distance*spreadpenalty,1);
+	if (client_hasweapon(self, WEP_LASER, FALSE, FALSE))
+		laser = (cvar("g_balance_laser_damage")/cvar("g_balance_laser_refire")*1.0)
+			* bound(0,cvar("g_balance_laser_speed")/distance*0.2*maxdelaytime,1);
+	if((self.enemy.flags & FL_ONGROUND)==FALSE){
+		rocket = rocket   * (1-bound(0, distancefromfloor/cvar("g_balance_rocketlauncher_radius"         ),0.9)); //slight bigger change
+		grenade = grenade * (1-bound(0,distancefromfloor/cvar("g_balance_grenadelauncher_primary_radius"),0.95));
+		electro = electro * (1-bound(0,distancefromfloor/cvar("g_balance_electro_primary_radius"        ),0.95));
+		laser = laser     * (1-bound(0,distancefromfloor/cvar("g_balance_laser_radius"                  ),0.95));
+	}
+/*
+	dprint("Floor distance: ",ftos(distancefromfloor),"\n");
+	dprint("Rocket: " , ftos(rocket  ), "\n");
+	dprint("Nex: "    , ftos(nex     ), "\n");
+	dprint("Hagar: "  , ftos(hagar   ), "\n");
+	dprint("Grenade: ", ftos(grenade ), "\n");
+	dprint("Electro: ", ftos(electro ), "\n");
+	dprint("Crylink: ", ftos(crylink ), "\n");
+	dprint("Uzi: "    , ftos(uzi     ), "\n");
+	dprint("Shotgun :", ftos(shotgun ), "\n");
+	dprint("Laser   :", ftos(laser   ), "\n\n");
+*/
+	if (rocket  > bestscore){ bestscore = rocket  ; bestweapon = WEP_ROCKET_LAUNCHER  ;}
+	if (nex     > bestscore){ bestscore = nex     ; bestweapon = WEP_NEX              ;}
+	if (hagar   > bestscore){ bestscore = hagar   ; bestweapon = WEP_HAGAR            ;}
+	if (grenade > bestscore){ bestscore = grenade ; bestweapon = WEP_GRENADE_LAUNCHER ;}
+	if (electro > bestscore){ bestscore = electro ; bestweapon = WEP_ELECTRO          ;}
+	if (crylink > bestscore){ bestscore = crylink ; bestweapon = WEP_CRYLINK          ;}
+	if (uzi     > bestscore){ bestscore = uzi     ; bestweapon = WEP_UZI              ;}
+	if (shotgun > bestscore){ bestscore = shotgun ; bestweapon = WEP_SHOTGUN          ;}
+	if (laser   > bestscore){ bestscore = laser   ; bestweapon = WEP_LASER            ;}
+
+	if(time>self.havocbot_chooseweapon_timer || self.havocbot_chooseweapon_lastbestscore<bestscore/10) //Or when the new damage is SOO much larger ! Or my gun runs out of ammo
+	{
+		self.havocbot_chooseweapon_timer=max(self.havocbot_chooseweapon_timer+cvar("g_balance_weaponswitchdelay")*120*(10-skill)*0.1,time);
+		if( self.havocbot_chooseweapon_lastbestscore*1.5<bestscore*bound(1,1+(skill*skill)*0.01,2))
+		{
+			self.switchweapon = bestweapon; 
+			self.havocbot_chooseweapon_lastbestscore=bestscore;
+		}
+	}
 };
 
 .float nextaim;
@@ -208,9 +394,20 @@ void() havocbot_ai =
 		weapon_action(self.weapon, WR_AIM);
 	else if (self.goalcurrent)
 	{
-		local vector v;
-		v = self.goalcurrent.origin - self.origin;
-		//v = self.velocity;
+		local vector now,v,next;//,heading;
+		local float distance,skillblend,distanceblend;
+		now = self.goalcurrent.origin - self.origin;
+		distance = vlen(now);
+		//heading = self.velocity;
+		//dprint(self.goalstack01.classname,etos(self.goalstack01),"\n");
+		if(self.goalstack01 != self && self.goalstack01 != world)
+			next = self.goalstack01.origin - self.origin;
+		else
+			next = now;
+		skillblend=bound(0,(skill-2.5)*0.5,1); //lower skill player can't preturn
+		distanceblend=bound(0,distance/cvar("bot_ai_keyboard_distance"),1); 
+		v = (now * (distanceblend) + next * (1-distanceblend)) * (skillblend) + now * (1-skillblend);
+		//v = now * (distanceblend) + next * (1-distanceblend);
 		if (self.waterlevel < 2)
 			v_z = 0;
 		//dprint("walk at:", vtos(v), "\n");
@@ -224,5 +421,7 @@ void() havocbot_setupbot =
 {
 	self.bot_ai = havocbot_ai;
 	// will be updated by think code
+	//Generate some random skill levels
+	self.havocbot_keyboardskill=random()-0.5;
 	havocbot_chooserole();
 }

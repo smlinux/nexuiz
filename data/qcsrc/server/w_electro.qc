@@ -149,10 +149,32 @@ void() W_Electro_Attack2
 	//sound (proj, CHAN_BODY, "weapons/electro_fly.wav", 1, ATTN_NORM);
 }
 
+.float bot_secondary_electromooth;
 float(float req) w_electro =
 {
 	if (req == WR_AIM)
-		self.button0 = bot_aim(cvar("g_balance_electro_primary_speed"), 0, cvar("g_balance_electro_primary_lifetime"), FALSE);
+	{
+		self.button0=FALSE;
+		self.button3=FALSE;
+		if(vlen(self.origin-self.enemy.origin) > 1000)
+			self.bot_secondary_electromooth = 0;
+		if(self.bot_secondary_electromooth == 0)
+		{
+			if(bot_aim(cvar("g_balance_electro_primary_speed"), 0, cvar("g_balance_electro_primary_lifetime"), FALSE))
+			{
+				self.button0 = TRUE;
+				if(random() < 0.01) self.bot_secondary_electromooth = 1;
+			}
+		}
+		else
+		{
+			if(bot_aim(cvar("g_balance_electro_secondary_speed"), cvar("g_balance_grenadelauncher_secondary_speed_up"), cvar("g_balance_electro_secondary_lifetime"), TRUE))
+			{
+				self.button3 = TRUE;
+				if(random() < 0.03) self.bot_secondary_electromooth = 0;
+			}
+		}
+	}
 	else if (req == WR_THINK)
 	{
 		if (self.button0)

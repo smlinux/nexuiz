@@ -133,10 +133,30 @@ void W_Grenade_Attack2 (void)
 	gren.flags = FL_PROJECTILE;
 }
 
+.float bot_secondary_grenademooth;
 float(float req) w_glauncher =
 {
 	if (req == WR_AIM)
-		self.button0 = bot_aim(cvar("g_balance_grenadelauncher_primary_speed"), cvar("g_balance_grenadelauncher_primary_speed_up"), cvar("g_balance_grenadelauncher_primary_lifetime"), TRUE);
+	{
+		self.button0 = FALSE;
+		self.button3 = FALSE;
+		if (self.bot_secondary_grenademooth == 0)
+		{
+			if(bot_aim(cvar("g_balance_grenadelauncher_primary_speed"), cvar("g_balance_grenadelauncher_primary_speed_up"), cvar("g_balance_grenadelauncher_primary_lifetime"), TRUE))
+			{
+				self.button0 = TRUE;
+				if(random() < 0.01) self.bot_secondary_grenademooth = 1;
+			}
+		}
+		else
+		{
+			if(bot_aim(cvar("g_balance_grenadelauncher_secondary_speed"), cvar("g_balance_grenadelauncher_secondary_speed_up"), cvar("g_balance_grenadelauncher_secondary_lifetime"), TRUE))
+			{
+				self.button3 = TRUE;
+				if(random() < 0.02) self.bot_secondary_grenademooth = 0;
+			}
+		}
+	}
 	else if (req == WR_THINK)
 	{
 		if (self.button0)

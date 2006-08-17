@@ -251,11 +251,16 @@ float(float req) w_rlauncher =
 			missile = find(world, classname, "missile");
 			while (missile)
 			{
+				if (missile.owner != self)
+				{
+					missile = find(missile, classname, "missile");
+					continue;
+				}
 				targ = targetlist;
 				while (targ)
 				{
 					d = vlen(targ.origin + (targ.mins + targ.maxs) * 0.5 - missile.origin);
-					d = edgedamage + (coredamage - edgedamage) * (1 - d * recipricoledgeradius);
+					d = bound(0, edgedamage + (coredamage - edgedamage) * sqrt(1 - d * recipricoledgeradius), 10000);
 					// count potential damage according to type of target
 					if (targ == self)
 						selfdamage = selfdamage + d;
@@ -273,13 +278,51 @@ float(float req) w_rlauncher =
 				desirabledamage = desirabledamage - selfdamage * cvar("g_balance_selfdamagepercent");
 			if (self.team && teamplay == 2)
 				desirabledamage = desirabledamage - teamdamage;
-			// if we would be doing at least half of the core damage, detonate it
-			// but don't fire a new shot at the same time!
-			if (desirabledamage >= 0.5 * coredamage)
+			
+			missile = find(world, classname, "missile");
+			while (missile)
 			{
-				self.button3 = TRUE;
-				self.button0 = FALSE;
+				if (missile.owner != self)
+				{
+					missile = find(missile, classname, "missile");
+					continue;
+				}
+				makevectors(missile.v_angle);
+				targ = targetlist;
+				if (skill > 9) // normal players only do this for the target they are tracking
+				{
+					targ = targetlist;
+					while (targ)
+					{
+						if (
+							(v_forward * normalize(missile.origin - targ.origin)< 0.1)
+							&& desirabledamage > 0.1*coredamage
+						)self.button3 = TRUE;
+						targ = targ.chain;
+					}
+				}else{
+					local float distance; distance= bound(300,vlen(self.origin-self.enemy.origin),30000);
+					//As the distance gets larger, a correct detonation gets near imposible
+					//Bots are assumed to use the rocket light to see if the rocket gets near a player
+					if(v_forward * normalize(missile.origin - self.enemy.origin)< 0.1)
+						if(self.enemy.classname == "player")
+							if(desirabledamage >= 0.1*coredamage)
+								if(random()/distance*300 > frametime*bound(0,(10-skill)*0.2,1))
+									self.button3 = TRUE;
+				//	dprint(ftos(random()/distance*300),">");dprint(ftos(frametime*bound(0,(10-skill)*0.2,1)),"\n");
+				}
+				
+				missile = find(missile, classname, "missile");
 			}
+			// if we would be doing at X percent of the core damage, detonate it
+			// but don't fire a new shot at the same time!
+			if (desirabledamage >= 0.75 * coredamage) //this should do group damage in rare fortunate events
+				self.button3 = TRUE;
+			if ((skill > 6.5) && (selfdamage > self.health))
+				self.button3 = FALSE;
+			//if(self.button3 == TRUE)
+			//	dprint(ftos(desirabledamage),"\n");
+			if (self.button3 == TRUE) self.button0 = FALSE;
 		}
 	}
 	else if (req == WR_THINK)

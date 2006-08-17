@@ -148,7 +148,13 @@ void W_Hagar_Attack2 (void)
 float(float req) w_hagar =
 {
 	if (req == WR_AIM)
-		self.button0 = bot_aim(cvar("g_balance_hagar_primary_speed"), 0, cvar("g_balance_hagar_primary_lifetime"), FALSE);
+		if (random()>0.15)
+			self.button0 = bot_aim(cvar("g_balance_hagar_primary_speed"), 0, cvar("g_balance_hagar_primary_lifetime"), FALSE);
+		else
+		{
+			// not using secondary_speed since these are only 15% and should cause some ricochets without re-aiming
+			self.button3 = bot_aim(cvar("g_balance_hagar_primary_speed"), 0, cvar("g_balance_hagar_primary_lifetime"), FALSE);
+		}
 	else if (req == WR_THINK)
 	{
 		if (self.button0)

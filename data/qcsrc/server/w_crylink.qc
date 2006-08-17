@@ -180,7 +180,12 @@ void W_Crylink_Attack3 (void)
 float(float req) w_crylink =
 {
 	if (req == WR_AIM)
-		self.button0 = bot_aim(cvar("g_balance_crylink_primary_speed"), 0, cvar("g_balance_crylink_primary_lifetime"), FALSE);
+	{
+		if (random() > 0.15)
+			self.button0 = bot_aim(cvar("g_balance_crylink_primary_speed"), 0, cvar("g_balance_crylink_primary_lifetime"), FALSE);
+		else
+			self.button3 = bot_aim(cvar("g_balance_crylink_secondary_speed"), 0, cvar("g_balance_crylink_secondary_lifetime"), FALSE);
+	}
 	else if (req == WR_THINK)
 	{
 		if (self.button0)
