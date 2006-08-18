@@ -360,11 +360,47 @@ float UpdateSelectedPlayer_countvalue(float v)
 	return max(0, (v - 1.0) / 0.5);
 }
 
+// returns: -2 if no hit, otherwise cos of the angle
+// uses the global v_angle
+float UpdateSelectedPlayer_canSee(entity p, float mincosangle, float maxdist)
+{
+	vector so, d;
+	float c;
+
+	if(p == self)
+		return -2;
+
+	if(p.deadflag)
+		return -2;
+
+	so = self.origin + self.view_ofs;
+	d = p.origin - so;
+
+	// misaimed?
+	if(dist_point_line(d, '0 0 0', v_forward) > maxdist)
+		return -2;
+
+	// now find the cos of the angle...
+	c = normalize(d) * v_forward;
+
+	if(c <= mincosangle)
+		return -2;
+
+	traceline(so, p.origin, MOVE_NOMONSTERS, self);
+	if(trace_fraction < 1)
+		return -2;
+
+	return c;
+}
+
 void ClearSelectedPlayer()
 {
-	centermsg_set(CENTERMSG_POINT, "");
-	self.selected_player = world;
-	self.selected_player_display_needs_update = FALSE;
+	if(self.selected_player)
+	{
+		centermsg_set(CENTERMSG_POINT, "");
+		self.selected_player = world;
+		self.selected_player_display_needs_update = FALSE;
+	}
 }
 
 void UpdateSelectedPlayer()
@@ -372,7 +408,7 @@ void UpdateSelectedPlayer()
 	entity selected;
 	float selected_score;
 	selected = world;
-	selected_score = 0;
+	selected_score = 0.95; // 18 degrees
 
 	if(clienttype(self) != CLIENTTYPE_REAL)
 		return;
@@ -383,6 +419,8 @@ void UpdateSelectedPlayer()
 	if(self.cvar_cl_shownames == 1 && !teams_matter)
 		return;
 
+	makevectors(self.v_angle); // sets v_forward
+
 	// 1. cursor trace is always right
 	if(self.cursor_trace_ent && self.cursor_trace_ent.classname == "player" && !self.cursor_trace_ent.deadflag)
 	{
@@ -390,42 +428,15 @@ void UpdateSelectedPlayer()
 	}
 	else
 	{
-		makevectors(self.v_angle); // sets v_forward
-
 		// 2. if we don't have a cursor trace, find the player which is least
 		//    mis-aimed at
 		entity p;
-		vector so;
-		so = self.origin + self.view_ofs;
 		for(p = find(world, classname, "player"); p; p = find(p, classname, "player"))
 		{
 			float c;
-			vector d;
-			d = p.origin - so;
-
-			if(p == self)
-				continue;
-
-			if(p.deadflag)
-				continue;
-
-			// misaimed?
-			if(dist_point_line(d, '0 0 0', v_forward) > 100) // about 2.5 m
-				continue;
-
-			// now find the cos of the angle...
-			c = normalize(d) * v_forward;
-
-			if(c < 0.95) // about 18 degrees
-				continue;
-
-			if(c > selected_score)
+			c = UpdateSelectedPlayer_canSee(p, selected_score, 100); // 100 = 2.5 meters
+			if(c >= -1)
 			{
-				// oh right... can we even see him?
-				traceline(so, p.origin, MOVE_NOMONSTERS, self);
-				if(trace_fraction < 1)
-					continue;
-
 				selected = p;
 				selected_score = c;
 			}
@@ -439,7 +450,7 @@ void UpdateSelectedPlayer()
 	else
 	{
 		if(time < self.selected_player_display_timeout)
-			if(!self.selected_player.deadflag)
+			if(UpdateSelectedPlayer_canSee(self.selected_player, 0.7, 200) >= -1) // 5 meters, 45 degrees
 				selected = self.selected_player;
 	}
 
@@ -474,6 +485,7 @@ void UpdateSelectedPlayer()
 		}
 		else
 		{
+			ClearSelectedPlayer();
 			self.selected_player = selected;
 			self.selected_player_time = time;
 			self.selected_player_count = 0;
@@ -483,10 +495,6 @@ void UpdateSelectedPlayer()
 	}
 	else
 	{
-		if(self.selected_player_display_needs_update)
-		{
-			centermsg_set(CENTERMSG_POINT, "");
-			self.selected_player_display_needs_update = FALSE;
-		}
+		ClearSelectedPlayer();
 	}
 }
