@@ -182,6 +182,11 @@ Item Window Player
 			text	"Disable gibs"
 			target	"::Data::Player::NoGibs::Switch"
 		}
+		Derive Nex_Option_Switch ShowNames
+		{
+			text    "Show player names"
+			target  "::Data::Player::PlayerShowNames::Switch"
+		}		
 		Derive Nex_Void Seperator1
 		{}
 		Derive PictureButton Apply

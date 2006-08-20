@@ -91,6 +91,18 @@ Item DataContainer Player
 	
 		[DataLink_OnOffSwitch]
 	}
+	Item Data_Cvar PlayerShowNames
+	{
+		cvarName "cl_shownames"
+		defValue "1"
+		
+		Item DataLink_TextSwitch Switch
+		{
+			valueList "'0' '1' '2'"
+			descList "'Off' 'Teamplay only' 'Always'"
+			link  "##up"
+		}
+	}
 	Item DataContainer Crosshair
 	{
 		Item Data_Cvar Type
