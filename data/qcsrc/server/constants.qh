@@ -173,6 +173,13 @@ float	IT_HEALTH				= 32768;
 float	IT_KEY1					= 131072;
 float	IT_KEY2					= 262144;
 
+float	IT_RED_FLAG_TAKEN			= 32768;
+float	IT_RED_FLAG_LOST			= 65536;
+float	IT_RED_FLAG_CARRING			= 98304;
+float	IT_BLUE_FLAG_TAKEN			= 131072;
+float	IT_BLUE_FLAG_LOST			= 262144;
+float	IT_BLUE_FLAG_CARRING			= 393216;
+
 float	IT_5HP					= 524288;
 float	IT_25HP					= 1048576;
 float	IT_ARMOR_SHARD				= 2097152;

@@ -567,3 +567,37 @@ void() ctf_init =
 	e.nextthink = time + 0.1;
 };
 
+void(entity flag) ctf_setstatus2 =
+{
+	if (flag) {
+		local float shift;
+		if (flag.team == 5) shift = IT_RED_FLAG_TAKEN;
+		else if (flag.team == 14) shift = IT_BLUE_FLAG_TAKEN;
+		else shift = 0;
+
+		local float status;
+		if (flag.cnt ==	FLAG_CARRY)
+			if (flag.owner == self) status = 3;
+			else status = 1;
+		else if (flag.cnt == FLAG_DROPPED) status = 2;
+		else status = 0;
+
+		self.items = self.items | (shift * status);
+	}
+};
+
+void() ctf_setstatus =
+{
+	self.items = self.items - (self.items & IT_RED_FLAG_TAKEN);
+	self.items = self.items - (self.items & IT_RED_FLAG_LOST);
+	self.items = self.items - (self.items & IT_BLUE_FLAG_TAKEN);
+	self.items = self.items - (self.items & IT_BLUE_FLAG_LOST);
+
+	if (cvar("g_ctf")) {
+		local entity flag;
+		flag = find(flag, classname, "item_flag_team1");
+		ctf_setstatus2(flag);
+		flag = find(flag, classname, "item_flag_team2");
+		ctf_setstatus2(flag);
+	}
+};

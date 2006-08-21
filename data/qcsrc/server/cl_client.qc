@@ -1291,6 +1291,7 @@ PlayerPreThink
 Called every frame for each client before the physics are run
 =============
 */
+void() ctf_setstatus;
 void PlayerPreThink (void)
 {
 	if(self.classname == "player") {
@@ -1468,6 +1469,8 @@ void PlayerPreThink (void)
 
 		if (cvar("g_minstagib"))
 			minstagib_ammocheck();
+
+		ctf_setstatus();
 
 		//self.angles_y=self.v_angle_y + 90;   // temp
 
