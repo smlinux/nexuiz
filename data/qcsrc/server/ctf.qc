@@ -595,9 +595,9 @@ void() ctf_setstatus =
 
 	if (cvar("g_ctf")) {
 		local entity flag;
-		flag = find(flag, classname, "item_flag_team1");
+		flag = find(world, classname, "item_flag_team1");
 		ctf_setstatus2(flag);
-		flag = find(flag, classname, "item_flag_team2");
+		flag = find(world, classname, "item_flag_team2");
 		ctf_setstatus2(flag);
 	}
 };
