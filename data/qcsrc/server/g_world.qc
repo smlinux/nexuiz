@@ -3,15 +3,22 @@ void GotoNextMap();
 
 void SetDefaultAlpha()
 {
-	if(cvar("g_cloaked"))
+	if(cvar("g_running_guns"))
+	{
+		default_player_alpha = -1;
+		default_weapon_alpha = +1;
+	}
+	else if(cvar("g_cloaked"))
 	{
 		default_player_alpha = cvar("g_balance_cloaked_alpha");
+		default_weapon_alpha = default_player_alpha;
 	}
 	else
 	{
 		default_player_alpha = cvar("g_player_alpha");
 		if(default_player_alpha <= 0)
 			default_player_alpha = 1;
+		default_weapon_alpha = default_player_alpha;
 	}
 }
 
