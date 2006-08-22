@@ -30,9 +30,10 @@ void(entity ent, vector vecs, float antilag, float recoil, string snd) W_SetupSh
 	// if aiming at a player and the original trace won't hit that player
 	// anymore, try aiming at the player's new position
 	if (antilag)
-	if (self.cursor_trace_ent)
-	if (self.cursor_trace_ent.takedamage)
-	if (trace_ent != self.cursor_trace_ent)
+	if (!trace_ent.takedamage)                 // shot would miss without antilag
+	if (self.cursor_trace_ent)                 // but it HAD hit on the client
+	if (self.cursor_trace_ent.takedamage)      //   and even something evil
+	// if (trace_ent != self.cursor_trace_ent) // and it is different (redundant check, see takedamage)
 	if (cvar("g_antilag"))
 		trueaimpoint = self.cursor_trace_ent.origin;
 
