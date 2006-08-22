@@ -500,12 +500,12 @@ string decolorize(string s)
 		string ch1, ch2;
 		n = 1;
 		ch1 = substring(s, 0, 1);
-		ch2 = substring(s, 1, 2);
+		ch2 = substring(s, 1, 1);
 		if(ch1 == "^")
 		{
 			n = 2;
 			if(ch2 == "^")
-				out = strcat(out, "^");
+				out = strcat(out, "^^");
 			else if(ch2 == "0")
 				out = strcat(out);
 			else if(ch2 == "1")
@@ -529,7 +529,7 @@ string decolorize(string s)
 			else
 			{
 				n = 1;
-				out = strcat(out, "^");
+				out = strcat(out, "^^");
 			}
 			s = substring(s, n, strlen(s) - n);
 		}
