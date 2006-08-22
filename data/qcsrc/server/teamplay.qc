@@ -929,7 +929,6 @@ void ShufflePlayerOutOfTeam (float source_team)
 	float smallestteam, smallestteam_count, steam;
 	float lowest_bot_score, lowest_player_score;
 	entity head, lowest_bot, lowest_player, selected;
-	string m;
 
 	smallestteam = 0;
 	smallestteam_count = 999;
