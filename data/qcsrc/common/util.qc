@@ -31,7 +31,8 @@ string wordwrap(string s, float l)
 				if (c == " ")
 					break;
 				if (c == "\\")
-					break;
+					if(j+1 < strlen(s))
+						break;
 				// we need to keep this tempstring alive even if substring is
 				// called repeatedly, so call strcat even though we're not
 				// doing anything
