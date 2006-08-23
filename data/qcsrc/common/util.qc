@@ -25,14 +25,20 @@ string wordwrap(string s, float l)
 		}
 		else
 		{
-			for (j = i;j < strlen(s);j++)
+			for (j = i+1;j < strlen(s);j++)
+				//    ^^ this skips over the first character of a word, which
+				//       is ALWAYS part of the word
+				//       this is safe since if i+1 == strlen(s), i will become
+				//       strlen(s)-1 at the end of this block and the function
+				//       will terminate. A space can't be the first character we
+				//       read here, and neither can a \n be the start, since these
+				//       two cases have been handled above.
 			{
 				c = substring(s, j, 1);
 				if (c == " ")
 					break;
 				if (c == "\\")
-					if(j+1 < strlen(s))
-						break;
+					break;
 				// we need to keep this tempstring alive even if substring is
 				// called repeatedly, so call strcat even though we're not
 				// doing anything
