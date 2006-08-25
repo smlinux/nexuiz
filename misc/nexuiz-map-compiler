@@ -1,0 +1,157 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+use POSIX;
+
+# change these to match your system
+
+	# Path to Nexuiz (where the data directory is in)
+	my $NEXUIZDIR   = '/home/polzer/Nexvn/nexuiz';
+
+	# Path to your q3map2 program. You find it in your GtkRadiant/install
+	# directory.
+	my $Q3MAP2      = '/home/users4/ommz/polzer/bin/q3map2.x86';
+
+	# General flags for q3map2 (for example -threads 4)
+	my $Q3MAP2FLAGS = '';
+
+	# Default flags for the -bsp stage
+	my $BSPFLAGS    = '-samplesize 8';
+
+	# Default flags for the -vis stage
+	my $VISFLAGS    = '';
+
+	# Default flags for the -light stage
+	my $LIGHTFLAGS  = '-deluxe -patchshadows -samples 3';
+
+# end of user changable part
+
+sub Usage()
+{
+	print <<EOF;
+Usage:
+$0 mapname [-bsp bspflags...] [-vis visflags...] [-light lightflags...]
+EOF
+	exit 1;
+}
+
+my $options =
+{
+	bsp => [split /\s+/, $BSPFLAGS],
+	vis => [split /\s+/, $VISFLAGS],
+	light => [split /\s+/, $LIGHTFLAGS],
+	maps => [],
+	scale => 1
+};
+
+my $curmode = 'maps';
+
+while(@ARGV)
+{
+	$_ = shift @ARGV;
+	my $enterflags = undef;
+	if($_ eq '-bsp' or $_ eq '-meta')
+	{
+		$enterflags = 'bsp';
+	}
+	elsif($_ eq '-vis')
+	{
+		$enterflags = 'vis';
+	}
+	elsif($_ eq '-light')
+	{
+		$enterflags = 'light';
+	}
+	elsif($_ eq '-map')
+	{
+		$curmode = 'maps';
+	}
+	elsif($_ eq '-scale')
+	{
+		$options->{scale} = (shift @ARGV) || 1;
+	}
+	elsif($_ =~ /^-/ and $curmode eq 'maps')
+	{
+		$curmode = 'bsp';
+		push @{$options->{$curmode}}, $_;
+	}
+	else
+	{
+		push @{$options->{$curmode}}, $_;
+	}
+	if(defined $enterflags)
+	{
+		$curmode = $enterflags;
+		if($ARGV[0] eq '+')
+		{
+			shift @ARGV;
+		}
+		else
+		{
+			$options->{$curmode} = [];
+		}
+	}
+}
+
+sub q3map2(@)
+{
+	my @args = @_;
+	return !system $Q3MAP2, '-game', 'quake3', '-fs_basepath', $NEXUIZDIR, '-fs_game', 'data', '-v', @_;
+}
+
+(my $mapdir = getcwd()) =~ s!/[^/]*(?:$)!!;
+
+unlink "$ENV{HOME}/.q3a/data";
+mkdir "$ENV{HOME}/.q3a";
+symlink "$mapdir", "$ENV{HOME}/.q3a/data"
+	or die "Setting up directory structure, $mapdir -> $ENV{HOME}/.q3a/data: $!";
+
+for my $m(@{$options->{maps}})
+{
+	if($options->{scale} != 1)
+	{
+		open my $checkfh, "<", "$m.map"
+			or die "open $m.map: $!";
+		my $keeplights = 0;
+		while(<$checkfh>)
+		{
+			/^\s*"_keeplights"\s+"1"\s*$/
+				or next;
+			$keeplights = 1;
+		}
+		close $checkfh;
+		die "$m does not define _keeplights to 1"
+			unless $keeplights;
+	}
+
+	my %shaders = map { m!/([^/.]*)\.shader(?:$)! ? ($1 => 1) : () } glob "../scripts/*.shader";
+	open my $shaderlist, "+<", "$NEXUIZDIR/data/scripts/shaderlist.txt"
+		or die "open $NEXUIZDIR/data/scripts/shaderlist.txt: $!";
+	while(<$shaderlist>)
+	{
+		y/\r\n//d;
+		delete $shaders{$_};
+	}
+	for(keys %shaders)
+	{
+		print $shaderlist "$_\n";
+	}
+	close $shaderlist;
+
+	q3map2 '-bsp', '-meta', @{$options->{bsp}},   "$m.map"
+		or die "-bsp: $?";
+	if($options->{scale} != 1)
+	{
+		q3map2 '-scale', $options->{scale}, "$m.bsp"
+			or die "-scale: $?";
+		rename "${m}_s.bsp", "$m.bsp"
+			or die "rename ${m}_s.bsp $m.bsp: $!";
+	}
+	q3map2 '-vis',          @{$options->{vis}},   "$m.map"
+		or die "-vis: $?";
+	q3map2 '-light',        @{$options->{light}}, "$m.map"
+		or die "-light: $?";
+
+	unlink "$m.srf";
+}
