@@ -388,7 +388,7 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 			}
 		}
 	} else {
-		if (deathtype == IT_NEX && !(attacker.flags & FL_ONGROUND) && !(targ.flags & FL_ONGROUND) && attacker.waterlevel < 2 && targ.waterlevel < 2 && attacker.killcount != 3 && attacker.killcount != 5 && attacker.killcount != 10 && attacker.killcount != 15 && attacker.killcount != 20 && attacker.killcount != 25 && attacker.killcount != 30)
+		if (deathtype == IT_NEX && !targ.deadflag && !(attacker.flags & FL_ONGROUND) && !(targ.flags & FL_ONGROUND) && attacker.waterlevel < 2 && targ.waterlevel < 2 && attacker.killcount != 3 && attacker.killcount != 5 && attacker.killcount != 10 && attacker.killcount != 15 && attacker.killcount != 20 && attacker.killcount != 25 && attacker.killcount != 30)
 		{
 			if(clienttype(attacker) == CLIENTTYPE_REAL)  stuffcmd(attacker, "play2 announcer/male/yoda.ogg\n");
 		}
