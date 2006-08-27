@@ -150,9 +150,10 @@ zip -9yr "$zipdir/nexuizsource$date$ext.zip"     Nexuiz/gpl.txt                 
 
 zipdiff -o "Nexuiz/data/datapatch$date.pk3" -f "$basepk3" -t Nexuiz/data/data$date.pk3
 mkdir -p gfx
-unzip "Nexuiz/data/data$date.pk3" gfx/brand.tga
-zip -9r "Nexuiz/data/datapatch$date.pk3" gfx/brand.tga
-rm -rf gfx
+if unzip "Nexuiz/data/data$date.pk3" gfx/brand.tga; then
+	zip -9r "Nexuiz/data/datapatch$date.pk3" gfx/brand.tga
+	rm -rf gfx
+fi
 
 rm -f "$zipdir/nexuizpatch$date$ext.zip"
 zip -9yr "$zipdir/nexuizpatch$date$ext.zip"      Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/data/datapatch$date.pk3
