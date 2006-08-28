@@ -410,6 +410,9 @@ void UpdateSelectedPlayer()
 	selected = world;
 	selected_score = 0.95; // 18 degrees
 
+	if(!cvar("sv_allow_shownames"))
+		return;
+
 	if(clienttype(self) != CLIENTTYPE_REAL)
 		return;
 
