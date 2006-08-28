@@ -453,8 +453,14 @@ void weapon_nex (void) {
 	if (cvar("g_minstagib")) {
 		minstagib_items(IT_CELLS);
 	} else {
+		float nextime;
 		self.ammo_cells = 25;
-		StartItem ("models/weapons/g_nex.md3", "weapons/weaponpickup.ogg", 15, W_Name(WEP_NEX), IT_NEX, FL_WEAPON, weapon_pickupevalfunc, 1000);
+		nextime = cvar("g_balance_nex_respawntime_modifier");
+		if(nextime)
+			nextime = 15 * nextime;
+		else
+			nextime = 15;
+		StartItem ("models/weapons/g_nex.md3", "weapons/weaponpickup.ogg", nextime, W_Name(WEP_NEX), IT_NEX, FL_WEAPON, weapon_pickupevalfunc, 1000);
 	}
 }
 
