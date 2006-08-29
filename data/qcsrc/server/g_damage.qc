@@ -152,7 +152,7 @@ void Obituary (entity attacker, entity targ, float deathtype)
 			else if (deathtype == DEATH_CAMP)
 				bprint ("^1",s, "^1 thought he found a nice camping ground\n");
 			else if (deathtype == DEATH_MIRRORDAMAGE)
-				bprint ("^1",s, "^1 didn't became friends with the Lord of Teamplay\n");
+				bprint ("^1",s, "^1 didn't become friends with the Lord of Teamplay\n");
 			else if (deathtype != DEATH_TEAMCHANGE)
 				bprint ("^1",s, "^1 couldn't resist the urge to self-destruct\n");
 
