@@ -423,9 +423,7 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 	if (attacker.items & IT_STRENGTH && !cvar("g_minstagib"))
 	{
 		damage = damage * cvar("g_balance_powerup_strength_damage");
-		mirrordamage = mirrordamage * cvar("g_balance_powerup_strength_damage");
 		force = force * cvar("g_balance_powerup_strength_force");
-		mirrorforce = mirrorforce * cvar("g_balance_powerup_strength_force");
 	}
 	// apply invincibility multiplier
 	if (targ.items & IT_INVINCIBLE && !cvar("g_minstagib"))
