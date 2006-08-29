@@ -352,7 +352,7 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 			if(attacker.team)
 				if(attacker.team == targ.team)
 					damage = 0;
-	if(teamplay == 2)
+	if(teamplay == 4)
 		if(attacker != targ)
 			if(attacker.team == targ.team)
 				if(attacker.classname == "player")
