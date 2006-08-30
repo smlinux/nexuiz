@@ -525,8 +525,10 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 				// just lose extra LIVES, don't kill the player for mirror damage
 				if(attacker.extralives > 0)
 				{
+					centermsg_setfor(attacker, CENTERMSG_MINSTAGIB, strcat("^3Remaining extra lives: ",ftos(targ.extralives)));
 					attacker.extralives = attacker.extralives - 1;
 					attacker.armorvalue = attacker.extralives;
+					if(clienttype(attacker) == CLIENTTYPE_REAL) stuffcmd(attacker, "play2 misc/hit.wav\n");
 				}
 				mirrordamage = 0;
 			}
