@@ -519,6 +519,17 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 	// apply mirror damage if any
 	if(mirrordamage > 0 || mirrorforce > 0)
 	{
+		if(cvar("g_minstagib"))
+			if(mirrordamage > 0)
+			{
+				// just lose extra LIVES, don't kill the player for mirror damage
+				if(attacker.extralives > 0)
+				{
+					attacker.extralives = attacker.extralives - 1;
+					attacker.armorvalue = attacker.extralives;
+				}
+				mirrordamage = 0;
+			}
 		force = normalize(attacker.origin + attacker.view_ofs - hitloc) * mirrorforce;
 		Damage(attacker, inflictor, attacker, mirrordamage, DEATH_MIRRORDAMAGE, attacker.origin, force);
 	}
