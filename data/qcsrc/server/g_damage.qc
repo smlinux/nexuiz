@@ -360,7 +360,13 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 					{
 						mirrordamage = cvar("g_mirrordamage") * damage;
 						mirrorforce = cvar("g_mirrordamage") * vlen(force);
-						damage = cvar("g_friendlyfire") * damage;
+						if(cvar("g_minstagib"))
+						{
+							if(cvar("g_friendlyfire") == 0)
+								damage = 0;
+						}
+						else
+							damage = cvar("g_friendlyfire") * damage;
 						// mirrordamage will be used LATER
 					}
 
@@ -408,7 +414,9 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 				if (targ.classname == "player")
 					centermsg_setfor(attacker, CENTERMSG_MINSTAGIB, "Secondary fire inflicts no damage!\n");
 				damage = 0;
+				mirrordamage = 0;
 				force = '0 0 0';
+				// keep mirrorforce
 				attacker = targ;
 			}
 		}
