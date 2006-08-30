@@ -20,10 +20,15 @@ Item Layout Teamplay
 		text	"Force Teamplay (TDM) in Deathmatch maps"
 		target	"::Data::Game::Teamplay::DMForceTeamplay::Switch"
 	}
-	Derive Nex_Option_Switch TeamPlay
+	Derive Nex_Option_EditBox FriendlyFire
 	{
-		text	"Teamplay Friendly Fire"
-		target	"::Data::Game::Teamplay::TeamPlay::Switch"
+		text	"Friendly Fire Amount"
+		target	"Data::Game::Teamplay::FriendlyFire::Text"
+	}
+	Derive Nex_Option_EditBox MirrorDamage
+	{
+		text	"Mirror Damage Amount"
+		target	"::Data::Game::Teamplay::MirrorDamage::Text"
 	}
 	Derive Nex_Option_Switch BalanceTeams
 	{

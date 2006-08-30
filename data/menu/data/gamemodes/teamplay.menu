@@ -11,20 +11,19 @@ Item DataContainer Teamplay
 
 		[DataLink_OnOffSwitch]
 	}
-	Item Data_Cvar TeamPlay
+	Item Data_Cvar FriendlyFire
 	{
-		cvarName	"teamplay_default"
-		defValue	1
+		cvarName	"g_friendlyfire"
+		defValue	0.0
 
-		Item DataLink_ValueSwitch Switch
-		{
-			minValue	1
-			stepValue	1
-			maxValue	3
-			descList	"'Self Fire, No Friendly' 'Friendly Fire' 'No Friendly Fire'"
+		[DataLink_Setting]
+	}
+	Item Data_Cvar MirrorDamage
+	{
+		cvarName	"g_mirrordamage"
+		defValue	0.2
 
-			link		"##up"
-		}
+		[DataLink_Setting]
 	}
 	Item Data_Cvar BalanceTeams
 	{
