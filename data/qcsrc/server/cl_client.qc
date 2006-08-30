@@ -571,7 +571,6 @@ void PutClientInServer (void)
 			self.items = IT_NEX;
 			self.switchweapon = WEP_NEX;
 			self.ammo_cells = cvar("g_minstagib_ammo_start");
-			self.extralives = 0;
 			self.jump_interval = time;
 		}
 
@@ -661,7 +660,7 @@ string ColoredTeamName(float t);
 //void dom_player_join_team(entity pl);
 void ClientConnect (void)
 {
-	local float fh;
+	//local float fh;
 	local string s;
 	
 	self.classname = "player_joining";

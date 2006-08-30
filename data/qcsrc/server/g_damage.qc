@@ -395,12 +395,11 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 		    (deathtype == DEATH_SLIME) ||
 		    (deathtype == DEATH_LAVA))
 			return;
-		if (targ.extralives && (deathtype == IT_NEX) && damage)
+		if (targ.armorvalue && (deathtype == IT_NEX) && damage)
 		{
-			targ.extralives -= 1;
-			centermsg_setfor(targ, CENTERMSG_MINSTAGIB, strcat("^3Remaining extra lives: ",ftos(targ.extralives)));
+			targ.armorvalue -= 1;
+			centermsg_setfor(targ, CENTERMSG_MINSTAGIB, strcat("^3Remaining extra lives: ",ftos(targ.armorvalue)));
 			damage = 0;
-			targ.armorvalue = targ.extralives;
 			if(clienttype(targ) == CLIENTTYPE_REAL) stuffcmd(targ, "play2 misc/hit.wav\n");
 			//stuffcmd(attacker, "play2 misc/hit.wav\n");
 		}
@@ -534,11 +533,10 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 			if(mirrordamage > 0)
 			{
 				// just lose extra LIVES, don't kill the player for mirror damage
-				if(attacker.extralives > 0)
+				if(attacker.armorvalue > 0)
 				{
-					attacker.extralives = attacker.extralives - 1;
-					centermsg_setfor(attacker, CENTERMSG_MINSTAGIB, strcat("^3Remaining extra lives: ",ftos(attacker.extralives)));
-					attacker.armorvalue = attacker.extralives;
+					attacker.armorvalue = attacker.armorvalue - 1;
+					centermsg_setfor(attacker, CENTERMSG_MINSTAGIB, strcat("^3Remaining extra lives: ",ftos(attacker.armorvalue)));
 					if(clienttype(attacker) == CLIENTTYPE_REAL) stuffcmd(attacker, "play2 misc/hit.wav\n");
 				}
 				mirrordamage = 0;

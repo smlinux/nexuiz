@@ -75,8 +75,7 @@ void Item_Touch (void)
 		{
 			// sound not available
 			// stuffcmd(other, "play2 announce/robotic/extra.ogg\nplay2 announce/robotic/_lives.ogg\n");
-			other.extralives = other.extralives + cvar("g_minstagib_extralives");
-			other.armorvalue = other.extralives;
+			other.armorvalue = other.armorvalue + cvar("g_minstagib_extralives");
 			sprint(other, "^3You picked up some extra lives\n");
 		}
 
