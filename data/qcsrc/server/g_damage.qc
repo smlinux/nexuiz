@@ -323,6 +323,7 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 {
 	float mirrordamage;
 	float mirrorforce;
+	entity attacker_save;
 	mirrordamage = 0;
 	mirrorforce = 0;
 
@@ -335,6 +336,7 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
         damage_targ = targ;
         damage_inflictor = inflictor;
         damage_attacker = attacker;
+		attacker_save = attacker;
 
 	if (targ.classname == "player")
 	if (attacker.classname == "player")
@@ -527,6 +529,7 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 	// apply mirror damage if any
 	if(mirrordamage > 0 || mirrorforce > 0)
 	{
+		attacker = attacker_save;
 		if(cvar("g_minstagib"))
 			if(mirrordamage > 0)
 			{
