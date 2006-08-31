@@ -4,28 +4,31 @@ use strict;
 use warnings;
 use POSIX;
 
-# change these to match your system
+# change these to match your system, or define them in ~/.nexuiz-map-compiler
+# (just copy paste this part to the file ~/.nexuiz-map-compiler)
 
 	# Path to Nexuiz (where the data directory is in)
-	my $NEXUIZDIR   = '/home/polzer/Nexvn/nexuiz';
+	our $NEXUIZDIR   = '/home/polzer/Nexvn/nexuiz';
 
 	# Path to your q3map2 program. You find it in your GtkRadiant/install
 	# directory.
-	my $Q3MAP2      = '/home/users4/ommz/polzer/bin/q3map2.x86';
+	our $Q3MAP2      = '/home/users4/ommz/polzer/bin/q3map2.x86';
 
 	# General flags for q3map2 (for example -threads 4)
-	my $Q3MAP2FLAGS = '';
+	our $Q3MAP2FLAGS = '';
 
 	# Default flags for the -bsp stage
-	my $BSPFLAGS    = '-samplesize 8';
+	our $BSPFLAGS    = '-samplesize 8';
 
 	# Default flags for the -vis stage
-	my $VISFLAGS    = '';
+	our $VISFLAGS    = '';
 
 	# Default flags for the -light stage
-	my $LIGHTFLAGS  = '-deluxe -patchshadows -samples 3';
+	our $LIGHTFLAGS  = '-deluxe -patchshadows -samples 3';
 
 # end of user changable part
+
+do "$ENV{HOME}/.nexuiz-map-compiler";
 
 sub Usage()
 {
