@@ -411,7 +411,7 @@ void minstagib_items (float itemid)
 			"Extralife", IT_NAILS, FL_POWERUP, generic_pickupevalfunc, 1000);
 
 	}
-	// replace with ammo
+	// replace with speed
 	if (itemid == IT_INVINCIBLE)
 	{
 		self.effects = EF_ADDITIVE;
@@ -424,27 +424,32 @@ void minstagib_items (float itemid)
 }
 
 void weapon_uzi (void) {
-	self.ammo_nails = 120;
+	if(!self.ammo_nails)
+		self.ammo_nails = 120;
 	StartItem ("models/weapons/g_uzi.md3", "weapons/weaponpickup.ogg", 15, W_Name(WEP_UZI), IT_UZI, FL_WEAPON, weapon_pickupevalfunc, 1000);
 }
 
 void weapon_shotgun (void) {
-	self.ammo_shells = 15;
+	if(!self.ammo_shells)
+		self.ammo_shells = 15;
 	StartItem ("models/weapons/g_shotgun.md3", "weapons/weaponpickup.ogg", 15, W_Name(WEP_SHOTGUN), IT_SHOTGUN, FL_WEAPON, weapon_pickupevalfunc, 1000);
 }
 
 void weapon_grenadelauncher (void) {
-	self.ammo_rockets = 15;
+	if(!self.ammo_rockets)
+		self.ammo_rockets = 15;
 	StartItem ("models/weapons/g_gl.md3", "weapons/weaponpickup.ogg", 15, W_Name(WEP_GRENADE_LAUNCHER), IT_GRENADE_LAUNCHER, FL_WEAPON, weapon_pickupevalfunc, 1000);
 }
 
 void weapon_electro (void) {
-	self.ammo_cells = 25;
+	if(!self.ammo_cells)
+		self.ammo_cells = 25;
 	StartItem ("models/weapons/g_electro.md3", "weapons/weaponpickup.ogg", 15, W_Name(WEP_ELECTRO), IT_ELECTRO, FL_WEAPON, weapon_pickupevalfunc, 1000);
 }
 
 void weapon_crylink (void) {
-	self.ammo_cells = 25;
+	if(!self.ammo_cells)
+		self.ammo_cells = 25;
 	StartItem ("models/weapons/g_crylink.md3", "weapons/weaponpickup.ogg", 15, W_Name(WEP_CRYLINK), IT_CRYLINK, FL_WEAPON, weapon_pickupevalfunc, 1000);
 }
 
@@ -453,7 +458,8 @@ void weapon_nex (void) {
 		minstagib_items(IT_CELLS);
 	} else {
 		float nextime;
-		self.ammo_cells = 25;
+		if(!self.ammo_cells)
+			self.ammo_cells = 25;
 		nextime = cvar("g_balance_nex_respawntime_modifier");
 		if(nextime)
 			nextime = 15 * nextime;
@@ -464,7 +470,8 @@ void weapon_nex (void) {
 }
 
 void weapon_hagar (void) {
-	self.ammo_rockets = 15;
+	if(!self.ammo_rockets)
+		self.ammo_rockets = 15;
 	StartItem ("models/weapons/g_hagar.md3", "weapons/weaponpickup.ogg", 15, W_Name(WEP_HAGAR), IT_HAGAR, FL_WEAPON, weapon_pickupevalfunc, 1000);
 }
 
@@ -472,48 +479,57 @@ void weapon_rocketlauncher (void) {
 	if (cvar("g_minstagib")) {
 		minstagib_items(IT_CELLS);
 	} else {
-		self.ammo_rockets = 15;
+		if(!self.ammo_rockets)
+			self.ammo_rockets = 15;
 		StartItem ("models/weapons/g_rl.md3", "weapons/weaponpickup.ogg", 15, W_Name(WEP_ROCKET_LAUNCHER), IT_ROCKET_LAUNCHER, FL_WEAPON, weapon_pickupevalfunc, 1000);
 	}
 }
 
 void item_rockets (void) {
-	self.ammo_rockets = 15;
+	if(!self.ammo_rockets)
+		self.ammo_rockets = 15;
 	StartItem ("models/items/a_rockets.md3", "misc/itempickup.ogg", 15, "rockets", IT_ROCKETS, 0, commodity_pickupevalfunc, 100);
 }
 
 void item_bullets (void) {
-	self.ammo_nails = 120;
+	if(!self.ammo_nails)
+		self.ammo_nails = 120;
 	StartItem ("models/items/a_bullets.mdl", "misc/itempickup.ogg", 15, "bullets", IT_NAILS, 0, commodity_pickupevalfunc, 100);
 }
 
 void item_cells (void) {
-	self.ammo_cells = 25;
+	if(!self.ammo_cells)
+		self.ammo_cells = 25;
 	StartItem ("models/items/a_cells.md3", "misc/itempickup.ogg", 15, "cells", IT_CELLS, 0, commodity_pickupevalfunc, 100);
 }
 
 void item_shells (void) {
-	self.ammo_shells = 15;
+	if(!self.ammo_shells)
+		self.ammo_shells = 15;
 	StartItem ("models/items/a_shells.md3", "misc/itempickup.ogg", 15, "shells", IT_SHELLS, 0, commodity_pickupevalfunc, 100);
 }
 
 void item_armor1 (void) {
-	self.armorvalue = 5;
+	if(!self.armorvalue)
+		self.armorvalue = 5;
 	StartItem ("models/items/g_a1.md3", "misc/armor1.wav", 15, "Armor Shard", IT_ARMOR_SHARD, 0, commodity_pickupevalfunc, 100);
 }
 
 void item_armor25 (void) {
-	self.armorvalue = 100;
+	if(!self.armorvalue)
+		self.armorvalue = 100;
 	StartItem ("models/items/g_a25.md3", "misc/armor25.wav", 30, "Armor", IT_ARMOR, 0, commodity_pickupevalfunc, 2000);
 }
 
 void item_health1 (void) {
-	self.max_health = 5;
+	if(!self.max_health)
+		self.max_health = 5;
 	StartItem ("models/items/g_h1.md3", "misc/minihealth.ogg", 15, "5 Health", IT_5HP, 0, commodity_pickupevalfunc, 100);
 }
 
 void item_health25 (void) {
-	self.max_health = 25;
+	if(!self.max_health)
+		self.max_health = 25;
 	StartItem ("models/items/g_h25.md3", "misc/mediumhealth.ogg", 15, "25 Health", IT_25HP, 0, commodity_pickupevalfunc, 500);
 }
 
@@ -527,7 +543,8 @@ void item_health100 (void) {
 	if(cvar("g_minstagib")) {
 		minstagib_items(IT_NAILS);
 	} else {
-		self.max_health = 100;
+		if(!self.max_health)
+			self.max_health = 100;
 		StartItem ("models/items/g_h100.md3", "misc/megahealth.ogg", 30, "100 Health", IT_HEALTH, 0, commodity_pickupevalfunc, 2000);
 	}
 }

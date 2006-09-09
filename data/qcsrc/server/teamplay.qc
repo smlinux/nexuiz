@@ -91,9 +91,6 @@ void ResetGameCvars()
 	cvar_set("g_lms", "0");
 	cvar_set("g_arena", "0");
 	cvar_set("teamplay", "0");
-
-
-	cvar_set("exit_cfg", "");
 }
 
 void ActivateTeamplay()
