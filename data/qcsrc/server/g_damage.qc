@@ -345,32 +345,35 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 		damage = damage * bound(0.1, (skill + 5) * 0.1, 1);
 
 	// nullify damage if teamplay is on
-	if(teamplay == 1)
-		if(attacker.team)
-			if(attacker.team == targ.team)
-				damage = 0;
-	if(teamplay == 3)
-		if(attacker != targ)
+	if(deathtype != DEATH_TELEFRAG)
+	{
+		if(teamplay == 1)
 			if(attacker.team)
 				if(attacker.team == targ.team)
 					damage = 0;
-	if(teamplay == 4)
-		if(attacker != targ)
-			if(attacker.team == targ.team)
-				if(attacker.classname == "player")
-					if(targ.classname == "player")
-					{
-						mirrordamage = cvar("g_mirrordamage") * damage;
-						mirrorforce = cvar("g_mirrordamage") * vlen(force);
-						if(cvar("g_minstagib"))
+		if(teamplay == 3)
+			if(attacker != targ)
+				if(attacker.team)
+					if(attacker.team == targ.team)
+						damage = 0;
+		if(teamplay == 4)
+			if(attacker != targ)
+				if(attacker.team == targ.team)
+					if(attacker.classname == "player")
+						if(targ.classname == "player")
 						{
-							if(cvar("g_friendlyfire") == 0)
-								damage = 0;
+							mirrordamage = cvar("g_mirrordamage") * damage;
+							mirrorforce = cvar("g_mirrordamage") * vlen(force);
+							if(cvar("g_minstagib"))
+							{
+								if(cvar("g_friendlyfire") == 0)
+									damage = 0;
+							}
+							else
+								damage = cvar("g_friendlyfire") * damage;
+							// mirrordamage will be used LATER
 						}
-						else
-							damage = cvar("g_friendlyfire") * damage;
-						// mirrordamage will be used LATER
-					}
+	}
 
 	if(cvar("g_lms"))
 	if(targ.classname == "player")
