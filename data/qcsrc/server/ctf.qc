@@ -8,6 +8,8 @@
 //float FLAGSCORE_CAPTURE       =  5;
 //float FLAGSCORE_CAPTURE_TEAM  = 20;
 
+#define FLAG_CARRY_POS '-15 0 7'
+
 void() FlagThink;
 void() FlagTouch;
 
@@ -18,6 +20,7 @@ void() place_flag =
 	if(!self.t_length)
 		self.t_length = 119; // maximum frame
 
+	setattachment(self, world, "");	
 	self.mdl = self.model;
 	self.flags = FL_ITEM;
 	self.solid = SOLID_TRIGGER;
@@ -53,6 +56,7 @@ void LogCTF(string mode, float flagteam, entity actor)
 
 void(entity e) RegenFlag =
 {
+	setattachment(e, world, "");	
 	e.movetype = MOVETYPE_TOSS;
 	e.solid = SOLID_TRIGGER;
 	// TODO: play a sound here
@@ -88,6 +92,8 @@ void(entity e) DropFlag =
 		return;
 	}
 	bprint(strcat(p.netname, "^7 lost the ", e.netname, "\n"));
+
+	setattachment(e, world, "");
 
 	if (p.flagcarried == e)
 		p.flagcarried = world;
@@ -131,6 +137,7 @@ void() FlagThink =
 
 	if (self.cnt == FLAG_DROPPED)
 	{
+		setattachment(self, world, "");
 		if (time > self.pain_finished)
 		{
 			bprint(strcat("The ", self.netname, " has returned to base\n"));
@@ -148,49 +155,6 @@ void() FlagThink =
 		LogCTF("dropped", self.team, e);
 		return;
 	}
-
-	// borrowed from threewave CTF, because it would be way too much work
-
-	makevectors (e.angles);
-	v = v_forward;
-	v_z = 0 - v_z; // reverse z
-
-	f = 14;
-	/*
-	if (e.frame >= 29 && e.frame <= 40)
-	{
-		if (e.frame >= 29 && e.frame <= 34)
-		{
-			//axpain
-			if      (e.frame == 29) f = f + 2;
-			else if (e.frame == 30) f = f + 8;
-			else if (e.frame == 31) f = f + 12;
-			else if (e.frame == 32) f = f + 11;
-			else if (e.frame == 33) f = f + 10;
-			else if (e.frame == 34) f = f + 4;
-		}
-		else if (e.frame >= 35 && e.frame <= 40)
-		{
-			// pain
-			if      (e.frame == 35) f = f + 2;
-			else if (e.frame == 36) f = f + 10;
-			else if (e.frame == 37) f = f + 10;
-			else if (e.frame == 38) f = f + 8;
-			else if (e.frame == 39) f = f + 4;
-			else if (e.frame == 40) f = f + 2;
-		}
-	}
-	else if (e.frame >= 103 && e.frame <= 118)
-	{
-		if      (e.frame >= 103 && e.frame <= 104) f = f + 6;  //nailattack
-		else if (e.frame >= 105 && e.frame <= 106) f = f + 6;  //light
-		else if (e.frame >= 107 && e.frame <= 112) f = f + 7;  //rocketattack
-		else if (e.frame >= 112 && e.frame <= 118) f = f + 7;  //shotattack
-	}
-	*/
-	self.angles = e.angles + '0 0 -45';
-	setorigin (self, e.origin + '0 0 0' - f*v + v_right * 22);
-	self.nextthink = time + 0.01;
 };
 
 float   flagcaptimerecord;
@@ -278,6 +242,10 @@ void() FlagTouch =
 			player = find(player, classname, "player");
 		}
 
+		self.movetype = MOVETYPE_NONE;
+		setorigin(self, FLAG_CARRY_POS);
+		setattachment(self, other, "");
+
 		return;
 	}
 
@@ -314,6 +282,9 @@ void() FlagTouch =
 				if(player.team == self.team) centermsg_setfor(player, CENTERMSG_CTF, "The enemy got your flag! Retrieve it!");
 				player = find(player, classname, "player");
 			}
+			self.movetype = MOVETYPE_NONE;	// flag must have MOVETYPE_NONE here, otherwise it will drop through the floor...
+			setorigin(self, FLAG_CARRY_POS);
+			setattachment(self, other, "");
 		}
 	}
 };

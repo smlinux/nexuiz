@@ -909,7 +909,10 @@ void() TeamBubbleThink =
 
 };
 
-float() ChatBubble_customizeentityforclient = {return (self.owner.team == other.team && other.killcount > -666);};
+float() TeamBubble_customizeentityforclient
+{
+	return (self.owner != other && self.owner.team == other.team && other.killcount > -666);
+}
 
 void() UpdateTeamBubble =
 {
@@ -929,7 +932,7 @@ void() UpdateTeamBubble =
 		setattachment(self.teambubbleentity, self, "");  // sticks to moving player better, also conserves bandwidth
 		self.teambubbleentity.mdl = self.teambubbleentity.model;
 		self.teambubbleentity.model = self.teambubbleentity.mdl;
-		self.teambubbleentity.customizeentityforclient = ChatBubble_customizeentityforclient;
+		self.teambubbleentity.customizeentityforclient = TeamBubble_customizeentityforclient;
 	}
 }
 
