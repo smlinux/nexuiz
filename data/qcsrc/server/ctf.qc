@@ -125,8 +125,6 @@ void AnimateFlag()
 void() FlagThink =
 {
 	local entity e;
-	local vector v;
-	local float f;
 
 	self.nextthink = time + 0.1;
 
