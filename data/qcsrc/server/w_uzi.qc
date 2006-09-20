@@ -1,10 +1,7 @@
-
 .float uzi_bulletcounter;
-float() FlashCustomize = { return other == self.owner; };
-
 void W_Uzi_Attack (void)
 {
-	local entity flash;
+	local entity flash, flash2;
 
 	if (cvar("g_use_ammunition"))
 	{
@@ -28,18 +25,26 @@ void W_Uzi_Attack (void)
 	else
 		fireBullet (w_shotorg, w_shotdir, cvar("g_balance_uzi_sustained_spread"), cvar("g_balance_uzi_sustained_damage"), IT_UZI, (self.uzi_bulletcounter & 3) == 0);
 
-
+	// muzzle flash for 1st person view
 	flash = spawn();
-	setorigin(flash, '53 5 0');
+	setorigin(flash, '53 5 -1');
 	setmodel(flash, "models/uziflash.md3");
 	setattachment(flash, self.weaponentity, "bone01");
-	flash.owner = self;
-	flash.customizeentityforclient = FlashCustomize;
-	flash.angles_z = flash.v_angle_z + random() * 180;
+	flash.viewmodelforclient = self;
 	flash.scale = 1.2;
-	flash.alpha = 0.5;
 	SUB_SetFade(flash, time, 0.2);
-	flash.effects = EF_ADDITIVE | EF_FULLBRIGHT | EF_LOWPRECISION;
+
+	// muzzle flash for 3rd person view
+	flash2 = spawn();
+	setorigin(flash2, '51 1 8');
+	setmodel(flash2, "models/uziflash.md3");
+	setattachment(flash2, self.exteriorweaponentity, "");
+	SUB_SetFade(flash2, time, 0.2);
+	
+	// common properties
+	flash.angles_z = flash2.angles_z = flash.v_angle_z + random() * 180;
+	flash.alpha = flash2.alpha = 0.5;
+	flash.effects = flash2.effects = EF_ADDITIVE | EF_FULLBRIGHT | EF_LOWPRECISION;
 
 	// casing code
 	if (cvar("g_casings") >= 2)
