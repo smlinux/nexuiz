@@ -1143,6 +1143,16 @@ void player_powerups (void)
 		self.effects = self.effects | (EF_ADDITIVE | EF_FULLBRIGHT);
 }
 
+float CalcRegen(float current, float stable, float maxv, float regenfactor)
+{
+	if(current > maxv)
+		return current;
+	else if(current > maxv - 0.25) // when close enough, "snap"
+		return maxv;
+	else
+		return bound(0, current + (maxv - current) * regenfactor * frametime, maxv);
+}
+
 void player_regen (void)
 {
 	float maxh, maxa, limith, limita, max_mod, regen_mod, rot_mod, limit_mod;
@@ -1198,10 +1208,8 @@ void player_regen (void)
 		}
 		if (time > self.pauseregen_finished)
 		{
-			if (self.health < maxh)
-				self.health = bound(0, self.health + (maxh- self.health) * regen_mod*cvar("g_balance_health_regen") * frametime  + 0.001, 1000);
-			if (self.armorvalue < maxa)
-				self.armorvalue = bound(0, self.armorvalue + (maxa - self.armorvalue) * cvar("g_balance_armor_regen") * frametime  + 0.001, 1000);
+			self.health = CalcRegen(self.health, maxh, 1000, regen_mod * cvar("g_balance_health_regen"));
+			self.armorvalue = CalcRegen(self.armorvalue, maxh, 1000, cvar("g_balance_health_regen"));
 		}
 	}
 	else
@@ -1214,10 +1222,8 @@ void player_regen (void)
 			self.armorvalue = bound(0, self.armorvalue + (maxa - self.armorvalue) * cvar("g_balance_armor_rot") * frametime, 1000);
 		if (time > self.pauseregen_finished)
 		{
-			if (self.health < maxh)
-				 self.health = bound(0, self.health + (maxh - self.health) * cvar("g_balance_health_regen") * frametime + 0.001, 1000);
-			if (self.armorvalue < maxa)
-				self.armorvalue = bound(0, self.armorvalue + (maxa - self.armorvalue) * cvar("g_balance_armor_regen") * frametime + 0.001, 1000);
+			self.health = CalcRegen(self.health, maxh, 1000, cvar("g_balance_health_regen"));
+			self.armorvalue = CalcRegen(self.armorvalue, maxh, 1000, cvar("g_balance_health_regen"));
 		}
 	}
 
