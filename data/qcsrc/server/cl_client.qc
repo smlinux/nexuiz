@@ -1209,7 +1209,7 @@ void player_regen (void)
 		if (time > self.pauseregen_finished)
 		{
 			self.health = CalcRegen(self.health, maxh, 1000, regen_mod * cvar("g_balance_health_regen"));
-			self.armorvalue = CalcRegen(self.armorvalue, maxh, 1000, cvar("g_balance_health_regen"));
+			self.armorvalue = CalcRegen(self.armorvalue, maxa, 1000, cvar("g_balance_health_regen"));
 		}
 	}
 	else
@@ -1223,7 +1223,7 @@ void player_regen (void)
 		if (time > self.pauseregen_finished)
 		{
 			self.health = CalcRegen(self.health, maxh, 1000, cvar("g_balance_health_regen"));
-			self.armorvalue = CalcRegen(self.armorvalue, maxh, 1000, cvar("g_balance_health_regen"));
+			self.armorvalue = CalcRegen(self.armorvalue, maxa, 1000, cvar("g_balance_health_regen"));
 		}
 	}
 
