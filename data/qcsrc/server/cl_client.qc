@@ -1145,12 +1145,12 @@ void player_powerups (void)
 
 float CalcRegen(float current, float stable, float maxv, float regenfactor)
 {
-	if(current > maxv)
+	if(current > stable)
 		return current;
-	else if(current > maxv - 0.25) // when close enough, "snap"
-		return maxv;
+	else if(current > stable - 0.25) // when close enough, "snap"
+		return stable;
 	else
-		return bound(0, current + (maxv - current) * regenfactor * frametime, maxv);
+		return bound(0, current + (stable - current) * regenfactor * frametime, maxv);
 }
 
 void player_regen (void)
