@@ -344,6 +344,29 @@ void SV_ParseClientCommand(string s) {
 		Say(self, TRUE, substring(s, 9, strlen(s) - 9));
 		//clientcommand(self, formatmessage(s));
 	} else {
+		string cmd;
+		cmd = argv(0);
+		if(cmd != "status")
+		if(cmd != "name")
+		//if(cmd != "say") // handled above
+		//if(cmd != "say_team") // handled above
+		if(cmd != "tell")
+		if(cmd != "color")
+		if(cmd != "kill")
+		if(cmd != "pause")
+		if(cmd != "kick")
+		if(cmd != "ping")
+		if(cmd != "pings")
+		if(cmd != "ban")
+		if(cmd != "pmodel")
+		if(cmd != "rate")
+		if(cmd != "playermodel")
+		if(cmd != "playerskin")
+		if(cmd != "god") if(cmd != "notarget") if(cmd != "fly") if(cmd != "give") if(cmd != "noclip")
+		{
+			ServerConsoleEcho(strcat("WARNING: Invalid clientcommand by ", self.netname, ": ", s), TRUE);
+			return;
+		}
 		clientcommand(self,s);
 	}
 }
