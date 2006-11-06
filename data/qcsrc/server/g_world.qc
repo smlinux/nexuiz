@@ -62,9 +62,12 @@ void GotoFirstMap()
 	}
 }
 
+float world_already_spawned;
 void worldspawn (void)
 {
-
+	if(world_already_spawned)
+		error("world already spawned - you may have EXACTLY ONE worldspawn!");
+	world_already_spawned = TRUE;
 	// Precache all player models
 	// Workaround for "invisible players"
 	precache_model("models/player/carni.zym");
