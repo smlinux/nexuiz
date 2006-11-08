@@ -9,6 +9,7 @@ float CampaignFile_Load(float offset, float n)
 	float entlen;
 	float i;
 	string l, a;
+	string fn;
 
 	if(n > CAMPAIGN_MAX_ENTRIES)
 		n = CAMPAIGN_MAX_ENTRIES;
@@ -16,7 +17,8 @@ float CampaignFile_Load(float offset, float n)
 	campaign_offset = offset;
 	campaign_entries = 0;
 
-	fh = fopen("maps/campaign.txt", FILE_READ);
+	fn = strcat("maps/campaign", campaign_name, ".txt");
+	fh = fopen(fn, FILE_READ);
 	if(fh >= 0)
 	{
 		for(lineno = 0; (l = fgets(fh)); )

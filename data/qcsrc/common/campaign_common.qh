@@ -19,6 +19,7 @@ string campaign_longdesc[CAMPAIGN_MAX_ENTRIES];
 // number is also stored in campaign_entries).
 // NOTE: there MUST be a corresponding CampaignFile_Unload() to unzone the
 // strings.
+string campaign_name; // set that to the campaign you want to load before calling CampaignFile_Load
 float CampaignFile_Load(float offset, float entries);
 void CampaignFile_Unload();
 

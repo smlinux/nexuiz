@@ -1,16 +1,17 @@
 // campaign cvars:
 //   _campaign_index: index of CURRENT map
-//   g_campaign_index: index of current LAST map (saved)
+//   _campaign_name: name of the current campaign
+//   g_campaign(name)_index: index of current LAST map (saved)
 //   g_campaign_skill: bot skill offset
 
 float campaign_level;
 float campaign_won;
+string campaign_index_var;
 
 void(string s) CampaignBailout =
 {
 	cvar_set("g_campaign", "0");
-	bprint(strcat("campaign initialization failed: ", s, "\n"));
-	//error(strcat("campaign initialization failed: ", s, "\n"));
+	ServerConsoleEcho(strcat("campaign initialization failed: ", s), TRUE);
 	return;
 }
 
@@ -19,6 +20,8 @@ void() CampaignPreInit =
 	float baseskill;
 	string title;
 	campaign_level = cvar("_campaign_index");
+	campaign_name = strzone(cvar_string("_campaign_name"));
+	campaign_index_var = strzone(strcat("g_campaign", campaign_name, "_index"));
 	CampaignFile_Load(campaign_level, 2);
 	if(campaign_entries < 1)
 		return CampaignBailout("unknown map");
@@ -93,12 +96,16 @@ void() CampaignPreIntermission =
 		{
 			//localcmd("set g_campaign_index 0\n");
 			// don't reset...
-			localcmd("set g_campaign_won 1\n");
+			localcmd("set g_campaign");
+			localcmd(campaign_name);
+			localcmd("_won 1\n");
 		}
-		else if(campaign_level == cvar("g_campaign_index"))
+		else if(campaign_level == cvar(campaign_index_var))
 		{
 			// advance level
-			localcmd("set g_campaign_index ");
+			localcmd("set ");
+			localcmd(campaign_index_var);
+			localcmd(" ");
 			localcmd(ftos(campaign_level + 1));
 			localcmd("\n");
 		}
@@ -120,6 +127,9 @@ void() CampaignPostIntermission =
 	CampaignSetup(campaign_won);
 	CampaignFile_Unload();
 	strunzone(campaign_message);
+	strunzone(campaign_index_var);
+	strunzone(campaign_name);
+	campaign_name = "";
 }
 
 
