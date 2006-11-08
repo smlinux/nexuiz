@@ -1,18 +1,25 @@
+string campaign_index_var;
+
 void Campaign_Init()
 {
+	campaign_name = strzone(cvar_string("g_campaign_name"));
+	campaign_index_var = strzone(strcat("g_campaign", campaign_name, "_index"));
 	CampaignFile_Load(0, CAMPAIGN_MAX_ENTRIES);
 }
 
 void Campaign_Shutdown()
 {
 	CampaignFile_Unload();
+	strunzone(campaign_index_var);
+	strunzone(campaign_name);
+	campaign_name = "";
 }
 
 void Campaign_DumpLevels()
 {
 	float i;
 	float imax;
-	imax = cvar("g_campaign_index") - campaign_offset;
+	imax = cvar(campaign_index_var) - campaign_offset;
 	if(imax >= campaign_entries)
 		imax = campaign_entries - 1;
 	for(i = 0; i <= imax; ++i)
@@ -34,7 +41,7 @@ void Campaign_JumpLevel(float n)
 {
 	float current;
 	// 1. current level?
-	current = cvar("g_campaign_index");
+	current = cvar(campaign_index_var);
 	if(n > current)
 		n = current;
 	if(n < 0)
@@ -75,7 +82,7 @@ void() Nex_Action_Campaign_Update =
 
 void() Nex_Action_Campaign_Init =
 {
-	campaign_index = cvar("g_campaign_index");
+	campaign_index = cvar(campaign_index_var);
 
 	Nex_Action_Campaign_Update();
 };
@@ -83,7 +90,7 @@ void() Nex_Action_Campaign_Init =
 void() Nex_Action_Campaign_Prev =
 {
 	if (campaign_index <= 0) {
-		campaign_index = min(campaign_entries, cvar("g_campaign_index"));
+		campaign_index = min(campaign_entries, cvar(campaign_index_var));
 	} else {
 		campaign_index -= 1;
 	}
@@ -93,7 +100,7 @@ void() Nex_Action_Campaign_Prev =
 
 void() Nex_Action_Campaign_Next =
 {
-	if (campaign_index >= min(campaign_entries, cvar("g_campaign_index"))) {
+	if (campaign_index >= min(campaign_entries, cvar(campaign_index_var))) {
 		campaign_index = 0;
 	} else {
 		campaign_index += 1;
