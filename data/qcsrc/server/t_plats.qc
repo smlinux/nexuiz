@@ -690,7 +690,6 @@ void() door_blocked =
 {
 
     if((self.spawnflags == 4) && (other.takedamage != DAMAGE_NO)) { // KIll Kill Kill!!
-        bprint("blabla2\n");
         Damage (other, self, self, 10000, DEATH_HURTTRIGGER, other.origin, '0 0 0');
     } else {
 
