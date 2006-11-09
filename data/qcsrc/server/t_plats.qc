@@ -5,6 +5,8 @@ float	STATE_UP		= 2;
 float	STATE_DOWN		= 3;
 
 .entity trigger_field;
+//.float dmgtime;
+.float dmgtime2;
 
 void() plat_center_touch;
 void() plat_outside_touch;
@@ -111,12 +113,23 @@ void() plat_trigger_use =
 
 void() plat_crush =
 {
-	if (self.state == 4)
-		plat_go_down ();
-	else if (self.state == 3)
-		plat_go_up ();
-	else
-		objerror ("plat_crush: bad self.state\n");
+    if((self.spawnflags == 4) && (other.takedamage != DAMAGE_NO)) { // KIll Kill Kill!!
+        Damage (other, self, self, 10000, DEATH_HURTTRIGGER, other.origin, '0 0 0');
+    } else {
+        if((self.dmg) && (other.takedamage != DAMAGE_NO)) {   // Shall we bite?
+            Damage (other, self, self, self.dmg, DEATH_HURTTRIGGER, other.origin, '0 0 0');
+            // Gib dead/dying stuff
+            if(other.deadflag != DEAD_NO)
+                Damage (other, self, self, 10000, DEATH_HURTTRIGGER, other.origin, '0 0 0');
+        }
+
+        if (self.state == 4)
+            plat_go_down ();
+        else if (self.state == 3)
+            plat_go_up ();
+        else
+            objerror ("plat_crush: bad self.state\n");
+    }
 };
 
 void() plat_use =
@@ -139,6 +152,12 @@ void() func_plat =
 
 	if (self.sounds == 0)
 		self.sounds = 2;
+
+    if(self.spawnflags == 4)
+        self.dmg = 10000;
+
+    if(self.dmg && (!self.message))
+		self.message = "was in the wrong place.";
 
 	if (self.sounds == 1)
 	{
@@ -178,8 +197,10 @@ void() func_plat =
 	setsize (self, self.mins , self.maxs);
 
 	self.blocked = plat_crush;
+
 	if (!self.speed)
 		self.speed = 150;
+
 	self.pos1 = self.origin;
 	self.pos2 = self.origin;
 	self.pos2_z = self.origin_z - self.size_z + 8;
@@ -356,11 +377,33 @@ void() func_train =
 	self.think = func_train_find;
 };
 
+
+
+void() rotating_blocked =
+{
+
+    if(self.dmg && other.takedamage != DAMAGE_NO) {
+        if(self.dmgtime2 < time) {
+            Damage (other, self, self, self.dmg, DEATH_HURTTRIGGER, other.origin, '0 0 0');
+            self.dmgtime2 = time + self.dmgtime;
+        }
+
+        // Gib dead/dying stuff
+        if(other.deadflag != DEAD_NO)
+            Damage (other, self, self, 10000, DEATH_HURTTRIGGER, other.origin, '0 0 0');
+    }
+
+
+}
+
 /*QUAKED func_rotating (0 .5 .8) ? - - X_AXIS Y_AXIS
 Brush model that spins in place on one axis (default Z).
-speed : speed to rotate (in degrees per second)
-noise : path/name of looping .wav file to play.
+speed   : speed to rotate (in degrees per second)
+noise   : path/name of looping .wav file to play.
+dmg     : Do this mutch dmg every .dmgtime intervall when blocked
+dmgtime : See above.
 */
+
 void() func_rotating =
 {
 	if (self.noise)
@@ -380,12 +423,24 @@ void() func_rotating =
 	else // Z
 		self.avelocity = '0 1 0' * self.speed;
 
+    if(self.dmg & (!self.message))
+        self.message = " was in the wrong place.";
+
+
+    if(self.dmg && (!self.dmgtime))
+        self.dmgtime = 0.25;
+
+    self.dmgtime2 = time;
+
+
 	self.solid = SOLID_BSP;
 	self.movetype = MOVETYPE_PUSH;
 
 	setmodel(self, self.model);
 	setsize(self, self.mins, self.maxs);
 	setorigin(self, self.origin);
+
+    self.blocked = rotating_blocked;
 
 	// wait for targets to spawn
 	self.nextthink = self.ltime + 999999999;
@@ -633,17 +688,42 @@ void() door_go_up;
 
 void() door_blocked =
 {
-	//T_Damage (other, self, self, self.dmg, self.dmg, self.deathtype, DT_IMPACT, (self.absmin + self.absmax) * 0.5, '0 0 0', Obituary_Generic);
 
+    if((self.spawnflags == 4) && (other.takedamage != DAMAGE_NO)) { // KIll Kill Kill!!
+        bprint("blabla2\n");
+        Damage (other, self, self, 10000, DEATH_HURTTRIGGER, other.origin, '0 0 0');
+    } else {
+
+        if((self.dmg) && (other.takedamage == DAMAGE_YES))    // Shall we bite?
+            Damage (other, self, self, self.dmg, DEATH_HURTTRIGGER, other.origin, '0 0 0');
+
+         //Dont chamge direction for dead or dying stuff
+        if(other.deadflag != DEAD_NO && (other.takedamage == DAMAGE_NO)) {
+            if (self.wait >= 0)
+            {
+                if (self.state == STATE_DOWN)
+                    door_go_up ();
+                else
+                    door_go_down ();
+            }
+        } else {
+            //gib dying stuff just to make sure
+            if((self.dmg) && (other.takedamage != DAMAGE_NO))    // Shall we bite?
+                Damage (other, self, self, 10000, DEATH_HURTTRIGGER, other.origin, '0 0 0');
+        }
+    }
+
+	//T_Damage (other, self, self, self.dmg, self.dmg, self.deathtype, DT_IMPACT, (self.absmin + self.absmax) * 0.5, '0 0 0', Obituary_Generic);
 // if a door has a negative wait, it would never come back if blocked,
 // so let it just squash the object to death real fast
-	if (self.wait >= 0)
+/*	if (self.wait >= 0)
 	{
 		if (self.state == STATE_DOWN)
 			door_go_up ();
 		else
 			door_go_down ();
 	}
+*/
 };
 
 
@@ -991,14 +1071,27 @@ void() func_door =
 
 	self.blocked = door_blocked;
 	self.use = door_use;
-	
+
+    if(self.targetname == "") {
+        self.spawnflags = 0;
+        self.dmg = 0;
+    }
+
+    if(self.spawnflags == 4)
+        self.dmg = 10000;
+
+    if(self.dmg & (!self.message))
+		self.message = "was in the wrong place.";
+
+
+
 	if (self.sounds > 0)
 	{
 		precache_sound ("plats/medplat1.wav");
 		precache_sound ("plats/medplat2.wav");
 		self.noise2 = "plats/medplat1.wav";
 		self.noise1 = "plats/medplat2.wav";
-	}	
+	}
 
 	if (!self.speed)
 		self.speed = 100;
