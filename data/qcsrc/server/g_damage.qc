@@ -157,9 +157,10 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				bprint ("^1",s, "^1 couldn't resist the urge to self-destruct\n");
 
 			if(deathtype != DEATH_TEAMCHANGE)
+			{
 				LogDeath("suicide", deathtype, targ, targ);
-
-			GiveFrags(attacker, targ, -1);
+				GiveFrags(attacker, targ, -1);
+			}
 			//targ.frags = targ.frags - 1;
 			if (targ.killcount > 2)
 				bprint ("^1",s,"^1 ended it all with a ",ftos(targ.killcount)," kill spree\n");
