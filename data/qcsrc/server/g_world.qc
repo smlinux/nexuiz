@@ -696,14 +696,15 @@ When the player presses attack or jump, change to the next level
 */
 void() IntermissionThink =
 {
-	if(self.cnt)
+	if(cvar("sv_autoscreenshot"))
 	if(self.cnt > time)
 	{
 		self.cnt = FALSE;
 		if(clienttype(self) == CLIENTTYPE_REAL)
-		if(cvar("sv_autoscreenshot"))
-			stuffcmd(self, "wait\nscreenshot\necho \"^5A screenshot has been taken at request of the server.\"\n");
+			stuffcmd(self, "screenshot\necho \"^5A screenshot has been taken at request of the server.\"\n");
+		return;
 	}
+
 	if (time < intermission_exittime)
 		return;
 
