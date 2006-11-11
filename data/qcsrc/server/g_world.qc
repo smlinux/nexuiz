@@ -696,6 +696,14 @@ When the player presses attack or jump, change to the next level
 */
 void() IntermissionThink =
 {
+	if(self.cnt)
+	if(self.cnt > time)
+	{
+		self.cnt = FALSE;
+		if(clienttype(self) == CLIENTTYPE_REAL)
+		if(cvar("sv_autoscreenshot"))
+			stuffcmd(self, "wait\nscreenshot\necho \"^5A screenshot has been taken at request of the server.\"\n");
+	}
 	if (time < intermission_exittime)
 		return;
 
@@ -860,6 +868,7 @@ void() NextLevel =
 		other.movetype = MOVETYPE_NONE;
 		other.angles = other.v_angle;
 		other.angles_x = other.angles_x * -1;
+		other.cnt = time + 0.5;	// used for autoscreenshot
 
 		self = other;
 
@@ -889,15 +898,6 @@ void() NextLevel =
 		CampaignPreIntermission();
 
 	WriteByte (MSG_ALL, SVC_INTERMISSION);
-
-	other = findchainflags(flags, FL_CLIENT);
-	while(other)
-	{
-		if(clienttype(other) == CLIENTTYPE_REAL)
-		if(cvar("sv_autoscreenshot"))
-			stuffcmd(other, "wait\nscreenshot\necho \"^5A screenshot has been taken at request of the server.\"\n");
-		other = other.chain;
-	}
 };
 
 /*
