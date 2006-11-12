@@ -464,8 +464,10 @@ void PutClientInServer (void)
 		} else {
 			self.playermodel = CheckPlayerModel(self.playermodel);
 			setmodel_lod (self, self.playermodel);
-			self.skin = stof(self.playerskin);
-
+			if(teams_matter)
+				self.skin = math_mod(stof(self.playerskin), NUM_PLAYERSKINS_TEAMPLAY);
+			else
+				self.skin = stof(self.playerskin);
 		}
 
 		self.crouch = FALSE;
@@ -1441,8 +1443,16 @@ void PlayerPreThink (void)
 				setsize (self, m1, m2);
 			}
 
-			if (self.skin != stof(self.playerskin))
-				self.skin = stof(self.playerskin);
+			if(teams_matter)
+			{
+				if (self.skin != math_mod(stof(self.playerskin), NUM_PLAYERSKINS_TEAMPLAY))
+					self.skin = math_mod(stof(self.playerskin), NUM_PLAYERSKINS_TEAMPLAY);
+			}
+			else
+			{
+				if (self.skin != stof(self.playerskin))
+					self.skin = stof(self.playerskin);
+			}
 		}
 		// Savage: Check for nameless players
 		if (strlen(self.netname) < 1) {
