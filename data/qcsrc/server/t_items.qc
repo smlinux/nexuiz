@@ -248,6 +248,8 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 			z_offset = '0 0 5';
 		else if (itemid == IT_ARMOR)
 			z_offset = '0 0 3';
+		else if (itemid == IT_SHOTGUN)
+			z_offset = '0 0 10';
 
 		org = find_floor(org) + z_offset;
 		setorigin(self, org);
