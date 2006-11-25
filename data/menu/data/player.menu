@@ -157,4 +157,17 @@ Item DataContainer Player
 			}
 		}
 	}
+	Item Data_Cvar MapDLSpeed
+	{
+		cvarName "cl_curl_maxspeed"
+		defValue "300"
+		
+		Item DataLink_Value Value
+		{
+			minValue	10.0
+			maxValue	1000.0
+			stepValue	10.0
+			link		"##up"
+		}
+	}
 }

@@ -187,6 +187,11 @@ Item Window Player
 			text    "Show player names"
 			target  "::Data::Player::PlayerShowNames::Switch"
 		}		
+		Derive Nex_Option_Slider MapDLSpeed
+		{
+			text	"Download Speed"
+			target	"::Data::Player::MapDLSpeed::Value"
+		}
 		Derive Nex_Void Seperator1
 		{}
 		Derive PictureButton Apply
