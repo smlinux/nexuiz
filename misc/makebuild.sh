@@ -3,7 +3,7 @@ set -ex
 
 base=`pwd`
 
-basepk3=$base/data20060614.pk3
+basepk3=$base/data20060905.pk3
 nexdir=$base/nexuiz
 dpdir=$base/darkplaces
 tmpdir=/tmp/NEX
@@ -14,7 +14,7 @@ osxapps=$buildfiles/osx
 copystrip=$buildfiles/copystrip
 fteqcc="fteqcc.bin -O2"
 mingw=/home/polzer/mingw32
-ia32=/chroot/fc4-i386
+ia32=/chroot/fc5-i386
 osxhost=macmini_osx
 osxtemp=/Users/rpolzer/Darkplaces.build
 

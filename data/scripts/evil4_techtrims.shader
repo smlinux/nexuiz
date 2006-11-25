@@ -1178,7 +1178,7 @@ textures/evil4_d_techwalls/d_tech_dwteky
 textures/evil4_d_techwalls/d_tech_drkwll_pnltek
 {
 	{
-		maptextures/evil4_d_techwalls/d_tech_drkwll_pnltek_glow.tga
+		map textures/evil4_d_techwalls/d_tech_drkwll_pnltek_glow.tga
 		tcmod turb 0 1 1 9
 		blendFunc GL_ONE GL_ONE
 	}
