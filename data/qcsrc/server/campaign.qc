@@ -96,14 +96,14 @@ void() CampaignPreIntermission =
 		{
 			//localcmd("set g_campaign_index 0\n");
 			// don't reset...
-			localcmd("set g_campaign");
+			localcmd("seta g_campaign");
 			localcmd(campaign_name);
 			localcmd("_won 1\n");
 		}
 		else if(campaign_level == cvar(campaign_index_var))
 		{
 			// advance level
-			localcmd("set ");
+			localcmd("seta ");
 			localcmd(campaign_index_var);
 			localcmd(" ");
 			localcmd(ftos(campaign_level + 1));
