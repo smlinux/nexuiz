@@ -21,14 +21,6 @@ Item Window TeamSelect
 
 		init		Nex_Action_ConsoleCmd
 	}
-	Derive TeamSelectButton RedTeam
-	{
-		pos	'15 54'
-		size	'186 66'
-		normal	"$gfx/tred"
-
-		syncCmd	"cmd selectteam red; cmd join; togglemenu\n"
-	}
 	Derive TeamSelectButton AutoSelect
 	{
 		pos	'204 54'
@@ -36,6 +28,14 @@ Item Window TeamSelect
 		normal	"$gfx/tauto"
 
 		syncCmd	"cmd selectteam auto; cmd join; togglemenu\n"
+	}
+	Derive TeamSelectButton RedTeam
+	{
+		pos	'15 54'
+		size	'186 66'
+		normal	"$gfx/tred"
+
+		syncCmd	"cmd selectteam red; cmd join; togglemenu\n"
 	}
 	Derive TeamSelectButton BlueTeam
 	{
