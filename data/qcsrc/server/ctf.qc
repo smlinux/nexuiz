@@ -385,6 +385,7 @@ void() item_flag_team1 =
 	//if(!cvar("teamplay"))
 	//	cvar_set("teamplay", "3");
 
+	self.classname = "item_flag_team1";
 	self.team = 5; // color 4 team (red)
 	self.items = IT_KEY2; // gold key (redish enough)
 	self.netname = "^1RED^7 flag";
@@ -437,6 +438,7 @@ void() item_flag_team2 =
 	//if(!cvar("teamplay"))
 	//	cvar_set("teamplay", "3");
 
+	self.classname = "item_flag_team2";
 	self.team = 14; // color 13 team (blue)
 	self.items = IT_KEY1; // silver key (bluish enough)
 	self.netname = "^4BLUE^7 flag";
