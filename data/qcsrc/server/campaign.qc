@@ -7,6 +7,7 @@
 float campaign_level;
 float campaign_won;
 string campaign_index_var;
+float checkrules_equality;
 
 void(string s) CampaignBailout =
 {
@@ -56,11 +57,53 @@ void() CampaignPostInit =
 	cvar_set("timelimit", "0");
 }
 
+void CampaignSaveCvar(string cvarname, float value)
+{
+	float fh;
+	float len;
+	string contents;
+	string l;
+
+	cvar_set(cvarname, ftos(value));
+	// note: cvarname must be remembered
+
+	fh = fopen("campaign.cfg", FILE_READ);
+	contents = "";
+	if(fh >= 0)
+	{
+		while((l = fgets(fh)))
+		{
+			cvarname = strcat(cvarname);
+			contents = strcat(contents);
+			len = tokenize(l);
+			if(len != 3)
+				continue;
+			if(argv(0) != "set")
+				continue;
+			if(argv(1) == cvarname)
+				continue;
+			contents = strcat(contents, "set ", argv(1), " ", argv(2), "\n");
+		}
+		fclose(fh);
+	}
+	contents = strcat(contents, "set ", cvarname,  " ", ftos(value), "\n");
+	fh = fopen("campaign.cfg", FILE_WRITE);
+	if(fh >= 0)
+	{
+		fputs(fh, contents);
+	}
+	else
+	{
+		error("Cannot write to campaign file");
+	}
+}
+
 void() CampaignPreIntermission =
 {
 	entity head;
 	float won;
 	float lost;
+	local string savevar;
 
 	won = 0;
 
@@ -77,7 +120,7 @@ void() CampaignPreIntermission =
 		head = head.chain;
 	}
 
-	if(won == 1 && lost == 0)
+	if(won == 1 && lost == 0 && checkrules_equality == 0)
 	{
 		campaign_won = 1;
 		bprint("The current level has been WON.\n");
@@ -94,20 +137,14 @@ void() CampaignPreIntermission =
 	{
 		if(campaign_entries < 2)
 		{
-			//localcmd("set g_campaign_index 0\n");
-			// don't reset...
-			localcmd("seta g_campaign");
-			localcmd(campaign_name);
-			localcmd("_won 1\n");
+			// I have won
+			savevar = strcat("g_campaign", campaign_name, "_won");
+			CampaignSaveCvar(savevar, 1);
 		}
 		else if(campaign_level == cvar(campaign_index_var))
 		{
 			// advance level
-			localcmd("seta ");
-			localcmd(campaign_index_var);
-			localcmd(" ");
-			localcmd(ftos(campaign_level + 1));
-			localcmd("\n");
+			CampaignSaveCvar(campaign_index_var, campaign_level + 1);
 		}
 	}
 }

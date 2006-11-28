@@ -1063,7 +1063,10 @@ float(float fraglimit) WinningCondition_MaxIndividualScore =
 		head = head.chain;
 	}
 
-	SetWinners(frags, checkrules_leaderfrags);
+	if(checkrules_leaderfrags > 0)
+		SetWinners(frags, checkrules_leaderfrags);
+	else
+		ClearWinners();
 
 	if (!cvar("g_runematch"))
 		if (checkrules_leaderfrags != checkrules_oldleaderfrags)
@@ -1096,14 +1099,17 @@ float(float fraglimit) WinningConditionBase_Teamplay =
 			>= 2));
 
 	ClearWinners();
-	if(team1_score == tdm_max_score)
-		AddWinners(team, COLOR_TEAM1);
-	if(team2_score == tdm_max_score)
-		AddWinners(team, COLOR_TEAM2);
-	if(team3_score == tdm_max_score)
-		AddWinners(team, COLOR_TEAM3);
-	if(team4_score == tdm_max_score)
-		AddWinners(team, COLOR_TEAM4);
+	if(tdm_max_score > 0)
+	{
+		if(team1_score == tdm_max_score)
+			AddWinners(team, COLOR_TEAM1);
+		if(team2_score == tdm_max_score)
+			AddWinners(team, COLOR_TEAM2);
+		if(team3_score == tdm_max_score)
+			AddWinners(team, COLOR_TEAM3);
+		if(team4_score == tdm_max_score)
+			AddWinners(team, COLOR_TEAM4);
+	}
 
 	if(!cvar("g_runematch") && !cvar("g_domination"))
 		if(tdm_max_score != tdm_old_score)
