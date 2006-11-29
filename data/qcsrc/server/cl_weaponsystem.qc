@@ -324,6 +324,9 @@ void(float windex, string wname, float hudammo) weapon_setup =
 	// the two weapon entities will notice this has changed and update their models
 	self.weapon = windex;
 	self.weaponname = wname;
+
+	// can fire immediately
+	self.attack_finished = time;
 };
 
 // perform weapon to attack (weaponstate and attack_finished check is here)
