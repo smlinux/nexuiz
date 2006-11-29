@@ -64,6 +64,7 @@ void CampaignSaveCvar(string cvarname, float value)
 	string contents;
 	string l;
 
+	registercvar(cvarname, ftos(value));
 	cvar_set(cvarname, ftos(value));
 	// note: cvarname must be remembered
 
