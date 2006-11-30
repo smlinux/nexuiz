@@ -143,10 +143,23 @@ float(float req) w_nex =
 	else if (req == WR_THINK)
 	{
 		if (self.button0)
-		if (weapon_prepareattack(0, cvar("g_balance_nex_refire")))
 		{
-			W_Nex_Attack();
-			weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_nex_animtime"), w_ready);
+			if(cvar("g_minstagib"))
+			{
+				if (weapon_prepareattack(0, cvar("g_balance_minstagib_nex_refire")))
+				{
+					W_Nex_Attack();
+					weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_minstagib_nex_animtime"), w_ready);
+				}
+			}
+			else
+			{
+				if (weapon_prepareattack(0, cvar("g_balance_nex_refire")))
+				{
+					W_Nex_Attack();
+					weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_nex_animtime"), w_ready);
+				}
+			}
 		}
 	}
 	else if (req == WR_SETUP)
