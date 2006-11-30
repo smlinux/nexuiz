@@ -232,6 +232,16 @@ Item Layout Misc
 				text	"Transparency for invisible players"
 				target	"::Data::Game::Misc::MinstaGibInvisAlpha::Text"
 			}
+			Derive Nex_Option_EditBox MinstaGibRefire
+			{
+				text	"Minstagib Nex Refire"
+				target	"::Data::Game::Misc::MinstaGibRefire::Text"
+			}
+			Derive Nex_Option_EditBox MinstaGibAnimtime
+			{
+				text	"Minstagib Nex Animation Time"
+				target	"::Data::Game::Misc::MinstaGibAnimtime::Text"
+			}
 			Derive Nex_Line	SeperatorNixNex
 			{}
 			Derive Nex_Option_Switch NixNex

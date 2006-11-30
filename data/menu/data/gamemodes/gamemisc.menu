@@ -291,6 +291,20 @@ Item DataContainer Misc
 
 		[DataLink_Setting]
 	}
+	Item Data_Cvar MinstaGibRefire
+	{
+		cvarName	"g_balance_minstagib_nex_refire"
+		defValue	1.5
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar MinstaGibAnimtime
+	{
+		cvarName	"g_balance_minstagib_nex_animtime"
+		defValue	0.3
+
+		[DataLink_Setting]
+	}
 	Item Data_Cvar Casings
 	{
 		cvarName	"g_casings"
