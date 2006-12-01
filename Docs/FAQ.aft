@@ -1,4 +1,5 @@
 #--- AFT (Almost Free Text) source file for Nexuiz FAQ
+#--- WARNING: ALWAYS RUN AFT TWICE! (otherwise the toc is missing/not up to date)
 #--- use AFT v5.096 or later (http://www.maplefish.com/todd/aft.html)
 
 #---SET nexversion=2.0
@@ -126,4 +127,4 @@ _Game data:_ to check out the Nexuiz svn, you'll need a [svn client (http://subv
 ^<<
 svn co svn://svn.icculus.org/nexuiz/trunk/
 ^>>
-To compile the gamecode you need [fteqcc (http://sourceforge.net/project/showfiles.php?group\_id=116842&package\_id=129507)]. Just download it and run it twice, once in |data/menuqc| and once in |data/qcsrc/server|.
+To compile the gamecode you need [fteqcc (http://sourceforge.net/project/showfiles.php?group\_id=116842&package\_id=129507)]. Just download it and run it twice, once in |data/qcsrc/menu| and once in |data/qcsrc/server|.
