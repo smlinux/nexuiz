@@ -325,8 +325,8 @@ void(float windex, string wname, float hudammo) weapon_setup =
 	self.weapon = windex;
 	self.weaponname = wname;
 
-	// can fire immediately
-	self.attack_finished = time;
+	// might fire faster after switch
+	self.attack_finished = min(max(time, self.attack_finished_old + 1), self.attack_finished);
 };
 
 // perform weapon to attack (weaponstate and attack_finished check is here)
@@ -346,6 +346,7 @@ float(float secondary, float attacktime) weapon_prepareattack =
 	if (self.weaponentity.state != WS_READY)
 		return FALSE;
 	self.weaponentity.state = WS_INUSE;
+	self.attack_finished_old = self.attack_finished;
 	self.attack_finished = max(time, self.attack_finished + attacktime);
 	return TRUE;
 };

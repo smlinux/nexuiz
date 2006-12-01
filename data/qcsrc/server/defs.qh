@@ -41,6 +41,7 @@ string newlines = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 .vector	mangle;
 
 .float	attack_finished;
+.float	attack_finished_old;
 .float	pain_finished;			//Added by Supajoe
 .float	pain_frame;			//"
 .float	statdraintime;			// record the one-second intervals between draining health and armour when they're over 100
