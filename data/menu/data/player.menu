@@ -114,9 +114,9 @@ Item DataContainer Player
 			{
 				minValue 0
 				stepValue 1
-				maxValue 6
+				maxValue 8
 
-				descList	"'' '$gfx/crosshair1' '$gfx/crosshair2' '$gfx/crosshair3' '$gfx/crosshair4' '$gfx/crosshair5' '$gfx/crosshair6'"
+				descList	"'' '$gfx/crosshair1' '$gfx/crosshair2' '$gfx/crosshair3' '$gfx/crosshair4' '$gfx/crosshair5' '$gfx/crosshair6' '$gfx/crosshair7' '$gfx/crosshair8'"
 
 				link		"##up"
 			}
