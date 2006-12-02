@@ -156,6 +156,20 @@ Item DataContainer Player
 				link		"##up"
 			}
 		}
+		Item Data_Cvar	Alpha
+		{
+			cvarName	"crosshair_color_alpha"
+			defValue	"1"
+
+			Item DataLink_Value Value
+			{
+				minValue	0.1
+				maxValue	1.0
+				stepValue	0.1
+
+				link		"##up"
+			}
+		}
 	}
 	Item Data_Cvar MapDLSpeed
 	{

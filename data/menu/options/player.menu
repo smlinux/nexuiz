@@ -172,6 +172,11 @@ Item Window Player
 			text	"Crosshair Size"
 			target	"::Data::Player::Crosshair::Size::Value"
 		}
+		Derive Nex_Option_Slider CrosshairAlpha
+		{
+			text	"Crosshair Alpha"
+			target	"::Data::Player::Crosshair::Alpha::Value"
+		}
 		Derive Nex_Option_Switch WeaponAutoswitch
 		{
 			text	"Weapon autoswitch"
