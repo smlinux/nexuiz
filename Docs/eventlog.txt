@@ -60,6 +60,7 @@ itemstring:
          F = player carries the flag
          S = player has strength
          I = player has the shield
+         T = player is typing (console, menu or chat)
    
    and weapon IDs are:
          1 = Shotgun

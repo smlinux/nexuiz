@@ -58,6 +58,8 @@ string AppendItemcodes(string s, entity player)
 		s = strcat(s, "I");
 	if(player.flagcarried != world)
 		s = strcat(s, "F");
+	if(player.buttonchat)
+		s = strcat(s, "T");
 	if(player.runes)
 		s = strcat(s, "|", ftos(player.runes));
 	return s;
