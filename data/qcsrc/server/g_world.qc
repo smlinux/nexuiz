@@ -1245,6 +1245,39 @@ void PrintScoreboard()
 	ServerConsoleEcho(".", FALSE);
 }
 
+void ShuffleMaplist()
+{
+	string result;
+	float start;
+	float items;
+	float selected;
+	float i;
+
+	result = cvar_string("g_maplist");
+	items = tokenize(result);
+
+	for(start = 0; start < items - 1; ++start)
+	{
+		result = "";
+
+		// select a random item
+		selected = ceil(random() * (items - start) + start) - 1;
+
+		// shift this item to the place start
+		for(i = 0; i < start; ++i)
+			result = strcat(result, "'", argv(i), "'");
+		result = strcat(result, "'", argv(selected), "'");
+		for(i = start; i < items; ++i)
+			if(i != selected)
+				result = strcat(result, "'", argv(i), "'");
+
+		items = tokenize(result);
+
+		dprint(result, "\n");
+	}
+
+	cvar_set("g_maplist", result);
+}
 
 /*
 ============
@@ -1279,6 +1312,12 @@ void() CheckRules_World =
 	{
 		cvar_set("_scoreboard", "0");
 		PrintScoreboard();
+	}
+
+	if(cvar("_g_maplist_shufflenow"))
+	{
+		cvar_set("_g_maplist_shufflenow", "0");
+		ShuffleMaplist();
 	}
 
 	timelimit = cvar("timelimit") * 60;
