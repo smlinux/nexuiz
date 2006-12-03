@@ -100,7 +100,9 @@ while(@ARGV)
 sub q3map2(@)
 {
 	my @args = @_;
-	return !system $Q3MAP2, '-game', 'quake3', '-fs_basepath', $NEXUIZDIR, '-fs_game', 'data', '-v', @_;
+	my @args = ($Q3MAP2, '-game', 'quake3', '-fs_basepath', $NEXUIZDIR, '-fs_game', 'data', '-v', @_);
+	print "\$ @args\n";
+	return !system @args;
 }
 
 (my $mapdir = getcwd()) =~ s!/[^/]*(?:$)!!;

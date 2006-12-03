@@ -1249,29 +1249,29 @@ void ShuffleMaplist()
 {
 	string result;
 	float start;
-	float items;
+	float litems;
 	float selected;
 	float i;
 
 	result = cvar_string("g_maplist");
-	items = tokenize(result);
+	litems = tokenize(result);
 
-	for(start = 0; start < items - 1; ++start)
+	for(start = 0; start < litems - 1; ++start)
 	{
 		result = "";
 
 		// select a random item
-		selected = ceil(random() * (items - start) + start) - 1;
+		selected = ceil(random() * (litems - start) + start) - 1;
 
 		// shift this item to the place start
 		for(i = 0; i < start; ++i)
 			result = strcat(result, "'", argv(i), "'");
 		result = strcat(result, "'", argv(selected), "'");
-		for(i = start; i < items; ++i)
+		for(i = start; i < litems; ++i)
 			if(i != selected)
 				result = strcat(result, "'", argv(i), "'");
 
-		items = tokenize(result);
+		litems = tokenize(result);
 
 		dprint(result, "\n");
 	}
@@ -1314,11 +1314,15 @@ void() CheckRules_World =
 		PrintScoreboard();
 	}
 
-	if(cvar("_g_maplist_shufflenow"))
+	// automatically shuffle when setting g_maplist_shuffle
+	if(cvar("_g_maplist_shufflenow") || (cvar("g_maplist_shuffle") && !cvar("_g_maplist_have_shuffled")))
 	{
-		cvar_set("_g_maplist_shufflenow", "0");
 		ShuffleMaplist();
+		localcmd("set _g_maplist_shufflenow 0\nset _g_maplist_have_shuffled 1\necho Shuffled map list.\n");
 	}
+	if(cvar("_g_maplist_have_shuffled"))
+		if(!cvar("g_maplist_shuffle"))
+			localcmd("set _g_maplist_have_shuffled 0\n");
 
 	timelimit = cvar("timelimit") * 60;
 	fraglimit = cvar("fraglimit");
