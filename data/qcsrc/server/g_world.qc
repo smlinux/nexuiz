@@ -562,9 +562,8 @@ float(float exponent) MaplistMethod_Shuffle = // more clever shuffling
 		string newlist;
 
 		// now reinsert this at another position
-		insertpos = pow(Map_Count - 1, exponent);
-		insertpos = random() * insertpos;              // ]0, (Map_Count - 1)^exponent]
-		insertpos = pow(insertpos, 1 / exponent);      // ]0, Map_Count - 1]
+		insertpos = pow(random(), 1 / exponent);       // ]0, 1]
+		insertpos = insertpos * (Map_Count - 1);       // ]0, Map_Count - 1]
 		insertpos = ceil(insertpos) + 1;               // {2, 3, 4, ..., Map_Count}
 		dprint("SHUFFLE: insert pos = ", ftos(insertpos), "\n");
 
