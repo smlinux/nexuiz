@@ -49,13 +49,19 @@ void W_Grenade_Touch2 (void)
 	else
 	{
 		float r;
-		r = random() * 3;
+		r = random() * 6;
 		if(r < 1)
 			sound (self, CHAN_IMPACT, "weapons/grenade_bounce1.ogg", 1, ATTN_NORM);
 		else if(r < 2)
 			sound (self, CHAN_IMPACT, "weapons/grenade_bounce2.ogg", 1, ATTN_NORM);
-		else
+		else if(r < 3)
 			sound (self, CHAN_IMPACT, "weapons/grenade_bounce3.ogg", 1, ATTN_NORM);
+		else if(r < 4)
+			sound (self, CHAN_IMPACT, "weapons/grenade_bounce4.ogg", 1, ATTN_NORM);
+		else if(r < 5)
+			sound (self, CHAN_IMPACT, "weapons/grenade_bounce5.ogg", 1, ATTN_NORM);
+		else
+			sound (self, CHAN_IMPACT, "weapons/grenade_bounce6.ogg", 1, ATTN_NORM);
 	}
 }
 
