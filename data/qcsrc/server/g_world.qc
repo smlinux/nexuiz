@@ -484,6 +484,133 @@ float MapHasRightSize(string map)
 	return TRUE;
 }
 
+float Map_Count, Map_Current;
+
+string Map_Filename(float position)
+{
+	return strcat("maps/", argv(position), ".mapcfg");
+}
+
+float(float position, float pass) Map_Check =
+{
+	string filename;
+	filename = Map_Filename(position);
+	if(TryFile(filename))
+	{
+		if(pass == 2)
+			return 1;
+		if(MapHasRightSize(argv(position)))
+			return 1;
+		return 0;
+	}
+	else
+		dprint( "Couldn't find '", filename, "'..\n" );
+
+	return 0;
+}
+
+void(float position) Map_Goto =
+{
+	cvar_set("g_maplist_index", ftos(position));
+	localcmd(strcat("exec \"", Map_Filename(position) ,"\"\n"));
+}
+
+// return codes of map selectors:
+//   -1 = temporary failure (that is, try some method that is guaranteed to succeed)
+//   -2 = permanent failure
+float() MaplistMethod_Iterate = // usual method
+{
+	float pass, i;
+
+	for(pass = 1; pass <= 2; ++pass)
+	{
+		for(i = 1; i < Map_Count; ++i)
+		{
+			float mapindex;
+			mapindex = math_mod(i + Map_Current, Map_Count);
+			if(Map_Check(mapindex, pass))
+				return mapindex;
+		}
+	}
+	return -1;
+}
+
+float() MaplistMethod_Repeat = // fallback method
+{
+	if(Map_Check(Map_Current, 2))
+		return Map_Current;
+	return -2;
+}
+
+float() MaplistMethod_Random = // random map selection
+{
+	float i, imax;
+
+	imax = 42;
+
+	for(i = 0; i <= imax; ++i)
+	{
+		float mapindex;
+		mapindex = math_mod(Map_Current + ceil(random() * (Map_Count - 1)), Map_Count); // any OTHER map
+		if(Map_Check(mapindex, 1))
+			return mapindex;
+	}
+	return -1;
+}
+
+float(float exponent) MaplistMethod_Shuffle = // more clever shuffling
+// the exponent sets a bias on the map selection:
+// the higher the exponent, the 
+{
+	float i, j, imax, insertpos;
+
+	imax = 42;
+
+	for(i = 0; i <= imax; ++i)
+	{
+		string newlist;
+
+		// now reinsert this at another position
+		insertpos = pow(Map_Count, exponent);
+		insertpos = random() * insertpos;              // ]0, (Map_Count)^exponent]
+		insertpos = pow(insertpos, 1 / exponent);      // ]0, Map_Count]
+		insertpos = ceil(insertpos);                   // {1, 2, 3, ..., Map_Count}
+		dprint("SHUFFLE: insert pos = ", ftos(insertpos), "\n");
+
+		// insert the current map there
+		newlist = "";
+		for(j = 1; j < insertpos; ++j)                 // i == 1: no loop, will be inserted as first
+			newlist = strcat(newlist, "'", argv(j), "'");
+		newlist = strcat(newlist, "'", argv(0), "'");  // now insert the just selected map
+		for(j = insertpos; j < Map_Count; ++j)         // i == Map_Count: no loop, has just been inserted as last
+			newlist = strcat(newlist, "'", argv(j), "'");
+		cvar_set("g_maplist", newlist);
+		Map_Count = tokenize(newlist);
+
+		// NOTE: the selected map has just been inserted at (insertpos-1)th position
+		Map_Current = insertpos - 1; // this is not really valid, but this way the fallback has a chance of working
+		if(Map_Check(Map_Current, 1))
+			return Map_Current;
+	}
+	return -1;
+}
+
+void() Maplist_Init =
+{
+	string temp;
+	temp = cvar_string("g_maplist");
+	Map_Count = tokenize(temp);
+	if(Map_Count == 0)
+	{
+		bprint( "Maplist is empty!  Resetting it to default map list.\n" );
+		cvar_set("g_maplist", temp = cvar_string("g_maplist_defaultlist"));
+		Map_Count = tokenize(temp);
+	}
+	Map_Current = bound(0, GetMaplistPosition(), Map_Count);
+	if(Map_Count == 0)
+		error("empty maplist, cannot select a new map");
+}
+
 void() GotoNextMap =
 {
 	//local string nextmap;
@@ -525,164 +652,53 @@ void() GotoNextMap =
 	}
 	else
 	{
-		// method 0
-		local float lCurrent;
-		local float lSize;
-		local float lOldCurrent;
-		local float lBeforeCurrent;
-		local float pass;
-		local float found_but_wrong_size;
-		found_but_wrong_size = FALSE;
+		float nextMap;
+		float allowReset;
 
+		// cvar "nextmap" always gets priority
 		if(TryFile(strcat("maps/", cvar_string("nextmap"), ".mapcfg")))
 		{
 			localcmd(strcat("exec \"maps/", cvar_string("nextmap"), ".mapcfg\"\n"));
 			return;
 		}
 
-		pass = 0;
-		while (pass < 2)
+		for(allowReset = 1; allowReset >= 0; --allowReset)
 		{
-			pass = pass + 1;
-			local string temp;
-			temp = cvar_string( "g_maplist" );
-			if(temp == "")
+			Maplist_Init();
+			nextMap = -1;
+
+			if(nextMap == -1)
+				if(cvar("g_maplist_shuffle") > 0)
+					nextMap = MaplistMethod_Shuffle(cvar("g_maplist_shuffle") + 1);
+
+			if(nextMap == -1)
+				if(cvar("g_maplist_selectrandom"))
+					nextMap = MaplistMethod_Random();
+
+			if(nextMap == -1)
+				nextMap = MaplistMethod_Iterate();
+
+			if(nextMap == -1)
+				nextMap = MaplistMethod_Repeat();
+
+			if(nextMap >= 0)
 			{
-				bprint( "Maplist is empty!  Resetting it to default map list.\n" );
-				cvar_set("g_maplist", cvar_string("g_maplist_defaultlist"));
-				temp = cvar_string( "g_maplist" );
+				Map_Goto(nextMap);
+				break;
 			}
-			temp = strzone(temp);
-			dprint("g_maplist is ", temp, "\n");
-			lSize = tokenize( temp );
-			lCurrent = GetMaplistPosition();
-			lCurrent = max(0, min(floor(lCurrent), lSize - 1));
-			lOldCurrent = lCurrent;
-			dprint(ftos(lOldCurrent), " / ", ftos(lSize), " (start)\n");
-
-			// if we want a random map selection...
-			if(cvar("g_maplist_selectrandom") && lSize > 1)
+			else // PERMANENT FAILURE
 			{
-				lBeforeCurrent = lCurrent - 1;
-				if(lBeforeCurrent < 0)
-					lBeforeCurrent = lSize - 1;
-				lCurrent = ceil(random() * (lSize - 1)) - 1; // random in 0..lsize-2
-				if(lCurrent >= lBeforeCurrent)
-					lCurrent += 1;
-				// choose any map except for the current one
-			}
-
-			while( 1 ) {
-				local string lFilename;
-
-				lCurrent = lCurrent + 1;
-				dprint(ftos(lCurrent), " / ", ftos(lSize), "\n");
-				if( lCurrent >= lSize ) {
-					lCurrent = 0;
-				}
-				if( lOldCurrent == lCurrent ) {
-					// we couldn't find a valid map at all
-					if (pass == 1)
-					{
-						if(!found_but_wrong_size)
-						{
-							bprint( "Maplist is bad/messed up. Not one good mapcfg can be found in it!  Resetting it to default map list.\n" );
-							cvar_set("g_maplist", cvar_string("g_maplist_defaultlist"));
-							// let the loop restart with the default list now
-						}
-						else
-						{
-							dprint("wrong size, now trying all\n");
-						}
-					}
-					else
-					{
-						bprint( "Both g_maplist and g_maplist_defaultlist are messed up!  Complain to developers!\n" );
-						localcmd( "disconnect\n" );
-					}
-					break;
-				}
-
-				lFilename = strzone(strcat( "maps/", argv( lCurrent ), ".mapcfg" ));
-				if( TryFile( lFilename ) ) {
-					if((pass == 2) || MapHasRightSize(argv(lCurrent)))
-					{
-						cvar_set( "g_maplist_index", ftos( lCurrent ) );
-						localcmd(strcat("exec \"", lFilename ,"\"\n"));
-						strunzone(lFilename);
-						pass = 2; // exit the outer loop
-						break;
-					}
-					else
-						found_but_wrong_size = TRUE;
-				} else {
-					dprint( "Couldn't find '", lFilename, "'..\n" );
-				}
-				strunzone(lFilename);
-				//changelevel( argv( lCurrent ) );
-			}
-			strunzone(temp);
-		}
-
-		/*
-		// method 1
-
-		//local entity pos;
-		local float fh;
-		local string line;
-
-		// restart current map if no cycle is found
-		nextmap = strzone(mapname);
-		fh = fopen("maplist.cfg", FILE_READ);
-		if (fh >= 0)
-		{
-			while (1)
-			{
-				line = fgets(fh);
-				if (nextmap == mapname)
+				if(allowReset)
 				{
-					strunzone(nextmap);
-					nextmap = strzone(line);
+					bprint( "Maplist contains no single playable map!  Resetting it to default map list.\n" );
+					cvar_set("g_maplist", cvar_string("g_maplist_defaultlist"));
 				}
-				if (!line)
-					break;
-				if (line == mapname)
+				else
 				{
-					line = fgets(fh);
-					if (!line)
-						break;
-					strunzone(nextmap);
-					nextmap = strzone(line);
-					break;
+					error("Everything is broken - not even the default map list works. Please report this to the developers.");
 				}
 			}
-			fclose(fh);
 		}
-		changelevel (nextmap);
-		strunzone(nextmap);*/
-
-		// method 3
-		/*
-		s = cvar_string("g_maplist");
-		nummaps = tokenize(s);
-		// if no map list, restart current one
-		nextmap = mapname;
-		if (nummaps >= 1)
-		{
-			n = 0;
-			while (n < nummaps)
-			{
-				if (argv(n) == mapname)
-					break;
-				n = n + 1;
-			}
-			n = n + 1;
-			if (n >= nummaps)
-				n = 0;
-			nextmap = argv(n);
-		}
-		changelevel (nextmap);
-		*/
 	}
 };
 
@@ -1004,9 +1020,9 @@ float() WinningCondition_LMS =
 	if((player_count == 1 && lms_dead_count == 1))
 	  	return WINNING_YES; // All dead... (n:n is handled by the test above)
 
-	dprint("player count = "); dprint(ftos(player_count));
-	dprint(", dead count = "); dprint(ftos(lms_dead_count));
-	dprint("\n");
+	// dprint("player count = "); dprint(ftos(player_count));
+	// dprint(", dead count = "); dprint(ftos(lms_dead_count));
+	// dprint("\n");
 
 	// When we get here, we have at least two players who are actually LIVING,
 	// or one player who is still waiting for a victim to join the server. Now
