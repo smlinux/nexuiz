@@ -427,29 +427,19 @@ string GetMapname()
 	return strcat("dm_", mapname);
 }
 
+float Map_Count, Map_Current;
+
+// NOTE: this now expects the map list to be already tokenize()d and the count in Map_Count
 float GetMaplistPosition()
 {
-	float pos, f;
-	string map, s;
+	float pos;
+	string map;
 
-	map = strzone(GetMapname());
-	pos = 0;
-	f = tokenize(cvar_string("g_maplist"));
-
-	while(pos < f)
-	{
-		s = strzone(argv(pos));
-		if(s == map)
-		{
-			strunzone(s);
-			strunzone(map);
+	map = GetMapname();
+	for(pos = 0; pos < Map_Count; ++pos)
+		if(map == argv(pos))
 			return pos;
-		}
-		strunzone(s);
-		pos++;
-	}
 
-	strunzone(map);
 	// resume normal maplist rotation if current map is not in g_maplist
 	return cvar("g_maplist_index");
 }
@@ -483,8 +473,6 @@ float MapHasRightSize(string map)
 	dprint(": not found\n");
 	return TRUE;
 }
-
-float Map_Count, Map_Current;
 
 string Map_Filename(float position)
 {
