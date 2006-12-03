@@ -606,9 +606,9 @@ void() Maplist_Init =
 		cvar_set("g_maplist", temp = cvar_string("g_maplist_defaultlist"));
 		Map_Count = tokenize(temp);
 	}
-	Map_Current = bound(0, GetMaplistPosition(), Map_Count);
 	if(Map_Count == 0)
 		error("empty maplist, cannot select a new map");
+	Map_Current = bound(0, GetMaplistPosition(), Map_Count - 1);
 }
 
 void() GotoNextMap =
