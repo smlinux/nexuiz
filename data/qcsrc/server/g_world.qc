@@ -554,20 +554,23 @@ float(float exponent) MaplistMethod_Shuffle = // more clever shuffling
 
 	imax = 42;
 
+	if(Map_Count <= 1)
+		return 0; // only one map, then always play this one
+
 	for(i = 0; i <= imax; ++i)
 	{
 		string newlist;
 
 		// now reinsert this at another position
-		insertpos = pow(Map_Count, exponent);
-		insertpos = random() * insertpos;              // ]0, (Map_Count)^exponent]
-		insertpos = pow(insertpos, 1 / exponent);      // ]0, Map_Count]
-		insertpos = ceil(insertpos);                   // {1, 2, 3, ..., Map_Count}
+		insertpos = pow(Map_Count - 1, exponent);
+		insertpos = random() * insertpos;              // ]0, (Map_Count - 1)^exponent]
+		insertpos = pow(insertpos, 1 / exponent);      // ]0, Map_Count - 1]
+		insertpos = ceil(insertpos) + 1;               // {2, 3, 4, ..., Map_Count}
 		dprint("SHUFFLE: insert pos = ", ftos(insertpos), "\n");
 
 		// insert the current map there
 		newlist = "";
-		for(j = 1; j < insertpos; ++j)                 // i == 1: no loop, will be inserted as first
+		for(j = 1; j < insertpos; ++j)                 // i == 1: no loop, will be inserted as first; however, i == 1 has been excluded above
 			newlist = strcat(newlist, "'", argv(j), "'");
 		newlist = strcat(newlist, "'", argv(0), "'");  // now insert the just selected map
 		for(j = insertpos; j < Map_Count; ++j)         // i == Map_Count: no loop, has just been inserted as last
