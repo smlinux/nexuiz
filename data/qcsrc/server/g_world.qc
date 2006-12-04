@@ -1244,6 +1244,60 @@ void PrintScoreboard()
 	ServerConsoleEcho(".", FALSE);
 }
 
+void RemoveFromMaplist(string m)
+{
+	string result;
+	float litems;
+	float i;
+	float found;
+
+	litems = tokenize(cvar_string("g_maplist"));
+	found = 0;
+	result = "";
+	for(i = 0; i < litems; ++i)
+	{
+		m = strcat(m);
+		result = strcat(result);
+		if(argv(i) == m)
+			found += 1;
+		else
+			result = strcat(result, "'", argv(i), "'");
+	}
+	if(found)
+	{
+		cvar_set("g_maplist", result);
+		localcmd("set _g_maplist_have_shuffled 0\n");
+	}
+	ServerConsoleEcho(strcat("Removed ", ftos(found), " items."), FALSE);
+}
+
+void AddToMaplist(string m)
+{
+	float found;
+	float litems;
+	float i;
+
+	if(!TryFile(strcat("maps/", m, ".mapcfg")))
+	{
+		ServerConsoleEcho("Map not found.", FALSE);
+		return;
+	}
+
+	litems = tokenize(cvar_string("g_maplist"));
+	found = 0;
+	for(i = 0; i < litems; ++i)
+		if(argv(i) == m)
+			found += 1;
+	if(!found)
+	{
+		cvar_set("g_maplist", strcat(cvar_string("g_maplist"), "'", m, "'"));
+		localcmd("set _g_maplist_have_shuffled 0\n");
+		ServerConsoleEcho("Map added.", FALSE);
+	}
+	else
+		ServerConsoleEcho("Map already in list.", FALSE);
+}
+
 void ShuffleMaplist()
 {
 	string result;
@@ -1314,6 +1368,16 @@ void() CheckRules_World =
 	}
 
 	// automatically shuffle when setting g_maplist_shuffle
+	if(cvar_string("_g_maplist_add") != "")
+	{
+		AddToMaplist(cvar_string("_g_maplist_add"));
+		cvar_set("_g_maplist_add", "");
+	}
+	if(cvar_string("_g_maplist_remove") != "")
+	{
+		RemoveFromMaplist(cvar_string("_g_maplist_remove"));
+		cvar_set("_g_maplist_remove", "");
+	}
 	if(cvar("_g_maplist_shufflenow") || (cvar("g_maplist_shuffle") && !cvar("_g_maplist_have_shuffled")))
 	{
 		ShuffleMaplist();
