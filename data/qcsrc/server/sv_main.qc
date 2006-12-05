@@ -78,7 +78,7 @@ void CreatureFrame (void)
 					dm = (dm - cvar("g_balance_falldamage_deadminspeed")) * cvar("g_balance_falldamage_factor");
 				else
 				{
-					if (self.oldvelocity_z < self.velocity_z - 100)
+					if (self.oldvelocity_z < self.velocity_z - 160)
 					{
 						local float soundrandom;
 						soundrandom = random() * 4;
