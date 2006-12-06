@@ -30,11 +30,11 @@ void Say(entity source, float teamsay, string msgin)
 
 	if(teamsay)
 	{
-		msgstr = strzone(strcat(colorstr, "(^3", source.netname, colorstr, ") ^7", msgin, "\n"));
+		msgstr = strzone(strcat("\{1}", colorstr, "(^3", source.netname, colorstr, ") ^7", msgin, "\n"));
 		cmsgstr = strcat(colorstr, "(^3", source.netname, colorstr, ")\n^7", wordwrap(msgin, 50));
 	}
 	else
-		msgstr = strzone(strcat("^3", source.netname, "^7: ", msgin, "\n"));
+		msgstr = strzone(strcat("\{1}^3", source.netname, "^7: ", msgin, "\n"));
 
 	head = find(world, classname, "player");
 	while(head)
@@ -45,7 +45,7 @@ void Say(entity source, float teamsay, string msgin)
 				sprint(head, msgstr);
 				if(teamsay)
 					centermsg_setfor(head, CENTERMSG_TEAMSAY, cmsgstr);
-				stuffcmd(head, "play2 misc/talk.wav\n");
+				//stuffcmd(head, "play2 misc/talk.wav\n");
 			}
 		head = find(head, classname, "player");
 	}
@@ -58,7 +58,7 @@ void Say(entity source, float teamsay, string msgin)
 			if(clienttype(head) == CLIENTTYPE_REAL)
 			{
 				sprint(head, msgstr);
-				stuffcmd(head, "play2 misc/talk.wav\n");
+				//stuffcmd(head, "play2 misc/talk.wav\n");
 			}
 			head = find(head, classname, "observer");
 		}
@@ -68,11 +68,11 @@ void Say(entity source, float teamsay, string msgin)
 			if(clienttype(head) == CLIENTTYPE_REAL)
 			{
 				sprint(head, msgstr);
-				stuffcmd(head, "play2 misc/talk.wav\n");
+				//stuffcmd(head, "play2 misc/talk.wav\n");
 			}
 			head = find(head, classname, "spectator");
 		}
-		ServerConsoleEcho(substring(msgstr, 0, strlen(msgstr) - 1), TRUE);
+		ServerConsoleEcho(substring(msgstr, 1, strlen(msgstr) - 2), TRUE);
 	}
 
 	strunzone(msgstr);
