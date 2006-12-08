@@ -1,5 +1,14 @@
 #!/bin/sh
 
+# this script is OBSOLETE, use nexuiz-map-compiler
+
+exit 0
+
+# nexuiz-map-compiler * -bsp -samplesize 8 -vis -light -deluxe -patchshadows -samples 3
+# nexuiz-map-compiler farewell -bsp -samplesize 8 -patchmeta -vis -light -deluxe -patchshadows -samples 3
+# nexuiz-map-compiler aggressor -scale 1.25 -bsp -samplesize 8 -vis -light -deluxe -patchshadows -samples 3
+# nexuiz-map-compiler bloodprison -scale 1.25:0.96 -bsp -samplesize 8 -vis -light -deluxe -patchshadows -samples 3
+
 : ignore <<'EOF'
 
 Nexuiz map recompilation script
