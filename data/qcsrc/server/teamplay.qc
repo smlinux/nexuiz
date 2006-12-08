@@ -595,7 +595,7 @@ void GetTeamCounts(entity ignore)
 // NOTE: Assumes CheckAllowedTeams has already been called!
 float FindSmallestTeam(entity pl, float ignore_pl)
 {
-	float totalteams, smallestteam, smallestteam_count, balance_type;
+	float totalteams, smallestteam, smallestteam_count, smallestteam_score, balance_type;
 	totalteams = 0;
 
 	// find out what teams are available
@@ -632,7 +632,8 @@ float FindSmallestTeam(entity pl, float ignore_pl)
 	// figure out which is smallest, giving priority to the team the player is already on as a tie-breaker
 
 	smallestteam = 0;
-	smallestteam_count = 999;
+	smallestteam_count = 999999999;
+	smallestteam_score = 999999999;
 
 	// 2 gives priority to what team you're already on, 1 goes in order
 	// 2 doesn't seem to work though...
@@ -640,25 +641,29 @@ float FindSmallestTeam(entity pl, float ignore_pl)
 
 	if(balance_type == 1)
 	{
-		if(c1 >= 0 && c1 < smallestteam_count)
+		if(c1 >= 0 && (c1 < smallestteam_count || (c1 <= smallestteam_count && team1_score < smallestteam_score)))
 		{
 			smallestteam = 1;
 			smallestteam_count = c1;
+			smallestteam_score = team1_score;
 		}
-		if(c2 >= 0 && c2 < smallestteam_count)
+		if(c2 >= 0 && (c2 < smallestteam_count || (c2 <= smallestteam_count && team2_score < smallestteam_score)))
 		{
 			smallestteam = 2;
 			smallestteam_count = c2;
+			smallestteam_score = team2_score;
 		}
-		if(c3 >= 0 && c3 < smallestteam_count)
+		if(c3 >= 0 && (c3 < smallestteam_count || (c3 <= smallestteam_count && team3_score < smallestteam_score)))
 		{
 			smallestteam = 3;
 			smallestteam_count = c3;
+			smallestteam_score = team3_score;
 		}
-		if(c4 >= 0 && c4 < smallestteam_count)
+		if(c4 >= 0 && (c4 < smallestteam_count || (c4 <= smallestteam_count && team4_score < smallestteam_score)))
 		{
 			smallestteam = 4;
 			smallestteam_count = c4;
+			smallestteam_score = team4_score;
 		}
 	}
 	else
@@ -706,9 +711,9 @@ float JoinBestTeam(entity pl, float only_return_best)
 	if(cvar("g_domination"))
 	{
 		if(cvar("g_domination_default_teams") < 3)
-			c3 = 9999;
+			c3 = 999999999;
 		if(cvar("g_domination_default_teams") < 4)
-			c4 = 9999;
+			c4 = 999999999;
 	}
 
 	// if we don't care what team he ends up on, put him on whatever team he entered as.
@@ -928,7 +933,7 @@ void ShufflePlayerOutOfTeam (float source_team)
 	entity head, lowest_bot, lowest_player, selected;
 
 	smallestteam = 0;
-	smallestteam_count = 999;
+	smallestteam_count = 999999999;
 
 	if(c1 >= 0 && c1 < smallestteam_count)
 	{
@@ -967,9 +972,9 @@ void ShufflePlayerOutOfTeam (float source_team)
 		steam = COLOR_TEAM4;
 
 	lowest_bot = world;
-	lowest_bot_score = 9999;
+	lowest_bot_score = 999999999;
 	lowest_player = world;
-	lowest_player_score = 9999;
+	lowest_player_score = 999999999;
 
 	// find the lowest-scoring player & bot of that team
 	head = find(world, classname, "player");
