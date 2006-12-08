@@ -500,4 +500,7 @@ void UpdateSelectedPlayer()
 	{
 		ClearSelectedPlayer();
 	}
+
+	if(self.selected_player)
+		self.last_selected_player = self.selected_player;
 }

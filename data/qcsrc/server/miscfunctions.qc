@@ -352,8 +352,8 @@ string(string msg) formatmessage =
 		}
 		else if(escape == "p")
 		{
-			if(self.selected_player)
-				replacement = self.selected_player.netname;
+			if(self.last_selected_player)
+				replacement = self.last_selected_player.netname;
 			else
 				replacement = "(nobody)";
 		}
