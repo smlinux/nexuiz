@@ -178,8 +178,7 @@ void SV_ParseClientCommand(string s) {
 						votefinished = time + cvar("sv_vote_timeout");
 						votecaller.vote_vote = 1; // of course you vote yes
 						votecaller.vote_next = time + cvar("sv_vote_wait");
-						// bprint(strcat("^3Vote for \"^1", votecalledvote, "^3\" called by \"^7", votecaller.netname, "^3\".\n"));
-						bprint(strcat("\{1}^3* ^7", votecaller.netname, "^3 calls a vote for ^1", votecalledvote, "\n"));
+						bprint(strcat("\{1}^2* ^3", votecaller.netname, "^2 calls a vote for ^1", votecalledvote, "\n"));
 						VoteCount(); // needed if you are the only one
 					} else {
 						sprint(self, "^1This vote is not ok. See help for more info.\n");
@@ -496,8 +495,7 @@ void VoteReset() {
 }
 
 void VoteAccept() {
-	// bprint(strcat("^2The vote for \"^1", votecalledvote, "^2\" from \"^7", votecaller.netname, "^2\" was accepted.\n"));
-	bprint(strcat("\{1}^3* ^7", votecaller.netname, "^3's vote for ^1", votecalledvote, "^3 was accepted\n"));
+	bprint(strcat("\{1}^2* ^3", votecaller.netname, "^2's vote for ^1", votecalledvote, "^2 was accepted\n"));
 	if(votecalledmaster)
 	{
 		votecaller.vote_master = 1;
@@ -509,20 +507,17 @@ void VoteAccept() {
 }
 
 void VoteReject() {
-	// bprint(strcat("^2The vote for \"^1", votecalledvote, "^2\" from \"^7", votecaller.netname, "^2\" was rejected.\n"));
-	bprint(strcat("\{1}^3* ^7", votecaller.netname, "^3's vote for ^1", votecalledvote, "^3 was rejected\n"));
+	bprint(strcat("\{1}^2* ^3", votecaller.netname, "^2's vote for ^1", votecalledvote, "^2 was rejected\n"));
 	VoteReset();
 }
 
 void VoteTimeout() {
-	// bprint(strcat("^5The vote for \"^1", votecalledvote, "^5\" from \"^7", votecaller.netname, "^5\" did timeout.\n"));
-	bprint(strcat("\{1}^3* ^7", votecaller.netname, "^3's vote for ^1", votecalledvote, "^3 timed out\n"));
+	bprint(strcat("\{1}^2* ^3", votecaller.netname, "^2's vote for ^1", votecalledvote, "^2 timed out\n"));
 	VoteReset();
 }
 
 void VoteStop(entity stopper) {
-	// bprint(strcat("^5The vote for \"^1", votecalledvote, "^5\" from \"^7", votecaller.netname, "^5\" was stopped by \"^5", stopper.netname, "^5\".\n"));
-	bprint(strcat("\{1}^3* ^7", stopper.netname, "^3 stopped ^7", votecaller.netname, "^3's vote\n"));
+	bprint(strcat("\{1}^2* ^3", stopper.netname, "^2 stopped ^3", votecaller.netname, "^2's vote\n"));
 	if(stopper == votecaller) {
 		// no wait for next vote so you can correct your vote
 		votecaller.vote_next = 0;
