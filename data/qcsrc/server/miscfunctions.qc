@@ -350,6 +350,13 @@ string(string msg) formatmessage =
 			if(!replacement || !self.cursor_trace_ent)
 				replacement = "nothing";
 		}
+		else if(escape == "p")
+		{
+			if(self.selected_player)
+				replacement = self.selected_player.netname;
+			else
+				replacement = "(nobody)";
+		}
 		msg = strcat(substring(msg_save, 0, p), replacement);
 		msg = strcat(msg, substring(msg_save, p+2, strlen(msg_save) - (p+2)));
 		strunzone(msg_save);
