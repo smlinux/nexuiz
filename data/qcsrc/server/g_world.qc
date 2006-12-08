@@ -1267,18 +1267,18 @@ void RemoveFromMaplist(string m)
 			result = strcat(result, "'", argv(i), "'");
 	}
 	if(found)
-	{
 		cvar_set("g_maplist", result);
-		localcmd("set _g_maplist_have_shuffled 0\n");
-	}
 	ServerConsoleEcho(strcat("Removed ", ftos(found), " items."), FALSE);
 }
 
 void AddToMaplist(string m)
 {
+	string result;
 	float found;
 	float litems;
 	float i;
+	float ipos;
+	float inserted;
 
 	if(!TryFile(strcat("maps/", m, ".mapcfg")))
 	{
@@ -1287,14 +1287,29 @@ void AddToMaplist(string m)
 	}
 
 	litems = tokenize(cvar_string("g_maplist"));
+	if(cvar("g_maplist_shuffle"))
+		ipos = ceil(random() * (litems + 1)) - 1;
+	else
+		ipos = litems;
 	found = 0;
+	inserted = 0;
 	for(i = 0; i < litems; ++i)
+	{
+		m = strcat(m);
+		if(i == ipos)
+		{
+			result = strcat(result, "'", m, "'");
+			inserted = 1;
+		}
+		result = strcat(result, "'", argv(i), "'");
 		if(argv(i) == m)
 			found += 1;
+	}
+	if(!inserted)
+		result = strcat(result, "'", m, "'");
 	if(!found)
 	{
-		cvar_set("g_maplist", strcat(cvar_string("g_maplist"), "'", m, "'"));
-		localcmd("set _g_maplist_have_shuffled 0\n");
+		cvar_set("g_maplist", result);
 		ServerConsoleEcho("Map added.", FALSE);
 	}
 	else
