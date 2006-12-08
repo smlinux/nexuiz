@@ -485,6 +485,8 @@ string Map_Filename(float position)
 float(float position, float pass) Map_Check =
 {
 	string filename;
+	if(argv(position) == GetMapname() && pass <= 1) // same map again in first pass?
+		return 0;
 	filename = Map_Filename(position);
 	if(TryFile(filename))
 	{
