@@ -431,6 +431,7 @@ string GetMapname()
 }
 
 float Map_Count, Map_Current;
+string Map_Current_Name;
 
 // NOTE: this now expects the map list to be already tokenize()d and the count in Map_Count
 float GetMaplistPosition()
@@ -488,9 +489,8 @@ float(float position, float pass) Map_Check =
 	string map_current;
 	string map_next;
 	map_next = argv(position);
-	map_current = GetMapname();
 	if(pass <= 1)
-		if(map_next == map_current) // same map again in first pass?
+		if(map_next == Map_Current_Name) // same map again in first pass?
 			return 0;
 	filename = Map_Filename(position);
 	if(TryFile(filename))
@@ -609,6 +609,10 @@ void() Maplist_Init =
 	if(Map_Count == 0)
 		error("empty maplist, cannot select a new map");
 	Map_Current = bound(0, GetMaplistPosition(), Map_Count - 1);
+
+	Map_Current_Name = strzone(argv(Map_Current)); // will be automatically freed on exit thanks to DP
+	// this may or may not be correct, but who cares, in the worst case a map
+	// isn't chosen in the first pass that should have been
 }
 
 void() GotoNextMap =
