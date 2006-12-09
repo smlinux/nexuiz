@@ -486,7 +486,6 @@ string Map_Filename(float position)
 float(float position, float pass) Map_Check =
 {
 	string filename;
-	string map_current;
 	string map_next;
 	map_next = argv(position);
 	if(pass <= 1)
