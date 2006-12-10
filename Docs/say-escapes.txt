@@ -7,6 +7,7 @@ In a message you "say", you can use the following escapes:
 %W        current ammo type
 
 %x        name of entity pointed at
+%p        name of player you look at
 
 %l        current location
 %y        location pointed at
