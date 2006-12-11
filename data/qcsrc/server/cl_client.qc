@@ -848,7 +848,7 @@ void ClientDisconnect (void)
 			remove(self.weaponentity.lasertarget);
 
 	// player was dead, decrease dead count
-	if(cvar("g_lms") && self.frags < 1)
+	if(cvar("g_lms") && self.frags < 0)
 		lms_dead_count -= 1;
 	else if(cvar("g_arena"))
 	{
