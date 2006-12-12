@@ -6,7 +6,7 @@ base=`pwd`
 case "$version" in
 	[0-9]*)
 		versiontag=
-		ext=_$version
+		ext=_v$version
 		version=$version
 		;;
 	*)
