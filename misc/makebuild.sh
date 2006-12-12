@@ -3,6 +3,25 @@ set -ex
 
 base=`pwd`
 
+case "$version" in
+	[0-9]*)
+		versiontag=
+		ext=_$version
+		version=$version
+		;;
+	*)
+		version=
+		;;
+esac
+case "$versiontag" in
+	'')
+		;;
+	*)
+		version='$1'$versiontag
+		versiontag=$versiontag
+		;;
+esac
+
 basepk3=$base/data20060905.pk3
 nexdir=$base/nexuiz
 dpdir=$base/darkplaces
@@ -17,9 +36,10 @@ mingw=/home/polzer/mingw32
 ia32=/chroot/fc5-i386
 osxhost=macmini_osx
 osxtemp=/Users/rpolzer/Darkplaces.build
+osxsave=/tmp/Nexuiz.osx
 
 if [ -n "$1" ]; then
-	osxhost=macmini
+	osxhost="$1"
 fi
 
 : ${date:=`date +%Y%m%d`}
@@ -30,7 +50,12 @@ buildosx()
 {
 	rsync --exclude "*.o" --exclude "*.d" --exclude "nexuiz-*" --delete-excluded --delete -zvaSHP . $copystrip "$osxhost:$osxtemp"
 	ssh "$osxhost" ". ~/.profile && cd $osxtemp && PATH=$osxtemp/copystrip:\$PATH make CC=\"gcc -g -arch i386 -arch ppc -isysroot /Developer/SDKs/MacOSX10.4u.sdk\" clean $*"
+	if [ -d "$osxsave" ]; then
+		cp "$osxsave"/* .
+	fi
 	rsync --exclude "*.o" --exclude "*.d" --delete-excluded --delete -zvaSHP "$osxhost:$osxtemp/." .
+	mkdir -p "$osxsave"
+	cp nexuiz-* "$osxsave"/
 }
 
 build64()
@@ -116,10 +141,16 @@ $fteqcc
 
 rm -rf "$tmpdir/data/qcsrc"
 
+cd "$tmpdir/Docs"
+perl -pi -e '/^#---SET nexversion=([0-9.]*)$/ and $_ = "#---SET nexversion='$version'\n"' FAQ.aft
+perl -pi -e '/^\s*Version ([0-9.]*)<\/div>$/ and $_ = "Version '$version'</div>\n"' Readme.htm
+aft FAQ.aft
+aft FAQ.aft
+rm FAQ.aft-TOC
+
 cd "$tmpdir/data"
 mv common-spog.pk3 ..
-#zip -9r ../data.pk3 .
-v=$versiontag perl -pi -e '/^set g_nexuizversion "([0-9.]*)[^"]*"/ and $_ = "set g_nexuizversion \"$1$ENV{v}\"\n"' default.cfg
+perl -pi -e '/^set g_nexuizversion "([0-9.]*)[^"]*"/ and $_ = "set g_nexuizversion \"'$version'\"\n"' default.cfg
 if [ -n "$versiontag" ]; then
 	perl -pi -e '/^set g_nexuizversion/ and $_ = "showbrand 1\n$_"' default.cfg
 	cp "$buildfiles/brand/$versiontag.tga" gfx/brand.tga
