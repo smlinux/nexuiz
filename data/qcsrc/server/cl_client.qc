@@ -777,16 +777,10 @@ void ClientConnect (void)
 		if(self.frags < 1)
 			self.frags = 999;
 
-		// disallow player to join after the worst player has lost g_lms_last_join lives
-		// if "g_lms_join_anytime" new players spawn with same amount of lives as the worst active player
-		if(((cvar("fraglimit") - cvar("g_lms_last_join")) > lms_lowest_lives && !cvar("g_lms_join_anytime")) || lms_lowest_lives < 1)
+		self.frags = LMS_NewPlayerLives();
+		if(!self.frags)
 		{
 			self.frags = -666;
-			lms_dead_count += 1;
-		}
-		else if(cvar("fraglimit") > lms_lowest_lives)
-		{
-			self.frags = lms_lowest_lives;
 		}
 	}
 	else if(cvar("g_arena"))
@@ -847,10 +841,7 @@ void ClientDisconnect (void)
 		if(self.weaponentity.lasertarget)
 			remove(self.weaponentity.lasertarget);
 
-	// player was dead, decrease dead count
-	if(cvar("g_lms") && self.frags < 0)
-		lms_dead_count -= 1;
-	else if(cvar("g_arena"))
+	if(cvar("g_arena"))
 	{
 		Spawnqueue_Unmark(self);
 		Spawnqueue_Remove(self);

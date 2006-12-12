@@ -30,7 +30,6 @@ void GiveFrags (entity attacker, entity targ, float f)
 		// player has no more lives left
 		if (!targ.frags)
 		{
-			lms_dead_count += 1;
 			if(!lms_next_place)
 				lms_next_place = player_count;
 			targ.frags = -lms_next_place;

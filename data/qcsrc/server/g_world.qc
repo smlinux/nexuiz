@@ -328,7 +328,6 @@ void worldspawn (void)
 	lightstyle(63, "a");
 
 	player_count = 0;
-	lms_dead_count = 0;
 	lms_lowest_lives = 0;
 	lms_next_place = 0;
 
@@ -1007,58 +1006,83 @@ void(void) ClearWinners =
 	}
 }
 
+float() LMS_NewPlayerLives =
+{
+	float fl;
+	fl = cvar("fraglimit");
+	if(fl == 0)
+		fl = 999;
+
+	// first player has left the game for dying too much? Nobody else can get in.
+	if(lms_lowest_lives < 1)
+		return FALSE;
+
+	if(!cvar("g_lms_join_anytime"))
+		if(lms_lowest_lives < fl - cvar("g_lms_last_join"))
+			return FALSE;
+
+	return bound(1, lms_lowest_lives, fl);
+}
+
 // LMS winning condition: game terminates if and only if there's at most one
 // one player who's living lives. Top two scores being equal cancels the time
 // limit.
 float() WinningCondition_LMS =
 {
 	entity head;
+	float have_player;
+	float have_players;
+	float l;
 
-	if(cvar("developer"))
+	have_player = FALSE;
+	have_players = FALSE;
+	l = LMS_NewPlayerLives();
+
+	head = find(world, classname, "player");
+	if(head)
+		have_player = TRUE;
+	head = find(head, classname, "player");
+	if(head)
+		have_players = TRUE;
+
+	if(have_player)
 	{
-		float real_dead_count;
-		float real_player_count;
-		for(head = world; (head = find(head, classname, "player")); )
+		// we have at least one player
+		if(have_players)
 		{
-			if(head.frags < 1)
-				real_dead_count += 1;
-			real_player_count += 1;
+			// two or more active players - continue with the game
 		}
-		for(head = world; (head = find(head, classname, "observer")); )
+		else
 		{
-			if(head.frags < 1)
-				real_dead_count += 1;
-			real_player_count += 1;
-		}
-		for(head = world; (head = find(head, classname, "spectator")); )
-		{
-			if(head.frags < 1)
-				real_dead_count += 1;
-			real_player_count += 1;
-		}
-
-		if(player_count != real_player_count)
-		{
-			dprint("ERROR: ", ftos(player_count), " is not ");
-			dprint(ftos(real_player_count), " -> player count mismatch\n");
-		}
-
-		if(lms_dead_count != real_dead_count)
-		{
-			dprint("ERROR: ", ftos(lms_dead_count), " is not ");
-			dprint(ftos(real_dead_count), " -> dead count mismatch\n");
+			// exactly one player?
+			if(l)
+			{
+				// but no game has taken place yet
+			}
+			else
+			{
+				// a winner!
+				SetWinners(winning, 0); // NOTE: exactly one player is still "player", so this works out
+				dprint("Have a winner, ending game.\n");
+				return WINNING_YES;
+			}
 		}
 	}
-
-	if(player_count > 1 && lms_dead_count >= player_count - 1)
-		return WINNING_YES; // He's the last man standing!
-
-	if((player_count == 1 && lms_dead_count == 1))
-	  	return WINNING_YES; // All dead... (n:n is handled by the test above)
-
-	// dprint("player count = "); dprint(ftos(player_count));
-	// dprint(", dead count = "); dprint(ftos(lms_dead_count));
-	// dprint("\n");
+	else
+	{
+		// nobody is playing at all...
+		if(l)
+		{
+			// wait for players...
+		}
+		else
+		{
+			// SNAFU (maybe a draw game?)
+			ClearWinners();
+			dprint("No players, ending game.\n");
+			return WINNING_YES;
+		}
+	}
 
 	// When we get here, we have at least two players who are actually LIVING,
 	// or one player who is still waiting for a victim to join the server. Now
