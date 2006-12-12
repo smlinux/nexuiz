@@ -1014,8 +1014,41 @@ float() WinningCondition_LMS =
 {
 	entity head;
 
-	if(lms_dead_count < 0)
-		lms_dead_count = 0;
+	if(cvar("developer"))
+	{
+		float real_dead_count;
+		float real_player_count;
+		for(head = world; (head = find(head, classname, "player")); )
+		{
+			if(head.frags < 1)
+				real_dead_count += 1;
+			real_player_count += 1;
+		}
+		for(head = world; (head = find(head, classname, "observer")); )
+		{
+			if(head.frags < 1)
+				real_dead_count += 1;
+			real_player_count += 1;
+		}
+		for(head = world; (head = find(head, classname, "spectator")); )
+		{
+			if(head.frags < 1)
+				real_dead_count += 1;
+			real_player_count += 1;
+		}
+
+		if(player_count != real_player_count)
+		{
+			dprint("ERROR: ", ftos(player_count), " is not ");
+			dprint(ftos(real_player_count), " -> player count mismatch\n");
+		}
+
+		if(lms_dead_count != real_dead_count)
+		{
+			dprint("ERROR: ", ftos(lms_dead_count), " is not ");
+			dprint(ftos(real_dead_count), " -> dead count mismatch\n");
+		}
+	}
 
 	if(player_count > 1 && lms_dead_count >= player_count - 1)
 		return WINNING_YES; // He's the last man standing!
