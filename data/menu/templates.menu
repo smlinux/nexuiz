@@ -224,6 +224,10 @@ DeriveTemplate Label Nex_HostCache_Players
 {
 	type	"Item_Nex_HostCache_Players"
 }
+DeriveTemplate Label Nex_HostCache_Ping
+{
+	type	"Item_Nex_HostCache_Ping"
+}
 DeriveTemplate PictureButton Nex_HostCache_Entry
 {
 	normal		"$gfx/white"
