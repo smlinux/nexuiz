@@ -111,3 +111,39 @@ void() Item_Nex_HostCache_Players_Spawn =
 
 	self._update = Item_Nex_HostCache_Players_Update;
 };
+
+//////////////////////////////////
+// Item_Nex_HostCache_Ping
+///////
+
+const vector HOSTCACHE_FAST_PING_COLOR = '1.0 1.0 0.0';
+const vector HOSTCACHE_MEDIUM_PING_COLOR = '0.0 1.0 0.0';
+const vector HOSTCACHE_SLOW_PING_COLOR = '1.0 0.0 0.0';
+
+const float HOSTCACHE_FAST_PING = 90;
+const float HOSTCACHE_SLOW_PING = 150;
+
+void() Item_Nex_HostCache_Ping_Update =
+{
+	local float ping;
+
+	Item_Nex_HostCache_ValueField_Update();
+
+	// AK 06 yes I know its not fast.. but its shorter..
+	ping = stof( self.text );
+	if( ping < HOSTCACHE_FAST_PING ) {
+		self.color = HOSTCACHE_FAST_PING_COLOR;
+	} else if( ping > HOSTCACHE_SLOW_PING ) {
+		self.color = HOSTCACHE_SLOW_PING_COLOR;
+	} else {
+		self.color = HOSTCACHE_MEDIUM_PING_COLOR;
+	}
+}
+
+void() Item_Nex_HostCache_Ping_Spawn =
+{
+	Item_Nex_HostCache_ValueField_Spawn();
+
+	self._update = Item_Nex_HostCache_Ping_Update;
+};
+

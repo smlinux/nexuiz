@@ -151,7 +151,7 @@ Item Window JoinGame
 						size		'824 15'
 						action		Nex_Action_EntryConnect
 
-						DeriveTemplate Nex_HostCache_ValueField Ping
+						DeriveTemplate Nex_HostCache_Ping Ping
 						{
 							pos		'0 0'
 							size		[SList_Ping]

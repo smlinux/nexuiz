@@ -29,3 +29,7 @@ void() Item_Nex_HostCache_ValueField_Spawn;
 void() Item_Nex_HostCache_Players_Update;
 void() Item_Nex_HostCache_Players_Spawn;
 
+// Item_Nex_HostCache_Ping Item_Nex_HostCache_ValueField
+void() Item_Nex_HostCache_Ping_Update;
+void() Item_Nex_HostCache_Ping_Spawn;
+
