@@ -116,8 +116,8 @@ void() Item_Nex_HostCache_Players_Spawn =
 // Item_Nex_HostCache_Ping
 ///////
 
-const vector HOSTCACHE_FAST_PING_COLOR = '1.0 1.0 0.0';
-const vector HOSTCACHE_MEDIUM_PING_COLOR = '0.0 1.0 0.0';
+const vector HOSTCACHE_FAST_PING_COLOR = '0.0 1.0 0.0';
+const vector HOSTCACHE_MEDIUM_PING_COLOR = '1.0 1.0 0.0';
 const vector HOSTCACHE_SLOW_PING_COLOR = '1.0 0.0 0.0';
 
 const float HOSTCACHE_FAST_PING = 90;
