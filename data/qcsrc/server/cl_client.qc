@@ -667,6 +667,7 @@ void ClientConnect (void)
 	
 	self.classname = "player_joining";
 	self.flags = self.flags | FL_CLIENT;
+	self.version_nagtime = time + 10 + random() * 10;
 
 	if(player_count<0) player_count = 0;
 
@@ -846,6 +847,9 @@ void ClientDisconnect (void)
 		Spawnqueue_Unmark(self);
 		Spawnqueue_Remove(self);
 	}
+
+	// free cvars
+	GetCvars(-1);
 }
 
 .float buttonchat;
@@ -1300,6 +1304,20 @@ Called every frame for each client before the physics are run
 void() ctf_setstatus;
 void PlayerPreThink (void)
 {
+	// version nagging
+	if(self.version_nagtime)
+		if(self.cvar_g_nexuizversion)
+			if(time > self.version_nagtime)
+			{
+				if(strstr(self.cvar_g_nexuizversion, "svn", 0) < 0)
+					if(self.cvar_g_nexuizversion != cvar_string("g_nexuizversion"))
+					{
+						dprint("^1NOTE^7 to ", self.netname, "^7 - the server is running ^3Nexuiz ", cvar_string("g_nexuizversion"), "^7, you have ^3Nexuiz ", self.cvar_g_nexuizversion, "\n");
+						sprint(self, strcat("\{1}^1NOTE: ^7the server is running ^3Nexuiz ", cvar_string("g_nexuizversion"), "^7, you have ^3Nexuiz ", self.cvar_g_nexuizversion, "\n"));
+					}
+				self.version_nagtime = 0;
+			}
+
 	if(self.classname == "player") {
 		local vector m1, m2;
 

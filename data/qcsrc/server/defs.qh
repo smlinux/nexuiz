@@ -258,6 +258,9 @@ float default_weapon_alpha;
 .float cvar_cl_nogibs;
 .float cvar_scr_centertime;
 .float cvar_cl_shownames;
+.string cvar_g_nexuizversion;
+
+.float version_nagtime;
 
 #ifdef ALLOW_VARIABLE_LOD
 .float modelindex_lod0;

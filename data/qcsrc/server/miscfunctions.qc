@@ -378,17 +378,29 @@ Called with:
 */
 void GetCvars_handleString(float f, .string field, string name)
 {
-	if(f)
+	if(f < 0)
+	{
+		if(self.field)
+			strunzone(self.field);
+	}
+	else if(f > 0)
 	{
 		if(argv(f) == name)
-			self.field = argv(f + 1);
+		{
+			if(self.field)
+				strunzone(self.field);
+			self.field = strzone(argv(f + 1));
+		}
 	}
 	else
 		stuffcmd(self, strcat("cmd reportcvar ", name, " $", name, "\n"));
 }
 void GetCvars_handleFloat(float f, .float field, string name)
 {
-	if(f)
+	if(f < 0)
+	{
+	}
+	else if(f > 0)
 	{
 		if(argv(f) == name)
 			self.field = stof(argv(f + 1));
@@ -402,6 +414,7 @@ void GetCvars(float f)
 	GetCvars_handleFloat(f, cvar_cl_nogibs, "cl_nogibs");
 	GetCvars_handleFloat(f, cvar_scr_centertime, "scr_centertime");
 	GetCvars_handleFloat(f, cvar_cl_shownames, "cl_shownames");
+	GetCvars_handleString(f, cvar_g_nexuizversion, "g_nexuizversion");
 }
 
 float fexists(string f)
