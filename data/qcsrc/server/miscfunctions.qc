@@ -169,7 +169,7 @@ float(string haystack, string needle, float offset) strstr =
 	string found;
 	len = strlen(needle);
 	endpos = strlen(haystack) - len;
-	while(offset < endpos)
+	while(offset <= endpos)
 	{
 		found = substring(haystack, offset, len);
 		if(found == needle)
