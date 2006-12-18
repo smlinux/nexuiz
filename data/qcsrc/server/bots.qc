@@ -1245,7 +1245,6 @@ void() navigation_goalrating_end =
 .float isbot; // true if this client is actually a bot
 
 float skill;
-float currentbots;
 entity bot_list;
 .entity nextbot;
 

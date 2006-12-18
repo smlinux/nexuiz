@@ -669,7 +669,11 @@ void ClientConnect (void)
 	self.flags = self.flags | FL_CLIENT;
 	self.version_nagtime = time + 10 + random() * 10;
 
-	if(player_count<0) player_count = 0;
+	if(player_count<0)
+	{
+		dprint("BUG player count is lower than zero, this cannot happen!\n");
+		player_count = 0;
+	}
 
 	bot_clientconnect();
 

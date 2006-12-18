@@ -629,6 +629,15 @@ void() GotoNextMap =
 		return;
 	}
 
+	if(cvar("quit_when_empty"))
+	{
+		if(player_count <= currentbots)
+		{
+			localcmd("quit\n");
+			return;
+		}
+	}
+
 	if (cvar("samelevel")) // if samelevel is set, stay on same level
 	{
 		// this does not work because it tries to exec maps/nexdm01.mapcfg (which doesn't exist, it should be trying maps/dm_nexdm01.mapcfg for example)
