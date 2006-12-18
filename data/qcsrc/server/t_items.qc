@@ -225,6 +225,7 @@ float(entity player, entity item) commodity_pickupevalfunc =
 };
 
 
+.float is_item;
 void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, string itemname, float itemid, float itemflags, float(entity player, entity item) pickupevalfunc, float pickupbasevalue)
 {
 	vector org;
@@ -253,6 +254,24 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 
 		org = find_floor(org) + z_offset;
 		setorigin(self, org);
+	}
+
+	if(cvar("spawn_debug") >= 2)
+	{
+		if(self.classname != "droppedweapon")
+		{
+			entity otheritem;
+			for(otheritem = findradius(org, 3); otheritem; otheritem = otheritem.chain)
+			{
+				if(otheritem.is_item)
+				{
+					dprint("XXX Found duplicated item: ", itemname, vtos(self.origin));
+					dprint(" vs ", otheritem.netname, vtos(otheritem.origin), "\n");
+					error("Mapper sucks.");
+				}
+			}
+			self.is_item = TRUE;
+		}
 	}
 
 	if (self.classname != "droppedweapon")
