@@ -113,7 +113,7 @@ void() plat_trigger_use =
 
 void() plat_crush =
 {
-    if((self.spawnflags == 4) && (other.takedamage != DAMAGE_NO)) { // KIll Kill Kill!!
+    if((self.spawnflags & 4) && (other.takedamage != DAMAGE_NO)) { // KIll Kill Kill!!
         Damage (other, self, self, 10000, DEATH_HURTTRIGGER, other.origin, '0 0 0');
     } else {
         if((self.dmg) && (other.takedamage != DAMAGE_NO)) {   // Shall we bite?
@@ -153,7 +153,7 @@ void() func_plat =
 	if (self.sounds == 0)
 		self.sounds = 2;
 
-    if(self.spawnflags == 4)
+    if(self.spawnflags & 4)
         self.dmg = 10000;
 
     if(self.dmg && (!self.message))
@@ -689,7 +689,7 @@ void() door_go_up;
 void() door_blocked =
 {
 
-    if((self.spawnflags | 4) && (other.takedamage != DAMAGE_NO)) { // KIll Kill Kill!!
+    if((self.spawnflags & 4) && (other.takedamage != DAMAGE_NO)) { // KIll Kill Kill!!
         Damage (other, self, self, 10000, DEATH_HURTTRIGGER, other.origin, '0 0 0');
     } else {
 
@@ -1076,7 +1076,7 @@ void() func_door =
         self.dmg = 0;
     }
 
-    if(self.spawnflags == 4)
+    if(self.spawnflags & 4)
         self.dmg = 10000;
 
     if(self.dmg & (!self.message))
