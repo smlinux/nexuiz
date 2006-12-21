@@ -287,8 +287,10 @@ void PutObserverInServer (void)
 		WriteEntity(MSG_ONE, self);
 	}
 
-	if (cvar("g_runematch"))
-		DropAllRunes(self);
+	DropAllRunes(self);
+
+	if(self.flagcarried)
+		DropFlag(self.flagcarried);
 
 	DistributeFragsAmongTeam(self, self.team, 1);
 

@@ -278,6 +278,8 @@ float teams_matter;
 
 float startitem_failed;
 
+void DropFlag(entity flag);
+void DropAllRunes(entity pl);
 
 
 typedef .float floatfield;

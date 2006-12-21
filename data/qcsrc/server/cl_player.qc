@@ -203,9 +203,6 @@ void PlayerCorpseDamage (entity inflictor, entity attacker, float damage, float 
 	}
 }
 
-void DropAllRunes(entity pl);
-
-
 void PlayerDamage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
 {
 	local float take, save;
@@ -297,6 +294,8 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 		// print an obituary message
 		Obituary (attacker, self, deathtype);
 		DropAllRunes(self);
+		if(self.flagcarried)
+			DropFlag(self.flagcarried);
 		// make the corpse upright (not tilted)
 		self.angles_x = 0;
 		self.angles_z = 0;

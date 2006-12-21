@@ -92,6 +92,7 @@ void(entity e) DropFlag =
 		return;
 	}
 	bprint(strcat(p.netname, "^7 lost the ", e.netname, "\n"));
+	LogCTF("dropped", p.team, p.flagcarried);
 
 	setattachment(e, world, "");
 
@@ -103,10 +104,15 @@ void(entity e) DropFlag =
 	e.solid = SOLID_TRIGGER;
 	e.movetype = MOVETYPE_TOSS;
 	// setsize(e, '-16 -16 0', '16 16 74');
-	setorigin(e, p.origin - '0 0 24');
+	setorigin(e, p.origin - '0 0 24' + '0 0 37');
 	e.cnt = FLAG_DROPPED;
 	e.velocity = '0 0 300';
 	e.pain_finished = time + cvar("g_ctf_flag_returntime");//30;
+
+	trace_startsolid = FALSE;
+	tracebox(e.origin, e.mins, e.maxs, e.origin, TRUE, e);
+	if(trace_startsolid)
+		dprint("FLAG FALLTHROUGH will happen SOON\n");
 };
 
 void AnimateFlag()
@@ -135,6 +141,12 @@ void() FlagThink =
 
 	if (self.cnt == FLAG_DROPPED)
 	{
+		// flag fallthrough? FIXME remove this if bug is really fixed now
+		if(self.origin_z < -32768)
+		{
+			dprint("FLAG FALLTHROUGH just happened\n");
+			self.pain_finished = 0;
+		}
 		setattachment(self, world, "");
 		if (time > self.pain_finished)
 		{
@@ -149,8 +161,8 @@ void() FlagThink =
 	e = self.owner;
 	if (e.classname != "player" || (e.deadflag) || (e.flagcarried != self))
 	{
+		dprint("CANNOT HAPPEN - player dead and STILL had a flag!\n");
 		DropFlag(self);
-		LogCTF("dropped", self.team, e);
 		return;
 	}
 };
