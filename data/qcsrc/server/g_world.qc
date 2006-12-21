@@ -1071,7 +1071,7 @@ float() WinningCondition_LMS =
 			else
 			{
 				// a winner!
-				SetWinners(winning, 0); // NOTE: exactly one player is still "player", so this works out
+				ClearWinners(); SetWinners(winning, 0); // NOTE: exactly one player is still "player", so this works out
 				dprint("Have a winner, ending game.\n");
 				return WINNING_YES;
 			}
