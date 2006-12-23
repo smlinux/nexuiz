@@ -142,7 +142,7 @@ void() FlagThink =
 	if (self.cnt == FLAG_DROPPED)
 	{
 		// flag fallthrough? FIXME remove this if bug is really fixed now
-		if(self.origin_z < -32768)
+		if(self.origin_z < -131072)
 		{
 			dprint("FLAG FALLTHROUGH just happened\n");
 			self.pain_finished = 0;
