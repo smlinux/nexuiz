@@ -129,7 +129,7 @@ void Obituary (entity attacker, entity targ, float deathtype)
 			else if (deathtype == DEATH_NOAMMO)
 				centermsg_setfor(targ, CENTERMSG_DEATH, "^1You were killed for running out of ammo...");
 			else if (deathtype == DEATH_ROT)
-				centermsg_setfor(targ, CENTERMSG_DEATH, "^1You grew too old without taking your medcine");
+				centermsg_setfor(targ, CENTERMSG_DEATH, "^1You grew too old without taking your medicine");
 			else if (deathtype == DEATH_MIRRORDAMAGE)
 				centermsg_setfor(targ, CENTERMSG_DEATH, "^1Don't shoot your team mates!");
 			else
@@ -173,7 +173,7 @@ void Obituary (entity attacker, entity targ, float deathtype)
 			GiveFrags(attacker, targ, -1);
 			//attacker.frags = attacker.frags - 1;
 			if (targ.killcount > 2)
-				bprint ("^1",s,"'s ^1",ftos(targ.killcount)," kill spree was endeded by a teammate!\n");
+				bprint ("^1",s,"'s ^1",ftos(targ.killcount)," kill spree was ended by a teammate!\n");
 			if (attacker.killcount > 2)
 				bprint ("^1",attacker.netname,"^1 ended a ",ftos(attacker.killcount)," kill spree by killing a teammate\n");
 			attacker.killcount = 0;
