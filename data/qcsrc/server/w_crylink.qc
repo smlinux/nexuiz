@@ -139,7 +139,7 @@ void W_Crylink_Attack2 (void)
 		setsize (proj, '0 0 0', '0 0 0');
 		setorigin (proj, w_shotorg);
 
-		proj.velocity = (w_shotdir + ((counter / shots) * 2 - 1) * v_right * cvar("g_balance_crylink_secondary_spread")) * cvar("g_balance_crylink_secondary_speed");
+		proj.velocity = (w_shotdir + (((counter + 0.5) / shots) * 2 - 1) * v_right * cvar("g_balance_crylink_secondary_spread")) * cvar("g_balance_crylink_secondary_speed");
 		proj.touch = W_Crylink_Touch2;
 		proj.think = SUB_Remove;
 		proj.nextthink = time + cvar("g_balance_crylink_secondary_lifetime");
