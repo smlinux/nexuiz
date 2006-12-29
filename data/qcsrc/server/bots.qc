@@ -93,7 +93,7 @@ float(entity e, vector start, vector m1, vector m2, vector end) tracewalk =
 		if (trace_dpstartcontents & DPCONTENTS_LIQUIDSMASK)
 		{
 			move = normalize(end - org);
-			tracebox(org, m1, m2, org + move * stepdist, FALSE, e);
+			tracebox(org, m1, m2, org + move * stepdist, MOVE_WORLDONLY, e);
 			if (trace_fraction < 1)
 			{
 				if (navigation_testtracewalk)
@@ -111,10 +111,10 @@ float(entity e, vector start, vector m1, vector m2, vector end) tracewalk =
 		else
 		{
 			move = dir * stepdist + org;
-			tracebox(org, m1, m2, move, FALSE, e);
+			tracebox(org, m1, m2, move, MOVE_WORLDONLY, e);
 			if (trace_fraction < 1)
 			{
-				tracebox(org + stepheightvec, m1, m2, move + stepheightvec, FALSE, e);
+				tracebox(org + stepheightvec, m1, m2, move + stepheightvec, MOVE_WORLDONLY, e);
 				if (trace_fraction < 1 || trace_startsolid)
 				{
 					if (navigation_testtracewalk)
@@ -939,7 +939,7 @@ entity(entity player, float walkfromwp) navigation_findnearestwaypoint =
 	local entity waylist, w, best;
 	local float dist, bestdist;
 	local vector v, org;
-	org = player.origin + (self.mins_z - PL_MIN_z) * '0 0 1';
+	org = player.origin + (player.mins_z - PL_MIN_z) * '0 0 1';
 	if (navigation_testtracewalk)
 		te_plasmaburn(org);
 	best = world;
@@ -2015,6 +2015,12 @@ void() bot_serverframe =
 	}
 	while (currentbots > bots)
 		bot_removenewest();
+
+	if(botframe_spawnedwaypoints)
+	{
+		if(cvar("waypoint_benchmark"))
+			localcmd("quit\n");
+	}
 
 	if (bots > 0 || cvar("g_waypointeditor"))
 	if (!botframe_spawnedwaypoints)
