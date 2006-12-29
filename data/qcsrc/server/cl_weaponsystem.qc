@@ -204,6 +204,10 @@ void() CL_ExteriorWeaponentity_Think =
 			self.model = "";
 	}
 	self.effects = self.owner.effects;
+	if(self.owner.alpha >= 0)
+		self.alpha = self.owner.alpha;
+	else
+		self.alpha = 1;
 	self.colormap = self.owner.colormap;
 };
 
