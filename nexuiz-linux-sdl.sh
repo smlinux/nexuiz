@@ -59,7 +59,7 @@ case "$xserver" in
 			prefix="DISPLAY=:$xserver "
 			msg=$msg$lf"- Running Nexuiz on already existing display :$xserver"
 		else
-			set -- startx "$@" -- ":$xserver"
+			set -- startx "$@" -fullscreen -- ":$xserver"
 			msg=$msg$lf"- Running Nexuiz on a newly created X server :$xserver."
 			case "$xlayout" in
 				'')
