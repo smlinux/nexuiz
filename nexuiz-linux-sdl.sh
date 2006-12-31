@@ -16,29 +16,53 @@ set -- ./${nexuiz} "${@}"
 xserver=
 xlayout=
 
+setdisplay()
+{
+	VALUE=$1
+	VALUE=${VALUE#\"}
+	VALUE=${VALUE%\"}
+	case "$VALUE" in
+		:*)
+			;;
+		*)
+			VALUE=:$VALUE
+			;;
+	esac
+	VALUE="$VALUE "
+	xserver="${VALUE%% *}"
+	xserver=${xserver#:}
+	xlayout=${VALUE#* }
+	xlayout=${xlayout% }
+}
+
 # now how do we execute it?
 if [ -r ~/.nexuiz/data/config.cfg ]; then
 	while read -r CMD KEY VALUE; do
-		VALUE=${VALUE#\"}
-		VALUE=${VALUE%\"}
 		case "$CMD:$KEY" in
 			seta:vid_x11_display)
-				case "$VALUE" in
-					:*)
-						;;
-					*)
-						VALUE=:$VALUE
-						;;
-				esac
-				VALUE="$VALUE "
-				xserver="${VALUE%% *}"
-				xserver=${xserver#:}
-				xlayout=${VALUE#* }
-				xlayout=${xlayout% }
+				setdisplay "$VALUE"
 				;;
 		esac
 	done < ~/.nexuiz/data/config.cfg
 fi
+
+m=0
+for X in "$@"; do
+	case "$m:$X" in
+		0:+vid_x11_display)
+			m=1
+			;;
+		0:+vid_x11_display\ *)
+			setdisplay "${X#+vid_x11_display }"
+			;;
+		1:*)
+			setdisplay "$X"
+			m=0
+			;;
+		*)
+			;;
+	esac
+done
 
 case "$xserver" in
 	'')
