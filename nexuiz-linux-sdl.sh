@@ -28,11 +28,11 @@ setdisplay()
 			VALUE=:$VALUE
 			;;
 	esac
-	VALUE="$VALUE "
-	xserver="${VALUE%% *}"
+	VALUE="$VALUE/"
+	xserver="${VALUE%%/*}"
 	xserver=${xserver#:}
-	xlayout=${VALUE#* }
-	xlayout=${xlayout% }
+	xlayout=${VALUE#*/}
+	xlayout=${xlayout%/}
 }
 
 # now how do we execute it?
