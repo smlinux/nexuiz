@@ -129,6 +129,10 @@ mkdir -p "$tmpdir/sources"
 #zip -9r ../sources/gamesource$date.zip qcsrc
 7za a -mx=9 -tzip ../sources/gamesource$date.zip qcsrc
 
+cd "$dpdir"
+rm -f ChangeLog
+cvs2cl.pl
+
 cd "$dpdir/.."
 #zip -9r "$tmpdir/sources/enginesource$date.zip" "${dpdir##*/}"
 7za a -mx=9 -tzip "$tmpdir/sources/enginesource$date.zip" "${dpdir##*/}"
