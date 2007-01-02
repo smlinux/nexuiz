@@ -80,6 +80,7 @@ void Say(entity source, float teamsay, string msgin)
 
 void SV_ParseClientCommand(string s) {
 	local float index;
+	local string cmd;
 
 	tokenize(s);
 
@@ -357,8 +358,13 @@ void SV_ParseClientCommand(string s) {
 	} else if(argv(0) == "say_team") {
 		Say(self, TRUE, substring(s, 9, strlen(s) - 9));
 		//clientcommand(self, formatmessage(s));
+	} else if(argv(0) == "info") {
+		cmd = cvar_string(strcat("sv_info_", argv(1)));
+		if(cmd == "")
+			sprint(self, "ERROR: unsupported info command\n");
+		else
+			wordwrap_sprint(cmd, 1111);
 	} else {
-		string cmd;
 		cmd = argv(0);
 		if(cmd != "status")
 		if(cmd != "name")
