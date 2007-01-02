@@ -724,11 +724,12 @@ When the player presses attack or jump, change to the next level
 void() IntermissionThink =
 {
 	if(cvar("sv_autoscreenshot"))
-	if(self.cnt > time)
+	if(self.cnt)
+	if(time > self.cnt)
 	{
 		self.cnt = FALSE;
 		if(clienttype(self) == CLIENTTYPE_REAL)
-			stuffcmd(self, "screenshot\necho \"^5A screenshot has been taken at request of the server.\"\n");
+			stuffcmd(self, "\nscreenshot\necho \"^5A screenshot has been taken at request of the server.\"\n");
 		return;
 	}
 
@@ -896,7 +897,7 @@ void() NextLevel =
 		other.movetype = MOVETYPE_NONE;
 		other.angles = other.v_angle;
 		other.angles_x = other.angles_x * -1;
-		other.cnt = time + 0.5;	// used for autoscreenshot
+		other.cnt = time + 0.8;	// used for autoscreenshot
 
 		self = other;
 
