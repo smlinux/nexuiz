@@ -1469,11 +1469,6 @@ void PlayerPreThink (void)
 					self.skin = stof(self.playerskin);
 			}
 		}
-		// Savage: Check for nameless players
-		if (strlen(self.netname) < 1) {
-			self.netname = "Player";
-			stuffcmd(self, "name Player\n");
-		}
 
 		GrapplingHookFrame();
 
@@ -1609,6 +1604,12 @@ Called every frame for each client after the physics are run
 */
 void PlayerPostThink (void)
 {
+	// Savage: Check for nameless players
+	if (strlen(self.netname) < 1) {
+		self.netname = "Player";
+		stuffcmd(self, "seta _cl_name Player\n");
+	}
+
 	if(self.classname == "player") {
 		CheckRules_Player();
 		UpdateChatBubble();
