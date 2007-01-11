@@ -170,7 +170,7 @@ void SV_ParseClientCommand(string s) {
 							return;
 						votecalled = TRUE;
 						votecalledmaster = FALSE;
-						// remap chmap to gomap (forces intermission)
+						// remap chmap to gotomap (forces intermission)
 						if(strlen(vote) >= 6)
 							if(substring(vote, 0, 6) == "chmap ")
 								vote = strcat("gotomap ", substring(vote, 6, strlen(vote) - 6));
@@ -216,12 +216,30 @@ void SV_ParseClientCommand(string s) {
 				sprint(self, "^1Vote to become master is NOT allowed.\n");
 			}
 		} else if(argv(1) == "do") {
-			if(self.vote_master) {
+			if(argv(2) == "login") {
+				local string masterpwd;
+				masterpwd = cvar_string("sv_vote_master_password");
+				if(masterpwd != "") {
+					self.vote_master = (masterpwd == argv(3));
+					if(self.vote_master) {
+						ServerConsoleEcho(strcat("Accepted master login from ", self.netname), TRUE);
+						bprint(strcat("\{1}^2* ^3", self.netname, "^2 logged in as ^3master^2\n"));
+					}
+					else
+						ServerConsoleEcho(strcat("REJECTED master login from ", self.netname), TRUE);
+				}
+				else
+					sprint(self, "^1You are NOT a master.\n");
+			} else if(self.vote_master) {
 				local string dovote;
 				dovote = VoteParse();
 				if(dovote == "") {
 					sprint(self, "^1Your command was empty. See help for more info.\n");
 				} else if(VoteAllowed(strcat(argv(2)))) { // strcat seems to be necessary
+					// remap chmap to gotomap (forces intermission)
+					if(strlen(dovote) >= 6)
+						if(substring(dovote, 0, 6) == "chmap ")
+							vote = strcat("gotomap ", substring(dovote, 6, strlen(dovote) - 6));
 					bprint("\"^7", strcat(self.netname, "^2 used his ^3master^2 status to do \"^2", dovote, "^2\".\n"));
 					localcmd(strcat(dovote, "\n"));
 				} else {
