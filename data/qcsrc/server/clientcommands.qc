@@ -236,7 +236,7 @@ void SV_ParseClientCommand(string s) {
 				if(dovote == "") {
 					sprint(self, "^1Your command was empty. See help for more info.\n");
 				} else if(VoteAllowed(strcat(argv(2)))) { // strcat seems to be necessary
-					if(!ValidateMap(vote))
+					if(!ValidateMap(dovote))
 						return;
 					// remap chmap to gotomap (forces intermission)
 					if(strlen(dovote) >= 6)
