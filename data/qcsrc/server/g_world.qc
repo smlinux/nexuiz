@@ -278,6 +278,16 @@ void worldspawn (void)
 	precache_sound ("announcer/robotic/3fragsleft.ogg");
 	precache_sound ("announcer/robotic/lastsecond.ogg");
 	precache_sound ("announcer/robotic/narrowly.ogg");
+	precache_sound ("announcer/robotic/1.ogg");
+	precache_sound ("announcer/robotic/2.ogg");
+	precache_sound ("announcer/robotic/3.ogg");
+	precache_sound ("announcer/robotic/4.ogg");
+	precache_sound ("announcer/robotic/5.ogg");
+	precache_sound ("announcer/robotic/6.ogg");
+	precache_sound ("announcer/robotic/7.ogg");
+	precache_sound ("announcer/robotic/8.ogg");
+	precache_sound ("announcer/robotic/9.ogg");
+	precache_sound ("announcer/robotic/10.ogg");
 
 	// plays music for the level if there is any
 	if (self.noise)
@@ -412,21 +422,26 @@ float( string pFilename ) TryFile =
 	}
 };
 
-string GetMapname()
+string GetGametype()
 {
 	if (game == GAME_DEATHMATCH)
-		return strcat("dm_", mapname);
+		return "dm";
 	else if (game == GAME_TEAM_DEATHMATCH)
-		return strcat("tdm_", mapname);
+		return "tdm";
 	else if (game == GAME_DOMINATION)
-		return strcat("dom_", mapname);
+		return "dom";
 	else if (game == GAME_CTF)
-		return strcat("ctf_", mapname);
+		return "ctf";
 	else if (game == GAME_RUNEMATCH)
-		return strcat("rune_", mapname);
+		return "rune";
 	else if (game == GAME_LMS)
-		return strcat("lms_", mapname);
-	return strcat("dm_", mapname);
+		return "lms";
+	return "dm";
+}
+
+string GetMapname()
+{
+	return strcat(GetGametype(), "_", mapname);
 }
 
 float Map_Count, Map_Current;

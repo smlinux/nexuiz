@@ -1302,6 +1302,31 @@ float SpectateNext() {
 
 /*
 =============
+ShowRespawnCountdown()
+
+Update a respawn countdown display.
+=============
+*/
+void ShowRespawnCountdown()
+{
+	float number;
+	if(self.deadflag == DEAD_NO) // just respawned?
+		return;
+	else
+	{
+		number = ceil(self.death_time - time);
+		if(number <= 0)
+			return;
+		if(number <= self.respawn_countdown)
+		{
+			self.respawn_countdown = number - 1;
+			stuffcmd(self, strcat("play2 announcer/robotic/", ftos(number), ".ogg\n"));
+		}
+	}
+}
+
+/*
+=============
 PlayerPreThink
 
 Called every frame for each client before the physics are run
@@ -1349,34 +1374,33 @@ void PlayerPreThink (void)
 
 		if (self.deadflag != DEAD_NO)
 		{
+			float button_pressed, force_respawn;
 			player_anim();
+			button_pressed = self.button0 || self.button2 || self.button3 || self.button4 || self.button5 || self.button6 || self.button7 || self.button8 || self.buttonuse;
+			force_respawn = cvar("g_lms") || cvar("g_forced_respawn");
 			if (self.deadflag == DEAD_DYING)
 			{
-				if (time > self.dead_time)
+				if(force_respawn)
+					self.deadflag = DEAD_RESPAWNING;
+				else if(!button_pressed)
 					self.deadflag = DEAD_DEAD;
 			}
 			else if (self.deadflag == DEAD_DEAD)
 			{
-				if (cvar("g_lms") || cvar("g_arena") || cvar("g_forced_respawn"))
-					self.deadflag = DEAD_RESPAWNABLE;
-				else if (!self.button0 && !self.button2 && !self.button3)
+				if(button_pressed)
 					self.deadflag = DEAD_RESPAWNABLE;
 			}
 			else if (self.deadflag == DEAD_RESPAWNABLE)
 			{
-				if (self.button0  ||
-				    self.button2  ||
-				    self.button3  ||
-				    self.button4  ||
-				    self.button5  ||
-				    self.button6  ||
-				    self.button7  ||
-				    self.button8  ||
-				    self.buttonuse ||
-				    cvar("g_lms") ||
-				    cvar("g_forced_respawn"))
+				if(!button_pressed)
+					self.deadflag = DEAD_RESPAWNING;
+			}
+			else if (self.deadflag == DEAD_RESPAWNING)
+			{
+				if(time > self.death_time)
 					respawn();
 			}
+			ShowRespawnCountdown();
 			return;
 		}
 

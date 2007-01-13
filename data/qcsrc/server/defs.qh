@@ -300,3 +300,5 @@ void ClearSelectedPlayer();
 .float selected_player_count; // how long this player has been directly pointed to
 .float selected_player_display_needs_update; // are regular updates necessary? (health)
 .float selected_player_display_timeout; // when the selection will time out
+
+.float respawn_countdown; // next number to count
