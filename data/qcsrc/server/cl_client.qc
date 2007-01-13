@@ -1320,7 +1320,8 @@ void ShowRespawnCountdown()
 		if(number <= self.respawn_countdown)
 		{
 			self.respawn_countdown = number - 1;
-			stuffcmd(self, strcat("play2 announcer/robotic/", ftos(number), ".ogg\n"));
+			if(ceil(self.death_time - (time + 0.5)) == number) // only say it if it is the same number even in 0.5s; to prevent overlapping sounds
+				stuffcmd(self, strcat("play2 announcer/robotic/", ftos(number), ".ogg\n"));
 		}
 	}
 }
