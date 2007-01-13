@@ -1376,7 +1376,7 @@ void PlayerPreThink (void)
 		{
 			float button_pressed, force_respawn;
 			player_anim();
-			button_pressed = self.button0 || self.button2 || self.button3 || self.button4 || self.button5 || self.button6 || self.button7 || self.button8 || self.buttonuse;
+			button_pressed = (self.button0 || self.button2 || self.button3 || self.button4 || self.button5 || self.button6 || self.button7 || self.button8 || self.buttonuse);
 			force_respawn = cvar("g_lms") || cvar("g_forced_respawn");
 			if (self.deadflag == DEAD_DYING)
 			{
