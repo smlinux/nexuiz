@@ -209,7 +209,7 @@ void SV_ParseClientCommand(string s) {
 					votefinished = time + cvar("sv_vote_timeout");
 					votecaller.vote_vote = 1; // of course you vote yes
 					votecaller.vote_next = time + cvar("sv_vote_wait");
-					bprint(strcat("\"^3", votecaller.netname, "^3\" called a vote to become ^3master^3.\n"));
+					bprint(strcat("\{1}^2* ^3", votecaller.netname, "^2 calls a vote to become ^3master^2.\n"));
 					VoteCount(); // needed if you are the only one
 				}
 			} else {
@@ -242,7 +242,7 @@ void SV_ParseClientCommand(string s) {
 					if(strlen(dovote) >= 6)
 						if(substring(dovote, 0, 6) == "chmap ")
 							vote = strcat("gotomap ", substring(dovote, 6, strlen(dovote) - 6));
-					bprint("\"^7", strcat(self.netname, "^2 used his ^3master^2 status to do \"^2", dovote, "^2\".\n"));
+					bprint("\{1}^2* ^3", strcat(self.netname, "^2 used his ^3master^2 status to do \"^2", dovote, "^2\".\n"));
 					localcmd(strcat(dovote, "\n"));
 				} else {
 					sprint(self, "^1This command is not ok. See help for more info.\n");
