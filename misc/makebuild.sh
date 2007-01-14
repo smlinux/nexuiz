@@ -33,7 +33,7 @@ osxapps=$buildfiles/osx
 copystrip=$buildfiles/copystrip
 fteqcc="fteqcc.bin -O2"
 mingw=/home/polzer/mingw32
-ia32=/chroot/fc5-i386
+ia32=/chroot/fc6-i386
 osxhost=macmini_osx
 osxtemp=/Users/rpolzer/Darkplaces.build
 osxsave=/tmp/Nexuiz.osx
@@ -60,12 +60,12 @@ buildosx()
 
 build64()
 {
-	PATH=$copystrip:$PATH make CC="gcc -g" "$@"
+	PATH=$copystrip:$PATH make CC="gcc -g -Wl,--hash-style=sysv,-O1" "$@"
 }
 
 build32()
 {
-	PATH=$copystrip:$PATH make CC="gcc -g -I$ia32/usr/include -I$ia32/usr/X11R6/include -L$ia32/usr/lib -L$ia32/usr/X11R6/lib -m32" DP_MACHINE=i686 "$@"
+	PATH=$copystrip:$PATH make CC="gcc -g -Wl,--hash-style=sysv,-O1 -I$ia32/usr/include -I$ia32/usr/X11R6/include -L$ia32/usr/lib -L$ia32/usr/X11R6/lib -m32" DP_MACHINE=i686 "$@"
 }
 
 buildwin()
