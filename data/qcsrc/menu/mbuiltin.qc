@@ -228,6 +228,7 @@ void	refreshhostcache(void) = #620;
 float	gethostcachenumber(float fld, float hostnr) = #621;
 float	gethostcacheindexforkey(string key) = #622;
 void	addwantedhostcachekey(string key) = #623;
+string	getextresponse(void) = #624;
 
 #ifdef FIXEDFOPEN
 float 	fopen( string filename, float mode ) =

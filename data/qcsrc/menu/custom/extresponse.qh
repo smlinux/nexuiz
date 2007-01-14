@@ -1,0 +1,7 @@
+// Property of Alientrap
+// custom/extresponse.qh
+
+// Item_Nex_ExtResponseSystem (singleton) Item_Label
+
+void() Item_Nex_ExtResponseSystem_Update;
+void() Item_Nex_ExtResponseSystem_Spawn;

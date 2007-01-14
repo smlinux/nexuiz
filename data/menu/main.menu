@@ -16,6 +16,7 @@ Item Arrangement Main
 	{
 		normal		"$gfx/b_campaign"
 		selected	"$gfx/b_campaign_u"
+		alignment	[AlignCenter]
 
 		target	"Campaign"
 		init	Nex_Action_SetNormalPanelLink
@@ -87,5 +88,13 @@ Item Arrangement InstantBar
 
 		target	"Demos"
 		init	Nex_Action_SetNormalPanelLink
+	}
+	Item Nex_ExtResponseSystem UpdateMessage
+	{
+		color		'1.0 0.9 0.1'
+		alpha		[DefaultTextAlpha]
+		drawFlag	[DefaultTextDrawFlag]
+		fontSize	'12 18'
+		pos         '0 10'
 	}
 }
