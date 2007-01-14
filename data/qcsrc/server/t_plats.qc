@@ -894,7 +894,7 @@ void() door_touch =
 	if (self.owner.message != "")
 	{
 		if (other.flags & FL_CLIENT)
-			centermsg_setfor (other, CENTERMSG_TRIGGER, self.owner.message);
+			centerprint (other, self.owner.message);
 		sound (other, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
 	}
 };
@@ -1295,7 +1295,7 @@ void() secret_touch =
 	if (self.message)
 	{
 		if (other.flags & FL_CLIENT)
-			centermsg_setfor (other, CENTERMSG_TRIGGER, self.message);
+			centerprint (other, self.message);
 		sound (other, CHAN_BODY, "misc/talk.wav", 1, ATTN_NORM);
 	}
 };

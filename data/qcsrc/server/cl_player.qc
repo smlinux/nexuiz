@@ -409,7 +409,7 @@ void ClearSelectedPlayer()
 {
 	if(self.selected_player)
 	{
-		centermsg_set(CENTERMSG_POINT, "");
+		centerprint_expire(self, CENTERPRIO_POINT);
 		self.selected_player = world;
 		self.selected_player_display_needs_update = FALSE;
 	}
@@ -495,7 +495,7 @@ void UpdateSelectedPlayer()
 				{
 					namestr = selected.netname;
 				}
-				centermsg_set(CENTERMSG_POINT, namestr);
+				centerprint_atprio(self, CENTERPRIO_POINT, namestr);
 			}
 		}
 		else

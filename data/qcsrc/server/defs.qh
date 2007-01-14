@@ -155,7 +155,7 @@ void(entity e, float chan, string samp, float vol, float atten) sound = #8;
 void(entity client, string s)	stuffcmd = #21;
 void(entity client, string s)	sprint = #24;
 vector(entity e, float sped)	aim = #44;
-void(entity client, string s)	centerprint = #73;
+void(entity client, string s)	centerprint_builtin = #73;
 void(entity e)			setspawnparms = #78;
 void(float to, float f)		WriteByte = #52;
 void(float to, float f)		WriteChar = #53;
@@ -300,5 +300,9 @@ void ClearSelectedPlayer();
 .float selected_player_count; // how long this player has been directly pointed to
 .float selected_player_display_needs_update; // are regular updates necessary? (health)
 .float selected_player_display_timeout; // when the selection will time out
+
+void centerprint_atprio(entity e, float prio, string s);
+void centerprint_expire(entity e, float prio);
+void centerprint(entity e, string s);
 
 .float respawn_countdown; // next number to count

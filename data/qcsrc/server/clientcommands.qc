@@ -44,7 +44,7 @@ void Say(entity source, float teamsay, string msgin)
 			{
 				sprint(head, msgstr);
 				if(teamsay)
-					centermsg_setfor(head, CENTERMSG_TEAMSAY, cmsgstr);
+					centerprint(head, cmsgstr);
 				//stuffcmd(head, "play2 misc/talk.wav\n");
 			}
 		head = find(head, classname, "player");

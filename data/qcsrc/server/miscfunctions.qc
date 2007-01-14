@@ -561,3 +561,31 @@ string decolorize(string s)
 	}
 	return out;
 }
+
+#define CENTERPRIO_POINT 1
+#define CENTERPRIO_NORMAL 5
+.float centerprint_priority;
+.float centerprint_expires;
+void centerprint_atprio(entity e, float prio, string s)
+{
+	if(time > e.centerprint_expires)
+		e.centerprint_priority = 0;
+	if(prio >= e.centerprint_priority)
+	{
+		e.centerprint_priority = prio;
+		e.centerprint_expires = time + e.cvar_scr_centertime;
+		centerprint_builtin(e, s);
+	}
+}
+void centerprint_expire(entity e, float prio)
+{
+	if(prio == e.centerprint_priority)
+	{
+		e.centerprint_priority = 0;
+		centerprint_builtin(e, "");
+	}
+}
+void centerprint(entity e, string s)
+{
+	centerprint_atprio(e, CENTERPRIO_NORMAL, s);
+}

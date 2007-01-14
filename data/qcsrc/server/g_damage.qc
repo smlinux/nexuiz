@@ -107,12 +107,11 @@ void Obituary (entity attacker, entity targ, float deathtype)
 					m = strcat(m, "^6Pink Team");
 				else if (targ.team == 13)
 					m = strcat(m, "^3Yellow Team");
-				centermsg_setfor(targ, CENTERMSG_TEAMCHANGE, m);
+				centerprint(targ, m);
 			}
 			else if (deathtype == DEATH_AUTOTEAMCHANGE)
 			{
-				centermsg_setfor(targ, CENTERMSG_TEAMCHANGE, "You have been moved into a different team to improve team balance");
-				m = "You are now on: ";
+				m = "You have been moved into a different team to improve team balance\nYou are now on: ";
 				if (targ.team == 5)
 					m = strcat(m, "^1Red Team");
 				else if (targ.team == 14)
@@ -121,19 +120,19 @@ void Obituary (entity attacker, entity targ, float deathtype)
 					m = strcat(m, "^6Pink Team");
 				else if (targ.team == 13)
 					m = strcat(m, "^3Yellow Team");
-				centermsg_setfor(targ, CENTERMSG_TEAMCHANGE2, m);
+				centerprint(targ, m);
 				return;
 			}
 			else if (deathtype == DEATH_CAMP)
-				centermsg_setfor(targ, CENTERMSG_DEATH, "^1Die camper!");
+				centerprint(targ, strcat("^1Die camper!\n\n\n"));
 			else if (deathtype == DEATH_NOAMMO)
-				centermsg_setfor(targ, CENTERMSG_DEATH, "^1You were killed for running out of ammo...");
+				centerprint(targ, strcat("^1You were killed for running out of ammo...\n\n\n"));
 			else if (deathtype == DEATH_ROT)
-				centermsg_setfor(targ, CENTERMSG_DEATH, "^1You grew too old without taking your medicine");
+				centerprint(targ, strcat("^1You grew too old without taking your medicine\n\n\n"));
 			else if (deathtype == DEATH_MIRRORDAMAGE)
-				centermsg_setfor(targ, CENTERMSG_DEATH, "^1Don't shoot your team mates!");
+				centerprint(targ, strcat("^1Don't shoot your team mates!\n\n\n"));
 			else
-				centermsg_setfor(targ, CENTERMSG_DEATH, "^1You killed your own dumb self!");
+				centerprint(targ, strcat("^1You killed your own dumb self!\n\n\n"));
 
 			if (deathtype == IT_GRENADE_LAUNCHER)
 				bprint ("^1",s, "^1 detonated\n");
@@ -168,7 +167,7 @@ void Obituary (entity attacker, entity targ, float deathtype)
 		}
 		else if (teamplay && attacker.team == targ.team)
 		{
-			centermsg_setfor(attacker, CENTERMSG_DEATH, "^1Moron! You fragged a teammate!");
+			centerprint(attacker, strcat("^1Moron! You fragged a teammate!\n\n\n"));
 			bprint ("^1", attacker.netname, "^1 mows down a teammate\n");
 			GiveFrags(attacker, targ, -1);
 			//attacker.frags = attacker.frags - 1;
@@ -191,8 +190,8 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				bprint("^1",attacker.netname, "^1 drew first blood", "\n");
 			}
 
-			centermsg_setfor(attacker, CENTERMSG_KILL, strcat("^4You fragged ^7", s));
-			centermsg_setfor(targ, CENTERMSG_DEATH, strcat("^1You were fragged by ^7", attacker.netname));
+			centerprint(attacker, strcat("^4You fragged ^7", s, "\n\n\n"));
+			centerprint(targ, strcat("^1You were fragged by ^7", attacker.netname, "\n\n\n"));
 
 			if (deathtype == IT_LASER)
 				bprint ("^1",s, "^1 was blasted by ", attacker.netname, "\n");
@@ -279,7 +278,7 @@ void Obituary (entity attacker, entity targ, float deathtype)
 		}
 		else
 		{
-			centermsg_setfor(targ, CENTERMSG_DEATH, "^1Watch your step!");
+			centerprint(targ, strcat("^1Watch your step!\n\n\n"));
 			if (deathtype == DEATH_HURTTRIGGER && attacker.message != "")
 				bprint ("^1",s, "^1 ", attacker.message, "\n");
 			else if (deathtype == DEATH_DROWN)
@@ -403,7 +402,7 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 		if (targ.armorvalue && (deathtype == IT_NEX) && damage)
 		{
 			targ.armorvalue -= 1;
-			centermsg_setfor(targ, CENTERMSG_MINSTAGIB, strcat("^3Remaining extra lives: ",ftos(targ.armorvalue)));
+			centerprint(targ, strcat("^3Remaining extra lives: ",ftos(targ.armorvalue),"\n"));
 			damage = 0;
 			if(clienttype(targ) == CLIENTTYPE_REAL) stuffcmd(targ, "play2 misc/hit.wav\n");
 			//stuffcmd(attacker, "play2 misc/hit.wav\n");
@@ -418,7 +417,7 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 			if (targ != attacker)
 			{
 				if (targ.classname == "player")
-					centermsg_setfor(attacker, CENTERMSG_MINSTAGIB, "Secondary fire inflicts no damage!\n");
+					centerprint(attacker, "Secondary fire inflicts no damage!\n");
 				damage = 0;
 				mirrordamage = 0;
 				force = '0 0 0';
@@ -541,7 +540,7 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 				if(attacker.armorvalue > 0)
 				{
 					attacker.armorvalue = attacker.armorvalue - 1;
-					centermsg_setfor(attacker, CENTERMSG_MINSTAGIB, strcat("^3Remaining extra lives: ",ftos(attacker.armorvalue)));
+					centerprint(attacker, strcat("^3Remaining extra lives: ",ftos(attacker.armorvalue),"\n"));
 					if(clienttype(attacker) == CLIENTTYPE_REAL) stuffcmd(attacker, "play2 misc/hit.wav\n");
 				}
 				mirrordamage = 0;

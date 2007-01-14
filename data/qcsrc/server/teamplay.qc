@@ -309,16 +309,16 @@ void PrintWelcomeMessage(entity pl)
 	if(self.classname == "observer")
 	{
 		if(cvar("g_lms") && self.frags <= 0 && self.frags > -666)
-			return centermsg_setall(strcat(newlines, "^1You have no more lives left\nwait for next round\n\n\n^7press attack to spectate other players"));
+			return centerprint(self, strcat(newlines, "^1You have no more lives left\nwait for next round\n\n\n^7press attack to spectate other players"));
 		else if(cvar("g_lms") && self.frags == -666)
-			return centermsg_setall(strcat(newlines, "^1Match has already begun\nwait for next round\n\n\n^7press attack to spectate other players"));
+			return centerprint(self, strcat(newlines, "^1Match has already begun\nwait for next round\n\n\n^7press attack to spectate other players"));
 	}
 	else if(self.classname == "spectator")
 	{
 		if ((cvar("g_lms") && self.frags < 1) || cvar("g_arena"))
-			return centermsg_setall(strcat(newlines, "spectating ", self.enemy.netname, "\n\n\n^7press attack for next player\npress attack2 for free fly mode"));
+			return centerprint(self, strcat(newlines, "spectating ", self.enemy.netname, "\n\n\n^7press attack for next player\npress attack2 for free fly mode"));
 		else
-			return centermsg_setall(strcat(newlines, "spectating ", self.enemy.netname, "\n\n\n^7press jump to play\n^7press attack for next player\npress attack2 for free fly mode"));
+			return centerprint(self, strcat(newlines, "spectating ", self.enemy.netname, "\n\n\n^7press jump to play\n^7press attack for next player\npress attack2 for free fly mode"));
 	}
 
 
@@ -327,7 +327,7 @@ void PrintWelcomeMessage(entity pl)
 
 	if(cvar("g_campaign"))
 	{
-		centermsg_setallfor(pl, campaign_message);
+		centerprint(pl, campaign_message);
 		return;
 	}
 
@@ -413,7 +413,7 @@ void PrintWelcomeMessage(entity pl)
 
 	s = strzone(s);
 
-	centermsg_setallfor(pl, s);
+	centerprint(pl, s);
 	//sprint(pl, s);
 
 	strunzone(s);
@@ -931,6 +931,7 @@ void ShufflePlayerOutOfTeam (float source_team)
 	float smallestteam, smallestteam_count, steam;
 	float lowest_bot_score, lowest_player_score;
 	entity head, lowest_bot, lowest_player, selected;
+	string m;
 
 	smallestteam = 0;
 	smallestteam_count = 999999999;
@@ -1066,7 +1067,6 @@ void ShufflePlayerOutOfTeam (float source_team)
 
 	if(selected.deadflag == DEAD_NO)
 			Damage(selected, selected, selected, 100000, DEATH_AUTOTEAMCHANGE, selected.origin, '0 0 0');
-	/*
 	m = "You have been moved into a different team to improve team balance\nYou are now on: ";
 	if (selected.team == 5)
 		m = strcat(m, "^1Red Team");
@@ -1077,7 +1077,6 @@ void ShufflePlayerOutOfTeam (float source_team)
 	else if (selected.team == 13)
 		m = strcat(m, "^3Yellow Team");
 	centerprint(selected, m);
-	*/
 }
 
 // part of g_balance_teams_force

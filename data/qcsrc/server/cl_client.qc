@@ -664,7 +664,6 @@ string ColoredTeamName(float t);
 //void dom_player_join_team(entity pl);
 void ClientConnect (void)
 {
-	//local float fh;
 	local string s;
 	
 	self.classname = "player_joining";
@@ -720,23 +719,7 @@ void ClientConnect (void)
 	self.welcomemessage_time = time + cvar("welcome_message_time");
 	self.welcomemessage_time2 = 0;
 
-	/*
-	// the client might not have his maps/%s.cfg file yet!
-	// so send the one from the server...
-	fh = fopen(strcat("maps/", mapname, ".cfg"), FILE_READ);
-	if(fh >= 0)
-	{
-		while((s = fgets(fh)))
-			stuffcmd(self, strcat(s, "\n"));
-		fclose(fh);
-	}
-	// and then execute the client's so he can still override CD tracks
-
-	not needed any more: current map download system disconnects and reconnects
-	after the download, and then the file will be there
-	*/
 	stuffcmd(self, strcat("exec maps/", mapname, ".cfg\n"));
-
 	// TODO: is this being used for anything else than cd tracks?
 	// Remember: SVC_CDTRACK exists. Maybe it should be used.
 	
@@ -1426,7 +1409,7 @@ void PlayerPreThink (void)
 				//sprint(self, "distance: ", ftos(self.lms_traveled_distance), "\n");
 				if(self.lms_traveled_distance < cvar("g_lms_campcheck_distance"))
 				{
-					centermsg_set(CENTERMSG_CAMP, cvar_string("g_lms_campcheck_message"));
+					centerprint(self, cvar_string("g_lms_campcheck_message"));
 					// FIXME KadaverJack: gibbing player here causes playermodel to bounce around, instead of eye.md3
 					// I wasn't able to find out WHY that happens, so I put a workaround in place that shall prevent players from being gibbed :(
 					Damage(self, self, self, bound(0, cvar("g_lms_campcheck_damage"), self.health + self.armorvalue * cvar("g_balance_armor_blockpercent") + 5), DEATH_CAMP, self.origin, '0 0 0');
@@ -1554,7 +1537,7 @@ void PlayerPreThink (void)
 					PutClientInServer();
 					if(self.flags & !FL_NOTARGET)
 						bprint (strcat("^4", self.netname, "^4 is playing now\n"));
-					centermsg_reset();
+					centerprint(self,"");
 					return;
 				} else {
 					self.flags = self.flags & !FL_JUMPRELEASED;
@@ -1587,7 +1570,7 @@ void PlayerPreThink (void)
 					if(cvar("g_campaign"))
 						campaign_bots_may_start = 1;
 					PutClientInServer();
-					centermsg_reset();
+					centerprint(self,"");
 					return;
 				} else {
 					self.flags = self.flags & !FL_JUMPRELEASED;

@@ -54,7 +54,7 @@ void() SUB_UseTargets =
 //
 	if (activator.classname == "player" && self.message != "")
 	{
-		centermsg_setfor (activator, CENTERMSG_TRIGGER, self.message);
+		centerprint (activator, self.message);
 		if (!self.noise)
 			sound (activator, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
 	}
@@ -307,20 +307,20 @@ void() counter_use =
 		&& (self.spawnflags & SPAWNFLAG_NOMESSAGE) == 0)
 		{
 			if (self.count >= 4)
-				centermsg_setfor (activator, CENTERMSG_TRIGGER, "There are more to go...");
+				centerprint (activator, "There are more to go...");
 			else if (self.count == 3)
-				centermsg_setfor (activator, CENTERMSG_TRIGGER, "Only 3 more to go...");
+				centerprint (activator, "Only 3 more to go...");
 			else if (self.count == 2)
-				centermsg_setfor (activator, CENTERMSG_TRIGGER, "Only 2 more to go...");
+				centerprint (activator, "Only 2 more to go...");
 			else
-				centermsg_setfor (activator, CENTERMSG_TRIGGER, "Only 1 more to go...");
+				centerprint (activator, "Only 1 more to go...");
 		}
 		return;
 	}
 
 	if (activator.classname == "player"
 	&& (self.spawnflags & SPAWNFLAG_NOMESSAGE) == 0)
-		centermsg_setfor(activator, CENTERMSG_TRIGGER, "Sequence completed!");
+		centerprint(activator, "Sequence completed!");
 	self.enemy = activator;
 	multi_trigger ();
 };
@@ -429,7 +429,6 @@ void() func_sparks =
   }
 }
 */
-
 void() rain_think =
 {
 	self.nextthink = time + 0.1;

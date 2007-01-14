@@ -67,68 +67,67 @@ void minstagib_ammocheck (void)
 	{
 		if (self.health == 5)
 		{
-			centermsg_set(CENTERMSG_MINSTAGIB, "you're dead now...");
+			centerprint(self, "you're dead now...\n");
 			Damage(self, self, self, 5, DEATH_NOAMMO, self.origin, '0 0 0');
 			stuffcmd(self, "play2 announcer/robotic/terminated.ogg\n");
 		}
 		if (self.health == 10)
 		{
-			centermsg_set(CENTERMSG_MINSTAGIB, "^11^7 second left to find some ammo");
+			centerprint(self, "^11^7 second left to find some ammo\n");
 			Damage(self, self, self, 5, DEATH_NOAMMO, self.origin, '0 0 0');
 			stuffcmd(self, "play2 announcer/robotic/1.ogg\n");
 		}
 		if (self.health == 20)
 		{
-			centermsg_set(CENTERMSG_MINSTAGIB, "^12^7 seconds left to find some ammo");
+			centerprint(self, "^12^7 seconds left to find some ammo\n");
 			Damage(self, self, self, 10, DEATH_NOAMMO, self.origin, '0 0 0');
 			stuffcmd(self, "play2 announcer/robotic/2.ogg\n");
 		}
 		if (self.health == 30)
 		{
-			centermsg_set(CENTERMSG_MINSTAGIB, "^13^7 seconds left to find some ammo");
+			centerprint(self, "^13^7 seconds left to find some ammo\n");
 			Damage(self, self, self, 10, DEATH_NOAMMO, self.origin, '0 0 0');
 			stuffcmd(self, "play2 announcer/robotic/3.ogg\n");
 		}
 		if (self.health == 40)
 		{
-			centermsg_set(CENTERMSG_MINSTAGIB, "^14^7 seconds left to find some ammo");
+			centerprint(self, "^14^7 seconds left to find some ammo\n");
 			Damage(self, self, self, 10, DEATH_NOAMMO, self.origin, '0 0 0');
 			stuffcmd(self, "play2 announcer/robotic/4.ogg\n");
 		}
 		if (self.health == 50)
 		{
-			centermsg_set(CENTERMSG_MINSTAGIB, "^15^7 seconds left to find some ammo");
+			centerprint(self, "^15^7 seconds left to find some ammo\n");
 			Damage(self, self, self, 10, DEATH_NOAMMO, self.origin, '0 0 0');
 			stuffcmd(self, "play2 announcer/robotic/5.ogg\n");
 		}
 		if (self.health == 60)
 		{
-			centermsg_set(CENTERMSG_MINSTAGIB, "^36^7 seconds left to find some ammo");
+			centerprint(self, "^36^7 seconds left to find some ammo\n");
 			Damage(self, self, self, 10, DEATH_NOAMMO, self.origin, '0 0 0');
 			stuffcmd(self, "play2 announcer/robotic/6.ogg\n");
 		}
 		if (self.health == 70)
 		{
-			centermsg_set(CENTERMSG_MINSTAGIB, "^37^7 seconds left to find some ammo");
+			centerprint(self, "^37^7 seconds left to find some ammo\n");
 			Damage(self, self, self, 10, DEATH_NOAMMO, self.origin, '0 0 0');
 			stuffcmd(self, "play2 announcer/robotic/7.ogg\n");
 		}
 		if (self.health == 80)
 		{
-			centermsg_set(CENTERMSG_MINSTAGIB, "^38^7 seconds left to find some ammo");
+			centerprint(self, "^38^7 seconds left to find some ammo\n");
 			Damage(self, self, self, 10, DEATH_NOAMMO, self.origin, '0 0 0');
 			stuffcmd(self, "play2 announcer/robotic/8.ogg\n");
 		}
 		if (self.health == 90)
 		{
-			centermsg_set(CENTERMSG_MINSTAGIB, "^39^7 seconds left to find some ammo");
+			centerprint(self, "^39^7 seconds left to find some ammo\n");
 			Damage(self, self, self, 10, DEATH_NOAMMO, self.origin, '0 0 0');
 			stuffcmd(self, "play2 announcer/robotic/9.ogg\n");
 		}
 		if (self.health == 100)
 		{
-			centermsg_set(CENTERMSG_MINSTAGIB, "get some ammo or");
-			centermsg_set(CENTERMSG_MINSTAGIB2, "you'll be dead in ^310^7 seconds...");
+			centerprint(self, "get some ammo or\nyou'll be dead in ^310^7 seconds...");
 			Damage(self, self, self, 10, DEATH_NOAMMO, self.origin, '0 0 0');
 			stuffcmd(self, "play2 announcer/robotic/10.ogg\n");
 		}
