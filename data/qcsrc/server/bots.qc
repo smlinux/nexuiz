@@ -1768,7 +1768,7 @@ void() bot_think =
 	// if dead, just wait until we can respawn
 	if (self.deadflag)
 	{
-		if (self.deadflag == DEAD_RESPAWNABLE)
+		if (self.deadflag == DEAD_DEAD)
 			self.button2 = 1; // press jump to respawn
 		return;
 	}
