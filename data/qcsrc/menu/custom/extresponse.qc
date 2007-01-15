@@ -3,6 +3,7 @@ bool _Nex_ExtResponseSystem_VersionHandled;
 bool _Nex_ExtResponseSystem_BanlistHandled;
 string _Nex_ExtResponseSystem_UpdateTo;
 float _Nex_ExtResponseSystem_RetryTime;
+float _Nex_ExtResponseSystem_RetryTime_LastDelay;
 bool _Nex_ExtResponseSystem_UpdateStringSet;
 bool _Nex_ExtResponseSystem_Initialized;
 
@@ -12,7 +13,8 @@ void() Item_Nex_ExtResponseSystem_SendQuery =
 	localcmd(strcat("packet update.alientrap.org:27950 \"getExtResponse checkUpdates nexuiz ", cvar_string("g_nexuizversion"), "\"\n"));
 	localcmd(strcat("packet update.alientrap.org:27950 \"getExtResponse getBanlist nexuiz\"\n"));
 	_Nex_ExtResponseSystem_RequestsSent = TRUE;
-	_Nex_ExtResponseSystem_RetryTime = Timer_Time + 10;
+	_Nex_ExtResponseSystem_RetryTime_LastDelay = _Nex_ExtResponseSystem_RetryTime_LastDelay * 2 + 1;
+	_Nex_ExtResponseSystem_RetryTime = Timer_Time + _Nex_ExtResponseSystem_RetryTime_LastDelay;
 }
 
 void(float argc) Item_Nex_ExtResponseSystem_Parse =
