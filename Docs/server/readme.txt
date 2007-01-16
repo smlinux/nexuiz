@@ -22,8 +22,8 @@ can start the server by executing the server script.  The options in
 the config file are only the most interesting and important ones. You
 can find more information about setting up a dedicated server in the
 Nexuiz Wiki:
-http://savage747.sa.funpic.de/wiki/pmwiki.php?n=Main.DedicatedServer
+http://alientrap.org/wiki/pmwiki.php?n=Main.DedicatedServer
 
 Some more info about the available variables and commands:
-http://savage747.sa.funpic.de/wiki/pmwiki.php?n=Main.GameTweaks
-http://savage747.sa.funpic.de/wiki/pmwiki.php?n=Main.ConsoleCommands
+http://alientrap.org/wiki/pmwiki.php?n=Main.GameTweaks
+http://alientrap.org/wiki/pmwiki.php?n=Main.ConsoleCommands

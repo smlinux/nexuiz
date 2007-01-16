@@ -43,7 +43,7 @@ Try run |nexuiz-sdl.exe| instead of |nexuiz.exe| (on Windows). Adding the comman
 Check if your desktop color depth is set to 32 bits per pixel. If it's just set to 16, Nexuiz can't switch to 32 bit mode.
 
 ** When I join a server or after a map change I see nothing but a black screen, but I can still move and shoot
-This is probably because you don't have the map, that's running on the server. As Nexuiz does now support map/content download the server might be be setup to support this and you will have to get the map the old fashioned way. Those servers will have a download URL in their name or welcome message. There is also a [wiki page (http://savage747.sa.funpic.de/wiki/pmwiki.php?n=Main.CustomMaps)] dedicated to new maps.
+This is probably because you don't have the map, that's running on the server. As Nexuiz does now support map/content download the server might be be setup to support this and you will have to get the map the old fashioned way. Those servers will have a download URL in their name or welcome message. There is also a [wiki page (http://alientrap.org/wiki/pmwiki.php?n=Main.CustomMaps)] dedicated to new maps.
 
 * Server setup
 
@@ -75,7 +75,7 @@ Use the script |nexuiz-linux.sh| instead of the binary. It will use the right ve
 Press |\[shift]+\[escape]|. To close it press |\[escape]|
 
 ** What console commands/variables are there?
-You can get a list of variables by entering |cvarlist| on the console. |cmdlist| will give you a list of available commands. An annotated version of that output can be found at the [Nexuiz wiki (http://savage747.sa.funpic.de/wiki/pmwiki.php?n=Main.ConsoleCommands)].
+You can get a list of variables by entering |cvarlist| on the console. |cmdlist| will give you a list of available commands. An annotated version of that output can be found at the [Nexuiz wiki (http://alientrap.org/wiki/pmwiki.php?n=Main.ConsoleCommands)].
 
 ** How can I speed up my frame rate?
 The greatest performance boost can be achieved by turning off dynamic lights and shadows in the menu |Options / Effects|. Bloom is also quite resource. Other fps boots include disabeling |Deluxemapping| and |Coronas|. On older graphics cards or on-board/notebook chips with little video ram you can try to lower the texture resolution. To do this open the console ([How do I open the console?]) and type |gl__picmip #; r__restart| (where # is a number between 0 and 10, 0 is the highest quality). Nexuiz now does also include config files that will adjust your graphic settings. Open the console as explained in and type |exec normal.cfg| to get the default setting. |exec med.cfg| and |exec low.cfg| are of lower quality but will make Nexuiz faster. |exec high.cfg| and |exec ultra.cfg| will show what Nexuiz is able to look like but do require a very fast PC and graphic card. Just like the |gl_picmip| some of the settings in those config files require you to either restart Nexuiz or type |vid_restart| in the console afterwards.
