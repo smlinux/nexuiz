@@ -71,7 +71,7 @@ void() Nex_Action_Campaign_Update =
 
 	handle = fopen(strcat("maps/campaign", campaign_name, ".txt"), FILE_READ);
 	if(handle >= 0) {
-		while (line = fgets(handle)) {
+		while ((line = fgets(handle))) {
 			if(substring(line, 0, 12) == "\"//campaign:") {
 				desc = substring(line, 12, (strlen(line) - (12 + 1)));
 				break;
