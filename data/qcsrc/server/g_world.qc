@@ -1,5 +1,6 @@
 string GetMapname();
 void GotoNextMap();
+void HandleMaplistShuffleCommands();
 
 void SetDefaultAlpha()
 {
@@ -53,6 +54,7 @@ void GotoFirstMap()
 	if(cvar("_sv_init"))
 	{
 		cvar_set("_sv_init", "0");
+		HandleMaplistShuffleCommands();
 		tokenize(cvar_string("g_maplist"));
 		if(argv(0) != GetMapname())
 		{
@@ -336,6 +338,9 @@ void worldspawn (void)
 
 	// 63 testing
 	lightstyle(63, "a");
+
+	registercvar("_g_maplist_shufflenow", "0");
+	registercvar("_g_maplist_have_shuffled", "0");
 
 	player_count = 0;
 	lms_lowest_lives = 0;
@@ -1442,6 +1447,31 @@ void ShuffleMaplist()
 	cvar_set("g_maplist", result);
 }
 
+void() HandleMaplistShuffleCommands =
+{
+	// automatically shuffle when setting g_maplist_shuffle
+	if(cvar_string("_g_maplist_add") != "")
+	{
+		AddToMaplist(cvar_string("_g_maplist_add"));
+		cvar_set("_g_maplist_add", "");
+	}
+	if(cvar_string("_g_maplist_remove") != "")
+	{
+		RemoveFromMaplist(cvar_string("_g_maplist_remove"));
+		cvar_set("_g_maplist_remove", "");
+	}
+	if(cvar("_g_maplist_shufflenow") || (cvar("g_maplist_shuffle") && !cvar("_g_maplist_have_shuffled")))
+	{
+		ShuffleMaplist();
+		cvar_set("_g_maplist_shufflenow", "0");
+		cvar_set("_g_maplist_have_shuffled", "1");
+		ServerConsoleEcho("Shuffled map list.", FALSE);
+	}
+	if(cvar("_g_maplist_have_shuffled"))
+		if(!cvar("g_maplist_shuffle"))
+			cvar_set("_g_maplist_have_shuffled", "0");
+}
+
 /*
 ============
 CheckRules_World
@@ -1477,25 +1507,7 @@ void() CheckRules_World =
 		PrintScoreboard();
 	}
 
-	// automatically shuffle when setting g_maplist_shuffle
-	if(cvar_string("_g_maplist_add") != "")
-	{
-		AddToMaplist(cvar_string("_g_maplist_add"));
-		cvar_set("_g_maplist_add", "");
-	}
-	if(cvar_string("_g_maplist_remove") != "")
-	{
-		RemoveFromMaplist(cvar_string("_g_maplist_remove"));
-		cvar_set("_g_maplist_remove", "");
-	}
-	if(cvar("_g_maplist_shufflenow") || (cvar("g_maplist_shuffle") && !cvar("_g_maplist_have_shuffled")))
-	{
-		ShuffleMaplist();
-		localcmd("set _g_maplist_shufflenow 0\nset _g_maplist_have_shuffled 1\necho Shuffled map list.\n");
-	}
-	if(cvar("_g_maplist_have_shuffled"))
-		if(!cvar("g_maplist_shuffle"))
-			localcmd("set _g_maplist_have_shuffled 0\n");
+	HandleMaplistShuffleCommands();
 
 	timelimit = cvar("timelimit") * 60;
 	fraglimit = cvar("fraglimit");

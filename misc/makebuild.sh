@@ -60,12 +60,12 @@ buildosx()
 
 build64()
 {
-	PATH=$copystrip:$PATH make CC="gcc -g -Wl,--hash-style=sysv,-O1" "$@"
+	PATH=$copystrip:$PATH make CC="/opt/gcc-4.1.1/bin/gcc -g" "$@"
 }
 
 build32()
 {
-	PATH=$copystrip:$PATH make CC="gcc -g -Wl,--hash-style=sysv,-O1 -I$ia32/usr/include -I$ia32/usr/X11R6/include -L$ia32/usr/lib -L$ia32/usr/X11R6/lib -m32" DP_MACHINE=i686 "$@"
+	PATH=$copystrip:$PATH make CC="/opt/gcc-4.1.1/bin/gcc -g -I$ia32/usr/include -I$ia32/usr/X11R6/include -L$ia32/usr/lib -L$ia32/usr/X11R6/lib -m32" DP_MACHINE=i686 "$@"
 }
 
 buildwin()
@@ -111,8 +111,7 @@ for x in dedicated sdl glx; do
 	cp nexuiz-$x-withdebug "$tmpdir/debuginfo/nexuiz-linux-x86_64-$x"
 done
 
-cp "$nexdir/nexuiz-linux-sdl.sh" "$tmpdir/"
-cp "$nexdir/nexuiz-linux-glx.sh" "$tmpdir/"
+cp "$nexdir/"nexuiz-*.{sh,bat} "$tmpdir/"
 cp "$nexdir/gpl.txt" "$tmpdir/"
 
 make clean
@@ -130,7 +129,7 @@ mkdir -p "$tmpdir/sources"
 7za a -mx=9 -tzip ../sources/gamesource$date.zip qcsrc
 
 cd "$dpdir"
-rm -f ChangeLog
+rm -f ChangeLog*
 cvs2cl.pl
 
 cd "$dpdir/.."
