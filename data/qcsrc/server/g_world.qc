@@ -455,16 +455,23 @@ string Map_Current_Name;
 // NOTE: this now expects the map list to be already tokenize()d and the count in Map_Count
 float GetMaplistPosition()
 {
-	float pos;
+	float pos, idx;
 	string map;
 
 	map = GetMapname();
+	idx = cvar("g_maplist_index");
+
+	if(idx >= 0)
+		if(idx < Map_Count)
+			if(map == argv(idx))
+				return idx;
+
 	for(pos = 0; pos < Map_Count; ++pos)
 		if(map == argv(pos))
 			return pos;
 
 	// resume normal maplist rotation if current map is not in g_maplist
-	return cvar("g_maplist_index");
+	return idx;
 }
 
 float MapHasRightSize(string map)
