@@ -312,10 +312,19 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 		// dying animation
 		self.deadflag = DEAD_DYING;
 		// when to allow respawn
-		sdelay = cvar(strcat("g_", GetGametype(), "_respawn_delay"));
+		sdelay = 0;
+		waves = 0;
+		if(cvar("g_respawn_mapsettings"))
+		{
+			sdelay = cvar("g_respawn_mapsettings_delay");
+			waves = cvar("g_respawn_mapsettings_waves");
+		}
+		if(!sdelay)
+			sdelay = cvar(strcat("g_", GetGametype(), "_respawn_delay"));
 		if(!sdelay)
 			sdelay = cvar("g_respawn_delay");
-		waves = cvar(strcat("g_", GetGametype(), "_respawn_waves"));
+		if(!waves)
+			waves = cvar(strcat("g_", GetGametype(), "_respawn_waves"));
 		if(!waves)
 			waves = cvar("g_respawn_waves");
 		if(waves)

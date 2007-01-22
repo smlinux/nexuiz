@@ -1309,6 +1309,25 @@ void ShowRespawnCountdown()
 	}
 }
 
+void LeaveSpectatorMode()
+{
+	if(!cvar("teamplay") || cvar("g_campaign") || cvar("g_balance_teams")) {
+		self.classname = "player";
+		if(cvar("g_campaign") || cvar("g_balance_teams"))
+			JoinBestTeam(self, 0);
+		if(cvar("g_campaign"))
+			campaign_bots_may_start = 1;
+		PutClientInServer();
+		if(!(self.flags & FL_NOTARGET))
+			bprint (strcat("^4", self.netname, "^4 is playing now\n"));
+		centerprint(self,"");
+		return;
+	} else {
+		stuffcmd(self,"menu_showteamselect\n");
+		return;
+	}
+}
+
 /*
 =============
 PlayerPreThink
@@ -1527,25 +1546,11 @@ void PlayerPreThink (void)
 
 		if (self.flags & FL_JUMPRELEASED) {
 			if (self.button2 && self.version == cvar("gameversion")) {
-				if(!cvar("teamplay") || cvar("g_campaign") || cvar("g_balance_teams")) {
-					self.flags = self.flags & !FL_JUMPRELEASED;
-					self.classname = "player";
-					if(cvar("g_campaign") || cvar("g_balance_teams"))
-						JoinBestTeam(self, 0);
-					if(cvar("g_campaign"))
-						campaign_bots_may_start = 1;
-					PutClientInServer();
-					if(self.flags & !FL_NOTARGET)
-						bprint (strcat("^4", self.netname, "^4 is playing now\n"));
-					centerprint(self,"");
-					return;
-				} else {
-					self.flags = self.flags & !FL_JUMPRELEASED;
-					stuffcmd(self,"menu_showteamselect\n");
-					return;
-				}
+				self.flags = self.flags - FL_JUMPRELEASED;
+				LeaveSpectatorMode();
+				return;
 			} else if(self.button0 && self.version == cvar("gameversion")) {
-				self.flags = self.flags & !FL_JUMPRELEASED;
+				self.flags = self.flags - FL_JUMPRELEASED;
 				if(SpectateNext() == 1) {
 					self.classname = "spectator";
 				}
@@ -1559,26 +1564,11 @@ void PlayerPreThink (void)
 	} else if(self.classname == "spectator") {
 		if (self.flags & FL_JUMPRELEASED) {
 			if (self.button2 && self.version == cvar("gameversion")) {
-				if(!cvar("teamplay") || cvar("g_campaign") || cvar("g_balance_teams")) {
-					self.flags = self.flags & !FL_JUMPRELEASED;
-					self.classname = "player";
-					if(!cvar("g_lms"))
-						bprint (strcat("^4", self.netname, "^4 is playing now\n"));
-
-					if(cvar("g_campaign") || cvar("g_balance_teams"))
-						JoinBestTeam(self, 0);
-					if(cvar("g_campaign"))
-						campaign_bots_may_start = 1;
-					PutClientInServer();
-					centerprint(self,"");
-					return;
-				} else {
-					self.flags = self.flags & !FL_JUMPRELEASED;
-					stuffcmd(self,"menu_showteamselect\n");
-					return;
-				}
+				self.flags = self.flags - FL_JUMPRELEASED;
+				LeaveSpectatorMode();
+				return;
 			} else if(self.button0) {
-				self.flags = self.flags & !FL_JUMPRELEASED;
+				self.flags = self.flags - FL_JUMPRELEASED;
 				if(SpectateNext() == 1) {
 					self.classname = "spectator";
 				} else {
@@ -1586,7 +1576,7 @@ void PlayerPreThink (void)
 					PutClientInServer();
 				}
 			} else if (self.button3) {
-				self.flags = self.flags & !FL_JUMPRELEASED;
+				self.flags = self.flags - FL_JUMPRELEASED;
 				self.classname = "observer";
 				PutClientInServer();
 			} else {
