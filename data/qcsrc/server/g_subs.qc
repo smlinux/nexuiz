@@ -167,7 +167,7 @@ void SUB_CalcAngleMove (vector destangle, float tspeed, void() func)
 	if (!tspeed)
 		objerror ("No speed is defined!");
 
-	delta = destangle = self.angles;
+	delta = destangle - self.angles;
 	traveltime = vlen (delta) / tspeed;
 
 	self.avelocity = delta * (1 / traveltime);
