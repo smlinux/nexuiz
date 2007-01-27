@@ -591,7 +591,7 @@ entity(vector m1, vector m2, float f) waypoint_spawn =
 	setorigin(w, org);
 	setsize(w, m1, m2);
 	waypoint_clearlinks(w);
-	waypoint_schedulerelink(w);
+	//waypoint_schedulerelink(w);
 	return w;
 };
 
@@ -601,7 +601,7 @@ void() waypoint =
 	setorigin(self, self.origin);
 	// schedule a relink after other waypoints have had a chance to spawn
 	waypoint_clearlinks(self);
-	waypoint_schedulerelink(self);
+	//waypoint_schedulerelink(self);
 };
 
 // remove a waypoint, and schedule all neighbors to relink
@@ -768,6 +768,10 @@ void(entity e) waypoint_spawnforitem =
 {
 	local entity w;
 	local vector org;
+
+	if(!bot_waypoints_for_items)
+		return;
+
 	org = e.origin + (e.mins + e.maxs) * 0.5;
 	org_z = e.origin_z + e.mins_z - PL_MIN_z + 1;
 	e.nearestwaypointtimeout = time + 1000000000;
@@ -2027,6 +2031,7 @@ void() bot_serverframe =
 	{
 		botframe_spawnedwaypoints = TRUE;
 		waypoint_loadall();
+		waypoint_schedulerelinkall();
 	}
 
 	if (bot_list)

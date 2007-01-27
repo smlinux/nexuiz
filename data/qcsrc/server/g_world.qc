@@ -1,3 +1,5 @@
+float SPAWNFLAG_NO_WAYPOINTS_FOR_ITEMS = 1;
+
 string GetMapname();
 void GotoNextMap();
 void HandleMaplistShuffleCommands();
@@ -298,7 +300,7 @@ void worldspawn (void)
 		ambientsound ('0 0 0', self.noise, 1.00, ATTN_NONE);
 	}
 
-		// 0 normal
+	// 0 normal
 	lightstyle(0, "m");
 
 	// 1 FLICKER (first variety)
@@ -347,6 +349,11 @@ void worldspawn (void)
 	lms_next_place = 0;
 
 	GotoFirstMap();
+
+	bot_waypoints_for_items = cvar("g_waypoints_for_items");
+	if(bot_waypoints_for_items == 1)
+		if(self.spawnflags & SPAWNFLAG_NO_WAYPOINTS_FOR_ITEMS)
+			bot_waypoints_for_items = 0;
 
 	if(cvar("g_campaign"))
 		CampaignPreInit();
@@ -411,7 +418,8 @@ void worldspawn (void)
 
 void light (void)
 {
-	makestatic (self);
+	//makestatic (self); // Who the f___ did that?
+	remove(self);
 }
 
 float( string pFilename ) TryFile =
