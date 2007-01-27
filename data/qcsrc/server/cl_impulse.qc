@@ -148,7 +148,7 @@ void ImpulseCommands (void)
 	if (cvar("g_waypointeditor"))
 	{
 		local entity e;
-		if (imp == 103) waypoint_spawn(self.origin, self.origin, 0);
+		if (imp == 103) waypoint_schedulerelink(waypoint_spawn(self.origin, self.origin, 0));
 		else if (imp == 104) {e = navigation_findnearestwaypoint(self, FALSE);if (e) waypoint_remove(e);}
 		else if (imp == 105) waypoint_schedulerelinkall();
 		else if (imp == 106) waypoint_saveall();
