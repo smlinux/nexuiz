@@ -6,10 +6,17 @@ link="`readlink \"${0}\"`"
 [ -n "${link}" ] && path="`dirname \"${link}\"`"
 cd "${path}"
 
-case "$(uname -m)" in
-  x86_64)	nexuiz="nexuiz-linux-x86_64-glx" ;;
-  *)		nexuiz="nexuiz-linux-686-glx" ;;
+case "${0##*/}" in
+  *sdl*)	mode="sdl" ;;
+  *)		mode="glx" ;;
 esac
+
+case "$(uname -m)" in
+  x86_64)	arch="x86_64" ;;
+  *)		arch="686" ;;
+esac
+
+nexuiz="nexuiz-linux-${arch}-${mode}"
 
 set -- ./${nexuiz} "${@}"
 
