@@ -16,22 +16,27 @@ void(string s) bcenterprint
 void(string s, float check_dangerous) ServerConsoleEcho =
 {
 	local string ch;
-	localcmd("echo \"");
-	if(check_dangerous)
-	{
-		while(strlen(s))
-		{
-			ch = substring(s, 0, 1);
-			if(ch != "\"" && ch != "\r" && ch != "\n")
-				localcmd(ch);
-			s = substring(s, 1, strlen(s) - 1);
-		}
-	}
+	if (checkextension("DP_SV_PRINT"))
+		print(s);
 	else
 	{
-		localcmd(s);
+		localcmd("echo \"");
+		if(check_dangerous)
+		{
+			while(strlen(s))
+			{
+				ch = substring(s, 0, 1);
+				if(ch != "\"" && ch != "\r" && ch != "\n")
+					localcmd(ch);
+				s = substring(s, 1, strlen(s) - 1);
+			}
+		}
+		else
+		{
+			localcmd(s);
+		}
+		localcmd("\"\n");
 	}
-	localcmd("\"\n");
 }
 
 void(string s, float check_dangerous) GameLogEcho =
@@ -81,82 +86,17 @@ float math_mod(float a, float b)
 	return a - (floor(a / b) * b);
 }
 
-vector find_floor(vector org)
-{
-	traceline(org + '0 0 5', org - '0 0 255', TRUE, self);
-	if (trace_fraction < 1)
-		return trace_endpos;
-	else
-		return org;
-}
-
 void relocate_spawnpoint()
 {
-	vector org, loc;
-	string error_msg;
+	// nudge off the floor
+	setorigin(self, self.origin + '0 0 1');
 
-	error_msg = "spawn point too close to a wall";
-
-	org = find_floor(self.origin) + '0 0 30';
-
-	traceline(org, org - '18 0 0', TRUE, world);
-	if(trace_fraction < 1)
+	tracebox(self.origin, PL_MIN, PL_MAXS, self.origin, TRUE, self);
+	if (trace_startsolid)
 	{
-		loc = trace_endpos;
-		traceline(loc, loc + '36 0 0', TRUE, world);
-		if(trace_fraction >= 1 && !self.noalign)
-			org = loc + '18 0 0';
-		else
-		{
-			objerror(error_msg);
-			return;
-		}
+		objerror("player spawn point in solid, mapper sucks!\n");
+		return;
 	}
-
-	traceline (org, org - '-18 0 0', TRUE, world);
-	if (trace_fraction < 1)
-	{
-		loc = trace_endpos;
-		traceline (loc, loc + '-36 0 0', TRUE, world);
-		if(trace_fraction >= 1 && !self.noalign)
-			org = loc + '-18 0 0';
-		else
-		{
-			objerror(error_msg);
-			return;
-		}
-	}
-
-	traceline (org, org - '0 18 0' , TRUE, world);
-	if (trace_fraction < 1)
-	{
-		loc = trace_endpos;
-		traceline (loc, loc + '0 36 0', TRUE, world);
-		if(trace_fraction >= 1 && !self.noalign)
-			org = loc + '0 18 0';
-		else
-		{
-			objerror(error_msg);
-			return;
-		}
-	}
-
-	traceline (org, org - '0 -18 0', TRUE, world);
-	if (trace_fraction < 1)
-	{
-		loc = trace_endpos;
-		traceline (loc, loc + '0 -36 0', TRUE, world);
-		if(trace_fraction >= 1 && !self.noalign)
-			org = loc + '0 -18 0';
-		else
-		{
-			objerror(error_msg);
-			return;
-		}
-	}
-
-	if(!self.noalign)
-		setorigin(self, org);
 }
 
 // NOTE: DO NOT USE THIS FUNCTION TOO OFTEN.
@@ -459,7 +399,7 @@ void DistributeFragsAmongTeam(entity p, float targetteam, float factor)
 
 	if(p.frags == -666)
 		return;
-	
+
 	f = ceil(factor * p.frags);
 	p.frags = p.frags - f;
 

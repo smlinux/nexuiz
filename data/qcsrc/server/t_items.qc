@@ -227,37 +227,19 @@ float(entity player, entity item) commodity_pickupevalfunc =
 .float is_item;
 void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, string itemname, float itemid, float itemflags, float(entity player, entity item) pickupevalfunc, float pickupbasevalue)
 {
-	vector org;
-	org = self.origin;
-
 	startitem_failed = FALSE;
 
-	if (self.classname != "droppedweapon" && !self.noalign)
+	if (self.classname != "droppedweapon")
 	{
-		vector z_offset;
+		if (!self.noalign)
+		{
+			// first nudge it off the floor a little bit to avoid math errors
+			setorigin(self, self.origin + '0 0 1');
+			// note droptofloor returns FALSE if stuck/or would fall too far
+			droptofloor(self);
+		}
 
-		z_offset = '0 0 1';
-
-		if (itemid == IT_SHELLS)
-			z_offset = '0 0 4';
-		else if (itemid == IT_ROCKETS)
-			z_offset = '0 0 4';
-		else if (itemid == IT_NAILS)
-			z_offset = '0 0 0';
-		else if (itemid == IT_25HP)
-			z_offset = '0 0 5';
-		else if (itemid == IT_ARMOR)
-			z_offset = '0 0 3';
-		else if (itemid == IT_SHOTGUN)
-			z_offset = '0 0 10';
-
-		org = find_floor(org) + z_offset;
-		setorigin(self, org);
-	}
-
-	if(cvar("spawn_debug") >= 2)
-	{
-		if(self.classname != "droppedweapon")
+		if(cvar("spawn_debug") >= 2)
 		{
 			entity otheritem;
 			for(otheritem = findradius(org, 3); otheritem; otheritem = otheritem.chain)
@@ -271,10 +253,9 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 			}
 			self.is_item = TRUE;
 		}
-	}
 
-	if (self.classname != "droppedweapon")
 		waypoint_spawnforitem(self);
+	}
 
 	if (!(cvar("g_pickup_items") && !cvar("g_nixnex")) && !cvar("g_minstagib") &&
 			itemid != IT_STRENGTH && itemid != IT_INVINCIBLE && itemid != IT_HEALTH)
@@ -340,6 +321,12 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 	self.netname = itemname;
 	self.items = itemid;
 	self.flags = FL_ITEM | itemflags;
+	if (self.noalign)
+		self.movetype = MOVETYPE_NONE;
+	else
+		self.movetype = MOVETYPE_TOSS;
+	self.solid = SOLID_TRIGGER;
+	self.touch = Item_Touch;
 	setmodel (self, self.mdl);
 	if (itemflags & FL_WEAPON)
 	{
@@ -354,20 +341,12 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 		setorigin (self, self.origin + '0 0 25');
 	//	setsize (self, '-8 -8 -5', '8 8 8');
 	}
-	self.movetype = MOVETYPE_TOSS;
-	self.solid = SOLID_TRIGGER;
-	self.touch = Item_Touch;
 
 	// Savage: remove thrown items after a certain period of time ("garbage collection")
 	if (self.classname == "droppedweapon")
 	{
 		self.think = RemoveItem;
 		self.nextthink = time + 60;
-	}
-	else
-	{
-		self.movetype = MOVETYPE_NONE;
-		setorigin(self, org);
 	}
 
 	if (cvar("g_fullbrightitems"))
