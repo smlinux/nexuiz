@@ -651,6 +651,13 @@ void(vector org, string modelname, float startframe, float endframe, float frame
 //description:
 //.movement vector contains the movement input from the player, allowing QC to do as it wishs with the input, and SV_PlayerPhysics will completely replace the player physics if present (works for all MOVETYPE's), see darkplaces mod source for example of this function (in playermovement.qc, adds HalfLife ladders support, as well as acceleration/deceleration while airborn (rather than the quake sudden-stop while airborn), and simplifies the physics a bit)
 
+//DP_SV_PRINT
+//idea: id Software (QuakeWorld Server)
+//darkplaces implementation: Black, LordHavoc
+void(string s, ...) print = #339; // same number as in EXT_CSQC
+//description:
+//this is identical to dprint except that it always prints regardless of the developer cvar.
+
 //DP_SV_SETCOLOR
 //idea: LordHavoc
 //darkplaces implementation: LordHavoc
