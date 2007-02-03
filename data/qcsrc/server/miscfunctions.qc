@@ -91,7 +91,7 @@ void relocate_spawnpoint()
 	// nudge off the floor
 	setorigin(self, self.origin + '0 0 1');
 
-	tracebox(self.origin, PL_MIN, PL_MAXS, self.origin, TRUE, self);
+	tracebox(self.origin, PL_MIN, PL_MAX, self.origin, TRUE, self);
 	if (trace_startsolid)
 	{
 		objerror("player spawn point in solid, mapper sucks!\n");

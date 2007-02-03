@@ -135,7 +135,7 @@ void() dompointthink =
 	}
 
 	// if the player left the game, changed teams or became spectator, we have to find another player on the same team to give credit to
-	if (!self.enemy.flags || self.enemy.team != self.goalentity.team || self.enemy.killcount == -666) // flags is zero on removed clients		
+	if (!self.enemy.flags || self.enemy.team != self.goalentity.team || self.enemy.killcount == -666) // flags is zero on removed clients
 	{
 		other = self.enemy;
 		head = find(head, classname, "player");
@@ -288,7 +288,7 @@ void() dom_controlpoint_setup =
 	self.flags = FL_ITEM;
 	setsize(self, '-32 -32 -32', '32 32 32');
 	setorigin(self, self.origin + '0 0 20');
-	droptofloor(0, 0);
+	droptofloor();
 };
 
 

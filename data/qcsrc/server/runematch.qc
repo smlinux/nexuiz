@@ -39,7 +39,7 @@ void runematch_spawn_point()
 		return;
 	}
 
-	droptofloor(self);
+	droptofloor();
 	setorigin(self, self.origin + '0 0 35');
 }
 

@@ -236,13 +236,13 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 			// first nudge it off the floor a little bit to avoid math errors
 			setorigin(self, self.origin + '0 0 1');
 			// note droptofloor returns FALSE if stuck/or would fall too far
-			droptofloor(self);
+			droptofloor();
 		}
 
 		if(cvar("spawn_debug") >= 2)
 		{
 			entity otheritem;
-			for(otheritem = findradius(org, 3); otheritem; otheritem = otheritem.chain)
+			for(otheritem = findradius(self.origin, 3); otheritem; otheritem = otheritem.chain)
 			{
 				if(otheritem.is_item)
 				{

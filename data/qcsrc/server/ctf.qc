@@ -20,7 +20,7 @@ void() place_flag =
 	if(!self.t_length)
 		self.t_length = 119; // maximum frame
 
-	setattachment(self, world, "");	
+	setattachment(self, world, "");
 	self.mdl = self.model;
 	self.flags = FL_ITEM;
 	self.solid = SOLID_TRIGGER;
@@ -33,7 +33,7 @@ void() place_flag =
 	self.cnt = FLAG_BASE;
 	self.mangle = self.angles;
 	//self.effects = self.effects | EF_DIMLIGHT;
-	if (!droptofloor(0, 0))
+	if (!droptofloor())
 	{
 		dprint("Flag fell out of level at ", vtos(self.origin), "\n");
 		remove(self);
@@ -56,7 +56,7 @@ void LogCTF(string mode, float flagteam, entity actor)
 
 void(entity e) RegenFlag =
 {
-	setattachment(e, world, "");	
+	setattachment(e, world, "");
 	e.movetype = MOVETYPE_TOSS;
 	e.solid = SOLID_TRIGGER;
 	// TODO: play a sound here
