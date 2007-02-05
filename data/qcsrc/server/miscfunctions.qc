@@ -17,7 +17,7 @@ void(string s, float check_dangerous) ServerConsoleEcho =
 {
 	local string ch;
 	if (checkextension("DP_SV_PRINT"))
-		print(s);
+		print(s, "\n");
 	else
 	{
 		localcmd("echo \"");
