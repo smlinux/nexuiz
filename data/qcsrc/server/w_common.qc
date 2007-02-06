@@ -134,7 +134,6 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float deathtype
 void fireBullet (vector start, vector dir, float spread, float damage, float dtype, float tracer)
 {
 	vector  end;
-	float r;
 	local entity e;
 
 	// use traceline_hitcorpse to make sure it can hit gibs and corpses too
@@ -167,13 +166,6 @@ void fireBullet (vector start, vector dir, float spread, float damage, float dty
 				te_gunshot (trace_endpos);
 			else
 				te_spike (trace_endpos);
-			r = random ();
-			if (r < 0.10)
-				PointSound (trace_endpos, "weapons/ric1.ogg", 1, ATTN_NORM);
-			else if (r < 0.20)
-				PointSound (trace_endpos, "weapons/ric2.ogg", 1, ATTN_NORM);
-			else if (r < 0.30)
-				PointSound (trace_endpos, "weapons/ric3.ogg", 1, ATTN_NORM);
 		}
 		//else if (trace_ent.classname == "player" || trace_ent.classname == "corpse" || trace_ent.classname == "gib")
 			//stuffcmd(self, "play2 misc/hit.wav\n");
