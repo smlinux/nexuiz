@@ -716,8 +716,7 @@ void ClientConnect (void)
 
 	bprint("\n");
 
-	self.welcomemessage_time = time + cvar("welcome_message_time");
-	self.welcomemessage_time2 = 0;
+	self.welcomemessage_time = 0;
 
 	stuffcmd(self, strcat("exec maps/", mapname, ".cfg\n"));
 	// TODO: is this being used for anything else than cd tracks?

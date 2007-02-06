@@ -300,15 +300,19 @@ void PrintWelcomeMessage(entity pl)
 {
 	string s, mutator, modifications, padding;
 
-	/*if(self.welcomemessage_time < time)
+	/*if(self.welcomemessage_time > time)
 		return;
-	if(self.welcomemessage_time2 > time)
-		return;
-	self.welcomemessage_time2 = time + 0.8; */
+	self.welcomemessage_time = time + 0.8; */
 
 	if(self.cvar_scr_centertime == 0) return;
-	if(self.welcomemessage_time2 > time) return;
-	self.welcomemessage_time2 = time + self.cvar_scr_centertime * 0.8;
+	if(self.welcomemessage_time > time) return;
+	self.welcomemessage_time = time + self.cvar_scr_centertime * 0.6;
+
+	if(cvar("g_campaign"))
+	{
+		centerprint(pl, campaign_message);
+		return;
+	}
 
 	if(self.classname == "observer")
 	{
@@ -325,12 +329,6 @@ void PrintWelcomeMessage(entity pl)
 			return centerprint(self, strcat(newlines, "spectating ", self.enemy.netname, "\n\n\n^7press jump to play\n^7press attack for next player\npress attack2 for free fly mode"));
 	}
 
-
-	if(cvar("g_campaign"))
-	{
-		centerprint(pl, campaign_message);
-		return;
-	}
 
 	if(cvar("g_minstagib"))
 		mutator = "^2Minstagib ^1";
