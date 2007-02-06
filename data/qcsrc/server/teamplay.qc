@@ -306,6 +306,10 @@ void PrintWelcomeMessage(entity pl)
 		return;
 	self.welcomemessage_time2 = time + 0.8; */
 
+	if(self.cvar_scr_centertime == 0) return;
+	if(self.welcomemessage_time2 > time) return;
+	self.welcomemessage_time2 = time + self.cvar_scr_centertime * 0.8;
+
 	if(self.classname == "observer")
 	{
 		if(cvar("g_lms") && self.frags <= 0 && self.frags > -666)
@@ -321,9 +325,6 @@ void PrintWelcomeMessage(entity pl)
 			return centerprint(self, strcat(newlines, "spectating ", self.enemy.netname, "\n\n\n^7press jump to play\n^7press attack for next player\npress attack2 for free fly mode"));
 	}
 
-
-	if(self.welcomemessage_time2 > time) return;
-	self.welcomemessage_time2 = time + 1.0;
 
 	if(cvar("g_campaign"))
 	{
