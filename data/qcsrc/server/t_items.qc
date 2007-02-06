@@ -231,14 +231,6 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 
 	if (self.classname != "droppedweapon")
 	{
-		if (!self.noalign)
-		{
-			// first nudge it off the floor a little bit to avoid math errors
-			setorigin(self, self.origin + '0 0 1');
-			// note droptofloor returns FALSE if stuck/or would fall too far
-			droptofloor();
-		}
-
 		if(cvar("spawn_debug") >= 2)
 		{
 			entity otheritem;
@@ -328,18 +320,11 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 	self.solid = SOLID_TRIGGER;
 	self.touch = Item_Touch;
 	setmodel (self, self.mdl);
+	setsize (self, '-16 -16 0', '16 16 32');
 	if (itemflags & FL_WEAPON)
 	{
-		setorigin (self, self.origin + '0 0 23');
-		setsize (self, '-12 -12 -12', '12 12 12');
-
 		// neutral team color for pickup weapons
 		self.colormap = 160 * 1024 + 160;
-	}
-	else
-	{
-		setorigin (self, self.origin + '0 0 25');
-	//	setsize (self, '-8 -8 -5', '8 8 8');
 	}
 
 	// Savage: remove thrown items after a certain period of time ("garbage collection")
@@ -347,6 +332,13 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 	{
 		self.think = RemoveItem;
 		self.nextthink = time + 60;
+	}
+	else if (!self.noalign)
+	{
+		// first nudge it off the floor a little bit to avoid math errors
+		setorigin(self, self.origin + '0 0 1');
+		// note droptofloor returns FALSE if stuck/or would fall too far
+		droptofloor();
 	}
 
 	if (cvar("g_fullbrightitems"))
