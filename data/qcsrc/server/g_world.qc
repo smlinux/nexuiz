@@ -702,7 +702,7 @@ void() GotoNextMap =
 		float allowReset;
 
 		// cvar "nextmap" always gets priority
-		if(cvar_string("nextmap") != "")
+		if(cvar("nextmap"))
 		if(TryFile(strcat("maps/", cvar_string("nextmap"), ".mapcfg")))
 		{
 			localcmd(strcat("exec \"maps/", cvar_string("nextmap"), ".mapcfg\"\n"));
