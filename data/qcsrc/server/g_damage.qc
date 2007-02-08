@@ -361,7 +361,7 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 			if(attacker != targ)
 				if(attacker.team == targ.team)
 					if(attacker.classname == "player")
-						if(targ.classname == "player")
+						if((targ.classname == "player") && (targ.health > 0))
 						{
 							mirrordamage = cvar("g_mirrordamage") * damage;
 							mirrorforce = cvar("g_mirrordamage") * vlen(force);
