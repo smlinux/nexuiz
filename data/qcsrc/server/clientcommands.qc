@@ -386,6 +386,7 @@ void SV_ParseClientCommand(string s) {
 			wordwrap_sprint(cmd, 1111);
 	} else {
 		cmd = argv(0);
+		/* checks not needed any more since DP has separated clientcommands and regular commands
 		if(cmd != "status")
 		if(cmd != "name")
 		//if(cmd != "say") // handled above
@@ -407,6 +408,7 @@ void SV_ParseClientCommand(string s) {
 			ServerConsoleEcho(strcat("WARNING: Invalid clientcommand by ", self.netname, ": ", s), TRUE);
 			return;
 		}
+		*/
 		clientcommand(self,s);
 	}
 }
