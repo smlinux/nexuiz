@@ -36,6 +36,12 @@ Item Window Video
 			text	"Fullscreen"
 			target	"::Data::Video::Fullscreen::Switch"
 		}
+		Derive Nex_Video_Option_Switch VSync
+		{   
+			text    "Vertical Synchronization"
+			
+			target  "::Data::Video::VSync::Switch"
+		}
 		Derive Nex_Video_Option_Switch Anisotropy
 		{
 			text	"Anisotropic Filtering"

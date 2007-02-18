@@ -32,6 +32,12 @@ Item DataContainer Video
 
 		[DataLink_OnOffSwitch]
 	}
+	Item Data_Cvar VSync
+	{
+		cvarName    "vid_vsync"
+	
+		[DataLink_OnOffSwitch]
+	}
 	Item Data_Cvar Anisotropy
 	{
 		cvarName "gl_texture_anisotropy"
