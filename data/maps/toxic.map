@@ -2,7 +2,7 @@
 // entity 0
 {
 "classname" "worldspawn"
-"message" "^2Toxic  ^7- by morfar"
+"message" "Toxic - by morfar"
 // brush 0
 {
 ( 136 -512 -64 ) ( 0 -512 -64 ) ( 0 -600 -64 ) common/caulk 0 0 0 0.5 0.5 0 0 0
