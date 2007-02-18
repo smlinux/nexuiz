@@ -165,115 +165,118 @@ void Obituary (entity attacker, entity targ, float deathtype)
 			if (targ.killcount > 2)
 				bprint ("^1",s,"^1 ended it all with a ",ftos(targ.killcount)," kill spree\n");
 		}
-		else if (teamplay && attacker.team == targ.team)
-		{
-			centerprint(attacker, strcat("^1Moron! You fragged a teammate!\n\n\n"));
-			bprint ("^1", attacker.netname, "^1 mows down a teammate\n");
-			GiveFrags(attacker, targ, -1);
-			//attacker.frags = attacker.frags - 1;
-			if (targ.killcount > 2)
-				bprint ("^1",s,"'s ^1",ftos(targ.killcount)," kill spree was ended by a teammate!\n");
-			if (attacker.killcount > 2)
-				bprint ("^1",attacker.netname,"^1 ended a ",ftos(attacker.killcount)," kill spree by killing a teammate\n");
-			attacker.killcount = 0;
-
-			LogDeath("tk", deathtype, attacker, targ);
-		}
 		else if (attacker.classname == "player" || attacker.classname == "gib")
 		{
-			if (!checkrules_firstblood)
+			if(teamplay && attacker.team == targ.team)
 			{
-				checkrules_firstblood = TRUE;
-				//sound(world, CHAN_AUTO, "announcer/firstblood.wav", 1, ATTN_NONE);
-				//if (cvar("g_minstagib"))
-					//sound(world, CHAN_AUTO, "announce/male/mapkill1.ogg", 1, ATTN_NONE);
-				bprint("^1",attacker.netname, "^1 drew first blood", "\n");
+				centerprint(attacker, strcat("^1Moron! You fragged a teammate!\n\n\n"));
+				bprint ("^1", attacker.netname, "^1 mows down a teammate\n");
+				GiveFrags(attacker, targ, -1);
+				//attacker.frags = attacker.frags - 1;
+				if (targ.killcount > 2)
+					bprint ("^1",s,"'s ^1",ftos(targ.killcount)," kill spree was ended by a teammate!\n");
+				if (attacker.killcount > 2)
+					bprint ("^1",attacker.netname,"^1 ended a ",ftos(attacker.killcount)," kill spree by killing a teammate\n");
+				attacker.killcount = 0;
+
+				LogDeath("tk", deathtype, attacker, targ);
 			}
-
-			centerprint(attacker, strcat("^4You fragged ^7", s, "\n\n\n"));
-			centerprint(targ, strcat("^1You were fragged by ^7", attacker.netname, "\n\n\n"));
-
-			if (deathtype == IT_LASER)
-				bprint ("^1",s, "^1 was blasted by ", attacker.netname, "\n");
-			else if (deathtype == IT_UZI)
-				bprint ("^1",s, "^1 was riddled full of holes by ", attacker.netname, "\n");
-			else if (deathtype == IT_SHOTGUN)
-				bprint ("^1",s, "^1 was gunned by ", attacker.netname, "\n");
-			else if (deathtype == IT_GRENADE_LAUNCHER)
-				bprint ("^1", s, "^1 was blasted by ", attacker.netname, "\n");
-			else if (deathtype == IT_ELECTRO)
-				bprint ("^1",s, "^1 was blasted by ", attacker.netname, "\n");
-			else if (deathtype == IT_CRYLINK)
-				bprint ("^1",s, "^1 was blasted by ", attacker.netname, "\n");
-			else if (deathtype == IT_NEX)
-				bprint ("^1",s, "^1 has been vaporized by ", attacker.netname, "\n");
-			else if (deathtype == IT_HAGAR)
-				bprint ("^1",s, "^1 was pummeled by ", attacker.netname, "\n");
-			else if (deathtype == IT_ROCKET_LAUNCHER)
-				bprint ("^1",s, "^1 was blasted by ", attacker.netname, "\n");
-			else if (deathtype == DEATH_TELEFRAG)
-				bprint ("^1",s, "^1 was telefragged by ", attacker.netname, "\n");
-			else if (deathtype == DEATH_DROWN)
-				bprint ("^1",s, "^1 was drowned by ", attacker.netname, "\n");
-			else if (deathtype == DEATH_SLIME)
-				bprint ("^1",s, "^1 was slimed by ", attacker.netname, "\n");
-			else if (deathtype == DEATH_LAVA)
-				bprint ("^1",s, "^1 was cooked by ", attacker.netname, "\n");
-			else if (deathtype == DEATH_FALL)
-				bprint ("^1",s, "^1 was grounded by ", attacker.netname, "\n");
-			else if (deathtype == DEATH_SHOOTING_STAR)
-				bprint ("^1",s, "^1 was shot into space by ", attacker.netname, "\n");
-			else if (deathtype == DEATH_SWAMP)
-				bprint ("^1",s, "^1 was conserved by ", attacker.netname, "\n");
-			else if (deathtype == DEATH_HURTTRIGGER)
-				bprint ("^1",s, "^1 was thrown into a world of hurt by ", attacker.netname, "\n");
 			else
-				bprint ("^1",s, "^1 was fragged by ", attacker.netname, "\n");
+			{
+				if (!checkrules_firstblood)
+				{
+					checkrules_firstblood = TRUE;
+					//sound(world, CHAN_AUTO, "announcer/firstblood.wav", 1, ATTN_NONE);
+					//if (cvar("g_minstagib"))
+						//sound(world, CHAN_AUTO, "announce/male/mapkill1.ogg", 1, ATTN_NONE);
+					bprint("^1",attacker.netname, "^1 drew first blood", "\n");
+				}
 
-			GiveFrags(attacker, targ, 1);
-			//attacker.frags = attacker.frags + 1;
-			if (targ.killcount > 2)
-				bprint ("^1",s,"'s ^1", ftos(targ.killcount), " kill spree was ended by ", attacker.netname, "\n");
-			attacker.killcount = attacker.killcount + 1;
-			if (attacker.killcount > 2)
-				bprint ("^1",attacker.netname,"^1 has ",ftos(attacker.killcount)," frags in a row\n");
+				centerprint(attacker, strcat("^4You fragged ^7", s, "\n\n\n"));
+				centerprint(targ, strcat("^1You were fragged by ^7", attacker.netname, "\n\n\n"));
 
-			LogDeath("frag", deathtype, attacker, targ);
+				if (deathtype == IT_LASER)
+					bprint ("^1",s, "^1 was blasted by ", attacker.netname, "\n");
+				else if (deathtype == IT_UZI)
+					bprint ("^1",s, "^1 was riddled full of holes by ", attacker.netname, "\n");
+				else if (deathtype == IT_SHOTGUN)
+					bprint ("^1",s, "^1 was gunned by ", attacker.netname, "\n");
+				else if (deathtype == IT_GRENADE_LAUNCHER)
+					bprint ("^1", s, "^1 was blasted by ", attacker.netname, "\n");
+				else if (deathtype == IT_ELECTRO)
+					bprint ("^1",s, "^1 was blasted by ", attacker.netname, "\n");
+				else if (deathtype == IT_CRYLINK)
+					bprint ("^1",s, "^1 was blasted by ", attacker.netname, "\n");
+				else if (deathtype == IT_NEX)
+					bprint ("^1",s, "^1 has been vaporized by ", attacker.netname, "\n");
+				else if (deathtype == IT_HAGAR)
+					bprint ("^1",s, "^1 was pummeled by ", attacker.netname, "\n");
+				else if (deathtype == IT_ROCKET_LAUNCHER)
+					bprint ("^1",s, "^1 was blasted by ", attacker.netname, "\n");
+				else if (deathtype == DEATH_TELEFRAG)
+					bprint ("^1",s, "^1 was telefragged by ", attacker.netname, "\n");
+				else if (deathtype == DEATH_DROWN)
+					bprint ("^1",s, "^1 was drowned by ", attacker.netname, "\n");
+				else if (deathtype == DEATH_SLIME)
+					bprint ("^1",s, "^1 was slimed by ", attacker.netname, "\n");
+				else if (deathtype == DEATH_LAVA)
+					bprint ("^1",s, "^1 was cooked by ", attacker.netname, "\n");
+				else if (deathtype == DEATH_FALL)
+					bprint ("^1",s, "^1 was grounded by ", attacker.netname, "\n");
+				else if (deathtype == DEATH_SHOOTING_STAR)
+					bprint ("^1",s, "^1 was shot into space by ", attacker.netname, "\n");
+				else if (deathtype == DEATH_SWAMP)
+					bprint ("^1",s, "^1 was conserved by ", attacker.netname, "\n");
+				else if (deathtype == DEATH_HURTTRIGGER)
+					bprint ("^1",s, "^1 was thrown into a world of hurt by ", attacker.netname, "\n");
+				else
+					bprint ("^1",s, "^1 was fragged by ", attacker.netname, "\n");
 
-			if (attacker.killcount == 3)
-			{
-				bprint (attacker.netname,"^7 made a ^1TRIPLE FRAG\n");
-				stuffcmd(attacker, "play2 announcer/male/03kills.ogg\n");
-			}
-			else if (attacker.killcount == 5)
-			{
-				bprint (attacker.netname,"^7 made a ^1FIVE FRAG COMBO\n");
-				stuffcmd(attacker, "play2 announcer/male/05kills.ogg\n");
-			}
-			else if (attacker.killcount == 10)
-			{
-				bprint (attacker.netname,"^7 is on a ^1RAGE\n");
-				stuffcmd(attacker, "play2 announcer/male/10kills.ogg\n");
-			}
-			else if (attacker.killcount == 15)
-			{
-				bprint (attacker.netname,"^7 has done a ^1MASSACRE!\n");
-				stuffcmd(attacker, "play2 announcer/male/15kills.ogg\n");
-			}
-			else if (attacker.killcount == 20)
-			{
-				bprint (attacker.netname,"^7 is ^1UNHUMAN!\n");
-				stuffcmd(attacker, "play2 announcer/male/20kills.ogg\n");
-			}
-			else if (attacker.killcount == 25)
-			{
-				bprint (attacker.netname,"^7 is a ^1DEATH INCARNATION!\n");
-				stuffcmd(attacker, "play2 announcer/male/25kills.ogg\n");
-			}
-			else if (attacker.killcount == 30)
-			{
-				bprint (attacker.netname,"^7 is maybe a ^1AIMBOTTER?!\n");
-				stuffcmd(attacker, "play2 announcer/male/30kills.ogg\n");
+				GiveFrags(attacker, targ, 1);
+				//attacker.frags = attacker.frags + 1;
+				if (targ.killcount > 2)
+					bprint ("^1",s,"'s ^1", ftos(targ.killcount), " kill spree was ended by ", attacker.netname, "\n");
+				attacker.killcount = attacker.killcount + 1;
+				if (attacker.killcount > 2)
+					bprint ("^1",attacker.netname,"^1 has ",ftos(attacker.killcount)," frags in a row\n");
+
+				LogDeath("frag", deathtype, attacker, targ);
+
+				if (attacker.killcount == 3)
+				{
+					bprint (attacker.netname,"^7 made a ^1TRIPLE FRAG\n");
+					stuffcmd(attacker, "play2 announcer/male/03kills.ogg\n");
+				}
+				else if (attacker.killcount == 5)
+				{
+					bprint (attacker.netname,"^7 made a ^1FIVE FRAG COMBO\n");
+					stuffcmd(attacker, "play2 announcer/male/05kills.ogg\n");
+				}
+				else if (attacker.killcount == 10)
+				{
+					bprint (attacker.netname,"^7 is on a ^1RAGE\n");
+					stuffcmd(attacker, "play2 announcer/male/10kills.ogg\n");
+				}
+				else if (attacker.killcount == 15)
+				{
+					bprint (attacker.netname,"^7 has done a ^1MASSACRE!\n");
+					stuffcmd(attacker, "play2 announcer/male/15kills.ogg\n");
+				}
+				else if (attacker.killcount == 20)
+				{
+					bprint (attacker.netname,"^7 is ^1UNHUMAN!\n");
+					stuffcmd(attacker, "play2 announcer/male/20kills.ogg\n");
+				}
+				else if (attacker.killcount == 25)
+				{
+					bprint (attacker.netname,"^7 is a ^1DEATH INCARNATION!\n");
+					stuffcmd(attacker, "play2 announcer/male/25kills.ogg\n");
+				}
+				else if (attacker.killcount == 30)
+				{
+					bprint (attacker.netname,"^7 is maybe a ^1AIMBOTTER?!\n");
+					stuffcmd(attacker, "play2 announcer/male/30kills.ogg\n");
+				}
 			}
 		}
 		else
