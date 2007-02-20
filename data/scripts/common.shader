@@ -1,3 +1,13 @@
+textures/common/antiportal
+{
+	qer_trans 0.30
+	qer_nocarve
+	surfaceparm nodraw
+	surfaceparm nonsolid
+	surfaceparm structural
+	surfaceparm trans
+	surfaceparm antiportal
+}
 
 textures/common/areaportal
 {
@@ -14,7 +24,7 @@ textures/common/areaportal
 textures/common/caulk
 {
 	surfaceparm nodraw
-    surfaceparm nolightmap
+	surfaceparm nolightmap
 	surfaceparm nomarks
 }
 
@@ -100,12 +110,12 @@ textures/common/hint // should NOT use surfaceparm hint.. strange but true
 textures/common/invisible // solid, transparent polygons, casts shadows
 {
 	surfaceparm nolightmap			
-        {
-                map textures/common/invisible.tga
-                alphaFunc GE128
+	{
+		map textures/common/invisible.tga
+		alphaFunc GE128
 		depthWrite
 		rgbGen vertex
-        }
+	}
 }
 
 textures/common/mirror1
@@ -113,15 +123,11 @@ textures/common/mirror1
 	qer_editorimage textures/common/mirror1.tga
 	surfaceparm nolightmap
 	portal
-  
 	{
 		map textures/common/mirror1.tga
 		blendfunc GL_ONE GL_ONE_MINUS_SRC_ALPHA
 		depthWrite
 	}
-       
-        
-
 }
 
 textures/common/mirror2
@@ -134,11 +140,10 @@ textures/common/mirror2
 		blendfunc GL_ONE GL_ONE_MINUS_SRC_ALPHA
 		depthWrite
 	}
-        {
-               map textures/sfx/mirror.tga
-	       blendFunc GL_ZERO GL_ONE_MINUS_SRC_COLOR
-        }
-
+	{
+		map textures/sfx/mirror.tga
+		blendFunc GL_ZERO GL_ONE_MINUS_SRC_COLOR
+	}
 }
 
 textures/common/missileclip
@@ -212,7 +217,6 @@ textures/common/portal
 		tcMod turb 0 0.25 0 0.05
 		blendfunc GL_ONE GL_ONE_MINUS_SRC_ALPHA
 		depthWrite
-
 	}
 }
 
@@ -230,7 +234,7 @@ textures/common/terrain
 {
 	q3map_terrain
 	surfaceparm nodraw
-    surfaceparm nolightmap
+	surfaceparm nolightmap
 	surfaceparm nomarks
 }
 
@@ -268,7 +272,7 @@ textures/common/weapclip
 {
 	qer_trans 0.40
 	surfaceparm nodraw
-    	surfaceparm nolightmap
+	surfaceparm nolightmap
 	surfaceparm trans
 	surfaceparm nomarks
 }

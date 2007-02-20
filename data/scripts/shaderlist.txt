@@ -1,5 +1,3 @@
-common
-toxic
 blacksky
 common
 dsi
@@ -8,13 +6,14 @@ el3dm1
 evil3
 evil4_techtrims
 evil5
+evil6
 evil6_floors
 evil6_lights
-evil6
 evil6_support
 evil6_trims
 evil6_walls
 evil8_base
+eX
 harlequin_sky
 kaznexctf2
 liquids
@@ -27,6 +26,5 @@ sav-liquids
 stralenex1
 stralenex8
 swamp
+toxic
 tznex01
-zenex1
-eX
