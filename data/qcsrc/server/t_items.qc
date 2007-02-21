@@ -313,6 +313,8 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 	self.netname = itemname;
 	self.items = itemid;
 	self.flags = FL_ITEM | itemflags;
+	if(self.spawnflags & 1)
+		self.noalign = 1;
 	if (self.noalign)
 		self.movetype = MOVETYPE_NONE;
 	else
