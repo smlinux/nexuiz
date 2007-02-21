@@ -87,16 +87,12 @@ alpha 256 256 0
 originjitter 6 6 6
 // dust/smoke drifting away from the impact
 effect TE_SPIKE
-count 10
-type smoke
+countabsolute 1
+type static
 tex 0 8
-color 0x101010 0x202020
+color 0xFFFFFF 0xFFFFFF
 size 6 6
-airfriction 2
-liquidfriction 2
-alpha 128 256 256
-originjitter 4 4 4
-velocityjitter 24 24 24
+alpha 48 48 48
 // bouncing sparks
 effect TE_SPIKE
 count 20
@@ -231,16 +227,12 @@ alpha 256 256 0
 originjitter 6 6 6
 // dust/smoke drifting away from the impact
 effect TE_GUNSHOT
-count 3
-type smoke
+countabsolute 1
+type static
 tex 0 8
-color 0x101010 0x202020
+color 0xFFFFFF 0xFFFFFF
 size 6 6
-airfriction 2
-liquidfriction 2
-alpha 128 256 256
-originjitter 4 4 4
-velocityjitter 24 24 24
+alpha 48 48 48
 // bouncing sparks
 effect TE_GUNSHOT
 count 10
