@@ -764,12 +764,12 @@
 }
 // brush 84
 {
-( 320 256 56 ) ( 320 -312 0 ) ( 512 256 56 ) evil2_basefloor/flr_cemtilesmll_drk 0 0 0 0.5 0.5 134217728 0 0
-( 320 -320 8 ) ( 320 256 64 ) ( 512 -320 8 ) evil2_basefloor/flr_cemtilesmll_drk 0 0 0 0.5 0.5 134217728 0 0
-( 336 -64 64 ) ( 336 -192 64 ) ( 336 -192 -128 ) evil2_basefloor/flr_cemtilesmll_drk 0 0 0 0.5 0.5 134217728 0 0
-( 296 -304 64 ) ( 488 -304 64 ) ( 488 -304 -128 ) evil2_basefloor/flr_cemtilesmll_drk 0 0 0 0.5 0.5 134217728 0 0
-( 496 -200 64 ) ( 496 -72 64 ) ( 496 -72 -128 ) evil2_basefloor/flr_cemtilesmll_drk 0 0 0 0.5 0.5 134217728 0 0
-( 472 240 64 ) ( 280 240 64 ) ( 280 240 -128 ) evil2_basefloor/flr_cemtilesmll_drk 0 0 0 0.5 0.5 134217728 0 0
+( 320 256 56 ) ( 320 -312 0 ) ( 512 256 56 ) evil2_basefloor/flr_cemtilesmll_drk 0 0 0 0.5 0.5 0 0 0
+( 320 -320 8 ) ( 320 256 64 ) ( 512 -320 8 ) evil2_basefloor/flr_cemtilesmll_drk 0 0 0 0.5 0.5 0 0 0
+( 336 -64 64 ) ( 336 -192 64 ) ( 336 -192 -128 ) evil2_basefloor/flr_cemtilesmll_drk 0 0 0 0.5 0.5 0 0 0
+( 296 -304 64 ) ( 488 -304 64 ) ( 488 -304 -128 ) evil2_basefloor/flr_cemtilesmll_drk 0 0 0 0.5 0.5 0 0 0
+( 496 -200 64 ) ( 496 -72 64 ) ( 496 -72 -128 ) evil2_basefloor/flr_cemtilesmll_drk 0 0 0 0.5 0.5 0 0 0
+( 472 240 64 ) ( 280 240 64 ) ( 280 240 -128 ) evil2_basefloor/flr_cemtilesmll_drk 0 0 0 0.5 0.5 0 0 0
 }
 // brush 85
 {
@@ -2105,66 +2105,66 @@
 }
 // brush 232
 {
-( 496 256 56 ) ( 336 256 56 ) ( 336 240 56 ) evil2_basefloor/flr_tmtl_drk 0 128 -90 0.5 0.5 134217728 0 0
-( 336 240 64 ) ( 336 256 64 ) ( 496 256 64 ) evil2_basefloor/flr_tmtl_drk 0 128 -90 0.5 0.5 134217728 0 0
-( 336 240 64 ) ( 496 240 64 ) ( 496 240 56 ) evil2_basefloor/flr_tmtl_drk 16 128 -90 0.5 0.5 134217728 0 0
-( 768 232 64 ) ( 768 248 64 ) ( 768 248 56 ) evil2_basefloor/flr_tmtl_drk 16 -32 -90 0.5 0.5 134217728 0 0
-( 496 256 64 ) ( 336 256 64 ) ( 336 256 56 ) evil2_basefloor/flr_tmtl_drk 16 128 -90 0.5 0.5 134217728 0 0
-( 320 256 64 ) ( 320 240 64 ) ( 320 240 56 ) evil2_basefloor/flr_tmtl_drk 16 -32 -90 0.5 0.5 134217728 0 0
+( 496 256 56 ) ( 336 256 56 ) ( 336 240 56 ) evil2_basefloor/flr_tmtl_drk 0 128 -90 0.5 0.5 0 0 0
+( 336 240 64 ) ( 336 256 64 ) ( 496 256 64 ) evil2_basefloor/flr_tmtl_drk 0 128 -90 0.5 0.5 0 0 0
+( 336 240 64 ) ( 496 240 64 ) ( 496 240 56 ) evil2_basefloor/flr_tmtl_drk 16 128 -90 0.5 0.5 0 0 0
+( 768 232 64 ) ( 768 248 64 ) ( 768 248 56 ) evil2_basefloor/flr_tmtl_drk 16 -32 -90 0.5 0.5 0 0 0
+( 496 256 64 ) ( 336 256 64 ) ( 336 256 56 ) evil2_basefloor/flr_tmtl_drk 16 128 -90 0.5 0.5 0 0 0
+( 320 256 64 ) ( 320 240 64 ) ( 320 240 56 ) evil2_basefloor/flr_tmtl_drk 16 -32 -90 0.5 0.5 0 0 0
 }
 // brush 233
 {
-( 488 240 64 ) ( 296 240 64 ) ( 296 240 -128 ) evil2_basefloor/flr_tmtl_drk -96 128 -90 0.5 0.5 134217728 0 0
-( 512 -200 64 ) ( 512 -72 64 ) ( 512 -72 -128 ) evil2_basefloor/flr_tmtl_drk -96 128 -90 0.5 0.5 134217728 0 0
-( 312 -304 64 ) ( 504 -304 64 ) ( 504 -304 -128 ) evil2_basefloor/flr_tmtl_drk -96 128 -90 0.5 0.5 134217728 0 0
-( 496 -80 64 ) ( 496 -208 64 ) ( 496 -208 -128 ) evil2_basefloor/flr_tmtl_drk -96 128 -90 0.5 0.5 134217728 0 0
-( 336 -320 8 ) ( 336 256 64 ) ( 528 -320 8 ) evil2_basefloor/flr_tmtl_drk -96 128 -90 0.5 0.5 134217728 0 0
-( 336 256 56 ) ( 336 -312 0 ) ( 528 256 56 ) evil2_basefloor/flr_tmtl_drk -96 128 -90 0.5 0.5 134217728 0 0
+( 488 240 64 ) ( 296 240 64 ) ( 296 240 -128 ) evil2_basefloor/flr_tmtl_drk -96 128 -90 0.5 0.5 0 0 0
+( 512 -200 64 ) ( 512 -72 64 ) ( 512 -72 -128 ) evil2_basefloor/flr_tmtl_drk -96 128 -90 0.5 0.5 0 0 0
+( 312 -304 64 ) ( 504 -304 64 ) ( 504 -304 -128 ) evil2_basefloor/flr_tmtl_drk -96 128 -90 0.5 0.5 0 0 0
+( 496 -80 64 ) ( 496 -208 64 ) ( 496 -208 -128 ) evil2_basefloor/flr_tmtl_drk -96 128 -90 0.5 0.5 0 0 0
+( 336 -320 8 ) ( 336 256 64 ) ( 528 -320 8 ) evil2_basefloor/flr_tmtl_drk -96 128 -90 0.5 0.5 0 0 0
+( 336 256 56 ) ( 336 -312 0 ) ( 528 256 56 ) evil2_basefloor/flr_tmtl_drk -96 128 -90 0.5 0.5 0 0 0
 }
 // brush 234
 {
-( 160 256 56 ) ( 160 -312 0 ) ( 352 256 56 ) evil2_basefloor/flr_tmtl_drk -96 -224 -90 0.5 0.5 134217728 0 0
-( 160 -320 8 ) ( 160 256 64 ) ( 352 -320 8 ) evil2_basefloor/flr_tmtl_drk -96 -224 -90 0.5 0.5 134217728 0 0
-( 320 -80 64 ) ( 320 -208 64 ) ( 320 -208 -128 ) evil2_basefloor/flr_tmtl_drk -96 128 -90 0.5 0.5 134217728 0 0
-( 136 -304 64 ) ( 328 -304 64 ) ( 328 -304 -128 ) evil2_basefloor/flr_tmtl_drk -96 -224 -90 0.5 0.5 134217728 0 0
-( 336 -200 64 ) ( 336 -72 64 ) ( 336 -72 -128 ) evil2_basefloor/flr_tmtl_drk -96 128 -90 0.5 0.5 134217728 0 0
-( 312 240 64 ) ( 120 240 64 ) ( 120 240 -128 ) evil2_basefloor/flr_tmtl_drk -96 -224 -90 0.5 0.5 134217728 0 0
+( 160 256 56 ) ( 160 -312 0 ) ( 352 256 56 ) evil2_basefloor/flr_tmtl_drk -96 -224 -90 0.5 0.5 0 0 0
+( 160 -320 8 ) ( 160 256 64 ) ( 352 -320 8 ) evil2_basefloor/flr_tmtl_drk -96 -224 -90 0.5 0.5 0 0 0
+( 320 -80 64 ) ( 320 -208 64 ) ( 320 -208 -128 ) evil2_basefloor/flr_tmtl_drk -96 128 -90 0.5 0.5 0 0 0
+( 136 -304 64 ) ( 328 -304 64 ) ( 328 -304 -128 ) evil2_basefloor/flr_tmtl_drk -96 -224 -90 0.5 0.5 0 0 0
+( 336 -200 64 ) ( 336 -72 64 ) ( 336 -72 -128 ) evil2_basefloor/flr_tmtl_drk -96 128 -90 0.5 0.5 0 0 0
+( 312 240 64 ) ( 120 240 64 ) ( 120 240 -128 ) evil2_basefloor/flr_tmtl_drk -96 -224 -90 0.5 0.5 0 0 0
 }
 // brush 235
 {
-( 320 432 64 ) ( 320 416 64 ) ( 320 416 56 ) evil2_basefloor/flr_tmtl_drk 16 64 -90 0.5 0.5 134217728 0 0
-( 496 432 64 ) ( 336 432 64 ) ( 336 432 56 ) evil2_basefloor/flr_tmtl_drk 16 128 -90 0.5 0.5 134217728 0 0
-( 768 408 64 ) ( 768 424 64 ) ( 768 424 56 ) evil2_basefloor/flr_tmtl_drk 16 64 -90 0.5 0.5 134217728 0 0
-( 336 416 64 ) ( 496 416 64 ) ( 496 416 56 ) evil2_basefloor/flr_tmtl_drk 16 128 -90 0.5 0.5 134217728 0 0
-( 336 416 64 ) ( 336 432 64 ) ( 496 432 64 ) evil2_basefloor/flr_tmtl_drk 96 128 -90 0.5 0.5 134217728 0 0
-( 496 432 56 ) ( 336 432 56 ) ( 336 416 56 ) evil2_basefloor/flr_tmtl_drk 96 128 -90 0.5 0.5 134217728 0 0
+( 320 432 64 ) ( 320 416 64 ) ( 320 416 56 ) evil2_basefloor/flr_tmtl_drk 16 64 -90 0.5 0.5 0 0 0
+( 496 432 64 ) ( 336 432 64 ) ( 336 432 56 ) evil2_basefloor/flr_tmtl_drk 16 128 -90 0.5 0.5 0 0 0
+( 768 408 64 ) ( 768 424 64 ) ( 768 424 56 ) evil2_basefloor/flr_tmtl_drk 16 64 -90 0.5 0.5 0 0 0
+( 336 416 64 ) ( 496 416 64 ) ( 496 416 56 ) evil2_basefloor/flr_tmtl_drk 16 128 -90 0.5 0.5 0 0 0
+( 336 416 64 ) ( 336 432 64 ) ( 496 432 64 ) evil2_basefloor/flr_tmtl_drk 96 128 -90 0.5 0.5 0 0 0
+( 496 432 56 ) ( 336 432 56 ) ( 336 416 56 ) evil2_basefloor/flr_tmtl_drk 96 128 -90 0.5 0.5 0 0 0
 }
 // brush 236
 {
-( 336 432 56 ) ( 320 432 56 ) ( 320 400 56 ) evil2_basefloor/flr_tmtl_drk 0 160 -90 0.5 0.5 134217728 0 0
-( 320 400 64 ) ( 320 432 64 ) ( 336 432 64 ) evil2_basefloor/flr_tmtl_drk 0 160 -90 0.5 0.5 134217728 0 0
-( 320 256 64 ) ( 336 256 64 ) ( 336 256 56 ) evil2_basefloor/flr_tmtl_drk 0 160 -90 0.5 0.5 134217728 0 0
-( 336 384 64 ) ( 336 416 64 ) ( 336 416 56 ) evil2_basefloor/flr_tmtl_drk 0 128 -90 0.5 0.5 134217728 0 0
-( 336 416 64 ) ( 320 416 64 ) ( 320 416 56 ) evil2_basefloor/flr_tmtl_drk 0 160 -90 0.5 0.5 134217728 0 0
-( 320 432 64 ) ( 320 400 64 ) ( 320 400 56 ) evil2_basefloor/flr_tmtl_drk 0 128 -90 0.5 0.5 134217728 0 0
+( 336 432 56 ) ( 320 432 56 ) ( 320 400 56 ) evil2_basefloor/flr_tmtl_drk 0 160 -90 0.5 0.5 0 0 0
+( 320 400 64 ) ( 320 432 64 ) ( 336 432 64 ) evil2_basefloor/flr_tmtl_drk 0 160 -90 0.5 0.5 0 0 0
+( 320 256 64 ) ( 336 256 64 ) ( 336 256 56 ) evil2_basefloor/flr_tmtl_drk 0 160 -90 0.5 0.5 0 0 0
+( 336 384 64 ) ( 336 416 64 ) ( 336 416 56 ) evil2_basefloor/flr_tmtl_drk 0 128 -90 0.5 0.5 0 0 0
+( 336 416 64 ) ( 320 416 64 ) ( 320 416 56 ) evil2_basefloor/flr_tmtl_drk 0 160 -90 0.5 0.5 0 0 0
+( 320 432 64 ) ( 320 400 64 ) ( 320 400 56 ) evil2_basefloor/flr_tmtl_drk 0 128 -90 0.5 0.5 0 0 0
 }
 // brush 237
 {
-( 752 432 64 ) ( 752 400 64 ) ( 752 400 56 ) evil2_basefloor/flr_tmtl_drk 0 128 -90 0.5 0.5 134217728 0 0
-( 768 416 64 ) ( 752 416 64 ) ( 752 416 56 ) evil2_basefloor/flr_tmtl_drk 0 0 -90 0.5 0.5 134217728 0 0
-( 768 384 64 ) ( 768 416 64 ) ( 768 416 56 ) evil2_basefloor/flr_tmtl_drk 0 128 -90 0.5 0.5 134217728 0 0
-( 752 256 64 ) ( 768 256 64 ) ( 768 256 56 ) evil2_basefloor/flr_tmtl_drk 0 0 -90 0.5 0.5 134217728 0 0
-( 752 400 64 ) ( 752 432 64 ) ( 768 432 64 ) evil2_basefloor/flr_tmtl_drk 0 0 -90 0.5 0.5 134217728 0 0
-( 768 432 56 ) ( 752 432 56 ) ( 752 400 56 ) evil2_basefloor/flr_tmtl_drk 0 0 -90 0.5 0.5 134217728 0 0
+( 752 432 64 ) ( 752 400 64 ) ( 752 400 56 ) evil2_basefloor/flr_tmtl_drk 0 128 -90 0.5 0.5 0 0 0
+( 768 416 64 ) ( 752 416 64 ) ( 752 416 56 ) evil2_basefloor/flr_tmtl_drk 0 0 -90 0.5 0.5 0 0 0
+( 768 384 64 ) ( 768 416 64 ) ( 768 416 56 ) evil2_basefloor/flr_tmtl_drk 0 128 -90 0.5 0.5 0 0 0
+( 752 256 64 ) ( 768 256 64 ) ( 768 256 56 ) evil2_basefloor/flr_tmtl_drk 0 0 -90 0.5 0.5 0 0 0
+( 752 400 64 ) ( 752 432 64 ) ( 768 432 64 ) evil2_basefloor/flr_tmtl_drk 0 0 -90 0.5 0.5 0 0 0
+( 768 432 56 ) ( 752 432 56 ) ( 752 400 56 ) evil2_basefloor/flr_tmtl_drk 0 0 -90 0.5 0.5 0 0 0
 }
 // brush 238
 {
-( 640 256 64 ) ( 768 256 64 ) ( 768 256 -128 ) evil2_basefloor/flr_cemtilesmll_drk 0 0 0 0.5 0.5 134217728 0 0
-( 640 240 64 ) ( 640 432 64 ) ( 768 432 64 ) evil2_basefloor/flr_cemtilesmll_drk 0 0 0 0.5 0.5 134217728 0 0
-( 808 432 56 ) ( 680 432 56 ) ( 680 240 56 ) evil2_basefloor/flr_cemtilesmll_drk 0 0 0 0.5 0.5 134217728 0 0
-( 496 416 64 ) ( 336 416 64 ) ( 496 416 56 ) evil2_basefloor/flr_cemtilesmll_drk 0 0 0 0.5 0.5 134217728 0 0
-( 336 416 64 ) ( 336 384 64 ) ( 336 416 56 ) evil2_basefloor/flr_cemtilesmll_drk 0 0 0 0.5 0.5 134217728 0 0
-( 752 400 64 ) ( 752 432 64 ) ( 752 400 56 ) evil2_basefloor/flr_cemtilesmll_drk 0 0 0 0.5 0.5 134217728 0 0
+( 640 256 64 ) ( 768 256 64 ) ( 768 256 -128 ) evil2_basefloor/flr_cemtilesmll_drk 0 0 0 0.5 0.5 0 0 0
+( 640 240 64 ) ( 640 432 64 ) ( 768 432 64 ) evil2_basefloor/flr_cemtilesmll_drk 0 0 0 0.5 0.5 0 0 0
+( 808 432 56 ) ( 680 432 56 ) ( 680 240 56 ) evil2_basefloor/flr_cemtilesmll_drk 0 0 0 0.5 0.5 0 0 0
+( 496 416 64 ) ( 336 416 64 ) ( 496 416 56 ) evil2_basefloor/flr_cemtilesmll_drk 0 0 0 0.5 0.5 0 0 0
+( 336 416 64 ) ( 336 384 64 ) ( 336 416 56 ) evil2_basefloor/flr_cemtilesmll_drk 0 0 0 0.5 0.5 0 0 0
+( 752 400 64 ) ( 752 432 64 ) ( 752 400 56 ) evil2_basefloor/flr_cemtilesmll_drk 0 0 0 0.5 0.5 0 0 0
 }
 // brush 239
 {
