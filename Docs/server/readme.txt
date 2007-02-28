@@ -9,9 +9,9 @@ directory called ~/.nexuiz/data .
 
 An important thing is to make sure that your firewall does allow to
 contact your server.  This typicly means you will have to open or
-forward the port (see the line <set "port" "26000"> in your config.cfg
-for the right port number) to the computer running your server.  How
-to do this does depend on your computer setup.
+forward the port (see the line <port 26000> in your config.cfg for the
+right port number) to the computer running your server.  How to do
+this does depend on your computer setup.
 
 If you plan to install custom maps on your server you should read the
 file Docs/mapdownload.txt to learn how to setup automatic map
