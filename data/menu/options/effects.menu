@@ -7,7 +7,7 @@ Item Window Effects
 		size 	'600 100'
 		pos	'156 45'
 		text
-	"See the Nexiuz Readme for more infomation. \nRealtime lighting/Bloom features require \nhigh end computers to run fast."
+	"See the Nexuiz Readme for more information. \nRealtime lighting/Bloom features require \nhigh end computers to run fast."
 	}
 
 	Item Layout Layout
