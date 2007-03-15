@@ -3,7 +3,7 @@
 #--- use AFT v5.096 or later (http://www.maplefish.com/todd/aft.html)
 
 #---SET nexversion=3
-#---SET zipname=nexuiz-VERSION.zip
+#---SET zipname=nexuiz-<version>.zip
 
 *Title: Nexuiz %nexversion% FAQ
 			http://nexuiz.com	http://alientrap.org
@@ -17,7 +17,7 @@
 * Troubleshooting
 
 ** How do I install Nexuiz?
-Just unzip the |%zipname%| file. You can do this with any archive program (like [7zip (http://7zip.org)]). It's very important to remain the directory structure while unpacking (in WinZip this option is called "Use folder names"). The directory structure should look like this afterwards:
+Just unzip the |%zipname%| file. You can do this with any archive program (like [7zip (http://7zip.org)]). It's very important to keep the directory structure while unpacking (in WinZip this option is called "Use folder names"). The directory structure should look like this afterwards:
 ^<<
 Nexuiz
 |-- Docs
@@ -30,54 +30,56 @@ Nexuiz
 `-- nexuiz-linux-*
 ^>>
 
-** When I start Nexuiz all I see is a black screen with some checkered squares
-This happens when the engine can't load the data*.pk3 file. The reasons could be:
+** When I start Nexuiz all I see is a black screen or a black screen with some checkered squares
+This happens when the engine can't load the data*.pk3 file or has trouble to initialize OpenGL. The reasons could be:
 	1. you unpacked the zip file without folder names (see [How do I install Nexuiz?])
-	2. on Linux: the current directory is not your Nexuiz/ folder (see [How can I place a shortcut to Nexuiz on my Linux desktop?])
-	3. your download might be corrupted, please download Nexuiz again
+	2. on Linux: the current directory is not your Nexuiz/ folder. See [How can I place a shortcut to Nexuiz on my Linux desktop?] on how to fix this
+	3. on Mac: you tried to extract and move the files from a Nexuiz update and it deleted the old files.  When using the mac gui please be sure to move only the files not the folders as that will delete the old files or use the mv console command which will not delete the old files
+	4. the engine could not initialize OpenGL.  Please install the latest drivers for your graphic card. You will probably find one for your card there: [intel (http://intel.com)] [ati (http://ati.com)] [nvidia (http://nvidia.com)]
+	5. your download might be corrupted, please download Nexuiz again
 
 ** The sound is broken, it crackles and stutters
-Try run |nexuiz-sdl.exe| instead of |nexuiz.exe| (on Windows). Adding the command line options |-sndspeed 48000| and/or |-sndstereo| can also help on some systems (on Windows, Linux, Mac).
+Try run |nexuiz-sdl.exe| instead of |nexuiz.exe| (on Windows). Adding the command line options |-sndspeed 48000| and/or |-sndstereo| can also help on some systems (on Linux, Mac, Windows).
 
-** I can't switch to 32 bit color depth (Windows)
+** I can't switch to 32 bit color depth (on Windows)
 Check if your desktop color depth is set to 32 bits per pixel. If it's just set to 16, Nexuiz can't switch to 32 bit mode.
 
 ** When I join a server or after a map change I see nothing but a black screen, but I can still move and shoot
-This is probably because you don't have the map, that's running on the server. As Nexuiz does now support map/content download the server might be be setup to support this and you will have to get the map the old fashioned way. Those servers will have a download URL in their name or welcome message. There is also a [wiki page (http://alientrap.org/wiki/pmwiki.php?n=Main.CustomMaps)] dedicated to new maps.
+This is probably because you don't have the map that's running on the server. As Nexuiz does now supports map/content download the server might not be be setup to support this and you will have to get the map the old fashioned way. Those servers will have a download URL in their name or welcome message. There is also a [wiki page (http://alientrap.org/wiki/pmwiki.php?n=Main.CustomMaps)] dedicated to new maps.
 
 * Server setup
 
 ** How do I start a server?
-Please take a look at the file |readme.txt| in the |Docs/server/| directory where this topic is explained.
+Use the |Create| menu to start a |listen server|.  You will always have to play in a |listen server|.
+If you want to create a server without being forced to play yourself please take a look at the file |readme.txt| in the |Docs/server/| directory where the |dedicated server| is explained.
 
 ** Which ports do I have to open in firewall/forward from my router to run a server?
-The default port is 26000 UDP. You can change that by starting Nexuiz with |nexuiz-sdl.exe -port <port>| (on Windows) or |nexuiz-linux-686-sdl -port <port>| (on Linux).
-To add the command line argument on Windows, create a new shortcut to |nexuiz-sdl.exe| and right click on it. Select properties and |-port <port>| in the "Target:" line. Be sure that the "Start in:" line contains the full path to your Nexuiz folder and click "OK".
-If you follow the tutorial mentioned above you do not need this command line argument as it will be done in the config file created for the server.
+The default port is 26000 UDP. You can change that by starting Nexuiz with the parameter |-port <port>| or having a line |port <port>| in the server config file.
+If you follow the tutorial mentioned above you do not need this command line argument as it will be done in the config file created for the server. To add the command line argument on Windows, create a new shortcut to |nexuiz.exe| or |nexuiz-dedicated.exe| and right click on it. Select properties and |-port <port>| in the "Target:" line. Be sure that the "Start in:" line contains the full path to your Nexuiz folder and click "OK". The parameter will be used if you start Nexuiz via that new shortcut.
 
 ** Is there some kind of rcon?
 Yes starting with Nexuiz 2.0 there is rcon (QuakeWorld compatible). To use it you must enter |rcon__password <password>| in the server console or server config file. The Nexuiz client has to set the same password in the same fasion. You can then issue commands with |rcon <command>| if you are connected to the server or have set |rcon__address <ip/hostname>| or |rcon__address <ip/hostname>:<port>| to point to the server. There are also external rcon tools but make sure you use a QW compatible rcon tool.
 
 ** How can i kick people who are using special characters in their names?
-Enter |status| at the console. You will see a list of all players. In front of their names you will see a number (the player id). You can kick the player you don't like with |kick # <player id> <reason>| (notice the space after #).
+Enter |status| at the server console. You will see a list of all players. In front of their names you will see a number (the player id). You can kick the player you don't like with |kick # <player id> <reason>| (notice the space after #).
 
 
 * General questions
 
 ** How do I install new maps?
-Maps usually ship as *.pk3 file. All you have to do is to copy this file to your |Nexuiz/data/| directory.
+Maps usually ship as *.pk3 file. All you have to do is to copy this file to the |Nexuiz/data/| (on Linux, Mac, Windows) OR |~/.nexuiz/data/| (on Linux, Mac) directory.
 
 ** How can I place a shortcut to Nexuiz on my Linux desktop?
-Use the script |nexuiz-linux.sh| instead of the binary. It will use the right version (32 or 64 bit).
+Use the script |nexuiz-linux-sdl.sh| or |nexuiz-linux-glx.sh| instead of the binaries. The scripts will use the correct |working directory|,choose the right version (32 or 64 bit) and also allow you to start a extra X server.
 
 ** How do I open the console?
 Press |\[shift]+\[escape]|. To close it press |\[escape]|
 
 ** What console commands/variables are there?
-You can get a list of variables by entering |cvarlist| on the console. |cmdlist| will give you a list of available commands. An annotated version of that output can be found at the [Nexuiz wiki (http://alientrap.org/wiki/pmwiki.php?n=Main.ConsoleCommands)].
+You can get a list of variables by entering |cvarlist| on the console ([How do I open the console?]). |cmdlist| will give you a list of available commands. An annotated version of that output can be found at the [Nexuiz wiki (http://alientrap.org/wiki/pmwiki.php?n=Main.ConsoleCommands)].
 
 ** How can I speed up my frame rate?
-The greatest performance boost can be achieved by turning off dynamic lights and shadows in the menu |Options / Effects|. Bloom is also quite resource. Other fps boots include disabeling |Deluxemapping| and |Coronas|. On older graphics cards or on-board/notebook chips with little video ram you can try to lower the texture resolution. To do this open the console ([How do I open the console?]) and type |gl__picmip #; r__restart| (where # is a number between 0 and 10, 0 is the highest quality). Nexuiz now does also include config files that will adjust your graphic settings. Open the console as explained in and type |exec normal.cfg| to get the default setting. |exec med.cfg| and |exec low.cfg| are of lower quality but will make Nexuiz faster. |exec high.cfg| and |exec ultra.cfg| will show what Nexuiz is able to look like but do require a very fast PC and graphic card. Just like the |gl_picmip| some of the settings in those config files require you to either restart Nexuiz or type |vid_restart| in the console afterwards.
+The greatest performance boost can be achieved by turning off dynamic lights and shadows in the menu |Options / Effects|. Bloom is also quite resource. Other fps boots include disabeling |Deluxemapping| and |Coronas|. On older graphics cards or on-board/notebook chips with little video ram you can try to lower the texture quality in the menu |Options / Video|. Nexuiz also includes config files that will adjust your graphic settings. Open the console ([How do I open the console?]) and type |exec normal.cfg| to get the default setting (back). |exec med.cfg| and |exec low.cfg| are of lower quality but will make Nexuiz run faster. |exec high.cfg|, |exec ultra.cfg| and |exec ultimate.cfg| will show what Nexuiz is able to look like but do require a very fast PC and graphic card. Some of the settings in those config files require you to either restart Nexuiz or also type |vid_restart| in the console after exec'ing the config files.
 
 ** How can I activate colors in my name?
 Colors can be used in nicknames and chat messages by typing ^ followed by a number between 0 and 9.
@@ -107,9 +109,9 @@ Colors can be used in nicknames and chat messages by typing ^ followed by a numb
 	!----------------------------!
 
 ** How do i watch/record demos?
-You can access your demos in the |Demos| menu. Click on the demo you want to watch and then on |Start| to watch the demo. 
-To record a demo yourself open the console ([How do I open the console?]) and type |rec <name>| before playing. That is before starting a game or connection to a server. The demo file will be stored in |~/.nexuiz/data/demos/<name>.dem| (Linux) or |Nexuiz/data/demos/<name>.dem| (Windows).
-To watch a demo: open the console and type |ply <name>|. If you downloaded a demo, copy it to |Nexuiz/data/demos|. You might have to create this directory if you have never recorded a demo before.
+You can access your demos in the |Demos| menu. Click on the demo you want to watch and then on |Start| to watch the demo. Or type |ply <name>| in the console ([How do I open the console?]).
+To record a demo yourself open the console and type |rec <name>| before playing. That is before starting a game or connecting to a server. The demo file will be stored in |Nexuiz/data/demos/<name>.dem| (on Windows) or |~/.nexuiz/data/demos/<name>.dem| (on Linux, Mac).
+If you downloaded a demo, copy it to |Nexuiz/data/demos/<name>.dem| (on Linux, Mac, Windows) or |~/.nexuiz/data/demos/<name>.dem| (on Linux, Mac). You might have to create this directory if you have never recorded a demo before.
 You can list all your demo files by typing |dem| on the console. Some usefull keybindings for viewing demos are listed [here (http://www.alientrap.org/forum/viewtopic.php?p=357#357)]. A simple way to automaticly record demos can be found [here (http://www.alientrap.org/forum/viewtopic.php?t=90)]
 
 
