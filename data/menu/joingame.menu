@@ -198,9 +198,40 @@ Item Window JoinGame
 	}
 	Derive PictureButton Refresh
 	{
-		pos	'395 522'
+		pos	'30 522'
 		normal	"$gfx/join_b_refresh"
 
 		action 	Nex_Action_RefreshSlist
+	}
+	Item Layout Settings
+	{
+		size		'1000 200'
+		alignment	[AlignLeft]
+		pos		'200 537'
+		direction	'0 10'
+		
+		Derive Nex_Option_Switch AutoDemo
+		{
+			text	"Automatically record a Demo when playing"
+			target	"Data::Demos::AutoDemo::Switch"
+		}
+		DeriveTemplate Nex_Composition Option_EditBox
+		{
+			DeriveTemplate Nex_Automation_Option_EditBox Automation
+			{}
+			DeriveTemplate TextButton Description
+			{}
+			DeriveTemplate EditBox EditBox
+			{
+				size 	'500 12'
+				action  Nex_Action_TestOnChange
+				select  Nex_Action_TestOnSelect
+			}
+		}
+		Derive Option_EditBox AutoDemoFormat
+		{
+			text	"Demo Name Format"
+			target	"Data::Demos::AutoDemoFormat::Text"
+		}
 	}
 }

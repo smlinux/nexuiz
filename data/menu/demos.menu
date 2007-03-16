@@ -63,14 +63,11 @@ Item Window Demos
 			action	Nex_Demos_Start
 		}
 	}
-// until its fixed in the engine..
-Ignore
-{
 	Item Layout Settings
 	{
 		size		'1000 200'
 		alignment	[AlignLeft]
-		pos		'50 540'
+		pos		'50 537'
 		direction	'0 10'
 		
 		Derive Nex_Option_Switch AutoDemo
@@ -97,5 +94,4 @@ Ignore
 			target	"Data::Demos::AutoDemoFormat::Text"
 		}
 	}
-}
 }
