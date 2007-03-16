@@ -467,7 +467,7 @@ void(entity missile) W_SetupProjectileVelocity =
 	else
 		error("g_projectiles_newton_style must be 0 (absolute), 1 (Newtonian), 2 (Newtonian + aimfix), 3 (pseudo Newtonian) or 4 (tZorkian)!");
 
-	dprint("Adjusted from ", vtos(missile.velocity));
+	//dprint("Adjusted from ", vtos(missile.velocity));
 	missile.velocity = outvelocity;
-	dprint(" to ", vtos(missile.velocity), "\n");
+	//dprint(" to ", vtos(missile.velocity), "\n");
 }
