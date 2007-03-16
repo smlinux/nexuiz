@@ -444,7 +444,7 @@ void(entity missile) W_SetupProjectileVelocity =
 		D = p * p - q;
 		if(D < 0)
 		{
-			dprint("impossible shot, adjusting\n");
+			//dprint("impossible shot, adjusting\n");
 			D = 0;
 		}
 		outspeed = p + sqrt(D);
