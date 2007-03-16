@@ -210,6 +210,7 @@ void W_Rocket_Attack (void)
 		missile.velocity = w_shotdir * cvar("g_balance_rocketlauncher_laserguided_speed");
 	else
 		missile.velocity = w_shotdir * cvar("g_balance_rocketlauncher_speed");
+	W_SetupProjectileVelocity(missile);
 	missile.angles = vectoangles (missile.velocity);
 
 	missile.touch = W_Rocket_Touch;

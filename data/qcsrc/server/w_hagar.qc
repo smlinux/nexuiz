@@ -104,6 +104,7 @@ void W_Hagar_Attack (void)
 
 	missile.movetype = MOVETYPE_FLY;
 	missile.velocity = (w_shotdir + randomvec() * cvar("g_balance_hagar_primary_spread")) * cvar("g_balance_hagar_primary_speed");
+	W_SetupProjectileVelocity(missile);
 
 	missile.angles = vectoangles (missile.velocity);
 	missile.flags = FL_PROJECTILE;
@@ -139,6 +140,7 @@ void W_Hagar_Attack2 (void)
 
 	missile.movetype = MOVETYPE_BOUNCEMISSILE;
 	missile.velocity = (w_shotdir + randomvec() * cvar("g_balance_hagar_secondary_spread")) * cvar("g_balance_hagar_secondary_speed");
+	W_SetupProjectileVelocity(missile);
 	missile.avelocity = '100 10 10';
 
 	missile.angles = vectoangles (missile.velocity);

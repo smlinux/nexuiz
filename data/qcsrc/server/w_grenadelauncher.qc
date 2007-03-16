@@ -99,6 +99,7 @@ void W_Grenade_Attack (void)
 	gren.think = W_Grenade_Explode;
 	gren.touch = W_Grenade_Touch1;
 	gren.velocity = v_forward * cvar("g_balance_grenadelauncher_primary_speed") + v_up * cvar("g_balance_grenadelauncher_primary_speed_up");
+	W_SetupProjectileVelocity(gren);
 	gren.avelocity_x = random () * -500 - 500;
 
 	gren.angles = vectoangles (gren.velocity);
@@ -133,6 +134,7 @@ void W_Grenade_Attack2 (void)
 	gren.damageforcescale = 4;
 	gren.event_damage = W_Grenade_Damage;
 	gren.velocity = v_forward * cvar("g_balance_grenadelauncher_secondary_speed") + v_up * cvar("g_balance_grenadelauncher_secondary_speed_up");
+	W_SetupProjectileVelocity(gren);
 	gren.avelocity = '100 150 100';
 
 	gren.angles = vectoangles (gren.velocity);

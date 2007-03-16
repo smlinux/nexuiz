@@ -3,6 +3,8 @@ float SPAWNFLAG_NO_WAYPOINTS_FOR_ITEMS = 1;
 string GetMapname();
 void GotoNextMap();
 void HandleMaplistShuffleCommands();
+void MapVote_Start(float n);
+float MapVote_Think();
 
 void SetDefaultAlpha()
 {
@@ -648,6 +650,29 @@ void() Maplist_Init =
 	// isn't chosen in the first pass that should have been
 }
 
+float() MapListMethod =
+{
+	float nextMap;
+
+	nextMap = -1;
+
+	if(nextMap == -1)
+		if(cvar("g_maplist_shuffle") > 0)
+			nextMap = MaplistMethod_Shuffle(cvar("g_maplist_shuffle") + 1);
+
+	if(nextMap == -1)
+		if(cvar("g_maplist_selectrandom"))
+			nextMap = MaplistMethod_Random();
+
+	if(nextMap == -1)
+		nextMap = MaplistMethod_Iterate();
+
+	if(nextMap == -1)
+		nextMap = MaplistMethod_Repeat();
+
+	return nextMap;
+}
+
 void() GotoNextMap =
 {
 	//local string nextmap;
@@ -709,40 +734,33 @@ void() GotoNextMap =
 			return;
 		}
 
-		for(allowReset = 1; allowReset >= 0; --allowReset)
+		if(cvar("g_vote_maps"))
 		{
-			Maplist_Init();
-			nextMap = -1;
-
-			if(nextMap == -1)
-				if(cvar("g_maplist_shuffle") > 0)
-					nextMap = MaplistMethod_Shuffle(cvar("g_maplist_shuffle") + 1);
-
-			if(nextMap == -1)
-				if(cvar("g_maplist_selectrandom"))
-					nextMap = MaplistMethod_Random();
-
-			if(nextMap == -1)
-				nextMap = MaplistMethod_Iterate();
-
-			if(nextMap == -1)
-				nextMap = MaplistMethod_Repeat();
-
-			if(nextMap >= 0)
+			MapVote_Start(cvar("g_vote_maps"));
+		}
+		else
+		{
+			for(allowReset = 1; allowReset >= 0; --allowReset)
 			{
-				Map_Goto(nextMap);
-				break;
-			}
-			else // PERMANENT FAILURE
-			{
-				if(allowReset)
+				Maplist_Init();
+				nextMap = MapListMethod();
+
+				if(nextMap >= 0)
 				{
-					bprint( "Maplist contains no single playable map!  Resetting it to default map list.\n" );
-					cvar_set("g_maplist", cvar_string("g_maplist_defaultlist"));
+					Map_Goto(nextMap);
+					break;
 				}
-				else
+				else // PERMANENT FAILURE
 				{
-					error("Everything is broken - not even the default map list works. Please report this to the developers.");
+					if(allowReset)
+					{
+						bprint( "Maplist contains no single playable map!  Resetting it to default map list.\n" );
+						cvar_set("g_maplist", cvar_string("g_maplist_defaultlist"));
+					}
+					else
+					{
+						error("Everything is broken - not even the default map list works. Please report this to the developers.");
+					}
 				}
 			}
 		}
@@ -760,6 +778,9 @@ When the player presses attack or jump, change to the next level
 .float autoscreenshot;
 void() IntermissionThink =
 {
+	if(MapVote_Think())
+		return;
+
 	if(cvar("sv_autoscreenshot"))
 	if(self.autoscreenshot)
 	if(time > self.autoscreenshot)
@@ -1590,3 +1611,206 @@ void() CheckRules_World =
 	if(status == WINNING_YES)
 		NextLevel();
 };
+
+float MapVote_starttime;
+float MapVote_nexttime;
+string MapVote_maps[10];
+float MapVote_votes[10];
+float MapVote_nmaps;
+float MapVote_round;
+.float MapVote_selected;
+
+void MapVote_Clear()
+{
+	entity e;
+	for(e = world; (e = findflags(e, flags, FL_CLIENT)) != world; ) if(clienttype(e) == CLIENTTYPE_REAL)
+		e.MapVote_selected = 0;
+}
+
+void MapVote_Start(float n)
+{
+	float m;
+	float i;
+	float j;
+	float k;
+	string ms;
+
+	MapVote_starttime = time;
+
+	Maplist_Init();
+	for(i = 0; i < n; ++i)
+	{
+		for(j = 0; j < 41; ++j)
+		{
+			m = MapListMethod();
+			if(m < 0)
+				goto out;
+			ms = strzone(argv(m));
+			for(k = 0; k < i; ++k)
+			{
+				if(MapVote_maps[k] == ms)
+					goto tryagain;
+			}
+			MapVote_maps[i] = ms;
+			goto next;
+:tryagain
+		}
+		// failed to find a new map in 42 attempts?
+		// give up
+		goto out;
+:next
+	}
+:out
+	MapVote_nmaps = i;
+	MapVote_Clear();
+}
+
+float RandomSelection_value;
+float RandomSelection_prio;
+float RandomSelection_n;
+void RandomSelection_init()
+{
+	RandomSelection_n = 0;
+	RandomSelection_prio = 0;
+}
+void RandomSelection_store(float value, float prio)
+{
+	if(prio > RandomSelection_prio)
+	{
+		RandomSelection_prio = prio;
+		RandomSelection_n = 1;
+		RandomSelection_value = value;
+	}
+	else if(prio == RandomSelection_prio)
+	{
+		RandomSelection_n += 1;
+		if(ceil(random() * RandomSelection_n) == 1)
+			RandomSelection_value = value;
+	}
+}
+
+void MapVote_Decide(float n)
+{
+	localcmd(strcat("exec \"maps/", MapVote_maps[n], ".mapcfg\"\n"));
+}
+
+float MapVote_Update()
+{
+	if(MapVote_nmaps == 0)
+	{
+		error("No maps found.");
+		return 0;
+	}
+	else if(MapVote_nmaps == 1)
+	{
+		MapVote_Decide(0);
+		return 1;
+	}
+	else
+	{
+		// check if we have a winner...
+		float firstPlace;
+		float firstPlaceVotes;
+		float secondPlace;
+		float secondPlaceVotes;
+		float votesTotal;
+		float notVoted;
+		entity e;
+		float i;
+
+		votesTotal = 0;
+		notVoted = 0;
+
+		for(i = 0; i < MapVote_nmaps; ++i)
+			MapVote_votes[i] = 0;
+		for(e = world; (e = findflags(e, flags, FL_CLIENT)) != world; ) if(clienttype(e) == CLIENTTYPE_REAL)
+		{
+			if(e.MapVote_selected == 0)
+			{
+				++notVoted;
+			}
+			else
+			{
+				MapVote_votes[e.MapVote_selected - 1] = MapVote_votes[e.MapVote_selected - 1] + 1;
+				++votesTotal;
+			}
+		}
+
+		RandomSelection_init();
+		for(i = 0; i < MapVote_nmaps; ++i)
+			RandomSelection_store(i, MapVote_votes[i]);
+		firstPlace = RandomSelection_value;
+		firstPlaceVotes = RandomSelection_prio;
+
+		RandomSelection_init();
+		for(i = 0; i < MapVote_nmaps; ++i)
+			if(i != firstPlace)
+				RandomSelection_store(i, MapVote_votes[i]);
+		secondPlace = RandomSelection_value;
+		secondPlaceVotes = RandomSelection_prio;
+
+		// absolute majority?
+		if(2 * firstPlaceVotes >= votesTotal + notVoted)
+		{
+			MapVote_Decide(firstPlace);
+			return 1;
+		}
+
+		if(time > MapVote_starttime + 10)
+			if(MapVote_round == 0)
+			{
+				MapVote_round = 1;
+				if(MapVote_nmaps > 2)
+				{
+					// clear all others
+					for(e = world; (e = findflags(e, flags, FL_CLIENT)) != world; ) if(clienttype(e) == CLIENTTYPE_REAL)
+						if(e.MapVote_selected != firstPlace)
+							if(e.MapVote_selected != secondPlace)
+								e.MapVote_selected = 0;
+					for(i = 0; i < MapVote_nmaps; ++i) if(i != firstPlace) if(i != secondPlace)
+					{
+						strunzone(MapVote_maps[i]);
+						MapVote_maps[i] = "";
+					}
+				}
+			}
+
+		if(time > MapVote_starttime + 15)
+		{
+			// simple majority suffices
+			MapVote_Decide(firstPlace);
+			return 1;
+		}
+
+		return 0;
+	}
+}
+
+void MapVote_Display()
+{
+}
+
+void MapVote_Keypressed(float k)
+{
+	// self pressed k
+}
+
+float MapVote_Think()
+{
+	if(!MapVote_starttime)
+		return 0;
+
+	if(time > MapVote_nexttime)
+	{
+		if(MapVote_Update())
+			return 1;
+		MapVote_nexttime = time + 5;
+	}
+
+	if(self.impulse >= 1 && self.impulse <= 10)
+		MapVote_Keypressed(self.impulse);
+
+	MapVote_Display();
+
+	return 1;
+}

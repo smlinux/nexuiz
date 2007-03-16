@@ -96,6 +96,7 @@ void W_Crylink_Attack (void)
 		setorigin (proj, w_shotorg);
 
 		proj.velocity = (w_shotdir + randomvec() * cvar("g_balance_crylink_primary_spread")) * cvar("g_balance_crylink_primary_speed");
+		W_SetupProjectileVelocity(proj);
 		proj.touch = W_Crylink_Touch;
 		proj.think = SUB_Remove;
 		proj.nextthink = time + cvar("g_balance_crylink_primary_lifetime");
@@ -140,6 +141,7 @@ void W_Crylink_Attack2 (void)
 		setorigin (proj, w_shotorg);
 
 		proj.velocity = (w_shotdir + (((counter + 0.5) / shots) * 2 - 1) * v_right * cvar("g_balance_crylink_secondary_spread")) * cvar("g_balance_crylink_secondary_speed");
+		W_SetupProjectileVelocity(proj);
 		proj.touch = W_Crylink_Touch2;
 		proj.think = SUB_Remove;
 		proj.nextthink = time + cvar("g_balance_crylink_secondary_lifetime");

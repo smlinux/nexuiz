@@ -103,6 +103,7 @@ void() W_Electro_Attack
 	proj.effects = EF_BRIGHTFIELD | EF_FULLBRIGHT | EF_NOSHADOW | EF_LOWPRECISION;
 	proj.movetype = MOVETYPE_FLY;
 	proj.velocity = w_shotdir * cvar("g_balance_electro_primary_speed");
+	W_SetupProjectileVelocity(proj);
 	proj.angles = vectoangles(proj.velocity);
 	proj.touch = W_Plasma_TouchExplode;
 	proj.flags = FL_PROJECTILE;
@@ -136,6 +137,7 @@ void() W_Electro_Attack2
 	//proj.glow_color = 45;
 	proj.movetype = MOVETYPE_BOUNCE;
 	proj.velocity = v_forward * cvar("g_balance_electro_secondary_speed") + v_up * cvar("g_balance_electro_secondary_speed_up");
+	W_SetupProjectileVelocity(proj);
 	proj.touch = W_Plasma_Touch;
 	setmodel(proj, "models/ebomb.mdl");
 	setsize(proj, '0 0 -3', '0 0 -3');

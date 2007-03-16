@@ -48,6 +48,7 @@ void W_Laser_Attack (void)
 	setorigin (missile, w_shotorg);
 
 	missile.velocity = w_shotdir * cvar("g_balance_laser_speed");
+	W_SetupProjectileVelocity(missile);
 	missile.angles = vectoangles (missile.velocity);
 	//missile.glow_color = 250; // 244, 250
 	//missile.glow_size = 120;

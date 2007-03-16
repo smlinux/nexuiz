@@ -393,3 +393,81 @@ void(float spd, vector org) weapon_boblayer1 =
 	// VorteX: haste can be added here
 };
 
+void(entity missile) W_SetupProjectileVelocity =
+{
+	vector pvelocity;
+	vector mdirection;
+	float mspeed;
+	float outspeed;
+	float nstyle;
+	vector mvelocity;
+	vector outvelocity;
+
+	if(missile.owner == world)
+		error("Unowned missile");
+	pvelocity = missile.owner.velocity;
+	mvelocity = missile.velocity;
+	mdirection = normalize(mvelocity);
+	mspeed = vlen(mvelocity);
+
+	nstyle = cvar("g_projectiles_newton_style");
+	if(nstyle == 0)
+	{
+		// absolute velocity
+		outvelocity = mvelocity;
+	}
+	else if(nstyle == 1)
+	{
+		// true Newtonian projectiles
+		outvelocity = pvelocity + mvelocity;
+	}
+	else if(nstyle == 2)
+	{
+		// true Newtonian projectiles with automatic aim adjustment
+		//
+		// solve: |outspeed * mdirection - pvelocity| = mspeed
+		// outspeed^2 - 2 * outspeed * (mdirection * pvelocity) + pvelocity^2 - mspeed^2 = 0
+		// outspeed = (mdirection * pvelocity) +- sqrt((mdirection * pvelocity)^2 - pvelocity^2 + mspeed^2)
+		// PLUS SIGN!
+		// not defined?
+		// then...
+		// pvelocity^2 - (mdirection * pvelocity)^2 > mspeed^2
+		// velocity without mdirection component > mspeed
+		// fire at smallest possible mspeed that works?
+		// |(mdirection * pvelocity) * pvelocity - pvelocity| = mspeed
+
+		float D;
+		float p;
+		float q;
+		p = mdirection * pvelocity;
+		q = pvelocity * pvelocity - mspeed * mspeed;
+		D = p * p - q;
+		if(D < 0)
+		{
+			dprint("impossible shot, adjusting\n");
+			D = 0;
+		}
+		outspeed = p + sqrt(D);
+		outspeed = bound(mspeed * 0.7, outspeed, mspeed * 5.0);
+		outvelocity = mdirection * outspeed;
+	}
+	else if(nstyle == 3)
+	{
+		// pseudo-Newtonian:
+		outspeed = mspeed + mdirection * pvelocity;
+		outspeed = bound(mspeed * 0.7, outspeed, mspeed * 5.0);
+		outvelocity = mdirection * outspeed;
+	}
+	else if(nstyle == 4)
+	{
+		// tZorkian:
+		outspeed = mspeed + vlen(pvelocity);
+		outvelocity = mdirection * outspeed;
+	}
+	else
+		error("g_projectiles_newton_style must be 0 (absolute), 1 (Newtonian), 2 (Newtonian + aimfix), 3 (pseudo Newtonian) or 4 (tZorkian)!");
+
+	dprint("Adjusted from ", vtos(missile.velocity));
+	missile.velocity = outvelocity;
+	dprint(" to ", vtos(missile.velocity), "\n");
+}

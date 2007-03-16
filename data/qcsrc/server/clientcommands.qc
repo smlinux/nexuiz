@@ -79,7 +79,6 @@ void Say(entity source, float teamsay, string msgin)
 }
 
 void SV_ParseClientCommand(string s) {
-	local float index;
 	local string cmd;
 
 	tokenize(s);
