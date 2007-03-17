@@ -547,7 +547,7 @@ void CheckAllowedTeams ()
 	}
 }
 
-float PlayerValue(entity p, entity to)
+float PlayerValue(entity p)
 {
 	if(IsTeamBalanceForced())
 		return 1;
@@ -570,7 +570,7 @@ void GetTeamCounts(entity ignore)
 	{
 		if(head != ignore)// && head.netname != "")
 		{
-			value = PlayerValue(head, ignore);
+			value = PlayerValue(head);
 			if(head.team == COLOR_TEAM1)
 			{
 				if(c1 >= 0)
