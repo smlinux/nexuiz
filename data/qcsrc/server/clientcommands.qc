@@ -30,7 +30,7 @@ void Say(entity source, float teamsay, string msgin)
 
 	if(teamsay)
 	{
-		msgstr = strzone(strcat("\{1}", colorstr, "(^3", source.netname, colorstr, ") ^7", msgin, "\n"));
+		msgstr = strzone(strcat("\{1}\{13}", colorstr, "(^3", source.netname, colorstr, ") ^7", msgin, "\n"));
 		cmsgstr = strcat(colorstr, "(^3", source.netname, colorstr, ")\n^7", wordwrap(msgin, 50));
 	}
 	else
