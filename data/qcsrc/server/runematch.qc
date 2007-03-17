@@ -659,7 +659,7 @@ void RuneMatchGivePoints()
 
 		if(rune.owner.classname == "player")
 		{
-			rune.owner.frags = rune.owner.frags + cvar("g_runematch_pointamt");
+			UpdateFrags(rune.owner, cvar("g_runematch_pointamt"));
 		}
 	}while(rune);
 }

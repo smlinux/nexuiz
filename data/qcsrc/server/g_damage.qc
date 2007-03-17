@@ -1,6 +1,12 @@
 
 float checkrules_firstblood;
 
+void(entity player, float f) UpdateFrags =
+{
+	player.frags += f;
+	player.totalfrags += f;
+}
+
 void GiveFrags (entity attacker, entity targ, float f)
 {
 	if(gameover) return;
@@ -39,7 +45,7 @@ void GiveFrags (entity attacker, entity targ, float f)
 	}
 
 	if(f)
-		attacker.frags = attacker.frags + f;
+		UpdateFrags(attacker, f);
 }
 
 string AppendItemcodes(string s, entity player)
@@ -161,7 +167,6 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				LogDeath("suicide", deathtype, targ, targ);
 				GiveFrags(attacker, targ, -1);
 			}
-			//targ.frags = targ.frags - 1;
 			if (targ.killcount > 2)
 				bprint ("^1",s,"^1 ended it all with a ",ftos(targ.killcount)," kill spree\n");
 		}
@@ -172,7 +177,6 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				centerprint(attacker, strcat("^1Moron! You fragged a teammate!\n\n\n"));
 				bprint ("^1", attacker.netname, "^1 mows down a teammate\n");
 				GiveFrags(attacker, targ, -1);
-				//attacker.frags = attacker.frags - 1;
 				if (targ.killcount > 2)
 					bprint ("^1",s,"'s ^1",ftos(targ.killcount)," kill spree was ended by a teammate!\n");
 				if (attacker.killcount > 2)
@@ -233,7 +237,6 @@ void Obituary (entity attacker, entity targ, float deathtype)
 					bprint ("^1",s, "^1 was fragged by ", attacker.netname, "\n");
 
 				GiveFrags(attacker, targ, 1);
-				//attacker.frags = attacker.frags + 1;
 				if (targ.killcount > 2)
 					bprint ("^1",s,"'s ^1", ftos(targ.killcount), " kill spree was ended by ", attacker.netname, "\n");
 				attacker.killcount = attacker.killcount + 1;
@@ -303,7 +306,6 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				stuffcmd(targ, "play2 announcer/male/botlike.ogg\n");
 			}
 
-			//targ.frags = targ.frags - 1;
 			if (targ.killcount > 2)
 				bprint ("^1",s,"^1 died with a ",ftos(targ.killcount)," kill spree\n");
 

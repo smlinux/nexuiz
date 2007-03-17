@@ -129,7 +129,7 @@ void() dompointthink =
 		while (head)
 		{
 			if (head.team == self.goalentity.team)
-				head.frags = head.frags + teamfragamt;
+				UpdateFrags(head, teamfragamt);
 			head = find(head, classname, "player");
 		}
 	}
@@ -160,7 +160,7 @@ void() dompointthink =
 		individualfragamt = cvar("g_domination_point_amt");
 		if(!individualfragamt)
 			individualfragamt = self.frags;
-		self.enemy.frags = self.enemy.frags + individualfragamt;
+		UpdateFrags(self.enemy, individualfragamt);
 	}
 };
 

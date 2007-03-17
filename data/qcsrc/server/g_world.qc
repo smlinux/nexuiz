@@ -900,6 +900,11 @@ only called if a time or frag limit has expired
 */
 void() NextLevel =
 {
+	float minTotalFrags;
+	float maxTotalFrags;
+	float score;
+	float f;
+
 	gameover = TRUE;
 
 	intermission_running = 1;
@@ -925,8 +930,16 @@ void() NextLevel =
 
 	GameLogClose();
 
-	other = findchainflags(flags, FL_CLIENT);
-	while (other != world)
+	maxTotalFrags = 0;
+	for(other = world; (other = findflags(other, flags, FL_CLIENT)); )
+	{
+		if(maxTotalFrags < other.totalfrags)
+			maxTotalFrags = other.totalfrags;
+		if(minTotalFrags > other.totalfrags)
+			minTotalFrags = other.totalfrags;
+	}
+
+	for(other = world; (other = findflags(other, flags, FL_CLIENT)); )
 	{
 		//other.nextthink = time + 0.5;
 		other.takedamage = DAMAGE_NO;
@@ -941,23 +954,12 @@ void() NextLevel =
 		if(other.winning)
 			bprint(strcat(other.netname, " ^7wins.\n"));
 
-		/*
-		if (pos != world);
+		if(!currentbots)
 		{
-			other.modelindex = 0;
-			other.weaponentity = world; // remove weapon model
-			other.view_ofs = '0 0 0';
-			other.angles = other.v_angle = pos.mangle;
-			if (!other.angles)
-			{
-				other.angles = other.v_angle = pos.angles;
-				other.v_angle_x = other.v_angle_x * -1;
-			}
-			other.fixangle = TRUE;		// turn this way immediately
-			setorigin (other, pos.origin);
+			score = (other.frags - minTotalFrags) / max(maxTotalFrags - minTotalFrags, 1);
+			f = bound(0, other.play_time / max(time, 1), 1);
+			// store some statistics?
 		}
-		*/
-		other = other.chain;
 	}
 
 	if(cvar("g_campaign"))
@@ -977,6 +979,9 @@ void() CheckRules_Player =
 {
 	if (gameover)	// someone else quit the game already
 		return;
+
+	if(self.deadflag == DEAD_NO)
+		self.play_time += frametime;
 
 	// fixme: don't check players; instead check dom_team and ctf_team entities
 	//   (div0: and that in CheckRules_World please)
@@ -1314,11 +1319,14 @@ float(float fraglimit) WinningCondition_MaxTeamMax =
 void PrintScoreboardFor(string name, string colorcode, float whichteam)
 {
 	entity head;
+	float v;
+	float teamvalue;
 	float fragtotal;
 	string s;
 	float found;
 	found = FALSE;
 	head = find(world, classname, "player");
+	teamvalue = 0;
 	while(head)
 	{
 		if(!whichteam || head.team == whichteam)
@@ -1335,12 +1343,19 @@ void PrintScoreboardFor(string name, string colorcode, float whichteam)
 				s = strcat(s, "botms");
 			else
 				s = strcat(s, "ms");
+			v = PlayerValue(head);
+			teamvalue += v;
+			s = strcat(s, " / ", ftos(v));
 			ServerConsoleEcho(strcat("  ", colorcode, head.netname, colorcode, " (", s, ")"), TRUE);
 		}
 		head = find(head, classname, "player");
 	}
 	if(whichteam && found)
-		ServerConsoleEcho(strcat(colorcode, "  (total: ", ftos(fragtotal), ")"), FALSE);
+	{
+		s = ftos(fragtotal);
+		s = strcat(s, " / ", ftos(teamvalue));
+		ServerConsoleEcho(strcat(colorcode, "  (total: ", s, ")"), FALSE);
+	}
 }
 
 void PrintScoreboard()

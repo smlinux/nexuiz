@@ -10,6 +10,9 @@ float lms_lowest_lives;
 float lms_next_place;
 float() LMS_NewPlayerLives;
 
+void(entity player, float f) UpdateFrags;
+.float totalfrags;
+
 float team1_score, team2_score, team3_score, team4_score;
 
 float maxclients;
@@ -60,6 +63,7 @@ string newlines = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 .float count;
 //.float cnt2;
 
+.float play_time;
 .float death_time;
 .float dead_time;
 .float dead_frame;

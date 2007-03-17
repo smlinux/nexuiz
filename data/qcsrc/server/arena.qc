@@ -60,7 +60,7 @@ void reset_map()
 	}
 
 	if(champion)
-		champion.frags += 1;
+		UpdateFrags(champion, +1);
 }
 
 void Spawnqueue_Insert(entity e)

@@ -212,14 +212,14 @@ void() FlagTouch =
 
 		LogCTF("capture", other.flagcarried.team, other);
 		// give credit to the individual player
-		other.frags = other.frags + cvar("g_ctf_flagscore_capture");//FLAGSCORE_CAPTURE;
+		UpdateFrags(other, cvar("g_ctf_flagscore_capture"));
 		// give credit to all players of the team (rewards large teams)
 		// NOTE: this defaults to 0
 		head = find(head, classname, "player");
 		while (head)
 		{
 			if (head.team == self.team)
-				head.frags = head.frags + cvar("g_ctf_flagscore_capture_team");//FLAGSCORE_CAPTURE_TEAM;
+				UpdateFrags(head, cvar("g_ctf_flagscore_capture_team"));
 			head = find(head, classname, "player");
 		}
 		sound (self, CHAN_AUTO, self.noise2, 1, ATTN_NONE);
@@ -242,7 +242,7 @@ void() FlagTouch =
 		other.flagcarried = self;
 		self.cnt = FLAG_CARRY;
 		bprint(other.netname, "^7 got the ", self.netname, "\n");
-		other.frags = other.frags + cvar("g_ctf_flagscore_pickup");//FLAGSCORE_PICKUP;
+		UpdateFrags(other, cvar("g_ctf_flagscore_pickup"));
 		LogCTF("steal", self.team, other);
 		sound (self, CHAN_AUTO, self.noise, 1, ATTN_NONE);
 
@@ -267,9 +267,9 @@ void() FlagTouch =
 			// return flag
 			bprint(other.netname, "^7 returned the ", self.netname, "\n");
 			if (other.team == 5 || other.team == 14)
-				other.frags = other.frags + cvar("g_ctf_flagscore_return");//FLAGSCORE_RETURN;
+				UpdateFrags(other, cvar("g_ctf_flagscore_return"));
 			else
-				other.frags = other.frags + cvar("g_ctf_flagscore_return_rogue");//FLAGSCORE_RETURNROGUE;
+				UpdateFrags(other, cvar("g_ctf_flagscore_return_rogue"));
 			LogCTF("return", self.team, other);
 			sound (self, CHAN_AUTO, self.noise1, 1, ATTN_NONE);
 			ReturnFlag(self);
@@ -283,7 +283,7 @@ void() FlagTouch =
 			other.flagcarried = self;
 			self.cnt = FLAG_CARRY;
 			bprint(other.netname, "^7 picked up the ", self.netname, "\n");
-			other.frags = other.frags + cvar("g_ctf_flagscore_pickup");//FLAGSCORE_PICKUP;
+			UpdateFrags(other, cvar("g_ctf_flagscore_pickup"));
 			LogCTF("pickup", self.team, other);
 			sound (self, CHAN_AUTO, self.noise, 1, ATTN_NONE);
 

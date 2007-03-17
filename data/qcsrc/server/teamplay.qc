@@ -6,7 +6,6 @@ float GAME_RUNEMATCH		= 5;
 float GAME_LMS			= 6;
 float GAME_ARENA		= 7;
 
-
 // client counts for each team
 float c1, c2, c3, c4;
 // # of bots on those teams
@@ -15,6 +14,16 @@ float cb1, cb2, cb3, cb4;
 float g_domination, g_ctf, g_tdm;
 
 float audit_teams_time;
+
+float() IsTeamBalanceForced() = {
+	if(cvar("g_campaign"))
+		return FALSE;
+	if(!cvar("g_balance_teams_force"))
+		return FALSE;
+	if(!cvar("teamplay"))
+		return FALSE;
+	return TRUE;
+}
 
 void TeamchangeFrags(entity e)
 {
@@ -538,11 +547,19 @@ void CheckAllowedTeams ()
 	}
 }
 
+float PlayerValue(entity p, entity to)
+{
+	if(IsTeamBalanceForced())
+		return 1;
+	return 1;
+}
+
 // c1...c4 should be set to -1 (not allowed) or 0 (allowed).
 // teams that are allowed will now have their player counts stored in c1...c4
 void GetTeamCounts(entity ignore)
 {
 	entity head;
+	float value;
 	// now count how many players are on each team already
 
 	// FIXME: also find and memorize the lowest-scoring bot on each team (in case players must be shuffled around)
@@ -553,36 +570,37 @@ void GetTeamCounts(entity ignore)
 	{
 		if(head != ignore)// && head.netname != "")
 		{
+			value = PlayerValue(head, ignore);
 			if(head.team == COLOR_TEAM1)
 			{
 				if(c1 >= 0)
 				{
-					c1 = c1 + 1;
-					cb1 = cb1 + 1;
+					c1 = c1 + value;
+					cb1 = cb1 + value;
 				}
 			}
 			if(head.team == COLOR_TEAM2)
 			{
 				if(c2 >= 0)
 				{
-					c2 = c2 + 1;
-					cb2 = cb2 + 1;
+					c2 = c2 + value;
+					cb2 = cb2 + value;
 				}
 			}
 			if(head.team == COLOR_TEAM3)
 			{
 				if(c3 >= 0)
 				{
-					c3 = c3 + 1;
-					cb3 = cb3 + 1;
+					c3 = c3 + value;
+					cb3 = cb3 + value;
 				}
 			}
 			if(head.team == COLOR_TEAM4)
 			{
 				if(c4 >= 0)
 				{
-					c4 = c4 + 1;
-					cb4 = cb4 + 1;
+					c4 = c4 + value;
+					cb4 = cb4 + value;
 				}
 			}
 		}
@@ -1084,11 +1102,7 @@ void ShufflePlayerOutOfTeam (float source_team)
 void AuditTeams()
 {
 	float numplayers, numteams, average;
-	if(cvar("g_campaign"))
-		return;
-	if(!cvar("g_balance_teams_force"))
-		return;
-	if(!cvar("teamplay"))
+	if(!IsTeamBalanceForced())
 		return;
 
 	if(audit_teams_time > time)
@@ -1129,7 +1143,7 @@ void AuditTeams()
 	if(numteams < 2)
 		return; // don't bother shuffling if for some reason there aren't any teams
 
-	average = ceil(numplayers / numteams);
+	average = (numplayers / numteams) + 1;
 
 	if(average <= 0)
 		return; // that's weird...
