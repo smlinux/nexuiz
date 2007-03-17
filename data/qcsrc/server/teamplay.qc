@@ -15,7 +15,7 @@ float g_domination, g_ctf, g_tdm;
 
 float audit_teams_time;
 
-float() IsTeamBalanceForced() = {
+float() IsTeamBalanceForced = {
 	if(cvar("g_campaign"))
 		return FALSE;
 	if(!cvar("g_balance_teams_force"))
