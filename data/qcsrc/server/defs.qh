@@ -301,6 +301,9 @@ void ClearSelectedPlayer();
 .float selected_player_display_needs_update; // are regular updates necessary? (health)
 .float selected_player_display_timeout; // when the selection will time out
 
+void FixIntermissionClient(entity e);
+void FixClientCvars(entity e);
+
 void centerprint_atprio(entity e, float prio, string s);
 void centerprint_expire(entity e, float prio);
 void centerprint(entity e, string s);

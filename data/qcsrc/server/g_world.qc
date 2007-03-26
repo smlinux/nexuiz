@@ -3,6 +3,7 @@ float SPAWNFLAG_NO_WAYPOINTS_FOR_ITEMS = 1;
 string GetMapname();
 void GotoNextMap();
 void HandleMaplistShuffleCommands();
+float() DoNextMapOverride;
 
 void SetDefaultAlpha()
 {
@@ -61,7 +62,8 @@ void GotoFirstMap()
 		if(argv(0) != GetMapname())
 		{
 			cvar_set("nextmap", argv(0));
-			GotoNextMap();
+			if(!DoNextMapOverride())
+				GotoNextMap();
 		}
 	}
 }
@@ -343,6 +345,9 @@ void worldspawn (void)
 
 	registercvar("_g_maplist_shufflenow", "0");
 	registercvar("_g_maplist_have_shuffled", "0");
+	registercvar("_g_maplist_add", "");
+	registercvar("_g_maplist_remove", "");
+	registercvar("_g_maplist_putfirst", "");
 
 	player_count = 0;
 	lms_lowest_lives = 0;
@@ -452,9 +457,12 @@ string GetGametype()
 	return "dm";
 }
 
+string getmapname_stored;
 string GetMapname()
 {
-	return strcat(GetGametype(), "_", mapname);
+	if(getmapname_stored == "")
+		getmapname_stored = strzone(strcat(GetGametype(), "_", mapname));
+	return getmapname_stored;
 }
 
 float Map_Count, Map_Current;
@@ -514,6 +522,7 @@ float MapHasRightSize(string map)
 
 string Map_Filename(float position)
 {
+	// FIXME unused
 	return strcat("maps/", argv(position), ".mapcfg");
 }
 
@@ -540,10 +549,37 @@ float(float position, float pass) Map_Check =
 	return 0;
 }
 
-void(float position) Map_Goto =
+void(string nextmapname) Map_Goto_SetStr =
+{
+	if(getmapname_stored != "")
+		strunzone(getmapname_stored);
+	if(nextmapname == "")
+		getmapname_stored = "";
+	else
+		getmapname_stored = strzone(nextmapname);
+}
+
+void(float position) Map_Goto_SetFloat =
 {
 	cvar_set("g_maplist_index", ftos(position));
-	localcmd(strcat("exec \"", Map_Filename(position) ,"\"\n"));
+	Map_Goto_SetStr(argv(position));
+}
+
+void() GameResetCfg =
+{
+	// if an exit cfg is defined by exiting map, exec it.
+	string exit_cfg;
+	exit_cfg = cvar_string("exit_cfg");
+	if(exit_cfg != "")
+		localcmd(strcat("exec \"", exit_cfg, "\"\n"));
+
+	localcmd("exec game_reset.cfg\n");
+};
+
+void() Map_Goto =
+{
+	GameResetCfg();
+	localcmd(strcat("exec \"maps/", getmapname_stored ,".mapcfg\"\n"));
 }
 
 // return codes of map selectors:
@@ -648,31 +684,51 @@ void() Maplist_Init =
 	// isn't chosen in the first pass that should have been
 }
 
-void() GotoNextMap =
+string() GetNextMap =
 {
-	//local string nextmap;
-	//local float n, nummaps;
-	//local string s;
-	string exit_cfg;
-	if (alreadychangedlevel)
-		return;
-	alreadychangedlevel = TRUE;
+	float nextMap;
 
+	Maplist_Init();
+	nextMap = -1;
+
+	if(nextMap == -1)
+		if(cvar("g_maplist_shuffle") > 0)
+			nextMap = MaplistMethod_Shuffle(cvar("g_maplist_shuffle") + 1);
+
+	if(nextMap == -1)
+		if(cvar("g_maplist_selectrandom"))
+			nextMap = MaplistMethod_Random();
+
+	if(nextMap == -1)
+		nextMap = MaplistMethod_Iterate();
+
+	if(nextMap == -1)
+		nextMap = MaplistMethod_Repeat();
+
+	if(nextMap >= 0)
+	{
+		Map_Goto_SetFloat(nextMap);
+		return getmapname_stored;
+	}
+
+	return "";
+};
+
+float() DoNextMapOverride =
+{
 	if(cvar("g_campaign"))
 	{
 		CampaignPostIntermission();
-		return;
+		return TRUE;
 	}
-
 	if(cvar("quit_when_empty"))
 	{
 		if(player_count <= currentbots)
 		{
 			localcmd("quit\n");
-			return;
+			return TRUE;
 		}
 	}
-
 	if (cvar("samelevel")) // if samelevel is set, stay on same level
 	{
 		// this does not work because it tries to exec maps/nexdm01.mapcfg (which doesn't exist, it should be trying maps/dm_nexdm01.mapcfg for example)
@@ -680,72 +736,55 @@ void() GotoNextMap =
 		// so instead just restart the current map using the restart command (DOES NOT WORK PROPERLY WITH exit_cfg STUFF)
 		localcmd("restart\n");
 		//changelevel (mapname);
-		return;
+		return TRUE;
 	}
-
-	// if an exit cfg is defined by exiting map, exec it.
-	exit_cfg = cvar_string("exit_cfg");
-	if(exit_cfg != "")
-		localcmd(strcat("exec \"", exit_cfg, "\"\n"));
-
-	localcmd("exec game_reset.cfg\n");
-
-
-	if (cvar("lastlevel"))
-	{
-		localcmd(strcat("set lastlevel 0\n"));
-		localcmd(strcat("togglemenu\n"));
-	}
-	else
-	{
-		float nextMap;
-		float allowReset;
-
-		// cvar "nextmap" always gets priority
-		if(cvar_string("nextmap") != "")
+	if(cvar_string("nextmap") != "")
 		if(TryFile(strcat("maps/", cvar_string("nextmap"), ".mapcfg")))
 		{
-			localcmd(strcat("exec \"maps/", cvar_string("nextmap"), ".mapcfg\"\n"));
-			return;
+			Map_Goto_SetStr(cvar_string("nextmap"));
+			Map_Goto();
+			return TRUE;
 		}
+	if(cvar("lastlevel"))
+	{
+		GameResetCfg();
+		localcmd(strcat("set lastlevel 0\n"));
+		localcmd(strcat("togglemenu\n"));
+		return TRUE;
+	}
+	return FALSE;
+};
+
+void() GotoNextMap =
+{
+	//local string nextmap;
+	//local float n, nummaps;
+	//local string s;
+	if (alreadychangedlevel)
+		return;
+	alreadychangedlevel = TRUE;
+
+	{
+		string nextMap;
+		float allowReset;
 
 		for(allowReset = 1; allowReset >= 0; --allowReset)
 		{
-			Maplist_Init();
-			nextMap = -1;
-
-			if(nextMap == -1)
-				if(cvar("g_maplist_shuffle") > 0)
-					nextMap = MaplistMethod_Shuffle(cvar("g_maplist_shuffle") + 1);
-
-			if(nextMap == -1)
-				if(cvar("g_maplist_selectrandom"))
-					nextMap = MaplistMethod_Random();
-
-			if(nextMap == -1)
-				nextMap = MaplistMethod_Iterate();
-
-			if(nextMap == -1)
-				nextMap = MaplistMethod_Repeat();
-
-			if(nextMap >= 0)
-			{
-				Map_Goto(nextMap);
+			nextMap = GetNextMap();
+			if(nextMap != "")
 				break;
-			}
-			else // PERMANENT FAILURE
+
+			if(allowReset)
 			{
-				if(allowReset)
-				{
-					bprint( "Maplist contains no single playable map!  Resetting it to default map list.\n" );
-					cvar_set("g_maplist", cvar_string("g_maplist_defaultlist"));
-				}
-				else
-				{
-					error("Everything is broken - not even the default map list works. Please report this to the developers.");
-				}
+				bprint( "Maplist contains no single playable map!  Resetting it to default map list.\n" );
+				cvar_set("g_maplist", cvar_string("g_maplist_defaultlist"));
+			}
+			else
+			{
+				error("Everything is broken - not even the default map list works. Please report this to the developers.");
 			}
 		}
+		Map_Goto();
 	}
 };
 
@@ -758,8 +797,12 @@ When the player presses attack or jump, change to the next level
 ============
 */
 .float autoscreenshot;
+void() MapVote_Think;
+float mapvote_initialized;
 void() IntermissionThink =
 {
+	FixIntermissionClient(self);
+
 	if(cvar("sv_autoscreenshot"))
 	if(self.autoscreenshot)
 	if(time > self.autoscreenshot)
@@ -773,10 +816,12 @@ void() IntermissionThink =
 	if (time < intermission_exittime)
 		return;
 
-	if (time < intermission_exittime + 10 && !self.button0 && !self.button2 && !self.button3 && !self.button6 && !self.buttonuse)
-		return;
+	if(!mapvote_initialized)
+		if (time < intermission_exittime + 10 && !self.button0 && !self.button2 && !self.button3 && !self.button6 && !self.buttonuse)
+			return;
 
-	GotoNextMap ();
+	if(intermission_exittime >= 0)
+		MapVote_Think();
 };
 
 /*
@@ -893,6 +938,28 @@ void() DumpStats =
 	}
 }
 
+void FixIntermissionClient(entity e)
+{
+	if(!e.autoscreenshot) // initial call
+	{
+		e.angles = e.v_angle;
+		e.autoscreenshot = time + 0.8;	// used for autoscreenshot
+		e.armorvalue = 0;
+		e.health = -42; // show scoreboard
+		e.solid = SOLID_NOT;
+		e.movetype = MOVETYPE_NONE;
+		e.takedamage = DAMAGE_NO;
+		if(e.weaponentity)
+			e.weaponentity.effects = EF_NODRAW;
+		stuffcmd(e, "\ncl_gravity 0\ncl_movement_maxspeed 0\ncl_movement_jumpvelocity 0\ncl_movement_maxairspeed 0\n");
+	}
+
+	e.velocity = '0 0 0';
+	e.fixangle = TRUE; // (e.health <= 0);
+
+	// TODO halt weapon animation
+}
+
 
 /*
 go to the next level for deathmatch
@@ -941,13 +1008,7 @@ void() NextLevel =
 
 	for(other = world; (other = findflags(other, flags, FL_CLIENT)); )
 	{
-		//other.nextthink = time + 0.5;
-		other.takedamage = DAMAGE_NO;
-		other.solid = SOLID_NOT;
-		other.movetype = MOVETYPE_NONE;
-		other.angles = other.v_angle;
-		other.angles_x = other.angles_x * -1;
-		other.autoscreenshot = time + 0.8;	// used for autoscreenshot
+		FixIntermissionClient(other);
 
 		self = other;
 
@@ -965,7 +1026,7 @@ void() NextLevel =
 	if(cvar("g_campaign"))
 		CampaignPreIntermission();
 
-	WriteByte (MSG_ALL, SVC_INTERMISSION);
+	// WriteByte (MSG_ALL, SVC_INTERMISSION);
 };
 
 /*
@@ -1316,7 +1377,15 @@ float(float fraglimit) WinningCondition_MaxTeamMax =
 	return WinningConditionBase_Teamplay(fraglimit);
 }
 
-void PrintScoreboardFor(string name, string colorcode, float whichteam)
+void print_to(entity e, string s)
+{
+	if(e)
+		sprint(e, strcat(s, "\n"));
+	else
+		ServerConsoleEcho(s, TRUE);
+}
+
+void PrintScoreboardFor(entity e, string name, string colorcode, float whichteam)
 {
 	entity head;
 	float v;
@@ -1333,7 +1402,7 @@ void PrintScoreboardFor(string name, string colorcode, float whichteam)
 		{
 			if(name != "")
 				if(!found)
-					ServerConsoleEcho(strcat(" ", colorcode, name, ":"), FALSE);
+					print_to(e, strcat(" ", colorcode, name, ":"));
 			found = TRUE;
 			fragtotal = fragtotal + head.frags;
 			s = ftos(head.frags);
@@ -1346,7 +1415,7 @@ void PrintScoreboardFor(string name, string colorcode, float whichteam)
 			v = PlayerValue(head);
 			teamvalue += v;
 			s = strcat(s, " / ", ftos(v));
-			ServerConsoleEcho(strcat("  ", colorcode, head.netname, colorcode, " (", s, ")"), TRUE);
+			print_to(e, strcat("  ", colorcode, head.netname, colorcode, " (", s, ")"));
 		}
 		head = find(head, classname, "player");
 	}
@@ -1354,25 +1423,28 @@ void PrintScoreboardFor(string name, string colorcode, float whichteam)
 	{
 		s = ftos(fragtotal);
 		s = strcat(s, " / ", ftos(teamvalue));
-		ServerConsoleEcho(strcat(colorcode, "  (total: ", s, ")"), FALSE);
+		print_to(e, strcat(colorcode, "  (total: ", s, ")"));
 	}
 }
 
-void PrintScoreboard()
+void PrintScoreboard(entity e)
 {
-	ServerConsoleEcho("Scoreboard:", FALSE);
+	print_to(e, strcat("Time:      ", ftos(time / 60)));
+	print_to(e, strcat("Timelimit: ", ftos(cvar("timelimit"))));
+	print_to(e, strcat("Fraglimit: ", ftos(cvar("fraglimit"))));
+	print_to(e, "Scoreboard:");
 	if(teams_matter)
 	{
-		PrintScoreboardFor("Red", "^1", COLOR_TEAM1);
-		PrintScoreboardFor("Blue", "^4", COLOR_TEAM2);
-		PrintScoreboardFor("Pink", "^6", COLOR_TEAM3);
-		PrintScoreboardFor("Yellow", "^3", COLOR_TEAM4);
+		PrintScoreboardFor(e, "Red", "^1", COLOR_TEAM1);
+		PrintScoreboardFor(e, "Blue", "^4", COLOR_TEAM2);
+		PrintScoreboardFor(e, "Pink", "^6", COLOR_TEAM3);
+		PrintScoreboardFor(e, "Yellow", "^3", COLOR_TEAM4);
 	}
 	else
 	{
-		PrintScoreboardFor("", "^7", 0);
+		PrintScoreboardFor(e, "", "^7", 0);
 	}
-	ServerConsoleEcho(".", FALSE);
+	print_to(e, ".");
 }
 
 void RemoveFromMaplist(string m)
@@ -1444,6 +1516,22 @@ void AddToMaplist(string m)
 		ServerConsoleEcho("Map already in list.", FALSE);
 }
 
+void MakeFirstInMaplist(string m)
+{
+	if(!TryFile(strcat("maps/", m, ".mapcfg")))
+	{
+		ServerConsoleEcho("Map not found.", FALSE);
+		return;
+	}
+
+	m = strzone(m);
+	RemoveFromMaplist(m);
+	cvar_set("g_maplist", strcat("'", m, "'", cvar_string("g_maplist")));
+	strunzone(m);
+
+	ServerConsoleEcho("Map added as first one.", FALSE);
+}
+
 void ShuffleMaplist()
 {
 	string result;
@@ -1491,6 +1579,11 @@ void() HandleMaplistShuffleCommands =
 		RemoveFromMaplist(cvar_string("_g_maplist_remove"));
 		cvar_set("_g_maplist_remove", "");
 	}
+	if(cvar_string("_g_maplist_putfirst") != "")
+	{
+		MakeFirstInMaplist(cvar_string("_g_maplist_putfirst"));
+		cvar_set("_g_maplist_putfirst", "");
+	}
 	if(cvar("_g_maplist_shufflenow") || (cvar("g_maplist_shuffle") && !cvar("_g_maplist_have_shuffled")))
 	{
 		ShuffleMaplist();
@@ -1523,7 +1616,8 @@ void() CheckRules_World =
 	if (intermission_running)
 		if (time >= intermission_exittime + 60)
 		{
-			GotoNextMap();
+			if(!DoNextMapOverride())
+				GotoNextMap();
 			return;
 		}
 
@@ -1535,7 +1629,7 @@ void() CheckRules_World =
 	if(cvar("_scoreboard"))
 	{
 		cvar_set("_scoreboard", "0");
-		PrintScoreboard();
+		PrintScoreboard(world);
 	}
 
 	HandleMaplistShuffleCommands();
@@ -1543,20 +1637,25 @@ void() CheckRules_World =
 	timelimit = cvar("timelimit") * 60;
 	fraglimit = cvar("fraglimit");
 
-	if (timelimit && time >= timelimit)
-		InitiateOvertime();
+	if(checkrules_overtimeend)
+	{
+		if(!checkrules_overtimewarning)
+		{
+			checkrules_overtimewarning = TRUE;
+			//sound(world, CHAN_AUTO, "announcer/robotic/1minuteremains.ogg", 1, ATTN_NONE);
+			bcenterprint("^3Now playing ^1OVERTIME^3!\n\n^3Keep fragging until we have a ^1winner^3!");
+		}
+	}
+	else
+	{
+		if (timelimit && time >= timelimit)
+			InitiateOvertime();
+	}
 
 	if (checkrules_overtimeend && time >= checkrules_overtimeend)
 	{
 		NextLevel();
 		return;
-	}
-
-	if(!checkrules_overtimewarning && checkrules_overtimeend)
-	{
-		checkrules_overtimewarning = TRUE;
-		//sound(world, CHAN_AUTO, "announcer/robotic/1minuteremains.ogg", 1, ATTN_NONE);
-		bcenterprint("^3Now playing ^1OVERTIME^3!\n\n^3Keep fragging until we have a ^1winner^3!");
 	}
 
 	if (!checkrules_oneminutewarning && timelimit > 0 && time > timelimit - 60)
@@ -1599,9 +1698,351 @@ void() CheckRules_World =
 		ClearWinners();
 
 	if(checkrules_overtimeend)
-		if(status != WINNING_NEVER)
+		if(status != WINNING_NEVER || time >= checkrules_overtimeend)
 			status = WINNING_YES;
 
 	if(status == WINNING_YES)
 		NextLevel();
+};
+
+float randsel_value;
+float randsel_priority;
+float randsel_count;
+void RandSel_Init()
+{
+	randsel_value = -1;
+	randsel_priority = -1;
+	randsel_count = -1;
+}
+void RandSel_Add(float priority, float value)
+{
+	if(priority > randsel_priority)
+	{
+		randsel_priority = priority;
+		randsel_value = value;
+		randsel_count = 1;
+	}
+	else if(priority == randsel_priority)
+	{
+		randsel_count += 1;
+		if(ceil(random() * randsel_count) == 1)
+			randsel_value = value;
+	}
+}
+
+float mapvote_nextthink;
+float mapvote_initialized;
+float mapvote_keeptwotime;
+float mapvote_timeout;
+string mapvote_message;
+
+#define MAPVOTE_COUNT 10
+float mapvote_count;
+string mapvote_maps[MAPVOTE_COUNT];
+float mapvote_maps_suggested[MAPVOTE_COUNT];
+string mapvote_suggestions[MAPVOTE_COUNT];
+float mapvote_suggestion_ptr;
+string mapvote_fillstr;
+float mapvote_maxlen;
+float mapvote_voters;
+float mapvote_votes[MAPVOTE_COUNT];
+.float mapvote;
+
+void MapVote_ClearAllVotes()
+{
+	for(other = world; (other = findflags(other, flags, FL_CLIENT)); )
+		other.mapvote = 0;
+}
+
+string MapVote_Suggest(string m)
+{
+	float i;
+	if(m == "")
+		return "That's not how to use this command.";
+	if(!cvar("g_maplist_votable_suggestions"))
+		return "Suggestions are not accepted on this server.";
+	if(mapvote_initialized)
+		return "Can't suggest - voting is already in progress!";
+	if(!TryFile(strcat("maps/", m, ".mapcfg")))
+		return "The map you suggested is not available on this server.";
+	for(i = 0; i < mapvote_suggestion_ptr; ++i)
+		if(mapvote_suggestions[i] == m)
+			return "This map was already suggested.";
+	if(mapvote_suggestion_ptr >= MAPVOTE_COUNT)
+	{
+		i = ceil(random() * mapvote_suggestion_ptr) - 1;
+	}
+	else
+	{
+		i = mapvote_suggestion_ptr;
+		mapvote_suggestion_ptr += 1;
+	}
+	if(mapvote_suggestions[i] != "")
+		strunzone(mapvote_suggestions[i]);
+	mapvote_suggestions[i] = strzone(m);
+	GameLogEcho(strcat(":vote:suggested:", m, ":", ftos(self.playerid), ":", self.netname), TRUE);
+	return "Suggestion accepted.";
+}
+
+void MapVote_Init()
+{
+	string nextMap;
+	float i, j;
+	float nmax, smax;
+
+	MapVote_ClearAllVotes();
+
+	nmax = min(MAPVOTE_COUNT, cvar("g_maplist_votable"));
+	smax = min(nmax, cvar("g_maplist_votable_suggestions"));
+	mapvote_count = 0;
+
+	for(i = 0; i < 100 && mapvote_count < smax; ++i)
+	{
+		nextMap = mapvote_suggestions[ceil(random() * mapvote_suggestion_ptr) - 1];
+		for(j = 0; j < mapvote_count; ++j)
+			if(mapvote_maps[j] == nextMap)
+			{
+				nextMap = "";
+				break;
+			}
+		if(nextMap != "")
+		{
+			if(strlen(nextMap) > mapvote_maxlen)
+				mapvote_maxlen = strlen(nextMap);
+			mapvote_maps[mapvote_count] = nextMap;
+			mapvote_maps_suggested[mapvote_count] = TRUE;
+			mapvote_count += 1;
+		}
+	}
+
+	for(i = 0; i < 100 && mapvote_count < nmax; ++i)
+	{
+		nextMap = GetNextMap();
+		for(j = 0; j < mapvote_count; ++j)
+			if(mapvote_maps[j] == nextMap)
+			{
+				nextMap = "";
+				break;
+			}
+		if(nextMap != "")
+		{
+			if(strlen(nextMap) > mapvote_maxlen)
+				mapvote_maxlen = strlen(nextMap);
+			mapvote_maps[mapvote_count] = strzone(nextMap);
+			mapvote_maps_suggested[mapvote_count] = FALSE;
+			mapvote_count += 1;
+		}
+	}
+
+	mapvote_fillstr = " ";
+	while(strlen(mapvote_fillstr) < mapvote_maxlen + 16)
+		mapvote_fillstr = strcat(mapvote_fillstr, mapvote_fillstr);
+	mapvote_fillstr = strzone(mapvote_fillstr);
+
+	mapvote_keeptwotime = time + cvar("g_maplist_votable_keeptwotime");
+	mapvote_timeout = time + cvar("g_maplist_votable_timeout");
+	if(mapvote_count < 3 || mapvote_keeptwotime <= time)
+		mapvote_keeptwotime = 0;
+	mapvote_message = "Choose a map and press its key!";
+}
+float MapVote_Finished(float mappos)
+{
+	string result;
+	float i;
+
+	result = strcat(":vote:finished:", mapvote_maps[mappos]);
+	result = strcat(result, ":", ftos(mapvote_votes[mappos]), "::");
+	for(i = 0; i < mapvote_count; ++i)
+		if(i != mappos)
+			if(mapvote_maps[i] != "")
+			{
+				result = strcat(result, ":", mapvote_maps[i]);
+				result = strcat(result, ":", ftos(mapvote_votes[i]));
+			}
+	GameLogEcho(result, FALSE);
+	if(mapvote_maps_suggested[mappos])
+		GameLogEcho(strcat(":vote:suggestion_accepted:", mapvote_maps[mappos]), FALSE);
+
+	for(other = world; (other = findflags(other, flags, FL_CLIENT)); ) if(clienttype(other) == CLIENTTYPE_REAL)
+		FixClientCvars(other);
+
+	Map_Goto_SetStr(mapvote_maps[mappos]);
+	Map_Goto();
+	return TRUE;
+}
+void MapVote_CheckRules_1()
+{
+	float i;
+
+	for(i = 0; i < mapvote_count; ++i) if(mapvote_maps[i] != "")
+	{
+		dprint("Map ", ftos(i), ": "); dprint(mapvote_maps[i], "\n");
+		mapvote_votes[i] = 0;
+	}
+
+	mapvote_voters = 0;
+	for(other = world; (other = findflags(other, flags, FL_CLIENT)); ) if(clienttype(other) == CLIENTTYPE_REAL)
+	{
+		++mapvote_voters;
+		if(other.mapvote)
+		{
+			dprint("Player ", other.netname, " vote = ", ftos(other.mapvote - 1), "\n");
+			mapvote_votes[other.mapvote - 1] = mapvote_votes[other.mapvote - 1] + 1;
+		}
+	}
+}
+
+float MapVote_CheckRules_2()
+{
+	float i;
+	float firstPlace, secondPlace;
+	float firstPlaceVotes, secondPlaceVotes;
+	string result;
+
+	RandSel_Init();
+	for(i = 0; i < mapvote_count; ++i) if(mapvote_maps[i] != "")
+		RandSel_Add(mapvote_votes[i], i);
+	firstPlace = randsel_value;
+	firstPlaceVotes = randsel_priority;
+	dprint("First place: ", ftos(firstPlace), "\n");
+	dprint("First place votes: ", ftos(firstPlaceVotes), "\n");
+
+	RandSel_Init();
+	for(i = 0; i < mapvote_count; ++i) if(mapvote_maps[i] != "")
+		if(i != firstPlace)
+			RandSel_Add(mapvote_votes[i], i);
+	secondPlace = randsel_value;
+	secondPlaceVotes = randsel_priority;
+	dprint("Second place: ", ftos(secondPlace), "\n");
+	dprint("Second place votes: ", ftos(secondPlaceVotes), "\n");
+
+	if(firstPlace == -1)
+		error("No first place in map vote... WTF?");
+
+	if(secondPlace == -1 || time > mapvote_timeout || (mapvote_voters - firstPlaceVotes) < firstPlaceVotes)
+		return MapVote_Finished(firstPlace);
+
+	if(mapvote_keeptwotime)
+		if(time > mapvote_keeptwotime || (mapvote_voters - firstPlaceVotes - secondPlaceVotes) < secondPlaceVotes)
+		{
+			mapvote_message = "Now decide between the TOP TWO!";
+			mapvote_keeptwotime = 0;
+			result = strcat(":vote:keeptwo:", mapvote_maps[firstPlace]);
+			result = strcat(result, ":", ftos(firstPlaceVotes));
+			result = strcat(result, ":", mapvote_maps[secondPlace]);
+			result = strcat(result, ":", ftos(secondPlaceVotes), "::");
+			for(i = 0; i < mapvote_count; ++i)
+				if(i != firstPlace)
+					if(i != secondPlace)
+						if(mapvote_maps[i] != "")
+						{
+							result = strcat(result, ":", mapvote_maps[i]);
+							result = strcat(result, ":", ftos(mapvote_votes[i]));
+							strunzone(mapvote_maps[i]);
+							mapvote_maps[i] = "";
+						}
+			GameLogEcho(result, FALSE);
+		}
+
+	return FALSE;
+}
+void MapVote_Tick()
+{
+	string msgstr;
+	string tmp;
+	float i;
+	float keeptwo;
+
+	keeptwo = mapvote_keeptwotime;
+	MapVote_CheckRules_1(); // count
+	if(MapVote_CheckRules_2()) // decide
+		return;
+
+	for(other = world; (other = findflags(other, flags, FL_CLIENT)); ) if(clienttype(other) == CLIENTTYPE_REAL)
+	{
+		// hide scoreboard again
+		if(other.health != 2342)
+		{
+			stuffcmd(other, "\nin_bind 7 1 \"impulse 1\"; in_bind 7 2 \"impulse 2\"; in_bind 7 3 \"impulse 3\"; in_bind 7 4 \"impulse 4\"; in_bind 7 5 \"impulse 5\"; in_bind 7 6 \"impulse 6\"; in_bind 7 7 \"impulse 7\"; in_bind 7 8 \"impulse 8\"; in_bind 7 9 \"impulse 9\"; in_bind 7 0 \"impulse 10\"; in_bind 7 KP_1 \"impulse 1\"; in_bind 7 KP_2 \"impulse 2\"; in_bind 7 KP_3 \"impulse 3\"; in_bind 7 KP_4 \"impulse 4\"; in_bind 7 KP_5 \"impulse 5\"; in_bind 7 KP_6 \"impulse 6\"; in_bind 7 KP_7 \"impulse 7\"; in_bind 7 KP_8 \"impulse 8\"; in_bind 7 KP_9 \"impulse 9\"; in_bind 7 KP_0 \"impulse 10\"; in_bindmap 7 0\n");
+			other.health = 2342;
+		}
+
+		// notify about keep-two
+		if(keeptwo != 0 && mapvote_keeptwotime == 0)
+			stuffcmd(other, "\nplay2 misc/invshot.wav\n");
+
+		// clear possibly invalid votes
+		if(mapvote_maps[other.mapvote - 1] == "")
+			other.mapvote = 0;
+		// use impulses as new vote
+		if(other.impulse >= 1 && other.impulse <= mapvote_count)
+			if(mapvote_maps[other.impulse - 1] != "")
+				other.mapvote = other.impulse;
+		other.impulse = 0;
+	}
+
+	MapVote_CheckRules_1(); // just count
+
+	for(other = world; (other = findflags(other, flags, FL_CLIENT)); ) if(clienttype(other) == CLIENTTYPE_REAL)
+	{
+		// display voting screen
+		msgstr = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+		msgstr = substring(msgstr, 0, strlen(msgstr) - mapvote_count);
+		msgstr = strcat(msgstr, mapvote_message);
+		msgstr = strcat(msgstr, "\n\n");
+		for(i = 0; i < mapvote_count; ++i)
+			if(mapvote_maps[i] == "")
+				msgstr = strcat(msgstr, "\n");
+			else
+			{
+				tmp = mapvote_maps[i];
+				tmp = strcat(tmp, substring(mapvote_fillstr, 0, mapvote_maxlen  - strlen(tmp)));
+				tmp = strcat(ftos(math_mod(i + 1, 10)), ": ", tmp);
+				tmp = strcat(tmp, " ^2(", ftos(mapvote_votes[i]), " vote");
+				if(mapvote_votes[i] != 1)
+					tmp = strcat(tmp, "s");
+				tmp = strcat(tmp, ")");
+				tmp = strcat(tmp, substring(mapvote_fillstr, 0, mapvote_maxlen + 15 - strlen(tmp)));
+				if(other.mapvote == i + 1)
+					msgstr = strcat(msgstr, "^3> ", tmp, "\n");
+				else
+					msgstr = strcat(msgstr, "^7  ", tmp, "\n");
+			}
+		i = ceil(mapvote_timeout - time);
+		msgstr = strcat(msgstr, "\n\n", ftos(i), " second");
+		if(i != 1)
+			msgstr = strcat(msgstr, "s");
+		msgstr = strcat(msgstr, " left");
+
+		centerprint(other, msgstr);
+	}
+}
+void MapVote_Think()
+{
+	if(alreadychangedlevel)
+		return;
+	
+	if(time < mapvote_nextthink)
+		return;
+	dprint("tick\n");
+
+	mapvote_nextthink = time + 0.5;
+
+	if(!mapvote_initialized)
+	{
+		mapvote_initialized = TRUE;
+		if(DoNextMapOverride())
+		{
+			alreadychangedlevel = TRUE;
+			return;
+		}
+		if(!cvar("g_maplist_votable"))
+		{
+			GotoNextMap();
+			return;
+		}
+		MapVote_Init();
+	}
+
+	MapVote_Tick();
 };

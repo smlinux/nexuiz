@@ -1,6 +1,7 @@
 void ReadyCount();
 float ValidateMap(string vote);
 void(entity e) DropFlag;
+string MapVote_Suggest(string m);
 
 void Say(entity source, float teamsay, string msgin)
 {
@@ -15,6 +16,9 @@ void Say(entity source, float teamsay, string msgin)
 	colorstr = Team_ColorCode(source.team);
 
 	if(!teams_matter)
+		teamsay = FALSE;
+
+	if(intermission_running)
 		teamsay = FALSE;
 
 	if(source.classname != "player") // observers can't
@@ -330,6 +334,8 @@ void SV_ParseClientCommand(string s) {
 			sprint(self, strcat(col, argv(i), " "));
 		}
 		sprint(self, "\n");
+	} else if(argv(0) == "teamstatus") {
+		PrintScoreboard(self);
 	} else if(argv(0) == "say") {
 		Say(self, FALSE, substring(s, 4, strlen(s) - 4));
 		//clientcommand(self, formatmessage(s));
@@ -342,6 +348,8 @@ void SV_ParseClientCommand(string s) {
 			sprint(self, "ERROR: unsupported info command\n");
 		else
 			wordwrap_sprint(cmd, 1111);
+	} else if(argv(0) == "suggestmap") {
+		sprint(self, strcat(MapVote_Suggest(argv(1)), "\n"));
 	} else {
 		cmd = argv(0);
 		/* checks not needed any more since DP has separated clientcommands and regular commands

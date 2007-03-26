@@ -653,6 +653,25 @@ void ClientKill (void)
 	Damage(self, self, self, 100000, DEATH_KILL, self.origin, '0 0 0');
 }
 
+void FixClientCvars(entity e)
+{
+	// send prediction settings to the client
+	stuffcmd(e, "\nin_bindmap 0 0\n");
+	stuffcmd(e, strcat("cl_gravity ", ftos(cvar("sv_gravity")), "\n"));
+	stuffcmd(e, strcat("cl_movement_accelerate ", ftos(cvar("sv_accelerate")), "\n"));
+	stuffcmd(e, strcat("cl_movement_friction ", ftos(cvar("sv_friction")), "\n"));
+	stuffcmd(e, strcat("cl_movement_maxspeed ", ftos(cvar("sv_maxspeed")), "\n"));
+	stuffcmd(e, strcat("cl_movement_airaccelerate ", ftos(cvar("sv_airaccelerate")), "\n"));
+	stuffcmd(e, strcat("cl_movement_maxairspeed ", ftos(cvar("sv_maxairspeed")), "\n"));
+	stuffcmd(e, strcat("cl_movement_stopspeed ", ftos(cvar("sv_stopspeed")), "\n"));
+	stuffcmd(e, strcat("cl_movement_jumpvelocity ", ftos(cvar("g_balance_jumpheight")), "\n"));
+	stuffcmd(e, strcat("cl_movement_stepheight ", ftos(cvar("sv_stepheight")), "\n"));
+	stuffcmd(e, strcat("set cl_movement_friction_on_land ", ftos(cvar("sv_friction_on_land")), "\n"));
+	stuffcmd(e, strcat("set cl_movement_airaccel_qw ", ftos(cvar("sv_airaccel_qw")), "\n"));
+	stuffcmd(e, strcat("set cl_movement_airaccel_sideways_friction ", ftos(cvar("sv_airaccel_sideways_friction")), "\n"));
+	stuffcmd(e, strcat("cl_movement_edgefriction 0\n"));
+}
+
 /*
 =============
 ClientConnect
@@ -722,19 +741,8 @@ void ClientConnect (void)
 	// TODO: is this being used for anything else than cd tracks?
 	// Remember: SVC_CDTRACK exists. Maybe it should be used.
 	
-	// send prediction settings to the client
-	stuffcmd(self, strcat("cl_movement_accelerate ", ftos(cvar("sv_accelerate")), "\n"));
-	stuffcmd(self, strcat("cl_movement_friction ", ftos(cvar("sv_friction")), "\n"));
-	stuffcmd(self, strcat("cl_movement_maxspeed ", ftos(cvar("sv_maxspeed")), "\n"));
-	stuffcmd(self, strcat("cl_movement_airaccelerate ", ftos(cvar("sv_airaccelerate")), "\n"));
-	stuffcmd(self, strcat("cl_movement_maxairspeed ", ftos(cvar("sv_maxairspeed")), "\n"));
-	stuffcmd(self, strcat("cl_movement_stopspeed ", ftos(cvar("sv_stopspeed")), "\n"));
-	stuffcmd(self, strcat("cl_movement_jumpvelocity ", ftos(cvar("g_balance_jumpheight")), "\n"));
-	stuffcmd(self, strcat("cl_movement_stepheight ", ftos(cvar("sv_stepheight")), "\n"));
-	stuffcmd(self, strcat("set cl_movement_friction_on_land ", ftos(cvar("sv_friction_on_land")), "\n"));
-	stuffcmd(self, strcat("set cl_movement_airaccel_qw ", ftos(cvar("sv_airaccel_qw")), "\n"));
-	stuffcmd(self, strcat("set cl_movement_airaccel_sideways_friction ", ftos(cvar("sv_airaccel_sideways_friction")), "\n"));
-	stuffcmd(self, strcat("cl_movement_edgefriction 0\n"));
+	FixClientCvars(self);
+
 	// Wazat's grappling hook
 	SetGrappleHookBindings();
 
@@ -1545,10 +1553,12 @@ void PlayerPreThink (void)
 
 		if (self.flags & FL_JUMPRELEASED) {
 			if (self.button2 && self.version == cvar("gameversion")) {
+				self.welcomemessage_time = 0;
 				self.flags = self.flags - FL_JUMPRELEASED;
 				LeaveSpectatorMode();
 				return;
 			} else if(self.button0 && self.version == cvar("gameversion")) {
+				self.welcomemessage_time = 0;
 				self.flags = self.flags - FL_JUMPRELEASED;
 				if(SpectateNext() == 1) {
 					self.classname = "spectator";
@@ -1563,10 +1573,12 @@ void PlayerPreThink (void)
 	} else if(self.classname == "spectator") {
 		if (self.flags & FL_JUMPRELEASED) {
 			if (self.button2 && self.version == cvar("gameversion")) {
+				self.welcomemessage_time = 0;
 				self.flags = self.flags - FL_JUMPRELEASED;
 				LeaveSpectatorMode();
 				return;
 			} else if(self.button0) {
+				self.welcomemessage_time = 0;
 				self.flags = self.flags - FL_JUMPRELEASED;
 				if(SpectateNext() == 1) {
 					self.classname = "spectator";
@@ -1575,6 +1587,7 @@ void PlayerPreThink (void)
 					PutClientInServer();
 				}
 			} else if (self.button3) {
+				self.welcomemessage_time = 0;
 				self.flags = self.flags - FL_JUMPRELEASED;
 				self.classname = "observer";
 				PutClientInServer();
