@@ -1784,7 +1784,7 @@ string MapVote_Suggest(string m)
 	return "Suggestion accepted.";
 }
 
-void MapVote_AddVotable(string nextMap)
+void MapVote_AddVotable(string nextMap, float isSuggestion)
 {
 	float j;
 	if(nextMap == "")
@@ -1795,7 +1795,7 @@ void MapVote_AddVotable(string nextMap)
 	if(strlen(nextMap) > mapvote_maxlen)
 		mapvote_maxlen = strlen(nextMap);
 	mapvote_maps[mapvote_count] = strzone(nextMap);
-	mapvote_maps_suggested[mapvote_count] = TRUE;
+	mapvote_maps_suggested[mapvote_count] = isSuggestion;
 	mapvote_count += 1;
 }
 
@@ -1811,17 +1811,17 @@ void MapVote_Init()
 	mapvote_count = 0;
 
 	for(i = 0; i < 100 && mapvote_count < smax; ++i)
-		MapVote_AddVotable(mapvote_suggestions[ceil(random() * mapvote_suggestion_ptr) - 1]);
+		MapVote_AddVotable(mapvote_suggestions[ceil(random() * mapvote_suggestion_ptr) - 1], TRUE);
 
 	for(i = 0; i < 100 && mapvote_count < nmax; ++i)
-		MapVote_AddVotable(GetNextMap());
+		MapVote_AddVotable(GetNextMap(), FALSE);
 
 	if(mapvote_count == 0)
 	{
 		bprint( "Maplist contains no single playable map!  Resetting it to default map list.\n" );
 		cvar_set("g_maplist", cvar_string("g_maplist_defaultlist"));
 		for(i = 0; i < 100 && mapvote_count < nmax; ++i)
-			MapVote_AddVotable(GetNextMap());
+			MapVote_AddVotable(GetNextMap(), FALSE);
 	}
 
 	//dprint("mapvote count is ", ftos(mapvote_count), "\n");
