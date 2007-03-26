@@ -1784,10 +1784,24 @@ string MapVote_Suggest(string m)
 	return "Suggestion accepted.";
 }
 
+void MapVote_AddVotable(string nextMap)
+{
+	float j;
+	if(nextMap == "")
+		return;
+	for(j = 0; j < mapvote_count; ++j)
+		if(mapvote_maps[j] == nextMap)
+			return;
+	if(strlen(nextMap) > mapvote_maxlen)
+		mapvote_maxlen = strlen(nextMap);
+	mapvote_maps[mapvote_count] = strzone(nextMap);
+	mapvote_maps_suggested[mapvote_count] = TRUE;
+	mapvote_count += 1;
+}
+
 void MapVote_Init()
 {
-	string nextMap;
-	float i, j;
+	float i;
 	float nmax, smax;
 
 	MapVote_ClearAllVotes();
@@ -1797,42 +1811,20 @@ void MapVote_Init()
 	mapvote_count = 0;
 
 	for(i = 0; i < 100 && mapvote_count < smax; ++i)
-	{
-		nextMap = mapvote_suggestions[ceil(random() * mapvote_suggestion_ptr) - 1];
-		for(j = 0; j < mapvote_count; ++j)
-			if(mapvote_maps[j] == nextMap)
-			{
-				nextMap = "";
-				break;
-			}
-		if(nextMap != "")
-		{
-			if(strlen(nextMap) > mapvote_maxlen)
-				mapvote_maxlen = strlen(nextMap);
-			mapvote_maps[mapvote_count] = nextMap;
-			mapvote_maps_suggested[mapvote_count] = TRUE;
-			mapvote_count += 1;
-		}
-	}
+		MapVote_AddVotable(mapvote_suggestions[ceil(random() * mapvote_suggestion_ptr) - 1]);
 
 	for(i = 0; i < 100 && mapvote_count < nmax; ++i)
+		MapVote_AddVotable(GetNextMap());
+
+	if(mapvote_count == 0)
 	{
-		nextMap = GetNextMap();
-		for(j = 0; j < mapvote_count; ++j)
-			if(mapvote_maps[j] == nextMap)
-			{
-				nextMap = "";
-				break;
-			}
-		if(nextMap != "")
-		{
-			if(strlen(nextMap) > mapvote_maxlen)
-				mapvote_maxlen = strlen(nextMap);
-			mapvote_maps[mapvote_count] = strzone(nextMap);
-			mapvote_maps_suggested[mapvote_count] = FALSE;
-			mapvote_count += 1;
-		}
+		bprint( "Maplist contains no single playable map!  Resetting it to default map list.\n" );
+		cvar_set("g_maplist", cvar_string("g_maplist_defaultlist"));
+		for(i = 0; i < 100 && mapvote_count < nmax; ++i)
+			MapVote_AddVotable(GetNextMap());
 	}
+
+	//dprint("mapvote count is ", ftos(mapvote_count), "\n");
 
 	mapvote_fillstr = " ";
 	while(strlen(mapvote_fillstr) < mapvote_maxlen + 16)
@@ -1876,7 +1868,7 @@ void MapVote_CheckRules_1()
 
 	for(i = 0; i < mapvote_count; ++i) if(mapvote_maps[i] != "")
 	{
-		dprint("Map ", ftos(i), ": "); dprint(mapvote_maps[i], "\n");
+		//dprint("Map ", ftos(i), ": "); dprint(mapvote_maps[i], "\n");
 		mapvote_votes[i] = 0;
 	}
 
@@ -1886,7 +1878,7 @@ void MapVote_CheckRules_1()
 		++mapvote_voters;
 		if(other.mapvote)
 		{
-			dprint("Player ", other.netname, " vote = ", ftos(other.mapvote - 1), "\n");
+			//dprint("Player ", other.netname, " vote = ", ftos(other.mapvote - 1), "\n");
 			mapvote_votes[other.mapvote - 1] = mapvote_votes[other.mapvote - 1] + 1;
 		}
 	}
@@ -1904,8 +1896,8 @@ float MapVote_CheckRules_2()
 		RandSel_Add(mapvote_votes[i], i);
 	firstPlace = randsel_value;
 	firstPlaceVotes = randsel_priority;
-	dprint("First place: ", ftos(firstPlace), "\n");
-	dprint("First place votes: ", ftos(firstPlaceVotes), "\n");
+	//dprint("First place: ", ftos(firstPlace), "\n");
+	//dprint("First place votes: ", ftos(firstPlaceVotes), "\n");
 
 	RandSel_Init();
 	for(i = 0; i < mapvote_count; ++i) if(mapvote_maps[i] != "")
@@ -1913,8 +1905,8 @@ float MapVote_CheckRules_2()
 			RandSel_Add(mapvote_votes[i], i);
 	secondPlace = randsel_value;
 	secondPlaceVotes = randsel_priority;
-	dprint("Second place: ", ftos(secondPlace), "\n");
-	dprint("Second place votes: ", ftos(secondPlaceVotes), "\n");
+	//dprint("Second place: ", ftos(secondPlace), "\n");
+	//dprint("Second place votes: ", ftos(secondPlaceVotes), "\n");
 
 	if(firstPlace == -1)
 		error("No first place in map vote... WTF?");
@@ -2024,7 +2016,7 @@ void MapVote_Think()
 	
 	if(time < mapvote_nextthink)
 		return;
-	dprint("tick\n");
+	//dprint("tick\n");
 
 	mapvote_nextthink = time + 0.5;
 
