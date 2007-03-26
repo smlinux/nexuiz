@@ -1878,8 +1878,9 @@ void MapVote_CheckRules_1()
 		++mapvote_voters;
 		if(other.mapvote)
 		{
+			i = other.mapvote - 1;
 			//dprint("Player ", other.netname, " vote = ", ftos(other.mapvote - 1), "\n");
-			mapvote_votes[other.mapvote - 1] = mapvote_votes[other.mapvote - 1] + 1;
+			mapvote_votes[i] = mapvote_votes[i] + 1;
 		}
 	}
 }
