@@ -1,16 +1,19 @@
+#define FOR_EACH_CLIENT(v) for(v = world; (v = findflags(v, flags, FL_CLIENT)) != world; )
+#define FOR_EACH_REALCLIENT(v) FOR_EACH_CLIENT(v) if(clienttype(v) == CLIENTTYPE_REAL)
+string STR_PLAYER = "player";
+#define FOR_EACH_PLAYER(v) for(v = world; (v = find(v, classname, STR_PLAYER)) != world; )
+#define FOR_EACH_REALPLAYER(v) FOR_EACH_PLAYER(v) if(clienttype(v) == CLIENTTYPE_REAL)
+
 float logfile_open;
 float logfile;
 
 void(string s) bcenterprint
 {
+	// TODO replace by MSG_ALL (would show it to spectators too, though)?
 	entity head;
-	head = find(world, classname, "player");
-	while(head)
-	{
+	FOR_EACH_PLAYER(head)
 		if(clienttype(head) == CLIENTTYPE_REAL)
 			centerprint(head, s);
-		head = find(head, classname, "player");
-	}
 }
 
 void(string s, float check_dangerous) ServerConsoleEcho =
@@ -404,21 +407,15 @@ void DistributeFragsAmongTeam(entity p, float targetteam, float factor)
 	p.frags = p.frags - f;
 
 	nTeam = 0;
-	head = find(world, classname, "player");
-	while(head)
-	{
+	FOR_EACH_PLAYER(head)
 		if(head != p)
 			if(head.team == targetteam)
 				nTeam = nTeam + 1;
-		head = find(head, classname, "player");
-	}
 
 	if(nTeam == 0)
 		return;
 
-	head = find(world, classname, "player");
-	while(head)
-	{
+	FOR_EACH_PLAYER(head)
 		if(head != p)
 			if(head.team == targetteam)
 			{
@@ -427,8 +424,6 @@ void DistributeFragsAmongTeam(entity p, float targetteam, float factor)
 				f = f - d;
 				nTeam = nTeam - 1;
 			}
-		head = find(head, classname, "player");
-	}
 
 	if(nTeam != 0)
 		error("nPlayers in team changed!");
@@ -503,11 +498,16 @@ string decolorize(string s)
 }
 
 #define CENTERPRIO_POINT 1
+#define CENTERPRIO_VOTE 4
 #define CENTERPRIO_NORMAL 5
+#define CENTERPRIO_MAPVOTE 9
 .float centerprint_priority;
 .float centerprint_expires;
 void centerprint_atprio(entity e, float prio, string s)
 {
+	if(intermission_running)
+		if(prio < CENTERPRIO_MAPVOTE)
+			return;
 	if(time > e.centerprint_expires)
 		e.centerprint_priority = 0;
 	if(prio >= e.centerprint_priority)
@@ -529,3 +529,5 @@ void centerprint(entity e, string s)
 {
 	centerprint_atprio(e, CENTERPRIO_NORMAL, s);
 }
+
+void VoteNag();

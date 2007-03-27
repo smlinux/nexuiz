@@ -213,15 +213,13 @@ void() FlagTouch =
 		LogCTF("capture", other.flagcarried.team, other);
 		// give credit to the individual player
 		UpdateFrags(other, cvar("g_ctf_flagscore_capture"));
+
 		// give credit to all players of the team (rewards large teams)
 		// NOTE: this defaults to 0
-		head = find(head, classname, "player");
-		while (head)
-		{
+		FOR_EACH_PLAYER(head)
 			if (head.team == self.team)
 				UpdateFrags(head, cvar("g_ctf_flagscore_capture_team"));
-			head = find(head, classname, "player");
-		}
+
 		sound (self, CHAN_AUTO, self.noise2, 1, ATTN_NONE);
 		RegenFlag (other.flagcarried);
 		other.flagcarried = world;
@@ -246,11 +244,9 @@ void() FlagTouch =
 		LogCTF("steal", self.team, other);
 		sound (self, CHAN_AUTO, self.noise, 1, ATTN_NONE);
 
-		player = find(world, classname, "player");
-		while(player) {
-			if(player.team == self.team) centerprint(player, "The enemy got your flag! Retrieve it!");
-			player = find(player, classname, "player");
-		}
+		FOR_EACH_PLAYER(player)
+			if(player.team == self.team)
+				centerprint(player, "The enemy got your flag! Retrieve it!");
 
 		self.movetype = MOVETYPE_NONE;
 		setorigin(self, FLAG_CARRY_POS);
@@ -287,11 +283,10 @@ void() FlagTouch =
 			LogCTF("pickup", self.team, other);
 			sound (self, CHAN_AUTO, self.noise, 1, ATTN_NONE);
 
-			player = find(world, classname, "player");
-			while(player) {
-				if(player.team == self.team) centerprint(player, "The enemy got your flag! Retrieve it!");
-				player = find(player, classname, "player");
-			}
+			FOR_EACH_PLAYER(player)
+				if(player.team == self.team)
+					centerprint(player, "The enemy got your flag! Retrieve it!");
+
 			self.movetype = MOVETYPE_NONE;	// flag must have MOVETYPE_NONE here, otherwise it will drop through the floor...
 			setorigin(self, FLAG_CARRY_POS);
 			setattachment(self, other, "");

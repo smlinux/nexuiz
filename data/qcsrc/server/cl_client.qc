@@ -1343,6 +1343,7 @@ Called every frame for each client before the physics are run
 =============
 */
 void() ctf_setstatus;
+.float vote_nagtime;
 void PlayerPreThink (void)
 {
 	// version nagging
@@ -1358,6 +1359,14 @@ void PlayerPreThink (void)
 					}
 				self.version_nagtime = 0;
 			}
+
+	// vote nagging
+	if(self.cvar_scr_centertime)
+		if(time > self.vote_nagtime)
+		{
+			VoteNag();
+			self.vote_nagtime = time + self.cvar_scr_centertime * 0.6;
+		}
 
 	if(self.classname == "player") {
 		local vector m1, m2;

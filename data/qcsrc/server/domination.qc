@@ -125,26 +125,18 @@ void() dompointthink =
 	{
 		teamfragamt = cvar("g_domination_point_teamamt");
 
-		head = find(head, classname, "player");
-		while (head)
-		{
+		FOR_EACH_PLAYER(head)
 			if (head.team == self.goalentity.team)
 				UpdateFrags(head, teamfragamt);
-			head = find(head, classname, "player");
-		}
 	}
 
 	// if the player left the game, changed teams or became spectator, we have to find another player on the same team to give credit to
 	if (!self.enemy.flags || self.enemy.team != self.goalentity.team || self.enemy.killcount == -666) // flags is zero on removed clients
 	{
 		other = self.enemy;
-		head = find(head, classname, "player");
-		while (head)
-		{
+		FOR_EACH_PLAYER(head)
 			if (head.team == self.goalentity.team)
 				self.enemy = head;
-			head = find(head, classname, "player");
-		}
 		if(self.enemy == other) // search returned no matching player, reset dom point
 		{
 			dom_controlpoint_setup();

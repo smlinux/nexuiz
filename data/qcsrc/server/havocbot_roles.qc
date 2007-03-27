@@ -73,8 +73,7 @@ void(float ratingscale, vector org, float sradius) havocbot_goalrating_enemyplay
 	//dprint(ftos(self.team)); dprint(" -> noteam is "); dprint(ftos(noteam));
 	//dprint("\n");
 
-	head = findchain(classname, "player");
-	while (head)
+	FOR_EACH_PLAYER(head)
 	{
 		if (self != head)
 		if (head.health > 0)
@@ -91,7 +90,6 @@ void(float ratingscale, vector org, float sradius) havocbot_goalrating_enemyplay
 				navigation_routerating(head, t * ratingscale);
 			}
 		}
-		head = head.chain;
 	}
 };
 

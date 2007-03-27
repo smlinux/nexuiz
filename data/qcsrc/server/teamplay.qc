@@ -565,8 +565,7 @@ void GetTeamCounts(entity ignore)
 	// FIXME: also find and memorize the lowest-scoring bot on each team (in case players must be shuffled around)
 	// also remember the lowest-scoring player
 
-	head = find(world, classname, "player");
-	while(head)
+	FOR_EACH_PLAYER(head)
 	{
 		if(head != ignore)// && head.netname != "")
 		{
@@ -604,7 +603,6 @@ void GetTeamCounts(entity ignore)
 				}
 			}
 		}
-		head = find(head, classname, "player");
 	}
 }
 
@@ -995,8 +993,7 @@ void ShufflePlayerOutOfTeam (float source_team)
 	lowest_player_score = 999999999;
 
 	// find the lowest-scoring player & bot of that team
-	head = find(world, classname, "player");
-	while(head)
+	FOR_EACH_PLAYER(head)
 	{
 		if(head.team == steam)
 		{
@@ -1017,7 +1014,6 @@ void ShufflePlayerOutOfTeam (float source_team)
 				}
 			}
 		}
-		head = find(head, classname, "player");
 	}
 
 	// prefers to move a bot...

@@ -455,7 +455,7 @@ void UpdateSelectedPlayer()
 		// 2. if we don't have a cursor trace, find the player which is least
 		//    mis-aimed at
 		entity p;
-		for(p = find(world, classname, "player"); p; p = find(p, classname, "player"))
+		FOR_EACH_PLAYER(p)
 		{
 			float c;
 			c = UpdateSelectedPlayer_canSee(p, selected_score, 100); // 100 = 2.5 meters

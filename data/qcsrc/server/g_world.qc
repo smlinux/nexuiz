@@ -907,8 +907,7 @@ void() DumpStats =
 		fputs(file, strcat(s, "\n"));
 	}
 
-	other = findchainflags(flags, FL_CLIENT);
-	while (other)
+	FOR_EACH_CLIENT(other)
 	{
 		if ((clienttype(other) == CLIENTTYPE_REAL) || (clienttype(other) == CLIENTTYPE_BOT && cvar("sv_logscores_bots")))
 		{
@@ -924,7 +923,6 @@ void() DumpStats =
 			else if(cvar("sv_logscores_console"))
 				ServerConsoleEcho(strcat(s, other.netname), TRUE);
 		}
-		other = other.chain;
 	}
 
 	if(cvar("sv_eventlog") && gameover)
@@ -944,18 +942,23 @@ void FixIntermissionClient(entity e)
 	{
 		e.angles = e.v_angle;
 		e.autoscreenshot = time + 0.8;	// used for autoscreenshot
-		e.armorvalue = 0;
-		e.health = -42; // show scoreboard
+		e.health = -2342;
+		// first intermission phase; voting phase has positive health (used to decide whether to send SVC_FINALE or not)
 		e.solid = SOLID_NOT;
 		e.movetype = MOVETYPE_NONE;
 		e.takedamage = DAMAGE_NO;
 		if(e.weaponentity)
 			e.weaponentity.effects = EF_NODRAW;
-		stuffcmd(e, "\ncl_gravity 0\ncl_movement_maxspeed 0\ncl_movement_jumpvelocity 0\ncl_movement_maxairspeed 0\n");
+		stuffcmd(e, "\nscr_printspeed 1000000\n");
+		if(clienttype(e) == CLIENTTYPE_REAL)
+		{
+			msg_entity = e;
+			WriteByte(MSG_ONE, SVC_INTERMISSION);
+		}
 	}
 
-	e.velocity = '0 0 0';
-	e.fixangle = TRUE; // (e.health <= 0);
+	//e.velocity = '0 0 0';
+	//e.fixangle = TRUE;
 
 	// TODO halt weapon animation
 }
@@ -998,7 +1001,7 @@ void() NextLevel =
 	GameLogClose();
 
 	maxTotalFrags = 0;
-	for(other = world; (other = findflags(other, flags, FL_CLIENT)); )
+	FOR_EACH_CLIENT(other)
 	{
 		if(maxTotalFrags < other.totalfrags)
 			maxTotalFrags = other.totalfrags;
@@ -1006,7 +1009,7 @@ void() NextLevel =
 			minTotalFrags = other.totalfrags;
 	}
 
-	for(other = world; (other = findflags(other, flags, FL_CLIENT)); )
+	FOR_EACH_CLIENT(other)
 	{
 		FixIntermissionClient(other);
 
@@ -1085,37 +1088,25 @@ float(float fraglimitreached, float equality) GetWinningCode =
 void(.float field, float value) SetWinners =
 {
 	entity head;
-	head = findchain(classname, "player");
-	while (head)
-	{
+	FOR_EACH_PLAYER(head)
 		head.winning = (head.field == value);
-		head = head.chain;
-	}
 }
 
 // set the .winning flag for those players with a given field value
 void(.float field, float value) AddWinners =
 {
 	entity head;
-	head = findchain(classname, "player");
-	while (head)
-	{
+	FOR_EACH_PLAYER(head)
 		if(head.field == value)
 			head.winning = 1;
-		head = head.chain;
-	}
 }
 
 // clear the .winning flags
 void(void) ClearWinners =
 {
 	entity head;
-	head = findchain(classname, "player");
-	while (head)
-	{
+	FOR_EACH_PLAYER(head)
 		head.winning = 0;
-		head = head.chain;
-	}
 }
 
 float() LMS_NewPlayerLives =
@@ -1201,9 +1192,8 @@ float() WinningCondition_LMS =
 	// check if the top two players have equal score.
 
 	checkrules_leaderfrags = 0;
-	head = findchain(classname, "player");
 	checkrules_equality = FALSE;
-	while (head)
+	FOR_EACH_PLAYER(head)
 	{
 		if(head.frags > checkrules_leaderfrags)
 		{
@@ -1212,7 +1202,6 @@ float() WinningCondition_LMS =
 		}
 		else if(head.frags > 0 && head.frags == checkrules_leaderfrags)
 			checkrules_equality = TRUE;
-		head = head.chain;
 	}
 
 	SetWinners(frags, checkrules_leaderfrags);
@@ -1237,9 +1226,8 @@ float(float fraglimit) WinningCondition_MaxIndividualScore =
 
 	checkrules_oldleaderfrags = checkrules_leaderfrags;
 	checkrules_leaderfrags = 0;
-	head = findchain(classname, "player");
 	checkrules_equality = FALSE;
-	while (head)
+	FOR_EACH_PLAYER(head)
 	{
 		if(head.frags > checkrules_leaderfrags)
 		{
@@ -1248,7 +1236,6 @@ float(float fraglimit) WinningCondition_MaxIndividualScore =
 		}
 		else if(head.frags > 0 && head.frags == checkrules_leaderfrags)
 			checkrules_equality = TRUE;
-		head = head.chain;
 	}
 
 	if(checkrules_leaderfrags > 0)
@@ -1322,8 +1309,7 @@ float(float fraglimit) WinningCondition_MaxTeamSum =
 
 	team1_score = team2_score = team3_score = team4_score = 0;
 
-	head = findchain(classname, "player");
-	while (head)
+	FOR_EACH_PLAYER(head)
 	{
 		if(head.team == COLOR_TEAM1)
 			team1_score += head.frags;
@@ -1333,7 +1319,6 @@ float(float fraglimit) WinningCondition_MaxTeamSum =
 			team3_score += head.frags;
 		else if(head.team == COLOR_TEAM4)
 			team4_score += head.frags;
-		head = head.chain;
 	}
 
 	return WinningConditionBase_Teamplay(fraglimit);
@@ -1348,8 +1333,7 @@ float(float fraglimit) WinningCondition_MaxTeamMax =
 
 	team1_score = team2_score = team3_score = team4_score = 0;
 
-	head = findchain(classname, "player");
-	while (head)
+	FOR_EACH_PLAYER(head)
 	{
 		if(head.team == COLOR_TEAM1)
 		{
@@ -1371,7 +1355,6 @@ float(float fraglimit) WinningCondition_MaxTeamMax =
 			if(head.frags > team4_score)
 				team4_score = head.frags;
 		}
-		head = head.chain;
 	}
 
 	return WinningConditionBase_Teamplay(fraglimit);
@@ -1394,9 +1377,8 @@ void PrintScoreboardFor(entity e, string name, string colorcode, float whichteam
 	string s;
 	float found;
 	found = FALSE;
-	head = find(world, classname, "player");
 	teamvalue = 0;
-	while(head)
+	FOR_EACH_PLAYER(head)
 	{
 		if(!whichteam || head.team == whichteam)
 		{
@@ -1417,7 +1399,6 @@ void PrintScoreboardFor(entity e, string name, string colorcode, float whichteam
 			s = strcat(s, " / ", ftos(v));
 			print_to(e, strcat("  ", colorcode, head.netname, colorcode, " (", s, ")"));
 		}
-		head = find(head, classname, "player");
 	}
 	if(whichteam && found)
 	{
@@ -1750,7 +1731,7 @@ float mapvote_votes[MAPVOTE_COUNT];
 
 void MapVote_ClearAllVotes()
 {
-	for(other = world; (other = findflags(other, flags, FL_CLIENT)); )
+	FOR_EACH_CLIENT(other)
 		other.mapvote = 0;
 }
 
@@ -1855,7 +1836,7 @@ float MapVote_Finished(float mappos)
 	if(mapvote_maps_suggested[mappos])
 		GameLogEcho(strcat(":vote:suggestion_accepted:", mapvote_maps[mappos]), FALSE);
 
-	for(other = world; (other = findflags(other, flags, FL_CLIENT)); ) if(clienttype(other) == CLIENTTYPE_REAL)
+	FOR_EACH_REALCLIENT(other)
 		FixClientCvars(other);
 
 	Map_Goto_SetStr(mapvote_maps[mappos]);
@@ -1873,7 +1854,7 @@ void MapVote_CheckRules_1()
 	}
 
 	mapvote_voters = 0;
-	for(other = world; (other = findflags(other, flags, FL_CLIENT)); ) if(clienttype(other) == CLIENTTYPE_REAL)
+	FOR_EACH_REALCLIENT(other)
 	{
 		++mapvote_voters;
 		if(other.mapvote)
@@ -1951,13 +1932,19 @@ void MapVote_Tick()
 	if(MapVote_CheckRules_2()) // decide
 		return;
 
-	for(other = world; (other = findflags(other, flags, FL_CLIENT)); ) if(clienttype(other) == CLIENTTYPE_REAL)
+	FOR_EACH_REALCLIENT(other)
 	{
 		// hide scoreboard again
 		if(other.health != 2342)
 		{
-			stuffcmd(other, "\nin_bind 7 1 \"impulse 1\"; in_bind 7 2 \"impulse 2\"; in_bind 7 3 \"impulse 3\"; in_bind 7 4 \"impulse 4\"; in_bind 7 5 \"impulse 5\"; in_bind 7 6 \"impulse 6\"; in_bind 7 7 \"impulse 7\"; in_bind 7 8 \"impulse 8\"; in_bind 7 9 \"impulse 9\"; in_bind 7 0 \"impulse 10\"; in_bind 7 KP_1 \"impulse 1\"; in_bind 7 KP_2 \"impulse 2\"; in_bind 7 KP_3 \"impulse 3\"; in_bind 7 KP_4 \"impulse 4\"; in_bind 7 KP_5 \"impulse 5\"; in_bind 7 KP_6 \"impulse 6\"; in_bind 7 KP_7 \"impulse 7\"; in_bind 7 KP_8 \"impulse 8\"; in_bind 7 KP_9 \"impulse 9\"; in_bind 7 KP_0 \"impulse 10\"; in_bindmap 7 0\n");
 			other.health = 2342;
+			if(clienttype(other) == CLIENTTYPE_REAL)
+			{
+				stuffcmd(other, "\nin_bind 7 1 \"impulse 1\"; in_bind 7 2 \"impulse 2\"; in_bind 7 3 \"impulse 3\"; in_bind 7 4 \"impulse 4\"; in_bind 7 5 \"impulse 5\"; in_bind 7 6 \"impulse 6\"; in_bind 7 7 \"impulse 7\"; in_bind 7 8 \"impulse 8\"; in_bind 7 9 \"impulse 9\"; in_bind 7 0 \"impulse 10\"; in_bind 7 KP_1 \"impulse 1\"; in_bind 7 KP_2 \"impulse 2\"; in_bind 7 KP_3 \"impulse 3\"; in_bind 7 KP_4 \"impulse 4\"; in_bind 7 KP_5 \"impulse 5\"; in_bind 7 KP_6 \"impulse 6\"; in_bind 7 KP_7 \"impulse 7\"; in_bind 7 KP_8 \"impulse 8\"; in_bind 7 KP_9 \"impulse 9\"; in_bind 7 KP_0 \"impulse 10\"; in_bindmap 7 0\n");
+				msg_entity = other;
+				WriteByte(MSG_ONE, SVC_FINALE);
+				WriteString(MSG_ONE, "");
+			}
 		}
 
 		// notify about keep-two
@@ -1976,7 +1963,7 @@ void MapVote_Tick()
 
 	MapVote_CheckRules_1(); // just count
 
-	for(other = world; (other = findflags(other, flags, FL_CLIENT)); ) if(clienttype(other) == CLIENTTYPE_REAL)
+	FOR_EACH_REALCLIENT(other)
 	{
 		// display voting screen
 		msgstr = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
@@ -2007,7 +1994,7 @@ void MapVote_Tick()
 			msgstr = strcat(msgstr, "s");
 		msgstr = strcat(msgstr, " left");
 
-		centerprint(other, msgstr);
+		centerprint_atprio(other, CENTERPRIO_MAPVOTE, msgstr);
 	}
 }
 void MapVote_Think()
