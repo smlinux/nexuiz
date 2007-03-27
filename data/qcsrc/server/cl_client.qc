@@ -669,7 +669,7 @@ void FixClientCvars(entity e)
 	stuffcmd(e, strcat("set cl_movement_friction_on_land ", ftos(cvar("sv_friction_on_land")), "\n"));
 	stuffcmd(e, strcat("set cl_movement_airaccel_qw ", ftos(cvar("sv_airaccel_qw")), "\n"));
 	stuffcmd(e, strcat("set cl_movement_airaccel_sideways_friction ", ftos(cvar("sv_airaccel_sideways_friction")), "\n"));
-	stuffcmd(e, strcat("cl_movement_edgefriction 0\n"));
+	stuffcmd(e, strcat("cl_movement_edgefriction 1\n"));
 }
 
 /*
