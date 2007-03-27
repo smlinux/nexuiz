@@ -523,7 +523,15 @@ void VoteCount() {
 	} else if((playercount / 2) < nocount) { // vote rejected
 		VoteReject();
 	} else if(time > votefinished) { // vote timedout
-		VoteTimeout();
+		if(cvar("sv_vote_simple_majority"))
+			if(yescount > nocount)
+				VoteAccept();
+			else if(nocount > yescount)
+				VoteReject();
+			else
+				VoteTimeout();
+		else
+			VoteTimeout();
 	} // else still running
 }
 
