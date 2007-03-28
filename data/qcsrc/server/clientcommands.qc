@@ -486,7 +486,7 @@ void VoteStop(entity stopper) {
 void VoteNag() {
 	if(votecalled)
 		if(self.vote_vote == 0)
-			centerprint_atprio(self, CENTERPRIO_VOTE, strcat("^7^3", votecaller.netname, "^2 called a vote for:\n^1", votecalledvote, "\n\n^2You have not voted yet!"));
+			centerprint_atprio(self, CENTERPRIO_VOTE, strcat("^7^3", votecaller.netname, "^2 called a vote for:\n^1", votecalledvote, "\n\n^2You have not voted yet!\n^2HINT: By default, F1 is yes and F2 is no."));
 }
 
 void VoteCount() {
