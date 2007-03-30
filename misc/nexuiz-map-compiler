@@ -99,7 +99,7 @@ while(@ARGV)
 
 sub q3map2(@)
 {
-	my @args = ($Q3MAP2, '-game', 'quake3', '-fs_basepath', $NEXUIZDIR, '-fs_game', 'data', '-v', @_);
+	my @args = ($Q3MAP2, split(/\s+/, $Q3MAP2FLAGS), '-game', 'quake3', '-fs_basepath', $NEXUIZDIR, '-fs_game', 'data', '-v', @_);
 	print "\$ @args\n";
 	return !system @args;
 }

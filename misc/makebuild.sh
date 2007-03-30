@@ -1,8 +1,17 @@
 #!/bin/sh
-set -ex
+set -e
 
 base=`pwd`
 
+
+case "$pw" in
+	'')
+		zipflags=
+		;;
+	*)
+		zipflags="-P $pw"
+		;;
+esac
 case "$version" in
 	[0-9]*)
 		versiontag=
@@ -34,7 +43,7 @@ copystrip=$buildfiles/copystrip
 fteqcc="fteqcc.bin -O2"
 mingw=/home/polzer/mingw32
 ia32=/chroot/fc6-i386
-osxhost=macmini_osx
+osxhost=macmini
 osxtemp=/Users/rpolzer/Darkplaces.build
 osxsave=/tmp/Nexuiz.osx
 
@@ -42,14 +51,26 @@ if [ -n "$1" ]; then
 	osxhost="$1"
 fi
 
+conflicts=`find "$dpdir" "$nexdir" -name '*.orig' -o -name '*.rej' -o -name '*.mine' -o -name '.#*' -o -name '.*~'`
+if [ -n "$conflicts" ]; then
+	echo "CONFLICTS OR UNNEEDED FILES HAVE BEEN FOUND!"
+	echo "NOT PROCEEDING"
+	echo
+	echo "$conflicts"
+	exit 1
+fi
+
 : ${date:=`date +%Y%m%d`}
 : ${versiontag:=}
 echo "date stamp: $date"
+
+set -x
 
 buildosx()
 {
 	rsync --exclude "*.o" --exclude "*.d" --exclude "nexuiz-*" --delete-excluded --delete -zvaSHP . $copystrip "$osxhost:$osxtemp"
 	ssh "$osxhost" ". ~/.profile && cd $osxtemp && PATH=$osxtemp/copystrip:\$PATH make CC=\"gcc -g -arch i386 -arch ppc -isysroot /Developer/SDKs/MacOSX10.4u.sdk\" clean $*"
+	rmdir "$osxsave" || true
 	if [ -d "$osxsave" ]; then
 		cp "$osxsave"/* .
 	fi
@@ -76,6 +97,8 @@ buildwin()
 rm -rf "$tmpdir"
 mkdir -p "$tmpdir"
 cd "$dpdir"
+quilt pop -a || true
+quilt push -a
 
 cp -r "$osxapps"/*.app "$tmpdir"
 mkdir "$tmpdir/debuginfo"
@@ -176,21 +199,21 @@ mv * Nexuiz/ || true
 find . -name .svn -exec rm -rf {} \; -prune
 
 rm -f "$zipdir/nexuiz$date$ext.zip"
-zip -9yr "$zipdir/nexuiz$date$ext.zip"           Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/data/data$date.pk3 Nexuiz/data/common-spog.pk3
+zip $zipflags -9yr "$zipdir/nexuiz$date$ext.zip"           Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/data/data$date.pk3 Nexuiz/data/common-spog.pk3
 rm -f "$zipdir/nexuizengineonly$date$ext.zip"
-zip -9yr "$zipdir/nexuizengineonly$date$ext.zip" Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll
+zip $zipflags -9yr "$zipdir/nexuizengineonly$date$ext.zip" Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll
 rm -f "$zipdir/nexuizsource$date$ext.zip"
-zip -9yr "$zipdir/nexuizsource$date$ext.zip"     Nexuiz/gpl.txt                                            Nexuiz/sources
+zip $zipflags -9yr "$zipdir/nexuizsource$date$ext.zip"     Nexuiz/gpl.txt                                            Nexuiz/sources
 
 zipdiff -o "Nexuiz/data/datapatch$date.pk3" -f "$basepk3" -t Nexuiz/data/data$date.pk3
 mkdir -p gfx
 if unzip "Nexuiz/data/data$date.pk3" gfx/brand.tga; then
-	zip -9r "Nexuiz/data/datapatch$date.pk3" gfx/brand.tga
+	zip $zipflags -9r "Nexuiz/data/datapatch$date.pk3" gfx/brand.tga
 	rm -rf gfx
 fi
 
 rm -f "$zipdir/nexuizpatch$date$ext.zip"
-zip -9yr "$zipdir/nexuizpatch$date$ext.zip"      Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/data/datapatch$date.pk3
+zip $zipflags -9yr "$zipdir/nexuizpatch$date$ext.zip"      Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/data/datapatch$date.pk3
 
 rm -f "$zipdir/nexuizdebug$date$ext.zip"
-zip -9yr "$zipdir/nexuizdebug$date$ext.zip"      Nexuiz/gpl.txt Nexuiz/debuginfo/*
+zip $zipflags -9yr "$zipdir/nexuizdebug$date$ext.zip"      Nexuiz/gpl.txt Nexuiz/debuginfo/*
