@@ -72,6 +72,8 @@ void Say(entity source, float teamsay, string msgin)
 			flood_lmax = cvar("g_chat_flood_lmax");
 			flood_field = floodcontrol_chat;
 		}
+		flood_burst = max(0, flood_burst - 1);
+		// to match explanation in default.cfg, a value of 3 must allow three-line bursts and not four!
 		lines = ceil(strlennocol(msgstr) / 50);
 		if(flood_lmax && lines > flood_lmax)
 			flood = 2;
