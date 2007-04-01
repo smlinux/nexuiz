@@ -30,7 +30,7 @@ float	MOVETYPE_PUSH				= 7;
 float	MOVETYPE_NOCLIP				= 8;
 float	MOVETYPE_FLYMISSILE			= 9;
 float	MOVETYPE_BOUNCE				= 10;
-//float	MOVETYPE_BOUNCEMISSILE	= 11;	// Like bounce but doesn't lose speed on bouncing
+float	MOVETYPE_BOUNCEMISSILE	= 11;	// Like bounce but doesn't lose speed on bouncing
 //float	MOVETYPE_FOLLOW				= 12;	// 'Attaches' the entity to its aim_ent
 
 float	SOLID_NOT				= 0;
@@ -127,8 +127,6 @@ float	EF_BRIGHTFIELD				= 1;
 float	EF_MUZZLEFLASH				= 2;
 float	EF_BRIGHTLIGHT				= 4;
 float	EF_DIMLIGHT				= 8;
-float	EF_NOSHADOW				= 4096;
-float	EF_DOUBLESIDED				= 32768;
 
 float	MSG_BROADCAST				= 0;
 float	MSG_ONE					= 1;

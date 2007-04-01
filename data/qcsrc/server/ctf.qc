@@ -91,7 +91,7 @@ void(entity e) DropFlag =
 		dprint("FLAG: drop - owner is not carrying this flag??\n");
 		return;
 	}
-	bprint(strcat(p.netname, "^7 lost the ", e.netname, "\n"));
+	bprint(p.netname, "^7 lost the ", e.netname, "\n");
 	LogCTF("dropped", p.team, p.flagcarried);
 
 	setattachment(e, world, "");
@@ -150,7 +150,7 @@ void() FlagThink =
 		setattachment(self, world, "");
 		if (time > self.pain_finished)
 		{
-			bprint(strcat("The ", self.netname, " has returned to base\n"));
+			bprint("The ", self.netname, " has returned to base\n");
 			sound (e, CHAN_AUTO, self.noise3, 1, ATTN_NONE);
 			LogCTF("returned", self.team, world);
 			ReturnFlag(self);

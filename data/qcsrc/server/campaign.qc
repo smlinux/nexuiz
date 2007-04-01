@@ -74,8 +74,8 @@ void CampaignSaveCvar(string cvarname, float value)
 	{
 		while((l = fgets(fh)))
 		{
-			cvarname = strcat(cvarname);
-			contents = strcat(contents);
+			cvarname = strcat1(cvarname);
+			contents = strcat1(contents);
 			len = tokenize(l);
 			if(len != 3)
 				continue;

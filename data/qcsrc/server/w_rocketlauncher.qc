@@ -131,7 +131,7 @@ void W_Rocket_Think (void)
 
 			if(self.enemy != world)
 			{
-				//bprint(strcat("Targeting ", self.enemy.owner.netname, "'s laser\n"));
+				//bprint("Targeting ", self.enemy.owner.netname, "'s laser\n");
 				if(!self.speed)
 					self.speed = vlen(self.velocity);
 				e = self.enemy;//self.owner.weaponentity.lasertarget;

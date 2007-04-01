@@ -295,9 +295,9 @@ void PutObserverInServer (void)
 	DistributeFragsAmongTeam(self, self.team, 1);
 
 	if(self.frags <= 0 && self.frags > -666 && cvar("g_lms") && self.killcount != -666)
-		bprint (strcat("^4", self.netname, "^4 has no more lives left\n"));
+		bprint ("^4", self.netname, "^4 has no more lives left\n");
 	else if(self.killcount != -666)
-		bprint (strcat("^4", self.netname, "^4 is spectating now\n"));
+		bprint ("^4", self.netname, "^4 is spectating now\n");
 
 	self.classname = "observer";
 	self.health = -666;
@@ -669,7 +669,7 @@ void FixClientCvars(entity e)
 	stuffcmd(e, strcat("set cl_movement_friction_on_land ", ftos(cvar("sv_friction_on_land")), "\n"));
 	stuffcmd(e, strcat("set cl_movement_airaccel_qw ", ftos(cvar("sv_airaccel_qw")), "\n"));
 	stuffcmd(e, strcat("set cl_movement_airaccel_sideways_friction ", ftos(cvar("sv_airaccel_sideways_friction")), "\n"));
-	stuffcmd(e, strcat("cl_movement_edgefriction 1\n"));
+	stuffcmd(e, "cl_movement_edgefriction 1\n");
 }
 
 /*
@@ -765,7 +765,7 @@ void ClientConnect (void)
 		stuffcmd(self, strcat("set teamplay ", ftos(t), "\n"));
 	}
 	else
-		stuffcmd(self, strcat("set teamplay 0\n"));
+		stuffcmd(self, "set teamplay 0\n");
 
 	if(cvar("g_lms"))
 	{
@@ -1326,7 +1326,7 @@ void LeaveSpectatorMode()
 			campaign_bots_may_start = 1;
 		PutClientInServer();
 		if(!(self.flags & FL_NOTARGET))
-			bprint (strcat("^4", self.netname, "^4 is playing now\n"));
+			bprint ("^4", self.netname, "^4 is playing now\n");
 		centerprint(self,"");
 		return;
 	} else {
@@ -1372,7 +1372,7 @@ void PlayerPreThink (void)
 		local vector m1, m2;
 
 //		if(self.netname == "Wazat")
-//			bprint(strcat(self.classname, "\n"));
+//			bprint(self.classname, "\n");
 
 		CheckRules_Player();
 

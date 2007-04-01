@@ -488,21 +488,15 @@ void UpdateSelectedPlayer()
 			if(save != UpdateSelectedPlayer_countvalue(self.selected_player_count))
 			{
 				string namestr, healthstr;
+				namestr = playername(selected);
 				if(teams_matter)
 				{
-					namestr = decolorize(selected.netname);
 					healthstr = ftos(floor(selected.health));
 					if(self.team == selected.team)
 					{
-						namestr = strcat(Team_ColorCode(selected.team), namestr, " (", healthstr, "%)");
+						namestr = strcat(namestr, " (", healthstr, "%)");
 						self.selected_player_display_needs_update = TRUE;
 					}
-					else
-						namestr = strcat(Team_ColorCode(selected.team), namestr);
-				}
-				else
-				{
-					namestr = selected.netname;
 				}
 				centerprint_atprio(self, CENTERPRIO_POINT, namestr);
 			}
@@ -514,7 +508,6 @@ void UpdateSelectedPlayer()
 			self.selected_player_time = time;
 			self.selected_player_count = 0;
 			self.selected_player_display_needs_update = FALSE;
-			// dprint("Selected: ", selected.netname, "\n");
 		}
 	}
 	else

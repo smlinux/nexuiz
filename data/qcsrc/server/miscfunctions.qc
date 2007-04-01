@@ -4,6 +4,11 @@ string STR_PLAYER = "player";
 #define FOR_EACH_PLAYER(v) for(v = world; (v = find(v, classname, STR_PLAYER)) != world; )
 #define FOR_EACH_REALPLAYER(v) FOR_EACH_PLAYER(v) if(clienttype(v) == CLIENTTYPE_REAL)
 
+// change that to actually calling strcat when running on an engine without
+// unlimited tempstrings:
+// string strcat1(string s) = #115; // FRIK_FILE
+#define strcat1(s) (s)
+
 float logfile_open;
 float logfile;
 
@@ -306,7 +311,7 @@ string(string msg) formatmessage =
 		msg_save = strzone(msg);
 		p = p + 2;
 	}
-	msg = strcat(msg_save);
+	msg = strcat(msg_save, "");
 	strunzone(msg_save);
 	return msg;
 }
@@ -445,58 +450,6 @@ string Team_ColorCode(float teamid)
 		return "^7";
 }
 
-string decolorize(string s)
-{
-	string out;
-	out = "";
-	while(s != "")
-	{
-		float n;
-		string ch1, ch2;
-		n = 1;
-		ch1 = substring(s, 0, 1);
-		ch2 = substring(s, 1, 1);
-		if(ch1 == "^")
-		{
-			n = 2;
-			if(ch2 == "^")
-				out = strcat(out, "^^");
-			else if(ch2 == "0")
-				out = strcat(out);
-			else if(ch2 == "1")
-				out = strcat(out);
-			else if(ch2 == "2")
-				out = strcat(out);
-			else if(ch2 == "3")
-				out = strcat(out);
-			else if(ch2 == "4")
-				out = strcat(out);
-			else if(ch2 == "5")
-				out = strcat(out);
-			else if(ch2 == "6")
-				out = strcat(out);
-			else if(ch2 == "7")
-				out = strcat(out);
-			else if(ch2 == "8")
-				out = strcat(out);
-			else if(ch2 == "9")
-				out = strcat(out);
-			else
-			{
-				n = 1;
-				out = strcat(out, "^^");
-			}
-			s = substring(s, n, strlen(s) - n);
-		}
-		else
-		{
-			s = substring(s, 1, strlen(s) - 1);
-			out = strcat(out, ch1);
-		}
-	}
-	return out;
-}
-
 #define CENTERPRIO_POINT 1
 #define CENTERPRIO_VOTE 4
 #define CENTERPRIO_NORMAL 5
@@ -531,3 +484,16 @@ void centerprint(entity e, string s)
 }
 
 void VoteNag();
+
+// decolorizes and team colors the player name when needed
+string playername(entity p)
+{
+	string t;
+	if(teams_matter && !intermission_running && p.classname == "player")
+	{
+		t = Team_ColorCode(p.team);
+		return strcat(t, strdecolorize(p.netname));
+	}
+	else
+		return p.netname;
+}

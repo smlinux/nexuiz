@@ -3,9 +3,12 @@ float ValidateMap(string vote);
 void(entity e) DropFlag;
 string MapVote_Suggest(string m);
 
+.float floodcontrol_chat;
+.float floodcontrol_team;
 void Say(entity source, float teamsay, string msgin)
 {
-	string msgstr, colorstr, cmsgstr;
+	string msgstr, colorstr, cmsgstr, namestr;
+	float flood;
 	entity head;
 
 	msgin = formatmessage(msgin);
@@ -24,6 +27,8 @@ void Say(entity source, float teamsay, string msgin)
 	if(source.classname != "player") // observers can't
 		teamsay = FALSE;
 
+	/*
+	 * using bprint solves this... me stupid
 	// how can we prevent the message from appearing in a listen server?
 	// for now, just give "say" back and only handle say_team
 	if(!teamsay)
@@ -31,16 +36,65 @@ void Say(entity source, float teamsay, string msgin)
 		clientcommand(self, strcat("say ", msgin));
 		return;
 	}
+	*/
 
+	if(cvar("g_teamcolors_chat"))
+		namestr = playername(source);
+	else
+		namestr = source.netname;
 	if(teamsay)
 	{
-		msgstr = strzone(strcat("\{1}\{13}", colorstr, "(^3", source.netname, colorstr, ") ^7", msgin, "\n"));
-		cmsgstr = strcat(colorstr, "(^3", source.netname, colorstr, ")\n^7", wordwrap(msgin, 50));
+		msgstr = strzone(strcat("\{1}\{13}", colorstr, "(^3", namestr, colorstr, ") ^7", msgin, "\n"));
+		cmsgstr = strcat(colorstr, "(^3", namestr, colorstr, ")\n^7", wordwrap(msgin, 50));
 	}
 	else
-		msgstr = strzone(strcat("\{1}^3", source.netname, "^7: ", msgin, "\n"));
+		msgstr = strzone(strcat("\{1}^3", namestr, "^7: ", msgin, "\n"));
 
-	if(teamsay)
+	// FLOOD CONTROL
+	flood = 0;
+	{
+		float flood_spl;
+		float flood_burst;
+		float flood_lmax;
+		var .float flood_field;
+		float lines;
+		if(teamsay)
+		{
+			flood_spl = cvar("g_chat_flood_spl_team");
+			flood_burst = cvar("g_chat_flood_burst_team");
+			flood_lmax = cvar("g_chat_flood_lmax_team");
+			flood_field = floodcontrol_team;
+		}
+		else
+		{
+			flood_spl = cvar("g_chat_flood_spl");
+			flood_burst = cvar("g_chat_flood_burst");
+			flood_lmax = cvar("g_chat_flood_lmax");
+			flood_field = floodcontrol_chat;
+		}
+		lines = ceil(strlennocol(msgstr) / 50);
+		if(flood_lmax && lines > flood_lmax)
+			flood = 2;
+		else if(time >= self.flood_field)
+			self.flood_field = max(time - flood_burst * flood_spl, self.flood_field) + lines * flood_spl;
+		else
+			flood = 1;
+	}
+
+	if(flood)
+	{
+		if(cvar("g_chat_flood_notify_flooder"))
+		{
+			if(flood == 1)
+				sprint(self, strcat("^3FLOOD CONTROL: ^7wait ^1", ftos(self.flood_field - time), "^3 seconds\n"));
+			else if(flood == 2)
+				sprint(self, "^3FLOOD CONTROL: ^7message too long\n");
+		}
+		else
+			sprint(self, msgstr);
+		ServerConsoleEcho(strcat("NOTE: ", playername(self), "^7 is flooding."), TRUE);
+	}
+	else if(teamsay)
 	{
 		FOR_EACH_REALPLAYER(head)
 		{
@@ -106,7 +160,7 @@ void SV_ParseClientCommand(string s) {
 						sprint(self, "^1Your vote is empty. See help for more info.\n");
 					} else if(time < self.vote_next) {
 						sprint(self, strcat("^1You have to wait ^2", ftos(self.vote_next - time), "^1 seconds before you can again call a vote.\n"));
-					} else if(VoteAllowed(strcat(argv(2)))) { // strcat seems to be necessary
+					} else if(VoteAllowed(strcat1(argv(2)))) { // strcat seems to be necessary
 						if(!ValidateMap(vote))
 							return;
 						votecalled = TRUE;
@@ -120,7 +174,7 @@ void SV_ParseClientCommand(string s) {
 						votefinished = time + cvar("sv_vote_timeout");
 						votecaller.vote_vote = 1; // of course you vote yes
 						votecaller.vote_next = time + cvar("sv_vote_wait");
-						bprint(strcat("\{1}^2* ^3", votecaller.netname, "^2 calls a vote for ^1", votecalledvote, "\n"));
+						bprint("\{1}^2* ^3", votecaller.netname, "^2 calls a vote for ^1", votecalledvote, "\n");
 						VoteCount(); // needed if you are the only one
 					} else {
 						sprint(self, "^1This vote is not ok. See help for more info.\n");
@@ -149,7 +203,7 @@ void SV_ParseClientCommand(string s) {
 					votefinished = time + cvar("sv_vote_timeout");
 					votecaller.vote_vote = 1; // of course you vote yes
 					votecaller.vote_next = time + cvar("sv_vote_wait");
-					bprint(strcat("\{1}^2* ^3", votecaller.netname, "^2 calls a vote to become ^3master^2.\n"));
+					bprint("\{1}^2* ^3", votecaller.netname, "^2 calls a vote to become ^3master^2.\n");
 					VoteCount(); // needed if you are the only one
 				}
 			} else {
@@ -163,7 +217,7 @@ void SV_ParseClientCommand(string s) {
 					self.vote_master = (masterpwd == argv(3));
 					if(self.vote_master) {
 						ServerConsoleEcho(strcat("Accepted master login from ", self.netname), TRUE);
-						bprint(strcat("\{1}^2* ^3", self.netname, "^2 logged in as ^3master^2\n"));
+						bprint("\{1}^2* ^3", self.netname, "^2 logged in as ^3master^2\n");
 					}
 					else
 						ServerConsoleEcho(strcat("REJECTED master login from ", self.netname), TRUE);
@@ -175,14 +229,14 @@ void SV_ParseClientCommand(string s) {
 				dovote = VoteParse();
 				if(dovote == "") {
 					sprint(self, "^1Your command was empty. See help for more info.\n");
-				} else if(VoteAllowed(strcat(argv(2)))) { // strcat seems to be necessary
+				} else if(VoteAllowed(strcat1(argv(2)))) { // strcat seems to be necessary
 					if(!ValidateMap(dovote))
 						return;
 					// remap chmap to gotomap (forces intermission)
 					if(strlen(dovote) >= 6)
 						if(substring(dovote, 0, 6) == "chmap ")
 							vote = strcat("gotomap ", substring(dovote, 6, strlen(dovote) - 6));
-					bprint("\{1}^2* ^3", strcat(self.netname, "^2 used his ^3master^2 status to do \"^2", dovote, "^2\".\n"));
+					bprint("\{1}^2* ^3", self.netname, "^2 used his ^3master^2 status to do \"^2", dovote, "^2\".\n");
 					localcmd(strcat(dovote, "\n"));
 				} else {
 					sprint(self, "^1This command is not ok. See help for more info.\n");
@@ -267,7 +321,7 @@ void SV_ParseClientCommand(string s) {
 		{
 			self.classname = "player";
 			self.frags = 0;
-			bprint (strcat("^4", self.netname, "^4 is playing now\n"));
+			bprint ("^4", self.netname, "^4 is playing now\n");
 			PutClientInServer();
 		}
 	} else if( argv(0) == "selectteam" ) {
@@ -453,7 +507,7 @@ void VoteReset() {
 }
 
 void VoteAccept() {
-	bprint(strcat("\{1}^2* ^3", votecaller.netname, "^2's vote for ^1", votecalledvote, "^2 was accepted\n"));
+	bprint("\{1}^2* ^3", votecaller.netname, "^2's vote for ^1", votecalledvote, "^2 was accepted\n");
 	if(votecalledmaster)
 	{
 		votecaller.vote_master = 1;
@@ -465,17 +519,17 @@ void VoteAccept() {
 }
 
 void VoteReject() {
-	bprint(strcat("\{1}^2* ^3", votecaller.netname, "^2's vote for ^1", votecalledvote, "^2 was rejected\n"));
+	bprint("\{1}^2* ^3", votecaller.netname, "^2's vote for ^1", votecalledvote, "^2 was rejected\n");
 	VoteReset();
 }
 
 void VoteTimeout() {
-	bprint(strcat("\{1}^2* ^3", votecaller.netname, "^2's vote for ^1", votecalledvote, "^2 timed out\n"));
+	bprint("\{1}^2* ^3", votecaller.netname, "^2's vote for ^1", votecalledvote, "^2 timed out\n");
 	VoteReset();
 }
 
 void VoteStop(entity stopper) {
-	bprint(strcat("\{1}^2* ^3", stopper.netname, "^2 stopped ^3", votecaller.netname, "^2's vote\n"));
+	bprint("\{1}^2* ^3", stopper.netname, "^2 stopped ^3", votecaller.netname, "^2's vote\n");
 	if(stopper == votecaller) {
 		// no wait for next vote so you can correct your vote
 		votecaller.vote_next = 0;

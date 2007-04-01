@@ -748,8 +748,7 @@ float() DoNextMapOverride =
 	if(cvar("lastlevel"))
 	{
 		GameResetCfg();
-		localcmd(strcat("set lastlevel 0\n"));
-		localcmd(strcat("togglemenu\n"));
+		localcmd("set lastlevel 0\ntogglemenu\n");
 		return TRUE;
 	}
 	return FALSE;
@@ -1017,7 +1016,7 @@ void() NextLevel =
 		self = other;
 
 		if(other.winning)
-			bprint(strcat(other.netname, " ^7wins.\n"));
+			bprint(other.netname, " ^7wins.\n");
 
 		if(!currentbots)
 		{
@@ -1261,7 +1260,7 @@ float(float fraglimit) WinningCondition_MaxIndividualScore =
 float(float fraglimit) WinningConditionBase_Teamplay =
 {
 	tdm_old_score = tdm_max_score;
-	tdm_max_score = max(team1_score, team2_score, team3_score, team4_score);
+	tdm_max_score = max4(team1_score, team2_score, team3_score, team4_score);
 
 	checkrules_equality =
 	(
@@ -1441,8 +1440,8 @@ void RemoveFromMaplist(string m)
 	result = "";
 	for(i = 0; i < litems; ++i)
 	{
-		m = strcat(m);
-		result = strcat(result);
+		m = strcat1(m);
+		result = strcat1(result);
 		if(argv(i) == m)
 			found += 1;
 		else
@@ -1477,7 +1476,7 @@ void AddToMaplist(string m)
 	inserted = 0;
 	for(i = 0; i < litems; ++i)
 	{
-		m = strcat(m);
+		m = strcat1(m);
 		if(i == ipos)
 		{
 			result = strcat(result, "'", m, "'");
@@ -2028,3 +2027,45 @@ void MapVote_Think()
 
 	MapVote_Tick();
 };
+
+
+
+float beamindex_modulo;
+void EndFrame()
+{
+	entity e;
+	string value;
+	vector mi, ma;
+	float i;
+
+	value = cvar_string("_entityboxes_for");
+	if(value == "")
+		return;
+
+	i = beamindex_modulo;
+	beamindex_modulo += 1;
+	if(beamindex_modulo >= 32)
+		beamindex_modulo = 0;
+	for(e = world; (e = find(e, classname, value)) != world; )
+	{
+		mi = e.absmin;
+		ma = e.absmax;
+		i = i + 1;
+		if(i >= 32)
+		{
+			i = 0;
+			te_lightning1(world, mi_x * '1 0 0' + mi_y * '0 1 0' + mi_z * '0 0 1', ma_x * '1 0 0' + mi_y * '0 1 0' + mi_z * '0 0 1');
+			te_lightning1(world, mi_x * '1 0 0' + mi_y * '0 1 0' + ma_z * '0 0 1', ma_x * '1 0 0' + mi_y * '0 1 0' + ma_z * '0 0 1');
+			te_lightning1(world, mi_x * '1 0 0' + ma_y * '0 1 0' + mi_z * '0 0 1', ma_x * '1 0 0' + ma_y * '0 1 0' + mi_z * '0 0 1');
+			te_lightning1(world, mi_x * '1 0 0' + ma_y * '0 1 0' + ma_z * '0 0 1', ma_x * '1 0 0' + ma_y * '0 1 0' + ma_z * '0 0 1');
+			te_lightning1(world, mi_x * '1 0 0' + mi_y * '0 1 0' + mi_z * '0 0 1', mi_x * '1 0 0' + ma_y * '0 1 0' + mi_z * '0 0 1');
+			te_lightning1(world, mi_x * '1 0 0' + mi_y * '0 1 0' + ma_z * '0 0 1', mi_x * '1 0 0' + ma_y * '0 1 0' + ma_z * '0 0 1');
+			te_lightning1(world, ma_x * '1 0 0' + mi_y * '0 1 0' + mi_z * '0 0 1', ma_x * '1 0 0' + ma_y * '0 1 0' + mi_z * '0 0 1');
+			te_lightning1(world, ma_x * '1 0 0' + mi_y * '0 1 0' + ma_z * '0 0 1', ma_x * '1 0 0' + ma_y * '0 1 0' + ma_z * '0 0 1');
+			te_lightning1(world, mi_x * '1 0 0' + mi_y * '0 1 0' + mi_z * '0 0 1', mi_x * '1 0 0' + mi_y * '0 1 0' + ma_z * '0 0 1');
+			te_lightning1(world, mi_x * '1 0 0' + ma_y * '0 1 0' + mi_z * '0 0 1', mi_x * '1 0 0' + ma_y * '0 1 0' + ma_z * '0 0 1');
+			te_lightning1(world, ma_x * '1 0 0' + mi_y * '0 1 0' + mi_z * '0 0 1', ma_x * '1 0 0' + mi_y * '0 1 0' + ma_z * '0 0 1');
+			te_lightning1(world, ma_x * '1 0 0' + ma_y * '0 1 0' + mi_z * '0 0 1', ma_x * '1 0 0' + ma_y * '0 1 0' + ma_z * '0 0 1');
+		}
+	}
+}

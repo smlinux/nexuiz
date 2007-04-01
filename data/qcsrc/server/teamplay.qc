@@ -466,8 +466,8 @@ void SetPlayerTeam(entity pl, float t, float s, float noprint)
 
 	if(!noprint && t != s)
 	{
-		//bprint(strcat(pl.netname, " has changed to ", TeamNoName(t), "\n"));
-		bprint(strcat(pl.netname, "^7 has changed from ", TeamNoName(s), " to ", TeamNoName(t), "\n"));
+		//bprint(pl.netname, " has changed to ", TeamNoName(t), "\n");
+		bprint(pl.netname, "^7 has changed from ", TeamNoName(s), " to ", TeamNoName(t), "\n");
 	}
 
 	if(t != s)
@@ -923,7 +923,7 @@ void SV_ChangeTeam(float _color)
 		}
 	}
 
-//	bprint(strcat("allow change teams from ", ftos(steam), " to ", ftos(dteam), "\n"));
+//	bprint("allow change teams from ", ftos(steam), " to ", ftos(dteam), "\n");
 
 	if(cvar("teamplay") && self.classname == "player" && steam != dteam)
 	{

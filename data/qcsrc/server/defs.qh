@@ -1,4 +1,3 @@
-
 // Globals
 
 entity	activator;
@@ -167,7 +166,6 @@ void(float to, float f)		WriteAngle = #57;
 void(float to, string s)	WriteString	= #58;
 void(float to, entity s)	WriteEntity	= #59;
 .vector dest1, dest2;
-void(entity clent) dropclient = #453;
 
 float gameover;
 float intermission_running;

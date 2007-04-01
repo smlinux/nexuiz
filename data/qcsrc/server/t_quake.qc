@@ -42,6 +42,9 @@ void junk_function ()
 	self.color = '0 0 0';
 	self.style = 0;
 	self.jumppadsused = world;
-	bprint(ftos(sv_maxairspeed), "\n");
+	self.disableclientprediction = 0;
+	self.contentstransition = SUB_Null;
+	self.dphitcontentsmask = 0;
+	trace_dphittexturename = "";
 }
 

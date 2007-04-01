@@ -180,7 +180,7 @@ void Spawnqueue_Check()
 		{
 			self = spawnqueue_first;
 
-			bprint (strcat("^4", self.netname, "^4 is the next challenger\n"));
+			bprint ("^4", self.netname, "^4 is the next challenger\n");
 
 			Spawnqueue_Remove(self);
 			Spawnqueue_Mark(self);
