@@ -38,6 +38,10 @@ void Say(entity source, float teamsay, string msgin)
 	}
 	*/
 
+	if(!teamsay)
+		if(substring(msgin, 0, 1) == " ")
+			msgin = substring(msgin, 1, strlen(msgin) - 1); // work around DP say bug (say_team does not have this!)
+
 	if(cvar("g_teamcolors_chat"))
 		namestr = playername(source);
 	else
