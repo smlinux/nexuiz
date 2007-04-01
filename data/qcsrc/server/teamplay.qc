@@ -16,13 +16,13 @@ float g_domination, g_ctf, g_tdm;
 float audit_teams_time;
 
 float() IsTeamBalanceForced = {
-	if(cvar("g_campaign"))
-		return FALSE;
-	if(!cvar("g_balance_teams_force"))
-		return FALSE;
 	if(!cvar("teamplay"))
-		return FALSE;
-	return TRUE;
+		return 0;
+	if(cvar("g_campaign"))
+		return 0;
+	if(!cvar("g_balance_teams_force"))
+		return -1;
+	return 1;
 }
 
 void TeamchangeFrags(entity e)
@@ -549,7 +549,7 @@ void CheckAllowedTeams ()
 
 float PlayerValue(entity p)
 {
-	if(IsTeamBalanceForced())
+	if(IsTeamBalanceForced() == 1)
 		return 1;
 	return 1;
 }
@@ -1092,13 +1092,53 @@ void ShufflePlayerOutOfTeam (float source_team)
 	centerprint(selected, m);
 }
 
+float lastRebalanceInfo;
+void CauseRebalance(float source_team, float howmany_toomany)
+{
+	float steam;
+	entity head;
+
+	if(IsTeamBalanceForced() == 1)
+	{
+		bprint("Rebalancing Teams\n");
+		ShufflePlayerOutOfTeam(source_team);
+	}
+	else
+	{
+		if(1+floor(howmany_toomany) < cvar("g_balance_teams_complain"))
+			return;
+		if(time < lastRebalanceInfo + 90)
+			return;
+		lastRebalanceInfo = time;
+		if(source_team == 1)
+			steam = COLOR_TEAM1;
+		else if(source_team == 2)
+			steam = COLOR_TEAM2;
+		else if(source_team == 3)
+			steam = COLOR_TEAM3;
+		else if(source_team == 4)
+			steam = COLOR_TEAM4;
+		ServerConsoleEcho(strcat("Team ", ftos(source_team), " too large, complaining."), TRUE);
+		FOR_EACH_REALPLAYER(head)
+		{
+			if(head.team == steam)
+			{
+				sprint(head, "\{1}\{13}^3SERVER NOTICE:^7 One of you please change teams!\n");
+				centerprint_atprio(head, CENTERPRIO_REBALANCE, "^3SERVER NOTICE:\n\n^7Someone of you please change teams!");
+			}
+		}
+	}
+}
+
 // part of g_balance_teams_force
 // occasionally perform an audit of the teams to make
 // sure they're more or less balanced in player count.
 void AuditTeams()
 {
-	float numplayers, numteams, average;
-	if(!IsTeamBalanceForced())
+	float numplayers, numteams, toomany;
+	float balance;
+	balance = IsTeamBalanceForced();
+	if(balance == 0)
 		return;
 
 	if(audit_teams_time > time)
@@ -1139,35 +1179,19 @@ void AuditTeams()
 	if(numteams < 2)
 		return; // don't bother shuffling if for some reason there aren't any teams
 
-	average = (numplayers / numteams) + 1;
+	toomany = (numplayers / numteams) + 1;
 
-	if(average <= 0)
+	if(toomany <= 0)
 		return; // that's weird...
 
-	if(c1 && c1 > average)
-	{
-		bprint("Rebalancing Teams\n");
-		//bprint("Shuffle from team 1\n");
-		ShufflePlayerOutOfTeam(1);
-	}
-	if(c2 && c2 > average)
-	{
-		bprint("Rebalancing Teams\n");
-		//bprint("Shuffle from team 2\n");
-		ShufflePlayerOutOfTeam(2);
-	}
-	if(c3 && c3 > average)
-	{
-		bprint("Rebalancing Teams\n");
-		//bprint("Shuffle from team 3\n");
-		ShufflePlayerOutOfTeam(3);
-	}
-	if(c4 && c4 > average)
-	{
-		bprint("Rebalancing Teams\n");
-		//bprint("Shuffle from team 4\n");
-		ShufflePlayerOutOfTeam(4);
-	}
+	if(c1 && c1 >= toomany)
+		CauseRebalance(1, c1 - toomany);
+	if(c2 && c2 >= toomany)
+		CauseRebalance(2, c2 - toomany);
+	if(c3 && c3 >= toomany)
+		CauseRebalance(3, c3 - toomany);
+	if(c4 && c4 >= toomany)
+		CauseRebalance(4, c4 - toomany);
 
 	// if teams are still unbalanced, balance them further in the next audit,
 	// which will happen sooner (keep doing rapid audits until things are in order)
