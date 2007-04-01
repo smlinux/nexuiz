@@ -1346,6 +1346,10 @@ void() ctf_setstatus;
 .float vote_nagtime;
 void PlayerPreThink (void)
 {
+	if(strlen(self.netname) > 0)
+		if(substring(self.netname, strlen(self.netname) - 1, 1) == "^")
+			self.netname = strzone(strcat(self.netname, " ")); // BROKEN COLORS can be annoying!
+
 	// version nagging
 	if(self.version_nagtime)
 		if(self.cvar_g_nexuizversion)

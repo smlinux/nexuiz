@@ -46,8 +46,6 @@ void Say(entity source, float teamsay, string msgin)
 		namestr = playername(source);
 	else
 		namestr = source.netname;
-	if(substring(namestr, strlen(namestr) - 1, 1) == "^")
-		namestr = strdecolorize(namestr); // BROKEN!
 	if(teamsay)
 	{
 		msgstr = strzone(strcat("\{1}\{13}", colorstr, "(^3", namestr, colorstr, ") ^7", msgin, "\n"));
