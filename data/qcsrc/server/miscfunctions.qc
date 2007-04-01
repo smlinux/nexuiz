@@ -450,6 +450,60 @@ string Team_ColorCode(float teamid)
 		return "^7";
 }
 
+string decolorize(string s)
+{
+	string out;
+	out = "";
+	while(s != "")
+	{
+		float n;
+		string ch1, ch2;
+		n = 1;
+		ch1 = substring(s, 0, 1);
+		ch2 = substring(s, 1, 1);
+		if(ch1 == "^")
+		{
+			n = 2;
+			if(ch2 == "^")
+				out = strcat(out, "^^");
+			else if(ch2 == "0")
+				out = strcat1(out);
+			else if(ch2 == "1")
+				out = strcat1(out);
+			else if(ch2 == "2")
+				out = strcat1(out);
+			else if(ch2 == "3")
+				out = strcat1(out);
+			else if(ch2 == "4")
+				out = strcat1(out);
+			else if(ch2 == "5")
+				out = strcat1(out);
+			else if(ch2 == "6")
+				out = strcat1(out);
+			else if(ch2 == "7")
+				out = strcat1(out);
+			else if(ch2 == "8")
+				out = strcat1(out);
+			else if(ch2 == "9")
+				out = strcat1(out);
+			else
+			{
+				n = 1;
+				out = strcat(out, "^^");
+			}
+			s = substring(s, n, strlen(s) - n);
+		}
+		else
+		{
+			s = substring(s, 1, strlen(s) - 1);
+			out = strcat(out, ch1);
+		}
+	}
+	return out;
+}
+#define strdecolorize(s) decolorize(s)
+#define strlennocol(s) strlen(decolorize(s))
+
 #define CENTERPRIO_POINT 1
 #define CENTERPRIO_REBALANCE 2
 #define CENTERPRIO_VOTE 4

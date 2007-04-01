@@ -46,6 +46,8 @@ void Say(entity source, float teamsay, string msgin)
 		namestr = playername(source);
 	else
 		namestr = source.netname;
+	if(substring(namestr, strlen(namestr) - 1, 1) == "^")
+		namestr = strdecolorize(namestr); // BROKEN!
 	if(teamsay)
 	{
 		msgstr = strzone(strcat("\{1}\{13}", colorstr, "(^3", namestr, colorstr, ") ^7", msgin, "\n"));
@@ -78,7 +80,7 @@ void Say(entity source, float teamsay, string msgin)
 		}
 		flood_burst = max(0, flood_burst - 1);
 		// to match explanation in default.cfg, a value of 3 must allow three-line bursts and not four!
-		lines = ceil(strlennocol(msgstr) / 50);
+		lines = ceil(strlennocol(msgstr) / 75);
 		if(flood_lmax && lines > flood_lmax)
 			flood = 2;
 		else if(time >= self.flood_field)
