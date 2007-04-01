@@ -1348,7 +1348,7 @@ void PlayerPreThink (void)
 {
 	if(strlen(self.netname) > 0)
 		if(substring(self.netname, strlen(self.netname) - 1, 1) == "^")
-			self.netname = strzone(strcat(self.netname, " ")); // BROKEN COLORS can be annoying!
+			self.netname = strzone(strcat(substring(self.netname, 0, strlen(self.netname) - 1), " ")); // BROKEN COLORS can be annoying!
 
 	// version nagging
 	if(self.version_nagtime)
