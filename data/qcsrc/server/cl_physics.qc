@@ -14,6 +14,94 @@ float sv_airaccel_qw;
 .float lastflags;
 .float lastground;
 
+/*
+=============
+PlayerJump
+
+When you press the jump key
+=============
+*/
+void PlayerJump (void)
+{
+	float mjumpheight;
+
+	mjumpheight = cvar("g_balance_jumpheight");
+	if (self.waterlevel >= 2)
+	{
+		if (self.watertype == CONTENT_WATER)
+			self.velocity_z = 200;
+		else if (self.watertype == CONTENT_SLIME)
+			self.velocity_z = 80;
+		else
+			self.velocity_z = 50;
+
+		return;
+	}
+
+
+	if (!(self.flags & FL_ONGROUND))
+		return;
+
+	if (!(self.flags & FL_JUMPRELEASED))
+		return;
+
+	if(cvar("g_runematch"))
+	{
+		if(self.runes & RUNE_SPEED)
+		{
+			if(self.runes & CURSE_SLOW)
+				mjumpheight = mjumpheight * cvar("g_balance_rune_speed_combo_jumpheight");
+			else
+				mjumpheight = mjumpheight * cvar("g_balance_rune_speed_jumpheight");
+		}
+		else if(self.runes & CURSE_SLOW)
+		{
+			mjumpheight = mjumpheight * cvar("g_balance_curse_slow_jumpheight");
+		}
+	}
+
+	if(cvar("g_minstagib") && (self.items & IT_INVINCIBLE))
+	{
+		mjumpheight = mjumpheight * cvar("g_balance_rune_speed_jumpheight");
+	}
+
+	self.velocity_z = self.velocity_z + mjumpheight;
+	self.oldvelocity_z = self.velocity_z;
+
+	self.flags = self.flags - FL_ONGROUND;
+	self.flags = self.flags - FL_JUMPRELEASED;
+}
+
+void() CheckWaterJump =
+{
+	local vector start, end;
+
+// check for a jump-out-of-water
+	makevectors (self.angles);
+	start = self.origin;
+	start_z = start_z + 8;
+	v_forward_z = 0;
+	normalize(v_forward);
+	end = start + v_forward*24;
+	traceline (start, end, TRUE, self);
+	if (trace_fraction < 1)
+	{	// solid at waist
+		start_z = start_z + self.maxs_z - 8;
+		end = start + v_forward*24;
+		self.movedir = trace_plane_normal * -50;
+		traceline (start, end, TRUE, self);
+		if (trace_fraction == 1)
+		{	// open at eye level
+			self.flags = self.flags | FL_WATERJUMP;
+			self.velocity_z = 225;
+			self.flags = self.flags - (self.flags & FL_JUMPRELEASED);
+			self.teleport_time = time + 2;	// safety net
+			return;
+		}
+	}
+};
+
+
 void Nixnex_GiveCurrentWeapon();
 void SV_PlayerPhysics()
 {
@@ -101,6 +189,14 @@ void SV_PlayerPhysics()
 		self.angles_x = 0;
 		self.angles_y = self.v_angle_y;
 		self.angles_z = 0;
+	}
+
+	if(self.classname == "player")
+	{
+		if (self.button2)
+			PlayerJump ();
+		else
+			self.flags = self.flags | FL_JUMPRELEASED;
 	}
 
 	if (self.flags & FL_WATERJUMP )
