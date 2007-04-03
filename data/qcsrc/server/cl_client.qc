@@ -1460,9 +1460,6 @@ void PlayerPreThink (void)
 
 		//self.angles_y=self.v_angle_y + 90;   // temp
 
-		if (self.waterlevel == 2)
-			CheckWaterJump ();
-
 		//if (TetrisPreFrame()) return;
 	} else if(gameover) {
 		if (intermission_running)

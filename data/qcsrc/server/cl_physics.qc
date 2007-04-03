@@ -197,6 +197,9 @@ void SV_PlayerPhysics()
 			PlayerJump ();
 		else
 			self.flags = self.flags | FL_JUMPRELEASED;
+
+		if (self.waterlevel == 2)
+			CheckWaterJump ();
 	}
 
 	if (self.flags & FL_WATERJUMP )
