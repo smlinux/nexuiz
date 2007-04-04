@@ -16,6 +16,8 @@ float g_domination, g_ctf, g_tdm;
 float audit_teams_time;
 
 float() IsTeamBalanceForced = {
+	if(intermission_running)
+		return 0; // no rebalancing whatsoever please
 	if(!cvar("teamplay"))
 		return 0;
 	if(cvar("g_campaign"))

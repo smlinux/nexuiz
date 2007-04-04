@@ -182,8 +182,6 @@ void SV_PlayerPhysics()
 	if (self.deadflag)
 		return;
 
-	UpdateSelectedPlayer();
-
 	if (!self.fixangle)
 	{
 		self.angles_x = 0;
