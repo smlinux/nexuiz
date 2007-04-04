@@ -1,3 +1,5 @@
+void    setsize(entity e, vector boxmin, vector boxmax);
+
 #define FOR_EACH_CLIENT(v) for(v = world; (v = findflags(v, flags, FL_CLIENT)) != world; )
 #define FOR_EACH_REALCLIENT(v) FOR_EACH_CLIENT(v) if(clienttype(v) == CLIENTTYPE_REAL)
 string STR_PLAYER = "player";
