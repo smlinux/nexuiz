@@ -71,9 +71,32 @@ void GotoFirstMap()
 float world_already_spawned;
 void worldspawn (void)
 {
+	string str;
+
 	if(world_already_spawned)
 		error("world already spawned - you may have EXACTLY ONE worldspawn!");
 	world_already_spawned = TRUE;
+
+	// first detect the map type
+	if(cvar("halflifebsp"))
+	{
+		maptype = MAPTYPE_HLBSP;
+	}
+	else
+	{
+		str = getsurfacetexture(world, 0);
+		dprint("maptype test texture string = ", str, "\n");
+		if(strstr(str, "/", 0) >= 0)
+			maptype = MAPTYPE_Q3BSP;
+		else if(str == "NULL") // GtkRadiant-ism
+			maptype = MAPTYPE_Q3BSP;
+		else if(str == "notexture") // q3map2-ism
+			maptype = MAPTYPE_Q3BSP;
+		else
+			maptype = MAPTYPE_Q1BSP;
+	}
+	dprint("Detected map type: ", ftos(maptype), "\n");
+
 	// Precache all player models
 	// Workaround for "invisible players"
 	precache_model("models/player/carni.zym");

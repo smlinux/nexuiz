@@ -1,5 +1,7 @@
 // Globals
 
+float maptype;
+
 entity	activator;
 string	string_null;
 
