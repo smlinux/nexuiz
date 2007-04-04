@@ -426,9 +426,7 @@ void PutClientInServer (void)
 		self.dead_frame = 0;
 		self.die_frame = 0;
 		self.alpha = 0;
-		self.scale = 1;
-		if(maptype == MAPTYPE_Q1BSP)
-			self.scale = 0.85;
+		self.scale = 0;
 		self.fade_time = 0;
 		self.pain_frame = 0;
 		self.pain_finished = 0;
@@ -477,8 +475,8 @@ void PutClientInServer (void)
 		}
 
 		self.crouch = FALSE;
-		self.view_ofs = PL_VIEW_OFS * self.scale;
-		setsize (self, PL_MIN * self.scale, PL_MAX * self.scale);
+		self.view_ofs = PL_VIEW_OFS;
+		setsize (self, PL_MIN, PL_MAX);
 		self.spawnorigin = spot.origin;
 		setorigin (self, spot.origin + '0 0 1' * (1 - self.mins_z - 24));
 		// don't reset back to last position, even if new position is stuck in solid
@@ -1380,20 +1378,20 @@ void PlayerPreThink (void)
 			if (!self.crouch)
 			{
 				self.crouch = TRUE;
-				self.view_ofs = PL_CROUCH_VIEW_OFS * self.scale;
-				setsize (self, PL_CROUCH_MIN * self.scale, PL_CROUCH_MAX * self.scale);
+				self.view_ofs = PL_CROUCH_VIEW_OFS;
+				setsize (self, PL_CROUCH_MIN, PL_CROUCH_MAX);
 			}
 		}
 		else
 		{
 			if (self.crouch)
 			{
-				tracebox(self.origin, PL_MIN * self.scale, PL_MAX * self.scale, self.origin, FALSE, self);
+				tracebox(self.origin, PL_MIN, PL_MAX, self.origin, FALSE, self);
 				if (!trace_startsolid)
 				{
 					self.crouch = FALSE;
-					self.view_ofs = PL_VIEW_OFS * self.scale;
-					setsize (self, PL_MIN * self.scale, PL_MAX * self.scale);
+					self.view_ofs = PL_VIEW_OFS;
+					setsize (self, PL_MIN, PL_MAX);
 				}
 			}
 		}

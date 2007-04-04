@@ -1,5 +1,3 @@
-void    setsize(entity e, vector boxmin, vector boxmax);
-
 #define FOR_EACH_CLIENT(v) for(v = world; (v = findflags(v, flags, FL_CLIENT)) != world; )
 #define FOR_EACH_REALCLIENT(v) FOR_EACH_CLIENT(v) if(clienttype(v) == CLIENTTYPE_REAL)
 string STR_PLAYER = "player";
@@ -553,54 +551,4 @@ string playername(entity p)
 	}
 	else
 		return p.netname;
-}
-
-void setsize(entity e, vector boxmin, vector boxmax)
-{
-	float needhull;
-	vector boxsize;
-	vector boxdiff, hullsize;
-
-	needhull = FALSE;
-	boxsize = boxmax - boxmin;
-
-	if(maptype == MAPTYPE_Q1BSP)
-	{
-		needhull = TRUE;
-		if(boxsize_x < 3)
-			hullsize = '0 0 0';
-		else if(boxsize_x < 32.1)
-			hullsize = '32 32 56';
-		else
-			hullsize = '64 64 88';
-	}
-	else if(maptype == MAPTYPE_HLBSP)
-	{
-		needhull = TRUE;
-		if(boxsize_x < 3)
-			hullsize = '0 0 0';
-		else if(boxsize_x < 32.1)
-		{
-			if(boxsize_z < 54)
-				hullsize = '32 32 36';
-			else
-				hullsize = '32 32 72';
-		}
-		else
-			hullsize = '64 64 64';
-	}
-
-	if(needhull)
-	{
-		boxdiff = hullsize - boxsize;
-		//dprint("Adjusted size from ");
-		//dprint(vtos(boxmin), "-");
-		//dprint(vtos(boxmax), " to ");
-		boxmin = '0.5 0 0' * (boxmin_x + boxmax_x - hullsize_x) + '0 0.5 0' * (boxmin_y + boxmax_y - hullsize_y) + '0 0 1' * boxmin_z;
-		boxmax = boxmin + hullsize;
-		//dprint(vtos(boxmin), "-");
-		//dprint(vtos(boxmax), "\n");
-	}
-
-	setsize_builtin(e, boxmin, boxmax);
 }

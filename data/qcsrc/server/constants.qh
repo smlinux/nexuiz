@@ -224,7 +224,3 @@ float COLOR_TEAM3	= 10; // pink
 float COLOR_TEAM4	= 13; // yellow
 
 float NUM_PLAYERSKINS_TEAMPLAY = 3;
-
-float MAPTYPE_Q1BSP = 100;
-float MAPTYPE_HLBSP = 150;
-float MAPTYPE_Q3BSP = 300;

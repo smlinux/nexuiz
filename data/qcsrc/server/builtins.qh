@@ -2,7 +2,7 @@
 void	makevectors (vector ang)							= #1;
 void	setorigin (entity e, vector o)							= #2;
 void	setmodel (entity e, string m)							= #3;
-void	setsize_builtin (entity e, vector min, vector max)					= #4;
+void	setsize (entity e, vector min, vector max)					= #4;
 
 void	crash (void)									= #6;
 float	random (void)									= #7;
