@@ -204,6 +204,7 @@ void() CL_ExteriorWeaponentity_Think =
 			self.model = "";
 	}
 	self.effects = self.owner.effects;
+	self.effects = self.effects - (self.effects & (EF_BLUE | EF_RED)); // eat performance
 	if(self.owner.alpha >= 0)
 		self.alpha = self.owner.alpha;
 	else
