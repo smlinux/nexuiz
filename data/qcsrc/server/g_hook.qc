@@ -60,6 +60,8 @@ void RemoveGrapplingHook(entity pl)
 		pl.movetype = MOVETYPE_WALK;
 
 	pl.hook_time = time + 0.0;
+
+	//pl.disableclientprediction = FALSE;
 }
 
 void GrapplingHookThink()
@@ -72,7 +74,7 @@ void GrapplingHookThink()
 		return;
 	}
 
-	self.nextthink = time + 0.1;
+	self.nextthink = time;
 
 	makevectors(self.owner.v_angle);
 	org = self.owner.origin + self.owner.view_ofs + v_forward * 15 - v_right * 5 + v_up * -12;
@@ -112,13 +114,13 @@ void GrapplingHookThink()
 			newlength = self.rope_length;
 
 			// first pull the rope...
-			newlength = max(newlength - pullspeed * 0.1, minlength);
+			newlength = max(newlength - pullspeed * frametime, minlength);
 
 			if(newlength < dist - ropestretch) // overstretched?
 			{
 				newlength = dist - ropestretch;
 				if(self.owner.velocity * dir < 0) // only if not already moving in hook direction
-					self.owner.velocity = self.owner.velocity + 0.1 * dir * rubberforce_overstretch;
+					self.owner.velocity = self.owner.velocity + frametime * dir * rubberforce_overstretch;
 			}
 
 			if(!self.owner.button5) // crouch key = don't pull
@@ -126,8 +128,8 @@ void GrapplingHookThink()
 
 			// then pull the player
 			spd = bound(0, (dist - self.rope_length) / ropestretch, 1);
-			self.owner.velocity = self.owner.velocity * (1 - 0.1 * ropeairfriction);
-			self.owner.velocity = self.owner.velocity + 0.1 * dir * spd * rubberforce;
+			self.owner.velocity = self.owner.velocity * (1 - frametime * ropeairfriction);
+			self.owner.velocity = self.owner.velocity + frametime * dir * spd * rubberforce;
 		}
 		else
 		{
@@ -175,11 +177,13 @@ void GrapplingHookTouch (void)
 
 	self.state = 1;
 	self.think = GrapplingHookThink;
-	self.nextthink = time + 0.1;
+	self.nextthink = time;
 	self.touch = SUB_Null;
 	self.velocity = '0 0 0';
 	self.movetype = MOVETYPE_NONE;
 	self.rope_length = -1;
+
+	//self.owner.disableclientprediction = TRUE;
 }
 
 void GrapplingHook_Damage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
