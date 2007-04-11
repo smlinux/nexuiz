@@ -1307,6 +1307,13 @@ void PlayerPreThink (void)
 			return;					// the think tics
 		}
 
+		if(time > self.teleport_time)
+		{
+			self.effects = self.effects - (self.effects & EF_NODRAW);
+			if(self.weaponentity)
+				self.weaponentity.flags = self.weaponentity.flags - (self.weaponentity.flags & EF_NODRAW);
+		}
+
 		Nixnex_GiveCurrentWeapon();
 		UpdateSelectedPlayer();
 

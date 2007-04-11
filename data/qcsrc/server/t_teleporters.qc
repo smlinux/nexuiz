@@ -58,6 +58,8 @@ void(vector org, entity death_owner, vector org2) spawn_tdeath =
 
 void Teleport_Touch (void)
 {
+	entity head;
+
 	if (other.health < 1)
 		return;
 	if (!other.flags & FL_CLIENT)	// FIXME: Make missiles firable through the teleport too
@@ -72,16 +74,40 @@ void Teleport_Touch (void)
 	makevectors (self.enemy.mangle);
 	te_teleport (self.enemy.origin + v_forward * 32);
 
-	spawn_tdeath(self.enemy.origin, other, other.origin);
-
 	// Relocate the player
-	//setorigin (other, self.enemy.origin);
 	setorigin (other, self.enemy.origin + '0 0 1' * (1 - other.mins_z - 24));
 	other.angles = self.enemy.mangle;
 	other.fixangle = TRUE;
-
-	// keep velocity but change movement direction
 	other.velocity = v_forward * vlen(other.velocity);
+
+	// Kill anyone else in the teleporter box (NO MORE TDEATH)
+	if(other.takedamage)
+	{
+		vector deathmin;
+		vector deathmax;
+		float deathradius;
+		deathmin = other.absmin;
+		deathmax = other.absmax;
+		deathradius = max(vlen(deathmin), vlen(deathmax));
+		for(head = findradius(other.origin, deathradius); head; head = head.chain)
+			if(head != other)
+				if(head.takedamage)
+					if(boxesoverlap(deathmin, deathmax, head.absmin, head.absmax))
+					{
+						if ((other.classname == "player") && (other.health >= 1))
+							Damage (head, self, other, 10000, DEATH_TELEFRAG, head.origin, '0 0 0');
+						else if (other.health < 1) // corpses gib
+							Damage (head, self, other, 10000, DEATH_TELEFRAG, head.origin, '0 0 0');
+						else // dead bodies and monsters gib themselves instead of telefragging
+							Damage (other, self, other, 10000, DEATH_TELEFRAG, other.origin, '0 0 0');
+					}
+	}
+	
+	// hide myself for 0.2 seconds
+	other.effects = other.effects | EF_NODRAW;
+	if (other.weaponentity) // misuse FL_FLY to avoid EF_NODRAW on viewmodel
+		other.weaponentity.flags = other.weaponentity.flags | FL_FLY;
+	other.teleport_time = time + 0.2;
 
 	other.flags = other.flags - (other.flags & FL_ONGROUND);
 	// reset tracking of oldvelocity for impact damage (sudden velocity changes)

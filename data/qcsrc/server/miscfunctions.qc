@@ -552,3 +552,9 @@ string playername(entity p)
 	else
 		return p.netname;
 }
+
+// requires that m2>m1 in all coordinates, and that m4>m3
+float(vector m1, vector m2, vector m3, vector m4) boxesoverlap = {return m2_x >= m3_x && m1_x <= m4_x && m2_y >= m3_y && m1_y <= m4_y && m2_z >= m3_z && m1_z <= m4_z;};
+
+// requires the same, but is a stronger condition
+float(vector smins, vector smaxs, vector bmins, vector bmaxs) boxinsidebox = {return smins_x >= bmins_x && smaxs_x <= bmaxs_x && smins_y >= bmins_y && smaxs_y <= bmaxs_y && smins_z >= bmins_z && smaxs_z <= bmaxs_z;};
