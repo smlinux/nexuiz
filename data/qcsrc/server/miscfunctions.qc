@@ -358,6 +358,8 @@ void GetCvars_handleFloat(float f, .float field, string name)
 }
 void GetCvars(float f)
 {
+	GetCvars_handleFloat(f, cvar_cl_zoomfactor, "cl_zoomfactor");
+	GetCvars_handleFloat(f, cvar_cl_zoomspeed, "cl_zoomspeed");
 	GetCvars_handleFloat(f, cvar_cl_playerdetailreduction, "cl_playerdetailreduction");
 	GetCvars_handleFloat(f, cvar_cl_nogibs, "cl_nogibs");
 	GetCvars_handleFloat(f, cvar_scr_centertime, "scr_centertime");

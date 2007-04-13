@@ -457,6 +457,7 @@ void PutClientInServer (void)
 		self.oldvelocity = self.velocity;
 
 		self.viewzoom = 0.6;
+		self.has_zoomed = 0;
 
 		self.customizeentityforclient = Client_customizeentityforclient;
 
@@ -1443,21 +1444,60 @@ void PlayerPreThink (void)
 
 		W_WeaponFrame();
 
-		if (self.button4 || (self.weapon == WEP_NEX && self.button3))
-		{
-			if (cvar("g_minstagib") && self.button3)
-			{
+		if (cvar("g_minstagib"))
+			if(self.button3)
 				if (self.jump_interval <= (time + 0.1))
 				{
 					self.jump_interval = time + 1;
 					W_Laser_Attack();
 				}
+		
+		{
+			float zoomfactor, zoomspeed, zoomdir;
+			zoomfactor = self.cvar_cl_zoomfactor;
+			if(zoomfactor < 1 || zoomfactor > 16)
+				zoomfactor = 2.5;
+			zoomspeed = self.cvar_cl_zoomspeed;
+			if(zoomspeed >= 0) // < 0 is instant zoom
+				if(zoomspeed < 0.5 || zoomspeed > 16)
+					zoomspeed = 3.5;
+			
+			zoomdir = self.button4;
+			if(self.button3)
+				if(self.weapon == WEP_NEX)
+					if(!cvar("g_minstagib"))
+						zoomdir = 1;
+
+			if(zoomdir)
+				self.has_zoomed = 1;
+
+			if(self.has_zoomed)
+			{
+				if(zoomspeed <= 0) // instant zoom
+				{
+					if(zoomdir)
+						self.viewzoom = 1 / zoomfactor;
+					else
+						self.viewzoom = 1;
+				}
+				else
+				{
+					// geometric zoom would be:
+					//   self.viewzoom = bound(1 / zoomfactor, self.viewzoom * pow(zoomfactor, (zoomdir ? -1 : 1) * frametime * zoomspeed), 1);
+					// however, testing showed that arithmetic/harmonic zoom works better
+					if(zoomdir)
+						// self.viewzoom = 1 / bound(1, 1 / self.viewzoom + (zoomdir ? 1 : -1) * frametime * zoomspeed * (zoomfactor - 1), zoomfactor);
+						// zoom in = arithmetic: 1x, 2x, 3x, 4x, ..., 8x
+						self.viewzoom = 1 / bound(1, 1 / self.viewzoom + frametime * zoomspeed * (zoomfactor - 1), zoomfactor);
+					else
+						// self.viewzoom = bound(1 / zoomfactor, self.viewzoom + (zoomdir ? -1 : 1) * frametime * zoomspeed * (1 - 1 / zoomfactor), 1);
+						// zoom out = harmonic: 8/1x, 8/2x, 8/3x, 8/4x, ..., 8/8x
+						self.viewzoom = bound(1 / zoomfactor, self.viewzoom + frametime * zoomspeed * (1 - 1 / zoomfactor), 1);
+				}
 			}
-			else if (self.viewzoom > 0.4)
-				self.viewzoom = max (0.4, self.viewzoom - frametime * 2);
+			else
+				self.viewzoom = min(1, self.viewzoom + frametime); // spawn zoom-in
 		}
-		else if (self.viewzoom < 1.0)
-			self.viewzoom = min (1.0, self.viewzoom + frametime);
 
 		player_powerups();
 		player_regen();
