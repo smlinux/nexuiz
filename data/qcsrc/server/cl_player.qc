@@ -285,6 +285,8 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 	{
 		self.deaths += 1;
 
+		// clear waypoints
+		WaypointSprite_PlayerDead();
 		// become fully visible
 		self.alpha = 1;
 		// clear selected player display

@@ -14,6 +14,8 @@ campaign.qh
 
 miscfunctions.qc
 
+waypointsprites.qc
+
 // general bot utility functions and management
 bots.qc
 

@@ -287,6 +287,8 @@ void PutObserverInServer (void)
 		WriteEntity(MSG_ONE, self);
 	}
 
+	WaypointSprite_PlayerDead();
+
 	DropAllRunes(self);
 
 	if(self.flagcarried)
@@ -746,6 +748,9 @@ void ClientConnect (void)
 	
 	FixClientCvars(self);
 
+	// waypoint sprites
+	WaypointSprite_InitClient(self);
+
 	// Wazat's grappling hook
 	SetGrappleHookBindings();
 
@@ -823,6 +828,8 @@ void ClientDisconnect (void)
 		remove (self.teambubbleentity);
 		self.teambubbleentity = world;
 	}
+
+	WaypointSprite_PlayerGone();
 
 	DropAllRunes(self);
 
@@ -1590,7 +1597,6 @@ void PlayerPostThink (void)
 		CheckRules_Player();
 		UpdateChatBubble();
 		UpdateTeamBubble();
-		if (self.deadflag == DEAD_NO)
 		if (self.impulse)
 			ImpulseCommands ();
 		if (intermission_running)

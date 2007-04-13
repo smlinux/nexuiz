@@ -63,27 +63,32 @@ void ImpulseCommands (void)
 	if (imp >= 1 && imp <= 12)
 	{
 		// weapon switching impulses
-		if (imp <= 9)
-			W_SwitchWeapon (imp);
-		else if (imp == 10)
-			W_NextWeapon ();
-		else if (imp == 12)
-			W_PreviousWeapon ();
-		else if (imp == 11) // last weapon
-			W_SwitchWeapon (self.cnt);
+		if(self.deadflag == DEAD_NO)
+		{
+			if (imp <= 9)
+				W_SwitchWeapon (imp);
+			else if (imp == 10)
+				W_NextWeapon ();
+			else if (imp == 12)
+				W_PreviousWeapon ();
+			else if (imp == 11) // last weapon
+				W_SwitchWeapon (self.cnt);
+		}
+		else
+			self.impulse = imp; // retry in next frame
 	}
 	else if (imp >= 13 && imp <= 16)
 	{
 		if (cvar("sv_cheats"))
 		{
-			if (imp == 13)
+			if (imp == 13 && self.deadflag == DEAD_NO)
 			{
 				makevectors (self.v_angle);
 				self.velocity = self.velocity + v_forward * 300;
 				CopyBody(1);
 				self.velocity = self.velocity - v_forward * 300;
 			}
-			else if (imp == 14)
+			else if (imp == 14 && self.deadflag == DEAD_NO)
 				CopyBody(0);
 			else if (imp == 15)
 			{
@@ -108,10 +113,87 @@ void ImpulseCommands (void)
 	// throw weapon
 	else if (imp == 17)
 	{
-		if (self.weapon != WEP_LASER
-			&& !cvar("g_minstagib") && !cvar("g_instagib")
-			&& !cvar("g_rocketarena") && !cvar("g_lms") && cvar("g_pickup_items") && !cvar("g_nixnex"))
-			W_ThrowWeapon(self.velocity * 0.5 + v_forward * 750, '0 0 0', TRUE);
+		if(self.deadflag == DEAD_NO)
+		{
+			if (self.weapon != WEP_LASER
+				&& !cvar("g_minstagib") && !cvar("g_instagib")
+				&& !cvar("g_rocketarena") && !cvar("g_lms") && cvar("g_pickup_items") && !cvar("g_nixnex"))
+				W_ThrowWeapon(self.velocity * 0.5 + v_forward * 750, '0 0 0', TRUE);
+		}
+	}
+	// deploy waypoints
+	else if (imp >= 30 && imp <= 49)
+	{
+		if(imp == 30)
+		{
+			WaypointSprite_DeployPersonal("waypoint", self.origin);
+			sprint(self, "personal waypoint spawned at location\n");
+		}
+		else if(imp == 31)
+		{
+			WaypointSprite_DeployPersonal("waypoint", self.cursor_trace_endpos);
+			sprint(self, "personal waypoint spawned at crosshair\n");
+		}
+		else if(imp == 32 && vlen(self.death_origin))
+		{
+			WaypointSprite_DeployPersonal("waypoint", self.death_origin);
+			sprint(self, "personal waypoint spawned at death location\n");
+		}
+		else if(imp == 33 && self.deadflag == DEAD_NO)
+		{
+			if(teams_matter)
+				WaypointSprite_Attach("helpme", TRUE);
+			sprint(self, "HELP ME attached\n");
+		}
+		else if(imp == 34)
+		{
+			WaypointSprite_DeployFixed("here", FALSE, self.origin);
+			sprint(self, "HERE spawned at location\n");
+		}
+		else if(imp == 35)
+		{
+			WaypointSprite_DeployFixed("here", FALSE, self.cursor_trace_endpos);
+			sprint(self, "HERE spawned at crosshair\n");
+		}
+		else if(imp == 36 && vlen(self.death_origin))
+		{
+			WaypointSprite_DeployFixed("here", FALSE, self.death_origin);
+			sprint(self, "HERE spawned at death location\n");
+		}
+		else if(imp == 37)
+		{
+			WaypointSprite_DeployFixed("danger", FALSE, self.origin);
+			sprint(self, "DANGER spawned at location\n");
+		}
+		else if(imp == 38)
+		{
+			WaypointSprite_DeployFixed("danger", FALSE, self.cursor_trace_endpos);
+			sprint(self, "DANGER spawned at crosshair\n");
+		}
+		else if(imp == 39 && vlen(self.death_origin))
+		{
+			WaypointSprite_DeployFixed("danger", FALSE, self.death_origin);
+			sprint(self, "DANGER spawned at death location\n");
+		}
+		else if(imp == 47)
+		{
+			WaypointSprite_ClearPersonal();
+			sprint(self, "personal waypoint cleared\n");
+		}
+		else if(imp == 48)
+		{
+			WaypointSprite_ClearOwned();
+			sprint(self, "all waypoints cleared\n");
+		}
+		else if(imp == 49)
+		{
+			self.cvar_cl_hidewaypoints = !(self.cvar_cl_hidewaypoints);
+			sprint(self, "fixed waypoints now ");
+			if(self.cvar_cl_hidewaypoints)
+				sprint(self, "OFF\n");
+			else
+				sprint(self, "ON\n");
+		}
 	}
 	else
 	{
@@ -130,11 +212,11 @@ void ImpulseCommands (void)
 				traceline(self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * 65536, FALSE, self);
 				sprint(self, strcat("distance: ", ftos(fabs(vlen(trace_endpos - (self.origin + self.view_ofs)))), "\n"));
 			}
-			else if(imp == 42)
+			else if(imp == 6*9)
 			{
 				CampaignLevelWarp(cvar("_warplevel"));
 			}
-			else if (imp == 99)
+			else if (imp == 99 && self.deadflag == DEAD_NO)
 			{
 				self.items = IT_LASER | IT_UZI | IT_SHOTGUN | IT_GRENADE_LAUNCHER | IT_ELECTRO | IT_CRYLINK | IT_NEX | IT_HAGAR | IT_ROCKET_LAUNCHER;
 				self.ammo_shells = 999;

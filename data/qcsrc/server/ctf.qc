@@ -71,7 +71,10 @@ void(entity e) ReturnFlag =
 {
 	if (e.owner)
 	if (e.owner.flagcarried == e)
+	{
+		WaypointSprite_DetachCarrier(e.owner);
 		e.owner.flagcarried = world;
+	}
 	e.owner = world;
 	RegenFlag(e);
 };
@@ -92,6 +95,7 @@ void(entity e) DropFlag =
 		return;
 	}
 	bprint(p.netname, "^7 lost the ", e.netname, "\n");
+	WaypointSprite_DetachCarrier(p);
 	LogCTF("dropped", p.team, p.flagcarried);
 
 	setattachment(e, world, "");
@@ -221,6 +225,7 @@ void() FlagTouch =
 				UpdateFrags(head, cvar("g_ctf_flagscore_capture_team"));
 
 		sound (self, CHAN_AUTO, self.noise2, 1, ATTN_NONE);
+		WaypointSprite_DetachCarrier(other);
 		RegenFlag (other.flagcarried);
 		other.flagcarried = world;
 		other.next_take_time = time + 1;
@@ -251,6 +256,7 @@ void() FlagTouch =
 		self.movetype = MOVETYPE_NONE;
 		setorigin(self, FLAG_CARRY_POS);
 		setattachment(self, other, "");
+		WaypointSprite_AttachCarrier("flagcarrier", other);
 
 		return;
 	}
@@ -290,6 +296,7 @@ void() FlagTouch =
 			self.movetype = MOVETYPE_NONE;	// flag must have MOVETYPE_NONE here, otherwise it will drop through the floor...
 			setorigin(self, FLAG_CARRY_POS);
 			setattachment(self, other, "");
+			WaypointSprite_AttachCarrier("flagcarrier", other);
 		}
 	}
 };
@@ -425,6 +432,9 @@ void() item_flag_team1 =
 	//	self.glow_size = 50;
 
 	self.effects = self.effects | EF_FULLBRIGHT | EF_LOWPRECISION;
+	droptofloor();
+
+	WaypointSprite_SpawnFixed("redbase", self.origin + '0 0 37');
 };
 
 /*QUAKED item_flag_team2 (0 0.5 0.8) (-48 -48 -24) (48 48 64)
@@ -478,6 +488,9 @@ void() item_flag_team2 =
 	//	self.glow_size = 50;
 
 	self.effects = self.effects | EF_FULLBRIGHT | EF_LOWPRECISION;
+	droptofloor();
+
+	WaypointSprite_SpawnFixed("bluebase", self.origin + '0 0 37');
 };
 
 

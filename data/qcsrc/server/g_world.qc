@@ -364,6 +364,9 @@ void worldspawn (void)
 		CampaignPreInit();
 
 	InitGameplayMode();
+
+	WaypointSprite_Init();
+
 	//if (cvar("g_domination"))
 	//	dom_init();
 
@@ -728,6 +731,14 @@ float() DoNextMapOverride =
 			localcmd("quit\n");
 			return TRUE;
 		}
+	}
+	if(cvar_string("quit_and_redirect") != "")
+	{
+		entity head;
+		FOR_EACH_REALCLIENT(head)
+			stuffcmd(head, strcat("\nconnect ", cvar_string("quit_and_redirect"), "\n"));
+		localcmd("wait; wait; wait; wait; wait; wait; wait; wait; wait; wait; wait; wait; wait; wait; wait; wait; wait; wait; wait; wait; wait; wait; quit\n");
+		return TRUE;
 	}
 	if (cvar("samelevel")) // if samelevel is set, stay on same level
 	{
