@@ -64,6 +64,20 @@ Item DataContainer Player
 			link		"##up"
 		}
 	}
+	Item Data_ServerCvar ZoomFactor
+	{
+		cvarName	"cl_zoomfactor"
+		syncCmd     "setreport cl_zoomfactor"
+		defValue	"5"
+
+		Item DataLink_Value Value
+		{
+			minValue	1.5
+			maxValue	8.0
+			stepValue	0.5
+			link		"##up"
+		}
+	}
 	Item Data_Cvar ViewSize
 	{
 		cvarName	"viewsize"
@@ -77,29 +91,45 @@ Item DataContainer Player
 			link		"##up"
 		}
 	}
-	Item Data_Cvar WeaponAutoswitch
+	Item Data_ServerCvar WeaponAutoswitch
 	{
 		cvarName	"cl_autoswitch"
+		syncCmd     "setreport cl_autoswitch"
 		defValue	1
 
 		[DataLink_OnOffSwitch]
 	}
-	Item Data_Cvar NoGibs
+	Item Data_ServerCvar NoGibs
 	{
 		cvarName	"cl_nogibs"
+		syncCmd     "setreport cl_nogibs"
 		defValue	"0"
 	
 		[DataLink_OnOffSwitch]
 	}
-	Item Data_Cvar PlayerShowNames
+	Item Data_ServerCvar PlayerShowNames
 	{
 		cvarName "cl_shownames"
+		syncCmd  "setreport cl_shownames"
 		defValue "1"
 		
 		Item DataLink_TextSwitch Switch
 		{
 			valueList "'0' '1' '2'"
 			descList "'Off' 'Teamplay only' 'Always'"
+			link  "##up"
+		}
+	}
+	Item Data_ServerCvar ShowWaypoints
+	{
+		cvarName "cl_hidewaypoints"
+		syncCmd  "setreport cl_hidewaypoints"
+		defValue "0"
+		
+		Item DataLink_TextSwitch Switch
+		{
+			valueList "'0' '1'"
+			descList "'Display' 'Hide'"
 			link  "##up"
 		}
 	}

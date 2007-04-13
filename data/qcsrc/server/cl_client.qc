@@ -754,9 +754,8 @@ void ClientConnect (void)
 	// Wazat's grappling hook
 	SetGrappleHookBindings();
 
-	// get autoswitch state from player
-	stuffcmd(self, "alias autoswitch \"set cl_autoswitch $1; cmd autoswitch $1\"\n");
-	stuffcmd(self, "cmd autoswitch $cl_autoswitch\n");
+	// get autoswitch state from player when he toggles it
+	stuffcmd(self, "alias autoswitch \"set cl_autoswitch $1 ; cmd autoswitch $1\"\n");
 
 	// get version info from player
 	stuffcmd(self, "cmd clientversion $gameversion\n");

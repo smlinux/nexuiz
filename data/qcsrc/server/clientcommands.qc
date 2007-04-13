@@ -309,7 +309,9 @@ void SV_ParseClientCommand(string s) {
 			self.classname = "observer";
 			stuffcmd(self,"menu_showteamselect\n");
 		}
-	} else if(argv(0) == "reportcvar") {
+	} else if(argv(0) == "reportcvar") { // old system
+		GetCvars(1);
+	} else if(argv(0) == "sentcvar") { // new system
 		GetCvars(1);
 	} else if(argv(0) == "spectate") {
 		if(cvar("g_lms") || cvar("g_arena"))

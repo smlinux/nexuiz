@@ -142,6 +142,11 @@ Item Window Player
 			text	"Field of View"
 			target	"::Data::Player::FOV::Value"
 		}
+		Derive Nex_Option_Slider ZoomFactor
+		{
+			text	"Zoom factor"
+			target	"::Data::Player::ZoomFactor::Value"
+		}
 		Derive Nex_Option_Slider ViewSize
 		{
 			text	"View Size"
@@ -191,6 +196,11 @@ Item Window Player
 		{
 			text    "Show player names"
 			target  "::Data::Player::PlayerShowNames::Switch"
+		}		
+		Derive Nex_Option_Switch ShowWaypoints
+		{
+			text    "Map waypoints"
+			target  "::Data::Player::ShowWaypoints::Switch"
 		}		
 		Derive Nex_Option_Slider MapDLSpeed
 		{

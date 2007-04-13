@@ -341,7 +341,7 @@ void GetCvars_handleString(float f, .string field, string name)
 		}
 	}
 	else
-		stuffcmd(self, strcat("cmd reportcvar ", name, " $", name, "\n"));
+		stuffcmd(self, strcat("sendcvar ", name, "\n"));
 }
 void GetCvars_handleFloat(float f, .float field, string name)
 {
@@ -354,10 +354,11 @@ void GetCvars_handleFloat(float f, .float field, string name)
 			self.field = stof(argv(f + 1));
 	}
 	else
-		stuffcmd(self, strcat("cmd reportcvar ", name, " $", name, "\n"));
+		stuffcmd(self, strcat("sendcvar ", name, "\n"));
 }
 void GetCvars(float f)
 {
+	GetCvars_handleFloat(f, autoswitch, "cl_autoswitch");
 	GetCvars_handleFloat(f, cvar_cl_hidewaypoints, "cl_hidewaypoints");
 	GetCvars_handleFloat(f, cvar_cl_zoomfactor, "cl_zoomfactor");
 	GetCvars_handleFloat(f, cvar_cl_zoomspeed, "cl_zoomspeed");
