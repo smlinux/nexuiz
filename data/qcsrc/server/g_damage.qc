@@ -567,6 +567,7 @@ void RadiusDamage (entity inflictor, entity attacker, float coredamage, float ed
 	vector	m2;
 	vector	nearest;
 	vector	diff;
+	vector center;
 
 	blastorigin = (inflictor.origin + (inflictor.mins + inflictor.maxs) * 0.5);
 
@@ -600,7 +601,11 @@ void RadiusDamage (entity inflictor, entity attacker, float coredamage, float ed
 					finaldmg = coredamage * power + edgedamage * (1 - power);
 					if (finaldmg > 0)
 					{
-						force = normalize((m1 + m2) * 0.5 - blastorigin) * (finaldmg / coredamage) * forceintensity;
+						center = (m1 + m2) * 0.5;
+						// if it's a player, use the view origin as reference
+						if (targ.classname == "player")
+							center = targ.origin + targ.view_ofs;
+						force = normalize(center - blastorigin) * (finaldmg / coredamage) * forceintensity;
 						if (targ == attacker)
 							finaldmg = finaldmg * cvar("g_balance_selfdamagepercent");	// Partial damage if the attacker hits himself
 						// test line of sight to multiple positions on box,

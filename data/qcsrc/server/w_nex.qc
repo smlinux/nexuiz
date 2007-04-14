@@ -6,9 +6,9 @@ void W_Nex_Attack (void)
 
 	// assure that nexdamage is high enough in minstagib
 	if (cvar("g_minstagib"))
-		FireRailgunBullet (w_shotorg, w_shotorg + w_shotdir * MAX_SHOT_DISTANCE, 1000, IT_NEX);
+		FireRailgunBullet (w_shotorg, w_shotorg + w_shotdir * MAX_SHOT_DISTANCE, 1000, 800, IT_NEX);
 	else
-		FireRailgunBullet (w_shotorg, w_shotorg + w_shotdir * MAX_SHOT_DISTANCE, cvar("g_balance_nex_damage"), IT_NEX);
+		FireRailgunBullet (w_shotorg, w_shotorg + w_shotdir * MAX_SHOT_DISTANCE, cvar("g_balance_nex_damage"), cvar("g_balance_nex_force"), IT_NEX);
 
 	// show as if shot started outside of gun
 	// muzzleflash light
@@ -157,6 +157,17 @@ float(float req) w_nex =
 				{
 					W_Nex_Attack();
 					weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_nex_animtime"), w_ready);
+				}
+			}
+		}
+		else if (self.button3)
+		{
+			if (cvar("g_minstagib"))
+			{
+				if (self.jump_interval <= time)
+				{
+					self.jump_interval = time + 0.9;
+					W_Laser_Attack(FALSE);
 				}
 			}
 		}

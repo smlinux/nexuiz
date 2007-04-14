@@ -4,15 +4,17 @@ void W_Shotgun_Attack (void)
 	float	sc;
 	float	bullets;
 	float	d;
+	float	f;
 	float	spread;
 
 	bullets = cvar("g_balance_shotgun_primary_bullets");
 	d = cvar("g_balance_shotgun_primary_damage");
+	f = cvar("g_balance_shotgun_primary_force");
 	spread = cvar("g_balance_shotgun_primary_spread");
 
 	W_SetupShot (self, '15 8 -8', TRUE, 5, "weapons/shotgun_fire.ogg");
 	for (sc = 0;sc < bullets;sc = sc + 1)
-		fireBullet (w_shotorg, w_shotdir, spread, d, IT_SHOTGUN, sc < 3);
+		fireBullet (w_shotorg, w_shotdir, spread, d, f, IT_SHOTGUN, sc < 3);
 	if (cvar("g_use_ammunition"))
 		self.ammo_shells = self.ammo_shells - cvar("g_balance_shotgun_primary_ammo");
 
@@ -29,15 +31,17 @@ void W_Shotgun_Attack2 (void)
 	float	sc;
 	float	bullets;
 	float	d;
+	float	f;
 	float	spread;
 
 	bullets = cvar("g_balance_shotgun_secondary_bullets");
 	d = cvar("g_balance_shotgun_secondary_damage");
+	f = cvar("g_balance_shotgun_secondary_force");
 	spread = cvar("g_balance_shotgun_secondary_spread");
 
 	W_SetupShot (self, '15 8 -8', TRUE, 5, "weapons/shotgun_fire.ogg");
 	for (sc = 0;sc < bullets;sc = sc + 1)
-		fireBullet (w_shotorg, w_shotdir, spread, d, IT_SHOTGUN, sc < 3);
+		fireBullet (w_shotorg, w_shotdir, spread, d, f, IT_SHOTGUN, sc < 3);
 	if (cvar("g_use_ammunition"))
 		self.ammo_shells = self.ammo_shells - cvar("g_balance_shotgun_secondary_ammo");
 

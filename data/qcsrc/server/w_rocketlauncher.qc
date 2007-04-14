@@ -89,13 +89,32 @@ void W_Rocket_Think (void)
 {
 	entity e;
 	vector desireddir, olddir, newdir;
-	float turnrate;
+	float turnrate, velspeed;
 	self.nextthink = time;
 	if (time > self.cnt)
 	{
 		W_Rocket_Explode ();
 		return;
 	}
+
+	if(cvar("g_laserguided_missile"))
+	{
+		// accelerate
+		makevectors(self.angles_x * '-1 0 0' + self.angles_y * '0 1 0');
+		velspeed = cvar("g_balance_rocketlauncher_laserguided_speed") - (self.velocity * v_forward);
+		if (velspeed > 0)
+			self.velocity = self.velocity + v_forward * min(cvar("g_balance_rocketlauncher_laserguided_speedaccel") * frametime, velspeed);
+	}
+	else
+	{
+		// accelerate
+		makevectors(self.angles_x * '-1 0 0' + self.angles_y * '0 1 0');
+		velspeed = cvar("g_balance_rocketlauncher_speed") - (self.velocity * v_forward);
+		if (velspeed > 0)
+			self.velocity = self.velocity + v_forward * min(cvar("g_balance_rocketlauncher_speedaccel") * frametime, velspeed);
+	}
+
+	// laser guided, or remote detonation
 	if (self.owner.weapon == WEP_ROCKET_LAUNCHER)
 	{
 		if(cvar("g_laserguided_missile"))
@@ -132,14 +151,13 @@ void W_Rocket_Think (void)
 			if(self.enemy != world)
 			{
 				//bprint("Targeting ", self.enemy.owner.netname, "'s laser\n");
-				if(!self.speed)
-					self.speed = vlen(self.velocity);
+				velspeed = vlen(self.velocity);
 				e = self.enemy;//self.owner.weaponentity.lasertarget;
 				turnrate = cvar("g_balance_rocketlauncher_laserguided_turnrate");//0.65;						// how fast to turn
 				desireddir = normalize(e.origin - self.origin);		// get direction from my position to the laser target
-				olddir = normalize(self.velocity);				// get my current direction
+				olddir = normalize(self.velocity);					// get my current direction
 				newdir = normalize((olddir + desireddir * turnrate) * 0.5);	// take the average of the 2 directions; not the best method but simple & easy
-				self.velocity = newdir * self.speed;			// make me fly in the new direction at my flight speed
+				self.velocity = newdir * velspeed;					// make me fly in the new direction at my flight speed
 				self.angles = vectoangles(self.velocity);			// turn model in the new flight direction
 
 				self.owner.attack_finished = time + 0.2;
@@ -207,9 +225,9 @@ void W_Rocket_Attack (void)
 
 	setorigin (missile, w_shotorg);
 	if(cvar("g_laserguided_missile") && self.laser_on)
-		missile.velocity = w_shotdir * cvar("g_balance_rocketlauncher_laserguided_speed");
+		missile.velocity = w_shotdir * cvar("g_balance_rocketlauncher_laserguided_speedstart");
 	else
-		missile.velocity = w_shotdir * cvar("g_balance_rocketlauncher_speed");
+		missile.velocity = w_shotdir * cvar("g_balance_rocketlauncher_speedstart");
 	W_SetupProjectileVelocity(missile);
 	missile.angles = vectoangles (missile.velocity);
 
@@ -279,7 +297,7 @@ float(float req) w_rlauncher =
 				desirabledamage = desirabledamage - selfdamage * cvar("g_balance_selfdamagepercent");
 			if (self.team && teamplay == 2)
 				desirabledamage = desirabledamage - teamdamage;
-			
+
 			missile = find(world, classname, "missile");
 			while (missile)
 			{
@@ -312,7 +330,7 @@ float(float req) w_rlauncher =
 									self.button3 = TRUE;
 				//	dprint(ftos(random()/distance*300),">");dprint(ftos(frametime*bound(0,(10-skill)*0.2,1)),"\n");
 				}
-				
+
 				missile = find(missile, classname, "missile");
 			}
 			// if we would be doing at X percent of the core damage, detonate it

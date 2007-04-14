@@ -21,9 +21,9 @@ void W_Uzi_Attack (void)
 	self.attack_finished = time + cvar("g_balance_uzi_first_refire");
 
 	if (self.uzi_bulletcounter == 1)
-		fireBullet (w_shotorg, w_shotdir, cvar("g_balance_uzi_first_spread"), cvar("g_balance_uzi_first_damage"), IT_UZI, TRUE);
+		fireBullet (w_shotorg, w_shotdir, cvar("g_balance_uzi_first_spread"), cvar("g_balance_uzi_first_damage"), cvar("g_balance_uzi_first_force"), IT_UZI, TRUE);
 	else
-		fireBullet (w_shotorg, w_shotdir, cvar("g_balance_uzi_sustained_spread"), cvar("g_balance_uzi_sustained_damage"), IT_UZI, (self.uzi_bulletcounter & 3) == 0);
+		fireBullet (w_shotorg, w_shotdir, cvar("g_balance_uzi_sustained_spread"), cvar("g_balance_uzi_sustained_damage"), cvar("g_balance_uzi_sustained_force"), IT_UZI, (self.uzi_bulletcounter & 3) == 0);
 
 	// muzzle flash for 1st person view
 	flash = spawn();
@@ -40,7 +40,7 @@ void W_Uzi_Attack (void)
 	setmodel(flash2, "models/uziflash.md3");
 	setattachment(flash2, self.exteriorweaponentity, "");
 	SUB_SetFade(flash2, time, 0.2);
-	
+
 	// common properties
 	flash.angles_z = flash2.angles_z = flash.v_angle_z + random() * 180;
 	flash.alpha = flash2.alpha = 0.5;

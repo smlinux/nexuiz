@@ -49,14 +49,14 @@ void W_GiveWeapon (entity e, float wep, string name)
 	self = oldself;
 }
 
-void FireRailgunBullet (vector start, vector end, float bdamage, float deathtype)
+void FireRailgunBullet (vector start, vector end, float bdamage, float bforce, float deathtype)
 {
 	local vector hitloc, force, endpoint, dir;
 	local entity ent;
 	//local entity explosion;
 
 	dir = normalize(end - start);
-	force = dir * 800; //(bdamage * 10);
+	force = dir * bforce;
 
 	// go a little bit into the wall because we need to hit this wall later
 	end = end + dir;
@@ -131,7 +131,7 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float deathtype
 	trace_endpos = endpoint;
 }
 
-void fireBullet (vector start, vector dir, float spread, float damage, float dtype, float tracer)
+void fireBullet (vector start, vector dir, float spread, float damage, float force, float dtype, float tracer)
 {
 	vector  end;
 	local entity e;
@@ -170,6 +170,6 @@ void fireBullet (vector start, vector dir, float spread, float damage, float dty
 		//else if (trace_ent.classname == "player" || trace_ent.classname == "corpse" || trace_ent.classname == "gib")
 			//stuffcmd(self, "play2 misc/hit.wav\n");
 			//sound (self, CHAN_BODY, "misc/hit.wav", 1, ATTN_NORM);
-		Damage (trace_ent, self, self, damage, dtype, trace_endpos, dir * damage * 5);
+		Damage (trace_ent, self, self, damage, dtype, trace_endpos, dir * force);
 	}
 }

@@ -562,3 +562,44 @@ float(vector m1, vector m2, vector m3, vector m4) boxesoverlap = {return m2_x >=
 
 // requires the same, but is a stronger condition
 float(vector smins, vector smaxs, vector bmins, vector bmaxs) boxinsidebox = {return smins_x >= bmins_x && smaxs_x <= bmaxs_x && smins_y >= bmins_y && smaxs_y <= bmaxs_y && smins_z >= bmins_z && smaxs_z <= bmaxs_z;};
+
+float g_pickup_shells;
+float g_pickup_shells_max;
+float g_pickup_nails;
+float g_pickup_nails_max;
+float g_pickup_rockets;
+float g_pickup_rockets_max;
+float g_pickup_cells;
+float g_pickup_cells_max;
+float g_pickup_armorshard;
+float g_pickup_armorshard_max;
+float g_pickup_armor;
+float g_pickup_armor_max;
+float g_pickup_healthshard;
+float g_pickup_healthshard_max;
+float g_pickup_health;
+float g_pickup_health_max;
+float g_pickup_healthmega;
+float g_pickup_healthmega_max;
+
+void readlevelcvars(void)
+{
+	g_pickup_shells                    = cvar("g_pickup_shells");
+	g_pickup_shells_max                = cvar("g_pickup_shells_max");
+	g_pickup_nails                     = cvar("g_pickup_nails");
+	g_pickup_nails_max                 = cvar("g_pickup_nails_max");
+	g_pickup_rockets                   = cvar("g_pickup_rockets");
+	g_pickup_rockets_max               = cvar("g_pickup_rockets_max");
+	g_pickup_cells                     = cvar("g_pickup_cells");
+	g_pickup_cells_max                 = cvar("g_pickup_cells_max");
+	g_pickup_armorshard                = cvar("g_pickup_armorshard");
+	g_pickup_armorshard_max            = cvar("g_pickup_armorshard_max");
+	g_pickup_armor                     = cvar("g_pickup_armor");
+	g_pickup_armor_max                 = cvar("g_pickup_armor_max");
+	g_pickup_healthshard               = cvar("g_pickup_healthshard");
+	g_pickup_healthshard_max           = cvar("g_pickup_healthshard_max");
+	g_pickup_health                    = cvar("g_pickup_health");
+	g_pickup_health_max                = cvar("g_pickup_health_max");
+	g_pickup_healthmega                = cvar("g_pickup_healthmega");
+	g_pickup_healthmega_max            = cvar("g_pickup_healthmega_max");
+}

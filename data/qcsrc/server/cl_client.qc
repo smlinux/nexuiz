@@ -689,7 +689,7 @@ string ColoredTeamName(float t);
 void ClientConnect (void)
 {
 	local string s;
-	
+
 	self.classname = "player_joining";
 	self.flags = self.flags | FL_CLIENT;
 	self.version_nagtime = time + 10 + random() * 10;
@@ -745,7 +745,7 @@ void ClientConnect (void)
 	stuffcmd(self, strcat("exec maps/", mapname, ".cfg\n"));
 	// TODO: is this being used for anything else than cd tracks?
 	// Remember: SVC_CDTRACK exists. Maybe it should be used.
-	
+
 	FixClientCvars(self);
 
 	// waypoint sprites
@@ -1057,14 +1057,14 @@ void player_powerups (void)
 		self.effects = self.effects | (EF_ADDITIVE | EF_FULLBRIGHT);
 }
 
-float CalcRegen(float current, float stable, float maxv, float regenfactor)
+float CalcRegen(float current, float stable, float regenfactor)
 {
 	if(current > stable)
 		return current;
 	else if(current > stable - 0.25) // when close enough, "snap"
 		return stable;
 	else
-		return bound(0, current + (stable - current) * regenfactor * frametime, maxv);
+		return min(stable, current + (stable - current) * regenfactor * frametime);
 }
 
 void player_regen (void)
@@ -1078,75 +1078,80 @@ void player_regen (void)
 	if (cvar("g_minstagib") || (cvar("g_lms") && !cvar("g_lms_regenerate")))
 		return;
 
-	if(cvar("g_runematch"))
-	{
-		max_mod = regen_mod = rot_mod = limit_mod = 1;
-		if (self.runes & RUNE_REGEN)
-		{
-			if (self.runes & CURSE_VENOM) // do we have both rune/curse?
-			{
-				regen_mod = cvar("g_balance_rune_regen_combo_regenrate");
-				max_mod = cvar("g_balance_rune_regen_combo_hpmod");
-				limit_mod = cvar("g_balance_rune_regen_combo_limitmod");
-			}
-			else
-			{
-				regen_mod = cvar("g_balance_rune_regen_regenrate");
-				max_mod = cvar("g_balance_rune_regen_hpmod");
-				limit_mod = cvar("g_balance_rune_regen_limitmod");
-			}
-		}
-		else if (self.runes & CURSE_VENOM)
-		{
-			max_mod = cvar("g_balance_curse_venom_hpmod");
-			if (self.runes & RUNE_REGEN) // do we have both rune/curse?
-				rot_mod = cvar("g_balance_rune_regen_combo_rotrate");
-			else
-				rot_mod = cvar("g_balance_curse_venom_rotrate");
-			limit_mod = cvar("g_balance_curse_venom_limitmod");
-			//if (!self.runes & RUNE_REGEN)
-			//	rot_mod = cvar("g_balance_curse_venom_rotrate");
-		}
-		maxh = maxh * max_mod;
-		//maxa = maxa * max_mod;
+	max_mod = regen_mod = rot_mod = limit_mod = 1;
 
-		if (time > self.pauserotarmor_finished)
+	if (self.runes & RUNE_REGEN)
+	{
+		if (self.runes & CURSE_VENOM) // do we have both rune/curse?
 		{
-			if (self.armorvalue > maxa)
-				self.armorvalue = bound(0, self.armorvalue + (maxa - self.armorvalue) * cvar("g_balance_armor_rot") * frametime, 1000);
+			regen_mod = cvar("g_balance_rune_regen_combo_regenrate");
+			max_mod = cvar("g_balance_rune_regen_combo_hpmod");
+			limit_mod = cvar("g_balance_rune_regen_combo_limitmod");
 		}
-		if (time > self.pauserothealth_finished)
+		else
 		{
-			if (self.health > maxh)
-				self.health = bound(0, self.health + (maxh - self.health) * rot_mod*cvar("g_balance_health_rot") * frametime, 1000);
-		}
-		if (time > self.pauseregen_finished)
-		{
-			self.health = CalcRegen(self.health, maxh, 1000, regen_mod * cvar("g_balance_health_regen"));
-			self.armorvalue = CalcRegen(self.armorvalue, maxa, 1000, cvar("g_balance_armor_regen"));
+			regen_mod = cvar("g_balance_rune_regen_regenrate");
+			max_mod = cvar("g_balance_rune_regen_hpmod");
+			limit_mod = cvar("g_balance_rune_regen_limitmod");
 		}
 	}
-	else
+	else if (self.runes & CURSE_VENOM)
 	{
-		if (time > self.pauserothealth_finished)
-		if (self.health > maxh)
-			self.health = bound(0, self.health + (maxh - self.health) * cvar("g_balance_health_rot") * frametime, 1000);
+		max_mod = cvar("g_balance_curse_venom_hpmod");
+		if (self.runes & RUNE_REGEN) // do we have both rune/curse?
+			rot_mod = cvar("g_balance_rune_regen_combo_rotrate");
+		else
+			rot_mod = cvar("g_balance_curse_venom_rotrate");
+		limit_mod = cvar("g_balance_curse_venom_limitmod");
+		//if (!self.runes & RUNE_REGEN)
+		//	rot_mod = cvar("g_balance_curse_venom_rotrate");
+	}
+	maxh = maxh * max_mod;
+	//maxa = maxa * max_mod;
+	limith = limith * limit_mod;
+	limita = limita * limit_mod;
+
+	if (self.armorvalue > maxa)
+	{
 		if (time > self.pauserotarmor_finished)
-		if (self.armorvalue > maxa)
-			self.armorvalue = bound(0, self.armorvalue + (maxa - self.armorvalue) * cvar("g_balance_armor_rot") * frametime, 1000);
+		{
+			self.armorvalue = max(maxa, self.armorvalue + (maxa - self.armorvalue) * cvar("g_balance_armor_rot") * frametime);
+			self.armorvalue = max(maxa, self.armorvalue - cvar("g_balance_armor_rotlinear") * frametime);
+		}
+	}
+	else if (self.armorvalue < maxa)
+	{
 		if (time > self.pauseregen_finished)
 		{
-			self.health = CalcRegen(self.health, maxh, 1000, cvar("g_balance_health_regen"));
-			self.armorvalue = CalcRegen(self.armorvalue, maxa, 1000, cvar("g_balance_armor_regen"));
+			self.armorvalue = CalcRegen(self.armorvalue, maxa, cvar("g_balance_armor_regen"));
+			self.armorvalue = min(maxa, self.armorvalue + cvar("g_balance_armor_regenlinear") * frametime);
+		}
+	}
+	if (self.health > maxh)
+	{
+		if (time > self.pauserothealth_finished)
+		{
+			self.health = max(maxh, self.health + (maxh - self.health) * rot_mod*cvar("g_balance_health_rot") * frametime);
+			self.health = max(maxh, self.health - rot_mod*cvar("g_balance_health_rotlinear") * frametime);
+		}
+	}
+	else if (self.health < maxh)
+	{
+		if (time > self.pauseregen_finished)
+		{
+			self.health = CalcRegen(self.health, maxh, regen_mod * cvar("g_balance_health_regen"));
+			self.health = min(maxh, self.health + regen_mod*cvar("g_balance_health_regenlinear") * frametime);
 		}
 	}
 
 	if (self.health > limith)
 		self.health = limith;
-	if(self.health < 1)
-		self.event_damage(self, self, 1, DEATH_ROT, self.origin, '0 0 0');
 	if (self.armorvalue > limita)
 		self.armorvalue = limita;
+
+	// if player rotted to death...  die!
+	if(self.health < 1)
+		self.event_damage(self, self, 1, DEATH_ROT, self.origin, '0 0 0');
 }
 
 /*
@@ -1450,14 +1455,6 @@ void PlayerPreThink (void)
 
 		W_WeaponFrame();
 
-		if (cvar("g_minstagib"))
-			if(self.button3)
-				if (self.jump_interval <= (time + 0.1))
-				{
-					self.jump_interval = time + 1;
-					W_Laser_Attack();
-				}
-		
 		{
 			float zoomfactor, zoomspeed, zoomdir;
 			zoomfactor = self.cvar_cl_zoomfactor;
@@ -1467,7 +1464,7 @@ void PlayerPreThink (void)
 			if(zoomspeed >= 0) // < 0 is instant zoom
 				if(zoomspeed < 0.5 || zoomspeed > 16)
 					zoomspeed = 3.5;
-			
+
 			zoomdir = self.button4;
 			if(self.button3)
 				if(self.weapon == WEP_NEX)
