@@ -1459,7 +1459,7 @@ void PlayerPreThink (void)
 			float zoomfactor, zoomspeed, zoomdir;
 			zoomfactor = self.cvar_cl_zoomfactor;
 			if(zoomfactor < 1 || zoomfactor > 16)
-				zoomfactor = 2.5;
+				zoomfactor = 3.1;
 			zoomspeed = self.cvar_cl_zoomspeed;
 			if(zoomspeed >= 0) // < 0 is instant zoom
 				if(zoomspeed < 0.5 || zoomspeed > 16)
