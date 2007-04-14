@@ -139,10 +139,9 @@ void ImpulseCommands (void)
 			WaypointSprite_DeployPersonal("waypoint", self.death_origin);
 			sprint(self, "personal waypoint spawned at death location\n");
 		}
-		else if(imp == 33 && self.deadflag == DEAD_NO)
+		else if(imp == 33 && self.deadflag == DEAD_NO && teams_matter)
 		{
-			if(teams_matter)
-				WaypointSprite_Attach("helpme", TRUE);
+			WaypointSprite_Attach("helpme", TRUE);
 			sprint(self, "HELP ME attached\n");
 		}
 		else if(imp == 34)
