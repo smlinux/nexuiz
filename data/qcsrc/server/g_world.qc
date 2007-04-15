@@ -905,6 +905,10 @@ void(float final) DumpStats =
 		to_eventlog = FALSE; // but never print them to the event log
 	}
 
+	if(to_eventlog)
+		if(cvar("sv_eventlog_console"))
+			to_console = FALSE; // otherwise we get the output twice
+
 	if(final)
 		s = ":scores:";
 	else
