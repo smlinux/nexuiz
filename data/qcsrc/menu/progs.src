@@ -185,4 +185,8 @@ custom/campaign.qc
 ../common/campaign_setup.qc
 ../common/campaign_file.qc
 
+// GameCommand() extension
+../common/gamecommand.qc
+gamecommand.qc
+
 menu.qc

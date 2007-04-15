@@ -2,7 +2,7 @@ float SPAWNFLAG_NO_WAYPOINTS_FOR_ITEMS = 1;
 
 string GetMapname();
 void GotoNextMap();
-void HandleMaplistShuffleCommands();
+void ShuffleMaplist()
 float() DoNextMapOverride;
 
 void SetDefaultAlpha()
@@ -57,7 +57,8 @@ void GotoFirstMap()
 	if(cvar("_sv_init"))
 	{
 		cvar_set("_sv_init", "0");
-		HandleMaplistShuffleCommands();
+		if(cvar("g_maplist_shuffle"))
+			ShuffleMaplist();
 		tokenize(cvar_string("g_maplist"));
 		if(argv(0) != GetMapname())
 		{
@@ -342,12 +343,6 @@ void worldspawn (void)
 
 	// 63 testing
 	lightstyle(63, "a");
-
-	registercvar("_g_maplist_shufflenow", "0");
-	registercvar("_g_maplist_have_shuffled", "0");
-	registercvar("_g_maplist_add", "");
-	registercvar("_g_maplist_remove", "");
-	registercvar("_g_maplist_putfirst", "");
 
 	player_count = 0;
 	lms_lowest_lives = 0;
@@ -892,31 +887,41 @@ RULES
 ===============================================================================
 */
 
-void() DumpStats =
+void(float final) DumpStats =
 {
 	local float file;
 	local string s;
+	local float to_console;
+	local float to_eventlog;
+	local float to_file;
 
-	if(cvar("_printstats"))
-		cvar_set("_printstats", "0");
-	else if(!gameover)
-		return;
+	to_console = cvar("sv_logscores_console");
+	to_eventlog = cvar("sv_eventlog");
+	to_file = cvar("sv_logscores_file");
 
-	if(gameover)
+	if(!final)
+	{
+		to_console = TRUE; // always print printstats replies
+		to_eventlog = FALSE; // but never print them to the event log
+	}
+
+	if(final)
 		s = ":scores:";
 	else
 		s = ":status:";
-
 	s = strcat(s, GetMapname(), ":", ftos(rint(time)));
 
-	if(cvar("sv_eventlog") && gameover)
-		GameLogEcho(s, FALSE);
-	else if(cvar("sv_logscores_console"))
+	if(to_console)
 		ServerConsoleEcho(s, FALSE);
-	if(cvar("sv_logscores_file"))
+	if(to_eventlog)
+		GameLogEcho(s, FALSE);
+	if(to_file)
 	{
 		file = fopen(cvar_string("sv_logscores_filename"), FILE_APPEND);
-		fputs(file, strcat(s, "\n"));
+		if(file == -1)
+			to_file = FALSE;
+		else
+			fputs(file, strcat(s, "\n"));
 	}
 
 	FOR_EACH_CLIENT(other)
@@ -928,20 +933,20 @@ void() DumpStats =
 			s = strcat(s, ftos(rint(time - other.jointime)), ":");
 			s = strcat(s, ftos(other.team), ":");
 
-			if(cvar("sv_logscores_file"))
-				fputs(file, strcat(s, other.netname, "\n"));
-			if(cvar("sv_eventlog") && gameover)
-				GameLogEcho(strcat(s, ftos(other.playerid), ":", other.netname), TRUE);
-			else if(cvar("sv_logscores_console"))
+			if(to_console)
 				ServerConsoleEcho(strcat(s, other.netname), TRUE);
+			if(to_eventlog)
+				GameLogEcho(strcat(s, ftos(other.playerid), ":", other.netname), TRUE);
+			if(to_file)
+				fputs(file, strcat(s, other.netname, "\n"));
 		}
 	}
 
-	if(cvar("sv_eventlog") && gameover)
-		GameLogEcho(":end", FALSE);
-	else if(cvar("sv_logscores_console"))
+	if(to_console)
 		ServerConsoleEcho(":end", FALSE);
-	if(cvar("sv_logscores_file"))
+	if(to_eventlog)
+		GameLogEcho(":end", FALSE);
+	if(to_file)
 	{
 		fputs(file, ":end\n");
 		fclose(file);
@@ -1006,7 +1011,7 @@ void() NextLevel =
 
 	VoteReset();
 
-	DumpStats();
+	DumpStats(TRUE);
 
 	if(cvar("sv_eventlog"))
 		GameLogEcho(":gameover", FALSE);
@@ -1441,91 +1446,6 @@ void PrintScoreboard(entity e)
 	print_to(e, ".");
 }
 
-void RemoveFromMaplist(string m)
-{
-	string result;
-	float litems;
-	float i;
-	float found;
-
-	litems = tokenize(cvar_string("g_maplist"));
-	found = 0;
-	result = "";
-	for(i = 0; i < litems; ++i)
-	{
-		m = strcat1(m);
-		result = strcat1(result);
-		if(argv(i) == m)
-			found += 1;
-		else
-			result = strcat(result, "'", argv(i), "'");
-	}
-	if(found)
-		cvar_set("g_maplist", result);
-	ServerConsoleEcho(strcat("Removed ", ftos(found), " items."), FALSE);
-}
-
-void AddToMaplist(string m)
-{
-	string result;
-	float found;
-	float litems;
-	float i;
-	float ipos;
-	float inserted;
-
-	if(!TryFile(strcat("maps/", m, ".mapcfg")))
-	{
-		ServerConsoleEcho("Map not found.", FALSE);
-		return;
-	}
-
-	litems = tokenize(cvar_string("g_maplist"));
-	if(cvar("g_maplist_shuffle"))
-		ipos = ceil(random() * (litems + 1)) - 1;
-	else
-		ipos = litems;
-	found = 0;
-	inserted = 0;
-	for(i = 0; i < litems; ++i)
-	{
-		m = strcat1(m);
-		if(i == ipos)
-		{
-			result = strcat(result, "'", m, "'");
-			inserted = 1;
-		}
-		result = strcat(result, "'", argv(i), "'");
-		if(argv(i) == m)
-			found += 1;
-	}
-	if(!inserted)
-		result = strcat(result, "'", m, "'");
-	if(!found)
-	{
-		cvar_set("g_maplist", result);
-		ServerConsoleEcho("Map added.", FALSE);
-	}
-	else
-		ServerConsoleEcho("Map already in list.", FALSE);
-}
-
-void MakeFirstInMaplist(string m)
-{
-	if(!TryFile(strcat("maps/", m, ".mapcfg")))
-	{
-		ServerConsoleEcho("Map not found.", FALSE);
-		return;
-	}
-
-	m = strzone(m);
-	RemoveFromMaplist(m);
-	cvar_set("g_maplist", strcat("'", m, "'", cvar_string("g_maplist")));
-	strunzone(m);
-
-	ServerConsoleEcho("Map added as first one.", FALSE);
-}
-
 void ShuffleMaplist()
 {
 	string result;
@@ -1560,36 +1480,6 @@ void ShuffleMaplist()
 	cvar_set("g_maplist", result);
 }
 
-void() HandleMaplistShuffleCommands =
-{
-	// automatically shuffle when setting g_maplist_shuffle
-	if(cvar_string("_g_maplist_add") != "")
-	{
-		AddToMaplist(cvar_string("_g_maplist_add"));
-		cvar_set("_g_maplist_add", "");
-	}
-	if(cvar_string("_g_maplist_remove") != "")
-	{
-		RemoveFromMaplist(cvar_string("_g_maplist_remove"));
-		cvar_set("_g_maplist_remove", "");
-	}
-	if(cvar_string("_g_maplist_putfirst") != "")
-	{
-		MakeFirstInMaplist(cvar_string("_g_maplist_putfirst"));
-		cvar_set("_g_maplist_putfirst", "");
-	}
-	if(cvar("_g_maplist_shufflenow") || (cvar("g_maplist_shuffle") && !cvar("_g_maplist_have_shuffled")))
-	{
-		ShuffleMaplist();
-		cvar_set("_g_maplist_shufflenow", "0");
-		cvar_set("_g_maplist_have_shuffled", "1");
-		ServerConsoleEcho("Shuffled map list.", FALSE);
-	}
-	if(cvar("_g_maplist_have_shuffled"))
-		if(!cvar("g_maplist_shuffle"))
-			cvar_set("_g_maplist_have_shuffled", "0");
-}
-
 /*
 ============
 CheckRules_World
@@ -1617,16 +1507,6 @@ void() CheckRules_World =
 
 	if (gameover)	// someone else quit the game already
 		return;
-
-	DumpStats();
-
-	if(cvar("_scoreboard"))
-	{
-		cvar_set("_scoreboard", "0");
-		PrintScoreboard(world);
-	}
-
-	HandleMaplistShuffleCommands();
 
 	timelimit = cvar("timelimit") * 60;
 	fraglimit = cvar("fraglimit");

@@ -687,19 +687,20 @@ float Item_WeaponCode(float it)
 	}
 }
 
-spawnfunc Item_SpawnFunc(float it)
+void Item_SpawnByItemCode(float it)
 {
 	switch(it)
 	{
-		case IT_SHOTGUN:          return weapon_shotgun;
-		case IT_UZI:              return weapon_uzi;
-		case IT_GRENADE_LAUNCHER: return weapon_grenadelauncher;
-		case IT_ELECTRO:          return weapon_electro;
-		case IT_CRYLINK:          return weapon_crylink;
-		case IT_NEX:              return weapon_nex;
-		case IT_HAGAR:            return weapon_hagar;
-		case IT_ROCKET_LAUNCHER:  return weapon_rocketlauncher;
+		case IT_SHOTGUN:          weapon_shotgun(); break;
+		case IT_UZI:              weapon_uzi(); break;
+		case IT_GRENADE_LAUNCHER: weapon_grenadelauncher(); break;
+		case IT_ELECTRO:          weapon_electro(); break;
+		case IT_CRYLINK:          weapon_crylink(); break;
+		case IT_NEX:              weapon_nex(); break;
+		case IT_HAGAR:            weapon_hagar(); break;
+		case IT_ROCKET_LAUNCHER:  weapon_rocketlauncher(); break;
 		// add all other item spawn functions here
-		default:                  error("requested item can't be spawned");
+		default:
+			error("requested item can't be spawned");
 	}
 }

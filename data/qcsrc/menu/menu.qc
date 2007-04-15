@@ -31,6 +31,9 @@ void() m_init =
 
 	// init menu
 	Menu_Init();
+
+	// menu QC is running; make the aliases use its GameCommand()
+	GameCommand_Init();
 };
 
 // required menu functions

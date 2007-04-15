@@ -6,3 +6,7 @@ string wordwrap(string s, float l);
 void wordwrap_sprint(string s, float l);
 #endif
 void wordwrap_cb(string s, float l, void(string) callback)
+
+float GameCommand_Generic(string cmd);
+// returns TRUE if handled, FALSE otherwise
+// uses tokenize on its argument!

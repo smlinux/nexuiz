@@ -122,7 +122,8 @@ string	strzone(string s)  = #56;
 void	strunzone(string s) = #57;
 #endif
 
-float	tokenize(string s)  = #58
+float	tokenize(string s) = #58;
+float(string s, string separator1, ...) tokenizebyseparator = #479;
 string	argv(float n)  = #59;
 
 float	isserver(void)  = #60;

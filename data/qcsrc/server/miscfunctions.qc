@@ -513,6 +513,7 @@ string decolorize(string s)
 #define CENTERPRIO_VOTE 4
 #define CENTERPRIO_NORMAL 5
 #define CENTERPRIO_MAPVOTE 9
+#define CENTERPRIO_ADMIN 99
 .float centerprint_priority;
 .float centerprint_expires;
 void centerprint_atprio(entity e, float prio, string s)

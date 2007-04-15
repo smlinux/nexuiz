@@ -110,7 +110,7 @@ void(vector velo, vector delta, float doreduce) W_ThrowWeapon
 		remove(wep);
 		goto leave;
 	}
-	(Item_SpawnFunc(w))();
+	Item_SpawnByItemCode(w);
 	if(startitem_failed)
 		goto leave;
 	if(doreduce)

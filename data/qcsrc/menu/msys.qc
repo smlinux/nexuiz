@@ -267,7 +267,7 @@ float ERR_BADFILENAME 			= -4; // fopen
 float ERR_NULLSTRING			= -1;
 float ERR_BADDRAWFLAG			= -2;
 float ERR_BADSCALE			= -3;
-float ERR_BADSIZE			= ERR_BADSCALE;
+//float ERR_BADSIZE			= ERR_BADSCALE;
 float ERR_NOTCACHED			= -4;
 
 /* not supported at the moment
