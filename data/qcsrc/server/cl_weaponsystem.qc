@@ -125,12 +125,10 @@ void LaserTarget_Think()
 
 float CL_Weaponentity_CustomizeEntityForClient()
 {
-	if(other == self.owner)
-		self.viewmodelforclient = other;
-	else
-		if(other.classname == "spectator")
-			if(other.enemy == self.owner)
-				self.viewmodelforclient = other;
+	self.viewmodelforclient = self.owner;
+	if(other.classname == "spectator")
+		if(other.enemy == self.owner)
+			self.viewmodelforclient = other;
 	return TRUE;
 }
 
