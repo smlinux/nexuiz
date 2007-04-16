@@ -53,12 +53,11 @@ void WaypointSprite_Disown(entity wp, float fadetime)
 	{
 		if(wp.exteriormodeltoclient == wp.owner)
 		{
-#ifdef ATTACHMENT_WORKS_WITH_EF_NODEPTHTEST
 			setattachment(wp, world, "");
+#ifdef ATTACHMENT_WORKS_WITH_EF_NODEPTHTEST
 			setorigin(wp, wp.origin + wp.exteriormodeltoclient.origin);
 #else
-			// setorigin(wp, wp.view_ofs + wp.exteriormodeltoclient.origin);
-			// has been done already by customizeentityforclient!
+			setorigin(wp, wp.view_ofs + wp.exteriormodeltoclient.origin);
 #endif
 			wp.exteriormodeltoclient = world;
 		}
@@ -93,11 +92,6 @@ void WaypointSprite_Think()
 	if(self.health)
 		if(time >= self.teleport_time)
 			doremove = TRUE;
-
-#ifndef ATTACHMENT_WORKS_WITH_EF_NODEPTHTEST
-	if(self.exteriormodeltoclient)
-		setorigin(self, self.exteriormodeltoclient.origin + self.view_ofs);
-#endif
 
 	if(doremove)
 		WaypointSprite_Kill(self);
@@ -141,7 +135,23 @@ float WaypointSprite_CustomizeEntityForClient()
 #ifdef ATTACHMENT_WORKS_WITH_EF_NODEPTHTEST
 	realorigin = self.exteriormodeltoclient.origin + self.origin;
 #else
-	realorigin = self.origin;
+	if(self.exteriormodeltoclient)
+	{
+		if(self.exteriormodeltoclient == other)
+		{
+			setattachment(self, other, "");
+			setorigin(self, self.view_ofs);
+			realorigin = other.origin + self.origin;
+		}
+		else
+		{
+			setattachment(self, world, "");
+			setorigin(self, self.exteriormodeltoclient.origin + self.view_ofs);
+			realorigin = self.origin;
+		}
+	}
+	else
+		realorigin = self.origin;
 #endif
 
 	distance = vlen(realorigin - porigin);
@@ -198,7 +208,6 @@ entity WaypointSprite_Spawn(
 		setorigin(wp, ofs);
 #else
 		wp.view_ofs = ofs;
-		setorigin(wp, ref.origin + ofs);
 #endif
 	}
 	else
