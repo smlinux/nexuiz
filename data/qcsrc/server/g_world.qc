@@ -1930,6 +1930,9 @@ void MapVote_Think()
 void EndFrame()
 {
 	FOR_EACH_REALCLIENT(self)
+		if(self.classname == "spectator")
+			self.hitsound += self.enemy.hitsound;
+	FOR_EACH_REALCLIENT(self)
 		if(self.hitsound)
 		{
 			stuffcmd(self, "play2 misc/hit.wav\n");
