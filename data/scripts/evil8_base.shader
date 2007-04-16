@@ -356,6 +356,24 @@ textures/evil8_trim/e8lighttrim_b_glow
 	}
 }
 
+textures/evil8_fx/e8jumpspawn02grey
+{
+	q3map_lightimage textures/evil8_fx/e8jumpspawn02grey_glow.tga
+	surfaceparm metalsteps
+	q3map_surfacelight 100
+	
+	{
+		map textures/evil8_fx/e8jumpspawn02grey
+		animmap 10 textures/evil8_fx/e8jumpspawn02grey textures/evil8_fx/e8jumpspawn02grey-1 textures/evil8_fx/e8jumpspawn02grey-2 textures/evil8_fx/e8jumpspawn02grey-3 textures/evil8_fx/e8jumpspawn02grey-4 textures/evil8_fx/e8jumpspawn02grey-5 textures/evil8_fx/e8jumpspawn02grey-6
+	}
+	{
+		map $lightmap
+		tcGen lightmap
+		blendfunc filter
+	}
+
+}
+
 textures/evil8_fx/e8jumpspawn02
 {
 	q3map_lightimage textures/evil8_fx/e8jumpspawn02_fx.tga
