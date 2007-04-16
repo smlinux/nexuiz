@@ -394,9 +394,9 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 	if(targ != attacker)
 	if(!targ.deadflag)
 	if(damage > 0)
-	if(clienttype(attacker) == CLIENTTYPE_REAL)
 	if(targ.classname == "player")
-		stuffcmd(attacker, "play2 misc/hit.wav\n");
+	if(attacker)
+		attacker.hitsound += 1;
 
 	if (cvar("g_minstagib"))
 	{
@@ -410,8 +410,7 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 			targ.armorvalue -= 1;
 			centerprint(targ, strcat("^3Remaining extra lives: ",ftos(targ.armorvalue),"\n"));
 			damage = 0;
-			if(clienttype(targ) == CLIENTTYPE_REAL) stuffcmd(targ, "play2 misc/hit.wav\n");
-			//stuffcmd(attacker, "play2 misc/hit.wav\n");
+			targ.hitsound += 1;
 		}
 		else if (deathtype == IT_NEX && targ.items & IT_STRENGTH)
 		{
@@ -547,7 +546,7 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 				{
 					attacker.armorvalue = attacker.armorvalue - 1;
 					centerprint(attacker, strcat("^3Remaining extra lives: ",ftos(attacker.armorvalue),"\n"));
-					if(clienttype(attacker) == CLIENTTYPE_REAL) stuffcmd(attacker, "play2 misc/hit.wav\n");
+					attacker.hitsound += 1;
 				}
 				mirrordamage = 0;
 			}

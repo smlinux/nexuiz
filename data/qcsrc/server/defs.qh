@@ -93,6 +93,7 @@ string newlines = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 .float		dmgtime;
 
 .float		killcount;
+.float hitsound;
 
 .float watersound_finished;
 .float iscreature;

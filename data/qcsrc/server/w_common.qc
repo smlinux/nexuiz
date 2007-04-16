@@ -167,9 +167,6 @@ void fireBullet (vector start, vector dir, float spread, float damage, float for
 			else
 				te_spike (trace_endpos);
 		}
-		//else if (trace_ent.classname == "player" || trace_ent.classname == "corpse" || trace_ent.classname == "gib")
-			//stuffcmd(self, "play2 misc/hit.wav\n");
-			//sound (self, CHAN_BODY, "misc/hit.wav", 1, ATTN_NORM);
 		Damage (trace_ent, self, self, damage, dtype, trace_endpos, dir * force);
 	}
 }
