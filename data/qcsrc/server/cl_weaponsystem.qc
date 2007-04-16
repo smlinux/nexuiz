@@ -123,6 +123,17 @@ void LaserTarget_Think()
 		e.angles = vectoangles(v_forward);
 }
 
+float CL_Weaponentity_CustomizeEntityForClient()
+{
+	if(other == self.owner)
+		self.viewmodelforclient = other;
+	else
+		if(other.classname == "spectator")
+			if(other.enemy == self.owner)
+				self.viewmodelforclient = other;
+	return TRUE;
+}
+
 .string weaponname;
 void() CL_Weaponentity_Think =
 {
@@ -225,6 +236,7 @@ void() CL_SpawnWeaponentity =
 	self.weaponentity.viewmodelforclient = self;
 	self.weaponentity.flags = 0;
 	self.weaponentity.think = CL_Weaponentity_Think;
+	self.weaponentity.customizeentityforclient = CL_Weaponentity_CustomizeEntityForClient;
 	self.weaponentity.nextthink = time;
 	self.weaponentity.scale = 0.61;
 
