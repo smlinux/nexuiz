@@ -152,12 +152,14 @@ mkdir -p "$tmpdir/sources"
 7za a -mx=9 -tzip ../sources/gamesource$date.zip qcsrc
 
 cd "$dpdir"
-rm -f ChangeLog*
-cvs2cl.pl
+svn export . "$tmpdir/darkplaces"
+svn info > "$tmpdir/darkplaces/nexuiz-base-revision.txt"
+svn diff > "$tmpdir/darkplaces/nexuiz-engine-changes.diff"
+svn log > "$tmpdir/darkplaces/ChangeLog"
 
-cd "$dpdir/.."
-#zip -9r "$tmpdir/sources/enginesource$date.zip" "${dpdir##*/}"
-7za a -mx=9 -tzip "$tmpdir/sources/enginesource$date.zip" "${dpdir##*/}"
+cd "$tmpdir"
+7za a -mx=9 -tzip "$tmpdir/sources/enginesource$date.zip" "darkplaces"
+rm -rf darkplaces
 
 cd "$tmpdir/data/qcsrc/menu"
 $fteqcc
