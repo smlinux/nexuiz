@@ -27,16 +27,18 @@ void W_Uzi_Attack (void)
 
 	// muzzle flash for 1st person view
 	flash = spawn();
-	setorigin(flash, '53 5 -1');
+	setorigin(flash, '53 5 0');
 	setmodel(flash, "models/uziflash.md3");
 	setattachment(flash, self.weaponentity, "bone01");
+	flash.owner = self;
 	flash.viewmodelforclient = self;
+	flash.customizeentityforclient = CL_Weaponentity_CustomizeEntityForClient;
 	flash.scale = 1.2;
 	SUB_SetFade(flash, time, 0.2);
 
 	// muzzle flash for 3rd person view
 	flash2 = spawn();
-	setorigin(flash2, '51 1 8');
+	setorigin(flash2, '43 1 8');
 	setmodel(flash2, "models/uziflash.md3");
 	setattachment(flash2, self.exteriorweaponentity, "");
 	SUB_SetFade(flash2, time, 0.2);
