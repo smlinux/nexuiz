@@ -181,6 +181,7 @@ void() FlagTouch =
 	local float t;
 	local entity head;
 	local entity player;
+	local string s, s0;
 	if (other.classname != "player")
 		return;
 	if (other.health < 1) // ignore dead players
@@ -198,20 +199,22 @@ void() FlagTouch =
 		{
 			return;
 		}
-		t = floor(time - other.flagcarried.flagpickuptime);
+		t = time - other.flagcarried.flagpickuptime;
+		s = ftos_decimals(t, 2);
+		s0 = ftos_decimals(flagcaptimerecord, 2);
 		if (flagcaptimerecord == 0)
 		{
-			bprint(other.netname, "^7 captured the ", other.flagcarried.netname, " in ", ftos(t), " seconds\n");
+			bprint(other.netname, "^7 captured the ", other.flagcarried.netname, " in ", s, " seconds\n");
 			flagcaptimerecord = t;
 		}
 		else if (t < flagcaptimerecord)
 		{
-			bprint(other.netname, "^7 captured the ", other.flagcarried.netname, " in ", ftos(t), ", breaking the previous record of ", ftos(flagcaptimerecord), " seconds\n");
+			bprint(other.netname, "^7 captured the ", other.flagcarried.netname, " in ", s, ", breaking the previous record of ", s0, " seconds\n");
 			flagcaptimerecord = t;
 		}
 		else
 		{
-			bprint(other.netname, "^7 captured the ", other.flagcarried.netname, " in ", ftos(t), ", failing to break the previous record of ", ftos(flagcaptimerecord), " seconds\n");
+			bprint(other.netname, "^7 captured the ", other.flagcarried.netname, " in ", s, ", failing to break the previous record of ", s0, " seconds\n");
 		}
 
 		LogCTF("capture", other.flagcarried.team, other);
