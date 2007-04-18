@@ -10,12 +10,11 @@ void move_out_of_solid_expand(entity e, vector by)
 		// adjust origin in the other direction...
 		e.origin = e.origin - by * (1 - trace_fraction);
 	}
-	return by;
 }
 
 void move_out_of_solid(entity e)
 {
-	vector o, m0, m1, mnew;
+	vector o, m0, m1;
 
 	o = e.origin;
 	traceline(o, o, MOVE_WORLDONLY, e);
