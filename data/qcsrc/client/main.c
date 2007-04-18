@@ -12,9 +12,9 @@ void SysParms_UPDATE (void)
 
 	f = getstati(STAT_HEALTH);
 	spec = (f == -666);
-	if(f <= 1 && !(player_flags & PFL_DEAD))
+	if(f < 1 && !(player_flags & PFL_DEAD))
 		player_flags |= PFL_DEAD;
-	else if(f > 1 && player_flags & PFL_DEAD)
+	else if(f >= 1 && player_flags & PFL_DEAD)
 		player_flags -= player_flags & (PFL_DEAD | PFL_GIBBED);
 }
 
