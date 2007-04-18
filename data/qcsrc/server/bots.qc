@@ -569,7 +569,7 @@ void(entity wp) waypoint_schedulerelink =
 // (suitable for waypoint editor)
 entity(vector m1, vector m2, float f) waypoint_spawn =
 {
-	local entity w;
+	local entity w, oldself;
 	local vector org;
 	org = (m1 + m2) * 0.5;
 	m1 = m1 - org;
@@ -588,6 +588,10 @@ entity(vector m1, vector m2, float f) waypoint_spawn =
 	setorigin(w, org);
 	setsize(w, PL_MIN + m1, PL_MAX + m2);
 	move_out_of_solid(w);
+	oldself = self;
+	self = w;
+	droptofloor();
+	self = oldself;
 	setsize(w, m1, m2);
 
 	waypoint_clearlinks(w);

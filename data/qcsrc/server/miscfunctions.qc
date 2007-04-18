@@ -3,7 +3,7 @@ void move_out_of_solid_expand(entity e, vector by)
 	float eps = 0.0625;
 	tracebox(e.origin, e.mins - '1 1 1' * eps, e.maxs + '1 1 1' * eps, e.origin + by, MOVE_WORLDONLY, e);
 	if(trace_startsolid)
-		error("could not get out of solid");
+		return;
 	if(trace_fraction < 1)
 	{
 		// hit something
@@ -21,7 +21,7 @@ void move_out_of_solid(entity e)
 	traceline(o, o, MOVE_WORLDONLY, e);
 	if(trace_startsolid)
 	{
-		print("origin is in solid too!");
+		dprint("origin is in solid too! (", vtos(o), ")");
 		return;
 	}
 
@@ -43,7 +43,10 @@ void move_out_of_solid(entity e)
 
 	tracebox(e.origin, e.mins, e.maxs, e.origin, MOVE_WORLDONLY, e);
 	if(trace_startsolid)
-		error("could not get out of solid");
+	{
+		dprint("could not get out of solid (", vtos(o), ")");
+		return;
+	}
 }
 
 // converts a number to a string with the indicated number of decimals
