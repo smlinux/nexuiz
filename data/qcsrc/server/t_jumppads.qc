@@ -126,24 +126,27 @@ void() trigger_push_touch =
 	}
 
 	if (other.classname == "player")
-	{
-		local float i;
-		local float found;
-		if(self.pushltime < time)  // prevent "snorring" sound when a player hits the jumppad more than once
+		if(clienttype(other) == CLIENTTYPE_REAL)
 		{
-			sound (other, CHAN_ITEM, "misc/jumppad.ogg", 1, ATTN_NORM);
-			self.pushltime = time + 0.5;
+			local float i;
+			local float found;
+			if(self.pushltime < time)  // prevent "snorring" sound when a player hits the jumppad more than once
+			{
+				sound (other, CHAN_ITEM, "misc/jumppad.ogg", 1, ATTN_NORM);
+				self.pushltime = time + 0.5;
+			}
+			found = FALSE;
+			for(i = 0; i < other.jumppadcount && i < NUM_JUMPPADSUSED; ++i)
+				if(other.(jumppadsused[i]) == self)
+					found = TRUE;
+			if(!found)
+			{
+				other.(jumppadsused[math_mod(other.jumppadcount, NUM_JUMPPADSUSED)]) = self;
+				other.jumppadcount = other.jumppadcount + 1;
+			}
 		}
-		found = FALSE;
-		for(i = 0; i < other.jumppadcount && i < NUM_JUMPPADSUSED; ++i)
-			if(other.(jumppadsused[i]) == self)
-				found = TRUE;
-		if(!found)
-		{
-			other.(jumppadsused[math_mod(other.jumppadcount, NUM_JUMPPADSUSED)]) = self;
-			other.jumppadcount = other.jumppadcount + 1;
-		}
-	}
+		else
+			other.jumppadcount = TRUE;
 
 	self.movedir = trigger_push_calculatevelocity(other.origin, self.enemy, self.height);
 
