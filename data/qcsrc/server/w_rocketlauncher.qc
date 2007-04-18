@@ -198,7 +198,7 @@ void W_Rocket_Damage (entity inflictor, entity attacker, float damage, float dea
 void W_Rocket_Attack (void)
 {
 	local entity missile;
-	local entity flash;
+	local entity flash, flash2;
 
 	if (cvar("g_use_ammunition") && !cvar("g_rocketarena"))
 		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_rocketlauncher_ammo");
@@ -239,12 +239,30 @@ void W_Rocket_Attack (void)
 	sound (missile, CHAN_BODY, "weapons/rocket_fly.wav", 0.4, ATTN_NORM);
 	missile.flags = FL_PROJECTILE;
 
+	// muzzle flash for 1st person view
 	flash = spawn ();
-	setorigin (flash, w_shotorg);
+	flash.scale = 1.2;
+	flash.angles_z = 180;
+	flash.owner = self;
+	flash.viewmodelforclient = self;
+	flash.customizeentityforclient = CL_Weaponentity_CustomizeEntityForClient;
+	setorigin (flash, '35 5 -12');
 	setmodel (flash, "models/flash.md3"); // precision set below
-	flash.angles = vectoangles (w_shotdir);
+	setattachment(flash, self.weaponentity, "bone01");	
 	SUB_SetFade (flash, time, 0.4);
-	flash.effects = flash.effects | EF_ADDITIVE | EF_FULLBRIGHT | EF_LOWPRECISION;
+
+	// muzzle flash for 3rd person view
+	flash2 = spawn ();
+	flash2.scale = 0.8;
+	flash2.angles_y = 180;
+	flash2.angles_z = 90;
+	setorigin (flash2, '42 0 5');
+	setmodel (flash2, "models/flash.md3"); // precision set below
+	setattachment(flash2, self.exteriorweaponentity, "");	
+	SUB_SetFade (flash2, time, 0.4);
+
+	// common properties
+	flash.effects = flash2.effects = EF_ADDITIVE | EF_FULLBRIGHT | EF_LOWPRECISION;
 }
 
 float(float req) w_rlauncher =
