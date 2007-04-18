@@ -1,3 +1,51 @@
+void move_out_of_solid_expand(entity e, vector by)
+{
+	float eps = 0.0625;
+	tracebox(e.origin, e.mins - '1 1 1' * eps, e.maxs + '1 1 1' * eps, e.origin + by, MOVE_WORLDONLY, e);
+	if(trace_startsolid)
+		error("could not get out of solid");
+	if(trace_fraction < 1)
+	{
+		// hit something
+		// adjust origin in the other direction...
+		e.origin = e.origin - by * (1 - trace_fraction);
+	}
+	return by;
+}
+
+void move_out_of_solid(entity e)
+{
+	vector o, m0, m1, mnew;
+
+	o = e.origin;
+	traceline(o, o, MOVE_WORLDONLY, e);
+	if(trace_startsolid)
+	{
+		print("origin is in solid too!");
+		return;
+	}
+
+	tracebox(o, e.mins, e.maxs, o, MOVE_WORLDONLY, e);
+	if(!trace_startsolid)
+		return;
+
+	m0 = e.mins;
+	m1 = e.maxs;
+	e.mins = '0 0 0';
+	e.maxs = '0 0 0';
+	move_out_of_solid_expand(e, '1 0 0' * m0_x); e.mins_x = m0_x;
+	move_out_of_solid_expand(e, '1 0 0' * m1_x); e.maxs_x = m1_x;
+	move_out_of_solid_expand(e, '0 1 0' * m0_y); e.mins_y = m0_y;
+	move_out_of_solid_expand(e, '0 1 0' * m1_y); e.maxs_y = m1_y;
+	move_out_of_solid_expand(e, '0 0 1' * m0_z); e.mins_z = m0_z;
+	move_out_of_solid_expand(e, '0 0 1' * m1_z); e.maxs_z = m1_z;
+	setorigin(e, e.origin);
+
+	tracebox(e.origin, e.mins, e.maxs, e.origin, MOVE_WORLDONLY, e);
+	if(trace_startsolid)
+		error("could not get out of solid");
+}
+
 // converts a number to a string with the indicated number of decimals
 // works for up to 10 decimals!
 string ftos_decimals(float number, float decimals)

@@ -586,7 +586,10 @@ entity(vector m1, vector m2, float f) waypoint_spawn =
 	w.classname = "waypoint";
 	w.wpflags = f;
 	setorigin(w, org);
+	setsize(w, PL_MIN + m1, PL_MAX + m2);
+	move_out_of_solid(w);
 	setsize(w, m1, m2);
+
 	waypoint_clearlinks(w);
 	//waypoint_schedulerelink(w);
 	return w;
@@ -941,6 +944,8 @@ entity(entity player, float walkfromwp) navigation_findnearestwaypoint =
 	local float dist, bestdist;
 	local vector v, org;
 	org = player.origin + (player.mins_z - PL_MIN_z) * '0 0 1';
+	if(player.tag_entity)
+		org = org + player.tag_entity.origin;
 	if (navigation_testtracewalk)
 		te_plasmaburn(org);
 	best = world;
