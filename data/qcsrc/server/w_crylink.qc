@@ -22,7 +22,7 @@ void W_Crylink_Touch (void)
 	}
 	self.owner = world;
 	self.touch = SUB_Null;
-	setmodel (self, "models/plasma.mdl");
+	setmodel (self, "models/plasma.mdl"); // precision set below
 	setsize (self, '0 0 0', '0 0 0');
 	self.gravity = 0;
 	self.glow_size = 0;
@@ -54,7 +54,7 @@ void W_Crylink_Touch2 (void)
 	}
 	self.owner = world;
 	self.touch = SUB_Null;
-	setmodel (self, "models/plasma.mdl");
+	setmodel (self, "models/plasma.mdl"); // precision set below
 	setsize (self, '0 0 0', '0 0 0');
 	self.gravity = 0;
 	self.glow_size = 0;
@@ -91,7 +91,7 @@ void W_Crylink_Attack (void)
 		proj.solid = SOLID_BBOX;
 		proj.gravity = 0.001;
 
-		setmodel (proj, "models/plasmatrail.mdl");
+		setmodel (proj, "models/plasmatrail.mdl"); // precision set below
 		setsize (proj, '0 0 0', '0 0 0');
 		setorigin (proj, w_shotorg);
 
@@ -136,7 +136,7 @@ void W_Crylink_Attack2 (void)
 		proj.solid = SOLID_BBOX;
 		proj.gravity = 0.001;
 
-		setmodel (proj, "models/plasmatrail.mdl");
+		setmodel (proj, "models/plasmatrail.mdl"); // precision set below
 		setsize (proj, '0 0 0', '0 0 0');
 		setorigin (proj, w_shotorg);
 

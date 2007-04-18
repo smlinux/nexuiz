@@ -220,7 +220,7 @@ void W_Rocket_Attack (void)
 
 	missile.movetype = MOVETYPE_FLY;
 	missile.solid = SOLID_BBOX;
-	setmodel (missile, "models/rocket.md3");
+	setmodel (missile, "models/rocket.md3"); // precision set below
 	setsize (missile, '0 0 0', '0 0 0');
 
 	setorigin (missile, w_shotorg);
@@ -235,13 +235,13 @@ void W_Rocket_Attack (void)
 	missile.think = W_Rocket_Think;
 	missile.nextthink = time;
 	missile.cnt = time + cvar("g_balance_rocketlauncher_lifetime");
-	missile.effects = EF_NOSHADOW;
+	missile.effects = EF_NOSHADOW | EF_LOWPRECISION;
 	sound (missile, CHAN_BODY, "weapons/rocket_fly.wav", 0.4, ATTN_NORM);
 	missile.flags = FL_PROJECTILE;
 
 	flash = spawn ();
 	setorigin (flash, w_shotorg);
-	setmodel (flash, "models/flash.md3");
+	setmodel (flash, "models/flash.md3"); // precision set below
 	flash.angles = vectoangles (w_shotdir);
 	SUB_SetFade (flash, time, 0.4);
 	flash.effects = flash.effects | EF_ADDITIVE | EF_FULLBRIGHT | EF_LOWPRECISION;

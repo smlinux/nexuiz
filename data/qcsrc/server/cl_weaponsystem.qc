@@ -98,11 +98,11 @@ void LaserTarget_Think()
 		e.owner = self.owner;			// Its owner is my owner
 		e.classname = "laser_target";
 		e.movetype = MOVETYPE_NOCLIP;	// don't touch things
-		setmodel(e, "models/laser_dot.mdl");	// what it looks like
+		setmodel(e, "models/laser_dot.mdl");	// what it looks like, precision set below
 		e.scale = 1.25;				// make it larger
 		e.alpha = 0.25;				// transparency
 		e.colormod = '255 0 0' * (1/255) * 8;	// change colors
-		e.effects = EF_FULLBRIGHT;
+		e.effects = EF_FULLBRIGHT | EF_LOWPRECISION;
 		// make it dynamically glow
 		// you should avoid over-using this, as it can slow down the player's computer.
 		e.glow_color = 251; // red color
@@ -154,11 +154,11 @@ void() CL_Weaponentity_Think =
 		self.dmg = self.owner.modelindex;
 		self.deadflag = self.owner.deadflag;
 		if (self.owner.weaponname != "")
-			setmodel(self, strcat("models/weapons/w_", self.owner.weaponname, ".zym"));
+			setmodel(self, strcat("models/weapons/w_", self.owner.weaponname, ".zym")); // precision set below
 		else
 			self.model = "";
 	}
-	self.effects = self.owner.effects;
+	self.effects = self.owner.effects | EF_LOWPRECISION;
 
 	if (self.flags & FL_FLY)
 		// owner is currently being teleported, so don't apply EF_NODRAW otherwise the viewmodel would "blink"
@@ -204,7 +204,7 @@ void() CL_ExteriorWeaponentity_Think =
 		self.dmg = self.owner.modelindex;
 		self.deadflag = self.owner.deadflag;
 		if (self.owner.weaponname != "")
-			setmodel(self, strcat("models/weapons/v_", self.owner.weaponname, ".md3"));
+			setmodel(self, strcat("models/weapons/v_", self.owner.weaponname, ".md3")); // precision set below
 		else
 			self.model = "";
 		setattachment(self, self.owner, "bip01 r hand");
@@ -212,7 +212,7 @@ void() CL_ExteriorWeaponentity_Think =
 		if (!self.tag_index)
 			self.model = "";
 	}
-	self.effects = self.owner.effects;
+	self.effects = self.owner.effects | EF_LOWPRECISION;
 	self.effects = self.effects - (self.effects & (EF_BLUE | EF_RED)); // eat performance
 	if(self.owner.alpha >= 0)
 		self.alpha = self.owner.alpha;
@@ -228,7 +228,7 @@ void() CL_SpawnWeaponentity =
 	self.weaponentity.solid = SOLID_NOT;
 	self.weaponentity.owner = self;
 	self.weaponentity.weaponentity = self.weaponentity;
-	setmodel(self.weaponentity, "");
+	setmodel(self.weaponentity, ""); // precision set when changed
 	self.weaponentity.origin = '0 0 0';
 	self.weaponentity.angles = '0 0 0';
 	self.weaponentity.viewmodelforclient = self;
@@ -291,7 +291,7 @@ void() w_clear =
 	if (self.weaponentity)
 	{
 		self.weaponentity.state = WS_CLEAR;
-		setmodel(self.weaponentity, "");
+		setmodel(self.weaponentity, ""); // precision already set
 		self.weaponentity.effects = 0;
 	}
 };

@@ -50,7 +50,7 @@ void W_Laser_Attack (float issecondary)
 	missile.movetype = MOVETYPE_FLY;
 	missile.solid = SOLID_BBOX;
 
-	setmodel (missile, "models/laser.mdl");
+	setmodel (missile, "models/laser.mdl"); // precision set below
 	setsize (missile, '0 0 0', '0 0 0');
 	setorigin (missile, w_shotorg);
 

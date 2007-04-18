@@ -94,7 +94,7 @@ void W_Hagar_Attack (void)
 	missile.solid = SOLID_BBOX;
 	missile.scale = 0.4; // BUG: the model is too big
 	setorigin (missile, w_shotorg);
-	setmodel (missile, "models/hagarmissile.mdl");
+	setmodel (missile, "models/hagarmissile.mdl"); // precision set below
 	setsize (missile, '0 0 0', '0 0 0');
 	//missile.takedamage = DAMAGE_YES;
 	//missile.damageforcescale = 4;
@@ -130,7 +130,7 @@ void W_Hagar_Attack2 (void)
 	missile.solid = SOLID_BBOX;
 	missile.scale = 0.4; // BUG: the model is too big
 	setorigin (missile, w_shotorg);
-	setmodel (missile, "models/hagarmissile.mdl");
+	setmodel (missile, "models/hagarmissile.mdl"); // precision set below
 	setsize (missile, '0 0 0', '0 0 0');
 	//missile.takedamage = DAMAGE_YES;
 	//missile.damageforcescale = 4;

@@ -223,7 +223,7 @@ void() trigger_push =
 		SetMovedir ();
 
 	self.solid = SOLID_TRIGGER;
-	setmodel (self, self.model);
+	setmodel (self, self.model); // no precision needed
 	self.movetype = MOVETYPE_NONE;
 	self.modelindex = 0;
 	self.model = "";

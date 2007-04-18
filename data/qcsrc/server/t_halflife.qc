@@ -52,7 +52,7 @@ void() func_ladder =
 void() func_water =
 {
 	self.solid = SOLID_TRIGGER;
-	setmodel (self, self.model);	// set size and link into world
+	setmodel (self, self.model);	// set size and link into world, precision set by mapper
 	self.touch = func_ladder_touch;
 };
 

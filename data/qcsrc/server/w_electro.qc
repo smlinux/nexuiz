@@ -107,7 +107,7 @@ void() W_Electro_Attack
 	proj.angles = vectoangles(proj.velocity);
 	proj.touch = W_Plasma_TouchExplode;
 	proj.flags = FL_PROJECTILE;
-	setmodel(proj, "models/elaser.mdl");
+	setmodel(proj, "models/elaser.mdl"); // precision set above
 	setsize(proj, '0 0 0', '0 0 0');
 
 	// LordHavoc: disabled because no one likes this sound and it sometimes never stops due to packet loss
@@ -139,7 +139,7 @@ void() W_Electro_Attack2
 	proj.velocity = v_forward * cvar("g_balance_electro_secondary_speed") + v_up * cvar("g_balance_electro_secondary_speed_up");
 	W_SetupProjectileVelocity(proj);
 	proj.touch = W_Plasma_Touch;
-	setmodel(proj, "models/ebomb.mdl");
+	setmodel(proj, "models/ebomb.mdl"); // precision set above
 	setsize(proj, '0 0 -3', '0 0 -3');
 	proj.takedamage = DAMAGE_YES;
 	proj.damageforcescale = 4;

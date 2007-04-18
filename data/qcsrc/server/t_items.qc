@@ -374,7 +374,8 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 		self.movetype = MOVETYPE_TOSS;
 	self.solid = SOLID_TRIGGER;
 	self.touch = Item_Touch;
-	setmodel (self, self.mdl);
+	setmodel (self, self.mdl); // precision set below
+	self.effects |= EF_LOWPRECISION;
 	setsize (self, '-16 -16 0', '16 16 32');
 	if (itemflags & FL_WEAPON)
 	{
@@ -644,7 +645,7 @@ void item_quad (void) {self.classname = "item_strength";item_strength();}
 void misc_models (void)
 {
 	precache_model (self.model);
-	setmodel (self, self.model);
+	setmodel (self, self.model); // precision set by mapper
 	setsize (self, self.mins, self.maxs);
 }
 

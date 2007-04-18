@@ -166,7 +166,7 @@ void trigger_teleport (void)
 	self.solid = SOLID_TRIGGER;
 	self.movetype = MOVETYPE_NONE;
 
-	setmodel (self, self.model);
+	setmodel (self, self.model); // no precision needed
 
 	self.model = "";
 	self.modelindex = 0;

@@ -226,7 +226,7 @@ void FireGrapplingHook (void)
 	missile.movetype = MOVETYPE_FLY;
 	missile.solid = SOLID_BBOX;
 
-	setmodel (missile, "models/ebomb.mdl"); // replace by something CENTERED!
+	setmodel (missile, "models/ebomb.mdl"); // replace by something CENTERED!, precision set below
 	setsize (missile, '-3 -3 -3', '3 3 3');
 	setorigin (missile, org);
 

@@ -193,7 +193,8 @@ void() func_plat =
 	self.solid = SOLID_BSP;
 	self.movetype = MOVETYPE_PUSH;
 	setorigin (self, self.origin);
-	setmodel (self, self.model);
+	setmodel (self, self.model); // precision set below
+	self.effects |= EF_LOWPRECISION;
 	setsize (self, self.mins , self.maxs);
 
 	self.blocked = plat_crush;
@@ -312,7 +313,8 @@ void() func_train =
 	self.use = train_use;
 	self.classname = "train";
 
-	setmodel (self, self.model);
+	setmodel (self, self.model); // precision set below
+	self.effects |= EF_LOWPRECISION;
 	setsize (self, self.mins , self.maxs);
 	setorigin (self, self.origin);
 	self.nextthink = self.ltime + 0.1;
@@ -368,7 +370,8 @@ void() func_train =
 	self.solid = SOLID_BSP;
 	self.movetype = MOVETYPE_PUSH;
 
-	setmodel(self, self.model);
+	setmodel(self, self.model); // precision set below
+	self.effects |= EF_LOWPRECISION;
 	setsize(self, self.mins, self.maxs);
 	setorigin(self, self.origin);
 
@@ -436,7 +439,7 @@ void() func_rotating =
 	self.solid = SOLID_BSP;
 	self.movetype = MOVETYPE_PUSH;
 
-	setmodel(self, self.model);
+	setmodel(self, self.model); // no lowprecision here! evil!
 	setsize(self, self.mins, self.maxs);
 	setorigin(self, self.origin);
 
@@ -494,7 +497,7 @@ void() func_bobbing =
 	self.solid = SOLID_BSP;
 	self.movetype = MOVETYPE_PUSH;
 
-	setmodel(self, self.model);
+	setmodel(self, self.model); // precision set below
 	setsize(self, self.mins, self.maxs);
 	setorigin(self, self.origin);
 
@@ -628,7 +631,8 @@ void() func_button =
 
 	self.movetype = MOVETYPE_PUSH;
 	self.solid = SOLID_BSP;
-	setmodel (self, self.model);
+	setmodel (self, self.model); // precision set below
+	self.effects |= EF_LOWPRECISION;
 
 	self.blocked = button_blocked;
 	self.use = button_use;
@@ -1065,7 +1069,8 @@ void() func_door =
 	self.solid = SOLID_BSP;
 	self.movetype = MOVETYPE_PUSH;
 	setorigin (self, self.origin);
-	setmodel (self, self.model);
+	setmodel (self, self.model); // precision set below
+	self.effects |= EF_LOWPRECISION;
 	self.classname = "door";
 
 	self.blocked = door_blocked;
@@ -1332,7 +1337,8 @@ void () func_door_secret =
 	self.solid = SOLID_BSP;
 	self.movetype = MOVETYPE_PUSH;
 	self.classname = "door";
-	setmodel (self, self.model);
+	setmodel (self, self.model); // precision set below
+	self.effects |= EF_LOWPRECISION;
 	setorigin (self, self.origin);
 
 	self.touch = secret_touch;

@@ -50,7 +50,7 @@ void W_Nex_Attack (void)
 	//flash.origin = '150 -16 -8';
 	//flash.angles_z = 90;
 	//flash.scale = 4;
-	setmodel (flash, "models/nexflash.md3");
+	setmodel (flash, "models/nexflash.md3"); // precision set below
 	SUB_SetFade (flash, time, 0.4);
 	flash.effects = flash.effects | EF_ADDITIVE | EF_FULLBRIGHT | EF_LOWPRECISION;
 	*/

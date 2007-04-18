@@ -91,7 +91,7 @@ void W_Grenade_Attack (void)
 	gren.movetype = MOVETYPE_BOUNCE;
 	gren.solid = SOLID_BBOX;
 	gren.effects = EF_NOSHADOW | EF_LOWPRECISION;
-	setmodel(gren, "models/grenademodel.md3");
+	setmodel(gren, "models/grenademodel.md3"); // precision set above
 	setsize(gren, '0 0 0', '0 0 0');
 	setorigin(gren, w_shotorg);
 
@@ -122,7 +122,7 @@ void W_Grenade_Attack2 (void)
 	gren.movetype = MOVETYPE_BOUNCE;
 	gren.solid = SOLID_BBOX;
 	gren.effects = EF_NOSHADOW | EF_LOWPRECISION;
-	setmodel(gren, "models/grenademodel.md3");
+	setmodel(gren, "models/grenademodel.md3"); // precision set above
 	setsize(gren, '0 0 -3', '0 0 -3');
 	setorigin(gren, w_shotorg);
 

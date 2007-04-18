@@ -151,10 +151,10 @@ void fireBullet (vector start, vector dir, float spread, float damage, float for
 		e.nextthink = time + vlen(trace_endpos - start) / 6000;
 		e.velocity = dir * 6000;
 		e.angles = vectoangles(e.velocity);
-		setmodel (e, "models/tracer.mdl");
+		setmodel (e, "models/tracer.mdl"); // precision set below
 		setsize (e, '0 0 0', '0 0 0');
 		setorigin (e, start);
-		e.effects = e.effects | EF_ADDITIVE | EF_FULLBRIGHT | EF_NOSHADOW;
+		e.effects = EF_ADDITIVE | EF_FULLBRIGHT | EF_NOSHADOW | EF_LOWPRECISION;
 		e.flags = FL_PROJECTILE;
 	}
 

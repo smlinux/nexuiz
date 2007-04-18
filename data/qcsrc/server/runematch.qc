@@ -581,7 +581,7 @@ void spawn_runes()
 		e.movetype = MOVETYPE_TOSS;
 		e.solid = SOLID_TRIGGER;
 		e.flags = FL_ITEM;
-		setmodel(e, "models/runematch/rune.mdl");
+		setmodel(e, "models/runematch/rune.mdl"); // precision set below
 		setorigin(e, spot.origin);
 		setsize(e, '0 0 -35', '0 0 0');
 
@@ -590,7 +590,7 @@ void spawn_runes()
 		e.enemy.classname = "curse";
 		e.enemy.runes = cs;
 		//e.enemy.avelocity = '300 500 200';
-		setmodel(e.enemy, "models/runematch/curse.mdl");
+		setmodel(e.enemy, "models/runematch/curse.mdl"); // precision set below
 		setorigin(e, '0 0 0');
 		setattachment(e.enemy, e, "");
 
@@ -599,10 +599,7 @@ void spawn_runes()
 		e.enemy.colormod = RuneColormod(cs);
 
 		e.alpha = e.enemy.alpha = cvar("g_runematch_rune_alpha");//0.78;
-		e.effects = e.enemy.effects = cvar("g_runematch_rune_effects");//EF_ADDITIVE;// | EF_FULLBRIGHT;
-
-		// Savage: Save some bandwidth
-		self.effects |= EF_LOWPRECISION;
+		e.effects = e.enemy.effects = cvar("g_runematch_rune_effects") | EF_LOWPRECISION;//EF_ADDITIVE;// | EF_FULLBRIGHT;
 
 		//e.glow_size = e.enemy.glow_size = cvar("g_runematch_rune_glow_size");
 		//e.glow_color = e.enemy.glow_color = cvar("g_runematch_rune_glow_color");

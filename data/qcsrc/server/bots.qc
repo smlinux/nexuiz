@@ -208,7 +208,7 @@ float(vector org, vector m1, vector m2, entity targ, float shotspeed, float shot
 		tracetossfaketarget = spawn();
 	tracetossfaketarget.solid = savesolid;
 	tracetossfaketarget.movetype = targ.movetype;
-	setmodel(tracetossfaketarget, targ.model);
+	setmodel(tracetossfaketarget, targ.model); // no low precision
 	tracetossfaketarget.model = targ.model;
 	tracetossfaketarget.modelindex = targ.modelindex;
 	setsize(tracetossfaketarget, targ.mins, targ.maxs);
@@ -548,7 +548,7 @@ void(entity wp) waypoint_schedulerelink =
 		local vector m1, m2;
 		m1 = wp.mins;
 		m2 = wp.maxs;
-		setmodel(wp, "models/runematch/rune.mdl");
+		setmodel(wp, "models/runematch/rune.mdl"); wp.effects = EF_LOWPRECISION;
 		setsize(wp, m1, m2);
 	}
 	else
@@ -561,6 +561,7 @@ void(entity wp) waypoint_schedulerelink =
 	// schedule an actual relink on next frame
 	wp.think = waypoint_think;
 	wp.nextthink = time;
+	wp.effects = EF_LOWPRECISION;
 }
 
 // create a new waypoint and automatically link it to other waypoints, and link

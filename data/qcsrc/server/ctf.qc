@@ -416,7 +416,7 @@ void() item_flag_team1 =
 	if (!self.noise3)
 		self.noise3 = "ctf/respawn.wav";
 	precache_model (self.model);
-	setmodel (self, self.model);
+	setmodel (self, self.model); // precision set below
 	precache_sound (self.noise);
 	precache_sound (self.noise1);
 	precache_sound (self.noise2);
@@ -472,7 +472,7 @@ void() item_flag_team2 =
 	if (!self.noise3)
 		self.noise3 = "ctf/respawn.wav";
 	precache_model (self.model);
-	setmodel (self, self.model);
+	setmodel (self, self.model); // precision set below
 	precache_sound (self.noise);
 	precache_sound (self.noise1);
 	precache_sound (self.noise2);

@@ -74,19 +74,19 @@ void(vector org, vector vel, float randomvel, vector ang, vector avel, float ran
 	e.createdtime = time;
 	if (casingtype == 1)
 	{
-		setmodel (e, "models/casing_shell.mdl");
+		setmodel (e, "models/casing_shell.mdl"); // precision set above
 		e.cnt = time + 30;
 		// bias to make these be considered more important than other things
 		e.createdtime = time + 1;
 	}
 	else if (casingtype == 2)
 	{
-		setmodel (e, "models/casing_steel.mdl");
+		setmodel (e, "models/casing_steel.mdl"); // precision set above
 		e.cnt = time + 10;
 	}
 	else
 	{
-		setmodel (e, "models/casing_bronze.mdl");
+		setmodel (e, "models/casing_bronze.mdl"); // precision set above
 		e.cnt = time + 10;
 	}
 	if (maxclients == 1)

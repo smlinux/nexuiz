@@ -236,7 +236,7 @@ void setmodel_lod(entity e, string modelname)
 	if(fexists(s))
 	{
 		precache_model(s);
-		setmodel(e, s);
+		setmodel(e, s); // players have high precision
 		self.modelindex_lod1 = self.modelindex;
 	}
 	else
@@ -246,14 +246,14 @@ void setmodel_lod(entity e, string modelname)
 	if(fexists(s))
 	{
 		precache_model(s);
-		setmodel(e, s);
+		setmodel(e, s); // players have high precision
 		self.modelindex_lod2 = self.modelindex;
 	}
 	else
 		self.modelindex_lod2 = -1;
 
 	precache_model(modelname);
-	setmodel(e, modelname);
+	setmodel(e, modelname); // players have high precision
 	self.modelindex_lod0 = self.modelindex;
 
 	if(self.modelindex_lod1 < 0)
@@ -263,7 +263,7 @@ void setmodel_lod(entity e, string modelname)
 		self.modelindex_lod2 = self.modelindex;
 #else
 	precache_model(modelname);
-	setmodel(e, modelname);
+	setmodel(e, modelname); // players have high precision
 #endif
 }
 
@@ -886,10 +886,11 @@ void() UpdateChatBubble =
 		self.chatbubbleentity.exteriormodeltoclient = self;
 		self.chatbubbleentity.think = ChatBubbleThink;
 		self.chatbubbleentity.nextthink = time;
-		setmodel(self.chatbubbleentity, "models/misc/chatbubble.spr");
+		setmodel(self.chatbubbleentity, "models/misc/chatbubble.spr"); // precision set below
 		setorigin(self.chatbubbleentity, self.origin + '0 0 15' + self.maxs_z * '0 0 1');
 		self.chatbubbleentity.mdl = self.chatbubbleentity.model;
 		self.chatbubbleentity.model = "";
+		self.chatbubbleentity.effects = EF_LOWPRECISION;
 	}
 }
 
@@ -928,13 +929,14 @@ void() UpdateTeamBubble =
 		self.teambubbleentity.exteriormodeltoclient = self;
 		self.teambubbleentity.think = TeamBubbleThink;
 		self.teambubbleentity.nextthink = time;
-		setmodel(self.teambubbleentity, "models/misc/teambubble.spr");
+		setmodel(self.teambubbleentity, "models/misc/teambubble.spr"); // precision set below
 //		setorigin(self.teambubbleentity, self.origin + '0 0 15' + self.maxs_z * '0 0 1');
 		setorigin(self.teambubbleentity, self.teambubbleentity.origin + '0 0 15' + self.maxs_z * '0 0 1');
 		setattachment(self.teambubbleentity, self, "");  // sticks to moving player better, also conserves bandwidth
 		self.teambubbleentity.mdl = self.teambubbleentity.model;
 		self.teambubbleentity.model = self.teambubbleentity.mdl;
 		self.teambubbleentity.customizeentityforclient = TeamBubble_customizeentityforclient;
+		self.teambubbleentity.effects = EF_LOWPRECISION;
 	}
 }
 

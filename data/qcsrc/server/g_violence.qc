@@ -38,9 +38,9 @@ float() Gib_customizeentityforclient =
 	if(self.classname == "player") // the eye
 	{
 		if(self.gibrandom > other.cvar_cl_nogibs)
-			setmodel(self, self.model);
+			self.model = self.mdl;
 		else
-			setmodel(self, "");
+			self.model = "";
 		return TRUE;
 	}
 	else // other gibs - don't even need to send them
@@ -71,7 +71,8 @@ void TossGib (entity gib, string mdlname, vector org, vector v, float destroyont
 	gib.customizeentityforclient = Gib_customizeentityforclient;
 	gib.effects = EF_LOWPRECISION; // use less bandwidth
 
-	setmodel (gib, mdlname);
+	gib.mdl = mdlname;
+	setmodel (gib, mdlname); // precision set above
 	gib.gibmodelindex = gib.modelindex;
 	setsize (gib, '-8 -8 -8', '8 8 8');
 	setorigin (gib, org);

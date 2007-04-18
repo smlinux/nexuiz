@@ -234,7 +234,7 @@ void() dom_team =
 	if (self.noise1 != "")
 		precache_sound(self.noise1);
 	self.classname = "dom_team";
-	setmodel(self, self.model);
+	setmodel(self, self.model); // precision not needed
 	self.mdl = self.model;
 	self.dmg = self.modelindex;
 	self.model = "";
@@ -255,7 +255,7 @@ void() dom_controlpoint_setup =
 
 	// copy important properties from dom_team entity
 	self.goalentity = head;
-	setmodel(self, head.mdl);
+	setmodel(self, head.mdl); // precision already set
 	self.skin = head.skin;
 
 	self.cnt = -1;
@@ -493,7 +493,7 @@ void() dom_controlpoint =
 
 	//if(!self.glow_size)
 	//	self.glow_size = cvar("g_domination_point_glow");
-	self.effects = self.effects | EF_FULLBRIGHT;
+	self.effects = self.effects | EF_FULLBRIGHT | EF_LOWPRECISION;
 };
 
 // code from here on is just to support maps that don't have control point and team entities
@@ -512,7 +512,7 @@ void dom_spawnteam (string teamname, float teamcolor, string pointmodel, float p
 	self.message = capmessage;
 
 	// this code is identical to dom_team
-	setmodel(self, self.model);
+	setmodel(self, self.model); // precision not needed
 	self.mdl = self.model;
 	self.dmg = self.modelindex;
 	self.model = "";

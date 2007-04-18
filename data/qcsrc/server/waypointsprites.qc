@@ -227,8 +227,8 @@ entity WaypointSprite_Spawn(
 	wp.customizeentityforclient = WaypointSprite_CustomizeEntityForClient;
 	wp.think = WaypointSprite_Think;
 	wp.nextthink = time;
-	wp.effects = EF_NODEPTHTEST;
-	setmodel(wp, strcat("models/sprites/", spr, ".sp2"));
+	wp.effects = EF_NODEPTHTEST | EF_LOWPRECISION;
+	setmodel(wp, strcat("models/sprites/", spr, ".sp2")); // precision set above
 	return wp;
 }
 
