@@ -23,9 +23,9 @@ Item Window JoinGame
 		origin		'460 44'
 
 		#define SList_Ping	'50 15'
-		#define SList_Name	'467 15'
+		#define SList_Name	'442 15'
 		#define SList_Map	'120 15'
-		#define SList_Players	'70 15'
+		#define SList_Players	'95 15'
 		#define SList_Mod	'90 15'
 		#define SList_Direction '2 0'
 
@@ -99,14 +99,25 @@ Item Window JoinGame
 					direction	'0.001 0 0'
 					flag		[FlagEmbedded]
 
-					Derive TextButton NumPlayers
+					Derive TextButton NumHumans
 					{
 						normal		"NP"
 
 						init 		Nex_Action_JoinGame_SortBy
-						target		"numplayers"
+						target		"numhumans"
 					}
 					Derive Label	Slash
+					{
+						text		"/"
+					}
+					Derive TextButton NumPlayers
+					{
+						normal		"TP"
+
+						init 		Nex_Action_JoinGame_SortBy
+						target		"numplayers"
+					}
+					Derive Label	Slash2
 					{
 						text		"/"
 					}
@@ -166,13 +177,13 @@ Item Window JoinGame
 						}
 						DeriveTemplate Nex_HostCache_StringField Map
 						{
-							pos		'519 0'
+							pos		'494 0'
 							size		[SList_Map]
 							target		"map"
 						}
 						DeriveTemplate Nex_HostCache_Players Players
 						{
-							pos		'641 0'
+							pos		'616 0'
 							size		[SList_Players]
 						}
 						DeriveTemplate Nex_HostCache_StringField Mod

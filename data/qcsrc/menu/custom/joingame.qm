@@ -170,6 +170,10 @@ void() Nex_Action_ExecuteQuery =
 						lField = SLIST_FIELD_NUMPLAYERS;
 						lIsStringArg = false;
 					}
+					else if( lToken == "numhumans" ) {
+						lField = SLIST_FIELD_NUMHUMANS;
+						lIsStringArg = false;
+					}
 					else if( lToken == "protocol" ) {
 						lField = SLIST_FIELD_PROTOCOL;
 						lIsStringArg = false;

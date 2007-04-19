@@ -93,14 +93,17 @@ void() Item_Nex_HostCache_ValueField_Spawn =
 
 void() Item_Nex_HostCache_Players_Update =
 {
-	local string lNum, lMax;
+	local string lHum, lNum, lMax;
+	local float lHumans;
 
 	if( HostCache_ViewCount <= self._parent.stepValue )
 		return;
+	lHumans = gethostcachenumber( SLIST_FIELD_NUMHUMANS, self._parent.stepValue );
+	if (lHumans >= 0) lHum = ftos( lHumans ); else lHum = "?";
 	lNum = ftos( gethostcachenumber( SLIST_FIELD_NUMPLAYERS, self._parent.stepValue ) );
 	lMax = ftos( gethostcachenumber( SLIST_FIELD_MAXPLAYERS, self._parent.stepValue ) );
 
-	String_EntitySet( self, text, strcat( lNum, "/", lMax ) );
+	String_EntitySet( self, text, strcat( lHum, "/", lNum, "/", lMax ) );
 
 	Item_Label_Update();
 };
