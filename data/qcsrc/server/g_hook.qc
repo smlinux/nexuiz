@@ -233,6 +233,8 @@ void FireGrapplingHook (void)
 	missile.state = 0; // not latched onto anything
 
 	missile.velocity = v_forward * cvar("g_balance_grapplehook_speed_fly");
+	W_SetupProjectileVelocity(missile);
+
 	missile.angles = vectoangles (missile.velocity);
 	//missile.glow_color = 250; // 244, 250
 	//missile.glow_size = 120;

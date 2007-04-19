@@ -291,7 +291,7 @@ void() w_clear =
 	if (self.weaponentity)
 	{
 		self.weaponentity.state = WS_CLEAR;
-		setmodel(self.weaponentity, ""); // precision already set
+		// self.weaponname = ""; // next frame will setmodel it to "" when needed anyway
 		self.weaponentity.effects = 0;
 	}
 };
