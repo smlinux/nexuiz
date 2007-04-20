@@ -12,24 +12,14 @@ case "$pw" in
 		zipflags="-P $pw"
 		;;
 esac
-case "$version" in
-	[0-9]*)
-		versiontag=
-		ext=_v$version
-		version=$version
-		;;
-	*)
-		version=
-		;;
-esac
-case "$versiontag" in
-	'')
-		;;
-	*)
-		version='$1'$versiontag
-		versiontag=$versiontag
-		;;
-esac
+
+: ${date:=`date +%Y%m%d`}
+: ${versiontag:=}
+echo "date stamp: $date"
+
+version=2-svntest-$date
+versiontag=test
+defaultcfg="cl_nettimesyncmode 6"
 
 basepk3=$base/data20060905.pk3
 nexdir=$base/nexuiz
@@ -59,10 +49,6 @@ if [ -n "$conflicts" ]; then
 	echo "$conflicts"
 	exit 1
 fi
-
-: ${date:=`date +%Y%m%d`}
-: ${versiontag:=}
-echo "date stamp: $date"
 
 set -x
 
@@ -183,6 +169,8 @@ if [ -n "$versiontag" ]; then
 	perl -pi -e '/^set g_nexuizversion/ and $_ = "showbrand 1\n$_"' default.cfg
 	cp "$buildfiles/brand/$versiontag.tga" gfx/brand.tga
 fi
+echo >> default.cfg
+echo "$defaultcfg" >> default.cfg
 7za a -mx=7 -tzip ../data.pk3 .
 
 cd "$tmpdir"
