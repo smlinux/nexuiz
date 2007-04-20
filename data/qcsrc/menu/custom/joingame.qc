@@ -94,12 +94,13 @@ void() Item_Nex_HostCache_ValueField_Spawn =
 void() Item_Nex_HostCache_Players_Update =
 {
 	local string lHum, lNum, lMax;
-	local float lHumans;
+	local float lHumans, lBots;
 
 	if( HostCache_ViewCount <= self._parent.stepValue )
 		return;
 	lHumans = gethostcachenumber( SLIST_FIELD_NUMHUMANS, self._parent.stepValue );
-	if (lHumans >= 0) lHum = ftos( lHumans ); else lHum = "?";
+	lBots = gethostcachenumber( SLIST_FIELD_NUMBOTS, self._parent.stepValue );
+	if (lBots >= 0) lHum = ftos( lHumans ); else lHum = "?";
 	lNum = ftos( gethostcachenumber( SLIST_FIELD_NUMPLAYERS, self._parent.stepValue ) );
 	lMax = ftos( gethostcachenumber( SLIST_FIELD_MAXPLAYERS, self._parent.stepValue ) );
 

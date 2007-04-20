@@ -12,6 +12,7 @@ void() HostCache_Init =
 	SLIST_FIELD_MAXPLAYERS = gethostcacheindexforkey( "maxplayers" );
 	SLIST_FIELD_NUMPLAYERS = gethostcacheindexforkey( "numplayers" );
 	SLIST_FIELD_NUMHUMANS = gethostcacheindexforkey( "numhumans" );
+	SLIST_FIELD_NUMBOTS = gethostcacheindexforkey( "numbots" );
 	SLIST_FIELD_PROTOCOL = gethostcacheindexforkey( "protocol" );
 };
 
