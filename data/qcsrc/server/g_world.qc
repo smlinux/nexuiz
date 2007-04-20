@@ -627,7 +627,7 @@ float() MaplistMethod_Random = // random map selection
 
 float(float exponent) MaplistMethod_Shuffle = // more clever shuffling
 // the exponent sets a bias on the map selection:
-// the higher the exponent, the
+// the higher the exponent, the less likely "shortly repeated" same maps are
 {
 	float i, j, imax, insertpos;
 

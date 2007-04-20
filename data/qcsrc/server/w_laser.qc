@@ -79,30 +79,43 @@ float(float req) w_laser =
 	local float r2;
 	if (req == WR_AIM)
 	{
-		r1 = cvar("g_balance_laser_primary_damage");
-		r2 = cvar("g_balance_laser_secondary_damage");
-		if (random() * (r2 + r1) > r1)
-			self.button3 = bot_aim(cvar("g_balance_laser_secondary_speed"), 0, cvar("g_balance_laser_secondary_lifetime"), FALSE);
+		if(cvar("g_balance_laser_secondary"))
+		{
+			r1 = cvar("g_balance_laser_primary_damage");
+			r2 = cvar("g_balance_laser_secondary_damage");
+			if (random() * (r2 + r1) > r1)
+				self.button3 = bot_aim(cvar("g_balance_laser_secondary_speed"), 0, cvar("g_balance_laser_secondary_lifetime"), FALSE);
+			else
+				self.button0 = bot_aim(cvar("g_balance_laser_primary_speed"), 0, cvar("g_balance_laser_primary_lifetime"), FALSE);
+		}
 		else
 			self.button0 = bot_aim(cvar("g_balance_laser_primary_speed"), 0, cvar("g_balance_laser_primary_lifetime"), FALSE);
 	}
 	else if (req == WR_THINK)
 	{
-		if (self.button3)
-		if (weapon_prepareattack(0, cvar("g_balance_laser_secondary_refire")))
-		{
-			W_Laser_Attack(TRUE);
-			weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_laser_secondary_animtime"), w_ready);
-		}
 		if (self.button0)
 		if (weapon_prepareattack(0, cvar("g_balance_laser_primary_refire")))
 		{
 			W_Laser_Attack(FALSE);
 			weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_laser_primary_animtime"), w_ready);
 		}
-		//if (self.button3)
-		//if (client_hasweapon(self, self.cnt, TRUE, FALSE))
-		//	W_SwitchWeapon (self.cnt);
+		if (self.button3)
+		{
+			if(cvar("g_balance_laser_secondary"))
+			{
+				if (weapon_prepareattack(0, cvar("g_balance_laser_secondary_refire")))
+				{
+					W_Laser_Attack(TRUE);
+					weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_laser_secondary_animtime"), w_ready);
+				}
+			}
+			else
+			{
+				if (self.button3)
+				if (client_hasweapon(self, self.cnt, TRUE, FALSE))
+					W_SwitchWeapon (self.cnt);
+			}
+		}
 	}
 	else if (req == WR_SETUP)
 		weapon_setup(WEP_LASER, "laser", 0);
