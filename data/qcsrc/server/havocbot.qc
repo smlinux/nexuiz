@@ -276,6 +276,7 @@ float(entity e) w_getbestweapon;
 .float havocbot_chooseweapon_lastbestscore;
 void() havocbot_chooseweapon =
 {
+	// TODO: clean this up by moving it to weapon code
 	if(self.enemy.classname!="player")
 	{
 		self.switchweapon = w_getbestweapon(self);

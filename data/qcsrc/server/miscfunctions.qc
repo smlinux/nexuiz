@@ -196,6 +196,12 @@ void relocate_spawnpoint()
 		objerror("player spawn point in solid, mapper sucks!\n");
 		return;
 	}
+
+	if(cvar("g_spawnpoints_autodrop"))
+	{
+		setsize(self, PL_MIN, PL_MAX);
+		droptofloor();
+	}
 }
 
 // NOTE: DO NOT USE THIS FUNCTION TOO OFTEN.
