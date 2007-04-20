@@ -1932,14 +1932,16 @@ void EndFrame()
 	FOR_EACH_REALCLIENT(self)
 	{
 		if(self.classname == "spectator")
-			self.hitsound = self.enemy.hitsound;
-		if(self.hitsound)
 		{
-			stuffcmd(self, "play2 misc/hit.wav\n");
-			self.hitsound = FALSE;
+			if(self.enemy.hitsound)
+				stuffcmd(self, "play2 misc/hit.wav\n");
+		}
+		else
+		{
+			if(self.hitsound)
+				stuffcmd(self, "play2 misc/hit.wav\n");
 		}
 	}
 	FOR_EACH_CLIENT(self)
-			if(clienttype(self) == CLIENTTYPE_BOT)
-				self.hitsound = FALSE;
+		self.hitsound = FALSE;
 }
