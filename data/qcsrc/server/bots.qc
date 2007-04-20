@@ -590,26 +590,31 @@ entity(vector m1, vector m2, float f) waypoint_spawn =
 
 	if(!(f & WAYPOINTFLAG_GENERATED))
 	{
-		org = w.origin + '2 2 2';
+		org = w.origin + '0 0 2';
 		tracebox(org, w.mins, w.maxs, w.origin, MOVE_WORLDONLY, w);
 		if(trace_startsolid)
 		{
-			org = w.origin + '-2 -2 2';
+			org = w.origin + '2 2 2';
 			tracebox(org, w.mins, w.maxs, w.origin, MOVE_WORLDONLY, w);
 			if(trace_startsolid)
 			{
-				org = w.origin + '-2 2 2';
+				org = w.origin + '-2 -2 2';
 				tracebox(org, w.mins, w.maxs, w.origin, MOVE_WORLDONLY, w);
 				if(trace_startsolid)
 				{
-					org = w.origin + '2 -2 2';
+					org = w.origin + '-2 2 2';
 					tracebox(org, w.mins, w.maxs, w.origin, MOVE_WORLDONLY, w);
 					if(trace_startsolid)
 					{
-						// this WP is in solid, refuse it
-						dprint("Killed a waypoint that was stuck in solid at ", vtos(org), "\n");
-						remove(w);
-						return world;
+						org = w.origin + '2 -2 2';
+						tracebox(org, w.mins, w.maxs, w.origin, MOVE_WORLDONLY, w);
+						if(trace_startsolid)
+						{
+							// this WP is in solid, refuse it
+							dprint("Killed a waypoint that was stuck in solid at ", vtos(org), "\n");
+							remove(w);
+							return world;
+						}
 					}
 				}
 			}
