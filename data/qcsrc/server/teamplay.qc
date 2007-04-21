@@ -328,16 +328,16 @@ void PrintWelcomeMessage(entity pl)
 	if(self.classname == "observer")
 	{
 		if(cvar("g_lms") && self.frags <= 0 && self.frags > -666)
-			return centerprint(self, strcat(newlines, "^1You have no more lives left\nwait for next round\n\n\n^7press attack to spectate other players"));
+			return centerprint(self, strcat(NEWLINES, "^1You have no more lives left\nwait for next round\n\n\n^7press attack to spectate other players"));
 		else if(cvar("g_lms") && self.frags == -666)
-			return centerprint(self, strcat(newlines, "^1Match has already begun\nwait for next round\n\n\n^7press attack to spectate other players"));
+			return centerprint(self, strcat(NEWLINES, "^1Match has already begun\nwait for next round\n\n\n^7press attack to spectate other players"));
 	}
 	else if(self.classname == "spectator")
 	{
 		if ((cvar("g_lms") && self.frags < 1) || cvar("g_arena"))
-			return centerprint(self, strcat(newlines, "spectating ", self.enemy.netname, "\n\n\n^7press attack for next player\npress attack2 for free fly mode"));
+			return centerprint(self, strcat(NEWLINES, "spectating ", self.enemy.netname, "\n\n\n^7press attack for next player\npress attack2 for free fly mode"));
 		else
-			return centerprint(self, strcat(newlines, "spectating ", self.enemy.netname, "\n\n\n^7press jump to play\n^7press attack for next player\npress attack2 for free fly mode"));
+			return centerprint(self, strcat(NEWLINES, "spectating ", self.enemy.netname, "\n\n\n^7press jump to play\n^7press attack for next player\npress attack2 for free fly mode"));
 	}
 
 
@@ -373,7 +373,7 @@ void PrintWelcomeMessage(entity pl)
 	local string versionmessage;
 	versionmessage = GetClientVersionMessage(self.version);
 
-	s = strcat(s, newlines, "This is Nexuiz ", cvar_string("g_nexuizversion"), "\n", versionmessage);
+	s = strcat(s, NEWLINES, "This is Nexuiz ", cvar_string("g_nexuizversion"), "\n", versionmessage);
 	s = strcat(s, "^8\n\nmatch type is ^1", mutator, gamemode_name, "^8\n");
 
 	if(modifications != "")

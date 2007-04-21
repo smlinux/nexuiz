@@ -166,7 +166,7 @@ cd "$tmpdir/data"
 mv common-spog.pk3 ..
 perl -pi -e '/^set g_nexuizversion "([0-9.]*)[^"]*"/ and $_ = "set g_nexuizversion \"'$version'\"\n"' default.cfg
 if [ -n "$versiontag" ]; then
-	perl -pi -e '/^set g_nexuizversion/ and $_ = "showbrand 1\n$_"' default.cfg
+	perl -pi -e '/^set g_nexuizversion/ and $_ = "showbrand 7\n$_"' default.cfg
 	cp "$buildfiles/brand/$versiontag.tga" gfx/brand.tga
 fi
 echo >> default.cfg
