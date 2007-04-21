@@ -247,6 +247,7 @@ void() FlagTouch =
 		self.owner = other;
 		other.flagcarried = self;
 		self.cnt = FLAG_CARRY;
+		self.angles = '0 0 0';
 		bprint(other.netname, "^7 got the ", self.netname, "\n");
 		UpdateFrags(other, cvar("g_ctf_flagscore_pickup"));
 		LogCTF("steal", self.team, other);
