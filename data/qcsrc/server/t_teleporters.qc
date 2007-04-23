@@ -142,6 +142,11 @@ void misc_teleporter_dest (void)
 	info_teleport_destination();
 }
 
+void target_teleporter (void)
+{
+	info_teleport_destination();
+}
+
 void teleport_findtarget (void)
 {
 	// now enable touch
