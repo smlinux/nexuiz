@@ -145,8 +145,12 @@ Called before each frame by the server
 =============
 */
 void RuneMatchGivePoints();
+float RedirectionThink();
 void StartFrame (void)
 {
+	if(RedirectionThink())
+		return;
+
 	sv_maxairspeed = cvar("sv_maxairspeed");
 	sv_maxspeed = cvar ("sv_maxspeed");
 	sv_friction = cvar ("sv_friction");

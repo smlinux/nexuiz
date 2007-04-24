@@ -1,4 +1,5 @@
 float SPAWNFLAG_NO_WAYPOINTS_FOR_ITEMS = 1;
+string redirection_target;
 
 string GetMapname();
 void GotoNextMap();
@@ -731,10 +732,7 @@ float() DoNextMapOverride =
 	}
 	if(cvar_string("quit_and_redirect") != "")
 	{
-		entity head;
-		FOR_EACH_REALCLIENT(head)
-			stuffcmd(head, strcat("\nconnect ", cvar_string("quit_and_redirect"), "\n"));
-		localcmd("wait; wait; wait; wait; wait; wait; wait; wait; wait; wait; wait; wait; wait; wait; wait; wait; wait; wait; wait; wait; wait; wait; quit\n");
+		redirection_target = strzone(cvar_string("quit_and_redirect"));
 		return TRUE;
 	}
 	if (cvar("samelevel")) // if samelevel is set, stay on same level
@@ -1944,4 +1942,52 @@ void EndFrame()
 	}
 	FOR_EACH_CLIENT(self)
 		self.hitsound = FALSE;
+}
+
+
+/*
+ * RedirectionThink:
+ * returns TRUE if redirecting
+ */
+float redirection_timeout;
+float redirection_nextthink;
+float RedirectionThink()
+{
+	float clients_found;
+
+	if(redirection_target == "")
+		return FALSE;
+
+	if(!redirection_timeout)
+	{
+		cvar_set("sv_public", "-2");
+		redirection_timeout = time + 10;
+		if(redirection_target == "self")
+			bprint("^3SERVER NOTICE:^7 restarting the server\n");
+		else
+			bprint("^3SERVER NOTICE:^7 redirecting everyone to ", redirection_target, "\n");
+	}
+
+	if(time < redirection_nextthink)
+		return TRUE;
+
+	redirection_nextthink = time + 1;
+
+	clients_found = 0;
+	FOR_EACH_REALCLIENT(self)
+	{
+		ServerConsoleEcho(strcat("Redirecting: sending connect command to ", self.netname), FALSE);
+		if(redirection_target == "self")
+			stuffcmd(self, "\ndisconnect; reconnect\n");
+		else
+			stuffcmd(self, strcat("\ndisconnect; connect ", redirection_target, "\n"));
+		++clients_found;
+	}
+
+	ServerConsoleEcho(strcat("Redirecting: ", ftos(clients_found), " clients left."), FALSE);
+
+	if(time > redirection_timeout || clients_found == 0)
+		localcmd("\nquit\n");
+
+	return TRUE;
 }
