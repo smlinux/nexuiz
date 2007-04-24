@@ -1961,7 +1961,7 @@ float RedirectionThink()
 	if(!redirection_timeout)
 	{
 		cvar_set("sv_public", "-2");
-		redirection_timeout = time + 10;
+		redirection_timeout = time + 1.5;
 		if(redirection_target == "self")
 			bprint("^3SERVER NOTICE:^7 restarting the server\n");
 		else
@@ -1987,7 +1987,7 @@ float RedirectionThink()
 	ServerConsoleEcho(strcat("Redirecting: ", ftos(clients_found), " clients left."), FALSE);
 
 	if(time > redirection_timeout || clients_found == 0)
-		localcmd("\nquit\n");
+		localcmd("\nwait; wait; wait; quit\n");
 
 	return TRUE;
 }
