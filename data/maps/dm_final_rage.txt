@@ -1,0 +1,20 @@
+Final Rage (dm_final_rage)
+maps/final_rage
+
+Small map with brutal fast
+vertical action.
+
+Players: 2-4
+
+Weapons: Machinegun, Mortar, 
+Nex, Hagar, Rocketlauncher
+
+Gametype: Deathmatch
+
+Layout/Architecture:
+Munyul Verminard 
+
+Texturing/Lighting/Models:
+Jakob "tZork" MG
+
+
