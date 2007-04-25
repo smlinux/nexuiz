@@ -819,10 +819,10 @@ void() IntermissionThink =
 	FixIntermissionClient(self);
 
 	if(cvar("sv_autoscreenshot"))
-	if(self.autoscreenshot)
+	if(self.autoscreenshot > 0)
 	if(time > self.autoscreenshot)
 	{
-		self.autoscreenshot = FALSE;
+		self.autoscreenshot = -1;
 		if(clienttype(self) == CLIENTTYPE_REAL)
 			stuffcmd(self, "\nscreenshot\necho \"^5A screenshot has been taken at request of the server.\"\n");
 		return;
