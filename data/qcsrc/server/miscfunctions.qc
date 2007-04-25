@@ -551,6 +551,7 @@ string Team_ColorCode(float teamid)
 		return "^7";
 }
 
+/*
 string decolorize(string s)
 {
 	string out;
@@ -604,6 +605,7 @@ string decolorize(string s)
 }
 #define strdecolorize(s) decolorize(s)
 #define strlennocol(s) strlen(decolorize(s))
+*/
 
 #define CENTERPRIO_POINT 1
 #define CENTERPRIO_REBALANCE 2
