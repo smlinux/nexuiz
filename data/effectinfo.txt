@@ -87,12 +87,26 @@ alpha 256 256 0
 originjitter 6 6 6
 // dust/smoke drifting away from the impact
 effect TE_SPIKE
-countabsolute 1
-type static
+count 8
+type smoke
 tex 0 8
-color 0xFFFFFF 0xFFFFFF
-size 6 6
-alpha 48 48 48
+color 0x101010 0x101010
+size 3 3
+sizeincrease 3
+alpha 255 255 256
+originjitter 0 0 0
+velocityjitter 8 8 8
+// dust/smoke staying at the impact
+effect TE_SPIKE
+count 1
+type smoke
+tex 0 8
+color 0x505050 0x505050
+size 4 4
+sizeincrease 4
+alpha 255 255 128
+originjitter 0 0 0
+velocityjitter 0 0 0
 // bouncing sparks
 effect TE_SPIKE
 count 20
@@ -161,15 +175,27 @@ size 3 3
 alpha 256 256 0
 originjitter 6 6 6
 // dust/smoke drifting away from the impact
-effect TE_SUPERSPIKE
+effect TE_SPIKE
 count 8
 type smoke
 tex 0 8
-color 0x101010 0x202020
+color 0x101010 0x101010
 size 3 3
-alpha 0 256 512
-originjitter 2 2 2
+sizeincrease 3
+alpha 255 255 256
+originjitter 0 0 0
 velocityjitter 8 8 8
+// dust/smoke staying at the impact
+effect TE_SUPERSPIKE
+count 1
+type smoke
+tex 0 8
+color 0x505050 0x505050
+size 4 4
+sizeincrease 4
+alpha 255 255 128
+originjitter 0 0 0
+velocityjitter 0 0 0
 // sparks that disappear on impact
 effect TE_SUPERSPIKE
 count 30
@@ -199,11 +225,23 @@ effect TE_SUPERSPIKEQUAD
 count 8
 type smoke
 tex 0 8
-color 0x101010 0x202020
+color 0x101010 0x101010
 size 3 3
-alpha 0 256 512
-originjitter 2 2 2
+sizeincrease 3
+alpha 255 255 256
+originjitter 0 0 0
 velocityjitter 8 8 8
+// dust/smoke staying at the impact
+effect TE_SUPERSPIKEQUAD
+count 1
+type smoke
+tex 0 8
+color 0x505050 0x505050
+size 4 4
+sizeincrease 4
+alpha 255 255 128
+originjitter 0 0 0
+velocityjitter 0 0 0
 // sparks that disappear on impact
 effect TE_SUPERSPIKEQUAD
 count 30
@@ -227,12 +265,26 @@ alpha 256 256 0
 originjitter 6 6 6
 // dust/smoke drifting away from the impact
 effect TE_GUNSHOT
-countabsolute 1
-type static
+count 4
+type smoke
 tex 0 8
-color 0xFFFFFF 0xFFFFFF
-size 6 6
-alpha 48 48 48
+color 0x101010 0x101010
+size 3 3
+sizeincrease 3
+alpha 128 128 64
+originjitter 0 0 0
+velocityjitter 8 8 8
+// dust/smoke staying at the impact
+effect TE_GUNSHOT
+count 1
+type smoke
+tex 0 8
+color 0x505050 0x505050
+size 4 4
+sizeincrease 4
+alpha 128 128 64
+originjitter 0 0 0
+velocityjitter 0 0 0
 // bouncing sparks
 effect TE_GUNSHOT
 count 10
@@ -263,11 +315,23 @@ effect TE_GUNSHOTQUAD
 count 4
 type smoke
 tex 0 8
-color 0x101010 0x202020
+color 0x101010 0x101010
 size 3 3
-alpha 0 256 512
-originjitter 2 2 2
+sizeincrease 3
+alpha 255 255 256
+originjitter 0 0 0
 velocityjitter 8 8 8
+// dust/smoke staying at the impact
+effect TE_GUNSHOTQUAD
+count 1
+type smoke
+tex 0 8
+color 0x202020 0x202020
+size 4 4
+sizeincrease 4
+alpha 255 255 128
+originjitter 0 0 0
+velocityjitter 0 0 0
 // sparks that disappear on impact
 effect TE_GUNSHOTQUAD
 count 15
@@ -332,7 +396,7 @@ type static
 tex 35 37
 color 0x404040 0x404040
 size 48 48
-alpha 128 128 64
+alpha 192 192 64
 // fire effect which expands then slows
 effect TE_EXPLOSION
 notunderwater
@@ -706,7 +770,7 @@ type static
 tex 35 37
 color 0x404040 0x404040
 size 72 72
-alpha 128 128 64
+alpha 192 192 64
 // fire effect
 effect TE_TEI_BIGEXPLOSION
 notunderwater
