@@ -152,7 +152,6 @@ float WEP_ROCKET_LAUNCHER	= 9; // float	IT_ROCKET_LAUNCHER		= 128;
 float WEP_FIRST				= 1;
 float WEP_LAST				= 9;
 
-void(entity e, float chan, string samp, float vol, float atten) sound = #8;
 void(entity client, string s)	stuffcmd = #21;
 void(entity client, string s)	sprint = #24;
 vector(entity e, float sped)	aim = #44;

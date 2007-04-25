@@ -54,12 +54,12 @@ void Item_Touch (void)
 			// play some cool sounds ;)
 			centerprint(other, "\n");
 			if(other.health <= 5)
-				stuffcmd(other, "play2 announcer/robotic/lastsecond.ogg\n");
+				play2(other, "announcer/robotic/lastsecond.ogg");
 			else if(other.health < 50)
-				stuffcmd(other, "play2 announcer/robotic/narrowly.ogg\n");
+				play2(other, "announcer/robotic/narrowly.ogg");
 			// sound not available
 			// else if(self.items == IT_CELLS)
-			//	stuffcmd(other, "play2 announce/robotic/ammo.ogg\n");
+			//	play2(other, "announce/robotic/ammo.ogg");
 
 			if (self.items & IT_NEX)
 				W_GiveWeapon (other, IT_NEX, "Nex");
@@ -73,7 +73,7 @@ void Item_Touch (void)
 		{
 			pickedup = TRUE;
 			// sound not available
-			// stuffcmd(other, "play2 announce/robotic/extra.ogg\nplay2 announce/robotic/_lives.ogg\n");
+			// play2(other, "announce/robotic/extra.ogg\nplay2 announce/robotic/_lives.ogg");
 			other.armorvalue = other.armorvalue + cvar("g_minstagib_extralives");
 			sprint(other, "^3You picked up some extra lives\n");
 		}
@@ -83,7 +83,7 @@ void Item_Touch (void)
 		{
 			pickedup = TRUE;
 			// sound not available
-			// stuffcmd(other, "play2 announce/robotic/invisible.ogg\n");
+			// play2(other, "announce/robotic/invisible.ogg");
 			other.strength_finished = max(other.strength_finished, time) + cvar("g_balance_powerup_strength_time");
 		}
 
@@ -92,7 +92,7 @@ void Item_Touch (void)
 		{
 			pickedup = TRUE;
 			// sound not available
-			// stuffcmd(other, "play2 announce/robotic/speed.ogg\n");
+			// play2(other, "announce/robotic/speed.ogg");
 			other.invincible_finished = max(other.invincible_finished, time) + cvar("g_balance_powerup_strength_time");
 		}
 	}

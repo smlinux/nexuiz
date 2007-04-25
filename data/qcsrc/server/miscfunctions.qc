@@ -1,3 +1,5 @@
+void() info_player_deathmatch; // needed for the other spawnpoints
+
 void move_out_of_solid_expand(entity e, vector by)
 {
 	float eps = 0.0625;
@@ -702,4 +704,31 @@ void readlevelcvars(void)
 	g_pickup_health_max                = cvar("g_pickup_health_max");
 	g_pickup_healthmega                = cvar("g_pickup_healthmega");
 	g_pickup_healthmega_max            = cvar("g_pickup_healthmega_max");
+}
+
+/*
+// TODO sound pack system
+string soundpack;
+
+string precache_sound_builtin (string s) = #19;
+void(entity e, float chan, string samp, float vol, float atten) sound_builtin = #8;
+string precache_sound(string s)
+{
+	return precache_sound_builtin(strcat(soundpack, s));
+}
+void play2(entity e, string filename)
+{
+	stuffcmd(e, strcat("play2 ", soundpack, filename, "\n"));
+}
+void sound(entity e, float chan, string samp, float vol, float atten)
+{
+	sound_builtin(e, chan, strcat(soundpack, samp), vol, atten);
+}
+*/
+
+string precache_sound (string s) = #19;
+void(entity e, float chan, string samp, float vol, float atten) sound = #8;
+void play2(entity e, string filename)
+{
+	stuffcmd(e, strcat("play2 ", filename, "\n"));
 }

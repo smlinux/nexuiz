@@ -1,11 +1,11 @@
 void info_player_start (void)
 {
-	self.classname = "info_player_deathmatch";
-	relocate_spawnpoint();
+	info_player_deathmatch();
 }
 
 void info_player_deathmatch (void)
 {
+	self.classname = "info_player_deathmatch";
 	relocate_spawnpoint();
 }
 
@@ -1239,7 +1239,7 @@ void ShowRespawnCountdown()
 		{
 			self.respawn_countdown = number - 1;
 			if(ceil(self.death_time - (time + 0.5)) == number) // only say it if it is the same number even in 0.5s; to prevent overlapping sounds
-				stuffcmd(self, strcat("play2 announcer/robotic/", ftos(number), ".ogg\n"));
+				play2(self, strcat("announcer/robotic/", ftos(number), ".ogg"));
 		}
 	}
 }
