@@ -131,6 +131,24 @@ textures/evil6_floors/e6grate2_flr_b_s
 	}
 }
 
+textures/evil6_floors/e6launchcfloor
+{
+	q3map_lightimage textures/evil6_floors/e6launchcfloor_glow.tga
+	q3map_surfacelight 400
+	surfaceparm nomarks
+	
+	{
+		map textures/evil6_floors/e6launchcfloor
+		animmap 10 textures/evil6_floors/e6launchcfloor textures/evil6_floors/e6launchcfloor-1 textures/evil6_floors/e6launchcfloor-2 textures/evil6_floors/e6launchcfloor-3 textures/evil6_floors/e6launchcfloor-4 textures/evil6_floors/e6launchcfloor-5 textures/evil6_floors/e6launchcfloor-6 textures/evil6_floors/e6launchcfloor-7
+	}
+	{
+		map $lightmap
+		tcGen lightmap
+		blendfunc filter
+	}
+
+}
+
 textures/evil6_floors/e6launchcfloor_s
 {
 	qer_editorimage textures/evil6_floors/e6launchcfloor.tga
@@ -163,24 +181,36 @@ textures/evil6_floors/e6launchengine_s
 	q3map_lightimage textures/evil6_floors/e6launchengine_glow.tga
 	q3map_surfacelight 400
 	surfaceparm nomarks
+	
 	{
-		map textures/evil6_floors/e6launchengine.tga
+		map textures/evil6_floors/e6launchengine
+		animmap 10 textures/evil6_floors/e6launchengine textures/evil6_floors/e6launchengine-1 textures/evil6_floors/e6launchengine-2 textures/evil6_floors/e6launchengine-3 textures/evil6_floors/e6launchengine-4 textures/evil6_floors/e6launchengine-5 textures/evil6_floors/e6launchengine-6 textures/evil6_floors/e6launchengine-7
 	}
 	{
 		map $lightmap
+		tcGen lightmap
 		blendfunc filter
 	}
+
+}
+
+textures/evil6_floors/e6launchengine
+{
+	qer_editorimage textures/evil6_floors/e6launchengine.tga
+	q3map_lightimage textures/evil6_floors/e6launchengine_glow.tga
+	q3map_surfacelight 400
+	surfaceparm nomarks
+	
 	{
-		map textures/evil6_floors/e6launchengine_glow.tga
-		blendfunc add
-		rgbgen wave sin .5 .8 0 1.5
+		map textures/evil6_floors/e6launchengine
+		animmap 10 textures/evil6_floors/e6launchengine textures/evil6_floors/e6launchengine-1 textures/evil6_floors/e6launchengine-2 textures/evil6_floors/e6launchengine-3 textures/evil6_floors/e6launchengine-4 textures/evil6_floors/e6launchengine-5 textures/evil6_floors/e6launchengine-6 textures/evil6_floors/e6launchengine-7
 	}
 	{
-		clampmap textures/evil6_floors/e6launchengine_fx.tga
-		blendfunc add
-		tcMod stretch sin 1.2 .9 0 1.5
-		rgbGen wave square .5 .5 .25 1.5
+		map $lightmap
+		tcGen lightmap
+		blendfunc filter
 	}
+
 }
 
 textures/evil6_floors/e6launchlfloor_s
@@ -207,6 +237,25 @@ textures/evil6_floors/e6launchlfloor_s
 		tcMod stretch sin 1.2 .9 0 1.5
 		rgbGen wave square .5 .5 .25 1.5
 	}
+}
+
+textures/evil6_floors/e6launchlfloor
+{
+	qer_editorimage textures/evil6_floors/e6launchlfloor.tga
+	q3map_lightimage textures/evil6_floors/e6launchlfloor_glow.tga
+	q3map_surfacelight 400
+	surfaceparm nomarks
+	
+	{
+		map textures/evil6_floors/e6launchlfloor
+		animmap 10 textures/evil6_floors/e6launchlfloor textures/evil6_floors/e6launchlfloor-1 textures/evil6_floors/e6launchlfloor-2 textures/evil6_floors/e6launchlfloor-3 textures/evil6_floors/e6launchlfloor-4 textures/evil6_floors/e6launchlfloor-5 textures/evil6_floors/e6launchlfloor-6 textures/evil6_floors/e6launchlfloor-7
+	}
+	{
+		map $lightmap
+		tcGen lightmap
+		blendfunc filter
+	}
+
 }
 
 textures/evil6_floors/e6tekmtlrflr_h_full_slow

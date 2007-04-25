@@ -1,3 +1,37 @@
+textures/e8/e8jumpspawn02b
+{
+	q3map_lightimage textures/e8/e8jumpspawn02b_glow.tga
+	surfaceparm metalsteps
+	q3map_surfacelight 100
+	
+	{
+		map textures/e8/e8jumpspawn02b
+		animmap 10 textures/e8/e8jumpspawn02b textures/e8/e8jumpspawn02b-1 textures/e8/e8jumpspawn02b-2 textures/e8/e8jumpspawn02b-3 textures/e8/e8jumpspawn02b-4 textures/e8/e8jumpspawn02b-5 textures/e8/e8jumpspawn02b-6
+	}
+	{
+		map $lightmap
+		tcGen lightmap
+		blendfunc filter
+	}
+}
+
+textures/e8/e8jumpspawn02c
+{
+	q3map_lightimage textures/e8/e8jumpspawn02c_glow.tga
+	surfaceparm metalsteps
+	q3map_surfacelight 100
+	
+	{
+		map textures/e8/e8jumpspawn02c
+		animmap 10 textures/e8/e8jumpspawn02c textures/e8/e8jumpspawn02c-1 textures/e8/e8jumpspawn02c-2 textures/e8/e8jumpspawn02c-3 textures/e8/e8jumpspawn02c-4 textures/e8/e8jumpspawn02c-5 textures/e8/e8jumpspawn02c-6
+	}
+	{
+		map $lightmap
+		tcGen lightmap
+		blendfunc filter
+	}
+}
+
 textures/e8/e8_base1broke
 {
 	q3map_nonplanar
@@ -379,22 +413,34 @@ textures/evil8_fx/e8jumpspawn02
 	q3map_lightimage textures/evil8_fx/e8jumpspawn02_fx.tga
 	surfaceparm metalsteps
 	q3map_surfacelight 100
+	
 	{
-		map textures/evil8_fx/e8jumpspawn02_fx.tga
-		rgbGen identity
-		tcMod rotate 760
-	}
-	{
-		map textures/evil8_fx/e8jumpspawn02.tga
-		blendfunc blend
-		rgbGen identity
+		map textures/evil8_fx/e8jumpspawn02
+		animmap 10 textures/evil8_fx/e8jumpspawn02 textures/evil8_fx/e8jumpspawn02-1 textures/evil8_fx/e8jumpspawn02-2 textures/evil8_fx/e8jumpspawn02-3 textures/evil8_fx/e8jumpspawn02-4 textures/evil8_fx/e8jumpspawn02-5 textures/evil8_fx/e8jumpspawn02-6
 	}
 	{
 		map $lightmap
-		blendfunc gl_dst_color gl_one_minus_dst_alpha
-		rgbGen identity
 		tcGen lightmap
+		blendfunc filter
 	}
+}
+
+textures/evil8_fx/e8jumpspawn02red
+{
+	q3map_lightimage textures/evil8_fx/e8jumpspawn02red_glow.tga
+	surfaceparm metalsteps
+	q3map_surfacelight 100
+	
+	{
+		map textures/evil8_fx/e8jumpspawn02red
+		animmap 10 textures/evil8_fx/e8jumpspawn02red textures/evil8_fx/e8jumpspawn02red-1 textures/evil8_fx/e8jumpspawn02red-2 textures/evil8_fx/e8jumpspawn02red-3 textures/evil8_fx/e8jumpspawn02red-4 textures/evil8_fx/e8jumpspawn02red-5 textures/evil8_fx/e8jumpspawn02red-6
+	}
+	{
+		map $lightmap
+		tcGen lightmap
+		blendfunc filter
+	}
+
 }
 
 textures/evil8_fx/e8jumpspawn02b

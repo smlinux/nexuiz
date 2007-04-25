@@ -10,9 +10,10 @@ textures/e7/e7brickfloor01jump
 	q3map_lightimage textures/e7/e7brickfloor01jump_glow.tga
 	surfaceparm nomarks
 	q3map_surfacelight 400
+	
 	{
-		map textures/e7/e7brickfloor01jump.tga
-		rgbGen identity
+		map textures/e7/e7brickfloor01jump
+		animmap 10 textures/e7/e7brickfloor01jump textures/e7/e7brickfloor01jump-1 textures/e7/e7brickfloor01jump-2 textures/e7/e7brickfloor01jump-3 textures/e7/e7brickfloor01jump-4 textures/e7/e7brickfloor01jump-5 textures/e7/e7brickfloor01jump-6 textures/e7/e7brickfloor01jump-7
 	}
 	{
 		map $lightmap
@@ -20,11 +21,7 @@ textures/e7/e7brickfloor01jump
 		rgbGen identity
 		tcGen lightmap
 	}
-	{
-		map textures/e7/e7brickfloor01jump_glow.tga
-		blendfunc add
-		rgbGen wave sin 0.5 0.8 0 1.5
-	}
+
 }
 
 textures/e7/e7mlight
@@ -231,9 +228,10 @@ textures/e7/e7sbrickfloor_jump
 	q3map_lightimage textures/e7/e7sbrickfloor_jump_glow.tga
 	surfaceparm nomarks
 	q3map_surfacelight 400
+	
 	{
-		map textures/e7/e7sbrickfloor_jump.tga
-		rgbGen identity
+		map textures/e7/e7sbrickfloor_jump
+		animmap 10 textures/e7/e7sbrickfloor_jump textures/e7/e7sbrickfloor_jump-1 textures/e7/e7sbrickfloor_jump-2 textures/e7/e7sbrickfloor_jump-3 textures/e7/e7sbrickfloor_jump-4 textures/e7/e7sbrickfloor_jump-5 textures/e7/e7sbrickfloor_jump-6 textures/e7/e7sbrickfloor_jump-7
 	}
 	{
 		map $lightmap
@@ -241,11 +239,7 @@ textures/e7/e7sbrickfloor_jump
 		rgbGen identity
 		tcGen lightmap
 	}
-	{
-		map textures/e7/e7sbrickfloor_jump_glow.tga
-		blendfunc add
-		rgbGen wave sin 0.5 0.8 0 1.5
-	}
+
 }
 
 //small grate

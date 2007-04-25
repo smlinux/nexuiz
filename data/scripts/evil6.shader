@@ -163,24 +163,17 @@ textures/evil6_floors/e6launchengine_s
 	q3map_lightimage textures/evil6_floors/e6launchengine_glow.tga
 	q3map_surfacelight 400
 	surfaceparm nomarks
+	
 	{
-		map textures/evil6_floors/e6launchengine.tga
+		map textures/evil6_floors/e6launchengine
+		animmap 10 textures/evil6_floors/e6launchengine textures/evil6_floors/e6launchengine-1 textures/evil6_floors/e6launchengine-2 textures/evil6_floors/e6launchengine-3 textures/evil6_floors/e6launchengine-4 textures/evil6_floors/e6launchengine-5 textures/evil6_floors/e6launchengine-6 textures/evil6_floors/e6launchengine-7
 	}
 	{
 		map $lightmap
+		tcGen lightmap
 		blendfunc filter
 	}
-	{
-		map textures/evil6_floors/e6launchengine_glow.tga
-		blendfunc add
-		rgbgen wave sin .5 .8 0 1.5
-	}
-	{
-		clampmap textures/evil6_floors/e6launchengine_fx.tga
-		blendfunc add
-		tcMod stretch sin 1.2 .9 0 1.5
-		rgbGen wave square .5 .5 .25 1.5
-	}
+
 }
 
 textures/evil6_floors/e6launchlfloor_s
