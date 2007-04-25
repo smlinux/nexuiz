@@ -1272,18 +1272,8 @@ Called every frame for each client before the physics are run
 */
 void() ctf_setstatus;
 .float vote_nagtime;
-.string need_to_free;
 void PlayerPreThink (void)
 {
-	if(self.need_to_free != "")
-	{
-		strunzone(self.need_to_free);
-		self.need_to_free = "";
-	}
-	if(strlen(self.netname) > 0)
-		if(substring(self.netname, strlen(self.netname) - 1, 1) == "^")
-			self.netname = self.need_to_free = strzone(strcat(substring(self.netname, 0, strlen(self.netname) - 1), " ")); // BROKEN COLORS can be annoying!
-
 	// version nagging
 	if(self.version_nagtime)
 		if(self.cvar_g_nexuizversion)
