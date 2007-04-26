@@ -25,7 +25,7 @@ void W_Laser_Touch (void)
 		RadiusDamage (self, self.owner, cvar("g_balance_laser_secondary_damage"), cvar("g_balance_laser_secondary_edgedamage"), cvar("g_balance_laser_secondary_radius"), world, cvar("g_balance_laser_secondary_force"), IT_LASER);
 	else
 		RadiusDamage (self, self.owner, cvar("g_balance_laser_primary_damage"), cvar("g_balance_laser_primary_edgedamage"), cvar("g_balance_laser_primary_radius"), world, cvar("g_balance_laser_primary_force"), IT_LASER);
-	sound (self, CHAN_BODY, "weapons/laserimpact.ogg", 1, ATTN_NORM);
+	sound (self, CHAN_BODY, "weapons/laserimpact.wav", 1, ATTN_NORM);
 
 	remove (self);
 }
@@ -34,7 +34,7 @@ void W_Laser_Attack (float issecondary)
 {
 	local entity missile;
 
-	W_SetupShot (self, '15 8 -8', FALSE, 3, "weapons/lasergun_fire.ogg");
+	W_SetupShot (self, '15 8 -8', FALSE, 3, "weapons/lasergun_fire.wav");
 	//te_customflash(w_shotorg, 160, 0.2, '1 0 0');
 
 	missile = spawn ();

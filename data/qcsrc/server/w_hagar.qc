@@ -7,11 +7,11 @@ void W_Hagar_Explode (void)
 	//effect (org2, "models/sprites/hagar.spr", 0, 12, 35);
 	b = crandom();
 	if (b<-0.7)
-		sound (self, CHAN_BODY, "weapons/hagexp1.ogg", 1, ATTN_NORM);
+		sound (self, CHAN_BODY, "weapons/hagexp1.wav", 1, ATTN_NORM);
 	else if (b<0.4)
-		sound (self, CHAN_BODY, "weapons/hagexp2.ogg", 1, ATTN_NORM);
+		sound (self, CHAN_BODY, "weapons/hagexp2.wav", 1, ATTN_NORM);
 	else if (b<1)
-		sound (self, CHAN_BODY, "weapons/hagexp3.ogg", 1, ATTN_NORM);
+		sound (self, CHAN_BODY, "weapons/hagexp3.wav", 1, ATTN_NORM);
 
 	self.event_damage = SUB_Null;
 	RadiusDamage (self, self.owner, cvar("g_balance_hagar_primary_damage"), cvar("g_balance_hagar_primary_edgedamage"), cvar("g_balance_hagar_primary_radius"), world, cvar("g_balance_hagar_primary_force"), IT_HAGAR);
@@ -28,11 +28,11 @@ void W_Hagar_Explode2 (void)
 	//effect (org2, "models/sprites/hagar.spr", 0, 12, 35);
 	b = crandom();
 	if (b<-0.7)
-		sound (self, CHAN_BODY, "weapons/hagexp1.ogg", 1, ATTN_NORM);
+		sound (self, CHAN_BODY, "weapons/hagexp1.wav", 1, ATTN_NORM);
 	else if (b<0.4)
-		sound (self, CHAN_BODY, "weapons/hagexp2.ogg", 1, ATTN_NORM);
+		sound (self, CHAN_BODY, "weapons/hagexp2.wav", 1, ATTN_NORM);
 	else if (b<1)
-		sound (self, CHAN_BODY, "weapons/hagexp3.ogg", 1, ATTN_NORM);
+		sound (self, CHAN_BODY, "weapons/hagexp3.wav", 1, ATTN_NORM);
 
 	self.event_damage = SUB_Null;
 	RadiusDamage (self, self.owner, cvar("g_balance_hagar_secondary_damage"), cvar("g_balance_hagar_secondary_edgedamage"), cvar("g_balance_hagar_secondary_radius"), world, cvar("g_balance_hagar_secondary_force"), IT_HAGAR);
@@ -81,7 +81,7 @@ void W_Hagar_Attack (void)
 
 	if (cvar("g_use_ammunition"))
 		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_hagar_primary_ammo");
-	W_SetupShot (self, '15 5 -8', FALSE, 2, "weapons/hagar_fire.ogg");
+	W_SetupShot (self, '15 5 -8', FALSE, 2, "weapons/hagar_fire.wav");
 
 	missile = spawn ();
 	missile.owner = self;
@@ -116,7 +116,7 @@ void W_Hagar_Attack2 (void)
 
 	if (cvar("g_use_ammunition"))
 		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_hagar_secondary_ammo");
-	W_SetupShot (self, '15 5 -8', FALSE, 2, "weapons/hagar_fire.ogg");
+	W_SetupShot (self, '15 5 -8', FALSE, 2, "weapons/hagar_fire.wav");
 
 	missile = spawn ();
 	missile.owner = self;

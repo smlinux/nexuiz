@@ -5,7 +5,7 @@ void W_Grenade_Explode (void)
 	org2 = findbetterlocation (self.origin, 12);
 	te_explosion (org2);
 	//effect (org2, "models/sprites/grenexpl.spr", 0, 12, 35);
-	sound (self, CHAN_BODY, "weapons/grenade_impact.ogg", 1, ATTN_NORM);
+	sound (self, CHAN_BODY, "weapons/grenade_impact.wav", 1, ATTN_NORM);
 
 	self.event_damage = SUB_Null;
 	RadiusDamage (self, self.owner, cvar("g_balance_grenadelauncher_primary_damage"), cvar("g_balance_grenadelauncher_primary_edgedamage"), cvar("g_balance_grenadelauncher_primary_radius"), world, cvar("g_balance_grenadelauncher_primary_force"), IT_GRENADE_LAUNCHER);
@@ -19,7 +19,7 @@ void W_Grenade_Explode2 (void)
 	org2 = findbetterlocation (self.origin, 12);
 	te_explosion (org2);
 	//effect (org2, "models/sprites/grenexpl.spr", 0, 12, 35);
-	sound (self, CHAN_BODY, "weapons/grenade_impact.ogg", 1, ATTN_NORM);
+	sound (self, CHAN_BODY, "weapons/grenade_impact.wav", 1, ATTN_NORM);
 
 	self.event_damage = SUB_Null;
 	RadiusDamage (self, self.owner, cvar("g_balance_grenadelauncher_secondary_damage"), cvar("g_balance_grenadelauncher_secondary_edgedamage"), cvar("g_balance_grenadelauncher_secondary_radius"), world, cvar("g_balance_grenadelauncher_secondary_force"), IT_GRENADE_LAUNCHER);
@@ -51,17 +51,17 @@ void W_Grenade_Touch2 (void)
 		float r;
 		r = random() * 6;
 		if(r < 1)
-			sound (self, CHAN_IMPACT, "weapons/grenade_bounce1.ogg", 1, ATTN_NORM);
+			sound (self, CHAN_IMPACT, "weapons/grenade_bounce1.wav", 1, ATTN_NORM);
 		else if(r < 2)
-			sound (self, CHAN_IMPACT, "weapons/grenade_bounce2.ogg", 1, ATTN_NORM);
+			sound (self, CHAN_IMPACT, "weapons/grenade_bounce2.wav", 1, ATTN_NORM);
 		else if(r < 3)
-			sound (self, CHAN_IMPACT, "weapons/grenade_bounce3.ogg", 1, ATTN_NORM);
+			sound (self, CHAN_IMPACT, "weapons/grenade_bounce3.wav", 1, ATTN_NORM);
 		else if(r < 4)
-			sound (self, CHAN_IMPACT, "weapons/grenade_bounce4.ogg", 1, ATTN_NORM);
+			sound (self, CHAN_IMPACT, "weapons/grenade_bounce4.wav", 1, ATTN_NORM);
 		else if(r < 5)
-			sound (self, CHAN_IMPACT, "weapons/grenade_bounce5.ogg", 1, ATTN_NORM);
+			sound (self, CHAN_IMPACT, "weapons/grenade_bounce5.wav", 1, ATTN_NORM);
 		else
-			sound (self, CHAN_IMPACT, "weapons/grenade_bounce6.ogg", 1, ATTN_NORM);
+			sound (self, CHAN_IMPACT, "weapons/grenade_bounce6.wav", 1, ATTN_NORM);
 	}
 }
 
@@ -81,7 +81,7 @@ void W_Grenade_Attack (void)
 
 	if (cvar("g_use_ammunition"))
 		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_grenadelauncher_primary_ammo");
-	W_SetupShot (self, '15 8 -8', FALSE, 4, "weapons/grenade_fire.ogg");
+	W_SetupShot (self, '15 8 -8', FALSE, 4, "weapons/grenade_fire.wav");
 
 	gren = spawn ();
 	gren.owner = self;
@@ -112,7 +112,7 @@ void W_Grenade_Attack2 (void)
 
 	if (cvar("g_use_ammunition"))
 		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_grenadelauncher_secondary_ammo");
-	W_SetupShot (self, '15 8 -8', FALSE, 4, "weapons/grenade_fire.ogg");
+	W_SetupShot (self, '15 8 -8', FALSE, 4, "weapons/grenade_fire.wav");
 
 	gren = spawn ();
 	gren.owner = self;

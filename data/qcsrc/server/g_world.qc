@@ -204,108 +204,108 @@ void worldspawn (void)
 	precache_sound ("misc/footstep04.wav");
 	precache_sound ("misc/footstep05.wav");
 	precache_sound ("misc/footstep06.wav");
-	precache_sound ("misc/hitground1.ogg");
-	precache_sound ("misc/hitground2.ogg");
-	precache_sound ("misc/hitground3.ogg");
-	precache_sound ("misc/hitground4.ogg");
-	precache_sound ("misc/itempickup.ogg");
-	precache_sound ("misc/itemrespawn.ogg");
-	precache_sound ("misc/jumppad.ogg");
-	precache_sound ("misc/mediumhealth.ogg");
-	precache_sound ("misc/megahealth.ogg");
-	precache_sound ("misc/minihealth.ogg");
-	precache_sound ("misc/powerup.ogg");
-	precache_sound ("misc/powerup_shield.ogg");
+	precache_sound ("misc/hitground1.wav");
+	precache_sound ("misc/hitground2.wav");
+	precache_sound ("misc/hitground3.wav");
+	precache_sound ("misc/hitground4.wav");
+	precache_sound ("misc/itempickup.wav");
+	precache_sound ("misc/itemrespawn.wav");
+	precache_sound ("misc/jumppad.wav");
+	precache_sound ("misc/mediumhealth.wav");
+	precache_sound ("misc/megahealth.wav");
+	precache_sound ("misc/minihealth.wav");
+	precache_sound ("misc/powerup.wav");
+	precache_sound ("misc/powerup_shield.wav");
 	precache_sound ("misc/talk.wav");
-	precache_sound ("misc/teleport.ogg");
+	precache_sound ("misc/teleport.wav");
 	precache_sound ("plats/medplat1.wav");
 	precache_sound ("plats/medplat2.wav");
 	precache_sound ("player/lava.wav");
 	precache_sound ("player/slime.wav");
-	precache_sound ("weapons/crylink_fire.ogg");
-	precache_sound ("weapons/electro_bounce.ogg");
-	precache_sound ("weapons/electro_fire.ogg");
-	precache_sound ("weapons/electro_fire2.ogg");
+	precache_sound ("weapons/crylink_fire.wav");
+	precache_sound ("weapons/electro_bounce.wav");
+	precache_sound ("weapons/electro_fire.wav");
+	precache_sound ("weapons/electro_fire2.wav");
 	precache_sound ("weapons/electro_fly.wav");
-	precache_sound ("weapons/electro_impact.ogg");
-	precache_sound ("weapons/electro_impact_combo.ogg");
-	//precache_sound ("weapons/grenade_bounce.ogg");
-	precache_sound ("weapons/grenade_bounce1.ogg");
-	precache_sound ("weapons/grenade_bounce2.ogg");
-	precache_sound ("weapons/grenade_bounce3.ogg");
-	precache_sound ("weapons/grenade_bounce4.ogg");
-	precache_sound ("weapons/grenade_bounce5.ogg");
-	precache_sound ("weapons/grenade_bounce6.ogg");
-	precache_sound ("weapons/grenade_fire.ogg");
-	precache_sound ("weapons/grenade_impact.ogg");
-	precache_sound ("weapons/hagar_fire.ogg");
-	precache_sound ("weapons/hagexp1.ogg");
-	precache_sound ("weapons/hagexp2.ogg");
-	precache_sound ("weapons/hagexp3.ogg");
-	precache_sound ("weapons/hook_fire.ogg");
-	precache_sound ("weapons/hook_impact.ogg");
-	precache_sound ("weapons/lasergun_fire.ogg");
-	precache_sound ("weapons/laserimpact.ogg");
-	precache_sound ("weapons/nexfire.ogg");
-	precache_sound ("weapons/neximpact.ogg");
-	precache_sound ("weapons/ric1.ogg");
-	precache_sound ("weapons/ric2.ogg");
-	precache_sound ("weapons/ric3.ogg");
-	precache_sound ("weapons/rocket_fire.ogg");
+	precache_sound ("weapons/electro_impact.wav");
+	precache_sound ("weapons/electro_impact_combo.wav");
+	//precache_sound ("weapons/grenade_bounce.wav");
+	precache_sound ("weapons/grenade_bounce1.wav");
+	precache_sound ("weapons/grenade_bounce2.wav");
+	precache_sound ("weapons/grenade_bounce3.wav");
+	precache_sound ("weapons/grenade_bounce4.wav");
+	precache_sound ("weapons/grenade_bounce5.wav");
+	precache_sound ("weapons/grenade_bounce6.wav");
+	precache_sound ("weapons/grenade_fire.wav");
+	precache_sound ("weapons/grenade_impact.wav");
+	precache_sound ("weapons/hagar_fire.wav");
+	precache_sound ("weapons/hagexp1.wav");
+	precache_sound ("weapons/hagexp2.wav");
+	precache_sound ("weapons/hagexp3.wav");
+	precache_sound ("weapons/hook_fire.wav");
+	precache_sound ("weapons/hook_impact.wav");
+	precache_sound ("weapons/lasergun_fire.wav");
+	precache_sound ("weapons/laserimpact.wav");
+	precache_sound ("weapons/nexfire.wav");
+	precache_sound ("weapons/neximpact.wav");
+	precache_sound ("weapons/ric1.wav");
+	precache_sound ("weapons/ric2.wav");
+	precache_sound ("weapons/ric3.wav");
+	precache_sound ("weapons/rocket_fire.wav");
 	precache_sound ("weapons/rocket_fly.wav");
-	precache_sound ("weapons/rocket_impact.ogg");
-	precache_sound ("weapons/rocket_det.ogg");
-	precache_sound ("weapons/shotgun_fire.ogg");
-	precache_sound ("weapons/tink1.ogg");
-	precache_sound ("weapons/uzi_fire.ogg");
-	precache_sound ("weapons/weapon_switch.ogg");
-	precache_sound ("weapons/weaponpickup.ogg");
-	precache_sound ("weapons/strength_fire.ogg");
+	precache_sound ("weapons/rocket_impact.wav");
+	precache_sound ("weapons/rocket_det.wav");
+	precache_sound ("weapons/shotgun_fire.wav");
+	precache_sound ("weapons/tink1.wav");
+	precache_sound ("weapons/uzi_fire.wav");
+	precache_sound ("weapons/weapon_switch.wav");
+	precache_sound ("weapons/weaponpickup.wav");
+	precache_sound ("weapons/strength_fire.wav");
 
-	//precache_sound ("announce/male/kill10.ogg");
-	//precache_sound ("announce/male/kill15.ogg");
-	//precache_sound ("announce/male/kill20.ogg");
-	//precache_sound ("announce/male/kill25.ogg");
-	//precache_sound ("announce/male/kill3.ogg");
-	//precache_sound ("announce/male/kill30.ogg");
-	//precache_sound ("announce/male/kill4.ogg");
-	//precache_sound ("announce/male/kill5.ogg");
-	//precache_sound ("announce/male/kill6.ogg");
-	//precache_sound ("announce/male/mapkill1.ogg");
-	//precache_sound ("announce/robotic/last_second_save.ogg");
-	//precache_sound ("announce/robotic/narrowly_averted.ogg");
-	//precache_sound ("minstagib/mockery.ogg");
+	//precache_sound ("announce/male/kill10.wav");
+	//precache_sound ("announce/male/kill15.wav");
+	//precache_sound ("announce/male/kill20.wav");
+	//precache_sound ("announce/male/kill25.wav");
+	//precache_sound ("announce/male/kill3.wav");
+	//precache_sound ("announce/male/kill30.wav");
+	//precache_sound ("announce/male/kill4.wav");
+	//precache_sound ("announce/male/kill5.wav");
+	//precache_sound ("announce/male/kill6.wav");
+	//precache_sound ("announce/male/mapkill1.wav");
+	//precache_sound ("announce/robotic/last_second_save.wav");
+	//precache_sound ("announce/robotic/narrowly_averted.wav");
+	//precache_sound ("minstagib/mockery.wav");
 
 	// announcer sounds - male
-	precache_sound ("announcer/male/03kills.ogg");
-	precache_sound ("announcer/male/05kills.ogg");
-	precache_sound ("announcer/male/10kills.ogg");
-	precache_sound ("announcer/male/15kills.ogg");
-	precache_sound ("announcer/male/20kills.ogg");
-	precache_sound ("announcer/male/25kills.ogg");
-	precache_sound ("announcer/male/30kills.ogg");
-	precache_sound ("announcer/male/botlike.ogg");
-	precache_sound ("announcer/male/electrobitch.ogg");
-	precache_sound ("announcer/male/welcome.ogg");
-	precache_sound ("announcer/male/yoda.ogg");
+	precache_sound ("announcer/male/03kills.wav");
+	precache_sound ("announcer/male/05kills.wav");
+	precache_sound ("announcer/male/10kills.wav");
+	precache_sound ("announcer/male/15kills.wav");
+	precache_sound ("announcer/male/20kills.wav");
+	precache_sound ("announcer/male/25kills.wav");
+	precache_sound ("announcer/male/30kills.wav");
+	precache_sound ("announcer/male/botlike.wav");
+	precache_sound ("announcer/male/electrobitch.wav");
+	precache_sound ("announcer/male/welcome.wav");
+	precache_sound ("announcer/male/yoda.wav");
 
 	// announcer sounds - robotic
-	precache_sound ("announcer/robotic/1fragleft.ogg");
-	precache_sound ("announcer/robotic/1minuteremains.ogg");
-	precache_sound ("announcer/robotic/2fragsleft.ogg");
-	precache_sound ("announcer/robotic/3fragsleft.ogg");
-	precache_sound ("announcer/robotic/lastsecond.ogg");
-	precache_sound ("announcer/robotic/narrowly.ogg");
-	precache_sound ("announcer/robotic/1.ogg");
-	precache_sound ("announcer/robotic/2.ogg");
-	precache_sound ("announcer/robotic/3.ogg");
-	precache_sound ("announcer/robotic/4.ogg");
-	precache_sound ("announcer/robotic/5.ogg");
-	precache_sound ("announcer/robotic/6.ogg");
-	precache_sound ("announcer/robotic/7.ogg");
-	precache_sound ("announcer/robotic/8.ogg");
-	precache_sound ("announcer/robotic/9.ogg");
-	precache_sound ("announcer/robotic/10.ogg");
+	precache_sound ("announcer/robotic/1fragleft.wav");
+	precache_sound ("announcer/robotic/1minuteremains.wav");
+	precache_sound ("announcer/robotic/2fragsleft.wav");
+	precache_sound ("announcer/robotic/3fragsleft.wav");
+	precache_sound ("announcer/robotic/lastsecond.wav");
+	precache_sound ("announcer/robotic/narrowly.wav");
+	precache_sound ("announcer/robotic/1.wav");
+	precache_sound ("announcer/robotic/2.wav");
+	precache_sound ("announcer/robotic/3.wav");
+	precache_sound ("announcer/robotic/4.wav");
+	precache_sound ("announcer/robotic/5.wav");
+	precache_sound ("announcer/robotic/6.wav");
+	precache_sound ("announcer/robotic/7.wav");
+	precache_sound ("announcer/robotic/8.wav");
+	precache_sound ("announcer/robotic/9.wav");
+	precache_sound ("announcer/robotic/10.wav");
 
 	// plays music for the level if there is any
 	if (self.noise)
@@ -1277,11 +1277,11 @@ float(float fraglimit) WinningCondition_MaxIndividualScore =
 		if (checkrules_leaderfrags != checkrules_oldleaderfrags)
 		{
 			if (checkrules_leaderfrags == fraglimit - 1)
-				sound(world, CHAN_AUTO, "announcer/robotic/1fragleft.ogg", 1, ATTN_NONE);
+				sound(world, CHAN_AUTO, "announcer/robotic/1fragleft.wav", 1, ATTN_NONE);
 			else if (checkrules_leaderfrags == fraglimit - 2)
-				sound(world, CHAN_AUTO, "announcer/robotic/2fragsleft.ogg", 1, ATTN_NONE);
+				sound(world, CHAN_AUTO, "announcer/robotic/2fragsleft.wav", 1, ATTN_NONE);
 			else if (checkrules_leaderfrags == fraglimit - 3)
-				sound(world, CHAN_AUTO, "announcer/robotic/3fragsleft.ogg", 1, ATTN_NONE);
+				sound(world, CHAN_AUTO, "announcer/robotic/3fragsleft.wav", 1, ATTN_NONE);
 		}
 
 	return GetWinningCode(fraglimit && checkrules_leaderfrags >= fraglimit, checkrules_equality);
@@ -1320,11 +1320,11 @@ float(float fraglimit) WinningConditionBase_Teamplay =
 		if(tdm_max_score != tdm_old_score)
 		{
 			if(tdm_max_score == fraglimit - 1)
-				sound(world, CHAN_AUTO, "announcer/robotic/1fragleft.ogg", 1, ATTN_NONE);
+				sound(world, CHAN_AUTO, "announcer/robotic/1fragleft.wav", 1, ATTN_NONE);
 			else if(tdm_max_score == fraglimit - 2)
-				sound(world, CHAN_AUTO, "announcer/robotic/2fragsleft.ogg", 1, ATTN_NONE);
+				sound(world, CHAN_AUTO, "announcer/robotic/2fragsleft.wav", 1, ATTN_NONE);
 			else if(tdm_max_score == fraglimit - 3)
-				sound(world, CHAN_AUTO, "announcer/robotic/3fragsleft.ogg", 1, ATTN_NONE);
+				sound(world, CHAN_AUTO, "announcer/robotic/3fragsleft.wav", 1, ATTN_NONE);
 		}
 
 	return GetWinningCode(fraglimit && tdm_max_score >= fraglimit, checkrules_equality);
@@ -1528,7 +1528,7 @@ void() CheckRules_World =
 		if(!checkrules_overtimewarning)
 		{
 			checkrules_overtimewarning = TRUE;
-			//sound(world, CHAN_AUTO, "announcer/robotic/1minuteremains.ogg", 1, ATTN_NONE);
+			//sound(world, CHAN_AUTO, "announcer/robotic/1minuteremains.wav", 1, ATTN_NONE);
 			bcenterprint("^3Now playing ^1OVERTIME^3!\n\n^3Keep fragging until we have a ^1winner^3!");
 		}
 	}
@@ -1547,7 +1547,7 @@ void() CheckRules_World =
 	if (!checkrules_oneminutewarning && timelimit > 0 && time > timelimit - 60)
 	{
 		checkrules_oneminutewarning = TRUE;
-		sound(world, CHAN_AUTO, "announcer/robotic/1minuteremains.ogg", 1, ATTN_NONE);
+		sound(world, CHAN_AUTO, "announcer/robotic/1minuteremains.wav", 1, ATTN_NONE);
 	}
 
 	status = WINNING_NO;

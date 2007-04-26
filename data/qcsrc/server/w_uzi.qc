@@ -10,7 +10,7 @@ void W_Uzi_Attack (void)
 		else
 			self.ammo_nails = self.ammo_nails - cvar("g_balance_uzi_sustained_ammo");
 	}
-	W_SetupShot (self, '15 5.5 -8', TRUE, 0, "weapons/uzi_fire.ogg");
+	W_SetupShot (self, '15 5.5 -8', TRUE, 0, "weapons/uzi_fire.wav");
 	if (!cvar("g_norecoil"))
 	{
 		self.punchangle_x = random () - 0.5;

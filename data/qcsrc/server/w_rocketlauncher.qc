@@ -4,7 +4,7 @@
 void W_Rocket_Explode (void)
 {
 	vector	org2;
-	sound (self, CHAN_BODY, "weapons/rocket_impact.ogg", 1, ATTN_NORM);
+	sound (self, CHAN_BODY, "weapons/rocket_impact.wav", 1, ATTN_NORM);
 	org2 = findbetterlocation (self.origin, 16);
 
 	//te_explosion (org2);
@@ -203,7 +203,7 @@ void W_Rocket_Attack (void)
 	if (cvar("g_use_ammunition") && !cvar("g_rocketarena"))
 		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_rocketlauncher_ammo");
 
-	W_SetupShot (self, '15 3 -8', FALSE, 5, "weapons/rocket_fire.ogg");
+	W_SetupShot (self, '15 3 -8', FALSE, 5, "weapons/rocket_fire.wav");
 	te_smallflash(w_shotorg);
 
 	missile = spawn ();
@@ -248,7 +248,7 @@ void W_Rocket_Attack (void)
 	flash.customizeentityforclient = CL_Weaponentity_CustomizeEntityForClient;
 	setorigin (flash, '35 5 -12');
 	setmodel (flash, "models/flash.md3"); // precision set below
-	setattachment(flash, self.weaponentity, "bone01");	
+	setattachment(flash, self.weaponentity, "bone01");
 	SUB_SetFade (flash, time, 0.4);
 
 	// muzzle flash for 3rd person view
@@ -258,7 +258,7 @@ void W_Rocket_Attack (void)
 	flash2.angles_z = 90;
 	setorigin (flash2, '42 0 5');
 	setmodel (flash2, "models/flash.md3"); // precision set below
-	setattachment(flash2, self.exteriorweaponentity, "");	
+	setattachment(flash2, self.exteriorweaponentity, "");
 	SUB_SetFade (flash2, time, 0.4);
 
 	// common properties
@@ -374,7 +374,7 @@ float(float req) w_rlauncher =
 		if(time > self.rl_sound)
 		{
 			self.rl_sound = time + 1;
-			sound (self, CHAN_BODY, "weapons/rocket_det.ogg", 0.5, ATTN_NORM);
+			sound (self, CHAN_BODY, "weapons/rocket_det.wav", 0.5, ATTN_NORM);
 		}
 		if (self.button3)
 		if(cvar("g_laserguided_missile"))
@@ -382,7 +382,7 @@ float(float req) w_rlauncher =
 		{
 			self.exteriorweaponentity.attack_finished = time + 0.4;
 			self.laser_on = !self.laser_on;
-			sound (self, CHAN_AUTO, "weapons/tink1.ogg", 1, ATTN_NORM);
+			sound (self, CHAN_AUTO, "weapons/tink1.wav", 1, ATTN_NORM);
 		}
 	}
 	else if (req == WR_SETUP)

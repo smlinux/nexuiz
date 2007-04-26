@@ -59,7 +59,7 @@ void(entity ent, vector vecs, float antilag, float recoil, string snd) W_SetupSh
 
 	if (self.items & IT_STRENGTH)
 	if (!cvar("g_minstagib"))
-		sound (self, CHAN_AUTO, "weapons/strength_fire.ogg", 1, ATTN_NORM);
+		sound (self, CHAN_AUTO, "weapons/strength_fire.wav", 1, ATTN_NORM);
 };
 
 void LaserTarget_Think()

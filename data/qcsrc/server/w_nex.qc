@@ -2,7 +2,7 @@
 void W_Nex_Attack (void)
 {
 	//w_shotorg = self.origin + self.view_ofs + v_forward * 5 + v_right * 14 + v_up * -7;
-	W_SetupShot(self, '5 14 -8', TRUE, 5, "weapons/nexfire.ogg");
+	W_SetupShot(self, '5 14 -8', TRUE, 5, "weapons/nexfire.wav");
 
 	// assure that nexdamage is high enough in minstagib
 	if (cvar("g_minstagib"))
@@ -29,7 +29,7 @@ void W_Nex_Attack (void)
 	if (trace_ent.solid == SOLID_BSP && !(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT))
 		te_plasmaburn (trace_endpos - w_shotdir * 6);
 	// play a sound
-	PointSound (trace_endpos, "weapons/neximpact.ogg", 1, ATTN_NORM);
+	PointSound (trace_endpos, "weapons/neximpact.wav", 1, ATTN_NORM);
 
 	if (cvar("g_use_ammunition") && !cvar("g_instagib"))
 	{

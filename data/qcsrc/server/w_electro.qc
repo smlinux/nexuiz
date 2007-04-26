@@ -18,7 +18,7 @@ void W_Plasma_Explode (void)
 		RadiusDamage (self, self.owner, cvar("g_balance_electro_secondary_damage"), cvar("g_balance_electro_secondary_edgedamage"), cvar("g_balance_electro_secondary_radius"), world, cvar("g_balance_electro_secondary_force"), IT_ELECTRO);
 	else
 		RadiusDamage (self, self.owner, cvar("g_balance_electro_primary_damage"), cvar("g_balance_electro_primary_edgedamage"), cvar("g_balance_electro_primary_radius"), world, cvar("g_balance_electro_primary_force"), IT_ELECTRO);
-	sound (self, CHAN_BODY, "weapons/electro_impact.ogg", 1, ATTN_NORM);
+	sound (self, CHAN_BODY, "weapons/electro_impact.wav", 1, ATTN_NORM);
 
 	remove (self);
 }
@@ -29,7 +29,7 @@ void W_Plasma_Explode_Combo (void) {
 	org2 = findbetterlocation (self.origin, 8);
 	te_spikequad(self.origin);
 
-	sound (self, CHAN_BODY, "weapons/electro_impact_combo.ogg", 1, ATTN_NORM);
+	sound (self, CHAN_BODY, "weapons/electro_impact_combo.wav", 1, ATTN_NORM);
 
 	self.event_damage = SUB_Null;
 	RadiusDamage (self, self.owner, cvar("g_balance_electro_combo_damage"), cvar("g_balance_electro_combo_edgedamage"), cvar("g_balance_electro_combo_radius"), world, cvar("g_balance_electro_combo_force"), IT_ELECTRO);
@@ -48,7 +48,7 @@ void W_Plasma_Touch (void)
 	if (other.takedamage == DAMAGE_AIM) {
 		W_Plasma_Explode ();
 	} else {
-		sound (self, CHAN_IMPACT, "weapons/electro_bounce.ogg", 1, ATTN_NORM);
+		sound (self, CHAN_IMPACT, "weapons/electro_bounce.wav", 1, ATTN_NORM);
 	}
 }
 
@@ -86,7 +86,7 @@ void() W_Electro_Attack
 {
 	local entity proj;
 
-	W_SetupShot (self, '15 8 -8', FALSE, 2, "weapons/electro_fire.ogg");
+	W_SetupShot (self, '15 8 -8', FALSE, 2, "weapons/electro_fire.wav");
 
 	proj = spawn ();
 	proj.classname = "plasma_prim";
@@ -118,7 +118,7 @@ void() W_Electro_Attack2
 {
 	local entity proj;
 
-	W_SetupShot (self, '15 8 -8', FALSE, 2, "weapons/electro_fire2.ogg");
+	W_SetupShot (self, '15 8 -8', FALSE, 2, "weapons/electro_fire2.wav");
 
 	proj = spawn ();
 	proj.classname = "plasma";

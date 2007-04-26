@@ -66,11 +66,11 @@ void Teleport_Touch (void)
 		return;
 
 	// Make teleport effect where the player left
-	sound (other, CHAN_ITEM, "misc/teleport.ogg", 1, ATTN_NORM);
+	sound (other, CHAN_ITEM, "misc/teleport.wav", 1, ATTN_NORM);
 	te_teleport (other.origin);
 
 	// Make teleport effect where the player arrived
-	sound (other, CHAN_ITEM, "misc/teleport.ogg", 1, ATTN_NORM);
+	sound (other, CHAN_ITEM, "misc/teleport.wav", 1, ATTN_NORM);
 	makevectors (self.enemy.mangle);
 	te_teleport (self.enemy.origin + v_forward * 32);
 
@@ -102,7 +102,7 @@ void Teleport_Touch (void)
 							Damage (other, self, other, 10000, DEATH_TELEFRAG, other.origin, '0 0 0');
 					}
 	}
-	
+
 	// hide myself for 0.2 seconds
 	other.effects = other.effects | EF_NODRAW;
 	if (other.weaponentity) // misuse FL_FLY to avoid EF_NODRAW on viewmodel

@@ -14,7 +14,7 @@ float trigger_push_calculatevelocity_flighttime;
 	  tgt - target entity (can be either a point or a model entity; if it is
 	        the latter, its midpoint is used)
 	  ht  - jump height, measured from the higher one of org and tgt's midpoint
-    
+
 	Returns: velocity for the jump
 	the global trigger_push_calculatevelocity_flighttime is set to the total
 	jump time
@@ -50,7 +50,7 @@ vector(vector org, entity tgt, float ht) trigger_push_calculatevelocity =
 		  z(t) = t * vz - 1/2 grav t^2
 
 		and solved for:
-		
+
 		  s(ti) = sdist
 		  z(ti) = zdist
 		  max(z, ti) = jumpheight
@@ -78,7 +78,7 @@ vector(vector org, entity tgt, float ht) trigger_push_calculatevelocity =
 			trajsign = +1;
 		else
 			trajsign = -1;
-		
+
 		// >0: the lower speed that achieves "it"
 		//     (parabola's maximum inside the jump)
 		// <0: the higher speed that achieves "it"
@@ -129,7 +129,7 @@ void() trigger_push_touch =
 	{
 		if(self.pushltime < time)  // prevent "snorring" sound when a player hits the jumppad more than once
 		{
-			sound (other, CHAN_ITEM, "misc/jumppad.ogg", 1, ATTN_NORM);
+			sound (other, CHAN_ITEM, "misc/jumppad.wav", 1, ATTN_NORM);
 			self.pushltime = time + 0.5;
 		}
 		if(clienttype(other) == CLIENTTYPE_REAL)
