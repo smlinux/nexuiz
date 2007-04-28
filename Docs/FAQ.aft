@@ -122,7 +122,7 @@ There's a [guide (http://www.alientrap.org/forum/viewtopic.php?t=10)] on gtkradi
 There are also [Windows tool (http://www.alientrap.org/forum/viewtopic.php?p=33)] that will help you to setup gtkradiant 1.4 and a [Linux script (http://www.alientrap.org/forum/viewtopic.php?p=841)] to configure gtkradiant 1.5.
 
 ** Where can i get latest development versions of the source code?
-_Engine:_ instructions are available at http://icculus.org/twilight/darkplaces/download.html (you will need a [cvs client (http://www.nongnu.org/cvs/)], beta builds are available [here (http://icculus.org/twilight/darkplaces/files/)])
+_Engine:_ instructions are available at http://icculus.org/twilight/darkplaces/download.html, look for |Accessing the SVN server| (you will need a [svn client (http://subversion.tigris.org/project_packages.html)], beta builds are available [here (http://icculus.org/twilight/darkplaces/files/)])
 
 _Game data:_ to check out the Nexuiz svn, you'll need a [svn client (http://subversion.tigris.org/project_packages.html)]. To check out the repository with a commandline svn client, do
 ^<<
