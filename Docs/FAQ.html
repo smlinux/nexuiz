@@ -180,8 +180,8 @@ This happens when the engine can't load the data*.pk3 file or has trouble to ini
 <ol>
 <li> you unpacked the zip file without folder names (see <a class="link" href="#How do I install Nexuiz?">How do I install Nexuiz?</a>)</li>
 <li> on Linux: the current directory is not your Nexuiz/ folder. See <a class="link" href="#How can I place a shortcut to Nexuiz on my Linux desktop?">How can I place a shortcut to Nexuiz on my Linux desktop?</a> on how to fix this</li>
-<li> on Mac: you tried to extract and move the files from a Nexuiz update and it deleted the old files.  When using the mac gui please be sure to move only the files not the folders as that will delete the old files or use the mv console command which will not delete the old files</li>
-<li> the engine could not initialize OpenGL.  Please install the latest drivers for your graphic card. You will probably find one for your card there: <a class="link" href="http://intel.com">intel</a> <a class="link" href="http://ati.com">ati</a> <a class="link" href="http://nvidia.com">nvidia</a></li>
+<li> on Mac: you tried to extract and move the files from a Nexuiz update and it deleted the old files. When using the mac gui please be sure to move only the files not the folders as that will delete the old files or use the mv console command which will not delete the old files</li>
+<li> the engine could not initialize OpenGL. Please install the latest drivers for your graphic card. You will probably find one for your card there: <a class="link" href="http://intel.com">intel</a> <a class="link" href="http://ati.com">ati</a> <a class="link" href="http://nvidia.com">nvidia</a></li>
 <li> your download might be corrupted, please download Nexuiz again</li>
 </ol>
 </p>
@@ -207,7 +207,7 @@ This is probably because you don't have the map that's running on the server. As
 <!-- Start SectLevel2 -->
 <h3><a name="How do I start a server?">How do I start a server?</a></h3>
 <p class="Body">
-Use the <tt>Create</tt> menu to start a <tt>listen server</tt>.  You will always have to play in a <tt>listen server</tt>.
+Use the <tt>Create</tt> menu to start a <tt>listen server</tt>. You will always have to play in a <tt>listen server</tt>.
 If you want to create a server without being forced to play yourself please take a look at the file <tt>readme.txt</tt> in the <tt>Docs/server/</tt> directory where the <tt>dedicated server</tt> is explained.
 </p>
 <!--End Section 2-->
@@ -253,7 +253,7 @@ You can get a list of variables by entering <tt>cvarlist</tt> on the console (<a
 <!--End Section 2-->
 <h3><a name="How can I speed up my frame rate?">How can I speed up my frame rate?</a></h3>
 <p class="Body">
-The greatest performance boost can be achieved by turning off dynamic lights and shadows in the menu <tt>Options / Effects</tt>. Bloom is also quite resource. Other fps boots include disabeling <tt>Deluxemapping</tt> and <tt>Coronas</tt>. On older graphics cards or on-board/notebook chips with little video ram you can try to lower the texture quality in the menu <tt>Options / Video</tt>. Nexuiz also includes config files that will adjust your graphic settings. Open the console (<a class="link" href="#How do I open the console?">How do I open the console?</a>) and type <tt>exec normal.cfg</tt> to get the default setting (back). <tt>exec med.cfg</tt> and <tt>exec low.cfg</tt> are of lower quality but will make Nexuiz run faster. <tt>exec high.cfg</tt>, <tt>exec ultra.cfg</tt> and <tt>exec ultimate.cfg</tt> will show what Nexuiz is able to look like but do require a very fast PC and graphic card. Some of the settings in those config files require you to either restart Nexuiz or also type <tt>vid_restart</tt> in the console after exec'ing the config files.
+The greatest performance boost can be achieved by turning off dynamic lights and shadows in the menu <tt>Options / Effects</tt>. Bloom is also quite resource intensive. Other fps boots include disableing <tt>Deluxemapping</tt> and <tt>Coronas</tt>. On older graphics cards or on-board/notebook chips with little video ram you can try to lower the texture quality in the menu <tt>Options / Video</tt>. Some older cards also run faster when you disable <tt>OpenGL 2.0 Shaders</tt> but in general for most cards it should be active. Nexuiz also includes config files that will adjust your graphic settings. Open the console (<a class="link" href="#How do I open the console?">How do I open the console?</a>) and type <tt>exec normal.cfg</tt> to get the default setting (back). <tt>exec med.cfg</tt> and <tt>exec low.cfg</tt> are of lower quality but will make Nexuiz run faster. <tt>exec high.cfg</tt>, <tt>exec ultra.cfg</tt> and <tt>exec ultimate.cfg</tt> will show what Nexuiz is able to look like but do require a very fast PC and graphic card. Some of the settings in those config files require you to either restart Nexuiz or also type <tt>vid_restart</tt> in the console after exec'ing the config files.
 </p>
 <!--End Section 2-->
 <h3><a name="How can I activate colors in my name?">How can I activate colors in my name?</a></h3>

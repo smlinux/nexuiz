@@ -34,8 +34,8 @@ Nexuiz
 This happens when the engine can't load the data*.pk3 file or has trouble to initialize OpenGL. The reasons could be:
 	1. you unpacked the zip file without folder names (see [How do I install Nexuiz?])
 	2. on Linux: the current directory is not your Nexuiz/ folder. See [How can I place a shortcut to Nexuiz on my Linux desktop?] on how to fix this
-	3. on Mac: you tried to extract and move the files from a Nexuiz update and it deleted the old files.  When using the mac gui please be sure to move only the files not the folders as that will delete the old files or use the mv console command which will not delete the old files
-	4. the engine could not initialize OpenGL.  Please install the latest drivers for your graphic card. You will probably find one for your card there: [intel (http://intel.com)] [ati (http://ati.com)] [nvidia (http://nvidia.com)]
+	3. on Mac: you tried to extract and move the files from a Nexuiz update and it deleted the old files. When using the mac gui please be sure to move only the files not the folders as that will delete the old files or use the mv console command which will not delete the old files
+	4. the engine could not initialize OpenGL. Please install the latest drivers for your graphic card. You will probably find one for your card there: [intel (http://intel.com)] [ati (http://ati.com)] [nvidia (http://nvidia.com)]
 	5. your download might be corrupted, please download Nexuiz again
 
 ** The sound is broken, it crackles and stutters
@@ -50,7 +50,7 @@ This is probably because you don't have the map that's running on the server. As
 * Server setup
 
 ** How do I start a server?
-Use the |Create| menu to start a |listen server|.  You will always have to play in a |listen server|.
+Use the |Create| menu to start a |listen server|. You will always have to play in a |listen server|.
 If you want to create a server without being forced to play yourself please take a look at the file |readme.txt| in the |Docs/server/| directory where the |dedicated server| is explained.
 
 ** Which ports do I have to open in firewall/forward from my router to run a server?
@@ -79,7 +79,7 @@ Press |\[shift]+\[escape]|. To close it press |\[escape]|
 You can get a list of variables by entering |cvarlist| on the console ([How do I open the console?]). |cmdlist| will give you a list of available commands. An annotated version of that output can be found at the [Nexuiz wiki (http://alientrap.org/wiki/pmwiki.php?n=Main.ConsoleCommands)].
 
 ** How can I speed up my frame rate?
-The greatest performance boost can be achieved by turning off dynamic lights and shadows in the menu |Options / Effects|. Bloom is also quite resource. Other fps boots include disabeling |Deluxemapping| and |Coronas|. On older graphics cards or on-board/notebook chips with little video ram you can try to lower the texture quality in the menu |Options / Video|. Nexuiz also includes config files that will adjust your graphic settings. Open the console ([How do I open the console?]) and type |exec normal.cfg| to get the default setting (back). |exec med.cfg| and |exec low.cfg| are of lower quality but will make Nexuiz run faster. |exec high.cfg|, |exec ultra.cfg| and |exec ultimate.cfg| will show what Nexuiz is able to look like but do require a very fast PC and graphic card. Some of the settings in those config files require you to either restart Nexuiz or also type |vid_restart| in the console after exec'ing the config files.
+The greatest performance boost can be achieved by turning off dynamic lights and shadows in the menu |Options / Effects|. Bloom is also quite resource intensive. Other fps boots include disableing |Deluxemapping| and |Coronas|. On older graphics cards or on-board/notebook chips with little video ram you can try to lower the texture quality in the menu |Options / Video|. Some older cards also run faster when you disable |OpenGL 2.0 Shaders| but in general for most cards it should be active. Nexuiz also includes config files that will adjust your graphic settings. Open the console ([How do I open the console?]) and type |exec normal.cfg| to get the default setting (back). |exec med.cfg| and |exec low.cfg| are of lower quality but will make Nexuiz run faster. |exec high.cfg|, |exec ultra.cfg| and |exec ultimate.cfg| will show what Nexuiz is able to look like but do require a very fast PC and graphic card. Some of the settings in those config files require you to either restart Nexuiz or also type |vid_restart| in the console after exec'ing the config files.
 
 ** How can I activate colors in my name?
 Colors can be used in nicknames and chat messages by typing ^ followed by a number between 0 and 9.
