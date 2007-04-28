@@ -158,7 +158,7 @@ void() trigger_push_touch =
 	// reset tracking of who pushed you into a hazard (for kill credit)
 	other.pushltime = 0;
 
-	if (other.classname == "missile")
+	if (other.flags & FL_PROJECTILE)
 		other.angles = vectoangles (other.velocity);
 
 	if (self.spawnflags & PUSH_ONCE)

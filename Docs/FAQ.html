@@ -180,7 +180,7 @@ This happens when the engine can't load the data*.pk3 file or has trouble to ini
 <ol>
 <li> you unpacked the zip file without folder names (see <a class="link" href="#How do I install Nexuiz?">How do I install Nexuiz?</a>)</li>
 <li> on Linux: the current directory is not your Nexuiz/ folder. See <a class="link" href="#How can I place a shortcut to Nexuiz on my Linux desktop?">How can I place a shortcut to Nexuiz on my Linux desktop?</a> on how to fix this</li>
-<li> on Mac: you tried to extract and move the files from a Nexuiz update and it deleted the old files. When using the mac gui please be sure to move only the files not the folders as that will delete the old files or use the mv console command which will not delete the old files</li>
+<li> on Mac: you tried to extract and move the files from a Nexuiz update and it deleted the old files. When using the mac GUI please be sure to move only the files not the folders as that will delete the old files or use the mv console command which will not delete the old files</li>
 <li> the engine could not initialize OpenGL. Please install the latest drivers for your graphic card. You will probably find one for your card there: <a class="link" href="http://intel.com">intel</a> <a class="link" href="http://ati.com">ati</a> <a class="link" href="http://nvidia.com">nvidia</a></li>
 <li> your download might be corrupted, please download Nexuiz again</li>
 </ol>
@@ -219,7 +219,7 @@ If you follow the tutorial mentioned above you do not need this command line arg
 <!--End Section 2-->
 <h3><a name="Is there some kind of rcon?">Is there some kind of rcon?</a></h3>
 <p class="Body">
-Yes starting with Nexuiz 2.0 there is rcon (QuakeWorld compatible). To use it you must enter <tt>rcon_password &lt;password&gt;</tt> in the server console or server config file. The Nexuiz client has to set the same password in the same fasion. You can then issue commands with <tt>rcon &lt;command&gt;</tt> if you are connected to the server or have set <tt>rcon_address &lt;ip/hostname&gt;</tt> or <tt>rcon_address &lt;ip/hostname&gt;:&lt;port&gt;</tt> to point to the server. There are also external rcon tools but make sure you use a QW compatible rcon tool.
+Yes starting with Nexuiz 2.0 there is rcon (QuakeWorld compatible). To use it you must enter <tt>rcon_password &lt;password&gt;</tt> in the server console or server config file. The Nexuiz client has to set the same password in the same fashion. You can then issue commands with <tt>rcon &lt;command&gt;</tt> if you are connected to the server or have set <tt>rcon_address &lt;ip/hostname&gt;</tt> or <tt>rcon_address &lt;ip/hostname&gt;:&lt;port&gt;</tt> to point to the server. There are also external rcon tools but make sure you use a QW compatible rcon tool.
 </p>
 <!--End Section 2-->
 <h3><a name="How can i kick people who are using special characters in their names?">How can i kick people who are using special characters in their names?</a></h3>
@@ -253,7 +253,7 @@ You can get a list of variables by entering <tt>cvarlist</tt> on the console (<a
 <!--End Section 2-->
 <h3><a name="How can I speed up my frame rate?">How can I speed up my frame rate?</a></h3>
 <p class="Body">
-The greatest performance boost can be achieved by turning off dynamic lights and shadows in the menu <tt>Options / Effects</tt>. Bloom is also quite resource intensive. Other fps boots include disableing <tt>Deluxemapping</tt> and <tt>Coronas</tt>. On older graphics cards or on-board/notebook chips with little video ram you can try to lower the texture quality in the menu <tt>Options / Video</tt>. Some older cards also run faster when you disable <tt>OpenGL 2.0 Shaders</tt> but in general for most cards it should be active. Nexuiz also includes config files that will adjust your graphic settings. Open the console (<a class="link" href="#How do I open the console?">How do I open the console?</a>) and type <tt>exec normal.cfg</tt> to get the default setting (back). <tt>exec med.cfg</tt> and <tt>exec low.cfg</tt> are of lower quality but will make Nexuiz run faster. <tt>exec high.cfg</tt>, <tt>exec ultra.cfg</tt> and <tt>exec ultimate.cfg</tt> will show what Nexuiz is able to look like but do require a very fast PC and graphic card. Some of the settings in those config files require you to either restart Nexuiz or also type <tt>vid_restart</tt> in the console after exec'ing the config files.
+The greatest performance boost can be achieved by turning off dynamic lights and shadows in the menu <tt>Options / Effects</tt>. Bloom is also quite resource intensive. Other fps boots include disabling <tt>Deluxemapping</tt> and <tt>Coronas</tt>. On older graphics cards or on-board/notebook chips with little video ram you can try to lower the texture quality in the menu <tt>Options / Video</tt>. Some older cards also run faster when you disable <tt>OpenGL 2.0 Shaders</tt> but in general for most cards it should be active. Nexuiz also includes config files that will adjust your graphic settings. Open the console (<a class="link" href="#How do I open the console?">How do I open the console?</a>) and type <tt>exec normal.cfg</tt> to get the default setting (back). <tt>exec med.cfg</tt> and <tt>exec low.cfg</tt> are of lower quality but will make Nexuiz run faster. <tt>exec high.cfg</tt>, <tt>exec ultra.cfg</tt> and <tt>exec ultimate.cfg</tt> will show what Nexuiz is able to look like but do require a very fast PC and graphic card. Some of the settings in those config files require you to either restart Nexuiz or also type <tt>vid_restart</tt> in the console after exec'ing the config files.
 </p>
 <!--End Section 2-->
 <h3><a name="How can I activate colors in my name?">How can I activate colors in my name?</a></h3>
@@ -280,7 +280,7 @@ Colors can be used in nicknames and chat messages by typing ^ followed by a numb
 You can access your demos in the <tt>Demos</tt> menu. Click on the demo you want to watch and then on <tt>Start</tt> to watch the demo. Or type <tt>ply &lt;name&gt;</tt> in the console (<a class="link" href="#How do I open the console?">How do I open the console?</a>).
 To record a demo yourself open the console and type <tt>rec &lt;name&gt;</tt> before playing. That is before starting a game or connecting to a server. The demo file will be stored in <tt>Nexuiz/data/demos/&lt;name&gt;.dem</tt> (on Windows) or <tt>~/.nexuiz/data/demos/&lt;name&gt;.dem</tt> (on Linux, Mac).
 If you downloaded a demo, copy it to <tt>Nexuiz/data/demos/&lt;name&gt;.dem</tt> (on Linux, Mac, Windows) or <tt>~/.nexuiz/data/demos/&lt;name&gt;.dem</tt> (on Linux, Mac). You might have to create this directory if you have never recorded a demo before.
-You can list all your demo files by typing <tt>dem</tt> on the console. Some usefull keybindings for viewing demos are listed <a class="link" href="http://www.alientrap.org/forum/viewtopic.php?p=357#357">here</a>. A simple way to automaticly record demos can be found <a class="link" href="http://www.alientrap.org/forum/viewtopic.php?t=90">here</a>
+You can list all your demo files by typing <tt>dem</tt> on the console. Some useful key bindings for viewing demos are listed <a class="link" href="http://www.alientrap.org/forum/viewtopic.php?p=357#357">here</a>. A simple way to automatically record demos can be found <a class="link" href="http://www.alientrap.org/forum/viewtopic.php?t=90">here</a>
 </p>
 <!--End Section 2-->
 <!-- End SectLevel2 -->
@@ -298,11 +298,11 @@ There are also <a class="link" href="http://www.alientrap.org/forum/viewtopic.ph
 <strong>Engine:</strong> instructions are available at <a class="link" href="http://icculus.org/twilight/darkplaces/download.html,">http://icculus.org/twilight/darkplaces/download.html,</a> look for <tt>Accessing the SVN server</tt> (you will need a <a class="link" href="http://subversion.tigris.org/project_packages.html">svn client</a>, beta builds are available <a class="link" href="http://icculus.org/twilight/darkplaces/files/">here</a>)
 </p>
 <p class="Body">
-<strong>Game data:</strong> to check out the Nexuiz svn, you'll need a <a class="link" href="http://subversion.tigris.org/project_packages.html">svn client</a>. To check out the repository with a commandline svn client, do
+<strong>Game data:</strong> to check out the Nexuiz svn, you'll need a <a class="link" href="http://subversion.tigris.org/project_packages.html">svn client</a>. To check out the repository with a command line svn client, do
 <div class="block"><pre>
 svn co svn://svn.icculus.org/nexuiz/trunk/
 </pre></div>
-To compile the gamecode you need <a class="link" href="http://sourceforge.net/project/showfiles.php?group_id=116842&amp;package_id=129507">fteqcc</a>. Just download it and run it twice, once in <tt>data/qcsrc/menu</tt> and once in <tt>data/qcsrc/server</tt>.
+To compile the game code you need <a class="link" href="http://sourceforge.net/project/showfiles.php?group_id=116842&amp;package_id=129507">fteqcc</a>. Just download it and run it twice, once in <tt>data/qcsrc/menu</tt> and once in <tt>data/qcsrc/server</tt>.
 </p>
 <!--End Section 2-->
 <!-- End SectLevel2 -->
