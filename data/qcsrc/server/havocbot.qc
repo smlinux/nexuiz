@@ -331,13 +331,13 @@ void() havocbot_chooseweapon =
 		shotgun = (cvar("g_balance_shotgun_primary_damage")*cvar("g_balance_shotgun_primary_bullets")/cvar("g_balance_shotgun_primary_refire")*1.0)
 			* bound(0,1/cvar("g_balance_shotgun_primary_spread")/distance*spreadpenalty,1);
 	if (client_hasweapon(self, WEP_LASER, FALSE, FALSE))
-		laser = (cvar("g_balance_laser_damage")/cvar("g_balance_laser_refire")*1.0)
-			* bound(0,cvar("g_balance_laser_speed")/distance*0.2*maxdelaytime,1);
+		laser = (cvar("g_balance_laser_primary_damage")/cvar("g_balance_laser_primary_refire")*1.0)
+			* bound(0,cvar("g_balance_laser_primary_speed")/distance*0.2*maxdelaytime,1);
 	if((self.enemy.flags & FL_ONGROUND)==FALSE){
 		rocket = rocket   * (1-bound(0, distancefromfloor/cvar("g_balance_rocketlauncher_radius"         ),0.9)); //slight bigger change
 		grenade = grenade * (1-bound(0,distancefromfloor/cvar("g_balance_grenadelauncher_primary_radius"),0.95));
 		electro = electro * (1-bound(0,distancefromfloor/cvar("g_balance_electro_primary_radius"        ),0.95));
-		laser = laser     * (1-bound(0,distancefromfloor/cvar("g_balance_laser_radius"                  ),0.95));
+		laser = laser     * (1-bound(0,distancefromfloor/cvar("g_balance_laser_primary_radius"                  ),0.95));
 	}
 /*
 	dprint("Floor distance: ",ftos(distancefromfloor),"\n");
