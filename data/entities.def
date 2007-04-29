@@ -266,7 +266,7 @@ Target this entity with a misc_model to have the model attached to the entity (s
 INFO_* ENTITIES
 //=============================================================================
 
-/*QUAKED info_player_team1 (1 0 1) (-16 -16 -24) (16 16 32) INITIAL
+/*QUAKED info_player_team1 (1 0 1) (-16 -16 -24) (16 16 45) INITIAL
 CTF Spawn Points for Nexuiz
 -------- KEYS --------
 angle : direction in which player will look when spawning in the game. Does not apply to bots.
@@ -277,7 +277,7 @@ INITIAL : makes the spawnpoint the initial place for the player to spawn at the 
 
 //=============================================================================
 
-/*QUAKED info_player_team2 (1 0 1) (-16 -16 -24) (16 16 32) INITIAL
+/*QUAKED info_player_team2 (1 0 1) (-16 -16 -24) (16 16 45) INITIAL
 CTF Spawn Points for Nexuiz
 -------- KEYS --------
 angle : direction in which player will look when spawning in the game. Does not apply to bots.
@@ -308,7 +308,7 @@ notsingle : when set to 1, entity will not spawn in Single Player mode (bot play
 
 //=============================================================================
 
-/*QUAKED info_player_deathmatch (1 0 1) (-16 -16 -24) (16 16 32) INITIAL
+/*QUAKED info_player_deathmatch (1 0 1) (-16 -16 -24) (16 16 45) INITIAL
 Normal player spawning location for Q3A levels.
 -------- KEYS --------
 angle : direction in which player will look when spawning in the game. Does not apply to bots.
@@ -324,7 +324,7 @@ INITIAL : makes the spawnpoint the initial place for the player to spawn at the 
 //=============================================================================
 
 
-/*QUAKED info_player_start (1 0 0) (-16 -16 -24) (16 16 32)
+/*QUAKED info_player_start (1 0 0) (-16 -16 -24) (16 16 45)
 Player spawn location. It works in Quake III Arena, but it is not used in the Id maps. Use info_player_deathmatch instead.
 -------- KEYS --------
 angle : direction in which player will look when spawning in the game.
@@ -332,7 +332,7 @@ target : this can point at a target_give entity for respawn freebies.*/
 
 //=============================================================================
 
-//QUAKED info_spectator_start (1 0 0) (-16 -16 -24) (16 16 32)
+//QUAKED info_spectator_start (1 0 0) (-16 -16 -24) (16 16 45)
 //Spectator spawn location. Doesn't appear to work in game. Commented out.
 //-------- KEYS --------
 //notfree : when set to 1, entity will not spawn in "Free for all" and "Tournament" modes.
