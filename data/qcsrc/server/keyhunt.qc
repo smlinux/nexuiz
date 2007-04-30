@@ -23,7 +23,7 @@ float kh_interferemsg_time, kh_interferemsg_team;
 
 string kh_sound_capture = "sound/ctf/capture.wav";
 string kh_sound_destroy = "sound/ctf/return.wav";
-string kh_sound_drop = "sound/ctf/respawn.wav";
+string kh_sound_drop = "sound/misc/mouseclick.wav";
 string kh_sound_collect = "sound/ctf/take.wav";
 
 float kh_sprite_dropped, kh_sprite_finish, kh_sprite_red, kh_sprite_blue, kh_sprite_pink, kh_sprite_yellow, kh_sprite_friend;
@@ -573,6 +573,10 @@ float kh_KeyCarrier_waypointsprite_for_player(entity e)
 		if(!kh_tracking_enabled)
 			return 0;
 
+	// e is spectator? That's no team mate...
+	if(e.classname != "player")
+		return kh_GetCarrierSprite(self.team, -1);
+	
 	// e is no key carrier: simple case...
 	if(!e.kh_next)
 		return kh_GetCarrierSprite(self.team, e.team);
