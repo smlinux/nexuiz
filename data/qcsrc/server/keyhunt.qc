@@ -103,7 +103,7 @@ void kh_Key_Attach(entity key, float wpchange)
 {
 	setattachment(key, key.owner, "");
 	setorigin(key, '0 0 0'); // fixed later in think
-	key.angles = '0 0 0';
+	key.angles = key.angles - '0 1 0' * key.owner.angles_y;
 	key.flags = 0;
 	key.solid = SOLID_NOT;
 	key.movetype = MOVETYPE_NONE;
@@ -186,6 +186,7 @@ void kh_Key_Spawn(entity initial_owner, float angle)
 	key.nextthink = time;
 	key.items = IT_KEY1 | IT_KEY2;
 	key.cnt = angle;
+	key.angles = '0 360 0' * random();
 	setmodel(key, "models/keyhunt/key3.md3");
 	setsize(key, '0 0 -24', '0 0 25');
 
@@ -292,6 +293,8 @@ void kh_Key_Touch()
 
 void kh_Key_Think()
 {
+	self.angles_y = math_mod(self.angles_y + 0.05 * 135, 360);
+
 	if(self.owner)
 	{
 		makevectors('0 1 0' * (self.cnt + math_mod(time, 360) * 45));
@@ -336,7 +339,7 @@ void kh_Key_Think()
 :not_winning
 	}
 
-	self.nextthink = time + 0.1;
+	self.nextthink = time + 0.05;
 }
 
 void kh_WinnerTeam(float teem)
