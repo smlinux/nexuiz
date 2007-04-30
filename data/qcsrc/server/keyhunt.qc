@@ -55,6 +55,8 @@ void kh_Controller_SetThink(float t, string msg, kh_Think_t func)
 void kh_Controller_Think()
 {
 	entity e;
+	if(intermission_running)
+		return;
 	if(self.cnt > 0)
 	{
 		if(kh_Controller_Waitmsg != "")
