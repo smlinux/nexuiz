@@ -283,8 +283,7 @@ void kh_Key_DropAll(entity player)
 			kh_Scores_Event(player, key, "losekey", 0, 0);
 			bprint(player.netname, "^7 lost the ", key.netname, "\n");
 			kh_Key_AssignTo(key, world, TRUE);
-			key.pusher = player.pusher;
-			key.pushltime = player.pushltime;
+			key.pusher = mypusher;
 		}
 		sound(world, CHAN_AUTO, kh_sound_drop, 1, ATTN_NORM);
 	}
@@ -427,8 +426,8 @@ void kh_LoserTeam(float teem, entity lostkey)
 
 	attacker = world;
 	if(lostkey.pusher)
-		if(player.pusher.team != player.team)
-			if(player.pusher.classname == "player")
+		if(lostkey.pusher.team != teem)
+			if(lostkey.pusher.classname == "player")
 				attacker = lostkey.pusher;
 
 	players = keys = 0;
