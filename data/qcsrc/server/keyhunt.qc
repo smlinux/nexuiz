@@ -254,11 +254,11 @@ void kh_Key_Remove(entity key)
 
 void kh_Key_Collect(entity key, entity player)
 {
+	sound(key, CHAN_AUTO, kh_sound_collect, 1, ATTN_NORM);
+
 	kh_Scores_Event(player, key, "collect", 1, 0);
 	bprint(player.netname, "^7 collected the ", key.netname, "\n");
 	kh_Key_AssignTo(key, player, TRUE);
-
-	sound(key, CHAN_AUTO, kh_sound_collect, 1, ATTN_NORM);
 
 	FOR_EACH_KH_KEY(key)
 		if(!key.owner || key.team != player.team)
@@ -285,7 +285,7 @@ void kh_Key_DropAll(entity player)
 			kh_Key_AssignTo(key, world, TRUE);
 			key.pusher = mypusher;
 		}
-		sound(world, CHAN_AUTO, kh_sound_drop, 1, ATTN_NORM);
+		sound(player, CHAN_AUTO, kh_sound_drop, 1, ATTN_NORM);
 	}
 }
 
@@ -323,8 +323,8 @@ void kh_Key_Think()
 			self.pusher = world;
 			kh_Scores_Event(self.owner, self, "dropkey", 0, 0);
 			bprint(self.owner.netname, "^7 dropped the ", self.netname, "\n");
+			sound(self.owner, CHAN_AUTO, kh_sound_drop, 1, ATTN_NORM);
 			kh_Key_AssignTo(self, world, TRUE);
-			sound(world, CHAN_AUTO, kh_sound_drop, 1, ATTN_NONE);
 		}
 	}
 
@@ -379,7 +379,9 @@ void kh_WinnerTeam(float teem)
 	float first;
 	entity key;
 	float score;
-	score = 1.0 / kh_teams;
+	score = (kh_teams - 1) / kh_teams;
+	// twice the score for 3 team games, three times the score for 4 team games!
+	// note: for a win by destroying the key, this should NOT be applied
 	first = TRUE;
 	FOR_EACH_KH_KEY(key)
 	{
