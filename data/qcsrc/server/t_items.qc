@@ -301,7 +301,7 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 
 		waypoint_spawnforitem(self);
 
-		itemsInMap |= itemflags;
+		itemsInMap |= itemid;
 	}
 
 	if (!(cvar("g_pickup_items") && !cvar("g_nixnex")) && !cvar("g_minstagib") &&
