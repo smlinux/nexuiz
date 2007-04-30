@@ -118,11 +118,21 @@ void kh_Key_Attach(entity key, float wpchange)
 	key.nextthink = time;
 }
 
+vector kh_AttachedOrigin(entity e)
+{
+	if(e.tag_entity)
+	{
+		makevectors(e.tag_entity.angles);
+		return e.tag_entity.origin + e.origin_x * v_forward - e.origin_y * v_right + e.origin_z * v_up;
+	}
+	else
+		return e.origin;
+}
+
 void kh_Key_Detach(entity key, float wpchange)
 {
+	setorigin(key, kh_AttachedOrigin(key));
 	setattachment(key, world, "");
-	makevectors(key.owner.angles);
-	setorigin(key, key.owner.origin + key.origin_x * v_forward - key.origin_y * v_right + key.origin_z * v_up);
 	key.angles_y = key.owner.angles_y;
 	key.aiment = world;
 	key.flags = FL_ITEM;
@@ -248,7 +258,7 @@ void kh_Key_Collect(entity key, entity player)
 	bprint(player.netname, "^7 collected the ", key.netname, "\n");
 	kh_Key_AssignTo(key, player, TRUE);
 
-	sound(key, CHAN_AUTO, kh_sound_collect, 1, ATTN_NONE);
+	sound(key, CHAN_AUTO, kh_sound_collect, 1, ATTN_NORM);
 
 	FOR_EACH_KH_KEY(key)
 		if(!key.owner || key.team != player.team)
@@ -276,7 +286,7 @@ void kh_Key_DropAll(entity player)
 			key.pusher = player.pusher;
 			key.pushltime = player.pushltime;
 		}
-		sound(world, CHAN_AUTO, kh_sound_drop, 1, ATTN_NONE);
+		sound(world, CHAN_AUTO, kh_sound_drop, 1, ATTN_NORM);
 	}
 }
 
@@ -366,8 +376,9 @@ void kh_Key_Think()
 void kh_WinnerTeam(float teem)
 {
 	// all key carriers get some points
-	entity key;
+	vector firstorigin, lastorigin;
 	float first;
+	entity key;
 	float score;
 	score = 1.0 / kh_teams;
 	first = TRUE;
@@ -382,6 +393,26 @@ void kh_WinnerTeam(float teem)
 			first = FALSE;
 		}
 	}
+
+	first = TRUE;
+	FOR_EACH_KH_KEY(key)
+	{
+		vector thisorigin;
+
+		thisorigin = kh_AttachedOrigin(key);
+
+		if(!first)
+			te_lightning2(world, lastorigin, thisorigin);
+		lastorigin = thisorigin;
+		if(first)
+			firstorigin = thisorigin;
+		first = FALSE;
+	}
+	if(kh_teams > 2)
+	{
+		te_lightning2(world, lastorigin, firstorigin);
+	}
+
 	bprint("^7 captured the keys for the ", ColoredTeamName(teem), "\n");
 	sound(world, CHAN_AUTO, kh_sound_capture, 1, ATTN_NONE);
 	kh_FinishRound();
