@@ -285,8 +285,6 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 	{
 		self.deaths += 1;
 
-		// clear waypoints
-		WaypointSprite_PlayerDead();
 		// become fully visible
 		self.alpha = 1;
 		// clear selected player display
@@ -296,8 +294,11 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 		// print an obituary message
 		Obituary (attacker, self, deathtype);
 		DropAllRunes(self);
+		kh_Key_DropAll(self);
 		if(self.flagcarried)
 			DropFlag(self.flagcarried);
+		// clear waypoints
+		WaypointSprite_PlayerDead();
 		// make the corpse upright (not tilted)
 		self.angles_x = 0;
 		self.angles_z = 0;

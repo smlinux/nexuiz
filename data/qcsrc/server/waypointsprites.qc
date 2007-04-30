@@ -9,6 +9,31 @@ float waypointsprite_deadlifetime;
 float waypointsprite_limitedrange;
 
 ..entity owned_by_field;
+.float(entity) waypointsprite_for_player; // returns a model index or 0 for hide
+float waypointsprite_for_player_default(entity e)
+{
+	// personal waypoints
+	if(self.enemy)
+		if(self.enemy != other)
+			return FALSE;
+
+	// team waypoints
+	if(self.team)
+	{
+		if(self.team != other.team)
+			return FALSE;
+		if(other.classname != "player")
+			return FALSE;
+	}
+
+	// fixed waypoints
+	if(self.currentammo) // hidable?
+		if(other.cvar_cl_hidewaypoints) // wants to hide;
+			return FALSE;
+
+	// otherwise, accept the model
+	return self.modelindex;
+}
 
 void WaypointSprite_Init()
 {
@@ -104,6 +129,7 @@ float WaypointSprite_CustomizeEntityForClient()
 	vector realorigin, porigin;
 	float distancealpha, timealpha;
 	float distance;
+	float newmodel;
 
 	if(self.health)
 	{
@@ -115,20 +141,11 @@ float WaypointSprite_CustomizeEntityForClient()
 	else
 		timealpha = 1;
 
-	if(self.enemy)
-		if(self.enemy != other)
-			return FALSE;
-	if(self.team)
-	{
-		if(self.team != other.team)
-			return FALSE;
-		if(other.classname != "player")
-			return FALSE;
-	}
-
-	if(self.currentammo) // hidable?
-		if(other.cvar_cl_hidewaypoints) // wants to hide;
-			return FALSE;
+	// customize WP
+	newmodel = self.waypointsprite_for_player(other);
+	if(newmodel == 0)
+		return FALSE;
+	self.modelindex = newmodel;
 
 	porigin = other.origin + other.view_ofs_z * '0 0 1';
 
@@ -228,7 +245,12 @@ entity WaypointSprite_Spawn(
 	wp.think = WaypointSprite_Think;
 	wp.nextthink = time;
 	wp.effects = EF_NODEPTHTEST | EF_LOWPRECISION;
-	setmodel(wp, strcat("models/sprites/", spr, ".sp2")); // precision set above
+	if(spr != "")
+		setmodel(wp, strcat("models/sprites/", spr, ".sp2")); // precision set above
+	else
+		wp.model = "waypoint";
+	setsize(wp, '0 0 0', '0 0 0');
+	wp.waypointsprite_for_player = waypointsprite_for_player_default;
 	return wp;
 }
 

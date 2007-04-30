@@ -508,6 +508,183 @@ void() havocbot_chooserole_dom =
 	self.havocbot_role = havocbot_role_dom;
 };
 
+
+
+
+
+
+void(float ratingscale_team, float ratingscale_dropped, float ratingscale_enemy) havocbot_goalrating_kh =
+{
+	local entity head;
+	for(head = world; (head = find(head, classname, "item_kh_key")); )
+	{
+		if(head.owner == self)
+			continue;
+		if(!head.owner)
+			navigation_routerating(head, ratingscale_dropped);
+		else if(head.team == self.team)
+			navigation_routerating(head, ratingscale_team);
+		else
+			navigation_routerating(head, ratingscale_enemy);
+	}
+};
+
+void() havocbot_role_kh_carrier;
+void() havocbot_role_kh_defense;
+void() havocbot_role_kh_offense;
+void() havocbot_role_kh_freelancer;
+void() havocbot_role_kh_carrier =
+{
+	local entity head;
+	if (!(self.items & IT_KEY1))
+	{
+		dprint("changing role to freelancer\n");
+		self.havocbot_role = havocbot_role_kh_freelancer;
+		self.havocbot_role_timeout = 0;
+		return;
+	}
+
+	if (self.bot_strategytime < time)
+	{
+		float enemies_have_keys;
+
+		self.bot_strategytime = time + cvar("bot_ai_strategyinterval");
+		navigation_goalrating_start();
+
+		enemies_have_keys = FALSE;
+		for(head = world; (head = find(head, classname, "item_kh_key")); )
+		{
+			if(head.owner)
+			if(head.team != self.team)
+			{
+				enemies_have_keys = TRUE;
+				break;
+			}
+		}
+
+		if(enemies_have_keys)
+			havocbot_goalrating_kh(4000, 4000, 100);
+		else
+			havocbot_goalrating_kh(10000, 10000, 1);
+		havocbot_goalrating_items(10000, self.origin, 10000);
+		navigation_goalrating_end();
+	}
+}
+
+void() havocbot_role_kh_defense =
+{
+	if (self.items & IT_KEY1)
+	{
+		dprint("changing role to carrier\n");
+		self.havocbot_role = havocbot_role_kh_carrier;
+		self.havocbot_role_timeout = 0;
+		return;
+	}
+
+	if (!self.havocbot_role_timeout)
+		self.havocbot_role_timeout = time + random() * 10 + 20;
+	if (time > self.havocbot_role_timeout)
+	{
+		dprint("changing role to freelancer\n");
+		self.havocbot_role = havocbot_role_kh_freelancer;
+		self.havocbot_role_timeout = 0;
+		return;
+	}
+
+	if (self.bot_strategytime < time)
+	{
+		self.bot_strategytime = time + cvar("bot_ai_strategyinterval");
+		navigation_goalrating_start();
+		havocbot_goalrating_kh(4000, 1000, 1);
+		havocbot_goalrating_items(10000, self.origin, 10000);
+		navigation_goalrating_end();
+	}
+};
+
+void() havocbot_role_kh_offense =
+{
+	if (self.items & IT_KEY1)
+	{
+		dprint("changing role to carrier\n");
+		self.havocbot_role = havocbot_role_kh_carrier;
+		self.havocbot_role_timeout = 0;
+		return;
+	}
+
+	if (!self.havocbot_role_timeout)
+		self.havocbot_role_timeout = time + random() * 10 + 20;
+	if (time > self.havocbot_role_timeout)
+	{
+		dprint("changing role to freelancer\n");
+		self.havocbot_role = havocbot_role_kh_freelancer;
+		self.havocbot_role_timeout = 0;
+		return;
+	}
+
+	if (self.bot_strategytime < time)
+	{
+		self.bot_strategytime = time + cvar("bot_ai_strategyinterval");
+		navigation_goalrating_start();
+		havocbot_goalrating_kh(1, 1000, 4000);
+		havocbot_goalrating_items(10000, self.origin, 10000);
+		navigation_goalrating_end();
+	}
+};
+
+void() havocbot_role_kh_freelancer =
+{
+	if (self.items & IT_KEY1)
+	{
+		dprint("changing role to carrier\n");
+		self.havocbot_role = havocbot_role_kh_carrier;
+		self.havocbot_role_timeout = 0;
+		return;
+	}
+
+	if (!self.havocbot_role_timeout)
+		self.havocbot_role_timeout = time + random() * 10 + 10;
+	if (time > self.havocbot_role_timeout)
+	{
+		if (random() < 0.5)
+		{
+			dprint("changing role to offense\n");
+			self.havocbot_role = havocbot_role_kh_offense;
+		}
+		else
+		{
+			dprint("changing role to defense\n");
+			self.havocbot_role = havocbot_role_kh_defense;
+		}
+		self.havocbot_role_timeout = 0;
+		return;
+	}
+
+	if (self.bot_strategytime < time)
+	{
+		self.bot_strategytime = time + cvar("bot_ai_strategyinterval");
+		navigation_goalrating_start();
+		havocbot_goalrating_kh(1000, 4000, 1000);
+		havocbot_goalrating_items(10000, self.origin, 10000);
+		navigation_goalrating_end();
+	}
+};
+
+
+
+
+
+void() havocbot_chooserole_kh =
+{
+	local float r;
+	r = random() * 3;
+	if (r < 1)
+		self.havocbot_role = havocbot_role_kh_offense;
+	else if (r < 2)
+		self.havocbot_role = havocbot_role_kh_defense;
+	else
+		self.havocbot_role = havocbot_role_kh_freelancer;
+};
+
 void() havocbot_chooserole =
 {
 	dprint("choose a role...\n");
@@ -517,6 +694,8 @@ void() havocbot_chooserole =
 		havocbot_chooserole_ctf();
 	else if (cvar("g_domination"))
 		havocbot_chooserole_dom();
+	else if (cvar("g_keyhunt"))
+		havocbot_chooserole_kh();
 	else // assume anything else is deathmatch
 		havocbot_chooserole_dm();
 };

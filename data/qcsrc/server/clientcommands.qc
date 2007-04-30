@@ -319,6 +319,8 @@ void SV_ParseClientCommand(string s) {
 		if(self.classname == "player" && cvar("sv_spectate") == 1) {
 			if(self.flagcarried)
 				DropFlag(self.flagcarried);
+			kh_Key_DropAll(self);
+			WaypointSprite_PlayerDead();
 			DistributeFragsAmongTeam(self, self.team, 1.0);
 			self.classname = "observer";
 			PutClientInServer();

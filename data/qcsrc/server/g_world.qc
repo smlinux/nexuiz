@@ -1559,7 +1559,7 @@ void() CheckRules_World =
 	{
 		if(teams_matter)
 		{
-			if(cvar("g_tdm") || cvar("g_runematch") || cvar("g_ctf") || cvar("g_domination"))
+			if(cvar("g_tdm") || cvar("g_runematch") || cvar("g_ctf") || cvar("g_domination") || cvar("g_keyhunt"))
 				status = WinningCondition_MaxTeamSum(fraglimit);
 			//else if()
 			//	status = WinningCondition_MaxTeamMax(fraglimit);

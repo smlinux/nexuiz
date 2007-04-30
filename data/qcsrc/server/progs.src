@@ -12,6 +12,8 @@ campaign.qh
 ../common/util.qh
 ../common/util.qc
 
+keyhunt.qh
+
 miscfunctions.qc
 
 waypointsprites.qc
@@ -84,3 +86,5 @@ campaign.qc
 
 ../common/gamecommand.qc
 gamecommand.qc
+
+keyhunt.qc

@@ -610,6 +610,7 @@ string decolorize(string s)
 */
 
 #define CENTERPRIO_POINT 1
+#define CENTERPRIO_SPAM 2
 #define CENTERPRIO_REBALANCE 2
 #define CENTERPRIO_VOTE 4
 #define CENTERPRIO_NORMAL 5

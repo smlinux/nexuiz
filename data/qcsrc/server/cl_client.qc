@@ -287,12 +287,13 @@ void PutObserverInServer (void)
 		WriteEntity(MSG_ONE, self);
 	}
 
-	WaypointSprite_PlayerDead();
-
 	DropAllRunes(self);
+	kh_Key_DropAll(self);
 
 	if(self.flagcarried)
 		DropFlag(self.flagcarried);
+
+	WaypointSprite_PlayerDead();
 
 	DistributeFragsAmongTeam(self, self.team, 1);
 
@@ -831,6 +832,7 @@ void ClientDisconnect (void)
 	WaypointSprite_PlayerGone();
 
 	DropAllRunes(self);
+	kh_Key_DropAll(self);
 
 	if(self.flagcarried)
 		DropFlag(self.flagcarried);
@@ -1508,6 +1510,7 @@ void PlayerPreThink (void)
 			minstagib_ammocheck();
 
 		ctf_setstatus();
+		kh_setstatus();
 
 		//self.angles_y=self.v_angle_y + 90;   // temp
 

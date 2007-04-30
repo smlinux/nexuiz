@@ -1,0 +1,593 @@
+string STR_ITEM_KH_KEY = "item_kh_key";
+#define FOR_EACH_KH_KEY(v) for(v = world; (v = find(v, classname, STR_ITEM_KH_KEY)); )
+
+typedef void(void) kh_Think_t;
+var kh_Think_t kh_Controller_Thinkfunc;
+string kh_Controller_Waitmsg;
+
+float kh_Team_ByID(float t)
+{
+	if(t == 0) return COLOR_TEAM1;
+	if(t == 1) return COLOR_TEAM2;
+	if(t == 2) return COLOR_TEAM3;
+	if(t == 3) return COLOR_TEAM4;
+	return 0;
+}
+
+entity kh_controller;
+float kh_tracking_enabled;
+float kh_teams;
+.entity kh_next, kh_prev; // linked list
+.float kh_droptime;
+
+float kh_sprite_dropped, kh_sprite_finish, kh_sprite_red, kh_sprite_blue, kh_sprite_pink, kh_sprite_yellow, kh_sprite_friend;
+
+float kh_GetCarrierSprite(float t)
+{
+	if(t == COLOR_TEAM1) return kh_sprite_red;
+	if(t == COLOR_TEAM2) return kh_sprite_blue;
+	if(t == COLOR_TEAM3) return kh_sprite_pink;
+	if(t == COLOR_TEAM4) return kh_sprite_yellow;
+	return 0;
+}
+
+void kh_Controller_SetThink(float t, string msg, kh_Think_t func)
+{
+	kh_Controller_Thinkfunc = func;
+	kh_controller.cnt = t;
+	if(kh_Controller_Waitmsg != "")
+		strunzone(kh_Controller_Waitmsg);
+	if(msg == "")
+		kh_Controller_Waitmsg = "";
+	else
+		kh_Controller_Waitmsg = strzone(msg);
+	if(t == 0)
+		kh_controller.nextthink = time; // force
+}
+
+void kh_Controller_Think()
+{
+	entity e;
+	if(self.cnt > 0)
+	{
+		if(kh_Controller_Waitmsg != "")
+		{
+			string s;
+			if(substring(kh_Controller_Waitmsg, strlen(kh_Controller_Waitmsg)-1, 1) == " ")
+				s = strcat(kh_Controller_Waitmsg, ftos(self.cnt));
+			else
+				s = kh_Controller_Waitmsg;
+
+			dprint(s, "\n");
+
+			FOR_EACH_PLAYER(e)
+				if(clienttype(e) == CLIENTTYPE_REAL)
+					centerprint_atprio(e, CENTERPRIO_SPAM, s);
+		}
+		self.cnt -= 1;
+	}
+	else if(self.cnt == 0)
+	{
+		FOR_EACH_PLAYER(e)
+			if(clienttype(e) == CLIENTTYPE_REAL)
+				centerprint_expire(e, CENTERPRIO_SPAM);
+		self.cnt -= 1;
+		kh_Controller_Thinkfunc();
+	}
+	self.nextthink = time + 1;
+}
+
+void kh_Log()
+{
+	string s;
+	if(!cvar("sv_eventlog"))
+		return;
+	// TODO ...
+	GameLogEcho(s, FALSE);
+}
+
+// frags f: take from cvar * f
+// frags 0: no frags
+void kh_Scores_Event(entity player, entity key, string what, float frags_player, float frags_owner)
+{
+	float basefrags;
+	basefrags = cvar(strcat("g_balance_keyhunt_score_", what));
+
+	if(frags_player)
+		player.frags = player.frags + floor(0.5 + basefrags * frags_player);
+	if(frags_owner)
+		key.owner.frags = key.owner.frags + floor(0.5 + basefrags * frags_owner);
+}
+
+void kh_Key_Attach(entity key, float wpchange)
+{
+	setattachment(key, key.owner, "");
+	setorigin(key, '0 0 0'); // fixed later in think
+	key.angles = '0 0 0';
+	key.flags = 0;
+	key.solid = SOLID_NOT;
+	key.movetype = MOVETYPE_NONE;
+	key.team = key.owner.team;
+	key.nextthink = time;
+}
+
+void kh_Key_Detach(entity key, float wpchange)
+{
+	setattachment(key, world, "");
+	makevectors(key.owner.angles);
+	setorigin(key, key.owner.origin + key.origin_x * v_forward - key.origin_y * v_right + key.origin_z * v_up);
+	key.angles_y = key.owner.angles_y;
+	key.aiment = world;
+	key.flags = FL_ITEM;
+	key.solid = SOLID_TRIGGER;
+	key.movetype = MOVETYPE_TOSS;
+	key.pain_finished = time + cvar("g_balance_keyhunt_delay_return");
+	// let key.team stay
+}
+
+void kh_Key_AssignTo(entity key, entity player, float wpchange)
+{
+	if(key.owner == player)
+		return;
+
+	if(key.owner)
+	{
+		kh_Key_Detach(key, wpchange);
+
+		// remove from linked list
+		if(key.kh_next)
+			key.kh_next.kh_prev = key.kh_prev;
+		key.kh_prev.kh_next = key.kh_next;
+		key.kh_next = world;
+		key.kh_prev = world;
+
+		if(key.owner.kh_next == world)
+		{
+			// No longer a key carrier
+			if(wpchange)
+				WaypointSprite_Kill(key.owner.waypointsprite_attachedforcarrier);
+			else
+				WaypointSprite_DetachCarrier(key.owner);
+		}
+	}
+
+	key.owner = player;
+
+	if(player)
+	{
+		// insert into linked list
+		key.kh_next = player.kh_next;
+		key.kh_prev = player;
+		player.kh_next = key;
+		if(key.kh_next)
+			key.kh_next.kh_prev = key;
+
+		kh_Key_Attach(key, wpchange);
+
+		if(key.kh_next == world)
+		{
+			// player is now a key carrier
+			WaypointSprite_AttachCarrier("", player);
+			player.waypointsprite_attachedforcarrier.waypointsprite_for_player = kh_KeyCarrier_waypointsprite_for_player;
+			player.waypointsprite_attachedforcarrier.team = player.team;
+		}
+	}
+
+	key.pusher = world;
+}
+
+void kh_Key_Spawn(entity initial_owner, float angle)
+{
+	entity key;
+	key = spawn();
+	key.classname = STR_ITEM_KH_KEY;
+	key.touch = kh_Key_Touch;
+	key.think = kh_Key_Think;
+	key.nextthink = time;
+	key.items = IT_KEY1 | IT_KEY2;
+	key.cnt = angle;
+	setmodel(key, "models/keyhunt/key3.md3");
+	setsize(key, '0 0 -24', '0 0 25');
+
+	switch(initial_owner.team)
+	{
+		case COLOR_TEAM1:
+			key.netname = "^1red key";
+			key.colormod = '1.73 0.10 0.10';
+			break;
+		case COLOR_TEAM2:
+			key.netname = "^4blue key";
+			key.colormod = '0.10 0.10 1.73';
+			break;
+		case COLOR_TEAM3:
+			key.netname = "^6pink key";
+			key.colormod = '1.22 0.10 1.22';
+			break;
+		case COLOR_TEAM4:
+			key.netname = "^3yellow key";
+			key.colormod = '1.22 1.22 0.10';
+			break;
+		default:
+			key.netname = "NETGIER key";
+			key.colormod = '1.00 1.00 1.00';
+			break;
+	}
+
+	sprint(initial_owner, strcat("You got the ^2", key.netname, "\n"));
+
+	WaypointSprite_AttachCarrier("", key);
+	key.waypointsprite_attachedforcarrier.waypointsprite_for_player = kh_Key_waypointsprite_for_player;
+
+	kh_Key_AssignTo(key, initial_owner, TRUE);
+}
+
+void kh_Key_Remove(entity key)
+{
+	entity o;
+	o = key.owner;
+	kh_Key_AssignTo(key, world, FALSE);
+	if(o) // it was attached
+		WaypointSprite_Kill(key.waypointsprite_attachedforcarrier);
+	else // it was dropped
+		WaypointSprite_DetachCarrier(key);
+
+	remove(key);
+}
+
+void kh_Key_Collect(entity key, entity player)
+{
+	entity head;
+
+	kh_Scores_Event(player, key, "collect", 1, 0);
+	bprint(player.netname, "^7 collected the ", key.netname, "\n");
+	kh_Key_AssignTo(key, player, TRUE);
+
+	FOR_EACH_KH_KEY(key)
+		if(!key.owner || key.team != player.team)
+			goto notallowned;
+	FOR_EACH_PLAYER(head)
+	{
+		if(head.team == player.team)
+			if(head.kh_next)
+				centerprint(head, "All keys are in your team's hands!\n\nMeet the other key carriers ^1NOW^7!\n");
+			else
+				centerprint(head, "All keys are in your team's hands!\n\nHelp the key carriers to meet!\n");
+		else
+			centerprint(head, "All keys are in the enemy's hands!\n\nInterfere ^1NOW^7!\n");
+	}
+:notallowned
+}
+
+void kh_Key_DropAll(entity player)
+{
+	entity key;
+	entity mypusher;
+	mypusher = world;
+	if(player.pusher)
+		if(time < player.pushltime)
+			mypusher = player.pusher;
+	while((key = player.kh_next))
+	{
+		kh_Scores_Event(player, key, "losekey", 0, 0);
+		bprint(player.netname, "^7 lost the ", key.netname, "\n");
+		kh_Key_AssignTo(key, world, TRUE);
+		key.pusher = player.pusher;
+		key.pushltime = player.pushltime;
+	}
+}
+
+void kh_Key_Touch()
+{
+	if(self.owner) // already carried
+		return;
+	if(other.classname != "player")
+		return;
+	if(other.deadflag != DEAD_NO)
+		return;
+	if(other == self.enemy)
+		if(time < self.kh_droptime + cvar("g_balance_keyhunt_delay_collect"))
+			return; // you just dropped it!
+	kh_Key_Collect(self, other);
+}
+
+void kh_Key_Think()
+{
+	if(self.owner)
+	{
+		makevectors('0 1 0' * (self.cnt + math_mod(time, 360) * 45));
+		setorigin(self, v_forward * 16);
+
+		if(self.owner.buttonuse)
+		if(time >= self.owner.kh_droptime + cvar("g_balance_keyhunt_delay_drop"))
+		{
+			self.owner.kh_droptime = time;
+			self.kh_droptime = time; // prevent collecting this one for some time
+			self.enemy = self.owner;
+			self.pusher = world;
+			kh_Scores_Event(self.owner, self, "dropkey", 0, 0);
+			bprint(self.owner.netname, "^7 dropped the ", self.netname, "\n");
+			kh_Key_AssignTo(self, world, TRUE);
+		}
+	}
+
+	// if in nodrop or time over, end the round
+	if(!self.owner)
+		if(time > self.pain_finished)
+			kh_LoserTeam(self.team, self);
+	
+	if(self.owner)
+	{
+		entity key;
+		vector p;
+		float teem;
+		teem = self.team;
+		p = self.owner.origin;
+		FOR_EACH_KH_KEY(key)
+		{
+			if(key.owner == self.owner)
+				continue;
+			if(key.owner)
+			if(key.team == teem)
+			if(vlen(key.owner.origin - p) < cvar("g_balance_keyhunt_maxdist"))
+				continue;
+			goto not_winning;
+		}
+		kh_WinnerTeam(teem);
+:not_winning
+	}
+
+	self.nextthink = time + 0.1;
+}
+
+void kh_WinnerTeam(float teem)
+{
+	// all key carriers get some points
+	entity key;
+	float first;
+	float score;
+	score = 1.0 / kh_teams;
+	first = TRUE;
+	FOR_EACH_KH_KEY(key)
+	{
+		kh_Scores_Event(key.owner, key, "capture", score, 0);
+		if(key.owner.kh_next == key)
+		{
+			if(!first)
+				bprint("^7, ");
+			bprint(key.owner.netname);
+			first = FALSE;
+		}
+	}
+	bprint("^7 captured the keys for the ", ColoredTeamName(teem), "\n");
+	kh_FinishRound();
+}
+
+void kh_LoserTeam(float teem, entity lostkey)
+{
+	entity player, key, attacker;
+	float players;
+	float keys;
+	float score;
+
+	attacker = world;
+	if(lostkey.pusher)
+		if(player.pusher.team != player.team)
+			if(player.pusher.classname == "player")
+				attacker = lostkey.pusher;
+
+	players = keys = 0;
+
+	if(attacker)
+	{
+		kh_Scores_Event(attacker, world, "push", 1, 0);
+		centerprint(attacker, "Your push is the best!\n\n\n");
+		bprint("The ", ColoredTeamName(teem), "^7 could not take care of the ", lostkey.netname, "\n");
+	}
+	else
+	{
+		FOR_EACH_PLAYER(player)
+			if(player.team != teem)
+				++players;
+		
+		FOR_EACH_KH_KEY(key)
+			if(key.owner && key.team != teem)
+				++keys;
+
+		score = 1.0 / (keys * cvar("g_balance_keyhunt_score_destroyed_ownfactor") + players);
+
+		FOR_EACH_PLAYER(player)
+			if(player.team != teem)
+				kh_Scores_Event(player, world, "destroyed", score, 0);
+
+		FOR_EACH_KH_KEY(key)
+			if(key.owner && key.team != teem)
+				kh_Scores_Event(key.owner, world, "destroyed", score * cvar("g_balance_keyhunt_score_destroyed_ownfactor"), 0);
+
+		bprint("The ", ColoredTeamName(teem), "^7 could not take care of the ", lostkey.netname, "\n");
+	}
+
+	kh_FinishRound();
+}
+
+void kh_FinishRound()
+{
+	// prepare next round
+	entity key;
+	FOR_EACH_KH_KEY(key)
+		kh_Key_Remove(key);
+
+	kh_Controller_SetThink(cvar("g_balance_keyhunt_delay_round"), "Round starts in ", kh_StartRound);
+}
+
+float kh_EnoughPlayers()
+{
+	float i, players, teem;
+	entity player;
+	
+	// find a random player per team
+	for(i = 0; i < kh_teams; ++i)
+	{
+		teem = kh_Team_ByID(i);
+		players = 0;
+		FOR_EACH_PLAYER(player)
+			if(player.deadflag == DEAD_NO)
+				if(player.team == teem)
+					++players;
+		if(players == 0)
+			return FALSE;
+	}
+	return TRUE;
+}
+
+void kh_WaitForPlayers()
+{
+	if(kh_EnoughPlayers())
+		kh_Controller_SetThink(cvar("g_balance_keyhunt_delay_round"), "Round starts in ", kh_StartRound);
+	else
+		kh_Controller_SetThink(1, "Waiting for players to join...", kh_WaitForPlayers);
+}
+
+void kh_StartRound()
+{
+	float i, players, teem;
+	entity player;
+
+	if(!kh_EnoughPlayers())
+	{
+		kh_Controller_SetThink(1, "Waiting for players to join...", kh_WaitForPlayers);
+		return;
+	}
+
+	for(i = 0; i < kh_teams; ++i)
+	{
+		teem = kh_Team_ByID(i);
+		players = 0;
+		entity my_player;
+		FOR_EACH_PLAYER(player)
+			if(player.deadflag == DEAD_NO)
+				if(player.team == teem)
+				{
+					++players;
+					if(random() * players <= 1)
+						my_player = player;
+				}
+		kh_Key_Spawn(my_player, 360 * i / kh_teams);
+	}
+
+	kh_tracking_enabled = FALSE;
+	kh_Controller_SetThink(cvar("g_balance_keyhunt_delay_tracking"), "Scanning frequency range...", kh_EnableTrackingDevice);
+}
+
+void kh_setstatus()
+{
+	if(kh_teams)
+	{
+		float kh_KEY;
+		kh_KEY = (IT_RED_FLAG_TAKEN | IT_RED_FLAG_LOST | IT_BLUE_FLAG_TAKEN | IT_BLUE_FLAG_LOST); // the one impossible combination
+		if(self.kh_next)
+			self.items = self.items | kh_KEY;
+		else
+			self.items = self.items - (self.items & kh_KEY);
+	}
+}
+
+void kh_EnableTrackingDevice()
+{
+	kh_tracking_enabled = TRUE;
+}
+
+float kh_Key_waypointsprite_for_player(entity e)
+{
+	if(!kh_tracking_enabled)
+		return 0;
+	if(!self.owner)
+		return kh_sprite_dropped;
+	if(!self.owner.owner)
+		return kh_sprite_dropped;
+	return 0; // draw only when key is not owned
+}
+
+float kh_KeyCarrier_waypointsprite_for_player(entity e)
+{
+	entity key;
+	
+	if(e.classname != "player" || self.team != e.team)
+		if(!kh_tracking_enabled)
+			return 0;
+
+	FOR_EACH_KH_KEY(key)
+		if(!key.owner || key.team != e.team)
+		{
+			if(self.team == e.team)
+				return kh_sprite_friend;
+			else
+				return kh_GetCarrierSprite(self.team);
+		}
+
+	return kh_sprite_finish;
+}
+
+float kh_HandleFrags(entity attacker, entity targ, float f)
+{
+	float newfrags;
+
+	if(f <= 0)
+		return f;
+	if(attacker == targ)
+		return f;
+
+	if(targ.kh_next)
+		f = f - 1 + cvar("g_balance_keyhunt_score_carrierfrag");
+
+	if(newfrags)
+		f = f - 1 + newfrags;
+	return f;
+}
+
+void kh_init()
+{
+	precache_model("models/sprites/key-dropped.sp2");
+	precache_model("models/sprites/keycarrier-finish.sp2");
+	precache_model("models/sprites/keycarrier-friend.sp2");
+	precache_model("models/sprites/keycarrier-red.sp2");
+	precache_model("models/sprites/keycarrier-blue.sp2");
+	precache_model("models/sprites/keycarrier-pink.sp2");
+	precache_model("models/sprites/keycarrier-yellow.sp2");
+	precache_model("models/keyhunt/key3.md3");
+
+	// setup variables
+	kh_teams = cvar("g_keyhunt_teams_override");
+	if(kh_teams < 2)
+		kh_teams = cvar("g_keyhunt_teams");
+	if(kh_teams < 2)
+		kh_teams = 2;
+
+	// make a KH entity for controlling the game
+	kh_controller = spawn();
+	kh_controller.think = kh_Controller_Think;
+	kh_Controller_SetThink(0, "", kh_WaitForPlayers);
+
+	setmodel(kh_controller, "models/sprites/key-dropped.sp2");
+	kh_sprite_dropped = kh_controller.modelindex;
+	setmodel(kh_controller, "models/sprites/keycarrier-finish.sp2");
+	kh_sprite_finish = kh_controller.modelindex;
+	setmodel(kh_controller, "models/sprites/keycarrier-friend.sp2");
+	kh_sprite_friend = kh_controller.modelindex;
+	setmodel(kh_controller, "models/sprites/keycarrier-red.sp2");
+	kh_sprite_red = kh_controller.modelindex;
+	setmodel(kh_controller, "models/sprites/keycarrier-blue.sp2");
+	kh_sprite_blue = kh_controller.modelindex;
+	setmodel(kh_controller, "models/sprites/keycarrier-pink.sp2");
+	kh_sprite_pink = kh_controller.modelindex;
+	setmodel(kh_controller, "models/sprites/keycarrier-yellow.sp2");
+	kh_sprite_yellow = kh_controller.modelindex;
+	setmodel(kh_controller, "");
+}
+
+void kh_finalize()
+{
+	// to be called before intermission
+	kh_FinishRound();
+	remove(kh_controller);
+	kh_controller = world;
+}

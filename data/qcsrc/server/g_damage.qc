@@ -26,6 +26,11 @@ void GiveFrags (entity attacker, entity targ, float f)
 		if(f > 0)
 			f = RunematchHandleFrags(attacker, targ, f);
 	}
+	else if(cvar("g_keyhunt"))
+	{
+		if(f > 0)
+			f = kh_HandleFrags(attacker, targ, f);
+	}
 	else if(cvar("g_lms"))
 	{
 		// count remaining lives, not frags in lms
