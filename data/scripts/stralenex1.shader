@@ -126,7 +126,6 @@ textures/stralenex1/e6xrst_supprt
 	qer_editorimage textures/stralenex1/e6xrst_supprt.tga
 	surfaceparm nomarks
 	surfaceparm trans
-	surfaceparm playerclip
 	cull none
 	nopicmip
 	{
