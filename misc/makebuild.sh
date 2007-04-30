@@ -205,5 +205,8 @@ fi
 rm -f "$zipdir/nexuizpatch$date$ext.zip"
 zip $zipflags -9yr "$zipdir/nexuizpatch$date$ext.zip"      Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/data/datapatch$date.pk3
 
+rm -f "$zipdir/nexuizdocs$date$ext.zip"
+zip $zipflags -9yr "$zipdir/nexuizdocs$date$ext.zip"       Nexuiz/gpl.txt Nexuiz/Docs
+
 rm -f "$zipdir/nexuizdebug$date$ext.zip"
 zip $zipflags -9yr "$zipdir/nexuizdebug$date$ext.zip"      Nexuiz/gpl.txt Nexuiz/debuginfo/*
