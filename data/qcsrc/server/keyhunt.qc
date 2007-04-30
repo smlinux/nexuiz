@@ -460,7 +460,7 @@ void kh_LoserTeam(float teem, entity lostkey)
 			if(key.owner && key.team != teem)
 				++keys;
 
-		score = 1.0 / (keys * cvar("g_balance_keyhunt_score_destroyed_ownfactor") + players);
+		score = 1.0 / max(1, keys * cvar("g_balance_keyhunt_score_destroyed_ownfactor") + players);
 
 		FOR_EACH_PLAYER(player)
 			if(player.team != teem)
