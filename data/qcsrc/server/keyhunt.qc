@@ -21,6 +21,11 @@ float kh_interferemsg_time, kh_interferemsg_team;
 .entity kh_next, kh_prev; // linked list
 .float kh_droptime;
 
+string kh_sound_capture = "sound/ctf/capture.wav";
+string kh_sound_destroy = "sound/ctf/return.wav";
+string kh_sound_drop = "sound/ctf/respawn.wav";
+string kh_sound_collect = "sound/ctf/take.wav";
+
 float kh_sprite_dropped, kh_sprite_finish, kh_sprite_red, kh_sprite_blue, kh_sprite_pink, kh_sprite_yellow, kh_sprite_friend;
 
 float kh_GetCarrierSprite(float t, float e)
@@ -243,6 +248,8 @@ void kh_Key_Collect(entity key, entity player)
 	bprint(player.netname, "^7 collected the ", key.netname, "\n");
 	kh_Key_AssignTo(key, player, TRUE);
 
+	sound(key, CHAN_AUTO, kh_sound_collect, 1, ATTN_NONE);
+
 	FOR_EACH_KH_KEY(key)
 		if(!key.owner || key.team != player.team)
 			goto notallowned;
@@ -255,17 +262,21 @@ void kh_Key_DropAll(entity player)
 {
 	entity key;
 	entity mypusher;
-	mypusher = world;
-	if(player.pusher)
-		if(time < player.pushltime)
-			mypusher = player.pusher;
-	while((key = player.kh_next))
+	if(player.kh_next)
 	{
-		kh_Scores_Event(player, key, "losekey", 0, 0);
-		bprint(player.netname, "^7 lost the ", key.netname, "\n");
-		kh_Key_AssignTo(key, world, TRUE);
-		key.pusher = player.pusher;
-		key.pushltime = player.pushltime;
+		mypusher = world;
+		if(player.pusher)
+			if(time < player.pushltime)
+				mypusher = player.pusher;
+		while((key = player.kh_next))
+		{
+			kh_Scores_Event(player, key, "losekey", 0, 0);
+			bprint(player.netname, "^7 lost the ", key.netname, "\n");
+			kh_Key_AssignTo(key, world, TRUE);
+			key.pusher = player.pusher;
+			key.pushltime = player.pushltime;
+		}
+		sound(world, CHAN_AUTO, kh_sound_drop, 1, ATTN_NONE);
 	}
 }
 
@@ -304,6 +315,7 @@ void kh_Key_Think()
 			kh_Scores_Event(self.owner, self, "dropkey", 0, 0);
 			bprint(self.owner.netname, "^7 dropped the ", self.netname, "\n");
 			kh_Key_AssignTo(self, world, TRUE);
+			sound(world, CHAN_AUTO, kh_sound_drop, 1, ATTN_NONE);
 		}
 	}
 
@@ -371,6 +383,7 @@ void kh_WinnerTeam(float teem)
 		}
 	}
 	bprint("^7 captured the keys for the ", ColoredTeamName(teem), "\n");
+	sound(world, CHAN_AUTO, kh_sound_capture, 1, ATTN_NONE);
 	kh_FinishRound();
 }
 
@@ -417,6 +430,7 @@ void kh_LoserTeam(float teem, entity lostkey)
 
 		bprint("The ", ColoredTeamName(teem), "^7 could not take care of the ", lostkey.netname, "\n");
 	}
+	sound(world, CHAN_AUTO, kh_sound_destroy, 1, ATTN_NONE);
 
 	kh_FinishRound();
 }
@@ -560,6 +574,11 @@ float kh_HandleFrags(entity attacker, entity targ, float f)
 
 void kh_init()
 {
+	precache_sound(kh_sound_capture);
+	precache_sound(kh_sound_destroy);
+	precache_sound(kh_sound_drop);
+	precache_sound(kh_sound_collect);
+
 	precache_model("models/sprites/key-dropped.sp2");
 	precache_model("models/sprites/keycarrier-finish.sp2");
 	precache_model("models/sprites/keycarrier-friend.sp2");
