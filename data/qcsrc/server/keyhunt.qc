@@ -252,6 +252,25 @@ void kh_Key_Remove(entity key)
 	remove(key);
 }
 
+// -1 when no team completely owns all keys yet
+float kh_Key_AllOwnedByWhichTeam()
+{
+	entity key;
+	float teem;
+
+	teem = -1;
+	FOR_EACH_KH_KEY(key)
+	{
+		if(!key.owner)
+			return -1;
+		if(teem == -1)
+			teem = key.team;
+		else if(teem != key.team)
+			return -1;
+	}
+	return teem;
+}
+
 void kh_Key_Collect(entity key, entity player)
 {
 	sound(key, CHAN_AUTO, kh_sound_collect, 1, ATTN_NORM);
@@ -260,12 +279,11 @@ void kh_Key_Collect(entity key, entity player)
 	bprint(player.netname, "^7 collected the ", key.netname, "\n");
 	kh_Key_AssignTo(key, player, TRUE);
 
-	FOR_EACH_KH_KEY(key)
-		if(!key.owner || key.team != player.team)
-			goto notallowned;
-	kh_interferemsg_time = time + 0.2;
-	kh_interferemsg_team = player.team;
-:notallowned
+	if(kh_Key_AllOwnedByWhichTeam() != -1)
+	{
+		kh_interferemsg_time = time + 0.2;
+		kh_interferemsg_team = player.team;
+	}
 }
 
 void kh_Key_DropAll(entity player)
@@ -334,23 +352,15 @@ void kh_Key_Think()
 			kh_LoserTeam(self.team, self);
 	
 	if(self.owner)
+	if(kh_Key_AllOwnedByWhichTeam() != -1)
 	{
 		entity key;
 		vector p;
-		float teem;
-		teem = self.team;
 		p = self.owner.origin;
 		FOR_EACH_KH_KEY(key)
-		{
-			if(key.owner == self.owner)
-				continue;
-			if(key.owner)
-			if(key.team == teem)
-			if(vlen(key.owner.origin - p) < cvar("g_balance_keyhunt_maxdist"))
-				continue;
-			goto not_winning;
-		}
-		kh_WinnerTeam(teem);
+			if(vlen(key.owner.origin - p) > cvar("g_balance_keyhunt_maxdist"))
+				goto not_winning;
+		kh_WinnerTeam(self.team);
 :not_winning
 	}
 
@@ -568,8 +578,6 @@ float kh_Key_waypointsprite_for_player(entity e)
 
 float kh_KeyCarrier_waypointsprite_for_player(entity e)
 {
-	entity key;
-	
 	if(e.classname != "player" || self.team != e.team)
 		if(!kh_tracking_enabled)
 			return 0;
@@ -584,11 +592,10 @@ float kh_KeyCarrier_waypointsprite_for_player(entity e)
 	
 	// e is a key carrier: if any key is dropped or owned by another team, show
 	// the carrier sprite; otherwise show run here
-	FOR_EACH_KH_KEY(key)
-		if(!key.owner || key.team != e.team)
-			return kh_GetCarrierSprite(self.team, e.team);
+	if(kh_Key_AllOwnedByWhichTeam() == e.team)
+		return kh_sprite_finish;
 
-	return kh_sprite_finish;
+	return kh_GetCarrierSprite(self.team, e.team);
 }
 
 float kh_HandleFrags(entity attacker, entity targ, float f)

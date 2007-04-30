@@ -2018,6 +2018,7 @@ void() botframe_updatedangerousobjects =
 
 
 float botframe_spawnedwaypoints;
+float botframe_nextthink;
 void() bot_serverframe =
 {
 	float realplayers, bots;
@@ -2038,17 +2039,13 @@ void() bot_serverframe =
 	{
 		float realminplayers, minplayers;
 		realminplayers = cvar("minplayers");
-		minplayers = bound(0, floor(realminplayers), maxclients - 1);
-		if (realminplayers != minplayers)
-			cvar_set("minplayers", ftos(minplayers));
+		minplayers = max(0, floor(realminplayers));
 
 		float realminbots, minbots;
 		realminbots = cvar("bot_number");
-		minbots = bound(0, floor(realminbots), maxclients - 1);
-		if (realminbots != minbots)
-			cvar_set("bot_number", ftos(minbots));
+		minbots = max(0, floor(realminbots));
 
-		bots = bound(minbots, minplayers - realplayers, maxclients);
+		bots = min(max(minbots, minplayers - realplayers), maxclients - realplayers);
 	}
 	else
 	{
@@ -2059,18 +2056,21 @@ void() bot_serverframe =
 	bot_ignore_bots = cvar("bot_ignore_bots");
 
 	// only add one bot per frame to avoid utter chaos
-	while (currentbots < bots)
+	if(time > botframe_nextthink)
 	{
-		if (bot_spawn() == world)
+		//dprint(ftos(bots), " ? ", ftos(currentbots), "\n");
+		while (currentbots < bots)
 		{
-			bprint("Can not add bot, server full.\n");
-			cvar_set("bot_number", ftos(currentbots));
-			bots = currentbots;
-			break;
+			if (bot_spawn() == world)
+			{
+				bprint("Can not add bot, server full.\n");
+				botframe_nextthink = time + 10;
+				break;
+			}
 		}
+		while (currentbots > bots)
+			bot_removenewest();
 	}
-	while (currentbots > bots)
-		bot_removenewest();
 
 	if(botframe_spawnedwaypoints)
 	{
@@ -2078,7 +2078,7 @@ void() bot_serverframe =
 			localcmd("quit\n");
 	}
 
-	if (bots > 0 || cvar("g_waypointeditor"))
+	if (currentbots > 0 || cvar("g_waypointeditor"))
 	if (!botframe_spawnedwaypoints)
 	{
 		botframe_spawnedwaypoints = TRUE;
