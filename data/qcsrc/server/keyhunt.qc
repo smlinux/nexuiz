@@ -17,6 +17,7 @@ float kh_Team_ByID(float t)
 entity kh_controller;
 float kh_tracking_enabled;
 float kh_teams;
+float kh_interferemsg_time, kh_interferemsg_team;
 .entity kh_next, kh_prev; // linked list
 .float kh_droptime;
 
@@ -238,8 +239,6 @@ void kh_Key_Remove(entity key)
 
 void kh_Key_Collect(entity key, entity player)
 {
-	entity head;
-
 	kh_Scores_Event(player, key, "collect", 1, 0);
 	bprint(player.netname, "^7 collected the ", key.netname, "\n");
 	kh_Key_AssignTo(key, player, TRUE);
@@ -247,16 +246,8 @@ void kh_Key_Collect(entity key, entity player)
 	FOR_EACH_KH_KEY(key)
 		if(!key.owner || key.team != player.team)
 			goto notallowned;
-	FOR_EACH_PLAYER(head)
-	{
-		if(head.team == player.team)
-			if(head.kh_next)
-				centerprint(head, "All keys are in your team's hands!\n\nMeet the other key carriers ^1NOW^7!\n");
-			else
-				centerprint(head, "All keys are in your team's hands!\n\nHelp the key carriers to meet!\n");
-		else
-			centerprint(head, "All keys are in the enemy's hands!\n\nInterfere ^1NOW^7!\n");
-	}
+	kh_interferemsg_time = time + 0.2;
+	kh_interferemsg_team = player.team;
 :notallowned
 }
 
@@ -294,6 +285,8 @@ void kh_Key_Touch()
 
 void kh_Key_Think()
 {
+	entity head;
+
 	self.angles_y = math_mod(self.angles_y + 0.05 * 135, 360);
 
 	if(self.owner)
@@ -338,6 +331,21 @@ void kh_Key_Think()
 		}
 		kh_WinnerTeam(teem);
 :not_winning
+	}
+
+	if(kh_interferemsg_time && time > kh_interferemsg_time)
+	{
+		kh_interferemsg_time = 0;
+		FOR_EACH_PLAYER(head)
+		{
+			if(head.team == kh_interferemsg_team)
+				if(head.kh_next)
+					centerprint(head, "All keys are in your team's hands!\n\nMeet the other key carriers ^1NOW^7!\n");
+				else
+					centerprint(head, "All keys are in your team's hands!\n\nHelp the key carriers to meet!\n");
+			else
+				centerprint(head, "All keys are in the enemy's hands!\n\nInterfere ^1NOW^7!\n");
+		}
 	}
 
 	self.nextthink = time + 0.05;
@@ -416,6 +424,7 @@ void kh_LoserTeam(float teem, entity lostkey)
 void kh_FinishRound()
 {
 	// prepare next round
+	kh_interferemsg_time = 0;
 	entity key;
 	FOR_EACH_KH_KEY(key)
 		kh_Key_Remove(key);

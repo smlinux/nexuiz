@@ -465,6 +465,8 @@ string GetGametype()
 		return "rune";
 	else if (game == GAME_LMS)
 		return "lms";
+	else if (game == GAME_KEYHUNT)
+		return "kh";
 	return "dm";
 }
 
