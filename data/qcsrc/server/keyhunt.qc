@@ -22,8 +22,9 @@ float kh_teams;
 
 float kh_sprite_dropped, kh_sprite_finish, kh_sprite_red, kh_sprite_blue, kh_sprite_pink, kh_sprite_yellow, kh_sprite_friend;
 
-float kh_GetCarrierSprite(float t)
+float kh_GetCarrierSprite(float t, float e)
 {
+	if(t == e)           return kh_sprite_friend;
 	if(t == COLOR_TEAM1) return kh_sprite_red;
 	if(t == COLOR_TEAM2) return kh_sprite_blue;
 	if(t == COLOR_TEAM3) return kh_sprite_pink;
@@ -520,18 +521,13 @@ float kh_KeyCarrier_waypointsprite_for_player(entity e)
 
 	// e is no key carrier: simple case...
 	if(!e.kh_next)
-		return kh_GetCarrierSprite(self.team);
+		return kh_GetCarrierSprite(self.team, e.team);
 	
 	// e is a key carrier: if any key is dropped or owned by another team, show
 	// the carrier sprite; otherwise show run here
 	FOR_EACH_KH_KEY(key)
 		if(!key.owner || key.team != e.team)
-		{
-			if(self.team == e.team)
-				return kh_sprite_friend;
-			else
-				return kh_GetCarrierSprite(self.team);
-		}
+			return kh_GetCarrierSprite(self.team, e.team);
 
 	return kh_sprite_finish;
 }
