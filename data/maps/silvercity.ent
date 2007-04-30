@@ -34,7 +34,7 @@
 }
 {
 "angle" "0"
-"origin" "544 -224 88"
+"origin" "544 -224 48"
 "classname" "info_player_deathmatch"
 }
 {
@@ -49,7 +49,7 @@
 }
 {
 "angle" "0"
-"origin" "-1536 -768 88"
+"origin" "-1536 -768 48"
 "classname" "info_player_deathmatch"
 }
 {
