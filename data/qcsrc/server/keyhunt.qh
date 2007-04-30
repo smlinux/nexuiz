@@ -1,4 +1,5 @@
 float kh_teams;
+float kh_tracking_enabled;
 
 void kh_Log();
 void kh_Scores_Event(entity player, entity key, string what, float frags_player, float frags_owner);

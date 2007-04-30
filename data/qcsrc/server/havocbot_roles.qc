@@ -520,6 +520,9 @@ void(float ratingscale_team, float ratingscale_dropped, float ratingscale_enemy)
 	{
 		if(head.owner == self)
 			continue;
+		if(!kh_tracking_enabled)
+			if(!head.owner || head.team == self.team)
+				continue; // skip what I can't see
 		if(!head.owner)
 			navigation_routerating(head, ratingscale_dropped);
 		else if(head.team == self.team)

@@ -518,6 +518,12 @@ float kh_KeyCarrier_waypointsprite_for_player(entity e)
 		if(!kh_tracking_enabled)
 			return 0;
 
+	// e is no key carrier: simple case...
+	if(!e.kh_next)
+		return kh_GetCarrierSprite(self.team);
+	
+	// e is a key carrier: if any key is dropped or owned by another team, show
+	// the carrier sprite; otherwise show run here
 	FOR_EACH_KH_KEY(key)
 		if(!key.owner || key.team != e.team)
 		{
