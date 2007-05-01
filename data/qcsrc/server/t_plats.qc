@@ -463,12 +463,20 @@ void() func_bobbing_controller_think =
 	self.owner.velocity = (v - self.owner.origin) * 10;
 };
 
+void() bobbing_blocked =
+{
+	// no need to duplicate code
+	rotating_blocked();
+}
+
 /*QUAKED func_bobbing (0 .5 .8) ? X_AXIS Y_AXIS
 Brush model that moves back and forth on one axis (default Z).
 speed : how long one cycle takes in seconds (default 4)
 height : how far the cycle moves (default 32)
 phase : cycle timing adjustment (0-1 as a fraction of the cycle, default 0)
 noise : path/name of looping .wav file to play.
+dmg : Do this mutch dmg every .dmgtime intervall when blocked
+dmgtime : See above.
 */
 void() func_bobbing =
 {
@@ -486,6 +494,15 @@ void() func_bobbing =
 	self.destvec = self.origin;
 	// time scale to get degrees
 	self.cnt = 360 / self.speed;
+
+	// damage when blocked
+	self.blocked = bobbing_blocked;
+	if(self.dmg & (!self.message))
+		self.message = " was in the wrong place.";
+	if(self.dmg && (!self.dmgtime))
+		self.dmgtime = 0.25;
+	self.dmgtime2 = time;
+
 	// how far to bob
 	if (self.spawnflags & 1) // X
 		self.movedir = '1 0 0' * self.height;
