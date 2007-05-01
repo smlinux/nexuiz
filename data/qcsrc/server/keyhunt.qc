@@ -33,8 +33,8 @@ float kh_GetCarrierSprite(float t, float e)
 	if(t == e)           return kh_sprite_friend;
 	if(t == COLOR_TEAM1) return kh_sprite_red;
 	if(t == COLOR_TEAM2) return kh_sprite_blue;
-	if(t == COLOR_TEAM3) return kh_sprite_pink;
-	if(t == COLOR_TEAM4) return kh_sprite_yellow;
+	if(t == COLOR_TEAM3) return kh_sprite_yellow;
+	if(t == COLOR_TEAM4) return kh_sprite_pink;
 	return 0;
 }
 
@@ -220,12 +220,12 @@ void kh_Key_Spawn(entity initial_owner, float angle)
 			key.colormod = '0.10 0.10 1.73';
 			break;
 		case COLOR_TEAM3:
-			key.netname = "^6pink key";
-			key.colormod = '1.22 0.10 1.22';
-			break;
-		case COLOR_TEAM4:
 			key.netname = "^3yellow key";
 			key.colormod = '1.22 1.22 0.10';
+			break;
+		case COLOR_TEAM4:
+			key.netname = "^6pink key";
+			key.colormod = '1.22 0.10 1.22';
 			break;
 		default:
 			key.netname = "NETGIER key";
@@ -629,8 +629,8 @@ void kh_init()
 	precache_model("models/sprites/keycarrier-friend.sp2");
 	precache_model("models/sprites/keycarrier-red.sp2");
 	precache_model("models/sprites/keycarrier-blue.sp2");
-	precache_model("models/sprites/keycarrier-pink.sp2");
 	precache_model("models/sprites/keycarrier-yellow.sp2");
+	precache_model("models/sprites/keycarrier-pink.sp2");
 	precache_model("models/keyhunt/key3.md3");
 
 	// setup variables

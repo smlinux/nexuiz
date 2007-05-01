@@ -345,15 +345,15 @@ void SV_ParseClientCommand(string s) {
 			SV_ChangeTeam( COLOR_TEAM1 - 1 );
 		} else if( argv(1) == "blue" ) {
 			SV_ChangeTeam( COLOR_TEAM2 - 1 );
-		} else if( argv(1) == "pink" ) {
-			SV_ChangeTeam( COLOR_TEAM3 - 1 );
 		} else if( argv(1) == "yellow" ) {
+			SV_ChangeTeam( COLOR_TEAM3 - 1 );
+		} else if( argv(1) == "pink" ) {
 			SV_ChangeTeam( COLOR_TEAM4 - 1 );
 		} else if( argv(1) == "auto" ) {
 			self.team = -1;
 			JoinBestTeam( self, 0 );
 		} else {
-			sprint( self, strcat( "selectteam none/red/blue/pink/yellow/auto - \"", argv(1), "\" not recognised\n" ) );
+			sprint( self, strcat( "selectteam none/red/blue/yellow/pink/auto - \"", argv(1), "\" not recognised\n" ) );
 		}
 	} else if(argv(0) == "ready") {
 		if(cvar("sv_ready_restart"))

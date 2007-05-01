@@ -220,7 +220,7 @@ float MAX_SHOT_DISTANCE = 32768;
 
 float COLOR_TEAM1	= 5;  // red
 float COLOR_TEAM2	= 14; // blue
-float COLOR_TEAM3	= 10; // pink
-float COLOR_TEAM4	= 13; // yellow
+float COLOR_TEAM3	= 13; // yellow
+float COLOR_TEAM4	= 10; // pink
 
 float NUM_PLAYERSKINS_TEAMPLAY = 3;

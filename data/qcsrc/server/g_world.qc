@@ -1450,8 +1450,8 @@ void PrintScoreboard(entity e)
 	{
 		PrintScoreboardFor(e, "Red", "^1", COLOR_TEAM1);
 		PrintScoreboardFor(e, "Blue", "^4", COLOR_TEAM2);
-		PrintScoreboardFor(e, "Pink", "^6", COLOR_TEAM3);
-		PrintScoreboardFor(e, "Yellow", "^3", COLOR_TEAM4);
+		PrintScoreboardFor(e, "Yellow", "^3", COLOR_TEAM3);
+		PrintScoreboardFor(e, "Pink", "^6", COLOR_TEAM4);
 	}
 	else
 	{

@@ -45,9 +45,9 @@ string TeamName(float t)
 	if(t == COLOR_TEAM2)
 		return "Blue Team";
 	if(t == COLOR_TEAM3)
-		return "Pink Team";
-	if(t == COLOR_TEAM4)
 		return "Yellow Team";
+	if(t == COLOR_TEAM4)
+		return "Pink Team";
 	return "Neutral Team";
 }
 string ColoredTeamName(float t)
@@ -58,9 +58,9 @@ string ColoredTeamName(float t)
 	if(t == COLOR_TEAM2)
 		return "^4Blue Team^7";
 	if(t == COLOR_TEAM3)
-		return "^6Pink Team^7";
-	if(t == COLOR_TEAM4)
 		return "^3Yellow Team^7";
+	if(t == COLOR_TEAM4)
+		return "^6Pink Team^7";
 	return "Neutral Team";
 }
 string TeamNoName(float t)
@@ -71,9 +71,9 @@ string TeamNoName(float t)
 	if(t == 2)
 		return "Blue Team";
 	if(t == 3)
-		return "Pink Team";
-	if(t == 4)
 		return "Yellow Team";
+	if(t == 4)
+		return "Pink Team";
 	return "Neutral Team";
 }
 
