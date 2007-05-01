@@ -411,20 +411,14 @@ void(float spd, vector org) weapon_boblayer1 =
 	// VorteX: haste can be added here
 };
 
-void(entity missile) W_SetupProjectileVelocity =
+vector(vector pvelocity, vector mvelocity) W_CalculateProjectileVelocity =
 {
-	vector pvelocity;
 	vector mdirection;
 	float mspeed;
 	float outspeed;
 	float nstyle;
-	vector mvelocity;
 	vector outvelocity;
 
-	if(missile.owner == world)
-		error("Unowned missile");
-	pvelocity = missile.owner.velocity;
-	mvelocity = missile.velocity;
 	mdirection = normalize(mvelocity);
 	mspeed = vlen(mvelocity);
 
@@ -485,7 +479,13 @@ void(entity missile) W_SetupProjectileVelocity =
 	else
 		error("g_projectiles_newton_style must be 0 (absolute), 1 (Newtonian), 2 (Newtonian + aimfix), 3 (pseudo Newtonian) or 4 (tZorkian)!");
 
-	//dprint("Adjusted from ", vtos(missile.velocity));
-	missile.velocity = outvelocity;
-	//dprint(" to ", vtos(missile.velocity), "\n");
+	return outvelocity;
+}
+
+void(entity missile) W_SetupProjectileVelocity =
+{
+	if(missile.owner == world)
+		error("Unowned missile");
+
+	missile.velocity = W_CalculateProjectileVelocity(missile.owner.velocity, missile.velocity);
 }
