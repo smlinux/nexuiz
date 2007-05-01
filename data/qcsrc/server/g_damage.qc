@@ -96,7 +96,7 @@ void LogDeath(string mode, float deathtype, entity killer, entity killed)
 
 void Obituary (entity attacker, entity targ, float deathtype)
 {
-	string	s, a, m;
+	string	s, a;
 
 	if (targ.classname == "player" || targ.classname == "corpse")
 	{
@@ -110,29 +110,11 @@ void Obituary (entity attacker, entity targ, float deathtype)
 		{
 			if (deathtype == DEATH_TEAMCHANGE)
 			{
-				m = "You are now on: ";
-				if (targ.team == 5)
-					m = strcat(m, "^1Red Team");
-				else if (targ.team == 14)
-					m = strcat(m, "^4Blue Team");
-				else if (targ.team == 10)
-					m = strcat(m, "^6Pink Team");
-				else if (targ.team == 13)
-					m = strcat(m, "^3Yellow Team");
-				centerprint(targ, m);
+				centerprint(targ, strcat("You are now on: ", ColoredTeamName(targ.team)));
 			}
 			else if (deathtype == DEATH_AUTOTEAMCHANGE)
 			{
-				m = "You have been moved into a different team to improve team balance\nYou are now on: ";
-				if (targ.team == 5)
-					m = strcat(m, "^1Red Team");
-				else if (targ.team == 14)
-					m = strcat(m, "^4Blue Team");
-				else if (targ.team == 10)
-					m = strcat(m, "^6Pink Team");
-				else if (targ.team == 13)
-					m = strcat(m, "^3Yellow Team");
-				centerprint(targ, m);
+				centerprint(targ, strcat("You have been moved into a different team to improve team balance\nYou are now on: ", ColoredTeamName(targ.team)));
 				return;
 			}
 			else if (deathtype == DEATH_CAMP)

@@ -234,7 +234,7 @@ void() FlagTouch =
 		other.next_take_time = time + 1;
 	}
 	if (self.cnt == FLAG_BASE)
-	if (other.team == 5 || other.team == 14) // only red and blue team can steal flags
+	if (other.team == COLOR_TEAM1 || other.team == COLOR_TEAM2) // only red and blue team can steal flags
 	if (other.team != self.team)
 	if (!other.flagcarried)
 	{
@@ -268,11 +268,11 @@ void() FlagTouch =
 	if (self.cnt == FLAG_DROPPED)
 	{
 		self.flags = FL_ITEM; // clear FL_ONGROUND and any other junk
-		if (other.team == self.team || (other.team != 5 && other.team != 14))
+		if (other.team == self.team || (other.team != COLOR_TEAM1 && other.team != COLOR_TEAM2))
 		{
 			// return flag
 			bprint(other.netname, "^7 returned the ", self.netname, "\n");
-			if (other.team == 5 || other.team == 14)
+			if (other.team == COLOR_TEAM1 || other.team == COLOR_TEAM2)
 				UpdateFrags(other, cvar("g_ctf_flagscore_return"));
 			else
 				UpdateFrags(other, cvar("g_ctf_flagscore_return_rogue"));
@@ -315,7 +315,7 @@ Keys:
 */
 void() info_player_team1 =
 {
-	self.team = 5; // red
+	self.team = COLOR_TEAM1; // red
 	info_player_deathmatch();
 };
 //self.team = 4;self.classname = "info_player_start";info_player_start();};
@@ -330,7 +330,7 @@ Keys:
 */
 void() info_player_team2 =
 {
-	self.team = 14; // blue
+	self.team = COLOR_TEAM2; // blue
 	info_player_deathmatch();
 };
 //self.team = 13;self.classname = "info_player_start";info_player_start();};
@@ -345,7 +345,7 @@ Keys:
 */
 void() info_player_team3 =
 {
-	self.team = 10; // purple
+	self.team = COLOR_TEAM3; // purple
 	info_player_deathmatch();
 };
 
@@ -360,7 +360,7 @@ Keys:
 */
 void() info_player_team4 =
 {
-	self.team = 13; // yellow
+	self.team = COLOR_TEAM4; // yellow
 	info_player_deathmatch();
 };
 
@@ -400,7 +400,7 @@ void() item_flag_team1 =
 	//	cvar_set("teamplay", "3");
 
 	self.classname = "item_flag_team1";
-	self.team = 5; // color 4 team (red)
+	self.team = COLOR_TEAM1; // color 4 team (red)
 	self.items = IT_KEY2; // gold key (redish enough)
 	self.netname = "^1RED^7 flag";
 	self.target = "###item###";
@@ -456,7 +456,7 @@ void() item_flag_team2 =
 	//	cvar_set("teamplay", "3");
 
 	self.classname = "item_flag_team2";
-	self.team = 14; // color 13 team (blue)
+	self.team = COLOR_TEAM2; // color 13 team (blue)
 	self.items = IT_KEY1; // silver key (bluish enough)
 	self.netname = "^4BLUE^7 flag";
 	self.target = "###item###";
@@ -549,8 +549,8 @@ void() ctf_spawnteams =
 
 	numteams = 2;//cvar("g_ctf_default_teams");
 
-	ctf_spawnteam("Red", 4);
-	ctf_spawnteam("Blue", 13);
+	ctf_spawnteam("Red", COLOR_TEAM1 - 1);
+	ctf_spawnteam("Blue", COLOR_TEAM2 - 1);
 };
 
 void() ctf_delayedinit =
@@ -574,8 +574,8 @@ void(entity flag) ctf_setstatus2 =
 {
 	if (flag) {
 		local float shift;
-		if (flag.team == 5) shift = IT_RED_FLAG_TAKEN;
-		else if (flag.team == 14) shift = IT_BLUE_FLAG_TAKEN;
+		if (flag.team == COLOR_TEAM1) shift = IT_RED_FLAG_TAKEN;
+		else if (flag.team == COLOR_TEAM2) shift = IT_BLUE_FLAG_TAKEN;
 		else shift = 0;
 
 		local float status;

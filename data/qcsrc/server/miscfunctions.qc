@@ -1,4 +1,5 @@
 void() info_player_deathmatch; // needed for the other spawnpoints
+string ColoredTeamName(float t);
 
 void move_out_of_solid_expand(entity e, vector by)
 {

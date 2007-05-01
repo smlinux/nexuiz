@@ -968,7 +968,6 @@ void ShufflePlayerOutOfTeam (float source_team)
 	float smallestteam, smallestteam_count, steam;
 	float lowest_bot_score, lowest_player_score;
 	entity head, lowest_bot, lowest_player, selected;
-	string m;
 
 	smallestteam = 0;
 	smallestteam_count = 999999999;
@@ -1101,17 +1100,8 @@ void ShufflePlayerOutOfTeam (float source_team)
 	SetPlayerTeam(selected, smallestteam, source_team, FALSE);
 
 	if(selected.deadflag == DEAD_NO)
-			Damage(selected, selected, selected, 100000, DEATH_AUTOTEAMCHANGE, selected.origin, '0 0 0');
-	m = "You have been moved into a different team to improve team balance\nYou are now on: ";
-	if (selected.team == 5)
-		m = strcat(m, "^1Red Team");
-	else if (selected.team == 14)
-		m = strcat(m, "^4Blue Team");
-	else if (selected.team == 10)
-		m = strcat(m, "^6Pink Team");
-	else if (selected.team == 13)
-		m = strcat(m, "^3Yellow Team");
-	centerprint(selected, m);
+		Damage(selected, selected, selected, 100000, DEATH_AUTOTEAMCHANGE, selected.origin, '0 0 0');
+	centerprint(selected, strcat("You have been moved into a different team to improve team balance\nYou are now on: ", ColoredTeamName(selected.team)));
 }
 
 float lastRebalanceInfo;
@@ -1262,8 +1252,8 @@ void() tdm_spawnteams =
 
 	numteams = cvar("g_tdm_teams");
 
-	tdm_spawnteam("Red", 4);
-	tdm_spawnteam("Blue", 13);
+	tdm_spawnteam("Red", COLOR_TEAM1-1);
+	tdm_spawnteam("Blue", COLOR_TEAM2-1);
 };
 
 void() tdm_delayedinit =

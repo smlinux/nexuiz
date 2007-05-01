@@ -126,7 +126,7 @@ void(float ratingscale, vector org, float sradius) havocbot_goalrating_ctf_carri
 void(float ratingscale) havocbot_goalrating_ctf_ourflag =
 {
 	local entity head;
-	if (self.team == 5) // red
+	if (self.team == COLOR_TEAM1) // red
 		head = find(world, classname, "item_flag_team1"); // red flag
 	else // blue
 		head = find(world, classname, "item_flag_team2"); // blue flag
@@ -136,7 +136,7 @@ void(float ratingscale) havocbot_goalrating_ctf_ourflag =
 void(float ratingscale) havocbot_goalrating_ctf_enemyflag =
 {
 	local entity head;
-	if (self.team == 5) // red
+	if (self.team == COLOR_TEAM1) // red
 		head = find(world, classname, "item_flag_team2"); // blue flag
 	else // blue
 		head = find(world, classname, "item_flag_team1"); // red flag
@@ -151,7 +151,7 @@ void(float ratingscale) havocbot_goalrating_ctf_enemybase =
 void(float ratingscale) havocbot_goalrating_ctf_ourstolenflag =
 {
 	local entity head;
-	if (self.team == 5) // red
+	if (self.team == COLOR_TEAM1) // red
 		head = find(world, classname, "item_flag_team1"); // red flag
 	else // blue
 		head = find(world, classname, "item_flag_team2"); // blue flag
@@ -234,7 +234,7 @@ void() havocbot_role_ctf_offense =
 		return;
 	}
 	// check our flag
-	if (self.team == 5) // red
+	if (self.team == COLOR_TEAM1) // red
 		f = find(world, classname, "item_flag_team1");
 	else // blue
 		f = find(world, classname, "item_flag_team2");
@@ -284,7 +284,7 @@ void() havocbot_role_ctf_interceptor =
 		return;
 	}
 	// check our flag
-	if (self.team == 5) // red
+	if (self.team == COLOR_TEAM1) // red
 		f = find(world, classname, "item_flag_team1");
 	else // blue
 		f = find(world, classname, "item_flag_team2");
@@ -325,7 +325,7 @@ void() havocbot_role_ctf_middle =
 		return;
 	}
 	// check our flag
-	if (self.team == 5) // red
+	if (self.team == COLOR_TEAM1) // red
 		f = find(world, classname, "item_flag_team1");
 	else // blue
 		f = find(world, classname, "item_flag_team2");
@@ -385,7 +385,7 @@ void() havocbot_role_ctf_defense =
 		return;
 	}
 	// check our flag
-	if (self.team == 5) // red
+	if (self.team == COLOR_TEAM1) // red
 		f = find(world, classname, "item_flag_team1");
 	else // blue
 		f = find(world, classname, "item_flag_team2");
@@ -453,7 +453,7 @@ void() havocbot_chooserole_ctf =
 {
 	local float r;
 	dprint("choose CTF role...\n");
-	if (self.team == 13)
+	if (self.team == COLOR_TEAM3 || self.team == COLOR_TEAM4)
 		self.havocbot_role = havocbot_role_ctf_rogue;
 	else
 	{
