@@ -77,9 +77,6 @@ void kh_Controller_Think()
 	}
 	else if(self.cnt == 0)
 	{
-		FOR_EACH_PLAYER(e)
-			if(clienttype(e) == CLIENTTYPE_REAL)
-				centerprint_expire(e, CENTERPRIO_SPAM);
 		self.cnt -= 1;
 		kh_Controller_Thinkfunc();
 	}
@@ -111,21 +108,25 @@ void kh_Scores_Event(entity player, entity key, string what, float frags_player,
 void kh_Key_Attach(entity key, float wpchange)
 {
 	setattachment(key, key.owner, "");
-	setorigin(key, '0 0 0'); // fixed later in think
+	setorigin(key, '0 0 -15'); // x/y fixed later in think, z has to be -15 to make the key fit even in the crouchbox
 	key.angles = key.angles - '0 1 0' * key.owner.angles_y;
 	key.flags = 0;
 	key.solid = SOLID_NOT;
 	key.movetype = MOVETYPE_NONE;
 	key.team = key.owner.team;
 	key.nextthink = time;
+	key.damageforcescale = 0;
 }
 
 vector kh_AttachedOrigin(entity e)
 {
 	if(e.tag_entity)
 	{
+		/*
 		makevectors(e.tag_entity.angles);
 		return e.tag_entity.origin + e.origin_x * v_forward - e.origin_y * v_right + e.origin_z * v_up;
+		*/
+		return e.tag_entity.origin + e.origin_z * '0 0 1'; // not exact, but allows full key hitbox
 	}
 	else
 		return e.origin;
@@ -141,6 +142,7 @@ void kh_Key_Detach(entity key, float wpchange)
 	key.solid = SOLID_TRIGGER;
 	key.movetype = MOVETYPE_TOSS;
 	key.pain_finished = time + cvar("g_balance_keyhunt_delay_return");
+	key.damageforcescale = cvar("g_balance_keyhunt_damageforcescale");
 	// let key.team stay
 }
 
@@ -195,6 +197,17 @@ void kh_Key_AssignTo(entity key, entity player, float wpchange)
 	key.pusher = world;
 }
 
+void kh_Key_Damage(entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
+{
+	if(self.owner)
+		return;
+	if(vlen(force) <= 0)
+		return;
+	if(time > self.pushltime)
+		if(attacker.classname == "player")
+			self.team = attacker.team;
+}
+
 void kh_Key_Spawn(entity initial_owner, float angle)
 {
 	entity key;
@@ -206,8 +219,9 @@ void kh_Key_Spawn(entity initial_owner, float angle)
 	key.items = IT_KEY1 | IT_KEY2;
 	key.cnt = angle;
 	key.angles = '0 360 0' * random();
+	key.event_damage = kh_Key_Damage;
 	setmodel(key, "models/keyhunt/key3.md3");
-	setsize(key, '0 0 -24', '0 0 25');
+	setsize(key, '-8 -8 -8', '8 8 40');
 
 	switch(initial_owner.team)
 	{
@@ -303,7 +317,10 @@ void kh_Key_DropAll(entity player)
 			kh_Scores_Event(player, key, "losekey", 0, 0);
 			bprint(player.netname, "^7 lost the ", key.netname, "\n");
 			kh_Key_AssignTo(key, world, TRUE);
+			makevectors('-90 0 0' * random() + '0 360 0' * random());
+			key.velocity = W_CalculateProjectileVelocity(player.velocity, cvar("g_balance_keyhunt_dropvelocity") * v_forward);
 			key.pusher = mypusher;
+			key.pushltime = time + cvar("g_balance_keyhunt_protecttime");
 		}
 		sound(player, CHAN_AUTO, kh_sound_drop, 1, ATTN_NORM);
 	}
@@ -332,7 +349,7 @@ void kh_Key_Think()
 	if(self.owner)
 	{
 		makevectors('0 1 0' * (self.cnt + math_mod(time, 360) * 45));
-		setorigin(self, v_forward * 16);
+		setorigin(self, v_forward * 24 + '0 0 1' * self.origin_z);
 
 		if(self.owner.buttonuse)
 		if(time >= self.owner.kh_droptime + cvar("g_balance_keyhunt_delay_drop"))
@@ -344,7 +361,10 @@ void kh_Key_Think()
 			kh_Scores_Event(self.owner, self, "dropkey", 0, 0);
 			bprint(self.owner.netname, "^7 dropped the ", self.netname, "\n");
 			sound(self.owner, CHAN_AUTO, kh_sound_drop, 1, ATTN_NORM);
+			makevectors(self.owner.v_angle);
+			self.velocity = W_CalculateProjectileVelocity(self.owner.velocity, cvar("g_balance_keyhunt_throwvelocity") * v_forward);
 			kh_Key_AssignTo(self, world, TRUE);
+			self.pushltime = time + cvar("g_balance_keyhunt_protecttime");
 		}
 	}
 
@@ -529,6 +549,10 @@ void kh_StartRound()
 		return;
 	}
 
+	FOR_EACH_PLAYER(player)
+		if(clienttype(player) == CLIENTTYPE_REAL)
+			centerprint_expire(player, CENTERPRIO_SPAM);
+
 	for(i = 0; i < kh_teams; ++i)
 	{
 		teem = kh_Team_ByID(i);
@@ -564,6 +588,12 @@ void kh_setstatus()
 
 void kh_EnableTrackingDevice()
 {
+	entity player;
+
+	FOR_EACH_PLAYER(player)
+		if(clienttype(player) == CLIENTTYPE_REAL)
+			centerprint_expire(player, CENTERPRIO_SPAM);
+
 	kh_tracking_enabled = TRUE;
 }
 
