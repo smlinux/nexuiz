@@ -105,7 +105,7 @@ void kh_Scores_Event(entity player, entity key, string what, float frags_player,
 		key.owner.frags = key.owner.frags + floor(0.5 + basefrags * frags_owner);
 }
 
-void kh_Key_Attach(entity key, float wpchange)
+void kh_Key_Attach(entity key)
 {
 	setattachment(key, key.owner, "");
 	setorigin(key, '0 0 -15'); // x/y fixed later in think, z has to be -15 to make the key fit even in the crouchbox
@@ -132,7 +132,7 @@ vector kh_AttachedOrigin(entity e)
 		return e.origin;
 }
 
-void kh_Key_Detach(entity key, float wpchange)
+void kh_Key_Detach(entity key)
 {
 	setorigin(key, kh_AttachedOrigin(key));
 	setattachment(key, world, "");
@@ -146,14 +146,14 @@ void kh_Key_Detach(entity key, float wpchange)
 	// let key.team stay
 }
 
-void kh_Key_AssignTo(entity key, entity player, float wpchange)
+void kh_Key_AssignTo(entity key, entity player)
 {
 	if(key.owner == player)
 		return;
 
 	if(key.owner)
 	{
-		kh_Key_Detach(key, wpchange);
+		kh_Key_Detach(key);
 
 		// remove from linked list
 		if(key.kh_next)
@@ -165,10 +165,7 @@ void kh_Key_AssignTo(entity key, entity player, float wpchange)
 		if(key.owner.kh_next == world)
 		{
 			// No longer a key carrier
-			if(wpchange)
-				WaypointSprite_Kill(key.owner.waypointsprite_attachedforcarrier);
-			else
-				WaypointSprite_DetachCarrier(key.owner);
+			WaypointSprite_DetachCarrier(key.owner);
 		}
 	}
 
@@ -183,7 +180,7 @@ void kh_Key_AssignTo(entity key, entity player, float wpchange)
 		if(key.kh_next)
 			key.kh_next.kh_prev = key;
 
-		kh_Key_Attach(key, wpchange);
+		kh_Key_Attach(key);
 
 		if(key.kh_next == world)
 		{
@@ -252,14 +249,14 @@ void kh_Key_Spawn(entity initial_owner, float angle)
 	WaypointSprite_AttachCarrier("", key);
 	key.waypointsprite_attachedforcarrier.waypointsprite_for_player = kh_Key_waypointsprite_for_player;
 
-	kh_Key_AssignTo(key, initial_owner, TRUE);
+	kh_Key_AssignTo(key, initial_owner);
 }
 
 void kh_Key_Remove(entity key)
 {
 	entity o;
 	o = key.owner;
-	kh_Key_AssignTo(key, world, FALSE);
+	kh_Key_AssignTo(key, world);
 	if(o) // it was attached
 		WaypointSprite_Kill(key.waypointsprite_attachedforcarrier);
 	else // it was dropped
@@ -293,7 +290,7 @@ void kh_Key_Collect(entity key, entity player)
 
 	kh_Scores_Event(player, key, "collect", 1, 0);
 	bprint(player.netname, "^7 collected the ", key.netname, "\n");
-	kh_Key_AssignTo(key, player, TRUE);
+	kh_Key_AssignTo(key, player);
 
 	if(kh_Key_AllOwnedByWhichTeam() != -1)
 	{
@@ -316,7 +313,7 @@ void kh_Key_DropAll(entity player)
 		{
 			kh_Scores_Event(player, key, "losekey", 0, 0);
 			bprint(player.netname, "^7 lost the ", key.netname, "\n");
-			kh_Key_AssignTo(key, world, TRUE);
+			kh_Key_AssignTo(key, world);
 			makevectors('-90 0 0' * random() + '0 360 0' * random());
 			key.velocity = W_CalculateProjectileVelocity(player.velocity, cvar("g_balance_keyhunt_dropvelocity") * v_forward);
 			key.pusher = mypusher;
@@ -363,7 +360,7 @@ void kh_Key_Think()
 			sound(self.owner, CHAN_AUTO, kh_sound_drop, 1, ATTN_NORM);
 			makevectors(self.owner.v_angle);
 			self.velocity = W_CalculateProjectileVelocity(self.owner.velocity, cvar("g_balance_keyhunt_throwvelocity") * v_forward);
-			kh_Key_AssignTo(self, world, TRUE);
+			kh_Key_AssignTo(self, world);
 			self.pushltime = time + cvar("g_balance_keyhunt_protecttime");
 		}
 	}
