@@ -378,7 +378,10 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 	self.touch = Item_Touch;
 	setmodel (self, self.mdl); // precision set below
 	self.effects |= EF_LOWPRECISION;
-	setsize (self, '-16 -16 0', '16 16 32');
+	if((itemflags & FL_POWERUP) || self.health || self.armorvalue)
+		setsize (self, '-16 -16 0', '16 16 48');
+	else
+		setsize (self, '-16 -16 0', '16 16 32');
 	if (itemflags & FL_WEAPON)
 	{
 		// neutral team color for pickup weapons
