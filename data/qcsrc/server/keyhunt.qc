@@ -464,7 +464,7 @@ void kh_LoserTeam(float teem, entity lostkey)
 
 	if(attacker)
 	{
-		kh_Scores_Event(attacker, world, "push", 1, 0);
+		kh_Scores_Event(attacker, world, "push", cvar("g_balance_keyhunt_score_push"), 0);
 		centerprint(attacker, "Your push is the best!\n\n\n");
 		bprint("The ", ColoredTeamName(teem), "^7 could not take care of the ", lostkey.netname, "\n");
 	}
