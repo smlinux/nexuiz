@@ -95,12 +95,12 @@ void kh_Scores_Event(entity player, entity key, string what, float frags_player,
 	if(!cvar("sv_eventlog"))
 		return;
 	s = strcat(":keyhunt:", what, ":", ftos(player.playerid));
-	s = strcat(s, ":", frags_player);
+	s = strcat(s, ":", ftos(frags_player));
 	if(key.owner)
 		s = strcat(s, ":", ftos(key.owner.playerid));
 	else
 		s = strcat(s, ":0");
-	s = strcat(s, ":", frags_owner);
+	s = strcat(s, ":", ftos(frags_owner));
 	s = strcat(s, ":", key.netname);
 	GameLogEcho(s, FALSE);
 }
