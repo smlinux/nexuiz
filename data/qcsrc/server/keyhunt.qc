@@ -122,11 +122,8 @@ vector kh_AttachedOrigin(entity e)
 {
 	if(e.tag_entity)
 	{
-		/*
 		makevectors(e.tag_entity.angles);
 		return e.tag_entity.origin + e.origin_x * v_forward - e.origin_y * v_right + e.origin_z * v_up;
-		*/
-		return e.tag_entity.origin + e.origin_z * '0 0 1'; // not exact, but allows full key hitbox
 	}
 	else
 		return e.origin;
@@ -134,7 +131,7 @@ vector kh_AttachedOrigin(entity e)
 
 void kh_Key_Detach(entity key)
 {
-	setorigin(key, kh_AttachedOrigin(key));
+	setorigin(key, key.owner.origin + key.origin_z * '0 0 1');
 	setattachment(key, world, "");
 	key.angles_y = key.owner.angles_y;
 	key.aiment = world;
