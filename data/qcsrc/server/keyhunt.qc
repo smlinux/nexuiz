@@ -411,10 +411,11 @@ void kh_WinnerTeam(float teem)
 	DistributeEvenly_Init(score, kh_teams);
 	// twice the score for 3 team games, three times the score for 4 team games!
 	// note: for a win by destroying the key, this should NOT be applied
+	FOR_EACH_KH_KEY(key)
+		kh_Scores_Event(key.owner, key, "capture", DistributeEvenly_Get(1), 0);
+
 	first = TRUE;
 	FOR_EACH_KH_KEY(key)
-	{
-		kh_Scores_Event(key.owner, key, "capture", DistributeEvenly_Get(1), 0);
 		if(key.owner.kh_next == key)
 		{
 			if(!first)
@@ -422,7 +423,7 @@ void kh_WinnerTeam(float teem)
 			bprint(key.owner.netname);
 			first = FALSE;
 		}
-	}
+	bprint("^7 captured the keys for the ", ColoredTeamName(teem), "\n");
 
 	first = TRUE;
 	FOR_EACH_KH_KEY(key)
@@ -443,7 +444,6 @@ void kh_WinnerTeam(float teem)
 		te_lightning2(world, lastorigin, firstorigin);
 	}
 
-	bprint("^7 captured the keys for the ", ColoredTeamName(teem), "\n");
 	sound(world, CHAN_AUTO, kh_sound_capture, 1, ATTN_NONE);
 	kh_FinishRound();
 }
