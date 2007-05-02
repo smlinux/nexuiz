@@ -221,19 +221,19 @@ void kh_Key_Spawn(entity initial_owner, float angle)
 	{
 		case COLOR_TEAM1:
 			key.netname = "^1red key";
-			key.colormod = '103 0 0' * (1/64);
+			key.colormod = '103 0 0' * (1/96);
 			break;
 		case COLOR_TEAM2:
 			key.netname = "^4blue key";
-			key.colormod = '35 35 191' * (1/64);
+			key.colormod = '35 35 191' * (1/96);
 			break;
 		case COLOR_TEAM3:
 			key.netname = "^3yellow key";
-			key.colormod = '187 167 15' * (1/64);
+			key.colormod = '187 167 15' * (1/96);
 			break;
 		case COLOR_TEAM4:
 			key.netname = "^6pink key";
-			key.colormod = '139 79 107' * (1/64);
+			key.colormod = '139 79 107' * (1/96);
 			break;
 		default:
 			key.netname = "NETGIER key";
