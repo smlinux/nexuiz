@@ -83,26 +83,26 @@ void kh_Controller_Think()
 	self.nextthink = time + 1;
 }
 
-void kh_Log()
-{
-	string s;
-	if(!cvar("sv_eventlog"))
-		return;
-	// TODO ...
-	GameLogEcho(s, FALSE);
-}
-
 // frags f: take from cvar * f
 // frags 0: no frags
 void kh_Scores_Event(entity player, entity key, string what, float frags_player, float frags_owner)
 {
-	float basefrags;
-	basefrags = cvar(strcat("g_balance_keyhunt_score_", what));
-
+	string s;
 	if(frags_player)
-		player.frags = player.frags + floor(0.5 + basefrags * frags_player);
+		player.frags = player.frags + floor(0.5 + frags_player);
 	if(frags_owner)
-		key.owner.frags = key.owner.frags + floor(0.5 + basefrags * frags_owner);
+		key.owner.frags = key.owner.frags + floor(0.5 + frags_owner);
+	if(!cvar("sv_eventlog"))
+		return;
+	s = strcat(":keyhunt:", what, ":", ftos(player.playerid));
+	s = strcat(s, ":", frags_player);
+	if(key.owner)
+		s = strcat(s, ":", ftos(key.owner.playerid));
+	else
+		s = strcat(s, ":0");
+	s = strcat(s, ":", frags_owner);
+	s = strcat(s, ":", key.netname);
+	GameLogEcho(s, FALSE);
 }
 
 void kh_Key_Attach(entity key)
@@ -285,7 +285,7 @@ void kh_Key_Collect(entity key, entity player)
 {
 	sound(key, CHAN_AUTO, kh_sound_collect, 1, ATTN_NORM);
 
-	kh_Scores_Event(player, key, "collect", 1, 0);
+	kh_Scores_Event(player, key, "collect", cvar("g_balance_keyhunt_score_collect"), 0);
 	bprint(player.netname, "^7 collected the ", key.netname, "\n");
 	kh_Key_AssignTo(key, player);
 
@@ -406,13 +406,14 @@ void kh_WinnerTeam(float teem)
 	float first;
 	entity key;
 	float score;
-	score = (kh_teams - 1) / kh_teams;
+	score = (kh_teams - 1) * cvar("g_balance_keyhunt_score_capture");
+	DistributeEvenly_Init(score, kh_teams);
 	// twice the score for 3 team games, three times the score for 4 team games!
 	// note: for a win by destroying the key, this should NOT be applied
 	first = TRUE;
 	FOR_EACH_KH_KEY(key)
 	{
-		kh_Scores_Event(key.owner, key, "capture", score, 0);
+		kh_Scores_Event(key.owner, key, "capture", DistributeEvenly_Get(1), 0);
 		if(key.owner.kh_next == key)
 		{
 			if(!first)
@@ -451,7 +452,6 @@ void kh_LoserTeam(float teem, entity lostkey)
 	entity player, key, attacker;
 	float players;
 	float keys;
-	float score;
 
 	attacker = world;
 	if(lostkey.pusher)
@@ -469,6 +469,9 @@ void kh_LoserTeam(float teem, entity lostkey)
 	}
 	else
 	{
+		float of, fragsleft, i, thisteam;
+		of = cvar("g_balance_keyhunt_score_destroyed_ownfactor");
+
 		FOR_EACH_PLAYER(player)
 			if(player.team != teem)
 				++players;
@@ -477,15 +480,31 @@ void kh_LoserTeam(float teem, entity lostkey)
 			if(key.owner && key.team != teem)
 				++keys;
 
-		score = 1.0 / max(1, keys * cvar("g_balance_keyhunt_score_destroyed_ownfactor") + players);
-
-		FOR_EACH_PLAYER(player)
-			if(player.team != teem)
-				kh_Scores_Event(player, world, "destroyed", score, 0);
+		DistributeEvenly_Init(cvar("g_balance_keyhunt_score_destroyed"), keys * of + players);
 
 		FOR_EACH_KH_KEY(key)
 			if(key.owner && key.team != teem)
-				kh_Scores_Event(key.owner, world, "destroyed", score * cvar("g_balance_keyhunt_score_destroyed_ownfactor"), 0);
+				kh_Scores_Event(key.owner, world, "destroyed_holdingkey", DistributeEvenly_Get(of), 0);
+
+		fragsleft = DistributeEvenly_Get(players);
+
+		// Now distribute these among all other teams...
+		for(i = 0; i < kh_teams; ++i)
+		{
+			thisteam = kh_Team_ByID(i);
+			players = 0;
+			FOR_EACH_PLAYER(player)
+				if(player.team == thisteam)
+					++players;
+
+			DistributeEvenly_Init(fragsleft, kh_teams - i);
+			fragsleft = DistributeEvenly_Get(kh_teams - i - 1);
+			DistributeEvenly_Init(DistributeEvenly_Get(1), players);
+
+			FOR_EACH_PLAYER(player)
+				if(player.team == thisteam)
+					kh_Scores_Event(player, world, "destroyed", DistributeEvenly_Get(1), 0);
+		}
 
 		bprint("The ", ColoredTeamName(teem), "^7 could not take care of the ", lostkey.netname, "\n");
 	}
@@ -627,18 +646,14 @@ float kh_KeyCarrier_waypointsprite_for_player(entity e)
 
 float kh_HandleFrags(entity attacker, entity targ, float f)
 {
-	float newfrags;
-
 	if(f <= 0)
 		return f;
 	if(attacker == targ)
 		return f;
 
 	if(targ.kh_next)
-		f = f - 1 + cvar("g_balance_keyhunt_score_carrierfrag");
+		kh_Scores_Event(attacker, targ.kh_next, "carrierfrag", cvar("g_balance_keyhunt_score_carrierfrag")-1, 0);
 
-	if(newfrags)
-		f = f - 1 + newfrags;
 	return f;
 }
 
