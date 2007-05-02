@@ -109,7 +109,7 @@ void kh_Key_Attach(entity key)
 {
 	setattachment(key, key.owner, "");
 	setorigin(key, '0 0 -15'); // x/y fixed later in think, z has to be -15 to make the key fit even in the crouchbox
-	key.angles = key.angles - '0 1 0' * key.owner.angles_y;
+	key.angles_y -= key.owner.angles_y;
 	key.flags = 0;
 	key.solid = SOLID_NOT;
 	key.movetype = MOVETYPE_NONE;
@@ -133,7 +133,7 @@ void kh_Key_Detach(entity key)
 {
 	setorigin(key, key.owner.origin + key.origin_z * '0 0 1');
 	setattachment(key, world, "");
-	key.angles_y = key.owner.angles_y;
+	key.angles_y += key.owner.angles_y;
 	key.aiment = world;
 	key.flags = FL_ITEM;
 	key.solid = SOLID_TRIGGER;
@@ -214,30 +214,30 @@ void kh_Key_Spawn(entity initial_owner, float angle)
 	key.cnt = angle;
 	key.angles = '0 360 0' * random();
 	key.event_damage = kh_Key_Damage;
-	setmodel(key, "models/keyhunt/key3.md3");
+	setmodel(key, "models/keyhunt/key.md3");
 	setsize(key, '-8 -8 -8', '8 8 40');
 
 	switch(initial_owner.team)
 	{
 		case COLOR_TEAM1:
 			key.netname = "^1red key";
-			key.colormod = '1.73 0.10 0.10';
+			key.colormod = '103 0 0' * (1/64);
 			break;
 		case COLOR_TEAM2:
 			key.netname = "^4blue key";
-			key.colormod = '0.10 0.10 1.73';
+			key.colormod = '35 35 191' * (1/64);
 			break;
 		case COLOR_TEAM3:
 			key.netname = "^3yellow key";
-			key.colormod = '1.22 1.22 0.10';
+			key.colormod = '187 167 15' * (1/64);
 			break;
 		case COLOR_TEAM4:
 			key.netname = "^6pink key";
-			key.colormod = '1.22 0.10 1.22';
+			key.colormod = '139 79 107' * (1/64);
 			break;
 		default:
 			key.netname = "NETGIER key";
-			key.colormod = '1.00 1.00 1.00';
+			key.colormod = '1 1 1';
 			break;
 	}
 
@@ -338,7 +338,8 @@ void kh_Key_Think()
 {
 	entity head;
 
-	self.angles_y = math_mod(self.angles_y + 0.05 * 135, 360);
+	//self.angles_y = math_mod(self.angles_y + 0.05 * 135, 360);
+	// model is EF_ROTATING now
 
 	if(self.owner)
 	{
@@ -655,14 +656,13 @@ void kh_init()
 	precache_model("models/sprites/keycarrier-blue.sp2");
 	precache_model("models/sprites/keycarrier-yellow.sp2");
 	precache_model("models/sprites/keycarrier-pink.sp2");
-	precache_model("models/keyhunt/key3.md3");
+	precache_model("models/keyhunt/key.md3");
 
 	// setup variables
 	kh_teams = cvar("g_keyhunt_teams_override");
 	if(kh_teams < 2)
 		kh_teams = cvar("g_keyhunt_teams");
-	if(kh_teams < 2)
-		kh_teams = 2;
+	kh_teams = bound(2, kh_teams, 4);
 
 	// make a KH entity for controlling the game
 	kh_controller = spawn();
