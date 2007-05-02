@@ -311,7 +311,7 @@ void kh_Key_DropAll(entity player)
 			kh_Scores_Event(player, key, "losekey", 0, 0);
 			bprint(player.netname, "^7 lost the ", key.netname, "\n");
 			kh_Key_AssignTo(key, world);
-			makevectors('-90 0 0' * random() + '0 360 0' * random());
+			makevectors('-1 0 0' * (45 + 45 * random()) + '0 360 0' * random());
 			key.velocity = W_CalculateProjectileVelocity(player.velocity, cvar("g_balance_keyhunt_dropvelocity") * v_forward);
 			key.pusher = mypusher;
 			key.pushltime = time + cvar("g_balance_keyhunt_protecttime");
