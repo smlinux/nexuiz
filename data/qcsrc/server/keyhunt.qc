@@ -617,10 +617,12 @@ void kh_FinishRound()
 	kh_Controller_SetThink(cvar("g_balance_keyhunt_delay_round"), "Round starts in ", kh_StartRound);
 }
 
-float kh_EnoughPlayers()
+string kh_CheckEnoughPlayers()
 {
 	float i, players, teem;
 	entity player;
+	string result;
+	result = "";
 	
 	// find a random player per team
 	for(i = 0; i < kh_teams; ++i)
@@ -633,27 +635,35 @@ float kh_EnoughPlayers()
 					if(player.team == teem)
 						++players;
 		if(players == 0)
-			return FALSE;
+		{
+			if(result != "")
+				result = strcat(result, ", ");
+			result = strcat(result, ColoredTeamName(teem));
+		}
 	}
-	return TRUE;
+	return result;
 }
 
 void kh_WaitForPlayers()
 {
-	if(kh_EnoughPlayers())
+	string teams_missing;
+	teams_missing = kh_CheckEnoughPlayers();
+	if(teams_missing == "")
 		kh_Controller_SetThink(cvar("g_balance_keyhunt_delay_round"), "Round starts in ", kh_StartRound);
 	else
-		kh_Controller_SetThink(1, "Waiting for players to join...\n\nNeed at least one active player per team!", kh_WaitForPlayers);
+		kh_Controller_SetThink(1, strcat("Waiting for players to join...\n\nNeed active players for: ", teams_missing), kh_WaitForPlayers);
 }
 
 void kh_StartRound()
 {
+	string teams_missing;
 	float i, players, teem;
 	entity player;
 
-	if(!kh_EnoughPlayers())
+	teams_missing = kh_CheckEnoughPlayers();
+	if(teams_missing != "")
 	{
-		kh_Controller_SetThink(1, "Waiting for players to join...", kh_WaitForPlayers);
+		kh_Controller_SetThink(1, strcat("Waiting for players to join...\n\nNeed active players for: ", teams_missing), kh_WaitForPlayers);
 		return;
 	}
 
