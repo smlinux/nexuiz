@@ -22,34 +22,39 @@ vector w_shotdir;
 // make sure you call makevectors first (FIXME?)
 void(entity ent, vector vecs, float antilag, float recoil, string snd) W_SetupShot =
 {
-	local vector trueaimpoint;
+	if (cvar("g_shootfromeye"))
+		w_shotorg = ent.origin + ent.view_ofs + v_forward;
+	else if (cvar("g_shootfromcenter"))
+		w_shotorg = ent.origin + ent.view_ofs + v_forward * vecs_x + '0 0 1' * vecs_z;
+	else
+		w_shotorg = ent.origin + ent.view_ofs + v_forward * vecs_x + v_right * vecs_y + v_up * vecs_z;
+	w_shotdir = v_forward;
 
-	traceline_hitcorpse(self, self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * MAX_SHOT_DISTANCE, MOVE_NOMONSTERS, self);
-	trueaimpoint = trace_endpos;
-
-	// if aiming at a player and the original trace won't hit that player
-	// anymore, try aiming at the player's new position
+	// explanation of g_antilag:
+	// if client reports it was aiming at a player, and the serverside trace
+	// says it would miss, change the aim point to the player's new origin,
+	// but only if the shot at the player's new origin would hit of course
+	//
+	// FIXME: a much better method for bullet weapons would be to leave a
+	// trail of lagged 'ghosts' behind players, and see if the bullet hits the
+	// ghost corresponding to this player's ping time, and if so it would do
+	// damage to the real player
 	if (antilag)
-	if (!trace_ent.takedamage)                 // shot would miss without antilag
-	if (self.cursor_trace_ent)                 // but it HAD hit on the client
-	if (self.cursor_trace_ent.takedamage)      //   and even something evil
-	// if (trace_ent != self.cursor_trace_ent) // and it is different (redundant check, see takedamage)
+	if (self.cursor_trace_ent)                 // client was aiming at someone
+	if (self.cursor_trace_ent.takedamage)      // and that person is killable
 	if (cvar("g_antilag"))
-		trueaimpoint = self.cursor_trace_ent.origin;
-
-	/*
-	// don't allow the shot to start inside a wall
-	local vector startorg;
-	local vector idealorg;
-	startorg = ent.origin + ent.view_ofs;// - '0 0 8';
-	idealorg = ent.origin + ent.view_ofs + v_forward * vecs_x + v_right * vecs_y + v_up * vecs_z;
-	traceline_hitcorpse (ent, startorg, idealorg, MOVE_NOMONSTERS, ent);
-	w_shotorg = trace_endpos;
-	*/
-	// all positions in the code are now required to be inside the player box
-	w_shotorg = ent.origin + ent.view_ofs + v_forward * vecs_x + v_right * vecs_y + v_up * vecs_z;
-
-	w_shotdir = normalize(trueaimpoint - w_shotorg);
+	{
+		// verify that the shot would miss without antilag
+		// (avoids an issue where guns would always shoot at their origin)
+		traceline_hitcorpse(self, self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * MAX_SHOT_DISTANCE, MOVE_NORMAL, self);
+		if (!trace_ent.takedamage)
+		{
+			// verify that the shot would hit if altered
+			traceline_hitcorpse(self, w_shotorg, self.cursor_trace_ent.origin, MOVE_NORMAL, self);
+			if (trace_ent == self.cursor_trace_ent)
+				w_shotdir = normalize(self.cursor_trace_ent.origin - w_shotorg);
+		}
+	}
 
 	if (!cvar("g_norecoil"))
 		self.punchangle_x = recoil * -1;
