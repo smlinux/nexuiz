@@ -623,8 +623,9 @@ float kh_EnoughPlayers()
 		players = 0;
 		FOR_EACH_PLAYER(player)
 			if(player.deadflag == DEAD_NO)
-				if(player.team == teem)
-					++players;
+				if(!player.buttonchat)
+					if(player.team == teem)
+						++players;
 		if(players == 0)
 			return FALSE;
 	}
@@ -661,12 +662,13 @@ void kh_StartRound()
 		entity my_player;
 		FOR_EACH_PLAYER(player)
 			if(player.deadflag == DEAD_NO)
-				if(player.team == teem)
-				{
-					++players;
-					if(random() * players <= 1)
-						my_player = player;
-				}
+				if(!player.buttonchat)
+					if(player.team == teem)
+					{
+						++players;
+						if(random() * players <= 1)
+							my_player = player;
+					}
 		kh_Key_Spawn(my_player, 360 * i / kh_teams);
 		//kh_Key_Spawn(my_player, 360 * i / kh_teams);
 		//kh_Key_Spawn(my_player, 360 * i / kh_teams);
