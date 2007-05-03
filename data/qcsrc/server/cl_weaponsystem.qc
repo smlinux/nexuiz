@@ -23,12 +23,13 @@ vector w_shotdir;
 void(entity ent, vector vecs, float antilag, float recoil, string snd) W_SetupShot =
 {
 	if (cvar("g_shootfromeye"))
-		w_shotorg = ent.origin + ent.view_ofs + v_forward;
+		w_shotorg = ent.origin + ent.view_ofs + v_forward * vecs_x;
 	else if (cvar("g_shootfromcenter"))
 		w_shotorg = ent.origin + ent.view_ofs + v_forward * vecs_x + '0 0 1' * vecs_z;
 	else
 		w_shotorg = ent.origin + ent.view_ofs + v_forward * vecs_x + v_right * vecs_y + v_up * vecs_z;
 	w_shotdir = v_forward;
+	//traceline_hitcorpse(self, w_shotorg, w_shotorg + v_forward *
 
 	// explanation of g_antilag:
 	// if client reports it was aiming at a player, and the serverside trace
