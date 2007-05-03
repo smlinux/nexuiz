@@ -167,7 +167,7 @@ void kh_Key_Attach(entity key)
 	}
 #else
 	setattachment(key, key.owner, "");
-	setorigin(key, '0 0 -15'); // fixing x, y in think
+	setorigin(key, '0 0 1' * KH_KEY_ZSHIFT); // fixing x, y in think
 	key.angles_y -= key.owner.angles_y;
 #endif
 	key.flags = 0;
