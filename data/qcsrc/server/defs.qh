@@ -1,5 +1,7 @@
 // Globals
 
+float sv_cheats;
+
 entity	activator;
 string	string_null;
 

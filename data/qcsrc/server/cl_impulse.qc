@@ -77,39 +77,6 @@ void ImpulseCommands (void)
 		else
 			self.impulse = imp; // retry in next frame
 	}
-	else if (imp >= 13 && imp <= 16)
-	{
-		if (cvar("sv_cheats"))
-		{
-			if (imp == 13 && self.deadflag == DEAD_NO)
-			{
-				makevectors (self.v_angle);
-				self.velocity = self.velocity + v_forward * 300;
-				CopyBody(1);
-				self.velocity = self.velocity - v_forward * 300;
-			}
-			else if (imp == 14 && self.deadflag == DEAD_NO)
-				CopyBody(0);
-			else if (imp == 15)
-			{
-				sprint(self, strcat("origin = ", vtos(self.origin), "\n"));
-				sprint(self, strcat("angles = ", vtos(self.angles), "\n"));
-			}
-			else if (imp == 16)
-			{
-				float i;
-				string s;
-				i=1;
-				while(i <= 10)
-				{
-					s = ftos(i);
-					sprint(self, strcat(s, ": ^", s, "color\n"));
-					i = i + 1;
-				}
-				sprint(self, strcat("origin = ", vtos(self.origin), "\n"));
-			}
-		}
-	}
 	// throw weapon
 	else if (imp == 17)
 	{
@@ -196,7 +163,7 @@ void ImpulseCommands (void)
 	}
 	else
 	{
-		if (cvar("sv_cheats"))
+		if (sv_cheats)
 		{
 			if(imp == 19)
 			{
@@ -211,17 +178,27 @@ void ImpulseCommands (void)
 				traceline(self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * 65536, FALSE, self);
 				sprint(self, strcat("distance: ", ftos(fabs(vlen(trace_endpos - (self.origin + self.view_ofs)))), "\n"));
 			}
-			else if(imp == 6*9)
+			else if(self.deadflag == DEAD_NO)
 			{
-				CampaignLevelWarp(cvar("_warplevel"));
-			}
-			else if (imp == 99 && self.deadflag == DEAD_NO)
-			{
-				self.items = IT_LASER | IT_UZI | IT_SHOTGUN | IT_GRENADE_LAUNCHER | IT_ELECTRO | IT_CRYLINK | IT_NEX | IT_HAGAR | IT_ROCKET_LAUNCHER;
-				self.ammo_shells = 999;
-				self.ammo_nails = 999;
-				self.ammo_rockets = 999;
-				self.ammo_cells = 999;
+				if(imp == 99)
+				{
+					self.items |= (IT_LASER | IT_UZI | IT_SHOTGUN | IT_GRENADE_LAUNCHER | IT_ELECTRO | IT_CRYLINK | IT_NEX | IT_HAGAR | IT_ROCKET_LAUNCHER);
+					self.ammo_shells = 999;
+					self.ammo_nails = 999;
+					self.ammo_rockets = 999;
+					self.ammo_cells = 999;
+					self.health = 999;
+					self.armorvalue = 999;
+				}
+				else if (imp == 13)
+				{
+					makevectors (self.v_angle);
+					self.velocity = self.velocity + v_forward * 300;
+					CopyBody(1);
+					self.velocity = self.velocity - v_forward * 300;
+				}
+				else if (imp == 14)
+					CopyBody(0);
 			}
 		}
 	}

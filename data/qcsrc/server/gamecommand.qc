@@ -28,25 +28,28 @@ void GameCommand(string command)
 		return;
 	}
 
-	if(argv(0) == "adminmsg")
+	if(argv(0) == "warp") if(argc == 2) if(cvar("g_campaign"))
 	{
-		if(argc == 3)
+		CampaignLevelWarp(stof(argv(1)));
+		return;
+	}
+
+	if(argv(0) == "adminmsg") if(argc == 3)
+	{
+		entity client;
+		float entno;
+		entno = stof(argv(1));
+		for(client = world; entno > 0; --entno, client = nextent(client))
+			;
+		if(client.flags & FL_CLIENT)
 		{
-			entity client;
-			float entno;
-			entno = stof(argv(1));
-			for(client = world; entno > 0; --entno, client = nextent(client))
-				;
-			if(client.flags & FL_CLIENT)
-			{
-				centerprint_atprio(client, CENTERPRIO_ADMIN, strcat("^3SERVER ADMIN:\n\n^7", argv(2)));
-				sprint(client, strcat("\{1}\{13}^3SERVER ADMIN^7: ", argv(2), "\n"));
-				print("Message sent to ", client.netname, "\n");
-			}
-			else
-				print("Client not found\n");
-			return;
+			centerprint_atprio(client, CENTERPRIO_ADMIN, strcat("^3SERVER ADMIN:\n\n^7", argv(2)));
+			sprint(client, strcat("\{1}\{13}^3SERVER ADMIN^7: ", argv(2), "\n"));
+			print("Message sent to ", client.netname, "\n");
 		}
+		else
+			print("Client not found\n");
+		return;
 	}
 
 	print("Invalid command. For a list of supported commands, try sv_cmd help.\n");

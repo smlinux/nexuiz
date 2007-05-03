@@ -174,7 +174,7 @@ void() CampaignPostIntermission =
 
 void(float n) CampaignLevelWarp =
 {
-	if(!cvar("sv_cheats"))
+	if(!sv_cheats)
 		return;
 	CampaignFile_Unload();
 	CampaignFile_Load(n, 1);

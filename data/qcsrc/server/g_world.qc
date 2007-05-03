@@ -77,6 +77,8 @@ void worldspawn (void)
 		error("world already spawned - you may have EXACTLY ONE worldspawn!");
 	world_already_spawned = TRUE;
 
+	sv_cheats = cvar("sv_cheats");
+
 	/*
 	TODO sound pack system
 	// initialize sound pack system
