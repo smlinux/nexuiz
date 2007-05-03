@@ -22,14 +22,17 @@ vector w_shotdir;
 // make sure you call makevectors first (FIXME?)
 void(entity ent, vector vecs, float antilag, float recoil, string snd) W_SetupShot =
 {
+	local vector trueaimpoint;
+	traceline_hitcorpse(self, self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * MAX_SHOT_DISTANCE, MOVE_NORMAL, self);
+	trueaimpoint = trace_endpos;
+
 	if (cvar("g_shootfromeye"))
 		w_shotorg = ent.origin + ent.view_ofs + v_forward * vecs_x;
 	else if (cvar("g_shootfromcenter"))
 		w_shotorg = ent.origin + ent.view_ofs + v_forward * vecs_x + '0 0 1' * vecs_z;
 	else
 		w_shotorg = ent.origin + ent.view_ofs + v_forward * vecs_x + v_right * vecs_y + v_up * vecs_z;
-	w_shotdir = v_forward;
-	//traceline_hitcorpse(self, w_shotorg, w_shotorg + v_forward *
+	w_shotdir = normalize(trueaimpoint - w_shotorg);
 
 	// explanation of g_antilag:
 	// if client reports it was aiming at a player, and the serverside trace
@@ -47,7 +50,7 @@ void(entity ent, vector vecs, float antilag, float recoil, string snd) W_SetupSh
 	{
 		// verify that the shot would miss without antilag
 		// (avoids an issue where guns would always shoot at their origin)
-		traceline_hitcorpse(self, self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * MAX_SHOT_DISTANCE, MOVE_NORMAL, self);
+		traceline_hitcorpse(self, w_shotorg, w_shotorg + w_shotdir * MAX_SHOT_DISTANCE, MOVE_NORMAL, self);
 		if (!trace_ent.takedamage)
 		{
 			// verify that the shot would hit if altered
