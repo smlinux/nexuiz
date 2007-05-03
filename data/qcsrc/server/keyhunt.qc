@@ -1,6 +1,25 @@
 string STR_ITEM_KH_KEY = "item_kh_key";
 #define FOR_EACH_KH_KEY(v) for(v = world; (v = find(v, classname, STR_ITEM_KH_KEY)); )
 
+// #define KH_PLAYER_USE_ATTACHMENT
+// #define KH_PLAYER_USE_CARRIEDMODEL
+// #define KH_KEY_ATTACHMENT_DEBUG
+
+#ifdef KH_PLAYER_USE_ATTACHMENT
+vector KH_PLAYER_ATTACHMENT_DIST_ROTATED = '0 -4 0';
+vector KH_PLAYER_ATTACHMENT_DIST = '4 0 0';
+vector KH_PLAYER_ATTACHMENT = '0 0 0';
+vector KH_PLAYER_ATTACHMENT_ANGLES = '0 0 0';
+string KH_PLAYER_ATTACHMENT_BONE = "";
+#else
+float KH_KEY_ZSHIFT = -15;
+float KH_KEY_XYDIST = 24;
+float KH_KEY_XYSPEED = 45;
+#endif
+
+vector KH_KEY_MIN = '-8 -8 -8';
+vector KH_KEY_MAX = '8 8 40';
+
 typedef void(void) kh_Think_t;
 var kh_Think_t kh_Controller_Thinkfunc;
 string kh_Controller_Waitmsg;
@@ -27,6 +46,7 @@ string kh_sound_drop = "sound/misc/mouseclick.wav";
 string kh_sound_collect = "sound/ctf/take.wav";
 
 float kh_sprite_dropped, kh_sprite_finish, kh_sprite_red, kh_sprite_blue, kh_sprite_pink, kh_sprite_yellow, kh_sprite_friend;
+float kh_key_dropped, kh_key_carried;
 
 float kh_GetCarrierSprite(float t, float e)
 {
@@ -106,19 +126,6 @@ void kh_Scores_Event(entity player, entity key, string what, float frags_player,
 	GameLogEcho(s, FALSE);
 }
 
-void kh_Key_Attach(entity key)
-{
-	setattachment(key, key.owner, "");
-	setorigin(key, '0 0 -15'); // x/y fixed later in think, z has to be -15 to make the key fit even in the crouchbox
-	key.angles_y -= key.owner.angles_y;
-	key.flags = 0;
-	key.solid = SOLID_NOT;
-	key.movetype = MOVETYPE_NONE;
-	key.team = key.owner.team;
-	key.nextthink = time;
-	key.damageforcescale = 0;
-}
-
 vector kh_AttachedOrigin(entity e)
 {
 	if(e.tag_entity)
@@ -130,11 +137,77 @@ vector kh_AttachedOrigin(entity e)
 		return e.origin;
 }
 
+void kh_Key_Attach(entity key)
+{
+#ifdef KH_PLAYER_USE_ATTACHMENT
+	entity first;
+	first = key.owner.kh_next;
+	if(key == first)
+	{
+		setattachment(key, key.owner, KH_PLAYER_ATTACHMENT_BONE);
+		if(key.kh_next)
+		{
+			setattachment(key.kh_next, key, "");
+			setorigin(key, key.kh_next.origin - 0.5 * KH_PLAYER_ATTACHMENT_DIST);
+			setorigin(key.kh_next, KH_PLAYER_ATTACHMENT_DIST_ROTATED);
+			key.kh_next.angles = '0 0 0';
+		}
+		else
+			setorigin(key, KH_PLAYER_ATTACHMENT);
+		key.angles = KH_PLAYER_ATTACHMENT_ANGLES;
+	}
+	else
+	{
+		setattachment(key, key.kh_prev, "");
+		if(key.kh_next)
+			setattachment(key.kh_next, key, "");
+		setorigin(key, KH_PLAYER_ATTACHMENT_DIST_ROTATED);
+		setorigin(first, first.origin - 0.5 * KH_PLAYER_ATTACHMENT_DIST);
+		key.angles = '0 0 0';
+	}
+#else
+	setattachment(key, key.owner, "");
+	setorigin(key, '0 0 -15'); // fixing x, y in think
+	key.angles_y -= key.owner.angles_y;
+#endif
+	key.flags = 0;
+	key.solid = SOLID_NOT;
+	key.movetype = MOVETYPE_NONE;
+	key.team = key.owner.team;
+	key.nextthink = time;
+	key.damageforcescale = 0;
+	key.modelindex = kh_key_carried;
+}
+
 void kh_Key_Detach(entity key)
 {
+#ifdef KH_PLAYER_USE_ATTACHMENT
+	entity first;
+	first = key.owner.kh_next;
+	if(key == first)
+	{
+		if(key.kh_next)
+		{
+			setattachment(key.kh_next, key.owner, KH_PLAYER_ATTACHMENT_BONE);
+			setorigin(key.kh_next, key.origin + 0.5 * KH_PLAYER_ATTACHMENT_DIST);
+			key.kh_next.angles = KH_PLAYER_ATTACHMENT_ANGLES;
+		}
+	}
+	else
+	{
+		if(key.kh_next)
+			setattachment(key.kh_next, key.kh_prev, "");
+		setorigin(first, first.origin + 0.5 * KH_PLAYER_ATTACHMENT_DIST);
+	}
+	// in any case:
+	setattachment(key, world, "");
+	setorigin(key, key.owner.origin + '0 0 1' * (PL_MIN_z - KH_KEY_MIN_z));
+	key.angles = key.owner.angles;
+#else
 	setorigin(key, key.owner.origin + key.origin_z * '0 0 1');
 	setattachment(key, world, "");
 	key.angles_y += key.owner.angles_y;
+#endif
 	key.aiment = world;
 	key.flags = FL_ITEM;
 	key.solid = SOLID_TRIGGER;
@@ -142,6 +215,7 @@ void kh_Key_Detach(entity key)
 	key.pain_finished = time + cvar("g_balance_keyhunt_delay_return");
 	key.damageforcescale = cvar("g_balance_keyhunt_damageforcescale");
 	// let key.team stay
+	key.modelindex = kh_key_dropped;
 }
 
 void kh_Key_AssignTo(entity key, entity player)
@@ -215,8 +289,10 @@ void kh_Key_Spawn(entity initial_owner, float angle)
 	key.cnt = angle;
 	key.angles = '0 360 0' * random();
 	key.event_damage = kh_Key_Damage;
-	setmodel(key, "models/keyhunt/key.md3");
+	key.modelindex = kh_key_dropped;
+	key.model = "key";
 	setsize(key, '-8 -8 -8', '8 8 40');
+	setsize(key, KH_KEY_MIN, KH_KEY_MAX);
 
 	switch(initial_owner.team)
 	{
@@ -339,13 +415,23 @@ void kh_Key_Think()
 {
 	entity head;
 
-	//self.angles_y = math_mod(self.angles_y + 0.05 * 135, 360);
-	// model is EF_ROTATING now
+#ifdef KH_KEY_ATTACHMENT_DEBUG
+	if(self.kh_prev == self.owner)
+	{
+		if(cvar_string("_angles") != "")
+		{
+			self.angles = stov(cvar_string("_angles"));
+			self.origin = stov(cvar_string("_origin"));
+		}
+	}
+#endif
 
 	if(self.owner)
 	{
-		makevectors('0 1 0' * (self.cnt + math_mod(time, 360) * 45));
-		setorigin(self, v_forward * 24 + '0 0 1' * self.origin_z);
+#ifndef KH_PLAYER_USE_ATTACHMENT
+		makevectors('0 1 0' * (self.cnt + math_mod(time, 360) * KH_KEY_XYSPEED));
+		setorigin(self, v_forward * KH_KEY_XYDIST + '0 0 1' * self.origin_z);
+#endif
 
 		if(self.owner.buttonuse)
 		if(time >= self.owner.kh_droptime + cvar("g_balance_keyhunt_delay_drop"))
@@ -582,6 +668,8 @@ void kh_StartRound()
 						my_player = player;
 				}
 		kh_Key_Spawn(my_player, 360 * i / kh_teams);
+		//kh_Key_Spawn(my_player, 360 * i / kh_teams);
+		//kh_Key_Spawn(my_player, 360 * i / kh_teams);
 	}
 
 	kh_tracking_enabled = FALSE;
@@ -672,6 +760,9 @@ void kh_init()
 	precache_model("models/sprites/keycarrier-blue.sp2");
 	precache_model("models/sprites/keycarrier-yellow.sp2");
 	precache_model("models/sprites/keycarrier-pink.sp2");
+#ifdef KH_PLAYER_USE_CARRIEDMODEL
+	precache_model("models/keyhunt/key-carried.md3");
+#endif
 	precache_model("models/keyhunt/key.md3");
 
 	// setup variables
@@ -685,6 +776,14 @@ void kh_init()
 	kh_controller.think = kh_Controller_Think;
 	kh_Controller_SetThink(0, "", kh_WaitForPlayers);
 
+	setmodel(kh_controller, "models/keyhunt/key.md3");
+	kh_key_dropped = kh_controller.modelindex;
+#ifdef KH_PLAYER_USE_CARRIEDMODEL
+	setmodel(kh_controller, "models/keyhunt/key-carried.md3");
+	kh_key_carried = kh_controller.modelindex;
+#else
+	kh_key_carried = kh_key_dropped;
+#endif
 	setmodel(kh_controller, "models/sprites/key-dropped.sp2");
 	kh_sprite_dropped = kh_controller.modelindex;
 	setmodel(kh_controller, "models/sprites/keycarrier-finish.sp2");
