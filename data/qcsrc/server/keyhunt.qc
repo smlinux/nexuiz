@@ -399,6 +399,9 @@ void kh_Key_DropAll(entity player)
 
 void kh_Key_Touch()
 {
+	if(intermission_running)
+		return;
+
 	if(self.owner) // already carried
 		return;
 	if(other.classname != "player")
@@ -414,6 +417,9 @@ void kh_Key_Touch()
 void kh_Key_Think()
 {
 	entity head;
+
+	if(intermission_running)
+		return;
 
 #ifdef KH_KEY_ATTACHMENT_DEBUG
 	if(self.kh_prev == self.owner)
