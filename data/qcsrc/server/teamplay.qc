@@ -1117,7 +1117,7 @@ void CauseRebalance(float source_team, float howmany_toomany)
 	}
 	else
 	{
-		if(1+floor(howmany_toomany) < cvar("g_balance_teams_complain"))
+		if(howmany_toomany < cvar("g_balance_teams_complain"))
 			return;
 		if(time < lastRebalanceInfo + 90)
 			return;
@@ -1147,7 +1147,7 @@ void CauseRebalance(float source_team, float howmany_toomany)
 // sure they're more or less balanced in player count.
 void AuditTeams()
 {
-	float numplayers, numteams, toomany;
+	float numplayers, numteams, smallest, toomany;
 	float balance;
 	balance = IsTeamBalanceForced();
 	if(balance == 0)
@@ -1164,26 +1164,33 @@ void AuditTeams()
 	GetTeamCounts(world);
 
 
-	numteams = numplayers = 0;
+	numteams = numplayers = smallest = 0;
 	if(c1 >= 0)
 	{
 		numteams = numteams + 1;
 		numplayers = numplayers + c1;
+		smallest = c1;
 	}
 	if(c2 >= 0)
 	{
 		numteams = numteams + 1;
 		numplayers = numplayers + c2;
+		if(c2 < smallest)
+			smallest = c2;
 	}
 	if(c3 >= 0)
 	{
 		numteams = numteams + 1;
 		numplayers = numplayers + c3;
+		if(c3 < smallest)
+			smallest = c3;
 	}
 	if(c4 >= 0)
 	{
 		numteams = numteams + 1;
 		numplayers = numplayers + c4;
+		if(c4 < smallest)
+			smallest = c4;
 	}
 
 	if(numplayers <= 0)
@@ -1191,18 +1198,15 @@ void AuditTeams()
 	if(numteams < 2)
 		return; // don't bother shuffling if for some reason there aren't any teams
 
-	toomany = (numplayers / numteams) + 1;
+	toomany = smallest + 1;
 
-	if(toomany <= 0)
-		return; // that's weird...
-
-	if(c1 && c1 >= toomany)
+	if(c1 && c1 > toomany)
 		CauseRebalance(1, c1 - toomany);
-	if(c2 && c2 >= toomany)
+	if(c2 && c2 > toomany)
 		CauseRebalance(2, c2 - toomany);
-	if(c3 && c3 >= toomany)
+	if(c3 && c3 > toomany)
 		CauseRebalance(3, c3 - toomany);
-	if(c4 && c4 >= toomany)
+	if(c4 && c4 > toomany)
 		CauseRebalance(4, c4 - toomany);
 
 	// if teams are still unbalanced, balance them further in the next audit,
