@@ -562,7 +562,7 @@ void kh_LoserTeam(float teem, entity lostkey)
 	}
 	else
 	{
-		float of, fragsleft, i, thisteam;
+		float of, fragsleft, i, j, thisteam;
 		of = cvar("g_balance_keyhunt_score_destroyed_ownfactor");
 
 		FOR_EACH_PLAYER(player)
@@ -582,16 +582,20 @@ void kh_LoserTeam(float teem, entity lostkey)
 		fragsleft = DistributeEvenly_Get(players);
 
 		// Now distribute these among all other teams...
+		j = kh_teams - 1;
 		for(i = 0; i < kh_teams; ++i)
 		{
 			thisteam = kh_Team_ByID(i);
+			if(thisteam == teem) // bad boy, no cookie - this WILL happen
+				continue;
+
 			players = 0;
 			FOR_EACH_PLAYER(player)
 				if(player.team == thisteam)
 					++players;
 
-			DistributeEvenly_Init(fragsleft, kh_teams - i);
-			fragsleft = DistributeEvenly_Get(kh_teams - i - 1);
+			DistributeEvenly_Init(fragsleft, j);
+			fragsleft = DistributeEvenly_Get(j - 1);
 			DistributeEvenly_Init(DistributeEvenly_Get(1), players);
 
 			FOR_EACH_PLAYER(player)
