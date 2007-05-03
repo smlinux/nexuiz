@@ -8,9 +8,12 @@ void DistributeEvenly_Init(float amount, float totalweight)
 	if(DistributeEvenly_amount)
 	{
 		dprint("DistributeEvenly_Init: UNFINISHED DISTRIBUTION (", ftos(DistributeEvenly_amount), " for ");
-		dprint(ftos(DistributeEvenly_totalweight), "left!\n");
+		dprint(ftos(DistributeEvenly_totalweight), " left!)\n");
 	}
-	DistributeEvenly_amount = amount;
+	if(totalweight == 0)
+		DistributeEvenly_amount = 0;
+	else
+		DistributeEvenly_amount = amount;
 	DistributeEvenly_totalweight = totalweight;
 }
 float DistributeEvenly_Get(float weight)

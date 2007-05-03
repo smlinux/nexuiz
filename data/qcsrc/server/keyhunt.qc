@@ -87,7 +87,7 @@ void kh_Controller_Think()
 			else
 				s = kh_Controller_Waitmsg;
 
-			dprint(s, "\n");
+			//dprint(s, "\n");
 
 			FOR_EACH_PLAYER(e)
 				if(clienttype(e) == CLIENTTYPE_REAL)
