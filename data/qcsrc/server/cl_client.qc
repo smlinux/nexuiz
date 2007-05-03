@@ -466,7 +466,7 @@ void PutClientInServer (void)
 
 		if(cvar("sv_defaultcharacter") == 1 && !teams_matter) {
 			local string defaultmodel;
-			defaultmodel = CheckPlayerModel(cvar_string("sv_defaultplayermodel"));
+			defaultmodel = cvar_string("sv_defaultplayermodel");
 			setmodel_lod (self, defaultmodel);
 			self.skin = stof(cvar_string("sv_defaultplayerskin"));
 		} else {
@@ -1417,7 +1417,7 @@ void PlayerPreThink (void)
 
 		if(cvar("sv_defaultcharacter") == 1 && !teams_matter) {
 			local string defaultmodel;
-			defaultmodel = CheckPlayerModel(cvar_string("sv_defaultplayermodel"));
+			defaultmodel = cvar_string("sv_defaultplayermodel");
 
 			if (defaultmodel != self.model)
 			{
