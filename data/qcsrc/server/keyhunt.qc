@@ -643,7 +643,7 @@ void kh_WaitForPlayers()
 	if(kh_EnoughPlayers())
 		kh_Controller_SetThink(cvar("g_balance_keyhunt_delay_round"), "Round starts in ", kh_StartRound);
 	else
-		kh_Controller_SetThink(1, "Waiting for players to join...", kh_WaitForPlayers);
+		kh_Controller_SetThink(1, "Waiting for players to join...\n\nNeed at least one active player per team!", kh_WaitForPlayers);
 }
 
 void kh_StartRound()
