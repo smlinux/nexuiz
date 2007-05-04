@@ -415,10 +415,20 @@ void PutClientInServer (void)
 		self.flags = FL_CLIENT;
 		self.takedamage = DAMAGE_AIM;
 		self.effects = 0;
-		self.health = cvar("g_balance_health_start");
 		self.air_finished = time + 12;
 		self.dmg = 2;
-		self.armorvalue = cvar("g_balance_armor_start");
+
+		self.ammo_shells = start_ammo_shells;
+		self.ammo_nails = start_ammo_nails;
+		self.ammo_rockets = start_ammo_rockets;
+		self.ammo_cells = start_ammo_cells;
+		self.health = start_health;
+		self.armorvalue = start_armorvalue;
+		self.items = start_items;
+		self.switchweapon = start_switchweapon;
+		self.weapon = 0;
+		self.jump_interval = time;
+
 		self.spawnshieldtime = time + cvar("g_spawnshieldtime");
 		self.pauserotarmor_finished = time + cvar("g_balance_pause_armor_rot_spawn");
 		self.pauserothealth_finished = time + cvar("g_balance_pause_health_rot_spawn");
@@ -441,8 +451,6 @@ void PutClientInServer (void)
 		// players have no think function
 		self.think = SUB_Null;
 		self.nextthink = 0;
-		self.weapon = 0;
-		self.switchweapon = 0;
 		self.hook_time = 0;
 
 		self.runes = 0;
@@ -486,104 +494,6 @@ void PutClientInServer (void)
 		// don't reset back to last position, even if new position is stuck in solid
 		self.oldorigin = self.origin;
 
-		if(cvar("g_lms"))
-		{
-			self.ammo_shells = cvar("g_lms_start_ammo_shells");
-			self.ammo_nails = cvar("g_lms_start_ammo_nails");
-			self.ammo_rockets = cvar("g_lms_start_ammo_rockets");
-			self.ammo_cells = cvar("g_lms_start_ammo_cells");
-			self.health = cvar("g_lms_start_health");
-			self.armorvalue = cvar("g_lms_start_armor");
-		}
-		else if (cvar("g_use_ammunition")) {
-			self.ammo_shells = cvar("g_start_ammo_shells");
-			self.ammo_nails = cvar("g_start_ammo_nails");
-			self.ammo_rockets = cvar("g_start_ammo_rockets");
-			self.ammo_cells = cvar("g_start_ammo_cells");
-		} else {
-			self.ammo_shells = 999;
-			self.ammo_nails = 999;
-			self.ammo_rockets = 999;
-			self.ammo_cells = 999;
-		}
-
-		self.items = 0;
-		if (cvar("g_start_weapon_laser") || cvar("g_lms"))
-		{
-			self.items = self.items | IT_LASER;
-			self.switchweapon = WEP_LASER;
-		}
-		if (cvar("g_start_weapon_shotgun") || cvar("g_lms"))
-		{
-			self.items = self.items | IT_SHOTGUN;
-			self.switchweapon = WEP_SHOTGUN;
-		}
-		if (cvar("g_start_weapon_uzi") || cvar("g_lms"))
-		{
-			self.items = self.items | IT_UZI;
-			self.switchweapon = WEP_UZI;
-		}
-		if (cvar("g_start_weapon_grenadelauncher") || cvar("g_lms"))
-		{
-			self.items = self.items | IT_GRENADE_LAUNCHER;
-			self.switchweapon = WEP_GRENADE_LAUNCHER;
-		}
-		if (cvar("g_start_weapon_electro") || cvar("g_lms"))
-		{
-			self.items = self.items | IT_ELECTRO;
-			self.switchweapon = WEP_ELECTRO;
-		}
-		if (cvar("g_start_weapon_crylink") || cvar("g_lms"))
-		{
-			self.items = self.items | IT_CRYLINK;
-			self.switchweapon = WEP_CRYLINK;
-		}
-		if (cvar("g_start_weapon_nex") || cvar("g_lms"))
-		{
-			self.items = self.items | IT_NEX;
-			self.switchweapon = WEP_NEX;
-		}
-		if (cvar("g_start_weapon_hagar") || cvar("g_lms"))
-		{
-			self.items = self.items | IT_HAGAR;
-			self.switchweapon = WEP_HAGAR;
-		}
-		if (cvar("g_start_weapon_rocketlauncher") || cvar("g_lms"))
-		{
-			self.items = self.items | IT_ROCKET_LAUNCHER;
-			self.switchweapon = WEP_ROCKET_LAUNCHER;
-		}
-
-		if(cvar("g_instagib"))
-		{
-			self.items = IT_NEX;
-			self.switchweapon = WEP_NEX;
-			self.ammo_cells = 999;
-		}
-
-		if(cvar("g_rocketarena"))
-		{
-			self.items = IT_ROCKET_LAUNCHER;
-			self.switchweapon = WEP_ROCKET_LAUNCHER;
-			self.ammo_rockets = 999;
-		}
-
-		if(cvar("g_nixnex"))
-		{
-			self.items = 0;
-			// will be done later
-		}
-
-		if(cvar("g_minstagib"))
-		{
-			self.health = 100;
-			self.armorvalue = 0;
-			self.items = IT_NEX;
-			self.switchweapon = WEP_NEX;
-			self.ammo_cells = cvar("g_minstagib_ammo_start");
-			self.jump_interval = time;
-		}
-
 		if(cvar("g_arena"))
 		{
 			Spawnqueue_Remove(self);
@@ -616,12 +526,14 @@ void PutClientInServer (void)
 
 		if(cvar("spawn_debug"))
 		{
-				sprint(self, strcat("spawnpoint origin:  ", vtos(spot.origin), "\n"));
-				remove(spot);	// usefull for checking if there are spawnpoints, that let drop through the floor
+			sprint(self, strcat("spawnpoint origin:  ", vtos(spot.origin), "\n"));
+			remove(spot);	// usefull for checking if there are spawnpoints, that let drop through the floor
 		}
 
 		//stuffcmd(self, "chase_active 0");
 	 	//stuffcmd(self, "set viewsize $tmpviewsize \n");
+
+		sound (self, CHAN_AUTO, "misc/teleport.wav", 1, ATTN_NORM);
 	} else if(self.classname == "observer") {
 		PutObserverInServer ();
 	}

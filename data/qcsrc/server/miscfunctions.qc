@@ -703,6 +703,15 @@ float g_pickup_health_max;
 float g_pickup_healthmega;
 float g_pickup_healthmega_max;
 
+float start_items;
+float start_switchweapon;
+float start_ammo_shells;
+float start_ammo_nails;
+float start_ammo_rockets;
+float start_ammo_cells;
+float start_health;
+float start_armorvalue;
+
 void readlevelcvars(void)
 {
 	g_pickup_shells                    = cvar("g_pickup_shells");
@@ -723,6 +732,123 @@ void readlevelcvars(void)
 	g_pickup_health_max                = cvar("g_pickup_health_max");
 	g_pickup_healthmega                = cvar("g_pickup_healthmega");
 	g_pickup_healthmega_max            = cvar("g_pickup_healthmega_max");
+
+	// initialize starting values for players
+	start_items = 0;
+	start_switchweapon = 0;
+	start_ammo_shells = 0;
+	start_ammo_nails = 0;
+	start_ammo_rockets = 0;
+	start_ammo_cells = 0;
+	start_health = cvar("g_balance_health_start");
+	start_armorvalue = cvar("g_balance_armor_start");
+
+	if(cvar("g_instagib"))
+	{
+		start_items = IT_NEX;
+		start_switchweapon = WEP_NEX;
+		weapon_action(start_switchweapon, WR_PRECACHE);
+		start_ammo_cells = 999;
+	}
+	else if(cvar("g_rocketarena"))
+	{
+		start_items = IT_ROCKET_LAUNCHER;
+		start_switchweapon = WEP_ROCKET_LAUNCHER;
+		weapon_action(start_switchweapon, WR_PRECACHE);
+		start_ammo_rockets = 999;
+	}
+	else if(cvar("g_nixnex"))
+	{
+		start_items = 0;
+		// will be done later
+	}
+	else if(cvar("g_minstagib"))
+	{
+		start_health = 100;
+		start_armorvalue = 0;
+		start_items = IT_NEX;
+		start_switchweapon = WEP_NEX;
+		weapon_action(start_switchweapon, WR_PRECACHE);
+		start_ammo_cells = cvar("g_minstagib_ammo_start");
+	}
+	else
+	{
+		if(cvar("g_lms"))
+		{
+			start_ammo_shells = cvar("g_lms_start_ammo_shells");
+			start_ammo_nails = cvar("g_lms_start_ammo_nails");
+			start_ammo_rockets = cvar("g_lms_start_ammo_rockets");
+			start_ammo_cells = cvar("g_lms_start_ammo_cells");
+			start_health = cvar("g_lms_start_health");
+			start_armorvalue = cvar("g_lms_start_armor");
+		}
+		else if (cvar("g_use_ammunition")) {
+			start_ammo_shells = cvar("g_start_ammo_shells");
+			start_ammo_nails = cvar("g_start_ammo_nails");
+			start_ammo_rockets = cvar("g_start_ammo_rockets");
+			start_ammo_cells = cvar("g_start_ammo_cells");
+		} else {
+			start_ammo_shells = cvar("g_pickup_shells_max");
+			start_ammo_nails = cvar("g_pickup_nails_max");
+			start_ammo_rockets = cvar("g_pickup_rockets_max");
+			start_ammo_cells = cvar("g_pickup_cells_max");
+		}
+
+		if (cvar("g_start_weapon_laser") || cvar("g_lms"))
+		{
+			start_items = start_items | IT_LASER;
+			start_switchweapon = WEP_LASER;
+			weapon_action(start_switchweapon, WR_PRECACHE);
+		}
+		if (cvar("g_start_weapon_shotgun") || cvar("g_lms"))
+		{
+			start_items = start_items | IT_SHOTGUN;
+			start_switchweapon = WEP_SHOTGUN;
+			weapon_action(start_switchweapon, WR_PRECACHE);
+		}
+		if (cvar("g_start_weapon_uzi") || cvar("g_lms"))
+		{
+			start_items = start_items | IT_UZI;
+			start_switchweapon = WEP_UZI;
+			weapon_action(start_switchweapon, WR_PRECACHE);
+		}
+		if (cvar("g_start_weapon_grenadelauncher") || cvar("g_lms"))
+		{
+			start_items = start_items | IT_GRENADE_LAUNCHER;
+			start_switchweapon = WEP_GRENADE_LAUNCHER;
+			weapon_action(start_switchweapon, WR_PRECACHE);
+		}
+		if (cvar("g_start_weapon_electro") || cvar("g_lms"))
+		{
+			start_items = start_items | IT_ELECTRO;
+			start_switchweapon = WEP_ELECTRO;
+			weapon_action(start_switchweapon, WR_PRECACHE);
+		}
+		if (cvar("g_start_weapon_crylink") || cvar("g_lms"))
+		{
+			start_items = start_items | IT_CRYLINK;
+			start_switchweapon = WEP_CRYLINK;
+			weapon_action(start_switchweapon, WR_PRECACHE);
+		}
+		if (cvar("g_start_weapon_nex") || cvar("g_lms"))
+		{
+			start_items = start_items | IT_NEX;
+			start_switchweapon = WEP_NEX;
+			weapon_action(start_switchweapon, WR_PRECACHE);
+		}
+		if (cvar("g_start_weapon_hagar") || cvar("g_lms"))
+		{
+			start_items = start_items | IT_HAGAR;
+			start_switchweapon = WEP_HAGAR;
+			weapon_action(start_switchweapon, WR_PRECACHE);
+		}
+		if (cvar("g_start_weapon_rocketlauncher") || cvar("g_lms"))
+		{
+			start_items = start_items | IT_ROCKET_LAUNCHER;
+			start_switchweapon = WEP_ROCKET_LAUNCHER;
+			weapon_action(start_switchweapon, WR_PRECACHE);
+		}
+	}
 }
 
 /*

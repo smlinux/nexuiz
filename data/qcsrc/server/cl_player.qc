@@ -176,28 +176,37 @@ void PlayerCorpseDamage (entity inflictor, entity attacker, float damage, float 
 		self.view_ofs = '0 0 4';
 
 		// make a juicy mess
-		te_bloodshower (self.origin + self.mins, self.origin + self.maxs, 800, 1000);
-		te_bloodshower (self.origin + self.mins, self.origin + self.maxs, 400, 1000);
+		local float multiplier;
+		multiplier = 1;
+		if (cvar("ekg"))
+			multiplier = 5;
+		te_bloodshower (self.origin + self.mins, self.origin + self.maxs, 1200 * multiplier, 1000);
 
 		// make a meaty mess
 		TossGib (self, "models/gibs/eye.md3", self.origin, self.velocity,0);
 		TossGib (world, "models/gibs/bloodyskull.md3", self.origin, '0 0 600',0);
 
-		TossGib (world, "models/gibs/gib1.md3", self.origin, self.velocity,0);
-		//TossGib (world, "models/gibs/gib2.md3", self.origin, self.velocity,0);
-		TossGib (world, "models/gibs/gib1.mdl", self.origin, self.velocity,0);
-		//TossGib (world, "models/gibs/gib3.md3", self.origin, self.velocity,0);
-		TossGib (world, "models/gibs/gib2.mdl", self.origin, self.velocity,0);
-		//TossGib (world, "models/gibs/gib4.md3", self.origin, self.velocity,0);
-		TossGib (world, "models/gibs/gib3.mdl", self.origin, self.velocity,0);
+		local float c;
+		c = 0;
+		while (c < multiplier)
+		{
+			c = c + 1;
+			TossGib (world, "models/gibs/gib1.md3", self.origin, self.velocity,0);
+			//TossGib (world, "models/gibs/gib2.md3", self.origin, self.velocity,0);
+			TossGib (world, "models/gibs/gib1.mdl", self.origin, self.velocity,0);
+			//TossGib (world, "models/gibs/gib3.md3", self.origin, self.velocity,0);
+			TossGib (world, "models/gibs/gib2.mdl", self.origin, self.velocity,0);
+			//TossGib (world, "models/gibs/gib4.md3", self.origin, self.velocity,0);
+			TossGib (world, "models/gibs/gib3.mdl", self.origin, self.velocity,0);
 
-		// these destory on impact
-		TossGib (world, "models/gibs/gib5.md3", self.origin, '-500 0 450',1);
-		//TossGib (world, "models/gibs/gib6.md3", self.origin, '0 500 450',1);
-		TossGib (world, "models/gibs/chunk.mdl", self.origin, '0 -500 450',1);
-		TossGib (world, "models/gibs/chunk.mdl", self.origin, '500 0 450',1);
-		TossGib (world, "models/gibs/chunk.mdl", self.origin, self.velocity,1);
-		TossGib (world, "models/gibs/chunk.mdl", self.origin, '0 0 450',1);
+			// these destory on impact
+			TossGib (world, "models/gibs/gib5.md3", self.origin, '-500 0 450',1);
+			//TossGib (world, "models/gibs/gib6.md3", self.origin, '0 500 450',1);
+			TossGib (world, "models/gibs/chunk.mdl", self.origin, '0 -500 450',1);
+			TossGib (world, "models/gibs/chunk.mdl", self.origin, '500 0 450',1);
+			TossGib (world, "models/gibs/chunk.mdl", self.origin, self.velocity,1);
+			TossGib (world, "models/gibs/chunk.mdl", self.origin, '0 0 450',1);
+		}
 
 		sound (self, CHAN_VOICE, "misc/gib.wav", 1, ATTN_NORM);
 	}

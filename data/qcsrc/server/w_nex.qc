@@ -172,6 +172,15 @@ float(float req) w_nex =
 			}
 		}
 	}
+	else if (req == WR_PRECACHE)
+	{
+		precache_model ("models/nexflash.md3");
+		precache_model ("models/weapons/g_nex.md3");
+		precache_model ("models/weapons/v_nex.md3");
+		precache_model ("models/weapons/w_nex.zym");
+		precache_sound ("weapons/nexfire.wav");
+		precache_sound ("weapons/neximpact.wav");
+	}
 	else if (req == WR_SETUP)
 		weapon_setup(WEP_NEX, "nex", IT_CELLS);
 	else if (req == WR_CHECKAMMO1)

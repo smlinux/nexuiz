@@ -88,108 +88,55 @@ void worldspawn (void)
 	soundpack = strzone(soundpack);
 	*/
 
-	// Precache all player models
-	// Workaround for "invisible players"
-	precache_model("models/player/carni.zym");
-	precache_model("models/player/crash.zym");
-	precache_model("models/player/grunt.zym");
-	precache_model("models/player/headhunter.zym");
-	precache_model("models/player/insurrectionist.zym");
-	precache_model("models/player/jeandarc.zym");
-	precache_model("models/player/lurk.zym");
-	precache_model("models/player/lycanthrope.zym");
-	precache_model("models/player/marine.zym");
-	precache_model("models/player/nexus.zym");
-	precache_model("models/player/pyria.zym");
-	precache_model("models/player/shock.zym");
-	precache_model("models/player/skadi.zym");
-	precache_model("models/player/specop.zym");
-	precache_model("models/player/visitant.zym");
+	// gamemode related things
+	precache_model ("models/misc/chatbubble.spr");
+	precache_model ("models/misc/teambubble.spr");
+	if (cvar("g_runematch"))
+	{
+		precache_model ("models/runematch/curse.mdl");
+		precache_model ("models/runematch/rune.mdl");
+	}
 
-	//precache_model ("progs/beam.mdl");
-	precache_model ("models/bullet.mdl");
-	precache_model ("models/casing_bronze.mdl");
-	precache_model ("models/casing_shell.mdl");
-	precache_model ("models/casing_steel.mdl");
-	precache_model ("models/ebomb.mdl");
-	precache_model ("models/elaser.mdl");
-	precache_model ("models/flash.md3");
+	// Precache all player models if desired
+	if (cvar("sv_precacheplayermodels"))
+	{
+		precache_model("models/player/carni.zym");
+		precache_model("models/player/crash.zym");
+		precache_model("models/player/grunt.zym");
+		precache_model("models/player/headhunter.zym");
+		precache_model("models/player/insurrectionist.zym");
+		precache_model("models/player/jeandarc.zym");
+		precache_model("models/player/lurk.zym");
+		precache_model("models/player/lycanthrope.zym");
+		precache_model("models/player/marine.zym");
+		precache_model("models/player/nexus.zym");
+		precache_model("models/player/pyria.zym");
+		precache_model("models/player/shock.zym");
+		precache_model("models/player/skadi.zym");
+		precache_model("models/player/specop.zym");
+		precache_model("models/player/visitant.zym");
+	}
+
+	if (cvar("g_footsteps"))
+	{
+		precache_sound ("misc/footstep01.wav");
+		precache_sound ("misc/footstep02.wav");
+		precache_sound ("misc/footstep03.wav");
+		precache_sound ("misc/footstep04.wav");
+		precache_sound ("misc/footstep05.wav");
+		precache_sound ("misc/footstep06.wav");
+	}
+
+	// gore and miscellaneous sounds
+	//precache_sound ("misc/h2ohit.wav");
 	precache_model ("models/gibs/bloodyskull.md3");
 	precache_model ("models/gibs/chunk.mdl");
 	precache_model ("models/gibs/eye.md3");
 	precache_model ("models/gibs/gib1.md3");
-	//precache_model ("models/gibs/gib2.md3");
-	//precache_model ("models/gibs/gib3.md3");
-	//precache_model ("models/gibs/gib4.md3");
-	precache_model ("models/gibs/gib5.md3");
-	//precache_model ("models/gibs/gib6.md3");
 	precache_model ("models/gibs/gib1.mdl");
 	precache_model ("models/gibs/gib2.mdl");
 	precache_model ("models/gibs/gib3.mdl");
-	precache_model ("models/grenademodel.md3");
-	precache_model ("models/hagarmissile.mdl");
-	precache_model ("models/items/a_bullets.mdl");
-	precache_model ("models/items/a_cells.md3");
-	precache_model ("models/items/a_rockets.md3");
-	precache_model ("models/items/a_shells.md3");
-	precache_model ("models/items/g_a1.md3");
-	precache_model ("models/items/g_a25.md3");
-	precache_model ("models/items/g_h1.md3");
-	precache_model ("models/items/g_h25.md3");
-	precache_model ("models/items/g_h100.md3");
-	precache_model ("models/items/g_invincible.md3");
-	precache_model ("models/items/g_strength.md3");
-	precache_model ("models/laser.mdl");
-	precache_model ("models/misc/chatbubble.spr");
-	precache_model ("models/misc/teambubble.spr");
-	precache_model ("models/nexflash.md3");
-	precache_model ("models/plasma.mdl");
-	precache_model ("models/plasmatrail.mdl");
-	precache_model ("models/rocket.md3");
-	//precache_model ("models/sprites/grenexpl.spr");
-	precache_model ("models/runematch/rune.mdl");
-	precache_model ("models/runematch/curse.mdl");
-	//precache_model ("models/sprites/hagar.spr");
-	//precache_model ("models/sprites/muzzleflash.spr32");
-	//precache_model ("models/sprites/electrocombo.spr32");
-	//precache_model ("models/sprites/plasmahitwall.spr32");
-	//precache_model ("models/sprites/plasmashot.spr32");
-	//precache_model ("models/sprites/rockexpl.spr");
-	precache_model ("models/tracer.mdl");
-	precache_model ("models/uziflash.md3");
-	precache_model ("models/weapons/g_crylink.md3");
-	precache_model ("models/weapons/g_electro.md3");
-	precache_model ("models/weapons/g_gl.md3");
-	precache_model ("models/weapons/g_hagar.md3");
-	precache_model ("models/weapons/g_nex.md3");
-	precache_model ("models/weapons/g_rl.md3");
-	precache_model ("models/weapons/g_shotgun.md3");
-	precache_model ("models/weapons/g_uzi.md3");
-	precache_model ("models/weapons/v_crylink.md3");
-	precache_model ("models/weapons/v_electro.md3");
-	precache_model ("models/weapons/v_gl.md3");
-	precache_model ("models/weapons/v_hagar.md3");
-	precache_model ("models/weapons/v_laser.md3");
-	precache_model ("models/weapons/v_nex.md3");
-	precache_model ("models/weapons/v_rl.md3");
-	precache_model ("models/weapons/v_shotgun.md3");
-	precache_model ("models/weapons/v_uzi.md3");
-	precache_model ("models/weapons/w_crylink.zym");
-	precache_model ("models/weapons/w_electro.zym");
-	precache_model ("models/weapons/w_gl.zym");
-	precache_model ("models/weapons/w_hagar.zym");
-	precache_model ("models/weapons/w_laser.zym");
-	precache_model ("models/weapons/w_nex.zym");
-	precache_model ("models/weapons/w_rl.zym");
-	precache_model ("models/weapons/w_shotgun.zym");
-	precache_model ("models/weapons/w_uzi.zym");
-
-	// laser for laser-guided weapons
-	precache_model ("models/laser_dot.mdl");
-
-	precache_sound ("misc/null.wav");
-	precache_sound ("misc/armor1.wav");
-	precache_sound ("misc/armor25.wav");
+	precache_model ("models/gibs/gib5.md3");
 	precache_sound ("misc/armorimpact.wav");
 	precache_sound ("misc/bodyimpact1.wav");
 	precache_sound ("misc/bodyimpact2.wav");
@@ -198,87 +145,19 @@ void worldspawn (void)
 	precache_sound ("misc/gib_splat02.wav");
 	precache_sound ("misc/gib_splat03.wav");
 	precache_sound ("misc/gib_splat04.wav");
-	//precache_sound ("misc/h2ohit.wav");
 	precache_sound ("misc/hit.wav");
-	precache_sound ("misc/footstep01.wav");
-	precache_sound ("misc/footstep02.wav");
-	precache_sound ("misc/footstep03.wav");
-	precache_sound ("misc/footstep04.wav");
-	precache_sound ("misc/footstep05.wav");
-	precache_sound ("misc/footstep06.wav");
 	precache_sound ("misc/hitground1.wav");
 	precache_sound ("misc/hitground2.wav");
 	precache_sound ("misc/hitground3.wav");
 	precache_sound ("misc/hitground4.wav");
-	precache_sound ("misc/itempickup.wav");
-	precache_sound ("misc/itemrespawn.wav");
-	precache_sound ("misc/jumppad.wav");
-	precache_sound ("misc/mediumhealth.wav");
-	precache_sound ("misc/megahealth.wav");
-	precache_sound ("misc/minihealth.wav");
-	precache_sound ("misc/powerup.wav");
-	precache_sound ("misc/powerup_shield.wav");
+	precache_sound ("misc/null.wav");
 	precache_sound ("misc/talk.wav");
 	precache_sound ("misc/teleport.wav");
-	precache_sound ("plats/medplat1.wav");
-	precache_sound ("plats/medplat2.wav");
 	precache_sound ("player/lava.wav");
 	precache_sound ("player/slime.wav");
-	precache_sound ("weapons/crylink_fire.wav");
-	precache_sound ("weapons/electro_bounce.wav");
-	precache_sound ("weapons/electro_fire.wav");
-	precache_sound ("weapons/electro_fire2.wav");
-	precache_sound ("weapons/electro_fly.wav");
-	precache_sound ("weapons/electro_impact.wav");
-	precache_sound ("weapons/electro_impact_combo.wav");
-	//precache_sound ("weapons/grenade_bounce.wav");
-	precache_sound ("weapons/grenade_bounce1.wav");
-	precache_sound ("weapons/grenade_bounce2.wav");
-	precache_sound ("weapons/grenade_bounce3.wav");
-	precache_sound ("weapons/grenade_bounce4.wav");
-	precache_sound ("weapons/grenade_bounce5.wav");
-	precache_sound ("weapons/grenade_bounce6.wav");
-	precache_sound ("weapons/grenade_fire.wav");
-	precache_sound ("weapons/grenade_impact.wav");
-	precache_sound ("weapons/hagar_fire.wav");
-	precache_sound ("weapons/hagexp1.wav");
-	precache_sound ("weapons/hagexp2.wav");
-	precache_sound ("weapons/hagexp3.wav");
-	precache_sound ("weapons/hook_fire.wav");
-	precache_sound ("weapons/hook_impact.wav");
-	precache_sound ("weapons/lasergun_fire.wav");
-	precache_sound ("weapons/laserimpact.wav");
-	precache_sound ("weapons/nexfire.wav");
-	precache_sound ("weapons/neximpact.wav");
-	precache_sound ("weapons/ric1.wav");
-	precache_sound ("weapons/ric2.wav");
-	precache_sound ("weapons/ric3.wav");
-	precache_sound ("weapons/rocket_fire.wav");
-	precache_sound ("weapons/rocket_fly.wav");
-	precache_sound ("weapons/rocket_impact.wav");
-	precache_sound ("weapons/rocket_det.wav");
-	precache_sound ("weapons/shotgun_fire.wav");
-	precache_sound ("weapons/tink1.wav");
-	precache_sound ("weapons/uzi_fire.wav");
-	precache_sound ("weapons/weapon_switch.wav");
-	precache_sound ("weapons/weaponpickup.wav");
-	precache_sound ("weapons/strength_fire.wav");
-
-	//precache_sound ("announce/male/kill10.wav");
-	//precache_sound ("announce/male/kill15.wav");
-	//precache_sound ("announce/male/kill20.wav");
-	//precache_sound ("announce/male/kill25.wav");
-	//precache_sound ("announce/male/kill3.wav");
-	//precache_sound ("announce/male/kill30.wav");
-	//precache_sound ("announce/male/kill4.wav");
-	//precache_sound ("announce/male/kill5.wav");
-	//precache_sound ("announce/male/kill6.wav");
-	//precache_sound ("announce/male/mapkill1.wav");
-	//precache_sound ("announce/robotic/last_second_save.wav");
-	//precache_sound ("announce/robotic/narrowly_averted.wav");
-	//precache_sound ("minstagib/mockery.wav");
 
 	// announcer sounds - male
+	//precache_sound ("announcer/male/electrobitch.wav");
 	precache_sound ("announcer/male/03kills.wav");
 	precache_sound ("announcer/male/05kills.wav");
 	precache_sound ("announcer/male/10kills.wav");
@@ -287,8 +166,6 @@ void worldspawn (void)
 	precache_sound ("announcer/male/25kills.wav");
 	precache_sound ("announcer/male/30kills.wav");
 	precache_sound ("announcer/male/botlike.wav");
-	precache_sound ("announcer/male/electrobitch.wav");
-	precache_sound ("announcer/male/welcome.wav");
 	precache_sound ("announcer/male/yoda.wav");
 
 	// announcer sounds - robotic
@@ -296,18 +173,42 @@ void worldspawn (void)
 	precache_sound ("announcer/robotic/1minuteremains.wav");
 	precache_sound ("announcer/robotic/2fragsleft.wav");
 	precache_sound ("announcer/robotic/3fragsleft.wav");
-	precache_sound ("announcer/robotic/lastsecond.wav");
-	precache_sound ("announcer/robotic/narrowly.wav");
-	precache_sound ("announcer/robotic/1.wav");
-	precache_sound ("announcer/robotic/2.wav");
-	precache_sound ("announcer/robotic/3.wav");
-	precache_sound ("announcer/robotic/4.wav");
-	precache_sound ("announcer/robotic/5.wav");
-	precache_sound ("announcer/robotic/6.wav");
-	precache_sound ("announcer/robotic/7.wav");
-	precache_sound ("announcer/robotic/8.wav");
-	precache_sound ("announcer/robotic/9.wav");
-	precache_sound ("announcer/robotic/10.wav");
+	if (cvar("g_minstagib"))
+	{
+		precache_sound ("announcer/robotic/lastsecond.wav");
+		precache_sound ("announcer/robotic/narrowly.wav");
+		precache_sound ("announcer/robotic/1.wav");
+		precache_sound ("announcer/robotic/2.wav");
+		precache_sound ("announcer/robotic/3.wav");
+		precache_sound ("announcer/robotic/4.wav");
+		precache_sound ("announcer/robotic/5.wav");
+		precache_sound ("announcer/robotic/6.wav");
+		precache_sound ("announcer/robotic/7.wav");
+		precache_sound ("announcer/robotic/8.wav");
+		precache_sound ("announcer/robotic/9.wav");
+		precache_sound ("announcer/robotic/10.wav");
+	}
+
+	// common weapon precaches
+	precache_sound ("weapons/weapon_switch.wav");
+	precache_sound ("weapons/weaponpickup.wav");
+	if (cvar("g_grappling_hook"))
+	{
+		precache_sound ("weapons/hook_fire.wav"); // hook
+		precache_sound ("weapons/hook_impact.wav"); // hook
+	}
+
+	if (cvar("sv_precacheweapons"))
+	{
+		//precache weapon models/sounds
+		local float wep;
+		wep = WEP_FIRST;
+		while (wep <= WEP_LAST)
+		{
+			weapon_action(wep, WR_PRECACHE);
+			wep = wep + 1;
+		}
+	}
 
 	// plays music for the level if there is any
 	if (self.noise)

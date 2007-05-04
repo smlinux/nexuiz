@@ -350,6 +350,13 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 		}
 	}
 
+	if (self.classname != "droppedweapon")
+	{
+		precache_model (itemmodel);
+		precache_sound (pickupsound);
+		precache_sound ("misc/itemrespawn.wav");
+	}
+
 	if(itemid & (IT_STRENGTH | IT_INVINCIBLE | IT_HEALTH | IT_ARMOR | IT_KEY1 | IT_KEY2 |
 				IT_ROCKET_LAUNCHER | IT_HAGAR | IT_NEX | IT_CRYLINK | IT_ELECTRO |
 				IT_GRENADE_LAUNCHER | IT_UZI | IT_SHOTGUN | IT_LASER) && self.classname != "droppedweapon")
@@ -479,62 +486,86 @@ void weapon_uzi (void) {
 	if(!self.ammo_nails)
 		self.ammo_nails = cvar("g_pickup_nails");
 	StartItem ("models/weapons/g_uzi.md3", "weapons/weaponpickup.wav", 15, W_Name(WEP_UZI), IT_UZI, FL_WEAPON, weapon_pickupevalfunc, 1000);
+	if (self.modelindex) // don't precache if self was removed
+		weapon_action(WEP_UZI, WR_PRECACHE);
 }
 
 void weapon_shotgun (void) {
 	if(!self.ammo_shells)
 		self.ammo_shells = cvar("g_pickup_shells");
 	StartItem ("models/weapons/g_shotgun.md3", "weapons/weaponpickup.wav", 15, W_Name(WEP_SHOTGUN), IT_SHOTGUN, FL_WEAPON, weapon_pickupevalfunc, 1000);
+	if (self.modelindex) // don't precache if self was removed
+		weapon_action(WEP_SHOTGUN, WR_PRECACHE);
 }
 
-void weapon_grenadelauncher (void) {
+void weapon_grenadelauncher (void)
+{
 	if(!self.ammo_rockets)
 		self.ammo_rockets = cvar("g_pickup_rockets");
 	StartItem ("models/weapons/g_gl.md3", "weapons/weaponpickup.wav", 15, W_Name(WEP_GRENADE_LAUNCHER), IT_GRENADE_LAUNCHER, FL_WEAPON, weapon_pickupevalfunc, 1000);
+	if (self.modelindex) // don't precache if self was removed
+		weapon_action(WEP_GRENADE_LAUNCHER, WR_PRECACHE);
 }
 
-void weapon_electro (void) {
+void weapon_electro (void)
+{
 	if(!self.ammo_cells)
 		self.ammo_cells = cvar("g_pickup_cells");
 	StartItem ("models/weapons/g_electro.md3", "weapons/weaponpickup.wav", 15, W_Name(WEP_ELECTRO), IT_ELECTRO, FL_WEAPON, weapon_pickupevalfunc, 1000);
+	if (self.modelindex) // don't precache if self was removed
+		weapon_action(WEP_ELECTRO, WR_PRECACHE);
 }
 
-void weapon_crylink (void) {
+void weapon_crylink (void)
+{
 	if(!self.ammo_cells)
 		self.ammo_cells = cvar("g_pickup_cells");
 	StartItem ("models/weapons/g_crylink.md3", "weapons/weaponpickup.wav", 15, W_Name(WEP_CRYLINK), IT_CRYLINK, FL_WEAPON, weapon_pickupevalfunc, 1000);
+	if (self.modelindex) // don't precache if self was removed
+		weapon_action(WEP_CRYLINK, WR_PRECACHE);
 }
 
-void weapon_nex (void) {
-	if (cvar("g_minstagib")) {
+void weapon_nex (void)
+{
+	float nextime;
+	if (cvar("g_minstagib"))
+	{
 		minstagib_items(IT_CELLS);
-	} else {
-		float nextime;
-		if(!self.ammo_cells)
-			self.ammo_cells = cvar("g_pickup_cells");
-		nextime = cvar("g_balance_nex_respawntime_modifier");
-		if(nextime)
-			nextime = 15 * nextime;
-		else
-			nextime = 15;
-		StartItem ("models/weapons/g_nex.md3", "weapons/weaponpickup.wav", nextime, W_Name(WEP_NEX), IT_NEX, FL_WEAPON, weapon_pickupevalfunc, 1000);
+		return;
 	}
+	if(!self.ammo_cells)
+		self.ammo_cells = cvar("g_pickup_cells");
+	nextime = cvar("g_balance_nex_respawntime_modifier");
+	if(nextime)
+		nextime = 15 * nextime;
+	else
+		nextime = 15;
+	StartItem ("models/weapons/g_nex.md3", "weapons/weaponpickup.wav", nextime, W_Name(WEP_NEX), IT_NEX, FL_WEAPON, weapon_pickupevalfunc, 1000);
+	if (self.modelindex) // don't precache if self was removed
+		weapon_action(WEP_NEX, WR_PRECACHE);
 }
 
-void weapon_hagar (void) {
+void weapon_hagar (void)
+{
 	if(!self.ammo_rockets)
 		self.ammo_rockets = cvar("g_pickup_rockets");
 	StartItem ("models/weapons/g_hagar.md3", "weapons/weaponpickup.wav", 15, W_Name(WEP_HAGAR), IT_HAGAR, FL_WEAPON, weapon_pickupevalfunc, 1000);
+	if (self.modelindex) // don't precache if self was removed
+		weapon_action(WEP_HAGAR, WR_PRECACHE);
 }
 
-void weapon_rocketlauncher (void) {
-	if (cvar("g_minstagib")) {
+void weapon_rocketlauncher (void)
+{
+	if (cvar("g_minstagib"))
+	{
 		minstagib_items(IT_CELLS);
-	} else {
-		if(!self.ammo_rockets)
-			self.ammo_rockets = g_pickup_rockets;
-		StartItem ("models/weapons/g_rl.md3", "weapons/weaponpickup.wav", 15, W_Name(WEP_ROCKET_LAUNCHER), IT_ROCKET_LAUNCHER, FL_WEAPON, weapon_pickupevalfunc, 1000);
+		return;
 	}
+	if(!self.ammo_rockets)
+		self.ammo_rockets = g_pickup_rockets;
+	StartItem ("models/weapons/g_rl.md3", "weapons/weaponpickup.wav", 15, W_Name(WEP_ROCKET_LAUNCHER), IT_ROCKET_LAUNCHER, FL_WEAPON, weapon_pickupevalfunc, 1000);
+	if (self.modelindex) // don't precache if self was removed
+		weapon_action(WEP_ROCKET_LAUNCHER, WR_PRECACHE);
 }
 
 void item_rockets (void) {
@@ -621,6 +652,7 @@ void item_strength (void) {
 	if(cvar("g_minstagib")) {
 		minstagib_items(IT_STRENGTH);
 	} else {
+		precache_sound("weapons/strength_fire.wav");
 		self.strength_finished = 30;
 		self.effects = EF_ADDITIVE;StartItem ("models/items/g_strength.md3", "misc/powerup.wav", 120, "Strength Powerup", IT_STRENGTH, FL_POWERUP, generic_pickupevalfunc, 10000);
 	}

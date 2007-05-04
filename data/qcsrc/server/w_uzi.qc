@@ -106,6 +106,21 @@ float(float req) w_uzi =
 			weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_uzi_sustained_refire"), w_ready);
 		}
 	}
+	else if (req == WR_PRECACHE)
+	{
+		precache_model ("models/tracer.mdl");
+		precache_model ("models/uziflash.md3");
+		precache_model ("models/weapons/g_uzi.md3");
+		precache_model ("models/weapons/v_uzi.md3");
+		precache_model ("models/weapons/w_uzi.zym");
+		precache_sound ("weapons/ric1.wav");
+		precache_sound ("weapons/ric2.wav");
+		precache_sound ("weapons/ric3.wav");
+		precache_sound ("weapons/tink1.wav");
+		precache_sound ("weapons/uzi_fire.wav");
+		if (cvar("g_casings") >= 2)
+			precache_model ("models/casing_bronze.mdl");
+	}
 	else if (req == WR_SETUP)
 		weapon_setup(WEP_UZI, "uzi", IT_NAILS);
 	else if (req == WR_CHECKAMMO1)

@@ -138,6 +138,7 @@ float WR_THINK		  = 2; // logic to run every frame
 float WR_CHECKAMMO1	  = 3; // checks ammo for weapon
 float WR_CHECKAMMO2	  = 4; // checks ammo for weapon
 float WR_AIM		  = 5; // runs bot aiming code for this weapon
+float WR_PRECACHE	  = 6; // precaches models/sounds used by this weapon
 
 // Weapon indexes
 float WEP_LASER				= 1; // float	IT_LASER				= 4096;

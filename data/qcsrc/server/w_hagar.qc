@@ -172,6 +172,17 @@ float(float req) w_hagar =
 			weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_hagar_secondary_refire"), w_ready);
 		}
 	}
+	else if (req == WR_PRECACHE)
+	{
+		precache_model ("models/hagarmissile.mdl");
+		precache_model ("models/weapons/g_hagar.md3");
+		precache_model ("models/weapons/v_hagar.md3");
+		precache_model ("models/weapons/w_hagar.zym");
+		precache_sound ("weapons/hagar_fire.wav");
+		precache_sound ("weapons/hagexp1.wav");
+		precache_sound ("weapons/hagexp2.wav");
+		precache_sound ("weapons/hagexp3.wav");
+	}
 	else if (req == WR_SETUP)
 		weapon_setup(WEP_HAGAR, "hagar", IT_ROCKETS);
 	else if (req == WR_CHECKAMMO1)

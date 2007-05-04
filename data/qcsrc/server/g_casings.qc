@@ -81,7 +81,8 @@ void(vector org, vector vel, float randomvel, vector ang, vector avel, float ran
 	}
 	else if (casingtype == 2)
 	{
-		setmodel (e, "models/casing_steel.mdl"); // precision set above
+		// FIXME: this is not used and not precached, uncomment if you need it
+		//setmodel (e, "models/casing_steel.mdl"); // precision set above
 		e.cnt = time + 10;
 	}
 	else

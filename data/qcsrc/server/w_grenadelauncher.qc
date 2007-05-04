@@ -180,6 +180,21 @@ float(float req) w_glauncher =
 			weapon_thinkf(WFRAME_FIRE2, cvar("g_balance_grenadelauncher_secondary_animtime"), w_ready);
 		}
 	}
+	else if (req == WR_PRECACHE)
+	{
+		precache_model ("models/grenademodel.md3");
+		precache_model ("models/weapons/g_gl.md3");
+		precache_model ("models/weapons/v_gl.md3");
+		precache_model ("models/weapons/w_gl.zym");
+		precache_sound ("weapons/grenade_bounce1.wav");
+		precache_sound ("weapons/grenade_bounce2.wav");
+		precache_sound ("weapons/grenade_bounce3.wav");
+		precache_sound ("weapons/grenade_bounce4.wav");
+		precache_sound ("weapons/grenade_bounce5.wav");
+		precache_sound ("weapons/grenade_bounce6.wav");
+		precache_sound ("weapons/grenade_fire.wav");
+		precache_sound ("weapons/grenade_impact.wav");
+	}
 	else if (req == WR_SETUP)
 		weapon_setup(WEP_GRENADE_LAUNCHER, "gl", IT_ROCKETS);
 	else if (req == WR_CHECKAMMO1)

@@ -122,7 +122,7 @@ void(vector velo, vector delta, float doreduce) W_ThrowWeapon
 
 	if(e.items & w)
 		if(e.health >= 1)
-			sprint(e, strcat("You dropped the ^2", wep.netname, "\n"));
+			sprint(e, strcat("You dropped the ^2", wep.netname, " with ", ftos(wep.ammofield), " ammo", "\n"));
 
 	wep.owner = e;
 	setorigin(wep, wep.origin);
@@ -346,10 +346,10 @@ void Nixnex_GiveCurrentWeapon()
 			}
 			else
 			{
-				self.ammo_shells = 999;
-				self.ammo_nails = 999;
-				self.ammo_rockets = 999;
-				self.ammo_cells = 999;
+				self.ammo_shells = cvar("g_pickup_shells_max");
+				self.ammo_nails = cvar("g_pickup_nails_max");
+				self.ammo_rockets = cvar("g_pickup_rockets_max");
+				self.ammo_cells = cvar("g_pickup_cells_max");
 			}
 			self.nixnex_nextincr = time + cvar("g_balance_nixnex_incrtime");
 			if(dt >= 1 && dt <= 5)
@@ -375,7 +375,7 @@ void Nixnex_GiveCurrentWeapon()
 
 		self.items = self.items - (self.items & (IT_LASER | IT_SHOTGUN | IT_UZI | IT_GRENADE_LAUNCHER | IT_ELECTRO | IT_CRYLINK | IT_NEX | IT_HAGAR | IT_ROCKET_LAUNCHER));
 		if(cvar("g_nixnex_with_laser"))
-			self.items = self.items + IT_LASER;
+			self.items = self.items | IT_LASER;
 		self.items = self.items | W_ItemCode(nixnex_weapon);
 
 		if(self.switchweapon != nixnex_weapon)

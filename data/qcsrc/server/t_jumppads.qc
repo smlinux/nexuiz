@@ -240,6 +240,9 @@ void() trigger_push =
 		self.speed = 1000;
 	self.movedir = self.movedir * self.speed * 10;
 
+	if (self.target)
+		precache_sound ("misc/jumppad.wav");
+
 	// this must be called to spawn the teleport waypoints for bots
 	self.think = trigger_push_findtarget;
 	self.nextthink = time + 0.2;

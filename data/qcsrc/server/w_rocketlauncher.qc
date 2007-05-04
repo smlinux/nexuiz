@@ -386,6 +386,20 @@ float(float req) w_rlauncher =
 			sound (self, CHAN_AUTO, "weapons/tink1.wav", 1, ATTN_NORM);
 		}
 	}
+	else if (req == WR_PRECACHE)
+	{
+		precache_model ("models/flash.md3");
+		precache_model ("models/rocket.md3");
+		precache_model ("models/weapons/g_rl.md3");
+		precache_model ("models/weapons/v_rl.md3");
+		precache_model ("models/weapons/w_rl.zym");
+		precache_sound ("weapons/rocket_det.wav");
+		precache_sound ("weapons/rocket_fire.wav");
+		precache_sound ("weapons/rocket_fly.wav");
+		precache_sound ("weapons/rocket_impact.wav");
+		if (cvar("g_laserguided_missile"))
+			precache_model ("models/laser_dot.mdl"); // rocket launcher
+	}
 	else if (req == WR_SETUP)
 		weapon_setup(WEP_ROCKET_LAUNCHER, "rl", IT_ROCKETS);
 	else if (req == WR_CHECKAMMO1)

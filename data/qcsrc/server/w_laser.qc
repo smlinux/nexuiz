@@ -117,6 +117,14 @@ float(float req) w_laser =
 			}
 		}
 	}
+	else if (req == WR_PRECACHE)
+	{
+		precache_model ("models/laser.mdl");
+		precache_model ("models/weapons/v_laser.md3");
+		precache_model ("models/weapons/w_laser.zym");
+		precache_sound ("weapons/lasergun_fire.wav");
+		precache_sound ("weapons/laserimpact.wav");
+	}
 	else if (req == WR_SETUP)
 		weapon_setup(WEP_LASER, "laser", 0);
 	else if (req == WR_CHECKAMMO1)

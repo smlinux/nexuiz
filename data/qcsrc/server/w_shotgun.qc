@@ -87,6 +87,21 @@ float(float req) w_shotgun =
 			weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_shotgun_secondary_animtime"), shotgun_fire2_02);
 		}
 	}
+	else if (req == WR_PRECACHE)
+	{
+		precache_model ("models/tracer.mdl");
+		precache_model ("models/weapons/g_shotgun.md3");
+		precache_model ("models/weapons/v_shotgun.md3");
+		precache_model ("models/weapons/w_shotgun.zym");
+		precache_sound ("misc/itempickup.wav");
+		precache_sound ("weapons/ric1.wav");
+		precache_sound ("weapons/ric2.wav");
+		precache_sound ("weapons/ric3.wav");
+		precache_sound ("weapons/shotgun_fire.wav");
+		precache_sound ("weapons/tink1.wav");
+		if (cvar("g_casings") >= 1)
+			precache_model ("models/casing_shell.mdl");
+	}
 	else if (req == WR_SETUP)
 		weapon_setup(WEP_SHOTGUN, "shotgun", IT_SHELLS);
 	else if (req == WR_CHECKAMMO1)

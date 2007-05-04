@@ -192,6 +192,20 @@ float(float req) w_electro =
 			weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_electro_secondary_animtime"), w_ready);
 		}
 	}
+	else if (req == WR_PRECACHE)
+	{
+		precache_model ("models/ebomb.mdl");
+		precache_model ("models/elaser.mdl");
+		precache_model ("models/weapons/g_electro.md3");
+		precache_model ("models/weapons/v_electro.md3");
+		precache_model ("models/weapons/w_electro.zym");
+		precache_sound ("weapons/electro_bounce.wav");
+		precache_sound ("weapons/electro_fire.wav");
+		precache_sound ("weapons/electro_fire2.wav");
+		precache_sound ("weapons/electro_fly.wav");
+		precache_sound ("weapons/electro_impact.wav");
+		precache_sound ("weapons/electro_impact_combo.wav");
+	}
 	else if (req == WR_SETUP)
 		weapon_setup(WEP_ELECTRO, "electro", IT_CELLS);
 	else if (req == WR_CHECKAMMO1)

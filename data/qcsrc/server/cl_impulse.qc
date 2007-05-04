@@ -183,12 +183,23 @@ void ImpulseCommands (void)
 				if(imp == 99)
 				{
 					self.items |= (IT_LASER | IT_UZI | IT_SHOTGUN | IT_GRENADE_LAUNCHER | IT_ELECTRO | IT_CRYLINK | IT_NEX | IT_HAGAR | IT_ROCKET_LAUNCHER);
-					self.ammo_shells = 999;
-					self.ammo_nails = 999;
-					self.ammo_rockets = 999;
-					self.ammo_cells = 999;
-					self.health = 999;
-					self.armorvalue = 999;
+					self.ammo_shells = cvar("g_pickup_shells_max");
+					self.ammo_nails = cvar("g_pickup_nails_max");
+					self.ammo_rockets = cvar("g_pickup_rockets_max");
+					self.ammo_cells = cvar("g_pickup_cells_max");
+					self.health = cvar("g_pickup_healthshard_max");
+					self.armorvalue = cvar("g_pickup_armorshard_max");
+					self.pauserotarmor_finished = time + cvar("g_balance_pause_armor_rot_spawn");
+					self.pauserothealth_finished = time + cvar("g_balance_pause_health_rot_spawn");
+					self.pauseregen_finished = time + cvar("g_balance_pause_health_regen_spawn");
+					// precache weapon models/sounds
+					local float wep;
+					wep = WEP_FIRST;
+					while (wep <= WEP_LAST)
+					{
+						weapon_action(wep, WR_PRECACHE);
+						wep = wep + 1;
+					}
 				}
 				else if (imp == 13)
 				{

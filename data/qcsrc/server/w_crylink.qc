@@ -203,6 +203,15 @@ float(float req) w_crylink =
 			weapon_thinkf(WFRAME_FIRE2, cvar("g_balance_crylink_secondary_animtime"), w_ready);
 		}
 	}
+	else if (req == WR_PRECACHE)
+	{
+		precache_model ("models/plasma.mdl");
+		precache_model ("models/plasmatrail.mdl");
+		precache_model ("models/weapons/g_crylink.md3");
+		precache_model ("models/weapons/v_crylink.md3");
+		precache_model ("models/weapons/w_crylink.zym");
+		precache_sound ("weapons/crylink_fire.wav");
+	}
 	else if (req == WR_SETUP)
 		weapon_setup(WEP_CRYLINK, "crylink", IT_CELLS);
 	else if (req == WR_CHECKAMMO1)

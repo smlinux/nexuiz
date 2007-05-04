@@ -23,7 +23,7 @@ vector w_shotdir;
 void(entity ent, vector vecs, float antilag, float recoil, string snd) W_SetupShot =
 {
 	local vector trueaimpoint;
-	traceline_hitcorpse(self, self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * MAX_SHOT_DISTANCE, MOVE_NORMAL, self);
+	traceline_hitcorpse(self, self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * MAX_SHOT_DISTANCE, MOVE_NOMONSTERS, self);
 	trueaimpoint = trace_endpos;
 
 	if (cvar("g_shootfromeye"))
