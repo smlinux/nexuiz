@@ -52,6 +52,11 @@ Item Window Video
 			text	"Texture Quality"
 			target	"::Data::Video::Picmip::Switch"
 		}
+		Derive Nex_Video_Option_Switch PicmipWorld
+		{
+			text	"Texture Quality Reduction"
+			target	"::Data::Video::PicmipWorld::Switch"
+		}
 		Derive Nex_Void Seperator1
 		{}
 		Derive PictureButton Apply

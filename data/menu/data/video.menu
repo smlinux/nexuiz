@@ -62,5 +62,17 @@ Item DataContainer Video
 			link  "##up"
 		}
 	}
+	Item Data_Cvar PicmipWorld
+	{
+		cvarName "r_picmipworld"
+		defValue "0"
+
+		Item DataLink_TextSwitch Switch
+		{
+			valueList "'0' '1'"
+			descList "'Reduce skins only' 'Reduce everything'"
+			link  "##up"
+		}
+	}
 
 }
