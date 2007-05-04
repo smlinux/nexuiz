@@ -108,6 +108,8 @@ void kh_Controller_Think()
 void kh_Scores_Event(entity player, entity key, string what, float frags_player, float frags_owner)
 {
 	string s;
+	if(intermission_running)
+		return;
 	if(frags_player)
 		player.frags = player.frags + floor(0.5 + frags_player);
 	if(frags_owner)
