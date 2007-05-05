@@ -1899,10 +1899,64 @@ entity() bot_spawn =
 	return bot;
 };
 
+void CheckAllowedTeams(); void GetTeamCounts(entity other); float c1, c2, c3, c4;
+void() bot_removefromlargestteam =
+{
+	local float besttime, bestcount, thiscount;
+	local entity best, head;
+	CheckAllowedTeams();
+	GetTeamCounts(world);
+	dprint("c1 = ", ftos(c1), "\n");
+	dprint("c2 = ", ftos(c2), "\n");
+	dprint("c3 = ", ftos(c3), "\n");
+	dprint("c4 = ", ftos(c4), "\n");
+	head = findchainfloat(isbot, TRUE);
+	if (!head)
+		return;
+	best = head;
+	besttime = head.createdtime;
+	bestcount = 0;
+	while (head)
+	{
+		if(head.team == COLOR_TEAM1)
+			thiscount = c1;
+		else if(head.team == COLOR_TEAM2)
+			thiscount = c2;
+		else if(head.team == COLOR_TEAM3)
+			thiscount = c3;
+		else if(head.team == COLOR_TEAM4)
+			thiscount = c4;
+		else
+			thiscount = 0;
+		if (thiscount > bestcount)
+		{
+			bestcount = thiscount;
+			besttime = head.createdtime;
+			best = head;
+		}
+		else if (thiscount == bestcount && besttime < head.createdtime)
+		{
+			besttime = head.createdtime;
+			best = head;
+		}
+		head = head.chain;
+	}
+	currentbots = currentbots - 1;
+	dprint("Removing from a ", ftos(bestcount), " players team!\n");
+	dropclient(best);
+};
+
 void() bot_removenewest =
 {
 	local float besttime;
 	local entity best, head;
+
+	if(teams_matter)
+	{
+		bot_removefromlargestteam();
+		return;
+	}
+
 	head = findchainfloat(isbot, TRUE);
 	if (!head)
 		return;
@@ -2044,6 +2098,7 @@ void() bot_serverframe =
 	// minplayers+bot_number, or remove all bots if no one is playing
 	// But don't remove bots immediately on level change, as the real players
 	// usually haven't rejoined yet
+	bots_would_leave = FALSE;
 	if (realplayers || cvar("bot_join_empty") || (currentbots > 0 && time < 5))
 	{
 		float realminplayers, minplayers;
@@ -2055,6 +2110,8 @@ void() bot_serverframe =
 		minbots = max(0, floor(realminbots));
 
 		bots = min(max(minbots, minplayers - activerealplayers), maxclients - realplayers);
+		if(bots > minbots)
+			bots_would_leave = TRUE;
 	}
 	else
 	{

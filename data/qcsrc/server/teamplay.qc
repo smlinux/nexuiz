@@ -579,7 +579,7 @@ float PlayerValue(entity p)
 void GetTeamCounts(entity ignore)
 {
 	entity head;
-	float value;
+	float value, bvalue;
 	// now count how many players are on each team already
 
 	// FIXME: also find and memorize the lowest-scoring bot on each team (in case players must be shuffled around)
@@ -590,12 +590,16 @@ void GetTeamCounts(entity ignore)
 		if(head != ignore)// && head.netname != "")
 		{
 			value = PlayerValue(head);
+			if(clienttype(head) == CLIENTTYPE_BOT)
+				bvalue = value;
+			else
+				bvalue = 0;
 			if(head.team == COLOR_TEAM1)
 			{
 				if(c1 >= 0)
 				{
 					c1 = c1 + value;
-					cb1 = cb1 + value;
+					cb1 = cb1 + bvalue;
 				}
 			}
 			if(head.team == COLOR_TEAM2)
@@ -603,7 +607,7 @@ void GetTeamCounts(entity ignore)
 				if(c2 >= 0)
 				{
 					c2 = c2 + value;
-					cb2 = cb2 + value;
+					cb2 = cb2 + bvalue;
 				}
 			}
 			if(head.team == COLOR_TEAM3)
@@ -611,7 +615,7 @@ void GetTeamCounts(entity ignore)
 				if(c3 >= 0)
 				{
 					c3 = c3 + value;
-					cb3 = cb3 + value;
+					cb3 = cb3 + bvalue;
 				}
 			}
 			if(head.team == COLOR_TEAM4)
@@ -619,7 +623,7 @@ void GetTeamCounts(entity ignore)
 				if(c4 >= 0)
 				{
 					c4 = c4 + value;
-					cb4 = cb4 + value;
+					cb4 = cb4 + bvalue;
 				}
 			}
 		}
@@ -675,6 +679,16 @@ float FindSmallestTeam(entity pl, float ignore_pl)
 	// 2 gives priority to what team you're already on, 1 goes in order
 	// 2 doesn't seem to work though...
 	balance_type = 1;
+
+	if(bots_would_leave)
+	if(pl.classname != "player")
+	if(clienttype(pl) != CLIENTTYPE_BOT)
+	{
+		c1 -= cb1 * 255.0/256;
+		c2 -= cb2 * 255.0/256;
+		c3 -= cb3 * 255.0/256;
+		c4 -= cb4 * 255.0/256;
+	}
 
 	if(balance_type == 1)
 	{

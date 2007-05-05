@@ -342,7 +342,7 @@ void DropAllRunes(entity pl)
 	entity rune, curse;
 	float rcount, ccount, r, c, rand, prevent_same, numtodrop, tries;
 
-	entity c1, r1, c2, r2;
+	entity curse1, rune1, curse2, rune2;
 
 	rune = curse = world;
 	rcount = ccount = r = c = 0;
@@ -400,29 +400,29 @@ void DropAllRunes(entity pl)
 
 		// pair rune and curse
 
-		r1 = rune;
-		c1 = curse;
-		r2 = c1.enemy;
-		c2 = r1.enemy;
+		rune1 = rune;
+		curse1 = curse;
+		rune2 = curse1.enemy;
+		curse2 = rune1.enemy;
 
-		if(r1 != r2) // not already attached to each other
+		if(rune1 != rune2) // not already attached to each other
 		{
-			r1.enemy = c1;
-			c1.enemy = r1;
-			setattachment(c1, r1, "");
-			r2.enemy = c2;
-			c2.enemy = r2;
-			setattachment(c2, r2, "");
-			//DropRune(pl, r2);
+			rune1.enemy = curse1;
+			curse1.enemy = rune1;
+			setattachment(curse1, rune1, "");
+			rune2.enemy = curse2;
+			curse2.enemy = rune2;
+			setattachment(curse2, rune2, "");
+			//DropRune(pl, rune2);
 			//ccount = ccount - 1;
 			//rcount = rcount - 1;
 		}
-		DropRune(pl, r1);
+		DropRune(pl, rune1);
 
 		if(numtodrop <=0)
 		{
-			r1.think = rune_respawn;
-			r1.nextthink = time;
+			rune1.think = rune_respawn;
+			rune1.nextthink = time;
 		}
 
 		numtodrop = numtodrop - 1;
