@@ -49,6 +49,13 @@ Item Layout Game
 			init            Nex_Action_JumpToPage
 			target          "Panel::Arena"
 		}																	
+		Derive TextButton KeyHunt
+		{
+			normal		"Key Hunt"
+
+			init		Nex_Action_JumpToPage
+			target		"Panel::KeyHunt"
+		}
 		Derive TextButton GameMisc
 		{
 			normal		"Misc"
@@ -69,5 +76,6 @@ Item Layout Game
 		#include "menu/creategame/gamemodes/runematch.menu"
 		#include "menu/creategame/gamemodes/lms.menu"
 		#include "menu/creategame/gamemodes/arena.menu"
+		#include "menu/creategame/gamemodes/keyhunt.menu"
 	}
 }

@@ -12,4 +12,5 @@ Item DataContainer Game
 	#include "menu/data/gamemodes/runematch.menu"
 	#include "menu/data/gamemodes/lms.menu"
 	#include "menu/data/gamemodes/arena.menu"
+	#include "menu/data/gamemodes/keyhunt.menu"
 }

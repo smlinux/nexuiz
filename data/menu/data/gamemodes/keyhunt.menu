@@ -1,0 +1,70 @@
+// Property of Alientrap
+//
+// data/ctf.menu
+
+Item DataContainer KeyHunt
+{
+	//Item Data_Cvar KeyHunt_Active
+	//{
+	//	cvarName	"g_keyhunt"
+	//	defValue	0
+	//	[DataLink_OnOffSwitch]
+	//}
+	Item Data_Cvar PointLimit
+	{
+		cvarName	"g_keyhunt_point_limit"
+		defValue	-1
+
+		Item DataLink_Value Value
+		{
+			minValue	-1
+			maxValue	9999.0
+			stepValue	1
+			link 		"##up"
+		}
+		Item DataLink_Text Text
+		{
+			maxValue	8
+			link		"##down"
+
+			Item DataLink_TextValue TextValue
+			{
+				link	"##up prev"
+			}
+		}
+	}
+	Item Data_Cvar TeamsOverride
+	{
+		cvarName	"g_keyhunt_teams_override"
+		defValue	-1
+
+		Item DataLink_ValueSwitch Switch
+		{
+			valueList	"'-1' '2' '3' '4'"
+			descList	"'Map default''Two''Three''Four'"
+
+			link		"##up"
+		}
+	}
+	Item Data_Cvar DelayRound
+	{
+		cvarName	"g_balance_keyhunt_delay_round"
+		defValue	5
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar DelayTracking
+	{
+		cvarName	"g_balance_keyhunt_delay_tracking"
+		defValue	10
+
+		[DataLink_Setting]
+	}
+	Item Data_Cvar DelayReturn
+	{
+		cvarName	"g_balance_keyhunt_delay_return"
+		defValue	60
+
+		[DataLink_Setting]
+	}
+}
