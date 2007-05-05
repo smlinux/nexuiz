@@ -52,7 +52,7 @@ void Say(entity source, float teamsay, string msgin)
 		cmsgstr = strcat(colorstr, "(^3", namestr, colorstr, ")\n^7", wordwrap(msgin, 50));
 	}
 	else
-		msgstr = strzone(strcat("\{1}^3", namestr, "^7: ", msgin, "\n"));
+		msgstr = strzone(strcat("\{1}", namestr, "^7: ", msgin, "\n"));
 
 	// FLOOD CONTROL
 	flood = 0;
