@@ -2021,7 +2021,8 @@ float botframe_spawnedwaypoints;
 float botframe_nextthink;
 void() bot_serverframe =
 {
-	float realplayers, bots;
+	float realplayers, bots, activerealplayers;
+	entity head;
 
 	if (intermission_running)
 		return;
@@ -2029,7 +2030,15 @@ void() bot_serverframe =
 	if (time < 2)
 		return;
 
-	realplayers = player_count - currentbots;
+	activerealplayers = 0;
+	realplayers = 0;
+
+	FOR_EACH_REALCLIENT(head)
+	{
+		if(head.classname == "player")
+			++activerealplayers;
+		++realplayers;
+	}
 
 	// add/remove bots if needed to make sure there are at least
 	// minplayers+bot_number, or remove all bots if no one is playing
@@ -2045,7 +2054,7 @@ void() bot_serverframe =
 		realminbots = cvar("bot_number");
 		minbots = max(0, floor(realminbots));
 
-		bots = min(max(minbots, minplayers - realplayers), maxclients - realplayers);
+		bots = min(max(minbots, minplayers - activerealplayers), maxclients - realplayers);
 	}
 	else
 	{
