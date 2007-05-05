@@ -18,7 +18,7 @@ use POSIX;
 	our $Q3MAP2FLAGS = '';
 
 	# Default flags for the -bsp stage
-	our $BSPFLAGS    = '-samplesize 8';
+	our $BSPFLAGS    = '-samplesize 8 -mv 1000000 -mi 6000000';
 
 	# Default flags for the -vis stage
 	our $VISFLAGS    = '';
