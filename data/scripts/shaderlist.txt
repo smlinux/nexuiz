@@ -28,4 +28,3 @@ stralenex8
 swamp
 toxic
 tznex01
-miniman
