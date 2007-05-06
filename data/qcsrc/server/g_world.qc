@@ -73,6 +73,8 @@ void GotoFirstMap()
 float world_already_spawned;
 void worldspawn (void)
 {
+	float globhandle, i, n;
+
 	if(world_already_spawned)
 		error("world already spawned - you may have EXACTLY ONE worldspawn!");
 	world_already_spawned = TRUE;
@@ -100,21 +102,29 @@ void worldspawn (void)
 	// Precache all player models if desired
 	if (cvar("sv_precacheplayermodels"))
 	{
-		precache_model("models/player/carni.zym");
-		precache_model("models/player/crash.zym");
-		precache_model("models/player/grunt.zym");
-		precache_model("models/player/headhunter.zym");
-		precache_model("models/player/insurrectionist.zym");
-		precache_model("models/player/jeandarc.zym");
-		precache_model("models/player/lurk.zym");
-		precache_model("models/player/lycanthrope.zym");
-		precache_model("models/player/marine.zym");
-		precache_model("models/player/nexus.zym");
-		precache_model("models/player/pyria.zym");
-		precache_model("models/player/shock.zym");
-		precache_model("models/player/skadi.zym");
-		precache_model("models/player/specop.zym");
-		precache_model("models/player/visitant.zym");
+		globhandle = search_begin("models/player/*.zym", TRUE, FALSE);
+		n = search_getsize(globhandle);
+		for(i = 0; i < n; ++i)
+		{
+			//print(search_getfilename(globhandle, i), "\n");
+			precache_model(search_getfilename(globhandle, i));
+		}
+		search_end(globhandle);
+		//precache_model("models/player/carni.zym");
+		//precache_model("models/player/crash.zym");
+		//precache_model("models/player/grunt.zym");
+		//precache_model("models/player/headhunter.zym");
+		//precache_model("models/player/insurrectionist.zym");
+		//precache_model("models/player/jeandarc.zym");
+		//precache_model("models/player/lurk.zym");
+		//precache_model("models/player/lycanthrope.zym");
+		//precache_model("models/player/marine.zym");
+		//precache_model("models/player/nexus.zym");
+		//precache_model("models/player/pyria.zym");
+		//precache_model("models/player/shock.zym");
+		//precache_model("models/player/skadi.zym");
+		//precache_model("models/player/specop.zym");
+		//precache_model("models/player/visitant.zym");
 	}
 
 	if (cvar("g_footsteps"))
