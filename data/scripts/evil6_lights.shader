@@ -1,4 +1,39 @@
 // textures/evil6_lights/
+textures/evil6_lights/e6tinylight_s_1500
+{
+	qer_editorimage textures/evil6_lights/e6tinylight.jpg
+	q3map_surfacelight 1500
+	surfaceparm nomarks
+	{
+		map textures/evil6_lights/e6tinylight.jpg
+	}
+	{
+		map $lightmap
+		blendfunc filter
+	}
+	{
+		map textures/evil6_lights/e6tinylight_glow.jpg
+		blendfunc add
+	}
+}
+
+textures/evil6_lights/e6platelight_burnt_500
+{
+	qer_editorimage textures/evil6_lights/e6platelight_burnt.jpg
+	q3map_surfacelight 500
+	surfaceparm nomarks
+	{
+		map textures/evil6_lights/e6platelight_burnt.jpg
+	}
+	{
+		map $lightmap
+		blendfunc filter
+	}
+	{
+		map textures/evil6_lights/e6platelight_burnt_glow.jpg
+		blendfunc add
+	}
+}
 
 textures/evil6_lights/e6horzlight_s_nolight
 {
