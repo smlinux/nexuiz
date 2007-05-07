@@ -109,7 +109,6 @@
 {
 "classname" "item_rockets"
 "origin" "1008 1104 256"
-"spawnflags" "1"
 "angle" "225"
 }
 {
@@ -315,7 +314,6 @@
 {
 "classname" "item_cells"
 "origin" "496 -80 64"
-"spawnflags" "1"
 }
 {
 "classname" "item_health"
