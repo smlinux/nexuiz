@@ -71,5 +71,47 @@ Item Window Video
 			init	Nex_Action_ResetData
 			target	"::Data::Video"
 		}
+		Derive Nex_Void Seperator2
+		{}
+		Derive Label Presets
+		{
+			text "Video/Effects presets:"
+		}
+		Derive TextButton Low
+		{
+			normal	"low quality"
+			init	Nex_Action_ConsoleCmd
+			syncCmd	"exec low.cfg; vid_restart\n"
+		}
+		Derive TextButton Medium
+		{
+			normal	"medium quality"
+			init	Nex_Action_ConsoleCmd
+			syncCmd	"exec med.cfg; vid_restart\n"
+		}
+		Derive TextButton Normal
+		{
+			normal	"normal quality"
+			init	Nex_Action_ConsoleCmd
+			syncCmd	"exec normal.cfg; vid_restart\n"
+		}
+		Derive TextButton High
+		{
+			normal	"high quality"
+			init	Nex_Action_ConsoleCmd
+			syncCmd	"exec high.cfg; vid_restart\n"
+		}
+		Derive TextButton Ultra
+		{
+			normal	"ultra quality"
+			init	Nex_Action_ConsoleCmd
+			syncCmd	"exec ultra.cfg; vid_restart\n"
+		}
+		Derive TextButton Ultimate
+		{
+			normal	"ulimate quality"
+			init	Nex_Action_ConsoleCmd
+			syncCmd	"exec ultimate.cfg; vid_restart\n"
+		}
 	}
 }
