@@ -376,16 +376,6 @@ void() Menu_Frame =
 
 
 	Menu_CollectGarbage( false );
-
-	if(cvar_string("scmenu_campaign_goto") != "") { // debug code for the campaign
-		float level;
-		level = cvar("scmenu_campaign_goto");
-		cvar_set( "scmenu_campaign_goto", "" );
-		Campaign_JumpLevel(level);
-	} else if(cvar_string("scmenu_campaign_dump") != "") {
-		cvar_set( "scmenu_campaign_dump", "" );
-		Campaign_DumpLevels();
-	}
 }
 
 void() Menu_Draw =
