@@ -12,13 +12,13 @@ vector KH_PLAYER_ATTACHMENT = '0 0 0';
 vector KH_PLAYER_ATTACHMENT_ANGLES = '0 0 0';
 string KH_PLAYER_ATTACHMENT_BONE = "";
 #else
-float KH_KEY_ZSHIFT = -15;
+float KH_KEY_ZSHIFT = 22;
 float KH_KEY_XYDIST = 24;
 float KH_KEY_XYSPEED = 45;
 #endif
 
-vector KH_KEY_MIN = '-8 -8 -8';
-vector KH_KEY_MAX = '8 8 40';
+vector KH_KEY_MIN = '-10 -10 -46';
+vector KH_KEY_MAX = '10 10 3';
 
 typedef void(void) kh_Think_t;
 var kh_Think_t kh_Controller_Thinkfunc;
@@ -293,7 +293,6 @@ void kh_Key_Spawn(entity initial_owner, float angle)
 	key.event_damage = kh_Key_Damage;
 	key.modelindex = kh_key_dropped;
 	key.model = "key";
-	setsize(key, '-8 -8 -8', '8 8 40');
 	setsize(key, KH_KEY_MIN, KH_KEY_MAX);
 
 	switch(initial_owner.team)
@@ -804,6 +803,11 @@ void kh_init()
 
 	setmodel(kh_controller, "models/keyhunt/key.md3");
 	kh_key_dropped = kh_controller.modelindex;
+	/*
+	dprint(vtos(kh_controller.mins)); 
+	dprint(vtos(kh_controller.maxs)); 
+	dprint("\n");
+	*/
 #ifdef KH_PLAYER_USE_CARRIEDMODEL
 	setmodel(kh_controller, "models/keyhunt/key-carried.md3");
 	kh_key_carried = kh_controller.modelindex;
