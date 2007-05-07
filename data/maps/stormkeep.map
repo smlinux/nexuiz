@@ -14966,7 +14966,7 @@ evil8_floor/e8cretefloor01c
 // entity 511
 {
 "classname" "item_armor1"
-"origin" "1736 416 -16"
+"origin" "1735 416 -16"
 }
 // entity 512
 {
