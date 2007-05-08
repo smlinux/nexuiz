@@ -1212,6 +1212,13 @@ void PlayerPreThink (void)
 			self.vote_nagtime = time + self.cvar_scr_centertime * 0.6;
 		}
 
+	// GOD MODE info
+	if(!(self.flags & FL_GODMODE)) if(self.max_armorvalue)
+	{
+		sprint(self, strcat("godmode saved you ", ftos(self.max_armorvalue), " units of damage, cheater!\n"));
+		self.max_armorvalue = 0;
+	}
+
 	if(self.classname == "player") {
 		local vector m1, m2;
 

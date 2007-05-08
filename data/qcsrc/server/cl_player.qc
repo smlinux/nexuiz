@@ -261,13 +261,17 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 	if (take > 100)
 		TossGib (world, "models/gibs/chunk.mdl", hitloc, force * -0.2,1);
 
-	if (!(self.flags & FL_GODMODE))
 	if (time > self.spawnshieldtime)
 	{
-		self.armorvalue = self.armorvalue - save;
-		self.health = self.health - take;
-		// pause regeneration for 5 seconds
-		self.pauseregen_finished = max(self.pauseregen_finished, time + cvar("g_balance_pause_health_regen"));
+		if (!(self.flags & FL_GODMODE))
+		{
+			self.armorvalue = self.armorvalue - save;
+			self.health = self.health - take;
+			// pause regeneration for 5 seconds
+			self.pauseregen_finished = max(self.pauseregen_finished, time + cvar("g_balance_pause_health_regen"));
+		}
+		else
+			self.max_armorvalue += (save + take);
 	}
 	self.dmg_save = self.dmg_save + save;//max(save - 10, 0);
 	self.dmg_take = self.dmg_take + take;//max(take - 10, 0);

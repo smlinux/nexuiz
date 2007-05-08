@@ -16,6 +16,7 @@ float KH_KEY_ZSHIFT = 22;
 float KH_KEY_XYDIST = 24;
 float KH_KEY_XYSPEED = 45;
 #endif
+float KH_KEY_WP_ZSHIFT = 20;
 
 vector KH_KEY_MIN = '-10 -10 -46';
 vector KH_KEY_MAX = '10 10 3';
@@ -322,7 +323,7 @@ void kh_Key_Spawn(entity initial_owner, float angle)
 
 	sprint(initial_owner, strcat("You got the ^2", key.netname, "\n"));
 
-	WaypointSprite_AttachCarrier("", key);
+	WaypointSprite_Spawn("", 0, 0, key, '0 0 1' * KH_KEY_WP_ZSHIFT, world, key.team, key, waypointsprite_attachedforcarrier, FALSE);
 	key.waypointsprite_attachedforcarrier.waypointsprite_for_player = kh_Key_waypointsprite_for_player;
 
 	kh_Key_AssignTo(key, initial_owner);
