@@ -70,6 +70,8 @@ string AppendItemcodes(string s, entity player)
 		s = strcat(s, "F");
 	if(player.buttonchat)
 		s = strcat(s, "T");
+	if(player.kh_next)
+		s = strcat(s, "K");
 	if(player.runes)
 		s = strcat(s, "|", ftos(player.runes));
 	return s;

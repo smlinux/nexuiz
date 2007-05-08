@@ -19,10 +19,11 @@ echo "date stamp: $date"
 
 version=2-svntest-$date
 versiontag=test
-defaultcfg="cl_nettimesyncmode 6"
+defaultcfg=""
 
 basepk3=$base/data20060905.pk3
 nexdir=$base/nexuiz
+nexprodir=$base/nexuizpro
 dpdir=$base/darkplaces
 tmpdir=/tmp/NEX
 zipdir=/home/polzer/UT/distfiles/nex/
@@ -129,6 +130,9 @@ rm -f *.exe nexuiz-* *-withdebug '.#'*
 cd "$nexdir/data"
 svn export . "$tmpdir/data"
 
+cd "$nexprodir"
+svn export . "$tmpdir/pro"
+
 cd "$nexdir/Docs"
 svn export . "$tmpdir/Docs"
 
@@ -173,11 +177,23 @@ echo >> default.cfg
 echo "$defaultcfg" >> default.cfg
 7za a -mx=7 -tzip ../data.pk3 .
 
+cd "$tmpdir/pro"
+perl -pi -e '/^set g_nexuizversion "([0-9.]*)[^"]*"/ and $_ = "set g_nexuizversion \"'$version-pro'\"\n"' default.cfg
+if [ -n "$versiontag" ]; then
+	perl -pi -e '/^set g_nexuizversion/ and $_ = "showbrand 3\n$_"' default.cfg
+fi
+echo >> default.cfg
+echo "$defaultcfg" >> default.cfg
+7za a -mx=7 -tzip ../pro.pk3 .
+
 cd "$tmpdir"
 rm -rf data
 mkdir data
 mv data.pk3 data/data$date.pk3
 mv common-spog.pk3 data/
+rm -rf pro
+mkdir pro
+mv pro.pk3 pro/data${date}pro.pk3
 
 cp -r "$mingwdlls"/* .
 # fix up permissions
@@ -189,7 +205,7 @@ mv * Nexuiz/ || true
 find . -name .svn -exec rm -rf {} \; -prune
 
 rm -f "$zipdir/nexuiz$date$ext.zip"
-zip $zipflags -9yr "$zipdir/nexuiz$date$ext.zip"           Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/data/data$date.pk3 Nexuiz/data/common-spog.pk3
+zip $zipflags -9yr "$zipdir/nexuiz$date$ext.zip"           Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/data/data$date.pk3 Nexuiz/data/common-spog.pk3 Nexuiz/pro/*
 rm -f "$zipdir/nexuizengineonly$date$ext.zip"
 zip $zipflags -9yr "$zipdir/nexuizengineonly$date$ext.zip" Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll
 rm -f "$zipdir/nexuizsource$date$ext.zip"
@@ -203,7 +219,7 @@ if unzip "Nexuiz/data/data$date.pk3" gfx/brand.tga; then
 fi
 
 rm -f "$zipdir/nexuizpatch$date$ext.zip"
-zip $zipflags -9yr "$zipdir/nexuizpatch$date$ext.zip"      Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/data/datapatch$date.pk3
+zip $zipflags -9yr "$zipdir/nexuizpatch$date$ext.zip"      Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/data/datapatch$date.pk3 Nexuiz/pro/*
 
 rm -f "$zipdir/nexuizdocs$date$ext.zip"
 zip $zipflags -9yr "$zipdir/nexuizdocs$date$ext.zip"       Nexuiz/gpl.txt Nexuiz/Docs
