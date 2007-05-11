@@ -1482,22 +1482,18 @@
 {
 "classname" "item_armor1"
 "origin" "2208 160 -160"
-"spawnflags" "1"
 }
 {
 "origin" "1936 144 -160"
 "classname" "item_armor1"
-"spawnflags" "1"
 }
 {
 "classname" "item_armor1"
 "origin" "1928 -80 -160"
-"spawnflags" "1"
 }
 {
 "origin" "2208 -96 -160"
 "classname" "item_armor1"
-"spawnflags" "1"
 }
 {
 "classname" "item_health1"
