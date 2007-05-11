@@ -363,7 +363,7 @@ Item DataContainer Misc
 	}
 	Item Data_Cvar JumpHeight
 	{
-		cvarName	"g_balance_jumpheight"
+		cvarName	"sv_jumpvelocity"
 		defValue	300
 
 		[DataLink_Setting]

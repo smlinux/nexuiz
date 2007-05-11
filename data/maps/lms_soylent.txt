@@ -1,7 +1,7 @@
 Soylent Space (lms_soylent)
 maps/soylent
 
-Medium sized vertical Level
+Medium sized vertical level
 
 Players: 2-6
 

@@ -1,8 +1,8 @@
 Running Man (lms_runningman_1on1remix)
 maps/runningman_1on1remix
 
-Small DM-Level, best suited 
-for 2 players.
+DM-Level especially designed
+for 1on1 Matches.
 
 Players: 2-4
 

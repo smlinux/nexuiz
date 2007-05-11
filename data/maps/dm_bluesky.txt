@@ -1,7 +1,7 @@
 Blue Sky (dm_bluesky)
 maps/bluesky
 
-Small fun map
+Small and fun map
 with a mighty jump
 
 Players: 2-6
