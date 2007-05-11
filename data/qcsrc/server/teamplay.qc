@@ -681,7 +681,7 @@ float FindSmallestTeam(entity pl, float ignore_pl)
 	balance_type = 1;
 
 	if(bots_would_leave)
-	if(pl.classname != "player")
+	//if(pl.classname != "player")
 	if(clienttype(pl) != CLIENTTYPE_BOT)
 	{
 		c1 -= cb1 * 255.0/256;
