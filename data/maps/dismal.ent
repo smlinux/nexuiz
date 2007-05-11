@@ -118,7 +118,7 @@
 {
 "angle" "180"
 "classname" "info_player_deathmatch"
-"origin" "3035 -848 0"
+"origin" "3035 -848 32"
 }
 {
 "classname" "weapon_electro"
@@ -126,7 +126,7 @@
 }
 {
 "angle" "180"
-"origin" "3003 256 0"
+"origin" "3003 256 32"
 "classname" "info_player_deathmatch"
 }
 {
@@ -141,7 +141,7 @@
 }
 {
 "classname" "info_player_deathmatch"
-"origin" "-264 -1024 0"
+"origin" "-264 -1024 32"
 }
 {
 "target" "t9"
@@ -174,7 +174,7 @@
 "model" "*10"
 }
 {
-"origin" "-296 80 0"
+"origin" "-296 80 32"
 "classname" "info_player_deathmatch"
 }
 {
