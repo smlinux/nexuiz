@@ -207,6 +207,17 @@ textures/common/origin
 	surfaceparm origin
 }
 
+textures/common/skip
+{
+	qer_nocarve
+	qer_trans 0.30
+	surfaceparm nodraw
+	surfaceparm nonsolid
+	surfaceparm skip
+	surfaceparm structural
+	surfaceparm trans
+}
+
 textures/common/portal
 {
 	qer_editorimage textures/common/qer_portal.tga
