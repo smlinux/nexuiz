@@ -12352,7 +12352,7 @@ dsi/weapspawn01
 // entity 172
 {
 "classname" "item_armor1"
-"origin" "1776 -384 224"
+"origin" "1775 -384 224"
 }
 // entity 173
 {
@@ -12367,7 +12367,7 @@ dsi/weapspawn01
 // entity 175
 {
 "classname" "item_armor1"
-"origin" "1776 -768 224"
+"origin" "1775 -768 224"
 }
 // entity 176
 {
@@ -12377,7 +12377,7 @@ dsi/weapspawn01
 // entity 177
 {
 "classname" "item_health1"
-"origin" "1776 -448 224"
+"origin" "1775 -448 224"
 }
 // entity 178
 {
@@ -12387,7 +12387,7 @@ dsi/weapspawn01
 // entity 179
 {
 "classname" "item_health1"
-"origin" "1776 -704 224"
+"origin" "1775 -704 224"
 }
 // entity 180
 {
