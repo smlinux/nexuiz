@@ -205,7 +205,7 @@ void() havocbot_movetogoal =
 	self.movement_y = dir * v_right;
 	if (self.flags & FL_INWATER) self.movement_z = dir * v_up; else self.movement_z = 0;
 
-	if ((dir * v_up) >= cvar("g_balance_jumpheight")*0.5 && (self.flags & FL_ONGROUND)) self.button2=1;
+	if ((dir * v_up) >= cvar("sv_jumpvelocity")*0.5 && (self.flags & FL_ONGROUND)) self.button2=1;
 	if (((dodge * v_up) > 0) && random()*frametime >= 0.2*bound(0,(10-skill)*0.1,1)) self.button2=TRUE;
 	if (((dodge * v_up) < 0) && random()*frametime >= 0.5*bound(0,(10-skill)*0.1,1)) self.havocbot_ducktime=time+0.3/bound(0.1,skill,10);
 	

@@ -25,7 +25,7 @@ void PlayerJump (void)
 {
 	float mjumpheight;
 
-	mjumpheight = cvar("g_balance_jumpheight");
+	mjumpheight = cvar("sv_jumpvelocity");
 	if (self.waterlevel >= 2)
 	{
 		if (self.watertype == CONTENT_WATER)
