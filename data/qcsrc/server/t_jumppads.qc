@@ -167,6 +167,8 @@ void() trigger_push_touch =
 		self.think = SUB_Remove;
 		self.nextthink = time;
 	}
+	// flash when activated
+	te_smallflash(other.origin);
 };
 
 .vector dest;
