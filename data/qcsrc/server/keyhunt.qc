@@ -488,7 +488,7 @@ void kh_Key_Think()
 				else
 					centerprint(head, "All keys are in your team's hands!\n\nHelp the key carriers to meet!\n");
 			else
-				centerprint(head, "All keys are in the enemy's hands!\n\nInterfere ^1NOW^7!\n");
+				centerprint(head, strcat("All keys are in the ", ColoredTeamName(kh_interferemsg_team), "^7's hands!\n\nInterfere ^1NOW^7!\n"));
 		}
 	}
 
