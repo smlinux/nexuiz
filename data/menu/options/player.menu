@@ -207,8 +207,6 @@ Item Window Player
 			text	"Download Speed"
 			target	"::Data::Player::MapDLSpeed::Value"
 		}
-		Derive Nex_Void Seperator1
-		{}
 		Derive PictureButton Apply
 		{
 			normal		"$gfx/options_b_apply"
