@@ -44,9 +44,7 @@ void CreatureFrame (void)
 						if (self.watersound_finished < time)
 						{
 							self.watersound_finished = time + 0.5;
-							if(self.deadflag == DEAD_NO)
-								if(self.classname == "player")
-									sound (self, CHAN_BODY, "player/lava.wav", 1, ATTN_NORM);
+							sound (self, CHAN_BODY, "player/lava.wav", 1, ATTN_NORM);
 						}
 						Damage (self, world, world, 6 * self.waterlevel, DEATH_LAVA, self.origin, '0 0 0');
 					}

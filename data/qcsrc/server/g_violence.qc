@@ -62,7 +62,7 @@ void TossGib (entity gib, string mdlname, vector org, vector v, float destroyont
 	// don't set his classname to something else or it'll screw up a lot of stuff
 	if(gib.classname != "player")
 		gib.classname = "gib";
-	gib.iscreature = TRUE;
+	gib.iscreature = FALSE; // not a creature, because lava sounds on gibs are annoying
 	gib.movetype = MOVETYPE_BOUNCE;
 	gib.solid = SOLID_CORPSE;
 	gib.skin = 0;
