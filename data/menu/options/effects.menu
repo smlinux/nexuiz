@@ -43,6 +43,11 @@ Item Window Effects
 			text	"Coronas"
 			target	"::Data::Effects::Coronas::Switch"
 		}
+		Derive Nex_Option_Switch Gloss
+		{
+			text	"Gloss"
+			target	"::Data::Effects::Gloss::Switch"
+		}
 
 		Derive Nex_Line	SeperatorRTLights
 		{}
@@ -77,23 +82,6 @@ Item Window Effects
 			target	"::Data::Effects::RealtimeDLightShadows::Switch"
 		}
 
-		Derive Nex_Line	SeperatorGFXFeatures
-		{}
-		Derive Nex_Option_Switch GLSL
-		{
-			text	"OpenGL 2.0 Shaders"
-			target	"::Data::Effects::GLSL::Switch"
-		}
-		Derive Nex_Option_Switch Gloss
-		{
-			text	"Gloss"
-			target	"::Data::Effects::Gloss::Switch"
-		}
-		Derive Nex_Option_Switch ShowFPS
-		{
-			text	"Show FPS"
-			target	"::Data::Effects::ShowFPS::Switch"
-		}
 		Derive Nex_Line	SeperatorReset
 		{}
 		Derive TextButton Reset
