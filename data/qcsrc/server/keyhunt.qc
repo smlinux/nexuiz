@@ -363,7 +363,7 @@ float kh_Key_AllOwnedByWhichTeam()
 
 void kh_Key_Collect(entity key, entity player)
 {
-	sound(key, CHAN_AUTO, kh_sound_collect, 1, ATTN_NORM);
+	sound(player, CHAN_AUTO, kh_sound_collect, 1, ATTN_NORM);
 
 	kh_Scores_Event(player, key, "collect", cvar("g_balance_keyhunt_score_collect"), 0);
 	bprint(player.netname, "^7 collected the ", key.netname, "\n");
