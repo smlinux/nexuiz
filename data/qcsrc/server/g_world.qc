@@ -945,8 +945,17 @@ void() NextLevel =
 
 	GameLogClose();
 
-	maxTotalFrags = 0;
 	FOR_EACH_CLIENT(other)
+	{
+		FixIntermissionClient(other);
+
+		if(other.winning)
+			bprint(other.netname, " ^7wins.\n");
+	}
+
+	minTotalFrags = 0;
+	maxTotalFrags = 0;
+	FOR_EACH_PLAYER(other)
 	{
 		if(maxTotalFrags < other.totalfrags)
 			maxTotalFrags = other.totalfrags;
@@ -954,18 +963,11 @@ void() NextLevel =
 			minTotalFrags = other.totalfrags;
 	}
 
-	FOR_EACH_CLIENT(other)
+	if(!currentbots)
 	{
-		FixIntermissionClient(other);
-
-		self = other;
-
-		if(other.winning)
-			bprint(other.netname, " ^7wins.\n");
-
-		if(!currentbots)
+		FOR_EACH_PLAYER(other)
 		{
-			score = (other.frags - minTotalFrags) / max(maxTotalFrags - minTotalFrags, 1);
+			score = (other.totalfrags - minTotalFrags) / max(maxTotalFrags - minTotalFrags, 1);
 			f = bound(0, other.play_time / max(time, 1), 1);
 			// store some statistics?
 		}
