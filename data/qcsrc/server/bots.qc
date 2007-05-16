@@ -1906,10 +1906,6 @@ void() bot_removefromlargestteam =
 	local entity best, head;
 	CheckAllowedTeams();
 	GetTeamCounts(world);
-	dprint("c1 = ", ftos(c1), "\n");
-	dprint("c2 = ", ftos(c2), "\n");
-	dprint("c3 = ", ftos(c3), "\n");
-	dprint("c4 = ", ftos(c4), "\n");
 	head = findchainfloat(isbot, TRUE);
 	if (!head)
 		return;
@@ -1942,7 +1938,6 @@ void() bot_removefromlargestteam =
 		head = head.chain;
 	}
 	currentbots = currentbots - 1;
-	dprint("Removing from a ", ftos(bestcount), " players team!\n");
 	dropclient(best);
 };
 
