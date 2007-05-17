@@ -35,6 +35,7 @@ float kh_Team_ByID(float t)
 	return 0;
 }
 
+vector kh_average_teamcolor;
 entity kh_controller;
 float kh_tracking_enabled;
 float kh_teams;
@@ -302,18 +303,22 @@ void kh_Key_Spawn(entity initial_owner, float angle)
 		case COLOR_TEAM1:
 			key.netname = "^1red key";
 			key.colormod = '103 0 0' * KH_KEY_BRIGHTNESS;
+			kh_average_teamcolor += key.colormod;
 			break;
 		case COLOR_TEAM2:
 			key.netname = "^4blue key";
 			key.colormod = '35 35 191' * KH_KEY_BRIGHTNESS;
+			kh_average_teamcolor += key.colormod;
 			break;
 		case COLOR_TEAM3:
 			key.netname = "^3yellow key";
 			key.colormod = '187 167 15' * KH_KEY_BRIGHTNESS;
+			kh_average_teamcolor += key.colormod;
 			break;
 		case COLOR_TEAM4:
 			key.netname = "^6pink key";
 			key.colormod = '139 79 107' * KH_KEY_BRIGHTNESS;
+			kh_average_teamcolor += key.colormod;
 			break;
 		default:
 			key.netname = "NETGIER key";
@@ -498,7 +503,7 @@ void kh_Key_Think()
 void kh_WinnerTeam(float teem)
 {
 	// all key carriers get some points
-	vector firstorigin, lastorigin;
+	vector firstorigin, lastorigin, midpoint;
 	float first;
 	entity key;
 	float score;
@@ -521,11 +526,13 @@ void kh_WinnerTeam(float teem)
 	bprint("^7 captured the keys for the ", ColoredTeamName(teem), "\n");
 
 	first = TRUE;
+	midpoint = '0 0 0';
 	FOR_EACH_KH_KEY(key)
 	{
 		vector thisorigin;
 
 		thisorigin = kh_AttachedOrigin(key);
+		midpoint += thisorigin;
 
 		if(!first)
 			te_lightning2(world, lastorigin, thisorigin);
@@ -538,6 +545,8 @@ void kh_WinnerTeam(float teem)
 	{
 		te_lightning2(world, lastorigin, firstorigin);
 	}
+	midpoint *= 1 / kh_teams;
+	te_customflash(midpoint, 1000, 1, kh_average_teamcolor);
 
 	sound(world, CHAN_AUTO, kh_sound_capture, 1, ATTN_NONE);
 	kh_FinishRound();
@@ -611,6 +620,7 @@ void kh_LoserTeam(float teem, entity lostkey)
 		bprint("The ", ColoredTeamName(teem), "^7 could not take care of the ", lostkey.netname, "\n");
 	}
 	sound(world, CHAN_AUTO, kh_sound_destroy, 1, ATTN_NONE);
+	te_tarexplosion(lostkey.origin);
 
 	kh_FinishRound();
 }
@@ -680,6 +690,7 @@ void kh_StartRound()
 		if(clienttype(player) == CLIENTTYPE_REAL)
 			centerprint_expire(player, CENTERPRIO_SPAM);
 
+	kh_average_teamcolor = '0 0 0';
 	for(i = 0; i < kh_teams; ++i)
 	{
 		teem = kh_Team_ByID(i);
@@ -698,6 +709,7 @@ void kh_StartRound()
 		//kh_Key_Spawn(my_player, 360 * i / kh_teams);
 		//kh_Key_Spawn(my_player, 360 * i / kh_teams);
 	}
+	kh_average_teamcolor *= 1 / kh_teams;
 
 	kh_tracking_enabled = FALSE;
 	kh_Controller_SetThink(cvar("g_balance_keyhunt_delay_tracking"), "Scanning frequency range...", kh_EnableTrackingDevice);
