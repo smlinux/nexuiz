@@ -42,6 +42,7 @@ float kh_teams;
 float kh_interferemsg_time, kh_interferemsg_team;
 .entity kh_next, kh_prev; // linked list
 .float kh_droptime;
+.float kh_dropperteam;
 
 string kh_sound_capture = "sound/ctf/capture.wav";
 string kh_sound_destroy = "sound/ctf/return.wav";
@@ -296,6 +297,7 @@ void kh_Key_Spawn(entity initial_owner, float angle)
 	key.event_damage = kh_Key_Damage;
 	key.modelindex = kh_key_dropped;
 	key.model = "key";
+	key.kh_dropperteam = 0;
 	setsize(key, KH_KEY_MIN, KH_KEY_MAX);
 
 	switch(initial_owner.team)
@@ -370,7 +372,9 @@ void kh_Key_Collect(entity key, entity player)
 {
 	sound(player, CHAN_AUTO, kh_sound_collect, 1, ATTN_NORM);
 
-	kh_Scores_Event(player, key, "collect", cvar("g_balance_keyhunt_score_collect"), 0);
+	if(key.kh_dropperteam != player.team)
+		kh_Scores_Event(player, key, "collect", cvar("g_balance_keyhunt_score_collect"), 0);
+	key.kh_dropperteam = 0;
 	bprint(player.netname, "^7 collected the ", key.netname, "\n");
 	kh_Key_AssignTo(key, player);
 
@@ -381,7 +385,7 @@ void kh_Key_Collect(entity key, entity player)
 	}
 }
 
-void kh_Key_DropAll(entity player)
+void kh_Key_DropAll(entity player, float suicide)
 {
 	entity key;
 	entity mypusher;
@@ -400,6 +404,8 @@ void kh_Key_DropAll(entity player)
 			key.velocity = W_CalculateProjectileVelocity(player.velocity, cvar("g_balance_keyhunt_dropvelocity") * v_forward);
 			key.pusher = mypusher;
 			key.pushltime = time + cvar("g_balance_keyhunt_protecttime");
+			if(suicide)
+				key.kh_dropperteam = player.team;
 		}
 		sound(player, CHAN_AUTO, kh_sound_drop, 1, ATTN_NORM);
 	}
@@ -461,6 +467,7 @@ void kh_Key_Think()
 			self.velocity = W_CalculateProjectileVelocity(self.owner.velocity, cvar("g_balance_keyhunt_throwvelocity") * v_forward);
 			kh_Key_AssignTo(self, world);
 			self.pushltime = time + cvar("g_balance_keyhunt_protecttime");
+			self.kh_dropperteam = self.team;
 		}
 	}
 

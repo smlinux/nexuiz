@@ -309,7 +309,12 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 		// print an obituary message
 		Obituary (attacker, self, deathtype);
 		DropAllRunes(self);
-		kh_Key_DropAll(self);
+		if(self == attacker)
+			kh_Key_DropAll(self, TRUE);
+		else if(attacker.classname == "player" || attacker.classname == "gib")
+			kh_Key_DropAll(self, FALSE);
+		else
+			kh_Key_DropAll(self, TRUE);
 		if(self.flagcarried)
 			DropFlag(self.flagcarried);
 		// clear waypoints

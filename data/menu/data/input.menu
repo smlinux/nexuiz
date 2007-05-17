@@ -10,7 +10,7 @@ Item DataContainer Input
 		Item DataLink_Value Value
 		{
 			minValue	0.0
-			maxValue	20.0
+			maxValue	30.0
 			stepValue	1
 			link		"##up"
 		}

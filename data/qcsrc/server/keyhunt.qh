@@ -9,7 +9,7 @@ void kh_Key_AssignTo(entity key, entity player);
 void kh_Key_Spawn(entity initial_owner, float angle);
 void kh_Key_Remove(entity key);
 void kh_Key_Collect(entity key, entity player);
-void kh_Key_DropAll(entity player);
+void kh_Key_DropAll(entity player, float suicide);
 void kh_Key_Touch();
 void kh_Key_Think();
 void kh_WinnerTeam(float teem);

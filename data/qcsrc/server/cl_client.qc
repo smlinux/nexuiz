@@ -288,7 +288,7 @@ void PutObserverInServer (void)
 	}
 
 	DropAllRunes(self);
-	kh_Key_DropAll(self);
+	kh_Key_DropAll(self, TRUE);
 
 	if(self.flagcarried)
 		DropFlag(self.flagcarried);
@@ -746,7 +746,7 @@ void ClientDisconnect (void)
 	WaypointSprite_PlayerGone();
 
 	DropAllRunes(self);
-	kh_Key_DropAll(self);
+	kh_Key_DropAll(self, TRUE);
 
 	if(self.flagcarried)
 		DropFlag(self.flagcarried);
