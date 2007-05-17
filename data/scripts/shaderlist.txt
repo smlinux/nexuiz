@@ -3,6 +3,7 @@ common
 dsi
 e7
 el3dm1
+evil2
 evil3
 evil4_techtrims
 evil5
@@ -14,9 +15,11 @@ evil6_trims
 evil6_walls
 evil8_base
 eX
+final_rage
 harlequin_sky
 kaznexctf2
 liquids
+morphed
 nexdm18_rmx
 official_cmp1
 reaper
@@ -28,3 +31,4 @@ stralenex8
 swamp
 toxic
 tznex01
+test

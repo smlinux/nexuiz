@@ -132,8 +132,7 @@ textures/stralenex1/e6xrst_supprt
 		map textures/stralenex1/e6xrst_supprt.tga
 		rgbGen identity
 		depthWrite
-		//alphaFunc GE128
-		blendfunc blend
+		alphaFunc GE128
 	}
 	{
 		map $lightmap 
@@ -326,4 +325,44 @@ textures/evil8_lights/e8trimlight
 		blendfunc GL_ONE GL_ONE
 		rgbGen identityLighting
 	}
+}
+
+textures/stralenex1/slimepit_ad-1
+{
+	qer_editorimage textures/stralenex1/slimepit_ad.tga
+	q3map_lightimage textures/stralenex1/slimepit_ad_glow.tga
+	surfaceparm nomarks
+	q3map_surfacelight 400
+	
+	{
+		map textures/stralenex1/slimepit_ad-1.tga
+		animmap 1 textures/stralenex1/slimepit_ad textures/stralenex1/slimepit_ad textures/stralenex1/slimepit_ad-1 textures/stralenex1/slimepit_ad-1 textures/stralenex1/slimepit_ad-2 textures/stralenex1/slimepit_ad-2 textures/stralenex1/slimepit_ad-3 textures/stralenex1/slimepit_ad-3 textures/stralenex1/slimepit_ad-4 textures/stralenex1/slimepit_ad-4 textures/stralenex1/slimepit_ad-5 textures/stralenex1/slimepit_ad-5 textures/stralenex1/slimepit_ad-6 textures/stralenex1/slimepit_ad-6 textures/stralenex1/slimepit_ad-7 textures/stralenex1/slimepit_ad-7 textures/stralenex1/slimepit_ad-8 textures/stralenex1/slimepit_ad-8 textures/stralenex1/slimepit_ad-9 textures/stralenex1/slimepit_ad-9 textures/stralenex1/slimepit_ad-10 textures/stralenex1/slimepit_ad-11 textures/stralenex1/slimepit_ad-10 textures/stralenex1/slimepit_ad-11 textures/stralenex1/slimepit_ad-10 textures/stralenex1/slimepit_ad-11 
+	}
+	{
+		map $lightmap
+		blendfunc filter
+		rgbGen identity
+		tcGen lightmap
+	}
+
+}
+
+textures/stralenex1/slime_rev
+{
+	qer_editorimage textures/stralenex1/slime_rev.tga
+	q3map_lightimage textures/stralenex1/slime_rev_glow.tga
+	surfaceparm nomarks
+	q3map_surfacelight 400
+	
+	{
+		map textures/stralenex1/slime_rev.tga
+		animmap 1 textures/stralenex1/slime_rev textures/stralenex1/slime_rev textures/stralenex1/slime_rev-1 textures/stralenex1/slime_rev-1 textures/stralenex1/slime_rev-2 textures/stralenex1/slime_rev-2 textures/stralenex1/slime_rev-3 textures/stralenex1/slime_rev-3
+	}
+	{
+		map $lightmap
+		blendfunc filter
+		rgbGen identity
+		tcGen lightmap
+	}
+
 }
