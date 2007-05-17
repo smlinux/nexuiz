@@ -132,7 +132,8 @@ textures/stralenex1/e6xrst_supprt
 		map textures/stralenex1/e6xrst_supprt.tga
 		rgbGen identity
 		depthWrite
-		alphaFunc GE128
+		//alphaFunc GE128
+		blendfunc blend
 	}
 	{
 		map $lightmap 
