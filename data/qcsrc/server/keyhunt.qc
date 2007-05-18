@@ -781,13 +781,25 @@ float kh_KeyCarrier_waypointsprite_for_player(entity e)
 
 float kh_HandleFrags(entity attacker, entity targ, float f)
 {
-	if(f <= 0)
-		return f;
 	if(attacker == targ)
 		return f;
 
 	if(targ.kh_next)
-		kh_Scores_Event(attacker, targ.kh_next, "carrierfrag", cvar("g_balance_keyhunt_score_carrierfrag")-1, 0);
+	{
+		if(attacker.team == targ.team)
+		{
+			entity k;
+			float nk;
+			nk = 0;
+			for(k = targ.kh_next; k != world; k = k.kh_next)
+				++nk;
+			kh_Scores_Event(attacker, targ.kh_next, "carrierfrag", -nk * cvar("g_balance_keyhunt_score_collect"), 0);
+		}
+		else
+		{
+			kh_Scores_Event(attacker, targ.kh_next, "carrierfrag", cvar("g_balance_keyhunt_score_carrierfrag")-1, 0);
+		}
+	}
 
 	return f;
 }

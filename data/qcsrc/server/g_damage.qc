@@ -28,8 +28,7 @@ void GiveFrags (entity attacker, entity targ, float f)
 	}
 	else if(cvar("g_keyhunt"))
 	{
-		if(f > 0)
-			f = kh_HandleFrags(attacker, targ, f);
+		f = kh_HandleFrags(attacker, targ, f);
 	}
 	else if(cvar("g_lms"))
 	{
