@@ -1,7 +1,7 @@
 {
 "_lightmapscale" "0.25"
 "classname" "worldspawn"
-"message" "Slime Pit"
+"message" "Slimepit Revisited"
 "gridsize" "128 128 256"
 }
 {
@@ -184,7 +184,7 @@
 }
 {
 "spawnflags" "1"
-"origin" "1216 192 80"
+"origin" "1216 192 76"
 "classname" "weapon_railgun"
 }
 {
@@ -279,13 +279,13 @@
 "classname" "item_rockets"
 }
 {
-"origin" "-1216 -1528 -56"
+"origin" "-1216 -1520 -64"
 "classname" "item_cells"
 "spawnflags" "1"
 }
 {
 "classname" "item_cells"
-"origin" "-856 -1520 -56"
+"origin" "-856 -1520 -64"
 "spawnflags" "1"
 }
 {
