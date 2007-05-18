@@ -1,4 +1,3 @@
-float MAGIC_VALUE_INACTIVE = 1000;
 
 // attacker spawn point
 void info_player_attacker() {
@@ -19,7 +18,7 @@ void assault_objective_reset() {
 		self.health = 100;
 		self.nextthink = time + 0.1;
 	} else {
-		self.health = MAGIC_VALUE_INACTIVE;
+		self.health = ASSAULT_VALUE_INACTIVE;
 	}
 }
 
@@ -49,8 +48,12 @@ void func_objective() {
 	assault_objective_reset();
 }
 
-
+// trigger new round
+// reset objectives, toggle spawnpoints, reset triggers, ...
 void assault_new_round() {
+	
+	// this assumes self.classname == "func_assault_roundend"!
+	self.cnt = self.cnt + 1;
 
 	// swap spawn point teams
 	local entity ent;
@@ -85,4 +88,11 @@ void assault_new_round() {
 	} 
 
 	// actually restart round... how to do that?
+}
+
+void func_assault_roundend() {
+	self.cnt = 0; // round counter
+	self.classname = "func_assault_roundend";
+	self.use = assault_new_round;
+	
 }

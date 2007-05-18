@@ -224,3 +224,5 @@ float COLOR_TEAM3	= 13; // yellow
 float COLOR_TEAM4	= 10; // pink
 
 float NUM_PLAYERSKINS_TEAMPLAY = 3;
+
+float ASSAULT_VALUE_INACTIVE = 1000;
