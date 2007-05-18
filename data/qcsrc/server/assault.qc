@@ -50,6 +50,9 @@ void target_objective() {
 
 // decrease the health of targeted objectives
 void assault_objective_decrease() {
+	// can only be triggered once per round
+	if(self.cnt > 0)
+		return;
 
 	local entity ent;
 	local entity oldself;
@@ -58,10 +61,15 @@ void assault_objective_decrease() {
 		ent.health = ent.health - self.dmg;
 		ent = find(ent, targetname, self.target);
 	}
+
+	self.cnt = 1;
 }
 
 // this entity should target an objective and be targeted by triggers
 void target_objective_decrease() {
+	self.cnt = 0;
+	self.classname = "target_objective_decrease";
+
 	if(!self.dmg) {
 		self.dmg = 101;
 	}
@@ -95,7 +103,6 @@ void assault_new_round() {
 	} 
 
 	// reset all objectives
-
 	ent = find(world, classname, "target_objective");
 	while (ent)
 	{
@@ -106,6 +113,15 @@ void assault_new_round() {
 
 		ent = find(ent, classname, "target_objective");
 	} 
+
+	// reset all target_objective_decrease
+	ent = find(world, classname, "target_objective_decrease");
+	while (ent)
+	{
+		ent.cnt = 0;
+		ent = find(ent, classname, "target_objective_decrease");
+	} 
+
 
 	// actually restart round... how to do that?
 }
