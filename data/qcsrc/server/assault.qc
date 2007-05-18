@@ -29,13 +29,21 @@ void assault_objective_use() {
 }
 
 void assault_objective_think() {
-	
+	local entity oldself;	
 	if(self.health < 0) {
+		self.effects = 0;
 		local entity ent;
 		ent = find(world, targetname, self.target);
-		self = ent;
-		self.use();
+		while(ent) {
+			oldself = self;
+			self = ent;
+			self.use();
+			self = oldself;
+			ent = find(ent, targetname, self.target);
+			
+		}
 	} else {
+		self.effects = EF_STARDUST;
 		self.nextthink = time + 0.1;
 	}
 	
@@ -50,15 +58,12 @@ void target_objective() {
 
 // decrease the health of targeted objectives
 void assault_objective_decrease() {
-	// can only be triggered once per round
-	if(self.cnt > 0)
-		return;
 
 	local entity ent;
-	local entity oldself;
 	ent = find(world, targetname, self.target);
 	while(ent) {
-		ent.health = ent.health - self.dmg;
+		if(ent.health > 0 && ent.health < ASSAULT_VALUE_INACTIVE)
+			ent.health = ent.health - self.dmg;
 		ent = find(ent, targetname, self.target);
 	}
 
@@ -67,7 +72,7 @@ void assault_objective_decrease() {
 
 // this entity should target an objective and be targeted by triggers
 void target_objective_decrease() {
-	self.cnt = 0;
+
 	self.classname = "target_objective_decrease";
 
 	if(!self.dmg) {
@@ -75,6 +80,75 @@ void target_objective_decrease() {
 	}
 	self.use = assault_objective_decrease;
 }
+
+
+void assault_destructible_reset() {
+	self.health = self.max_health;
+	self.model = self.mdl;
+	self.solid = SOLID_BSP;
+	self.cnt = 0; // not active
+	if(self.spawnflags)
+		self.use();
+}
+
+void assault_destructible_use() {
+	self.cnt = 1; // mark active
+	self.takedamage = DAMAGE_YES;
+	self.nextthink = time + 0.1;
+}
+
+void assault_destructible_damage(entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force) {
+	// TODO: check for teams	
+
+	if(self.cnt > 0)	
+		self.health = self.health - damage;
+
+}
+
+
+void assault_destructible_think() {
+	local entity oldself;
+
+	if(self.cnt > 0 && self.health < 0) {
+		self.model = "";
+		self.takedamage = DAMAGE_NO;
+		self.solid = SOLID_NOT;
+		local entity ent;
+		ent = find(world, targetname, self.target);
+		while(ent) {
+			oldself = self;
+			self = ent;
+			self.use();
+			self = oldself;
+			ent = find(ent, targetname, self.target);
+		}
+	} else {
+		self.nextthink = time + 0.1;
+	}
+}
+
+// destructible walls that can be used to trigger target_objective_decrease
+void func_assault_destructible() {
+	if(!self.health)
+		self.health = 100;
+
+	self.max_health = self.health;
+	
+	self.cnt = 0; // not yet activated
+
+	self.classname = "func_assault_destructible";
+	self.mdl = self.model;
+	setmodel(self, self.mdl);
+
+	self.solid = SOLID_BSP;
+	self.think = assault_destructible_think;
+	self.use = assault_destructible_use;
+	self.event_damage = assault_destructible_damage;
+
+	if(self.spawnflags) // active from start
+		self.use();
+}
+
 
 // trigger new round
 // reset objectives, toggle spawnpoints, reset triggers, ...
@@ -114,14 +188,16 @@ void assault_new_round() {
 		ent = find(ent, classname, "target_objective");
 	} 
 
-	// reset all target_objective_decrease
-	ent = find(world, classname, "target_objective_decrease");
+	// reset all func_assault_destructible
+	ent = find(world, classname, "func_assault_destructible");
 	while (ent)
 	{
-		ent.cnt = 0;
-		ent = find(ent, classname, "target_objective_decrease");
-	} 
-
+		oldself = self;
+		self = ent;
+		assault_destructible_reset();
+		self = oldself;
+		ent = find(ent, classname, "func_assault_destructible");
+	}
 
 	// actually restart round... how to do that?
 }
@@ -130,5 +206,6 @@ void target_assault_roundend() {
 	self.cnt = 0; // round counter
 	self.classname = "target_assault_roundend";
 	self.use = assault_new_round;
-	
 }
+
+
