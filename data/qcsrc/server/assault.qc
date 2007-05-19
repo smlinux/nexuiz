@@ -14,12 +14,7 @@ void info_player_defender() {
 // reset this objective. Used when spawning an objective
 // and when a new round starts
 void assault_objective_reset() {
-	if(self.spawnflags) { // first objective
-		self.health = 100;
-		self.nextthink = time + 0.1;
-	} else {
-		self.health = ASSAULT_VALUE_INACTIVE;
-	}
+	self.health = ASSAULT_VALUE_INACTIVE;
 }
 
 void assault_objective_use() {
@@ -64,7 +59,7 @@ void assault_objective_decrease_think() {
 	found = 0;
 	objective = find(world, targetname, self.target);
 	while(objective && found == 0) {
-		if(objective.classname = "target_objective") {
+		if(objective.classname == "target_objective") {
 			found = 1;
 			if(objective.health < ASSAULT_VALUE_INACTIVE) { // targeted objective is active
 				if(self.cnt == 1 && self.max_health >= ASSAULT_VALUE_INACTIVE) { 
@@ -185,8 +180,6 @@ void func_assault_destructible() {
 	self.use = assault_destructible_use;
 	self.event_damage = assault_destructible_damage;
 
-	if(self.spawnflags) // active from start
-		self.use();
 }
 
 
@@ -247,6 +240,16 @@ void assault_new_round() {
 		ent = find(ent, classname, "func_assault_destructible");
 	}
 
+	ent = find(world, classname, "target_assault_roundstart");
+	while (ent)
+	{
+		oldself = self;
+		self = ent;
+		self.use();
+		self = oldself;
+		ent = find(ent, classname, "target_assault_roundstart");
+	}
+
 	// actually restart round... how to do that?
 }
 
@@ -254,6 +257,26 @@ void target_assault_roundend() {
 	self.cnt = 0; // round counter
 	self.classname = "target_assault_roundend";
 	self.use = assault_new_round;
+}
+
+void assault_roundstart_use() {
+	local entity ent;
+	local entity oldself;
+	ent = find(world, targetname, self.target);
+	while(ent) {
+		oldself = self;
+		self = ent;
+		self.use();
+		self = oldself;
+		ent = find(ent, targetname, self.target);
+	}
+}
+
+void target_assault_roundstart() {
+	self.classname = "target_assault_roundstart";
+	self.use = assault_roundstart_use;
+	self.think = assault_roundstart_use;
+	self.nextthink = time + 0.1;
 }
 
 
