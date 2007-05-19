@@ -84,9 +84,10 @@ Item DataContainer Effects
 
 		[DataLink_OnOffSwitch]
 	}
-	Item Data_Cvar RealtimeDLightShadows
+	Item Data_ServerCvar RealtimeDLightShadows
 	{
 		cvarName	"r_shadow_realtime_world_dlightshadows"
+		syncCmd     "_r_shadow_rwds_and_rds"
 		defValue	0
 
 		[DataLink_OnOffSwitch]
