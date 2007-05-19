@@ -1,14 +1,14 @@
 
 // attacker spawn point
 void info_player_attacker() {
-	self.team = COLOR_TEAM1; // red, gets swapped every round
 	info_player_deathmatch();
+	self.team = COLOR_TEAM1; // red, gets swapped every round
 }
 
 // defender spawn point
 void info_player_defender() {
-	self.team = COLOR_TEAM2; // blue, gets swapped every round
 	info_player_deathmatch();
+	self.team = COLOR_TEAM2; // blue, gets swapped every round
 }
 
 // reset this objective. Used when spawning an objective
