@@ -33,8 +33,9 @@ entity Spawn_FilterOutBadSpots(entity firstspot, entity playerlist, float mindis
 			local entity ent;
 			ent = find(world, targetname, spot.target);
 			while(ent) {
-				if(ent.health < 0 || ent.health >= ASSAULT_VALUE_INACTIVE)
-					spotactive = 0;
+				if(ent.classname == "target_objective")
+					if(ent.health < 0 || ent.health >= ASSAULT_VALUE_INACTIVE)
+						spotactive = 0;
 				ent = find(ent, targetname, spot.target);
 			}
 		}
