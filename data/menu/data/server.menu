@@ -37,6 +37,34 @@ Item DataContainer Server
 			// creates x and x_index (CVAR_SAVE)
 			cvarName	"g_maplist"
 		}
+
+		Item Data_CvarCreateSave Random
+		{
+			cvarName	"g_maplist_shuffle"
+			defValue	1
+
+			Item DataLink_ValueSwitch Switch
+			{
+				minValue	0
+				stepValue	1
+				maxValue	1
+				descList	"'Linear''Random'"
+				link		"##up"
+			}
+		}
+
+		Item Data_CvarCreateSave Votable
+		{
+			cvarName	"g_maplist_votable"
+			defValue	5
+
+			Item DataLink_ValueSwitch Switch
+			{
+				valueList   "'0''3''4''5'"
+				descList	"'none''3 maps''4 maps''5 maps'"
+				link		"##up"
+			}
+		}
 	}
 
 	Item Data_Cvar Hostname

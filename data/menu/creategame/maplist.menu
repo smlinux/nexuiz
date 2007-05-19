@@ -21,9 +21,23 @@ Item Window MapList
 	Derive Nex_Option_MapType MapQuery
 	{
 		pos	'0 0'
-		size	'900 20'
+		size	'380 20'
 		text	"Map Type:"
 		target	"Data::Server::Map::Query::Switch"
+	}
+	Derive Nex_Option_MapType Votable
+	{
+		pos	'380 0'
+		size	'260 20'
+		text	"Voting:"
+		target	"Data::Server::Map::Votable::Switch"
+	}
+	Derive Nex_Option_MapType Random
+	{
+		pos	'640 0'
+		size	'200 20'
+		text	"Selection:"
+		target	"Data::Server::Map::Random::Switch"
 	}
 	Derive Label MapsLabel
 	{
