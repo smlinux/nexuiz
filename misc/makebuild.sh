@@ -38,6 +38,19 @@ osxhost=macmini
 osxtemp=/Users/rpolzer/Darkplaces.build
 osxsave=/tmp/Nexuiz.osx
 
+i=
+while [ -f "$zipdir/nexuiz$date$i$ext.zip" ]; do
+	if [ -z "$i" ]; then
+		i=a
+	else
+		i=`echo "$i" | tr a-y b-z`
+	fi
+done
+date=$date$i
+
+echo "Using build name nexuiz$date$ext"
+sleep 3
+
 if [ -n "$1" ]; then
 	osxhost="$1"
 fi
