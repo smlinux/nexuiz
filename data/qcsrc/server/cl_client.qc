@@ -24,7 +24,22 @@ entity Spawn_FilterOutBadSpots(entity firstspot, entity playerlist, float mindis
 	{
 		nextspot = spot.chain;
 		// count team mismatches as bad spots
-		if (spot.team == teamcheck)
+
+		local float spotactive;
+		spotactive = 1;
+
+		// filter out spots for assault
+		if(spot.target != "") {
+			local entity ent;
+			ent = find(world, targetname, spot.target);
+			while(ent) {
+				if(ent.health < 0 || ent.health >= ASSAULT_VALUE_INACTIVE)
+					spotactive = 0;
+				ent = find(ent, targetname, spot.target);
+			}
+		}
+
+		if (spot.team == teamcheck && spotactive > 0)
 		{
 			pcount = 0;
 			player = playerlist;
