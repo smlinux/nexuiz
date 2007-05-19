@@ -539,6 +539,7 @@ void kh_WinnerTeam(float teem)
 		vector thisorigin;
 
 		thisorigin = kh_AttachedOrigin(key);
+		dprint("Key origin: ", vtos(thisorigin), "\n");
 		midpoint += thisorigin;
 
 		if(!first)
@@ -552,7 +553,8 @@ void kh_WinnerTeam(float teem)
 	{
 		te_lightning2(world, lastorigin, firstorigin);
 	}
-	midpoint *= 1 / kh_teams;
+	midpoint = midpoint * (1 / kh_teams);
+	//dprint("Custom flash around ", vtos(midpoint), " color ", vtos(kh_average_teamcolor), "\n");
 	te_customflash(midpoint, 1000, 1, kh_average_teamcolor);
 
 	sound(world, CHAN_AUTO, kh_sound_capture, 1, ATTN_NONE);
@@ -716,7 +718,8 @@ void kh_StartRound()
 		//kh_Key_Spawn(my_player, 360 * i / kh_teams);
 		//kh_Key_Spawn(my_player, 360 * i / kh_teams);
 	}
-	kh_average_teamcolor *= 1 / kh_teams;
+
+	kh_average_teamcolor = kh_average_teamcolor * (1 / max3(kh_average_teamcolor_x, kh_average_teamcolor_y, kh_average_teamcolor_z));
 
 	kh_tracking_enabled = FALSE;
 	kh_Controller_SetThink(cvar("g_balance_keyhunt_delay_tracking"), "Scanning frequency range...", kh_EnableTrackingDevice);
