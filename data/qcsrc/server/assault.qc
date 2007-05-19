@@ -87,6 +87,9 @@ void assault_objective_decrease_think() {
 // decrease the health of targeted objectives
 void assault_objective_decrease() {
 
+	if(activator.team != self.team)
+		return;
+
 	local entity ent;
 	ent = find(world, targetname, self.target);
 	while(ent) {
@@ -110,6 +113,7 @@ void target_objective_decrease() {
 	self.use = assault_objective_decrease;
 	self.mdl = "models/sprites/here.sp2";
 	self.effects = EF_NODEPTHTEST;
+	self.team = COLOR_TEAM1; // red team, swaps every round
 	self.health = ASSAULT_VALUE_INACTIVE;
 	self.max_health = ASSAULT_VALUE_INACTIVE;
 	self.think = assault_objective_decrease_think;
@@ -225,6 +229,11 @@ void assault_new_round() {
 	ent = find(world, classname, "target_objective_decrease");
 	while (ent)
 	{
+		if(ent.team == COLOR_TEAM1) {
+			ent.team = COLOR_TEAM2;
+		} else {
+			ent.team = COLOR_TEAM1;
+		}
 		ent.cnt = 0;
 		ent = find(ent, classname, "target_objective_decrease");
 	} 
