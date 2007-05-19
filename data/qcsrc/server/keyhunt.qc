@@ -20,7 +20,7 @@ float KH_KEY_WP_ZSHIFT = 20;
 
 vector KH_KEY_MIN = '-10 -10 -46';
 vector KH_KEY_MAX = '10 10 3';
-float KH_KEY_BRIGHTNESS = 0.015625;
+float KH_KEY_BRIGHTNESS = 4;
 
 typedef void(void) kh_Think_t;
 var kh_Think_t kh_Controller_Thinkfunc;
@@ -35,7 +35,6 @@ float kh_Team_ByID(float t)
 	return 0;
 }
 
-vector kh_average_teamcolor;
 entity kh_controller;
 float kh_tracking_enabled;
 float kh_teams;
@@ -283,6 +282,27 @@ void kh_Key_Damage(entity inflictor, entity attacker, float damage, float deatht
 			self.team = attacker.team;
 }
 
+vector kh_TeamColor(float teem)
+{
+	switch(teem)
+	{
+		case COLOR_TEAM1:
+			//return '103 0 0' / 255.0;
+			return '0.4039 0.0000 0.0000';
+		case COLOR_TEAM2:
+			//return '35 35 191' / 255.0;
+			return '0.1373 0.1373 0.7490';
+		case COLOR_TEAM3:
+			//return '187 167 15' / 255.0;
+			return '0.7333 0.6549 0.0588';
+		case COLOR_TEAM4:
+			//return '139 79 107' / 255.0;
+			return '0.5451 0.3099 0.4196';
+		default:
+			return '1 1 1';
+	}
+}
+
 void kh_Key_Spawn(entity initial_owner, float angle)
 {
 	entity key;
@@ -299,32 +319,24 @@ void kh_Key_Spawn(entity initial_owner, float angle)
 	key.model = "key";
 	key.kh_dropperteam = 0;
 	setsize(key, KH_KEY_MIN, KH_KEY_MAX);
+	key.colormod = kh_TeamColor(initial_owner.team) * KH_KEY_BRIGHTNESS;
 
 	switch(initial_owner.team)
 	{
 		case COLOR_TEAM1:
 			key.netname = "^1red key";
-			key.colormod = '103 0 0' * KH_KEY_BRIGHTNESS;
-			kh_average_teamcolor += key.colormod;
 			break;
 		case COLOR_TEAM2:
 			key.netname = "^4blue key";
-			key.colormod = '35 35 191' * KH_KEY_BRIGHTNESS;
-			kh_average_teamcolor += key.colormod;
 			break;
 		case COLOR_TEAM3:
 			key.netname = "^3yellow key";
-			key.colormod = '187 167 15' * KH_KEY_BRIGHTNESS;
-			kh_average_teamcolor += key.colormod;
 			break;
 		case COLOR_TEAM4:
 			key.netname = "^6pink key";
-			key.colormod = '139 79 107' * KH_KEY_BRIGHTNESS;
-			kh_average_teamcolor += key.colormod;
 			break;
 		default:
 			key.netname = "NETGIER key";
-			key.colormod = '1 1 1';
 			break;
 	}
 
@@ -554,8 +566,7 @@ void kh_WinnerTeam(float teem)
 		te_lightning2(world, lastorigin, firstorigin);
 	}
 	midpoint = midpoint * (1 / kh_teams);
-	//dprint("Custom flash around ", vtos(midpoint), " color ", vtos(kh_average_teamcolor), "\n");
-	te_customflash(midpoint, 1000, 1, kh_average_teamcolor);
+	te_customflash(midpoint, 1000, 1, kh_TeamColor(teem));
 
 	sound(world, CHAN_AUTO, kh_sound_capture, 1, ATTN_NONE);
 	kh_FinishRound();
@@ -699,7 +710,6 @@ void kh_StartRound()
 		if(clienttype(player) == CLIENTTYPE_REAL)
 			centerprint_expire(player, CENTERPRIO_SPAM);
 
-	kh_average_teamcolor = '0 0 0';
 	for(i = 0; i < kh_teams; ++i)
 	{
 		teem = kh_Team_ByID(i);
@@ -718,8 +728,6 @@ void kh_StartRound()
 		//kh_Key_Spawn(my_player, 360 * i / kh_teams);
 		//kh_Key_Spawn(my_player, 360 * i / kh_teams);
 	}
-
-	kh_average_teamcolor = kh_average_teamcolor * (1 / max3(kh_average_teamcolor_x, kh_average_teamcolor_y, kh_average_teamcolor_z));
 
 	kh_tracking_enabled = FALSE;
 	kh_Controller_SetThink(cvar("g_balance_keyhunt_delay_tracking"), "Scanning frequency range...", kh_EnableTrackingDevice);
