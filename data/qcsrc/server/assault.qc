@@ -31,7 +31,7 @@ void assault_objective_use() {
 void assault_objective_think() {
 	local entity oldself;	
 	if(self.health < 0) {
-		self.effects = 0;
+		//self.effects = 0;
 		local entity ent;
 		ent = find(world, targetname, self.target);
 		while(ent) {
@@ -43,7 +43,7 @@ void assault_objective_think() {
 			
 		}
 	} else {
-		self.effects = EF_STARDUST;
+		//self.effects = EF_STARDUST;
 		self.nextthink = time + 0.1;
 	}
 	
@@ -55,6 +55,39 @@ void target_objective() {
 	self.use = assault_objective_use;
 	assault_objective_reset();
 }
+
+
+void assault_objective_decrease_think() {
+
+	local entity objective;
+	local float found;
+	found = 0;
+	objective = find(world, targetname, self.target);
+	while(objective && found == 0) {
+		if(objective.classname = "target_objective") {
+			found = 1;
+			if(objective.health < ASSAULT_VALUE_INACTIVE) { // targeted objective is active
+				if(self.cnt == 1 && self.max_health >= ASSAULT_VALUE_INACTIVE) { 
+					// decrease was fired already, but objective did recover (round reset)
+					self.cnt = 0;
+				}
+			} else { // objective isn't active
+				self.cnt = 1;
+			}
+			self.max_health = objective.health; // save current objective status for next think
+		}
+	}
+
+	if(self.cnt == 0) {
+		if(self.model != self.mdl)
+			setmodel(self, self.mdl);
+	} else {
+		self.model = "";
+	}
+
+	self.nextthink = time + 0.2;
+}
+
 
 // decrease the health of targeted objectives
 void assault_objective_decrease() {
@@ -78,7 +111,14 @@ void target_objective_decrease() {
 	if(!self.dmg) {
 		self.dmg = 101;
 	}
+	self.cnt = 0; // not used yet
 	self.use = assault_objective_decrease;
+	self.mdl = "models/sprites/here.sp2";
+	self.effects = EF_NODEPTHTEST;
+	self.health = ASSAULT_VALUE_INACTIVE;
+	self.max_health = ASSAULT_VALUE_INACTIVE;
+	self.think = assault_objective_decrease_think;
+	self.nextthink = time;
 }
 
 
@@ -186,6 +226,14 @@ void assault_new_round() {
 		self = oldself;
 
 		ent = find(ent, classname, "target_objective");
+	} 
+
+	// reset all target_object_decrease
+	ent = find(world, classname, "target_objective_decrease");
+	while (ent)
+	{
+		ent.cnt = 0;
+		ent = find(ent, classname, "target_objective_decrease");
 	} 
 
 	// reset all func_assault_destructible
