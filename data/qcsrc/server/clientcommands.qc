@@ -435,11 +435,19 @@ float ValidateMap(string vote)
 	else
 		return TRUE;
 
+	if(!cvar("sv_vote_change_gametype"))
+		if(!IsSameGametype(argv(1)))
+		{
+			sprint(self, "This server does not allow changing the game type by map votes.\n");
+			return FALSE;
+		}
+
 	if(!TryFile(strcat("maps/", argv(1), ext)))
 	{
 		sprint(self, strcat("^1Invalid mapname, \"^3", argv(1), "^1\" does not exist on this server.\n"));
 		return FALSE;
 	}
+
 	return TRUE;
 }
 

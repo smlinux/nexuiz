@@ -383,6 +383,15 @@ string GetGametype()
 	return "dm";
 }
 
+float IsSameGametype(string mapcfgname)
+{
+	string gt;
+	gt = GetGametype();
+	if(substring(mapcfgname, 0, strlen(gt) + 1) == strcat(gt, "_"))
+		return TRUE;
+	return FALSE;
+}
+
 string getmapname_stored;
 string GetMapname()
 {
@@ -1566,6 +1575,12 @@ string MapVote_Suggest(string m)
 		return "Suggestions are not accepted on this server.";
 	if(mapvote_initialized)
 		return "Can't suggest - voting is already in progress!";
+	if(!cvar("g_maplist_votable_suggestions_change_gametype"))
+		if(!IsSameGametype(m))
+		{
+			return "This server does not allow changing the game type by map suggestions.";
+		}
+
 	if(!TryFile(strcat("maps/", m, ".mapcfg")))
 		return "The map you suggested is not available on this server.";
 	for(i = 0; i < mapvote_suggestion_ptr; ++i)
