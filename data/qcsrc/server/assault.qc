@@ -133,9 +133,8 @@ void assault_destructible_use() {
 }
 
 void assault_destructible_damage(entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force) {
-	// TODO: check for teams	
 
-	if(self.cnt > 0)	
+	if(self.cnt > 0 && self.team == attacker.team)	
 		self.health = self.health - damage;
 
 }
@@ -172,6 +171,7 @@ void func_assault_destructible() {
 	self.cnt = 0; // not yet activated
 
 	self.classname = "func_assault_destructible";
+	self.team = COLOR_TEAM1; // red team, gets swapped every round
 	self.mdl = self.model;
 	setmodel(self, self.mdl);
 
@@ -236,6 +236,11 @@ void assault_new_round() {
 		oldself = self;
 		self = ent;
 		assault_destructible_reset();
+		if(self.team == COLOR_TEAM1) {
+			self.team = COLOR_TEAM2;
+		} else {
+			self.team = COLOR_TEAM1;
+		}
 		self = oldself;
 		ent = find(ent, classname, "func_assault_destructible");
 	}
