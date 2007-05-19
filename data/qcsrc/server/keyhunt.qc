@@ -566,7 +566,7 @@ void kh_WinnerTeam(float teem)
 		te_lightning2(world, lastorigin, firstorigin);
 	}
 	midpoint = midpoint * (1 / kh_teams);
-	te_customflash(midpoint, 1000, 1, kh_TeamColor(teem));
+	te_customflash(midpoint, 1000, 1, kh_TeamColor(teem) * 0.5 + '0.5 0.5 0.5'); // make the color >=0.5 in each component
 
 	sound(world, CHAN_AUTO, kh_sound_capture, 1, ATTN_NONE);
 	kh_FinishRound();
