@@ -1448,7 +1448,13 @@ void() CheckRules_World =
 	*/
 
 	if (gameover)	// someone else quit the game already
+	{
+		if(player_count == 0) // Nobody there? Then let's go to the next map
+			MapVote_Start();
+			// this will actually check the player count in the next frame
+			// again, but this shouldn't hurt
 		return;
+	}
 
 	timelimit = cvar("timelimit") * 60;
 	fraglimit = cvar("fraglimit");
