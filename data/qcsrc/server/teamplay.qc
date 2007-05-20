@@ -6,6 +6,7 @@ float GAME_RUNEMATCH		= 5;
 float GAME_LMS			= 6;
 float GAME_ARENA		= 7;
 float GAME_KEYHUNT		= 8;
+float GAME_ASSAULT		= 9;
 
 // client counts for each team
 float c1, c2, c3, c4;
@@ -103,6 +104,7 @@ void ResetGameCvars()
 	cvar_set("g_lms", "0");
 	cvar_set("g_arena", "0");
 	cvar_set("g_keyhunt", "0");
+	cvar_set("g_assault", "0");
 	cvar_set("teamplay", "0");
 }
 
@@ -200,6 +202,15 @@ void InitGameplayMode()
 		}
 
 		fraglimit_override = cvar("fraglimit_override");
+	}
+	else if(game = GAME_ASSAULT || cvar("g_assault"))
+	{
+		ResetGameCvars();
+		game = GAME_ASSAULT;
+		gamemode_name = "Assault";
+		ActivateTeamplay();
+		teams_matter = 1;
+		cvar_set("g_assault", "1");
 	}
 	else if(game == GAME_LMS || cvar("g_lms"))
 	{
