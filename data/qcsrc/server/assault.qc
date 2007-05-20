@@ -131,6 +131,7 @@ void assault_destructible_reset() {
 	self.health = self.max_health;
 	self.model = self.mdl;
 	self.solid = SOLID_BSP;
+	self.colormod = '1 1 1';
 	self.cnt = 0; // not active
 	if(self.spawnflags)
 		self.use();
@@ -162,6 +163,12 @@ void assault_destructible_damage(entity inflictor, entity attacker, float damage
 
 	if(self.cnt > 0 && assault_attacker_team == attacker.team) {
 		self.health = self.health - damage;
+		if(self.health / self.max_health < 0.25)
+			self.colormod = '1 0 0';
+		else if(self.health / self.max_health < 0.75)
+			self.colormod = '1 1 0';
+		else
+			self.colormod = '1 1 1';
 	}
 
 	if(self.health < 0) {
@@ -200,6 +207,22 @@ void assault_new_round() {
 	// swap spawn point teams
 	local entity ent;
 	local entity oldself;
+
+	// reward attackers for winning the round
+	ent = find(world, classname, "player");
+	while(ent) {
+		if(ent.team == assault_attacker_team) {
+			UpdateFrags(ent, 10);
+		}
+		ent = find(ent, classname, "player");
+	}
+
+	// swap attacker/defender roles
+	if(assault_attacker_team == COLOR_TEAM1) {
+		assault_attacker_team = COLOR_TEAM2;
+	} else {
+		assault_attacker_team = COLOR_TEAM1;
+	}
 
 	ent = find(world, classname, "info_player_deathmatch");
 	while (ent)
@@ -262,20 +285,12 @@ void assault_new_round() {
 	while(ent) {
 		oldself = self;
 		self = ent;
-		if(self.team == assault_attacker_team) {
-			UpdateFrags(self, 10);
-		}
 		PutClientInServer();
 		self = oldself;
 		ent = find(ent, classname, "player");
 	}
 
-	// swap attacker/defender roles
-	if(assault_attacker_team == COLOR_TEAM1) {
-		assault_attacker_team = COLOR_TEAM2;
-	} else {
-		assault_attacker_team = COLOR_TEAM1;
-	}
+
 }
 
 void target_assault_roundend() {
