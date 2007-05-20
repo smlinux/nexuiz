@@ -203,7 +203,7 @@ void InitGameplayMode()
 
 		fraglimit_override = cvar("fraglimit_override");
 	}
-	else if(game = GAME_ASSAULT || cvar("g_assault"))
+	else if(game == GAME_ASSAULT || cvar("g_assault"))
 	{
 		ResetGameCvars();
 		game = GAME_ASSAULT;
