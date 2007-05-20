@@ -1,6 +1,6 @@
 //=============================================================================
 
-/*QUAKED info_player_attacker (1 0 1) (-16 -16 -24) (16 16 45) INITIAL
+/*QUAKED info_player_attacker (1 0 0) (-16 -16 -24) (16 16 45) INITIAL
 Normal attacker spawning location for Nexuiz Asssault
 -------- KEYS --------
 angle : direction in which player will look when spawning in the game. Does not apply to bots.
@@ -19,7 +19,7 @@ void info_player_attacker() {
 
 //=============================================================================
 
-/*QUAKED info_player_defender (1 0 1) (-16 -16 -24) (16 16 45) INITIAL
+/*QUAKED info_player_defender (0 1 0) (-16 -16 -24) (16 16 45) INITIAL
 Normal defender spawning location for Nexuiz Asssault
 -------- KEYS --------
 angle : direction in which player will look when spawning in the game. Does not apply to bots.
