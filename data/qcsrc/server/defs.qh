@@ -319,3 +319,6 @@ void centerprint(entity e, string s);
 .float respawn_countdown; // next number to count
 
 float bot_waypoints_for_items;
+
+// assault game mode: Which team is attacking in this round?
+float assault_attacker_team;

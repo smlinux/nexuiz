@@ -51,6 +51,18 @@ void target_objective() {
 	assault_objective_reset();
 }
 
+float assault_objective_decrease_customizeforclient() {
+	if(self.cnt == 0) {
+		if(other.team == assault_attacker_team)
+			setmodel(self, "models/sprites/here.sp2");
+		else
+			setmodel(self, "models/sprites/helpme.sp2");
+	} else {
+		return FALSE;
+	}
+	return TRUE;
+}
+
 
 void assault_objective_decrease_think() {
 
@@ -73,21 +85,15 @@ void assault_objective_decrease_think() {
 		}
 	}
 
-	if(self.cnt == 0) {
-		if(self.model != self.mdl)
-			setmodel(self, self.mdl);
-	} else {
-		self.model = "";
-	}
 
 	self.nextthink = time + 0.2;
 }
 
 
 // decrease the health of targeted objectives
-void assault_objective_decrease() {
+void assault_objective_decrease_use() {
 
-	if(activator.team != self.team)
+	if(activator.team != assault_attacker_team)
 		return;
 
 	local entity ent;
@@ -110,13 +116,13 @@ void target_objective_decrease() {
 		self.dmg = 101;
 	}
 	self.cnt = 0; // not used yet
-	self.use = assault_objective_decrease;
+	self.use = assault_objective_decrease_use;
 	self.mdl = "models/sprites/here.sp2";
 	self.effects = EF_NODEPTHTEST;
-	self.team = COLOR_TEAM1; // red team, swaps every round
 	self.health = ASSAULT_VALUE_INACTIVE;
 	self.max_health = ASSAULT_VALUE_INACTIVE;
 	self.think = assault_objective_decrease_think;
+	self.customizeentityforclient = assault_objective_decrease_customizeforclient;
 	self.nextthink = time;
 }
 
@@ -133,35 +139,34 @@ void assault_destructible_reset() {
 void assault_destructible_use() {
 	self.cnt = 1; // mark active
 	self.takedamage = DAMAGE_YES;
-	self.nextthink = time + 0.1;
+}
+
+void assault_destructible_destroy() {
+	local entity oldself;
+	
+	self.model = "";
+	self.takedamage = DAMAGE_NO;
+	self.solid = SOLID_NOT;
+	local entity ent;
+	ent = find(world, targetname, self.target);
+	while(ent) {
+		oldself = self;
+		self = ent;
+		self.use();
+		self = oldself;
+		ent = find(ent, targetname, self.target);
+	}
 }
 
 void assault_destructible_damage(entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force) {
 
-	if(self.cnt > 0 && self.team == attacker.team)	
+	if(self.cnt > 0 && assault_attacker_team == attacker.team) {
 		self.health = self.health - damage;
+	}
 
-}
-
-
-void assault_destructible_think() {
-	local entity oldself;
-
-	if(self.cnt > 0 && self.health < 0) {
-		self.model = "";
-		self.takedamage = DAMAGE_NO;
-		self.solid = SOLID_NOT;
-		local entity ent;
-		ent = find(world, targetname, self.target);
-		while(ent) {
-			oldself = self;
-			self = ent;
-			self.use();
-			self = oldself;
-			ent = find(ent, targetname, self.target);
-		}
-	} else {
-		self.nextthink = time + 0.1;
+	if(self.health < 0) {
+		activator = attacker;
+		assault_destructible_destroy();
 	}
 }
 
@@ -175,12 +180,10 @@ void func_assault_destructible() {
 	self.cnt = 0; // not yet activated
 
 	self.classname = "func_assault_destructible";
-	self.team = COLOR_TEAM1; // red team, gets swapped every round
 	self.mdl = self.model;
 	setmodel(self, self.mdl);
 
 	self.solid = SOLID_BSP;
-	self.think = assault_destructible_think;
 	self.use = assault_destructible_use;
 	self.event_damage = assault_destructible_damage;
 
@@ -197,6 +200,12 @@ void assault_new_round() {
 	// swap spawn point teams
 	local entity ent;
 	local entity oldself;
+
+	if(assault_attacker_team == COLOR_TEAM1) {
+		assault_attacker_team = COLOR_TEAM2;
+	} else {
+		assault_attacker_team = COLOR_TEAM1;
+	}
 
 	ent = find(world, classname, "info_player_deathmatch");
 	while (ent)
@@ -229,11 +238,6 @@ void assault_new_round() {
 	ent = find(world, classname, "target_objective_decrease");
 	while (ent)
 	{
-		if(ent.team == COLOR_TEAM1) {
-			ent.team = COLOR_TEAM2;
-		} else {
-			ent.team = COLOR_TEAM1;
-		}
 		ent.cnt = 0;
 		ent = find(ent, classname, "target_objective_decrease");
 	} 
@@ -245,11 +249,6 @@ void assault_new_round() {
 		oldself = self;
 		self = ent;
 		assault_destructible_reset();
-		if(self.team == COLOR_TEAM1) {
-			self.team = COLOR_TEAM2;
-		} else {
-			self.team = COLOR_TEAM1;
-		}
 		self = oldself;
 		ent = find(ent, classname, "func_assault_destructible");
 	}
@@ -287,6 +286,7 @@ void assault_roundstart_use() {
 }
 
 void target_assault_roundstart() {
+	assault_attacker_team = COLOR_TEAM1;
 	self.classname = "target_assault_roundstart";
 	self.use = assault_roundstart_use;
 	self.think = assault_roundstart_use;
