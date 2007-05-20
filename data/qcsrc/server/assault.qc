@@ -201,12 +201,6 @@ void assault_new_round() {
 	local entity ent;
 	local entity oldself;
 
-	if(assault_attacker_team == COLOR_TEAM1) {
-		assault_attacker_team = COLOR_TEAM2;
-	} else {
-		assault_attacker_team = COLOR_TEAM1;
-	}
-
 	ent = find(world, classname, "info_player_deathmatch");
 	while (ent)
 	{
@@ -268,9 +262,19 @@ void assault_new_round() {
 	while(ent) {
 		oldself = self;
 		self = ent;
+		if(self.team == assault_attacker_team) {
+			UpdateFrags(self, 10);
+		}
 		PutClientInServer();
 		self = oldself;
 		ent = find(ent, classname, "player");
+	}
+
+	// swap attacker/defender roles
+	if(assault_attacker_team == COLOR_TEAM1) {
+		assault_attacker_team = COLOR_TEAM2;
+	} else {
+		assault_attacker_team = COLOR_TEAM1;
 	}
 }
 
