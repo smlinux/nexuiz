@@ -165,6 +165,12 @@ void assault_destructible_damage(entity inflictor, entity attacker, float damage
 		self.health = self.health - damage;
 		if(self.health / self.max_health < 0.25)
 			self.colormod = '1 0 0';
+		else if(self.health / self.max_health < 0.375)
+			self.colormod = '1 0.25 0';
+		else if(self.health / self.max_health < 0.50)
+			self.colormod = '1 0.5 0';
+		else if(self.health / self.max_health < 0.625)
+			self.colormod = '1 0.75 0';
 		else if(self.health / self.max_health < 0.75)
 			self.colormod = '1 1 0';
 		else
