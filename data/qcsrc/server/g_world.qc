@@ -736,6 +736,7 @@ When the player presses attack or jump, change to the next level
 ============
 */
 .float autoscreenshot;
+void() MapVote_Start;
 void() MapVote_Think;
 float mapvote_initialized;
 void() IntermissionThink =
@@ -759,8 +760,7 @@ void() IntermissionThink =
 		if (time < intermission_exittime + 10 && !self.button0 && !self.button2 && !self.button3 && !self.button6 && !self.buttonuse)
 			return;
 
-	if(intermission_exittime >= 0)
-		MapVote_Think();
+	MapVote_Start();
 };
 
 /*
@@ -937,7 +937,7 @@ void() NextLevel =
 	if(player_count > 0)
 		intermission_exittime = time + cvar("sv_mapchange_delay");
 	else
-		intermission_exittime = -60;
+		intermission_exittime = -1;
 
 	WriteByte (MSG_ALL, SVC_CDTRACK);
 	WriteByte (MSG_ALL, 3);
@@ -1432,9 +1432,12 @@ void() CheckRules_World =
 	local float fraglimit;
 
 	VoteThink();
+	MapVote_Think();
 
 	SetDefaultAlpha();
 
+	/*
+	MapVote_Think should now do that part
 	if (intermission_running)
 		if (time >= intermission_exittime + 60)
 		{
@@ -1442,6 +1445,7 @@ void() CheckRules_World =
 				GotoNextMap();
 			return;
 		}
+	*/
 
 	if (gameover)	// someone else quit the game already
 		return;
@@ -1558,6 +1562,7 @@ string mapvote_fillstr;
 float mapvote_maxlen;
 float mapvote_voters;
 float mapvote_votes[MAPVOTE_COUNT];
+float mapvote_run;
 .float mapvote;
 
 void MapVote_ClearAllVotes()
@@ -1835,8 +1840,15 @@ void MapVote_Tick()
 		centerprint_atprio(other, CENTERPRIO_MAPVOTE, msgstr);
 	}
 }
+void MapVote_Start()
+{
+	mapvote_run = TRUE;
+}
 void MapVote_Think()
 {
+	if(!mapvote_run)
+		return;
+
 	if(alreadychangedlevel)
 		return;
 
@@ -1854,7 +1866,7 @@ void MapVote_Think()
 			alreadychangedlevel = TRUE;
 			return;
 		}
-		if(!cvar("g_maplist_votable"))
+		if(!cvar("g_maplist_votable") || player_count <= 0)
 		{
 			GotoNextMap();
 			return;
