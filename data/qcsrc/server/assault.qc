@@ -93,6 +93,9 @@ void assault_objective_decrease_think() {
 // decrease the health of targeted objectives
 void assault_objective_decrease_use() {
 
+	if(self.cnt > 0)
+		return;
+
 	if(activator.team != assault_attacker_team)
 		return;
 
