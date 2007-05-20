@@ -202,6 +202,36 @@ void func_assault_destructible() {
 
 }
 
+void assault_wall_think() {
+	local entity ent;
+	local float notvisible;
+	notvisible = 0;
+	ent = find(world, targetname, self.target);
+	while(ent) {
+		if(ent.classname == "target_objective" && ent.health < 0)
+			notvisible = 1;
+		ent = find(ent, targetname, self.target);
+	}
+
+	if(notvisible) {
+		self.model = "";
+		self.solid = SOLID_NOT;
+	} else {
+		self.model = self.mdl;
+		self.solid = SOLID_BSP;
+	}
+
+	self.nextthink = time + 0.2;
+}
+
+void func_assault_wall() {
+	self.classname = "func_assault_wall";
+	self.mdl = self.model;
+	setmodel(self, self.mdl);
+	self.solid = SOLID_BSP;
+	self.think = assault_wall_think;
+	self.nextthink = time;
+}
 
 // trigger new round
 // reset objectives, toggle spawnpoints, reset triggers, ...
