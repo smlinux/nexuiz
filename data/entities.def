@@ -705,6 +705,12 @@ When the random key is set, its value is used to calculate a minimum and a maxim
 
 //=============================================================================
 
+/*QUAKED trigger_relay (.5 .5 .5) (-8 -8 -8) (8 8 8)
+This fixed size trigger cannot be touched, it can only be fired by other events.  It can contain killtargets, targets, delays, and messages.
+*/
+
+//=============================================================================
+
 /*QUAKED trigger_push (.5 .5 .5) ?
 This is used to create jump pads and launch ramps. It MUST point to a target_position or info_notnull entity to work. Unlike target_push, this is client side predicted.
 -------- KEYS --------
