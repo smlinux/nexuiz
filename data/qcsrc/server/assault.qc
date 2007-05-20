@@ -1,11 +1,36 @@
+//=============================================================================
 
-// attacker spawn point
+/*QUAKED info_player_attacker (1 0 1) (-16 -16 -24) (16 16 45) INITIAL
+Normal attacker spawning location for Nexuiz Asssault
+-------- KEYS --------
+angle : direction in which player will look when spawning in the game. Does not apply to bots.
+target : this should point to a target_objective to decide when this spawning point is active.
+nobots : when set to 1, bots will never use this spawn point to respawn in the game.
+nohumans : when set to 1, human players will never use this spawn point to respawn in the game.
+notfree : when set to 1, entity will not spawn in "Free for all" and "Tournament" modes.
+notteam : when set to 1, entity will not spawn in "Teamplay" and "CTF" modes.
+notsingle : when set to 1, entity will not spawn in Single Player mode (bot play mode).
+-------- SPAWNFLAGS --------
+INITIAL : makes the spawnpoint the initial place for the player to spawn at the beginning of the game.*/
 void info_player_attacker() {
 	info_player_deathmatch();
 	self.team = COLOR_TEAM1; // red, gets swapped every round
 }
 
-// defender spawn point
+//=============================================================================
+
+/*QUAKED info_player_defender (1 0 1) (-16 -16 -24) (16 16 45) INITIAL
+Normal defender spawning location for Nexuiz Asssault
+-------- KEYS --------
+angle : direction in which player will look when spawning in the game. Does not apply to bots.
+target : this should point to a target_objective to decide when this spawning point is active.
+nobots : when set to 1, bots will never use this spawn point to respawn in the game.
+nohumans : when set to 1, human players will never use this spawn point to respawn in the game.
+notfree : when set to 1, entity will not spawn in "Free for all" and "Tournament" modes.
+notteam : when set to 1, entity will not spawn in "Teamplay" and "CTF" modes.
+notsingle : when set to 1, entity will not spawn in Single Player mode (bot play mode).
+-------- SPAWNFLAGS --------
+INITIAL : makes the spawnpoint the initial place for the player to spawn at the beginning of the game.*/
 void info_player_defender() {
 	info_player_deathmatch();
 	self.team = COLOR_TEAM2; // blue, gets swapped every round
@@ -43,7 +68,13 @@ void assault_objective_think() {
 	}
 	
 }
+//=============================================================================
 
+/*QUAKED target_objective (0 .5 0) (-8 -8 -8) (8 8 8)
+Objective controller for Nexuiz Assault. When active it has 100 health. If it falls below 0 then
+it'll trigger the next targeted entity (usually the next objective or target_assault_roundend etc.)
+-------- KEYS --------
+targetname : point to e.g. next objective*/
 void target_objective() {
 	self.classname = "target_objective";
 	self.think = assault_objective_think;
@@ -110,7 +141,12 @@ void assault_objective_decrease_use() {
 	self.cnt = 1;
 }
 
-// this entity should target an objective and be targeted by triggers
+//=============================================================================
+
+/*QUAKED target_objective_decrease (0 .5 0) (-8 -8 -8) (8 8 8)
+When triggered decreases health of the targeted target_objective.
+-------- KEYS --------
+targetname : point to a target_objective entity*/
 void target_objective_decrease() {
 
 	self.classname = "target_objective_decrease";
