@@ -264,6 +264,14 @@ void assault_new_round() {
 	}
 
 	// actually restart round... how to do that?
+	ent = find(world, classname, "player");
+	while(ent) {
+		oldself = self;
+		self = ent;
+		PutClientInServer();
+		self = oldself;
+		ent = find(ent, classname, "player");
+	}
 }
 
 void target_assault_roundend() {

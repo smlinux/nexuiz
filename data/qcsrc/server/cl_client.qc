@@ -552,6 +552,13 @@ void PutClientInServer (void)
 		if (cvar("g_spawnsound"))
 			sound (self, CHAN_AUTO, "misc/teleport.wav", 1, ATTN_NORM);
 
+		if(cvar("g_assault")) {
+			if(self.team == assault_attacker_team)
+				centerprint(self, "You are attacking!\n");
+			else
+				centerprint(self, "You are defending!\n");
+		}
+
 	} else if(self.classname == "observer") {
 		PutObserverInServer ();
 	}
