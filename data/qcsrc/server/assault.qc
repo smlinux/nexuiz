@@ -83,11 +83,17 @@ void target_objective() {
 }
 
 float assault_objective_decrease_customizeforclient() {
+	if(!self.spawnflags)
+		return FALSE;
+
 	if(self.cnt == 0) {
 		if(other.team == assault_attacker_team)
-			setmodel(self, "models/sprites/here.sp2");
+			if(self.spawnflags == 1)
+				setmodel(self, "models/sprites/push.sp2");
+			else
+				setmodel(self, "models/sprites/destroy.sp2");
 		else
-			setmodel(self, "models/sprites/helpme.sp2");
+			setmodel(self, "models/sprites/defend.sp2");
 	} else {
 		return FALSE;
 	}
@@ -116,6 +122,16 @@ void assault_objective_decrease_think() {
 		}
 	}
 
+	if(!self.spawnflags) {
+		local entity ent;
+		ent = find(world, target, self.targetname);
+		if(ent) {
+			if(ent.classname == "func_assault_destructible")
+				self.spawnflags = 2;
+			else
+				self.spawnflags = 1;
+		}
+	}
 
 	self.nextthink = time + 0.2;
 }
@@ -150,6 +166,10 @@ targetname : point to a target_objective entity*/
 void target_objective_decrease() {
 
 	self.classname = "target_objective_decrease";
+
+	precache_model("models/sprites/defend.sp2");
+	precache_model("models/sprites/destroy.sp2");
+	precache_model("models/sprites/push.sp2");
 
 	if(!self.dmg) {
 		self.dmg = 101;
