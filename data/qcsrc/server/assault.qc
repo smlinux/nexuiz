@@ -296,8 +296,10 @@ void func_assault_wall() {
 // reset objectives, toggle spawnpoints, reset triggers, ...
 void assault_new_round() {
 	
-	// this assumes self.classname == "func_assault_roundend"!
-	self.cnt = self.cnt + 1;
+	// up round counter
+	self.winning = self.winning + 1;
+	// set end time for next round
+	self.cnt = time + self.health;
 
 	// swap spawn point teams
 	local entity ent;
@@ -388,10 +390,35 @@ void assault_new_round() {
 
 }
 
+void assault_roundend_think() {
+	if(time > self.cnt)
+		assault_new_round();
+
+	local float timeleft;
+	timeleft = self.cnt - time;
+	timeleft = ceil(timeleft);
+
+	if(timeleft <= 10) {
+		local entity ent;
+		ent = find(world, classname, "player");
+		while(ent) {
+			centerprint(ent, ftos(timeleft));
+			ent = find(ent, classname, "player");
+		}
+	}
+
+	self.nextthink = time + 0.25;
+}
+
 void target_assault_roundend() {
-	self.cnt = 0; // round counter
+	if(!self.health)
+		self.health = 300; // 5 minutes
+	self.winning = 0; // round counter
+	self.cnt = time + self.max_health; // time when this round ends
 	self.classname = "target_assault_roundend";
 	self.use = assault_new_round;
+	self.think = assault_roundend_think;
+	self.nextthink = time;
 }
 
 void assault_roundstart_use() {
