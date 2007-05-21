@@ -68,7 +68,7 @@ Item DataContainer Key
 	Item Data_Nex_Key Use
 	{
 		target		"+use"
-		defValue	"'g'"
+		defValue	"'f'"
 	}
 	Item Data_Nex_Key Zoom
 	{
