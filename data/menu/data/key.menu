@@ -58,12 +58,17 @@ Item DataContainer Key
 	Item Data_Nex_Key DropWeapon
 	{
 		target		"dropweapon"
-		defValue	"'BACKSPACE'"
+		defValue	"'BACKSPACE' 'g'"
 	}
 	Item Data_Nex_Key WeapLast
 	{
 		target		"weaplast"
 		defValue	"'MOUSE4'"
+	}
+	Item Data_Nex_Key Use
+	{
+		target		"+use"
+		defValue	"'g'"
 	}
 	Item Data_Nex_Key Zoom
 	{

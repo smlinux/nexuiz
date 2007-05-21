@@ -213,6 +213,11 @@ Item Window KeyControl
 						text	"Last Used Weapon"
 						target	"Data::Key::WeapLast"
 					}
+					Derive Nex_Key_Template Use
+					{
+						text	"Use (Drop Key in KH)"
+						target	"Data::Key::Use"
+					}
 					Derive Nex_Void Seperator2
 					{}
 					Derive Title Weapons
