@@ -552,7 +552,7 @@ void kh_WinnerTeam(float teem)
 		vector thisorigin;
 
 		thisorigin = kh_AttachedOrigin(key);
-		dprint("Key origin: ", vtos(thisorigin), "\n");
+		//dprint("Key origin: ", vtos(thisorigin), "\n");
 		midpoint += thisorigin;
 
 		if(!first)
