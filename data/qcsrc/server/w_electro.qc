@@ -118,7 +118,7 @@ void() W_Electro_Attack2
 {
 	local entity proj;
 
-	W_SetupShot (self, '11 8 -8', FALSE, 2, "weapons/electro_fire2.wav");
+	W_SetupShot (self, '9 4 -12', FALSE, 2, "weapons/electro_fire2.wav");
 
 	proj = spawn ();
 	proj.classname = "plasma";
@@ -140,7 +140,7 @@ void() W_Electro_Attack2
 	W_SetupProjectileVelocity(proj);
 	proj.touch = W_Plasma_Touch;
 	setmodel(proj, "models/ebomb.mdl"); // precision set above
-	setsize(proj, '0 0 -3', '0 0 -3');
+	setsize(proj, '0 0 0', '0 0 0');
 	proj.takedamage = DAMAGE_YES;
 	proj.damageforcescale = 4;
 	proj.health = 5;
