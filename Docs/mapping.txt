@@ -334,9 +334,9 @@ For our laser jumping example, we could do something like this:
 	 // set up the exit cfg so we can reset values to what they were before
 	set exit_cfg "maps/dom_wazat1_exit.cfg"
 	 // make a backup
-	set BACKUP_g_balance_laser_force $g_balance_laser_force
+	set BACKUP_g_balance_laser_primary_force $g_balance_laser_primary_force
 	 // map-customized values here
-	set g_balance_laser_force 100
+	set g_balance_laser_primary_force 100
 	 // and on with the rest of the config
 	set g_domination 1		// turn on domination
 	set fraglimit 100		// 100 points to win
@@ -347,10 +347,10 @@ For our laser jumping example, we could do something like this:
 Then we would make the exit cfg, named "dom_wazat1_exit.cfg":
 
 	 // reset laser damage
-	set g_balance_laser_force $BACKUP_g_balance_laser_force
+	set g_balance_laser_primary_force $BACKUP_g_balance_laser_primary_force
 
 
-When my wazat1 map is run in domination, the laser's force will only be 100.  However, before the map changes, it gets set back to what it was before.  This is because the original value was stored in BACKUP_g_balance_laser_force, then BACKUP_g_balance_laser_force was copied back into g_balance_laser_force when the exit cfg ran.
+When my wazat1 map is run in domination, the laser's force will only be 100.  However, before the map changes, it gets set back to what it was before.  This is because the original value was stored in BACKUP_g_balance_laser_primary_force, then BACKUP_g_balance_laser_primary_force was copied back into g_balance_laser_primary_force when the exit cfg ran.
 
 
 You can set all kinds of values like this, including fog and gameplay options.

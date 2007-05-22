@@ -63,7 +63,7 @@ Item DataContainer Weapon
 	}
 	Item Data_Cvar LaserForce
 	{
-		cvarName	"g_balance_laser_force"
+		cvarName	"g_balance_laser_primary_force"
 		defValue	400
 
 		[DataLink_Setting]
