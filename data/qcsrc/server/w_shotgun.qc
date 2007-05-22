@@ -18,7 +18,7 @@ void W_Shotgun_Attack (void)
 	if (cvar("g_use_ammunition"))
 		self.ammo_shells = self.ammo_shells - cvar("g_balance_shotgun_primary_ammo");
 
-	W_Smoke(w_shotorg, v_forward, 12);
+	W_Smoke(w_shotorg + v_forward * 8, v_forward, 12);
 	//te_smallflash(w_shotorg);
 
 	// casing code
