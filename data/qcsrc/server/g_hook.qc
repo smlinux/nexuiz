@@ -215,7 +215,7 @@ void FireGrapplingHook (void)
 	makevectors(self.v_angle);
 
 	sound (self, CHAN_WEAPON, "weapons/hook_fire.wav", 1, ATTN_NORM);
-	org = self.origin + self.view_ofs + v_forward * 15 - v_right * 5 + v_up * -12;
+	org = self.origin + self.view_ofs + v_forward * 8 - v_right * 8 + '0 0 -12';
 	te_customflash(org, 160, 0.2, '1 0 0');
 
 	missile = spawn ();

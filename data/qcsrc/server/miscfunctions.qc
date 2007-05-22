@@ -678,6 +678,16 @@ string playername(entity p)
 		return p.netname;
 }
 
+vector(vector m1, vector m2) randompos =
+{
+	local vector v;
+	m2 = m2 - m1;
+	v_x = m2_x * random() + m1_x;
+	v_y = m2_y * random() + m1_y;
+	v_z = m2_z * random() + m1_z;
+	return  v;
+};
+
 // requires that m2>m1 in all coordinates, and that m4>m3
 float(vector m1, vector m2, vector m3, vector m4) boxesoverlap = {return m2_x >= m3_x && m1_x <= m4_x && m2_y >= m3_y && m1_y <= m4_y && m2_z >= m3_z && m1_z <= m4_z;};
 
@@ -876,4 +886,14 @@ void(entity e, float chan, string samp, float vol, float atten) sound = #8;
 void play2(entity e, string filename)
 {
 	stuffcmd(e, strcat("play2 ", filename, "\n"));
+}
+
+void play2team(float t, string filename)
+{
+	local entity head;
+	FOR_EACH_REALPLAYER(head)
+	{
+		if (head.team == t)
+			play2(head, filename);
+	}
 }

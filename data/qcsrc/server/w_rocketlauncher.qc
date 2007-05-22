@@ -204,7 +204,7 @@ void W_Rocket_Attack (void)
 	if (cvar("g_use_ammunition") && !cvar("g_rocketarena"))
 		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_rocketlauncher_ammo");
 
-	W_SetupShot (self, '15 3 -8', FALSE, 5, "weapons/rocket_fire.wav");
+	W_SetupShot (self, '8 3 -8', FALSE, 5, "weapons/rocket_fire.wav");
 	te_smallflash(w_shotorg);
 
 	missile = spawn ();
@@ -222,7 +222,7 @@ void W_Rocket_Attack (void)
 	missile.movetype = MOVETYPE_FLY;
 	missile.solid = SOLID_BBOX;
 	setmodel (missile, "models/rocket.md3"); // precision set below
-	setsize (missile, '0 0 0', '0 0 0');
+	setsize (missile, '-3 -3 -3', '3 3 3'); // give it some size so it can be shot
 
 	setorigin (missile, w_shotorg);
 	if(cvar("g_laserguided_missile") && self.laser_on)

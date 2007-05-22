@@ -34,7 +34,7 @@ void W_Laser_Attack (float issecondary)
 {
 	local entity missile;
 
-	W_SetupShot (self, '15 8 -8', FALSE, 3, "weapons/lasergun_fire.wav");
+	W_SetupShot (self, '11 8 -8', FALSE, 3, "weapons/lasergun_fire.wav");
 	//te_customflash(w_shotorg, 160, 0.2, '1 0 0');
 
 	missile = spawn ();

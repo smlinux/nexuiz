@@ -86,7 +86,7 @@ void() W_Electro_Attack
 {
 	local entity proj;
 
-	W_SetupShot (self, '15 8 -8', FALSE, 2, "weapons/electro_fire.wav");
+	W_SetupShot (self, '11 8 -8', FALSE, 2, "weapons/electro_fire.wav");
 
 	proj = spawn ();
 	proj.classname = "plasma_prim";
@@ -118,7 +118,7 @@ void() W_Electro_Attack2
 {
 	local entity proj;
 
-	W_SetupShot (self, '15 8 -8', FALSE, 2, "weapons/electro_fire2.wav");
+	W_SetupShot (self, '11 8 -8', FALSE, 2, "weapons/electro_fire2.wav");
 
 	proj = spawn ();
 	proj.classname = "plasma";

@@ -81,7 +81,7 @@ void W_Grenade_Attack (void)
 
 	if (cvar("g_use_ammunition"))
 		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_grenadelauncher_primary_ammo");
-	W_SetupShot (self, '15 8 -8', FALSE, 4, "weapons/grenade_fire.wav");
+	W_SetupShot (self, '11 8 -8', FALSE, 4, "weapons/grenade_fire.wav");
 
 	gren = spawn ();
 	gren.owner = self;
@@ -112,7 +112,7 @@ void W_Grenade_Attack2 (void)
 
 	if (cvar("g_use_ammunition"))
 		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_grenadelauncher_secondary_ammo");
-	W_SetupShot (self, '15 8 -8', FALSE, 4, "weapons/grenade_fire.wav");
+	W_SetupShot (self, '11 8 -8', FALSE, 4, "weapons/grenade_fire.wav");
 
 	gren = spawn ();
 	gren.owner = self;

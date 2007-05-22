@@ -12,7 +12,7 @@ void W_Shotgun_Attack (void)
 	f = cvar("g_balance_shotgun_primary_force");
 	spread = cvar("g_balance_shotgun_primary_spread");
 
-	W_SetupShot (self, '15 8 -8', TRUE, 5, "weapons/shotgun_fire.wav");
+	W_SetupShot (self, '11 8 -8', TRUE, 5, "weapons/shotgun_fire.wav");
 	for (sc = 0;sc < bullets;sc = sc + 1)
 		fireBullet (w_shotorg, w_shotdir, spread, d, f, IT_SHOTGUN, sc < 3);
 	if (cvar("g_use_ammunition"))
@@ -39,7 +39,7 @@ void W_Shotgun_Attack2 (void)
 	f = cvar("g_balance_shotgun_secondary_force");
 	spread = cvar("g_balance_shotgun_secondary_spread");
 
-	W_SetupShot (self, '15 8 -8', TRUE, 5, "weapons/shotgun_fire.wav");
+	W_SetupShot (self, '11 8 -8', TRUE, 5, "weapons/shotgun_fire.wav");
 	for (sc = 0;sc < bullets;sc = sc + 1)
 		fireBullet (w_shotorg, w_shotdir, spread, d, f, IT_SHOTGUN, sc < 3);
 	if (cvar("g_use_ammunition"))
