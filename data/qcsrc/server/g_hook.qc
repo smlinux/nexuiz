@@ -150,15 +150,9 @@ void GrapplingHookThink()
 		org = org + dir*50; // get the beam out of the player's eyes
 	}
 
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_BEAM);
-	WriteEntity (MSG_BROADCAST, self);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
-	WriteCoord (MSG_BROADCAST, org_x);
-	WriteCoord (MSG_BROADCAST, org_y);
-	WriteCoord (MSG_BROADCAST, org_z);
+	makevectors(self.angles);
+
+	te_beam(self, self.origin - v_forward * 4, org);
 }
 
 void GrapplingHookTouch (void)
@@ -226,7 +220,7 @@ void FireGrapplingHook (void)
 	missile.movetype = MOVETYPE_FLY;
 	missile.solid = SOLID_BBOX;
 
-	setmodel (missile, "models/ebomb.mdl"); // precision set below
+	setmodel (missile, "models/hook.md3"); // precision set below
 	setsize (missile, '-3 -3 -3', '3 3 3');
 	setorigin (missile, org);
 
@@ -242,7 +236,7 @@ void FireGrapplingHook (void)
 	missile.think = GrapplingHookThink;
 	missile.nextthink = time + 0.1;
 
-	missile.effects = EF_FULLBRIGHT | EF_ADDITIVE | EF_LOWPRECISION;
+	missile.effects = /*EF_FULLBRIGHT | EF_ADDITIVE |*/ EF_LOWPRECISION;
 
 	missile.health = cvar("g_balance_grapplehook_health");//120
 	missile.event_damage = GrapplingHook_Damage;

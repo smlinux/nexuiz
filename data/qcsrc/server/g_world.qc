@@ -147,6 +147,7 @@ void worldspawn (void)
 	precache_model ("models/gibs/gib2.mdl");
 	precache_model ("models/gibs/gib3.mdl");
 	precache_model ("models/gibs/gib5.md3");
+	precache_model ("models/hook.md3");
 	precache_sound ("misc/armorimpact.wav");
 	precache_sound ("misc/bodyimpact1.wav");
 	precache_sound ("misc/bodyimpact2.wav");
