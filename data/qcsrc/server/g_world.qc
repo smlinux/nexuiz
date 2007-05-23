@@ -161,6 +161,7 @@ void worldspawn (void)
 	precache_sound ("misc/hitground3.wav");
 	precache_sound ("misc/hitground4.wav");
 	precache_sound ("misc/null.wav");
+	precache_sound ("misc/spawn.wav");
 	precache_sound ("misc/talk.wav");
 	precache_sound ("misc/teleport.wav");
 	precache_sound ("player/lava.wav");
