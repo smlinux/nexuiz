@@ -150,9 +150,8 @@ void GrapplingHookThink()
 		org = org + dir*50; // get the beam out of the player's eyes
 	}
 
-	makevectors(self.angles);
-
-	te_beam(self, self.origin - v_forward * 4, org);
+	makevectors(self.angles_x * '-1 0 0' + self.angles_y * '0 1 0');
+	te_beam(self, self.origin + v_forward * (-9), org);
 }
 
 void GrapplingHookTouch (void)
