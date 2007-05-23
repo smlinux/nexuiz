@@ -69,7 +69,7 @@ void W_Laser_Attack (float issecondary)
 	else
 		missile.nextthink = time + cvar("g_balance_laser_primary_lifetime");
 
-	missile.effects = EF_NOSHADOW | EF_FULLBRIGHT | EF_FULLBRIGHT | EF_LOWPRECISION;
+	missile.effects = EF_LOWPRECISION;
 	missile.flags = FL_PROJECTILE;
 }
 

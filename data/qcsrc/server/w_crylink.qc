@@ -29,7 +29,7 @@ void W_Crylink_Touch (void)
 	self.glow_color = 0;
 	self.think = SUB_Remove;
 	self.movetype = MOVETYPE_NONE;
-	self.effects = EF_FULLBRIGHT | EF_LOWPRECISION;
+	self.effects = EF_LOWPRECISION;
 	SUB_SetFade(self, time, 1);
 	//remove (self);
 	*/
@@ -61,7 +61,7 @@ void W_Crylink_Touch2 (void)
 	self.glow_color = 0;
 	self.think = SUB_Remove;
 	self.movetype = MOVETYPE_NONE;
-	self.effects = EF_FULLBRIGHT | EF_LOWPRECISION;
+	self.effects = EF_LOWPRECISION;
 	SUB_SetFade(self, time, 1);
 	//remove (self);
 	*/
@@ -105,7 +105,7 @@ void W_Crylink_Attack (void)
 
 		//proj.glow_size = 20;
 
-		proj.effects = EF_NOSHADOW | EF_FULLBRIGHT | EF_LOWPRECISION;
+		proj.effects = EF_LOWPRECISION;
 		proj.flags = FL_PROJECTILE;
 		proj.colormod = proj_color;
 		counter = counter + 1;
@@ -150,7 +150,7 @@ void W_Crylink_Attack2 (void)
 
 		//proj.glow_size = 20;
 
-		proj.effects = EF_NOSHADOW | EF_FULLBRIGHT | EF_LOWPRECISION;
+		proj.effects = EF_LOWPRECISION;
 		proj.flags = FL_PROJECTILE;
 		proj.colormod = proj_color;
 		counter = counter + 1;
