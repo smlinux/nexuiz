@@ -236,7 +236,7 @@ void W_Rocket_Attack (void)
 	missile.think = W_Rocket_Think;
 	missile.nextthink = time;
 	missile.cnt = time + cvar("g_balance_rocketlauncher_lifetime");
-	missile.effects = EF_NOSHADOW | EF_LOWPRECISION;
+	missile.effects = EF_LOWPRECISION;
 	sound (missile, CHAN_BODY, "weapons/rocket_fly.wav", 0.4, ATTN_NORM);
 	missile.flags = FL_PROJECTILE;
 
