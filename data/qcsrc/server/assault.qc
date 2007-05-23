@@ -390,6 +390,15 @@ void assault_new_round() {
 
 }
 
+void assault_print_time_warning(string s) {
+	local entity ent;
+	ent = find(world, classname, "player");
+	while(ent) {
+		centerprint(ent, s);
+		ent = find(ent, classname, "player");
+	}	
+}
+
 void assault_roundend_think() {
 	if(time > self.cnt)
 		assault_new_round();
@@ -398,17 +407,43 @@ void assault_roundend_think() {
 	timeleft = self.cnt - time;
 	timeleft = ceil(timeleft);
 
+	// reset time notification if the values don't make sense
+	if(timeleft > self.nextstep)
+		self.nextstep = 9999999;
+
+	if(timeleft <= 300 && self.nextstep > 300) {
+		assault_print_time_warning("5 minutes left");
+		self.nextstep = 300;
+	}
+
+	if(timeleft <= 240 && self.nextstep > 240) {
+		assault_print_time_warning("4 minutes left");
+		self.nextstep = 240;
+	}
+
+	if(timeleft <= 180 && self.nextstep > 180) {
+		assault_print_time_warning("3 minutes left");
+		self.nextstep = 180;
+	}
+
+	if(timeleft <= 120 && self.nextstep > 120) {
+		assault_print_time_warning("2 minutes left");
+		self.nextstep = 120;
+	}
+
+	if(timeleft <= 60 && self.nextstep > 60) {
+		assault_print_time_warning("one minute left");
+		self.nextstep = 60;
+	}
+
 	if(timeleft <= 10) {
-		local entity ent;
-		ent = find(world, classname, "player");
-		while(ent) {
-			centerprint(ent, ftos(timeleft));
-			ent = find(ent, classname, "player");
-		}
+		assault_print_time_warning(ftos(timeleft));
 	}
 
 	self.nextthink = time + 0.25;
 }
+
+
 
 void target_assault_roundend() {
 	if(!self.health)
@@ -416,6 +451,7 @@ void target_assault_roundend() {
 	self.winning = 0; // round counter
 	self.cnt = time + self.max_health; // time when this round ends
 	self.classname = "target_assault_roundend";
+	self.nextstep = 9999999; // used to store what time warning was last issued;
 	self.use = assault_new_round;
 	self.think = assault_roundend_think;
 	self.nextthink = time;
