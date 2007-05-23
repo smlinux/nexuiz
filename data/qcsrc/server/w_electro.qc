@@ -100,7 +100,7 @@ void() W_Electro_Attack
 
 	if (cvar("g_use_ammunition"))
 		self.ammo_cells = self.ammo_cells - cvar("g_balance_electro_primary_ammo");
-	proj.effects = EF_BRIGHTFIELD | EF_FULLBRIGHT | EF_NOSHADOW | EF_LOWPRECISION;
+	proj.effects = EF_BRIGHTFIELD | EF_LOWPRECISION;
 	proj.movetype = MOVETYPE_FLY;
 	proj.velocity = w_shotdir * cvar("g_balance_electro_primary_speed");
 	W_SetupProjectileVelocity(proj);
@@ -132,7 +132,7 @@ void() W_Electro_Attack2
 
 	if (cvar("g_use_ammunition"))
 		self.ammo_cells = self.ammo_cells - cvar("g_balance_electro_secondary_ammo");
-	proj.effects = EF_FULLBRIGHT | EF_NOSHADOW | EF_LOWPRECISION;
+	proj.effects = EF_LOWPRECISION;
 	//proj.glow_size = 50;
 	//proj.glow_color = 45;
 	proj.movetype = MOVETYPE_BOUNCE;
@@ -140,7 +140,7 @@ void() W_Electro_Attack2
 	W_SetupProjectileVelocity(proj);
 	proj.touch = W_Plasma_Touch;
 	setmodel(proj, "models/ebomb.mdl"); // precision set above
-	setsize(proj, '0 0 0', '0 0 0');
+	setsize(proj, '0 0 -3', '0 0 -3');
 	proj.takedamage = DAMAGE_YES;
 	proj.damageforcescale = 4;
 	proj.health = 5;
