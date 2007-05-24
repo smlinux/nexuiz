@@ -14,7 +14,7 @@ textures/toxic/toxic_slime
 		map textures/liquids/slime1.tga
 		blendfunc add
 		rgbGen identity
-		tcMod turb 0 0.2 0.28 0.1
+		tcMod turb 0 0.2 0 0.04
 	}
 }
 
