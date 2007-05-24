@@ -10,7 +10,7 @@ textures/sav-liquids/slime1
 	surfaceparm nonsolid
 	surfaceparm slime
 	q3map_surfacelight 250
-	deformVertexes wave 150.0 sin 2 5 0.25 0.1
+	//deformVertexes wave 150.0 sin 2 5 0.25 0.1
 	Q3map_TessSize 128
 	cull none
 	{
@@ -32,5 +32,6 @@ textures/sav-liquids/glass_tube
 		map textures/dsi/dsiglass2.tga
 		blendfunc blend
 		rgbGen vertex
+		tcgen environment
 	}	
 }

@@ -68,6 +68,7 @@ textures/dsi/dsiglass
 		map textures/dsi/dsiglass2.tga
 		blendfunc blend
 		rgbGen vertex
+		tcgen environment
 	}	
 }
 
