@@ -11,6 +11,7 @@ textures/savdm6ish/#lava1
 	//deformVertexes wave 100sin 5 5 .5 0.02
 	{
 		map textures/savdm6ish/#lava1.jpg
+		tcMod turb 0 0.2 0 0.04
 	}
 }
 
@@ -27,6 +28,7 @@ textures/savdm6ish/#teleport
 	//deformVertexes wave 100sin 5 5 .5 0.02
 	{
 		map textures/savdm6ish/#teleport.jpg
+		tcMod turb 0 0.2 0 0.04
 	}
 }
 
