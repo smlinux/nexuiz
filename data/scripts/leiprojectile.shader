@@ -80,9 +80,10 @@ models/elecbeam
 {
 	cull disable
 	{
-		animmap 35 models/elecbeam.tga models/elecbeam2.tga models/elecbeam3.tga models/elecbeam4.tga models/elecbeam5.tga models/elecbeam6.tga models/elecbeam7.tga models/elecbeam8.tga 
+		map models/elecbeam.tga
 		blendfunc add
 		rgbGen identity
+		tcMod scroll -2 0
 	}
 }
 
