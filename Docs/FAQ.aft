@@ -38,6 +38,10 @@ This happens when the engine can't load the data*.pk3 file or has trouble to ini
 	4. the engine could not initialize OpenGL. Please install the latest drivers for your graphic card. You will probably find one for your card there: [intel (http://intel.com)] [ati (http://ati.com)] [nvidia (http://nvidia.com)]
 	5. your download might be corrupted, please download Nexuiz again
 
+** How can I speed up my frame rate?
+You can choose predefined performance settings in the |Options / Video| menu.  |Normal| is the default, |Medium| and |Low| run faster while |High|, |Ultra| and |Ultimate| enable more features you might want to test if you have a high end graphic card.  Or you can dis/enable single features.  The greatest performance boost can be achieved by turning off dynamic lights and shadows in the menu |Options / Effects|. Bloom is also quite resource intensive. Other fps boots include disabling |Deluxemapping| and |Coronas|. On older graphics cards or on-board/notebook chips with little video ram you can try to lower the texture quality in the menu |Options / Video|.
+Some graphic cards (mostly ATI or quite old cards) run A LOT faster if you disable the |Vertex Buffer Objects| in the |Options / Video menu|. An other thing that can greatly help on such cards is to disable the |OpenGL 2.0 Shaders|.  Having that option enabled is faster on most cards however thats why both are active by default.
+
 ** The sound is broken, it crackles and stutters
 Try run |nexuiz-sdl.exe| instead of |nexuiz.exe| (on Windows). Adding the command line options |-sndspeed 48000| and/or |-sndstereo| can also help on some systems (on Linux, Mac, Windows).
 
@@ -47,23 +51,6 @@ Check if your desktop color depth is set to 32 bits per pixel. If it's just set 
 ** When I join a server or after a map change I see nothing but a black screen, but I can still move and shoot
 This is probably because you don't have the map that's running on the server. As Nexuiz does now supports map/content download the server might not be be setup to support this and you will have to get the map the old fashioned way. Those servers will have a download URL in their name or welcome message. There is also a [wiki page (http://alientrap.org/wiki/pmwiki.php?n=Main.CustomMaps)] dedicated to new maps.
 For Linux users: you need to have libcurl installed, otherwise you won't be able to download any maps. libcurl should be available in any Linux distribution, just search for "libcurl" and install it in your distribution's package manager.
-
-* Server setup
-
-** How do I start a server?
-Use the |Create| menu to start a |listen server|. You will always have to play in a |listen server|.
-If you want to create a server without being forced to play yourself please take a look at the file |readme.txt| in the |Docs/server/| directory where the |dedicated server| is explained.
-
-** Which ports do I have to open in firewall/forward from my router to run a server?
-The default port is 26000 UDP. You can change that by starting Nexuiz with the parameter |-port <port>| or having a line |port <port>| in the server config file.
-If you follow the tutorial mentioned above you do not need this command line argument as it will be done in the config file created for the server. To add the command line argument on Windows, create a new shortcut to |nexuiz.exe| or |nexuiz-dedicated.exe| and right click on it. Select properties and |-port <port>| in the "Target:" line. Be sure that the "Start in:" line contains the full path to your Nexuiz folder and click "OK". The parameter will be used if you start Nexuiz via that new shortcut.
-
-** Is there some kind of rcon?
-Yes starting with Nexuiz 2.0 there is rcon (QuakeWorld compatible). To use it you must enter |rcon__password <password>| in the server console or server config file. The Nexuiz client has to set the same password in the same fashion. You can then issue commands with |rcon <command>| if you are connected to the server or have set |rcon__address <ip/hostname>| or |rcon__address <ip/hostname>:<port>| to point to the server. There are also external rcon tools but make sure you use a QW compatible rcon tool.
-
-** How can i kick people who are using special characters in their names?
-Enter |status| at the server console. You will see a list of all players. In front of their names you will see a number (the player id). You can kick the player you don't like with |kick # <player id> <reason>| (notice the space after #).
-
 
 * General questions
 
@@ -78,9 +65,6 @@ Press |\[shift]+\[escape]|. To close it press |\[escape]|
 
 ** What console commands/variables are there?
 You can get a list of variables by entering |cvarlist| on the console ([How do I open the console?]). |cmdlist| will give you a list of available commands. An annotated version of that output can be found at the [Nexuiz wiki (http://alientrap.org/wiki/pmwiki.php?n=Main.ConsoleCommands)].
-
-** How can I speed up my frame rate?
-The greatest performance boost can be achieved by turning off dynamic lights and shadows in the menu |Options / Effects|. Bloom is also quite resource intensive. Other fps boots include disabling |Deluxemapping| and |Coronas|. On older graphics cards or on-board/notebook chips with little video ram you can try to lower the texture quality in the menu |Options / Video|. Some older cards also run faster when you disable |OpenGL 2.0 Shaders| but in general for most cards it should be active. Nexuiz also includes config files that will adjust your graphic settings. Open the console ([How do I open the console?]) and type |exec normal.cfg| to get the default setting (back). |exec med.cfg| and |exec low.cfg| are of lower quality but will make Nexuiz run faster. |exec high.cfg|, |exec ultra.cfg| and |exec ultimate.cfg| will show what Nexuiz is able to look like but do require a very fast PC and graphic card. Some of the settings in those config files require you to either restart Nexuiz or also type |vid_restart| in the console after exec'ing the config files.
 
 ** How can I activate colors in my name?
 Colors can be used in nicknames and chat messages by typing ^ followed by a number between 0 and 9.
@@ -115,6 +99,21 @@ To record a demo yourself open the console and type |rec <name>| before playing.
 If you downloaded a demo, copy it to |Nexuiz/data/demos/<name>.dem| (on Linux, Mac, Windows) or |~/.nexuiz/data/demos/<name>.dem| (on Linux, Mac). You might have to create this directory if you have never recorded a demo before.
 You can list all your demo files by typing |dem| on the console. Some useful key bindings for viewing demos are listed [here (http://www.alientrap.org/forum/viewtopic.php?p=357#357)]. A simple way to automatically record demos can be found [here (http://www.alientrap.org/forum/viewtopic.php?t=90)]
 
+* Server setup
+
+** How do I start a server?
+Use the |Create| menu to start a |listen server|. You will always have to play in a |listen server|.
+If you want to create a server without being forced to play yourself please take a look at the file |readme.txt| in the |Docs/server/| directory where the |dedicated server| is explained.
+
+** Which ports do I have to open in firewall/forward from my router to run a server?
+The default port is 26000 UDP. You can change that by starting Nexuiz with the parameter |-port <port>| or having a line |port <port>| in the server config file.
+If you follow the tutorial mentioned above you do not need this command line argument as it will be done in the config file created for the server. To add the command line argument on Windows, create a new shortcut to |nexuiz.exe| or |nexuiz-dedicated.exe| and right click on it. Select properties and |-port <port>| in the "Target:" line. Be sure that the "Start in:" line contains the full path to your Nexuiz folder and click "OK". The parameter will be used if you start Nexuiz via that new shortcut.
+
+** Is there some kind of rcon?
+Yes starting with Nexuiz 2.0 there is rcon (QuakeWorld compatible). To use it you must enter |rcon__password <password>| in the server console or server config file. The Nexuiz client has to set the same password in the same fashion. You can then issue commands with |rcon <command>| if you are connected to the server or have set |rcon__address <ip/hostname>| or |rcon__address <ip/hostname>:<port>| to point to the server. There are also external rcon tools but make sure you use a QW compatible rcon tool.
+
+** How can i kick people who are using special characters in their names?
+Enter |status| at the server console. You will see a list of all players. In front of their names you will see a number (the player id). You can kick the player you don't like with |kick # <player id> <reason>| (notice the space after #).
 
 * Development
 
