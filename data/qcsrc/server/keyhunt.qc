@@ -42,6 +42,7 @@ float kh_interferemsg_time, kh_interferemsg_team;
 .entity kh_next, kh_prev; // linked list
 .float kh_droptime;
 .float kh_dropperteam;
+.entity kh_previous_owner;
 
 string kh_sound_capture = "sound/ctf/capture.wav";
 string kh_sound_destroy = "sound/ctf/return.wav";
@@ -115,7 +116,7 @@ void kh_Scores_Event(entity player, entity key, string what, float frags_player,
 		return;
 	if(frags_player)
 		player.frags = player.frags + floor(0.5 + frags_player);
-	if(frags_owner)
+	if(key && key.owner && frags_owner)
 		key.owner.frags = key.owner.frags + floor(0.5 + frags_owner);
 	if(!cvar("sv_eventlog"))
 		return;
@@ -221,6 +222,7 @@ void kh_Key_Detach(entity key)
 	key.damageforcescale = cvar("g_balance_keyhunt_damageforcescale");
 	// let key.team stay
 	key.modelindex = kh_key_dropped;
+	key.kh_previous_owner = key.owner;
 }
 
 void kh_Key_AssignTo(entity key, entity player)
@@ -589,6 +591,9 @@ void kh_LoserTeam(float teem, entity lostkey)
 
 	if(attacker)
 	{
+		if(lostkey.kh_previous_owner)
+			kh_Scores_Event(lostkey.kh_previous_owner, world, "pushed", 0, -cvar("g_balance_keyhunt_score_push"));
+			// don't actually GIVE him the -nn points, just log
 		kh_Scores_Event(attacker, world, "push", cvar("g_balance_keyhunt_score_push"), 0);
 		centerprint(attacker, "Your push is the best!\n\n\n");
 		bprint("The ", ColoredTeamName(teem), "^7 could not take care of the ", lostkey.netname, "^7 when ", attacker.netname, "^7 came\n");
@@ -605,6 +610,10 @@ void kh_LoserTeam(float teem, entity lostkey)
 		FOR_EACH_KH_KEY(key)
 			if(key.owner && key.team != teem)
 				++keys;
+
+		if(lostkey.kh_previous_owner)
+			kh_Scores_Event(lostkey.kh_previous_owner, world, "destroyed", 0, -cvar("g_balance_keyhunt_score_destroyed"));
+			// don't actually GIVE him the -nn points, just log
 
 		DistributeEvenly_Init(cvar("g_balance_keyhunt_score_destroyed"), keys * of + players);
 
