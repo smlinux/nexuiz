@@ -33,5 +33,6 @@ textures/sav-liquids/glass_tube
 		blendfunc blend
 		rgbGen vertex
 		tcgen environment
+		tcmod scale 4 4
 	}	
 }

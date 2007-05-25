@@ -69,6 +69,7 @@ textures/dsi/dsiglass
 		blendfunc blend
 		rgbGen vertex
 		tcgen environment
+		tcmod scale 4 4
 	}	
 }
 
