@@ -19,7 +19,7 @@ textures/stralenex1/stralenex5_fakesky
 	surfaceparm nonsolid
 	surfaceparm water
 	//	<div><func><base><amplitude><phase><freq>
-	deformVertexes wave 8000.0 sin 64 1000 0 5
+	//deformVertexes wave 8000.0 sin 64 1000 0 5
 	Q3map_TessSize 128
 	cull none
 	{
