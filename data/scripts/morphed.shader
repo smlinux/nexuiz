@@ -27,7 +27,7 @@ textures/morphed/gelslime
 	surfaceparm nonsolid
 	surfaceparm slime
 	q3map_surfacelight 280
-	deformVertexes wave 150.0 sin 2 5 0.25 0.1
+	//deformVertexes wave 150.0 sin 2 5 0.25 0.1
 	Q3map_TessSize 128
 	cull none
 	{
@@ -54,7 +54,7 @@ textures/morphed/gelslime_bright
 	surfaceparm nonsolid
 	surfaceparm slime
 	q3map_surfacelight 300
-	deformVertexes wave 150.0 sin 2 5 0.25 0.1
+	//deformVertexes wave 150.0 sin 2 5 0.25 0.1
 	Q3map_TessSize 128
 	cull none
 	{
