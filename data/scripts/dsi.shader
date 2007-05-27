@@ -66,8 +66,8 @@ textures/dsi/dsiglass
 
 	{
 		map textures/dsi/dsiglass2.tga
-		blendfunc blend
-		rgbGen vertex
+		blendfunc add
+		//rgbGen vertex
 		tcgen environment
 		tcmod scale 4 4
 	}	
