@@ -61,6 +61,11 @@ Item Window Effects
 			text	"Offset Mapping"
 			target	"::Data::Effects::OffsetMapping::Switch"
 		}											
+		Derive Nex_Option_Switch ShadowNormals
+		{
+			text	"Realtime Light Bumpmaps"
+			target	"::Data::Effects::ShadowNormals::Switch"
+		}
 		Derive Nex_Option_Switch RealtimeLights
 		{
 			text	"Realtime World Lights"

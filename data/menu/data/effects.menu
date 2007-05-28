@@ -98,4 +98,11 @@ Item DataContainer Effects
 
 		[DataLink_OnOffSwitch]
 	}
+	Item Data_Cvar ShadowNormals
+	{
+		cvarName	"r_shadow_usenormalmap"
+		defValue	0
+
+		[DataLink_OnOffSwitch]
+	}
 }
