@@ -8,7 +8,7 @@
 "dm","silvercity","4","4","15","g_minstagib 1; sv_gravity 200","Silver City","Low gravity minstagib!\n\nYou face 4 bots and a fraglimit of 15 in this huge outdoor arena.\n\nWith the low gravity you should be able to navigate easily.\n\nBe careful not to run out of ammo or you will die within 10 seconds if you do not pick up a dropped Nex."
 "dm","reslimed","3","5","15","g_vampire 1","Slimepit Revisited","Vampire Deathmatch against 3 bots in the Slime Pit with a fraglimit of 15.\n\nYou are healed by doing damage."
 "dm","bluesky","3","5","15",,"Blue Sky","In this fairly odd Deathmatch level there are 3 skilled bots with a fraglimit of 15."
-"tdm","dieselpower","3","5","20",,"Team DM on Dieselpower","Team deathmatch again.\n\nFraglimit of 20.\n\nThis time your team has to win on dieselpower."
+"tdm","dieselpower","7","5","20",,"Team DM on Dieselpower","Team deathmatch again.\n\nFraglimit of 20.\n\nThis time your team has to win on dieselpower."
 "dm","aggressor","3","5","15",,"Aggressor","In this Deathmatch level you face 3 skilled bots with a fraglimit of 15."
 "ctf","basementctf","3","7","60",,"CTF on Basement","Teams face off in this Capture The Flag arena with the goal of stealing the other team's flag and returning it to their own.\n\nBe sure to kill any enemies carrying your team's flag and touch it to return it to your base.\n\nFirst team to score 60 points wins."
 "dm","evilspace","3","5","10",,"Evil Space","Deathmatch in a space map against 3 bots.\n\nFraglimit of 10.\n\nPush your opponents off the map and try not to fall off yourself."
