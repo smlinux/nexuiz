@@ -30,6 +30,11 @@ Item Window ColorControl
 			text	"Gamma"
 			target	"::Data::Color::Gamma::Value"
 		}
+		Derive Nex_Option_Slider GLSLContrastBoost
+		{
+			text	"OpenGL 2 Contrast (SLOW)"
+			target	"::Data::Color::GLSLContrastBoost::Value"
+		}
 		Derive Nex_Line	Seperator1
 		{}
 		Derive Nex_Option_Switch ExtendedControl

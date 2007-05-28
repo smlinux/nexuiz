@@ -18,6 +18,18 @@ Item DataContainer Color
 			link		"##up"
 		}
 	}
+	Item Data_Cvar GLSLContrastBoost
+	{
+		cvarName 	"r_glsl_contrastboost"
+		defValue 	1.0
+		Item DataLink_Value Value
+		{
+			minValue	1.0
+			maxValue	8.0
+			stepValue	0.1
+			link		"##up"
+		}
+	}
 	Item Data_Cvar Brightness
 	{
 		cvarName	"v_brightness"
