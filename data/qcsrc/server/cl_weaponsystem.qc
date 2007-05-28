@@ -168,6 +168,7 @@ void() CL_Weaponentity_Think =
 			self.model = "";
 	}
 	self.effects = self.owner.effects | EF_LOWPRECISION;
+	self.effects = self.effects - (self.effects & (EF_FULLBRIGHT)); // can mask team color, so get rid of it
 
 	if (self.flags & FL_FLY)
 		// owner is currently being teleported, so don't apply EF_NODRAW otherwise the viewmodel would "blink"
