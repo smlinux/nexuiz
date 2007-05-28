@@ -99,13 +99,16 @@ textures/morphed/gelslime_bright
 	surfaceparm trans
 	surfaceparm nonsolid
 	surfaceparm slime
-	q3map_surfacelight 300
+	q3map_surfacelight 320
 	Q3map_TessSize 128
 	cull none
 	{
 		map textures/morphed/gelslime_bright.tga
 		blendFunc add
 		rgbGen identity
+		//tcMod turb <base> <amplitude> <phase><freq>
+		tcMod turb 1 0.15 0 0.15
+		tcMod scroll 0 0.2
 	}
 }
 
@@ -118,7 +121,7 @@ textures/morphed/gelslime_bright_warp
 	surfaceparm trans
 	surfaceparm nonsolid
 	surfaceparm slime
-	q3map_surfacelight 300
+	q3map_surfacelight 320
 	deformVertexes wave 150.0 sin 2 5 0.25 0.1
 	Q3map_TessSize 128
 	cull none
