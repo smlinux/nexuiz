@@ -129,8 +129,10 @@ void() trigger_push_touch =
 	{
 		if(self.pushltime < time)  // prevent "snorring" sound when a player hits the jumppad more than once
 		{
+			// flash when activated
+			te_smallflash(other.origin);
 			sound (other, CHAN_ITEM, "misc/jumppad.wav", 1, ATTN_NORM);
-			self.pushltime = time + 0.5;
+			self.pushltime = time + 0.2;
 		}
 		if(clienttype(other) == CLIENTTYPE_REAL)
 		{
@@ -167,8 +169,6 @@ void() trigger_push_touch =
 		self.think = SUB_Remove;
 		self.nextthink = time;
 	}
-	// flash when activated
-	te_smallflash(other.origin);
 };
 
 .vector dest;
