@@ -65,7 +65,7 @@ textures/stralenex1/light_tube_green
 	{
 		map textures/stralenex1/light_tube_green.tga 
 		//blendfunc add 
-       tcmod scale 12 1  
+       	//tcmod scale 12 1  
 		//rgbGen identity 
 
         
