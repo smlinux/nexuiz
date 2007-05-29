@@ -44,10 +44,10 @@ float kh_interferemsg_time, kh_interferemsg_team;
 .float kh_dropperteam;
 .entity kh_previous_owner;
 
-string kh_sound_capture = "sound/ctf/capture.wav";
-string kh_sound_destroy = "sound/ctf/return.wav";
-string kh_sound_drop = "sound/misc/mouseclick.wav";
-string kh_sound_collect = "sound/ctf/take.wav";
+string kh_sound_capture = "sound/kh/capture.wav";
+string kh_sound_destroy = "sound/kh/destroy.wav";
+string kh_sound_drop = "sound/kh/drop.wav";
+string kh_sound_collect = "sound/kh/collect.wav";
 
 float kh_sprite_dropped, kh_sprite_finish, kh_sprite_red, kh_sprite_blue, kh_sprite_pink, kh_sprite_yellow, kh_sprite_friend;
 float kh_key_dropped, kh_key_carried;
