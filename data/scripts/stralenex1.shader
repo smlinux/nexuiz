@@ -109,8 +109,8 @@ textures/stralenex1/stralenex5_water
 	surfaceparm trans
 	surfaceparm nonsolid
       surfaceparm water
-	
-	deformVertexes wave 150.0 sin 2 5 0.25 0.1
+	//deformVertexes wave <div> <func> <base> <amplitude> <phase> <freq>
+	deformVertexes wave 150.0 sin 2 0.5 0 2
 	Q3map_TessSize 128
 	cull none
 
