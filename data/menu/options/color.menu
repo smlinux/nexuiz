@@ -20,6 +20,16 @@ Item Window ColorControl
 			text	"Contrast"
 			target	"::Data::Color::Contrast::Value"
 		}
+		Derive Nex_Option_Slider GLSLContrastBoost
+		{
+			text	"OpenGL 2 Contrast (SLOW)"
+			target	"::Data::Color::GLSLContrastBoost::Value"
+		}
+		Derive Nex_Option_Slider Ambient
+		{
+			text	"Ambient Light"
+			target	"::Data::Color::Ambient::Value"
+		}
 		Derive Nex_Option_Switch HWGamma
 		{
 			text	"HW Gamma Support"
@@ -29,11 +39,6 @@ Item Window ColorControl
 		{
 			text	"Gamma"
 			target	"::Data::Color::Gamma::Value"
-		}
-		Derive Nex_Option_Slider GLSLContrastBoost
-		{
-			text	"OpenGL 2 Contrast (SLOW)"
-			target	"::Data::Color::GLSLContrastBoost::Value"
 		}
 		Derive Nex_Line	Seperator1
 		{}

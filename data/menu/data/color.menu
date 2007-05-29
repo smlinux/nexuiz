@@ -30,6 +30,18 @@ Item DataContainer Color
 			link		"##up"
 		}
 	}
+	Item Data_Cvar Ambient
+	{
+		cvarName	"r_ambient"
+		defValue	0.0
+		Item DataLink_Value Value
+		{
+			minValue	0.0
+			maxValue	20.0
+			stepValue	1.0
+			link		"##up"
+		}
+	}
 	Item Data_Cvar Brightness
 	{
 		cvarName	"v_brightness"
