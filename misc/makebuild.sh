@@ -17,9 +17,20 @@ esac
 : ${versiontag:=}
 echo "date stamp: $date"
 
-version=2-svntest-$date
-versiontag=test
-defaultcfg=""
+case "$version" in
+	'')
+		version=2-svntest-$date
+		versiontag=test
+		defaultcfg=
+		ext=
+		;;
+	*)
+		version=$version
+		versiontag=$versiontag
+		defaultcfg=
+		ext=_$version
+		;;
+esac
 
 basepk3=$base/data20060905.pk3
 nexdir=$base/nexuiz
@@ -46,7 +57,7 @@ while [ -f "$zipdir/nexuiz$date$i$ext.zip" ]; do
 		i=`echo "$i" | tr a-y b-z`
 	fi
 done
-date=$date$i
+ext=$i$ext
 
 echo "Using build name nexuiz$date$ext"
 sleep 3
@@ -181,7 +192,7 @@ rm FAQ.aft-TOC
 
 cd "$tmpdir/data"
 mv common-spog.pk3 ..
-perl -pi -e '/^set g_nexuizversion "([0-9.]*)[^"]*"/ and $_ = "set g_nexuizversion \"'$version'\"\n"' default.cfg
+perl -pi -e '/^set g_nexuizversion "?([0-9.]*)[^"]*"?/ and $_ = "set g_nexuizversion '$version'\n"' default.cfg
 if [ -n "$versiontag" ]; then
 	perl -pi -e '/^set g_nexuizversion/ and $_ = "showbrand 3\n$_"' default.cfg
 	cp "$buildfiles/brand/$versiontag.tga" gfx/brand.tga
@@ -191,7 +202,7 @@ echo "$defaultcfg" >> default.cfg
 7za a -mx=7 -tzip ../data.pk3 .
 
 cd "$tmpdir/pro"
-perl -pi -e '/^set g_nexuizversion "([0-9.]*)[^"]*"/ and $_ = "set g_nexuizversion \"'$version-pro'\"\n"' default.cfg
+perl -pi -e '/^set g_nexuizversion "?([0-9.]*)[^"]*"?/ and $_ = "set g_nexuizversion '$version-pro'\n"' default.cfg
 if [ -n "$versiontag" ]; then
 	perl -pi -e '/^set g_nexuizversion/ and $_ = "showbrand 3\n$_"' default.cfg
 fi
