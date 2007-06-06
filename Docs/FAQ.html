@@ -127,8 +127,10 @@ h1, h2, h3, h4, h5, h6 {
 <li> <a class="link" href="#When I start Nexuiz all I see is a black screen or a black screen with some checkered squares">When I start Nexuiz all I see is a black screen or a black screen with some checkered squares</a></li>
 <li> <a class="link" href="#How can I speed up my frame rate?">How can I speed up my frame rate?</a></li>
 <li> <a class="link" href="#The sound is broken, it crackles and stutters">The sound is broken, it crackles and stutters</a></li>
+<li> <a class="link" href="#Mouse is too slow and sensitivity is at top (on Mac / Linux)">Mouse is too slow and sensitivity is at top (on Mac / Linux)</a></li>
 <li> <a class="link" href="#I can't switch to 32 bit color depth (on Windows)">I can't switch to 32 bit color depth (on Windows)</a></li>
 <li> <a class="link" href="#When I join a server or after a map change I see nothing but a black screen, but I can still move and shoot">When I join a server or after a map change I see nothing but a black screen, but I can still move and shoot</a></li>
+<li> <a class="link" href="#Where can i get more help?">Where can i get more help?</a></li>
 </ul>
 <li> <a class="link" href="#General questions">General questions</a></li>
 <ul>
@@ -197,6 +199,12 @@ Some graphic cards (mostly ATI or quite old cards) run A LOT faster if you disab
 Try run <tt>nexuiz-sdl.exe</tt> instead of <tt>nexuiz.exe</tt> (on Windows). Adding the command line options <tt>-sndspeed 48000</tt> and/or <tt>-sndstereo</tt> can also help on some systems (on Linux, Mac, Windows).
 </p>
 <!--End Section 2-->
+<h3><a name="Mouse is too slow and sensitivity is at top (on Mac / Linux)">Mouse is too slow and sensitivity is at top (on Mac / Linux)</a></h3>
+<p class="Body">
+Mac: The default mouse acceleration on Mac is very high and strange.  The Nexuiz defaults work fine with it but some mouse drivers seem to 'correct' the mouse acceleration and conflict with the Nexuiz defaults. Try <tt>apple<strong>mouse</strong>noaccel 0; vid_restart</tt> in the console (<a class="link" href="#How do I open the console?">How do I open the console?</a>)
+Linux: A similar problem can arise on Linux.  Try <tt>vid<strong>dga 0; vid</strong>restart</tt> in the console (<a class="link" href="#How do I open the console?">How do I open the console?</a>)
+</p>
+<!--End Section 2-->
 <h3><a name="I can't switch to 32 bit color depth (on Windows)">I can't switch to 32 bit color depth (on Windows)</a></h3>
 <p class="Body">
 Check if your desktop color depth is set to 32 bits per pixel. If it's just set to 16, Nexuiz can't switch to 32 bit mode.
@@ -206,6 +214,11 @@ Check if your desktop color depth is set to 32 bits per pixel. If it's just set 
 <p class="Body">
 This is probably because you don't have the map that's running on the server. As Nexuiz does now supports map/content download the server might not be be setup to support this and you will have to get the map the old fashioned way. Those servers will have a download URL in their name or welcome message. There is also a <a class="link" href="http://alientrap.org/wiki/pmwiki.php?n=Main.CustomMaps">wiki page</a> dedicated to new maps.
 For Linux users: you need to have libcurl installed, otherwise you won't be able to download any maps. libcurl should be available in any Linux distribution, just search for &quot;libcurl&quot; and install it in your distribution's package manager.
+</p>
+<!--End Section 2-->
+<h3><a name="Where can i get more help?">Where can i get more help?</a></h3>
+<p class="Body">
+Visit the official Nexuiz forum (<a class="link" href="http://alientrap.org/forum">http://alientrap.org/forum</a>) there is a support and bug report area (<a class="link" href="#http://alientrap.org/forum/viewforum.php?f=3">http://alientrap.org/forum/viewforum.php?f=3</a>).  Or get on irc and ask for help.  The normal useres channel is <a class="link" href="#irc://irc.quakenet.org/nexuiz">irc://irc.quakenet.org/nexuiz</a> while the developers channel is <a class="link" href="#irc://irc.anynet.org/alientrap">irc://irc.anynet.org/alientrap</a>
 </p>
 <!--End Section 2-->
 <!-- End SectLevel2 -->
