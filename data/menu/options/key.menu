@@ -311,6 +311,11 @@ Item Window KeyControl
 						text	"Quit Nexuiz"
 						target	"Data::Key::Quit"
 					}
+					Derive Nex_Key_Template Disconnect
+					{
+						text	"Disconnect from server"
+						target	"Data::Key::Disconnect"
+					}
 					Derive Nex_Key_Template ViewSmaller
 					{
 						text	"Decrease Viewsize"
@@ -335,6 +340,31 @@ Item Window KeyControl
 					{
 						text	"Show Teammenu"
 						target	"Data::Key::TeamSelect"
+					}
+					Derive Nex_Key_Template TeamAuto
+					{
+						text	"Automatically join team"
+						target	"Data::Key::TeamAuto"
+					}
+					Derive Nex_Key_Template TeamRed
+					{
+						text	"Join red team"
+						target	"Data::Key::TeamRed"
+					}
+					Derive Nex_Key_Template TeamBlue
+					{
+						text	"Join blue team"
+						target	"Data::Key::TeamBlue"
+					}
+					Derive Nex_Key_Template TeamYellow
+					{
+						text	"Join yellow team"
+						target	"Data::Key::TeamYellow"
+					}
+					Derive Nex_Key_Template TeamPink
+					{
+						text	"Join pink team"
+						target	"Data::Key::TeamPink"
 					}
 					Derive Nex_Key_Template VoteYes
 					{

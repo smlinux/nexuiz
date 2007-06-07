@@ -78,7 +78,7 @@ Item DataContainer Key
 	Item Data_Nex_Key Hook
 	{
 		target		"+hook"
-		defValue	"'e'"
+		defValue	"'Mouse5' 'e'"
 	}
 	Item DataContainer Weapon
 	{
@@ -163,6 +163,11 @@ Item DataContainer Key
 		target		"quit"
 		defValue 	"'F10'"
 	}
+	Item Data_Nex_Key Disconnect
+	{
+		target		"disconnect"
+		defValue 	"'F11'"
+	}
 	Item Data_Nex_Key ViewSmaller
 	{
 		target		"sizedown"
@@ -187,6 +192,27 @@ Item DataContainer Key
 	{
 		target		"menu_showteamselect"
 		defValue	"'F5'"
+	}
+	Item Data_Nex_Key TeamAuto
+	{
+		target		"team_auto"
+		defValue	"'F6'"
+	}
+	Item Data_Nex_Key TeamRed
+	{
+		target		"team_red"
+	}
+	Item Data_Nex_Key TeamBlue
+	{
+		target		"team_blue"
+	}
+	Item Data_Nex_Key TeamYellow
+	{
+		target		"team_yellow"
+	}
+	Item Data_Nex_Key TeamPink
+	{
+		target		"team_pink"
 	}
 	Item Data_Nex_Key VoteYes
 	{
