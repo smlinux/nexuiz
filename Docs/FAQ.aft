@@ -46,8 +46,8 @@ Some graphic cards (mostly ATI or quite old cards) run A LOT faster if you disab
 Try run |nexuiz-sdl.exe| instead of |nexuiz.exe| (on Windows). Adding the command line options |-sndspeed 48000| and/or |-sndstereo| can also help on some systems (on Linux, Mac, Windows).
 
 ** Mouse is too slow and sensitivity is at top (on Mac / Linux)
-Mac: The default mouse acceleration on Mac is very high and strange.  The Nexuiz defaults work fine with it but some mouse drivers seem to 'correct' the mouse acceleration and conflict with the Nexuiz defaults. Try |apple_mouse_noaccel 0; vid_restart| in the console ([How do I open the console?])
-Linux: A similar problem can arise on Linux.  Try |vid_dga 0; vid_restart| in the console ([How do I open the console?])
+Mac: The default mouse acceleration on Mac is very high and strange.  The Nexuiz defaults work fine with it but some mouse drivers seem to 'correct' the mouse acceleration and conflict with the Nexuiz defaults. Try |apple__mouse__noaccel 0; vid__restart| in the console ([How do I open the console?])
+Linux: A similar problem can arise on Linux.  Try |vid__dga 0; vid__restart| in the console ([How do I open the console?])
 
 ** I can't switch to 32 bit color depth (on Windows)
 Check if your desktop color depth is set to 32 bits per pixel. If it's just set to 16, Nexuiz can't switch to 32 bit mode.
