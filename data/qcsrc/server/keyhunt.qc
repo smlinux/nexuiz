@@ -115,9 +115,9 @@ void kh_Scores_Event(entity player, entity key, string what, float frags_player,
 	if(intermission_running)
 		return;
 	if(frags_player)
-		player.frags = player.frags + floor(0.5 + frags_player);
+		UpdateFrags(player, frags_player);
 	if(key && key.owner && frags_owner)
-		key.owner.frags = key.owner.frags + floor(0.5 + frags_owner);
+		UpdateFrags(key.owner, frags_owner);
 	if(!cvar("sv_eventlog"))
 		return;
 	s = strcat(":keyhunt:", what, ":", ftos(player.playerid));

@@ -2068,6 +2068,61 @@ void() botframe_updatedangerousobjects =
 
 float botframe_spawnedwaypoints;
 float botframe_nextthink;
+
+float autoskill_nextthink;
+.float totalfrags_lastcheck;
+void(float factor) autoskill =
+{
+	float bestbot;
+	float bestplayer;
+	entity head;
+
+	bestbot = -1;
+	bestplayer = -1;
+	FOR_EACH_PLAYER(head)
+	{
+		if(clienttype(head) == CLIENTTYPE_REAL)
+			bestplayer = max(bestplayer, head.totalfrags - head.totalfrags_lastcheck);
+		else
+			bestbot = max(bestbot, head.totalfrags - head.totalfrags_lastcheck);
+	}
+
+	dprint("autoskill: best player got ", ftos(bestplayer), ", ");
+	dprint("best bot got ", ftos(bestbot), "; ");
+	if(bestbot < 0 || bestplayer < 0)
+	{
+		dprint("not doing anything\n");
+		// don't return, let it reset all counters below
+	}
+	else if(bestbot <= bestplayer * factor - 2)
+	{
+		if(cvar("skill") < 17)
+		{
+			dprint("2 frags difference, increasing skill\n");
+			cvar_set("skill", ftos(cvar("skill") + 1));
+			bprint("^2SKILL UP!^7 Now at level ", ftos(cvar("skill")), "\n");
+		}
+	}
+	else if(bestbot >= bestplayer * factor + 2)
+	{
+		if(cvar("skill") > 0)
+		{
+			dprint("2 frags difference, decreasing skill\n");
+			cvar_set("skill", ftos(cvar("skill") - 1));
+			bprint("^1SKILL DOWN!^7 Now at level ", ftos(cvar("skill")), "\n");
+		}
+	}
+	else
+	{
+		dprint("not doing anything\n");
+		return;
+		// don't reset counters, wait for them to accumulate
+	}
+
+	FOR_EACH_PLAYER(head)
+		head.totalfrags_lastcheck = head.totalfrags;
+}
+
 void() bot_serverframe =
 {
 	float realplayers, bots, activerealplayers;
@@ -2078,6 +2133,16 @@ void() bot_serverframe =
 
 	if (time < 2)
 		return;
+
+	if(time > autoskill_nextthink)
+	{
+		float a;
+		a = cvar("skill_auto");
+		if(!cvar("g_campaign"))
+			if(a)
+				autoskill(a);
+		autoskill_nextthink = time + 5;
+	}
 
 	activerealplayers = 0;
 	realplayers = 0;
