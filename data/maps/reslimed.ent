@@ -13,37 +13,31 @@
 {
 "angle" "360"
 "classname" "info_player_deathmatch"
-"angles" "0 0 0"
 "origin" "-544 576 380"
 }
 {
 "classname" "info_player_deathmatch"
-"angles" "0 0 0"
 "origin" "-1040 184 168"
 "angle" "270"
 }
 {
 "angle" "360"
 "classname" "info_player_deathmatch"
-"angles" "0 0 0"
 "origin" "-1568 -912 -8"
 }
 {
 "angle" "360"
 "classname" "info_player_deathmatch"
-"angles" "0 0 0"
 "origin" "504 -72 -32"
 }
 {
 "angle" "360"
 "classname" "info_player_deathmatch"
-"angles" "0 0 0"
 "origin" "320 -768 -32"
 }
 {
 "angle" "180"
 "classname" "info_player_deathmatch"
-"angles" "0 0 0"
 "origin" "1520 -176 112"
 }
 {
@@ -263,7 +257,6 @@
 {
 "angle" "90"
 "origin" "-1024 -1120 -8"
-"angles" "0 0 0"
 "classname" "info_player_deathmatch"
 }
 {
@@ -473,7 +466,6 @@
 }
 {
 "origin" "-616 -1776 -48"
-"angles" "0 0 0"
 "classname" "info_player_deathmatch"
 "angle" "90"
 }
@@ -602,7 +594,7 @@
 {
 "wait" "5"
 "frags" "2"
-"message" "^3 has captured the Hagar"
+"message" "^3 has captured the Mortar"
 "origin" "-632 576 384"
 "classname" "dom_controlpoint"
 }
