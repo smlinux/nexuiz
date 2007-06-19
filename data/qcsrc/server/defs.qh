@@ -259,6 +259,7 @@ float default_weapon_alpha;
 .float has_zoomed;
 
 .float() customizeentityforclient;
+.float cvar_cl_handicap;
 .float cvar_cl_zoomfactor;
 .float cvar_cl_zoomspeed;
 .float cvar_cl_playerdetailreduction;

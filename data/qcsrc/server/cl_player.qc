@@ -218,6 +218,8 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 {
 	local float take, save, waves, sdelay;
 
+	damage = damage * bound(1.0, self.cvar_cl_handicap, 100.0);
+
 	te_blood (hitloc, force, damage);
 	if (self.pain_finished < time)		//Don't switch pain sequences like crazy
 	{

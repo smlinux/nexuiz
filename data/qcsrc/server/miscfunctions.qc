@@ -493,6 +493,7 @@ void GetCvars(float f)
 	GetCvars_handleFloat(f, cvar_scr_centertime, "scr_centertime");
 	GetCvars_handleFloat(f, cvar_cl_shownames, "cl_shownames");
 	GetCvars_handleString(f, cvar_g_nexuizversion, "g_nexuizversion");
+	GetCvars_handleFloat(f, cvar_cl_handicap, "cl_handicap");
 }
 
 float fexists(string f)
