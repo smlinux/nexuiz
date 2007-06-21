@@ -56,6 +56,15 @@ Check if your desktop color depth is set to 32 bits per pixel. If it's just set 
 This is probably because you don't have the map that's running on the server. As Nexuiz does now supports map/content download the server might not be be setup to support this and you will have to get the map the old fashioned way. Those servers will have a download URL in their name or welcome message. There is also a [wiki page (http://alientrap.org/wiki/pmwiki.php?n=Main.CustomMaps)] dedicated to new maps.
 For Linux users: you need to have libcurl installed, otherwise you won't be able to download any maps. libcurl should be available in any Linux distribution, just search for "libcurl" and install it in your distribution's package manager.
 
+** How to report crashes
+Alientrap wants to ensure everyone has a pleasent time playing Nexuiz, so if you have problems we would like to ask you to report then and thus help solve them.  Especially crash reports can be very helpful.  See below for how to contact Alientrap ([Where can i get more help?])
+
+On Mac: IS THERE A EASY WAY?
+
+On Linux: In a xterm, |cd| into your Nexuiz installation directory, start |catchsegv ./nexuiz-linux-686-sdl -condebug -developer > crash.txt 2>&1| and give the file crash.txt to the developers.  Note that you can also use |./nexuiz-linux-686-glx| or if you have a 64bit system |./nexuiz-linux-x86__64-sdl| and |./nexuiz-linux-x86__64-glx|
+
+On Windows: Click Start->Run, and enter drwtsn32, click Ok in the next window, run Nexuiz and wait for the crash.  Then go to |C:\Documents and Settings\All Users\Application Data\Microsoft\Dr Watson| there should be a file called "drwtsn32.log", give that file along with the engine's build date to the developers.  You'll see that date when you open the ingame console ([How do I open the console?]).  Note that some folders of that path may be hidden or have a translated name if you're using a non-english windows.
+
 ** Where can i get more help?
 Visit the official Nexuiz forum (http://alientrap.org/forum) there is a support and bug report area ({-http://alientrap.org/forum/viewforum.php?f=3-}).  Or get on irc and ask for help.  The normal useres channel is {-irc://irc.quakenet.org/nexuiz-} while the developers channel is {-irc://irc.anynet.org/alientrap-}
 

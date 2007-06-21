@@ -130,6 +130,7 @@ h1, h2, h3, h4, h5, h6 {
 <li> <a class="link" href="#Mouse is too slow and sensitivity is at top (on Mac / Linux)">Mouse is too slow and sensitivity is at top (on Mac / Linux)</a></li>
 <li> <a class="link" href="#I can't switch to 32 bit color depth (on Windows)">I can't switch to 32 bit color depth (on Windows)</a></li>
 <li> <a class="link" href="#When I join a server or after a map change I see nothing but a black screen, but I can still move and shoot">When I join a server or after a map change I see nothing but a black screen, but I can still move and shoot</a></li>
+<li> <a class="link" href="#How to report crashes">How to report crashes</a></li>
 <li> <a class="link" href="#Where can i get more help?">Where can i get more help?</a></li>
 </ul>
 <li> <a class="link" href="#General questions">General questions</a></li>
@@ -214,6 +215,20 @@ Check if your desktop color depth is set to 32 bits per pixel. If it's just set 
 <p class="Body">
 This is probably because you don't have the map that's running on the server. As Nexuiz does now supports map/content download the server might not be be setup to support this and you will have to get the map the old fashioned way. Those servers will have a download URL in their name or welcome message. There is also a <a class="link" href="http://alientrap.org/wiki/pmwiki.php?n=Main.CustomMaps">wiki page</a> dedicated to new maps.
 For Linux users: you need to have libcurl installed, otherwise you won't be able to download any maps. libcurl should be available in any Linux distribution, just search for &quot;libcurl&quot; and install it in your distribution's package manager.
+</p>
+<!--End Section 2-->
+<h3><a name="How to report crashes">How to report crashes</a></h3>
+<p class="Body">
+Alientrap wants to ensure everyone has a pleasent time playing Nexuiz, so if you have problems we would like to ask you to report then and thus help solve them.  Especially crash reports can be very helpful.  See below for how to contact Alientrap (<a class="link" href="#Where can i get more help?">Where can i get more help?</a>)
+</p>
+<p class="Body">
+On Mac: IS THERE A EASY WAY?
+</p>
+<p class="Body">
+On Linux: In a xterm, <tt>cd</tt> into your Nexuiz installation directory, start <tt>catchsegv ./nexuiz-linux-686-sdl -condebug -developer &gt; crash.txt 2&gt;&amp;1</tt> and give the file crash.txt to the developers.  Note that you can also use <tt>./nexuiz-linux-686-glx</tt> or if you have a 64bit system <tt>./nexuiz-linux-x86_64-sdl</tt> and <tt>./nexuiz-linux-x86_64-glx</tt>
+</p>
+<p class="Body">
+On Windows: Click Start-&gt;Run, and enter drwtsn32, click Ok in the next window, run Nexuiz and wait for the crash.  Then go to <tt>C:\Documents and Settings\All Users\Application Data\Microsoft\Dr Watson</tt> there should be a file called &quot;drwtsn32.log&quot;, give that file along with the engine's build date to the developers.  You'll see that date when you open the ingame console (<a class="link" href="#How do I open the console?">How do I open the console?</a>).  Note that some folders of that path may be hidden or have a translated name if you're using a non-english windows.
 </p>
 <!--End Section 2-->
 <h3><a name="Where can i get more help?">Where can i get more help?</a></h3>
