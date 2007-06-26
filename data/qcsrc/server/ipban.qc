@@ -26,7 +26,10 @@ void Ban_SaveBans()
 		out = strcat(out, " ", ban_ip[i]);
 		out = strcat(out, " ", ftos(ban_expire[i] - time));
 	}
-	cvar_set("g_banned_list", out);
+	if(strlen(out) <= 1) // no real entries
+		cvar_set("g_banned_list", "");
+	else
+		cvar_set("g_banned_list", out);
 }
 
 float Ban_Delete(float i)
