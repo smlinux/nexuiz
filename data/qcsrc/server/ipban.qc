@@ -85,10 +85,10 @@ float Ban_GetClientIP(entity client)
 	n = tokenizebyseparator(client.netaddress, ".");
 	if(n != 4)
 		return FALSE;
-	ban_ip1 = strcat1(argv(1));
-	ban_ip2 = strcat(ban_ip1, ".", argv(2));
-	ban_ip3 = strcat(ban_ip2, ".", argv(3));
-	ban_ip4 = strcat(ban_ip3, ".", argv(4));
+	ban_ip1 = strcat1(argv(0));
+	ban_ip2 = strcat(ban_ip1, ".", argv(1));
+	ban_ip3 = strcat(ban_ip2, ".", argv(2));
+	ban_ip4 = strcat(ban_ip3, ".", argv(3));
 	return TRUE;
 }
 

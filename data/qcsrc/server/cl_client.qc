@@ -626,14 +626,15 @@ string ColoredTeamName(float t);
 //void dom_player_join_team(entity pl);
 void ClientConnect (void)
 {
+	local string s;
+
 	if(Ban_IsClientBanned(self))
 	{
+		s = strcat("^1NOTE:^7 banned client ", self.netaddress, " just tried to enter\n");
 		dropclient(self);
-		bprint("^1NOTE:^7 banned client ", self.netaddress, " just tried to enter\n");
+		bprint(s);
 		return;
 	}
-
-	local string s;
 
 	self.classname = "player_joining";
 	self.flags = self.flags | FL_CLIENT;
