@@ -345,6 +345,8 @@ void worldspawn (void)
 	fteqcc_testbugs();
 
 	readlevelcvars();
+
+	Ban_LoadBans();
 }
 
 void light (void)
@@ -511,6 +513,8 @@ void() GameResetCfg =
 		localcmd(strcat("exec \"", exit_cfg, "\"\n"));
 
 	localcmd("exec game_reset.cfg\n");
+
+	Ban_SaveBans();
 };
 
 void() Map_Goto =
@@ -653,6 +657,8 @@ string() GetNextMap =
 
 float() DoNextMapOverride =
 {
+	Ban_SaveBans();
+
 	if(cvar("g_campaign"))
 	{
 		CampaignPostIntermission();

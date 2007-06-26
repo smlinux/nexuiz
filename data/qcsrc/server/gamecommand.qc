@@ -9,9 +9,13 @@ void GameCommand(string command)
 		print("  adminmsg clientnumber \"message\"\n");
 		print("  teamstatus\n");
 		print("  printstats\n");
+		GameCommand_Ban("help");
 		GameCommand_Generic("help");
 		return;
 	}
+
+	if(GameCommand_Ban(command))
+		return;
 
 	if(GameCommand_Generic(command))
 		return;

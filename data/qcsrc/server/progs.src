@@ -12,6 +12,8 @@ campaign.qh
 ../common/util.qh
 ../common/util.qc
 
+ipban.qh
+
 keyhunt.qh
 
 miscfunctions.qc
@@ -90,3 +92,5 @@ gamecommand.qc
 keyhunt.qc
 
 assault.qc
+
+ipban.qc

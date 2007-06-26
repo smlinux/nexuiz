@@ -1,0 +1,4 @@
+void Ban_SaveBans();
+void Ban_LoadBans();
+float Ban_IsClientBanned(entity client);
+float GameCommand_Ban(string command);

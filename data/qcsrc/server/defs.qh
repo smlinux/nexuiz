@@ -186,6 +186,7 @@ float alreadychangedlevel;
 // stahl's voting
 float votecalled;
 string votecalledvote;
+string votecalledvote_display;
 float votecalledmaster;
 entity votecaller;
 float votefinished;

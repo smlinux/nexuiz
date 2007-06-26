@@ -1455,3 +1455,5 @@ float PFLAGS_FULLDYNAMIC = 128; // light enable (without this set no light is pr
 //sv_stepheight (default 18)
 //description:
 //sv_jumpstep allows stepping up onto stairs while airborn, sv_stepheight controls how high a single step can be.
+
+.string netaddress; // TODO make this a full block

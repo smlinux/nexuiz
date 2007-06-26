@@ -120,8 +120,47 @@ void Say(entity source, float teamsay, string msgin)
 	strunzone(msgstr);
 }
 
+string GetKickVoteVictim_newcommand;
+entity GetKickVoteVictim(string vote, string cmd)
+{
+	float tokens;
+	float i, n;
+	string ns;
+	entity e;
+
+	tokens = tokenize(vote);
+	ns = "";
+
+	if(tokens == 2)
+		if(substring(argv(1), 0, 1) == "#")
+			ns = substring(argv(1), 1, 999);
+	
+	if(tokens == 3)
+		if(argv(1) == "#")
+			ns = argv(2);
+
+	if(ns != "")
+	{
+		n = stof(ns);
+		if(ns == ftos(n)) if(n >= 1) if(n <= maxclients)
+		{
+			for((e = world), (i = 0); i < n; ++i, (e = nextent(e)))
+				;
+			if(clienttype(e) == CLIENTTYPE_REAL)
+			{
+				GetKickVoteVictim_newcommand = strcat(argv(0), " # ", ns);
+				return e;
+			}
+		}
+	}
+
+	sprint(self, strcat("Usage: ", cmd, " ", argv(0), " #playernumber (as in \"status\")\n"));
+	return world;
+}
+
 void SV_ParseClientCommand(string s) {
 	local string cmd;
+	local entity e;
 
 	tokenize(s);
 
@@ -151,7 +190,7 @@ void SV_ParseClientCommand(string s) {
 			sprint(self, strcat("^3", cvar_string("sv_vote_commands"), "^7 and maybe further ^3arguments^7\n"));
 		} else if(argv(1) == "status") {
 			if(votecalled) {
-				sprint(self, strcat("^7Vote for \"^1", votecalledvote, "^7\" called by \"^7", votecaller.netname, "^7\".\n"));
+				sprint(self, strcat("^7Vote for ", votecalledvote_display, "^7 called by ^7", votecaller.netname, "^7.\n"));
 			} else {
 				sprint(self, "^1No vote called.\n");
 			}
@@ -169,18 +208,29 @@ void SV_ParseClientCommand(string s) {
 					} else if(VoteAllowed(strcat1(argv(2)))) { // strcat seems to be necessary
 						if(!ValidateMap(vote))
 							return;
+						// remap chmap to gotomap (forces intermission)
+						if(substring(vote, 0, 6) == "chmap ")
+							vote = strcat("gotomap ", substring(vote, 6, strlen(vote) - 6));
+						// make kick and kickban votes a bit nicer (and reject them if formatted badly)
+						if(substring(vote, 0, 5) == "kick " || substring(vote, 0, 8) == "kickban ")
+						{
+							if(!(e = GetKickVoteVictim(vote, "vcall")))
+								return;
+							votecalledvote_display = strzone(strcat("^1", vote, " (^7", e.netname, "^1)"));
+							vote = GetKickVoteVictim_newcommand;
+						}
+						else
+						{
+							votecalledvote_display = strzone(strcat("^1", vote));
+						}
+						votecalledvote = strzone(vote);
 						votecalled = TRUE;
 						votecalledmaster = FALSE;
-						// remap chmap to gotomap (forces intermission)
-						if(strlen(vote) >= 6)
-							if(substring(vote, 0, 6) == "chmap ")
-								vote = strcat("gotomap ", substring(vote, 6, strlen(vote) - 6));
-						votecalledvote = strzone(vote);
 						votecaller = self; // remember who called the vote
 						votefinished = time + cvar("sv_vote_timeout");
 						votecaller.vote_vote = 1; // of course you vote yes
 						votecaller.vote_next = time + cvar("sv_vote_wait");
-						bprint("\{1}^2* ^3", votecaller.netname, "^2 calls a vote for ^1", votecalledvote, "\n");
+						bprint("\{1}^2* ^3", votecaller.netname, "^2 calls a vote for ", votecalledvote_display, "\n");
 						VoteCount(); // needed if you are the only one
 					} else {
 						sprint(self, "^1This vote is not ok. See help for more info.\n");
@@ -194,6 +244,8 @@ void SV_ParseClientCommand(string s) {
 				sprint(self, "^1No vote called.\n");
 			} else if(self == votecaller) { // the votecaller can stop a vote
 				VoteStop(self);
+			} else if(self.vote_master) { // masters can, too
+				VoteStop(self);
 			} else {
 				sprint(self, "^1You are not allowed to stop that Vote.\n");
 			}
@@ -204,7 +256,8 @@ void SV_ParseClientCommand(string s) {
 				} else {
 					votecalled = TRUE;
 					votecalledmaster = TRUE;
-					votecalledvote = strzone("^3master");
+					votecalledvote = strzone("XXX");
+					votecalledvote_display = strzone("^3master");
 					votecaller = self; // remember who called the vote
 					votefinished = time + cvar("sv_vote_timeout");
 					votecaller.vote_vote = 1; // of course you vote yes
@@ -231,7 +284,7 @@ void SV_ParseClientCommand(string s) {
 				else
 					sprint(self, "^1You are NOT a master.\n");
 			} else if(self.vote_master) {
-				local string dovote;
+				local string dovote, dovote_display;
 				dovote = VoteParse();
 				if(dovote == "") {
 					sprint(self, "^1Your command was empty. See help for more info.\n");
@@ -241,8 +294,16 @@ void SV_ParseClientCommand(string s) {
 					// remap chmap to gotomap (forces intermission)
 					if(strlen(dovote) >= 6)
 						if(substring(dovote, 0, 6) == "chmap ")
-							vote = strcat("gotomap ", substring(dovote, 6, strlen(dovote) - 6));
-					bprint("\{1}^2* ^3", self.netname, "^2 used his ^3master^2 status to do \"^2", dovote, "^2\".\n");
+							dovote = strcat("gotomap ", substring(dovote, 6, strlen(dovote) - 6));
+					dovote = dovote_display;
+					if(substring(dovote, 0, 5) == "kick " || substring(dovote, 0, 8) == "kickban ")
+					{
+						if(!(e = GetKickVoteVictim(dovote, "vdo")))
+							return;
+						dovote_display = strzone(strcat("^1", dovote, " (^7", e.netname, "^1)"));
+						dovote = GetKickVoteVictim_newcommand;
+					}
+					bprint("\{1}^2* ^3", self.netname, "^2 used his ^3master^2 status to do \"^2", dovote_display, "^2\".\n");
 					localcmd(strcat(dovote, "\n"));
 				} else {
 					sprint(self, "^1This command is not ok. See help for more info.\n");
@@ -519,13 +580,19 @@ void VoteReset() {
 		centerprint_expire(player, CENTERPRIO_VOTE);
 	}
 
+	if(votecalled)
+	{
+		strunzone(votecalledvote);
+		strunzone(votecalledvote_display);
+	}
+
 	votecalled = FALSE;
 	votecalledmaster = FALSE;
 	votefinished = 0;
 }
 
 void VoteAccept() {
-	bprint("\{1}^2* ^3", votecaller.netname, "^2's vote for ^1", votecalledvote, "^2 was accepted\n");
+	bprint("\{1}^2* ^3", votecaller.netname, "^2's vote for ^1", votecalledvote_display, "^2 was accepted\n");
 	if(votecalledmaster)
 	{
 		votecaller.vote_master = 1;
@@ -537,12 +604,12 @@ void VoteAccept() {
 }
 
 void VoteReject() {
-	bprint("\{1}^2* ^3", votecaller.netname, "^2's vote for ^1", votecalledvote, "^2 was rejected\n");
+	bprint("\{1}^2* ^3", votecaller.netname, "^2's vote for ", votecalledvote_display, "^2 was rejected\n");
 	VoteReset();
 }
 
 void VoteTimeout() {
-	bprint("\{1}^2* ^3", votecaller.netname, "^2's vote for ^1", votecalledvote, "^2 timed out\n");
+	bprint("\{1}^2* ^3", votecaller.netname, "^2's vote for ", votecalledvote_display, "^2 timed out\n");
 	VoteReset();
 }
 
@@ -558,7 +625,7 @@ void VoteStop(entity stopper) {
 void VoteNag() {
 	if(votecalled)
 		if(self.vote_vote == 0)
-			centerprint_atprio(self, CENTERPRIO_VOTE, strcat("^7^3", votecaller.netname, "^2 called a vote for ^1", votecalledvote, "\n\n^2You have not voted yet!\n^2HINT: By default, F1 is yes and F2 is no."));
+			centerprint_atprio(self, CENTERPRIO_VOTE, strcat("^7^3", votecaller.netname, "^2 called a vote for ", votecalledvote_display, "\n\n^2You have not voted yet!\n^2HINT: By default, F1 is yes and F2 is no."));
 }
 
 void VoteCount() {
