@@ -295,7 +295,7 @@ void SV_ParseClientCommand(string s) {
 					if(strlen(dovote) >= 6)
 						if(substring(dovote, 0, 6) == "chmap ")
 							dovote = strcat("gotomap ", substring(dovote, 6, strlen(dovote) - 6));
-					dovote = dovote_display;
+					dovote_display = dovote;
 					if(substring(dovote, 0, 5) == "kick " || substring(dovote, 0, 8) == "kickban ")
 					{
 						if(!(e = GetKickVoteVictim(dovote, "vdo")))
