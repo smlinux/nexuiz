@@ -76,6 +76,7 @@ t_plats.qc
 
 ctf.qc
 domination.qc
+mode_onslaught.qc
 g_hook.qc
 
 t_swamp.qc

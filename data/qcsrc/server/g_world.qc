@@ -384,6 +384,8 @@ string GetGametype()
 		return "lms";
 	else if (game == GAME_KEYHUNT)
 		return "kh";
+	else if (game == GAME_ONSLAUGHT)
+		return "ons";
 	return "dm";
 }
 
@@ -1073,6 +1075,42 @@ void(void) ClearWinners =
 		head.winning = 0;
 }
 
+// Onslaught winning condition:
+// game terminates if only one team has a working generator (or none)
+float() WinningCondition_Onslaught =
+{
+	entity head;
+	local float t1, t2, t3, t4;
+	// first check if the game has ended
+	t1 = t2 = t3 = t4 = 0;
+	head = find(world, classname, "onslaught_generator");
+	while (head)
+	{
+		if (head.health > 0)
+		{
+			if (head.team == COLOR_TEAM1) t1 = 1;
+			if (head.team == COLOR_TEAM2) t2 = 1;
+			if (head.team == COLOR_TEAM3) t3 = 1;
+			if (head.team == COLOR_TEAM4) t4 = 1;
+		}
+		head = find(head, classname, "onslaught_generator");
+	}
+	if (t1 + t2 + t3 + t4 < 2)
+	{
+		// game over, only one team remains (or none)
+		ClearWinners();
+		if (t1) SetWinners(team, COLOR_TEAM1);
+		if (t2) SetWinners(team, COLOR_TEAM2);
+		if (t3) SetWinners(team, COLOR_TEAM3);
+		if (t4) SetWinners(team, COLOR_TEAM4);
+		dprint("Have a winner, ending game.\n");
+		return WINNING_YES;
+	}
+
+	// Two or more teams remain
+	return WINNING_NO;
+}
+
 float() LMS_NewPlayerLives =
 {
 	float fl;
@@ -1498,6 +1536,10 @@ void() CheckRules_World =
 	if(cvar("g_lms"))
 	{
 		status = WinningCondition_LMS();
+	}
+	else if (cvar("g_onslaught"))
+	{
+		status = WinningCondition_Onslaught();
 	}
 	else
 	{
