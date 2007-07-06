@@ -1,4 +1,7 @@
 #!/bin/sh
+
+echo TODO: add darkplaces.txt to Docs/
+
 set -e
 
 base=`pwd`
