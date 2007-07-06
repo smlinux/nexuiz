@@ -182,6 +182,14 @@ void ImpulseCommands (void)
 			{
 				if(imp == 99)
 				{
+					if(self.waypointsprite_deployed_personal)
+					{
+						tracebox(self.waypointsprite_deployed_personal.origin, self.mins, self.maxs, self.waypointsprite_deployed_personal.origin, MOVE_WORLDONLY, self);
+						if(trace_startsolid)
+							sprint(self, "Cannot move there, cheater\n");
+						else
+							setorigin(self, self.waypointsprite_deployed_personal.origin);
+					}
 					self.items |= (IT_LASER | IT_UZI | IT_SHOTGUN | IT_GRENADE_LAUNCHER | IT_ELECTRO | IT_CRYLINK | IT_NEX | IT_HAGAR | IT_ROCKET_LAUNCHER);
 					self.ammo_shells = cvar("g_pickup_shells_max");
 					self.ammo_nails = cvar("g_pickup_nails_max");
