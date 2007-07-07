@@ -347,9 +347,9 @@ void() hurt_touch =
 	if (!other.owner)
 	{
 		if (other.items & IT_KEY1 || other.items & IT_KEY2)	// reset flag
-			other.pain_finished = time + 2;
+			other.pain_finished = min(other.pain_finished, time + 2);
 		else if (other.classname == "rune")			// reset runes
-			other.nextthink = time + 1;
+			other.nextthink = min(other.nextthink, time + 1);
 	}
 
 	if (other.takedamage)
