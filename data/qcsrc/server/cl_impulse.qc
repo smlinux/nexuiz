@@ -1,3 +1,5 @@
+.vector personal_v_angle; // view angles to restore on impulse 77
+
 void CopyBody(float keepvelocity);
 
 // changes by LordHavoc on 03/30/04
@@ -94,16 +96,19 @@ void ImpulseCommands (void)
 		if(imp == 30)
 		{
 			WaypointSprite_DeployPersonal("waypoint", self.origin);
+			self.personal_v_angle = self.v_angle;
 			sprint(self, "personal waypoint spawned at location\n");
 		}
 		else if(imp == 31)
 		{
 			WaypointSprite_DeployPersonal("waypoint", self.cursor_trace_endpos);
+			self.personal_v_angle = self.v_angle;
 			sprint(self, "personal waypoint spawned at crosshair\n");
 		}
 		else if(imp == 32 && vlen(self.death_origin))
 		{
 			WaypointSprite_DeployPersonal("waypoint", self.death_origin);
+			self.personal_v_angle = self.v_angle;
 			sprint(self, "personal waypoint spawned at death location\n");
 		}
 		else if(imp == 33 && self.deadflag == DEAD_NO && teams_matter)
@@ -180,16 +185,34 @@ void ImpulseCommands (void)
 			}
 			else if(self.deadflag == DEAD_NO)
 			{
-				if(imp == 99)
+				if(imp == 77)
 				{
 					if(self.waypointsprite_deployed_personal)
 					{
 						tracebox(self.waypointsprite_deployed_personal.origin, self.mins, self.maxs, self.waypointsprite_deployed_personal.origin, MOVE_WORLDONLY, self);
 						if(trace_startsolid)
-							sprint(self, "Cannot move there, cheater\n");
+						{
+							sprint(self, "Cannot move there, cheater - only waypoints set using g_waypointsprite_personal work\n");
+						}
 						else
+						{
+							// Abort speedrun, teleport back
 							setorigin(self, self.waypointsprite_deployed_personal.origin);
+							self.velocity = '0 0 0';
+							self.angles = self.personal_v_angle;
+							self.fixangle = TRUE;
+							if(self.flagcarried)
+							{
+								bprint("The ", self.flagcarried.netname, " was returned to base by its carrier\n");
+								ReturnFlag(self.flagcarried);
+							}
+						}
 					}
+					else
+						sprint(self, "No waypoint set, cheater (use g_waypointsprite_personal to set one)\n");
+				}
+				else if(imp == 99)
+				{
 					self.items |= (IT_LASER | IT_UZI | IT_SHOTGUN | IT_GRENADE_LAUNCHER | IT_ELECTRO | IT_CRYLINK | IT_NEX | IT_HAGAR | IT_ROCKET_LAUNCHER);
 					self.ammo_shells = cvar("g_pickup_shells_max");
 					self.ammo_nails = cvar("g_pickup_nails_max");
