@@ -74,6 +74,14 @@ while(@ARGV)
 	{
 		$options->{scale} = (shift @ARGV) || 1;
 	}
+	elsif($_ eq '-novis')
+	{
+		$options->{vis} = undef;
+	}
+	elsif($_ eq '-nolight')
+	{
+		$options->{light} = undef;
+	}
 	elsif($_ =~ /^-/ and $curmode eq 'maps')
 	{
 		$curmode = 'bsp';
@@ -171,10 +179,16 @@ for my $m(@{$options->{maps}})
 			rename "${m}_s.bsp", "$m.bsp"
 				or die "rename ${m}_s.bsp $m.bsp: $!";
 		}
-		q3map2 '-vis',          @{$options->{vis}},   "$m.map"
-			or die "-vis: $?";
-		q3map2 '-light',        @{$options->{light}}, "$m.map"
-			or die "-light: $?";
+		if(defined $options->{vis})
+		{
+			q3map2 '-vis',          @{$options->{vis}},   "$m.map"
+				or die "-vis: $?";
+		}
+		if(defined $options->{light})
+		{
+			q3map2 '-light',        @{$options->{light}}, "$m.map"
+				or die "-light: $?";
+		}
 		if($postscale != 1)
 		{
 			q3map2 '-scale', $postscale, "$m.bsp"
