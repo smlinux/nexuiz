@@ -502,6 +502,12 @@ float ValidateMap(string vote)
 			sprint(self, "This server does not allow changing the game type by map votes.\n");
 			return FALSE;
 		}
+	if(!cvar("sv_vote_override_mostrecent"))
+		if(Map_IsRecent(argv(1)))
+		{
+			sprint(self, "This server does not allow for recent maps to be played again. Please be patient for some rounds.\n");
+			return FALSE;
+		}
 
 	if(!TryFile(strcat("maps/", argv(1), ext)))
 	{

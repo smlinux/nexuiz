@@ -467,14 +467,44 @@ string Map_Filename(float position)
 	return strcat("maps/", argv(position), ".mapcfg");
 }
 
+string strwords(string s, float w)
+{
+	float endpos;
+	for(endpos = 0; w && endpos >= 0; --w)
+		endpos = strstrofs(s, " ", endpos + 1);
+	if(endpos < 0)
+		return s;
+	else
+		return substring(s, 0, endpos);
+}
+
+float strhasword(string s, string w)
+{
+	return strstrofs(strcat(" ", s, " "), strcat(" ", w, " "), 0) >= 0;
+}
+
+void Map_MarkAsRecent(string m)
+{
+	cvar_set("g_maplist_mostrecent", strwords(strcat(m, " ", cvar_string("g_maplist_mostrecent")), cvar("g_maplist_mostrecent_count")));
+}
+
+float Map_IsRecent(string m)
+{
+	return strhasword(cvar_string("g_maplist_mostrecent"), m);
+}
+
 float(float position, float pass) Map_Check =
 {
 	string filename;
 	string map_next;
 	map_next = argv(position);
 	if(pass <= 1)
+	{
 		if(map_next == Map_Current_Name) // same map again in first pass?
 			return 0;
+		if(Map_IsRecent(map_next))
+			return 0;
+	}
 	filename = Map_Filename(position);
 	if(TryFile(filename))
 	{
@@ -521,6 +551,7 @@ void() GameResetCfg =
 
 void() Map_Goto =
 {
+	Map_MarkAsRecent(getmapname_stored);
 	GameResetCfg();
 	localcmd(strcat("exec \"maps/", getmapname_stored ,".mapcfg\"\n"));
 }
@@ -1614,7 +1645,6 @@ string mapvote_maps[MAPVOTE_COUNT];
 float mapvote_maps_suggested[MAPVOTE_COUNT];
 string mapvote_suggestions[MAPVOTE_COUNT];
 float mapvote_suggestion_ptr;
-string mapvote_fillstr;
 float mapvote_maxlen;
 float mapvote_voters;
 float mapvote_votes[MAPVOTE_COUNT];
@@ -1638,9 +1668,10 @@ string MapVote_Suggest(string m)
 		return "Can't suggest - voting is already in progress!";
 	if(!cvar("g_maplist_votable_suggestions_change_gametype"))
 		if(!IsSameGametype(m))
-		{
 			return "This server does not allow changing the game type by map suggestions.";
-		}
+	if(!cvar("g_maplist_votable_override_mostrecent"))
+		if(Map_IsRecent(m))
+			return "This server does not allow for recent maps to be played again. Please be patient for some rounds.";
 
 	if(!TryFile(strcat("maps/", m, ".mapcfg")))
 		return "The map you suggested is not available on this server.";
@@ -1704,11 +1735,6 @@ void MapVote_Init()
 	}
 
 	//dprint("mapvote count is ", ftos(mapvote_count), "\n");
-
-	mapvote_fillstr = " ";
-	while(strlen(mapvote_fillstr) < mapvote_maxlen + 16)
-		mapvote_fillstr = strcat(mapvote_fillstr, mapvote_fillstr);
-	mapvote_fillstr = strzone(mapvote_fillstr);
 
 	mapvote_keeptwotime = time + cvar("g_maplist_votable_keeptwotime");
 	mapvote_timeout = time + cvar("g_maplist_votable_timeout");
@@ -1875,13 +1901,13 @@ void MapVote_Tick()
 			else
 			{
 				tmp = mapvote_maps[i];
-				tmp = strcat(tmp, substring(mapvote_fillstr, 0, mapvote_maxlen  - strlen(tmp)));
+				tmp = strpad(mapvote_maxlen, tmp);
 				tmp = strcat(ftos(math_mod(i + 1, 10)), ": ", tmp);
 				tmp = strcat(tmp, " ^2(", ftos(mapvote_votes[i]), " vote");
 				if(mapvote_votes[i] != 1)
 					tmp = strcat(tmp, "s");
 				tmp = strcat(tmp, ")");
-				tmp = strcat(tmp, substring(mapvote_fillstr, 0, mapvote_maxlen + 15 - strlen(tmp)));
+				tmp = strpad(mapvote_maxlen + 15, tmp);
 				if(other.mapvote == i + 1)
 					msgstr = strcat(msgstr, "^3> ", tmp, "\n");
 				else

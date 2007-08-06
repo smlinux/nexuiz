@@ -45,6 +45,7 @@ void junk_function ()
 	self.disableclientprediction = 0;
 	self.contentstransition = SUB_Null;
 	self.dphitcontentsmask = 0;
+	self.modelflags = 0;
 	trace_dphittexturename = "";
 }
 

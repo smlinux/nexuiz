@@ -233,6 +233,8 @@ void relocate_spawnpoint()
 	}
 }
 
+#define strstr strstrofs
+/*
 // NOTE: DO NOT USE THIS FUNCTION TOO OFTEN.
 // IT WILL MOST PROBABLY DESTROY _ALL_ OTHER TEMP
 // STRINGS AND TAKE QUITE LONG. haystack and needle MUST
@@ -252,6 +254,7 @@ float(string haystack, string needle, float offset) strstr =
 	}
 	return -1;
 }
+*/
 
 float NUM_NEAREST_ENTITIES = 4;
 entity nearest_entity[NUM_NEAREST_ENTITIES];
