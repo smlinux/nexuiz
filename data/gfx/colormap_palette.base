@@ -1,0 +1,26 @@
+bbbbbb
+73571f
+00BBBB
+00FF00
+FF0000
+0080ff
+cf8f2b
+b7876b
+c38baa
+FF00FF
+a3877b
+4f6357
+FFFF00
+0000FF
+ff8000
+e30074
+
+processing of player colors:
+:'<,'>!perl -pe '$_ = sprintf "\%s\n", unpack "H6", pack "CCC", map { $_ * 15/16 + 255/16 } unpack "CCC", pack "H6", $_'                     
+(put 1/16 white on them so other-colored light still affects them a bit)
+
+processing of scoreboard colors:
+:'<,'>!perl -pe '$_ = sprintf "\%s\n", unpack "H6", pack "CCC", map { $_ * 0.7 + 0.5 } unpack "CCC", pack "H6", $_'
+(made them darker by 30%)
+
+red has been darkened further manually

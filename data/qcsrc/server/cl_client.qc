@@ -488,16 +488,28 @@ void PutClientInServer (void)
 
 		self.customizeentityforclient = Client_customizeentityforclient;
 
-		if(cvar("sv_defaultcharacter") == 1 && !teams_matter) {
+		if(cvar("sv_defaultcharacter") == 1) {
 			local string defaultmodel;
 			defaultmodel = cvar_string("sv_defaultplayermodel");
 			setmodel_lod (self, defaultmodel);
 			self.skin = stof(cvar_string("sv_defaultplayerskin"));
+			if(!teams_matter)
+				if(strlen(cvar_string("sv_defaultplayercolors")))
+					setcolor(self, cvar("sv_defaultplayercolors"));
 		} else {
 			self.playermodel = CheckPlayerModel(self.playermodel);
 			setmodel_lod (self, self.playermodel);
 			if(teams_matter)
-				self.skin = math_mod(stof(self.playerskin), NUM_PLAYERSKINS_TEAMPLAY);
+			{
+				float s;
+				s = stof(self.playerskin);
+				if(s >= 0 && s < 3)
+					self.skin = s;
+				else if(s == 6)
+					self.skin = 6;
+				else
+					self.skin = 0;
+			}
 			else
 				self.skin = stof(self.playerskin);
 		}
@@ -1367,7 +1379,7 @@ void PlayerPreThink (void)
 			}
 		}
 
-		if(cvar("sv_defaultcharacter") == 1 && !teams_matter) {
+		if(cvar("sv_defaultcharacter") == 1) {
 			local string defaultmodel;
 			defaultmodel = cvar_string("sv_defaultplayermodel");
 
@@ -1381,6 +1393,10 @@ void PlayerPreThink (void)
 
 			if (self.skin != cvar("sv_defaultplayerskin"))
 				self.skin = cvar("sv_defaultplayerskin");
+			if(!teams_matter)
+				if(strlen(cvar_string("sv_defaultplayercolors")))
+					if(self.clientcolors != cvar("sv_defaultplayercolors"))
+						setcolor(self, cvar("sv_defaultplayercolors"));
 		} else {
 			if (self.playermodel != self.model)
 			{

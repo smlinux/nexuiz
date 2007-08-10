@@ -20,7 +20,7 @@ float KH_KEY_WP_ZSHIFT = 20;
 
 vector KH_KEY_MIN = '-10 -10 -46';
 vector KH_KEY_MAX = '10 10 3';
-float KH_KEY_BRIGHTNESS = 4;
+float KH_KEY_BRIGHTNESS = 2;
 
 typedef void(void) kh_Think_t;
 var kh_Think_t kh_Controller_Thinkfunc;
@@ -289,17 +289,13 @@ vector kh_TeamColor(float teem)
 	switch(teem)
 	{
 		case COLOR_TEAM1:
-			//return '103 0 0' / 255.0;
-			return '0.4039 0.0000 0.0000';
+			return '1 0.0625 0.0625';
 		case COLOR_TEAM2:
-			//return '35 35 191' / 255.0;
-			return '0.1373 0.1373 0.7490';
+			return '0.0625 0.0625 1';
 		case COLOR_TEAM3:
-			//return '187 167 15' / 255.0;
-			return '0.7333 0.6549 0.0588';
+			return '1 1 0.0625';
 		case COLOR_TEAM4:
-			//return '139 79 107' / 255.0;
-			return '0.5451 0.3099 0.4196';
+			return '1 0.0625 1';
 		default:
 			return '1 1 1';
 	}
