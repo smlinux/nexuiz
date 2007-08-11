@@ -493,9 +493,6 @@ void PutClientInServer (void)
 			defaultmodel = cvar_string("sv_defaultplayermodel");
 			setmodel_lod (self, defaultmodel);
 			self.skin = stof(cvar_string("sv_defaultplayerskin"));
-			if(!teams_matter)
-				if(strlen(cvar_string("sv_defaultplayercolors")))
-					setcolor(self, cvar("sv_defaultplayercolors"));
 		} else {
 			self.playermodel = CheckPlayerModel(self.playermodel);
 			setmodel_lod (self, self.playermodel);
@@ -513,6 +510,9 @@ void PutClientInServer (void)
 			else
 				self.skin = stof(self.playerskin);
 		}
+		if(!teams_matter)
+			if(strlen(cvar_string("sv_defaultplayercolors")))
+				setcolor(self, cvar("sv_defaultplayercolors"));
 
 		self.crouch = FALSE;
 		self.view_ofs = PL_VIEW_OFS;
@@ -1393,10 +1393,6 @@ void PlayerPreThink (void)
 
 			if (self.skin != cvar("sv_defaultplayerskin"))
 				self.skin = cvar("sv_defaultplayerskin");
-			if(!teams_matter)
-				if(strlen(cvar_string("sv_defaultplayercolors")))
-					if(self.clientcolors != cvar("sv_defaultplayercolors"))
-						setcolor(self, cvar("sv_defaultplayercolors"));
 		} else {
 			if (self.playermodel != self.model)
 			{
@@ -1418,6 +1414,10 @@ void PlayerPreThink (void)
 					self.skin = stof(self.playerskin);
 			}
 		}
+		if(!teams_matter)
+			if(strlen(cvar_string("sv_defaultplayercolors")))
+				if(self.clientcolors != cvar("sv_defaultplayercolors"))
+					setcolor(self, cvar("sv_defaultplayercolors"));
 
 		GrapplingHookFrame();
 
