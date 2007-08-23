@@ -333,142 +333,156 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
         damage_attacker = attacker;
 		attacker_save = attacker;
 
-	if (targ.classname == "player")
-	if (attacker.classname == "player")
-	if (!targ.isbot)
-	if (attacker.isbot)
-		damage = damage * bound(0.1, (skill + 5) * 0.1, 1);
-
-	// nullify damage if teamplay is on
-	if(deathtype != DEATH_TELEFRAG)
-	if(attacker.team == targ.team)
-	if(attacker.classname == "player")
+	if(deathtype == DEATH_KILL || deathtype == DEATH_TEAMCHANGE || deathtype == DEATH_AUTOTEAMCHANGE)
 	{
-		if(teamplay == 1)
-			damage = 0;
-		else if(attacker != targ)
+		// These are ALWAYS lethal
+		// No damage modification here
+		// Instead, prepare the victim for his death...
+		targ.armorvalue = 0;
+		targ.spawnshieldtime = 0;
+		targ.health = 1;
+		targ.flags -= targ.flags & FL_GODMODE;
+		damage = 100000;
+	}
+	else
+	{
+		if (targ.classname == "player")
+		if (attacker.classname == "player")
+		if (!targ.isbot)
+		if (attacker.isbot)
+			damage = damage * bound(0.1, (skill + 5) * 0.1, 1);
+
+		// nullify damage if teamplay is on
+		if(deathtype != DEATH_TELEFRAG)
+		if(attacker.team == targ.team)
+		if(attacker.classname == "player")
 		{
-			if(teamplay == 3)
+			if(teamplay == 1)
 				damage = 0;
-			else if(teamplay == 4)
+			else if(attacker != targ)
 			{
-				if(targ.classname == "player" && targ.deadflag == DEAD_NO)
+				if(teamplay == 3)
+					damage = 0;
+				else if(teamplay == 4)
 				{
-					mirrordamage = cvar("g_mirrordamage") * damage;
-					mirrorforce = cvar("g_mirrordamage") * vlen(force);
-					if(cvar("g_minstagib"))
+					if(targ.classname == "player" && targ.deadflag == DEAD_NO)
 					{
-						if(cvar("g_friendlyfire") == 0)
-							damage = 0;
+						mirrordamage = cvar("g_mirrordamage") * damage;
+						mirrorforce = cvar("g_mirrordamage") * vlen(force);
+						if(cvar("g_minstagib"))
+						{
+							if(cvar("g_friendlyfire") == 0)
+								damage = 0;
+						}
+						else
+							damage = cvar("g_friendlyfire") * damage;
+						// mirrordamage will be used LATER
 					}
 					else
-						damage = cvar("g_friendlyfire") * damage;
-					// mirrordamage will be used LATER
+						damage = 0;
+				}
+			}
+		}
+
+		if(cvar("g_lms"))
+		if(targ.classname == "player")
+		if(attacker.classname == "player")
+		if(attacker != targ)
+		{
+			targ.lms_traveled_distance = cvar("g_lms_campcheck_distance");
+			attacker.lms_traveled_distance = cvar("g_lms_campcheck_distance");
+		}
+
+		if(targ != attacker)
+		if(!targ.deadflag)
+		if(damage > 0)
+		if(targ.classname == "player")
+		if(attacker)
+			attacker.hitsound += 1;
+
+		if (cvar("g_minstagib"))
+		{
+			if ((deathtype == DEATH_FALL)  ||
+				(deathtype == DEATH_DROWN) ||
+				(deathtype == DEATH_SLIME) ||
+				(deathtype == DEATH_LAVA))
+				return;
+			if (targ.armorvalue && (deathtype == IT_NEX) && damage)
+			{
+				targ.armorvalue -= 1;
+				centerprint(targ, strcat("^3Remaining extra lives: ",ftos(targ.armorvalue),"\n"));
+				damage = 0;
+				targ.hitsound += 1;
+			}
+			else if (deathtype == IT_NEX && targ.items & IT_STRENGTH)
+			{
+				if(clienttype(attacker) == CLIENTTYPE_REAL) play2(attacker, "announcer/male/yoda.ogg");
+			}
+			if (deathtype == IT_LASER)
+			{
+				damage = 0;
+				if (targ != attacker)
+				{
+					if (targ.classname == "player")
+						centerprint(attacker, "Secondary fire inflicts no damage!\n");
+					damage = 0;
+					mirrordamage = 0;
+					force = '0 0 0';
+					// keep mirrorforce
+					attacker = targ;
+				}
+			}
+		} else {
+			if (deathtype == IT_NEX && !targ.deadflag && !(attacker.flags & FL_ONGROUND) && !(targ.flags & FL_ONGROUND) && attacker.waterlevel < 2 && targ.waterlevel < 2 && attacker.killcount != 3 && attacker.killcount != 5 && attacker.killcount != 10 && attacker.killcount != 15 && attacker.killcount != 20 && attacker.killcount != 25 && attacker.killcount != 30)
+			{
+				if(clienttype(attacker) == CLIENTTYPE_REAL)  play2(attacker, "announcer/male/yoda.ogg");
+			}
+		}
+
+		// apply strength multiplier
+		if (attacker.items & IT_STRENGTH && !cvar("g_minstagib"))
+		{
+			damage = damage * cvar("g_balance_powerup_strength_damage");
+			force = force * cvar("g_balance_powerup_strength_force");
+		}
+		// apply invincibility multiplier
+		if (targ.items & IT_INVINCIBLE && !cvar("g_minstagib"))
+			damage = damage * cvar("g_balance_powerup_invincible_takedamage");
+
+
+		if(cvar("g_runematch"))
+		{
+			// apply strength rune
+			if (attacker.runes & RUNE_STRENGTH)
+			{
+				if(attacker.runes & CURSE_WEAK) // have both curse & rune
+				{
+					damage = damage * cvar("g_balance_rune_strength_combo_damage");
+					force = force * cvar("g_balance_rune_strength_combo_force");
 				}
 				else
-					damage = 0;
+				{
+					damage = damage * cvar("g_balance_rune_strength_damage");
+					force = force * cvar("g_balance_rune_strength_force");
+				}
 			}
-		}
-	}
-
-	if(cvar("g_lms"))
-	if(targ.classname == "player")
-	if(attacker.classname == "player")
-	if(attacker != targ)
-	{
-		targ.lms_traveled_distance = cvar("g_lms_campcheck_distance");
-		attacker.lms_traveled_distance = cvar("g_lms_campcheck_distance");
-	}
-
-	if(targ != attacker)
-	if(!targ.deadflag)
-	if(damage > 0)
-	if(targ.classname == "player")
-	if(attacker)
-		attacker.hitsound += 1;
-
-	if (cvar("g_minstagib"))
-	{
-		if ((deathtype == DEATH_FALL)  ||
-		    (deathtype == DEATH_DROWN) ||
-		    (deathtype == DEATH_SLIME) ||
-		    (deathtype == DEATH_LAVA))
-			return;
-		if (targ.armorvalue && (deathtype == IT_NEX) && damage)
-		{
-			targ.armorvalue -= 1;
-			centerprint(targ, strcat("^3Remaining extra lives: ",ftos(targ.armorvalue),"\n"));
-			damage = 0;
-			targ.hitsound += 1;
-		}
-		else if (deathtype == IT_NEX && targ.items & IT_STRENGTH)
-		{
-			if(clienttype(attacker) == CLIENTTYPE_REAL) play2(attacker, "announcer/male/yoda.ogg");
-		}
-		if (deathtype == IT_LASER)
-		{
-			damage = 0;
-			if (targ != attacker)
+			else if (attacker.runes & CURSE_WEAK)
 			{
-				if (targ.classname == "player")
-					centerprint(attacker, "Secondary fire inflicts no damage!\n");
-				damage = 0;
-				mirrordamage = 0;
-				force = '0 0 0';
-				// keep mirrorforce
-				attacker = targ;
+				damage = damage * cvar("g_balance_curse_weak_damage");
+				force = force * cvar("g_balance_curse_weak_force");
 			}
-		}
-	} else {
-		if (deathtype == IT_NEX && !targ.deadflag && !(attacker.flags & FL_ONGROUND) && !(targ.flags & FL_ONGROUND) && attacker.waterlevel < 2 && targ.waterlevel < 2 && attacker.killcount != 3 && attacker.killcount != 5 && attacker.killcount != 10 && attacker.killcount != 15 && attacker.killcount != 20 && attacker.killcount != 25 && attacker.killcount != 30)
-		{
-			if(clienttype(attacker) == CLIENTTYPE_REAL)  play2(attacker, "announcer/male/yoda.ogg");
-		}
-	}
 
-	// apply strength multiplier
-	if (attacker.items & IT_STRENGTH && !cvar("g_minstagib"))
-	{
-		damage = damage * cvar("g_balance_powerup_strength_damage");
-		force = force * cvar("g_balance_powerup_strength_force");
-	}
-	// apply invincibility multiplier
-	if (targ.items & IT_INVINCIBLE && !cvar("g_minstagib"))
-		damage = damage * cvar("g_balance_powerup_invincible_takedamage");
-
-
-	if(cvar("g_runematch"))
-	{
-		// apply strength rune
-		if (attacker.runes & RUNE_STRENGTH)
-		{
-			if(attacker.runes & CURSE_WEAK) // have both curse & rune
+			// apply defense rune
+			if (targ.runes & RUNE_DEFENSE)
 			{
-				damage = damage * cvar("g_balance_rune_strength_combo_damage");
-				force = force * cvar("g_balance_rune_strength_combo_force");
+				if (targ.runes & CURSE_VULNER) // have both curse & rune
+					damage = damage * cvar("g_balance_rune_defense_combo_takedamage");
+				else
+					damage = damage * cvar("g_balance_rune_defense_takedamage");
 			}
-			else
-			{
-				damage = damage * cvar("g_balance_rune_strength_damage");
-				force = force * cvar("g_balance_rune_strength_force");
-			}
+			else if (targ.runes & CURSE_VULNER)
+				damage = damage * cvar("g_balance_curse_vulner_takedamage");
 		}
-		else if (attacker.runes & CURSE_WEAK)
-		{
-			damage = damage * cvar("g_balance_curse_weak_damage");
-			force = force * cvar("g_balance_curse_weak_force");
-		}
-
-		// apply defense rune
-		if (targ.runes & RUNE_DEFENSE)
-		{
-			if (targ.runes & CURSE_VULNER) // have both curse & rune
-				damage = damage * cvar("g_balance_rune_defense_combo_takedamage");
-			else
-				damage = damage * cvar("g_balance_rune_defense_takedamage");
-		}
-		else if (targ.runes & CURSE_VULNER)
-			damage = damage * cvar("g_balance_curse_vulner_takedamage");
 	}
 
 	// apply push
