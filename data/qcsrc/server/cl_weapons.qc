@@ -248,6 +248,10 @@ void() W_WeaponFrame =
 		}
 	}
 
+	// don't let attack_finished fall behind when not firing (must be after weapon_setup calls!)
+	if (ATTACK_FINISHED(self) < time)
+		ATTACK_FINISHED(self) = time;
+
 	// call the think code which may fire the weapon
 	// and do so multiple times to resolve framerate dependency issues if the
 	// server framerate is very low and the weapon fire rate very high
@@ -263,10 +267,6 @@ void() W_WeaponFrame =
 			self.weapon_think();
 		}
 	}
-
-	// don't let attack_finished fall behind when not firing
-	if (self.attack_finished < time)
-		self.attack_finished = time;
 
 	// update currentammo incase it has changed
 	if (self.items & IT_CELLS)

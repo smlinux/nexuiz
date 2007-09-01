@@ -356,9 +356,6 @@ void(float windex, string wname, float hudammo) weapon_setup =
 	// the two weapon entities will notice this has changed and update their models
 	self.weapon = windex;
 	self.weaponname = wname;
-
-	// might fire faster after switch
-	self.attack_finished = min(max(time, self.attack_finished_old + 1), self.attack_finished);
 };
 
 // perform weapon to attack (weaponstate and attack_finished check is here)
@@ -372,14 +369,13 @@ float(float secondary, float attacktime) weapon_prepareattack =
 		return FALSE;
 	}
 	// don't fire if previous attack is not finished
-	if (self.attack_finished > time)
+	if (ATTACK_FINISHED(self) > time)
 		return FALSE;
 	// don't fire while changing weapon
 	if (self.weaponentity.state != WS_READY)
 		return FALSE;
 	self.weaponentity.state = WS_INUSE;
-	self.attack_finished_old = self.attack_finished;
-	self.attack_finished = max(time, self.attack_finished + attacktime);
+	ATTACK_FINISHED(self) = max(time, ATTACK_FINISHED(self) + attacktime);
 	return TRUE;
 };
 

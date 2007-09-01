@@ -24,11 +24,11 @@ void W_Rocket_Explode (void)
 		if(self.owner.ammo_rockets < cvar("g_balance_rocketlauncher_ammo"))
 		{
 			self.owner.cnt = WEP_ROCKET_LAUNCHER;
-			self.owner.attack_finished = time;
+			ATTACK_FINISHED(self.owner) = time;
 			self.owner.switchweapon = w_getbestweapon(self.owner);
 		}
 		if(cvar("g_laserguided_missile"))
-				  self.owner.attack_finished = time + cvar("g_balance_rocketlauncher_refire");
+			ATTACK_FINISHED(self.owner) = time + cvar("g_balance_rocketlauncher_refire");
 	}
 	remove (self);
 }
@@ -134,9 +134,9 @@ void W_Rocket_Think (void)
 			{
 				if(self.owner.laser_on)
 				{
-					if(self.attack_finished < time)
+					if(self.attack_finished_single < time)
 					{
-						self.attack_finished = time + 0.2 + random()*0.3;
+						self.attack_finished_single = time + 0.2 + random()*0.3;
 						self.enemy = FindLaserTarget(self, 0.7, 0.7);
 					}
 
@@ -160,7 +160,7 @@ void W_Rocket_Think (void)
 				self.velocity = newdir * velspeed;					// make me fly in the new direction at my flight speed
 				self.angles = vectoangles(self.velocity);			// turn model in the new flight direction
 
-				self.owner.attack_finished = time + 0.2;
+				ATTACK_FINISHED(self.owner) = time + 0.2;
 			}
 		}
 		else
@@ -379,9 +379,9 @@ float(float req) w_rlauncher =
 		}
 		if (self.button3)
 		if(cvar("g_laserguided_missile"))
-		if(self.exteriorweaponentity.attack_finished < time)
+		if(self.exteriorweaponentity.attack_finished_single < time)
 		{
-			self.exteriorweaponentity.attack_finished = time + 0.4;
+			self.exteriorweaponentity.attack_finished_single = time + 0.4;
 			self.laser_on = !self.laser_on;
 			sound (self, CHAN_AUTO, "weapons/tink1.wav", 1, ATTN_NORM);
 		}
@@ -405,7 +405,7 @@ float(float req) w_rlauncher =
 	else if (req == WR_CHECKAMMO1)
 	{
 		// don't switch while guiding a missile
-		if ((self.attack_finished <= time || self.weapon != WEP_ROCKET_LAUNCHER)
+		if ((ATTACK_FINISHED(self) <= time || self.weapon != WEP_ROCKET_LAUNCHER)
 			&& self.ammo_rockets < cvar("g_balance_rocketlauncher_ammo"))
 			return FALSE;
 	}

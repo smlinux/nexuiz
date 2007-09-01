@@ -18,7 +18,7 @@ void W_Uzi_Attack (void)
 	}
 
 	// this attack_finished just enforces a cooldown at the end of a burst
-	self.attack_finished = time + cvar("g_balance_uzi_first_refire");
+	ATTACK_FINISHED(self) = time + cvar("g_balance_uzi_first_refire");
 
 	if (self.uzi_bulletcounter == 1)
 		fireBullet (w_shotorg, w_shotdir, cvar("g_balance_uzi_first_spread"), cvar("g_balance_uzi_first_damage"), cvar("g_balance_uzi_first_force"), IT_UZI, TRUE);
@@ -71,7 +71,7 @@ void()	uzi_fire1_02 =
 			w_ready();
 			return;
 		}
-		self.attack_finished = time + cvar("g_balance_uzi_refire");
+		ATTACK_FINISHED(self) = time + cvar("g_balance_uzi_refire");
 		self.uzi_bulletcounter = self.uzi_bulletcounter + 1;
 		W_Uzi_Attack();
 		weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_uzi_sustained_refire"), uzi_fire1_02);

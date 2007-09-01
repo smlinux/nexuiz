@@ -107,7 +107,7 @@ void player_anim (void)
 	}
 	else if (self.pain_finished > time)
 		self.frame = self.pain_frame;
-	else if (self.attack_finished > time)
+	else if (ATTACK_FINISHED(self) > time)
 		self.frame = $shoot;
 	else
 		self.frame = $idle;

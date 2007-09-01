@@ -46,6 +46,7 @@ void junk_function ()
 	self.contentstransition = SUB_Null;
 	self.dphitcontentsmask = 0;
 	self.modelflags = 0;
+	self.attack_finished_for = 0; // why is this even valid? Spiiiiiiiiiiiiiiiiiiiiike!
 	trace_dphittexturename = "";
 }
 

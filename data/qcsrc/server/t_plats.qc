@@ -229,9 +229,9 @@ void() func_train_find;
 
 void() train_blocked =
 {
-	if (time < self.attack_finished)
+	if (time < self.attack_finished_single)
 		return;
-	self.attack_finished = time + 0.5;
+	self.attack_finished_single = time + 0.5;
 };
 void() train_use =
 {
@@ -869,9 +869,9 @@ void() door_trigger_touch =
 	if (other.health < 1)
 		return;
 
-	if (time < self.attack_finished)
+	if (time < self.attack_finished_single)
 		return;
-	self.attack_finished = time + 1;
+	self.attack_finished_single = time + 1;
 
 	activator = other;
 
@@ -907,10 +907,10 @@ void() door_touch =
 {
 	if (other.classname != "player")
 		return;
-	if (self.owner.attack_finished > time)
+	if (self.owner.attack_finished_single > time)
 		return;
 
-	self.owner.attack_finished = time + 2;
+	self.owner.attack_finished_single = time + 2;
 
 	if (self.owner.message != "")
 	{
@@ -1292,9 +1292,9 @@ void () fd_secret_done =
 
 void () secret_blocked =
 {
-	if (time < self.attack_finished)
+	if (time < self.attack_finished_single)
 		return;
-	self.attack_finished = time + 0.5;
+	self.attack_finished_single = time + 0.5;
 	//T_Damage (other, self, self, self.dmg, self.dmg, self.deathtype, DT_IMPACT, (self.absmin + self.absmax) * 0.5, '0 0 0', Obituary_Generic);
 };
 
@@ -1309,10 +1309,10 @@ void() secret_touch =
 {
 	if (activator.classname != "player")
 		return;
-	if (self.attack_finished > time)
+	if (self.attack_finished_single > time)
 		return;
 
-	self.attack_finished = time + 2;
+	self.attack_finished_single = time + 2;
 
 	if (self.message)
 	{
