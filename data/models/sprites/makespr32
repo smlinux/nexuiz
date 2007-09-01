@@ -1,0 +1,247 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+use Image::Magick;
+
+# SPR32 file format:
+#
+#	dsprite_s =
+#		int ident = "IDSP"
+#		int version = 32
+#		int type = {projection type enum}
+#		float boundingradius
+#		int width = width of largest frame
+#		int height = height of largest frame
+#		int numframes
+#		float beamlength
+#		int synctype = {ST_SYNC=0, ST_RAND=1}
+#
+#	Shared Setup:
+#		for 1..numframes:
+#			int type = {SPR_SINGLE=0, SPR_GROUP=1}
+#			if type == SPR_GROUP:
+#				int numframes_thisgroup
+#				for 1..numframes_thisgroup:
+#					float interval
+#			for 1..numframes_thisgroup:
+#				dspriteframe_s =
+#					int origin_x
+#					int origin_y
+#					int width
+#					int height
+#				width*height*4 bytes of image data, RGBA
+
+my $magick = Image::Magick->new();
+
+sub checkmagick($)
+{
+	my ($e) = @_;
+	die $e if $e;
+	return $e;
+}
+
+sub writesprite($$)
+{
+	my ($spritestruct, $filename) = @_;
+	open my $fh, '>', $filename;
+	binmode $fh;
+	syswrite $fh, "IDSP";
+	syswrite $fh, pack 'V', 32;
+	syswrite $fh, pack 'V', $spritestruct->{type};
+
+	my $radius_x = abs(abs($spritestruct->{x0}) > abs($spritestruct->{x1}) ? $spritestruct->{x0} : $spritestruct->{x1});
+	my $radius_y = abs(abs($spritestruct->{y0}) > abs($spritestruct->{y1}) ? $spritestruct->{y0} : $spritestruct->{y1});
+
+	syswrite $fh, pack 'f', sqrt($radius_x * $radius_x + $radius_y * $radius_y);
+	syswrite $fh, pack 'V', $spritestruct->{x1} - $spritestruct->{x0};
+	syswrite $fh, pack 'V', $spritestruct->{y1} - $spritestruct->{y0};
+	syswrite $fh, pack 'V', scalar @{$spritestruct->{groups}};
+	syswrite $fh, pack 'f', $spritestruct->{beamlength};
+	syswrite $fh, pack 'V', $spritestruct->{synctype};
+
+	for my $g(@{$spritestruct->{groups}})
+	{
+		my $f = $g->{frames};
+		if(@$f == 1)
+		{
+			# no group
+			syswrite $fh, pack 'V', 0;
+		}
+		else
+		{
+			# group
+			syswrite $fh, pack 'V', 1;
+			syswrite $fh, pack 'V', scalar @$f;
+			syswrite $fh, pack 'f', $_->{interval} for @$f;
+		}
+		for(@$f)
+		{
+			syswrite $fh, pack 'V', -$_->{orgx};
+			syswrite $fh, pack 'V', $_->{orgy};
+			syswrite $fh, pack 'V', $_->{width};
+			syswrite $fh, pack 'V', $_->{height};
+			syswrite $fh, $_->{data};
+		}
+	}
+}
+
+sub spritestruct($$$)
+{
+	my ($type, $beamlength, $synctype) = @_;
+	return {
+		type => $type,
+		beamlength => $beamlength,
+		synctype => $synctype,
+		x0 => 0,
+		y0 => 0,
+		x1 => 0,
+		y1 => 0,
+		groups => [
+			#	{
+			#		frames => [
+			#			{
+			#				width => ...,
+			#				height => ...,
+			#				orgx => ...,
+			#				orgy => ...,
+			#				data => ...,
+			#				interval => ...,
+			#			},
+			#		]
+			#	},
+		],
+	};
+}
+
+sub spriteframe($$$$$)
+{
+	my ($spritestruct, $imagefile, $orgx, $orgy, $interval) = @_;
+	checkmagick $magick->Read($imagefile);
+	my ($width, $height) = $magick->Get('columns', 'rows');
+	my $data = $magick->ImageToBlob(depth => 8, magick => 'RGBA');
+	die "Size mismatch"
+		if length $data != 4 * $width * $height;
+	my $g = ($spritestruct->{groups}->[-1]);
+	push @{$g->{frames}}, my $s = {};
+	$s->{width} = $width;
+	$s->{orgx} = $orgx;
+	$s->{orgy} = $orgy;
+	$s->{width} = $width;
+	$s->{height} = $height;
+	$s->{data} = $data;
+	$s->{interval} = $interval;
+
+	my $x0 = 0 - $orgx;
+	my $y0 = 0 - $orgy;
+	my $x1 = $width - $orgx;
+	my $y1 = $height - $orgy;
+
+	$spritestruct->{x0} = $x0 if $width > $spritestruct->{x0};
+	$spritestruct->{y0} = $y0 if $width > $spritestruct->{y0};
+	$spritestruct->{x1} = $x1 if $width > $spritestruct->{x1};
+	$spritestruct->{y1} = $y1 if $width > $spritestruct->{y1};
+}
+
+sub spritegroup($)
+{
+	my ($spritestruct) = @_;
+	push @{$spritestruct->{groups}}, my $g = {};
+}
+
+sub usage()
+{
+	die <<EOF;
+Usage: $0
+	-o outfile.spr
+	[-proj projectiontype]
+	[-beam beamlength]
+	[-rand]
+	[-group]
+		-sprite filename.tga orgx orgy interval
+		[-sprite filename.tga orgx orgy interval [...]]
+	[-group
+		-sprite filename.tga orgx orgy interval
+		[-sprite filename.tga orgx orgy interval [...]] [...]]
+EOF
+}
+
+my $proj = 2; # SPR_VP_PARALLEL
+my $beam = 0;
+my $synctype = 0;
+my $outfile = undef;
+
+for(;;)
+{
+	usage()
+		unless @ARGV;
+	my $s = shift @ARGV;
+	if($s eq '-proj')
+	{
+		$proj = shift @ARGV;
+	}
+	elsif($s eq '-beam')
+	{
+		$beam = shift @ARGV;
+	}
+	elsif($s eq '-rand')
+	{
+		$synctype = 1;
+	}
+	elsif($s eq '-o')
+	{
+		$outfile = shift @ARGV;
+	}
+	elsif($s eq '-group')
+	{
+		last;
+	}
+	elsif($s eq '-sprite')
+	{
+		unshift @ARGV, $s;
+		last;
+	}
+	else
+	{
+		unshift @ARGV, $s;
+		unshift @ARGV, '-sprite';
+		last;
+	}
+}
+
+usage() unless defined $outfile;
+
+my $spritestruct = spritestruct($proj, $beam, $synctype);
+print "created sprite with projection $proj, beam length $beam, sync type $synctype\n";
+
+spritegroup($spritestruct);
+print "  created sprite group\n";
+
+for(;;)
+{
+	last
+		unless @ARGV;
+	my $s = shift @ARGV;
+	if($s eq '-sprite')
+	{
+		my ($filename, $orgx, $orgy, $interval) = splice @ARGV, 0, 4;
+		usage() if not defined $interval;
+		spriteframe($spritestruct, $filename, $orgx, $orgy, $interval);
+		print "    created sprite frame $filename, origin at $orgx|$orgy, interval $interval\n";
+	}
+	elsif($s eq '-group')
+	{
+		spritegroup($spritestruct);
+		print "  created sprite group\n";
+	}
+	else
+	{
+		my ($orgx, $orgy, $interval) = splice @ARGV, 0, 3;
+		usage() if not defined $interval;
+		spriteframe($spritestruct, $s, $orgx, $orgy, $interval);
+		print "    created sprite frame $s, origin at $orgx|$orgy, interval $interval\n";
+	}
+}
+
+writesprite($spritestruct, $outfile);
+print "written to $outfile\n";
