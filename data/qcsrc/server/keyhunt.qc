@@ -313,6 +313,7 @@ void kh_Key_Spawn(entity initial_owner, float angle)
 	key.cnt = angle;
 	key.angles = '0 360 0' * random();
 	key.event_damage = kh_Key_Damage;
+	key.takedamage = DAMAGE_YES;
 	key.modelindex = kh_key_dropped;
 	key.model = "key";
 	key.kh_dropperteam = 0;
