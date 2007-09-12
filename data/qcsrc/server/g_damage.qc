@@ -558,7 +558,8 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 	}
 }
 
-void RadiusDamage (entity inflictor, entity attacker, float coredamage, float edgedamage, float rad, entity ignore, float forceintensity, float deathtype)
+float RadiusDamage (entity inflictor, entity attacker, float coredamage, float edgedamage, float rad, entity ignore, float forceintensity, float deathtype)
+// Returns total damage applies to creatures
 {
 	entity	targ;
 	float	finaldmg;
@@ -569,9 +570,11 @@ void RadiusDamage (entity inflictor, entity attacker, float coredamage, float ed
 	vector	m2;
 	vector	nearest;
 	vector	diff;
-	vector center;
+	vector  center;
+	float   total_damage_to_creatures;
 
 	blastorigin = (inflictor.origin + (inflictor.mins + inflictor.maxs) * 0.5);
+	total_damage_to_creatures = 0;
 
 	targ = findradius (blastorigin, rad);
 	while (targ)
@@ -623,6 +626,8 @@ void RadiusDamage (entity inflictor, entity attacker, float coredamage, float ed
 							if (trace_fraction == 1 || trace_ent == targ
 							    || cvar("g_throughfloor"))
 							{
+								if(targ.iscreature)
+									total_damage_to_creatures += finaldmg;
 								Damage (targ, inflictor, attacker, finaldmg, deathtype, nearest, force);
 								break;
 							}
@@ -635,6 +640,8 @@ void RadiusDamage (entity inflictor, entity attacker, float coredamage, float ed
 			}
 		targ = targ.chain;
 	}
+
+	return total_damage_to_creatures;
 }
 
 /*
