@@ -1959,6 +1959,22 @@ void MapVote_Think()
 	MapVote_Tick();
 };
 
+string GotoMap(string m)
+{
+	if(!TryFile(strcat("maps/", m, ".mapcfg")))
+		return "The map you chose is not available on this server.";
+	cvar_set("nextmap", m);
+	cvar_set("timelimit", "-1");
+	if(mapvote_initialized || alreadychangedlevel)
+	{
+		if(DoNextMapOverride())
+			return "Map switch initiated.";
+		else
+			return "Hm... no. For some reason I like THIS map more.";
+	}
+	else
+		return "Map switch will happen after scoreboard.";
+}
 
 
 void EndFrame()

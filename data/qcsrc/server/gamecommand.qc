@@ -1,3 +1,5 @@
+string GotoMap(string m);
+
 void GameCommand(string command)
 {
 	float argc;
@@ -35,6 +37,12 @@ void GameCommand(string command)
 	if(argv(0) == "warp") if(argc == 2) if(cvar("g_campaign"))
 	{
 		CampaignLevelWarp(stof(argv(1)));
+		return;
+	}
+
+	if(argv(0) == "gotomap") if(argc == 2)
+	{
+		print(GotoMap(argv(1)), "\n");
 		return;
 	}
 
