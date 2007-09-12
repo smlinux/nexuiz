@@ -322,8 +322,7 @@ void() havocbot_chooseweapon =
 			* bound(0,(cvar("g_balance_electro_primary_speed")/distance*maxdelaytime),1)*1.0;
 	if (client_hasweapon(self, WEP_CRYLINK, TRUE, FALSE))
 		crylink = (cvar("g_balance_crylink_primary_damage")/cvar("g_balance_crylink_primary_refire")*1.0)
-			* bound(0,(cvar("g_balance_crylink_primary_speed")/distance*maxdelaytime),1)*1.0
-			* bound(0,1/cvar("g_balance_crylink_primary_spread")/distance*spreadpenalty,1);
+			* bound(0,(cvar("g_balance_crylink_primary_speed")/distance*maxdelaytime),1)*1.0;
 	if (client_hasweapon(self, WEP_UZI, TRUE, FALSE))
 		uzi = (cvar("g_balance_uzi_sustained_damage")/cvar("g_balance_uzi_sustained_refire")*1.0)
 			* bound(0,1/cvar("g_balance_uzi_sustained_spread")/distance*spreadpenalty,1)*0.5;
