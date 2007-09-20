@@ -1899,12 +1899,12 @@ entity() bot_spawn =
 	return bot;
 };
 
-void CheckAllowedTeams(); void GetTeamCounts(entity other); float c1, c2, c3, c4;
+void CheckAllowedTeams(entity for_whom); void GetTeamCounts(entity other); float c1, c2, c3, c4;
 void() bot_removefromlargestteam =
 {
 	local float besttime, bestcount, thiscount;
 	local entity best, head;
-	CheckAllowedTeams();
+	CheckAllowedTeams(world);
 	GetTeamCounts(world);
 	head = findchainfloat(isbot, TRUE);
 	if (!head)
@@ -2166,7 +2166,10 @@ void() bot_serverframe =
 		minplayers = max(0, floor(realminplayers));
 
 		float realminbots, minbots;
-		realminbots = cvar("bot_number");
+		if(cvar("bot_vs_human"))
+			realminbots = ceil(fabs(cvar("bot_vs_human")) * activerealplayers);
+		else
+			realminbots = cvar("bot_number");
 		minbots = max(0, floor(realminbots));
 
 		bots = min(max(minbots, minplayers - activerealplayers), maxclients - realplayers);

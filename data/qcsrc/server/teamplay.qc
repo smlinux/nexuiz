@@ -522,7 +522,7 @@ void SetPlayerTeam(entity pl, float t, float s, float noprint)
 
 
 // set c1...c4 to show what teams are allowed
-void CheckAllowedTeams ()
+void CheckAllowedTeams (entity for_whom)
 {
 	string teament_name;
 	float dm;
@@ -604,6 +604,23 @@ void CheckAllowedTeams ()
 			}
 		}
 		head = find(head, classname, teament_name);
+	}
+
+	if(cvar("bot_vs_human") > 0)
+	{
+		// bots are all blue
+		if(clienttype(for_whom) == CLIENTTYPE_BOT)
+			c1 = c3 = c4 = -1;
+		else
+			c2 = -1;
+	}
+	else if(cvar("bot_vs_human") < 0)
+	{
+		// bots are all red
+		if(clienttype(for_whom) == CLIENTTYPE_BOT)
+			c2 = c3 = c4 = -1;
+		else
+			c1 = -1;
 	}
 }
 
@@ -689,6 +706,9 @@ float FindSmallestTeam(entity pl, float ignore_pl)
 		totalteams = totalteams + 1;
 	if(c4 >= 0)
 		totalteams = totalteams + 1;
+
+	if(cvar("bot_vs_human"))
+		totalteams += 1;
 
 	if(totalteams <= 1)
 	{
@@ -797,7 +817,7 @@ float JoinBestTeam(entity pl, float only_return_best)
 		return 0;
 
 	// find out what teams are available
-	CheckAllowedTeams();
+	CheckAllowedTeams(pl);
 
 	if(cvar("g_domination"))
 	{
@@ -918,11 +938,12 @@ void SV_ChangeTeam(float _color)
 	}
 	*/
 
-	CheckAllowedTeams();
-	if(dteam == 3 && c3 < 0)
-		dteam = 2;
-	if(dteam == 4 && c4 < 0)
-		dteam = 1;
+	CheckAllowedTeams(self);
+
+	if(dteam == 1 && c1 < 0) dteam = 4;
+	if(dteam == 4 && c4 < 0) dteam = 3;
+	if(dteam == 3 && c3 < 0) dteam = 2;
+	if(dteam == 2 && c2 < 0) dteam = 1;
 
 	// not changing teams
 	if(scolor == dcolor)
@@ -945,7 +966,7 @@ void SV_ChangeTeam(float _color)
 			// only allow changing to a smaller or equal size team
 
 			// find out what teams are available
-			CheckAllowedTeams();
+			//CheckAllowedTeams();
 			// count how many players on each team
 			GetTeamCounts(world);
 
@@ -1214,7 +1235,7 @@ void AuditTeams()
 
 //	bprint("Auditing teams\n");
 
-	CheckAllowedTeams();
+	CheckAllowedTeams(world);
 	GetTeamCounts(world);
 
 
