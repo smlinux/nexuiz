@@ -1,7 +1,5 @@
 #!/bin/sh
 
-echo TODO: add darkplaces.txt to Docs/
-
 set -e
 
 base=`pwd`
@@ -35,7 +33,7 @@ case "$version" in
 		;;
 esac
 
-basepk3=$base/data20060905.pk3
+basepk3=$base/data20070531.pk3
 nexdir=$base/nexuiz
 nexprodir=$base/nexuizpro
 dpdir=$base/darkplaces
@@ -189,6 +187,7 @@ rm -rf "$tmpdir/data/qcsrc"
 cd "$tmpdir/Docs"
 perl -pi -e '/^#---SET nexversion=([0-9.]*)$/ and $_ = "#---SET nexversion='$version'\n"' FAQ.aft
 perl -pi -e '/^\s*Version ([0-9.]*)<\/div>$/ and $_ = "Version '$version'</div>\n"' Readme.htm
+cp "$dpdir/darkplaces.txt" .
 aft FAQ.aft
 aft FAQ.aft
 rm FAQ.aft-TOC
@@ -233,10 +232,15 @@ find . -name .svn -exec rm -rf {} \; -prune
 
 rm -f "$zipdir/nexuiz$date$ext.zip"
 zip $zipflags -9yr "$zipdir/nexuiz$date$ext.zip"           Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/data/data$date.pk3 Nexuiz/data/common-spog.pk3 Nexuiz/pro/*
+ln -snf nexuiz$date$ext.zip "$zipdir/nexuizNEWEST.zip"
+
 rm -f "$zipdir/nexuizengineonly$date$ext.zip"
 zip $zipflags -9yr "$zipdir/nexuizengineonly$date$ext.zip" Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll
+ln -snf nexuizengineonly$date$ext.zip "$zipdir/nexuizengineonlyNEWEST.zip"
+
 rm -f "$zipdir/nexuizsource$date$ext.zip"
 zip $zipflags -9yr "$zipdir/nexuizsource$date$ext.zip"     Nexuiz/gpl.txt                                            Nexuiz/sources
+ln -snf nexuizsource$date$ext.zip "$zipdir/nexuizsourceNEWEST.zip"
 
 zipdiff -o "Nexuiz/data/datapatch$date.pk3" -f "$basepk3" -t Nexuiz/data/data$date.pk3
 mkdir -p gfx
@@ -247,9 +251,12 @@ fi
 
 rm -f "$zipdir/nexuizpatch$date$ext.zip"
 zip $zipflags -9yr "$zipdir/nexuizpatch$date$ext.zip"      Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/data/datapatch$date.pk3 Nexuiz/pro/*
+ln -snf nexuizpatch$date$ext.zip "$zipdir/nexuizpatchNEWEST.zip"
 
 rm -f "$zipdir/nexuizdocs$date$ext.zip"
 zip $zipflags -9yr "$zipdir/nexuizdocs$date$ext.zip"       Nexuiz/gpl.txt Nexuiz/Docs
+ln -snf nexuizdocs$date$ext.zip "$zipdir/nexuizdocsNEWEST.zip"
 
 rm -f "$zipdir/nexuizdebug$date$ext.zip"
-zip $zipflags -9yr "$zipdir/nexuizdebug$date$ext.zip"      Nexuiz/gpl.txt Nexuiz/debuginfo/*
+zip $zipflags -9yr "$zipdir/nexuizdebug$date$ext.zip"      Nexuiz/gpl.txt Nexuiz/debuginfo/* Nexuiz/sources
+ln -snf nexuizdebug$date$ext.zip "$zipdir/nexuizdebugNEWEST.zip"
