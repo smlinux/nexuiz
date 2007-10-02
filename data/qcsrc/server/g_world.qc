@@ -210,7 +210,7 @@ void worldspawn (void)
 		precache_sound ("weapons/hook_impact.wav"); // hook
 	}
 
-	if (cvar("sv_precacheweapons"))
+	if (cvar("sv_precacheweapons") || cvar("g_nixnex"))
 	{
 		//precache weapon models/sounds
 		local float wep;

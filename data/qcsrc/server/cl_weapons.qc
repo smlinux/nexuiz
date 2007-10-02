@@ -332,6 +332,7 @@ void Nixnex_GiveCurrentWeapon()
 			nixnex_weapon = nixnex_nextweapon;
 			nixnex_nextweapon = 0;
 			nixnex_nextchange = time + cvar("g_balance_nixnex_roundtime");
+			//weapon_action(nixnex_weapon, WR_PRECACHE); // forget it, too slow
 		}
 
 		if(nixnex_nextchange != self.nixnex_lastchange_id) // this shall only be called once per round!
