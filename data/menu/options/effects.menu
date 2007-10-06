@@ -86,6 +86,11 @@ Item Window Effects
 			text	"Realt. Dyn. Lights Shad."
 			target	"::Data::Effects::RealtimeDLightShadows::Switch"
 		}
+		Derive Nex_Option_Switch Reflections
+		{
+			text	"Reflections"
+			target	"::Data::Effects::Reflections::Switch"
+		}
 
 		Derive Nex_Line	SeperatorReset
 		{}
