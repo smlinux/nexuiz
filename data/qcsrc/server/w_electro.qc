@@ -212,5 +212,7 @@ float(float req) w_electro =
 		return self.ammo_cells >= cvar("g_balance_electro_primary_ammo");
 	else if (req == WR_CHECKAMMO2)
 		return self.ammo_cells >= cvar("g_balance_electro_secondary_ammo");
+	else if (req == WR_REGISTER)
+		weapon_register(WEP_ELECTRO, min(cvar("g_balance_electro_primary_ammo"), cvar("g_balance_electro_secondary_ammo")));
 	return TRUE;
 };

@@ -192,5 +192,7 @@ float(float req) w_nex =
 	}
 	else if (req == WR_CHECKAMMO2)
 		return FALSE;
+	else if (req == WR_REGISTER)
+		weapon_register(WEP_NEX, cvar("g_balance_nex_ammo"));
 	return TRUE;
 };

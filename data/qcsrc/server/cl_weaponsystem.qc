@@ -494,4 +494,29 @@ void(entity missile) W_SetupProjectileVelocity =
 		error("Unowned missile");
 
 	missile.velocity = W_CalculateProjectileVelocity(missile.owner.velocity, missile.velocity);
+} 
+
+void(float wepcode, float minammo) weapon_register =
+{
+	string s;
+	float itemcode;
+	s = strcat("register_bestweapon ", ftos(wepcode), " "); // char for bestweapon
+	s = strcat(s, ftos(wepcode), " "); // impulse
+	s = strcat(s, ftos(W_ItemCode(wepcode)), " "); // item code
+	s = strcat(s, ftos(wepcode), " "); // self.weapon code
+
+	// ammo stat
+	itemcode = W_AmmoItemCode(wepcode);
+	if(itemcode == IT_SHELLS)
+		s = strcat(s, "6 ");
+	else if(itemcode == IT_NAILS)
+		s = strcat(s, "7 ");
+	else if(itemcode == IT_ROCKETS)
+		s = strcat(s, "8 ");
+	else // if(itemcode == IT_CELLS)
+		s = strcat(s, "9 ");
+
+	s = strcat(s, ftos(minammo), "\n");
+	//dprint(s);
+	stuffcmd(self, s);
 }

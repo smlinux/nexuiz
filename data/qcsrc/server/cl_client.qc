@@ -639,6 +639,7 @@ string ColoredTeamName(float t);
 void ClientConnect (void)
 {
 	local string s;
+	float wep;
 
 	if(Ban_IsClientBanned(self))
 	{
@@ -717,6 +718,15 @@ void ClientConnect (void)
 
 	// get version info from player
 	stuffcmd(self, "cmd clientversion $gameversion\n");
+
+	// send all weapon info strings
+	stuffcmd(self, "register_bestweapon clear\n"); // clear the Quake stuff
+	wep = WEP_FIRST;
+	while (wep <= WEP_LAST)
+	{
+		weapon_action(wep, WR_REGISTER);
+		wep = wep + 1;
+	}
 
 	// get other cvars from player
 	GetCvars(0);

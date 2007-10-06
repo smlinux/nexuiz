@@ -411,5 +411,7 @@ float(float req) w_rlauncher =
 	}
 	else if (req == WR_CHECKAMMO2)
 		return FALSE;
+	else if (req == WR_REGISTER)
+		weapon_register(WEP_ROCKET_LAUNCHER, cvar("g_balance_rocketlauncher_ammo"));
 	return TRUE;
 };

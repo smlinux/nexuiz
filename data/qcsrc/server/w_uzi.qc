@@ -126,6 +126,8 @@ float(float req) w_uzi =
 	else if (req == WR_CHECKAMMO1)
 		return self.ammo_nails >= cvar("g_balance_uzi_first_ammo");
 	else if (req == WR_CHECKAMMO2)
-		return self.ammo_nails >= cvar("g_balance_uzi_sustained_ammo");
+		return self.ammo_nails >= cvar("g_balance_uzi_first_ammo");
+	else if (req == WR_REGISTER)
+		weapon_register(WEP_UZI, cvar("g_balance_uzi_first_ammo"));
 	return TRUE;
 };

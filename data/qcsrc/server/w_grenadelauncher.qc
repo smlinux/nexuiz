@@ -201,5 +201,7 @@ float(float req) w_glauncher =
 		return self.ammo_rockets >= cvar("g_balance_grenadelauncher_primary_ammo");
 	else if (req == WR_CHECKAMMO2)
 		return self.ammo_rockets >= cvar("g_balance_grenadelauncher_secondary_ammo");
+	else if (req == WR_REGISTER)
+		weapon_register(WEP_GRENADE_LAUNCHER, min(cvar("g_balance_grenadelauncher_primary_ammo"), cvar("g_balance_grenadelauncher_secondary_ammo")));
 	return TRUE;
 };

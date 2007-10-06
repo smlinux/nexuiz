@@ -108,5 +108,7 @@ float(float req) w_shotgun =
 		return self.ammo_shells >= cvar("g_balance_shotgun_primary_ammo");
 	else if (req == WR_CHECKAMMO2)
 		return self.ammo_shells >= cvar("g_balance_shotgun_secondary_ammo") * 3;
+	else if (req == WR_REGISTER)
+		weapon_register(WEP_SHOTGUN, min(cvar("g_balance_shotgun_primary_ammo"), cvar("g_balance_shotgun_secondary_ammo")));
 	return TRUE;
 };

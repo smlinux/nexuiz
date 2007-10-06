@@ -131,5 +131,7 @@ float(float req) w_laser =
 		return TRUE;
 	else if (req == WR_CHECKAMMO2)
 		return TRUE;
+	else if (req == WR_REGISTER)
+		weapon_register(WEP_LASER, 0);
 	return TRUE;
 };

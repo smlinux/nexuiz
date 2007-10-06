@@ -217,5 +217,7 @@ float(float req) w_crylink =
 		return self.ammo_cells >= cvar("g_balance_crylink_primary_ammo");
 	else if (req == WR_CHECKAMMO2)
 		return self.ammo_cells >= cvar("g_balance_crylink_secondary_ammo");
+	else if (req == WR_REGISTER)
+		weapon_register(WEP_CRYLINK, min(cvar("g_balance_crylink_primary_ammo"), cvar("g_balance_crylink_secondary_ammo")));
 	return TRUE;
 };
