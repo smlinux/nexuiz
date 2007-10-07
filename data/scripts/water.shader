@@ -18,8 +18,7 @@ textures/water/water0
 		tcmod rotate 0.5
 		blendfunc blend
 	}
-	dp_reflect 0.5
-	dp_refract
+	dp_refract 0.1 0.6
 }
 
 textures/water/water1
@@ -40,8 +39,7 @@ textures/water/water1
 		tcmod rotate 0.5
 		blendfunc blend
 	}
-	dp_reflect 0.5
-	dp_refract
+	dp_refract 0.1 0.6
 }
 
 textures/water/water2
@@ -62,8 +60,7 @@ textures/water/water2
 		tcmod rotate 0.5
 		blendfunc blend
 	}
-	dp_reflect 0.5
-	dp_refract
+	dp_refract 0.1 0.6
 }
 
 textures/water/slime1
@@ -84,8 +81,7 @@ textures/water/slime1
 		tcMod stretch sin 1 0.05 0.2 .0015
 		tcmod rotate 0.5
 	}
-	dp_reflect 0.2
-	dp_refract
+	dp_reflect 0.5
 }
 
 textures/water/slime2
@@ -107,6 +103,5 @@ textures/water/slime2
 		tcmod rotate 0.5
 		blendfunc blend
 	}
-	dp_reflect 0.2
-	dp_refract
+	dp_reflect 0.5
 }
