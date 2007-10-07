@@ -18,7 +18,7 @@ textures/water/water0
 		tcmod rotate 0.5
 		blendfunc blend
 	}
-	dp_refract 0.1 0.6
+	dp_refract 0.4 0.8 1
 }
 
 textures/water/water1
@@ -39,7 +39,7 @@ textures/water/water1
 		tcmod rotate 0.5
 		blendfunc blend
 	}
-	dp_refract 0.1 0.6
+	dp_refract 0.4 0.8 1
 }
 
 textures/water/water2
@@ -60,7 +60,7 @@ textures/water/water2
 		tcmod rotate 0.5
 		blendfunc blend
 	}
-	dp_refract 0.1 0.6
+	dp_refract 0.4 0.8 1
 }
 
 textures/water/slime1
