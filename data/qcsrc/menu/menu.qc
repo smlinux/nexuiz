@@ -19,6 +19,8 @@ void() m_updategamestate =
 
 void() m_init =
 {
+	dprint_load();
+
 	// init graphic
 	Gfx_Init();
 
@@ -48,6 +50,8 @@ void( float pKey, float pAscii ) m_keydown =
 
 void() m_frame =
 {
+	dprint_load();
+
 	Timer_Update();
 
 	HostCache_Update();

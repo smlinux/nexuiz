@@ -148,6 +148,8 @@ void RuneMatchGivePoints();
 float RedirectionThink();
 void StartFrame (void)
 {
+	dprint_load(); // load dprint status from cvar
+
 	if(RedirectionThink())
 		return;
 

@@ -123,6 +123,8 @@ void SV_PlayerPhysics()
 			shtest_score = self.shtest_accumulator / SHTEST_DELTA;
 			if(shtest_score > 1.2)
 				dprint("TIME PARADOX: shtest for ", self.netname, " said ", ftos(shtest_score), "\n");
+			else if(cvar("developer_shtest"))
+				dprint("okay: shtest for ", self.netname, " said ", ftos(shtest_score), "\n");
 		}
 		self.shtest_next = time + SHTEST_DELTA;
 		self.shtest_accumulator = 0;

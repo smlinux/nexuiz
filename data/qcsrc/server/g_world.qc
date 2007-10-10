@@ -75,6 +75,8 @@ void worldspawn (void)
 {
 	float globhandle, i, n;
 
+	dprint_load(); // load dprint status from cvar
+
 	if(world_already_spawned)
 		error("world already spawned - you may have EXACTLY ONE worldspawn!");
 	world_already_spawned = TRUE;
