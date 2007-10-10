@@ -14,6 +14,10 @@ float sv_airaccel_qw;
 .float lastflags;
 .float lastground;
 
+#define SHTEST_DELTA 15
+.float shtest_next;
+.float shtest_accumulator;
+
 /*
 =============
 PlayerJump
@@ -106,8 +110,24 @@ void Nixnex_GiveCurrentWeapon();
 void SV_PlayerPhysics()
 {
 	local vector wishvel, wishdir, v;
-	local float wishspeed, f, maxspd_mod, spd, maxairspd, airaccel, swampspd_mod;
+	local float wishspeed, f, maxspd_mod, spd, maxairspd, airaccel, swampspd_mod, shtest_score;
 	string temps;
+
+	if(time > self.shtest_next)
+	{
+		if(self.shtest_next > 0)
+		{
+			// self.shtest_accumulator:
+			//   started at time - SHTEST_DELTA
+			//   should be at SHTEST_DELTA
+			shtest_score = self.shtest_accumulator / SHTEST_DELTA;
+			if(shtest_score > 1.2)
+				dprint("TIME PARADOX: shtest for ", self.netname, " said ", ftos(shtest_score), "\n");
+		}
+		self.shtest_next = time + SHTEST_DELTA;
+		self.shtest_accumulator = 0;
+	}
+	self.shtest_accumulator += frametime;
 
 	if (clienttype(self) == CLIENTTYPE_BOT)
 		bot_think();
