@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -e
 
@@ -34,21 +34,45 @@ case "$version" in
 esac
 
 basepk3=$base/data20070531.pk3
-nexdir=$base/nexuiz
-nexprodir=$base/nexuizpro
+nexdir=$base/nexuiz-2.0
+nexprodir=$base/nexuiz-current/pro
 dpdir=$base/darkplaces
 tmpdir=/tmp/NEX
-zipdir=/home/polzer/UT/distfiles/nex/
-buildfiles=$base/buildfiles
+zipdir=/home/polzer/public_html/nexuiz/builds
+buildfiles=$base/nexuiz-current/misc/buildfiles
 mingwdlls=$buildfiles/w32
 osxapps=$buildfiles/osx
 copystrip=$buildfiles/copystrip
-fteqcc="fteqcc.bin -O2"
+fteqcc="fteqcc -O2"
 mingw=/home/polzer/mingw32
-ia32=/chroot/fc6-i386
-osxhost=macmini
-osxtemp=/Users/rpolzer/Darkplaces.build
-osxsave=/tmp/Nexuiz.osx
+
+# TODO normalize the builds
+platforms='x86 amd64 osx'
+buildon()
+{
+	host=$1
+	prefix=$2
+	path=$3
+	makeflags=$4
+	rsync --exclude "*.o" --exclude "*.d" --exclude "nexuiz-*" --delete-excluded --delete -zvaSHP . $copystrip "$host:$path"
+	ssh "$host" ". ~/.profile && cd $path && PATH=$path/copystrip:\$PATH make $makeflags clean nexuiz"
+	rsync --exclude "*.o" --exclude "*.d" --delete-excluded --delete -zvaSHP "$host:$path/." .
+	for P in -dedicated -sdl -glx -wgl -agl -dedicated.exe -sdl.exe .exe; do
+		[ -f nexuiz$P ] && mv nexuiz$P "$tmpdir/$prefix$P"
+		[ -f nexuiz$P-withdebug ] && mv nexuiz$P-withdebug "$tmpdir/debuginfo/$prefix$P"
+	done
+	make clean
+}
+
+build()
+{
+	buildon macmini nexuiz-osx-ppc      /tmp/Darkplaces.build 'CC="gcc -g -arch i386 -arch ppc -isysroot /Developer/SDKs/MacOSX10.4u.sdk"' 
+		mv "$tmpdir/nexuiz-osx-ppc-agl" "$tmpdir/Nexuiz.app/Contents/MacOS/nexuiz-osx-ppc-agl-bin"
+		mv "$tmpdir/nexuiz-osx-ppc-sdl" "$tmpdir/Nexuiz-SDL.app/Contents/MacOS/nexuiz-osx-ppc-sdl-bin"
+	buildon hagger  nexuiz              /tmp/Darkplaces.build 'DP_MAKE_TARGET=mingw CC="i586-mingw32msvc-gcc -g -I/home/polzer/mingw32.include" WINDRES=i586-mingw32msvc-windres SDL_CONFIG=/home/polzer/mingw32.SDL/bin/sdl-config'
+	buildon hagger  nexuiz-linux-686    /tmp/Darkplaces.build 'CC="gcc -g"'
+	buildon hector  nexuiz-linux-x86_64 /tmp/Darkplaces.build 'CC="gcc -g"'
+}
 
 i=
 while [ -f "$zipdir/nexuiz$date$i$ext.zip" ]; do
@@ -78,79 +102,56 @@ fi
 
 set -x
 
-buildosx()
-{
-	rsync --exclude "*.o" --exclude "*.d" --exclude "nexuiz-*" --delete-excluded --delete -zvaSHP . $copystrip "$osxhost:$osxtemp"
-	ssh "$osxhost" ". ~/.profile && cd $osxtemp && PATH=$osxtemp/copystrip:\$PATH make CC=\"gcc -g -arch i386 -arch ppc -isysroot /Developer/SDKs/MacOSX10.4u.sdk\" clean $*"
-	rmdir "$osxsave" || true
-	if [ -d "$osxsave" ]; then
-		cp "$osxsave"/* .
-	fi
-	rsync --exclude "*.o" --exclude "*.d" --delete-excluded --delete -zvaSHP "$osxhost:$osxtemp/." .
-	mkdir -p "$osxsave"
-	cp nexuiz-* "$osxsave"/
-}
-
-build64()
-{
-	PATH=$copystrip:$PATH make CC="/opt/gcc-4.1.1/bin/gcc -g" "$@"
-}
-
-build32()
-{
-	PATH=$copystrip:$PATH make CC="/opt/gcc-4.1.1/bin/gcc -g -I$ia32/usr/include -I$ia32/usr/X11R6/include -L$ia32/usr/lib -L$ia32/usr/X11R6/lib -m32" DP_MACHINE=i686 "$@"
-}
-
-buildwin()
-{
-	PATH=$copystrip:$mingw/bin:$PATH make CC="gcc -g" DP_MAKE_TARGET=mingw "$@"
-}
-
 rm -rf "$tmpdir"
 mkdir -p "$tmpdir"
+
 cd "$dpdir"
 quilt pop -a || true
-quilt push -a
+svn revert -R .
+quilt push -a # apply all patches
 
 cp -r "$osxapps"/*.app "$tmpdir"
 mkdir "$tmpdir/debuginfo"
-rm -f *.exe nexuiz-* *-withdebug
 
+rm -f *.exe nexuiz-* *-withdebug* *.o
 make clean
-buildosx sdl-nexuiz cl-nexuiz sv-nexuiz
-cp nexuiz-agl "$tmpdir/Nexuiz.app/Contents/MacOS/nexuiz-osx-ppc-agl-bin"
-cp nexuiz-dedicated "$tmpdir/nexuiz-osx-ppc-dedicated"
-cp nexuiz-sdl "$tmpdir/Nexuiz-SDL.app/Contents/MacOS/nexuiz-osx-ppc-sdl-bin"
-cp nexuiz-agl-withdebug "$tmpdir/debuginfo/nexuiz-osx-ppc-agl-bin"
-cp nexuiz-dedicated-withdebug "$tmpdir/debuginfo/nexuiz-osx-ppc-dedicated-bin"
-cp nexuiz-sdl-withdebug "$tmpdir/debuginfo/nexuiz-osx-ppc-sdl-bin"
-
+build
+rm -f *.exe nexuiz-* *-withdebug '.#'* *.o
 make clean
-buildwin nexuiz
-for x in -dedicated -sdl ''; do
-	cp nexuiz$x.exe "$tmpdir/nexuiz$x.exe"
-	cp nexuiz$x.exe-withdebug "$tmpdir/debuginfo/nexuiz$x.exe"
-done
 
-make clean
-build32 nexuiz
-for x in dedicated sdl glx; do
-	cp nexuiz-$x "$tmpdir/nexuiz-linux-686-$x"
-	cp nexuiz-$x-withdebug "$tmpdir/debuginfo/nexuiz-linux-686-$x"
-done
+cd "$tmpdir"
 
-make clean
-build64 nexuiz
-for x in dedicated sdl glx; do
-	cp nexuiz-$x "$tmpdir/nexuiz-linux-x86_64-$x"
-	cp nexuiz-$x-withdebug "$tmpdir/debuginfo/nexuiz-linux-x86_64-$x"
-done
+# cp nexuiz-agl "$tmpdir/Nexuiz.app/Contents/MacOS/nexuiz-osx-ppc-agl-bin"
+# cp nexuiz-dedicated "$tmpdir/nexuiz-osx-ppc-dedicated"
+# cp nexuiz-sdl "$tmpdir/Nexuiz-SDL.app/Contents/MacOS/nexuiz-osx-ppc-sdl-bin"
+# cp nexuiz-agl-withdebug "$tmpdir/debuginfo/nexuiz-osx-ppc-agl-bin"
+# cp nexuiz-dedicated-withdebug "$tmpdir/debuginfo/nexuiz-osx-ppc-dedicated-bin"
+# cp nexuiz-sdl-withdebug "$tmpdir/debuginfo/nexuiz-osx-ppc-sdl-bin"
+# 
+# make clean
+# buildwin nexuiz
+# for x in -dedicated -sdl ''; do
+# 	cp nexuiz$x.exe "$tmpdir/nexuiz$x.exe"
+# 	cp nexuiz$x.exe-withdebug "$tmpdir/debuginfo/nexuiz$x.exe"
+# done
+# 
+# make clean
+# build32 nexuiz
+# for x in dedicated sdl glx; do
+# 	cp nexuiz-$x "$tmpdir/nexuiz-linux-686-$x"
+# 	cp nexuiz-$x-withdebug "$tmpdir/debuginfo/nexuiz-linux-686-$x"
+# done
+# 
+# make clean
+# build64 nexuiz
+# for x in dedicated sdl glx; do
+# 	cp nexuiz-$x "$tmpdir/nexuiz-linux-x86_64-$x"
+# 	cp nexuiz-$x-withdebug "$tmpdir/debuginfo/nexuiz-linux-x86_64-$x"
+# done
 
-cp "$nexdir/"nexuiz-*.{sh,bat} "$tmpdir/"
+cp "$nexdir/"nexuiz-*.sh "$tmpdir/"
+cp "$nexdir/"nexuiz-*.bat "$tmpdir/"
 cp "$nexdir/gpl.txt" "$tmpdir/"
-
-make clean
-rm -f *.exe nexuiz-* *-withdebug '.#'*
 
 cd "$nexdir/data"
 svn export . "$tmpdir/data"
