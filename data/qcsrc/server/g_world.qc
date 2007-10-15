@@ -388,6 +388,8 @@ string GetGametype()
 		return "kh";
 	else if (game == GAME_ONSLAUGHT)
 		return "ons";
+	else if (game == GAME_ASSAULT)
+		return "as";
 	return "dm";
 }
 
