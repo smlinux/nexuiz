@@ -293,7 +293,7 @@ putting a client as observer in the server
 void PutObserverInServer (void)
 {
 	entity	spot;
-	spot = SelectSpawnPoint (FALSE);
+	spot = SelectSpawnPoint (TRUE);
 	RemoveGrapplingHook(self); // Wazat's Grappling Hook
 
 	if(clienttype(self) == CLIENTTYPE_REAL)
