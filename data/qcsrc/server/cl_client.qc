@@ -1301,7 +1301,9 @@ void PlayerPreThink (void)
 		}
 
 		Nixnex_GiveCurrentWeapon();
-		UpdateSelectedPlayer();
+
+		if(frametime > 0) // don't do this in cl_movement frames, just in server ticks
+			UpdateSelectedPlayer();
 
 		if (self.deadflag != DEAD_NO)
 		{
