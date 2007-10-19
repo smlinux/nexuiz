@@ -20,7 +20,7 @@ textures/savdm6ish/#teleport
 	qer_editorimage textures/savdm6ish/#teleport.jpg
 	qer_nocarve
 	surfaceparm noimpact
-	surfaceparm water
+	//surfaceparm water
 	surfaceparm nolightmap
 	q3map_surfacelight 1000
 	cull disable
