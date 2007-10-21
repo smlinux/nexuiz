@@ -66,10 +66,10 @@ buildon()
 
 build()
 {
+	buildon hagger  nexuiz              /tmp/Darkplaces.build 'DP_MAKE_TARGET=mingw CC="i586-mingw32msvc-gcc -g -I/home/polzer/mingw32.include" WINDRES=i586-mingw32msvc-windres SDL_CONFIG=/home/polzer/mingw32.SDL/bin/sdl-config'
 	buildon macmini nexuiz-osx-ppc      /tmp/Darkplaces.build 'CC="gcc -g -arch i386 -arch ppc -isysroot /Developer/SDKs/MacOSX10.4u.sdk"' 
 		mv "$tmpdir/nexuiz-osx-ppc-agl" "$tmpdir/Nexuiz.app/Contents/MacOS/nexuiz-osx-ppc-agl-bin"
 		mv "$tmpdir/nexuiz-osx-ppc-sdl" "$tmpdir/Nexuiz-SDL.app/Contents/MacOS/nexuiz-osx-ppc-sdl-bin"
-	buildon hagger  nexuiz              /tmp/Darkplaces.build 'DP_MAKE_TARGET=mingw CC="i586-mingw32msvc-gcc -g -I/home/polzer/mingw32.include" WINDRES=i586-mingw32msvc-windres SDL_CONFIG=/home/polzer/mingw32.SDL/bin/sdl-config'
 	buildon hagger  nexuiz-linux-686    /tmp/Darkplaces.build 'CC="gcc -g"'
 	buildon hector  nexuiz-linux-x86_64 /tmp/Darkplaces.build 'CC="gcc -g"'
 }
