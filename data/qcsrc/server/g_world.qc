@@ -1873,6 +1873,12 @@ void MapVote_Tick()
 				msg_entity = other;
 				WriteByte(MSG_ONE, SVC_FINALE);
 				WriteString(MSG_ONE, "");
+				for(i = 0; i < mapvote_count; ++i)
+					if(mapvote_maps[i] != "")
+					{
+						tmp = mapvote_maps[i];
+						sprint(other, strcat("map voting: type ^1impulse ", ftos(i), "^7 to vote for ", tmp, "\n"));
+					}
 			}
 		}
 
