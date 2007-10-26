@@ -24,6 +24,7 @@ void() m_init =
 	main = spawnMainWindow(); main.configureMainWindow(main);
 	draw_reset();
 	main.resizeNotify(main, draw_shift, draw_scale, draw_shift, draw_scale);
+	main.focused = 1;
 	shiftState = 0;
 };
 

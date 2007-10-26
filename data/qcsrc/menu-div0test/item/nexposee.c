@@ -8,7 +8,8 @@ CLASS(Nexposee) EXTENDS(Container)
 	METHOD(Nexposee, mouseRelease, float(entity, vector))
 	METHOD(Nexposee, mouseDrag, float(entity, vector))
 	METHOD(Nexposee, resizeNotify, void(entity, vector, vector, vector, vector))
-	METHOD(Nexposee, setFocus, void(entity, entity))
+	//METHOD(Nexposee, setFocus, void(entity, entity))
+	METHOD(Nexposee, focusEnter, void(entity))
 
 	ATTRIB(Nexposee, animationState, float, -1)
 	ATTRIB(Nexposee, animationFactor, float, 0)
@@ -44,7 +45,9 @@ void ExposeeCloseButton_Click(entity button, entity other); // un-exposees the c
 
 void ExposeeCloseButton_Click(entity button, entity other)
 {
+	other.selectedChild = other.focusedChild;
 	other.setFocus(other, NULL);
+	other.animationState = 3;
 }
 
 void resizeNotifyNexposee(entity me, vector relOrigin, vector relSize, vector absOrigin, vector absSize)
@@ -314,13 +317,20 @@ void addItemNexposee(entity me, entity other, vector theOrigin, vector theSize, 
 	addItemContainer(me, other, theOrigin, theSize, theAlpha);
 }
 
+void focusEnterNexposee(entity me)
+{
+	if(me.animationState == 2)
+		setFocusContainer(me, me.selectedChild);
+}
+
 void setFocusNexposee(entity me, entity other)
 {
+/*
 	if(me.animationState == 0)
 	{
 		if(other != NULL)
 		{
-			me.focusedChild = other;
+			setFocusContainer(me, other);
 			me.selectedChild = other;
 			me.animationState = 1;
 		}
@@ -330,9 +340,10 @@ void setFocusNexposee(entity me, entity other)
 		if(other == NULL)
 		{
 			me.selectedChild = me.focusedChild;
-			me.focusedChild = NULL;
+			setFocusContainer(me, NULL);
 			me.animationState = 3;
 		}
 	}
+*/
 }
 #endif

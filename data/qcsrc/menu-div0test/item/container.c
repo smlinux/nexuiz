@@ -92,9 +92,7 @@ void drawContainer(entity me)
 
 void focusLeaveContainer(entity me)
 {
-	if(me.focusedChild)
-		me.focusedChild.focused = 0;
-	me.focusedChild = NULL;
+	me.setFocus(me, NULL);
 }
 
 float keyUpContainer(entity me, float scan, float ascii, float shift)
@@ -208,6 +206,7 @@ void setFocusContainer(entity me, entity other)
 {
 	if(me.focusedChild == other)
 		return;
+	print(etos(me), ": focus changes from ", etos(me.focusedChild), " to ", etos(other), "\n");
 	if(me.focusedChild)
 	{
 		me.focusedChild.focused = 0;

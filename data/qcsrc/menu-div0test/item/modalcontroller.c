@@ -212,10 +212,10 @@ void drawModalController(entity me)
 		// --> (maxima)
 		// o' = (to * (f - f_prev) + o * (1 - f)) / (1 - f_prev)
 	}
-	if(animating)
-		me.focusedChild = NULL;
+	if(animating || !me.focused)
+		me.setFocus(me, NULL);
 	else
-		me.focusedChild = front;
+		me.setFocus(me, front);
 	drawContainer(me);
 };
 
@@ -244,14 +244,15 @@ void addItemModalController(entity me, entity other, vector theOrigin, vector th
 
 void setFocusModalController(entity me, entity other)
 {
-	error("Sorry, modal controllers can't handle setFocus");
+	//print("focus to ", etos(other), "\n");
+	setFocusContainer(me, other);
 }
 
 void showChildModalController(entity me, entity other, vector theOrigin, vector theSize, float skipAnimation)
 {
 	if(other.ModalController_state == 0)
 	{
-		me.focusedChild = NULL;
+		me.setFocus(me, NULL);
 		other.ModalController_buttonOrigin = globalToBox(theOrigin, me.origin, me.size);
 		other.ModalController_buttonSize = globalToBoxSize(theSize, me.size);
 		me.switchState(me, other, 1, skipAnimation);
@@ -269,7 +270,7 @@ void hideChildModalController(entity me, entity other, float skipAnimation)
 {
 	if(other.ModalController_state)
 	{
-		me.focusedChild = NULL;
+		me.setFocus(me, NULL);
 		me.switchState(me, other, 0, skipAnimation);
 		if(other.ModalController_controllingButton)
 		{

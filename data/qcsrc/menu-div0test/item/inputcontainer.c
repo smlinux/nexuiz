@@ -153,9 +153,9 @@ float mouseReleaseInputContainer(entity me, vector pos)
 {
 	float r;
 	r = mouseReleaseContainer(me, pos);
-	me._changeFocusXY(me, pos);
-	if(r)
-		return 1;
+	if(me.focused) // am I still eligible for this? (UGLY HACK, but a mouse event could have changed focus away)
+		if(me._changeFocusXY(me, pos))
+			return 1;
 	if(pos_x >= 0 && pos_y >= 0 && pos_x < 1 && pos_y < 1)
 		return 1;
 	return 0;
