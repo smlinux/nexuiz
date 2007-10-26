@@ -132,7 +132,7 @@ void drawModalController(entity me)
 	entity e;
 	entity front;
 	float animating;
-	float f0, f, fd;
+	float f0, f;
 	vector to, ts; float ta;
 	animating = 0;
 
@@ -194,6 +194,8 @@ void drawModalController(entity me)
 		// -->
 		// X == (o - to * f0) / (1 - f0)
 		// o' = to * f + (o - to * f0) / (1 - f0) * (1 - f)
+		// --> (maxima)
+		// o' = (to * (f - f0) + o * (1 - f)) / (1 - f0)
 	}
 	if(animating)
 		me.focusedChild = NULL;
