@@ -1,0 +1,24 @@
+#define localcmd cmd
+
+#define NULL (null_entity)
+
+// constants
+
+const vector eX = '1 0 0';
+const vector eY = '0 1 0';
+const vector eZ = '0 0 1';
+
+const float GAME_ISSERVER 	= 1;
+const float GAME_CONNECTED	= 2;
+const float GAME_DEVELOPER	= 4;
+
+// prototypes
+
+float Menu_Active;
+float gamestatus;
+
+const float S_SHIFT = 1;
+const float S_CTRL = 2;
+const float S_ALT = 4;
+
+float frametime;

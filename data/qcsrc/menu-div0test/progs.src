@@ -1,0 +1,25 @@
+../../menu.dat
+
+msys.qh
+mbuiltin.qh
+
+oo/base.h
+
+../common/util.qh
+gamecommand.qh
+menu.qh
+draw.qh
+
+oo/classdefs.h
+	classes.c
+
+../common/util.qc
+../common/gamecommand.qc
+gamecommand.qc
+menu.qc
+draw.qc
+
+oo/constructors.h
+	classes.c
+oo/implementation.h
+	classes.c

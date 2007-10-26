@@ -1,0 +1,18 @@
+vector draw_shift;
+vector draw_scale;
+float draw_alpha;
+
+void draw_reset();
+void draw_setMousePointer(string pic);
+void draw_drawMousePointer(vector where);
+
+void draw_Picture(vector origin, string pic, vector size, vector color, float alpha);
+void draw_Text(vector origin, string text, vector size, vector color, float alpha);
+float draw_TextWidth(string text);
+
+vector boxToGlobal(vector v, vector shift, vector scale);
+vector boxToGlobalSize(vector v, vector scale);
+vector globalToBox(vector v, vector shift, vector scale);
+vector globalToBoxSize(vector v, vector scale);
+
+float draw_NeedResizeNotify;

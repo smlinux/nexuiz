@@ -1,0 +1,2 @@
+void GameCommand_Init();
+void GameCommand(string command);

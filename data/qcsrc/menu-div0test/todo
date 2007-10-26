@@ -1,0 +1,26 @@
+DONE generic container
+DONE container that takes input to switch focus
+DONE container that does "exposee"
+
+DONE image displayer
+DONE text label
+DONE button
+TODO radio button
+TODO checkbox (+ tristate)
+TODO listbox (with draw callback and scroll bar)
+TODO value slider
+DONE tabbed dialog
+
+TODO options dialog:
+	TODO video/effects
+	TODO preferences
+	TODO input
+TODO singleplayer dialog
+	TODO campaign
+	TODO instant action
+TODO multiplayer dialog
+	TODO player setup
+	TODO server browser
+	TODO create game
+TODO demo viewer
+TODO quit dialog
