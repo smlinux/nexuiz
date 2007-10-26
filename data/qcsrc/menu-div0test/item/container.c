@@ -204,9 +204,12 @@ void removeItemContainer(entity me, entity other)
 
 void setFocusContainer(entity me, entity other)
 {
+	if(other)
+		if(!me.focused)
+			error("Trying to set focus in a non-focused control!");
 	if(me.focusedChild == other)
 		return;
-	print(etos(me), ": focus changes from ", etos(me.focusedChild), " to ", etos(other), "\n");
+	//print(etos(me), ": focus changes from ", etos(me.focusedChild), " to ", etos(other), "\n");
 	if(me.focusedChild)
 	{
 		me.focusedChild.focused = 0;
