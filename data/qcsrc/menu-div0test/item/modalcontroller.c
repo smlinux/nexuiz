@@ -132,8 +132,10 @@ void drawModalController(entity me)
 	entity e;
 	entity front;
 	float animating;
-	float f0, f;
-	vector to, ts; float ta;
+	float f; // animation factor
+	float df; // animation step size
+	float prevFactor, targetFactor;
+	vector targetOrigin, targetSize; float targetAlpha;
 	animating = 0;
 
 	for(e = me.firstChild; e; e = e.Container_nextSibling)
@@ -146,56 +148,69 @@ void drawModalController(entity me)
 	if(front)
 		me.switchState(me, front, 1, 0);
 
+	df = frametime * 3; // animation speed
+
 	for(e = me.firstChild; e; e = e.Container_nextSibling)
 	{
-		f0 = e.ModalController_factor;
-		f = e.ModalController_factor = min(1, f0 + frametime * 3);
+		f = (e.ModalController_factor = min(1, e.ModalController_factor + df));
 		if(e.ModalController_state)
 			if(f < 1)
 				animating = 1;
+
+		if(f < 1)
+		{
+			prevFactor   = (1 - f) / (1 - f + df);
+			targetFactor =     df  / (1 - f + df);
+		}
+		else
+		{
+			prevFactor = 0;
+			targetFactor = 1;
+		}
+
 		if(e.ModalController_state == 2)
 		{
 			// fading out partially
-			to = e.Container_origin; // stay as is
-			ts = e.Container_size; // stay as is
-			ta = me.fadedAlpha * e.ModalController_initialAlpha;
+			targetOrigin = e.Container_origin; // stay as is
+			targetSize = e.Container_size; // stay as is
+			targetAlpha = me.fadedAlpha * e.ModalController_initialAlpha;
 		}
 		else if(e.ModalController_state == 1)
 		{
 			// zooming in
-			to = e.ModalController_initialOrigin;
-			ts = e.ModalController_initialSize;
-			ta = e.ModalController_initialAlpha;
+			targetOrigin = e.ModalController_initialOrigin;
+			targetSize = e.ModalController_initialSize;
+			targetAlpha = e.ModalController_initialAlpha;
 		}
 		else
 		{
 			// fading out
 			if(f < 1)
 				animating = 1;
-			to = e.Container_origin; // stay as is
-			ts = e.Container_size; // stay as is
-			ta = 0;
+			targetOrigin = e.Container_origin; // stay as is
+			targetSize = e.Container_size; // stay as is
+			targetAlpha = 0;
 		}
 
 		if(f == 1)
 		{
-			e.Container_origin = to;
-			e.Container_size = ts;
-			e.Container_alpha = ta;
+			e.Container_origin = targetOrigin;
+			e.Container_size = targetSize;
+			e.Container_alpha = targetAlpha;
 		}
 		else
 		{
-			e.Container_origin = (e.Container_origin * (1 - f) + to * (f - f0)) * (1 / (1 - f0));
-			e.Container_size = (e.Container_size * (1 - f) + ts * (f - f0)) * (1 / (1 - f0));
-			e.Container_alpha = (e.Container_alpha * (1 - f) + ta * (f - f0)) * (1 / (1 - f0));
+			e.Container_origin = e.Container_origin * prevFactor + targetOrigin * targetFactor;
+			e.Container_size   = e.Container_size   * prevFactor + targetSize   * targetFactor;
+			e.Container_alpha  = e.Container_alpha  * prevFactor + targetAlpha  * targetFactor;
 		}
-		// assume: o == to * f0 + X * (1 - f0)
+		// assume: o == to * f_prev + X * (1 - f_prev)
 		// make:   o' = to * f  + X * (1 - f)
 		// -->
-		// X == (o - to * f0) / (1 - f0)
-		// o' = to * f + (o - to * f0) / (1 - f0) * (1 - f)
+		// X == (o - to * f_prev) / (1 - f_prev)
+		// o' = to * f + (o - to * f_prev) / (1 - f_prev) * (1 - f)
 		// --> (maxima)
-		// o' = (to * (f - f0) + o * (1 - f)) / (1 - f0)
+		// o' = (to * (f - f_prev) + o * (1 - f)) / (1 - f_prev)
 	}
 	if(animating)
 		me.focusedChild = NULL;
