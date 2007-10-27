@@ -8,4 +8,5 @@
 #include "item/button.c"
 #include "item/checkbox.c"
 #include "item/radiobutton.c"
+#include "item/borderimage.c"
 #include "nexuiz/mainwindow.c"

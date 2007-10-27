@@ -180,8 +180,11 @@ void	freepic(string name)		= #453;
 float	drawcharacter(vector position, float character, vector scale, vector rgb, float alpha, float flag) = #454;
 
 float	drawstring(vector position, string text, vector scale, vector rgb, float alpha, float flag) = #455;
+float   drawcolorcodedstring(vector position, string text, vector scale, float alpha, float flag) = #467;
+float	stringwidth(string text, float handleColors) = #468;
 
 float	drawpic(vector position, string pic, vector size, vector rgb, float alpha, float flag) = #456;
+float	drawsubpic(vector position, vector size, string pic, vector srcPosition, vector srcSize, vector rgb, float alpha, float flag) = #469;
 
 float	drawfill(vector position, vector size, vector rgb, float alpha, float flag) = #457;
 

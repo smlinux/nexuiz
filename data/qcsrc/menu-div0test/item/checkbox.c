@@ -50,7 +50,13 @@ void drawCheckBox(entity me)
 		else
 			draw_Picture(cbOrigin, strcat(me.src, "_n0"), cbSize, '1 1 1', 1);
 	}
-	me.clickTime -= frametime;
 	drawLabel(me); // skip drawButton!
+
+	if(me.clickTime > 0 && me.clickTime < frametime)
+	{
+		// keyboard click timer expired? Fire the event then.
+		me.onClick(me, me.onClickEntity);
+	}
+	me.clickTime -= frametime;
 }
 #endif

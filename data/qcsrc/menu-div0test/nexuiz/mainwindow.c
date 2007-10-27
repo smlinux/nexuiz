@@ -16,19 +16,21 @@ void DemoButton_Click(entity me, entity other)
 
 void configureMainWindowMainWindow(entity me)
 {
-	entity dlg, n, i, b, c, mc, t1, t2, t3;
+	entity dlg, n, i, b, c, mc, t1, t2, t3, cb;
 
 	n = spawnNexposee();
 	me.addItem(me, n, '0 0 0', '1 1 0', 1);
 
 	dlg = spawnInputContainer();
-		i = spawnImage();
-		i.configureImage(i, "gfx/4.tga");
-		dlg.addItem(dlg, i, '0 0 0', '1 1 0', 1);
+		cb = spawnButton();
+		cb.configureButton(cb, "", 12, "qcsrc/menu-div0test/baseclosebutton");
+		cb.onClick = DialogCloseButton_Click; cb.onClickEntity = dlg;
+		cb.srcMulti = 0;
 
-		i = spawnLabel();
-		i.configureLabel(i, "I told you...", 24, 0.5);
-		dlg.addItem(dlg, i, '0 0 0', '1 0.2 0', 1);
+		i = spawnBorderImage();
+		i.configureBorderImage(i, "I told you...", 18, '0.5 0.5 1', "qcsrc/menu-div0test/baseborder", 1.5);
+		i.closeButton = cb;
+		dlg.addItem(dlg, i, '0 0 0', '1 1 0', 1);
 
 		i = spawnLabel();
 		i.configureLabel(i, "Swim swim hungry, swim swim hungry...", 8, 0.5);
@@ -51,6 +53,8 @@ void configureMainWindowMainWindow(entity me)
 		i.configureButton(i, "Close", 12, "qcsrc/menu-div0test/basebutton");
 		i.onClick = DialogCloseButton_Click; i.onClickEntity = dlg;
 		dlg.addItem(dlg, i, '0.3 0.7 0', '0.4 0.2 0', 1);
+
+		dlg.addItem(dlg, cb, '0.3 0.7 0', '0.4 0.2 0', 1);
 	me.addItem(me, dlg, '0.2 0.3 0', '0.6 0.4 0', 1);
 	
 	i = spawnImage();

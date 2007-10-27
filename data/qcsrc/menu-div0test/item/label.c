@@ -11,6 +11,7 @@ CLASS(Label) EXTENDS(Item)
 	ATTRIB(Label, keepspaceRight, float, 0)
 	ATTRIB(Label, realFontSize, vector, '0 0 0')
 	ATTRIB(Label, realOrigin, vector, '0 0 0')
+	ATTRIB(Label, alpha, float, 0.7)
 ENDCLASS(Label)
 #endif
 
@@ -36,6 +37,6 @@ void configureLabelLabel(entity me, string txt, float sz, float algn)
 }
 void drawLabel(entity me)
 {
-	draw_Text(me.realOrigin, me.text, me.realFontSize, '0 0 0', 1);
+	draw_Text(me.realOrigin, me.text, me.realFontSize, '1 1 1', me.alpha);
 }
 #endif

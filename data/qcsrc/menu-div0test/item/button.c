@@ -15,6 +15,7 @@ CLASS(Button) EXTENDS(Label)
 	ATTRIB(Button, pressed, float, 0)
 	ATTRIB(Button, clickTime, float, 0)
 	ATTRIB(Button, forcePressed, float, 0)
+	ATTRIB(Button, color, vector, '1 1 1')
 
 	ATTRIB(Button, origin, vector, '0 0 0')
 	ATTRIB(Button, size, vector, '0 0 0')
@@ -37,8 +38,7 @@ float keyDownButton(entity me, float key, float ascii, float shift)
 {
 	if(key == K_ENTER || key == K_SPACE)
 	{
-		me.onClick(me, me.onClickEntity);
-		me.clickTime = 0.1;
+		me.clickTime = 0.1; // delayed for effect
 		return 1;
 	}
 	return 0;
@@ -71,40 +71,29 @@ void drawButton(entity me)
 {
 	if(me.srcMulti)
 	{
-		float division;
-		division = min(0.5, 0.5 * me.size_y / me.size_x);
 		if(me.forcePressed || me.pressed || me.clickTime > 0)
-		{
-			draw_Picture('0 0 0', strcat(me.src, "_cl"), eX * division + eY, '1 1 1', 1);
-			if(division < 0.5)
-				draw_Picture('0 0 0' + eX * division, strcat(me.src, "_cm"), eX * (1 - 2 * division) + eY, '1 1 1', 1);
-			draw_Picture(eX * (1 - division), strcat(me.src, "_cr"), eX * division + eY, '1 1 1', 1);
-		}
+			draw_ButtonPicture('0 0 0', strcat(me.src, "_c"), '1 1 0', me.color, 1);
 		else if(me.focused)
-		{
-			draw_Picture('0 0 0', strcat(me.src, "_fl"), eX * division + eY, '1 1 1', 1);
-			if(division < 0.5)
-				draw_Picture('0 0 0' + eX * division, strcat(me.src, "_fm"), eX * (1 - 2 * division) + eY, '1 1 1', 1);
-			draw_Picture(eX * (1 - division), strcat(me.src, "_fr"), eX * division + eY, '1 1 1', 1);
-		}
+			draw_ButtonPicture('0 0 0', strcat(me.src, "_f"), '1 1 0', me.color, 1);
 		else
-		{
-			draw_Picture('0 0 0', strcat(me.src, "_nl"), eX * division + eY, '1 1 1', 1);
-			if(division < 0.5)
-				draw_Picture('0 0 0' + eX * division, strcat(me.src, "_nm"), eX * (1 - 2 * division) + eY, '1 1 1', 1);
-			draw_Picture(eX * (1 - division), strcat(me.src, "_nr"), eX * division + eY, '1 1 1', 1);
-		}
+			draw_ButtonPicture('0 0 0', strcat(me.src, "_n"), '1 1 0', me.color, 1);
 	}
 	else
 	{
 		if(me.forcePressed || me.pressed || me.clickTime > 0)
-			draw_Picture('0 0 0', strcat(me.src, "_c"), '1 1 0', '1 1 1', 1);
+			draw_Picture('0 0 0', strcat(me.src, "_c"), '1 1 0', me.color, 1);
 		else if(me.focused)
-			draw_Picture('0 0 0', strcat(me.src, "_f"), '1 1 0', '1 1 1', 1);
+			draw_Picture('0 0 0', strcat(me.src, "_f"), '1 1 0', me.color, 1);
 		else
-			draw_Picture('0 0 0', strcat(me.src, "_n"), '1 1 0', '1 1 1', 1);
+			draw_Picture('0 0 0', strcat(me.src, "_n"), '1 1 0', me.color, 1);
+	}
+	drawLabel(me);
+
+	if(me.clickTime > 0 && me.clickTime < frametime)
+	{
+		// keyboard click timer expired? Fire the event then.
+		me.onClick(me, me.onClickEntity);
 	}
 	me.clickTime -= frametime;
-	drawLabel(me);
 }
 #endif

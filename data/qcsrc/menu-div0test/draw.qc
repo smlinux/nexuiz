@@ -1,3 +1,4 @@
+float drawfont;
 string draw_mousepointer;
 
 void draw_setMousePointer(string pic)
@@ -12,6 +13,7 @@ void draw_drawMousePointer(vector where)
 
 void draw_reset()
 {
+	drawfont = 8;
 	draw_shift = '0 0 0';
 	draw_scale = '1 0 0' * cvar("vid_conwidth") + '0 1 0' * cvar("vid_conheight");
 	draw_alpha = 1;
@@ -49,9 +51,111 @@ vector boxToGlobalSize(vector v, vector theScale)
 
 void draw_Picture(vector theOrigin, string pic, vector theSize, vector theColor, float theAlpha)
 {
-	drawpic(boxToGlobal(theOrigin, draw_shift, draw_scale), pic, boxToGlobalSize(theSize, draw_scale), theColor, theAlpha * draw_alpha, 0);
+	//drawpic(boxToGlobal(theOrigin, draw_shift, draw_scale), pic, boxToGlobalSize(theSize, draw_scale), theColor, theAlpha * draw_alpha, 0);
+	drawsubpic(boxToGlobal(theOrigin, draw_shift, draw_scale), boxToGlobalSize(theSize, draw_scale), pic, '0 0 0', '1 1 1', theColor, theAlpha * draw_alpha, 0);
 }
 
+// a button picture is a texture containing three parts:
+//   1/4 width: left part
+//   1/2 width: middle part (stretched)
+//   1/4 width: right part
+// it is assumed to be 4x as wide as high for aspect ratio purposes, which
+// means, the parts are a square, two squares and a square.
+void draw_ButtonPicture(vector theOrigin, string pic, vector theSize, vector theColor, float theAlpha)
+{
+	vector square;
+	vector width, height;
+	theOrigin = boxToGlobal(theOrigin, draw_shift, draw_scale);
+	theSize = boxToGlobalSize(theSize, draw_scale);
+	theAlpha *= draw_alpha;
+	width = eX * theSize_x;
+	height = eY * theSize_y;
+	if(theSize_x <= theSize_y * 2)
+	{
+		// button not wide enough
+		// draw just left and right part then
+		square = eX * theSize_x * 0.5;
+		drawsubpic(theOrigin,          square + height, pic, '0   0 0', '0.25 1 0', theColor, theAlpha, 0);
+		drawsubpic(theOrigin + square, square + height, pic, '0.75 0 0', '0.25 1 0', theColor, theAlpha, 0);
+	}
+	else
+	{
+		square = theSize_y * '1 0 0';
+		drawsubpic(theOrigin,                  height  +     square, pic, '0    0 0', '0.25 1 0', theColor, theAlpha, 0);
+		drawsubpic(theOrigin +         square, theSize - 2 * square, pic, '0.25 0 0', '0.5  1 0', theColor, theAlpha, 0);
+		drawsubpic(theOrigin + width - square, height  +     square, pic, '0.75 0 0', '0.25 1 0', theColor, theAlpha, 0);
+	}
+}
+
+// a border picture is a texture containing nine parts:
+//   1/4 width: left part
+//   1/2 width: middle part (stretched)
+//   1/4 width: right part
+// divided into
+//   1/4 height: top part
+//   1/2 height: middle part (stretched)
+//   1/4 height: bottom part
+void draw_BorderPicture(vector theOrigin, string pic, vector theSize, vector theColor, float theAlpha, vector theBorderSize)
+{
+	vector dX, dY;
+	vector width, height;
+	theOrigin = boxToGlobal(theOrigin, draw_shift, draw_scale);
+	theSize = boxToGlobalSize(theSize, draw_scale);
+	theBorderSize = boxToGlobalSize(theBorderSize, draw_scale);
+	theAlpha *= draw_alpha;
+	width = eX * theSize_x;
+	height = eY * theSize_y;
+	if(theSize_x <= theBorderSize_x * 2)
+	{
+		// not wide enough... draw just left and right then
+		if(theSize_y <= theBorderSize_y * 2)
+		{
+			// not high enough... draw just corners
+			drawsubpic(theOrigin,                 width * 0.5 + height * 0.5, pic, '0    0    0', '0.25 0.25 0', theColor, theAlpha, 0);
+			drawsubpic(theOrigin + width   * 0.5, width * 0.5 + height * 0.5, pic, '0.75 0    0', '0.25 0.25 0', theColor, theAlpha, 0);
+			drawsubpic(theOrigin + height  * 0.5, width * 0.5 + height * 0.5, pic, '0    0.75 0', '0.25 0.25 0', theColor, theAlpha, 0);
+			drawsubpic(theOrigin + theSize * 0.5, width * 0.5 + height * 0.5, pic, '0.75 0.75 0', '0.25 0.25 0', theColor, theAlpha, 0);
+		}
+		else
+		{
+			dY = theBorderSize_x * eY;
+			drawsubpic(theOrigin,                      width * 0.5          +     dY, pic, '0    0    0', '0.25 0.25 0', theColor, theAlpha, 0);
+			drawsubpic(theOrigin + width   * 0.5,      width * 0.5          +     dY, pic, '0.75 0    0', '0.25 0.25 0', theColor, theAlpha, 0);
+			drawsubpic(theOrigin                 + dY, width * 0.5 + height - 2 * dY, pic, '0    0.25 0', '0.25 0.5  0', theColor, theAlpha, 0);
+			drawsubpic(theOrigin + width   * 0.5 + dY, width * 0.5 + height - 2 * dY, pic, '0.75 0.25 0', '0.25 0.5  0', theColor, theAlpha, 0);
+			drawsubpic(theOrigin + height        - dY, width * 0.5          +     dY, pic, '0    0.75 0', '0.25 0.25 0', theColor, theAlpha, 0);
+			drawsubpic(theOrigin + width   * 0.5 + dY, width * 0.5          +     dY, pic, '0.75 0.75 0', '0.25 0.25 0', theColor, theAlpha, 0);
+		}
+	}
+	else
+	{
+		if(theSize_y <= theBorderSize_y * 2)
+		{
+			// not high enough... draw just top and bottom then
+			dX = theBorderSize_x * eX;
+			drawsubpic(theOrigin,                                         dX + height * 0.5, pic, '0    0    0', '0.25 0.25 0', theColor, theAlpha, 0);
+			drawsubpic(theOrigin + dX,                        width - 2 * dX + height * 0.5, pic, '0.25 0    0', '0.5  0.25 0', theColor, theAlpha, 0);
+			drawsubpic(theOrigin + width - dX,                            dX + height * 0.5, pic, '0.75 0    0', '0.25 0.25 0', theColor, theAlpha, 0);
+			drawsubpic(theOrigin              + height * 0.5,             dX + height * 0.5, pic, '0    0    0', '0.25 0.25 0', theColor, theAlpha, 0);
+			drawsubpic(theOrigin + dX         + height * 0.5, width - 2 * dX + height * 0.5, pic, '0.25 0    0', '0.5  0.25 0', theColor, theAlpha, 0);
+			drawsubpic(theOrigin + width - dX + height * 0.5,             dX + height * 0.5, pic, '0.75 0    0', '0.25 0.25 0', theColor, theAlpha, 0);
+		}
+		else
+		{
+			dX = theBorderSize_x * eX;
+			dY = theBorderSize_x * eY;
+			drawsubpic(theOrigin,                                        dX          +     dY, pic, '0    0    0', '0.25 0.25 0', theColor, theAlpha, 0);
+			drawsubpic(theOrigin                  + dX,      width - 2 * dX          +     dY, pic, '0.25 0    0', '0.5  0.25 0', theColor, theAlpha, 0);
+			drawsubpic(theOrigin          + width - dX,                  dX          +     dY, pic, '0.75 0    0', '0.25 0.25 0', theColor, theAlpha, 0);
+			drawsubpic(theOrigin          + dY,                          dX + height - 2 * dY, pic, '0    0.25 0', '0.25 0.5  0', theColor, theAlpha, 0);
+			drawsubpic(theOrigin          + dY         + dX, width - 2 * dX + height - 2 * dY, pic, '0.25 0.25 0', '0.5  0.5  0', theColor, theAlpha, 0);
+			drawsubpic(theOrigin          + dY + width - dX,             dX + height - 2 * dY, pic, '0.75 0.25 0', '0.25 0.5  0', theColor, theAlpha, 0);
+			drawsubpic(theOrigin + height - dY,                          dX          +     dY, pic, '0    0.75 0', '0.25 0.25 0', theColor, theAlpha, 0);
+			drawsubpic(theOrigin + height - dY         + dX, width - 2 * dX          +     dY, pic, '0.25 0.75 0', '0.5  0.25 0', theColor, theAlpha, 0);
+			drawsubpic(theOrigin + height - dY + width - dX,             dX          +     dY, pic, '0.75 0.75 0', '0.25 0.25 0', theColor, theAlpha, 0);
+		}
+	}
+}
 void draw_Text(vector theOrigin, string theText, vector theSize, vector theColor, float theAlpha)
 {
 	drawstring(boxToGlobal(theOrigin, draw_shift, draw_scale), theText, boxToGlobalSize(theSize, draw_scale), theColor, theAlpha * draw_alpha, 0);
@@ -59,5 +163,7 @@ void draw_Text(vector theOrigin, string theText, vector theSize, vector theColor
 
 float draw_TextWidth(string theText)
 {
-	return strlen(theText);
+	//return strlen(theText);
+	//print("draw_TextWidth \"", theText, "\"\n");
+	return stringwidth(theText, 0);
 }
