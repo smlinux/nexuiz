@@ -22,3 +22,6 @@ const float S_CTRL = 2;
 const float S_ALT = 4;
 
 float frametime;
+
+entity keyGrabber;
+.void(entity me, float key, float ascii) keyGrabbed;

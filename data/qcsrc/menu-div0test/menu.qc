@@ -54,15 +54,26 @@ void(float key, float ascii) m_keydown =
 {
 	if(!Menu_Active)
 		return;
-	draw_reset();
-	if(!main.keyDown(main, key, ascii, shiftState))
-		if(key == K_ESCAPE)
-			if(gamestatus & (GAME_ISSERVER | GAME_CONNECTED)) // don't back out to console only
-				m_hide(); // disable menu on unhandled ESC
+	if(keyGrabber)
+	{
+		entity e;
+		e = keyGrabber;
+		keyGrabber = NULL;
+		e.keyGrabbed(e, key, ascii);
+	}
+	else
+	{
+		draw_reset();
+		if(!main.keyDown(main, key, ascii, shiftState))
+			if(key == K_ESCAPE)
+				if(gamestatus & (GAME_ISSERVER | GAME_CONNECTED)) // don't back out to console only
+					m_hide(); // disable menu on unhandled ESC
+		if(key >= K_MOUSE1 && key <= K_MOUSE10)
+			if(!mouseButtonsPressed)
+				main.mousePress(main, mousePos);
+	}
 	if(key >= K_MOUSE1 && key <= K_MOUSE10)
 	{
-		if(!mouseButtonsPressed)
-			main.mousePress(main, mousePos);
 		++mouseButtonsPressed;
 		if(mouseButtonsPressed > 10)
 		{
