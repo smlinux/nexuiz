@@ -44,10 +44,15 @@ void configureMainWindowMainWindow(entity me)
 		i.configureRadioButton(i, "RadioButton2", 12, "qcsrc/menu-div0test/baseradiobutton", 1, 1);
 		dlg.addItem(dlg, i, '0.5 0.4 0', '0.8 0.1 0', 1);
 
+		i = spawnSlider();
+		i.configureSliderVisuals(i, "", " fps", 12, 0.2, "qcsrc/menu-div0test/baseslider");
+		i.configureSliderValues(i, 1, 50, 200, 1, 1, 20);
+		dlg.addItem(dlg, i, '0.1 0.5 0', '0.8 0.1 0', 1);
+
 		i = spawnCheckBox();
 		i.configureCheckBox(i, "Do not show this dialog again", 12, "qcsrc/menu-div0test/basecheckbox");
 		i.checked = 1;
-		dlg.addItem(dlg, i, '0.1 0.5 0', '0.8 0.1 0', 1);
+		dlg.addItem(dlg, i, '0.1 0.6 0', '0.8 0.1 0', 1);
 
 		i = spawnButton();
 		i.configureButton(i, "Close", 12, "qcsrc/menu-div0test/basebutton");

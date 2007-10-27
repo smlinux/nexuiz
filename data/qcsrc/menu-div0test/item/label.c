@@ -37,6 +37,7 @@ void configureLabelLabel(entity me, string txt, float sz, float algn)
 }
 void drawLabel(entity me)
 {
-	draw_Text(me.realOrigin, me.text, me.realFontSize, '1 1 1', me.alpha);
+	if(me.text)
+		draw_Text(me.realOrigin, me.text, me.realFontSize, '1 1 1', me.alpha);
 }
 #endif

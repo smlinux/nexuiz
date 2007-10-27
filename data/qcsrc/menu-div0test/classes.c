@@ -9,4 +9,5 @@
 #include "item/checkbox.c"
 #include "item/radiobutton.c"
 #include "item/borderimage.c"
+#include "item/slider.c"
 #include "nexuiz/mainwindow.c"
