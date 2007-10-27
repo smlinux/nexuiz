@@ -33,7 +33,7 @@ void configureMainWindowMainWindow(entity me)
 		dlg.addItem(dlg, i, '0 0 0', '1 1 0', 1);
 
 		i = spawnLabel();
-		i.configureLabel(i, "Swim swim hungry, swim swim hungry...", 8, 0.5);
+		i.configureLabel(i, "Swim swim hungry, swim swim hungry...", 10, 0.5);
 		dlg.addItem(dlg, i, '0 0.3 0', '1 0.1 0', 1);
 
 		i = spawnRadioButton();
@@ -62,6 +62,10 @@ void configureMainWindowMainWindow(entity me)
 		dlg.addItem(dlg, cb, '0.3 0.7 0', '0.4 0.2 0', 1);
 	me.addItem(me, dlg, '0.2 0.3 0', '0.6 0.4 0', 1);
 	
+	i = spawnTeamSelectDialog();
+	i.configureDialog(i);
+	me.addItem(me, i, ('1 1 0' - i.intendedWidth * eX - i.intendedHeight * eY) * 0.5, i.intendedWidth * eX + i.intendedHeight * eY, 1);
+
 	i = spawnImage();
 	i.configureImage(i, "gfx/0.tga");
 	n.addItem(n, i, '0.4 0.45 0', '0.2 0.1 0', 1);
@@ -121,6 +125,7 @@ void configureMainWindowMainWindow(entity me)
 	n.setNexposee(n, i, '0.1 0.9 0', 0.2, 0.5);
 
 	me.initializeDialog(me, n);
+
 }
 #endif
 

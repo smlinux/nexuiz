@@ -9,6 +9,7 @@ oo/base.h
 gamecommand.qh
 menu.qh
 draw.qh
+skin.qh
 
 oo/classdefs.h
 	classes.c

@@ -25,9 +25,9 @@ void resizeNotifyBorderImage(entity me, vector relOrigin, vector relSize, vector
 		me.closeButton.color = me.color;
 	}
 }
-void configureBorderImageBorderImage(entity me, string title, float sz, vector theColor, string path, float theBorderHeight)
+void configureBorderImageBorderImage(entity me, string theTitle, float sz, vector theColor, string path, float theBorderHeight)
 {
-	me.configureLabel(me, title, sz, 0.5);
+	me.configureLabel(me, theTitle, sz, 0.5);
 	me.src = path;
 	me.color = theColor;
 	me.borderHeight = theBorderHeight;

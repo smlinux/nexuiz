@@ -52,7 +52,7 @@ float keyDownInputContainer(entity me, float scan, float ascii, float shift)
 		{
 			if(f)
 			{
-				for(ff = f.Container_prevSibling; ff; ff = ff.Container_prevSibling)
+				for(ff = f.prevSibling; ff; ff = ff.prevSibling)
 				{
 					if(!ff.focusable)
 						continue;
@@ -62,7 +62,7 @@ float keyDownInputContainer(entity me, float scan, float ascii, float shift)
 			}
 			if(!f || me.isTabRoot)
 			{
-				for(ff = me.lastChild; ff; ff = ff.Container_prevSibling)
+				for(ff = me.lastChild; ff; ff = ff.prevSibling)
 				{
 					if(!ff.focusable)
 						continue;
@@ -76,7 +76,7 @@ float keyDownInputContainer(entity me, float scan, float ascii, float shift)
 		{
 			if(f)
 			{
-				for(ff = f.Container_nextSibling; ff; ff = ff.Container_nextSibling)
+				for(ff = f.nextSibling; ff; ff = ff.nextSibling)
 				{
 					if(!ff.focusable)
 						continue;
@@ -86,7 +86,7 @@ float keyDownInputContainer(entity me, float scan, float ascii, float shift)
 			}
 			if(!f || me.isTabRoot)
 			{
-				for(ff = me.firstChild; ff; ff = ff.Container_nextSibling)
+				for(ff = me.firstChild; ff; ff = ff.nextSibling)
 				{
 					if(!ff.focusable)
 						continue;

@@ -23,5 +23,11 @@ const float S_ALT = 4;
 
 float frametime;
 
+entity main;
+void m_hide();
+void m_display();
+void m_goto(string name);
+.string name;
+
 entity keyGrabber;
 .void(entity me, float key, float ascii) keyGrabbed;

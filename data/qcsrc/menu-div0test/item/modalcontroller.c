@@ -137,7 +137,7 @@ void drawModalController(entity me)
 	vector targetOrigin, targetSize; float targetAlpha;
 	animating = 0;
 
-	for(e = me.firstChild; e; e = e.Container_nextSibling)
+	for(e = me.firstChild; e; e = e.nextSibling)
 		if(e.ModalController_state)
 		{
 			if(front)
@@ -149,7 +149,7 @@ void drawModalController(entity me)
 
 	df = frametime * 3; // animation speed
 
-	for(e = me.firstChild; e; e = e.Container_nextSibling)
+	for(e = me.firstChild; e; e = e.nextSibling)
 	{
 		f = (e.ModalController_factor = min(1, e.ModalController_factor + df));
 		if(e.ModalController_state)
@@ -255,7 +255,7 @@ void showChildModalController(entity me, entity other, vector theOrigin, vector 
 void hideAllModalController(entity me, float skipAnimation)
 {
 	entity e;
-	for(e = me.firstChild; e; e = e.Container_nextSibling)
+	for(e = me.firstChild; e; e = e.nextSibling)
 		me.hideChild(me, e, skipAnimation);
 }
 

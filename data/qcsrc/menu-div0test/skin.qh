@@ -1,0 +1,13 @@
+const float SKINFONTSIZE_TITLE = 12;
+const float SKINHEIGHT_TITLE = 1.5;
+const string SKINGFX_DIALOGBORDER = "qcsrc/menu-div0test/baseborder";
+const string SKINGFX_CLOSEBUTTON = "qcsrc/menu-div0test/baseclosebutton";
+const string SKINGFX_BUTTON = "qcsrc/menu-div0test/basebutton";
+const string SKINGFX_BUTTON_GRAY = "qcsrc/menu-div0test/basebuttongray";
+
+const float SKINMARGIN_TOP = 8;
+const float SKINMARGIN_LEFT = 8;
+
+const float SKINFONTSIZE_NORMAL = 10;
+const float SKINHEIGHT_NORMAL = 1.5;
+const float SKINHEIGHT_NORMAL_WITHSPACING = 2;

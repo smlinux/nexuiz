@@ -5,11 +5,13 @@ DONE container that does "exposee"
 DONE image displayer
 DONE text label
 DONE button
-TODO radio button
-TODO checkbox (+ tristate)
+DONE radio button
+DONE checkbox
 TODO listbox (with draw callback and scroll bar)
-TODO value slider
+DONE value slider
 DONE tabbed dialog
+
+TODO "half-automatically" self-sizing dialog (by specifying number of "lines" in advance)
 
 TODO options dialog:
 	TODO video/effects

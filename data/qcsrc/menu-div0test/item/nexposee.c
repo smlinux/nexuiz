@@ -66,17 +66,17 @@ void calcNexposee(entity me)
 	
 	for(scale = 0.7;; scale *= 0.9)
 	{
-		for(e = me.firstChild; e; e = e.Container_nextSibling)
+		for(e = me.firstChild; e; e = e.nextSibling)
 		{
 			e.Nexposee_smallOrigin = (e.Nexposee_initialOrigin - e.Nexposee_scaleCenter) * scale + e.Nexposee_scaleCenter;
 			e.Nexposee_smallSize = e.Nexposee_initialSize * scale;
 		}
 
-		for(e = me.firstChild; e; e = e.Container_nextSibling)
+		for(e = me.firstChild; e; e = e.nextSibling)
 		{
 			emins = e.Nexposee_smallOrigin;
 			emaxs = emins + e.Nexposee_smallSize;
-			for(e2 = e.Container_nextSibling; e2; e2 = e2.Container_nextSibling)
+			for(e2 = e.nextSibling; e2; e2 = e2.nextSibling)
 			{
 				e2mins = e2.Nexposee_smallOrigin;
 				e2maxs = e2mins + e2.Nexposee_smallSize;
@@ -99,7 +99,7 @@ void calcNexposee(entity me)
 	}
 
 	scale *= 0.9;
-	for(e = me.firstChild; e; e = e.Container_nextSibling)
+	for(e = me.firstChild; e; e = e.nextSibling)
 	{
 		e.Nexposee_smallOrigin = (e.Nexposee_initialOrigin - e.Nexposee_scaleCenter) * scale + e.Nexposee_scaleCenter;
 		e.Nexposee_smallSize = e.Nexposee_initialSize * scale;
@@ -157,7 +157,7 @@ void drawNexposee(entity me)
 	}
 
 	f = min(1, frametime * 10);
-	for(e = me.firstChild; e; e = e.Container_nextSibling)
+	for(e = me.firstChild; e; e = e.nextSibling)
 	{
 		float a;
 		float a0;
@@ -261,14 +261,14 @@ float keyDownNexposee(entity me, float scan, float ascii, float shift)
 			if(shift & S_SHIFT)
 			{
 				if(me.selectedChild)
-					me.selectedChild = me.selectedChild.Container_prevSibling;
+					me.selectedChild = me.selectedChild.prevSibling;
 				if(!me.selectedChild)
 					me.selectedChild = me.lastChild;
 			}
 			else
 			{
 				if(me.selectedChild)
-					me.selectedChild = me.selectedChild.Container_nextSibling;
+					me.selectedChild = me.selectedChild.nextSibling;
 				if(!me.selectedChild)
 					me.selectedChild = me.firstChild;
 			}

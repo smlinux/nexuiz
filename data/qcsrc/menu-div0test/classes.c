@@ -10,4 +10,7 @@
 #include "item/radiobutton.c"
 #include "item/borderimage.c"
 #include "item/slider.c"
+#include "nexuiz/dialog.c"
 #include "nexuiz/mainwindow.c"
+#include "nexuiz/commandbutton.c"
+#include "nexuiz/dialog_teamselect.c"

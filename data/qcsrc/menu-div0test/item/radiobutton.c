@@ -27,7 +27,7 @@ void RadioButton_Click(entity me, entity other)
 	else
 	{
 		entity e;
-		for(e = me.parent.firstChild; e; e = e.Container_nextSibling)
+		for(e = me.parent.firstChild; e; e = e.nextSibling)
 			if(e != me)
 				if(e.group == me.group)
 					e.checked = 0;

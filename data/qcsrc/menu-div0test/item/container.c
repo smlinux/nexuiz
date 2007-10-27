@@ -11,6 +11,7 @@ CLASS(Container) EXTENDS(Item)
 	METHOD(Container, resizeNotify, void(entity, vector, vector, vector, vector))
 	METHOD(Container, resizeNotifyLie, void(entity, vector, vector, vector, vector, .vector, .vector))
 	METHOD(Container, addItem, void(entity, entity, vector, vector, float))
+	METHOD(Container, moveItemAfter, void(entity, entity, entity))
 	METHOD(Container, removeItem, void(entity, entity))
 	METHOD(Container, setFocus, void(entity, entity))
 	METHOD(Container, itemFromPoint, entity(entity, vector))
@@ -25,14 +26,14 @@ ENDCLASS(Container)
 .vector Container_origin;
 .vector Container_size;
 .float Container_alpha;
-.entity Container_nextSibling;
-.entity Container_prevSibling;
+.entity nextSibling;
+.entity prevSibling;
 
 void resizeNotifyLieContainer(entity me, vector relOrigin, vector relSize, vector absOrigin, vector absSize, .vector originField, .vector sizeField)
 {
 	entity e;
 	vector o, s;
-	for(e = me.lastChild; e; e = e.Container_prevSibling)
+	for(e = me.lastChild; e; e = e.prevSibling)
 	{
 		o = e.originField;
 		s = e.sizeField;
@@ -50,7 +51,7 @@ entity itemFromPointContainer(entity me, vector pos)
 {
 	entity e;
 	vector o, s;
-	for(e = me.lastChild; e; e = e.Container_prevSibling)
+	for(e = me.lastChild; e; e = e.prevSibling)
 	{
 		o = e.Container_origin;
 		s = e.Container_size;
@@ -74,7 +75,7 @@ void drawContainer(entity me)
 	oldscale = draw_scale;
 	oldalpha = draw_alpha;
 	me.focusable = 0;
-	for(e = me.firstChild; e; e = e.Container_nextSibling)
+	for(e = me.firstChild; e; e = e.nextSibling)
 	{
 		if(e.focusable)
 			me.focusable += 1;
@@ -164,12 +165,12 @@ void addItemContainer(entity me, entity other, vector theOrigin, vector theSize,
 	l = me.lastChild;
 
 	if(l)
-		l.Container_nextSibling = other;
+		l.nextSibling = other;
 	else
 		me.firstChild = other;
 
-	other.Container_prevSibling = l;
-	other.Container_nextSibling = NULL;
+	other.prevSibling = l;
+	other.nextSibling = NULL;
 	me.lastChild = other;
 
 	draw_NeedResizeNotify = 1;
@@ -188,16 +189,16 @@ void removeItemContainer(entity me, entity other)
 	entity n, p, f, l;
 	f = me.firstChild;
 	l = me.lastChild;
-	n = other.Container_nextSibling;
-	p = other.Container_prevSibling;
+	n = other.nextSibling;
+	p = other.prevSibling;
 
 	if(p)
-		p.Container_nextSibling = n;
+		p.nextSibling = n;
 	else
 		me.firstChild = n;
 
 	if(n)
-		n.Container_prevSibling = p;
+		n.prevSibling = p;
 	else
 		me.lastChild = p;
 }
@@ -221,5 +222,46 @@ void setFocusContainer(entity me, entity other)
 		other.focusEnter(other);
 	}
 	me.focusedChild = other;
+}
+
+void moveItemAfterContainer(entity me, entity other, entity dest)
+{
+	// first: remove other from the chain
+	entity n, p, f, l;
+
+	if(other.parent != me)
+		error("Can't move in wrong container!");
+
+	f = me.firstChild;
+	l = me.lastChild;
+	n = other.nextSibling;
+	p = other.prevSibling;
+
+	if(p)
+		p.nextSibling = n;
+	else
+		me.firstChild = n;
+
+	if(n)
+		n.prevSibling = p;
+	else
+		me.lastChild = p;
+	
+	// now other got removed. Insert it behind dest now.
+	other.prevSibling = dest;
+	if(dest)
+		other.nextSibling = dest.nextSibling;
+	else
+		other.nextSibling = me.firstChild;
+
+	if(dest)
+		dest.nextSibling = other;
+	else
+		me.firstChild = other;
+
+	if(other.nextSibling)
+		other.nextSibling.prevSibling = other;
+	else
+		me.lastChild = other;
 }
 #endif
