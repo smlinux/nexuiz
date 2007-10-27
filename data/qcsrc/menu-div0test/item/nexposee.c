@@ -8,7 +8,6 @@ CLASS(Nexposee) EXTENDS(Container)
 	METHOD(Nexposee, mouseRelease, float(entity, vector))
 	METHOD(Nexposee, mouseDrag, float(entity, vector))
 	METHOD(Nexposee, resizeNotify, void(entity, vector, vector, vector, vector))
-	//METHOD(Nexposee, setFocus, void(entity, entity))
 	METHOD(Nexposee, focusEnter, void(entity))
 
 	ATTRIB(Nexposee, animationState, float, -1)
@@ -321,29 +320,5 @@ void focusEnterNexposee(entity me)
 {
 	if(me.animationState == 2)
 		setFocusContainer(me, me.selectedChild);
-}
-
-void setFocusNexposee(entity me, entity other)
-{
-/*
-	if(me.animationState == 0)
-	{
-		if(other != NULL)
-		{
-			setFocusContainer(me, other);
-			me.selectedChild = other;
-			me.animationState = 1;
-		}
-	}
-	else if(me.animationState == 2)
-	{
-		if(other == NULL)
-		{
-			me.selectedChild = me.focusedChild;
-			setFocusContainer(me, NULL);
-			me.animationState = 3;
-		}
-	}
-*/
 }
 #endif

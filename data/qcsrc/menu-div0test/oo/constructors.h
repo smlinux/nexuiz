@@ -14,8 +14,8 @@
 #undef ENDCLASS
 #endif
 
-#define CLASS(cname)                 entity spawn##cname() { entity e;
-#define EXTENDS(base)                e = spawn##base ();
-#define METHOD(cname,name,prototype) e.name = name##cname;
-#define ATTRIB(cname,name,type,val)  e.name = val;
-#define ENDCLASS(cname)              e.instanceOf##cname = 1; e.classname = #cname; return e; }
+#define CLASS(cname)                 entity spawn##cname() { entity me;
+#define EXTENDS(base)                me = spawn##base ();
+#define METHOD(cname,name,prototype) me.name = name##cname;
+#define ATTRIB(cname,name,type,val)  me.name = val;
+#define ENDCLASS(cname)              me.instanceOf##cname = 1; me.classname = #cname; return me; }

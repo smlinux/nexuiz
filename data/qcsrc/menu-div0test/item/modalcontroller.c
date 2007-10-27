@@ -3,7 +3,6 @@ CLASS(ModalController) EXTENDS(Container)
 	METHOD(ModalController, resizeNotify, void(entity, vector, vector, vector, vector))
 	METHOD(ModalController, draw, void(entity))
 	METHOD(ModalController, addItem, void(entity, entity, vector, vector, float))
-	METHOD(ModalController, setFocus, void(entity, entity))
 	METHOD(ModalController, showChild, void(entity, entity, vector, vector, float))
 	METHOD(ModalController, hideChild, void(entity, entity, float))
 	METHOD(ModalController, hideAll, void(entity, float))
@@ -240,12 +239,6 @@ void addItemModalController(entity me, entity other, vector theOrigin, vector th
 	addItemContainer(me, other, theOrigin, theSize, theAlpha);
 	if(other != me.firstChild)
 		other.Container_alpha = 0;
-}
-
-void setFocusModalController(entity me, entity other)
-{
-	//print("focus to ", etos(other), "\n");
-	setFocusContainer(me, other);
 }
 
 void showChildModalController(entity me, entity other, vector theOrigin, vector theSize, float skipAnimation)

@@ -31,13 +31,26 @@ void configureMainWindowMainWindow(entity me)
 		dlg.addItem(dlg, i, '0 0 0', '1 0.2 0', 1);
 
 		i = spawnLabel();
-		i.configureLabel(i, "Swim swim hungry, swim swim hungry...", 12, 0.5);
-		dlg.addItem(dlg, i, '0 0.3 0', '1 0.2 0', 1);
+		i.configureLabel(i, "Swim swim hungry, swim swim hungry...", 8, 0.5);
+		dlg.addItem(dlg, i, '0 0.3 0', '1 0.1 0', 1);
+
+		i = spawnRadioButton();
+		i.configureRadioButton(i, "RadioButton1", 12, "qcsrc/menu-div0test/baseradiobutton", 1, 0);
+		dlg.addItem(dlg, i, '0.1 0.4 0', '0.4 0.1 0', 1);
+
+		i = spawnRadioButton();
+		i.configureRadioButton(i, "RadioButton2", 12, "qcsrc/menu-div0test/baseradiobutton", 1, 1);
+		dlg.addItem(dlg, i, '0.5 0.4 0', '0.8 0.1 0', 1);
+
+		i = spawnCheckBox();
+		i.configureCheckBox(i, "Do not show this dialog again", 12, "qcsrc/menu-div0test/basecheckbox");
+		i.checked = 1;
+		dlg.addItem(dlg, i, '0.1 0.5 0', '0.8 0.1 0', 1);
 
 		i = spawnButton();
 		i.configureButton(i, "Close", 12, "qcsrc/menu-div0test/basebutton");
 		i.onClick = DialogCloseButton_Click; i.onClickEntity = dlg;
-		dlg.addItem(dlg, i, '0.3 0.6 0', '0.4 0.3 0', 1);
+		dlg.addItem(dlg, i, '0.3 0.7 0', '0.4 0.2 0', 1);
 	me.addItem(me, dlg, '0.2 0.3 0', '0.6 0.4 0', 1);
 	
 	i = spawnImage();

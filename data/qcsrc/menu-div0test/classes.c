@@ -6,4 +6,6 @@
 #include "item/image.c"
 #include "item/label.c"
 #include "item/button.c"
+#include "item/checkbox.c"
+#include "item/radiobutton.c"
 #include "nexuiz/mainwindow.c"

@@ -10,6 +10,7 @@ CLASS(Button) EXTENDS(Label)
 	ATTRIB(Button, onClick, void(entity, entity), SUB_Null)
 	ATTRIB(Button, onClickEntity, entity, NULL)
 	ATTRIB(Button, src, string, "")
+	ATTRIB(Button, srcMulti, float, 1)
 	ATTRIB(Button, focusable, float, 1)
 	ATTRIB(Button, pressed, float, 0)
 	ATTRIB(Button, clickTime, float, 0)
@@ -68,28 +69,40 @@ float mouseReleaseButton(entity me, vector pos)
 }
 void drawButton(entity me)
 {
-	float division;
-	division = min(0.5, 0.5 * me.size_y / me.size_x);
-	if(me.forcePressed || me.pressed || me.clickTime > 0)
+	if(me.srcMulti)
 	{
-		draw_Picture('0 0 0', strcat(me.src, "_cl"), eX * division + eY, '1 1 1', 1);
-		if(division < 0.5)
-			draw_Picture('0 0 0' + eX * division, strcat(me.src, "_cm"), eX * (1 - 2 * division) + eY, '1 1 1', 1);
-		draw_Picture(eX * (1 - division), strcat(me.src, "_cr"), eX * division + eY, '1 1 1', 1);
-	}
-	else if(me.focused)
-	{
-		draw_Picture('0 0 0', strcat(me.src, "_fl"), eX * division + eY, '1 1 1', 1);
-		if(division < 0.5)
-			draw_Picture('0 0 0' + eX * division, strcat(me.src, "_fm"), eX * (1 - 2 * division) + eY, '1 1 1', 1);
-		draw_Picture(eX * (1 - division), strcat(me.src, "_fr"), eX * division + eY, '1 1 1', 1);
+		float division;
+		division = min(0.5, 0.5 * me.size_y / me.size_x);
+		if(me.forcePressed || me.pressed || me.clickTime > 0)
+		{
+			draw_Picture('0 0 0', strcat(me.src, "_cl"), eX * division + eY, '1 1 1', 1);
+			if(division < 0.5)
+				draw_Picture('0 0 0' + eX * division, strcat(me.src, "_cm"), eX * (1 - 2 * division) + eY, '1 1 1', 1);
+			draw_Picture(eX * (1 - division), strcat(me.src, "_cr"), eX * division + eY, '1 1 1', 1);
+		}
+		else if(me.focused)
+		{
+			draw_Picture('0 0 0', strcat(me.src, "_fl"), eX * division + eY, '1 1 1', 1);
+			if(division < 0.5)
+				draw_Picture('0 0 0' + eX * division, strcat(me.src, "_fm"), eX * (1 - 2 * division) + eY, '1 1 1', 1);
+			draw_Picture(eX * (1 - division), strcat(me.src, "_fr"), eX * division + eY, '1 1 1', 1);
+		}
+		else
+		{
+			draw_Picture('0 0 0', strcat(me.src, "_nl"), eX * division + eY, '1 1 1', 1);
+			if(division < 0.5)
+				draw_Picture('0 0 0' + eX * division, strcat(me.src, "_nm"), eX * (1 - 2 * division) + eY, '1 1 1', 1);
+			draw_Picture(eX * (1 - division), strcat(me.src, "_nr"), eX * division + eY, '1 1 1', 1);
+		}
 	}
 	else
 	{
-		draw_Picture('0 0 0', strcat(me.src, "_nl"), eX * division + eY, '1 1 1', 1);
-		if(division < 0.5)
-			draw_Picture('0 0 0' + eX * division, strcat(me.src, "_nm"), eX * (1 - 2 * division) + eY, '1 1 1', 1);
-		draw_Picture(eX * (1 - division), strcat(me.src, "_nr"), eX * division + eY, '1 1 1', 1);
+		if(me.forcePressed || me.pressed || me.clickTime > 0)
+			draw_Picture('0 0 0', strcat(me.src, "_c"), '1 1 0', '1 1 1', 1);
+		else if(me.focused)
+			draw_Picture('0 0 0', strcat(me.src, "_f"), '1 1 0', '1 1 1', 1);
+		else
+			draw_Picture('0 0 0', strcat(me.src, "_n"), '1 1 0', '1 1 1', 1);
 	}
 	me.clickTime -= frametime;
 	drawLabel(me);
