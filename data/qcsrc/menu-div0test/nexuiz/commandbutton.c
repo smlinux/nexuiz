@@ -1,22 +1,22 @@
 #ifdef INTERFACE
-CLASS(CommandButton) EXTENDS(NexuizButton)
-	METHOD(CommandButton, configureCommandButton, void(entity, string, vector, string, float))
-	ATTRIB(CommandButton, onClickCommand, string, "")
-	ATTRIB(CommandButton, closes, float, 0)
-ENDCLASS(CommandButton)
-entity makeCommandButton(string theText, vector theColor, string theCommand, float closesMenu);
+CLASS(NexuizCommandButton) EXTENDS(NexuizButton)
+	METHOD(NexuizCommandButton, configureNexuizCommandButton, void(entity, string, vector, string, float))
+	ATTRIB(NexuizCommandButton, onClickCommand, string, "")
+	ATTRIB(NexuizCommandButton, closes, float, 0)
+ENDCLASS(NexuizCommandButton)
+entity makeNexuizCommandButton(string theText, vector theColor, string theCommand, float closesMenu);
 #endif
 
 #ifdef IMPLEMENTATION
-entity makeCommandButton(string theText, vector theColor, string theCommand, float closesMenu)
+entity makeNexuizCommandButton(string theText, vector theColor, string theCommand, float closesMenu)
 {
 	entity me;
-	me = spawnCommandButton();
-	me.configureCommandButton(me, theText, theColor, theCommand, closesMenu);
+	me = spawnNexuizCommandButton();
+	me.configureNexuizCommandButton(me, theText, theColor, theCommand, closesMenu);
 	return me;
 }
 
-void CommandButton_Click(entity me, entity other)
+void NexuizCommandButton_Click(entity me, entity other)
 {
 	cmd("\n", me.onClickCommand, "\n");
 	if(me.closes)
@@ -25,12 +25,12 @@ void CommandButton_Click(entity me, entity other)
 	}
 }
 
-void configureCommandButtonCommandButton(entity me, string theText, vector theColor, string theCommand, float closesMenu)
+void configureNexuizCommandButtonNexuizCommandButton(entity me, string theText, vector theColor, string theCommand, float closesMenu)
 {
 	me.configureNexuizButton(me, theText, theColor);
 	me.onClickCommand = theCommand;
 	me.closes = closesMenu;
-	me.onClick = CommandButton_Click;
+	me.onClick = NexuizCommandButton_Click;
 	me.onClickEntity = me;
 }
 #endif

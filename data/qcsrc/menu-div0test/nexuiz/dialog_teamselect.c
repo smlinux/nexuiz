@@ -1,18 +1,18 @@
 #ifdef INTERFACE
-CLASS(TeamSelectDialog) EXTENDS(NexuizDialog)
-	METHOD(TeamSelectDialog, fill, void(entity)) // to be overridden by user to fill the dialog with controls
-	METHOD(TeamSelectDialog, open, void(entity))
-	ATTRIB(TeamSelectDialog, title, string, "Team Selection") // ;)
-	ATTRIB(TeamSelectDialog, color, vector, '1 1 1')
-	ATTRIB(TeamSelectDialog, intendedWidth, float, 0.4)
-	ATTRIB(TeamSelectDialog, rows, float, 5)
-	ATTRIB(TeamSelectDialog, columns, float, 4)
-	ATTRIB(TeamSelectDialog, name, string, "TeamSelect")
-	ATTRIB(TeamSelectDialog, team1, entity, NULL)
-	ATTRIB(TeamSelectDialog, team2, entity, NULL)
-	ATTRIB(TeamSelectDialog, team3, entity, NULL)
-	ATTRIB(TeamSelectDialog, team4, entity, NULL)
-ENDCLASS(TeamSelectDialog)
+CLASS(NexuizTeamSelectDialog) EXTENDS(NexuizDialog)
+	METHOD(NexuizTeamSelectDialog, fill, void(entity)) // to be overridden by user to fill the dialog with controls
+	METHOD(NexuizTeamSelectDialog, open, void(entity))
+	ATTRIB(NexuizTeamSelectDialog, title, string, "Team Selection") // ;)
+	ATTRIB(NexuizTeamSelectDialog, color, vector, '1 1 1')
+	ATTRIB(NexuizTeamSelectDialog, intendedWidth, float, 0.4)
+	ATTRIB(NexuizTeamSelectDialog, rows, float, 5)
+	ATTRIB(NexuizTeamSelectDialog, columns, float, 4)
+	ATTRIB(NexuizTeamSelectDialog, name, string, "TeamSelect")
+	ATTRIB(NexuizTeamSelectDialog, team1, entity, NULL)
+	ATTRIB(NexuizTeamSelectDialog, team2, entity, NULL)
+	ATTRIB(NexuizTeamSelectDialog, team3, entity, NULL)
+	ATTRIB(NexuizTeamSelectDialog, team4, entity, NULL)
+ENDCLASS(NexuizTeamSelectDialog)
 #endif
 
 #ifdef IMPLEMENTATION
@@ -23,7 +23,7 @@ entity makeTeamButton(string theName, vector theColor, string commandtheName)
 	return b;
 }
 
-void openTeamSelectDialog(entity me)
+void openNexuizTeamSelectDialog(entity me)
 {
 	float teams, nTeams;
 	teams = cvar("_teams_available");
@@ -34,7 +34,7 @@ void openTeamSelectDialog(entity me)
 	me.team4.disabled = !(teams & 8); nTeams += !!(teams & 8);
 }
 
-void fillTeamSelectDialog(entity me)
+void fillNexuizTeamSelectDialog(entity me)
 {
 	me.TR(me);
 		me.TD(me, 2, 4, makeTeamButton("auto", '0 0 0', "cmd selectteam auto; cmd join"));
