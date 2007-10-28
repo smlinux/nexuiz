@@ -15,6 +15,7 @@ CLASS(Container) EXTENDS(Item)
 	METHOD(Container, removeItem, void(entity, entity))
 	METHOD(Container, setFocus, void(entity, entity))
 	METHOD(Container, itemFromPoint, entity(entity, vector))
+	METHOD(Container, open, void(entity))
 	ATTRIB(Container, focusable, float, 0)
 	ATTRIB(Container, firstChild, entity, NULL)
 	ATTRIB(Container, lastChild, entity, NULL)
@@ -29,11 +30,18 @@ ENDCLASS(Container)
 .entity nextSibling;
 .entity prevSibling;
 
+void openContainer(entity me)
+{
+	entity e;
+	for(e = me.firstChild; e; e = e.nextSibling)
+		e.open(e);
+}
+
 void resizeNotifyLieContainer(entity me, vector relOrigin, vector relSize, vector absOrigin, vector absSize, .vector originField, .vector sizeField)
 {
 	entity e;
 	vector o, s;
-	for(e = me.lastChild; e; e = e.prevSibling)
+	for(e = me.firstChild; e; e = e.nextSibling)
 	{
 		o = e.originField;
 		s = e.sizeField;

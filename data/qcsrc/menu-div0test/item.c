@@ -11,6 +11,7 @@ CLASS(Item) EXTENDS(Object)
 	METHOD(Item, focusLeave, void(entity))
 	METHOD(Item, resizeNotify, void(entity, vector, vector, vector, vector))
 	METHOD(Item, relinquishFocus, void(entity))
+	METHOD(Item, open, void(entity))
 	ATTRIB(Item, focused, float, 0)
 	ATTRIB(Item, focusable, float, 0)
 	ATTRIB(Item, parent, entity, NULL)
@@ -30,6 +31,10 @@ void resizeNotifyItem(entity me, vector relOrigin, vector relSize, vector absOri
 }
 
 void drawItem(entity me)
+{
+}
+
+void openItem(entity me)
 {
 }
 

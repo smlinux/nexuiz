@@ -94,6 +94,10 @@ void() m_draw =
 	realFrametime = frametime = min(0.2, t - menuPrevTime);
 	menuPrevTime = t;
 
+	if(Menu_Active)
+		if(getkeydest() != KEY_MENU || getmousetarget() != MT_MENU)
+			m_hide();
+
 	if(cvar("cl_capturevideo"))
 		frametime = 1 / cvar("cl_capturevideo_fps"); // make capturevideo work smoothly
 

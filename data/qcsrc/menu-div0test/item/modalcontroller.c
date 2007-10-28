@@ -2,6 +2,7 @@
 CLASS(ModalController) EXTENDS(Container)
 	METHOD(ModalController, resizeNotify, void(entity, vector, vector, vector, vector))
 	METHOD(ModalController, draw, void(entity))
+	METHOD(ModalController, open, void(entity))
 	METHOD(ModalController, addItem, void(entity, entity, vector, vector, float))
 	METHOD(ModalController, showChild, void(entity, entity, vector, vector, float))
 	METHOD(ModalController, hideChild, void(entity, entity, float))
@@ -125,9 +126,13 @@ void switchStateModalController(entity me, entity other, float state, float skip
 		other.ModalController_factor = 1;
 }
 
+void openModalController(entity me)
+{
+	// just swallow the event; will handle opening another way
+}
+
 void drawModalController(entity me)
 {
-	// TODO set up alpha, sizes and focus
 	entity e;
 	entity front;
 	float animating;
@@ -249,6 +254,7 @@ void showChildModalController(entity me, entity other, vector theOrigin, vector 
 		other.ModalController_buttonOrigin = globalToBox(theOrigin, me.origin, me.size);
 		other.ModalController_buttonSize = globalToBoxSize(theSize, me.size);
 		me.switchState(me, other, 1, skipAnimation);
+		other.open(other);
 	} // zoom in from button (factor increases)
 }
 

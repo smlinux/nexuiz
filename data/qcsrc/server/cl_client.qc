@@ -610,6 +610,7 @@ void ClientKill (void)
 
 void FixClientCvars(entity e)
 {
+	float t;
 	// send prediction settings to the client
 	stuffcmd(e, "\nin_bindmap 0 0\n");
 	stuffcmd(e, strcat("cl_gravity ", ftos(cvar("sv_gravity")), "\n"));
@@ -625,6 +626,11 @@ void FixClientCvars(entity e)
 	stuffcmd(e, strcat("set cl_movement_airaccel_qw ", ftos(cvar("sv_airaccel_qw")), "\n"));
 	stuffcmd(e, strcat("set cl_movement_airaccel_sideways_friction ", ftos(cvar("sv_airaccel_sideways_friction")), "\n"));
 	stuffcmd(e, "cl_movement_edgefriction 1\n");
+
+	// notify about available teams
+	CheckAllowedTeams(e);
+	t = 0; if(c1 >= 0) t |= 1; if(c2 >= 0) t |= 2; if(c3 >= 0) t |= 4; if(c4 >= 0) t |= 8;
+	stuffcmd(e, strcat("set _teams_available ", ftos(t), "\n"));
 }
 
 /*
