@@ -19,7 +19,7 @@ ENDCLASS(NexuizTeamSelectDialog)
 entity makeTeamButton(string theName, vector theColor, string commandtheName)
 {
 	entity b;
-	b = makeCommandButton(theName, theColor, commandtheName, 1);
+	b = makeNexuizCommandButton(theName, theColor, commandtheName, 1);
 	return b;
 }
 

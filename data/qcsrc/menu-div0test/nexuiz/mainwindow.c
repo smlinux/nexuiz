@@ -62,7 +62,7 @@ void configureMainWindowMainWindow(entity me)
 		dlg.addItem(dlg, cb, '0.3 0.7 0', '0.4 0.2 0', 1);
 	me.addItem(me, dlg, '0.2 0.3 0', '0.6 0.4 0', 1);
 	
-	i = spawnTeamSelectDialog();
+	i = spawnNexuizTeamSelectDialog();
 	i.configureDialog(i);
 	me.addItem(me, i, ('1 1 0' - i.intendedWidth * eX - i.intendedHeight * eY) * 0.5, i.intendedWidth * eX + i.intendedHeight * eY, 1);
 
