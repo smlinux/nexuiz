@@ -26,3 +26,6 @@
 #include "nexuiz/slider.c"
 #include "nexuiz/slider_resolution.c"
 #include "nexuiz/checkbox.c"
+#include "nexuiz/radiobutton.c"
+#include "nexuiz/slider_picmip.c"
+#include "nexuiz/nexposee.c"

@@ -10,7 +10,6 @@ CLASS(NexuizDialog) EXTENDS(Dialog)
 	ATTRIB(NexuizDialog, rows, float, 3)
 	ATTRIB(NexuizDialog, columns, float, 2)
 	*/
-
 	ATTRIB(NexuizDialog, marginTop, float, SKINMARGIN_TOP) // pixels
 	ATTRIB(NexuizDialog, marginBottom, float, SKINMARGIN_TOP) // pixels
 	ATTRIB(NexuizDialog, marginLeft, float, SKINMARGIN_LEFT) // pixels

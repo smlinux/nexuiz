@@ -22,7 +22,7 @@ void RadioButton_Click(entity me, entity other)
 	if(me.checked)
 	{
 		if(me.allowDeselect)
-			me.checked = 0;
+			me.setChecked(me, 0);
 	}
 	else
 	{
@@ -30,8 +30,8 @@ void RadioButton_Click(entity me, entity other)
 		for(e = me.parent.firstChild; e; e = e.nextSibling)
 			if(e != me)
 				if(e.group == me.group)
-					e.checked = 0;
-		me.checked = 1;
+					e.setChecked(e, 0);
+		me.setChecked(me, 1);
 	}
 }
 #endif

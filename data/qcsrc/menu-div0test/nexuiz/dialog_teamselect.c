@@ -1,7 +1,7 @@
 #ifdef INTERFACE
 CLASS(NexuizTeamSelectDialog) EXTENDS(NexuizDialog)
 	METHOD(NexuizTeamSelectDialog, fill, void(entity)) // to be overridden by user to fill the dialog with controls
-	METHOD(NexuizTeamSelectDialog, open, void(entity))
+	METHOD(NexuizTeamSelectDialog, showNotify, void(entity))
 	ATTRIB(NexuizTeamSelectDialog, title, string, "Team Selection") // ;)
 	ATTRIB(NexuizTeamSelectDialog, color, vector, '1 1 1')
 	ATTRIB(NexuizTeamSelectDialog, intendedWidth, float, 0.4)
@@ -23,7 +23,7 @@ entity makeTeamButton(string theName, vector theColor, string commandtheName)
 	return b;
 }
 
-void openNexuizTeamSelectDialog(entity me)
+void showNotifyNexuizTeamSelectDialog(entity me)
 {
 	float teams, nTeams;
 	teams = cvar("_teams_available");

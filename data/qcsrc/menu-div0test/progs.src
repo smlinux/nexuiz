@@ -10,6 +10,7 @@ gamecommand.qh
 menu.qh
 draw.qh
 skin.qh
+nexuiz/util.qh
 
 oo/classdefs.h
 	classes.c
@@ -19,6 +20,7 @@ oo/classdefs.h
 gamecommand.qc
 menu.qc
 draw.qc
+nexuiz/util.qc
 
 oo/constructors.h
 	classes.c

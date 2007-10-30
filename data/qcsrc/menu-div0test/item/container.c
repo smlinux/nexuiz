@@ -15,12 +15,15 @@ CLASS(Container) EXTENDS(Item)
 	METHOD(Container, moveItemAfter, void(entity, entity, entity))
 	METHOD(Container, removeItem, void(entity, entity))
 	METHOD(Container, setFocus, void(entity, entity))
+	METHOD(Container, setAlphaOf, void(entity, entity, float))
 	METHOD(Container, itemFromPoint, entity(entity, vector))
-	METHOD(Container, open, void(entity))
+	METHOD(Container, showNotify, void(entity))
+	METHOD(Container, hideNotify, void(entity))
 	ATTRIB(Container, focusable, float, 0)
 	ATTRIB(Container, firstChild, entity, NULL)
 	ATTRIB(Container, lastChild, entity, NULL)
 	ATTRIB(Container, focusedChild, entity, NULL)
+	ATTRIB(Container, shown, float, 0)
 ENDCLASS(Container)
 .entity nextSibling;
 .entity prevSibling;
@@ -31,11 +34,41 @@ ENDCLASS(Container)
 .vector Container_size;
 .float Container_alpha;
 
-void openContainer(entity me)
+void showNotifyContainer(entity me)
 {
 	entity e;
+	if(me.shown)
+		return;
+	me.shown = 1;
 	for(e = me.firstChild; e; e = e.nextSibling)
-		e.open(e);
+		if(e.Container_alpha > 0)
+			e.showNotify(e);
+}
+
+void hideNotifyContainer(entity me)
+{
+	entity e;
+	if(!me.shown)
+		return;
+	me.shown = 0;
+	for(e = me.firstChild; e; e = e.nextSibling)
+		if(e.Container_alpha > 0)
+			e.hideNotify(e);
+}
+
+void setAlphaOfContainer(entity me, entity other, float theAlpha)
+{
+	if(theAlpha <= 0)
+	{
+		if(other.Container_alpha > 0)
+			other.hideNotify(other);
+	}
+	else // value > 0
+	{
+		if(other.Container_alpha <= 0)
+			other.showNotify(other);
+	}
+	other.Container_alpha = theAlpha;
 }
 
 void resizeNotifyLieContainer(entity me, vector relOrigin, vector relSize, vector absOrigin, vector absSize, .vector originField, .vector sizeField)
@@ -169,10 +202,23 @@ void addItemContainer(entity me, entity other, vector theOrigin, vector theSize,
 	if(other.focusable)
 		me.focusable += 1;
 
+	if(theSize_x > 1)
+	{
+		theOrigin_x -= 0.5 * (theSize_x - 1);
+		theSize_x = 1;
+	}
+	if(theSize_y > 1)
+	{
+		theOrigin_y -= 0.5 * (theSize_y - 1);
+		theSize_y = 1;
+	}
+	theOrigin_x = bound(0, theOrigin_x, 1 - theSize_x);
+	theOrigin_y = bound(0, theOrigin_y, 1 - theSize_y);
+
 	other.parent = me;
 	other.Container_origin = theOrigin;
 	other.Container_size = theSize;
-	other.Container_alpha = theAlpha;
+	me.setAlphaOf(me, other, theAlpha);
 
 	entity f, l;
 	f = me.firstChild;

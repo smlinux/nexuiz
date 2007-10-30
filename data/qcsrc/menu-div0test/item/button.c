@@ -2,7 +2,7 @@
 CLASS(Button) EXTENDS(Label)
 	METHOD(Button, configureButton, void(entity, string, float, string))
 	METHOD(Button, draw, void(entity))
-	METHOD(Button, open, void(entity))
+	METHOD(Button, showNotify, void(entity))
 	METHOD(Button, resizeNotify, void(entity, vector, vector, vector, vector))
 	METHOD(Button, keyDown, float(entity, float, float, float))
 	METHOD(Button, mousePress, float(entity, vector))
@@ -70,7 +70,7 @@ float mouseReleaseButton(entity me, vector pos)
 	}
 	return 1;
 }
-void openButton(entity me)
+void showNotifyButton(entity me)
 {
 	me.focusable = !me.disabled;
 }

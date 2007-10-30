@@ -1,6 +1,7 @@
 #ifdef INTERFACE
 CLASS(NexuizSlider) EXTENDS(Slider)
 	METHOD(NexuizSlider, configureNexuizSlider, void(entity, float, float, float, string))
+	METHOD(NexuizSlider, setValue, void(entity, float))
 	ATTRIB(NexuizSlider, fontSize, float, SKINFONTSIZE_NORMAL)
 	ATTRIB(NexuizSlider, valueSpace, float, SKINWIDTH_SLIDERTEXT)
 	ATTRIB(NexuizSlider, image, string, SKINGFX_SLIDER)
@@ -24,17 +25,25 @@ void configureNexuizSliderNexuizSlider(entity me, float theValueMin, float theVa
 {
 	float v, vk, vp;
 	v = theValueMin;
+	vk = theValueStep;
+	vp = theValueStep * 10;
+	while(fabs(vp) < fabs(theValueMax - theValueMin) / 40)
+		vp *= 10;
+	me.configureSliderVisuals(me, me.fontSize, me.valueSpace, me.image);
+	me.configureSliderValues(me, theValueMin, v, theValueMax, theValueStep, vk, vp);
 	if(theCvar != "")
 	{
 		me.cvarName = theCvar;
 		me.loadCvars(me);
 	}
-	vk = theValueStep;
-	vp = theValueStep * 10;
-	while(vp < (theValueMax - theValueMin) / 40)
-		vp *= 10;
-	me.configureSliderVisuals(me, me.fontSize, me.valueSpace, me.image);
-	me.configureSliderValues(me, theValueMin, v, theValueMax, theValueStep, vk, vp);
+}
+void setValueNexuizSlider(entity me, float val)
+{
+	if(val != me.value)
+	{
+		me.value = val;
+		me.saveCvars(me);
+	}
 }
 void loadCvarsNexuizSlider(entity me)
 {

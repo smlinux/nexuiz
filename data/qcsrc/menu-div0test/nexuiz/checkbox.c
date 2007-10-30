@@ -1,6 +1,7 @@
 #ifdef INTERFACE
 CLASS(NexuizCheckBox) EXTENDS(CheckBox)
 	METHOD(NexuizCheckBox, configureNexuizCheckBox, void(entity, float, string, string))
+	METHOD(NexuizCheckBox, setChecked, void(entity, float))
 	ATTRIB(NexuizCheckBox, fontSize, float, SKINFONTSIZE_NORMAL)
 	ATTRIB(NexuizCheckBox, image, string, SKINGFX_CHECKBOX)
 	ATTRIB(NexuizCheckBox, inverted, float, 0)
@@ -31,12 +32,20 @@ void configureNexuizCheckBoxNexuizCheckBox(entity me, float isInverted, string t
 	}
 	me.configureCheckBox(me, theText, me.fontSize, me.image);
 }
+void setCheckedNexuizCheckBox(entity me, float val)
+{
+	if(val != me.checked)
+	{
+		me.checked = val;
+		me.saveCvars(me);
+	}
+}
 void loadCvarsNexuizCheckBox(entity me)
 {
 	me.checked = me.inverted - !!cvar(me.cvarName);
 }
 void saveCvarsNexuizCheckBox(entity me)
 {
-	cvar_set(me.cvarName, ftos(me.inverted - me.value));
+	cvar_set(me.cvarName, ftos(fabs(me.inverted - me.checked)));
 }
 #endif

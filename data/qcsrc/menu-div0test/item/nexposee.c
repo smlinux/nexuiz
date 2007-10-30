@@ -9,6 +9,7 @@ CLASS(Nexposee) EXTENDS(Container)
 	METHOD(Nexposee, mouseDrag, float(entity, vector))
 	METHOD(Nexposee, resizeNotify, void(entity, vector, vector, vector, vector))
 	METHOD(Nexposee, focusEnter, void(entity))
+	METHOD(Nexposee, close, void(entity))
 
 	ATTRIB(Nexposee, animationState, float, -1)
 	ATTRIB(Nexposee, animationFactor, float, 0)
@@ -41,6 +42,11 @@ void ExposeeCloseButton_Click(entity button, entity other); // un-exposees the c
 .float Nexposee_smallAlpha;
 .float Nexposee_mediumAlpha;
 .vector Nexposee_scaleCenter;
+
+void closeNexposee(entity me)
+{
+	// user must override this
+}
 
 void ExposeeCloseButton_Click(entity button, entity other)
 {
@@ -109,7 +115,8 @@ void calcNexposee(entity me)
 void setNexposeeNexposee(entity me, entity other, vector scalecenter, float a0, float a1)
 {
 	other.Nexposee_scaleCenter = scalecenter;
-	other.Nexposee_smallAlpha = other.Container_alpha = a0;
+	other.Nexposee_smallAlpha = a0;
+	me.setAlphaOf(me, other, a0);
 	other.Nexposee_mediumAlpha = a1;
 }
 
@@ -178,7 +185,7 @@ void drawNexposee(entity me)
 			e.Container_size = e.Nexposee_smallSize;
 			a = e.Nexposee_smallAlpha * (1 - me.animationFactor);
 		}
-		e.Container_alpha = e.Container_alpha * (1 - f) + a * f;
+		me.setAlphaOf(me, e, e.Container_alpha * (1 - f) + a * f);
 	}
 
 	drawContainer(me);
@@ -190,11 +197,13 @@ float mousePressNexposee(entity me, vector pos)
 	{
 		me.mouseFocusedChild = NULL;
 		mouseMoveNexposee(me, pos);
-		if(me.selectedChild)
+		if(me.mouseFocusedChild)
 		{
 			me.animationState = 1;
 			setFocusContainer(me, NULL);
 		}
+		else
+			me.close(me);
 		return 1;
 	}
 	else if(me.animationState == 2)
@@ -310,10 +319,10 @@ float keyDownNexposee(entity me, float scan, float ascii, float shift)
 
 void addItemNexposee(entity me, entity other, vector theOrigin, vector theSize, float theAlpha)
 {
-	other.Nexposee_initialSize = theSize;
-	other.Nexposee_initialOrigin = theOrigin;
-	other.Nexposee_initialAlpha = theAlpha;
 	addItemContainer(me, other, theOrigin, theSize, theAlpha);
+	other.Nexposee_initialSize = other.Container_size;
+	other.Nexposee_initialOrigin = other.Container_origin;
+	other.Nexposee_initialAlpha = other.Container_alpha;
 }
 
 void focusEnterNexposee(entity me)

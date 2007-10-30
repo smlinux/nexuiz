@@ -10,6 +10,7 @@ CLASS(Slider) EXTENDS(Label)
 	METHOD(Slider, mouseRelease, float(entity, vector))
 	METHOD(Slider, valueToText, string(entity, float))
 	METHOD(Slider, toString, string(entity))
+	METHOD(Slider, setValue, void(entity, float))
 	ATTRIB(Slider, src, string, "")
 	ATTRIB(Slider, focusable, float, 1)
 	ATTRIB(Slider, value, float, 0)
@@ -27,6 +28,10 @@ ENDCLASS(Slider)
 #endif
 
 #ifdef IMPLEMENTATION
+void setValueSlider(entity me, float val)
+{
+	me.value = val;
+}
 string toStringSlider(entity me)
 {
 	return strcat(ftos(me.value), " (", me.valueToText(me, me.value), ")");
@@ -57,24 +62,48 @@ void configureSliderValuesSlider(entity me, float theValueMin, float theValue, f
 }
 float keyDownSlider(entity me, float key, float ascii, float shift)
 {
+	float inRange;
+	inRange = (me.value == median(me.valueMin, me.value, me.valueMax));
 	if(key == K_LEFTARROW)
 	{
-		me.value = bound(me.valueMin, me.value - me.valueKeyStep, me.valueMax);
+		if(inRange)
+			me.setValue(me, median(me.valueMin, me.value - me.valueKeyStep, me.valueMax));
+		else
+			me.setValue(me, me.valueMax);
 		return 1;
 	}
 	if(key == K_RIGHTARROW)
 	{
-		me.value = bound(me.valueMin, me.value + me.valueKeyStep, me.valueMax);
+		if(inRange)
+			me.setValue(me, median(me.valueMin, me.value + me.valueKeyStep, me.valueMax));
+		else
+			me.setValue(me, me.valueMin);
 		return 1;
 	}
 	if(key == K_PGUP)
 	{
-		me.value = bound(me.valueMin, me.value - me.valuePageStep, me.valueMax);
+		if(inRange)
+			me.setValue(me, median(me.valueMin, me.value - me.valuePageStep, me.valueMax));
+		else
+			me.setValue(me, me.valueMax);
 		return 1;
 	}
 	if(key == K_PGDN)
 	{
-		me.value = bound(me.valueMin, me.value + me.valuePageStep, me.valueMax);
+		if(inRange)
+			me.setValue(me, median(me.valueMin, me.value + me.valuePageStep, me.valueMax));
+		else
+			me.setValue(me, me.valueMin);
+		return 1;
+	}
+	if(key == K_HOME)
+	{
+		me.setValue(me, me.valueMin);
+		return 1;
+	}
+	if(key == K_END)
+	{
+		me.setValue(me, me.valueMax);
 		return 1;
 	}
 	// TODO more keys
@@ -83,6 +112,7 @@ float keyDownSlider(entity me, float key, float ascii, float shift)
 float mouseDragSlider(entity me, vector pos)
 {
 	float hit;
+	float v;
 	if(me.pressed)
 	{
 		hit = 1;
@@ -92,12 +122,13 @@ float mouseDragSlider(entity me, vector pos)
 		if(pos_y >= 1) hit = 0;
 		if(hit)
 		{
-			me.value = bound(0, (pos_x - me.pressOffset - 0.5 * me.controlWidth) / (1 - me.valueSpace - me.controlWidth), 1) * (me.valueMax - me.valueMin) + me.valueMin;
+			v = median(0, (pos_x - me.pressOffset - 0.5 * me.controlWidth) / (1 - me.valueSpace - me.controlWidth), 1) * (me.valueMax - me.valueMin) + me.valueMin;
 			if(me.valueStep)
-				me.value = floor(0.5 + me.value / me.valueStep) * me.valueStep;
+				v = floor(0.5 + v / me.valueStep) * me.valueStep;
+			me.setValue(me, v);
 		}
 		else
-			me.value = me.previousValue;
+			me.setValue(me, me.previousValue);
 	}
 	return 1;
 }
@@ -134,7 +165,7 @@ void drawSlider(entity me)
 {
 	float controlLeft;
 	draw_ButtonPicture('0 0 0', strcat(me.src, "_s"), eX * (1 - me.valueSpace) + eY, '1 1 1', 1);
-	if(me.value >= me.valueMin && me.value <= me.valueMax)
+	if(me.value == median(me.valueMin, me.value, me.valueMax))
 	{
 		controlLeft = (me.value - me.valueMin) / (me.valueMax - me.valueMin) * (1 - me.valueSpace - me.controlWidth);
 		if(me.pressed)

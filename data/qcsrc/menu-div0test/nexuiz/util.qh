@@ -1,0 +1,3 @@
+void forAllDescendants(entity root, void(entity, entity) funcPre, void(entity, entity) funcPost, entity pass);
+void saveAllCvars(entity root);
+void loadAllCvars(entity root);

@@ -2,7 +2,6 @@
 CLASS(ModalController) EXTENDS(Container)
 	METHOD(ModalController, resizeNotify, void(entity, vector, vector, vector, vector))
 	METHOD(ModalController, draw, void(entity))
-	METHOD(ModalController, open, void(entity))
 	METHOD(ModalController, addItem, void(entity, entity, vector, vector, float))
 	METHOD(ModalController, showChild, void(entity, entity, vector, vector, float))
 	METHOD(ModalController, hideChild, void(entity, entity, float))
@@ -126,11 +125,6 @@ void switchStateModalController(entity me, entity other, float state, float skip
 		other.ModalController_factor = 1;
 }
 
-void openModalController(entity me)
-{
-	// just swallow the event; will handle opening another way
-}
-
 void drawModalController(entity me)
 {
 	entity e;
@@ -200,13 +194,13 @@ void drawModalController(entity me)
 		{
 			e.Container_origin = targetOrigin;
 			e.Container_size = targetSize;
-			e.Container_alpha = targetAlpha;
+			me.setAlphaOf(me, e, targetAlpha);
 		}
 		else
 		{
 			e.Container_origin = e.Container_origin * prevFactor + targetOrigin * targetFactor;
 			e.Container_size   = e.Container_size   * prevFactor + targetSize   * targetFactor;
-			e.Container_alpha  = e.Container_alpha  * prevFactor + targetAlpha  * targetFactor;
+			me.setAlphaOf(me, e, e.Container_alpha  * prevFactor + targetAlpha  * targetFactor);
 		}
 		// assume: o == to * f_prev + X * (1 - f_prev)
 		// make:   o' = to * f  + X * (1 - f)
@@ -238,12 +232,10 @@ void addTabModalController(entity me, entity other, entity tabButton)
 
 void addItemModalController(entity me, entity other, vector theOrigin, vector theSize, float theAlpha)
 {
-	other.ModalController_initialSize = theSize;
-	other.ModalController_initialOrigin = theOrigin;
-	other.ModalController_initialAlpha = theAlpha;
-	addItemContainer(me, other, theOrigin, theSize, theAlpha);
-	if(other != me.firstChild)
-		other.Container_alpha = 0;
+	addItemContainer(me, other, theOrigin, theSize, (other == me.firstChild) ? theAlpha : 0);
+	other.ModalController_initialSize = other.Container_size;
+	other.ModalController_initialOrigin = other.Container_origin;
+	other.ModalController_initialAlpha = theAlpha; // hope Container never modifies this
 }
 
 void showChildModalController(entity me, entity other, vector theOrigin, vector theSize, float skipAnimation)
@@ -254,7 +246,6 @@ void showChildModalController(entity me, entity other, vector theOrigin, vector 
 		other.ModalController_buttonOrigin = globalToBox(theOrigin, me.origin, me.size);
 		other.ModalController_buttonSize = globalToBoxSize(theSize, me.size);
 		me.switchState(me, other, 1, skipAnimation);
-		other.open(other);
 	} // zoom in from button (factor increases)
 }
 

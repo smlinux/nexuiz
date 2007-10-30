@@ -24,3 +24,5 @@ float GameCommand_Generic(string cmd);
 // iterative depth-first search, with fields that go "up", "down left" and "right" in a tree
 // for each element, funcPre is called first, then funcPre and funcPost for all its children, and funcPost last
 void depthfirst(entity start, .entity up, .entity downleft, .entity right, void(entity, entity) funcPre, void(entity, entity) funcPost, entity pass);
+
+float median(float a, float b, float c);

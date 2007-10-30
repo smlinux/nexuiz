@@ -6,6 +6,7 @@ CLASS(NexuizTab) EXTENDS(Tab)
 	ATTRIB(NexuizTab, rows, float, 3)
 	ATTRIB(NexuizTab, columns, float, 2)
 	*/
+	METHOD(NexuizTab, showNotify, void(entity))
 
 	ATTRIB(NexuizTab, marginTop, float, 0) // pixels
 	ATTRIB(NexuizTab, marginBottom, float, 0) // pixels
@@ -21,4 +22,8 @@ ENDCLASS(NexuizTab)
 #endif
 
 #ifdef IMPLEMENTATION
+void showNotifyNexuizTab(entity me)
+{
+	loadAllCvars(me);
+}
 #endif

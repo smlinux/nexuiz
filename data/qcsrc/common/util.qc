@@ -131,4 +131,9 @@ void depthfirst(entity start, .entity up, .entity downleft, .entity right, void(
 	}
 }
 
-
+float median(float a, float b, float c)
+{
+	if(a < c)
+		return bound(a, b, c);
+	return bound(c, b, a);
+}

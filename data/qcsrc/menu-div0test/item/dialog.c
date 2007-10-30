@@ -23,6 +23,7 @@ CLASS(Dialog) EXTENDS(InputContainer)
 
 	METHOD(Dialog, TD, void(entity, float, float, entity))
 	METHOD(Dialog, TDempty, void(entity, float))
+	METHOD(Dialog, setFirstColumn, void(entity, float))
 	METHOD(Dialog, TR, void(entity))
 	METHOD(Dialog, gotoXY, void(entity, float, float))
 
@@ -34,6 +35,7 @@ CLASS(Dialog) EXTENDS(InputContainer)
 	ATTRIB(Dialog, itemSpacing, vector, '0 0 0')
 	ATTRIB(Dialog, currentRow, float, 0)
 	ATTRIB(Dialog, currentColumn, float, 0)
+	ATTRIB(Dialog, firstColumn, float, 0)
 
 	// to be customized
 	ATTRIB(Dialog, closable, float, 1)
@@ -87,13 +89,18 @@ void gotoXYDialog(entity me, float row, float col)
 void TRDialog(entity me)
 {
 	me.currentRow += 1;
-	me.currentColumn = 0;
+	me.currentColumn = me.firstColumn;
 }
 
 void TDDialog(entity me, float rowspan, float colspan, entity e)
 {
 	me.addItemSimple(me, me.currentRow, me.currentColumn, rowspan, colspan, e);
 	me.currentColumn += colspan;
+}
+
+void setFirstColumnDialog(entity me, float col)
+{
+	me.firstColumn = col;
 }
 
 void TDemptyDialog(entity me, float colspan)

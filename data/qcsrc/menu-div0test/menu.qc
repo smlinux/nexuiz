@@ -147,6 +147,11 @@ void() m_draw =
 void() m_display =
 {
 	Menu_Active = true;
+
+	if(mouseButtonsPressed)
+		main.mouseRelease(main, menuMousePos);
+	mouseButtonsPressed = 0;
+
 	setkeydest(KEY_MENU);
 	setmousetarget(MT_MENU);
 
