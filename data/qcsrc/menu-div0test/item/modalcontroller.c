@@ -98,7 +98,7 @@ void switchStateModalController(entity me, entity other, float state, float skip
 {
 	float previousState;
 	previousState = other.ModalController_state;
-	if(state == previousState)
+	if(state == previousState && !skipAnimation)
 		return;
 	other.ModalController_state = state;
 	switch(state)
@@ -240,7 +240,7 @@ void addItemModalController(entity me, entity other, vector theOrigin, vector th
 
 void showChildModalController(entity me, entity other, vector theOrigin, vector theSize, float skipAnimation)
 {
-	if(other.ModalController_state == 0)
+	if(other.ModalController_state == 0 || skipAnimation)
 	{
 		me.setFocus(me, NULL);
 		other.ModalController_buttonOrigin = globalToBox(theOrigin, me.origin, me.size);
@@ -258,7 +258,7 @@ void hideAllModalController(entity me, float skipAnimation)
 
 void hideChildModalController(entity me, entity other, float skipAnimation)
 {
-	if(other.ModalController_state)
+	if(other.ModalController_state || skipAnimation)
 	{
 		me.setFocus(me, NULL);
 		me.switchState(me, other, 0, skipAnimation);
