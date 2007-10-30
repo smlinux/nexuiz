@@ -28,7 +28,7 @@ void configureMainWindowMainWindow(entity me)
 		cb.srcMulti = 0;
 
 		i = spawnBorderImage();
-		i.configureBorderImage(i, "I told you...", 18, '0.5 0.5 1', "qcsrc/menu-div0test/baseborder", 1.5);
+		i.configureBorderImage(i, "I told you...", 18, '0.5 0.5 1', "qcsrc/menu-div0test/baseborder", 18 * 1.5);
 		i.closeButton = cb;
 		dlg.addItem(dlg, i, '0 0 0', '1 1 0', 1);
 
@@ -45,7 +45,7 @@ void configureMainWindowMainWindow(entity me)
 		dlg.addItem(dlg, i, '0.5 0.4 0', '0.8 0.1 0', 1);
 
 		i = spawnSlider();
-		i.configureSliderVisuals(i, "", " fps", 12, 0.2, "qcsrc/menu-div0test/baseslider");
+		i.configureSliderVisuals(i, 12, 0.2, "qcsrc/menu-div0test/baseslider");
 		i.configureSliderValues(i, 1, 50, 200, 1, 1, 20);
 		dlg.addItem(dlg, i, '0.1 0.5 0', '0.8 0.1 0', 1);
 
@@ -64,7 +64,7 @@ void configureMainWindowMainWindow(entity me)
 	
 	i = spawnNexuizTeamSelectDialog();
 	i.configureDialog(i);
-	me.addItem(me, i, ('1 1 0' - i.intendedWidth * eX - i.intendedHeight * eY) * 0.5, i.intendedWidth * eX + i.intendedHeight * eY, 1);
+	me.addItemCentered(me, i, i.intendedWidth * eX + i.intendedHeight * eY, 1);
 
 	i = spawnImage();
 	i.configureImage(i, "gfx/0.tga");
@@ -109,9 +109,9 @@ void configureMainWindowMainWindow(entity me)
 	n.addItem(n, c, '0.03 0.06 0', '0.9 0.9 0', 0.5);
 	n.setNexposee(n, c, '0.1 0.2 0', 0.2, 0.5);
 	
-	i = spawnImage();
-	i.configureImage(i, "gfx/2.tga");
-	n.addItem(n, i, '0.04 0.01 0', '0.9 0.9 0', 1);
+	i = spawnNexuizSettingsDialog();
+	i.configureDialog(i);
+	n.addItemCentered(n, i, i.intendedWidth * eX + i.intendedHeight * eY, 1);
 	n.setNexposee(n, i, '0.95 0.8 0', 0.2, 0.5);
 	
 	i = spawnImage();

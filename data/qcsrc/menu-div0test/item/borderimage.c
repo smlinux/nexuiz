@@ -15,15 +15,14 @@ ENDCLASS(BorderImage)
 void resizeNotifyBorderImage(entity me, vector relOrigin, vector relSize, vector absOrigin, vector absSize)
 {
 	resizeNotifyLabel(me, relOrigin, relSize, absOrigin, absSize);
-	me.borderVec = me.borderHeight * me.realFontSize_y * (eY + eX * (absSize_y / absSize_x));
-	me.realOrigin_y = 0.5 * me.realFontSize_y * (me.borderHeight - 1);
+	me.borderVec = me.borderHeight / absSize_y * (eY + eX * (absSize_y / absSize_x));
+	me.realOrigin_y = 0.5 * (me.borderVec_y - me.realFontSize_y);
 	if(me.closeButton)
 	{
 		// move the close button to the right place
 		me.closeButton.Container_origin = '1 0 0' * (1 - me.borderVec_x);
 		me.closeButton.Container_size = me.borderVec;
 		me.closeButton.color = me.color;
-		print("a: ", vtos(absSize), "\n");
 	}
 }
 void configureBorderImageBorderImage(entity me, string theTitle, float sz, vector theColor, string path, float theBorderHeight)
@@ -35,7 +34,10 @@ void configureBorderImageBorderImage(entity me, string theTitle, float sz, vecto
 }
 void drawBorderImage(entity me)
 {
-	draw_BorderPicture('0 0 0', me.src, '1 1 0', me.color, 1, me.borderVec);
-	drawLabel(me);
+	//print(vtos(me.borderVec), "\n");
+	if(me.src != "")
+		draw_BorderPicture('0 0 0', me.src, '1 1 0', me.color, 1, me.borderVec);
+	if(me.fontSize > 0)
+		drawLabel(me);
 };
 #endif

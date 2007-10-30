@@ -3,7 +3,7 @@ CLASS(NexuizDialog) EXTENDS(Dialog)
 	// still to be customized by user
 	/*
 	ATTRIB(NexuizDialog, closable, float, 1)
-	ATTRIB(NexuizDialog, rootNexuizDialog, float, 1)
+	ATTRIB(NexuizDialog, rootDialog, float, 1)
 	ATTRIB(NexuizDialog, title, string, "Form1") // ;)
 	ATTRIB(NexuizDialog, color, vector, '1 0.5 1')
 	ATTRIB(NexuizDialog, intendedWidth, float, 0)

@@ -4,6 +4,8 @@ const string SKINGFX_DIALOGBORDER = "qcsrc/menu-div0test/baseborder";
 const string SKINGFX_CLOSEBUTTON = "qcsrc/menu-div0test/baseclosebutton";
 const string SKINGFX_BUTTON = "qcsrc/menu-div0test/basebutton";
 const string SKINGFX_BUTTON_GRAY = "qcsrc/menu-div0test/basebuttongray";
+const string SKINGFX_SLIDER = "qcsrc/menu-div0test/baseslider";
+const string SKINGFX_CHECKBOX = "qcsrc/menu-div0test/basecheckbox";
 
 const float SKINMARGIN_TOP = 8;
 const float SKINMARGIN_LEFT = 8;
@@ -13,3 +15,5 @@ const float SKINMARGIN_ROWS = 4;
 const float SKINFONTSIZE_NORMAL = 12;
 const float SKINHEIGHT_NORMAL = 1.5;
 const float SKINHEIGHT_NORMAL_WITHSPACING = 2;
+
+const float SKINWIDTH_SLIDERTEXT = 0.333333333333;

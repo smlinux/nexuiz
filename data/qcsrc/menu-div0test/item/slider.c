@@ -1,13 +1,14 @@
 #ifdef INTERFACE
 CLASS(Slider) EXTENDS(Label)
 	METHOD(Slider, resizeNotify, void(entity, vector, vector, vector, vector))
-	METHOD(Slider, configureSliderVisuals, void(entity, string, string, float, float, string))
+	METHOD(Slider, configureSliderVisuals, void(entity, float, float, string))
 	METHOD(Slider, configureSliderValues, void(entity, float, float, float, float, float, float))
 	METHOD(Slider, draw, void(entity))
 	METHOD(Slider, keyDown, float(entity, float, float, float))
 	METHOD(Slider, mousePress, float(entity, vector))
 	METHOD(Slider, mouseDrag, float(entity, vector))
 	METHOD(Slider, mouseRelease, float(entity, vector))
+	METHOD(Slider, valueToText, string(entity, float))
 	ATTRIB(Slider, src, string, "")
 	ATTRIB(Slider, focusable, float, 1)
 	ATTRIB(Slider, value, float, 0)
@@ -20,8 +21,6 @@ CLASS(Slider) EXTENDS(Label)
 	ATTRIB(Slider, controlWidth, float, 0)
 	ATTRIB(Slider, pressed, float, 0)
 	ATTRIB(Slider, pressOffset, float, 0)
-	ATTRIB(Slider, prefix, string, "")
-	ATTRIB(Slider, suffix, string, "")
 	ATTRIB(Slider, previousValue, float, 0)
 ENDCLASS(Slider)
 #endif
@@ -32,11 +31,13 @@ void resizeNotifySlider(entity me, vector relOrigin, vector relSize, vector absO
 	resizeNotifyLabel(me, relOrigin, relSize, absOrigin, absSize);
 	me.controlWidth = absSize_y / absSize_x;
 }
-void configureSliderVisualsSlider(entity me, string thePrefix, string theSuffix, float sz, float theValueSpace, string gfx)
+string valueToTextSlider(entity me, float val)
+{
+	return ftos(val);
+}
+void configureSliderVisualsSlider(entity me, float sz, float theValueSpace, string gfx)
 {
 	configureLabelLabel(me, "", sz, 1);
-	me.prefix = thePrefix;
-	me.suffix = theSuffix;
 	me.valueSpace = theValueSpace;
 	me.src = gfx;
 }
@@ -135,7 +136,7 @@ void drawSlider(entity me)
 		draw_Picture(eX * controlLeft, strcat(me.src, "_f"), eX * me.controlWidth + eY, '1 1 1', 1);
 	else
 		draw_Picture(eX * controlLeft, strcat(me.src, "_n"), eX * me.controlWidth + eY, '1 1 1', 1);
-	me.setText(me, strcat(me.prefix, ftos(me.value), me.suffix));
+	me.setText(me, me.valueToText(me, me.value));
 	drawLabel(me);
 	me.text = ""; // TEMPSTRING!
 }

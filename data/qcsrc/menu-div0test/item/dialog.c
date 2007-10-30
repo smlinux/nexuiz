@@ -6,7 +6,7 @@
 // - title is ""
 // - marginTop is 
 // - intendedHeight ends up to be the tab's actual height, or at least close
-// - titleFontSize is sensible, and so is titleHeight
+// - titleFontSize is 0
 // - marginTop cancels out as much of titleHeight as needed (that is, it should be actualMarginTop - titleHeight)
 // To ensure the latter, you best create all tabs FIRST and insert the tabbed
 // control to your dialog THEN - with the right height
@@ -52,7 +52,7 @@ CLASS(Dialog) EXTENDS(InputContainer)
 	ATTRIB(Dialog, rowSpacing, float, 0) // pixels
 	ATTRIB(Dialog, rowHeight, float, 0) // pixels
 	ATTRIB(Dialog, titleHeight, float, 0) // pixels
-	ATTRIB(Dialog, titleFontSize, float, 0) // pixels
+	ATTRIB(Dialog, titleFontSize, float, 0) // pixels; if 0, title causes no margin
 
 	ATTRIB(Dialog, backgroundImage, string, "")
 	ATTRIB(Dialog, closeButtonImage, string, "")
@@ -71,7 +71,7 @@ void fillDialog(entity me)
 
 void addItemSimpleDialog(entity me, float row, float col, float rowspan, float colspan, entity e)
 {
-	print(vtos(me.itemSpacing), " ", vtos(me.itemSize), "\n");
+	//print(vtos(me.itemSpacing), " ", vtos(me.itemSize), "\n");
 	me.addItem(me, e,
 		me.itemOrigin + eX * ( col          * me.itemSpacing_x) + eY * ( row          * me.itemSpacing_y),
 		me.itemSize   + eX * ((colspan - 1) * me.itemSpacing_x) + eY * ((rowspan - 1) * me.itemSpacing_y),
@@ -107,8 +107,11 @@ void configureDialogDialog(entity me)
 	float absWidth, absHeight;
 
 	frame = spawnBorderImage();
-	frame.configureBorderImage(frame, me.title, me.titleFontSize, me.color, me.backgroundImage, me.titleHeight / me.titleFontSize);
+	frame.configureBorderImage(frame, me.title, me.titleFontSize, me.color, me.backgroundImage, me.titleHeight);
 	me.addItem(me, frame, '0 0 0', '1 1 0', 1);
+
+	if(!me.titleFontSize)
+		me.titleHeight = 0; // no title bar
 
 	absWidth = me.intendedWidth * cvar("vid_conwidth");
 	absHeight = me.titleHeight + me.marginTop + me.rows * me.rowHeight + (me.rows - 1) * me.rowSpacing + me.marginBottom;
