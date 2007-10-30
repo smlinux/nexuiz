@@ -199,7 +199,7 @@ void worldspawn (void)
 		precache_model ("models/runematch/rune.mdl");
 	}
 
-	bsp();
+	//bsp();
 	// Precache all player models if desired
 	if (cvar("sv_precacheplayermodels"))
 	{
