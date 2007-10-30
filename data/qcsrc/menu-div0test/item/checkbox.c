@@ -4,6 +4,7 @@ CLASS(CheckBox) EXTENDS(Button)
 	METHOD(CheckBox, configureCheckBox, void(entity, string, float, string))
 	METHOD(CheckBox, resizeNotify, void(entity, vector, vector, vector, vector))
 	METHOD(CheckBox, draw, void(entity))
+	METHOD(CheckBox, toString, string(entity))
 	ATTRIB(CheckBox, checked, float, 0)
 	ATTRIB(CheckBox, onClick, void(entity, entity), CheckBox_Click)
 	ATTRIB(CheckBox, srcMulti, float, 0)
@@ -14,6 +15,10 @@ ENDCLASS(CheckBox)
 void CheckBox_Click(entity me, entity other)
 {
 	me.checked = !me.checked;
+}
+string toStringCheckBox(entity me)
+{
+	return strcat(toStringLabel(me), ", ", me.checked ? "checked" : "unchecked");
 }
 void configureCheckBoxCheckBox(entity me, string txt, float sz, string gfx)
 {

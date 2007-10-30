@@ -4,6 +4,7 @@ CLASS(Label) EXTENDS(Item)
 	METHOD(Label, draw, void(entity))
 	METHOD(Label, resizeNotify, void(entity, vector, vector, vector, vector))
 	METHOD(Label, setText, void(entity, string))
+	METHOD(Label, toString, string(entity))
 	ATTRIB(Label, text, string, "Big Red Button")
 	ATTRIB(Label, fontSize, float, 8)
 	ATTRIB(Label, align, float, 0.5)
@@ -16,6 +17,10 @@ ENDCLASS(Label)
 #endif
 
 #ifdef IMPLEMENTATION
+string toStringLabel(entity me)
+{
+	return me.text;
+}
 void setTextLabel(entity me, string txt)
 {
 	me.text = txt;
@@ -37,7 +42,7 @@ void configureLabelLabel(entity me, string txt, float sz, float algn)
 }
 void drawLabel(entity me)
 {
-	if(me.text)
+	if(me.text && me.fontSize)
 		draw_Text(me.realOrigin, me.text, me.realFontSize, '1 1 1', me.alpha);
 }
 #endif

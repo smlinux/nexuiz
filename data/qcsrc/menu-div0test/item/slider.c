@@ -9,6 +9,7 @@ CLASS(Slider) EXTENDS(Label)
 	METHOD(Slider, mouseDrag, float(entity, vector))
 	METHOD(Slider, mouseRelease, float(entity, vector))
 	METHOD(Slider, valueToText, string(entity, float))
+	METHOD(Slider, toString, string(entity))
 	ATTRIB(Slider, src, string, "")
 	ATTRIB(Slider, focusable, float, 1)
 	ATTRIB(Slider, value, float, 0)
@@ -26,6 +27,10 @@ ENDCLASS(Slider)
 #endif
 
 #ifdef IMPLEMENTATION
+string toStringSlider(entity me)
+{
+	return strcat(ftos(me.value), " (", me.valueToText(me, me.value), ")");
+}
 void resizeNotifySlider(entity me, vector relOrigin, vector relSize, vector absOrigin, vector absSize)
 {
 	resizeNotifyLabel(me, relOrigin, relSize, absOrigin, absSize);
@@ -128,14 +133,17 @@ float mouseReleaseSlider(entity me, vector pos)
 void drawSlider(entity me)
 {
 	float controlLeft;
-	controlLeft = (me.value - me.valueMin) / (me.valueMax - me.valueMin) * (1 - me.valueSpace - me.controlWidth);
 	draw_ButtonPicture('0 0 0', strcat(me.src, "_s"), eX * (1 - me.valueSpace) + eY, '1 1 1', 1);
-	if(me.pressed)
-		draw_Picture(eX * controlLeft, strcat(me.src, "_c"), eX * me.controlWidth + eY, '1 1 1', 1);
-	else if(me.focused)
-		draw_Picture(eX * controlLeft, strcat(me.src, "_f"), eX * me.controlWidth + eY, '1 1 1', 1);
-	else
-		draw_Picture(eX * controlLeft, strcat(me.src, "_n"), eX * me.controlWidth + eY, '1 1 1', 1);
+	if(me.value >= me.valueMin && me.value <= me.valueMax)
+	{
+		controlLeft = (me.value - me.valueMin) / (me.valueMax - me.valueMin) * (1 - me.valueSpace - me.controlWidth);
+		if(me.pressed)
+			draw_Picture(eX * controlLeft, strcat(me.src, "_c"), eX * me.controlWidth + eY, '1 1 1', 1);
+		else if(me.focused)
+			draw_Picture(eX * controlLeft, strcat(me.src, "_f"), eX * me.controlWidth + eY, '1 1 1', 1);
+		else
+			draw_Picture(eX * controlLeft, strcat(me.src, "_n"), eX * me.controlWidth + eY, '1 1 1', 1);
+	}
 	me.setText(me, me.valueToText(me, me.value));
 	drawLabel(me);
 	me.text = ""; // TEMPSTRING!

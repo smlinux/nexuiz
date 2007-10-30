@@ -22,14 +22,14 @@ CLASS(Container) EXTENDS(Item)
 	ATTRIB(Container, lastChild, entity, NULL)
 	ATTRIB(Container, focusedChild, entity, NULL)
 ENDCLASS(Container)
+.entity nextSibling;
+.entity prevSibling;
 #endif
 
 #ifdef IMPLEMENTATION
 .vector Container_origin;
 .vector Container_size;
 .float Container_alpha;
-.entity nextSibling;
-.entity prevSibling;
 
 void openContainer(entity me)
 {

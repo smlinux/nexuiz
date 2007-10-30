@@ -2,11 +2,16 @@
 CLASS(Image) EXTENDS(Item)
 	METHOD(Image, configureImage, void(entity, string))
 	METHOD(Image, draw, void(entity))
+	METHOD(Image, toString, string(entity))
 	ATTRIB(Image, src, string, "")
 ENDCLASS(Image)
 #endif
 
 #ifdef IMPLEMENTATION
+string toStringImage(entity me)
+{
+	return me.src;
+}
 void configureImageImage(entity me, string path)
 {
 	me.src = path;

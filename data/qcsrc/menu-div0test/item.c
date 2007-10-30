@@ -12,6 +12,7 @@ CLASS(Item) EXTENDS(Object)
 	METHOD(Item, resizeNotify, void(entity, vector, vector, vector, vector))
 	METHOD(Item, relinquishFocus, void(entity))
 	METHOD(Item, open, void(entity))
+	METHOD(Item, toString, string(entity))
 	ATTRIB(Item, focused, float, 0)
 	ATTRIB(Item, focusable, float, 0)
 	ATTRIB(Item, parent, entity, NULL)
@@ -74,5 +75,10 @@ void focusEnterItem(entity me)
 
 void focusLeaveItem(entity me)
 {
+}
+
+string toStringItem(entity me)
+{
+	return "";
 }
 #endif

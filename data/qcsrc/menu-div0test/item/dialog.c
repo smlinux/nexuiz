@@ -131,7 +131,7 @@ void configureDialogDialog(entity me)
 	if(me.closable)
 	{
 		closebutton = me.closeButton = spawnButton();
-		closebutton.configureButton(closebutton, "", 12, me.closeButtonImage);
+		closebutton.configureButton(closebutton, "Close", 0, me.closeButtonImage);
 		closebutton.onClick = Dialog_Close; closebutton.onClickEntity = me;
 		closebutton.srcMulti = 0;
 		me.addItem(me, closebutton, '0 0 0', '1 1 0', 1); // put it as LAST
