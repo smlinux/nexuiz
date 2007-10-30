@@ -1,7 +1,6 @@
 #ifdef INTERFACE
 CLASS(NexuizSettingsDialog) EXTENDS(NexuizDialog)
 	METHOD(NexuizSettingsDialog, fill, void(entity))
-	ATTRIB(NexuizSettingsDialog, rootDialog, float, 0)
 	ATTRIB(NexuizSettingsDialog, title, string, "Settings")
 	ATTRIB(NexuizSettingsDialog, color, vector, '0.5 0.5 1')
 	ATTRIB(NexuizSettingsDialog, intendedWidth, float, 0.96)

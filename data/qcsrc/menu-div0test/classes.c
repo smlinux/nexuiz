@@ -29,3 +29,4 @@
 #include "nexuiz/radiobutton.c"
 #include "nexuiz/slider_picmip.c"
 #include "nexuiz/nexposee.c"
+#include "nexuiz/rootdialog.c"

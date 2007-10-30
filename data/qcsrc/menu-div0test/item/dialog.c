@@ -39,7 +39,6 @@ CLASS(Dialog) EXTENDS(InputContainer)
 
 	// to be customized
 	ATTRIB(Dialog, closable, float, 1)
-	ATTRIB(Dialog, rootDialog, float, 1)
 	ATTRIB(Dialog, title, string, "Form1") // ;)
 	ATTRIB(Dialog, color, vector, '1 0.5 1')
 	ATTRIB(Dialog, intendedWidth, float, 0)
@@ -156,10 +155,6 @@ void closeDialog(entity me)
 	else if(me.parent.instanceOfModalController)
 	{
 		DialogCloseButton_Click(me, me);
-	}
-	if(me.rootDialog)
-	{
-		m_goto("");
 	}
 }
 

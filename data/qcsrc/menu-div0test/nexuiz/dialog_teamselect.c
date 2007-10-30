@@ -1,5 +1,5 @@
 #ifdef INTERFACE
-CLASS(NexuizTeamSelectDialog) EXTENDS(NexuizDialog)
+CLASS(NexuizTeamSelectDialog) EXTENDS(NexuizRootDialog)
 	METHOD(NexuizTeamSelectDialog, fill, void(entity)) // to be overridden by user to fill the dialog with controls
 	METHOD(NexuizTeamSelectDialog, showNotify, void(entity))
 	ATTRIB(NexuizTeamSelectDialog, title, string, "Team Selection") // ;)
