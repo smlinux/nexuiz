@@ -7,7 +7,7 @@ stripfile=$1
 
 p=$PATH
 while [ -n "$p" ]; do
-	item=${p%%:*}/strip
+	item=${p%%:*}/${COPYSTRIP_STRIP:-strip}
 	if [ -x "$item" ]; then
 		case "`sed -n 2p "$item"`" in
 			\#THIS-IS-COPYSTRIP)
