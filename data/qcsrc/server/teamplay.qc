@@ -14,7 +14,7 @@ float c1, c2, c3, c4;
 // # of bots on those teams
 float cb1, cb2, cb3, cb4;
 
-float g_domination, g_ctf, g_tdm, g_keyhunt, g_onslaught;
+float g_domination, g_ctf, g_tdm, g_keyhunt, g_onslaught, g_assault;
 
 float audit_teams_time;
 
@@ -323,6 +323,7 @@ void InitGameplayMode()
 
 	g_domination = cvar("g_domination");
 	g_ctf = cvar("g_ctf");
+	g_assault = cvar("g_assault");
 	g_tdm = cvar("g_tdm");
 	g_keyhunt = cvar("g_keyhunt");
 	g_onslaught = cvar("g_onslaught");
@@ -555,6 +556,11 @@ void CheckAllowedTeams (entity for_whom)
 		teament_name = "ctf_team";
 	else if(g_tdm)
 		teament_name = "tdm_team";
+	else if(g_assault)
+	{
+		c1 = c2 = 0; // Assault always has 2 teams
+		return;
+	}
 	else
 	{
 		// cover anything else by treating it like tdm with no teams spawned

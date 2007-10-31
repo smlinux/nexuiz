@@ -53,104 +53,6 @@ void fteqcc_testbugs()
 	world.frags = 0;
 }
 
-float BoxSurfaceArea(vector d)
-{
-	return 2 * (d_x * d_y + d_y * d_z + d_z * d_x);
-}
-
-vector BoxPand(vector d, vector n)
-{
-	return max(d_x, n_x) * '1 0 0' + max(d_y, n_y) * '0 1 0' + max(d_z, n_z) * '0 0 1';
-}
-
-void bsp()
-{
-	float globhandle;
-	float i, n;
-	float area;
-	globhandle = search_begin("maps/*.bsp", TRUE, FALSE);
-	n = search_getsize(globhandle);
-	for(i = 0; i < n; ++i)
-	{
-		string fn;
-		string s;
-		float fh;
-		fn = search_getfilename(globhandle, i);
-		print("Processing ", fn);
-		fh = fopen(fn, FILE_READ);
-
-		string e_classname;
-		vector e_origin;
-		float spawns;
-		float spawns1;
-		float spawns2;
-		spawns = spawns1 = spawns2 = 0;
-		vector spawnmins, spawnmaxs;
-		vector spawnmins1, spawnmaxs1;
-		vector spawnmins2, spawnmaxs2;
-		while((s = fgets(fh)))
-		{
-			if(s == "}")
-			{
-				// entity ends
-				if(e_classname == "info_player_start" || e_classname == "info_player_deathmatch")
-				{
-					if(spawns)
-					{
-						spawnmins = -1 * BoxPand(-1 * spawnmins, -1 * e_origin);
-						spawnmaxs =      BoxPand(     spawnmaxs,      e_origin);
-					}
-					else
-						spawnmins = spawnmaxs = e_origin;
-					++spawns;
-				}
-				else if(e_classname == "info_player_team1")
-				{
-					if(spawns)
-					{
-						spawnmins = -1 * BoxPand(-1 * spawnmins, -1 * e_origin);
-						spawnmaxs =      BoxPand(     spawnmaxs,      e_origin);
-						spawnmins1 = -1 * BoxPand(-1 * spawnmins1, -1 * e_origin);
-						spawnmaxs1 =      BoxPand(     spawnmaxs1,      e_origin);
-					}
-					else
-						spawnmins = spawnmaxs = e_origin;
-					++spawns;
-					++spawns1;
-				}
-				else if(e_classname == "info_player_team2")
-				{
-					if(spawns)
-					{
-						spawnmins = -1 * BoxPand(-1 * spawnmins, -1 * e_origin);
-						spawnmaxs =      BoxPand(     spawnmaxs,      e_origin);
-						spawnmins2 = -1 * BoxPand(-1 * spawnmins2, -1 * e_origin);
-						spawnmaxs2 =      BoxPand(     spawnmaxs2,      e_origin);
-					}
-					else
-						spawnmins = spawnmaxs = e_origin;
-					++spawns;
-					++spawns2;
-				}
-				e_classname = "";
-				e_origin = '0 0 0';
-			}
-			else if(substring(s, 0, 13) == "\"classname\" \"")
-				e_classname = substring(s, 13, strlen(s) - 14);
-			else if(substring(s, 0, 10) == "\"origin\" \"")
-				e_origin = stov(substring(s, 10, strlen(s) - 11));
-		}
-		fclose(fh);
-		print(" -- found ", ftos(spawns), " spawns [");
-		print(vtos(spawnmins), " - ", vtos(spawnmaxs), "\n");
-
-		area = BoxSurfaceArea(spawnmaxs - spawnmins);
-		print("Spawn box surface area: ", ftos(area), "\n");
-		print("^4plot: ", ftos(area), " ", ftos(spawns), "\n");
-	}
-	search_end(globhandle);
-}
-
 void GotoFirstMap()
 {
 	if(cvar("_sv_init"))
@@ -199,7 +101,6 @@ void worldspawn (void)
 		precache_model ("models/runematch/rune.mdl");
 	}
 
-	//bsp();
 	// Precache all player models if desired
 	if (cvar("sv_precacheplayermodels"))
 	{

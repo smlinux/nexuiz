@@ -141,7 +141,7 @@ entity SelectSpawnPoint (float anypoint)
 
 	teamcheck = 0;
 
-	if((!anypoint && cvar("g_ctf")) || cvar("g_assault") )
+	if(!anypoint && (cvar("g_ctf") || cvar("g_assault")))
 		teamcheck = self.team;
 
 	// get the list of players
