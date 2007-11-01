@@ -44,6 +44,7 @@ mingwdlls=$buildfiles/w32
 osxapps=$buildfiles/osx
 copystrip=$buildfiles/copystrip
 fteqcc="fteqcc -O2"
+fteqccdir="$base/fteqcc"
 mingw=/home/polzer/mingw32
 
 # TODO normalize the builds
@@ -52,26 +53,31 @@ buildon()
 {
 	host=$1
 	prefix=$2
-	path=$3
-	makeflags=$4
-	rsync --exclude "*.o" --exclude "*.d" --exclude "nexuiz-*" --delete-excluded --delete -zvaSHP . $copystrip "$host:$path"
-	ssh "$host" ". ~/.profile && cd $path && PATH=$path/copystrip:\$PATH make $makeflags clean nexuiz"
+	fteqccname=$3
+	path=$4
+	makeflags=$5
+	strip=$6
+	rm -f "$fteqccdir"/*.o
+	rm -f "$fteqccdir"/*.bin
+	rsync --exclude "*.o" --exclude "*.d" --exclude "nexuiz-*" --delete-excluded --delete -zvaSHP . "$copystrip" "$fteqccdir" "$host:$path"
+	ssh "$host" ". ~/.profile && cd $path && COPYSTRIP_STRIP=$strip PATH=$path/copystrip:\$PATH make $makeflags clean nexuiz && cd ${fteqccdir##*/} && make $makeflags BASE_CFLAGS=-DQCCONLY"
 	rsync --exclude "*.o" --exclude "*.d" --delete-excluded --delete -zvaSHP "$host:$path/." .
 	for P in -dedicated -sdl -glx -wgl -agl -dedicated.exe -sdl.exe .exe; do
 		[ -f nexuiz$P ] && mv nexuiz$P "$tmpdir/$prefix$P"
 		[ -f nexuiz$P-withdebug ] && mv nexuiz$P-withdebug "$tmpdir/debuginfo/$prefix$P"
 	done
+	mv "${fteqccdir##*/}"/fteqcc.bin "$tmpdir/fteqcc/$fteqccname"
 	make clean
 }
 
 build()
 {
-	buildon hagger  nexuiz              /tmp/Darkplaces.build 'DP_MAKE_TARGET=mingw CC="i586-mingw32msvc-gcc -g -I/home/polzer/mingw32.include" WINDRES=i586-mingw32msvc-windres SDL_CONFIG=/home/polzer/mingw32.SDL/bin/sdl-config'
-	buildon macmini nexuiz-osx-ppc      /tmp/Darkplaces.build 'CC="gcc -g -arch i386 -arch ppc -isysroot /Developer/SDKs/MacOSX10.4u.sdk"' 
-		mv "$tmpdir/nexuiz-osx-ppc-agl" "$tmpdir/Nexuiz.app/Contents/MacOS/nexuiz-osx-ppc-agl-bin"
-		mv "$tmpdir/nexuiz-osx-ppc-sdl" "$tmpdir/Nexuiz-SDL.app/Contents/MacOS/nexuiz-osx-ppc-sdl-bin"
-	buildon hagger  nexuiz-linux-686    /tmp/Darkplaces.build 'CC="gcc -g"'
-	buildon hector  nexuiz-linux-x86_64 /tmp/Darkplaces.build 'CC="gcc -g"'
+	buildon hagger  nexuiz-osx          fteqcc-osx          /tmp/Darkplaces.build 'DP_MAKE_TARGET=macosx CC="i686-apple-darwin8-gcc -g -arch i386 -arch ppc -I/opt/mac/SDKs/MacOSX10.4u.sdk/Library/Frameworks/SDL.framework/Headers"' i686-apple-darwin8-strip
+		mv "$tmpdir/nexuiz-osx-agl"     "$tmpdir/Nexuiz.app/Contents/MacOS/nexuiz-osx-agl-bin"
+		mv "$tmpdir/nexuiz-osx-sdl"     "$tmpdir/Nexuiz-SDL.app/Contents/MacOS/nexuiz-osx-sdl-bin"
+	buildon hagger  nexuiz              fteqcc.exe          /tmp/Darkplaces.build 'DP_MAKE_TARGET=mingw CC="i586-mingw32msvc-gcc -g -I/home/polzer/mingw32.include" WINDRES=i586-mingw32msvc-windres SDL_CONFIG=/home/polzer/mingw32.SDL/bin/sdl-config' i586-mingw32msvc-strip
+	buildon hagger  nexuiz-linux-686    fteqcc-linux-686    /tmp/Darkplaces.build 'CC="gcc -g"'
+	buildon hector  nexuiz-linux-x86_64 fteqcc-linux-x86_64 /tmp/Darkplaces.build 'CC="gcc -g"'
 }
 
 i=
@@ -112,43 +118,21 @@ quilt push -a # apply all patches
 
 cp -r "$osxapps"/*.app "$tmpdir"
 mkdir "$tmpdir/debuginfo"
+mkdir "$tmpdir/fteqcc"
+
+svn export "$fteqccdir" "$tmpdir/fteqcc/source"
+svn info "$fteqccdir" > "$tmpdir/fteqcc/source/fteqcc-base-revision.txt"
+fteqccrev=$((`grep "Last Changed Rev:" "$tmpdir/fteqcc/source/fteqcc-base-revision.txt" | cut -d : -f 2`))
+echo "fteqcc rev $fteqccrev"
 
 rm -f *.exe nexuiz-* *-withdebug* *.o
 make clean
 build
 rm -f *.exe nexuiz-* *-withdebug '.#'* *.o
+rm -rf fteqcc copystrip
 make clean
 
 cd "$tmpdir"
-
-# cp nexuiz-agl "$tmpdir/Nexuiz.app/Contents/MacOS/nexuiz-osx-ppc-agl-bin"
-# cp nexuiz-dedicated "$tmpdir/nexuiz-osx-ppc-dedicated"
-# cp nexuiz-sdl "$tmpdir/Nexuiz-SDL.app/Contents/MacOS/nexuiz-osx-ppc-sdl-bin"
-# cp nexuiz-agl-withdebug "$tmpdir/debuginfo/nexuiz-osx-ppc-agl-bin"
-# cp nexuiz-dedicated-withdebug "$tmpdir/debuginfo/nexuiz-osx-ppc-dedicated-bin"
-# cp nexuiz-sdl-withdebug "$tmpdir/debuginfo/nexuiz-osx-ppc-sdl-bin"
-# 
-# make clean
-# buildwin nexuiz
-# for x in -dedicated -sdl ''; do
-# 	cp nexuiz$x.exe "$tmpdir/nexuiz$x.exe"
-# 	cp nexuiz$x.exe-withdebug "$tmpdir/debuginfo/nexuiz$x.exe"
-# done
-# 
-# make clean
-# build32 nexuiz
-# for x in dedicated sdl glx; do
-# 	cp nexuiz-$x "$tmpdir/nexuiz-linux-686-$x"
-# 	cp nexuiz-$x-withdebug "$tmpdir/debuginfo/nexuiz-linux-686-$x"
-# done
-# 
-# make clean
-# build64 nexuiz
-# for x in dedicated sdl glx; do
-# 	cp nexuiz-$x "$tmpdir/nexuiz-linux-x86_64-$x"
-# 	cp nexuiz-$x-withdebug "$tmpdir/debuginfo/nexuiz-linux-x86_64-$x"
-# done
-
 cp "$nexdir/"nexuiz-*.sh "$tmpdir/"
 cp "$nexdir/"nexuiz-*.bat "$tmpdir/"
 cp "$nexdir/gpl.txt" "$tmpdir/"
@@ -177,11 +161,19 @@ cd "$tmpdir"
 7za a -mx=9 -tzip "$tmpdir/sources/enginesource$date.zip" "darkplaces"
 rm -rf darkplaces
 
+cd "$tmpdir"
+zip -9r "$tmpdir/sources/fteqcc-binaries-and-source-rev$fteqccrev.zip" "fteqcc"
+rm -rf fteqcc
+
+cd "$fteqccdir"
+rm -f *.o *.bin
+make
+
 cd "$tmpdir/data/qcsrc/menu"
-$fteqcc
+"$fteqccdir/fteqcc.bin" $fteqccflags
 
 cd "$tmpdir/data/qcsrc/server"
-$fteqcc
+"$fteqccdir/fteqcc.bin" $fteqccflags
 
 rm -rf "$tmpdir/data/qcsrc"
 
