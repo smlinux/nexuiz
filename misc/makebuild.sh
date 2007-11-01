@@ -57,16 +57,31 @@ buildon()
 	path=$4
 	makeflags=$5
 	strip=$6
+
+	fteqccflags=
+	case "$fteqccname" in
+		*.exe)
+			fteqccflags=win
+			;;
+	esac
+
 	rm -f "$fteqccdir"/*.o
 	rm -f "$fteqccdir"/*.bin
 	rsync --exclude "*.o" --exclude "*.d" --exclude "nexuiz-*" --delete-excluded --delete -zvaSHP . "$copystrip" "$fteqccdir" "$host:$path"
-	ssh "$host" ". ~/.profile && cd $path && COPYSTRIP_STRIP=$strip PATH=$path/copystrip:\$PATH make $makeflags clean nexuiz && cd ${fteqccdir##*/} && make $makeflags BASE_CFLAGS=-DQCCONLY"
+	ssh "$host" ". ~/.profile && cd $path && COPYSTRIP_STRIP=$strip PATH=$path/copystrip:\$PATH make $makeflags clean nexuiz && cd ${fteqccdir##*/} && make $makeflags $fteqccflags"
 	rsync --exclude "*.o" --exclude "*.d" --delete-excluded --delete -zvaSHP "$host:$path/." .
 	for P in -dedicated -sdl -glx -wgl -agl -dedicated.exe -sdl.exe .exe; do
 		[ -f nexuiz$P ] && mv nexuiz$P "$tmpdir/$prefix$P"
 		[ -f nexuiz$P-withdebug ] && mv nexuiz$P-withdebug "$tmpdir/debuginfo/$prefix$P"
 	done
-	mv "${fteqccdir##*/}"/fteqcc.bin "$tmpdir/fteqcc/$fteqccname"
+	case "$fteqccname" in
+		*.exe)
+			mv "${fteqccdir##*/}"/fteqcc.exe "$tmpdir/fteqcc/$fteqccname"
+			;;
+		*)
+			mv "${fteqccdir##*/}"/fteqcc.bin "$tmpdir/fteqcc/$fteqccname"
+			;;
+	esac
 	make clean
 }
 
