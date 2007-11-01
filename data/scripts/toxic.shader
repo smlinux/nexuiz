@@ -1,14 +1,14 @@
 textures/toxic/toxic_sky
 {
-	qer_editorimage env/strale_grey/ygrey_up.tga
-	q3map_lightimage textures/strale_grey/ygrey_up.tga
+	qer_editorimage env/green_dark/green_dark_lf.tga
+	q3map_lightimage env/green_dark/green_dark_lf.tga
 	surfaceparm noimpact
 	surfaceparm nolightmap
 	surfaceparm nomarks
 	surfaceparm sky
-	q3map_surfacelight 150
-	q3map_sun 0.75 0.65 0.6 130 255 80
-	skyParms env/strale_grey/ygrey 128 -
+	q3map_surfacelight 200
+	q3map_sun 0.55 0.55 0.55 100 215 40
+	skyParms env/green_dark/green_dark 128 -
 }
 
 textures/toxic/toxic_grate
@@ -23,7 +23,8 @@ textures/toxic/toxic_grate
 	{
 		map textures/kaznexctf2/grate.tga
 		//depthWrite
-		alphaFunc GT0
+		//alphaFunc GT0
+		blendFunc blend
 		rgbgen vertex
 	}
 }
