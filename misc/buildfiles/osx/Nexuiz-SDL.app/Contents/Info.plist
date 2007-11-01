@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleExecutable</key>
-	<string>nexuiz-osx-ppc-sdl</string>
+	<string>nexuiz-osx-sdl</string>
 	<key>CFBundleIconFile</key>
 	<string>Nexuiz</string>
 	<key>CFBundlePackageType</key>
