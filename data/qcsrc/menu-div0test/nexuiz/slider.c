@@ -5,6 +5,8 @@ CLASS(NexuizSlider) EXTENDS(Slider)
 	ATTRIB(NexuizSlider, fontSize, float, SKINFONTSIZE_NORMAL)
 	ATTRIB(NexuizSlider, valueSpace, float, SKINWIDTH_SLIDERTEXT)
 	ATTRIB(NexuizSlider, image, string, SKINGFX_SLIDER)
+	ATTRIB(NexuizSlider, tolerance, vector, SKINTOLERANCE_SLIDER)
+	ATTRIB(NexuizSlider, align, float, 0.5)
 
 	ATTRIB(NexuizSlider, cvarName, string, string_null)
 	METHOD(NexuizSlider, loadCvars, void(entity))
@@ -29,7 +31,7 @@ void configureNexuizSliderNexuizSlider(entity me, float theValueMin, float theVa
 	vp = theValueStep * 10;
 	while(fabs(vp) < fabs(theValueMax - theValueMin) / 40)
 		vp *= 10;
-	me.configureSliderVisuals(me, me.fontSize, me.valueSpace, me.image);
+	me.configureSliderVisuals(me, me.fontSize, me.align, me.valueSpace, me.image);
 	me.configureSliderValues(me, theValueMin, v, theValueMax, theValueStep, vk, vp);
 	if(theCvar != "")
 	{

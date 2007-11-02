@@ -1,7 +1,9 @@
+// Note:
+//   to use this, you FIRST call configureSliderVisuals, then configureSliderValues
 #ifdef INTERFACE
 CLASS(Slider) EXTENDS(Label)
 	METHOD(Slider, resizeNotify, void(entity, vector, vector, vector, vector))
-	METHOD(Slider, configureSliderVisuals, void(entity, float, float, string))
+	METHOD(Slider, configureSliderVisuals, void(entity, float, float, float, string))
 	METHOD(Slider, configureSliderValues, void(entity, float, float, float, float, float, float))
 	METHOD(Slider, draw, void(entity))
 	METHOD(Slider, keyDown, float(entity, float, float, float))
@@ -11,19 +13,23 @@ CLASS(Slider) EXTENDS(Label)
 	METHOD(Slider, valueToText, string(entity, float))
 	METHOD(Slider, toString, string(entity))
 	METHOD(Slider, setValue, void(entity, float))
+	METHOD(Slider, showNotify, void(entity))
 	ATTRIB(Slider, src, string, "")
 	ATTRIB(Slider, focusable, float, 1)
 	ATTRIB(Slider, value, float, 0)
 	ATTRIB(Slider, valueMin, float, 0)
 	ATTRIB(Slider, valueMax, float, 0)
 	ATTRIB(Slider, valueStep, float, 0)
+	ATTRIB(Slider, valueDigits, float, 0)
 	ATTRIB(Slider, valueKeyStep, float, 0)
 	ATTRIB(Slider, valuePageStep, float, 0)
-	ATTRIB(Slider, valueSpace, float, 0)
+	ATTRIB(Slider, textSpace, float, 0)
 	ATTRIB(Slider, controlWidth, float, 0)
 	ATTRIB(Slider, pressed, float, 0)
 	ATTRIB(Slider, pressOffset, float, 0)
 	ATTRIB(Slider, previousValue, float, 0)
+	ATTRIB(Slider, tolerance, vector, '0 0 0')
+	ATTRIB(Slider, disabled, float, 0)
 ENDCLASS(Slider)
 #endif
 
@@ -43,12 +49,13 @@ void resizeNotifySlider(entity me, vector relOrigin, vector relSize, vector absO
 }
 string valueToTextSlider(entity me, float val)
 {
-	return ftos(val);
+	return ftos_decimals(val, me.valueDigits);
 }
-void configureSliderVisualsSlider(entity me, float sz, float theValueSpace, string gfx)
+void configureSliderVisualsSlider(entity me, float sz, float theAlign, float theTextSpace, string gfx)
 {
-	configureLabelLabel(me, "", sz, 1);
-	me.valueSpace = theValueSpace;
+	configureLabelLabel(me, "", sz, theAlign);
+	me.textSpace = theTextSpace;
+	me.keepspaceLeft = (theTextSpace == 0) ? 0 : (1 - theTextSpace);
 	me.src = gfx;
 }
 void configureSliderValuesSlider(entity me, float theValueMin, float theValue, float theValueMax, float theValueStep, float theValueKeyStep, float theValuePageStep)
@@ -59,10 +66,19 @@ void configureSliderValuesSlider(entity me, float theValueMin, float theValue, f
 	me.valueMax = theValueMax;
 	me.valueKeyStep = theValueKeyStep;
 	me.valuePageStep = theValuePageStep;
+	me.valueDigits = 3;
+	if(fabs(floor(me.valueStep * 100 + 0.5) - (me.valueStep * 100)) < 0.01) // about a whole number of 100ths
+		me.valueDigits = 2;
+	if(fabs(floor(me.valueStep * 10 + 0.5) - (me.valueStep * 10)) < 0.01) // about a whole number of 10ths
+		me.valueDigits = 1;
+	if(fabs(floor(me.valueStep * 1 + 0.5) - (me.valueStep * 1)) < 0.01) // about a whole number
+		me.valueDigits = 0;
 }
 float keyDownSlider(entity me, float key, float ascii, float shift)
 {
 	float inRange;
+	if(me.disabled)
+		return 0;
 	inRange = (me.value == median(me.valueMin, me.value, me.valueMax));
 	if(key == K_LEFTARROW)
 	{
@@ -113,16 +129,18 @@ float mouseDragSlider(entity me, vector pos)
 {
 	float hit;
 	float v;
+	if(me.disabled)
+		return 0;
 	if(me.pressed)
 	{
 		hit = 1;
-		if(pos_x < 0) hit = 0;
-		if(pos_y < 0) hit = 0;
-		if(pos_x >= 1 - me.valueSpace) hit = 0;
-		if(pos_y >= 1) hit = 0;
+		if(pos_x < 0 - me.tolerance_x) hit = 0;
+		if(pos_y < 0 - me.tolerance_y) hit = 0;
+		if(pos_x >= 1 - me.textSpace + me.tolerance_x) hit = 0;
+		if(pos_y >= 1 + me.tolerance_y) hit = 0;
 		if(hit)
 		{
-			v = median(0, (pos_x - me.pressOffset - 0.5 * me.controlWidth) / (1 - me.valueSpace - me.controlWidth), 1) * (me.valueMax - me.valueMin) + me.valueMin;
+			v = median(0, (pos_x - me.pressOffset - 0.5 * me.controlWidth) / (1 - me.textSpace - me.controlWidth), 1) * (me.valueMax - me.valueMin) + me.valueMin;
 			if(me.valueStep)
 				v = floor(0.5 + v / me.valueStep) * me.valueStep;
 			me.setValue(me, v);
@@ -135,11 +153,13 @@ float mouseDragSlider(entity me, vector pos)
 float mousePressSlider(entity me, vector pos)
 {
 	float controlCenter;
-	if(pos_x < 0) return 0;
-	if(pos_y < 0) return 0;
-	if(pos_x >= 1 - me.valueSpace) return 0;
-	if(pos_y < 0) return 0;
-	controlCenter = (me.value - me.valueMin) / (me.valueMax - me.valueMin) * (1 - me.valueSpace - me.controlWidth) + 0.5 * me.controlWidth;
+	if(me.disabled)
+		return 0;
+	if(pos_x < 0 - me.tolerance_x) return 0;
+	if(pos_y < 0 - me.tolerance_y) return 0;
+	if(pos_x >= 1 - me.textSpace + me.tolerance_x) return 0;
+	if(pos_y >= 1 + me.tolerance_y) return 0;
+	controlCenter = (me.value - me.valueMin) / (me.valueMax - me.valueMin) * (1 - me.textSpace - me.controlWidth) + 0.5 * me.controlWidth;
 	if(fabs(pos_x - controlCenter) <= 0.5 * me.controlWidth)
 	{
 		me.pressed = 1;
@@ -159,16 +179,27 @@ float mousePressSlider(entity me, vector pos)
 float mouseReleaseSlider(entity me, vector pos)
 {
 	me.pressed = 0;
+	if(me.disabled)
+		return 0;
 	return 1;
+}
+void showNotifySlider(entity me)
+{
+	me.focusable = !me.disabled;
 }
 void drawSlider(entity me)
 {
 	float controlLeft;
-	draw_ButtonPicture('0 0 0', strcat(me.src, "_s"), eX * (1 - me.valueSpace) + eY, '1 1 1', 1);
+	me.focusable = !me.disabled;
+	if(me.disabled)
+		draw_alpha *= 0.5;
+	draw_ButtonPicture('0 0 0', strcat(me.src, "_s"), eX * (1 - me.textSpace) + eY, '1 1 1', 1);
 	if(me.value == median(me.valueMin, me.value, me.valueMax))
 	{
-		controlLeft = (me.value - me.valueMin) / (me.valueMax - me.valueMin) * (1 - me.valueSpace - me.controlWidth);
-		if(me.pressed)
+		controlLeft = (me.value - me.valueMin) / (me.valueMax - me.valueMin) * (1 - me.textSpace - me.controlWidth);
+		if(me.disabled)
+			draw_Picture(eX * controlLeft, strcat(me.src, "_d"), eX * me.controlWidth + eY, '1 1 1', 1);
+		else if(me.pressed)
 			draw_Picture(eX * controlLeft, strcat(me.src, "_c"), eX * me.controlWidth + eY, '1 1 1', 1);
 		else if(me.focused)
 			draw_Picture(eX * controlLeft, strcat(me.src, "_f"), eX * me.controlWidth + eY, '1 1 1', 1);

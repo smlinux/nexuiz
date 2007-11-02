@@ -9,6 +9,7 @@ CLASS(CheckBox) EXTENDS(Button)
 	ATTRIB(CheckBox, checked, float, 0)
 	ATTRIB(CheckBox, onClick, void(entity, entity), CheckBox_Click)
 	ATTRIB(CheckBox, srcMulti, float, 0)
+	ATTRIB(CheckBox, disabled, float, 0)
 ENDCLASS(CheckBox)
 #endif
 
@@ -35,16 +36,26 @@ void resizeNotifyCheckBox(entity me, vector relOrigin, vector relSize, vector ab
 	me.keepspaceLeft = min(0.8, absSize_y / absSize_x);
 	resizeNotifyButton(me, relOrigin, relSize, absOrigin, absSize);
 }
+void showNotifyCheckBox(entity me)
+{
+	me.focusable = !me.disabled;
+}
 void drawCheckBox(entity me)
 {
 	vector cbOrigin;
 	vector cbSize;
 
+	me.focusable = !me.disabled;
+	if(me.disabled)
+		draw_alpha *= 0.5;
+
 	cbOrigin = eY * (0.5 * (1 - me.realFontSize_y)) + eX * (0.5 * (me.keepspaceLeft - me.realFontSize_x));
 	cbSize = me.realFontSize;
 	if(me.checked)
 	{
-		if(me.forcePressed || me.pressed || me.clickTime > 0)
+		if(me.disabled)
+			draw_Picture(cbOrigin, strcat(me.src, "_d1"), cbSize, '1 1 1', 1);
+		else if(me.forcePressed || me.pressed || me.clickTime > 0)
 			draw_Picture(cbOrigin, strcat(me.src, "_c1"), cbSize, '1 1 1', 1);
 		else if(me.focused)
 			draw_Picture(cbOrigin, strcat(me.src, "_f1"), cbSize, '1 1 1', 1);
@@ -53,7 +64,9 @@ void drawCheckBox(entity me)
 	}
 	else
 	{
-		if(me.forcePressed || me.pressed || me.clickTime > 0)
+		if(me.disabled)
+			draw_Picture(cbOrigin, strcat(me.src, "_d0"), cbSize, '1 1 1', 1);
+		else if(me.forcePressed || me.pressed || me.clickTime > 0)
 			draw_Picture(cbOrigin, strcat(me.src, "_c0"), cbSize, '1 1 1', 1);
 		else if(me.focused)
 			draw_Picture(cbOrigin, strcat(me.src, "_f0"), cbSize, '1 1 1', 1);

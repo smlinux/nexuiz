@@ -50,7 +50,7 @@ void GameCommand(string theCommand)
 
 	if(argv(0) == "sync")
 	{
-		// make changes in cvars known to the system
+		loadAllCvars(main);
 		return;
 	}
 

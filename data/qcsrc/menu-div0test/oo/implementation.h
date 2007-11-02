@@ -11,5 +11,6 @@
 #undef EXTENDS
 #undef METHOD
 #undef ATTRIB
+#undef ATTRIBARRAY
 #undef ENDCLASS
 #endif

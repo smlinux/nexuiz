@@ -24,7 +24,7 @@ string toStringLabel(entity me)
 void setTextLabel(entity me, string txt)
 {
 	me.text = txt;
-	me.realOrigin_x = me.align * (1 - me.realFontSize_x * draw_TextWidth(me.text));
+	me.realOrigin_x = me.align * (1 - me.keepspaceLeft - me.keepspaceRight - me.realFontSize_x * draw_TextWidth(me.text)) + me.keepspaceLeft;
 }
 void resizeNotifyLabel(entity me, vector relOrigin, vector relSize, vector absOrigin, vector absSize)
 {
