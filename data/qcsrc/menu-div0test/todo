@@ -14,8 +14,8 @@ DONE tabbed dialog
 TODO "half-automatically" self-sizing dialog (by specifying number of "lines" in advance)
 
 TODO options dialog:
-	TODO video/effects
-	TODO preferences
+	DONE video/effects
+	TODO misc
 	TODO input
 TODO singleplayer dialog
 	TODO campaign
@@ -26,7 +26,4 @@ TODO multiplayer dialog
 	TODO create game
 TODO demo viewer
 TODO quit dialog
-
-short term:
-TODO make video resolution slider work
-TODO make cvar controls save their values on change
+TODO credits dialog
