@@ -137,3 +137,46 @@ float median(float a, float b, float c)
 		return bound(a, b, c);
 	return bound(c, b, a);
 }
+
+// converts a number to a string with the indicated number of decimals
+// works for up to 10 decimals!
+string ftos_decimals(float number, float decimals)
+{
+	string result;
+	string tmp;
+	float len;
+
+	// if negative, cut off the sign first
+	if(number < 0)
+		return strcat("-", ftos_decimals(-number, decimals));
+	// it now is always positive!
+
+	// 3.516 -> 352
+	number = floor(number * pow(10, decimals) + 0.5);
+
+	// 352 -> "352"
+	result = ftos(number);
+	len = strlen(result);
+	// does it have a decimal point (should not happen)? If there is one, it is always at len-7)
+		// if ftos had fucked it up, which should never happen: "34278.000000"
+	if(len >= 7)
+		if(substring(result, len - 7, 1) == ".")
+		{
+			dprint("ftos(integer) has comma? Can't be. Affected result: ", result, "\n");
+			result = substring(result, 0, len - 7);
+			len -= 7;
+		}
+		// "34278"
+	if(decimals == 0)
+		return result; // don't insert a point for zero decimals
+	// is it too short? If yes, insert leading zeroes
+	if(len <= decimals)
+	{
+		result = strcat(substring("0000000000", 0, decimals - len + 1), result);
+		len = decimals + 1;
+	}
+	// and now... INSERT THE POINT!
+	tmp = substring(result, len - decimals, decimals);
+	result = strcat(substring(result, 0, len - decimals), ".", tmp);
+	return result;
+}

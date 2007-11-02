@@ -26,3 +26,7 @@ float GameCommand_Generic(string cmd);
 void depthfirst(entity start, .entity up, .entity downleft, .entity right, void(entity, entity) funcPre, void(entity, entity) funcPost, entity pass);
 
 float median(float a, float b, float c);
+
+// converts a number to a string with the indicated number of decimals
+// works for up to 10 decimals!
+string ftos_decimals(float number, float decimals);
