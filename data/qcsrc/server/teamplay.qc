@@ -1339,6 +1339,10 @@ void() tdm_spawnteams =
 
 	tdm_spawnteam("Red", COLOR_TEAM1-1);
 	tdm_spawnteam("Blue", COLOR_TEAM2-1);
+	if(numteams >= 3)
+		tdm_spawnteam("Yellow", COLOR_TEAM3-1);
+	if(numteams >= 4)
+		tdm_spawnteam("Pink", COLOR_TEAM4-1);
 };
 
 void() tdm_delayedinit =
