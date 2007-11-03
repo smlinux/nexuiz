@@ -20,16 +20,19 @@ entity makeNexuizPlayerSettingsTab()
 void fillNexuizPlayerSettingsTab(entity me)
 {
 	entity e;
+	float i;
 
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Player Name:"));
 		me.TD(me, 1, 2, e = makeNexuizResolutionSlider());
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Shirt Color:"));
-		me.TD(me, 1, 2, e = makeNexuizResolutionSlider());
+		for(i = 0; i < 15; ++i)
+			me.TD(me, 1, 2 / 15, e = makeNexuizColorButton(1, 0, i));
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Pants Color:"));
-		me.TD(me, 1, 2, e = makeNexuizResolutionSlider());
+		for(i = 0; i < 15; ++i)
+			me.TD(me, 1, 2 / 15, e = makeNexuizColorButton(2, 1, i));
 
 	me.gotoXY(me, 0, 3.5); me.setFirstColumn(me, me.currentColumn);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Field of View:"));
@@ -68,5 +71,8 @@ void fillNexuizPlayerSettingsTab(entity me)
 			e.addValue(e, "Simple", "110");
 			e.addValue(e, "Full", "100");
 			e.configureNexuizTextSliderValues(e);
+
+	me.gotoXY(me, me.rows - 1, 0);
+		me.TD(me, 1, me.columns, makeNexuizCommandButton("Apply immediately", '0 0 0', "color -1 -1", COMMANDBUTTON_APPLY));
 }
 #endif

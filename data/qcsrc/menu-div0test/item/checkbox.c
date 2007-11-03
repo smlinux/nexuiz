@@ -2,10 +2,10 @@
 void CheckBox_Click(entity me, entity other);
 CLASS(CheckBox) EXTENDS(Button)
 	METHOD(CheckBox, configureCheckBox, void(entity, string, float, string))
-	METHOD(CheckBox, resizeNotify, void(entity, vector, vector, vector, vector))
 	METHOD(CheckBox, draw, void(entity))
 	METHOD(CheckBox, toString, string(entity))
 	METHOD(CheckBox, setChecked, void(entity, float))
+	ATTRIB(CheckBox, useDownAsChecked, float, 0)
 	ATTRIB(CheckBox, checked, float, 0)
 	ATTRIB(CheckBox, onClick, void(entity, entity), CheckBox_Click)
 	ATTRIB(CheckBox, srcMulti, float, 0)
@@ -31,55 +31,22 @@ void configureCheckBoxCheckBox(entity me, string txt, float sz, string gfx)
 	me.configureButton(me, txt, sz, gfx);
 	me.align = 0;
 }
-void resizeNotifyCheckBox(entity me, vector relOrigin, vector relSize, vector absOrigin, vector absSize)
-{
-	me.keepspaceLeft = min(0.8, absSize_y / absSize_x);
-	resizeNotifyButton(me, relOrigin, relSize, absOrigin, absSize);
-}
 void showNotifyCheckBox(entity me)
 {
 	me.focusable = !me.disabled;
 }
 void drawCheckBox(entity me)
 {
-	vector cbOrigin;
-	vector cbSize;
-
-	me.focusable = !me.disabled;
-	if(me.disabled)
-		draw_alpha *= 0.5;
-
-	cbOrigin = eY * (0.5 * (1 - me.realFontSize_y)) + eX * (0.5 * (me.keepspaceLeft - me.realFontSize_x));
-	cbSize = me.realFontSize;
-	if(me.checked)
+	float s;
+	s = me.pressed;
+	if(me.useDownAsChecked)
 	{
-		if(me.disabled)
-			draw_Picture(cbOrigin, strcat(me.src, "_d1"), cbSize, '1 1 1', 1);
-		else if(me.forcePressed || me.pressed || me.clickTime > 0)
-			draw_Picture(cbOrigin, strcat(me.src, "_c1"), cbSize, '1 1 1', 1);
-		else if(me.focused)
-			draw_Picture(cbOrigin, strcat(me.src, "_f1"), cbSize, '1 1 1', 1);
-		else
-			draw_Picture(cbOrigin, strcat(me.src, "_n1"), cbSize, '1 1 1', 1);
+		me.srcSuffix = "";
+		me.forcePressed = me.checked;
 	}
 	else
-	{
-		if(me.disabled)
-			draw_Picture(cbOrigin, strcat(me.src, "_d0"), cbSize, '1 1 1', 1);
-		else if(me.forcePressed || me.pressed || me.clickTime > 0)
-			draw_Picture(cbOrigin, strcat(me.src, "_c0"), cbSize, '1 1 1', 1);
-		else if(me.focused)
-			draw_Picture(cbOrigin, strcat(me.src, "_f0"), cbSize, '1 1 1', 1);
-		else
-			draw_Picture(cbOrigin, strcat(me.src, "_n0"), cbSize, '1 1 1', 1);
-	}
-	drawLabel(me); // skip drawButton!
-
-	if(me.clickTime > 0 && me.clickTime < frametime)
-	{
-		// keyboard click timer expired? Fire the event then.
-		me.onClick(me, me.onClickEntity);
-	}
-	me.clickTime -= frametime;
+		me.srcSuffix = (me.checked ? "1" : "0");
+	drawButton(me);
+	me.pressed = s;
 }
 #endif

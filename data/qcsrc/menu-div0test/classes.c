@@ -33,3 +33,4 @@
 #include "nexuiz/nexposee.c"
 #include "nexuiz/rootdialog.c"
 #include "nexuiz/textslider.c"
+#include "nexuiz/colorbutton.c"

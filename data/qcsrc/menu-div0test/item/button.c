@@ -10,8 +10,11 @@ CLASS(Button) EXTENDS(Label)
 	METHOD(Button, mouseRelease, float(entity, vector))
 	ATTRIB(Button, onClick, void(entity, entity), SUB_Null)
 	ATTRIB(Button, onClickEntity, entity, NULL)
-	ATTRIB(Button, src, string, "")
-	ATTRIB(Button, srcMulti, float, 1)
+	ATTRIB(Button, src, string, string_null)
+	ATTRIB(Button, srcSuffix, string, "")
+	ATTRIB(Button, src2, string, string_null) // is centered, same aspect, and stretched to label size
+	ATTRIB(Button, srcMulti, float, 1) // 0: button square left, text right; 1: button stretched, text over it
+	ATTRIB(Button, buttonLeftOfText, float, 0)
 	ATTRIB(Button, focusable, float, 1)
 	ATTRIB(Button, pressed, float, 0)
 	ATTRIB(Button, clickTime, float, 0)
@@ -27,13 +30,17 @@ ENDCLASS(Button)
 #ifdef IMPLEMENTATION
 void resizeNotifyButton(entity me, vector relOrigin, vector relSize, vector absOrigin, vector absSize)
 {
+	if(me.srcMulti)
+		me.keepspaceLeft = 0;
+	else
+		me.keepspaceLeft = min(0.8, absSize_y / absSize_x);
 	resizeNotifyLabel(me, relOrigin, relSize, absOrigin, absSize);
 	me.origin = absOrigin;
 	me.size = absSize;
 }
 void configureButtonButton(entity me, string txt, float sz, string gfx)
 {
-	configureLabelLabel(me, txt, sz, 0.5);
+	configureLabelLabel(me, txt, sz, me.srcMulti ? 0.5 : 0);
 	me.src = gfx;
 }
 float keyDownButton(entity me, float key, float ascii, float shift)
@@ -76,31 +83,54 @@ void showNotifyButton(entity me)
 }
 void drawButton(entity me)
 {
+	vector bOrigin, bSize;
+
 	me.focusable = !me.disabled;
 	if(me.disabled)
 		draw_alpha *= 0.5;
 
-	if(me.srcMulti)
+	if(me.src)
 	{
-		if(me.disabled)
-			draw_ButtonPicture('0 0 0', strcat(me.src, "_d"), '1 1 0', '1 1 1', 1);
-		else if(me.forcePressed || me.pressed || me.clickTime > 0)
-			draw_ButtonPicture('0 0 0', strcat(me.src, "_c"), '1 1 0', me.color, 1);
-		else if(me.focused)
-			draw_ButtonPicture('0 0 0', strcat(me.src, "_f"), '1 1 0', me.color, 1);
+		if(me.srcMulti)
+		{
+			bOrigin = '0 0 0';
+			bSize = '1 1 0';
+			if(me.disabled)
+				draw_ButtonPicture(bOrigin, strcat(me.src, "_d", me.srcSuffix), bSize, '1 1 1', 1);
+			else if(me.forcePressed || me.pressed || me.clickTime > 0)
+				draw_ButtonPicture(bOrigin, strcat(me.src, "_c", me.srcSuffix), bSize, me.color, 1);
+			else if(me.focused)
+				draw_ButtonPicture(bOrigin, strcat(me.src, "_f", me.srcSuffix), bSize, me.color, 1);
+			else
+				draw_ButtonPicture(bOrigin, strcat(me.src, "_n", me.srcSuffix), bSize, me.color, 1);
+		}
 		else
-			draw_ButtonPicture('0 0 0', strcat(me.src, "_n"), '1 1 0', me.color, 1);
+		{
+			if(me.realFontSize_y == 0)
+			{
+				bOrigin = '0 0 0';
+				bSize = '1 1 0';
+			}
+			else
+			{
+				bOrigin = eY * (0.5 * (1 - me.realFontSize_y)) + eX * (0.5 * (me.keepspaceLeft - me.realFontSize_x));
+				bSize = me.realFontSize;
+			}
+			if(me.disabled)
+				draw_Picture(bOrigin, strcat(me.src, "_d", me.srcSuffix), bSize, '1 1 1', 1);
+			else if(me.forcePressed || me.pressed || me.clickTime > 0)
+				draw_Picture(bOrigin, strcat(me.src, "_c", me.srcSuffix), bSize, me.color, 1);
+			else if(me.focused)
+				draw_Picture(bOrigin, strcat(me.src, "_f", me.srcSuffix), bSize, me.color, 1);
+			else
+				draw_Picture(bOrigin, strcat(me.src, "_n", me.srcSuffix), bSize, me.color, 1);
+		}
 	}
-	else
+	if(me.src2)
 	{
-		if(me.disabled)
-			draw_Picture('0 0 0', strcat(me.src, "_d"), '1 1 0', '1 1 1', 1);
-		else if(me.forcePressed || me.pressed || me.clickTime > 0)
-			draw_Picture('0 0 0', strcat(me.src, "_c"), '1 1 0', me.color, 1);
-		else if(me.focused)
-			draw_Picture('0 0 0', strcat(me.src, "_f"), '1 1 0', me.color, 1);
-		else
-			draw_Picture('0 0 0', strcat(me.src, "_n"), '1 1 0', me.color, 1);
+		bOrigin = me.keepspaceLeft * eX;
+		bSize = eY + eX * (1 - me.keepspaceLeft);
+		draw_Picture(bOrigin, me.src2, bSize, me.color, 1);
 	}
 	drawLabel(me);
 
