@@ -10,6 +10,8 @@ DONE checkbox
 TODO listbox (with draw callback and scroll bar)
 DONE value slider
 DONE tabbed dialog
+TODO alternate button drawing (like: "Image Text" as in checkbox, or overlay two images); move that stuff out of CheckBox
+TODO NexuizImageRadioButton (color, crosshair)
 
 TODO "half-automatically" self-sizing dialog (by specifying number of "lines" in advance)
 
