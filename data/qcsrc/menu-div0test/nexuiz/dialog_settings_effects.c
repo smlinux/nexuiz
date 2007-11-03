@@ -147,7 +147,7 @@ void fillNexuizEffectsSettingsTab(entity me)
 
 	me.TR(me);
 		me.TDempty(me, 0.2);
-		me.TD(me, 1, 2.8, e = makeNexuizCheckBox(0, "r_shadow_usenormalmaps", "Use normal maps"));
+		me.TD(me, 1, 2.8, e = makeNexuizCheckBox(0, "r_shadow_usenormalmap", "Use normal maps"));
 			setDependentOR(e, "r_shadow_realtime_dlight", 1, 1, "r_shadow_realtime_world", 1, 1);
 	
 	me.TR(me);
