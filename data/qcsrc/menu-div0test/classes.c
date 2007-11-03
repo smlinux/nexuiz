@@ -22,6 +22,7 @@
 #include "nexuiz/dialog_settings.c"
 #include "nexuiz/dialog_settings_video.c"
 #include "nexuiz/dialog_settings_effects.c"
+#include "nexuiz/dialog_settings_player.c"
 #include "nexuiz/tabcontroller.c"
 #include "nexuiz/textlabel.c"
 #include "nexuiz/slider.c"
