@@ -136,16 +136,21 @@ float K_AUX32		=	803;
 float K_MOUSE1		=	512;
 float K_MOUSE2		=	513;
 float K_MOUSE3		=	514;
-float K_MOUSE4		=	515;
-float K_MOUSE5		=	516;
-float K_MOUSE6		=	517;
-float K_MOUSE7		=	518;
-float K_MOUSE8		=	519;
-float K_MOUSE9		=	520;
-float K_MOUSE10		=	521;
-
-float K_MWHEELDOWN	=	K_MOUSE4;
-float K_MWHEELUP	=	K_MOUSE5;
+float K_MWHEELUP	=	515;
+float K_MWHEELDOWN	=	516;
+float K_MOUSE4		=	517;
+float K_MOUSE5		=	518;
+float K_MOUSE6		=	519;
+float K_MOUSE7		=	520;
+float K_MOUSE8		=	521;
+float K_MOUSE9		=	522;
+float K_MOUSE10		=	523;
+float K_MOUSE11		=	524;
+float K_MOUSE12		=	525;
+float K_MOUSE13		=	526;
+float K_MOUSE14		=	527;
+float K_MOUSE15		=	528;
+float K_MOUSE16		=	529;
 
 ///////////////////////////
 // key dest constants
