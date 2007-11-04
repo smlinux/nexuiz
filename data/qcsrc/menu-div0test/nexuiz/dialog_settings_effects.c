@@ -110,8 +110,8 @@ void fillNexuizEffectsSettingsTab(entity me)
 		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "r_coronas", "Coronas"));
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizCheckBox(0, "r_bloom", "Bloom"));
+			setDependent(e, "r_hdr", 0, 0);
 		me.TD(me, 1, 2, e = makeNexuizCheckBox(0, "r_hdr", "High Dynamic Range (HDR)"));
-			setDependent(e, "r_bloom", 1, 1);
 
 	me.TR(me);
 
