@@ -34,7 +34,7 @@ void(float key, float ascii) m_keyup =
 		return;
 	draw_reset();
 	main.keyUp(main, key, ascii, menuShiftState);
-	if(key >= K_MOUSE1 && key <= K_MOUSE10)
+	if(key >= K_MOUSE1 && key <= K_MOUSE3)
 	{
 		--mouseButtonsPressed;
 		if(!mouseButtonsPressed)
@@ -68,11 +68,11 @@ void(float key, float ascii) m_keydown =
 			if(key == K_ESCAPE)
 				if(gamestatus & (GAME_ISSERVER | GAME_CONNECTED)) // don't back out to console only
 					m_hide(); // disable menu on unhandled ESC
-		if(key >= K_MOUSE1 && key <= K_MOUSE10)
+		if(key >= K_MOUSE1 && key <= K_MOUSE3)
 			if(!mouseButtonsPressed)
 				main.mousePress(main, menuMousePos);
 	}
-	if(key >= K_MOUSE1 && key <= K_MOUSE10)
+	if(key >= K_MOUSE1 && key <= K_MOUSE3)
 	{
 		++mouseButtonsPressed;
 		if(mouseButtonsPressed > 10)
@@ -142,6 +142,8 @@ void() m_draw =
 	}
 	main.draw(main);
 	draw_drawMousePointer(menuMousePos);
+
+	frametime = 0;
 };
 
 void() m_display =

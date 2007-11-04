@@ -17,6 +17,13 @@ entity makeNexuizAudioSettingsTab()
 	me.configureDialog(me);
 	return me;
 }
+entity makeNexuizDemoListbox()
+{
+	entity me;
+	me = spawnListBox();
+	me.configureListBox(me, 16, 0.1);
+	return me;
+}
 void fillNexuizAudioSettingsTab(entity me)
 {
 	entity e;
@@ -32,6 +39,7 @@ void fillNexuizAudioSettingsTab(entity me)
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Ambient Volume:"));
 		me.TD(me, 1, 2, e = makeNexuizSlider(0, 255, 1, "snd_staticvolume"));
 	me.TR(me);
+		me.TD(me, 7, 3, e = makeNexuizDemoListbox());
 
 	me.gotoXY(me, 0, 3.5); me.setFirstColumn(me, me.currentColumn);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Frequency:"));

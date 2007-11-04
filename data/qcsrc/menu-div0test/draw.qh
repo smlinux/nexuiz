@@ -13,6 +13,9 @@ void draw_Picture(vector origin, string pic, vector size, vector color, float al
 void draw_Text(vector origin, string text, vector size, vector color, float alpha);
 float draw_TextWidth(string text);
 
+void draw_SetClip();
+void draw_ClearClip();
+
 vector boxToGlobal(vector v, vector shift, vector scale);
 vector boxToGlobalSize(vector v, vector scale);
 vector globalToBox(vector v, vector shift, vector scale);

@@ -155,17 +155,17 @@ float mousePressSlider(entity me, vector pos)
 	float controlCenter;
 	if(me.disabled)
 		return 0;
-	if(pos_x < 0 - me.tolerance_x) return 0;
-	if(pos_y < 0 - me.tolerance_y) return 0;
-	if(pos_x >= 1 - me.textSpace + me.tolerance_x) return 0;
-	if(pos_y >= 1 + me.tolerance_y) return 0;
+	if(pos_x < 0) return 0;
+	if(pos_y < 0) return 0;
+	if(pos_x >= 1 - me.textSpace) return 0;
+	if(pos_y >= 1) return 0;
 	controlCenter = (me.value - me.valueMin) / (me.valueMax - me.valueMin) * (1 - me.textSpace - me.controlWidth) + 0.5 * me.controlWidth;
 	if(fabs(pos_x - controlCenter) <= 0.5 * me.controlWidth)
 	{
 		me.pressed = 1;
 		me.pressOffset = pos_x - controlCenter;
 		me.previousValue = me.value;
-		me.mouseDrag(me, pos);
+		//me.mouseDrag(me, pos);
 	}
 	else
 	{

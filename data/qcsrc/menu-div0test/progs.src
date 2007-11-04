@@ -15,6 +15,11 @@ nexuiz/util.qh
 oo/classdefs.h
 	classes.c
 
+oo/constructors.h
+	classes.c
+oo/implementation.h
+	classes.c
+
 ../common/util.qc
 ../common/gamecommand.qc
 gamecommand.qc
@@ -22,7 +27,3 @@ menu.qc
 draw.qc
 nexuiz/util.qc
 
-oo/constructors.h
-	classes.c
-oo/implementation.h
-	classes.c

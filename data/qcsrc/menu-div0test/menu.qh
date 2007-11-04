@@ -32,3 +32,5 @@ void m_goto(string name);
 
 entity keyGrabber;
 .void(entity me, float key, float ascii) keyGrabbed;
+
+void SUB_Null();

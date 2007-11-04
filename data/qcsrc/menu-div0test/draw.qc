@@ -208,3 +208,20 @@ float draw_TextWidth(string theText)
 	//print("draw_TextWidth \"", theText, "\"\n");
 	return stringwidth(theText, 0);
 }
+
+float draw_clipSet;
+void draw_SetClip()
+{
+	if(draw_clipSet)
+		error("Already clipping, no stack implemented here, sorry");
+	drawsetcliparea(draw_shift_x, draw_shift_y, draw_scale_x, draw_scale_y);
+	draw_clipSet = 1;
+}
+
+void draw_ClearClip()
+{
+	if(!draw_clipSet)
+		error("Not clipping, can't clear it then");
+	drawresetcliparea();
+	draw_clipSet = 0;
+}
