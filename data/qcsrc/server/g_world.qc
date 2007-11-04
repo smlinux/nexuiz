@@ -1170,6 +1170,57 @@ float() LMS_NewPlayerLives =
 	return bound(1, lms_lowest_lives, fl);
 }
 
+// Assault winning condition: If the attackers triggered a round end (by fulfilling all objectives)
+// they win. Otherwise the defending team wins once the timelimit passes.
+void assault_new_round();
+float() WinningCondition_Assault =
+{
+	local float status;
+	status = WINNING_NO;
+
+	// as the timelimit has not yet passed just assume the defending team will win
+	if(assault_attacker_team == COLOR_TEAM1)
+	{
+		SetWinners(team, COLOR_TEAM2);
+	}
+	else
+	{
+		SetWinners(team, COLOR_TEAM1);
+	}	
+		
+	local entity ent;
+	ent = find(world, classname, "target_assault_roundend");
+	if(ent)
+	{
+		if(ent.winning)	// round end has been triggered by attacking team
+		{
+			SetWinners(team, assault_attacker_team);
+			if(assault_attacker_team == COLOR_TEAM1)
+			{
+				team1_score = team1_score + 50;
+			}
+			else
+			{
+				team2_score = team2_score + 50;
+			}
+
+			if(ent.cnt == 1) // this was the second round
+			{
+				status = WINNING_YES;
+			}
+			else
+			{
+				cvar_set("timelimit", ftos((2*time)/60));
+				assault_new_round();
+			}
+		}		
+	}
+
+	return status;
+
+}
+
+
 // LMS winning condition: game terminates if and only if there's at most one
 // one player who's living lives. Top two scores being equal cancels the time
 // limit.
@@ -1574,7 +1625,11 @@ void() CheckRules_World =
 	}
 
 	status = WINNING_NO;
-	if(cvar("g_lms"))
+	if(cvar("g_assault"))
+	{
+		status = WinningCondition_Assault();
+	}
+	else if(cvar("g_lms"))
 	{
 		status = WinningCondition_LMS();
 	}

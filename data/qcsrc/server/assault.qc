@@ -292,6 +292,48 @@ void func_assault_wall() {
 	self.nextthink = time;
 }
 
+
+void target_assault_roundend_reset() {
+	self.cnt = self.cnt + 1; // up round counter
+	self.winning = 0; // up round 
+}
+
+void target_assault_roundend_use() {
+	self.winning = 1; // round has been won by attackers
+}
+
+void target_assault_roundend() {
+	if(!self.health)
+		self.health = 300; // 5 minutes
+
+	cvar_set("timelimit", ftos(self.health/60));
+	self.winning = 0; // round not yet won by attackers
+	self.classname = "target_assault_roundend";
+	self.use = target_assault_roundend_use;
+	self.cnt = 0; // first round
+}
+
+void assault_roundstart_use() {
+	local entity ent;
+	local entity oldself;
+	ent = find(world, targetname, self.target);
+	while(ent) {
+		oldself = self;
+		self = ent;
+		self.use();
+		self = oldself;
+		ent = find(ent, targetname, self.target);
+	}
+}
+
+void target_assault_roundstart() {
+	assault_attacker_team = COLOR_TEAM1;
+	self.classname = "target_assault_roundstart";
+	self.use = assault_roundstart_use;
+	self.think = assault_roundstart_use;
+	self.nextthink = time + 0.1;
+}
+
 // trigger new round
 // reset objectives, toggle spawnpoints, reset triggers, ...
 void assault_new_round() {
@@ -348,6 +390,18 @@ void assault_new_round() {
 		ent = find(ent, classname, "target_objective");
 	} 
 
+	// reset round end triggers
+	ent = find(world, classname, "target_assault_roundend");
+	while (ent)
+	{
+		oldself = self;
+		self = ent;
+		target_assault_roundend_reset();
+		self = oldself;
+
+		ent = find(ent, classname, "target_assault_roundend");
+	}
+
 	// reset all target_object_decrease
 	ent = find(world, classname, "target_objective_decrease");
 	while (ent)
@@ -388,94 +442,6 @@ void assault_new_round() {
 	}
 
 
-}
-
-void assault_print_time_warning(string s) {
-	local entity ent;
-	ent = find(world, classname, "player");
-	while(ent) {
-		centerprint(ent, s);
-		ent = find(ent, classname, "player");
-	}	
-}
-
-void assault_roundend_think() {
-	if(time > self.cnt)
-		assault_new_round();
-
-	local float timeleft;
-	timeleft = self.cnt - time;
-	timeleft = ceil(timeleft);
-
-	// reset time notification if the values don't make sense
-	if(timeleft > self.nextstep)
-		self.nextstep = 9999999;
-
-	if(timeleft <= 300 && self.nextstep > 300) {
-		assault_print_time_warning("5 minutes left");
-		self.nextstep = 300;
-	}
-
-	if(timeleft <= 240 && self.nextstep > 240) {
-		assault_print_time_warning("4 minutes left");
-		self.nextstep = 240;
-	}
-
-	if(timeleft <= 180 && self.nextstep > 180) {
-		assault_print_time_warning("3 minutes left");
-		self.nextstep = 180;
-	}
-
-	if(timeleft <= 120 && self.nextstep > 120) {
-		assault_print_time_warning("2 minutes left");
-		self.nextstep = 120;
-	}
-
-	if(timeleft <= 60 && self.nextstep > 60) {
-		assault_print_time_warning("one minute left");
-		self.nextstep = 60;
-	}
-
-	if(timeleft <= 10) {
-		assault_print_time_warning(ftos(timeleft));
-	}
-
-	self.nextthink = time + 0.25;
-}
-
-
-
-void target_assault_roundend() {
-	if(!self.health)
-		self.health = 300; // 5 minutes
-	self.winning = 0; // round counter
-	self.cnt = time + self.max_health; // time when this round ends
-	self.classname = "target_assault_roundend";
-	self.nextstep = 9999999; // used to store what time warning was last issued;
-	self.use = assault_new_round;
-	self.think = assault_roundend_think;
-	self.nextthink = time;
-}
-
-void assault_roundstart_use() {
-	local entity ent;
-	local entity oldself;
-	ent = find(world, targetname, self.target);
-	while(ent) {
-		oldself = self;
-		self = ent;
-		self.use();
-		self = oldself;
-		ent = find(ent, targetname, self.target);
-	}
-}
-
-void target_assault_roundstart() {
-	assault_attacker_team = COLOR_TEAM1;
-	self.classname = "target_assault_roundstart";
-	self.use = assault_roundstart_use;
-	self.think = assault_roundstart_use;
-	self.nextthink = time + 0.1;
 }
 
 
