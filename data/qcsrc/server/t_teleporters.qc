@@ -103,11 +103,11 @@ void Teleport_Touch (void)
 					}
 	}
 
-	// hide myself for 0.2 seconds
+	// hide myself a tic
 	other.effects = other.effects | EF_NODRAW;
 	if (other.weaponentity) // misuse FL_FLY to avoid EF_NODRAW on viewmodel
 		other.weaponentity.flags = other.weaponentity.flags | FL_FLY;
-	other.teleport_time = time + 0.2;
+	other.teleport_time = time + cvar("sys_ticrate");
 
 	other.flags = other.flags - (other.flags & FL_ONGROUND);
 	// reset tracking of oldvelocity for impact damage (sudden velocity changes)
