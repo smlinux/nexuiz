@@ -6,7 +6,7 @@ textures/final_rage/lava
 	cull disable
 	q3map_surfacelight 1000
 	{
-		map textures/final_rage/lava1.tga
+		map textures/final_rage/lava.tga
 	}
 }
 
