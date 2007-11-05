@@ -54,6 +54,11 @@ void draw_Picture(vector theOrigin, string pic, vector theSize, vector theColor,
 	drawpic(boxToGlobal(theOrigin, draw_shift, draw_scale), pic, boxToGlobalSize(theSize, draw_scale), theColor, theAlpha * draw_alpha, 0);
 }
 
+void draw_Fill(vector theOrigin, vector theSize, vector theColor, float theAlpha)
+{
+	drawfill(boxToGlobal(theOrigin, draw_shift, draw_scale), boxToGlobalSize(theSize, draw_scale), theColor, theAlpha * draw_alpha, 0);
+}
+
 // a button picture is a texture containing three parts:
 //   1/4 width: left part
 //   1/2 width: middle part (stretched)
@@ -224,4 +229,37 @@ void draw_ClearClip()
 		error("Not clipping, can't clear it then");
 	drawresetcliparea();
 	draw_clipSet = 0;
+}
+
+string draw_TextShortenToWidth(string theText, float maxWidth)
+{
+	// STOP.
+	// The following function is SLOW.
+	// For your safety and for the protection of those around you...
+	// DO NOT CALL THIS AT HOME.
+	// No really, don't.
+	if(draw_TextWidth(theText) <= maxWidth)
+		return theText; // yeah!
+
+	// binary search for right place to cut string
+	float left, right, middle; // this always works
+	left = 0;
+	right = strlen(theText); // this always fails
+	do
+	{
+		middle = floor((left + right) / 2);
+		if(draw_TextWidth(strcat(substring(theText, 0, middle), "...")) <= maxWidth)
+			left = middle;
+		else
+			right = middle;
+	}
+	while(left < right - 1);
+
+	// NOTE: when color codes are involved, this binary search is,
+	// mathematically, BROKEN. However, it is obviously guaranteed to
+	// terminate, as the range still halves each time - but nevertheless, it is
+	// guaranteed that it finds ONE valid cutoff place (where "left" is in
+	// range, and "right" is outside).
+
+	return strcat(substring(theText, 0, left), "...");
 }

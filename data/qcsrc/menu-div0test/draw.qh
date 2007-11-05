@@ -10,8 +10,10 @@ void draw_ButtonPicture(vector theOrigin, string pic, vector theSize, vector the
 void draw_VertButtonPicture(vector theOrigin, string pic, vector theSize, vector theColor, float theAlpha);
 void draw_BorderPicture(vector theOrigin, string pic, vector theSize, vector theColor, float theAlpha, vector theBorderSize);
 void draw_Picture(vector origin, string pic, vector size, vector color, float alpha);
+void draw_Fill(vector theOrigin, vector theSize, vector theColor, float theAlpha);
 void draw_Text(vector origin, string text, vector size, vector color, float alpha);
 float draw_TextWidth(string text);
+string draw_TextShortenToWidth(string text, float maxWidth);
 
 void draw_SetClip();
 void draw_ClearClip();
@@ -22,3 +24,4 @@ vector globalToBox(vector v, vector shift, vector scale);
 vector globalToBoxSize(vector v, vector scale);
 
 float draw_NeedResizeNotify;
+

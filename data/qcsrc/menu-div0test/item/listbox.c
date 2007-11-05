@@ -25,7 +25,7 @@ CLASS(ListBox) EXTENDS(Item)
 	ATTRIB(ListBox, src, string, "") // scrollbar
 	ATTRIB(ListBox, tolerance, vector, '0 0 0') // drag tolerance
 	ATTRIB(ListBox, scrollbarWidth, float, 0) // pixels
-	ATTRIB(ListBox, nItems, float, 0)
+	ATTRIB(ListBox, nItems, float, 42)
 	ATTRIB(ListBox, itemHeight, float, 0)
 	METHOD(ListBox, drawListBoxItem, void(entity, float, vector, float)) // item number, width/height, selected
 	METHOD(ListBox, clickListBoxItem, void(entity, float, vector)) // item number, relative clickpos
@@ -80,10 +80,10 @@ float mouseDragListBox(entity me, vector pos)
 	if(me.pressed == 1)
 	{
 		hit = 1;
-		if(pos_x < 1 - me.controlWidth - me.tolerance_x) hit = 0;
-		if(pos_y < 0 - me.tolerance_y) hit = 0;
-		if(pos_x >= 1 + me.tolerance_x) hit = 0;
-		if(pos_y >= 1 + me.tolerance_y) hit = 0;
+		if(pos_x < 1 - me.controlWidth - me.tolerance_y * me.controlWidth) hit = 0;
+		if(pos_y < 0 - me.tolerance_x) hit = 0;
+		if(pos_x >= 1 + me.tolerance_y * me.controlWidth) hit = 0;
+		if(pos_y >= 1 + me.tolerance_x) hit = 0;
 		if(hit)
 		{
 			// calculate new pos to v
@@ -111,6 +111,7 @@ float mousePressListBox(entity me, vector pos)
 	if(pos_y < 0) return 0;
 	if(pos_x >= 1) return 0;
 	if(pos_y >= 1) return 0;
+	me.dragScrollPos = pos;
 	me.updateControlTopBottom(me);
 	if(pos_x >= 1 - me.controlWidth)
 	{
@@ -218,7 +219,7 @@ void drawListBox(entity me)
 		vector o, s;
 		o = eX * (1 - me.controlWidth) + eY * me.controlTop;
 		s = eX * me.controlWidth + eY * (me.controlBottom - me.controlTop);
-		if(me.pressed)
+		if(me.pressed == 1)
 			draw_VertButtonPicture(o, strcat(me.src, "_c"), s, '1 1 1', 1);
 		else if(me.focused)
 			draw_VertButtonPicture(o, strcat(me.src, "_f"), s, '1 1 1', 1);

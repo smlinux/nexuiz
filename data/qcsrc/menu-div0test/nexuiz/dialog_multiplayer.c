@@ -15,7 +15,7 @@ void fillNexuizMultiplayerDialog(entity me)
 	entity mc;
 	mc = makeNexuizTabController(me.rows - 2);
 	me.TR(me);
-		me.TD(me, 1, 1, mc.makeTabButton(mc, "Serverlist",  makeNexuizPlayerSettingsTab()));
+		me.TD(me, 1, 1, mc.makeTabButton(mc, "Serverlist",  makeNexuizServerListTab()));
 		me.TD(me, 1, 1, mc.makeTabButton(mc, "Player Setup",  makeNexuizPlayerSettingsTab()));
 		me.TD(me, 1, 1, mc.makeTabButton(mc, "Server Setup",  makeNexuizPlayerSettingsTab()));
 	me.TR(me);
