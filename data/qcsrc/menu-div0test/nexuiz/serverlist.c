@@ -29,7 +29,7 @@ CLASS(NexuizServerList) EXTENDS(NexuizListBox)
 	ATTRIB(NexuizServerList, connectButton, entity, NULL)
 	ATTRIB(NexuizServerList, currentSortOrder, float, 0)
 	ATTRIB(NexuizServerList, currentSortField, float, 0)
-	ATTRIB(NexuizServerList, lastClickedServer, float, 0)
+	ATTRIB(NexuizServerList, lastClickedServer, float, -1)
 	ATTRIB(NexuizServerList, lastClickedTime, float, 0)
 ENDCLASS(NexuizServerList)
 entity makeNexuizServerList();
@@ -113,13 +113,15 @@ void drawNexuizServerList(entity me)
 	me.nItems = gethostcachevalue(SLIST_HOSTCACHEVIEWCOUNT);
 	me.connectButton.disabled = (me.nItems == 0);
 	for(i = 0; i < me.nItems; ++i)
-	{
 		if(gethostcachestring(SLIST_FIELD_CNAME, i) == me.selectedServer)
 		{
-			me.selectedItem = i;
+			if(i != me.selectedItem)
+			{
+				me.lastClickedServer = -1;
+				me.selectedItem = i;
+			}
 			break;
 		}
-	}
 	drawListBox(me);
 }
 void ServerList_PingSort_Click(entity btn, entity me)
