@@ -75,7 +75,6 @@ float keyDownListBox(entity me, float key, float ascii, float shift)
 float mouseDragListBox(entity me, vector pos)
 {
 	float hit;
-	float v;
 	me.updateControlTopBottom(me);
 	me.dragScrollPos = pos;
 	if(me.pressed == 1)
@@ -147,7 +146,7 @@ float mousePressListBox(entity me, vector pos)
 }
 float mouseReleaseListBox(entity me, vector pos)
 {
-	vector absSize, clickOrigin;
+	vector absSize;
 	if(me.pressed == 1)
 	{
 		// slider dragging mode

@@ -27,7 +27,6 @@ entity makeNexuizDemoListbox()
 void fillNexuizAudioSettingsTab(entity me)
 {
 	entity e;
-	float i;
 
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Music Volume:"));

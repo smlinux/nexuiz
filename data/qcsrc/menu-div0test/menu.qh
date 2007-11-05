@@ -23,6 +23,7 @@ const float S_CTRL = 2;
 const float S_ALT = 4;
 
 float frametime;
+float time;
 
 entity main;
 void m_hide();

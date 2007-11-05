@@ -16,7 +16,7 @@ void DemoButton_Click(entity me, entity other)
 
 void configureMainWindowMainWindow(entity me)
 {
-	entity dlg, n, i, b, c, mc, t1, t2, t3, cb;
+	entity dlg, n, i, b, c, mc, t1, t2, t3;
 
 	n = spawnNexuizNexposee();
 	me.addItem(me, n, '0 0 0', '1 1 0', 1);

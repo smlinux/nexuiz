@@ -93,6 +93,7 @@ void() m_draw =
 	t = gettime();
 	realFrametime = frametime = min(0.2, t - menuPrevTime);
 	menuPrevTime = t;
+	time += frametime;
 
 	if(Menu_Active)
 		if(getkeydest() != KEY_MENU || getmousetarget() != MT_MENU)
