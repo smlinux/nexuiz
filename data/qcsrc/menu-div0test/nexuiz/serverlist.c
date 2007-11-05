@@ -4,6 +4,7 @@ CLASS(NexuizServerList) EXTENDS(NexuizListBox)
 	ATTRIB(NexuizServerList, rowsPerItem, float, 1)
 	METHOD(NexuizServerList, draw, void(entity))
 	METHOD(NexuizServerList, drawListBoxItem, void(entity, float, vector, float))
+	METHOD(NexuizServerList, clickListBoxItem, void(entity, float, vector))
 	METHOD(NexuizServerList, resizeNotify, void(entity, vector, vector, vector, vector))
 
 	ATTRIB(NexuizServerList, realFontSize, vector, '0 0 0')
@@ -19,8 +20,21 @@ CLASS(NexuizServerList) EXTENDS(NexuizListBox)
 
 	ATTRIB(NexuizServerList, selectedServer, string, string_null) // to restore selected server when needed
 	METHOD(NexuizServerList, setSelected, void(entity, float))
+	METHOD(NexuizServerList, setSortOrder, void(entity, float, float))
+	METHOD(NexuizServerList, positionSortButton, void(entity, entity, float, float, string, void(entity, entity)))
+	ATTRIB(NexuizServerList, sortButton1, entity, NULL)
+	ATTRIB(NexuizServerList, sortButton2, entity, NULL)
+	ATTRIB(NexuizServerList, sortButton3, entity, NULL)
+	ATTRIB(NexuizServerList, sortButton4, entity, NULL)
+	ATTRIB(NexuizServerList, connectButton, entity, NULL)
+	ATTRIB(NexuizServerList, currentSortOrder, float, 0)
+	ATTRIB(NexuizServerList, currentSortField, float, 0)
+	ATTRIB(NexuizServerList, lastClickedServer, float, 0)
+	ATTRIB(NexuizServerList, lastClickedTime, float, 0)
 ENDCLASS(NexuizServerList)
 entity makeNexuizServerList();
+void ServerList_Connect_Click(entity btn, entity me);
+void ServerList_Refresh_Click(entity btn, entity me);
 #endif
 
 #ifdef IMPLEMENTATION
@@ -35,6 +49,7 @@ float SLIST_FIELD_NUMPLAYERS;
 float SLIST_FIELD_NUMHUMANS;
 float SLIST_FIELD_NUMBOTS;
 float SLIST_FIELD_PROTOCOL;
+float SLIST_FIELD_FREESLOTS;
 void ServerList_UpdateFieldIDs()
 {
 	SLIST_FIELD_CNAME = gethostcacheindexforkey( "cname" );
@@ -48,6 +63,7 @@ void ServerList_UpdateFieldIDs()
 	SLIST_FIELD_NUMHUMANS = gethostcacheindexforkey( "numhumans" );
 	SLIST_FIELD_NUMBOTS = gethostcacheindexforkey( "numbots" );
 	SLIST_FIELD_PROTOCOL = gethostcacheindexforkey( "protocol" );
+	SLIST_FIELD_FREESLOTS = gethostcacheindexforkey( "freeslots" );
 }
 
 entity makeNexuizServerList()
@@ -63,7 +79,7 @@ void configureNexuizServerListNexuizServerList(entity me)
 
 	ServerList_UpdateFieldIDs();
 	resethostcachemasks();
-	refreshhostcache();
+	me.currentSortField = -1;
 
 	me.nItems = 0;
 }
@@ -87,7 +103,15 @@ void setSelectedNexuizServerList(entity me, float i)
 void drawNexuizServerList(entity me)
 {
 	float i;
+
+	if(me.currentSortField == -1)
+	{
+		refreshhostcache();
+		me.setSortOrder(me, SLIST_FIELD_PING, +1);
+	}
+
 	me.nItems = gethostcachevalue(SLIST_HOSTCACHEVIEWCOUNT);
+	me.connectButton.disabled = (me.nItems == 0);
 	for(i = 0; i < me.nItems; ++i)
 	{
 		if(gethostcachestring(SLIST_FIELD_CNAME, i) == me.selectedServer)
@@ -97,6 +121,56 @@ void drawNexuizServerList(entity me)
 		}
 	}
 	drawListBox(me);
+}
+void ServerList_PingSort_Click(entity btn, entity me)
+{
+	me.setSortOrder(me, SLIST_FIELD_PING, +1);
+}
+void ServerList_NameSort_Click(entity btn, entity me)
+{
+	me.setSortOrder(me, SLIST_FIELD_NAME, -1); // why?
+}
+void ServerList_MapSort_Click(entity btn, entity me)
+{
+	me.setSortOrder(me, SLIST_FIELD_MAP, -1); // why?
+}
+void ServerList_PlayerSort_Click(entity btn, entity me)
+{
+	me.setSortOrder(me, SLIST_FIELD_NUMHUMANS, -1);
+}
+void setSortOrderNexuizServerList(entity me, float field, float direction)
+{
+	if(me.currentSortField == field)
+		direction = -me.currentSortOrder;
+	me.currentSortOrder = direction;
+	me.currentSortField = field;
+	sethostcachesort(field, direction < 0);
+	resorthostcache();
+	me.sortButton1.forcePressed = (field == SLIST_FIELD_PING);
+	me.sortButton2.forcePressed = (field == SLIST_FIELD_NAME);
+	me.sortButton3.forcePressed = (field == SLIST_FIELD_MAP);
+	me.sortButton4.forcePressed = (field == SLIST_FIELD_NUMHUMANS);
+	me.selectedItem = 0;
+	if(me.selectedServer)
+		strunzone(me.selectedServer);
+	me.selectedServer = string_null;
+}
+void positionSortButtonNexuizServerList(entity me, entity btn, float theOrigin, float theSize, string theTitle, void(entity, entity) theFunc)
+{
+	vector originInLBSpace, sizeInLBSpace;
+	originInLBSpace = eY * (-me.itemHeight);
+	sizeInLBSpace = eY * me.itemHeight + eX * (1 - me.controlWidth);
+
+	vector originInDialogSpace, sizeInDialogSpace;
+	originInDialogSpace = boxToGlobal(originInLBSpace, me.Container_origin, me.Container_size);
+	sizeInDialogSpace = boxToGlobalSize(sizeInLBSpace, me.Container_size);
+
+	btn.Container_origin_x = originInDialogSpace_x + sizeInDialogSpace_x * theOrigin;
+	btn.Container_size_x   =                         sizeInDialogSpace_x * theSize;
+	btn.setText(btn, theTitle);
+	btn.onClick = theFunc;
+	btn.onClickEntity = me;
+	btn.resized = 1;
 }
 void resizeNotifyNexuizServerList(entity me, vector relOrigin, vector relSize, vector absOrigin, vector absSize)
 {
@@ -114,6 +188,36 @@ void resizeNotifyNexuizServerList(entity me, vector relOrigin, vector relSize, v
 	me.columnNameOrigin = me.columnPingOrigin + me.columnPingSize + me.realFontSize_x;
 	me.columnMapOrigin = me.columnNameOrigin + me.columnNameSize + me.realFontSize_x;
 	me.columnPlayersOrigin = me.columnMapOrigin + me.columnMapSize + me.realFontSize_x;
+
+	me.positionSortButton(me, me.sortButton1, me.columnPingOrigin, me.columnPingSize, "Ping", ServerList_PingSort_Click);
+	me.positionSortButton(me, me.sortButton2, me.columnNameOrigin, me.columnNameSize, "Host name", ServerList_NameSort_Click);
+	me.positionSortButton(me, me.sortButton3, me.columnMapOrigin, me.columnMapSize, "Map", ServerList_MapSort_Click);
+	me.positionSortButton(me, me.sortButton4, me.columnPlayersOrigin, me.columnPlayersSize, "Players", ServerList_PlayerSort_Click);
+
+	float f;
+	f = me.currentSortField;
+	me.currentSortField = -1;
+	me.setSortOrder(me, f, me.currentSortOrder); // force resetting the sort order
+}
+void ServerList_Connect_Click(entity btn, entity me)
+{
+	if(me.nItems > 0)
+		localcmd("connect ", me.selectedServer, "\n");
+}
+void ServerList_Refresh_Click(entity btn, entity me)
+{
+	refreshhostcache();
+}
+void clickListBoxItemNexuizServerList(entity me, float i, vector where)
+{
+	if(i == me.lastClickedServer)
+		if(time < me.lastClickedTime + 0.3)
+		{
+			// DOUBLE CLICK!
+			ServerList_Connect_Click(NULL, me);
+		}
+	me.lastClickedServer = i;
+	me.lastClickedTime = time;
 }
 void drawListBoxItemNexuizServerList(entity me, float i, vector absSize, float isSelected)
 {
@@ -141,7 +245,12 @@ void drawListBoxItemNexuizServerList(entity me, float i, vector absSize, float i
 	else if(p < 650)
 	{
 		theColor = eX;
-		theAlpha *= (650 - p) / 500;
+		theAlpha *= 0.1 + 0.9 * (650 - p) / 500;
+	}
+	else
+	{
+		theColor = eX;
+		theAlpha *= 0.1;
 	}
 	
 	s = ftos(p);

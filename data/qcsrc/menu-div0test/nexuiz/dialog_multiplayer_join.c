@@ -19,16 +19,28 @@ entity makeNexuizServerListTab()
 }
 void fillNexuizServerListTab(entity me)
 {
-	entity e;
+	entity e, slist;
+
+	slist  = makeNexuizServerList();
 
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Filter:"));
 
 	me.TR(me);
-		me.TD(me, me.rows - 2, me.columns, e = makeNexuizServerList());
+		me.TD(me, 1, 1, slist.sortButton1 = makeNexuizButton("", '0 0 0'));
+		me.TD(me, 1, 1, slist.sortButton2 = makeNexuizButton("", '0 0 0'));
+		me.TD(me, 1, 1, slist.sortButton3 = makeNexuizButton("", '0 0 0'));
+		me.TD(me, 1, 1, slist.sortButton4 = makeNexuizButton("", '0 0 0'));
+	me.TR(me);
+		me.TD(me, me.rows - 3, me.columns, slist);
 
 	me.gotoXY(me, me.rows - 1, 0);
-		me.TD(me, 1, 1, makeNexuizCommandButton("Refresh!", '0 0 0', "echo FIXME ask for servers again", 0));
-		me.TD(me, 1, me.columns - 1, makeNexuizCommandButton("Join!", '0 0 0', "connect $menu_selected_server", 0));
+		me.TD(me, 1, 1, e = makeNexuizButton("Refresh!", '0 0 0'));
+			e.onClick = ServerList_Refresh_Click;
+			e.onClickEntity = slist;
+		me.TD(me, 1, me.columns - 1, e = makeNexuizButton("Join!", '0 0 0'));
+			e.onClick = ServerList_Connect_Click;
+			e.onClickEntity = slist;
+			slist.connectButton = e;
 }
 #endif

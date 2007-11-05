@@ -27,13 +27,13 @@ CLASS(Container) EXTENDS(Item)
 ENDCLASS(Container)
 .entity nextSibling;
 .entity prevSibling;
-#endif
-
-#ifdef IMPLEMENTATION
+.float resized;
 .vector Container_origin;
 .vector Container_size;
 .float Container_alpha;
+#endif
 
+#ifdef IMPLEMENTATION
 void showNotifyContainer(entity me)
 {
 	entity e;
@@ -75,12 +75,27 @@ void resizeNotifyLieContainer(entity me, vector relOrigin, vector relSize, vecto
 {
 	entity e;
 	vector o, s;
+	float d;
 	for(e = me.firstChild; e; e = e.nextSibling)
 	{
 		o = e.originField;
 		s = e.sizeField;
 		e.resizeNotify(e, o, s, boxToGlobal(o, absOrigin, absSize), boxToGlobalSize(s, absSize));
 	}
+	do
+	{
+		d = 0;
+		for(e = me.firstChild; e; e = e.nextSibling)
+			if(e.resized)
+			{
+				e.resized = 0;
+				d = 1;
+				o = e.originField;
+				s = e.sizeField;
+				e.resizeNotify(e, o, s, boxToGlobal(o, absOrigin, absSize), boxToGlobalSize(s, absSize));
+			}
+	}
+	while(d);
 	resizeNotifyItem(me, relOrigin, relSize, absOrigin, absSize);
 }
 
