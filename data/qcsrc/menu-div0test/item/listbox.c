@@ -106,7 +106,7 @@ float mouseDragListBox(entity me, vector pos)
 	}
 	else if(me.pressed == 2)
 	{
-		me.setSelected(me, (me.scrollPos + pos_y) / me.itemHeight);
+		me.setSelected(me, floor((me.scrollPos + pos_y) / me.itemHeight));
 	}
 	return 1;
 }
@@ -143,7 +143,7 @@ float mousePressListBox(entity me, vector pos)
 	else
 	{
 		// an item has been clicked. Select it, ...
-		me.setSelected(me, (me.scrollPos + pos_y) / me.itemHeight);
+		me.setSelected(me, floor((me.scrollPos + pos_y) / me.itemHeight));
 		// continue doing that while dragging (even when dragging outside). When releasing, forward the click to the then selected item.
 		me.pressed = 2;
 	}
@@ -161,7 +161,7 @@ float mouseReleaseListBox(entity me, vector pos)
 	{
 		// item dragging mode
 		// select current one one last time...
-		me.setSelected(me, (me.scrollPos + pos_y) / me.itemHeight);
+		me.setSelected(me, floor((me.scrollPos + pos_y) / me.itemHeight));
 		// and give it a nice click event
 		if(me.nItems > 0)
 		{
