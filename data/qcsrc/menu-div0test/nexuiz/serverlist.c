@@ -16,12 +16,14 @@ CLASS(NexuizServerList) EXTENDS(NexuizListBox)
 	ATTRIB(NexuizServerList, columnMapSize, float, 0)
 	ATTRIB(NexuizServerList, columnPlayersOrigin, float, 0)
 	ATTRIB(NexuizServerList, columnPlayersSize, float, 0)
+
+	ATTRIB(NexuizServerList, selectedServer, string, string_null) // to restore selected server when needed
+	METHOD(NexuizServerList, setSelected, void(entity, float))
 ENDCLASS(NexuizServerList)
 entity makeNexuizServerList();
 #endif
 
 #ifdef IMPLEMENTATION
-
 float SLIST_FIELD_CNAME;
 float SLIST_FIELD_PING;
 float SLIST_FIELD_GAME;
@@ -65,9 +67,35 @@ void configureNexuizServerListNexuizServerList(entity me)
 
 	me.nItems = 0;
 }
+void setSelectedNexuizServerList(entity me, float i)
+{
+	float save;
+	save = me.selectedItem;
+	setSelectedListBox(me, i);
+	/*
+	if(me.selectedItem == save)
+		return;
+	*/
+	if(me.nItems == 0)
+		return;
+	if(gethostcachevalue(SLIST_HOSTCACHEVIEWCOUNT) != me.nItems)
+		return; // sorry, it would be wrong
+	if(me.selectedServer)
+		strunzone(me.selectedServer);
+	me.selectedServer = strzone(gethostcachestring(SLIST_FIELD_CNAME, me.selectedItem));
+}
 void drawNexuizServerList(entity me)
 {
+	float i;
 	me.nItems = gethostcachevalue(SLIST_HOSTCACHEVIEWCOUNT);
+	for(i = 0; i < me.nItems; ++i)
+	{
+		if(gethostcachestring(SLIST_FIELD_CNAME, i) == me.selectedServer)
+		{
+			me.selectedItem = i;
+			break;
+		}
+	}
 	drawListBox(me);
 }
 void resizeNotifyNexuizServerList(entity me, vector relOrigin, vector relSize, vector absOrigin, vector absSize)

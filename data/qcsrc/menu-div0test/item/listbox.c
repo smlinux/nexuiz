@@ -29,10 +29,15 @@ CLASS(ListBox) EXTENDS(Item)
 	ATTRIB(ListBox, itemHeight, float, 0)
 	METHOD(ListBox, drawListBoxItem, void(entity, float, vector, float)) // item number, width/height, selected
 	METHOD(ListBox, clickListBoxItem, void(entity, float, vector)) // item number, relative clickpos
+	METHOD(ListBox, setSelected, void(entity, float))
 ENDCLASS(ListBox)
 #endif
 
 #ifdef IMPLEMENTATION
+void setSelectedListBox(entity me, float i)
+{
+	me.selectedItem = floor(0.5 + bound(0, i, me.nItems - 1));
+}
 void resizeNotifyListBox(entity me, vector relOrigin, vector relSize, vector absOrigin, vector absSize)
 {
 	me.size = absSize;
@@ -52,29 +57,29 @@ float keyDownListBox(entity me, float key, float ascii, float shift)
 	else if(key == K_MWHEELUP)
 	{
 		me.scrollPos = max(me.scrollPos - 0.5, 0);
-		me.selectedItem = min(me.selectedItem, floor((me.scrollPos + 1) / me.itemHeight - 1));
+		me.setSelected(me, min(me.selectedItem, floor((me.scrollPos + 1) / me.itemHeight - 1)));
 	}
 	else if(key == K_MWHEELDOWN)
 	{
 		me.scrollPos = min(me.scrollPos + 0.5, me.nItems * me.itemHeight - 1);
-		me.selectedItem = max(me.selectedItem, ceil(me.scrollPos / me.itemHeight));
+		me.setSelected(me, max(me.selectedItem, ceil(me.scrollPos / me.itemHeight)));
 	}
 	else if(key == K_PGUP)
-		me.selectedItem = me.selectedItem - 1 / me.itemHeight;
+		me.setSelected(me, me.selectedItem - 1 / me.itemHeight);
 	else if(key == K_PGDN)
-		me.selectedItem = me.selectedItem + 1 / me.itemHeight;
+		me.setSelected(me, me.selectedItem + 1 / me.itemHeight);
 	else if(key == K_HOME)
-		me.selectedItem = 0;
+		me.setSelected(me, 0);
 	else if(key == K_END)
-		me.selectedItem = me.nItems - 1;
+		me.setSelected(me, me.nItems - 1);
 	else
 		return 0;
-	me.selectedItem = floor(0.5 + bound(0, me.selectedItem, me.nItems - 1));
 	return 1;
 }
 float mouseDragListBox(entity me, vector pos)
 {
 	float hit;
+	float i;
 	me.updateControlTopBottom(me);
 	me.dragScrollPos = pos;
 	if(me.pressed == 1)
@@ -95,13 +100,13 @@ float mouseDragListBox(entity me, vector pos)
 			me.scrollPos = me.previousValue;
 		me.scrollPos = min(me.scrollPos, me.nItems * me.itemHeight - 1);
 		me.scrollPos = max(me.scrollPos, 0);
-		me.selectedItem = min(me.selectedItem, floor((me.scrollPos + 1) / me.itemHeight - 1));
-		me.selectedItem = max(me.selectedItem, ceil(me.scrollPos / me.itemHeight));
+		i = min(me.selectedItem, floor((me.scrollPos + 1) / me.itemHeight - 1));
+		i = max(i, ceil(me.scrollPos / me.itemHeight));
+		me.setSelected(me, i);
 	}
 	else if(me.pressed == 2)
 	{
-		me.selectedItem = (me.scrollPos + pos_y) / me.itemHeight;
-		me.selectedItem = floor(0.5 + bound(0, me.selectedItem, me.nItems - 1));
+		me.setSelected(me, (me.scrollPos + pos_y) / me.itemHeight);
 	}
 	return 1;
 }
@@ -120,13 +125,13 @@ float mousePressListBox(entity me, vector pos)
 		{
 			// page up
 			me.scrollPos = max(me.scrollPos - 1, 0);
-			me.selectedItem = min(me.selectedItem, floor((me.scrollPos + 1) / me.itemHeight - 1));
+			me.setSelected(me, min(me.selectedItem, floor((me.scrollPos + 1) / me.itemHeight - 1)));
 		}
 		else if(pos_y > me.controlBottom)
 		{
 			// page down
 			me.scrollPos = min(me.scrollPos + 1, me.nItems * me.itemHeight - 1);
-			me.selectedItem = max(me.selectedItem, ceil(me.scrollPos / me.itemHeight));
+			me.setSelected(me, max(me.selectedItem, ceil(me.scrollPos / me.itemHeight)));
 		}
 		else
 		{
@@ -138,8 +143,7 @@ float mousePressListBox(entity me, vector pos)
 	else
 	{
 		// an item has been clicked. Select it, ...
-		me.selectedItem = (me.scrollPos + pos_y) / me.itemHeight;
-		me.selectedItem = floor(0.5 + bound(0, me.selectedItem, me.nItems - 1));
+		me.setSelected(me, (me.scrollPos + pos_y) / me.itemHeight);
 		// continue doing that while dragging (even when dragging outside). When releasing, forward the click to the then selected item.
 		me.pressed = 2;
 	}
@@ -157,8 +161,7 @@ float mouseReleaseListBox(entity me, vector pos)
 	{
 		// item dragging mode
 		// select current one one last time...
-		me.selectedItem = (me.scrollPos + pos_y) / me.itemHeight;
-		me.selectedItem = floor(0.5 + bound(0, me.selectedItem, me.nItems - 1));
+		me.setSelected(me, (me.scrollPos + pos_y) / me.itemHeight);
 		// and give it a nice click event
 		if(me.nItems > 0)
 		{
