@@ -27,10 +27,10 @@ void fillNexuizServerListTab(entity me)
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Filter:"));
 
 	me.TR(me);
-		me.TD(me, 1, 1, slist.sortButton1 = makeNexuizButton("", '0 0 0'));
-		me.TD(me, 1, 1, slist.sortButton2 = makeNexuizButton("", '0 0 0'));
-		me.TD(me, 1, 1, slist.sortButton3 = makeNexuizButton("", '0 0 0'));
-		me.TD(me, 1, 1, slist.sortButton4 = makeNexuizButton("", '0 0 0'));
+		me.TD(me, 1, 1, slist.sortButton1 = makeNexuizButton(string_null, '0 0 0'));
+		me.TD(me, 1, 1, slist.sortButton2 = makeNexuizButton(string_null, '0 0 0'));
+		me.TD(me, 1, 1, slist.sortButton3 = makeNexuizButton(string_null, '0 0 0'));
+		me.TD(me, 1, 1, slist.sortButton4 = makeNexuizButton(string_null, '0 0 0'));
 	me.TR(me);
 		me.TD(me, me.rows - 3, me.columns, slist);
 

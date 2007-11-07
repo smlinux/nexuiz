@@ -11,7 +11,7 @@ CLASS(Button) EXTENDS(Label)
 	ATTRIB(Button, onClick, void(entity, entity), SUB_Null)
 	ATTRIB(Button, onClickEntity, entity, NULL)
 	ATTRIB(Button, src, string, string_null)
-	ATTRIB(Button, srcSuffix, string, "")
+	ATTRIB(Button, srcSuffix, string, string_null)
 	ATTRIB(Button, src2, string, string_null) // is centered, same aspect, and stretched to label size
 	ATTRIB(Button, srcMulti, float, 1) // 0: button square left, text right; 1: button stretched, text over it
 	ATTRIB(Button, buttonLeftOfText, float, 0)

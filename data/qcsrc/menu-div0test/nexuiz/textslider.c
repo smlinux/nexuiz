@@ -27,7 +27,7 @@ entity makeNexuizTextSlider(string theCvar)
 void configureNexuizTextSliderNexuizTextSlider(entity me, string theCvar)
 {
 	me.configureSliderVisuals(me, me.fontSize, me.align, me.valueSpace, me.image);
-	if(theCvar != "")
+	if(theCvar)
 		me.cvarName = theCvar;
 		// don't load it yet
 }
@@ -50,7 +50,7 @@ void saveCvarsNexuizTextSlider(entity me)
 }
 void configureNexuizTextSliderValuesNexuizTextSlider(entity me)
 {
-	me.configureTextSliderValues(me, "");
+	me.configureTextSliderValues(me, string_null);
 	me.loadCvars(me);
 }
 #endif

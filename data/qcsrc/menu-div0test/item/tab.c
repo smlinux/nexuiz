@@ -3,7 +3,7 @@ CLASS(Tab) EXTENDS(Dialog)
 	ATTRIB(Tab, isTabRoot, float, 0)
 	ATTRIB(Tab, closable, float, 0)
 	ATTRIB(Tab, rootDialog, float, 0)
-	ATTRIB(Tab, title, string, "")
+	ATTRIB(Tab, title, string, string_null)
 	ATTRIB(Tab, titleFontSize, float, 0) // pixels
 	
 	// still to be customized
@@ -20,7 +20,7 @@ CLASS(Tab) EXTENDS(Dialog)
 	ATTRIB(Tab, rowHeight, float, 0) // pixels
 	ATTRIB(Tab, titleHeight, float, 0) // pixels
 
-	ATTRIB(Tab, backgroundImage, string, "")
+	ATTRIB(Tab, backgroundImage, string, string_null)
 ENDCLASS(Tab)
 #endif
 

@@ -33,7 +33,7 @@ void configureNexuizSliderNexuizSlider(entity me, float theValueMin, float theVa
 		vp *= 10;
 	me.configureSliderVisuals(me, me.fontSize, me.align, me.valueSpace, me.image);
 	me.configureSliderValues(me, theValueMin, v, theValueMax, theValueStep, vk, vp);
-	if(theCvar != "")
+	if(theCvar)
 	{
 		me.cvarName = theCvar;
 		me.loadCvars(me);

@@ -25,7 +25,7 @@ void configureNexuizCheckBoxNexuizCheckBox(entity me, float isInverted, string t
 {
 	me.inverted = isInverted;
 	me.checked = 0;
-	if(theCvar != "")
+	if(theCvar)
 	{
 		me.cvarName = theCvar;
 		me.loadCvars(me);

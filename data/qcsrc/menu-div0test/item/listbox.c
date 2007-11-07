@@ -22,7 +22,7 @@ CLASS(ListBox) EXTENDS(Item)
 	ATTRIB(ListBox, dragScrollTimer, float, 0)
 	ATTRIB(ListBox, dragScrollPos, vector, '0 0 0')
 
-	ATTRIB(ListBox, src, string, "") // scrollbar
+	ATTRIB(ListBox, src, string, string_null) // scrollbar
 	ATTRIB(ListBox, tolerance, vector, '0 0 0') // drag tolerance
 	ATTRIB(ListBox, scrollbarWidth, float, 0) // pixels
 	ATTRIB(ListBox, nItems, float, 42)

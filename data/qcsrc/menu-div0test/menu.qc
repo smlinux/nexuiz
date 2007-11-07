@@ -186,7 +186,7 @@ void() m_shutdown =
 void(string itemname) m_goto =
 {
 	entity e;
-	if(itemname == "")
+	if(itemname == "") // this can be called by GameCommand
 	{
 		m_hide();
 	}

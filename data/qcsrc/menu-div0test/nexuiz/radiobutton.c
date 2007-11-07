@@ -23,7 +23,7 @@ entity makeNexuizRadioButton(float theGroup, string theCvar, string theValue, st
 }
 void configureNexuizRadioButtonNexuizRadioButton(entity me, float theGroup, string theCvar, string theValue, string theText)
 {
-	if(theCvar != "")
+	if(theCvar)
 	{
 		me.cvarName = theCvar;
 		me.cvarValue = theValue;

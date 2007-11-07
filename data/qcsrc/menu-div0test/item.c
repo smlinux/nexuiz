@@ -84,6 +84,6 @@ void focusLeaveItem(entity me)
 
 string toStringItem(entity me)
 {
-	return "";
+	return string_null;
 }
 #endif

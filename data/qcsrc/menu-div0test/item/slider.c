@@ -14,7 +14,7 @@ CLASS(Slider) EXTENDS(Label)
 	METHOD(Slider, toString, string(entity))
 	METHOD(Slider, setValue, void(entity, float))
 	METHOD(Slider, showNotify, void(entity))
-	ATTRIB(Slider, src, string, "")
+	ATTRIB(Slider, src, string, string_null)
 	ATTRIB(Slider, focusable, float, 1)
 	ATTRIB(Slider, value, float, 0)
 	ATTRIB(Slider, valueMin, float, 0)
@@ -53,7 +53,7 @@ string valueToTextSlider(entity me, float val)
 }
 void configureSliderVisualsSlider(entity me, float sz, float theAlign, float theTextSpace, string gfx)
 {
-	configureLabelLabel(me, "", sz, theAlign);
+	configureLabelLabel(me, string_null, sz, theAlign);
 	me.textSpace = theTextSpace;
 	me.keepspaceLeft = (theTextSpace == 0) ? 0 : (1 - theTextSpace);
 	me.src = gfx;
@@ -208,6 +208,6 @@ void drawSlider(entity me)
 	}
 	me.setText(me, me.valueToText(me, me.value));
 	drawLabel(me);
-	me.text = ""; // TEMPSTRING!
+	me.text = string_null; // TEMPSTRING!
 }
 #endif

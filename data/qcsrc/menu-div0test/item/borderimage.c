@@ -3,7 +3,7 @@ CLASS(BorderImage) EXTENDS(Label)
 	METHOD(BorderImage, configureBorderImage, void(entity, string, float, vector, string, float))
 	METHOD(BorderImage, resizeNotify, void(entity, vector, vector, vector, vector))
 	METHOD(BorderImage, draw, void(entity))
-	ATTRIB(BorderImage, src, string, "")
+	ATTRIB(BorderImage, src, string, string_null)
 	ATTRIB(BorderImage, borderHeight, float, 0)
 	ATTRIB(BorderImage, borderVec, vector, '0 0 0')
 	ATTRIB(BorderImage, color, vector, '1 1 1')
@@ -35,7 +35,7 @@ void configureBorderImageBorderImage(entity me, string theTitle, float sz, vecto
 void drawBorderImage(entity me)
 {
 	//print(vtos(me.borderVec), "\n");
-	if(me.src != "")
+	if(me.src)
 		draw_BorderPicture('0 0 0', me.src, '1 1 0', me.color, 1, me.borderVec);
 	if(me.fontSize > 0)
 		drawLabel(me);

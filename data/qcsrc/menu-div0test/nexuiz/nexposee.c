@@ -21,6 +21,6 @@ void configureNexuizNexposeeNexuizNexposee(entity me)
 
 void closeNexuizNexposee(entity me)
 {
-	m_goto(""); // hide
+	m_goto(string_null); // hide
 }
 #endif

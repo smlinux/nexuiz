@@ -42,7 +42,7 @@ void setDependent_Check(entity e)
 		e.disabled = ((f < e.cvarMin_setDependent) || (f > e.cvarMax_setDependent));
 	else
 		e.disabled = ((f >= e.cvarMax_setDependent) && (f <= e.cvarMin_setDependent));
-	if(e.cvar2_setDependent != string_null)
+	if(e.cvar2_setDependent)
 	{
 		f = cvar(e.cvar2_setDependent);
 		if(e.cvar2Min_setDependent <= e.cvar2Max_setDependent)

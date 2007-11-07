@@ -3,7 +3,7 @@ CLASS(Image) EXTENDS(Item)
 	METHOD(Image, configureImage, void(entity, string))
 	METHOD(Image, draw, void(entity))
 	METHOD(Image, toString, string(entity))
-	ATTRIB(Image, src, string, "")
+	ATTRIB(Image, src, string, string_null)
 ENDCLASS(Image)
 #endif
 

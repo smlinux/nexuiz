@@ -55,8 +55,8 @@ CLASS(Dialog) EXTENDS(InputContainer)
 	ATTRIB(Dialog, titleHeight, float, 0) // pixels
 	ATTRIB(Dialog, titleFontSize, float, 0) // pixels; if 0, title causes no margin
 
-	ATTRIB(Dialog, backgroundImage, string, "")
-	ATTRIB(Dialog, closeButtonImage, string, "")
+	ATTRIB(Dialog, backgroundImage, string, string_null)
+	ATTRIB(Dialog, closeButtonImage, string, string_null)
 ENDCLASS(Dialog)
 #endif
 
