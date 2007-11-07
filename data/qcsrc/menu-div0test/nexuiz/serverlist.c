@@ -234,7 +234,7 @@ void drawListBoxItemNexuizServerList(entity me, float i, vector absSize, float i
 
 	if(gethostcachenumber(SLIST_FIELD_NUMPLAYERS, i) >= gethostcachenumber(SLIST_FIELD_MAXPLAYERS, i))
 		theAlpha = 0.2;
-	else if(!gethostcachenumber(SLIST_FIELD_NUMHUMANS, i))
+	else if not(gethostcachenumber(SLIST_FIELD_NUMHUMANS, i))
 		theAlpha = 0.5;
 	else
 		theAlpha = 1;

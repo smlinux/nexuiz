@@ -71,7 +71,7 @@ float mouseReleaseButton(entity me, vector pos)
 	me.mouseDrag(me, pos); // verify coordinates
 	if(me.pressed)
 	{
-		if(!me.disabled)
+		if not(me.disabled)
 			me.onClick(me, me.onClickEntity);
 		me.pressed = 0;
 	}
@@ -137,7 +137,7 @@ void drawButton(entity me)
 	if(me.clickTime > 0 && me.clickTime < frametime)
 	{
 		// keyboard click timer expired? Fire the event then.
-		if(!me.disabled)
+		if not(me.disabled)
 			me.onClick(me, me.onClickEntity);
 	}
 	me.clickTime -= frametime;

@@ -116,7 +116,7 @@ void configureDialogDialog(entity me)
 	frame.configureBorderImage(frame, me.title, me.titleFontSize, me.color, me.backgroundImage, me.titleHeight);
 	me.addItem(me, frame, '0 0 0', '1 1 0', 1);
 
-	if(!me.titleFontSize)
+	if not(me.titleFontSize)
 		me.titleHeight = 0; // no title bar
 
 	absWidth = me.intendedWidth * cvar("vid_conwidth");

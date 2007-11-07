@@ -48,7 +48,7 @@ void showNotifyContainer(entity me)
 void hideNotifyContainer(entity me)
 {
 	entity e;
-	if(!me.shown)
+	if not(me.shown)
 		return;
 	me.shown = 0;
 	for(e = me.firstChild; e; e = e.nextSibling)
@@ -136,7 +136,7 @@ void drawContainer(entity me)
 	{
 		if(e.focusable)
 			me.focusable += 1;
-		if(!e.Container_alpha)
+		if not(e.Container_alpha)
 			continue;
 		draw_shift = boxToGlobal(e.Container_origin, oldshift, oldscale);
 		draw_scale = boxToGlobalSize(e.Container_size, oldscale);
@@ -281,7 +281,7 @@ void removeItemContainer(entity me, entity other)
 void setFocusContainer(entity me, entity other)
 {
 	if(other)
-		if(!me.focused)
+		if not(me.focused)
 			error("Trying to set focus in a non-focused control!");
 	if(me.focusedChild == other)
 		return;

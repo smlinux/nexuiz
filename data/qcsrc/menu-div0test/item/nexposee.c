@@ -208,7 +208,7 @@ float mousePressNexposee(entity me, vector pos)
 	}
 	else if(me.animationState == 2)
 	{
-		if(!mousePressContainer(me, pos))
+		if not(mousePressContainer(me, pos))
 		{
 			me.animationState = 3;
 			setFocusContainer(me, NULL);
@@ -271,14 +271,14 @@ float keyDownNexposee(entity me, float scan, float ascii, float shift)
 			{
 				if(me.selectedChild)
 					me.selectedChild = me.selectedChild.prevSibling;
-				if(!me.selectedChild)
+				if not(me.selectedChild)
 					me.selectedChild = me.lastChild;
 			}
 			else
 			{
 				if(me.selectedChild)
 					me.selectedChild = me.selectedChild.nextSibling;
-				if(!me.selectedChild)
+				if not(me.selectedChild)
 					me.selectedChild = me.firstChild;
 			}
 		}
@@ -309,7 +309,7 @@ float keyDownNexposee(entity me, float scan, float ascii, float shift)
 		}
 		if(me.focusedChild)
 			me.selectedChild = me.focusedChild;
-		if(!me.selectedChild)
+		if not(me.selectedChild)
 			me.animationState = 0;
 		setFocusContainer(me, NULL);
 		return 1;
