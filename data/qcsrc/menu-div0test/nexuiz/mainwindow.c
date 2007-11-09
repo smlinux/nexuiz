@@ -28,7 +28,7 @@ void configureMainWindowMainWindow(entity me)
 	i = spawnImage();
 	i.configureImage(i, "gfx/0.tga");
 	n.addItem(n, i, '0.4 0.45 0', '0.2 0.1 0', 1);
-	n.setNexposee(n, i, '0.5 0.5 0', 0.2, 0.5);
+	n.setNexposee(n, i, '0.5 0.5 0', 0.5, 0.8);
 
 	c = spawnInputContainer();
 
@@ -66,22 +66,22 @@ void configureMainWindowMainWindow(entity me)
 		c.addItem(c, mc, '0 0.2 0', '1 0.8 0', 1);
 
 	n.addItem(n, c, '0.03 0.06 0', '0.9 0.9 0', 0.5);
-	n.setNexposee(n, c, '0.1 0.2 0', 0.2, 0.5);
+	n.setNexposee(n, c, '0.1 0.2 0', 0.5, 0.8);
 
 	i = spawnNexuizSettingsDialog();
 	i.configureDialog(i);
 	n.addItemCentered(n, i, i.intendedWidth * eX + i.intendedHeight * eY, 1);
-	n.setNexposee(n, i, '0.95 0.8 0', 0.2, 0.5);
+	n.setNexposee(n, i, '0.95 0.8 0', 0.5, 0.8);
 
 	i = spawnNexuizMultiplayerDialog();
 	i.configureDialog(i);
 	n.addItemCentered(n, i, i.intendedWidth * eX + i.intendedHeight * eY, 1);
-	n.setNexposee(n, i, '0.99 0.1 0', 0.2, 0.5);
+	n.setNexposee(n, i, '0.99 0.1 0', 0.5, 0.8);
 
 	i = spawnImage();
 	i.configureImage(i, "gfx/4.tga");
 	n.addItem(n, i, '0.01 0.09 0', '0.9 0.9 0', 1);
-	n.setNexposee(n, i, '0.1 0.9 0', 0.2, 0.5);
+	n.setNexposee(n, i, '0.1 0.9 0', 0.5, 0.8);
 
 	me.initializeDialog(me, n);
 
