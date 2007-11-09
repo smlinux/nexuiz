@@ -188,7 +188,13 @@ void(string itemname) m_goto =
 	entity e;
 	if(itemname == "") // this can be called by GameCommand
 	{
-		m_hide();
+		if(gamestatus & (GAME_ISSERVER | GAME_CONNECTED))
+			m_hide();
+		else
+		{
+			main.initializeDialog(main, main.firstChild);
+			m_display();
+		}
 	}
 	else
 	{

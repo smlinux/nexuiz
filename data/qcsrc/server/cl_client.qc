@@ -628,9 +628,14 @@ void FixClientCvars(entity e)
 	stuffcmd(e, "cl_movement_edgefriction 1\n");
 
 	// notify about available teams
-	CheckAllowedTeams(e);
-	t = 0; if(c1 >= 0) t |= 1; if(c2 >= 0) t |= 2; if(c3 >= 0) t |= 4; if(c4 >= 0) t |= 8;
-	stuffcmd(e, strcat("set _teams_available ", ftos(t), "\n"));
+	if(teamplay)
+	{
+		CheckAllowedTeams(e);
+		t = 0; if(c1 >= 0) t |= 1; if(c2 >= 0) t |= 2; if(c3 >= 0) t |= 4; if(c4 >= 0) t |= 8;
+		stuffcmd(e, strcat("set _teams_available ", ftos(t), "\n"));
+	}
+	else
+		stuffcmd(e, "set _teams_available 0\n");
 }
 
 /*
