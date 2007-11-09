@@ -21,6 +21,8 @@ CLASS(NexuizServerList) EXTENDS(NexuizListBox)
 	ATTRIB(NexuizServerList, selectedServer, string, string_null) // to restore selected server when needed
 	METHOD(NexuizServerList, setSelected, void(entity, float))
 	METHOD(NexuizServerList, setSortOrder, void(entity, float, float))
+	ATTRIB(NexuizServerList, filterShowEmpty, float, 1)
+	ATTRIB(NexuizServerList, filterShowFull, float, 1)
 	ATTRIB(NexuizServerList, nextRefreshTime, float, 0)
 	METHOD(NexuizServerList, refreshServerList, void(entity, float)) // refresh mode: 0 = just reparametrize, 1 = send new requests, 2 = clear
 	ATTRIB(NexuizServerList, needsRefresh, float, 1)
@@ -39,6 +41,8 @@ ENDCLASS(NexuizServerList)
 entity makeNexuizServerList();
 void ServerList_Connect_Click(entity btn, entity me);
 void ServerList_Refresh_Click(entity btn, entity me);
+void ServerList_ShowEmpty_Click(entity box, entity me);
+void ServerList_ShowFull_Click(entity box, entity me);
 #endif
 
 #ifdef IMPLEMENTATION
@@ -117,6 +121,10 @@ void refreshServerListNexuizServerList(entity me, float mode)
 	else */
 	{
 		resethostcachemasks();
+		if(!me.filterShowEmpty)
+			sethostcachemasknumber(SLIST_MASK_AND + 0, SLIST_FIELD_NUMHUMANS, 1, SLIST_TEST_GREATEREQUAL);
+		if(!me.filterShowFull)
+			sethostcachemasknumber(SLIST_MASK_AND + 1, SLIST_FIELD_FREESLOTS, 1, SLIST_TEST_GREATEREQUAL);
 		sethostcachesort(me.currentSortField, me.currentSortOrder < 0);
 		resorthostcache();
 		if(mode >= 1)
@@ -181,6 +189,16 @@ void ServerList_MapSort_Click(entity btn, entity me)
 void ServerList_PlayerSort_Click(entity btn, entity me)
 {
 	me.setSortOrder(me, SLIST_FIELD_NUMHUMANS, -1);
+}
+void ServerList_ShowEmpty_Click(entity box, entity me)
+{
+	box.checked = me.filterShowEmpty = !me.filterShowEmpty;
+	me.refreshServerList(me, 0);
+}
+void ServerList_ShowFull_Click(entity box, entity me)
+{
+	box.checked = me.filterShowFull = !me.filterShowFull;
+	me.refreshServerList(me, 0);
 }
 void setSortOrderNexuizServerList(entity me, float field, float direction)
 {
