@@ -21,6 +21,10 @@ CLASS(NexuizServerList) EXTENDS(NexuizListBox)
 	ATTRIB(NexuizServerList, selectedServer, string, string_null) // to restore selected server when needed
 	METHOD(NexuizServerList, setSelected, void(entity, float))
 	METHOD(NexuizServerList, setSortOrder, void(entity, float, float))
+	ATTRIB(NexuizServerList, nextRefreshTime, float, 0)
+	METHOD(NexuizServerList, refreshServerList, void(entity, float)) // refresh mode: 0 = just reparametrize, 1 = send new requests, 2 = clear
+	ATTRIB(NexuizServerList, needsRefresh, float, 1)
+	METHOD(NexuizServerList, focusEnter, void(entity))
 	METHOD(NexuizServerList, positionSortButton, void(entity, entity, float, float, string, void(entity, entity)))
 	ATTRIB(NexuizServerList, sortButton1, entity, NULL)
 	ATTRIB(NexuizServerList, sortButton2, entity, NULL)
@@ -28,7 +32,7 @@ CLASS(NexuizServerList) EXTENDS(NexuizListBox)
 	ATTRIB(NexuizServerList, sortButton4, entity, NULL)
 	ATTRIB(NexuizServerList, connectButton, entity, NULL)
 	ATTRIB(NexuizServerList, currentSortOrder, float, 0)
-	ATTRIB(NexuizServerList, currentSortField, float, 0)
+	ATTRIB(NexuizServerList, currentSortField, float, -1)
 	ATTRIB(NexuizServerList, lastClickedServer, float, -1)
 	ATTRIB(NexuizServerList, lastClickedTime, float, 0)
 ENDCLASS(NexuizServerList)
@@ -78,8 +82,6 @@ void configureNexuizServerListNexuizServerList(entity me)
 	me.configureNexuizListBox(me);
 
 	ServerList_UpdateFieldIDs();
-	resethostcachemasks();
-	me.currentSortField = -1;
 
 	me.nItems = 0;
 }
@@ -100,14 +102,54 @@ void setSelectedNexuizServerList(entity me, float i)
 		strunzone(me.selectedServer);
 	me.selectedServer = strzone(gethostcachestring(SLIST_FIELD_CNAME, me.selectedItem));
 }
+void refreshServerListNexuizServerList(entity me, float mode)
+{
+	// 0: just reparametrize
+	// 1: also ask for new servers
+	// 2: clear
+	print("refresh of type ", ftos(mode), "\n");
+	/* if(mode == 2) // borken
+	{
+		// clear list
+		localcmd("net_slist\n");
+		me.needsRefresh = 1; // net_slist kills sort order, so we need to restore it later
+	}
+	else */
+	{
+		resethostcachemasks();
+		sethostcachesort(me.currentSortField, me.currentSortOrder < 0);
+		resorthostcache();
+		if(mode >= 1)
+			refreshhostcache();
+	}
+}
+void focusEnterNexuizServerList(entity me)
+{
+	if(time < me.nextRefreshTime)
+	{
+		print("sorry, no refresh yet\n");
+		return;
+	}
+	me.nextRefreshTime = time + 60;
+	me.refreshServerList(me, 1);
+}
 void drawNexuizServerList(entity me)
 {
 	float i;
 
 	if(me.currentSortField == -1)
 	{
-		refreshhostcache();
 		me.setSortOrder(me, SLIST_FIELD_PING, +1);
+		me.refreshServerList(me, 2);
+	}
+	else if(me.needsRefresh == 1)
+	{
+		me.needsRefresh = 2; // delay by one frame to make sure "slist" has been executed
+	}
+	else if(me.needsRefresh == 2)
+	{
+		me.needsRefresh = 0;
+		me.refreshServerList(me, 0);
 	}
 
 	me.nItems = gethostcachevalue(SLIST_HOSTCACHEVIEWCOUNT);
@@ -146,8 +188,7 @@ void setSortOrderNexuizServerList(entity me, float field, float direction)
 		direction = -me.currentSortOrder;
 	me.currentSortOrder = direction;
 	me.currentSortField = field;
-	sethostcachesort(field, direction < 0);
-	resorthostcache();
+	me.needsRefresh = 1;
 	me.sortButton1.forcePressed = (field == SLIST_FIELD_PING);
 	me.sortButton2.forcePressed = (field == SLIST_FIELD_NAME);
 	me.sortButton3.forcePressed = (field == SLIST_FIELD_MAP);
