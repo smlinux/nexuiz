@@ -145,7 +145,7 @@ void focusEnterNexuizServerList(entity me)
 }
 void drawNexuizServerList(entity me)
 {
-	float i;
+	float i, found;
 
 	if(me.currentSortField == -1)
 	{
@@ -164,16 +164,32 @@ void drawNexuizServerList(entity me)
 
 	me.nItems = gethostcachevalue(SLIST_HOSTCACHEVIEWCOUNT);
 	me.connectButton.disabled = (me.nItems == 0);
-	for(i = 0; i < me.nItems; ++i)
-		if(gethostcachestring(SLIST_FIELD_CNAME, i) == me.selectedServer)
-		{
-			if(i != me.selectedItem)
+
+	found = 0;
+	if(me.selectedServer)
+	{
+		for(i = 0; i < me.nItems; ++i)
+			if(gethostcachestring(SLIST_FIELD_CNAME, i) == me.selectedServer)
 			{
-				me.lastClickedServer = -1;
-				me.selectedItem = i;
+				if(i != me.selectedItem)
+				{
+					me.lastClickedServer = -1;
+					me.selectedItem = i;
+				}
+				found = 1;
+				break;
 			}
-			break;
+	}
+	if(!found)
+		if(me.nItems > 0)
+		{
+			if(me.selectedItem >= me.nItems)
+				me.selectedItem = me.nItems - 1;
+			if(me.selectedServer)
+				strunzone(me.selectedServer);
+			me.selectedServer = strzone(gethostcachestring(SLIST_FIELD_CNAME, me.selectedItem));
 		}
+
 	drawListBox(me);
 }
 void ServerList_PingSort_Click(entity btn, entity me)
