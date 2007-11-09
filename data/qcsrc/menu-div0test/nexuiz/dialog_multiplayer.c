@@ -4,7 +4,7 @@ CLASS(NexuizMultiplayerDialog) EXTENDS(NexuizDialog)
 	ATTRIB(NexuizMultiplayerDialog, title, string, "Multiplayer")
 	ATTRIB(NexuizMultiplayerDialog, color, vector, '0.5 0.5 1')
 	ATTRIB(NexuizMultiplayerDialog, intendedWidth, float, 0.96)
-	ATTRIB(NexuizMultiplayerDialog, rows, float, 17)
+	ATTRIB(NexuizMultiplayerDialog, rows, float, 24)
 	ATTRIB(NexuizMultiplayerDialog, columns, float, 6)
 ENDCLASS(NexuizMultiplayerDialog)
 #endif

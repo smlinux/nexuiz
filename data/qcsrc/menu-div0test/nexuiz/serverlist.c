@@ -40,7 +40,6 @@ CLASS(NexuizServerList) EXTENDS(NexuizListBox)
 ENDCLASS(NexuizServerList)
 entity makeNexuizServerList();
 void ServerList_Connect_Click(entity btn, entity me);
-void ServerList_Refresh_Click(entity btn, entity me);
 void ServerList_ShowEmpty_Click(entity box, entity me);
 void ServerList_ShowFull_Click(entity box, entity me);
 #endif
@@ -140,7 +139,7 @@ void focusEnterNexuizServerList(entity me)
 		print("sorry, no refresh yet\n");
 		return;
 	}
-	me.nextRefreshTime = time + 60;
+	me.nextRefreshTime = time + 10;
 	me.refreshServerList(me, 1);
 }
 void drawNexuizServerList(entity me)
@@ -224,7 +223,6 @@ void setSortOrderNexuizServerList(entity me, float field, float direction)
 		direction = -me.currentSortOrder;
 	me.currentSortOrder = direction;
 	me.currentSortField = field;
-	me.needsRefresh = 1;
 	me.sortButton1.forcePressed = (field == SLIST_FIELD_PING);
 	me.sortButton2.forcePressed = (field == SLIST_FIELD_NAME);
 	me.sortButton3.forcePressed = (field == SLIST_FIELD_MAP);
@@ -233,6 +231,7 @@ void setSortOrderNexuizServerList(entity me, float field, float direction)
 	if(me.selectedServer)
 		strunzone(me.selectedServer);
 	me.selectedServer = string_null;
+	me.refreshServerList(me, 0);
 }
 void positionSortButtonNexuizServerList(entity me, entity btn, float theOrigin, float theSize, string theTitle, void(entity, entity) theFunc)
 {
@@ -282,10 +281,6 @@ void ServerList_Connect_Click(entity btn, entity me)
 {
 	if(me.nItems > 0)
 		localcmd("connect ", me.selectedServer, "\n");
-}
-void ServerList_Refresh_Click(entity btn, entity me)
-{
-	refreshhostcache();
 }
 void clickListBoxItemNexuizServerList(entity me, float i, vector where)
 {

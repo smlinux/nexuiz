@@ -3,7 +3,7 @@ CLASS(NexuizPlayerSettingsTab) EXTENDS(NexuizTab)
 	METHOD(NexuizPlayerSettingsTab, fill, void(entity))
 	ATTRIB(NexuizPlayerSettingsTab, title, string, "Settings")
 	ATTRIB(NexuizPlayerSettingsTab, intendedWidth, float, 0.9)
-	ATTRIB(NexuizPlayerSettingsTab, rows, float, 15)
+	ATTRIB(NexuizPlayerSettingsTab, rows, float, 22)
 	ATTRIB(NexuizPlayerSettingsTab, columns, float, 6.5)
 ENDCLASS(NexuizPlayerSettingsTab)
 entity makeNexuizPlayerSettingsTab();

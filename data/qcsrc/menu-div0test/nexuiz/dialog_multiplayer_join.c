@@ -3,7 +3,7 @@ CLASS(NexuizServerListTab) EXTENDS(NexuizTab)
 	METHOD(NexuizServerListTab, fill, void(entity))
 	ATTRIB(NexuizServerListTab, title, string, "Settings")
 	ATTRIB(NexuizServerListTab, intendedWidth, float, 0.9)
-	ATTRIB(NexuizServerListTab, rows, float, 15)
+	ATTRIB(NexuizServerListTab, rows, float, 22)
 	ATTRIB(NexuizServerListTab, columns, float, 6.5)
 ENDCLASS(NexuizServerListTab)
 entity makeNexuizServerListTab();
@@ -43,10 +43,7 @@ void fillNexuizServerListTab(entity me)
 		me.TD(me, me.rows - 3, me.columns, slist);
 
 	me.gotoXY(me, me.rows - 1, 0);
-		me.TD(me, 1, 1, e = makeNexuizButton("Refresh!", '0 0 0'));
-			e.onClick = ServerList_Refresh_Click;
-			e.onClickEntity = slist;
-		me.TD(me, 1, me.columns - 1, e = makeNexuizButton("Join!", '0 0 0'));
+		me.TD(me, 1, me.columns, e = makeNexuizButton("Join!", '0 0 0'));
 			e.onClick = ServerList_Connect_Click;
 			e.onClickEntity = slist;
 			slist.connectButton = e;
