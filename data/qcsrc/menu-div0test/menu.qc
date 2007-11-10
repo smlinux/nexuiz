@@ -159,6 +159,7 @@ void() m_display =
 	setmousetarget(MT_MENU);
 
 	main.focusEnter(main);
+	main.showNotify(main);
 };
 
 void() m_hide =
@@ -168,6 +169,7 @@ void() m_hide =
 	setmousetarget(MT_CLIENT);
 
 	main.focusLeave(main);
+	main.hideNotify(main);
 };
 
 void() m_toggle =
@@ -201,6 +203,7 @@ void(string itemname) m_goto =
 		e = findstring(NULL, name, itemname);
 		if(e && e.parent == main)
 		{
+			m_hide();
 			main.initializeDialog(main, e);
 			m_display();
 		}
