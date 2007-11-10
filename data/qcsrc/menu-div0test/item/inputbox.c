@@ -92,7 +92,10 @@ float keyDownInputBox(entity me, float key, float ascii, float shift)
 			}
 			return 1;
 		case K_DEL:
-			me.setText(me, strcat(substring(me.text, 0, me.cursorPos), substring(me.text, me.cursorPos + 1, strlen(me.text) - me.cursorPos - 1)));
+			if(shift)
+				me.setText(me, "");
+			else
+				me.setText(me, strcat(substring(me.text, 0, me.cursorPos), substring(me.text, me.cursorPos + 1, strlen(me.text) - me.cursorPos - 1)));
 			return 1;
 	}
 	return 0;

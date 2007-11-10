@@ -10,12 +10,13 @@ const string SKINGFX_RADIOBUTTON = "qcsrc/menu-div0test/baseradiobutton";
 const string SKINGFX_COLORBUTTON = "qcsrc/menu-div0test/basebutton";
 const string SKINGFX_COLORBUTTON_COLOR = "qcsrc/menu-div0test/color";
 const string SKINGFX_SCROLLBAR = "qcsrc/menu-div0test/basescrollbar";
-const string SKINGFX_INPUTBOX = "qcsrc/menu-div0test/basebuttongray";
+const string SKINGFX_INPUTBOX = "qcsrc/menu-div0test/baseinputbox";
 
 const float SKINMARGIN_TOP = 8;
 const float SKINMARGIN_LEFT = 8;
 const float SKINMARGIN_COLUMNS = 4;
 const float SKINMARGIN_ROWS = 4;
+const float SKINMARGIN_INPUTBOX = 0.01;
 
 const float SKINFONTSIZE_NORMAL = 12;
 const float SKINHEIGHT_NORMAL = 1.5;

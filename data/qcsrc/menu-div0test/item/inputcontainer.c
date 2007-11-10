@@ -18,10 +18,12 @@ ENDCLASS(InputContainer)
 void resizeNotifyInputContainer(entity me, vector relOrigin, vector relSize, vector absOrigin, vector absSize)
 {
 	resizeNotifyContainer(me, relOrigin, relSize, absOrigin, absSize);
+	/*
 	if(me.parent.instanceOfInputContainer)
 		me.isTabRoot = 0;
 	else
 		me.isTabRoot = 1;
+	*/
 }
 
 void focusLeaveInputContainer(entity me)

@@ -7,6 +7,8 @@ CLASS(NexuizInputBox) EXTENDS(InputBox)
 	ATTRIB(NexuizInputBox, image, string, SKINGFX_INPUTBOX)
 	ATTRIB(NexuizInputBox, onChange, void(entity, entity), SUB_Null)
 	ATTRIB(NexuizInputBox, onChangeEntity, entity, NULL)
+	ATTRIB(NexuizInputBox, keepspaceLeft, float, SKINMARGIN_INPUTBOX)
+	ATTRIB(NexuizInputBox, keepspaceRight, float, SKINMARGIN_INPUTBOX)
 
 	ATTRIB(NexuizInputBox, cvarName, string, string_null)
 	METHOD(NexuizInputBox, loadCvars, void(entity))

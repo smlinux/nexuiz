@@ -50,11 +50,8 @@ void configureListBoxListBox(entity me, float theScrollbarWidth, float theItemHe
 }
 float keyDownListBox(entity me, float key, float ascii, float shift)
 {
-	if(key == K_DOWNARROW)
-		me.selectedItem += 1;
-	else if(key == K_UPARROW)
-		me.selectedItem -= 1;
-	else if(key == K_MWHEELUP)
+	me.dragScrollTimer = 0;
+	if(key == K_MWHEELUP)
 	{
 		me.scrollPos = max(me.scrollPos - 0.5, 0);
 		me.setSelected(me, min(me.selectedItem, floor((me.scrollPos + 1) / me.itemHeight - 1)));
@@ -68,6 +65,10 @@ float keyDownListBox(entity me, float key, float ascii, float shift)
 		me.setSelected(me, me.selectedItem - 1 / me.itemHeight);
 	else if(key == K_PGDN)
 		me.setSelected(me, me.selectedItem + 1 / me.itemHeight);
+	else if(key == K_UPARROW)
+		me.setSelected(me, me.selectedItem - 1);
+	else if(key == K_DOWNARROW)
+		me.setSelected(me, me.selectedItem + 1);
 	else if(key == K_HOME)
 		me.setSelected(me, 0);
 	else if(key == K_END)
@@ -118,6 +119,7 @@ float mousePressListBox(entity me, vector pos)
 	if(pos_y >= 1) return 0;
 	me.dragScrollPos = pos;
 	me.updateControlTopBottom(me);
+	me.dragScrollTimer = 0;
 	if(pos_x >= 1 - me.controlWidth)
 	{
 		// if hit, set me.pressed, otherwise scroll by one page
