@@ -133,7 +133,7 @@ void drawInputBox(entity me)
 	draw_SetClipRect(eX * me.keepspaceLeft, eX * (1 - me.keepspaceLeft - me.keepspaceRight) + eY);
 	if(me.editColorCodes)
 	{
-		string out, ch, ch2;
+		string ch, ch2;
 		float i;
 		vector theColor;
 		float theAlpha;
