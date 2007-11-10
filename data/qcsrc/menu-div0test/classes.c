@@ -40,3 +40,4 @@
 #include "nexuiz/dialog_multiplayer_join.c"
 #include "nexuiz/listbox.c"
 #include "nexuiz/serverlist.c"
+#include "nexuiz/inputbox.c"

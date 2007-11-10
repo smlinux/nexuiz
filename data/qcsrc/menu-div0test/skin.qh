@@ -10,6 +10,7 @@ const string SKINGFX_RADIOBUTTON = "qcsrc/menu-div0test/baseradiobutton";
 const string SKINGFX_COLORBUTTON = "qcsrc/menu-div0test/basebutton";
 const string SKINGFX_COLORBUTTON_COLOR = "qcsrc/menu-div0test/color";
 const string SKINGFX_SCROLLBAR = "qcsrc/menu-div0test/basescrollbar";
+const string SKINGFX_INPUTBOX = "qcsrc/menu-div0test/basebuttongray";
 
 const float SKINMARGIN_TOP = 8;
 const float SKINMARGIN_LEFT = 8;

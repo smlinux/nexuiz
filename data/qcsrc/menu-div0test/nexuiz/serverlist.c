@@ -23,6 +23,7 @@ CLASS(NexuizServerList) EXTENDS(NexuizListBox)
 	METHOD(NexuizServerList, setSortOrder, void(entity, float, float))
 	ATTRIB(NexuizServerList, filterShowEmpty, float, 1)
 	ATTRIB(NexuizServerList, filterShowFull, float, 1)
+	ATTRIB(NexuizServerList, filterString, string, string_null)
 	ATTRIB(NexuizServerList, nextRefreshTime, float, 0)
 	METHOD(NexuizServerList, refreshServerList, void(entity, float)) // refresh mode: 0 = just reparametrize, 1 = send new requests, 2 = clear
 	ATTRIB(NexuizServerList, needsRefresh, float, 1)
@@ -42,6 +43,7 @@ entity makeNexuizServerList();
 void ServerList_Connect_Click(entity btn, entity me);
 void ServerList_ShowEmpty_Click(entity box, entity me);
 void ServerList_ShowFull_Click(entity box, entity me);
+void ServerList_Filter_Change(entity box, entity me);
 #endif
 
 #ifdef IMPLEMENTATION
@@ -126,6 +128,12 @@ void refreshServerListNexuizServerList(entity me, float mode)
 			sethostcachemasknumber(m++, SLIST_FIELD_FREESLOTS, 1, SLIST_TEST_GREATEREQUAL);
 		if(!me.filterShowEmpty)
 			sethostcachemasknumber(m++, SLIST_FIELD_NUMHUMANS, 1, SLIST_TEST_GREATEREQUAL);
+		m = SLIST_MASK_OR;
+		if(me.filterString)
+		{
+			sethostcachemaskstring(m++, SLIST_FIELD_NAME, me.filterString, SLIST_TEST_CONTAINS);
+			sethostcachemaskstring(m++, SLIST_FIELD_MAP, me.filterString, SLIST_TEST_CONTAINS);
+		}
 		sethostcachesort(me.currentSortField, me.currentSortOrder < 0);
 		resorthostcache();
 		if(mode >= 1)
@@ -206,6 +214,16 @@ void ServerList_MapSort_Click(entity btn, entity me)
 void ServerList_PlayerSort_Click(entity btn, entity me)
 {
 	me.setSortOrder(me, SLIST_FIELD_NUMHUMANS, -1);
+}
+void ServerList_Filter_Change(entity box, entity me)
+{
+	if(me.filterString)
+		strunzone(me.filterString);
+	if(box.text != "")
+		me.filterString = strzone(box.text);
+	else
+		me.filterString = string_null;
+	me.refreshServerList(me, 0);
 }
 void ServerList_ShowEmpty_Click(entity box, entity me)
 {
