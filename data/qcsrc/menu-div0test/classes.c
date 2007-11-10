@@ -14,6 +14,7 @@
 #include "item/tab.c"
 #include "item/textslider.c"
 #include "item/listbox.c"
+#include "item/inputbox.c"
 #include "nexuiz/dialog.c"
 #include "nexuiz/tab.c"
 #include "nexuiz/mainwindow.c"

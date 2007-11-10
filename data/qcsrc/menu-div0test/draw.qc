@@ -200,18 +200,21 @@ void draw_BorderPicture(vector theOrigin, string pic, vector theSize, vector the
 		}
 	}
 }
-void draw_Text(vector theOrigin, string theText, vector theSize, vector theColor, float theAlpha)
+void draw_Text(vector theOrigin, string theText, vector theSize, vector theColor, float theAlpha, float ICanHasKallerz)
 {
 	if(theSize_x <= 0 || theSize_y <= 0)
 		error("Drawing zero size text?\n");
-	drawstring(boxToGlobal(theOrigin, draw_shift, draw_scale), theText, boxToGlobalSize(theSize, draw_scale), theColor, theAlpha * draw_alpha, 0);
+	if(ICanHasKallerz)
+		drawcolorcodedstring(boxToGlobal(theOrigin, draw_shift, draw_scale), theText, boxToGlobalSize(theSize, draw_scale), theAlpha * draw_alpha, 0);
+	else
+		drawstring(boxToGlobal(theOrigin, draw_shift, draw_scale), theText, boxToGlobalSize(theSize, draw_scale), theColor, theAlpha * draw_alpha, 0);
 }
 
-float draw_TextWidth(string theText)
+float draw_TextWidth(string theText, float ICanHasKallerz)
 {
 	//return strlen(theText);
 	//print("draw_TextWidth \"", theText, "\"\n");
-	return stringwidth(theText, 0);
+	return stringwidth(theText, ICanHasKallerz);
 }
 
 float draw_clipSet;
@@ -223,6 +226,17 @@ void draw_SetClip()
 	draw_clipSet = 1;
 }
 
+void draw_SetClipRect(vector theOrigin, vector theScale)
+{
+	vector o, s;
+	if(draw_clipSet)
+		error("Already clipping, no stack implemented here, sorry");
+	o = boxToGlobal(theOrigin, draw_shift, draw_scale);
+	s = boxToGlobalSize(theScale, draw_scale);
+	drawsetcliparea(o_x, o_y, s_x, s_y);
+	draw_clipSet = 1;
+}
+
 void draw_ClearClip()
 {
 	if(!draw_clipSet)
@@ -231,15 +245,23 @@ void draw_ClearClip()
 	draw_clipSet = 0;
 }
 
-string draw_TextShortenToWidth(string theText, float maxWidth)
+string draw_TextShortenToWidth(string theText, float maxWidth, float ICanHasKallerz)
+{
+	if(draw_TextWidth(theText, ICanHasKallerz) <= maxWidth)
+		return theText;
+	else
+		return strcat(substring(theText, 0, draw_TextLengthUpToWidth(theText, maxWidth = draw_TextWidth("...", ICanHasKallerz), ICanHasKallerz)), "...");
+}
+
+float draw_TextLengthUpToWidth(string theText, float maxWidth, float ICanHasKallerz)
 {
 	// STOP.
 	// The following function is SLOW.
 	// For your safety and for the protection of those around you...
 	// DO NOT CALL THIS AT HOME.
 	// No really, don't.
-	if(draw_TextWidth(theText) <= maxWidth)
-		return theText; // yeah!
+	if(draw_TextWidth(theText, ICanHasKallerz) <= maxWidth)
+		return strlen(theText); // yeah!
 
 	// binary search for right place to cut string
 	float left, right, middle; // this always works
@@ -248,7 +270,7 @@ string draw_TextShortenToWidth(string theText, float maxWidth)
 	do
 	{
 		middle = floor((left + right) / 2);
-		if(draw_TextWidth(strcat(substring(theText, 0, middle), "...")) <= maxWidth)
+		if(draw_TextWidth(substring(theText, 0, middle), ICanHasKallerz) <= maxWidth)
 			left = middle;
 		else
 			right = middle;
@@ -261,5 +283,5 @@ string draw_TextShortenToWidth(string theText, float maxWidth)
 	// guaranteed that it finds ONE valid cutoff place (where "left" is in
 	// range, and "right" is outside).
 
-	return strcat(substring(theText, 0, left), "...");
+	return left;
 }

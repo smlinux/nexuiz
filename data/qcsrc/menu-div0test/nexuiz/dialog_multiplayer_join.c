@@ -10,6 +10,16 @@ entity makeNexuizServerListTab();
 #endif
 
 #ifdef IMPLEMENTATION
+entity makeNexuizTextBox()
+{
+	entity e;
+	e = spawnInputBox();
+	e.configureInputBox(e, "hello world", 3, 12, "qcsrc/menu-div0test/basebutton");
+	e.keepspaceLeft = 0.1;
+	e.keepspaceRight = 0.2;
+	return e;
+}
+
 entity makeNexuizServerListTab()
 {
 	entity me;
@@ -24,7 +34,8 @@ void fillNexuizServerListTab(entity me)
 	slist  = makeNexuizServerList();
 
 	me.TR(me);
-		me.TD(me, 1, me.columns - 1.5, e = makeNexuizTextLabel(0, "Filter:"));
+		me.TD(me, 1, 0.5, e = makeNexuizTextLabel(0, "Filter:"));
+		me.TD(me, 1, me.columns - 2, e = makeNexuizTextBox());
 		me.TD(me, 1, 0.75, e = makeNexuizCheckBox(0, string_null, "Empty"));
 			e.checked = slist.filterShowEmpty;
 			e.onClickEntity = slist;

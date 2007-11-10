@@ -11,11 +11,13 @@ void draw_VertButtonPicture(vector theOrigin, string pic, vector theSize, vector
 void draw_BorderPicture(vector theOrigin, string pic, vector theSize, vector theColor, float theAlpha, vector theBorderSize);
 void draw_Picture(vector origin, string pic, vector size, vector color, float alpha);
 void draw_Fill(vector theOrigin, vector theSize, vector theColor, float theAlpha);
-void draw_Text(vector origin, string text, vector size, vector color, float alpha);
-float draw_TextWidth(string text);
-string draw_TextShortenToWidth(string text, float maxWidth);
+void draw_Text(vector origin, string text, vector size, vector color, float alpha, float allowColorCodes);
+float draw_TextWidth(string text, float allowColorCodes);
+string draw_TextShortenToWidth(string text, float maxWidth, float allowColorCodes);
+float draw_TextLengthUpToWidth(string text, float maxWidth, float allowColorCodes);
 
 void draw_SetClip();
+void draw_SetClipRect(vector theOrigin, vector theScale);
 void draw_ClearClip();
 
 vector boxToGlobal(vector v, vector shift, vector scale);

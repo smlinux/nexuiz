@@ -5,7 +5,7 @@ CLASS(Label) EXTENDS(Item)
 	METHOD(Label, resizeNotify, void(entity, vector, vector, vector, vector))
 	METHOD(Label, setText, void(entity, string))
 	METHOD(Label, toString, string(entity))
-	ATTRIB(Label, text, string, "Big Red Button")
+	ATTRIB(Label, text, string, string_null)
 	ATTRIB(Label, fontSize, float, 8)
 	ATTRIB(Label, align, float, 0.5)
 	ATTRIB(Label, keepspaceLeft, float, 0) // for use by subclasses (radiobuttons for example)
@@ -24,14 +24,14 @@ string toStringLabel(entity me)
 void setTextLabel(entity me, string txt)
 {
 	me.text = txt;
-	me.realOrigin_x = me.align * (1 - me.keepspaceLeft - me.keepspaceRight - me.realFontSize_x * draw_TextWidth(me.text)) + me.keepspaceLeft;
+	me.realOrigin_x = me.align * (1 - me.keepspaceLeft - me.keepspaceRight - me.realFontSize_x * draw_TextWidth(me.text, 0)) + me.keepspaceLeft;
 }
 void resizeNotifyLabel(entity me, vector relOrigin, vector relSize, vector absOrigin, vector absSize)
 {
 	// absSize_y is height of label
 	me.realFontSize_y = me.fontSize / absSize_y;
 	me.realFontSize_x = me.fontSize / absSize_x;
-	me.realOrigin_x = me.align * (1 - me.keepspaceLeft - me.keepspaceRight - me.realFontSize_x * draw_TextWidth(me.text)) + me.keepspaceLeft;
+	me.realOrigin_x = me.align * (1 - me.keepspaceLeft - me.keepspaceRight - me.realFontSize_x * draw_TextWidth(me.text, 0)) + me.keepspaceLeft;
 	me.realOrigin_y = 0.5 * (1 - me.realFontSize_y);
 }
 void configureLabelLabel(entity me, string txt, float sz, float algn)
@@ -42,7 +42,8 @@ void configureLabelLabel(entity me, string txt, float sz, float algn)
 }
 void drawLabel(entity me)
 {
-	if(me.text && me.fontSize)
-		draw_Text(me.realOrigin, me.text, me.realFontSize, '1 1 1', me.alpha);
+	if(me.fontSize)
+		if(me.text)
+			draw_Text(me.realOrigin, me.text, me.realFontSize, '1 1 1', me.alpha, 0);
 }
 #endif
