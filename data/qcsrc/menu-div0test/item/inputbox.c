@@ -85,11 +85,14 @@ float keyDownInputBox(entity me, float key, float ascii, float shift)
 			me.cursorPos = strlen(me.text);
 			return 1;
 		case K_BACKSPACE:
-			if(me.cursorPos > 0)
-			{
-				me.cursorPos -= 1;
-				me.setText(me, strcat(substring(me.text, 0, me.cursorPos), substring(me.text, me.cursorPos + 1, strlen(me.text) - me.cursorPos - 1)));
-			}
+			if(shift)
+				me.setText(me, "");
+			else
+				if(me.cursorPos > 0)
+				{
+					me.cursorPos -= 1;
+					me.setText(me, strcat(substring(me.text, 0, me.cursorPos), substring(me.text, me.cursorPos + 1, strlen(me.text) - me.cursorPos - 1)));
+				}
 			return 1;
 		case K_DEL:
 			if(shift)
