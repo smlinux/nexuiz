@@ -19,6 +19,8 @@ CLASS(InputBox) EXTENDS(Label)
 	ATTRIB(InputBox, dragScrollPos, vector, '0 0 0')
 	ATTRIB(InputBox, pressed, float, 0)
 	ATTRIB(InputBox, editColorCodes, float, 1)
+	ATTRIB(InputBox, color, vector, '1 1 1')
+	ATTRIB(InputBox, colorF, vector, '1 1 1')
 ENDCLASS(InputBox)
 #endif
 
@@ -115,9 +117,9 @@ void drawInputBox(entity me)
 	if(me.src)
 	{
 		if(me.focused)
-			draw_ButtonPicture('0 0 0', strcat(me.src, "_f"), '1 1 0', '1 1 1', 1);
+			draw_ButtonPicture('0 0 0', strcat(me.src, "_f"), '1 1 0', me.colorF, 1);
 		else
-			draw_ButtonPicture('0 0 0', strcat(me.src, "_n"), '1 1 0', '1 1 1', 1);
+			draw_ButtonPicture('0 0 0', strcat(me.src, "_n"), '1 1 0', me.color, 1);
 	}
 
 	me.cursorPos = bound(0, me.cursorPos, strlen(me.text));
@@ -178,7 +180,7 @@ void drawInputBox(entity me)
 						case 9: theColor = '0.5 0.5 0.5'; theAlpha = 1; break;
 					}
 					theColor = theColor * (1 - brightness) + brightness * '1 1 1';
-					draw_Fill(p, eX * w + eY * me.realFontSize_y, '0 0 0', 0.5);
+					draw_Fill(p, eX * w + eY * me.realFontSize_y, '1 1 1', 0.5);
 					draw_Text(p, strcat(ch, ch2), me.realFontSize, theColor, theAlpha, 0);
 					draw_Text(p, strcat(ch, ch2), me.realFontSize, theColor, theAlpha, 0);
 				}

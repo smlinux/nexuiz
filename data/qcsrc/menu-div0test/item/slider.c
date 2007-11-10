@@ -30,6 +30,11 @@ CLASS(Slider) EXTENDS(Label)
 	ATTRIB(Slider, previousValue, float, 0)
 	ATTRIB(Slider, tolerance, vector, '0 0 0')
 	ATTRIB(Slider, disabled, float, 0)
+	ATTRIB(Slider, color, vector, '1 1 1')
+	ATTRIB(Slider, color2, vector, '1 1 1')
+	ATTRIB(Slider, colorD, vector, '1 1 1')
+	ATTRIB(Slider, colorC, vector, '1 1 1')
+	ATTRIB(Slider, colorF, vector, '1 1 1')
 ENDCLASS(Slider)
 #endif
 
@@ -193,18 +198,18 @@ void drawSlider(entity me)
 	me.focusable = !me.disabled;
 	if(me.disabled)
 		draw_alpha *= 0.5;
-	draw_ButtonPicture('0 0 0', strcat(me.src, "_s"), eX * (1 - me.textSpace) + eY, '1 1 1', 1);
+	draw_ButtonPicture('0 0 0', strcat(me.src, "_s"), eX * (1 - me.textSpace) + eY, me.color2, 1);
 	if(me.value == median(me.valueMin, me.value, me.valueMax))
 	{
 		controlLeft = (me.value - me.valueMin) / (me.valueMax - me.valueMin) * (1 - me.textSpace - me.controlWidth);
 		if(me.disabled)
-			draw_Picture(eX * controlLeft, strcat(me.src, "_d"), eX * me.controlWidth + eY, '1 1 1', 1);
+			draw_Picture(eX * controlLeft, strcat(me.src, "_d"), eX * me.controlWidth + eY, me.colorD, 1);
 		else if(me.pressed)
-			draw_Picture(eX * controlLeft, strcat(me.src, "_c"), eX * me.controlWidth + eY, '1 1 1', 1);
+			draw_Picture(eX * controlLeft, strcat(me.src, "_c"), eX * me.controlWidth + eY, me.colorC, 1);
 		else if(me.focused)
-			draw_Picture(eX * controlLeft, strcat(me.src, "_f"), eX * me.controlWidth + eY, '1 1 1', 1);
+			draw_Picture(eX * controlLeft, strcat(me.src, "_f"), eX * me.controlWidth + eY, me.colorF, 1);
 		else
-			draw_Picture(eX * controlLeft, strcat(me.src, "_n"), eX * me.controlWidth + eY, '1 1 1', 1);
+			draw_Picture(eX * controlLeft, strcat(me.src, "_n"), eX * me.controlWidth + eY, me.color, 1);
 	}
 	me.setText(me, me.valueToText(me, me.value));
 	drawLabel(me);

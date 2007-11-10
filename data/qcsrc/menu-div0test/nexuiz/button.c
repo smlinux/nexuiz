@@ -4,6 +4,10 @@ CLASS(NexuizButton) EXTENDS(Button)
 	ATTRIB(NexuizButton, fontSize, float, SKINFONTSIZE_NORMAL)
 	ATTRIB(NexuizButton, image, string, SKINGFX_BUTTON)
 	ATTRIB(NexuizButton, grayImage, string, SKINGFX_BUTTON_GRAY)
+	ATTRIB(NexuizButton, color, vector, SKINCOLOR_BUTTON_N)
+	ATTRIB(NexuizButton, colorC, vector, SKINCOLOR_BUTTON_C)
+	ATTRIB(NexuizButton, colorF, vector, SKINCOLOR_BUTTON_F)
+	ATTRIB(NexuizButton, colorD, vector, SKINCOLOR_BUTTON_D)
 ENDCLASS(NexuizButton)
 entity makeNexuizButton(string theText, vector theColor);
 #endif

@@ -6,6 +6,11 @@ CLASS(NexuizCheckBox) EXTENDS(CheckBox)
 	ATTRIB(NexuizCheckBox, image, string, SKINGFX_CHECKBOX)
 	ATTRIB(NexuizCheckBox, inverted, float, 0)
 
+	ATTRIB(NexuizCheckBox, color, vector, SKINCOLOR_CHECKBOX_N)
+	ATTRIB(NexuizCheckBox, colorC, vector, SKINCOLOR_CHECKBOX_C)
+	ATTRIB(NexuizCheckBox, colorF, vector, SKINCOLOR_CHECKBOX_F)
+	ATTRIB(NexuizCheckBox, colorD, vector, SKINCOLOR_CHECKBOX_D)
+
 	ATTRIB(NexuizCheckBox, cvarName, string, string_null)
 	METHOD(NexuizCheckBox, loadCvars, void(entity))
 	METHOD(NexuizCheckBox, saveCvars, void(entity))

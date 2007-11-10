@@ -3,7 +3,7 @@ CLASS(NexuizTeamSelectDialog) EXTENDS(NexuizRootDialog)
 	METHOD(NexuizTeamSelectDialog, fill, void(entity)) // to be overridden by user to fill the dialog with controls
 	METHOD(NexuizTeamSelectDialog, showNotify, void(entity))
 	ATTRIB(NexuizTeamSelectDialog, title, string, "Team Selection") // ;)
-	ATTRIB(NexuizTeamSelectDialog, color, vector, '1 1 1')
+	ATTRIB(NexuizTeamSelectDialog, color, vector, SKINCOLOR_DIALOG_TEAMSELECT)
 	ATTRIB(NexuizTeamSelectDialog, intendedWidth, float, 0.4)
 	ATTRIB(NexuizTeamSelectDialog, rows, float, 5)
 	ATTRIB(NexuizTeamSelectDialog, columns, float, 4)

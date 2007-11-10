@@ -1,28 +1,58 @@
+const float SKINFONTSIZE_NORMAL = 12;
+const float SKINHEIGHT_NORMAL = 1.5;
+const float SKINHEIGHT_NORMAL_WITHSPACING = 2;
+
 const float SKINFONTSIZE_TITLE = 14;
 const float SKINHEIGHT_TITLE = 1.5;
+
+const string SKINGFX_BUTTON = "qcsrc/menu-div0test/basebutton";
+const vector SKINCOLOR_BUTTON_N = '1 1 1';
+const vector SKINCOLOR_BUTTON_C = '1 1 1';
+const vector SKINCOLOR_BUTTON_F = '1 1 1';
+const vector SKINCOLOR_BUTTON_D = '1 1 1';
+
+const string SKINGFX_BUTTON_GRAY = "qcsrc/menu-div0test/basebuttongray";
+
+const string SKINGFX_CHECKBOX = "qcsrc/menu-div0test/basecheckbox";
+const vector SKINCOLOR_CHECKBOX_N = '1 1 1';
+const vector SKINCOLOR_CHECKBOX_C = '1 1 1';
+const vector SKINCOLOR_CHECKBOX_F = '1 1 1';
+const vector SKINCOLOR_CHECKBOX_D = '1 1 1';
+
 const string SKINGFX_DIALOGBORDER = "qcsrc/menu-div0test/baseborder";
 const string SKINGFX_CLOSEBUTTON = "qcsrc/menu-div0test/baseclosebutton";
-const string SKINGFX_BUTTON = "qcsrc/menu-div0test/basebutton";
-const string SKINGFX_BUTTON_GRAY = "qcsrc/menu-div0test/basebuttongray";
-const string SKINGFX_SLIDER = "qcsrc/menu-div0test/baseslider";
-const string SKINGFX_CHECKBOX = "qcsrc/menu-div0test/basecheckbox";
-const string SKINGFX_RADIOBUTTON = "qcsrc/menu-div0test/baseradiobutton";
-const string SKINGFX_COLORBUTTON = "qcsrc/menu-div0test/basebutton";
-const string SKINGFX_COLORBUTTON_COLOR = "qcsrc/menu-div0test/color";
-const string SKINGFX_SCROLLBAR = "qcsrc/menu-div0test/basescrollbar";
-const string SKINGFX_INPUTBOX = "qcsrc/menu-div0test/baseinputbox";
-
 const float SKINMARGIN_TOP = 8;
 const float SKINMARGIN_LEFT = 8;
 const float SKINMARGIN_COLUMNS = 4;
 const float SKINMARGIN_ROWS = 4;
-const float SKINMARGIN_INPUTBOX = 0.01;
+const vector SKINCOLOR_DIALOG_MULTIPLAYER = '0.7 0.7 1';
+const vector SKINCOLOR_DIALOG_SETTINGS = '0.7 0.7 1';
+const vector SKINCOLOR_DIALOG_TEAMSELECT = '1 1 1';
 
-const float SKINFONTSIZE_NORMAL = 12;
-const float SKINHEIGHT_NORMAL = 1.5;
-const float SKINHEIGHT_NORMAL_WITHSPACING = 2;
+const string SKINGFX_SLIDER = "qcsrc/menu-div0test/baseslider";
+const vector SKINCOLOR_SLIDER_N = '1 1 1';
+const vector SKINCOLOR_SLIDER_C = '1 1 1';
+const vector SKINCOLOR_SLIDER_F = '1 1 1';
+const vector SKINCOLOR_SLIDER_D = '1 1 1';
+const vector SKINCOLOR_SLIDER_S = '1 1 1';
+const float SKINWIDTH_SLIDERTEXT = 0.333333333333;
+const vector SKINTOLERANCE_SLIDER = '0.2 2 0';
+
+const string SKINGFX_RADIOBUTTON = "qcsrc/menu-div0test/baseradiobutton";
+const vector SKINCOLOR_RADIOBUTTON_N = '1 1 1';
+const vector SKINCOLOR_RADIOBUTTON_C = '1 1 1';
+const vector SKINCOLOR_RADIOBUTTON_F = '1 1 1';
+const vector SKINCOLOR_RADIOBUTTON_D = '1 1 1';
+
+const string SKINGFX_COLORBUTTON = "qcsrc/menu-div0test/basebutton";
+const string SKINGFX_COLORBUTTON_COLOR = "qcsrc/menu-div0test/color";
+const string SKINGFX_SCROLLBAR = "qcsrc/menu-div0test/basescrollbar";
+const vector SKINCOLOR_SCROLLBAR_N = '1 1 1';
+const vector SKINCOLOR_SCROLLBAR_F = '1 1 1';
+const vector SKINCOLOR_SCROLLBAR_S = '1 1 1';
 const float SKINWIDTH_SCROLLBAR = 16;
 
-const float SKINWIDTH_SLIDERTEXT = 0.333333333333;
-
-const vector SKINTOLERANCE_SLIDER = '0.2 2 0';
+const string SKINGFX_INPUTBOX = "qcsrc/menu-div0test/baseinputbox";
+const vector SKINCOLOR_INPUTBOX_N = '1 1 1';
+const vector SKINCOLOR_INPUTBOX_F = '1 0.5 0.5';
+const float SKINMARGIN_INPUTBOX = 0.02;

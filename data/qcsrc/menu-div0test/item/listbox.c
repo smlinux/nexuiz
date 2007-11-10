@@ -23,6 +23,10 @@ CLASS(ListBox) EXTENDS(Item)
 	ATTRIB(ListBox, dragScrollPos, vector, '0 0 0')
 
 	ATTRIB(ListBox, src, string, string_null) // scrollbar
+	ATTRIB(ListBox, color, vector, '1 1 1')
+	ATTRIB(ListBox, color2, vector, '1 1 1')
+	ATTRIB(ListBox, colorC, vector, '1 1 1')
+	ATTRIB(ListBox, colorF, vector, '1 1 1')
 	ATTRIB(ListBox, tolerance, vector, '0 0 0') // drag tolerance
 	ATTRIB(ListBox, scrollbarWidth, float, 0) // pixels
 	ATTRIB(ListBox, nItems, float, 42)
@@ -218,18 +222,18 @@ void drawListBox(entity me)
 	if(me.pressed == 2)
 		me.mouseDrag(me, me.dragScrollPos); // simulate mouseDrag event
 	me.updateControlTopBottom(me);
-	draw_VertButtonPicture(eX * (1 - me.controlWidth), strcat(me.src, "_s"), eX * me.controlWidth + eY, '1 1 1', 1);
+	draw_VertButtonPicture(eX * (1 - me.controlWidth), strcat(me.src, "_s"), eX * me.controlWidth + eY, me.color2, 1);
 	if(me.nItems * me.itemHeight > 1)
 	{
 		vector o, s;
 		o = eX * (1 - me.controlWidth) + eY * me.controlTop;
 		s = eX * me.controlWidth + eY * (me.controlBottom - me.controlTop);
 		if(me.pressed == 1)
-			draw_VertButtonPicture(o, strcat(me.src, "_c"), s, '1 1 1', 1);
+			draw_VertButtonPicture(o, strcat(me.src, "_c"), s, me.colorC, 1);
 		else if(me.focused)
-			draw_VertButtonPicture(o, strcat(me.src, "_f"), s, '1 1 1', 1);
+			draw_VertButtonPicture(o, strcat(me.src, "_f"), s, me.colorF, 1);
 		else
-			draw_VertButtonPicture(o, strcat(me.src, "_n"), s, '1 1 1', 1);
+			draw_VertButtonPicture(o, strcat(me.src, "_n"), s, me.color, 1);
 	}
 	draw_SetClip();
 	oldshift = draw_shift;

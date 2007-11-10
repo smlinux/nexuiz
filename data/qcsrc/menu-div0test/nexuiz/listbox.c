@@ -7,6 +7,9 @@ CLASS(NexuizListBox) EXTENDS(ListBox)
 	ATTRIB(NexuizListBox, tolerance, vector, SKINTOLERANCE_SLIDER)
 	ATTRIB(NexuizListBox, rowsPerItem, float, 1)
 	METHOD(NexuizListBox, resizeNotify, void(entity, vector, vector, vector, vector))
+	ATTRIB(NexuizListBox, color, vector, SKINCOLOR_SCROLLBAR_N)
+	ATTRIB(NexuizListBox, colorF, vector, SKINCOLOR_SCROLLBAR_F)
+	ATTRIB(NexuizListBox, color2, vector, SKINCOLOR_SCROLLBAR_S)
 ENDCLASS(NexuizListBox)
 entity makeNexuizListBox();
 #endif

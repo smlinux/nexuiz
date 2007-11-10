@@ -2,7 +2,7 @@
 CLASS(NexuizMultiplayerDialog) EXTENDS(NexuizDialog)
 	METHOD(NexuizMultiplayerDialog, fill, void(entity))
 	ATTRIB(NexuizMultiplayerDialog, title, string, "Multiplayer")
-	ATTRIB(NexuizMultiplayerDialog, color, vector, '0.5 0.5 1')
+	ATTRIB(NexuizMultiplayerDialog, color, vector, SKINCOLOR_DIALOG_MULTIPLAYER)
 	ATTRIB(NexuizMultiplayerDialog, intendedWidth, float, 0.96)
 	ATTRIB(NexuizMultiplayerDialog, rows, float, 24)
 	ATTRIB(NexuizMultiplayerDialog, columns, float, 6)

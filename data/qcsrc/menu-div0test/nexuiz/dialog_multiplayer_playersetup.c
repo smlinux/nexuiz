@@ -24,7 +24,7 @@ void fillNexuizPlayerSettingsTab(entity me)
 
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Player Name:"));
-		me.TD(me, 1, 2, e = makeNexuizResolutionSlider());
+		me.TD(me, 1, 2, e = makeNexuizInputBox(1, "_cl_name"));
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Shirt Color:"));
 		for(i = 0; i < 15; ++i)
@@ -76,6 +76,6 @@ void fillNexuizPlayerSettingsTab(entity me)
 			e.configureNexuizTextSliderValues(e);
 
 	me.gotoXY(me, me.rows - 1, 0);
-		me.TD(me, 1, me.columns, makeNexuizCommandButton("Apply immediately", '0 0 0', "color -1 -1", COMMANDBUTTON_APPLY));
+		me.TD(me, 1, me.columns, makeNexuizCommandButton("Apply immediately", '0 0 0', "color -1 -1;name $_cl_name", COMMANDBUTTON_APPLY));
 }
 #endif

@@ -21,6 +21,10 @@ CLASS(Button) EXTENDS(Label)
 	ATTRIB(Button, disabled, float, 0)
 	ATTRIB(Button, forcePressed, float, 0)
 	ATTRIB(Button, color, vector, '1 1 1')
+	ATTRIB(Button, colorC, vector, '1 1 1')
+	ATTRIB(Button, colorF, vector, '1 1 1')
+	ATTRIB(Button, colorD, vector, '1 1 1')
+	ATTRIB(Button, color2, vector, '1 1 1')
 
 	ATTRIB(Button, origin, vector, '0 0 0')
 	ATTRIB(Button, size, vector, '0 0 0')
@@ -96,11 +100,11 @@ void drawButton(entity me)
 			bOrigin = '0 0 0';
 			bSize = '1 1 0';
 			if(me.disabled)
-				draw_ButtonPicture(bOrigin, strcat(me.src, "_d", me.srcSuffix), bSize, '1 1 1', 1);
+				draw_ButtonPicture(bOrigin, strcat(me.src, "_d", me.srcSuffix), bSize, me.colorD, 1);
 			else if(me.forcePressed || me.pressed || me.clickTime > 0)
-				draw_ButtonPicture(bOrigin, strcat(me.src, "_c", me.srcSuffix), bSize, me.color, 1);
+				draw_ButtonPicture(bOrigin, strcat(me.src, "_c", me.srcSuffix), bSize, me.colorC, 1);
 			else if(me.focused)
-				draw_ButtonPicture(bOrigin, strcat(me.src, "_f", me.srcSuffix), bSize, me.color, 1);
+				draw_ButtonPicture(bOrigin, strcat(me.src, "_f", me.srcSuffix), bSize, me.colorF, 1);
 			else
 				draw_ButtonPicture(bOrigin, strcat(me.src, "_n", me.srcSuffix), bSize, me.color, 1);
 		}
@@ -117,11 +121,11 @@ void drawButton(entity me)
 				bSize = me.realFontSize;
 			}
 			if(me.disabled)
-				draw_Picture(bOrigin, strcat(me.src, "_d", me.srcSuffix), bSize, '1 1 1', 1);
+				draw_Picture(bOrigin, strcat(me.src, "_d", me.srcSuffix), bSize, me.colorD, 1);
 			else if(me.forcePressed || me.pressed || me.clickTime > 0)
-				draw_Picture(bOrigin, strcat(me.src, "_c", me.srcSuffix), bSize, me.color, 1);
+				draw_Picture(bOrigin, strcat(me.src, "_c", me.srcSuffix), bSize, me.colorC, 1);
 			else if(me.focused)
-				draw_Picture(bOrigin, strcat(me.src, "_f", me.srcSuffix), bSize, me.color, 1);
+				draw_Picture(bOrigin, strcat(me.src, "_f", me.srcSuffix), bSize, me.colorF, 1);
 			else
 				draw_Picture(bOrigin, strcat(me.src, "_n", me.srcSuffix), bSize, me.color, 1);
 		}
@@ -130,7 +134,7 @@ void drawButton(entity me)
 	{
 		bOrigin = me.keepspaceLeft * eX;
 		bSize = eY + eX * (1 - me.keepspaceLeft);
-		draw_Picture(bOrigin, me.src2, bSize, me.color, 1);
+		draw_Picture(bOrigin, me.src2, bSize, me.color2, 1);
 	}
 	drawLabel(me);
 

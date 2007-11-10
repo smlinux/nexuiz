@@ -29,6 +29,7 @@ entity makeTabButtonNexuizTabController(entity me, string theTitle, entity tab)
 	b = spawnButton();
 	b.configureButton(b, theTitle, me.fontSize, me.image);
 	me.addTab(me, tab, b);
+	// TODO make this real tab buttons (with color parameters, and different gfx)
 	return b;
 }
 #endif

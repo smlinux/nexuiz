@@ -9,6 +9,8 @@ CLASS(NexuizInputBox) EXTENDS(InputBox)
 	ATTRIB(NexuizInputBox, onChangeEntity, entity, NULL)
 	ATTRIB(NexuizInputBox, keepspaceLeft, float, SKINMARGIN_INPUTBOX)
 	ATTRIB(NexuizInputBox, keepspaceRight, float, SKINMARGIN_INPUTBOX)
+	ATTRIB(NexuizInputBox, color, vector, SKINCOLOR_INPUTBOX_N)
+	ATTRIB(NexuizInputBox, colorF, vector, SKINCOLOR_INPUTBOX_F)
 
 	ATTRIB(NexuizInputBox, cvarName, string, string_null)
 	METHOD(NexuizInputBox, loadCvars, void(entity))
