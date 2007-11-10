@@ -250,7 +250,7 @@ string draw_TextShortenToWidth(string theText, float maxWidth, float ICanHasKall
 	if(draw_TextWidth(theText, ICanHasKallerz) <= maxWidth)
 		return theText;
 	else
-		return strcat(substring(theText, 0, draw_TextLengthUpToWidth(theText, maxWidth + draw_TextWidth("...", ICanHasKallerz), ICanHasKallerz)), "...");
+		return strcat(substring(theText, 0, draw_TextLengthUpToWidth(theText, maxWidth - draw_TextWidth("...", ICanHasKallerz), ICanHasKallerz)), "...");
 }
 
 float draw_TextLengthUpToWidth(string theText, float maxWidth, float ICanHasKallerz)
