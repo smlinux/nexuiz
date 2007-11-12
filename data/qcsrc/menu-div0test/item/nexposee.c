@@ -70,7 +70,7 @@ void calcNexposee(entity me)
 	entity e, e2;
 	vector emins, emaxs, e2mins, e2maxs;
 	
-	for(scale = 0.7;; scale *= 0.9)
+	for(scale = 0.7;; scale *= 0.99)
 	{
 		for(e = me.firstChild; e; e = e.nextSibling)
 		{
@@ -104,7 +104,7 @@ void calcNexposee(entity me)
 :have_overlap
 	}
 
-	scale *= 0.9;
+	scale *= 0.95;
 	for(e = me.firstChild; e; e = e.nextSibling)
 	{
 		e.Nexposee_smallOrigin = (e.Nexposee_initialOrigin - e.Nexposee_scaleCenter) * scale + e.Nexposee_scaleCenter;

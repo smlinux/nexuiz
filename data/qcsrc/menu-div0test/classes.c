@@ -41,3 +41,4 @@
 #include "nexuiz/listbox.c"
 #include "nexuiz/serverlist.c"
 #include "nexuiz/inputbox.c"
+#include "nexuiz/dialog_quit.c"
