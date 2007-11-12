@@ -371,6 +371,15 @@ ammo how hard can it be*/
 
 //===================================================================
 
+/*QUAKED item_minst_cells (.3 .3 1) (-16 -16 -16) (16 16 16)
+ammo get over it, shall i say no more
+-----------KEYS------------
+-----------SPAWNFLAGS-----------
+---------NOTES----------
+minstagib ammo (prevents auto-replacement of nex & rocket launcher when used)*/
+
+//===================================================================
+
 /*QUAKED item_bullets (.3 .3 1) (-16 -16 -16) (16 16 16)
 ammo get over it, shall i say no more
 -----------KEYS------------

@@ -482,6 +482,12 @@ void minstagib_items (float itemid)
 
 }
 
+float minst_no_auto_cells;
+void minst_remove_item (void) {
+	if(minst_no_auto_cells)
+		remove(self);
+}
+
 void weapon_uzi (void) {
 	if(!self.ammo_nails)
 		self.ammo_nails = cvar("g_pickup_nails");
@@ -531,6 +537,8 @@ void weapon_nex (void)
 	if (cvar("g_minstagib"))
 	{
 		minstagib_items(IT_CELLS);
+		self.think = minst_remove_item;
+		self.nextthink = time + cvar("sys_ticrate");
 		return;
 	}
 	if(!self.ammo_cells)
@@ -559,6 +567,8 @@ void weapon_rocketlauncher (void)
 	if (cvar("g_minstagib"))
 	{
 		minstagib_items(IT_CELLS);
+		self.think = minst_remove_item;
+		self.nextthink = time + cvar("sys_ticrate");
 		return;
 	}
 	if(!self.ammo_rockets)
@@ -675,6 +685,16 @@ void item_invincible (void) {
 }
 //void item_speed (void) {self.speed_finished = 30;StartItem ("models/items/g_speed.md3", "misc/powerup.wav", 120, "Speed Powerup", IT_SPEED, FL_POWERUP, generic_pickupevalfunc, 10000);}
 //void item_slowmo (void) {self.slowmo_finished = 30;StartItem ("models/items/g_slowmo.md3", "misc/powerup.wav", 120, "Slow Motion", IT_SLOWMO, FL_POWERUP, generic_pickupevalfunc, 10000);}
+
+void item_minst_cells (void) {
+	if (cvar("g_minstagib"))
+	{
+		minst_no_auto_cells = 1;
+		minstagib_items(IT_CELLS);
+	}
+	else
+		remove(self);
+}
 
 // compatibility:
 void item_quad (void) {self.classname = "item_strength";item_strength();}
