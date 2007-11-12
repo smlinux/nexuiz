@@ -20,15 +20,18 @@ entity makeNexuizServerListTab()
 }
 void fillNexuizServerListTab(entity me)
 {
-	entity e, slist;
+	entity e, slist, clearbtn;
 
 	slist  = makeNexuizServerList();
 
 	me.TR(me);
 		me.TD(me, 1, 0.5, e = makeNexuizTextLabel(0, "Filter:"));
-		me.TD(me, 1, me.columns - 2, e = makeNexuizInputBox(0, string_null));
+		me.TD(me, 1, 0.5, clearbtn = makeNexuizButton("Clear", '0 0 0'));
+			clearbtn.onClick = InputBox_Clear_Click;
+		me.TD(me, 1, me.columns - 2.5, e = makeNexuizInputBox(0, string_null));
 			e.onChange = ServerList_Filter_Change;
 			e.onChangeEntity = slist;
+			clearbtn.onClickEntity = e;
 		me.TD(me, 1, 0.75, e = makeNexuizCheckBox(0, string_null, "Empty"));
 			e.checked = slist.filterShowEmpty;
 			e.onClickEntity = slist;

@@ -22,6 +22,7 @@ CLASS(InputBox) EXTENDS(Label)
 	ATTRIB(InputBox, color, vector, '1 1 1')
 	ATTRIB(InputBox, colorF, vector, '1 1 1')
 ENDCLASS(InputBox)
+void InputBox_Clear_Click(entity btn, entity me);
 #endif
 
 #ifdef IMPLEMENTATION
@@ -37,6 +38,11 @@ void setTextInputBox(entity me, string txt)
 	if(me.text)
 		strunzone(me.text);
 	setTextLabel(me, strzone(txt));
+}
+
+void InputBox_Clear_Click(entity btn, entity me)
+{
+	me.setText(me, "");
 }
 
 float mouseDragInputBox(entity me, vector pos)
