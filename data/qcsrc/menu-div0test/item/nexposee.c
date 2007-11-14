@@ -122,6 +122,8 @@ void setNexposeeNexposee(entity me, entity other, vector scalecenter, float a0, 
 
 void drawNexposee(entity me)
 {
+	float a;
+	float a0;
 	entity e;
 	float f;
 
@@ -166,8 +168,6 @@ void drawNexposee(entity me)
 	f = min(1, frametime * 10);
 	for(e = me.firstChild; e; e = e.nextSibling)
 	{
-		float a;
-		float a0;
 		if(e == me.selectedChild)
 		{
 			e.Container_origin = e.Nexposee_smallOrigin * (1 - me.animationFactor) + e.Nexposee_initialOrigin * me.animationFactor;
@@ -189,6 +189,23 @@ void drawNexposee(entity me)
 	}
 
 	drawContainer(me);
+
+	/*
+	for(e = me.firstChild; e; e = e.nextSibling)
+	{
+		vector t, fs;
+		a0 = e.Container_alpha;
+		if(a0 < e.Nexposee_smallAlpha)
+			a = 0.3 * (a0 - 0) / (e.Nexposee_smallAlpha - 0);
+		else if(a0 < e.Nexposee_mediumAlpha)
+			a = 0.3 + 0.5 * (a0 - e.Nexposee_smallAlpha)  / (e.Nexposee_mediumAlpha - e.Nexposee_smallAlpha);
+		else
+			a = 0.8 - 0.8 * (a0 - e.Nexposee_mediumAlpha) / (1 - e.Nexposee_mediumAlpha);
+		fs = (eX * (1 / draw_scale_x) + eY * (1 / draw_scale_y)) * 36;
+		t = draw_TextWidth(e.title, FALSE) * eX * fs_x + eY * fs_y;
+		draw_Text(e.Container_origin + (e.Container_size_x * eX - t) * 0.5 - 0.5 * eY * t_y, e.title, fs, e.color, a, FALSE);
+	}
+	*/
 };
 
 float mousePressNexposee(entity me, vector pos)
