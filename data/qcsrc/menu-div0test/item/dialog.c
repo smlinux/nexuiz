@@ -19,9 +19,10 @@ CLASS(Dialog) EXTENDS(InputContainer)
 	METHOD(Dialog, fill, void(entity)) // to be overridden by user to fill the dialog with controls
 	METHOD(Dialog, keyDown, float(entity, float, float, float))
 	METHOD(Dialog, close, void(entity))
-	METHOD(Dialog, addItemSimple, void(entity, float, float, float, float, entity))
+	METHOD(Dialog, addItemSimple, void(entity, float, float, float, float, entity, vector))
 
 	METHOD(Dialog, TD, void(entity, float, float, entity))
+	METHOD(Dialog, TDNoMargin, void(entity, float, float, entity, vector))
 	METHOD(Dialog, TDempty, void(entity, float))
 	METHOD(Dialog, setFirstColumn, void(entity, float))
 	METHOD(Dialog, TR, void(entity))
@@ -70,13 +71,17 @@ void fillDialog(entity me)
 {
 }
 
-void addItemSimpleDialog(entity me, float row, float col, float rowspan, float colspan, entity e)
+void addItemSimpleDialog(entity me, float row, float col, float rowspan, float colspan, entity e, vector v)
 {
 	//print(vtos(me.itemSpacing), " ", vtos(me.itemSize), "\n");
-	me.addItem(me, e,
-		me.itemOrigin + eX * ( col          * me.itemSpacing_x) + eY * ( row          * me.itemSpacing_y),
-		me.itemSize   + eX * ((colspan - 1) * me.itemSpacing_x) + eY * ((rowspan - 1) * me.itemSpacing_y),
-		1);
+	vector o, s;
+	o = me.itemOrigin + eX * ( col          * me.itemSpacing_x) + eY * ( row          * me.itemSpacing_y);
+	s = me.itemSize   + eX * ((colspan - 1) * me.itemSpacing_x) + eY * ((rowspan - 1) * me.itemSpacing_y);
+	o_x -= 0.5 * (me.itemSpacing_x - me.itemSize_x) * v_x;
+	s_x +=       (me.itemSpacing_x - me.itemSize_x) * v_x;
+	o_y -= 0.5 * (me.itemSpacing_y - me.itemSize_y) * v_y;
+	s_y +=       (me.itemSpacing_y - me.itemSize_y) * v_y;
+	me.addItem(me, e, o, s, 1);
 }
 
 void gotoXYDialog(entity me, float row, float col)
@@ -93,7 +98,13 @@ void TRDialog(entity me)
 
 void TDDialog(entity me, float rowspan, float colspan, entity e)
 {
-	me.addItemSimple(me, me.currentRow, me.currentColumn, rowspan, colspan, e);
+	me.addItemSimple(me, me.currentRow, me.currentColumn, rowspan, colspan, e, '0 0 0');
+	me.currentColumn += colspan;
+}
+
+void TDNoMarginDialog(entity me, float rowspan, float colspan, entity e, vector v)
+{
+	me.addItemSimple(me, me.currentRow, me.currentColumn, rowspan, colspan, e, v);
 	me.currentColumn += colspan;
 }
 

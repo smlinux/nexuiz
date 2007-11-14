@@ -2,6 +2,7 @@
 CLASS(NexuizColorButton) EXTENDS(RadioButton)
 	METHOD(NexuizColorButton, configureNexuizColorButton, void(entity, float, float, float))
 	METHOD(NexuizColorButton, setChecked, void(entity, float))
+	METHOD(NexuizColorButton, draw, void(entity))
 	ATTRIB(NexuizColorButton, fontSize, float, SKINFONTSIZE_NORMAL)
 	ATTRIB(NexuizColorButton, image, string, SKINGFX_COLORBUTTON)
 	ATTRIB(NexuizColorButton, image2, string, SKINGFX_COLORBUTTON_COLOR)
@@ -33,7 +34,7 @@ void configureNexuizColorButtonNexuizColorButton(entity me, float theGroup, floa
 	me.loadCvars(me);
 	me.configureRadioButton(me, string_null, me.fontSize, me.image, theGroup, 0);
 	me.srcMulti = 1;
-	me.src2 = strzone(strcat(me.image2, ftos(me.cvarValueFloat)));
+	me.src2 = me.image2;
 }
 void setCheckedNexuizColorButton(entity me, float val)
 {
@@ -60,5 +61,10 @@ void saveCvarsNexuizColorButton(entity me)
 			cvar_set(me.cvarName, ftos(cvar(me.cvarName) & 240 + me.cvarValueFloat));
 	}
 	// TODO on an apply button, read _cl_color and execute the color command for it
+}
+void drawNexuizColorButton(entity me)
+{
+	me.color2 = colormapPaletteColor(me.cvarValueFloat, me.cvarPart);
+	drawCheckBox(me);
 }
 #endif

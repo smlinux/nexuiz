@@ -2,7 +2,7 @@ const float SKINFONTSIZE_NORMAL = 12;
 const float SKINHEIGHT_NORMAL = 1.5;
 const float SKINHEIGHT_NORMAL_WITHSPACING = 2;
 
-const float SKINFONTSIZE_TITLE = 14;
+const float SKINFONTSIZE_TITLE = 24;
 const float SKINHEIGHT_TITLE = 1.5;
 
 const string SKINGFX_BUTTON = "qcsrc/menu-div0test/basebutton";
@@ -45,7 +45,7 @@ const vector SKINCOLOR_RADIOBUTTON_C = '1 1 1';
 const vector SKINCOLOR_RADIOBUTTON_F = '1 1 1';
 const vector SKINCOLOR_RADIOBUTTON_D = '1 1 1';
 
-const string SKINGFX_COLORBUTTON = "qcsrc/menu-div0test/basebutton";
+const string SKINGFX_COLORBUTTON = "qcsrc/menu-div0test/basecolorbutton";
 const string SKINGFX_COLORBUTTON_COLOR = "qcsrc/menu-div0test/color";
 const string SKINGFX_SCROLLBAR = "qcsrc/menu-div0test/basescrollbar";
 const vector SKINCOLOR_SCROLLBAR_N = '1 1 1';

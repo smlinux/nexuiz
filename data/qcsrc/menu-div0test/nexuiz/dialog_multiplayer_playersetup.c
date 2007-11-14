@@ -20,19 +20,20 @@ entity makeNexuizPlayerSettingsTab()
 void fillNexuizPlayerSettingsTab(entity me)
 {
 	entity e;
-	float i;
+	float i, n;
 
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Player Name:"));
 		me.TD(me, 1, 2, e = makeNexuizInputBox(1, "_cl_name"));
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Shirt Color:"));
-		for(i = 0; i < 15; ++i)
-			me.TD(me, 1, 2 / 15, e = makeNexuizColorButton(1, 0, i));
+		n = 16 - !cvar("developer");
+		for(i = 0; i < n; ++i)
+			me.TDNoMargin(me, 1, 2 / n, e = makeNexuizColorButton(1, 0, i), '1 0 0');
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Pants Color:"));
-		for(i = 0; i < 15; ++i)
-			me.TD(me, 1, 2 / 15, e = makeNexuizColorButton(2, 1, i));
+		for(i = 0; i < n; ++i)
+			me.TDNoMargin(me, 1, 2 / n, e = makeNexuizColorButton(2, 1, i), '1 0 0');
 
 	me.gotoXY(me, 0, 3.5); me.setFirstColumn(me, me.currentColumn);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Field of View:"));
