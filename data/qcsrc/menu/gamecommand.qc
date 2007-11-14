@@ -37,11 +37,8 @@ void GameCommand(string command)
 	if(argv(0) == "directmenu") if(argc == 2)
 	{
 		entity newitem;
-		newitem = findstring(null_entity, name, argv(1));
-		if(newitem)
-			Menu_ActiveWindow = newitem;
-		else
-			print(argv(1), " not found.\n");
+		cvar_set("scmenu_directmenu", argv(1));
+		m_display();
 		return;
 	}
 
