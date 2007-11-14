@@ -23,6 +23,8 @@ void resizeNotifyBorderImage(entity me, vector relOrigin, vector relSize, vector
 		me.closeButton.Container_origin = '1 0 0' * (1 - me.borderVec_x);
 		me.closeButton.Container_size = me.borderVec;
 		me.closeButton.color = me.color;
+		me.closeButton.colorC = me.color;
+		me.closeButton.colorF = me.color;
 	}
 }
 void configureBorderImageBorderImage(entity me, string theTitle, float sz, vector theColor, string path, float theBorderHeight)

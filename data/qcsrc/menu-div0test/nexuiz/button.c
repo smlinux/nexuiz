@@ -31,6 +31,8 @@ void configureNexuizButtonNexuizButton(entity me, string theText, vector theColo
 	{
 		me.configureButton(me, theText, me.fontSize, me.grayImage);
 		me.color = theColor;
+		me.colorC = theColor;
+		me.colorF = theColor;
 	}
 }
 #endif
