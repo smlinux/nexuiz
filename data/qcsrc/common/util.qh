@@ -30,3 +30,5 @@ float median(float a, float b, float c);
 // converts a number to a string with the indicated number of decimals
 // works for up to 10 decimals!
 string ftos_decimals(float number, float decimals);
+
+vector colormapPaletteColor(float c, float isPants);
