@@ -18,8 +18,14 @@ void() m_init =
 {
 	dprint_load();
 	GameCommand_Init();
+
+	if(cvar("developer") == 42)
+		draw_currentSkin = "qcsrc/menu-div0test/xawskin";
+	else
+		draw_currentSkin = "qcsrc/menu-div0test/defaultskin";
+	// TODO load SKIN constants from file later
 	
-	draw_setMousePointer("gfx/cursor");
+	draw_setMousePointer("cursor");
 
 	main = spawnMainWindow(); main.configureMainWindow(main);
 	draw_reset();

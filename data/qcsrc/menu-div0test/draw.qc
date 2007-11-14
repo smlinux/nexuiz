@@ -1,9 +1,17 @@
 float drawfont;
 string draw_mousepointer;
 
+string draw_UseSkinFor(string pic)
+{
+	if(substring(pic, 0, 1) == "/")
+		return substring(pic, 1, strlen(pic)-1);
+	else
+		return strcat(draw_currentSkin, "/", pic);
+}
+
 void draw_setMousePointer(string pic)
 {
-	draw_mousepointer = pic;
+	draw_mousepointer = strzone(draw_UseSkinFor(pic));
 }
 
 void draw_drawMousePointer(vector where)
@@ -51,6 +59,7 @@ vector boxToGlobalSize(vector v, vector theScale)
 
 void draw_Picture(vector theOrigin, string pic, vector theSize, vector theColor, float theAlpha)
 {
+	pic = draw_UseSkinFor(pic);
 	drawpic(boxToGlobal(theOrigin, draw_shift, draw_scale), pic, boxToGlobalSize(theSize, draw_scale), theColor, theAlpha * draw_alpha, 0);
 }
 
@@ -70,6 +79,7 @@ void draw_ButtonPicture(vector theOrigin, string pic, vector theSize, vector the
 	vector square;
 	vector width, height;
 	vector bW;
+	pic = draw_UseSkinFor(pic);
 	theOrigin = boxToGlobal(theOrigin, draw_shift, draw_scale);
 	theSize = boxToGlobalSize(theSize, draw_scale);
 	theAlpha *= draw_alpha;
@@ -104,6 +114,7 @@ void draw_VertButtonPicture(vector theOrigin, string pic, vector theSize, vector
 	vector square;
 	vector width, height;
 	vector bH;
+	pic = draw_UseSkinFor(pic);
 	theOrigin = boxToGlobal(theOrigin, draw_shift, draw_scale);
 	theSize = boxToGlobalSize(theSize, draw_scale);
 	theAlpha *= draw_alpha;
@@ -140,6 +151,7 @@ void draw_BorderPicture(vector theOrigin, string pic, vector theSize, vector the
 	vector dX, dY;
 	vector width, height;
 	vector bW, bH;
+	pic = draw_UseSkinFor(pic);
 	theOrigin = boxToGlobal(theOrigin, draw_shift, draw_scale);
 	theSize = boxToGlobalSize(theSize, draw_scale);
 	theBorderSize = boxToGlobalSize(theBorderSize, draw_scale);

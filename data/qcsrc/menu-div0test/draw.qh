@@ -27,3 +27,4 @@ vector globalToBoxSize(vector v, vector scale);
 
 float draw_NeedResizeNotify;
 
+string draw_currentSkin;
