@@ -17,9 +17,9 @@ type static
 color 0x63F2EA 0x63f2EA
 size 20 20
 alpha 128 128 128
-lightradius 200
-lightradiusfade 200
-lightcolor 0.4 0.9 0.9
+lightradius 100
+lightradiusfade 100
+lightcolor 1 2 2
 // cloud of particles which expand rapidly and then slow to form a ball
 effect TE_WIZSPIKE
 count 100
@@ -53,8 +53,8 @@ size 24 24
 alpha 256 256 0
 originjitter 16 16 16
 lightradius 200
-lightradiusfade 1000
-lightcolor 4 0.2 0.2
+lightradiusfade 500
+lightcolor 8 0.4 0.4
 // flare effect
 effect TE_KNIGHTSPIKE
 countabsolute 1
@@ -85,6 +85,9 @@ tex 56 59
 size 5 5
 alpha 256 256 0
 originjitter 6 6 6
+//lightradius 30
+//lightradiusfade 90
+//lightcolor 1 1 1
 // dust/smoke drifting away from the impact
 effect TE_SPIKE
 count 8
@@ -129,8 +132,8 @@ size 64 64
 alpha 256 256 0
 originjitter 34 34 34
 lightradius 400
-lightradiusfade 200
-lightcolor 2 2.5 3
+lightradiusfade 300
+lightcolor 4 5 6
 // flare effect
 effect TE_SPIKEQUAD
 countabsolute 1
@@ -138,7 +141,7 @@ type static
 tex 38 38
 color 0x80C0FF 0x80C0FF
 size 48 48
-alpha 256 256 128
+alpha 128 128 64
 // large sparks
 effect TE_SPIKEQUAD
 count 20
@@ -263,6 +266,9 @@ tex 56 59
 size 3 3
 alpha 256 256 0
 originjitter 6 6 6
+//lightradius 30
+//lightradiusfade 90
+//lightcolor 1 1 1
 // dust/smoke drifting away from the impact
 effect TE_GUNSHOT
 count 4
@@ -354,9 +360,9 @@ tex 47 47
 size 8 8
 alpha 256 256 0
 originjitter 12 12 12
-//lightradius 100
-//lightradiusfade 300
-//lightcolor 0.5 0.5 0.5
+//lightradius 30
+//lightradiusfade 60
+//lightcolor 1.6 0.2 2
 // purple flare effect
 effect TE_GUNSHOTQUAD
 countabsolute 1
@@ -386,9 +392,9 @@ tex 8 16
 size 48 48
 alpha 256 256 0
 originjitter 40 40 40
-lightradius 350
-lightradiusfade 700
-lightcolor 4 2 0.5
+lightradius 250
+lightradiusfade 400
+lightcolor 8 4 1
 // flare effect
 effect TE_EXPLOSION
 countabsolute 1
@@ -620,9 +626,9 @@ tex 47 47
 size 24 24
 alpha 256 256 0
 originjitter 16 16 16
-lightradius 200
-lightradiusfade 400
-lightcolor 1 1 1
+lightradius 100
+lightradiusfade 300
+lightcolor 4 6 8
 // flare effect
 effect TE_PLASMABURN
 countabsolute 1
@@ -760,9 +766,9 @@ tex 8 16
 size 72 72
 alpha 256 256 0
 originjitter 40 40 40
-lightradius 500
-lightradiusfade 500
-lightcolor 4 2 0.5
+lightradius 400
+lightradiusfade 400
+lightcolor 8 4 1
 // flare effect
 effect TE_TEI_BIGEXPLOSION
 countabsolute 1
@@ -823,9 +829,9 @@ tex 59 59
 size 32 32
 alpha 256 256 0
 originjitter 20 20 20
-lightradius 200
-lightradiusfade 600
-lightcolor 2.4 4.8 8
+lightradius 250
+lightradiusfade 250
+lightcolor 4 4 10
 // flare effect
 effect TE_TEI_PLASMAHIT
 countabsolute 1
@@ -867,9 +873,9 @@ color 0x303030 0x606060
 tex 0 8
 size 3 3
 alpha 32 32 32
-lightradius 200
+lightradius 150
 lighttime 0
-lightcolor 3.0 1.5 0.5
+lightcolor 6 3 1
 // fire
 effect TR_ROCKET
 notunderwater
@@ -983,9 +989,9 @@ color 0x283880 0x283880
 size 4 4
 alpha 256 256 1024
 velocityjitter 16 16 16
-lightradius 200
+lightradius 90
 lighttime 0
-lightcolor 0.75 1.5 3.0
+lightcolor 1.5 3 6
 velocitymultiplier -0.1
 
 // quake effect
