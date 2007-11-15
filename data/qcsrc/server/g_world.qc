@@ -349,6 +349,11 @@ void worldspawn (void)
 	readlevelcvars();
 
 	Ban_LoadBans();
+
+#ifdef MAPINFO
+	MapInfo_Enumerate();
+	MapInfo_FilterGametype(MapInfo_CurrentGametype(), MapInfo_CurrentFeatures());
+#endif
 }
 
 void light (void)
@@ -2069,7 +2074,14 @@ void MapVote_Tick()
 }
 void MapVote_Start()
 {
-	mapvote_run = TRUE;
+	if(mapvote_run)
+		return;
+
+#ifdef MAPINFO
+	MapInfo_Enumerate();
+	if(MapInfo_FilterGametype(MapInfo_CurrentGametype(), MapInfo_CurrentFeatures()))
+#endif
+		mapvote_run = TRUE;
 }
 void MapVote_Think()
 {
