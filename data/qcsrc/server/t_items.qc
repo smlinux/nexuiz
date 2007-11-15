@@ -324,7 +324,7 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 		}
 	}
 
-	if(cvar("g_lms") && (self.classname != "droppedweapon"))
+	if(g_lms && (self.classname != "droppedweapon"))
 	{
 		startitem_failed = TRUE;
 		remove(self);
@@ -638,7 +638,7 @@ void item_health100 (void) {
 	if(!cvar("g_powerup_superhealth"))
 		return;
 
-	if(cvar("g_arena") && !cvar("g_arena_powerups"))
+	if(g_arena && !cvar("g_arena_powerups"))
 		return;
 
 	if(cvar("g_minstagib")) {
@@ -656,7 +656,7 @@ void item_strength (void) {
 	if(!cvar("g_powerup_strength"))
 		return;
 
-	if(cvar("g_arena") && !cvar("g_arena_powerups"))
+	if(g_arena && !cvar("g_arena_powerups"))
 		return;
 
 	if(cvar("g_minstagib")) {
@@ -672,7 +672,7 @@ void item_invincible (void) {
 	if(!cvar("g_powerup_shield"))
 		return;
 
-	if(cvar("g_arena") && !cvar("g_arena_powerups"))
+	if(g_arena && !cvar("g_arena_powerups"))
 		return;
 
 	if(cvar("g_minstagib")) {

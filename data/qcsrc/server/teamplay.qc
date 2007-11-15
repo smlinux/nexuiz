@@ -14,8 +14,6 @@ float c1, c2, c3, c4;
 // # of bots on those teams
 float cb1, cb2, cb3, cb4;
 
-float g_domination, g_ctf, g_tdm, g_keyhunt, g_onslaught, g_assault;
-
 float audit_teams_time;
 
 float() IsTeamBalanceForced = {
@@ -127,7 +125,7 @@ void InitGameplayMode()
 
 	VoteReset();
 
-	game = cvar ("gamecfg");	// load game options
+	game = cvar("gamecfg");	// load game options
 
 	// game cvars get reset before map changes
 	// then map's cfg sets them as desired
@@ -323,10 +321,12 @@ void InitGameplayMode()
 
 	g_domination = cvar("g_domination");
 	g_ctf = cvar("g_ctf");
-	g_assault = cvar("g_assault");
+	g_lms = cvar("g_lms");
 	g_tdm = cvar("g_tdm");
 	g_keyhunt = cvar("g_keyhunt");
 	g_onslaught = cvar("g_onslaught");
+	g_assault = cvar("g_assault");
+	g_arena = cvar("g_arena");
 }
 
 string GetClientVersionMessage(float v) {
@@ -368,14 +368,14 @@ void PrintWelcomeMessage(entity pl)
 
 	if(self.classname == "observer")
 	{
-		if(cvar("g_lms") && self.frags <= 0 && self.frags > -666)
+		if(g_lms && self.frags <= 0 && self.frags > -666)
 			return centerprint(self, strcat(NEWLINES, "^1You have no more lives left\nwait for next round\n\n\n^7press attack to spectate other players"));
-		else if(cvar("g_lms") && self.frags == -666)
+		else if(g_lms && self.frags == -666)
 			return centerprint(self, strcat(NEWLINES, "^1Match has already begun\nwait for next round\n\n\n^7press attack to spectate other players"));
 	}
 	else if(self.classname == "spectator")
 	{
-		if ((cvar("g_lms") && self.frags < 1) || cvar("g_arena"))
+		if ((g_lms && self.frags < 1) || g_arena)
 			return centerprint(self, strcat(NEWLINES, "spectating ", self.enemy.netname, "\n\n\n^7press attack for next player\npress attack2 for free fly mode"));
 		else
 			return centerprint(self, strcat(NEWLINES, "spectating ", self.enemy.netname, "\n\n\n^7press jump to play\n^7press attack for next player\npress attack2 for free fly mode"));
@@ -421,7 +421,7 @@ void PrintWelcomeMessage(entity pl)
 		s = strcat(s, "^8\nactive modifications: ^3", modifications, "^8\n");
 
 	if((self.classname == "observer" || self.classname == "spectator") && self.version == cvar("gameversion")) {
-		if(!cvar("g_arena"))
+		if(!g_arena)
 			s = strcat(s,"^7\n\n\npress jump to play\npress attack to spectate other players\n\n");
 		else if(player_count < 2 && arena_roundbased)
 		{
@@ -825,7 +825,7 @@ float JoinBestTeam(entity pl, float only_return_best)
 	// find out what teams are available
 	CheckAllowedTeams(pl);
 
-	if(cvar("g_domination"))
+	if(g_domination)
 	{
 		if(cvar("g_domination_default_teams") < 3)
 			c3 = 999999999;
@@ -923,26 +923,6 @@ void SV_ChangeTeam(float _color)
 		dteam = 3;
 	else if(dcolor == COLOR_TEAM4 - 1)
 		dteam = 4;
-
-	// remap invalid teams in dom & ctf
-	/*
-	if(cvar("g_ctf") && dteam == 3)
-		dteam = 2;
-	else if(cvar("g_ctf") && dteam == 4)
-		dteam = 1;
-	else if((cvar("g_domination") && cvar("g_domination_default_teams") < 3) || (cvar("g_tdm") && cvar("g_tdm_teams") < 3))
-	{
-		if(dteam == 3)
-			dteam = 2;
-		else if(dteam == 4)
-			dteam = 1;
-	}
-	else if((cvar("g_domination") && cvar("g_domination_default_teams") < 4) || (cvar("g_tdm") && cvar("g_tdm_teams") < 4))
-	{
-		if(dteam == 4)
-			dteam = 1;
-	}
-	*/
 
 	CheckAllowedTeams(self);
 

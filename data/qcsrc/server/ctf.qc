@@ -395,7 +395,7 @@ Keys:
 
 void() item_flag_team1 =
 {
-	if (!cvar("g_ctf"))
+	if (!g_ctf)
 		return;
 	//if(!cvar("teamplay"))
 	//	cvar_set("teamplay", "3");
@@ -451,7 +451,7 @@ Keys:
 
 void() item_flag_team2 =
 {
-	if (!cvar("g_ctf"))
+	if (!g_ctf)
 		return;
 	//if(!cvar("teamplay"))
 	//	cvar_set("teamplay", "3");
@@ -597,7 +597,7 @@ void() ctf_setstatus =
 	self.items = self.items - (self.items & IT_BLUE_FLAG_TAKEN);
 	self.items = self.items - (self.items & IT_BLUE_FLAG_LOST);
 
-	if (cvar("g_ctf")) {
+	if (g_ctf) {
 		local entity flag;
 		flag = find(world, classname, "item_flag_team1");
 		ctf_setstatus2(flag);

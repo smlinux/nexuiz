@@ -746,7 +746,7 @@ void readlevelcvars(void)
 	}
 	else
 	{
-		if(cvar("g_lms"))
+		if(g_lms)
 		{
 			start_ammo_shells = cvar("g_lms_start_ammo_shells");
 			start_ammo_nails = cvar("g_lms_start_ammo_nails");
@@ -767,55 +767,55 @@ void readlevelcvars(void)
 			start_ammo_cells = cvar("g_pickup_cells_max");
 		}
 
-		if (cvar("g_start_weapon_laser") || cvar("g_lms"))
+		if (cvar("g_start_weapon_laser") || g_lms)
 		{
 			start_items = start_items | IT_LASER;
 			start_switchweapon = WEP_LASER;
 			weapon_action(start_switchweapon, WR_PRECACHE);
 		}
-		if (cvar("g_start_weapon_shotgun") || cvar("g_lms"))
+		if (cvar("g_start_weapon_shotgun") || g_lms)
 		{
 			start_items = start_items | IT_SHOTGUN;
 			start_switchweapon = WEP_SHOTGUN;
 			weapon_action(start_switchweapon, WR_PRECACHE);
 		}
-		if (cvar("g_start_weapon_uzi") || cvar("g_lms"))
+		if (cvar("g_start_weapon_uzi") || g_lms)
 		{
 			start_items = start_items | IT_UZI;
 			start_switchweapon = WEP_UZI;
 			weapon_action(start_switchweapon, WR_PRECACHE);
 		}
-		if (cvar("g_start_weapon_grenadelauncher") || cvar("g_lms"))
+		if (cvar("g_start_weapon_grenadelauncher") || g_lms)
 		{
 			start_items = start_items | IT_GRENADE_LAUNCHER;
 			start_switchweapon = WEP_GRENADE_LAUNCHER;
 			weapon_action(start_switchweapon, WR_PRECACHE);
 		}
-		if (cvar("g_start_weapon_electro") || cvar("g_lms"))
+		if (cvar("g_start_weapon_electro") || g_lms)
 		{
 			start_items = start_items | IT_ELECTRO;
 			start_switchweapon = WEP_ELECTRO;
 			weapon_action(start_switchweapon, WR_PRECACHE);
 		}
-		if (cvar("g_start_weapon_crylink") || cvar("g_lms"))
+		if (cvar("g_start_weapon_crylink") || g_lms)
 		{
 			start_items = start_items | IT_CRYLINK;
 			start_switchweapon = WEP_CRYLINK;
 			weapon_action(start_switchweapon, WR_PRECACHE);
 		}
-		if (cvar("g_start_weapon_nex") || cvar("g_lms"))
+		if (cvar("g_start_weapon_nex") || g_lms)
 		{
 			start_items = start_items | IT_NEX;
 			start_switchweapon = WEP_NEX;
 			weapon_action(start_switchweapon, WR_PRECACHE);
 		}
-		if (cvar("g_start_weapon_hagar") || cvar("g_lms"))
+		if (cvar("g_start_weapon_hagar") || g_lms)
 		{
 			start_items = start_items | IT_HAGAR;
 			start_switchweapon = WEP_HAGAR;
 			weapon_action(start_switchweapon, WR_PRECACHE);
 		}
-		if (cvar("g_start_weapon_rocketlauncher") || cvar("g_lms"))
+		if (cvar("g_start_weapon_rocketlauncher") || g_lms)
 		{
 			start_items = start_items | IT_ROCKET_LAUNCHER;
 			start_switchweapon = WEP_ROCKET_LAUNCHER;

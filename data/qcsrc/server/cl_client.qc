@@ -141,7 +141,7 @@ entity SelectSpawnPoint (float anypoint)
 
 	teamcheck = 0;
 
-	if(!anypoint && (cvar("g_ctf") || cvar("g_assault")))
+	if(!anypoint && (g_ctf || g_assault))
 		teamcheck = self.team;
 
 	// get the list of players
@@ -313,7 +313,7 @@ void PutObserverInServer (void)
 
 	DistributeFragsAmongTeam(self, self.team, 1);
 
-	if(self.frags <= 0 && self.frags > -666 && cvar("g_lms") && self.killcount != -666)
+	if(self.frags <= 0 && self.frags > -666 && g_lms && self.killcount != -666)
 		bprint ("^4", self.netname, "^4 has no more lives left\n");
 	else if(self.killcount != -666)
 		bprint ("^4", self.netname, "^4 is spectating now\n");
@@ -372,7 +372,7 @@ void PutObserverInServer (void)
 	self.oldvelocity = self.velocity;
 	self.customizeentityforclient = Client_customizeentityforclient;
 
-	if(cvar("g_arena"))
+	if(g_arena)
 	{
 		if(self.frags != -2)
 		{
@@ -384,7 +384,7 @@ void PutObserverInServer (void)
 			Spawnqueue_Remove(self);
 		}
 	}
-	else if(!cvar("g_lms"))
+	else if(!g_lms)
 		self.frags = -666;
 }
 
@@ -410,10 +410,10 @@ void PutClientInServer (void)
 	}
 
 	// player is dead and becomes observer
-	if(cvar("g_lms") && self.frags < 1)
+	if(g_lms && self.frags < 1)
 		self.classname = "observer";
 
-	if(cvar("g_arena"))
+	if(g_arena)
 	if(!self.spawned)
 		self.classname = "observer";
 
@@ -522,7 +522,7 @@ void PutClientInServer (void)
 		// don't reset back to last position, even if new position is stuck in solid
 		self.oldorigin = self.origin;
 
-		if(cvar("g_arena"))
+		if(g_arena)
 		{
 			Spawnqueue_Remove(self);
 			Spawnqueue_Mark(self);
@@ -537,8 +537,8 @@ void PutClientInServer (void)
 
 		if(self.killcount == -666) {
 			self.killcount = 0;
-			if(!cvar("g_arena"))
-			if(!cvar("g_lms"))
+			if(!g_arena)
+			if(!g_lms)
 				self.frags = 0;
 		}
 
@@ -564,7 +564,7 @@ void PutClientInServer (void)
 		if (cvar("g_spawnsound"))
 			sound (self, CHAN_AUTO, "misc/spawn.wav", 1, ATTN_NORM);
 
-		if(cvar("g_assault")) {
+		if(g_assault) {
 			if(self.team == assault_attacker_team)
 				centerprint(self, "You are attacking!\n");
 			else
@@ -677,7 +677,7 @@ void ClientConnect (void)
 
 	//JoinBestTeam(self, FALSE);
 
-	if((cvar("sv_spectate") == 1 && !cvar("g_lms")) || cvar("g_campaign")) {
+	if((cvar("sv_spectate") == 1 && !g_lms) || cvar("g_campaign")) {
 		self.classname = "observer";
 	} else {
 		self.classname = "player";
@@ -702,7 +702,7 @@ void ClientConnect (void)
 	bprint ("^4",self.netname);
 	bprint ("^4 connected");
 
-	if(cvar("g_domination") || cvar("g_ctf"))
+	if(cvar("g_domination") || g_ctf)
 	{
 		bprint(" and joined the ");
 		bprint(ColoredTeamName(self.team));
@@ -753,7 +753,7 @@ void ClientConnect (void)
 	else
 		stuffcmd(self, "set teamplay 0\n");
 
-	if(cvar("g_lms"))
+	if(g_lms)
 	{
 		self.frags = cvar("fraglimit");
 		// no fraglimit was set, so player gets 999 lives
@@ -766,7 +766,7 @@ void ClientConnect (void)
 			self.frags = -666;
 		}
 	}
-	else if(cvar("g_arena"))
+	else if(g_arena)
 	{
 		self.classname = "observer";
 		Spawnqueue_Insert(self);
@@ -827,7 +827,7 @@ void ClientDisconnect (void)
 		if(self.weaponentity.lasertarget)
 			remove(self.weaponentity.lasertarget);
 
-	if(cvar("g_arena"))
+	if(g_arena)
 	{
 		Spawnqueue_Unmark(self);
 		Spawnqueue_Remove(self);
@@ -1057,7 +1057,7 @@ void player_regen (void)
 	limith = cvar("g_balance_health_limit");
 	limita = cvar("g_balance_armor_limit");
 
-	if (cvar("g_minstagib") || (cvar("g_lms") && !cvar("g_lms_regenerate")))
+	if (cvar("g_minstagib") || (g_lms && !cvar("g_lms_regenerate")))
 		return;
 
 	max_mod = regen_mod = rot_mod = limit_mod = 1;
@@ -1294,7 +1294,7 @@ void PlayerPreThink (void)
 		if(self.button7)
 			PrintWelcomeMessage(self);
 
-		if(cvar("g_lms") || !cvar("sv_spectate"))
+		if(g_lms || !cvar("sv_spectate"))
 		if((time - self.jointime) <= cvar("welcome_message_time"))
 			PrintWelcomeMessage(self);
 
@@ -1321,7 +1321,7 @@ void PlayerPreThink (void)
 			float button_pressed, force_respawn;
 			player_anim();
 			button_pressed = (self.button0 || self.button2 || self.button3 || self.button6 || self.buttonuse);
-			force_respawn = (cvar("g_lms") || cvar("g_forced_respawn"));
+			force_respawn = (g_lms || cvar("g_forced_respawn"));
 			if (self.deadflag == DEAD_DYING)
 			{
 				if(force_respawn)
@@ -1348,7 +1348,7 @@ void PlayerPreThink (void)
 			return;
 		}
 
-		if(cvar("g_lms") && !self.deadflag && cvar("g_lms_campcheck_interval"))
+		if(g_lms && !self.deadflag && cvar("g_lms_campcheck_interval"))
 		{
 			vector dist;
 

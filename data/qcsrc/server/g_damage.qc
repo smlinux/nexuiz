@@ -11,7 +11,7 @@ void GiveFrags (entity attacker, entity targ, float f)
 {
 	if(gameover) return;
 
-	if(cvar("g_arena"))
+	if(g_arena)
 		if(cvar("g_arena_roundbased"))
 			return;
 
@@ -26,11 +26,11 @@ void GiveFrags (entity attacker, entity targ, float f)
 		if(f > 0)
 			f = RunematchHandleFrags(attacker, targ, f);
 	}
-	else if(cvar("g_keyhunt"))
+	else if(g_keyhunt)
 	{
 		f = kh_HandleFrags(attacker, targ, f);
 	}
-	else if(cvar("g_lms"))
+	else if(g_lms)
 	{
 		// count remaining lives, not frags in lms
 		targ.frags -= 1;
@@ -384,7 +384,7 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 			}
 		}
 
-		if(cvar("g_lms"))
+		if(g_lms)
 		if(targ.classname == "player")
 		if(attacker.classname == "player")
 		if(attacker != targ)

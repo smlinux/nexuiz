@@ -227,7 +227,7 @@ keys:
 */
 void() onslaught_generator =
 {
-	if (!cvar("g_onslaught"))
+	if (!g_onslaught)
 	{
 		remove(self);
 		return;
@@ -409,7 +409,7 @@ keys:
 void() onslaught_controlpoint =
 {
 	local entity e;
-	if (!cvar("g_onslaught"))
+	if (!g_onslaught)
 	{
 		remove(self);
 		return;
@@ -465,7 +465,7 @@ keys:
 */
 void() onslaught_link =
 {
-	if (!cvar("g_onslaught"))
+	if (!g_onslaught)
 	{
 		remove(self);
 		return;

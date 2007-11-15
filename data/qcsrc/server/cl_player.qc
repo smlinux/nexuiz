@@ -236,7 +236,7 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 		self.v_angle_y = self.v_angle_y + (random() * 2 - 1) * shake;
 	}
 
-	if(cvar("g_arena"))
+	if(g_arena)
 	if(numspawned < 2)
 		return;
 
@@ -396,7 +396,7 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 			//WriteAngle (MSG_ONE, 80);
 		}
 
-		if(cvar("g_arena"))
+		if(g_arena)
 			Spawnqueue_Unmark(self);
 	}
 }

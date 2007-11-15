@@ -1649,15 +1649,15 @@ void() CheckRules_World =
 	}
 
 	status = WINNING_NO;
-	if(cvar("g_assault"))
+	if(g_assault)
 	{
 		status = WinningCondition_Assault();
 	}
-	else if(cvar("g_lms"))
+	else if(g_lms)
 	{
 		status = WinningCondition_LMS();
 	}
-	else if (cvar("g_onslaught"))
+	else if (g_onslaught)
 	{
 		status = WinningCondition_Onslaught();
 	}
@@ -1665,7 +1665,7 @@ void() CheckRules_World =
 	{
 		if(teams_matter)
 		{
-			if(cvar("g_tdm") || cvar("g_runematch") || cvar("g_ctf") || cvar("g_domination") || cvar("g_keyhunt"))
+			if(g_tdm || cvar("g_runematch") || g_ctf || cvar("g_domination") || g_keyhunt)
 				status = WinningCondition_MaxTeamSum(fraglimit);
 			//else if()
 			//	status = WinningCondition_MaxTeamMax(fraglimit);

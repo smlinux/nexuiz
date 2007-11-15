@@ -2149,7 +2149,7 @@ void() bot_serverframe =
 
 	FOR_EACH_REALCLIENT(head)
 	{
-		if(head.classname == "player" || cvar("g_lms") || cvar("g_arena"))
+		if(head.classname == "player" || g_lms || g_arena)
 			++activerealplayers;
 		++realplayers;
 	}

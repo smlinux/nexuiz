@@ -709,11 +709,11 @@ void() havocbot_chooserole =
 	dprint("choose a role...\n");
 	navigation_routetogoal(world);
 	self.bot_strategytime = -1;
-	if (cvar("g_ctf"))
+	if (g_ctf)
 		havocbot_chooserole_ctf();
 	else if (cvar("g_domination"))
 		havocbot_chooserole_dom();
-	else if (cvar("g_keyhunt"))
+	else if (g_keyhunt)
 		havocbot_chooserole_kh();
 	else // assume anything else is deathmatch
 		havocbot_chooserole_dm();
