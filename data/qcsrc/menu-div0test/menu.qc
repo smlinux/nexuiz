@@ -18,6 +18,11 @@ void SUB_Null() { };
 void() m_init =
 {
 	dprint_load();
+}
+
+void() m_init_delayed =
+{
+	dprint_load();
 
 	menuLoadedMaplist = 0;
 	MapInfo_Enumerate();
@@ -113,7 +118,8 @@ void() m_draw =
 	float realFrametime;
 	if(!menuLoadedMaplist)
 	{
-		m_init();
+		// TODO draw an info image about this situation
+		m_init_delayed();
 		return;
 	}
 	t = gettime();

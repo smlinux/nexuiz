@@ -1,5 +1,20 @@
 string GotoMap(string m);
 
+void make_mapinfo_Think()
+{
+	MapInfo_Enumerate(); // just in case
+	if(MapInfo_FilterGametype(MAPINFO_TYPE_ALL))
+	{
+		print("Done rebuiling mapinfos.\n");
+		remove(self);
+	}
+	else
+	{
+		self.think = make_mapinfo_Think;
+		self.nextthink = time;
+	}
+}
+
 void GameCommand(string command)
 {
 	float argc;
@@ -11,6 +26,7 @@ void GameCommand(string command)
 		print("  adminmsg clientnumber \"message\"\n");
 		print("  teamstatus\n");
 		print("  printstats\n");
+		print("  make_mapinfo\n");
 		GameCommand_Ban("help");
 		GameCommand_Generic("help");
 		return;
@@ -31,6 +47,16 @@ void GameCommand(string command)
 	if(argv(0) == "printstats")
 	{
 		DumpStats(FALSE);
+		return;
+	}
+
+	if(argv(0) == "make-mapinfo")
+	{
+		entity e;
+		e = spawn();
+		e.classname = "make_mapinfo";
+		e.think = make_mapinfo_Think;
+		e.nextthink = time;
 		return;
 	}
 
