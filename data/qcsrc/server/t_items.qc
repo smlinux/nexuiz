@@ -45,7 +45,7 @@ void Item_Touch (void)
 	pickedup = FALSE;
 	_switchweapon = FALSE;
 
-	if (cvar("g_minstagib"))
+	if (g_minstagib)
 	{
 		_switchweapon = TRUE;
 		if (self.ammo_cells)
@@ -304,7 +304,7 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 		itemsInMap |= itemid;
 	}
 
-	if (!(cvar("g_pickup_items") && !cvar("g_nixnex")) && !cvar("g_minstagib") &&
+	if (!(cvar("g_pickup_items") && !g_nixnex) && !g_minstagib &&
 			itemid != IT_STRENGTH && itemid != IT_INVINCIBLE && itemid != IT_HEALTH)
 	{
 		startitem_failed = TRUE;
@@ -312,7 +312,7 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 		return;
 	}
 
-	if (cvar("g_minstagib"))
+	if (g_minstagib)
 	{
 		// don't remove dropped items and powerups
 		if (self.classname != "droppedweapon" &&
@@ -331,7 +331,7 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 		return;
 	}
 
-	if(cvar("g_instagib") || cvar("g_rocketarena"))
+	if(g_instagib || g_rocketarena)
 	{
 		startitem_failed = TRUE;
 		remove(self);
@@ -534,7 +534,7 @@ void weapon_crylink (void)
 void weapon_nex (void)
 {
 	float nextime;
-	if (cvar("g_minstagib"))
+	if (g_minstagib)
 	{
 		minstagib_items(IT_CELLS);
 		self.think = minst_remove_item;
@@ -564,7 +564,7 @@ void weapon_hagar (void)
 
 void weapon_rocketlauncher (void)
 {
-	if (cvar("g_minstagib"))
+	if (g_minstagib)
 	{
 		minstagib_items(IT_CELLS);
 		self.think = minst_remove_item;
@@ -641,7 +641,7 @@ void item_health100 (void) {
 	if(g_arena && !cvar("g_arena_powerups"))
 		return;
 
-	if(cvar("g_minstagib")) {
+	if(g_minstagib) {
 		minstagib_items(IT_NAILS);
 	} else {
 		if(!self.max_health)
@@ -659,7 +659,7 @@ void item_strength (void) {
 	if(g_arena && !cvar("g_arena_powerups"))
 		return;
 
-	if(cvar("g_minstagib")) {
+	if(g_minstagib) {
 		minstagib_items(IT_STRENGTH);
 	} else {
 		precache_sound("weapons/strength_fire.wav");
@@ -675,7 +675,7 @@ void item_invincible (void) {
 	if(g_arena && !cvar("g_arena_powerups"))
 		return;
 
-	if(cvar("g_minstagib")) {
+	if(g_minstagib) {
 		minstagib_items(IT_INVINCIBLE);
 	} else {
 		self.invincible_finished = 30;
@@ -687,7 +687,7 @@ void item_invincible (void) {
 //void item_slowmo (void) {self.slowmo_finished = 30;StartItem ("models/items/g_slowmo.md3", "misc/powerup.wav", 120, "Slow Motion", IT_SLOWMO, FL_POWERUP, generic_pickupevalfunc, 10000);}
 
 void item_minst_cells (void) {
-	if (cvar("g_minstagib"))
+	if (g_minstagib)
 	{
 		minst_no_auto_cells = 1;
 		minstagib_items(IT_CELLS);

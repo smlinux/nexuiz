@@ -85,8 +85,8 @@ void ImpulseCommands (void)
 		if(self.deadflag == DEAD_NO)
 		{
 			if (self.weapon != WEP_LASER
-				&& !cvar("g_minstagib") && !cvar("g_instagib")
-				&& !cvar("g_rocketarena") && !g_lms && cvar("g_pickup_items") && !cvar("g_nixnex"))
+				&& !g_minstagib && !g_instagib
+				&& !g_rocketarena && !g_lms && cvar("g_pickup_items") && !g_nixnex)
 				W_ThrowWeapon(W_CalculateProjectileVelocity(self.velocity, v_forward * 750), '0 0 0', TRUE);
 		}
 	}

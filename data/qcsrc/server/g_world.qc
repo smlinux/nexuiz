@@ -13,7 +13,7 @@ void SetDefaultAlpha()
 		default_player_alpha = -1;
 		default_weapon_alpha = +1;
 	}
-	else if(cvar("g_cloaked"))
+	else if(g_cloaked)
 	{
 		default_player_alpha = cvar("g_balance_cloaked_alpha");
 		default_weapon_alpha = default_player_alpha;
@@ -129,7 +129,7 @@ void worldspawn (void)
 		//precache_model("models/player/visitant.zym");
 	}
 
-	if (cvar("g_footsteps"))
+	if (g_footsteps)
 	{
 		precache_sound ("misc/footstep01.wav");
 		precache_sound ("misc/footstep02.wav");
@@ -187,7 +187,7 @@ void worldspawn (void)
 	precache_sound ("announcer/robotic/1minuteremains.wav");
 	precache_sound ("announcer/robotic/2fragsleft.wav");
 	precache_sound ("announcer/robotic/3fragsleft.wav");
-	if (cvar("g_minstagib"))
+	if (g_minstagib)
 	{
 		precache_sound ("announcer/robotic/lastsecond.wav");
 		precache_sound ("announcer/robotic/narrowly.wav");
@@ -206,13 +206,13 @@ void worldspawn (void)
 	// common weapon precaches
 	precache_sound ("weapons/weapon_switch.wav");
 	precache_sound ("weapons/weaponpickup.wav");
-	if (cvar("g_grappling_hook"))
+	if (g_grappling_hook)
 	{
 		precache_sound ("weapons/hook_fire.wav"); // hook
 		precache_sound ("weapons/hook_impact.wav"); // hook
 	}
 
-	if (cvar("sv_precacheweapons") || cvar("g_nixnex"))
+	if (cvar("sv_precacheweapons") || g_nixnex)
 	{
 		//precache weapon models/sounds
 		local float wep;
@@ -311,27 +311,27 @@ void worldspawn (void)
 		s = strcat(s, ftos(random()));
 		GameLogEcho(strcat(":gamestart:", GetMapname(), ":", s), FALSE);
 		s = ":gameinfo:mutators:LIST";
-		if(cvar("g_grappling_hook"))
+		if(g_grappling_hook)
 			s = strcat(s, ":grappling_hook");
 		if(!cvar("g_use_ammunition"))
 			s = strcat(s, ":no_use_ammunition");
 		if(!cvar("g_pickup_items"))
 			s = strcat(s, ":no_pickup_items");
-		if(cvar("g_instagib"))
+		if(g_instagib)
 			s = strcat(s, ":instagib");
-		if(cvar("g_rocketarena"))
+		if(g_rocketarena)
 			s = strcat(s, ":rockerarena");
-		if(cvar("g_nixnex"))
+		if(g_nixnex)
 			s = strcat(s, ":nixnex");
-		if(cvar("g_vampire"))
+		if(g_vampire)
 			s = strcat(s, ":vampire");
-		if(cvar("g_laserguided_missile"))
+		if(g_laserguided_missile)
 			s = strcat(s, ":laserguided_missile");
-		if(cvar("g_norecoil"))
+		if(g_norecoil)
 			s = strcat(s, ":norecoil");
-		if(cvar("g_midair"))
+		if(g_midair)
 			s = strcat(s, ":midair");
-		if(cvar("g_minstagib"))
+		if(g_minstagib)
 			s = strcat(s, ":minstagib");
 		GameLogEcho(s, FALSE);
 		GameLogEcho(":gameinfo:end", FALSE);

@@ -162,7 +162,7 @@ void InitGameplayMode()
 		gamemode_name = "Capture the Flag";
 		teams_matter = 1;
 	}
-	else if((game == GAME_RUNEMATCH || cvar("g_runematch")) && !cvar("g_minstagib"))
+	else if((game == GAME_RUNEMATCH || cvar("g_runematch")) && !g_minstagib)
 	{
 		game = GAME_RUNEMATCH;
 		cvar_set("g_runematch", "1");
@@ -298,17 +298,17 @@ void InitGameplayMode()
 		kh_init();
 
 	// those mutators rule each other out
-	if(cvar("g_minstagib"))
+	if(g_minstagib)
 	{
 		cvar_set("g_instagib", "0");
 		cvar_set("g_rocketarena", "0");
 	}
-	if(cvar("g_instagib"))
+	if(g_instagib)
 	{
 		cvar_set("g_minstagib", "0");
 		cvar_set("g_rocketarena", "0");
 	}
-	if(cvar("g_rocketarena"))
+	if(g_rocketarena)
 	{
 		cvar_set("g_instagib", "0");
 		cvar_set("g_minstagib", "0");
@@ -382,29 +382,29 @@ void PrintWelcomeMessage(entity pl)
 	}
 
 
-	if(cvar("g_minstagib"))
+	if(g_minstagib)
 		mutator = "^2Minstagib ^1";
-	else if(cvar("g_instagib"))
+	else if(g_instagib)
 		mutator = "^2Instagib ^1";
-	else if(cvar("g_rocketarena"))
+	else if(g_rocketarena)
 		mutator = "^2Rocketarena ^1";
-	else if(cvar("g_nixnex"))
+	else if(g_nixnex)
 		mutator = "^2No Items Nexuiz ^1";
 
-	if(cvar("g_midair")) {
+	if(g_midair) {
 		// to protect against unheedingly made changes
 		if (modifications) {
 			modifications = strcat(modifications, ", ");
 		}
 		modifications = "midair";
 	}
-	if(cvar("g_vampire")) {
+	if(g_vampire) {
 		if (modifications) {
 			modifications = strcat(modifications, ", ");
 		}
 		modifications = strcat(modifications, "vampire");
 	}
-	if(cvar("g_laserguided_missile")) {
+	if(g_laserguided_missile) {
 		if (modifications) {
 			modifications = strcat(modifications, ", ");
 		}
@@ -439,7 +439,7 @@ void PrintWelcomeMessage(entity pl)
 
 	s = strzone(s);
 
-	if (cvar("g_grappling_hook"))
+	if (g_grappling_hook)
 		s = strcat(s, "\n\n^8grappling hook is enabled, press 'e' to use it\n");
 
 	if (cvar_string("_mutatormsg") != "") {

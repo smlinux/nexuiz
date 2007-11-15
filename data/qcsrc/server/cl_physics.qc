@@ -64,7 +64,7 @@ void PlayerJump (void)
 		}
 	}
 
-	if(cvar("g_minstagib") && (self.items & IT_INVINCIBLE))
+	if(g_minstagib && (self.items & IT_INVINCIBLE))
 	{
 		mjumpheight = mjumpheight * cvar("g_balance_rune_speed_jumpheight");
 	}
@@ -172,7 +172,7 @@ void SV_PlayerPhysics()
 		}
 	}
 
-	if(cvar("g_minstagib") && (self.items & IT_INVINCIBLE))
+	if(g_minstagib && (self.items & IT_INVINCIBLE))
 	{
 		maxspd_mod = cvar("g_balance_rune_speed_moverate");
 	}

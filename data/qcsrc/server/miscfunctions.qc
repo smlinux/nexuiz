@@ -687,6 +687,19 @@ float start_armorvalue;
 
 void readlevelcvars(void)
 {
+	g_cloaked = cvar("g_cloaked");
+	g_footsteps = cvar("g_footsteps");
+	g_grappling_hook = cvar("g_grappling_hook");
+	g_instagib = cvar("g_instagib");
+	g_laserguided_missile = cvar("g_laserguided_missile");
+	g_midair = cvar("g_midair");
+	g_minstagib = cvar("g_minstagib");
+	g_nixnex = cvar("g_nixnex");
+	g_nixnex_with_laser = cvar("g_nixnex_with_laser");
+	g_norecoil = cvar("g_norecoil");
+	g_rocketarena = cvar("g_rocketarena");
+	g_vampire = cvar("g_vampire");
+
 	g_pickup_shells                    = cvar("g_pickup_shells");
 	g_pickup_shells_max                = cvar("g_pickup_shells_max");
 	g_pickup_nails                     = cvar("g_pickup_nails");
@@ -716,26 +729,26 @@ void readlevelcvars(void)
 	start_health = cvar("g_balance_health_start");
 	start_armorvalue = cvar("g_balance_armor_start");
 
-	if(cvar("g_instagib"))
+	if(g_instagib)
 	{
 		start_items = IT_NEX;
 		start_switchweapon = WEP_NEX;
 		weapon_action(start_switchweapon, WR_PRECACHE);
 		start_ammo_cells = 999;
 	}
-	else if(cvar("g_rocketarena"))
+	else if(g_rocketarena)
 	{
 		start_items = IT_ROCKET_LAUNCHER;
 		start_switchweapon = WEP_ROCKET_LAUNCHER;
 		weapon_action(start_switchweapon, WR_PRECACHE);
 		start_ammo_rockets = 999;
 	}
-	else if(cvar("g_nixnex"))
+	else if(g_nixnex)
 	{
 		start_items = 0;
 		// will be done later
 	}
-	else if(cvar("g_minstagib"))
+	else if(g_minstagib)
 	{
 		start_health = 100;
 		start_armorvalue = 0;

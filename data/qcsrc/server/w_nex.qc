@@ -5,7 +5,7 @@ void W_Nex_Attack (void)
 	W_SetupShot (self, '5 14 -8', TRUE, 5, "weapons/nexfire.wav");
 
 	// assure that nexdamage is high enough in minstagib
-	if (cvar("g_minstagib"))
+	if (g_minstagib)
 		FireRailgunBullet (w_shotorg, w_shotorg + w_shotdir * MAX_SHOT_DISTANCE, 1000, 800, IT_NEX);
 	else
 		FireRailgunBullet (w_shotorg, w_shotorg + w_shotdir * MAX_SHOT_DISTANCE, cvar("g_balance_nex_damage"), cvar("g_balance_nex_force"), IT_NEX);
@@ -31,9 +31,9 @@ void W_Nex_Attack (void)
 	// play a sound
 	PointSound (trace_endpos, "weapons/neximpact.wav", 1, ATTN_NORM);
 
-	if (cvar("g_use_ammunition") && !cvar("g_instagib"))
+	if (cvar("g_use_ammunition") && !g_instagib)
 	{
-		if (cvar("g_minstagib"))
+		if (g_minstagib)
 			self.ammo_cells = self.ammo_cells - 1;
 		else
 			self.ammo_cells = self.ammo_cells - cvar("g_balance_nex_ammo");
@@ -143,7 +143,7 @@ float(float req) w_nex =
 	{
 		if (self.button0)
 		{
-			if(cvar("g_minstagib"))
+			if(g_minstagib)
 			{
 				if (weapon_prepareattack(0, cvar("g_balance_minstagib_nex_refire")))
 				{
@@ -162,7 +162,7 @@ float(float req) w_nex =
 		}
 		else if (self.button3)
 		{
-			if (cvar("g_minstagib"))
+			if (g_minstagib)
 			{
 				if (self.jump_interval <= time)
 				{
@@ -185,7 +185,7 @@ float(float req) w_nex =
 		weapon_setup(WEP_NEX, "nex", IT_CELLS);
 	else if (req == WR_CHECKAMMO1)
 	{
-		if (cvar("g_minstagib"))
+		if (g_minstagib)
 			return self.ammo_cells >= 1;
 		else
 			return self.ammo_cells >= cvar("g_balance_nex_ammo");

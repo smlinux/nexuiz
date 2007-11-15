@@ -104,7 +104,7 @@ void CreatureFrame (void)
 			}
 
 			// play stupid sounds
-			if (cvar("g_footsteps"))
+			if (g_footsteps)
 			if (!gameover)
 			if (self.flags & FL_ONGROUND)
 			if (vlen(self.velocity) > sv_maxspeed * 0.6)

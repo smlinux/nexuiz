@@ -944,7 +944,7 @@ void respawn(void)
 
 void player_powerups (void)
 {
-	if (cvar("g_minstagib"))
+	if (g_minstagib)
 	{
 		self.effects = EF_FULLBRIGHT;
 		if (self.items & IT_STRENGTH)
@@ -1032,7 +1032,7 @@ void player_powerups (void)
 	// first damage in the frame, leaving the player vulnerable to the
 	// remaining hits in the same frame)
 	if (self.flags & FL_ONGROUND)
-	if (cvar("g_midair"))
+	if (g_midair)
 		self.spawnshieldtime = max(self.spawnshieldtime, time + cvar("g_midair_shieldtime"));
 
 	if (time < self.spawnshieldtime)
@@ -1057,7 +1057,7 @@ void player_regen (void)
 	limith = cvar("g_balance_health_limit");
 	limita = cvar("g_balance_armor_limit");
 
-	if (cvar("g_minstagib") || (g_lms && !cvar("g_lms_regenerate")))
+	if (g_minstagib || (g_lms && !cvar("g_lms_regenerate")))
 		return;
 
 	max_mod = regen_mod = rot_mod = limit_mod = 1;
@@ -1459,7 +1459,7 @@ void PlayerPreThink (void)
 			zoomdir = self.button4;
 			if(self.button3)
 				if(self.weapon == WEP_NEX)
-					if(!cvar("g_minstagib"))
+					if(!g_minstagib)
 						zoomdir = 1;
 
 			if(zoomdir)
@@ -1497,7 +1497,7 @@ void PlayerPreThink (void)
 		player_regen();
 		player_anim();
 
-		if (cvar("g_minstagib"))
+		if (g_minstagib)
 			minstagib_ammocheck();
 
 		ctf_setstatus();

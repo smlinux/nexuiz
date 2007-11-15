@@ -27,7 +27,7 @@ void W_Rocket_Explode (void)
 			ATTACK_FINISHED(self.owner) = time;
 			self.owner.switchweapon = w_getbestweapon(self.owner);
 		}
-		if(cvar("g_laserguided_missile"))
+		if(g_laserguided_missile)
 			ATTACK_FINISHED(self.owner) = time + cvar("g_balance_rocketlauncher_refire");
 	}
 	remove (self);
@@ -97,7 +97,7 @@ void W_Rocket_Think (void)
 		return;
 	}
 
-	if(cvar("g_laserguided_missile"))
+	if(g_laserguided_missile)
 	{
 		// accelerate
 		makevectors(self.angles_x * '-1 0 0' + self.angles_y * '0 1 0');
@@ -117,7 +117,7 @@ void W_Rocket_Think (void)
 	// laser guided, or remote detonation
 	if (self.owner.weapon == WEP_ROCKET_LAUNCHER)
 	{
-		if(cvar("g_laserguided_missile"))
+		if(g_laserguided_missile)
 		{
 			if(!self.owner.button0)
 				self.ltime = -1; // indicate that the player has let go of the button
@@ -201,7 +201,7 @@ void W_Rocket_Attack (void)
 	local entity missile;
 	local entity flash, flash2;
 
-	if (cvar("g_use_ammunition") && !cvar("g_rocketarena"))
+	if (cvar("g_use_ammunition") && !g_rocketarena)
 		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_rocketlauncher_ammo");
 
 	W_SetupShot (self, '8 3 -8', FALSE, 5, "weapons/rocket_fire.wav");
@@ -225,7 +225,7 @@ void W_Rocket_Attack (void)
 	setsize (missile, '-3 -3 -3', '3 3 3'); // give it some size so it can be shot
 
 	setorigin (missile, w_shotorg);
-	if(cvar("g_laserguided_missile") && self.laser_on)
+	if(g_laserguided_missile && self.laser_on)
 		missile.velocity = w_shotdir * cvar("g_balance_rocketlauncher_laserguided_speedstart");
 	else
 		missile.velocity = w_shotdir * cvar("g_balance_rocketlauncher_speedstart");
@@ -378,7 +378,7 @@ float(float req) w_rlauncher =
 			sound (self, CHAN_BODY, "weapons/rocket_det.wav", 0.5, ATTN_NORM);
 		}
 		if (self.button3)
-		if(cvar("g_laserguided_missile"))
+		if(g_laserguided_missile)
 		if(self.exteriorweaponentity.attack_finished_single < time)
 		{
 			self.exteriorweaponentity.attack_finished_single = time + 0.4;
@@ -397,7 +397,7 @@ float(float req) w_rlauncher =
 		precache_sound ("weapons/rocket_fire.wav");
 		precache_sound ("weapons/rocket_fly.wav");
 		precache_sound ("weapons/rocket_impact.wav");
-		if (cvar("g_laserguided_missile"))
+		if (g_laserguided_missile)
 			precache_model ("models/laser_dot.mdl"); // rocket launcher
 	}
 	else if (req == WR_SETUP)

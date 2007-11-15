@@ -293,11 +293,11 @@ void Nixnex_ChooseNextWeapon()
 {
 	float numberof, id;
 	numberof = WEP_LAST - WEP_FIRST; // all but the current one
-	if(cvar("g_nixnex_with_laser"))
+	if(g_nixnex_with_laser)
 		numberof = numberof - 1;
 	id = WEP_FIRST + ceil(random() * numberof) - 1;
 
-	if(cvar("g_nixnex_with_laser")) // skip the laser if needed
+	if(g_nixnex_with_laser) // skip the laser if needed
 		id = id + 1;
 
 	if(id >= nixnex_weapon) // skip the current weapon
@@ -320,7 +320,7 @@ void Nixnex_ChooseNextWeapon()
 void Nixnex_GiveCurrentWeapon()
 {
 	float dt;
-	if(cvar("g_nixnex"))
+	if(g_nixnex)
 	{
 		if(!nixnex_nextweapon)
 			Nixnex_ChooseNextWeapon();
@@ -375,7 +375,7 @@ void Nixnex_GiveCurrentWeapon()
 		}
 
 		self.items = self.items - (self.items & (IT_LASER | IT_SHOTGUN | IT_UZI | IT_GRENADE_LAUNCHER | IT_ELECTRO | IT_CRYLINK | IT_NEX | IT_HAGAR | IT_ROCKET_LAUNCHER));
-		if(cvar("g_nixnex_with_laser"))
+		if(g_nixnex_with_laser)
 			self.items = self.items | IT_LASER;
 		self.items = self.items | W_ItemCode(nixnex_weapon);
 

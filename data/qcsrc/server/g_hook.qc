@@ -246,7 +246,7 @@ void FireGrapplingHook (void)
 void GrapplingHookFrame()
 {
 	// this function has been modified for Nexuiz
-	if (self.button6 && cvar("g_grappling_hook"))
+	if (self.button6 && g_grappling_hook)
 	{
 		if (!self.hook && self.hook_time <= time && !self.button6_pressed_before)
 			FireGrapplingHook();
@@ -263,7 +263,7 @@ void GrapplingHookFrame()
 	{
 		self.movetype = MOVETYPE_WALK;
 	}
-	if(self.impulse == GRAPHOOK_FIRE && self.hook_time <= time && cvar("g_grappling_hook"))
+	if(self.impulse == GRAPHOOK_FIRE && self.hook_time <= time && g_grappling_hook)
 	{
 		// fire hook
 		FireGrapplingHook();

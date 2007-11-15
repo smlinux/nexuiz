@@ -125,7 +125,7 @@ void player_anim (void)
 void SpawnThrownWeapon (vector org, float w)
 {
 	if (!cvar("g_pickup_items"))
-	if (!cvar("g_minstagib"))
+	if (!g_minstagib)
 		return;
 	if (!w)
 		return;
@@ -240,7 +240,7 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 	if(numspawned < 2)
 		return;
 
-	if (!cvar("g_minstagib"))
+	if (!g_minstagib)
 	{
 		save = bound(0, damage * cvar("g_balance_armor_blockpercent"), self.armorvalue);
 		take = bound(0, damage - save, damage);
