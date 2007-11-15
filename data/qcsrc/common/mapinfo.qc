@@ -34,6 +34,22 @@ string extractRestOfLine(string haystack, string needle)
 		return substring(haystack, strlen(needle), strlen(haystack) - strlen(needle));
 	return string_null;
 }
+string car(string s)
+{
+	float o;
+	o = strstrofs(s, " ", 0);
+	if(o < 0)
+		return s;
+	return substring(s, 0, o);
+}
+string cdr(string s)
+{
+	float o;
+	o = strstrofs(s, " ", 0);
+	if(o < 0)
+		return string_null;
+	return substring(s, o + 1, strlen(s) - (o + 1));
+}
 
 // GLOB HANDLING (for all BSP files)
 float _MapInfo_globopen;
@@ -59,7 +75,7 @@ void MapInfo_Enumerate()
 string _MapInfo_filtered;
 string MapInfo_FilterGametype_Recursive(float pGametype, float pFeatures, float pBegin, float pEnd)
 {
-	float m;
+	float m, valid;
 	string l, r;
 
 	if(pBegin == pEnd)
@@ -70,13 +86,14 @@ string MapInfo_FilterGametype_Recursive(float pGametype, float pFeatures, float 
 	l = MapInfo_FilterGametype_Recursive(pGametype, pFeatures, pBegin, m);
 	if not(l)
 		return string_null; // BAIL OUT
-	if(MapInfo_Get_ByName(_MapInfo_GlobItem(m), 1) == 2) // if we generated one... BAIL OUT and let the caller continue in the next frame.
+	if(MapInfo_Get_ByName(_MapInfo_GlobItem(m), 1, 0) == 2) // if we generated one... BAIL OUT and let the caller continue in the next frame.
 		return string_null; // BAIL OUT
+	valid = ((MapInfo_Map_supportedGametypes & pGametype) != 0) && ((MapInfo_Map_supportedFeatures & pFeatures) == pFeatures);
 	r = MapInfo_FilterGametype_Recursive(pGametype, pFeatures, m + 1, pEnd);
 	if not(r)
 		return string_null; // BAIL OUT
 
-	if(((MapInfo_Map_supportedGametypes & pGametype) != 0) && ((MapInfo_Map_supportedFeatures & pFeatures) == pFeatures))
+	if(valid)
 		return HugeSetOfIntegers_insert(l, m, r);
 	else
 		return HugeSetOfIntegers_concat(l, r);
@@ -93,7 +110,7 @@ float MapInfo_FilterGametype(float pGametype, float pFeatures)
 	}
 	_MapInfo_filtered = strzone(_MapInfo_filtered);
 	MapInfo_count = HugeSetOfIntegers_length(_MapInfo_filtered);
-	dprint("Filter ", ftos(pGametype), " results in ", _MapInfo_filtered, "\n");
+	dprint("Filter ", ftos(pGametype), "/", ftos(pFeatures), " results in ", _MapInfo_filtered, "\n");
 	// TODO clear cache
 	return 1;
 }
@@ -102,7 +119,7 @@ float MapInfo_FilterGametype(float pGametype, float pFeatures)
 float MapInfo_Get_ByID(float i)
 {
 	// TODO check cache
-	if(MapInfo_Get_ByName(_MapInfo_GlobItem(HugeSetOfIntegers_get(_MapInfo_filtered, i)), 0))
+	if(MapInfo_Get_ByName(_MapInfo_GlobItem(HugeSetOfIntegers_get(_MapInfo_filtered, i)), 0, 0))
 	{
 		// TODO save in cache
 		return 1;
@@ -136,6 +153,7 @@ float _MapInfo_Generate(string pFilename) // 0: failure, 1: ok ent, 2: ok bsp
 	print("Analyzing ", fn, " to generate initial mapinfo; please edit that file later\n");
 
 	inWorldspawn = 2;
+	MapInfo_Map_supportedGametypes = 0;
 
 	for(;;)
 	{
@@ -228,28 +246,59 @@ float _MapInfo_Generate(string pFilename) // 0: failure, 1: ok ent, 2: ok bsp
 	return r;
 }
 
-// load info about a map by name into the MapInfo_Map_* globals
-float MapInfo_Get_ByName(string pFilename, float pAllowGenerate)
+void _MapInfo_Map_Reset()
 {
-	string fn;
-	string s, t;
-	float fh;
-	float r;
-
-	// default all generic fields so they have "good" values in case something fails
 	MapInfo_Map_title = "Untitled1";
 	MapInfo_Map_description = "Bleh.";
 	MapInfo_Map_supportedGametypes = 0;
 	MapInfo_Map_supportedFeatures = 0;
 	MapInfo_Map_diameter = 0;
 	MapInfo_Map_spawnpoints = 0;
+}
 
+void _MapInfo_Map_ApplyGametype(string s, float pWantedType, float pThisType)
+{
+	MapInfo_Map_supportedGametypes |= pThisType;
+	if(!(pThisType & pWantedType))
+		return;
+	
+	cvar_set("fraglimit", car(s));
+	s = cdr(s);
+
+	cvar_set("timelimit", car(s));
+	s = cdr(s);
+
+	if(pWantedType == MAPINFO_TYPE_TEAM_DEATHMATCH)
+	{
+		cvar_set("g_tdm_teams", car(s));
+		s = cdr(s);
+	}
+
+	if(pWantedType == MAPINFO_TYPE_KEYHUNT)
+	{
+		cvar_set("g_keyhunt_teams", car(s));
+		s = cdr(s);
+	}
+}
+
+// load info about a map by name into the MapInfo_Map_* globals
+float MapInfo_Get_ByName(string pFilename, float pAllowGenerate, float pGametypeToSet)
+{
+	string fn;
+	string s, t;
+	float fh;
+	float r;
+
+	r = 1;
+
+	// default all generic fields so they have "good" values in case something fails
 	fn = strcat("maps/", pFilename, ".mapinfo");
 	fh = fopen(fn, FILE_READ);
 	if(fh < 0)
 	{
 		if(!pAllowGenerate)
 			return 0;
+		_MapInfo_Map_Reset();
 		r = _MapInfo_Generate(pFilename);
 		if(!r)
 			return 0;
@@ -260,8 +309,8 @@ float MapInfo_Get_ByName(string pFilename, float pAllowGenerate)
 		fputs(fh, strcat("_spawnpoints ", ftos(MapInfo_Map_spawnpoints), "\n"));
 		if(MapInfo_Map_supportedFeatures & MAPINFO_FEATURE_WEAPONS)       fputs(fh, "has weapons\n");
 		if(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_DEATHMATCH)      fputs(fh, "type dm 30 20\n");
-		if(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_TEAM_DEATHMATCH) fputs(fh, "type tdm 50 20 2\n"); // TODO count tdm_team entities
-		if(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_DOMINATION)      fputs(fh, "type dom 200 20 2\n"); // TODO count tdm_team entities
+		if(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_TEAM_DEATHMATCH) fputs(fh, "type tdm 50 20 2\n");
+		if(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_DOMINATION)      fputs(fh, "type dom 200 20\n");
 		if(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_CTF)             fputs(fh, "type ctf 300 20\n");
 		if(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_RUNEMATCH)       fputs(fh, "type rune 200 20\n");
 		if(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_LMS)             fputs(fh, "type lms 9 20\n");
@@ -270,50 +319,58 @@ float MapInfo_Get_ByName(string pFilename, float pAllowGenerate)
 		if(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_ASSAULT)         fputs(fh, "type as 20\n");
 		if(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_ONSLAUGHT)       fputs(fh, "type ons 20\n");
 		fclose(fh);
+		r = 2;
 		// return r;
-		return 2;
+		fh = fopen(fn, FILE_READ);
+		if(fh < 0)
+			error("... but I just wrote it!");
 	}
+
+	_MapInfo_Map_Reset();
 	for(;;)
 	{
 		if not((s = fgets(fh)))
 			break;
-		tokenize(s);
-		t = argv(0);
-		if(t == "title")
-			MapInfo_Map_title = substring(s, 6, strlen(s) - 6); // without "title"
+		t = car(s); s = cdr(s);
+		if     (t == "title")
+			MapInfo_Map_title = t;
 		else if(t == "description")
 			MapInfo_Map_description = substring(s, 12, strlen(s) - 12);
 		else if(t == "_diameter")
-			MapInfo_Map_diameter = stof(argv(1));
+			MapInfo_Map_diameter = stof(s);
 		else if(t == "_spawnpoints")
-			MapInfo_Map_spawnpoints = stof(argv(1));
+			MapInfo_Map_spawnpoints = stof(s);
 		else if(t == "has")
 		{
-			t = argv(1);
+			t = car(s); s = cdr(s);
 			if     (t == "weapons") MapInfo_Map_supportedFeatures |= MAPINFO_FEATURE_WEAPONS;
 			else
 				dprint("Map ", pFilename, " supports unknown feature ", t, ", ignored\n");
 		}
 		else if(t == "type")
 		{
-			t = argv(1);
-			if     (t == "dm")    MapInfo_Map_supportedGametypes |= MAPINFO_TYPE_DEATHMATCH;
-			else if(t == "tdm")   MapInfo_Map_supportedGametypes |= MAPINFO_TYPE_TEAM_DEATHMATCH;
-			else if(t == "dom")   MapInfo_Map_supportedGametypes |= MAPINFO_TYPE_DOMINATION;
-			else if(t == "ctf")   MapInfo_Map_supportedGametypes |= MAPINFO_TYPE_CTF;
-			else if(t == "rune")  MapInfo_Map_supportedGametypes |= MAPINFO_TYPE_RUNEMATCH;
-			else if(t == "lms")   MapInfo_Map_supportedGametypes |= MAPINFO_TYPE_LMS;
-			else if(t == "arena") MapInfo_Map_supportedGametypes |= MAPINFO_TYPE_ARENA;
-			else if(t == "kh")    MapInfo_Map_supportedGametypes |= MAPINFO_TYPE_KEYHUNT;
-			else if(t == "as")    MapInfo_Map_supportedGametypes |= MAPINFO_TYPE_ASSAULT;
-			else if(t == "ons")   MapInfo_Map_supportedGametypes |= MAPINFO_TYPE_ONSLAUGHT;
+			t = car(s); s = cdr(s);
+			if     (t == "dm")    _MapInfo_Map_ApplyGametype (s, pGametypeToSet, MAPINFO_TYPE_DEATHMATCH);
+			else if(t == "tdm")   _MapInfo_Map_ApplyGametype (s, pGametypeToSet, MAPINFO_TYPE_TEAM_DEATHMATCH);
+			else if(t == "dom")   _MapInfo_Map_ApplyGametype (s, pGametypeToSet, MAPINFO_TYPE_DOMINATION);
+			else if(t == "ctf")   _MapInfo_Map_ApplyGametype (s, pGametypeToSet, MAPINFO_TYPE_CTF);
+			else if(t == "rune")  _MapInfo_Map_ApplyGametype (s, pGametypeToSet, MAPINFO_TYPE_RUNEMATCH);
+			else if(t == "lms")   _MapInfo_Map_ApplyGametype (s, pGametypeToSet, MAPINFO_TYPE_LMS);
+			else if(t == "arena") _MapInfo_Map_ApplyGametype (s, pGametypeToSet, MAPINFO_TYPE_ARENA);
+			else if(t == "kh")    _MapInfo_Map_ApplyGametype (s, pGametypeToSet, MAPINFO_TYPE_KEYHUNT);
+			else if(t == "as")    _MapInfo_Map_ApplyGametype (s, pGametypeToSet, MAPINFO_TYPE_ASSAULT);
+			else if(t == "ons")   _MapInfo_Map_ApplyGametype (s, pGametypeToSet, MAPINFO_TYPE_ONSLAUGHT);
 			else
 				dprint("Map ", pFilename, " supports unknown game type ", t, ", ignored\n");
 		}
 		else
-			dprint("Map ", pFilename, " supports unknown game type ", t, ", ignored\n");
+			dprint("Map ", pFilename, " provides unknown info item ", t, ", ignored\n");
 	}
 	fclose(fh);
+	print(pFilename, " -> ", ftos(MapInfo_Map_supportedGametypes), ", ", ftos(MapInfo_Map_supportedFeatures), "\n");
+	if(pGametypeToSet)
+		if(!(MapInfo_Map_supportedGametypes & pGametypeToSet))
+			error("Can't select the requested game type. Bailing out.");
 	if(MapInfo_Map_supportedGametypes != 0)
 		return 1;
 	dprint("Map ", pFilename, " supports no game types, ignored\n");
@@ -391,7 +448,7 @@ float MapInfo_CurrentGametype()
 
 float MapInfo_CheckMap(string s) // returns 0 if the map can't be played with the current settings, 1 otherwise
 {
-	if(!MapInfo_Get_ByName(s, 1))
+	if(!MapInfo_Get_ByName(s, 1, 0))
 		return 0;
 	if((MapInfo_Map_supportedGametypes & MapInfo_CurrentGametype()) == 0)
 		return 0;
@@ -415,5 +472,18 @@ void MapInfo_LoadMap(string s)
 		cvar_set("g_keyhunt", "0");
 		cvar_set("g_onslaught", "0");
 	}
+	MapInfo_Get_ByName(s, 1, MapInfo_CurrentGametype());
 	localcmd(strcat("\nchangelevel ", s, "\n"));
+}
+
+string MapInfo_ListAllowedMaps()
+{
+	string out;
+	float i;
+	MapInfo_Enumerate();
+	MapInfo_FilterGametype(MapInfo_CurrentGametype(), MapInfo_CurrentFeatures());
+	out = "";
+	for(i = 0; i < MapInfo_count; ++i)
+		out = strcat(out, " ", _MapInfo_GlobItem(HugeSetOfIntegers_get(_MapInfo_filtered, i)));
+	return substring(out, 1, strlen(out) - 1);
 }

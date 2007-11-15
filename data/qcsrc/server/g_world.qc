@@ -395,10 +395,11 @@ string GetGametype()
 
 float IsSameGametype(string mapcfgname)
 {
+#ifdef MAPINFO
+	return TRUE; // can't change game type by map name here
+#else
 	string gt;
 	gt = GetGametype();
-#ifdef MAPINFO
-#else
 	if(substring(mapcfgname, 0, strlen(gt) + 1) == strcat(gt, "_"))
 		return TRUE;
 	return FALSE;
@@ -409,6 +410,7 @@ string getmapname_stored;
 string GetMapname()
 {
 #ifdef MAPINFO
+	return mapname;
 #else
 	if(getmapname_stored == "")
 		getmapname_stored = strzone(strcat(GetGametype(), "_", mapname));
@@ -519,6 +521,7 @@ float(float position, float pass) Map_Check =
 			return 0;
 	}
 #ifdef MAPINFO
+	if(MapInfo_CheckMap(argv(position)))
 #else
 	filename = Map_Filename(position);
 	if(TryFile(filename))
@@ -554,6 +557,12 @@ void(float position) Map_Goto_SetFloat =
 
 void() GameResetCfg =
 {
+#ifdef MAPINFO
+	// settings persist, except...
+	if(cvar("g_campaign"))
+		localcmd("\nexec mutator_reset.cfg\n");
+	localcmd("\nsettemp_restore\n");
+#else
 	// if an exit cfg is defined by exiting map, exec it.
 	string exit_cfg;
 	exit_cfg = cvar_string("exit_cfg");
@@ -561,6 +570,7 @@ void() GameResetCfg =
 		localcmd(strcat("exec \"", exit_cfg, "\"\n"));
 
 	localcmd("exec game_reset.cfg\n");
+#endif
 
 	Ban_SaveBans();
 };
@@ -570,6 +580,7 @@ void() Map_Goto =
 	Map_MarkAsRecent(getmapname_stored);
 	GameResetCfg();
 #ifdef MAPINFO
+	MapInfo_LoadMap(getmapname_stored);
 #else
 	localcmd(strcat("exec \"maps/", getmapname_stored ,".mapcfg\"\n"));
 #endif
@@ -641,11 +652,20 @@ float(float exponent) MaplistMethod_Shuffle = // more clever shuffling
 
 		// insert the current map there
 		newlist = "";
+#ifdef MAPINFO
+		for(j = 1; j < insertpos; ++j)                 // i == 1: no loop, will be inserted as first; however, i == 1 has been excluded above
+			newlist = strcat(newlist, " ", argv(j));
+		newlist = strcat(newlist, " ", argv(0));       // now insert the just selected map
+		for(j = insertpos; j < Map_Count; ++j)         // i == Map_Count: no loop, has just been inserted as last
+			newlist = strcat(newlist, " ", argv(j));
+		newlist = substring(newlist, 1, strlen(newlist) - 1);
+#else
 		for(j = 1; j < insertpos; ++j)                 // i == 1: no loop, will be inserted as first; however, i == 1 has been excluded above
 			newlist = strcat(newlist, "'", argv(j), "'");
 		newlist = strcat(newlist, "'", argv(0), "'");  // now insert the just selected map
 		for(j = insertpos; j < Map_Count; ++j)         // i == Map_Count: no loop, has just been inserted as last
 			newlist = strcat(newlist, "'", argv(j), "'");
+#endif
 		cvar_set("g_maplist", newlist);
 		Map_Count = tokenize(newlist);
 
@@ -666,6 +686,7 @@ void() Maplist_Init =
 	{
 		bprint( "Maplist is empty!  Resetting it to default map list.\n" );
 #ifdef MAPINFO
+		cvar_set("g_maplist", temp = MapInfo_ListAllowedMaps());
 #else
 		cvar_set("g_maplist", temp = cvar_string("g_maplist_defaultlist"));
 #endif
@@ -747,6 +768,7 @@ float() DoNextMapOverride =
 	}
 	if(cvar_string("nextmap") != "")
 #ifdef MAPINFO
+		if(MapInfo_CheckMap(cvar_string("nextmap")))
 #else
 		if(TryFile(strcat("maps/", cvar_string("nextmap"), ".mapcfg")))
 #endif
@@ -789,6 +811,7 @@ void() GotoNextMap =
 			{
 				bprint( "Maplist contains no single playable map!  Resetting it to default map list.\n" );
 #ifdef MAPINFO
+				cvar_set("g_maplist", MapInfo_ListAllowedMaps());
 #else
 				cvar_set("g_maplist", cvar_string("g_maplist_defaultlist"));
 #endif
@@ -1565,12 +1588,22 @@ void ShuffleMaplist()
 		selected = ceil(random() * (litems - start) + start) - 1;
 
 		// shift this item to the place start
+#ifdef MAPINFO
+		for(i = 0; i < start; ++i)
+			result = strcat(result, " ", argv(i));
+		result = strcat(result, " ", argv(selected));
+		for(i = start; i < litems; ++i)
+			if(i != selected)
+				result = strcat(result, " ", argv(i));
+		result = substring(result, 1, strlen(result) - 1);
+#else
 		for(i = 0; i < start; ++i)
 			result = strcat(result, "'", argv(i), "'");
 		result = strcat(result, "'", argv(selected), "'");
 		for(i = start; i < litems; ++i)
 			if(i != selected)
 				result = strcat(result, "'", argv(i), "'");
+#endif
 
 		litems = tokenize(result);
 
@@ -1763,6 +1796,7 @@ string MapVote_Suggest(string m)
 			return "This server does not allow for recent maps to be played again. Please be patient for some rounds.";
 
 #ifdef MAPINFO
+	if(!MapInfo_CheckMap(m))
 #else
 	if(!TryFile(strcat("maps/", m, ".mapcfg")))
 #endif
@@ -1822,6 +1856,7 @@ void MapVote_Init()
 	{
 		bprint( "Maplist contains no single playable map!  Resetting it to default map list.\n" );
 #ifdef MAPINFO
+		cvar_set("g_maplist", MapInfo_ListAllowedMaps());
 #else
 		cvar_set("g_maplist", cvar_string("g_maplist_defaultlist"));
 #endif
@@ -2063,6 +2098,7 @@ void MapVote_Think()
 string GotoMap(string m)
 {
 #ifdef MAPINFO
+	if(!MapInfo_CheckMap(m))
 #else
 	if(!TryFile(strcat("maps/", m, ".mapcfg")))
 #endif

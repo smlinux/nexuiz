@@ -49,8 +49,12 @@ void() CampaignPostInit =
 	// now some sanity checks
 	string thismapname, wantedmapname;
 	thismapname = GetMapname();
+#ifdef MAPINFO
+	wantedmapname = campaign_mapname[0];
+#else
 	wantedmapname = campaign_gametype[0];
 	wantedmapname = strcat(wantedmapname, "_", campaign_mapname[0]);
+#endif
 	if(wantedmapname != thismapname)
 		return CampaignBailout(strcat("wrong map: ", wantedmapname, " != ", thismapname));
 	cvar_set("fraglimit", ftos(campaign_fraglimit[0]));
