@@ -50,7 +50,7 @@ void GameCommand(string command)
 		return;
 	}
 
-	if(argv(0) == "make-mapinfo")
+	if(argv(0) == "make_mapinfo")
 	{
 		entity e;
 		e = spawn();

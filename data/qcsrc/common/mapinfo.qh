@@ -16,6 +16,8 @@ float MapInfo_count;
 string MapInfo_Map_title;
 string MapInfo_Map_description;
 float MapInfo_Map_supportedGametypes;
+float MapInfo_Map_diameter;
+float MapInfo_Map_spawnpoints;
 
 // load MapInfo_count; generate mapinfo for maps that miss them, and clear the
 // cache; you need to call MapInfo_FilterGametype afterwards!
