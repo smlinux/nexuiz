@@ -100,6 +100,8 @@ string MapInfo_FilterGametype_Recursive(float pGametype, float pFeatures, float 
 }
 float MapInfo_FilterGametype(float pGametype, float pFeatures)
 {
+	MapInfo_Enumerate();
+
 	if(_MapInfo_filtered)
 		strunzone(_MapInfo_filtered);
 	_MapInfo_filtered = MapInfo_FilterGametype_Recursive(pGametype, pFeatures, 0, _MapInfo_globcount);
@@ -384,6 +386,8 @@ string MapInfo_FixName(string s)
 	// note that DP sorts glob results... so I can use a binary search
 	string match;
 	float l, r, m, cmp;
+	MapInfo_Enumerate();
+	MapInfo_FilterGametype(MapInfo_CurrentGametype(), MapInfo_CurrentFeatures());
 	l = 0;
 	r = MapInfo_count;
 	// invariants: r is behind s, l-1 is equal or before

@@ -2,7 +2,6 @@ string GotoMap(string m);
 
 void make_mapinfo_Think()
 {
-	MapInfo_Enumerate(); // just in case
 	if(MapInfo_FilterGametype(MAPINFO_TYPE_ALL, 0))
 	{
 		print("Done rebuiling mapinfos.\n");

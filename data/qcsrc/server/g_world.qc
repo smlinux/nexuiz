@@ -1788,6 +1788,11 @@ string MapVote_Suggest(string m)
 		return "Suggestions are not accepted on this server.";
 	if(mapvote_initialized)
 		return "Can't suggest - voting is already in progress!";
+#ifdef MAPINFO
+	m = MapInfo_FixName(m);
+	if(!m)
+		return "The map you suggested is not available on this server.";
+#endif
 	if(!cvar("g_maplist_votable_suggestions_change_gametype"))
 		if(!IsSameGametype(m))
 			return "This server does not allow changing the game type by map suggestions.";
@@ -1797,10 +1802,11 @@ string MapVote_Suggest(string m)
 
 #ifdef MAPINFO
 	if(!MapInfo_CheckMap(m))
+		return "The map you suggested does not support the current game mode.";
 #else
 	if(!TryFile(strcat("maps/", m, ".mapcfg")))
-#endif
 		return "The map you suggested is not available on this server.";
+#endif
 	for(i = 0; i < mapvote_suggestion_ptr; ++i)
 		if(mapvote_suggestions[i] == m)
 			return "This map was already suggested.";
