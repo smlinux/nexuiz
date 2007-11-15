@@ -162,10 +162,11 @@ void InitGameplayMode()
 		gamemode_name = "Capture the Flag";
 		teams_matter = 1;
 	}
-	else if((game == GAME_RUNEMATCH || cvar("g_runematch")) && !g_minstagib)
+	else if(game == GAME_RUNEMATCH || cvar("g_runematch"))
 	{
 		game = GAME_RUNEMATCH;
 		cvar_set("g_runematch", "1");
+		cvar_set("g_minstagib", "0");
 
 		if(cvar("deathmatch_force_teamplay"))
 			ActivateTeamplay();

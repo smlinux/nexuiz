@@ -28,6 +28,8 @@ void MapInfo_Enumerate();
 
 // filter the info by game type mask (updates MapInfo_count)
 float MapInfo_FilterGametype(float gametype, float features); // 1 on success, 0 on temporary failure (call it again next frame then)
+float MapInfo_CurrentFeatures(); // retrieves currently required features from cvars
+float MapInfo_CurrentGametype(); // retrieves current gametype from cvars
 
 // load info about the i-th map into the MapInfo_Map_* globals
 float MapInfo_Get_ByID(float i); // 1 on success, 0 on failure
@@ -37,3 +39,7 @@ float MapInfo_Get_ByName(string s, float allowGenerate); // 1 on success, 0 on f
 
 // look for a map by a prefix, returns the actual map name on success, string_null on failure or ambigous match
 string MapInfo_FixName(string s);
+
+// play a map
+float MapInfo_CheckMap(string s); // returns 0 if the map can't be played with the current settings
+void MapInfo_LoadMap(string s);

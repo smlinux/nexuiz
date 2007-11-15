@@ -355,3 +355,65 @@ string MapInfo_FixName(string s)
 		return string_null; // ambigous match
 	return match;
 }
+
+float MapInfo_CurrentFeatures()
+{
+	float req;
+	req = 0;
+	if(!(cvar("g_instagib") || cvar("g_minstagib") || cvar("g_nixnex") || cvar("g_rocketarena")))
+		req |= MAPINFO_FEATURE_WEAPONS;
+	return req;
+}
+
+float MapInfo_CurrentGametype()
+{
+	if(cvar("g_domination"))
+		return MAPINFO_TYPE_DOMINATION;
+	else if(cvar("g_ctf"))
+		return MAPINFO_TYPE_CTF;
+	else if(cvar("g_runematch"))
+		return MAPINFO_TYPE_RUNEMATCH;
+	else if(cvar("g_tdm"))
+		return MAPINFO_TYPE_TEAM_DEATHMATCH;
+	else if(cvar("g_assault"))
+		return MAPINFO_TYPE_ASSAULT;
+	else if(cvar("g_lms"))
+		return MAPINFO_TYPE_LMS;
+	else if(cvar("g_arena"))
+		return MAPINFO_TYPE_ARENA;
+	else if(cvar("g_keyhunt"))
+		return MAPINFO_TYPE_KEYHUNT;
+	else if(cvar("g_onslaught"))
+		return MAPINFO_TYPE_ONSLAUGHT;
+	else
+		return MAPINFO_TYPE_DEATHMATCH;
+}
+
+float MapInfo_CheckMap(string s) // returns 0 if the map can't be played with the current settings, 1 otherwise
+{
+	if(!MapInfo_Get_ByName(s, 1))
+		return 0;
+	if((MapInfo_Map_supportedGametypes & MapInfo_CurrentGametype()) == 0)
+		return 0;
+	if((MapInfo_Map_supportedFeatures & MapInfo_CurrentFeatures()) != MapInfo_CurrentFeatures())
+		return 0;
+	return 1;
+}
+
+void MapInfo_LoadMap(string s)
+{
+	if(!MapInfo_CheckMap(s))
+	{
+		print("EMERGENCY: can't play the selected map in the given game mode. Falling back to deathmatch.\n");
+		cvar_set("g_domination", "0");
+		cvar_set("g_ctf", "0");
+		cvar_set("g_runematch", "0");
+		cvar_set("g_tdm", "0");
+		cvar_set("g_assault", "0");
+		cvar_set("g_lms", "0");
+		cvar_set("g_arena", "0");
+		cvar_set("g_keyhunt", "0");
+		cvar_set("g_onslaught", "0");
+	}
+	localcmd(strcat("\nchangelevel ", s, "\n"));
+}
