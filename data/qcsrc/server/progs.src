@@ -12,6 +12,8 @@ campaign.qh
 ../common/util.qh
 ../common/util.qc
 
+../common/mapinfo.qh
+
 ipban.qh
 
 keyhunt.qh
@@ -95,3 +97,5 @@ keyhunt.qc
 assault.qc
 
 ipban.qc
+
+../common/mapinfo.qc

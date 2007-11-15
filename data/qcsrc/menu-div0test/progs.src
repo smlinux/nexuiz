@@ -6,6 +6,9 @@ mbuiltin.qh
 oo/base.h
 
 ../common/util.qh
+
+../common/mapinfo.qh
+
 gamecommand.qh
 menu.qh
 draw.qh
@@ -27,3 +30,4 @@ menu.qc
 draw.qc
 nexuiz/util.qc
 
+../common/mapinfo.qc

@@ -11,12 +11,20 @@ float menuShiftState;
 float menuPrevTime;
 float menuAlpha;
 float prevMenuAlpha;
+float menuLoadedMaplist;
 
 void SUB_Null() { };
 
 void() m_init =
 {
 	dprint_load();
+
+	menuLoadedMaplist = 0;
+	MapInfo_Enumerate();
+	if(!MapInfo_FilterGametype(MAPINFO_TYPE_ALL))
+		return;
+	menuLoadedMaplist = 1;
+
 	GameCommand_Init();
 
 	if(cvar("developer") == 42)
@@ -32,10 +40,15 @@ void() m_init =
 	main.resizeNotify(main, draw_shift, draw_scale, draw_shift, draw_scale);
 	main.focused = 1;
 	menuShiftState = 0;
+
+	if(Menu_Active)
+		m_display(); // delayed menu display
 };
 
 void(float key, float ascii) m_keyup =
 {
+	if(!menuLoadedMaplist)
+		return;
 	if(!Menu_Active)
 		return;
 	draw_reset();
@@ -58,6 +71,8 @@ void(float key, float ascii) m_keyup =
 
 void(float key, float ascii) m_keydown =
 {
+	if(!menuLoadedMaplist)
+		return;
 	if(!Menu_Active)
 		return;
 	if(keyGrabber)
@@ -96,6 +111,11 @@ void() m_draw =
 {
 	float t;
 	float realFrametime;
+	if(!menuLoadedMaplist)
+	{
+		m_init();
+		return;
+	}
 	t = gettime();
 	realFrametime = frametime = min(0.2, t - menuPrevTime);
 	menuPrevTime = t;
@@ -156,13 +176,15 @@ void() m_draw =
 void() m_display =
 {
 	Menu_Active = true;
+	setkeydest(KEY_MENU);
+	setmousetarget(MT_MENU);
+
+	if(!menuLoadedMaplist)
+		return;
 
 	if(mouseButtonsPressed)
 		main.mouseRelease(main, menuMousePos);
 	mouseButtonsPressed = 0;
-
-	setkeydest(KEY_MENU);
-	setmousetarget(MT_MENU);
 
 	main.focusEnter(main);
 	main.showNotify(main);
@@ -173,6 +195,9 @@ void() m_hide =
 	Menu_Active = false;
 	setkeydest(KEY_GAME);
 	setmousetarget(MT_CLIENT);
+
+	if(!menuLoadedMaplist)
+		return;
 
 	main.focusLeave(main);
 	main.hideNotify(main);
@@ -194,6 +219,8 @@ void() m_shutdown =
 void(string itemname) m_goto =
 {
 	entity e;
+	if(!menuLoadedMaplist)
+		return;
 	if(itemname == "") // this can be called by GameCommand
 	{
 		if(gamestatus & (GAME_ISSERVER | GAME_CONNECTED))
