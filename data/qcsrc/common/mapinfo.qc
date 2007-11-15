@@ -311,3 +311,39 @@ float MapInfo_Get_ByName(string pFilename, float pAllowGenerate)
 	dprint("Map ", pFilename, " supports no game types, ignored\n");
 	return 0;
 }
+
+string MapInfo_FixName(string s)
+{
+	// if there is exactly one map of prefix s, return it
+	// if not, return the null string
+	// note that DP sorts glob results... so I can use a binary search
+	string match;
+	float l, r, m, cmp;
+	l = 0;
+	r = MapInfo_count;
+	// invariants: r is behind s, l-1 is equal or before
+	while(l != r)
+	{
+		m = floor((l + r) / 2);
+		cmp = strcasecmp(_MapInfo_GlobItem(HugeSetOfIntegers_get(_MapInfo_filtered, m)), s);
+		if(cmp == 0)
+			return s; // found and good
+		if(cmp < 0)
+			l = m + 1; // l-1 is before s
+		else
+			r = m; // behind s
+	}
+	// r == l, so: l is behind s, l-1 is before
+	// SO: if there is any, l is the one with the right prefix
+	//     and l+1 may be one too
+	if(l == MapInfo_count)
+		return string_null; // no match, behind last item
+	match = _MapInfo_GlobItem(HugeSetOfIntegers_get(_MapInfo_filtered, l));
+	if(!startsWith(match, s))
+		return string_null; // wrong prefix
+	if(l == MapInfo_count - 1)
+		return match; // last one, nothing can follow => unique
+	if(startsWith(_MapInfo_GlobItem(HugeSetOfIntegers_get(_MapInfo_filtered, l + 1)), s))
+		return string_null; // ambigous match
+	return match;
+}

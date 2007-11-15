@@ -397,17 +397,23 @@ float IsSameGametype(string mapcfgname)
 {
 	string gt;
 	gt = GetGametype();
+#ifdef MAPINFO
+#else
 	if(substring(mapcfgname, 0, strlen(gt) + 1) == strcat(gt, "_"))
 		return TRUE;
 	return FALSE;
+#endif
 }
 
 string getmapname_stored;
 string GetMapname()
 {
+#ifdef MAPINFO
+#else
 	if(getmapname_stored == "")
 		getmapname_stored = strzone(strcat(GetGametype(), "_", mapname));
 	return getmapname_stored;
+#endif
 }
 
 float Map_Count, Map_Current;
@@ -465,11 +471,14 @@ float MapHasRightSize(string map)
 	return TRUE;
 }
 
+#ifdef MAPINFO
+#else
 string Map_Filename(float position)
 {
 	// FIXME unused
 	return strcat("maps/", argv(position), ".mapcfg");
 }
+#endif
 
 string strwords(string s, float w)
 {
@@ -509,8 +518,11 @@ float(float position, float pass) Map_Check =
 		if(Map_IsRecent(map_next))
 			return 0;
 	}
+#ifdef MAPINFO
+#else
 	filename = Map_Filename(position);
 	if(TryFile(filename))
+#endif
 	{
 		if(pass == 2)
 			return 1;
@@ -557,7 +569,10 @@ void() Map_Goto =
 {
 	Map_MarkAsRecent(getmapname_stored);
 	GameResetCfg();
+#ifdef MAPINFO
+#else
 	localcmd(strcat("exec \"maps/", getmapname_stored ,".mapcfg\"\n"));
+#endif
 }
 
 // return codes of map selectors:
@@ -650,7 +665,10 @@ void() Maplist_Init =
 	if(Map_Count == 0)
 	{
 		bprint( "Maplist is empty!  Resetting it to default map list.\n" );
+#ifdef MAPINFO
+#else
 		cvar_set("g_maplist", temp = cvar_string("g_maplist_defaultlist"));
+#endif
 		Map_Count = tokenize(temp);
 	}
 	if(Map_Count == 0)
@@ -728,7 +746,10 @@ float() DoNextMapOverride =
 		return TRUE;
 	}
 	if(cvar_string("nextmap") != "")
+#ifdef MAPINFO
+#else
 		if(TryFile(strcat("maps/", cvar_string("nextmap"), ".mapcfg")))
+#endif
 		{
 			Map_Goto_SetStr(cvar_string("nextmap"));
 			Map_Goto();
@@ -767,7 +788,10 @@ void() GotoNextMap =
 			if(allowReset)
 			{
 				bprint( "Maplist contains no single playable map!  Resetting it to default map list.\n" );
+#ifdef MAPINFO
+#else
 				cvar_set("g_maplist", cvar_string("g_maplist_defaultlist"));
+#endif
 			}
 			else
 			{
@@ -1738,7 +1762,10 @@ string MapVote_Suggest(string m)
 		if(Map_IsRecent(m))
 			return "This server does not allow for recent maps to be played again. Please be patient for some rounds.";
 
+#ifdef MAPINFO
+#else
 	if(!TryFile(strcat("maps/", m, ".mapcfg")))
+#endif
 		return "The map you suggested is not available on this server.";
 	for(i = 0; i < mapvote_suggestion_ptr; ++i)
 		if(mapvote_suggestions[i] == m)
@@ -1794,7 +1821,10 @@ void MapVote_Init()
 	if(mapvote_count == 0)
 	{
 		bprint( "Maplist contains no single playable map!  Resetting it to default map list.\n" );
+#ifdef MAPINFO
+#else
 		cvar_set("g_maplist", cvar_string("g_maplist_defaultlist"));
+#endif
 		for(i = 0; i < 100 && mapvote_count < nmax; ++i)
 			MapVote_AddVotable(GetNextMap(), FALSE);
 	}
@@ -2032,7 +2062,10 @@ void MapVote_Think()
 
 string GotoMap(string m)
 {
+#ifdef MAPINFO
+#else
 	if(!TryFile(strcat("maps/", m, ".mapcfg")))
+#endif
 		return "The map you chose is not available on this server.";
 	cvar_set("nextmap", m);
 	cvar_set("timelimit", "-1");
