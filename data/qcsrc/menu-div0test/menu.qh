@@ -3,7 +3,8 @@
 #define NULL (null_entity)
 
 #ifndef MAPINFO
-#error Sorry, need to compile with -DMAPINFO enabled (server QC too, by the way)
+#warning Sorry, need to compile with -DMAPINFO enabled (server QC too, by the way)
+!
 #endif
 
 // constants
