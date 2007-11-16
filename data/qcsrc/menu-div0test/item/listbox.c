@@ -171,8 +171,8 @@ float mouseReleaseListBox(entity me, vector pos)
 		// and give it a nice click event
 		if(me.nItems > 0)
 		{
-			absSize = boxToGlobalSize(me.size, eX * (1 - me.controlWidth) + eY);
-			me.clickListBoxItem(me, me.selectedItem, globalToBox(pos, eX * (me.selectedItem * me.itemHeight - me.scrollPos), absSize));
+			absSize = boxToGlobalSize(me.size, eX * (1 - me.controlWidth) + eY * me.itemHeight);
+			me.clickListBoxItem(me, me.selectedItem, globalToBox(pos, eY * (me.selectedItem * me.itemHeight - me.scrollPos), eX * (1 - me.controlWidth) + eY * me.itemHeight));
 		}
 	}
 	me.pressed = 0;

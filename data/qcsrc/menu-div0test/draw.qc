@@ -57,6 +57,12 @@ vector boxToGlobalSize(vector v, vector theScale)
 	return v;
 }
 
+void draw_PreloadPicture(string pic)
+{
+	pic = draw_UseSkinFor(pic);
+	precache_pic(pic);
+}
+
 void draw_Picture(vector theOrigin, string pic, vector theSize, vector theColor, float theAlpha)
 {
 	pic = draw_UseSkinFor(pic);

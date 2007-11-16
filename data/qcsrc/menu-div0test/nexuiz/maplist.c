@@ -25,6 +25,8 @@ CLASS(NexuizMapList) EXTENDS(NexuizListBox)
 	METHOD(NexuizMapList, g_maplistCacheQuery, float(entity, float))
 ENDCLASS(NexuizMapList)
 entity makeNexuizMapList();
+void MapList_All(entity btn, entity me);
+void MapList_None(entity btn, entity me);
 #endif
 
 #ifdef IMPLEMENTATION
@@ -47,7 +49,8 @@ float g_maplistCacheQueryNexuizMapList(entity me, float i)
 }
 void g_maplistCacheToggleNexuizMapList(entity me, float i)
 {
-	string a, b, c, s;
+	string a, b, c, s, bspname;
+	float n;
 	s = me.g_maplistCache;
 	if not(s)
 		return;
@@ -62,6 +65,20 @@ void g_maplistCacheToggleNexuizMapList(entity me, float i)
 	c = substring(s, i+1, strlen(s) - (i+1));
 	strunzone(s);
 	me.g_maplistCache = strzone(strcat(a, b, c));
+	// TODO also update the actual cvar
+	if not((bspname = MapInfo_BSPName_ByID(i)))
+		return;
+	if(b == "1")
+		cvar_set("g_maplist", strcat(bspname, " ", cvar_string("g_maplist")));
+	else
+	{
+		s = "";
+		n = tokenize(cvar_string("g_maplist"));
+		for(i = 0; i < n; ++i)
+			if(argv(i) != bspname)
+				s = strcat(s, " ", argv(i));
+		cvar_set("g_maplist", substring(s, 1, strlen(s) - 1));
+	}
 }
 
 void resizeNotifyNexuizMapList(entity me, vector relOrigin, vector relSize, vector absOrigin, vector absSize)
@@ -86,16 +103,24 @@ void resizeNotifyNexuizMapList(entity me, vector relOrigin, vector relSize, vect
 }
 void clickListBoxItemNexuizMapList(entity me, float i, vector where)
 {
-	if(i == me.lastClickedMap)
-		if(time < me.lastClickedTime + 0.3)
-		{
-			// DOUBLE CLICK!
-			// insert/remove into/from maplist
+	if(where_x <= me.columnPreviewOrigin + me.columnPreviewSize)
+	{
+		if(where_x >= 0)
 			me.g_maplistCacheToggle(me, i);
-			// TODO also update the actual cvar
-		}
-	me.lastClickedMap = i;
-	me.lastClickedTime = time;
+	}
+	if(where_x >= me.columnNameOrigin)
+		if(where_x <= 1)
+			{
+				if(i == me.lastClickedMap)
+					if(time < me.lastClickedTime + 0.3)
+					{
+						// DOUBLE CLICK!
+						// pop up map info screen
+						return;
+					}
+				me.lastClickedMap = i;
+				me.lastClickedTime = time;
+			}
 }
 void drawListBoxItemNexuizMapList(entity me, float i, vector absSize, float isSelected)
 {
@@ -138,6 +163,8 @@ void refilterNexuizMapList(entity me)
 	string s;
 	MapInfo_FilterGametype(MapInfo_CurrentGametype(), MapInfo_CurrentFeatures());
 	me.nItems = MapInfo_count;
+	for(i = 0; i < MapInfo_count; ++i)
+		draw_PreloadPicture(strcat("/maps/", MapInfo_BSPName_ByID(i)));
 	if(me.g_maplistCache)
 		strunzone(me.g_maplistCache);
 	s = "0";
@@ -155,5 +182,21 @@ void refilterNexuizMapList(entity me)
 			);
 	}
 	me.g_maplistCache = strzone(s);
+}
+void MapList_All(entity btn, entity me)
+{
+	float i;
+	string s;
+	MapInfo_FilterGametype(MAPINFO_TYPE_ALL, 0); // all
+	s = "";
+	for(i = 0; i < MapInfo_count; ++i)
+		s = strcat(s, " ", MapInfo_BSPName_ByID(i));
+	cvar_set("g_maplist", substring(s, 1, strlen(s) - 1));
+	me.refilter(me);
+}
+void MapList_None(entity btn, entity me)
+{
+	cvar_set("g_maplist", "");
+	me.refilter(me);
 }
 #endif

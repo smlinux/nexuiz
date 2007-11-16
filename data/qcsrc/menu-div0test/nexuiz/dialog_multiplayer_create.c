@@ -23,6 +23,7 @@ entity makeNexuizServerCreateTab()
 	me.configureDialog(me);
 	return me;
 }
+
 void fillNexuizServerCreateTab(entity me)
 {
 	entity e, e0;
@@ -56,8 +57,16 @@ void fillNexuizServerCreateTab(entity me)
 	me.TR(me);
 		me.TD(me, 1, 3, e = makeNexuizTextLabel(0, "Map list:"));
 	me.TR(me);
-		me.TD(me, me.rows - 5, 3, e = makeNexuizMapList());
+		me.TD(me, me.rows - 6, 3, e = makeNexuizMapList());
 		me.mapListBox = e;
+	me.gotoXY(me, me.rows - 2, 0);
+		me.TD(me, 1, 1, e = makeNexuizButton("All", '0 0 0'));
+			e.onClick = MapList_All;
+			e.onClickEntity = me.mapListBox;
+		me.TD(me, 1, 1, e = makeNexuizButton("None", '0 0 0'));
+			e.onClick = MapList_None;
+			e.onClickEntity = me.mapListBox;
+		me.TD(me, 1, 1, e = makeNexuizButton("Details...", '0 0 0'));
 
 	me.gotoXY(me, 3, 3.5); me.setFirstColumn(me, me.currentColumn);
 		me.TD(me, 1, 3, e = makeNexuizTextLabel(0, "Settings:"));
@@ -70,9 +79,10 @@ void fillNexuizServerCreateTab(entity me)
 		me.TD(me, 1, 2, e = makeNexuizSlider(1.0, 2000.0, 5, "fraglimit_override"));
 			me.sliderFraglimit = e;
 	me.TR(me);
-		me.TD(me, 1, 1, e = makeNexuizButton("Mutators", '0 0 0'));
+		me.TD(me, 1, 1, e = makeNexuizButton("Mutators...", '0 0 0'));
 			e.onClick = DialogOpenButton_Click;
 			e.onClickEntity = main.mutatorsDialog;
+			main.mutatorsDialog.refilterEntity = me.mapListBox;
 
 	me.gotoXY(me, me.rows - 1, 0);
 		me.TD(me, 1, me.columns, e = makeNexuizButton("Start!", '0 0 0'));
