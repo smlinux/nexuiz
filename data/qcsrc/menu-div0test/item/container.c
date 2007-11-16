@@ -136,7 +136,7 @@ void drawContainer(entity me)
 	{
 		if(e.focusable)
 			me.focusable += 1;
-		if not(e.Container_alpha)
+		if(e.Container_alpha < 0.003) // can't change color values anyway
 			continue;
 		draw_shift = boxToGlobal(e.Container_origin, oldshift, oldscale);
 		draw_scale = boxToGlobalSize(e.Container_size, oldscale);
