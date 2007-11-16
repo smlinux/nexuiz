@@ -165,6 +165,13 @@ float _MapInfo_Generate(string pFilename) // 0: failure, 1: ok ent, 2: ok bsp
 		{
 			if(startsWith(s, "\"classname\" \"worldspawn\""))
 				inWorldspawn = 1;
+			else if((v = extractRestOfLine(s, "\"author\" \"")))
+			{
+				for(l = strlen(v) - 1; l > 0; --l)
+					if(substring(v, l, 1) == "\"")
+						break;
+				MapInfo_Map_author = substring(v, 0, l);
+			}
 			else if((v = extractRestOfLine(s, "\"message\" \"")))
 			{
 				for(l = strlen(v) - 1; l > 0; --l)
@@ -248,6 +255,7 @@ void _MapInfo_Map_Reset()
 {
 	MapInfo_Map_title = "Untitled1";
 	MapInfo_Map_description = "Bleh.";
+	MapInfo_Map_author = "He-Who-Must-Not-Be-Named";
 	MapInfo_Map_supportedGametypes = 0;
 	MapInfo_Map_supportedFeatures = 0;
 	MapInfo_Map_diameter = 0;
@@ -304,6 +312,8 @@ float MapInfo_Get_ByName(string pFilename, float pAllowGenerate, float pGametype
 
 	r = 1;
 
+	MapInfo_Map_bspname = pFilename;
+
 	// default all generic fields so they have "good" values in case something fails
 	fn = strcat("maps/", pFilename, ".mapinfo");
 	fh = fopen(fn, FILE_READ);
@@ -318,6 +328,7 @@ float MapInfo_Get_ByName(string pFilename, float pAllowGenerate, float pGametype
 		fh = fopen(fn, FILE_WRITE);
 		fputs(fh, strcat("title ", MapInfo_Map_title, "\n"));
 		fputs(fh, strcat("description ", MapInfo_Map_description, "\n"));
+		fputs(fh, strcat("author ", MapInfo_Map_author, "\n"));
 		fputs(fh, strcat("_diameter ", ftos(MapInfo_Map_diameter), "\n"));
 		fputs(fh, strcat("_spawnpoints ", ftos(MapInfo_Map_spawnpoints), "\n"));
 		if(MapInfo_Map_supportedFeatures & MAPINFO_FEATURE_WEAPONS)       fputs(fh, "has weapons\n");
@@ -346,9 +357,11 @@ float MapInfo_Get_ByName(string pFilename, float pAllowGenerate, float pGametype
 			break;
 		t = car(s); s = cdr(s);
 		if     (t == "title")
-			MapInfo_Map_title = t;
+			MapInfo_Map_title = s;
 		else if(t == "description")
-			MapInfo_Map_description = substring(s, 12, strlen(s) - 12);
+			MapInfo_Map_description = s;
+		else if(t == "author")
+			MapInfo_Map_author = s;
 		else if(t == "_diameter")
 			MapInfo_Map_diameter = stof(s);
 		else if(t == "_spawnpoints")
@@ -382,22 +395,23 @@ float MapInfo_Get_ByName(string pFilename, float pAllowGenerate, float pGametype
 	return 0;
 }
 
-string MapInfo_FixName(string s)
+string _MapInfo_FindName_match;
+float MapInfo_FindName(string s)
 {
 	// if there is exactly one map of prefix s, return it
 	// if not, return the null string
 	// note that DP sorts glob results... so I can use a binary search
-	string match;
 	float l, r, m, cmp;
 	l = 0;
 	r = MapInfo_count;
+	_MapInfo_FindName_match = string_null;
 	// invariants: r is behind s, l-1 is equal or before
 	while(l != r)
 	{
 		m = floor((l + r) / 2);
 		cmp = strcasecmp(_MapInfo_GlobItem(HugeSetOfIntegers_get(_MapInfo_filtered, m)), s);
 		if(cmp == 0)
-			return s; // found and good
+			return m; // found and good
 		if(cmp < 0)
 			l = m + 1; // l-1 is before s
 		else
@@ -407,15 +421,21 @@ string MapInfo_FixName(string s)
 	// SO: if there is any, l is the one with the right prefix
 	//     and l+1 may be one too
 	if(l == MapInfo_count)
-		return string_null; // no match, behind last item
-	match = _MapInfo_GlobItem(HugeSetOfIntegers_get(_MapInfo_filtered, l));
-	if(!startsWith(match, s))
-		return string_null; // wrong prefix
+		return -1; // no _MapInfo_FindName_match, behind last item
+	_MapInfo_FindName_match = _MapInfo_GlobItem(HugeSetOfIntegers_get(_MapInfo_filtered, l));
+	if(!startsWith(_MapInfo_FindName_match, s))
+		return -1; // wrong prefix
 	if(l == MapInfo_count - 1)
-		return match; // last one, nothing can follow => unique
+		return l; // last one, nothing can follow => unique
 	if(startsWith(_MapInfo_GlobItem(HugeSetOfIntegers_get(_MapInfo_filtered, l + 1)), s))
-		return string_null; // ambigous match
-	return match;
+		return -1; // ambigous _MapInfo_FindName_match
+	return l;
+}
+
+string MapInfo_FixName(string s)
+{
+	MapInfo_FindName(s);
+	return _MapInfo_FindName_match;
 }
 
 float MapInfo_CurrentFeatures()

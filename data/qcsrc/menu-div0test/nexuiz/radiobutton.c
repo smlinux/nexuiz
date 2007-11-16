@@ -1,6 +1,7 @@
 #ifdef INTERFACE
 CLASS(NexuizRadioButton) EXTENDS(RadioButton)
 	METHOD(NexuizRadioButton, configureNexuizRadioButton, void(entity, float, string, string, string))
+	METHOD(NexuizRadioButton, draw, void(entity))
 	METHOD(NexuizRadioButton, setChecked, void(entity, float))
 	ATTRIB(NexuizRadioButton, fontSize, float, SKINFONTSIZE_NORMAL)
 	ATTRIB(NexuizRadioButton, image, string, SKINGFX_RADIOBUTTON)
@@ -45,11 +46,56 @@ void setCheckedNexuizRadioButton(entity me, float val)
 }
 void loadCvarsNexuizRadioButton(entity me)
 {
-	me.checked = (cvar_string(me.cvarName) == me.cvarValue);
+	if(me.cvarValue)
+		me.checked = (cvar_string(me.cvarName) == me.cvarValue);
+	else
+	{
+		if(me.cvarName)
+		{
+			me.checked = !!cvar(me.cvarName);
+		}
+		else
+		{
+			// this is difficult
+			// this is the "generic" selection... but at this time, not
+			// everything is constructed yet.
+			// we need to set this later in draw()
+			me.checked = 0;
+		}
+	}
+}
+void drawNexuizRadioButton(entity me)
+{
+	if not(me.cvarValue)
+		if not(me.cvarName)
+		{
+			// this is the "other" option
+			// always select this if none other is
+			entity e;
+			float found;
+			found = 0;
+			for(e = me.parent.firstChild; e; e = e.nextSibling)
+				if(e.group == me.group)
+					if(e.checked)
+						found = 1;
+			if(!found)
+				me.setChecked(me, 1);
+		}
+	drawCheckBox(me);
 }
 void saveCvarsNexuizRadioButton(entity me)
 {
-	if(me.checked)
-		cvar_set(me.cvarName, me.cvarValue);
+	if(me.cvarValue)
+	{
+		if(me.checked)
+			cvar_set(me.cvarName, me.cvarValue);
+	}
+	else
+	{
+		if(me.cvarName)
+		{
+			cvar_set(me.cvarName, ftos(me.checked));
+		}
+	}
 }
 #endif

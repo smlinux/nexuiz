@@ -7,6 +7,7 @@ CLASS(NexuizServerCreateTab) EXTENDS(NexuizTab)
 	ATTRIB(NexuizServerCreateTab, rows, float, 22)
 	ATTRIB(NexuizServerCreateTab, columns, float, 6.5)
 
+	ATTRIB(NexuizServerCreateTab, mapListBox, entity, NULL)
 	ATTRIB(NexuizServerCreateTab, sliderFraglimit, entity, NULL)
 	ATTRIB(NexuizServerCreateTab, checkboxFraglimit, entity, NULL)
 ENDCLASS(NexuizServerCreateTab)
@@ -27,23 +28,23 @@ void fillNexuizServerCreateTab(entity me)
 	entity e, e0;
 
 	me.TR(me);
-		me.TD(me, 1, me.columns / 9, e = makeNexuizGametypeButton(1, "g_dm", "DM"));
+		me.TD(me, 2, me.columns / 9, e = makeNexuizGametypeButton(1, "g_dm", "Deathmatch"));
 			e0 = e;
-		me.TD(me, 1, me.columns / 9, e = makeNexuizGametypeButton(1, "g_tdm", "TDM"));
+		me.TD(me, 2, me.columns / 9, e = makeNexuizGametypeButton(1, "g_tdm", "TDM"));
 			if(e.checked) e0 = NULL;
-		me.TD(me, 1, me.columns / 9, e = makeNexuizGametypeButton(1, "g_lms", "LMS"));
+		me.TD(me, 2, me.columns / 9, e = makeNexuizGametypeButton(1, "g_lms", "LMS"));
 			if(e.checked) e0 = NULL;
-		me.TD(me, 1, me.columns / 9, e = makeNexuizGametypeButton(1, "g_arena", "Arena"));
+		me.TD(me, 2, me.columns / 9, e = makeNexuizGametypeButton(1, "g_arena", "Arena"));
 			if(e.checked) e0 = NULL;
-		me.TD(me, 1, me.columns / 9, e = makeNexuizGametypeButton(1, "g_runematch", "Rune"));
+		me.TD(me, 2, me.columns / 9, e = makeNexuizGametypeButton(1, "g_runematch", "Rune"));
 			if(e.checked) e0 = NULL;
-		me.TD(me, 1, me.columns / 9, e = makeNexuizGametypeButton(1, "g_keyhunt", "Key Hunt"));
+		me.TD(me, 2, me.columns / 9, e = makeNexuizGametypeButton(1, "g_keyhunt", "Key Hunt"));
 			if(e.checked) e0 = NULL;
-		me.TD(me, 1, me.columns / 9, e = makeNexuizGametypeButton(1, "g_ctf", "CTF"));
+		me.TD(me, 2, me.columns / 9, e = makeNexuizGametypeButton(1, "g_ctf", "CTF"));
 			if(e.checked) e0 = NULL;
-		me.TD(me, 1, me.columns / 9, e = makeNexuizGametypeButton(1, "g_assault", "Assault"));
+		me.TD(me, 2, me.columns / 9, e = makeNexuizGametypeButton(1, "g_assault", "Assault"));
 			if(e.checked) e0 = NULL;
-		me.TD(me, 1, me.columns / 9, e = makeNexuizGametypeButton(1, "g_onslaught", "Onslaught"));
+		me.TD(me, 2, me.columns / 9, e = makeNexuizGametypeButton(1, "g_onslaught", "Onslaught"));
 			if(e.checked) e0 = NULL;
 		if(e0)
 		{
@@ -52,9 +53,15 @@ void fillNexuizServerCreateTab(entity me)
 		}
 	me.TR(me);
 	me.TR(me);
+	me.TR(me);
 		me.TD(me, 1, 3, e = makeNexuizTextLabel(0, "Map list:"));
+	me.TR(me);
+		me.TD(me, me.rows - 5, 3, e = makeNexuizMapList());
+		me.mapListBox = e;
 
-	me.gotoXY(me, 2, 3.5); me.setFirstColumn(me, me.currentColumn);
+	me.gotoXY(me, 3, 3.5); me.setFirstColumn(me, me.currentColumn);
+		me.TD(me, 1, 3, e = makeNexuizTextLabel(0, "Settings:"));
+	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Time limit:"));
 		me.TD(me, 1, 2, e = makeNexuizSlider(1.0, 60.0, 0.5, "timelimit_override"));
 	me.TR(me);
@@ -62,6 +69,10 @@ void fillNexuizServerCreateTab(entity me)
 			me.checkboxFraglimit = e;
 		me.TD(me, 1, 2, e = makeNexuizSlider(1.0, 2000.0, 5, "fraglimit_override"));
 			me.sliderFraglimit = e;
+	me.TR(me);
+		me.TD(me, 1, 1, e = makeNexuizButton("Mutators", '0 0 0'));
+			e.onClick = DialogOpenButton_Click;
+			e.onClickEntity = main.mutatorsDialog;
 
 	me.gotoXY(me, me.rows - 1, 0);
 		me.TD(me, 1, me.columns, e = makeNexuizButton("Start!", '0 0 0'));
@@ -92,8 +103,7 @@ void gameTypeChangeNotifyNexuizServerCreateTab(entity me)
 		case MAPINFO_TYPE_LMS:        GameType_ConfigureSliders(e, l, "Lives:",         3,   50,  1, "g_lms_lives_override");     break;
 		default:                      GameType_ConfigureSliders(e, l, "Frag limit:",    5,  100,  5, "fraglimit_override");       break;
 	}
-	MapInfo_FilterGametype(MapInfo_CurrentGametype(), MapInfo_CurrentFeatures());
-	print(ftos(MapInfo_count), " maps\n");
+	me.mapListBox.refilter(me.mapListBox);
 }
 
 #endif

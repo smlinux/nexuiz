@@ -43,4 +43,6 @@
 #include "nexuiz/inputbox.c"
 #include "nexuiz/dialog_quit.c"
 #include "nexuiz/dialog_multiplayer_create.c"
+#include "nexuiz/dialog_multiplayer_create_mutators.c"
 #include "nexuiz/gametypebutton.c"
+#include "nexuiz/maplist.c"
