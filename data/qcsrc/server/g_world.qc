@@ -64,6 +64,14 @@ void GotoFirstMap()
 		if(argv(0) != GetMapname())
 		{
 			cvar_set("nextmap", argv(0));
+
+#ifdef MAPINFO
+			MapInfo_Enumerate();
+			while(!MapInfo_FilterGametype(MapInfo_CurrentGametype(), MapInfo_CurrentFeatures()))
+			{
+			}
+#endif
+
 			if(!DoNextMapOverride())
 				GotoNextMap();
 		}
