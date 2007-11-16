@@ -110,7 +110,6 @@ float MapInfo_FilterGametype(float pGametype, float pFeatures)
 	}
 	_MapInfo_filtered = strzone(_MapInfo_filtered);
 	MapInfo_count = HugeSetOfIntegers_length(_MapInfo_filtered);
-	dprint("Filter ", ftos(pGametype), "/", ftos(pFeatures), " results in ", _MapInfo_filtered, "\n");
 	// TODO clear cache
 	return 1;
 }
@@ -242,7 +241,6 @@ float _MapInfo_Generate(string pFilename) // 0: failure, 1: ok ent, 2: ok bsp
 	}
 
 	fclose(fh);
-	dprint(fn, ": types = ", ftos(MapInfo_Map_supportedGametypes), " MapInfo_Map_spawnpoints ", ftos(MapInfo_Map_spawnpoints), " MapInfo_Map_diameter ", ftos(MapInfo_Map_diameter), "\n");
 	return r;
 }
 
@@ -281,13 +279,28 @@ void _MapInfo_Map_ApplyGametype(string s, float pWantedType, float pThisType)
 	}
 }
 
+float MapInfo_Type_FromString(string t)
+{
+	if     (t == "dm")    return MAPINFO_TYPE_DEATHMATCH;
+	else if(t == "tdm")   return MAPINFO_TYPE_TEAM_DEATHMATCH;
+	else if(t == "dom")   return MAPINFO_TYPE_DOMINATION;
+	else if(t == "ctf")   return MAPINFO_TYPE_CTF;
+	else if(t == "rune")  return MAPINFO_TYPE_RUNEMATCH;
+	else if(t == "lms")   return MAPINFO_TYPE_LMS;
+	else if(t == "arena") return MAPINFO_TYPE_ARENA;
+	else if(t == "kh")    return MAPINFO_TYPE_KEYHUNT;
+	else if(t == "as")    return MAPINFO_TYPE_ASSAULT;
+	else if(t == "ons")   return MAPINFO_TYPE_ONSLAUGHT;
+	else                  return 0;
+}
+
 // load info about a map by name into the MapInfo_Map_* globals
 float MapInfo_Get_ByName(string pFilename, float pAllowGenerate, float pGametypeToSet)
 {
 	string fn;
 	string s, t;
 	float fh;
-	float r;
+	float r, f;
 
 	r = 1;
 
@@ -350,16 +363,9 @@ float MapInfo_Get_ByName(string pFilename, float pAllowGenerate, float pGametype
 		else if(t == "type")
 		{
 			t = car(s); s = cdr(s);
-			if     (t == "dm")    _MapInfo_Map_ApplyGametype (s, pGametypeToSet, MAPINFO_TYPE_DEATHMATCH);
-			else if(t == "tdm")   _MapInfo_Map_ApplyGametype (s, pGametypeToSet, MAPINFO_TYPE_TEAM_DEATHMATCH);
-			else if(t == "dom")   _MapInfo_Map_ApplyGametype (s, pGametypeToSet, MAPINFO_TYPE_DOMINATION);
-			else if(t == "ctf")   _MapInfo_Map_ApplyGametype (s, pGametypeToSet, MAPINFO_TYPE_CTF);
-			else if(t == "rune")  _MapInfo_Map_ApplyGametype (s, pGametypeToSet, MAPINFO_TYPE_RUNEMATCH);
-			else if(t == "lms")   _MapInfo_Map_ApplyGametype (s, pGametypeToSet, MAPINFO_TYPE_LMS);
-			else if(t == "arena") _MapInfo_Map_ApplyGametype (s, pGametypeToSet, MAPINFO_TYPE_ARENA);
-			else if(t == "kh")    _MapInfo_Map_ApplyGametype (s, pGametypeToSet, MAPINFO_TYPE_KEYHUNT);
-			else if(t == "as")    _MapInfo_Map_ApplyGametype (s, pGametypeToSet, MAPINFO_TYPE_ASSAULT);
-			else if(t == "ons")   _MapInfo_Map_ApplyGametype (s, pGametypeToSet, MAPINFO_TYPE_ONSLAUGHT);
+			f = MapInfo_Type_FromString(t);
+			if(f)
+				_MapInfo_Map_ApplyGametype (s, pGametypeToSet, f);
 			else
 				dprint("Map ", pFilename, " supports unknown game type ", t, ", ignored\n");
 		}
@@ -367,7 +373,6 @@ float MapInfo_Get_ByName(string pFilename, float pAllowGenerate, float pGametype
 			dprint("Map ", pFilename, " provides unknown info item ", t, ", ignored\n");
 	}
 	fclose(fh);
-	print(pFilename, " -> ", ftos(MapInfo_Map_supportedGametypes), ", ", ftos(MapInfo_Map_supportedFeatures), "\n");
 	if(pGametypeToSet)
 		if(!(MapInfo_Map_supportedGametypes & pGametypeToSet))
 			error("Can't select the requested game type. Bailing out.");
@@ -457,20 +462,26 @@ float MapInfo_CheckMap(string s) // returns 0 if the map can't be played with th
 	return 1;
 }
 
+void MapInfo_SwitchGameType(float t)
+{
+	cvar_set("gamecfg",      "0");
+	cvar_set("g_tdm",        (t == MAPINFO_TYPE_TEAM_DEATHMATCH) ? "0" : "1");
+	cvar_set("g_domination", (t == MAPINFO_TYPE_DOMINATION)      ? "0" : "1");
+	cvar_set("g_ctf",        (t == MAPINFO_TYPE_CTF)             ? "0" : "1");
+	cvar_set("g_runematch",  (t == MAPINFO_TYPE_RUNEMATCH)       ? "0" : "1");
+	cvar_set("g_lms",        (t == MAPINFO_TYPE_LMS)             ? "0" : "1");
+	cvar_set("g_arena",      (t == MAPINFO_TYPE_ARENA)           ? "0" : "1");
+	cvar_set("g_keyhunt",    (t == MAPINFO_TYPE_KEYHUNT)         ? "0" : "1");
+	cvar_set("g_assault",    (t == MAPINFO_TYPE_ASSAULT)         ? "0" : "1");
+	cvar_set("g_onslaught",  (t == MAPINFO_TYPE_ONSLAUGHT)       ? "0" : "1");
+}
+
 void MapInfo_LoadMap(string s)
 {
 	if(!MapInfo_CheckMap(s))
 	{
 		print("EMERGENCY: can't play the selected map in the given game mode. Falling back to deathmatch.\n");
-		cvar_set("g_domination", "0");
-		cvar_set("g_ctf", "0");
-		cvar_set("g_runematch", "0");
-		cvar_set("g_tdm", "0");
-		cvar_set("g_assault", "0");
-		cvar_set("g_lms", "0");
-		cvar_set("g_arena", "0");
-		cvar_set("g_keyhunt", "0");
-		cvar_set("g_onslaught", "0");
+		MapInfo_SwitchGameType(MAPINFO_TYPE_DEATHMATCH);
 	}
 	MapInfo_Get_ByName(s, 1, MapInfo_CurrentGametype());
 	localcmd(strcat("\nchangelevel ", s, "\n"));
