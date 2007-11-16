@@ -96,6 +96,7 @@ void(entity pl) LogTeamchange =
 
 void ResetGameCvars()
 {
+	cvar_set("g_dm", "0");
 	cvar_set("g_tdm", "0");
 	cvar_set("g_domination", "0");
 	cvar_set("g_ctf", "0");
@@ -263,6 +264,7 @@ void InitGameplayMode()
 	{
 		// we can only assume...
 		ResetGameCvars();
+		cvar_set("g_dm", "1");
 		gamemode_name = "Deathmatch";
 		teams_matter = 0;
 	}

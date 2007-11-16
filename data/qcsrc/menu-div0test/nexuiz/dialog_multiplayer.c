@@ -12,12 +12,14 @@ ENDCLASS(NexuizMultiplayerDialog)
 #ifdef IMPLEMENTATION
 void fillNexuizMultiplayerDialog(entity me)
 {
-	entity mc;
+	entity mc, e;
 	mc = makeNexuizTabController(me.rows - 2);
 	me.TR(me);
-		me.TD(me, 1, 1, mc.makeTabButton(mc, "Serverlist",  makeNexuizServerListTab()));
-		me.TD(me, 1, 1, mc.makeTabButton(mc, "Player Setup",  makeNexuizPlayerSettingsTab()));
-		me.TD(me, 1, 1, mc.makeTabButton(mc, "Server Setup",  makeNexuizPlayerSettingsTab()));
+		me.TD(me, 1, 1, e = mc.makeTabButton(mc, "Join",  makeNexuizServerListTab()));
+		me.TD(me, 1, 1, e = mc.makeTabButton(mc, "Player Setup",  makeNexuizPlayerSettingsTab()));
+		if(cvar_string("_cl_name") == "Player")
+			e.onClick(e, e.onClickEntity); // lol animation
+		me.TD(me, 1, 1, e = mc.makeTabButton(mc, "Create",  makeNexuizServerCreateTab()));
 	me.TR(me);
 	me.TR(me);
 		me.TD(me, me.rows - 2, me.columns, mc);
