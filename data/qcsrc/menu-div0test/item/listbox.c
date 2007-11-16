@@ -98,7 +98,7 @@ float mouseDragListBox(entity me, vector pos)
 		{
 			// calculate new pos to v
 			float delta;
-			delta = (pos_y - me.pressOffset) / (1 - 1 / (me.nItems * me.itemHeight)) * (me.nItems * me.itemHeight - 1);
+			delta = (pos_y - me.pressOffset) / (1 - (me.controlBottom - me.controlTop)) * (me.nItems * me.itemHeight - 1);
 			me.scrollPos = me.previousValue + delta;
 		}
 		else
@@ -180,6 +180,7 @@ float mouseReleaseListBox(entity me, vector pos)
 }
 void updateControlTopBottomListBox(entity me)
 {
+	float f;
 	// scrollPos is in 0..1 and indicates where the "page" currently shown starts.
 	if(me.nItems * me.itemHeight <= 1)
 	{
@@ -212,6 +213,20 @@ void updateControlTopBottomListBox(entity me)
 		// now that we know where the list is scrolled to, find out where to draw the control
 		me.controlTop = max(0, me.scrollPos / (me.nItems * me.itemHeight));
 		me.controlBottom = min((me.scrollPos + 1) / (me.nItems * me.itemHeight), 1);
+
+		float fmin;
+		fmin = 1 * me.controlWidth / me.size_y * me.size_x;
+		f = me.controlBottom - me.controlTop;
+		if(f < fmin) // FIXME good default?
+		{
+			// f * X + 1 * (1-X) = fmin
+			// (f - 1) * X + 1 = fmin
+			// (f - 1) * X = fmin - 1
+			// X = (fmin - 1) / (f - 1)
+			f = (fmin - 1) / (f - 1);
+			me.controlTop = me.controlTop * f + 0 * (1 - f);
+			me.controlBottom = me.controlBottom * f + 1 * (1 - f);
+		}
 	}
 }
 void drawListBox(entity me)
