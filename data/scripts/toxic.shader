@@ -16,16 +16,21 @@ textures/toxic/toxic_grate
 	qer_editorimage textures/kaznexctf2/grate.tga
 	surfaceparm nomarks
 	surfaceparm trans
-	surfaceparm alphashadow
 	cull none
 	nopicmip
-	nomipmaps
 	{
 		map textures/kaznexctf2/grate.tga
-		//depthWrite
-		//alphaFunc GT0
-		blendFunc blend
-		rgbgen vertex
+		rgbGen identity
+		depthWrite
+		//alphaFunc GE128
+		blendfunc blend
+	}
+	{
+		map $lightmap 
+		blendfunc filter
+		rgbGen identity
+		tcGen lightmap 
+		depthFunc equal
 	}
 }
 
