@@ -122,6 +122,29 @@ string MapInfo_BSPName_ByID(float i)
 	return _MapInfo_GlobItem(HugeSetOfIntegers_get(_MapInfo_filtered, i));
 }
 
+string unquote(string s)
+{
+	float i, j, l;
+	l = strlen(s);
+	j = -1;
+	for(i = 0; i < l; ++i)
+	{
+		string ch;
+		ch = substring(s, i, 1);
+		if(ch != " ") if(ch != "\"")
+		{
+			for(j = strlen(s) - i - 1; j > 0; --j)
+			{
+				ch = substring(s, i+j, 1);
+				if(ch != " ") if(ch != "\"")
+					return substring(s, i, j+1);
+			}
+			return substring(s, i, 1);
+		}
+	}
+	return "";
+}
+
 float MapInfo_Get_ByID(float i)
 {
 	// TODO check cache
@@ -137,10 +160,10 @@ float _MapInfo_Generate(string pFilename) // 0: failure, 1: ok ent, 2: ok bsp
 {
 	string fn;
 	float fh;
-	string s, v;
+	string s, k, v;
 	vector o;
 	float i;
-	float inWorldspawn, l;
+	float inWorldspawn;
 	float r;
 	float twoBaseModes;
 
@@ -169,40 +192,31 @@ float _MapInfo_Generate(string pFilename) // 0: failure, 1: ok ent, 2: ok bsp
 		if(inWorldspawn == 1)
 			if(startsWith(s, "}"))
 				inWorldspawn = 0;
+		k = unquote(car(s));
+		v = unquote(cdr(s));
 		if(inWorldspawn)
 		{
-			if(startsWith(s, "\"classname\" \"worldspawn\""))
+			if(k == "classname" && v == "worldspawn")
 				inWorldspawn = 1;
-			else if((v = extractRestOfLine(s, "\"author\" \"")))
+			else if(k == "author")
+				MapInfo_Map_author = v;
+			else if(k == "message")
 			{
-				for(l = strlen(v) - 1; l > 0; --l)
-					if(substring(v, l, 1) == "\"")
-						break;
-				MapInfo_Map_author = substring(v, 0, l);
-			}
-			else if((v = extractRestOfLine(s, "\"message\" \"")))
-			{
-				for(l = strlen(v) - 1; l > 0; --l)
-					if(substring(v, l, 1) == "\"")
-						break;
-				i = strstrofs(substring(v, 0, l), " by ", 0);
+				i = strstrofs(v, " by ", 0);
 				if(MapInfo_Map_author == "He-Who-Must-Not-Be-Named" && i >= 0)
 				{
 					MapInfo_Map_title = substring(v, 0, i);
-					MapInfo_Map_author = substring(v, i + 4, l - (i + 4));
+					MapInfo_Map_author = substring(v, i + 4, strlen(v) - (i + 4));
 				}
 				else
-					MapInfo_Map_title = substring(v, 0, l);
+					MapInfo_Map_title = v;
 			}
 		}
 		else
 		{
-			if((v = extractRestOfLine(s, "\"origin\" \"")))
+			if(k == "origin")
 			{
-				for(l = strlen(v) - 1; l > 0; --l)
-					if(substring(v, l, 1) == "\"")
-						break;
-				o = stov(strcat("'", substring(v, 0, l), "'"));
+				o = stov(strcat("'", v, "'"));
 				mapMins_x = min(mapMins_x, o_x);
 				mapMins_y = min(mapMins_y, o_y);
 				mapMins_z = min(mapMins_z, o_z);
@@ -210,27 +224,33 @@ float _MapInfo_Generate(string pFilename) // 0: failure, 1: ok ent, 2: ok bsp
 				mapMaxs_y = max(mapMaxs_y, o_y);
 				mapMaxs_z = max(mapMaxs_z, o_z);
 			}
-			else if((v = extractRestOfLine(s, "\"classname\" \"")))
+			else if(k == "classname")
 			{
-				if(startsWith(v, "dom_controlpoint\""))
+				if(v == "dom_controlpoint")
 					MapInfo_Map_supportedGametypes |= MAPINFO_TYPE_DOMINATION;
-				else if(startsWith(v, "item_flag_team2\""))
+				else if(v == "item_flag_team2")
 					MapInfo_Map_supportedGametypes |= MAPINFO_TYPE_CTF;
-				else if(startsWith(v, "runematch_spawn_point\""))
+				else if(v == "team_CTF_blueflag")
+					MapInfo_Map_supportedGametypes |= MAPINFO_TYPE_CTF;
+				else if(v == "runematch_spawn_point")
 					MapInfo_Map_supportedGametypes |= MAPINFO_TYPE_RUNEMATCH;
-				else if(startsWith(v, "target_assault_roundend\""))
+				else if(v == "target_assault_roundend")
 					MapInfo_Map_supportedGametypes |= MAPINFO_TYPE_ASSAULT;
-				else if(startsWith(v, "onslaught_generator\""))
+				else if(v == "onslaught_generator")
 					MapInfo_Map_supportedGametypes |= MAPINFO_TYPE_ONSLAUGHT;
-				else if(startsWith(v, "info_player_team1\""))
+				else if(v == "info_player_team1")
 					++MapInfo_Map_spawnpoints;
-				else if(startsWith(v, "info_player_team2\""))
+				else if(v == "info_player_team2")
 					++MapInfo_Map_spawnpoints;
-				else if(startsWith(v, "info_player_deathmatch\""))
+				else if(v == "info_player_start")
 					++MapInfo_Map_spawnpoints;
-				else if(startsWith(v, "info_player_start\""))
+				else if(v == "info_player_deathmatch")
 					++MapInfo_Map_spawnpoints;
-				else if(startsWith(v, "weapon_") && !startsWith(v, "weapon_nex\"") && !startsWith(v, "weapon_railgun\""))
+				else if(v == "weapon_nex")
+					{ }
+				else if(v == "weapon_railgun")
+					{ }
+				else if(startsWith(v, "weapon_"))
 					MapInfo_Map_supportedFeatures |= MAPINFO_FEATURE_WEAPONS;
 			}
 		}
