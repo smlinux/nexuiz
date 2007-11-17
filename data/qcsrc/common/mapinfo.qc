@@ -88,7 +88,7 @@ string MapInfo_FilterGametype_Recursive(float pGametype, float pFeatures, float 
 		return string_null; // BAIL OUT
 	if(MapInfo_Get_ByName(_MapInfo_GlobItem(m), 1, 0) == 2) // if we generated one... BAIL OUT and let the caller continue in the next frame.
 		return string_null; // BAIL OUT
-	valid = ((MapInfo_Map_supportedGametypes & pGametype) != 0) && ((MapInfo_Map_supportedFeatures & pFeatures) == pFeatures);
+	valid = (((MapInfo_Map_supportedGametypes & pGametype) != 0) && ((MapInfo_Map_supportedFeatures & pFeatures) == pFeatures));
 	r = MapInfo_FilterGametype_Recursive(pGametype, pFeatures, m + 1, pEnd);
 	if not(r)
 		return string_null; // BAIL OUT
@@ -110,15 +110,21 @@ float MapInfo_FilterGametype(float pGametype, float pFeatures)
 	}
 	_MapInfo_filtered = strzone(_MapInfo_filtered);
 	MapInfo_count = HugeSetOfIntegers_length(_MapInfo_filtered);
+	print("Filter ", ftos(pGametype), "/", ftos(pFeatures), " has ", ftos(MapInfo_count), "\n");
 	// TODO clear cache
 	return 1;
 }
 
 // load info about the i-th map into the MapInfo_Map_* globals
+string MapInfo_BSPName_ByID(float i)
+{
+	return _MapInfo_GlobItem(HugeSetOfIntegers_get(_MapInfo_filtered, i));
+}
+
 float MapInfo_Get_ByID(float i)
 {
 	// TODO check cache
-	if(MapInfo_Get_ByName(_MapInfo_GlobItem(HugeSetOfIntegers_get(_MapInfo_filtered, i)), 0, 0))
+	if(MapInfo_Get_ByName(MapInfo_BSPName_ByID(i), 0, 0))
 	{
 		// TODO save in cache
 		return 1;
@@ -444,6 +450,7 @@ float MapInfo_CurrentFeatures()
 	req = 0;
 	if(!(cvar("g_instagib") || cvar("g_minstagib") || cvar("g_nixnex") || cvar("g_rocketarena")))
 		req |= MAPINFO_FEATURE_WEAPONS;
+	print(ftos(req), "\n");
 	return req;
 }
 
