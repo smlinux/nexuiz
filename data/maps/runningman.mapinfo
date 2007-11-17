@@ -1,0 +1,11 @@
+title Running Man
+description Small DM-Level, best suited for 2 players
+author Paul Evers
+_diameter 3314.800781
+_spawnpoints 10
+has weapons
+type dm 30 20
+type dom 200 20
+type rune 200 20
+type lms 9 20
+type arena 10 20

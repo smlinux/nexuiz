@@ -1,0 +1,12 @@
+title Starship
+description A sprawling complex
+author Chris Matz
+_diameter 3048.152832
+_spawnpoints 27
+has weapons
+type dm 30 20
+type dom 200 20
+type ctf 300 20
+type rune 200 20
+type lms 9 20
+type arena 10 20

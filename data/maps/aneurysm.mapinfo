@@ -1,0 +1,11 @@
+title Aneurysm
+description A multiple arena map with complex flow
+author Paul Evers
+_diameter 3652.639648
+_spawnpoints 8
+has weapons
+type dm 30 20
+type dom 200 20
+type rune 200 20
+type lms 9 20
+type arena 10 20

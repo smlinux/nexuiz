@@ -1,0 +1,12 @@
+title Bleach
+description A large multiple arena map
+author Paul Evers
+_diameter 5181.482910
+_spawnpoints 14
+has weapons
+type dm 30 20
+type tdm 50 20 2
+type dom 200 20
+type rune 200 20
+type lms 9 20
+type kh 1000 20 3

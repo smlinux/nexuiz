@@ -1,0 +1,13 @@
+title Running Man CTF
+description Medium-sized CTF-Map
+author Paul Evers
+_diameter 5930.995117
+_spawnpoints 16
+has weapons
+type dm 30 20
+type tdm 50 20 2
+type dom 200 20
+type ctf 300 20
+type rune 200 20
+type lms 9 20
+type kh 1000 20 3

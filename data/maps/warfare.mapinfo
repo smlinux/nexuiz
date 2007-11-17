@@ -1,0 +1,11 @@
+title Stabilized Warfare: Resurrection
+description Medium sized map with a central area
+author Tymo
+author_email tymo@gmx.de
+author_www http://home.arcor.de/dwalinn/
+_diameter 2806.050537
+_spawnpoints 8
+has weapons
+type dm 30 20
+type lms 9 20
+type arena 10 20

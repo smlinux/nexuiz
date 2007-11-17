@@ -1,0 +1,11 @@
+title Basement
+description A small map designed for fast constant gameplay
+author Garth Hendy
+_diameter 1966.839355
+_spawnpoints 5
+has weapons
+type dm 30 20
+type dom 200 20
+type rune 200 20
+type lms 9 20
+type arena 10 20

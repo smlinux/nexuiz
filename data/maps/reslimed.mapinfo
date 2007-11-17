@@ -1,0 +1,11 @@
+title Slimepit Revisited
+description An industrial arena with deadly slime
+author Paul Evers, Mattrew Rye, Garth Hendy, Maik Merten
+_diameter 4519.555664
+_spawnpoints 10
+has weapons
+type dm 30 20
+type tdm 50 20 2
+type dom 200 20
+type rune 200 20
+type lms 9 20

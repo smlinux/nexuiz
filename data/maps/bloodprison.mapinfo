@@ -1,0 +1,9 @@
+title Blood Prison
+description Small and very fast Tourney Map
+author Paul Evers
+_diameter 4409.023926
+_spawnpoints 8
+has weapons
+type dm 30 20
+type tdm 50 20 2
+type lms 9 20
