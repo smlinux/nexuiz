@@ -206,9 +206,9 @@ void drawInputBox(entity me)
 	else
 		draw_Text(me.realOrigin - eX * me.scrollPos, me.text, me.realFontSize, '1 1 1', 1, 0);
 		// skipping drawLabel(me);
-	draw_ClearClip();
-
 	if(!me.focused || (time - me.lastChangeTime) < floor(time - me.lastChangeTime) + 0.5)
 		draw_Text(me.realOrigin + eX * (cursorPosInWidths - me.scrollPos), CURSOR, me.realFontSize, '1 1 1', 1, 0);
+
+	draw_ClearClip();
 }
 #endif
