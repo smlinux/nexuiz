@@ -190,7 +190,7 @@ void refilterNexuizMapList(entity me)
 	float gt, f;
 	gt = MapInfo_CurrentGametype();
 	f = MapInfo_CurrentFeatures();
-	MapInfo_FilterGametype(gt, f);
+	MapInfo_FilterGametype(gt, f, 0);
 	me.nItems = MapInfo_count;
 	for(i = 0; i < MapInfo_count; ++i)
 		draw_PreloadPicture(strcat("/maps/", MapInfo_BSPName_ByID(i)));
@@ -222,7 +222,7 @@ void MapList_All(entity btn, entity me)
 {
 	float i;
 	string s;
-	MapInfo_FilterGametype(MAPINFO_TYPE_ALL, 0); // all
+	MapInfo_FilterGametype(MAPINFO_TYPE_ALL, 0, 0); // all
 	s = "";
 	for(i = 0; i < MapInfo_count; ++i)
 		s = strcat(s, " ", MapInfo_BSPName_ByID(i));

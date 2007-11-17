@@ -2,7 +2,7 @@ string GotoMap(string m);
 
 void make_mapinfo_Think()
 {
-	if(MapInfo_FilterGametype(MAPINFO_TYPE_ALL, 0))
+	if(MapInfo_FilterGametype(MAPINFO_TYPE_ALL, 0, 1))
 	{
 		print("Done rebuiling mapinfos.\n");
 		remove(self);

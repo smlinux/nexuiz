@@ -26,7 +26,7 @@ void() m_init_delayed =
 
 	menuLoadedMaplist = 0;
 	MapInfo_Enumerate();
-	if(!MapInfo_FilterGametype(MAPINFO_TYPE_ALL, 0))
+	if(!MapInfo_FilterGametype(MAPINFO_TYPE_ALL, 0, 1))
 		return;
 	menuLoadedMaplist = 1;
 

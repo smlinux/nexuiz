@@ -67,9 +67,7 @@ void GotoFirstMap()
 
 #ifdef MAPINFO
 			MapInfo_Enumerate();
-			while(!MapInfo_FilterGametype(MapInfo_CurrentGametype(), MapInfo_CurrentFeatures()))
-			{
-			}
+			MapInfo_FilterGametype(MapInfo_CurrentGametype(), MapInfo_CurrentFeatures(), 0);
 #endif
 
 			if(!DoNextMapOverride())
@@ -360,7 +358,7 @@ void worldspawn (void)
 
 #ifdef MAPINFO
 	MapInfo_Enumerate();
-	MapInfo_FilterGametype(MapInfo_CurrentGametype(), MapInfo_CurrentFeatures());
+	MapInfo_FilterGametype(MapInfo_CurrentGametype(), MapInfo_CurrentFeatures(), 1);
 #endif
 }
 
@@ -2090,7 +2088,7 @@ void MapVote_Start()
 
 #ifdef MAPINFO
 	MapInfo_Enumerate();
-	if(MapInfo_FilterGametype(MapInfo_CurrentGametype(), MapInfo_CurrentFeatures()))
+	if(MapInfo_FilterGametype(MapInfo_CurrentGametype(), MapInfo_CurrentFeatures(), 1))
 #endif
 		mapvote_run = TRUE;
 }
