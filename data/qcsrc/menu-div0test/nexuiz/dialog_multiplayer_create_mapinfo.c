@@ -19,6 +19,7 @@ CLASS(NexuizMapInfoDialog) EXTENDS(NexuizDialog)
 	ATTRIB(NexuizMapInfoDialog, typeLMSLabel, entity, NULL)
 	ATTRIB(NexuizMapInfoDialog, typeArenaLabel, entity, NULL)
 	ATTRIB(NexuizMapInfoDialog, typeRuneLabel, entity, NULL)
+	ATTRIB(NexuizMapInfoDialog, typeDominationLabel, entity, NULL)
 	ATTRIB(NexuizMapInfoDialog, typeKeyHuntLabel, entity, NULL)
 	ATTRIB(NexuizMapInfoDialog, typeCTFLabel, entity, NULL)
 	ATTRIB(NexuizMapInfoDialog, typeAssaultLabel, entity, NULL)
@@ -102,30 +103,29 @@ void fillNexuizMapInfoDialog(entity me)
 	me.TR(me);
 		me.TD(me, 1, 5.5, e = makeNexuizTextLabel(0, "Game types:"));
 	me.TR(me);
-		me.TDempty(me, 1);
-		me.TD(me, 1, 1.5, e = makeNexuizTextLabel(0, "Deathmatch"));
+		me.TD(me, 1, 5.5/4, e = makeNexuizTextLabel(0, "Deathmatch"));
 			me.typeDeathmatchLabel = e;
-		me.TD(me, 1, 1.5, e = makeNexuizTextLabel(0, "TDM"));
+		me.TD(me, 1, 5.5/4, e = makeNexuizTextLabel(0, "TDM"));
 			me.typeTDMLabel = e;
-		me.TD(me, 1, 1.5, e = makeNexuizTextLabel(0, "LMS"));
+		me.TD(me, 1, 5.5/4, e = makeNexuizTextLabel(0, "LMS"));
 			me.typeLMSLabel = e;
-	me.TR(me);
-		me.TDempty(me, 1);
-		me.TD(me, 1, 1.5, e = makeNexuizTextLabel(0, "Arena"));
+		me.TD(me, 1, 5.5/4, e = makeNexuizTextLabel(0, "Arena"));
 			me.typeArenaLabel = e;
-		me.TD(me, 1, 1.5, e = makeNexuizTextLabel(0, "Rune"));
-			me.typeRuneLabel = e;
-		me.TD(me, 1, 1.5, e = makeNexuizTextLabel(0, "Key Hunt"));
-			me.typeKeyHuntLabel = e;
 	me.TR(me);
-		me.TDempty(me, 1);
-		me.TD(me, 1, 1.5, e = makeNexuizTextLabel(0, "CTF"));
+		me.TD(me, 1, 5.5/4, e = makeNexuizTextLabel(0, "Rune"));
+			me.typeRuneLabel = e;
+		me.TD(me, 1, 5.5/4, e = makeNexuizTextLabel(0, "Domination"));
+			me.typeDominationLabel = e;
+		me.TD(me, 1, 5.5/4, e = makeNexuizTextLabel(0, "Key Hunt"));
+			me.typeKeyHuntLabel = e;
+		me.TD(me, 1, 5.5/4, e = makeNexuizTextLabel(0, "CTF"));
 			me.typeCTFLabel = e;
+	me.TR(me);
 		if(cvar("developer"))
 		{
-			me.TD(me, 1, 1.5, e = makeNexuizTextLabel(0, "Assault"));
+			me.TD(me, 1, 5.5/4, e = makeNexuizTextLabel(0, "Assault"));
 				me.typeAssaultLabel = e;
-			me.TD(me, 1, 1.5, e = makeNexuizTextLabel(0, "Onslaught"));
+			me.TD(me, 1, 5.5/4, e = makeNexuizTextLabel(0, "Onslaught"));
 				me.typeOnslaughtLabel = e;
 		}
 

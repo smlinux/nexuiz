@@ -292,8 +292,11 @@ void resizeNotifyNexuizServerList(entity me, vector relOrigin, vector relSize, v
 
 	float f;
 	f = me.currentSortField;
-	me.currentSortField = -1;
-	me.setSortOrder(me, f, me.currentSortOrder); // force resetting the sort order
+	if(f >= 0)
+	{
+		me.currentSortField = -1;
+		me.setSortOrder(me, f, me.currentSortOrder); // force resetting the sort order
+	}
 }
 void ServerList_Connect_Click(entity btn, entity me)
 {

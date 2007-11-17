@@ -110,7 +110,7 @@ float MapInfo_FilterGametype(float pGametype, float pFeatures)
 	}
 	_MapInfo_filtered = strzone(_MapInfo_filtered);
 	MapInfo_count = HugeSetOfIntegers_length(_MapInfo_filtered);
-	print("Filter ", ftos(pGametype), "/", ftos(pFeatures), " has ", ftos(MapInfo_count), "\n");
+	//print("Filter ", ftos(pGametype), "/", ftos(pFeatures), " has ", ftos(MapInfo_count), "\n");
 	// TODO clear cache
 	return 1;
 }
@@ -242,7 +242,6 @@ float _MapInfo_Generate(string pFilename) // 0: failure, 1: ok ent, 2: ok bsp
 	else
 	{
 		MapInfo_Map_supportedGametypes |= MAPINFO_TYPE_DEATHMATCH;      // DM always works
-		MapInfo_Map_supportedGametypes |= MAPINFO_TYPE_RUNEMATCH;       // Rune always works
 		MapInfo_Map_supportedGametypes |= MAPINFO_TYPE_LMS;             // LMS always works
 
 		if(MapInfo_Map_spawnpoints >= 8  && MapInfo_Map_diameter > 4096)
@@ -450,7 +449,6 @@ float MapInfo_CurrentFeatures()
 	req = 0;
 	if(!(cvar("g_instagib") || cvar("g_minstagib") || cvar("g_nixnex") || cvar("g_rocketarena")))
 		req |= MAPINFO_FEATURE_WEAPONS;
-	print(ftos(req), "\n");
 	return req;
 }
 

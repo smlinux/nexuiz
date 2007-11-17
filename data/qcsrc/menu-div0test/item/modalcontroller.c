@@ -250,8 +250,11 @@ void showChildModalController(entity me, entity other, vector theOrigin, vector 
 	if(other.ModalController_state == 0 || skipAnimation)
 	{
 		me.setFocus(me, NULL);
-		other.ModalController_buttonOrigin = globalToBox(theOrigin, me.origin, me.size);
-		other.ModalController_buttonSize = globalToBoxSize(theSize, me.size);
+		if(!skipAnimation)
+		{
+			other.ModalController_buttonOrigin = globalToBox(theOrigin, me.origin, me.size);
+			other.ModalController_buttonSize = globalToBoxSize(theSize, me.size);
+		}
 		me.switchState(me, other, 1, skipAnimation);
 	} // zoom in from button (factor increases)
 }

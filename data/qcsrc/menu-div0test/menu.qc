@@ -159,19 +159,22 @@ void() m_draw =
 	draw_reset();
 	draw_alpha *= menuAlpha;
 
-	vector dMouse;
-	dMouse = getmousepos();
-	dMouse *= frametime / realFrametime; // for capturevideo
-	if(dMouse != '0 0 0')
+	if(frametime > 0)
 	{
-		dMouse = globalToBoxSize(dMouse, draw_scale);
-		menuMousePos += dMouse * 1; // TODO use a cvar here
-		menuMousePos_x = bound(0, menuMousePos_x, 1);
-		menuMousePos_y = bound(0, menuMousePos_y, 1);
-		if(mouseButtonsPressed)
-			main.mouseDrag(main, menuMousePos);
-		else
-			main.mouseMove(main, menuMousePos);
+		vector dMouse;
+		dMouse = getmousepos();
+		dMouse *= frametime / realFrametime; // for capturevideo
+		if(dMouse != '0 0 0')
+		{
+			dMouse = globalToBoxSize(dMouse, draw_scale);
+			menuMousePos += dMouse * 1; // TODO use a cvar here
+			menuMousePos_x = bound(0, menuMousePos_x, 1);
+			menuMousePos_y = bound(0, menuMousePos_y, 1);
+			if(mouseButtonsPressed)
+				main.mouseDrag(main, menuMousePos);
+			else
+				main.mouseMove(main, menuMousePos);
+		}
 	}
 	main.draw(main);
 	draw_drawMousePointer(menuMousePos);
