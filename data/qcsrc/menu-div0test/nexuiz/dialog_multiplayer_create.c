@@ -27,29 +27,34 @@ entity makeNexuizServerCreateTab()
 void fillNexuizServerCreateTab(entity me)
 {
 	entity e, e0;
+	float n;
 
 	me.TR(me);
-		me.TD(me, 2, me.columns / 9, e = makeNexuizGametypeButton(1, "g_dm", "Deathmatch"));
+		n = 7 + 2 * !!cvar("developer");
+		me.TD(me, 2, me.columns / n, e = makeNexuizGametypeButton(1, "g_dm", "Deathmatch"));
 			e0 = e;
-		me.TD(me, 2, me.columns / 9, e = makeNexuizGametypeButton(1, "g_tdm", "TDM"));
+		me.TD(me, 2, me.columns / n, e = makeNexuizGametypeButton(1, "g_tdm", "TDM"));
 			if(e.checked) e0 = NULL;
-		me.TD(me, 2, me.columns / 9, e = makeNexuizGametypeButton(1, "g_lms", "LMS"));
+		me.TD(me, 2, me.columns / n, e = makeNexuizGametypeButton(1, "g_lms", "LMS"));
 			if(e.checked) e0 = NULL;
-		me.TD(me, 2, me.columns / 9, e = makeNexuizGametypeButton(1, "g_arena", "Arena"));
+		me.TD(me, 2, me.columns / n, e = makeNexuizGametypeButton(1, "g_arena", "Arena"));
 			if(e.checked) e0 = NULL;
-		me.TD(me, 2, me.columns / 9, e = makeNexuizGametypeButton(1, "g_runematch", "Rune"));
+		me.TD(me, 2, me.columns / n, e = makeNexuizGametypeButton(1, "g_runematch", "Rune"));
 			if(e.checked) e0 = NULL;
-		me.TD(me, 2, me.columns / 9, e = makeNexuizGametypeButton(1, "g_keyhunt", "Key Hunt"));
+		me.TD(me, 2, me.columns / n, e = makeNexuizGametypeButton(1, "g_keyhunt", "Key Hunt"));
 			if(e.checked) e0 = NULL;
-		me.TD(me, 2, me.columns / 9, e = makeNexuizGametypeButton(1, "g_ctf", "CTF"));
+		me.TD(me, 2, me.columns / n, e = makeNexuizGametypeButton(1, "g_ctf", "CTF"));
 			if(e.checked) e0 = NULL;
-		me.TD(me, 2, me.columns / 9, e = makeNexuizGametypeButton(1, "g_assault", "Assault"));
-			if(e.checked) e0 = NULL;
-		me.TD(me, 2, me.columns / 9, e = makeNexuizGametypeButton(1, "g_onslaught", "Onslaught"));
-			if(e.checked) e0 = NULL;
+		if(cvar("developer"))
+		{
+			me.TD(me, 2, me.columns / n, e = makeNexuizGametypeButton(1, "g_assault", "Assault"));
+				if(e.checked) e0 = NULL;
+			me.TD(me, 2, me.columns / n, e = makeNexuizGametypeButton(1, "g_onslaught", "Onslaught"));
+				if(e.checked) e0 = NULL;
+		}
 		if(e0)
 		{
-			print("NO CHECK\n");
+			//print("NO CHECK\n");
 			e0.setChecked(e0, 1);
 		}
 	me.TR(me);
@@ -60,13 +65,14 @@ void fillNexuizServerCreateTab(entity me)
 		me.TD(me, me.rows - 6, 3, e = makeNexuizMapList());
 		me.mapListBox = e;
 	me.gotoXY(me, me.rows - 2, 0);
+		me.TDempty(me, 0.5);
 		me.TD(me, 1, 1, e = makeNexuizButton("All", '0 0 0'));
 			e.onClick = MapList_All;
 			e.onClickEntity = me.mapListBox;
 		me.TD(me, 1, 1, e = makeNexuizButton("None", '0 0 0'));
 			e.onClick = MapList_None;
 			e.onClickEntity = me.mapListBox;
-		me.TD(me, 1, 1, e = makeNexuizButton("Details...", '0 0 0'));
+		me.TDempty(me, 0.5);
 
 	me.gotoXY(me, 3, 3.5); me.setFirstColumn(me, me.currentColumn);
 		me.TD(me, 1, 3, e = makeNexuizTextLabel(0, "Settings:"));

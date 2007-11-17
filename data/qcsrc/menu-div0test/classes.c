@@ -44,5 +44,7 @@
 #include "nexuiz/dialog_quit.c"
 #include "nexuiz/dialog_multiplayer_create.c"
 #include "nexuiz/dialog_multiplayer_create_mutators.c"
+#include "nexuiz/dialog_multiplayer_create_mapinfo.c"
 #include "nexuiz/gametypebutton.c"
 #include "nexuiz/maplist.c"
+#include "nexuiz/image.c"

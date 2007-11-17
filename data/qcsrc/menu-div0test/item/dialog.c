@@ -58,6 +58,8 @@ CLASS(Dialog) EXTENDS(InputContainer)
 
 	ATTRIB(Dialog, backgroundImage, string, string_null)
 	ATTRIB(Dialog, closeButtonImage, string, string_null)
+
+	ATTRIB(Dialog, frame, entity, NULL)
 ENDCLASS(Dialog)
 #endif
 
@@ -120,12 +122,12 @@ void TDemptyDialog(entity me, float colspan)
 
 void configureDialogDialog(entity me)
 {
-	entity frame, closebutton;
+	entity closebutton;
 	float absWidth, absHeight;
 
-	frame = spawnBorderImage();
-	frame.configureBorderImage(frame, me.title, me.titleFontSize, me.color, me.backgroundImage, me.titleHeight);
-	me.addItem(me, frame, '0 0 0', '1 1 0', 1);
+	me.frame = spawnBorderImage();
+	me.frame.configureBorderImage(me.frame, me.title, me.titleFontSize, me.color, me.backgroundImage, me.titleHeight);
+	me.addItem(me, me.frame, '0 0 0', '1 1 0', 1);
 
 	if not(me.titleFontSize)
 		me.titleHeight = 0; // no title bar
@@ -154,7 +156,7 @@ void configureDialogDialog(entity me)
 		me.addItem(me, closebutton, '0 0 0', '1 1 0', 1); // put it as LAST
 	}
 
-	frame.closeButton = closebutton;
+	me.frame.closeButton = closebutton;
 }
 
 void closeDialog(entity me)

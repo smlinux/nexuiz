@@ -14,6 +14,8 @@ CLASS(NexuizGametypeButton) EXTENDS(RadioButton)
 	ATTRIB(NexuizGametypeButton, cvarName, string, string_null)
 	METHOD(NexuizGametypeButton, loadCvars, void(entity))
 	METHOD(NexuizGametypeButton, saveCvars, void(entity))
+
+	ATTRIB(NexuizGametypeButton, disabledAlpha, float, SKINALPHA_DISABLED)
 ENDCLASS(NexuizGametypeButton)
 entity makeNexuizGametypeButton(float, string, string);
 #endif

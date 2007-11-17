@@ -35,6 +35,7 @@ CLASS(Slider) EXTENDS(Label)
 	ATTRIB(Slider, colorD, vector, '1 1 1')
 	ATTRIB(Slider, colorC, vector, '1 1 1')
 	ATTRIB(Slider, colorF, vector, '1 1 1')
+	ATTRIB(Slider, disabledAlpha, float, 0.3)
 ENDCLASS(Slider)
 #endif
 
@@ -195,9 +196,11 @@ void showNotifySlider(entity me)
 void drawSlider(entity me)
 {
 	float controlLeft;
+	float save;
 	me.focusable = !me.disabled;
+	save = draw_alpha;
 	if(me.disabled)
-		draw_alpha *= 0.5;
+		draw_alpha *= me.disabledAlpha;
 	draw_ButtonPicture('0 0 0', strcat(me.src, "_s"), eX * (1 - me.textSpace) + eY, me.color2, 1);
 	if(me.value == median(me.valueMin, me.value, me.valueMax))
 	{
@@ -212,6 +215,7 @@ void drawSlider(entity me)
 			draw_Picture(eX * controlLeft, strcat(me.src, "_n"), eX * me.controlWidth + eY, me.color, 1);
 	}
 	me.setText(me, me.valueToText(me, me.value));
+	draw_alpha = save;
 	drawLabel(me);
 	me.text = string_null; // TEMPSTRING!
 }

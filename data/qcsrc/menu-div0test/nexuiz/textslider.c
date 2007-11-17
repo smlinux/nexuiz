@@ -17,6 +17,8 @@ CLASS(NexuizTextSlider) EXTENDS(TextSlider)
 	ATTRIB(NexuizTextSlider, cvarName, string, string_null)
 	METHOD(NexuizTextSlider, loadCvars, void(entity))
 	METHOD(NexuizTextSlider, saveCvars, void(entity))
+
+	ATTRIB(NexuizTextSlider, disabledAlpha, float, SKINALPHA_DISABLED)
 ENDCLASS(NexuizTextSlider)
 entity makeNexuizTextSlider(string); // note: you still need to call addValue and configureNexuizTextSliderValues!
 #endif

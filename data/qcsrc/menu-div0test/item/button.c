@@ -19,6 +19,7 @@ CLASS(Button) EXTENDS(Label)
 	ATTRIB(Button, pressed, float, 0)
 	ATTRIB(Button, clickTime, float, 0)
 	ATTRIB(Button, disabled, float, 0)
+	ATTRIB(Button, disabledAlpha, float, 0.3)
 	ATTRIB(Button, forcePressed, float, 0)
 	ATTRIB(Button, color, vector, '1 1 1')
 	ATTRIB(Button, colorC, vector, '1 1 1')
@@ -88,10 +89,13 @@ void showNotifyButton(entity me)
 void drawButton(entity me)
 {
 	vector bOrigin, bSize;
+	float save;
 
 	me.focusable = !me.disabled;
+
+	save = draw_alpha;
 	if(me.disabled)
-		draw_alpha *= 0.5;
+		draw_alpha *= me.disabledAlpha;
 
 	if(me.src)
 	{
@@ -136,6 +140,9 @@ void drawButton(entity me)
 		bSize = eY + eX * (1 - me.keepspaceLeft);
 		draw_Picture(bOrigin, me.src2, bSize, me.color2, 1);
 	}
+
+	draw_alpha = save;
+
 	drawLabel(me);
 
 	if(me.clickTime > 0 && me.clickTime < frametime)

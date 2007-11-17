@@ -20,6 +20,12 @@ CLASS(NexuizMapList) EXTENDS(NexuizListBox)
 	ATTRIB(NexuizMapList, lastClickedMap, float, -1)
 	ATTRIB(NexuizMapList, lastClickedTime, float, 0)
 
+	ATTRIB(NexuizMapList, lastGametype, float, 0)
+	ATTRIB(NexuizMapList, lastFeatures, float, 0)
+
+	ATTRIB(NexuizMapList, origin, vector, '0 0 0')
+	ATTRIB(NexuizMapList, itemAbsSize, vector, '0 0 0')
+
 	ATTRIB(NexuizMapList, g_maplistCache, string, string_null)
 	METHOD(NexuizMapList, g_maplistCacheToggle, void(entity, float))
 	METHOD(NexuizMapList, g_maplistCacheQuery, float(entity, float))
@@ -83,22 +89,21 @@ void g_maplistCacheToggleNexuizMapList(entity me, float i)
 
 void resizeNotifyNexuizMapList(entity me, vector relOrigin, vector relSize, vector absOrigin, vector absSize)
 {
-	vector itemAbsSize;
-	itemAbsSize = '0 0 0';
-
+	me.origin = absOrigin;
+	me.itemAbsSize = '0 0 0';
 	resizeNotifyNexuizListBox(me, relOrigin, relSize, absOrigin, absSize);
 
-	me.realFontSize_y = me.fontSize / (itemAbsSize_y = (absSize_y * me.itemHeight));
-	me.realFontSize_x = me.fontSize / (itemAbsSize_x = (absSize_x * (1 - me.controlWidth)));
+	me.realFontSize_y = me.fontSize / (me.itemAbsSize_y = (absSize_y * me.itemHeight));
+	me.realFontSize_x = me.fontSize / (me.itemAbsSize_x = (absSize_x * (1 - me.controlWidth)));
 	me.realUpperMargin1 = 0.5 * (1 - 2.5 * me.realFontSize_y);
 	me.realUpperMargin2 = me.realUpperMargin1 + 1.5 * me.realFontSize_y;
 
 	me.columnPreviewOrigin = 0;
-	me.columnPreviewSize = itemAbsSize_y / itemAbsSize_x * 4 / 3;
+	me.columnPreviewSize = me.itemAbsSize_y / me.itemAbsSize_x * 4 / 3;
 	me.columnNameOrigin = me.columnPreviewOrigin + me.columnPreviewSize + me.realFontSize_x;
 	me.columnNameSize = 1 - me.columnPreviewSize - 2 * me.realFontSize_x;
 
-	me.checkMarkSize = (eX * (itemAbsSize_y / itemAbsSize_x) + eY) * 0.5;
+	me.checkMarkSize = (eX * (me.itemAbsSize_y / me.itemAbsSize_x) + eY) * 0.5;
 	me.checkMarkOrigin = eY + eX * (me.columnPreviewOrigin + me.columnPreviewSize) - me.checkMarkSize;
 }
 void clickListBoxItemNexuizMapList(entity me, float i, vector where)
@@ -116,6 +121,8 @@ void clickListBoxItemNexuizMapList(entity me, float i, vector where)
 					{
 						// DOUBLE CLICK!
 						// pop up map info screen
+						main.mapInfoDialog.loadMapInfo(main.mapInfoDialog, i);
+						DialogOpenButton_Click_withCoords(NULL, main.mapInfoDialog, me.origin + eX * (me.columnNameOrigin * me.size_x) + eY * ((me.itemHeight * i - me.scrollPos) * me.size_y), eY * me.itemAbsSize_y + eX * (me.itemAbsSize_x * me.columnNameSize));
 						return;
 					}
 				me.lastClickedMap = i;
@@ -161,7 +168,10 @@ void refilterNexuizMapList(entity me)
 {
 	float i, j, n;
 	string s;
-	MapInfo_FilterGametype(MapInfo_CurrentGametype(), MapInfo_CurrentFeatures());
+	float gt, f;
+	gt = MapInfo_CurrentGametype();
+	f = MapInfo_CurrentFeatures();
+	MapInfo_FilterGametype(gt, f);
 	me.nItems = MapInfo_count;
 	for(i = 0; i < MapInfo_count; ++i)
 		draw_PreloadPicture(strcat("/maps/", MapInfo_BSPName_ByID(i)));
@@ -182,6 +192,12 @@ void refilterNexuizMapList(entity me)
 			);
 	}
 	me.g_maplistCache = strzone(s);
+	if(gt != me.lastGametype || f != me.lastFeatures)
+	{
+		me.lastGametype = gt;
+		me.lastFeatures = f;
+		me.setSelected(me, 0);
+	}
 }
 void MapList_All(entity btn, entity me)
 {

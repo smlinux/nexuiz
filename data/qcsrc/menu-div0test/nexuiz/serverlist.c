@@ -112,7 +112,7 @@ void refreshServerListNexuizServerList(entity me, float mode)
 	// 0: just reparametrize
 	// 1: also ask for new servers
 	// 2: clear
-	print("refresh of type ", ftos(mode), "\n");
+	//print("refresh of type ", ftos(mode), "\n");
 	/* if(mode == 2) // borken
 	{
 		// clear list
@@ -144,7 +144,7 @@ void focusEnterNexuizServerList(entity me)
 {
 	if(time < me.nextRefreshTime)
 	{
-		print("sorry, no refresh yet\n");
+		//print("sorry, no refresh yet\n");
 		return;
 	}
 	me.nextRefreshTime = time + 10;

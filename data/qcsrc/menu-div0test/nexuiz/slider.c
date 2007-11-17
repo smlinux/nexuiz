@@ -16,6 +16,8 @@ CLASS(NexuizSlider) EXTENDS(Slider)
 	ATTRIB(NexuizSlider, cvarName, string, string_null)
 	METHOD(NexuizSlider, loadCvars, void(entity))
 	METHOD(NexuizSlider, saveCvars, void(entity))
+
+	ATTRIB(NexuizSlider, disabledAlpha, float, SKINALPHA_DISABLED)
 ENDCLASS(NexuizSlider)
 entity makeNexuizSlider(float, float, float, string);
 #endif

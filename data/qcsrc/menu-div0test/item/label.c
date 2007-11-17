@@ -8,11 +8,15 @@ CLASS(Label) EXTENDS(Item)
 	ATTRIB(Label, text, string, string_null)
 	ATTRIB(Label, fontSize, float, 8)
 	ATTRIB(Label, align, float, 0.5)
+	ATTRIB(Label, allowCut, float, 0)
 	ATTRIB(Label, keepspaceLeft, float, 0) // for use by subclasses (radiobuttons for example)
 	ATTRIB(Label, keepspaceRight, float, 0)
 	ATTRIB(Label, realFontSize, vector, '0 0 0')
 	ATTRIB(Label, realOrigin, vector, '0 0 0')
 	ATTRIB(Label, alpha, float, 0.7)
+	ATTRIB(Label, colorL, vector, '1 1 1')
+	ATTRIB(Label, disabled, float, 0)
+	ATTRIB(Label, disabledAlpha, float, 0.3)
 ENDCLASS(Label)
 #endif
 
@@ -42,8 +46,15 @@ void configureLabelLabel(entity me, string txt, float sz, float algn)
 }
 void drawLabel(entity me)
 {
+	if(me.disabled)
+		draw_alpha *= me.disabledAlpha;
 	if(me.fontSize)
 		if(me.text)
-			draw_Text(me.realOrigin, me.text, me.realFontSize, '1 1 1', me.alpha, 0);
+		{
+			if(me.allowCut)
+				draw_Text(me.realOrigin, draw_TextShortenToWidth(me.text, 1 / me.realFontSize_x, 0), me.realFontSize, me.colorL, me.alpha, 0);
+			else
+				draw_Text(me.realOrigin, me.text, me.realFontSize, me.colorL, me.alpha, 0);
+		}
 }
 #endif
