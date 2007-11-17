@@ -2,6 +2,7 @@
 CLASS(NexuizMapList) EXTENDS(NexuizListBox)
 	METHOD(NexuizMapList, configureNexuizMapList, void(entity))
 	ATTRIB(NexuizMapList, rowsPerItem, float, 4)
+	METHOD(NexuizMapList, draw, void(entity))
 	METHOD(NexuizMapList, drawListBoxItem, void(entity, float, vector, float))
 	METHOD(NexuizMapList, clickListBoxItem, void(entity, float, vector))
 	METHOD(NexuizMapList, resizeNotify, void(entity, vector, vector, vector, vector))
@@ -29,10 +30,16 @@ CLASS(NexuizMapList) EXTENDS(NexuizListBox)
 	ATTRIB(NexuizMapList, g_maplistCache, string, string_null)
 	METHOD(NexuizMapList, g_maplistCacheToggle, void(entity, float))
 	METHOD(NexuizMapList, g_maplistCacheQuery, float(entity, float))
+
+	ATTRIB(NexuizMapList, startButton, entity, NULL)
+
+	ATTRIB(NexuizMapList, cvarName, string, "dummy")
+	METHOD(NexuizMapList, loadCvars, void(entity))
 ENDCLASS(NexuizMapList)
 entity makeNexuizMapList();
 void MapList_All(entity btn, entity me);
 void MapList_None(entity btn, entity me);
+void MapList_LoadMap(entity btn, entity me);
 #endif
 
 #ifdef IMPLEMENTATION
@@ -46,6 +53,11 @@ entity makeNexuizMapList()
 void configureNexuizMapListNexuizMapList(entity me)
 {
 	me.configureNexuizListBox(me);
+	me.refilter(me);
+}
+
+void loadCvarsNexuizMapList(entity me)
+{
 	me.refilter(me);
 }
 
@@ -85,6 +97,13 @@ void g_maplistCacheToggleNexuizMapList(entity me, float i)
 				s = strcat(s, " ", argv(i));
 		cvar_set("g_maplist", substring(s, 1, strlen(s) - 1));
 	}
+}
+
+void drawNexuizMapList(entity me)
+{
+	if(me.startButton)
+		me.startButton.disabled = ((me.selectedItem < 0) || (me.selectedItem >= me.nItems));
+	drawListBox(me);
 }
 
 void resizeNotifyNexuizMapList(entity me, vector relOrigin, vector relSize, vector absOrigin, vector absSize)
@@ -214,5 +233,23 @@ void MapList_None(entity btn, entity me)
 {
 	cvar_set("g_maplist", "");
 	me.refilter(me);
+}
+void MapList_LoadMap(entity btn, entity me)
+{
+	string m;
+	if(me.selectedItem >= me.nItems || me.selectedItem < 0)
+		return;
+	m = MapInfo_BSPName_ByID(me.selectedItem);
+	if not(m)
+		return;
+	if(MapInfo_CheckMap(m))
+	{
+		MapInfo_LoadMap(m);
+	}
+	else
+	{
+		print("Huh? Can't play this. Refiltering so this won't happen again.\n");
+		me.refilter(me);
+	}
 }
 #endif

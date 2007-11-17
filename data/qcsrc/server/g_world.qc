@@ -700,6 +700,7 @@ void() Maplist_Init =
 		bprint( "Maplist is empty!  Resetting it to default map list.\n" );
 #ifdef MAPINFO
 		cvar_set("g_maplist", temp = MapInfo_ListAllowedMaps());
+		localcmd("\nmenu_cmd sync\n");
 #else
 		cvar_set("g_maplist", temp = cvar_string("g_maplist_defaultlist"));
 #endif
@@ -825,6 +826,7 @@ void() GotoNextMap =
 				bprint( "Maplist contains no single playable map!  Resetting it to default map list.\n" );
 #ifdef MAPINFO
 				cvar_set("g_maplist", MapInfo_ListAllowedMaps());
+				localcmd("\nmenu_cmd sync\n");
 #else
 				cvar_set("g_maplist", cvar_string("g_maplist_defaultlist"));
 #endif
@@ -1876,6 +1878,7 @@ void MapVote_Init()
 		bprint( "Maplist contains no single playable map!  Resetting it to default map list.\n" );
 #ifdef MAPINFO
 		cvar_set("g_maplist", MapInfo_ListAllowedMaps());
+		localcmd("\nmenu_cmd sync\n");
 #else
 		cvar_set("g_maplist", cvar_string("g_maplist_defaultlist"));
 #endif

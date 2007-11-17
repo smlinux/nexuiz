@@ -94,6 +94,9 @@ void fillNexuizServerCreateTab(entity me)
 
 	me.gotoXY(me, me.rows - 1, 0);
 		me.TD(me, 1, me.columns, e = makeNexuizButton("Start!", '0 0 0'));
+			e.onClick = MapList_LoadMap;
+			e.onClickEntity = me.mapListBox;
+			me.mapListBox.startButton = e;
 
 	me.gameTypeChangeNotify(me);
 }
