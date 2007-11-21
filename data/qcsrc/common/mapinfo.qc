@@ -333,6 +333,7 @@ float MapInfo_Type_FromString(string t)
 	else if(t == "kh")    return MAPINFO_TYPE_KEYHUNT;
 	else if(t == "as")    return MAPINFO_TYPE_ASSAULT;
 	else if(t == "ons")   return MAPINFO_TYPE_ONSLAUGHT;
+	else if(t == "all")   return MAPINFO_TYPE_ALL;
 	else                  return 0;
 }
 
@@ -415,6 +416,38 @@ float MapInfo_Get_ByName(string pFilename, float pAllowGenerate, float pGametype
 				_MapInfo_Map_ApplyGametype (s, pGametypeToSet, f);
 			else
 				dprint("Map ", pFilename, " supports unknown game type ", t, ", ignored\n");
+		}
+		else if(t == "settemp_for_type")
+		{
+			t = car(s); s = cdr(s);
+			if((f = MapInfo_Type_FromString(t)))
+			{
+				if(f & pGametypeToSet)
+				{
+					t = car(s); s = cdr(s);
+					if(strstrofs(t, "\"", 0) >= 0)
+						print("Map ", pFilename, " contains a potentially harmful setting, ignored\n");
+					else if(strstrofs(t, "\\", 0) >= 0)
+						print("Map ", pFilename, " contains a potentially harmful setting, ignored\n");
+					else if(strstrofs(t, ";", 0) >= 0)
+						print("Map ", pFilename, " contains a potentially harmful setting, ignored\n");
+					else if(strstrofs(s, "\"", 0) >= 0)
+						print("Map ", pFilename, " contains a potentially harmful setting, ignored\n");
+					else if(strstrofs(s, "\\", 0) >= 0)
+						print("Map ", pFilename, " contains a potentially harmful setting, ignored\n");
+					else if(strstrofs(s, ";", 0) >= 0)
+						print("Map ", pFilename, " contains a potentially harmful setting, ignored\n");
+					else
+					{
+						dprint("Applying temporary setting ", t, " := ", s, "\n");
+						localcmd(strcat("\nsettemp ", t, " \"", s, "\"\n"));
+					}
+				}
+			}
+			else
+			{
+				dprint("Map ", pFilename, " has a setting for unknown game type ", t, ", ignored\n");
+			}
 		}
 		else
 			dprint("Map ", pFilename, " provides unknown info item ", t, ", ignored\n");
