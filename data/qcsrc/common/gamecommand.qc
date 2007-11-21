@@ -46,6 +46,8 @@ void rpn_setf(float f) { return rpn_set(ftos(f)); }
 float GameCommand_Generic(string command)
 {
 	float argc;
+	float i, j, f, n;
+	string s, s2;
 	argc = tokenize(command);
 	if(argv(0) == "help")
 	{
@@ -62,18 +64,107 @@ float GameCommand_Generic(string command)
 		print("    s shuffle -------------------------> s   : randomly arrange elements\n");
 		print("    Set operations operate on 'such''strings' like g_maplist.\n");
 		print("    Unknown tokens insert their cvar value.\n");
+		print("  maplist add map\n");
+		print("  maplist remove map\n");
+		print("  maplist shuffle\n");
 		return TRUE;
 	}
 	
-	if(argv(0) == "rpn")
+	if(argv(0) == "maplist")
+	{
+		if(argv(1) == "add" && argc == 3)
+		{
+#ifdef MAPINFO
+			f = fopen(strcat("maps/", argv(2), ".bsp"), FILE_READ);
+			if(f != -1)
+				fclose(f);
+			else {
+				print("maplist: ERROR: ", argv(2), " does not exist!\n");
+				return TRUE;
+			}
+			if(cvar_string("g_maplist") == "")
+				cvar_set("g_maplist", argv(2));
+			else
+				cvar_set("g_maplist", strcat(argv(2), " ", cvar_string("g_maplist")));
+#else
+			f = fopen(strcat("maps/", argv(2), ".mapcfg"), FILE_READ);
+			if(f != -1)
+				fclose(f);
+			else {
+				print("maplist: ERROR: ", argv(2), " does not exist!\n");
+				return TRUE;
+			}
+			cvar_set("g_maplist", strcat("'", argv(2), "'", cvar_string("g_maplist")));
+#endif
+			return TRUE;
+		}
+		else if(argv(1) == "remove" && argc == 3)
+		{
+			s = argv(2);
+#ifdef MAPINFO
+			n = tokenizebyseparator(cvar_string("g_maplist"), " ");
+#else
+			n = tokenize(cvar_string("g_maplist"));
+#endif
+			s2 = "";
+			for(i = 0; i < n; ++i)
+				if(argv(i) != s)
+				{
+#ifdef MAPINFO
+					s2 = strcat(s2, " ", argv(i));
+#else
+					s2 = strcat(s2, "'", argv(i), "'");
+#endif
+				}
+#ifdef MAPINFO
+			s2 = substring(s2, 1, strlen(s2) - 1);
+#endif
+			cvar_set("g_maplist", s2);
+			return TRUE;
+		}
+		else if(argv(1) == "shuffle" && argc == 2)
+		{
+			s = cvar_string("g_maplist");
+#ifdef MAPINFO
+			for(i = 1; i < (n = tokenizebyseparator(s, " ")); ++i)
+#else
+			for(i = 1; i < (n = tokenize(s)); ++i)
+#endif
+			{
+				// swap i-th item at a random position from 0 to i
+				// proof for even distribution:
+				//   n = 1: obvious
+				//   n -> n+1:
+				//     item n+1 gets at any position with chance 1/(n+1)
+				//     all others will get their 1/n chance reduced by factor n/(n+1)
+				//     to be on place n+1, their chance will be 1/(n+1)
+				//     1/n * n/(n+1) = 1/(n+1)
+				//     q.e.d.
+				f = ceil(random() * (i + 1)) - 1; // 0 to i
+				if(f == i)
+					continue; // no change
+
+				s2 = "";
+				for(j = 0; j < n; ++j)
+#ifdef MAPINFO
+					s2 = strcat(s2, " ", argv((j == i) ? f : (j == f) ? i : j));
+				s = substring(s2, 1, strlen(s2) - 1);
+#else
+					s2 = strcat(s2, "'", argv((j == i) ? f : (j == f) ? i : j), "'");
+				s = s2;
+#endif
+			}
+			cvar_set("g_maplist", s);
+			return TRUE;
+		}
+	}
+	else if(argv(0) == "rpn")
 	{
 		if(argc >= 2)
 		{
 			float rpnpos;
 			string rpncmd;
-			string s, s2;
-			float f, f2;
-			float i, j;
+			float f2;
 			rpn_sp = 0;
 			rpn_error = FALSE;
 			for(rpnpos = 1; rpnpos < argc; ++rpnpos)

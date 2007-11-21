@@ -60,7 +60,11 @@ void GotoFirstMap()
 		cvar_set("_sv_init", "0");
 		if(cvar("g_maplist_shuffle"))
 			ShuffleMaplist();
+#ifdef MAPINFO
+		tokenizebyseparator(cvar_string("g_maplist"), " ");
+#else
 		tokenize(cvar_string("g_maplist"));
+#endif
 		if(argv(0) != GetMapname())
 		{
 			cvar_set("nextmap", argv(0));
@@ -678,7 +682,11 @@ float(float exponent) MaplistMethod_Shuffle = // more clever shuffling
 			newlist = strcat(newlist, "'", argv(j), "'");
 #endif
 		cvar_set("g_maplist", newlist);
+#ifdef MAPINFO
+		Map_Count = tokenizebyseparator(cvar_string("g_maplist"), " ");
+#else
 		Map_Count = tokenize(newlist);
+#endif
 
 		// NOTE: the selected map has just been inserted at (insertpos-1)th position
 		Map_Current = insertpos - 1; // this is not really valid, but this way the fallback has a chance of working
@@ -692,17 +700,22 @@ void() Maplist_Init =
 {
 	string temp;
 	temp = cvar_string("g_maplist");
+#ifdef MAPINFO
+	Map_Count = tokenizebyseparator(cvar_string("g_maplist"), " ");
+#else
 	Map_Count = tokenize(temp);
+#endif
 	if(Map_Count == 0)
 	{
 		bprint( "Maplist is empty!  Resetting it to default map list.\n" );
 #ifdef MAPINFO
 		cvar_set("g_maplist", temp = MapInfo_ListAllowedMaps());
 		localcmd("\nmenu_cmd sync\n");
+		Map_Count = tokenizebyseparator(temp, " ");
 #else
 		cvar_set("g_maplist", temp = cvar_string("g_maplist_defaultlist"));
-#endif
 		Map_Count = tokenize(temp);
+#endif
 	}
 	if(Map_Count == 0)
 		error("empty maplist, cannot select a new map");
@@ -1591,7 +1604,11 @@ void ShuffleMaplist()
 	float i;
 
 	result = cvar_string("g_maplist");
+#ifdef MAPINFO
+	litems = tokenizebyseparator(result, " ");
+#else
 	litems = tokenize(result);
+#endif
 
 	for(start = 0; start < litems - 1; ++start)
 	{
@@ -1609,6 +1626,8 @@ void ShuffleMaplist()
 			if(i != selected)
 				result = strcat(result, " ", argv(i));
 		result = substring(result, 1, strlen(result) - 1);
+
+		litems = tokenizebyseparator(result, " ");
 #else
 		for(i = 0; i < start; ++i)
 			result = strcat(result, "'", argv(i), "'");
@@ -1616,9 +1635,9 @@ void ShuffleMaplist()
 		for(i = start; i < litems; ++i)
 			if(i != selected)
 				result = strcat(result, "'", argv(i), "'");
-#endif
 
 		litems = tokenize(result);
+#endif
 
 		//dprint(result, "\n");
 	}
