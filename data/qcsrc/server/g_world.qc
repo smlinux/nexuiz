@@ -1855,7 +1855,7 @@ string MapVote_Suggest(string m)
 		strunzone(mapvote_suggestions[i]);
 	mapvote_suggestions[i] = strzone(m);
 	GameLogEcho(strcat(":vote:suggested:", m, ":", ftos(self.playerid), ":", self.netname), TRUE);
-	return "Suggestion accepted.";
+	return strcat("Suggestion of ", m, " accepted.");
 }
 
 void MapVote_AddVotable(string nextMap, float isSuggestion)
