@@ -2,6 +2,7 @@ float SPAWNFLAG_NO_WAYPOINTS_FOR_ITEMS = 1;
 string redirection_target;
 
 string GetMapname();
+string GetGametype();
 void GotoNextMap();
 void ShuffleMaplist()
 float() DoNextMapOverride;
@@ -319,7 +320,11 @@ void worldspawn (void)
 		GameLogEcho(":logversion:2", FALSE);
 		s = strcat(cvar_string("sv_eventlog_files_counter"), ".");
 		s = strcat(s, ftos(random()));
+#ifdef MAPINFO
+		GameLogEcho(strcat(":gamestart:", GetGametype(), "_", GetMapname(), ":", s, ":"), FALSE);
+#else
 		GameLogEcho(strcat(":gamestart:", GetMapname(), ":", s), FALSE);
+#endif
 		s = ":gameinfo:mutators:LIST";
 		if(g_grappling_hook)
 			s = strcat(s, ":grappling_hook");
@@ -969,7 +974,11 @@ void(float final) DumpStats =
 		s = ":scores:";
 	else
 		s = ":status:";
+#ifdef MAPINFO
+	s = strcat(s, GetGametype(), "_", GetMapname(), ":", ftos(rint(time)));
+#else
 	s = strcat(s, GetMapname(), ":", ftos(rint(time)));
+#endif
 
 	if(to_console)
 		ServerConsoleEcho(s, FALSE);

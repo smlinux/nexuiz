@@ -471,12 +471,12 @@ float MapInfo_FindName(string s)
 	float l, r, m, cmp;
 	l = 0;
 	r = MapInfo_count;
-	_MapInfo_FindName_match = string_null;
 	// invariants: r is behind s, l-1 is equal or before
 	while(l != r)
 	{
 		m = floor((l + r) / 2);
-		cmp = strcasecmp(_MapInfo_GlobItem(HugeSetOfIntegers_get(_MapInfo_filtered, m)), s);
+		_MapInfo_FindName_match = _MapInfo_GlobItem(HugeSetOfIntegers_get(_MapInfo_filtered, m));
+		cmp = strcasecmp(_MapInfo_FindName_match, s);
 		if(cmp == 0)
 			return m; // found and good
 		if(cmp < 0)
@@ -484,18 +484,27 @@ float MapInfo_FindName(string s)
 		else
 			r = m; // behind s
 	}
+	_MapInfo_FindName_match = _MapInfo_GlobItem(HugeSetOfIntegers_get(_MapInfo_filtered, l));
 	// r == l, so: l is behind s, l-1 is before
 	// SO: if there is any, l is the one with the right prefix
 	//     and l+1 may be one too
 	if(l == MapInfo_count)
+	{
+		_MapInfo_FindName_match = string_null;
 		return -1; // no _MapInfo_FindName_match, behind last item
-	_MapInfo_FindName_match = _MapInfo_GlobItem(HugeSetOfIntegers_get(_MapInfo_filtered, l));
+	}
 	if(!startsWith(_MapInfo_FindName_match, s))
+	{
+		_MapInfo_FindName_match = string_null;
 		return -1; // wrong prefix
+	}
 	if(l == MapInfo_count - 1)
 		return l; // last one, nothing can follow => unique
 	if(startsWith(_MapInfo_GlobItem(HugeSetOfIntegers_get(_MapInfo_filtered, l + 1)), s))
+	{
+		_MapInfo_FindName_match = string_null;
 		return -1; // ambigous _MapInfo_FindName_match
+	}
 	return l;
 }
 
