@@ -321,7 +321,7 @@ void worldspawn (void)
 		s = strcat(cvar_string("sv_eventlog_files_counter"), ".");
 		s = strcat(s, ftos(random()));
 #ifdef MAPINFO
-		GameLogEcho(strcat(":gamestart:", GetGametype(), "_", GetMapname(), ":", s, ":"), FALSE);
+		GameLogEcho(strcat(":gamestart:", GetGametype(), "_", GetMapname(), ":", s), FALSE);
 #else
 		GameLogEcho(strcat(":gamestart:", GetMapname(), ":", s), FALSE);
 #endif
