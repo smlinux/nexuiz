@@ -294,12 +294,15 @@ void SV_ParseClientCommand(string s) {
 				if(dovote == "") {
 					sprint(self, "^1Your command was empty. See help for more info.\n");
 				} else if(VoteAllowed(strcat1(argv(2)))) { // strcat seems to be necessary
-					if(!ValidateMap(dovote))
-						return;
-					// remap chmap to gotomap (forces intermission)
-					if(strlen(dovote) >= 6)
-						if(substring(dovote, 0, 6) == "chmap ")
-							dovote = strcat("gotomap ", substring(dovote, 6, strlen(dovote) - 6));
+					if(substring(dovote, 0, 6) == "chmap ")
+						dovote = strcat("gotomap ", substring(dovote, 6, strlen(dovote) - 6));
+					if(substring(dovote, 0, 8) == "gotomap ")
+					{
+						if(!(dovote = ValidateMap(substring(dovote, 8, strlen(dovote) - 8))))
+							return;
+						dovote = strcat("gotomap ", dovote);
+					}
+
 					dovote_display = dovote;
 					if(substring(dovote, 0, 5) == "kick " || substring(dovote, 0, 8) == "kickban ")
 					{
