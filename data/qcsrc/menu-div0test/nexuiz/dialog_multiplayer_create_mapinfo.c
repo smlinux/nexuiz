@@ -68,6 +68,7 @@ void loadMapInfoNexuizMapInfoDialog(entity me, float i)
 	me.typeTDMLabel.disabled = !(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_TEAM_DEATHMATCH);
 	me.typeLMSLabel.disabled = !(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_LMS);
 	me.typeArenaLabel.disabled = !(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_ARENA);
+	me.typeDominationLabel.disabled = !(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_DOMINATION);
 	me.typeRuneLabel.disabled = !(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_RUNEMATCH);
 	me.typeKeyHuntLabel.disabled = !(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_KEYHUNT);
 	me.typeCTFLabel.disabled = !(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_CTF);
