@@ -7,7 +7,7 @@ DONE text label
 DONE button
 DONE radio button
 DONE checkbox
-TODO listbox (with draw callback and scroll bar)
+DONE listbox (with draw callback and scroll bar)
 DONE value slider
 DONE tabbed dialog
 DONE alternate button drawing (like: "Image Text" as in checkbox, or overlay two images); move that stuff out of CheckBox
@@ -23,8 +23,10 @@ TODO singleplayer dialog
 	TODO instant action
 TODO multiplayer dialog
 	TODO player setup
-	TODO server browser
-	TODO create game
+	DONE server browser
+	DONE create game
 TODO demo viewer
-TODO quit dialog
+DONE quit dialog
 TODO credits dialog
+
+cvars: cl_netinputpacketlosstolerance
