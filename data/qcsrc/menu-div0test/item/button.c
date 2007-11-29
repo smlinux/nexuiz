@@ -26,6 +26,7 @@ CLASS(Button) EXTENDS(Label)
 	ATTRIB(Button, colorF, vector, '1 1 1')
 	ATTRIB(Button, colorD, vector, '1 1 1')
 	ATTRIB(Button, color2, vector, '1 1 1')
+	ATTRIB(Button, alpha2, float, 1)
 
 	ATTRIB(Button, origin, vector, '0 0 0')
 	ATTRIB(Button, size, vector, '0 0 0')
@@ -138,7 +139,7 @@ void drawButton(entity me)
 	{
 		bOrigin = me.keepspaceLeft * eX;
 		bSize = eY + eX * (1 - me.keepspaceLeft);
-		draw_Picture(bOrigin, me.src2, bSize, me.color2, 1);
+		draw_Picture(bOrigin, me.src2, bSize, me.color2, me.alpha2);
 	}
 
 	draw_alpha = save;

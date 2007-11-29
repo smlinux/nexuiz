@@ -1,7 +1,7 @@
 #ifdef INTERFACE
 CLASS(NexuizPlayerSettingsTab) EXTENDS(NexuizTab)
 	METHOD(NexuizPlayerSettingsTab, fill, void(entity))
-	ATTRIB(NexuizPlayerSettingsTab, title, string, "Settings")
+	ATTRIB(NexuizPlayerSettingsTab, title, string, "Player setup")
 	ATTRIB(NexuizPlayerSettingsTab, intendedWidth, float, 0.9)
 	ATTRIB(NexuizPlayerSettingsTab, rows, float, 22)
 	ATTRIB(NexuizPlayerSettingsTab, columns, float, 6.5)
@@ -46,7 +46,9 @@ void fillNexuizPlayerSettingsTab(entity me)
 		me.TD(me, 1, 2, e = makeNexuizSlider(-1, 5, 1, "cl_zoomspeed"));
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Crosshair:"));
-		me.TD(me, 1, 2, e = makeNexuizSlider(0, 10, 1, "crosshair"));
+		n = 10;
+		for(i = 1; i <= n; ++i)
+			me.TDNoMargin(me, 1, 2 / n, e = makeNexuizCrosshairButton(3, i), '0 0 0');
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Crosshair Size:"));
 		me.TD(me, 1, 2, e = makeNexuizSlider(0.10, 1, 0.05, "crosshair_size"));

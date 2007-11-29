@@ -48,3 +48,4 @@
 #include "nexuiz/gametypebutton.c"
 #include "nexuiz/maplist.c"
 #include "nexuiz/image.c"
+#include "nexuiz/crosshairbutton.c"

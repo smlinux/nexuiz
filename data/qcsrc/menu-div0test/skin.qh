@@ -57,6 +57,7 @@ const vector SKINCOLOR_RADIOBUTTON_D = '1 1 1';
 
 const string SKINGFX_COLORBUTTON = "colorbutton";
 const string SKINGFX_COLORBUTTON_COLOR = "color";
+const string SKINGFX_CROSSHAIRBUTTON = "crosshairbutton";
 const string SKINGFX_SCROLLBAR = "scrollbar";
 const vector SKINCOLOR_SCROLLBAR_N = '1 1 1';
 const vector SKINCOLOR_SCROLLBAR_F = '1 1 1';
