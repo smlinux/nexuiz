@@ -102,6 +102,12 @@ float	strlen(string s)  = #52;
 string	strcat(string s1, ...)  = #53;
 string	substring(string s, float start, float length)  = #54;
 
+float(string str, string sub, float startpos) strstrofs = #221;
+float(string s1, string s2, float len) strncmp = #228;
+float(string s1, string s2) strcasecmp = #229;
+float(string s1, string s2, float len) strncasecmp = #230;
+
+
 vector	stov(string s)  = #55;
 
 #ifdef PROFILESTRZONE
