@@ -91,6 +91,8 @@ custom/sound.qm
 custom/joingame.qm
 custom/credits.qm
 
+custom/gecko.qm
+
 custom/player/avatar.qc
 custom/player/color.qc
 

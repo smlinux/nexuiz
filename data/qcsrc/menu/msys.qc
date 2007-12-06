@@ -275,6 +275,13 @@ float ERR_BADSCALE			= -3;
 //float ERR_BADSIZE			= ERR_BADSCALE;
 float ERR_NOTCACHED			= -4;
 
+float GECKO_BUTTON_DOWN 		= 0;
+float GECKO_BUTTON_UP 			= 1;
+// either use down and up or just press but not all of them!
+float GECKO_BUTTON_PRESS 		= 2;
+// use this for mouse events if needed?
+float GECKO_BUTTON_DOUBLECLICK 	= 3;
+
 /* not supported at the moment
 ///////////////////////////
 // os constants

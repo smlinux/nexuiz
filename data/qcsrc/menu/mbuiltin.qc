@@ -240,6 +240,13 @@ float	gethostcacheindexforkey(string key) = #622;
 void	addwantedhostcachekey(string key) = #623;
 string	getextresponse(void) = #624;
 
+// AK the builtin numbers may change - the code might be removed again
+float gecko_create( string name ) = #487;
+void gecko_destroy( string name ) = #488;
+void gecko_navigate( string name, string URI ) = #489;
+float gecko_keyevent( string name, float key, float eventtype ) = #490;
+void gecko_mousemove( string name, float x, float y ) = #491;
+
 #ifdef FIXEDFOPEN
 float 	fopen( string filename, float mode ) =
 {
