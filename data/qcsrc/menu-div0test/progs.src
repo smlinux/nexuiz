@@ -1,5 +1,6 @@
 ../../menu.dat
 
+config.qh
 msys.qh
 mbuiltin.qh
 

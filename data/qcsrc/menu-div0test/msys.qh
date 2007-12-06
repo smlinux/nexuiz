@@ -1,5 +1,4 @@
 #pragma flag off fastarrays // make dp behave with new fteqcc versions. remove when dp bug with fteqcc fastarrays is fixed
-#define MENUQC // so common/*.qc can check for menu QC or game QC
 
 //////////////////////////////////////////////////////////
 // sys globals
