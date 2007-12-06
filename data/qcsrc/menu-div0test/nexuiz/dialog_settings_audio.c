@@ -59,6 +59,9 @@ void fillNexuizAudioSettingsTab(entity me)
 		me.TDempty(me, 0.2);
 		me.TD(me, 1, 2.8, e = makeNexuizCheckBox(1, "snd_swapstereo", "Swap Stereo"));
 	me.TR(me);
+		me.TD(me, 10, 15, e = spawnGecko() );
+		e.configureBrowser( e, "www.google.de" );
+	me.TR(me);
 
 	me.gotoXY(me, me.rows - 1, 0);
 		me.TD(me, 1, me.columns, makeNexuizCommandButton("Apply immediately", '0 0 0', "snd_restart", COMMANDBUTTON_APPLY));
