@@ -124,7 +124,7 @@ void() trigger_push_touch =
 		{
 			// flash when activated
 			te_smallflash(other.origin);
-			sound (other, CHAN_ITEM, "misc/jumppad.wav", 1, ATTN_NORM);
+			sound (other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
 			self.pushltime = time + 0.2;
 		}
 		if(clienttype(other) == CLIENTTYPE_REAL)
@@ -236,8 +236,9 @@ void() trigger_push =
 		self.speed = 1000;
 	self.movedir = self.movedir * self.speed * 10;
 
-	if (self.target)
-		precache_sound ("misc/jumppad.wav");
+	if not(self.noise)
+		self.noise = "misc/jumppad.wav";
+	precache_sound (self.noise);
 
 	// this must be called to spawn the teleport waypoints for bots
 	self.think = trigger_push_findtarget;
