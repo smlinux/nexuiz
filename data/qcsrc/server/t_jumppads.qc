@@ -118,13 +118,6 @@ void() trigger_push_touch =
 	if (other.deadflag && other.classname == "player")
 		return;
 
-	if (!self.target)
-	{
-		other.velocity = self.movedir;
-		other.flags = other.flags - (other.flags & FL_ONGROUND);
-		return;
-	}
-
 	if (other.classname == "player")
 	{
 		if(self.pushltime < time)  // prevent "snorring" sound when a player hits the jumppad more than once
@@ -152,7 +145,8 @@ void() trigger_push_touch =
 			other.jumppadcount = TRUE;
 	}
 
-	self.movedir = trigger_push_calculatevelocity(other.origin, self.enemy, self.height);
+	if(self.target)
+		self.movedir = trigger_push_calculatevelocity(other.origin, self.enemy, self.height);
 
 	other.flags = other.flags - (other.flags & FL_ONGROUND);
 	// reset tracking of oldvelocity for impact damage (sudden velocity changes)
