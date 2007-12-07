@@ -22,7 +22,7 @@ void configureBrowserGecko( entity me, string URI ) {
 
 	//create a new gecko object if needed
 	if( !me.texturePath ) {
-		me.texturePath = strzone( strcat( "/_dynamic/gecko/menu/",  ftos( _gecko_instanceNumber ) ) );
+		me.texturePath = strzone( strcat( "_dynamic/gecko/menu/",  ftos( _gecko_instanceNumber ) ) );
 		_gecko_instanceNumber+=1;
 		// TODO: add error checks
 		gecko_create( me.texturePath );
@@ -33,7 +33,7 @@ void configureBrowserGecko( entity me, string URI ) {
 void drawGecko(entity me)
 {
 	if( me.texturePath ) {
-		draw_Picture( '0 0 0', me.texturePath, '1 1 0', '1 1 1', 1.0 );
+		draw_Picture( '0 0 0', strcat( "/", me.texturePath ), '1 1 0', '1 1 1', 1.0 );
 	} else {
 		local vector fontsize;
 		fontsize_x = fontsize_y = 1.0 / 30.0;
@@ -57,23 +57,26 @@ float keyUpGecko(entity me, float scan, float ascii, float shift)
 
 float mouseMoveGecko(entity me, vector pos)
 {
+	print( vtos( pos ), "\n" );
 	gecko_mousemove( me.texturePath, pos_x, pos_y );
 	return 1;
 }
 
 float mousePressGecko(entity me, vector pos)
 {
+	print( "mouse down!\n" );
 	return gecko_keyevent( me.texturePath, K_MOUSE1, GECKO_BUTTON_DOWN );
 }
 
 float mouseDragGecko(entity me, vector pos)
 {
-	//gecko_mousemove( me.instanceName, pos_x, pos_y );
-	return 0;
+	gecko_mousemove( me.texturePath, pos_x, pos_y );
+	return 1;
 }
 
 float mouseReleaseGecko(entity me, vector pos)
 {
+	print( "mouse up!\n" );
 	return gecko_keyevent( me.texturePath, K_MOUSE1, GECKO_BUTTON_UP );
 }
 
