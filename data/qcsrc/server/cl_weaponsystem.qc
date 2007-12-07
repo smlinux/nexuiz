@@ -410,6 +410,15 @@ void(float fr, float t, void() func) weapon_thinkf =
 	// VorteX: haste can be added here
 	self.weapon_nextthink = max(time, self.weapon_nextthink_lastframe + t);
 	self.weapon_think = func;
+
+	if (fr == WFRAME_FIRE1 || fr == WFRAME_FIRE2)
+	if (t)
+	{
+		local vector anim;
+		anim = self.anim_shoot;
+		anim_z = anim_y / t;
+		player_setanim(anim, FALSE, TRUE, TRUE);
+	}
 };
 
 void(float spd, vector org) weapon_boblayer1 =

@@ -68,11 +68,50 @@ float maxclients;
 
 .float play_time;
 .float death_time;
-.float dead_time;
 .float dead_frame;
-.float die_frame;
 .float fade_time;
 .float fade_rate;
+
+// player animation state
+.float animstate_startframe;
+.float animstate_numframes;
+.float animstate_framerate;
+.float animstate_starttime;
+.float animstate_endtime;
+.float animstate_override;
+.float animstate_looping;
+
+// player animation data for this model
+// each vector is as follows:
+// _x = startframe
+// _y = numframes
+// _z = framerate
+.vector anim_die1; // player dies
+.vector anim_die2; // player dies differently
+.vector anim_draw; // player pulls out a weapon
+.vector anim_duck; // player crouches (from idle to duckidle)
+.vector anim_duckwalk; // player walking while crouching
+.vector anim_duckjump; // player jumping from a crouch
+.vector anim_duckidle; // player idling while crouching
+.vector anim_idle; // player standing
+.vector anim_jump; // player jump
+.vector anim_pain1; // player flinches from pain
+.vector anim_pain2; // player flinches from pain, differently
+.vector anim_shoot; // player shoots
+.vector anim_taunt; // player taunts others (FIXME: no code references this)
+.vector anim_run; // player running forward
+.vector anim_runbackwards; // player running backward
+.vector anim_strafeleft; // player shuffling left quickly
+.vector anim_straferight; // player shuffling right quickly
+.vector anim_dead1; // player dead (must be identical to last frame of die1)
+.vector anim_dead2; // player dead (must be identical to last frame of die2)
+.vector anim_forwardright; // player running forward and right
+.vector anim_forwardleft; // player running forward and left
+.vector anim_backright; // player running backward and right
+.vector anim_backleft; // player running back and left
+
+void() player_setupanimsformodel;
+void(vector anim, float looping, float override, float restart) player_setanim;
 
 .string mdl;
 

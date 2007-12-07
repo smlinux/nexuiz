@@ -1,0 +1,21 @@
+  0 40 20 // die1         : die
+ 40 40 20 // die2         : die differently
+ 80  6 20 // draw         : raise weapon
+ 86  6 20 // duck         : crouch quickly
+ 92 12 20 // duckwalk     : crouch walking
+104 10 20 // duckjump     : jump from crouching position, stays on last frame until you land
+114 20 20 // duckidle     : crouched
+134 30 20 // idle         : standing
+164 10 20 // jump         : jump, stays on last frame until you land
+174 10 20 // pain1        : flinch from pain
+184 10 20 // pain2        : flinch differently
+194  6 20 // shoot        : 300ms shooting anim, may be played faster/slower by code, used for all weapons
+200  1 20 // taunt        : not used
+201 10 20 // run          : run forward
+211 10 20 // runbackwards : run backwards
+221 10 20 // strafeleft   : fast shuffling to the left
+231 10 20 // straferight  : fast shuffling to the right
+241 10 20 // forwardright : running forward and right
+251 10 20 // forwardleft  : running forward and left
+261 10 20 // backright    : running backward and right
+271 10 20 // backleft     : running backward and left

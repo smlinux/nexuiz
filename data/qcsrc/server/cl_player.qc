@@ -1,7 +1,3 @@
-$frame die1 die2 draw duck duckwalk duckjump duckidle idle
-$frame jump pain1 pain2 shoot taunt run runbackwards
-$frame strafeleft straferight dead1 dead2 forwardright
-$frame forwardleft backright backleft
 
 // changes by LordHavoc on 03/29/04 and 03/30/04 at Vermeulen's request
 // merged player_run and player_stand to player_anim
@@ -32,7 +28,16 @@ void CopyBody(float keepvelocity)
 	self.damageforcescale = oldself.damageforcescale;
 	self.effects = oldself.effects;
 	self.event_damage = oldself.event_damage;
+	self.animstate_startframe = oldself.animstate_startframe;
+	self.animstate_numframes = oldself.animstate_numframes;
+	self.animstate_framerate = oldself.animstate_framerate;
+	self.animstate_starttime = oldself.animstate_starttime;
+	self.animstate_endtime = oldself.animstate_endtime;
+	self.animstate_override = oldself.animstate_override;
+	self.animstate_looping = oldself.animstate_looping;
 	self.frame = oldself.frame;
+	self.dead_frame = oldself.dead_frame;
+	self.pain_finished = oldself.pain_finished;
 	self.health = oldself.health;
 	self.armorvalue = oldself.armorvalue;
 	self.armortype = oldself.armortype;
@@ -58,11 +63,137 @@ void CopyBody(float keepvelocity)
 	self = oldself;
 }
 
+float animparseerror;
+vector(float animfile) animparseline =
+{
+	local string line;
+	local float c;
+	local vector anim;
+	if (animfile < 0)
+		return '0 1 2';
+	line = fgets(animfile);
+	c = tokenize(line);
+	if (c != 3)
+	{
+		animparseerror = TRUE;
+		return '0 1 2';
+	}
+	anim_x = stof(argv(0));
+	anim_y = stof(argv(1));
+	anim_z = stof(argv(2));
+	// don't allow completely bogus values
+	if (anim_x < 0 || anim_y < 1 || anim_z < 0.001)
+		anim = '0 1 2';
+	return anim;
+};
+
+void() player_setupanimsformodel =
+{
+	local string animfilename;
+	local float animfile;
+	// defaults for legacy .zym models without animinfo files
+	self.anim_die1 = '0 1 0.5'; // 2 seconds
+	self.anim_die2 = '1 1 0.5'; // 2 seconds
+	self.anim_draw = '2 1 3'; // TODO: analyze models and set framerate
+	self.anim_duck = '3 1 100'; // this anim seems bogus in most models, so make it play VERY briefly!
+	self.anim_duckwalk = '4 1 1';
+	self.anim_duckjump = '5 1 100'; // zym anims keep playing until changed, so this only has to start the anim, landing will end it
+	self.anim_duckidle = '6 1 1';
+	self.anim_idle = '7 1 1';
+	self.anim_jump = '8 1 100'; // zym anims keep playing until changed, so this only has to start the anim, landing will end it
+	self.anim_pain1 = '9 1 2'; // 0.5 seconds
+	self.anim_pain2 = '10 1 2'; // 0.5 seconds
+	self.anim_shoot = '11 1 5'; // TODO: analyze models and set framerate
+	self.anim_taunt = '12 1 1'; // FIXME?  there is no code using this anim
+	self.anim_run = '13 1 1';
+	self.anim_runbackwards = '14 1 1';
+	self.anim_strafeleft = '15 1 1';
+	self.anim_straferight = '16 1 1';
+	self.anim_dead1 = '17 1 1';
+	self.anim_dead2 = '18 1 1';
+	self.anim_forwardright = '19 1 1';
+	self.anim_forwardleft = '20 1 1';
+	self.anim_backright = '21 1 1';
+	self.anim_backleft  = '22 1 1';
+	animparseerror = FALSE;
+	animfilename = strcat(self.model, ".animinfo");
+	animfile = fopen(animfilename, FILE_READ);
+	if (animfile >= 0)
+	{
+		self.anim_die1         = animparseline(animfile);
+		self.anim_die2         = animparseline(animfile);
+		self.anim_draw         = animparseline(animfile);
+		self.anim_duck         = animparseline(animfile);
+		self.anim_duckwalk     = animparseline(animfile);
+		self.anim_duckjump     = animparseline(animfile);
+		self.anim_duckidle     = animparseline(animfile);
+		self.anim_idle         = animparseline(animfile);
+		self.anim_jump         = animparseline(animfile);
+		self.anim_pain1        = animparseline(animfile);
+		self.anim_pain2        = animparseline(animfile);
+		self.anim_shoot        = animparseline(animfile);
+		self.anim_taunt        = animparseline(animfile);
+		self.anim_run          = animparseline(animfile);
+		self.anim_runbackwards = animparseline(animfile);
+		self.anim_strafeleft   = animparseline(animfile);
+		self.anim_straferight  = animparseline(animfile);
+		self.anim_forwardright = animparseline(animfile);
+		self.anim_forwardleft  = animparseline(animfile);
+		self.anim_backright    = animparseline(animfile);
+		self.anim_backleft     = animparseline(animfile);
+		fclose(animfile);
+
+		// derived anims
+		self.anim_dead1 = '0 1 1' + '1 0 0' * (self.anim_die1_x + self.anim_die1_y - 1);
+		self.anim_dead2 = '0 1 1' + '1 0 0' * (self.anim_die2_x + self.anim_die2_y - 1);
+
+		if (animparseerror)
+			print("Parse error in ", animfilename, ", some player animations are broken\n");
+	}
+	else
+		dprint("File ", animfilename, " not found, assuming legacy .zym model animation timings\n");
+	// reset animstate now
+	player_setanim(self.anim_idle, TRUE, FALSE, TRUE);
+};
+
+void(vector anim, float looping, float override, float restart) player_setanim =
+{
+	if (!restart)
+	if (anim_x != self.animstate_startframe)
+	if (anim_y != self.animstate_numframes)
+	if (anim_z != self.animstate_framerate)
+		return;
+	self.animstate_startframe = anim_x;
+	self.animstate_numframes = anim_y;
+	self.animstate_framerate = anim_z;
+	self.animstate_starttime = time;
+	self.animstate_endtime = time + self.animstate_numframes / self.animstate_framerate;
+	self.animstate_looping = looping;
+	self.animstate_override = override;
+	self.frame = self.animstate_startframe;
+};
+
+void() player_updateframe =
+{
+	if (time >= self.animstate_endtime)
+	{
+		if (self.animstate_looping)
+		{
+			self.animstate_starttime = self.animstate_endtime;
+			self.animstate_endtime = self.animstate_endtime + self.animstate_numframes / self.animstate_framerate;
+		}
+		self.animstate_override = FALSE;
+	}
+	self.frame = self.animstate_startframe + bound(0, (time - self.animstate_starttime) * self.animstate_framerate, self.animstate_numframes - 1);
+};
+
 void player_anim (void)
 {
+	player_updateframe();
+
 	if (self.deadflag != DEAD_NO)
 	{
-		if (time > self.dead_time)
+		if (time > self.animstate_endtime)
 		{
 			if (self.maxs_z > 5)
 			{
@@ -71,53 +202,48 @@ void player_anim (void)
 			}
 			self.frame = self.dead_frame;
 		}
-		else
-			self.frame = self.die_frame;
 		return;
 	}
 
-
-	if (self.crouch)
+	if (!self.animstate_override)
 	{
-		if (self.movement_x * self.movement_x + self.movement_y * self.movement_y > 20)
-			self.frame = $duckwalk;
+		if (!(self.flags & FL_ONGROUND))
+		{
+			if (self.crouch)
+				player_setanim(self.anim_duckjump, FALSE, TRUE, FALSE);
+			else
+				player_setanim(self.anim_jump, FALSE, TRUE, FALSE);
+		}
+		else if (self.crouch)
+		{
+			if (self.movement_x * self.movement_x + self.movement_y * self.movement_y > 20)
+				player_setanim(self.anim_duckwalk, TRUE, FALSE, FALSE);
+			else
+				player_setanim(self.anim_duckidle, TRUE, FALSE, FALSE);
+		}
+		else if ((self.movement_x * self.movement_x + self.movement_y * self.movement_y) > 20)
+		{
+			if (self.movement_x > 0 && self.movement_y == 0)
+				player_setanim(self.anim_run, TRUE, FALSE, FALSE);
+			else if (self.movement_x < 0 && self.movement_y == 0)
+				player_setanim(self.anim_runbackwards, TRUE, FALSE, FALSE);
+			else if (self.movement_x == 0 && self.movement_y > 0)
+				player_setanim(self.anim_straferight, TRUE, FALSE, FALSE);
+			else if (self.movement_x == 0 && self.movement_y < 0)
+				player_setanim(self.anim_strafeleft, TRUE, FALSE, FALSE);
+			else if (self.movement_x > 0 && self.movement_y > 0)
+				player_setanim(self.anim_forwardright, TRUE, FALSE, FALSE);
+			else if (self.movement_x > 0 && self.movement_y < 0)
+				player_setanim(self.anim_forwardleft, TRUE, FALSE, FALSE);
+			else if (self.movement_x < 0 && self.movement_y > 0)
+				player_setanim(self.anim_backright, TRUE, FALSE, FALSE);
+			else if (self.movement_x < 0 && self.movement_y < 0)
+				player_setanim(self.anim_backleft, TRUE, FALSE, FALSE);
+			else
+				player_setanim(self.anim_run, TRUE, FALSE, FALSE);
+		}
 		else
-			self.frame = $duckidle;
-	}
-	else if ((self.movement_x * self.movement_x + self.movement_y * self.movement_y) > 20)
-	{
-		if (self.movement_x > 0 && self.movement_y == 0)
-			self.frame = $run;
-		else if (self.movement_x < 0 && self.movement_y == 0)
-			self.frame = $runbackwards;
-		else if (self.movement_x == 0 && self.movement_y > 0)
-			self.frame = $straferight;
-		else if (self.movement_x == 0 && self.movement_y < 0)
-			self.frame = $strafeleft;
-		else if (self.movement_x > 0 && self.movement_y > 0)
-			self.frame = $forwardright;
-		else if (self.movement_x > 0 && self.movement_y < 0)
-			self.frame = $forwardleft;
-		else if (self.movement_x < 0 && self.movement_y > 0)
-			self.frame = $backright;
-		else if (self.movement_x < 0 && self.movement_y < 0)
-			self.frame = $backleft;
-		else
-			self.frame = $run;
-	}
-	else if (self.pain_finished > time)
-		self.frame = self.pain_frame;
-	else if (ATTACK_FINISHED(self) > time)
-		self.frame = $shoot;
-	else
-		self.frame = $idle;
-
-	if (!(self.flags & FL_ONGROUND))
-	{
-		if (self.crouch)
-			self.frame = $duckidle;		// if player is crouching while in air, show crouch frame
-		else
-			self.frame = $jump;
+			player_setanim(self.anim_idle, TRUE, FALSE, FALSE);
 	}
 }
 //End change by Supajoe on 11:44 PM EST 11/16/03 (Subject: Player animations)
@@ -173,7 +299,6 @@ void PlayerCorpseDamage (entity inflictor, entity attacker, float damage, float 
 		// don't use any animations as a gib
 		self.frame = 0;
 		self.dead_frame = 0;
-		self.die_frame = 0;
 		// view just above the floor
 		self.view_ofs = '0 0 4';
 
@@ -224,9 +349,9 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 	if (self.pain_finished < time)		//Don't switch pain sequences like crazy
 	{
 		if (random() > 0.5)
-			self.pain_frame = $pain1;
+			player_setanim(self.anim_pain1, FALSE, TRUE, TRUE);
 		else
-			self.pain_frame = $pain2;
+			player_setanim(self.anim_pain2, FALSE, TRUE, TRUE);
 		self.pain_finished = time + 0.5;	//Supajoe
 
 		// throw off bot aim temporarily
@@ -360,20 +485,16 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 			self.respawn_countdown = 10; // first number to count down from is 10
 		else
 			self.respawn_countdown = -1; // do not count down
-		// when to switch to the dead_frame
-		self.dead_time = time + 2;
 		if (random() < 0.5)
 		{
-			self.die_frame = $die1;
-			self.dead_frame = $dead1;
+			player_setanim(self.anim_die1, FALSE, TRUE, TRUE);
+			self.dead_frame = self.anim_dead1_x;
 		}
 		else
 		{
-			self.die_frame = $die2;
-			self.dead_frame = $dead2;
+			player_setanim(self.anim_die2, FALSE, TRUE, TRUE);
+			self.dead_frame = self.anim_dead2_x;
 		}
-		// start the animation
-		player_anim();
 		// set damage function to corpse damage
 		self.event_damage = PlayerCorpseDamage;
 		// call the corpse damage function just in case it wants to gib

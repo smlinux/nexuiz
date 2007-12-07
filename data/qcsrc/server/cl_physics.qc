@@ -74,6 +74,11 @@ void PlayerJump (void)
 
 	self.flags = self.flags - FL_ONGROUND;
 	self.flags = self.flags - FL_JUMPRELEASED;
+
+	if (self.crouch)
+		player_setanim(self.anim_duckjump, FALSE, TRUE, TRUE);
+	else
+		player_setanim(self.anim_jump, FALSE, TRUE, TRUE);
 }
 
 void() CheckWaterJump =

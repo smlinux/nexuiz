@@ -248,7 +248,8 @@ void setmodel_lod(entity e, string modelname)
 #ifdef ALLOW_VARIABLE_LOD
 	string s;
 
-	s = strcat(substring(modelname, 0, strlen(modelname) - 4), "_1.zym");
+	// FIXME: this only supports 3-letter extensions
+	s = strcat(substring(modelname, 0, strlen(modelname) - 4), "_1", substring(modelname, 0, strlen(modelname) - 4));
 	if(fexists(s))
 	{
 		precache_model(s);
@@ -258,7 +259,7 @@ void setmodel_lod(entity e, string modelname)
 	else
 		self.modelindex_lod1 = -1;
 
-	s = strcat(substring(modelname, 0, strlen(modelname) - 4), "_2.zym");
+	s = strcat(substring(modelname, 0, strlen(modelname) - 4), "_2", substring(modelname, 0, strlen(modelname) - 4));
 	if(fexists(s))
 	{
 		precache_model(s);
@@ -281,6 +282,7 @@ void setmodel_lod(entity e, string modelname)
 	precache_model(modelname);
 	setmodel(e, modelname); // players have high precision
 #endif
+	player_setupanimsformodel();
 }
 
 /*
@@ -332,9 +334,7 @@ void PutObserverInServer (void)
 	self.pauseregen_finished = 0;
 	self.damageforcescale = 0;
 	self.death_time = 0;
-	self.dead_time = 0;
 	self.dead_frame = 0;
-	self.die_frame = 0;
 	self.deaths = 0;
 	self.alpha = 0;
 	self.scale = 0;
@@ -451,9 +451,7 @@ void PutClientInServer (void)
 		self.pauseregen_finished = time + cvar("g_balance_pause_health_regen_spawn");
 		self.damageforcescale = 2;
 		self.death_time = 0;
-		self.dead_time = 0;
 		self.dead_frame = 0;
-		self.die_frame = 0;
 		self.alpha = 0;
 		self.scale = 0;
 		self.fade_time = 0;
@@ -1386,6 +1384,7 @@ void PlayerPreThink (void)
 				self.crouch = TRUE;
 				self.view_ofs = PL_CROUCH_VIEW_OFS;
 				setsize (self, PL_CROUCH_MIN, PL_CROUCH_MAX);
+				player_setanim(self.anim_duck, FALSE, TRUE, TRUE);
 			}
 		}
 		else
