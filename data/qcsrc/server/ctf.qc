@@ -1,7 +1,6 @@
 
 .float next_take_time;			// the next time a player can pick up a flag (time + blah)
 								/// I used this, in part, to fix the looping score bug. - avirox
-.float movetype_orig;
 
 //float FLAGSCORE_PICKUP        =  1;
 //float FLAGSCORE_RETURN        =  5; // returned by owner team
@@ -25,7 +24,7 @@ void() place_flag =
 	self.mdl = self.model;
 	self.flags = FL_ITEM;
 	self.solid = SOLID_TRIGGER;
-	self.movetype = self.movetype_orig;
+	self.movetype = MOVETYPE_NONE;
 	self.velocity = '0 0 0';
 	self.origin_z = self.origin_z + 6;
 	self.think = FlagThink;
@@ -36,12 +35,15 @@ void() place_flag =
 	self.dphitcontentsmask = DPCONTENTS_SOLID | DPCONTENTS_BODY | DPCONTENTS_PLAYERCLIP;
 	//self.effects = self.effects | EF_DIMLIGHT;
 	if(!self.noalign)
+	{
+		self.movetype = MOVETYPE_TOSS;
 		if (!droptofloor())
 		{
 			dprint("Flag fell out of level at ", vtos(self.origin), "\n");
 			remove(self);
 			return;
 		}
+	}
 	self.oldorigin = self.origin;
 };
 
@@ -60,7 +62,9 @@ void LogCTF(string mode, float flagteam, entity actor)
 void(entity e) RegenFlag =
 {
 	setattachment(e, world, "");
-	e.movetype = self.movetype_orig;
+	e.movetype = MOVETYPE_NONE;
+	if(!self.noalign)
+		e.movetype = MOVETYPE_TOSS;
 	e.solid = SOLID_TRIGGER;
 	// TODO: play a sound here
 	setorigin(e, e.oldorigin);
