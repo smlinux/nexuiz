@@ -55,30 +55,18 @@ Ignore
 	}
 
 	// Include the main menu as first sub window
-	//#include "menu/main.menu"
+	#include "menu/main.menu"
 
-	// Item Task_Job PanelReinit
-	// {
-		// // this is a automation init function (dont change this to reinit!)
-		// init 	Nex_Action_SetLinkOnReinit
-		// //target	"Panel::NexuizLogo"
-	// }
-	// Item Reference Panel
-	// {
-		// pos	'62 110'
-		// size	'938 650'
-//
-		// Item Gecko test
-		// {
-			// size '512 512'
-			// targetURL "www.google.de"
-		// }
-	// }
-	Derive Gecko test
+	Item Task_Job PanelReinit
+	{
+		// this is a automation init function (dont change this to reinit!)
+		init 	Nex_Action_SetLinkOnReinit
+		//target	"Panel::NexuizLogo"
+	}
+	Item Reference Panel
 	{
 		pos	'62 110'
-		size '512 512'
-		targetURL "www.google.de"
+		size	'938 650'
 	}
 
 	//Derive TextButton

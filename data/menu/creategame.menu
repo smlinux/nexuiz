@@ -60,7 +60,7 @@ Item Layout CreateGame
 		#include "menu/creategame/basic.menu"
 		#include "menu/creategame/maplist.menu"
 		#include "menu/creategame/game.menu"
-		//#include "menu/creategame/weapon.menu"
-		//#include "menu/creategame/management.menu"
+		#include "menu/creategame/weapon.menu"
+		#include "menu/creategame/management.menu"
 	}
 }
