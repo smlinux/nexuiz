@@ -1,9 +1,0 @@
-Mechanical
-models/player/mechanical
-2
-models/player/crash.zym
-
-Robotic Warrior
-
-Weight: 312 lb
-Age: 1 year

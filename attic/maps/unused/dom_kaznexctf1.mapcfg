@@ -1,5 +1,0 @@
-set g_domination 1
-
-set fraglimit 100
-set timelimit 20
-changelevel kaznexctf1

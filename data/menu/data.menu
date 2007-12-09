@@ -20,7 +20,7 @@ Item DataContainer Data
 
 	#include "menu/data/server.menu"
 	#include "menu/data/game.menu"
-	#include "menu/data/weapon.menu"
-	#include "menu/data/management.menu"
+	//#include "menu/data/weapon.menu"
+	//#include "menu/data/management.menu"
 	#include "menu/data/demos.menu"
 }

@@ -1,2 +1,0 @@
-qcc.exe
-pause
