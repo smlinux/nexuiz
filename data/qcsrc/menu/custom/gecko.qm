@@ -24,8 +24,6 @@ void() Item_Gecko_Update = {
 	lNormalizedPosition_y = (Menu_Cursor_Position_y - self.pos_y) / self.size_y;
 	lNormalizedPosition_z = 0.0;
 
-	print( vtos( Menu_Cursor_Position ), " ", vtos( lNormalizedPosition ), "\n" );
-
 	if( Util_InRect( lNormalizedPosition, '0 0 0', '1 1 0' ) ) {
 		gecko_mousemove( self.picture, lNormalizedPosition_x, lNormalizedPosition_y );
 	}

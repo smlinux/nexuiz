@@ -57,14 +57,12 @@ float keyUpGecko(entity me, float scan, float ascii, float shift)
 
 float mouseMoveGecko(entity me, vector pos)
 {
-	print( vtos( pos ), "\n" );
 	gecko_mousemove( me.texturePath, pos_x, pos_y );
 	return 1;
 }
 
 float mousePressGecko(entity me, vector pos)
 {
-	print( "mouse down!\n" );
 	return gecko_keyevent( me.texturePath, K_MOUSE1, GECKO_BUTTON_DOWN );
 }
 
@@ -76,7 +74,6 @@ float mouseDragGecko(entity me, vector pos)
 
 float mouseReleaseGecko(entity me, vector pos)
 {
-	print( "mouse up!\n" );
 	return gecko_keyevent( me.texturePath, K_MOUSE1, GECKO_BUTTON_UP );
 }
 
