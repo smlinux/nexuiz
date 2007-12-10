@@ -19,7 +19,7 @@ entity makeNexuizPlayerSettingsTab()
 }
 void fillNexuizPlayerSettingsTab(entity me)
 {
-	entity e;
+	entity e, pms;
 	float i, n;
 
 	me.TR(me);
@@ -34,6 +34,15 @@ void fillNexuizPlayerSettingsTab(entity me)
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Pants Color:"));
 		for(i = 0; i < n; ++i)
 			me.TDNoMargin(me, 1, 2 / n, e = makeNexuizColorButton(2, 1, i), '1 0 0');
+	me.TR(me);
+		pms = makeNexuizPlayerModelSelector();
+		me.TD(me, 1, 0.5, e = makeNexuizButton("<<", '0 0 0'));
+			e.onClick = PlayerModelSelector_Prev_Click;
+			e.onClickEntity = pms;
+		me.TD(me, me.rows - me.currentRow - 1, 2.5, pms);
+		me.TD(me, 1, 0.5, e = makeNexuizButton(">>", '0 0 0'));
+			e.onClick = PlayerModelSelector_Next_Click;
+			e.onClickEntity = pms;
 
 	me.gotoXY(me, 0, 3.5); me.setFirstColumn(me, me.currentColumn);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Field of View:"));

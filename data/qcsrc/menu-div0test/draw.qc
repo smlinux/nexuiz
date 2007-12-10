@@ -227,6 +227,10 @@ void draw_Text(vector theOrigin, string theText, vector theSize, vector theColor
 	else
 		drawstring(boxToGlobal(theOrigin, draw_shift, draw_scale), theText, boxToGlobalSize(theSize, draw_scale), theColor, theAlpha * draw_alpha, 0);
 }
+void draw_CenterText(vector theOrigin, string theText, vector theSize, vector theColor, float theAlpha, float ICanHasKallerz)
+{
+	draw_Text(theOrigin - eX * theSize_x * 0.5 * draw_TextWidth(theText, ICanHasKallerz), theText, theSize, theColor, theAlpha, ICanHasKallerz);
+}
 
 float draw_TextWidth(string theText, float ICanHasKallerz)
 {

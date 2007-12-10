@@ -50,3 +50,4 @@
 #include "nexuiz/maplist.c"
 #include "nexuiz/image.c"
 #include "nexuiz/crosshairbutton.c"
+#include "nexuiz/playermodel.c"
