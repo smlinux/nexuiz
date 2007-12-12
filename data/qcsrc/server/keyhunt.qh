@@ -24,3 +24,9 @@ float kh_Key_waypointsprite_for_player(entity e);
 void kh_setstatus();
 float kh_HandleFrags(entity attacker, entity targ, float f);
 float kh_Key_AllOwnedByWhichTeam();
+
+#define STR_ITEM_KH_KEY "item_kh_key"
+typedef void(void) kh_Think_t;
+var kh_Think_t kh_Controller_Thinkfunc;
+void kh_Controller_SetThink(float t, string msg, kh_Think_t func)
+void kh_Key_Remove(entity key)

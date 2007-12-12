@@ -15,13 +15,13 @@ void GiveFrags (entity attacker, entity targ, float f)
 		if(cvar("g_arena_roundbased"))
 			return;
 
-	if(cvar("g_domination"))
+	if(g_domination)
 	{
 		if(cvar("g_domination_disable_frags"))
 			if(f > 0)
 				return;
 	}
-	else if(cvar("g_runematch"))
+	else if(g_runematch)
 	{
 		if(f > 0)
 			f = RunematchHandleFrags(attacker, targ, f);
@@ -450,7 +450,7 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 			damage = damage * cvar("g_balance_powerup_invincible_takedamage");
 
 
-		if(cvar("g_runematch"))
+		if(g_runematch)
 		{
 			// apply strength rune
 			if (attacker.runes & RUNE_STRENGTH)
@@ -503,7 +503,7 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 		{
 			attacker.health += damage;
 		}
-		if(cvar("g_runematch"))
+		if(g_runematch)
 		{
 			if (attacker.runes & RUNE_VAMPIRE)
 			{

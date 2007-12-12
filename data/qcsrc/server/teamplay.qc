@@ -280,6 +280,38 @@ void InitGameplayMode()
 		fraglimit_override = cvar("fraglimit_override");
 	}*/
 
+	// those mutators rule each other out
+	if(cvar("g_minstagib"))
+	{
+		cvar_set("g_instagib", "0");
+		cvar_set("g_rocketarena", "0");
+	}
+	if(cvar("g_instagib"))
+	{
+		cvar_set("g_minstagib", "0");
+		cvar_set("g_rocketarena", "0");
+	}
+	if(cvar("g_rocketarena"))
+	{
+		cvar_set("g_instagib", "0");
+		cvar_set("g_minstagib", "0");
+	}
+
+	registercvar("_motd", "");
+	registercvar("_mutatormsg", "");
+	cvar_set("_motd", wordwrap(cvar_string("sv_motd"), 50));
+	cvar_set("_mutatormsg", wordwrap(cvar_string("g_mutatormsg"), 50));
+
+	g_domination = cvar("g_domination");
+	g_ctf = cvar("g_ctf");
+	g_lms = cvar("g_lms");
+	g_tdm = cvar("g_tdm");
+	g_runematch = cvar("g_runematch");
+	g_keyhunt = cvar("g_keyhunt");
+	g_onslaught = cvar("g_onslaught");
+	g_assault = cvar("g_assault");
+	g_arena = cvar("g_arena");
+
 	// enforce the server's universal frag/time limits
 	if(!cvar("g_campaign"))
 	{
@@ -299,37 +331,6 @@ void InitGameplayMode()
 		tdm_init();
 	else if (game == GAME_KEYHUNT)//cvar("g_keyhunt"))
 		kh_init();
-
-	// those mutators rule each other out
-	if(g_minstagib)
-	{
-		cvar_set("g_instagib", "0");
-		cvar_set("g_rocketarena", "0");
-	}
-	if(g_instagib)
-	{
-		cvar_set("g_minstagib", "0");
-		cvar_set("g_rocketarena", "0");
-	}
-	if(g_rocketarena)
-	{
-		cvar_set("g_instagib", "0");
-		cvar_set("g_minstagib", "0");
-	}
-
-	registercvar("_motd", "");
-	registercvar("_mutatormsg", "");
-	cvar_set("_motd", wordwrap(cvar_string("sv_motd"), 50));
-	cvar_set("_mutatormsg", wordwrap(cvar_string("g_mutatormsg"), 50));
-
-	g_domination = cvar("g_domination");
-	g_ctf = cvar("g_ctf");
-	g_lms = cvar("g_lms");
-	g_tdm = cvar("g_tdm");
-	g_keyhunt = cvar("g_keyhunt");
-	g_onslaught = cvar("g_onslaught");
-	g_assault = cvar("g_assault");
-	g_arena = cvar("g_arena");
 }
 
 string GetClientVersionMessage(float v) {
@@ -422,6 +423,9 @@ void PrintWelcomeMessage(entity pl)
 
 	if(modifications != "")
 		s = strcat(s, "^8\nactive modifications: ^3", modifications, "^8\n");
+
+	if(time < restart_countdown)
+		s = strcat(s, "\n^1Game starts in ", ftos(ceil(restart_countdown-time)), " seconds^7");
 
 	if((self.classname == "observer" || self.classname == "spectator") && self.version == cvar("gameversion")) {
 		if(!g_arena)

@@ -33,7 +33,7 @@ spawn point for runes in runematch
 
 void runematch_spawn_point()
 {
-	if(!cvar("g_runematch"))
+	if(!g_runematch)
 	{
 		remove(self);
 		return;
@@ -151,7 +151,7 @@ void RuneCarriedThink()
 	vector ang;
 	entity rune;
 
-	if(self.owner.classname != "player")
+	if(self.owner.classname != "player" || time < restart_countdown)
 	{
 		rune_respawn();
 		return;
@@ -181,7 +181,7 @@ void RuneCarriedThink()
 
 void rune_touch()
 {
-	if(other.classname != "player" || other.health < 2)
+	if(other.classname != "player" || other.health < 1)
 		return;
 	if(self.wait > time)
 		return; // "notouch" time isn't finished
@@ -619,7 +619,7 @@ void spawn_runes()
 
 void runematch_init()
 {
-	if(!cvar("g_runematch"))
+	if(!g_runematch)
 		return;
 
 	entity e;
@@ -636,7 +636,7 @@ void RuneMatchGivePoints()
 {
 	entity rune;
 
-	if(!cvar("g_runematch") || !cvar("g_runematch_pointamt"))
+	if(!g_runematch || !cvar("g_runematch_pointamt"))
 		return;
 
 	if(gameover)

@@ -210,8 +210,7 @@ void() W_PreviousWeapon =
 // Bringed back weapon frame
 void() W_WeaponFrame =
 {
-	if(arena_roundbased)
-	if(time < warmup)
+	if((arena_roundbased && time < warmup) || (time < restart_countdown))
 		return;
 
 	if (!self.weaponentity || self.health < 1)

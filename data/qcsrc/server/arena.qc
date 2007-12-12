@@ -15,20 +15,71 @@ void PutClientInServer();
 void(entity e) DropFlag;
 void(entity e) ReturnFlag;
 void(entity e) removedecor;
+void dom_controlpoint_setup();
 
 void reset_map()
 {
+	if(g_arena)
 	if(cvar("g_arena_warmup"))
 		warmup = time + cvar("g_arena_warmup");
 	
+	lms_lowest_lives = 999;
+	lms_next_place = player_count;
+
 	self = nextent(world);
 	while(self)
 	{
-		if(self.classname == "droppedweapon"		// cleanup
+		if(self.flags & FL_CLIENT)				// reset all players
+		{
+			if(time < restart_countdown)
+			{
+				self.frags = (g_lms)?LMS_NewPlayerLives():0;
+				self.deaths = 0;
+				self.killcount = 0;
+				self.classname = "player";
+				PutClientInServer();
+			}
+			else if(g_arena)
+			{
+				if(self.spawned)
+					PutClientInServer();
+				else
+					PutObserverInServer();
+			}
+		}
+		else if(self.classname == STR_ITEM_KH_KEY)
+		{
+			kh_Key_AssignTo(self, world);
+			//if(self.owner)
+			//	kh_Key_DropAll(self.owner, TRUE);
+			kh_Key_Remove(self);
+		}
+		else if(self.classname == "droppedweapon"		// cleanup
 				|| self.classname == "gib"
 				|| self.classname == "body")
 		{
 			remove(self);
+		}
+		else if(self.items & (IT_KEY1 | IT_KEY2))
+		{
+			DropFlag(self);
+			ReturnFlag(self);
+		}
+		else if(self.classname == "rune")
+		{
+			if(self.owner)
+			if(self.owner.classname != "runematch_spawn_point")
+				DropAllRunes(self.owner);
+			rune_respawn();
+		}
+		else if(self.classname == "sprite_waypoint")
+		{
+			if(self.health | g_keyhunt)
+				WaypointSprite_Kill(self);
+		}
+		else if(self.classname == "dom_controlpoint")
+		{
+			dom_controlpoint_setup();
 		}
 		else if(self.flags & FL_ITEM)			// reset items
 		{
@@ -48,17 +99,13 @@ void reset_map()
 		{
 			removedecor(self);
 		}
-		else if(self.flags & FL_CLIENT)			// reset all players
-		{
-			if(self.spawned)
-				PutClientInServer();
-			else
-				PutObserverInServer();
-		}
-		
 		self = nextent(self);
 	}
 
+	if(g_keyhunt)
+		kh_Controller_SetThink(cvar("g_balance_keyhunt_delay_round")+RESTART_COUNTDOWN, "", kh_StartRound);
+
+	if(g_arena)
 	if(champion)
 		UpdateFrags(champion, +1);
 }
@@ -117,7 +164,7 @@ void Arena_Warmup()
 	float f;
 	string msg;
 
-	if(!arena_roundbased)
+	if(!g_arena || !arena_roundbased || (time < restart_countdown))
 		return;
 
 	f = rint(warmup - time);

@@ -392,7 +392,7 @@ void(float fr, float t, void() func) weapon_thinkf =
 		backtrace("Tried to override initial weapon think function - should this really happen?");
 	}
 
-	if(cvar("g_runematch"))
+	if(g_runematch)
 	{
 		if(self.runes & RUNE_SPEED)
 		{

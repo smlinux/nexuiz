@@ -711,7 +711,7 @@ void() havocbot_chooserole =
 	self.bot_strategytime = -1;
 	if (g_ctf)
 		havocbot_chooserole_ctf();
-	else if (cvar("g_domination"))
+	else if (g_domination)
 		havocbot_chooserole_dom();
 	else if (g_keyhunt)
 		havocbot_chooserole_kh();

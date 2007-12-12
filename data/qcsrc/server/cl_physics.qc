@@ -49,7 +49,7 @@ void PlayerJump (void)
 	if (!(self.flags & FL_JUMPRELEASED))
 		return;
 
-	if(cvar("g_runematch"))
+	if(g_runematch)
 	{
 		if(self.runes & RUNE_SPEED)
 		{
@@ -162,7 +162,7 @@ void SV_PlayerPhysics()
 
 	maxspd_mod = 1;
 
-	if(cvar("g_runematch"))
+	if(g_runematch)
 	{
 		if(self.runes & RUNE_SPEED)
 		{

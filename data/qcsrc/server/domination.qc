@@ -99,20 +99,8 @@ void() dompointthink =
 
 	// give points
 
-	if (gameover)	// game has ended, don't keep giving points
+	if (gameover || self.delay > time || time < restart_countdown)	// game has ended, don't keep giving points
 		return;
-
-	if(self.delay > time)
-		return;
-
-/*
-	if(self.state == 1)
-	{
-		self.state = 0;
-		dompoint_captured();
-		return;
-	}
-*/
 
 	waittime = cvar("g_domination_point_rate");
 	if(!waittime)
@@ -480,7 +468,7 @@ Control point for Domination gameplay.
 */
 void() dom_controlpoint =
 {
-	if(!cvar("g_domination"))
+	if(!g_domination)
 	{
 		remove(self);
 		return;

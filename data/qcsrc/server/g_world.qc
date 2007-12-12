@@ -84,15 +84,11 @@ void GotoFirstMap()
 float world_already_spawned;
 void worldspawn (void)
 {
-	float globhandle, i, n;
-
 	dprint_load(); // load dprint status from cvar
 
 	if(world_already_spawned)
 		error("world already spawned - you may have EXACTLY ONE worldspawn!");
 	world_already_spawned = TRUE;
-
-	sv_cheats = cvar("sv_cheats");
 
 	/*
 	TODO sound pack system
@@ -102,145 +98,6 @@ void worldspawn (void)
 		soundpack = strcat(soundpack, "/");
 	soundpack = strzone(soundpack);
 	*/
-
-	// gamemode related things
-	precache_model ("models/misc/chatbubble.spr");
-	precache_model ("models/misc/teambubble.spr");
-	if (cvar("g_runematch"))
-	{
-		precache_model ("models/runematch/curse.mdl");
-		precache_model ("models/runematch/rune.mdl");
-	}
-
-	// Precache all player models if desired
-	if (cvar("sv_precacheplayermodels"))
-	{
-		globhandle = search_begin("models/player/*.zym", TRUE, FALSE);
-		n = search_getsize(globhandle);
-		for(i = 0; i < n; ++i)
-		{
-			//print(search_getfilename(globhandle, i), "\n");
-			precache_model(search_getfilename(globhandle, i));
-		}
-		search_end(globhandle);
-		//precache_model("models/player/carni.zym");
-		//precache_model("models/player/crash.zym");
-		//precache_model("models/player/grunt.zym");
-		//precache_model("models/player/headhunter.zym");
-		//precache_model("models/player/insurrectionist.zym");
-		//precache_model("models/player/jeandarc.zym");
-		//precache_model("models/player/lurk.zym");
-		//precache_model("models/player/lycanthrope.zym");
-		//precache_model("models/player/marine.zym");
-		//precache_model("models/player/nexus.zym");
-		//precache_model("models/player/pyria.zym");
-		//precache_model("models/player/shock.zym");
-		//precache_model("models/player/skadi.zym");
-		//precache_model("models/player/specop.zym");
-		//precache_model("models/player/visitant.zym");
-	}
-
-	if (cvar("g_footsteps"))
-	{
-		precache_sound ("misc/footstep01.wav");
-		precache_sound ("misc/footstep02.wav");
-		precache_sound ("misc/footstep03.wav");
-		precache_sound ("misc/footstep04.wav");
-		precache_sound ("misc/footstep05.wav");
-		precache_sound ("misc/footstep06.wav");
-	}
-
-	// gore and miscellaneous sounds
-	//precache_sound ("misc/h2ohit.wav");
-	precache_model ("models/gibs/bloodyskull.md3");
-	precache_model ("models/gibs/chunk.mdl");
-	precache_model ("models/gibs/eye.md3");
-	precache_model ("models/gibs/gib1.md3");
-	precache_model ("models/gibs/gib1.mdl");
-	precache_model ("models/gibs/gib2.mdl");
-	precache_model ("models/gibs/gib3.mdl");
-	precache_model ("models/gibs/gib5.md3");
-	precache_model ("models/hook.md3");
-	precache_sound ("misc/armorimpact.wav");
-	precache_sound ("misc/bodyimpact1.wav");
-	precache_sound ("misc/bodyimpact2.wav");
-	precache_sound ("misc/gib.wav");
-	precache_sound ("misc/gib_splat01.wav");
-	precache_sound ("misc/gib_splat02.wav");
-	precache_sound ("misc/gib_splat03.wav");
-	precache_sound ("misc/gib_splat04.wav");
-	precache_sound ("misc/hit.wav");
-	precache_sound ("misc/hitground1.wav");
-	precache_sound ("misc/hitground2.wav");
-	precache_sound ("misc/hitground3.wav");
-	precache_sound ("misc/hitground4.wav");
-	precache_sound ("misc/null.wav");
-	precache_sound ("misc/spawn.wav");
-	precache_sound ("misc/talk.wav");
-	precache_sound ("misc/teleport.wav");
-	precache_sound ("player/lava.wav");
-	precache_sound ("player/slime.wav");
-
-	// announcer sounds - male
-	//precache_sound ("announcer/male/electrobitch.wav");
-	precache_sound ("announcer/male/03kills.wav");
-	precache_sound ("announcer/male/05kills.wav");
-	precache_sound ("announcer/male/10kills.wav");
-	precache_sound ("announcer/male/15kills.wav");
-	precache_sound ("announcer/male/20kills.wav");
-	precache_sound ("announcer/male/25kills.wav");
-	precache_sound ("announcer/male/30kills.wav");
-	precache_sound ("announcer/male/botlike.wav");
-	precache_sound ("announcer/male/yoda.wav");
-
-	// announcer sounds - robotic
-	precache_sound ("announcer/robotic/1fragleft.wav");
-	precache_sound ("announcer/robotic/1minuteremains.wav");
-	precache_sound ("announcer/robotic/2fragsleft.wav");
-	precache_sound ("announcer/robotic/3fragsleft.wav");
-	if (cvar("g_minstagib"))
-	{
-		precache_sound ("announcer/robotic/lastsecond.wav");
-		precache_sound ("announcer/robotic/narrowly.wav");
-		precache_sound ("announcer/robotic/1.wav");
-		precache_sound ("announcer/robotic/2.wav");
-		precache_sound ("announcer/robotic/3.wav");
-		precache_sound ("announcer/robotic/4.wav");
-		precache_sound ("announcer/robotic/5.wav");
-		precache_sound ("announcer/robotic/6.wav");
-		precache_sound ("announcer/robotic/7.wav");
-		precache_sound ("announcer/robotic/8.wav");
-		precache_sound ("announcer/robotic/9.wav");
-		precache_sound ("announcer/robotic/10.wav");
-	}
-
-	// common weapon precaches
-	precache_sound ("weapons/weapon_switch.wav");
-	precache_sound ("weapons/weaponpickup.wav");
-	if (cvar("g_grappling_hook"))
-	{
-		precache_sound ("weapons/hook_fire.wav"); // hook
-		precache_sound ("weapons/hook_impact.wav"); // hook
-	}
-
-	if (cvar("sv_precacheweapons") || cvar("g_nixnex"))
-	{
-		//precache weapon models/sounds
-		local float wep;
-		wep = WEP_FIRST;
-		while (wep <= WEP_LAST)
-		{
-			weapon_action(wep, WR_PRECACHE);
-			wep = wep + 1;
-		}
-	}
-
-	// plays music for the level if there is any
-	if (self.noise)
-	{
-		precache_sound (self.noise);
-		ambientsound ('0 0 0', self.noise, 1.00, ATTN_NONE);
-	}
 
 	// 0 normal
 	lightstyle(0, "m");
@@ -298,10 +155,12 @@ void worldspawn (void)
 		CampaignPreInit();
 
 	InitGameplayMode();
+	readlevelcvars();
+	precache();
 
 	WaypointSprite_Init();
 
-	//if (cvar("g_domination"))
+	//if (g_domination)
 	//	dom_init();
 
 	local entity head;
@@ -360,8 +219,6 @@ void worldspawn (void)
 		CampaignPostInit();
 
 	fteqcc_testbugs();
-
-	readlevelcvars();
 
 	Ban_LoadBans();
 
@@ -1419,7 +1276,7 @@ float(float fraglimit) WinningCondition_MaxIndividualScore =
 	else
 		ClearWinners();
 
-	if (!cvar("g_runematch"))
+	if (!g_runematch)
 		if (checkrules_leaderfrags != checkrules_oldleaderfrags)
 		{
 			if (checkrules_leaderfrags == fraglimit - 1)
@@ -1462,7 +1319,7 @@ float(float fraglimit) WinningConditionBase_Teamplay =
 			AddWinners(team, COLOR_TEAM4);
 	}
 
-	if(!cvar("g_runematch") && !cvar("g_domination"))
+	if(!g_runematch && !g_domination)
 		if(tdm_max_score != tdm_old_score)
 		{
 			if(tdm_max_score == fraglimit - 1)
@@ -1739,7 +1596,7 @@ void() CheckRules_World =
 	{
 		if(teams_matter)
 		{
-			if(g_tdm || cvar("g_runematch") || g_ctf || cvar("g_domination") || g_keyhunt)
+			if(g_tdm || g_runematch || g_ctf || g_domination || g_keyhunt)
 				status = WinningCondition_MaxTeamSum(fraglimit);
 			//else if()
 			//	status = WinningCondition_MaxTeamMax(fraglimit);

@@ -427,9 +427,14 @@ void SV_ParseClientCommand(string s) {
 	} else if(argv(0) == "ready") {
 		if(cvar("sv_ready_restart"))
 		{
-			self.ready = TRUE;
-			bprint(self.netname, "^2 is ready\n");
-			ReadyCount();
+			if(!restart_countdown)
+			{
+				self.ready = TRUE;
+				bprint(self.netname, "^2 is ready\n");
+				ReadyCount();
+			} else {
+				sprint(self, "^1game has already been restarted\n");
+			}
 		}
 	} else if(argv(0) == "maplist") {
 		local float i, n;
@@ -691,6 +696,7 @@ void VoteCount() {
 	} // else still running
 }
 
+float timelimit_orig;
 
 void ReadyCount()
 {
@@ -704,9 +710,26 @@ void ReadyCount()
 			r += 1;
 	}
 
-	if(p && r == p)
-	{
-		bprint("^1Server is restarting...\n");
+	if(!p || r < p)
+		return;
+
+	bprint("^1Server is restarting...\n");
+	
+	// no arena, assault & onslaught support yet...
+	if(g_arena | g_assault | g_onslaught | gameover | intermission_running)
 		localcmd("restart\n");
+
+	restart_countdown = time + RESTART_COUNTDOWN;
+	if(0<cvar("timelimit"))
+	{
+		// remember original timelimit on first restart
+		if(!timelimit_orig)
+			timelimit_orig = cvar("timelimit");
+		cvar_set("timelimit", ftos(timelimit_orig + ceil(restart_countdown)/60));
 	}
+
+	reset_map();
+	
+	if(cvar("sv_eventlog"))
+		GameLogEcho(":restart", FALSE);
 }

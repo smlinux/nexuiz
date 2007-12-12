@@ -1,4 +1,3 @@
-string STR_ITEM_KH_KEY = "item_kh_key";
 #define FOR_EACH_KH_KEY(v) for(v = world; (v = find(v, classname, STR_ITEM_KH_KEY)); )
 
 // #define KH_PLAYER_USE_ATTACHMENT
@@ -22,8 +21,6 @@ vector KH_KEY_MIN = '-10 -10 -46';
 vector KH_KEY_MAX = '10 10 3';
 float KH_KEY_BRIGHTNESS = 2;
 
-typedef void(void) kh_Think_t;
-var kh_Think_t kh_Controller_Thinkfunc;
 string kh_Controller_Waitmsg;
 
 float kh_Team_ByID(float t)

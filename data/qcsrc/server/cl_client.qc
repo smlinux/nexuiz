@@ -670,7 +670,7 @@ void ClientConnect (void)
 
 	bot_clientconnect();
 
-	//if(cvar("g_domination"))
+	//if(g_domination)
 	//	dom_player_join_team(self);
 
 	//JoinBestTeam(self, FALSE);
@@ -700,7 +700,7 @@ void ClientConnect (void)
 	bprint ("^4",self.netname);
 	bprint ("^4 connected");
 
-	if(cvar("g_domination") || g_ctf)
+	if(g_domination || g_ctf)
 	{
 		bprint(" and joined the ");
 		bprint(ColoredTeamName(self.team));
@@ -753,16 +753,9 @@ void ClientConnect (void)
 
 	if(g_lms)
 	{
-		self.frags = cvar("fraglimit");
-		// no fraglimit was set, so player gets 999 lives
-		if(self.frags < 1)
-			self.frags = 999;
-
 		self.frags = LMS_NewPlayerLives();
 		if(!self.frags)
-		{
 			self.frags = -666;
-		}
 	}
 	else if(g_arena)
 	{
@@ -1355,8 +1348,7 @@ void PlayerPreThink (void)
 			dist_z = 0;
 			self.lms_traveled_distance += fabs(vlen(dist));
 
-			if(cvar("g_campaign"))
-			if(!campaign_bots_may_start)
+			if((cvar("g_campaign") && !campaign_bots_may_start) || (time < restart_countdown))
 			{
 				self.lms_nextcheck = time + cvar("g_lms_campcheck_interval")*2;
 				self.lms_traveled_distance = 0;
@@ -1585,16 +1577,37 @@ void PlayerPostThink (void)
 		UpdateChatBubble();
 		UpdateTeamBubble();
 		if (self.impulse)
-			ImpulseCommands ();
+			ImpulseCommands();
 		if (intermission_running)
 			return;		// intermission or finale
 
 		//PrintWelcomeMessage(self);
 		//if (TetrisPostFrame()) return;
+	
+		// restart countdown
+		if(time < restart_countdown)
+		{
+			string s;
+			float sec;
+
+			sec = ceil(restart_countdown-time);
+			s = strcat(NEWLINES, "^1Game starts in ", ftos(sec), " seconds");
+			centerprint(self, s);
+			self.movetype = MOVETYPE_NONE;		
+			self.velocity = '0 0 0';
+			self.avelocity = '0 0 0';
+			self.movement = '0 0 0';
+		}
+		else if(self.movetype == MOVETYPE_NONE)
+		{
+			self.movetype = MOVETYPE_WALK;
+			centerprint(self, "\n");
+		}
 	} else if (self.classname == "observer") {
 		//do nothing
 	} else if (self.classname == "spectator") {
 		//do nothing
 	}
+
 	Arena_Warmup();
 }

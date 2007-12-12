@@ -1,6 +1,6 @@
 // Globals
 
-float g_domination, g_ctf, g_tdm, g_keyhunt, g_onslaught, g_assault, g_arena, g_lms;
+float g_domination, g_ctf, g_tdm, g_keyhunt, g_onslaught, g_assault, g_arena, g_lms, g_runematch;
 float g_cloaked, g_footsteps, g_grappling_hook, g_instagib, g_laserguided_missile, g_midair, g_minstagib, g_nixnex, g_nixnex_with_laser, g_norecoil, g_rocketarena, g_vampire;
 
 float sv_cheats;
@@ -270,6 +270,8 @@ float GRAPHOOK_RELEASE		= 21;
 .float nextstep;
 
 .float ready;
+#define RESTART_COUNTDOWN 10
+float restart_countdown;
 
 .float winning;
 .float deaths;
