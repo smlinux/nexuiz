@@ -9,7 +9,9 @@ CLASS(Gecko) EXTENDS(Item)
 	METHOD( Gecko, mousePress, float(entity, vector))
 	METHOD( Gecko, mouseDrag, float(entity, vector))
 	METHOD( Gecko, mouseRelease, float(entity, vector))
+	METHOD( Gecko, resizeNotify, void(entity, vector, vector, vector, vector))
 	ATTRIB( Gecko, texturePath, string, string_null )
+	ATTRIB( Gecko, textureExtent, vector, '0 0 0')
 ENDCLASS(Item)
 #endif
 
@@ -32,8 +34,16 @@ void configureBrowserGecko( entity me, string URI ) {
 
 void drawGecko(entity me)
 {
+	vector drawSize;
+  
 	if( me.texturePath ) {
-		draw_Picture( '0 0 0', strcat( "/", me.texturePath ), '1 1 0', '1 1 1', 1.0 );
+		/* The gecko browser is actually only drawn to a part of the
+		   texture. Correct scaling so that part fills up the whole
+		   item area. */
+		drawSize_x = 1.0 / me.textureExtent_x;
+		drawSize_y = 1.0 / me.textureExtent_y;
+		draw_Picture( '0 0 0', strcat( "/", me.texturePath ), 
+			drawSize, '1 1 1', 1.0 );
 	} else {
 		local vector fontsize;
 		fontsize_x = fontsize_y = 1.0 / 30.0;
@@ -75,6 +85,14 @@ float mouseDragGecko(entity me, vector pos)
 float mouseReleaseGecko(entity me, vector pos)
 {
 	return gecko_keyevent( me.texturePath, K_MOUSE1, GECKO_BUTTON_UP );
+}
+
+void resizeNotifyGecko(entity me, vector relOrigin, vector relSize, vector absOrigin, vector absSize)
+{
+	me.origin = absOrigin;
+	me.size = absSize;
+	gecko_resize( me.texturePath, absSize_x, absSize_y );
+	me.textureExtent = gecko_get_texture_extent( me.texturePath );
 }
 
 string toStringGecko(entity me)

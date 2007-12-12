@@ -246,6 +246,8 @@ void gecko_destroy( string name ) = #488;
 void gecko_navigate( string name, string URI ) = #489;
 float gecko_keyevent( string name, float key, float eventtype ) = #490;
 void gecko_mousemove( string name, float x, float y ) = #491;
+void gecko_resize( string name, float w, float h ) = #492;
+vector gecko_get_texture_extent( string name ) = #493;
 
 #ifdef FIXEDFOPEN
 float 	fopen( string filename, float mode ) =
