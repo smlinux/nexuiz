@@ -33,6 +33,14 @@ void configureMainWindowMainWindow(entity me)
 	me.addItemCentered(me, i, i.intendedWidth * eX + i.intendedHeight * eY, 1);
 
 	n = spawnNexuizNexposee();
+		if(checkextension("DP_GECKO_SUPPORT"))
+		{
+			i = spawnNexuizNewsDialog();
+			i.configureDialog(i);
+			n.addItemCentered(n, i, i.intendedWidth * eX + i.intendedHeight * eY, 1);
+			n.setNexposee(n, i, '0.1 0.1 0', 0.5, 0.8);
+		}
+		
 		i = spawnNexuizSettingsDialog();
 		i.configureDialog(i);
 		n.addItemCentered(n, i, i.intendedWidth * eX + i.intendedHeight * eY, 1);

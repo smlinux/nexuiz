@@ -51,3 +51,4 @@
 #include "nexuiz/image.c"
 #include "nexuiz/crosshairbutton.c"
 #include "nexuiz/playermodel.c"
+#include "nexuiz/dialog_news.c"
