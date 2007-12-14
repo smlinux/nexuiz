@@ -879,7 +879,7 @@ void precache_all_models(string pattern)
 {
 	float globhandle, i, n;
 
-	globhandle = search_begin("models/player/*.zym", TRUE, FALSE);
+	globhandle = search_begin(pattern, TRUE, FALSE);
 	n = search_getsize(globhandle);
 	for(i = 0; i < n; ++i)
 	{
