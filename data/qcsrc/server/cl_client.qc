@@ -193,6 +193,9 @@ string CheckPlayerModel(string plyermodel) {
 	else if(cvar("sv_servermodelsonly"))
 	{
 		if(substring(plyermodel,strlen(plyermodel)-4,4) != ".zym")
+		if(substring(plyermodel,strlen(plyermodel)-4,4) != ".dpm")
+		if(substring(plyermodel,strlen(plyermodel)-4,4) != ".md3")
+		if(substring(plyermodel,strlen(plyermodel)-4,4) != ".psk")
 			return FallbackPlayerModel;
 		if(!fexists(plyermodel))
 			return FallbackPlayerModel;
