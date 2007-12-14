@@ -875,10 +875,22 @@ void play2team(float t, string filename)
 	}
 }
 
-void precache()
+void precache_all_models(string pattern)
 {
 	float globhandle, i, n;
 
+	globhandle = search_begin("models/player/*.zym", TRUE, FALSE);
+	n = search_getsize(globhandle);
+	for(i = 0; i < n; ++i)
+	{
+		//print(search_getfilename(globhandle, i), "\n");
+		precache_model(search_getfilename(globhandle, i));
+	}
+	search_end(globhandle);
+}
+
+void precache()
+{
 	// gamemode related things
 	precache_model ("models/misc/chatbubble.spr");
 	precache_model ("models/misc/teambubble.spr");
@@ -891,14 +903,10 @@ void precache()
 	// Precache all player models if desired
 	if (cvar("sv_precacheplayermodels"))
 	{
-		globhandle = search_begin("models/player/*.zym", TRUE, FALSE);
-		n = search_getsize(globhandle);
-		for(i = 0; i < n; ++i)
-		{
-			//print(search_getfilename(globhandle, i), "\n");
-			precache_model(search_getfilename(globhandle, i));
-		}
-		search_end(globhandle);
+		precache_all_models("models/player/*.zym");
+		precache_all_models("models/player/*.dpm");
+		precache_all_models("models/player/*.md3");
+		precache_all_models("models/player/*.psk");
 		//precache_model("models/player/carni.zym");
 		//precache_model("models/player/crash.zym");
 		//precache_model("models/player/grunt.zym");
