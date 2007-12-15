@@ -87,12 +87,12 @@ buildon()
 
 build()
 {
+	buildon hagger  nexuiz-linux-686    fteqcc-linux-686    /tmp/Darkplaces.build 'CC="gcc -g" DP_MODPLUG_STATIC_LIBDIR=/usr/local/lib'
+	buildon hector  nexuiz-linux-x86_64 fteqcc-linux-x86_64 /tmp/Darkplaces.build 'CC="gcc -g" DP_MODPLUG_STATIC_LIBDIR=/home/users4/ommz/polzer/libmodplug-static/lib64'
 	buildon hagger  nexuiz-osx          fteqcc-osx          /tmp/Darkplaces.build 'DP_MAKE_TARGET=macosx CC="i686-apple-darwin8-gcc -g -arch i386 -arch ppc -I/opt/mac/SDKs/MacOSX10.4u.sdk/Library/Frameworks/SDL.framework/Headers"' i686-apple-darwin8-strip
 		mv "$tmpdir/nexuiz-osx-agl"     "$tmpdir/Nexuiz.app/Contents/MacOS/nexuiz-osx-agl-bin"
 		mv "$tmpdir/nexuiz-osx-sdl"     "$tmpdir/Nexuiz-SDL.app/Contents/MacOS/nexuiz-osx-sdl-bin"
 	buildon hagger  nexuiz              fteqcc.exe          /tmp/Darkplaces.build 'DP_MAKE_TARGET=mingw CC="i586-mingw32msvc-gcc -g -I/home/polzer/mingw32.include" WINDRES=i586-mingw32msvc-windres SDL_CONFIG=/home/polzer/mingw32.SDL/bin/sdl-config' i586-mingw32msvc-strip
-	buildon hagger  nexuiz-linux-686    fteqcc-linux-686    /tmp/Darkplaces.build 'CC="gcc -g"'
-	buildon hector  nexuiz-linux-x86_64 fteqcc-linux-x86_64 /tmp/Darkplaces.build 'CC="gcc -g"'
 }
 
 i=
@@ -240,15 +240,15 @@ find . -name .svn -exec rm -rf {} \; -prune
 
 rm -f "$zipdir/nexuiz$date$ext.zip"
 zip $zipflags -9yr "$zipdir/nexuiz$date$ext.zip"           Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/data/data$date.pk3 Nexuiz/data/common-spog.pk3 Nexuiz/pro/*
-ln -snf nexuiz$date$ext.zip "$zipdir/nexuizNEWEST.zip"
+ln -snf nexuiz$date$ext.zip "$zipdir/nexuiz-NEWEST.zip"
 
 rm -f "$zipdir/nexuizengineonly$date$ext.zip"
 zip $zipflags -9yr "$zipdir/nexuizengineonly$date$ext.zip" Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll
-ln -snf nexuizengineonly$date$ext.zip "$zipdir/nexuizengineonlyNEWEST.zip"
+ln -snf nexuizengineonly$date$ext.zip "$zipdir/nexuizengineonly-NEWEST.zip"
 
 rm -f "$zipdir/nexuizsource$date$ext.zip"
 zip $zipflags -9yr "$zipdir/nexuizsource$date$ext.zip"     Nexuiz/gpl.txt                                            Nexuiz/sources
-ln -snf nexuizsource$date$ext.zip "$zipdir/nexuizsourceNEWEST.zip"
+ln -snf nexuizsource$date$ext.zip "$zipdir/nexuizsource-NEWEST.zip"
 
 zipdiff -o "Nexuiz/data/datapatch$date.pk3" -f "$basepk3" -t Nexuiz/data/data$date.pk3
 mkdir -p gfx
@@ -259,12 +259,12 @@ fi
 
 rm -f "$zipdir/nexuizpatch$date$ext.zip"
 zip $zipflags -9yr "$zipdir/nexuizpatch$date$ext.zip"      Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/data/datapatch$date.pk3 Nexuiz/pro/*
-ln -snf nexuizpatch$date$ext.zip "$zipdir/nexuizpatchNEWEST.zip"
+ln -snf nexuizpatch$date$ext.zip "$zipdir/nexuizpatch-NEWEST.zip"
 
 rm -f "$zipdir/nexuizdocs$date$ext.zip"
 zip $zipflags -9yr "$zipdir/nexuizdocs$date$ext.zip"       Nexuiz/gpl.txt Nexuiz/Docs
-ln -snf nexuizdocs$date$ext.zip "$zipdir/nexuizdocsNEWEST.zip"
+ln -snf nexuizdocs$date$ext.zip "$zipdir/nexuizdocs-NEWEST.zip"
 
 rm -f "$zipdir/nexuizdebug$date$ext.zip"
 zip $zipflags -9yr "$zipdir/nexuizdebug$date$ext.zip"      Nexuiz/gpl.txt Nexuiz/debuginfo/* Nexuiz/sources
-ln -snf nexuizdebug$date$ext.zip "$zipdir/nexuizdebugNEWEST.zip"
+ln -snf nexuizdebug$date$ext.zip "$zipdir/nexuizdebug-NEWEST.zip"
