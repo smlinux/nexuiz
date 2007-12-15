@@ -3,6 +3,7 @@ CLASS(InputBox) EXTENDS(Label)
 	METHOD(InputBox, configureInputBox, void(entity, string, float, float, string))
 	METHOD(InputBox, draw, void(entity))
 	METHOD(InputBox, setText, void(entity, string))
+	METHOD(InputBox, enterText, void(entity, string))
 	METHOD(InputBox, keyDown, float(entity, float, float, float))
 	METHOD(InputBox, mouseRelease, float(entity, vector))
 	METHOD(InputBox, mousePress, float(entity, vector))
@@ -19,6 +20,7 @@ CLASS(InputBox) EXTENDS(Label)
 	ATTRIB(InputBox, dragScrollPos, vector, '0 0 0')
 	ATTRIB(InputBox, pressed, float, 0)
 	ATTRIB(InputBox, editColorCodes, float, 1)
+	ATTRIB(InputBox, forbiddenCharacters, string, "")
 	ATTRIB(InputBox, color, vector, '1 1 1')
 	ATTRIB(InputBox, colorF, vector, '1 1 1')
 ENDCLASS(InputBox)
@@ -68,14 +70,23 @@ float mouseReleaseInputBox(entity me, vector pos)
 	return mouseDragInputBox(me, pos);
 }
 
+void enterTextInputBox(entity me, string ch)
+{
+	float i;
+	for(i = 0; i < strlen(ch); ++i)
+		if(strstrofs(me.forbiddenCharacters, substring(ch, i, 1), 0) > -1)
+			return;
+	me.setText(me, strcat(substring(me.text, 0, me.cursorPos), ch, substring(me.text, me.cursorPos, strlen(me.text) - me.cursorPos)));
+	me.cursorPos += strlen(ch);
+}
+
 float keyDownInputBox(entity me, float key, float ascii, float shift)
 {
 	me.lastChangeTime = time;
 	me.dragScrollTimer = 0;
 	if(ascii >= 32 && ascii != 127)
 	{
-		me.setText(me, strcat(substring(me.text, 0, me.cursorPos), chr(ascii), substring(me.text, me.cursorPos, strlen(me.text) - me.cursorPos)));
-		me.cursorPos += 1;
+		me.enterText(me, chr(ascii));
 		return 1;
 	}
 	switch(key)

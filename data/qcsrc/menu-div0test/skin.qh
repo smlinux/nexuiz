@@ -73,3 +73,6 @@ const vector SKINCOLOR_MAPLIST_TITLE = '1 1 1';
 const vector SKINCOLOR_MAPLIST_AUTHOR = '0.4 0.4 0.7';
 
 const float SKINALPHA_DISABLED = 0.2;
+
+const string SKINGFX_CHARMAP = "charmap";
+const string SKINGFX_CHARMAP_SELECTED = "charmapbutton";

@@ -9,6 +9,7 @@ CLASS(NexuizServerCreateTab) EXTENDS(NexuizTab)
 
 	ATTRIB(NexuizServerCreateTab, mapListBox, entity, NULL)
 	ATTRIB(NexuizServerCreateTab, sliderFraglimit, entity, NULL)
+	ATTRIB(NexuizServerCreateTab, sliderTimelimit, entity, NULL)
 	ATTRIB(NexuizServerCreateTab, checkboxFraglimit, entity, NULL)
 ENDCLASS(NexuizServerCreateTab)
 entity makeNexuizServerCreateTab();
@@ -79,13 +80,20 @@ void fillNexuizServerCreateTab(entity me)
 	me.gotoXY(me, 3, 3.5); me.setFirstColumn(me, me.currentColumn);
 		me.TD(me, 1, 3, e = makeNexuizTextLabel(0, "Settings:"));
 	me.TR(me);
-		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Time limit:"));
-		me.TD(me, 1, 2, e = makeNexuizSlider(1.0, 60.0, 0.5, "timelimit_override"));
+		me.sliderTimelimit = makeNexuizSlider(1.0, 60.0, 0.5, "timelimit_override");
+		me.TD(me, 1, 1, e = makeNexuizSliderCheckBox(0, 1, me.sliderTimelimit, "Time limit:"));
+		me.TD(me, 1, 2, me.sliderTimelimit);
 	me.TR(me);
-		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Point limit:"));
+		me.TDempty(me, 0.2);
+		me.TD(me, 1, 2.8, e = makeNexuizSliderCheckBox(-1, 0, me.sliderTimelimit, "Use map specified default"));
+	me.TR(me);
+		me.sliderFraglimit = makeNexuizSlider(1.0, 2000.0, 5, "fraglimit_override");
+		me.TD(me, 1, 1, e = makeNexuizSliderCheckBox(0, 1, me.sliderFraglimit, "Point limit:"));
 			me.checkboxFraglimit = e;
-		me.TD(me, 1, 2, e = makeNexuizSlider(1.0, 2000.0, 5, "fraglimit_override"));
-			me.sliderFraglimit = e;
+		me.TD(me, 1, 2, me.sliderFraglimit);
+	me.TR(me);
+		me.TDempty(me, 0.2);
+		me.TD(me, 1, 2.8, e = makeNexuizSliderCheckBox(-1, 0, me.sliderFraglimit, "Use map specified default"));
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizButton("Mutators...", '0 0 0'));
 			e.onClick = DialogOpenButton_Click;
