@@ -69,6 +69,12 @@ void draw_Picture(vector theOrigin, string pic, vector theSize, vector theColor,
 	drawpic(boxToGlobal(theOrigin, draw_shift, draw_scale), pic, boxToGlobalSize(theSize, draw_scale), theColor, theAlpha * draw_alpha, 0);
 }
 
+vector draw_PictureSize(string pic)
+{
+	pic = draw_UseSkinFor(pic);
+	return drawgetimagesize(pic);
+}
+
 void draw_Fill(vector theOrigin, vector theSize, vector theColor, float theAlpha)
 {
 	drawfill(boxToGlobal(theOrigin, draw_shift, draw_scale), boxToGlobalSize(theSize, draw_scale), theColor, theAlpha * draw_alpha, 0);

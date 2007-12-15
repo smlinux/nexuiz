@@ -57,6 +57,12 @@ void drawNexuizCrosshairButton(entity me)
 {
 	me.color2 = eX * cvar("crosshair_color_red") + eY * cvar("crosshair_color_green") + eZ * cvar("crosshair_color_blue");
 	me.alpha2 = cvar("crosshair_color_alpha");
+	me.src2scale = min((draw_PictureSize(me.src2) * eY * cvar("crosshair_size")) / me.size_y, (draw_PictureSize(me.src2) * eX * cvar("crosshair_size")) / me.size_x, 0.8);
+	if(!me.checked && !me.focused)
+	{
+		me.alpha2 *= me.disabledAlpha;
+		me.color2 = '1 1 1';
+	}
 	drawCheckBox(me);
 }
 #endif

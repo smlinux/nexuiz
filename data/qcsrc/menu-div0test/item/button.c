@@ -13,6 +13,7 @@ CLASS(Button) EXTENDS(Label)
 	ATTRIB(Button, src, string, string_null)
 	ATTRIB(Button, srcSuffix, string, string_null)
 	ATTRIB(Button, src2, string, string_null) // is centered, same aspect, and stretched to label size
+	ATTRIB(Button, src2scale, float, 1)
 	ATTRIB(Button, srcMulti, float, 1) // 0: button square left, text right; 1: button stretched, text over it
 	ATTRIB(Button, buttonLeftOfText, float, 0)
 	ATTRIB(Button, focusable, float, 1)
@@ -139,6 +140,10 @@ void drawButton(entity me)
 	{
 		bOrigin = me.keepspaceLeft * eX;
 		bSize = eY + eX * (1 - me.keepspaceLeft);
+
+		bOrigin += bSize * (0.5 - 0.5 * me.src2scale);
+		bSize = bSize * me.src2scale;
+
 		draw_Picture(bOrigin, me.src2, bSize, me.color2, me.alpha2);
 	}
 

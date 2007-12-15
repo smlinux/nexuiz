@@ -52,3 +52,4 @@
 #include "nexuiz/crosshairbutton.c"
 #include "nexuiz/playermodel.c"
 #include "nexuiz/dialog_news.c"
+#include "nexuiz/checkbox_slider_invalid.c"

@@ -11,6 +11,7 @@ void draw_ButtonPicture(vector theOrigin, string pic, vector theSize, vector the
 void draw_VertButtonPicture(vector theOrigin, string pic, vector theSize, vector theColor, float theAlpha);
 void draw_BorderPicture(vector theOrigin, string pic, vector theSize, vector theColor, float theAlpha, vector theBorderSize);
 void draw_Picture(vector origin, string pic, vector size, vector color, float alpha);
+vector draw_PictureSize(string pic);
 void draw_Fill(vector theOrigin, vector theSize, vector theColor, float theAlpha);
 void draw_Text(vector origin, string text, vector size, vector color, float alpha, float allowColorCodes);
 void draw_CenterText(vector origin, string text, vector size, vector color, float alpha, float allowColorCodes);

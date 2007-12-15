@@ -55,6 +55,8 @@ void resizeNotifySlider(entity me, vector relOrigin, vector relSize, vector absO
 }
 string valueToTextSlider(entity me, float val)
 {
+	if(val < me.valueMin) return "";
+	if(val > me.valueMax) return "";
 	return ftos_decimals(val, me.valueDigits);
 }
 void configureSliderVisualsSlider(entity me, float sz, float theAlign, float theTextSpace, string gfx)
