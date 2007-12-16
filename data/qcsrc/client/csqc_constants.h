@@ -73,6 +73,7 @@ const float EF_NODRAW		= 16;
 const float EF_NOSHADOW		= 4096;
 const float EF_RED		= 128;
 const float EF_STARDUST		= 2048;
+const float EF_SELECTABLE 	= 16384;
 
 const float PFL_ONGROUND	= 1;
 const float PFL_CROUCH		= 2;

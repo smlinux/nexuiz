@@ -1,4 +1,5 @@
 void (vector ang)							makevectors = #1;
+void(entity e, vector o) setorigin	= #2;
 void (entity e, string m)						setmodel = #3;
 
 void ()									break = #6;
