@@ -159,9 +159,9 @@ void() player_setupanimsformodel =
 void(vector anim, float looping, float override, float restart) player_setanim =
 {
 	if (!restart)
-	if (anim_x != self.animstate_startframe)
-	if (anim_y != self.animstate_numframes)
-	if (anim_z != self.animstate_framerate)
+	if (anim_x == self.animstate_startframe)
+	if (anim_y == self.animstate_numframes)
+	if (anim_z == self.animstate_framerate)
 		return;
 	self.animstate_startframe = anim_x;
 	self.animstate_numframes = anim_y;
