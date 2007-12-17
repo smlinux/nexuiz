@@ -1,3 +1,16 @@
+// leilei's fancy muzzleflash stuff
+void() W_Uzi_Flash_Go;
+void() W_Uzi_Flash_Go {
+	if (self.frame > 10){
+		SUB_Remove();
+		return;
+	}
+	self.frame = self.frame + 2;
+	self.alpha = self.alpha - 0.2;
+	self.think = W_Uzi_Flash_Go;
+	self.nextthink = time + 0.02;
+};
+
 .float uzi_bulletcounter;
 void W_Uzi_Attack (void)
 {
@@ -34,18 +47,23 @@ void W_Uzi_Attack (void)
 	flash.viewmodelforclient = self;
 	flash.customizeentityforclient = CL_Weaponentity_CustomizeEntityForClient;
 	flash.scale = 1.2;
-	SUB_SetFade(flash, time, 0.2);
+	//SUB_SetFade(flash, time + 0.06, 0);
+	flash.think = W_Uzi_Flash_Go;
+	flash.nextthink = time + 0.02;
+	flash.frame = 2;
 
 	// muzzle flash for 3rd person view
 	flash2 = spawn();
 	setorigin(flash2, '43 1 8');
 	setmodel(flash2, "models/uziflash.md3"); // precision set below
 	setattachment(flash2, self.exteriorweaponentity, "");
-	SUB_SetFade(flash2, time, 0.2);
-
+	//SUB_SetFade(flash2, time + 0.06, 0);
+	flash2.think = W_Uzi_Flash_Go;
+	flash2.nextthink = time + 0.02;
+	flash2.frame = 2;
 	// common properties
 	flash.angles_z = flash2.angles_z = flash.v_angle_z + random() * 180;
-	flash.alpha = flash2.alpha = 0.5;
+	flash.alpha = flash2.alpha = 1;
 	flash.effects = flash2.effects = EF_ADDITIVE | EF_FULLBRIGHT | EF_LOWPRECISION;
 
 	// casing code

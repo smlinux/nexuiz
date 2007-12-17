@@ -75,6 +75,19 @@ airfriction 6
 liquidfriction 6
 //originjitter 32 32 32
 velocityjitter 256 256 256
+effect TE_KNIGHTSPIKE
+count 14
+type smoke
+tex 48 55
+color 0x800000 0xFF8020
+size 12 12
+alpha 0 256 100
+originjitter 1 1 1
+airfriction 5
+liquidfriction 16
+velocityjitter 23 23 183
+scalemultiplier 1
+gravity -0.04
 
 // machinegun bullet impact
 // bullet impact decal
@@ -90,37 +103,95 @@ originjitter 6 6 6
 //lightcolor 1 1 1
 // dust/smoke drifting away from the impact
 effect TE_SPIKE
-count 8
+count 5
 type smoke
-tex 0 8
+tex 48 55
 color 0x101010 0x101010
-size 3 3
-sizeincrease 3
-alpha 255 255 256
-originjitter 0 0 0
-velocityjitter 8 8 8
+size 7 7
+alpha 0 256 100
+originjitter 1 1 1
+airfriction 5
+liquidfriction 16
+velocityjitter 183 183 183
+scalemultiplier 1
+gravity -0.04
 // dust/smoke staying at the impact
 effect TE_SPIKE
-count 1
+count 5
 type smoke
-tex 0 8
+tex 48 55
 color 0x505050 0x505050
-size 4 4
-sizeincrease 4
-alpha 255 255 128
-originjitter 0 0 0
-velocityjitter 0 0 0
+size 7 7
+alpha 0 256 100
+originjitter 1 1 1
+airfriction 3
+liquidfriction 16
+velocityjitter 85 85 85
+scalemultiplier 1
+gravity -0.04
+
 // bouncing sparks
 effect TE_SPIKE
-count 20
+count 12
+tex 40 40
 type spark
 color 0x8f4333 0xfff31b
 size 0.4 0.4
-alpha 0 256 256
-gravity 1
+alpha 0 256 7256
+gravity 0.6
 bounce 1.5
+airfriction 3
 velocityoffset 0 0 80
-velocityjitter 64 64 64
+velocityjitter 124 124 124
+
+/*
+effect TE_SPIKE
+count 3
+type spark
+tex 40 40
+color 0xFDFFD9 0xFDFFD9
+size 2 2
+alpha 511 512 644
+//gravity 1
+gravity 0
+airfriction 16
+bounce 1
+
+velocityoffset 0 0 45
+originjitter 1 1 1
+velocityjitter 777 777 777
+velocitymultiplier 65
+*/
+
+effect TE_SPIKE
+count 2
+type spark
+tex 40 40
+color 0xFDFFD9 0xFDFFD9
+size 6 4
+alpha 444 512 866
+gravity 1
+bounce 1
+airfriction 2
+velocityoffset 0 0 15
+originjitter 1 1 1
+velocityjitter 153 153 153
+velocitymultiplier 65
+
+effect TE_SPIKE
+count 14
+type spark
+tex 40 40
+color 0xFDFFD9 0xFDFFD9
+size 4 4
+alpha 444 512 866
+gravity 1
+bounce 1
+velocityoffset 0 0 15
+airfriction 5
+originjitter 1 1 1
+velocityjitter 888 888 888
+
 
 // electro combo explosion
 // decal
@@ -155,6 +226,19 @@ airfriction 4
 liquidfriction 16
 //velocityoffset 0 0 120
 velocityjitter 512 512 512
+effect TE_SPIKEQUAD
+count 32
+type spark
+tex 41 41
+color 0xFDFFD9 0xFDFFD9
+size 16 16
+alpha 444 512 866
+gravity 1
+bounce 1
+velocityoffset 0 0 15
+airfriction 9
+originjitter 1 1 1
+velocityjitter 1333 1333 1333
 /*
 // inner cloud of smoke
 effect TE_SPIKEQUAD
@@ -275,11 +359,12 @@ count 4
 type smoke
 tex 0 8
 color 0x101010 0x101010
-size 3 3
-sizeincrease 3
+size 4 4
+sizeincrease 10
 alpha 128 128 64
 originjitter 0 0 0
-velocityjitter 8 8 8
+airfriction 8
+velocityjitter 30 30 30
 // dust/smoke staying at the impact
 effect TE_GUNSHOT
 count 1
@@ -302,6 +387,21 @@ gravity 1
 bounce 1.5
 velocityoffset 0 0 80
 velocityjitter 64 64 64
+
+effect TE_GUNSHOT
+count 6
+type spark
+tex 40 40
+color 0xFDFFD9 0xFDFFD9
+size 3 2
+alpha 444 512 866
+gravity 1
+bounce 1
+velocityoffset 0 0 5
+airfriction 5
+originjitter 1 1 1
+velocityjitter 500 500 500
+
 
 /*
 // quake effect
@@ -714,19 +814,36 @@ countabsolute 1
 type beam
 tex 60 60
 color 0xFFFFFF 0xFFFFFF
-size 4 4
-alpha 128 128 256
+size 6 6
+alpha 128 128 192
+
+// The RING smoke
 // experimental
 effect TE_TEI_G3
-trailspacing 2
-type static
-color 0x202020 0x404040
-size 1 1
-alpha 256 256 512
-airfriction -4
+trailspacing 12
+color 0x0B3E4F 0x0B3E4F
+size 4 4
+tex 32 32
+alpha 0 256 100
+airfriction 5
 //liquidfriction -4
-velocityjitter 8 8 8
-type smoke
+sizeincrease 12
+//velocityjitter 4 4
+type static
+
+// The drifting smoke to accompany it
+// experimental
+effect TE_TEI_G3
+trailspacing 8
+color 0x0B3E4F 0x0B3E4F
+size 4 4
+tex 48 55
+alpha 0 256 100
+airfriction 5
+//liquidfriction -4
+sizeincrease 16
+//velocityjitter 125 125 125
+type static
 /*
 // experimental
 effect TE_TEI_G3
@@ -993,6 +1110,21 @@ lightradius 90
 lighttime 0
 lightcolor 1.5 3 6
 velocitymultiplier -0.1
+
+effect TR_NEXUIZ_PLASMA
+trailspacing 6
+count 3
+type spark
+tex 41 41
+color 0xFDFFD9 0xFDFFD9
+size 2 2
+alpha 444 512 1866
+gravity 1
+bounce 1
+velocityoffset 0 0 15
+airfriction 12
+originjitter 1 1 1
+velocityjitter 200 200
 
 // quake effect
 effect EF_FLAME

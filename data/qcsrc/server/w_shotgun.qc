@@ -6,6 +6,7 @@ void W_Shotgun_Attack (void)
 	float	d;
 	float	f;
 	float	spread;
+	local entity flash;
 
 	bullets = cvar("g_balance_shotgun_primary_bullets");
 	d = cvar("g_balance_shotgun_primary_damage");
@@ -24,6 +25,22 @@ void W_Shotgun_Attack (void)
 	// casing code
 	if (cvar("g_casings") >= 1)
 		SpawnCasing (w_shotorg, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 - 30) * v_up), 2, vectoangles(v_forward),'0 250 0', 100, 1);
+
+	// muzzle flash for 1st person view
+	flash = spawn();
+	setorigin(flash, '53 5 0');
+	setmodel(flash, "models/uziflash.md3"); // precision set below
+	setattachment(flash, self.weaponentity, "bone01");
+	flash.owner = self;
+	flash.viewmodelforclient = self;
+	flash.customizeentityforclient = CL_Weaponentity_CustomizeEntityForClient;
+	flash.scale = 1.2;
+	flash.think = SUB_Remove;
+	flash.nextthink = time + 0.06;
+	flash.angles_z = flash.v_angle_z + random() * 180;
+	flash.alpha = 1;
+	flash.effects = EF_ADDITIVE | EF_FULLBRIGHT | EF_LOWPRECISION;
+
 }
 
 void W_Shotgun_Attack2 (void)
