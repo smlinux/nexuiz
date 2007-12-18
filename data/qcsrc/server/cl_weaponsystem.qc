@@ -219,7 +219,8 @@ void() CL_ExteriorWeaponentity_Think =
 		else
 			self.model = "";
 
-		if((tag_found = gettagindex(self.owner, "tag_weapon")))
+		//if((tag_found = gettagindex(self.owner, "tag_weapon")))
+		if((tag_found = gettagindex(self.owner, "tag_attachweaponhere"))) // can't use tag_weapon because Q3A uses it for some random place INSIDE the model
 		{
 			self.tag_index = tag_found;
 			self.tag_entity = self.owner;
