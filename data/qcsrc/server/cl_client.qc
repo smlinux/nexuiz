@@ -548,6 +548,7 @@ void PutClientInServer (void)
 
 		CL_SpawnWeaponentity();
 		self.alpha = default_player_alpha;
+		self.colormod = '1 1 1' * cvar("g_player_brightness");
 		self.exteriorweaponentity.alpha = default_weapon_alpha;
 
 		self.lms_nextcheck = time + cvar("g_lms_campcheck_interval")*2;
