@@ -422,6 +422,7 @@ void(float fr, float t, void() func) weapon_thinkf =
 
 	if (fr == WFRAME_FIRE1 || fr == WFRAME_FIRE2)
 	if (t)
+	if (!self.crouch) // shoot anim stands up, this looks bad
 	{
 		local vector anim;
 		anim = self.anim_shoot;
