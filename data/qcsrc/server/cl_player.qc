@@ -810,8 +810,8 @@ void VoiceMessage(string type)
 			if(self.pusher)
 				if(self.pusher.team == self.team)
 				{
-					soundto(self, self.pusher, CHAN_VOICE, sample, 1, 1/64.0);
-					soundto(self, self, CHAN_VOICE, sample, 1, 1/64.0);
+					soundto(self, self.pusher, CHAN_VOICE, sample, 1, ATTN_NONE);
+					soundto(self, self, CHAN_VOICE, sample, 1, ATTN_NONE);
 				}
 	}
 	else if(teamsay == 0 || !teams_matter)
@@ -822,8 +822,8 @@ void VoiceMessage(string type)
 	else if(teamsay == 1)
 	{
 		entity e;
-		FOR_EACH_CLIENT(e)
+		FOR_EACH_REALCLIENT(e)
 			if(e.team == self.team)
-				soundto(self, e, CHAN_VOICE, sample, 1, 1/64.0); // minimum attenuation
+				soundto(self, e, CHAN_VOICE, sample, 1, ATTN_NONE);
 	}
 }
