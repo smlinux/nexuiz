@@ -664,3 +664,164 @@ void UpdateSelectedPlayer()
 	if(self.selected_player)
 		self.last_selected_player = self.selected_player;
 }
+
+.string voice_attack;
+.string voice_attackinfive;
+.string voice_coverme;
+.string voice_defend;
+.string voice_freelance;
+.string voice_incoming;
+.string voice_meet;
+.string voice_needhelp;
+.string voice_seenflag;
+.string voice_taunt;
+.string voice_teamshoot;
+.float modelindex_for_voice;
+
+float GetVoiceMessageTeamsayType(string type)
+{
+	if(type == "taunt")
+		return 0;
+	if(type == "teamshoot")
+		return 2;
+	return 1;
+}
+
+string allvoicesamples = "attack attackinfive coverme defend freelance incoming meet needhelp seenflag taunt teamshoot";
+float GetVoiceMessageSampleField_notFound;
+.string GetVoiceMessageSampleField(string type)
+{
+	GetVoiceMessageSampleField_notFound = 0;
+	switch(type)
+	{
+		case "attack":       return voice_attack;
+		case "attackinfive": return voice_attackinfive;
+		case "coverme":      return voice_coverme;
+		case "defend":       return voice_defend;
+		case "freelance":    return voice_freelance;
+		case "incoming":     return voice_incoming;
+		case "meet":         return voice_meet;
+		case "needhelp":     return voice_needhelp;
+		case "seenflag":     return voice_seenflag;
+		case "taunt":        return voice_taunt;
+		case "teamshoot":    return voice_teamshoot;
+	}
+	GetVoiceMessageSampleField_notFound = 1;
+	return voice_taunt;
+}
+
+void PrecacheVoiceMessages(string f)
+{
+	float fh;
+	float i, n;
+	string s;
+	fh = fopen(f, FILE_READ);
+	if(fh < 0)
+		return;
+	while((s = fgets(fh)))
+	{
+		if(tokenize(s) != 3)
+		{
+			dprint("Invalid sound info line: ", s, "\n");
+			continue;
+		}
+		n = stof(argv(2));
+		for(i = 1; i <= n; ++i)
+			precache_sound(strcat(argv(1), ftos(i), ".wav"));
+	}
+	fclose(fh);
+}
+
+void LoadVoiceMessages(string f)
+{
+	float fh;
+	string s;
+	var .string field;
+	fh = fopen(f, FILE_READ);
+	if(fh < 0)
+		return;
+	while((s = fgets(fh)))
+	{
+		if(tokenize(s) != 3)
+			continue;
+		field = GetVoiceMessageSampleField(argv(0));
+		if(GetVoiceMessageSampleField_notFound)
+			continue;
+		if(self.field)
+			strunzone(self.field);
+		self.field = strzone(strcat(argv(1), " ", argv(2)));
+	}
+	fclose(fh);
+}
+
+void UpdateVoiceMessages()
+{
+	if(self.modelindex == self.modelindex_for_voice)
+		return;
+	self.modelindex_for_voice = self.modelindex;
+	LoadVoiceMessages("sound/player/voice/default.voice");
+	LoadVoiceMessages(strcat(self.model, ".voice"));
+}
+
+float precache_sound_index (string s) = #19;
+void soundto(entity e, entity sounddest, float chan, string samp, float vol, float atten)
+{
+	vector o;
+	o = e.origin + 0.5 * (e.mins + e.maxs);
+	msg_entity = sounddest;
+	WriteByte(MSG_ONE, 6);
+	WriteByte(MSG_ONE, 27); // all bits except SND_LOOPING
+	WriteByte(MSG_ONE, vol * 255);
+	WriteByte(MSG_ONE, atten * 64);
+	WriteEntity(MSG_ONE, e);
+	WriteByte(MSG_ONE, chan);
+	WriteShort(MSG_ONE, precache_sound_index(samp));
+	WriteCoord(MSG_ONE, o_x);
+	WriteCoord(MSG_ONE, o_y);
+	WriteCoord(MSG_ONE, o_z);
+}
+
+void VoiceMessage(string type)
+{
+	// TODO precache voice messages?
+	var string sample;
+	var float teamsay;
+	sample = self.(GetVoiceMessageSampleField(type));
+
+	if(GetVoiceMessageSampleField_notFound)
+	{
+		sprint(self, strcat("Invalid voice. Use one of: ", allvoicesamples, "\n"));
+		return;
+	}
+
+	if(!sample)
+		return;
+
+	teamsay = GetVoiceMessageTeamsayType(type);
+
+	tokenize(sample);
+	sample = strcat(argv(0), ftos(ceil(random() * stof(argv(1)))), ".wav"); // randomization
+
+	if(teamsay == 2)
+	{
+		if(teams_matter)
+			if(self.pusher)
+				if(self.pusher.team == self.team)
+				{
+					soundto(self, self.pusher, CHAN_VOICE, sample, 1, ATTN_NONE);
+					soundto(self, self, CHAN_VOICE, sample, 1, ATTN_NONE);
+				}
+	}
+	else if(teamsay == 0 || !teams_matter)
+	{
+		// broadcast the sound, but it's directional
+		sound(self, CHAN_VOICE, sample, 1, ATTN_NORM);
+	}
+	else if(teamsay == 1)
+	{
+		entity e;
+		FOR_EACH_CLIENT(e)
+			if(e.team == self.team)
+				soundto(self, e, CHAN_VOICE, sample, 1, ATTN_NONE);
+	}
+}

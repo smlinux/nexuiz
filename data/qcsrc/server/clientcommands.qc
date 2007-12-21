@@ -452,6 +452,8 @@ void SV_ParseClientCommand(string s) {
 		sprint(self, "\n");
 	} else if(argv(0) == "teamstatus") {
 		PrintScoreboard(self);
+	} else if(argv(0) == "voice") {
+		VoiceMessage(argv(1));
 	} else if(argv(0) == "say") {
 		Say(self, FALSE, substring(s, 4, strlen(s) - 4));
 		//clientcommand(self, formatmessage(s));

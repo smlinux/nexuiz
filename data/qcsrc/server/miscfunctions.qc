@@ -875,16 +875,20 @@ void play2team(float t, string filename)
 	}
 }
 
+void PrecacheVoiceMessages(string f);
 void precache_all_models(string pattern)
 {
 	float globhandle, i, n;
+	string f;
 
 	globhandle = search_begin(pattern, TRUE, FALSE);
 	n = search_getsize(globhandle);
 	for(i = 0; i < n; ++i)
 	{
 		//print(search_getfilename(globhandle, i), "\n");
-		precache_model(search_getfilename(globhandle, i));
+		f = search_getfilename(globhandle, i);
+		precache_model(f);
+		PrecacheVoiceMessages(strcat(f, ".voice"));
 	}
 	search_end(globhandle);
 }
@@ -903,6 +907,7 @@ void precache()
 	// Precache all player models if desired
 	if (cvar("sv_precacheplayermodels"))
 	{
+		PrecacheVoiceMessages("sound/player/voice/default.voice");
 		precache_all_models("models/player/*.zym");
 		precache_all_models("models/player/*.dpm");
 		precache_all_models("models/player/*.md3");
