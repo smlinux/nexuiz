@@ -8,28 +8,16 @@ void() onslaught_updatelinks =
 	local entity l, links;
 	local float stop, t1, t2, t3, t4;
 	// first check if the game has ended
-	t1 = t2 = t3 = t4 = 0;
-	l = findchain(classname, "onslaught_generator");
-	while (l)
-	{
-		if (l.iscaptured)
-		{
-			if (l.team == COLOR_TEAM1) t1 = 1;
-			if (l.team == COLOR_TEAM2) t2 = 1;
-			if (l.team == COLOR_TEAM3) t3 = 1;
-			if (l.team == COLOR_TEAM4) t4 = 1;
-		}
-		l = l.chain;
-	}
-	if (t1 + t2 + t3 + t4 < 2)
-	{
-		// game over, only one team remains (or none)
-		return;
-	}
+	dprint("--- updatelinks ---\n");
+	links = findchain(classname, "onslaught_link");
 	// mark generators as being shielded and networked
 	l = findchain(classname, "onslaught_generator");
 	while (l)
 	{
+		if (l.iscaptured)
+			dprint(etos(l), " (generator) belongs to team ", ftos(l.team), "\n");
+		else
+			dprint(etos(l), " (generator) is destroyed\n");
 		l.islinked = l.iscaptured;
 		l.isshielded = l.iscaptured;
 		l = l.chain;
@@ -40,38 +28,40 @@ void() onslaught_updatelinks =
 	{
 		l.islinked = FALSE;
 		l.isshielded = TRUE;
+		dprint(etos(l), " (point) belongs to team ", ftos(l.team), "\n");
 		l = l.chain;
 	}
 	// flow power outward from the generators through the network
-	links = findchain(classname, "onslaught_link");
-	stop = TRUE;
-	while (stop)
+	l = links;
+	while (l)
 	{
-		stop = FALSE;
+		dprint(etos(l), " (link) connects ", etos(l.goalentity), " with ", etos(l.enemy), "\n");
+		l = l.chain;
+	}
+	stop = FALSE;
+	while (!stop)
+	{
+		stop = TRUE;
 		l = links;
 		while (l)
 		{
 			// if both points are captured by the same team, and only one of
 			// them is powered, mark the other one as powered as well
+			if (l.enemy.iscaptured && l.goalentity.iscaptured)
+			if (l.enemy.islinked != l.goalentity.islinked)
 			if (l.enemy.team == l.goalentity.team)
 			{
-				if (l.goalentity.islinked)
+				if (!l.goalentity.islinked)
 				{
-					if (l.enemy.iscaptured)
-					if (!l.enemy.islinked)
-					{
-						stop = FALSE;
-						l.enemy.islinked = TRUE;
-					}
+					stop = FALSE;
+					l.goalentity.islinked = TRUE;
+					dprint(etos(l), " (link) is marking ", etos(l.goalentity), " (point) because its team matches ", etos(l.enemy), " (point)\n");
 				}
-				else
+				else if (!l.enemy.islinked)
 				{
-					if (l.goalentity.iscaptured)
-					if (!l.goalentity.islinked)
-					{
-						stop = FALSE;
-						l.goalentity.islinked = TRUE;
-					}
+					stop = FALSE;
+					l.enemy.islinked = TRUE;
+					dprint(etos(l), " (link) is marking ", etos(l.enemy), " (point) because its team matches ", etos(l.goalentity), " (point)\n");
 				}
 			}
 			l = l.chain;
@@ -85,9 +75,15 @@ void() onslaught_updatelinks =
 		if (l.goalentity.team != l.enemy.team)
 		{
 			if (l.goalentity.islinked)
+			{
+				dprint(etos(l), " (link) is unshielding ", etos(l.enemy), " (point) because its team does not match ", etos(l.goalentity), " (point)\n");
 				l.enemy.isshielded = FALSE;
+			}
 			if (l.enemy.islinked)
+			{
+				dprint(etos(l), " (link) is unshielding ", etos(l.goalentity), " (point) because its team does not match ", etos(l.enemy), " (point)\n");
 				l.goalentity.isshielded = FALSE;
+			}
 		}
 		l = l.chain;
 	}
@@ -97,13 +93,17 @@ void() onslaught_updatelinks =
 	{
 		if (l.isshielded)
 		{
-			l.enemy.alpha = -1;
-			l.takedamage = DAMAGE_AIM;
+			dprint(etos(l), " (generator) is shielded\n");
+			l.enemy.alpha = 1;
+			l.takedamage = DAMAGE_NO;
+			l.bot_attack = FALSE;
 		}
 		else
 		{
+			dprint(etos(l), " (generator) is not shielded\n");
 			l.enemy.alpha = -1;
 			l.takedamage = DAMAGE_AIM;
+			l.bot_attack = TRUE;
 		}
 		l = l.chain;
 	}
@@ -113,29 +113,69 @@ void() onslaught_updatelinks =
 	{
 		if (l.isshielded)
 		{
-			l.enemy.alpha = -1;
+			dprint(etos(l), " (point) is shielded\n");
+			l.enemy.alpha = 1;
 			if (l.goalentity)
-				l.goalentity.takedamage = DAMAGE_AIM;
+			{
+				l.goalentity.takedamage = DAMAGE_NO;
+				l.goalentity.bot_attack = FALSE;
+			}
 		}
 		else
 		{
+			dprint(etos(l), " (point) is not shielded\n");
 			l.enemy.alpha = -1;
 			if (l.goalentity)
+			{
 				l.goalentity.takedamage = DAMAGE_AIM;
+				l.goalentity.bot_attack = TRUE;
+			}
 		}
 		l = l.chain;
 	}
+	// count generators owned by each team
+	t1 = t2 = t3 = t4 = 0;
+	l = findchain(classname, "onslaught_generator");
+	while (l)
+	{
+		if (l.iscaptured)
+		{
+			if (l.team == COLOR_TEAM1) t1 = 1;
+			if (l.team == COLOR_TEAM2) t2 = 1;
+			if (l.team == COLOR_TEAM3) t3 = 1;
+			if (l.team == COLOR_TEAM4) t4 = 1;
+		}
+		l = l.chain;
+	}
+	// see if multiple teams remain (if not, it's game over)
+	if (t1 + t2 + t3 + t4 < 2)
+		dprint("--- game over ---\n");
+	else
+		dprint("--- done updating links ---\n");
 };
 
 void() onslaught_generator_think =
 {
+	local float d;
+	local entity e;
 	self.nextthink = ceil(time + 1);
 	if (cvar("timelimit"))
 	if (time > cvar("timelimit") * 60 - 60)
 	{
-		// self.max_health / 120 gives 2 minutes of overtime
+		// self.max_health / 300 gives 5 minutes of overtime.
+		// control points reduce the overtime duration.
 		sound(self, CHAN_AUTO, "sound/onslaught/generator_decay.wav", 1, ATTN_NORM);
-		Damage(self, self, self, self.max_health / 60, DEATH_HURTTRIGGER, self.origin, '0 0 0');
+		d = 1;
+		e = findchain(classname, "onslaught_controlpoint");
+		while (e)
+		{
+			if (e.team != self.team)
+			if (e.islinked)
+				d = d + 1;
+			e = e.chain;
+		}
+		d = d * self.max_health / 300;
+		Damage(self, self, self, d, DEATH_HURTTRIGGER, self.origin, '0 0 0');
 	}
 };
 
@@ -241,13 +281,15 @@ void() onslaught_generator =
 	precache_sound("sound/onslaught/generator_underattack.wav");
 	if (!self.team)
 		objerror("team must be set");
+	self.colormap = 1024 + (self.team - 1) * 17;
 	self.solid = SOLID_BSP;
 	self.movetype = MOVETYPE_NONE;
-	self.max_health = self.health = 1000;
+	self.max_health = self.health = 3000;
 	setmodel(self, "models/onslaught/generator.md3");
 	//setsize(self, '-32 -32 -24', '32 32 64');
 	setorigin(self, self.origin);
 	self.takedamage = DAMAGE_AIM;
+	self.bot_attack = TRUE;
 	self.event_damage = onslaught_generator_damage;
 	self.iscaptured = TRUE;
 	self.islinked = TRUE;
@@ -261,6 +303,7 @@ void() onslaught_generator =
 	//setsize(e, '-32 -32 0', '32 32 128');
 	setorigin(e, self.origin);
 	e.colormap = self.colormap;
+	e.team = self.team;
 	self.think = onslaught_generator_delayed;
 	self.nextthink = time + 0.2;
 };
@@ -346,10 +389,16 @@ void() onslaught_controlpoint_touch =
 		return;
 	// if there's already an icon built, nothing happens
 	if (self.goalentity)
+	{
+		dprint("a\n");
 		return;
+	}
 	// shielded points are definitely off-limits
 	if (self.isshielded)
+	{
+		dprint("b\n");
 		return;
+	}
 	// check to see if this player has a legitimate claim to capture this
 	// control point - more specifically that there is a captured path of
 	// points leading back to the team generator
@@ -358,26 +407,51 @@ void() onslaught_controlpoint_touch =
 	{
 		if (e.goalentity == self)
 		{
+			dprint(etos(e), " (link) connects to ", etos(e.enemy), " (point)");
 			if (e.enemy.islinked)
-			if (e.enemy.team == other.team)
-				break;
+			{
+				dprint(" which is linked");
+				if (e.enemy.team == other.team)
+				{
+					dprint(" and has the correct team!\n");
+					break;
+				}
+				else
+					dprint(" but has the wrong team\n");
+			}
+			else
+				dprint("\n");
 		}
 		else if (e.enemy == self)
 		{
+			dprint(etos(e), " (link) connects to ", etos(e.goalentity), " (point)");
 			if (e.goalentity.islinked)
-			if (e.goalentity.team == other.team)
-				break;
+			{
+				dprint(" which is linked");
+				if (e.goalentity.team == other.team)
+				{
+					dprint(" and has a team!\n");
+					break;
+				}
+				else
+					dprint(" but has the wrong team\n");
+			}
+			else
+				dprint("\n");
 		}
 		e = e.chain;
 	}
 	if (!e)
+	{
+		dprint("c\n");
 		return;
+	}
 	// we've verified that this player has a legitimate claim to this point,
 	// so start building the captured point icon (which only captures this
 	// point if it successfully builds without being destroyed first)
 	self.goalentity = e = spawn();
 	e.owner = self;
-	e.max_health = 300;
+	e.max_health = 1000;
 	e.health = e.max_health * 0.1;
 	e.alpha = e.health / e.max_health;
 	e.solid = SOLID_BBOX;
@@ -386,14 +460,16 @@ void() onslaught_controlpoint_touch =
 	setsize(e, '-32 -32 -32', '32 32 32');
 	setorigin(e, self.origin + '0 0 96');
 	e.takedamage = DAMAGE_AIM;
+	e.bot_attack = TRUE;
 	e.event_damage = onslaught_controlpoint_icon_damage;
 	e.team = other.team;
+	e.colormap = 1024 + (e.team - 1) * 17;
 	e.think = onslaught_controlpoint_icon_buildthink;
 	e.nextthink = time + 0.1;
 	e.count = e.max_health / 50; // how long it takes to build
 	sound(e, CHAN_BODY, "sound/onslaught/controlpoint_build.wav", 1, ATTN_NORM);
 	self.team = e.team;
-	self.colormap = 1024 + (self.team - 1) * 17;
+	self.colormap = e.colormap;
 };
 
 /*QUAKED onslaught_controlpoint (0 .5 .8) (-32 -32 0) (32 32 128)
@@ -428,6 +504,7 @@ void() onslaught_controlpoint =
 	//setsize(self, '-32 -32 0', '32 32 8');
 	setorigin(self, self.origin);
 	self.touch = onslaught_controlpoint_touch;
+	self.team = 0;
 	self.colormap = 1024;
 	self.iscaptured = FALSE;
 	self.islinked = FALSE;
@@ -452,6 +529,7 @@ void() onslaught_link_delayed =
 		objerror("can not find target\n");
 	if (!self.enemy)
 		objerror("can not find target2\n");
+	dprint(etos(self.goalentity), " linked with ", etos(self.enemy), "\n");
 }
 
 /*QUAKED onslaught_link (0 .5 .8) (-16 -16 -16) (16 16 16)
