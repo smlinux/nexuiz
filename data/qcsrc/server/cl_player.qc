@@ -767,6 +767,8 @@ float precache_sound_index (string s) = #19;
 void soundto(entity e, entity sounddest, float chan, string samp, float vol, float atten)
 {
 	vector o;
+	if(clienttype(sounddest) != CLIENTTYPE_REAL)
+		return;
 	o = e.origin + 0.5 * (e.mins + e.maxs);
 	msg_entity = sounddest;
 	WriteByte(MSG_ONE, 6);
@@ -808,8 +810,8 @@ void VoiceMessage(string type)
 			if(self.pusher)
 				if(self.pusher.team == self.team)
 				{
-					soundto(self, self.pusher, CHAN_VOICE, sample, 1, ATTN_NONE);
-					soundto(self, self, CHAN_VOICE, sample, 1, ATTN_NONE);
+					soundto(self, self.pusher, CHAN_VOICE, sample, 1, 1/64.0);
+					soundto(self, self, CHAN_VOICE, sample, 1, 1/64.0);
 				}
 	}
 	else if(teamsay == 0 || !teams_matter)
@@ -822,6 +824,6 @@ void VoiceMessage(string type)
 		entity e;
 		FOR_EACH_CLIENT(e)
 			if(e.team == self.team)
-				soundto(self, e, CHAN_VOICE, sample, 1, ATTN_NONE);
+				soundto(self, e, CHAN_VOICE, sample, 1, 1/64.0); // minimum attenuation
 	}
 }
