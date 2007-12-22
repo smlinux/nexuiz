@@ -815,7 +815,7 @@ type beam
 tex 60 60
 color 0xFFFFFF 0xFFFFFF
 size 6 6
-alpha 128 128 384
+alpha 128 128 192
 
 // The RING smoke
 // experimental
