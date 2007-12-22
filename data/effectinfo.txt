@@ -815,7 +815,7 @@ type beam
 tex 60 60
 color 0xFFFFFF 0xFFFFFF
 size 6 6
-alpha 128 128 192
+alpha 128 128 384
 
 // The RING smoke
 // experimental
@@ -824,10 +824,10 @@ trailspacing 12
 color 0x0B3E4F 0x0B3E4F
 size 4 4
 tex 32 32
-alpha 0 256 100
+alpha 0 256 200
 airfriction 5
 //liquidfriction -4
-sizeincrease 12
+sizeincrease 18
 //velocityjitter 4 4
 type static
 
@@ -838,10 +838,10 @@ trailspacing 8
 color 0x0B3E4F 0x0B3E4F
 size 4 4
 tex 48 55
-alpha 0 256 100
+alpha 0 256 200
 airfriction 5
 //liquidfriction -4
-sizeincrease 16
+sizeincrease 24
 //velocityjitter 125 125 125
 type static
 /*
