@@ -4,7 +4,7 @@
 "classname" "worldspawn"
 "gridsize" "1024 1024 1024"
 "message" "SilverCity"
-"fog" "0.035 0.3 0.3 0.3 0 4000"
+"fog" "0.15 0.3 0.3 0.3 0.8"
 // brush 0
 {
 ( -2176 -2120 2336 ) ( -2176 -2120 -392 ) ( -2176 2120 -392 ) sav-graysky1/sav-graysky2_skybox 0 0 0 0.5 0.5 0 0 0

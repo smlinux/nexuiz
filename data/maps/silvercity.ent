@@ -2,7 +2,7 @@
 "classname" "worldspawn"
 "message" "Silver City"
 "gridsize" "1024 1024 1024"
-"fog" "0.035 0.3 0.3 0.3 0 4000"
+"fog" "0.15 0.3 0.3 0.3 0.8"
 }
 {
 "classname" "info_player_deathmatch"

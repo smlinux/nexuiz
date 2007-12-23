@@ -4,6 +4,7 @@
 "message" "Slimepit Revisited"
 "classname" "worldspawn"
 "_lightmapscale" "0.25"
+"fog" "0.2 0.3 1 0 0.5 0 1024"
 // brush 0
 {
 ( -832 480 328 ) ( -832 504 328 ) ( -448 504 328 ) evil3_support/mtlsupport_grtwrn -64 4 -90 0.500000 0.500000 134217728 0 0
