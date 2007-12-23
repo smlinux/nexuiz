@@ -1150,6 +1150,12 @@ void SpectateCopy(entity spectatee) {
 	self.view_ofs = spectatee.view_ofs;
 	self.v_angle = spectatee.v_angle;
 	self.viewzoom = spectatee.viewzoom;
+	self.velocity = spectatee.velocity;
+	self.dmg_take = spectatee.dmg_take;
+	self.dmg_save = spectatee.dmg_save;
+	self.dmg_inflictor = spectatee.dmg_inflictor;
+	self.angles = spectatee.v_angle;
+	self.fixangle = TRUE;
 	setorigin(self, spectatee.origin);
 	setsize(self, spectatee.mins, spectatee.maxs);
 }
@@ -1162,11 +1168,6 @@ void SpectateUpdate() {
 		if(self.enemy.flags & FL_NOTARGET)
 			PutObserverInServer();
 		SpectateCopy(self.enemy);
-		self.dmg_take = self.enemy.dmg_take;
-		self.dmg_save = self.enemy.dmg_save;
-		self.dmg_inflictor = self.enemy.dmg_inflictor;
-		self.fixangle = TRUE;
-		self.angles = self.enemy.v_angle;
 		//msg_entity = self;
 		//WriteByte(MSG_ONE, SVC_SETANGLE);
 		//WriteAngle(MSG_ONE, self.enemy.v_angle_x);
