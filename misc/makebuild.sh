@@ -44,6 +44,7 @@ mingwdlls=$buildfiles/w32
 osxapps=$buildfiles/osx
 copystrip=$buildfiles/copystrip
 fteqcc="fteqcc -O2"
+zipdiff=$base/nexuiz-current/misc/zipdiff
 fteqccdir="$base/fteqcc"
 mingw=/home/polzer/mingw32
 
@@ -250,7 +251,7 @@ rm -f "$zipdir/nexuizsource$date$ext.zip"
 zip $zipflags -9yr "$zipdir/nexuizsource$date$ext.zip"     Nexuiz/gpl.txt                                            Nexuiz/sources
 ln -snf nexuizsource$date$ext.zip "$zipdir/nexuizsource-NEWEST.zip"
 
-zipdiff -o "Nexuiz/data/datapatch$date.pk3" -f "$basepk3" -t Nexuiz/data/data$date.pk3
+$zipdiff -o "Nexuiz/data/datapatch$date.pk3" -f "$basepk3" -t Nexuiz/data/data$date.pk3 -x 'sound/cdtracks/track*.ogg'
 mkdir -p gfx
 if unzip "Nexuiz/data/data$date.pk3" gfx/brand.tga; then
 	zip $zipflags -9r "Nexuiz/data/datapatch$date.pk3" gfx/brand.tga

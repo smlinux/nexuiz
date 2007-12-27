@@ -13,6 +13,7 @@ EOF
 output=
 from=
 to=
+excludes=
 
 while [ $# -gt 0 ]; do
 	o=$1
@@ -28,6 +29,10 @@ while [ $# -gt 0 ]; do
 			;;
 		-t)
 			to=$1
+			shift
+			;;
+		-x)
+			excludes="$excludes $1"
 			shift
 			;;
 		*)
@@ -47,6 +52,8 @@ found()
 	case "$type" in
 		new|changed|deleted)
 			echo "$source"
+			;;
+		excluded)
 			;;
 		deleted|*)
 			echo >&2 " * Sorry, can't handle deletion of $source."
@@ -76,13 +83,27 @@ diffit()
 		case "$newline$fromlist$newline" in
 			*$newline$line$newline*)
 				# check if equal
-				unzip -p "$from" "$line" > "$tempdir/v1"
-				unzip -p "$to" "$line" > "$tempdir/v2"
-				if ! diff --brief "$tempdir/v1" "$tempdir/v2" >/dev/null 2>&1; then
-					found changed "$line"
+				isexcluded=false
+
+				for P in $excludes; do
+					case "$line" in
+						$P)
+							found excluded "$line"
+							isexcluded=true
+							break
+							;;
+					esac
+				done
+
+				if ! $isexcluded; then
+					unzip -p "$from" "$line" > "$tempdir/v1"
+					unzip -p "$to" "$line" > "$tempdir/v2"
+					if ! diff --brief "$tempdir/v1" "$tempdir/v2" >/dev/null 2>&1; then
+						found changed "$line"
+					fi
+					rm "$tempdir/v1"
+					rm "$tempdir/v2"
 				fi
-				rm "$tempdir/v1"
-				rm "$tempdir/v2"
 				;;
 			*)
 				found new "$line"
