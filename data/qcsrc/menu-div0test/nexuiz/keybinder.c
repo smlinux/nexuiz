@@ -229,6 +229,17 @@ void drawListBoxItemNexuizKeyBinder(entity me, float i, vector absSize, float is
 		extraMargin = me.realFontSize_x * 0.5;
 	}
 
+	if(substring(descr, 0, 1) == "$")
+	{
+		s = substring(descr, 1, strlen(descr) - 1);
+		descr = cvar_string(strcat(s, "_description"));
+		if(descr == "")
+			descr = s;
+		if(cvar_string(strcat(s, "_press")) == "")
+			if(cvar_string(strcat(s, "_release")) == "")
+				theAlpha *= 0.5;
+	}
+
 	draw_Text(me.realUpperMargin * eY + extraMargin * eX, descr, me.realFontSize, theColor, theAlpha, 0);
 	if(func != "")
 	{
