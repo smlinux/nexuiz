@@ -21,6 +21,7 @@ CLASS(NexuizKeyBinder) EXTENDS(NexuizListBox)
 	ATTRIB(NexuizKeyBinder, previouslySelected, float, -1)
 	ATTRIB(NexuizKeyBinder, inMouseHandler, float, 0)
 	ATTRIB(NexuizKeyBinder, userbindEditButton, entity, NULL)
+	ATTRIB(NexuizKeyBinder, keyGrabButton, entity, NULL)
 	ATTRIB(NexuizKeyBinder, userbindEditDialog, entity, NULL)
 	METHOD(NexuizKeyBinder, editUserbind, void(entity, string, string, string))
 ENDCLASS(NexuizKeyBinder)
@@ -73,6 +74,7 @@ void configureNexuizKeyBinderNexuizKeyBinder(entity me)
 	if(Nexuiz_KeyBinds_Count < 0)
 		Nexuiz_KeyBinds_Read();
 	me.nItems = Nexuiz_KeyBinds_Count;
+	me.setSelected(me, 0);
 }
 void resizeNotifyNexuizKeyBinder(entity me, vector relOrigin, vector relSize, vector absOrigin, vector absSize)
 {
@@ -98,6 +100,7 @@ void KeyBinder_Bind_Change(entity btn, entity me)
 	if(func == "")
 		return;
 
+	me.keyGrabButton.forcePressed = 1;
 	keyGrabber = me;
 }
 void keyGrabbedNexuizKeyBinder(entity me, float key, float ascii)
@@ -105,6 +108,7 @@ void keyGrabbedNexuizKeyBinder(entity me, float key, float ascii)
 	float n, j, k, nvalid;
 	string func;
 
+	me.keyGrabButton.forcePressed = 0;
 	if(key == K_ESCAPE)
 		return;
 

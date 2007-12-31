@@ -31,6 +31,7 @@ void fillNexuizInputSettingsTab(entity me)
 		me.TD(me, 1, 1, e = makeNexuizButton("Change key...", '0 0 0'));
 			e.onClick = KeyBinder_Bind_Change;
 			e.onClickEntity = kb;
+			kb.keyGrabButton = e;
 		me.TD(me, 1, 1, e = makeNexuizButton("Edit...", '0 0 0'));
 			e.onClick = KeyBinder_Bind_Edit;
 			e.onClickEntity = kb;
