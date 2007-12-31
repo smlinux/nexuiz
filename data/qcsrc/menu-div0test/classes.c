@@ -54,3 +54,5 @@
 #include "nexuiz/dialog_news.c"
 #include "nexuiz/checkbox_slider_invalid.c"
 #include "nexuiz/charmap.c"
+#include "nexuiz/keybinder.c"
+#include "nexuiz/dialog_settings_input.c"

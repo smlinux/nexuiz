@@ -57,7 +57,7 @@ void fillNexuizPlayerSettingsTab(entity me)
 		me.TD(me, 1, 2, e = makeNexuizSlider(60, 130, 1, "fov"));
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Zoom Factor:"));
-		me.TD(me, 1, 2, e = makeNexuizSlider(2, 10, 1, "cl_zoomfactor"));
+		me.TD(me, 1, 2, e = makeNexuizSlider(2, 16, 0.5, "cl_zoomfactor"));
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Zoom Speed:"));
 		me.TD(me, 1, 2, e = makeNexuizSlider(1, 8, 0.5, "cl_zoomspeed"));
@@ -99,6 +99,6 @@ void fillNexuizPlayerSettingsTab(entity me)
 			setDependent(e, "viewsize", 0, 110);
 
 	me.gotoXY(me, me.rows - 1, 0);
-		me.TD(me, 1, me.columns, makeNexuizCommandButton("Apply immediately", '0 0 0', "color -1 -1;name $_cl_name", COMMANDBUTTON_APPLY));
+		me.TD(me, 1, me.columns, makeNexuizCommandButton("Apply immediately", '0 0 0', "color -1 -1;name $_cl_name;sendcvar cl_zoomfactor;sendcvar cl_zoomspeed", COMMANDBUTTON_APPLY));
 }
 #endif

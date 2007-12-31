@@ -12,7 +12,7 @@ CLASS(ListBox) EXTENDS(Item)
 	ATTRIB(ListBox, size, vector, '0 0 0')
 	ATTRIB(ListBox, scrollPos, float, 0) // measured in window heights, fixed when needed
 	ATTRIB(ListBox, previousValue, float, 0)
-	ATTRIB(ListBox, pressed, float, 0)
+	ATTRIB(ListBox, pressed, float, 0) // 0 = normal, 1 = scrollbar dragging, 2 = item dragging, 3 = released
 	ATTRIB(ListBox, pressOffset, float, 0)
 
 	METHOD(ListBox, updateControlTopBottom, void(entity))
@@ -148,10 +148,10 @@ float mousePressListBox(entity me, vector pos)
 	}
 	else
 	{
-		// an item has been clicked. Select it, ...
-		me.setSelected(me, floor((me.scrollPos + pos_y) / me.itemHeight));
 		// continue doing that while dragging (even when dragging outside). When releasing, forward the click to the then selected item.
 		me.pressed = 2;
+		// an item has been clicked. Select it, ...
+		me.setSelected(me, floor((me.scrollPos + pos_y) / me.itemHeight));
 	}
 	return 1;
 }
@@ -165,6 +165,7 @@ float mouseReleaseListBox(entity me, vector pos)
 	}
 	else if(me.pressed == 2)
 	{
+		me.pressed = 3; // do that here, so setSelected can know the mouse has been released
 		// item dragging mode
 		// select current one one last time...
 		me.setSelected(me, floor((me.scrollPos + pos_y) / me.itemHeight));

@@ -5,6 +5,10 @@ CLASS(NexuizCheckBox) EXTENDS(CheckBox)
 	ATTRIB(NexuizCheckBox, fontSize, float, SKINFONTSIZE_NORMAL)
 	ATTRIB(NexuizCheckBox, image, string, SKINGFX_CHECKBOX)
 	ATTRIB(NexuizCheckBox, inverted, float, 0)
+	// can be: 0   (off =  0, on =  1)
+	//         1   (off =  1, on =  0)
+	//         1+a (off =  a, on = -a)
+	//        -1-a (off = -a, on =  a)
 
 	ATTRIB(NexuizCheckBox, color, vector, SKINCOLOR_CHECKBOX_N)
 	ATTRIB(NexuizCheckBox, colorC, vector, SKINCOLOR_CHECKBOX_C)
@@ -49,10 +53,34 @@ void setCheckedNexuizCheckBox(entity me, float val)
 }
 void loadCvarsNexuizCheckBox(entity me)
 {
-	me.checked = me.inverted - !!cvar(me.cvarName);
+	if(me.inverted == 0)
+		me.checked = cvar(me.cvarName);
+	else if(me.inverted == 1)
+		me.checked = !cvar(me.cvarName);
+	else if(me.inverted > 1)
+		me.checked = (cvar(me.cvarName) > 0);
+	else if(me.inverted < 1)
+		me.checked = (cvar(me.cvarName) < 0);
 }
 void saveCvarsNexuizCheckBox(entity me)
 {
-	cvar_set(me.cvarName, ftos(fabs(me.inverted - me.checked)));
+	if(me.inverted == 0)
+		cvar_set(me.cvarName, me.checked ? "1" : "0");
+	else if(me.inverted == 1)
+		cvar_set(me.cvarName, me.checked ? "0" : "1");
+	else if(me.inverted > 1)
+	{
+		if(me.checked)
+			cvar_set(me.cvarName, ftos(-(me.inverted - 1)));
+		else
+			cvar_set(me.cvarName, ftos(+(me.inverted - 1)));
+	}
+	else if(me.inverted < 1)
+	{
+		if(me.checked)
+			cvar_set(me.cvarName, ftos(-(me.inverted + 1)));
+		else
+			cvar_set(me.cvarName, ftos(+(me.inverted + 1)));
+	}
 }
 #endif
