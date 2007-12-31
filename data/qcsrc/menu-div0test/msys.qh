@@ -154,9 +154,10 @@ float K_MOUSE16		=	529;
 ///////////////////////////
 // key dest constants
 
+float KEY_UNKNOWN	= 	-1;
 float KEY_GAME 		=	0;
 float KEY_MENU		=	2;
-float KEY_UNKNOWN	= 	3;
+float KEY_MENU_GRABBED = 3;
 
 ///////////////////////////
 // file constants
