@@ -98,6 +98,9 @@ void keyGrabbedNexuizKeyBinder(entity me, float key, float ascii)
 	float n, j, k, nvalid;
 	string func;
 
+	if(key == K_ESCAPE)
+		return;
+
 	func = Nexuiz_KeyBinds_Functions[me.selectedItem];
 	if(func == "")
 		return;
