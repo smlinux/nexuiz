@@ -31,6 +31,7 @@ const vector SKINCOLOR_DIALOG_TEAMSELECT = '1 1 1';
 const vector SKINCOLOR_DIALOG_QUIT = '1 0 0';
 const vector SKINCOLOR_DIALOG_MUTATORS = '0.7 0.7 1';
 const vector SKINCOLOR_DIALOG_MAPINFO = '0.7 0.7 1';
+const vector SKINCOLOR_DIALOG_USERBIND = '0.7 0.7 1';
 /* ideal for xaw skin:
 const vector SKINCOLOR_DIALOG_MULTIPLAYER = '1 1 1';
 const vector SKINCOLOR_DIALOG_SETTINGS = '1 1 1';

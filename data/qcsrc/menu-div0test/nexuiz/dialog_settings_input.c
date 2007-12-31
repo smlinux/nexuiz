@@ -28,10 +28,16 @@ void fillNexuizInputSettingsTab(entity me)
 		me.TD(me, me.rows - 2, 3, kb = makeNexuizKeyBinder());
 	me.gotoXY(me, me.rows - 1, 0);
 	me.TR(me);
-		me.TD(me, 1, 1.5, e = makeNexuizButton("Change...", '0 0 0'));
+		me.TD(me, 1, 1, e = makeNexuizButton("Change key...", '0 0 0'));
 			e.onClick = KeyBinder_Bind_Change;
 			e.onClickEntity = kb;
-		me.TD(me, 1, 1.5, e = makeNexuizButton("Clear", '0 0 0'));
+		me.TD(me, 1, 1, e = makeNexuizButton("Edit...", '0 0 0'));
+			e.onClick = KeyBinder_Bind_Edit;
+			e.onClickEntity = kb;
+			kb.userbindEditButton = e;
+			kb.userbindEditDialog = main.userbindEditDialog;
+			main.userbindEditDialog.keybindBox = kb;
+		me.TD(me, 1, 1, e = makeNexuizButton("Clear", '0 0 0'));
 			e.onClick = KeyBinder_Bind_Clear;
 			e.onClickEntity = kb;
 

@@ -20,10 +20,14 @@ CLASS(NexuizKeyBinder) EXTENDS(NexuizListBox)
 	ATTRIB(NexuizKeyBinder, lastClickedTime, float, 0)
 	ATTRIB(NexuizKeyBinder, previouslySelected, float, -1)
 	ATTRIB(NexuizKeyBinder, inMouseHandler, float, 0)
+	ATTRIB(NexuizKeyBinder, userbindEditButton, entity, NULL)
+	ATTRIB(NexuizKeyBinder, userbindEditDialog, entity, NULL)
+	METHOD(NexuizKeyBinder, editUserbind, void(entity, string, string, string))
 ENDCLASS(NexuizKeyBinder)
 entity makeNexuizKeyBinder();
 void KeyBinder_Bind_Change(entity btn, entity me);
 void KeyBinder_Bind_Clear(entity btn, entity me);
+void KeyBinder_Bind_Edit(entity btn, entity me);
 #endif
 
 #ifdef IMPLEMENTATION
@@ -82,6 +86,9 @@ void resizeNotifyNexuizKeyBinder(entity me, vector relOrigin, vector relSize, ve
 	me.columnKeysSize = me.realFontSize_x * 12;
 	me.columnFunctionSize = 1 - me.columnKeysSize - 2 * me.realFontSize_x;
 	me.columnKeysOrigin = me.columnFunctionOrigin + me.columnFunctionSize + me.realFontSize_x;
+
+	if(me.userbindEditButton)
+		me.userbindEditButton.disabled = (substring(Nexuiz_KeyBinds_Descriptions[me.selectedItem], 0, 1) != "$");
 }
 void KeyBinder_Bind_Change(entity btn, entity me)
 {
@@ -123,6 +130,48 @@ void keyGrabbedNexuizKeyBinder(entity me, float key, float ascii)
 		}
 	}
 	localcmd("\nbind \"", keynumtostring(key), "\" \"", func, "\"\n");
+}
+void editUserbindNexuizKeyBinder(entity me, string theName, string theCommandPress, string theCommandRelease)
+{
+	string func, descr;
+
+	if(!me.userbindEditDialog)
+		return;
+	
+	func = Nexuiz_KeyBinds_Functions[me.selectedItem];
+	if(func == "")
+		return;
+	
+	descr = Nexuiz_KeyBinds_Descriptions[me.selectedItem];
+	if(substring(descr, 0, 1) != "$")
+		return;
+	descr = substring(descr, 1, strlen(descr) - 1);
+
+	// Hooray! It IS a user bind!
+	cvar_set(strcat(descr, "_description"), theName);
+	cvar_set(strcat(descr, "_press"), theCommandPress);
+	cvar_set(strcat(descr, "_release"), theCommandRelease);
+}
+void KeyBinder_Bind_Edit(entity btn, entity me)
+{
+	string func, descr;
+
+	if(!me.userbindEditDialog)
+		return;
+	
+	func = Nexuiz_KeyBinds_Functions[me.selectedItem];
+	if(func == "")
+		return;
+	
+	descr = Nexuiz_KeyBinds_Descriptions[me.selectedItem];
+	if(substring(descr, 0, 1) != "$")
+		return;
+	descr = substring(descr, 1, strlen(descr) - 1);
+
+	// Hooray! It IS a user bind!
+	me.userbindEditDialog.loadUserBind(me.userbindEditDialog, cvar_string(strcat(descr, "_description")), cvar_string(strcat(descr, "_press")), cvar_string(strcat(descr, "_release")));
+
+	DialogOpenButton_Click(btn, me.userbindEditDialog);
 }
 void KeyBinder_Bind_Clear(entity btn, entity me)
 {
@@ -175,6 +224,8 @@ void setSelectedNexuizKeyBinder(entity me, float i)
 	}
 	if(Nexuiz_KeyBinds_Functions[i] != "")
 		me.previouslySelected = i;
+	if(me.userbindEditButton)
+		me.userbindEditButton.disabled = (substring(Nexuiz_KeyBinds_Descriptions[i], 0, 1) != "$");
 	setSelectedListBox(me, i);
 }
 float keyDownNexuizKeyBinder(entity me, float key, float ascii, float shift)

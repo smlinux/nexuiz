@@ -3,6 +3,7 @@ CLASS(MainWindow) EXTENDS(ModalController)
 	METHOD(MainWindow, configureMainWindow, void(entity))
 	ATTRIB(MainWindow, mutatorsDialog, entity, NULL)
 	ATTRIB(MainWindow, mapInfoDialog, entity, NULL)
+	ATTRIB(MainWindow, userbindEditDialog, entity, NULL)
 ENDCLASS(MainWindow)
 #endif
 
@@ -29,6 +30,10 @@ void configureMainWindowMainWindow(entity me)
 	me.addItemCentered(me, i, i.intendedWidth * eX + i.intendedHeight * eY, 1);
 
 	me.mapInfoDialog = i = spawnNexuizMapInfoDialog();
+	i.configureDialog(i);
+	me.addItemCentered(me, i, i.intendedWidth * eX + i.intendedHeight * eY, 1);
+
+	me.userbindEditDialog = i = spawnNexuizUserbindEditDialog();
 	i.configureDialog(i);
 	me.addItemCentered(me, i, i.intendedWidth * eX + i.intendedHeight * eY, 1);
 
