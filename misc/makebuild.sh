@@ -43,10 +43,21 @@ buildfiles=$base/nexuiz-current/misc/buildfiles
 mingwdlls=$buildfiles/w32
 osxapps=$buildfiles/osx
 copystrip=$buildfiles/copystrip
-fteqcc="fteqcc -O2"
 zipdiff=$base/nexuiz-current/misc/zipdiff
 fteqccdir="$base/fteqcc"
+fteqccflags=""
 mingw=/home/polzer/mingw32
+menuqc=menu
+newest=NEWEST
+
+if [ -n "$EXPERIMENTAL" ]; then
+	basepk3=$base/data20071231.pk3 # newer build to make smaller patches
+	nexdir=$base/nexuiz-current
+	fteqccflags="$fteqccflags -DMAPINFO"
+	ext="${ext}_svntrunk"
+	menuqc="menu-div0test"
+	newest=NEWEST-svntrunk
+fi
 
 # TODO normalize the builds
 platforms='x86 amd64 osx'
@@ -59,17 +70,17 @@ buildon()
 	makeflags=$5
 	strip=$6
 
-	fteqccflags=
+	fteqcc_cflags=
 	case "$fteqccname" in
 		*.exe)
-			fteqccflags=win
+			fteqcc_cflags=win
 			;;
 	esac
 
 	rm -f "$fteqccdir"/*.o
 	rm -f "$fteqccdir"/*.bin
 	rsync --exclude "*.o" --exclude "*.d" --exclude "nexuiz-*" --delete-excluded --delete -zvaSHP . "$copystrip" "$fteqccdir" "$host:$path"
-	ssh "$host" ". ~/.profile && cd $path && COPYSTRIP_STRIP=$strip PATH=$path/copystrip:\$PATH make $makeflags clean nexuiz && cd ${fteqccdir##*/} && make $makeflags $fteqccflags"
+	ssh "$host" ". ~/.profile && cd $path && COPYSTRIP_STRIP=$strip PATH=$path/copystrip:\$PATH make $makeflags clean nexuiz && cd ${fteqccdir##*/} && make $makeflags $fteqcc_cflags"
 	rsync --exclude "*.o" --exclude "*.d" --delete-excluded --delete -zvaSHP "$host:$path/." .
 	for P in -dedicated -sdl -glx -wgl -agl -dedicated.exe -sdl.exe .exe; do
 		[ -f nexuiz$P ] && mv nexuiz$P "$tmpdir/$prefix$P"
@@ -185,7 +196,7 @@ cd "$fteqccdir"
 rm -f *.o *.bin
 make
 
-cd "$tmpdir/data/qcsrc/menu"
+cd "$tmpdir/data/qcsrc/$menuqc"
 "$fteqccdir/fteqcc.bin" $fteqccflags
 
 cd "$tmpdir/data/qcsrc/server"
@@ -241,15 +252,15 @@ find . -name .svn -exec rm -rf {} \; -prune
 
 rm -f "$zipdir/nexuiz$date$ext.zip"
 zip $zipflags -9yr "$zipdir/nexuiz$date$ext.zip"           Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/data/data$date.pk3 Nexuiz/data/common-spog.pk3 Nexuiz/pro/*
-ln -snf nexuiz$date$ext.zip "$zipdir/nexuiz-NEWEST.zip"
+ln -snf nexuiz$date$ext.zip "$zipdir/nexuiz-$newest.zip"
 
 rm -f "$zipdir/nexuizengineonly$date$ext.zip"
 zip $zipflags -9yr "$zipdir/nexuizengineonly$date$ext.zip" Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll
-ln -snf nexuizengineonly$date$ext.zip "$zipdir/nexuizengineonly-NEWEST.zip"
+ln -snf nexuizengineonly$date$ext.zip "$zipdir/nexuizengineonly-$newest.zip"
 
 rm -f "$zipdir/nexuizsource$date$ext.zip"
 zip $zipflags -9yr "$zipdir/nexuizsource$date$ext.zip"     Nexuiz/gpl.txt                                            Nexuiz/sources
-ln -snf nexuizsource$date$ext.zip "$zipdir/nexuizsource-NEWEST.zip"
+ln -snf nexuizsource$date$ext.zip "$zipdir/nexuizsource-$newest.zip"
 
 $zipdiff -o "Nexuiz/data/datapatch$date.pk3" -f "$basepk3" -t Nexuiz/data/data$date.pk3 -x 'sound/cdtracks/track*.ogg'
 mkdir -p gfx
@@ -260,12 +271,12 @@ fi
 
 rm -f "$zipdir/nexuizpatch$date$ext.zip"
 zip $zipflags -9yr "$zipdir/nexuizpatch$date$ext.zip"      Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/data/datapatch$date.pk3 Nexuiz/pro/*
-ln -snf nexuizpatch$date$ext.zip "$zipdir/nexuizpatch-NEWEST.zip"
+ln -snf nexuizpatch$date$ext.zip "$zipdir/nexuizpatch-$newest.zip"
 
 rm -f "$zipdir/nexuizdocs$date$ext.zip"
 zip $zipflags -9yr "$zipdir/nexuizdocs$date$ext.zip"       Nexuiz/gpl.txt Nexuiz/Docs
-ln -snf nexuizdocs$date$ext.zip "$zipdir/nexuizdocs-NEWEST.zip"
+ln -snf nexuizdocs$date$ext.zip "$zipdir/nexuizdocs-$newest.zip"
 
 rm -f "$zipdir/nexuizdebug$date$ext.zip"
 zip $zipflags -9yr "$zipdir/nexuizdebug$date$ext.zip"      Nexuiz/gpl.txt Nexuiz/debuginfo/* Nexuiz/sources
-ln -snf nexuizdebug$date$ext.zip "$zipdir/nexuizdebug-NEWEST.zip"
+ln -snf nexuizdebug$date$ext.zip "$zipdir/nexuizdebug-$newest.zip"
