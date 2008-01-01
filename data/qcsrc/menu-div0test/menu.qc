@@ -154,6 +154,15 @@ void() m_draw =
 	if(cvar("cl_capturevideo"))
 		frametime = 1 / cvar("cl_capturevideo_fps"); // make capturevideo work smoothly
 
+	dprint_load();
+	gamestatus = 0;
+	if(isserver())
+		gamestatus = gamestatus | GAME_ISSERVER;
+	if(clientstate() == CS_CONNECTED)
+		gamestatus = gamestatus | GAME_CONNECTED;
+	if(cvar("developer"))
+		gamestatus = gamestatus | GAME_DEVELOPER;
+
 	prevMenuAlpha = menuAlpha;
 	if(Menu_Active)
 	{
@@ -164,11 +173,14 @@ void() m_draw =
 		else
 		{
 			menuAlpha = min(1, menuAlpha + frametime * 5);
-			menuLogoAlpha = 3;
+			menuLogoAlpha = 2;
 		}
 	}
 	else
+	{
 		menuAlpha = max(0, menuAlpha - frametime * 5);
+		menuLogoAlpha = 2;
+	}
 
 	draw_reset();
 
@@ -201,15 +213,6 @@ void() m_draw =
 			main.initializeDialog(main, main.firstChild);
 		return;
 	}
-
-	dprint_load();
-	gamestatus = 0;
-	if(isserver())
-		gamestatus = gamestatus | GAME_ISSERVER;
-	if(clientstate() == CS_CONNECTED)
-		gamestatus = gamestatus | GAME_CONNECTED;
-	if(cvar("developer"))
-		gamestatus = gamestatus | GAME_DEVELOPER;
 
 	draw_alpha *= menuAlpha;
 
