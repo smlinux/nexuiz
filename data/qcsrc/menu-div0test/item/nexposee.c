@@ -19,6 +19,7 @@ CLASS(Nexposee) EXTENDS(Container)
 	METHOD(Nexposee, calc, void(entity))
 	METHOD(Nexposee, setNexposee, void(entity, entity, vector, float, float))
 	ATTRIB(Nexposee, mousePosition, vector, '0 0 0')
+	METHOD(Nexposee, pullNexposee, void(entity, entity, vector))
 ENDCLASS(Nexposee)
 
 void ExposeeCloseButton_Click(entity button, entity other); // un-exposees the current state
@@ -42,6 +43,7 @@ void ExposeeCloseButton_Click(entity button, entity other); // un-exposees the c
 .float Nexposee_smallAlpha;
 .float Nexposee_mediumAlpha;
 .vector Nexposee_scaleCenter;
+.vector Nexposee_align;
 
 void closeNexposee(entity me)
 {
@@ -60,6 +62,24 @@ void resizeNotifyNexposee(entity me, vector relOrigin, vector relSize, vector ab
 	me.resizeNotifyLie(me, relOrigin, relSize, absOrigin, absSize, Nexposee_initialOrigin, Nexposee_initialSize);
 }
 
+void Nexposee_Calc_Scale(entity me, float scale)
+{
+	entity e;
+	for(e = me.firstChild; e; e = e.nextSibling)
+	{
+		e.Nexposee_smallOrigin = (e.Nexposee_initialOrigin - e.Nexposee_scaleCenter) * scale + e.Nexposee_scaleCenter;
+		e.Nexposee_smallSize = e.Nexposee_initialSize * scale;
+		if(e.Nexposee_align_x > 0)
+			e.Nexposee_smallOrigin_x = 1 - e.Nexposee_align_x * scale;
+		if(e.Nexposee_align_x < 0)
+			e.Nexposee_smallOrigin_x = -e.Nexposee_smallSize_x + e.Nexposee_align_x * scale;
+		if(e.Nexposee_align_y > 0)
+			e.Nexposee_smallOrigin_y = 1 - e.Nexposee_align_y * scale;
+		if(e.Nexposee_align_y < 0)
+			e.Nexposee_smallOrigin_y = -e.Nexposee_smallSize_y + e.Nexposee_align_y * scale;
+	}
+}
+
 void calcNexposee(entity me)
 {
 	/*
@@ -72,11 +92,7 @@ void calcNexposee(entity me)
 	
 	for(scale = 0.7;; scale *= 0.99)
 	{
-		for(e = me.firstChild; e; e = e.nextSibling)
-		{
-			e.Nexposee_smallOrigin = (e.Nexposee_initialOrigin - e.Nexposee_scaleCenter) * scale + e.Nexposee_scaleCenter;
-			e.Nexposee_smallSize = e.Nexposee_initialSize * scale;
-		}
+		Nexposee_Calc_Scale(me, scale);
 
 		for(e = me.firstChild; e; e = e.nextSibling)
 		{
@@ -105,11 +121,8 @@ void calcNexposee(entity me)
 	}
 
 	scale *= 0.95;
-	for(e = me.firstChild; e; e = e.nextSibling)
-	{
-		e.Nexposee_smallOrigin = (e.Nexposee_initialOrigin - e.Nexposee_scaleCenter) * scale + e.Nexposee_scaleCenter;
-		e.Nexposee_smallSize = e.Nexposee_initialSize * scale;
-	}
+
+	Nexposee_Calc_Scale(me, scale);
 }
 
 void setNexposeeNexposee(entity me, entity other, vector scalecenter, float a0, float a1)
@@ -346,5 +359,10 @@ void focusEnterNexposee(entity me)
 {
 	if(me.animationState == 2)
 		setFocusContainer(me, me.selectedChild);
+}
+
+void pullNexposeeNexposee(entity me, entity other, vector theAlign)
+{
+	other.Nexposee_align = theAlign;
 }
 #endif

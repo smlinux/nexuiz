@@ -166,6 +166,29 @@ void() m_draw =
 	draw_reset();
 	draw_alpha *= menuAlpha;
 
+	if(!(gamestatus & (GAME_CONNECTED | GAME_ISSERVER)))
+	{
+		vector sz;
+		vector isz;
+		sz = draw_PictureSize(SKINGFX_BACKGROUND);
+		// keep aspect of image
+		if(sz_x * draw_scale_y >= sz_y * draw_scale_x)
+		{
+			// that is, sz_x/sz_y >= draw_scale_x/draw_scale_y
+			// match up the height
+			isz_y = 1;
+			isz_x = isz_y * (sz_x / sz_y) * (draw_scale_y / draw_scale_x);
+		}
+		else
+		{
+			// that is, sz_x/sz_y <= draw_scale_x/draw_scale_y
+			// match up the width
+			isz_x = 1;
+			isz_y = isz_x * (sz_y / sz_x) * (draw_scale_x / draw_scale_y);
+		}
+		draw_Picture('0.5 0.5 0' - 0.5 * isz, SKINGFX_BACKGROUND, isz, '1 1 1', 1);
+	}
+
 	if(frametime > 0)
 	{
 		vector dMouse;

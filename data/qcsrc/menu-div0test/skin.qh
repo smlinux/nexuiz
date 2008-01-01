@@ -77,3 +77,7 @@ const float SKINALPHA_DISABLED = 0.2;
 
 const string SKINGFX_CHARMAP = "charmap";
 const string SKINGFX_CHARMAP_SELECTED = "charmapbutton";
+
+const string SKINGFX_BACKGROUND = "background";
+
+const vector SKINALPHAS_MAINMENU = '0.5 0.8 0.95';
