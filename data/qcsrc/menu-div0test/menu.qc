@@ -10,6 +10,7 @@ vector menuMousePos;
 float menuShiftState;
 float menuPrevTime;
 float menuAlpha;
+float menuLogoAlpha;
 float prevMenuAlpha;
 float menuLoadedMaplist;
 float menuNotTheFirstFrame;
@@ -117,12 +118,16 @@ void() m_draw =
 {
 	float t;
 	float realFrametime;
+
 	if(!menuNotTheFirstFrame)
 	{
 		menuNotTheFirstFrame = 1;
 		if(Menu_Active)
 		if(!cvar("menu_video_played"))
-			localcmd("set menu_video_played 1; playvideo logo; cd loop 1; play sound/announcer/male/welcome.ogg\n");
+		{
+			localcmd("set menu_video_played 1; cd loop 1; play sound/announcer/male/welcome.ogg\n");
+			menuLogoAlpha = -2; // no idea why, but when I start this at zero, it jumps instead of fading
+		}
 	}
 	if(!menuLoadedMaplist)
 	{
@@ -151,28 +156,21 @@ void() m_draw =
 
 	prevMenuAlpha = menuAlpha;
 	if(Menu_Active)
-		menuAlpha = min(1, menuAlpha + frametime * 5);
+	{
+		if(menuAlpha == 0 && menuLogoAlpha < 3)
+		{
+			menuLogoAlpha = menuLogoAlpha + frametime * 5;
+		}
+		else
+		{
+			menuAlpha = min(1, menuAlpha + frametime * 5);
+			menuLogoAlpha = 3;
+		}
+	}
 	else
 		menuAlpha = max(0, menuAlpha - frametime * 5);
 
-	if(menuAlpha <= 0)
-	{
-		if(prevMenuAlpha > 0)
-			main.initializeDialog(main, main.firstChild);
-		return;
-	}
-
-	dprint_load();
-	gamestatus = 0;
-	if(isserver())
-		gamestatus = gamestatus | GAME_ISSERVER;
-	if(clientstate() == CS_CONNECTED)
-		gamestatus = gamestatus | GAME_CONNECTED;
-	if(cvar("developer"))
-		gamestatus = gamestatus | GAME_DEVELOPER;
-
 	draw_reset();
-	draw_alpha *= menuAlpha;
 
 	if(!(gamestatus & (GAME_CONNECTED | GAME_ISSERVER)))
 	{
@@ -194,8 +192,26 @@ void() m_draw =
 			isz_x = 1;
 			isz_y = isz_x * (sz_y / sz_x) * (draw_scale_x / draw_scale_y);
 		}
-		draw_Picture('0.5 0.5 0' - 0.5 * isz, SKINGFX_BACKGROUND, isz, '1 1 1', 1);
+		draw_Picture('0.5 0.5 0' - 0.5 * isz, SKINGFX_BACKGROUND, isz, '1 1 1', bound(0, menuLogoAlpha, 1));
 	}
+
+	if(menuAlpha <= 0)
+	{
+		if(prevMenuAlpha > 0)
+			main.initializeDialog(main, main.firstChild);
+		return;
+	}
+
+	dprint_load();
+	gamestatus = 0;
+	if(isserver())
+		gamestatus = gamestatus | GAME_ISSERVER;
+	if(clientstate() == CS_CONNECTED)
+		gamestatus = gamestatus | GAME_CONNECTED;
+	if(cvar("developer"))
+		gamestatus = gamestatus | GAME_DEVELOPER;
+
+	draw_alpha *= menuAlpha;
 
 	if(frametime > 0)
 	{
