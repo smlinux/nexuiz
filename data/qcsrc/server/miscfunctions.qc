@@ -882,6 +882,8 @@ void precache_all_models(string pattern)
 	string f;
 
 	globhandle = search_begin(pattern, TRUE, FALSE);
+	if(globhandle < 0)
+		return;
 	n = search_getsize(globhandle);
 	for(i = 0; i < n; ++i)
 	{

@@ -508,7 +508,6 @@ void PutClientInServer (void)
 			self.playermodel = CheckPlayerModel(self.playermodel);
 			setmodel_lod (self, self.playermodel);
 			self.skin = RestrictSkin(stof(self.playerskin));
-			self.playerskin = ftos(self.skin);
 		}
 		if(!teams_matter)
 			if(strlen(cvar_string("sv_defaultplayercolors")))
@@ -1249,6 +1248,8 @@ void() ctf_setstatus;
 .float vote_nagtime;
 void PlayerPreThink (void)
 {
+	float f;
+
 	// version nagging
 	if(self.version_nagtime)
 		if(self.cvar_g_nexuizversion)
@@ -1421,11 +1422,9 @@ void PlayerPreThink (void)
 				setsize (self, m1, m2);
 			}
 
-			if(self.skin != stof(self.playerskin))
-			{
-				self.skin = RestrictSkin(stof(self.playerskin));
-				self.playerskin = ftos(self.skin);
-			}
+			f = RestrictSkin(stof(self.playerskin));
+			if(self.skin != f)
+				self.skin = f;
 		}
 		if(!teams_matter)
 			if(strlen(cvar_string("sv_defaultplayercolors")))
