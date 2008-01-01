@@ -106,6 +106,7 @@ float(float req) w_shotgun =
 	}
 	else if (req == WR_PRECACHE)
 	{
+		precache_model ("models/uziflash.md3");
 		precache_model ("models/tracer.mdl");
 		precache_model ("models/weapons/g_shotgun.md3");
 		precache_model ("models/weapons/v_shotgun.md3");
