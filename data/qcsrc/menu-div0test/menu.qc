@@ -12,6 +12,7 @@ float menuPrevTime;
 float menuAlpha;
 float prevMenuAlpha;
 float menuLoadedMaplist;
+float menuNotTheFirstFrame;
 
 void SUB_Null() { };
 
@@ -116,6 +117,13 @@ void() m_draw =
 {
 	float t;
 	float realFrametime;
+	if(!menuNotTheFirstFrame)
+	{
+		menuNotTheFirstFrame = 1;
+		if(Menu_Active)
+		if(!cvar("menu_video_played"))
+			localcmd("set menu_video_played 1; playvideo logo; cd loop 1; play sound/announcer/male/welcome.ogg\n");
+	}
 	if(!menuLoadedMaplist)
 	{
 		// TODO draw an info image about this situation
