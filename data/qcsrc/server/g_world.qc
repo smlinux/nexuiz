@@ -350,14 +350,14 @@ float MapHasRightSize(string map)
 	return TRUE;
 }
 
-#ifdef MAPINFO
-#else
 string Map_Filename(float position)
 {
-	// FIXME unused
+#ifdef MAPINFO
+	return strcat("maps/", argv(position), ".bsp");
+#else
 	return strcat("maps/", argv(position), ".mapcfg");
-}
 #endif
+}
 
 string strwords(string s, float w)
 {
@@ -397,16 +397,16 @@ float(float position, float pass) Map_Check =
 		if(Map_IsRecent(map_next))
 			return 0;
 	}
-#ifdef MAPINFO
-	if(MapInfo_CheckMap(argv(position)))
-#else
 	filename = Map_Filename(position);
+#ifdef MAPINFO
+	if(MapInfo_CheckMap(map_next))
+#else
 	if(TryFile(filename))
 #endif
 	{
 		if(pass == 2)
 			return 1;
-		if(MapHasRightSize(argv(position)))
+		if(MapHasRightSize(map_next))
 			return 1;
 		return 0;
 	}
@@ -513,9 +513,6 @@ float(float exponent) MaplistMethod_Shuffle = // more clever shuffling
 	float i, j, imax, insertpos;
 
 	imax = 42;
-
-	if(Map_Count <= 1)
-		return 0; // only one map, then always play this one
 
 	for(i = 0; i <= imax; ++i)
 	{
