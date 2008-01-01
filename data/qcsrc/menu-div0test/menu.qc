@@ -126,7 +126,7 @@ void() m_draw =
 		if(!cvar("menu_video_played"))
 		{
 			localcmd("set menu_video_played 1; cd loop 1; play sound/announcer/male/welcome.ogg\n");
-			menuLogoAlpha = -2; // no idea why, but when I start this at zero, it jumps instead of fading
+			menuLogoAlpha = -0.8; // no idea why, but when I start this at zero, it jumps instead of fading
 		}
 	}
 	if(!menuLoadedMaplist)
@@ -157,9 +157,9 @@ void() m_draw =
 	prevMenuAlpha = menuAlpha;
 	if(Menu_Active)
 	{
-		if(menuAlpha == 0 && menuLogoAlpha < 3)
+		if(menuAlpha == 0 && menuLogoAlpha < 2)
 		{
-			menuLogoAlpha = menuLogoAlpha + frametime * 5;
+			menuLogoAlpha = menuLogoAlpha + frametime * 2;
 		}
 		else
 		{
