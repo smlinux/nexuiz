@@ -37,8 +37,12 @@ void() m_init_delayed =
 
 	GameCommand_Init();
 
-	draw_currentSkin = strcat("gfx/menu/", cvar_string("menu_skin"));
-	fh = fopen(strcat(draw_currentSkin, "/skinvalues.txt"), FILE_READ);
+	fh = -1;
+	if(cvar_string("menu_skin") != "")
+	{
+		draw_currentSkin = strcat("gfx/menu/", cvar_string("menu_skin"));
+		fh = fopen(strcat(draw_currentSkin, "/skinvalues.txt"), FILE_READ);
+	}
 	if(fh < 0)
 	{
 		draw_currentSkin = "gfx/menu/default";
