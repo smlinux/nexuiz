@@ -44,17 +44,12 @@ void() m_init_delayed =
 		draw_currentSkin = "gfx/menu/default";
 		fh = fopen(strcat(draw_currentSkin, "/skinvalues.txt"), FILE_READ);
 	}
+	draw_currentSkin = strzone(draw_currentSkin);
 	while((s = fgets(fh)))
 		if(tokenize(s) == 2)
 			Skin_ApplySetting(argv(0), argv(1));
 	fclose(fh);
 
-	if(cvar("developer") == 42)
-		draw_currentSkin = "qcsrc/menu-div0test/xawskin";
-	else
-		draw_currentSkin = "qcsrc/menu-div0test/defaultskin";
-	// TODO load SKIN constants from file later
-	
 	draw_setMousePointer("cursor");
 
 	main = spawnMainWindow(); main.configureMainWindow(main);
