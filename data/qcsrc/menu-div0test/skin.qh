@@ -1,83 +1,23 @@
-const float SKINFONTSIZE_NORMAL = 12;
-const float SKINHEIGHT_NORMAL = 1.5;
-const float SKINHEIGHT_NORMAL_WITHSPACING = 2;
+#define SKINBEGIN
+#define SKINVECTOR(name,def) var vector SKIN##name = def
+#define SKINFLOAT(name,def) var float SKIN##name = def
+#define SKINSTRING(name,def) const string SKIN##name = def
+#define SKINEND
+#include "skin-customizables.inc"
+#undef SKINEND
+#undef SKINBEGIN
+#undef SKINSTRING
+#undef SKINFLOAT
+#undef SKINVECTOR
 
-const float SKINFONTSIZE_TITLE = 24;
-const float SKINHEIGHT_TITLE = 1.5;
-
-const string SKINGFX_BUTTON = "button";
-const vector SKINCOLOR_BUTTON_N = '1 1 1';
-const vector SKINCOLOR_BUTTON_C = '1 1 1';
-const vector SKINCOLOR_BUTTON_F = '1 1 1';
-const vector SKINCOLOR_BUTTON_D = '1 1 1';
-
-const string SKINGFX_BUTTON_GRAY = "buttongray";
-
-const string SKINGFX_CHECKBOX = "checkbox";
-const vector SKINCOLOR_CHECKBOX_N = '1 1 1';
-const vector SKINCOLOR_CHECKBOX_C = '1 1 1';
-const vector SKINCOLOR_CHECKBOX_F = '1 1 1';
-const vector SKINCOLOR_CHECKBOX_D = '1 1 1';
-
-const string SKINGFX_DIALOGBORDER = "border";
-const string SKINGFX_CLOSEBUTTON = "closebutton";
-const float SKINMARGIN_TOP = 8;
-const float SKINMARGIN_LEFT = 8;
-const float SKINMARGIN_COLUMNS = 4;
-const float SKINMARGIN_ROWS = 4;
-const vector SKINCOLOR_DIALOG_MULTIPLAYER = '0.7 0.7 1';
-const vector SKINCOLOR_DIALOG_SETTINGS = '0.7 0.7 1';
-const vector SKINCOLOR_DIALOG_TEAMSELECT = '1 1 1';
-const vector SKINCOLOR_DIALOG_QUIT = '1 0 0';
-const vector SKINCOLOR_DIALOG_MUTATORS = '0.7 0.7 1';
-const vector SKINCOLOR_DIALOG_MAPINFO = '0.7 0.7 1';
-const vector SKINCOLOR_DIALOG_USERBIND = '0.7 0.7 1';
-/* ideal for xaw skin:
-const vector SKINCOLOR_DIALOG_MULTIPLAYER = '1 1 1';
-const vector SKINCOLOR_DIALOG_SETTINGS = '1 1 1';
-const vector SKINCOLOR_DIALOG_TEAMSELECT = '1 1 1';
-const vector SKINCOLOR_DIALOG_QUIT = '1 1 1';
-const vector SKINCOLOR_DIALOG_MUTATORS = '1 1 1';
-const vector SKINCOLOR_DIALOG_MAPINFO = '1 1 1';
-*/
-
-const string SKINGFX_SLIDER = "slider";
-const vector SKINCOLOR_SLIDER_N = '1 1 1';
-const vector SKINCOLOR_SLIDER_C = '1 1 1';
-const vector SKINCOLOR_SLIDER_F = '1 1 1';
-const vector SKINCOLOR_SLIDER_D = '1 1 1';
-const vector SKINCOLOR_SLIDER_S = '1 1 1';
-const float SKINWIDTH_SLIDERTEXT = 0.333333333333;
-const vector SKINTOLERANCE_SLIDER = '0.2 2 0';
-
-const string SKINGFX_RADIOBUTTON = "radiobutton";
-const vector SKINCOLOR_RADIOBUTTON_N = '1 1 1';
-const vector SKINCOLOR_RADIOBUTTON_C = '1 1 1';
-const vector SKINCOLOR_RADIOBUTTON_F = '1 1 1';
-const vector SKINCOLOR_RADIOBUTTON_D = '1 1 1';
-
-const string SKINGFX_COLORBUTTON = "colorbutton";
-const string SKINGFX_COLORBUTTON_COLOR = "color";
-const string SKINGFX_CROSSHAIRBUTTON = "crosshairbutton";
-const string SKINGFX_SCROLLBAR = "scrollbar";
-const vector SKINCOLOR_SCROLLBAR_N = '1 1 1';
-const vector SKINCOLOR_SCROLLBAR_F = '1 1 1';
-const vector SKINCOLOR_SCROLLBAR_S = '1 1 1';
-const float SKINWIDTH_SCROLLBAR = 16;
-
-const string SKINGFX_INPUTBOX = "inputbox";
-const vector SKINCOLOR_INPUTBOX_N = '1 1 1';
-const vector SKINCOLOR_INPUTBOX_F = '1 1 1';
-const float SKINMARGIN_INPUTBOX = 0.02;
-
-const vector SKINCOLOR_MAPLIST_TITLE = '1 1 1';
-const vector SKINCOLOR_MAPLIST_AUTHOR = '0.4 0.4 0.7';
-
-const float SKINALPHA_DISABLED = 0.2;
-
-const string SKINGFX_CHARMAP = "charmap";
-const string SKINGFX_CHARMAP_SELECTED = "charmapbutton";
-
-const string SKINGFX_BACKGROUND = "background";
-
-const vector SKINALPHAS_MAINMENU = '0.6 0.8 0.9';
+#define SKINBEGIN void Skin_ApplySetting(string key, string value) { switch(key) {
+#define SKINVECTOR(name,def) case #name: SKIN##name = stov(value); break
+#define SKINFLOAT(name,def) case #name: SKIN##name = stof(value); break
+#define SKINSTRING(name,def) break
+#define SKINEND default: print("Invalid key in skin file: ", key, "\n"); } }
+#include "skin-customizables.inc"
+#undef SKINEND
+#undef SKINSTRING
+#undef SKINFLOAT
+#undef SKINVECTOR
+#undef SKINBEGIN

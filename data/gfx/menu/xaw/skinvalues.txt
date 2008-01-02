@@ -1,0 +1,45 @@
+ALPHAS_MAINMENU                 '0.6 0.8 0.9'
+ALPHA_DISABLED                  0.2
+COLOR_BUTTON_C                  '1 1 1'
+COLOR_BUTTON_D                  '1 1 1'
+COLOR_BUTTON_F                  '1 1 1'
+COLOR_BUTTON_N                  '1 1 1'
+COLOR_CHECKBOX_C                '1 1 1'
+COLOR_CHECKBOX_D                '1 1 1'
+COLOR_CHECKBOX_F                '1 1 1'
+COLOR_CHECKBOX_N                '1 1 1'
+COLOR_DIALOG_MAPINFO            '0.7 0.7 1'
+COLOR_DIALOG_MULTIPLAYER        '0.7 0.7 1'
+COLOR_DIALOG_MUTATORS           '0.7 0.7 1'
+COLOR_DIALOG_QUIT               '1 0 0'
+COLOR_DIALOG_SETTINGS           '0.7 0.7 1'
+COLOR_DIALOG_TEAMSELECT         '1 1 1'
+COLOR_DIALOG_USERBIND           '0.7 0.7 1'
+COLOR_INPUTBOX_F                '1 1 1'
+COLOR_INPUTBOX_N                '1 1 1'
+COLOR_MAPLIST_AUTHOR            '0.4 0.4 0.7'
+COLOR_MAPLIST_TITLE             '1 1 1'
+COLOR_RADIOBUTTON_C             '1 1 1'
+COLOR_RADIOBUTTON_D             '1 1 1'
+COLOR_RADIOBUTTON_F             '1 1 1'
+COLOR_RADIOBUTTON_N             '1 1 1'
+COLOR_SCROLLBAR_F               '1 1 1'
+COLOR_SCROLLBAR_N               '1 1 1'
+COLOR_SCROLLBAR_S               '1 1 1'
+COLOR_SLIDER_C                  '1 1 1'
+COLOR_SLIDER_D                  '1 1 1'
+COLOR_SLIDER_F                  '1 1 1'
+COLOR_SLIDER_N                  '1 1 1'
+COLOR_SLIDER_S                  '1 1 1'
+FONTSIZE_NORMAL                 12
+FONTSIZE_TITLE                  24
+HEIGHT_NORMAL                   1.5
+HEIGHT_TITLE                    1.5
+MARGIN_COLUMNS                  4
+MARGIN_INPUTBOX                 0.02
+MARGIN_LEFT                     8
+MARGIN_ROWS                     4
+MARGIN_TOP                      8
+TOLERANCE_SLIDER                '0.2 2 0'
+WIDTH_SCROLLBAR                 16
+WIDTH_SLIDERTEXT                0.333333333333

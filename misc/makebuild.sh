@@ -99,11 +99,11 @@ buildon()
 
 build()
 {
-	buildon hagger  nexuiz-linux-686    fteqcc-linux-686    /tmp/Darkplaces.build 'CC="gcc -g" DP_MODPLUG_STATIC_LIBDIR=/usr/local/lib'
-	buildon hector  nexuiz-linux-x86_64 fteqcc-linux-x86_64 /tmp/Darkplaces.build 'CC="gcc -g" DP_MODPLUG_STATIC_LIBDIR=/home/users4/ommz/polzer/libmodplug-static/lib64'
-	buildon hagger  nexuiz-osx          fteqcc-osx          /tmp/Darkplaces.build 'DP_MAKE_TARGET=macosx CC="i686-apple-darwin8-gcc -g -arch i386 -arch ppc -I/opt/mac/SDKs/MacOSX10.4u.sdk/Library/Frameworks/SDL.framework/Headers"' i686-apple-darwin8-strip
+	buildon macmini nexuiz-osx          fteqcc-osx          /tmp/Darkplaces.build 'CC="gcc -g -arch i386 -arch ppc -isysroot /Developer/SDKs/MacOSX10.4u.sdk -I/Library/Frameworks/SDL.framework/Headers"' strip
 		mv "$tmpdir/nexuiz-osx-agl"     "$tmpdir/Nexuiz.app/Contents/MacOS/nexuiz-osx-agl-bin"
 		mv "$tmpdir/nexuiz-osx-sdl"     "$tmpdir/Nexuiz-SDL.app/Contents/MacOS/nexuiz-osx-sdl-bin"
+	buildon hagger  nexuiz-linux-686    fteqcc-linux-686    /tmp/Darkplaces.build 'CC="gcc -g" DP_MODPLUG_STATIC_LIBDIR=/usr/local/lib'
+	buildon hector  nexuiz-linux-x86_64 fteqcc-linux-x86_64 /tmp/Darkplaces.build 'CC="gcc -g" DP_MODPLUG_STATIC_LIBDIR=/home/users4/ommz/polzer/libmodplug-static/lib64'
 	buildon hagger  nexuiz              fteqcc.exe          /tmp/Darkplaces.build 'DP_MAKE_TARGET=mingw CC="i586-mingw32msvc-gcc -g -I/home/polzer/mingw32.include" WINDRES=i586-mingw32msvc-windres SDL_CONFIG=/home/polzer/mingw32.SDL/bin/sdl-config' i586-mingw32msvc-strip
 }
 
@@ -202,7 +202,9 @@ cd "$tmpdir/data/qcsrc/$menuqc"
 cd "$tmpdir/data/qcsrc/server"
 "$fteqccdir/fteqcc.bin" $fteqccflags
 
-rm -rf "$tmpdir/data/qcsrc"
+if [ -z "$EXPERIMENTAL" ]; then
+	rm -rf "$tmpdir/data/qcsrc"
+fi
 
 cd "$tmpdir/Docs"
 perl -pi -e '/^#---SET nexversion=([0-9.]*)$/ and $_ = "#---SET nexversion='$version'\n"' FAQ.aft

@@ -24,6 +24,9 @@ void() m_init =
 
 void() m_init_delayed =
 {
+	float fh;
+	string s;
+
 	dprint_load();
 
 	menuLoadedMaplist = 0;
@@ -33,6 +36,18 @@ void() m_init_delayed =
 	menuLoadedMaplist = 1;
 
 	GameCommand_Init();
+
+	draw_currentSkin = strcat("gfx/menu/", cvar_string("menu_skin"));
+	fh = fopen(strcat(draw_currentSkin, "/skinvalues.txt"), FILE_READ);
+	if(fh < 0)
+	{
+		draw_currentSkin = "gfx/menu/default";
+		fh = fopen(strcat(draw_currentSkin, "/skinvalues.txt"), FILE_READ);
+	}
+	while((s = fgets(fh)))
+		if(tokenize(s) == 2)
+			Skin_ApplySetting(argv(0), argv(1));
+	fclose(fh);
 
 	if(cvar("developer") == 42)
 		draw_currentSkin = "qcsrc/menu-div0test/xawskin";
