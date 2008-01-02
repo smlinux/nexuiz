@@ -150,15 +150,12 @@ void() m_draw =
 	menuPrevTime = t;
 	time += frametime;
 
-	if(getkeydest() == KEY_MENU || getkeydest() == KEY_MENU_GRABBED)
+	if(Menu_Active)
 	{
-		setkeydest(keyGrabber ? KEY_MENU_GRABBED : KEY_MENU);
-	}
-	else
-	{
-		if(Menu_Active)
-			if(getmousetarget() != MT_MENU)
-				m_hide();
+		if(getmousetarget() == MT_MENU && (getkeydest() == KEY_MENU || getkeydest() == KEY_MENU_GRABBED))
+			setkeydest(keyGrabber ? KEY_MENU_GRABBED : KEY_MENU);
+		else
+			m_hide();
 	}
 
 	if(cvar("cl_capturevideo"))
