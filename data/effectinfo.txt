@@ -86,7 +86,7 @@ originjitter 1 1 1
 airfriction 5
 liquidfriction 16
 velocityjitter 23 23 183
-scalemultiplier 1
+sizeincrease 6
 gravity -0.04
 
 // machinegun bullet impact
@@ -113,7 +113,7 @@ originjitter 1 1 1
 airfriction 5
 liquidfriction 16
 velocityjitter 183 183 183
-scalemultiplier 1
+sizeincrease 7
 gravity -0.04
 // dust/smoke staying at the impact
 effect TE_SPIKE
@@ -127,7 +127,7 @@ originjitter 1 1 1
 airfriction 3
 liquidfriction 16
 velocityjitter 85 85 85
-scalemultiplier 1
+sizeincrease 7
 gravity -0.04
 
 // bouncing sparks
@@ -1111,7 +1111,7 @@ lighttime 0
 lightcolor 1.5 3 6
 velocitymultiplier -0.1
 
-effect TR_NEXUIZ_PLASMA
+effect TR_NEXUIZPLASMA
 trailspacing 6
 count 3
 type spark
@@ -1124,7 +1124,7 @@ bounce 1
 velocityoffset 0 0 15
 airfriction 12
 originjitter 1 1 1
-velocityjitter 200 200
+velocityjitter 200 200 200
 
 // quake effect
 effect EF_FLAME
