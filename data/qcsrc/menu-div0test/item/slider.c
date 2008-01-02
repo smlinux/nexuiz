@@ -23,6 +23,7 @@ CLASS(Slider) EXTENDS(Label)
 	ATTRIB(Slider, valueDigits, float, 0)
 	ATTRIB(Slider, valueKeyStep, float, 0)
 	ATTRIB(Slider, valuePageStep, float, 0)
+	ATTRIB(Slider, valueDisplayMultiplier, float, 1.0)
 	ATTRIB(Slider, textSpace, float, 0)
 	ATTRIB(Slider, controlWidth, float, 0)
 	ATTRIB(Slider, pressed, float, 0)
@@ -57,7 +58,7 @@ string valueToTextSlider(entity me, float val)
 {
 	if(val < me.valueMin) return "";
 	if(val > me.valueMax) return "";
-	return ftos_decimals(val, me.valueDigits);
+	return ftos_decimals(val * me.valueDisplayMultiplier, me.valueDigits);
 }
 void configureSliderVisualsSlider(entity me, float sz, float theAlign, float theTextSpace, string gfx)
 {
