@@ -58,9 +58,9 @@ void loadCvarsNexuizCheckBox(entity me)
 	else if(me.inverted == 1)
 		me.checked = !cvar(me.cvarName);
 	else if(me.inverted > 1)
-		me.checked = (cvar(me.cvarName) > 0);
-	else if(me.inverted < 1)
 		me.checked = (cvar(me.cvarName) < 0);
+	else if(me.inverted < -1)
+		me.checked = (cvar(me.cvarName) > 0);
 }
 void saveCvarsNexuizCheckBox(entity me)
 {
@@ -75,7 +75,7 @@ void saveCvarsNexuizCheckBox(entity me)
 		else
 			cvar_set(me.cvarName, ftos(+(me.inverted - 1)));
 	}
-	else if(me.inverted < 1)
+	else if(me.inverted < -1)
 	{
 		if(me.checked)
 			cvar_set(me.cvarName, ftos(-(me.inverted + 1)));
