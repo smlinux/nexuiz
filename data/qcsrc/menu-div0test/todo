@@ -1,32 +1,5 @@
-DONE generic container
-DONE container that takes input to switch focus
-DONE container that does "exposee"
-
-DONE image displayer
-DONE text label
-DONE button
-DONE radio button
-DONE checkbox
-DONE listbox (with draw callback and scroll bar)
-DONE value slider
-DONE tabbed dialog
-DONE alternate button drawing (like: "Image Text" as in checkbox, or overlay two images); move that stuff out of CheckBox
-DONE NexuizImageRadioButton (color, crosshair)
-DONE "half-automatically" self-sizing dialog (by specifying number of "lines" in advance)
-
-TODO options dialog:
-	DONE video/effects
-	TODO misc
-	TODO input
 TODO singleplayer dialog
 	TODO campaign
 	TODO instant action
-TODO multiplayer dialog
-	TODO player setup
-	DONE server browser
-	DONE create game
-TODO demo viewer
-DONE quit dialog
 TODO credits dialog
-
-cvars: cl_netinputpacketlosstolerance
+TODO update notification
