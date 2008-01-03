@@ -230,8 +230,7 @@ void() m_draw =
 	if(frametime > 0)
 	{
 		vector dMouse;
-		dMouse = getmousepos();
-		dMouse *= frametime / realFrametime; // for capturevideo
+		dMouse = getmousepos() * (frametime / realFrametime); // for capturevideo
 		if(dMouse != '0 0 0')
 		{
 			dMouse = globalToBoxSize(dMouse, draw_scale);

@@ -1,4 +1,4 @@
-ALPHAS_MAINMENU                 '0.6 0.8 0.9'
+ALPHAS_MAINMENU                 '1 1 1'
 ALPHA_DISABLED                  0.2
 COLOR_BUTTON_C                  '1 1 1'
 COLOR_BUTTON_D                  '1 1 1'
