@@ -1,5 +1,7 @@
 float drawfont;
 string draw_mousepointer;
+vector draw_mousepointer_offset;
+vector draw_mousepointer_size;
 
 string draw_UseSkinFor(string pic)
 {
@@ -9,14 +11,16 @@ string draw_UseSkinFor(string pic)
 		return strcat(draw_currentSkin, "/", pic);
 }
 
-void draw_setMousePointer(string pic)
+void draw_setMousePointer(string pic, vector theSize, vector theOffset)
 {
 	draw_mousepointer = strzone(draw_UseSkinFor(pic));
+	draw_mousepointer_size = theSize;
+	draw_mousepointer_offset = eX * (theOffset_x * theSize_x) + eY * (theOffset_y * theSize_y);
 }
 
 void draw_drawMousePointer(vector where)
 {
-	drawpic(boxToGlobal(where, draw_shift, draw_scale), draw_mousepointer, '32 32 0', '1 1 1', draw_alpha, 0);
+	drawpic(boxToGlobal(where, draw_shift, draw_scale) - draw_mousepointer_offset, draw_mousepointer, draw_mousepointer_size, '1 1 1', draw_alpha, 0);
 }
 
 void draw_reset()

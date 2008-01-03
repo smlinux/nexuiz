@@ -1,5 +1,6 @@
 ALPHAS_MAINMENU                 '1 1 1'
 ALPHA_DISABLED                  0.2
+ALPHA_BEHIND                    1
 COLOR_BUTTON_C                  '1 1 1'
 COLOR_BUTTON_D                  '1 1 1'
 COLOR_BUTTON_F                  '1 1 1'
@@ -43,3 +44,6 @@ MARGIN_TOP                      8
 TOLERANCE_SLIDER                '0.2 2 0'
 WIDTH_SCROLLBAR                 16
 WIDTH_SLIDERTEXT                0.333333333333
+SIZE_CURSOR                     '32 32 0'
+OFFSET_CURSOR                   '0.5 0.5 0'
+ALPHA_CURSOR_INTRO              1

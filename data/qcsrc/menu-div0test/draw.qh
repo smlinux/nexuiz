@@ -3,7 +3,7 @@ vector draw_scale;
 float draw_alpha;
 
 void draw_reset();
-void draw_setMousePointer(string pic);
+void draw_setMousePointer(string pic, vector theSize, vector theOffset);
 void draw_drawMousePointer(vector where);
 
 void draw_PreloadPicture(string pic);

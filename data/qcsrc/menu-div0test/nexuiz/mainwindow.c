@@ -4,6 +4,7 @@ CLASS(MainWindow) EXTENDS(ModalController)
 	ATTRIB(MainWindow, mutatorsDialog, entity, NULL)
 	ATTRIB(MainWindow, mapInfoDialog, entity, NULL)
 	ATTRIB(MainWindow, userbindEditDialog, entity, NULL)
+	ATTRIB(MainWindow, fadedAlpha, float, SKINALPHA_BEHIND)
 ENDCLASS(MainWindow)
 #endif
 

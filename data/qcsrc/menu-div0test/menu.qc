@@ -54,13 +54,14 @@ void() m_init_delayed =
 			Skin_ApplySetting(argv(0), argv(1));
 	fclose(fh);
 
-	draw_setMousePointer("cursor");
+	draw_setMousePointer("cursor", SKINSIZE_CURSOR, SKINOFFSET_CURSOR);
 
 	main = spawnMainWindow(); main.configureMainWindow(main);
 	draw_reset();
 	main.resizeNotify(main, draw_shift, draw_scale, draw_shift, draw_scale);
 	main.focused = 1;
 	menuShiftState = 0;
+	menuMousePos = '0.5 0.5 0';
 
 	if(Menu_Active)
 		m_display(); // delayed menu display
@@ -195,7 +196,7 @@ void() m_draw =
 
 	draw_reset();
 
-	if(!(gamestatus & (GAME_CONNECTED | GAME_ISSERVER)))
+	if(!(gamestatus & (GAME_CONNECTED | GAME_ISSERVER)) && menuLogoAlpha > 0)
 	{
 		vector sz;
 		vector isz;
@@ -216,6 +217,12 @@ void() m_draw =
 			isz_y = isz_x * (sz_y / sz_x) * (draw_scale_x / draw_scale_y);
 		}
 		draw_Picture('0.5 0.5 0' - 0.5 * isz, SKINGFX_BACKGROUND, isz, '1 1 1', bound(0, menuLogoAlpha, 1));
+		if(menuAlpha <= 0 && SKINALPHA_CURSOR_INTRO > 0)
+		{
+			draw_alpha = SKINALPHA_CURSOR_INTRO * bound(0, menuLogoAlpha, 1);
+			draw_drawMousePointer(menuMousePos);
+			draw_alpha = 1;
+		}
 	}
 
 	if(menuAlpha <= 0)
@@ -244,6 +251,7 @@ void() m_draw =
 		}
 	}
 	main.draw(main);
+	draw_alpha = max(draw_alpha, SKINALPHA_CURSOR_INTRO * bound(0, menuLogoAlpha, 1));
 	draw_drawMousePointer(menuMousePos);
 
 	frametime = 0;
