@@ -665,18 +665,18 @@ void UpdateSelectedPlayer()
 		self.last_selected_player = self.selected_player;
 }
 
-.string voice_attack;
-.string voice_attackinfive;
-.string voice_coverme;
-.string voice_defend;
-.string voice_freelance;
-.string voice_incoming;
-.string voice_meet;
-.string voice_needhelp;
-.string voice_seenflag;
-.string voice_taunt;
-.string voice_teamshoot;
-.float modelindex_for_voice;
+.string playersound_attack;
+.string playersound_attackinfive;
+.string playersound_coverme;
+.string playersound_defend;
+.string playersound_freelance;
+.string playersound_incoming;
+.string playersound_meet;
+.string playersound_needhelp;
+.string playersound_seenflag;
+.string playersound_taunt;
+.string playersound_teamshoot;
+.float modelindex_for_playersound;
 
 float GetVoiceMessageTeamsayType(string type)
 {
@@ -688,29 +688,39 @@ float GetVoiceMessageTeamsayType(string type)
 }
 
 string allvoicesamples = "attack attackinfive coverme defend freelance incoming meet needhelp seenflag taunt teamshoot";
-float GetVoiceMessageSampleField_notFound;
+float GetPlayerSoundSampleField_notFound;
 .string GetVoiceMessageSampleField(string type)
 {
-	GetVoiceMessageSampleField_notFound = 0;
+	GetPlayerSoundSampleField_notFound = 0;
 	switch(type)
 	{
-		case "attack":       return voice_attack;
-		case "attackinfive": return voice_attackinfive;
-		case "coverme":      return voice_coverme;
-		case "defend":       return voice_defend;
-		case "freelance":    return voice_freelance;
-		case "incoming":     return voice_incoming;
-		case "meet":         return voice_meet;
-		case "needhelp":     return voice_needhelp;
-		case "seenflag":     return voice_seenflag;
-		case "taunt":        return voice_taunt;
-		case "teamshoot":    return voice_teamshoot;
+		case "attack":       return playersound_attack;
+		case "attackinfive": return playersound_attackinfive;
+		case "coverme":      return playersound_coverme;
+		case "defend":       return playersound_defend;
+		case "freelance":    return playersound_freelance;
+		case "incoming":     return playersound_incoming;
+		case "meet":         return playersound_meet;
+		case "needhelp":     return playersound_needhelp;
+		case "seenflag":     return playersound_seenflag;
+		case "taunt":        return playersound_taunt;
+		case "teamshoot":    return playersound_teamshoot;
 	}
-	GetVoiceMessageSampleField_notFound = 1;
-	return voice_taunt;
+	GetPlayerSoundSampleField_notFound = 1;
+	return playersound_taunt;
 }
 
-void PrecacheVoiceMessages(string f)
+.string GetPlayerSoundSampleField(string type)
+{
+	GetPlayerSoundSampleField_notFound = 0;
+	switch(type)
+	{
+		case "attack":       return playersound_attack;
+		default:             return GetVoiceMessageSampleField(type);
+	}
+}
+
+void PrecachePlayerSounds(string f)
 {
 	float fh;
 	float i, n;
@@ -732,7 +742,7 @@ void PrecacheVoiceMessages(string f)
 	fclose(fh);
 }
 
-void LoadVoiceMessages(string f)
+void LoadPlayerSounds(string f)
 {
 	float fh;
 	string s;
@@ -744,8 +754,8 @@ void LoadVoiceMessages(string f)
 	{
 		if(tokenize(s) != 3)
 			continue;
-		field = GetVoiceMessageSampleField(argv(0));
-		if(GetVoiceMessageSampleField_notFound)
+		field = GetPlayerSoundSampleField(argv(0));
+		if(GetPlayerSoundSampleField_notFound)
 			continue;
 		if(self.field)
 			strunzone(self.field);
@@ -754,13 +764,13 @@ void LoadVoiceMessages(string f)
 	fclose(fh);
 }
 
-void UpdateVoiceMessages()
+void UpdatePlayerSounds()
 {
-	if(self.modelindex == self.modelindex_for_voice)
+	if(self.modelindex == self.modelindex_for_playersound)
 		return;
-	self.modelindex_for_voice = self.modelindex;
-	LoadVoiceMessages("sound/player/voice/default.voice");
-	LoadVoiceMessages(strcat(self.model, ".voice"));
+	self.modelindex_for_playersound = self.modelindex;
+	LoadPlayerSounds("sound/player/default.sounds");
+	LoadPlayerSounds(strcat(self.model, ".sounds"));
 }
 
 float precache_sound_index (string s) = #19;
@@ -788,9 +798,9 @@ void VoiceMessage(string type)
 	// TODO precache voice messages?
 	var string sample;
 	var float teamsay;
-	sample = self.(GetVoiceMessageSampleField(type));
+	sample = self.(GetPlayerSoundSampleField(type));
 
-	if(GetVoiceMessageSampleField_notFound)
+	if(GetPlayerSoundSampleField_notFound)
 	{
 		sprint(self, strcat("Invalid voice. Use one of: ", allvoicesamples, "\n"));
 		return;

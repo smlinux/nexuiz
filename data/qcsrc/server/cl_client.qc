@@ -246,7 +246,7 @@ float Client_customizeentityforclient()
 	return TRUE;
 }
 
-void UpdateVoiceMessages();
+void UpdatePlayerSounds();
 void setmodel_lod(entity e, string modelname)
 {
 #ifdef ALLOW_VARIABLE_LOD
@@ -287,7 +287,7 @@ void setmodel_lod(entity e, string modelname)
 	setmodel(e, modelname); // players have high precision
 #endif
 	player_setupanimsformodel();
-	UpdateVoiceMessages();
+	UpdatePlayerSounds();
 }
 
 /*

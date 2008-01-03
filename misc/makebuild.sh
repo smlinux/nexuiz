@@ -49,6 +49,7 @@ fteqccflags=""
 mingw=/home/polzer/mingw32
 menuqc=menu
 newest=NEWEST
+tag=
 
 if [ -n "$EXPERIMENTAL" ]; then
 	basepk3=$base/data20071231.pk3 # newer build to make smaller patches
@@ -57,6 +58,7 @@ if [ -n "$EXPERIMENTAL" ]; then
 	ext="${ext}_svntrunk"
 	menuqc="menu-div0test"
 	newest=NEWEST-svntrunk
+	tag=trunk
 fi
 
 # TODO normalize the builds
@@ -202,9 +204,7 @@ cd "$tmpdir/data/qcsrc/$menuqc"
 cd "$tmpdir/data/qcsrc/server"
 "$fteqccdir/fteqcc.bin" $fteqccflags
 
-if [ -z "$EXPERIMENTAL" ]; then
-	rm -rf "$tmpdir/data/qcsrc"
-fi
+rm -rf "$tmpdir/data/qcsrc"
 
 cd "$tmpdir/Docs"
 perl -pi -e '/^#---SET nexversion=([0-9.]*)$/ and $_ = "#---SET nexversion='$version'\n"' FAQ.aft
@@ -237,11 +237,11 @@ echo "$defaultcfg" >> default.cfg
 cd "$tmpdir"
 rm -rf data
 mkdir data
-mv data.pk3 data/data$date.pk3
+mv data.pk3 data/data$tag$date.pk3
 mv common-spog.pk3 data/
 rm -rf pro
 mkdir pro
-mv pro.pk3 pro/data${date}pro.pk3
+mv pro.pk3 pro/data$tag${date}pro.pk3
 
 cp -r "$mingwdlls"/* .
 # fix up permissions
@@ -253,7 +253,7 @@ mv * Nexuiz/ || true
 find . -name .svn -exec rm -rf {} \; -prune
 
 rm -f "$zipdir/nexuiz$date$ext.zip"
-zip $zipflags -9yr "$zipdir/nexuiz$date$ext.zip"           Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/data/data$date.pk3 Nexuiz/data/common-spog.pk3 Nexuiz/pro/*
+zip $zipflags -9yr "$zipdir/nexuiz$date$ext.zip"           Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/data/data$tag$date.pk3 Nexuiz/data/common-spog.pk3 Nexuiz/pro/*
 ln -snf nexuiz$date$ext.zip "$zipdir/nexuiz-$newest.zip"
 
 rm -f "$zipdir/nexuizengineonly$date$ext.zip"
@@ -264,15 +264,15 @@ rm -f "$zipdir/nexuizsource$date$ext.zip"
 zip $zipflags -9yr "$zipdir/nexuizsource$date$ext.zip"     Nexuiz/gpl.txt                                            Nexuiz/sources
 ln -snf nexuizsource$date$ext.zip "$zipdir/nexuizsource-$newest.zip"
 
-$zipdiff -o "Nexuiz/data/datapatch$date.pk3" -f "$basepk3" -t Nexuiz/data/data$date.pk3 -x 'sound/cdtracks/track*.ogg'
+$zipdiff -o "Nexuiz/data/datapatch$tag$date.pk3" -f "$basepk3" -t Nexuiz/data/data$tag$date.pk3 -x 'sound/cdtracks/track*.ogg'
 mkdir -p gfx
-if unzip "Nexuiz/data/data$date.pk3" gfx/brand.tga; then
-	zip $zipflags -9r "Nexuiz/data/datapatch$date.pk3" gfx/brand.tga
+if unzip "Nexuiz/data/data$tag$date.pk3" gfx/brand.tga; then
+	zip $zipflags -9r "Nexuiz/data/datapatch$tag$date.pk3" gfx/brand.tga
 	rm -rf gfx
 fi
 
 rm -f "$zipdir/nexuizpatch$date$ext.zip"
-zip $zipflags -9yr "$zipdir/nexuizpatch$date$ext.zip"      Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/data/datapatch$date.pk3 Nexuiz/pro/*
+zip $zipflags -9yr "$zipdir/nexuizpatch$date$ext.zip"      Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/data/datapatch$tag$date.pk3 Nexuiz/pro/*
 ln -snf nexuizpatch$date$ext.zip "$zipdir/nexuizpatch-$newest.zip"
 
 rm -f "$zipdir/nexuizdocs$date$ext.zip"
