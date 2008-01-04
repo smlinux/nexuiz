@@ -757,6 +757,7 @@ void readlevelcvars(void)
 		start_switchweapon = WEP_NEX;
 		weapon_action(start_switchweapon, WR_PRECACHE);
 		start_ammo_cells = cvar("g_minstagib_ammo_start");
+		g_minstagib_invis_alpha = cvar("g_minstagib_invis_alpha");
 	}
 	else
 	{

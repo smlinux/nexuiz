@@ -443,7 +443,10 @@ void PutClientInServer (void)
 		self.solid = SOLID_SLIDEBOX;
 		self.flags = FL_CLIENT;
 		self.takedamage = DAMAGE_AIM;
-		self.effects = 0;
+		if(g_minstagib)
+			self.effects = EF_FULLBRIGHT;
+		else
+			self.effects = 0;
 		self.air_finished = time + 12;
 		self.dmg = 2;
 
@@ -939,13 +942,20 @@ void player_powerups (void)
 {
 	if (g_minstagib)
 	{
-		self.effects = EF_FULLBRIGHT;
 		if (self.items & IT_STRENGTH)
 		{
 			if (time > self.strength_finished)
 			{
-				self.alpha = default_player_alpha;
-				self.exteriorweaponentity.alpha = default_weapon_alpha;
+				if (g_minstagib_invis_alpha > 0)
+				{
+					self.alpha = default_player_alpha;
+					self.exteriorweaponentity.alpha = default_weapon_alpha;
+					self.effects = self.effects | EF_FULLBRIGHT;
+				}
+				else
+				{
+					self.effects -= self.effects & EF_NODRAW;
+				}
 				self.items = self.items - (self.items & IT_STRENGTH);
 				sprint(self, "^3Invisibility has worn off\n");
 			}
@@ -954,8 +964,16 @@ void player_powerups (void)
 		{
 			if (time < self.strength_finished)
 			{
-				self.alpha = cvar("g_minstagib_invis_alpha");
-				self.exteriorweaponentity.alpha = cvar("g_minstagib_invis_alpha");
+				if (g_minstagib_invis_alpha > 0)
+				{
+					self.alpha = g_minstagib_invis_alpha;
+					self.exteriorweaponentity.alpha = g_minstagib_invis_alpha;
+					self.effects -= self.effects & EF_FULLBRIGHT;
+				}
+				else
+				{
+					self.effects = self.effects | EF_NODRAW;
+				}
 				self.items = self.items | IT_STRENGTH;
 				sprint(self, "^3You are invisible\n");
 			}
@@ -1300,8 +1318,10 @@ void PlayerPreThink (void)
 			return;					// the think tics
 		}
 
+		if(self.teleport_time)
 		if(time > self.teleport_time)
 		{
+			self.teleport_time = 0;
 			self.effects = self.effects - (self.effects & EF_NODRAW);
 			if(self.weaponentity)
 				self.weaponentity.flags = self.weaponentity.flags - (self.weaponentity.flags & EF_NODRAW);
