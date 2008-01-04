@@ -580,7 +580,7 @@ void MapInfo_LoadMap(string s)
 		print("EMERGENCY: can't play the selected map in the given game mode. Falling back to deathmatch.\n");
 		MapInfo_SwitchGameType(MAPINFO_TYPE_DEATHMATCH);
 	}
-	localcmd(strcat("\nsettemp_restore\n"));
+	localcmd("\nsettemp_restore\n");
 	MapInfo_Get_ByName(s, 1, MapInfo_CurrentGametype());
 	localcmd(strcat("\nchangelevel ", s, "\n"));
 }
