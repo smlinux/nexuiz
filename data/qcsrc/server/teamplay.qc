@@ -370,21 +370,23 @@ void PrintWelcomeMessage(entity pl)
 		return;
 	}
 
-	if(self.classname == "observer")
+	if(!self.button7)
 	{
-		if(g_lms && self.frags <= 0 && self.frags > -666)
-			return centerprint(self, strcat(NEWLINES, "^1You have no more lives left\nwait for next round\n\n\n^7press attack to spectate other players"));
-		else if(g_lms && self.frags == -666)
-			return centerprint(self, strcat(NEWLINES, "^1Match has already begun\nwait for next round\n\n\n^7press attack to spectate other players"));
+		if(self.classname == "observer")
+		{
+			if(g_lms && self.frags <= 0 && self.frags > -666)
+				return centerprint_atprio(self, CENTERPRIO_SPAM, strcat(NEWLINES, "^1You have no more lives left\nwait for next round\n\n\n^7press attack to spectate other players"));
+			else if(g_lms && self.frags == -666)
+				return centerprint_atprio(self, CENTERPRIO_SPAM, strcat(NEWLINES, "^1Match has already begun\nwait for next round\n\n\n^7press attack to spectate other players"));
+		}
+		else if(self.classname == "spectator")
+		{
+			if ((g_lms && self.frags < 1) || g_arena)
+				return centerprint_atprio(self, CENTERPRIO_SPAM, strcat(NEWLINES, "spectating ", self.enemy.netname, "\n\n\n^7press attack for next player\npress attack2 for free fly mode"));
+			else
+				return centerprint_atprio(self, CENTERPRIO_SPAM, strcat(NEWLINES, "spectating ", self.enemy.netname, "\n\n\n^7press jump to play\n^7press attack for next player\npress attack2 for free fly mode"));
+		}
 	}
-	else if(self.classname == "spectator")
-	{
-		if ((g_lms && self.frags < 1) || g_arena)
-			return centerprint(self, strcat(NEWLINES, "spectating ", self.enemy.netname, "\n\n\n^7press attack for next player\npress attack2 for free fly mode"));
-		else
-			return centerprint(self, strcat(NEWLINES, "spectating ", self.enemy.netname, "\n\n\n^7press jump to play\n^7press attack for next player\npress attack2 for free fly mode"));
-	}
-
 
 	if(g_minstagib)
 		mutator = "^2Minstagib ^1";
@@ -426,23 +428,6 @@ void PrintWelcomeMessage(entity pl)
 
 	if(time < restart_countdown)
 		s = strcat(s, "\n^1Game starts in ", ftos(ceil(restart_countdown-time)), " seconds^7");
-
-	if((self.classname == "observer" || self.classname == "spectator") && self.version == cvar("gameversion")) {
-		if(!g_arena)
-			s = strcat(s,"^7\n\n\npress jump to play\npress attack to spectate other players\n\n");
-		else if(player_count < 2 && arena_roundbased)
-		{
-			s = strcat(s, "\n\n\n^1waiting for second player to start match^7\n\n");
-		}
-		else
-		{
-			s = strcat(s, "\n\n\n");
-			if(champion)
-				s = strcat(s, "^7current champion is: ", champion.netname, "\n\n");
-			s = strcat(s,"^7press attack to spectate other players\n\n");
-		}
-	}
-
 
 	s = strzone(s);
 
