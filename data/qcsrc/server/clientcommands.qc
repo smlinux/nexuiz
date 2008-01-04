@@ -20,15 +20,14 @@ void Say(entity source, float teamsay, string msgin)
 	if(msgin == "")
 		return;
 
-	colorstr = Team_ColorCode(source.team);
-
-	if(!teams_matter)
+	if(source.classname != "player")
+		colorstr = "^0"; // black for spectators
+	else if(teams_matter)
+		colorstr = Team_ColorCode(source.team);
+	else
 		teamsay = FALSE;
 
 	if(intermission_running)
-		teamsay = FALSE;
-
-	if(source.classname != "player") // observers can't
 		teamsay = FALSE;
 
 	/*
@@ -102,9 +101,20 @@ void Say(entity source, float teamsay, string msgin)
 	}
 	else if(teamsay)
 	{
-		FOR_EACH_REALPLAYER(head)
+		if(source.classname == "player")
 		{
-			if(head.team == source.team)
+			FOR_EACH_REALPLAYER(head)
+			{
+				if(head.team == source.team)
+				{
+					sprint(head, msgstr);
+					centerprint(head, cmsgstr);
+				}
+			}
+		}
+		else
+		{
+			FOR_EACH_REALCLIENT(head) if(head.classname != "player")
 			{
 				sprint(head, msgstr);
 				centerprint(head, cmsgstr);
