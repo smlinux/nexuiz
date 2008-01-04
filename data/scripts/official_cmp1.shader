@@ -187,3 +187,22 @@ textures/cmp1-dm8/ame7glass
 		tcGen lightmap
 	}
 }
+textures/cmp1-dm8/ame7glass_reflect
+{
+	qer_editorimage textures/cmp1-dm8/ame7light.tga
+	surfaceparm nomarks
+	surfaceparm trans
+	cull disable
+	qer_trans 0.5
+	{
+		map textures/cmp1-dm8/ame7light.tga
+		blendfunc add
+		tcGen environment
+	}
+	{
+		map $lightmap
+		blendfunc filter
+		tcGen lightmap
+	}
+	dp_reflect 0 1 0.4 1 0.5
+}
