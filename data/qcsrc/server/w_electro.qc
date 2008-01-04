@@ -136,7 +136,7 @@ void() W_Electro_Attack2
 	//proj.glow_size = 50;
 	//proj.glow_color = 45;
 	proj.movetype = MOVETYPE_BOUNCE;
-	proj.velocity = v_forward * cvar("g_balance_electro_secondary_speed") + v_up * cvar("g_balance_electro_secondary_speed_up");
+	proj.velocity = (v_forward + randomvec() * cvar("g_balance_electro_secondary_spread")) * cvar("g_balance_electro_secondary_speed") + v_up * cvar("g_balance_electro_secondary_speed_up");
 	W_SetupProjectileVelocity(proj);
 	proj.touch = W_Plasma_Touch;
 	setmodel(proj, "models/ebomb.mdl"); // precision set above
