@@ -1777,7 +1777,7 @@ void MapVote_Init()
 
 	mapvote_count_real = mapvote_count;
 	if(mapvote_abstain)
-		MapVote_AddVotable("/abstain", 0);
+		MapVote_AddVotable("don't care", 0);
 
 	//dprint("mapvote count is ", ftos(mapvote_count), "\n");
 
@@ -1957,8 +1957,6 @@ void MapVote_Tick()
 			else
 			{
 				tmp = mapvote_maps[i];
-				if(tmp == "/abstain")
-					tmp = "ABSTAIN!";
 				tmp = strpad(mapvote_maxlen, tmp);
 				tmp = strcat(ftos(math_mod(i + 1, 10)), ": ", tmp);
  				if(mapvote_detail)
