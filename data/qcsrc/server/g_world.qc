@@ -1666,6 +1666,7 @@ float mapvote_maxlen;
 float mapvote_voters;
 float mapvote_votes[MAPVOTE_COUNT];
 float mapvote_run;
+float mapvote_detail;
 .float mapvote;
 
 void MapVote_ClearAllVotes()
@@ -1746,6 +1747,7 @@ void MapVote_Init()
 	nmax = min(MAPVOTE_COUNT, cvar("g_maplist_votable"));
 	smax = min(nmax, cvar("g_maplist_votable_suggestions"));
 	mapvote_count = 0;
+	mapvote_detail = !cvar("g_maplist_votable_nodetail");
 
 	for(i = 0; i < 100 && mapvote_count < smax; ++i)
 		MapVote_AddVotable(mapvote_suggestions[ceil(random() * mapvote_suggestion_ptr) - 1], TRUE);
@@ -1883,12 +1885,14 @@ void MapVote_Tick()
 	string tmp;
 	float i;
 	float keeptwo;
+	float totalvotes;
 
 	keeptwo = mapvote_keeptwotime;
 	MapVote_CheckRules_1(); // count
 	if(MapVote_CheckRules_2()) // decide
 		return;
 
+	totalvotes = 0;
 	FOR_EACH_REALCLIENT(other)
 	{
 		// hide scoreboard again
@@ -1925,6 +1929,9 @@ void MapVote_Tick()
 			if(mapvote_maps[other.impulse - 1] != "")
 				other.mapvote = other.impulse;
 		other.impulse = 0;
+
+		if(other.mapvote)
+			++totalvotes;
 	}
 
 	MapVote_CheckRules_1(); // just count
@@ -1944,18 +1951,26 @@ void MapVote_Tick()
 				tmp = mapvote_maps[i];
 				tmp = strpad(mapvote_maxlen, tmp);
 				tmp = strcat(ftos(math_mod(i + 1, 10)), ": ", tmp);
-				tmp = strcat(tmp, " ^2(", ftos(mapvote_votes[i]), " vote");
-				if(mapvote_votes[i] != 1)
-					tmp = strcat(tmp, "s");
-				tmp = strcat(tmp, ")");
-				tmp = strpad(mapvote_maxlen + 15, tmp);
+ 				if(mapvote_detail)
+ 				{
+ 					tmp = strcat(tmp, " ^2(", ftos(mapvote_votes[i]), " vote");
+ 					if(mapvote_votes[i] != 1)
+ 						tmp = strcat(tmp, "s");
+ 					tmp = strcat(tmp, ")");
+ 					tmp = strpad(mapvote_maxlen + 15, tmp);
+ 				}
 				if(other.mapvote == i + 1)
 					msgstr = strcat(msgstr, "^3> ", tmp, "\n");
 				else
 					msgstr = strcat(msgstr, "^7  ", tmp, "\n");
 			}
+
+ 		msgstr = strcat(msgstr, "\n\n^2", ftos(totalvotes), " vote");
+ 		if(totalvotes != 1)
+ 			msgstr = strcat(msgstr, "s");
+ 		msgstr = strcat(msgstr, " cast");
 		i = ceil(mapvote_timeout - time);
-		msgstr = strcat(msgstr, "\n\n", ftos(i), " second");
+ 		msgstr = strcat(msgstr, "\n", ftos(i), " second");
 		if(i != 1)
 			msgstr = strcat(msgstr, "s");
 		msgstr = strcat(msgstr, " left");
