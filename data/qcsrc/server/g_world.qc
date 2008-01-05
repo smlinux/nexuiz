@@ -1794,7 +1794,7 @@ float MapVote_Finished(float mappos)
 
 	result = strcat(":vote:finished:", mapvote_maps[mappos]);
 	result = strcat(result, ":", ftos(mapvote_votes[mappos]), "::");
-	for(i = 0; i < mapvote_count_real; ++i)
+	for(i = 0; i < mapvote_count; ++i)
 		if(i != mappos)
 			if(mapvote_maps[i] != "")
 			{
@@ -1880,15 +1880,18 @@ float MapVote_CheckRules_2()
 			result = strcat(result, ":", ftos(firstPlaceVotes));
 			result = strcat(result, ":", mapvote_maps[secondPlace]);
 			result = strcat(result, ":", ftos(secondPlaceVotes), "::");
-			for(i = 0; i < mapvote_count_real; ++i)
+			for(i = 0; i < mapvote_count; ++i)
 				if(i != firstPlace)
 					if(i != secondPlace)
 						if(mapvote_maps[i] != "")
 						{
 							result = strcat(result, ":", mapvote_maps[i]);
 							result = strcat(result, ":", ftos(mapvote_votes[i]));
-							strunzone(mapvote_maps[i]);
-							mapvote_maps[i] = "";
+							if(i < mapvote_count_real)
+							{
+								strunzone(mapvote_maps[i]);
+								mapvote_maps[i] = "";
+							}
 						}
 			GameLogEcho(result, FALSE);
 		}
