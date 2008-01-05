@@ -1658,6 +1658,7 @@ string mapvote_message;
 
 #define MAPVOTE_COUNT 10
 float mapvote_count;
+float mapvote_count_real;
 string mapvote_maps[MAPVOTE_COUNT];
 float mapvote_maps_suggested[MAPVOTE_COUNT];
 string mapvote_suggestions[MAPVOTE_COUNT];
@@ -1667,6 +1668,7 @@ float mapvote_voters;
 float mapvote_votes[MAPVOTE_COUNT];
 float mapvote_run;
 float mapvote_detail;
+float mapvote_abstain;
 .float mapvote;
 
 void MapVote_ClearAllVotes()
@@ -1744,10 +1746,15 @@ void MapVote_Init()
 
 	MapVote_ClearAllVotes();
 
-	nmax = min(MAPVOTE_COUNT, cvar("g_maplist_votable"));
-	smax = min(nmax, cvar("g_maplist_votable_suggestions"));
 	mapvote_count = 0;
 	mapvote_detail = !cvar("g_maplist_votable_nodetail");
+	mapvote_abstain = cvar("g_maplist_votable_abstain");
+	
+	if(mapvote_abstain)
+		nmax = min(MAPVOTE_COUNT - 1, cvar("g_maplist_votable"));
+	else
+		nmax = min(MAPVOTE_COUNT, cvar("g_maplist_votable"));
+	smax = min(nmax, cvar("g_maplist_votable_suggestions"));
 
 	for(i = 0; i < 100 && mapvote_count < smax; ++i)
 		MapVote_AddVotable(mapvote_suggestions[ceil(random() * mapvote_suggestion_ptr) - 1], TRUE);
@@ -1768,11 +1775,15 @@ void MapVote_Init()
 			MapVote_AddVotable(GetNextMap(), FALSE);
 	}
 
+	mapvote_count_real = mapvote_count;
+	if(mapvote_abstain)
+		MapVote_AddVotable("/abstain", 0);
+
 	//dprint("mapvote count is ", ftos(mapvote_count), "\n");
 
 	mapvote_keeptwotime = time + cvar("g_maplist_votable_keeptwotime");
 	mapvote_timeout = time + cvar("g_maplist_votable_timeout");
-	if(mapvote_count < 3 || mapvote_keeptwotime <= time)
+	if(mapvote_count_real < 3 || mapvote_keeptwotime <= time)
 		mapvote_keeptwotime = 0;
 	mapvote_message = "Choose a map and press its key!";
 }
@@ -1783,7 +1794,7 @@ float MapVote_Finished(float mappos)
 
 	result = strcat(":vote:finished:", mapvote_maps[mappos]);
 	result = strcat(result, ":", ftos(mapvote_votes[mappos]), "::");
-	for(i = 0; i < mapvote_count; ++i)
+	for(i = 0; i < mapvote_count_real; ++i)
 		if(i != mappos)
 			if(mapvote_maps[i] != "")
 			{
@@ -1830,10 +1841,15 @@ float MapVote_CheckRules_2()
 	float i;
 	float firstPlace, secondPlace;
 	float firstPlaceVotes, secondPlaceVotes;
+	float mapvote_voters_real;
 	string result;
 
+	mapvote_voters_real = mapvote_voters;
+	if(mapvote_abstain)
+		mapvote_voters_real -= mapvote_votes[mapvote_count - 1];
+
 	RandSel_Init();
-	for(i = 0; i < mapvote_count; ++i) if(mapvote_maps[i] != "")
+	for(i = 0; i < mapvote_count_real; ++i) if(mapvote_maps[i] != "")
 		RandSel_Add(mapvote_votes[i], i);
 	firstPlace = randsel_value;
 	firstPlaceVotes = randsel_priority;
@@ -1841,7 +1857,7 @@ float MapVote_CheckRules_2()
 	//dprint("First place votes: ", ftos(firstPlaceVotes), "\n");
 
 	RandSel_Init();
-	for(i = 0; i < mapvote_count; ++i) if(mapvote_maps[i] != "")
+	for(i = 0; i < mapvote_count_real; ++i) if(mapvote_maps[i] != "")
 		if(i != firstPlace)
 			RandSel_Add(mapvote_votes[i], i);
 	secondPlace = randsel_value;
@@ -1852,11 +1868,11 @@ float MapVote_CheckRules_2()
 	if(firstPlace == -1)
 		error("No first place in map vote... WTF?");
 
-	if(secondPlace == -1 || time > mapvote_timeout || (mapvote_voters - firstPlaceVotes) < firstPlaceVotes)
+	if(secondPlace == -1 || time > mapvote_timeout || (mapvote_voters_real - firstPlaceVotes) < firstPlaceVotes)
 		return MapVote_Finished(firstPlace);
 
 	if(mapvote_keeptwotime)
-		if(time > mapvote_keeptwotime || (mapvote_voters - firstPlaceVotes - secondPlaceVotes) < secondPlaceVotes)
+		if(time > mapvote_keeptwotime || (mapvote_voters_real - firstPlaceVotes - secondPlaceVotes) < secondPlaceVotes)
 		{
 			mapvote_message = "Now decide between the TOP TWO!";
 			mapvote_keeptwotime = 0;
@@ -1864,7 +1880,7 @@ float MapVote_CheckRules_2()
 			result = strcat(result, ":", ftos(firstPlaceVotes));
 			result = strcat(result, ":", mapvote_maps[secondPlace]);
 			result = strcat(result, ":", ftos(secondPlaceVotes), "::");
-			for(i = 0; i < mapvote_count; ++i)
+			for(i = 0; i < mapvote_count_real; ++i)
 				if(i != firstPlace)
 					if(i != secondPlace)
 						if(mapvote_maps[i] != "")
@@ -1906,14 +1922,6 @@ void MapVote_Tick()
 				msg_entity = other;
 				WriteByte(MSG_ONE, SVC_FINALE);
 				WriteString(MSG_ONE, "");
-				/*
-				for(i = 0; i < mapvote_count; ++i)
-					if(mapvote_maps[i] != "")
-					{
-						tmp = mapvote_maps[i];
-						sprint(other, strcat("map voting: type ^1impulse ", ftos(i+1), "^7 to vote for ", tmp, "\n"));
-					}
-				*/
 			}
 		}
 
@@ -1949,6 +1957,8 @@ void MapVote_Tick()
 			else
 			{
 				tmp = mapvote_maps[i];
+				if(tmp == "/abstain")
+					tmp = "ABSTAIN!";
 				tmp = strpad(mapvote_maxlen, tmp);
 				tmp = strcat(ftos(math_mod(i + 1, 10)), ": ", tmp);
  				if(mapvote_detail)
