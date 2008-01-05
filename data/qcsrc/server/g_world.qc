@@ -1791,16 +1791,21 @@ float MapVote_Finished(float mappos)
 {
 	string result;
 	float i;
+	float didntvote;
 
 	result = strcat(":vote:finished:", mapvote_maps[mappos]);
 	result = strcat(result, ":", ftos(mapvote_votes[mappos]), "::");
+	didntvote = mapvote_voters;
 	for(i = 0; i < mapvote_count; ++i)
 		if(i != mappos)
 			if(mapvote_maps[i] != "")
 			{
 				result = strcat(result, ":", mapvote_maps[i]);
 				result = strcat(result, ":", ftos(mapvote_votes[i]));
+				didntvote -= mapvote_votes[i];
 			}
+	result = strcat(result, ":didn't vote:", ftos(didntvote));
+	
 	GameLogEcho(result, FALSE);
 	if(mapvote_maps_suggested[mappos])
 		GameLogEcho(strcat(":vote:suggestion_accepted:", mapvote_maps[mappos]), FALSE);
@@ -1874,13 +1879,17 @@ float MapVote_CheckRules_2()
 	if(mapvote_keeptwotime)
 		if(time > mapvote_keeptwotime || (mapvote_voters_real - firstPlaceVotes - secondPlaceVotes) < secondPlaceVotes)
 		{
+			float didntvote;
 			mapvote_message = "Now decide between the TOP TWO!";
 			mapvote_keeptwotime = 0;
 			result = strcat(":vote:keeptwo:", mapvote_maps[firstPlace]);
 			result = strcat(result, ":", ftos(firstPlaceVotes));
 			result = strcat(result, ":", mapvote_maps[secondPlace]);
 			result = strcat(result, ":", ftos(secondPlaceVotes), "::");
+			didntvote = mapvote_voters;
 			for(i = 0; i < mapvote_count; ++i)
+			{
+				didntvote -= mapvote_votes[i];
 				if(i != firstPlace)
 					if(i != secondPlace)
 						if(mapvote_maps[i] != "")
@@ -1893,6 +1902,8 @@ float MapVote_CheckRules_2()
 								mapvote_maps[i] = "";
 							}
 						}
+			}
+			result = strcat(result, ":didn't vote:", ftos(didntvote));
 			GameLogEcho(result, FALSE);
 		}
 
