@@ -6,9 +6,7 @@ CLASS(Gecko) EXTENDS(Item)
 	METHOD( Gecko, keyDown, float(entity, float, float, float))
 	METHOD( Gecko, keyUp, float(entity, float, float, float))
 	METHOD( Gecko, mouseMove, float(entity, vector))
-	METHOD( Gecko, mousePress, float(entity, vector))
 	METHOD( Gecko, mouseDrag, float(entity, vector))
-	METHOD( Gecko, mouseRelease, float(entity, vector))
 	METHOD( Gecko, resizeNotify, void(entity, vector, vector, vector, vector))
 	ATTRIB( Gecko, texturePath, string, string_null )
 	ATTRIB( Gecko, textureExtent, vector, '0 0 0')
@@ -57,12 +55,18 @@ float keyDownGecko(entity me, float scan, float ascii, float shift)
 	if( scan == K_ESCAPE ) {
 		return 0;
 	}
-	return gecko_keyevent( me.texturePath, scan, GECKO_BUTTON_DOWN );
+	if (ascii >= 32)
+		return gecko_keyevent( me.texturePath, ascii, GECKO_BUTTON_DOWN );
+	else
+		return gecko_keyevent( me.texturePath, scan, GECKO_BUTTON_DOWN );
 }
 
 float keyUpGecko(entity me, float scan, float ascii, float shift)
 {
-	return gecko_keyevent( me.texturePath, scan, GECKO_BUTTON_UP );
+	if (ascii >= 32)
+		return gecko_keyevent( me.texturePath, ascii, GECKO_BUTTON_UP );
+	else
+		return gecko_keyevent( me.texturePath, scan, GECKO_BUTTON_UP );
 }
 
 float mouseMoveGecko(entity me, vector pos)
@@ -71,20 +75,10 @@ float mouseMoveGecko(entity me, vector pos)
 	return 1;
 }
 
-float mousePressGecko(entity me, vector pos)
-{
-	return gecko_keyevent( me.texturePath, K_MOUSE1, GECKO_BUTTON_DOWN );
-}
-
 float mouseDragGecko(entity me, vector pos)
 {
 	gecko_mousemove( me.texturePath, pos_x, pos_y );
 	return 1;
-}
-
-float mouseReleaseGecko(entity me, vector pos)
-{
-	return gecko_keyevent( me.texturePath, K_MOUSE1, GECKO_BUTTON_UP );
 }
 
 void resizeNotifyGecko(entity me, vector relOrigin, vector relSize, vector absOrigin, vector absSize)
