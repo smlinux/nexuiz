@@ -1949,6 +1949,8 @@ void MapVote_Tick()
 		// display voting screen
 		msgstr = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 		msgstr = substring(msgstr, 0, strlen(msgstr) - mapvote_count);
+		if(mapvote_abstain)
+			msgstr = substring(msgstr, 1, strlen(msgstr) - 1);
 		msgstr = strcat(msgstr, mapvote_message);
 		msgstr = strcat(msgstr, "\n\n");
 		for(i = 0; i < mapvote_count; ++i)
@@ -1967,6 +1969,9 @@ void MapVote_Tick()
  					tmp = strcat(tmp, ")");
  					tmp = strpad(mapvote_maxlen + 15, tmp);
  				}
+				if(mapvote_abstain)
+					if(i == mapvote_count - 1)
+						msgstr = strcat(msgstr, "\n");
 				if(other.mapvote == i + 1)
 					msgstr = strcat(msgstr, "^3> ", tmp, "\n");
 				else
