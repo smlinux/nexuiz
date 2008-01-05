@@ -1797,13 +1797,15 @@ float MapVote_Finished(float mappos)
 	result = strcat(result, ":", ftos(mapvote_votes[mappos]), "::");
 	didntvote = mapvote_voters;
 	for(i = 0; i < mapvote_count; ++i)
-		if(i != mappos)
-			if(mapvote_maps[i] != "")
+		if(mapvote_maps[i] != "")
+		{
+			didntvote -= mapvote_votes[i];
+			if(i != mappos)
 			{
 				result = strcat(result, ":", mapvote_maps[i]);
 				result = strcat(result, ":", ftos(mapvote_votes[i]));
-				didntvote -= mapvote_votes[i];
 			}
+		}
 	result = strcat(result, ":didn't vote:", ftos(didntvote));
 	
 	GameLogEcho(result, FALSE);
@@ -1888,11 +1890,11 @@ float MapVote_CheckRules_2()
 			result = strcat(result, ":", ftos(secondPlaceVotes), "::");
 			didntvote = mapvote_voters;
 			for(i = 0; i < mapvote_count; ++i)
-			{
-				didntvote -= mapvote_votes[i];
-				if(i != firstPlace)
-					if(i != secondPlace)
-						if(mapvote_maps[i] != "")
+				if(mapvote_maps[i] != "")
+				{
+					didntvote -= mapvote_votes[i];
+					if(i != firstPlace)
+						if(i != secondPlace)
 						{
 							result = strcat(result, ":", mapvote_maps[i]);
 							result = strcat(result, ":", ftos(mapvote_votes[i]));
@@ -1902,7 +1904,7 @@ float MapVote_CheckRules_2()
 								mapvote_maps[i] = "";
 							}
 						}
-			}
+				}
 			result = strcat(result, ":didn't vote:", ftos(didntvote));
 			GameLogEcho(result, FALSE);
 		}
