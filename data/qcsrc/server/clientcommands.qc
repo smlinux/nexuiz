@@ -217,6 +217,8 @@ void SV_ParseClientCommand(string s) {
 						sprint(self, strcat("^1You have to wait ^2", ftos(self.vote_next - time), "^1 seconds before you can again call a vote.\n"));
 					} else if(VoteAllowed(strcat1(argv(2)))) { // strcat seems to be necessary
 						// remap chmap to gotomap (forces intermission)
+						if(vote == "chmap" || vote == "gotomap") // won't work without arguments
+							return;
 						if(substring(vote, 0, 6) == "chmap ")
 							vote = strcat("gotomap ", substring(vote, 6, strlen(vote) - 6));
 						if(substring(vote, 0, 8) == "gotomap ")
@@ -304,6 +306,8 @@ void SV_ParseClientCommand(string s) {
 				if(dovote == "") {
 					sprint(self, "^1Your command was empty. See help for more info.\n");
 				} else if(VoteAllowed(strcat1(argv(2)))) { // strcat seems to be necessary
+					if(dovote == "chmap" || dovote == "gotomap") // won't work without arguments
+						return;
 					if(substring(dovote, 0, 6) == "chmap ")
 						dovote = strcat("gotomap ", substring(dovote, 6, strlen(dovote) - 6));
 					if(substring(dovote, 0, 8) == "gotomap ")
