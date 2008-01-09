@@ -38,6 +38,8 @@ void W_Uzi_Attack (void)
 	else
 		fireBullet (w_shotorg, w_shotdir, cvar("g_balance_uzi_sustained_spread"), cvar("g_balance_uzi_sustained_damage"), cvar("g_balance_uzi_sustained_force"), IT_UZI, (self.uzi_bulletcounter & 3) == 0);
 
+	pointparticles(particleeffectnum("uzi_muzzleflash"), w_shotorg + v_forward * 14, v_forward * 1000, 1);
+
 	// muzzle flash for 1st person view
 	flash = spawn();
 	setorigin(flash, '53 5 0');

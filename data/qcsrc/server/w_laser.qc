@@ -36,6 +36,7 @@ void W_Laser_Attack (float issecondary)
 
 	W_SetupShot (self, '11 8 -8', FALSE, 3, "weapons/lasergun_fire.wav");
 	//te_customflash(w_shotorg, 160, 0.2, '1 0 0');
+	pointparticles(particleeffectnum("laser_muzzleflash"), w_shotorg + v_forward * 8, v_forward * 1000, 1);
 
 	missile = spawn ();
 	missile.owner = self;

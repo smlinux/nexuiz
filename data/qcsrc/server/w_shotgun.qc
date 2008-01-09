@@ -19,7 +19,8 @@ void W_Shotgun_Attack (void)
 	if (cvar("g_use_ammunition"))
 		self.ammo_shells = self.ammo_shells - cvar("g_balance_shotgun_primary_ammo");
 
-	W_Smoke(w_shotorg + v_forward * 8, v_forward, 12);
+	pointparticles(particleeffectnum("shotgun_muzzleflash"), w_shotorg + v_forward * 6, v_forward * 1000, cvar("g_balance_shotgun_primary_ammo"));
+	//W_Smoke(w_shotorg + v_forward * 8, v_forward, 12);
 	//te_smallflash(w_shotorg);
 
 	// casing code
@@ -63,7 +64,8 @@ void W_Shotgun_Attack2 (void)
 	if (cvar("g_use_ammunition"))
 		self.ammo_shells = self.ammo_shells - cvar("g_balance_shotgun_secondary_ammo");
 
-	W_Smoke(w_shotorg + v_forward * 8, v_forward, 12);
+	pointparticles(particleeffectnum("shotgun_muzzleflash"), w_shotorg + v_forward * 6, v_forward * 1000, cvar("g_balance_shotgun_secondary_ammo"));
+	//W_Smoke(w_shotorg + v_forward * 8, v_forward, 12);
 	//te_smallflash(w_shotorg);
 
 	// casing code

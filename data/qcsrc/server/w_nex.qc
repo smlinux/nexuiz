@@ -10,24 +10,16 @@ void W_Nex_Attack (void)
 	else
 		FireRailgunBullet (w_shotorg, w_shotorg + w_shotdir * MAX_SHOT_DISTANCE, cvar("g_balance_nex_damage"), cvar("g_balance_nex_force"), IT_NEX);
 
+	pointparticles(particleeffectnum("nex_muzzleflash"), w_shotorg + v_forward * 32, v_forward * 1000, 1);
+
 	// show as if shot started outside of gun
 	// muzzleflash light
 	//te_smallflash (w_shotorg + w_shotdir * 24);
 	// beam effect
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, 76);
-	WriteCoord (MSG_BROADCAST, w_shotorg_x + w_shotdir_x * 18);
-	WriteCoord (MSG_BROADCAST, w_shotorg_y + w_shotdir_y * 18);
-	WriteCoord (MSG_BROADCAST, w_shotorg_z + w_shotdir_z * 18);
-	WriteCoord (MSG_BROADCAST, trace_endpos_x);
-	WriteCoord (MSG_BROADCAST, trace_endpos_y);
-	WriteCoord (MSG_BROADCAST, trace_endpos_z);
-	WriteCoord (MSG_BROADCAST, 0);
-	WriteCoord (MSG_BROADCAST, 0);
-	WriteCoord (MSG_BROADCAST, 0);
+	trailparticles(world, particleeffectnum("nex_beam"), w_shotorg + w_shotdir * 28, trace_endpos);
 	// flash and burn the wall
 	if (trace_ent.solid == SOLID_BSP && !(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT))
-		te_plasmaburn (trace_endpos - w_shotdir * 6);
+		pointparticles(particleeffectnum("nex_impact"), trace_endpos - w_shotdir * 6, '0 0 0', 1);
 	// play a sound
 	PointSound (trace_endpos, "weapons/neximpact.wav", 1, ATTN_NORM);
 

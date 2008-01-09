@@ -1,3 +1,8 @@
+void info_player_survivor (void)
+{
+	info_player_deathmatch();
+}
+
 void info_player_start (void)
 {
 	info_player_deathmatch();

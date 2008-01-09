@@ -79,6 +79,7 @@ void W_Crylink_Attack (void)
 	te_smallflash(w_shotorg);
 
 	shots = cvar("g_balance_crylink_primary_shots");
+	pointparticles(particleeffectnum("crylink_muzzleflash"), w_shotorg + v_forward * 12, v_forward * 1000, shots);
 	while (counter < shots)
 	{
 		proj = spawn ();
@@ -121,9 +122,10 @@ void W_Crylink_Attack2 (void)
 		self.ammo_cells = self.ammo_cells - cvar("g_balance_crylink_secondary_ammo");
 
 	W_SetupShot (self, '11 8 -8', FALSE, 2, "weapons/crylink_fire.wav");
-	te_smallflash(w_shotorg);
+	//te_smallflash(w_shotorg);
 
 	shots = cvar("g_balance_crylink_secondary_shots");
+	pointparticles(particleeffectnum("crylink_muzzleflash"), w_shotorg + v_forward * 12, v_forward * 1000, shots);
 	while (counter < shots)
 	{
 		proj = spawn ();

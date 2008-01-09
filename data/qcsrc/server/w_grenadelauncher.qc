@@ -83,6 +83,8 @@ void W_Grenade_Attack (void)
 		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_grenadelauncher_primary_ammo");
 	W_SetupShot (self, '11 8 -8', FALSE, 4, "weapons/grenade_fire.wav");
 
+	pointparticles(particleeffectnum("grenadelauncher_muzzleflash"), w_shotorg + v_forward * 8, v_forward * 1000, 1);
+
 	gren = spawn ();
 	gren.owner = self;
 	gren.classname = "grenade";
@@ -91,6 +93,7 @@ void W_Grenade_Attack (void)
 	gren.movetype = MOVETYPE_BOUNCE;
 	gren.solid = SOLID_BBOX;
 	gren.effects = EF_LOWPRECISION;
+	gren.modelflags = MF_GRENADE;
 	setmodel(gren, "models/grenademodel.md3"); // precision set above
 	setsize(gren, '0 0 0', '0 0 0');
 	setorigin(gren, w_shotorg);
@@ -114,6 +117,8 @@ void W_Grenade_Attack2 (void)
 		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_grenadelauncher_secondary_ammo");
 	W_SetupShot (self, '11 8 -8', FALSE, 4, "weapons/grenade_fire.wav");
 
+	pointparticles(particleeffectnum("grenadelauncher_muzzleflash"), w_shotorg + v_forward * 8, v_forward * 1000, 1);
+
 	gren = spawn ();
 	gren.owner = self;
 	gren.classname = "grenade";
@@ -122,6 +127,7 @@ void W_Grenade_Attack2 (void)
 	gren.movetype = MOVETYPE_BOUNCE;
 	gren.solid = SOLID_BBOX;
 	gren.effects = EF_LOWPRECISION;
+	gren.modelflags = MF_GRENADE;
 	setmodel(gren, "models/grenademodel.md3"); // precision set above
 	setsize(gren, '0 0 -3', '0 0 -3');
 	setorigin(gren, w_shotorg);

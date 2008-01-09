@@ -205,7 +205,8 @@ void W_Rocket_Attack (void)
 		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_rocketlauncher_ammo");
 
 	W_SetupShot (self, '8 3 -8', FALSE, 5, "weapons/rocket_fire.wav");
-	te_smallflash(w_shotorg);
+	//te_smallflash(w_shotorg);
+	pointparticles(particleeffectnum("rocketlauncher_muzzleflash"), w_shotorg + v_forward * 12, v_forward * 1000, 1);
 
 	missile = spawn ();
 	missile.owner = self;

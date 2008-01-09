@@ -88,6 +88,8 @@ void() W_Electro_Attack
 
 	W_SetupShot (self, '11 8 -8', FALSE, 2, "weapons/electro_fire.wav");
 
+	pointparticles(particleeffectnum("electro_muzzleflash"), w_shotorg + v_forward * 8, v_forward * 1000, 1);
+
 	proj = spawn ();
 	proj.classname = "plasma_prim";
 	proj.owner = self;
@@ -119,6 +121,8 @@ void() W_Electro_Attack2
 	local entity proj;
 
 	W_SetupShot (self, '8 4.5 -13', FALSE, 2, "weapons/electro_fire2.wav");
+
+	pointparticles(particleeffectnum("electro_muzzleflash"), w_shotorg + v_forward * 8, v_forward * 1000, 1);
 
 	proj = spawn ();
 	proj.classname = "plasma";

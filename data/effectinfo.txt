@@ -948,7 +948,7 @@ alpha 256 256 0
 originjitter 20 20 20
 lightradius 250
 lightradiusfade 250
-lightcolor 4 4 10
+lightcolor 3.125 4.375 10
 // flare effect
 effect TE_TEI_PLASMAHIT
 countabsolute 1
@@ -984,11 +984,11 @@ velocityjitter 32 32 32
 // rocket trail
 // smoke
 effect TR_ROCKET
-trailspacing 3
+trailspacing 6
 type smoke
 color 0x303030 0x606060
 tex 0 8
-size 3 3
+size 7 7
 alpha 32 32 32
 lightradius 150
 lighttime 0
@@ -996,14 +996,15 @@ lightcolor 6 3 1
 // fire
 effect TR_ROCKET
 notunderwater
-trailspacing 3
+trailspacing 6
 type static
-color 0x801010 0xFFA020
+color 0x805010 0xFFA020
 tex 0 8
-size 3 3
-alpha 144 144 700
-velocityjitter 20 20 20
-velocitymultiplier -0.25
+size 6 6
+alpha 144 144 288
+airfriction 8
+velocityjitter 32 32 32
+velocitymultiplier -0.5
 // bubbles
 effect TR_ROCKET
 underwater
@@ -1017,6 +1018,21 @@ gravity -0.125
 bounce 1.5
 liquidfriction 4
 velocityjitter 16 16 16
+// sparks
+effect TR_ROCKET
+trailspacing 10
+type spark
+tex 40 40
+color 0xFFFDD9 0xFFFDD9
+size 2 2
+alpha 444 512 1866
+gravity 1
+bounce 1
+velocityoffset 0 0 15
+airfriction 12
+originjitter 1 1 1
+velocityjitter 200 200 200
+velocitymultiplier -0.5
 
 // grenade trail
 // smoke
@@ -1104,7 +1120,7 @@ trailspacing 4
 type static
 color 0x283880 0x283880
 size 4 4
-alpha 256 256 1024
+alpha 256 256 768
 velocityjitter 16 16 16
 lightradius 90
 lighttime 0
@@ -1156,3 +1172,284 @@ velocityjitter 32 32 0
 //lightradius 200
 //lighttime 0
 //lightcolor 0.4 0.9 0.9
+
+effect laser_muzzleflash
+count 1
+type smoke
+color 0xFFFFFF 0xFFFFFF
+tex 0 8
+size 5 5
+alpha 64 64 128
+airfriction 12
+originjitter 1.5 1.5 1.5
+velocityjitter 6 6 6
+velocitymultiplier 0.01
+lightradius 200
+lightradiusfade 2000
+lightcolor 3 0.1 0.1
+
+effect shotgun_muzzleflash
+count 3
+type smoke
+color 0x202020 0x404040
+tex 0 8
+size 5 5
+alpha 256 256 512
+originjitter 1.5 1.5 1.5
+velocityjitter 6 6 6
+velocitymultiplier 0.01
+lightradius 200
+lightradiusfade 2000
+lightcolor 2 1.5 0.2
+effect shotgun_muzzleflash
+count 10
+type spark
+tex 40 40
+color 0xFFFDD9 0xFFFDD9
+size 2 2
+alpha 0 128 1024
+originjitter 1 1 1
+velocityjitter 200 200 200
+velocitymultiplier 0.5
+airfriction 12
+
+effect uzi_muzzleflash
+count 2
+type smoke
+color 0x202020 0x404040
+tex 0 8
+size 5 5
+alpha 256 256 512
+originjitter 1.5 1.5 1.5
+velocityjitter 6 6 6
+velocitymultiplier 0.01
+lightradius 200
+lightradiusfade 2000
+lightcolor 2 1.5 0.2
+effect uzi_muzzleflash
+count 20
+type spark
+tex 40 40
+color 0xFFFDD9 0xFFFDD9
+size 2 2
+alpha 0 128 1024
+originjitter 1 1 1
+velocityjitter 300 300 300
+velocitymultiplier 0.5
+airfriction 12
+
+effect grenadelauncher_muzzleflash
+count 3
+type smoke
+color 0x202020 0x404040
+tex 0 8
+size 5 5
+alpha 256 256 512
+originjitter 1.5 1.5 1.5
+airfriction 12
+velocityjitter 20 20 20
+velocitymultiplier 0.03
+lightradius 200
+lightradiusfade 2000
+lightcolor 2 1.5 0.2
+effect grenadelauncher_muzzleflash
+count 30
+type spark
+tex 40 40
+color 0xFFFDD9 0xFFFDD9
+size 3 3
+alpha 0 128 1024
+originjitter 1 1 1
+velocityjitter 300 300 300
+velocitymultiplier 0.5
+airfriction 12
+
+effect electro_muzzleflash
+count 1
+type smoke
+color 0x202020 0x404040
+tex 0 8
+size 5 5
+alpha 256 256 512
+originjitter 1.5 1.5 1.5
+velocityjitter 6 6 6
+velocitymultiplier 0.01
+lightradius 200
+lightradiusfade 2000
+lightcolor 2 1.5 0.2
+effect electro_muzzleflash
+count 30
+type spark
+tex 41 41
+color 0xD9FDFF 0xD9FDFF
+size 3 3
+alpha 0 128 1024
+originjitter 1 1 1
+velocityjitter 300 300 300
+velocitymultiplier 0.5
+airfriction 12
+
+effect crylink_muzzleflash
+count 1
+type smoke
+color 0x202020 0x404040
+tex 0 8
+size 5 5
+alpha 128 128 256
+originjitter 1.5 1.5 1.5
+velocityjitter 6 6 6
+velocitymultiplier 0.01
+lightradius 200
+lightradiusfade 2000
+lightcolor 2 1.5 0.2
+effect crylink_muzzleflash
+count 10
+type spark
+tex 40 40
+color 0xA080C0 0xA080C0
+size 3 3
+alpha 0 128 1024
+originjitter 1 1 1
+velocityjitter 200 200 200
+velocitymultiplier 0.3
+airfriction 12
+
+effect nex_muzzleflash
+count 10
+type smoke
+color 0x202020 0x404040
+tex 0 8
+size 16 16
+alpha 256 256 384
+originjitter 4 4 4
+velocityjitter 24 24 24
+velocitymultiplier 0.02
+lightradius 300
+lightradiusfade 300
+lightcolor 4 5 6
+effect nex_muzzleflash
+count 150
+type spark
+tex 41 41
+color 0xD9FDFF 0xD9FDFF
+size 3 3
+alpha 0 128 512
+originjitter 1 1 1
+velocityjitter 600 600 600
+velocitymultiplier 0.5
+airfriction 9
+
+effect hagar_muzzleflash
+count 4
+type smoke
+color 0x202020 0x404040
+tex 0 8
+size 5 5
+alpha 256 256 512
+originjitter 1.5 1.5 1.5
+velocityjitter 6 6 6
+velocitymultiplier 0.01
+lightradius 200
+lightradiusfade 2000
+lightcolor 2 1.5 0.2
+effect hagar_muzzleflash
+count 30
+type spark
+tex 40 40
+color 0xFFFDD9 0xFFFDD9
+size 3 3
+alpha 0 128 1024
+originjitter 1 1 1
+velocityjitter 300 300 300
+velocitymultiplier 0.5
+airfriction 12
+
+effect rocketlauncher_muzzleflash
+count 5
+type smoke
+color 0x202020 0x404040
+tex 0 8
+size 5 5
+alpha 256 256 256
+airfriction 6
+originjitter 1.5 1.5 1.5
+velocityjitter 40 40 40
+velocitymultiplier 0.03
+//lightradius 200
+//lightradiusfade 2000
+//lightcolor 2 1.5 0.2
+effect rocketlauncher_muzzleflash
+count 30
+type spark
+tex 40 40
+color 0xFFFDD9 0xFFFDD9
+size 3 3
+alpha 0 128 1024
+originjitter 1 1 1
+velocityjitter 300 300 300
+velocitymultiplier 0.5
+airfriction 12
+
+// nex beam
+effect nex_beam
+countabsolute 1
+type beam
+tex 60 60
+color 0xFFFFFF 0xFFFFFF
+size 6 6
+alpha 128 128 192
+// The RING smoke
+// experimental
+effect nex_beam
+trailspacing 12
+color 0x0B3E4F 0x0B3E4F
+size 4 4
+tex 32 32
+alpha 0 256 200
+airfriction 5
+sizeincrease 3
+type static
+// The drifting smoke to accompany it
+// experimental
+effect nex_beam
+trailspacing 8
+color 0x28404F 0x28404F
+size 4 4
+tex 48 55
+alpha 128 192 200
+airfriction 9
+sizeincrease 12
+velocityjitter 64 64 64
+type static
+
+// nex impact
+// decal
+effect nex_impact
+countabsolute 1
+type decal
+tex 47 47
+size 24 24
+alpha 256 256 0
+originjitter 16 16 16
+lightradius 200
+lightradiusfade 250
+lightcolor 4 6 8
+// flare effect
+effect nex_impact
+countabsolute 1
+type static
+tex 37 37
+color 0x80C0FF 0x80C0FF
+size 8 8
+alpha 256 256 256
+// small sparks which form a sphere as they slow down
+effect nex_impact
+count 256
+type spark
+color 0x2030FF 0x80C0FF
+size 1 2
+alpha 256 256 512
+bounce 2
+airfriction 8
+liquidfriction 8
+velocityjitter 384 384 384
