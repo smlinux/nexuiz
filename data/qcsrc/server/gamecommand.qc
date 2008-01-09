@@ -56,6 +56,7 @@ void GameCommand(string command)
 		e.classname = "make_mapinfo";
 		e.think = make_mapinfo_Think;
 		e.nextthink = time;
+		MapInfo_Enumerate();
 		return;
 	}
 
