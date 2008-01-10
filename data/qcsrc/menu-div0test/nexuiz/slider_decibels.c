@@ -64,7 +64,7 @@ void loadCvarsNexuizDecibelsSlider(entity me)
 	else if(v < 0.0005)
 		me.value = -1000000;
 	else
-		me.value = ln(cvar(me.cvarName)) * 10 / LOG10;
+		me.value = 0.1 * floor(0.5 + 10.0 * ln(cvar(me.cvarName)) * 10 / LOG10);
 }
 void saveCvarsNexuizDecibelsSlider(entity me)
 {
