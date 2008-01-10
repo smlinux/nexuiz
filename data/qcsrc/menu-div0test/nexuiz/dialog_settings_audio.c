@@ -32,14 +32,17 @@ void fillNexuizAudioSettingsTab(entity me)
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Music Volume:"));
 		me.TD(me, 1, 2, e = makeNexuizSlider(0, 1, 0.02, "bgmvolume"));
 			e.valueDisplayMultiplier = 100;
+			e.valueDigits = 0;
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Game Volume:"));
 		me.TD(me, 1, 2, e = makeNexuizSlider(0, 1, 0.02, "volume"));
 			e.valueDisplayMultiplier = 100;
+			e.valueDigits = 0;
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Ambient Volume:"));
 		me.TD(me, 1, 2, e = makeNexuizSlider(0, 1, 0.02, "snd_staticvolume"));
 			e.valueDisplayMultiplier = 100;
+			e.valueDigits = 0;
 
 	me.gotoXY(me, 0, 3.5); me.setFirstColumn(me, me.currentColumn);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Frequency:"));
