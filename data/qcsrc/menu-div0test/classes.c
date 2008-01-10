@@ -57,3 +57,4 @@
 #include "nexuiz/keybinder.c"
 #include "nexuiz/dialog_settings_input.c"
 #include "nexuiz/dialog_settings_input_userbind.c"
+#include "nexuiz/slider_decibels.c"

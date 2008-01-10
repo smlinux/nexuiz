@@ -26,23 +26,20 @@ entity makeNexuizDemoListbox()
 }
 void fillNexuizAudioSettingsTab(entity me)
 {
-	entity e;
+	entity e, s;
 
 	me.TR(me);
-		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Music Volume:"));
-		me.TD(me, 1, 2, e = makeNexuizSlider(0, 1, 0.02, "bgmvolume"));
-			e.valueDisplayMultiplier = 100;
-			e.valueDigits = 0;
+		s = makeNexuizDecibelsSlider(-20, 0, 0.5, "bgmvolume");
+		me.TD(me, 1, 1, e = makeNexuizSliderCheckBox(-1000000, 1, s, "Music:"));
+		me.TD(me, 1, 2, s);
 	me.TR(me);
-		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Game Volume:"));
-		me.TD(me, 1, 2, e = makeNexuizSlider(0, 1, 0.02, "volume"));
-			e.valueDisplayMultiplier = 100;
-			e.valueDigits = 0;
+		s = makeNexuizDecibelsSlider(-20, 0, 0.5, "volume");
+		me.TD(me, 1, 1, e = makeNexuizSliderCheckBox(-1000000, 1, s, "Game:"));
+		me.TD(me, 1, 2, s);
 	me.TR(me);
-		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Ambient Volume:"));
-		me.TD(me, 1, 2, e = makeNexuizSlider(0, 1, 0.02, "snd_staticvolume"));
-			e.valueDisplayMultiplier = 100;
-			e.valueDigits = 0;
+		s = makeNexuizDecibelsSlider(-20, 0, 0.5, "snd_staticvolume");
+		me.TD(me, 1, 1, e = makeNexuizSliderCheckBox(-1000000, 1, s, "Ambient:"));
+		me.TD(me, 1, 2, s);
 
 	me.gotoXY(me, 0, 3.5); me.setFirstColumn(me, me.currentColumn);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Frequency:"));
