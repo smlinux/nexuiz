@@ -24,7 +24,7 @@ void draw_drawMousePointer(vector where)
 
 void draw_reset()
 {
-	drawfont = 8;
+	drawfont = FONT_USER+0;
 	draw_shift = '0 0 0';
 	draw_scale = '1 0 0' * cvar("vid_conwidth") + '0 1 0' * cvar("vid_conheight");
 	draw_alpha = 1;

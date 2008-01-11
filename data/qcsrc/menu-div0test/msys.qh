@@ -291,7 +291,7 @@ float OS_LINUX		= 1;
 float OS_MAC		= 2;
 */
 
-float drawfont; // set this to one of the following for draw text routines to work
+float drawfont; // set this to one of the following for draw text routines to work with another font
 float FONT_DEFAULT     = 0;
 float FONT_CONSOLE     = 1;
 float FONT_SBAR        = 2;
