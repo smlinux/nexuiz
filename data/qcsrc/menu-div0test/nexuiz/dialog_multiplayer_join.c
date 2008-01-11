@@ -32,14 +32,15 @@ void fillNexuizServerListTab(entity me)
 			e.onChange = ServerList_Filter_Change;
 			e.onChangeEntity = slist;
 			clearbtn.onClickEntity = e;
-		me.TD(me, 1, 0.75, e = makeNexuizCheckBox(0, string_null, "Empty"));
-			e.checked = slist.filterShowEmpty;
+		me.TD(me, 1, 0.5, e = makeNexuizCheckBox(0, "menu_slist_showempty", "Empty"));
+			slist.filterShowEmpty = e.checked;
 			e.onClickEntity = slist;
 			e.onClick = ServerList_ShowEmpty_Click;
-		me.TD(me, 1, 0.75, e = makeNexuizCheckBox(0, string_null, "Full"));
-			e.checked = slist.filterShowFull;
+		me.TD(me, 1, 0.5, e = makeNexuizCheckBox(0, "menu_slist_showfull", "Full"));
+			slist.filterShowFull = e.checked;
 			e.onClickEntity = slist;
 			e.onClick = ServerList_ShowFull_Click;
+		me.TD(me, 1, 0.5, e = makeNexuizCheckBox(0, "net_slist_pause", "Pause"));
 
 	me.TR(me);
 		me.TD(me, 1, 1, slist.sortButton1 = makeNexuizButton(string_null, '0 0 0'));
