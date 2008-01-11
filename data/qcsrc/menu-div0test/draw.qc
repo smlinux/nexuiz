@@ -1,4 +1,3 @@
-float drawfont;
 string draw_mousepointer;
 vector draw_mousepointer_offset;
 vector draw_mousepointer_size;

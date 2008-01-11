@@ -291,3 +291,13 @@ float OS_LINUX		= 1;
 float OS_MAC		= 2;
 */
 
+float drawfont; // set this to one of the following for draw text routines to work
+float FONT_DEFAULT     = 0;
+float FONT_CONSOLE     = 1;
+float FONT_SBAR        = 2;
+float FONT_NOTIFY      = 3;
+float FONT_CHAT        = 4;
+float FONT_CENTERPRINT = 5;
+float FONT_INFOBAR     = 6;
+float FONT_MENU        = 7;
+float FONT_USER        = 8; // add to this the index, like FONT_USER+3 = user3. At least 8 of them are supported.
