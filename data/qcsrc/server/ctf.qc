@@ -10,6 +10,20 @@
 
 #define FLAG_CARRY_POS '-15 0 7'
 
+void FakeTimeLimit(entity e, float t)
+{
+	msg_entity = e;
+	WriteByte(MSG_ONE, 3); // svc_updatestat
+	WriteByte(MSG_ONE, 236); // STAT_TIMELIMIT
+	if(t < 0)
+		WriteCoord(MSG_ONE, cvar("timelimit"));
+	else
+		WriteCoord(MSG_ONE, (t + 1) / 60);
+}
+
+float   flagcaptimerecord;
+.float  flagpickuptime;
+
 void() FlagThink;
 void() FlagTouch;
 
@@ -81,6 +95,9 @@ void(entity e) ReturnFlag =
 	{
 		WaypointSprite_DetachCarrier(e.owner);
 		e.owner.flagcarried = world;
+
+		if(e.speedrunning)
+			FakeTimeLimit(e.owner, -1);
 	}
 	e.owner = world;
 	RegenFlag(e);
@@ -89,6 +106,12 @@ void(entity e) ReturnFlag =
 void(entity e) DropFlag =
 {
 	local entity p;
+
+	if(e.speedrunning)
+	{
+		ReturnFlag(e);
+		return;
+	}
 
 	if (!e.owner)
 	{
@@ -147,6 +170,25 @@ void() FlagThink =
 
 	AnimateFlag();
 
+	if(self.speedrunning)
+	if(self.cnt == FLAG_CARRY)
+	{
+		if(self.owner)
+		if(flagcaptimerecord)
+		if(time >= self.flagpickuptime + flagcaptimerecord)
+		{
+			bprint("The ", self.netname, " became impatient after ", ftos_decimals(flagcaptimerecord, 2), " seconds and returned itself\n");
+
+			self.owner.impulse = 77; // returning!
+			e = self;
+			self = self.owner;
+			ReturnFlag(e);
+			ImpulseCommands();
+			self = e;
+			return;
+		}
+	}
+
 	if (self.cnt == FLAG_BASE)
 		return;
 
@@ -177,9 +219,6 @@ void() FlagThink =
 		return;
 	}
 };
-
-float   flagcaptimerecord;
-.float  flagpickuptime;
 
 void() FlagTouch =
 {
@@ -236,6 +275,8 @@ void() FlagTouch =
 
 		sound (self, CHAN_AUTO, self.noise2, 1, ATTN_NONE);
 		WaypointSprite_DetachCarrier(other);
+		if(self.speedrunning)
+			FakeTimeLimit(other, -1);
 		RegenFlag (other.flagcarried);
 		other.flagcarried = world;
 		other.next_take_time = time + 1;
@@ -249,6 +290,10 @@ void() FlagTouch =
 			return;
 		// pick up
 		self.flagpickuptime = time; // used for timing runs
+		self.speedrunning = other.speedrunning; // if speedrunning, flag will self-return and teleport the owner back after the record
+		if(other.speedrunning)
+		if(flagcaptimerecord)
+			FakeTimeLimit(other, time + flagcaptimerecord);
 		self.solid = SOLID_NOT;
 		setorigin(self, self.origin); // relink
 		self.owner = other;

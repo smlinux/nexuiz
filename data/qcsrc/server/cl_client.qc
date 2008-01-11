@@ -559,6 +559,7 @@ void PutClientInServer (void)
 
 		self.lms_nextcheck = time + cvar("g_lms_campcheck_interval")*2;
 		self.lms_traveled_distance = 0;
+		self.speedrunning = FALSE;
 
 		if(cvar("spawn_debug"))
 		{
