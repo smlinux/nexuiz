@@ -178,6 +178,8 @@ float(float req) w_nex =
 		precache_model ("models/weapons/w_nex.zym");
 		precache_sound ("weapons/nexfire.wav");
 		precache_sound ("weapons/neximpact.wav");
+		if(g_minstagib)
+			w_laser(WR_PRECACHE);
 	}
 	else if (req == WR_SETUP)
 		weapon_setup(WEP_NEX, "nex", IT_CELLS);
