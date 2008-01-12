@@ -6,6 +6,7 @@ float yoda;
 void announce(entity player, string msg)
 {
 	if(time > player.announcetime)
+	if(clienttype(player) == CLIENTTYPE_REAL)
 	{
 		player.announcetime = time + 0.3;
 		play2(player, msg);
@@ -448,9 +449,8 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 			else if (deathtype == IT_NEX && targ.items & IT_STRENGTH)
 			{
 				if(clienttype(attacker) == CLIENTTYPE_REAL)
-				{
-					announce(attacker, "announcer/male/yoda.ogg");
-				}
+					if(IsDifferentTeam(self, attacker))
+							yoda = 1;
 			}
 			if (deathtype == IT_LASER)
 			{
