@@ -8,7 +8,13 @@ void W_Nex_Attack (void)
 	if (g_minstagib)
 		FireRailgunBullet (w_shotorg, w_shotorg + w_shotdir * MAX_SHOT_DISTANCE, 1000, 800, IT_NEX);
 	else
+	{
+		yoda = 0;
 		FireRailgunBullet (w_shotorg, w_shotorg + w_shotdir * MAX_SHOT_DISTANCE, cvar("g_balance_nex_damage"), cvar("g_balance_nex_force"), IT_NEX);
+		if(yoda)
+			if(IsFlying(self))
+				announce(self, "announcer/male/yoda.ogg");
+	}
 
 	pointparticles(particleeffectnum("nex_muzzleflash"), w_shotorg + v_forward * 32, v_forward * 1000, 1);
 
@@ -61,67 +67,67 @@ void minstagib_ammocheck (void)
 		{
 			centerprint(self, "you're dead now...\n");
 			Damage(self, self, self, 5, DEATH_NOAMMO, self.origin, '0 0 0');
-			play2(self, "announcer/robotic/terminated.ogg");
+			announce(self, "announcer/robotic/terminated.ogg");
 		}
 		if (self.health == 10)
 		{
 			centerprint(self, "^11^7 second left to find some ammo\n");
 			Damage(self, self, self, 5, DEATH_NOAMMO, self.origin, '0 0 0');
-			play2(self, "announcer/robotic/1.ogg");
+			announce(self, "announcer/robotic/1.ogg");
 		}
 		if (self.health == 20)
 		{
 			centerprint(self, "^12^7 seconds left to find some ammo\n");
 			Damage(self, self, self, 10, DEATH_NOAMMO, self.origin, '0 0 0');
-			play2(self, "announcer/robotic/2.ogg");
+			announce(self, "announcer/robotic/2.ogg");
 		}
 		if (self.health == 30)
 		{
 			centerprint(self, "^13^7 seconds left to find some ammo\n");
 			Damage(self, self, self, 10, DEATH_NOAMMO, self.origin, '0 0 0');
-			play2(self, "announcer/robotic/3.ogg");
+			announce(self, "announcer/robotic/3.ogg");
 		}
 		if (self.health == 40)
 		{
 			centerprint(self, "^14^7 seconds left to find some ammo\n");
 			Damage(self, self, self, 10, DEATH_NOAMMO, self.origin, '0 0 0');
-			play2(self, "announcer/robotic/4.ogg");
+			announce(self, "announcer/robotic/4.ogg");
 		}
 		if (self.health == 50)
 		{
 			centerprint(self, "^15^7 seconds left to find some ammo\n");
 			Damage(self, self, self, 10, DEATH_NOAMMO, self.origin, '0 0 0');
-			play2(self, "announcer/robotic/5.ogg");
+			announce(self, "announcer/robotic/5.ogg");
 		}
 		if (self.health == 60)
 		{
 			centerprint(self, "^36^7 seconds left to find some ammo\n");
 			Damage(self, self, self, 10, DEATH_NOAMMO, self.origin, '0 0 0');
-			play2(self, "announcer/robotic/6.ogg");
+			announce(self, "announcer/robotic/6.ogg");
 		}
 		if (self.health == 70)
 		{
 			centerprint(self, "^37^7 seconds left to find some ammo\n");
 			Damage(self, self, self, 10, DEATH_NOAMMO, self.origin, '0 0 0');
-			play2(self, "announcer/robotic/7.ogg");
+			announce(self, "announcer/robotic/7.ogg");
 		}
 		if (self.health == 80)
 		{
 			centerprint(self, "^38^7 seconds left to find some ammo\n");
 			Damage(self, self, self, 10, DEATH_NOAMMO, self.origin, '0 0 0');
-			play2(self, "announcer/robotic/8.ogg");
+			announce(self, "announcer/robotic/8.ogg");
 		}
 		if (self.health == 90)
 		{
 			centerprint(self, "^39^7 seconds left to find some ammo\n");
 			Damage(self, self, self, 10, DEATH_NOAMMO, self.origin, '0 0 0');
-			play2(self, "announcer/robotic/9.ogg");
+			announce(self, "announcer/robotic/9.ogg");
 		}
 		if (self.health == 100)
 		{
 			centerprint(self, "get some ammo or\nyou'll be dead in ^310^7 seconds...");
 			Damage(self, self, self, 10, DEATH_NOAMMO, self.origin, '0 0 0');
-			play2(self, "announcer/robotic/10.ogg");
+			announce(self, "announcer/robotic/10.ogg");
 		}
 	}
 	self.minstagib_nextthink = time + 1;

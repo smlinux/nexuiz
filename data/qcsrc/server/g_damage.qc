@@ -1,6 +1,37 @@
 
 float checkrules_firstblood;
 
+.float announcetime;
+float yoda;
+void announce(entity player, string msg)
+{
+	if(time > player.announcetime)
+	{
+		player.announcetime = time + 0.3;
+		play2(player, msg);
+	}
+}
+
+float IsDifferentTeam(entity a, entity b)
+{
+	if(teams_matter)
+		if(a.team == b.team)
+			return 0;
+	return 1;
+}
+
+float IsFlying(entity a)
+{
+	if(a.flags & FL_ONGROUND)
+		return 0;
+	if(a.waterlevel >= 2)
+		return 0;
+	traceline(a.origin, a.origin - '0 0 48', MOVE_NORMAL, a);
+	if(trace_fraction < 1)
+		return 0;
+	return 1;
+}
+
 void(entity player, float f) UpdateFrags =
 {
 	player.frags += f;
@@ -237,37 +268,37 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				if (attacker.killcount == 3)
 				{
 					bprint (a,"^7 made a ^1TRIPLE FRAG\n");
-					play2(attacker, "announcer/male/03kills.ogg");
+					announce(attacker, "announcer/male/03kills.ogg");
 				}
 				else if (attacker.killcount == 5)
 				{
 					bprint (a,"^7 made a ^1FIVE FRAG COMBO\n");
-					play2(attacker, "announcer/male/05kills.ogg");
+					announce(attacker, "announcer/male/05kills.ogg");
 				}
 				else if (attacker.killcount == 10)
 				{
 					bprint (a,"^7 is on a ^1RAGE\n");
-					play2(attacker, "announcer/male/10kills.ogg");
+					announce(attacker, "announcer/male/10kills.ogg");
 				}
 				else if (attacker.killcount == 15)
 				{
 					bprint (a,"^7 has done a ^1MASSACRE!\n");
-					play2(attacker, "announcer/male/15kills.ogg");
+					announce(attacker, "announcer/male/15kills.ogg");
 				}
 				else if (attacker.killcount == 20)
 				{
 					bprint (a,"^7 is ^1UNHUMAN!\n");
-					play2(attacker, "announcer/male/20kills.ogg");
+					announce(attacker, "announcer/male/20kills.ogg");
 				}
 				else if (attacker.killcount == 25)
 				{
 					bprint (a,"^7 is a ^1DEATH INCARNATION!\n");
-					play2(attacker, "announcer/male/25kills.ogg");
+					announce(attacker, "announcer/male/25kills.ogg");
 				}
 				else if (attacker.killcount == 30)
 				{
 					bprint (a,"^7 is maybe a ^1AIMBOTTER?!\n");
-					play2(attacker, "announcer/male/30kills.ogg");
+					announce(attacker, "announcer/male/30kills.ogg");
 				}
 			}
 		}
@@ -292,7 +323,7 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				bprint ("^1",s, "^1 died\n");
 			GiveFrags(targ, targ, -1);
 			if(targ.frags == -5) {
-				play2(targ, "announcer/male/botlike.ogg");
+				announce(targ, "announcer/male/botlike.ogg");
 			}
 
 			if (targ.killcount > 2)
@@ -416,7 +447,10 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 			}
 			else if (deathtype == IT_NEX && targ.items & IT_STRENGTH)
 			{
-				if(clienttype(attacker) == CLIENTTYPE_REAL) play2(attacker, "announcer/male/yoda.ogg");
+				if(clienttype(attacker) == CLIENTTYPE_REAL)
+				{
+					announce(attacker, "announcer/male/yoda.ogg");
+				}
 			}
 			if (deathtype == IT_LASER)
 			{
@@ -433,10 +467,10 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 				}
 			}
 		} else {
-			if (deathtype == IT_NEX && !targ.deadflag && !(attacker.flags & FL_ONGROUND) && !(targ.flags & FL_ONGROUND) && attacker.waterlevel < 2 && targ.waterlevel < 2 && attacker.killcount != 3 && attacker.killcount != 5 && attacker.killcount != 10 && attacker.killcount != 15 && attacker.killcount != 20 && attacker.killcount != 25 && attacker.killcount != 30)
-			{
-				if(clienttype(attacker) == CLIENTTYPE_REAL)  play2(attacker, "announcer/male/yoda.ogg");
-			}
+			if (!targ.deadflag)
+				if(IsFlying(targ))
+					if(IsDifferentTeam(self, targ))
+						yoda = 1;
 		}
 
 		// apply strength multiplier

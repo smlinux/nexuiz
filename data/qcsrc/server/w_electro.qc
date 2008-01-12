@@ -39,6 +39,7 @@ void W_Plasma_Explode_Combo (void) {
 
 void W_Plasma_Touch (void)
 {
+	entity o;
 	if (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
 	{
 		sound (self, CHAN_BODY, "misc/null.wav", 1, ATTN_NORM);
@@ -46,7 +47,12 @@ void W_Plasma_Touch (void)
 		return;
 	}
 	if (other.takedamage == DAMAGE_AIM) {
+		o = self.owner;
 		W_Plasma_Explode ();
+		if(!other.deadflag)
+			if(IsDifferentTeam(o, other))
+				if(IsFlying(other))
+					announce(o, "announcer/male/electrobitch.ogg");
 	} else {
 		sound (self, CHAN_IMPACT, "weapons/electro_bounce.wav", 1, ATTN_NORM);
 	}
@@ -54,13 +60,20 @@ void W_Plasma_Touch (void)
 
 void W_Plasma_TouchExplode (void)
 {
+	entity o;
 	if (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
 	{
 		sound (self, CHAN_BODY, "misc/null.wav", 1, ATTN_NORM);
 		remove(self);
 		return;
 	}
+	o = self.owner;
 	W_Plasma_Explode ();
+	if(other.takedamage == DAMAGE_AIM)
+		if(!other.deadflag)
+			if(IsDifferentTeam(o, other))
+				if(IsFlying(other))
+					announce(o, "announcer/male/electrobitch.ogg");
 }
 
 void W_Plasma_Damage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)

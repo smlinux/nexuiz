@@ -1237,7 +1237,7 @@ void ShowRespawnCountdown()
 		{
 			self.respawn_countdown = number - 1;
 			if(ceil(self.death_time - (time + 0.5)) == number) // only say it if it is the same number even in 0.5s; to prevent overlapping sounds
-				play2(self, strcat("announcer/robotic/", ftos(number), ".ogg"));
+				play2(self, strcat("announcer/robotic/", ftos(number), "announcer/.ogg"));
 		}
 	}
 }
