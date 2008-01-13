@@ -45,6 +45,7 @@ void(entity ent, vector vecs, float antilag, float recoil, string snd) W_SetupSh
 	// damage to the real player
 	if (antilag)
 	if (self.cursor_trace_ent)                 // client was aiming at someone
+	if (self.cursor_trace_ent != self)         // just to make sure
 	if (self.cursor_trace_ent.takedamage)      // and that person is killable
 	if (cvar("g_antilag"))
 	{
@@ -56,7 +57,27 @@ void(entity ent, vector vecs, float antilag, float recoil, string snd) W_SetupSh
 			// verify that the shot would hit if altered
 			traceline_hitcorpse(self, w_shotorg, self.cursor_trace_ent.origin, MOVE_NORMAL, self);
 			if (trace_ent == self.cursor_trace_ent)
-				w_shotdir = normalize(self.cursor_trace_ent.origin - w_shotorg);
+			{
+				// verify that the shot would hit in the past
+				antilag_takeback(self,                  time - self.ping * 0.001);
+				antilag_takeback(self.cursor_trace_ent, time - self.ping * 0.001);
+
+				//te_spark(self.origin, '0 0 0', 1000);
+				//te_spark(self.cursor_trace_ent.origin, '0 0 0', 1000);
+
+				traceline_hitcorpse(self, self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * MAX_SHOT_DISTANCE, MOVE_NORMAL, self);
+
+				antilag_restore(self);
+				antilag_restore(self.cursor_trace_ent);
+
+				if(trace_ent == self.cursor_trace_ent)
+					w_shotdir = normalize(self.cursor_trace_ent.origin - w_shotorg);
+				else
+				{
+					// wallhack or odd network conditions
+					dprint("WARNING: antilag ghost trace for ", self.netname, " failed!\n");
+				}
+			}
 		}
 	}
 

@@ -18,6 +18,8 @@ ipban.qh
 
 keyhunt.qh
 
+antilag.qh
+
 miscfunctions.qc
 
 waypointsprites.qc
@@ -69,9 +71,11 @@ t_items.qc
 cl_weapons.qc
 //g_tetris.qc
 cl_impulse.qc
+
 cl_player.qc
 cl_client.qc
 t_plats.qc
+antilag.qc
 
 ctf.qc
 domination.qc

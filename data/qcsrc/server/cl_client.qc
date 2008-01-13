@@ -1274,6 +1274,8 @@ void PlayerPreThink (void)
 {
 	float f;
 
+	antilag_record(self);
+
 	// version nagging
 	if(self.version_nagtime)
 		if(self.cvar_g_nexuizversion)
