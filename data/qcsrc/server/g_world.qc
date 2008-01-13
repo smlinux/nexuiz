@@ -90,6 +90,10 @@ void worldspawn (void)
 		error("world already spawned - you may have EXACTLY ONE worldspawn!");
 	world_already_spawned = TRUE;
 
+#ifdef MAPINFO
+	MapInfo_LoadMapSettings(mapname);
+#endif
+
 	/*
 	TODO sound pack system
 	// initialize sound pack system
@@ -139,6 +143,10 @@ void worldspawn (void)
 
 	// 63 testing
 	lightstyle(63, "a");
+
+	// for setting by mapinfo
+	q3acompat_machineshotgunswap = cvar("sv_q3acompat_machineshotgunswap");
+	cvar_set("sv_q3acompat_machineshotgunswap", "0");
 
 	player_count = 0;
 	lms_lowest_lives = 0;

@@ -380,3 +380,4 @@ float assault_attacker_team;
 .float notsingle;
 .float notfree;
 .float notq3a;
+float q3acompat_machineshotgunswap;

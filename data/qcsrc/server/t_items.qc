@@ -527,7 +527,20 @@ void minst_remove_item (void) {
 		remove(self);
 }
 
+float weaponswapping;
+
+void weapon_shotgun (void);
 void weapon_uzi (void) {
+	if(!weaponswapping)
+	if(q3acompat_machineshotgunswap)
+	if(self.classname != "droppedweapon")
+	{
+		weaponswapping = TRUE;
+		weapon_shotgun();
+		weaponswapping = FALSE;
+		return;
+	}
+
 	if(!self.ammo_nails)
 		self.ammo_nails = cvar("g_pickup_nails");
 	StartItem ("models/weapons/g_uzi.md3", "weapons/weaponpickup.wav", 15, W_Name(WEP_UZI), IT_UZI, FL_WEAPON, weapon_pickupevalfunc, 1000);
@@ -536,6 +549,16 @@ void weapon_uzi (void) {
 }
 
 void weapon_shotgun (void) {
+	if(!weaponswapping)
+	if(q3acompat_machineshotgunswap)
+	if(self.classname != "droppedweapon")
+	{
+		weaponswapping = TRUE;
+		weapon_uzi();
+		weaponswapping = FALSE;
+		return;
+	}
+
 	if(!self.ammo_shells)
 		self.ammo_shells = cvar("g_pickup_shells");
 	StartItem ("models/weapons/g_shotgun.md3", "weapons/weaponpickup.wav", 15, W_Name(WEP_SHOTGUN), IT_SHOTGUN, FL_WEAPON, weapon_pickupevalfunc, 1000);
@@ -623,7 +646,18 @@ void item_rockets (void) {
 	StartItem ("models/items/a_rockets.md3", "misc/itempickup.wav", 15, "rockets", IT_ROCKETS, 0, commodity_pickupevalfunc, 100);
 }
 
+void item_shells (void);
 void item_bullets (void) {
+	if(!weaponswapping)
+	if(q3acompat_machineshotgunswap)
+	if(self.classname != "droppedweapon")
+	{
+		weaponswapping = TRUE;
+		item_shells();
+		weaponswapping = FALSE;
+		return;
+	}
+
 	if(!self.ammo_nails)
 		self.ammo_nails = g_pickup_nails;
 	StartItem ("models/items/a_bullets.mdl", "misc/itempickup.wav", 15, "bullets", IT_NAILS, 0, commodity_pickupevalfunc, 100);
@@ -636,6 +670,16 @@ void item_cells (void) {
 }
 
 void item_shells (void) {
+	if(!weaponswapping)
+	if(q3acompat_machineshotgunswap)
+	if(self.classname != "droppedweapon")
+	{
+		weaponswapping = TRUE;
+		item_bullets();
+		weaponswapping = FALSE;
+		return;
+	}
+
 	if(!self.ammo_shells)
 		self.ammo_shells = g_pickup_shells;
 	StartItem ("models/items/a_shells.md3", "misc/itempickup.wav", 15, "shells", IT_SHELLS, 0, commodity_pickupevalfunc, 100);

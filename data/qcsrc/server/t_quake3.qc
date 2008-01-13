@@ -50,3 +50,5 @@ void spawnfunc_team_CTF_redflag()    { item_flag_team1();    }
 void spawnfunc_team_CTF_blueflag()   { item_flag_team2();    }
 void spawnfunc_team_CTF_redplayer()  { info_player_team1();  }
 void spawnfunc_team_CTF_blueplayer() { info_player_team2();  }
+void spawnfunc_team_CTF_redspawn()   { info_player_team1();  }
+void spawnfunc_team_CTF_bluespawn()  { info_player_team2();  }

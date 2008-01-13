@@ -54,3 +54,6 @@ string MapInfo_ListAllowedMaps();
 // gets a gametype from a string
 float MapInfo_Type_FromString(string t);
 void MapInfo_SwitchGameType(float t);
+
+// to be called from worldspawn to set up cvars
+void MapInfo_LoadMapSettings(string s);
