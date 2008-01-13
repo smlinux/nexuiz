@@ -305,6 +305,15 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 			}
 		}
 
+		if(self.notq3a)
+		{
+			// We aren't TA or something like that, so we keep the Q3A entities
+			print("removed non-Q3A ", self.classname, "\n");
+			startitem_failed = TRUE;
+			remove (self);
+			return;
+		}
+		
 		if(self.targetname)
 		{
 			// target_give not yet supported; maybe later

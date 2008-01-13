@@ -181,6 +181,10 @@ void() multi_touch =
 	if (other.classname != "player")
 		return;
 
+    if(self.team)
+    if(self.team == other.team)
+        return;
+
 // if the trigger has an angles field, check player's facing direction
 	if (self.movedir != '0 0 0')
 	{
@@ -291,6 +295,19 @@ void() trigger_relay =
 	self.use = SUB_UseTargets;
 };
 
+void() delay_use
+{
+    self.think = SUB_UseTargets;
+    self.nextthink = self.wait;
+}
+
+void() trigger_delay
+{
+    if(!self.wait)
+        self.wait = 1;
+
+    self.use = delay_use;
+}
 
 //=============================================================================
 

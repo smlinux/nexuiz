@@ -379,3 +379,4 @@ float assault_attacker_team;
 .float notteam;
 .float notsingle;
 .float notfree;
+.float notq3a;
