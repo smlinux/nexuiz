@@ -552,18 +552,6 @@ void() item_flag_team2 =
 };
 
 
-// spawnfunctions for q3 flags
-void team_CTF_redflag()
-{
-	item_flag_team1();
-}
-
-void team_CTF_blueflag()
-{
-	item_flag_team2();
-}
-
-
 /*QUAKED ctf_team (0 .5 .8) (-16 -16 -24) (16 16 32)
 Team declaration for CTF gameplay, this allows you to decide what team
 names and control point models are used in your map.

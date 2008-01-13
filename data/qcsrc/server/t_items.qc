@@ -284,6 +284,36 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 
 	if (self.classname != "droppedweapon")
 	{
+		if(teams_matter)
+		{
+			if(self.notteam)
+			{
+				print("removed non-teamplay ", self.classname, "\n");
+				startitem_failed = TRUE;
+				remove (self);
+				return;
+			}
+		}
+		else
+		{
+			if(self.notfree)
+			{
+				print("removed non-FFA ", self.classname, "\n");
+				startitem_failed = TRUE;
+				remove (self);
+				return;
+			}
+		}
+
+		if(self.targetname)
+		{
+			// target_give not yet supported; maybe later
+			print("removed targeted ", self.classname, "\n");
+			startitem_failed = TRUE;
+			remove (self);
+			return;
+		}
+		
 		if(cvar("spawn_debug") >= 2)
 		{
 			entity otheritem;
@@ -602,39 +632,57 @@ void item_shells (void) {
 	StartItem ("models/items/a_shells.md3", "misc/itempickup.wav", 15, "shells", IT_SHELLS, 0, commodity_pickupevalfunc, 100);
 }
 
-void item_armor1 (void) {
+void item_armor_small (void) {
 	if(!self.armorvalue)
-		self.armorvalue = g_pickup_armorshard;
+		self.armorvalue = g_pickup_armorsmall;
 	if(!self.max_armorvalue)
-		self.max_armorvalue = g_pickup_armorshard_max;
+		self.max_armorvalue = g_pickup_armorsmall_max;
 	StartItem ("models/items/g_a1.md3", "misc/armor1.wav", 15, "Armor Shard", IT_ARMOR_SHARD, 0, commodity_pickupevalfunc, 100);
 }
 
-void item_armor25 (void) {
+void item_armor_medium (void) {
 	if(!self.armorvalue)
-		self.armorvalue = g_pickup_armor;
+		self.armorvalue = g_pickup_armormedium;
 	if(!self.max_armorvalue)
-		self.max_armorvalue = g_pickup_armor_max;
+		self.max_armorvalue = g_pickup_armormedium_max;
+	self.skin = 1; // "weaker" skin
 	StartItem ("models/items/g_a25.md3", "misc/armor25.wav", 30, "Armor", IT_ARMOR, 0, commodity_pickupevalfunc, 2000);
 }
 
-void item_health1 (void) {
+void item_armor_large (void) {
+	if(!self.armorvalue)
+		self.armorvalue = g_pickup_armorlarge;
+	if(!self.max_armorvalue)
+		self.max_armorvalue = g_pickup_armorlarge_max;
+	StartItem ("models/items/g_a25.md3", "misc/armor25.wav", 30, "Armor", IT_ARMOR, 0, commodity_pickupevalfunc, 2000);
+}
+
+void item_health_small (void) {
 	if(!self.max_health)
-		self.max_health = g_pickup_healthshard_max;
+		self.max_health = g_pickup_healthsmall_max;
 	if(!self.health)
-		self.health = g_pickup_healthshard;
+		self.health = g_pickup_healthsmall;
 	StartItem ("models/items/g_h1.md3", "misc/minihealth.wav", 15, "5 Health", IT_5HP, 0, commodity_pickupevalfunc, 100);
 }
 
-void item_health25 (void) {
+void item_health_medium (void) {
 	if(!self.max_health)
-		self.max_health = g_pickup_health_max;
+		self.max_health = g_pickup_healthmedium_max;
 	if(!self.health)
-		self.health = g_pickup_health;
+		self.health = g_pickup_healthmedium;
 	StartItem ("models/items/g_h25.md3", "misc/mediumhealth.wav", 15, "25 Health", IT_25HP, 0, commodity_pickupevalfunc, 500);
 }
 
-void item_health100 (void) {
+void item_health_large (void) {
+	if(!self.max_health)
+		self.max_health = g_pickup_healthlarge_max;
+	if(!self.health)
+		self.health = g_pickup_healthlarge;
+	self.skin = 1; // "stronger" skin
+	StartItem ("models/items/g_h25.md3", "misc/mediumhealth.wav", 15, "25 Health", IT_25HP, 0, commodity_pickupevalfunc, 500);
+}
+
+void item_health_mega (void) {
 	if(!cvar("g_powerup_superhealth"))
 		return;
 
@@ -651,6 +699,13 @@ void item_health100 (void) {
 		StartItem ("models/items/g_h100.md3", "misc/megahealth.wav", 30, "100 Health", IT_HEALTH, 0, commodity_pickupevalfunc, 2000);
 	}
 }
+
+// support old misnamed entities
+void item_armor1() { item_armor_small(); }
+void item_armor25() { item_armor_large(); }
+void item_health1() { item_health_small(); }
+void item_health25() { item_health_medium(); }
+void item_health100() { item_health_mega(); }
 
 void item_strength (void) {
 	if(!cvar("g_powerup_strength"))

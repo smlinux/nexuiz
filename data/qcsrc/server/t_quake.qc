@@ -47,6 +47,7 @@ void junk_function ()
 	self.dphitcontentsmask = 0;
 	self.modelflags = 0;
 	self.attack_finished_for = 0; // why is this even valid? Spiiiiiiiiiiiiiiiiiiiiike!
+	self.notsingle = 0;
 	trace_dphittexturename = "";
 }
 

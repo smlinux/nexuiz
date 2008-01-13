@@ -66,9 +66,6 @@ w_hagar.qc
 w_rocketlauncher.qc
 
 t_items.qc
-t_halflife.qc
-t_quake3.qc
-t_quake.qc
 cl_weapons.qc
 //g_tetris.qc
 cl_impulse.qc
@@ -99,3 +96,10 @@ assault.qc
 ipban.qc
 
 ../common/mapinfo.qc
+
+
+
+
+t_quake3.qc
+t_halflife.qc
+t_quake.qc
