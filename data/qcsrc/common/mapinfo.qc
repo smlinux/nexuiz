@@ -1,16 +1,20 @@
 // internal toy
-void cvar_settemp(string key, string value)
+void cvar_settemp(string pKey, string pValue)
 {
 	//localcmd(strcat("\nsettemp ", t, " \"", s, "\"\n"));
 	
 	// duplicate what this alias does:
 	// alias settemp "settemp_list \"1 $1 $settemp_var $settemp_list\"; set $settemp_var \"${$1}\"; settemp_var ${settemp_var}x; $1 \"$2\""
 	
-	cvar_set("settemp_list", strcat("1 ", key, " ", cvar_string("settemp_var"), " ", cvar_string("settemp_list")));
+	cvar_set("settemp_list", strcat("1 ", pKey, " ", cvar_string("settemp_var"), " ", cvar_string("settemp_list")));
+#ifdef MENUQC
+	registercvar(cvar_string("settemp_var"), "", 0);
+#else
 	registercvar(cvar_string("settemp_var"), "");
-	cvar_set(cvar_string("settemp_var"), cvar_string(key));
+#endif
+	cvar_set(cvar_string("settemp_var"), cvar_string(pKey));
 	cvar_set("settemp_var", strcat(cvar_string("settemp_var"), "x"));
-	cvar_set(key, value);
+	cvar_set(pKey, pValue);
 }
 
 void cvar_settemp_restore()
