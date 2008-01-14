@@ -7,6 +7,8 @@
 ===========================================================================
 */
 
+.float antilag_debug;
+
 // VorteX: static frame globals
 float WFRAME_FIRE1 = 0;
 float WFRAME_FIRE2 = 1;
@@ -43,6 +45,7 @@ void(entity ent, vector vecs, float antilag, float recoil, string snd) W_SetupSh
 	// trail of lagged 'ghosts' behind players, and see if the bullet hits the
 	// ghost corresponding to this player's ping time, and if so it would do
 	// damage to the real player
+	self.cursor_trace_ent = nextent(self);
 	if (antilag)
 	if (self.cursor_trace_ent)                 // client was aiming at someone
 	if (self.cursor_trace_ent != self)         // just to make sure
@@ -59,21 +62,25 @@ void(entity ent, vector vecs, float antilag, float recoil, string snd) W_SetupSh
 			if (trace_ent == self.cursor_trace_ent)
 			{
 				// verify that the shot would hit in the past
-				antilag_takeback(self.cursor_trace_ent, time - self.ping * 0.001);
+				if(self.antilag_debug)
+					antilag_takeback(self.cursor_trace_ent, time - self.antilag_debug);
+				else
+					antilag_takeback(self.cursor_trace_ent, time - self.ping * 0.001);
 
 				traceline_hitcorpse(self, self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * MAX_SHOT_DISTANCE, MOVE_NORMAL, self);
+				antilag_restore(self.cursor_trace_ent);
+
 				if(trace_ent == self.cursor_trace_ent)
 				{
 					// HIT!
 					w_shotdir = normalize(self.cursor_trace_ent.origin - w_shotorg);
+					dprint("ANTILAG HIT\n");
 				}
 				else
 				{
 					// prydon cursor aimbot or odd network conditions
 					dprint("WARNING: antilag ghost trace for ", self.netname, " failed!\n");
 				}
-
-				antilag_restore(self.cursor_trace_ent);
 			}
 		}
 	}
