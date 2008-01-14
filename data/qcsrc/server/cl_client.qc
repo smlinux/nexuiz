@@ -1274,9 +1274,6 @@ void PlayerPreThink (void)
 {
 	float f;
 
-	if(frametime)
-		antilag_record(self);
-
 	// version nagging
 	if(self.version_nagtime)
 		if(self.cvar_g_nexuizversion)
@@ -1637,4 +1634,7 @@ void PlayerPostThink (void)
 	}
 
 	Arena_Warmup();
+
+	if(frametime)
+		antilag_record(self);
 }
