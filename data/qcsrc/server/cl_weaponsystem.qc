@@ -45,7 +45,6 @@ void(entity ent, vector vecs, float antilag, float recoil, string snd) W_SetupSh
 	// trail of lagged 'ghosts' behind players, and see if the bullet hits the
 	// ghost corresponding to this player's ping time, and if so it would do
 	// damage to the real player
-	self.cursor_trace_ent = nextent(self);
 	if (antilag)
 	if (self.cursor_trace_ent)                 // client was aiming at someone
 	if (self.cursor_trace_ent != self)         // just to make sure
