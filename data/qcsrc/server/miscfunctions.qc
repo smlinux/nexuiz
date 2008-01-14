@@ -533,6 +533,32 @@ string Team_ColorCode(float teamid)
 	else
 		return "^7";
 }
+string Team_ColorName(float t)
+{
+	// fixme: Search for team entities and get their .netname's!
+	if(t == COLOR_TEAM1)
+		return "Red";
+	if(t == COLOR_TEAM2)
+		return "Blue";
+	if(t == COLOR_TEAM3)
+		return "Yellow";
+	if(t == COLOR_TEAM4)
+		return "Pink";
+	return "Neutral";
+}
+string Team_ColorNameLowerCase(float t)
+{
+	// fixme: Search for team entities and get their .netname's!
+	if(t == COLOR_TEAM1)
+		return "red";
+	if(t == COLOR_TEAM2)
+		return "blue";
+	if(t == COLOR_TEAM3)
+		return "yellow";
+	if(t == COLOR_TEAM4)
+		return "pink";
+	return "neutral";
+}
 
 /*
 string decolorize(string s)

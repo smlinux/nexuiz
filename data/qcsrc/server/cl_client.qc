@@ -407,6 +407,56 @@ float RestrictSkin(float s)
 	return math_mod(s, 3);
 }
 
+void FixPlayermodel()
+{
+	local string defaultmodel;
+	local float defaultskin;
+	local vector m1, m2;
+
+	if(cvar("sv_defaultcharacter") == 1) {
+		defaultmodel = "";
+		defaultskin = 0;
+
+		if(teams_matter)
+		{
+			defaultmodel = cvar_string(strcat("sv_defaultplayermodel_", Team_ColorNameLowerCase(self.team)));
+			defaultskin = cvar(strcat("sv_defaultplayerskin_", Team_ColorNameLowerCase(self.team)));
+		}
+
+		if(defaultmodel == "")
+		{
+			defaultmodel = cvar_string("sv_defaultplayermodel");
+			defaultskin = cvar("sv_defaultplayerskin");
+		}
+
+		if (defaultmodel != self.model)
+		{
+			m1 = self.mins;
+			m2 = self.maxs;
+			setmodel_lod (self, defaultmodel);
+			setsize (self, m1, m2);
+		}
+
+		self.skin = defaultskin;
+	} else {
+		if (self.playermodel != self.model)
+		{
+			self.playermodel = CheckPlayerModel(self.playermodel);
+			m1 = self.mins;
+			m2 = self.maxs;
+			setmodel_lod (self, self.playermodel);
+			setsize (self, m1, m2);
+		}
+
+		self.skin = RestrictSkin(stof(self.playerskin));
+	}
+
+	if(!teams_matter)
+		if(strlen(cvar_string("sv_defaultplayercolors")))
+			if(self.clientcolors != cvar("sv_defaultplayercolors"))
+				setcolor(self, cvar("sv_defaultplayercolors"));
+}
+
 /*
 =============
 PutClientInServer
@@ -507,19 +557,8 @@ void PutClientInServer (void)
 
 		self.customizeentityforclient = Client_customizeentityforclient;
 
-		if(cvar("sv_defaultcharacter") == 1) {
-			local string defaultmodel;
-			defaultmodel = cvar_string("sv_defaultplayermodel");
-			setmodel_lod (self, defaultmodel);
-			self.skin = stof(cvar_string("sv_defaultplayerskin"));
-		} else {
-			self.playermodel = CheckPlayerModel(self.playermodel);
-			setmodel_lod (self, self.playermodel);
-			self.skin = RestrictSkin(stof(self.playerskin));
-		}
-		if(!teams_matter)
-			if(strlen(cvar_string("sv_defaultplayercolors")))
-				setcolor(self, cvar("sv_defaultplayercolors"));
+		self.model = "";
+		FixPlayermodel();
 
 		self.crouch = FALSE;
 		self.view_ofs = PL_VIEW_OFS;
@@ -1272,8 +1311,6 @@ void() ctf_setstatus;
 .float vote_nagtime;
 void PlayerPreThink (void)
 {
-	float f;
-
 	// version nagging
 	if(self.version_nagtime)
 		if(self.cvar_g_nexuizversion)
@@ -1304,8 +1341,6 @@ void PlayerPreThink (void)
 	}
 
 	if(self.classname == "player") {
-		local vector m1, m2;
-
 //		if(self.netname == "Wazat")
 //			bprint(self.classname, "\n");
 
@@ -1424,38 +1459,7 @@ void PlayerPreThink (void)
 			}
 		}
 
-		if(cvar("sv_defaultcharacter") == 1) {
-			local string defaultmodel;
-			defaultmodel = cvar_string("sv_defaultplayermodel");
-
-			if (defaultmodel != self.model)
-			{
-				m1 = self.mins;
-				m2 = self.maxs;
-				setmodel_lod (self, defaultmodel);
-				setsize (self, m1, m2);
-			}
-
-			if (self.skin != cvar("sv_defaultplayerskin"))
-				self.skin = cvar("sv_defaultplayerskin");
-		} else {
-			if (self.playermodel != self.model)
-			{
-				self.playermodel = CheckPlayerModel(self.playermodel);
-				m1 = self.mins;
-				m2 = self.maxs;
-				setmodel_lod (self, self.playermodel);
-				setsize (self, m1, m2);
-			}
-
-			f = RestrictSkin(stof(self.playerskin));
-			if(self.skin != f)
-				self.skin = f;
-		}
-		if(!teams_matter)
-			if(strlen(cvar_string("sv_defaultplayercolors")))
-				if(self.clientcolors != cvar("sv_defaultplayercolors"))
-					setcolor(self, cvar("sv_defaultplayercolors"));
+		FixPlayermodel();
 
 		GrapplingHookFrame();
 

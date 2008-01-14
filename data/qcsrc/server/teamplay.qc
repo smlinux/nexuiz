@@ -39,29 +39,11 @@ void TeamchangeFrags(entity e)
 
 string TeamName(float t)
 {
-	// fixme: Search for team entities and get their .netname's!
-	if(t == COLOR_TEAM1)
-		return "Red Team";
-	if(t == COLOR_TEAM2)
-		return "Blue Team";
-	if(t == COLOR_TEAM3)
-		return "Yellow Team";
-	if(t == COLOR_TEAM4)
-		return "Pink Team";
-	return "Neutral Team";
+	return strcat(Team_ColorName(t), " Team");
 }
 string ColoredTeamName(float t)
 {
-	// fixme: Search for team entities and get their .netname's!
-	if(t == COLOR_TEAM1)
-		return "^1Red Team^7";
-	if(t == COLOR_TEAM2)
-		return "^4Blue Team^7";
-	if(t == COLOR_TEAM3)
-		return "^3Yellow Team^7";
-	if(t == COLOR_TEAM4)
-		return "^6Pink Team^7";
-	return "Neutral Team";
+	return strcat(Team_ColorCode(t), Team_ColorName(t), " Team^7");
 }
 string TeamNoName(float t)
 {
