@@ -653,11 +653,8 @@ void MapInfo_LoadMapSettings(string s) // to be called from worldspawn
 		}
 		// t is now a supported mode!
 		print("EMERGENCY: can't play the selected map in the given game mode. Falling back to a supported mode.\n");
-		print(ftos(t), "\n");
 		MapInfo_SwitchGameType(t);
-		print(ftos(MapInfo_CurrentGametype()), "\n");
 	}
-	print(ftos(MapInfo_CurrentGametype()), "\n");
 	cvar_settemp_restore();
 	MapInfo_Get_ByName(s, 1, MapInfo_CurrentGametype());
 }

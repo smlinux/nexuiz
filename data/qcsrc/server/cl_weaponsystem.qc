@@ -74,7 +74,7 @@ void(entity ent, vector vecs, float antilag, float recoil, string snd) W_SetupSh
 				{
 					// HIT!
 					w_shotdir = normalize(self.cursor_trace_ent.origin - w_shotorg);
-					dprint("ANTILAG HIT\n");
+					//dprint("ANTILAG HIT\n");
 				}
 				else
 				{
