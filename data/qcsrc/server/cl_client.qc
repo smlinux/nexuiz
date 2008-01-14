@@ -1274,7 +1274,8 @@ void PlayerPreThink (void)
 {
 	float f;
 
-	antilag_record(self);
+	if(frametime)
+		antilag_record(self);
 
 	// version nagging
 	if(self.version_nagtime)
