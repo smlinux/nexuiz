@@ -49,7 +49,7 @@ void W_Plasma_Touch (void)
 	if (other.takedamage == DAMAGE_AIM) {
 		o = self.owner;
 		W_Plasma_Explode ();
-		if(!other.deadflag)
+		if(other.classname == "player")
 			if(IsDifferentTeam(o, other))
 				if(IsFlying(other))
 					announce(o, "announcer/male/electrobitch.ogg");
@@ -70,7 +70,7 @@ void W_Plasma_TouchExplode (void)
 	o = self.owner;
 	W_Plasma_Explode ();
 	if(other.takedamage == DAMAGE_AIM)
-		if(!other.deadflag)
+		if(other.classname == "player")
 			if(IsDifferentTeam(o, other))
 				if(IsFlying(other))
 					announce(o, "announcer/male/electrobitch.ogg");
