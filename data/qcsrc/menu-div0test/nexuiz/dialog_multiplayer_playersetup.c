@@ -19,7 +19,7 @@ entity makeNexuizPlayerSettingsTab()
 }
 void fillNexuizPlayerSettingsTab(entity me)
 {
-	entity e, pms;
+	entity e, pms, sl;
 	float i, n;
 
 	me.TR(me);
@@ -56,14 +56,13 @@ void fillNexuizPlayerSettingsTab(entity me)
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Field of View:"));
 		me.TD(me, 1, 2, e = makeNexuizSlider(60, 130, 1, "fov"));
 	me.TR(me);
+
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Zoom Factor:"));
 		me.TD(me, 1, 2, e = makeNexuizSlider(2, 16, 0.5, "cl_zoomfactor"));
 	me.TR(me);
-		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Zoom Speed:"));
-		me.TD(me, 1, 2, e = makeNexuizSlider(1, 8, 0.5, "cl_zoomspeed"));
-	me.TR(me);
-		me.TDempty(me, 0.2);
-		me.TD(me, 1, 2.8, e = makeNexuizSliderCheckBox(-1, 0, e, "Instant Zoom"));
+		sl = makeNexuizSlider(1, 8, 0.5, "cl_zoomspeed");
+		me.TD(me, 1, 2.8, e = makeNexuizSliderCheckBox(-1, 0, sl, "Zoom speed:"));
+		me.TD(me, 1, 2, sl);
 	me.TR(me);
 		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "cl_autoswitch", "Auto switch weapons on pickup"));
 	me.TR(me);
@@ -116,7 +115,7 @@ void fillNexuizPlayerSettingsTab(entity me)
 	me.TR(me);
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Network speed:"));
-		me.TD(me, 1, 2, e = makeNexuizTextSlider("cl_rate"));
+		me.TD(me, 1, 2, e = makeNexuizTextSlider("_cl_rate"));
 			e.addValue(e, "56k", "4000");
 			e.addValue(e, "ISDN", "7000");
 			e.addValue(e, "Slow ADSL", "15000");
@@ -128,6 +127,6 @@ void fillNexuizPlayerSettingsTab(entity me)
 		me.TD(me, 1, 0.5, e = makeNexuizInputBox(0, "cl_port"));
 
 	me.gotoXY(me, me.rows - 1, 0);
-		me.TD(me, 1, me.columns, makeNexuizCommandButton("Apply immediately", '0 0 0', "color -1 -1;name $_cl_name;sendcvar cl_zoomfactor;sendcvar cl_zoomspeed;sendcvar cl_autoswitch;rate $cl_rate", COMMANDBUTTON_APPLY));
+		me.TD(me, 1, me.columns, makeNexuizCommandButton("Apply immediately", '0 0 0', "color -1 -1;name $_cl_name;sendcvar cl_zoomfactor;sendcvar cl_zoomspeed;sendcvar cl_autoswitch;rate $_cl_rate", COMMANDBUTTON_APPLY));
 }
 #endif

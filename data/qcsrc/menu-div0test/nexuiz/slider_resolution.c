@@ -41,7 +41,7 @@ void configureNexuizResolutionSliderNexuizResolutionSlider(entity me)
 }
 void loadCvarsNexuizResolutionSlider(entity me)
 {
-	me.setValueFromIdentifier(me, strcat(cvar_string("vid_width"), " ", cvar_string("vid_height")));
+	me.setValueFromIdentifier(me, strcat(cvar_string("vid_width"), " ", cvar_string("vid_height"), " ", cvar_string("vid_conwidth"), " ", cvar_string("vid_conheight")));
 }
 void saveCvarsNexuizResolutionSlider(entity me)
 {
