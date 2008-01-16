@@ -39,4 +39,6 @@ void m_goto(string name);
 entity keyGrabber;
 .void(entity me, float key, float ascii) keyGrabbed;
 
+float conwidth, conheight; // "virtual" conwidth/height values for other stuff to assume for scaling
+
 void SUB_Null();

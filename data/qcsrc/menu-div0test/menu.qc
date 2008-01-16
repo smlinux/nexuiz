@@ -22,6 +22,32 @@ void() m_init =
 	dprint_load();
 }
 
+void UpdateConWidthHeight()
+{
+	var float conwidth_s = conwidth;
+	var float conheight_s = conheight;
+	conwidth = cvar("vid_conwidth");
+	conheight = cvar("vid_conheight");
+	if(conwidth < 800)
+	{
+		conheight *= 800 / conwidth;
+		conwidth = 800;
+	}
+	if(conheight < 600)
+	{
+		conwidth *= 600 / conheight;
+		conheight = 600;
+	}
+	if(main)
+	{
+		if(conwidth_s != conwidth || conheight_s != conheight)
+		{
+			draw_reset();
+			main.resizeNotify(main, '0 0 0', eX * conwidth + eY * conheight, '0 0 0', eX * conwidth + eY * conheight);
+		}
+	}
+}
+
 void() m_init_delayed =
 {
 	float fh;
@@ -56,9 +82,11 @@ void() m_init_delayed =
 
 	draw_setMousePointer("cursor", SKINSIZE_CURSOR, SKINOFFSET_CURSOR);
 
-	main = spawnMainWindow(); main.configureMainWindow(main);
+	conwidth = conheight = -1;
 	draw_reset();
-	main.resizeNotify(main, draw_shift, draw_scale, draw_shift, draw_scale);
+	UpdateConWidthHeight();
+	main = spawnMainWindow(); main.configureMainWindow(main);
+	main.resizeNotify(main, '0 0 0', eX * conwidth + eY * conheight, '0 0 0', eX * conwidth + eY * conheight);
 	main.focused = 1;
 	menuShiftState = 0;
 	menuMousePos = '0.5 0.5 0';
@@ -134,6 +162,9 @@ void() m_draw =
 	float t;
 	float realFrametime;
 
+	if(main)
+		UpdateConWidthHeight();
+
 	if(!menuNotTheFirstFrame)
 	{
 		menuNotTheFirstFrame = 1;
@@ -150,6 +181,7 @@ void() m_draw =
 		m_init_delayed();
 		return;
 	}
+
 	t = gettime();
 	realFrametime = frametime = min(0.2, t - menuPrevTime);
 	menuPrevTime = t;
