@@ -145,6 +145,8 @@ void() CampaignPreIntermission =
 			// I have won
 			savevar = strcat("g_campaign", campaign_name, "_won");
 			CampaignSaveCvar(savevar, 1);
+			// advance level (for menu to show it right)
+			CampaignSaveCvar(campaign_index_var, campaign_level + 1);
 		}
 		else if(campaign_level == cvar(campaign_index_var))
 		{

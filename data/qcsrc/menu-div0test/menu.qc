@@ -24,8 +24,9 @@ void() m_init =
 
 void UpdateConWidthHeight()
 {
-	var float conwidth_s = conwidth;
-	var float conheight_s = conheight;
+	float conwidth_s, conheight_s;
+	conwidth_s = conwidth;
+	conheight_s = conheight;
 	conwidth = cvar("vid_conwidth");
 	conheight = cvar("vid_conheight");
 	if(conwidth < 800)

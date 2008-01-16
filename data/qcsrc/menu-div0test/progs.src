@@ -7,8 +7,8 @@ mbuiltin.qh
 oo/base.h
 
 ../common/util.qh
-
 ../common/mapinfo.qh
+../common/campaign_common.qh
 
 gamecommand.qh
 menu.qh
@@ -31,4 +31,6 @@ menu.qc
 draw.qc
 nexuiz/util.qc
 
+../common/campaign_file.qc
+../common/campaign_setup.qc
 ../common/mapinfo.qc

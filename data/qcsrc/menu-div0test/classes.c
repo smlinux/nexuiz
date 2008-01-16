@@ -58,3 +58,5 @@
 #include "nexuiz/dialog_settings_input.c"
 #include "nexuiz/dialog_settings_input_userbind.c"
 #include "nexuiz/slider_decibels.c"
+#include "nexuiz/dialog_singleplayer.c"
+#include "nexuiz/campaign.c"

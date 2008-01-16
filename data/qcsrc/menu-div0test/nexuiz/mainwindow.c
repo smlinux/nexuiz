@@ -39,6 +39,7 @@ void configureMainWindowMainWindow(entity me)
 	me.addItemCentered(me, i, i.intendedWidth * eX + i.intendedHeight * eY, SKINALPHAS_MAINMENU_z);
 
 	n = spawnNexuizNexposee();
+	/*
 		if(checkextension("DP_GECKO_SUPPORT"))
 		{
 			i = spawnNexuizNewsDialog();
@@ -46,6 +47,11 @@ void configureMainWindowMainWindow(entity me)
 			n.addItemCentered(n, i, i.intendedWidth * eX + i.intendedHeight * eY, SKINALPHAS_MAINMENU_z);
 			n.setNexposee(n, i, '0.1 0.1 0', SKINALPHAS_MAINMENU_x, SKINALPHAS_MAINMENU_y);
 		}
+	*/
+		i = spawnNexuizSingleplayerDialog();
+		i.configureDialog(i);
+		n.addItemCentered(n, i, i.intendedWidth * eX + i.intendedHeight * eY, SKINALPHAS_MAINMENU_z);
+		n.setNexposee(n, i, '0.1 0.1 0', SKINALPHAS_MAINMENU_x, SKINALPHAS_MAINMENU_y);
 		
 		i = spawnNexuizSettingsDialog();
 		i.configureDialog(i);
