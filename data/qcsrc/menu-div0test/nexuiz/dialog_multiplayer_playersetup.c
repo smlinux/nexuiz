@@ -65,6 +65,8 @@ void fillNexuizPlayerSettingsTab(entity me)
 		me.TDempty(me, 0.2);
 		me.TD(me, 1, 2.8, e = makeNexuizSliderCheckBox(-1, 0, e, "Instant Zoom"));
 	me.TR(me);
+		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "cl_autoswitch", "Auto switch weapons on pickup"));
+	me.TR(me);
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Crosshair:"));
 		n = 10;
@@ -97,8 +99,35 @@ void fillNexuizPlayerSettingsTab(entity me)
 		me.TDempty(me, 0.2);
 		me.TD(me, 1, 2.8, e = makeNexuizCheckBox(1, "sbar_hudselector", "Use alternate HUD layout"));
 			setDependent(e, "viewsize", 0, 110);
+	me.TR(me);
+	me.TR(me);
+		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Show names:"));
+		me.TD(me, 1, 2, e = makeNexuizTextSlider("cl_shownames"));
+			e.addValue(e, "Never", "0");
+			e.addValue(e, "Team games", "1");
+			e.addValue(e, "Always", "2");
+			e.configureNexuizTextSliderValues(e);
+	me.TR(me);
+		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Show waypoints:"));
+		me.TD(me, 1, 2, e = makeNexuizTextSlider("cl_hidewaypoints"));
+			e.addValue(e, "Players", "1");
+			e.addValue(e, "All", "0");
+			e.configureNexuizTextSliderValues(e);
+	me.TR(me);
+	me.TR(me);
+		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Network speed:"));
+		me.TD(me, 1, 2, e = makeNexuizTextSlider("cl_rate"));
+			e.addValue(e, "56k", "4000");
+			e.addValue(e, "ISDN", "7000");
+			e.addValue(e, "Slow ADSL", "15000");
+			e.addValue(e, "Fast ADSL", "20000");
+			e.addValue(e, "Broadband", "25000");
+			e.configureNexuizTextSliderValues(e);
+	me.TR(me);
+		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Client UDP port:"));
+		me.TD(me, 1, 0.5, e = makeNexuizInputBox(0, "cl_port"));
 
 	me.gotoXY(me, me.rows - 1, 0);
-		me.TD(me, 1, me.columns, makeNexuizCommandButton("Apply immediately", '0 0 0', "color -1 -1;name $_cl_name;sendcvar cl_zoomfactor;sendcvar cl_zoomspeed", COMMANDBUTTON_APPLY));
+		me.TD(me, 1, me.columns, makeNexuizCommandButton("Apply immediately", '0 0 0', "color -1 -1;name $_cl_name;sendcvar cl_zoomfactor;sendcvar cl_zoomspeed;sendcvar cl_autoswitch;rate $cl_rate", COMMANDBUTTON_APPLY));
 }
 #endif

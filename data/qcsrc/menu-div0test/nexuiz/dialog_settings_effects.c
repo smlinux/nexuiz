@@ -97,12 +97,13 @@ void fillNexuizEffectsSettingsTab(entity me)
 		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "cl_decals", "Decals"));
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Gibs:"));
-		n = 3 + !!cvar("developer");
-		me.TD(me, 1, 2 / n, e = makeNexuizRadioButton(2, "cl_nogibs", "0", "Lots"));
-		me.TD(me, 1, 2 / n, e = makeNexuizRadioButton(2, "cl_nogibs", "0.5", "Many"));
-		me.TD(me, 1, 2 / n, e = makeNexuizRadioButton(2, "cl_nogibs", "0.75", "Few"));
-		if(cvar("developer"))
-			me.TD(me, 1, 2 / n, e = makeNexuizRadioButton(2, "cl_nogibs", "1", "German"));
+		me.TD(me, 1, 2, e = makeNexuizTextSlider("cl_nogibs"));
+			if(cvar("developer"))
+				e.addValue(e, "German", "1");
+			e.addValue(e, "Few", "0.75");
+			e.addValue(e, "Many", "0.5");
+			e.addValue(e, "Lots", "1");
+			e.configureNexuizTextSliderValues(e);
 
 	me.TR(me);
 
@@ -166,6 +167,12 @@ void fillNexuizEffectsSettingsTab(entity me)
 			e.addValue(e, "Insane", "2");
 			e.configureNexuizTextSliderValues(e);
 			setDependent(e, "r_water", 1, 1);
+	
+	me.TR(me);
+
+	me.TR(me);
+		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Damage view kick:"));
+		me.TD(me, 1, 2, e = makeNexuizSlider(0, 0.5, 0.05, "v_kicktime"));
 
 	me.TR(me);
 

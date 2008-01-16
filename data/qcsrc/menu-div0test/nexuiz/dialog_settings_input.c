@@ -53,5 +53,7 @@ void fillNexuizInputSettingsTab(entity me)
 		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "joy_enable", "Use joystick input"));
 	me.TR(me);
 		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "cl_movement", "Client-side movement prediction"));
+	me.TR(me);
+		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "con_closeontoggleconsole", "\"enter console\" also closes"));
 }
 #endif
