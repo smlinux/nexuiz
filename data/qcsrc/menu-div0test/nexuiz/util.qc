@@ -93,6 +93,67 @@ void setDependentOR(entity e, string theCvarName, float theCvarMin, float theCva
 	setDependent_Check(e);
 }
 
+// EXTRESPONSE SYSTEM ////////////////////////////////////////////////////////
+
+float _Nex_ExtResponseSystem_RequestsSent;
+float _Nex_ExtResponseSystem_VersionHandled;
+string _Nex_ExtResponseSystem_UpdateTo;
+float _Nex_ExtResponseSystem_RetryTime;
+float _Nex_ExtResponseSystem_RetryTime_LastDelay;
+
+void() Item_Nex_ExtResponseSystem_SendQuery =
+{
+	dprint("Sending extended response requests...\n");
+	localcmd(strcat("packet update.alientrap.org:27950 \"getExtResponse checkUpdates nexuiz ", cvar_string("g_nexuizversion"), "\"\n"));
+	_Nex_ExtResponseSystem_RequestsSent = TRUE;
+	_Nex_ExtResponseSystem_RetryTime_LastDelay = _Nex_ExtResponseSystem_RetryTime_LastDelay * 2 + 1;
+	_Nex_ExtResponseSystem_RetryTime = time + _Nex_ExtResponseSystem_RetryTime_LastDelay;
+}
+
+void(float argc) Item_Nex_ExtResponseSystem_Parse =
+{
+	dprint("Received extended response packet from ", argv(0), "\n");
+	if(!_Nex_ExtResponseSystem_RequestsSent)
+	{
+		dprint("  But I haven't sent a request yet! Ignoring.\n");
+		return;
+	}
+	if(argv(1) == "noUpdateAvailable")
+	{
+		if(_Nex_ExtResponseSystem_VersionHandled)
+		{
+			dprint("  duplicated update notice, ignored\n");
+			return;
+		}
+		_Nex_ExtResponseSystem_VersionHandled = 1;
+	}
+	else if(argv(1) == "updateAvailable")
+	{
+		if(_Nex_ExtResponseSystem_VersionHandled)
+		{
+			dprint("  duplicated update notice, ignored\n");
+			return;
+		}
+		_Nex_ExtResponseSystem_VersionHandled = 1;
+		_Nex_ExtResponseSystem_UpdateTo = strzone(argv(2)); // note: only one packet can be handled, so this can't be a leak
+	}
+	else
+		dprint("  UNKNOWN RESPONSE TYPE: ", argv(1), "\n");
+}
+
+void() Item_Nex_ExtResponseSystem_CheckForResponse =
+{
+	local string s;
+	local float argc;
+	while(strlen((s = getextresponse())))
+	{
+		argc = tokenize(s);
+		Item_Nex_ExtResponseSystem_Parse(argc);
+	}
+}
+
+// END OF EXTRESPONSE SYSTEM /////////////////////////////////////////////////
+
 float preMenuInit()
 {
 	MapInfo_Enumerate();
@@ -103,8 +164,32 @@ float preMenuInit()
 
 string campaign_name_previous;
 float campaign_won_previous;
+void postMenuDraw()
+{
+}
 void preMenuDraw()
 {
+	vector fs, sz, line, mid;
+	Item_Nex_ExtResponseSystem_CheckForResponse();
+	if(!_Nex_ExtResponseSystem_VersionHandled)
+		if(time > _Nex_ExtResponseSystem_RetryTime)
+			Item_Nex_ExtResponseSystem_SendQuery();
+
+	if(_Nex_ExtResponseSystem_UpdateTo)
+	{
+		fs = ((1/draw_scale_x) * eX + (1/draw_scale_y) * eY) * 12;
+		line = eY * fs_y;
+		sz_x = draw_TextWidth("  http://www.nexuiz.com/  ", 0) * fs_x;
+		sz_y = 3 * fs_y;
+
+		draw_alpha = sin(time * 0.112 - 0.3) * 0.7;
+		mid = eX * (0.5 + 0.5 * (1 - sz_x) * cos(time * 0.071))
+		    + eY * (0.5 + 0.5 * (1 - sz_y) * sin(time * 0.071));
+
+		draw_Fill(mid - 0.5 * sz, sz, '1 1 0', 1);
+		draw_CenterText(mid - 1 * line, strcat("Update to ", _Nex_ExtResponseSystem_UpdateTo, " now!"), fs, '1 0 0', 1, 0);
+		draw_CenterText(mid - 0 * line, "http://www.nexuiz.com/", fs, '0 0 1', 1, 0);
+	}
 	if not(campaign_name_previous)
 		campaign_name_previous = strzone(strcat(campaign_name, "x")); // force unequal
 	if(campaign_name == campaign_name_previous)
@@ -127,5 +212,4 @@ void preMenuDraw()
 		campaign_name_previous = strzone(campaign_name);
 		campaign_won_previous = cvar(strcat("g_campaign", campaign_name, "_won"));
 	}
-
 }

@@ -186,8 +186,6 @@ void() m_draw =
 	menuPrevTime = t;
 	time += frametime;
 
-	preMenuDraw();
-
 	if(Menu_Active)
 	{
 		if(getmousetarget() == MT_MENU && (getkeydest() == KEY_MENU || getkeydest() == KEY_MENU_GRABBED))
@@ -258,10 +256,16 @@ void() m_draw =
 		}
 	}
 
+	draw_reset();
+	preMenuDraw();
+	draw_reset();
+
 	if(menuAlpha <= 0)
 	{
 		if(prevMenuAlpha > 0)
 			main.initializeDialog(main, main.firstChild);
+		draw_reset();
+		postMenuDraw();
 		return;
 	}
 
@@ -285,7 +289,11 @@ void() m_draw =
 	}
 	main.draw(main);
 	draw_alpha = max(draw_alpha, SKINALPHA_CURSOR_INTRO * bound(0, menuLogoAlpha, 1));
+
 	draw_drawMousePointer(menuMousePos);
+
+	draw_reset();
+	postMenuDraw();
 
 	frametime = 0;
 };

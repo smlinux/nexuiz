@@ -45,3 +45,4 @@ void SUB_Null();
 
 float preMenuInit(); // you have to define this for pre-menu initialization. Return 0 if initialization needs to be retried a frame later, 1 if it succeeded.
 void preMenuDraw(); // this is run before the menu is drawn. You may put some stuff there that has to be done every frame.
+void postMenuDraw(); // this is run just after the menu is drawn (or not). Useful to draw something over everything else.
