@@ -1,6 +1,8 @@
 void CampaignSetup(float n)
 {
+#ifndef MAPINFO
 	localcmd("exec game_reset.cfg\n");
+#endif
 	localcmd("exec mutator_reset.cfg\n");
 	localcmd("set g_campaign 1\n");
 	localcmd("set _campaign_name \"");
@@ -13,6 +15,7 @@ void CampaignSetup(float n)
 		localcmd("\n");
 #ifdef MAPINFO
 	MapInfo_SwitchGameType(MapInfo_Type_FromString(campaign_gametype[n]));
+	//print(">>", cvar_string("g_tdm"), "<<\n");
 	MapInfo_LoadMap(campaign_mapname[n]);
 #else
 	localcmd("exec maps/"); // can't use strcat here in current fteqcc
