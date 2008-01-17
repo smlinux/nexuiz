@@ -4,6 +4,7 @@ CLASS(MainWindow) EXTENDS(ModalController)
 	ATTRIB(MainWindow, mutatorsDialog, entity, NULL)
 	ATTRIB(MainWindow, mapInfoDialog, entity, NULL)
 	ATTRIB(MainWindow, userbindEditDialog, entity, NULL)
+	ATTRIB(MainWindow, winnerDialog, entity, NULL)
 	ATTRIB(MainWindow, fadedAlpha, float, SKINALPHA_BEHIND)
 ENDCLASS(MainWindow)
 #endif
@@ -35,6 +36,10 @@ void configureMainWindowMainWindow(entity me)
 	me.addItemCentered(me, i, i.intendedWidth * eX + i.intendedHeight * eY, SKINALPHAS_MAINMENU_z);
 
 	me.userbindEditDialog = i = spawnNexuizUserbindEditDialog();
+	i.configureDialog(i);
+	me.addItemCentered(me, i, i.intendedWidth * eX + i.intendedHeight * eY, SKINALPHAS_MAINMENU_z);
+
+	me.winnerDialog = i = spawnNexuizWinnerDialog();
 	i.configureDialog(i);
 	me.addItemCentered(me, i, i.intendedWidth * eX + i.intendedHeight * eY, SKINALPHAS_MAINMENU_z);
 

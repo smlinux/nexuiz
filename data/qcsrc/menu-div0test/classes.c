@@ -60,3 +60,4 @@
 #include "nexuiz/slider_decibels.c"
 #include "nexuiz/dialog_singleplayer.c"
 #include "nexuiz/campaign.c"
+#include "nexuiz/dialog_singleplayer_winner.c"
