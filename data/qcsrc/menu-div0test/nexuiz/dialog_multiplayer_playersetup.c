@@ -61,7 +61,7 @@ void fillNexuizPlayerSettingsTab(entity me)
 		me.TD(me, 1, 2, e = makeNexuizSlider(2, 16, 0.5, "cl_zoomfactor"));
 	me.TR(me);
 		sl = makeNexuizSlider(1, 8, 0.5, "cl_zoomspeed");
-		me.TD(me, 1, 2.8, e = makeNexuizSliderCheckBox(-1, 0, sl, "Zoom speed:"));
+		me.TD(me, 1, 2.8, e = makeNexuizSliderCheckBox(-1, 1, sl, "Zoom speed:"));
 		me.TD(me, 1, 2, sl);
 	me.TR(me);
 		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "cl_autoswitch", "Auto switch weapons on pickup"));
