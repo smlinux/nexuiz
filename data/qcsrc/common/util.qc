@@ -48,6 +48,11 @@ void wordwrap_cb(string s, float l, void(string) callback)
 			lleft = l;
 			i++;
 		}
+		else if (substring(s, i, 1) == "\n")
+		{
+			callback("\n");
+			lleft = l;
+		}
 		else if (substring(s, i, 1) == " ")
 		{
 			if (lleft > 0)
@@ -71,6 +76,8 @@ void wordwrap_cb(string s, float l, void(string) callback)
 				if (c == " ")
 					break;
 				if (c == "\\")
+					break;
+				if (c == "\n")
 					break;
 				// we need to keep this tempstring alive even if substring is
 				// called repeatedly, so call strcat even though we're not
