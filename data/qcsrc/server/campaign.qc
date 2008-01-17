@@ -166,7 +166,7 @@ void() CampaignPostIntermission =
 	if(campaign_won && campaign_entries < 2)
 	{
 		// last map won!
-		localcmd("togglemenu\n");
+		localcmd("togglemenu 1\n");
 		CampaignFile_Unload();
 		return;
 	}
