@@ -144,10 +144,13 @@ void fillNexuizServerCreateTab(entity me)
 		me.TD(me, 1, 0.7, e = makeNexuizInputBox(1, "bot_suffix"));
 	me.TR(me);
 	me.TR(me);
-		me.TD(me, 1, 3, e = makeNexuizButton("Mutators...", '0 0 0'));
+		me.TD(me, 1, 1, e = makeNexuizButton("Mutators...", '0 0 0'));
 			e.onClick = DialogOpenButton_Click;
 			e.onClickEntity = main.mutatorsDialog;
 			main.mutatorsDialog.refilterEntity = me.mapListBox;
+		me.TD(me, 1, 2, e0 = makeNexuizTextLabel(0, string_null));
+			e0.textEntity = main.mutatorsDialog;
+			e0.allowCut = 1;
 
 	me.gotoXY(me, me.rows - 1, 0);
 		me.TD(me, 1, me.columns, e = makeNexuizButton("Start!", '0 0 0'));

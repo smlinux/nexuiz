@@ -1,5 +1,6 @@
 #ifdef INTERFACE
 CLASS(NexuizMutatorsDialog) EXTENDS(NexuizDialog)
+	METHOD(NexuizMutatorsDialog, toString, string(entity))
 	METHOD(NexuizMutatorsDialog, fill, void(entity))
 	METHOD(NexuizMutatorsDialog, showNotify, void(entity))
 	METHOD(NexuizMutatorsDialog, close, void(entity))
@@ -16,6 +17,37 @@ ENDCLASS(NexuizMutatorsDialog)
 void showNotifyNexuizMutatorsDialog(entity me)
 {
         loadAllCvars(me);
+}
+string toStringNexuizMutatorsDialog(entity me)
+{
+	string s;
+	s = "";
+	if(cvar("g_instagib"))
+		s = strcat(s, ", InstaGib");
+	if(cvar("g_minstagib"))
+		s = strcat(s, ", MinstaGib");
+	if(cvar("g_nixnex"))
+		s = strcat(s, ", NixNex");
+	if(cvar("g_rocketarena"))
+		s = strcat(s, ", RL arena");
+	if(cvar("sv_gravity") < 800)
+		s = strcat(s, ", Low gravity");
+	if(cvar("g_cloaked"))
+		s = strcat(s, ", Cloaked");
+	if(cvar("g_footsteps"))
+		s = strcat(s, ", Steps");
+	if(cvar("g_grappling_hook"))
+		s = strcat(s, ", Hook");
+	if(cvar("g_laserguides_missile"))
+		s = strcat(s, ", LG missiles");
+	if(cvar("g_midair"))
+		s = strcat(s, ", Mid-air");
+	if(cvar("g_vampire"))
+		s = strcat(s, ", Vampire");
+	if(s == "")
+		return "None";
+	else
+		return substring(s, 2, strlen(s) - 2);
 }
 void fillNexuizMutatorsDialog(entity me)
 {
@@ -56,7 +88,7 @@ void fillNexuizMutatorsDialog(entity me)
 		s = makeNexuizSlider(80, 400, 40, "sv_gravity");
 			s.valueDigits = 0;
 			s.valueDisplayMultiplier = 0.125; // show gravity in percent
-		me.TD(me, 1, 1, e = makeNexuizSliderCheckBox(800, 0, s, "Low gravity"));
+		me.TD(me, 1, 1, e = makeNexuizSliderCheckBox(800, 1, s, "Low gravity"));
 		me.TD(me, 1, 3, s);
 
 	me.gotoXY(me, me.rows - 1, 0);
