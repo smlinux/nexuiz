@@ -6,7 +6,7 @@ CLASS(NexuizMutatorsDialog) EXTENDS(NexuizDialog)
 	ATTRIB(NexuizMutatorsDialog, title, string, "Mutators")
 	ATTRIB(NexuizMutatorsDialog, color, vector, SKINCOLOR_DIALOG_MUTATORS)
 	ATTRIB(NexuizMutatorsDialog, intendedWidth, float, 0.6)
-	ATTRIB(NexuizMutatorsDialog, rows, float, 8)
+	ATTRIB(NexuizMutatorsDialog, rows, float, 9)
 	ATTRIB(NexuizMutatorsDialog, columns, float, 4)
 	ATTRIB(NexuizMutatorsDialog, refilterEntity, entity, NULL)
 ENDCLASS(NexuizMutatorsDialog)
@@ -19,7 +19,7 @@ void showNotifyNexuizMutatorsDialog(entity me)
 }
 void fillNexuizMutatorsDialog(entity me)
 {
-	entity e;
+	entity e, s;
 	me.TR(me);
 		me.TD(me, 1, 2, makeNexuizTextLabel(0, "Game mutators:"));
 	me.TR(me);
@@ -51,6 +51,13 @@ void fillNexuizMutatorsDialog(entity me)
 			setDependent(e, "g_nixnex", 1, 1);
 	me.TR(me);
 		me.TD(me, 1, 2, e = makeNexuizRadioButton(1, "g_rocketarena", string_null, "Rocket launcher arena"));
+
+	me.gotoXY(me, me.rows - 2, 0);
+		s = makeNexuizSlider(80, 400, 40, "sv_gravity");
+			s.valueDigits = 0;
+			s.valueDisplayMultiplier = 0.125; // show gravity in percent
+		me.TD(me, 1, 1, e = makeNexuizSliderCheckBox(800, 0, s, "Low gravity"));
+		me.TD(me, 1, 3, s);
 
 	me.gotoXY(me, me.rows - 1, 0);
 		me.TD(me, 1, me.columns, e = makeNexuizButton("OK", '0 0 0'));
