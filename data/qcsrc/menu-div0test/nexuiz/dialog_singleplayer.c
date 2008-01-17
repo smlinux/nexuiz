@@ -13,8 +13,7 @@ ENDCLASS(NexuizSingleplayerDialog)
 #ifdef IMPLEMENTATION
 void fillNexuizSingleplayerDialog(entity me)
 {
-	entity e, e0;
-	float n;
+	entity e;
 
 	me.TR(me);
 		me.TDempty(me, (me.columns - 2) / 2);

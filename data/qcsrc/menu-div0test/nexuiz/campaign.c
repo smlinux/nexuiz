@@ -188,7 +188,6 @@ void drawListBoxItemNexuizCampaignList(entity me, float i, vector absSize, float
 	float p;
 	vector theColor;
 	float theAlpha;
-	float done;
 	float j, n;
 	vector o;
 

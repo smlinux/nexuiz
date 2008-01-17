@@ -92,3 +92,40 @@ void setDependentOR(entity e, string theCvarName, float theCvarMin, float theCva
 	e.draw = setDependent_Draw;
 	setDependent_Check(e);
 }
+
+float preMenuInit()
+{
+	MapInfo_Enumerate();
+	if(!MapInfo_FilterGametype(MAPINFO_TYPE_ALL, 0, 1))
+		return FALSE;
+	return TRUE;
+}
+
+string campaign_name_previous;
+float campaign_won_previous;
+void preMenuDraw()
+{
+	if not(campaign_name_previous)
+		campaign_name_previous = strzone(strcat(campaign_name, "x")); // force unequal
+	if(campaign_name == campaign_name_previous)
+	{
+		if(cvar(strcat("g_campaign", campaign_name, "_won")))
+		{
+			if(!campaign_won_previous)
+			{
+				m_display();
+				DialogOpenButton_Click_withCoords(NULL, main.winnerDialog, '0 0 0', '1 1 0');
+			}
+			campaign_won_previous = 1;
+		}
+		else
+			campaign_won_previous = 0;
+	}
+	else
+	{
+		strunzone(campaign_name_previous);
+		campaign_name_previous = strzone(campaign_name);
+		campaign_won_previous = cvar(strcat("g_campaign", campaign_name, "_won"));
+	}
+
+}

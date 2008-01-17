@@ -12,11 +12,8 @@ float menuPrevTime;
 float menuAlpha;
 float menuLogoAlpha;
 float prevMenuAlpha;
-float menuLoadedMaplist;
+float menuInitialized;
 float menuNotTheFirstFrame;
-
-string campaign_name_previous;
-float campaign_won_previous;
 
 void SUB_Null() { };
 
@@ -59,12 +56,10 @@ void() m_init_delayed =
 
 	dprint_load();
 
-	menuLoadedMaplist = 0;
-	MapInfo_Enumerate();
-	if(!MapInfo_FilterGametype(MAPINFO_TYPE_ALL, 0, 1))
+	menuInitialized = 0;
+	if(!preMenuInit())
 		return;
-	menuLoadedMaplist = 1;
-
+	menuInitialized = 1;
 	GameCommand_Init();
 
 	fh = -1;
@@ -101,7 +96,7 @@ void() m_init_delayed =
 
 void(float key, float ascii) m_keyup =
 {
-	if(!menuLoadedMaplist)
+	if(!menuInitialized)
 		return;
 	if(!Menu_Active)
 		return;
@@ -125,7 +120,7 @@ void(float key, float ascii) m_keyup =
 
 void(float key, float ascii) m_keydown =
 {
-	if(!menuLoadedMaplist)
+	if(!menuInitialized)
 		return;
 	if(!Menu_Active)
 		return;
@@ -179,7 +174,7 @@ void() m_draw =
 			menuLogoAlpha = -0.8; // no idea why, but when I start this at zero, it jumps instead of fading
 		}
 	}
-	if(!menuLoadedMaplist)
+	if(!menuInitialized)
 	{
 		// TODO draw an info image about this situation
 		m_init_delayed();
@@ -191,28 +186,7 @@ void() m_draw =
 	menuPrevTime = t;
 	time += frametime;
 
-	if not(campaign_name_previous)
-		campaign_name_previous = strzone(strcat(campaign_name, "x")); // force unequal
-	if(campaign_name == campaign_name_previous)
-	{
-		if(cvar(strcat("g_campaign", campaign_name, "_won")))
-		{
-			if(!campaign_won_previous)
-			{
-				m_display();
-				DialogOpenButton_Click_withCoords(NULL, main.winnerDialog, '0 0 0', '1 1 0');
-			}
-			campaign_won_previous = 1;
-		}
-		else
-			campaign_won_previous = 0;
-	}
-	else
-	{
-		strunzone(campaign_name_previous);
-		campaign_name_previous = strzone(campaign_name);
-		campaign_won_previous = cvar(strcat("g_campaign", campaign_name, "_won"));
-	}
+	preMenuDraw();
 
 	if(Menu_Active)
 	{
@@ -322,7 +296,7 @@ void() m_display =
 	setkeydest(KEY_MENU);
 	setmousetarget(MT_MENU);
 
-	if(!menuLoadedMaplist)
+	if(!menuInitialized)
 		return;
 
 	if(mouseButtonsPressed)
@@ -339,7 +313,7 @@ void() m_hide =
 	setkeydest(KEY_GAME);
 	setmousetarget(MT_CLIENT);
 
-	if(!menuLoadedMaplist)
+	if(!menuInitialized)
 		return;
 
 	main.focusLeave(main);
@@ -362,7 +336,7 @@ void() m_shutdown =
 void(string itemname) m_goto =
 {
 	entity e;
-	if(!menuLoadedMaplist)
+	if(!menuInitialized)
 		return;
 	if(itemname == "") // this can be called by GameCommand
 	{

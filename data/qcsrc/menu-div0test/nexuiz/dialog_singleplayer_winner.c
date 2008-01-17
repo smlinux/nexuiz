@@ -12,7 +12,7 @@ ENDCLASS(NexuizWinnerDialog)
 #ifdef IMPLEMENTATION
 void fillNexuizWinnerDialog(entity me)
 {
-	entity mc, e;
+	entity e;
 
 	me.TR(me);
 		me.TD(me, me.rows - 2, me.columns, e = makeNexuizImage("/gfx/winner", 1.0));
