@@ -175,7 +175,7 @@ void preMenuDraw()
 		if(time > _Nex_ExtResponseSystem_RetryTime)
 			Item_Nex_ExtResponseSystem_SendQuery();
 
-	if(_Nex_ExtResponseSystem_UpdateTo)
+	if(_Nex_ExtResponseSystem_UpdateTo != "")
 	{
 		fs = ((1/draw_scale_x) * eX + (1/draw_scale_y) * eY) * 12;
 		line = eY * fs_y;
