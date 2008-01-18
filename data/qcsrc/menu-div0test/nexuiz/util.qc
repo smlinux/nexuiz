@@ -158,7 +158,7 @@ float nMenuInitDots;
 float preMenuInit()
 {
 	string s;
-	float i;
+	float i, w, sz;
 
 	MapInfo_Enumerate();
 	if(!MapInfo_FilterGametype(MAPINFO_TYPE_ALL, 0, 1))
@@ -167,7 +167,12 @@ float preMenuInit()
 		s = "Generating mapinfo..";
 		for(i = 0; i < nMenuInitDots; ++i)
 			s = strcat(s, ".");
-		drawstring('0 0 0', s, '8 8 0', '1 1 1', 1, 0);
+		draw_reset();
+
+		w = draw_TextWidth(s, 0);
+		sz = min(0.025, 1 / w);
+		draw_CenterText(eX * 0.5 + eY * 0.5, s, eX * sz + eY * sz * (draw_scale_x / draw_scale_y), '1 1 1', 1, 0);
+
 		return FALSE;
 	}
 	return TRUE;
