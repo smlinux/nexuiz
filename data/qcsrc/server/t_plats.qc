@@ -143,6 +143,7 @@ void() plat_use =
 
 .string sound1, sound2;
 
+void() path_corner = { };
 void() func_plat =
 {
 	if (!self.t_length)
