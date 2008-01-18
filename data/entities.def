@@ -44,13 +44,13 @@ speed : amount of time in seconds for one complete oscillation cycle (default 4)
 height : sets the amount of travel of the oscillation movement (default 32). 
 phase : sets the start offset of the oscillation cycle. Values must be 0 < phase < 1. Any integer phase value is the same as no offset (default 0).
 noise : path/name of .wav file to play. Use looping sounds only (eg. sound/world/drone6.wav - See Notes).
-model2 : path/name of model to include (eg: models/mapobjects/jets/jets01.md3).
-origin : alternate method of setting XYZ origin of sound and .md3 model included with entity (See Notes).
+dmg : damage a player who gets crushed by it receives
+dmgtime : interval to apply dmg to a player who is s in the way
+message : death message when a player gets crushed
 light : constantLight radius of .md3 model included with entity. Has no effect on the entity's brushes (default 0).
 color : constantLight color of .md3 model included with entity. Has no effect on the entity's brushes (default 1 1 1).
-notfree : when set to 1, entity will not spawn in "Free for all" and "Tournament" modes.
-notteam : when set to 1, entity will not spawn in "Teamplay" and "CTF" modes.
-notsingle : when set to 1, entity will not spawn in Single Player mode (bot play mode).
+model2 : path/name of model to include (eg: models/mapobjects/jets/jets01.md3).
+origin : alternate method of setting XYZ origin of sound and .md3 model included with entity (See Notes).
 -------- Q3MAP2 KEYS --------
 _targetname : Used to attach a misc_model entity to this entity.
 _lightmapscale : Floating point value scaling the resolution of lightmaps on brushes/patches in this entity (default 1.0).
@@ -84,9 +84,6 @@ light : constantLight radius of .md3 model included with entity. Has no effect o
 color : constantLight color of .md3 model included with entity. Has no effect on the entity's brushes (default 1 1 1).
 model2 : path/name of model to include (eg: models/mapobjects/pipe/pipe02.md3).
 origin : alternate method of setting XYZ origin of .md3 model included with entity (See Notes).
-notfree : when set to 1, entity will not spawn in "Free for all" and "Tournament" modes.
-notteam : when set to 1, entity will not spawn in "Teamplay" and "CTF" modes.
-notsingle : when set to 1, entity will not spawn in Single Player mode (bot play mode).
 -------- Q3MAP2 KEYS --------
 _targetname : Used to attach a misc_model entity to this entity.
 _lightmapscale : Floating point value scaling the resolution of lightmaps on brushes/patches in this entity (default 1.0).
@@ -104,7 +101,7 @@ Target this entity with a misc_model to have the model attached to the entity (s
 
 //=============================================================================
 
-/*QUAKED func_door (0 .5 .8) ? START_OPEN - CRUSHER
+/*QUAKED func_door (0 .5 .8) ? START_OPEN DOOR_DONT_LINK CRUSHER
 Normal sliding door entity. By default, the door will activate when player walks close to it or when damage is inflicted to it.
 -------- KEYS --------
 angle : determines the opening direction of door (up = -1, down = -2).
@@ -114,14 +111,11 @@ lip : lip remaining at end of move (default 8)
 targetname : if set, a func_button or trigger is required to activate the door.
 health : (default 0) if set to any non-zero value, the button must take damage (any amount) to activate.
 dmg : damage to inflict on player when he blocks operation of door (default 4). Door will reverse direction when blocked unless CRUSHER spawnflag is set.
-team: assign the same team name to multiple doors that should operate together (see Notes).
+message : death message when a player gets crushed
 light : constantLight radius of .md3 model included with entity. Has no effect on the entity's brushes (default 0).
 color : constantLight color of .md3 model included with entity. Has no effect on the entity's brushes (default 1 1 1).
 model2 : path/name of model to include (eg: models/mapobjects/pipe/pipe02.md3).
 origin : alternate method of setting XYZ origin of .md3 model included with entity (See Notes).
-notfree : when set to 1, entity will not spawn in "Free for all" and "Tournament" modes.
-notteam : when set to 1, entity will not spawn in "Teamplay" and "CTF" modes.
-notsingle : when set to 1, entity will not spawn in Single Player mode (bot play mode).
 -------- Q3MAP2 KEYS --------
 _targetname : Used to attach a misc_model entity to this entity.
 _lightmapscale : Floating point value scaling the resolution of lightmaps on brushes/patches in this entity (default 1.0).
@@ -134,9 +128,11 @@ _layers OR layers : Integer value is the number unique root shaders that will be
 _shader OR shader : Path to the metashader used to assign textures to the terrain entity. Note: Omit the "textures/" prefix.
 -------- SPAWNFLAGS --------
 START_OPEN : the door will spawn in the open state and operate in reverse.
+DOOR_DONT_LINK : the door will not get linked to touching doors
 CRUSHER : door will not reverse direction when blocked and will keep damaging player until he dies or gets out of the way.
+TOGGLE : the door waits to be triggered in both states
 -------- NOTES --------
-Unlike in Quake 2, doors that touch are NOT automatically teamed. If you want doors to operate together, you have to team them manually by assigning the same team name to all of them. Setting the origin key is simply an alternate method to using an origin brush. When using the model2 key, the origin point of the model will correspond to the origin point defined by either the origin brush or the origin coordinate value.
+Setting the origin key is simply an alternate method to using an origin brush. When using the model2 key, the origin point of the model will correspond to the origin point defined by either the origin brush or the origin coordinate value.
 
 Target this entity with a misc_model to have the model attached to the entity (set the model's "target" key to the same value as this entity's "targetname").*/
 
@@ -175,9 +171,6 @@ light : constantLight radius of .md3 model included with entity. Has no effect o
 color : constantLight color of .md3 model included with entity. Has no effect on the entity's brushes (default 1 1 1).
 model2 : path/name of model to include (eg: models/mapobjects/pipe/pipe02.md3).
 origin : alternate method of setting XYZ origin of .md3 model included with entity (See Notes).
-notfree : when set to 1, entity will not spawn in "Free for all" and "Tournament" modes.
-notteam : when set to 1, entity will not spawn in "Teamplay" and "CTF" modes.
-notsingle : when set to 1, entity will not spawn in Single Player mode (bot play mode).
 -------- Q3MAP2 KEYS --------
 _targetname : Used to attach a misc_model entity to this entity.
 _lightmapscale : Floating point value scaling the resolution of lightmaps on brushes/patches in this entity (default 1.0).
@@ -331,15 +324,6 @@ angle : direction in which player will look when spawning in the game.
 target : this can point at a target_give entity for respawn freebies.*/
 
 //=============================================================================
-
-//QUAKED info_spectator_start (1 0 0) (-16 -16 -24) (16 16 45)
-//Spectator spawn location. Doesn't appear to work in game. Commented out.
-//-------- KEYS --------
-//notfree : when set to 1, entity will not spawn in "Free for all" and "Tournament" modes.
-//notteam : when set to 1, entity will not spawn in "Teamplay" and "CTF" modes.
-//notsingle : when set to 1, entity will not spawn in Single Player mode (bot play mode).
-
-//=============================================================================
 ITEM_* ENTITIES
 //=============================================================================
 
@@ -389,15 +373,6 @@ ammo how hard can it be*/
 
 //===================================================================
 
-/*QUAKED item_speed (.3 .3 1) (-16 -16 -16) (16 16 16)
-haste clone
------------KEYS------------
------------SPAWNFLAGS-----------
----------NOTES----------
-makes user faster, and jump higher*/
-
-//===================================================================                           
-
 /*QUAKED item_strength (.3 .3 1) (-16 -16 -16) (16 16 16)
 gibs are funny
 -----------KEYS------------
@@ -415,15 +390,6 @@ who touched my ass
 can't damage the user*/
 
 //===================================================================                    
-
-/*QUAKED item_slowmo (.3 .3 1) (-16 -16 -16) (16 16 16)
-i dunno
------------KEYS------------
------------SPAWNFLAGS-----------
----------NOTES----------
-slows down the server for 5 seconds*/
-
-//===================================================================      
 
 /*QUAKED item_health1 (.3 .3 1) (-16 -16 -16) (16 16 16)
 i dunno
@@ -541,36 +507,6 @@ _cs OR _castshadows : Allows per-entity control over shadow casting. Defaults to
 _rs OR _receiveshadows : Allows per-entity control over shadow reception. Defaults to 1 on everything (world shadows). 0 = receives NO shadows. > 1 = receive shadows only from corresponding keyed entities (see above) and world. < 1 = receive shadows ONLY from corresponding keyed entities.
 _celshader : Sets the cel shader used for this geometry. Note: omit the "textures/" prefix.
 */
-
-//=============================================================================
-
-/*QUAKED misc_portal_camera (1 .5 .25) (-8 -8 -8) (8 8 8) SLOWROTATE FASTROTATE
-Portal camera. This camera is used to project its view onto a portal surface in the level through the intermediary of a misc_portal_surface entity. Use the "angles" key or target a target_position or info_notnull entity to set the camera's pointing direction.
--------- KEYS --------
-angles: this sets the pitch and yaw aiming angles of the portal camera (default 0 0). Use "roll" key to set roll angle.
-target : point this to a target_position entity to set the camera's pointing direction.
-targetname : a misc_portal_surface portal surface indicator must point to this.
-roll: roll angle of camera. A value of 0 is upside down and 180 is the same as the player's view.
-notfree : when set to 1, entity will not spawn in "Free for all" and "Tournament" modes.
-notteam : when set to 1, entity will not spawn in "Teamplay" and "CTF" modes.
-notsingle : when set to 1, entity will not spawn in Single Player mode (bot play mode).
--------- SPAWNFLAGS --------
-SLOWROTATE : makes the portal camera rotate slowly along the roll axis.
-FASTROTATE : makes the portal camera rotate faster along the roll axis.
--------- NOTES --------
-Both the setting "angles" key or "targeting a target_position" methods can be used to aim the camera. However, the target_position method is simpler. In both cases, the "roll" key must be used to set the roll angle. If either the SLOWROTATE or FASTROTATE spawnflag is set, then the "roll" value is irrelevant.*/
-
-//=============================================================================
-
-/*QUAKED misc_portal_surface (1 .5 .25) (-8 -8 -8) (8 8 8)
-Portal surface indicator. This will "lock on" the brush face closest to it and identify as a portal. The view displayed on the portal surface is the view of the misc_portal_camera that this entity targets. Also used for mirrors (see Notes).
--------- KEYS --------
-target : point this to a misc_portal_camera that "sees" the view you want to display on the portal.
-notfree : when set to 1, entity will not spawn in "Free for all" and "Tournament" modes.
-notteam : when set to 1, entity will not spawn in "Teamplay" and "CTF" modes.
-notsingle : when set to 1, entity will not spawn in Single Player mode (bot play mode).
--------- NOTES --------
-The entity must be no farther than 64 units away from the portal surface to lock onto it. To make a mirror, apply the common/mirror shader to the surface, place this entity near it but don't target a misc_portal_camera.*/
 
 //=============================================================================
 
@@ -752,7 +688,7 @@ a weapon how hard can it be*/
 
 //===================================================================
 
-/*QUAKED weapon_machinegun (1 0 .5) (-16 -16 -16) (16 16 16)
+/*QUAKED weapon_uzi (1 0 .5) (-16 -16 -16) (16 16 16)
 machinegun, shall i say no more
 -----------KEYS------------
 -----------SPAWNFLAGS-----------
@@ -855,29 +791,6 @@ a ladder, need i say no more
 graba trigger brush and put it infront of the part that you want the player to climb
 */
 
-//=============================================================================
-/*QUAKED dynlight (0 1 0) (-8 -8 -8) (8 8 8) START_OFF NOSHADOW FOLLOW
-Dynamic light.
-Can do one of these things: sit still and be just a silly light, travel along a path, follow an entity around, attach to a tag on an entity.
-It can spin around it's own axis in all the above cases.
-If targeted, it will toggle between on or off.
-keys:
-"light_lev" light radius, default 200
-"color" light color in rgb and brightness, 1 1 1 produces bright white, up to 255 255 255 (nuclear blast), recommended values up to 1 1 1, default 1 1 1
-"style" lightstyle, same as for static lights
-"angles" initial orientation
-"avelocity" a vector value, the direction and speed it rotates in
-"skin" cubemap number, must be 16 or above
-"dtagname" will attach to this tag on the entity which "targetname" matches "target". If the "target" is either not an md3 model or is missing tags, it will attach to the targets origin. Note that the "target" must be visible to the light
-"targetname" will toggle on and off when triggered
-"target" if issued with a target, preferrably path_corner, it will move along the path. If also issued with the FOLLOW spawnflag, then this is the entity it will follow. If issued with the "tagname" key it will attach it to this targets tag called "tagname", does not work together with FOLLOW or path movement
-"speed" the speed it will travel along the path, default 100
-flags:
-"START_OFF" light will be in off state until targeted
-"NOSHADOW" will not cast shadows in realtime lighting mode
-"FOLLOW" will follow the entity which "targetname" matches "target"
-*/
-
 /*QUAKED trigger_cmd (.5 .5 .5) ? 
 Any player that touches this will have the .cdm command executed
 -------- KEYS --------
@@ -925,3 +838,42 @@ frags		How many frags this point gives each wait cycle.
 ---------NOTES----------
 In order to get Domination working well in your map, you need to place dom_team and dom_controlpoint entites.  You *must* have at least 3 dom_team entities - 2 minimum teams and one blank one (empty netname and no team).  You can have up to 4 teams (5 dom_team entities).
 */
+
+// entities still to describe:
+// ctf_team
+// func_assault_destructible
+// func_assault_wall
+// func_door_secret
+// func_rain
+// func_snow
+// func_stardust
+// func_water
+// info_location
+// info_player_attacker
+// info_player_defender
+// info_player_team3
+// info_player_team4
+// info_teleport_destination
+// item_armor2
+// item_armor_large
+// item_armor_medium
+// item_armor_small
+// item_health
+// item_health_large
+// item_health_medium
+// item_health_mega
+// item_health_small
+// misc_models
+// onslaught_controlpoint
+// onslaught_generator
+// onslaught_link
+// target_assault_roundend
+// target_assault_roundstart
+// target_location
+// target_objective
+// target_objective_decrease
+// trigger_counter
+// trigger_delay
+// trigger_once
+// trigger_swamp
+// waypoint
