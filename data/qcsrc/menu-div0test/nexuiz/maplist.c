@@ -7,6 +7,7 @@ CLASS(NexuizMapList) EXTENDS(NexuizListBox)
 	METHOD(NexuizMapList, clickListBoxItem, void(entity, float, vector))
 	METHOD(NexuizMapList, resizeNotify, void(entity, vector, vector, vector, vector))
 	METHOD(NexuizMapList, refilter, void(entity))
+	METHOD(NexuizMapList, keyDown, float(entity, float, float, float))
 
 	ATTRIB(NexuizMapList, realFontSize, vector, '0 0 0')
 	ATTRIB(NexuizMapList, columnPreviewOrigin, float, 0)
@@ -153,25 +154,22 @@ void drawListBoxItemNexuizMapList(entity me, float i, vector absSize, float isSe
 	// layout: Ping, Map name, Map name, NP, TP, MP
 	string s;
 	float p;
-	vector theColor;
 	float theAlpha;
 	float included;
-
-	theColor = '1 1 1';
 
 	if(!MapInfo_Get_ByID(i))
 		return;
 
 	included = me.g_maplistCacheQuery(me, i);
 	if(included)
-		theAlpha = 1;
+		theAlpha = SKINALPHA_MAPLIST_INCLUDEDFG;
 	else
-		theAlpha = 0.4;
+		theAlpha = SKINALPHA_MAPLIST_NOTINCLUDEDFG;
 
 	if(isSelected)
-		draw_Fill('0 0 0', '1 1 0', '0 0 1', 0.5);
+		draw_Fill('0 0 0', '1 1 0', SKINCOLOR_LISTBOX_SELECTED, SKINALPHA_LISTBOX_SELECTED);
 	else if(included)
-		draw_Fill('0 0 0', '1 1 0', '0 0 0', 0.5);
+		draw_Fill('0 0 0', '1 1 0', SKINCOLOR_MAPLIST_INCLUDEDBG, SKINALPHA_MAPLIST_INCLUDEDBG);
 
 	s = ftos(p);
 	draw_Picture(me.columnPreviewOrigin * eX, strcat("/maps/", MapInfo_Map_bspname), me.columnPreviewSize * eX + eY, '1 1 1', theAlpha);
@@ -252,5 +250,32 @@ void MapList_LoadMap(entity btn, entity me)
 		print("Huh? Can't play this. Refiltering so this won't happen again.\n");
 		me.refilter(me);
 	}
+}
+
+float keyDownNexuizMapList(entity me, float scan, float ascii, float shift)
+{
+	if(scan == K_ENTER)
+	{
+		// pop up map info screen
+		main.mapInfoDialog.loadMapInfo(main.mapInfoDialog, me.selectedItem);
+		DialogOpenButton_Click_withCoords(NULL, main.mapInfoDialog, me.origin + eX * (me.columnNameOrigin * me.size_x) + eY * ((me.itemHeight * me.selectedItem - me.scrollPos) * me.size_y), eY * me.itemAbsSize_y + eX * (me.itemAbsSize_x * me.columnNameSize));
+	}
+	else if(scan == K_SPACE)
+	{
+		me.g_maplistCacheToggle(me, me.selectedItem);
+	}
+	else if(ascii == 43) // +
+	{
+		if not(me.g_maplistCacheQuery(me, me.selectedItem))
+			me.g_maplistCacheToggle(me, me.selectedItem);
+	}
+	else if(ascii == 45) // -
+	{
+		if(me.g_maplistCacheQuery(me, me.selectedItem))
+			me.g_maplistCacheToggle(me, me.selectedItem);
+	}
+	else
+		return keyDownListBox(me, scan, ascii, shift);
+	return 1;
 }
 #endif

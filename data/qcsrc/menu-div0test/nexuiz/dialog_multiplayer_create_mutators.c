@@ -85,10 +85,11 @@ void fillNexuizMutatorsDialog(entity me)
 		me.TD(me, 1, 2, e = makeNexuizRadioButton(1, "g_rocketarena", string_null, "Rocket launcher arena"));
 
 	me.gotoXY(me, me.rows - 2, 0);
-		s = makeNexuizSlider(80, 400, 40, "sv_gravity");
+		s = makeNexuizSlider(80, 400, 8, "sv_gravity");
 			s.valueDigits = 0;
 			s.valueDisplayMultiplier = 0.125; // show gravity in percent
 		me.TD(me, 1, 1, e = makeNexuizSliderCheckBox(800, 1, s, "Low gravity"));
+			e.savedValue = 200; // good on silvercity
 		me.TD(me, 1, 3, s);
 
 	me.gotoXY(me, me.rows - 1, 0);

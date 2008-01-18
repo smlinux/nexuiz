@@ -140,8 +140,11 @@ void fillNexuizServerCreateTab(entity me)
 		me.TDempty(me, 0.2);
 		me.TD(me, 1, 0.8, e = makeNexuizTextLabel(0, "Bot names:"));
 		me.TD(me, 1, 0.7, e = makeNexuizInputBox(1, "bot_prefix"));
+			setDependent(e, "bot_number", 0, -1);
 		me.TD(me, 1, 0.6, e = makeNexuizTextLabel(0.5, "Spellbinder"));
+			setDependent(e, "bot_number", 0, -1);
 		me.TD(me, 1, 0.7, e = makeNexuizInputBox(1, "bot_suffix"));
+			setDependent(e, "bot_number", 0, -1);
 	me.TR(me);
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizButton("Mutators...", '0 0 0'));

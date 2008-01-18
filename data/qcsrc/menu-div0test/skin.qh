@@ -14,7 +14,7 @@
 #define SKINVECTOR(name,def) case #name: SKIN##name = stov(value); break
 #define SKINFLOAT(name,def) case #name: SKIN##name = stof(value); break
 #define SKINSTRING(name,def) break
-#define SKINEND default: print("Invalid key in skin file: ", key, "\n"); } }
+#define SKINEND case "": break; case "//": break; default: print("Invalid key in skin file: ", key, "\n"); } }
 #include "skin-customizables.inc"
 #undef SKINEND
 #undef SKINSTRING

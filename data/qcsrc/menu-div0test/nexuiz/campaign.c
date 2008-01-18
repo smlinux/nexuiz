@@ -7,6 +7,7 @@ CLASS(NexuizCampaignList) EXTENDS(NexuizListBox)
 	METHOD(NexuizCampaignList, clickListBoxItem, void(entity, float, vector))
 	METHOD(NexuizCampaignList, resizeNotify, void(entity, vector, vector, vector, vector))
 	METHOD(NexuizCampaignList, setSelected, void(entity, float))
+	METHOD(NexuizCampaignList, keyDown, float(entity, float, float, float))
 
 	ATTRIB(NexuizCampaignList, realFontSize, vector, '0 0 0')
 	ATTRIB(NexuizCampaignList, columnPreviewOrigin, float, 0)
@@ -193,22 +194,22 @@ void drawListBoxItemNexuizCampaignList(entity me, float i, vector absSize, float
 
 	if(i < me.campaignIndex)
 	{
-		theAlpha = 1;
-		theColor = '1 1 1';
+		theAlpha = SKINALPHA_CAMPAIGN_SELECTABLE;
+		theColor = SKINCOLOR_CAMPAIGN_SELECTABLE;
 	}
 	else if(i == me.campaignIndex)
 	{
-		theAlpha = 1;
-		theColor = '1 1 0';
+		theAlpha = SKINALPHA_CAMPAIGN_CURRENT;
+		theColor = SKINCOLOR_CAMPAIGN_CURRENT;
 	}
 	else
 	{
-		theAlpha = 0.2;
-		theColor = '1 1 1';
+		theAlpha = SKINALPHA_CAMPAIGN_FUTURE;
+		theColor = SKINCOLOR_CAMPAIGN_FUTURE;
 	}
 
 	if(isSelected)
-		draw_Fill('0 0 0', '1 1 0', '0 0 1', 0.5);
+		draw_Fill('0 0 0', '1 1 0', SKINCOLOR_LISTBOX_SELECTED, SKINALPHA_LISTBOX_SELECTED);
 
 	s = ftos(p);
 	draw_Picture(me.columnPreviewOrigin * eX, strcat("/maps/", campaign_mapname[i]), me.columnPreviewSize * eX + eY, '1 1 1', theAlpha);
@@ -229,7 +230,7 @@ void drawListBoxItemNexuizCampaignList(entity me, float i, vector absSize, float
 		for(j = 0; j < n; ++j)
 			if(argv(j) != "")
 			{
-				draw_Text(o, argv(j), me.realFontSize, theColor, theAlpha * 0.7, 0);
+				draw_Text(o, argv(j), me.realFontSize, theColor, theAlpha * SKINALPHA_CAMPAIGN_DESCRIPTION, 0);
 				o_y += me.realFontSize_y;
 			}
 			else
@@ -247,5 +248,14 @@ void setSelectedNexuizCampaignList(entity me, float i)
 {
 	// prevent too late items from being played
 	setSelectedListBox(me, min(i, me.campaignIndex));
+}
+
+float keyDownNexuizCampaignList(entity me, float scan, float ascii, float shift)
+{
+	if(scan == K_ENTER || scan == K_SPACE)
+		CampaignList_LoadMap(me, me);
+	else
+		return keyDownListBox(me, scan, ascii, shift);
+	return 1;
 }
 #endif

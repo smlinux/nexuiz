@@ -31,10 +31,6 @@ void configureCheckBoxCheckBox(entity me, string txt, float sz, string gfx)
 	me.configureButton(me, txt, sz, gfx);
 	me.align = 0;
 }
-void showNotifyCheckBox(entity me)
-{
-	me.focusable = !me.disabled;
-}
 void drawCheckBox(entity me)
 {
 	float s;

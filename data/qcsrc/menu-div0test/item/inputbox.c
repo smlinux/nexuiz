@@ -8,6 +8,7 @@ CLASS(InputBox) EXTENDS(Label)
 	METHOD(InputBox, mouseRelease, float(entity, vector))
 	METHOD(InputBox, mousePress, float(entity, vector))
 	METHOD(InputBox, mouseDrag, float(entity, vector))
+	METHOD(InputBox, showNotify, void(entity))
 
 	ATTRIB(InputBox, src, string, string_null)
 
@@ -15,6 +16,7 @@ CLASS(InputBox) EXTENDS(Label)
 	ATTRIB(InputBox, scrollPos, float, 0) // widths
 
 	ATTRIB(InputBox, focusable, float, 1)
+	ATTRIB(InputBox, disabled, float, 0)
 	ATTRIB(InputBox, lastChangeTime, float, 0)
 	ATTRIB(InputBox, dragScrollTimer, float, 0)
 	ATTRIB(InputBox, dragScrollPos, vector, '0 0 0')
@@ -131,9 +133,13 @@ void drawInputBox(entity me)
 	if(me.pressed)
 		me.mouseDrag(me, me.dragScrollPos); // simulate mouseDrag event
 
+	me.focusable = !me.disabled;
+	if(me.disabled)
+		draw_alpha *= me.disabledAlpha;
+
 	if(me.src)
 	{
-		if(me.focused)
+		if(me.focused && !me.disabled)
 			draw_ButtonPicture('0 0 0', strcat(me.src, "_f"), '1 1 0', me.colorF, 1);
 		else
 			draw_ButtonPicture('0 0 0', strcat(me.src, "_n"), '1 1 0', me.color, 1);
@@ -221,5 +227,10 @@ void drawInputBox(entity me)
 		draw_Text(me.realOrigin + eX * (cursorPosInWidths - me.scrollPos), CURSOR, me.realFontSize, '1 1 1', 1, 0);
 
 	draw_ClearClip();
+}
+
+void showNotifyInputBox(entity me)
+{
+	me.focusable = !me.disabled;
 }
 #endif

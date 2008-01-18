@@ -6,6 +6,7 @@ CLASS(NexuizServerList) EXTENDS(NexuizListBox)
 	METHOD(NexuizServerList, drawListBoxItem, void(entity, float, vector, float))
 	METHOD(NexuizServerList, clickListBoxItem, void(entity, float, vector))
 	METHOD(NexuizServerList, resizeNotify, void(entity, vector, vector, vector, vector))
+	METHOD(NexuizServerList, keyDown, float(entity, float, float, float))
 
 	ATTRIB(NexuizServerList, realFontSize, vector, '0 0 0')
 	ATTRIB(NexuizServerList, realUpperMargin, float, 0)
@@ -323,29 +324,29 @@ void drawListBoxItemNexuizServerList(entity me, float i, vector absSize, float i
 	float theAlpha;
 
 	if(isSelected)
-		draw_Fill('0 0 0', '1 1 0', '0 0 1', 0.5);
+		draw_Fill('0 0 0', '1 1 0', SKINCOLOR_LISTBOX_SELECTED, SKINALPHA_LISTBOX_SELECTED);
 
 	if(gethostcachenumber(SLIST_FIELD_NUMPLAYERS, i) >= gethostcachenumber(SLIST_FIELD_MAXPLAYERS, i))
-		theAlpha = 0.2;
+		theAlpha = SKINALPHA_SERVERLIST_FULL;
 	else if not(gethostcachenumber(SLIST_FIELD_NUMHUMANS, i))
-		theAlpha = 0.5;
+		theAlpha = SKINALPHA_SERVERLIST_EMPTY;
 	else
 		theAlpha = 1;
 	
 	p = gethostcachenumber(SLIST_FIELD_PING, i);
 	if(p < 50)
-		theColor = eX * (p / 50) + eY;
+		theColor = SKINCOLOR_SERVERLIST_LOWPING + (SKINCOLOR_SERVERLIST_MEDPING - SKINCOLOR_SERVERLIST_LOWPING) * (p / 50);
 	else if(p < 150)
-		theColor = eX + eY * ((150 - p) / 100);
+		theColor = SKINCOLOR_SERVERLIST_MEDPING + (SKINCOLOR_SERVERLIST_HIGHPING - SKINCOLOR_SERVERLIST_MEDPING) * ((p - 50) / 100);
 	else if(p < 650)
 	{
-		theColor = eX;
-		theAlpha *= 0.1 + 0.9 * (650 - p) / 500;
+		theColor = SKINCOLOR_SERVERLIST_HIGHPING;
+		theAlpha *= 1 + (SKINALPHA_SERVERLIST_HIGHPING - 1) * ((p - 150) / 500);
 	}
 	else
 	{
 		theColor = eX;
-		theAlpha *= 0.1;
+		theAlpha *= SKINALPHA_SERVERLIST_HIGHPING;
 	}
 	
 	s = ftos(p);
@@ -356,5 +357,14 @@ void drawListBoxItemNexuizServerList(entity me, float i, vector absSize, float i
 	draw_Text(me.realUpperMargin * eY + (me.columnMapOrigin + (me.columnMapSize - draw_TextWidth(s, 0) * me.realFontSize_x) * 0.5) * eX, s, me.realFontSize, theColor, theAlpha, 0);
 	s = strcat(ftos(gethostcachenumber(SLIST_FIELD_NUMHUMANS, i)), "/", ftos(gethostcachenumber(SLIST_FIELD_MAXPLAYERS, i)));
 	draw_Text(me.realUpperMargin * eY + (me.columnPlayersOrigin + (me.columnPlayersSize - draw_TextWidth(s, 0) * me.realFontSize_x) * 0.5) * eX, s, me.realFontSize, theColor, theAlpha, 0);
+}
+
+float keyDownNexuizServerList(entity me, float scan, float ascii, float shift)
+{
+	if(scan == K_ENTER || scan == K_SPACE)
+		ServerList_Connect_Click(NULL, me);
+	else
+		return keyDownListBox(me, scan, ascii, shift);
+	return 1;
 }
 #endif

@@ -79,7 +79,7 @@ void() m_init_delayed =
 			Skin_ApplySetting(argv(0), argv(1));
 	fclose(fh);
 
-	draw_setMousePointer("cursor", SKINSIZE_CURSOR, SKINOFFSET_CURSOR);
+	draw_setMousePointer(SKINGFX_CURSOR, SKINSIZE_CURSOR, SKINOFFSET_CURSOR);
 
 	conwidth = conheight = -1;
 	draw_reset();
