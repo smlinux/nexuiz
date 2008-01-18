@@ -38,7 +38,7 @@ string toStringNexuizMutatorsDialog(entity me)
 		s = strcat(s, ", Steps");
 	if(cvar("g_grappling_hook"))
 		s = strcat(s, ", Hook");
-	if(cvar("g_laserguides_missile"))
+	if(cvar("g_laserguided_missile"))
 		s = strcat(s, ", LG missiles");
 	if(cvar("g_midair"))
 		s = strcat(s, ", Mid-air");
