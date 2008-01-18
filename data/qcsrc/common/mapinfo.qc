@@ -57,6 +57,10 @@ float startsWith(string haystack, string needle)
 {
 	return substring(haystack, 0, strlen(needle)) == needle;
 }
+float startsWithNocase(string haystack, string needle)
+{
+	return strcasecmp(substring(haystack, 0, strlen(needle)), needle) == 0;
+}
 string extractRestOfLine(string haystack, string needle)
 {
 	if(startsWith(haystack, needle))
@@ -532,7 +536,7 @@ float MapInfo_FindName(string s)
 		MapInfo_FindName_firstResult = -1;
 		return -1; // no MapInfo_FindName_match, behind last item
 	}
-	if(!startsWith(MapInfo_FindName_match, s))
+	if(!startsWithNocase(MapInfo_FindName_match, s))
 	{
 		MapInfo_FindName_match = string_null;
 		MapInfo_FindName_firstResult = -1;
@@ -540,7 +544,7 @@ float MapInfo_FindName(string s)
 	}
 	if(l == MapInfo_count - 1)
 		return l; // last one, nothing can follow => unique
-	if(startsWith(_MapInfo_GlobItem(HugeSetOfIntegers_get(_MapInfo_filtered, l + 1)), s))
+	if(startsWithNocase(_MapInfo_GlobItem(HugeSetOfIntegers_get(_MapInfo_filtered, l + 1)), s))
 	{
 		MapInfo_FindName_match = string_null;
 		return -1; // ambigous MapInfo_FindName_match
