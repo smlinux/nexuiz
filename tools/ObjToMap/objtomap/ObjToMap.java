@@ -46,6 +46,7 @@ public class ObjToMap {
         while(in.ready()) {
             String line = in.readLine();
             line.trim();
+            line = line.replaceAll("  ", " ");
             String[] tokens = line.split(" ");
             if(tokens.length > 1) {
                 
