@@ -32,3 +32,6 @@ float median(float a, float b, float c);
 string ftos_decimals(float number, float decimals);
 
 vector colormapPaletteColor(float c, float isPants);
+
+// unzone the string, and return it as tempstring. Safe to be called on string_null
+string fstrunzone(string s);

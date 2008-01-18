@@ -222,3 +222,14 @@ vector colormapPaletteColor(float c, float isPants)
 		default: return '0.000 0.000 0.000';
 	}
 }
+
+// unzone the string, and return it as tempstring. Safe to be called on string_null
+string fstrunzone(string s)
+{
+	string sc;
+	if not(s)
+		return s;
+	sc = strcat(s, "");
+	strunzone(s);
+	return sc;
+}

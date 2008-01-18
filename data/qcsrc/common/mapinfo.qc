@@ -500,7 +500,6 @@ float MapInfo_Get_ByName(string pFilename, float pAllowGenerate, float pGametype
 	return 0;
 }
 
-string _MapInfo_FindName_match;
 float MapInfo_FindName(string s)
 {
 	// if there is exactly one map of prefix s, return it
@@ -513,8 +512,8 @@ float MapInfo_FindName(string s)
 	while(l != r)
 	{
 		m = floor((l + r) / 2);
-		_MapInfo_FindName_match = _MapInfo_GlobItem(HugeSetOfIntegers_get(_MapInfo_filtered, m));
-		cmp = strcasecmp(_MapInfo_FindName_match, s);
+		MapInfo_FindName_match = _MapInfo_GlobItem(HugeSetOfIntegers_get(_MapInfo_filtered, m));
+		cmp = strcasecmp(MapInfo_FindName_match, s);
 		if(cmp == 0)
 			return m; // found and good
 		if(cmp < 0)
@@ -522,26 +521,29 @@ float MapInfo_FindName(string s)
 		else
 			r = m; // behind s
 	}
-	_MapInfo_FindName_match = _MapInfo_GlobItem(HugeSetOfIntegers_get(_MapInfo_filtered, l));
+	MapInfo_FindName_match = _MapInfo_GlobItem(HugeSetOfIntegers_get(_MapInfo_filtered, l));
+	MapInfo_FindName_firstResult = l;
 	// r == l, so: l is behind s, l-1 is before
 	// SO: if there is any, l is the one with the right prefix
 	//     and l+1 may be one too
 	if(l == MapInfo_count)
 	{
-		_MapInfo_FindName_match = string_null;
-		return -1; // no _MapInfo_FindName_match, behind last item
+		MapInfo_FindName_match = string_null;
+		MapInfo_FindName_firstResult = -1;
+		return -1; // no MapInfo_FindName_match, behind last item
 	}
-	if(!startsWith(_MapInfo_FindName_match, s))
+	if(!startsWith(MapInfo_FindName_match, s))
 	{
-		_MapInfo_FindName_match = string_null;
+		MapInfo_FindName_match = string_null;
+		MapInfo_FindName_firstResult = -1;
 		return -1; // wrong prefix
 	}
 	if(l == MapInfo_count - 1)
 		return l; // last one, nothing can follow => unique
 	if(startsWith(_MapInfo_GlobItem(HugeSetOfIntegers_get(_MapInfo_filtered, l + 1)), s))
 	{
-		_MapInfo_FindName_match = string_null;
-		return -1; // ambigous _MapInfo_FindName_match
+		MapInfo_FindName_match = string_null;
+		return -1; // ambigous MapInfo_FindName_match
 	}
 	return l;
 }
@@ -549,7 +551,7 @@ float MapInfo_FindName(string s)
 string MapInfo_FixName(string s)
 {
 	MapInfo_FindName(s);
-	return _MapInfo_FindName_match;
+	return MapInfo_FindName_match;
 }
 
 float MapInfo_CurrentFeatures()

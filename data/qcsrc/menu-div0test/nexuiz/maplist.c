@@ -36,6 +36,9 @@ CLASS(NexuizMapList) EXTENDS(NexuizListBox)
 
 	ATTRIB(NexuizMapList, cvarName, string, "dummy")
 	METHOD(NexuizMapList, loadCvars, void(entity))
+
+	ATTRIB(NexuizMapList, typeToSearchString, string, string_null)
+	ATTRIB(NexuizMapList, typeToSearchTime, float, 0)
 ENDCLASS(NexuizMapList)
 entity makeNexuizMapList();
 void MapList_All(entity btn, entity me);
@@ -254,6 +257,7 @@ void MapList_LoadMap(entity btn, entity me)
 
 float keyDownNexuizMapList(entity me, float scan, float ascii, float shift)
 {
+	string ch, save;
 	if(scan == K_ENTER)
 	{
 		// pop up map info screen
@@ -273,6 +277,38 @@ float keyDownNexuizMapList(entity me, float scan, float ascii, float shift)
 	{
 		if(me.g_maplistCacheQuery(me, me.selectedItem))
 			me.g_maplistCacheToggle(me, me.selectedItem);
+	}
+	else if(scan == K_BACKSPACE)
+	{
+		if(time < me.typeToSearchTime)
+		{
+			save = substring(me.typeToSearchString, 0, strlen(me.typeToSearchString) - 1);
+			if(me.typeToSearchString)
+				strunzone(me.typeToSearchString);
+			me.typeToSearchString = strzone(save);
+			me.typeToSearchTime = time + 0.5;
+			if(strlen(me.typeToSearchString))
+			{
+				MapInfo_FindName(me.typeToSearchString);
+				if(MapInfo_FindName_firstResult >= 0)
+					me.setSelected(me, MapInfo_FindName_firstResult);
+			}
+		}
+	}
+	else if(ascii >= 32 && ascii != 127)
+	{
+		ch = chr(ascii);
+		if(time > me.typeToSearchTime)
+			save = ch;
+		else
+			save = strcat(me.typeToSearchString, ch);
+		if(me.typeToSearchString)
+			strunzone(me.typeToSearchString);
+		me.typeToSearchString = strzone(save);
+		me.typeToSearchTime = time + 0.5;
+		MapInfo_FindName(me.typeToSearchString);
+		if(MapInfo_FindName_firstResult >= 0)
+			me.setSelected(me, MapInfo_FindName_firstResult);
 	}
 	else
 		return keyDownListBox(me, scan, ascii, shift);
