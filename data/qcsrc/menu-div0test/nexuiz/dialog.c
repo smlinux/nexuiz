@@ -10,9 +10,9 @@ CLASS(NexuizDialog) EXTENDS(Dialog)
 	ATTRIB(NexuizDialog, columns, float, 2)
 	*/
 	ATTRIB(NexuizDialog, marginTop, float, SKINMARGIN_TOP) // pixels
-	ATTRIB(NexuizDialog, marginBottom, float, SKINMARGIN_TOP) // pixels
+	ATTRIB(NexuizDialog, marginBottom, float, SKINMARGIN_BOTTOM) // pixels
 	ATTRIB(NexuizDialog, marginLeft, float, SKINMARGIN_LEFT) // pixels
-	ATTRIB(NexuizDialog, marginRight, float, SKINMARGIN_LEFT) // pixels
+	ATTRIB(NexuizDialog, marginRight, float, SKINMARGIN_RIGHT) // pixels
 	ATTRIB(NexuizDialog, columnSpacing, float, SKINMARGIN_COLUMNS) // pixels
 	ATTRIB(NexuizDialog, rowSpacing, float, SKINMARGIN_ROWS) // pixels
 	ATTRIB(NexuizDialog, rowHeight, float, SKINFONTSIZE_NORMAL * SKINHEIGHT_NORMAL) // pixels

@@ -56,7 +56,9 @@ COLOR_CHECKBOX_D                '1 1 1'
 //   uses "border" images
 //   uses "closebutton" images
 MARGIN_TOP                      8
+MARGIN_BOTTOM                   8
 MARGIN_LEFT                     8
+MARGIN_RIGHT                    8
 MARGIN_COLUMNS                  4
 MARGIN_ROWS                     4
 
