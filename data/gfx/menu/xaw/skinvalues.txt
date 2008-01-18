@@ -17,7 +17,7 @@ COLOR_DIALOG_SINGLEPLAYER       '1 1 1'
 // mouse
 //   uses cursor.tga
 SIZE_CURSOR                     '32 32 0'
-OFFSET_CURSOR                   '0 0 0'
+OFFSET_CURSOR                   '0.5 0.5 0'
 ALPHA_CURSOR_INTRO              1
 
 // general
@@ -37,7 +37,7 @@ COLOR_BUTTON_D                  '1 1 1'
 ALPHA_CAMPAIGN_SELECTABLE       0.8
 COLOR_CAMPAIGN_SELECTABLE       '1 1 1'
 ALPHA_CAMPAIGN_CURRENT          1
-COLOR_CAMPAIGN_CURRENT          '1 1 0'
+COLOR_CAMPAIGN_CURRENT          '1 1 1'
 ALPHA_CAMPAIGN_FUTURE           0.2
 COLOR_CAMPAIGN_FUTURE           '1 1 1'
 ALPHA_CAMPAIGN_DESCRIPTION      0.7
@@ -67,15 +67,15 @@ COLOR_INPUTBOX_F                '1 1 1'
 MARGIN_INPUTBOX                 0.02
 
 // item: list box
-COLOR_LISTBOX_SELECTED          '0 0 1'
-ALPHA_LISTBOX_SELECTED          0.5
+COLOR_LISTBOX_SELECTED          '0 0 0'
+ALPHA_LISTBOX_SELECTED          1
 
 // item: map list
 COLOR_MAPLIST_TITLE             '1 1 1'
 COLOR_MAPLIST_AUTHOR            '0.5 0.5 0.5'
 COLOR_MAPLIST_INCLUDEDBG        '0 0 0'
 ALPHA_MAPLIST_INCLUDEDFG        1
-ALPHA_MAPLIST_INCLUDEDBG        0.5
+ALPHA_MAPLIST_INCLUDEDBG        1
 ALPHA_MAPLIST_NOTINCLUDEDFG     0.4
 
 // item: nexposee
