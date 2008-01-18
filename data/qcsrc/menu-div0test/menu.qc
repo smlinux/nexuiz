@@ -51,7 +51,7 @@ void UpdateConWidthHeight()
 
 void() m_init_delayed =
 {
-	float fh;
+	float fh, glob, n, i;
 	string s;
 
 	dprint_load();
@@ -78,6 +78,15 @@ void() m_init_delayed =
 		if(tokenize(s) == 2)
 			Skin_ApplySetting(argv(0), argv(1));
 	fclose(fh);
+
+	glob = search_begin(strcat(draw_currentSkin, "/*.tga"), TRUE, TRUE);
+	if(glob >= 0)
+	{
+		n = search_getsize(glob);
+		for(i = 0; i < n; ++i)
+			precache_pic(search_getfilename(glob, i));
+		search_end(glob);
+	}
 
 	draw_setMousePointer(SKINGFX_CURSOR, SKINSIZE_CURSOR, SKINOFFSET_CURSOR);
 
@@ -164,6 +173,12 @@ void() m_draw =
 	if(main)
 		UpdateConWidthHeight();
 
+	if(!menuInitialized)
+	{
+		// TODO draw an info image about this situation
+		m_init_delayed();
+		return;
+	}
 	if(!menuNotTheFirstFrame)
 	{
 		menuNotTheFirstFrame = 1;
@@ -173,12 +188,6 @@ void() m_draw =
 			localcmd("set menu_video_played 1; cd loop 1; play sound/announcer/male/welcome.ogg\n");
 			menuLogoAlpha = -0.8; // no idea why, but when I start this at zero, it jumps instead of fading
 		}
-	}
-	if(!menuInitialized)
-	{
-		// TODO draw an info image about this situation
-		m_init_delayed();
-		return;
 	}
 
 	t = gettime();

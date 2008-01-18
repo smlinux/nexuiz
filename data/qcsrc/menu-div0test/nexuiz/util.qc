@@ -154,11 +154,22 @@ void() Item_Nex_ExtResponseSystem_CheckForResponse =
 
 // END OF EXTRESPONSE SYSTEM /////////////////////////////////////////////////
 
+float nMenuInitDots;
 float preMenuInit()
 {
+	string s;
+	float i;
+
 	MapInfo_Enumerate();
 	if(!MapInfo_FilterGametype(MAPINFO_TYPE_ALL, 0, 1))
+	{
+		nMenuInitDots = nMenuInitDots + 1;
+		s = "Generating mapinfo..";
+		for(i = 0; i < nMenuInitDots; ++i)
+			s = strcat(s, ".");
+		drawstring('0 0 0', s, '8 8 0', '1 1 1', 1, 0);
 		return FALSE;
+	}
 	return TRUE;
 }
 
