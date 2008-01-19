@@ -1,5 +1,6 @@
 float SPAWNFLAG_NO_WAYPOINTS_FOR_ITEMS = 1;
 string redirection_target;
+float world_initialized;
 
 string GetMapname();
 string GetGametype();
@@ -236,6 +237,8 @@ void worldspawn (void)
 	MapInfo_Enumerate();
 	MapInfo_FilterGametype(MapInfo_CurrentGametype(), MapInfo_CurrentFeatures(), 1);
 #endif
+
+	world_initialized = 1;
 }
 
 void light (void)
@@ -458,9 +461,6 @@ void() GameResetCfg =
 
 	localcmd("exec game_reset.cfg\n");
 #endif
-
-	Ban_SaveBans();
-	db_save(ServerProgsDB, "server.db");
 };
 
 void() Map_Goto =
@@ -628,9 +628,6 @@ string() GetNextMap =
 
 float() DoNextMapOverride =
 {
-	Ban_SaveBans();
-	db_save(ServerProgsDB, "server.db");
-
 	if(cvar("g_campaign"))
 	{
 		CampaignPostIntermission();
@@ -929,9 +926,6 @@ void() NextLevel =
 	float f;
 
 	gameover = TRUE;
-
-	Ban_SaveBans();
-	db_save(ServerProgsDB, "server.db");
 
 	intermission_running = 1;
 
@@ -2150,4 +2144,20 @@ float RedirectionThink()
 		localcmd("\nwait; wait; wait; quit\n");
 
 	return TRUE;
+}
+
+void SV_Shutdown()
+{
+	if(world_initialized)
+	{
+		world_initialized = 0;
+		print("Saving persistent data...\n");
+		Ban_SaveBans();
+		db_save(ServerProgsDB, "server.db");
+		print("done!\n");
+	}
+	else
+	{
+		print("NOTE: crashed before even initializing the world, not saving persistent data\n");
+	}
 }
