@@ -275,14 +275,14 @@ void db_close(float db)
 string db_get(float db, string key)
 {
 	float h;
-	h = hash(FALSE, key);
+	h = math_mod(hash(FALSE, key), DB_BUCKETS);
 	return infoget(bufstr_get(db, h), key);
 }
 
 void db_put(float db, string key, string value)
 {
 	float h;
-	h = hash(FALSE, key);
+	h = math_mod(hash(FALSE, key), DB_BUCKETS);
 	bufstr_set(db, h, infoadd(bufstr_get(db, h), key, value));
 }
 
