@@ -229,12 +229,12 @@ void ImpulseCommands (void)
 				else if(imp == 99)
 				{
 					self.items |= (IT_LASER | IT_UZI | IT_SHOTGUN | IT_GRENADE_LAUNCHER | IT_ELECTRO | IT_CRYLINK | IT_NEX | IT_HAGAR | IT_ROCKET_LAUNCHER);
-					self.ammo_shells = cvar("g_pickup_shells_max");
-					self.ammo_nails = cvar("g_pickup_nails_max");
-					self.ammo_rockets = cvar("g_pickup_rockets_max");
-					self.ammo_cells = cvar("g_pickup_cells_max");
-					self.health = cvar("g_pickup_healthshard_max");
-					self.armorvalue = cvar("g_pickup_armorshard_max");
+					self.ammo_shells = g_pickup_shells_max;
+					self.ammo_nails = g_pickup_nails_max;
+					self.ammo_rockets = g_pickup_rockets_max;
+					self.ammo_cells = g_pickup_cells_max;
+					self.health = g_pickup_healthsmall_max;
+					self.armorvalue = g_pickup_armorsmall_max;
 					self.pauserotarmor_finished = time + cvar("g_balance_pause_armor_rot_spawn");
 					self.pauserothealth_finished = time + cvar("g_balance_pause_health_rot_spawn");
 					self.pauseregen_finished = time + cvar("g_balance_pause_health_regen_spawn");
