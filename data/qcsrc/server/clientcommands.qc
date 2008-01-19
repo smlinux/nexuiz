@@ -171,6 +171,7 @@ entity GetKickVoteVictim(string vote, string cmd)
 void SV_ParseClientCommand(string s) {
 	local string cmd;
 	local entity e;
+	local float i;
 
 	tokenize(s);
 
@@ -451,7 +452,7 @@ void SV_ParseClientCommand(string s) {
 			}
 		}
 	} else if(argv(0) == "maplist") {
-		local float i, n;
+		local float n;
 		local string col;
 		n = tokenize(cvar_string("g_maplist"));
 		sprint(self, "^7Maps in list: ");
@@ -464,6 +465,19 @@ void SV_ParseClientCommand(string s) {
 			sprint(self, strcat(col, argv(i), " "));
 		}
 		sprint(self, "\n");
+#ifdef MAPINFO
+	} else if(argv(0) == "lsmaps") {
+		sprint(self, "^7Maps available: ");
+		for(i = 0; i < MapInfo_count; ++i)
+		{
+			if(mod(i, 2))
+				col = "^2";
+			else
+				col = "^3";
+			sprint(self, strcat(col, MapInfo_BSPName_ByID(i), " "));
+		}
+		sprint(self, "\n");
+#endif
 	} else if(argv(0) == "teamstatus") {
 		PrintScoreboard(self);
 	} else if(argv(0) == "voice") {
