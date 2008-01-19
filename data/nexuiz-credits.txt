@@ -1,172 +1,115 @@
-Team:
-
+**Team:
 
 
 Lee Vermeulen
-Project Founder and Co-Designer
+*Project Founder and Co-Designer
 
 Forest "LordHavoc" Hale
-Lead Programmer and Co-Designer
+*Lead Programmer and Co-Designer
 
 SavageX
-Project Maintainer
+*Project Maintainer
 
 
-In alphabetical order
-(nickname or surname)
 
+**In alphabetical order
+**(nickname or surname)
 
 
 Andreas "Black" Kirsch
-Programmer
+*Programmer
 
 Kurt Dereli
-Lead Artist
-
+*Lead Artist
 
 Yves "EviLair" Allaire 
-Artist
-
+*Artist
 
 Stephan "esteel" Stahl
-Programmer
-
+*Programmer
 
 Fabien "H. Reaper" Tschirhart 
-Level Designer
-
+*Level Designer
 
 "Innovati"
-Menu Artist
-
+*Menu Artist
 
 KadaverJack
-Programmer
+*Programmer
 
 MauveBib
-Bot Programmer
-
+*Bot Programmer
 
 Peter "Morphed" Pielak
-2d Artist, Menu Artist
-
+*2d Artist, Menu Artist
 
 Rick "Rat" Kelley
-Lead Animator, Skinner 
+*Lead Animator, Skinner 
 
 Rudolf "div0" Polzer
-Programmer
+*Programmer
 
 Paul "Strahlemann" Evers
-Co-Lead Level Designer
-
+*Co-Lead Level Designer
 
 Gottfried "Toddd" Hofmann
-Sound FX 
-
+*Sound FX 
 
 Marko "Urre" Permanto
-Bot Programmer
-
+*Bot Programmer
 
 Dan "Wazat" Hale
-Programmer
-
+*Programmer
 
 Garth "Zombie" Hendy
-Level Designer
+*Level Designer
 
 
 
-
-Thanks:
+**Thanks:
 
 Gerd "Elysis" Raudenbusch
-
 Qantourisc
-
 Tymo
-
 Spirit
-
 Attila "WW3" Houtkooper
-
 GreEn`mArine
-
 Dan "Digger" Korostelev
-
 Kristian "morfar" Johansson
-
 leileilol
-
 Jody Gallagher
-
 Donkey
-
 Vortex
-
 Juergen "LowDragon" Timm
-
 Sajt
-
 Supajoe
-
 lcatlnx
-
 Zenex
-
 Q1 Retexturing Project
-
 Tomaz
-
 Jitspoe
-
 "Parapraxis"
-
 NoelCower
-
 Brain Younds
-
 Spike
-
 Petithomme
-
 Tei
-
 Munyul
-
 Mathieu "Elric" Olivier
-
 SomeGuy
-
 Lee David Ash
-
 Shank
-
 FrikaC
-
 Dustin Geeraert
-
 Steve Vermeulen
-
 Edgenetwork
-
 Clinton "Kaziganthe" Freeman
-
 Jakob "tZork" Markstrom Grohn
-
 BigMac
-
 Mephisto
-
 michaelb
-
 dstrek
-
 Netzwerg
-
 Ulrich Galbraith
-
 Christian Ice
-
 Wolfgang "Blub\0" Bumiller

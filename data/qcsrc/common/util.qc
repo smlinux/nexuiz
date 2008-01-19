@@ -234,34 +234,51 @@ string fstrunzone(string s)
 	return sc;
 }
 
-#if 0
-#define DB_BUCKETS 16384
-void db_save(float db, string filename)
+// Databases (hash tables)
+#define DB_BUCKETS 8192
+void db_save(float db, string pFilename)
 {
-	float fh, i;
-	fh = fopen(filename, FILE_WRITE);
+	float fh, i, n;
+	fh = fopen(pFilename, FILE_WRITE);
 	if(fh < 0)
-		error(strcat("Can't write DB to ", filename));
-	for(i = 0; i < DB_BUCKETS; ++i)
+		error(strcat("Can't write DB to ", pFilename));
+	n = buf_getsize(db);
+	fputs(fh, strcat(ftos(DB_BUCKETS), "\n"));
+	for(i = 0; i < n; ++i)
 		fputs(fh, strcat(bufstr_get(db, i), "\n"));
 	fclose(fh);
 }
 
-float db_load(string filename)
+float db_load(string pFilename)
 {
-	float db, fh, i;
+	float db, fh, i, j, n;
 	string l;
 	db = buf_create();
 	if(db < 0)
 		return -1;
-	fh = fopen(filename, FILE_READ);
+	fh = fopen(pFilename, FILE_READ);
 	if(fh < 0)
 		return db;
-	while((l = fgets(fh)))
+	if(stof(fgets(fh)) == DB_BUCKETS)
 	{
-		if(l != "")
-			bufstr_set(db, i, l);
-		++i;
+		i = 0;
+		while((l = fgets(fh)))
+		{
+			if(l != "")
+				bufstr_set(db, i, l);
+			++i;
+		}
+	}
+	else
+	{
+		// different count of buckets?
+		// need to reorganize the database then (SLOW)
+		while((l = fgets(fh)))
+		{
+			n = tokenizebyseparator(l, "\\");
+			for(j = 0; j < n; j += 2)
+				db_put(db, argv(j), argv(j+1));
+		}
 	}
 	fclose(fh);
 	return db;
@@ -272,18 +289,18 @@ void db_close(float db)
 	buf_del(db);
 }
 
-string db_get(float db, string key)
+string db_get(float db, string pKey)
 {
 	float h;
-	h = math_mod(hash(FALSE, key), DB_BUCKETS);
-	return infoget(bufstr_get(db, h), key);
+	h = mod(crc16(FALSE, pKey), DB_BUCKETS);
+	return infoget(bufstr_get(db, h), pKey);
 }
 
-void db_put(float db, string key, string value)
+void db_put(float db, string pKey, string pValue)
 {
 	float h;
-	h = math_mod(hash(FALSE, key), DB_BUCKETS);
-	bufstr_set(db, h, infoadd(bufstr_get(db, h), key, value));
+	h = mod(crc16(FALSE, pKey), DB_BUCKETS);
+	bufstr_set(db, h, infoadd(bufstr_get(db, h), pKey, pValue));
 }
 
 void db_test()
@@ -300,4 +317,36 @@ void db_test()
 	db_close(db);
 	print("CLOSED.\n");
 }
-#endif
+
+// Multiline text file buffers
+float buf_load(string pFilename)
+{
+	float buf, fh, i;
+	string l;
+	buf = buf_create();
+	if(buf < 0)
+		return -1;
+	fh = fopen(pFilename, FILE_READ);
+	if(fh < 0)
+		return buf;
+	i = 0;
+	while((l = fgets(fh)))
+	{
+		bufstr_set(buf, i, l);
+		++i;
+	}
+	fclose(fh);
+	return buf;
+}
+
+void buf_save(float buf, string pFilename)
+{
+	float fh, i, n;
+	fh = fopen(pFilename, FILE_WRITE);
+	if(fh < 0)
+		error(strcat("Can't write buf to ", pFilename));
+	n = buf_getsize(buf);
+	for(i = 0; i < n; ++i)
+		fputs(fh, strcat(bufstr_get(buf, i), "\n"));
+	fclose(fh);
+}

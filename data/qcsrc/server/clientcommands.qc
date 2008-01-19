@@ -457,7 +457,7 @@ void SV_ParseClientCommand(string s) {
 		sprint(self, "^7Maps in list: ");
 		for(i = 0; i < n; ++i)
 		{
-			if(math_mod(i, 2))
+			if(mod(i, 2))
 				col = "^2";
 			else
 				col = "^3";

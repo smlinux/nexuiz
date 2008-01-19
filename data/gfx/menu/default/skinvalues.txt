@@ -13,6 +13,7 @@ COLOR_DIALOG_MUTATORS           '0.7 0.7 1'
 COLOR_DIALOG_MAPINFO            '0.7 0.7 1'
 COLOR_DIALOG_USERBIND           '0.7 0.7 1'
 COLOR_DIALOG_SINGLEPLAYER       '1 1 0.7'
+COLOR_DIALOG_CREDITS            '0.7 0.7 1'
 
 // mouse
 //   uses "cursor" images
@@ -48,6 +49,14 @@ COLOR_CHECKBOX_N                '1 1 1'
 COLOR_CHECKBOX_C                '1 1 1'
 COLOR_CHECKBOX_F                '1 1 1'
 COLOR_CHECKBOX_D                '1 1 1'
+
+// item: credits list
+COLOR_CREDITS_TITLE             '1 1 1'
+ALPHA_CREDITS_TITLE             1
+COLOR_CREDITS_FUNCTION          '1 1 1'
+ALPHA_CREDITS_FUNCTION          0.7
+COLOR_CREDITS_PERSON            '0.7 0.7 1'
+ALPHA_CREDITS_PERSON            0.7
 
 // item: crosshair button
 //   uses "crosshairbutton" images

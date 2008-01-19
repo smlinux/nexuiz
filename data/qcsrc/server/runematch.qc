@@ -171,7 +171,7 @@ void RuneCarriedThink()
 		rune = find(rune, classname, "rune");
 	}
 
-	ang_y = rnum*(360 / rcount) + math_mod(time, 360)*45;//180;
+	ang_y = rnum*(360 / rcount) + mod(time, 360)*45;//180;
 
 	makevectors(ang);
 

@@ -404,7 +404,7 @@ float RestrictSkin(float s)
 		return s;
 	if(s == 6)
 		return 6;
-	return math_mod(s, 3);
+	return mod(s, 3);
 }
 
 void FixPlayermodel()

@@ -249,6 +249,28 @@ void gecko_mousemove( string name, float x, float y ) = #491;
 void gecko_resize( string name, float w, float h ) = #492;
 vector gecko_get_texture_extent( string name ) = #493;
 
+//DP_QC_STRINGBUFFERS
+//idea: ??
+//darkplaces implementation: LordHavoc
+//functions to manage string buffer objects - that is, arbitrary length string arrays that are handled by the engine
+float() buf_create = #440;
+void(float bufhandle) buf_del = #441;
+float(float bufhandle) buf_getsize = #442;
+void(float bufhandle_from, float bufhandle_to) buf_copy = #443;
+void(float bufhandle, float sortpower, float backward) buf_sort = #444;
+string(float bufhandle, string glue) buf_implode = #445;
+string(float bufhandle, float string_index) bufstr_get = #446;
+void(float bufhandle, float string_index, string str) bufstr_set = #447;
+float(float bufhandle, string str, float order) bufstr_add = #448;
+void(float bufhandle, float string_index) bufstr_free = #449;
+
+//DP_QC_CRC16
+//idea: div0
+//darkplaces implementation: div0
+//Some hash function to build hash tables with. This has to be be the CRC-16-CCITT that is also required for the QuakeWorld download protocol.
+//When caseinsensitive is set, the CRC is calculated of the lower cased string.
+float(float caseinsensitive, string s, ...) crc16 = #494;
+
 #ifdef FIXEDFOPEN
 float 	fopen( string filename, float mode ) =
 {

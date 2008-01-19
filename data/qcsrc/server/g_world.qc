@@ -483,7 +483,7 @@ float() MaplistMethod_Iterate = // usual method
 		for(i = 1; i < Map_Count; ++i)
 		{
 			float mapindex;
-			mapindex = math_mod(i + Map_Current, Map_Count);
+			mapindex = mod(i + Map_Current, Map_Count);
 			if(Map_Check(mapindex, pass))
 				return mapindex;
 		}
@@ -507,7 +507,7 @@ float() MaplistMethod_Random = // random map selection
 	for(i = 0; i <= imax; ++i)
 	{
 		float mapindex;
-		mapindex = math_mod(Map_Current + ceil(random() * (Map_Count - 1)), Map_Count); // any OTHER map
+		mapindex = mod(Map_Current + ceil(random() * (Map_Count - 1)), Map_Count); // any OTHER map
 		if(Map_Check(mapindex, 1))
 			return mapindex;
 	}
@@ -1984,7 +1984,7 @@ void MapVote_Tick()
 			{
 				tmp = mapvote_maps[i];
 				tmp = strpad(mapvote_maxlen, tmp);
-				tmp = strcat(ftos(math_mod(i + 1, 10)), ": ", tmp);
+				tmp = strcat(ftos(mod(i + 1, 10)), ": ", tmp);
  				if(mapvote_detail)
  				{
  					tmp = strcat(tmp, " ^2(", ftos(mapvote_votes[i]), " vote");
