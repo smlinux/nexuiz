@@ -276,7 +276,7 @@ float db_load(string pFilename)
 		while((l = fgets(fh)))
 		{
 			n = tokenizebyseparator(l, "\\");
-			for(j = 0; j < n; j += 2)
+			for(j = 1; j < n; j += 2)
 				db_put(db, argv(j), argv(j+1));
 		}
 	}
