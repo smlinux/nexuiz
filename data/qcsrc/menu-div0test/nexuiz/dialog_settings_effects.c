@@ -160,13 +160,14 @@ void fillNexuizEffectsSettingsTab(entity me)
 			setDependentAND(e, "r_glsl", 1, 1, "r_glsl_offsetmapping", 1, 1);
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizCheckBox(0, "r_water", "Reflections"));
+			setDependent(e, "r_glsl", 1, 1);
 		me.TD(me, 1, 2, e = makeNexuizTextSlider("r_water_resolutionmultiplier"));
 			e.addValue(e, "Blurred", "0.25");
 			e.addValue(e, "Good", "0.5");
 			e.addValue(e, "Sharp", "1");
 			e.addValue(e, "Insane", "2");
 			e.configureNexuizTextSliderValues(e);
-			setDependent(e, "r_water", 1, 1);
+			setDependentAND(e, "r_glsl", 1, 1, "r_water", 1, 1);
 	
 	me.TR(me);
 
