@@ -690,7 +690,7 @@ void item_armor_small (void) {
 		self.armorvalue = g_pickup_armorsmall;
 	if(!self.max_armorvalue)
 		self.max_armorvalue = g_pickup_armorsmall_max;
-	StartItem ("models/items/g_a1.md3", "misc/armor1.wav", 15, "Armor Shard", IT_ARMOR_SHARD, 0, commodity_pickupevalfunc, 100);
+	StartItem ("models/items/g_a1.md3", "misc/armor1.wav", 15, "5 Armor", IT_ARMOR_SHARD, 0, commodity_pickupevalfunc, 100);
 }
 
 void item_armor_medium (void) {
@@ -699,7 +699,7 @@ void item_armor_medium (void) {
 	if(!self.max_armorvalue)
 		self.max_armorvalue = g_pickup_armormedium_max;
 	self.skin = 1; // "weaker" skin
-	StartItem ("models/items/g_a25.md3", "misc/armor25.wav", 30, "Armor", IT_ARMOR, 0, commodity_pickupevalfunc, 2000);
+	StartItem ("models/items/g_a25.md3", "misc/armor25.wav", 30, "25 Armor", IT_ARMOR, 0, commodity_pickupevalfunc, 2000);
 }
 
 void item_armor_large (void) {
@@ -707,7 +707,7 @@ void item_armor_large (void) {
 		self.armorvalue = g_pickup_armorlarge;
 	if(!self.max_armorvalue)
 		self.max_armorvalue = g_pickup_armorlarge_max;
-	StartItem ("models/items/g_a25.md3", "misc/armor25.wav", 30, "Armor", IT_ARMOR, 0, commodity_pickupevalfunc, 2000);
+	StartItem ("models/items/g_a25.md3", "misc/armor25.wav", 30, "100 Armor", IT_ARMOR, 0, commodity_pickupevalfunc, 2000);
 }
 
 void item_health_small (void) {
@@ -731,8 +731,7 @@ void item_health_large (void) {
 		self.max_health = g_pickup_healthlarge_max;
 	if(!self.health)
 		self.health = g_pickup_healthlarge;
-	self.skin = 1; // "stronger" skin
-	StartItem ("models/items/g_h25.md3", "misc/mediumhealth.wav", 15, "25 Health", IT_25HP, 0, commodity_pickupevalfunc, 500);
+	StartItem ("models/items/g_h50.md3", "misc/mediumhealth.wav", 15, "50 Health", IT_25HP, 0, commodity_pickupevalfunc, 500);
 }
 
 void item_health_mega (void) {
