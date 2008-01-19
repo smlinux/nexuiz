@@ -77,7 +77,7 @@ void configureMainWindowMainWindow(entity me)
 		i = spawnNexuizCreditsDialog();
 		i.configureDialog(i);
 		n.addItemCentered(n, i, i.intendedWidth * eX + i.intendedHeight * eY, SKINALPHAS_MAINMENU_z);
-		n.setNexposee(n, i, '0.5 1.2 0', SKINALPHAS_MAINMENU_x, SKINALPHAS_MAINMENU_y);
+		n.setNexposee(n, i, '0.3 1.2 0', SKINALPHAS_MAINMENU_x, SKINALPHAS_MAINMENU_y);
 		n.pullNexposee(n, i, eY * (SKINHEIGHT_TITLE * SKINFONTSIZE_TITLE / conheight));
 	me.addItem(me, n, '0 0 0', '1 1 0', SKINALPHAS_MAINMENU_z);
 	me.moveItemAfter(me, n, NULL);

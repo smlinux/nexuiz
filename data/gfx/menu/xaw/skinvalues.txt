@@ -60,6 +60,8 @@ COLOR_CREDITS_FUNCTION          '0 0 0'
 ALPHA_CREDITS_FUNCTION          1
 COLOR_CREDITS_PERSON            '0 0 0'
 ALPHA_CREDITS_PERSON            1
+ROWS_CREDITS                    10
+WIDTH_CREDITS                   0.75
 
 // item: dialog
 //   uses border.tga

@@ -57,6 +57,8 @@ COLOR_CREDITS_FUNCTION          '1 1 1'
 ALPHA_CREDITS_FUNCTION          0.7
 COLOR_CREDITS_PERSON            '0.7 0.7 1'
 ALPHA_CREDITS_PERSON            0.7
+ROWS_CREDITS                    20
+WIDTH_CREDITS                   0.5
 
 // item: crosshair button
 //   uses "crosshairbutton" images
