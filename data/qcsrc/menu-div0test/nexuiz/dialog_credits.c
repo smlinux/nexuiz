@@ -24,7 +24,6 @@ void fillNexuizCreditsDialog(entity me)
 }
 void focusEnterNexuizCreditsDialog(entity me)
 {
-	me.creditsList.scrollPos = 0;
 	me.creditsList.scrolling = time + 1;
 }
 #endif
