@@ -224,40 +224,6 @@ textures/e8/e8jumpspawn02
 	}
 }
 
-textures/e8/e8jumpspawn02b
-{
-	q3map_lightimage textures/e8/e8jumpspawn02b_glow.tga
-	surfaceparm metalsteps
-	q3map_surfacelight 100
-	
-	{
-		map textures/e8/e8jumpspawn02b
-		animmap 10 textures/e8/e8jumpspawn02b textures/e8/e8jumpspawn02b-1 textures/e8/e8jumpspawn02b-2 textures/e8/e8jumpspawn02b-3 textures/e8/e8jumpspawn02b-4 textures/e8/e8jumpspawn02b-5 textures/e8/e8jumpspawn02b-6
-	}
-	{
-		map $lightmap
-		tcGen lightmap
-		blendfunc filter
-	}
-}
-
-textures/e8/e8jumpspawn02c
-{
-	q3map_lightimage textures/e8/e8jumpspawn02c_glow.tga
-	surfaceparm metalsteps
-	q3map_surfacelight 100
-	
-	{
-		map textures/e8/e8jumpspawn02c
-		animmap 10 textures/e8/e8jumpspawn02c textures/e8/e8jumpspawn02c-1 textures/e8/e8jumpspawn02c-2 textures/e8/e8jumpspawn02c-3 textures/e8/e8jumpspawn02c-4 textures/e8/e8jumpspawn02c-5 textures/e8/e8jumpspawn02c-6
-	}
-	{
-		map $lightmap
-		tcGen lightmap
-		blendfunc filter
-	}
-}
-
 textures/e8/e8jumpspawn02d
 {
 	surfaceparm metalsteps
@@ -392,27 +358,6 @@ textures/e8/e8xgirder_small2
 	}
 }
 
-textures/e8/e8mtltrim2
-{
-	surfaceparm alphashadow
-	surfaceparm metalsteps
-	surfaceparm trans
-	cull disable
-	{
-		map textures/e8/e8mtltrim2.tga
-		rgbGen identity
-		depthWrite
-		alphaFunc GE128
-	}
-	{
-		map $lightmap
-		blendfunc filter
-		rgbGen identity
-		tcGen lightmap
-		depthFunc equal
-	}
-}
-
 textures/e8/e8wrntrim2
 {
 	surfaceparm alphashadow
@@ -421,27 +366,6 @@ textures/e8/e8wrntrim2
 	cull disable
 	{
 		map textures/e8/e8wrntrim2.tga
-		rgbGen identity
-		depthWrite
-		alphaFunc GE128
-	}
-	{
-		map $lightmap
-		blendfunc filter
-		rgbGen identity
-		tcGen lightmap
-		depthFunc equal
-	}
-}
-
-textures/e8/e8mtltrim2
-{
-	surfaceparm alphashadow
-	surfaceparm metalsteps
-	surfaceparm trans
-	cull disable
-	{
-		map textures/e8/e8mtltrim2.tga
 		rgbGen identity
 		depthWrite
 		alphaFunc GE128

@@ -403,7 +403,7 @@ textures/Reaptxt/lud_Corona
 //Corona for sun.tga by HipShot
 //This shader is for DarkPlaces Engine - Nexuiz
 
-textures/Reaptxt/lud_Corona
+textures/Reaptxt/sun
 {
 	qer_editorimage textures/Reaptxt/sun.jpg
 	surfaceparm trans

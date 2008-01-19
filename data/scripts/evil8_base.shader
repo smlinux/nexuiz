@@ -62,26 +62,6 @@ textures/evil8_lights/e8btrimlight
 	}
 }
 
-textures/evil8_lights/e8trimlight
-{
-	qer_editorimage textures/evil8_lights/e8trimlight.tga
-	q3map_lightimage textures/evil8_lights/e8trimlight.blend.tga
-	surfaceparm nomarks
-	q3map_surfacelight 250
-	{
-		map textures/evil8_lights/e8trimlight.tga
-	}
-	{
-		map $lightmap
-		blendfunc filter
-		tcGen lightmap
-	}
-	{
-		map textures/evil8_lights/e8trimlight.blend.tga
-		blendfunc add
-	}
-}
-
 textures/evil8_floor/e8warn2steplight
 {
 	qer_editorimage textures/evil8_floor/e8warn2steplight.tga
@@ -613,27 +593,6 @@ textures/evil8_trim/e8wrntrim2
 	cull disable
 	{
 		map textures/evil8_trim/e8wrntrim2.tga
-		rgbGen identity
-		depthWrite
-		alphaFunc GE128
-	}
-	{
-		map $lightmap
-		blendfunc filter
-		rgbGen identity
-		tcGen lightmap
-		depthFunc equal
-	}
-}
-
-textures/evil8_trim/e8mtltrim2
-{
-	surfaceparm alphashadow
-	surfaceparm metalsteps
-	surfaceparm trans
-	cull disable
-	{
-		map textures/evil8_trim/e8mtltrim2.tga
 		rgbGen identity
 		depthWrite
 		alphaFunc GE128

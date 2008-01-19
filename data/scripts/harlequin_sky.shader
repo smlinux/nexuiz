@@ -123,24 +123,6 @@ textures/harlequin_sky/jf-nebula_sky2
 	skyparms textures/harlequin_sky/env/nebular - -
 }
 
-//   Nebula skybox without Surfacelight (ie NO-GLOW)
-//   =====================================================
-
-textures/harlequin_sky/jf-nebula_sky_noglow
-{
-	qer_editorimage textures/harlequin_sky/nebula_qer2.tga
-	surfaceparm sky
-	surfaceparm noimpact
-	surfaceparm nolightmap
-	surfaceparm nomarks
-	q3map_sun 1 .98 .9 100 0 90
-// note: Change the fourth value (100) if you want a brighter or dimmer sun
-	skyparms textures/harlequin_sky/env/nebular - -
-}
-
-//   ---stop cutting here---
-//   ---cut here---
-
 //   the Imperial Palace Sky
 //   =======================
 
