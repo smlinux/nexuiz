@@ -1538,3 +1538,16 @@ string(string info, string key) infoget = #227;
 float(string s1, string s2, float len) strncmp = #228;
 float(string s1, string s2) strcasecmp = #229;
 float(string s1, string s2, float len) strncasecmp = #230;
+
+//DP_QC_STRINGBUFFERS
+float() buf_create = #460;
+void(float bufhandle) buf_del = #461;
+float(float bufhandle) buf_getsize = #462;
+void(float bufhandle_from, float bufhandle_to) buf_copy = #463;
+void(float bufhandle, float sortpower, float backward) buf_sort = #464;
+string(float bufhandle, string glue) buf_implode = #465;
+string(float bufhandle, float string_index) bufstr_get = #466;
+void(float bufhandle, float string_index, string str) bufstr_set = #467;
+float(float bufhandle, string str, float order) bufstr_add = #468;
+void(float bufhandle, float string_index) bufstr_free = #469;
+float(float caseinsensitive, string s, ...) hash = #487;

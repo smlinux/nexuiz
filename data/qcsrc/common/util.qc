@@ -233,3 +233,71 @@ string fstrunzone(string s)
 	strunzone(s);
 	return sc;
 }
+
+#if 0
+#define DB_BUCKETS 16384
+void db_save(float db, string filename)
+{
+	float fh, i;
+	fh = fopen(filename, FILE_WRITE);
+	if(fh < 0)
+		error(strcat("Can't write DB to ", filename));
+	for(i = 0; i < DB_BUCKETS; ++i)
+		fputs(fh, strcat(bufstr_get(db, i), "\n"));
+	fclose(fh);
+}
+
+float db_load(string filename)
+{
+	float db, fh, i;
+	string l;
+	db = buf_create();
+	if(db < 0)
+		return -1;
+	fh = fopen(filename, FILE_READ);
+	if(fh < 0)
+		return db;
+	while((l = fgets(fh)))
+	{
+		if(l != "")
+			bufstr_set(db, i, l);
+		++i;
+	}
+	fclose(fh);
+	return db;
+}
+
+void db_close(float db)
+{
+	buf_del(db);
+}
+
+string db_get(float db, string key)
+{
+	float h;
+	h = hash(FALSE, key);
+	return infoget(bufstr_get(db, h), key);
+}
+
+void db_put(float db, string key, string value)
+{
+	float h;
+	h = hash(FALSE, key);
+	bufstr_set(db, h, infoadd(bufstr_get(db, h), key, value));
+}
+
+void db_test()
+{
+	float db, i;
+	print("LOAD...\n");
+	db = db_load("foo.db");
+	print("LOADED. FILL...\n");
+	for(i = 0; i < DB_BUCKETS; ++i)
+		db_put(db, ftos(random()), "X");
+	print("FILLED. SAVE...\n");
+	db_save(db, "foo.db");
+	print("SAVED. CLOSE...\n");
+	db_close(db);
+	print("CLOSED.\n");
+}
+#endif
