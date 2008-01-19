@@ -94,6 +94,8 @@ void worldspawn (void)
 	MapInfo_LoadMapSettings(mapname);
 #endif
 
+	ServerProgsDB = db_load("server.db");
+
 	/*
 	TODO sound pack system
 	// initialize sound pack system
@@ -458,6 +460,7 @@ void() GameResetCfg =
 #endif
 
 	Ban_SaveBans();
+	db_save(ServerProgsDB, "server.db");
 };
 
 void() Map_Goto =
@@ -626,6 +629,7 @@ string() GetNextMap =
 float() DoNextMapOverride =
 {
 	Ban_SaveBans();
+	db_save(ServerProgsDB, "server.db");
 
 	if(cvar("g_campaign"))
 	{
@@ -925,6 +929,9 @@ void() NextLevel =
 	float f;
 
 	gameover = TRUE;
+
+	Ban_SaveBans();
+	db_save(ServerProgsDB, "server.db");
 
 	intermission_running = 1;
 

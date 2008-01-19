@@ -381,3 +381,6 @@ float assault_attacker_team;
 .float notfree;
 .float notq3a;
 float q3acompat_machineshotgunswap;
+
+// database
+float ServerProgsDB;

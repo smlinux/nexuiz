@@ -227,7 +227,7 @@ void() FlagTouch =
 	local float t;
 	local entity head;
 	local entity player;
-	local string s, s0;
+	local string s, s0, h0;
 	if (other.classname != "player")
 		return;
 	if (other.health < 1) // ignore dead players
@@ -248,19 +248,28 @@ void() FlagTouch =
 		t = time - other.flagcarried.flagpickuptime;
 		s = ftos_decimals(t, 2);
 		s0 = ftos_decimals(flagcaptimerecord, 2);
+		h0 = db_get(ServerProgsDB, strcat(GetMapname(), "/captimerecord/netname"));
+		if(h0 == other.netname)
+			h0 = "his";
+		else
+			h0 = strcat(h0, "^7's"); 
 		if (flagcaptimerecord == 0)
 		{
 			bprint(other.netname, "^7 captured the ", other.flagcarried.netname, " in ", s, " seconds\n");
 			flagcaptimerecord = t;
+			db_put(ServerProgsDB, strcat(GetMapname(), "/captimerecord/time"), ftos(t));
+			db_put(ServerProgsDB, strcat(GetMapname(), "/captimerecord/netname"), other.netname);
 		}
 		else if (t < flagcaptimerecord)
 		{
-			bprint(other.netname, "^7 captured the ", other.flagcarried.netname, " in ", s, ", breaking the previous record of ", s0, " seconds\n");
+			bprint(other.netname, "^7 captured the ", other.flagcarried.netname, " in ", s, ", breaking ", strcat(h0, " previous record of ", s0, " seconds\n"));
 			flagcaptimerecord = t;
+			db_put(ServerProgsDB, strcat(GetMapname(), "/captimerecord/time"), ftos(t));
+			db_put(ServerProgsDB, strcat(GetMapname(), "/captimerecord/netname"), other.netname);
 		}
 		else
 		{
-			bprint(other.netname, "^7 captured the ", other.flagcarried.netname, " in ", s, ", failing to break the previous record of ", s0, " seconds\n");
+			bprint(other.netname, "^7 captured the ", other.flagcarried.netname, " in ", s, ", failing to break ", strcat(h0, " record of ", s0, " seconds\n"));
 		}
 
 		LogCTF("capture", other.flagcarried.team, other);
@@ -614,6 +623,7 @@ void() ctf_init =
 	e = spawn();
 	e.think = ctf_delayedinit;
 	e.nextthink = time + 0.1;
+	flagcaptimerecord = stof(db_get(ServerProgsDB, strcat(GetMapname(), "/captimerecord/time")));
 };
 
 void(entity flag) ctf_setstatus2 =
