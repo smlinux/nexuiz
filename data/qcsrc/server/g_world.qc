@@ -55,7 +55,7 @@ void fteqcc_testbugs()
 	world.frags = 0;
 }
 
-void GotoFirstMap()
+float GotoFirstMap()
 {
 	if(cvar("_sv_init"))
 	{
@@ -78,8 +78,11 @@ void GotoFirstMap()
 
 			if(!DoNextMapOverride())
 				GotoNextMap();
+
+			return 1;
 		}
 	}
+	return 0;
 }
 
 float world_already_spawned;
@@ -90,6 +93,8 @@ void worldspawn (void)
 	if(world_already_spawned)
 		error("world already spawned - you may have EXACTLY ONE worldspawn!");
 	world_already_spawned = TRUE;
+
+	GotoFirstMap();
 
 #ifdef MAPINFO
 	MapInfo_LoadMapSettings(mapname);
@@ -154,8 +159,6 @@ void worldspawn (void)
 	player_count = 0;
 	lms_lowest_lives = 0;
 	lms_next_place = 0;
-
-	GotoFirstMap();
 
 	bot_waypoints_for_items = cvar("g_waypoints_for_items");
 	if(bot_waypoints_for_items == 1)
