@@ -73,32 +73,32 @@ void(entity ent, vector vecs, float antilag, float recoil, string snd) W_SetupSh
 				{
 					// HIT!
 					w_shotdir = normalize(self.cursor_trace_ent.origin - w_shotorg);
-					//dprint("ANTILAG HIT\n");
+					dprint("ANTILAG HIT for ", self.netname, "\n");
 				}
 				else
 				{
 					// prydon cursor aimbot or odd network conditions
 					dprint("WARNING: antilag ghost trace for ", self.netname, " failed!\n");
-					if(cvar("developer") >= 2)
-					{
-						vector v, vplus, vel;
-						float X;
-						v     = antilag_takebackorigin(self.cursor_trace_ent, time - (self.ping * 0.001       ));
-						vplus = antilag_takebackorigin(self.cursor_trace_ent, time - (self.ping * 0.001 + 0.01));
-						vel = (vplus - v) * (1 / 0.01);
-						// solve: v + X * vel = closest to self.origin + self.view_ofs, v_forward axis
-						v     -= (self.origin + self.view_ofs);
-						// solve: v + X * vel = closest to v_forward axis
-						// project into 2D by subtracting v_forward components:
-						v   -= (v   * v_forward) * v_forward;
-						vel -= (vel * v_forward) * v_forward;
-						// solve: v + X * vel = closest to origin
-						// (v + X * vel)^2 closest to 0
-						// v^2 + 2 * X * (v * vel) + X^2 * vel^2 closest to 0
-						X = -(v * vel) / (vel * vel);
-						dprint("... could have adjusted antilag by ", ftos(X), "\n");
-						dprint(" (that is, ", ftos(self.ping + X * 1000), " instead of ", ftos(self.ping), "\n");
-					}
+				}
+
+				if(cvar("developer") >= 2)
+				{
+					vector v, vplus, vel;
+					float X;
+					v     = antilag_takebackorigin(self.cursor_trace_ent, time - (self.ping * 0.001       ));
+					vplus = antilag_takebackorigin(self.cursor_trace_ent, time - (self.ping * 0.001 + 0.01));
+					vel = (vplus - v) * (1 / 0.01);
+					// solve: v + X * vel = closest to self.origin + self.view_ofs, v_forward axis
+					v     -= (self.origin + self.view_ofs);
+					// solve: v + X * vel = closest to v_forward axis
+					// project into 2D by subtracting v_forward components:
+					v   -= (v   * v_forward) * v_forward;
+					vel -= (vel * v_forward) * v_forward;
+					// solve: v + X * vel = closest to origin
+					// (v + X * vel)^2 closest to 0
+					// v^2 + 2 * X * (v * vel) + X^2 * vel^2 closest to 0
+					X = -(v * vel) / (vel * vel);
+					dprint("dead center needs adjustment of ", ftos(X * 1000), " (that is, ", ftos(self.ping + X * 1000), " instead of ", ftos(self.ping), "\n");
 				}
 			}
 		}
