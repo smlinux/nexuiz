@@ -698,8 +698,7 @@ void item_armor_medium (void) {
 		self.armorvalue = g_pickup_armormedium;
 	if(!self.max_armorvalue)
 		self.max_armorvalue = g_pickup_armormedium_max;
-	self.skin = 1; // "weaker" skin
-	StartItem ("models/items/g_a25.md3", "misc/armor25.wav", 30, "25 Armor", IT_ARMOR, 0, commodity_pickupevalfunc, 2000);
+	StartItem ("models/items/g_armormedium.md3", "misc/armor1.wav", 30, "25 Armor", IT_ARMOR, 0, commodity_pickupevalfunc, 2000);
 }
 
 void item_armor_large (void) {
