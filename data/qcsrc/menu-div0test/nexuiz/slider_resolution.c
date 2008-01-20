@@ -25,7 +25,7 @@ void configureNexuizResolutionSliderNexuizResolutionSlider(entity me)
 {
 	me.configureNexuizTextSlider(me, "vid_width");
 	me.addResolution(me, 640, 480, 640, 480);
-	me.addResolution(me, 800, 600, 640, 480);
+	me.addResolution(me, 800, 600, 800, 600);
 	me.addResolution(me, 1024, 768, 800, 600);
 	me.addResolution(me, 1152, 864, 800, 600);
 	me.addResolution(me, 1280, 800, 800, 600);
