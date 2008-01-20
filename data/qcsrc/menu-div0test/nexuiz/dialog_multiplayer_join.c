@@ -32,6 +32,7 @@ void fillNexuizServerListTab(entity me)
 			e.onChange = ServerList_Filter_Change;
 			e.onChangeEntity = slist;
 			clearbtn.onClickEntity = e;
+			slist.controlledTextbox = e;
 		me.TD(me, 1, 0.5, e = makeNexuizCheckBox(0, "menu_slist_showempty", "Empty"));
 			slist.filterShowEmpty = e.checked;
 			e.onClickEntity = slist;

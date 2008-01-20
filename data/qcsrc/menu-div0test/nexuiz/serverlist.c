@@ -25,6 +25,7 @@ CLASS(NexuizServerList) EXTENDS(NexuizListBox)
 	ATTRIB(NexuizServerList, filterShowEmpty, float, 1)
 	ATTRIB(NexuizServerList, filterShowFull, float, 1)
 	ATTRIB(NexuizServerList, filterString, string, string_null)
+	ATTRIB(NexuizServerList, controlledTextbox, entity, NULL)
 	ATTRIB(NexuizServerList, nextRefreshTime, float, 0)
 	METHOD(NexuizServerList, refreshServerList, void(entity, float)) // refresh mode: 0 = just reparametrize, 1 = send new requests, 2 = clear
 	ATTRIB(NexuizServerList, needsRefresh, float, 1)
@@ -361,10 +362,16 @@ void drawListBoxItemNexuizServerList(entity me, float i, vector absSize, float i
 
 float keyDownNexuizServerList(entity me, float scan, float ascii, float shift)
 {
-	if(scan == K_ENTER || scan == K_SPACE)
+	if(scan == K_ENTER)
+	{
 		ServerList_Connect_Click(NULL, me);
+		return 1;
+	}
+	else if(keyDownListBox(me, scan, ascii, shift))
+		return 1;
+	else if(!me.controlledTextbox)
+		return 0;
 	else
-		return keyDownListBox(me, scan, ascii, shift);
-	return 1;
+		return me.controlledTextbox.keyDown(me.controlledTextbox, scan, ascii, shift);
 }
 #endif
