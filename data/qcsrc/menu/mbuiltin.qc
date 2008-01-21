@@ -4,7 +4,7 @@
 // AK FIXME: Create perhaps a special builtin file for the common cmds
 
 //#define PROFILESTRZONE
-#define FIXEDFOPEN
+//#define FIXEDFOPEN
 
 void 	checkextension(string ext) = #1;
 
@@ -101,12 +101,6 @@ float	strlen(string s)  = #52;
 //string	strcat(string s1,string s2,...)  = #53;
 string	strcat(string s1, ...)  = #53;
 string	substring(string s, float start, float length)  = #54;
-
-float(string str, string sub, float startpos) strstrofs = #221;
-float(string s1, string s2, float len) strncmp = #228;
-float(string s1, string s2) strcasecmp = #229;
-float(string s1, string s2, float len) strncasecmp = #230;
-
 
 vector	stov(string s)  = #55;
 
@@ -248,6 +242,22 @@ float gecko_keyevent( string name, float key, float eventtype ) = #490;
 void gecko_mousemove( string name, float x, float y ) = #491;
 void gecko_resize( string name, float w, float h ) = #492;
 vector gecko_get_texture_extent( string name ) = #493;
+
+//FTE_STRINGS
+//idea: many
+//darkplaces implementation: KrimZon
+//description:
+//various string manipulation functions
+float(string str, string sub, float startpos) strstrofs = #221;
+float(string str, float ofs) str2chr = #222;
+string(float c, ...) chr2str = #223;
+string(float ccase, float calpha, float cnum, string s, ...) strconv = #224;
+string(float chars, string s, ...) strpad = #225;
+string(string info, string key, string value, ...) infoadd = #226;
+string(string info, string key) infoget = #227;
+float(string s1, string s2, float len) strncmp = #228;
+float(string s1, string s2) strcasecmp = #229;
+float(string s1, string s2, float len) strncasecmp = #230;
 
 //DP_QC_STRINGBUFFERS
 //idea: ??
