@@ -553,3 +553,8 @@ void() onslaught_link =
 	self.think = onslaught_link_delayed;
 	self.nextthink = time + 0.1;
 };
+
+void() onslaught_spawnpoint_use =
+{
+	self.team = activator.team;
+};
