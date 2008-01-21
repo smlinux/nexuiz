@@ -14,6 +14,12 @@ void info_player_deathmatch (void)
 	relocate_spawnpoint();
 }
 
+void() spawnpoint_use =
+{
+	if(teams_matter)
+		self.team = activator.team;
+};
+
 float spawn_allbad;
 float spawn_allgood;
 entity Spawn_FilterOutBadSpots(entity firstspot, entity playerlist, float mindist, float teamcheck)

@@ -1,5 +1,5 @@
 void() info_player_deathmatch; // needed for the other spawnpoints
-void() onslaught_spawnpoint_use;	// when in Onslaught mode, spawnpoitns are triggered to change teams.
+void() spawnpoint_use;
 string ColoredTeamName(float t);
 
 float DistributeEvenly_amount;
@@ -186,8 +186,8 @@ void relocate_spawnpoint()
 		setsize(self, PL_MIN, PL_MAX);
 		droptofloor();
 	}
-	if (g_onslaught)
-		self.use = onslaught_spawnpoint_use;
+
+	self.use = spawnpoint_use;
 }
 
 #define strstr strstrofs
