@@ -428,7 +428,10 @@ float(float secondary, float attacktime) weapon_prepareattack =
 	if (self.weaponentity.state != WS_READY)
 		return FALSE;
 	self.weaponentity.state = WS_INUSE;
-	ATTACK_FINISHED(self) = max(time, ATTACK_FINISHED(self) + attacktime);
+	// if the weapon hasn't been firing continuously, reset the timer
+	if (ATTACK_FINISHED(self) < time - frametime)
+		ATTACK_FINISHED(self) = time;
+	ATTACK_FINISHED(self) = ATTACK_FINISHED(self) + attacktime;
 	return TRUE;
 };
 
