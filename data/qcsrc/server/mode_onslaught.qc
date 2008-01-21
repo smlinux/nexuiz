@@ -365,6 +365,9 @@ void() onslaught_controlpoint_icon_think =
 
 void() onslaught_controlpoint_icon_buildthink =
 {
+	local entity oself;
+	oself = self;
+
 	self.nextthink = time + 0.1;
 	self.health = self.health + self.count;
 	if (self.health >= self.max_health)
@@ -376,6 +379,12 @@ void() onslaught_controlpoint_icon_buildthink =
 		bprint(ColoredTeamName(self.team), " captured ", self.owner.message, " control point\n");
 		self.owner.iscaptured = TRUE;
 		onslaught_updatelinks();
+
+		// Use targets now (somebody make sure this is in the right place..)
+		self = self.owner;
+		activator = self;
+		SUB_UseTargets ();
+		self = oself;
 	}
 	self.alpha = self.health / self.max_health;
 	// colormod flash when shot
