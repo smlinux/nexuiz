@@ -1056,6 +1056,15 @@ void(.float field, float value) AddWinners =
 			head.winning = 1;
 }
 
+// clear frags for all players but the team given (when they ran out of spawnpoints)
+void(.float field, float value) ClearFragsForEveryoneBut =
+{
+	entity head;
+	FOR_EACH_PLAYER(head)
+		if(head.field != value)
+			head.frags = max(head.frags, 0);
+}
+
 // clear the .winning flags
 void(void) ClearWinners =
 {
@@ -1520,6 +1529,73 @@ void ShuffleMaplist()
 	cvar_set("g_maplist", result);
 }
 
+float WinningCondition_RanOutOfSpawns()
+{
+	entity head;
+
+	if(!teams_matter)
+		return WINNING_NO;
+
+	team1_score = team2_score = team3_score = team4_score = 0;
+
+	FOR_EACH_PLAYER(head) if(head.deadflag == DEAD_NO)
+	{
+		if(head.team == COLOR_TEAM1)
+			team1_score = 1;
+		else if(head.team == COLOR_TEAM2)
+			team2_score = 1;
+		else if(head.team == COLOR_TEAM3)
+			team3_score = 1;
+		else if(head.team == COLOR_TEAM4)
+			team4_score = 1;
+	}
+
+	for(head = world; (head = find(head, classname, "info_player_deathmatch")) != world; )
+	{
+		if(head.team == COLOR_TEAM1)
+			team1_score = 1;
+		else if(head.team == COLOR_TEAM2)
+			team2_score = 1;
+		else if(head.team == COLOR_TEAM3)
+			team3_score = 1;
+		else if(head.team == COLOR_TEAM4)
+			team4_score = 1;
+	}
+
+	ClearWinners();
+	if(team1_score + team2_score + team3_score + team4_score == 0)
+	{
+		checkrules_equality = TRUE;
+		return WINNING_YES;
+	}
+	else if(team1_score + team2_score + team3_score + team4_score == 1)
+	{
+		if(team1_score)
+		{
+			AddWinners(team, COLOR_TEAM1);
+			ClearFragsForEveryoneBut(team, COLOR_TEAM1);
+		}
+		if(team2_score)
+		{
+			AddWinners(team, COLOR_TEAM2);
+			ClearFragsForEveryoneBut(team, COLOR_TEAM1);
+		}
+		if(team3_score)
+		{
+			AddWinners(team, COLOR_TEAM3);
+			ClearFragsForEveryoneBut(team, COLOR_TEAM1);
+		}
+		if(team4_score)
+		{
+			AddWinners(team, COLOR_TEAM4);
+			ClearFragsForEveryoneBut(team, COLOR_TEAM1);
+		}
+		return WINNING_YES;
+	}
+	else
+		return WINNING_NO;
+}
+
 /*
 ============
 CheckRules_World
@@ -1588,8 +1664,11 @@ void() CheckRules_World =
 		sound(world, CHAN_AUTO, "announcer/robotic/1minuteremains.wav", 1, ATTN_NONE);
 	}
 
-	status = WINNING_NO;
-	if(g_assault)
+	status = WinningCondition_RanOutOfSpawns();
+	if(status == WINNING_YES)
+	{
+	}
+	else if(g_assault)
 	{
 		status = WinningCondition_Assault();
 	}

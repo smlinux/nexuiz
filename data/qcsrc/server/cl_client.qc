@@ -181,7 +181,7 @@ entity SelectSpawnPoint (float anypoint)
 		if(cvar("spawn_debug"))
 			GotoNextMap();
 		else
-			error ("PutClientInServer: no start points on level");
+			return world;
 	}
 
 	return spot;
@@ -312,6 +312,8 @@ void PutObserverInServer (void)
 {
 	entity	spot;
 	spot = SelectSpawnPoint (TRUE);
+	if(!spot)
+		error("No spawnpoints for observers?!?\n");
 	RemoveGrapplingHook(self); // Wazat's Grappling Hook
 
 	if(clienttype(self) == CLIENTTYPE_REAL)
@@ -495,6 +497,11 @@ void PutClientInServer (void)
 		entity	spot;
 
 		spot = SelectSpawnPoint (FALSE);
+		if(!spot)
+		{
+			centerprint(self, "Sorry, no spawnpoints available!\nHope your team can fix it...");
+			return; // spawn failed
+		}
 
 		RemoveGrapplingHook(self); // Wazat's Grappling Hook
 
@@ -986,6 +993,7 @@ void() UpdateTeamBubble =
 void respawn(void)
 {
 	CopyBody(1);
+	self.effects |= EF_NODRAW; // prevent another CopyBody
 	PutClientInServer();
 }
 
@@ -1405,7 +1413,10 @@ void PlayerPreThink (void)
 			else if (self.deadflag == DEAD_RESPAWNING)
 			{
 				if(time > self.death_time)
+				{
+					self.death_time = time + 1; // only retry once a second
 					respawn();
+				}
 			}
 			ShowRespawnCountdown();
 			return;
