@@ -1043,7 +1043,7 @@ type smoke
 color 0x303030 0x606060
 tex 0 8
 size 3 3
-alpha 16 16 16
+alpha 64 64 64
 // bubbles
 effect TR_GRENADE
 underwater
