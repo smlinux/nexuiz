@@ -186,7 +186,7 @@ void relocate_spawnpoint()
 		setsize(self, PL_MIN, PL_MAX);
 		droptofloor();
 	}
-	if (game == 10/*GAME_ONSLAUGHT*/ || cvar("g_onslaught"))		// xavior: game modes should be defined in defs.. leaving this here temp
+	if (g_onslaught)
 		self.use = onslaught_spawnpoint_use;
 }
 

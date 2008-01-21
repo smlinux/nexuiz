@@ -310,6 +310,7 @@ void() onslaught_generator =
 
 void(entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force) onslaught_controlpoint_icon_damage =
 {
+	entity oself;
 	if (damage <= 0)
 		return;
 	if (self.owner.isshielded)
@@ -345,6 +346,13 @@ void(entity inflictor, entity attacker, float damage, float deathtype, vector hi
 		self.owner.team = 0;
 		self.owner.colormap = 1024;
 		onslaught_updatelinks();
+
+		// Use targets now (somebody make sure this is in the right place..)
+		self = self.owner;
+		activator = self.owner;
+		SUB_UseTargets ();
+		self = oself;
+
 		remove(self);
 	}
 };
