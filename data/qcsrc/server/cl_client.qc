@@ -146,7 +146,7 @@ entity SelectSpawnPoint (float anypoint)
 
 	teamcheck = 0;
 
-	if(!anypoint && (g_ctf || g_assault))
+	if(!anypoint && (g_ctf || g_assault || g_onslaught))
 		teamcheck = self.team;
 
 	// get the list of players
