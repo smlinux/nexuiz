@@ -389,6 +389,7 @@ void PutObserverInServer (void)
 	self.punchvector = '0 0 0';
 	self.oldvelocity = self.velocity;
 	self.customizeentityforclient = Client_customizeentityforclient;
+	self.viewzoom = 1;
 
 	if(g_arena)
 	{
