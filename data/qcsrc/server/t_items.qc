@@ -812,9 +812,27 @@ void misc_models (void)
 	setsize (self, self.mins, self.maxs);
 }
 
+void func_wall_use (void)
+{
+	if(teams_matter)
+	{
+		if(activator.team)
+			self.colormap = (activator.team - 1) * 0x11;
+		else
+			self.colormap = 0x00;
+	}
+	else
+		self.colormap = ceil(random() * 256) - 1;
+}
 
-
-
+void func_wall (void)
+{
+	precache_model (self.model);
+	setmodel (self, self.model); // precision set by mapper
+	setsize (self, self.mins, self.maxs);
+	self.solid = SOLID_BSP;
+	self.use = func_wall_use;
+}
 
 floatfield Item_CounterField(float it)
 {
