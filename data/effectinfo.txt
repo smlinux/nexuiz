@@ -1614,20 +1614,20 @@ airfriction 9
 // nex beam: ring smoke
 effect nex_beam
 trailspacing 32
-color 0x0B3E4F 0x0B3E4F
+color 0x1680A0 0x1680A0
 size 4 4
 tex 32 32
-alpha 64 256 196
+alpha 64 128 64
 airfriction 5
 sizeincrease 2
 type static
 // nex beam: drifting smoke
 effect nex_beam
-trailspacing 12
-color 0x28404F 0x28404F
+trailspacing 6
+color 0x5080A0 0x5080A0
 size 4 4
 tex 48 55
-alpha 64 128 96
+alpha 64 128 64
 airfriction 9
 sizeincrease 4
 velocityjitter 64 64 64
@@ -1638,7 +1638,7 @@ trailspacing 6
 color 0x80CDFF 0x80CDFF
 size 4 4
 //tex 48 55
-alpha 256 256 2560
+alpha 256 256 1280
 type static
 
 // nex impact
