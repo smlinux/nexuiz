@@ -353,6 +353,7 @@ void(entity inflictor, entity attacker, float damage, float deathtype, vector hi
 		onslaught_updatelinks();
 
 		// Use targets now (somebody make sure this is in the right place..)
+		oself = self;
 		self = self.owner;
 		activator = self.owner;
 		SUB_UseTargets ();
@@ -379,7 +380,6 @@ void() onslaught_controlpoint_icon_think =
 void() onslaught_controlpoint_icon_buildthink =
 {
 	local entity oself;
-	oself = self;
 
 	self.nextthink = time + 0.1;
 	self.health = self.health + self.count;
@@ -394,6 +394,7 @@ void() onslaught_controlpoint_icon_buildthink =
 		onslaught_updatelinks();
 
 		// Use targets now (somebody make sure this is in the right place..)
+		oself = self;
 		self = self.owner;
 		activator = self;
 		SUB_UseTargets ();
