@@ -320,7 +320,11 @@ void(entity inflictor, entity attacker, float damage, float deathtype, vector hi
 		if (attacker == self)
 			bprint(ColoredTeamName(self.team), " generator spontaneously exploded due to overtime!\n");
 		else
-			bprint(ColoredTeamName(self.team), " generator destroyed by ", ColoredTeamName(attacker.team), "!\n");
+		{
+			string t;
+			t = ColoredTeamName(attacker.team);
+			bprint(ColoredTeamName(self.team), " generator destroyed by ", t, "!\n");
+		}
 		self.iscaptured = FALSE;
 		self.islinked = FALSE;
 		self.isshielded = FALSE;
@@ -368,7 +372,7 @@ float onslaught_controlpoint_waypointsprite_for_player(entity e)
 	if(e.classname == "player")
 	{
 		a = onslaught_controlpoint_attackable(self.owner, e.team);
-		if(a == -1 || a == 1) // own point, or fire at it
+		if(self.owner.team == e.team || a == -1 || a == 1) // own point, or fire at it
 		{
 			if(self.owner.team == COLOR_TEAM1)
 				return ons_sprite_cp_red;
