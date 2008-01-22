@@ -188,6 +188,7 @@ void relocate_spawnpoint()
 	}
 
 	self.use = spawnpoint_use;
+	self.team_saved = self.team;
 }
 
 #define strstr strstrofs

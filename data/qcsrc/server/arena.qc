@@ -81,6 +81,10 @@ void reset_map()
 		{
 			dom_controlpoint_setup();
 		}
+		else if(self.classname == "info_player_deathmatch")
+		{
+			self.team = self.team_saved; // reset spawns to their original state too!
+		}
 		else if(self.flags & FL_ITEM)			// reset items
 		{
 			self.model = self.mdl;
@@ -99,6 +103,8 @@ void reset_map()
 		{
 			removedecor(self);
 		}
+		// TODO properly reset Onslaught
+		// TODO properly reset Assault
 		self = nextent(self);
 	}
 
