@@ -503,7 +503,11 @@ void(entity inflictor, entity attacker, float damage, float deathtype, vector hi
 	{
 		sound(self, CHAN_AUTO, "sound/weapons/grenade_impact.wav", 1, ATTN_NORM);
 		pointparticles(particleeffectnum("onslaught_controlpoint_explosion"), self.origin, '0 0 0', 1);
-		bprint(ColoredTeamName(self.team), " ", self.message, " control point destroyed by ", ColoredTeamName(attacker.team), "\n");
+		{
+			string t;
+			t = ColoredTeamName(attacker.team);
+			bprint(ColoredTeamName(self.team), " ", self.message, " control point destroyed by ", t, "\n");
+		}
 		self.owner.goalentity = world;
 		self.owner.islinked = FALSE;
 		self.owner.iscaptured = FALSE;
