@@ -256,10 +256,12 @@ entity WaypointSprite_Spawn(
 
 entity WaypointSprite_SpawnFixed(
 	string spr,
-	vector ofs
+	vector ofs,
+	entity own,
+	.entity ownfield
 )
 {
-	return WaypointSprite_Spawn(spr, 0, 0, world, ofs, world, 0, world, enemy, TRUE);
+	return WaypointSprite_Spawn(spr, 0, 0, world, ofs, world, 0, own, ownfield, TRUE);
 }
 
 .entity waypointsprite_deployed_fixed;

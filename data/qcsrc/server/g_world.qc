@@ -1667,6 +1667,7 @@ void() CheckRules_World =
 	status = WinningCondition_RanOutOfSpawns();
 	if(status == WINNING_YES)
 	{
+		bprint("Hey! Someone ran out of spawns!\n");
 	}
 	else if(g_assault)
 	{

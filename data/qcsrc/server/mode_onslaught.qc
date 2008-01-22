@@ -1,8 +1,13 @@
-
+.entity sprite;
 .string target2;
 .float iscaptured;
 .float islinked;
 .float isshielded;
+.float lasthealth;
+
+float ons_sprite_cp_red, ons_sprite_cp_blue, ons_sprite_cp_neut;
+float ons_sprite_gen_red, ons_sprite_gen_blue, ons_sprite_gen_shielded;
+
 void() onslaught_updatelinks =
 {
 	local entity l, links;
@@ -154,6 +159,81 @@ void() onslaught_updatelinks =
 		dprint("--- done updating links ---\n");
 };
 
+float onslaught_controlpoint_can_be_linked(entity cp, float t)
+{
+	entity e;
+	// check to see if this player has a legitimate claim to capture this
+	// control point - more specifically that there is a captured path of
+	// points leading back to the team generator
+	e = findchain(classname, "onslaught_link");
+	while (e)
+	{
+		if (e.goalentity == cp)
+		{
+			dprint(etos(e), " (link) connects to ", etos(e.enemy), " (point)");
+			if (e.enemy.islinked)
+			{
+				dprint(" which is linked");
+				if (e.enemy.team == t)
+				{
+					dprint(" and has the correct team!\n");
+					return 1;
+				}
+				else
+					dprint(" but has the wrong team\n");
+			}
+			else
+				dprint("\n");
+		}
+		else if (e.enemy == cp)
+		{
+			dprint(etos(e), " (link) connects to ", etos(e.goalentity), " (point)");
+			if (e.goalentity.islinked)
+			{
+				dprint(" which is linked");
+				if (e.goalentity.team == t)
+				{
+					dprint(" and has a team!\n");
+					return 1;
+				}
+				else
+					dprint(" but has the wrong team\n");
+			}
+			else
+				dprint("\n");
+		}
+		e = e.chain;
+	}
+	return 0;
+}
+
+float onslaught_controlpoint_attackable(entity cp, float t)
+// -1: SAME TEAM!
+// 0:  off limits
+// 1:  attack it
+// 2:  touch it
+{
+	if(cp.isshielded)
+	{
+		return 0;
+	}
+	else if(cp.goalentity)
+	{
+		// if there's already an icon built, nothing happens
+		if(cp.team == t)
+			return -1;
+		if(onslaught_controlpoint_can_be_linked(cp, t))
+			return 1;
+	}
+	else
+	{
+		// free point
+		if(onslaught_controlpoint_can_be_linked(cp, t))
+			return 2;
+	}
+	return 0;
+}
+
 void() onslaught_generator_think =
 {
 	local float d;
@@ -227,7 +307,14 @@ void(entity inflictor, entity attacker, float damage, float deathtype, vector hi
 	self.frame = 10 * bound(0, (1 - self.health / self.max_health), 1);
 	// see if the generator is still functional, or dying
 	if (self.health > 0)
-		bprint(ColoredTeamName(self.team), " generator has ", ftos(floor(self.health)), " health remaining\n");
+	{
+		float h, lh;
+		lh = ceil(self.lasthealth / 100) * 100;
+		h = ceil(self.health / 100) * 100;
+		if(lh != h)
+			bprint(ColoredTeamName(self.team), " generator has less than ", ftos(h), " health remaining\n");
+		self.lasthealth = self.health;
+	}
 	else
 	{
 		if (attacker == self)
@@ -256,6 +343,53 @@ void() onslaught_generator_delayed =
 	self.nextthink = time;
 };
 
+float onslaught_generator_waypointsprite_for_player(entity e)
+{
+	if(e.classname == "player")
+		if(e.team == self.owner.team)
+		{
+			if(self.owner.team == COLOR_TEAM1)
+				return ons_sprite_gen_red;
+			else if(self.owner.team == COLOR_TEAM2)
+				return ons_sprite_gen_blue;
+		}
+	if(self.owner.isshielded)
+		return ons_sprite_gen_shielded;
+	if(self.owner.team == COLOR_TEAM1)
+		return ons_sprite_gen_red;
+	else if(self.owner.team == COLOR_TEAM2)
+		return ons_sprite_gen_blue;
+	return 0;
+}
+
+float onslaught_controlpoint_waypointsprite_for_player(entity e)
+{
+	float a;
+	if(e.classname == "player")
+	{
+		a = onslaught_controlpoint_attackable(self.owner, e.team);
+		if(a == -1 || a == 1) // own point, or fire at it
+		{
+			if(self.owner.team == COLOR_TEAM1)
+				return ons_sprite_cp_red;
+			else if(self.owner.team == COLOR_TEAM2)
+				return ons_sprite_cp_blue;
+		}
+		else if(a == 2) // touch it
+			return ons_sprite_cp_neut;
+	}
+	else
+	{
+		if(self.owner.team == COLOR_TEAM1)
+			return ons_sprite_cp_red;
+		else if(self.owner.team == COLOR_TEAM2)
+			return ons_sprite_cp_blue;
+		else
+			return ons_sprite_cp_neut;
+	}
+	return 0;
+}
+
 /*QUAKED onslaught_generator (0 .5 .8) (-32 -32 -24) (32 32 64)
 Base generator.
 
@@ -272,6 +406,29 @@ void() onslaught_generator =
 		remove(self);
 		return;
 	}
+
+	if(!ons_sprite_cp_blue)
+	{
+		precache_model("models/sprites/ons-cp-blue.sp2");
+		setmodel(self, "models/sprites/ons-cp-blue.sp2");
+		ons_sprite_cp_blue = self.modelindex;
+		precache_model("models/sprites/ons-cp-red.sp2");
+		setmodel(self, "models/sprites/ons-cp-red.sp2");
+		ons_sprite_cp_red = self.modelindex;
+		precache_model("models/sprites/ons-cp-neut.sp2");
+		setmodel(self, "models/sprites/ons-cp-neut.sp2");
+		ons_sprite_cp_neut = self.modelindex;
+		precache_model("models/sprites/ons-gen-blue.sp2");
+		setmodel(self, "models/sprites/ons-gen-blue.sp2");
+		ons_sprite_gen_blue = self.modelindex;
+		precache_model("models/sprites/ons-gen-red.sp2");
+		setmodel(self, "models/sprites/ons-gen-red.sp2");
+		ons_sprite_gen_red = self.modelindex;
+		precache_model("models/sprites/ons-gen-shielded.sp2");
+		setmodel(self, "models/sprites/ons-gen-shielded.sp2");
+		ons_sprite_gen_shielded = self.modelindex;
+	}
+
 	local entity e;
 	precache_model("models/onslaught/generator.md3");
 	precache_model("models/onslaught/generator_shield.md3");
@@ -284,7 +441,7 @@ void() onslaught_generator =
 	self.colormap = 1024 + (self.team - 1) * 17;
 	self.solid = SOLID_BSP;
 	self.movetype = MOVETYPE_NONE;
-	self.max_health = self.health = 3000;
+	self.lasthealth = self.max_health = self.health = 3000;
 	setmodel(self, "models/onslaught/generator.md3");
 	//setsize(self, '-32 -32 -24', '32 32 64');
 	setorigin(self, self.origin);
@@ -306,6 +463,9 @@ void() onslaught_generator =
 	e.team = self.team;
 	self.think = onslaught_generator_delayed;
 	self.nextthink = time + 0.2;
+
+	WaypointSprite_SpawnFixed(string_null, e.origin + '0 0 1' * e.maxs_z, self, sprite);
+	self.sprite.waypointsprite_for_player = onslaught_generator_waypointsprite_for_player;
 };
 
 void(entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force) onslaught_controlpoint_icon_damage =
@@ -405,65 +565,8 @@ void() onslaught_controlpoint_touch =
 	local entity e;
 	if (other.classname != "player")
 		return;
-	// if there's already an icon built, nothing happens
-	if (self.goalentity)
-	{
-		dprint("a\n");
+	if(onslaught_controlpoint_attackable(self, other.team) != 2)
 		return;
-	}
-	// shielded points are definitely off-limits
-	if (self.isshielded)
-	{
-		dprint("b\n");
-		return;
-	}
-	// check to see if this player has a legitimate claim to capture this
-	// control point - more specifically that there is a captured path of
-	// points leading back to the team generator
-	e = findchain(classname, "onslaught_link");
-	while (e)
-	{
-		if (e.goalentity == self)
-		{
-			dprint(etos(e), " (link) connects to ", etos(e.enemy), " (point)");
-			if (e.enemy.islinked)
-			{
-				dprint(" which is linked");
-				if (e.enemy.team == other.team)
-				{
-					dprint(" and has the correct team!\n");
-					break;
-				}
-				else
-					dprint(" but has the wrong team\n");
-			}
-			else
-				dprint("\n");
-		}
-		else if (e.enemy == self)
-		{
-			dprint(etos(e), " (link) connects to ", etos(e.goalentity), " (point)");
-			if (e.goalentity.islinked)
-			{
-				dprint(" which is linked");
-				if (e.goalentity.team == other.team)
-				{
-					dprint(" and has a team!\n");
-					break;
-				}
-				else
-					dprint(" but has the wrong team\n");
-			}
-			else
-				dprint("\n");
-		}
-		e = e.chain;
-	}
-	if (!e)
-	{
-		dprint("c\n");
-		return;
-	}
 	// we've verified that this player has a legitimate claim to this point,
 	// so start building the captured point icon (which only captures this
 	// point if it successfully builds without being destroyed first)
@@ -537,6 +640,9 @@ void() onslaught_controlpoint =
 	setorigin(e, self.origin);
 	e.colormap = self.colormap;
 	onslaught_updatelinks();
+
+	WaypointSprite_SpawnFixed(string_null, e.origin + '0 0 1' * e.maxs_z, self, sprite);
+	self.sprite.waypointsprite_for_player = onslaught_controlpoint_waypointsprite_for_player;
 };
 
 void() onslaught_link_delayed =

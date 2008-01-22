@@ -498,7 +498,7 @@ void() item_flag_team1 =
 	if(!self.noalign)
 		droptofloor();
 
-	WaypointSprite_SpawnFixed("redbase", self.origin + '0 0 37');
+	WaypointSprite_SpawnFixed("redbase", self.origin + '0 0 37', self, enemy);
 };
 
 /*QUAKED item_flag_team2 (0 0.5 0.8) (-48 -48 -24) (48 48 64)
@@ -557,7 +557,7 @@ void() item_flag_team2 =
 	if(!self.noalign)
 		droptofloor();
 
-	WaypointSprite_SpawnFixed("bluebase", self.origin + '0 0 37');
+	WaypointSprite_SpawnFixed("bluebase", self.origin + '0 0 37', self, enemy);
 };
 
 
