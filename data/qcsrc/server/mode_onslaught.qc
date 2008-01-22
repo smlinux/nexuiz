@@ -304,11 +304,6 @@ void() onslaught_generator =
 	setorigin(e, self.origin);
 	e.colormap = self.colormap;
 	e.team = self.team;
-
-	// use our "target"s (spawn points linked to generator for Morphed..)
-	activator = self;
-	SUB_UseTargets();
-
 	self.think = onslaught_generator_delayed;
 	self.nextthink = time + 0.2;
 };
