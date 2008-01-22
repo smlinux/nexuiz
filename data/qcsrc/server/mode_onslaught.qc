@@ -222,7 +222,7 @@ float onslaught_controlpoint_attackable(entity cp, float t)
 		// if there's already an icon built, nothing happens
 		if(cp.team == t)
 			return -1;
-		if(onslaught_controlpoint_can_be_linked(cp, t))
+		//if(onslaught_controlpoint_can_be_linked(cp, t))
 			return 1;
 	}
 	else
