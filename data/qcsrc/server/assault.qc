@@ -49,19 +49,10 @@ void assault_objective_use() {
 }
 
 void assault_objective_think() {
-	local entity oldself;	
 	if(self.health < 0) {
 		//self.effects = 0;
-		local entity ent;
-		ent = find(world, targetname, self.target);
-		while(ent) {
-			oldself = self;
-			self = ent;
-			self.use();
-			self = oldself;
-			ent = find(ent, targetname, self.target);
-			
-		}
+		activator = self;
+		SUB_UseTargets();
 	} else {
 		//self.effects = EF_STARDUST;
 		self.nextthink = time + 0.1;
@@ -193,7 +184,10 @@ void assault_destructible_reset() {
 	self.colormod = '1 1 1';
 	self.cnt = 0; // not active
 	if(self.spawnflags)
+	{
+		activator = self;
 		self.use();
+	}
 }
 
 void assault_destructible_use() {
@@ -202,20 +196,11 @@ void assault_destructible_use() {
 }
 
 void assault_destructible_destroy() {
-	local entity oldself;
-	
 	self.model = "";
 	self.takedamage = DAMAGE_NO;
 	self.solid = SOLID_NOT;
-	local entity ent;
-	ent = find(world, targetname, self.target);
-	while(ent) {
-		oldself = self;
-		self = ent;
-		self.use();
-		self = oldself;
-		ent = find(ent, targetname, self.target);
-	}
+	activator = other;
+	SUB_UseTargets();
 }
 
 void assault_destructible_damage(entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force) {
@@ -314,16 +299,8 @@ void target_assault_roundend() {
 }
 
 void assault_roundstart_use() {
-	local entity ent;
-	local entity oldself;
-	ent = find(world, targetname, self.target);
-	while(ent) {
-		oldself = self;
-		self = ent;
-		self.use();
-		self = oldself;
-		ent = find(ent, targetname, self.target);
-	}
+	activator = self;
+	SUB_UseTargets();
 }
 
 void target_assault_roundstart() {
