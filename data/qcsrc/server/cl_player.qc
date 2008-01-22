@@ -264,7 +264,7 @@ void SpawnThrownWeapon (vector org, float w)
 void PlayerCorpseDamage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
 {
 	local float take, save;
-	te_blood (hitloc, force, damage);
+	pointparticles(particleeffectnum("blood"), hitloc, force, damage);
 	// damage resistance (ignore most of the damage from a bullet or similar)
 	damage = max(damage - 5, 1);
 
@@ -345,7 +345,7 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 
 	damage = damage * bound(1.0, self.cvar_cl_handicap, 100.0);
 
-	te_blood (hitloc, force, damage);
+	pointparticles(particleeffectnum("blood"), hitloc, force, damage);
 	if (self.pain_finished < time)		//Don't switch pain sequences like crazy
 	{
 		if (random() > 0.5)

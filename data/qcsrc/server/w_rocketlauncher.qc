@@ -7,13 +7,7 @@ void W_Rocket_Explode (void)
 	sound (self, CHAN_BODY, "weapons/rocket_impact.wav", 1, ATTN_NORM);
 	org2 = findbetterlocation (self.origin, 16);
 
-	//te_explosion (org2);
-	// LordHavoc: TE_TEI_BIGEXPLOSION
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, 78);
-	WriteCoord (MSG_BROADCAST, org2_x);
-	WriteCoord (MSG_BROADCAST, org2_y);
-	WriteCoord (MSG_BROADCAST, org2_z);
+	pointparticles(particleeffectnum("rocket_explode"), org2, '0 0 0', 1);
 
 	//effect (org2, "models/sprites/rockexpl.spr", 0, 12, 35);
 	self.event_damage = SUB_Null;
@@ -204,9 +198,9 @@ void W_Rocket_Attack (void)
 	if (cvar("g_use_ammunition") && !g_rocketarena)
 		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_rocketlauncher_ammo");
 
-	W_SetupShot (self, '8 3 -8', FALSE, 5, "weapons/rocket_fire.wav");
-	//te_smallflash(w_shotorg);
-	pointparticles(particleeffectnum("rocketlauncher_muzzleflash"), w_shotorg + v_forward * 12, v_forward * 1000, 1);
+	W_SetupShot (self, '25 3 -8', FALSE, 5, "weapons/rocket_fire.wav");
+	//W_SetupShot (self, '25 8 -8', FALSE, 5, "weapons/rocket_fire.wav"); // TODO: move model to the right a little
+	pointparticles(particleeffectnum("rocketlauncher_muzzleflash"), w_shotorg, w_shotdir * 1000, 1);
 
 	missile = spawn ();
 	missile.owner = self;

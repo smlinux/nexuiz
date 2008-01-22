@@ -10,7 +10,7 @@ void GibDamage (entity inflictor, entity attacker, float damage, float deathtype
 		sound (self, CHAN_IMPACT, "misc/gib_splat03.wav", 1, ATTN_NORM);
 	else if (r < 0.75)
 		sound (self, CHAN_IMPACT, "misc/gib_splat04.wav", 1, ATTN_NORM);
-	te_blood (self.origin + '0 0 1', '0 0 30', 10);
+	pointparticles(particleeffectnum("blood"), self.origin + '0 0 1', '0 0 30', 10);
 	self.health = self.health - damage;
 	if (self.health <= -1000)
 	{

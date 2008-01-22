@@ -4,6 +4,7 @@ void W_Laser_Touch (void)
 {
 	vector	dir;
 	vector org2;
+	vector normal;
 
 	if (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
 	{
@@ -14,10 +15,11 @@ void W_Laser_Touch (void)
 	if (other == self.owner)
 		return;
 
+	normal = trace_plane_normal;
 	dir = normalize (self.owner.origin - self.origin);
 	org2 = findbetterlocation (self.origin, 8);
 
-	te_knightspike(org2);
+	pointparticles(particleeffectnum("laser_impact"), org2, normal * 1000, 1);
 
 
 	self.event_damage = SUB_Null;
@@ -34,9 +36,8 @@ void W_Laser_Attack (float issecondary)
 {
 	local entity missile;
 
-	W_SetupShot (self, '11 8 -8', FALSE, 3, "weapons/lasergun_fire.wav");
-	//te_customflash(w_shotorg, 160, 0.2, '1 0 0');
-	pointparticles(particleeffectnum("laser_muzzleflash"), w_shotorg + v_forward * 8, v_forward * 1000, 1);
+	W_SetupShot (self, '25 8 -8', FALSE, 3, "weapons/lasergun_fire.wav");
+	pointparticles(particleeffectnum("laser_muzzleflash"), w_shotorg, w_shotdir * 1000, 1);
 
 	missile = spawn ();
 	missile.owner = self;

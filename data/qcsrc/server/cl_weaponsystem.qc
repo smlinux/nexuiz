@@ -464,7 +464,9 @@ void(float fr, float t, void() func) weapon_thinkf =
 	}
 
 	// VorteX: haste can be added here
-	self.weapon_nextthink = max(time, self.weapon_nextthink_lastframe + t);
+	if (self.weapon_nextthink < time - frametime)
+		self.weapon_nextthink = time;
+	self.weapon_nextthink = self.weapon_nextthink + t;
 	self.weapon_think = func;
 
 	if (fr == WFRAME_FIRE1 || fr == WFRAME_FIRE2)

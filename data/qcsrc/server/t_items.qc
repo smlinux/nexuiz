@@ -1,6 +1,3 @@
-//void Item_ClearRespawnEffect (void) {
-//	self.effects = self.effects - (self.effects & EF_STARDUST);
-//}
 
 .float max_armorvalue;
 
@@ -11,12 +8,8 @@ void Item_Respawn (void)
 	sound (self, CHAN_VOICE, "misc/itemrespawn.wav", 1, ATTN_NORM);	// play respawn sound
 	setorigin (self, self.origin);
 
-	// LordHavoc: replaced respawn stardust effect with a custom te_wizspike
-	te_wizspike(self.origin + self.mins_z * '0 0 1' + '0 0 48');
-	//// Savage: Add simple Respawn effect and make sure it gets removed
-	//self.effects = self.effects | EF_STARDUST;
-	//self.think = Item_ClearRespawnEffect;
-	//self.nextthink = time + 0.1;
+	//pointparticles(particleeffectnum("item_respawn"), self.origin + self.mins_z * '0 0 1' + '0 0 48', '0 0 0', 1);
+	pointparticles(particleeffectnum("item_respawn"), self.origin + 0.5 * (self.mins + self.maxs), '0 0 0', 1);
 }
 
 void Item_Touch (void)
@@ -191,9 +184,6 @@ void Item_Touch (void)
 
 	if (!pickedup)
 		return;
-
-	// Savage: Remove the respawn effect if still present
-	self.effects = self.effects - (self.effects & EF_STARDUST);
 
 	sound (self, CHAN_BODY, self.noise, 1, ATTN_NORM);
 	sound (other, CHAN_AUTO, self.item_pickupsound, 1, ATTN_NORM);

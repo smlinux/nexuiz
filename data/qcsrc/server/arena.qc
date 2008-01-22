@@ -92,7 +92,6 @@ void reset_map()
 			setorigin (self, self.origin);
 			self.think = SUB_Null;
 			self.nextthink = 0;
-			self.effects = self.effects - (self.effects & EF_STARDUST);
 		}
 		else if(self.flags & FL_PROJECTILE)		// remove any projectiles left
 		{

@@ -13,19 +13,17 @@ void W_Shotgun_Attack (void)
 	f = cvar("g_balance_shotgun_primary_force");
 	spread = cvar("g_balance_shotgun_primary_spread");
 
-	W_SetupShot (self, '11 8 -8', TRUE, 5, "weapons/shotgun_fire.wav");
+	W_SetupShot (self, '25 8 -8', TRUE, 5, "weapons/shotgun_fire.wav");
 	for (sc = 0;sc < bullets;sc = sc + 1)
 		fireBullet (w_shotorg, w_shotdir, spread, d, f, IT_SHOTGUN, sc < 3);
 	if (cvar("g_use_ammunition"))
 		self.ammo_shells = self.ammo_shells - cvar("g_balance_shotgun_primary_ammo");
 
-	pointparticles(particleeffectnum("shotgun_muzzleflash"), w_shotorg + v_forward * 6, v_forward * 1000, cvar("g_balance_shotgun_primary_ammo"));
-	//W_Smoke(w_shotorg + v_forward * 8, v_forward, 12);
-	//te_smallflash(w_shotorg);
+	pointparticles(particleeffectnum("shotgun_muzzleflash"), w_shotorg, w_shotdir * 1000, cvar("g_balance_shotgun_primary_ammo"));
 
 	// casing code
 	if (cvar("g_casings") >= 1)
-		SpawnCasing (w_shotorg, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 - 30) * v_up), 2, vectoangles(v_forward),'0 250 0', 100, 1);
+		SpawnCasing (w_shotorg, ((random () * 50 + 50) * v_right) - (v_forward * (random () * 25 + 25)) - ((random () * 5 - 30) * v_up), 2, vectoangles(v_forward),'0 250 0', 100, 1);
 
 	// muzzle flash for 1st person view
 	flash = spawn();
@@ -58,19 +56,17 @@ void W_Shotgun_Attack2 (void)
 	f = cvar("g_balance_shotgun_secondary_force");
 	spread = cvar("g_balance_shotgun_secondary_spread");
 
-	W_SetupShot (self, '11 8 -8', TRUE, 5, "weapons/shotgun_fire.wav");
+	W_SetupShot (self, '25 8 -8', TRUE, 5, "weapons/shotgun_fire.wav");
 	for (sc = 0;sc < bullets;sc = sc + 1)
 		fireBullet (w_shotorg, w_shotdir, spread, d, f, IT_SHOTGUN, sc < 3);
 	if (cvar("g_use_ammunition"))
 		self.ammo_shells = self.ammo_shells - cvar("g_balance_shotgun_secondary_ammo");
 
-	pointparticles(particleeffectnum("shotgun_muzzleflash"), w_shotorg + v_forward * 6, v_forward * 1000, cvar("g_balance_shotgun_secondary_ammo"));
-	//W_Smoke(w_shotorg + v_forward * 8, v_forward, 12);
-	//te_smallflash(w_shotorg);
+	pointparticles(particleeffectnum("shotgun_muzzleflash"), w_shotorg, w_shotdir * 1000, cvar("g_balance_shotgun_secondary_ammo"));
 
 	// casing code
 	if (cvar("g_casings") >= 1)
-		SpawnCasing (w_shotorg, ((random () * 50 + 50) * v_right) - ((random () * 25 + 25) * v_forward) - ((random () * 5 - 30) * v_up), 2, vectoangles(v_forward),'0 250 0', 100, 1);
+		SpawnCasing (w_shotorg, ((random () * 50 + 50) * v_right) - (v_forward * (random () * 25 + 25)) - ((random () * 5 - 30) * v_up), 2, vectoangles(v_forward),'0 250 0', 100, 1);
 
 	flash = spawn();
 	setorigin(flash, '53 5 0');

@@ -67,12 +67,12 @@ void Teleport_Touch (void)
 
 	// Make teleport effect where the player left
 	sound (other, CHAN_ITEM, "misc/teleport.wav", 1, ATTN_NORM);
-	te_teleport (other.origin);
+	pointparticles(particleeffectnum("teleport"), other.origin, '0 0 0', 1);
 
 	// Make teleport effect where the player arrived
 	sound (other, CHAN_ITEM, "misc/teleport.wav", 1, ATTN_NORM);
 	makevectors (self.enemy.mangle);
-	te_teleport (self.enemy.origin + v_forward * 32);
+	pointparticles(particleeffectnum("teleport"), self.enemy.origin + v_forward * 32, '0 0 0', 1);
 
 	// Relocate the player
 	setorigin (other, self.enemy.origin + '0 0 1' * (1 - other.mins_z - 24));

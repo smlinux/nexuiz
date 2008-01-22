@@ -1,8 +1,8 @@
 
 void W_Nex_Attack (void)
 {
-	//w_shotorg = self.origin + self.view_ofs + v_forward * 5 + v_right * 14 + v_up * -7;
-	W_SetupShot (self, '5 14 -8', TRUE, 5, "weapons/nexfire.wav");
+	W_SetupShot (self, '25 8 -4', TRUE, 5, "weapons/nexfire.wav");
+	//W_SetupShot (self, '25 8 -8', TRUE, 2, "weapons/nexfire.wav"); // TODO: move model down a little
 
 	// assure that nexdamage is high enough in minstagib
 	if (g_minstagib)
@@ -16,13 +16,10 @@ void W_Nex_Attack (void)
 				announce(self, "announcer/male/yoda.ogg");
 	}
 
-	pointparticles(particleeffectnum("nex_muzzleflash"), w_shotorg + v_forward * 32, v_forward * 1000, 1);
+	pointparticles(particleeffectnum("nex_muzzleflash"), w_shotorg, w_shotdir * 1000, 1);
 
-	// show as if shot started outside of gun
-	// muzzleflash light
-	//te_smallflash (w_shotorg + w_shotdir * 24);
 	// beam effect
-	trailparticles(world, particleeffectnum("nex_beam"), w_shotorg + w_shotdir * 28, trace_endpos);
+	trailparticles(world, particleeffectnum("nex_beam"), w_shotorg, trace_endpos);
 	// flash and burn the wall
 	if (trace_ent.solid == SOLID_BSP && !(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT))
 		pointparticles(particleeffectnum("nex_impact"), trace_endpos - w_shotdir * 6, '0 0 0', 1);
@@ -36,22 +33,6 @@ void W_Nex_Attack (void)
 		else
 			self.ammo_cells = self.ammo_cells - cvar("g_balance_nex_ammo");
 	}
-
-	/*
-	local entity flash;
-	flash = spawn ();
-	setorigin (flash, self.origin + self.view_ofs + v_forward * 33 + v_right * 14 + v_up * -7);
-	flash.angles = vectoangles (w_shotdir);
-	//setattachment(flash, self.weaponentity, "bone01");
-	//flash.origin = '150 0 0';
-	//setattachment(flash, self.weaponentity, "");
-	//flash.origin = '150 -16 -8';
-	//flash.angles_z = 90;
-	//flash.scale = 4;
-	setmodel (flash, "models/nexflash.md3"); // precision set below
-	SUB_SetFade (flash, time, 0.4);
-	flash.effects = flash.effects | EF_ADDITIVE | EF_FULLBRIGHT | EF_LOWPRECISION;
-	*/
 }
 
 

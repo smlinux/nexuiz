@@ -11,28 +11,8 @@ void W_Crylink_Touch (void)
 		return;
 	}
 	RadiusDamage (self, self.realowner, cvar("g_balance_crylink_primary_damage"), cvar("g_balance_crylink_primary_edgedamage"), cvar("g_balance_crylink_primary_radius"), world, cvar("g_balance_crylink_primary_force"), IT_CRYLINK);
-	te_gunshotquad(self.origin);
+	pointparticles(particleeffectnum("crylink_impact"), self.origin, '0 0 0', 1);
 	remove (self);
-	/*
-	//te_smallflash(self.origin);
-	if (other.takedamage == DAMAGE_AIM)
-	{
-		remove (self);
-		return;
-	}
-	self.owner = world;
-	self.touch = SUB_Null;
-	setmodel (self, "models/plasma.mdl"); // precision set below
-	setsize (self, '0 0 0', '0 0 0');
-	self.gravity = 0;
-	self.glow_size = 0;
-	self.glow_color = 0;
-	self.think = SUB_Remove;
-	self.movetype = MOVETYPE_NONE;
-	self.effects = EF_LOWPRECISION;
-	SUB_SetFade(self, time, 1);
-	//remove (self);
-	*/
 }
 
 void W_Crylink_Touch2 (void)
@@ -43,28 +23,8 @@ void W_Crylink_Touch2 (void)
 		return;
 	}
 	RadiusDamage (self, self.realowner, cvar("g_balance_crylink_secondary_damage"), cvar("g_balance_crylink_secondary_edgedamage"), cvar("g_balance_crylink_secondary_radius"), world, cvar("g_balance_crylink_secondary_force"), IT_CRYLINK);
-	te_gunshotquad(self.origin);
+	pointparticles(particleeffectnum("crylink_impact"), self.origin, '0 0 0', 1);
 	remove (self);
-	/*
-	//te_smallflash(self.origin);
-	if (other.takedamage == DAMAGE_AIM)
-	{
-		remove (self);
-		return;
-	}
-	self.owner = world;
-	self.touch = SUB_Null;
-	setmodel (self, "models/plasma.mdl"); // precision set below
-	setsize (self, '0 0 0', '0 0 0');
-	self.gravity = 0;
-	self.glow_size = 0;
-	self.glow_color = 0;
-	self.think = SUB_Remove;
-	self.movetype = MOVETYPE_NONE;
-	self.effects = EF_LOWPRECISION;
-	SUB_SetFade(self, time, 1);
-	//remove (self);
-	*/
 }
 
 void W_Crylink_Attack (void)
@@ -75,11 +35,10 @@ void W_Crylink_Attack (void)
 	if (cvar("g_use_ammunition"))
 		self.ammo_cells = self.ammo_cells - cvar("g_balance_crylink_primary_ammo");
 
-	W_SetupShot (self, '11 8 -8', FALSE, 2, "weapons/crylink_fire.wav");
-	te_smallflash(w_shotorg);
+	W_SetupShot (self, '25 8 -8', FALSE, 2, "weapons/crylink_fire.wav");
 
 	shots = cvar("g_balance_crylink_primary_shots");
-	pointparticles(particleeffectnum("crylink_muzzleflash"), w_shotorg + v_forward * 12, v_forward * 1000, shots);
+	pointparticles(particleeffectnum("crylink_muzzleflash"), w_shotorg, w_shotdir * 1000, shots);
 	while (counter < shots)
 	{
 		proj = spawn ();
@@ -121,11 +80,10 @@ void W_Crylink_Attack2 (void)
 	if (cvar("g_use_ammunition"))
 		self.ammo_cells = self.ammo_cells - cvar("g_balance_crylink_secondary_ammo");
 
-	W_SetupShot (self, '11 8 -8', FALSE, 2, "weapons/crylink_fire.wav");
-	//te_smallflash(w_shotorg);
+	W_SetupShot (self, '25 8 -8', FALSE, 2, "weapons/crylink_fire.wav");
 
 	shots = cvar("g_balance_crylink_secondary_shots");
-	pointparticles(particleeffectnum("crylink_muzzleflash"), w_shotorg + v_forward * 12, v_forward * 1000, shots);
+	pointparticles(particleeffectnum("crylink_muzzleflash"), w_shotorg, w_shotdir * 1000, shots);
 	while (counter < shots)
 	{
 		proj = spawn ();
@@ -166,14 +124,14 @@ void W_Crylink_Attack3 (void)
 {
 	if (cvar("g_use_ammunition"))
 		self.ammo_cells = self.ammo_cells - cvar("g_balance_crylink_primary_ammo");
-	W_SetupShot (self, '11 8 -8', TRUE, 0, "weapons/crylink_fire.wav");
+	W_SetupShot (self, '25 8 -8', TRUE, 0, "weapons/crylink_fire.wav");
 
 	// use traceline_hitcorpse to make sure it can hit gibs and corpses too
 	traceline_hitcorpse(self, w_shotorg, w_shotorg + w_shotdir * 1000, FALSE, self);
 
-	te_smallflash(w_shotorg);
-	te_plasmaburn(trace_endpos);
-	te_lightning2(self, w_shotorg, trace_endpos);
+	pointparticles(particleeffectnum("lightning_muzzleflash", w_shotorg, w_shotdir * 1000, 1);
+	pointparticles(particleeffectnum("lightning_impact", trace_endpos, trace_plane_normal * 1000, 1);
+	trailparticles(world, particleeffectnum("lightning_beam", w_shotorg, trace_endpos);
 
 	if (trace_fraction < 1)
 		Damage(trace_ent, self, self, cvar("g_balance_crylink_primary_damage"), IT_CRYLINK, trace_endpos, '0 0 0');

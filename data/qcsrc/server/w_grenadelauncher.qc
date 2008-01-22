@@ -3,8 +3,7 @@ void W_Grenade_Explode (void)
 {
 	vector	org2;
 	org2 = findbetterlocation (self.origin, 12);
-	te_explosion (org2);
-	//effect (org2, "models/sprites/grenexpl.spr", 0, 12, 35);
+	pointparticles(particleeffectnum("grenade_explode"), org2, '0 0 0', 1);
 	sound (self, CHAN_BODY, "weapons/grenade_impact.wav", 1, ATTN_NORM);
 
 	self.event_damage = SUB_Null;
@@ -17,8 +16,7 @@ void W_Grenade_Explode2 (void)
 {
 	vector	org2;
 	org2 = findbetterlocation (self.origin, 12);
-	te_explosion (org2);
-	//effect (org2, "models/sprites/grenexpl.spr", 0, 12, 35);
+	pointparticles(particleeffectnum("grenade_explode"), org2, '0 0 0', 1);
 	sound (self, CHAN_BODY, "weapons/grenade_impact.wav", 1, ATTN_NORM);
 
 	self.event_damage = SUB_Null;
@@ -81,9 +79,10 @@ void W_Grenade_Attack (void)
 
 	if (cvar("g_use_ammunition"))
 		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_grenadelauncher_primary_ammo");
-	W_SetupShot (self, '11 8 -8', FALSE, 4, "weapons/grenade_fire.wav");
+	W_SetupShot (self, '25 6 -8', FALSE, 4, "weapons/grenade_fire.wav");
+	//W_SetupShot (self, '25 8 -8', FALSE, 4, "weapons/grenade_fire.wav"); // TODO: move model to the right a little
 
-	pointparticles(particleeffectnum("grenadelauncher_muzzleflash"), w_shotorg + v_forward * 8, v_forward * 1000, 1);
+	pointparticles(particleeffectnum("grenadelauncher_muzzleflash"), w_shotorg, w_shotdir * 1000, 1);
 
 	gren = spawn ();
 	gren.owner = self;
@@ -101,7 +100,7 @@ void W_Grenade_Attack (void)
 	gren.nextthink = time + cvar("g_balance_grenadelauncher_primary_lifetime");
 	gren.think = W_Grenade_Explode;
 	gren.touch = W_Grenade_Touch1;
-	gren.velocity = v_forward * cvar("g_balance_grenadelauncher_primary_speed") + v_up * cvar("g_balance_grenadelauncher_primary_speed_up");
+	gren.velocity = w_shotdir * cvar("g_balance_grenadelauncher_primary_speed") + v_up * cvar("g_balance_grenadelauncher_primary_speed_up");
 	W_SetupProjectileVelocity(gren);
 	gren.avelocity_x = random () * -500 - 500;
 
@@ -115,9 +114,10 @@ void W_Grenade_Attack2 (void)
 
 	if (cvar("g_use_ammunition"))
 		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_grenadelauncher_secondary_ammo");
-	W_SetupShot (self, '11 8 -8', FALSE, 4, "weapons/grenade_fire.wav");
+	W_SetupShot (self, '25 6 -8', FALSE, 4, "weapons/grenade_fire.wav");
+	//W_SetupShot (self, '25 8 -8', FALSE, 4, "weapons/grenade_fire.wav"); // TODO: move model to the right a little
 
-	pointparticles(particleeffectnum("grenadelauncher_muzzleflash"), w_shotorg + v_forward * 8, v_forward * 1000, 1);
+	pointparticles(particleeffectnum("grenadelauncher_muzzleflash"), w_shotorg, w_shotdir * 1000, 1);
 
 	gren = spawn ();
 	gren.owner = self;
@@ -139,7 +139,7 @@ void W_Grenade_Attack2 (void)
 	gren.health = 10;
 	gren.damageforcescale = 4;
 	gren.event_damage = W_Grenade_Damage;
-	gren.velocity = v_forward * cvar("g_balance_grenadelauncher_secondary_speed") + v_up * cvar("g_balance_grenadelauncher_secondary_speed_up");
+	gren.velocity = w_shotdir * cvar("g_balance_grenadelauncher_secondary_speed") + v_up * cvar("g_balance_grenadelauncher_secondary_speed_up");
 	W_SetupProjectileVelocity(gren);
 	gren.avelocity = '100 150 100';
 
