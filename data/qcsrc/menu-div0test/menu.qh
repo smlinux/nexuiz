@@ -2,10 +2,7 @@
 
 #define NULL (null_entity)
 
-#ifndef MAPINFO
-#warning Sorry, need to compile with -DMAPINFO enabled (server QC too, by the way)
-!
-#endif
+#define MAPINFO
 
 // constants
 

@@ -1,3 +1,5 @@
+#define MAPINFO
+
 // Globals
 
 float g_domination, g_ctf, g_tdm, g_keyhunt, g_onslaught, g_assault, g_arena, g_lms, g_runematch;
