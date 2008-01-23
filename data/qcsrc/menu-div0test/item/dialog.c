@@ -55,7 +55,8 @@ CLASS(Dialog) EXTENDS(InputContainer)
 	ATTRIB(Dialog, rowHeight, float, 0) // pixels
 	ATTRIB(Dialog, titleHeight, float, 0) // pixels
 	ATTRIB(Dialog, titleFontSize, float, 0) // pixels; if 0, title causes no margin
-	ATTRIB(Dialog, zoomedOutTitleBarPosition, float, -1)
+	ATTRIB(Dialog, zoomedOutTitleBarPosition, float, 0)
+	ATTRIB(Dialog, zoomedOutTitleBar, float, 0)
 
 	ATTRIB(Dialog, backgroundImage, string, string_null)
 	ATTRIB(Dialog, closeButtonImage, string, string_null)
@@ -129,6 +130,7 @@ void configureDialogDialog(entity me)
 	me.frame = spawnBorderImage();
 	me.frame.configureBorderImage(me.frame, me.title, me.titleFontSize, me.color, me.backgroundImage, me.titleHeight);
 	me.frame.zoomedOutTitleBarPosition = me.zoomedOutTitleBarPosition;
+	me.frame.zoomedOutTitleBar = me.zoomedOutTitleBar;
 	me.addItem(me, me.frame, '0 0 0', '1 1 0', 1);
 
 	if not(me.titleFontSize)

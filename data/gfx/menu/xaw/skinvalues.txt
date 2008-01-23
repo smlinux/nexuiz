@@ -3,7 +3,7 @@ FONTSIZE_NORMAL                 12
 HEIGHT_NORMAL                   1.5
 FONTSIZE_TITLE                  16
 HEIGHT_TITLE                    1.5
-HEIGHT_ZOOMEDTITLE              -1
+HEIGHT_ZOOMEDTITLE              0
 
 // the individual dialog background colors
 COLOR_DIALOG_MAPINFO            '1 1 1'

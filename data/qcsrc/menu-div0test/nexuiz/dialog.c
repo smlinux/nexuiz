@@ -22,6 +22,7 @@ CLASS(NexuizDialog) EXTENDS(Dialog)
 	ATTRIB(NexuizDialog, backgroundImage, string, SKINGFX_DIALOGBORDER)
 	ATTRIB(NexuizDialog, closeButtonImage, string, SKINGFX_CLOSEBUTTON)
 	ATTRIB(NexuizDialog, zoomedOutTitleBarPosition, float, SKINHEIGHT_ZOOMEDTITLE * 0.5 - 0.5)
+	ATTRIB(NexuizDialog, zoomedOutTitleBar, float, SKINHEIGHT_ZOOMEDTITLE != 0)
 ENDCLASS(NexuizDialog)
 #endif
 
