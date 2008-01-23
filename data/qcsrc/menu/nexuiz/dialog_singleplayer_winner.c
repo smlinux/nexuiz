@@ -15,7 +15,7 @@ void fillNexuizWinnerDialog(entity me)
 	entity e;
 
 	me.TR(me);
-		me.TD(me, me.rows - 2, me.columns, e = makeNexuizImage("/gfx/winner", 1.0));
+		me.TD(me, me.rows - 2, me.columns, e = makeNexuizImage("/gfx/winner", -1));
 
 	me.gotoRC(me, me.rows - 1, 0);
 		me.TD(me, 1, me.columns, e = makeNexuizButton("OK", '0 0 0'));
