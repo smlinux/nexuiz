@@ -249,6 +249,11 @@ void db_save(float db, string pFilename)
 	fclose(fh);
 }
 
+float db_create()
+{
+	return buf_create();
+}
+
 float db_load(string pFilename)
 {
 	float db, fh, i, j, n;

@@ -248,10 +248,7 @@ void() FlagTouch =
 		t = time - other.flagcarried.flagpickuptime;
 		s = ftos_decimals(t, 2);
 		s0 = ftos_decimals(flagcaptimerecord, 2);
-		if(sv_cheats)
-			h0 = "some cheater";
-		else
-			h0 = db_get(ServerProgsDB, strcat(GetMapname(), "/captimerecord/netname"));
+		h0 = db_get(ServerProgsDB, strcat(GetMapname(), "/captimerecord/netname"));
 		if(h0 == other.netname)
 			h0 = "his";
 		else
@@ -260,21 +257,15 @@ void() FlagTouch =
 		{
 			bprint(other.netname, "^7 captured the ", other.flagcarried.netname, " in ", s, " seconds\n");
 			flagcaptimerecord = t;
-			if(!sv_cheats)
-			{
-				db_put(ServerProgsDB, strcat(GetMapname(), "/captimerecord/time"), ftos(t));
-				db_put(ServerProgsDB, strcat(GetMapname(), "/captimerecord/netname"), other.netname);
-			}
+			db_put(ServerProgsDB, strcat(GetMapname(), "/captimerecord/time"), ftos(t));
+			db_put(ServerProgsDB, strcat(GetMapname(), "/captimerecord/netname"), other.netname);
 		}
 		else if (t < flagcaptimerecord)
 		{
 			bprint(other.netname, "^7 captured the ", other.flagcarried.netname, " in ", s, ", breaking ", strcat(h0, " previous record of ", s0, " seconds\n"));
 			flagcaptimerecord = t;
-			if(!sv_cheats)
-			{
-				db_put(ServerProgsDB, strcat(GetMapname(), "/captimerecord/time"), ftos(t));
-				db_put(ServerProgsDB, strcat(GetMapname(), "/captimerecord/netname"), other.netname);
-			}
+			db_put(ServerProgsDB, strcat(GetMapname(), "/captimerecord/time"), ftos(t));
+			db_put(ServerProgsDB, strcat(GetMapname(), "/captimerecord/netname"), other.netname);
 		}
 		else
 		{
@@ -632,8 +623,7 @@ void() ctf_init =
 	e = spawn();
 	e.think = ctf_delayedinit;
 	e.nextthink = time + 0.1;
-	if(!sv_cheats)
-		flagcaptimerecord = stof(db_get(ServerProgsDB, strcat(GetMapname(), "/captimerecord/time")));
+	flagcaptimerecord = stof(db_get(ServerProgsDB, strcat(GetMapname(), "/captimerecord/time")));
 };
 
 void(entity flag) ctf_setstatus2 =

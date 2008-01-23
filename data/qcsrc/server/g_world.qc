@@ -100,7 +100,10 @@ void worldspawn (void)
 	MapInfo_LoadMapSettings(mapname);
 #endif
 
-	ServerProgsDB = db_load("server.db");
+	if(sv_cheats)
+		ServerProgsDB = db_create();
+	else
+		ServerProgsDB = db_load("server.db");
 
 	/*
 	TODO sound pack system
@@ -2236,7 +2239,8 @@ void SV_Shutdown()
 		world_initialized = 0;
 		print("Saving persistent data...\n");
 		Ban_SaveBans();
-		db_save(ServerProgsDB, "server.db");
+		if(!sv_cheats)
+			db_save(ServerProgsDB, "server.db");
 		print("done!\n");
 	}
 	else
