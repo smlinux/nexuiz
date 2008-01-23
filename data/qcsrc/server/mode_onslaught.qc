@@ -11,6 +11,7 @@
 
 float ons_sprite_cp_red, ons_sprite_cp_blue, ons_sprite_cp_neut;
 float ons_sprite_cp_atck_red, ons_sprite_cp_atck_blue, ons_sprite_cp_atck_neut;
+float ons_sprite_cp_dfnd_red, ons_sprite_cp_dfnd_blue;
 float ons_sprite_gen_red, ons_sprite_gen_blue, ons_sprite_gen_shielded;
 
 void() onslaught_updatelinks =
@@ -262,6 +263,7 @@ float onslaught_controlpoint_can_be_linked(entity cp, float t)
 }
 
 float onslaught_controlpoint_attackable(entity cp, float t)
+// -2: SAME TEAM, attackable by enemy!
 // -1: SAME TEAM!
 // 0:  off limits
 // 1:  attack it
@@ -279,7 +281,12 @@ float onslaught_controlpoint_attackable(entity cp, float t)
 	{
 		// if there's already an icon built, nothing happens
 		if(cp.team == t)
+		{
+			a = onslaught_controlpoint_can_be_linked(cp, COLOR_TEAM1 + COLOR_TEAM2 - t);
+			if(a) // attackable by enemy?
+				return -2; // EMERGENCY!
 			return -1;
+		}
 		// we know it can be linked, so no need to check
 		// but...
 		a = onslaught_controlpoint_can_be_linked(cp, t);
@@ -449,6 +456,13 @@ float onslaught_controlpoint_waypointsprite_for_player(entity e)
 			else
 				return ons_sprite_cp_atck_neut;
 		}
+		else if(a == -2) // DEFEND THIS ONE NOW
+		{
+			if(self.owner.team == COLOR_TEAM1)
+				return ons_sprite_cp_dfnd_red;
+			else if(self.owner.team == COLOR_TEAM2)
+				return ons_sprite_cp_dfnd_blue;
+		}
 		else if(self.owner.team == e.team || a == -1 || a == 1) // own point, or fire at it
 		{
 			if(self.owner.team == COLOR_TEAM1)
@@ -499,6 +513,12 @@ void() onslaught_generator =
 		precache_model("models/sprites/ons-cp-neut.sp2");
 		setmodel(self, "models/sprites/ons-cp-neut.sp2");
 		ons_sprite_cp_neut = self.modelindex;
+		precache_model("models/sprites/ons-cp-dfnd-blue.sp2");
+		setmodel(self, "models/sprites/ons-cp-dfnd-blue.sp2");
+		ons_sprite_cp_dfnd_blue = self.modelindex;
+		precache_model("models/sprites/ons-cp-dfnd-red.sp2");
+		setmodel(self, "models/sprites/ons-cp-dfnd-red.sp2");
+		ons_sprite_cp_dfnd_red = self.modelindex;
 		precache_model("models/sprites/ons-cp-atck-blue.sp2");
 		setmodel(self, "models/sprites/ons-cp-atck-blue.sp2");
 		ons_sprite_cp_atck_blue = self.modelindex;
