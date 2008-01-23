@@ -8,12 +8,29 @@ CLASS(BorderImage) EXTENDS(Label)
 	ATTRIB(BorderImage, borderVec, vector, '0 0 0')
 	ATTRIB(BorderImage, color, vector, '1 1 1')
 	ATTRIB(BorderImage, closeButton, entity, NULL)
+	ATTRIB(BorderImage, realFontSize_Nexposeed, vector, '0 0 0')
+	ATTRIB(BorderImage, realOrigin_Nexposeed, vector, '0 0 0')
+	ATTRIB(BorderImage, isNexposeeTitleBar, float, 0)
 ENDCLASS(BorderImage)
 #endif
 
 #ifdef IMPLEMENTATION
 void resizeNotifyBorderImage(entity me, vector relOrigin, vector relSize, vector absOrigin, vector absSize)
 {
+	me.isNexposeeTitleBar = 0;
+	if(me.parent.parent.instanceOfNexposee)
+		if(me.parent.instanceOfDialog)
+			if(me == me.parent.frame)
+				me.isNexposeeTitleBar = 1;
+	if(me.isNexposeeTitleBar)
+	{
+		vector scrs;
+		scrs = eX * conwidth + eY * conheight;
+		resizeNotifyLabel(me, relOrigin, relSize, boxToGlobal(me.parent.Nexposee_smallOrigin, '0 0 0', scrs), boxToGlobalSize(me.parent.Nexposee_smallSize, scrs));
+		me.realOrigin_y = -me.realFontSize_y;
+		me.realOrigin_Nexposeed = me.realOrigin;
+		me.realFontSize_Nexposeed = me.realFontSize;
+	}
 	resizeNotifyLabel(me, relOrigin, relSize, absOrigin, absSize);
 	me.borderVec = me.borderHeight / absSize_y * (eY + eX * (absSize_y / absSize_x));
 	me.realOrigin_y = 0.5 * (me.borderVec_y - me.realFontSize_y);
@@ -37,9 +54,31 @@ void configureBorderImageBorderImage(entity me, string theTitle, float sz, vecto
 void drawBorderImage(entity me)
 {
 	//print(vtos(me.borderVec), "\n");
+
 	if(me.src)
 		draw_BorderPicture('0 0 0', me.src, '1 1 0', me.color, 1, me.borderVec);
 	if(me.fontSize > 0)
+	{
+		vector ro, rf;
+		if(me.isNexposeeTitleBar)
+		{
+			// me.parent.Nexposee_animationFactor 0 (small) or 1 (full)
+			// default values are for 1
+			ro = me.realOrigin;
+			rf = me.realFontSize;
+			me.realOrigin = ro * me.parent.Nexposee_animationFactor + me.realOrigin_Nexposeed * (1 - me.parent.Nexposee_animationFactor);
+			me.realFontSize = rf * me.parent.Nexposee_animationFactor + me.realFontSize_Nexposeed * (1 - me.parent.Nexposee_animationFactor);
+		}
+
 		drawLabel(me);
+
+		if(me.isNexposeeTitleBar)
+		{
+			// me.Nexposee_animationState 0 (small) or 1 (full)
+			// default values are for 1
+			me.realOrigin = ro;
+			me.realFontSize = rf;
+		}
+	}
 };
 #endif

@@ -44,6 +44,7 @@ void ExposeeCloseButton_Click(entity button, entity other); // un-exposees the c
 .float Nexposee_mediumAlpha;
 .vector Nexposee_scaleCenter;
 .vector Nexposee_align;
+.float Nexposee_animationFactor;
 
 void closeNexposee(entity me)
 {
@@ -59,6 +60,7 @@ void ExposeeCloseButton_Click(entity button, entity other)
 
 void resizeNotifyNexposee(entity me, vector relOrigin, vector relSize, vector absOrigin, vector absSize)
 {
+	me.calc(me);
 	me.resizeNotifyLie(me, relOrigin, relSize, absOrigin, absSize, Nexposee_initialOrigin, Nexposee_initialSize);
 }
 
@@ -143,7 +145,6 @@ void drawNexposee(entity me)
 	if(me.animationState == -1)
 	{
 		me.animationState = 0;
-		me.calc(me);
 	}
 
 	//print(ftos(me.animationState), "\n");
@@ -185,6 +186,7 @@ void drawNexposee(entity me)
 		{
 			e.Container_origin = e.Nexposee_smallOrigin * (1 - me.animationFactor) + e.Nexposee_initialOrigin * me.animationFactor;
 			e.Container_size = e.Nexposee_smallSize * (1 - me.animationFactor) + e.Nexposee_initialSize * me.animationFactor;
+			e.Nexposee_animationFactor = me.animationFactor;
 			a0 = e.Nexposee_mediumAlpha;
 			if(me.animationState == 3)
 				if(e != me.mouseFocusedChild)
@@ -196,6 +198,7 @@ void drawNexposee(entity me)
 			// minimum theSize counts
 			e.Container_origin = e.Nexposee_smallOrigin;
 			e.Container_size = e.Nexposee_smallSize;
+			e.Nexposee_animationFactor = 0;
 			a = e.Nexposee_smallAlpha * (1 - me.animationFactor);
 		}
 		me.setAlphaOf(me, e, e.Container_alpha * (1 - f) + a * f);
