@@ -11,6 +11,7 @@ CLASS(BorderImage) EXTENDS(Label)
 	ATTRIB(BorderImage, realFontSize_Nexposeed, vector, '0 0 0')
 	ATTRIB(BorderImage, realOrigin_Nexposeed, vector, '0 0 0')
 	ATTRIB(BorderImage, isNexposeeTitleBar, float, 0)
+	ATTRIB(BorderImage, zoomedOutTitleBarPosition, float, -1)
 ENDCLASS(BorderImage)
 #endif
 
@@ -27,7 +28,7 @@ void resizeNotifyBorderImage(entity me, vector relOrigin, vector relSize, vector
 		vector scrs;
 		scrs = eX * conwidth + eY * conheight;
 		resizeNotifyLabel(me, relOrigin, relSize, boxToGlobal(me.parent.Nexposee_smallOrigin, '0 0 0', scrs), boxToGlobalSize(me.parent.Nexposee_smallSize, scrs));
-		me.realOrigin_y = -me.realFontSize_y;
+		me.realOrigin_y = me.realFontSize_y * me.zoomedOutTitleBarPosition;
 		me.realOrigin_Nexposeed = me.realOrigin;
 		me.realFontSize_Nexposeed = me.realFontSize;
 	}

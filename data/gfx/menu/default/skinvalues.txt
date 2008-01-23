@@ -3,6 +3,7 @@ FONTSIZE_NORMAL                 12
 HEIGHT_NORMAL                   1.5
 FONTSIZE_TITLE                  24
 HEIGHT_TITLE                    1.5
+HEIGHT_ZOOMEDTITLE              -1
 
 // the individual dialog background colors
 COLOR_DIALOG_MULTIPLAYER        '0.7 0.7 1'
