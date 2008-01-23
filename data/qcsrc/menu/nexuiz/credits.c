@@ -16,34 +16,6 @@ entity makeNexuizCreditsList();
 #endif
 
 #ifdef IMPLEMENTATION
-float SLIST_FIELD_CNAME;
-float SLIST_FIELD_PING;
-float SLIST_FIELD_GAME;
-float SLIST_FIELD_MOD;
-float SLIST_FIELD_MAP;
-float SLIST_FIELD_NAME;
-float SLIST_FIELD_MAXPLAYERS;
-float SLIST_FIELD_NUMPLAYERS;
-float SLIST_FIELD_NUMHUMANS;
-float SLIST_FIELD_NUMBOTS;
-float SLIST_FIELD_PROTOCOL;
-float SLIST_FIELD_FREESLOTS;
-void CreditsList_UpdateFieldIDs()
-{
-	SLIST_FIELD_CNAME = gethostcacheindexforkey( "cname" );
-	SLIST_FIELD_PING = gethostcacheindexforkey( "ping" );
-	SLIST_FIELD_GAME = gethostcacheindexforkey( "game" );
-	SLIST_FIELD_MOD = gethostcacheindexforkey( "mod" );
-	SLIST_FIELD_MAP = gethostcacheindexforkey( "map" );
-	SLIST_FIELD_NAME = gethostcacheindexforkey( "name" );
-	SLIST_FIELD_MAXPLAYERS = gethostcacheindexforkey( "maxplayers" );
-	SLIST_FIELD_NUMPLAYERS = gethostcacheindexforkey( "numplayers" );
-	SLIST_FIELD_NUMHUMANS = gethostcacheindexforkey( "numhumans" );
-	SLIST_FIELD_NUMBOTS = gethostcacheindexforkey( "numbots" );
-	SLIST_FIELD_PROTOCOL = gethostcacheindexforkey( "protocol" );
-	SLIST_FIELD_FREESLOTS = gethostcacheindexforkey( "freeslots" );
-}
-
 entity makeNexuizCreditsList()
 {
 	entity me;
