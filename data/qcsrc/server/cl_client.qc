@@ -14,10 +14,14 @@ void info_player_deathmatch (void)
 	relocate_spawnpoint();
 }
 
+float some_spawn_has_been_used;
 void() spawnpoint_use =
 {
 	if(teams_matter)
+	{
 		self.team = activator.team;
+		some_spawn_has_been_used = 1;
+	}
 };
 
 float spawn_allbad;
@@ -181,7 +185,12 @@ entity SelectSpawnPoint (float anypoint)
 		if(cvar("spawn_debug"))
 			GotoNextMap();
 		else
-			return world;
+		{
+			if(some_spawn_has_been_used)
+				return world; // team can't spawn any more, because of actions of other team
+			else
+				error("Cannot find a spawn point - please fix the map!");
+		}
 	}
 
 	return spot;
