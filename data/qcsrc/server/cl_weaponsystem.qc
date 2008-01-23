@@ -53,6 +53,7 @@ void(entity ent, vector vecs, float antilag, float recoil, string snd) W_SetupSh
 	if (self.cursor_trace_ent)                 // client was aiming at someone
 	if (self.cursor_trace_ent != self)         // just to make sure
 	if (self.cursor_trace_ent.takedamage)      // and that person is killable
+	if (self.cursor_trace_ent.classname == "player") // and actually a player
 	if (cvar("g_antilag"))
 	{
 		// verify that the shot would miss without antilag
