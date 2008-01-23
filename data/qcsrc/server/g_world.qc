@@ -1533,7 +1533,7 @@ float WinningCondition_RanOutOfSpawns()
 {
 	entity head;
 
-	if(!teams_matter)
+	if(!g_ctf && !g_assault && !g_onslaught)
 		return WINNING_NO;
 
 	team1_score = team2_score = team3_score = team4_score = 0;
