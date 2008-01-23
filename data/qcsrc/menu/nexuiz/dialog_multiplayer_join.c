@@ -51,7 +51,7 @@ void fillNexuizServerListTab(entity me)
 	me.TR(me);
 		me.TD(me, me.rows - 3, me.columns, slist);
 
-	me.gotoXY(me, me.rows - 1, 0);
+	me.gotoRC(me, me.rows - 1, 0);
 		me.TD(me, 1, me.columns, e = makeNexuizButton("Join!", '0 0 0'));
 			e.onClick = ServerList_Connect_Click;
 			e.onClickEntity = slist;

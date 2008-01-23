@@ -63,7 +63,7 @@ void fillNexuizSingleplayerDialog(entity me)
 	me.TR(me);
 		me.TD(me, me.rows - 5, me.columns, me.campaignBox = makeNexuizCampaignList());
 
-	me.gotoXY(me, me.rows - 1, 0);
+	me.gotoRC(me, me.rows - 1, 0);
 		me.TD(me, 1, me.columns, e = makeNexuizButton("Start!", '0 0 0'));
 			e.onClick = CampaignList_LoadMap;
 			e.onClickEntity = me.campaignBox;

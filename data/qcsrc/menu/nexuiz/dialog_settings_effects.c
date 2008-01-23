@@ -119,7 +119,7 @@ void fillNexuizEffectsSettingsTab(entity me)
 	me.TR(me);
 		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "showfps", "Show frames per second"));
 
-	me.gotoXY(me, 2, 3.5); me.setFirstColumn(me, me.currentColumn);
+	me.gotoRC(me, 2, 3.5); me.setFirstColumn(me, me.currentColumn);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Anisotropy:"));
 		me.TD(me, 1, 2, e = makeNexuizTextSlider("gl_texture_anisotropy"));
 			e.addValue(e, "1x", "1");
@@ -181,7 +181,7 @@ void fillNexuizEffectsSettingsTab(entity me)
 		if(cvar("developer"))
 			me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "r_showsurfaces", "Show surfaces"));
 
-	me.gotoXY(me, me.rows - 1, 0);
+	me.gotoRC(me, me.rows - 1, 0);
 		me.TD(me, 1, me.columns, makeNexuizCommandButton("Apply immediately", '0 0 0', "sendcvar cl_nogibs; r_restart", COMMANDBUTTON_APPLY));
 }
 /*

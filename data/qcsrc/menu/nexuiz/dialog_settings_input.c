@@ -26,7 +26,7 @@ void fillNexuizInputSettingsTab(entity me)
 		me.TD(me, 1, 3, e = makeNexuizTextLabel(0, "Key bindings:"));
 	me.TR(me);
 		me.TD(me, me.rows - 2, 3, kb = makeNexuizKeyBinder());
-	me.gotoXY(me, me.rows - 1, 0);
+	me.gotoRC(me, me.rows - 1, 0);
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizButton("Change key...", '0 0 0'));
 			e.onClick = KeyBinder_Bind_Change;
@@ -42,7 +42,7 @@ void fillNexuizInputSettingsTab(entity me)
 			e.onClick = KeyBinder_Bind_Clear;
 			e.onClickEntity = kb;
 
-	me.gotoXY(me, 0, 3.5); me.setFirstColumn(me, me.currentColumn);
+	me.gotoRC(me, 0, 3.5); me.setFirstColumn(me, me.currentColumn);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Sensitivity:"));
 		me.TD(me, 1, 2, e = makeNexuizSlider(1, 32, 0.2, "sensitivity"));
 	me.TR(me);

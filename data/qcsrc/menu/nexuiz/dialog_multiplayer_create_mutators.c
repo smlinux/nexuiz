@@ -67,7 +67,7 @@ void fillNexuizMutatorsDialog(entity me)
 	me.TR(me);
 		me.TD(me, 1, 2, e = makeNexuizCheckBox(0, "g_vampire", "Vampire"));
 
-	me.gotoXY(me, 0, 2); me.setFirstColumn(me, me.currentColumn);
+	me.gotoRC(me, 0, 2); me.setFirstColumn(me, me.currentColumn);
 		me.TD(me, 1, 2, makeNexuizTextLabel(0, "Arena mutators:"));
 	me.TR(me);
 		me.TD(me, 1, 2, e = makeNexuizRadioButton(1, string_null, string_null, "Regular"));
@@ -84,7 +84,7 @@ void fillNexuizMutatorsDialog(entity me)
 	me.TR(me);
 		me.TD(me, 1, 2, e = makeNexuizRadioButton(1, "g_rocketarena", string_null, "Rocket launcher arena"));
 
-	me.gotoXY(me, me.rows - 2, 0);
+	me.gotoRC(me, me.rows - 2, 0);
 		s = makeNexuizSlider(80, 400, 8, "sv_gravity");
 			s.valueDigits = 0;
 			s.valueDisplayMultiplier = 0.125; // show gravity in percent
@@ -92,7 +92,7 @@ void fillNexuizMutatorsDialog(entity me)
 			e.savedValue = 200; // good on silvercity
 		me.TD(me, 1, 3, s);
 
-	me.gotoXY(me, me.rows - 1, 0);
+	me.gotoRC(me, me.rows - 1, 0);
 		me.TD(me, 1, me.columns, e = makeNexuizButton("OK", '0 0 0'));
 			e.onClick = Dialog_Close;
 			e.onClickEntity = me;

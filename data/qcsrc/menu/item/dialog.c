@@ -26,7 +26,7 @@ CLASS(Dialog) EXTENDS(InputContainer)
 	METHOD(Dialog, TDempty, void(entity, float))
 	METHOD(Dialog, setFirstColumn, void(entity, float))
 	METHOD(Dialog, TR, void(entity))
-	METHOD(Dialog, gotoXY, void(entity, float, float))
+	METHOD(Dialog, gotoRC, void(entity, float, float))
 
 	ATTRIB(Dialog, isTabRoot, float, 1)
 	ATTRIB(Dialog, closeButton, entity, NULL)
@@ -88,7 +88,7 @@ void addItemSimpleDialog(entity me, float row, float col, float rowspan, float c
 	me.addItem(me, e, o, s, 1);
 }
 
-void gotoXYDialog(entity me, float row, float col)
+void gotoRCDialog(entity me, float row, float col)
 {
 	me.currentRow = row;
 	me.currentColumn = col;

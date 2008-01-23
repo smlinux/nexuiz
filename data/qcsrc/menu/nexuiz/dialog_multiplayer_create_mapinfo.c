@@ -84,7 +84,7 @@ void fillNexuizMapInfoDialog(entity me)
 	me.TR(me);
 		me.TD(me, me.rows - 2, 3, e = makeNexuizImage(string_null, 4.0/3.0));
 		me.previewImage = e;
-	me.gotoXY(me, 0, 3.5); me.setFirstColumn(me, me.currentColumn);
+	me.gotoRC(me, 0, 3.5); me.setFirstColumn(me, me.currentColumn);
 	w = me.columns - me.currentColumn;
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Title:"));
 		me.TD(me, 1, w-1, e = makeNexuizTextLabel(0, ""));
@@ -132,12 +132,12 @@ void fillNexuizMapInfoDialog(entity me)
 				me.typeOnslaughtLabel = e;
 		}
 
-	me.gotoXY(me, me.rows - 2, 0);
+	me.gotoRC(me, me.rows - 2, 0);
 		me.TD(me, 1, me.columns, e = makeNexuizTextLabel(0.5, ""));
 			e.allowCut = 1;
 			me.descriptionLabel = e;
 
-	me.gotoXY(me, me.rows - 1, 0);
+	me.gotoRC(me, me.rows - 1, 0);
 		me.TD(me, 1, me.columns, e = makeNexuizButton("OK", '0 0 0'));
 			e.onClick = Dialog_Close;
 			e.onClickEntity = me;

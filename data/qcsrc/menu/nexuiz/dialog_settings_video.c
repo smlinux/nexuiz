@@ -65,7 +65,7 @@ void fillNexuizVideoSettingsTab(entity me)
 	me.TR(me);
 		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "showfps", "Show frames per second"));
 
-	me.gotoXY(me, 0, 3.5); me.setFirstColumn(me, me.currentColumn);
+	me.gotoRC(me, 0, 3.5); me.setFirstColumn(me, me.currentColumn);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Brightness:"));
 		me.TD(me, 1, 2, e = makeNexuizSlider(0.0, 0.5, 0.02, "v_brightness"));
 	me.TR(me);
@@ -89,7 +89,7 @@ void fillNexuizVideoSettingsTab(entity me)
 		me.TD(me, 1, 2, e = makeNexuizSlider(1.0, 5.0, 0.1, "r_glsl_contrastboost"));
 			setDependent(e, "r_glsl", 1, 1);
 
-	me.gotoXY(me, me.rows - 1, 0);
+	me.gotoRC(me, me.rows - 1, 0);
 		me.TD(me, 1, me.columns, makeNexuizCommandButton("Apply immediately", '0 0 0', "vid_restart", COMMANDBUTTON_APPLY));
 }
 #endif

@@ -52,7 +52,7 @@ void fillNexuizPlayerSettingsTab(entity me)
 			e.onClick = PlayerModelSelector_Next_Click;
 			e.onClickEntity = pms;
 
-	me.gotoXY(me, 0, 3.5); me.setFirstColumn(me, me.currentColumn);
+	me.gotoRC(me, 0, 3.5); me.setFirstColumn(me, me.currentColumn);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Field of View:"));
 		me.TD(me, 1, 2, e = makeNexuizSlider(60, 130, 1, "fov"));
 	me.TR(me);
@@ -126,7 +126,7 @@ void fillNexuizPlayerSettingsTab(entity me)
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Client UDP port:"));
 		me.TD(me, 1, 0.5, e = makeNexuizInputBox(0, "cl_port"));
 
-	me.gotoXY(me, me.rows - 1, 0);
+	me.gotoRC(me, me.rows - 1, 0);
 		me.TD(me, 1, me.columns, makeNexuizCommandButton("Apply immediately", '0 0 0', "color -1 -1;name $_cl_name;sendcvar cl_zoomfactor;sendcvar cl_zoomspeed;sendcvar cl_autoswitch;rate $_cl_rate", COMMANDBUTTON_APPLY));
 }
 #endif

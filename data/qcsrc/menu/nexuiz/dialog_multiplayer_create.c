@@ -67,7 +67,7 @@ void fillNexuizServerCreateTab(entity me)
 	me.TR(me);
 		me.TD(me, me.rows - 7, 3, e = makeNexuizMapList());
 		me.mapListBox = e;
-	me.gotoXY(me, me.rows - 3, 0);
+	me.gotoRC(me, me.rows - 3, 0);
 		me.TDempty(me, 0.5);
 		me.TD(me, 1, 1, e = makeNexuizButton("All", '0 0 0'));
 			e.onClick = MapList_All;
@@ -77,7 +77,7 @@ void fillNexuizServerCreateTab(entity me)
 			e.onClickEntity = me.mapListBox;
 		me.TDempty(me, 0.5);
 
-	me.gotoXY(me, 3, 3.5); me.setFirstColumn(me, me.currentColumn);
+	me.gotoRC(me, 3, 3.5); me.setFirstColumn(me, me.currentColumn);
 		me.TD(me, 1, 3, e = makeNexuizTextLabel(0, "Settings:"));
 	me.TR(me);
 		me.sliderTimelimit = makeNexuizSlider(1.0, 60.0, 0.5, "timelimit_override");
@@ -155,7 +155,7 @@ void fillNexuizServerCreateTab(entity me)
 			e0.textEntity = main.mutatorsDialog;
 			e0.allowCut = 1;
 
-	me.gotoXY(me, me.rows - 1, 0);
+	me.gotoRC(me, me.rows - 1, 0);
 		me.TD(me, 1, me.columns, e = makeNexuizButton("Start!", '0 0 0'));
 			e.onClick = MapList_LoadMap;
 			e.onClickEntity = me.mapListBox;
