@@ -1364,6 +1364,9 @@ void PlayerPreThink (void)
 		self.max_armorvalue = 0;
 	}
 
+	if(frametime)
+		antilag_record(self);
+
 	if(self.classname == "player") {
 //		if(self.netname == "Wazat")
 //			bprint(self.classname, "\n");
@@ -1665,7 +1668,4 @@ void PlayerPostThink (void)
 	}
 
 	Arena_Warmup();
-
-	if(frametime)
-		antilag_record(self);
 }
