@@ -1,7 +1,7 @@
 #ifdef INTERFACE
 CLASS(NexuizVideoSettingsTab) EXTENDS(NexuizTab)
 	METHOD(NexuizVideoSettingsTab, fill, void(entity))
-	ATTRIB(NexuizVideoSettingsTab, title, string, "Settings")
+	ATTRIB(NexuizVideoSettingsTab, title, string, "Video")
 	ATTRIB(NexuizVideoSettingsTab, intendedWidth, float, 0.9)
 	ATTRIB(NexuizVideoSettingsTab, rows, float, 15)
 	ATTRIB(NexuizVideoSettingsTab, columns, float, 6.5)

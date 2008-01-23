@@ -1,7 +1,7 @@
 #ifdef INTERFACE
 CLASS(NexuizPlayerSettingsTab) EXTENDS(NexuizTab)
 	METHOD(NexuizPlayerSettingsTab, fill, void(entity))
-	ATTRIB(NexuizPlayerSettingsTab, title, string, "Player setup")
+	ATTRIB(NexuizPlayerSettingsTab, title, string, "Player Setup")
 	ATTRIB(NexuizPlayerSettingsTab, intendedWidth, float, 0.9)
 	ATTRIB(NexuizPlayerSettingsTab, rows, float, 22)
 	ATTRIB(NexuizPlayerSettingsTab, columns, float, 6.5)

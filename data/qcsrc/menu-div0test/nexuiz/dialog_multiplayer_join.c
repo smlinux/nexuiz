@@ -1,7 +1,7 @@
 #ifdef INTERFACE
 CLASS(NexuizServerListTab) EXTENDS(NexuizTab)
 	METHOD(NexuizServerListTab, fill, void(entity))
-	ATTRIB(NexuizServerListTab, title, string, "Settings")
+	ATTRIB(NexuizServerListTab, title, string, "Join")
 	ATTRIB(NexuizServerListTab, intendedWidth, float, 0.9)
 	ATTRIB(NexuizServerListTab, rows, float, 22)
 	ATTRIB(NexuizServerListTab, columns, float, 6.5)

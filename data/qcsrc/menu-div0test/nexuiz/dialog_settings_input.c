@@ -1,7 +1,7 @@
 #ifdef INTERFACE
 CLASS(NexuizInputSettingsTab) EXTENDS(NexuizTab)
 	METHOD(NexuizInputSettingsTab, fill, void(entity))
-	ATTRIB(NexuizInputSettingsTab, title, string, "Settings")
+	ATTRIB(NexuizInputSettingsTab, title, string, "Input")
 	ATTRIB(NexuizInputSettingsTab, intendedWidth, float, 0.9)
 	ATTRIB(NexuizInputSettingsTab, rows, float, 15)
 	ATTRIB(NexuizInputSettingsTab, columns, float, 6.5)
