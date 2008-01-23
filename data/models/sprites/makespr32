@@ -120,7 +120,8 @@ sub spriteframe($$$$$)
 	checkmagick $magick->Read($imagefile);
 	my ($width, $height) = $magick->Get('columns', 'rows');
 	my $data = $magick->ImageToBlob(depth => 8, magick => 'RGBA');
-	die "Size mismatch"
+	@$magick = ();
+	die "Size mismatch for $imagefile: @{[length $data]} is not @{[4 * $width * $height]}"
 		if length $data != 4 * $width * $height;
 	my $g = ($spritestruct->{groups}->[-1]);
 	push @{$g->{frames}}, my $s = {};

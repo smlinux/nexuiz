@@ -1,11 +1,14 @@
+#!/bin/bash
+
 width=256
 height=64
 
 sprwidth=256
 sprheight=64
 
-sprite()
+pngsprite()
 {
+	local name text color bgcolor
 	name=$1
 	color=$2
 	bgcolor=$3
@@ -108,31 +111,53 @@ EOF
 	inkscape -z -w $sprwidth -h $sprheight \
 		-a "$((-$enlargex * $svgwidth / $width / 2)):0:$(($svgwidth + $enlargex * $svgwidth / $width / 2)):$(($svgheight + $enlargey * $svgheight / $height))" \
 		-e "$name.png" "$name.svg"
-	./makespr32 -o "$name.sp2" -proj 5 "$name.png" $(($sprwidth / 2)) $(($sprheight - 1)) 0
 }
 
-sprite bluebase           0000ff 000000 "BLUE BASE"
-sprite danger             ff0000 ffff00 "DANGER"
-sprite flagcarrier        ffff00 000000 "FLAG CARRIER"
-sprite helpme             ffff00 ff0000 "HELP ME"
-sprite here               00ff00 000000 "HERE"
-sprite key-dropped        00ffff 000000 "DROPPED KEY"
-sprite keycarrier-blue    0000ff 000000 "KEY CARRIER"
-sprite keycarrier-finish  00ffff 000000 "RUN HERE"
-sprite keycarrier-friend  00ff00 000000 "KEY CARRIER"
-sprite keycarrier-pink    ff00ff 000000 "KEY CARRIER"
-sprite keycarrier-red     ff0000 000000 "KEY CARRIER"
-sprite keycarrier-yellow  ffff00 000000 "KEY CARRIER"
-sprite redbase            ff0000 000000 "RED BASE"
-sprite waypoint           008080 000000 "WAYPOINT"
-sprite ons-gen-red        ff0000 000000 "GENERATOR"
-sprite ons-gen-blue       0000ff 000000 "GENERATOR"
-sprite ons-gen-shielded   808080 000000 "GENERATOR"
-sprite ons-cp-neut        ffff00 000000 "CONTROL POINT"
-sprite ons-cp-red         ff0000 000000 "CONTROL POINT"
-sprite ons-cp-blue        0000ff 000000 "CONTROL POINT"
-sprite ons-cp-atck-neut   000000 ffff00 "CONTROL POINT"
-sprite ons-cp-atck-red    ff0000 ffff00 "CONTROL POINT"
-sprite ons-cp-atck-blue   0000ff ffff00 "CONTROL POINT"
-sprite ons-cp-dfnd-red    ff0000 00ffff "CONTROL POINT"
-sprite ons-cp-dfnd-blue   0000ff 00ffff "CONTROL POINT"
+sprite()
+{
+	local name text color bgcolor interval frame args
+	name=$1
+	text=$2
+	shift
+	shift
+	args=
+	frame=0
+	while [ $# -gt 0 ]; do
+		color=$1
+		bgcolor=$2
+		interval=$3
+		shift
+		shift
+		shift
+		pngsprite "${name}_frame$frame" "$color" "$bgcolor" "$text"
+		args="$args -sprite ${name}_frame$frame.png $(($sprwidth / 2)) $(($sprheight - 1)) $interval"
+		frame=$(($frame + 1))
+	done
+	./makespr32 -o "$name.sp2" -proj 5 -group $args
+}
+
+sprite bluebase           "BLUE BASE"     0000ff 000000 0.0
+sprite danger             "DANGER"        ff0000 ffff00 0.0
+sprite flagcarrier        "FLAG CARRIER"  ffff00 000000 0.0
+sprite helpme             "HELP ME"       ffff00 ff0000 0.0
+sprite here               "HERE"          00ff00 000000 0.0
+sprite key-dropped        "DROPPED KEY"   00ffff 000000 0.0
+sprite keycarrier-blue    "KEY CARRIER"   0000ff 000000 0.0
+sprite keycarrier-finish  "RUN HERE"      00ffff 000000 0.0
+sprite keycarrier-friend  "KEY CARRIER"   00ff00 000000 0.0
+sprite keycarrier-pink    "KEY CARRIER"   ff00ff 000000 0.0
+sprite keycarrier-red     "KEY CARRIER"   ff0000 000000 0.0
+sprite keycarrier-yellow  "KEY CARRIER"   ffff00 000000 0.0
+sprite redbase            "RED BASE"      ff0000 000000 0.0
+sprite waypoint           "WAYPOINT"      008080 000000 0.0
+sprite ons-gen-red        "GENERATOR"     ff0000 000000 0.0
+sprite ons-gen-blue       "GENERATOR"     0000ff 000000 0.0
+sprite ons-gen-shielded   "GENERATOR"     808080 000000 0.0
+sprite ons-cp-neut        "CONTROL POINT" ffff00 000000 0.0
+sprite ons-cp-red         "CONTROL POINT" ff0000 000000 0.0
+sprite ons-cp-blue        "CONTROL POINT" 0000ff 000000 0.0
+sprite ons-cp-atck-neut   "CONTROL POINT" ffff00 000000 0.5 000000 ffff00 0.5
+sprite ons-cp-atck-red    "CONTROL POINT" ff0000 000000 0.5 ff0000 ffff00 0.5
+sprite ons-cp-atck-blue   "CONTROL POINT" 0000ff 000000 0.5 0000ff ffff00 0.5
+sprite ons-cp-dfnd-red    "CONTROL POINT" ff0000 000000 0.5 ff0000 ffffff 0.5
+sprite ons-cp-dfnd-blue   "CONTROL POINT" 0000ff 000000 0.5 0000ff ffffff 0.5
