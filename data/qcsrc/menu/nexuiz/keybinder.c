@@ -209,6 +209,7 @@ void clickListBoxItemNexuizKeyBinder(entity me, float i, vector where)
 void setSelectedNexuizKeyBinder(entity me, float i)
 {
 	// handling of "unselectable" items
+	i = floor(0.5 + bound(0, i, me.nItems - 1));
 	if(me.pressed == 0 || me.pressed == 1) // keyboard or scrolling - skip unselectable items
 	{
 		if(i > me.previouslySelected)

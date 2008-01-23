@@ -74,9 +74,15 @@ float keyDownListBox(entity me, float key, float ascii, float shift)
 	else if(key == K_DOWNARROW)
 		me.setSelected(me, me.selectedItem + 1);
 	else if(key == K_HOME)
+	{
+		me.scrollPos = 0;
 		me.setSelected(me, 0);
+	}
 	else if(key == K_END)
+	{
+		me.scrollPos = max(0, me.nItems * me.itemHeight - 1);
 		me.setSelected(me, me.nItems - 1);
+	}
 	else
 		return 0;
 	return 1;
