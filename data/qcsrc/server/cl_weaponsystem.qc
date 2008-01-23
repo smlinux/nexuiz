@@ -25,15 +25,19 @@ vector w_shotdir;
 void(entity ent, vector vecs, float antilag, float recoil, string snd) W_SetupShot =
 {
 	local vector trueaimpoint;
-	traceline_hitcorpse(self, self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * MAX_SHOT_DISTANCE, MOVE_NOMONSTERS, self);
+	traceline(self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * MAX_SHOT_DISTANCE, MOVE_NOMONSTERS, self);
 	trueaimpoint = trace_endpos;
 
 	if (cvar("g_shootfromeye"))
-		w_shotorg = ent.origin + ent.view_ofs + v_forward * vecs_x;
+		w_shotorg = ent.origin + ent.view_ofs;
 	else if (cvar("g_shootfromcenter"))
-		w_shotorg = ent.origin + ent.view_ofs + v_forward * vecs_x + '0 0 1' * vecs_z;
+		w_shotorg = ent.origin + ent.view_ofs + '0 0 1' * vecs_z;
 	else
-		w_shotorg = ent.origin + ent.view_ofs + v_forward * vecs_x + v_right * vecs_y + v_up * vecs_z;
+		w_shotorg = ent.origin + ent.view_ofs + v_right * vecs_y + v_up * vecs_z;
+	// now move the shotorg forward as much as requested if possible
+	traceline(w_shotorg, w_shotorg + v_forward * vecs_x, MOVE_NOMONSTERS, self);
+	w_shotorg = trace_endpos;
+	// calculate the shotdir from the chosen shotorg
 	w_shotdir = normalize(trueaimpoint - w_shotorg);
 
 	// explanation of g_antilag:
