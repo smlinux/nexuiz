@@ -1,7 +1,7 @@
 // font sizes (used for everything)
 FONTSIZE_NORMAL                 12
 HEIGHT_NORMAL                   1.5
-FONTSIZE_TITLE                  24
+FONTSIZE_TITLE                  16
 HEIGHT_TITLE                    1.5
 HEIGHT_ZOOMEDTITLE              -1
 
