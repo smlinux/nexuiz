@@ -160,6 +160,7 @@ float preMenuInit()
 	string s;
 	float i, w, sz;
 
+	MapInfo_Cache_Create();
 	MapInfo_Enumerate();
 	if(!MapInfo_FilterGametype(MAPINFO_TYPE_ALL, 0, 1))
 	{

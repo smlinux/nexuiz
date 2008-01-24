@@ -84,6 +84,84 @@ string cdr(string s)
 	return substring(s, o + 1, strlen(s) - (o + 1));
 }
 
+float _MapInfo_Cache_Active;
+float _MapInfo_Cache_DB_NameToIndex;
+float _MapInfo_Cache_Buf_IndexToMapData;
+
+void MapInfo_Cache_Destroy()
+{
+	if(!_MapInfo_Cache_Active)
+		return;
+
+	db_close(_MapInfo_Cache_DB_NameToIndex);
+	buf_del(_MapInfo_Cache_Buf_IndexToMapData);
+	_MapInfo_Cache_Active = 0;
+}
+
+void MapInfo_Cache_Create()
+{
+	MapInfo_Cache_Destroy();
+	_MapInfo_Cache_DB_NameToIndex = db_create();
+	_MapInfo_Cache_Buf_IndexToMapData = buf_create();
+	_MapInfo_Cache_Active = 1;
+}
+
+void MapInfo_Cache_Invalidate()
+{
+	if(!_MapInfo_Cache_Active)
+		return;
+
+	MapInfo_Cache_Create();
+}
+
+void MapInfo_Cache_Store()
+{
+	float i;
+	string s;
+	if(!_MapInfo_Cache_Active)
+		return;
+
+	s = db_get(_MapInfo_Cache_DB_NameToIndex, MapInfo_Map_bspname);
+	if(!s) // empty string is NOT valid here!
+		i = buf_getsize(_MapInfo_Cache_Buf_IndexToMapData);
+	else
+		i = stof(s);
+
+	// now store all the stuff
+	bufstr_set(_MapInfo_Cache_Buf_IndexToMapData, i++, MapInfo_Map_bspname);
+	bufstr_set(_MapInfo_Cache_Buf_IndexToMapData, i++, MapInfo_Map_title);
+	bufstr_set(_MapInfo_Cache_Buf_IndexToMapData, i++, MapInfo_Map_description);
+	bufstr_set(_MapInfo_Cache_Buf_IndexToMapData, i++, MapInfo_Map_author);
+	bufstr_set(_MapInfo_Cache_Buf_IndexToMapData, i++, ftos(MapInfo_Map_supportedGametypes));
+	bufstr_set(_MapInfo_Cache_Buf_IndexToMapData, i++, ftos(MapInfo_Map_supportedFeatures));
+	bufstr_set(_MapInfo_Cache_Buf_IndexToMapData, i++, ftos(MapInfo_Map_diameter));
+	bufstr_set(_MapInfo_Cache_Buf_IndexToMapData, i++, ftos(MapInfo_Map_spawnpoints));
+}
+
+float MapInfo_Cache_Retrieve(string map)
+{
+	float i;
+	string s;
+	if(!_MapInfo_Cache_Active)
+		return 0;
+
+	s = db_get(_MapInfo_Cache_DB_NameToIndex, map);
+	if(!s)
+		return 0;
+	i = stof(s);
+
+	// now retrieve all the stuff
+	MapInfo_Map_bspname = bufstr_get(_MapInfo_Cache_Buf_IndexToMapData, i++);
+	MapInfo_Map_title = bufstr_get(_MapInfo_Cache_Buf_IndexToMapData, i++);
+	MapInfo_Map_description = bufstr_get(_MapInfo_Cache_Buf_IndexToMapData, i++);
+	MapInfo_Map_author = bufstr_get(_MapInfo_Cache_Buf_IndexToMapData, i++);
+	MapInfo_Map_supportedGametypes = stof(bufstr_get(_MapInfo_Cache_Buf_IndexToMapData, i++));
+	MapInfo_Map_supportedFeatures = stof(bufstr_get(_MapInfo_Cache_Buf_IndexToMapData, i++));
+	MapInfo_Map_diameter = stof(bufstr_get(_MapInfo_Cache_Buf_IndexToMapData, i++));
+	MapInfo_Map_spawnpoints = stof(bufstr_get(_MapInfo_Cache_Buf_IndexToMapData, i++));
+	return 1;
+}
+
 // GLOB HANDLING (for all BSP files)
 float _MapInfo_globopen;
 float _MapInfo_globcount; 
@@ -99,6 +177,7 @@ void MapInfo_Enumerate()
 {
 	if(_MapInfo_globopen)
 		search_end(_MapInfo_globhandle);
+	MapInfo_Cache_Invalidate();
 	_MapInfo_globhandle = search_begin("maps/*.bsp", TRUE, TRUE);
 	_MapInfo_globcount = search_getsize(_MapInfo_globhandle);
 	_MapInfo_globopen = 1;
@@ -379,6 +458,10 @@ float MapInfo_Get_ByName(string pFilename, float pAllowGenerate, float pGametype
 	float fh, fh2;
 	float r, f;
 
+	if(pGametypeToSet == 0)
+		if(MapInfo_Cache_Retrieve(pFilename))
+			return 1;
+
 	r = 1;
 
 	MapInfo_Map_bspname = pFilename;
@@ -498,6 +581,7 @@ float MapInfo_Get_ByName(string pFilename, float pAllowGenerate, float pGametype
 	if(pGametypeToSet)
 		if(!(MapInfo_Map_supportedGametypes & pGametypeToSet))
 			error("Can't select the requested game type. Bailing out.");
+	MapInfo_Cache_Store();
 	if(MapInfo_Map_supportedGametypes != 0)
 		return r;
 	dprint("Map ", pFilename, " supports no game types, ignored\n");
