@@ -123,7 +123,10 @@ void MapInfo_Cache_Store()
 
 	s = db_get(_MapInfo_Cache_DB_NameToIndex, MapInfo_Map_bspname);
 	if(!s) // empty string is NOT valid here!
+	{
 		i = buf_getsize(_MapInfo_Cache_Buf_IndexToMapData);
+		db_put(_MapInfo_Cache_DB_NameToIndex, MapInfo_Map_bspname, ftos(i));
+	}
 	else
 		i = stof(s);
 
@@ -259,12 +262,8 @@ string unquote(string s)
 
 float MapInfo_Get_ByID(float i)
 {
-	// TODO check cache
 	if(MapInfo_Get_ByName(MapInfo_BSPName_ByID(i), 0, 0))
-	{
-		// TODO save in cache
 		return 1;
-	}
 	return 0;
 }
 
