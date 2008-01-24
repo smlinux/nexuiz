@@ -14,7 +14,6 @@ void info_player_deathmatch (void)
 	relocate_spawnpoint();
 }
 
-float some_spawn_has_been_used;
 void() spawnpoint_use =
 {
 	if(teams_matter)
@@ -81,9 +80,7 @@ entity Spawn_FilterOutBadSpots(entity firstspot, entity playerlist, float mindis
 		}
 		spot = nextspot;
 	}
-	// if we couldn't find ANY good points, return the original list
-	if (!newfirstspot)
-		newfirstspot = firstspot;
+	// if we couldn't find ANY good points, return world
 	return newfirstspot;
 }
 
@@ -156,7 +153,7 @@ entity SelectSpawnPoint (float anypoint)
 
 	teamcheck = 0;
 
-	if(!anypoint && (g_ctf || g_assault || g_onslaught))
+	if(!anypoint && have_team_spawns)
 		teamcheck = self.team;
 
 	// get the list of players

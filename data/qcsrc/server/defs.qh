@@ -387,3 +387,6 @@ float q3acompat_machineshotgunswap;
 float ServerProgsDB;
 
 .float team_saved;
+
+float some_spawn_has_been_used;
+float have_team_spawns;

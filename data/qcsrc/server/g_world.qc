@@ -1536,7 +1536,7 @@ float WinningCondition_RanOutOfSpawns()
 {
 	entity head;
 
-	if(!g_ctf && !g_assault && !g_onslaught)
+	if(!have_team_spawns)
 		return WINNING_NO;
 
 	team1_score = team2_score = team3_score = team4_score = 0;
@@ -1581,17 +1581,17 @@ float WinningCondition_RanOutOfSpawns()
 		if(team2_score)
 		{
 			AddWinners(team, COLOR_TEAM2);
-			ClearFragsForEveryoneBut(team, COLOR_TEAM1);
+			ClearFragsForEveryoneBut(team, COLOR_TEAM2);
 		}
 		if(team3_score)
 		{
 			AddWinners(team, COLOR_TEAM3);
-			ClearFragsForEveryoneBut(team, COLOR_TEAM1);
+			ClearFragsForEveryoneBut(team, COLOR_TEAM3);
 		}
 		if(team4_score)
 		{
 			AddWinners(team, COLOR_TEAM4);
-			ClearFragsForEveryoneBut(team, COLOR_TEAM1);
+			ClearFragsForEveryoneBut(team, COLOR_TEAM4);
 		}
 		return WINNING_YES;
 	}

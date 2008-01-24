@@ -189,6 +189,10 @@ void relocate_spawnpoint()
 
 	self.use = spawnpoint_use;
 	self.team_saved = self.team;
+
+	if(g_ctf || g_assault || g_onslaught)
+	if(self.team)
+		have_team_spawns = 1;
 }
 
 #define strstr strstrofs
