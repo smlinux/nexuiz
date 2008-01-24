@@ -8591,94 +8591,89 @@ evil3_floors/cemdrk
 }
 // entity 81
 {
-"classname" "weapon_hagar"
-"origin" "1024 -64 32"
-}
-// entity 82
-{
 "classname" "item_health25"
 "origin" "288 1056 -96"
 "angle" "315"
 }
-// entity 83
+// entity 82
 {
 "classname" "item_health25"
 "angle" "225"
 "origin" "1056 1056 -96"
 }
-// entity 84
+// entity 83
 {
 "classname" "item_health1"
 "origin" "384 48 -224"
 }
-// entity 85
+// entity 84
 {
 "classname" "item_armor1"
 "origin" "320 48 -224"
 }
-// entity 86
+// entity 85
 {
 "classname" "item_health1"
 "origin" "256 48 -256"
 }
-// entity 87
+// entity 86
 {
 "classname" "item_armor1"
 "origin" "192 48 -288"
 }
-// entity 88
+// entity 87
 {
 "classname" "item_health1"
 "origin" "128 48 -320"
 }
-// entity 89
+// entity 88
 {
 "classname" "item_armor1"
 "origin" "64 48 -352"
 }
-// entity 90
+// entity 89
 {
 "classname" "item_health25"
 "origin" "96 1072 160"
 "angle" "270"
 }
-// entity 91
+// entity 90
 {
 "classname" "item_health25"
 "angle" "270"
 "origin" "-16 1072 160"
 }
-// entity 92
+// entity 91
 {
 "classname" "item_armor1"
 "origin" "1024 -64 -240"
 }
-// entity 93
+// entity 92
 {
 "classname" "item_armor1"
 "origin" "1024 -128 -240"
 }
-// entity 94
+// entity 93
 {
 "classname" "item_armor1"
 "origin" "1024 -192 -240"
 }
-// entity 95
+// entity 94
 {
 "classname" "item_armor1"
 "origin" "1024 -256 -240"
 }
-// entity 96
+// entity 95
 {
 "classname" "item_armor1"
 "origin" "1024 -320 -240"
 }
-// entity 97
+// entity 96
 {
 "classname" "weapon_hagar"
 "origin" "-320 512 -352"
 }
-// entity 98
+// entity 97
 {
 "classname" "func_group"
 "type" "patchCapped"
@@ -8696,7 +8691,7 @@ evil3_support/mtlsupport_pipes
 }
 }
 }
-// entity 99
+// entity 98
 {
 "classname" "func_group"
 "type" "patchCapped"
@@ -8714,7 +8709,7 @@ evil3_support/mtlsupport_pipes
 }
 }
 }
-// entity 100
+// entity 99
 {
 "classname" "func_group"
 "type" "patchCapped"
@@ -8732,46 +8727,46 @@ evil3_support/mtlsupport_pipes
 }
 }
 }
-// entity 101
+// entity 100
 {
 "classname" "item_rockets"
 "origin" "-296 288 24"
 "angle" "360"
 }
-// entity 102
+// entity 101
 {
 "classname" "item_shells"
 "origin" "-88 288 24"
 "angle" "180"
 }
-// entity 103
+// entity 102
 {
 "classname" "item_bullets"
 "origin" "256 416 -240"
 }
-// entity 104
+// entity 103
 {
 "classname" "item_cells"
 "origin" "-408 -152 -368"
 }
-// entity 105
+// entity 104
 {
 "classname" "item_cells"
 "origin" "-232 -152 -368"
 }
-// entity 106
+// entity 105
 {
 "classname" "item_rockets"
 "origin" "320 1384 -368"
 "angle" "270"
 }
-// entity 107
+// entity 106
 {
 "classname" "info_player_deathmatch"
 "origin" "1328 -64 32"
 "angle" "180"
 }
-// entity 108
+// entity 107
 {
 "classname" "func_group"
 "type" "patchCapped"
@@ -8789,7 +8784,7 @@ evil3_support/mtlsupport_pipes
 }
 }
 }
-// entity 109
+// entity 108
 {
 "classname" "func_group"
 "type" "patchCapped"
@@ -8820,7 +8815,7 @@ evil3_support/mtlsupport_pipes
 }
 }
 }
-// entity 110
+// entity 109
 {
 "classname" "func_group"
 "type" "patchCapped"
@@ -8851,109 +8846,109 @@ evil3_support/mtlsupport_pipes
 }
 }
 }
-// entity 111
+// entity 110
 {
 "classname" "info_player_deathmatch"
 "angle" "90"
 "origin" "1024 -496 -224"
 }
-// entity 112
+// entity 111
 {
 "classname" "info_player_deathmatch"
 "origin" "816 800 -288"
 "angle" "270"
 }
-// entity 113
+// entity 112
 {
 "classname" "info_player_deathmatch"
 "angle" "270"
 "origin" "512 800 -288"
 }
-// entity 114
+// entity 113
 {
 "classname" "info_player_deathmatch"
 "angle" "360"
 "origin" "-384 1280 -352"
 }
-// entity 115
+// entity 114
 {
 "classname" "info_player_deathmatch"
 "origin" "-320 -160 -352"
 "angle" "90"
 }
-// entity 116
+// entity 115
 {
 "classname" "info_player_deathmatch"
 "origin" "-192 -128 32"
 "angle" "90"
 }
-// entity 117
+// entity 116
 {
 "classname" "info_player_deathmatch"
 "origin" "32 1088 160"
 "angle" "270"
 }
-// entity 118
+// entity 117
 {
 "classname" "info_player_deathmatch"
 "origin" "704 128 -208"
 "angle" "180"
 }
-// entity 119
+// entity 118
 {
 "classname" "item_health1"
 "origin" "-192 384 32"
 }
-// entity 120
+// entity 119
 {
 "classname" "item_health1"
 "origin" "-192 320 32"
 }
-// entity 121
+// entity 120
 {
 "classname" "item_health1"
 "origin" "-192 256 32"
 }
-// entity 122
+// entity 121
 {
 "classname" "item_health1"
 "origin" "-192 192 32"
 }
-// entity 123
+// entity 122
 {
 "classname" "item_shells"
 "origin" "320 1184 -368"
 "angle" "90"
 }
-// entity 124
+// entity 123
 {
 "classname" "light"
 "origin" "656 720 -168"
 "light" "140"
 "_color" "0.687 0.799 0.765"
 }
-// entity 125
+// entity 124
 {
 "classname" "light"
 "origin" "1024 64 -152"
 "light" "100"
 "_color" "0.687 0.799 0.765"
 }
-// entity 126
+// entity 125
 {
 "classname" "light"
 "_color" "0.687 0.799 0.765"
 "light" "80"
 "origin" "1024 -192 -152"
 }
-// entity 127
+// entity 126
 {
 "classname" "light"
 "_color" "0.687 0.799 0.765"
 "light" "130"
 "origin" "224 288 168"
 }
-// entity 128
+// entity 127
 {
 "classname" "dom_controlpoint"
 "origin" "112 848 184"
@@ -8961,52 +8956,52 @@ evil3_support/mtlsupport_pipes
 "frags" "2"
 "wait" "5"
 }
-// entity 129
+// entity 128
 {
 "classname" "runematch_spawn_point"
 "origin" "672 672 -296"
 }
-// entity 130
+// entity 129
 {
 "classname" "runematch_spawn_point"
 "origin" "672 960 -88"
 }
-// entity 131
+// entity 130
 {
 "classname" "runematch_spawn_point"
 "origin" "1024 416 -88"
 }
-// entity 132
+// entity 131
 {
 "classname" "runematch_spawn_point"
 "origin" "784 -64 56"
 }
-// entity 133
+// entity 132
 {
 "classname" "runematch_spawn_point"
 "origin" "624 -448 -200"
 }
-// entity 134
+// entity 133
 {
 "classname" "runematch_spawn_point"
 "origin" "304 256 56"
 }
-// entity 135
+// entity 134
 {
 "classname" "runematch_spawn_point"
 "origin" "128 832 168"
 }
-// entity 136
+// entity 135
 {
 "classname" "runematch_spawn_point"
 "origin" "320 1280 -344"
 }
-// entity 137
+// entity 136
 {
 "classname" "runematch_spawn_point"
 "origin" "-320 64 -344"
 }
-// entity 138
+// entity 137
 {
 "classname" "dom_controlpoint"
 "wait" "5"
@@ -9014,7 +9009,7 @@ evil3_support/mtlsupport_pipes
 "message" "^3 has captured the Tunnel"
 "origin" "320 1280 -328"
 }
-// entity 139
+// entity 138
 {
 "classname" "dom_controlpoint"
 "wait" "5"
@@ -9022,7 +9017,7 @@ evil3_support/mtlsupport_pipes
 "message" "^3 has captured the Tunnel"
 "origin" "840 -448 -208"
 }
-// entity 140
+// entity 139
 {
 "classname" "func_group"
 "type" "patchCapped"
@@ -9040,7 +9035,7 @@ evil3_support/mtlsupport_pipes
 }
 }
 }
-// entity 141
+// entity 140
 {
 "classname" "func_group"
 "type" "patchCapped"
@@ -9058,7 +9053,7 @@ evil3_support/mtlsupport_pipes
 }
 }
 }
-// entity 142
+// entity 141
 {
 "classname" "func_group"
 "type" "patchCapped"
@@ -9078,103 +9073,103 @@ evil3_support/mtlsupport_pipes
 }
 }
 }
-// entity 143
+// entity 142
 {
 "classname" "light"
 "_color" "0.687 0.799 0.765"
 "light" "100"
 "origin" "1024 188 -40"
 }
-// entity 144
+// entity 143
 {
 "classname" "light"
 "origin" "30 -70 168"
 "light" "130"
 "_color" "0.687 0.799 0.765"
 }
-// entity 145
+// entity 144
 {
 "classname" "light"
 "_color" "0.687 0.799 0.765"
 "light" "130"
 "origin" "-136 -8 168"
 }
-// entity 146
+// entity 145
 {
 "classname" "light"
 "origin" "48 64 -56"
 "light" "75"
 "_color" "0.687 0.799 0.765"
 }
-// entity 147
+// entity 146
 {
 "classname" "light"
 "_color" "0.9 1 1"
 "light" "100"
 "origin" "496 1272 -304"
 }
-// entity 148
+// entity 147
 {
 "classname" "light"
 "_color" "0.9 1 1"
 "light" "110"
 "origin" "136 1280 -288"
 }
-// entity 149
+// entity 148
 {
 "classname" "light"
 "_color" "0.9 1 1"
 "light" "60"
 "origin" "64 1088 -288"
 }
-// entity 150
+// entity 149
 {
 "classname" "light"
 "origin" "-152 832 -288"
 "light" "60"
 "_color" "0.9 1 1"
 }
-// entity 151
+// entity 150
 {
 "classname" "light"
 "origin" "-328 736 -288"
 "light" "110"
 "_color" "0.9 1 1"
 }
-// entity 152
+// entity 151
 {
 "classname" "light"
 "_color" "0.9 1 1"
 "light" "110"
 "origin" "-312 192 -288"
 }
-// entity 153
+// entity 152
 {
 "classname" "light"
 "_color" "0.687 0.799 0.765"
 "light" "105"
 "origin" "320 -64 168"
 }
-// entity 154
+// entity 153
 {
 "classname" "light"
 "origin" "448 72 168"
 "light" "85"
 "_color" "0.687 0.799 0.765"
 }
-// entity 155
+// entity 154
 {
 "classname" "light"
 "origin" "1010 -378 -136"
 "light" "140"
 "_color" "0.687 0.799 0.765"
 }
-// entity 156
+// entity 155
 {
 "classname" "item_armor25"
 "origin" "848 432 -96"
 }
-// entity 157
+// entity 156
 {
 "classname" "func_rain"
 "count" "1600"
@@ -9252,511 +9247,511 @@ evil3_support/mtlsupport_pipes
 ( -320 768 64 ) ( -320 512 64 ) ( -320 512 0 ) common/trigger 0 0 0 0.5 0.5 0 265 0
 }
 }
-// entity 158
+// entity 157
 {
 "classname" "target_speaker"
 "spawnflags" "1"
 "noise" "sound/ambient/transformer.wav"
 "origin" "608 -240 -160"
 }
-// entity 159
+// entity 158
 {
 "classname" "target_speaker"
 "origin" "-320 -168 -304"
 "noise" "sound/ambient/transformer.wav"
 "spawnflags" "1"
 }
-// entity 160
+// entity 159
 {
 "classname" "target_speaker"
 "spawnflags" "1"
 "noise" "sound/ambient/water.wav"
 "origin" "-336 96 -352"
 }
-// entity 161
+// entity 160
 {
 "classname" "target_speaker"
 "origin" "-296 624 -352"
 "noise" "sound/ambient/water.wav"
 "spawnflags" "1"
 }
-// entity 162
+// entity 161
 {
 "classname" "target_speaker"
 "spawnflags" "1"
 "noise" "sound/ambient/water.wav"
 "origin" "-8 904 -352"
 }
-// entity 163
+// entity 162
 {
 "classname" "target_speaker"
 "origin" "-192 1304 -352"
 "noise" "sound/ambient/water.wav"
 "spawnflags" "1"
 }
-// entity 164
+// entity 163
 {
 "classname" "target_speaker"
 "spawnflags" "1"
 "noise" "sound/ambient/water.wav"
 "origin" "224 1296 -352"
 }
-// entity 165
+// entity 164
 {
 "classname" "target_speaker"
 "origin" "672 1120 -352"
 "noise" "sound/ambient/water.wav"
 "spawnflags" "1"
 }
-// entity 166
+// entity 165
 {
 "classname" "target_speaker"
 "spawnflags" "1"
 "noise" "sound/ambient/water.wav"
 "origin" "584 -440 -216"
 }
-// entity 167
+// entity 166
 {
 "classname" "target_speaker"
 "origin" "1024 -168 -216"
 "noise" "sound/ambient/water.wav"
 "spawnflags" "1"
 }
-// entity 168
+// entity 167
 {
 "classname" "target_speaker"
 "origin" "912 -448 -216"
 "noise" "sound/ambient/water.wav"
 "spawnflags" "1"
 }
-// entity 169
+// entity 168
 {
 "classname" "target_speaker"
 "origin" "1024 512 -64"
 "noise" "sound/weather/rain_1.wav"
 "spawnflags" "1"
 }
-// entity 170
+// entity 169
 {
 "classname" "target_speaker"
 "spawnflags" "1"
 "noise" "sound/weather/rain_1.wav"
 "origin" "1024 512 64"
 }
-// entity 171
+// entity 170
 {
 "classname" "target_speaker"
 "spawnflags" "1"
 "noise" "sound/weather/rain_1.wav"
 "origin" "1024 768 -64"
 }
-// entity 172
+// entity 171
 {
 "classname" "target_speaker"
 "origin" "1024 768 64"
 "noise" "sound/weather/rain_1.wav"
 "spawnflags" "1"
 }
-// entity 173
+// entity 172
 {
 "classname" "target_speaker"
 "origin" "1024 1024 -64"
 "noise" "sound/weather/rain_1.wav"
 "spawnflags" "1"
 }
-// entity 174
+// entity 173
 {
 "classname" "target_speaker"
 "spawnflags" "1"
 "noise" "sound/weather/rain_1.wav"
 "origin" "1024 1024 64"
 }
-// entity 175
+// entity 174
 {
 "classname" "target_speaker"
 "spawnflags" "1"
 "noise" "sound/weather/rain_1.wav"
 "origin" "1024 256 -64"
 }
-// entity 176
+// entity 175
 {
 "classname" "target_speaker"
 "origin" "1024 256 64"
 "noise" "sound/weather/rain_1.wav"
 "spawnflags" "1"
 }
-// entity 177
+// entity 176
 {
 "classname" "target_speaker"
 "spawnflags" "1"
 "noise" "sound/weather/rain_1.wav"
 "origin" "768 384 -64"
 }
-// entity 178
+// entity 177
 {
 "classname" "target_speaker"
 "origin" "768 384 64"
 "noise" "sound/weather/rain_1.wav"
 "spawnflags" "1"
 }
-// entity 179
+// entity 178
 {
 "classname" "target_speaker"
 "origin" "768 640 -64"
 "noise" "sound/weather/rain_1.wav"
 "spawnflags" "1"
 }
-// entity 180
+// entity 179
 {
 "classname" "target_speaker"
 "spawnflags" "1"
 "noise" "sound/weather/rain_1.wav"
 "origin" "768 640 64"
 }
-// entity 181
+// entity 180
 {
 "classname" "target_speaker"
 "origin" "512 384 -64"
 "noise" "sound/weather/rain_1.wav"
 "spawnflags" "1"
 }
-// entity 182
+// entity 181
 {
 "classname" "target_speaker"
 "spawnflags" "1"
 "noise" "sound/weather/rain_1.wav"
 "origin" "512 384 64"
 }
-// entity 183
+// entity 182
 {
 "classname" "target_speaker"
 "spawnflags" "1"
 "noise" "sound/weather/rain_1.wav"
 "origin" "512 640 -64"
 }
-// entity 184
+// entity 183
 {
 "classname" "target_speaker"
 "origin" "512 640 64"
 "noise" "sound/weather/rain_1.wav"
 "spawnflags" "1"
 }
-// entity 185
+// entity 184
 {
 "classname" "target_speaker"
 "spawnflags" "1"
 "noise" "sound/weather/rain_1.wav"
 "origin" "256 384 -64"
 }
-// entity 186
+// entity 185
 {
 "classname" "target_speaker"
 "origin" "256 384 64"
 "noise" "sound/weather/rain_1.wav"
 "spawnflags" "1"
 }
-// entity 187
+// entity 186
 {
 "classname" "target_speaker"
 "origin" "256 640 -64"
 "noise" "sound/weather/rain_1.wav"
 "spawnflags" "1"
 }
-// entity 188
+// entity 187
 {
 "classname" "target_speaker"
 "spawnflags" "1"
 "noise" "sound/weather/rain_1.wav"
 "origin" "256 640 64"
 }
-// entity 189
+// entity 188
 {
 "classname" "target_speaker"
 "spawnflags" "1"
 "noise" "sound/weather/rain_1.wav"
 "origin" "256 384 192"
 }
-// entity 190
+// entity 189
 {
 "classname" "target_speaker"
 "origin" "256 640 192"
 "noise" "sound/weather/rain_1.wav"
 "spawnflags" "1"
 }
-// entity 191
+// entity 190
 {
 "classname" "target_speaker"
 "spawnflags" "1"
 "noise" "sound/weather/rain_1.wav"
 "origin" "256 896 64"
 }
-// entity 192
+// entity 191
 {
 "classname" "target_speaker"
 "origin" "256 896 192"
 "noise" "sound/weather/rain_1.wav"
 "spawnflags" "1"
 }
-// entity 193
+// entity 192
 {
 "classname" "target_speaker"
 "spawnflags" "1"
 "noise" "sound/weather/rain_1.wav"
 "origin" "0 1024 192"
 }
-// entity 194
+// entity 193
 {
 "classname" "target_speaker"
 "origin" "-256 1024 192"
 "noise" "sound/weather/rain_1.wav"
 "spawnflags" "1"
 }
-// entity 195
+// entity 194
 {
 "classname" "target_speaker"
 "origin" "0 896 192"
 "noise" "sound/weather/rain_1.wav"
 "spawnflags" "1"
 }
-// entity 196
+// entity 195
 {
 "classname" "target_speaker"
 "spawnflags" "1"
 "noise" "sound/weather/rain_1.wav"
 "origin" "0 640 192"
 }
-// entity 197
+// entity 196
 {
 "classname" "target_speaker"
 "origin" "-256 640 192"
 "noise" "sound/weather/rain_1.wav"
 "spawnflags" "1"
 }
-// entity 198
+// entity 197
 {
 "classname" "target_speaker"
 "spawnflags" "1"
 "noise" "sound/weather/rain_1.wav"
 "origin" "-192 384 128"
 }
-// entity 199
+// entity 198
 {
 "classname" "target_speaker"
 "origin" "-192 192 128"
 "noise" "sound/weather/rain_1.wav"
 "spawnflags" "1"
 }
-// entity 200
+// entity 199
 {
 "classname" "target_speaker"
 "spawnflags" "1"
 "noise" "sound/weather/rain_1.wav"
 "origin" "-192 0 128"
 }
-// entity 201
+// entity 200
 {
 "classname" "target_speaker"
 "origin" "64 64 128"
 "noise" "sound/weather/rain_1.wav"
 "spawnflags" "1"
 }
-// entity 202
+// entity 201
 {
 "classname" "target_speaker"
 "spawnflags" "1"
 "noise" "sound/weather/rain_1.wav"
 "origin" "64 -128 128"
 }
-// entity 203
+// entity 202
 {
 "classname" "target_speaker"
 "spawnflags" "1"
 "noise" "sound/weather/rain_1.wav"
 "origin" "256 64 128"
 }
-// entity 204
+// entity 203
 {
 "classname" "target_speaker"
 "origin" "256 -128 128"
 "noise" "sound/weather/rain_1.wav"
 "spawnflags" "1"
 }
-// entity 205
+// entity 204
 {
 "classname" "target_speaker"
 "origin" "512 64 128"
 "noise" "sound/weather/rain_1.wav"
 "spawnflags" "1"
 }
-// entity 206
+// entity 205
 {
 "classname" "target_speaker"
 "spawnflags" "1"
 "noise" "sound/weather/rain_1.wav"
 "origin" "512 -128 128"
 }
-// entity 207
+// entity 206
 {
 "classname" "target_speaker"
 "spawnflags" "1"
 "noise" "sound/weather/rain_1.wav"
 "origin" "64 64 -64"
 }
-// entity 208
+// entity 207
 {
 "classname" "target_speaker"
 "origin" "256 64 -64"
 "noise" "sound/weather/rain_1.wav"
 "spawnflags" "1"
 }
-// entity 209
+// entity 208
 {
 "classname" "target_speaker"
 "spawnflags" "1"
 "noise" "sound/weather/rain_1.wav"
 "origin" "512 64 -64"
 }
-// entity 210
+// entity 209
 {
 "classname" "target_speaker"
 "origin" "576 -320 128"
 "noise" "sound/weather/rain_1.wav"
 "spawnflags" "1"
 }
-// entity 211
+// entity 210
 {
 "classname" "target_speaker"
 "spawnflags" "1"
 "noise" "sound/weather/rain_1.wav"
 "origin" "704 -448 128"
 }
-// entity 212
+// entity 211
 {
 "classname" "target_speaker"
 "origin" "896 -448 128"
 "noise" "sound/weather/rain_1.wav"
 "spawnflags" "1"
 }
-// entity 213
+// entity 212
 {
 "classname" "target_speaker"
 "spawnflags" "1"
 "noise" "sound/weather/rain_1.wav"
 "origin" "576 -320 -128"
 }
-// entity 214
+// entity 213
 {
 "classname" "target_speaker"
 "origin" "704 -448 -128"
 "noise" "sound/weather/rain_1.wav"
 "spawnflags" "1"
 }
-// entity 215
+// entity 214
 {
 "classname" "target_speaker"
 "spawnflags" "1"
 "noise" "sound/weather/rain_1.wav"
 "origin" "896 -448 -128"
 }
-// entity 216
+// entity 215
 {
 "classname" "target_speaker"
 "spawnflags" "1"
 "noise" "sound/weather/rain_1.wav"
 "origin" "-256 1024 0"
 }
-// entity 217
+// entity 216
 {
 "classname" "target_speaker"
 "origin" "-320 1024 -256"
 "noise" "sound/weather/rain_1.wav"
 "spawnflags" "1"
 }
-// entity 218
+// entity 217
 {
 "classname" "target_speaker"
 "spawnflags" "1"
 "noise" "sound/weather/rain_1.wav"
 "origin" "768 640 -192"
 }
-// entity 219
+// entity 218
 {
 "classname" "target_speaker"
 "origin" "512 640 -192"
 "noise" "sound/weather/rain_1.wav"
 "spawnflags" "1"
 }
-// entity 220
+// entity 219
 {
 "classname" "target_speaker"
 "origin" "320 896 -64"
 "noise" "sound/weather/rain_1.wav"
 "spawnflags" "1"
 }
-// entity 221
+// entity 220
 {
 "classname" "target_speaker"
 "spawnflags" "1"
 "noise" "sound/weather/rain_1.wav"
 "origin" "448 1024 -64"
 }
-// entity 222
+// entity 221
 {
 "classname" "target_speaker"
 "spawnflags" "1"
 "noise" "sound/weather/rain_1.wav"
 "origin" "832 960 -64"
 }
-// entity 223
+// entity 222
 {
 "classname" "target_speaker"
 "origin" "672 704 -256"
 "noise" "sound/weather/rain_1.wav"
 "spawnflags" "1"
 }
-// entity 224
+// entity 223
 {
 "classname" "target_speaker"
 "spawnflags" "1"
 "noise" "sound/weather/rain_1.wav"
 "origin" "608 352 -192"
 }
-// entity 225
+// entity 224
 {
 "classname" "target_speaker"
 "origin" "512 64 -192"
 "noise" "sound/weather/rain_1.wav"
 "spawnflags" "1"
 }
-// entity 226
+// entity 225
 {
 "classname" "target_speaker"
 "spawnflags" "1"
 "noise" "sound/weather/rain_1.wav"
 "origin" "256 64 -192"
 }
-// entity 227
+// entity 226
 {
 "classname" "target_speaker"
 "origin" "64 64 -192"
 "noise" "sound/weather/rain_1.wav"
 "spawnflags" "1"
 }
-// entity 228
+// entity 227
 {
 "classname" "target_speaker"
 "spawnflags" "1"
 "noise" "sound/weather/rain_1.wav"
 "origin" "64 64 -320"
 }
-// entity 229
+// entity 228
 {
 "classname" "light"
 "origin" "88 624 120"
 "light" "100"
 "_color" "0.687 0.799 0.765"
 }
-// entity 230
+// entity 229
 {
 "classname" "func_button"
 "lip" "2"
@@ -9773,7 +9768,7 @@ evil3_support/mtlsupport_pipes
 ( 728 -576 128 ) ( 728 -608 128 ) ( 728 -608 0 ) evil1_floors/tile_brn_lite -112 -32 0 0.5 0.5 0 0 0
 }
 }
-// entity 231
+// entity 230
 {
 "classname" "func_door"
 "lip" "4"
@@ -9801,12 +9796,12 @@ evil3_support/mtlsupport_pipes
 ( 2368 -32 0 ) ( 2368 -16 0 ) ( 2368 -16 128 ) evil3_metals/mtl_rivplt2_wrn2 0 -120 -90 0.5 0.5 0 0 0
 }
 }
-// entity 232
+// entity 231
 {
 "classname" "item_strength"
 "origin" "2304 -64 8"
 }
-// entity 233
+// entity 232
 {
 "classname" "func_door"
 "wait" "10"
@@ -9829,7 +9824,7 @@ evil3_support/mtlsupport_pipes
 ( 1440 -80 0 ) ( 1408 -80 0 ) ( 1408 -80 128 ) common/caulk 0 0 0 0.5 0.5 0 0 0
 }
 }
-// entity 234
+// entity 233
 {
 "classname" "func_door"
 "wait" "10"
@@ -9852,7 +9847,7 @@ evil3_support/mtlsupport_pipes
 ( 1408 -48 0 ) ( 1440 -48 0 ) ( 1408 -48 128 ) common/caulk 0 0 0 0.5 0.5 0 0 0
 }
 }
-// entity 235
+// entity 234
 {
 "classname" "func_door"
 "lip" "4"
@@ -9880,7 +9875,7 @@ evil3_support/mtlsupport_pipes
 ( 2240 -16 0 ) ( 2240 -32 0 ) ( 2240 -16 128 ) evil3_metals/mtl_rivplt2_wrn2 0 -128 -270 0.5 0.5 0 0 0
 }
 }
-// entity 236
+// entity 235
 {
 "classname" "trigger_hurt"
 "dmg" "5"
@@ -9894,7 +9889,7 @@ evil3_support/mtlsupport_pipes
 ( 2752 0 120 ) ( 2752 -128 120 ) ( 2752 -128 -8 ) common/trigger 0 -16 0 0.5 0.5 0 7 0
 }
 }
-// entity 237
+// entity 236
 {
 "classname" "trigger_hurt"
 "dmg" "5"
@@ -9908,12 +9903,12 @@ evil3_support/mtlsupport_pipes
 ( 2368 0 -8 ) ( 2240 0 -8 ) ( 2240 -128 -8 ) common/trigger 0 0 0 0.5 0.5 0 7 0
 }
 }
-// entity 238
+// entity 237
 {
 "classname" "weapon_railgun"
 "origin" "2816 -64 24"
 }
-// entity 239
+// entity 238
 {
 "classname" "func_rain"
 "count" "1600"
@@ -9927,4 +9922,14 @@ evil3_support/mtlsupport_pipes
 ( 376 -576 64 ) ( 760 -576 64 ) ( 760 -576 0 ) common/trigger 0 0 0 0.5 0.5 0 265 0
 ( 896 640 64 ) ( 896 896 64 ) ( 896 896 0 ) common/trigger 0 0 0 0.5 0.5 0 265 0
 }
+}
+// entity 239
+{
+"classname" "weapon_nex"
+"origin" "1024 -64 32"
+}
+// entity 240
+{
+"classname" "item_invincible"
+"origin" "640 312 16"
 }
