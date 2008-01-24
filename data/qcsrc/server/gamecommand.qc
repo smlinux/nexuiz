@@ -27,6 +27,7 @@ void GameCommand(string command)
 		print("  printstats\n");
 		print("  make_mapinfo\n");
 		print("  savedb filename\n");
+		print("  dumpdb filename\n");
 		print("  loaddb filename\n");
 		GameCommand_Ban("help");
 		GameCommand_Generic("help");
@@ -93,12 +94,25 @@ void GameCommand(string command)
 	}
 
 	if(argv(0) == "savedb") if(argc == 2)
+	{
 		db_save(ServerProgsDB, argv(1));
+		print("DB saved.\n");
+		return;
+	}
+
+	if(argv(0) == "dumpdb") if(argc == 2)
+	{
+		db_dump(ServerProgsDB, argv(1));
+		print("DB dumped.\n");
+		return;
+	}
 
 	if(argv(0) == "loaddb") if(argc == 2)
 	{
 		db_close(ServerProgsDB);
 		ServerProgsDB = db_load(argv(1));
+		print("DB loaded.\n");
+		return;
 	}
 
 	print("Invalid command. For a list of supported commands, try sv_cmd help.\n");

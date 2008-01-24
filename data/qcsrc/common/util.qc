@@ -289,6 +289,23 @@ float db_load(string pFilename)
 	return db;
 }
 
+void db_dump(float db, string pFilename)
+{
+	float fh, i, j, n, m;
+	fh = fopen(pFilename, FILE_WRITE);
+	if(fh < 0)
+		error(strcat("Can't dump DB to ", pFilename));
+	n = buf_getsize(db);
+	fputs(fh, "0\n");
+	for(i = 0; i < n; ++i)
+	{
+		m = tokenizebyseparator(bufstr_get(db, i), "\\");
+		for(j = 2; j < m; j += 2)
+			fputs(fh, strcat("\\", argv(j-1), "\\", argv(j), "\n"));
+	}
+	fclose(fh);
+}
+
 void db_close(float db)
 {
 	buf_del(db);

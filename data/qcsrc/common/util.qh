@@ -38,6 +38,7 @@ string fstrunzone(string s);
 
 // database (NOTE: keys are case sensitive)
 void db_save(float db, string filename);
+void db_dump(float db, string pFilename);
 float db_create();
 float db_load(string filename);
 void db_close(float db);
