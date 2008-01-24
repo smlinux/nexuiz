@@ -26,6 +26,8 @@ void GameCommand(string command)
 		print("  teamstatus\n");
 		print("  printstats\n");
 		print("  make_mapinfo\n");
+		print("  savedb filename\n");
+		print("  loaddb filename\n");
 		GameCommand_Ban("help");
 		GameCommand_Generic("help");
 		return;
@@ -88,6 +90,15 @@ void GameCommand(string command)
 		else
 			print("Client not found\n");
 		return;
+	}
+
+	if(argv(0) == "savedb") if(argc == 2)
+		db_save(ServerProgsDB, argv(1));
+
+	if(argv(0) == "loaddb") if(argc == 2)
+	{
+		db_close(ServerProgsDB);
+		ServerProgsDB = db_load(argv(1));
 	}
 
 	print("Invalid command. For a list of supported commands, try sv_cmd help.\n");
