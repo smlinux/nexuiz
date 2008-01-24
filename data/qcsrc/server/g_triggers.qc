@@ -469,7 +469,7 @@ Keys:
 "cnt"
  sets color of rain (default 12 - white)
 "count"
- adjusts rain density, this many particles fall every second, experiment to see the effects (default is based on area size)
+ adjusts density, this many particles fall every second for a 1024x1024 area, default is 2000
 */
 void() func_rain =
 {
@@ -487,7 +487,8 @@ void() func_rain =
 	if (!self.cnt)
 		self.cnt = 12;
 	if (!self.count)
-		self.count = (self.absmax_x - self.absmin_x)*(self.absmax_y - self.absmin_y)/8192;
+		self.count = 2000;
+	self.count = 0.1 * self.count * (self.size_x / 1024) * (self.size_y / 1024);
 	if (self.count < 1)
 	{
 		remove(self);
@@ -502,7 +503,7 @@ void() func_rain =
 
 void() snow_think =
 {
-	self.nextthink = time + 0.1;
+	self.nextthink = time + 0.1 + random() * 0.05;
 	te_particlesnow(self.absmin, self.absmax, self.dest, self.count, self.cnt);
 //	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 //	WriteByte (MSG_BROADCAST, TE_PARTICLESNOW);
@@ -522,7 +523,7 @@ Keys:
 "cnt"
  sets color of rain (default 12 - white)
 "count"
- adjusts snow density, this many particles fall every second, experiment to see the effects (default is based on area size)
+ adjusts density, this many particles fall every second for a 1024x1024 area, default is 2000
 */
 void() func_snow =
 {
@@ -540,7 +541,8 @@ void() func_snow =
 	if (!self.cnt)
 		self.cnt = 12;
 	if (!self.count)
-		self.count = (self.absmax_x - self.absmin_x)*(self.absmax_y - self.absmin_y)/8192;
+		self.count = 2000;
+	self.count = 0.1 * self.count * (self.size_x / 1024) * (self.size_y / 1024);
 	if (self.count < 1)
 	{
 		remove(self);
