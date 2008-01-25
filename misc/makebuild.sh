@@ -56,7 +56,7 @@ if [ -n "$EXPERIMENTAL" ]; then
 	nexdir=$base/nexuiz-current
 	fteqccflags="$fteqccflags -DMAPINFO"
 	ext="${ext}_svntrunk"
-	menuqc="menu-div0test"
+	menuqc="menu"
 	newest=NEWEST-svntrunk
 	tag=trunk
 fi
