@@ -104,7 +104,7 @@ void()	uzi_fire1_02 =
 float(float req) w_uzi =
 {
 	if (req == WR_AIM)
-		if(vlen(self.origin-self.enemy.origin)<750)
+		if(vlen(self.origin-self.enemy.origin) < 3000 - bound(0, skill, 10) * 200)
 			self.button0 = bot_aim(1000000, 0, 0.001, FALSE);
 		else
 		{

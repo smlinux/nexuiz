@@ -272,8 +272,6 @@ void() havocbot_chooseenemy =
 };
 
 float(entity e) w_getbestweapon;
-.float havocbot_chooseweapon_timer;
-.float havocbot_chooseweapon_lastbestscore;
 void() havocbot_chooseweapon =
 {
 	// TODO: clean this up by moving it to weapon code
@@ -283,6 +281,7 @@ void() havocbot_chooseweapon =
 		return;
 	}
 
+	local float w, s;
 	local float rocket  ; rocket   =-1000;
 	local float nex     ; nex      =-1000;
 	local float hagar   ; hagar    =-1000;
@@ -292,6 +291,7 @@ void() havocbot_chooseweapon =
 	local float uzi     ; uzi      =-1000;
 	local float shotgun ; shotgun  =-1000;
 	local float laser   ; laser    =-1000;
+	local float currentscore;
 	local float bestscore; bestscore = 0;
 	local float bestweapon; bestweapon=self.switchweapon;
 	local float distance; distance=bound(10,vlen(self.origin-self.enemy.origin)-200,10000);
@@ -322,23 +322,23 @@ void() havocbot_chooseweapon =
 			* bound(0,(cvar("g_balance_electro_primary_speed")/distance*maxdelaytime),1)*1.0;
 	if (client_hasweapon(self, WEP_CRYLINK, TRUE, FALSE))
 		crylink = (cvar("g_balance_crylink_primary_damage")/cvar("g_balance_crylink_primary_refire")*1.0)
-			* bound(0,(cvar("g_balance_crylink_primary_speed")/distance*maxdelaytime),1)*1.0;
+			* bound(0,(cvar("g_balance_crylink_primary_speed")/distance*maxdelaytime),1)*(64/(32+cvar("g_balance_crylink_primary_spread")*distance))*1.0;
 	if (client_hasweapon(self, WEP_UZI, TRUE, FALSE))
 		uzi = (cvar("g_balance_uzi_sustained_damage")/cvar("g_balance_uzi_sustained_refire")*1.0)
-			* bound(0,1/cvar("g_balance_uzi_sustained_spread")/distance*spreadpenalty,1)*0.5;
+			* bound(0,32/(32+cvar("g_balance_uzi_sustained_spread")*distance),1);
 	if (client_hasweapon(self, WEP_SHOTGUN, TRUE, FALSE))
 		shotgun = (cvar("g_balance_shotgun_primary_damage")*cvar("g_balance_shotgun_primary_bullets")/cvar("g_balance_shotgun_primary_refire")*1.0)
-			* bound(0,1/cvar("g_balance_shotgun_primary_spread")/distance*spreadpenalty,1);
+			* bound(0,32/(32+cvar("g_balance_shotgun_primary_spread")*distance),1);
 	if (client_hasweapon(self, WEP_LASER, FALSE, FALSE))
 		laser = (cvar("g_balance_laser_primary_damage")/cvar("g_balance_laser_primary_refire")*1.0)
-			* bound(0,cvar("g_balance_laser_primary_speed")/distance*0.2*maxdelaytime,1);
+			* bound(0,cvar("g_balance_laser_primary_speed")/distance*maxdelaytime,1);
 	if((self.enemy.flags & FL_ONGROUND)==FALSE){
-		rocket = rocket   * (1-bound(0, distancefromfloor/cvar("g_balance_rocketlauncher_radius"         ),0.9)); //slight bigger change
-		grenade = grenade * (1-bound(0,distancefromfloor/cvar("g_balance_grenadelauncher_primary_radius"),0.95));
-		electro = electro * (1-bound(0,distancefromfloor/cvar("g_balance_electro_primary_radius"        ),0.95));
-		laser = laser     * (1-bound(0,distancefromfloor/cvar("g_balance_laser_primary_radius"                  ),0.95));
+		rocket = rocket   * (1.5-bound(0, distancefromfloor/cvar("g_balance_rocketlauncher_radius"         ),0.9)); //slight bigger change
+		grenade = grenade * (1.5-bound(0,distancefromfloor/cvar("g_balance_grenadelauncher_primary_radius"),0.95));
+		electro = electro * (1.5-bound(0,distancefromfloor/cvar("g_balance_electro_primary_radius"        ),0.95));
+		laser = laser     * (1.5-bound(0,distancefromfloor/cvar("g_balance_laser_primary_radius"                  ),0.95));
 	}
-/*
+	/*
 	dprint("Floor distance: ",ftos(distancefromfloor),"\n");
 	dprint("Rocket: " , ftos(rocket  ), "\n");
 	dprint("Nex: "    , ftos(nex     ), "\n");
@@ -349,26 +349,21 @@ void() havocbot_chooseweapon =
 	dprint("Uzi: "    , ftos(uzi     ), "\n");
 	dprint("Shotgun :", ftos(shotgun ), "\n");
 	dprint("Laser   :", ftos(laser   ), "\n\n");
-*/
-	if (rocket  > bestscore){ bestscore = rocket  ; bestweapon = WEP_ROCKET_LAUNCHER  ;}
-	if (nex     > bestscore){ bestscore = nex     ; bestweapon = WEP_NEX              ;}
-	if (hagar   > bestscore){ bestscore = hagar   ; bestweapon = WEP_HAGAR            ;}
-	if (grenade > bestscore){ bestscore = grenade ; bestweapon = WEP_GRENADE_LAUNCHER ;}
-	if (electro > bestscore){ bestscore = electro ; bestweapon = WEP_ELECTRO          ;}
-	if (crylink > bestscore){ bestscore = crylink ; bestweapon = WEP_CRYLINK          ;}
-	if (uzi     > bestscore){ bestscore = uzi     ; bestweapon = WEP_UZI              ;}
-	if (shotgun > bestscore){ bestscore = shotgun ; bestweapon = WEP_SHOTGUN          ;}
-	if (laser   > bestscore){ bestscore = laser   ; bestweapon = WEP_LASER            ;}
+	*/
+	currentscore = -1;
+	w = WEP_ROCKET_LAUNCHER  ;s = rocket ;if (s > bestscore){bestscore = s;bestweapon = w;} if (self.switchweapon == w) currentscore = s;
+	w = WEP_NEX              ;s = nex    ;if (s > bestscore){bestscore = s;bestweapon = w;} if (self.switchweapon == w) currentscore = s;
+	w = WEP_HAGAR            ;s = hagar  ;if (s > bestscore){bestscore = s;bestweapon = w;} if (self.switchweapon == w) currentscore = s;
+	w = WEP_GRENADE_LAUNCHER ;s = grenade;if (s > bestscore){bestscore = s;bestweapon = w;} if (self.switchweapon == w) currentscore = s;
+	w = WEP_ELECTRO          ;s = electro;if (s > bestscore){bestscore = s;bestweapon = w;} if (self.switchweapon == w) currentscore = s;
+	w = WEP_CRYLINK          ;s = crylink;if (s > bestscore){bestscore = s;bestweapon = w;} if (self.switchweapon == w) currentscore = s;
+	w = WEP_UZI              ;s = uzi    ;if (s > bestscore){bestscore = s;bestweapon = w;} if (self.switchweapon == w) currentscore = s;
+	w = WEP_SHOTGUN          ;s = shotgun;if (s > bestscore){bestscore = s;bestweapon = w;} if (self.switchweapon == w) currentscore = s;
+	w = WEP_LASER            ;s = laser  ;if (s > bestscore){bestscore = s;bestweapon = w;} if (self.switchweapon == w) currentscore = s;
 
-	if(time>self.havocbot_chooseweapon_timer || self.havocbot_chooseweapon_lastbestscore<bestscore/10) //Or when the new damage is SOO much larger ! Or my gun runs out of ammo
-	{
-		self.havocbot_chooseweapon_timer=max(self.havocbot_chooseweapon_timer+cvar("g_balance_weaponswitchdelay")*120*(10-skill)*0.1,time);
-		if( self.havocbot_chooseweapon_lastbestscore*1.5<bestscore*bound(1,1+(skill*skill)*0.01,2))
-		{
-			self.switchweapon = bestweapon; 
-			self.havocbot_chooseweapon_lastbestscore=bestscore;
-		}
-	}
+	// switch if the best weapon would provide a significant damage increase
+	if (bestscore > currentscore*1.5)
+		self.switchweapon = bestweapon;
 };
 
 .float nextaim;

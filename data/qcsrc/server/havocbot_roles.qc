@@ -14,6 +14,7 @@ void(float ratingscale, vector org, float sradius) havocbot_goalrating_items =
 {
 	local entity head;
 	local float t;
+	ratingscale = ratingscale * 0.0001; // items are rated around 10000 already
 	head = findchainfloat(bot_pickup, TRUE);
 	while (head)
 	{
@@ -24,7 +25,7 @@ void(float ratingscale, vector org, float sradius) havocbot_goalrating_items =
 			//if (!head.bot_pickupevalfunc || head.model == "")
 			//	eprint(head);
 			// get the value of the item
-			t = head.bot_pickupevalfunc(self, head) * 0.0001;
+			t = head.bot_pickupevalfunc(self, head);
 			if (t > 0)
 				navigation_routerating(head, t * ratingscale);
 		}
@@ -51,6 +52,10 @@ void(float ratingscale, vector org, float sradius) havocbot_goalrating_controlpo
 	}
 };
 
+/*
+// LordHavoc: this function was already unused, but for waypoints to be a
+// useful goal the bots would have to seek out the least-recently-visited
+// ones, not the closest
 void(float ratingscale, vector org, float sradius) havocbot_goalrating_waypoints =
 {
 	local entity head;
@@ -62,12 +67,12 @@ void(float ratingscale, vector org, float sradius) havocbot_goalrating_waypoints
 		head = head.chain;
 	}
 };
+*/
 
 void(float ratingscale, vector org, float sradius) havocbot_goalrating_enemyplayers =
 {
 	local entity head;
 	local float t, noteam;
-	ratingscale = ratingscale * 1200;
 	noteam = ((self.team == 0) || (teamplay == 0)); // fteqcc sucks
 	//dprint("teamplay is "); dprint(ftos(teamplay)); dprint(", own team is ");
 	//dprint(ftos(self.team)); dprint(" -> noteam is "); dprint(ftos(noteam));
@@ -80,10 +85,7 @@ void(float ratingscale, vector org, float sradius) havocbot_goalrating_enemyplay
 		if ((noteam && (!bot_ignore_bots || clienttype(head) == CLIENTTYPE_REAL)) || head.team != self.team)
 		if (vlen(head.origin - org) < sradius)
 		{
-			t = head.frags + 25;
-			if (t < 1)
-				t = 1;
-			t = t / (head.health + head.armortype * head.armorvalue);
+			t = 100 / (head.health + head.armorvalue);
 			if (t > 0)
 			{
 				//dprint("found: "); dprint(head.netname); dprint("\n");
@@ -477,7 +479,7 @@ void() havocbot_role_dom =
 		navigation_goalrating_start();
 		havocbot_goalrating_controlpoints(10000, self.origin, 15000);
 		havocbot_goalrating_items(8000, self.origin, 8000);
-		//havocbot_goalrating_enemyplayers(1, self.origin, 2000);
+		//havocbot_goalrating_enemyplayers(3000, self.origin, 2000);
 		//havocbot_goalrating_waypoints(1, self.origin, 1000);
 		navigation_goalrating_end();
 	}
@@ -492,7 +494,7 @@ void() havocbot_role_dm =
 		self.bot_strategytime = time + cvar("bot_ai_strategyinterval");
 		navigation_goalrating_start();
 		havocbot_goalrating_items(10000, self.origin, 10000);
-		havocbot_goalrating_enemyplayers(1, self.origin, 20000);
+		havocbot_goalrating_enemyplayers(5000, self.origin, 20000);
 		//havocbot_goalrating_waypoints(1, self.origin, 1000);
 		navigation_goalrating_end();
 	}

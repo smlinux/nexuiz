@@ -994,24 +994,28 @@ entity(entity player, float walkfromwp) navigation_findnearestwaypoint =
 {
 	local entity waylist, w, best;
 	local float dist, bestdist;
-	local vector v, org;
-	org = player.origin + (player.mins_z - PL_MIN_z) * '0 0 1';
-	if(player.tag_entity)
-		org = org + player.tag_entity.origin;
-	if (navigation_testtracewalk)
-		te_plasmaburn(org);
-	best = world;
-	bestdist = 1000;
+	local vector v, org, pm1, pm2;
+	pm1 = player.origin + PL_MIN;
+	pm2 = player.origin + PL_MAX;
 	waylist = findchain(classname, "waypoint");
 	// do two scans, because box test is cheaper
 	w = waylist;
 	while (w)
 	{
 		// if object is touching waypoint
-		if (boxesoverlap(org, org, w.absmin, w.absmax))
+		if (boxesoverlap(pm1, pm2, w.absmin, w.absmax))
 			return w;
 		w = w.chain;
 	}
+
+	org = player.origin + (player.mins_z - PL_MIN_z) * '0 0 1';
+	if(player.tag_entity)
+		org = org + player.tag_entity.origin;
+	if (navigation_testtracewalk)
+		te_plasmaburn(org);
+	best = world;
+	bestdist = 1050;
+
 	// box check failed, try walk
 	w = waylist;
 	while (w)
@@ -1212,17 +1216,21 @@ void(entity e, float f) navigation_routerating =
 		e.nearestwaypoint = navigation_findnearestwaypoint(e, TRUE);
 		e.nearestwaypointtimeout = time + random() * 3 + 5;
 	}
+	dprint(e.classname, " ", ftos(f));
 	if (e.nearestwaypoint)
 	if (e.nearestwaypoint.wpcost < 10000000)
 	{
 		//te_wizspike(e.nearestwaypoint.wpnearestpoint);
-		f = f / ((e.nearestwaypoint.wpcost + vlen(e.origin - e.nearestwaypoint.wpnearestpoint)) * 0.001 + 1);
+		dprint(e.classname, " ", ftos(f), "*(500/(500+", ftos((e.nearestwaypoint.wpcost + vlen(e.origin - e.nearestwaypoint.wpnearestpoint))), " = ");
+		f = f * 500 / ((e.nearestwaypoint.wpcost + vlen(e.origin - e.nearestwaypoint.wpnearestpoint)) + 500);
+		dprint(ftos(f));
 		if (navigation_bestrating < f)
 		{
 			navigation_bestrating = f;
 			navigation_bestgoal = e;
 		}
 	}
+	dprint("\n");
 };
 
 // replaces the goal stack with the path to a given item
@@ -1703,10 +1711,9 @@ float(vector v, float maxfiredeviation) bot_aimdir =
 	// note the maxfiredeviation is in degrees so this has to convert to radians first
 	//if ((normalize(v) * shotdir) >= cos(maxfiredeviation * (3.14159265358979323846 / 180)))
 	if ((normalize(v) * shotdir) >= cos(maxfiredeviation * (3.14159265358979323846 / 180)))
-			self.bot_firetimer = time + 0.3/bound(1,skill*0.3,3);
+	if (vlen(trace_endpos-shotorg) < 500+500*bound(0, skill, 10) || random()*random()>bound(0,skill*0.05,1))
+		self.bot_firetimer = time + bound(0.1, 0.5-skill*0.05, 0.5);
 	traceline(shotorg,shotorg+shotdir*1000,FALSE,world);
-	if ( vlen(trace_endpos-shotorg)>bound(0,skill*20,20) && random()<bound(0,skill*0.5,10)*frametime*2 )
-		self.bot_canfire = 0;
 	//dprint(ftos(maxfiredeviation),"\n");
 	//dprint(" diff:", vtos(diffang), "\n");
 
