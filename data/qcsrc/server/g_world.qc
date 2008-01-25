@@ -66,8 +66,8 @@ float GotoFirstMap()
 		tokenizebyseparator(cvar_string("g_maplist"), " ");
 #else
 		tokenize(cvar_string("g_maplist"));
-#endif
 		if(argv(0) != GetMapname())
+#endif
 		{
 			cvar_set("nextmap", argv(0));
 
@@ -94,7 +94,8 @@ void worldspawn (void)
 		error("world already spawned - you may have EXACTLY ONE worldspawn!");
 	world_already_spawned = TRUE;
 
-	GotoFirstMap();
+	if(GotoFirstMap())
+		return;
 
 #ifdef MAPINFO
 	MapInfo_LoadMapSettings(mapname);
