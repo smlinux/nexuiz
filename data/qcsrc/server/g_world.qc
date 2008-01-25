@@ -1539,6 +1539,9 @@ float WinningCondition_RanOutOfSpawns()
 	if(!have_team_spawns)
 		return WINNING_NO;
 
+	if(!some_spawn_has_been_used)
+		return WINNING_NO;
+
 	team1_score = team2_score = team3_score = team4_score = 0;
 
 	FOR_EACH_PLAYER(head) if(head.deadflag == DEAD_NO)

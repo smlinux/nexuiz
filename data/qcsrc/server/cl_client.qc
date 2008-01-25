@@ -17,6 +17,7 @@ void info_player_deathmatch (void)
 void() spawnpoint_use =
 {
 	if(teams_matter)
+	if(have_team_spawns)
 	{
 		self.team = activator.team;
 		some_spawn_has_been_used = 1;
