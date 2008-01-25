@@ -465,7 +465,7 @@ void(entity from, entity to) waypoint_addlink =
 void() waypoint_think =
 {
 	local entity e;
-	local vector sv, sm1, sm2, ev, em1, em2;
+	local vector sv, sm1, sm2, ev, em1, em2, dv;
 	//dprint("waypoint_think wpisbox = ", ftos(self.wpisbox), "\n");
 	sm1 = self.origin + self.mins;
 	sm2 = self.origin + self.maxs;
@@ -490,7 +490,9 @@ void() waypoint_think =
 			ev_x = bound(em1_x, ev_x, em2_x);
 			ev_y = bound(em1_y, ev_y, em2_y);
 			ev_z = bound(em1_z, ev_z, em2_z);
-			if (vlen(ev - sv) < self.wp31mincost)
+			dv = ev - sv;
+			dv_z = 0;
+			if (vlen(dv) < 1050) // max search distance in XY
 			{
 				navigation_testtracewalk = 0;
 				if (!self.wpisbox)
@@ -530,7 +532,7 @@ void(entity wp) waypoint_clearlinks =
 {
 	// clear links to other waypoints
 	local float f;
-	f = 1050; // maximum search range for other waypoints
+	f = 10000000;
 	wp.wp00 = wp.wp01 = wp.wp02 = wp.wp03 = wp.wp04 = wp.wp05 = wp.wp06 = wp.wp07 = world;wp.wp00mincost = wp.wp01mincost = wp.wp02mincost = wp.wp03mincost = wp.wp04mincost = wp.wp05mincost = wp.wp06mincost = wp.wp07mincost = f;
 	wp.wp08 = wp.wp09 = wp.wp10 = wp.wp11 = wp.wp12 = wp.wp13 = wp.wp14 = wp.wp15 = world;wp.wp08mincost = wp.wp09mincost = wp.wp10mincost = wp.wp11mincost = wp.wp12mincost = wp.wp13mincost = wp.wp14mincost = wp.wp15mincost = f;
 	wp.wp16 = wp.wp17 = wp.wp18 = wp.wp19 = wp.wp20 = wp.wp21 = wp.wp22 = wp.wp23 = world;wp.wp16mincost = wp.wp17mincost = wp.wp18mincost = wp.wp19mincost = wp.wp20mincost = wp.wp21mincost = wp.wp22mincost = wp.wp23mincost = f;
