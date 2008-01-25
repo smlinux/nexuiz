@@ -522,6 +522,7 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 
 	// apply push
 	if (self.damageforcescale)
+	if (vlen(force))
 	{
 		self.velocity = self.velocity + self.damageforcescale * force;
 		self.flags = self.flags - (self.flags & FL_ONGROUND);

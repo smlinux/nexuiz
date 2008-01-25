@@ -555,3 +555,68 @@ void() func_snow =
 };
 
 
+void FireRailgunBullet (vector start, vector end, float bdamage, float bforce, float deathtype);
+void() misc_laser_think =
+{
+	vector o;
+	if(!self.state)
+	{
+		self.enemy = find(world, targetname, self.target);
+		self.state = 1;
+	}
+	if(self.enemy)
+	{
+		o = self.enemy.origin;
+	}
+	else
+	{
+		makevectors(self.angles);
+		o = self.origin + v_forward * MAX_SHOT_DISTANCE;
+	}
+
+	if(self.dmg)
+	{
+		if(self.dmg < 0)
+			FireRailgunBullet(self.origin, o, 100000, 0, DEATH_HURTTRIGGER);
+		else
+			FireRailgunBullet(self.origin, o, self.dmg * frametime, 0, DEATH_HURTTRIGGER);
+	}
+	if(time > self.ltime)
+	{
+		trailparticles(self, self.cnt, self.origin, trace_endpos);
+		pointparticles(self.lip, trace_endpos, trace_plane_normal, 256 * frametime);
+		self.ltime = time + self.wait;
+	}
+	self.nextthink = time;
+}
+/*QUAKED misc_laser (.5 .5 .5) ?
+Any object touching the beam will be hurt
+Keys:
+"target"
+ target_position where the laser ends
+"mdl"
+ name of beam effect to use
+"dmg"
+ damage per second (-1 for a laser that kills immediately)
+"wait"
+ delay between sending the particle effect
+*/
+void() misc_laser =
+{
+	if(self.mdl)
+	{
+		self.cnt = particleeffectnum(self.mdl);
+		self.lip = particleeffectnum(strcat(self.mdl, "_end"));
+	}
+	else
+	{
+		self.cnt = particleeffectnum("misc_laser_beam");
+		self.lip = particleeffectnum("misc_laser_beam_end");
+	}
+	if(!self.wait)
+		self.wait = 1;
+	if(!self.message)
+		self.message = "saw the light";
+	self.think = misc_laser_think;
+	self.nextthink = time;
+}
