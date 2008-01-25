@@ -58,8 +58,11 @@ float GameCommand_Generic(string command)
 		print("    x x exch --------------------------> x x : swap the top two\n");
 		print("    /cvarname load --------------------> x   : loads a cvar\n");
 		print("    /cvarname x def ------------------->     : writes to a cvar\n");
-		print("    f f add|sub|mul|div|mod -----------> f   : adds/... two numbers\n");
+		print("    f f add|sub|mul|div|mod|max|min ---> f   : adds/... two numbers\n");
+		print("    f f eq|ne|gt|ge|lt|le -------------> f   : compares two numbers\n");
 		print("    f neg|abs|sgn|rand ----------------> f   : negates/... a number\n");
+		print("    f f f bound -----------------------> f   : bounds the middle number\n");
+		print("    f1 f2 b when ----------------------> f   : f1 if b, f2 otherwise\n");
 		print("    s s union|intersection|difference -> s   : set operations\n");
 		print("    s shuffle -------------------------> s   : randomly arrange elements\n");
 		print("    Set operations operate on 'such''strings' like g_maplist.\n");
@@ -164,7 +167,7 @@ float GameCommand_Generic(string command)
 		{
 			float rpnpos;
 			string rpncmd;
-			float f2;
+			float f2, f3;
 			rpn_sp = 0;
 			rpn_error = FALSE;
 			for(rpnpos = 1; rpnpos < argc; ++rpnpos)
@@ -231,6 +234,45 @@ float GameCommand_Generic(string command)
 						rpn_set("0");
 				} else if(rpncmd == "neg" || rpncmd == "~") {
 					rpn_setf(-rpn_getf());
+				} else if(rpncmd == "max") {
+					f = rpn_popf();
+					f2 = rpn_getf();
+					rpn_setf(max(f2, f));
+				} else if(rpncmd == "min") {
+					f = rpn_popf();
+					f2 = rpn_getf();
+					rpn_setf(min(f2, f));
+				} else if(rpncmd == "bound") {
+					f = rpn_popf();
+					f2 = rpn_popf();
+					f3 = rpn_getf();
+					rpn_setf(bound(f3, f2, f));
+				} else if(rpncmd == "when") {
+					f = rpn_popf();
+					f2 = rpn_popf();
+					f3 = rpn_getf();
+					if(f)
+						rpn_setf(f3);
+					else
+						rpn_setf(f2);
+				} else if(rpncmd == ">" || rpncmd == "gt") {
+					f = rpn_popf();
+					rpn_setf(rpn_getf() > f);
+				} else if(rpncmd == "<" || rpncmd == "lt") {
+					f = rpn_popf();
+					rpn_setf(rpn_getf() < f);
+				} else if(rpncmd == "==" || rpncmd == "eq") {
+					f = rpn_popf();
+					rpn_setf(rpn_getf() == f);
+				} else if(rpncmd == ">=" || rpncmd == "ge") {
+					f = rpn_popf();
+					rpn_setf(rpn_getf() >= f);
+				} else if(rpncmd == "<=" || rpncmd == "le") {
+					f = rpn_popf();
+					rpn_setf(rpn_getf() <= f);
+				} else if(rpncmd == "!=" || rpncmd == "ne") {
+					f = rpn_popf();
+					rpn_setf(rpn_getf() != f);
 				} else if(rpncmd == "rand") {
 					rpn_setf(ceil(random() * rpn_getf()) - 1);
 				} else if(rpncmd == "union") {
