@@ -55,7 +55,7 @@ entity Spawn_FilterOutBadSpots(entity firstspot, entity playerlist, float mindis
 			}
 		}
 
-		if (spot.team == teamcheck && spotactive > 0)
+		if ((!teamcheck || spot.team == teamcheck) && spotactive > 0)
 		{
 			pcount = 0;
 			player = playerlist;
