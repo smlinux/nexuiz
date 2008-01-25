@@ -1216,21 +1216,21 @@ void(entity e, float f) navigation_routerating =
 		e.nearestwaypoint = navigation_findnearestwaypoint(e, TRUE);
 		e.nearestwaypointtimeout = time + random() * 3 + 5;
 	}
-	dprint(e.classname, " ", ftos(f));
+	//dprint(e.classname, " ", ftos(f));
 	if (e.nearestwaypoint)
 	if (e.nearestwaypoint.wpcost < 10000000)
 	{
 		//te_wizspike(e.nearestwaypoint.wpnearestpoint);
-		dprint(e.classname, " ", ftos(f), "*(500/(500+", ftos((e.nearestwaypoint.wpcost + vlen(e.origin - e.nearestwaypoint.wpnearestpoint))), " = ");
+		//dprint(e.classname, " ", ftos(f), "*(500/(500+", ftos((e.nearestwaypoint.wpcost + vlen(e.origin - e.nearestwaypoint.wpnearestpoint))), " = ");
 		f = f * 500 / ((e.nearestwaypoint.wpcost + vlen(e.origin - e.nearestwaypoint.wpnearestpoint)) + 500);
-		dprint(ftos(f));
+		//dprint(ftos(f));
 		if (navigation_bestrating < f)
 		{
 			navigation_bestrating = f;
 			navigation_bestgoal = e;
 		}
 	}
-	dprint("\n");
+	//dprint("\n");
 };
 
 // replaces the goal stack with the path to a given item
