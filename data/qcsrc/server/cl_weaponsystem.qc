@@ -37,7 +37,9 @@ void(entity ent, vector vecs, float antilag, float recoil, string snd) W_SetupSh
 		w_shotorg = ent.origin + ent.view_ofs + v_right * vecs_y + v_up * vecs_z;
 	// now move the shotorg forward as much as requested if possible
 	traceline_hitcorpse(self, w_shotorg, w_shotorg + v_forward * (vecs_x + nudge), MOVE_NORMAL, self);
-	w_shotorg = trace_endpos - v_forward * nudge;
+	w_shotorg = trace_endpos;
+	if (trace_fraction < 1)
+		w_shotorg = w_shotorg - v_forward * nudge;
 	// calculate the shotdir from the chosen shotorg
 	w_shotdir = normalize(trueaimpoint - w_shotorg);
 
