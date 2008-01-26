@@ -191,9 +191,16 @@ void() m_draw =
 	}
 
 	t = gettime();
-	realFrametime = frametime = min(0.2, t - menuPrevTime) * cvar("menu_slowmo");
+	realFrametime = frametime = min(0.2, t - menuPrevTime);
 	menuPrevTime = t;
 	time += frametime;
+
+	t = cvar("menu_slowmo");
+	if(t)
+	{
+		frametime *= t;
+		realFrametime *= t;
+	}
 
 	if(Menu_Active)
 	{
