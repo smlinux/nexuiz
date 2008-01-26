@@ -146,6 +146,7 @@ Finds a point to respawn
 entity SelectSpawnPoint (float anypoint)
 {
 	local float teamcheck;
+	local entity firstspot_new;
 	local entity spot, firstspot, playerlist;
 
 	spot = find (world, classname, "testplayerstart");
@@ -164,13 +165,17 @@ entity SelectSpawnPoint (float anypoint)
 	// filter out the bad ones
 	// (note this returns the original list if none survived)
 	firstspot = Spawn_FilterOutBadSpots(firstspot, playerlist, 100, teamcheck);
+	if(!firstspot)
+		firstspot = Spawn_FilterOutBadSpots(firstspot, playerlist, -1, teamcheck);
 
 	// there is 50/50 chance of choosing a random spot or the furthest spot
 	// (this means that roughly every other spawn will be furthest, so you
 	// usually won't get fragged at spawn twice in a row)
 	if (arena_roundbased)
 	{
-		firstspot = Spawn_FilterOutBadSpots(firstspot, playerlist, 800, teamcheck);
+		firstspot_new = Spawn_FilterOutBadSpots(firstspot, playerlist, 800, teamcheck);
+		if(firstspot_new)
+			firstspot = firstspot_new;
 		spot = Spawn_RandomPoint(firstspot);
 	}
 	else if (random() > 0.5 || spawn_allbad || spawn_allgood)
