@@ -32,6 +32,8 @@ ALPHA_CURSOR_INTRO              1
 
 // general
 //   uses background.tga
+//   uses "background_ingame" images
+ALPHA_BACKGROUND_INGAME         0
 ALPHA_DISABLED                  0.2
 ALPHA_BEHIND                    1
 
