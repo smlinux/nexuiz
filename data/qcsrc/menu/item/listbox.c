@@ -54,7 +54,7 @@ void configureListBoxListBox(entity me, float theScrollbarWidth, float theItemHe
 }
 float keyDownListBox(entity me, float key, float ascii, float shift)
 {
-	me.dragScrollTimer = 0;
+	me.dragScrollTimer = time;
 	if(key == K_MWHEELUP)
 	{
 		me.scrollPos = max(me.scrollPos - 0.5, 0);
@@ -129,7 +129,7 @@ float mousePressListBox(entity me, vector pos)
 	if(pos_y >= 1) return 0;
 	me.dragScrollPos = pos;
 	me.updateControlTopBottom(me);
-	me.dragScrollTimer = 0;
+	me.dragScrollTimer = time;
 	if(pos_x >= 1 - me.controlWidth)
 	{
 		// if hit, set me.pressed, otherwise scroll by one page
@@ -200,8 +200,7 @@ void updateControlTopBottomListBox(entity me)
 	{
 		if(frametime) // only do this in draw frames
 		{
-			me.dragScrollTimer -= frametime;
-			if(me.dragScrollTimer < 0)
+			if(me.dragScrollTimer < time)
 			{
 				float save;
 				save = me.scrollPos;
@@ -210,7 +209,7 @@ void updateControlTopBottomListBox(entity me)
 				// if selected item is above listbox, decrease scrollpos so it is in
 				me.scrollPos = min(me.scrollPos, me.selectedItem * me.itemHeight);
 				if(me.scrollPos != save)
-					me.dragScrollTimer = 0.2;
+					me.dragScrollTimer = time + 0.2;
 			}
 		}
 		// if scroll pos is below end of list, fix it

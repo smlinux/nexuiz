@@ -61,7 +61,7 @@ float mouseDragInputBox(entity me, vector pos)
 
 float mousePressInputBox(entity me, vector pos)
 {
-	me.dragScrollTimer = 0;
+	me.dragScrollTimer = time;
 	me.pressed = 1;
 	return mouseDragInputBox(me, pos);
 }
@@ -85,7 +85,7 @@ void enterTextInputBox(entity me, string ch)
 float keyDownInputBox(entity me, float key, float ascii, float shift)
 {
 	me.lastChangeTime = time;
-	me.dragScrollTimer = 0;
+	me.dragScrollTimer = time;
 	if(ascii >= 32 && ascii != 127)
 	{
 		me.enterText(me, chr(ascii));
@@ -149,14 +149,13 @@ void drawInputBox(entity me)
 	cursorPosInWidths = draw_TextWidth(substring(me.text, 0, me.cursorPos), 0) * me.realFontSize_x;
 	totalSizeInWidths = draw_TextWidth(strcat(me.text, CURSOR), 0) * me.realFontSize_x;
 
-	me.dragScrollTimer -= frametime;
-	if(me.dragScrollTimer < 0)
+	if(me.dragScrollTimer < time)
 	{
 		float save;
 		save = me.scrollPos;
 		me.scrollPos = bound(cursorPosInWidths - (0.875 - me.keepspaceLeft - me.keepspaceRight), me.scrollPos, cursorPosInWidths - 0.125);
 		if(me.scrollPos != save)
-			me.dragScrollTimer = 0.2;
+			me.dragScrollTimer = time + 0.2;
 	}
 	me.scrollPos = min(me.scrollPos, totalSizeInWidths - (1 - me.keepspaceRight - me.keepspaceLeft));
 	me.scrollPos = max(0, me.scrollPos);

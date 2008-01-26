@@ -83,7 +83,7 @@ void drawListBoxItemNexuizCreditsList(entity me, float i, vector absSize, float 
 float keyDownNexuizCreditsList(entity me, float scan, float ascii, float shift)
 {
 	float i;
-	me.dragScrollTimer = 0;
+	me.dragScrollTimer = time;
 	me.scrolling = 0;
 
 	if(scan == K_PGUP)
