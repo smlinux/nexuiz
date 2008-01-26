@@ -24,6 +24,7 @@ vector w_shotdir;
 // make sure you call makevectors first (FIXME?)
 void(entity ent, vector vecs, float antilag, float recoil, string snd) W_SetupShot =
 {
+	float nudge = 1;
 	local vector trueaimpoint;
 	traceline(self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * MAX_SHOT_DISTANCE, MOVE_NOMONSTERS, self);
 	trueaimpoint = trace_endpos;
@@ -35,8 +36,8 @@ void(entity ent, vector vecs, float antilag, float recoil, string snd) W_SetupSh
 	else
 		w_shotorg = ent.origin + ent.view_ofs + v_right * vecs_y + v_up * vecs_z;
 	// now move the shotorg forward as much as requested if possible
-	traceline_hitcorpse(self, w_shotorg, w_shotorg + v_forward * vecs_x, MOVE_NORMAL, self);
-	w_shotorg = trace_endpos;
+	traceline_hitcorpse(self, w_shotorg, w_shotorg + v_forward * (vecs_x + nudge), MOVE_NORMAL, self);
+	w_shotorg = trace_endpos - v_forward * nudge;
 	// calculate the shotdir from the chosen shotorg
 	w_shotdir = normalize(trueaimpoint - w_shotorg);
 
