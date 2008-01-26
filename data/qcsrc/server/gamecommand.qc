@@ -5,6 +5,7 @@ void make_mapinfo_Think()
 	if(MapInfo_FilterGametype(MAPINFO_TYPE_ALL, 0, 1))
 	{
 		print("Done rebuiling mapinfos.\n");
+		MapInfo_FilterGametype(MapInfo_CurrentGametype(), MapInfo_CurrentFeatures(), 0);
 		remove(self);
 	}
 	else
@@ -26,6 +27,7 @@ void GameCommand(string command)
 		print("  teamstatus\n");
 		print("  printstats\n");
 		print("  make_mapinfo\n");
+		print("  gametype dm|ctf|...\n");
 		print("  savedb filename\n");
 		print("  dumpdb filename\n");
 		print("  loaddb filename\n");
@@ -74,6 +76,25 @@ void GameCommand(string command)
 		print(GotoMap(argv(1)), "\n");
 		return;
 	}
+
+#ifdef MAPINFO
+	if(argv(0) == "gametype") if(argc == 2)
+	{
+		float t;
+		string s;
+		s = argv(1);
+		t = MapInfo_Type_FromString(s);
+		if(t)
+		{
+			MapInfo_SwitchGameType(t);
+			MapInfo_FilterGametype(MapInfo_CurrentGametype(), MapInfo_CurrentFeatures(), 0);
+			bprint("Game type successfully switched to ", s, "\n");
+		}
+		else
+			bprint("Game type switch to ", s, " failed: this type does not exist!\n");
+		return;
+	}
+#endif
 
 	if(argv(0) == "adminmsg") if(argc == 3)
 	{
