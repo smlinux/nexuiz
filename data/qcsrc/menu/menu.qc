@@ -191,7 +191,7 @@ void() m_draw =
 	}
 
 	t = gettime();
-	realFrametime = frametime = min(0.2, t - menuPrevTime);
+	realFrametime = frametime = min(0.2, t - menuPrevTime) * cvar("menu_slowmo");
 	menuPrevTime = t;
 	time += frametime;
 
@@ -204,7 +204,7 @@ void() m_draw =
 	}
 
 	if(cvar("cl_capturevideo"))
-		frametime = 1 / cvar("cl_capturevideo_fps"); // make capturevideo work smoothly
+		frametime = cvar("menu_slowmo") / cvar("cl_capturevideo_fps"); // make capturevideo work smoothly
 
 	dprint_load();
 	gamestatus = 0;
