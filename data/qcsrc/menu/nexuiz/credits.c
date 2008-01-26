@@ -33,9 +33,9 @@ void configureNexuizCreditsListNexuizCreditsList(entity me)
 void drawNexuizCreditsList(entity me)
 {
 	float i;
-	if(me.scrolling && time > me.scrolling)
+	if(me.scrolling)
 	{
-		me.scrollPos = min(me.scrollPos + frametime * me.itemHeight, me.nItems * me.itemHeight - 1);
+		me.scrollPos = bound(0, (time - me.scrolling) * me.itemHeight, me.nItems * me.itemHeight - 1);
 		i = min(me.selectedItem, floor((me.scrollPos + 1) / me.itemHeight - 1));
 		i = max(i, ceil(me.scrollPos / me.itemHeight));
 		me.setSelected(me, i);
