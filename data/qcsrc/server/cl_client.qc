@@ -164,9 +164,10 @@ entity SelectSpawnPoint (float anypoint)
 	firstspot = findchain(classname, "info_player_deathmatch");
 	// filter out the bad ones
 	// (note this returns the original list if none survived)
-	firstspot = Spawn_FilterOutBadSpots(firstspot, playerlist, 100, teamcheck);
-	if(!firstspot)
-		firstspot = Spawn_FilterOutBadSpots(firstspot, playerlist, -1, teamcheck);
+	firstspot_new = Spawn_FilterOutBadSpots(firstspot, playerlist, 100, teamcheck);
+	if(!firstspot_new)
+		firstspot_new = Spawn_FilterOutBadSpots(firstspot, playerlist, -1, teamcheck);
+	firstspot = firstspot_new;
 
 	// there is 50/50 chance of choosing a random spot or the furthest spot
 	// (this means that roughly every other spawn will be furthest, so you
