@@ -11,14 +11,11 @@ textures/water/water0
 	q3map_globaltexture
 	{
 		map textures/water/water0.tga
-		tcMod scroll 0.1 0.2
-		tcMod turb .1 .1 0 .01
-		tcmod scale .1 .1
-		tcMod stretch sin 1 0.05 0.2 .0015
-		tcmod rotate 0.5
+		tcMod scroll 0.07 0.07
+		tcmod scale 1.2 0.7
 		blendfunc blend
 	}
-	dp_water 0.4 0.9  3 3  1 1 1  1 1 1
+	dp_water 0.1 0.8  3 3  1 1 1  1 1 1  0.125
 }
 
 textures/water/water1
@@ -32,14 +29,11 @@ textures/water/water1
 	q3map_globaltexture
 	{
 		map textures/water/water1.tga
-		tcMod scroll 0.1 0.2
-		tcMod turb .1 .1 0 .01
-		tcmod scale .1 .1
-		tcMod stretch sin 1 0.05 0.2 .0015
-		tcmod rotate 0.5
+		tcMod scroll 0.07 0.07
+		tcmod scale 1.2 0.7
 		blendfunc blend
 	}
-	dp_water 0.4 0.9  3 3  1 1 1  1 1 1
+	dp_water 0.1 0.8  3 3  1 1 1  1 1 1  0.125
 }
 
 textures/water/water2
@@ -53,14 +47,11 @@ textures/water/water2
 	q3map_globaltexture
 	{
 		map textures/water/water2.tga
-		tcMod scroll 0.1 0.2
-		tcMod turb .1 .1 0 .01
-		tcmod scale .1 .1
-		tcMod stretch sin 1 0.05 0.2 .0015
-		tcmod rotate 0.5
+		tcMod scroll 0.07 0.07
+		tcmod scale 1.2 0.7
 		blendfunc blend
 	}
-	dp_water 0.4 0.9  3 3  1 1 1  1 1 1
+	dp_water 0.1 0.8  3 3  1 1 1  1 1 1  0.125
 }
 
 textures/water/slime1
