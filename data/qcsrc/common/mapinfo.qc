@@ -1,4 +1,4 @@
-// internal toy
+	// internal toy
 void cvar_settemp(string pKey, string pValue)
 {
 	//localcmd(strcat("\nsettemp ", t, " \"", s, "\"\n"));
@@ -226,8 +226,7 @@ float MapInfo_FilterGametype(float pGametype, float pFeatures, float pAbortOnGen
 	}
 	_MapInfo_filtered = strzone(_MapInfo_filtered);
 	MapInfo_count = HugeSetOfIntegers_length(_MapInfo_filtered);
-	//print("Filter ", ftos(pGametype), "/", ftos(pFeatures), " has ", ftos(MapInfo_count), "\n");
-	// TODO clear cache
+	MapInfo_ClearTemps();
 	return 1;
 }
 
@@ -674,7 +673,7 @@ float MapInfo_CurrentGametype()
 		return MAPINFO_TYPE_DEATHMATCH;
 }
 
-float MapInfo_CheckMap(string s) // returns 0 if the map can't be played with the current settings, 1 otherwise
+float _MapInfo_CheckMap(string s) // returns 0 if the map can't be played with the current settings, 1 otherwise
 {
 	if(!MapInfo_Get_ByName(s, 1, 0))
 		return 0;
@@ -683,6 +682,14 @@ float MapInfo_CheckMap(string s) // returns 0 if the map can't be played with th
 	if((MapInfo_Map_supportedFeatures & MapInfo_CurrentFeatures()) != MapInfo_CurrentFeatures())
 		return 0;
 	return 1;
+}
+
+float MapInfo_CheckMap(string s) // returns 0 if the map can't be played with the current settings, 1 otherwise
+{
+	float r;
+	r = _MapInfo_CheckMap(s);
+	MapInfo_ClearTemps();
+	return r;
 }
 
 void MapInfo_SwitchGameType(float t)
@@ -729,7 +736,7 @@ string MapInfo_ListAllowedMaps()
 void MapInfo_LoadMapSettings(string s) // to be called from worldspawn
 {
 	float t;
-	if(!MapInfo_CheckMap(s))
+	if(!_MapInfo_CheckMap(s)) // with underscore, it keeps temps
 	{
 		if(MapInfo_Map_supportedGametypes <= 0)
 			error("Mapinfo system is not functional at all. BAILED OUT.\n");
@@ -746,4 +753,17 @@ void MapInfo_LoadMapSettings(string s) // to be called from worldspawn
 	}
 	cvar_settemp_restore();
 	MapInfo_Get_ByName(s, 1, MapInfo_CurrentGametype());
+	MapInfo_ClearTemps();
+}
+
+void MapInfo_ClearTemps()
+{
+	MapInfo_Map_bspname = string_null;
+	MapInfo_Map_title = string_null;
+	MapInfo_Map_description = string_null;
+	MapInfo_Map_author = string_null;
+	MapInfo_Map_supportedGametypes = 0;
+	MapInfo_Map_supportedFeatures = 0;
+	MapInfo_Map_diameter = 0;
+	MapInfo_Map_spawnpoints = 0;
 }

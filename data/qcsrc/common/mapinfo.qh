@@ -63,3 +63,5 @@ void MapInfo_LoadMapSettings(string s);
 void MapInfo_Cache_Destroy(); // disable caching
 void MapInfo_Cache_Create(); // enable caching
 void MapInfo_Cache_Invalidate(); // delete cache if any, but keep enabled
+
+void MapInfo_ClearTemps(); // call this when done with mapinfo for this frame

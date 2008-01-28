@@ -7,9 +7,12 @@ void wordwrap_buffer_put(string s)
 
 string wordwrap(string s, float l)
 {
+	string r;
 	wordwrap_buffer = "";
 	wordwrap_cb(s, l, wordwrap_buffer_put);
-	return wordwrap_buffer;
+	r = wordwrap_buffer;
+	wordwrap_buffer = "";
+	return r;
 }
 
 #ifndef MENUQC
@@ -29,6 +32,7 @@ void wordwrap_sprint(string s, float l)
 	wordwrap_cb(s, l, wordwrap_buffer_sprint);
 	if(wordwrap_buffer != "")
 		sprint(self, strcat(wordwrap_buffer, "\n"));
+	wordwrap_buffer = "";
 	return;
 }
 #endif

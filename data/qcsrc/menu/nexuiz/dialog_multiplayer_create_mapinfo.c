@@ -76,6 +76,8 @@ void loadMapInfoNexuizMapInfoDialog(entity me, float i)
 		me.typeAssaultLabel.disabled = !(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_ASSAULT);
 	if(me.typeOnslaughtLabel)
 		me.typeOnslaughtLabel.disabled = !(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_ONSLAUGHT);
+
+	MapInfo_ClearTemps();
 }
 void fillNexuizMapInfoDialog(entity me)
 {
