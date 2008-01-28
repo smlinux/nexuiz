@@ -96,9 +96,6 @@ void fillNexuizServerCreateTab(entity me)
 		me.TD(me, 1, 2.8, e = makeNexuizSliderCheckBox(-1, 0, me.sliderFraglimit, "Use map specified default"));
 	me.TR(me);
 	me.TR(me);
-		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Server UDP port:"));
-		me.TD(me, 1, 0.5, e = makeNexuizInputBox(0, "port"));
-	me.TR(me);
 		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "g_antilag", "AntiLag"));
 	me.TR(me);
 	me.TR(me);
@@ -112,6 +109,8 @@ void fillNexuizServerCreateTab(entity me)
 			e.addValue(e, "6 choices", "6");
 			e.addValue(e, "7 choices", "7");
 			e.configureNexuizTextSliderValues(e);
+	me.TR(me);
+		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "sv_vote_simple_majority", "Simple majority wins vcall"));
 	me.TR(me);
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Number of players:"));
