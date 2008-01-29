@@ -1551,9 +1551,9 @@ tex 47 47
 size 8 8
 alpha 256 256 0
 originjitter 12 12 12
-//lightradius 30
-//lightradiusfade 60
-//lightcolor 1.6 0.2 2
+//lightradius 60
+//lightradiusfade 300
+//lightcolor 3.2 0.4 4
 // purple flare effect
 effect crylink_impact
 countabsolute 1
@@ -1564,15 +1564,30 @@ size 8 8
 alpha 256 256 512
 // purple sparks
 effect crylink_impact
-count 12
+count 20
 type spark
-color 0xA040C0 0xFFFFFF
-size 1 1
-alpha 128 128 384
-gravity 1
-bounce 1.5
-velocityoffset 0 0 80
-velocityjitter 128 128 128
+tex 41 41
+color 0xA040C0 0xA040C0
+bounce 2
+size 4 4
+alpha 256 256 1024
+velocityjitter 256 256 256
+// purple splash
+effect crylink_impact
+count 3
+type static
+color 0xE070FF 0xE070FF
+size 8 8
+alpha 256 256 512
+velocityjitter 8 8 8
+// purple splash
+effect crylink_impact
+count 3
+type static
+color 0xE070FF 0xE070FF
+size 8 8
+alpha 256 256 1024
+velocityjitter 32 32 32
 
 
 
