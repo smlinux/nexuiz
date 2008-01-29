@@ -51,15 +51,10 @@ menuqc=menu
 newest=NEWEST
 tag=
 
-if [ -n "$EXPERIMENTAL" ]; then
-	basepk3=$base/data20071231.pk3 # newer build to make smaller patches
+#if [ -n "$EXPERIMENTAL" ]; then
+#	basepk3=$base/data20071231.pk3 # newer build to make smaller patches
 	nexdir=$base/nexuiz-current
-	fteqccflags="$fteqccflags -DMAPINFO"
-	ext="${ext}_svntrunk"
-	menuqc="menu"
-	newest=NEWEST-svntrunk
-	tag=trunk
-fi
+#fi
 
 # TODO normalize the builds
 platforms='x86 amd64 osx'
