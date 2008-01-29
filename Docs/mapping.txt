@@ -2,183 +2,181 @@
 =Mapping Help=
 ==============
 
-While I can't help you make a map, I can help you get it listed in the menu and working in the maplist.  :p  The central object is the .mapcfg file, but there's much more available.
+While I can't help you make a map, I can help you get it listed in the menu and
+working in the maplist. :p  The central object is the .mapinfo file, but
+there's much more available.
 
 Table of Contents
 -----------------
-I		Map Lists & Scripts
-		(get your map listed and working)
-  i.		mapcfg
-  ii.		mapname.cfg
+I        Map Lists & Scripts
+         (get your map listed and working)
+  i.     mapinfo
+  ii.    mapname.cfg
 
-II		Map Descriptions
-		(get the picture and info to show)
+II       Map Image
 
-III		Domination
+III      Domination
 
-IV		CTF
+IV       CTF
 
-V		Rune Match
+V        Rune Match
 
-Appendix A	Advanced mapcfgs
-  i.		mapcfg revisited
-  ii.		exit cfgs
+VI       Assault
 
-Appendix B	Helpful extras
-  i.		Team Colors
-  ii.		Text Colors
+VII      Onslaught
+
+Appendix A - Advanced mapinfo
+
+Appendix B - Helpful extras
+  i.     Team Colors
+  ii.    Text Colors
 
 
 ========================
 =I. Map Lists & Scripts=
 ========================
 
+There are actually 2 script/cfg options available to you, each serving a
+different purpose and being executed at a different time during the map's life
+cycle:
 
-There are actually 3 script/cfg options available to you, each serving a different purpose and being executed at a different time during the map's life cycle:
-1. The mapcfg
+1. mapname.mapinfo
 2. mapname.cfg
-3. exit cfg (explained in Appendix A)
 
-Of these, the mapcfg is the only one that's truely required.
+Of these, the mapinfo is the only one that's truely required - and the game is
+even so nice that it automatically generates a draft of it for you.
 
------------------
--The mapcfg file-
------------------
+------------------
+-The mapinfo file-
+------------------
 
-*cue scary music*
+*cue even more scary music*
 
-The mapcfg file is basically what gets your map listed in the menu, and sets up the options needed to change to it.  This file is basically required in order for your map to work, though in a pinch you could say "map mymap" in the console.
-The simplest mapcfg is simply a changelevel command, but you should usually add a timelimit and/or fraglimit to make sure your map will eventually change to the next map in the list.
+The mapinfo file is basically what gets your map listed in the menu, and sets
+up the options needed to change to it. If no mapinfo file exists, the menu
+will automatically generate a rough draft for you on game startup. It will get
+stored into data/data/mapname.mapinfo.
 
-As an example, let's say I make a map called "wazat1.bsp".  As long as I'm fantasizing, I might as well say this map is so well done I'm actually willing to release it for friends, neighbors, fellow forum visitors and other people who like me to judge me by.
-Let's also assume that I want domination, deathmatch/team deathmatch and runematch to all be playable on my map.
+As an example, let's say I make a map called "wazat1.bsp". As long as I'm
+fantasizing, I might as well say this map is so well done I'm actually willing
+to release it for friends, neighbors, fellow forum visitors and other people
+who like me to judge me by. Let's also assume that I want domination,
+deathmatch/team deathmatch and runematch to all be playable on my map.
 
-This is very easy.  Let's start with domination.  I should make a file called "dom_wazat1.mapcfg" (and put it inside of the maps directory) and write the following inside of it:
+This is very easy. First, I start the game and exit it again so the game writes
+data/data/wazat1.mapinfo for me. The file may look like:
 
-	set g_domination 1		// turn on domination
-	set fraglimit 100		// 100 points to win
-	set timelimit 15		// 15 minute max round time
-	changelevel wazat1	// now change level
+    title Wazat's Great Map
+    description Bleh.
+    author Unknown
+    _diameter 1966.839355
+    _spawnpoints 5
+    has weapons
+    type dm 30 20
+    type dom 200 20
+    type rune 200 20
+    type lms 9 20
+    type arena 10 20
 
-Likewise, runematch is easy:
-filename: "rune_wazat1.mapcfg"
+As I see, the menu autodetected that my map may be suitable for deathmatch,
+domination, runematch, last man standing and arena. But I want the map to be
+played in domination, deathmatch, team deathmatch, runematch only, and I also
+want different timelimits/fraglimits, so I will change the "type" lines to:
 
-	set g_runematch 1		// turn on rune match
-	set fraglimit 1000		// points to win
-	set timelimit 25		// round time
-	changelevel wazat1	// now change level
+    type dom 100 15
+    type rune 1000 25
+    type dm 40 15
+    type tdm 50 0 2
 
+Also, while I am at it, I should fix the placeholders in the map description lines:
 
-At this point I should say "okay, now it gets hard", but deathmatch and team deathmatch are easy (I skipped the comments in this one since they're fairly self-explanatory):
+    title Wibble
+    description A large multi level arena map
+    author Wazat
 
-filename: "dm_wazat1.mapcfg"
+Although not entirely necessary, I will now move the .mapinfo file from
+data/data/maps/wazat1.mapinfo to data/maps/wazat1.mapinfo, so it is at the same
+place as my map. Next time I start the game, my map will be shown supporting
+the right game modes and with the right description in the menu.
 
-	set fraglimit 40
-	set timelimit 15
-	changelevel wazat1
+Also, note the "has weapons" line. If this line is not there (which happens if
+the map contains no weapon entities other than the Nex), the map will run in
+MinstaGib only and not be shown in the menu normally. So if you look for your
+map and don't find it, add "has weapons" to the mapinfo file, and make sure you
+have weapon entities placed.
 
-Team Deathmatch is turned on automatically if the server sets the "Force Teamplay" option and plays a deathmatch map, but you can add TDM as an option for your map too:
+There's much more power in a mapinfo file. See Appendix A for more details.
 
-	set g_tdm 1			// play team deathmatch
-	set fraglimit 50		// how many kills to win
-	//set timelimit 25		// disabled: don't bother setting a time limit
-	changelevel wazat1	// now change level
-
-
-There's much more power in a mapcfg file.  See Appendix A for more details.
 
 -------------
 -mapname.cfg-
 -------------
 
-Unlike the mapcfg, which happens before the map loads (and is responsible for loading it), the mapname.cfg file doesn't exec until the map has mostly loaded.  This file is *usually* used to set values such as what music to play.
+Unlike the mapinfo, which is processed by the server, the mapname.cfg file is
+processed by the client, and therefore is used for client settings like fog or
+the music to play.
 
-Another difference from the mapcfg file is that mapname.cfg is global, meaning it doesn't matter if you're playing domination, deathmatch, or capture the flag, and it doesn't care what mapcfg was loaded.  It does the same thing every time this bsp file is loaded.  For that reason, this file should usually be used sparingly.
+To make the mapname.cfg, make a file with the same name as your map's .bsp
+file, except with a .cfg extension instead of .bsp. For example, my
+"wazat1.bsp" map would use "wazat1.cfg". It uses the same name as your map,
+thus the term mapname.cfg. It will typically only contain a single line:
 
-To make the mapname.cfg, make a file with the same name as your map's .bsp file, except with a .cfg extension instead of .bsp.  For example, my "wazat1.bsp" map would use "wazat1.cfg".  It uses the same name as your map, thus the term mapname.cfg.
+    cd loop 6
 
-
-======================
-=II. Map Descriptions=
-======================
-
-
-So, you've got your map listed in the menu and it plays properly, but the menu isn't showing your description and picture!  What manner of man would create such an accursed abomination?!
-
-Well... That sounds like something I'd do.  :D
-
-Luckily getting this to work is easy.  Just like you can have different mapcfgs for each map, you can have different descriptions.  In fact, those descriptions now match up with the mapcfgs, instead of the bsp files.
-So, all you need to do is make a description for each mapcfg file.  Simple copy-pasting will fulfil this need, though a bit of modification between versions is prefered.
-
-There is one crucial difference in this map's format.  Like the old style, the first like is what appears in the title bar.  However, the second line is the map's image file.  This means you can have a separate image for each game mode your map supports, if you want: one for domination, one for ctf, one for regular dm, and so on.  Or you can use the same image for all of them.
-
-So how to do this?  Easy, just create a .txt file with the same name as the .mapcfg file.  For example, my wazat1.bsp has 4 mapcfgs:
-dm_wazat1.mapcfg
-tdm_wazat1.mapcfg
-dom_wazat1.mapcfg
-rune_wazat1.mapcfg
-
-I would then make 4 .txt files:
-dm_wazat1.txt
-tdm_wazat1.txt
-dom_wazat1.txt
-rune_wazat1.txt
-
-Each of these files can have the same content, but I recommend you change at least a little bit of it (such as the title bar).
-Here is an example of what rune_wazat1.txt would look like (note that when you make your real file, you shouldn't tab it in):
-
-	Wibble (rune_wazat1)
-	maps/rune_wazat1
-	
-	The only map I've ever
-	done right!
-	
-	Players: 3-8
-	
-	Weapons: Machinegun, Mortar,
-	Crylink, Nex, Rocket Launcher,
-	Hagar
-	
-	Powerups: None
-	
-	Gametype:
-	Rune Match
-	
-	Author:
-	Wazat
+where 6 is the number or name of a track in sound/cdtracks/
 
 
-Notice the first line has the map's title (Wibble... what was I thinking?), and the filename of the mapcfg for the user to see (which from the player's point of view is essentially the map's filename).
+===============
+=II. Map Image=
+===============
 
-The second line defines where the image is that should be displayed.  This can be different for each game mode, but it doesn't have to be.  Note that you need to provide the right path (maps/), but you don't need to give an extension.
+So, you've got your map listed in the menu and it plays properly, but the menu
+isn't showing your picture! Or the picture is scaled badly! What manner of man
+would create such an accursed abomination?!
 
-The rest of the file is just plain text to print out as-is.
+Well... That sounds like something I'd do. :D
 
+And it is really easy: just make a screenshot of the map in action (preferably
+with crosshair and HUD switched off), and place it next to the map as
+mapname.jpg. For best rendering and file size, make the image in 4:3 aspect
+ratio, but scale it to the resolution 256x256 or possibly 512x512. It will look
+skewed in your image editing app, but the menu will show it right, and your
+graphics card LOVES images of such dimension.
 
 
 =================
 =III. Domination=
 =================
 
-In order to get Domination working well in your map, you need to place dom_team and dom_controlpoint entites.  You *must* have at least 3 dom_team entities - 2 minimum teams and one blank one (empty netname and no team).  You can have up to 4 teams (5 dom_team entities).
+In order to get Domination working well in your map, you need to place dom_team
+and dom_controlpoint entites. You *must* have at least 3 dom_team entities - 2
+minimum teams and one blank one (empty netname and no team). You can have up
+to 4 teams (5 dom_team entities).
 
 Dom Team
 --------
-classname	dom_team
-netname		name of team (Red Team).  Set to "" or don't define for the required blank team.
-cnt		color of the team.  See the "Helpful Extras" section for info.
-model		When this team captures control points, the points turn to this model.  If this is the neutral team, points start out as this model.
-noise		Sound to be played on the control point when it's captured.  Only players nearby will hear it.
-noise1		Sound to be played to all players when the control point is captured.  Also good for an annoncer voice ("Red Team has captured a control point")
+classname  dom_team
+netname    name of team (Red Team). Set to "" or don't define for the required
+           blank team.
+cnt        color of the team. See the "Helpful Extras" section for info.
+model      When this team captures control points, the points turn to this
+           model. If this is the neutral team, points start out as this model.
+noise      Sound to be played on the control point when it's captured. Only
+           players nearby will hear it.
+noise1     Sound to be played to all players when the control point is
+           captured. Also good for an annoncer voice ("Red Team has captured a
+           control point")
 
 Control Points
 --------------
-classname	dom_controlpoint
-message		message to be displayed to all players when this point is captured, preceded by the team's name.  This defaults to " has captured a control point".  You can specify different names for each point, for example " has captured the Lava Room".
-origin		where in the map this point is
-wait		How often this point gives its controlling team frags.
-frags		How many frags this point gives each wait cycle.
-
+classname  dom_controlpoint
+message    message to be displayed to all players when this point is captured,
+           preceded by the team's name. This defaults to " has captured a control point".
+           You can specify different names for each point, for example " has captured the
+           Lava Room".
+origin     where in the map this point is
+wait       How often this point gives its controlling team frags.
+frags      How many frags this point gives each wait cycle.
 
 Here is an example entry in a .ent file that includes colored text and 3 teams:
 
@@ -257,105 +255,93 @@ Here is an example entry in a .ent file that includes colored text and 3 teams:
 }
 
 
-As you can see in the example, there are 5 dom_team ents: one blank, Red, Blue, Pink and Yellow.  Each control point has a different message (giving it a special name), and the one in the hallways gives 3 frags every 5 seconds instead of just one, making it more valuable.
+As you can see in the example, there are 5 dom_team ents: one blank, Red, Blue,
+Pink and Yellow. Each control point has a different message (giving it a
+special name), and the one in the hallways gives 3 frags every 5 seconds
+instead of just one, making it more valuable.
 
+If your map contains the required entities for Domination, the menu will
+automatically detect it for supporting Domination. To force the map to get
+re-detected after you add such entities, delete the data/data/mapname.mapinfo
+file - or simply edit it to add the "type dom" line.
 
 
 ==========
 =III. CTF=
 ==========
 
-Capture the flag needs at least 1 CTF flag per team, and can also make use of team spawnpoints.
+Capture the flag needs at least 1 CTF flag per team, and can also make use of
+team spawnpoints.
 
 CTF Flags
 ---------
-classname	item_flag_team1 or item_flag_team2
-angle		direction the flag will point
-model		model of the flag (default: models/ctf/flag_red.md3 or models/ctf/flag_blue.md3)
-noise		sound played when flag is stolen (default: "ctf/take.wav")
-noise1		sound played when flag is returned by a teammate (default: "ctf/return.wav")
-noise2		sound played when flag is captured (default: "ctf/capture.wav")
-noise3		sound played when flag returns itself (default: "ctf/respawn.wav")
+classname  item_flag_team1 or item_flag_team2
+angle      direction the flag will point
+model      model of the flag (default: models/ctf/flag_red.md3 or
+           models/ctf/flag_blue.md3)
+noise      sound played when flag is stolen (default: "ctf/take.wav")
+noise1     sound played when flag is returned by a teammate (default:
+           "ctf/return.wav")
+noise2     sound played when flag is captured (default: "ctf/capture.wav")
+noise3     sound played when flag returns itself (default: "ctf/respawn.wav")
 
 Team Spawnpoints
 ----------------
-classname	info_player_team1 or info_player_team2
-*note: These function just like info_player_deathmatch, but for one team only.  If you don't make team spawnpoints, info_player_deathmatch is used instead.
+classname  info_player_team1 or info_player_team2
+*note: These function just like info_player_deathmatch, but for one team only.
+If you don't make team spawnpoints, info_player_deathmatch is used instead.
 
-
+If your map contains the required entities for CTF, the menu will automatically
+detect it for supporting CTF. To force the map to get re-detected after you add
+such entities, delete the data/data/mapname.mapinfo file - or simply edit it to
+add the "type ctf" line.
 
 ================
 =III. Runematch=
 ================
 
-Runematch needs only one type of entity to work: rune spawn points.  You will need at least one for each rune (5 minimum at the time of this writing), though you should probably have more than that in the map.  Just give the points a classname and origin.
+Runematch needs only one type of entity to work: rune spawn points. You will
+need at least one for each rune (5 minimum at the time of this writing), though
+you should probably have more than that in the map. Just give the points a
+classname and origin.
 
 Rune Spawnpoints
 ----------------
-classname	runematch_spawn_point
+classname  runematch_spawn_point
 
+If your map contains the required entities for Runematch, the menu will automatically
+detect it for supporting Runematch. To force the map to get re-detected after you add
+such entities, delete the data/data/mapname.mapinfo file - or simply edit it to
+add the "type rune" line.
 
 
 =================================
-=Appendix A - Advanced Mapcfgs  =
+=Appendix A - Advanced mapinfo  =
 =================================
 
----------------------
--i. mapcfg revisited-
----------------------
+You now know how to make a basic, bare-bones mapinfo to set up a couple options
+and load your map. However, there's much more you can do!  Consider these
+senarios:
 
-You now know how to make a basic, bare-bones mapcfg to set up a couple options and load your map.  However, there's much more you can do!  Consider these senarios:
+1. The laser has too high of a force for laser jumps and ruins CTF
+2. I don't want players to start out with the shotgun, but with the machinegun
+   instead
+3. The map takes so much server CPU performance that the anti-wallhack can't be
+   made active
 
-1. I want to play different music in ctf and domination
-2. The laser has too high of a force for laser jumps and ruins CTF
-3. I want to create fog in my map
+Each of these situations can be resolved with ease with a little work in the
+mapinfo file.
 
-Each of these situations can be resolved with ease with a little work in the mapcfg file.
+To do this, I can add the following lines to my mapinfo file:
 
-You're already creating different settings between game modes with your gamecfgs, since you can choose different fraglimits.  You can also play different music.  The mapname.cfg file is global to all uses of your map, so instead of using it, we'll use the mapinfos.  You'll need to remove the music entry from the mapname.cfg file, and paste it into each of your mapname.cfg files *after* the changelevel command.
-So, dom_wazat1.mapcfg would look like this:
+    settemp_for_type ctf g_balance_laser_primary_force 200
+    settemp_for_type all g_start_weapon_shotgun 0
+    settemp_for_type all g_start_weapon_uzi 1
+    settemp_for_type all sv_cullentities_trace 0
 
-	set g_domination 1		// turn on domination
-	set fraglimit 100		// 100 points to win
-	set timelimit 15		// 15 minute max round time
-	set changelevel wazat1	// now change level
-	cd loop "8"		// play music
-
-You can choose different music for each of your game modes by changing that last line.  Just make sure your map.cfg file doesn't have a cd loop command in it, or it'll overwrite what you've done.
-
----------------
--ii. exit cfgs-
----------------
-
-In order to solve our laser jumping problem, we need to call upon another feature of mapcfgs -- map exit scripts or "exit cfgs".  These are called when the map is changing, before the next map's mapcfg is run.  You can use them to clean up any special changes you've made so they won't affect the next map.
-
-For our laser jumping example, we could do something like this:
-
-	 // set up the exit cfg so we can reset values to what they were before
-	set exit_cfg "maps/dom_wazat1_exit.cfg"
-	 // make a backup
-	set BACKUP_g_balance_laser_primary_force $g_balance_laser_primary_force
-	 // map-customized values here
-	set g_balance_laser_primary_force 100
-	 // and on with the rest of the config
-	set g_domination 1		// turn on domination
-	set fraglimit 100		// 100 points to win
-	set timelimit 15		// 15 minute max round time
-	set changelevel wazat1	// now change level
-	cd loop "8"		// play music
-
-Then we would make the exit cfg, named "dom_wazat1_exit.cfg":
-
-	 // reset laser damage
-	set g_balance_laser_primary_force $BACKUP_g_balance_laser_primary_force
-
-
-When my wazat1 map is run in domination, the laser's force will only be 100.  However, before the map changes, it gets set back to what it was before.  This is because the original value was stored in BACKUP_g_balance_laser_primary_force, then BACKUP_g_balance_laser_primary_force was copied back into g_balance_laser_primary_force when the exit cfg ran.
-
-
-You can set all kinds of values like this, including fog and gameplay options.
-
-
+These "settemp" settings are automatically removed when the map is left and
+another is loaded. As you can see, it is possible to make per-mode temporary
+settings, and global ones.
 
 
 ===============================
@@ -369,30 +355,29 @@ When you need to set an entity's color or team, use these values:
 
 Red
 ---
-Team:	5
-Color:	4
+Team:      5
+Color:     4
 
 Blue
 ----
-Team:	14
-Color:	13
-
-Pink
------
-Team:	10
-Color:	9
+Team:      14
+Color:     13
 
 Yellow
 ------
-Team:	13
-Color:	12
+Team:      13
+Color:     12
 
+Pink
+-----
+Team:      10
+Color:     9
 
 
 ----------------
 -i. Text Colors-
 ----------------
-Occasionally you may want to print text in color, such as team names.  Here are your options:
+Occasionally you may want to print text in color, such as team names. Here are your options:
 
 1  Red
 2  Green
@@ -401,6 +386,6 @@ Occasionally you may want to print text in color, such as team names.  Here are 
 5  Cyan
 6  Magenta
 7  White
-8  Grey
-9  Grey
+8  Grey (transparent)
+9  Grey (solid)
 0  Black
