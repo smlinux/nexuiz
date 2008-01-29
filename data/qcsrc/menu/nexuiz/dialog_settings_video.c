@@ -72,22 +72,21 @@ void fillNexuizVideoSettingsTab(entity me)
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Contrast:"));
 		me.TD(me, 1, 2, e = makeNexuizSlider(1.0, 3.0, 0.05, "v_contrast"));
 	me.TR(me);
-		me.TD(me, 1, 1, e = makeNexuizCheckBox(0, "v_hwgamma", "HW Gamma:"));
+		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Gamma:"));
 		me.TD(me, 1, 2, e = makeNexuizSlider(0.5, 2.0, 0.05, "v_gamma"));
-			setDependent(e, "v_hwgamma", 1, 1);
 	me.TR(me);
-
+		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Contrast boost:"));
+		me.TD(me, 1, 2, e = makeNexuizSlider(1.0, 5.0, 0.1, "v_contrastboost"));
+	me.TR(me);
+		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "v_glslgamma", "Use GLSL to handle color control"));
+			setDependent(e, "r_glsl", 1, 1);
+	me.TR(me);
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Ambient lighting:"));
 		me.TD(me, 1, 2, e = makeNexuizSlider(0, 20.0, 1.0, "r_ambient"));
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Scene brightness:"));
 		me.TD(me, 1, 2, e = makeNexuizSlider(0.5, 2.0, 0.05, "r_hdr_scenebrightness"));
-	me.TR(me);
-		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Contrast boost:"));
-			setDependent(e, "r_glsl", 1, 1);
-		me.TD(me, 1, 2, e = makeNexuizSlider(1.0, 5.0, 0.1, "r_glsl_contrastboost"));
-			setDependent(e, "r_glsl", 1, 1);
 
 	me.gotoRC(me, me.rows - 1, 0);
 		me.TD(me, 1, me.columns, makeNexuizCommandButton("Apply immediately", '0 0 0', "vid_restart", COMMANDBUTTON_APPLY));
