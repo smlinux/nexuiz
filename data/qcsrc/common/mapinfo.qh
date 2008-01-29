@@ -29,7 +29,8 @@ float MapInfo_Map_spawnpoints;
 void MapInfo_Enumerate();
 
 // filter the info by game type mask (updates MapInfo_count)
-float MapInfo_FilterGametype(float gametype, float features, float pAbortOnGenerate); // 1 on success, 0 on temporary failure (call it again next frame then)
+float MapInfo_progress;
+float MapInfo_FilterGametype(float gametype, float features, float pAbortOnGenerate); // 1 on success, 0 on temporary failure (call it again next frame then; use MapInfo_progress as progress indicator)
 float MapInfo_CurrentFeatures(); // retrieves currently required features from cvars
 float MapInfo_CurrentGametype(); // retrieves current gametype from cvars
 

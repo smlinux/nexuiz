@@ -154,25 +154,30 @@ void() Item_Nex_ExtResponseSystem_CheckForResponse =
 
 // END OF EXTRESPONSE SYSTEM /////////////////////////////////////////////////
 
-float nMenuInitDots;
 float preMenuInit()
 {
-	string s;
-	float i, w, sz;
+	vector sz;
+	vector boxA, boxB;
 
 	MapInfo_Cache_Create();
 	MapInfo_Enumerate();
 	if(!MapInfo_FilterGametype(MAPINFO_TYPE_ALL, 0, 1))
 	{
-		nMenuInitDots = nMenuInitDots + 1;
-		s = "Generating mapinfo..";
-		for(i = 0; i < nMenuInitDots; ++i)
-			s = strcat(s, ".");
 		draw_reset();
 
-		w = draw_TextWidth(s, 0);
-		sz = min(0.025, 1 / w);
-		draw_CenterText(eX * 0.5 + eY * 0.5, s, eX * sz + eY * sz * (draw_scale_x / draw_scale_y), '1 1 1', 1, 0);
+		sz = eX * 0.025 + eY * 0.025 * (draw_scale_x / draw_scale_y);
+		draw_CenterText('0.5 0.5 0' - 1.25 * sz_y * eY, "Autogenerating mapinfo for newly added maps...", sz, '1 1 1', 1, 0);
+
+		boxA = '0.05 0.5 0' + 0.25 * sz_y * eY;
+		boxB = '0.95 0.5 0' + 1.25 * sz_y * eY;
+		draw_Fill(boxA, boxB - boxA, '1 1 1', 1);
+		
+		boxA += sz * 0.1;
+		boxB -= sz * 0.1;
+		draw_Fill(boxA, boxB - boxA, '0.1 0.1 0.1', 1);
+
+		boxB_x = boxA_x * (1 - MapInfo_progress) + boxB_x * MapInfo_progress;
+		draw_Fill(boxA, boxB - boxA, '0 0 1', 1);
 
 		return FALSE;
 	}
