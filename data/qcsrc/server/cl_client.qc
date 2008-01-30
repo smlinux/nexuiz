@@ -435,8 +435,9 @@ void FixPlayermodel()
 	local float defaultskin;
 	local vector m1, m2;
 
+	defaultmodel = "";
+
 	if(cvar("sv_defaultcharacter") == 1) {
-		defaultmodel = "";
 		defaultskin = 0;
 
 		if(teams_matter)
@@ -450,7 +451,10 @@ void FixPlayermodel()
 			defaultmodel = cvar_string("sv_defaultplayermodel");
 			defaultskin = cvar("sv_defaultplayerskin");
 		}
-
+	}
+	
+	if(defaultmodel != "")
+	{
 		if (defaultmodel != self.model)
 		{
 			m1 = self.mins;
