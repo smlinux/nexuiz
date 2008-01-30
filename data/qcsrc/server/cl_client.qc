@@ -540,6 +540,7 @@ void PutClientInServer (void)
 		self.armorvalue = start_armorvalue;
 		self.items = start_items;
 		self.switchweapon = start_switchweapon;
+		self.cnt = start_switchweapon;
 		self.weapon = 0;
 		self.jump_interval = time;
 

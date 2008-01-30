@@ -146,7 +146,7 @@ void(float imp) W_SwitchWeapon
 	if (self.weapon != imp)
 	if (client_hasweapon(self, imp, TRUE, TRUE))
 	{
-		self.cnt = self.weapon;
+		self.cnt = self.weapon ? self.weapon : self.switchweapon;
 		self.switchweapon = imp;
 	}
 };
@@ -175,7 +175,7 @@ void() W_NextWeapon =
 		if (weaponwant > WEP_LAST)
 			weaponwant = WEP_FIRST;
 	}
-	self.cnt = self.weapon;
+	self.cnt = self.weapon ? self.weapon : self.switchweapon;
 	self.switchweapon = weaponwant;
 };
 
@@ -203,7 +203,7 @@ void() W_PreviousWeapon =
 		if (weaponwant > WEP_LAST)
 			weaponwant = WEP_FIRST;
 	}
-	self.cnt = self.weapon;
+	self.cnt = self.weapon ? self.weapon : self.switchweapon;
 	self.switchweapon = weaponwant;
 };
 
