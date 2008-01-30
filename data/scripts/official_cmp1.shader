@@ -192,11 +192,10 @@ textures/cmp1-dm8/ame7glass_reflect
 	qer_editorimage textures/cmp1-dm8/ame7light.tga
 	surfaceparm nomarks
 	surfaceparm trans
-	cull disable
 	qer_trans 0.5
 	{
 		map textures/cmp1-dm8/ame7light.tga
-		blendfunc add
+		blendfunc blend
 		tcGen environment
 	}
 	{
