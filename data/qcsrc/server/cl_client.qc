@@ -1,3 +1,5 @@
+.float wantswelcomemessage;
+
 void info_player_survivor (void)
 {
 	info_player_deathmatch();
@@ -403,6 +405,7 @@ void PutObserverInServer (void)
 	self.oldvelocity = self.velocity;
 	self.customizeentityforclient = Client_customizeentityforclient;
 	self.viewzoom = 1;
+	self.wantswelcomemessage = 1;
 
 	if(g_arena)
 	{
@@ -1280,6 +1283,7 @@ float SpectateNext() {
 		msg_entity = self;
 		WriteByte(MSG_ONE, SVC_SETVIEW);
 		WriteEntity(MSG_ONE, self.enemy);
+		self.wantswelcomemessage = 1;
 	 	//stuffcmd(self, "set viewsize $tmpviewsize \n");
 		SpectateUpdate();
 		return 1;
@@ -1569,7 +1573,6 @@ void PlayerPreThink (void)
 			IntermissionThink ();	// otherwise a button could be missed between
 		return;
 	} else if(self.classname == "observer") {
-
 		if (self.flags & FL_JUMPRELEASED) {
 			if (self.button2 && self.version == cvar("gameversion")) {
 				self.welcomemessage_time = 0;
@@ -1588,7 +1591,10 @@ void PlayerPreThink (void)
 				self.flags = self.flags | FL_JUMPRELEASED;
         		}
 		}
-		PrintWelcomeMessage(self);
+		if(self.button4)
+			self.wantswelcomemessage = 0;
+		if(self.wantswelcomemessage)
+			PrintWelcomeMessage(self);
 	} else if(self.classname == "spectator") {
 		if (self.flags & FL_JUMPRELEASED) {
 			if (self.button2 && self.version == cvar("gameversion")) {
@@ -1618,7 +1624,10 @@ void PlayerPreThink (void)
 				self.flags = self.flags | FL_JUMPRELEASED;
         		}
 		}
-		PrintWelcomeMessage(self);
+		if(self.button4)
+			self.wantswelcomemessage = 0;
+		if(self.wantswelcomemessage)
+			PrintWelcomeMessage(self);
 		self.flags = self.flags | FL_CLIENT | FL_NOTARGET;
 	}
 }
