@@ -133,12 +133,12 @@ void Say(entity source, float teamsay, string msgin)
 float VoteCheckNasty(string cmd)
 {
 	if(strstrofs(cmd, ";", 0) >= 0)
-		return FALSE;
+		return TRUE;
 	if(strstrofs(cmd, "\n", 0) >= 0)
-		return FALSE;
+		return TRUE;
 	if(strstrofs(cmd, "\r", 0) >= 0)
-		return FALSE;
-	return TRUE;
+		return TRUE;
+	return FALSE;
 }
 
 string GetKickVoteVictim_newcommand;
