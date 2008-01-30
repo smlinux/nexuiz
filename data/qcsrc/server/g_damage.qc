@@ -16,8 +16,15 @@ void announce(entity player, string msg)
 float IsDifferentTeam(entity a, entity b)
 {
 	if(teams_matter)
+	{
 		if(a.team == b.team)
 			return 0;
+	}
+	else
+	{
+		if(a == b)
+			return 0;
+	}
 	return 1;
 }
 
