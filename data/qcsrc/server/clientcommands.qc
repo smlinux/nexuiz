@@ -130,6 +130,17 @@ void Say(entity source, float teamsay, string msgin)
 	strunzone(msgstr);
 }
 
+float VoteCheckNasty(string cmd)
+{
+	if(strstrofs(cmd, ";", 0) >= 0)
+		return FALSE;
+	if(strstrofs(cmd, "\n", 0) >= 0)
+		return FALSE;
+	if(strstrofs(cmd, "\r", 0) >= 0)
+		return FALSE;
+	return TRUE;
+}
+
 string GetKickVoteVictim_newcommand;
 entity GetKickVoteVictim(string vote, string cmd)
 {
@@ -216,6 +227,8 @@ void SV_ParseClientCommand(string s) {
 						sprint(self, "^1Your vote is empty. See help for more info.\n");
 					} else if(time < self.vote_next) {
 						sprint(self, strcat("^1You have to wait ^2", ftos(self.vote_next - time), "^1 seconds before you can again call a vote.\n"));
+					} else if(VoteCheckNasty(vote)) {
+						sprint(self, "Syntax error in command.\n");
 					} else if(VoteAllowed(strcat1(argv(2)))) { // strcat seems to be necessary
 						// remap chmap to gotomap (forces intermission)
 						if(vote == "chmap" || vote == "gotomap") // won't work without arguments
@@ -306,6 +319,8 @@ void SV_ParseClientCommand(string s) {
 				dovote = VoteParse();
 				if(dovote == "") {
 					sprint(self, "^1Your command was empty. See help for more info.\n");
+				} else if(VoteCheckNasty(dovote)) {
+					sprint(self, "Syntax error in command.\n");
 				} else if(VoteAllowed(strcat1(argv(2)))) { // strcat seems to be necessary
 					if(dovote == "chmap" || dovote == "gotomap") // won't work without arguments
 						return;
