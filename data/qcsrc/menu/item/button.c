@@ -151,7 +151,7 @@ void drawButton(entity me)
 
 	drawLabel(me);
 
-	if(me.clickTime > 0 && me.clickTime < frametime)
+	if(me.clickTime > 0 && me.clickTime <= frametime)
 	{
 		// keyboard click timer expired? Fire the event then.
 		if not(me.disabled)
