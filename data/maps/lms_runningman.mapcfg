@@ -1,4 +1,0 @@
-set g_lms 1
-set fraglimit 10
-set timelimit 30
-changelevel runningman

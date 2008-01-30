@@ -1,4 +1,0 @@
-set g_domination 1
-set fraglimit 500
-set timelimit 15
-changelevel ruiner

@@ -1,4 +1,0 @@
-set g_domination 1
-set fraglimit 400
-set timelimit 15
-changelevel reslimed

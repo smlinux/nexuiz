@@ -1,5 +1,0 @@
-set g_domination 1
-set g_domination_default_teams 4
-set fraglimit 250
-set timelimit 15
-changelevel toxic

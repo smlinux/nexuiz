@@ -1,5 +1,0 @@
-set g_keyhunt 1
-set g_keyhunt_teams 2
-set fraglimit 1000
-set timelimit 15
-changelevel strength
