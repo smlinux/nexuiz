@@ -34,21 +34,35 @@ void loadAllCvars(entity root)
 .float cvar2Min_setDependent;
 .float cvar2Max_setDependent;
 .float op_setDependent;
+.string cvarString_setDependent;
+.string cvarValue_setDependent;
 void setDependent_Check(entity e)
 {
 	float f;
-	f = cvar(e.cvar_setDependent);
-	if(e.cvarMin_setDependent <= e.cvarMax_setDependent)
-		e.disabled = ((f < e.cvarMin_setDependent) || (f > e.cvarMax_setDependent));
-	else
-		e.disabled = ((f >= e.cvarMax_setDependent) && (f <= e.cvarMin_setDependent));
-	if(e.cvar2_setDependent)
+	string s;
+	if(e.cvarString_setDependent)
 	{
-		f = cvar(e.cvar2_setDependent);
-		if(e.cvar2Min_setDependent <= e.cvar2Max_setDependent)
-			e.disabled = (e.disabled + ((f < e.cvar2Min_setDependent) || (f > e.cvar2Max_setDependent)) > e.op_setDependent);
-		else
-			e.disabled = (e.disabled + ((f >= e.cvar2Max_setDependent) && (f <= e.cvar2Min_setDependent)) > e.op_setDependent);
+		s = cvar_string(e.cvarString_setDependent);
+		e.disabled = (cvar_string(e.cvarString_setDependent) == e.cvarValue_setDependent);
+	}
+	else
+	{
+		if(e.cvar_setDependent)
+		{
+			f = cvar(e.cvar_setDependent);
+			if(e.cvarMin_setDependent <= e.cvarMax_setDependent)
+				e.disabled = ((f < e.cvarMin_setDependent) || (f > e.cvarMax_setDependent));
+			else
+				e.disabled = ((f >= e.cvarMax_setDependent) && (f <= e.cvarMin_setDependent));
+		}
+		if(e.cvar2_setDependent)
+		{
+			f = cvar(e.cvar2_setDependent);
+			if(e.cvar2Min_setDependent <= e.cvar2Max_setDependent)
+				e.disabled = (e.disabled + ((f < e.cvar2Min_setDependent) || (f > e.cvar2Max_setDependent)) > e.op_setDependent);
+			else
+				e.disabled = (e.disabled + ((f >= e.cvar2Max_setDependent) && (f <= e.cvar2Min_setDependent)) > e.op_setDependent);
+		}
 	}
 }
 void setDependent_Draw(entity e)
@@ -62,6 +76,16 @@ void setDependent(entity e, string theCvarName, float theCvarMin, float theCvarM
 	e.cvar_setDependent = theCvarName;
 	e.cvarMin_setDependent = theCvarMin;
 	e.cvarMax_setDependent = theCvarMax;
+	e.cvar2_setDependent = string_null;
+	e.draw = setDependent_Draw;
+	setDependent_Check(e);
+}
+void setDependentStringNotEqual(entity e, string theCvarName, string theCvarValue)
+{
+	e.draw_setDependent = e.draw;
+	e.cvarString_setDependent = theCvarName;
+	e.cvarValue_setDependent = theCvarValue;
+	e.cvar_setDependent = string_null;
 	e.cvar2_setDependent = string_null;
 	e.draw = setDependent_Draw;
 	setDependent_Check(e);

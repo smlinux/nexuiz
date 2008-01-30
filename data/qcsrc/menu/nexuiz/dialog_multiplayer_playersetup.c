@@ -1,10 +1,13 @@
 #ifdef INTERFACE
 CLASS(NexuizPlayerSettingsTab) EXTENDS(NexuizTab)
 	METHOD(NexuizPlayerSettingsTab, fill, void(entity))
+	METHOD(NexuizPlayerSettingsTab, draw, void(entity))
 	ATTRIB(NexuizPlayerSettingsTab, title, string, "Player Setup")
 	ATTRIB(NexuizPlayerSettingsTab, intendedWidth, float, 0.9)
 	ATTRIB(NexuizPlayerSettingsTab, rows, float, 22)
 	ATTRIB(NexuizPlayerSettingsTab, columns, float, 6.5)
+	ATTRIB(NexuizPlayerSettingsTab, playerNameLabel, entity, NULL)
+	ATTRIB(NexuizPlayerSettingsTab, playerNameLabelAlpha, float, 0)
 ENDCLASS(NexuizPlayerSettingsTab)
 entity makeNexuizPlayerSettingsTab();
 #endif
@@ -17,13 +20,22 @@ entity makeNexuizPlayerSettingsTab()
 	me.configureDialog(me);
 	return me;
 }
+void drawNexuizPlayerSettingsTab(entity me)
+{
+	if(cvar_string("_cl_name") == "Player")
+		me.playerNameLabel.alpha = ((mod(time * 2, 2) < 1) ? 1 : 0);
+	else
+		me.playerNameLabel.alpha = me.playerNameLabelAlpha;
+	drawContainer(me);
+}
 void fillNexuizPlayerSettingsTab(entity me)
 {
 	entity e, pms, sl;
 	float i, n;
 
 	me.TR(me);
-		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Player Name:"));
+		me.TD(me, 1, 1, me.playerNameLabel = makeNexuizTextLabel(0, "Player Name:"));
+			me.playerNameLabelAlpha = me.playerNameLabel.alpha;
 		me.TD(me, 1, 2, e = makeNexuizInputBox(1, "_cl_name"));
 			e.forbiddenCharacters = "\r\n\\\""; // don't care, isn't getting saved
 	me.TR(me);

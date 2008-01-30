@@ -16,10 +16,12 @@ void fillNexuizMultiplayerDialog(entity me)
 	mc = makeNexuizTabController(me.rows - 2);
 	me.TR(me);
 		me.TD(me, 1, 1, e = mc.makeTabButton(mc, "Join",  makeNexuizServerListTab()));
+			setDependentStringNotEqual(e, "_cl_name", "Player");
 		me.TD(me, 1, 1, e = mc.makeTabButton(mc, "Player Setup",  makeNexuizPlayerSettingsTab()));
-		if(cvar_string("_cl_name") == "Player")
-			e.onClick(e, e.onClickEntity); // lol animation
+			if(cvar_string("_cl_name") == "Player")
+				e.onClick(e, e.onClickEntity); // lol animation
 		me.TD(me, 1, 1, e = mc.makeTabButton(mc, "Create",  makeNexuizServerCreateTab()));
+			setDependentStringNotEqual(e, "_cl_name", "Player");
 	me.TR(me);
 	me.TR(me);
 		me.TD(me, me.rows - 2, me.columns, mc);

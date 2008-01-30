@@ -5,3 +5,4 @@ void loadAllCvars(entity root);
 void setDependent(entity e, string theCvarName, float theCvarMin, float theCvarMax);
 void setDependentAND(entity e, string theCvarName, float theCvarMin, float theCvarMax, string theCvar2Name, float theCvar2Min, float theCvar2Max);
 void setDependentOR(entity e, string theCvarName, float theCvarMin, float theCvarMax, string theCvar2Name, float theCvar2Min, float theCvar2Max);
+void setDependentStringNotEqual(entity e, string theCvarName, string theCvarValue);
