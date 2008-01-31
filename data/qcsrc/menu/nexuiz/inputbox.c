@@ -12,6 +12,8 @@ CLASS(NexuizInputBox) EXTENDS(InputBox)
 	ATTRIB(NexuizInputBox, color, vector, SKINCOLOR_INPUTBOX_N)
 	ATTRIB(NexuizInputBox, colorF, vector, SKINCOLOR_INPUTBOX_F)
 
+	ATTRIB(NexuizInputBox, alpha, float, SKINALPHA_TEXT)
+
 	ATTRIB(NexuizInputBox, cvarName, string, string_null)
 	METHOD(NexuizInputBox, loadCvars, void(entity))
 	METHOD(NexuizInputBox, saveCvars, void(entity))

@@ -12,8 +12,6 @@ CLASS(NexuizCrosshairButton) EXTENDS(RadioButton)
 	ATTRIB(NexuizCrosshairButton, cvarValueFloat, float, 0)
 	METHOD(NexuizCrosshairButton, loadCvars, void(entity))
 	METHOD(NexuizCrosshairButton, saveCvars, void(entity))
-
-	ATTRIB(NexuizCrosshairButton, disabledAlpha, float, SKINALPHA_DISABLED)
 ENDCLASS(NexuizCrosshairButton)
 entity makeNexuizCrosshairButton(float, float);
 #endif

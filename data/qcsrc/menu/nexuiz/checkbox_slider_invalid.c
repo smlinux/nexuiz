@@ -11,6 +11,7 @@ CLASS(NexuizSliderCheckBox) EXTENDS(CheckBox)
 	ATTRIB(NexuizSliderCheckBox, colorF, vector, SKINCOLOR_CHECKBOX_F)
 	ATTRIB(NexuizSliderCheckBox, colorD, vector, SKINCOLOR_CHECKBOX_D)
 
+	ATTRIB(NexuizSliderCheckBox, alpha, float, SKINALPHA_TEXT)
 	ATTRIB(NexuizSliderCheckBox, disabledAlpha, float, SKINALPHA_DISABLED)
 
 	ATTRIB(NexuizSliderCheckBox, controlledSlider, entity, NULL)

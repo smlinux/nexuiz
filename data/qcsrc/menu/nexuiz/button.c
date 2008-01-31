@@ -8,6 +8,7 @@ CLASS(NexuizButton) EXTENDS(Button)
 	ATTRIB(NexuizButton, colorC, vector, SKINCOLOR_BUTTON_C)
 	ATTRIB(NexuizButton, colorF, vector, SKINCOLOR_BUTTON_F)
 	ATTRIB(NexuizButton, colorD, vector, SKINCOLOR_BUTTON_D)
+	ATTRIB(NexuizButton, alpha, float, SKINALPHA_TEXT)
 	ATTRIB(NexuizButton, disabledAlpha, float, SKINALPHA_DISABLED)
 ENDCLASS(NexuizButton)
 entity makeNexuizButton(string theText, vector theColor);

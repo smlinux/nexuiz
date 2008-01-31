@@ -3,6 +3,7 @@ CLASS(NexuizTextLabel) EXTENDS(Label)
 	METHOD(NexuizTextLabel, configureNexuizTextLabel, void(entity, float, string))
 	METHOD(NexuizTextLabel, draw, void(entity))
 	ATTRIB(NexuizTextLabel, fontSize, float, SKINFONTSIZE_NORMAL)
+	ATTRIB(NexuizTextLabel, alpha, float, SKINALPHA_TEXT)
 	ATTRIB(NexuizTextLabel, disabledAlpha, float, SKINALPHA_DISABLED)
 ENDCLASS(NexuizTextLabel)
 entity makeNexuizTextLabel(float theAlign, string theText);

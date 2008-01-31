@@ -19,6 +19,7 @@ CLASS(NexuizCheckBox) EXTENDS(CheckBox)
 	METHOD(NexuizCheckBox, loadCvars, void(entity))
 	METHOD(NexuizCheckBox, saveCvars, void(entity))
 
+	ATTRIB(NexuizCheckBox, alpha, float, SKINALPHA_TEXT)
 	ATTRIB(NexuizCheckBox, disabledAlpha, float, SKINALPHA_DISABLED)
 ENDCLASS(NexuizCheckBox)
 entity makeNexuizCheckBox(float, string, string);

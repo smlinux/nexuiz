@@ -268,7 +268,8 @@ void drawListBoxItemNexuizKeyBinder(entity me, float i, vector absSize, float is
 	if(func == "")
 	{
 		theAlpha = 1;
-		theColor = '1 1 1';
+		theColor = SKINCOLOR_KEYGRABBER_TITLES;
+		theAlpha = SKINALPHA_KEYGRABBER_TITLES;
 		extraMargin = 0;
 	}
 	else
@@ -276,12 +277,12 @@ void drawListBoxItemNexuizKeyBinder(entity me, float i, vector absSize, float is
 		if(isSelected)
 		{
 			if(keyGrabber == me)
-				draw_Fill('0 0 0', '1 1 0', '1 0 0', 0.5);
+				draw_Fill('0 0 0', '1 1 0', SKINCOLOR_LISTBOX_WAITING, SKINALPHA_LISTBOX_WAITING);
 			else
-				draw_Fill('0 0 0', '1 1 0', '0 0 1', 0.5);
+				draw_Fill('0 0 0', '1 1 0', SKINCOLOR_LISTBOX_SELECTED, SKINALPHA_LISTBOX_SELECTED);
 		}
-		theAlpha = 0.7;
-		theColor = '1 1 1';
+		theAlpha = SKINALPHA_KEYGRABBER_KEYS;
+		theColor = SKINCOLOR_KEYGRABBER_KEYS;
 		extraMargin = me.realFontSize_x * 0.5;
 	}
 
@@ -293,7 +294,7 @@ void drawListBoxItemNexuizKeyBinder(entity me, float i, vector absSize, float is
 			descr = s;
 		if(cvar_string(strcat(s, "_press")) == "")
 			if(cvar_string(strcat(s, "_release")) == "")
-				theAlpha *= 0.5;
+				theAlpha *= SKINALPHA_DISABLED;
 	}
 
 	draw_Text(me.realUpperMargin * eY + extraMargin * eX, descr, me.realFontSize, theColor, theAlpha, 0);

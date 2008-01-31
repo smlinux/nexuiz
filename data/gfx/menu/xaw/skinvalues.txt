@@ -36,6 +36,7 @@ ALPHA_CURSOR_INTRO              1
 ALPHA_BACKGROUND_INGAME         0
 ALPHA_DISABLED                  0.2
 ALPHA_BEHIND                    1
+ALPHA_TEXT                      0.7
 
 // item: button
 //   uses button.tga
@@ -90,9 +91,17 @@ COLOR_INPUTBOX_N                '1 1 1'
 COLOR_INPUTBOX_F                '1 1 1'
 MARGIN_INPUTBOX                 0.02
 
+// item: key grabber
+COLOR_KEYGRABBER_TITLES         '1 1 1'
+ALPHA_KEYGRABBER_TITLES         1
+COLOR_KEYGRABBER_KEYS           '1 1 1'
+ALPHA_KEYGRABBER_KEYS           0.7
+
 // item: list box
 COLOR_LISTBOX_SELECTED          '0 0 0'
 ALPHA_LISTBOX_SELECTED          1
+COLOR_LISTBOX_WAITING           '1 0 0'
+ALPHA_LISTBOX_WAITING           0.5
 
 // item: map list
 COLOR_MAPLIST_TITLE             '1 1 1'
@@ -108,6 +117,10 @@ ALPHAS_MAINMENU                 '1 1 1'
 // item: player color button
 //   uses colorbutton.tga
 //   uses color.tga
+
+// item: player model
+COLOR_MODELTITLE                '1 1 1'
+ALPHA_MODELTITLE                1
 
 // item: player name editor
 //   uses charmap.tga
