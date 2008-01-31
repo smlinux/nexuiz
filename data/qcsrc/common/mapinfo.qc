@@ -356,10 +356,12 @@ float _MapInfo_Generate(string pFilename) // 0: failure, 1: ok ent, 2: ok bsp
 				inWorldspawn = 1;
 			else if(k == "author")
 				MapInfo_Map_author = v;
+			else if(k == "_description")
+				MapInfo_Map_description = v;
 			else if(k == "message")
 			{
 				i = strstrofs(v, " by ", 0);
-				if(MapInfo_Map_author == "He-Who-Must-Not-Be-Named" && i >= 0)
+				if(MapInfo_Map_author == "<AUTHOR>" && i >= 0)
 				{
 					MapInfo_Map_title = substring(v, 0, i);
 					MapInfo_Map_author = substring(v, i + 4, strlen(v) - (i + 4));
@@ -444,9 +446,9 @@ float _MapInfo_Generate(string pFilename) // 0: failure, 1: ok ent, 2: ok bsp
 
 void _MapInfo_Map_Reset()
 {
-	MapInfo_Map_title = "Untitled1";
-	MapInfo_Map_description = "Bleh.";
-	MapInfo_Map_author = "He-Who-Must-Not-Be-Named";
+	MapInfo_Map_title = "<TITLE>";
+	MapInfo_Map_description = "<DESCRIPTION>";
+	MapInfo_Map_author = "<AUTHOR>";
 	MapInfo_Map_supportedGametypes = 0;
 	MapInfo_Map_supportedFeatures = 0;
 	MapInfo_Map_diameter = 0;
