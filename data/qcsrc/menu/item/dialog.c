@@ -131,6 +131,7 @@ void configureDialogDialog(entity me)
 	me.frame.configureBorderImage(me.frame, me.title, me.titleFontSize, me.color, me.backgroundImage, me.titleHeight);
 	me.frame.zoomedOutTitleBarPosition = me.zoomedOutTitleBarPosition;
 	me.frame.zoomedOutTitleBar = me.zoomedOutTitleBar;
+	me.frame.alpha = me.alpha;
 	me.addItem(me, me.frame, '0 0 0', '1 1 0', 1);
 
 	if not(me.titleFontSize)

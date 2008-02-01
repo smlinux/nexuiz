@@ -26,9 +26,8 @@ entity makeTabButtonNexuizTabController(entity me, string theTitle, entity tab)
 	entity b;
 	if(me.rows != tab.rows)
 		error("Tab dialog height mismatch!");
-	b = spawnButton();
-	b.configureButton(b, theTitle, me.fontSize, me.image);
-	me.addTab(me, tab, b);
+	b = makeNexuizButton(theTitle, '0 0 0');
+		me.addTab(me, tab, b);
 	// TODO make this real tab buttons (with color parameters, and different gfx)
 	return b;
 }
