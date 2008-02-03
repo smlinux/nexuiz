@@ -113,6 +113,7 @@ sub q3map2(@)
 }
 
 (my $mapdir = getcwd()) =~ s!/[^/]*(?:$)!!;
+$mapdir = "/" if $mapdir eq "";
 
 unlink "$ENV{HOME}/.q3a/data";
 mkdir "$ENV{HOME}/.q3a";
