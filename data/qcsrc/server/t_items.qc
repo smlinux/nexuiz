@@ -304,6 +304,10 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 			return;
 		}
 		
+		/*
+		 * can't do it that way, as it would break maps
+		 * TODO make a target_give like entity another way, that perhaps has
+		 * the weapon name in a key
 		if(self.targetname)
 		{
 			// target_give not yet supported; maybe later
@@ -312,6 +316,7 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 			remove (self);
 			return;
 		}
+		*/
 		
 		if(cvar("spawn_debug") >= 2)
 		{
