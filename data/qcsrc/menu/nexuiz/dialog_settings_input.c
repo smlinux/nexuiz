@@ -62,6 +62,6 @@ void fillNexuizInputSettingsTab(entity me)
 		if(cvar_defstring("vid_dgamouse") != "")
 			me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "vid_dgamouse", "Turn off OS mouse acceleration"));
 		else if(cvar_defstring("apple_mouse_noaccel") != "")
-			me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "vid_dgamouse", "Turn off OS mouse acceleration"));
+			me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "apple_mouse_noaccel", "Turn off OS mouse acceleration"));
 }
 #endif
