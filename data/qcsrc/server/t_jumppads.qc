@@ -150,6 +150,9 @@ void() trigger_push_touch =
 		}
 		else
 			other.jumppadcount = TRUE;
+
+		if(self.message)
+			centerprint(other, self.message);
 	}
 
 	// reset tracking of who pushed you into a hazard (for kill credit)
