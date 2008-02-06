@@ -54,7 +54,7 @@ void fillNexuizVideoSettingsTab(entity me)
 			e.configureNexuizTextSliderValues(e);
 
 	me.TR(me);
-		if(cvar_defstring("apple_multithreadedgl") != "") // FIXME can this check against string_null too?
+		if(cvar_type("apple_multithreadedgl") & CVAR_TYPEFLAG_ENGINE)
 			me.TD(me, 1, 3, e = makeNexuizCheckBox(1, "apple_multithreadedgl", "Disable multithreaded OpenGL"));
 
 	me.TR(me);
