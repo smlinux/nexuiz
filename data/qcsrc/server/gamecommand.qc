@@ -80,15 +80,25 @@ void GameCommand(string command)
 #ifdef MAPINFO
 	if(argv(0) == "gametype") if(argc == 2)
 	{
-		float t;
+		float t, tsave;
 		string s;
 		s = argv(1);
 		t = MapInfo_Type_FromString(s);
+		tsave = MapInfo_CurrentGametype();
 		if(t)
 		{
 			MapInfo_SwitchGameType(t);
 			MapInfo_FilterGametype(MapInfo_CurrentGametype(), MapInfo_CurrentFeatures(), 0);
-			bprint("Game type successfully switched to ", s, "\n");
+			if(MapInfo_count > 0)
+			{
+				bprint("Game type successfully switched to ", s, "\n");
+			}
+			else
+			{
+				bprint("Cannot use this game type: no map for it found\n");
+				MapInfo_SwitchGameType(tsave);
+				MapInfo_FilterGametype(MapInfo_CurrentGametype(), MapInfo_CurrentFeatures(), 0);
+			}
 		}
 		else
 			bprint("Game type switch to ", s, " failed: this type does not exist!\n");
