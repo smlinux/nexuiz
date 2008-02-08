@@ -112,17 +112,6 @@ textures/evil8_fx/e8_jumppad02
 		rgbGen identity
 	}
 	{
-		map textures/evil8_fx/e8_jumppad02_fx.tga
-		blendfunc add
-		tcMod rotate 360
-		tcMod stretch sin 1 0.8 1 0.4
-	}
-	{
-		map textures/evil8_fx/e8_jumppad02.tga
-		blendfunc blend
-		rgbGen identity
-	}
-	{
 		map $lightmap
 		blendfunc gl_dst_color gl_one_minus_dst_alpha
 		rgbGen identity
