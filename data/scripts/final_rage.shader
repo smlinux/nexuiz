@@ -37,28 +37,6 @@ textures/final_rage/lt1
 	}
 }
 
-// Model textures 
-textures/final_rage/lamp1-1
-{
-	qer_editorimage textures/final_rage/lamp1.tga
-	q3map_clipmodel    
-	q3map_forcemeta
-	{
-		map $lightmap 
-		rgbGen identity
-		tcGen lightmap 
-	}
-	{
-		map textures/final_rage/lamp1.tga
-		blendfunc filter
-	}
-}
-
-textures/final_rage/lamp1-2
-{
-
-}
-
 textures/final_rage/lamp2-1
 {
 	qer_editorimage textures/final_rage/lamp2.tga
