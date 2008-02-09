@@ -8,7 +8,6 @@ evil2
 evil3
 evil4_techtrims
 evil5
-evil6
 evil6_floors
 evil6_lights
 evil6_support
@@ -31,6 +30,7 @@ sav-liquids
 sfx
 stralenex1
 stralenex8
+strength
 swamp
 toxic
 tznex01
