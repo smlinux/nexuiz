@@ -81,7 +81,7 @@
 {
 "classname" "target_speaker"
 "origin" "848 960 -200"
-"noise" "sound/world/fan4.wav"
+"noise" "sound/ambient/fan4.ogg"
 "spawnflags" "1"
 }
 {
@@ -265,43 +265,43 @@
 {
 "classname" "target_speaker"
 "spawnflags" "1"
-"noise" "sound/world/fan4.wav"
+"noise" "sound/ambient/fan4.ogg"
 "origin" "-880 960 -200"
 }
 {
 "classname" "target_speaker"
 "origin" "-496 736 -392"
-"noise" "sound/world/fan4.wav"
+"noise" "sound/ambient/fan4.ogg"
 "spawnflags" "1"
 }
 {
 "classname" "target_speaker"
 "spawnflags" "1"
-"noise" "sound/world/fan4.wav"
+"noise" "sound/ambient/fan4.ogg"
 "origin" "-16 416 -392"
 }
 {
 "classname" "target_speaker"
 "origin" "432 736 -392"
-"noise" "sound/world/fan4.wav"
+"noise" "sound/ambient/fan4.ogg"
 "spawnflags" "1"
 }
 {
 "classname" "target_speaker"
 "spawnflags" "1"
-"noise" "sound/world/fan4.wav"
+"noise" "sound/ambient/fan4.ogg"
 "origin" "-16 1088 -392"
 }
 {
 "classname" "target_speaker"
 "origin" "-864 176 -232"
-"noise" "sound/world/fan4.wav"
+"noise" "sound/ambient/fan4.ogg"
 "spawnflags" "1"
 }
 {
 "classname" "target_speaker"
 "spawnflags" "1"
-"noise" "sound/world/fan4.wav"
+"noise" "sound/ambient/fan4.ogg"
 "origin" "848 176 -232"
 }
 {
