@@ -9,19 +9,11 @@ textures/evil6_trims/e6btrim_light_s_nolight
 		map $lightmap
 		blendfunc filter
 	}
-	{
-		map textures/evil6_trims/e6btrim_light_blend.tga
-		blendfunc add
-	}
 }
 
 textures/evil6_trims/e6metalfan_s
 {
 	qer_editorimage textures/evil6_trims/e6metalfan.tga
-	{
-		map textures/evil6_trims/e6metalfan_blade.tga
-		tcmod rotate 5000
-	}
 	{
 		map textures/evil6_trims/e6metalfan.tga
 		blendfunc blend
@@ -43,10 +35,6 @@ textures/evil6_trims/e6strimlight_s_nolight
 		map $lightmap
 		blendfunc filter
 	}
-	{
-		map textures/evil6_trims/e6strimlight_blend.tga
-		blendfunc add
-	}
 }
 
 textures/evil6_trims/e6trim_bsrlight_s_nolight
@@ -60,10 +48,6 @@ textures/evil6_trims/e6trim_bsrlight_s_nolight
 		map $lightmap
 		blendfunc filter
 	}
-	{
-		map textures/evil6_trims/e6trim_bsrlight_blend.tga
-		blendfunc add
-	}
 }
 
 textures/evil6_trims/e6trim_light_s_nolight
@@ -76,9 +60,5 @@ textures/evil6_trims/e6trim_light_s_nolight
 	{
 		map $lightmap
 		blendfunc filter
-	}
-	{
-		map textures/evil6_trims/e6trim_light_blend.tga
-		blendfunc add
 	}
 }

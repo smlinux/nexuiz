@@ -94,11 +94,6 @@ textures/evil6_walls/e6tdoor
 		map textures/evil6_walls/e6tdoor.tga
 	}
 	{
-		map textures/evil6_walls/e6tdoor_fx.tga
-		tcmod scroll -1 0
-		blendFunc add
-	}
-	{
 		map textures/evil6_walls/e6tdoor.tga
 		blendFunc blend
 	}

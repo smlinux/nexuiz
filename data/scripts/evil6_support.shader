@@ -70,10 +70,6 @@ textures/evil6_support/e6vlight_supp_s_nolight
 		map $lightmap
 		blendfunc filter
 	}
-	{
-		map textures/evil6_support/e6vlight_supp_blend.tga
-		blendfunc add
-	}
 }
 
 textures/evil6_support/e6x_supprt_s

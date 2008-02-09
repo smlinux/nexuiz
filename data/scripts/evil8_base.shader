@@ -45,7 +45,6 @@ textures/e8/e8_base1broke
 textures/evil8_lights/e8btrimlight
 {
 	qer_editorimage textures/evil8_lights/e8btrimlight.tga
-	q3map_lightimage textures/evil8_lights/e8btrimlight.blend.tga
 	surfaceparm nomarks
 	q3map_surfacelight 250
 	{
@@ -56,16 +55,11 @@ textures/evil8_lights/e8btrimlight
 		blendfunc filter
 		tcGen lightmap
 	}
-	{
-		map textures/evil8_lights/e8btrimlight.blend.tga
-		blendfunc add
-	}
 }
 
 textures/evil8_floor/e8warn2steplight
 {
 	qer_editorimage textures/evil8_floor/e8warn2steplight.tga
-	q3map_lightimage textures/evil8_floor/e8warn2steplight.blend.tga
 	surfaceparm nomarks
 	q3map_surfacelight 250
 	{
@@ -76,16 +70,11 @@ textures/evil8_floor/e8warn2steplight
 		blendfunc filter
 		tcGen lightmap
 	}
-	{
-		map textures/evil8_floor/e8warn2steplight.blend.tga
-		blendfunc add
-	}
 }
 
 textures/evil8_floor/e8minitrimlight
 {
 	qer_editorimage textures/evil8_lights/e8minitrimlight.tga
-	q3map_lightimage textures/evil8_lights/e8minitrimlight.blend.tga
 	surfaceparm nomarks
 	q3map_surfacelight 250
 	{
@@ -95,10 +84,6 @@ textures/evil8_floor/e8minitrimlight
 		map $lightmap
 		blendfunc filter
 		tcGen lightmap
-	}
-	{
-		map textures/evil8_lights/e8minitrimlight.blend.tga
-		blendfunc add
 	}
 }
 
@@ -122,7 +107,6 @@ textures/evil8_fx/e8_jumppad02
 textures/evil8_lights/e8_rlightb2
 {
 	qer_editorimage textures/evil8_lights/e8_rlightb2.tga
-	q3map_lightimage textures/evil8_lights/e8_rlightb2.blend.tga
 	surfaceparm nomarks
 	q3map_surfacelight 450
 	{
@@ -133,16 +117,11 @@ textures/evil8_lights/e8_rlightb2
 		blendfunc filter
 		tcGen lightmap
 	}
-	{
-		map textures/evil8_lights/e8_rlightb2.blend.tga
-		blendfunc add
-	}
 }
 
 textures/evil8_lights/e8_rlightb
 {
 	qer_editorimage textures/evil8_lights/e8_rlightb.tga
-	q3map_lightimage textures/evil8_lights/e8_rlightb.blend.tga
 	surfaceparm nomarks
 	q3map_surfacelight 450
 	{
@@ -153,16 +132,11 @@ textures/evil8_lights/e8_rlightb
 		blendfunc filter
 		tcGen lightmap
 	}
-	{
-		map textures/evil8_lights/e8_rlightb.blend.tga
-		blendfunc add
-	}
 }
 
 textures/evil8_lights/evil8_rlight
 {
 	qer_editorimage textures/evil8_lights/e8_rlight.tga
-	q3map_lightimage textures/evil8_lights/e8_rlight.blend.tga
 	surfaceparm nomarks
 	q3map_surfacelight 950
 	{
@@ -173,16 +147,11 @@ textures/evil8_lights/evil8_rlight
 		blendfunc filter
 		tcGen lightmap
 	}
-	{
-		map textures/evil8_lights/e8_rlight.blend.tga
-		blendfunc add
-	}
 }
 
 textures/evil8_lights/e8tmtllight
 {
 	qer_editorimage textures/evil8_lights/e8tmtllight.tga
-	q3map_lightimage textures/evil8_lights/e8tmtllight.blend.tga
 	surfaceparm nomarks
 	q3map_surfacelight 950
 	{
@@ -193,16 +162,11 @@ textures/evil8_lights/e8tmtllight
 		blendfunc filter
 		tcGen lightmap
 	}
-	{
-		map textures/evil8_lights/e8tmtllight.blend.tga
-		blendfunc add
-	}
 }
 
 textures/evil8_lights/e8tmtllight2
 {
 	qer_editorimage textures/evil8_lights/e8tmtllight2.tga
-	q3map_lightimage textures/evil8_lights/e8tmtllight2.blend.tga
 	surfaceparm nomarks
 	q3map_surfacelight 950
 	{
@@ -213,16 +177,11 @@ textures/evil8_lights/e8tmtllight2
 		blendfunc filter
 		tcGen lightmap
 	}
-	{
-		map textures/evil8_lights/e8tmtllight2.blend.tga
-		blendfunc add
-	}
 }
 
 textures/evil8_lights/e8tmtllight2b
 {
 	qer_editorimage textures/evil8_lights/e8tmtllight2b.tga
-	q3map_lightimage textures/evil8_lights/e8tmtllight2b.blend.tga
 	surfaceparm nomarks
 	q3map_surfacelight 950
 	{
@@ -232,10 +191,6 @@ textures/evil8_lights/e8tmtllight2b
 		map $lightmap
 		blendfunc filter
 		tcGen lightmap
-	}
-	{
-		map textures/evil8_lights/e8tmtllight2b.blend.tga
-		blendfunc add
 	}
 }
 
@@ -294,10 +249,6 @@ textures/evil8_trim/e8lighttrim_static
 		blendfunc filter
 		tcGen lightmap
 	}
-	{
-		map textures/evil8_trim/e8lighttrim.blend.tga
-		blendfunc add
-	}
 }
 
 textures/evil8_trim/e8lighttrim_glow
@@ -312,11 +263,6 @@ textures/evil8_trim/e8lighttrim_glow
 		map $lightmap
 		blendfunc filter
 		tcGen lightmap
-	}
-	{
-		map textures/evil8_trim/e8lighttrim.blend.tga
-		blendfunc add
-		rgbGen wave sawtooth 0.2 1 1 0.2
 	}
 }
 
@@ -333,10 +279,6 @@ textures/evil8_trim/e8lighttrim_b_static
 		blendfunc filter
 		tcGen lightmap
 	}
-	{
-		map textures/evil8_trim/e8lighttrim_b.blend.tga
-		blendfunc add
-	}
 }
 
 textures/evil8_trim/e8lighttrim_b_glow
@@ -351,11 +293,6 @@ textures/evil8_trim/e8lighttrim_b_glow
 		map $lightmap
 		blendfunc filter
 		tcGen lightmap
-	}
-	{
-		map textures/evil8_trim/e8lighttrim_b.blend.tga
-		blendfunc add
-		rgbGen wave sawtooth 0.2 1 1 0.2
 	}
 }
 
@@ -379,7 +316,7 @@ textures/evil8_fx/e8jumpspawn02grey
 
 textures/evil8_fx/e8jumpspawn02
 {
-	q3map_lightimage textures/evil8_fx/e8jumpspawn02_fx.tga
+	q3map_lightimage textures/evil8_fx/e8jumpspawn02.tga
 	surfaceparm metalsteps
 	q3map_surfacelight 100
 	
@@ -414,14 +351,8 @@ textures/evil8_fx/e8jumpspawn02red
 
 textures/evil8_fx/e8jumpspawn02b
 {
-	q3map_lightimage textures/evil8_fx/e8jumpspawn02_fx.tga
 	surfaceparm metalsteps
 	q3map_surfacelight 100
-	{
-		map textures/evil8_fx/e8jumpspawn02_fx.tga
-		rgbGen identity
-		tcMod rotate 760
-	}
 	{
 		map textures/evil8_fx/e8jumpspawn02b.tga
 		blendfunc blend
@@ -437,14 +368,8 @@ textures/evil8_fx/e8jumpspawn02b
 
 textures/evil8_fx/e8jumpspawn02c
 {
-	q3map_lightimage textures/evil8_fx/e8jumpspawn02_fx.tga
 	surfaceparm metalsteps
 	q3map_surfacelight 100
-	{
-		map textures/evil8_fx/e8jumpspawn02_fx.tga
-		rgbGen identity
-		tcMod rotate 760
-	}
 	{
 		map textures/evil8_fx/e8jumpspawn02c.tga
 		blendfunc blend
@@ -460,7 +385,6 @@ textures/evil8_fx/e8jumpspawn02c
 
 textures/evil8_fx/e8_launchpad1
 {
-	q3map_lightimage textures/evil8_fx/e8_launchpad1.blend.tga
 	surfaceparm metalsteps
 	q3map_surfacelight 100
 	{
@@ -723,13 +647,6 @@ textures/evil8_fx/e8circle_blue_fade
 textures/evil8_fx/e8spawn01b
 {
 	{
-		map textures/sfx/proto_zzztblu2.tga
-		rgbGen identity
-		tcMod turb 0 0.5 0 9.6
-		tcMod scale 2 2
-		tcMod scroll 9 5
-	}
-	{
 		map textures/evil8_fx/e8spawn01b.tga
 		blendfunc blend
 		rgbGen identity
@@ -801,7 +718,6 @@ textures/evil8_fx/e8evilspacetxt
 textures/evil8_lights/e8tinylight
 {
 	qer_editorimage textures/evil8_lights/e8tinylight.tga
-	q3map_lightimage textures/evil8_lights/e8tinylight.blend.tga
 	surfaceparm nomarks
 	q3map_surfacelight 950
 	{
@@ -811,10 +727,6 @@ textures/evil8_lights/e8tinylight
 		map $lightmap
 		blendfunc filter
 		tcGen lightmap
-	}
-	{
-		map textures/evil8_lights/e8tinylight.blend.tga
-		blendfunc add
 	}
 }
 
@@ -830,10 +742,6 @@ textures/evil8_lights/e8tinylightblue
 		map $lightmap
 		blendfunc filter
 		tcGen lightmap
-	}
-	{
-		map textures/evil8_lights/e8tinylightblue.blend.tga
-		blendfunc add
 	}
 }
 
@@ -968,11 +876,6 @@ textures/evil8_trim/e8trimlight2_blue
 		blendfunc filter
 		tcGen lightmap
 	}
-	{
-		map textures/evil8_trim/e8trimlight2_blue.blend.tga
-		blendfunc add
-		tcMod scroll -0.7 0
-	}
 }
 
 textures/evil8_trim/e8trimlight2_red
@@ -987,11 +890,6 @@ textures/evil8_trim/e8trimlight2_red
 		map $lightmap
 		blendfunc filter
 		tcGen lightmap
-	}
-	{
-		map textures/evil8_trim/e8trimlight2_red.blend.tga
-		blendfunc add
-		tcMod scroll -0.7 0
 	}
 }
 

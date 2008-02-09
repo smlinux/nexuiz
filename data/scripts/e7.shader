@@ -27,7 +27,6 @@ textures/e7/e7brickfloor01jump
 textures/e7/e7mlight
 {
 	qer_editorimage textures/e7/e7mlight.tga
-	q3map_lightimage textures/e7/e7mlight.blend.tga
 	surfaceparm nomarks
 	q3map_surfacelight 1500
 	{
@@ -40,11 +39,6 @@ textures/e7/e7mlight
 		blendfunc filter
 		rgbGen identity
 	}
-	{
-		map textures/e7/e7mlight.blend.tga
-		blendfunc add
-		rgbGen identity
-	}
 }
 
 //small light
@@ -52,7 +46,6 @@ textures/e7/e7mlight
 textures/e7/e7slight
 {
 	qer_editorimage textures/e7/e7slight.tga
-	q3map_lightimage textures/e7/e7slight.blend.tga
 	surfaceparm nomarks
 	q3map_surfacelight 2500
 	{
@@ -65,17 +58,11 @@ textures/e7/e7slight
 		blendfunc filter
 		rgbGen identity
 	}
-	{
-		map textures/e7/e7slight.blend.tga
-		blendfunc add
-		rgbGen identity
-	}
 }
 
 textures/e7/e7trimlight
 {
 	qer_editorimage textures/e7/e7trimlight.tga
-	q3map_lightimage textures/e7/e7trimlight.blend.tga
 	surfaceparm nomarks
 	q3map_surfacelight 700
 	{
@@ -86,11 +73,6 @@ textures/e7/e7trimlight
 	{
 		map textures/e7/e7trimlight.tga
 		blendfunc filter
-		rgbGen identity
-	}
-	{
-		map textures/e7/e7trimlight.blend.tga
-		blendfunc add
 		rgbGen identity
 	}
 }

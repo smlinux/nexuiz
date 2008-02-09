@@ -284,34 +284,6 @@ textures/evil4_metals/wrnjumppad
 //********************************************
 //********************************************
 //********************************************
-//**************evil wall section****************
-//********************************************
-//********************************************
-//********************************************
-
-textures/evil4_wall/tekwallmulti2
-{
-	{
-		map textures/base_wall/chrome_env.tga
-		rgbGen identity
-		tcGen environment
-		tcmod scale .25 .25
-	}
-	{
-		map textures/evil4_wall/tekwallmulti2.tga
-		blendFunc GL_ONE_MINUS_SRC_ALPHA GL_SRC_ALPHA
-		rgbGen identity
-	}
-	{
-		map $lightmap
-		blendfunc gl_dst_color gl_zero
-		rgbGen identity
-	}
-}
-
-//********************************************
-//********************************************
-//********************************************
 //**************evil lights section***************
 //********************************************
 //********************************************
@@ -393,11 +365,6 @@ textures/evil4_lights/t_mtllight
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
-	{
-		map textures/evil4_lights/t_mtllight_blend.jpg
-		//rgbGen wave sin 0.5 0.5 1 1
-		blendfunc GL_ONE GL_ONE
-	}
 }
 
 textures/evil4_lights/mtl_lightsmll
@@ -413,11 +380,6 @@ textures/evil4_lights/mtl_lightsmll
 		map textures/evil4_lights/mtl_lightsmll.jpg
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
-	}
-	{
-		map textures/evil4_lights/mtl_lightsmll_blend.jpg
-		rgbGen wave sin 0.5 0.5 1 1
-		blendfunc GL_ONE GL_ONE
 	}
 }
 
@@ -436,15 +398,6 @@ textures/evil4_lights/l_light_b
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
-	{
-		map textures/evil4_lights/l_light_b_blend.jpg
-		blendfunc GL_ONE GL_ONE
-	}
-	{
-		map textures/evil4_lights/l_light_b_blend.jpg
-		rgbGen wave sin 6 2 1 2
-		blendfunc GL_ONE GL_ONE
-	}
 }
 
 textures/evil4_lights/l_light_g
@@ -459,15 +412,6 @@ textures/evil4_lights/l_light_g
 		map textures/evil4_lights/l_light_g.jpg
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
-	}
-	{
-		map textures/evil4_lights/l_light_g_blend.jpg
-		blendfunc GL_ONE GL_ONE
-	}
-	{
-		map textures/evil4_lights/l_light_g_blend.jpg
-		rgbGen wave sin 6 2 1 2
-		blendfunc GL_ONE GL_ONE
 	}
 }
 
@@ -484,15 +428,6 @@ textures/evil4_lights/l_light_r
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
-	{
-		map textures/evil4_lights/l_light_r_blend.jpg
-		blendfunc GL_ONE GL_ONE
-	}
-	{
-		map textures/evil4_lights/l_light_r_blend.jpg
-		rgbGen wave sin 6 2 1 2
-		blendfunc GL_ONE GL_ONE
-	}
 }
 
 textures/evil4_lights/l_light_w
@@ -507,15 +442,6 @@ textures/evil4_lights/l_light_w
 		map textures/evil4_lights/l_light_w.jpg
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
-	}
-	{
-		map textures/evil4_lights/l_light_w_blend.jpg
-		blendfunc GL_ONE GL_ONE
-	}
-	{
-		map textures/evil4_lights/l_light_w_blend.jpg
-		rgbGen wave sin 6 2 1 2
-		blendfunc GL_ONE GL_ONE
 	}
 }
 
@@ -573,7 +499,6 @@ textures/evil4_lights/mtl_l1
 textures/evil4_lights/trimtl_grlbtm_light
 {
 	q3map_surfacelight 5000
-	q3map_lightimage textures/evil4_lights/trimtl_grlbtm_light_blnd.tga
 	qer_editorimage textures/evil4_lights/trimtl_grlbtm_light.tga
 	{
 		map textures/evil4_lights/trimtl_grlbtm_light.tga
@@ -583,11 +508,6 @@ textures/evil4_lights/trimtl_grlbtm_light
 		map $lightmap
 		rgbGen identity
 		blendfunc gl_dst_color gl_zero
-	}
-	{
-		map textures/evil4_lights/trimtl_grlbtm_light_blnd.tga
-		blendfunc gl_one gl_one
-		rgbgen wave sin 1 .1 0 1
 	}
 }
 
@@ -659,160 +579,7 @@ textures/evil4_fx/mtlportal_fx
 	}
 }
 
-//matrixy transparent display images
-
-textures/evil4_fx/mat1
-{
-	{
-		map textures/evil4_fx/mat1.tga
-		blendfunc GL_ONE GL_ONE
-		rgbGen identity
-		rgbGen wave sin 0.5 0.5 0 0.7
-	}
-	{
-		map textures/evil4_fx/mat2.tga
-		blendfunc GL_ONE GL_ONE
-		rgbGen identity
-		rgbGen wave sin 0.5 0.5 0 .2
-	}
-	{
-		map textures/evil4_fx/mat3.tga
-		blendfunc GL_ONE GL_ONE
-		rgbGen identity
-		tcMod scroll 0 -.1
-	}
-	{
-		map textures/evil4_fx/mat4.tga
-		blendfunc GL_ONE GL_ONE
-		rgbGen identity
-		tcMod scroll 0 2
-	}
-	{
-		map $lightmap
-		rgbGen identity
-		blendfunc GL_ONE_MINUS_SRC_ALPHA GL_SRC_ALPHA
-	}
-}
-
-textures/evil4_fx/b_ray
-{
-	q3map_surfacelight 200
-	surfaceparm trans
-	surfaceparm nonsolid
-	surfaceparm nomarks
-	surfaceparm nolightmap
-	q3map_lightimage textures/evil4_fx/b_ray.tga
-	cull none
-	{
-		map textures/evil4_fx/b_ray.tga
-		blendFunc GL_ONE GL_ONE
-		rgbgen wave triangle 1 9 1 1
-		tcMod scale  0 0
-		tcMod scroll 1 0
-	}
-	{
-		map textures/evil4_fx/b_ray.tga
-		blendFunc GL_ONE GL_ONE
-		rgbgen wave triangle 1 1 1 1
-		tcMod scale  1 1
-		tcMod scroll 1 0
-	}
-}
-
-//effect2
-
-textures/evil4_fx/b_rayc
-{
-	q3map_surfacelight 200
-	surfaceparm trans
-	surfaceparm nonsolid
-	surfaceparm nomarks
-	surfaceparm nolightmap
-	q3map_lightimage textures/evil4_fx/b_rayc.tga
-	cull none
-	{
-		map textures/evil4_fx/b_rayc.tga
-		blendFunc GL_ONE GL_ONE
-		rgbgen wave triangle 1 9 1 1
-		tcMod scale  0 0
-		tcMod scroll 2 0
-	}
-	{
-		map textures/evil4_fx/b_rayc.tga
-		blendFunc GL_ONE GL_ONE
-		rgbgen wave triangle 1 1 1 1
-		tcMod scale  1 1
-		tcMod scroll 2 0
-	}
-}
-
 //snow
-
-textures/evil4_fx/esnow
-{
-	q3map_surfacelight 100
-	surfaceparm trans
-	surfaceparm nonsolid
-	surfaceparm nomarks
-	surfaceparm nolightmap
-	q3map_lightimage textures/evil4fx/esnow.tga
-	cull none
-	{
-		map textures/evil4_fx/esnow.tga
-		blendFunc GL_ONE GL_ONE
-		tcMod scroll 0 -0.9
-	}
-	{
-		map textures/evil4_fx/esnow3.tga
-		blendFunc GL_ONE GL_ONE
-		tcMod scroll 0 -0.7
-	}
-	{
-		map textures/evil4_fx/esnow2.tga
-		blendFunc GL_ONE GL_ONE
-		tcMod scroll 0 -0.5
-	}
-	{
-		map textures/evil4_fx/esnow2.tga
-		blendFunc GL_ONE GL_ONE
-		tcMod scale  2 2
-		tcMod scroll 0 -3
-	}
-}
-
-//weirdo waterfall’ish effect
-
-textures/evil4_fx/e_waterfall
-{
-	q3map_surfacelight 2
-	surfaceparm trans
-	surfaceparm nonsolid
-	surfaceparm nomarks
-	surfaceparm nolightmap
-	q3map_lightimage textures/evil4_fx/e_waterfall.tga
-	cull none
-	{
-		map textures/evil4_fx/e_waterfall.tga
-		tcGen environment
-		blendFunc GL_ONE GL_ONE
-		rgbgen wave triangle 2 1 1 5
-		tcMod scale  5 5
-		tcMod scroll 0 -1
-	}
-	{
-		map textures/evil4_fx/e_waterfall.tga
-		tcGen environment
-		tcmod scale 1 1
-		tcmod scroll 1 -1
-		blendFunc GL_ONE GL_ONE
-		rgbGen identity
-	}
-	{
-		map $lightmap
-		blendFunc GL_DST_COLOR GL_ONE_MINUS_DST_ALPHA
-		rgbGen identity
-	}
-}
 
 textures/evil4_fx/teleprtr
 {
@@ -1039,20 +806,6 @@ textures/evil4_techwalls/drkmtl_lightboard
 	}
 	{
 		map textures/evil4_techwalls/drkmtl_lightboard.tga
-		blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
-		rgbGen identity
-	}
-	{
-		map $lightmap
-		blendFunc GL_DST_COLOR GL_ONE_MINUS_DST_ALPHA
-		rgbGen identity
-	}
-}
-
-textures/evil4_techwalls/drkmtl_dpanelwrnb2
-{
-	{
-		map textures/evil_techwalls/drkmtl_dpanelwrnb2.tga
 		blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
 		rgbGen identity
 	}

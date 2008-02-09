@@ -627,9 +627,9 @@ textures/eX/eXmetal_plate01
 
 textures/eX/eXmetal_plate01b
 {
-	qer_EditorImage textures/eX/eXmetal_plate01b.tga
+	qer_EditorImage textures/eX/eXmetal_plate01B.tga
 	{
-		map textures/eX/eXmetal_plate01b
+		map textures/eX/eXmetal_plate01B
 	}
 	{
 		map $lightmap

@@ -1,7 +1,6 @@
 textures/evil8_lights/e8minitrimlight
 {
 	qer_editorimage textures/evil8_lights/e8minitrimlight.tga
-	q3map_lightimage textures/evil8_lights/e8minitrimlight.blend.tga
 	surfaceparm nomarks
 	q3map_surfacelight 1200
 	{
@@ -11,10 +10,6 @@ textures/evil8_lights/e8minitrimlight
 		map $lightmap 
 		blendfunc filter
 		tcGen lightmap 
-	}
-	{
-		map textures/evil8_lights/e8minitrimlight.blend.tga
-		blendfunc add
 	}
 }
 textures/evil8_lights/e8tinylight2k
@@ -31,10 +26,6 @@ textures/evil8_lights/e8tinylight2k
 		blendfunc filter
 		tcGen lightmap 
 	}
-	{
-		map textures/evil8_lights/e8tinylight.blend.tga
-		blendfunc add
-	}
 }
 
 textures/evil8_lights/e8tinylightblue2k
@@ -50,10 +41,6 @@ textures/evil8_lights/e8tinylightblue2k
 		map $lightmap 
 		blendfunc filter
 		tcGen lightmap 
-	}
-	{
-		map textures/evil8_lights/e8tinylightblue.blend.tga
-		blendfunc add
 	}
 }
 
@@ -76,30 +63,6 @@ textures/stralenex1/light_tube_green
 	}
 } 
 
-
-textures/stralenex1/e8_bluestrip
-{
-	surfaceparm nolightmap
-	surfaceparm nomarks
-	surfaceparm trans
-	{
-		map textures/stralenex1/e8_bluestrip.tga
-		blendfunc add
-		rgbGen identity
-	}
-}
-
-textures/stralenex1/e8_redstrip
-{
-	surfaceparm nolightmap
-	surfaceparm nomarks
-	surfaceparm trans
-	{
-		map textures/stralenex1/e8_redstrip.tga
-		blendfunc add
-		rgbGen identity
-	}
-}
 
 textures/stralenex1/stralenex5_water
 { 

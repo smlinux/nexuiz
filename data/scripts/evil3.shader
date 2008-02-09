@@ -6,73 +6,6 @@
 //NOTE FROM Yves: Please edit this .shader all you want, there might have some problems...
 //--------------------------------------------
 
-textures/evil_floors/mtl-wlkway
-{
-	surfaceparm metalsteps
-	surfaceparm trans
-	cull none
-	nopicmip
-	{
-		map textures/evil_floors/mtl-wlkway.tga
-		blendFunc GL_ONE GL_ZERO
-		alphaFunc GE128
-		depthWrite
-		rgbGen identity
-	}
-	{
-		map $lightmap
-		rgbGen identity
-		blendFunc GL_DST_COLOR GL_ZERO
-		depthFunc equal
-	}
-}
-
-//-------------------------------------------------
-
-textures/evil_floors/mtl-wlkway_end
-{
-	surfaceparm metalsteps
-	surfaceparm trans
-	cull none
-	nopicmip
-	{
-		map textures/evil_floors/mtl-wlkway_end.tga
-		blendFunc GL_ONE GL_ZERO
-		alphaFunc GE128
-		depthWrite
-		rgbGen identity
-	}
-	{
-		map $lightmap
-		rgbGen identity
-		blendFunc GL_DST_COLOR GL_ZERO
-		depthFunc equal
-	}
-}
-
-//---------------------------------------------
-
-textures/evil_floors/mtl-wlkway_mid
-{
-	surfaceparm metalsteps
-	surfaceparm trans
-	cull none
-	nopicmip
-	{
-		map textures/evil_floors/mtl-wlkway_mid.tga
-		blendFunc GL_ONE GL_ZERO
-		alphaFunc GE128
-		depthWrite
-		rgbGen identity
-	}
-	{
-		map $lightmap
-		rgbGen identity
-		blendFunc GL_DST_COLOR GL_ZERO
-		depthFunc equal
-	}
-}
-
 //------------------------------------------
 
 textures/evil_floors/t-flr_oddtile_drty
@@ -99,52 +32,6 @@ textures/evil_floors/t-flr_oddtile_drty
 
 //-------------------------------------------------
 
-textures/evil_floors/cemtiledrk_mhbrk
-{
-	{
-		map textures/evil_floors/cemtiledrk_mhbrk_glow.tga
-		tcMod turb 1.2 1 1.2 1
-		tcmod scale 0 0
-		tcmod scroll .1 .1
-		blendFunc GL_ONE GL_ZERO
-		rgbGen identity
-	}
-	{
-		map textures/evil_floors/cemtiledrk_mhbrk.tga
-		blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
-		rgbGen identity
-	}
-	{
-		map $lightmap
-		blendFunc GL_DST_COLOR GL_ONE_MINUS_DST_ALPHA
-		rgbGen identity
-	}
-}
-
-//-----------------------------------
-
-textures/evil_floors/grt_offmtl
-{
-	surfaceparm metalsteps
-	surfaceparm alphashadow
-	surfaceparm trans
-	surfaceparm nonsolid
-	cull none
-	{
-		map textures/evil_floors/grt_offmtl.tga
-		alphaFunc GE128
-		depthWrite
-		rgbGen identity
-	}
-	{
-		map $lightmap
-		rgbGen identity
-		blendFunc filter
-		depthFunc equal
-	}
-}
-//-------------------------------------------
-
 textures/evil_floors/grtmtl_offt
 {
 	surfaceparm metalsteps
@@ -154,29 +41,6 @@ textures/evil_floors/grtmtl_offt
 	cull none
 	{
 		map textures/evil_floors/grtmtl_offt.tga
-		alphaFunc GE128
-		depthWrite
-		rgbGen identity
-	}
-	{
-		map $lightmap
-		rgbGen identity
-		blendFunc filter
-		depthFunc equal
-	}
-}
-
-//------------------------------------------
-
-textures/evil_floors/grtmtl_offt2
-{
-	surfaceparm metalsteps
-	surfaceparm alphashadow
-	surfaceparm trans
-	surfaceparm nonsolid
-	cull none
-	{
-		map textures/evil_floors/grtmtl_offt2.tga
 		alphaFunc GE128
 		depthWrite
 		rgbGen identity
@@ -205,11 +69,6 @@ textures/evil_lights/rlight_a
 		blendFunc GL_DST_COLOR GL_ZERO
 		rgbGen identity
 	}
-	{
-		map textures/evil_lights/rlight_a_blend.tga
-		rgbGen wave sin 0.5 0.5 1 1
-		blendFunc GL_ONE GL_ONE
-	}
 }
 
 //--------------------------------------------
@@ -224,11 +83,6 @@ textures/evil_misc/rstbouncefan
 		clampmap textures/sfx/fan3bladeb.tga
 		blendFunc blend
 		tcmod rotate 999
-		rgbGen identity
-	}
-	{
-		map textures/evil_misc/rstbouncefan.tga
-		blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
 		rgbGen identity
 	}
 	{
