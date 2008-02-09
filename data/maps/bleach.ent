@@ -1846,10 +1846,10 @@
 "classname" "target_speaker"
 "origin" "3048 1360 -16"
 "spawnflags" "5"
-"noise" "sound/misc/Ambient_07"
+"noise" "sound/ambient/ambient_07.ogg"
 }
 {
-"noise" "sound/misc/Ambient_07"
+"noise" "sound/ambient/ambient_07.ogg"
 "spawnflags" "5"
 "origin" "3128 -32 248"
 "classname" "target_speaker"
@@ -1858,10 +1858,10 @@
 "classname" "target_speaker"
 "origin" "3040 -928 -128"
 "spawnflags" "5"
-"noise" "sound/misc/Ambient_07"
+"noise" "sound/ambient/ambient_07.ogg"
 }
 {
-"noise" "sound/misc/Ambient_07"
+"noise" "sound/ambient/ambient_07.ogg"
 "spawnflags" "5"
 "origin" "3432 -1320 272"
 "classname" "target_speaker"
@@ -1870,10 +1870,10 @@
 "classname" "target_speaker"
 "origin" "1800 -1064 496"
 "spawnflags" "5"
-"noise" "sound/misc/Ambient_07"
+"noise" "sound/ambient/ambient_07.ogg"
 }
 {
-"noise" "sound/misc/Ambient_07"
+"noise" "sound/ambient/ambient_07.ogg"
 "spawnflags" "5"
 "origin" "1800 1128 496"
 "classname" "target_speaker"
@@ -1882,17 +1882,17 @@
 "classname" "target_speaker"
 "origin" "40 32 448"
 "spawnflags" "5"
-"noise" "sound/misc/Ambient_07"
+"noise" "sound/ambient/ambient_07.ogg"
 }
 {
-"noise" "sound/misc/Ambient_06"
+"noise" "sound/ambient/ambient_06.ogg"
 "origin" "368 32 272"
 "classname" "target_speaker"
 "wait" "30"
 "random" "10"
 }
 {
-"noise" "sound/misc/Ambient_07"
+"noise" "sound/ambient/ambient_07.ogg"
 "spawnflags" "5"
 "origin" "2008 32 -80"
 "classname" "target_speaker"
@@ -1902,10 +1902,10 @@
 "wait" "30"
 "classname" "target_speaker"
 "origin" "3048 624 -64"
-"noise" "sound/misc/Ambient_03"
+"noise" "sound/ambient/ambient_03.ogg"
 }
 {
-"noise" "sound/misc/Ambient_03"
+"noise" "sound/ambient/ambient_03.ogg"
 "origin" "2776 -928 504"
 "classname" "target_speaker"
 "wait" "30"
