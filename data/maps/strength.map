@@ -29189,7 +29189,7 @@ eX/eXmetalBase07rust
 // entity 519
 {
 "spawnflags" "1"
-"noise" "sound/ambient/fan4wav"
+"noise" "sound/ambient/fan4.wav"
 "origin" "128 832 1216"
 "classname" "target_speaker"
 }
@@ -29197,7 +29197,7 @@ eX/eXmetalBase07rust
 {
 "classname" "target_speaker"
 "origin" "128 832 1152"
-"noise" "sound/ambient/fan4wav"
+"noise" "sound/ambient/fan4.wav"
 "spawnflags" "1"
 }
 // entity 521
@@ -29295,7 +29295,7 @@ eX/eXmetalBase07rust
 {
 "classname" "target_speaker"
 "origin" "1792 1056 1856"
-"noise" "sound/ambient/deamonwind01.wav"
+"noise" "sound/ambient/demonwind01.wav"
 "spawnflags" "1"
 }
 // entity 535
