@@ -464,19 +464,9 @@ textures/evil8_fx/e8_launchpad1
 	surfaceparm metalsteps
 	q3map_surfacelight 100
 	{
-		map textures/evil8_fx/e8_launchpad1_fx.tga
-		rgbGen identity
-		tcMod scroll 0 3
-	}
-	{
 		map textures/evil8_fx/e8_launchpad1.tga
 		blendfunc blend
 		rgbGen identity
-	}
-	{
-		map textures/evil8_fx/e8_launchpad1.blend.tga
-		blendfunc add
-		rgbGen wave triangle 0.2 2 1 2
 	}
 	{
 		map $lightmap
