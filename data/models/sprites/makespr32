@@ -77,7 +77,7 @@ sub writesprite($$)
 		}
 		for(@$f)
 		{
-			syswrite $fh, pack 'V', -$_->{orgx};
+			syswrite $fh, pack 'V', $_->{orgx} - $_->{width};
 			syswrite $fh, pack 'V', $_->{orgy};
 			syswrite $fh, pack 'V', $_->{width};
 			syswrite $fh, pack 'V', $_->{height};
