@@ -711,6 +711,17 @@ void VoteNag() {
 			centerprint_atprio(self, CENTERPRIO_VOTE, strcat("^7^3", votecaller.netname, "^2 called a vote for ", votecalledvote_display, "\n\n^2You have not voted yet!\n^2HINT: By default, F1 is yes and F2 is no."));
 }
 
+void VoteSpam(float yescount, float nocount, float abstaincount, float notvoters, float mincount)
+{
+	string s;
+	s = strcat("\{1}^2* vote results: ^1", ftos(yescount), "^2:^1");
+	s = strcat(s, ftos(nocount), "^2 (^1");
+	s = strcat(s, ftos(mincount), "^2 needed), ^1");
+	s = strcat(s, ftos(abstaincount), "^2 didn't care, ^1");
+	s = strcat(s, ftos(notvoters), "^2 didn't vote\n");
+	bprint(s);
+}
+
 void VoteCount() {
 	local float playercount;
 	playercount = 0;
@@ -745,22 +756,21 @@ void VoteCount() {
 		votecaller.vote_next = 0;
 		VoteReset();
 	} else {
-#define VOTEDEBUG dprint("yes = ", ftos(yescount), ", "); dprint("no = ", ftos(nocount), ", "); dprint("abstain = ", ftos(abstaincount), ", "); dprint("not voted = ", ftos(playercount - yescount - nocount - abstaincount), "\n");
 		float votefactor;
 		votefactor = bound(0.5, cvar("sv_vote_majority_factor"), 0.999);
 		if(yescount > (playercount - abstaincount) * votefactor)
 		{
-			VOTEDEBUG
+			VoteSpam(yescount, nocount, abstaincount, playercount - yescount - nocount - abstaincount, floor((playercount - abstaincount) * votefactor) + 1);
 			VoteAccept();
 		}
 		else if(nocount >= (playercount - abstaincount) * (1 - votefactor)) // that means, yescount cannot reach minyes any more
 		{
-			VOTEDEBUG
+			VoteSpam(yescount, nocount, abstaincount, playercount - yescount - nocount - abstaincount, floor((playercount - abstaincount) * votefactor) + 1);
 			VoteReject();
 		}
 		else if(time > votefinished)
 		{
-			VOTEDEBUG
+			VoteSpam(yescount, nocount, abstaincount, playercount - yescount - nocount - abstaincount, floor((yescount + nocount) * votefactor) + 1);
 			if(cvar("sv_vote_simple_majority"))
 				if(yescount > (yescount + nocount) * votefactor)
 					VoteAccept();
