@@ -770,16 +770,21 @@ void VoteCount() {
 		}
 		else if(time > votefinished)
 		{
-			VoteSpam(yescount, nocount, abstaincount, playercount - yescount - nocount - abstaincount, floor((yescount + nocount) * votefactor) + 1);
 			if(cvar("sv_vote_simple_majority"))
+			{
+				VoteSpam(yescount, nocount, abstaincount, playercount - yescount - nocount - abstaincount, floor((yescount + nocount) * votefactor) + 1);
 				if(yescount > (yescount + nocount) * votefactor)
 					VoteAccept();
 				else if(yescount + nocount > 0)
 					VoteReject();
 				else
 					VoteTimeout();
+			}
 			else
+			{
+				VoteSpam(yescount, nocount, abstaincount, playercount - yescount - nocount - abstaincount, floor((playercount - abstaincount) * votefactor) + 1);
 				VoteTimeout();
+			}
 		}
 	}
 }
