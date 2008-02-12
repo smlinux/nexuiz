@@ -1,12 +1,8 @@
 ../../csprogs.dat
 
-defs.c
+Defs.qc
+csqc_constants.qc
+csqc_builtins.qc
 
-csqc_constants.h
-csqc_builtins.h
-vars.h
-
-helpers.c
-view.c
-
-main.c
+Main.qc
+View.qc
