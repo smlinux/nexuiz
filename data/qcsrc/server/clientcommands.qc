@@ -196,17 +196,17 @@ void SV_ParseClientCommand(string s) {
 			if(!cvar("sv_vote_call")) {
 				vcalldis = " ^1(disabled)";
 			}
-			sprint(self, "^7You can use voting with \"^2cmd vote help^7\" \"^2cmd vote status^7\" \"^2cmd vote call ^3COMMAND ARGUMENTS^7\" \"^2cmd vote stop^7\" \"^2cmd vote master^7\" \"^2cmd vote do ^3COMMAND ARGUMENTS^7\" \"^2cmd vote yes^7\" \"^2cmd vote no^7\".\n");
-			sprint(self, "^7Or if your version is up to date you can use these aliases \"^2vhelp^7\" \"^2vstatus^7\" \"^2vcall ^3COMMAND ARGUMENTS^7\" \"^2vstop^7\" \"^2vmaster^7\" \"^2vdo ^3COMMAND ARGUMENTS^7\" \"^2vyes^7\" \"^2vno^7\".\n");
+			sprint(self, "^7You can use voting with \"^2cmd vote help^7\" \"^2cmd vote status^7\" \"^2cmd vote call ^3COMMAND ARGUMENTS^7\" \"^2cmd vote stop^7\" \"^2cmd vote master^7\" \"^2cmd vote do ^3COMMAND ARGUMENTS^7\" \"^2cmd vote yes^7\" \"^2cmd vote no^7\" \"^2cmd vote dontcare^7\".\n");
+			sprint(self, "^7Or if your version is up to date you can use these aliases \"^2vhelp^7\" \"^2vstatus^7\" \"^2vcall ^3COMMAND ARGUMENTS^7\" \"^2vstop^7\" \"^2vmaster^7\" \"^2vdo ^3COMMAND ARGUMENTS^7\" \"^2vyes^7\" \"^2vno^7\" \"^2vdontcare^7\".\n");
 			sprint(self, "^7\"^2help^7\" shows this info.\n");
 			sprint(self, "^7\"^2status^7\" shows if there is a vote called and who called it.\n");
 			sprint(self, strcat("^7\"^2call^7\" is used to call a vote. See the list of allowed commands.", vcalldis, "^7\n"));
 			sprint(self, "^7\"^2stop^7\" can be used by the vote caller or an admin to stop a vote and maybe correct it.\n");
 			sprint(self, strcat("^7\"^2master^7\" is used to call a vote to become a master.", vmasterdis, "^7\n"));
 			sprint(self, "^7\"^2do^7\" If you are a master you can execute a command without a vote. See the list of allowed commands.\n");
-			sprint(self, "^7\"^2yes^7\" and \"^2no^7\" to make your vote.\n");
-			sprint(self, "^7If more then 50% of the players vote yes the vote is accepted.\n");
-			sprint(self, "^7If more then 50% of the players vote no the vote is rejected.\n");
+			sprint(self, "^7\"^2yes^7\", \"^2no^7\" and \"^2dontcare^7\" to make your vote.\n");
+			sprint(self, "^7If enough of the players vote yes the vote is accepted.\n");
+			sprint(self, "^7If enough of the players vote no the vote is rejected.\n");
 			sprint(self, strcat("^7The vote will end after ", cvar_string("sv_vote_timeout"), "^7 seconds.\n"));
 			sprint(self, "^7You can call a vote for or execute these commands:\n");
 			sprint(self, strcat("^3", cvar_string("sv_vote_commands"), "^7 and maybe further ^3arguments^7\n"));
@@ -356,6 +356,7 @@ void SV_ParseClientCommand(string s) {
 				  || cvar("sv_vote_change")) {
 				sprint(self, "^1You accepted the vote.\n");
 				self.vote_vote = 1;
+				centerprint_expire(self, CENTERPRIO_VOTE);
 				if(!cvar("sv_vote_singlecount")) {
 					VoteCount();
 				}
@@ -369,6 +370,21 @@ void SV_ParseClientCommand(string s) {
 				  || cvar("sv_vote_change")) {
 				sprint(self, "^1You rejected the vote.\n");
 				self.vote_vote = -1;
+				centerprint_expire(self, CENTERPRIO_VOTE);
+				if(!cvar("sv_vote_singlecount")) {
+					VoteCount();
+				}
+			} else {
+				sprint(self, "^1You have already voted.\n");
+			}
+		} else if(argv(1) == "abstain" || argv(1) == "dontcare") {
+			if(!votecalled) {
+				sprint(self, "^1No vote called.\n");
+			} else if(self.vote_vote == 0
+				  || cvar("sv_vote_change")) {
+				sprint(self, "^1You abstained from your vote.\n");
+				self.vote_vote = -2;
+				centerprint_expire(self, CENTERPRIO_VOTE);
 				if(!cvar("sv_vote_singlecount")) {
 					VoteCount();
 				}
@@ -702,14 +718,18 @@ void VoteCount() {
 	yescount = 0;
 	local float nocount;
 	nocount = 0;
+	local float abstaincount;
+	abstaincount = 0;
 	local entity player;
 
 	FOR_EACH_REALCLIENT(player)
 	{
-		if(player.vote_vote < 0) {
+		if(player.vote_vote == -1) {
 			nocount++;
-		} else if(player.vote_vote > 0) {
+		} else if(player.vote_vote == 1) {
 			yescount++;
+		} else if(player.vote_vote == -2) {
+			abstaincount++;
 		}
 		playercount++;
 	}
@@ -724,21 +744,34 @@ void VoteCount() {
 		sprint(self, "^1You are the only player on this server so you can not become vote master.\n");
 		votecaller.vote_next = 0;
 		VoteReset();
-	} else if((playercount / 2) < yescount) { // vote accepted
-		VoteAccept();
-	} else if((playercount / 2) < nocount) { // vote rejected
-		VoteReject();
-	} else if(time > votefinished) { // vote timedout
-		if(cvar("sv_vote_simple_majority"))
-			if(yescount > nocount)
-				VoteAccept();
-			else if(nocount > yescount)
-				VoteReject();
+	} else {
+#define VOTEDEBUG dprint("yes = ", ftos(yescount), ", "); dprint("no = ", ftos(nocount), ", "); dprint("abstain = ", ftos(abstaincount), ", "); dprint("not voted = ", ftos(playercount - yescount - nocount - abstaincount), "\n");
+		float votefactor;
+		votefactor = bound(0.5, cvar("sv_vote_majority_factor"), 0.999);
+		if(yescount > (playercount - abstaincount) * votefactor)
+		{
+			VOTEDEBUG
+			VoteAccept();
+		}
+		else if(nocount >= (playercount - abstaincount) * (1 - votefactor)) // that means, yescount cannot reach minyes any more
+		{
+			VOTEDEBUG
+			VoteReject();
+		}
+		else if(time > votefinished)
+		{
+			VOTEDEBUG
+			if(cvar("sv_vote_simple_majority"))
+				if(yescount > (yescount + nocount) * votefactor)
+					VoteAccept();
+				else if(yescount + nocount > 0)
+					VoteReject();
+				else
+					VoteTimeout();
 			else
 				VoteTimeout();
-		else
-			VoteTimeout();
-	} // else still running
+		}
+	}
 }
 
 float timelimit_orig;
