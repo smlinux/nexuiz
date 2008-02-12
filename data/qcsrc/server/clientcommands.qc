@@ -138,6 +138,8 @@ float VoteCheckNasty(string cmd)
 		return TRUE;
 	if(strstrofs(cmd, "\r", 0) >= 0)
 		return TRUE;
+	if(strstrofs(cmd, "$", 0) >= 0)
+		return TRUE;
 	return FALSE;
 }
 
