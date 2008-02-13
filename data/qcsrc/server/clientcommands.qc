@@ -144,26 +144,38 @@ float VoteCheckNasty(string cmd)
 }
 
 string GetKickVoteVictim_newcommand;
+string GetKickVoteVictim_reason;
 entity GetKickVoteVictim(string vote, string cmd)
 {
 	float tokens;
-	float i, n;
+	float i, n, t;
 	string ns;
 	entity e;
 
 	tokens = tokenize(vote);
 	ns = "";
 
-	if(tokens == 2)
+	if(tokens >= 2)
 		if(substring(argv(1), 0, 1) == "#")
+		{
 			ns = substring(argv(1), 1, 999);
+			t = 2;
+		}
 	
-	if(tokens == 3)
+	if(tokens >= 3)
 		if(argv(1) == "#")
+		{
 			ns = argv(2);
+			t = 3;
+		}
 
 	if(ns != "")
 	{
+		GetKickVoteVictim_reason = "";
+		for(i = t; i < tokens; ++i)
+			GetKickVoteVictim_reason = strcat(GetKickVoteVictim_reason, argv(i), " ");
+		GetKickVoteVictim_reason = substring(GetKickVoteVictim_reason, 0, strlen(GetKickVoteVictim_reason) - 1);
+		
 		n = stof(ns);
 		if(ns == ftos(n)) if(n >= 1) if(n <= maxclients)
 		{
@@ -249,7 +261,7 @@ void SV_ParseClientCommand(string s) {
 						{
 							if(!(e = GetKickVoteVictim(vote, "vcall")))
 								return;
-							votecalledvote_display = strzone(strcat("^1", vote, " (^7", e.netname, "^1)"));
+							votecalledvote_display = strzone(strcat("^1", vote, " (^7", e.netname, "^1): ", GetKickVoteVictim_reason));
 							vote = GetKickVoteVictim_newcommand;
 						}
 						else
@@ -340,7 +352,7 @@ void SV_ParseClientCommand(string s) {
 					{
 						if(!(e = GetKickVoteVictim(dovote, "vdo")))
 							return;
-						dovote_display = strzone(strcat("^1", dovote, " (^7", e.netname, "^1)"));
+						dovote_display = strzone(strcat("^1", dovote, " (^7", e.netname, "^1): ", GetKickVoteVictim_reason));
 						dovote = GetKickVoteVictim_newcommand;
 					}
 					bprint("\{1}^2* ^3", self.netname, "^2 used his ^3master^2 status to do \"^2", dovote_display, "^2\".\n");
