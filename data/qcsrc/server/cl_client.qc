@@ -728,7 +728,7 @@ void KillIndicator_Think()
 		if(self.cnt <= 10)
 		{
 			setmodel(self, strcat("models/sprites/", ftos(self.cnt), ".spr32"));
-			play2(self.owner, strcat("sound/announce/robotoic/", ftos(self.cnt), ".ogg"));
+			play2(self.owner, strcat("announcer/robotic/", ftos(self.cnt), ".ogg"));
 		}
 		if(self.owner.killindicator_teamchange)
 		{
@@ -739,7 +739,6 @@ void KillIndicator_Think()
 		}
 		else
 			centerprint(self.owner, strcat("^1Suicide in ", ftos(self.cnt), " seconds"));
-		play2(self.owner, strcat("announcer/robotoc/", ftos(self.cnt), ".ogg"));
 		self.nextthink = time + 1;
 		self.cnt -= 1;
 	}
