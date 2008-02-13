@@ -713,11 +713,21 @@ void VoteNag() {
 void VoteSpam(float yescount, float nocount, float abstaincount, float notvoters, float mincount)
 {
 	string s;
-	s = strcat("\{1}^2* vote results: ^1", ftos(yescount), "^2:^1");
-	s = strcat(s, ftos(nocount), "^2 (^1");
-	s = strcat(s, ftos(mincount), "^2 needed), ^1");
-	s = strcat(s, ftos(abstaincount), "^2 didn't care, ^1");
-	s = strcat(s, ftos(notvoters), "^2 didn't vote\n");
+	if(mincount >= 0)
+	{
+		s = strcat("\{1}^2* vote results: ^1", ftos(yescount), "^2:^1");
+		s = strcat(s, ftos(nocount), "^2 (^1");
+		s = strcat(s, ftos(mincount), "^2 needed), ^1");
+		s = strcat(s, ftos(abstaincount), "^2 didn't care, ^1");
+		s = strcat(s, ftos(notvoters), "^2 didn't vote\n");
+	}
+	else
+	{
+		s = strcat("\{1}^2* vote results: ^1", ftos(yescount), "^2:^1");
+		s = strcat(s, ftos(nocount), "^2 (^1");
+		s = strcat(s, ftos(abstaincount), "^2 didn't care, ^1");
+		s = strcat(s, ftos(notvoters), "^2 didn't have to vote\n");
+	}
 	bprint(s);
 }
 
@@ -759,12 +769,12 @@ void VoteCount() {
 		votefactor = bound(0.5, cvar("sv_vote_majority_factor"), 0.999);
 		if(yescount > (playercount - abstaincount) * votefactor)
 		{
-			VoteSpam(yescount, nocount, abstaincount, playercount - yescount - nocount - abstaincount, floor((playercount - abstaincount) * votefactor) + 1);
+			VoteSpam(yescount, nocount, abstaincount, playercount - yescount - nocount - abstaincount, -1);
 			VoteAccept();
 		}
 		else if(nocount >= (playercount - abstaincount) * (1 - votefactor)) // that means, yescount cannot reach minyes any more
 		{
-			VoteSpam(yescount, nocount, abstaincount, playercount - yescount - nocount - abstaincount, floor((playercount - abstaincount) * votefactor) + 1);
+			VoteSpam(yescount, nocount, abstaincount, playercount - yescount - nocount - abstaincount, -1);
 			VoteReject();
 		}
 		else if(time > votefinished)
