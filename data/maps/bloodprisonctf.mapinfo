@@ -1,0 +1,7 @@
+title Blood Prison CTF
+description Medium sized CTF map based upon Blood Prison
+author Paul Evers, Edvard Holness
+_diameter 6238.943848
+_spawnpoints 28
+has weapons
+type ctf 300 20
