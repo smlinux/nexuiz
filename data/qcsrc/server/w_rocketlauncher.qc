@@ -119,6 +119,7 @@ void W_Rocket_Think (void)
 
 			if(self.owner.deadflag == DEAD_NO)
 			if (self.owner.button0 && self.ltime < 0) // if the player let go of the button and then pushed it again
+			if(time >= self.spawnshieldtime)
 			{
 				  W_Rocket_Explode ();
 				  return;
@@ -161,6 +162,7 @@ void W_Rocket_Think (void)
 		{
 			if(self.owner.deadflag == DEAD_NO)
 			if (self.owner.button3)
+			if(time >= self.spawnshieldtime)
 				  W_Rocket_Explode ();
 		}
 	}
@@ -205,6 +207,7 @@ void W_Rocket_Attack (void)
 	missile = spawn ();
 	missile.owner = self;
 	self.lastrocket = missile;
+	missile.spawnshieldtime = time + cvar("g_balance_rocketlauncher_detonatedelay");
 	missile.classname = "missile";
 	missile.bot_dodge = TRUE;
 	missile.bot_dodgerating = cvar("g_balance_rocketlauncher_primary_damage") * 2; // * 2 because it can be detonated inflight which makes it even more dangerous
