@@ -353,7 +353,7 @@ void SV_ParseClientCommand(string s) {
 						if(!(e = GetKickVoteVictim(dovote, "vdo")))
 							return;
 						dovote = GetKickVoteVictim_newcommand;
-						dovote_display = strzone(strcat("^1", dovote, " (^7", e.netname, "^1): ", GetKickVoteVictim_reason));
+						dovote_display = strcat("^1", dovote, " (^7", e.netname, "^1): ", GetKickVoteVictim_reason);
 					}
 					bprint("\{1}^2* ^3", self.netname, "^2 used his ^3master^2 status to do \"^2", dovote_display, "^2\".\n");
 					localcmd(strcat(dovote, "\n"));
