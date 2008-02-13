@@ -792,7 +792,7 @@ void DoTeamChange(float destteam)
 			SetPlayerColors(self, destteam);
 		return;
 	}
-	if(destteam == self.team)
+	if(destteam == self.team && !self.killindicator)
 		return;
 	ClientKill_TeamChange(destteam);
 }
