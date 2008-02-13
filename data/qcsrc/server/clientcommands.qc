@@ -456,19 +456,16 @@ void SV_ParseClientCommand(string s) {
 			sprint( self, "selecteam can only be used in teamgames\n");
 		} else if(cvar("g_campaign")) {
 			//JoinBestTeam(self, 0);
-		} else if( argv(1) == "none" ) {
-			SV_ChangeTeam( 0 );
 		} else if( argv(1) == "red" ) {
-			SV_ChangeTeam( COLOR_TEAM1 - 1 );
+			DoTeamChange(COLOR_TEAM1);
 		} else if( argv(1) == "blue" ) {
-			SV_ChangeTeam( COLOR_TEAM2 - 1 );
+			DoTeamChange(COLOR_TEAM2);
 		} else if( argv(1) == "yellow" ) {
-			SV_ChangeTeam( COLOR_TEAM3 - 1 );
+			DoTeamChange(COLOR_TEAM3);
 		} else if( argv(1) == "pink" ) {
-			SV_ChangeTeam( COLOR_TEAM4 - 1 );
+			DoTeamChange(COLOR_TEAM4);
 		} else if( argv(1) == "auto" ) {
-			self.team = -1;
-			JoinBestTeam( self, 0 );
+			DoTeamChange(-1);
 		} else {
 			sprint( self, strcat( "selectteam none/red/blue/yellow/pink/auto - \"", argv(1), "\" not recognised\n" ) );
 		}

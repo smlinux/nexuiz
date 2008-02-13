@@ -339,6 +339,8 @@ void PlayerCorpseDamage (entity inflictor, entity attacker, float damage, float 
 	}
 }
 
+void ClientKill_Now_TeamChange();
+
 void PlayerDamage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
 {
 	local float take, save, waves, sdelay;
@@ -426,6 +428,15 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 	if (self.health < 1)
 	{
 		self.deaths += 1;
+
+		// get rid of kill indicator
+		if(self.killindicator)
+		{
+			remove(self.killindicator);
+			self.killindicator = world;
+			if(self.killindicator_teamchange)
+				ClientKill_Now_TeamChange();
+		}
 
 		// become fully visible
 		self.alpha = 1;

@@ -686,9 +686,115 @@ ClientKill
 Called when a client types 'kill' in the console
 =============
 */
+
+void ClientKill_Now_TeamChange()
+{
+	if(self.killindicator_teamchange == -1)
+	{
+		self.team = -1;
+		JoinBestTeam( self, 0 );
+	}
+	else
+	{
+		SV_ChangeTeam(self.killindicator_teamchange - 1);
+	}
+}
+
+void ClientKill_Now()
+{
+	if(self.killindicator_teamchange)
+		ClientKill_Now_TeamChange();
+	else
+		Damage(self, self, self, 100000, DEATH_KILL, self.origin, '0 0 0');
+}
+void KillIndicator_Think()
+{
+	if (!self.owner.modelindex)
+	{
+		self.owner.killindicator = world;
+		remove(self);
+		return;
+	}
+
+	if(self.cnt <= 0)
+	{
+		self = self.owner;
+		ClientKill_Now(); // no oldself needed
+		return;
+	}
+	else
+	{
+		if(self.cnt <= 10)
+		{
+			setmodel(self, strcat("models/sprites/", ftos(self.cnt), ".spr32"));
+			play2(self.owner, strcat("sound/announce/robotoic/", ftos(self.cnt), ".ogg"));
+		}
+		if(self.owner.killindicator_teamchange)
+		{
+			if(self.owner.killindicator_teamchange == -1)
+				centerprint(self.owner, strcat("Changing team in ", ftos(self.cnt), " seconds"));
+			else
+				centerprint(self.owner, strcat("Changing to ", ColoredTeamName(self.owner.killindicator_teamchange), " in ", ftos(self.cnt), " seconds"));
+		}
+		else
+			centerprint(self.owner, strcat("^1Suicide in ", ftos(self.cnt), " seconds"));
+		play2(self.owner, strcat("announcer/robotoc/", ftos(self.cnt), ".ogg"));
+		self.nextthink = time + 1;
+		self.cnt -= 1;
+	}
+}
+
+void ClientKill_TeamChange (float targetteam) // 0 = don't change, -1 = auto
+{
+	float killtime;
+	killtime = cvar("g_balance_kill_delay");
+
+	self.killindicator_teamchange = targetteam;
+
+	if(!self.killindicator)
+	{
+		if(killtime <= 0 || !self.modelindex || self.deadflag != DEAD_NO)
+		{
+			ClientKill_Now();
+		}
+		else
+		{
+			self.killindicator = spawn();
+			self.killindicator.owner = self;
+			self.killindicator.scale = 0.5;
+			setattachment(self.killindicator, self, "");
+			setorigin(self.killindicator, '0 0 52');
+			self.killindicator.think = KillIndicator_Think;
+			self.killindicator.nextthink = time;
+			self.killindicator.cnt = ceil(killtime);
+			sprint(self, strcat("^1You'll be dead in ", ftos(self.killindicator.cnt), " seconds\n"));
+		}
+	}
+	if(self.killindicator)
+	{
+		if(targetteam)
+			self.killindicator.colormod = TeamColor(targetteam);
+		else
+			self.killindicator.colormod = '0 0 0';
+	}
+}
+
 void ClientKill (void)
 {
-	Damage(self, self, self, 100000, DEATH_KILL, self.origin, '0 0 0');
+	ClientKill_TeamChange(0);
+}
+
+void DoTeamChange(float destteam)
+{
+	if(!cvar("teamplay"))
+	{
+		if(destteam >= 0)
+			SetPlayerColors(self, destteam);
+		return;
+	}
+	if(destteam == self.team)
+		return;
+	ClientKill_TeamChange(destteam);
 }
 
 void FixClientCvars(entity e)
@@ -883,6 +989,12 @@ void ClientDisconnect (void)
 		self.teambubbleentity = world;
 	}
 
+	if (self.killindicator)
+	{
+		remove (self.killindicator);
+		self.killindicator = world;
+	}
+
 	WaypointSprite_PlayerGone();
 
 	DropAllRunes(self);
@@ -961,7 +1073,7 @@ void() TeamBubbleThink =
 		return;
 	}
 //	setorigin(self, self.owner.origin + '0 0 15' + self.owner.maxs_z * '0 0 1');  // bandwidth hog. setattachment does this now
-	if (self.owner.buttonchat || self.owner.deadflag)
+	if (self.owner.buttonchat || self.owner.deadflag || self.owner.killindicator)
 		self.model = "";
 	else
 		self.model = self.mdl;
@@ -1313,7 +1425,7 @@ void ShowRespawnCountdown()
 		{
 			self.respawn_countdown = number - 1;
 			if(ceil(self.death_time - (time + 0.5)) == number) // only say it if it is the same number even in 0.5s; to prevent overlapping sounds
-				play2(self, strcat("announcer/robotic/", ftos(number), "announcer/.ogg"));
+				play2(self, strcat("announcer/robotic/", ftos(number), ".ogg"));
 		}
 	}
 }

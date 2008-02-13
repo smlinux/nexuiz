@@ -390,3 +390,7 @@ float ServerProgsDB;
 
 float some_spawn_has_been_used;
 float have_team_spawns;
+
+// set when showing a kill countdown
+.entity killindicator;
+.float killindicator_teamchange;

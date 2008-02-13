@@ -281,23 +281,6 @@ void kh_Key_Damage(entity inflictor, entity attacker, float damage, float deatht
 			self.team = attacker.team;
 }
 
-vector kh_TeamColor(float teem)
-{
-	switch(teem)
-	{
-		case COLOR_TEAM1:
-			return '1 0.0625 0.0625';
-		case COLOR_TEAM2:
-			return '0.0625 0.0625 1';
-		case COLOR_TEAM3:
-			return '1 1 0.0625';
-		case COLOR_TEAM4:
-			return '1 0.0625 1';
-		default:
-			return '1 1 1';
-	}
-}
-
 void kh_Key_Spawn(entity initial_owner, float angle)
 {
 	entity key;
@@ -316,7 +299,7 @@ void kh_Key_Spawn(entity initial_owner, float angle)
 	key.kh_dropperteam = 0;
 	key.dphitcontentsmask = DPCONTENTS_SOLID | DPCONTENTS_BODY | DPCONTENTS_PLAYERCLIP;
 	setsize(key, KH_KEY_MIN, KH_KEY_MAX);
-	key.colormod = kh_TeamColor(initial_owner.team) * KH_KEY_BRIGHTNESS;
+	key.colormod = TeamColor(initial_owner.team) * KH_KEY_BRIGHTNESS;
 
 	switch(initial_owner.team)
 	{
@@ -563,7 +546,7 @@ void kh_WinnerTeam(float teem)
 		te_lightning2(world, lastorigin, firstorigin);
 	}
 	midpoint = midpoint * (1 / kh_teams);
-	te_customflash(midpoint, 1000, 1, kh_TeamColor(teem) * 0.5 + '0.5 0.5 0.5'); // make the color >=0.5 in each component
+	te_customflash(midpoint, 1000, 1, TeamColor(teem) * 0.5 + '0.5 0.5 0.5'); // make the color >=0.5 in each component
 
 	sound(world, CHAN_AUTO, kh_sound_capture, 1, ATTN_NONE);
 	kh_FinishRound();

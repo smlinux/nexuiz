@@ -37,6 +37,23 @@ void TeamchangeFrags(entity e)
 	}
 }
 
+vector TeamColor(float teem)
+{
+	switch(teem)
+	{
+		case COLOR_TEAM1:
+			return '1 0.0625 0.0625';
+		case COLOR_TEAM2:
+			return '0.0625 0.0625 1';
+		case COLOR_TEAM3:
+			return '1 1 0.0625';
+		case COLOR_TEAM4:
+			return '1 0.0625 1';
+		default:
+			return '1 1 1';
+	}
+}
+
 string TeamName(float t)
 {
 	return strcat(Team_ColorName(t), " Team");
