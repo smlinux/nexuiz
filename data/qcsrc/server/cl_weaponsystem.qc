@@ -435,7 +435,7 @@ float(float secondary, float attacktime) weapon_prepareattack =
 		return FALSE;
 	self.weaponentity.state = WS_INUSE;
 	// if the weapon hasn't been firing continuously, reset the timer
-	if (ATTACK_FINISHED(self) < time - frametime)
+	if (ATTACK_FINISHED(self) < time - frametime * 1.5)
 		ATTACK_FINISHED(self) = time;
 	ATTACK_FINISHED(self) = ATTACK_FINISHED(self) + attacktime;
 	return TRUE;
@@ -470,7 +470,7 @@ void(float fr, float t, void() func) weapon_thinkf =
 	}
 
 	// VorteX: haste can be added here
-	if (self.weapon_think == w_ready || self.weapon_nextthink < time - frametime)
+	if (self.weapon_think == w_ready || self.weapon_nextthink < time - frametime * 1.5)
 		self.weapon_nextthink = time;
 	self.weapon_nextthink = self.weapon_nextthink + t;
 	self.weapon_think = func;
@@ -568,7 +568,7 @@ void(entity missile) W_SetupProjectileVelocity =
 		error("Unowned missile");
 
 	missile.velocity = W_CalculateProjectileVelocity(missile.owner.velocity, missile.velocity);
-} 
+}
 
 void(float wepcode, float minammo) weapon_register =
 {
