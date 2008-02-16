@@ -427,6 +427,9 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 
 	if (self.health < 1)
 	{
+		float defer_ClientKill_Now_TeamChange;
+		defer_ClientKill_Now_TeamChange = FALSE;
+
 		self.deaths += 1;
 
 		// get rid of kill indicator
@@ -435,7 +438,7 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 			remove(self.killindicator);
 			self.killindicator = world;
 			if(self.killindicator_teamchange)
-				ClientKill_Now_TeamChange();
+				defer_ClientKill_Now_TeamChange = TRUE;
 		}
 
 		// become fully visible
@@ -530,6 +533,9 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 
 		if(g_arena)
 			Spawnqueue_Unmark(self);
+
+		if(defer_ClientKill_Now_TeamChange)
+			ClientKill_Now_TeamChange();
 	}
 }
 
