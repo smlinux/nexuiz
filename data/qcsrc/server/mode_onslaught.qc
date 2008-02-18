@@ -551,7 +551,7 @@ void() onslaught_generator =
 	self.colormap = 1024 + (self.team - 1) * 17;
 	self.solid = SOLID_BSP;
 	self.movetype = MOVETYPE_NONE;
-	self.lasthealth = self.max_health = self.health = 3000;
+	self.lasthealth = self.max_health = self.health = cvar("g_onslaught_gen_health");
 	setmodel(self, "models/onslaught/generator.md3");
 	//setsize(self, '-32 -32 -24', '32 32 64');
 	setorigin(self, self.origin);
@@ -688,7 +688,7 @@ void() onslaught_controlpoint_touch =
 	// point if it successfully builds without being destroyed first)
 	self.goalentity = e = spawn();
 	e.owner = self;
-	e.max_health = 1000;
+	e.max_health = cvar("g_onslaught_cp_health");
 	e.health = e.max_health * 0.1;
 	e.alpha = e.health / e.max_health;
 	e.solid = SOLID_BBOX;
