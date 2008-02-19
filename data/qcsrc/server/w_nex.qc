@@ -1,7 +1,7 @@
 
 void W_Nex_Attack (void)
 {
-	W_SetupShot (self, '25 3 -1', TRUE, 5, "weapons/nexfire.wav");
+	W_SetupShot (self, '25 4 -4', TRUE, 5, "weapons/nexfire.wav");
 	//W_SetupShot (self, '25 8 -8', TRUE, 2, "weapons/nexfire.wav"); // TODO: move model down a little
 
 	// assure that nexdamage is high enough in minstagib
