@@ -375,10 +375,8 @@ void() w_clear =
 void() w_ready =
 {
 	if (self.weaponentity)
-	{
 		self.weaponentity.state = WS_READY;
-		weapon_thinkf(WFRAME_IDLE, 0.1, w_ready);
-	}
+	weapon_thinkf(WFRAME_IDLE, 1000000, w_ready);
 };
 
 // FIXME: add qw-style client-custom weaponrating (cl_weaponrating)?
@@ -428,7 +426,7 @@ float(float secondary, float attacktime) weapon_prepareattack =
 		return FALSE;
 	}
 	// don't fire if previous attack is not finished
-	if (ATTACK_FINISHED(self) > time)
+	if (ATTACK_FINISHED(self) > time + frametime * 0.5)
 		return FALSE;
 	// don't fire while changing weapon
 	if (self.weaponentity.state != WS_READY)
@@ -436,8 +434,12 @@ float(float secondary, float attacktime) weapon_prepareattack =
 	self.weaponentity.state = WS_INUSE;
 	// if the weapon hasn't been firing continuously, reset the timer
 	if (ATTACK_FINISHED(self) < time - frametime * 1.5)
+	{
 		ATTACK_FINISHED(self) = time;
+		//dprint("resetting attack finished to ", ftos(time), "\n");
+	}
 	ATTACK_FINISHED(self) = ATTACK_FINISHED(self) + attacktime;
+	//dprint("attack finished ", ftos(ATTACK_FINISHED(self)), "\n");
 	return TRUE;
 };
 
@@ -470,10 +472,19 @@ void(float fr, float t, void() func) weapon_thinkf =
 	}
 
 	// VorteX: haste can be added here
-	if (self.weapon_think == w_ready || self.weapon_nextthink < time - frametime * 1.5)
+	if (self.weapon_think == w_ready)
+	{
 		self.weapon_nextthink = time;
+		//dprint("started firing at ", ftos(time), "\n");
+	}
+	if (self.weapon_nextthink < time - frametime * 1.5 || self.weapon_nextthink > time + frametime * 1.5)
+	{
+		self.weapon_nextthink = time;
+		//dprint("reset weapon animation timer at ", ftos(time), "\n");
+	}
 	self.weapon_nextthink = self.weapon_nextthink + t;
 	self.weapon_think = func;
+	//dprint("next ", ftos(self.weapon_nextthink), "\n");
 
 	if (fr == WFRAME_FIRE1 || fr == WFRAME_FIRE2)
 	if (t)
