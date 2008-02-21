@@ -111,8 +111,9 @@ void GameCommand(string command)
 		entity client;
 		float entno;
 		entno = stof(argv(1));
-		for(client = world; entno > 0; --entno, client = nextent(client))
-			;
+		client = world;
+		if(entno <= maxclients)
+			client = edict_num(entno);
 		if(client.flags & FL_CLIENT)
 		{
 			centerprint_atprio(client, CENTERPRIO_ADMIN, strcat("^3SERVER ADMIN:\n\n^7", argv(2)));

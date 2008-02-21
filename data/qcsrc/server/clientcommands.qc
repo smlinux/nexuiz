@@ -179,8 +179,7 @@ entity GetKickVoteVictim(string vote, string cmd)
 		n = stof(ns);
 		if(ns == ftos(n)) if(n >= 1) if(n <= maxclients)
 		{
-			for((e = world), (i = 0); i < n; ++i, (e = nextent(e)))
-				;
+			e = edict_num(n);
 			if(clienttype(e) == CLIENTTYPE_REAL)
 			{
 				GetKickVoteVictim_newcommand = strcat(argv(0), " # ", ns);

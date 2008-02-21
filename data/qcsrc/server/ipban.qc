@@ -210,8 +210,7 @@ float GameCommand_Ban(string command)
 			entno = stof(argv(2));
 			if(entno > maxclients || entno < 1)
 				return TRUE;
-			for(client = world; entno > 0; --entno, client = nextent(client))
-				;
+			client = edict_num(entno);
 			if(argc >= 4)
 				bantime = stof(argv(3));
 			else
