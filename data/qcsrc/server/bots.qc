@@ -1475,10 +1475,11 @@ void() bot_setnameandstuff =
 void() bot_endgame =
 {
 	local entity e;
+	//dprint("bot_endgame\n");
 	e = bot_list;
 	while (e)
 	{
-		e.clientcolors = e.bot_preferredcolors;
+		setcolor(e, e.bot_preferredcolors);
 		e = e.nextbot;
 	}
 	// if dynamic waypoints are ever implemented, save them here
