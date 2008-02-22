@@ -1317,6 +1317,8 @@ entity bot_list;
 float sv_maxspeed;
 .float createdtime;
 
+.float bot_preferredcolors;
+
 .float bot_attack;
 .float bot_dodge;
 .float bot_dodgerating;
@@ -1416,6 +1418,7 @@ void() bot_setnameandstuff =
 	//shirt = bound(0, floor(random() * 16), 15);
 	shirt = pants;
 	self.clientcolors = shirt * 16 + pants;
+	self.bot_preferredcolors = self.clientcolors;
 	self.team = pants + 1;
 
 	// now pick a name...
@@ -1467,6 +1470,18 @@ void() bot_setnameandstuff =
 		self.netname = strzone(strcat(prefix, name, suffix));
 	else
 		self.netname = name;
+};
+
+void() bot_endgame =
+{
+	local entity e;
+	e = bot_list;
+	while (e)
+	{
+		e.clientcolors = e.bot_preferredcolors;
+		e = e.nextbot;
+	}
+	// if dynamic waypoints are ever implemented, save them here
 };
 
 float bot_ignore_bots; // let bots not attack other bots (only works in non-teamplay)

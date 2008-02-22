@@ -1147,8 +1147,8 @@ float() WinningCondition_Assault =
 	else
 	{
 		SetWinners(team, COLOR_TEAM1);
-	}	
-		
+	}
+
 	local entity ent;
 	ent = find(world, classname, "target_assault_roundend");
 	if(ent)
@@ -1174,7 +1174,7 @@ float() WinningCondition_Assault =
 				cvar_set("timelimit", ftos((2*time)/60));
 				assault_new_round();
 			}
-		}		
+		}
 	}
 
 	return status;
@@ -1848,7 +1848,7 @@ void MapVote_Init()
 	mapvote_count = 0;
 	mapvote_detail = !cvar("g_maplist_votable_nodetail");
 	mapvote_abstain = cvar("g_maplist_votable_abstain");
-	
+
 	if(mapvote_abstain)
 		nmax = min(MAPVOTE_COUNT - 1, cvar("g_maplist_votable"));
 	else
@@ -1906,7 +1906,7 @@ float MapVote_Finished(float mappos)
 			}
 		}
 	result = strcat(result, ":didn't vote:", ftos(didntvote));
-	
+
 	GameLogEcho(result, FALSE);
 	if(mapvote_maps_suggested[mappos])
 		GameLogEcho(strcat(":vote:suggestion_accepted:", mapvote_maps[mappos]), FALSE);
@@ -2246,6 +2246,8 @@ void SV_Shutdown()
 		if(!sv_cheats)
 			db_save(ServerProgsDB, "server.db");
 		print("done!\n");
+		// tell the bot system the game is ending now
+		bot_endgame();
 	}
 	else
 	{
