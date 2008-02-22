@@ -455,7 +455,7 @@ void FixPlayermodel()
 			defaultskin = cvar("sv_defaultplayerskin");
 		}
 	}
-	
+
 	if(defaultmodel != "")
 	{
 		if (defaultmodel != self.model)
@@ -704,7 +704,7 @@ void ClientKill_Now()
 {
 	if(self.killindicator_teamchange)
 		ClientKill_Now_TeamChange();
-	
+
 	// in any case:
 	Damage(self, self, self, 100000, DEATH_KILL, self.origin, '0 0 0');
 }
@@ -1771,7 +1771,7 @@ void PlayerPostThink (void)
 
 		//PrintWelcomeMessage(self);
 		//if (TetrisPostFrame()) return;
-	
+
 		// restart countdown
 		if(time < restart_countdown)
 		{
@@ -1781,7 +1781,7 @@ void PlayerPostThink (void)
 			sec = ceil(restart_countdown-time);
 			s = strcat(NEWLINES, "^1Game starts in ", ftos(sec), " seconds");
 			centerprint(self, s);
-			self.movetype = MOVETYPE_NONE;		
+			self.movetype = MOVETYPE_NONE;
 			self.velocity = '0 0 0';
 			self.avelocity = '0 0 0';
 			self.movement = '0 0 0';
