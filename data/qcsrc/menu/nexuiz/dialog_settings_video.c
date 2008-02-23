@@ -42,8 +42,8 @@ void fillNexuizVideoSettingsTab(entity me)
 		me.TD(me, 1, 0.5, e = makeNexuizRadioButton(1, "gl_texturecompression", "0", "None"));
 		me.TD(me, 1, 0.5, e = makeNexuizRadioButton(1, "gl_texturecompression", "1", "Fast"));
 		me.TD(me, 1, 0.5, e = makeNexuizRadioButton(1, "gl_texturecompression", "2", "Good"));
-
 	me.TR(me);
+		me.TD(me, 1, 3, e = makeNexuizCheckBoxEx(4, 1, "vid_samples", "Use 4x multisampling"));
 
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Depth first:"));

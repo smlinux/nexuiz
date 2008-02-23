@@ -1,14 +1,11 @@
 #ifdef INTERFACE
 CLASS(NexuizCheckBox) EXTENDS(CheckBox)
-	METHOD(NexuizCheckBox, configureNexuizCheckBox, void(entity, float, string, string))
+	METHOD(NexuizCheckBox, configureNexuizCheckBox, void(entity, float, float, string, string))
 	METHOD(NexuizCheckBox, setChecked, void(entity, float))
 	ATTRIB(NexuizCheckBox, fontSize, float, SKINFONTSIZE_NORMAL)
 	ATTRIB(NexuizCheckBox, image, string, SKINGFX_CHECKBOX)
-	ATTRIB(NexuizCheckBox, inverted, float, 0)
-	// can be: 0   (off =  0, on =  1)
-	//         1   (off =  1, on =  0)
-	//         1+a (off =  a, on = -a)
-	//        -1-a (off = -a, on =  a)
+	ATTRIB(NexuizCheckBox, yesValue, float, 1)
+	ATTRIB(NexuizCheckBox, noValue, float, 0)
 
 	ATTRIB(NexuizCheckBox, color, vector, SKINCOLOR_CHECKBOX_N)
 	ATTRIB(NexuizCheckBox, colorC, vector, SKINCOLOR_CHECKBOX_C)
@@ -23,19 +20,47 @@ CLASS(NexuizCheckBox) EXTENDS(CheckBox)
 	ATTRIB(NexuizCheckBox, disabledAlpha, float, SKINALPHA_DISABLED)
 ENDCLASS(NexuizCheckBox)
 entity makeNexuizCheckBox(float, string, string);
+entity makeNexuizCheckBoxEx(float, float, string, string);
 #endif
 
 #ifdef IMPLEMENTATION
 entity makeNexuizCheckBox(float isInverted, string theCvar, string theText)
 {
+	float y, n;
+	if(isInverted > 1)
+	{
+		n = isInverted - 1;
+		y = -n;
+	}
+	else if(isInverted < -1)
+	{
+		n = isInverted + 1;
+		y = -n;
+	}
+	else if(isInverted == 1)
+	{
+		n = 1;
+		y = 0;
+	}
+	else
+	{
+		n = 0;
+		y = 1;
+	}
+	print("y = ", ftos(y), ", n = ", ftos(n), "\n");
+	return makeNexuizCheckBoxEx(y, n, theCvar, theText);
+}
+entity makeNexuizCheckBoxEx(float theYesValue, float theNoValue, string theCvar, string theText)
+{
 	entity me;
 	me = spawnNexuizCheckBox();
-	me.configureNexuizCheckBox(me, isInverted, theCvar, theText);
+	me.configureNexuizCheckBox(me, theYesValue, theNoValue, theCvar, theText);
 	return me;
 }
-void configureNexuizCheckBoxNexuizCheckBox(entity me, float isInverted, string theCvar, string theText)
+void configureNexuizCheckBoxNexuizCheckBox(entity me, float theYesValue, float theNoValue, string theCvar, string theText)
 {
-	me.inverted = isInverted;
+	me.yesValue = theYesValue;
+	me.noValue = theNoValue;
 	me.checked = 0;
 	if(theCvar)
 	{
@@ -54,34 +79,16 @@ void setCheckedNexuizCheckBox(entity me, float val)
 }
 void loadCvarsNexuizCheckBox(entity me)
 {
-	if(me.inverted == 0)
-		me.checked = cvar(me.cvarName);
-	else if(me.inverted == 1)
-		me.checked = !cvar(me.cvarName);
-	else if(me.inverted > 1)
-		me.checked = (cvar(me.cvarName) < 0);
-	else if(me.inverted < -1)
-		me.checked = (cvar(me.cvarName) > 0);
+	float m, d;
+	m = (me.yesValue + me.noValue) * 0.5;
+	d = (cvar(me.cvarName) - m) / (me.yesValue - m);
+	me.checked = (d > 0);
 }
 void saveCvarsNexuizCheckBox(entity me)
 {
-	if(me.inverted == 0)
-		cvar_set(me.cvarName, me.checked ? "1" : "0");
-	else if(me.inverted == 1)
-		cvar_set(me.cvarName, me.checked ? "0" : "1");
-	else if(me.inverted > 1)
-	{
-		if(me.checked)
-			cvar_set(me.cvarName, ftos(-(me.inverted - 1)));
-		else
-			cvar_set(me.cvarName, ftos(+(me.inverted - 1)));
-	}
-	else if(me.inverted < -1)
-	{
-		if(me.checked)
-			cvar_set(me.cvarName, ftos(-(me.inverted + 1)));
-		else
-			cvar_set(me.cvarName, ftos(+(me.inverted + 1)));
-	}
+	if(me.checked)
+		cvar_set(me.cvarName, ftos(me.yesValue));
+	else
+		cvar_set(me.cvarName, ftos(me.noValue));
 }
 #endif
