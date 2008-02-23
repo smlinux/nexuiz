@@ -227,7 +227,7 @@ void() FlagTouch =
 	local float t;
 	local entity head;
 	local entity player;
-	local string s, s0, h0;
+	local string s, s0, h0, h1;
 	if (other.classname != "player")
 		return;
 	if (other.health < 1) // ignore dead players
@@ -249,23 +249,24 @@ void() FlagTouch =
 		s = ftos_decimals(t, 2);
 		s0 = ftos_decimals(flagcaptimerecord, 2);
 		h0 = db_get(ServerProgsDB, strcat(GetMapname(), "/captimerecord/netname"));
-		if(h0 == other.netname)
+		h1 = strreplace(other.netname, "\\", "\xDC"); // h1: current netname, escaped for DB (\ is 5C, other \ is DC)
+		if(h0 == h1)
 			h0 = "his";
 		else
-			h0 = strcat(h0, "^7's"); 
+			h0 = strcat(strreplace(h0, "\xDC", "\\"), "^7's"); // h0: display text for previous netname
 		if (flagcaptimerecord == 0)
 		{
 			bprint(other.netname, "^7 captured the ", other.flagcarried.netname, " in ", s, " seconds\n");
 			flagcaptimerecord = t;
 			db_put(ServerProgsDB, strcat(GetMapname(), "/captimerecord/time"), ftos(t));
-			db_put(ServerProgsDB, strcat(GetMapname(), "/captimerecord/netname"), other.netname);
+			db_put(ServerProgsDB, strcat(GetMapname(), "/captimerecord/netname"), h1);
 		}
 		else if (t < flagcaptimerecord)
 		{
 			bprint(other.netname, "^7 captured the ", other.flagcarried.netname, " in ", s, ", breaking ", strcat(h0, " previous record of ", s0, " seconds\n"));
 			flagcaptimerecord = t;
 			db_put(ServerProgsDB, strcat(GetMapname(), "/captimerecord/time"), ftos(t));
-			db_put(ServerProgsDB, strcat(GetMapname(), "/captimerecord/netname"), other.netname);
+			db_put(ServerProgsDB, strcat(GetMapname(), "/captimerecord/netname"), h1);
 		}
 		else
 		{
