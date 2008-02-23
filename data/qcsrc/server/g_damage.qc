@@ -601,6 +601,20 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 	}
 }
 
+vector NearestPointOnBox(entity box, vector org)
+{
+	vector m1, m2, nearest;
+
+	m1 = box.mins + box.origin;
+	m2 = box.maxs + box.origin;
+
+	nearest_x = bound(m1_x, org_x, m2_x);
+	nearest_y = bound(m1_y, org_y, m2_y);
+	nearest_z = bound(m1_z, org_z, m2_z);
+
+	return nearest;
+}
+
 float RadiusDamage (entity inflictor, entity attacker, float coredamage, float edgedamage, float rad, entity ignore, float forceintensity, float deathtype)
 // Returns total damage applies to creatures
 {
@@ -609,11 +623,9 @@ float RadiusDamage (entity inflictor, entity attacker, float coredamage, float e
 	float	power;
 	vector	blastorigin;
 	vector	force;
-	vector	m1;
-	vector	m2;
-	vector	nearest;
-	vector	diff;
+	vector  diff;
 	vector  center;
+	vector  nearest;
 	float   total_damage_to_creatures;
 
 	blastorigin = (inflictor.origin + (inflictor.mins + inflictor.maxs) * 0.5);
@@ -627,15 +639,7 @@ float RadiusDamage (entity inflictor, entity attacker, float coredamage, float e
 			{
 				// LordHavoc: measure distance to nearest point on target (not origin)
 				// (this guarentees 100% damage on a touch impact)
-				nearest = blastorigin;
-				m1 = targ.origin + targ.mins;
-				m2 = targ.origin + targ.maxs;
-				if (nearest_x < m1_x) nearest_x = m1_x;
-				if (nearest_y < m1_y) nearest_y = m1_y;
-				if (nearest_z < m1_z) nearest_z = m1_z;
-				if (nearest_x > m2_x) nearest_x = m2_x;
-				if (nearest_y > m2_y) nearest_y = m2_y;
-				if (nearest_z > m2_z) nearest_z = m2_z;
+				nearest = NearestPointOnBox(targ, blastorigin);
 				diff = nearest - blastorigin;
 				// round up a little on the damage to ensure full damage on impacts
 				// and turn the distance into a fraction of the radius
@@ -649,7 +653,7 @@ float RadiusDamage (entity inflictor, entity attacker, float coredamage, float e
 					finaldmg = coredamage * power + edgedamage * (1 - power);
 					if (finaldmg > 0)
 					{
-						center = (m1 + m2) * 0.5;
+						center = targ.origin + (targ.mins + targ.maxs) * 0.5;
 						// if it's a player, use the view origin as reference
 						if (targ.classname == "player")
 							center = targ.origin + targ.view_ofs;
@@ -674,9 +678,9 @@ float RadiusDamage (entity inflictor, entity attacker, float coredamage, float e
 								Damage (targ, inflictor, attacker, finaldmg, deathtype, nearest, force);
 								break;
 							}
-							nearest_x = m1_x + random() * targ.size_x;
-							nearest_y = m1_y + random() * targ.size_y;
-							nearest_z = m1_z + random() * targ.size_z;
+							nearest_x = targ.mins_x + random() * targ.size_x;
+							nearest_y = targ.mins_y + random() * targ.size_y;
+							nearest_z = targ.mins_z + random() * targ.size_z;
 						}
 					}
 				}

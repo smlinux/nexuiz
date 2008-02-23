@@ -1,5 +1,6 @@
 
 .float rl_sound;
+.float rl_detonate_later;
 
 void W_Rocket_Explode (void)
 {
@@ -79,6 +80,23 @@ entity FindLaserTarget(entity e, float dist_variance, float dot_variance)
 	return selected;
 }
 
+void W_Rocket_RemoteExplode()
+{
+	if(self.owner.deadflag == DEAD_NO)
+	{
+		if((self.spawnshieldtime >= 0)
+			? (time >= self.spawnshieldtime) // timer
+			: (vlen(NearestPointOnBox(self.owner, self.origin) - self.origin) > cvar("g_balance_rocketlauncher_radius")) // safety device
+		)
+		{
+			W_Rocket_Explode ();
+		}
+		else
+		{
+		}
+	}
+}
+
 void W_Rocket_Think (void)
 {
 	entity e;
@@ -119,11 +137,9 @@ void W_Rocket_Think (void)
 
 			if(self.owner.deadflag == DEAD_NO)
 			if (self.owner.button0 && self.ltime < 0) // if the player let go of the button and then pushed it again
-			if(time >= self.spawnshieldtime)
-			{
-				  W_Rocket_Explode ();
-				  return;
-			}
+				self.rl_detonate_later = TRUE;
+			if(self.rl_detonate_later)
+				W_Rocket_RemoteExplode();
 
 			if(cvar("g_balance_rocketlauncher_laserguided_allow_steal"))
 			{
@@ -160,10 +176,10 @@ void W_Rocket_Think (void)
 		}
 		else
 		{
-			if(self.owner.deadflag == DEAD_NO)
 			if (self.owner.button3)
-			if(time >= self.spawnshieldtime)
-				  W_Rocket_Explode ();
+				self.rl_detonate_later = TRUE;
+			if(self.rl_detonate_later)
+				W_Rocket_RemoteExplode();
 		}
 	}
 }
@@ -207,7 +223,10 @@ void W_Rocket_Attack (void)
 	missile = spawn ();
 	missile.owner = self;
 	self.lastrocket = missile;
-	missile.spawnshieldtime = time + cvar("g_balance_rocketlauncher_detonatedelay");
+	if(cvar("g_balance_rocketlauncher_detonatedelay") >= 0)
+		missile.spawnshieldtime = time + cvar("g_balance_rocketlauncher_detonatedelay");
+	else
+		missile.spawnshieldtime = -1;
 	missile.classname = "missile";
 	missile.bot_dodge = TRUE;
 	missile.bot_dodgerating = cvar("g_balance_rocketlauncher_primary_damage") * 2; // * 2 because it can be detonated inflight which makes it even more dangerous
