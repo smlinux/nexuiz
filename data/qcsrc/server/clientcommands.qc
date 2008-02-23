@@ -575,13 +575,14 @@ string ValidateMap(string m)
 		sprint(self, "This map is not available on this server.\n");
 		return string_null;
 	}
-#endif
+#else
 	if(!cvar("sv_vote_change_gametype"))
 		if(!IsSameGametype(m))
 		{
 			sprint(self, "This server does not allow changing the game type by map votes.\n");
 			return string_null;
 		}
+#endif
 	if(!cvar("sv_vote_override_mostrecent"))
 		if(Map_IsRecent(m))
 		{

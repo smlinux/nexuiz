@@ -1789,10 +1789,11 @@ string MapVote_Suggest(string m)
 	m = MapInfo_FixName(m);
 	if(!m)
 		return "The map you suggested is not available on this server.";
-#endif
+#else
 	if(!cvar("g_maplist_votable_suggestions_change_gametype"))
 		if(!IsSameGametype(m))
 			return "This server does not allow changing the game type by map suggestions.";
+#endif
 	if(!cvar("g_maplist_votable_override_mostrecent"))
 		if(Map_IsRecent(m))
 			return "This server does not allow for recent maps to be played again. Please be patient for some rounds.";
