@@ -47,7 +47,6 @@ entity makeNexuizCheckBox(float isInverted, string theCvar, string theText)
 		n = 0;
 		y = 1;
 	}
-	print("y = ", ftos(y), ", n = ", ftos(n), "\n");
 	return makeNexuizCheckBoxEx(y, n, theCvar, theText);
 }
 entity makeNexuizCheckBoxEx(float theYesValue, float theNoValue, string theCvar, string theText)
