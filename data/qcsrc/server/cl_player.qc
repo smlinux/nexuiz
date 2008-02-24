@@ -682,6 +682,27 @@ void UpdateSelectedPlayer()
 		self.last_selected_player = self.selected_player;
 }
 
+float precache_sound_index (string s) = #19;
+void soundto(entity e, entity sounddest, float chan, string samp, float vol, float atten)
+{
+	vector o;
+	if(clienttype(sounddest) != CLIENTTYPE_REAL)
+		return;
+	o = e.origin + 0.5 * (e.mins + e.maxs);
+	msg_entity = sounddest;
+	WriteByte(MSG_ONE, 6);
+	WriteByte(MSG_ONE, 27); // all bits except SND_LOOPING
+	WriteByte(MSG_ONE, vol * 255);
+	WriteByte(MSG_ONE, atten * 64);
+	WriteEntity(MSG_ONE, e);
+	WriteByte(MSG_ONE, chan);
+	WriteShort(MSG_ONE, precache_sound_index(samp));
+	WriteCoord(MSG_ONE, o_x);
+	WriteCoord(MSG_ONE, o_y);
+	WriteCoord(MSG_ONE, o_z);
+}
+
+#if 0
 .string playersound_attack;
 .string playersound_attackinfive;
 .string playersound_coverme;
@@ -790,26 +811,6 @@ void UpdatePlayerSounds()
 	LoadPlayerSounds(strcat(self.model, ".sounds"));
 }
 
-float precache_sound_index (string s) = #19;
-void soundto(entity e, entity sounddest, float chan, string samp, float vol, float atten)
-{
-	vector o;
-	if(clienttype(sounddest) != CLIENTTYPE_REAL)
-		return;
-	o = e.origin + 0.5 * (e.mins + e.maxs);
-	msg_entity = sounddest;
-	WriteByte(MSG_ONE, 6);
-	WriteByte(MSG_ONE, 27); // all bits except SND_LOOPING
-	WriteByte(MSG_ONE, vol * 255);
-	WriteByte(MSG_ONE, atten * 64);
-	WriteEntity(MSG_ONE, e);
-	WriteByte(MSG_ONE, chan);
-	WriteShort(MSG_ONE, precache_sound_index(samp));
-	WriteCoord(MSG_ONE, o_x);
-	WriteCoord(MSG_ONE, o_y);
-	WriteCoord(MSG_ONE, o_z);
-}
-
 void VoiceMessage(string type)
 {
 	// TODO precache voice messages?
@@ -854,3 +855,8 @@ void VoiceMessage(string type)
 				soundto(self, e, CHAN_VOICE, sample, 1, ATTN_NONE);
 	}
 }
+#else
+void PrecachePlayerSounds(string f) { }
+void UpdatePlayerSounds() { }
+void VoiceMessage(string type) { sprint(self, "Sorry, voice command support is not done yet. Maybe later.\n"); }
+#endif
