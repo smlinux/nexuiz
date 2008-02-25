@@ -253,7 +253,7 @@ void() FlagTouch =
 		if(h0 == h1)
 			h0 = "his";
 		else
-			h0 = strcat(strreplace("\xDC", "\\", other.netname), "^7's"); // h0: display text for previous netname
+			h0 = strcat(strreplace("\xDC", "\\", h0), "^7's"); // h0: display text for previous netname
 		if (flagcaptimerecord == 0)
 		{
 			bprint(other.netname, "^7 captured the ", other.flagcarried.netname, " in ", s, " seconds\n");
