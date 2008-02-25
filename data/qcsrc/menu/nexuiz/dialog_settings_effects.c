@@ -102,7 +102,7 @@ void fillNexuizEffectsSettingsTab(entity me)
 				e.addValue(e, "German", "1");
 			e.addValue(e, "Few", "0.75");
 			e.addValue(e, "Many", "0.5");
-			e.addValue(e, "Lots", "1");
+			e.addValue(e, "Lots", "0");
 			e.configureNexuizTextSliderValues(e);
 
 	me.TR(me);
