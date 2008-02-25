@@ -229,7 +229,7 @@ void ServerList_Filter_Change(entity box, entity me)
 }
 void ServerList_ShowEmpty_Click(entity box, entity me)
 {
-	box.checked = me.filterShowEmpty = !me.filterShowEmpty;
+	box.setChecked(box, me.filterShowEmpty = !me.filterShowEmpty);
 	me.refreshServerList(me, 0);
 }
 void ServerList_ShowFull_Click(entity box, entity me)

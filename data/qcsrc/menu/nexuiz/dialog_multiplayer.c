@@ -15,7 +15,7 @@ void fillNexuizMultiplayerDialog(entity me)
 	entity mc, e;
 	mc = makeNexuizTabController(me.rows - 2);
 	me.TR(me);
-		me.TD(me, 1, 1, e = mc.makeTabButton(mc, "Join",  makeNexuizServerListTab()));
+		me.TD(me, 1, 1, e = mc.makeTabButton(mc, "Servers",  makeNexuizServerListTab()));
 			setDependentStringNotEqual(e, "_cl_name", "Player");
 		me.TD(me, 1, 1, e = mc.makeTabButton(mc, "Player Setup",  makeNexuizPlayerSettingsTab()));
 			if(cvar_string("_cl_name") == "Player")
