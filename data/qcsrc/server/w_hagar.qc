@@ -64,6 +64,7 @@ void W_Hagar_Touch2 (void)
 	} else {
 		self.cnt++;
 		pointparticles(particleeffectnum("hagar_bounce"), self.origin, self.velocity, 1);
+		self.angles = vectoangles (self.velocity);
 	}
 }
 
