@@ -4,7 +4,7 @@
 
 vector stepheightvec;
 float navigation_testtracewalk;
-float(entity e, vector start, vector m1, vector m2, vector end) tracewalk =
+float(entity e, vector start, vector m1, vector m2, vector end, float movemode) tracewalk =
 {
 	local vector org;
 	local vector move;
@@ -30,10 +30,10 @@ float(entity e, vector start, vector m1, vector m2, vector end) tracewalk =
 	stepdist = 32;
 	ignorehazards = FALSE;
 	//self.angles = vectoangles(dir);
-	traceline(start, start, FALSE, e);
+	traceline(start, start, MOVE_NORMAL, e);
 	if (trace_dpstartcontents & (DPCONTENTS_SLIME | DPCONTENTS_LAVA))
 		ignorehazards = TRUE;
-	tracebox(start, m1, m2, start, TRUE, e);
+	tracebox(start, m1, m2, start, MOVE_NOMONSTERS, e);
 	if (trace_startsolid)
 	{
 		// failed - bad start
@@ -71,7 +71,7 @@ float(entity e, vector start, vector m1, vector m2, vector end) tracewalk =
 		if (stepdist > dist)
 			stepdist = dist;
 		dist = dist - stepdist;
-		traceline(org, org, FALSE, e);
+		traceline(org, org, MOVE_NORMAL, e);
 		if (!ignorehazards)
 		{
 			if (trace_dpstartcontents & (DPCONTENTS_SLIME | DPCONTENTS_LAVA))
@@ -89,7 +89,7 @@ float(entity e, vector start, vector m1, vector m2, vector end) tracewalk =
 		if (trace_dpstartcontents & DPCONTENTS_LIQUIDSMASK)
 		{
 			move = normalize(end - org);
-			tracebox(org, m1, m2, org + move * stepdist, MOVE_WORLDONLY, e);
+			tracebox(org, m1, m2, org + move * stepdist, movemode, e);
 			if (trace_fraction < 1)
 			{
 				if (navigation_testtracewalk)
@@ -107,10 +107,10 @@ float(entity e, vector start, vector m1, vector m2, vector end) tracewalk =
 		else
 		{
 			move = dir * stepdist + org;
-			tracebox(org, m1, m2, move, MOVE_WORLDONLY, e);
+			tracebox(org, m1, m2, move, movemode, e);
 			if (trace_fraction < 1)
 			{
-				tracebox(org + stepheightvec, m1, m2, move + stepheightvec, MOVE_WORLDONLY, e);
+				tracebox(org + stepheightvec, m1, m2, move + stepheightvec, movemode, e);
 				if (trace_fraction < 1 || trace_startsolid)
 				{
 					if (navigation_testtracewalk)
@@ -126,13 +126,12 @@ float(entity e, vector start, vector m1, vector m2, vector end) tracewalk =
 				}
 			}
 			move = trace_endpos;
-			tracebox(move, m1, m2, move + '0 0 -65536', FALSE, e);
-			/*
 			// trace down from stepheight as far as possible and move there,
 			// if this starts in solid we try again without the stepup, and
 			// if that also fails we assume it is a wall
 			// (this is the same logic as the Quake walkmove function used)
-			tracebox(move + '0 0 18', m1, m2, move + '0 0 -65536', FALSE, e);
+			tracebox(move, m1, m2, move + '0 0 -65536', movemode, e);
+			/*
 			if (trace_startsolid)
 			{
 				tracebox(move, m1, m2, move + '0 0 -65536', FALSE, e);
@@ -344,7 +343,7 @@ float(float t, float f1, float f2, entity e1, vector v1, vector v2, vector v3, v
 .float wp00mincost, wp01mincost, wp02mincost, wp03mincost, wp04mincost, wp05mincost, wp06mincost, wp07mincost;
 .float wp08mincost, wp09mincost, wp10mincost, wp11mincost, wp12mincost, wp13mincost, wp14mincost, wp15mincost;
 .float wp16mincost, wp17mincost, wp18mincost, wp19mincost, wp20mincost, wp21mincost, wp22mincost, wp23mincost, wp24mincost, wp25mincost, wp26mincost, wp27mincost, wp28mincost, wp29mincost, wp30mincost, wp31mincost;
-.float wpfire, wpcost;
+.float wpfire, wpcost, wpconsidered;
 .float wpisbox;
 .float wpflags;
 .vector wpnearestpoint;
@@ -516,10 +515,10 @@ void() waypoint_think =
 				//traceline(self.origin, e.origin, FALSE, world);
 				//if (trace_fraction == 1)
 				if (!self.wpisbox)
-				if (tracewalk(self, sv, PL_MIN, PL_MAX, ev))
+				if (tracewalk(self, sv, PL_MIN, PL_MAX, ev, MOVE_NOMONSTERS))
 					waypoint_addlink(self, e);
 				if (!e.wpisbox)
-				if (tracewalk(e, ev, PL_MIN, PL_MAX, sv))
+				if (tracewalk(e, ev, PL_MIN, PL_MAX, sv, MOVE_NOMONSTERS))
 					waypoint_addlink(e, self);
 			}
 		}
@@ -1039,7 +1038,7 @@ entity(entity player, float walkfromwp) navigation_findnearestwaypoint =
 			{
 				traceline(v, org, TRUE, player);
 				if (trace_fraction == 1)
-				if (tracewalk(player, v, PL_MIN, PL_MAX, org))
+				if (tracewalk(player, v, PL_MIN, PL_MAX, org, MOVE_NORMAL))
 				{
 					bestdist = dist;
 					best = w;
@@ -1049,7 +1048,7 @@ entity(entity player, float walkfromwp) navigation_findnearestwaypoint =
 			{
 				traceline(v, org, TRUE, player);
 				if (trace_fraction == 1)
-				if (tracewalk(player, org, PL_MIN, PL_MAX, v))
+				if (tracewalk(player, org, PL_MIN, PL_MAX, v, MOVE_NORMAL))
 				{
 					bestdist = dist;
 					best = w;
@@ -1062,50 +1061,48 @@ entity(entity player, float walkfromwp) navigation_findnearestwaypoint =
 }
 
 // finds the waypoints near the bot initiating a navigation query
-void() navigation_markroutes_nearestwaypoints =
+float(entity waylist, float maxdist) navigation_markroutes_nearestwaypoints =
 {
 	local entity head;
-	local float dist;
-	local vector v, m1, m2;
+	local vector v, m1, m2, diff;
+	local float c;
 	//navigation_testtracewalk = TRUE;
-	head = findchain(classname, "waypoint");
+	c = 0;
+	head = waylist;
 	while (head)
 	{
-		m1 = head.origin + head.mins;
-		m2 = head.origin + head.maxs;
-		v = self.origin;
-		v_x = bound(m1_x, v_x, m2_x);
-		v_y = bound(m1_y, v_y, m2_y);
-		v_z = bound(m1_z, v_z, m2_z);
-		dist = vlen(v - self.origin);
-		if (dist < 1000)
+		if (!head.wpconsidered)
 		{
-			if (dist < 4)
+			if (head.wpisbox)
 			{
-				// if bot is very near a waypoint don't bother doing a trace
-				head.wpnearestpoint = v;
-				head.wpcost = dist + head.dmg;
-				head.wpfire = 1;
-				head.enemy = world;
+				m1 = head.origin + head.mins;
+				m2 = head.origin + head.maxs;
+				v = self.origin;
+				v_x = bound(m1_x, v_x, m2_x);
+				v_y = bound(m1_y, v_y, m2_y);
+				v_z = bound(m1_z, v_z, m2_z);
 			}
 			else
+				v = head.origin;
+			diff = v - self.origin;
+			diff_z = max(0, diff_z);
+			if (vlen(diff) < maxdist)
 			{
-				tracebox(self.origin, '-16 -16 0', '16 16 0', v, TRUE, self);
-				if (trace_fraction == 1)
+				head.wpconsidered = TRUE;
+				if (tracewalk(self, self.origin, self.mins, self.maxs, v, MOVE_NORMAL))
 				{
-					if (tracewalk(self, self.origin, self.mins, self.maxs, v))
-					{
-						head.wpnearestpoint = v;
-						head.wpcost = dist + head.dmg;
-						head.wpfire = 1;
-						head.enemy = world;
-					}
+					head.wpnearestpoint = v;
+					head.wpcost = vlen(v - self.origin) + head.dmg;
+					head.wpfire = 1;
+					head.enemy = world;
+					c = c + 1;
 				}
 			}
 		}
 		head = head.chain;
 	}
 	//navigation_testtracewalk = FALSE;
+	return c;
 }
 
 // updates a path link if a waypoint link is better than the current one
@@ -1143,13 +1140,18 @@ void() navigation_markroutes =
 	w = waylist = findchain(classname, "waypoint");
 	while (w)
 	{
+		w.wpconsidered = FALSE;
 		w.wpnearestpoint = '0 0 0';
 		w.wpcost = 10000000;
 		w.wpfire = 0;
 		w.enemy = world;
 		w = w.chain;
 	}
-	navigation_markroutes_nearestwaypoints();
+	// try a short range search for the nearest waypoints, and expand the
+	// search repeatedly if none are found
+	if (!navigation_markroutes_nearestwaypoints(waylist, 250))
+		if (!navigation_markroutes_nearestwaypoints(waylist, 1000))
+			navigation_markroutes_nearestwaypoints(waylist, 1000000);
 	searching = TRUE;
 	while (searching)
 	{
@@ -1252,9 +1254,9 @@ void(entity e) navigation_routetogoal =
 	//bprint(etos(e));
 	//bprint(") : ");
 	//bprint(etos(e));
-	tracebox(self.origin, '-16 -16 0', '16 16 0', e.origin, TRUE, self);
-	if (trace_fraction == 1)
-	if (tracewalk(self, self.origin, PL_MIN, PL_MAX, e.origin))
+	//tracebox(self.origin, '-16 -16 0', '16 16 0', e.origin, TRUE, self);
+	//if (trace_fraction == 1)
+	if (tracewalk(self, self.origin, PL_MIN, PL_MAX, e.origin, MOVE_NORMAL))
 		return;
 	// see if there are waypoints describing a path to the item
 	e = e.nearestwaypoint;
@@ -1265,7 +1267,7 @@ void(entity e) navigation_routetogoal =
 		//te_smallflash((e.absmin + e.absmax) * 0.5);
 		//tracebox(self.origin, '-16 -16 0', '16 16 0', e.origin, TRUE, self);
 		//if (trace_fraction == 1)
-		//if (tracewalk(self, self.origin, PL_MIN, PL_MAX, e.origin))
+		//if (tracewalk(self, self.origin, PL_MIN, PL_MAX, e.origin, MOVE_NORMAL))
 		//	break;
 		// add the waypoint to the path
 		navigation_pushroute(e);
@@ -1527,6 +1529,7 @@ void(float t, float f1, float f2, entity e1, vector v1, vector v2, vector v3, ve
 		self.bot_canfire = 1;
 };
 
+.float bot_nextthink;
 .float bot_badaimtime;
 .float bot_aimthinktime;
 .vector bot_mouseaim;
@@ -1575,13 +1578,7 @@ float(vector v, float maxfiredeviation) bot_aimdir =
 
 	//dprint("aim ", self.netname, ": old:", vtos(self.v_angle));
 	// make sure v_angle is sane first
-	//self.v_angle_x = bound(-180, self.v_angle_x, 180);
-	//while (self.v_angle_x < -180) self.v_angle_x = self.v_angle_x + 360;
-	//while (self.v_angle_x >= 180) self.v_angle_x = self.v_angle_x - 360;
-	while (self.v_angle_y < -180) self.v_angle_y = self.v_angle_y + 360;
-	while (self.v_angle_y >= 180) self.v_angle_y = self.v_angle_y - 360;
-	//while (self.v_angle_z < -180) self.v_angle_z = self.v_angle_z + 360;
-	//while (self.v_angle_z >= 180) self.v_angle_z = self.v_angle_z - 360;
+	self.v_angle_y = self.v_angle_y - floor(self.v_angle_y / 360) * 360;
 	self.v_angle_z = 0;
 
 	// get the desired angles to aim at
@@ -1591,15 +1588,14 @@ float(vector v, float maxfiredeviation) bot_aimdir =
 	if (time >= self.bot_badaimtime)
 	{
 		self.bot_badaimtime = max(self.bot_badaimtime + 0.3, time);
-		self.bot_badaimoffset = randomvec() * bound(0, 5 - 0.5 * (skill+self.bot_offsetskill), 5);
+		self.bot_badaimoffset = randomvec() * bound(0, 5 - 0.5 * (skill+self.bot_offsetskill), 5) * cvar("bot_ai_aimskill_offset");
 	}
-	desiredang = vectoangles(v) + self.bot_badaimoffset*cvar("bot_ai_aimskill_offset");
+	desiredang = vectoangles(v) + self.bot_badaimoffset;
 	//dprint(" desired:", vtos(desiredang));
 	if (desiredang_x >= 180)
 		desiredang_x = desiredang_x - 360;
-	desiredang_x = 0 - desiredang_x;
+	desiredang_x = bound(-90, 0 - desiredang_x, 90);
 	desiredang_z = self.v_angle_z;
-	desiredang_x = bound(-90, desiredang_x, 90);
 	//dprint(" / ", vtos(desiredang));
 
 	//// pain throws off aim
@@ -1610,19 +1606,17 @@ float(vector v, float maxfiredeviation) bot_aimdir =
 	//}
 
 	// calculate turn angles
-	diffang = (desiredang - self.bot_olddesiredang)*(1/frametime);
+	diffang = (desiredang - self.bot_olddesiredang);
+	// wrap yaw turn
+	diffang_y = diffang_y - floor(diffang_y / 360) * 360;
+	if (diffang_y >= 180)
+		diffang_y = diffang_y - 360;
 	self.bot_olddesiredang = desiredang;
 	//dprint(" diff:", vtos(diffang));
 
-	// wrap yaw turn
-	while (diffang_y < -180)
-		diffang_y = diffang_y + 360;
-	while (diffang_y >  180)
-		diffang_y = diffang_y - 360;
-
 	// Here we will try to anticipate the comming aiming direction
 	self.bot_1st_order_aimfilter= self.bot_1st_order_aimfilter
-		+ (diffang                      - self.bot_1st_order_aimfilter) * bound(0, cvar("bot_ai_aimskill_order_filter_1st"),1);
+		+ (diffang * (1 / frametime)    - self.bot_1st_order_aimfilter) * bound(0, cvar("bot_ai_aimskill_order_filter_1st"),1);
 	self.bot_2nd_order_aimfilter= self.bot_2nd_order_aimfilter
 		+ (self.bot_1st_order_aimfilter - self.bot_2nd_order_aimfilter) * bound(0, cvar("bot_ai_aimskill_order_filter_2nd"),1);
 	self.bot_3th_order_aimfilter= self.bot_3th_order_aimfilter
@@ -1643,19 +1637,14 @@ float(vector v, float maxfiredeviation) bot_aimdir =
 		+ self.bot_4th_order_aimfilter * cvar("bot_ai_aimskill_order_mix_4th")
 		+ self.bot_5th_order_aimfilter * cvar("bot_ai_aimskill_order_mix_5th")
 	);
-	while (desiredang_z < -180)
-		desiredang_z = desiredang_z + 360;
-	while (desiredang_z >  180)
-		desiredang_z = desiredang_z - 360;
+
 	// calculate turn angles
 	diffang = desiredang - self.bot_mouseaim;
-	//dprint(" diff:", vtos(diffang));
-
 	// wrap yaw turn
-	while (diffang_y < -180)
-		diffang_y = diffang_y + 360;
-	while (diffang_y >  180)
+	diffang_y = diffang_y - floor(diffang_y / 360) * 360;
+	if (diffang_y >= 180)
 		diffang_y = diffang_y - 360;
+	//dprint(" diff:", vtos(diffang));
 
 	if (time >= self.bot_aimthinktime)
 	{
@@ -1665,26 +1654,20 @@ float(vector v, float maxfiredeviation) bot_aimdir =
 
 	//self.v_angle = self.v_angle + diffang * bound(0, r * frametime * (skill * 0.5 + 2), 1);
 
-	desiredang = self.bot_mouseaim*bound(0,cvar("bot_ai_aimskill_think"),1) + desiredang * bound(0,(1-cvar("bot_ai_aimskill_think")),1);
+	diffang = self.bot_mouseaim - desiredang;
+	// wrap yaw turn
+	diffang_y = diffang_y - floor(diffang_y / 360) * 360;
+	if (diffang_y >= 180)
+		diffang_y = diffang_y - 360;
+	desiredang = desiredang + diffang * bound(0,cvar("bot_ai_aimskill_think"),1);
 
 	// calculate turn angles
 	diffang = desiredang - self.v_angle;
-	//dprint(" diff:", vtos(diffang));
-
 	// wrap yaw turn
-	while (diffang_y < -180)
-		diffang_y = diffang_y + 360;
-	while (diffang_y >  180)
+	diffang_y = diffang_y - floor(diffang_y / 360) * 360;
+	if (diffang_y >= 180)
 		diffang_y = diffang_y - 360;
-	// calculate turn angles
-	diffang = desiredang - self.v_angle;
 	//dprint(" diff:", vtos(diffang));
-
-	// wrap yaw turn
-	while (diffang_y < -180)
-		diffang_y = diffang_y + 360;
-	while (diffang_y >  180)
-		diffang_y = diffang_y - 360;
 
 	// jitter tracking
 	dist = vlen(diffang);
@@ -1701,10 +1684,7 @@ float(vector v, float maxfiredeviation) bot_aimdir =
 	//self.v_angle = self.v_angle + diffang * bound(0, r * frametime * (skill * 0.5 + 2), 1);
 	//self.v_angle = self.v_angle + diffang * (1/ blendrate);
 	self.v_angle_z = 0;
-	while (self.v_angle_y < -180)
-		self.v_angle_y = self.v_angle_y + 360;
-	while (self.v_angle_y >= 180)
-		self.v_angle_y = self.v_angle_y - 360;
+	self.v_angle_y = self.v_angle_y - floor(self.v_angle_y / 360) * 360;
 	//dprint(" turn:", vtos(self.v_angle));
 
 	makevectors(self.v_angle);
@@ -1715,13 +1695,12 @@ float(vector v, float maxfiredeviation) bot_aimdir =
 	//te_lightning2(world, shotorg, shotorg + shotdir * 100);
 
 	// calculate turn angles again
-	diffang = desiredang - self.v_angle;
-	while (diffang_y < -180)
-		diffang_y = diffang_y + 360;
-	while (diffang_y >  180)
-		diffang_y = diffang_y - 360;
+	//diffang = desiredang - self.v_angle;
+	//diffang_y = diffang_y - floor(diffang_y / 360) * 360;
+	//if (diffang_y >= 180)
+	//	diffang_y = diffang_y - 360;
 
-	//bprint("e ");bprintvector(diffang);bprint(" < ");bprintfloat(maxfiredeviation);bprint("\n");
+	//dprint("e ", vtos(diffang), " < ", ftos(maxfiredeviation), "\n");
 
 	// decide whether to fire this time
 	// note the maxfiredeviation is in degrees so this has to convert to radians first
@@ -1729,7 +1708,7 @@ float(vector v, float maxfiredeviation) bot_aimdir =
 	if ((normalize(v) * shotdir) >= cos(maxfiredeviation * (3.14159265358979323846 / 180)))
 	if (vlen(trace_endpos-shotorg) < 500+500*bound(0, skill, 10) || random()*random()>bound(0,skill*0.05,1))
 		self.bot_firetimer = time + bound(0.1, 0.5-skill*0.05, 0.5);
-	traceline(shotorg,shotorg+shotdir*1000,FALSE,world);
+	//traceline(shotorg,shotorg+shotdir*1000,FALSE,world);
 	//dprint(ftos(maxfiredeviation),"\n");
 	//dprint(" diff:", vtos(diffang), "\n");
 
@@ -1802,6 +1781,9 @@ float(float shotspeed, float shotspeedupward, float maxshottime, float applygrav
 // TODO: move this painintensity code to the player damage code
 void() bot_think =
 {
+	if (self.bot_nextthink > time)
+		return;
+	self.bot_nextthink = self.bot_nextthink + cvar("bot_ai_thinkinterval");
 	//if (self.bot_painintensity > 0)
 	//	self.bot_painintensity = self.bot_painintensity - (skill + 1) * 40 * frametime;
 
@@ -1859,6 +1841,7 @@ void() bot_think =
 };
 
 entity bot_strategytoken;
+float bot_strategytoken_taken;
 entity player_list;
 .entity nextplayer;
 void() bot_relinkplayerlist =
@@ -1887,6 +1870,7 @@ void() bot_relinkplayerlist =
 	}
 	dprint(strcat("relink: ", ftos(currentbots), " bots seen.\n"));
 	bot_strategytoken = bot_list;
+	bot_strategytoken_taken = TRUE;
 };
 
 void() havocbot_setupbot;
@@ -1896,6 +1880,7 @@ void() bot_clientconnect =
 {
 	if (clienttype(self) != CLIENTTYPE_BOT)
 		return;
+	self.bot_nextthink = time - random();
 	self.lag_func = bot_lagfunc;
 	self.isbot = TRUE;
 	self.createdtime = self.nextthink;
@@ -2053,7 +2038,7 @@ void() botframe_showwaypointlinks =
 };
 
 entity botframe_dangerwaypoint;
-void() botframe_updatedangerousobjects =
+void(float maxupdate) botframe_updatedangerousobjects =
 {
 	local entity head, bot_dodgelist;
 	local vector m1, m2, v;
@@ -2084,7 +2069,7 @@ void() botframe_updatedangerousobjects =
 		}
 		botframe_dangerwaypoint.dmg = danger;
 		c = c + 1;
-		if (c >= 256)
+		if (c >= maxupdate)
 			break;
 		botframe_dangerwaypoint = find(botframe_dangerwaypoint, classname, "waypoint");
 	}
@@ -2093,6 +2078,7 @@ void() botframe_updatedangerousobjects =
 
 float botframe_spawnedwaypoints;
 float botframe_nextthink;
+float botframe_nextdangertime;
 
 float autoskill_nextthink;
 .float totalfrags_lastcheck;
@@ -2245,12 +2231,24 @@ void() bot_serverframe =
 		// cycle the goal token from one bot to the next each frame
 		// (this prevents them from all doing waypoint searches on the same
 		//  frame, which causes choppy framerates)
-		if (bot_strategytoken)
-			bot_strategytoken = bot_strategytoken.nextbot;
-		if (!bot_strategytoken)
-			bot_strategytoken = bot_list;
+		if (bot_strategytoken_taken)
+		{
+			bot_strategytoken_taken = FALSE;
+			if (bot_strategytoken)
+				bot_strategytoken = bot_strategytoken.nextbot;
+			if (!bot_strategytoken)
+				bot_strategytoken = bot_list;
+		}
 
-		botframe_updatedangerousobjects();
+		if (botframe_nextdangertime < time)
+		{
+			local float interval;
+			interval = cvar("bot_ai_dangerdetectioninterval");
+			if (botframe_nextdangertime < time - interval * 1.5)
+				botframe_nextdangertime = time;
+			botframe_nextdangertime = botframe_nextdangertime + interval;
+			botframe_updatedangerousobjects(cvar("bot_ai_dangerdetectionupdates"));
+		}
 	}
 
 	if (cvar("g_waypointeditor"))

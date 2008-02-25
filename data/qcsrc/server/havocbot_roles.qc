@@ -125,24 +125,33 @@ void(float ratingscale, vector org, float sradius) havocbot_goalrating_ctf_carri
 	}
 };
 
+entity flaglist;
 void(float ratingscale) havocbot_goalrating_ctf_ourflag =
 {
 	local entity head;
-	if (self.team == COLOR_TEAM1) // red
-		head = find(world, classname, "item_flag_team1"); // red flag
-	else // blue
-		head = find(world, classname, "item_flag_team2"); // blue flag
-	navigation_routerating(head, ratingscale);
+	head = flaglist;
+	while (head)
+	{
+		if (self.team == head.team)
+			break;
+		head = head.enemy;
+	}
+	if (head)
+		navigation_routerating(head, ratingscale);
 };
 
 void(float ratingscale) havocbot_goalrating_ctf_enemyflag =
 {
 	local entity head;
-	if (self.team == COLOR_TEAM1) // red
-		head = find(world, classname, "item_flag_team2"); // blue flag
-	else // blue
-		head = find(world, classname, "item_flag_team1"); // red flag
-	navigation_routerating(head, ratingscale);
+	head = flaglist;
+	while (head)
+	{
+		if (self.team != head.team)
+			break;
+		head = head.enemy;
+	}
+	if (head)
+		navigation_routerating(head, ratingscale);
 };
 
 void(float ratingscale) havocbot_goalrating_ctf_enemybase =
@@ -153,30 +162,28 @@ void(float ratingscale) havocbot_goalrating_ctf_enemybase =
 void(float ratingscale) havocbot_goalrating_ctf_ourstolenflag =
 {
 	local entity head;
-	if (self.team == COLOR_TEAM1) // red
-		head = find(world, classname, "item_flag_team1"); // red flag
-	else // blue
-		head = find(world, classname, "item_flag_team2"); // blue flag
+	head = flaglist;
+	while (head)
+	{
+		if (self.team == head.team)
+			break;
+		head = head.enemy;
+	}
+	if (head)
 	if (head.cnt != FLAG_BASE)
 		navigation_routerating(head, ratingscale);
 };
 
 void(float ratingscale) havocbot_goalrating_ctf_droppedflags =
 {
-	local entity redflag, blueflag;
-
-	redflag = find(world, classname, "item_flag_team1");
-	blueflag = find(world, classname, "item_flag_team2");
-
-	if (redflag == world)
-		error("havocbot: item_flag_team1 missing\n");
-	if (blueflag == world)
-		error("havocbot: item_flag_team2 missing\n");
-
-	if (redflag.cnt != FLAG_BASE) // red flag is carried or out in the field
-		navigation_routerating(redflag, ratingscale);
-	if (blueflag.cnt != FLAG_BASE) // blue flag is carried or out in the field
-		navigation_routerating(blueflag, ratingscale);
+	local entity head;
+	head = flaglist;
+	while (head)
+	{
+		if (head.cnt != FLAG_BASE) // flag is carried or out in the field
+			navigation_routerating(head, ratingscale);
+		head = head.enemy;
+	}
 };
 
 // CTF: (always teamplay)
@@ -236,10 +243,13 @@ void() havocbot_role_ctf_offense =
 		return;
 	}
 	// check our flag
-	if (self.team == COLOR_TEAM1) // red
-		f = find(world, classname, "item_flag_team1");
-	else // blue
-		f = find(world, classname, "item_flag_team2");
+	f = flaglist;
+	while (f)
+	{
+		if (self.team == f.team)
+			break;
+		f = f.enemy;
+	}
 	if (f.cnt != FLAG_BASE && canreach(f))
 	{
 		dprint("changing role to interceptor\n");
@@ -286,10 +296,13 @@ void() havocbot_role_ctf_interceptor =
 		return;
 	}
 	// check our flag
-	if (self.team == COLOR_TEAM1) // red
-		f = find(world, classname, "item_flag_team1");
-	else // blue
-		f = find(world, classname, "item_flag_team2");
+	f = flaglist;
+	while (f)
+	{
+		if (self.team == f.team)
+			break;
+		f = f.enemy;
+	}
 	if (f.cnt == FLAG_BASE)
 	{
 		dprint("changing role back\n");
@@ -327,10 +340,13 @@ void() havocbot_role_ctf_middle =
 		return;
 	}
 	// check our flag
-	if (self.team == COLOR_TEAM1) // red
-		f = find(world, classname, "item_flag_team1");
-	else // blue
-		f = find(world, classname, "item_flag_team2");
+	f = flaglist;
+	while (f)
+	{
+		if (self.team == f.team)
+			break;
+		f = f.enemy;
+	}
 	if (f.cnt != FLAG_BASE && canreach(f))
 	{
 		dprint("changing role to interceptor\n");
@@ -387,10 +403,13 @@ void() havocbot_role_ctf_defense =
 		return;
 	}
 	// check our flag
-	if (self.team == COLOR_TEAM1) // red
-		f = find(world, classname, "item_flag_team1");
-	else // blue
-		f = find(world, classname, "item_flag_team2");
+	f = flaglist;
+	while (f)
+	{
+		if (self.team == f.team)
+			break;
+		f = f.enemy;
+	}
 	if (f.cnt != FLAG_BASE && canreach(f))
 	{
 		dprint("changing role to interceptor\n");
@@ -451,6 +470,7 @@ void() havocbot_role_ctf_defense =
 
 // CTF:
 // choose a role according to the situation
+void() havocbot_role_dm;
 void() havocbot_chooserole_ctf =
 {
 	local float r;
@@ -515,10 +535,12 @@ void() havocbot_chooserole_dom =
 
 
 
+entity kh_keylist;
 void(float ratingscale_team, float ratingscale_dropped, float ratingscale_enemy) havocbot_goalrating_kh =
 {
 	local entity head;
-	for(head = world; (head = find(head, classname, "item_kh_key")); )
+	head = kh_keylist;
+	while (head)
 	{
 		if(head.owner == self)
 			continue;
@@ -531,6 +553,7 @@ void(float ratingscale_team, float ratingscale_dropped, float ratingscale_enemy)
 			navigation_routerating(head, ratingscale_team);
 		else
 			navigation_routerating(head, ratingscale_enemy);
+		head = head.enemy;
 	}
 };
 

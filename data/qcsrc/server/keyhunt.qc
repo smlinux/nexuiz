@@ -1,4 +1,4 @@
-#define FOR_EACH_KH_KEY(v) for(v = world; (v = find(v, classname, STR_ITEM_KH_KEY)); )
+#define FOR_EACH_KH_KEY(v) for(v = kh_keylist; v; v = v.enemy )
 
 // #define KH_PLAYER_USE_ATTACHMENT
 // #define KH_PLAYER_USE_CARRIEDMODEL
@@ -32,6 +32,7 @@ float kh_Team_ByID(float t)
 	return 0;
 }
 
+entity kh_keylist;
 entity kh_controller;
 float kh_tracking_enabled;
 float kh_teams;
@@ -320,6 +321,10 @@ void kh_Key_Spawn(entity initial_owner, float angle)
 			break;
 	}
 
+	// link into key list
+	key.enemy = kh_keylist;
+	kh_keylist = key;
+
 	sprint(initial_owner, strcat("You got the ^2", key.netname, "\n"));
 
 	WaypointSprite_Spawn("", 0, 0, key, '0 0 1' * KH_KEY_WP_ZSHIFT, world, key.team, key, waypointsprite_attachedforcarrier, FALSE);
@@ -337,6 +342,23 @@ void kh_Key_Remove(entity key)
 		WaypointSprite_Kill(key.waypointsprite_attachedforcarrier);
 	else // it was dropped
 		WaypointSprite_DetachCarrier(key);
+
+	// remove key from key list
+	if (kh_keylist == key)
+		kh_keylist = kh_keylist.enemy;
+	else
+	{
+		o = kh_keylist;
+		while (o)
+		{
+			if (o.enemy == key)
+			{
+				o.enemy = o.enemy.enemy;
+				break;
+			}
+			o = o.enemy;
+		}
+	}
 
 	remove(key);
 }
@@ -467,7 +489,7 @@ void kh_Key_Think()
 	if(!self.owner)
 		if(time > self.pain_finished)
 			kh_LoserTeam(self.team, self);
-	
+
 	if(self.owner)
 	if(kh_Key_AllOwnedByWhichTeam() != -1)
 	{
@@ -583,7 +605,7 @@ void kh_LoserTeam(float teem, entity lostkey)
 		FOR_EACH_PLAYER(player)
 			if(player.team != teem)
 				++players;
-		
+
 		FOR_EACH_KH_KEY(key)
 			if(key.owner && key.team != teem)
 				++keys;
@@ -649,7 +671,7 @@ string kh_CheckEnoughPlayers()
 	entity player;
 	string result;
 	result = "";
-	
+
 	// find a random player per team
 	for(i = 0; i < kh_teams; ++i)
 	{
@@ -764,11 +786,11 @@ float kh_KeyCarrier_waypointsprite_for_player(entity e)
 	// e is spectator? That's no team mate...
 	if(e.classname != "player")
 		return kh_GetCarrierSprite(self.team, -1);
-	
+
 	// e is no key carrier: simple case...
 	if(!e.kh_next)
 		return kh_GetCarrierSprite(self.team, e.team);
-	
+
 	// e is a key carrier: if any key is dropped or owned by another team, show
 	// the carrier sprite; otherwise show run here
 	if(kh_Key_AllOwnedByWhichTeam() == e.team)
@@ -835,8 +857,8 @@ void kh_init()
 	setmodel(kh_controller, "models/keyhunt/key.md3");
 	kh_key_dropped = kh_controller.modelindex;
 	/*
-	dprint(vtos(kh_controller.mins)); 
-	dprint(vtos(kh_controller.maxs)); 
+	dprint(vtos(kh_controller.mins));
+	dprint(vtos(kh_controller.maxs));
 	dprint("\n");
 	*/
 #ifdef KH_PLAYER_USE_CARRIEDMODEL
