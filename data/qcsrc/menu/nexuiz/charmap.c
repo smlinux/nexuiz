@@ -6,6 +6,7 @@ CLASS(NexuizCharmap) EXTENDS(Image)
 	METHOD(NexuizCharmap, mouseMove, float(entity, vector))
 	METHOD(NexuizCharmap, mouseDrag, float(entity, vector))
 	METHOD(NexuizCharmap, keyDown, float(entity, float, float, float))
+	METHOD(NexuizCharmap, focusLeave, void(entity))
 	METHOD(NexuizCharmap, draw, void(entity))
 	ATTRIB(NexuizCharmap, controlledTextbox, entity, NULL)
 	ATTRIB(NexuizCharmap, image, string, SKINGFX_CHARMAP)
@@ -112,6 +113,10 @@ float keyDownNexuizCharmap(entity me, float key, float ascii, float shift)
 		default:
 			return me.controlledTextbox.keyDown(me.controlledTextbox, key, ascii, shift);
 	}
+}
+void focusLeaveNexuizCharmap(entity me)
+{
+	me.controlledTextbox.saveCvars(me.controlledTextbox);
 }
 void drawNexuizCharmap(entity me)
 {
