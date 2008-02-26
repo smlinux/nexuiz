@@ -562,7 +562,11 @@ float MapInfo_Get_ByName(string pFilename, float pAllowGenerate, float pGametype
 		if not((s = fgets(fh)))
 			break;
 		t = car(s); s = cdr(s);
-		if     (t == "title")
+		if(t == "//")
+		{
+			// no comment
+		}
+		else if(t == "title")
 			MapInfo_Map_title = s;
 		else if(t == "description")
 			MapInfo_Map_description = s;
