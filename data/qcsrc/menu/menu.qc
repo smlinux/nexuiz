@@ -224,6 +224,8 @@ void() m_draw =
 		frametime *= t;
 		realFrametime *= t;
 	}
+	else
+		t = 1;
 
 	if(Menu_Active)
 	{
@@ -234,7 +236,7 @@ void() m_draw =
 	}
 
 	if(cvar("cl_capturevideo"))
-		frametime = cvar("menu_slowmo") / cvar("cl_capturevideo_fps"); // make capturevideo work smoothly
+		frametime = t / cvar("cl_capturevideo_fps"); // make capturevideo work smoothly
 
 	dprint_load();
 	gamestatus = 0;
