@@ -141,12 +141,12 @@ COLOR_SCROLLBAR_S               '1 1 1'
 WIDTH_SCROLLBAR                 16
 
 // item: server list
-ALPHA_SERVERLIST_FULL           0.2
-ALPHA_SERVERLIST_EMPTY          0.5
+ALPHA_SERVERLIST_FULL           0.4
+ALPHA_SERVERLIST_EMPTY          0.7
 COLOR_SERVERLIST_LOWPING        '0 1 0'
 COLOR_SERVERLIST_MEDPING        '1 1 0'
 COLOR_SERVERLIST_HIGHPING       '1 0 0'
-ALPHA_SERVERLIST_HIGHPING       0.2
+ALPHA_SERVERLIST_HIGHPING       0.4
 
 // item: slider
 //   uses "slider" images
