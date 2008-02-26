@@ -164,7 +164,7 @@ void drawListBoxItemNexuizMapList(entity me, float i, vector absSize, float isSe
 		return;
 
 	included = me.g_maplistCacheQuery(me, i);
-	if(included)
+	if(included || isSelected)
 		theAlpha = SKINALPHA_MAPLIST_INCLUDEDFG;
 	else
 		theAlpha = SKINALPHA_MAPLIST_NOTINCLUDEDFG;
