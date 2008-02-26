@@ -272,8 +272,49 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 {
 	startitem_failed = FALSE;
 
-	if (self.classname != "droppedweapon")
+	// is it a dropped weapon?
+	if (self.classname == "droppedweapon")
 	{
+		// it's a dropped weapon
+		self.movetype = MOVETYPE_TOSS;
+		self.solid = SOLID_TRIGGER;
+		// Savage: remove thrown items after a certain period of time ("garbage collection")
+		self.think = RemoveItem;
+		self.nextthink = time + 60;
+		// don't drop if in a NODROP zone (such as lava)
+		traceline(self.origin, self.origin, MOVE_NORMAL, self);
+		if (trace_dpstartcontents & DPCONTENTS_NODROP)
+		{
+			startitem_failed = TRUE;
+			remove(self);
+			return;
+		}
+	}
+	else
+	{
+		// it's a level item
+		if(self.spawnflags & 1)
+			self.noalign = 1;
+		if (self.noalign)
+			self.movetype = MOVETYPE_NONE;
+		else
+			self.movetype = MOVETYPE_TOSS;
+		self.solid = SOLID_TRIGGER;
+		// do item filtering according to game mode and other things
+		if (!self.noalign)
+		{
+			// first nudge it off the floor a little bit to avoid math errors
+			setorigin(self, self.origin + '0 0 1');
+			// set item size before we spawn a waypoint
+			if((itemflags & FL_POWERUP) || self.health || self.armorvalue)
+				setsize (self, '-16 -16 0', '16 16 48');
+			else
+				setsize (self, '-16 -16 0', '16 16 32');
+			// note droptofloor returns FALSE if stuck/or would fall too far
+			droptofloor();
+			waypoint_spawnforitem(self);
+		}
+
 		if(teams_matter)
 		{
 			if(self.notteam)
@@ -303,7 +344,7 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 			remove (self);
 			return;
 		}
-		
+
 		/*
 		 * can't do it that way, as it would break maps
 		 * TODO make a target_give like entity another way, that perhaps has
@@ -317,7 +358,7 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 			return;
 		}
 		*/
-		
+
 		if(cvar("spawn_debug") >= 2)
 		{
 			entity otheritem;
@@ -333,70 +374,41 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 			self.is_item = TRUE;
 		}
 
-		waypoint_spawnforitem(self);
-
 		itemsInMap |= itemid;
-	}
 
-	if (!(cvar("g_pickup_items") && !g_nixnex) && !g_minstagib &&
-			itemid != IT_STRENGTH && itemid != IT_INVINCIBLE && itemid != IT_HEALTH)
-	{
-		startitem_failed = TRUE;
-		remove (self);
-		return;
-	}
-
-	if (g_minstagib)
-	{
-		// don't remove dropped items and powerups
-		if (self.classname != "droppedweapon" &&
-		    self.classname != "minstagib")
-		{
-			startitem_failed = TRUE;
-			remove (self);
-			return;
-		}
-	}
-
-	if(g_lms && (self.classname != "droppedweapon"))
-	{
-		startitem_failed = TRUE;
-		remove(self);
-		return;
-	}
-
-	if(g_instagib || g_rocketarena)
-	{
-		startitem_failed = TRUE;
-		remove(self);
-		return;
-	}
-
-	if (self.classname == "droppedweapon")
-	{
-		// don't drop if in a NODROP zone (such as lava)
-		traceline(self.origin, self.origin, MOVE_NORMAL, self);
-		if (trace_dpstartcontents & DPCONTENTS_NODROP)
+		if(g_lms || g_instagib || g_rocketarena)
 		{
 			startitem_failed = TRUE;
 			remove(self);
 			return;
 		}
-	}
+		else if (g_minstagib)
+		{
+			// don't remove dropped items and powerups
+			if (self.classname != "minstagib")
+			{
+				startitem_failed = TRUE;
+				remove (self);
+				return;
+			}
+		}
+		else if ((!cvar("g_pickup_items") || g_nixnex) && itemid != IT_STRENGTH && itemid != IT_INVINCIBLE && itemid != IT_HEALTH)
+		{
+			startitem_failed = TRUE;
+			remove (self);
+			return;
+		}
 
-	if (self.classname != "droppedweapon")
-	{
 		precache_model (itemmodel);
 		precache_sound (pickupsound);
 		precache_sound ("misc/itemrespawn.wav");
+
+		if(itemid & (IT_STRENGTH | IT_INVINCIBLE | IT_HEALTH | IT_ARMOR | IT_KEY1 | IT_KEY2 |
+					IT_ROCKET_LAUNCHER | IT_HAGAR | IT_NEX | IT_CRYLINK | IT_ELECTRO |
+					IT_GRENADE_LAUNCHER | IT_UZI | IT_SHOTGUN | IT_LASER))
+			self.target = "###item###"; // for finding the nearest item using find()
 	}
 
-	if(itemid & (IT_STRENGTH | IT_INVINCIBLE | IT_HEALTH | IT_ARMOR | IT_KEY1 | IT_KEY2 |
-				IT_ROCKET_LAUNCHER | IT_HAGAR | IT_NEX | IT_CRYLINK | IT_ELECTRO |
-				IT_GRENADE_LAUNCHER | IT_UZI | IT_SHOTGUN | IT_LASER) && self.classname != "droppedweapon")
-	{
-		self.target = "###item###"; // for finding the nearest item using find()
-	}
 	self.bot_pickup = TRUE;
 	self.bot_pickupevalfunc = pickupevalfunc;
 	self.bot_pickupbasevalue = pickupbasevalue;
@@ -409,13 +421,6 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 	self.netname = itemname;
 	self.items = itemid;
 	self.flags = FL_ITEM | itemflags;
-	if(self.spawnflags & 1)
-		self.noalign = 1;
-	if (self.noalign)
-		self.movetype = MOVETYPE_NONE;
-	else
-		self.movetype = MOVETYPE_TOSS;
-	self.solid = SOLID_TRIGGER;
 	self.touch = Item_Touch;
 	setmodel (self, self.mdl); // precision set below
 	self.effects |= EF_LOWPRECISION;
@@ -427,20 +432,6 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 	{
 		// neutral team color for pickup weapons
 		self.colormap = 160 * 1024 + 160;
-	}
-
-	// Savage: remove thrown items after a certain period of time ("garbage collection")
-	if (self.classname == "droppedweapon")
-	{
-		self.think = RemoveItem;
-		self.nextthink = time + 60;
-	}
-	else if (!self.noalign)
-	{
-		// first nudge it off the floor a little bit to avoid math errors
-		setorigin(self, self.origin + '0 0 1');
-		// note droptofloor returns FALSE if stuck/or would fall too far
-		droptofloor();
 	}
 
 	if (cvar("g_fullbrightitems"))
@@ -538,7 +529,7 @@ void weapon_uzi (void) {
 
 	if(!self.ammo_nails)
 		self.ammo_nails = cvar("g_pickup_nails");
-	StartItem ("models/weapons/g_uzi.md3", "weapons/weaponpickup.wav", 15, W_Name(WEP_UZI), IT_UZI, FL_WEAPON, weapon_pickupevalfunc, 20000);
+	StartItem ("models/weapons/g_uzi.md3", "weapons/weaponpickup.wav", 15, W_Name(WEP_UZI), IT_UZI, FL_WEAPON, weapon_pickupevalfunc, 5000);
 	if (self.modelindex) // don't precache if self was removed
 		weapon_action(WEP_UZI, WR_PRECACHE);
 }
@@ -556,7 +547,7 @@ void weapon_shotgun (void) {
 
 	if(!self.ammo_shells)
 		self.ammo_shells = cvar("g_pickup_shells");
-	StartItem ("models/weapons/g_shotgun.md3", "weapons/weaponpickup.wav", 15, W_Name(WEP_SHOTGUN), IT_SHOTGUN, FL_WEAPON, weapon_pickupevalfunc, 10000);
+	StartItem ("models/weapons/g_shotgun.md3", "weapons/weaponpickup.wav", 15, W_Name(WEP_SHOTGUN), IT_SHOTGUN, FL_WEAPON, weapon_pickupevalfunc, 2500);
 	if (self.modelindex) // don't precache if self was removed
 		weapon_action(WEP_SHOTGUN, WR_PRECACHE);
 }
@@ -565,7 +556,7 @@ void weapon_grenadelauncher (void)
 {
 	if(!self.ammo_rockets)
 		self.ammo_rockets = cvar("g_pickup_rockets");
-	StartItem ("models/weapons/g_gl.md3", "weapons/weaponpickup.wav", 15, W_Name(WEP_GRENADE_LAUNCHER), IT_GRENADE_LAUNCHER, FL_WEAPON, weapon_pickupevalfunc, 20000);
+	StartItem ("models/weapons/g_gl.md3", "weapons/weaponpickup.wav", 15, W_Name(WEP_GRENADE_LAUNCHER), IT_GRENADE_LAUNCHER, FL_WEAPON, weapon_pickupevalfunc, 5000);
 	if (self.modelindex) // don't precache if self was removed
 		weapon_action(WEP_GRENADE_LAUNCHER, WR_PRECACHE);
 }
@@ -574,7 +565,7 @@ void weapon_electro (void)
 {
 	if(!self.ammo_cells)
 		self.ammo_cells = cvar("g_pickup_cells");
-	StartItem ("models/weapons/g_electro.md3", "weapons/weaponpickup.wav", 15, W_Name(WEP_ELECTRO), IT_ELECTRO, FL_WEAPON, weapon_pickupevalfunc, 15000);
+	StartItem ("models/weapons/g_electro.md3", "weapons/weaponpickup.wav", 15, W_Name(WEP_ELECTRO), IT_ELECTRO, FL_WEAPON, weapon_pickupevalfunc, 5000);
 	if (self.modelindex) // don't precache if self was removed
 		weapon_action(WEP_ELECTRO, WR_PRECACHE);
 }
@@ -583,7 +574,7 @@ void weapon_crylink (void)
 {
 	if(!self.ammo_cells)
 		self.ammo_cells = cvar("g_pickup_cells");
-	StartItem ("models/weapons/g_crylink.md3", "weapons/weaponpickup.wav", 15, W_Name(WEP_CRYLINK), IT_CRYLINK, FL_WEAPON, weapon_pickupevalfunc, 10000);
+	StartItem ("models/weapons/g_crylink.md3", "weapons/weaponpickup.wav", 15, W_Name(WEP_CRYLINK), IT_CRYLINK, FL_WEAPON, weapon_pickupevalfunc, 2500);
 	if (self.modelindex) // don't precache if self was removed
 		weapon_action(WEP_CRYLINK, WR_PRECACHE);
 }
@@ -605,7 +596,7 @@ void weapon_nex (void)
 		nextime = 15 * nextime;
 	else
 		nextime = 15;
-	StartItem ("models/weapons/g_nex.md3", "weapons/weaponpickup.wav", nextime, W_Name(WEP_NEX), IT_NEX, FL_WEAPON, weapon_pickupevalfunc, 30000);
+	StartItem ("models/weapons/g_nex.md3", "weapons/weaponpickup.wav", nextime, W_Name(WEP_NEX), IT_NEX, FL_WEAPON, weapon_pickupevalfunc, 10000);
 	if (self.modelindex) // don't precache if self was removed
 		weapon_action(WEP_NEX, WR_PRECACHE);
 }
@@ -614,7 +605,7 @@ void weapon_hagar (void)
 {
 	if(!self.ammo_rockets)
 		self.ammo_rockets = cvar("g_pickup_rockets");
-	StartItem ("models/weapons/g_hagar.md3", "weapons/weaponpickup.wav", 15, W_Name(WEP_HAGAR), IT_HAGAR, FL_WEAPON, weapon_pickupevalfunc, 10000);
+	StartItem ("models/weapons/g_hagar.md3", "weapons/weaponpickup.wav", 15, W_Name(WEP_HAGAR), IT_HAGAR, FL_WEAPON, weapon_pickupevalfunc, 5000);
 	if (self.modelindex) // don't precache if self was removed
 		weapon_action(WEP_HAGAR, WR_PRECACHE);
 }
@@ -630,7 +621,7 @@ void weapon_rocketlauncher (void)
 	}
 	if(!self.ammo_rockets)
 		self.ammo_rockets = g_pickup_rockets;
-	StartItem ("models/weapons/g_rl.md3", "weapons/weaponpickup.wav", 15, W_Name(WEP_ROCKET_LAUNCHER), IT_ROCKET_LAUNCHER, FL_WEAPON, weapon_pickupevalfunc, 30000);
+	StartItem ("models/weapons/g_rl.md3", "weapons/weaponpickup.wav", 15, W_Name(WEP_ROCKET_LAUNCHER), IT_ROCKET_LAUNCHER, FL_WEAPON, weapon_pickupevalfunc, 10000);
 	if (self.modelindex) // don't precache if self was removed
 		weapon_action(WEP_ROCKET_LAUNCHER, WR_PRECACHE);
 }
@@ -709,7 +700,7 @@ void item_health_small (void) {
 		self.max_health = g_pickup_healthsmall_max;
 	if(!self.health)
 		self.health = g_pickup_healthsmall;
-	StartItem ("models/items/g_h1.md3", "misc/minihealth.wav", 15, "5 Health", IT_5HP, 0, commodity_pickupevalfunc, 1000);
+	StartItem ("models/items/g_h1.md3", "misc/minihealth.wav", 15, "5 Health", IT_5HP, 0, commodity_pickupevalfunc, 20000);
 }
 
 void item_health_medium (void) {
@@ -717,7 +708,7 @@ void item_health_medium (void) {
 		self.max_health = g_pickup_healthmedium_max;
 	if(!self.health)
 		self.health = g_pickup_healthmedium;
-	StartItem ("models/items/g_h25.md3", "misc/mediumhealth.wav", 15, "25 Health", IT_25HP, 0, commodity_pickupevalfunc, 5000);
+	StartItem ("models/items/g_h25.md3", "misc/mediumhealth.wav", 15, "25 Health", IT_25HP, 0, commodity_pickupevalfunc, 20000);
 }
 
 void item_health_large (void) {
@@ -725,7 +716,7 @@ void item_health_large (void) {
 		self.max_health = g_pickup_healthlarge_max;
 	if(!self.health)
 		self.health = g_pickup_healthlarge;
-	StartItem ("models/items/g_h50.md3", "misc/mediumhealth.wav", 15, "50 Health", IT_25HP, 0, commodity_pickupevalfunc, 5000);
+	StartItem ("models/items/g_h50.md3", "misc/mediumhealth.wav", 15, "50 Health", IT_25HP, 0, commodity_pickupevalfunc, 20000);
 }
 
 void item_health_mega (void) {

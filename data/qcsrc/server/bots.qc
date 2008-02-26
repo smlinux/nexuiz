@@ -551,6 +551,12 @@ void(entity wp) waypoint_schedulerelink =
 		m2 = wp.maxs;
 		setmodel(wp, "models/runematch/rune.mdl"); wp.effects = EF_LOWPRECISION;
 		setsize(wp, m1, m2);
+		if (wp.wpflags & WAYPOINTFLAG_ITEM)
+			wp.colormod = '1 0 0';
+		else if (wp.wpflags & WAYPOINTFLAG_GENERATED)
+			wp.colormod = '1 1 0';
+		else
+			wp.colormod = '1 1 1';
 	}
 	else
 		wp.model = "";
@@ -572,74 +578,86 @@ entity(vector m1, vector m2, float f) waypoint_spawn =
 {
 	local entity w;
 	local vector org;
-	org = (m1 + m2) * 0.5;
-	m1 = m1 - org;
-	m2 = m2 - org;
 	w = find(world, classname, "waypoint");
 	while (w)
 	{
 		// if a matching waypoint already exists, don't add a duplicate
-		if (w.origin == org && w.mins == m1 && w.maxs == m2)
+		if (boxesoverlap(m1, m2, w.absmin, w.absmax))
 			return w;
 		w = find(w, classname, "waypoint");
 	}
 	w = spawn();
 	w.classname = "waypoint";
 	w.wpflags = f;
-	setorigin(w, org);
-	setsize(w, PL_MIN + m1, PL_MAX + m2);
+	setorigin(w, (m1 + m2) * 0.5);
+	setsize(w, m1 - w.origin, m2 - w.origin);
+	if (vlen(w.size) > 0)
+		w.wpisbox = TRUE;
 
 	if(!(f & WAYPOINTFLAG_GENERATED))
+	if(!w.wpisbox)
 	{
-		org = w.origin + '0 0 2';
-		tracebox(org, w.mins, w.maxs, w.origin, MOVE_WORLDONLY, w);
-		if(trace_startsolid)
+		traceline(w.origin + '0 0 1', w.origin + PL_MIN_z * '0 0 1' - '0 0 1', MOVE_NOMONSTERS, w);
+		if (trace_fraction < 1)
+			setorigin(w, trace_endpos - PL_MIN_z * '0 0 1');
+
+		// check if the start position is stuck
+		tracebox(w.origin, PL_MIN + '-1 -1 -1', PL_MAX + '1 1 1', w.origin, MOVE_NOMONSTERS, w);
+		if (trace_startsolid)
 		{
-			org = w.origin + '2 2 2';
-			tracebox(org, w.mins, w.maxs, w.origin, MOVE_WORLDONLY, w);
+			org = w.origin + '0 0 26';
+			tracebox(org, PL_MIN, PL_MAX, w.origin, MOVE_WORLDONLY, w);
 			if(trace_startsolid)
 			{
-				org = w.origin + '-2 -2 2';
-				tracebox(org, w.mins, w.maxs, w.origin, MOVE_WORLDONLY, w);
+				org = w.origin + '2 2 2';
+				tracebox(org, PL_MIN, PL_MAX, w.origin, MOVE_WORLDONLY, w);
 				if(trace_startsolid)
 				{
-					org = w.origin + '-2 2 2';
-					tracebox(org, w.mins, w.maxs, w.origin, MOVE_WORLDONLY, w);
+					org = w.origin + '-2 -2 2';
+					tracebox(org, PL_MIN, PL_MAX, w.origin, MOVE_WORLDONLY, w);
 					if(trace_startsolid)
 					{
-						org = w.origin + '2 -2 2';
-						tracebox(org, w.mins, w.maxs, w.origin, MOVE_WORLDONLY, w);
+						org = w.origin + '-2 2 2';
+						tracebox(org, PL_MIN, PL_MAX, w.origin, MOVE_WORLDONLY, w);
 						if(trace_startsolid)
 						{
-							// this WP is in solid, refuse it
-							dprint("Killed a waypoint that was stuck in solid at ", vtos(org), "\n");
-							remove(w);
-							return world;
+							org = w.origin + '2 -2 2';
+							tracebox(org, PL_MIN, PL_MAX, w.origin, MOVE_WORLDONLY, w);
+							if(trace_startsolid)
+							{
+								// this WP is in solid, refuse it
+								dprint("Killed a waypoint that was stuck in solid at ", vtos(org), "\n");
+								remove(w);
+								return world;
+							}
 						}
 					}
 				}
 			}
+			setorigin(w, org * 0.05 + trace_endpos * 0.95); // don't trust the trace fully
 		}
 
-		org = org * 0.05 + trace_endpos * 0.95; // don't trust the trace fully
-		tracebox(org, w.mins, w.maxs, org - '0 0 128', MOVE_WORLDONLY, w);
-
-		if(trace_fraction == 1 || trace_startsolid)
+		tracebox(w.origin, PL_MIN, PL_MAX, w.origin - '0 0 128', MOVE_WORLDONLY, w);
+		if(trace_startsolid)
 		{
-			// this WP is in air, refuse it
-			dprint("Killed a waypoint that was stuck in air/ceiling at ", vtos(w.origin), "\n");
+			dprint("Killed a waypoint that was stuck in solid ", vtos(w.origin), "\n");
 			remove(w);
 			return world;
 		}
-		trace_endpos_z += 0.1; // don't trust the trace fully
-
-//		dprint("Moved waypoint at ", vtos(w.origin), " by ", ftos(vlen(w.origin - trace_endpos)));
-//		dprint(" direction: ", vtos((trace_endpos - w.origin)), "\n");
-
-		setorigin(w, trace_endpos);
+		if (!trace_inwater)
+		{
+			if(trace_fraction == 1)
+			{
+				dprint("Killed a waypoint that was stuck in air at ", vtos(w.origin), "\n");
+				remove(w);
+				return world;
+			}
+			trace_endpos_z += 0.1; // don't trust the trace fully
+//			dprint("Moved waypoint at ", vtos(w.origin), " by ", ftos(vlen(w.origin - trace_endpos)));
+//			dprint(" direction: ", vtos((trace_endpos - w.origin)), "\n");
+			setorigin(w, trace_endpos);
+		}
 	}
-
-	setsize(w, m1, m2);
 
 	waypoint_clearlinks(w);
 	//waypoint_schedulerelink(w);
@@ -830,7 +848,7 @@ void(entity e) waypoint_spawnforitem =
 	w = findchain(classname, "waypoint");
 	while (w)
 	{
-		if (vlen(w.size) > 1)
+		if (w.wpisbox)
 		{
 			if (boxesoverlap(org, org, w.absmin, w.absmax))
 			{
@@ -1205,7 +1223,9 @@ void() navigation_markroutes =
 };
 
 // updates the best goal according to a weighted calculation of travel cost and item value of a new proposed item
-void(entity e, float f) navigation_routerating =
+.void() havocbot_role;
+void() havocbot_role_ctf_offense;
+void(entity e, float f, float rangebias) navigation_routerating =
 {
 	if (!e)
 		return;
@@ -1224,7 +1244,9 @@ void(entity e, float f) navigation_routerating =
 	{
 		//te_wizspike(e.nearestwaypoint.wpnearestpoint);
 		//dprint(e.classname, " ", ftos(f), "*(500/(500+", ftos((e.nearestwaypoint.wpcost + vlen(e.origin - e.nearestwaypoint.wpnearestpoint))), " = ");
-		f = f * 500 / ((e.nearestwaypoint.wpcost + vlen(e.origin - e.nearestwaypoint.wpnearestpoint)) + 500);
+		f = f * rangebias / ((e.nearestwaypoint.wpcost + vlen(e.origin - e.nearestwaypoint.wpnearestpoint)) + rangebias);
+		if (self.havocbot_role == havocbot_role_ctf_offense)
+			dprint("-- considering ", e.classname, " (with rating ", ftos(f), ")\n");
 		//dprint(ftos(f));
 		if (navigation_bestrating < f)
 		{
@@ -1299,6 +1321,8 @@ void() navigation_goalrating_start =
 // ends a goal selection session (updates goal stack to the best goal)
 void() navigation_goalrating_end =
 {
+	if (self.havocbot_role == havocbot_role_ctf_offense)
+		dprint(navigation_bestgoal.classname, " (with rating ", ftos(navigation_bestrating), ")\n");
 	navigation_routetogoal(navigation_bestgoal);
 };
 

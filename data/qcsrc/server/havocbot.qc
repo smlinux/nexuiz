@@ -229,9 +229,9 @@ void() havocbot_movetogoal =
 			else
 				keyboard_y = 0;
 
-			if (keyboard_z >= trigger)
+			if (keyboard_z > trigger)
 				keyboard_z = 1;
-			else if (keyboard_z <= trigger1)
+			else if (keyboard_z < trigger1)
 				keyboard_z = -1;
 			else
 				keyboard_z = 0;

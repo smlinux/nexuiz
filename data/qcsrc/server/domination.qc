@@ -269,6 +269,8 @@ void() dom_controlpoint_setup =
 	setsize(self, '-32 -32 -32', '32 32 32');
 	setorigin(self, self.origin + '0 0 20');
 	droptofloor();
+
+	waypoint_spawnforitem(self);
 };
 
 

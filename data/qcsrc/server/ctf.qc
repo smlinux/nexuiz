@@ -506,6 +506,8 @@ void() item_flag_team1 =
 	if(!self.noalign)
 		droptofloor();
 
+	waypoint_spawnforitem(self);
+
 	WaypointSprite_SpawnFixed("redbase", self.origin + '0 0 37', self, sprite);
 };
 
@@ -568,6 +570,8 @@ void() item_flag_team2 =
 	self.effects = self.effects | EF_FULLBRIGHT | EF_LOWPRECISION;
 	if(!self.noalign)
 		droptofloor();
+
+	waypoint_spawnforitem(self);
 
 	WaypointSprite_SpawnFixed("bluebase", self.origin + '0 0 37', self, sprite);
 };

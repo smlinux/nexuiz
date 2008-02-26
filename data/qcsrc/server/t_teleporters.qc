@@ -1,6 +1,3 @@
-void Damage (entity targ, entity inflictor, entity attacker, float
-damage, float deathtype, vector hitloc, vector force);
-
 void() tdeath_touch =
 {
 	if (other == self.owner)

@@ -394,3 +394,5 @@ float have_team_spawns;
 // set when showing a kill countdown
 .entity killindicator;
 .float killindicator_teamchange;
+
+void Damage (entity targ, entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force);

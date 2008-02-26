@@ -757,6 +757,8 @@ void() onslaught_controlpoint =
 	e.colormap = self.colormap;
 	onslaught_updatelinks();
 
+	waypoint_spawnforitem(self);
+
 	WaypointSprite_SpawnFixed(string_null, e.origin + '0 0 1' * e.maxs_z, self, sprite);
 	self.sprite.waypointsprite_for_player = onslaught_controlpoint_waypointsprite_for_player;
 };

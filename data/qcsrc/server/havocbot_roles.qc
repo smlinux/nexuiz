@@ -27,7 +27,7 @@ void(float ratingscale, vector org, float sradius) havocbot_goalrating_items =
 			// get the value of the item
 			t = head.bot_pickupevalfunc(self, head);
 			if (t > 0)
-				navigation_routerating(head, t * ratingscale);
+				navigation_routerating(head, t * ratingscale, 2000);
 		}
 		head = head.chain;
 	}
@@ -42,11 +42,11 @@ void(float ratingscale, vector org, float sradius) havocbot_goalrating_controlpo
 		if (vlen(head.origin - org) < sradius)
 		{
 			if(head.cnt > -1) // this is just being fought for
-				navigation_routerating(head, ratingscale);
+				navigation_routerating(head, ratingscale, 5000);
 			else if(head.goalentity.cnt == 0) // unclaimed point
-				navigation_routerating(head, ratingscale * 0.5);
+				navigation_routerating(head, ratingscale * 0.5, 5000);
 			else if(head.goalentity.team != self.team) // other team's point
-				navigation_routerating(head, ratingscale * 0.2);
+				navigation_routerating(head, ratingscale * 0.2, 5000);
 		}
 		head = head.chain;
 	}
@@ -63,7 +63,7 @@ void(float ratingscale, vector org, float sradius) havocbot_goalrating_waypoints
 	while (head)
 	{
 		if (vlen(head.origin - org) < sradius && vlen(head.origin - org) > 100)
-			navigation_routerating(head, ratingscale);
+			navigation_routerating(head, ratingscale, 2000);
 		head = head.chain;
 	}
 };
@@ -89,7 +89,7 @@ void(float ratingscale, vector org, float sradius) havocbot_goalrating_enemyplay
 			if (t > 0)
 			{
 				//dprint("found: "); dprint(head.netname); dprint("\n");
-				navigation_routerating(head, t * ratingscale);
+				navigation_routerating(head, t * ratingscale, 500);
 			}
 		}
 	}
@@ -119,7 +119,7 @@ void(float ratingscale, vector org, float sradius) havocbot_goalrating_ctf_carri
 			// get the value of the item
 			t = head.bot_pickupevalfunc(self, head) * 0.0001;
 			if (t > 0)
-				navigation_routerating(head, t * ratingscale);
+				navigation_routerating(head, t * ratingscale, 500);
 		}
 		head = head.chain;
 	}
@@ -137,7 +137,7 @@ void(float ratingscale) havocbot_goalrating_ctf_ourflag =
 		head = head.enemy;
 	}
 	if (head)
-		navigation_routerating(head, ratingscale);
+		navigation_routerating(head, ratingscale, 10000);
 };
 
 void(float ratingscale) havocbot_goalrating_ctf_enemyflag =
@@ -151,7 +151,7 @@ void(float ratingscale) havocbot_goalrating_ctf_enemyflag =
 		head = head.enemy;
 	}
 	if (head)
-		navigation_routerating(head, ratingscale);
+		navigation_routerating(head, ratingscale, 10000);
 };
 
 void(float ratingscale) havocbot_goalrating_ctf_enemybase =
@@ -171,7 +171,7 @@ void(float ratingscale) havocbot_goalrating_ctf_ourstolenflag =
 	}
 	if (head)
 	if (head.cnt != FLAG_BASE)
-		navigation_routerating(head, ratingscale);
+		navigation_routerating(head, ratingscale, 10000);
 };
 
 void(float ratingscale) havocbot_goalrating_ctf_droppedflags =
@@ -181,7 +181,7 @@ void(float ratingscale) havocbot_goalrating_ctf_droppedflags =
 	while (head)
 	{
 		if (head.cnt != FLAG_BASE) // flag is carried or out in the field
-			navigation_routerating(head, ratingscale);
+			navigation_routerating(head, ratingscale, 10000);
 		head = head.enemy;
 	}
 };
@@ -206,6 +206,7 @@ void() havocbot_role_ctf_rogue =
 //role flag carrier:
 //pick up armor and health
 //go to our flag spot
+.float bot_cantfindflag;
 void() havocbot_role_ctf_carrier =
 {
 	if (self.flagcarried == world)
@@ -219,7 +220,14 @@ void() havocbot_role_ctf_carrier =
 	{
 		self.bot_strategytime = time + cvar("bot_ai_strategyinterval");
 		navigation_goalrating_start();
-		havocbot_goalrating_ctf_ourflag(5000);
+		havocbot_goalrating_ctf_ourflag(50000);
+		if (navigation_bestgoal)
+			self.bot_cantfindflag = time + 10;
+		else if (time > self.bot_cantfindflag)
+		{
+			// can't navigate to our own flag :(
+			Damage(self, self, self, 100000, DEATH_KILL, self.origin, '0 0 0');
+		}
 		havocbot_goalrating_ctf_carrieritems(1000, self.origin, 1000);
 		navigation_goalrating_end();
 	}
@@ -240,6 +248,7 @@ void() havocbot_role_ctf_offense =
 		dprint("changing role to carrier\n");
 		self.havocbot_role = havocbot_role_ctf_carrier;
 		self.havocbot_role_timeout = 0;
+		self.bot_cantfindflag = time + 10;
 		return;
 	}
 	// check our flag
@@ -260,7 +269,7 @@ void() havocbot_role_ctf_offense =
 	}
 	if (!self.havocbot_role_timeout)
 		self.havocbot_role_timeout = time + random() * 30 + 60;
-	if (self.ammo_rockets < 15 || time > self.havocbot_role_timeout)
+	if (time > self.havocbot_role_timeout)
 	{
 		dprint("changing role to middle\n");
 		self.havocbot_role = havocbot_role_ctf_middle;
@@ -271,9 +280,9 @@ void() havocbot_role_ctf_offense =
 	{
 		self.bot_strategytime = time + cvar("bot_ai_strategyinterval");
 		navigation_goalrating_start();
-		havocbot_goalrating_ctf_ourstolenflag(5000);
-		havocbot_goalrating_ctf_enemyflag(3000);
-		havocbot_goalrating_ctf_enemybase(2000);
+		havocbot_goalrating_ctf_ourstolenflag(50000);
+		havocbot_goalrating_ctf_enemyflag(30000);
+		havocbot_goalrating_ctf_enemybase(20000);
 		havocbot_goalrating_items(10000, self.origin, 10000);
 		navigation_goalrating_end();
 	}
@@ -293,6 +302,7 @@ void() havocbot_role_ctf_interceptor =
 		dprint("changing role to carrier\n");
 		self.havocbot_role = havocbot_role_ctf_carrier;
 		self.havocbot_role_timeout = 0;
+		self.bot_cantfindflag = time + 10;
 		return;
 	}
 	// check our flag
@@ -315,8 +325,8 @@ void() havocbot_role_ctf_interceptor =
 	{
 		self.bot_strategytime = time + cvar("bot_ai_strategyinterval");
 		navigation_goalrating_start();
-		havocbot_goalrating_ctf_ourstolenflag(5000);
-		havocbot_goalrating_ctf_droppedflags(5000);
+		havocbot_goalrating_ctf_ourstolenflag(50000);
+		havocbot_goalrating_ctf_droppedflags(50000);
 		havocbot_goalrating_items(10000, self.origin, 10000);
 		navigation_goalrating_end();
 	}
@@ -337,6 +347,7 @@ void() havocbot_role_ctf_middle =
 		dprint("changing role to carrier\n");
 		self.havocbot_role = havocbot_role_ctf_carrier;
 		self.havocbot_role_timeout = 0;
+		self.bot_cantfindflag = time + 10;
 		return;
 	}
 	// check our flag
@@ -358,7 +369,6 @@ void() havocbot_role_ctf_middle =
 	if (!self.havocbot_role_timeout)
 		self.havocbot_role_timeout = time + random() * 10 + 10;
 	if (time > self.havocbot_role_timeout)
-	if (self.ammo_rockets >= 25)
 	{
 		if (random() < 0.5)
 		{
@@ -378,8 +388,8 @@ void() havocbot_role_ctf_middle =
 	{
 		self.bot_strategytime = time + cvar("bot_ai_strategyinterval");
 		navigation_goalrating_start();
-		havocbot_goalrating_ctf_ourstolenflag(5000);
-		havocbot_goalrating_ctf_droppedflags(3000);
+		havocbot_goalrating_ctf_ourstolenflag(50000);
+		havocbot_goalrating_ctf_droppedflags(30000);
 		//havocbot_goalrating_enemyplayers(1000, self.origin, 1000);
 		havocbot_goalrating_items(10000, self.origin, 10000);
 		navigation_goalrating_end();
@@ -400,6 +410,7 @@ void() havocbot_role_ctf_defense =
 		dprint("changing role to carrier\n");
 		self.havocbot_role = havocbot_role_ctf_carrier;
 		self.havocbot_role_timeout = 0;
+		self.bot_cantfindflag = time + 10;
 		return;
 	}
 	// check our flag
@@ -420,7 +431,7 @@ void() havocbot_role_ctf_defense =
 	}
 	if (!self.havocbot_role_timeout)
 		self.havocbot_role_timeout = time + random() * 20 + 30;
-	if (self.ammo_rockets < 15 || time > self.havocbot_role_timeout)
+	if (time > self.havocbot_role_timeout)
 	{
 		dprint("changing role to middle\n");
 		self.havocbot_role = havocbot_role_ctf_middle;
@@ -431,8 +442,8 @@ void() havocbot_role_ctf_defense =
 	{
 		self.bot_strategytime = time + cvar("bot_ai_strategyinterval");
 		navigation_goalrating_start();
-		havocbot_goalrating_ctf_ourstolenflag(20000);
-		havocbot_goalrating_ctf_droppedflags(500);
+		havocbot_goalrating_ctf_ourstolenflag(200000);
+		havocbot_goalrating_ctf_droppedflags(50000);
 		havocbot_goalrating_items(10000, f.origin, 10000);
 		navigation_goalrating_end();
 	}
@@ -548,11 +559,11 @@ void(float ratingscale_team, float ratingscale_dropped, float ratingscale_enemy)
 			if(!head.owner || head.team == self.team)
 				continue; // skip what I can't see
 		if(!head.owner)
-			navigation_routerating(head, ratingscale_dropped);
+			navigation_routerating(head, ratingscale_dropped, 10000);
 		else if(head.team == self.team)
-			navigation_routerating(head, ratingscale_team);
+			navigation_routerating(head, ratingscale_team, 10000);
 		else
-			navigation_routerating(head, ratingscale_enemy);
+			navigation_routerating(head, ratingscale_enemy, 10000);
 		head = head.enemy;
 	}
 };
