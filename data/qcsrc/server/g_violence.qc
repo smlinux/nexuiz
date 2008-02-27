@@ -84,8 +84,8 @@ void TossGib (entity gib, string mdlname, vector org, vector v, float destroyont
 	if (destroyontouch == 1)
 		gib.touch = GibTouch;
 
-	gib.velocity = v + randomvec() * 450;
-	gib.avelocity = randomvec() * 300;
+	gib.velocity = v + randomvec();
+	gib.avelocity = randomvec() * vlen(gib.velocity);
 	gib.oldvelocity = gib.velocity;
 
 	SUB_SetFade (gib, time + 12 + random () * 4, 1);
