@@ -318,7 +318,6 @@ void db_close(float db)
 string db_get(float db, string pKey)
 {
 	float h;
-	pKey = uri_escape(pKey);
 	h = mod(crc16(FALSE, pKey), DB_BUCKETS);
 	return uri_unescape(infoget(bufstr_get(db, h), pKey));
 }
@@ -326,10 +325,8 @@ string db_get(float db, string pKey)
 void db_put(float db, string pKey, string pValue)
 {
 	float h;
-	pKey = uri_escape(pKey);
-	pValue = uri_escape(pValue);
 	h = mod(crc16(FALSE, pKey), DB_BUCKETS);
-	bufstr_set(db, h, infoadd(bufstr_get(db, h), pKey, pValue));
+	bufstr_set(db, h, infoadd(bufstr_get(db, h), pKey, uri_escape(pValue)));
 }
 
 void db_test()
