@@ -286,7 +286,7 @@ float db_load(string pFilename)
 		{
 			n = tokenizebyseparator(l, "\\");
 			for(j = 2; j < n; j += 2)
-				db_put(db, argv(j-1), argv(j));
+				db_put(db, uri_unescape(argv(j-1)), uri_unescape(argv(j)));
 		}
 	}
 	fclose(fh);
@@ -318,13 +318,16 @@ void db_close(float db)
 string db_get(float db, string pKey)
 {
 	float h;
+	pKey = uri_escape(pKey);
 	h = mod(crc16(FALSE, pKey), DB_BUCKETS);
-	return infoget(bufstr_get(db, h), pKey);
+	return uri_unescape(infoget(bufstr_get(db, h), pKey));
 }
 
 void db_put(float db, string pKey, string pValue)
 {
 	float h;
+	pKey = uri_escape(pKey);
+	pValue = uri_escape(pValue);
 	h = mod(crc16(FALSE, pKey), DB_BUCKETS);
 	bufstr_set(db, h, infoadd(bufstr_get(db, h), pKey, pValue));
 }

@@ -251,11 +251,11 @@ void() FlagTouch =
 		s = ftos_decimals(t, 2);
 		s0 = ftos_decimals(flagcaptimerecord, 2);
 		h0 = db_get(ServerProgsDB, strcat(GetMapname(), "/captimerecord/netname"));
-		h1 = strreplace("\\", "\xDC", other.netname); // h1: current netname, escaped for DB (\ is 5C, other \ is DC)
+		h1 = other.netname;
 		if(h0 == h1)
 			h0 = "his";
 		else
-			h0 = strcat(strreplace("\xDC", "\\", h0), "^7's"); // h0: display text for previous netname
+			h0 = strcat(h0, "^7's"); // h0: display text for previous netname
 		if (flagcaptimerecord == 0)
 		{
 			bprint(other.netname, "^7 captured the ", other.flagcarried.netname, " in ", s, " seconds\n");
