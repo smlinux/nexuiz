@@ -34,26 +34,25 @@ case "$version" in
 esac
 
 basepk3=$base/data20070531.pk3
-nexdir=$base/nexuiz-2.0
-nexprodir=$base/nexuiz-current/pro
+nexdir=$base/nexuiz
+nexprodir=$base/nexuiz/pro
 dpdir=$base/darkplaces
 tmpdir=/tmp/NEX
-zipdir=/home/polzer/public_html/nexuiz/builds
-buildfiles=$base/nexuiz-current/misc/buildfiles
+zipdir=$base/builds
+buildfiles=$base/nexuiz/misc/buildfiles
 mingwdlls=$buildfiles/w32
 osxapps=$buildfiles/osx
 copystrip=$buildfiles/copystrip
-zipdiff=$base/nexuiz-current/misc/zipdiff
+zipdiff=$base/nexuiz/misc/zipdiff
 fteqccdir="$base/fteqcc"
 fteqccflags=""
-mingw=/home/polzer/mingw32
 menuqc=menu
 newest=NEWEST
 tag=
 
 #if [ -n "$EXPERIMENTAL" ]; then
 #	basepk3=$base/data20071231.pk3 # newer build to make smaller patches
-	nexdir=$base/nexuiz-current
+#	nexdir=$base/nexuiz
 #fi
 
 # TODO normalize the builds
@@ -96,12 +95,12 @@ buildon()
 
 build()
 {
-	buildon macmini nexuiz-osx          fteqcc-osx          /tmp/Darkplaces.build 'CC="gcc -g -arch i386 -arch ppc -isysroot /Developer/SDKs/MacOSX10.4u.sdk -I/Library/Frameworks/SDL.framework/Headers"' strip
+	buildon macmini               nexuiz-osx          fteqcc-osx          /tmp/Darkplaces.build 'CC="gcc -g -arch i386 -arch ppc -isysroot /Developer/SDKs/MacOSX10.4u.sdk -I/Library/Frameworks/SDL.framework/Headers"' strip
 		mv "$tmpdir/nexuiz-osx-agl"     "$tmpdir/Nexuiz.app/Contents/MacOS/nexuiz-osx-agl-bin"
 		mv "$tmpdir/nexuiz-osx-sdl"     "$tmpdir/Nexuiz-SDL.app/Contents/MacOS/nexuiz-osx-sdl-bin"
-	buildon hagger  nexuiz-linux-686    fteqcc-linux-686    /tmp/Darkplaces.build 'CC="gcc -g" DP_MODPLUG_STATIC_LIBDIR=/usr/local/lib'
-	buildon hector  nexuiz-linux-x86_64 fteqcc-linux-x86_64 /tmp/Darkplaces.build 'CC="gcc -g -Wl,--hash-style=sysv" DP_MODPLUG_STATIC_LIBDIR=/home/users4/ommz/polzer/libmodplug-static/lib64'
-	buildon hagger  nexuiz              fteqcc.exe          /tmp/Darkplaces.build 'DP_MAKE_TARGET=mingw CC="i586-mingw32msvc-gcc -g -I/home/polzer/mingw32.include" WINDRES=i586-mingw32msvc-windres SDL_CONFIG=/home/polzer/mingw32.SDL/bin/sdl-config' i586-mingw32msvc-strip
+	buildon blubpc.homelinux.org  nexuiz              fteqcc.exe          /tmp/Darkplaces.build 'DP_MAKE_TARGET=mingw CC="i486-mingw32-gcc -g" WINDRES=i486-mingw32-windres SDL_CONFIG=/usr/i486-mingw32/bin/sdl-config' i486-mingw32-strip
+	buildon rear                  nexuiz-linux-686    fteqcc-linux-686    /tmp/Darkplaces.build 'CC="gcc -g" DP_MODPLUG_STATIC_LIBDIR=/usr/lib'
+	buildon blubpc.homelinux.org  nexuiz-linux-x86_64 fteqcc-linux-x86_64 /tmp/Darkplaces.build 'CC="gcc -g -Wl,--hash-style=sysv" DP_MODPLUG_STATIC_LIBDIR=/usr/lib'
 }
 
 i=
@@ -158,7 +157,6 @@ make clean
 
 cd "$tmpdir"
 cp "$nexdir/"nexuiz-*.sh "$tmpdir/"
-cp "$nexdir/"nexuiz-*.bat "$tmpdir/"
 cp "$nexdir/gpl.txt" "$tmpdir/"
 
 cd "$nexdir/data"
