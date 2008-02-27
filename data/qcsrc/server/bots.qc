@@ -1904,6 +1904,7 @@ void() bot_clientconnect =
 {
 	if (clienttype(self) != CLIENTTYPE_BOT)
 		return;
+	self.bot_preferredcolors = self.clientcolors;
 	self.bot_nextthink = time - random();
 	self.lag_func = bot_lagfunc;
 	self.isbot = TRUE;
