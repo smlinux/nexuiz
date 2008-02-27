@@ -138,3 +138,24 @@ const float 	EXTRA_HIGH 						= 99999999;
 const float		FILE_READ						= 0;
 const float		FILE_APPEND						= 1;
 const float		FILE_WRITE						= 2;
+
+// Button values used by input_buttons
+const float BUTTON_ATTACK = 1;
+const float BUTTON_JUMP = 2;
+const float BUTTON_3 = 4;
+const float BUTTON_4 = 8;
+const float BUTTON_5 = 16;
+const float BUTTON_6 = 32;
+const float BUTTON7 = 64;
+const float BUTTON8 = 128;
+const float BUTTON_USE = 256;
+const float BUTTON_CHAT = 512;
+const float BUTTON_PRYDONCURSOR = 1024;
+const float BUTTON_9 = 2048;
+const float BUTTON_10 = 4096;
+const float BUTTON_11 = 8192;
+const float BUTTON_12 = 16384;
+const float BUTTON_13 = 32768;
+const float BUTTON_14 = 65536;
+const float BUTTON_15 = 131072;
+const float BUTTON_16 = 262;
