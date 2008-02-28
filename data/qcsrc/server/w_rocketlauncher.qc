@@ -241,7 +241,7 @@ void W_Rocket_Attack (void)
 	setmodel (missile, "models/rocket.md3"); // precision set below
 	setsize (missile, '-3 -3 -3', '3 3 3'); // give it some size so it can be shot
 
-	setorigin (missile, w_shotorg);
+	setorigin (missile, w_shotorg - v_forward * 3); // move it back so it hits the wall at the right point
 	if(g_laserguided_missile && self.laser_on)
 		missile.velocity = w_shotdir * cvar("g_balance_rocketlauncher_laserguided_speedstart");
 	else
