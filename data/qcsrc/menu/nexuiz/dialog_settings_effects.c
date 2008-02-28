@@ -172,7 +172,7 @@ void fillNexuizEffectsSettingsTab(entity me)
 	me.TR(me);
 
 	me.TR(me);
-		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Damage view kick:"));
+		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Damage kick:"));
 		me.TD(me, 1, 2, e = makeNexuizSlider(0, 0.5, 0.05, "v_kicktime"));
 
 	me.TR(me);
