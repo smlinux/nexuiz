@@ -1,5 +1,4 @@
-**Team:
-
+**Team Leaders:
 
 Lee Vermeulen
 *Project Founder and Co-Designer
@@ -10,29 +9,42 @@ Forest "LordHavoc" Hale
 SavageX
 *Project Maintainer
 
+Rudolf "div0" Polzer
+* Programmer
 
 
-**In alphabetical order
-**(nickname or surname)
 
+**Development Team
 
 Andreas "Black" Kirsch
 *Programmer
 
-Kurt Dereli
-*Lead Artist
-
-Yves "EviLair" Allaire 
-*Artist
-
 Stephan "esteel" Stahl
 *Programmer
 
-Fabien "H. Reaper" Tschirhart 
+Peter "Morphed" Pielak
+*Artist
+
+Paul "Strahlemann" Evers
+*Level Designer
+
+
+
+**Past Team Members
+*In alphabetical order
+*(nickname or surname)
+
+Kurt Dereli
+*Artist
+
+Yves "EviLair" Allaire
+*Artist
+
+Fabien "H. Reaper" Tschirhart
 *Level Designer
 
 "Innovati"
-*Menu Artist
+*Artist
 
 KadaverJack
 *Programmer
@@ -40,20 +52,11 @@ KadaverJack
 MauveBib
 *Bot Programmer
 
-Peter "Morphed" Pielak
-*2d Artist, Menu Artist
-
 Rick "Rat" Kelley
-*Lead Animator, Skinner 
-
-Rudolf "div0" Polzer
-*Programmer
-
-Paul "Strahlemann" Evers
-*Co-Lead Level Designer
+*Lead Animator, Skinner
 
 Gottfried "Toddd" Hofmann
-*Sound FX 
+*Sound FX
 
 Marko "Urre" Permanto
 *Bot Programmer
@@ -68,7 +71,10 @@ Garth "Zombie" Hendy
 
 **Thanks:
 
-Gerd "Elysis" Raudenbusch
+Gerd "Elysis" Raudenbusch - Music
+William "Willis" Weilep - Master server host
+Tyler "-z-" Mulligan - Site Design
+
 Qantourisc
 Tymo
 Spirit
