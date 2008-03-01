@@ -7,6 +7,8 @@ stripfile=$1
 
 case "$COPYSTRIP_STRIP" in
 	*/*)
+		echo >&2 "Using $COPYSTRIP_STRIP..."
+		cp "$stripfile" "$stripfile-withdebug"
 		exec "$COPYSTRIP_STRIP" "$stripfile"
 		;;
 esac
