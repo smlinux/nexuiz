@@ -1243,10 +1243,10 @@ void(entity e, float f, float rangebias) navigation_routerating =
 	if (e.nearestwaypoint.wpcost < 10000000)
 	{
 		//te_wizspike(e.nearestwaypoint.wpnearestpoint);
-		//dprint(e.classname, " ", ftos(f), "*(500/(500+", ftos((e.nearestwaypoint.wpcost + vlen(e.origin - e.nearestwaypoint.wpnearestpoint))), " = ");
-		f = f * rangebias / ((e.nearestwaypoint.wpcost + vlen(e.origin - e.nearestwaypoint.wpnearestpoint)) + rangebias);
-		if (self.havocbot_role == havocbot_role_ctf_offense)
-			dprint("-- considering ", e.classname, " (with rating ", ftos(f), ")\n");
+		//dprint(e.classname, " ", ftos(f), "/(1+", ftos((e.nearestwaypoint.wpcost + vlen(e.origin - e.nearestwaypoint.wpnearestpoint))), "/", ftos(rangebias), ") = ");
+		f = f * rangebias / (rangebias + (e.nearestwaypoint.wpcost + vlen(e.origin - e.nearestwaypoint.wpnearestpoint)));
+		//if (self.havocbot_role == havocbot_role_ctf_offense)
+		//	dprint("-- considering ", e.classname, " (with rating ", ftos(f), ")\n");
 		//dprint(ftos(f));
 		if (navigation_bestrating < f)
 		{
