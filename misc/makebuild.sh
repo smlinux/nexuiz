@@ -48,7 +48,6 @@ fteqccdir="$base/fteqcc"
 fteqccflags=""
 menuqc=menu
 newest=NEWEST
-sevenza=/chroot/debian-etch/usr/bin/7za
 aft="perl -I/chroot/debian-etch/usr/share/aft /chroot/debian-etch/usr/bin/aft"
 tag=
 
@@ -97,12 +96,12 @@ buildon()
 
 build()
 {
+	buildon alientrap.org                         nexuiz              fteqcc.exe          /tmp/Darkplaces.build 'DP_MAKE_TARGET=mingw CC="/chroot/debian-etch/usr/bin/i586-mingw32msvc-gcc -g" WINDRES=/chroot/debian-etch/usr/bin/i586-mingw32msvc-windres SDL_CONFIG=/home/divverent/sdl-win32/SDL-1.2.13/bin/sdl-config' /chroot/debian-etch/usr/bin/i586-mingw32msvc-strip
+	buildon alientrap.org                         nexuiz-linux-686    fteqcc-linux-686    /tmp/Darkplaces.build 'CC="gcc -m32 -L/chroot/debian-etch/usr/include -L/chroot/debian-etch/lib -L/chroot/debian-etch/usr/lib -g -Wl,-rpath,/chroot/debian-etch/usr/lib" DP_MODPLUG_STATIC_LIBDIR=/home/divverent/modplug-i386/lib SDL_CONFIG=/home/divverent/sdl-config-debian32' strip
+	buildon alientrap.org                         nexuiz-linux-x86_64 fteqcc-linux-x86_64 /tmp/Darkplaces.build 'CC="gcc -g -Wl,--hash-style=sysv" DP_MODPLUG_STATIC_LIBDIR=/home/divverent/modplug-x86_64/lib' strip
 	buildon div0@nexmacbuild.endoftheinternet.org nexuiz-osx          fteqcc-osx          /tmp/Darkplaces.build 'CC="gcc -g -arch i386 -arch ppc -isysroot /Developer/SDKs/MacOSX10.4u.sdk -I/Library/Frameworks/SDL.framework/Headers"' strip
 		mv "$tmpdir/nexuiz-osx-agl"     "$tmpdir/Nexuiz.app/Contents/MacOS/nexuiz-osx-agl-bin"
 		mv "$tmpdir/nexuiz-osx-sdl"     "$tmpdir/Nexuiz-SDL.app/Contents/MacOS/nexuiz-osx-sdl-bin"
-	buildon alientrap.org                         nexuiz              fteqcc.exe          /tmp/Darkplaces.build 'DP_MAKE_TARGET=mingw CC="/chroot/debian-etch/usr/bin/i586-mingw32msvc-gcc -g" WINDRES=/chroot/debian-etch/usr/bin/i586-mingw32msvc-windres SDL_CONFIG=/home/divverent/sdl-win32/SDL-1.2.13/bin/sdl-config' /chroot/debian-etch/usr/bin/i586-mingw32msvc-strip
-	buildon alientrap.org                         nexuiz-linux-686    fteqcc-linux-686    /tmp/Darkplaces.build 'CC="gcc -m32 -L/chroot/debian-etch/usr/include -L/chroot/debian-etch/lib -L/chroot/debian-etch/usr/lib -g -Wl,-rpath,/chroot/debian-etch/usr/lib" DP_MODPLUG_STATIC_LIBDIR=/home/divverent/modplug-i386/lib' SDL_CONFIG=/home/divverent/sdl-config-debian32
-	buildon alientrap.org                         nexuiz-linux-x86_64 fteqcc-linux-x86_64 /tmp/Darkplaces.build 'CC="gcc -g -Wl,--hash-style=sysv" DP_MODPLUG_STATIC_LIBDIR=/home/divverent/modplug-x86_64/lib'
 }
 
 i=
@@ -175,7 +174,7 @@ svn export . "$tmpdir/Docs"
 cd "$tmpdir/data"
 mkdir -p "$tmpdir/sources"
 #zip -9r ../sources/gamesource$date.zip qcsrc
-$sevenza a -mx=9 -tzip ../sources/gamesource$date.zip qcsrc nexuiz-data-base-revision.txt ChangeLog
+7za a -mx=9 -tzip ../sources/gamesource$date.zip qcsrc nexuiz-data-base-revision.txt ChangeLog
 
 cd "$dpdir"
 svn export . "$tmpdir/darkplaces"
@@ -184,7 +183,7 @@ svn diff > "$tmpdir/darkplaces/nexuiz-engine-changes.diff"
 svn log > "$tmpdir/darkplaces/ChangeLog"
 
 cd "$tmpdir"
-$sevenza a -mx=9 -tzip "$tmpdir/sources/enginesource$date.zip" "darkplaces"
+7za a -mx=9 -tzip "$tmpdir/sources/enginesource$date.zip" "darkplaces"
 rm -rf darkplaces
 
 cd "$tmpdir"
@@ -220,7 +219,7 @@ if [ -n "$versiontag" ]; then
 fi
 echo >> default.cfg
 echo "$defaultcfg" >> default.cfg
-$sevenza a -mx=7 -tzip ../data.pk3 .
+7za a -mx=7 -tzip ../data.pk3 .
 
 cd "$tmpdir/pro"
 perl -pi -e '/^set g_nexuizversion "?([0-9.]*)[^"]*"?/ and $_ = "set g_nexuizversion '$version-pro'\n"' default.cfg
@@ -229,7 +228,7 @@ if [ -n "$versiontag" ]; then
 fi
 echo >> default.cfg
 echo "$defaultcfg" >> default.cfg
-$sevenza a -mx=7 -tzip ../pro.pk3 .
+7za a -mx=7 -tzip ../pro.pk3 .
 
 cd "$tmpdir"
 rm -rf data
