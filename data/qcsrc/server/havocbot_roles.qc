@@ -550,8 +550,7 @@ entity kh_keylist;
 void(float ratingscale_team, float ratingscale_dropped, float ratingscale_enemy) havocbot_goalrating_kh =
 {
 	local entity head;
-	head = kh_keylist;
-	while (head)
+	for (head = kh_keylist; head; head = head.enemy)
 	{
 		if(head.owner == self)
 			continue;
@@ -564,7 +563,6 @@ void(float ratingscale_team, float ratingscale_dropped, float ratingscale_enemy)
 			navigation_routerating(head, ratingscale_team, 10000);
 		else
 			navigation_routerating(head, ratingscale_enemy, 10000);
-		head = head.enemy;
 	}
 };
 
