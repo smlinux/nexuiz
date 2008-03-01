@@ -557,8 +557,16 @@ void(float ratingscale_team, float ratingscale_dropped, float ratingscale_enemy)
 		if(head.owner == self)
 			continue;
 		if(!kh_tracking_enabled)
-			if(!head.owner || head.team == self.team)
-				continue; // skip what I can't see
+		{
+			// if it's carried by our team we know about it
+			// otherwise we have to see it to know about it
+			if(!head.owner || head.team != self.team)
+			{
+				traceline(self.origin + self.view_ofs, head.origin, MOVE_NOMONSTERS, self);
+				if (trace_fraction < 1 && trace_ent != head)
+					continue; // skip what I can't see
+			}
+		}
 		if(!head.owner)
 			navigation_routerating(head, ratingscale_dropped, 100000);
 		else if(head.team == self.team)
