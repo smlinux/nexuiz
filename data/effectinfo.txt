@@ -2025,3 +2025,165 @@ gravity 1
 bounce -1
 velocityjitter 64 64 64
 velocitymultiplier 100
+
+// additional laser colors (mike)
+effect misc_laser_green_beam
+countabsolute 1
+type beam
+tex 60 60
+size 1 1
+alpha 256 256 64
+color 0x00ff00 0x00ff00
+sizeincrease 1
+
+effect misc_laser_green_beam_end
+count 1
+type spark
+color 0x8f4333 0xfff31b
+size 0.4 0.4
+alpha 128 256 768
+gravity 1
+bounce -1
+velocityjitter 64 64 64
+velocitymultiplier 100
+
+effect misc_laser_blue_beam
+countabsolute 1
+type beam
+tex 60 60
+size 1 1
+alpha 256 256 64
+color 0x0000ff 0x0000ff
+sizeincrease 1
+
+effect misc_laser_blue_beam_end
+count 1
+type spark
+color 0x8f4333 0xfff31b
+size 0.4 0.4
+alpha 128 256 768
+gravity 1
+bounce -1
+velocityjitter 64 64 64
+velocitymultiplier 100
+
+effect misc_laser_yellow_beam
+countabsolute 1
+type beam
+tex 60 60
+size 1 1
+alpha 256 256 64
+color 0xffff00 0xffff00
+sizeincrease 1
+
+effect misc_laser_yellow_beam_end
+count 1
+type spark
+color 0x8f4333 0xfff31b
+size 0.4 0.4
+alpha 128 256 768
+gravity 1
+bounce -1
+velocityjitter 64 64 64
+velocitymultiplier 100
+
+effect misc_laser_cyan_beam
+countabsolute 1
+type beam
+tex 60 60
+size 1 1
+alpha 256 256 64
+color 0x00ffff 0x00ffff
+sizeincrease 1
+
+effect misc_laser_cyan_beam_end
+count 1
+type spark
+color 0x8f4333 0xfff31b
+size 0.4 0.4
+alpha 128 256 768
+gravity 1
+bounce -1
+velocityjitter 64 64 64
+velocitymultiplier 100
+
+effect misc_laser_magenta_beam
+countabsolute 1
+type beam
+tex 60 60
+size 1 1
+alpha 256 256 64
+color 0xff00ff 0xff00ff
+sizeincrease 1
+
+effect misc_laser_magenta_beam_end
+count 1
+type spark
+color 0x8f4333 0xfff31b
+size 0.4 0.4
+alpha 128 256 768
+gravity 1
+bounce -1
+velocityjitter 64 64 64
+velocitymultiplier 100
+
+effect misc_laser_white_beam
+countabsolute 1
+type beam
+tex 60 60
+size 1 1
+alpha 256 256 64
+color 0xffffff 0xffffff
+sizeincrease 1
+
+effect misc_laser_white_beam_end
+count 1
+type spark
+color 0x8f4333 0xfff31b
+size 0.4 0.4
+alpha 128 256 768
+gravity 1
+bounce -1
+velocityjitter 64 64 64
+velocitymultiplier 100
+
+effect misc_laser_black_beam
+countabsolute 1
+type beam
+tex 60 60
+size 1 1
+alpha 256 256 64
+color 0x000000 0x000000
+sizeincrease 1
+
+effect misc_laser_black_beam_end
+count 1
+type spark
+color 0x8f4333 0xfff31b
+size 0.4 0.4
+alpha 128 256 768
+gravity 1
+bounce -1
+velocityjitter 64 64 64
+velocitymultiplier 100
+
+effect misc_laser_orange_beam
+countabsolute 1
+type beam
+tex 60 60
+size 1 1
+alpha 256 256 64
+color 0xff6600 0xff6600
+sizeincrease 1
+
+effect misc_laser_orange_beam_end
+count 1
+type spark
+color 0x8f4333 0xfff31b
+size 0.4 0.4
+alpha 128 256 768
+gravity 1
+bounce -1
+velocityjitter 64 64 64
+velocitymultiplier 100
+
