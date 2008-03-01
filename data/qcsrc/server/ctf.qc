@@ -1,5 +1,6 @@
 .entity sprite;
-entity flaglist; // CTF flags in the map
+entity ctf_worldflaglist; // CTF flags in the map
+.entity ctf_worldflagnext;
 
 .float next_take_time;			// the next time a player can pick up a flag (time + blah)
 								/// I used this, in part, to fix the looping score bug. - avirox
@@ -464,9 +465,9 @@ void() item_flag_team1 =
 	//if(!cvar("teamplay"))
 	//	cvar_set("teamplay", "3");
 
-	// link flag into flaglist
-	self.enemy = flaglist;
-	flaglist = self;
+	// link flag into ctf_worldflaglist
+	self.ctf_worldflagnext = ctf_worldflaglist;
+	ctf_worldflaglist = self;
 
 	self.classname = "item_flag_team";
 	self.team = COLOR_TEAM1; // color 4 team (red)
@@ -529,9 +530,9 @@ void() item_flag_team2 =
 	//if(!cvar("teamplay"))
 	//	cvar_set("teamplay", "3");
 
-	// link flag into flaglist
-	self.enemy = flaglist;
-	flaglist = self;
+	// link flag into ctf_worldflaglist
+	self.ctf_worldflagnext = ctf_worldflaglist;
+	ctf_worldflaglist = self;
 
 	self.classname = "item_flag_team";
 	self.team = COLOR_TEAM2; // color 13 team (blue)
@@ -670,11 +671,11 @@ void() ctf_setstatus =
 
 	if (g_ctf) {
 		local entity flag;
-		flag = flaglist;
+		flag = ctf_worldflaglist;
 		while (flag)
 		{
 			ctf_setstatus2(flag);
-			flag = flag.enemy;
+			flag = flag.ctf_worldflagnext;
 		}
 	}
 };

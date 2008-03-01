@@ -125,16 +125,17 @@ void(float ratingscale, vector org, float sradius) havocbot_goalrating_ctf_carri
 	}
 };
 
-entity flaglist;
+entity ctf_worldflaglist;
+.entity ctf_worldflagnext;
 void(float ratingscale) havocbot_goalrating_ctf_ourflag =
 {
 	local entity head;
-	head = flaglist;
+	head = ctf_worldflaglist;
 	while (head)
 	{
 		if (self.team == head.team)
 			break;
-		head = head.enemy;
+		head = head.ctf_worldflagnext;
 	}
 	if (head)
 		navigation_routerating(head, ratingscale, 10000);
@@ -143,12 +144,12 @@ void(float ratingscale) havocbot_goalrating_ctf_ourflag =
 void(float ratingscale) havocbot_goalrating_ctf_enemyflag =
 {
 	local entity head;
-	head = flaglist;
+	head = ctf_worldflaglist;
 	while (head)
 	{
 		if (self.team != head.team)
 			break;
-		head = head.enemy;
+		head = head.ctf_worldflagnext;
 	}
 	if (head)
 		navigation_routerating(head, ratingscale, 10000);
@@ -162,12 +163,12 @@ void(float ratingscale) havocbot_goalrating_ctf_enemybase =
 void(float ratingscale) havocbot_goalrating_ctf_ourstolenflag =
 {
 	local entity head;
-	head = flaglist;
+	head = ctf_worldflaglist;
 	while (head)
 	{
 		if (self.team == head.team)
 			break;
-		head = head.enemy;
+		head = head.ctf_worldflagnext;
 	}
 	if (head)
 	if (head.cnt != FLAG_BASE)
@@ -177,12 +178,12 @@ void(float ratingscale) havocbot_goalrating_ctf_ourstolenflag =
 void(float ratingscale) havocbot_goalrating_ctf_droppedflags =
 {
 	local entity head;
-	head = flaglist;
+	head = ctf_worldflaglist;
 	while (head)
 	{
 		if (head.cnt != FLAG_BASE) // flag is carried or out in the field
 			navigation_routerating(head, ratingscale, 10000);
-		head = head.enemy;
+		head = head.ctf_worldflagnext;
 	}
 };
 
@@ -252,12 +253,12 @@ void() havocbot_role_ctf_offense =
 		return;
 	}
 	// check our flag
-	f = flaglist;
+	f = ctf_worldflaglist;
 	while (f)
 	{
 		if (self.team == f.team)
 			break;
-		f = f.enemy;
+		f = f.ctf_worldflagnext;
 	}
 	if (f.cnt != FLAG_BASE && canreach(f))
 	{
@@ -306,12 +307,12 @@ void() havocbot_role_ctf_interceptor =
 		return;
 	}
 	// check our flag
-	f = flaglist;
+	f = ctf_worldflaglist;
 	while (f)
 	{
 		if (self.team == f.team)
 			break;
-		f = f.enemy;
+		f = f.ctf_worldflagnext;
 	}
 	if (f.cnt == FLAG_BASE)
 	{
@@ -351,12 +352,12 @@ void() havocbot_role_ctf_middle =
 		return;
 	}
 	// check our flag
-	f = flaglist;
+	f = ctf_worldflaglist;
 	while (f)
 	{
 		if (self.team == f.team)
 			break;
-		f = f.enemy;
+		f = f.ctf_worldflagnext;
 	}
 	if (f.cnt != FLAG_BASE && canreach(f))
 	{
@@ -414,12 +415,12 @@ void() havocbot_role_ctf_defense =
 		return;
 	}
 	// check our flag
-	f = flaglist;
+	f = ctf_worldflaglist;
 	while (f)
 	{
 		if (self.team == f.team)
 			break;
-		f = f.enemy;
+		f = f.ctf_worldflagnext;
 	}
 	if (f.cnt != FLAG_BASE && canreach(f))
 	{
