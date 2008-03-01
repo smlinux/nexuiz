@@ -5,6 +5,12 @@
 
 stripfile=$1
 
+case "$COPYSTRIP_STRIP" in
+	*/*)
+		exec "$COPYSTRIP_STRIP" "$stripfile"
+		;;
+esac
+
 p=$PATH
 while [ -n "$p" ]; do
 	item=${p%%:*}/${COPYSTRIP_STRIP:-strip}
