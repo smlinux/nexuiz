@@ -48,7 +48,7 @@ fteqccdir="$base/fteqcc"
 fteqccflags=""
 menuqc=menu
 newest=NEWEST
-7za=/chroot/debian-etch/usr/bin/7za
+sevenza=/chroot/debian-etch/usr/bin/7za
 aft="perl -I/chroot/debian-etch/usr/share/aft /chroot/debian-etch/usr/bin/aft"
 tag=
 
@@ -173,7 +173,7 @@ svn export . "$tmpdir/Docs"
 cd "$tmpdir/data"
 mkdir -p "$tmpdir/sources"
 #zip -9r ../sources/gamesource$date.zip qcsrc
-$7za a -mx=9 -tzip ../sources/gamesource$date.zip qcsrc
+$sevenza a -mx=9 -tzip ../sources/gamesource$date.zip qcsrc
 
 cd "$dpdir"
 svn export . "$tmpdir/darkplaces"
@@ -182,7 +182,7 @@ svn diff > "$tmpdir/darkplaces/nexuiz-engine-changes.diff"
 svn log > "$tmpdir/darkplaces/ChangeLog"
 
 cd "$tmpdir"
-$7za a -mx=9 -tzip "$tmpdir/sources/enginesource$date.zip" "darkplaces"
+$sevenza a -mx=9 -tzip "$tmpdir/sources/enginesource$date.zip" "darkplaces"
 rm -rf darkplaces
 
 cd "$tmpdir"
@@ -218,7 +218,7 @@ if [ -n "$versiontag" ]; then
 fi
 echo >> default.cfg
 echo "$defaultcfg" >> default.cfg
-7za a -mx=7 -tzip ../data.pk3 .
+$sevenza a -mx=7 -tzip ../data.pk3 .
 
 cd "$tmpdir/pro"
 perl -pi -e '/^set g_nexuizversion "?([0-9.]*)[^"]*"?/ and $_ = "set g_nexuizversion '$version-pro'\n"' default.cfg
@@ -227,7 +227,7 @@ if [ -n "$versiontag" ]; then
 fi
 echo >> default.cfg
 echo "$defaultcfg" >> default.cfg
-$7za a -mx=7 -tzip ../pro.pk3 .
+$sevenza a -mx=7 -tzip ../pro.pk3 .
 
 cd "$tmpdir"
 rm -rf data
