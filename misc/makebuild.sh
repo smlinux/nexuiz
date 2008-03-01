@@ -163,6 +163,8 @@ cp "$nexdir/gpl.txt" "$tmpdir/"
 
 cd "$nexdir/data"
 svn export . "$tmpdir/data"
+svn info . > "$tmpdir/data/nexuiz-data-base-revision.txt"
+svn log > ChangeLog
 
 cd "$nexprodir"
 svn export . "$tmpdir/pro"
@@ -173,7 +175,7 @@ svn export . "$tmpdir/Docs"
 cd "$tmpdir/data"
 mkdir -p "$tmpdir/sources"
 #zip -9r ../sources/gamesource$date.zip qcsrc
-$sevenza a -mx=9 -tzip ../sources/gamesource$date.zip qcsrc
+$sevenza a -mx=9 -tzip ../sources/gamesource$date.zip qcsrc nexuiz-data-base-revision.txt ChangeLog
 
 cd "$dpdir"
 svn export . "$tmpdir/darkplaces"
