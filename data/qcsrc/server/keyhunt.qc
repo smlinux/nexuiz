@@ -1,4 +1,4 @@
-#define FOR_EACH_KH_KEY(v) for(v = kh_keylist; v; v = v.enemy )
+#define FOR_EACH_KH_KEY(v) for(v = kh_worldkeylist; v; v = v.enemy )
 
 // #define KH_PLAYER_USE_ATTACHMENT
 // #define KH_PLAYER_USE_CARRIEDMODEL
@@ -32,7 +32,8 @@ float kh_Team_ByID(float t)
 	return 0;
 }
 
-entity kh_keylist;
+entity kh_worldkeylist;
+.entity kh_worldkeynext;
 entity kh_controller;
 float kh_tracking_enabled;
 float kh_teams;
@@ -322,8 +323,8 @@ void kh_Key_Spawn(entity initial_owner, float angle)
 	}
 
 	// link into key list
-	key.enemy = kh_keylist;
-	kh_keylist = key;
+	key.kh_worldkeynext = kh_worldkeylist;
+	kh_worldkeylist = key;
 
 	sprint(initial_owner, strcat("You got the ^2", key.netname, "\n"));
 
@@ -344,19 +345,19 @@ void kh_Key_Remove(entity key)
 		WaypointSprite_DetachCarrier(key);
 
 	// remove key from key list
-	if (kh_keylist == key)
-		kh_keylist = kh_keylist.enemy;
+	if (kh_worldkeylist == key)
+		kh_worldkeylist = kh_worldkeylist.kh_worldkeynext;
 	else
 	{
-		o = kh_keylist;
+		o = kh_worldkeylist;
 		while (o)
 		{
-			if (o.enemy == key)
+			if (o.kh_worldkeynext == key)
 			{
-				o.enemy = o.enemy.enemy;
+				o.kh_worldkeynext = o.kh_worldkeynext.kh_worldkeynext;
 				break;
 			}
-			o = o.enemy;
+			o = o.kh_worldkeynext;
 		}
 	}
 

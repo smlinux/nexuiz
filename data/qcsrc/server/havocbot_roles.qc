@@ -546,11 +546,12 @@ void() havocbot_chooserole_dom =
 
 
 
-entity kh_keylist;
+entity kh_worldkeylist;
+.entity kh_worldkeynext;
 void(float ratingscale_team, float ratingscale_dropped, float ratingscale_enemy) havocbot_goalrating_kh =
 {
 	local entity head;
-	for (head = kh_keylist; head; head = head.enemy)
+	for (head = kh_worldkeylist; head; head = head.kh_worldkeynext)
 	{
 		if(head.owner == self)
 			continue;
