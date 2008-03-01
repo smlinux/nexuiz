@@ -164,7 +164,7 @@ cp "$nexdir/gpl.txt" "$tmpdir/"
 cd "$nexdir/data"
 svn export . "$tmpdir/data"
 svn info . > "$tmpdir/data/nexuiz-data-base-revision.txt"
-svn log > ChangeLog
+svn log > "$tmpdir/data/ChangeLog"
 
 cd "$nexprodir"
 svn export . "$tmpdir/pro"
