@@ -51,6 +51,12 @@ newest=NEWEST
 aft="perl -I/chroot/debian-etch/usr/share/aft /chroot/debian-etch/usr/bin/aft"
 tag=
 
+mk7z()
+{
+	7za a -tzip -mx=9 "$@"
+	chmod 644 "$1"
+}
+
 #if [ -n "$EXPERIMENTAL" ]; then
 #	basepk3=$base/data20071231.pk3 # newer build to make smaller patches
 #	nexdir=$base/nexuiz
@@ -173,8 +179,7 @@ svn export . "$tmpdir/Docs"
 
 cd "$tmpdir/data"
 mkdir -p "$tmpdir/sources"
-#zip -9r ../sources/gamesource$date.zip qcsrc
-7za a -mx=9 -tzip ../sources/gamesource$date.zip qcsrc nexuiz-data-base-revision.txt ChangeLog
+mk7z ../sources/gamesource$date.zip qcsrc nexuiz-data-base-revision.txt ChangeLog
 
 cd "$dpdir"
 svn export . "$tmpdir/darkplaces"
@@ -183,7 +188,7 @@ svn diff > "$tmpdir/darkplaces/nexuiz-engine-changes.diff"
 svn log > "$tmpdir/darkplaces/ChangeLog"
 
 cd "$tmpdir"
-7za a -mx=9 -tzip "$tmpdir/sources/enginesource$date.zip" "darkplaces"
+mk7z "$tmpdir/sources/enginesource$date.zip" "darkplaces"
 rm -rf darkplaces
 
 cd "$tmpdir"
@@ -219,7 +224,7 @@ if [ -n "$versiontag" ]; then
 fi
 echo >> default.cfg
 echo "$defaultcfg" >> default.cfg
-7za a -mx=7 -tzip ../data.pk3 .
+mk7z ../data.pk3 .
 
 cd "$tmpdir/pro"
 perl -pi -e '/^set g_nexuizversion "?([0-9.]*)[^"]*"?/ and $_ = "set g_nexuizversion '$version-pro'\n"' default.cfg
@@ -228,7 +233,7 @@ if [ -n "$versiontag" ]; then
 fi
 echo >> default.cfg
 echo "$defaultcfg" >> default.cfg
-7za a -mx=7 -tzip ../pro.pk3 .
+mk7z ../pro.pk3 .
 
 cd "$tmpdir"
 rm -rf data
