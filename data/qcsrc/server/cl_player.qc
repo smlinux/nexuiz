@@ -252,6 +252,7 @@ void SpawnThrownWeapon (vector org, float w)
 {
 	if (!cvar("g_pickup_items"))
 	if (!g_minstagib)
+	if (!g_instagib)
 		return;
 	if (!w)
 		return;
