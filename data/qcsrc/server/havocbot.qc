@@ -455,7 +455,14 @@ void() havocbot_ai =
 	havocbot_aim();
 	lag_update();
 	if (self.bot_aimtarg)
+	{
 		weapon_action(self.weapon, WR_AIM);
+		if (cvar("bot_nofire"))
+		{
+			self.button0 = FALSE;
+			self.button3 = FALSE;
+		}
+	}
 	else if (self.goalcurrent)
 	{
 		local vector now,v,next;//,heading;
