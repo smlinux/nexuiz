@@ -84,12 +84,7 @@ void ImpulseCommands (void)
 	else if (imp == 17)
 	{
 		if(self.deadflag == DEAD_NO)
-		{
-			if (self.weapon != WEP_LASER
-				&& !g_minstagib && !g_instagib
-				&& !g_rocketarena && !g_lms && cvar("g_pickup_items") && !g_nixnex)
-				W_ThrowWeapon(W_CalculateProjectileVelocity(self.velocity, v_forward * 750), '0 0 0', TRUE);
-		}
+			W_ThrowWeapon(W_CalculateProjectileVelocity(self.velocity, v_forward * 750), '0 0 0', TRUE);
 	}
 	// deploy waypoints
 	else if (imp >= 30 && imp <= 49)

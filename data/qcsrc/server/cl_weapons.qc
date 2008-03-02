@@ -88,10 +88,22 @@ void(vector velo, vector delta, float doreduce) W_ThrowWeapon
 	local .float ammofield;
 
 	w = self.weapon;
-	if(w == WEP_LASER)
-		return;
-	if(w == 0)
+	if (w == 0)
 		return; // just in case
+	if (w == WEP_LASER)
+		return;
+	if (g_minstagib)
+		return;
+	if (g_instagib)
+		return;
+	if (g_rocketarena)
+		return;
+	if (g_lms)
+		return;
+	if (g_nixnex)
+		return;
+	if (!cvar("g_pickup_items"))
+		return;
 
 	e = self;
 	wep = spawn();
