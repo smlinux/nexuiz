@@ -692,7 +692,7 @@ void ClientKill_Now_TeamChange()
 	if(self.killindicator_teamchange == -1)
 	{
 		self.team = -1;
-		JoinBestTeam( self, 0 );
+		JoinBestTeam( self, FALSE, FALSE );
 	}
 	else
 	{
@@ -864,7 +864,7 @@ void ClientConnect (void)
 	//if(g_domination)
 	//	dom_player_join_team(self);
 
-	//JoinBestTeam(self, FALSE);
+	//JoinBestTeam(self, FALSE, FALSE);
 
 	if((cvar("sv_spectate") == 1 && !g_lms) || cvar("g_campaign")) {
 		self.classname = "observer";
@@ -1434,8 +1434,8 @@ void LeaveSpectatorMode()
 {
 	if(!cvar("teamplay") || cvar("g_campaign") || cvar("g_balance_teams")) {
 		self.classname = "player";
-		if(cvar("g_campaign") || cvar("g_balance_teams"))
-			JoinBestTeam(self, 0);
+		if(cvar("g_campaign") || cvar("g_balance_teams") || cvar("g_balance_teams_force"))
+			JoinBestTeam(self, FALSE, TRUE);
 		if(cvar("g_campaign"))
 			campaign_bots_may_start = 1;
 		PutClientInServer();

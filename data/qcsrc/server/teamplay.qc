@@ -805,7 +805,7 @@ float FindSmallestTeam(entity pl, float ignore_pl)
 	return smallestteam;
 }
 
-float JoinBestTeam(entity pl, float only_return_best)
+float JoinBestTeam(entity pl, float only_return_best, float forcebestteam)
 {
 	float smallest, selectedteam;
 
@@ -826,7 +826,7 @@ float JoinBestTeam(entity pl, float only_return_best)
 
 	// if we don't care what team he ends up on, put him on whatever team he entered as.
 	// if he's not on a valid team, then let other code put him on the smallest team
-	if(!cvar("g_campaign") && !cvar("g_balance_teams") && !cvar("g_balance_teams_force"))
+	if(!forcebestteam)
 	{
 		if(     c1 >= 0 && pl.team == COLOR_TEAM1)
 			selectedteam = pl.team;

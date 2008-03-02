@@ -1443,9 +1443,8 @@ void() bot_setnameandstuff =
 	pants = bound(0, floor(random() * 13), 13);
 	//shirt = bound(0, floor(random() * 16), 15);
 	shirt = pants;
-	self.clientcolors = shirt * 16 + pants;
+	setcolor(self, shirt * 16 + pants);
 	self.bot_preferredcolors = self.clientcolors;
-	self.team = pants + 1;
 
 	// now pick a name...
 
@@ -1898,7 +1897,7 @@ void() bot_relinkplayerlist =
 };
 
 void() havocbot_setupbot;
-float JoinBestTeam(entity pl, float only_return_best);
+float JoinBestTeam(entity pl, float only_return_best, float forcebestteam);
 
 void() bot_clientconnect =
 {
@@ -1909,7 +1908,7 @@ void() bot_clientconnect =
 	self.lag_func = bot_lagfunc;
 	self.isbot = TRUE;
 	self.createdtime = self.nextthink;
-	JoinBestTeam(self, FALSE);
+	JoinBestTeam(self, FALSE, TRUE);
 	havocbot_setupbot();
 	self.bot_mouseskill=random()-0.5;
 	self.bot_thinkskill=random()-0.5;

@@ -161,7 +161,7 @@ entity GetKickVoteVictim(string vote, string cmd)
 			ns = substring(argv(1), 1, 999);
 			t = 2;
 		}
-	
+
 	if(tokens >= 3)
 		if(argv(1) == "#")
 		{
@@ -175,7 +175,7 @@ entity GetKickVoteVictim(string vote, string cmd)
 		for(i = t; i < tokens; ++i)
 			GetKickVoteVictim_reason = strcat(GetKickVoteVictim_reason, argv(i), " ");
 		GetKickVoteVictim_reason = substring(GetKickVoteVictim_reason, 0, strlen(GetKickVoteVictim_reason) - 1);
-		
+
 		n = stof(ns);
 		if(ns == ftos(n)) if(n >= 1) if(n <= maxclients)
 		{
@@ -426,13 +426,13 @@ void SV_ParseClientCommand(string s) {
 		} else {
 			self.version = stof(argv(1));
 		}
-		if(self.version != cvar("gameversion"))	
+		if(self.version != cvar("gameversion"))
 		{
 			self.classname = "observer";
 			self.frags = -2;
 			PutClientInServer();
-		} else if(cvar("g_campaign") || cvar("g_balance_teams")) {
-			//JoinBestTeam(self, 0);
+		} else if(cvar("g_campaign") || cvar("g_balance_teams") || cvar("g_balance_teams_force")) {
+			//JoinBestTeam(self, FALSE, TRUE);
 		} else if(cvar("teamplay") && !cvar("sv_spectate")) {
 			self.classname = "observer";
 			stuffcmd(self,"menu_showteamselect\n");
@@ -828,7 +828,7 @@ void ReadyCount()
 		return;
 
 	bprint("^1Server is restarting...\n");
-	
+
 	// no arena, assault & onslaught support yet...
 	if(g_arena | g_assault | g_onslaught | gameover | intermission_running)
 		localcmd("restart\n");
@@ -843,7 +843,7 @@ void ReadyCount()
 	}
 
 	reset_map();
-	
+
 	if(cvar("sv_eventlog"))
 		GameLogEcho(":restart", FALSE);
 }
