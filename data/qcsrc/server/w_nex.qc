@@ -5,7 +5,7 @@ void W_Nex_Attack (void)
 	//W_SetupShot (self, '25 8 -8', TRUE, 2, "weapons/nexfire.wav"); // TODO: move model down a little
 
 	// assure that nexdamage is high enough in minstagib
-	if (g_minstagib)
+	if (g_minstagib || g_instagib)
 		FireRailgunBullet (w_shotorg, w_shotorg + w_shotdir * MAX_SHOT_DISTANCE, 1000, 800, IT_NEX);
 	else
 	{
