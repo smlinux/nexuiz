@@ -542,7 +542,10 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 	if(targ.classname == "player" && attacker.classname == "player" && attacker != targ && attacker.health > 2)
 	{
 		// Savage: vampire mode
-		if(g_vampire && !g_minstagib)
+		if (g_vampire)
+		if (!g_minstagib)
+		if (!g_instagib)
+		if (time > self.spawnshieldtime)
 		{
 			attacker.health += damage;
 		}
