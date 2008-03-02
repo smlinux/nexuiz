@@ -92,8 +92,6 @@ void(vector velo, vector delta, float doreduce) W_ThrowWeapon
 		return; // just in case
 	if (w == WEP_LASER)
 		return;
-	if (g_minstagib)
-		return;
 	if (g_instagib)
 		return;
 	if (g_rocketarena)

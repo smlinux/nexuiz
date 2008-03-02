@@ -84,6 +84,7 @@ void ImpulseCommands (void)
 	else if (imp == 17)
 	{
 		if(self.deadflag == DEAD_NO)
+		if (!g_minstagib)
 			W_ThrowWeapon(W_CalculateProjectileVelocity(self.velocity, v_forward * 750), '0 0 0', TRUE);
 	}
 	// deploy waypoints
