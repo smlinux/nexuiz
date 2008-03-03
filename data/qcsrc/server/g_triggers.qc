@@ -581,8 +581,10 @@ void() misc_laser_think =
 		else
 			FireRailgunBullet(self.origin, o, self.dmg * frametime, 0, DEATH_HURTTRIGGER);
 	}
+
 	if(time > self.ltime)
 	{
+		traceline(self.origin, o, MOVE_WORLDONLY, self);
 		trailparticles(self, self.cnt, self.origin, trace_endpos);
 		pointparticles(self.lip, trace_endpos, trace_plane_normal, 256 * frametime);
 		self.ltime = time + self.wait;
