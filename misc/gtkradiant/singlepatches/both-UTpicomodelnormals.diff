@@ -1,0 +1,101 @@
+Index: libs/picomodel/picomodel.c
+===================================================================
+--- libs/picomodel/picomodel.c	(revision 191)
++++ libs/picomodel/picomodel.c	(working copy)
+@@ -295,10 +295,7 @@
+ 		model = PicoModuleLoadModel(module, fileName, buffer, bufSize, frameNum);
+ 	}
+ 	
+-  if(model != 0)
+-  {
+-	  _pico_free(buffer);
+-  }
++	_pico_free(buffer);
+ 
+ 	/* return */
+ 	return model;
+@@ -1573,6 +1570,7 @@
+ {
+ 	int		i, j;
+ 	
++//   Sys_Printf(" %f %f %f\n", normal[0] , normal[1] , normal[2] );
+ 	
+ 	/* dummy check */
+ 	if( surface == NULL || surface->numVertexes <= 0 )
+@@ -1861,13 +1859,10 @@
+ typedef picoVec3_t* picoNormalIter_t;
+ typedef picoIndex_t* picoIndexIter_t;
+ 
+-#define THE_CROSSPRODUCTS_OF_ANY_PAIR_OF_EDGES_OF_A_GIVEN_TRIANGLE_ARE_EQUAL 1
+-
+ void _pico_triangles_generate_weighted_normals(picoIndexIter_t first, picoIndexIter_t end, picoVec3_t* xyz, picoVec3_t* normals)
+ {
+ 	for(; first != end; first += 3)
+ 	{
+-#if (THE_CROSSPRODUCTS_OF_ANY_PAIR_OF_EDGES_OF_A_GIVEN_TRIANGLE_ARE_EQUAL)
+ 		picoVec3_t weightedNormal;
+ 		{
+ 			float* a = xyz[*(first + 0)];
+@@ -1878,24 +1873,11 @@
+ 			_pico_subtract_vec( c, a, ca );
+ 			_pico_cross_vec( ca, ba, weightedNormal );
+ 		}
+-#endif
+ 		{
+ 			int j = 0;
+ 			for(; j < 3; ++j)
+ 			{
+ 				float* normal = normals[*(first + j)];
+-#if (!THE_CROSSPRODUCTS_OF_ANY_PAIR_OF_EDGES_OF_A_GIVEN_TRIANGLE_ARE_EQUAL)
+-				picoVec3_t weightedNormal;
+-				{
+-					float* a = xyz[*(first + ((j + 0) % 3))];
+-					float* b = xyz[*(first + ((j + 1) % 3))];
+-					float* c = xyz[*(first + ((j + 2) % 3))];
+-					picoVec3_t ba, ca;
+-					_pico_subtract_vec( b, a, ba );
+-					_pico_subtract_vec( c, a, ca );
+-					_pico_cross_vec( ca, ba, weightedNormal );
+-				}
+-#endif
+ 				_pico_add_vec(weightedNormal, normal, normal);
+ 			}
+ 		}
+@@ -1941,7 +1923,8 @@
+ {
+ 	for(; first != last; ++first, ++generated)
+ 	{
+-		if(!_pico_normal_is_unit_length(*first) || !_pico_normal_within_tolerance(*first, *generated))
++      //27 - fix for badly generated normals thing.
++      //	if(!_pico_normal_is_unit_length(*first) || !_pico_normal_within_tolerance(*first, *generated))
+ 		{
+ 			_pico_copy_vec(*generated, *first);
+ 		}
+@@ -1954,10 +1937,11 @@
+ 
+ 	_pico_normals_zero(normals, normals + surface->numVertexes);
+ 
++   //Just build standard no sg normals for now
+ 	_pico_triangles_generate_weighted_normals(surface->index, surface->index + surface->numIndexes, surface->xyz, normals);
+ 	_pico_vertices_combine_shared_normals(surface->xyz, surface->smoothingGroup, normals, surface->numVertexes);
+ 
+-	_pico_normals_normalize(normals, normals + surface->numVertexes);
++	_pico_normals_normalize(normals, normals + surface->numVertexes); 
+ 
+ 	_pico_normals_assign_generated_normals(surface->normal, surface->normal + surface->numVertexes, normals);
+ 
+@@ -2261,7 +2245,7 @@
+ 		int newVertIndex = PicoGetSurfaceNumIndexes ( workSurface );
+ 
+ 		/* get the index of the vertex that we're going to store at newVertIndex */
+-		vertDataIndex = PicoFindSurfaceVertexNum ( workSurface , *xyz[i] , *normals[i] , numSTs , st[i] , numColors , colors[i], smoothingGroup[i]);
++      vertDataIndex = -1;// PicoFindSurfaceVertexNum ( workSurface , *xyz[i] , *normals[i] , numSTs , st[i] , numColors , colors[i], smoothingGroup[i]);
+ 
+ 		/* the vertex wasn't found, so create a new vertex in the pool from the data we have */
+ 		if ( vertDataIndex == -1 )
+@@ -2290,3 +2274,5 @@
+ 		PicoSetSurfaceIndex ( workSurface , newVertIndex , vertDataIndex );
+ 	}
+ }
++
++

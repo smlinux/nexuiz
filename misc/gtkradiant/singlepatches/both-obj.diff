@@ -1,0 +1,83 @@
+Index: libs/picomodel/pm_obj.c
+===================================================================
+--- libs/picomodel/pm_obj.c	(revision 193)
++++ libs/picomodel/pm_obj.c	(working copy)
+@@ -265,7 +265,7 @@
+ 		/* get next token in material file */
+ 		if (_pico_parse( p,1 ) == NULL)
+ 			break;
+-#if 0
++#if 1
+ 
+ 		/* skip empty lines */
+ 		if (p->token == NULL || !strlen( p->token ))
+@@ -307,6 +307,7 @@
+ 		else if (!_pico_stricmp(p->token,"map_kd"))
+ 		{
+ 			char *mapName;
++			picoShader_t *shader;
+ 
+ 			/* pointer to current shader must be valid */
+ 			if (curShader == NULL)
+@@ -321,6 +322,10 @@
+ 				_pico_printf( PICO_ERROR,"Missing material map name in MTL, line %d.",p->curLine);
+ 				_obj_mtl_error_return;
+ 			}
++			/* create a new pico shader */
++			shader = PicoNewShader( model );
++			if (shader == NULL)
++				_obj_mtl_error_return;
+ 			/* set shader map name */
+ 			PicoSetShaderMapName( shader,mapName );
+ 		}
+@@ -521,7 +526,7 @@
+ 	PicoSetModelFileName( model,fileName );
+ 
+ 	/* try loading the materials; we don't handle the result */
+-#if 0
++#if 1
+ 	_obj_mtl_load( model );
+ #endif
+ 
+@@ -830,6 +835,41 @@
+ 				curVertex += max;
+ 			}
+ 		}
++		else if (!_pico_stricmp(p->token,"usemtl"))
++		{
++			picoShader_t *shader;
++			char *name;
++
++			/* get material name */
++			name = _pico_parse( p,0 );
++
++			/* validate material name */
++			if (name == NULL || !strlen(name))
++			{
++				_pico_printf( PICO_ERROR,"Missing material name in OBJ, line %d.",p->curLine);
++			}
++			else
++			{
++				shader = PicoFindShader( model, name, 1 );
++				if (shader == NULL)
++				{
++					_pico_printf( PICO_ERROR,"Undefined material name in OBJ, line %d. Making a default shader.",p->curLine);
++
++					/* create a new pico shader */
++					shader = PicoNewShader( model );
++					if (shader != NULL)
++					{
++						PicoSetShaderName( shader,name );
++						PicoSetShaderMapName( shader,name );
++						PicoSetSurfaceShader( curSurface, shader );
++					}
++				}
++				else
++				{
++					PicoSetSurfaceShader( curSurface, shader );
++				}
++			}
++		}
+ 		/* skip unparsed rest of line and continue */
+ 		_pico_parse_skip_rest( p );
+ 	}

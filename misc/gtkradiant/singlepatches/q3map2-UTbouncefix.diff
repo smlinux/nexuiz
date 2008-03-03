@@ -1,0 +1,20 @@
+Index: tools/quake3/q3map2/shaders.c
+===================================================================
+--- tools/quake3/q3map2/shaders.c	(revision 191)
++++ tools/quake3/q3map2/shaders.c	(working copy)
+@@ -793,8 +793,14 @@
+ 	}
+ 	
+ 	if( VectorLength( si->color ) <= 0.0f )
++	{
+ 		ColorNormalize( color, si->color );
+-	VectorScale( color, (1.0f / count), si->averageColor );
++		VectorScale( color, (1.0f / count), si->averageColor );
++	}
++	else
++	{
++		VectorCopy( si->color, si->averageColor );
++	}
+ }
+ 
+ 
