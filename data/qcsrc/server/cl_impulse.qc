@@ -265,5 +265,5 @@ void ImpulseCommands (void)
 		else if (imp == 106) waypoint_saveall();
 	}
 
-	//TetrisImpulses();
+	//TetrisImpulses(imp);
 }

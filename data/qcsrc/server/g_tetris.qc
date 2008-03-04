@@ -5,8 +5,8 @@ Installation:
 in weapons.qc add TetrisImpulses(); to ImpulseCommands
 
 in progs.src add tetris.qc after subs.qc
-in client.qc add if (TetrisPreFrame()) return; to  PlayerPreThink
-in client.qc add if (TetrisPostFrame()) return; to PlayerPostThink
+in cl_client.qc add if (TetrisPreFrame()) return; to  PlayerPreThink
+in cl_client.qc add if (TetrisPostFrame()) return; to PlayerPostThink
 
 */
 
@@ -667,9 +667,9 @@ Important Linking Into Quake stuff
 */
 
 
-void() TetrisImpulses =
+void(float imp) TetrisImpulses =
 {
-	if (self.impulse == 200)
+	if (imp == 200)
 	{
 		self.tetris_on = 1;
 		ResetTetris();
