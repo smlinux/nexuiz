@@ -34,6 +34,7 @@ case "$version" in
 esac
 
 basepk3=$base/data20070531.pk3
+hotbasepk3=$base/data20080229.pk3
 nexdir=$base/nexuiz
 nexprodir=$base/nexuiz/pro
 dpdir=$base/darkplaces
@@ -102,12 +103,12 @@ buildon()
 
 build()
 {
+	buildon mac.alientrap.org                     nexuiz-osx          fteqcc-osx          /tmp/Darkplaces.build 'CC="gcc -g -arch i386 -arch ppc -isysroot /Developer/SDKs/MacOSX10.4u.sdk -I/Library/Frameworks/SDL.framework/Headers"' strip
+		mv "$tmpdir/nexuiz-osx-agl"     "$tmpdir/Nexuiz.app/Contents/MacOS/nexuiz-osx-agl-bin"
+		mv "$tmpdir/nexuiz-osx-sdl"     "$tmpdir/Nexuiz-SDL.app/Contents/MacOS/nexuiz-osx-sdl-bin"
 	buildon alientrap.org                         nexuiz              fteqcc.exe          /tmp/Darkplaces.build 'DP_MAKE_TARGET=mingw CC="/chroot/debian-etch/usr/bin/i586-mingw32msvc-gcc -g" WINDRES=/chroot/debian-etch/usr/bin/i586-mingw32msvc-windres SDL_CONFIG=/home/divverent/sdl-win32/SDL-1.2.13/bin/sdl-config' /chroot/debian-etch/usr/bin/i586-mingw32msvc-strip
 	buildon alientrap.org                         nexuiz-linux-686    fteqcc-linux-686    /tmp/Darkplaces.build 'CC="gcc -m32 -L/chroot/debian-etch/usr/include -L/chroot/debian-etch/lib -L/chroot/debian-etch/usr/lib -g -Wl,-rpath,/chroot/debian-etch/usr/lib" DP_MODPLUG_STATIC_LIBDIR=/home/divverent/modplug-i386/lib SDL_CONFIG=/home/divverent/sdl-config-debian32' strip
 	buildon alientrap.org                         nexuiz-linux-x86_64 fteqcc-linux-x86_64 /tmp/Darkplaces.build 'CC="gcc -g -Wl,--hash-style=sysv" DP_MODPLUG_STATIC_LIBDIR=/home/divverent/modplug-x86_64/lib' strip
-	buildon div0@nexmacbuild.endoftheinternet.org nexuiz-osx          fteqcc-osx          /tmp/Darkplaces.build 'CC="gcc -g -arch i386 -arch ppc -isysroot /Developer/SDKs/MacOSX10.4u.sdk -I/Library/Frameworks/SDL.framework/Headers"' strip
-		mv "$tmpdir/nexuiz-osx-agl"     "$tmpdir/Nexuiz.app/Contents/MacOS/nexuiz-osx-agl-bin"
-		mv "$tmpdir/nexuiz-osx-sdl"     "$tmpdir/Nexuiz-SDL.app/Contents/MacOS/nexuiz-osx-sdl-bin"
 }
 
 i=
@@ -266,15 +267,21 @@ zip $zipflags -9yr "$zipdir/nexuizsource$date$ext.zip"     Nexuiz/gpl.txt       
 ln -snf nexuizsource$date$ext.zip "$zipdir/nexuizsource-$newest.zip"
 
 $zipdiff -o "Nexuiz/data/datapatch$tag$date.pk3" -f "$basepk3" -t Nexuiz/data/data$tag$date.pk3 -x 'sound/cdtracks/track*.ogg'
+[ -n "$hotbasepk3" ] && $zipdiff -o "Nexuiz/data/datapatch$tag$date""hotfix.pk3" -f "$hotbasepk3" -t Nexuiz/data/data$tag$date.pk3
 mkdir -p gfx
 if unzip "Nexuiz/data/data$tag$date.pk3" gfx/brand.tga; then
 	zip $zipflags -9r "Nexuiz/data/datapatch$tag$date.pk3" gfx/brand.tga
+	[ -n "$hotbasepk3" ] && zip $zipflags -9r "Nexuiz/data/datapatch$tag$date""hotfix.pk3" gfx/brand.tga
 	rm -rf gfx
 fi
 
 rm -f "$zipdir/nexuizpatch$date$ext.zip"
 zip $zipflags -9yr "$zipdir/nexuizpatch$date$ext.zip"      Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/data/datapatch$tag$date.pk3 Nexuiz/pro/*
 ln -snf nexuizpatch$date$ext.zip "$zipdir/nexuizpatch-$newest.zip"
+
+[ -n "$hotbasepk3" ] && rm -f "$zipdir/nexuizhotfix$date$ext.zip"
+[ -n "$hotbasepk3" ] && zip $zipflags -9yr "$zipdir/nexuizhotfix$date$ext.zip"      Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/data/datapatch$tag$date""hotfix.pk3 Nexuiz/pro/*
+[ -n "$hotbasepk3" ] && ln -snf nexuizhotfix$date$ext.zip "$zipdir/nexuizhotfix-$newest.zip"
 
 rm -f "$zipdir/nexuizdocs$date$ext.zip"
 zip $zipflags -9yr "$zipdir/nexuizdocs$date$ext.zip"       Nexuiz/gpl.txt Nexuiz/Docs
