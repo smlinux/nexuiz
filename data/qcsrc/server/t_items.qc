@@ -738,7 +738,7 @@ void item_health_mega (void) {
 }
 
 // support old misnamed entities
-void item_armor1() { item_armor_small(); }
+void item_armor1() { item_armor_small(); }  // FIXME: in Quake this is green armor, in Nexuiz maps it is an armor shard
 void item_armor25() { item_armor_large(); }
 void item_health1() { item_health_small(); }
 void item_health25() { item_health_medium(); }

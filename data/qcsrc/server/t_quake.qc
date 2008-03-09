@@ -6,8 +6,9 @@ void weapon_supernailgun (void) {weapon_hagar();}
 void weapon_supershotgun (void) {weapon_uzi();}
 
 void item_spikes (void) {item_bullets();}
-void item_armor2 (void) {item_armor25();}
-void item_armorInv (void) {item_armor25();}
+//void item_armor1 (void) {item_armor_medium;}  // FIXME: in Quake this is green armor, in Nexuiz maps it is an armor shard
+void item_armor2 (void) {item_armor_large();}
+void item_armorInv (void) {item_armor_large();}
 void item_health (void) {if (self.spawnflags & 2) item_health_mega();else item_health_medium();}
 
 //item_spikes
