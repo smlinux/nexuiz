@@ -163,7 +163,7 @@ h1, h2, h3, h4, h5, h6 {
 <!-- Start SectLevel2 -->
 <h3><a name="How do I install Nexuiz?">How do I install Nexuiz?</a></h3>
 <p class="Body">
-Just unzip the <tt>nexuiz-&lt;version&gt;.zip</tt> file. You can do this with any archive program (like <a class="link" href="http://7zip.org">7zip</a>). It's very important to keep the directory structure while unpacking (in WinZip this option is called &quot;Use folder names&quot;). The directory structure should look like this afterwards:
+Just unzip the <tt>nexuiz-&lt;version&gt;.zip</tt> file.  You can do this with any archive program (like <a class="link" href="http://7zip.org">7zip</a>).  It's very important to keep the directory structure while unpacking (in WinZip this option is called &quot;Use folder names&quot;).  The directory structure should look like this afterwards:
 <div class="block"><pre>
 Nexuiz/
 |-- Docs/
@@ -189,47 +189,47 @@ Nexuiz/
 <!--End Section 2-->
 <h3><a name="When I start Nexuiz all I see is a black screen or a black screen with some checkered squares">When I start Nexuiz all I see is a black screen or a black screen with some checkered squares</a></h3>
 <p class="Body">
-This happens when the engine can't load the data*.pk3 file or has trouble to initialize OpenGL. The reasons could be:
+This happens when the engine can't load the data*.pk3 file or has trouble to initialize OpenGL.  The reasons could be:
 <ol>
 <li> you unpacked the zip file without folder names (see <a class="link" href="#How do I install Nexuiz?">How do I install Nexuiz?</a>)</li>
-<li> on Linux: the current directory is not your Nexuiz/ folder. See <a class="link" href="#How can I place a shortcut to Nexuiz on my Linux desktop?">How can I place a shortcut to Nexuiz on my Linux desktop?</a> on how to fix this</li>
-<li> on Mac: you tried to extract and move the files from a Nexuiz update and it deleted the old files. When using the mac GUI please be sure to move only the files not the folders as that will delete the old files or use the mv console command which will not delete the old files</li>
-<li> the engine could not initialize OpenGL. Please install the latest drivers for your graphic card. You will probably find one for your card there: <a class="link" href="http://intel.com">intel</a> <a class="link" href="http://ati.com">ati</a> <a class="link" href="http://nvidia.com">nvidia</a></li>
+<li> on Linux: the current directory is not your Nexuiz/ folder.  See <a class="link" href="#How can I place a shortcut to Nexuiz on my Linux desktop?">How can I place a shortcut to Nexuiz on my Linux desktop?</a> on how to fix this</li>
+<li> on Mac: you tried to extract and move the files from a Nexuiz update and it deleted the old files.  When using the mac GUI please be sure to move only the files not the folders as that will delete the old files or use the mv console command which will not delete the old files</li>
+<li> the engine could not initialize OpenGL.  Please install the latest drivers for your graphic card.  You will probably find one for your card there: <a class="link" href="http://intel.com">intel</a> <a class="link" href="http://ati.com">ati</a> <a class="link" href="http://nvidia.com">nvidia</a></li>
 <li> your download might be corrupted, please download Nexuiz again</li>
 </ol>
 </p>
 <!--End Section 2-->
 <h3><a name="How can I speed up my frame rate?">How can I speed up my frame rate?</a></h3>
 <p class="Body">
-You can choose predefined performance settings in the <tt>Options / Video</tt> menu.  <tt>Normal</tt> is the default, <tt>Medium</tt> and <tt>Low</tt> run faster while <tt>High</tt>, <tt>Ultra</tt> and <tt>Ultimate</tt> enable more features you might want to test if you have a high end graphic card.  Or you can dis/enable single features.  The greatest performance boost can be achieved by turning off dynamic lights and shadows in the menu <tt>Options / Effects</tt>. Bloom is also quite resource intensive. Other fps boots include disabling <tt>Deluxemapping</tt> and <tt>Coronas</tt>. On older graphics cards or on-board/notebook chips with little video ram you can try to lower the texture quality in the menu <tt>Options / Video</tt>.
-Some graphic cards (mostly ATI or quite old cards) run A LOT faster if you disable the <tt>Vertex Buffer Objects</tt> in the <tt>Options / Video menu</tt>. An other thing that can greatly help on such cards is to disable the <tt>OpenGL 2.0 Shaders</tt>.  Having that option enabled is faster on most cards however thats why both are active by default.
+You can choose predefined performance settings in the <tt>Settings / Video</tt> menu.  <tt>Normal</tt> is the default, <tt>Medium</tt> and <tt>Low</tt> run faster while <tt>High</tt>, <tt>Ultra</tt> and <tt>Ultimate</tt> enable more features you might want to test if you have a high end graphic card.  Or you can dis/enable single features.  The greatest performance boost can be achieved by turning off dynamic lights and shadows in the <tt>Settings / Effects</tt> menu.  Bloom is also quite resource intensive.  Other fps boots include disabling <tt>Deluxemapping</tt> and <tt>Coronas</tt>.  On older graphics cards or on-board/notebook chips with little video ram you can try to lower the texture quality in the <tt>Settings / Video</tt> menu.
+Some graphic cards (mostly ATI or quite old cards) run A LOT faster if you disable the <tt>Vertex Buffer Objects</tt> in the <tt>Settings / Video</tt> menu.  An other thing that can greatly help on such cards is to disable the <tt>OpenGL 2.0 Shaders</tt>.  Having that option enabled is faster on most cards however thats why both are active by default.
 </p>
 <!--End Section 2-->
 <h3><a name="The sound is broken, it crackles and stutters">The sound is broken, it crackles and stutters</a></h3>
 <p class="Body">
-Try run <tt>nexuiz-sdl.exe</tt> instead of <tt>nexuiz.exe</tt> (on Windows). Adding the command line options <tt>-sndspeed 48000</tt> and/or <tt>-sndstereo</tt> can also help on some systems (on Linux, Mac, Windows).
+Try run <tt>nexuiz-sdl.exe</tt> instead of <tt>nexuiz.exe</tt> (on Windows).  Adding the command line options <tt>-sndspeed 48000</tt> and/or <tt>-sndstereo</tt> can also help on some systems (on Linux, Mac, Windows).
 </p>
 <!--End Section 2-->
 <h3><a name="Mouse is too slow and sensitivity is at top (on Mac / Linux)">Mouse is too slow and sensitivity is at top (on Mac / Linux)</a></h3>
 <p class="Body">
-Mac: The default mouse acceleration on Mac is very high and strange.  The Nexuiz defaults work fine with it but some mouse drivers seem to 'correct' the mouse acceleration and conflict with the Nexuiz defaults. Try <tt>apple_mouse_noaccel 0; vid_restart</tt> in the console (<a class="link" href="#How do I open the console?">How do I open the console?</a>)
-Linux: A similar problem can arise on Linux.  Try <tt>vid_dga 0; vid_restart</tt> in the console (<a class="link" href="#How do I open the console?">How do I open the console?</a>)
+Mac: The default mouse acceleration on Mac is very high and strange.  The Nexuiz defaults work fine with it but some mouse drivers seem to 'correct' the mouse acceleration and conflict with the Nexuiz defaults.  Try to disable the option <tt>Turn off OS mouse acceleration</tt> in the <tt>Settings / Input</tt> menu.  Or the same via console: <tt>apple_mouse_noaccel 0; vid_restart</tt> (<a class="link" href="#How do I open the console?">How do I open the console?</a>)
+Linux: A similar problem can arise on Linux.  Its also <tt>Turn off OS mouse acceleration</tt> in the <tt>Settings / Input</tt> menu but the console command is different: <tt>vid_dga 0; vid_restart</tt> (<a class="link" href="#How do I open the console?">How do I open the console?</a>)
 </p>
 <!--End Section 2-->
 <h3><a name="I can't switch to 32 bit color depth (on Windows)">I can't switch to 32 bit color depth (on Windows)</a></h3>
 <p class="Body">
-Check if your desktop color depth is set to 32 bits per pixel. If it's just set to 16, Nexuiz can't switch to 32 bit mode.
+Check if your desktop color depth is set to 32 bits per pixel.  If it's just set to 16, Nexuiz can't switch to 32 bit mode.
 </p>
 <!--End Section 2-->
 <h3><a name="When I join a server or after a map change I see nothing but a black screen, but I can still move and shoot">When I join a server or after a map change I see nothing but a black screen, but I can still move and shoot</a></h3>
 <p class="Body">
-This is probably because you don't have the map that's running on the server. As Nexuiz does now supports map/content download the server might not be be setup to support this and you will have to get the map the old fashioned way. Those servers will have a download URL in their name or welcome message. There is also a <a class="link" href="http://alientrap.org/wiki/pmwiki.php?n=Main.CustomMaps">wiki page</a> dedicated to new maps.
-For Linux users: you need to have libcurl installed, otherwise you won't be able to download any maps. libcurl should be available in any Linux distribution, just search for &quot;libcurl&quot; and install it in your distribution's package manager.
+This is probably because you don't have the map that's running on the server.  As Nexuiz supports map/content download the server might not be be setup (correctly) to support this and you will have to get the map the old fashioned way.  Those servers should have a download URL in their name or welcome message.  There is also a <a class="link" href="http://alientrap.org/wiki/pmwiki.php?n=Main.CustomMaps">wiki page</a> dedicated to new maps.
+For Linux users: you need to have libcurl installed, otherwise you won't be able to download any maps.  libcurl should be available in any Linux distribution, just search for &quot;libcurl&quot; and install it in your distribution's package manager.
 </p>
 <!--End Section 2-->
 <h3><a name="How to report crashes">How to report crashes</a></h3>
 <p class="Body">
-Alientrap wants to ensure everyone has a pleasent time playing Nexuiz, so if you have problems we would like to ask you to report then and thus help solve them.  Especially crash reports can be very helpful.  See below for how to contact Alientrap (<a class="link" href="#Where can i get more help?">Where can i get more help?</a>)
+Alientrap wants to ensure everyone has a pleasent time playing Nexuiz, so if you have problems we would like to ask you to report them and thus help solve them.  Especially crash reports can be very helpful.  See below for how to contact Alientrap (<a class="link" href="#Where can i get more help?">Where can i get more help?</a>)
 </p>
 <p class="Body">
 On Mac: IS THERE A EASY WAY?
@@ -252,22 +252,22 @@ Visit <a class="link" href="http://alientrap.org/forum">the official Nexuiz foru
 <!-- Start SectLevel2 -->
 <h3><a name="How do I install new maps?">How do I install new maps?</a></h3>
 <p class="Body">
-Maps usually ship as *.pk3 file. All you have to do is to copy this file to the <tt>Nexuiz/data/</tt> (on Linux, Mac, Windows) OR <tt>~/.nexuiz/data/</tt> (on Linux, Mac) directory.
+Maps usually ship as *.pk3 file.  All you have to do is to copy this file to the <tt>Nexuiz/data/</tt> (on Linux, Mac, Windows) OR <tt>~/.nexuiz/data/</tt> (on Linux, Mac) directory.
 </p>
 <!--End Section 2-->
 <h3><a name="How can I place a shortcut to Nexuiz on my Linux desktop?">How can I place a shortcut to Nexuiz on my Linux desktop?</a></h3>
 <p class="Body">
-Use the script <tt>nexuiz-linux-sdl.sh</tt> or <tt>nexuiz-linux-glx.sh</tt> instead of the binaries. The scripts will use the correct <tt>working directory</tt>,choose the right version (32 or 64 bit) and also allow you to start a extra X server.
+Use the script <tt>nexuiz-linux-sdl.sh</tt> or <tt>nexuiz-linux-glx.sh</tt> instead of the binaries.  The scripts will use the correct <tt>working directory</tt>,choose the right version (32 or 64 bit) and also allow you to start a extra X server.
 </p>
 <!--End Section 2-->
 <h3><a name="How do I open the console?">How do I open the console?</a></h3>
 <p class="Body">
-Press <tt>[shift]+[escape]</tt>. To close it press <tt>[escape]</tt>
+Press <tt>[shift]+[escape]</tt>.  To close it press <tt>[escape]</tt>.  While playing ` or ^ will also open the console.
 </p>
 <!--End Section 2-->
 <h3><a name="What console commands/variables are there?">What console commands/variables are there?</a></h3>
 <p class="Body">
-You can get a list of variables by entering <tt>cvarlist</tt> on the console (<a class="link" href="#How do I open the console?">How do I open the console?</a>). <tt>cmdlist</tt> will give you a list of available commands. An annotated version of that output can be found at the <a class="link" href="http://alientrap.org/wiki/pmwiki.php?n=Main.ConsoleCommands">Nexuiz wiki</a>.
+You can get a list of variables by entering <tt>cvarlist</tt> on the console (<a class="link" href="#How do I open the console?">How do I open the console?</a>).  <tt>cmdlist</tt> will give you a list of available commands.  An annotated version of that output can be found at the <a class="link" href="http://alientrap.org/wiki/pmwiki.php?n=Main.ConsoleCommands">Nexuiz wiki</a>.
 </p>
 <!--End Section 2-->
 <h3><a name="How can I activate colors in my name?">How can I activate colors in my name?</a></h3>
@@ -291,10 +291,10 @@ Colors can be used in nicknames and chat messages by typing ^ followed by a numb
 <!--End Section 2-->
 <h3><a name="How do i watch/record demos?">How do i watch/record demos?</a></h3>
 <p class="Body">
-You can access your demos in the <tt>Demos</tt> menu. Click on the demo you want to watch and then on <tt>Start</tt> to watch the demo. Or type <tt>ply &lt;name&gt;</tt> in the console (<a class="link" href="#How do I open the console?">How do I open the console?</a>).
-To record a demo yourself open the console and type <tt>rec &lt;name&gt;</tt> before playing. That is before starting a game or connecting to a server. The demo file will be stored in <tt>Nexuiz/data/demos/&lt;name&gt;.dem</tt> (on Windows) or <tt>~/.nexuiz/data/demos/&lt;name&gt;.dem</tt> (on Linux, Mac).
-If you downloaded a demo, copy it to <tt>Nexuiz/data/demos/&lt;name&gt;.dem</tt> (on Linux, Mac, Windows) or <tt>~/.nexuiz/data/demos/&lt;name&gt;.dem</tt> (on Linux, Mac). You might have to create this directory if you have never recorded a demo before.
-You can list all your demo files by typing <tt>dem</tt> on the console. Some useful key bindings for viewing demos are listed <a class="link" href="http://www.alientrap.org/forum/viewtopic.php?p=357#357">here</a>. A simple way to automatically record demos can be found <a class="link" href="http://www.alientrap.org/forum/viewtopic.php?t=90">here</a>
+After the menu redesign in Nexuiz 2.4 there is no demo menu anymore for the time being.  To watch a demo type <tt>ply &lt;demos/name&gt;</tt> in the console (<a class="link" href="#How do I open the console?">How do I open the console?</a>).
+To automaticly record a demo each time you play enable the option <tt>Demo recording</tt> in the <tt>Settings / Misc</tt> menu.  Of if you just want to record some matches open the console and type <tt>rec &lt;demos/name&gt;</tt> before playing.  That is before starting a game or connecting to a server.  The demo file will then be stored in <tt>Nexuiz/data/demos/&lt;name&gt;.dem</tt> (on Windows) or <tt>~/.nexuiz/data/demos/&lt;name&gt;.dem</tt> (on Linux, Mac).
+If you downloaded a demo, copy it to <tt>Nexuiz/data/demos/&lt;name&gt;.dem</tt> (on Linux, Mac, Windows) or <tt>~/.nexuiz/data/demos/&lt;name&gt;.dem</tt> (on Linux, Mac).  You might have to create this directory if you have never recorded a demo before.
+You can list all your demo files by typing <tt>dem</tt> on the console.  Some useful key bindings for viewing demos are listed <a class="link" href="http://www.alientrap.org/forum/viewtopic.php?p=357#357">here</a>.  A simple way to automatically record demos can be found <a class="link" href="http://www.alientrap.org/forum/viewtopic.php?t=90">here</a>
 </p>
 <!--End Section 2-->
 <!-- End SectLevel2 -->
@@ -303,24 +303,24 @@ You can list all your demo files by typing <tt>dem</tt> on the console. Some use
 <!-- Start SectLevel2 -->
 <h3><a name="How do I start a server?">How do I start a server?</a></h3>
 <p class="Body">
-Use the <tt>Create</tt> menu to start a <tt>listen server</tt>. You will always have to play in a <tt>listen server</tt>.
+Use the <tt>Multiplayer / Create</tt> menu to start a <tt>listen server</tt>.  You will always have to play yourself in a <tt>listen server</tt>.
 If you want to create a server without being forced to play yourself please take a look at the file <tt>readme.txt</tt> in the <tt>Docs/server/</tt> directory where the <tt>dedicated server</tt> is explained.
 </p>
 <!--End Section 2-->
 <h3><a name="Which ports do I have to open in firewall/forward from my router to run a server?">Which ports do I have to open in firewall/forward from my router to run a server?</a></h3>
 <p class="Body">
-The default port is 26000 UDP. You can change that by starting Nexuiz with the parameter <tt>-port &lt;port&gt;</tt> or having a line <tt>port &lt;port&gt;</tt> in the server config file.
-If you follow the tutorial mentioned above you do not need this command line argument as it will be done in the config file created for the server. To add the command line argument on Windows, create a new shortcut to <tt>nexuiz.exe</tt> or <tt>nexuiz-dedicated.exe</tt> and right click on it. Select properties and <tt>-port &lt;port&gt;</tt> in the &quot;Target:&quot; line. Be sure that the &quot;Start in:&quot; line contains the full path to your Nexuiz folder and click &quot;OK&quot;. The parameter will be used if you start Nexuiz via that new shortcut.
+The default port is 26000 UDP.  You can change that in the <tt>Multiplayer / Create</tt> menu or by starting Nexuiz with the parameter <tt>-port &lt;port&gt;</tt> or having a line <tt>port &lt;port&gt;</tt> in the server config file.
+If you follow the tutorial mentioned above you do not need this command line argument as it will be done in the config file created for the server.  To add the command line argument on Windows, create a new shortcut to <tt>nexuiz.exe</tt> or <tt>nexuiz-dedicated.exe</tt> and right click on it.  Select properties and <tt>-port &lt;port&gt;</tt> in the &quot;Target:&quot; line.  Be sure that the &quot;Start in:&quot; line contains the full path to your Nexuiz folder and click &quot;OK&quot;.  The parameter will be used if you start Nexuiz via that new shortcut.
 </p>
 <!--End Section 2-->
 <h3><a name="Is there some kind of rcon?">Is there some kind of rcon?</a></h3>
 <p class="Body">
-Yes starting with Nexuiz 2.0 there is rcon (QuakeWorld compatible). To use it you must enter <tt>rcon_password &lt;password&gt;</tt> in the server console or server config file. The Nexuiz client has to set the same password in the same fashion. You can then issue commands with <tt>rcon &lt;command&gt;</tt> if you are connected to the server or have set <tt>rcon_address &lt;ip/hostname&gt;</tt> or <tt>rcon_address &lt;ip/hostname&gt;:&lt;port&gt;</tt> to point to the server. There are also external rcon tools but make sure you use a QW compatible rcon tool.
+Yes starting with Nexuiz 2.0 there is rcon (QuakeWorld compatible).  To use it you must enter <tt>rcon_password &lt;password&gt;</tt> in the server console or server config file.  The Nexuiz client has to set the same password in the same fashion.  You can then issue commands with <tt>rcon &lt;command&gt;</tt> if you are connected to the server or will have to set <tt>rcon_address &lt;ip/hostname&gt;</tt> or <tt>rcon_address &lt;ip/hostname&gt;:&lt;port&gt;</tt> to point to the server.  There are also external rcon tools but make sure you use a QW compatible rcon tool.
 </p>
 <!--End Section 2-->
 <h3><a name="How can i kick people who are using special characters in their names?">How can i kick people who are using special characters in their names?</a></h3>
 <p class="Body">
-Enter <tt>status</tt> at the server console. You will see a list of all players. In front of their names you will see a number (the player id). You can kick the player you don't like with <tt>kick # &lt;player id&gt; &lt;reason&gt;</tt> (notice the space after #).
+Enter <tt>status</tt> at the server console.  You will see a list of all players.  In front of their names you will see a number (the player id).  You can kick the player you don't like with <tt>kick # &lt;player id&gt; &lt;reason&gt;</tt> (notice the space after #).
 </p>
 <!--End Section 2-->
 <!-- End SectLevel2 -->
@@ -338,11 +338,11 @@ There are also <a class="link" href="http://www.alientrap.org/forum/viewtopic.ph
 <strong>Engine:</strong> instructions are available at <a class="link" href="http://icculus.org/twilight/darkplaces/download.html">http://icculus.org/twilight/darkplaces/download.html</a> look for <tt>Accessing the SVN server</tt> (you will need a <a class="link" href="http://subversion.tigris.org/project_packages.html">svn client</a>, beta builds are available <a class="link" href="http://icculus.org/twilight/darkplaces/files/">here</a>)
 </p>
 <p class="Body">
-<strong>Game data:</strong> to check out the Nexuiz svn, you'll need a <a class="link" href="http://subversion.tigris.org/project_packages.html">svn client</a>. To check out the repository with a command line svn client, do
+<strong>Game data:</strong> to check out the Nexuiz svn, you'll need a <a class="link" href="http://subversion.tigris.org/project_packages.html">svn client</a>.  To check out the repository with a command line svn client, do
 <div class="block"><pre>
 svn co svn://svn.icculus.org/nexuiz/trunk/
 </pre></div>
-To compile the game code you need <a class="link" href="http://sourceforge.net/project/showfiles.php?group_id=116842&amp;package_id=129507">fteqcc</a>. Just download it and run it twice, once in <tt>data/qcsrc/menu</tt> and once in <tt>data/qcsrc/server</tt>.
+To compile the game code you need <a class="link" href="http://sourceforge.net/project/showfiles.php?group_id=116842&amp;package_id=129507">fteqcc</a>.  Just download it and run it twice, once in <tt>data/qcsrc/menu</tt> and once in <tt>data/qcsrc/server</tt>.
 </p>
 <!--End Section 2-->
 <!-- End SectLevel2 -->
