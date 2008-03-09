@@ -40,7 +40,7 @@ void spawnfunc_item_armor_shard()    { item_armor_small();   }
 void spawnfunc_item_enviro()         { item_armor_medium();  }
 //void spawnfunc_item_flight()       /* not supported */
 //void spawnfunc_item_haste()        /* not supported */
-void spawnfunc_item_health()         { item_health_medium(); }
+//void spawnfunc_item_health()       /* handled in t_quake.qc */
 void spawnfunc_item_health_large()   { item_health_large();  }
 void spawnfunc_item_health_small()   { item_health_small();  }
 void spawnfunc_item_health_mega()    { item_health_mega();   }
