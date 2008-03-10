@@ -226,20 +226,54 @@ void PointSound (vector org, string snd, float vol, float attn)
 
 /*
 ==================
-traceline_hitcorpse
+traceline_antilag
 
 A version of traceline that must be used by SOLID_SLIDEBOX things that want to hit SOLID_CORPSE things with a trace attack
+Additionally it moves players back into the past before the trace and restores them afterward.
 ==================
 */
-void traceline_hitcorpse (entity source, vector v1, vector v2, float nomonst, entity forent)
+void traceline_antilag (entity source, vector v1, vector v2, float nomonst, entity forent, float lag)
 {
-	float	oldsolid;
+	local entity player;
+	local float oldsolid;
 
+	// check whether antilagged traces are enabled
+	if (lag < 0.001)
+		lag = 0;
+	if (lag)
+	if (cvar("g_antilag") != 2)
+		lag = 0;
+
+	// change shooter to SOLID_BBOX so the shot can hit corpses
 	oldsolid = source.solid;
 	source.solid = SOLID_BBOX;
 
+	if (lag)
+	{
+		// take players back into the past
+		player = player_list;
+		while (player)
+		{
+			antilag_takeback(player, time - lag);
+			player = player.nextplayer;
+		}
+	}
+
+	// do the trace
 	traceline (v1, v2, nomonst, forent);
 
+	// restore players to current positions
+	if (lag)
+	{
+		player = player_list;
+		while (player)
+		{
+			antilag_restore(player);
+			player = player.nextplayer;
+		}
+	}
+
+	// restore shooter solid type
 	source.solid = oldsolid;
 }
 

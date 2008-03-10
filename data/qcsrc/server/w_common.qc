@@ -39,7 +39,7 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float bforce, f
 	// note down which entities were hit so we can damage them later
 	while (1)
 	{
-		traceline_hitcorpse (self, start, end, FALSE, self);
+		traceline_antilag (self, start, end, FALSE, self, self.ping);
 
 		// if it is world we can't hurt it so stop now
 		if (trace_ent == world || trace_fraction == 1)
@@ -105,10 +105,9 @@ void fireBullet (vector start, vector dir, float spread, float damage, float for
 	vector  end;
 	local entity e;
 
-	// use traceline_hitcorpse to make sure it can hit gibs and corpses too
 	dir = dir + randomvec() * spread;
 	end = start + dir * MAX_SHOT_DISTANCE;
-	traceline_hitcorpse (self, start, end, FALSE, self);
+	traceline_antilag (self, start, end, FALSE, self, self.ping);
 
 	if (tracer)
 	{

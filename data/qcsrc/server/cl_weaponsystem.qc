@@ -26,7 +26,7 @@ void(entity ent, vector vecs, float antilag, float recoil, string snd) W_SetupSh
 {
 	float nudge = 1; // added to traceline target and subtracted from result
 	local vector trueaimpoint;
-	traceline_hitcorpse(self, self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * MAX_SHOT_DISTANCE, MOVE_NOMONSTERS, self);
+	traceline(self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * MAX_SHOT_DISTANCE, MOVE_NOMONSTERS, self);
 	trueaimpoint = trace_endpos;
 
 	if (cvar("g_shootfromeye"))
@@ -36,7 +36,7 @@ void(entity ent, vector vecs, float antilag, float recoil, string snd) W_SetupSh
 	else
 		w_shotorg = ent.origin + ent.view_ofs + v_right * vecs_y + v_up * vecs_z;
 	// now move the shotorg forward as much as requested if possible
-	traceline_hitcorpse(self, w_shotorg, w_shotorg + v_forward * (vecs_x + nudge), MOVE_NORMAL, self);
+	traceline(w_shotorg, w_shotorg + v_forward * (vecs_x + nudge), MOVE_NORMAL, self);
 	w_shotorg = trace_endpos - v_forward * nudge;
 	// calculate the shotdir from the chosen shotorg
 	w_shotdir = normalize(trueaimpoint - w_shotorg);
@@ -55,15 +55,15 @@ void(entity ent, vector vecs, float antilag, float recoil, string snd) W_SetupSh
 	if (self.cursor_trace_ent != self)         // just to make sure
 	if (self.cursor_trace_ent.takedamage)      // and that person is killable
 	if (self.cursor_trace_ent.classname == "player") // and actually a player
-	if (cvar("g_antilag"))
+	if (cvar("g_antilag") == 1)
 	{
 		// verify that the shot would miss without antilag
 		// (avoids an issue where guns would always shoot at their origin)
-		traceline_hitcorpse(self, w_shotorg, w_shotorg + w_shotdir * MAX_SHOT_DISTANCE, MOVE_NORMAL, self);
+		traceline(w_shotorg, w_shotorg + w_shotdir * MAX_SHOT_DISTANCE, MOVE_NORMAL, self);
 		if (!trace_ent.takedamage)
 		{
 			// verify that the shot would hit if altered
-			traceline_hitcorpse(self, w_shotorg, self.cursor_trace_ent.origin, MOVE_NORMAL, self);
+			traceline(w_shotorg, self.cursor_trace_ent.origin, MOVE_NORMAL, self);
 			if (trace_ent == self.cursor_trace_ent)
 			{
 				// verify that the shot would hit in the past
@@ -72,7 +72,7 @@ void(entity ent, vector vecs, float antilag, float recoil, string snd) W_SetupSh
 				else
 					antilag_takeback(self.cursor_trace_ent, time - self.ping * 0.001);
 
-				traceline_hitcorpse(self, self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * MAX_SHOT_DISTANCE, MOVE_NORMAL, self);
+				traceline(self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * MAX_SHOT_DISTANCE, MOVE_NORMAL, self);
 				antilag_restore(self.cursor_trace_ent);
 
 				if(trace_ent == self.cursor_trace_ent)
