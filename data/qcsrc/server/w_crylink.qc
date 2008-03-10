@@ -126,7 +126,7 @@ void W_Crylink_Attack3 (void)
 		self.ammo_cells = self.ammo_cells - cvar("g_balance_crylink_primary_ammo");
 	W_SetupShot (self, '25 8 -8', TRUE, 0, "weapons/crylink_fire.wav");
 
-	traceline_antilag(self, w_shotorg, w_shotorg + w_shotdir * 1000, FALSE, self, self.ping);
+	traceline_antilag(self, w_shotorg, w_shotorg + w_shotdir * 1000, FALSE, self, self.ping * 0.001);
 
 	pointparticles(particleeffectnum("lightning_muzzleflash", w_shotorg, w_shotdir * 1000, 1);
 	pointparticles(particleeffectnum("lightning_impact", trace_endpos, trace_plane_normal * 1000, 1);
