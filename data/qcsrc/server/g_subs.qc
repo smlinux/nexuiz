@@ -240,6 +240,8 @@ void traceline_antilag (entity source, vector v1, vector v2, float nomonst, enti
 	// check whether antilagged traces are enabled
 	if (lag < 0.001)
 		lag = 0;
+	if (clienttype(forent) != CLIENTTYPE_REAL)
+		lag = 0; // only antilag for clients
 	if (lag)
 	if (cvar("g_antilag") != 2)
 		lag = 0;
