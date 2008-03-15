@@ -107,7 +107,7 @@ build()
 	buildon mac.alientrap.org                     nexuiz-osx          fteqcc-osx          /tmp/Darkplaces.build 'CC="gcc -g -arch i386 -arch ppc -isysroot /Developer/SDKs/MacOSX10.4u.sdk"' strip
 		mv "$tmpdir/nexuiz-osx-agl"     "$tmpdir/Nexuiz.app/Contents/MacOS/nexuiz-osx-agl-bin"
 		mv "$tmpdir/nexuiz-osx-sdl"     "$tmpdir/Nexuiz-SDL.app/Contents/MacOS/nexuiz-osx-sdl-bin"
-	buildon alientrap.org                         nexuiz-linux-686    fteqcc-linux-686    /tmp/Darkplaces.build 'CC="gcc -m32 -L/chroot/debian-etch/usr/include -L/chroot/debian-etch/lib -L/chroot/debian-etch/usr/lib -g -Wl,-rpath,/chroot/debian-etch/usr/lib" DP_MODPLUG_STATIC_LIBDIR=/home/divverent/modplug-i386/lib SDL_CONFIG=/home/divverent/sdl-config-debian32' strip
+	buildon eos.franken.de                        nexuiz-linux-686    fteqcc-linux-686    /tmp/Darkplaces.build 'CC="gcc -g DP_MODPLUG_STATIC_LIBDIR=/home/divverent/modplug-i386/lib' strip
 	buildon alientrap.org                         nexuiz-linux-x86_64 fteqcc-linux-x86_64 /tmp/Darkplaces.build 'CC="gcc -g -Wl,--hash-style=sysv" DP_MODPLUG_STATIC_LIBDIR=/home/divverent/modplug-x86_64/lib' strip
 }
 
