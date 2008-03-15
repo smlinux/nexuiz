@@ -1683,3 +1683,6 @@ float(float caseinsensitive, string s, ...) crc16 = #494;
 //URI::Escape's functionality
 string(string in) uri_escape = #510;
 string(string in) uri_unescape = #511;
+
+void(float index, float type, ...) addstat = #232;
+float(entity ent) num_for_edict = #512;

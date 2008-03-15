@@ -1,14 +1,3 @@
-float GAME_DEATHMATCH		= 1;
-float GAME_TEAM_DEATHMATCH	= 2;
-float GAME_DOMINATION		= 3;
-float GAME_CTF			= 4;
-float GAME_RUNEMATCH		= 5;
-float GAME_LMS			= 6;
-float GAME_ARENA		= 7;
-float GAME_KEYHUNT		= 8;
-float GAME_ASSAULT		= 9;
-float GAME_ONSLAUGHT	= 10;
-
 // client counts for each team
 float c1, c2, c3, c4;
 // # of bots on those teams
@@ -122,6 +111,7 @@ void ActivateTeamplay()
 void InitGameplayMode()
 {
 	float fraglimit_override, timelimit_override;
+	entity pl;
 
 	VoteReset();
 
@@ -318,6 +308,11 @@ void InitGameplayMode()
 			cvar_set("fraglimit", ftos(fraglimit_override));
 		if(timelimit_override >= 0)
 			cvar_set("timelimit", ftos(timelimit_override));
+	}
+
+	FOR_EACH_REALCLIENT(pl)
+	{
+		stuffcmd(pl, strcat("\nset gametype ", ftos(game), ";"));
 	}
 
 	if (game == GAME_DOMINATION)//cvar("g_domination"))

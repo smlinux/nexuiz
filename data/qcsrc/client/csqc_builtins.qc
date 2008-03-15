@@ -125,8 +125,6 @@ vector ()								getmousepos = #344;
 
 string (string s) 							uncolorstring = #170;
 
-float ()								playernum = #354;
-
 void (vector org, vector forward, vector right, vector up)		setlistener = #351;
 
 float (vector start, vector end, float ignore, float csqcents)		selecttraceline = #355;
@@ -135,7 +133,10 @@ float ()								isserver = #350;
 
 void (float f)								setwantsmousemove = #343;
 string (float key)							getkeybind = #342;
+//string (float f)							chr = #78;
 string (float f)							chr = #78;
+float(string str, float ofs)						str2chr = #222;
+string(float c, ...)							chr2str = #223;
 
 vector (vector org)							getlight = #92;
 
@@ -247,3 +248,12 @@ string(string s) strtoupper = #481; // returns the passed in string in pure uppe
 float(string s) strlennocol = #476;
 
 void(vector origin, string sample, float volume, float attenuation) pointsound = #483;
+
+// added by blub
+
+string(string key)					serverkey = #354;
+float(string s1, string s2)				strcasecmp = #229;
+float(string s1, string s2, float len)			strncasecmp = #230;
+float(string str, string sub, float startoffs)		strstrofs = #221;
+//float(string str, string sub) 	    		strstrofs = #221;
+entity(float num)   	   				edict_num = #459;

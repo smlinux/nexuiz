@@ -3,6 +3,7 @@
 sys.qh
 builtins.qh
 constants.qh
+../common/constants.qh
 defs.qh		// Should rename this, it has fields and globals
 
 extensions.qh

@@ -956,6 +956,8 @@ void ClientConnect (void)
 
 	bot_relinkplayerlist();
 
+	stuffcmd(self, strcat("\nset gametype ", ftos(game), ";"));
+
 	self.jointime = time;
 }
 
