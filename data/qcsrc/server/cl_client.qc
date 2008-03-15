@@ -942,6 +942,8 @@ void ClientConnect (void)
 	else
 		stuffcmd(self, "set teamplay 0\n");
 
+	stuffcmd(self, strcat("set gametype ", ftos(game), "\n"));
+
 	if(g_lms)
 	{
 		self.frags = LMS_NewPlayerLives();

@@ -111,7 +111,6 @@ void ActivateTeamplay()
 void InitGameplayMode()
 {
 	float fraglimit_override, timelimit_override;
-	entity pl;
 
 	VoteReset();
 
@@ -308,11 +307,6 @@ void InitGameplayMode()
 			cvar_set("fraglimit", ftos(fraglimit_override));
 		if(timelimit_override >= 0)
 			cvar_set("timelimit", ftos(timelimit_override));
-	}
-
-	FOR_EACH_REALCLIENT(pl)
-	{
-		stuffcmd(pl, strcat("\nset gametype ", ftos(game), ";"));
 	}
 
 	if (game == GAME_DOMINATION)//cvar("g_domination"))
