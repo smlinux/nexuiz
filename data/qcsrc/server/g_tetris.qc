@@ -726,20 +726,14 @@ float() TetrisPostFrame =
 	if (self.origin != self.tet_org)
 	{
 		self.origin = self.tet_org;
-		makevectors(self.v_angle);
-		norm = self.velocity*v_forward;
-		if(norm < -0.1)
+		if(self.movement_x < 0)
 			keysa |= TETKEY_DOWN;
-		else if(norm > 0.1)
+		else if(self.movement_x > 0)
 			keysa |= TETKEY_UP;
-
-		norm = self.velocity*v_right;
-		if(norm < -0.1)
+		if(self.movement_y < 0)
 			keysa |= TETKEY_LEFT;
-		else if(norm > 0.1)
+		else if(self.movement_y > 0)
 			keysa |= TETKEY_RIGHT;
-
-		self.velocity_x = self.velocity_y = self.velocity_z = 0;
 	}
 	if (self.button0)
 		keysa = keysa | TETKEY_ROTRIGHT;
