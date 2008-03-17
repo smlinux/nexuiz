@@ -3,6 +3,8 @@
 =By Dan Hale, aka Wazat=
 ========================
 
+PLEASE NOTE THAT SINCE THE INTEGRATION OF 'GAME MODE PATCH' THE MAP AND MENU SYSTEM WAS REWRITTEN AND THUS THE INFO REGARDING BOTH IS OUTDATED!
+
 This patch enables game modes like Capture the Flag and Domination, and adds more controls for all game modes.
 
 See Cvars.txt and mapping.txt in /data/ for more info.
@@ -244,7 +246,7 @@ Uber special thanks to Black for his awesome idea on how to do maplists and game
 Special thanks to Randy, who provided the awesome team symbols for Domination & CTF.
 
 Thanks to people who beta tested, found bugs, and/or made suggestions:
-Kaz, Lardarse, stahl (who helped me weed out the dedicated server bugs)
+Kaz, Lardarse, esteel (who helped me weed out the dedicated server bugs)
 Probably others I've forgotten  :(
 
 

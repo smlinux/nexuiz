@@ -11,10 +11,11 @@ cvars for further tuning:
    cl_curl_maxdownloads         maximum number of downloads at once (default: 1)
    cl_curl_maxspeed             maximum total speed in KiB/s (default: 100)
 
-Downloaded packages end up in the "dlcache" subdirectory of your data
-directory and are used till you exit Nexuiz. If you want to play them
-localy or use them to setup a server of your own you can "accept" the
-packages by moving it one level up - right next to your config.cfg.
+Downloaded packages end up in |Nexuiz/data/dlcache/| or
+|~/.nexuiz/data/dlcache/| and are only used till you exit Nexuiz.
+ If you want to play them localy or use them to setup a server of your
+own you can "accept" the packages by moving it one level up - right
+next to your config.cfg.
 
 You should regularily clean up your cache to save space and make the maps
 you really want available from the menu.

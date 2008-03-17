@@ -225,7 +225,7 @@ float alreadychangedlevel;
 .float welcomemessage_time;
 .float version;
 
-// stahl's voting
+// esteel's voting
 float votecalled;
 string votecalledvote;
 string votecalledvote_display;
