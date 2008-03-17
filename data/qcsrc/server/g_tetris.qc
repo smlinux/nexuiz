@@ -2,9 +2,9 @@
 
 Installation:
 
-in weapons.qc add TetrisImpulses(); to ImpulseCommands
+in cl_impulse.qc add TetrisImpulses(); to ImpulseCommands
 
-in progs.src add tetris.qc after subs.qc
+in progs.src add g_tetris.qc after g_subs.qc
 in cl_client.qc add if (TetrisPreFrame()) return; to  PlayerPreThink
 in cl_client.qc add if (TetrisPostFrame()) return; to PlayerPostThink
 
@@ -724,7 +724,8 @@ float() TetrisPostFrame =
 	{
 		mov = vectoangles(self.origin - self.tet_org);
 		self.origin = self.tet_org;
-
+		self.velocity_x = self.velocity_y = self.velocity_z = 0;
+		
 		norm = angcompa(self.v_angle_y, mov_y);
 
 		if (norm > -80 && norm < 80)
