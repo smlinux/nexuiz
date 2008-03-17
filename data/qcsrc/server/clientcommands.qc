@@ -829,8 +829,8 @@ void ReadyCount()
 
 	bprint("^1Server is restarting...\n");
 
-	// no arena, assault & onslaught support yet...
-	if(g_arena | g_assault | g_onslaught | gameover | intermission_running)
+	// no arena, assault support yet...
+	if(g_arena | g_assault | gameover | intermission_running)
 		localcmd("restart\n");
 
 	restart_countdown = time + RESTART_COUNTDOWN;

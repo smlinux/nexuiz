@@ -548,6 +548,7 @@ void() onslaught_generator =
 	precache_sound("sound/onslaught/generator_underattack.wav");
 	if (!self.team)
 		objerror("team must be set");
+	self.team_saved = self.team;
 	self.colormap = 1024 + (self.team - 1) * 17;
 	self.solid = SOLID_BSP;
 	self.movetype = MOVETYPE_NONE;
@@ -577,6 +578,20 @@ void() onslaught_generator =
 	WaypointSprite_SpawnFixed(string_null, e.origin + '0 0 1' * e.maxs_z, self, sprite);
 	self.sprite.waypointsprite_for_player = onslaught_generator_waypointsprite_for_player;
 };
+
+void() onslaught_generator_reset =
+{
+	self.team = self.team_saved;
+	self.lasthealth = self.max_health = self.health = cvar("g_onslaught_gen_health");
+	self.takedamage = DAMAGE_AIM;
+	self.bot_attack = TRUE;
+	self.iscaptured = TRUE;
+	self.islinked = TRUE;
+	self.isshielded = TRUE;
+	self.enemy.solid = SOLID_NOT;
+	self.think = onslaught_generator_delayed;
+	self.nextthink = time + 0.2;
+}
 
 void(entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force) onslaught_controlpoint_icon_damage =
 {
@@ -762,6 +777,27 @@ void() onslaught_controlpoint =
 	WaypointSprite_SpawnFixed(string_null, e.origin + '0 0 1' * e.maxs_z, self, sprite);
 	self.sprite.waypointsprite_for_player = onslaught_controlpoint_waypointsprite_for_player;
 };
+
+void() onslaught_controlpoint_reset =
+{
+	if(self.goalentity && self.goalentity != world)
+		remove(self.goalentity);
+	self.goalentity = world;
+	self.team = 0;
+	self.colormap = 1024;
+	self.iscaptured = FALSE;
+	self.islinked = FALSE;
+	self.isshielded = TRUE;
+	self.enemy.solid = SOLID_NOT;
+	self.enemy.colormap = self.colormap;
+	self.think = self.enemy.think = SUB_Null;
+	self.nextthink = 0; // don't like SUB_Null :P
+	
+	onslaught_updatelinks();
+
+	activator = self;
+	SUB_UseTargets(); // to reset the structures, playerspawns etc.
+}
 
 void() onslaught_link_delayed =
 {

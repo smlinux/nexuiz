@@ -16,6 +16,8 @@ void(entity e) DropFlag;
 void(entity e) ReturnFlag;
 void(entity e) removedecor;
 void dom_controlpoint_setup();
+void onslaught_generator_reset();
+void onslaught_controlpoint_reset();
 
 void reset_map()
 {
@@ -29,25 +31,7 @@ void reset_map()
 	self = nextent(world);
 	while(self)
 	{
-		if(self.flags & FL_CLIENT)				// reset all players
-		{
-			if(time < restart_countdown)
-			{
-				self.frags = (g_lms)?LMS_NewPlayerLives():0;
-				self.deaths = 0;
-				self.killcount = 0;
-				self.classname = "player";
-				PutClientInServer();
-			}
-			else if(g_arena)
-			{
-				if(self.spawned)
-					PutClientInServer();
-				else
-					PutObserverInServer();
-			}
-		}
-		else if(self.classname == STR_ITEM_KH_KEY)
+		if(self.classname == STR_ITEM_KH_KEY)
 		{
 			kh_Key_AssignTo(self, world);
 			//if(self.owner)
@@ -81,10 +65,6 @@ void reset_map()
 		{
 			dom_controlpoint_setup();
 		}
-		else if(self.classname == "info_player_deathmatch")
-		{
-			self.team = self.team_saved; // reset spawns to their original state too!
-		}
 		else if(self.flags & FL_ITEM)			// reset items
 		{
 			self.model = self.mdl;
@@ -103,8 +83,44 @@ void reset_map()
 			removedecor(self);
 		}
 		// TODO properly reset Onslaught
+		else if(self.classname == "onslaught_generator")
+		{
+			onslaught_generator_reset();
+		}
+		else if(self.classname == "onslaught_controlpoint")
+		{
+			onslaught_controlpoint_reset();
+		}
 		// TODO properly reset Assault
+		// General teambased game modes
+		else if(self.classname == "info_player_deathmatch")
+		{
+			self.team = self.team_saved;
+		}
 		self = nextent(self);
+	}
+
+	// Moving the player reset code here since the player-reset depends
+	// on spawnpoint entities which have to be reset first --blub
+	FOR_EACH_CLIENT(self) {
+		if(self.flags & FL_CLIENT)				// reset all players
+		{
+			if(time < restart_countdown)
+			{
+				self.frags = (g_lms)?LMS_NewPlayerLives():0;
+				self.deaths = 0;
+				self.killcount = 0;
+				self.classname = "player";
+				PutClientInServer();
+			}
+			else if(g_arena)
+			{
+				if(self.spawned)
+					PutClientInServer();
+				else
+					PutObserverInServer();
+			}
+		}
 	}
 
 	if(g_keyhunt)
