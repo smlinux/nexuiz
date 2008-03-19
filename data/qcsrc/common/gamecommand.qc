@@ -375,7 +375,7 @@ float GameCommand_Generic(string command)
 					i = stof(db_get(rpn_db, "stack.pos"));
 					if(!j)
 					{
-						rpn_error = true;
+						rpn_error = TRUE;
 						print("rpn: empty database\n");
 					} else {
 						--j;
@@ -414,7 +414,7 @@ float GameCommand_Generic(string command)
 						if(i < 0 || i >= j)
 						{
 							print("rpn: database cursor out of bounds\n");
-							rpn_error = true;
+							rpn_error = TRUE;
 						}
 						if(!rpn_error)
 						{
@@ -426,7 +426,7 @@ float GameCommand_Generic(string command)
 					j = stof(db_get(rpn_db, "stack.pointer"));
 					if(!j)
 					{
-						rpn_error = true;
+						rpn_error = TRUE;
 						print("rpn: empty database, cannot move cursor\n");
 					}
 					if(!rpn_error)
@@ -442,7 +442,7 @@ float GameCommand_Generic(string command)
 						if(i < 0 || i >= j)
 						{
 							print("rpn: database cursor destination out of bounds\n");
-							rpn_error = true;
+							rpn_error = TRUE;
 						}
 						if(!rpn_error)
 						{
