@@ -1,4 +1,5 @@
-#define MAX_RPN_STACK 8
+#define MAX_RPN_STACK 16
+float rpn_db;
 float rpn_error;
 float rpn_sp;
 string rpn_stack[MAX_RPN_STACK];
@@ -60,12 +61,18 @@ float GameCommand_Generic(string command)
 		print("    /cvarname x def ------------------->     : writes to a cvar\n");
 		print("    f f add|sub|mul|div|mod|max|min ---> f   : adds/... two numbers\n");
 		print("    f f eq|ne|gt|ge|lt|le -------------> f   : compares two numbers\n");
-		print("    f neg|abs|sgn|rand ----------------> f   : negates/... a number\n");
+		print("    f neg|abs|sgn|rand|floor|ceil------> f   : negates/... a number\n");
 		print("    f f f bound -----------------------> f   : bounds the middle number\n");
 		print("    f1 f2 b when ----------------------> f   : f1 if b, f2 otherwise\n");
 		print("    s s union|intersection|difference -> s   : set operations\n");
 		print("    s shuffle -------------------------> s   : randomly arrange elements\n");
-		print("    Set operations operate on 'such''strings' like g_maplist.\n");
+		print("    x dbpush -------------------------->     : pushes the top onto the database\n");
+		print("    dbpop|dbget -----------------------> x   : removes/reads DB's top\n");
+		print("    dblen|dbat ------------------------> f   : gets the DB's size/cursor pos\n");
+		print("    x dbins --------------------------->     : moves the top into the DB\n");
+		print("    dbext|dbread ----------------------> x   : extract/get from the DB's cursor\n");
+		print("    f dbmov|dbgoto -------------------->     : move or set the DB's cursor\n");
+		print("    Set operations operate on 'such''strings'.\n");
 		print("    Unknown tokens insert their cvar value.\n");
 		print("  maplist add map\n");
 		print("  maplist remove map\n");
@@ -163,6 +170,12 @@ float GameCommand_Generic(string command)
 	}
 	else if(argv(0) == "rpn")
 	{
+		if(!rpn_db)
+		{
+			rpn_db = db_create();
+			db_put(rpn_db, "stack.pointer", "0");
+			db_put(rpn_db, "stack.pos", "-1");
+		}
 		if(argc >= 2)
 		{
 			float rpnpos;
@@ -185,8 +198,27 @@ float GameCommand_Generic(string command)
 					rpn_push(rpncmd);
 				} else if(f >= 2 && substring(rpncmd, 0, 1) == "/") {
 					rpn_push(substring(rpncmd, 1, strlen(rpncmd) - 1));
+				} else if(rpncmd == "clear") {
+					rpn_sp = 0;
 				} else if(rpncmd == "def" || rpncmd == "=") {
 					s = rpn_pop();
+					s2 = rpn_pop();
+#ifdef MENUQC
+					registercvar(s2, "", 0);
+#else
+					registercvar(s2, "");
+#endif
+					if(!rpn_error) // don't change cvars if a stack error had happened!
+						cvar_set(s2, s);
+				} else if(rpncmd == "defs" || rpncmd == "@") {
+					s = "";
+					i = rpn_popf();
+					j = (i == 0);
+					while(rpn_sp > 1 && (j || i > 0))
+					{
+						s = strcat("/", rpn_pop(), " ", s);
+						--i;
+					}
 					s2 = rpn_pop();
 #ifdef MENUQC
 					registercvar(s2, "", 0);
@@ -234,6 +266,10 @@ float GameCommand_Generic(string command)
 						rpn_set("0");
 				} else if(rpncmd == "neg" || rpncmd == "~") {
 					rpn_setf(-rpn_getf());
+				} else if(rpncmd == "floor" || rpncmd == "f") {
+					rpn_setf(floor(rpn_getf()));
+				} else if(rpncmd == "ceil" || rpncmd == "c") {
+					rpn_setf(ceil(rpn_getf()));
 				} else if(rpncmd == "max") {
 					f = rpn_popf();
 					f2 = rpn_getf();
@@ -275,25 +311,165 @@ float GameCommand_Generic(string command)
 					rpn_setf(rpn_getf() != f);
 				} else if(rpncmd == "rand") {
 					rpn_setf(ceil(random() * rpn_getf()) - 1);
+				} else if(rpncmd == "dbpush") {
+					s = rpn_pop();
+					if(!rpn_error)
+					{
+						i = stof(db_get(rpn_db, "stack.pointer"));
+						db_put(rpn_db, "stack.pointer", ftos(i+1));
+						db_put(rpn_db, strcat("stack.", ftos(i)), s);
+					}
+					if(!i)
+						db_put(rpn_db, "stack.pos", "0");
+				} else if(rpncmd == "dbpop") {
+					i = stof(db_get(rpn_db, "stack.pointer"));
+					if(i)
+					{
+						s = ftos(i-1);
+						db_put(rpn_db, "stack.pointer", s);
+						rpn_push(db_get(rpn_db, strcat("stack.", s)));
+						j = stof(db_get(rpn_db, "stack.pos"));
+						if(j >= i)
+							db_put(rpn_db, "stack.pos", ftos(i-2));
+					} else {
+						rpn_error = 1;
+						print("rpn: database underflow\n");
+					}
+				} else if(rpncmd == "dbget") {
+					
+					i = stof(db_get(rpn_db, "stack.pointer"));
+					if(i)
+					{
+						rpn_push(db_get(rpn_db, strcat("stack.", ftos(i-1))));
+					} else {
+						rpn_error = 1;
+						print("rpn: database empty\n");
+					}
+				} else if(rpncmd == "dblen") {
+					rpn_push(db_get(rpn_db, "stack.pointer"));
+				} else if(rpncmd == "dbins") {
+					s = rpn_pop();
+					if(!rpn_error)
+						//if(rpn_sp > 0)
+					{
+						j = stof(db_get(rpn_db, "stack.pointer"));
+						i = stof(db_get(rpn_db, "stack.pos"));
+						
+						if(i < 0)
+						{
+							i = 0;
+							db_put(rpn_db, "stack.pos", "0");
+						}
+						
+						db_put(rpn_db, "stack.pointer", ftos(j+1));
+						for(--j; j >= i; --j)
+						{
+							db_put(rpn_db, strcat("stack.", ftos(j+1)),
+							       db_get(rpn_db, (strcat("stack.", ftos(j))))
+								);
+						}
+						db_put(rpn_db, strcat("stack.", ftos(i)), s);
+					}
+				} else if(rpncmd == "dbext") {
+					j = stof(db_get(rpn_db, "stack.pointer"));
+					i = stof(db_get(rpn_db, "stack.pos"));
+					if(!j)
+					{
+						rpn_error = true;
+						print("rpn: empty database\n");
+					} else {
+						--j;
+						rpn_push(db_get(rpn_db, strcat("stack.", ftos(i))));
+						db_put(rpn_db, "stack.pointer", ftos(j));
+						if(i == j)
+						{
+							db_put(rpn_db, "stack.pos", ftos(j-1));
+						} else {
+							while(i < j)
+							{
+								db_put(rpn_db, strcat("stack.", ftos(i)),
+								       db_get(rpn_db, (strcat("stack.", ftos(i+1))))
+									);
+								++i;
+							}
+						}
+					}
+				} else if(rpncmd == "dbread") {
+					s = db_get(rpn_db, "stack.pos");
+					if(stof(s) >= 0)
+					{
+						rpn_push(db_get(rpn_db, strcat("stack.", s)));
+					} else {
+						rpn_error = 1;
+						print("rpn: empty database\n");
+					}
+				} else if(rpncmd == "dbat") {
+					rpn_push(db_get(rpn_db, "stack.pos"));
+				} else if(rpncmd == "dbmov") {
+					j = stof(db_get(rpn_db, "stack.pointer"));
+					i = stof(db_get(rpn_db, "stack.pos"));
+					i += rpn_popf();
+					if(!rpn_error)
+					{
+						if(i < 0 || i >= j)
+						{
+							print("rpn: database cursor out of bounds\n");
+							rpn_error = true;
+						}
+						if(!rpn_error)
+						{
+							db_put(rpn_db, "stack.pos", ftos(i));
+						}
+					}
+				} else if(rpncmd == "dbgoto") {
+					s = rpn_pop();
+					j = stof(db_get(rpn_db, "stack.pointer"));
+					if(!j)
+					{
+						rpn_error = true;
+						print("rpn: empty database, cannot move cursor\n");
+					}
+					if(!rpn_error)
+					{
+						if(s == "end")
+							i = stof(db_get(rpn_db, "stack.pointer"))-1;
+						else if(s == "beg")
+							i = 0;
+						else
+							i = stof(s);
+						
+						j = stof(db_get(rpn_db, "stack.pointer"));
+						if(i < 0 || i >= j)
+						{
+							print("rpn: database cursor destination out of bounds\n");
+							rpn_error = true;
+						}
+						if(!rpn_error)
+						{
+							db_put(rpn_db, "stack.pos", ftos(i));
+						}
+					}
 				} else if(rpncmd == "union") {
 					// s s2 union
 					s2 = rpn_pop();
 					s = rpn_get();
 					f = tokenize(s);
-					f2 = tokenize(strcat(s, s2));
+					f2 = tokenize(strcat(s, " ", s2));
 					// tokens 0..(f-1) represent s
 					// tokens f..f2 represent s2
 					// UNION: add all tokens to s that are in s2 but not in s
 					s = "";
-					for(i = 0; i < f; ++i)
-						s = strcat(s, "'", argv(i), "'");
+					for(i = 0; i < f; ++i)	
+						s = strcat(s, " ", argv(i));
 					for(i = f; i < f2; ++i) {
 						for(j = 0; j < f; ++j)
 							if(argv(i) == argv(j))
 								goto skip_union;
-						s = strcat(s, "'", argv(i), "'");
+						s = strcat(s, " ", argv(i));
 :skip_union
 					}
+					if(substring(s, 0, 1) == " ")
+						s = substring(s, 1, 99999);
 					rpn_set(s);
 					tokenize(command);
 				} else if(rpncmd == "intersection") {
@@ -301,7 +477,7 @@ float GameCommand_Generic(string command)
 					s2 = rpn_pop();
 					s = rpn_get();
 					f = tokenize(s);
-					f2 = tokenize(strcat(s, s2));
+					f2 = tokenize(strcat(s, " ", s2));
 					// tokens 0..(f-1) represent s
 					// tokens f..f2 represent s2
 					// INTERSECTION: keep only the tokens from s that are also in s2
@@ -310,10 +486,12 @@ float GameCommand_Generic(string command)
 						for(j = f; j < f2; ++j)
 							if(argv(i) == argv(j))
 							{
-								s = strcat(s, "'", argv(i), "'");
+								s = strcat(s, " ", argv(i));
 								break;
 							}
 					}
+					if(substring(s, 0, 1) == " ")
+						s = substring(s, 1, 99999);
 					rpn_set(s);
 					tokenize(command);
 				} else if(rpncmd == "difference") {
@@ -321,7 +499,7 @@ float GameCommand_Generic(string command)
 					s2 = rpn_pop();
 					s = rpn_get();
 					f = tokenize(s);
-					f2 = tokenize(strcat(s, s2));
+					f2 = tokenize(strcat(s, " ", s2));
 					// tokens 0..(f-1) represent s
 					// tokens f..f2 represent s2
 					// DIFFERENCE: keep only the tokens from s that are not in s2
@@ -330,9 +508,11 @@ float GameCommand_Generic(string command)
 						for(j = f; j < f2; ++j)
 							if(argv(i) == argv(j))
 								goto skip_difference;
-						s = strcat(s, "'", argv(i), "'");
+						s = strcat(s, " ", argv(i));
 :skip_difference
 					}
+					if(substring(s, 0, 1) == " ")
+						s = substring(s, 1, 99999);
 					rpn_set(s);
 					tokenize(command);
 				} else if(rpncmd == "shuffle") {
@@ -345,17 +525,19 @@ float GameCommand_Generic(string command)
 						s = "";
 						f2 = ceil(random() * (f - i) + i) - 1;
 						for(j = 0; j < i; ++j)
-							s = strcat(s, "'", argv(j), "'");
-						s = strcat(s, "'", argv(f2), "'");
+							s = strcat(s, " ", argv(j));
+						s = strcat(s, " ", argv(f2));
 						for(j = i; j < f; ++j)
 							if(j != f2)
-								s = strcat(s, "'", argv(j), "'");
+								s = strcat(s, " ", argv(j));
 						f = tokenize(s);
 					}
 
+					if(substring(s, 0, 1) == " ")
+						s = substring(s, 1, 99999);
 					rpn_set(s);
 					tokenize(command);
-				} else if(rpncmd == "fexists_assert") {
+					} else if(rpncmd == "fexists_assert") {
 					s = rpn_pop();
 					if(!rpn_error)
 					{
