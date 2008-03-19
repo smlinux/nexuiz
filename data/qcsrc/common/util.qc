@@ -37,6 +37,37 @@ void wordwrap_sprint(string s, float l)
 }
 #endif
 
+string unescape(string in)
+{
+	local float i, len;
+	local string str, s;
+
+	// but it doesn't seem to be necessary in my tests at least
+	in = strzone(in);
+
+	len = strlen(in);
+	str = "";
+	for(i = 0; i < len; ++i)
+	{
+		s = substring(in, i, 1);
+		if(s == "\\")
+		{
+			s = substring(in, i+1, 1);
+			if(s == "n")
+				str = strcat(str, "\n");
+			else if(s == "\\")
+				str = strcat(str, "\\");
+			else
+				str = strcat(str, substring(in, i, 2));
+			++i;
+		} else
+			str = strcat(str, s);
+	}
+
+	strunzone(in);
+	return str;
+}
+
 void wordwrap_cb(string s, float l, void(string) callback)
 {
 	local string c;

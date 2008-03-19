@@ -562,6 +562,17 @@ float GameCommand_Generic(string command)
 			}
 			return TRUE;
 		}
+#ifdef MENUQC
+	} else if(argv(0) == "cp") {
+		if(argc >= 2)
+		{
+			s = argv(1);
+			for(i = 2; i < argc; ++i)
+				s = strcat(s, " ", argv(i));
+			centerprint(unescape(s));
+		}
+		return TRUE;
+#endif
 	}
 
 	return FALSE;
