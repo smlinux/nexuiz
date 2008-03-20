@@ -94,12 +94,18 @@ void fillNexuizEffectsSettingsTab(entity me)
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Particle quality:"));
 		me.TD(me, 1, 2, e = makeNexuizSlider(0.1, 1.0, 0.05, "cl_particles_quality"));
 	me.TR(me);
+		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Particle distance:"));
+		me.TD(me, 1, 2, e = makeNexuizSlider(500, 2000, 100, "r_drawparticles_drawdistance"));
+	me.TR(me);
 		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "cl_decals", "Decals"));
+	me.TR(me);
+		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Decals distance:"));
+		me.TD(me, 1, 2, e = makeNexuizSlider(200, 500, 20, "r_drawdecals_drawdistance"));
+			setDependent(e, "cl_decals", 1, 1);
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Gibs:"));
 		me.TD(me, 1, 2, e = makeNexuizTextSlider("cl_nogibs"));
-			if(cvar("developer"))
-				e.addValue(e, "German", "1");
+			e.addValue(e, "None", "1");
 			e.addValue(e, "Few", "0.75");
 			e.addValue(e, "Many", "0.5");
 			e.addValue(e, "Lots", "0");
@@ -113,11 +119,6 @@ void fillNexuizEffectsSettingsTab(entity me)
 		me.TD(me, 1, 1, e = makeNexuizCheckBox(0, "r_bloom", "Bloom"));
 			setDependent(e, "r_hdr", 0, 0);
 		me.TD(me, 1, 2, e = makeNexuizCheckBox(0, "r_hdr", "High Dynamic Range (HDR)"));
-
-	me.TR(me);
-
-	me.TR(me);
-		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "showfps", "Show frames per second"));
 
 	me.gotoRC(me, 2, 3.5); me.setFirstColumn(me, me.currentColumn);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Anisotropy:"));
