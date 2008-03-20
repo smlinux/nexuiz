@@ -145,7 +145,9 @@ mkdir -p "$tmpdir"
 cd "$dpdir"
 quilt pop -a || true
 svn revert -R .
-quilt push -a # apply all patches
+if [ -s patches/series ]; then
+	quilt push -a # apply all patches
+fi
 
 cp -r "$osxapps"/*.app "$tmpdir"
 mkdir "$tmpdir/debuginfo"
