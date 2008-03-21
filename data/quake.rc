@@ -1,5 +1,6 @@
 exec default.cfg
 exec config.cfg
+exec config_update.cfg
 exec data/campaign.cfg
 exec autoexec.cfg
 stuffcmds
