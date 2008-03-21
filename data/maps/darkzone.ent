@@ -13,7 +13,7 @@
 "angle" "270"
 }
 {
-"classname" "weapon_supershotgun"
+"classname" "weapon_machinegun"
 "origin" "672 536 64"
 }
 {
@@ -88,21 +88,21 @@
 }
 {
 "origin" "48 272 272"
-"classname" "item_health"
+"classname" "item_health25"
 "angle" "270"
 }
 {
-"classname" "item_health"
+"classname" "item_health25"
 "origin" "-560 -80 280"
 "angle" "315"
 }
 {
 "origin" "912 -80 256"
-"classname" "item_health"
+"classname" "item_health25"
 "angle" "180"
 }
 {
-"classname" "item_health"
+"classname" "item_health25"
 "origin" "1072 64 256"
 "angle" "90"
 }
@@ -139,7 +139,7 @@
 "origin" "656 472 64"
 }
 {
-"classname" "weapon_nailgun"
+"classname" "weapon_electro"
 "origin" "64 -736 48"
 }
 {
@@ -185,7 +185,7 @@
 "targetname" "t340"
 }
 {
-"classname" "item_armor2"
+"classname" "item_armor25"
 "origin" "1120 1024 256"
 }
 {
@@ -252,7 +252,7 @@
 "classname" "info_null"
 }
 {
-"classname" "weapon_lightning"
+"classname" "weapon_crylink"
 "origin" "-688 -64 -368"
 }
 {
@@ -275,7 +275,7 @@
 }
 {
 "origin" "-544 -1120 168"
-"classname" "weapon_supernailgun"
+"classname" "weapon_hagar"
 }
 {
 "origin" "-648 -1136 168"
@@ -299,24 +299,24 @@
 }
 {
 "angle" "90"
-"classname" "item_health"
+"classname" "item_health100"
 "origin" "-1016 -216 352"
 "spawnflags" "2"
 }
 {
-"classname" "item_health"
+"classname" "item_health25"
 "origin" "416 784 240"
 }
 {
 "origin" "416 656 240"
-"classname" "item_health"
+"classname" "item_health25"
 }
 {
 "classname" "item_cells"
 "origin" "496 -80 64"
 }
 {
-"classname" "item_health"
+"classname" "item_health25"
 "origin" "64 -424 272"
 "angle" "90"
 }
@@ -325,7 +325,7 @@
 "origin" "712 -80 64"
 }
 {
-"classname" "item_health"
+"classname" "item_health25"
 "origin" "792 1168 48"
 "angle" "270"
 }
@@ -352,7 +352,7 @@
 "targetname" "t346"
 }
 {
-"classname" "item_armor2"
+"classname" "item_armor25"
 "origin" "-1048 -1112 144"
 }
 {
@@ -376,7 +376,7 @@
 "classname" "info_null"
 }
 {
-"classname" "item_health"
+"classname" "item_health25"
 "origin" "-544 -1152 40"
 "angle" "90"
 }
