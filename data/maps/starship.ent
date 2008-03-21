@@ -6,19 +6,19 @@
 "_color" "0.95 0.8 1.0"
 }
 {
-"classname" "item_health_mega"
+"classname" "item_health100"
 "origin" "-320 -352 -176"
 }
 {
-"classname" "item_health"
+"classname" "item_health25"
 "origin" "1296 576 16"
 }
 {
-"classname" "item_health"
+"classname" "item_health25"
 "origin" "576 -752 -80"
 }
 {
-"classname" "item_health"
+"classname" "item_health25"
 "origin" "-224 -32 16"
 }
 {
@@ -38,7 +38,7 @@
 "origin" "-560 -1056 -16"
 }
 {
-"classname" "item_health_small"
+"classname" "item_health1"
 "origin" "896 -192 -80"
 }
 {
@@ -46,15 +46,15 @@
 "origin" "-128 320 -176"
 }
 {
-"classname" "item_health_small"
+"classname" "item_health1"
 "origin" "608 -128 -80"
 }
 {
-"classname" "item_health_small"
+"classname" "item_health1"
 "origin" "-320 -768 16"
 }
 {
-"classname" "item_health_small"
+"classname" "item_health1"
 "origin" "576 -1344 80"
 }
 {
@@ -74,15 +74,15 @@
 }
 {
 "origin" "-416 -32 16"
-"classname" "item_armor_shard"
+"classname" "item_armor1"
 }
 {
-"classname" "item_armor_shard"
+"classname" "item_armor1"
 "origin" "128 128 16"
 }
 {
 "origin" "112 432 -176"
-"classname" "item_armor_shard"
+"classname" "item_armor1"
 }
 {
 "classname" "item_rockets"
@@ -163,27 +163,27 @@
 }
 {
 "origin" "128 -464 -80"
-"classname" "item_health"
+"classname" "item_health25"
 }
 {
 "origin" "-320 768 -176"
-"classname" "item_health"
+"classname" "item_health25"
 }
 {
 "origin" "1024 768 16"
-"classname" "item_armor_combat"
+"classname" "item_armor25"
 }
 {
 "origin" "-352 480 -176"
-"classname" "item_armor_shard"
+"classname" "item_armor1"
 }
 {
 "origin" "-672 224 16"
-"classname" "item_health"
+"classname" "item_health25"
 }
 {
 "origin" "-160 608 16"
-"classname" "item_armor_shard"
+"classname" "item_armor1"
 }
 {
 "origin" "-112 912 24"
@@ -231,40 +231,40 @@
 "classname" "trigger_push"
 }
 {
-"classname" "item_armor_combat"
+"classname" "item_armor25"
 "origin" "704 -1088 -80"
 "angle" "90"
 }
 {
 "origin" "832 -1344 80"
-"classname" "item_health_small"
+"classname" "item_health1"
 }
 {
-"classname" "item_health_small"
+"classname" "item_health1"
 "origin" "1104 -1024 80"
 }
 {
 "origin" "-320 -896 16"
-"classname" "item_armor_shard"
+"classname" "item_armor1"
 }
 {
 "origin" "-576 -768 16"
-"classname" "item_armor_shard"
+"classname" "item_armor1"
 }
 {
 "origin" "-576 -896 16"
-"classname" "item_health_small"
+"classname" "item_health1"
 }
 {
 "origin" "896 -384 -80"
-"classname" "item_health_small"
+"classname" "item_health1"
 }
 {
 "origin" "544 656 -144"
-"classname" "item_health_small"
+"classname" "item_health1"
 }
 {
-"classname" "item_health_small"
+"classname" "item_health1"
 "origin" "544 496 -144"
 }
 {
@@ -585,7 +585,7 @@
 }
 {
 "origin" "1296 192 16"
-"classname" "item_health"
+"classname" "item_health25"
 }
 {
 "origin" "1017 -1269 115"
