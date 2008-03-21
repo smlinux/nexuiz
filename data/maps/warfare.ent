@@ -15,12 +15,12 @@
 "origin" "-440 -976 88"
 }
 {
-"classname" "weapon_lightning"
+"classname" "weapon_crylink"
 "origin" "400 -288 8"
 "notteam" "1"
 }
 {
-"classname" "weapon_railgun"
+"classname" "weapon_nex"
 "origin" "-480 320 496"
 "notteam" "1"
 }
@@ -297,7 +297,7 @@
 "origin" "996 444 176"
 }
 {
-"classname" "weapon_plasmagun"
+"classname" "weapon_electro"
 "origin" "288 -704 496"
 }
 {
