@@ -25341,7 +25341,7 @@ common/clip
 // entity 3
 {
 "origin" "496 1680 400"
-"classname" "item_armor_combat"
+"classname" "item_armor25"
 }
 // entity 4
 {
@@ -25393,12 +25393,12 @@ common/clip
 {
 "origin" "2208 -64 -752"
 "angle" "180"
-"classname" "item_health_large"
+"classname" "item_health25"
 }
 // entity 10
 {
 "origin" "1920 -64 -624"
-"classname" "item_armor_body"
+"classname" "item_armor25"
 }
 // entity 11
 {
@@ -25443,7 +25443,7 @@ common/clip
 // entity 17
 {
 "origin" "1184 168 152"
-"classname" "item_health_mega"
+"classname" "item_health100"
 }
 // entity 18
 {
@@ -25484,27 +25484,27 @@ common/clip
 // entity 24
 {
 "origin" "-800 -352 16"
-"classname" "item_health"
+"classname" "item_health25"
 }
 // entity 25
 {
 "origin" "560 128 24"
-"classname" "item_health_small"
+"classname" "item_health1"
 }
 // entity 26
 {
 "origin" "560 0 24"
-"classname" "item_health_small"
+"classname" "item_health1"
 }
 // entity 27
 {
 "origin" "560 -128 24"
-"classname" "item_health_small"
+"classname" "item_health1"
 }
 // entity 28
 {
 "origin" "560 -256 24"
-"classname" "item_health_small"
+"classname" "item_health1"
 }
 // entity 29
 {
@@ -25559,27 +25559,27 @@ common/clip
 // entity 37
 {
 "origin" "2504 -1288 -368"
-"classname" "item_health"
+"classname" "item_health25"
 }
 // entity 38
 {
 "origin" "1192 -1416 -424"
-"classname" "item_health"
+"classname" "item_health25"
 }
 // entity 39
 {
 "origin" "1600 -1760 -208"
-"classname" "item_armor_shard"
+"classname" "item_armor1"
 }
 // entity 40
 {
 "origin" "1632 -1760 -208"
-"classname" "item_armor_shard"
+"classname" "item_armor1"
 }
 // entity 41
 {
 "origin" "1664 -1760 -208"
-"classname" "item_armor_shard"
+"classname" "item_armor1"
 }
 // entity 42
 {
@@ -48150,15 +48150,15 @@ evil5_wall/crete_tek2btm
 // entity 915
 {
 "origin" "1184 1280 -104"
-"classname" "item_armor_body"
+"classname" "item_armor25"
 }
 // entity 916
 {
 "origin" "1040 -528 -432"
-"classname" "item_armor_body"
+"classname" "item_armor25"
 }
 // entity 917
 {
 "origin" "2168 -1208 -752"
-"classname" "item_armor_body"
+"classname" "item_armor25"
 }
