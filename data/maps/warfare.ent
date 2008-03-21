@@ -3,15 +3,15 @@
 "message" "Stabilized Warfare: Resurrection - by Tymo"
 }
 {
-"classname" "item_health_large"
+"classname" "item_health25"
 "origin" "-304 -96 336"
 }
 {
-"classname" "item_armor_shard"
+"classname" "item_armor1"
 "origin" "-336 -1080 88"
 }
 {
-"classname" "item_armor_shard"
+"classname" "item_armor1"
 "origin" "-440 -976 88"
 }
 {
@@ -25,7 +25,7 @@
 "notteam" "1"
 }
 {
-"classname" "item_health"
+"classname" "item_health25"
 "origin" "384 224 16"
 "angle" "270"
 }
@@ -34,11 +34,11 @@
 "origin" "832 64 336"
 }
 {
-"classname" "item_armor_combat"
+"classname" "item_armor25"
 "origin" "800 -1120 408"
 }
 {
-"classname" "item_health"
+"classname" "item_health25"
 "origin" "1008 -544 336"
 "angle" "180"
 }
@@ -59,23 +59,23 @@
 "origin" "-512 -544 184"
 }
 {
-"classname" "item_health_small"
+"classname" "item_health1"
 "origin" "-72 640 176"
 }
 {
-"classname" "item_health_small"
+"classname" "item_health1"
 "origin" "8 640 176"
 }
 {
-"classname" "item_health_small"
+"classname" "item_health1"
 "origin" "48 -648 176"
 }
 {
-"classname" "item_health_small"
+"classname" "item_health1"
 "origin" "144 -648 176"
 }
 {
-"classname" "item_health"
+"classname" "item_health25"
 "origin" "320 224 16"
 "angle" "270"
 }
@@ -90,11 +90,11 @@
 "origin" "-128 -304 256"
 }
 {
-"classname" "item_health_small"
+"classname" "item_health1"
 "origin" "-528 -120 496"
 }
 {
-"classname" "item_health_small"
+"classname" "item_health1"
 "origin" "-528 -40 496"
 }
 {
@@ -127,11 +127,11 @@
 "origin" "96 -1152 24"
 }
 {
-"classname" "item_health"
+"classname" "item_health25"
 "origin" "784 672 336"
 }
 {
-"classname" "item_armor_combat"
+"classname" "item_armor25"
 "origin" "-704 576 176"
 }
 {
@@ -145,7 +145,7 @@
 "model" "*1"
 }
 {
-"classname" "item_armor_body"
+"classname" "item_armor25"
 "origin" "528 320 496"
 }
 {
@@ -160,7 +160,7 @@
 "sounds" "1"
 }
 {
-"classname" "item_health_mega"
+"classname" "item_health100"
 "origin" "-376 -1016 88"
 }
 {
