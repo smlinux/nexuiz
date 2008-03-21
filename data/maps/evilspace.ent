@@ -18,7 +18,7 @@
 "origin" "-600 462 -56"
 }
 {
-"classname" "item_armor_shard"
+"classname" "item_armor1"
 "origin" "-96 -184 -72"
 }
 {
@@ -42,21 +42,21 @@
 "targetname" "t1"
 }
 {
-"classname" "item_health"
+"classname" "item_health25"
 "angle" "90"
 "origin" "582 -122 -64"
 }
 {
-"classname" "item_health"
+"classname" "item_health25"
 "angle" "90"
 "origin" "-626 -122 -64"
 }
 {
-"classname" "item_armor_shard"
+"classname" "item_armor1"
 "origin" "-16 -184 -72"
 }
 {
-"classname" "item_armor_shard"
+"classname" "item_armor1"
 "origin" "64 -184 -72"
 }
 {
@@ -85,7 +85,7 @@
 "spawnflags" "1"
 }
 {
-"classname" "item_health_large"
+"classname" "item_health25"
 "angle" "90"
 "origin" "-8 152 -408"
 }
@@ -98,7 +98,7 @@
 "origin" "1284 464 -236"
 }
 {
-"classname" "weapon_railgun"
+"classname" "weapon_nex"
 "spawnflags" "1"
 "origin" "-16 587 296"
 }
@@ -114,11 +114,11 @@
 "model" "*1"
 }
 {
-"classname" "item_armor_shard"
+"classname" "item_armor1"
 "origin" "904 480 -416"
 }
 {
-"classname" "item_armor_shard"
+"classname" "item_armor1"
 "origin" "904 542 -416"
 }
 {
@@ -138,24 +138,24 @@
 "origin" "-1296 208 -228"
 }
 {
-"classname" "item_armor_shard"
+"classname" "item_armor1"
 "origin" "-926 464 -416"
 }
 {
-"classname" "item_armor_combat"
+"classname" "item_armor25"
 "spawnflags" "1"
 "origin" "-16 704 106"
 }
 {
-"classname" "item_health_small"
+"classname" "item_health1"
 "origin" "-1310 676 -226"
 }
 {
-"classname" "item_health"
+"classname" "item_health25"
 "origin" "-864 400 -416"
 }
 {
-"classname" "ammo_rockets"
+"classname" "item_health1"
 "origin" "-352 1008 -416"
 }
 {
@@ -218,24 +218,24 @@
 "origin" "-912 728 -96"
 }
 {
-"classname" "weapon_plasmagun"
+"classname" "weapon_electro"
 "origin" "1392 1040 -224"
 }
 {
-"classname" "ammo_rockets"
+"classname" "item_health1"
 "origin" "320 1008 -416"
 }
 {
-"classname" "item_health"
+"classname" "item_health25"
 "origin" "832 400 -416"
 "angle" "180"
 }
 {
-"classname" "item_health_small"
+"classname" "item_health1"
 "origin" "1272 676 -226"
 }
 {
-"classname" "item_armor_shard"
+"classname" "item_armor1"
 "origin" "-926 526 -416"
 }
 {
