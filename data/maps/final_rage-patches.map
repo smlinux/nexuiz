@@ -1,8 +1,8 @@
 // entity 0
 {
-"_gridsize" "64 64 128"
-"_blocksize" "128"
 "classname" "worldspawn"
+"_blocksize" "128"
+"_gridsize" "64 64 128"
 // brush 0
 {
 patchDef2
@@ -930,63 +930,63 @@ evil4_walls/drk_brnbrick
 }
 // brush 71
 {
-( -936 -1128 192 ) ( -936 1856 192 ) ( -936 -1128 184 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
-( -944 1856 192 ) ( -944 -1128 192 ) ( -944 -1128 184 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
-( 1688 1856 192 ) ( -944 1856 192 ) ( -944 1856 184 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
-( -944 -1128 192 ) ( 1688 -1128 192 ) ( 1688 -1128 184 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
-( -1032 -1128 920 ) ( -1032 1856 920 ) ( 1600 1856 920 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
 ( 1904 1856 -536 ) ( -728 1856 -536 ) ( -728 -1128 -536 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
+( -1032 -1128 920 ) ( -1032 1856 920 ) ( 1600 1856 920 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
+( -944 -1128 192 ) ( 1688 -1128 192 ) ( 1688 -1128 184 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
+( 1688 1856 192 ) ( -944 1856 192 ) ( -944 1856 184 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
+( -944 1856 192 ) ( -944 -1128 192 ) ( -944 -1128 184 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
+( -936 -1128 192 ) ( -936 1856 192 ) ( -936 -1128 184 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
 }
 // brush 72
 {
-( -944 1848 192 ) ( 1688 1848 192 ) ( -944 1848 184 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
-( -944 1856 192 ) ( -944 -1128 192 ) ( -944 -1128 184 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
-( 1688 1856 192 ) ( -944 1856 192 ) ( -944 1856 184 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
-( 1688 -1128 192 ) ( 1688 1856 192 ) ( 1688 1856 184 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
-( -1032 -1128 920 ) ( -1032 1856 920 ) ( 1600 1856 920 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
 ( 1904 1856 -536 ) ( -728 1856 -536 ) ( -728 -1128 -536 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
+( -1032 -1128 920 ) ( -1032 1856 920 ) ( 1600 1856 920 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
+( 1688 -1128 192 ) ( 1688 1856 192 ) ( 1688 1856 184 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
+( 1688 1856 192 ) ( -944 1856 192 ) ( -944 1856 184 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
+( -944 1856 192 ) ( -944 -1128 192 ) ( -944 -1128 184 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
+( -944 1848 192 ) ( 1688 1848 192 ) ( -944 1848 184 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
 }
 // brush 73
 {
-( 1680 1856 192 ) ( 1680 -1128 192 ) ( 1680 1856 184 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
-( 1688 1856 192 ) ( -944 1856 192 ) ( -944 1856 184 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
-( 1688 -1128 192 ) ( 1688 1856 192 ) ( 1688 1856 184 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
-( -944 -1128 192 ) ( 1688 -1128 192 ) ( 1688 -1128 184 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
-( -1032 -1128 920 ) ( -1032 1856 920 ) ( 1600 1856 920 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
 ( 1904 1856 -536 ) ( -728 1856 -536 ) ( -728 -1128 -536 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
+( -1032 -1128 920 ) ( -1032 1856 920 ) ( 1600 1856 920 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
+( -944 -1128 192 ) ( 1688 -1128 192 ) ( 1688 -1128 184 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
+( 1688 -1128 192 ) ( 1688 1856 192 ) ( 1688 1856 184 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
+( 1688 1856 192 ) ( -944 1856 192 ) ( -944 1856 184 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
+( 1680 1856 192 ) ( 1680 -1128 192 ) ( 1680 1856 184 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
 }
 // brush 74
 {
-( 1688 -1120 192 ) ( -944 -1120 192 ) ( 1688 -1120 184 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
-( -944 1856 192 ) ( -944 -1128 192 ) ( -944 -1128 184 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
-( 1688 -1128 192 ) ( 1688 1856 192 ) ( 1688 1856 184 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
-( -944 -1128 192 ) ( 1688 -1128 192 ) ( 1688 -1128 184 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
-( -1032 -1128 920 ) ( -1032 1856 920 ) ( 1600 1856 920 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
 ( 1904 1856 -536 ) ( -728 1856 -536 ) ( -728 -1128 -536 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
+( -1032 -1128 920 ) ( -1032 1856 920 ) ( 1600 1856 920 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
+( -944 -1128 192 ) ( 1688 -1128 192 ) ( 1688 -1128 184 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
+( 1688 -1128 192 ) ( 1688 1856 192 ) ( 1688 1856 184 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
+( -944 1856 192 ) ( -944 -1128 192 ) ( -944 -1128 184 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
+( 1688 -1120 192 ) ( -944 -1120 192 ) ( 1688 -1120 184 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
 }
 // brush 75
 {
-( -1032 1856 912 ) ( -1032 -1128 912 ) ( 1600 1856 912 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
-( -944 1856 192 ) ( -944 -1128 192 ) ( -944 -1128 184 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
-( 1688 1856 192 ) ( -944 1856 192 ) ( -944 1856 184 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
-( 1688 -1128 192 ) ( 1688 1856 192 ) ( 1688 1856 184 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
-( -944 -1128 192 ) ( 1688 -1128 192 ) ( 1688 -1128 184 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
 ( -1032 -1128 920 ) ( -1032 1856 920 ) ( 1600 1856 920 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
+( -944 -1128 192 ) ( 1688 -1128 192 ) ( 1688 -1128 184 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
+( 1688 -1128 192 ) ( 1688 1856 192 ) ( 1688 1856 184 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
+( 1688 1856 192 ) ( -944 1856 192 ) ( -944 1856 184 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
+( -944 1856 192 ) ( -944 -1128 192 ) ( -944 -1128 184 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
+( -1032 1856 912 ) ( -1032 -1128 912 ) ( 1600 1856 912 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
 }
 // brush 76
 {
-( -728 1856 -528 ) ( 1904 1856 -528 ) ( -728 -1128 -528 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
-( -944 1856 192 ) ( -944 -1128 192 ) ( -944 -1128 184 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
-( 1688 1856 192 ) ( -944 1856 192 ) ( -944 1856 184 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
-( 1688 -1128 192 ) ( 1688 1856 192 ) ( 1688 1856 184 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
-( -944 -1128 192 ) ( 1688 -1128 192 ) ( 1688 -1128 184 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
 ( 1904 1856 -536 ) ( -728 1856 -536 ) ( -728 -1128 -536 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
+( -944 -1128 192 ) ( 1688 -1128 192 ) ( 1688 -1128 184 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
+( 1688 -1128 192 ) ( 1688 1856 192 ) ( 1688 1856 184 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
+( 1688 1856 192 ) ( -944 1856 192 ) ( -944 1856 184 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
+( -944 1856 192 ) ( -944 -1128 192 ) ( -944 -1128 184 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
+( -728 1856 -528 ) ( 1904 1856 -528 ) ( -728 -1128 -528 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
 }
 }
 // entity 1
 {
-"type" "patchCapped"
 "classname" "func_group"
+"type" "patchCapped"
 // brush 0
 {
 patchDef2
@@ -1016,8 +1016,8 @@ final_rage/drkmtl_default
 }
 // entity 2
 {
-"type" "patchCapped"
 "classname" "func_group"
+"type" "patchCapped"
 // brush 0
 {
 patchDef2
@@ -1047,8 +1047,8 @@ final_rage/drkmtl_default
 }
 // entity 3
 {
-"classname" "func_group"
 "type" "patchCapped"
+"classname" "func_group"
 // brush 0
 {
 patchDef2
@@ -1065,8 +1065,8 @@ evil4_walls/drk_brnbrick
 }
 // entity 4
 {
-"type" "patchCapped"
 "classname" "func_group"
+"type" "patchCapped"
 // brush 0
 {
 patchDef2
@@ -1083,8 +1083,8 @@ evil4_walls/drk_brnbrick
 }
 // entity 5
 {
-"type" "patchCapped"
 "classname" "func_group"
+"type" "patchCapped"
 // brush 0
 {
 patchDef2
@@ -1101,8 +1101,8 @@ final_rage/drkmtl_default
 }
 // entity 6
 {
-"type" "patchCapped"
 "classname" "func_group"
+"type" "patchCapped"
 // brush 0
 {
 patchDef2
@@ -1119,8 +1119,8 @@ final_rage/drkmtl_default
 }
 // entity 7
 {
-"classname" "func_group"
 "type" "patchCapped"
+"classname" "func_group"
 // brush 0
 {
 patchDef2
@@ -1137,8 +1137,8 @@ evil4_walls/drk_brnbrick
 }
 // entity 8
 {
-"type" "patchCapped"
 "classname" "func_group"
+"type" "patchCapped"
 // brush 0
 {
 patchDef2
@@ -1155,8 +1155,8 @@ evil4_walls/drk_brnbrick
 }
 // entity 9
 {
-"type" "patchCapped"
 "classname" "func_group"
+"type" "patchCapped"
 // brush 0
 {
 patchDef2
@@ -1186,8 +1186,8 @@ final_rage/drkmtl_oddtrim
 }
 // entity 10
 {
-"type" "patchCapped"
 "classname" "func_group"
+"type" "patchCapped"
 // brush 0
 {
 patchDef2
@@ -1230,8 +1230,8 @@ final_rage/drkmtl_oddtrim
 }
 // entity 11
 {
-"type" "patchCapped"
 "classname" "func_group"
+"type" "patchCapped"
 // brush 0
 {
 patchDef2
@@ -1261,8 +1261,8 @@ evil4_walls/drk_brnbrick
 }
 // entity 12
 {
-"type" "patchCapped"
 "classname" "func_group"
+"type" "patchCapped"
 // brush 0
 {
 patchDef2
@@ -1292,8 +1292,8 @@ final_rage/drkmtl_default
 }
 // entity 13
 {
-"type" "patchCapped"
 "classname" "func_group"
+"type" "patchCapped"
 // brush 0
 {
 patchDef2
@@ -1323,8 +1323,8 @@ final_rage/drkmtl_default
 }
 // entity 14
 {
-"type" "patchCapped"
 "classname" "func_group"
+"type" "patchCapped"
 // brush 0
 {
 patchDef2
@@ -1367,8 +1367,8 @@ final_rage/drkmtl_oddtrim
 }
 // entity 15
 {
-"type" "patchCapped"
 "classname" "func_group"
+"type" "patchCapped"
 // brush 0
 {
 patchDef2
@@ -1411,8 +1411,8 @@ final_rage/drkmtl_oddtrim
 }
 // entity 16
 {
-"type" "patchCapped"
 "classname" "func_group"
+"type" "patchCapped"
 // brush 0
 {
 patchDef2
@@ -1455,8 +1455,8 @@ final_rage/drkmtl_oddtrim
 }
 // entity 17
 {
-"type" "patchCapped"
 "classname" "func_group"
+"type" "patchCapped"
 // brush 0
 {
 patchDef2
@@ -1499,8 +1499,8 @@ final_rage/drkmtl_oddtrim
 }
 // entity 18
 {
-"type" "patchCapped"
 "classname" "func_group"
+"type" "patchCapped"
 // brush 0
 {
 patchDef2
@@ -1517,8 +1517,8 @@ final_rage/mtltekfloor
 }
 // entity 19
 {
-"type" "patchCapped"
 "classname" "func_group"
+"type" "patchCapped"
 // brush 0
 {
 patchDef2
@@ -1535,8 +1535,8 @@ final_rage/mtltekfloor
 }
 // entity 20
 {
-"type" "patchCapped"
 "classname" "func_group"
+"type" "patchCapped"
 // brush 0
 {
 patchDef2
@@ -1566,8 +1566,8 @@ final_rage/drkmtl_oddtrim
 }
 // entity 21
 {
-"classname" "func_group"
 "type" "patchCapped"
+"classname" "func_group"
 // brush 0
 {
 patchDef2
@@ -1597,8 +1597,8 @@ evil4_techfloors/tfloor
 }
 // entity 22
 {
-"classname" "func_group"
 "type" "patchCapped"
+"classname" "func_group"
 // brush 0
 {
 patchDef2
@@ -1628,8 +1628,8 @@ evil4_techfloors/tfloor
 }
 // entity 23
 {
-"classname" "func_group"
 "type" "patchCapped"
+"classname" "func_group"
 // brush 0
 {
 patchDef2
@@ -1659,8 +1659,8 @@ evil4_techfloors/tfloor
 }
 // entity 24
 {
-"classname" "func_group"
 "type" "patchCapped"
+"classname" "func_group"
 // brush 0
 {
 patchDef2
@@ -1690,8 +1690,8 @@ evil4_techfloors/tfloor
 }
 // entity 25
 {
-"classname" "func_group"
 "type" "patchCapped"
+"classname" "func_group"
 // brush 0
 {
 patchDef2
@@ -1721,8 +1721,8 @@ final_rage/drkmtl_oddtrim
 }
 // entity 26
 {
-"classname" "func_group"
 "type" "patchCapped"
+"classname" "func_group"
 // brush 0
 {
 patchDef2
@@ -1752,8 +1752,8 @@ final_rage/drkmtl_oddtrim
 }
 // entity 27
 {
-"classname" "func_group"
 "type" "patchCapped"
+"classname" "func_group"
 // brush 0
 {
 patchDef2
@@ -1783,8 +1783,8 @@ evil4_walls/drk_brnbrick
 }
 // entity 28
 {
-"classname" "func_group"
 "type" "patchCapped"
+"classname" "func_group"
 // brush 0
 {
 patchDef2
@@ -1814,8 +1814,8 @@ final_rage/drkmtl_oddtrim
 }
 // entity 29
 {
-"classname" "func_group"
 "type" "patchCapped"
+"classname" "func_group"
 // brush 0
 {
 patchDef2
@@ -1858,8 +1858,8 @@ final_rage/drkmtl_oddtrim
 }
 // entity 30
 {
-"classname" "func_group"
 "type" "patchCapped"
+"classname" "func_group"
 // brush 0
 {
 patchDef2
@@ -1902,8 +1902,8 @@ final_rage/drkmtl_oddtrim
 }
 // entity 31
 {
-"classname" "func_group"
 "type" "patchCapped"
+"classname" "func_group"
 // brush 0
 {
 patchDef2
@@ -1933,8 +1933,8 @@ evil4_walls/drk_brnbrick
 }
 // entity 32
 {
-"classname" "func_group"
 "type" "patchCapped"
+"classname" "func_group"
 // brush 0
 {
 patchDef2
@@ -1964,8 +1964,8 @@ evil4_walls/drk_brnbrick
 }
 // entity 33
 {
-"classname" "func_group"
 "type" "patchCapped"
+"classname" "func_group"
 // brush 0
 {
 patchDef2
@@ -2008,8 +2008,8 @@ final_rage/drkmtl_oddtrim
 }
 // entity 34
 {
-"classname" "func_group"
 "type" "patchCapped"
+"classname" "func_group"
 // brush 0
 {
 patchDef2
@@ -2026,8 +2026,8 @@ final_rage/mtltekfloor
 }
 // entity 35
 {
-"classname" "func_group"
 "type" "patchCapped"
+"classname" "func_group"
 // brush 0
 {
 patchDef2
@@ -2057,8 +2057,8 @@ final_rage/drkmtl_oddtrim
 }
 // entity 36
 {
-"classname" "func_group"
 "type" "patchCapped"
+"classname" "func_group"
 // brush 0
 {
 patchDef2
@@ -2088,8 +2088,8 @@ final_rage/drkmtl_oddtrim
 }
 // entity 37
 {
-"classname" "func_group"
 "type" "patchCapped"
+"classname" "func_group"
 // brush 0
 {
 patchDef2
@@ -2119,8 +2119,8 @@ final_rage/drkmtl_oddtrim
 }
 // entity 38
 {
-"classname" "func_group"
 "type" "patchCapped"
+"classname" "func_group"
 // brush 0
 {
 patchDef2
@@ -2150,8 +2150,8 @@ final_rage/drkmtl_oddtrim
 }
 // entity 39
 {
-"classname" "func_group"
 "type" "patchCapped"
+"classname" "func_group"
 // brush 0
 {
 patchDef2
@@ -2181,8 +2181,8 @@ final_rage/drkmtl_default
 }
 // entity 40
 {
-"classname" "func_group"
 "type" "patchCapped"
+"classname" "func_group"
 // brush 0
 {
 patchDef2
@@ -2212,8 +2212,8 @@ final_rage/drkmtl_default
 }
 // entity 41
 {
-"classname" "func_group"
 "type" "patchCapped"
+"classname" "func_group"
 // brush 0
 {
 patchDef2
@@ -2243,8 +2243,8 @@ final_rage/drkmtl_default
 }
 // entity 42
 {
-"classname" "func_group"
 "type" "patchCapped"
+"classname" "func_group"
 // brush 0
 {
 patchDef2
@@ -2274,8 +2274,8 @@ final_rage/drkmtl_default
 }
 // entity 43
 {
-"classname" "func_group"
 "type" "patchCapped"
+"classname" "func_group"
 // brush 0
 {
 patchDef2
@@ -2305,8 +2305,8 @@ final_rage/drkmtl_default
 }
 // entity 44
 {
-"classname" "func_group"
 "type" "patchCapped"
+"classname" "func_group"
 // brush 0
 {
 patchDef2
@@ -2336,22 +2336,9 @@ final_rage/drkmtl_default
 }
 // entity 45
 {
-"classname" "func_group"
 "type" "patchCapped"
+"classname" "func_group"
 // brush 0
-{
-patchDef2
-{
-savdm6ish/#lava1
-( 3 3 0 0 0 )
-(
-( ( -192 256 -80 -1.500000 -2 ) ( -192 256 -80 -1.500000 -2 ) ( -192 256 -80 -1.500000 -2 ) )
-( ( -192 256 -80 -1.500000 -2 ) ( -192 256 -80 -1.500000 -2 ) ( -192 256 -80 -1.500000 -2 ) )
-( ( -192 128 -80 -1.500000 -1 ) ( -64 128 -80 -0.500000 -1 ) ( -64 256 -80 -0.500000 -2 ) )
-)
-}
-}
-// brush 1
 {
 patchDef2
 {
@@ -2367,22 +2354,9 @@ final_rage/drkmtl_oddtrim
 }
 // entity 46
 {
-"classname" "func_group"
 "type" "patchCapped"
+"classname" "func_group"
 // brush 0
-{
-patchDef2
-{
-savdm6ish/#lava1
-( 3 3 0 0 0 )
-(
-( ( 64 384 -80 0.500000 -3 ) ( -64 384 -80 -0.500000 -3 ) ( -64 256 -80 -0.500000 -2 ) )
-( ( -64 384 -80 -0.500000 -3 ) ( -64 384 -80 -0.500000 -3 ) ( -64 384 -80 -0.500000 -3 ) )
-( ( -64 384 -80 -0.500000 -3 ) ( -64 384 -80 -0.500000 -3 ) ( -64 384 -80 -0.500000 -3 ) )
-)
-}
-}
-// brush 1
 {
 patchDef2
 {
@@ -2398,22 +2372,9 @@ final_rage/drkmtl_oddtrim
 }
 // entity 47
 {
-"classname" "func_group"
 "type" "patchCapped"
+"classname" "func_group"
 // brush 0
-{
-patchDef2
-{
-savdm6ish/#lava1
-( 3 3 0 0 0 )
-(
-( ( -320 320 -80 -2.500000 -2.500000 ) ( -256 320 -80 -2 -2.500000 ) ( -256 384 -80 -2 -3 ) )
-( ( -256 320 -80 -2 -2.500000 ) ( -256 320 -80 -2 -2.500000 ) ( -256 320 -80 -2 -2.500000 ) )
-( ( -256 320 -80 -2 -2.500000 ) ( -256 320 -80 -2 -2.500000 ) ( -256 320 -80 -2 -2.500000 ) )
-)
-}
-}
-// brush 1
 {
 patchDef2
 {
@@ -2429,8 +2390,8 @@ final_rage/drkmtl_oddtrim
 }
 // entity 48
 {
-"classname" "func_group"
 "type" "patchCapped"
+"classname" "func_group"
 // brush 0
 {
 patchDef2
@@ -2447,8 +2408,8 @@ final_rage/mtltekfloor
 }
 // entity 49
 {
-"type" "patchCapped"
 "classname" "func_group"
+"type" "patchCapped"
 // brush 0
 {
 patchDef2
@@ -2465,8 +2426,8 @@ evil4_walls/drk_brnbrick
 }
 // entity 50
 {
-"type" "patchCapped"
 "classname" "func_group"
+"type" "patchCapped"
 // brush 0
 {
 patchDef2
@@ -2483,8 +2444,8 @@ evil4_techtrims/dwtrim_fade2
 }
 // entity 51
 {
-"classname" "func_group"
 "type" "patchCapped"
+"classname" "func_group"
 // brush 0
 {
 patchDef2
@@ -2501,8 +2462,8 @@ evil4_techtrims/dwtrim_fade2
 }
 // entity 52
 {
-"classname" "func_group"
 "type" "patchThick"
+"classname" "func_group"
 // brush 0
 {
 patchDef2
@@ -2532,6 +2493,6 @@ final_rage/drkmtl_default
 }
 // entity 53
 {
-"classname" "info_player_deathmatch"
 "origin" "520 496 -64"
+"classname" "info_player_deathmatch"
 }

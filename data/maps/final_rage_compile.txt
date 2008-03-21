@@ -1,0 +1,3 @@
+bsp:	  -meta -v -samplesize 8 -skyfix -np 50
+vis:	  -vis -v
+light: 	   -light -deluxe -compensate 1.4 -fast -gamma 1.5 -patchshadows -areascale 1.5 -pointscale 2 -v -bounce 3 -bouncegrid
