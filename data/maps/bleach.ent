@@ -1562,7 +1562,7 @@
 "origin" "2512 700 236"
 }
 {
-"classname" "item_health_large"
+"classname" "item_health25"
 "origin" "2844 -36 152"
 }
 {
@@ -1686,7 +1686,7 @@
 "origin" "2992 1560 320"
 }
 {
-"classname" "item_health_large"
+"classname" "item_health25"
 "origin" "2896 -1472 -168"
 }
 {
