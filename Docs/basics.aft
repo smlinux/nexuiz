@@ -101,7 +101,7 @@ Nexuiz supports several different game modes and some smaller changes called mut
 **''Modes''
 	*Deathmatch (DM) is the most simple game mode.  It is a free-for-all fragfest with every man for himself.  All items are free to grab, and the player with the most frags will win (either by hitting the frag limit, or when the time limit expires).
 	*Team Deathmatch (TDM) is similar, but pits teams of players against each other.  Only shoot players with a different color than yourself.  Look at your gun to see your color.  The team with the most frags wins.
-	*Capture The Flag (CTF) is a team match in which you have two teams, two bases, and two flags.  You have to get into the enemy base, grab their flag, and bring it back to your own flag to score.  Scoring gives the most points, normal fragging and returning the flag gives some points.  The team with the most points wins.  CTF is a surprisingly complicated game mode, so see the comprehensive CTF guide in the Nexuiz forum for more information ({-http://alientrap.org/forum/viewtopic.php?t=849-}).
+	*Capture The Flag (CTF) is a team match in which you have two teams, two bases, and two flags.  You have to get into the enemy base, grab their flag, and bring it back to your own flag to score.  Scoring gives the most points, normal fragging and returning the flag gives some points.  The team with the most points wins.  CTF is a surprisingly complicated game mode, so see the comprehensive CTF guide in the Nexuiz forum for more information ({+http://alientrap.org/forum/viewtopic.php?t=849+}).
 	*Instagib removes all items from the map, and equips everyone with a nexgun.  One hit will kill, and this means some very fast action.  The player with the most frags wins.
 	*Minstagib is an improved instagib.  You can pick up lives, so you can survive two shots, and you can pick up an item to become almost invisible.  The secondary fire mode is the laser, so you can laser jump around the map.
 	*Runematch places five runes into the map in addition to the normal items.  A rune gives you a bonus but also a curse - but you only get points for fragging if you carry a rune, so make sure you have one.  You also get points for fragging a rune carrier, and for just holding a rune (but fragging is the quicker way to gain points).  The player with the most points wins.
@@ -119,11 +119,11 @@ Nexuiz supports several different game modes and some smaller changes called mut
 There are some more of these mutators, but those are the most important ones.
 
 A list of useful links:
-	*CTF guide and ctf MAPS guide: {-http://alientrap.org/forum/viewtopic.php?t=849-}
-	*Team communication explained: {-http://alientrap.org/forum/viewtopic.php?t=555-}
-	*General Nexuiz Tips and Tricks: {-http://alientrap.org/forum/viewtopic.php?t=90-}
-	*How to get more help via IRC: {-http://alientrap.org/forum/viewtopic.php?t=497-}
+	*CTF guide and ctf MAPS guide: {+http://alientrap.org/forum/viewtopic.php?t=849+}
+	*Team communication explained: {+http://alientrap.org/forum/viewtopic.php?t=555+}
+	*General Nexuiz Tips and Tricks: {+http://alientrap.org/forum/viewtopic.php?t=90+}
+	*How to get more help via IRC: {+http://alientrap.org/forum/viewtopic.php?t=497+}
 	*A few useful jumps: http://esteel.planetnexuiz.de/nexuiz/demos/jumps.pk3  (copy the file into Nexuiz/data and you should find the demos in the demos menu)
-	*FPS settings: {-http://alientrap.org/forum/viewtopic.php?t=1628-}
-	*A list of all available variables in Nexuiz: {-http://alientrap.org/wiki/pmwiki.php?n=Main.GameTweaks-}
-	*A list of all available commands in Nexuiz: {-http://alientrap.org/wiki/pmwiki.php?n=Main.ConsoleCommands-}
+	*FPS settings: {+http://alientrap.org/forum/viewtopic.php?t=1628+}
+	*A list of all available variables in Nexuiz: {+http://alientrap.org/wiki/pmwiki.php?n=Main.GameTweaks+}
+	*A list of all available commands in Nexuiz: {+http://alientrap.org/wiki/pmwiki.php?n=Main.ConsoleCommands+}
