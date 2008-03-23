@@ -9,6 +9,10 @@ server.cfg.  You can copy it either into the Nexuiz/data directory
 where the big data*.pk3 file is or when running on linux or mac you
 can as well copy it into a special directory called ~/.nexuiz/data
 
+Please make sure your server is always uptodate!  Just signup the
+Nexuiz release mailinglist to get informed about new releases.
+https://lists.sourceforge.net/lists/listinfo/nexuiz-releases
+
 An important thing is to make sure that your firewall does allow
 players to connect to your server.  This typicly means you will have
 to open or forward the port (see the line that sets the variable port
