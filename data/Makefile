@@ -44,4 +44,5 @@ $(PK3NAME): qc
 		TDIR=`mktemp -d -t nexuizpk3.XXXXXX`; \
 		svn export --force . $$TDIR; \
 		cd $$TDIR; \
+		$(RM) -r qcsrc common-spog.pk3 \
 		$(ZIP) $$ABSPK3NAME .
