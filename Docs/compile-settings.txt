@@ -11,6 +11,12 @@ Standard
 "...q3map2.exe" -light -bounce 3 -deluxe -fast -filter -patchshadows -samples 2 "...nexuizmap.bsp"
 
 ------------
+Only update the entities.
+------------
+
+"...q3map2.exe" -onlyents "...nexuizmap.map"
+
+------------
 bloodprison.map
 ------------
 
