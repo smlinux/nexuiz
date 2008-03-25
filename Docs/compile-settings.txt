@@ -20,6 +20,14 @@ bloodprison.map
 "...q3map2.exe" -light -deluxe -fast -filter -deluxe -patchshadows -samples 3 "...bloodprisonctf.bsp"
 
 ------------
+final_rage.map
+------------
+
+"...q3map2.exe" -meta -v -samplesize 8 -skyfix -np 50 "...final_rage.map"
+"...q3map2.exe" -vis -v "...final_rage.map"
+"...q3map2.exe" -light -deluxe -compensate 1.4 -fast -gamma 1.5 -patchshadows -areascale 1.5 -pointscale 2 -v -bounce 3 -bouncegrid "...final_rage.map"
+
+------------
 reslimed.map
 ------------
 
