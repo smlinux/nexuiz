@@ -36,6 +36,6 @@ http://alientrap.org/wiki/pmwiki.php?n=Main.GameTweaks
 http://alientrap.org/wiki/pmwiki.php?n=Main.ConsoleCommands
 
 For your convenience you can also find a nexuizserver to irc gateway
-in rcon2irc-0.4.tar.bz2.  It allows you to watch and communincate with
+in rcon2irc-*.tar.bz2.  It allows you to watch and communincate with
 active players on your nexuizserver via irc.  Extract it and read its
 rcon2irc.txt to learn how to setup and use it!
