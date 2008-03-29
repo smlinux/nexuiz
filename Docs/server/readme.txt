@@ -1,6 +1,8 @@
 In this subdirectory you will find scripts and a config file that can
 be used to start a dedicated Nexuiz server on linux, mac or windows
-systems.  You will need to copy the right script into your Nexuiz main
+systems and also some tools that help with maintaining your server.
+
+You will need to copy the right script into your Nexuiz main
 directory, where the normal binaries are.  There are two scrips for
 each sytems, one to start a normal Nexuiz server and one to start a
 Nexuiz 'Pro' server, that differs in movement and weapon settings.
@@ -35,7 +37,9 @@ Some more info about the available variables and commands:
 http://alientrap.org/wiki/pmwiki.php?n=Main.GameTweaks
 http://alientrap.org/wiki/pmwiki.php?n=Main.ConsoleCommands
 
-For your convenience you can also find a nexuizserver to irc gateway
-in rcon2irc-*.tar.bz2.  It allows you to watch and communincate with
-active players on your nexuizserver via irc.  Extract it and read its
-rcon2irc.txt to learn how to setup and use it!
+rcon2irc is a Nexuiz server to irc gateway.  It allows you to watch
+and communicate with active players on your server via irc.  Extract
+it and read its rcon2irc.txt to learn how to setup and use it!
+
+rcon.pl is a perl script that implements rcon which can be used to
+remotely control your server.
