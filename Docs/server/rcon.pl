@@ -387,7 +387,7 @@ if($timeout)
 	{
 		for($rcon->recv())
 		{
-			$_ = color_dp2ansi $_;
+			$_ = color_dp2ansi $_ unless $colors;
 			print "$_\033[m\n"
 		}
 	}
