@@ -120,12 +120,16 @@ sub color_dp2irc($)
 			$c = 0 if $c >= 7; # map 0, 7, 8, 9 to default (no bright white or such stuff)
 			$color = $color_dp2irc_table[$c];
 			($color == $oldcolor) ? '' :
-			$c == 0 ? "\017" :
-			$f eq ',' ? "\003$color\002\002" :
-			$f ne ''  ? sprintf "\003%02d", $color : "\003$color";
+			$c == 0 ? "\0001" :
+			$f eq ',' ? "\0003$color\0002\0002" :
+			$f ne ''  ? sprintf "\0003%02d", $color : "\0003$color";
 		} : "^$c";
 	}esg;
-	return text_dp2ascii $message;
+	$message = text_dp2ascii $message;
+	$message =~ s/\0001/\017/g;
+	$message =~ s/\0002/\002/g;
+	$message =~ s/\0003/\003/g;
+	return $message;
 }
 
 sub color_dp2ansi($)
