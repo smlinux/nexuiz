@@ -38,8 +38,8 @@ http://alientrap.org/wiki/pmwiki.php?n=Main.GameTweaks
 http://alientrap.org/wiki/pmwiki.php?n=Main.ConsoleCommands
 
 rcon2irc is a Nexuiz server to irc gateway.  It allows you to watch
-and communicate with active players on your server via irc.  Extract
-it and read its rcon2irc.txt to learn how to setup and use it!
+and communicate with active players on your server via irc.  Read its
+rcon2irc.txt to learn how to setup and use it!
 
 rcon.pl is a perl script that implements rcon which can be used to
 remotely control your server.
