@@ -26,7 +26,10 @@ void(entity ent, vector vecs, float antilag, float recoil, string snd) W_SetupSh
 {
 	float nudge = 1; // added to traceline target and subtracted from result
 	local vector trueaimpoint;
-	traceline_antilag(self, self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * MAX_SHOT_DISTANCE, MOVE_NOMONSTERS, self, 0);
+	local float oldsolid;
+	oldsolid = self.solid;
+	self.solid = SOLID_BBOX; // make all shot test traces bypass playerclip
+	traceline(self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * MAX_SHOT_DISTANCE, MOVE_NOMONSTERS, self);
 	trueaimpoint = trace_endpos;
 
 	if (cvar("g_shootfromeye"))
@@ -109,6 +112,8 @@ void(entity ent, vector vecs, float antilag, float recoil, string snd) W_SetupSh
 			}
 		}
 	}
+
+	self.solid = oldsolid; // restore solid type (generally SOLID_SLIDEBOX)
 
 	if (!g_norecoil)
 		self.punchangle_x = recoil * -1;
