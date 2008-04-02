@@ -1591,6 +1591,55 @@ velocityjitter 32 32 32
 
 
 
+// bigger crylink impact effect
+// decal
+effect crylink_impactbig
+countabsolute 1
+type decal
+tex 47 47
+size 24 24
+alpha 256 256 0
+originjitter 12 12 12
+//lightradius 200
+//lightradiusfade 800
+//lightcolor 3.2 0.4 4
+// purple flare effect
+effect crylink_impactbig
+countabsolute 1
+type static
+tex 39 39
+color 0x504060 0x504060
+size 24 24
+alpha 256 256 512
+// purple sparks
+effect crylink_impactbig
+count 80
+type spark
+tex 41 41
+color 0xA040C0 0xA040C0
+bounce 2
+size 6 6
+alpha 256 256 1024
+velocityjitter 512 512 512
+// purple splash
+effect crylink_impactbig
+count 3
+type static
+color 0xE070FF 0xE070FF
+size 16 16
+alpha 256 256 512
+velocityjitter 32 32 32
+// purple splash
+effect crylink_impactbig
+count 6
+type static
+color 0xE070FF 0xE070FF
+size 16 16
+alpha 256 256 1024
+velocityjitter 256 256 256
+
+
+
 effect nex_muzzleflash
 count 10
 type smoke

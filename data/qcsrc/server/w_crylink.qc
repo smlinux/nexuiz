@@ -19,7 +19,7 @@ void W_Crylink_Touch (void)
 		remove(self);
 		return;
 	}
-	pointparticles(particleeffectnum("crylink_impact"), self.origin, '0 0 0', 1);
+	pointparticles(particleeffectnum("crylink_impactbig"), self.origin, '0 0 0', 1);
 	RadiusDamage (self, self.realowner, cvar("g_balance_crylink_primary_damage"), cvar("g_balance_crylink_primary_edgedamage"), cvar("g_balance_crylink_primary_radius"), world, cvar("g_balance_crylink_primary_force"), IT_CRYLINK);
 	if (self.cnt <= 0 || other.takedamage != DAMAGE_NO)
 	{
@@ -30,6 +30,7 @@ void W_Crylink_Touch (void)
 	self.angles = vectoangles(self.velocity);
 	self.nextthink = time;
 	self.owner = world;
+	//self.scale = 1 + self.cnt;
 }
 
 void W_Crylink_Touch2 (void)
@@ -50,6 +51,7 @@ void W_Crylink_Touch2 (void)
 	self.angles = vectoangles(self.velocity);
 	self.nextthink = time;
 	self.owner = world;
+//	self.scale = 1 + 1 * self.cnt;
 }
 
 void W_Crylink_Attack (void)
@@ -101,6 +103,7 @@ void W_Crylink_Attack (void)
 		proj.think = W_Crylink_Think;
 		proj.nextthink = proj.count;
 		proj.cnt = cvar("g_balance_crylink_primary_bounces");
+		proj.scale = 1 + 1 * proj.cnt;
 
 		proj.angles = vectoangles (proj.velocity);
 
@@ -148,6 +151,7 @@ void W_Crylink_Attack2 (void)
 		proj.think = W_Crylink_Think;
 		proj.nextthink = proj.count;
 		proj.cnt = cvar("g_balance_crylink_secondary_bounces");
+		proj.scale = 1 + 1 * proj.cnt;
 
 		proj.angles = vectoangles (proj.velocity);
 
