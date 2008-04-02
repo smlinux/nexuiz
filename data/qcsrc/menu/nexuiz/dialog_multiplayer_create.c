@@ -52,9 +52,9 @@ void fillNexuizServerCreateTab(entity me)
 		{
 			me.TD(me, 2, me.columns / n, e = makeNexuizGametypeButton(1, "g_assault", "Assault"));
 				if(e.checked) e0 = NULL;
-			me.TD(me, 2, me.columns / n, e = makeNexuizGametypeButton(1, "g_onslaught", "Onslaught"));
-				if(e.checked) e0 = NULL;
 		}
+		me.TD(me, 2, me.columns / n, e = makeNexuizGametypeButton(1, "g_onslaught", "Onslaught"));
+			if(e.checked) e0 = NULL;
 		if(e0)
 		{
 			//print("NO CHECK\n");

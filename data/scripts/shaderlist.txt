@@ -18,7 +18,9 @@ eX
 final_rage
 harlequin_sky
 kaznexctf2
+leiprojectile
 liquids
+mflag
 morphed
 nexdm18_rmx
 official_cmp1
@@ -32,7 +34,11 @@ stralenex1
 stralenex8
 strength
 swamp
+terrain_alphafade
+terrain_dotproduct2projected
+terrain_dotproduct2
+test3
 toxic
+tree
 tznex01
 water
-savterrain
