@@ -33,11 +33,12 @@ void() dom_spawnteams;
 void dompoint_captured ()
 {
 	local entity head;
-	local float old_delay;
+	local float old_delay, old_team, real_team;
 
 	// now that the delay has expired, switch to the latest team to lay claim to this point
 	head = self.aiment;
 
+	real_team = self.cnt;
 	self.cnt = -1;
 
 	LogDom("taken", self.team, self.dmg_inflictor);
@@ -73,10 +74,13 @@ void dompoint_captured ()
 		
 	// do trigger work
 	old_delay = self.delay;
+	old_team = self.team;
+	self.team = real_team;
 	self.delay = 0;
 	activator = self;
 	SUB_UseTargets ();
-	self.delay = old_delay;	
+	self.delay = old_delay;
+	self.team = old_team;
 };
 
 void AnimateDomPoint()
