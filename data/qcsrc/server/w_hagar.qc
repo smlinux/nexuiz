@@ -13,7 +13,7 @@ void W_Hagar_Explode (void)
 		sound (self, CHAN_BODY, "weapons/hagexp3.wav", 1, ATTN_NORM);
 
 	self.event_damage = SUB_Null;
-	RadiusDamage (self, self.owner, cvar("g_balance_hagar_primary_damage"), cvar("g_balance_hagar_primary_edgedamage"), cvar("g_balance_hagar_primary_radius"), world, cvar("g_balance_hagar_primary_force"), IT_HAGAR);
+	RadiusDamage (self, self.realowner, cvar("g_balance_hagar_primary_damage"), cvar("g_balance_hagar_primary_edgedamage"), cvar("g_balance_hagar_primary_radius"), world, cvar("g_balance_hagar_primary_force"), IT_HAGAR);
 
 	remove (self);
 }
@@ -33,7 +33,7 @@ void W_Hagar_Explode2 (void)
 		sound (self, CHAN_BODY, "weapons/hagexp3.wav", 1, ATTN_NORM);
 
 	self.event_damage = SUB_Null;
-	RadiusDamage (self, self.owner, cvar("g_balance_hagar_secondary_damage"), cvar("g_balance_hagar_secondary_edgedamage"), cvar("g_balance_hagar_secondary_radius"), world, cvar("g_balance_hagar_secondary_force"), IT_HAGAR);
+	RadiusDamage (self, self.realowner, cvar("g_balance_hagar_secondary_damage"), cvar("g_balance_hagar_secondary_edgedamage"), cvar("g_balance_hagar_secondary_radius"), world, cvar("g_balance_hagar_secondary_force"), IT_HAGAR);
 
 	remove (self);
 }
@@ -65,6 +65,7 @@ void W_Hagar_Touch2 (void)
 		self.cnt++;
 		pointparticles(particleeffectnum("hagar_bounce"), self.origin, self.velocity, 1);
 		self.angles = vectoangles (self.velocity);
+		self.owner = world;
 	}
 }
 
@@ -87,7 +88,7 @@ void W_Hagar_Attack (void)
 	pointparticles(particleeffectnum("hagar_muzzleflash"), w_shotorg, w_shotdir * 1000, 1);
 
 	missile = spawn ();
-	missile.owner = self;
+	missile.owner = missile.realowner = self;
 	missile.classname = "missile";
 	missile.bot_dodge = TRUE;
 	missile.bot_dodgerating = cvar("g_balance_hagar_primary_damage");
@@ -126,7 +127,7 @@ void W_Hagar_Attack2 (void)
 	pointparticles(particleeffectnum("hagar_muzzleflash"), w_shotorg, w_shotdir * 1000, 1);
 
 	missile = spawn ();
-	missile.owner = self;
+	missile.owner = missile.realowner = self;
 	missile.classname = "missile";
 	missile.bot_dodge = TRUE;
 	missile.bot_dodgerating = cvar("g_balance_hagar_secondary_damage");
