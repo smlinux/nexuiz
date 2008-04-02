@@ -3,6 +3,15 @@
 const vector proj_color = '1 1 1';
 
 .entity realowner;
+
+void W_Crylink_Think (void)
+{
+	self.nextthink = self.count;
+	self.angles = vectoangles(self.velocity);
+	if (time >= self.count)
+		remove(self);
+}
+
 void W_Crylink_Touch (void)
 {
 	if (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
@@ -10,9 +19,17 @@ void W_Crylink_Touch (void)
 		remove(self);
 		return;
 	}
-	RadiusDamage (self, self.realowner, cvar("g_balance_crylink_primary_damage"), cvar("g_balance_crylink_primary_edgedamage"), cvar("g_balance_crylink_primary_radius"), world, cvar("g_balance_crylink_primary_force"), IT_CRYLINK);
 	pointparticles(particleeffectnum("crylink_impact"), self.origin, '0 0 0', 1);
-	remove (self);
+	RadiusDamage (self, self.realowner, cvar("g_balance_crylink_primary_damage"), cvar("g_balance_crylink_primary_edgedamage"), cvar("g_balance_crylink_primary_radius"), world, cvar("g_balance_crylink_primary_force"), IT_CRYLINK);
+	if (self.cnt <= 0 || other.takedamage != DAMAGE_NO)
+	{
+		remove (self);
+		return;
+	}
+	self.cnt = self.cnt - 1;
+	self.angles = vectoangles(self.velocity);
+	self.nextthink = time;
+	self.owner = world;
 }
 
 void W_Crylink_Touch2 (void)
@@ -22,15 +39,24 @@ void W_Crylink_Touch2 (void)
 		remove(self);
 		return;
 	}
-	RadiusDamage (self, self.realowner, cvar("g_balance_crylink_secondary_damage"), cvar("g_balance_crylink_secondary_edgedamage"), cvar("g_balance_crylink_secondary_radius"), world, cvar("g_balance_crylink_secondary_force"), IT_CRYLINK);
 	pointparticles(particleeffectnum("crylink_impact"), self.origin, '0 0 0', 1);
-	remove (self);
+	RadiusDamage (self, self.realowner, cvar("g_balance_crylink_secondary_damage"), cvar("g_balance_crylink_secondary_edgedamage"), cvar("g_balance_crylink_secondary_radius"), world, cvar("g_balance_crylink_secondary_force"), IT_CRYLINK);
+	if (self.cnt <= 0 || other.takedamage != DAMAGE_NO)
+	{
+		remove (self);
+		return;
+	}
+	self.cnt = self.cnt - 1;
+	self.angles = vectoangles(self.velocity);
+	self.nextthink = time;
+	self.owner = world;
 }
 
 void W_Crylink_Attack (void)
 {
 	local float counter, shots;
 	local entity proj;
+	local vector s;
 
 	if (cvar("g_use_ammunition"))
 		self.ammo_cells = self.ammo_cells - cvar("g_balance_crylink_primary_ammo");
@@ -47,19 +73,34 @@ void W_Crylink_Attack (void)
 		proj.bot_dodge = TRUE;
 		proj.bot_dodgerating = cvar("g_balance_crylink_primary_damage");
 
-		proj.movetype = MOVETYPE_BOUNCE;
+		proj.movetype = MOVETYPE_BOUNCEMISSILE;
 		proj.solid = SOLID_BBOX;
-		proj.gravity = 0.001;
+		//proj.gravity = 0.001;
 
 		setmodel (proj, "models/plasmatrail.mdl"); // precision set below
 		setsize (proj, '0 0 0', '0 0 0');
 		setorigin (proj, w_shotorg);
 
-		proj.velocity = (w_shotdir + randomvec() * cvar("g_balance_crylink_primary_spread")) * cvar("g_balance_crylink_primary_speed");
+		s = '0 0 0';
+		if (counter == 0)
+			s = '0 0 0';
+		else if (counter == 1)
+			s = '0 0 1';
+		else if (counter == 2)
+			s = '0 -0.71 -0.71';
+		else if (counter == 3)
+			s = '0 0.71 -0.71';
+		else
+			s = randomvec();
+		s = s * cvar("g_balance_crylink_primary_spread");
+		proj.velocity = (w_shotdir + v_right * s_y + v_up * s_z) * cvar("g_balance_crylink_primary_speed");
+//		proj.velocity = (w_shotdir + randomvec() * cvar("g_balance_crylink_primary_spread")) * cvar("g_balance_crylink_primary_speed");
 		W_SetupProjectileVelocity(proj);
 		proj.touch = W_Crylink_Touch;
-		proj.think = SUB_Remove;
-		proj.nextthink = time + cvar("g_balance_crylink_primary_lifetime");
+		proj.count = time + cvar("g_balance_crylink_primary_lifetime");
+		proj.think = W_Crylink_Think;
+		proj.nextthink = proj.count;
+		proj.cnt = cvar("g_balance_crylink_primary_bounces");
 
 		proj.angles = vectoangles (proj.velocity);
 
@@ -92,9 +133,9 @@ void W_Crylink_Attack2 (void)
 		proj.bot_dodge = TRUE;
 		proj.bot_dodgerating = cvar("g_balance_crylink_secondary_damage");
 
-		proj.movetype = MOVETYPE_BOUNCE;
+		proj.movetype = MOVETYPE_BOUNCEMISSILE;
 		proj.solid = SOLID_BBOX;
-		proj.gravity = 0.001;
+		//proj.gravity = 0.001;
 
 		setmodel (proj, "models/plasmatrail.mdl"); // precision set below
 		setsize (proj, '0 0 0', '0 0 0');
@@ -103,8 +144,10 @@ void W_Crylink_Attack2 (void)
 		proj.velocity = (w_shotdir + (((counter + 0.5) / shots) * 2 - 1) * v_right * cvar("g_balance_crylink_secondary_spread")) * cvar("g_balance_crylink_secondary_speed");
 		W_SetupProjectileVelocity(proj);
 		proj.touch = W_Crylink_Touch2;
-		proj.think = SUB_Remove;
-		proj.nextthink = time + cvar("g_balance_crylink_secondary_lifetime");
+		proj.count = time + cvar("g_balance_crylink_primary_lifetime");
+		proj.think = W_Crylink_Think;
+		proj.nextthink = proj.count;
+		proj.cnt = cvar("g_balance_crylink_secondary_bounces");
 
 		proj.angles = vectoangles (proj.velocity);
 
