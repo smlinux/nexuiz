@@ -33,6 +33,7 @@ void() dom_spawnteams;
 void dompoint_captured ()
 {
 	local entity head;
+	local float old_delay;
 
 	// now that the delay has expired, switch to the latest team to lay claim to this point
 	head = self.aiment;
@@ -64,10 +65,18 @@ void dompoint_captured ()
 
 	//self.nextthink = time + cvar("g_domination_point_rate");
 	//self.think = dompointthink;
+	
 	if(cvar("g_domination_point_rate"))
 		self.delay = time + cvar("g_domination_point_rate");
 	else
 		self.delay = time + self.wait;
+		
+	// do trigger work
+	old_delay = self.delay;
+	self.delay = 0;
+	activator = self;
+	SUB_UseTargets ();
+	self.delay = old_delay;	
 };
 
 void AnimateDomPoint()

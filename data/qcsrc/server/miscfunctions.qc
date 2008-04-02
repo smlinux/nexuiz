@@ -190,7 +190,7 @@ void relocate_spawnpoint()
 	self.use = spawnpoint_use;
 	self.team_saved = self.team;
 
-	if(g_ctf || g_assault || g_onslaught)
+	if(g_ctf || g_assault || g_onslaught || g_domination)
 	if(self.team)
 		have_team_spawns = 1;
 }
