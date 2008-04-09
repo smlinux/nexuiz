@@ -799,9 +799,11 @@ void DoTeamChange(float destteam)
 
 void FixClientCvars(entity e)
 {
-	float t;
 	// send prediction settings to the client
 	stuffcmd(e, "\nin_bindmap 0 0\n");
+	/*
+	 * we no longer need to stuff this. Remove this comment block if you feel 
+	 * 2.3 and higher (or was it 2.2.3?) don't need these any more
 	stuffcmd(e, strcat("cl_gravity ", ftos(cvar("sv_gravity")), "\n"));
 	stuffcmd(e, strcat("cl_movement_accelerate ", ftos(cvar("sv_accelerate")), "\n"));
 	stuffcmd(e, strcat("cl_movement_friction ", ftos(cvar("sv_friction")), "\n"));
@@ -815,16 +817,7 @@ void FixClientCvars(entity e)
 	stuffcmd(e, strcat("set cl_movement_airaccel_qw ", ftos(cvar("sv_airaccel_qw")), "\n"));
 	stuffcmd(e, strcat("set cl_movement_airaccel_sideways_friction ", ftos(cvar("sv_airaccel_sideways_friction")), "\n"));
 	stuffcmd(e, "cl_movement_edgefriction 1\n");
-
-	// notify about available teams
-	if(teamplay)
-	{
-		CheckAllowedTeams(e);
-		t = 0; if(c1 >= 0) t |= 1; if(c2 >= 0) t |= 2; if(c3 >= 0) t |= 4; if(c4 >= 0) t |= 8;
-		stuffcmd(e, strcat("set _teams_available ", ftos(t), "\n"));
-	}
-	else
-		stuffcmd(e, "set _teams_available 0\n");
+	 */
 }
 
 /*
@@ -904,6 +897,8 @@ void ClientConnect (void)
 	stuffcmd(self, strcat("exec maps/", mapname, ".cfg\n"));
 	// TODO: is this being used for anything else than cd tracks?
 	// Remember: SVC_CDTRACK exists. Maybe it should be used.
+	//
+	stuffcmd(self, "cl_particles_reloadeffects\n");
 
 	FixClientCvars(self);
 
@@ -914,7 +909,7 @@ void ClientConnect (void)
 	SetGrappleHookBindings();
 
 	// get autoswitch state from player when he toggles it
-	stuffcmd(self, "alias autoswitch \"set cl_autoswitch $1 ; cmd autoswitch $1\"\n");
+	stuffcmd(self, "alias autoswitch \"set cl_autoswitch $1 ; cmd autoswitch $1\"\n"); // default.cfg-ed in 2.4.1
 
 	// get version info from player
 	stuffcmd(self, "cmd clientversion $gameversion\n");
@@ -941,6 +936,16 @@ void ClientConnect (void)
 	}
 	else
 		stuffcmd(self, "set teamplay 0\n");
+
+	// notify about available teams
+	if(teamplay)
+	{
+		CheckAllowedTeams(self);
+		t = 0; if(c1 >= 0) t |= 1; if(c2 >= 0) t |= 2; if(c3 >= 0) t |= 4; if(c4 >= 0) t |= 8;
+		stuffcmd(self, strcat("set _teams_available ", ftos(t), "\n"));
+	}
+	else
+		stuffcmd(self, "set _teams_available 0\n");
 
 	stuffcmd(self, strcat("set gametype ", ftos(game), "\n"));
 
