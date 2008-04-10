@@ -280,32 +280,32 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				}
 				else if (attacker.killcount == 5)
 				{
-					bprint (a,"^7 made a ^1FIVE FRAG COMBO\n");
+					bprint (a,"^7 is on a ^1RAGE\n");
 					announce(attacker, "announcer/male/05kills.ogg");
 				}
 				else if (attacker.killcount == 10)
 				{
-					bprint (a,"^7 is on a ^1RAGE\n");
+					bprint (a,"^7 has done a ^1MASSACRE!\n");
 					announce(attacker, "announcer/male/10kills.ogg");
 				}
 				else if (attacker.killcount == 15)
 				{
-					bprint (a,"^7 has done a ^1MASSACRE!\n");
+					bprint (a,"^7 caused a ^1MAYHEM!\n");
 					announce(attacker, "announcer/male/15kills.ogg");
 				}
 				else if (attacker.killcount == 20)
 				{
-					bprint (a,"^7 is ^1UNHUMAN!\n");
+					bprint (a,"^7 is a ^1BERSERKER!\n");
 					announce(attacker, "announcer/male/20kills.ogg");
 				}
 				else if (attacker.killcount == 25)
 				{
-					bprint (a,"^7 is a ^1DEATH INCARNATION!\n");
+					bprint (a,"^7 caused a ^1CARNAGE!\n");
 					announce(attacker, "announcer/male/25kills.ogg");
 				}
 				else if (attacker.killcount == 30)
 				{
-					bprint (a,"^7 is maybe a ^1AIMBOTTER?!\n");
+					bprint (a,"^7 started the ^1ARMAGEDDON?!\n");
 					announce(attacker, "announcer/male/30kills.ogg");
 				}
 			}
