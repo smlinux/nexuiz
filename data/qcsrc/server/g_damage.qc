@@ -280,17 +280,17 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				}
 				else if (attacker.killcount == 5)
 				{
-					bprint (a,"^7 is on a ^1RAGE\n");
+					bprint (a,"^7 unleashes ^1RAGE\n");
 					announce(attacker, "announcer/male/05kills.ogg");
 				}
 				else if (attacker.killcount == 10)
 				{
-					bprint (a,"^7 started a ^1MASSACRE!\n");
+					bprint (a,"^7 starts the ^1MASSACRE!\n");
 					announce(attacker, "announcer/male/10kills.ogg");
 				}
 				else if (attacker.killcount == 15)
 				{
-					bprint (a,"^7 is unleashing ^1MAYHEM!\n");
+					bprint (a,"^7 executes ^1MAYHEM!\n");
 					announce(attacker, "announcer/male/15kills.ogg");
 				}
 				else if (attacker.killcount == 20)
@@ -300,12 +300,12 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				}
 				else if (attacker.killcount == 25)
 				{
-					bprint (a,"^7 caused massive ^1CARNAGE!\n");
+					bprint (a,"^7 inflicts ^1CARNAGE!\n");
 					announce(attacker, "announcer/male/25kills.ogg");
 				}
 				else if (attacker.killcount == 30)
 				{
-					bprint (a,"^7 is starting ^1ARMAGEDDON!\n");
+					bprint (a,"^7 unleashes ^1ARMAGEDDON!\n");
 					announce(attacker, "announcer/male/30kills.ogg");
 				}
 			}
