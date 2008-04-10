@@ -290,7 +290,7 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				}
 				else if (attacker.killcount == 15)
 				{
-					bprint (a,"^7 caused a ^1MAYHEM!\n");
+					bprint (a,"^7 caused ^1MAYHEM!\n");
 					announce(attacker, "announcer/male/15kills.ogg");
 				}
 				else if (attacker.killcount == 20)
@@ -300,7 +300,7 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				}
 				else if (attacker.killcount == 25)
 				{
-					bprint (a,"^7 caused a ^1CARNAGE!\n");
+					bprint (a,"^7 caused massive ^1CARNAGE!\n");
 					announce(attacker, "announcer/male/25kills.ogg");
 				}
 				else if (attacker.killcount == 30)
