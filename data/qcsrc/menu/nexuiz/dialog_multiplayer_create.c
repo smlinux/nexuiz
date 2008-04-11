@@ -31,7 +31,9 @@ void fillNexuizServerCreateTab(entity me)
 	float n;
 
 	me.TR(me);
-		n = 8 + 2 * !!cvar("developer");
+		n = 9 + 1 * !!cvar("developer");
+		// NOTE: not using ?: due to fteqcc bug
+		// this actually means: cvar("developer") ? 10 : 9
 		me.TD(me, 2, me.columns / n, e = makeNexuizGametypeButton(1, "g_dm", "DM"));
 			e0 = e;
 		me.TD(me, 2, me.columns / n, e = makeNexuizGametypeButton(1, "g_tdm", "TDM"));
