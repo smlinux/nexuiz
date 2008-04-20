@@ -36,7 +36,10 @@ void fillNexuizVideoSettingsTab(entity me)
 	me.TR(me);
 		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "r_glsl", "Use OpenGL 2.0 shaders (GLSL)"));
 	me.TR(me);
-		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "gl_vbo", "Use Vertex Buffer Objects (VBO)"));
+		me.TD(me, 1, 1.5, e = makeNexuizTextLabel(0, "Vertex Buffer Objects"));
+		me.TD(me, 1, 0.5, e = makeNexuizRadioButton(1, "gl_vbo", "0", "Off"));
+		me.TD(me, 1, 0.5, e = makeNexuizRadioButton(1, "gl_vbo", "1", "One"));
+		me.TD(me, 1, 0.5, e = makeNexuizRadioButton(1, "gl_vbo", "2", "Several VBOs"));
 	me.TR(me);
 		me.TD(me, 1, 1.5, e = makeNexuizTextLabel(0, "Texture compression"));
 		me.TD(me, 1, 0.5, e = makeNexuizRadioButton(1, "gl_texturecompression", "0", "None"));
