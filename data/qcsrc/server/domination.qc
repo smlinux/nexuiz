@@ -229,6 +229,11 @@ Keys:
 
 void() dom_team =
 {
+	if(!g_domination)
+	{
+		remove(self);
+		return;
+	}
 	precache_model(self.model);
 	if (self.noise != "")
 		precache_sound(self.noise);

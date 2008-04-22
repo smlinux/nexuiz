@@ -460,7 +460,10 @@ Keys:
 void() item_flag_team1 =
 {
 	if (!g_ctf)
+	{
+		remove(self);
 		return;
+	}
 
 	//if(!cvar("teamplay"))
 	//	cvar_set("teamplay", "3");
@@ -526,7 +529,10 @@ Keys:
 void() item_flag_team2 =
 {
 	if (!g_ctf)
+	{
+		remove(self);
 		return;
+	}
 	//if(!cvar("teamplay"))
 	//	cvar_set("teamplay", "3");
 
@@ -595,6 +601,11 @@ Keys:
 
 void() ctf_team =
 {
+	if (!g_ctf)
+	{
+		remove(self);
+		return;
+	}
 	self.classname = "ctf_team";
 	self.team = self.cnt + 1;
 };
