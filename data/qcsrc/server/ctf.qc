@@ -654,22 +654,18 @@ void() ctf_init =
 	flagcaptimerecord = stof(db_get(ServerProgsDB, strcat(GetMapname(), "/captimerecord/time")));
 };
 
-void(entity flag) ctf_setstatus2 =
+void(entity flag, float shift) ctf_setstatus2 =
 {
-	if (flag) {
-		local float shift;
-		if (flag.team == COLOR_TEAM1) shift = IT_RED_FLAG_TAKEN;
-		else if (flag.team == COLOR_TEAM2) shift = IT_BLUE_FLAG_TAKEN;
-		else shift = 0;
-
-		local float status;
-		if (flag.cnt ==	FLAG_CARRY)
-			if (flag.owner == self) status = 3;
-			else status = 1;
-		else if (flag.cnt == FLAG_DROPPED) status = 2;
-		else status = 0;
-
-		self.items = self.items | (shift * status);
+	if (flag.cnt ==	FLAG_CARRY)
+		if (flag.owner == self)
+			self.items |= shift * 3;
+		else
+			self.items |= shift * 1;
+	else if (flag.cnt == FLAG_DROPPED)
+		self.items |= shift * 2;
+	else
+	{
+		// no status bits
 	}
 };
 
@@ -682,11 +678,37 @@ void() ctf_setstatus =
 
 	if (g_ctf) {
 		local entity flag;
-		flag = ctf_worldflaglist;
-		while (flag)
+		float redflags, blueflags;
+
+		redflags = 0;
+		blueflags = 0;
+
+		for (flag = ctf_worldflaglist; flag; flag = flag.ctf_worldflagnext) if(flag.cnt != FLAG_BASE)
 		{
-			ctf_setstatus2(flag);
-			flag = flag.ctf_worldflagnext;
+			if(flag.team == COLOR_TEAM1)
+				++redflags;
+			else if(flag.team == COLOR_TEAM2)
+				++blueflags;
+		}
+
+		// blinking magic: if there is more than one flag, show one of these in a clever way
+		if(redflags)
+			redflags = mod(floor(time * redflags * 0.75), redflags);
+		if(blueflags)
+			blueflags = mod(floor(time * blueflags * 0.75), blueflags);
+
+		for (flag = ctf_worldflaglist; flag; flag = flag.ctf_worldflagnext) if(flag.cnt != FLAG_BASE)
+		{
+			if(flag.team == COLOR_TEAM1)
+			{
+				if(redflags-- == 0) // happens exactly once
+					ctf_setstatus2(flag, IT_RED_FLAG_TAKEN);
+			}
+			else if(flag.team == COLOR_TEAM2)
+			{
+				if(blueflags-- == 0) // happens exactly once
+					ctf_setstatus2(flag, IT_BLUE_FLAG_TAKEN);
+			}
 		}
 	}
 };
