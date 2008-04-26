@@ -480,7 +480,8 @@ void() func_rain =
 	self.angles = '0 0 0';
 	self.movetype = MOVETYPE_NONE;
 	self.solid = SOLID_NOT;
-	setmodel(self, self.model); // no precision needed
+	if(self.model != "")
+		setmodel(self, self.model); // no precision needed
 	setorigin(self, self.origin);
 	setsize(self, self.mins, self.maxs);
 	self.model = "";
@@ -534,7 +535,8 @@ void() func_snow =
 	self.angles = '0 0 0';
 	self.movetype = MOVETYPE_NONE;
 	self.solid = SOLID_NOT;
-	setmodel(self, self.model); // no precision needed
+	if(self.model != "")
+		setmodel(self, self.model); // no precision needed
 	setorigin(self, self.origin);
 	setsize(self, self.mins, self.maxs);
 	self.model = "";

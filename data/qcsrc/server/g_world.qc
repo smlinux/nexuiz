@@ -2206,7 +2206,7 @@ float RedirectionThink()
 	if(!redirection_timeout)
 	{
 		cvar_set("sv_public", "-2");
-		redirection_timeout = time + 0.5; // this will only try twice... should be able to keep more clients
+		redirection_timeout = time + 0.6; // this will only try twice... should be able to keep more clients
 		if(redirection_target == "self")
 			bprint("^3SERVER NOTICE:^7 restarting the server\n");
 		else
