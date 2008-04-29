@@ -456,7 +456,7 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 			else if (deathtype == IT_NEX && targ.items & IT_STRENGTH)
 			{
 				if(clienttype(attacker) == CLIENTTYPE_REAL)
-					if(IsDifferentTeam(self, attacker))
+					if(IsDifferentTeam(targ, attacker))
 						yoda = 1;
 			}
 			if (deathtype == IT_LASER)
@@ -477,7 +477,7 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 			if (!targ.deadflag)
 				if(targ.takedamage == DAMAGE_AIM)
 					if(IsFlying(targ))
-						if(IsDifferentTeam(self, targ))
+						if(IsDifferentTeam(targ, attacker))
 							yoda = 1;
 		}
 
