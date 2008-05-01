@@ -283,7 +283,7 @@ void PlayerCorpseDamage (entity inflictor, entity attacker, float damage, float 
 		self.pauseregen_finished = max(self.pauseregen_finished, time + cvar("g_balance_pause_health_regen"));
 	}
 	self.dmg_save = self.dmg_save + save;//max(save - 10, 0);
-	self.dmg_take = self.dmg_take + take * 10;//max(take - 10, 0);
+	self.dmg_take = self.dmg_take + take;//max(take - 10, 0);
 	self.dmg_inflictor = inflictor;
 
 	if (self.health <= -50)
@@ -404,9 +404,8 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 			self.max_armorvalue += (save + take);
 	}
 	self.dmg_save = self.dmg_save + save;//max(save - 10, 0);
-	self.dmg_take = self.dmg_take + take * 10;//max(take - 10, 0);
+	self.dmg_take = self.dmg_take + take;//max(take - 10, 0);
 	self.dmg_inflictor = inflictor;
-	print("dmg_take is ", ftos(self.dmg_take), "\n");
 
 	if(attacker == self)
 	{
