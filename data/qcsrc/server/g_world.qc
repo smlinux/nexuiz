@@ -342,8 +342,22 @@ float GetMaplistPosition()
 
 float MapHasRightSize(string map)
 {
-	// open map size restriction file
 	float fh;
+	if(currentbots || cvar("bot_number") || player_count < cvar("minplayers"))
+	if(cvar("g_maplist_check_waypoints"))
+	{
+		dprint("checkwp "); dprint(map);
+		fh = fopen(strcat("maps/", map, ".waypoints"), FILE_READ);
+		if(fh < 0)
+		{
+			dprint(": no waypoints\n");
+			return FALSE;
+		}
+		dprint(": has waypoints\n");
+		fclose(fh);
+	}
+
+	// open map size restriction file
 	dprint("opensize "); dprint(map);
 	fh = fopen(strcat("maps/", map, ".sizes"), FILE_READ);
 	if(fh >= 0)
@@ -431,7 +445,7 @@ float(float position, float pass) Map_Check =
 		return 0;
 	}
 	else
-		dprint( "Couldn't find '", filename, "'..\n" );
+		dprint( "Couldn't select '", filename, "'..\n" );
 
 	return 0;
 }
