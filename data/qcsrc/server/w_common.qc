@@ -25,7 +25,8 @@ void W_GiveWeapon (entity e, float wep, string name)
 void FireRailgunBullet (vector start, vector end, float bdamage, float bforce, float deathtype)
 {
 	local vector hitloc, force, endpoint, dir;
-	local entity ent;
+	local entity ent, endent;
+	local float endq3surfaceflags;
 	//local entity explosion;
 
 	dir = normalize(end - start);
@@ -62,6 +63,8 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float bforce, f
 	}
 
 	endpoint = trace_endpos;
+	endent = trace_ent;
+	endq3surfaceflags = trace_dphitq3surfaceflags;
 
 	// find all the entities the railgun hit and restore their solid state
 	ent = findfloat(world, railgunhit, TRUE);
@@ -101,6 +104,8 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float bforce, f
 	//remove(explosion);
 
 	trace_endpos = endpoint;
+	trace_ent = endent;
+	trace_dphitq3surfaceflags = endq3surfaceflags;
 }
 
 void fireBullet (vector start, vector dir, float spread, float damage, float force, float dtype, float tracer)

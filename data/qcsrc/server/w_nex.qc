@@ -1,6 +1,10 @@
 
 void W_Nex_Attack (void)
 {
+	float flying;
+	if not(g_minstagib || g_instagib)
+		flying = IsFlying(self); // do this BEFORE to make the trace values from FireRailgunBullet last
+
 	W_SetupShot (self, '25 4 -4', TRUE, 5, "weapons/nexfire.wav");
 	//W_SetupShot (self, '25 8 -8', TRUE, 2, "weapons/nexfire.wav"); // TODO: move model down a little
 
@@ -11,8 +15,9 @@ void W_Nex_Attack (void)
 	{
 		yoda = 0;
 		FireRailgunBullet (w_shotorg, w_shotorg + w_shotdir * MAX_SHOT_DISTANCE, cvar("g_balance_nex_damage"), cvar("g_balance_nex_force"), IT_NEX);
+
 		if(yoda)
-			if(IsFlying(self))
+			if(flying)
 				announce(self, "announcer/male/yoda.ogg");
 	}
 
