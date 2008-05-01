@@ -1,3 +1,8 @@
+string cache_motd;
+string cache_mutatormsg;
+string cache_lastmotd;
+string cache_lastmutatormsg;
+
 // client counts for each team
 float c1, c2, c3, c4;
 // # of bots on those teams
@@ -285,11 +290,6 @@ void InitGameplayMode()
 		cvar_set("g_minstagib", "0");
 	}
 
-	registercvar("_motd", "");
-	registercvar("_mutatormsg", "");
-	cvar_set("_motd", wordwrap(cvar_string("sv_motd"), 50));
-	cvar_set("_mutatormsg", wordwrap(cvar_string("g_mutatormsg"), 50));
-
 	g_domination = cvar("g_domination");
 	g_ctf = cvar("g_ctf");
 	g_lms = cvar("g_lms");
@@ -299,6 +299,11 @@ void InitGameplayMode()
 	g_onslaught = cvar("g_onslaught");
 	g_assault = cvar("g_assault");
 	g_arena = cvar("g_arena");
+
+	cache_mutatormsg = strzone("");
+	cache_motd = strzone("");
+	cache_lastmutatormsg = strzone("");
+	cache_lastmotd = strzone("");
 
 	// enforce the server's universal frag/time limits
 	if(!cvar("g_campaign"))
@@ -422,12 +427,32 @@ void PrintWelcomeMessage(entity pl)
 	if (g_grappling_hook)
 		s = strcat(s, "\n\n^8grappling hook is enabled, press 'e' to use it\n");
 
-	if (cvar_string("_mutatormsg") != "") {
-		s = strcat(s, "\n\n^8special gameplay tips: ^7", cvar_string("_mutatormsg"));
+	if(cache_lastmutatormsg != cvar_string("g_mutatormsg"))
+	{
+		if(cache_lastmutatormsg)
+			strunzone(cache_lastmutatormsg);
+		if(cache_mutatormsg)
+			strunzone(cache_mutatormsg);
+		cache_lastmutatormsg = strzone(cvar_string("g_mutatormsg"));
+		cache_mutatormsg = strzone(wordwrap(cache_lastmutatormsg, 50));
 	}
 
-	if (cvar_string("_motd") != "") {
-		s = strcat(s, "\n\n^8MOTD: ^7", cvar_string("_motd"));
+	if (cache_mutatormsg != "") {
+		s = strcat(s, "\n\n^8special gameplay tips: ^7", cache_mutatormsg);
+	}
+	
+	if(cache_lastmotd != cvar_string("sv_motd"))
+	{
+		if(cache_lastmotd)
+			strunzone(cache_lastmotd);
+		if(cache_motd)
+			strunzone(cache_motd);
+		cache_lastmotd = strzone(cvar_string("sv_motd"));
+		cache_motd = strzone(wordwrap(cache_lastmotd, 50));
+	}
+
+	if (cache_motd != "") {
+		s = strcat(s, "\n\n^8MOTD: ^7", cache_motd);
 	}
 
 	s = strcat(s, "\n");
