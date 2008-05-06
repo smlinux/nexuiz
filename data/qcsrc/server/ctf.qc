@@ -451,7 +451,7 @@ Keys:
  (default ctf/return.wav)
 "noise2"
  sound played when flag is captured
- (default ctf/capture.wav)
+ (default ctf/redcapture.wav)
 "noise3"
  sound played when flag is lost in the field and respawns itself
  (default ctf/respawn.wav)
@@ -487,7 +487,7 @@ void() item_flag_team1 =
 	if (!self.noise1)
 		self.noise1 = "ctf/return.wav";
 	if (!self.noise2)
-		self.noise2 = "ctf/capture.wav";
+		self.noise2 = "ctf/redcapture.wav"; // blue team scores by capturing the red flag
 	if (!self.noise3)
 		self.noise3 = "ctf/respawn.wav";
 	precache_model (self.model);
@@ -523,7 +523,21 @@ Keys:
 "angle"
  Angle the flag will point
 (minus 90 degrees)
-
+"model"
+ model to use, note this needs red and blue as skins 0 and 1
+ (default models/ctf/flag.md3)
+"noise"
+ sound played when flag is picked up
+ (default ctf/take.wav)
+"noise1"
+ sound played when flag is returned by a teammate
+ (default ctf/return.wav)
+"noise2"
+ sound played when flag is captured
+ (default ctf/bluecapture.wav)
+"noise3"
+ sound played when flag is lost in the field and respawns itself
+ (default ctf/respawn.wav)
 */
 
 void() item_flag_team2 =
@@ -555,7 +569,7 @@ void() item_flag_team2 =
 	if (!self.noise1)
 		self.noise1 = "ctf/return.wav";
 	if (!self.noise2)
-		self.noise2 = "ctf/capture.wav";
+		self.noise2 = "ctf/bluecapture.wav"; // red team scores by capturing the blue flag
 	if (!self.noise3)
 		self.noise3 = "ctf/respawn.wav";
 	precache_model (self.model);
