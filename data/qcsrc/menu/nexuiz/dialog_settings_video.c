@@ -36,10 +36,15 @@ void fillNexuizVideoSettingsTab(entity me)
 	me.TR(me);
 		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "r_glsl", "Use OpenGL 2.0 shaders (GLSL)"));
 	me.TR(me);
-		me.TD(me, 1, 1.5, e = makeNexuizTextLabel(0, "Vertex Buffer Objects"));
-		me.TD(me, 1, 0.5, e = makeNexuizRadioButton(1, "gl_vbo", "0", "Off"));
-		me.TD(me, 1, 0.5, e = makeNexuizRadioButton(1, "gl_vbo", "1", "One"));
-		me.TD(me, 1, 0.5, e = makeNexuizRadioButton(1, "gl_vbo", "2", "Several VBOs"));
+		me.TD(me, 1, 1.5, e = makeNexuizTextLabel(0, "Vertex Buffer Objects (VBOs)"));
+	me.TR(me);
+		me.TDempty(me, 0.2);
+		me.TD(me, 1, 1.5, e = makeNexuizRadioButton(1, "gl_vbo", "0", "Off"));
+		me.TD(me, 1, 1.5, e = makeNexuizRadioButton(1, "gl_vbo", "1", "One big buffer"));
+	me.TR(me);
+		me.TDempty(me, 0.2);
+		me.TD(me, 1, 1.5, e = makeNexuizRadioButton(1, "gl_vbo", "2", "Several mixed buffers"));
+		me.TD(me, 1, 1.5, e = makeNexuizRadioButton(1, "gl_vbo", "3", "Several dedicated buffers"));
 	me.TR(me);
 		me.TD(me, 1, 1.5, e = makeNexuizTextLabel(0, "Texture compression"));
 		me.TD(me, 1, 0.5, e = makeNexuizRadioButton(1, "gl_texturecompression", "0", "None"));
@@ -47,14 +52,6 @@ void fillNexuizVideoSettingsTab(entity me)
 		me.TD(me, 1, 0.5, e = makeNexuizRadioButton(1, "gl_texturecompression", "2", "Good"));
 	me.TR(me);
 		me.TD(me, 1, 3, e = makeNexuizCheckBoxEx(4, 1, "vid_samples", "Use 4x multisampling"));
-
-	me.TR(me);
-		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Depth first:"));
-		me.TD(me, 1, 2, e = makeNexuizTextSlider("r_depthfirst"));
-			e.addValue(e, "Disabled", "0");
-			e.addValue(e, "World", "1");
-			e.addValue(e, "All", "2");
-			e.configureNexuizTextSliderValues(e);
 
 	me.TR(me);
 		if(cvar_type("apple_multithreadedgl") & CVAR_TYPEFLAG_ENGINE)
@@ -85,6 +82,15 @@ void fillNexuizVideoSettingsTab(entity me)
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Scene brightness:"));
 		me.TD(me, 1, 2, e = makeNexuizSlider(0.5, 2.0, 0.05, "r_hdr_scenebrightness"));
+
+	me.TR(me);
+	me.TR(me);
+		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Depth first:"));
+		me.TD(me, 1, 2, e = makeNexuizTextSlider("r_depthfirst"));
+			e.addValue(e, "Disabled", "0");
+			e.addValue(e, "World", "1");
+			e.addValue(e, "All", "2");
+			e.configureNexuizTextSliderValues(e);
 
 	me.gotoRC(me, me.rows - 1, 0);
 		me.TD(me, 1, me.columns, makeNexuizCommandButton("Apply immediately", '0 0 0', "vid_restart", COMMANDBUTTON_APPLY));
