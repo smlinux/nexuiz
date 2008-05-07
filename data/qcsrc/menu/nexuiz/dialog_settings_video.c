@@ -39,12 +39,12 @@ void fillNexuizVideoSettingsTab(entity me)
 		me.TD(me, 1, 1.5, e = makeNexuizTextLabel(0, "Vertex Buffer Objects (VBOs)"));
 	me.TR(me);
 		me.TDempty(me, 0.2);
-		me.TD(me, 1, 1.5, e = makeNexuizRadioButton(1, "gl_vbo", "0", "Off"));
-		me.TD(me, 1, 1.5, e = makeNexuizRadioButton(1, "gl_vbo", "1", "One big buffer"));
+		me.TD(me, 1, 0.9, e = makeNexuizRadioButton(1, "gl_vbo", "0", "Off"));
+		me.TD(me, 1, 2.1, e = makeNexuizRadioButton(1, "gl_vbo", "1", "Vertex and Triangles"));
 	me.TR(me);
 		me.TDempty(me, 0.2);
-		me.TD(me, 1, 1.5, e = makeNexuizRadioButton(1, "gl_vbo", "2", "Several mixed buffers"));
-		me.TD(me, 1, 1.5, e = makeNexuizRadioButton(1, "gl_vbo", "3", "Several dedicated buffers"));
+		me.TD(me, 1, 0.9, e = makeNexuizRadioButton(1, "gl_vbo", "2", "Vertex only"));
+		me.TD(me, 1, 2.1, e = makeNexuizRadioButton(1, "gl_vbo", "3", "Vertex, some Triangles (compatible)"));
 	me.TR(me);
 		me.TD(me, 1, 1.5, e = makeNexuizTextLabel(0, "Texture compression"));
 		me.TD(me, 1, 0.5, e = makeNexuizRadioButton(1, "gl_texturecompression", "0", "None"));
