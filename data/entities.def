@@ -667,6 +667,16 @@ To make a jump pad or launch ramp, place the target_position/info_notnull entity
 
 //=============================================================================
 
+/*QUAKED trigger_force (.5 .5 .5) ?
+Similar to trigger_push, but adds force to the target as long as it is within the trigger.
+-------- KEYS --------
+target : this points to the target_position to which the player will get pushed.
+strength : This is how mutch force to add in the direction of .target each second
+-------- NOTES --------
+Use a brush textured with common/origin in the trigger to determine the origin of the force
+*/
+
+//=============================================================================
 /*QUAKED trigger_teleport (.5 .5 .5) ?
 Touching this will teleport players to the location of the targeted misc_teleporter_dest entity. This entity allows client prediction of events.
 -------- KEYS --------
@@ -684,16 +694,21 @@ shot gun, shall i say no more
 -----------KEYS------------
 -----------SPAWNFLAGS-----------
 ---------NOTES----------
-a weapon how hard can it be*/
-
+a weapon how hard can it be
+-------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
+model="models/weapons/g_shotgun.md3"
+*/
 //===================================================================
 
-/*QUAKED weapon_uzi (1 0 .5) (-16 -16 -16) (16 16 16)
+/*QUAKED weapon_machinegun (1 0 .5) (-16 -16 -16) (16 16 16)
 machinegun, shall i say no more
 -----------KEYS------------
 -----------SPAWNFLAGS-----------
 ---------NOTES----------
-a weapon how hard can it be*/
+a weapon how hard can it be
+-------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
+model="models/weapons/g_uzi.md3"
+*/
 
 //===================================================================
 
@@ -702,7 +717,11 @@ grenade launcher, shall i say no more
 -----------KEYS------------
 -----------SPAWNFLAGS-----------
 ---------NOTES----------
-a weapon how hard can it be*/
+a weapon how hard can it be
+-------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
+model="models/weapons/g_gl.md3"
+*/
+
 
 //===================================================================
 
@@ -711,7 +730,11 @@ electro, shall i say no more
 -----------KEYS------------
 -----------SPAWNFLAGS-----------
 ---------NOTES----------
-a weapon how hard can it be*/
+a weapon how hard can it be
+-------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
+model="models/weapons/g_electro.md3"
+*/
+
 
 //===================================================================
 
@@ -720,7 +743,11 @@ crylink, shall i say no more
 -----------KEYS------------
 -----------SPAWNFLAGS-----------
 ---------NOTES----------
-a weapon how hard can it be*/
+a weapon how hard can it be
+-------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
+model="models/weapons/g_crylink.md3"
+*/
+
 
 //===================================================================
 
@@ -729,7 +756,11 @@ hagar, shall i say no more
 -----------KEYS------------
 -----------SPAWNFLAGS-----------
 ---------NOTES----------
-a weapon how hard can it be*/
+a weapon how hard can it be
+-------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
+model="models/weapons/g_hagar.md3"
+*/
+
 
 //===================================================================
 
@@ -738,7 +769,11 @@ rocketlauncher, shall i say no more
 -----------KEYS------------
 -----------SPAWNFLAGS-----------
 ---------NOTES----------
-a weapon how hard can it be*/
+a weapon how hard can it be
+-------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
+model="models/weapons/g_rl.md3"
+*/
+
 
 //===================================================================
 
@@ -747,7 +782,11 @@ nexgun launcher, shall i say no more
 -----------KEYS------------
 -----------SPAWNFLAGS-----------
 ---------NOTES----------
-a weapon how hard can it be*/
+a weapon how hard can it be
+-------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
+model="models/weapons/g_nex.md3"
+*/
+
 
 //===================================================================
 
@@ -791,6 +830,28 @@ a ladder, need i say no more
 graba trigger brush and put it infront of the part that you want the player to climb
 */
 
+//=============================================================================
+/*QUAKED dynlight (0 1 0) (-8 -8 -8) (8 8 8) START_OFF NOSHADOW FOLLOW
+Dynamic light.
+Can do one of these things: sit still and be just a silly light, travel along a path, follow an entity around, attach to a tag on an entity.
+It can spin around it's own axis in all the above cases.
+If targeted, it will toggle between on or off.
+keys:
+"light_lev" light radius, default 200
+"color" light color in rgb and brightness, 1 1 1 produces bright white, up to 255 255 255 (nuclear blast), recommended values up to 1 1 1, default 1 1 1
+"style" lightstyle, same as for static lights
+"angles" initial orientation
+"avelocity" a vector value, the direction and speed it rotates in
+"skin" cubemap number, must be 16 or above
+"dtagname" will attach to this tag on the entity which "targetname" matches "target". If the "target" is either not an md3 model or is missing tags, it will attach to the targets origin. Note that the "target" must be visible to the light
+"targetname" will toggle on and off when triggered
+"target" if issued with a target, preferrably path_corner, it will move along the path. If also issued with the FOLLOW spawnflag, then this is the entity it will follow. If issued with the "tagname" key it will attach it to this targets tag called "tagname", does not work together with FOLLOW or path movement
+"speed" the speed it will travel along the path, default 100
+flags:
+"START_OFF" light will be in off state until targeted
+"NOSHADOW" will not cast shadows in realtime lighting mode
+"FOLLOW" will follow the entity which "targetname" matches "target"
+*/
 /*QUAKED trigger_cmd (.5 .5 .5) ? 
 Any player that touches this will have the .cdm command executed
 -------- KEYS --------
@@ -840,19 +901,19 @@ In order to get Domination working well in your map, you need to place dom_team 
 */
 
 // entities still to describe:
-// ctf_team
-// func_assault_destructible
-// func_assault_wall
-// func_door_secret
-// func_rain
-// func_snow
-// func_stardust
-// func_water
-// info_location
-// info_player_attacker
-// info_player_defender
-// info_player_team3
-// info_player_team4
+/*QUAKED info_location(0 .5 0) (-8 -8 -8) (8 8 8)
+Indicates a location name, for use with say macros
+-------- KEYS --------
+netname : Name of the place (ex " the upper ledge")
+//=============================================================================
+*/
+
+/*QUAKED func_stardust(0.5 0 0.5) (-8 -8 -8) (8 8 8)
+Eyecandy
+-------- KEYS --------
+none
+//=============================================================================
+*/
 // info_teleport_destination
 // item_armor2
 // item_armor_large
