@@ -234,7 +234,7 @@ void ServerList_ShowEmpty_Click(entity box, entity me)
 }
 void ServerList_ShowFull_Click(entity box, entity me)
 {
-	box.checked = me.filterShowFull = !me.filterShowFull;
+	box.setChecked(box, me.filterShowFull = !me.filterShowFull);
 	me.refreshServerList(me, 0);
 }
 void setSortOrderNexuizServerList(entity me, float field, float direction)
