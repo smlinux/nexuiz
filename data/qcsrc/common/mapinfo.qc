@@ -139,8 +139,6 @@ void MapInfo_Cache_Store()
 	bufstr_set(_MapInfo_Cache_Buf_IndexToMapData, i++, MapInfo_Map_author);
 	bufstr_set(_MapInfo_Cache_Buf_IndexToMapData, i++, ftos(MapInfo_Map_supportedGametypes));
 	bufstr_set(_MapInfo_Cache_Buf_IndexToMapData, i++, ftos(MapInfo_Map_supportedFeatures));
-	bufstr_set(_MapInfo_Cache_Buf_IndexToMapData, i++, ftos(MapInfo_Map_diameter));
-	bufstr_set(_MapInfo_Cache_Buf_IndexToMapData, i++, ftos(MapInfo_Map_spawnpoints));
 }
 
 float MapInfo_Cache_Retrieve(string map)
@@ -162,8 +160,6 @@ float MapInfo_Cache_Retrieve(string map)
 	MapInfo_Map_author = bufstr_get(_MapInfo_Cache_Buf_IndexToMapData, i++);
 	MapInfo_Map_supportedGametypes = stof(bufstr_get(_MapInfo_Cache_Buf_IndexToMapData, i++));
 	MapInfo_Map_supportedFeatures = stof(bufstr_get(_MapInfo_Cache_Buf_IndexToMapData, i++));
-	MapInfo_Map_diameter = stof(bufstr_get(_MapInfo_Cache_Buf_IndexToMapData, i++));
-	MapInfo_Map_spawnpoints = stof(bufstr_get(_MapInfo_Cache_Buf_IndexToMapData, i++));
 	return 1;
 }
 
@@ -322,6 +318,7 @@ float _MapInfo_Generate(string pFilename) // 0: failure, 1: ok ent, 2: ok bsp
 	float inWorldspawn;
 	float r;
 	float twoBaseModes;
+	float diameter, spawnpoints;
 
 	vector mapMins, mapMaxs;
 
@@ -340,6 +337,7 @@ float _MapInfo_Generate(string pFilename) // 0: failure, 1: ok ent, 2: ok bsp
 
 	inWorldspawn = 2;
 	MapInfo_Map_supportedGametypes = 0;
+	spawnpoints = 0;
 
 	for(;;)
 	{
@@ -397,13 +395,13 @@ float _MapInfo_Generate(string pFilename) // 0: failure, 1: ok ent, 2: ok bsp
 				else if(v == "onslaught_generator")
 					MapInfo_Map_supportedGametypes |= MAPINFO_TYPE_ONSLAUGHT;
 				else if(v == "info_player_team1")
-					++MapInfo_Map_spawnpoints;
+					++spawnpoints;
 				else if(v == "info_player_team2")
-					++MapInfo_Map_spawnpoints;
+					++spawnpoints;
 				else if(v == "info_player_start")
-					++MapInfo_Map_spawnpoints;
+					++spawnpoints;
 				else if(v == "info_player_deathmatch")
-					++MapInfo_Map_spawnpoints;
+					++spawnpoints;
 				else if(v == "weapon_nex")
 					{ }
 				else if(v == "weapon_railgun")
@@ -418,7 +416,7 @@ float _MapInfo_Generate(string pFilename) // 0: failure, 1: ok ent, 2: ok bsp
 		print(fn, " ended still in worldspawn, BUG\n");
 		return 0;
 	}
-	MapInfo_Map_diameter = vlen(mapMaxs - mapMins);
+	diameter = vlen(mapMaxs - mapMins);
 
 	twoBaseModes = MapInfo_Map_supportedGametypes & (MAPINFO_TYPE_CTF | MAPINFO_TYPE_ASSAULT);
 	if(twoBaseModes && (MapInfo_Map_supportedGametypes == twoBaseModes))
@@ -431,13 +429,17 @@ float _MapInfo_Generate(string pFilename) // 0: failure, 1: ok ent, 2: ok bsp
 		MapInfo_Map_supportedGametypes |= MAPINFO_TYPE_DEATHMATCH;      // DM always works
 		MapInfo_Map_supportedGametypes |= MAPINFO_TYPE_LMS;             // LMS always works
 
-		if(MapInfo_Map_spawnpoints >= 8  && MapInfo_Map_diameter > 4096)
+		if(spawnpoints >= 8  && diameter > 4096)
 			MapInfo_Map_supportedGametypes |= MAPINFO_TYPE_TEAM_DEATHMATCH;
-		if(                MapInfo_Map_diameter < 4096)
+		if(                     diameter < 4096)
 			MapInfo_Map_supportedGametypes |= MAPINFO_TYPE_ARENA;
-		if(MapInfo_Map_spawnpoints >= 12 && MapInfo_Map_diameter > 5120)
+		if(spawnpoints >= 12 && diameter > 5120)
 			MapInfo_Map_supportedGametypes |= MAPINFO_TYPE_KEYHUNT;
 	}
+
+	dprint("-> diameter ",    ftos(diameter));
+	dprint(";  spawnpoints ", ftos(spawnpoints));
+	dprint(";  modes ",       ftos(MapInfo_Map_supportedGametypes), "\n");
 
 	fclose(fh);
 
@@ -451,8 +453,6 @@ void _MapInfo_Map_Reset()
 	MapInfo_Map_author = "<AUTHOR>";
 	MapInfo_Map_supportedGametypes = 0;
 	MapInfo_Map_supportedFeatures = 0;
-	MapInfo_Map_diameter = 0;
-	MapInfo_Map_spawnpoints = 0;
 }
 
 void _MapInfo_Map_ApplyGametype(string s, float pWantedType, float pThisType)
@@ -527,8 +527,6 @@ float MapInfo_Get_ByName(string pFilename, float pAllowGenerate, float pGametype
 		fputs(fh, strcat("title ", MapInfo_Map_title, "\n"));
 		fputs(fh, strcat("description ", MapInfo_Map_description, "\n"));
 		fputs(fh, strcat("author ", MapInfo_Map_author, "\n"));
-		fputs(fh, strcat("_diameter ", ftos(MapInfo_Map_diameter), "\n"));
-		fputs(fh, strcat("_spawnpoints ", ftos(MapInfo_Map_spawnpoints), "\n"));
 		if(MapInfo_Map_supportedFeatures & MAPINFO_FEATURE_WEAPONS)       fputs(fh, "has weapons\n");
 		if(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_DEATHMATCH)      fputs(fh, "type dm 30 20\n");
 		if(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_TEAM_DEATHMATCH) fputs(fh, "type tdm 50 20 2\n");
@@ -561,21 +559,24 @@ float MapInfo_Get_ByName(string pFilename, float pAllowGenerate, float pGametype
 	{
 		if not((s = fgets(fh)))
 			break;
+
+		// catch different sorts of comments
+		if(s == "")                    // empty lines
+			continue;
+		if(substring(s, 0, 1) == "#")  // UNIX style
+			continue;
+		if(substring(s, 0, 2) == "//") // C++ style
+			continue;
+		if(substring(s, 0, 1) == "_")  // q3map style
+			continue;
+
 		t = car(s); s = cdr(s);
-		if(t == "//")
-		{
-			// no comment
-		}
-		else if(t == "title")
+		if(t == "title")
 			MapInfo_Map_title = s;
 		else if(t == "description")
 			MapInfo_Map_description = s;
 		else if(t == "author")
 			MapInfo_Map_author = s;
-		else if(t == "_diameter")
-			MapInfo_Map_diameter = stof(s);
-		else if(t == "_spawnpoints")
-			MapInfo_Map_spawnpoints = stof(s);
 		else if(t == "has")
 		{
 			t = car(s); s = cdr(s);
@@ -816,6 +817,4 @@ void MapInfo_ClearTemps()
 	MapInfo_Map_author = string_null;
 	MapInfo_Map_supportedGametypes = 0;
 	MapInfo_Map_supportedFeatures = 0;
-	MapInfo_Map_diameter = 0;
-	MapInfo_Map_spawnpoints = 0;
 }

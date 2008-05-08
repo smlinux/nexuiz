@@ -14,6 +14,7 @@ float menuLogoAlpha;
 float prevMenuAlpha;
 float menuInitialized;
 float menuNotTheFirstFrame;
+float menuMouseMode;
 
 void SUB_Null() { };
 
@@ -193,6 +194,8 @@ void() m_draw =
 	float t;
 	float realFrametime;
 
+	menuMouseMode = cvar("menu_mouse_absolute");
+
 	if(main)
 		UpdateConWidthHeight();
 
@@ -229,7 +232,7 @@ void() m_draw =
 
 	if(Menu_Active)
 	{
-		if(getmousetarget() == MT_MENU && (getkeydest() == KEY_MENU || getkeydest() == KEY_MENU_GRABBED))
+		if(getmousetarget() == (menuMouseMode ? MT_CLIENT : MT_MENU) && (getkeydest() == KEY_MENU || getkeydest() == KEY_MENU_GRABBED))
 			setkeydest(keyGrabber ? KEY_MENU_GRABBED : KEY_MENU);
 		else
 			m_hide();
@@ -302,26 +305,44 @@ void() m_draw =
 
 	draw_alpha *= menuAlpha;
 
-	if(frametime > 0)
+	if(menuMouseMode)
 	{
-		vector dMouse;
-		dMouse = getmousepos() * (frametime / realFrametime); // for capturevideo
-		if(dMouse != '0 0 0')
+		vector newMouse;
+		newMouse = globalToBoxSize(getmousepos(), draw_scale);
+		if(newMouse != '0 0 0')
+			if(newMouse != menuMousePos)
+			{
+				menuMousePos = newMouse;
+				if(mouseButtonsPressed)
+					main.mouseDrag(main, menuMousePos);
+				else
+					main.mouseMove(main, menuMousePos);
+			}
+	}
+	else
+	{
+		if(frametime > 0)
 		{
-			dMouse = globalToBoxSize(dMouse, draw_scale);
-			menuMousePos += dMouse * 1; // TODO use a cvar here
-			menuMousePos_x = bound(0, menuMousePos_x, 1);
-			menuMousePos_y = bound(0, menuMousePos_y, 1);
-			if(mouseButtonsPressed)
-				main.mouseDrag(main, menuMousePos);
-			else
-				main.mouseMove(main, menuMousePos);
+			vector dMouse;
+			dMouse = getmousepos() * (frametime / realFrametime); // for capturevideo
+			if(dMouse != '0 0 0')
+			{
+				dMouse = globalToBoxSize(dMouse, draw_scale);
+				menuMousePos += dMouse * cvar("menu_mouse_speed");
+				menuMousePos_x = bound(0, menuMousePos_x, 1);
+				menuMousePos_y = bound(0, menuMousePos_y, 1);
+				if(mouseButtonsPressed)
+					main.mouseDrag(main, menuMousePos);
+				else
+					main.mouseMove(main, menuMousePos);
+			}
 		}
 	}
 	main.draw(main);
 	draw_alpha = max(draw_alpha, SKINALPHA_CURSOR_INTRO * bound(0, menuLogoAlpha, 1));
 
-	draw_drawMousePointer(menuMousePos);
+	if(!menuMouseMode)
+		draw_drawMousePointer(menuMousePos);
 
 	draw_reset();
 	postMenuDraw();
@@ -333,7 +354,7 @@ void() m_display =
 {
 	Menu_Active = true;
 	setkeydest(KEY_MENU);
-	setmousetarget(MT_MENU);
+	setmousetarget((menuMouseMode ? MT_CLIENT : MT_MENU));
 
 	if(!menuInitialized)
 		return;
