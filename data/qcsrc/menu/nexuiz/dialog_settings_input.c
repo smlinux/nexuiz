@@ -47,7 +47,7 @@ void fillNexuizInputSettingsTab(entity me)
 		me.TD(me, 1, 2, e = makeNexuizSlider(1, 32, 0.2, "sensitivity"));
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Menu mouse speed:"));
-		me.TD(me, 1, 2, e = makeNexuizSlider(0.25, 8.0, 0.05, "menu_mouse_speed"));
+		me.TD(me, 1, 2, e = makeNexuizSlider(0.2, 4.0, 0.1, "menu_mouse_speed"));
 	me.TR(me);
 		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "m_filter", "Mouse filter"));
 	me.TR(me);
