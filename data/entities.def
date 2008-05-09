@@ -685,13 +685,18 @@ To make a jump pad or launch ramp, place the target_position/info_notnull entity
 
 //=============================================================================
 
-/*QUAKED trigger_force (.5 .5 .5) ?
-Similar to trigger_push, but adds force to the target as long as it is within the trigger.
+/*QUAKED trigger_impulse (.5 .5 .5) ?
 -------- KEYS --------
-target : this points to the target_position to which the player will get pushed.
+target : If this is set, this points to the target_position to which the player will get pushed.
+         If not, this trigger acts like a damper/accelerator field.
+
 strength : This is how mutch force to add in the direction of .target each second
+           when .target is set. If not, this is hoe mutch to slow down/accelerate
+           someting cought inside this trigger.
+
 -------- NOTES --------
-Use a brush textured with common/origin in the trigger to determine the origin of the force
+Use a brush textured with common/origin in the trigger entity to determine the origin of the force
+in directional push mode. For damper/accelerator mode this is no nessesary (and has no effect).
 */
 
 //=============================================================================

@@ -624,3 +624,98 @@ void() misc_laser =
 	self.think = misc_laser_think;
 	self.nextthink = time;
 }
+
+.float strength;
+.float lastpushtime;
+void trigger_impulse_touch1()
+{
+	entity targ;
+    float pushdeltatime;
+
+	// FIXME: Better checking for what to push and not.
+	if (other.classname != "player")
+	if (other.classname != "corpse")
+	if (other.classname != "body")
+	if (other.classname != "gib")
+	if (other.classname != "missile")
+	if (other.classname != "casing")
+	if (other.classname != "grenade")
+	if (other.classname != "plasma")
+	if (other.classname != "plasma_prim")
+	if (other.classname != "plasma_chain")
+	if (other.classname != "droppedweapon")
+		return;
+
+	if (other.deadflag && other.classname == "player")
+		return;
+
+    targ = find(world, targetname, self.target);
+    if(!targ)
+    {
+        objerror("trigger_force without a (valif) .target!\n");
+        remove(self);
+        return;
+    }
+
+
+    pushdeltatime = time - other.lastpushtime;
+    if (pushdeltatime > 0.15) pushdeltatime = 0;
+    other.lastpushtime = time;
+    if(!pushdeltatime) return;
+
+    other.velocity = other.velocity + normalize(targ.origin - self.origin) * self.strength * pushdeltatime;
+}
+
+void trigger_impulse_touch2()
+{
+
+	// FIXME: Better checking for what to push and not.
+	if (other.classname != "player")
+	if (other.classname != "corpse")
+	if (other.classname != "body")
+	if (other.classname != "gib")
+	if (other.classname != "missile")
+	if (other.classname != "casing")
+	if (other.classname != "grenade")
+	if (other.classname != "plasma")
+	if (other.classname != "plasma_prim")
+	if (other.classname != "plasma_chain")
+	if (other.classname != "droppedweapon")
+		return;
+
+	if (other.deadflag && other.classname == "player")
+		return;
+
+    other.velocity = other.velocity * self.strength;
+}
+
+
+/*QUAKED trigger_impulse (.5 .5 .5) ?
+-------- KEYS --------
+target : If this is set, this points to the target_position to which the player will get pushed.
+         If not, this trigger acts like a damper/accelerator field.
+
+strength : This is how mutch force to add in the direction of .target each second
+           when .target is set. If not, this is hoe mutch to slow down/accelerate
+           someting cought inside this trigger. (1=no change, 0,5 half speed rougthly each tic, 2 = doubble)
+
+-------- NOTES --------
+Use a brush textured with common/origin in the trigger entity to determine the origin of the force
+in directional push mode. For damper/accelerator mode this is no nessesary (and has no effect).
+*/
+
+void trigger_impulse()
+{
+    InitTrigger ();
+    if(self.target)
+    {
+        if(!self.strength) self.strength = 950;
+        self.touch = trigger_impulse_touch1;
+    }
+    else
+    {
+        if(!self.strength) self.strength = 0.9;
+        self.touch = trigger_impulse_touch2;
+    }
+}
+
