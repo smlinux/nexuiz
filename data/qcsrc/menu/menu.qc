@@ -341,8 +341,7 @@ void() m_draw =
 	main.draw(main);
 	draw_alpha = max(draw_alpha, SKINALPHA_CURSOR_INTRO * bound(0, menuLogoAlpha, 1));
 
-	if(!menuMouseMode)
-		draw_drawMousePointer(menuMousePos);
+	draw_drawMousePointer(menuMousePos);
 
 	draw_reset();
 	postMenuDraw();
