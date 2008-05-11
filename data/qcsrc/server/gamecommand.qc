@@ -152,7 +152,10 @@ void GameCommand(string command)
 	{
 		local entity temp;
 		temp = spawn();
-		temp.netname = (cvar_string("sv_adminnick") == "") ? cvar_string("hostname") : cvar_string("sv_adminnick");
+		if(cvar_string("sv_adminnick") == "")
+			temp.netname = cvar_string("hostname");
+		else
+			temp.netname = cvar_string("sv_adminnick");
 		VoteStop(temp);
 		remove(temp);
 		return;
