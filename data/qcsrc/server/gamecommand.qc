@@ -31,6 +31,7 @@ void GameCommand(string command)
 		print("  savedb filename\n");
 		print("  dumpdb filename\n");
 		print("  loaddb filename\n");
+		print("  vstop\n");
 		GameCommand_Ban("help");
 		GameCommand_Generic("help");
 		return;
@@ -144,6 +145,16 @@ void GameCommand(string command)
 		db_close(ServerProgsDB);
 		ServerProgsDB = db_load(argv(1));
 		print("DB loaded.\n");
+		return;
+	}
+
+	if(argv(0) == "vstop")
+	{
+		local entity temp;
+		temp = spawn();
+		temp.netname = (cvar_string("sv_adminnick") == "") ? cvar_string("hostname") : cvar_string("sv_adminnick");
+		VoteStop(temp);
+		remove(temp);
 		return;
 	}
 
