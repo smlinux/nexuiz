@@ -1029,6 +1029,8 @@ void precache()
 	precache_sound ("announcer/male/yoda.wav");
 
 	// announcer sounds - robotic
+	precache_sound ("announcer/robotic/begin.wav");
+	precache_sound ("announcer/robotic/prepareforbattle.wav");
 	precache_sound ("announcer/robotic/1fragleft.wav");
 	precache_sound ("announcer/robotic/1minuteremains.wav");
 	precache_sound ("announcer/robotic/2fragsleft.wav");

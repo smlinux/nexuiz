@@ -483,7 +483,7 @@ void SV_ParseClientCommand(string s) {
 	} else if(argv(0) == "ready") {
 		if(cvar("sv_ready_restart"))
 		{
-			if(!restart_countdown)
+			if(!restart_countdown || cvar("sv_ready_restart_repeatable"))
 			{
 				self.ready = TRUE;
 				bprint(self.netname, "^2 is ready\n");
@@ -812,6 +812,15 @@ void VoteCount() {
 
 float timelimit_orig;
 
+/**
+ * Counts how many players are ready. If not enough players are ready, the function
+ * does nothing. If all players are ready, the timelimit will be extended and the
+ * restart_countdown variable is set to allow other functions like PlayerPostThink
+ * to detect that the countdown is now active. If the cvar sv_ready_restart_after_countdown
+ * is not set the map will be resetted.
+ * 
+ * Function is called after the server receives a 'ready' sign from a player.
+ */
 void ReadyCount()
 {
 	local entity e;
@@ -824,6 +833,16 @@ void ReadyCount()
 			r += 1;
 	}
 
+	if(cvar("sv_ready_restart_nag")) {
+		if(!readyNagActive) {
+			readyNagger = spawn();
+			readyNagger.think = readyNagger_Think;
+			readyNagger.cnt = cvar("sv_ready_restart_nag_duration");
+			readyNagger.nextthink = time;
+			readyNagActive = 1;
+		}
+	}
+
 	if(!p || r < p)
 		return;
 
@@ -833,7 +852,18 @@ void ReadyCount()
 	if(g_arena | g_assault | gameover | intermission_running)
 		localcmd("restart\n");
 
+	if(readyNagActive) { //if every player is ready, remove the ready-nagger again
+		readyNagActive = 0;
+		remove(readyNagger);
+	}
+
 	restart_countdown = time + RESTART_COUNTDOWN;
+	restart_mapalreadyrestarted = 0; //reset this var, needed when cvar sv_ready_restart_repeatable is in use
+	//reset the .ready status of all players (also spectators)
+	FOR_EACH_CLIENT(e)
+	{
+		e.ready = 0;
+	}
 	if(0<cvar("timelimit"))
 	{
 		// remember original timelimit on first restart
@@ -842,8 +872,95 @@ void ReadyCount()
 		cvar_set("timelimit", ftos(timelimit_orig + ceil(restart_countdown)/60));
 	}
 
-	reset_map();
+	//initiate the restart-countdown-announcer entity
+	restartAnnouncer = spawn();
+	restartAnnouncer.think = restartAnnouncer_Think;
+	restartAnnouncer.nextthink = time;
+	restartAnnouncer.cnt = RESTART_COUNTDOWN;
 
+	//play the prepareforbattle sound to everyone
+	sound(world, CHAN_AUTO, "announcer/robotic/prepareforbattle.wav", 1, ATTN_NONE);
+
+	//reset map immediately if this cvar is not set
+	if (!cvar("sv_ready_restart_after_countdown"))
+		reset_map();
+	
 	if(cvar("sv_eventlog"))
 		GameLogEcho(":restart", FALSE);
+}
+
+/**
+ * Centerprints the information to all players who didn't ready up yet to do so.
+ */
+void readyNagger_Think() {
+	local entity plr;
+	if(self.cnt <= 0) { //have a break showing the ready nag
+		//make sure that the old ready-nag-centerprint isn't shown too long:
+		FOR_EACH_REALCLIENT(plr) {
+			if(plr.classname == "player") {
+				if (!plr.ready)
+					centerprint_atprio(plr, CENTERPRIO_SPAM, "");
+			}
+		}
+		self.cnt = cvar("sv_ready_restart_nag_duration");
+		self.nextthink = time + cvar("sv_ready_restart_nag_interval");
+	}
+	else {
+		//show the ready nagging to all players who aren't ready yet
+		FOR_EACH_REALCLIENT(plr) {
+			if(plr.classname == "player") {
+				if (!plr.ready) {
+					centerprint_atprio(plr, CENTERPRIO_SPAM, "^2Please ready up (F4 by default)!");
+					//play reminder sound once the centerprint appears for the first time after the pause:
+					if (self.cnt == cvar("sv_ready_restart_nag_duration"))
+						play2(plr, "misc/talk2.wav");
+				}
+			}
+		}
+
+		self.nextthink = time + 1;
+		self.cnt -= 1;
+	}
+}
+
+/**
+ * Shows the restart countdown for all players.
+ * Plays the countdown sounds for the seconds 3, 2 1, begin for everyone.
+ * Restarts the map after the countdown is over (and cvar sv_ready_restart_after_countdown
+ * is set to 1).
+ */
+void restartAnnouncer_Think() {
+	local entity plr;
+	local string s;
+	if(self.cnt <= 0) { //show the "Begin" message and
+		if (cvar("sv_ready_restart_after_countdown")) {
+			restart_mapalreadyrestarted = 1;
+			reset_map();
+		}
+
+		FOR_EACH_REALCLIENT(plr) {
+			if(plr.classname == "player") {
+				s = strcat(NEWLINES, "^1Begin!");
+				centerprint(plr, s);
+			}
+		}
+		sound(world, CHAN_AUTO, "announcer/robotic/begin.wav", 1, ATTN_NONE);
+
+		remove(self);
+		return;
+	}
+	else {
+		FOR_EACH_REALCLIENT(plr) {
+			if(plr.classname == "player") {
+				s = strcat(NEWLINES, "^1Game starts in ", ftos(self.cnt), " seconds");
+				centerprint(plr, s);
+			}
+		}
+
+		if(self.cnt <= 3) {
+			sound(world, CHAN_AUTO, strcat("announcer/robotic/", ftos(self.cnt), ".ogg"), 1, ATTN_NONE);
+		}
+		self.nextthink = time + 1;
+		self.cnt -= 1;
+	}
 }

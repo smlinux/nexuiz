@@ -555,6 +555,13 @@ void PutClientInServer (void)
 		self.pauserotarmor_finished = time + cvar("g_balance_pause_armor_rot_spawn");
 		self.pauserothealth_finished = time + cvar("g_balance_pause_health_rot_spawn");
 		self.pauseregen_finished = time + cvar("g_balance_pause_health_regen_spawn");
+		//extend the pause of rotting if client was reset at the beginning of the countdown
+		if(!cvar("sv_ready_restart_after_countdown") && time < restart_countdown) {
+			self.spawnshieldtime += RESTART_COUNTDOWN;
+			self.pauserotarmor_finished += RESTART_COUNTDOWN;
+			self.pauserothealth_finished += RESTART_COUNTDOWN;
+			self.pauseregen_finished += RESTART_COUNTDOWN;
+		}
 		self.damageforcescale = 2;
 		self.death_time = 0;
 		self.dead_frame = 0;
@@ -1780,24 +1787,29 @@ void PlayerPostThink (void)
 		//if (TetrisPostFrame()) return;
 
 		// restart countdown
-		if(time < restart_countdown)
-		{
-			string s;
-			float sec;
-
-			sec = ceil(restart_countdown-time);
-			s = strcat(NEWLINES, "^1Game starts in ", ftos(sec), " seconds");
-			centerprint(self, s);
-			self.movetype = MOVETYPE_NONE;
-			self.velocity = '0 0 0';
-			self.avelocity = '0 0 0';
-			self.movement = '0 0 0';
+		if (restart_countdown) {
+			if(time < restart_countdown) {
+				if (!cvar("sv_ready_restart_after_countdown"))
+				{
+					self.movetype = MOVETYPE_NONE;		
+					self.velocity = '0 0 0';
+					self.avelocity = '0 0 0';
+					self.movement = '0 0 0';
+				}
+			}
+			else
+			{
+				//allow the player to move again if sv_ready_restart_after_countdown is not used and countdown is over
+				if (!cvar("sv_ready_restart_after_countdown"))
+				{
+					if(self.movetype == MOVETYPE_NONE)
+					{
+						self.movetype = MOVETYPE_WALK;
+					}
+				}
+			}
 		}
-		else if(self.movetype == MOVETYPE_NONE)
-		{
-			self.movetype = MOVETYPE_WALK;
-			centerprint(self, "\n");
-		}
+		
 	} else if (self.classname == "observer") {
 		//do nothing
 	} else if (self.classname == "spectator") {

@@ -423,6 +423,13 @@ void(float windex, string wname, float hudammo) weapon_setup =
 // perform weapon to attack (weaponstate and attack_finished check is here)
 float(float secondary, float attacktime) weapon_prepareattack =
 {
+	//if sv_ready_restart_after_countdown is set, don't allow the player to shoot
+	//if all players readied up and the countdown is running
+	if (cvar("sv_ready_restart_after_countdown"))
+		if(time < restart_countdown) {
+			return FALSE;
+		}
+	
 	if (!weapon_action(self.weapon, WR_CHECKAMMO1 + secondary))
 	{
 		self.switchweapon = w_getbestweapon(self);

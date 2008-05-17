@@ -19,6 +19,10 @@ void dom_controlpoint_setup();
 void onslaught_generator_reset();
 void onslaught_controlpoint_reset();
 
+/**
+ * Resets the state of all clients, items, flags, runes, keys, weapons, waypoints, ... of the map.
+ * Sets the 'warmup' global variable.
+ */
 void reset_map()
 {
 	if(g_arena)
@@ -105,20 +109,35 @@ void reset_map()
 	FOR_EACH_CLIENT(self) {
 		if(self.flags & FL_CLIENT)				// reset all players
 		{
-			if(time < restart_countdown)
-			{
-				self.frags = (g_lms)?LMS_NewPlayerLives():0;
-				self.deaths = 0;
-				self.killcount = 0;
-				self.classname = "player";
-				PutClientInServer();
-			}
-			else if(g_arena)
+			if(g_arena)
 			{
 				if(self.spawned)
 					PutClientInServer();
 				else
 					PutObserverInServer();
+			}
+			else
+			{
+				/*
+				only reset players if a restart countdown is active
+				this can either be due to cvar sv_ready_restart_after_countdown having set
+				restart_mapalreadyrestarted to 1 after the countdown ended or when
+				sv_ready_restart_after_countdown is not used and countdown is still running
+				*/
+				if (restart_mapalreadyrestarted || (time < restart_countdown))
+				{
+					//NEW: changed behaviour so that it prevents that previous spectators/observers suddenly spawn as players
+					if (self.classname == "player") {
+						self.frags = (g_lms)?LMS_NewPlayerLives():0;
+						self.deaths = 0;
+						self.killcount = 0;
+						//stop the player from moving so that he stands still once he gets respawned
+						self.velocity = '0 0 0';
+						self.avelocity = '0 0 0';
+						self.movement = '0 0 0';
+						PutClientInServer();
+					}
+				}
 			}
 		}
 	}
@@ -180,6 +199,14 @@ void Spawnqueue_Mark(entity e)
 	numspawned = numspawned + 1;
 }
 
+/**
+ * If roundbased arena game mode is active, it centerprints the texts for the
+ * player when player is waiting for the countdown to finish.
+ * Blocks the players movement while countdown is active.
+ * Unblocks the player once the countdown is over.
+ * 
+ * Called in PlayerPostThink()
+ */
 void Arena_Warmup()
 {
 	float f;
@@ -223,11 +250,20 @@ void Arena_Warmup()
 }
 
 float next_round;
+
+/**
+ * This function finds out whether an arena round is over 1 player is left.
+ * It determines the last player who's still alive and saves it's entity reference
+ * in the global variable 'champion'. Then the new enemy/enemies are put into the server.
+ * 
+ * Gets called in StartFrame()
+ */
 void Spawnqueue_Check()
 {
 	if(time < warmup + 1)
 		return;
 
+	//extend next_round if it isn't set yet and only 1 player is spawned
 	if(!next_round)
 	if(numspawned < 2)
 		next_round = time + 3;
