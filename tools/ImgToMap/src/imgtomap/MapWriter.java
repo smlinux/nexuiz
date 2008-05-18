@@ -90,11 +90,16 @@ public class MapWriter {
                     buf.append(getMapPlaneString(g, h, f, p.detail, "common/caulk", p.texturescale));
                     buf.append("}\n");
                 } else if (p.skyfill) {
-                    // fill skipped blocks with sky
-                    Vector3D p1 = new Vector3D(x * units, -(y + 1) * units, -32.0);
-                    Vector3D p2 = new Vector3D((x + 1) * units, -y * units, p.skyheight);
-                    
-                    writeBoxBrush(buf, p1, p2, false, p.skytexture, 1.0);
+
+                    boolean totalskip = height[x][y] < -5 || height[x][y + 1] < -5 || height[x + 1][y] < -5 || height[x + 1][y + 1] < -5;
+
+                    if (!totalskip) {
+                        // fill skipped blocks with sky
+                        Vector3D p1 = new Vector3D(x * units, -(y + 1) * units, -32.0);
+                        Vector3D p2 = new Vector3D((x + 1) * units, -y * units, p.skyheight);
+
+                        writeBoxBrush(buf, p1, p2, false, p.skytexture, 1.0);
+                    }
                 }
             }
         }
@@ -103,22 +108,22 @@ public class MapWriter {
             // generate skybox
             int x = height.length - 1;
             int y = height[0].length - 1;
-            
+
             // top
             Vector3D p1 = new Vector3D(0, -y * units, p.skyheight);
             Vector3D p2 = new Vector3D(x * units, 0, p.skyheight + 32.0);
             writeBoxBrush(buf, p1, p2, false, p.skytexture, 1.0);
-            
+
             // bottom
             p1 = new Vector3D(0, -y * units, -64.0);
             p2 = new Vector3D(x * units, 0, -32.0);
             writeBoxBrush(buf, p1, p2, false, p.skytexture, 1.0);
-            
+
             // north
             p1 = new Vector3D(0, 0, -32.0);
             p2 = new Vector3D(x * units, 32, p.skyheight);
             writeBoxBrush(buf, p1, p2, false, p.skytexture, 1.0);
-            
+
             // east
             p1 = new Vector3D(x * units, -y * units, -32.0);
             p2 = new Vector3D(x * units + 32.0, 0, p.skyheight);
@@ -128,8 +133,8 @@ public class MapWriter {
             p1 = new Vector3D(0, -y * units - 32, -32.0);
             p2 = new Vector3D(x * units, -y * units, p.skyheight);
             writeBoxBrush(buf, p1, p2, false, p.skytexture, 1.0);
-            
-            
+
+
             // west
             p1 = new Vector3D(0 - 32.0, -y * units, -32.0);
             p2 = new Vector3D(0, 0, p.skyheight);
@@ -181,7 +186,7 @@ public class MapWriter {
 
     private class Vector3D {
 
-        public  double x,        y,        z;
+        public double x,  y,  z;
 
         public Vector3D() {
             this(0.0, 0.0, 0.0);
@@ -236,6 +241,73 @@ public class MapWriter {
         }
     }
 
+    private double[][] markTotalSkip(double[][] input) {
+        double[][] result = new double[input.length][input[0].length];
+
+        int xmax = input.length - 1;
+        int ymax = input[0].length - 1;
+
+        for (int x = 0; x <= xmax; ++x) {
+            for (int y = 0; y <= ymax; ++y) {
+                double val;
+                double max;
+
+                val = input[x][y];
+                max = val;
+
+                if (x - 1 >= 0 && y - 1 >= 0) {
+                    val = input[x - 1][y - 1];
+                    max = val > max ? val : max;
+                }
+
+                if (y - 1 >= 0) {
+                    val = input[x][y - 1];
+                    max = val > max ? val : max;
+                }
+
+                if (x + 1 <= xmax && y - 1 >= 0) {
+                    val = input[x + 1][y - 1];
+                    max = val > max ? val : max;
+                }
+
+                if (x - 1 >= 0) {
+                    val = input[x - 1][y];
+                    max = val > max ? val : max;
+                }
+
+                if (x + 1 <= xmax) {
+                    val = input[x + 1][y];
+                    max = val > max ? val : max;
+                }
+
+                if (x - 1 >= 0 && y + 1 <= ymax) {
+                    val = input[x - 1][y + 1];
+                    max = val > max ? val : max;
+                }
+
+                if (y + 1 <= ymax) {
+                    val = input[x][y + 1];
+                    max = val > max ? val : max;
+                }
+
+                if (x + 1 <= xmax && y + 1 <= ymax) {
+                    val = input[x + 1][y + 1];
+                    max = val > max ? val : max;
+                }
+
+                if (max < 0) {
+                    result[x][y] = -10.0;
+                } else {
+                    result[x][y] = input[x][y];
+                }
+
+            }
+        }
+
+
+        return result;
+    }
+
     private double[][] getHeightmap(String file) {
         try {
             BufferedImage bimg = ImageIO.read(new File(file));
@@ -285,7 +357,7 @@ public class MapWriter {
             }
 
 
-            return result;
+            return markTotalSkip(result);
         } catch (IOException ex) {
             Logger.getLogger(MapWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
