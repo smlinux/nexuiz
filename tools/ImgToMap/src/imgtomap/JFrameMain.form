@@ -69,7 +69,7 @@
                           </Group>
                           <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="jSpinner1" max="32767" attributes="1"/>
+                              <Component id="jSpinnerTextureScale" max="32767" attributes="1"/>
                               <Component id="jLabel4" alignment="0" max="32767" attributes="1"/>
                           </Group>
                       </Group>
@@ -114,7 +114,7 @@
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jSpinnerUnits" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jSpinnerHeight" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jSpinner1" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jSpinnerTextureScale" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
@@ -203,7 +203,7 @@
             <Property name="text" type="java.lang.String" value="Texture scale:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JSpinner" name="jSpinner1">
+        <Component class="javax.swing.JSpinner" name="jSpinnerTextureScale">
           <Properties>
             <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
               <SpinnerModel initial="0.5" maximum="16.0" minimum="0.25" numberType="java.lang.Double" stepSize="0.25" type="number"/>
