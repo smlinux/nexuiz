@@ -20,9 +20,9 @@ import javax.imageio.ImageIO;
  */
 public class MapWriter {
 
-    public void writeMap(Parameters p) {
+    public int writeMap(Parameters p) {
         if (!(new File(p.infile).exists())) {
-            return;
+            return 1;
         }
 
         FileOutputStream fos;
@@ -30,7 +30,7 @@ public class MapWriter {
             fos = new FileOutputStream(new File(p.outfile));
         } catch (FileNotFoundException ex) {
             Logger.getLogger(MapWriter.class.getName()).log(Level.SEVERE, null, ex);
-            return;
+            return 1;
         }
 
         double[][] height = getHeightmap(p.infile);
@@ -99,7 +99,9 @@ public class MapWriter {
             fos.write(buf.toString().getBytes());
         } catch (IOException ex) {
             Logger.getLogger(MapWriter.class.getName()).log(Level.SEVERE, null, ex);
+            return 1;
         }
+        return 0;
     }
 
     private String getMapPlaneString(Vector3D p1, Vector3D p2, Vector3D p3, boolean detail, String material, double scale) {
