@@ -279,11 +279,16 @@ void restartAnnouncer_Think();
 entity readyNagger; //manages printing the ready-nag to active players who are not ready yet
 void readyNagger_Think();
 float readyNagActive; //if set to 1, the readyNagger entity was already spawned (boolean)
+float blockSpectators; //if set, new or existing spectators or observers will be removed unless they become a player within g_maxplayers_spectator_blocktime seconds
+.float spectatortime; //point in time since the client is spectating or observing
+void checkSpectatorBlock();
 
 .float winning;
 .float deaths;
 .float jointime;
 
+float isJoinAllowed();
+#define PREVENT_JOIN_TEXT "^1You may not join the game at this time.\n\nThe player limit reached maximum capacity."
 .float spawnshieldtime;
 
 .float lms_nextcheck;

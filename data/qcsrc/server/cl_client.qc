@@ -353,6 +353,8 @@ void PutObserverInServer (void)
 	else if(self.killcount != -666)
 		bprint ("^4", self.netname, "^4 is spectating now\n");
 
+	self.spectatortime = time;
+	
 	self.classname = "observer";
 	self.health = -666;
 	self.takedamage = DAMAGE_NO;
@@ -970,6 +972,12 @@ void ClientConnect (void)
 
 	bot_relinkplayerlist();
 
+	self.spectatortime = time;
+	if(blockSpectators)
+	{
+		sprint(self, strcat("^7You have to become a player within the next ", ftos(cvar("g_maxplayers_spectator_blocktime")), " seconds, otherwise you will be kicked, because spectators aren't allowed at this time!\n"));
+	}
+
 	self.jointime = time;
 }
 
@@ -1446,20 +1454,61 @@ void ShowRespawnCountdown()
 
 void LeaveSpectatorMode()
 {
-	if(!cvar("teamplay") || cvar("g_campaign") || cvar("g_balance_teams")) {
-		self.classname = "player";
-		if(cvar("g_campaign") || cvar("g_balance_teams") || cvar("g_balance_teams_force"))
-			JoinBestTeam(self, FALSE, TRUE);
-		if(cvar("g_campaign"))
-			campaign_bots_may_start = 1;
-		PutClientInServer();
-		if(!(self.flags & FL_NOTARGET))
-			bprint ("^4", self.netname, "^4 is playing now\n");
-		centerprint(self,"");
-		return;
-	} else {
-		stuffcmd(self,"menu_showteamselect\n");
-		return;
+	if(isJoinAllowed()) {
+		if(!cvar("teamplay") || cvar("g_campaign") || cvar("g_balance_teams")) {
+			self.classname = "player";
+			if(cvar("g_campaign") || cvar("g_balance_teams") || cvar("g_balance_teams_force"))
+				JoinBestTeam(self, FALSE, TRUE);
+			if(cvar("g_campaign"))
+				campaign_bots_may_start = 1;
+			PutClientInServer();
+			if(!(self.flags & FL_NOTARGET))
+				bprint ("^4", self.netname, "^4 is playing now\n");
+			centerprint(self,"");
+			return;
+		} else {
+			stuffcmd(self,"menu_showteamselect\n");
+			return;
+		}
+	}
+	else {
+		//player may not join because of g_maxplayers is set
+		centerprint_atprio(self, CENTERPRIO_MAPVOTE, PREVENT_JOIN_TEXT);
+	}
+}
+
+/**
+ * Determines whether the player is allowed to join. This depends on cvar
+ * g_maxplayers, if it isn't used this function always return TRUE, otherwise
+ * it checks whether the number of currently playing players exceeds g_maxplayers.
+ * @return bool TRUE if the player is allowed to join, false otherwise
+ */
+float isJoinAllowed() {
+	if (!cvar("g_maxplayers"))
+		return TRUE;
+
+	local entity e;
+	local float currentlyPlaying;
+	FOR_EACH_REALPLAYER(e) {
+		if(e.classname == "player")
+			currentlyPlaying += 1;
+	}
+	if(currentlyPlaying < cvar("g_maxplayers"))
+		return TRUE;
+
+	return FALSE;
+}
+
+/**
+ * Checks whether the client is an observer or spectator, if so, he will get kicked after
+ * g_maxplayers_spectator_blocktime seconds
+ */
+void checkSpectatorBlock() {
+	if(self.classname == "spectator" || self.classname == "observer") {
+		if( time > (self.spectatortime + cvar("g_maxplayers_spectator_blocktime")) ) {
+			sprint(self, "^7You were kicked from the server because you are spectator and spectators aren't allowed at the moment.\n");
+			dropclient(self);
+		}
 	}
 }
 
@@ -1474,6 +1523,9 @@ void() ctf_setstatus;
 .float vote_nagtime;
 void PlayerPreThink (void)
 {
+	if(blockSpectators)
+		checkSpectatorBlock();
+	
 	// version nagging
 	if(self.version_nagtime)
 		if(self.cvar_g_nexuizversion)

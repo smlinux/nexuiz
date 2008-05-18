@@ -451,16 +451,24 @@ void SV_ParseClientCommand(string s) {
 			WaypointSprite_PlayerDead();
 			DistributeFragsAmongTeam(self, self.team, 1.0);
 			self.classname = "observer";
+			if(blockSpectators)
+				sprint(self, strcat("^7You have to become a player within the next ", ftos(cvar("g_maxplayers_spectator_blocktime")), " seconds, otherwise you will be kicked, because spectators aren't allowed at this time!\n"));
 			PutClientInServer();
 		}
 	} else if(argv(0) == "join") {
 		if(!g_arena)
 		if (self.classname != "player" && !lockteams)
 		{
-			self.classname = "player";
-			self.frags = 0;
-			bprint ("^4", self.netname, "^4 is playing now\n");
-			PutClientInServer();
+			if(isJoinAllowed()) {
+				self.classname = "player";
+				self.frags = 0;
+				bprint ("^4", self.netname, "^4 is playing now\n");
+				PutClientInServer();
+			}
+			else {
+				//player may not join because of g_maxplayers is set
+				centerprint_atprio(self, CENTERPRIO_MAPVOTE, PREVENT_JOIN_TEXT);
+			}
 		}
 	} else if( argv(0) == "selectteam" ) {
 		if( !cvar("teamplay") ) {

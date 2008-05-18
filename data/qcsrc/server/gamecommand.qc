@@ -147,6 +147,21 @@ void GameCommand(string command)
 		print("DB loaded.\n");
 		return;
 	}
+	if (argv(0) == "nospectators")
+	{
+		blockSpectators = 1;
+		local entity plr;
+		FOR_EACH_CLIENT(plr) //give every spectator <g_maxplayers_spectator_blocktime> seconds time to become a player
+		{
+			if(plr.classname == "spectator" || plr.classname == "observer")
+			{
+				plr.spectatortime = time;
+				sprint(plr, strcat("^7You have to become a player within the next ", ftos(cvar("g_maxplayers_spectator_blocktime")), " seconds, otherwise you will be kicked, because spectators aren't allowed at this time!\n"));
+			}
+		}
+		bprint(strcat("^7All spectators will be automatically kicked when not joining the game after ", ftos(cvar("g_maxplayers_spectator_blocktime")), " seconds!\n"));
+		return;
+	}
 	if (argv(0) == "lockteams")
 	{
 		if(teamplay)
