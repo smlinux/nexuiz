@@ -27,6 +27,7 @@ public class JFrameMain extends javax.swing.JFrame {
             jTextFieldOutput.setText(testoutput);
         }
         
+        enableSkyPanel(jCheckBoxSky.isSelected());
     }
 
     /** This method is called from within the constructor to
@@ -43,21 +44,29 @@ public class JFrameMain extends javax.swing.JFrame {
         jButtonInput = new javax.swing.JButton();
         jTextFieldOutput = new javax.swing.JTextField();
         jButtonOutput = new javax.swing.JButton();
-        jSpinnerUnits = new javax.swing.JSpinner();
-        jLabel1 = new javax.swing.JLabel();
-        jSpinnerHeight = new javax.swing.JSpinner();
-        jLabel2 = new javax.swing.JLabel();
         jButtonOK = new javax.swing.JButton();
-        jLabel3 = new javax.swing.JLabel();
-        jTextFieldTexture = new javax.swing.JTextField();
+        jPanel2 = new javax.swing.JPanel();
         jCheckBoxDetail = new javax.swing.JCheckBox();
-        jLabel4 = new javax.swing.JLabel();
+        jTextFieldTexture = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jSpinnerUnits = new javax.swing.JSpinner();
+        jSpinnerHeight = new javax.swing.JSpinner();
         jSpinnerTextureScale = new javax.swing.JSpinner();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jPanelSky = new javax.swing.JPanel();
+        jCheckBoxSky = new javax.swing.JCheckBox();
+        jLabel5 = new javax.swing.JLabel();
+        jSpinnerSkyHeight = new javax.swing.JSpinner();
+        jCheckBoxSkyFill = new javax.swing.JCheckBox();
+        jLabel6 = new javax.swing.JLabel();
+        jTextFieldSkyTexture = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("ImgToMap");
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Convert image to map"));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Files"));
 
         jButtonInput.setText("Select input file");
         jButtonInput.addActionListener(new java.awt.event.ActionListener() {
@@ -73,63 +82,19 @@ public class JFrameMain extends javax.swing.JFrame {
             }
         });
 
-        jSpinnerUnits.setModel(new javax.swing.SpinnerNumberModel(256, 1, 2048, 1));
-
-        jLabel1.setText("Units per pixel:");
-
-        jSpinnerHeight.setModel(new javax.swing.SpinnerNumberModel(1024, 256, 16384, 1));
-
-        jLabel2.setText("Height for white:");
-
-        jButtonOK.setText("Start conversion!");
-        jButtonOK.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonOKActionPerformed(evt);
-            }
-        });
-
-        jLabel3.setText("Cover terrain surface with texture:");
-
-        jTextFieldTexture.setText("terrain/terrain1");
-
-        jCheckBoxDetail.setSelected(true);
-        jCheckBoxDetail.setText("make detail");
-
-        jLabel4.setText("Texture scale:");
-
-        jSpinnerTextureScale.setModel(new javax.swing.SpinnerNumberModel(0.5d, 0.25d, 16.0d, 0.25d));
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jTextFieldOutput, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE)
+                    .addComponent(jTextFieldInput, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextFieldTexture, javax.swing.GroupLayout.DEFAULT_SIZE, 465, Short.MAX_VALUE)
-                    .addComponent(jButtonOK)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jSpinnerUnits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(27, 27, 27)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jSpinnerHeight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(24, 24, 24)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jSpinnerTextureScale)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addComponent(jLabel3)
-                    .addComponent(jCheckBoxDetail)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jTextFieldOutput, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextFieldInput, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 313, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButtonInput, javax.swing.GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE)
-                            .addComponent(jButtonOutput, javax.swing.GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE))))
+                    .addComponent(jButtonInput, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+                    .addComponent(jButtonOutput, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -143,42 +108,173 @@ public class JFrameMain extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonOutput)
                     .addComponent(jTextFieldOutput, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(16, 16, 16)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jButtonOK.setText("Start conversion!");
+        jButtonOK.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonOKActionPerformed(evt);
+            }
+        });
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Terrain configuration"));
+
+        jCheckBoxDetail.setSelected(true);
+        jCheckBoxDetail.setText("make detail");
+
+        jTextFieldTexture.setText("terrain/terrain1");
+
+        jLabel3.setText("Cover terrain surface with texture:");
+
+        jSpinnerUnits.setModel(new javax.swing.SpinnerNumberModel(256, 1, 2048, 1));
+
+        jSpinnerHeight.setModel(new javax.swing.SpinnerNumberModel(1024, 256, 16384, 1));
+
+        jSpinnerTextureScale.setModel(new javax.swing.SpinnerNumberModel(0.5d, 0.25d, 16.0d, 0.25d));
+
+        jLabel4.setText("Texture scale:");
+
+        jLabel2.setText("Height for white:");
+
+        jLabel1.setText("Units per pixel:");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jSpinnerHeight, 0, 0, Short.MAX_VALUE)
+                            .addComponent(jSpinnerUnits))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jSpinnerTextureScale))
+                            .addComponent(jCheckBoxDetail)))
+                    .addComponent(jLabel3)
+                    .addComponent(jTextFieldTexture, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 404, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jSpinnerUnits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jSpinnerHeight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel4)
                     .addComponent(jSpinnerTextureScale, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jSpinnerHeight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jCheckBoxDetail))
+                .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextFieldTexture, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jCheckBoxDetail)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
-                .addComponent(jButtonOK)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanelSky.setBorder(javax.swing.BorderFactory.createTitledBorder("Sky configuration"));
+
+        jCheckBoxSky.setSelected(true);
+        jCheckBoxSky.setText("generate a skybox");
+        jCheckBoxSky.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxSkyActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setText("Sky height:");
+
+        jSpinnerSkyHeight.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1152), Integer.valueOf(256), null, Integer.valueOf(1)));
+
+        jCheckBoxSkyFill.setSelected(true);
+        jCheckBoxSkyFill.setText("fill alpha-gaps with sky");
+
+        jLabel6.setText("Sky texture:");
+
+        jTextFieldSkyTexture.setText("skies/sky1");
+
+        javax.swing.GroupLayout jPanelSkyLayout = new javax.swing.GroupLayout(jPanelSky);
+        jPanelSky.setLayout(jPanelSkyLayout);
+        jPanelSkyLayout.setHorizontalGroup(
+            jPanelSkyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelSkyLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanelSkyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTextFieldSkyTexture, javax.swing.GroupLayout.DEFAULT_SIZE, 404, Short.MAX_VALUE)
+                    .addGroup(jPanelSkyLayout.createSequentialGroup()
+                        .addComponent(jCheckBoxSky)
+                        .addGap(18, 18, 18)
+                        .addComponent(jCheckBoxSkyFill))
+                    .addGroup(jPanelSkyLayout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSpinnerSkyHeight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel6))
                 .addContainerGap())
+        );
+        jPanelSkyLayout.setVerticalGroup(
+            jPanelSkyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelSkyLayout.createSequentialGroup()
+                .addGroup(jPanelSkyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jCheckBoxSky)
+                    .addComponent(jCheckBoxSkyFill))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanelSkyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(jSpinnerSkyHeight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextFieldSkyTexture, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addContainerGap()
+                            .addComponent(jPanelSky, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addContainerGap()
+                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addContainerGap()
+                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jButtonOK)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanelSky, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButtonOK)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -202,8 +298,12 @@ private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
     p.infile = jTextFieldInput.getText();
     p.outfile = jTextFieldOutput.getText();
     p.texture = jTextFieldTexture.getText();
+    p.skytexture = jTextFieldSkyTexture.getText();
     p.pixelsize = (Integer)jSpinnerUnits.getValue();
     p.height = (Integer)jSpinnerHeight.getValue();
+    p.sky = jCheckBoxSky.isSelected();
+    p.skyfill = jCheckBoxSkyFill.isSelected();
+    p.skyheight = (Integer)jSpinnerSkyHeight.getValue();
     p.texturescale = (Double)jSpinnerTextureScale.getValue();
     p.detail = jCheckBoxDetail.isSelected();
     int ret = new MapWriter().writeMap(p);
@@ -227,6 +327,16 @@ private void jButtonOutputActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     }
 }//GEN-LAST:event_jButtonOutputActionPerformed
 
+private void jCheckBoxSkyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxSkyActionPerformed
+    enableSkyPanel(jCheckBoxSky.isSelected());
+}//GEN-LAST:event_jCheckBoxSkyActionPerformed
+
+private void enableSkyPanel(boolean b) {
+    jCheckBoxSkyFill.setEnabled(b);
+    jSpinnerSkyHeight.setEnabled(b);
+    jTextFieldSkyTexture.setEnabled(b);
+}
+
     /**
     * @param args the command line arguments
     */
@@ -243,16 +353,24 @@ private void jButtonOutputActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JButton jButtonOK;
     private javax.swing.JButton jButtonOutput;
     private javax.swing.JCheckBox jCheckBoxDetail;
+    private javax.swing.JCheckBox jCheckBoxSky;
+    private javax.swing.JCheckBox jCheckBoxSkyFill;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanelSky;
     private javax.swing.JSpinner jSpinnerHeight;
+    private javax.swing.JSpinner jSpinnerSkyHeight;
     private javax.swing.JSpinner jSpinnerTextureScale;
     private javax.swing.JSpinner jSpinnerUnits;
     private javax.swing.JTextField jTextFieldInput;
     private javax.swing.JTextField jTextFieldOutput;
+    private javax.swing.JTextField jTextFieldSkyTexture;
     private javax.swing.JTextField jTextFieldTexture;
     // End of variables declaration//GEN-END:variables
 

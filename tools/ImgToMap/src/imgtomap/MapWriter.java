@@ -89,8 +89,52 @@ public class MapWriter {
                     buf.append(getMapPlaneString(h, d, a, p.detail, "common/caulk", p.texturescale));
                     buf.append(getMapPlaneString(g, h, f, p.detail, "common/caulk", p.texturescale));
                     buf.append("}\n");
+                } else if (p.skyfill) {
+                    // fill skipped blocks with sky
+                    Vector3D p1 = new Vector3D(x * units, -(y + 1) * units, -32.0);
+                    Vector3D p2 = new Vector3D((x + 1) * units, -y * units, p.skyheight);
+                    
+                    writeBoxBrush(buf, p1, p2, false, p.skytexture, 1.0);
                 }
             }
+        }
+
+        if (p.sky) {
+            // generate skybox
+            int x = height.length - 1;
+            int y = height[0].length - 1;
+            
+            // top
+            Vector3D p1 = new Vector3D(0, -y * units, p.skyheight);
+            Vector3D p2 = new Vector3D(x * units, 0, p.skyheight + 32.0);
+            writeBoxBrush(buf, p1, p2, false, p.skytexture, 1.0);
+            
+            // bottom
+            p1 = new Vector3D(0, -y * units, -64.0);
+            p2 = new Vector3D(x * units, 0, -32.0);
+            writeBoxBrush(buf, p1, p2, false, p.skytexture, 1.0);
+            
+            // north
+            p1 = new Vector3D(0, 0, -32.0);
+            p2 = new Vector3D(x * units, 32, p.skyheight);
+            writeBoxBrush(buf, p1, p2, false, p.skytexture, 1.0);
+            
+            // east
+            p1 = new Vector3D(x * units, -y * units, -32.0);
+            p2 = new Vector3D(x * units + 32.0, 0, p.skyheight);
+            writeBoxBrush(buf, p1, p2, false, p.skytexture, 1.0);
+
+            // south
+            p1 = new Vector3D(0, -y * units - 32, -32.0);
+            p2 = new Vector3D(x * units, -y * units, p.skyheight);
+            writeBoxBrush(buf, p1, p2, false, p.skytexture, 1.0);
+            
+            
+            // west
+            p1 = new Vector3D(0 - 32.0, -y * units, -32.0);
+            p2 = new Vector3D(0, 0, p.skyheight);
+            writeBoxBrush(buf, p1, p2, false, p.skytexture, 1.0);
+
         }
 
         // worldspawn end
@@ -102,6 +146,27 @@ public class MapWriter {
             return 1;
         }
         return 0;
+    }
+
+    private void writeBoxBrush(StringBuffer buf, Vector3D p1, Vector3D p2, boolean detail, String texture, double scale) {
+        Vector3D a = new Vector3D(p1.x, p2.y, p2.z);
+        Vector3D b = p2;
+        Vector3D c = new Vector3D(p1.x, p1.y, p2.z);
+        Vector3D d = new Vector3D(p2.x, p1.y, p2.z);
+        //Vector3D e unused
+        Vector3D f = new Vector3D(p2.x, p2.y, p1.z);
+        Vector3D g = p1;
+        Vector3D h = new Vector3D(p2.x, p1.y, p1.z);
+
+        buf.append("{\n");
+        buf.append(getMapPlaneString(a, b, d, detail, texture, scale));
+        buf.append(getMapPlaneString(d, b, f, detail, texture, scale));
+        buf.append(getMapPlaneString(c, d, h, detail, texture, scale));
+        buf.append(getMapPlaneString(a, c, g, detail, texture, scale));
+        buf.append(getMapPlaneString(f, b, a, detail, texture, scale));
+        buf.append(getMapPlaneString(g, h, f, detail, texture, scale));
+        buf.append("}\n");
+
     }
 
     private String getMapPlaneString(Vector3D p1, Vector3D p2, Vector3D p3, boolean detail, String material, double scale) {
@@ -116,7 +181,7 @@ public class MapWriter {
 
     private class Vector3D {
 
-        public double x,  y,  z;
+        public  double x,        y,        z;
 
         public Vector3D() {
             this(0.0, 0.0, 0.0);
