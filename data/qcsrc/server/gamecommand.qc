@@ -147,7 +147,28 @@ void GameCommand(string command)
 		print("DB loaded.\n");
 		return;
 	}
-
+	if (argv(0) == "lockteams")
+	{
+		if(teamplay)
+		{
+			lockteams = 1;
+			bprint("^1The teams are now locked.\n");
+		}
+		else
+			bprint("That command can only be used in a team-based gamemode.\n");
+		return;
+	}
+	if (argv(0) == "unlockteams")
+	{
+		if(teamplay)
+		{
+			lockteams = 0;
+			bprint("^1The teams are now unlocked.\n");
+		}
+		else
+			bprint("That command can only be used in a team-based gamemode.\n");
+		return;
+	}
 	if(argv(0) == "vstop")
 	{
 		local entity temp;

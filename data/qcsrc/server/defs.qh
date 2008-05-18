@@ -402,3 +402,5 @@ float have_team_spawns;
 .float killindicator_teamchange;
 
 void Damage (entity targ, entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force);
+
+float lockteams;

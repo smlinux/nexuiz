@@ -455,7 +455,7 @@ void SV_ParseClientCommand(string s) {
 		}
 	} else if(argv(0) == "join") {
 		if(!g_arena)
-		if (self.classname != "player")
+		if (self.classname != "player" && !lockteams)
 		{
 			self.classname = "player";
 			self.frags = 0;
@@ -467,6 +467,8 @@ void SV_ParseClientCommand(string s) {
 			sprint( self, "selecteam can only be used in teamgames\n");
 		} else if(cvar("g_campaign")) {
 			//JoinBestTeam(self, 0);
+		} else if(lockteams) {
+			sprint( self, "^7The game has already begun, you must wait until the next map to be able to join a team.\n");
 		} else if( argv(1) == "red" ) {
 			DoTeamChange(COLOR_TEAM1);
 		} else if( argv(1) == "blue" ) {
@@ -871,7 +873,11 @@ void ReadyCount()
 			timelimit_orig = cvar("timelimit");
 		cvar_set("timelimit", ftos(timelimit_orig + ceil(restart_countdown)/60));
 	}
-
+	if(cvar("teamplay_lockonrestart") && teams_matter) {
+		lockteams = 1;
+		bprint("^1The teams are now locked.\n");
+	}
+	
 	//initiate the restart-countdown-announcer entity
 	restartAnnouncer = spawn();
 	restartAnnouncer.think = restartAnnouncer_Think;
