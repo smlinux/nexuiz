@@ -130,6 +130,11 @@ public class JFrameMain extends javax.swing.JFrame {
         jSpinnerUnits.setModel(new javax.swing.SpinnerNumberModel(256, 1, 2048, 1));
 
         jSpinnerHeight.setModel(new javax.swing.SpinnerNumberModel(1024, 256, 16384, 1));
+        jSpinnerHeight.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jSpinnerHeightStateChanged(evt);
+            }
+        });
 
         jSpinnerTextureScale.setModel(new javax.swing.SpinnerNumberModel(0.5d, 0.25d, 16.0d, 0.25d));
 
@@ -198,6 +203,11 @@ public class JFrameMain extends javax.swing.JFrame {
         jLabel5.setText("Sky height:");
 
         jSpinnerSkyHeight.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1152), Integer.valueOf(256), null, Integer.valueOf(1)));
+        jSpinnerSkyHeight.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jSpinnerSkyHeightStateChanged(evt);
+            }
+        });
 
         jCheckBoxSkyFill.setSelected(true);
         jCheckBoxSkyFill.setText("fill alpha-gaps with sky");
@@ -221,7 +231,7 @@ public class JFrameMain extends javax.swing.JFrame {
                     .addGroup(jPanelSkyLayout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSpinnerSkyHeight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jSpinnerSkyHeight, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel6))
                 .addContainerGap())
         );
@@ -247,20 +257,12 @@ public class JFrameMain extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(jPanelSky, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jButtonOK)))
+                    .addComponent(jPanelSky, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButtonOK))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -330,6 +332,22 @@ private void jButtonOutputActionPerformed(java.awt.event.ActionEvent evt) {//GEN
 private void jCheckBoxSkyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxSkyActionPerformed
     enableSkyPanel(jCheckBoxSky.isSelected());
 }//GEN-LAST:event_jCheckBoxSkyActionPerformed
+
+private void jSpinnerHeightStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinnerHeightStateChanged
+    int value = (Integer)jSpinnerHeight.getValue();
+    int skyheight = (Integer)jSpinnerSkyHeight.getValue();
+    if(skyheight < value) {
+        jSpinnerSkyHeight.setValue(value);
+    }
+}//GEN-LAST:event_jSpinnerHeightStateChanged
+
+private void jSpinnerSkyHeightStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinnerSkyHeightStateChanged
+    int value =(Integer)jSpinnerSkyHeight.getValue();
+    int height = (Integer)jSpinnerHeight.getValue();
+    if(height > value) {
+        jSpinnerHeight.setValue(value);
+    }
+}//GEN-LAST:event_jSpinnerSkyHeightStateChanged
 
 private void enableSkyPanel(boolean b) {
     jCheckBoxSkyFill.setEnabled(b);
