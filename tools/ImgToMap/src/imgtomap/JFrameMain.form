@@ -52,19 +52,19 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
+              <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jTextFieldTexture" alignment="0" pref="421" max="32767" attributes="0"/>
+                      <Component id="jTextFieldTexture" alignment="0" pref="465" max="32767" attributes="0"/>
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="1" attributes="0">
-                              <Component id="jTextFieldInput" pref="291" max="32767" attributes="1"/>
-                              <Component id="jTextFieldOutput" alignment="1" pref="291" max="32767" attributes="1"/>
+                              <Component id="jTextFieldInput" pref="313" max="32767" attributes="1"/>
+                              <Component id="jTextFieldOutput" alignment="1" pref="313" max="32767" attributes="1"/>
                           </Group>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="1" attributes="0">
-                              <Component id="jButtonOutput" pref="124" max="32767" attributes="2"/>
-                              <Component id="jButtonInput" pref="124" max="32767" attributes="2"/>
+                              <Component id="jButtonOutput" pref="146" max="32767" attributes="2"/>
+                              <Component id="jButtonInput" pref="146" max="32767" attributes="2"/>
                           </Group>
                       </Group>
                       <Component id="jButtonOK" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -78,12 +78,18 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jSpinnerHeight" min="-2" max="-2" attributes="1"/>
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="jCheckBoxDetail" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jSpinner1" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
+                          <EmptySpace min="-2" pref="132" max="-2" attributes="0"/>
                       </Group>
                       <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="jCheckBoxDetail" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -106,18 +112,21 @@
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jSpinnerUnits" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jSpinnerHeight" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jCheckBoxDetail" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jSpinner1" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jTextFieldTexture" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="39" max="32767" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Component id="jCheckBoxDetail" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace pref="18" max="32767" attributes="0"/>
                   <Component id="jButtonOK" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -126,12 +135,6 @@
       </Layout>
       <SubComponents>
         <Component class="javax.swing.JTextField" name="jTextFieldInput">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="/home/maik/netbeans/ImgToMap/test1.png"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTextFieldInputActionPerformed"/>
-          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="jButtonInput">
           <Properties>
@@ -142,9 +145,6 @@
           </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="jTextFieldOutput">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="/tmp/test.map"/>
-          </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="jButtonOutput">
           <Properties>
@@ -197,6 +197,18 @@
           <Properties>
             <Property name="selected" type="boolean" value="true"/>
             <Property name="text" type="java.lang.String" value="make detail"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel4">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Texture scale:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JSpinner" name="jSpinner1">
+          <Properties>
+            <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
+              <SpinnerModel initial="0.5" maximum="16.0" minimum="0.25" numberType="java.lang.Double" stepSize="0.25" type="number"/>
+            </Property>
           </Properties>
         </Component>
       </SubComponents>

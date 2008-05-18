@@ -18,6 +18,14 @@ public class JFrameMain extends javax.swing.JFrame {
     /** Creates new form JFrameMain */
     public JFrameMain() {
         initComponents();
+        String testinput = "/mnt/data/nexuizsvn/nexuiz/trunk/tools/ImgToMap/test1.png";
+        String testoutput = "/tmp/test.map";
+        
+        if(new File(testinput).exists()) {
+            jTextFieldInput.setText(testinput);
+            jTextFieldOutput.setText(testoutput);
+        }
+        
     }
 
     /** This method is called from within the constructor to
@@ -42,18 +50,13 @@ public class JFrameMain extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jTextFieldTexture = new javax.swing.JTextField();
         jCheckBoxDetail = new javax.swing.JCheckBox();
+        jLabel4 = new javax.swing.JLabel();
+        jSpinner1 = new javax.swing.JSpinner();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("ImgToMap");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Convert image to map"));
-
-        jTextFieldInput.setText("/home/maik/netbeans/ImgToMap/test1.png");
-        jTextFieldInput.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldInputActionPerformed(evt);
-            }
-        });
 
         jButtonInput.setText("Select input file");
         jButtonInput.addActionListener(new java.awt.event.ActionListener() {
@@ -61,8 +64,6 @@ public class JFrameMain extends javax.swing.JFrame {
                 jButtonInputActionPerformed(evt);
             }
         });
-
-        jTextFieldOutput.setText("/tmp/test.map");
 
         jButtonOutput.setText("Select output file");
 
@@ -88,6 +89,10 @@ public class JFrameMain extends javax.swing.JFrame {
         jCheckBoxDetail.setSelected(true);
         jCheckBoxDetail.setText("make detail");
 
+        jLabel4.setText("Texture scale:");
+
+        jSpinner1.setModel(new javax.swing.SpinnerNumberModel(0.5d, 0.25d, 16.0d, 0.25d));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -95,15 +100,15 @@ public class JFrameMain extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextFieldTexture, javax.swing.GroupLayout.DEFAULT_SIZE, 421, Short.MAX_VALUE)
+                    .addComponent(jTextFieldTexture, javax.swing.GroupLayout.DEFAULT_SIZE, 465, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jTextFieldInput, javax.swing.GroupLayout.DEFAULT_SIZE, 291, Short.MAX_VALUE)
-                            .addComponent(jTextFieldOutput, javax.swing.GroupLayout.DEFAULT_SIZE, 291, Short.MAX_VALUE))
+                            .addComponent(jTextFieldInput, javax.swing.GroupLayout.DEFAULT_SIZE, 313, Short.MAX_VALUE)
+                            .addComponent(jTextFieldOutput, javax.swing.GroupLayout.DEFAULT_SIZE, 313, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jButtonOutput, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
-                            .addComponent(jButtonInput, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)))
+                            .addComponent(jButtonOutput, javax.swing.GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE)
+                            .addComponent(jButtonInput, javax.swing.GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE)))
                     .addComponent(jButtonOK)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -114,9 +119,14 @@ public class JFrameMain extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jSpinnerHeight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jCheckBoxDetail))
-                            .addComponent(jLabel2)))
-                    .addComponent(jLabel3))
+                                .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel4)))
+                        .addGap(132, 132, 132))
+                    .addComponent(jLabel3)
+                    .addComponent(jCheckBoxDetail))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -133,17 +143,20 @@ public class JFrameMain extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jLabel2))
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jSpinnerUnits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jSpinnerHeight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jCheckBoxDetail))
+                    .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextFieldTexture, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jCheckBoxDetail)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                 .addComponent(jButtonOK)
                 .addContainerGap())
         );
@@ -180,17 +193,14 @@ private void jButtonInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
     }
 }//GEN-LAST:event_jButtonInputActionPerformed
 
-private void jTextFieldInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldInputActionPerformed
-// TODO add your handling code here:
-}//GEN-LAST:event_jTextFieldInputActionPerformed
-
 private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOKActionPerformed
     Parameters p = new Parameters();
     p.infile = jTextFieldInput.getText();
     p.outfile = jTextFieldOutput.getText();
     p.texture = jTextFieldTexture.getText();
-    p.pixelsize = new Integer(jSpinnerUnits.getValue().toString());
-    p.height = new Integer(jSpinnerHeight.getValue().toString());
+    p.pixelsize = (Integer)jSpinnerUnits.getValue();
+    p.height = (Integer)jSpinnerHeight.getValue();
+    p.texturescale = (Double)jSpinner1.getValue();
     p.detail = jCheckBoxDetail.isSelected();
     new MapWriter().writeMap(p);
 }//GEN-LAST:event_jButtonOKActionPerformed
@@ -214,7 +224,9 @@ private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JSpinner jSpinner1;
     private javax.swing.JSpinner jSpinnerHeight;
     private javax.swing.JSpinner jSpinnerUnits;
     private javax.swing.JTextField jTextFieldInput;

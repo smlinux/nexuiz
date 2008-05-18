@@ -24,7 +24,7 @@ public class MapWriter {
         if (!(new File(p.infile).exists())) {
             return;
         }
-        
+
         FileOutputStream fos;
         try {
             fos = new FileOutputStream(new File(p.outfile));
@@ -32,7 +32,7 @@ public class MapWriter {
             Logger.getLogger(MapWriter.class.getName()).log(Level.SEVERE, null, ex);
             return;
         }
-           
+
         double[][] height = getHeightmap(p.infile);
         double units = 1d * p.pixelsize;
         double max = p.height;
@@ -43,52 +43,56 @@ public class MapWriter {
         buf.append("{\n\"classname\" \"worldspawn\"\n");
 
         // wander through grid
-        for (int x = 0; x < height.length-1; ++x) {
-            for (int y = 0; y < height[0].length-1; ++y) {
-                
-                
-                /*
-                 * 
-                 *      a +-------+ b
-                 *       /       /|
-                 *      /       / |
-                 *     /       /  |
-                 *  c +-------+ d + f   (e occluded, unused)
-                 *    |       |  /
-                 *    |       | /
-                 *    |       |/
-                 *  g +-------+ h
-                 * 
-                 */
-                
-                Vector3D a = new Vector3D(x * units, -y * units, height[x][y] * max);
-                Vector3D b = new Vector3D((x+1) * units, -y * units, height[x+1][y] * max);
-                Vector3D c = new Vector3D(x * units, -(y+1) * units, height[x][y+1] * max);
-                Vector3D d = new Vector3D((x+1) * units, -(y+1) * units, height[x+1][y+1] * max);
-                //Vector3D e = new Vector3D(x * units, -y * units, -16.0);
-                Vector3D f = new Vector3D((x+1) * units, -y * units, -16.0);
-                Vector3D g = new Vector3D(x * units, -(y+1) * units, -16.0);
-                Vector3D h = new Vector3D((x+1) * units, -(y+1) * units, -16.0);
-                
-                buf.append("{\n");
-                buf.append(getMapPlaneString(a,b,d, p.detail, p.texture, p.texturescale));
-                buf.append(getMapPlaneString(d,b,f, p.detail, "common/caulk", p.texturescale));
-                buf.append(getMapPlaneString(f,b,a, p.detail, "common/caulk", p.texturescale));
-                buf.append(getMapPlaneString(a,d,h, p.detail, "common/caulk", p.texturescale));
-                buf.append(getMapPlaneString(g,h,f, p.detail, "common/caulk", p.texturescale));
-                buf.append("}\n");
-                
-                
-                buf.append("{\n");
-                buf.append(getMapPlaneString(d,c,a, p.detail, p.texture, p.texturescale));
-                buf.append(getMapPlaneString(g,c,d, p.detail, "common/caulk", p.texturescale));
-                buf.append(getMapPlaneString(c,g,a, p.detail, "common/caulk", p.texturescale));
-                buf.append(getMapPlaneString(h,d,a, p.detail, "common/caulk", p.texturescale));
-                buf.append(getMapPlaneString(g,h,f, p.detail, "common/caulk", p.texturescale));
-                buf.append("}\n");
+        for (int x = 0; x < height.length - 1; ++x) {
+            for (int y = 0; y < height[0].length - 1; ++y) {
+
+                boolean skip = height[x][y] < 0 || height[x][y + 1] < 0 || height[x + 1][y] < 0 || height[x + 1][y + 1] < 0;
+
+                if (!skip) {
+
+                    /*
+                     * 
+                     *      a +-------+ b
+                     *       /       /|
+                     *      /       / |
+                     *     /       /  |
+                     *  c +-------+ d + f   (e occluded, unused)
+                     *    |       |  /
+                     *    |       | /
+                     *    |       |/
+                     *  g +-------+ h
+                     * 
+                     */
+
+                    Vector3D a = new Vector3D(x * units, -y * units, height[x][y] * max);
+                    Vector3D b = new Vector3D((x + 1) * units, -y * units, height[x + 1][y] * max);
+                    Vector3D c = new Vector3D(x * units, -(y + 1) * units, height[x][y + 1] * max);
+                    Vector3D d = new Vector3D((x + 1) * units, -(y + 1) * units, height[x + 1][y + 1] * max);
+                    //Vector3D e = new Vector3D(x * units, -y * units, -16.0);
+                    Vector3D f = new Vector3D((x + 1) * units, -y * units, -16.0);
+                    Vector3D g = new Vector3D(x * units, -(y + 1) * units, -16.0);
+                    Vector3D h = new Vector3D((x + 1) * units, -(y + 1) * units, -16.0);
+
+                    buf.append("{\n");
+                    buf.append(getMapPlaneString(a, b, d, p.detail, p.texture, p.texturescale));
+                    buf.append(getMapPlaneString(d, b, f, p.detail, "common/caulk", p.texturescale));
+                    buf.append(getMapPlaneString(f, b, a, p.detail, "common/caulk", p.texturescale));
+                    buf.append(getMapPlaneString(a, d, h, p.detail, "common/caulk", p.texturescale));
+                    buf.append(getMapPlaneString(g, h, f, p.detail, "common/caulk", p.texturescale));
+                    buf.append("}\n");
+
+
+                    buf.append("{\n");
+                    buf.append(getMapPlaneString(d, c, a, p.detail, p.texture, p.texturescale));
+                    buf.append(getMapPlaneString(g, c, d, p.detail, "common/caulk", p.texturescale));
+                    buf.append(getMapPlaneString(c, g, a, p.detail, "common/caulk", p.texturescale));
+                    buf.append(getMapPlaneString(h, d, a, p.detail, "common/caulk", p.texturescale));
+                    buf.append(getMapPlaneString(g, h, f, p.detail, "common/caulk", p.texturescale));
+                    buf.append("}\n");
+                }
             }
         }
-        
+
         // worldspawn end
         buf.append("}\n");
         try {
@@ -172,17 +176,44 @@ public class MapWriter {
             int x = raster.getWidth();
             int y = raster.getHeight();
 
-
             double[][] result = new double[x][y];
 
             for (int xi = 0; xi < x; ++xi) {
                 for (int yi = 0; yi < y; ++yi) {
                     float[] pixel = raster.getPixel(xi, yi, (float[]) null);
+
+                    int channels;
+                    boolean alpha;
+                    if (pixel.length == 3) {
+                        // RGB
+                        channels = 3;
+                        alpha = false;
+                    } else if (pixel.length == 4) {
+                        // RGBA
+                        channels = 3;
+                        alpha = true;
+                    } else if (pixel.length == 1) {
+                        // grayscale
+                        channels = 1;
+                        alpha = false;
+                    } else {
+                        // grayscale with alpha
+                        channels = 1;
+                        alpha = true;
+                    }
+
                     float tmp = 0f;
-                    for (int i = 0; i < pixel.length; ++i) {
+                    for (int i = 0; i < channels; ++i) {
                         tmp += pixel[i];
                     }
-                    result[xi][yi] = tmp / (pixel.length * 255f);
+                    result[xi][yi] = tmp / (channels * 255f);
+
+                    if (alpha) {
+                        // mark this pixel to be skipped
+                        if (pixel[pixel.length - 1] < 64.0) {
+                            result[xi][yi] = -1.0;
+                        }
+                    }
                 }
             }
 
