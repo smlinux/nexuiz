@@ -6,7 +6,6 @@ package imgtomap;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.Raster;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
