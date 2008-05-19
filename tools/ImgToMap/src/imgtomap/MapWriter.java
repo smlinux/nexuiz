@@ -6,10 +6,12 @@ package imgtomap;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.Raster;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -37,10 +39,17 @@ public class MapWriter {
         double units = 1d * p.pixelsize;
         double max = p.height;
 
-        StringBuffer buf = new StringBuffer();
+        PrintWriter pw = null;
+        try {
+            pw = new PrintWriter(new FileOutputStream(new File(p.outfile)));
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(MapWriter.class.getName()).log(Level.SEVERE, null, ex);
+            return 1;
+        }
+        
 
         // worldspawn start
-        buf.append("{\n\"classname\" \"worldspawn\"\n");
+        pw.print("{\n\"classname\" \"worldspawn\"\n");
 
         // wander through grid
         for (int x = 0; x < height.length - 1; ++x) {
@@ -73,22 +82,22 @@ public class MapWriter {
                     Vector3D g = new Vector3D(x * units, -(y + 1) * units, -16.0);
                     Vector3D h = new Vector3D((x + 1) * units, -(y + 1) * units, -16.0);
 
-                    buf.append("{\n");
-                    buf.append(getMapPlaneString(a, b, d, p.detail, p.texture, p.texturescale));
-                    buf.append(getMapPlaneString(d, b, f, p.detail, "common/caulk", p.texturescale));
-                    buf.append(getMapPlaneString(f, b, a, p.detail, "common/caulk", p.texturescale));
-                    buf.append(getMapPlaneString(a, d, h, p.detail, "common/caulk", p.texturescale));
-                    buf.append(getMapPlaneString(g, h, f, p.detail, "common/caulk", p.texturescale));
-                    buf.append("}\n");
+                    pw.print("{\n");
+                    pw.print(getMapPlaneString(a, b, d, p.detail, p.texture, p.texturescale));
+                    pw.print(getMapPlaneString(d, b, f, p.detail, "common/caulk", p.texturescale));
+                    pw.print(getMapPlaneString(f, b, a, p.detail, "common/caulk", p.texturescale));
+                    pw.print(getMapPlaneString(a, d, h, p.detail, "common/caulk", p.texturescale));
+                    pw.print(getMapPlaneString(g, h, f, p.detail, "common/caulk", p.texturescale));
+                    pw.print("}\n");
 
 
-                    buf.append("{\n");
-                    buf.append(getMapPlaneString(d, c, a, p.detail, p.texture, p.texturescale));
-                    buf.append(getMapPlaneString(g, c, d, p.detail, "common/caulk", p.texturescale));
-                    buf.append(getMapPlaneString(c, g, a, p.detail, "common/caulk", p.texturescale));
-                    buf.append(getMapPlaneString(h, d, a, p.detail, "common/caulk", p.texturescale));
-                    buf.append(getMapPlaneString(g, h, f, p.detail, "common/caulk", p.texturescale));
-                    buf.append("}\n");
+                    pw.print("{\n");
+                    pw.print(getMapPlaneString(d, c, a, p.detail, p.texture, p.texturescale));
+                    pw.print(getMapPlaneString(g, c, d, p.detail, "common/caulk", p.texturescale));
+                    pw.print(getMapPlaneString(c, g, a, p.detail, "common/caulk", p.texturescale));
+                    pw.print(getMapPlaneString(h, d, a, p.detail, "common/caulk", p.texturescale));
+                    pw.print(getMapPlaneString(g, h, f, p.detail, "common/caulk", p.texturescale));
+                    pw.print("}\n");
                 } else if (p.skyfill) {
 
                     boolean totalskip = height[x][y] < -5 || height[x][y + 1] < -5 || height[x + 1][y] < -5 || height[x + 1][y + 1] < -5;
@@ -98,7 +107,7 @@ public class MapWriter {
                         Vector3D p1 = new Vector3D(x * units, -(y + 1) * units, -32.0);
                         Vector3D p2 = new Vector3D((x + 1) * units, -y * units, p.skyheight);
 
-                        writeBoxBrush(buf, p1, p2, false, p.skytexture, 1.0);
+                        writeBoxBrush(pw, p1, p2, false, p.skytexture, 1.0);
                     }
                 }
             }
@@ -112,48 +121,43 @@ public class MapWriter {
             // top
             Vector3D p1 = new Vector3D(0, -y * units, p.skyheight);
             Vector3D p2 = new Vector3D(x * units, 0, p.skyheight + 32.0);
-            writeBoxBrush(buf, p1, p2, false, p.skytexture, 1.0);
+            writeBoxBrush(pw, p1, p2, false, p.skytexture, 1.0);
 
             // bottom
             p1 = new Vector3D(0, -y * units, -64.0);
             p2 = new Vector3D(x * units, 0, -32.0);
-            writeBoxBrush(buf, p1, p2, false, p.skytexture, 1.0);
+            writeBoxBrush(pw, p1, p2, false, p.skytexture, 1.0);
 
             // north
             p1 = new Vector3D(0, 0, -32.0);
             p2 = new Vector3D(x * units, 32, p.skyheight);
-            writeBoxBrush(buf, p1, p2, false, p.skytexture, 1.0);
+            writeBoxBrush(pw, p1, p2, false, p.skytexture, 1.0);
 
             // east
             p1 = new Vector3D(x * units, -y * units, -32.0);
             p2 = new Vector3D(x * units + 32.0, 0, p.skyheight);
-            writeBoxBrush(buf, p1, p2, false, p.skytexture, 1.0);
+            writeBoxBrush(pw, p1, p2, false, p.skytexture, 1.0);
 
             // south
             p1 = new Vector3D(0, -y * units - 32, -32.0);
             p2 = new Vector3D(x * units, -y * units, p.skyheight);
-            writeBoxBrush(buf, p1, p2, false, p.skytexture, 1.0);
+            writeBoxBrush(pw, p1, p2, false, p.skytexture, 1.0);
 
 
             // west
             p1 = new Vector3D(0 - 32.0, -y * units, -32.0);
             p2 = new Vector3D(0, 0, p.skyheight);
-            writeBoxBrush(buf, p1, p2, false, p.skytexture, 1.0);
+            writeBoxBrush(pw, p1, p2, false, p.skytexture, 1.0);
 
         }
 
         // worldspawn end
-        buf.append("}\n");
-        try {
-            fos.write(buf.toString().getBytes());
-        } catch (IOException ex) {
-            Logger.getLogger(MapWriter.class.getName()).log(Level.SEVERE, null, ex);
-            return 1;
-        }
+        pw.print("}\n");
+        pw.close();
         return 0;
     }
 
-    private void writeBoxBrush(StringBuffer buf, Vector3D p1, Vector3D p2, boolean detail, String texture, double scale) {
+    private void writeBoxBrush(PrintWriter pw, Vector3D p1, Vector3D p2, boolean detail, String texture, double scale) {
         Vector3D a = new Vector3D(p1.x, p2.y, p2.z);
         Vector3D b = p2;
         Vector3D c = new Vector3D(p1.x, p1.y, p2.z);
@@ -163,14 +167,14 @@ public class MapWriter {
         Vector3D g = p1;
         Vector3D h = new Vector3D(p2.x, p1.y, p1.z);
 
-        buf.append("{\n");
-        buf.append(getMapPlaneString(a, b, d, detail, texture, scale));
-        buf.append(getMapPlaneString(d, b, f, detail, texture, scale));
-        buf.append(getMapPlaneString(c, d, h, detail, texture, scale));
-        buf.append(getMapPlaneString(a, c, g, detail, texture, scale));
-        buf.append(getMapPlaneString(f, b, a, detail, texture, scale));
-        buf.append(getMapPlaneString(g, h, f, detail, texture, scale));
-        buf.append("}\n");
+        pw.print("{\n");
+        pw.print(getMapPlaneString(a, b, d, detail, texture, scale));
+        pw.print(getMapPlaneString(d, b, f, detail, texture, scale));
+        pw.print(getMapPlaneString(c, d, h, detail, texture, scale));
+        pw.print(getMapPlaneString(a, c, g, detail, texture, scale));
+        pw.print(getMapPlaneString(f, b, a, detail, texture, scale));
+        pw.print(getMapPlaneString(g, h, f, detail, texture, scale));
+        pw.print("}\n");
 
     }
 
