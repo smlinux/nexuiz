@@ -51,7 +51,7 @@ public class MapWriter {
 
                 boolean skip = getMinMaxForRegion(height, x, y, 2)[0] < 0;
 
-                if (!skip && false) {
+                if (!skip) {
 
                     /*
                      * 
