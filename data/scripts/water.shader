@@ -8,6 +8,7 @@ textures/water/water0
 	surfaceparm trans
 	surfaceparm water
 	surfaceparm nolightmap
+	cull none
 	q3map_globaltexture
 	{
 		map textures/water/water0.tga
@@ -26,6 +27,7 @@ textures/water/water1
 	surfaceparm trans
 	surfaceparm water
 	surfaceparm nolightmap
+	cull none
 	q3map_globaltexture
 	{
 		map textures/water/water1.tga
@@ -44,6 +46,7 @@ textures/water/water2
 	surfaceparm trans
 	surfaceparm water
 	surfaceparm nolightmap
+	cull none
 	q3map_globaltexture
 	{
 		map textures/water/water2.tga
@@ -62,6 +65,7 @@ textures/water/slime1
 	surfaceparm trans
 	surfaceparm slime
 	surfaceparm nolightmap
+	cull none
 	q3map_globaltexture
 	{
 		map textures/water/slime1.tga
@@ -80,6 +84,7 @@ textures/water/slime2
 	surfaceparm trans
 	surfaceparm slime
 	surfaceparm nolightmap
+	cull none
 	q3map_globaltexture
 	{
 		map textures/water/slime1.tga
