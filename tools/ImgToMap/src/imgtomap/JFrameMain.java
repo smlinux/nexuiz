@@ -55,6 +55,7 @@ public class JFrameMain extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
+        jCheckBoxVisBlocker = new javax.swing.JCheckBox();
         jPanelSky = new javax.swing.JPanel();
         jCheckBoxSky = new javax.swing.JCheckBox();
         jLabel5 = new javax.swing.JLabel();
@@ -144,6 +145,9 @@ public class JFrameMain extends javax.swing.JFrame {
 
         jLabel1.setText("Units per pixel:");
 
+        jCheckBoxVisBlocker.setSelected(true);
+        jCheckBoxVisBlocker.setText("generate visblockers");
+
         org.jdesktop.layout.GroupLayout jPanel2Layout = new org.jdesktop.layout.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -159,15 +163,17 @@ public class JFrameMain extends javax.swing.JFrame {
                         .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
                             .add(jSpinnerHeight, 0, 0, Short.MAX_VALUE)
                             .add(jSpinnerUnits))
-                        .add(18, 18, 18)
-                        .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(jPanel2Layout.createSequentialGroup()
-                                .add(jLabel4)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(jSpinnerTextureScale))
-                            .add(jCheckBoxDetail)))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jLabel4)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jSpinnerTextureScale, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE))
                     .add(jLabel3)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jTextFieldTexture, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 404, Short.MAX_VALUE))
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jTextFieldTexture, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE)
+                    .add(jPanel2Layout.createSequentialGroup()
+                        .add(jCheckBoxDetail)
+                        .add(18, 18, 18)
+                        .add(jCheckBoxVisBlocker)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -181,9 +187,12 @@ public class JFrameMain extends javax.swing.JFrame {
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jLabel2)
-                    .add(jSpinnerHeight, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jCheckBoxDetail))
-                .add(18, 18, 18)
+                    .add(jSpinnerHeight, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jCheckBoxDetail)
+                    .add(jCheckBoxVisBlocker))
+                .add(14, 14, 14)
                 .add(jLabel3)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jTextFieldTexture, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
@@ -273,7 +282,7 @@ public class JFrameMain extends javax.swing.JFrame {
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanelSky, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 157, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(jPanelSky, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(jButtonOK)
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -305,6 +314,7 @@ private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
     p.height = (Integer)jSpinnerHeight.getValue();
     p.sky = jCheckBoxSky.isSelected();
     p.skyfill = jCheckBoxSkyFill.isSelected();
+    p.visblockers = jCheckBoxVisBlocker.isSelected();
     p.skyheight = (Integer)jSpinnerSkyHeight.getValue();
     p.texturescale = (Double)jSpinnerTextureScale.getValue();
     p.detail = jCheckBoxDetail.isSelected();
@@ -373,6 +383,7 @@ private void enableSkyPanel(boolean b) {
     private javax.swing.JCheckBox jCheckBoxDetail;
     private javax.swing.JCheckBox jCheckBoxSky;
     private javax.swing.JCheckBox jCheckBoxSkyFill;
+    private javax.swing.JCheckBox jCheckBoxVisBlocker;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

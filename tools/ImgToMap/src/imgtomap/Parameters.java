@@ -12,7 +12,7 @@ package imgtomap;
 public class Parameters {
     public String infile, outfile, texture, skytexture;
     public int pixelsize, height, skyheight;
-    public boolean detail, sky, skyfill;
+    public boolean detail, sky, skyfill, visblockers;
     public double texturescale = 0.5;
     
 

@@ -11,6 +11,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -26,15 +28,8 @@ public class MapWriter {
             return 1;
         }
 
-        FileOutputStream fos;
-        try {
-            fos = new FileOutputStream(new File(p.outfile));
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(MapWriter.class.getName()).log(Level.SEVERE, null, ex);
-            return 1;
-        }
-
         double[][] height = getHeightmap(p.infile);
+        double[][] columns = getColumns(height);
         double units = 1d * p.pixelsize;
         double max = p.height;
 
@@ -45,7 +40,7 @@ public class MapWriter {
             Logger.getLogger(MapWriter.class.getName()).log(Level.SEVERE, null, ex);
             return 1;
         }
-        
+
 
         // worldspawn start
         pw.print("{\n\"classname\" \"worldspawn\"\n");
@@ -54,9 +49,9 @@ public class MapWriter {
         for (int x = 0; x < height.length - 1; ++x) {
             for (int y = 0; y < height[0].length - 1; ++y) {
 
-                boolean skip = height[x][y] < 0 || height[x][y + 1] < 0 || height[x + 1][y] < 0 || height[x + 1][y + 1] < 0;
+                boolean skip = getMinMaxForRegion(height, x, y, 2)[0] < 0;
 
-                if (!skip) {
+                if (!skip && false) {
 
                     /*
                      * 
@@ -97,16 +92,23 @@ public class MapWriter {
                     pw.print(getMapPlaneString(h, d, a, p.detail, "common/caulk", p.texturescale));
                     pw.print(getMapPlaneString(g, h, f, p.detail, "common/caulk", p.texturescale));
                     pw.print("}\n");
-                } else if (p.skyfill) {
+                }
+            }
+        }
 
-                    boolean totalskip = height[x][y] < -5 || height[x][y + 1] < -5 || height[x + 1][y] < -5 || height[x + 1][y + 1] < -5;
+        if (p.skyfill) {
+            for (int x = 0; x < columns.length; ++x) {
+                for (int y = 0; y < columns[0].length; ++y) {
+                    if (columns[x][y] < 0) {
+                        // this is a skipped block, see if it neighbours a
+                        // relevant block
+                        double tmp = getMinMaxForRegion(columns, x - 1, y - 1, 3)[1];
+                        if (tmp >= 0) {
+                            Vector3D p1 = new Vector3D(x * units, -(y + 1) * units, -32.0);
+                            Vector3D p2 = new Vector3D((x + 1) * units, -y * units, p.skyheight);
 
-                    if (!totalskip) {
-                        // fill skipped blocks with sky
-                        Vector3D p1 = new Vector3D(x * units, -(y + 1) * units, -32.0);
-                        Vector3D p2 = new Vector3D((x + 1) * units, -y * units, p.skyheight);
-
-                        writeBoxBrush(pw, p1, p2, false, p.skytexture, 1.0);
+                            writeBoxBrush(pw, p1, p2, false, p.skytexture, 1.0);
+                        }
                     }
                 }
             }
@@ -150,6 +152,38 @@ public class MapWriter {
 
         }
 
+        // genBlockers screws the columns array!
+        // this should be the last step!
+        if (p.visblockers) {
+            List<VisBlocker> blockers = genBlockers(columns, 0.15);
+            double xmax = (columns.length - 1) * units;
+            double ymax = (columns[0].length - 1) * units;
+            for (VisBlocker b : blockers) {
+                double z = b.minheight * p.height;
+                z = Math.floor(z / 16);
+                z = z * 16;
+
+                if (z > 0) {
+                    int dim = b.dim;
+
+                    double x = b.x * units;
+                    double y = (b.y + dim) * units;
+                    x = x > xmax ? xmax : x;
+                    y = y > ymax ? ymax : y;
+                    Vector3D p1 = new Vector3D(x, -y, -32.0);
+
+                    x = (b.x + dim) * units;
+                    y = b.y * units;
+                    x = x > xmax ? xmax : x;
+                    y = y > ymax ? ymax : y;
+                    Vector3D p2 = new Vector3D(x, -y, z);
+
+                    writeBoxBrush(pw, p1, p2, false, "common/caulk", 1.0);
+                }
+
+            }
+        }
+
         // worldspawn end
         pw.print("}\n");
         pw.close();
@@ -185,6 +219,137 @@ public class MapWriter {
             flag = 0;
         }
         return "( " + p1.x + " " + p1.y + " " + p1.z + " ) ( " + p2.x + " " + p2.y + " " + p2.z + " ) ( " + p3.x + " " + p3.y + " " + p3.z + " ) " + material + " 0 0 0 " + scale + " " + scale + " " + flag + " 0 0\n";
+    }
+
+    private double[][] getHeightmap(String file) {
+        try {
+            BufferedImage bimg = ImageIO.read(new File(file));
+            Raster raster = bimg.getRaster();
+            int x = raster.getWidth();
+            int y = raster.getHeight();
+
+            double[][] result = new double[x][y];
+
+            for (int xi = 0; xi < x; ++xi) {
+                for (int yi = 0; yi < y; ++yi) {
+                    float[] pixel = raster.getPixel(xi, yi, (float[]) null);
+
+                    int channels;
+                    boolean alpha;
+                    if (pixel.length == 3) {
+                        // RGB
+                        channels = 3;
+                        alpha = false;
+                    } else if (pixel.length == 4) {
+                        // RGBA
+                        channels = 3;
+                        alpha = true;
+                    } else if (pixel.length == 1) {
+                        // grayscale
+                        channels = 1;
+                        alpha = false;
+                    } else {
+                        // grayscale with alpha
+                        channels = 1;
+                        alpha = true;
+                    }
+
+                    float tmp = 0f;
+                    for (int i = 0; i < channels; ++i) {
+                        tmp += pixel[i];
+                    }
+                    result[xi][yi] = tmp / (channels * 255f);
+
+                    if (alpha) {
+                        // mark this pixel to be skipped
+                        if (pixel[pixel.length - 1] < 64.0) {
+                            result[xi][yi] = -1.0;
+                        }
+                    }
+                }
+            }
+
+
+            return result;
+        } catch (IOException ex) {
+            Logger.getLogger(MapWriter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;
+    }
+
+    private double[][] getColumns(double[][] heights) {
+        double[][] result = new double[heights.length][heights[0].length];
+
+        for (int x = 0; x < heights.length; ++x) {
+            for (int y = 0; y < heights[0].length; ++y) {
+                result[x][y] = getMinMaxForRegion(heights, x, y, 2)[0];
+            }
+        }
+
+        return result;
+    }
+
+    private double[] getMinMaxForRegion(double[][] field, int x, int y, int dim) {
+        double max = -100d;
+        double min = 100d;
+
+        for (int i = x; i < x + dim; ++i) {
+            for (int j = y; j < y + dim; ++j) {
+                if (i >= 0 && j >= 0 && i < field.length && j < field[0].length) {
+                    min = field[i][j] < min ? field[i][j] : min;
+                    max = field[i][j] > max ? field[i][j] : max;
+                }
+            }
+        }
+
+        double[] result = {min, max};
+        return result;
+    }
+
+    public List<VisBlocker> genBlockers(double[][] columns, double delta) {
+
+        VisBlocker[][] blockers = new VisBlocker[columns.length][columns[0].length];
+        LinkedList<VisBlocker> result = new LinkedList<VisBlocker>();
+
+        for (int x = 0; x < columns.length; ++x) {
+            for (int y = 0; y < columns[0].length; ++y) {
+                if (blockers[x][y] == null && columns[x][y] >= 0) {
+                    // this pixel isn't covered by a blocker yet... so let's create one!
+                    VisBlocker b = new VisBlocker();
+                    result.add(b);
+                    b.x = x;
+                    b.y = y;
+                    b.minheight = b.origheight = columns[x][y];
+
+                    // grow till the delta hits
+                    int dim;
+                    double min = b.minheight;
+                    for (dim = 1; dim < columns.length; ++dim) {
+                        double[] minmax = getMinMaxForRegion(columns, x, y, dim);
+                        if (Math.abs(b.origheight - minmax[0]) > delta || Math.abs(b.origheight - minmax[1]) > delta) {
+                            break;
+                        }
+                        min = minmax[0];
+
+                    }
+
+                    b.dim = dim - 1;
+                    b.minheight = min;
+
+                    for (int i = x; i < x + b.dim; ++i) {
+                        for (int j = y; j < y + b.dim; ++j) {
+                            if (i >= 0 && j >= 0 && i < blockers.length && j < blockers[0].length) {
+                                blockers[i][j] = b;
+                                columns[i][j] = -1337.0;
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+        return result;
     }
 
     private class Vector3D {
@@ -244,127 +409,9 @@ public class MapWriter {
         }
     }
 
-    private double[][] markTotalSkip(double[][] input) {
-        double[][] result = new double[input.length][input[0].length];
+    private class VisBlocker {
 
-        int xmax = input.length - 1;
-        int ymax = input[0].length - 1;
-
-        for (int x = 0; x <= xmax; ++x) {
-            for (int y = 0; y <= ymax; ++y) {
-                double val;
-                double max;
-
-                val = input[x][y];
-                max = val;
-
-                if (x - 1 >= 0 && y - 1 >= 0) {
-                    val = input[x - 1][y - 1];
-                    max = val > max ? val : max;
-                }
-
-                if (y - 1 >= 0) {
-                    val = input[x][y - 1];
-                    max = val > max ? val : max;
-                }
-
-                if (x + 1 <= xmax && y - 1 >= 0) {
-                    val = input[x + 1][y - 1];
-                    max = val > max ? val : max;
-                }
-
-                if (x - 1 >= 0) {
-                    val = input[x - 1][y];
-                    max = val > max ? val : max;
-                }
-
-                if (x + 1 <= xmax) {
-                    val = input[x + 1][y];
-                    max = val > max ? val : max;
-                }
-
-                if (x - 1 >= 0 && y + 1 <= ymax) {
-                    val = input[x - 1][y + 1];
-                    max = val > max ? val : max;
-                }
-
-                if (y + 1 <= ymax) {
-                    val = input[x][y + 1];
-                    max = val > max ? val : max;
-                }
-
-                if (x + 1 <= xmax && y + 1 <= ymax) {
-                    val = input[x + 1][y + 1];
-                    max = val > max ? val : max;
-                }
-
-                if (max < 0) {
-                    result[x][y] = -10.0;
-                } else {
-                    result[x][y] = input[x][y];
-                }
-
-            }
-        }
-
-
-        return result;
-    }
-
-    private double[][] getHeightmap(String file) {
-        try {
-            BufferedImage bimg = ImageIO.read(new File(file));
-            Raster raster = bimg.getRaster();
-            int x = raster.getWidth();
-            int y = raster.getHeight();
-
-            double[][] result = new double[x][y];
-
-            for (int xi = 0; xi < x; ++xi) {
-                for (int yi = 0; yi < y; ++yi) {
-                    float[] pixel = raster.getPixel(xi, yi, (float[]) null);
-
-                    int channels;
-                    boolean alpha;
-                    if (pixel.length == 3) {
-                        // RGB
-                        channels = 3;
-                        alpha = false;
-                    } else if (pixel.length == 4) {
-                        // RGBA
-                        channels = 3;
-                        alpha = true;
-                    } else if (pixel.length == 1) {
-                        // grayscale
-                        channels = 1;
-                        alpha = false;
-                    } else {
-                        // grayscale with alpha
-                        channels = 1;
-                        alpha = true;
-                    }
-
-                    float tmp = 0f;
-                    for (int i = 0; i < channels; ++i) {
-                        tmp += pixel[i];
-                    }
-                    result[xi][yi] = tmp / (channels * 255f);
-
-                    if (alpha) {
-                        // mark this pixel to be skipped
-                        if (pixel[pixel.length - 1] < 64.0) {
-                            result[xi][yi] = -1.0;
-                        }
-                    }
-                }
-            }
-
-
-            return markTotalSkip(result);
-        } catch (IOException ex) {
-            Logger.getLogger(MapWriter.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        return null;
+        public int x,  y,  dim;
+        public double origheight,  minheight;
     }
 }
