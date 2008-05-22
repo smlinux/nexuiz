@@ -164,15 +164,13 @@ public class MapWriter {
                 z = z * 16;
 
                 if (z > 0) {
-                    int dim = b.dim;
-
                     double x = b.x * units;
-                    double y = (b.y + dim) * units;
+                    double y = (b.y + b.ydim) * units;
                     x = x > xmax ? xmax : x;
                     y = y > ymax ? ymax : y;
                     Vector3D p1 = new Vector3D(x, -y, -32.0);
 
-                    x = (b.x + dim) * units;
+                    x = (b.x + b.xdim) * units;
                     y = b.y * units;
                     x = x > xmax ? xmax : x;
                     y = y > ymax ? ymax : y;
@@ -291,11 +289,15 @@ public class MapWriter {
     }
 
     private double[] getMinMaxForRegion(double[][] field, int x, int y, int dim) {
+        return getMinMaxForRegion(field, x, y, dim, dim);
+    }
+
+    private double[] getMinMaxForRegion(double[][] field, int x, int y, int xdim, int ydim) {
         double max = -100d;
         double min = 100d;
 
-        for (int i = x; i < x + dim; ++i) {
-            for (int j = y; j < y + dim; ++j) {
+        for (int i = x; i < x + xdim; ++i) {
+            for (int j = y; j < y + ydim; ++j) {
                 if (i >= 0 && j >= 0 && i < field.length && j < field[0].length) {
                     min = field[i][j] < min ? field[i][j] : min;
                     max = field[i][j] > max ? field[i][j] : max;
@@ -323,22 +325,45 @@ public class MapWriter {
                     b.minheight = b.origheight = columns[x][y];
 
                     // grow till the delta hits
-                    int dim;
+                    int xdim = 1;
+                    int ydim = 1;
+                    boolean xgrow = true;
+                    boolean ygrow = true;
                     double min = b.minheight;
-                    for (dim = 1; dim < columns.length; ++dim) {
-                        double[] minmax = getMinMaxForRegion(columns, x, y, dim);
+                    for (; xdim < columns.length && ydim < columns[0].length;) {
+                        double[] minmax = getMinMaxForRegion(columns, x, y, xdim + 1, ydim);
                         if (Math.abs(b.origheight - minmax[0]) > delta || Math.abs(b.origheight - minmax[1]) > delta) {
-                            break;
+                            xgrow = false;
                         }
+
+                        minmax = getMinMaxForRegion(columns, x, y, xdim, ydim + 1);
+                        if (Math.abs(b.origheight - minmax[0]) > delta || Math.abs(b.origheight - minmax[1]) > delta) {
+                            ygrow = false;
+                        }
+
                         min = minmax[0];
 
+                        if (xgrow) {
+                            ++xdim;
+                        }
+                        if (ygrow) {
+                            ++ydim;
+                        }
+
+                        minmax = getMinMaxForRegion(columns, x, y, xdim, ydim);
+                        min = minmax[0];
+
+                        if (!(xgrow || ygrow)) {
+                            break;
+                        }
                     }
 
-                    b.dim = dim - 1;
+                    b.xdim = xdim;
+                    b.ydim = ydim;
                     b.minheight = min;
 
-                    for (int i = x; i < x + b.dim; ++i) {
-                        for (int j = y; j < y + b.dim; ++j) {
+                    for (int i = x; i < x + b.xdim; ++i) {
+                        for (int j = y; j < y + b.ydim; ++j) {
                             if (i >= 0 && j >= 0 && i < blockers.length && j < blockers[0].length) {
                                 blockers[i][j] = b;
                                 columns[i][j] = -1337.0;
@@ -354,7 +379,7 @@ public class MapWriter {
 
     private class Vector3D {
 
-        public double x,  y,  z;
+        public  double x,    y,    z;
 
         public Vector3D() {
             this(0.0, 0.0, 0.0);
@@ -411,7 +436,7 @@ public class MapWriter {
 
     private class VisBlocker {
 
-        public int x,  y,  dim;
-        public double origheight,  minheight;
+        public  int x,    y,    xdim,   ydim;
+        public  double origheight,    minheight;
     }
 }
