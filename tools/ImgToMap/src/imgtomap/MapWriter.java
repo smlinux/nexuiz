@@ -41,64 +41,11 @@ public class MapWriter {
             return 1;
         }
 
-
         // worldspawn start
         pw.print("{\n\"classname\" \"worldspawn\"\n");
 
-        // wander through grid
-        for (int x = 0; x < height.length - 1; ++x) {
-            for (int y = 0; y < height[0].length - 1; ++y) {
-
-                boolean skip = getMinMaxForRegion(height, x, y, 2)[0] < 0;
-
-                if (!skip) {
-
-                    /*
-                     * 
-                     *      a +-------+ b
-                     *       /       /|
-                     *      /       / |
-                     *     /       /  |
-                     *  c +-------+ d + f   (e occluded, unused)
-                     *    |       |  /
-                     *    |       | /
-                     *    |       |/
-                     *  g +-------+ h
-                     * 
-                     */
-
-                    Vector3D a = new Vector3D(x * units, -y * units, height[x][y] * max);
-                    Vector3D b = new Vector3D((x + 1) * units, -y * units, height[x + 1][y] * max);
-                    Vector3D c = new Vector3D(x * units, -(y + 1) * units, height[x][y + 1] * max);
-                    Vector3D d = new Vector3D((x + 1) * units, -(y + 1) * units, height[x + 1][y + 1] * max);
-                    //Vector3D e = new Vector3D(x * units, -y * units, -16.0);
-                    Vector3D f = new Vector3D((x + 1) * units, -y * units, -16.0);
-                    Vector3D g = new Vector3D(x * units, -(y + 1) * units, -16.0);
-                    Vector3D h = new Vector3D((x + 1) * units, -(y + 1) * units, -16.0);
-
-                    pw.print("{\n");
-                    pw.print(getMapPlaneString(a, b, d, p.detail, p.texture, p.texturescale));
-                    pw.print(getMapPlaneString(d, b, f, p.detail, "common/caulk", p.texturescale));
-                    pw.print(getMapPlaneString(f, b, a, p.detail, "common/caulk", p.texturescale));
-                    pw.print(getMapPlaneString(a, d, h, p.detail, "common/caulk", p.texturescale));
-                    pw.print(getMapPlaneString(g, h, f, p.detail, "common/caulk", p.texturescale));
-                    pw.print("}\n");
-
-
-                    pw.print("{\n");
-                    pw.print(getMapPlaneString(d, c, a, p.detail, p.texture, p.texturescale));
-                    pw.print(getMapPlaneString(g, c, d, p.detail, "common/caulk", p.texturescale));
-                    pw.print(getMapPlaneString(c, g, a, p.detail, "common/caulk", p.texturescale));
-                    pw.print(getMapPlaneString(h, d, a, p.detail, "common/caulk", p.texturescale));
-                    pw.print(getMapPlaneString(g, h, f, p.detail, "common/caulk", p.texturescale));
-                    pw.print("}\n");
-                }
-            }
-        }
-
         double xmax = (columns.length - 1) * units;
         double ymax = (columns[0].length - 1) * units;
-
 
         if (p.skyfill) {
             List<Block> fillers = genSkyFillers(columns);
@@ -187,6 +134,62 @@ public class MapWriter {
 
         // worldspawn end
         pw.print("}\n");
+
+        // func_group start
+        pw.print("{\n\"classname\" \"func_group\"\n");
+        // wander through grid
+        for (int x = 0; x < height.length - 1; ++x) {
+            for (int y = 0; y < height[0].length - 1; ++y) {
+
+                boolean skip = getMinMaxForRegion(height, x, y, 2)[0] < 0;
+
+                if (!skip) {
+
+                    /*
+                     * 
+                     *      a +-------+ b
+                     *       /       /|
+                     *      /       / |
+                     *     /       /  |
+                     *  c +-------+ d + f   (e occluded, unused)
+                     *    |       |  /
+                     *    |       | /
+                     *    |       |/
+                     *  g +-------+ h
+                     * 
+                     */
+
+                    Vector3D a = new Vector3D(x * units, -y * units, height[x][y] * max);
+                    Vector3D b = new Vector3D((x + 1) * units, -y * units, height[x + 1][y] * max);
+                    Vector3D c = new Vector3D(x * units, -(y + 1) * units, height[x][y + 1] * max);
+                    Vector3D d = new Vector3D((x + 1) * units, -(y + 1) * units, height[x + 1][y + 1] * max);
+                    //Vector3D e = new Vector3D(x * units, -y * units, -16.0);
+                    Vector3D f = new Vector3D((x + 1) * units, -y * units, -16.0);
+                    Vector3D g = new Vector3D(x * units, -(y + 1) * units, -16.0);
+                    Vector3D h = new Vector3D((x + 1) * units, -(y + 1) * units, -16.0);
+
+                    pw.print("{\n");
+                    pw.print(getMapPlaneString(a, b, d, p.detail, p.texture, p.texturescale));
+                    pw.print(getMapPlaneString(d, b, f, p.detail, "common/caulk", p.texturescale));
+                    pw.print(getMapPlaneString(f, b, a, p.detail, "common/caulk", p.texturescale));
+                    pw.print(getMapPlaneString(a, d, h, p.detail, "common/caulk", p.texturescale));
+                    pw.print(getMapPlaneString(g, h, f, p.detail, "common/caulk", p.texturescale));
+                    pw.print("}\n");
+
+
+                    pw.print("{\n");
+                    pw.print(getMapPlaneString(d, c, a, p.detail, p.texture, p.texturescale));
+                    pw.print(getMapPlaneString(g, c, d, p.detail, "common/caulk", p.texturescale));
+                    pw.print(getMapPlaneString(c, g, a, p.detail, "common/caulk", p.texturescale));
+                    pw.print(getMapPlaneString(h, d, a, p.detail, "common/caulk", p.texturescale));
+                    pw.print(getMapPlaneString(g, h, f, p.detail, "common/caulk", p.texturescale));
+                    pw.print("}\n");
+                }
+            }
+        }
+        // func_group end
+        pw.print("}\n");
+
         pw.close();
         return 0;
     }
