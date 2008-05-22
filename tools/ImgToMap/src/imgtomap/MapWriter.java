@@ -96,21 +96,26 @@ public class MapWriter {
             }
         }
 
-        if (p.skyfill) {
-            for (int x = 0; x < columns.length; ++x) {
-                for (int y = 0; y < columns[0].length; ++y) {
-                    if (columns[x][y] < 0) {
-                        // this is a skipped block, see if it neighbours a
-                        // relevant block
-                        double tmp = getMinMaxForRegion(columns, x - 1, y - 1, 3)[1];
-                        if (tmp >= 0) {
-                            Vector3D p1 = new Vector3D(x * units, -(y + 1) * units, -32.0);
-                            Vector3D p2 = new Vector3D((x + 1) * units, -y * units, p.skyheight);
+        double xmax = (columns.length - 1) * units;
+        double ymax = (columns[0].length - 1) * units;
 
-                            writeBoxBrush(pw, p1, p2, false, p.skytexture, 1.0);
-                        }
-                    }
-                }
+
+        if (p.skyfill) {
+            List<Block> fillers = genSkyFillers(columns);
+            for (Block b : fillers) {
+                double x = b.x * units;
+                double y = (b.y + b.ydim) * units;
+                x = x > xmax ? xmax : x;
+                y = y > ymax ? ymax : y;
+                Vector3D p1 = new Vector3D(x, -y, -32.0);
+
+                x = (b.x + b.xdim) * units;
+                y = b.y * units;
+                x = x > xmax ? xmax : x;
+                y = y > ymax ? ymax : y;
+                Vector3D p2 = new Vector3D(x, -y, p.skyheight);
+
+                writeBoxBrush(pw, p1, p2, false, p.skytexture, 1.0);
             }
         }
 
@@ -155,11 +160,9 @@ public class MapWriter {
         // genBlockers screws the columns array!
         // this should be the last step!
         if (p.visblockers) {
-            List<VisBlocker> blockers = genBlockers(columns, 0.15);
-            double xmax = (columns.length - 1) * units;
-            double ymax = (columns[0].length - 1) * units;
-            for (VisBlocker b : blockers) {
-                double z = b.minheight * p.height;
+            List<Block> blockers = genBlockers(columns, 0.15);
+            for (Block b : blockers) {
+                double z = b.minheight * p.height - 1;
                 z = Math.floor(z / 16);
                 z = z * 16;
 
@@ -309,16 +312,16 @@ public class MapWriter {
         return result;
     }
 
-    public List<VisBlocker> genBlockers(double[][] columns, double delta) {
+    private List<Block> genBlockers(double[][] columns, double delta) {
 
-        VisBlocker[][] blockers = new VisBlocker[columns.length][columns[0].length];
-        LinkedList<VisBlocker> result = new LinkedList<VisBlocker>();
+        Block[][] blockers = new Block[columns.length][columns[0].length];
+        LinkedList<Block> result = new LinkedList<Block>();
 
         for (int x = 0; x < columns.length; ++x) {
             for (int y = 0; y < columns[0].length; ++y) {
                 if (blockers[x][y] == null && columns[x][y] >= 0) {
                     // this pixel isn't covered by a blocker yet... so let's create one!
-                    VisBlocker b = new VisBlocker();
+                    Block b = new Block();
                     result.add(b);
                     b.x = x;
                     b.y = y;
@@ -377,9 +380,92 @@ public class MapWriter {
         return result;
     }
 
+    private List<Block> genSkyFillers(double[][] columns) {
+
+        double delta = 0;
+
+        for (int x = 0; x < columns.length; ++x) {
+            for (int y = 0; y < columns[0].length; ++y) {
+                if (columns[x][y] < 0) {
+                    // this is a skipped block, see if it neighbours a
+                    // relevant block
+                    if (getMinMaxForRegion(columns, x - 1, y - 1, 3)[1] >= 0) {
+                        columns[x][y] = -100d;
+                    }
+                }
+            }
+        }
+
+
+        Block[][] fillers = new Block[columns.length][columns[0].length];
+        LinkedList<Block> result = new LinkedList<Block>();
+
+        for (int x = 0; x < columns.length; ++x) {
+            for (int y = 0; y < columns[0].length; ++y) {
+                if (fillers[x][y] == null && columns[x][y] == -100d) {
+                    // this pixel is marked to be skyfill
+                    Block b = new Block();
+                    result.add(b);
+                    b.x = x;
+                    b.y = y;
+                    b.minheight = b.origheight = columns[x][y];
+
+                    // grow till the delta hits
+                    int xdim = 1;
+                    int ydim = 1;
+                    boolean xgrow = true;
+                    boolean ygrow = true;
+                    double min = b.minheight;
+                    for (; xdim < columns.length && ydim < columns[0].length;) {
+                        double[] minmax = getMinMaxForRegion(columns, x, y, xdim + 1, ydim);
+                        if (Math.abs(b.origheight - minmax[0]) > delta || Math.abs(b.origheight - minmax[1]) > delta) {
+                            xgrow = false;
+                        }
+
+                        minmax = getMinMaxForRegion(columns, x, y, xdim, ydim + 1);
+                        if (Math.abs(b.origheight - minmax[0]) > delta || Math.abs(b.origheight - minmax[1]) > delta) {
+                            ygrow = false;
+                        }
+
+                        min = minmax[0];
+
+                        if (xgrow) {
+                            ++xdim;
+                        }
+                        if (ygrow) {
+                            ++ydim;
+                        }
+
+                        minmax = getMinMaxForRegion(columns, x, y, xdim, ydim);
+                        min = minmax[0];
+
+                        if (!(xgrow || ygrow)) {
+                            break;
+                        }
+                    }
+
+                    b.xdim = xdim;
+                    b.ydim = ydim;
+                    b.minheight = min;
+
+                    for (int i = x; i < x + b.xdim; ++i) {
+                        for (int j = y; j < y + b.ydim; ++j) {
+                            if (i >= 0 && j >= 0 && i < fillers.length && j < fillers[0].length) {
+                                fillers[i][j] = b;
+                                columns[i][j] = -1337.0;
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+        return result;
+    }
+
     private class Vector3D {
 
-        public  double x,    y,    z;
+        public double x,  y,  z;
 
         public Vector3D() {
             this(0.0, 0.0, 0.0);
@@ -434,9 +520,9 @@ public class MapWriter {
         }
     }
 
-    private class VisBlocker {
+    private class Block {
 
-        public  int x,    y,    xdim,   ydim;
-        public  double origheight,    minheight;
+        public int x,  y,  xdim,  ydim;
+        public double origheight,  minheight;
     }
 }
