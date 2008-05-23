@@ -1115,6 +1115,27 @@ sub irc_joinstage($)
 		out irc => 0, "PRIVMSG $config{irc_channel} :\001ACTION would have LIKED to put the scores here, but they wouldn't fit :(\001";
 		return 0;
 	} ],
+
+	# complain when system load gets too high
+	[ dp => q{timing:   (([0-9.]*)% CPU, ([0-9.]*)% lost, offset avg ([0-9.]*)ms, max ([0-9.]*)ms, sdev ([0-9.]*)ms)} => sub {
+		my ($all, $cpu, $lost, $avg, $max, $sdev) = @_;
+		return 0 # don't complain when just on the voting screen
+			if !$store{playing};
+		return 0 # don't complain if it was less than 0.5%
+			if $lost < 0.5;
+		return 0 # don't complain if nobody is looking
+			if $store{slots_active} == 0;
+		return 0 # don't complain in the first two minutes
+			if time() - $store{map_starttime} < 120;
+		return 0 # don't complain if it was already at least half as bad in this round
+			if $store{map_starttime} == $store{timingerror_map_starttime} and $lost <= 2 * $store{timingerror_lost};
+		$store{timingerror_map_starttime} = $store{map_starttime};
+		$store{timingerror_lost} = $lost;
+		out dp => 0, 'rcon2irc_say_as server "There are currently some severe system load problems. The admins have been notified."';
+		out irc => 1, "PRIVMSG $config{irc_channel} :\001ACTION has big trouble on $store{map} after @{[int(time() - $store{map_starttime})]}s: $all\001";
+		#out irc => 1, "PRIVMSG OpBaI :\001ACTION has big trouble on $store{map} after @{[int(time() - $store{map_starttime})]}s: $all\001";
+		return 0;
+	} ],
 );
 
 
