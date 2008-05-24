@@ -159,6 +159,13 @@ public class MapWriter {
                      * 
                      */
 
+
+                    // delta a - d
+                    double grad1 = Math.abs(height[x][y] - height[x + 1][y + 1]);
+
+                    /// delta b - c
+                    double grad2 = Math.abs(height[x + 1][y] - height[x][y + 1]);
+
                     Vector3D a = new Vector3D(x * units, -y * units, height[x][y] * max);
                     Vector3D b = new Vector3D((x + 1) * units, -y * units, height[x + 1][y] * max);
                     Vector3D c = new Vector3D(x * units, -(y + 1) * units, height[x][y + 1] * max);
@@ -168,22 +175,43 @@ public class MapWriter {
                     Vector3D g = new Vector3D(x * units, -(y + 1) * units, -16.0);
                     Vector3D h = new Vector3D((x + 1) * units, -(y + 1) * units, -16.0);
 
-                    pw.print("{\n");
-                    pw.print(getMapPlaneString(a, b, d, p.detail, p.texture, p.texturescale));
-                    pw.print(getMapPlaneString(d, b, f, p.detail, "common/caulk", p.texturescale));
-                    pw.print(getMapPlaneString(f, b, a, p.detail, "common/caulk", p.texturescale));
-                    pw.print(getMapPlaneString(a, d, h, p.detail, "common/caulk", p.texturescale));
-                    pw.print(getMapPlaneString(g, h, f, p.detail, "common/caulk", p.texturescale));
-                    pw.print("}\n");
+                    if (grad1 > grad2) {
+                        pw.print("{\n");
+                        pw.print(getMapPlaneString(a, b, c, p.detail, p.texture, p.texturescale));
+                        pw.print(getMapPlaneString(f, b, a, p.detail, "common/caulk", p.texturescale));
+                        pw.print(getMapPlaneString(a, c, g, p.detail, "common/caulk", p.texturescale));
+                        pw.print(getMapPlaneString(g, h, f, p.detail, "common/caulk", p.texturescale));
+                        pw.print(getMapPlaneString(g, c, b, p.detail, "common/caulk", p.texturescale));
+                        pw.print("}\n");
 
 
-                    pw.print("{\n");
-                    pw.print(getMapPlaneString(d, c, a, p.detail, p.texture, p.texturescale));
-                    pw.print(getMapPlaneString(g, c, d, p.detail, "common/caulk", p.texturescale));
-                    pw.print(getMapPlaneString(c, g, a, p.detail, "common/caulk", p.texturescale));
-                    pw.print(getMapPlaneString(h, d, a, p.detail, "common/caulk", p.texturescale));
-                    pw.print(getMapPlaneString(g, h, f, p.detail, "common/caulk", p.texturescale));
-                    pw.print("}\n");
+                        pw.print("{\n");
+                        pw.print(getMapPlaneString(b, d, c, p.detail, p.texture, p.texturescale));
+                        pw.print(getMapPlaneString(d, h, g, p.detail, "common/caulk", p.texturescale));
+                        pw.print(getMapPlaneString(d, b, f, p.detail, "common/caulk", p.texturescale));
+                        pw.print(getMapPlaneString(f, b, c, p.detail, "common/caulk", p.texturescale));
+                        pw.print(getMapPlaneString(g, h, f, p.detail, "common/caulk", p.texturescale));
+                        pw.print("}\n");
+
+                    } else {
+
+                        pw.print("{\n");
+                        pw.print(getMapPlaneString(a, b, d, p.detail, p.texture, p.texturescale));
+                        pw.print(getMapPlaneString(d, b, f, p.detail, "common/caulk", p.texturescale));
+                        pw.print(getMapPlaneString(f, b, a, p.detail, "common/caulk", p.texturescale));
+                        pw.print(getMapPlaneString(a, d, h, p.detail, "common/caulk", p.texturescale));
+                        pw.print(getMapPlaneString(g, h, f, p.detail, "common/caulk", p.texturescale));
+                        pw.print("}\n");
+
+
+                        pw.print("{\n");
+                        pw.print(getMapPlaneString(d, c, a, p.detail, p.texture, p.texturescale));
+                        pw.print(getMapPlaneString(g, c, d, p.detail, "common/caulk", p.texturescale));
+                        pw.print(getMapPlaneString(c, g, a, p.detail, "common/caulk", p.texturescale));
+                        pw.print(getMapPlaneString(h, d, a, p.detail, "common/caulk", p.texturescale));
+                        pw.print(getMapPlaneString(g, h, f, p.detail, "common/caulk", p.texturescale));
+                        pw.print("}\n");
+                    }
                 }
             }
         }
