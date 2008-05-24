@@ -137,6 +137,7 @@ public class MapWriter {
 
         // func_group start
         pw.print("{\n\"classname\" \"func_group\"\n");
+        pw.print("\n\"terrain\" \"1\"\n");
         // wander through grid
         for (int x = 0; x < height.length - 1; ++x) {
             for (int y = 0; y < height[0].length - 1; ++y) {
