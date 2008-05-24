@@ -167,10 +167,10 @@ public class MapWriter {
                     /// delta b - c
                     double grad2 = Math.abs(height[x + 1][y] - height[x][y + 1]);
 
-                    Vector3D a = new Vector3D(x * units, -y * units, height[x][y] * max);
-                    Vector3D b = new Vector3D((x + 1) * units, -y * units, height[x + 1][y] * max);
-                    Vector3D c = new Vector3D(x * units, -(y + 1) * units, height[x][y + 1] * max);
-                    Vector3D d = new Vector3D((x + 1) * units, -(y + 1) * units, height[x + 1][y + 1] * max);
+                    Vector3D a = new Vector3D(x * units, -y * units, Math.floor(height[x][y] * max));
+                    Vector3D b = new Vector3D((x + 1) * units, -y * units, Math.floor(height[x + 1][y] * max));
+                    Vector3D c = new Vector3D(x * units, -(y + 1) * units, Math.floor(height[x][y + 1] * max));
+                    Vector3D d = new Vector3D((x + 1) * units, -(y + 1) * units, Math.floor(height[x + 1][y + 1] * max));
                     //Vector3D e = new Vector3D(x * units, -y * units, -16.0);
                     Vector3D f = new Vector3D((x + 1) * units, -y * units, -16.0);
                     Vector3D g = new Vector3D(x * units, -(y + 1) * units, -16.0);
