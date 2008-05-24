@@ -418,6 +418,12 @@ void PrintWelcomeMessage(entity pl)
 		}
 		modifications = strcat(modifications, "laser-guided-missiles");
 	}
+	if(g_tourney) {
+		if (modifications) {
+			modifications = strcat(modifications, ", ");
+		}
+		modifications = strcat(modifications, "Tournament");
+	}
 
 	local string versionmessage;
 	versionmessage = GetClientVersionMessage(self.version);
@@ -427,6 +433,13 @@ void PrintWelcomeMessage(entity pl)
 
 	if(modifications != "")
 		s = strcat(s, "^8\nactive modifications: ^3", modifications, "^8\n");
+
+	if(g_tourney) {
+		if(!tourneyInMatchStage)
+			s = strcat(s, "\n^8The game is currently in ^3warmup-stage ^8!\n");
+		else
+			s = strcat(s, "\n^8The game is currently in ^3match-stage ^8!\n");
+	}
 
 	if(time < restart_countdown)
 		s = strcat(s, "\n^1Game starts in ", ftos(restartAnnouncer.cnt + 1), " seconds^7");

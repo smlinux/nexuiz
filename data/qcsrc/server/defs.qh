@@ -4,6 +4,8 @@
 
 float g_domination, g_ctf, g_tdm, g_keyhunt, g_onslaught, g_assault, g_arena, g_lms, g_runematch;
 float g_cloaked, g_footsteps, g_grappling_hook, g_instagib, g_laserguided_missile, g_midair, g_minstagib, g_nixnex, g_nixnex_with_laser, g_norecoil, g_rocketarena, g_vampire, g_minstagib_invis_alpha;
+float g_tourney;
+float tourneyInMatchStage;
 
 float sv_cheats;
 
@@ -282,6 +284,7 @@ float readyNagActive; //if set to 1, the readyNagger entity was already spawned 
 float blockSpectators; //if set, new or existing spectators or observers will be removed unless they become a player within g_maxplayers_spectator_blocktime seconds
 .float spectatortime; //point in time since the client is spectating or observing
 void checkSpectatorBlock();
+float timelimit_orig;
 
 .float winning;
 .float deaths;

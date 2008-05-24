@@ -123,7 +123,15 @@ void Say(entity source, float teamsay, string msgin)
 	}
 	else
 	{
-		bprint(msgstr);
+		//when g_tourney is active and g_tourney_disable_spec_chat is set and game is in matchstage
+		//don't print the text from specs/observers to the players but only the other spectators
+		if(g_tourney && cvar("g_tourney_disable_spec_chat") && tourneyInMatchStage && source.classname != "player") {
+			FOR_EACH_REALCLIENT(head) if(head.classname != "player") {
+				sprint(head, msgstr);
+			}
+		}
+		else
+			bprint(msgstr);
 		//ServerConsoleEcho(substring(msgstr, 1, strlen(msgstr) - 2), TRUE);
 	}
 
@@ -231,7 +239,10 @@ void SV_ParseClientCommand(string s) {
 			}
 		} else if(argv(1) == "call") {
 			if(cvar("sv_vote_call")) {
-				if(votecalled) {
+				if(tourneyInMatchStage && cvar("g_tourney_disable_spec_vote") && self.classname != "player") {
+					sprint(self, "^1Error: Only players can call a vote during the match-stage.\n");
+				}
+				else if(votecalled) {
 					sprint(self, "^1There is already a vote called.\n");
 				} else {
 					local string vote;
@@ -701,7 +712,17 @@ void VoteAccept() {
 	{
 		votecaller.vote_master = 1;
 	} else {
-		localcmd(strcat(votecalledvote, "\n"));
+		//in g_tourney mode and if the vote is a timelimit-change, don't change it immediately but after restart
+		if(cvar("g_tourney") && substring(votecalledvote, 0, 10) == "timelimit ") {
+			if( stof(substring(votecalledvote, 10, strlen(votecalledvote) - 10)) > 0 ) {
+				timelimit_orig = stof(substring(votecalledvote, 10, strlen(votecalledvote) - 10));
+				bprint(strcat("The timelimit will be set to ", ftos(timelimit_orig), " minutes after the next restart!\n"));
+			}
+			else //calls like "timelimit -1" can pass immediately
+				localcmd(strcat(votecalledvote, "\n"));
+		}
+		else
+			localcmd(strcat(votecalledvote, "\n"));
 	}
 	votecaller.vote_next = 0; // people like your votes, no wait for next vote
 	VoteReset();
@@ -763,6 +784,12 @@ void VoteCount() {
 	local float abstaincount;
 	abstaincount = 0;
 	local entity player;
+	//same for real players
+	local float realplayercount;
+	local float realplayeryescount;
+	local float realplayernocount;
+	local float realplayerabstaincount;
+	realplayercount = realplayernocount = realplayerabstaincount = realplayeryescount = 0;
 
 	FOR_EACH_REALCLIENT(player)
 	{
@@ -774,7 +801,27 @@ void VoteCount() {
 			abstaincount++;
 		}
 		playercount++;
+		//do the same for real players
+		if(player.classname == "player") {
+			if(player.vote_vote == -1) {
+				realplayernocount++;
+			} else if(player.vote_vote == 1) {
+				realplayeryescount++;
+			} else if(player.vote_vote == -2) {
+				realplayerabstaincount++;
+			}
+			realplayercount++;
+		}
 	}
+
+	//in tournament mode, if we have at least one player then don't make the vote dependent on spectators (so specs don't have to press F1)
+	if( cvar("g_tourney") && (realplayercount > 0) ) {
+		yescount = realplayeryescount;
+		nocount = realplayernocount;
+		abstaincount = realplayerabstaincount;
+		playercount = realplayercount;
+	}
+
 
 	if((playercount == 1) && votecalledmaster) {
 		// if only one player is on the server becoming vote
@@ -819,8 +866,6 @@ void VoteCount() {
 		}
 	}
 }
-
-float timelimit_orig;
 
 /**
  * Counts how many players are ready. If not enough players are ready, the function
@@ -867,6 +912,19 @@ void ReadyCount()
 		remove(readyNagger);
 	}
 
+	if(g_tourney) {
+		tourneyInMatchStage = 1; //once the game is restarted the game is in match stage
+		//reset weapons and ammo, health and armor to default:
+		start_items = IT_LASER | IT_SHOTGUN;
+		start_switchweapon = WEP_SHOTGUN;
+		start_ammo_shells = cvar("g_start_ammo_shells");
+		start_ammo_nails = cvar("g_start_ammo_nails");
+		start_ammo_rockets = cvar("g_start_ammo_rockets");
+		start_ammo_cells = cvar("g_start_ammo_cells");
+		start_health = cvar("g_balance_health_start");
+		start_armorvalue = cvar("g_balance_armor_start");
+	}
+
 	restart_countdown = time + RESTART_COUNTDOWN;
 	restart_mapalreadyrestarted = 0; //reset this var, needed when cvar sv_ready_restart_repeatable is in use
 	//reset the .ready status of all players (also spectators)
@@ -874,12 +932,14 @@ void ReadyCount()
 	{
 		e.ready = 0;
 	}
-	if(0<cvar("timelimit"))
+	if(0<cvar("timelimit") || (g_tourney && cvar("g_tourney_warmup_unlimited_time")) )
 	{
 		// remember original timelimit on first restart
 		if(!timelimit_orig)
 			timelimit_orig = cvar("timelimit");
-		cvar_set("timelimit", ftos(timelimit_orig + ceil(restart_countdown)/60));
+		//only set the new timelimit if, when loading the map, a timelimit was really set
+		if(timelimit_orig)
+			cvar_set("timelimit", ftos(timelimit_orig + ceil(restart_countdown)/60));
 	}
 	if(cvar("teamplay_lockonrestart") && teams_matter) {
 		lockteams = 1;

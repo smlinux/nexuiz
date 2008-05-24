@@ -245,6 +245,12 @@ void worldspawn (void)
 	MapInfo_FilterGametype(MapInfo_CurrentGametype(), MapInfo_CurrentFeatures(), 1);
 #endif
 
+	//if tourney is used map starts in warmup mode. if this mode shall stay unlimited, reset timelimit, but save the original one
+	if(g_tourney && cvar("g_tourney_warmup_unlimited_time")) {
+		timelimit_orig = cvar("timelimit");
+		cvar_set("timelimit", "0");
+	}
+
 	world_initialized = 1;
 }
 
