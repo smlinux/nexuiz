@@ -268,6 +268,7 @@ float MapInfo_FilterGametype(float pGametype, float pFeatures, float pAbortOnGen
 			bufstr_set(_MapInfo_filtered, j++, ftos(i));
 	}
 	MapInfo_count = j;
+	MapInfo_ClearTemps();
 	return 1;
 }
 #endif
