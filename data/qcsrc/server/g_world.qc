@@ -55,6 +55,82 @@ void fteqcc_testbugs()
 	world.frags = 0;
 }
 
+/**
+ * Takes care of pausing and unpausing the game.
+ * Centerprints the information about an upcoming or active timeout to all active
+ * players. Also plays reminder sounds.
+ */
+void timeoutHandler_Think() {
+	local string timeStr;
+	local entity plr;
+	if (timeoutStatus == 1) {
+		if (remainingLeadTime > 0) {
+			//centerprint the information to every player
+			timeStr = getTimeoutText(0);
+			FOR_EACH_REALCLIENT(plr) {
+				if(plr.classname == "player") {
+					centerprint_atprio(plr, CENTERPRIO_SPAM, timeStr);
+				}
+			}
+			remainingLeadTime -= 1;
+			//think again in 1 second:
+			self.nextthink = time + 1;
+		}
+		else {
+			//now pause the game:
+			timeoutStatus = 2;
+			cvar_set("slowmo", ftos(TIMEOUT_SLOWMO_VALUE));
+			//copy .v_angle to .lastV_angle for every player in order to fix their view during pause (see PlayerPreThink)
+			FOR_EACH_REALPLAYER(plr) {
+				plr.lastV_angle = plr.v_angle;
+			}
+			self.nextthink = time;
+		}
+	}
+	else if (timeoutStatus == 2) {
+		if (remainingTimeoutTime > 0) {
+			timeStr = getTimeoutText(0);
+			FOR_EACH_REALCLIENT(plr) {
+				if(plr.classname == "player") {
+					centerprint_atprio(plr, CENTERPRIO_SPAM, timeStr);
+				}
+			}
+			if(remainingTimeoutTime == cvar("sv_timeout_resumetime")) { //play a warning sound when only <sv_timeout_resumetime> seconds are left
+				sound(world, CHAN_AUTO, "announcer/robotic/prepareforbattle.wav", 1, ATTN_NONE);
+			}
+			remainingTimeoutTime -= 1;
+			self.nextthink = time + TIMEOUT_SLOWMO_VALUE;
+		}
+		else {
+			//unpause the game again
+			remainingTimeoutTime = timeoutStatus = 0;
+			cvar_set("slowmo", ftos(orig_slowmo));
+			//and unlock the fixed view again once there is no timeout active anymore
+			FOR_EACH_REALPLAYER(plr) {
+				plr.fixangle = FALSE;
+			}
+			//get rid of the countdown message
+			FOR_EACH_REALCLIENT(plr) {
+				if(plr.classname == "player") {
+					centerprint_atprio(plr, CENTERPRIO_SPAM, "");
+				}
+			}
+			remove(self);
+			return;
+		}
+		
+	}
+	else if (timeoutStatus == 0) { //if a player called the resumegame command (which set timeoutStatus to 0 already)
+		FOR_EACH_REALCLIENT(plr) {
+			if(plr.classname == "player") {
+				centerprint_atprio(plr, CENTERPRIO_SPAM, "");
+			}
+		}
+		remove(self);
+		return;
+	}
+}
+
 float GotoFirstMap()
 {
 	if(cvar("_sv_init"))
@@ -239,6 +315,10 @@ void worldspawn (void)
 	fteqcc_testbugs();
 
 	Ban_LoadBans();
+
+	//initialise globals related to sv_timeout
+	sys_ticrate = cvar("sys_ticrate");
+	orig_slowmo = cvar("slowmo");
 
 #ifdef MAPINFO
 	MapInfo_Enumerate();

@@ -979,6 +979,7 @@ void ClientConnect (void)
 	}
 
 	self.jointime = time;
+	self.allowedTimeouts = cvar("sv_timeout_number");
 }
 
 /*
@@ -1151,6 +1152,47 @@ void respawn(void)
 	CopyBody(1);
 	self.effects |= EF_NODRAW; // prevent another CopyBody
 	PutClientInServer();
+}
+
+/**
+ * When sv_timeout is used this function returs strings like
+ * "Timeout begins in 2 seconds!\n" or "Timeout ends in 23 seconds!\n".
+ * Called by centerprint functions
+ * @param addOneSecond boolean, set to 1 if the welcome-message centerprint asks for the text
+ */
+string getTimeoutText(float addOneSecond) {
+	if (!cvar("sv_timeout") || !timeoutStatus)
+		return "";
+
+	local string retStr;
+	if (timeoutStatus == 1) {
+		if (addOneSecond == 1) {
+			retStr = strcat("Timeout begins in ", ftos(remainingLeadTime + 1), " seconds!\n");
+		}
+		else {
+			retStr = strcat("Timeout begins in ", ftos(remainingLeadTime), " seconds!\n");
+		}
+		return retStr;
+	}
+	else if (timeoutStatus == 2) {
+		if (addOneSecond) {
+			retStr = strcat("Timeout ends in ", ftos(remainingTimeoutTime + 1), " seconds!\n");
+			//don't show messages like "Timeout ends in 0 seconds"...
+			if ((remainingTimeoutTime + 1) > 0)
+				return retStr;
+			else
+				return "";
+		}
+		else {
+			retStr = strcat("Timeout ends in ", ftos(remainingTimeoutTime), " seconds!\n");
+			//don't show messages like "Timeout ends in 0 seconds"...
+			if (remainingTimeoutTime > 0)
+				return retStr;
+			else
+				return "";
+		}
+	}
+	else return "";
 }
 
 void player_powerups (void)
@@ -1651,6 +1693,13 @@ void PlayerPreThink (void)
 
 		if(frametime > 0) // don't do this in cl_movement frames, just in server ticks
 			UpdateSelectedPlayer();
+
+		//don't allow the player to turn around while game is paused!
+		if(timeoutStatus == 2) {
+			self.v_angle = self.lastV_angle;
+			self.angles = self.lastV_angle;
+			self.fixangle = TRUE;
+		}
 
 		if (self.deadflag != DEAD_NO)
 		{

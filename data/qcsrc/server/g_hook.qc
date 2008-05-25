@@ -249,7 +249,8 @@ void GrapplingHookFrame()
 	if (self.button6 && g_grappling_hook)
 	{
 		if (!self.hook && self.hook_time <= time && !self.button6_pressed_before)
-			FireGrapplingHook();
+			if (timeoutStatus != 2) //only allow the player to fire the grappling hook if the game is not paused (timeout)
+				FireGrapplingHook();
 	}
 	else
 	{

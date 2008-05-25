@@ -63,6 +63,10 @@ void ImpulseCommands (void)
 	if (!imp || gameover)
 		return;
 	self.impulse = 0;
+
+	if (timeoutStatus == 2) //don't allow any impulses while the game is paused
+		return;
+
 	if (imp >= 1 && imp <= 12)
 	{
 		// weapon switching impulses

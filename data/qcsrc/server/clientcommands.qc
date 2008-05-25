@@ -242,6 +242,9 @@ void SV_ParseClientCommand(string s) {
 				if(tourneyInMatchStage && cvar("g_tourney_disable_spec_vote") && self.classname != "player") {
 					sprint(self, "^1Error: Only players can call a vote during the match-stage.\n");
 				}
+				else if(timeoutStatus) { //don't allow a vote call during a timeout
+					sprint(self, "^1Error: You can not call a vote while a timeout is active.\n");
+				}
 				else if(votecalled) {
 					sprint(self, "^1There is already a vote called.\n");
 				} else {
@@ -504,6 +507,10 @@ void SV_ParseClientCommand(string s) {
 	} else if(argv(0) == "ready") {
 		if(cvar("sv_ready_restart"))
 		{
+			if(timeoutStatus) {
+				return sprint(self, "^1You cannot reset the game while a timeout is active!\n");
+			}
+			
 			if(!restart_countdown || cvar("sv_ready_restart_repeatable"))
 			{
 				self.ready = TRUE;
@@ -558,6 +565,21 @@ void SV_ParseClientCommand(string s) {
 			wordwrap_sprint(cmd, 1111);
 	} else if(argv(0) == "suggestmap") {
 		sprint(self, strcat(MapVote_Suggest(argv(1)), "\n"));
+	} else if(argv(0) == "calltimeout") {
+		if(cvar("sv_timeout")) {
+			if(self.classname == "player") {
+				if(votecalled)
+					sprint(self, "^7Error: you can not call a timeout while a vote is active!\n");
+				else
+					evaluateTimeoutCall();
+			}
+			else
+				sprint(self, "^7Error: only players can call a timeout!\n");
+		}
+	} else if(argv(0) == "resumegame") {
+		if(cvar("sv_timeout")) {
+			evaluateResumeGame();
+		}
 	} else {
 		cmd = argv(0);
 		/* checks not needed any more since DP has separated clientcommands and regular commands
@@ -951,6 +973,15 @@ void ReadyCount()
 	restartAnnouncer.think = restartAnnouncer_Think;
 	restartAnnouncer.nextthink = time;
 	restartAnnouncer.cnt = RESTART_COUNTDOWN;
+	
+	//after a restart every players number of allowed timeouts gets reset, too
+	if(cvar("sv_timeout"))
+	{
+		FOR_EACH_REALPLAYER(e)
+		{
+			e.allowedTimeouts = cvar("sv_timeout_number");
+		}
+	}
 
 	//play the prepareforbattle sound to everyone
 	sound(world, CHAN_AUTO, "announcer/robotic/prepareforbattle.wav", 1, ATTN_NONE);
@@ -1036,5 +1067,89 @@ void restartAnnouncer_Think() {
 		}
 		self.nextthink = time + 1;
 		self.cnt -= 1;
+	}
+}
+
+/**
+ * Checks whether the player who calls the timeout is allowed to do so.
+ * If so, it initializes the timeout countdown. It also checks whether another
+ * timeout was already running at this time and reacts correspondingly.
+ *
+ * affected globals/fields: .allowedTimeouts, remainingTimeoutTime, remainingLeadTime,
+ *                          timeoutInitiator, timeoutStatus, timeoutHandler
+ *
+ * This function is called when a player issues the calltimeout command.
+ */
+void evaluateTimeoutCall() {
+	if (g_tourney && !tourneyInMatchStage && !cvar("g_tourney_warmup_allow_timeout"))
+		return sprint(self, "^7Error: You can not call a timeout in warmup-stage!\n");
+	if (time < restart_countdown )
+		return sprint(self, "^7Error: You can not call a timeout while the map is being restarted!\n");
+	if (timeoutStatus != 2) {
+		//if the map uses a timelimit make sure that timeout cannot be called right before the map ends
+		if (cvar("timelimit")) {
+			//a timelimit was used
+			local float myTl;
+			if (cvar("timelimit"))
+				myTl = cvar("timelimit");
+			else
+				myTl = timelimit_orig;
+
+			local float lastPossibleTimeout;
+			lastPossibleTimeout = (myTl*60) - cvar("sv_timeout_leadtime") - 1;
+
+			if (lastPossibleTimeout < time)
+				return sprint(self, "^7Error: It is too late to call a timeout now!\n");
+		}
+	}
+	//player may not call a timeout if he has no calls left
+	if (self.allowedTimeouts < 1)
+		return sprint(self, "^7Error: You already used all your timeout calls for this map!\n");
+	//now all required checks are passed
+	self.allowedTimeouts -= 1;
+	bprint(self.netname, " ^7called a timeout (", ftos(self.allowedTimeouts), " timeouts left)!\n"); //write a bprint who started the timeout (and how many he has left)
+	remainingTimeoutTime = cvar("sv_timeout_length");
+	remainingLeadTime = cvar("sv_timeout_leadtime");
+	timeoutInitiator = self;
+	if (timeoutStatus == 0) { //if another timeout was already active, don't change its status (which was 1 or 2) to 1, only change it to 1 if no timeout was active yet
+		timeoutStatus = 1;
+		//create the timeout indicator which centerprints the information to all players and takes care of pausing/unpausing
+		timeoutHandler = spawn();
+		timeoutHandler.think = timeoutHandler_Think;
+	}
+	timeoutHandler.nextthink = time; //always let the entity think asap
+
+	//inform all connected clients about the timeout call
+	sound(world, CHAN_AUTO, "announcer/robotic/timeoutcalled.wav", 1, ATTN_NONE);
+}
+
+/**
+ * Checks whether a player is allowed to resume the game. If he is allowed to do it,
+ * and the lead time for the timeout is still active, this countdown just will be aborted (the
+ * game will never be paused). Otherwise the remainingTimeoutTime will be set to the corresponding
+ * value of the cvar sv_timeout_resumetime.
+ *
+ * This function is called when a player issues the resumegame command.
+ */
+void evaluateResumeGame() {
+	if (!timeoutStatus)
+		return sprint(self, "^7Error: There is no active timeout which could be aborted!\n");
+	if (self != timeoutInitiator)
+		return sprint(self, "^7Error: You may not abort the active timeout. Only the player who called it can do that!\n");
+	if (timeoutStatus == 1) {
+		remainingTimeoutTime = timeoutStatus = 0;
+		timeoutHandler.nextthink = time; //timeoutHandler has to take care of it immediately
+		bprint(strcat("^7The timeout was aborted by ", self.netname, " !\n"));
+	}
+	else if (timeoutStatus == 2) {
+		//only shorten the remainingTimeoutTime if it makes sense
+		if( remainingTimeoutTime > (cvar("sv_timeout_resumetime") + 1) ) {
+			bprint(strcat("^1Attention: ^7", self.netname, " resumed the game! Prepare for battle!\n"));
+			remainingTimeoutTime = cvar("sv_timeout_resumetime");
+			timeoutHandler.nextthink = time; //timeoutHandler has to take care of it immediately
+		}
+		else
+			sprint(self, "^7Error: Your resumegame call was discarded!\n");
+
 	}
 }

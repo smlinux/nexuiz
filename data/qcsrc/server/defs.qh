@@ -292,6 +292,23 @@ float timelimit_orig;
 
 float isJoinAllowed();
 #define PREVENT_JOIN_TEXT "^1You may not join the game at this time.\n\nThe player limit reached maximum capacity."
+
+//sv_timeout: pauses the game by setting the gamespeed to a really low value (see TIMEOUT_SLOWMO_VALUE)
+#define TIMEOUT_SLOWMO_VALUE 0.0001
+float sys_ticrate; // gets initialised in worlspawn, saves the value from cvar("sys_ticrate")
+float remainingTimeoutTime; // contains the time in seconds that the active timeout has left
+float remainingLeadTime; // contains the number of seconds left of the leadtime (before the timeout starts)
+float timeoutStatus; // (values: 0, 1, 2) contains whether a timeout is not active (0), was called but still at leadtime (1) or is active (2)
+.float allowedTimeouts; // contains the number of allowed timeouts for each player
+entity timeoutInitiator; // contains the entity of the player who started the last timeout
+float orig_slowmo; // contains the value of cvar("slowmo") so that, after timeout finished, it isn't set to slowmo 1 necessarily
+.vector lastV_angle; //used when pausing the game in order to force the player to keep his old view angle fixed
+entity timeoutHandler; //responsible for centerprinting the timeout countdowns and playing sounds
+void timeoutHandler_Think();
+void evaluateTimeoutCall();
+void evaluateResumeGame();
+string getTimeoutText(float addOneSecond);
+
 .float spawnshieldtime;
 
 .float lms_nextcheck;

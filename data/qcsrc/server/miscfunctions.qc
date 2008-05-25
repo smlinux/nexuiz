@@ -638,7 +638,10 @@ void centerprint_atprio(entity e, float prio, string s)
 	if(prio >= e.centerprint_priority)
 	{
 		e.centerprint_priority = prio;
-		e.centerprint_expires = time + e.cvar_scr_centertime;
+		if(timeoutStatus == 2)
+			e.centerprint_expires = time + (e.cvar_scr_centertime * TIMEOUT_SLOWMO_VALUE);
+		else
+			e.centerprint_expires = time + e.cvar_scr_centertime;
 		centerprint_builtin(e, s);
 	}
 }
@@ -1038,8 +1041,9 @@ void precache()
 	precache_sound ("announcer/male/yoda.wav");
 
 	// announcer sounds - robotic
-	precache_sound ("announcer/robotic/begin.wav");
 	precache_sound ("announcer/robotic/prepareforbattle.wav");
+	precache_sound ("announcer/robotic/begin.wav");
+	precache_sound ("announcer/robotic/timeoutcalled.wav");
 	precache_sound ("announcer/robotic/1fragleft.wav");
 	precache_sound ("announcer/robotic/1minuteremains.wav");
 	precache_sound ("announcer/robotic/2fragsleft.wav");
