@@ -129,14 +129,14 @@ public class JFrameMain extends javax.swing.JFrame {
 
         jSpinnerUnits.setModel(new javax.swing.SpinnerNumberModel(256, 1, 2048, 1));
 
-        jSpinnerHeight.setModel(new javax.swing.SpinnerNumberModel(1024, 256, 16384, 1));
+        jSpinnerHeight.setModel(new javax.swing.SpinnerNumberModel(2048, 256, 16384, 1));
         jSpinnerHeight.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jSpinnerHeightStateChanged(evt);
             }
         });
 
-        jSpinnerTextureScale.setModel(new javax.swing.SpinnerNumberModel(0.5d, 0.25d, 16.0d, 0.25d));
+        jSpinnerTextureScale.setModel(new javax.swing.SpinnerNumberModel(1.0d, 0.25d, 16.0d, 0.25d));
 
         jLabel4.setText("Texture scale:");
 
@@ -163,8 +163,7 @@ public class JFrameMain extends javax.swing.JFrame {
                             .add(jPanel2Layout.createSequentialGroup()
                                 .add(jCheckBoxDetail)
                                 .add(18, 18, 18)
-                                .add(jCheckBoxVisBlocker)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED))
+                                .add(jCheckBoxVisBlocker))
                             .add(jPanel2Layout.createSequentialGroup()
                                 .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
                                     .add(jLabel1)
@@ -214,7 +213,7 @@ public class JFrameMain extends javax.swing.JFrame {
 
         jLabel5.setText("Sky height:");
 
-        jSpinnerSkyHeight.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1152), Integer.valueOf(256), null, Integer.valueOf(1)));
+        jSpinnerSkyHeight.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(2048), Integer.valueOf(256), null, Integer.valueOf(1)));
         jSpinnerSkyHeight.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jSpinnerSkyHeightStateChanged(evt);

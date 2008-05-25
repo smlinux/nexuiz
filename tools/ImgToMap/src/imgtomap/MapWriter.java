@@ -43,6 +43,8 @@ public class MapWriter {
 
         // worldspawn start
         pw.print("{\n\"classname\" \"worldspawn\"\n");
+        pw.print("\n\"gridsize\" \"128 128 256\"\n");
+        pw.print("\n\"blocksize\" \"2048 2048 2048\"\n");
 
         double xmax = (columns.length - 1) * units;
         double ymax = (columns[0].length - 1) * units;

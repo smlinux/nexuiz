@@ -152,7 +152,6 @@
                                   <Component id="jCheckBoxDetail" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
                                   <Component id="jCheckBoxVisBlocker" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
                                   <Group type="103" groupAlignment="1" attributes="0">
@@ -231,7 +230,7 @@
         <Component class="javax.swing.JSpinner" name="jSpinnerHeight">
           <Properties>
             <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
-              <SpinnerModel initial="1024" maximum="16384" minimum="256" numberType="java.lang.Integer" stepSize="1" type="number"/>
+              <SpinnerModel initial="2048" maximum="16384" minimum="256" numberType="java.lang.Integer" stepSize="1" type="number"/>
             </Property>
           </Properties>
           <Events>
@@ -241,7 +240,7 @@
         <Component class="javax.swing.JSpinner" name="jSpinnerTextureScale">
           <Properties>
             <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
-              <SpinnerModel initial="0.5" maximum="16.0" minimum="0.25" numberType="java.lang.Double" stepSize="0.25" type="number"/>
+              <SpinnerModel initial="1.0" maximum="16.0" minimum="0.25" numberType="java.lang.Double" stepSize="0.25" type="number"/>
             </Property>
           </Properties>
         </Component>
@@ -339,7 +338,7 @@
         <Component class="javax.swing.JSpinner" name="jSpinnerSkyHeight">
           <Properties>
             <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
-              <SpinnerModel initial="1152" minimum="256" numberType="java.lang.Integer" stepSize="1" type="number"/>
+              <SpinnerModel initial="2048" minimum="256" numberType="java.lang.Integer" stepSize="1" type="number"/>
             </Property>
           </Properties>
           <Events>
