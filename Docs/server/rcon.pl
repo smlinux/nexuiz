@@ -142,7 +142,7 @@ sub color_dp2ansi($)
 		$c =~ /^[0-9]$/ ? do {
 			my $oldcolor = $color;
 			$color = $color_dp2ansi_table[$c];
-			($color == $oldcolor) ? '' :
+			($color eq $oldcolor) ? '' :
 			"\000[${color}" # "
 		} : "^$c";
 	}esg;
