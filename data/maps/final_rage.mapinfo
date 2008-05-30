@@ -5,8 +5,9 @@ _diameter 3148.711426
 _spawnpoints 13
 has weapons
 type dm 30 20
+type tdm 50 20 2
 type dom 200 20
 type rune 200 20
 type lms 9 20
 type arena 10 20
-type tdm 50 20 2
+
