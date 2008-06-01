@@ -980,15 +980,20 @@ sub irc_joinstage($)
 		return 0;
 	} ],
 
+	# chat: Nexuiz server -> IRC channel, nick set
+	[ dp => q{:join:(\d+):(?:player|bot):(.*)} => sub {
+		my ($id, $nick) = @_;
+		$nick = color_dp2irc $nick;
+		$store{"playernick_$id"} = $nick;
+		return 0;
+	} ],
+
 	# chat: Nexuiz server -> IRC channel, nick change/set
-	[ dp => q{:(name|join):(\d+):(.*)} => sub {
-		my ($type, $id, $nick) = @_;
+	[ dp => q{:name:(\d+):(.*)} => sub {
+		my ($id, $nick) = @_;
 		$nick = color_dp2irc $nick;
 		my $oldnick = $store{"playernick_$id"};
-		if($type eq 'name')
-		{
-			out irc => 0, "PRIVMSG $config{irc_channel} :* $oldnick\017 is now known as $nick";
-		}
+		out irc => 0, "PRIVMSG $config{irc_channel} :* $oldnick\017 is now known as $nick";
 		$store{"playernick_$id"} = $nick;
 		return 0;
 	} ],
@@ -998,7 +1003,7 @@ sub irc_joinstage($)
 		my ($id, $command) = @_;
 		$command = color_dp2irc $command;
 		my $oldnick = $store{"playernick_$id"};
-		out irc => 0, "PRIVMSG $config{irc_channel} :* $oldnick\017 calls a vote for $command";
+		out irc => 0, "PRIVMSG $config{irc_channel} :* $oldnick\017 calls a vote for \"$command\"";
 		return 0;
 	} ],
 
@@ -1022,7 +1027,7 @@ sub irc_joinstage($)
 	[ dp => q{:vote:vdo:(\d+):(.*)} => sub {
 		my ($id, $command) = @_;
 		my $oldnick = $store{"playernick_$id"};
-		out irc => 0, "PRIVMSG $config{irc_channel} :* $oldnick\017 used his master status to do $command";
+		out irc => 0, "PRIVMSG $config{irc_channel} :* $oldnick\017 used his master status to do \"$command\"";
 		return 0;
 	} ],
 
@@ -1261,7 +1266,7 @@ schedule sub {
 		{
 			# IRC connection apparently broke
 			# so... KILL IT WITH FIRE
-			channels{system}->send("error irc", 0);
+			$channels{system}->send("error irc", 0);
 		}
 		else
 		{
