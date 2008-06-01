@@ -6,7 +6,7 @@ void() SUB_CalcAngleMoveDone;
 //void() SUB_UseTargets;
 void() SUB_Remove;
 
-void info_null (void)
+void spawnfunc_info_null (void)
 {
 }
 

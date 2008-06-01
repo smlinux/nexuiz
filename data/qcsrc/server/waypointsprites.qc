@@ -52,7 +52,7 @@ void WaypointSprite_Init()
 	precache_model("models/sprites/here.sp2");
 	precache_model("models/sprites/helpme.sp2");
 	precache_model("models/sprites/redbase.sp2");
-	precache_model("models/sprites/waypoint.sp2");
+	precache_model("models/sprites/spawnfunc_waypoint.sp2");
 	precache_model("models/sprites/danger.sp2");
 }
 
@@ -96,7 +96,7 @@ void WaypointSprite_Disown(entity wp, float fadetime)
 		}
 		else if(fadetime < (wp.teleport_time - time))
 		{
-			// accelerate the waypoint's dying
+			// accelerate the spawnfunc_waypoint's dying
 			// ensure:
 			//   (wp.teleport_time - time) / wp.health stays
 			//   wp.teleport_time = time + fadetime
@@ -248,7 +248,7 @@ entity WaypointSprite_Spawn(
 	if(spr != "")
 		setmodel(wp, strcat("models/sprites/", spr, ".sp2")); // precision set above
 	else
-		wp.model = "waypoint";
+		wp.model = "spawnfunc_waypoint";
 	setsize(wp, '0 0 0', '0 0 0');
 	wp.waypointsprite_for_player = waypointsprite_for_player_default;
 	return wp;

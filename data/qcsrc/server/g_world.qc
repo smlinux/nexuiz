@@ -162,12 +162,12 @@ float GotoFirstMap()
 }
 
 float world_already_spawned;
-void worldspawn (void)
+void spawnfunc_worldspawn (void)
 {
 	dprint_load(); // load dprint status from cvar
 
 	if(world_already_spawned)
-		error("world already spawned - you may have EXACTLY ONE worldspawn!");
+		error("world already spawned - you may have EXACTLY ONE spawnfunc_worldspawn!");
 	world_already_spawned = TRUE;
 
 	if(GotoFirstMap())
@@ -227,7 +227,7 @@ void worldspawn (void)
 	// 11 SLOW PULSE NOT FADE TO BLACK
 	lightstyle(11, "abcdefghijklmnopqrrqponmlkjihgfedcba");
 
-	// styles 32-62 are assigned by the light program for switchable lights
+	// styles 32-62 are assigned by the spawnfunc_light program for switchable lights
 
 	// 63 testing
 	lightstyle(63, "a");
@@ -334,7 +334,7 @@ void worldspawn (void)
 	world_initialized = 1;
 }
 
-void light (void)
+void spawnfunc_light (void)
 {
 	//makestatic (self); // Who the f___ did that?
 	remove(self);
@@ -891,7 +891,7 @@ entity() FindIntermission =
 	}
 
 // then look for the start position
-	spot = find (world, classname, "info_player_start");
+	spot = find (world, classname, "spawnfunc_info_player_start");
 	if (spot)
 		return spot;
 
@@ -901,7 +901,7 @@ entity() FindIntermission =
 		return spot;
 
 // then look for the start position
-	spot = find (world, classname, "info_player_deathmatch");
+	spot = find (world, classname, "spawnfunc_info_player_deathmatch");
 	if (spot)
 		return spot;
 
@@ -1106,7 +1106,7 @@ void() CheckRules_Player =
 	if(self.deadflag == DEAD_NO)
 		self.play_time += frametime;
 
-	// fixme: don't check players; instead check dom_team and ctf_team entities
+	// fixme: don't check players; instead check spawnfunc_dom_team and spawnfunc_ctf_team entities
 	//   (div0: and that in CheckRules_World please)
 };
 
@@ -1185,7 +1185,7 @@ float() WinningCondition_Onslaught =
 	local float t1, t2, t3, t4;
 	// first check if the game has ended
 	t1 = t2 = t3 = t4 = 0;
-	head = find(world, classname, "onslaught_generator");
+	head = find(world, classname, "spawnfunc_onslaught_generator");
 	while (head)
 	{
 		if (head.health > 0)
@@ -1195,7 +1195,7 @@ float() WinningCondition_Onslaught =
 			if (head.team == COLOR_TEAM3) t3 = 1;
 			if (head.team == COLOR_TEAM4) t4 = 1;
 		}
-		head = find(head, classname, "onslaught_generator");
+		head = find(head, classname, "spawnfunc_onslaught_generator");
 	}
 	if (t1 + t2 + t3 + t4 < 2)
 	{
@@ -1250,7 +1250,7 @@ float() WinningCondition_Assault =
 	}
 
 	local entity ent;
-	ent = find(world, classname, "target_assault_roundend");
+	ent = find(world, classname, "spawnfunc_target_assault_roundend");
 	if(ent)
 	{
 		if(ent.winning)	// round end has been triggered by attacking team
@@ -1657,7 +1657,7 @@ float WinningCondition_RanOutOfSpawns()
 			team4_score = 1;
 	}
 
-	for(head = world; (head = find(head, classname, "info_player_deathmatch")) != world; )
+	for(head = world; (head = find(head, classname, "spawnfunc_info_player_deathmatch")) != world; )
 	{
 		if(head.team == COLOR_TEAM1)
 			team1_score = 1;

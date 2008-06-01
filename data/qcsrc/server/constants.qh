@@ -201,7 +201,7 @@ vector	PL_CROUCH_MAX				= '16 16 25';
 //float	GAME_FULLBRIGHT_PLAYERS			= 64; /// makes the players model fullbright
 //float	GAME_TEAMS				= 128; /// Teams, red/green/yellow/blue
 
-float	game;	// set to "gamecfg" on worldspawn
+float	game;	// set to "gamecfg" on spawnfunc_worldspawn
 
 
 //float	POWERUP_STRENGTH_DAMAGE			= 2; // damage multiplier for strength powerup

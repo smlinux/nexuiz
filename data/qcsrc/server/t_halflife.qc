@@ -6,33 +6,33 @@
 .float  rendermode;
 .vector rendercolor;
 
-void() weapon_crossbow = {};
-void() weapon_handgrenade = {};
-void() ammo_crossbow = {};
-void() ammo_9mmclip = {};
-void() ammo_gaussclip = {};
-void() weapon_rpg = {};
-void() weapon_357 = {};
+void() spawnfunc_weapon_crossbow = {};
+void() spawnfunc_weapon_handgrenade = {};
+void() spawnfunc_ammo_crossbow = {};
+void() spawnfunc_ammo_9mmclip = {};
+void() spawnfunc_ammo_gaussclip = {};
+void() spawnfunc_weapon_rpg = {};
+void() spawnfunc_weapon_357 = {};
 void() ammo_ARgrenades = {};
-void() item_battery = {};
-void() ammo_rpgclip = {};
+void() spawnfunc_item_battery = {};
+void() spawnfunc_ammo_rpgclip = {};
 void() weapon_9mmAR = {};
-void() weapon_tripmine = {};
-void() weapon_snark = {};
-void() ammo_buckshot = {};
+void() spawnfunc_weapon_tripmine = {};
+void() spawnfunc_weapon_snark = {};
+void() spawnfunc_ammo_buckshot = {};
 void() ammo_9mmAR = {};
-void() ammo_357 = {};
-void() weapon_gauss = {};
-void() weapon_hornetgun = {};
-//void() weapon_shotgun = {};
-void() item_healthkit = {};
-void() item_longjump = {};
-void() item_antidote = {};
-void() func_recharge = {};
-void() info_node = {};
-void() env_sound = {};
-void() light_spot = {};
-void() func_healthcharger = {};
+void() spawnfunc_ammo_357 = {};
+void() spawnfunc_weapon_gauss = {};
+void() spawnfunc_weapon_hornetgun = {};
+//void() spawnfunc_weapon_shotgun = {};
+void() spawnfunc_item_healthkit = {};
+void() spawnfunc_item_longjump = {};
+void() spawnfunc_item_antidote = {};
+void() spawnfunc_func_recharge = {};
+void() spawnfunc_info_node = {};
+void() spawnfunc_env_sound = {};
+void() spawnfunc_light_spot = {};
+void() spawnfunc_func_healthcharger = {};
 
 
 void() func_ladder_touch =
@@ -43,13 +43,13 @@ void() func_ladder_touch =
 	other.ladder_entity = self;
 };
 
-void() func_ladder =
+void() spawnfunc_func_ladder =
 {
 	InitTrigger ();
 	self.touch = func_ladder_touch;
 };
 
-void() func_water =
+void() spawnfunc_func_water =
 {
 	self.solid = SOLID_TRIGGER;
 	setmodel (self, self.model);	// set size and link into world, precision set by mapper

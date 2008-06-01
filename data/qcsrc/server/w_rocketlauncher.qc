@@ -358,7 +358,7 @@ float(float req) w_rlauncher =
 				}else{
 					local float distance; distance= bound(300,vlen(self.origin-self.enemy.origin),30000);
 					//As the distance gets larger, a correct detonation gets near imposible
-					//Bots are assumed to use the rocket light to see if the rocket gets near a player
+					//Bots are assumed to use the rocket spawnfunc_light to see if the rocket gets near a player
 					if(v_forward * normalize(missile.origin - self.enemy.origin)< 0.1)
 						if(self.enemy.classname == "player")
 							if(desirabledamage >= 0.1*coredamage)

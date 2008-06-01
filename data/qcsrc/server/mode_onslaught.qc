@@ -20,9 +20,9 @@ void() onslaught_updatelinks =
 	local float stop, t1, t2, t3, t4;
 	// first check if the game has ended
 	dprint("--- updatelinks ---\n");
-	links = findchain(classname, "onslaught_link");
+	links = findchain(classname, "spawnfunc_onslaught_link");
 	// mark generators as being shielded and networked
-	l = findchain(classname, "onslaught_generator");
+	l = findchain(classname, "spawnfunc_onslaught_generator");
 	while (l)
 	{
 		if (l.iscaptured)
@@ -34,7 +34,7 @@ void() onslaught_updatelinks =
 		l = l.chain;
 	}
 	// mark points as shielded and not networked
-	l = findchain(classname, "onslaught_controlpoint");
+	l = findchain(classname, "spawnfunc_onslaught_controlpoint");
 	while (l)
 	{
 		l.islinked = FALSE;
@@ -93,7 +93,7 @@ void() onslaught_updatelinks =
 			{
 				dprint(etos(l), " (link) is unshielding ", etos(l.enemy), " (point) because its team does not match ", etos(l.goalentity), " (point)\n");
 				l.enemy.isshielded = FALSE;
-				if(l.goalentity.classname == "onslaught_generator")
+				if(l.goalentity.classname == "spawnfunc_onslaught_generator")
 				{
 					if(l.goalentity.team == COLOR_TEAM1)
 						l.enemy.isgenneighbor_red = TRUE;
@@ -112,7 +112,7 @@ void() onslaught_updatelinks =
 			{
 				dprint(etos(l), " (link) is unshielding ", etos(l.goalentity), " (point) because its team does not match ", etos(l.enemy), " (point)\n");
 				l.goalentity.isshielded = FALSE;
-				if(l.enemy.classname == "onslaught_generator")
+				if(l.enemy.classname == "spawnfunc_onslaught_generator")
 				{
 					if(l.enemy.team == COLOR_TEAM1)
 						l.goalentity.isgenneighbor_red = TRUE;
@@ -131,7 +131,7 @@ void() onslaught_updatelinks =
 		l = l.chain;
 	}
 	// now update the takedamage and alpha variables on generator shields
-	l = findchain(classname, "onslaught_generator");
+	l = findchain(classname, "spawnfunc_onslaught_generator");
 	while (l)
 	{
 		if (l.isshielded)
@@ -151,7 +151,7 @@ void() onslaught_updatelinks =
 		l = l.chain;
 	}
 	// now update the takedamage and alpha variables on control point icons
-	l = findchain(classname, "onslaught_controlpoint");
+	l = findchain(classname, "spawnfunc_onslaught_controlpoint");
 	while (l)
 	{
 		if (l.isshielded)
@@ -178,7 +178,7 @@ void() onslaught_updatelinks =
 	}
 	// count generators owned by each team
 	t1 = t2 = t3 = t4 = 0;
-	l = findchain(classname, "onslaught_generator");
+	l = findchain(classname, "spawnfunc_onslaught_generator");
 	while (l)
 	{
 		if (l.iscaptured)
@@ -219,7 +219,7 @@ float onslaught_controlpoint_can_be_linked(entity cp, float t)
 	// check to see if this player has a legitimate claim to capture this
 	// control point - more specifically that there is a captured path of
 	// points leading back to the team generator
-	e = findchain(classname, "onslaught_link");
+	e = findchain(classname, "spawnfunc_onslaught_link");
 	while (e)
 	{
 		if (e.goalentity == cp)
@@ -321,7 +321,7 @@ void() onslaught_generator_think =
 		// control points reduce the overtime duration.
 		sound(self, CHAN_AUTO, "sound/onslaught/generator_decay.wav", 1, ATTN_NORM);
 		d = 1;
-		e = findchain(classname, "onslaught_controlpoint");
+		e = findchain(classname, "spawnfunc_onslaught_controlpoint");
 		while (e)
 		{
 			if (e.team != self.team)
@@ -485,16 +485,16 @@ float onslaught_controlpoint_waypointsprite_for_player(entity e)
 	return 0;
 }
 
-/*QUAKED onslaught_generator (0 .5 .8) (-32 -32 -24) (32 32 64)
+/*QUAKED spawnfunc_onslaught_generator (0 .5 .8) (-32 -32 -24) (32 32 64)
 Base generator.
 
-onslaught_link entities can target this.
+spawnfunc_onslaught_link entities can target this.
 
 keys:
 "team" - team that owns this generator (5 = red, 14 = blue, etc), MUST BE SET.
-"targetname" - name that onslaught_link entities will use to target this.
+"targetname" - name that spawnfunc_onslaught_link entities will use to target this.
 */
-void() onslaught_generator =
+void() spawnfunc_onslaught_generator =
 {
 	if (!g_onslaught)
 	{
@@ -724,17 +724,17 @@ void() onslaught_controlpoint_touch =
 	self.colormap = e.colormap;
 };
 
-/*QUAKED onslaught_controlpoint (0 .5 .8) (-32 -32 0) (32 32 128)
+/*QUAKED spawnfunc_onslaught_controlpoint (0 .5 .8) (-32 -32 0) (32 32 128)
 Control point.  Be sure to give this enough clearance so that the shootable part has room to exist
 
-This should link to an onslaught_controlpoint entity or onslaught_generator entity.
+This should link to an spawnfunc_onslaught_controlpoint entity or spawnfunc_onslaught_generator entity.
 
 keys:
-"targetname" - name that onslaught_link entities will use to target this.
+"targetname" - name that spawnfunc_onslaught_link entities will use to target this.
 "target" - target any entities that are tied to this control point, such as vehicles and buildable structure entities.
 "message" - name of this control point (should reflect the location in the map, such as "center bridge", "north tower", etc)
 */
-void() onslaught_controlpoint =
+void() spawnfunc_onslaught_controlpoint =
 {
 	local entity e;
 	if (!g_onslaught)
@@ -810,16 +810,16 @@ void() onslaught_link_delayed =
 	dprint(etos(self.goalentity), " linked with ", etos(self.enemy), "\n");
 }
 
-/*QUAKED onslaught_link (0 .5 .8) (-16 -16 -16) (16 16 16)
+/*QUAKED spawnfunc_onslaught_link (0 .5 .8) (-16 -16 -16) (16 16 16)
 Link between control points.
 
-This entity targets two different onslaught_controlpoint or onslaught_generator entities, and suppresses shielding on both if they are owned by different teams.
+This entity targets two different spawnfunc_onslaught_controlpoint or spawnfunc_onslaught_generator entities, and suppresses shielding on both if they are owned by different teams.
 
 keys:
 "target" - first control point.
 "target2" - second control point.
 */
-void() onslaught_link =
+void() spawnfunc_onslaught_link =
 {
 	if (!g_onslaught)
 	{

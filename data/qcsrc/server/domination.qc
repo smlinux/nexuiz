@@ -7,12 +7,12 @@ How to add domination points to a mod:
 1. Add this line to progs.src above world.qc:
 domination.qc
 2. Comment out all lines in ClientObituary in client.qc that begin with targ.frags  or attacker.frags.
-3. Add this above worldspawn in world.qc:
+3. Add this above spawnfunc_worldspawn in world.qc:
 void() dom_init;
-4. Add this line to the end of worldspawn in world.qc:
+4. Add this line to the end of spawnfunc_worldspawn in world.qc:
 dom_init();
 
-Note: The only teams who can use dom control points are identified by dom_team entities (if none exist these default to red and blue and use only quake models/sounds).
+Note: The only teams who can use dom control points are identified by spawnfunc_dom_team entities (if none exist these default to red and blue and use only quake models/sounds).
 */
 
 void() dom_controlpoint_setup;
@@ -166,9 +166,9 @@ void() dompointtouch =
 		return;
 
 	// only valid teams can claim it
-	head = find(world, classname, "dom_team");
+	head = find(world, classname, "spawnfunc_dom_team");
 	while (head && head.team != other.team)
-		head = find(head, classname, "dom_team");
+		head = find(head, classname, "spawnfunc_dom_team");
 	if (!head || head.netname == "" || head == self.goalentity)
 		return;
 
@@ -186,9 +186,9 @@ void() dompointtouch =
 	//self.think = dompoint_captured;
 
 	// go to neutral team in the mean time
-	head = find(world, classname, "dom_team");
+	head = find(world, classname, "spawnfunc_dom_team");
 	while (head && head.netname != "")
-		head = find(head, classname, "dom_team");
+		head = find(head, classname, "spawnfunc_dom_team");
 	if(head == world)
 		return;
 
@@ -201,11 +201,11 @@ void() dompointtouch =
 	dompoint_captured();
 };
 
-/*QUAKED dom_team (0 .5 .8) (-32 -32 -24) (32 32 32)
+/*QUAKED spawnfunc_dom_team (0 .5 .8) (-32 -32 -24) (32 32 32)
 Team declaration for Domination gameplay, this allows you to decide what team
 names and control point models are used in your map.
 
-Note: If you use dom_team entities you must define at least 3 and only two
+Note: If you use spawnfunc_dom_team entities you must define at least 3 and only two
 can have netname set!  The nameless team owns all control points at start.
 
 Keys:
@@ -227,7 +227,7 @@ Keys:
  (this is a global sound, like "Red team has captured a control point")
 */
 
-void() dom_team =
+void() spawnfunc_dom_team =
 {
 	if(!g_domination)
 	{
@@ -239,7 +239,7 @@ void() dom_team =
 		precache_sound(self.noise);
 	if (self.noise1 != "")
 		precache_sound(self.noise1);
-	self.classname = "dom_team";
+	self.classname = "spawnfunc_dom_team";
 	setmodel(self, self.model); // precision not needed
 	self.mdl = self.model;
 	self.dmg = self.modelindex;
@@ -252,14 +252,14 @@ void() dom_team =
 void() dom_controlpoint_setup =
 {
 	local entity head;
-	// find the dom_team representing unclaimed points
-	head = find(world, classname, "dom_team");
+	// find the spawnfunc_dom_team representing unclaimed points
+	head = find(world, classname, "spawnfunc_dom_team");
 	while(head && head.netname != "")
-		head = find(head, classname, "dom_team");
+		head = find(head, classname, "spawnfunc_dom_team");
 	if (!head)
-		objerror("no dom_team with netname \"\" found\n");
+		objerror("no spawnfunc_dom_team with netname \"\" found\n");
 
-	// copy important properties from dom_team entity
+	// copy important properties from spawnfunc_dom_team entity
 	self.goalentity = head;
 	setmodel(self, head.mdl); // precision already set
 	self.skin = head.skin;
@@ -308,7 +308,7 @@ void() dom_controlpoint_setup =
 	totalteams = 0;
 
 	// first find out what teams are allowed
-	head = find(world, classname, "dom_team");
+	head = find(world, classname, "spawnfunc_dom_team");
 	while(head)
 	{
 		if(head.netname != "")
@@ -332,7 +332,7 @@ void() dom_controlpoint_setup =
 					c4 = 0;
 			}
 		}
-		head = find(head, classname, "dom_team");
+		head = find(head, classname, "spawnfunc_dom_team");
 	}
 
 	// make sure there are at least 2 teams to join
@@ -483,10 +483,10 @@ void() dom_controlpoint_setup =
 	SetPlayerColors(pl, selectedteam);
 }
 */
-/*QUAKED dom_controlpoint (0 .5 .8) (-16 -16 -24) (16 16 32)
+/*QUAKED spawnfunc_dom_controlpoint (0 .5 .8) (-16 -16 -24) (16 16 32)
 Control point for Domination gameplay.
 */
-void() dom_controlpoint =
+void() spawnfunc_dom_controlpoint =
 {
 	if(!g_domination)
 	{
@@ -510,7 +510,7 @@ void dom_spawnteam (string teamname, float teamcolor, string pointmodel, float p
 	local entity oldself;
 	oldself = self;
 	self = spawn();
-	self.classname = "dom_team";
+	self.classname = "spawnfunc_dom_team";
 	self.netname = teamname;
 	self.cnt = teamcolor;
 	self.model = pointmodel;
@@ -519,7 +519,7 @@ void dom_spawnteam (string teamname, float teamcolor, string pointmodel, float p
 	self.noise1 = capnarration;
 	self.message = capmessage;
 
-	// this code is identical to dom_team
+	// this code is identical to spawnfunc_dom_team
 	setmodel(self, self.model); // precision not needed
 	self.mdl = self.model;
 	self.dmg = self.modelindex;
@@ -537,11 +537,11 @@ void(vector org) dom_spawnpoint =
 	local entity oldself;
 	oldself = self;
 	self = spawn();
-	self.classname = "dom_controlpoint";
-	self.think = dom_controlpoint;
+	self.classname = "spawnfunc_dom_controlpoint";
+	self.think = spawnfunc_dom_controlpoint;
 	self.nextthink = time;
 	self.origin = org;
-	dom_controlpoint();
+	spawnfunc_dom_controlpoint();
 	self = oldself;
 };
 
@@ -568,10 +568,10 @@ void() dom_delayedinit =
 	self.think = SUB_Remove;
 	self.nextthink = time;
 	// if no teams are found, spawn defaults
-	if (find(world, classname, "dom_team") == world)
+	if (find(world, classname, "spawnfunc_dom_team") == world)
 		dom_spawnteams();
 	// if no control points are found, spawn defaults
-	if (find(world, classname, "dom_controlpoint") == world)
+	if (find(world, classname, "spawnfunc_dom_controlpoint") == world)
 	{
 		// here follow default domination points for each map
 		/*
@@ -583,11 +583,11 @@ void() dom_delayedinit =
 		*/
 		{
 			// if no supported map was found, make every deathmatch spawn a point
-			head = find(world, classname, "info_player_deathmatch");
+			head = find(world, classname, "spawnfunc_info_player_deathmatch");
 			while (head)
 			{
 				dom_spawnpoint(head.origin);
-				head = find(head, classname, "info_player_deathmatch");
+				head = find(head, classname, "spawnfunc_info_player_deathmatch");
 			}
 		}
 	}
@@ -597,7 +597,7 @@ void() dom_init =
 {
 	local entity e;
 	// we have to precache default models/sounds even if they might not be
-	// used because worldspawn is executed before any other entities are read,
+	// used because spawnfunc_worldspawn is executed before any other entities are read,
 	// so we don't even know yet if this map is set up for domination...
 	precache_model("models/domination/dom_red.md3");
 	precache_model("models/domination/dom_blue.md3");

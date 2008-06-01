@@ -1,18 +1,18 @@
 //***********************
 //QUAKE 1 ENTITIES - So people can play quake1 maps with the nexuiz weapons
 //***********************
-void weapon_nailgun (void) {weapon_electro();}
-void weapon_supernailgun (void) {weapon_hagar();}
-void weapon_supershotgun (void) {weapon_uzi();}
+void spawnfunc_weapon_nailgun (void) {spawnfunc_weapon_electro();}
+void spawnfunc_weapon_supernailgun (void) {spawnfunc_weapon_hagar();}
+void spawnfunc_weapon_supershotgun (void) {spawnfunc_weapon_uzi();}
 
-void item_spikes (void) {item_bullets();}
-//void item_armor1 (void) {item_armor_medium;}  // FIXME: in Quake this is green armor, in Nexuiz maps it is an armor shard
-void item_armor2 (void) {item_armor_large();}
-void item_armorInv (void) {item_armor_large();}
-void item_health (void) {if (self.spawnflags & 2) item_health_mega();else item_health_medium();}
+void spawnfunc_item_spikes (void) {spawnfunc_item_bullets();}
+//void spawnfunc_item_armor1 (void) {spawnfunc_item_armor_medium;}  // FIXME: in Quake this is green armor, in Nexuiz maps it is an armor shard
+void spawnfunc_item_armor2 (void) {spawnfunc_item_armor_large();}
+void item_armorInv (void) {spawnfunc_item_armor_large();}
+void spawnfunc_item_health (void) {if (self.spawnflags & 2) spawnfunc_item_health_mega();else spawnfunc_item_health_medium();}
 
-//item_spikes
-//item_health
+//spawnfunc_item_spikes
+//spawnfunc_item_health
 
 
 
@@ -50,5 +50,7 @@ void junk_function ()
 	self.attack_finished_for = 0; // why is this even valid? Spiiiiiiiiiiiiiiiiiiiiike!
 	self.notsingle = 0;
 	trace_dphittexturename = "";
+	require_spawnfunc_prefix = 1;
+	self.movetypesteplandevent = SUB_Null;
 }
 

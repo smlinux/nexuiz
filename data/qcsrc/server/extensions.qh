@@ -719,6 +719,12 @@ float(float minimum, float val, float maximum) bound = #96;
 //
 //NOTE: this extension is superseded by DP_QC_UNLIMITEDTEMPSTRINGS
 
+//DP_QC_NUM_FOR_EDICT
+//idea: Blub\0
+//darkplaces implementation: Blub\0
+//Function to get the number of an entity - a clean way.
+float(entity num) num_for_edict = #512;
+
 //DP_QC_RANDOMVEC
 //idea: LordHavoc
 //darkplaces implementation: LordHavoc
@@ -750,7 +756,7 @@ string(float uselocaltime, string format, ...) strftime = #478;
 //for more format codes please do a web search for strftime 3 and you should find the man(3) pages for this standard C function.
 //
 //practical uses:
-//changing day/night cycle (shops closing, monsters going on the prowl) in an RPG, for this you probably want to use s = strftime(TRUE, "%H");hour = ftos(s);
+//changing day/night cycle (shops closing, monsters going on the prowl) in an RPG, for this you probably want to use s = strftime(TRUE, "%H");hour = stof(s);
 //printing current date/time for competitive multiplayer games, such as the beginning/end of each round in real world time.
 //activating eastereggs in singleplayer games on certain dates.
 //
@@ -1053,6 +1059,17 @@ void(vector org, string modelname, float startframe, float endframe, float frame
 //This field function, when provided, is triggered on an entity when the contents (ie. liquid / water / etc) is changed.
 //The first parameter provides the entities original contents, prior to the transition.  The second parameter provides the new contents.
 //NOTE: If this field function is provided on an entity, the standard watersplash sound IS SUPPRESSED to allow for authors to create their own transition sounds.
+
+//DP_SV_MOVETYPESTEP_LANDEVENT
+//idea: Dresk
+//darkplaces implementation: Dresk
+//field definitions:
+.void(vector vImpactVelocity) movetypesteplandevent;
+//description:
+//This field function, when provided, is triggered on a MOVETYPE_STEP entity when it experiences  "land event".
+// The standard engine behavior for this event is to play the sv_sound_land CVar sound.
+//The parameter provides the velocity of the entity at the time of the impact.  The z value may therefore be used to calculate how "hard" the entity struck the surface.
+//NOTE: If this field function is provided on a MOVETYPE_STEP entity, the standard sv_sound_land sound IS SUPPRESSED to allow for authors to create their own feedback.
 
 //DP_SV_POINTSOUND
 //idea: Dresk
@@ -1684,5 +1701,9 @@ float(float caseinsensitive, string s, ...) crc16 = #494;
 string(string in) uri_escape = #510;
 string(string in) uri_unescape = #511;
 
-void(float index, float type, ...) addstat = #232;
-float(entity ent) num_for_edict = #512;
+//DP_SV_SPAWNFUNC_PREFIX
+//idea: div0
+//darkplaces implementation: div0
+//Make functions whose name start with spawnfunc_ take precedence as spawn function for loading entities.
+//Useful if you have a field ammo_shells (required in any Quake mod) but want to support spawn functions called ammo_shells (like in Q3A).
+//Optionally, you can declare a global "float require_spawnfunc_prefix;" which will require ANY spawn function to start with that prefix.

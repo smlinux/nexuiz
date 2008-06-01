@@ -8,23 +8,23 @@ float DFOLLOW = 4;
 .string dtagname;
 
 /*QUAKED dynlight (0 1 0) (-8 -8 -8) (8 8 8) START_OFF NOSHADOW FOLLOW
-Dynamic light.
-Can do one of these things: sit still and be just a silly light, travel along a path, follow an entity around, attach to a tag on an entity.
+Dynamic spawnfunc_light.
+Can do one of these things: sit still and be just a silly spawnfunc_light, travel along a path, follow an entity around, attach to a tag on an entity.
 It can spin around it's own axis in all the above cases.
 If targeted, it will toggle between on or off.
 keys:
-"light_lev" light radius, default 200
-"color" light color in rgb and brightness, 1 1 1 produces bright white, up to 255 255 255 (nuclear blast), recommended values up to 1 1 1, default 1 1 1
+"light_lev" spawnfunc_light radius, default 200
+"color" spawnfunc_light color in rgb and brightness, 1 1 1 produces bright white, up to 255 255 255 (nuclear blast), recommended values up to 1 1 1, default 1 1 1
 "style" lightstyle, same as for static lights
 "angles" initial orientation
 "avelocity" a vector value, the direction and speed it rotates in
 "skin" cubemap number, must be 16 or above
-"dtagname" will attach to this tag on the entity which "targetname" matches "target". If the "target" is either not an md3 model or is missing tags, it will attach to the targets origin. Note that the "target" must be visible to the light
+"dtagname" will attach to this tag on the entity which "targetname" matches "target". If the "target" is either not an md3 model or is missing tags, it will attach to the targets origin. Note that the "target" must be visible to the spawnfunc_light
 "targetname" will toggle on and off when triggered
-"target" if issued with a target, preferrably path_corner, it will move along the path. If also issued with the FOLLOW spawnflag, then this is the entity it will follow. If issued with the "tagname" key it will attach it to this targets tag called "tagname", does not work together with FOLLOW or path movement
+"target" if issued with a target, preferrably spawnfunc_path_corner, it will move along the path. If also issued with the FOLLOW spawnflag, then this is the entity it will follow. If issued with the "tagname" key it will attach it to this targets tag called "tagname", does not work together with FOLLOW or path movement
 "speed" the speed it will travel along the path, default 100
 flags:
-"START_OFF" light will be in off state until targeted
+"START_OFF" spawnfunc_light will be in off state until targeted
 "NOSHADOW" will not cast shadows in realtime lighting mode
 "FOLLOW" will follow the entity which "targetname" matches "target"
 */

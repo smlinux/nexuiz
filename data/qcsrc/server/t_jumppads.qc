@@ -187,7 +187,7 @@ void() trigger_push_findtarget =
 		self.enemy = find(world, targetname, self.target);
 		if (!self.enemy)
 		{
-			objerror("trigger_push: target not found\n");
+			objerror("spawnfunc_trigger_push: target not found\n");
 			remove(self);
 			return;
 		}
@@ -198,7 +198,7 @@ void() trigger_push_findtarget =
 	else
 		flighttime = 0;
 
-	// calculate the destination and spawn a teleporter waypoint
+	// calculate the destination and spawn a teleporter spawnfunc_waypoint
 	e = spawn();
 	setorigin(e, org);
 	setsize(e, PL_MIN, PL_MAX);
@@ -222,7 +222,7 @@ void() trigger_push_findtarget =
  *            values to target a point on the ceiling.
  *   movedir: if target is not set, this * speed * 10 is the velocity to be reached.
  */
-void() trigger_push =
+void() spawnfunc_trigger_push =
 {
 	if (self.angles != '0 0 0')
 		SetMovedir ();
@@ -249,6 +249,6 @@ void() trigger_push =
 	self.nextthink = time + 0.2;
 };
 
-void() target_push = {};
-void() info_notnull = {};
-void() target_position = {};
+void() spawnfunc_target_push = {};
+void() spawnfunc_info_notnull = {};
+void() spawnfunc_target_position = {};

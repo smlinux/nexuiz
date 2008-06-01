@@ -305,7 +305,7 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 		{
 			// first nudge it off the floor a little bit to avoid math errors
 			setorigin(self, self.origin + '0 0 1');
-			// set item size before we spawn a waypoint
+			// set item size before we spawn a spawnfunc_waypoint
 			if((itemflags & FL_POWERUP) || self.health || self.armorvalue)
 				setsize (self, '-16 -16 0', '16 16 48');
 			else
@@ -515,14 +515,14 @@ void minst_remove_item (void) {
 
 float weaponswapping;
 
-void weapon_shotgun (void);
-void weapon_uzi (void) {
+void spawnfunc_weapon_shotgun (void);
+void spawnfunc_weapon_uzi (void) {
 	if(!weaponswapping)
 	if(q3acompat_machineshotgunswap)
 	if(self.classname != "droppedweapon")
 	{
 		weaponswapping = TRUE;
-		weapon_shotgun();
+		spawnfunc_weapon_shotgun();
 		weaponswapping = FALSE;
 		return;
 	}
@@ -534,13 +534,13 @@ void weapon_uzi (void) {
 		weapon_action(WEP_UZI, WR_PRECACHE);
 }
 
-void weapon_shotgun (void) {
+void spawnfunc_weapon_shotgun (void) {
 	if(!weaponswapping)
 	if(q3acompat_machineshotgunswap)
 	if(self.classname != "droppedweapon")
 	{
 		weaponswapping = TRUE;
-		weapon_uzi();
+		spawnfunc_weapon_uzi();
 		weaponswapping = FALSE;
 		return;
 	}
@@ -552,7 +552,7 @@ void weapon_shotgun (void) {
 		weapon_action(WEP_SHOTGUN, WR_PRECACHE);
 }
 
-void weapon_grenadelauncher (void)
+void spawnfunc_weapon_grenadelauncher (void)
 {
 	if(!self.ammo_rockets)
 		self.ammo_rockets = cvar("g_pickup_rockets");
@@ -561,7 +561,7 @@ void weapon_grenadelauncher (void)
 		weapon_action(WEP_GRENADE_LAUNCHER, WR_PRECACHE);
 }
 
-void weapon_electro (void)
+void spawnfunc_weapon_electro (void)
 {
 	if(!self.ammo_cells)
 		self.ammo_cells = cvar("g_pickup_cells");
@@ -570,7 +570,7 @@ void weapon_electro (void)
 		weapon_action(WEP_ELECTRO, WR_PRECACHE);
 }
 
-void weapon_crylink (void)
+void spawnfunc_weapon_crylink (void)
 {
 	if(!self.ammo_cells)
 		self.ammo_cells = cvar("g_pickup_cells");
@@ -579,7 +579,7 @@ void weapon_crylink (void)
 		weapon_action(WEP_CRYLINK, WR_PRECACHE);
 }
 
-void weapon_nex (void)
+void spawnfunc_weapon_nex (void)
 {
 	float nextime;
 	if (g_minstagib)
@@ -601,7 +601,7 @@ void weapon_nex (void)
 		weapon_action(WEP_NEX, WR_PRECACHE);
 }
 
-void weapon_hagar (void)
+void spawnfunc_weapon_hagar (void)
 {
 	if(!self.ammo_rockets)
 		self.ammo_rockets = cvar("g_pickup_rockets");
@@ -610,7 +610,7 @@ void weapon_hagar (void)
 		weapon_action(WEP_HAGAR, WR_PRECACHE);
 }
 
-void weapon_rocketlauncher (void)
+void spawnfunc_weapon_rocketlauncher (void)
 {
 	if (g_minstagib)
 	{
@@ -626,20 +626,20 @@ void weapon_rocketlauncher (void)
 		weapon_action(WEP_ROCKET_LAUNCHER, WR_PRECACHE);
 }
 
-void item_rockets (void) {
+void spawnfunc_item_rockets (void) {
 	if(!self.ammo_rockets)
 		self.ammo_rockets = g_pickup_rockets;
 	StartItem ("models/items/a_rockets.md3", "misc/itempickup.wav", 15, "rockets", IT_ROCKETS, 0, commodity_pickupevalfunc, 3000);
 }
 
-void item_shells (void);
-void item_bullets (void) {
+void spawnfunc_item_shells (void);
+void spawnfunc_item_bullets (void) {
 	if(!weaponswapping)
 	if(q3acompat_machineshotgunswap)
 	if(self.classname != "droppedweapon")
 	{
 		weaponswapping = TRUE;
-		item_shells();
+		spawnfunc_item_shells();
 		weaponswapping = FALSE;
 		return;
 	}
@@ -649,19 +649,19 @@ void item_bullets (void) {
 	StartItem ("models/items/a_bullets.mdl", "misc/itempickup.wav", 15, "bullets", IT_NAILS, 0, commodity_pickupevalfunc, 2000);
 }
 
-void item_cells (void) {
+void spawnfunc_item_cells (void) {
 	if(!self.ammo_cells)
 		self.ammo_cells = g_pickup_cells;
 	StartItem ("models/items/a_cells.md3", "misc/itempickup.wav", 15, "cells", IT_CELLS, 0, commodity_pickupevalfunc, 2000);
 }
 
-void item_shells (void) {
+void spawnfunc_item_shells (void) {
 	if(!weaponswapping)
 	if(q3acompat_machineshotgunswap)
 	if(self.classname != "droppedweapon")
 	{
 		weaponswapping = TRUE;
-		item_bullets();
+		spawnfunc_item_bullets();
 		weaponswapping = FALSE;
 		return;
 	}
@@ -671,7 +671,7 @@ void item_shells (void) {
 	StartItem ("models/items/a_shells.md3", "misc/itempickup.wav", 15, "shells", IT_SHELLS, 0, commodity_pickupevalfunc, 500);
 }
 
-void item_armor_small (void) {
+void spawnfunc_item_armor_small (void) {
 	if(!self.armorvalue)
 		self.armorvalue = g_pickup_armorsmall;
 	if(!self.max_armorvalue)
@@ -679,7 +679,7 @@ void item_armor_small (void) {
 	StartItem ("models/items/g_a1.md3", "misc/armor1.wav", 15, "5 Armor", IT_ARMOR_SHARD, 0, commodity_pickupevalfunc, 1000);
 }
 
-void item_armor_medium (void) {
+void spawnfunc_item_armor_medium (void) {
 	if(!self.armorvalue)
 		self.armorvalue = g_pickup_armormedium;
 	if(!self.max_armorvalue)
@@ -687,7 +687,7 @@ void item_armor_medium (void) {
 	StartItem ("models/items/g_armormedium.md3", "misc/armor1.wav", 30, "25 Armor", IT_ARMOR, 0, commodity_pickupevalfunc, 20000);
 }
 
-void item_armor_large (void) {
+void spawnfunc_item_armor_large (void) {
 	if(!self.armorvalue)
 		self.armorvalue = g_pickup_armorlarge;
 	if(!self.max_armorvalue)
@@ -695,7 +695,7 @@ void item_armor_large (void) {
 	StartItem ("models/items/g_a25.md3", "misc/armor25.wav", 30, "100 Armor", IT_ARMOR, 0, commodity_pickupevalfunc, 20000);
 }
 
-void item_health_small (void) {
+void spawnfunc_item_health_small (void) {
 	if(!self.max_health)
 		self.max_health = g_pickup_healthsmall_max;
 	if(!self.health)
@@ -703,7 +703,7 @@ void item_health_small (void) {
 	StartItem ("models/items/g_h1.md3", "misc/minihealth.wav", 15, "5 Health", IT_5HP, 0, commodity_pickupevalfunc, 20000);
 }
 
-void item_health_medium (void) {
+void spawnfunc_item_health_medium (void) {
 	if(!self.max_health)
 		self.max_health = g_pickup_healthmedium_max;
 	if(!self.health)
@@ -711,7 +711,7 @@ void item_health_medium (void) {
 	StartItem ("models/items/g_h25.md3", "misc/mediumhealth.wav", 15, "25 Health", IT_25HP, 0, commodity_pickupevalfunc, 20000);
 }
 
-void item_health_large (void) {
+void spawnfunc_item_health_large (void) {
 	if(!self.max_health)
 		self.max_health = g_pickup_healthlarge_max;
 	if(!self.health)
@@ -719,7 +719,7 @@ void item_health_large (void) {
 	StartItem ("models/items/g_h50.md3", "misc/mediumhealth.wav", 15, "50 Health", IT_25HP, 0, commodity_pickupevalfunc, 20000);
 }
 
-void item_health_mega (void) {
+void spawnfunc_item_health_mega (void) {
 	if(!cvar("g_powerup_superhealth"))
 		return;
 
@@ -738,13 +738,13 @@ void item_health_mega (void) {
 }
 
 // support old misnamed entities
-void item_armor1() { item_armor_small(); }  // FIXME: in Quake this is green armor, in Nexuiz maps it is an armor shard
-void item_armor25() { item_armor_large(); }
-void item_health1() { item_health_small(); }
-void item_health25() { item_health_medium(); }
-void item_health100() { item_health_mega(); }
+void spawnfunc_item_armor1() { spawnfunc_item_armor_small(); }  // FIXME: in Quake this is green armor, in Nexuiz maps it is an armor shard
+void spawnfunc_item_armor25() { spawnfunc_item_armor_large(); }
+void spawnfunc_item_health1() { spawnfunc_item_health_small(); }
+void spawnfunc_item_health25() { spawnfunc_item_health_medium(); }
+void spawnfunc_item_health100() { spawnfunc_item_health_mega(); }
 
-void item_strength (void) {
+void spawnfunc_item_strength (void) {
 	if(!cvar("g_powerup_strength"))
 		return;
 
@@ -760,7 +760,7 @@ void item_strength (void) {
 	}
 }
 
-void item_invincible (void) {
+void spawnfunc_item_invincible (void) {
 	if(!cvar("g_powerup_shield"))
 		return;
 
@@ -778,7 +778,7 @@ void item_invincible (void) {
 //void item_speed (void) {self.speed_finished = 30;StartItem ("models/items/g_speed.md3", "misc/powerup.wav", 120, "Speed Powerup", IT_SPEED, FL_POWERUP, generic_pickupevalfunc, 10000);}
 //void item_slowmo (void) {self.slowmo_finished = 30;StartItem ("models/items/g_slowmo.md3", "misc/powerup.wav", 120, "Slow Motion", IT_SLOWMO, FL_POWERUP, generic_pickupevalfunc, 10000);}
 
-void item_minst_cells (void) {
+void spawnfunc_item_minst_cells (void) {
 	if (g_minstagib)
 	{
 		minst_no_auto_cells = 1;
@@ -789,9 +789,9 @@ void item_minst_cells (void) {
 }
 
 // compatibility:
-void item_quad (void) {self.classname = "item_strength";item_strength();}
+void spawnfunc_item_quad (void) {self.classname = "spawnfunc_item_strength";spawnfunc_item_strength();}
 
-void misc_models (void)
+void spawnfunc_misc_models (void)
 {
 	precache_model (self.model);
 	setmodel (self, self.model); // precision set by mapper
@@ -812,7 +812,7 @@ void func_wall_use (void)
 	self.colormap |= 1024; // RENDER_COLORMAPPED
 }
 
-void func_wall (void)
+void spawnfunc_func_wall (void)
 {
 	precache_model (self.model);
 	setmodel (self, self.model); // precision set by mapper
@@ -860,14 +860,14 @@ void Item_SpawnByItemCode(float it)
 {
 	switch(it)
 	{
-		case IT_SHOTGUN:          weapon_shotgun(); break;
-		case IT_UZI:              weapon_uzi(); break;
-		case IT_GRENADE_LAUNCHER: weapon_grenadelauncher(); break;
-		case IT_ELECTRO:          weapon_electro(); break;
-		case IT_CRYLINK:          weapon_crylink(); break;
-		case IT_NEX:              weapon_nex(); break;
-		case IT_HAGAR:            weapon_hagar(); break;
-		case IT_ROCKET_LAUNCHER:  weapon_rocketlauncher(); break;
+		case IT_SHOTGUN:          spawnfunc_weapon_shotgun(); break;
+		case IT_UZI:              spawnfunc_weapon_uzi(); break;
+		case IT_GRENADE_LAUNCHER: spawnfunc_weapon_grenadelauncher(); break;
+		case IT_ELECTRO:          spawnfunc_weapon_electro(); break;
+		case IT_CRYLINK:          spawnfunc_weapon_crylink(); break;
+		case IT_NEX:              spawnfunc_weapon_nex(); break;
+		case IT_HAGAR:            spawnfunc_weapon_hagar(); break;
+		case IT_ROCKET_LAUNCHER:  spawnfunc_weapon_rocketlauncher(); break;
 		// add all other item spawn functions here
 		default:
 			error("requested item can't be spawned");

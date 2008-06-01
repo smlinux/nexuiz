@@ -285,7 +285,7 @@ void SV_PlayerPhysics()
 	}
 	else if (time < self.ladder_time)
 	{
-		// on a func_ladder or swimming in func_water
+		// on a spawnfunc_func_ladder or swimming in spawnfunc_func_water
 		self.flags = self.flags - (self.flags & FL_ONGROUND);
 
 		self.velocity = self.velocity * (1 - frametime * sv_friction);
@@ -296,7 +296,7 @@ void SV_PlayerPhysics()
 			self.velocity_z = self.velocity_z + self.gravity * sv_gravity * frametime;
 		else
 			self.velocity_z = self.velocity_z + sv_gravity * frametime;
-		if (self.ladder_entity.classname == "func_water")
+		if (self.ladder_entity.classname == "spawnfunc_func_water")
 		{
 			f = vlen(wishvel);
 			if (f > self.ladder_entity.speed)

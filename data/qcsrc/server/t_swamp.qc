@@ -1,6 +1,6 @@
 /*
 *		t_swamp.c
-*		Adds trigger_swamp and suppoart routines for nexuiz 1.2.1+
+*		Adds spawnfunc_trigger_swamp and suppoart routines for nexuiz 1.2.1+
 *		Author tZork (Jakob MG) 
 *		jakob@games43.se
 *		2005 11 29
@@ -11,14 +11,14 @@
 .float swamp_ticker;	//Used localy by the swampslug to calculate when to hurt the player and check the slug.
 .entity swampslug;
 
-void trigger_swamp(void);
+void spawnfunc_trigger_swamp(void);
 void swamp_touch(void);
 void swampslug_think();
 
 
 /*
 * Uses a entity calld swampslug to handle players in the swamp
-* It works like this: When the plyer enters teh swamp the trigger_swamp
+* It works like this: When the plyer enters teh swamp the spawnfunc_trigger_swamp
 * attaches a new "swampslug" to the player. As long as the plyer is inside
 * the swamp the swamp gives the slug new health. But the slug slowly kills itself
 * so when the player goes outside the swamp, it dies and releases the player from the 
@@ -84,11 +84,11 @@ void swamp_touch(void)
 	other.swampslug.health = 2;
 }
 
-/*QUAKED trigger_swamp (.5 .5 .5) ?
+/*QUAKED spawnfunc_trigger_swamp (.5 .5 .5) ?
 Players gettin into the swamp will 
 get slowd down and damaged
 */
-void trigger_swamp(void)
+void spawnfunc_trigger_swamp(void)
 {
 	// Init stuff
 	InitTrigger ();

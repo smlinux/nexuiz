@@ -370,7 +370,7 @@ void() FlagTouch =
 	}
 };
 
-/*QUAKED info_player_team1 (1 0 0) (-16 -16 -24) (16 16 24)
+/*QUAKED spawnfunc_info_player_team1 (1 0 0) (-16 -16 -24) (16 16 24)
 CTF Starting point for a player
 in team one (Red).
 
@@ -378,14 +378,14 @@ Keys:
 "angle"
  viewing angle when spawning
 */
-void() info_player_team1 =
+void() spawnfunc_info_player_team1 =
 {
 	self.team = COLOR_TEAM1; // red
-	info_player_deathmatch();
+	spawnfunc_info_player_deathmatch();
 };
-//self.team = 4;self.classname = "info_player_start";info_player_start();};
+//self.team = 4;self.classname = "spawnfunc_info_player_start";spawnfunc_info_player_start();};
 
-/*QUAKED info_player_team2 (1 0 0) (-16 -16 -24) (16 16 24)
+/*QUAKED spawnfunc_info_player_team2 (1 0 0) (-16 -16 -24) (16 16 24)
 CTF Starting point for a player in
 team two (Blue).
 
@@ -393,14 +393,14 @@ Keys:
 "angle"
  viewing angle when spawning
 */
-void() info_player_team2 =
+void() spawnfunc_info_player_team2 =
 {
 	self.team = COLOR_TEAM2; // blue
-	info_player_deathmatch();
+	spawnfunc_info_player_deathmatch();
 };
-//self.team = 13;self.classname = "info_player_start";info_player_start();};
+//self.team = 13;self.classname = "spawnfunc_info_player_start";spawnfunc_info_player_start();};
 
-/*QUAKED info_player_team3 (1 0 0) (-16 -16 -24) (16 16 24)
+/*QUAKED spawnfunc_info_player_team3 (1 0 0) (-16 -16 -24) (16 16 24)
 CTF Starting point for a player in
 team three (Magenta).
 
@@ -408,14 +408,14 @@ Keys:
 "angle"
  viewing angle when spawning
 */
-void() info_player_team3 =
+void() spawnfunc_info_player_team3 =
 {
 	self.team = COLOR_TEAM3; // purple
-	info_player_deathmatch();
+	spawnfunc_info_player_deathmatch();
 };
 
 
-/*QUAKED info_player_team4 (1 0 0) (-16 -16 -24) (16 16 24)
+/*QUAKED spawnfunc_info_player_team4 (1 0 0) (-16 -16 -24) (16 16 24)
 CTF Starting point for a player in
 team four (Yellow).
 
@@ -423,16 +423,16 @@ Keys:
 "angle"
  viewing angle when spawning
 */
-void() info_player_team4 =
+void() spawnfunc_info_player_team4 =
 {
 	self.team = COLOR_TEAM4; // yellow
-	info_player_deathmatch();
+	spawnfunc_info_player_deathmatch();
 };
 
 
 
 
-/*QUAKED item_flag_team1 (0 0.5 0.8) (-48 -48 -37) (48 48 37)
+/*QUAKED spawnfunc_item_flag_team1 (0 0.5 0.8) (-48 -48 -37) (48 48 37)
 CTF flag for team one (Red).
 Multiple are allowed.
 
@@ -457,7 +457,7 @@ Keys:
  (default ctf/respawn.wav)
 */
 
-void() item_flag_team1 =
+void() spawnfunc_item_flag_team1 =
 {
 	if (!g_ctf)
 	{
@@ -515,7 +515,7 @@ void() item_flag_team1 =
 	WaypointSprite_SpawnFixed("redbase", self.origin + '0 0 37', self, sprite);
 };
 
-/*QUAKED item_flag_team2 (0 0.5 0.8) (-48 -48 -24) (48 48 64)
+/*QUAKED spawnfunc_item_flag_team2 (0 0.5 0.8) (-48 -48 -24) (48 48 64)
 CTF flag for team two (Blue).
 Multiple are allowed.
 
@@ -540,7 +540,7 @@ Keys:
  (default ctf/respawn.wav)
 */
 
-void() item_flag_team2 =
+void() spawnfunc_item_flag_team2 =
 {
 	if (!g_ctf)
 	{
@@ -598,11 +598,11 @@ void() item_flag_team2 =
 };
 
 
-/*QUAKED ctf_team (0 .5 .8) (-16 -16 -24) (16 16 32)
+/*QUAKED spawnfunc_ctf_team (0 .5 .8) (-16 -16 -24) (16 16 32)
 Team declaration for CTF gameplay, this allows you to decide what team
 names and control point models are used in your map.
 
-Note: If you use ctf_team entities you must define at least 2!  However, unlike
+Note: If you use spawnfunc_ctf_team entities you must define at least 2!  However, unlike
 domination, you don't need to make a blank one too.
 
 Keys:
@@ -613,14 +613,14 @@ Keys:
 
 */
 
-void() ctf_team =
+void() spawnfunc_ctf_team =
 {
 	if (!g_ctf)
 	{
 		remove(self);
 		return;
 	}
-	self.classname = "ctf_team";
+	self.classname = "spawnfunc_ctf_team";
 	self.team = self.cnt + 1;
 };
 
@@ -630,11 +630,11 @@ void ctf_spawnteam (string teamname, float teamcolor)
 	local entity oldself;
 	oldself = self;
 	self = spawn();
-	self.classname = "ctf_team";
+	self.classname = "spawnfunc_ctf_team";
 	self.netname = teamname;
 	self.cnt = teamcolor;
 
-	ctf_team();
+	spawnfunc_ctf_team();
 
 	self = oldself;
 };
@@ -655,7 +655,7 @@ void() ctf_delayedinit =
 	self.think = SUB_Remove;
 	self.nextthink = time;
 	// if no teams are found, spawn defaults
-	if (find(world, classname, "ctf_team") == world)
+	if (find(world, classname, "spawnfunc_ctf_team") == world)
 		ctf_spawnteams();
 };
 

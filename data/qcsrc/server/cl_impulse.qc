@@ -96,24 +96,24 @@ void ImpulseCommands (void)
 	{
 		if(imp == 30)
 		{
-			WaypointSprite_DeployPersonal("waypoint", self.origin);
+			WaypointSprite_DeployPersonal("spawnfunc_waypoint", self.origin);
 			self.personal_v_angle = self.v_angle;
 			self.personal_velocity = self.velocity;
-			sprint(self, "personal waypoint spawned at location\n");
+			sprint(self, "personal spawnfunc_waypoint spawned at location\n");
 		}
 		else if(imp == 31)
 		{
-			WaypointSprite_DeployPersonal("waypoint", self.cursor_trace_endpos);
+			WaypointSprite_DeployPersonal("spawnfunc_waypoint", self.cursor_trace_endpos);
 			self.personal_v_angle = self.v_angle;
 			self.personal_velocity = '0 0 0';
-			sprint(self, "personal waypoint spawned at crosshair\n");
+			sprint(self, "personal spawnfunc_waypoint spawned at crosshair\n");
 		}
 		else if(imp == 32 && vlen(self.death_origin))
 		{
-			WaypointSprite_DeployPersonal("waypoint", self.death_origin);
+			WaypointSprite_DeployPersonal("spawnfunc_waypoint", self.death_origin);
 			self.personal_v_angle = self.v_angle;
 			self.personal_velocity = '0 0 0';
-			sprint(self, "personal waypoint spawned at death location\n");
+			sprint(self, "personal spawnfunc_waypoint spawned at death location\n");
 		}
 		else if(imp == 33 && self.deadflag == DEAD_NO && teams_matter)
 		{
@@ -153,7 +153,7 @@ void ImpulseCommands (void)
 		else if(imp == 47)
 		{
 			WaypointSprite_ClearPersonal();
-			sprint(self, "personal waypoint cleared\n");
+			sprint(self, "personal spawnfunc_waypoint cleared\n");
 		}
 		else if(imp == 48)
 		{
@@ -224,7 +224,7 @@ void ImpulseCommands (void)
 						self.pauseregen_finished = time + cvar("g_balance_pause_health_regen_spawn");
 					}
 					else
-						sprint(self, "No waypoint set, cheater (use g_waypointsprite_personal to set one)\n");
+						sprint(self, "No spawnfunc_waypoint set, cheater (use g_waypointsprite_personal to set one)\n");
 				}
 				else if(imp == 99)
 				{

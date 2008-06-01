@@ -143,8 +143,8 @@ void() plat_use =
 
 .string sound1, sound2;
 
-void() path_corner = { };
-void() func_plat =
+void() spawnfunc_path_corner = { };
+void() spawnfunc_func_plat =
 {
 	if (!self.t_length)
 		self.t_length = 80;
@@ -285,12 +285,12 @@ void() func_train_find =
 };
 
 
-void() func_train =
+void() spawnfunc_func_train =
 {
 	if (!self.speed)
 		self.speed = 100;
 	if (!self.target)
-		objerror ("func_train without a target");
+		objerror ("spawnfunc_func_train without a target");
 
 	if (self.sounds == 0)
 	{
@@ -356,15 +356,15 @@ void() func_train_find =
 	self.think = train_next;
 };
 
-/*QUAKED func_train (0 .5 .8) ?
-Ridable platform, targets path_corner path to follow.
-speed : speed the train moves (can be overridden by each path_corner)
-target : targetname of first path_corner (starts here)
+/*QUAKED spawnfunc_func_train (0 .5 .8) ?
+Ridable platform, targets spawnfunc_path_corner path to follow.
+speed : speed the train moves (can be overridden by each spawnfunc_path_corner)
+target : targetname of first spawnfunc_path_corner (starts here)
 */
-void() func_train =
+void() spawnfunc_func_train =
 {
 	if (!self.target)
-		objerror("func_train without a target");
+		objerror("spawnfunc_func_train without a target");
 	if (!self.speed)
 		self.speed = 100;
 
@@ -400,7 +400,7 @@ void() rotating_blocked =
 
 }
 
-/*QUAKED func_rotating (0 .5 .8) ? - - X_AXIS Y_AXIS
+/*QUAKED spawnfunc_func_rotating (0 .5 .8) ? - - X_AXIS Y_AXIS
 Brush model that spins in place on one axis (default Z).
 speed   : speed to rotate (in degrees per second)
 noise   : path/name of looping .wav file to play.
@@ -408,7 +408,7 @@ dmg     : Do this mutch dmg every .dmgtime intervall when blocked
 dmgtime : See above.
 */
 
-void() func_rotating =
+void() spawnfunc_func_rotating =
 {
 	if (self.noise)
 	{
@@ -470,7 +470,7 @@ void() bobbing_blocked =
 	rotating_blocked();
 }
 
-/*QUAKED func_bobbing (0 .5 .8) ? X_AXIS Y_AXIS
+/*QUAKED spawnfunc_func_bobbing (0 .5 .8) ? X_AXIS Y_AXIS
 Brush model that moves back and forth on one axis (default Z).
 speed : how long one cycle takes in seconds (default 4)
 height : how far the cycle moves (default 32)
@@ -479,7 +479,7 @@ noise : path/name of looping .wav file to play.
 dmg : Do this mutch dmg every .dmgtime intervall when blocked
 dmgtime : See above.
 */
-void() func_bobbing =
+void() spawnfunc_func_bobbing =
 {
 	local entity controller;
 	if (self.noise)
@@ -628,7 +628,7 @@ void(entity inflictor, entity attacker, float damage, float deathtype, vector hi
 };
 
 
-/*QUAKED func_button (0 .5 .8) ?
+/*QUAKED spawnfunc_func_button (0 .5 .8) ?
 When a button is touched, it moves some distance in the direction of it's angle, triggers all of it's targets, waits some time, then returns to it's original position where it can be triggered again.
 
 "angle"		determines the opening direction
@@ -643,7 +643,7 @@ When a button is touched, it moves some distance in the direction of it's angle,
 2) metallic click
 3) in-out
 */
-void() func_button =
+void() spawnfunc_func_button =
 {
 	SetMovedir ();
 
@@ -1052,7 +1052,7 @@ void() LinkDoors =
 };
 
 
-/*QUAKED func_door (0 .5 .8) ? START_OPEN x DOOR_DONT_LINK x x TOGGLE
+/*QUAKED spawnfunc_func_door (0 .5 .8) ? START_OPEN x DOOR_DONT_LINK x x TOGGLE
 if two doors touch, they are assumed to be connected and operate as a unit.
 
 TOGGLE causes the door to wait in both the start and end states for a trigger event.
@@ -1077,7 +1077,7 @@ FIXME: only one sound set available at the time being
 
 */
 
-void() func_door =
+void() spawnfunc_func_door =
 {
 	//if (!self.deathtype) // map makers can override this
 	//	self.deathtype = " got in the way";
@@ -1324,7 +1324,7 @@ void() secret_touch =
 };
 
 
-/*QUAKED func_door_secret (0 .5 .8) ? open_once 1st_left 1st_down no_shoot always_shoot
+/*QUAKED spawnfunc_func_door_secret (0 .5 .8) ? open_once 1st_left 1st_down no_shoot always_shoot
 Basic secret door. Slides back, then to the side. Angle determines direction.
 wait  = # of seconds before coming back
 1st_left = 1st move is left of arrow
@@ -1341,7 +1341,7 @@ If a secret door has a targetname, it will only be opened by it's botton or trig
 3) base
 */
 
-void () func_door_secret =
+void () spawnfunc_func_door_secret =
 {
 	/*if (!self.deathtype) // map makers can override this
 		self.deathtype = " got in the way";*/

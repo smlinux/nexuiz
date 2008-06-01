@@ -569,7 +569,7 @@ void CheckAllowedTeams (entity for_whom)
 	// onslaught is special
 	if(g_onslaught)
 	{
-		head = findchain(classname, "onslaught_generator");
+		head = findchain(classname, "spawnfunc_onslaught_generator");
 		while (head)
 		{
 			if (head.team == COLOR_TEAM1) c1 = 0;
@@ -582,9 +582,9 @@ void CheckAllowedTeams (entity for_whom)
 	}
 
 	if(g_domination)
-		teament_name = "dom_team";
+		teament_name = "spawnfunc_dom_team";
 	else if(g_ctf)
-		teament_name = "ctf_team";
+		teament_name = "spawnfunc_ctf_team";
 	else if(g_tdm)
 		teament_name = "tdm_team";
 	else if(g_assault)

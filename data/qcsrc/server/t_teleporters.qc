@@ -122,7 +122,7 @@ void Teleport_Touch (void)
 	}
 }
 
-void info_teleport_destination (void)
+void spawnfunc_info_teleport_destination (void)
 {
 	self.mangle = self.angles;
 	self.angles = '0 0 0';
@@ -134,14 +134,14 @@ void info_teleport_destination (void)
 		objerror ("Teleport destination without a targetname");
 }
 
-void misc_teleporter_dest (void)
+void spawnfunc_misc_teleporter_dest (void)
 {
-	info_teleport_destination();
+	spawnfunc_info_teleport_destination();
 }
 
-void target_teleporter (void)
+void spawnfunc_target_teleporter (void)
 {
-	info_teleport_destination();
+	spawnfunc_info_teleport_destination();
 }
 
 void teleport_findtarget (void)
@@ -161,7 +161,7 @@ void teleport_findtarget (void)
 	waypoint_spawnforteleporter(self, self.dest, 0);
 }
 
-void trigger_teleport (void)
+void spawnfunc_trigger_teleport (void)
 {
 	self.angles = '0 0 0';
 

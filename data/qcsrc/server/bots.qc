@@ -332,7 +332,7 @@ float(float t, float f1, float f2, entity e1, vector v1, vector v2, vector v3, v
 .float bot_offsetskill;
 
 
-// waypoint navigation system
+// spawnfunc_waypoint navigation system
 
 // itemscore = (howmuchmoreIwant / howmuchIcanwant) / itemdistance
 // waypointscore = 0.7 / waypointdistance
@@ -371,7 +371,7 @@ entity navigation_bestgoal;
 
 
 /////////////////////////////////////////////////////////////////////////////
-// waypoint management
+// spawnfunc_waypoint management
 /////////////////////////////////////////////////////////////////////////////
 
 // waypoints with this flag are not saved, they are automatically generated
@@ -381,7 +381,7 @@ float WAYPOINTFLAG_ITEM = 4194304;
 float WAYPOINTFLAG_TELEPORT = 2097152;
 float WAYPOINTFLAG_NORELINK = 1048576;
 
-// add a new link to the waypoint, replacing the furthest link it already has
+// add a new link to the spawnfunc_waypoint, replacing the furthest link it already has
 void(entity from, entity to) waypoint_addlink =
 {
 	local float c;
@@ -458,8 +458,8 @@ void(entity from, entity to) waypoint_addlink =
 	from.wp00 = to;from.wp00mincost = c;return;
 };
 
-// relink this waypoint
-// (precompile a list of all reachable waypoints from this waypoint)
+// relink this spawnfunc_waypoint
+// (precompile a list of all reachable waypoints from this spawnfunc_waypoint)
 // (SLOW!)
 void() waypoint_think =
 {
@@ -468,7 +468,7 @@ void() waypoint_think =
 	//dprint("waypoint_think wpisbox = ", ftos(self.wpisbox), "\n");
 	sm1 = self.origin + self.mins;
 	sm2 = self.origin + self.maxs;
-	e = find(world, classname, "waypoint");
+	e = find(world, classname, "spawnfunc_waypoint");
 	stepheightvec = cvar("sv_stepheight") * '0 0 1';
 	while (e)
 	{
@@ -522,7 +522,7 @@ void() waypoint_think =
 					waypoint_addlink(e, self);
 			}
 		}
-		e = find(e, classname, "waypoint");
+		e = find(e, classname, "spawnfunc_waypoint");
 	}
 	navigation_testtracewalk = 0;
 };
@@ -538,7 +538,7 @@ void(entity wp) waypoint_clearlinks =
 	wp.wp24 = wp.wp25 = wp.wp26 = wp.wp27 = wp.wp28 = wp.wp29 = wp.wp30 = wp.wp31 = world;wp.wp24mincost = wp.wp25mincost = wp.wp26mincost = wp.wp27mincost = wp.wp28mincost = wp.wp29mincost = wp.wp30mincost = wp.wp31mincost = f;
 };
 
-// tell a waypoint to relink
+// tell a spawnfunc_waypoint to relink
 void(entity wp) waypoint_schedulerelink =
 {
 	if (wp == world)
@@ -571,23 +571,23 @@ void(entity wp) waypoint_schedulerelink =
 	wp.effects = EF_LOWPRECISION;
 }
 
-// create a new waypoint and automatically link it to other waypoints, and link
+// create a new spawnfunc_waypoint and automatically link it to other waypoints, and link
 // them back to it as well
-// (suitable for waypoint editor)
+// (suitable for spawnfunc_waypoint editor)
 entity(vector m1, vector m2, float f) waypoint_spawn =
 {
 	local entity w;
 	local vector org;
-	w = find(world, classname, "waypoint");
+	w = find(world, classname, "spawnfunc_waypoint");
 	while (w)
 	{
-		// if a matching waypoint already exists, don't add a duplicate
+		// if a matching spawnfunc_waypoint already exists, don't add a duplicate
 		if (boxesoverlap(m1, m2, w.absmin, w.absmax))
 			return w;
-		w = find(w, classname, "waypoint");
+		w = find(w, classname, "spawnfunc_waypoint");
 	}
 	w = spawn();
-	w.classname = "waypoint";
+	w.classname = "spawnfunc_waypoint";
 	w.wpflags = f;
 	setorigin(w, (m1 + m2) * 0.5);
 	setsize(w, m1 - w.origin, m2 - w.origin);
@@ -626,7 +626,7 @@ entity(vector m1, vector m2, float f) waypoint_spawn =
 							if(trace_startsolid)
 							{
 								// this WP is in solid, refuse it
-								dprint("Killed a waypoint that was stuck in solid at ", vtos(org), "\n");
+								dprint("Killed a spawnfunc_waypoint that was stuck in solid at ", vtos(org), "\n");
 								remove(w);
 								return world;
 							}
@@ -640,7 +640,7 @@ entity(vector m1, vector m2, float f) waypoint_spawn =
 		tracebox(w.origin, PL_MIN, PL_MAX, w.origin - '0 0 128', MOVE_WORLDONLY, w);
 		if(trace_startsolid)
 		{
-			dprint("Killed a waypoint that was stuck in solid ", vtos(w.origin), "\n");
+			dprint("Killed a spawnfunc_waypoint that was stuck in solid ", vtos(w.origin), "\n");
 			remove(w);
 			return world;
 		}
@@ -648,12 +648,12 @@ entity(vector m1, vector m2, float f) waypoint_spawn =
 		{
 			if(trace_fraction == 1)
 			{
-				dprint("Killed a waypoint that was stuck in air at ", vtos(w.origin), "\n");
+				dprint("Killed a spawnfunc_waypoint that was stuck in air at ", vtos(w.origin), "\n");
 				remove(w);
 				return world;
 			}
 			trace_endpos_z += 0.1; // don't trust the trace fully
-//			dprint("Moved waypoint at ", vtos(w.origin), " by ", ftos(vlen(w.origin - trace_endpos)));
+//			dprint("Moved spawnfunc_waypoint at ", vtos(w.origin), " by ", ftos(vlen(w.origin - trace_endpos)));
 //			dprint(" direction: ", vtos((trace_endpos - w.origin)), "\n");
 			setorigin(w, trace_endpos);
 		}
@@ -664,8 +664,8 @@ entity(vector m1, vector m2, float f) waypoint_spawn =
 	return w;
 };
 
-// waypoint map entity
-void() waypoint =
+// spawnfunc_waypoint map entity
+void() spawnfunc_waypoint =
 {
 	setorigin(self, self.origin);
 	// schedule a relink after other waypoints have had a chance to spawn
@@ -673,7 +673,7 @@ void() waypoint =
 	//waypoint_schedulerelink(self);
 };
 
-// remove a waypoint, and schedule all neighbors to relink
+// remove a spawnfunc_waypoint, and schedule all neighbors to relink
 void(entity e) waypoint_remove =
 {
 	// tell all linked waypoints that they need to relink
@@ -709,7 +709,7 @@ void(entity e) waypoint_remove =
 	waypoint_schedulerelink(e.wp29);
 	waypoint_schedulerelink(e.wp30);
 	waypoint_schedulerelink(e.wp31);
-	// and now remove the waypoint
+	// and now remove the spawnfunc_waypoint
 	remove(e);
 };
 
@@ -717,7 +717,7 @@ void(entity e) waypoint_remove =
 void() waypoint_removeall =
 {
 	local entity head, next;
-	head = findchain(classname, "waypoint");
+	head = findchain(classname, "spawnfunc_waypoint");
 	while (head)
 	{
 		next = head.chain;
@@ -731,7 +731,7 @@ void() waypoint_removeall =
 void() waypoint_schedulerelinkall =
 {
 	local entity head;
-	head = findchain(classname, "waypoint");
+	head = findchain(classname, "spawnfunc_waypoint");
 	while (head)
 	{
 		waypoint_schedulerelink(head);
@@ -752,7 +752,7 @@ void() waypoint_saveall =
 	if (file >= 0)
 	{
 		c = 0;
-		w = findchain(classname, "waypoint");
+		w = findchain(classname, "spawnfunc_waypoint");
 		while (w)
 		{
 			if (!(w.wpflags & WAYPOINTFLAG_GENERATED))
@@ -776,7 +776,7 @@ void() waypoint_saveall =
 	}
 	else
 	{
-		bprint("waypoint save to ");
+		bprint("spawnfunc_waypoint save to ");
 		bprint(filename);
 		bprint(" failed\n");
 	}
@@ -826,7 +826,7 @@ float() waypoint_loadall =
 	}
 	else
 	{
-		dprint("waypoint load from ");
+		dprint("spawnfunc_waypoint load from ");
 		dprint(filename);
 		dprint(" failed\n");
 	}
@@ -844,8 +844,8 @@ void(entity e) waypoint_spawnforitem =
 	org = e.origin + (e.mins + e.maxs) * 0.5;
 	org_z = e.origin_z + e.mins_z - PL_MIN_z + 1;
 	e.nearestwaypointtimeout = time + 1000000000;
-	// don't spawn an item waypoint if it already exists
-	w = findchain(classname, "waypoint");
+	// don't spawn an item spawnfunc_waypoint if it already exists
+	w = findchain(classname, "spawnfunc_waypoint");
 	while (w)
 	{
 		if (w.wpisbox)
@@ -878,7 +878,7 @@ void(entity e, vector destination, float timetaken) waypoint_spawnforteleporter 
 	// one way link to the destination
 	w.wp00 = dw;
 	w.wp00mincost = timetaken; // this is just for jump pads
-	// the teleporter's nearest waypoint is this one
+	// the teleporter's nearest spawnfunc_waypoint is this one
 	// (teleporters are not goals, so this is probably useless)
 	e.nearestwaypoint = w;
 	e.nearestwaypointtimeout = time + 1000000000;
@@ -969,7 +969,7 @@ void(entity e) navigation_pushroute =
 
 // remove first goal from stack
 // (in other words: remove a prerequisite for reaching the later goals)
-// (used when a waypoint is reached)
+// (used when a spawnfunc_waypoint is reached)
 void() navigation_poproute =
 {
 	self.goalcurrent = self.goalstack01;
@@ -1006,7 +1006,7 @@ void() navigation_poproute =
 	self.goalstack31 = world;
 };
 
-// find the waypoint near a dynamic goal such as a dropped weapon
+// find the spawnfunc_waypoint near a dynamic goal such as a dropped weapon
 entity(entity player, float walkfromwp) navigation_findnearestwaypoint =
 {
 	local entity waylist, w, best;
@@ -1014,12 +1014,12 @@ entity(entity player, float walkfromwp) navigation_findnearestwaypoint =
 	local vector v, org, pm1, pm2;
 	pm1 = player.origin + PL_MIN;
 	pm2 = player.origin + PL_MAX;
-	waylist = findchain(classname, "waypoint");
+	waylist = findchain(classname, "spawnfunc_waypoint");
 	// do two scans, because box test is cheaper
 	w = waylist;
 	while (w)
 	{
-		// if object is touching waypoint
+		// if object is touching spawnfunc_waypoint
 		if (boxesoverlap(pm1, pm2, w.absmin, w.absmax))
 			return w;
 		w = w.chain;
@@ -1037,7 +1037,7 @@ entity(entity player, float walkfromwp) navigation_findnearestwaypoint =
 	w = waylist;
 	while (w)
 	{
-		// if object can walk from waypoint
+		// if object can walk from spawnfunc_waypoint
 		if (w.wpisbox)
 		{
 			local vector wm1, wm2;
@@ -1123,7 +1123,7 @@ float(entity waylist, float maxdist) navigation_markroutes_nearestwaypoints =
 	return c;
 }
 
-// updates a path link if a waypoint link is better than the current one
+// updates a path link if a spawnfunc_waypoint link is better than the current one
 void(entity w, entity wp, float cost2, vector p) navigation_markroutes_checkwaypoint =
 {
 	local vector m1;
@@ -1149,13 +1149,13 @@ void(entity w, entity wp, float cost2, vector p) navigation_markroutes_checkwayp
 	}
 };
 
-// queries the entire waypoint network for pathes leading away from the bot
+// queries the entire spawnfunc_waypoint network for pathes leading away from the bot
 void() navigation_markroutes =
 {
 	local entity w, wp, waylist;
 	local float searching, cost, cost2;
 	local vector p;
-	w = waylist = findchain(classname, "waypoint");
+	w = waylist = findchain(classname, "spawnfunc_waypoint");
 	while (w)
 	{
 		w.wpconsidered = FALSE;
@@ -1232,7 +1232,7 @@ void(entity e, float f, float rangebias) navigation_routerating =
 	//te_wizspike(e.origin);
 	//bprint(etos(e));
 	//bprint("\n");
-	// update the cached waypoint link on a dynamic item entity
+	// update the cached spawnfunc_waypoint link on a dynamic item entity
 	if (time > e.nearestwaypointtimeout)
 	{
 		e.nearestwaypoint = navigation_findnearestwaypoint(e, TRUE);
@@ -1291,7 +1291,7 @@ void(entity e) navigation_routetogoal =
 		//if (trace_fraction == 1)
 		//if (tracewalk(self, self.origin, PL_MIN, PL_MAX, e.origin, MOVE_NORMAL))
 		//	break;
-		// add the waypoint to the path
+		// add the spawnfunc_waypoint to the path
 		navigation_pushroute(e);
 		e = e.enemy;
 	}
@@ -1310,7 +1310,7 @@ void() navigation_poptouchedgoals =
 		navigation_poproute();
 }
 
-// begin a goal selection session (queries waypoint network)
+// begin a goal selection session (queries spawnfunc_waypoint network)
 void() navigation_goalrating_start =
 {
 	navigation_bestrating = -1;
@@ -2069,7 +2069,7 @@ void(float maxupdate) botframe_updatedangerousobjects =
 	local float c, d, danger;
 	c = 0;
 	bot_dodgelist = findchainfloat(bot_dodge, TRUE);
-	botframe_dangerwaypoint = find(botframe_dangerwaypoint, classname, "waypoint");
+	botframe_dangerwaypoint = find(botframe_dangerwaypoint, classname, "spawnfunc_waypoint");
 	while (botframe_dangerwaypoint != world)
 	{
 		danger = 0;
@@ -2095,7 +2095,7 @@ void(float maxupdate) botframe_updatedangerousobjects =
 		c = c + 1;
 		if (c >= maxupdate)
 			break;
-		botframe_dangerwaypoint = find(botframe_dangerwaypoint, classname, "waypoint");
+		botframe_dangerwaypoint = find(botframe_dangerwaypoint, classname, "spawnfunc_waypoint");
 	}
 };
 
@@ -2253,7 +2253,7 @@ void() bot_serverframe =
 	if (bot_list)
 	{
 		// cycle the goal token from one bot to the next each frame
-		// (this prevents them from all doing waypoint searches on the same
+		// (this prevents them from all doing spawnfunc_waypoint searches on the same
 		//  frame, which causes choppy framerates)
 		if (bot_strategytoken_taken)
 		{

@@ -5,50 +5,50 @@
 // NOTE: for best experience, you need to swap MGs with SGs in the map or it won't have a MG
 
 // SG -> SG
-void spawnfunc_ammo_shells()         { item_shells();        }
+void spawnfunc_ammo_shells()         { spawnfunc_item_shells();        }
                                                  
 // MG -> MG                                      
-void spawnfunc_weapon_machinegun()   { weapon_uzi();         }
-void spawnfunc_ammo_bullets()        { item_bullets();       }
+void spawnfunc_weapon_machinegun()   { spawnfunc_weapon_uzi();         }
+void spawnfunc_ammo_bullets()        { spawnfunc_item_bullets();       }
                                                  
 // GL -> Mortar                                  
-void spawnfunc_ammo_grenades()       { item_rockets();       }
+void spawnfunc_ammo_grenades()       { spawnfunc_item_rockets();       }
                                                  
 // LG -> Electro                                 
-void spawnfunc_weapon_lightning()    { weapon_electro();     }
-void spawnfunc_ammo_lightning()      { item_cells();         }
+void spawnfunc_weapon_lightning()    { spawnfunc_weapon_electro();     }
+void spawnfunc_ammo_lightning()      { spawnfunc_item_cells();         }
                                                  
 // Plasma -> Crylink                             
-void spawnfunc_weapon_plasmagun()    { weapon_crylink();     }
-void spawnfunc_ammo_cells()          { item_cells();         }
+void spawnfunc_weapon_plasmagun()    { spawnfunc_weapon_crylink();     }
+void spawnfunc_ammo_cells()          { spawnfunc_item_cells();         }
                                                  
 // Rail -> Nex                                   
-void spawnfunc_weapon_railgun()      { weapon_nex();         }
-void spawnfunc_ammo_slugs()          { item_cells();         }
+void spawnfunc_weapon_railgun()      { spawnfunc_weapon_nex();         }
+void spawnfunc_ammo_slugs()          { spawnfunc_item_cells();         }
                                                  
 // BFG -> Hagar                                  
-void spawnfunc_weapon_bfg()          { weapon_hagar();       }
-void spawnfunc_ammo_bfg()            { item_cells();         }
+void spawnfunc_weapon_bfg()          { spawnfunc_weapon_hagar();       }
+void spawnfunc_ammo_bfg()            { spawnfunc_item_cells();         }
 
 // RL -> RL
-void spawnfunc_ammo_rockets()        { item_rockets();       }
+void spawnfunc_ammo_rockets()        { spawnfunc_item_rockets();       }
                           
 // Armor                  
-void spawnfunc_item_armor_body()     { item_armor_large();   }
-void spawnfunc_item_armor_combat()   { item_armor_medium();  }
-void spawnfunc_item_armor_shard()    { item_armor_small();   }
-void spawnfunc_item_enviro()         { item_armor_medium();  }
+void spawnfunc_item_armor_body()     { spawnfunc_item_armor_large();   }
+void spawnfunc_item_armor_combat()   { spawnfunc_item_armor_medium();  }
+void spawnfunc_item_armor_shard()    { spawnfunc_item_armor_small();   }
+void spawnfunc_item_enviro()         { spawnfunc_item_armor_medium();  }
 //void spawnfunc_item_flight()       /* not supported */
 //void spawnfunc_item_haste()        /* not supported */
 //void spawnfunc_item_health()       /* handled in t_quake.qc */
-void spawnfunc_item_health_large()   { item_health_large();  }
-void spawnfunc_item_health_small()   { item_health_small();  }
-void spawnfunc_item_health_mega()    { item_health_mega();   }
+//void spawnfunc_item_health_large() /* handled in t_items.qc */
+//void spawnfunc_item_health_small() /* handled in t_items.qc */
+//void spawnfunc_item_health_mega()  /* handled in t_items.qc */
 //void spawnfunc_item_invis()        /* not supported */
 //void spawnfunc_item_regen()        /* not supported */
-void spawnfunc_team_CTF_redflag()    { item_flag_team1();    }
-void spawnfunc_team_CTF_blueflag()   { item_flag_team2();    }
-void spawnfunc_team_CTF_redplayer()  { info_player_team1();  }
-void spawnfunc_team_CTF_blueplayer() { info_player_team2();  }
-void spawnfunc_team_CTF_redspawn()   { info_player_team1();  }
-void spawnfunc_team_CTF_bluespawn()  { info_player_team2();  }
+void spawnfunc_team_CTF_redflag()    { spawnfunc_item_flag_team1();    }
+void spawnfunc_team_CTF_blueflag()   { spawnfunc_item_flag_team2();    }
+void spawnfunc_team_CTF_redplayer()  { spawnfunc_info_player_team1();  }
+void spawnfunc_team_CTF_blueplayer() { spawnfunc_info_player_team2();  }
+void spawnfunc_team_CTF_redspawn()   { spawnfunc_info_player_team1();  }
+void spawnfunc_team_CTF_bluespawn()  { spawnfunc_info_player_team2();  }

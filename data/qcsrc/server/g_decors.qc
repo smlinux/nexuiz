@@ -1,5 +1,5 @@
 
-float maxclients; // set by worldspawn code
+float maxclients; // set by spawnfunc_worldspawn code
 float numdecors;
 float maxdecors;
 .float createdtime;
