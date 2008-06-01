@@ -74,7 +74,7 @@ float GameCommand_Vote(string s, entity e) {
 				print_to(e, "^1No vote called.");
 			}
 		} else if(argv(1) == "call") {
-			if(cvar("sv_vote_call")) {
+			if(!e || cvar("sv_vote_call")) {
 				if(tourneyInMatchStage
 				   && cvar("g_tourney_disable_spec_vote")
 				   && e.classname != "player") {
@@ -130,6 +130,7 @@ float GameCommand_Vote(string s, entity e) {
 							e.vote_next = time + cvar("sv_vote_wait");
 						}
 						bprint("\{1}^2* ^3", VoteNetname(votecaller), "^2 calls a vote for ", votecalledvote_display, "\n");
+						GameLogEcho(strcat(":vote:vcall:", ftos(votecaller.playerid), ":", votecalledvote_display), TRUE);
 						VoteCount(); // needed if you are the only one
 					} else {
 						print_to(e, "^1This vote is not ok. See help for more info.");
@@ -166,6 +167,7 @@ float GameCommand_Vote(string s, entity e) {
 						e.vote_next = time + cvar("sv_vote_wait");
 					}
 					bprint("\{1}^2* ^3", VoteNetname(votecaller), "^2 calls a vote to become ^3master^2.\n");
+					GameLogEcho(strcat(":vote:vcall:", ftos(votecaller.playerid), ":", votecalledvote_display), FALSE);
 					VoteCount(); // needed if you are the only one
 				}
 			} else {
@@ -200,6 +202,7 @@ float GameCommand_Vote(string s, entity e) {
 						dovote_display = strcat("^1", dovote, " (^7", VoteNetname(e), "^1): ", GetKickVoteVictim_reason);
 					}
 					bprint("\{1}^2* ^3", VoteNetname(e), "^2 used his ^3master^2 status to do \"^2", dovote_display, "^2\".\n");
+					GameLogEcho(strcat(":vote:vdo:", ftos(e.playerid), ":", dovote_display), FALSE);
 					localcmd(strcat(dovote, "\n"));
 				} else {
 					print_to(e, "^1This command is not ok. See help for more info.");
@@ -218,6 +221,7 @@ float GameCommand_Vote(string s, entity e) {
 				if(granted) {
 					ServerConsoleEcho(strcat("Accepted master login from ", VoteNetname(e)), TRUE);
 					bprint("\{1}^2* ^3", VoteNetname(e), "^2 logged in as ^3master^2\n");
+					GameLogEcho(strcat(":vote:vlogin:", ftos(e.playerid)), FALSE);
 				}
 				else
 					ServerConsoleEcho(strcat("REJECTED master login from ", VoteNetname(e)), TRUE);
@@ -465,6 +469,7 @@ void VoteTimeout() {
 
 void VoteStop(entity stopper) {
 	bprint("\{1}^2* ^3", VoteNetname(stopper), "^2 stopped ^3", VoteNetname(votecaller), "^2's vote\n");
+	GameLogEcho(strcat(":vote:vstop:", ftos(stopper.playerid)), FALSE);
 	if(stopper == votecaller) {
 		// no wait for next vote so you can correct your vote
 		if(votecaller) {
@@ -480,7 +485,7 @@ void VoteNag() {
 		centerprint_atprio(self, CENTERPRIO_VOTE, strcat("^7^3", VoteNetname(votecaller), "^2 called a vote for ", votecalledvote_display, "\n\n^2You have not voted yet!\n^2HINT: By default, F1 is yes and F2 is no."));
 }
 
-void VoteSpam(float yescount, float nocount, float abstaincount, float notvoters, float mincount)
+void VoteSpam(float yescount, float nocount, float abstaincount, float notvoters, float mincount, string result)
 {
 	string s;
 	if(mincount >= 0)
@@ -499,6 +504,12 @@ void VoteSpam(float yescount, float nocount, float abstaincount, float notvoters
 		s = strcat(s, ftos(notvoters), "^2 didn't have to vote\n");
 	}
 	bprint(s);
+	s = strcat(":vote:v", result, ":", ftos(yescount));
+	s = strcat(s, ":", ftos(nocount));
+	s = strcat(s, ":", ftos(abstaincount));
+	s = strcat(s, ":", ftos(notvoters));
+	s = strcat(s, ":", ftos(mincount));
+	GameLogEcho(s, FALSE);
 }
 
 void VoteCount() {
@@ -569,29 +580,36 @@ void VoteCount() {
 		votefactor = bound(0.5, cvar("sv_vote_majority_factor"), 0.999);
 		if(yescount > (playercount - abstaincount) * votefactor)
 		{
-			VoteSpam(yescount, nocount, abstaincount, playercount - yescount - nocount - abstaincount, -1);
+			VoteSpam(yescount, nocount, abstaincount, playercount - yescount - nocount - abstaincount, -1, "yes");
 			VoteAccept();
 		}
 		else if(nocount >= (playercount - abstaincount) * (1 - votefactor)) // that means, yescount cannot reach minyes any more
 		{
-			VoteSpam(yescount, nocount, abstaincount, playercount - yescount - nocount - abstaincount, -1);
+			VoteSpam(yescount, nocount, abstaincount, playercount - yescount - nocount - abstaincount, -1, "no");
 			VoteReject();
 		}
 		else if(time > votefinished)
 		{
 			if(cvar("sv_vote_simple_majority"))
 			{
-				VoteSpam(yescount, nocount, abstaincount, playercount - yescount - nocount - abstaincount, floor((yescount + nocount) * votefactor) + 1);
+				string result;
 				if(yescount > (yescount + nocount) * votefactor)
-					VoteAccept();
+					result = "yes";
 				else if(yescount + nocount > 0)
+					result = "no";
+				else
+					result = "timeout";
+				VoteSpam(yescount, nocount, abstaincount, playercount - yescount - nocount - abstaincount, floor((yescount + nocount) * votefactor) + 1, result);
+				if(result == "yes")
+					VoteAccept();
+				else if(result == "no")
 					VoteReject();
 				else
 					VoteTimeout();
 			}
 			else
 			{
-				VoteSpam(yescount, nocount, abstaincount, playercount - yescount - nocount - abstaincount, floor((playercount - abstaincount) * votefactor) + 1);
+				VoteSpam(yescount, nocount, abstaincount, playercount - yescount - nocount - abstaincount, floor((playercount - abstaincount) * votefactor) + 1, "timeout");
 				VoteTimeout();
 			}
 		}
