@@ -42,6 +42,17 @@ ______________
    :restart
    :end
    :gameover
+   :vote:suggested:<mapname>:<playerid>
+   :vote:keeptwo:<mapname>:<mapvotes>:<mapname>:<mapvotes>:::<mapname>:<mapvotes>:...:didn't vote:<notvoters>
+   :vote:finished:<mapname>:<mapvotes>:::<mapname>:<mapvotes>:<mapname>:<mapvotes>:...:didn't vote:<notvoters>
+   :vote:suggestion_accepted:<mapname>
+   :vote:vcall:<ID of player>:<vote command display string>
+   :vote:vyes:<yescount>:<nocount>:<abstaincount>:<notvoters>:<mincount>
+   :vote:vno:<yescount>:<nocount>:<abstaincount>:<notvoters>:<mincount>
+   :vote:vtimeout:<yescount>:<nocount>:<abstaincount>:<notvoters>:<mincount>
+   :vote:vstop:<ID of stopper>
+   :vote:vlogin:<ID of player>
+   :vote:vdo:<ID of player>:<do command display string>
 
    Note that only the :join and :player lines ever contain player names.
 
