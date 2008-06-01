@@ -21,6 +21,8 @@ keyhunt.qh
 
 antilag.qh
 
+vote.qh
+
 miscfunctions.qc
 
 waypointsprites.qc
@@ -86,6 +88,8 @@ g_hook.qc
 t_swamp.qc
 
 clientcommands.qc
+
+vote.qc
 
 campaign.qc
 ../common/campaign_file.qc

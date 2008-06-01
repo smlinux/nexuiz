@@ -31,11 +31,14 @@ void GameCommand(string command)
 		print("  savedb filename\n");
 		print("  dumpdb filename\n");
 		print("  loaddb filename\n");
-		print("  vstop\n");
+		GameCommand_Vote("help", world);
 		GameCommand_Ban("help");
 		GameCommand_Generic("help");
 		return;
 	}
+
+	if(GameCommand_Vote(command, world))
+		return;
 
 	if(GameCommand_Ban(command))
 		return;
@@ -182,18 +185,6 @@ void GameCommand(string command)
 		}
 		else
 			bprint("That command can only be used in a team-based gamemode.\n");
-		return;
-	}
-	if(argv(0) == "vstop")
-	{
-		local entity temp;
-		temp = spawn();
-		if(cvar_string("sv_adminnick") == "")
-			temp.netname = cvar_string("hostname");
-		else
-			temp.netname = cvar_string("sv_adminnick");
-		VoteStop(temp);
-		remove(temp);
 		return;
 	}
 

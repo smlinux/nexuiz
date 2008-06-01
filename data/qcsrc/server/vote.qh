@@ -1,0 +1,20 @@
+string GetKickVoteVictim_newcommand;
+string GetKickVoteVictim_reason;
+
+float VoteCheckNasty(string cmd);
+entity GetKickVoteVictim(string vote, string cmd, entity caller);
+float GameCommand_Vote(string s, entity e);
+void VoteHelp(entity e);
+string VoteNetname(entity e);
+string ValidateMap(string m, entity e);
+void VoteThink();
+string VoteParse();
+float VoteAllowed(string votecommand);
+void VoteReset();
+void VoteAccept();
+void VoteReject();
+void VoteTimeout();
+void VoteStop(entity stopper);
+void VoteNag();
+void VoteSpam(float yescount, float nocount, float abstaincount, float notvoters, float mincount);
+void VoteCount();
