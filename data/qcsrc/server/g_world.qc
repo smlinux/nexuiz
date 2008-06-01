@@ -1920,7 +1920,7 @@ string MapVote_Suggest(string m)
 	if(mapvote_suggestions[i] != "")
 		strunzone(mapvote_suggestions[i]);
 	mapvote_suggestions[i] = strzone(m);
-	GameLogEcho(strcat(":vote:suggested:", m, ":", ftos(self.playerid), ":", self.netname), TRUE);
+	GameLogEcho(strcat(":vote:suggested:", m, ":", ftos(self.playerid)), TRUE);
 	return strcat("Suggestion of ", m, " accepted.");
 }
 
