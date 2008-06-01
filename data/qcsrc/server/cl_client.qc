@@ -1,4 +1,5 @@
 .float wantswelcomemessage;
+.string netname_previous;
 
 void spawnfunc_info_player_survivor (void)
 {
@@ -887,6 +888,7 @@ void ClientConnect (void)
 		s = strcat(s, ftos(self.team));
 		GameLogEcho(s, FALSE);
 	}
+	self.netname_previous = strzone(self.netname);
 
 	//stuffcmd(self, "set tmpviewsize $viewsize \n");
 
@@ -1043,6 +1045,8 @@ void ClientDisconnect (void)
 		Spawnqueue_Unmark(self);
 		Spawnqueue_Remove(self);
 	}
+
+	strunzone(self.netname_previous);
 
 	// free cvars
 	GetCvars(-1);
@@ -1612,6 +1616,14 @@ void PlayerPreThink (void)
 	if(blockSpectators)
 		checkSpectatorBlock();
 	
+	if(self.netname_previous != self.netname)
+	{
+		if(cvar("sv_eventlog"))
+			GameLogEcho(strcat(":name:", ftos(self.playerid), ":", self.netname), TRUE);
+		strunzone(self.netname_previous);
+		self.netname_previous = strzone(self.netname);
+	}
+
 	// version nagging
 	if(self.version_nagtime)
 		if(self.cvar_g_nexuizversion)

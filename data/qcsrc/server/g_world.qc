@@ -1920,7 +1920,8 @@ string MapVote_Suggest(string m)
 	if(mapvote_suggestions[i] != "")
 		strunzone(mapvote_suggestions[i]);
 	mapvote_suggestions[i] = strzone(m);
-	GameLogEcho(strcat(":vote:suggested:", m, ":", ftos(self.playerid)), TRUE);
+	if(cvar("sv_eventlog"))
+		GameLogEcho(strcat(":vote:suggested:", m, ":", ftos(self.playerid)), TRUE);
 	return strcat("Suggestion of ", m, " accepted.");
 }
 
@@ -1993,24 +1994,27 @@ float MapVote_Finished(float mappos)
 	float i;
 	float didntvote;
 
-	result = strcat(":vote:finished:", mapvote_maps[mappos]);
-	result = strcat(result, ":", ftos(mapvote_votes[mappos]), "::");
-	didntvote = mapvote_voters;
-	for(i = 0; i < mapvote_count; ++i)
-		if(mapvote_maps[i] != "")
-		{
-			didntvote -= mapvote_votes[i];
-			if(i != mappos)
+	if(cvar("sv_eventlog"))
+	{
+		result = strcat(":vote:finished:", mapvote_maps[mappos]);
+		result = strcat(result, ":", ftos(mapvote_votes[mappos]), "::");
+		didntvote = mapvote_voters;
+		for(i = 0; i < mapvote_count; ++i)
+			if(mapvote_maps[i] != "")
 			{
-				result = strcat(result, ":", mapvote_maps[i]);
-				result = strcat(result, ":", ftos(mapvote_votes[i]));
+				didntvote -= mapvote_votes[i];
+				if(i != mappos)
+				{
+					result = strcat(result, ":", mapvote_maps[i]);
+					result = strcat(result, ":", ftos(mapvote_votes[i]));
+				}
 			}
-		}
-	result = strcat(result, ":didn't vote:", ftos(didntvote));
+		result = strcat(result, ":didn't vote:", ftos(didntvote));
 
-	GameLogEcho(result, FALSE);
-	if(mapvote_maps_suggested[mappos])
-		GameLogEcho(strcat(":vote:suggestion_accepted:", mapvote_maps[mappos]), FALSE);
+		GameLogEcho(result, FALSE);
+		if(mapvote_maps_suggested[mappos])
+			GameLogEcho(strcat(":vote:suggestion_accepted:", mapvote_maps[mappos]), FALSE);
+	}
 
 	FOR_EACH_REALCLIENT(other)
 		FixClientCvars(other);
@@ -2106,7 +2110,8 @@ float MapVote_CheckRules_2()
 						}
 				}
 			result = strcat(result, ":didn't vote:", ftos(didntvote));
-			GameLogEcho(result, FALSE);
+			if(cvar("sv_eventlog"))
+				GameLogEcho(result, FALSE);
 		}
 
 	return FALSE;
