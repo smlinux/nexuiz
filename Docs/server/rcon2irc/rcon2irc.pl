@@ -389,6 +389,7 @@ our @tasks = (); # list of [time, sub]
 our %channels = ();
 our %store = (
 	irc_nick => "",
+	playernick_0 => "(console)",
 );
 our %config = (
 	irc_server => undef,
@@ -976,6 +977,60 @@ sub irc_joinstage($)
 	[ dp => q{\001(.*?)\^7: (.*)} => sub {
 		my ($nick, $message) = map { color_dp2irc $_ } @_;
 		out irc => 0, "PRIVMSG $config{irc_channel} :<$nick\017> $message";
+		return 0;
+	} ],
+
+	# chat: Nexuiz server -> IRC channel, nick change/set
+	[ dp => q{:(name|join):(\d+):(.*)} => sub {
+		my ($type, $id, $nick) = @_;
+		$nick = color_dp2irc $nick;
+		my $oldnick = $store{"playernick_$id"};
+		if($type eq 'name')
+		{
+			out irc => 0, "PRIVMSG $config{irc_channel} :* $oldnick\017 is now known as $nick";
+		}
+		$store{"playernick_$id"} = $nick;
+		return 0;
+	} ],
+
+	# chat: Nexuiz server -> IRC channel, vote call
+	[ dp => q{:vote:vcall:(\d+):(.*)} => sub {
+		my ($id, $command) = @_;
+		$command = color_dp2irc $command;
+		my $oldnick = $store{"playernick_$id"};
+		out irc => 0, "PRIVMSG $config{irc_channel} :* $oldnick\017 calls a vote for $command";
+		return 0;
+	} ],
+
+	# chat: Nexuiz server -> IRC channel, vote stop
+	[ dp => q{:vote:vstop:(\d+)} => sub {
+		my ($id) = @_;
+		my $oldnick = $store{"playernick_$id"};
+		out irc => 0, "PRIVMSG $config{irc_channel} :* $oldnick\017 stopped the vote";
+		return 0;
+	} ],
+
+	# chat: Nexuiz server -> IRC channel, master login
+	[ dp => q{:vote:vlogin:(\d+)} => sub {
+		my ($id) = @_;
+		my $oldnick = $store{"playernick_$id"};
+		out irc => 0, "PRIVMSG $config{irc_channel} :* $oldnick\017 logged in as master";
+		return 0;
+	} ],
+
+	# chat: Nexuiz server -> IRC channel, master do
+	[ dp => q{:vote:vdo:(\d+):(.*)} => sub {
+		my ($id, $command) = @_;
+		my $oldnick = $store{"playernick_$id"};
+		out irc => 0, "PRIVMSG $config{irc_channel} :* $oldnick\017 used his master status to do $command";
+		return 0;
+	} ],
+
+	# chat: Nexuiz server -> IRC channel, result
+	[ dp => q{:vote:v(yes|no|timeout):(\d+):(\d+):(\d+):(\d+):-?(\d+)} => sub {
+		my ($result, $yes, $no, $abstain, $not, $min) = @_;
+		my $spam = "$yes:$no" . (($min >= 0) ? " ($min needed)" : "") . " $abstain didn't care, $not didn't vote";
+		out irc => 0, "PRIVMSG $config{irc_channel} :* the vote ended with $result: $spam";
 		return 0;
 	} ],
 
