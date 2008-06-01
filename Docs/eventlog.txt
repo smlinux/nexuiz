@@ -24,6 +24,7 @@ ______________
    :gameinfo:end
    :join:<ID>:player:<nickname>
    :join:<ID>:bot:<nickname>
+   :name:<ID>:<nickname>
    :part:<ID>
    :team:<ID>:<team>
    :kill:frag:<ID of killer>:<ID of victim>:type=<death type>:items=<itemstring of killer>:victimitems=<itemstring of victim>
