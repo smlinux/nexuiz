@@ -1003,7 +1003,7 @@ sub irc_joinstage($)
 		my ($id, $command) = @_;
 		$command = color_dp2irc $command;
 		my $oldnick = $store{"playernick_$id"};
-		out irc => 0, "PRIVMSG $config{irc_channel} :* $oldnick\017 calls a vote for \"$command\"";
+		out irc => 0, "PRIVMSG $config{irc_channel} :* $oldnick\017 calls a vote for \"$command\017\"";
 		return 0;
 	} ],
 
@@ -1027,7 +1027,7 @@ sub irc_joinstage($)
 	[ dp => q{:vote:vdo:(\d+):(.*)} => sub {
 		my ($id, $command) = @_;
 		my $oldnick = $store{"playernick_$id"};
-		out irc => 0, "PRIVMSG $config{irc_channel} :* $oldnick\017 used his master status to do \"$command\"";
+		out irc => 0, "PRIVMSG $config{irc_channel} :* $oldnick\017 used his master status to do \"$command\017\"";
 		return 0;
 	} ],
 
