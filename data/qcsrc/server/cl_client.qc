@@ -1621,7 +1621,8 @@ void PlayerPreThink (void)
 	{
 		if(cvar("sv_eventlog"))
 			GameLogEcho(strcat(":name:", ftos(self.playerid), ":", self.netname), TRUE);
-		strunzone(self.netname_previous);
+		if(self.netname_previous)
+			strunzone(self.netname_previous);
 		self.netname_previous = strzone(self.netname);
 	}
 
