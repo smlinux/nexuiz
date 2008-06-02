@@ -1034,7 +1034,7 @@ sub irc_joinstage($)
 	# chat: Nexuiz server -> IRC channel, result
 	[ dp => q{:vote:v(yes|no|timeout):(\d+):(\d+):(\d+):(\d+):(-?\d+)} => sub {
 		my ($result, $yes, $no, $abstain, $not, $min) = @_;
-		my $spam = "$yes:$no" . (($min >= 0) ? " ($min needed)" : "") . " $abstain didn't care, $not didn't vote";
+		my $spam = "$yes:$no" . (($min >= 0) ? " ($min needed)" : "") . ", $abstain didn't care, $not didn't vote";
 		out irc => 0, "PRIVMSG $config{irc_channel} :* the vote ended with $result: $spam";
 		return 0;
 	} ],
