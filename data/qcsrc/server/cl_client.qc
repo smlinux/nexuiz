@@ -1046,7 +1046,8 @@ void ClientDisconnect (void)
 		Spawnqueue_Remove(self);
 	}
 
-	strunzone(self.netname_previous);
+	if(self.netname_previous)
+		strunzone(self.netname_previous);
 
 	// free cvars
 	GetCvars(-1);
