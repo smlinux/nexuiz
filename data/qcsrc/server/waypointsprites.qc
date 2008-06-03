@@ -52,7 +52,7 @@ void WaypointSprite_Init()
 	precache_model("models/sprites/here.sp2");
 	precache_model("models/sprites/helpme.sp2");
 	precache_model("models/sprites/redbase.sp2");
-	precache_model("models/sprites/spawnfunc_waypoint.sp2");
+	precache_model("models/sprites/waypoint.sp2");
 	precache_model("models/sprites/danger.sp2");
 }
 
