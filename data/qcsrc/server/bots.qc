@@ -626,7 +626,7 @@ entity(vector m1, vector m2, float f) waypoint_spawn =
 							if(trace_startsolid)
 							{
 								// this WP is in solid, refuse it
-								dprint("Killed a spawnfunc_waypoint that was stuck in solid at ", vtos(org), "\n");
+								dprint("Killed a waypoint that was stuck in solid at ", vtos(org), "\n");
 								remove(w);
 								return world;
 							}
@@ -640,7 +640,7 @@ entity(vector m1, vector m2, float f) waypoint_spawn =
 		tracebox(w.origin, PL_MIN, PL_MAX, w.origin - '0 0 128', MOVE_WORLDONLY, w);
 		if(trace_startsolid)
 		{
-			dprint("Killed a spawnfunc_waypoint that was stuck in solid ", vtos(w.origin), "\n");
+			dprint("Killed a waypoint that was stuck in solid ", vtos(w.origin), "\n");
 			remove(w);
 			return world;
 		}
@@ -648,12 +648,12 @@ entity(vector m1, vector m2, float f) waypoint_spawn =
 		{
 			if(trace_fraction == 1)
 			{
-				dprint("Killed a spawnfunc_waypoint that was stuck in air at ", vtos(w.origin), "\n");
+				dprint("Killed a waypoint that was stuck in air at ", vtos(w.origin), "\n");
 				remove(w);
 				return world;
 			}
 			trace_endpos_z += 0.1; // don't trust the trace fully
-//			dprint("Moved spawnfunc_waypoint at ", vtos(w.origin), " by ", ftos(vlen(w.origin - trace_endpos)));
+//			dprint("Moved waypoint at ", vtos(w.origin), " by ", ftos(vlen(w.origin - trace_endpos)));
 //			dprint(" direction: ", vtos((trace_endpos - w.origin)), "\n");
 			setorigin(w, trace_endpos);
 		}

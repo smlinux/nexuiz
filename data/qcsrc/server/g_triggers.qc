@@ -620,7 +620,7 @@ void() spawnfunc_misc_laser =
 	if(!self.wait)
 		self.wait = 1;
 	if(!self.message)
-		self.message = "saw the spawnfunc_light";
+		self.message = "saw the light";
 	self.think = misc_laser_think;
 	self.nextthink = time;
 }
