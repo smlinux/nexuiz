@@ -36,7 +36,7 @@ void(float ratingscale, vector org, float sradius) havocbot_goalrating_items =
 void(float ratingscale, vector org, float sradius) havocbot_goalrating_controlpoints =
 {
 	local entity head;
-	head = findchain(classname, "spawnfunc_dom_controlpoint");
+	head = findchain(classname, "dom_controlpoint");
 	while (head)
 	{
 		if (vlen(head.origin - org) < sradius)
@@ -59,7 +59,7 @@ void(float ratingscale, vector org, float sradius) havocbot_goalrating_controlpo
 void(float ratingscale, vector org, float sradius) havocbot_goalrating_waypoints =
 {
 	local entity head;
-	head = findchain(classname, "spawnfunc_waypoint");
+	head = findchain(classname, "waypoint");
 	while (head)
 	{
 		if (vlen(head.origin - org) < sradius && vlen(head.origin - org) > 100)

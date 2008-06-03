@@ -789,7 +789,7 @@ void spawnfunc_item_minst_cells (void) {
 }
 
 // compatibility:
-void spawnfunc_item_quad (void) {self.classname = "spawnfunc_item_strength";spawnfunc_item_strength();}
+void spawnfunc_item_quad (void) {self.classname = "item_strength";spawnfunc_item_strength();}
 
 void spawnfunc_misc_models (void)
 {

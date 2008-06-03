@@ -290,7 +290,7 @@ void() spawnfunc_func_train =
 	if (!self.speed)
 		self.speed = 100;
 	if (!self.target)
-		objerror ("spawnfunc_func_train without a target");
+		objerror ("func_train without a target");
 
 	if (self.sounds == 0)
 	{
@@ -364,7 +364,7 @@ target : targetname of first spawnfunc_path_corner (starts here)
 void() spawnfunc_func_train =
 {
 	if (!self.target)
-		objerror("spawnfunc_func_train without a target");
+		objerror("func_train without a target");
 	if (!self.speed)
 		self.speed = 100;
 

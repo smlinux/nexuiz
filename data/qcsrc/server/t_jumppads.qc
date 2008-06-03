@@ -187,7 +187,7 @@ void() trigger_push_findtarget =
 		self.enemy = find(world, targetname, self.target);
 		if (!self.enemy)
 		{
-			objerror("spawnfunc_trigger_push: target not found\n");
+			objerror("trigger_push: target not found\n");
 			remove(self);
 			return;
 		}

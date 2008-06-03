@@ -468,7 +468,7 @@ void() waypoint_think =
 	//dprint("waypoint_think wpisbox = ", ftos(self.wpisbox), "\n");
 	sm1 = self.origin + self.mins;
 	sm2 = self.origin + self.maxs;
-	e = find(world, classname, "spawnfunc_waypoint");
+	e = find(world, classname, "waypoint");
 	stepheightvec = cvar("sv_stepheight") * '0 0 1';
 	while (e)
 	{
@@ -522,7 +522,7 @@ void() waypoint_think =
 					waypoint_addlink(e, self);
 			}
 		}
-		e = find(e, classname, "spawnfunc_waypoint");
+		e = find(e, classname, "waypoint");
 	}
 	navigation_testtracewalk = 0;
 };
@@ -578,16 +578,16 @@ entity(vector m1, vector m2, float f) waypoint_spawn =
 {
 	local entity w;
 	local vector org;
-	w = find(world, classname, "spawnfunc_waypoint");
+	w = find(world, classname, "waypoint");
 	while (w)
 	{
 		// if a matching spawnfunc_waypoint already exists, don't add a duplicate
 		if (boxesoverlap(m1, m2, w.absmin, w.absmax))
 			return w;
-		w = find(w, classname, "spawnfunc_waypoint");
+		w = find(w, classname, "waypoint");
 	}
 	w = spawn();
-	w.classname = "spawnfunc_waypoint";
+	w.classname = "waypoint";
 	w.wpflags = f;
 	setorigin(w, (m1 + m2) * 0.5);
 	setsize(w, m1 - w.origin, m2 - w.origin);
@@ -717,7 +717,7 @@ void(entity e) waypoint_remove =
 void() waypoint_removeall =
 {
 	local entity head, next;
-	head = findchain(classname, "spawnfunc_waypoint");
+	head = findchain(classname, "waypoint");
 	while (head)
 	{
 		next = head.chain;
@@ -731,7 +731,7 @@ void() waypoint_removeall =
 void() waypoint_schedulerelinkall =
 {
 	local entity head;
-	head = findchain(classname, "spawnfunc_waypoint");
+	head = findchain(classname, "waypoint");
 	while (head)
 	{
 		waypoint_schedulerelink(head);
@@ -752,7 +752,7 @@ void() waypoint_saveall =
 	if (file >= 0)
 	{
 		c = 0;
-		w = findchain(classname, "spawnfunc_waypoint");
+		w = findchain(classname, "waypoint");
 		while (w)
 		{
 			if (!(w.wpflags & WAYPOINTFLAG_GENERATED))
@@ -776,7 +776,7 @@ void() waypoint_saveall =
 	}
 	else
 	{
-		bprint("spawnfunc_waypoint save to ");
+		bprint("waypoint save to ");
 		bprint(filename);
 		bprint(" failed\n");
 	}
@@ -826,7 +826,7 @@ float() waypoint_loadall =
 	}
 	else
 	{
-		dprint("spawnfunc_waypoint load from ");
+		dprint("waypoint load from ");
 		dprint(filename);
 		dprint(" failed\n");
 	}
@@ -845,7 +845,7 @@ void(entity e) waypoint_spawnforitem =
 	org_z = e.origin_z + e.mins_z - PL_MIN_z + 1;
 	e.nearestwaypointtimeout = time + 1000000000;
 	// don't spawn an item spawnfunc_waypoint if it already exists
-	w = findchain(classname, "spawnfunc_waypoint");
+	w = findchain(classname, "waypoint");
 	while (w)
 	{
 		if (w.wpisbox)
@@ -1014,7 +1014,7 @@ entity(entity player, float walkfromwp) navigation_findnearestwaypoint =
 	local vector v, org, pm1, pm2;
 	pm1 = player.origin + PL_MIN;
 	pm2 = player.origin + PL_MAX;
-	waylist = findchain(classname, "spawnfunc_waypoint");
+	waylist = findchain(classname, "waypoint");
 	// do two scans, because box test is cheaper
 	w = waylist;
 	while (w)
@@ -1155,7 +1155,7 @@ void() navigation_markroutes =
 	local entity w, wp, waylist;
 	local float searching, cost, cost2;
 	local vector p;
-	w = waylist = findchain(classname, "spawnfunc_waypoint");
+	w = waylist = findchain(classname, "waypoint");
 	while (w)
 	{
 		w.wpconsidered = FALSE;
@@ -2069,7 +2069,7 @@ void(float maxupdate) botframe_updatedangerousobjects =
 	local float c, d, danger;
 	c = 0;
 	bot_dodgelist = findchainfloat(bot_dodge, TRUE);
-	botframe_dangerwaypoint = find(botframe_dangerwaypoint, classname, "spawnfunc_waypoint");
+	botframe_dangerwaypoint = find(botframe_dangerwaypoint, classname, "waypoint");
 	while (botframe_dangerwaypoint != world)
 	{
 		danger = 0;
@@ -2095,7 +2095,7 @@ void(float maxupdate) botframe_updatedangerousobjects =
 		c = c + 1;
 		if (c >= maxupdate)
 			break;
-		botframe_dangerwaypoint = find(botframe_dangerwaypoint, classname, "spawnfunc_waypoint");
+		botframe_dangerwaypoint = find(botframe_dangerwaypoint, classname, "waypoint");
 	}
 };
 

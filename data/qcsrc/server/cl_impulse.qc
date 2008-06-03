@@ -96,21 +96,21 @@ void ImpulseCommands (void)
 	{
 		if(imp == 30)
 		{
-			WaypointSprite_DeployPersonal("spawnfunc_waypoint", self.origin);
+			WaypointSprite_DeployPersonal("waypoint", self.origin);
 			self.personal_v_angle = self.v_angle;
 			self.personal_velocity = self.velocity;
 			sprint(self, "personal spawnfunc_waypoint spawned at location\n");
 		}
 		else if(imp == 31)
 		{
-			WaypointSprite_DeployPersonal("spawnfunc_waypoint", self.cursor_trace_endpos);
+			WaypointSprite_DeployPersonal("waypoint", self.cursor_trace_endpos);
 			self.personal_v_angle = self.v_angle;
 			self.personal_velocity = '0 0 0';
 			sprint(self, "personal spawnfunc_waypoint spawned at crosshair\n");
 		}
 		else if(imp == 32 && vlen(self.death_origin))
 		{
-			WaypointSprite_DeployPersonal("spawnfunc_waypoint", self.death_origin);
+			WaypointSprite_DeployPersonal("waypoint", self.death_origin);
 			self.personal_v_angle = self.v_angle;
 			self.personal_velocity = '0 0 0';
 			sprint(self, "personal spawnfunc_waypoint spawned at death location\n");

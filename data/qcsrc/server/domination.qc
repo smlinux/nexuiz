@@ -166,9 +166,9 @@ void() dompointtouch =
 		return;
 
 	// only valid teams can claim it
-	head = find(world, classname, "spawnfunc_dom_team");
+	head = find(world, classname, "dom_team");
 	while (head && head.team != other.team)
-		head = find(head, classname, "spawnfunc_dom_team");
+		head = find(head, classname, "dom_team");
 	if (!head || head.netname == "" || head == self.goalentity)
 		return;
 
@@ -186,9 +186,9 @@ void() dompointtouch =
 	//self.think = dompoint_captured;
 
 	// go to neutral team in the mean time
-	head = find(world, classname, "spawnfunc_dom_team");
+	head = find(world, classname, "dom_team");
 	while (head && head.netname != "")
-		head = find(head, classname, "spawnfunc_dom_team");
+		head = find(head, classname, "dom_team");
 	if(head == world)
 		return;
 
@@ -239,7 +239,7 @@ void() spawnfunc_dom_team =
 		precache_sound(self.noise);
 	if (self.noise1 != "")
 		precache_sound(self.noise1);
-	self.classname = "spawnfunc_dom_team";
+	self.classname = "dom_team";
 	setmodel(self, self.model); // precision not needed
 	self.mdl = self.model;
 	self.dmg = self.modelindex;
@@ -253,9 +253,9 @@ void() dom_controlpoint_setup =
 {
 	local entity head;
 	// find the spawnfunc_dom_team representing unclaimed points
-	head = find(world, classname, "spawnfunc_dom_team");
+	head = find(world, classname, "dom_team");
 	while(head && head.netname != "")
-		head = find(head, classname, "spawnfunc_dom_team");
+		head = find(head, classname, "dom_team");
 	if (!head)
 		objerror("no spawnfunc_dom_team with netname \"\" found\n");
 
@@ -308,7 +308,7 @@ void() dom_controlpoint_setup =
 	totalteams = 0;
 
 	// first find out what teams are allowed
-	head = find(world, classname, "spawnfunc_dom_team");
+	head = find(world, classname, "dom_team");
 	while(head)
 	{
 		if(head.netname != "")
@@ -332,7 +332,7 @@ void() dom_controlpoint_setup =
 					c4 = 0;
 			}
 		}
-		head = find(head, classname, "spawnfunc_dom_team");
+		head = find(head, classname, "dom_team");
 	}
 
 	// make sure there are at least 2 teams to join
@@ -510,7 +510,7 @@ void dom_spawnteam (string teamname, float teamcolor, string pointmodel, float p
 	local entity oldself;
 	oldself = self;
 	self = spawn();
-	self.classname = "spawnfunc_dom_team";
+	self.classname = "dom_team";
 	self.netname = teamname;
 	self.cnt = teamcolor;
 	self.model = pointmodel;
@@ -537,7 +537,7 @@ void(vector org) dom_spawnpoint =
 	local entity oldself;
 	oldself = self;
 	self = spawn();
-	self.classname = "spawnfunc_dom_controlpoint";
+	self.classname = "dom_controlpoint";
 	self.think = spawnfunc_dom_controlpoint;
 	self.nextthink = time;
 	self.origin = org;
@@ -568,10 +568,10 @@ void() dom_delayedinit =
 	self.think = SUB_Remove;
 	self.nextthink = time;
 	// if no teams are found, spawn defaults
-	if (find(world, classname, "spawnfunc_dom_team") == world)
+	if (find(world, classname, "dom_team") == world)
 		dom_spawnteams();
 	// if no control points are found, spawn defaults
-	if (find(world, classname, "spawnfunc_dom_controlpoint") == world)
+	if (find(world, classname, "dom_controlpoint") == world)
 	{
 		// here follow default domination points for each map
 		/*
@@ -583,11 +583,11 @@ void() dom_delayedinit =
 		*/
 		{
 			// if no supported map was found, make every deathmatch spawn a point
-			head = find(world, classname, "spawnfunc_info_player_deathmatch");
+			head = find(world, classname, "info_player_deathmatch");
 			while (head)
 			{
 				dom_spawnpoint(head.origin);
-				head = find(head, classname, "spawnfunc_info_player_deathmatch");
+				head = find(head, classname, "info_player_deathmatch");
 			}
 		}
 	}

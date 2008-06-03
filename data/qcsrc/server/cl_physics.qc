@@ -296,7 +296,7 @@ void SV_PlayerPhysics()
 			self.velocity_z = self.velocity_z + self.gravity * sv_gravity * frametime;
 		else
 			self.velocity_z = self.velocity_z + sv_gravity * frametime;
-		if (self.ladder_entity.classname == "spawnfunc_func_water")
+		if (self.ladder_entity.classname == "func_water")
 		{
 			f = vlen(wishvel);
 			if (f > self.ladder_entity.speed)

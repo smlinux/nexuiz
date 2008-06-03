@@ -20,9 +20,9 @@ void() onslaught_updatelinks =
 	local float stop, t1, t2, t3, t4;
 	// first check if the game has ended
 	dprint("--- updatelinks ---\n");
-	links = findchain(classname, "spawnfunc_onslaught_link");
+	links = findchain(classname, "onslaught_link");
 	// mark generators as being shielded and networked
-	l = findchain(classname, "spawnfunc_onslaught_generator");
+	l = findchain(classname, "onslaught_generator");
 	while (l)
 	{
 		if (l.iscaptured)
@@ -34,7 +34,7 @@ void() onslaught_updatelinks =
 		l = l.chain;
 	}
 	// mark points as shielded and not networked
-	l = findchain(classname, "spawnfunc_onslaught_controlpoint");
+	l = findchain(classname, "onslaught_controlpoint");
 	while (l)
 	{
 		l.islinked = FALSE;
@@ -93,7 +93,7 @@ void() onslaught_updatelinks =
 			{
 				dprint(etos(l), " (link) is unshielding ", etos(l.enemy), " (point) because its team does not match ", etos(l.goalentity), " (point)\n");
 				l.enemy.isshielded = FALSE;
-				if(l.goalentity.classname == "spawnfunc_onslaught_generator")
+				if(l.goalentity.classname == "onslaught_generator")
 				{
 					if(l.goalentity.team == COLOR_TEAM1)
 						l.enemy.isgenneighbor_red = TRUE;
@@ -112,7 +112,7 @@ void() onslaught_updatelinks =
 			{
 				dprint(etos(l), " (link) is unshielding ", etos(l.goalentity), " (point) because its team does not match ", etos(l.enemy), " (point)\n");
 				l.goalentity.isshielded = FALSE;
-				if(l.enemy.classname == "spawnfunc_onslaught_generator")
+				if(l.enemy.classname == "onslaught_generator")
 				{
 					if(l.enemy.team == COLOR_TEAM1)
 						l.goalentity.isgenneighbor_red = TRUE;
@@ -131,7 +131,7 @@ void() onslaught_updatelinks =
 		l = l.chain;
 	}
 	// now update the takedamage and alpha variables on generator shields
-	l = findchain(classname, "spawnfunc_onslaught_generator");
+	l = findchain(classname, "onslaught_generator");
 	while (l)
 	{
 		if (l.isshielded)
@@ -151,7 +151,7 @@ void() onslaught_updatelinks =
 		l = l.chain;
 	}
 	// now update the takedamage and alpha variables on control point icons
-	l = findchain(classname, "spawnfunc_onslaught_controlpoint");
+	l = findchain(classname, "onslaught_controlpoint");
 	while (l)
 	{
 		if (l.isshielded)
@@ -178,7 +178,7 @@ void() onslaught_updatelinks =
 	}
 	// count generators owned by each team
 	t1 = t2 = t3 = t4 = 0;
-	l = findchain(classname, "spawnfunc_onslaught_generator");
+	l = findchain(classname, "onslaught_generator");
 	while (l)
 	{
 		if (l.iscaptured)
@@ -219,7 +219,7 @@ float onslaught_controlpoint_can_be_linked(entity cp, float t)
 	// check to see if this player has a legitimate claim to capture this
 	// control point - more specifically that there is a captured path of
 	// points leading back to the team generator
-	e = findchain(classname, "spawnfunc_onslaught_link");
+	e = findchain(classname, "onslaught_link");
 	while (e)
 	{
 		if (e.goalentity == cp)
@@ -321,7 +321,7 @@ void() onslaught_generator_think =
 		// control points reduce the overtime duration.
 		sound(self, CHAN_AUTO, "sound/onslaught/generator_decay.wav", 1, ATTN_NORM);
 		d = 1;
-		e = findchain(classname, "spawnfunc_onslaught_controlpoint");
+		e = findchain(classname, "onslaught_controlpoint");
 		while (e)
 		{
 			if (e.team != self.team)

@@ -102,7 +102,7 @@ float count_rune_spawnpoints()
 	float num;
 	entity e;
 	num = 0;
-	e = findchain(classname, "spawnfunc_runematch_spawn_point");
+	e = findchain(classname, "runematch_spawn_point");
 	while(e)
 	{
 		num = num + 1;
@@ -118,9 +118,9 @@ entity rune_find_spawnpoint(float num, float r)
 	e = world;
 	do
 	{
-		e = find(e, classname, "spawnfunc_runematch_spawn_point");
+		e = find(e, classname, "runematch_spawn_point");
 		if(!e)
-			e = find(e, classname, "spawnfunc_runematch_spawn_point");
+			e = find(e, classname, "runematch_spawn_point");
 		if(!e)
 			break;
 
@@ -187,7 +187,7 @@ void rune_touch()
 		return; // "notouch" time isn't finished
 
 	// detach from the spawn point you're on
-	if(self.owner.classname == "spawnfunc_runematch_spawn_point")
+	if(self.owner.classname == "runematch_spawn_point")
 	{
 		self.owner.owner = world;
 		self.owner = world;
@@ -230,7 +230,7 @@ void rune_respawn()
 	num = count_rune_spawnpoints();
 	r = ceil(random()*num);
 
-	if(self.owner.classname == "spawnfunc_runematch_spawn_point")
+	if(self.owner.classname == "runematch_spawn_point")
 	{
 		self.owner.owner = world;
 		self.owner = world;
@@ -436,13 +436,13 @@ void DropAllRunes(entity pl)
 void spawn_default_runespawnpoints()
 {
 	entity spot, e;
-	spot = find(world, classname, "spawnfunc_info_player_deathmatch");
+	spot = find(world, classname, "info_player_deathmatch");
 	while(spot)
 	{
 		e = spawn();
-		e.classname = "spawnfunc_runematch_spawn_point";
+		e.classname = "runematch_spawn_point";
 		e.origin = spot.origin;
-		spot = find(spot, classname, "spawnfunc_info_player_deathmatch");
+		spot = find(spot, classname, "info_player_deathmatch");
 	}
 }
 

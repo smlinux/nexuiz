@@ -248,7 +248,7 @@ entity WaypointSprite_Spawn(
 	if(spr != "")
 		setmodel(wp, strcat("models/sprites/", spr, ".sp2")); // precision set above
 	else
-		wp.model = "spawnfunc_waypoint";
+		wp.model = "waypoint";
 	setsize(wp, '0 0 0', '0 0 0');
 	wp.waypointsprite_for_player = waypointsprite_for_player_default;
 	return wp;

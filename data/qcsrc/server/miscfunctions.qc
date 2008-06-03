@@ -303,14 +303,14 @@ entity(vector point, .string field, string value, vector axismod) findnearest =
 
 void() spawnfunc_target_location =
 {
-	self.classname = "spawnfunc_target_location";
+	self.classname = "target_location";
 	// location name in netname
 	// eventually support: count, teamgame selectors, line of sight?
 };
 
 void() spawnfunc_info_location =
 {
-	self.classname = "spawnfunc_target_location";
+	self.classname = "target_location";
 	self.message = self.netname;
 };
 
@@ -319,7 +319,7 @@ string NearestLocation(vector p)
 	entity loc;
 	string ret;
 	ret = "somewhere";
-	loc = findnearest(p, classname, "spawnfunc_target_location", '1 1 1');
+	loc = findnearest(p, classname, "target_location", '1 1 1');
 	if(loc)
 	{
 		ret = loc.message;

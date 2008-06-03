@@ -13,7 +13,7 @@ void spawnfunc_info_player_start (void)
 
 void spawnfunc_info_player_deathmatch (void)
 {
-	self.classname = "spawnfunc_info_player_deathmatch";
+	self.classname = "info_player_deathmatch";
 	relocate_spawnpoint();
 }
 
@@ -51,7 +51,7 @@ entity Spawn_FilterOutBadSpots(entity firstspot, entity playerlist, float mindis
 			local entity ent;
 			ent = find(world, targetname, spot.target);
 			while(ent) {
-				if(ent.classname == "spawnfunc_target_objective")
+				if(ent.classname == "target_objective")
 					if(ent.health < 0 || ent.health >= ASSAULT_VALUE_INACTIVE)
 						spotactive = 0;
 				ent = find(ent, targetname, spot.target);
@@ -164,7 +164,7 @@ entity SelectSpawnPoint (float anypoint)
 	// get the list of players
 	playerlist = findchain(classname, "player");
 	// get the entire list of spots
-	firstspot = findchain(classname, "spawnfunc_info_player_deathmatch");
+	firstspot = findchain(classname, "info_player_deathmatch");
 	// filter out the bad ones
 	// (note this returns the original list if none survived)
 	firstspot_new = Spawn_FilterOutBadSpots(firstspot, playerlist, 100, teamcheck);

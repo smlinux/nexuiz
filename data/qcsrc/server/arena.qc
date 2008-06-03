@@ -56,7 +56,7 @@ void reset_map()
 		else if(self.classname == "rune")
 		{
 			if(self.owner)
-			if(self.owner.classname != "spawnfunc_runematch_spawn_point")
+			if(self.owner.classname != "runematch_spawn_point")
 				DropAllRunes(self.owner);
 			rune_respawn();
 		}
@@ -65,7 +65,7 @@ void reset_map()
 			if(self.health | g_keyhunt)
 				WaypointSprite_Kill(self);
 		}
-		else if(self.classname == "spawnfunc_dom_controlpoint")
+		else if(self.classname == "dom_controlpoint")
 		{
 			dom_controlpoint_setup();
 		}
@@ -87,17 +87,17 @@ void reset_map()
 			removedecor(self);
 		}
 		// TODO properly reset Onslaught
-		else if(self.classname == "spawnfunc_onslaught_generator")
+		else if(self.classname == "onslaught_generator")
 		{
 			onslaught_generator_reset();
 		}
-		else if(self.classname == "spawnfunc_onslaught_controlpoint")
+		else if(self.classname == "onslaught_controlpoint")
 		{
 			onslaught_controlpoint_reset();
 		}
 		// TODO properly reset Assault
 		// General teambased game modes
-		else if(self.classname == "spawnfunc_info_player_deathmatch")
+		else if(self.classname == "info_player_deathmatch")
 		{
 			self.team = self.team_saved;
 		}

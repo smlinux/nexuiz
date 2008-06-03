@@ -891,7 +891,7 @@ entity() FindIntermission =
 	}
 
 // then look for the start position
-	spot = find (world, classname, "spawnfunc_info_player_start");
+	spot = find (world, classname, "info_player_start");
 	if (spot)
 		return spot;
 
@@ -901,7 +901,7 @@ entity() FindIntermission =
 		return spot;
 
 // then look for the start position
-	spot = find (world, classname, "spawnfunc_info_player_deathmatch");
+	spot = find (world, classname, "info_player_deathmatch");
 	if (spot)
 		return spot;
 
@@ -1185,7 +1185,7 @@ float() WinningCondition_Onslaught =
 	local float t1, t2, t3, t4;
 	// first check if the game has ended
 	t1 = t2 = t3 = t4 = 0;
-	head = find(world, classname, "spawnfunc_onslaught_generator");
+	head = find(world, classname, "onslaught_generator");
 	while (head)
 	{
 		if (head.health > 0)
@@ -1195,7 +1195,7 @@ float() WinningCondition_Onslaught =
 			if (head.team == COLOR_TEAM3) t3 = 1;
 			if (head.team == COLOR_TEAM4) t4 = 1;
 		}
-		head = find(head, classname, "spawnfunc_onslaught_generator");
+		head = find(head, classname, "onslaught_generator");
 	}
 	if (t1 + t2 + t3 + t4 < 2)
 	{
@@ -1250,7 +1250,7 @@ float() WinningCondition_Assault =
 	}
 
 	local entity ent;
-	ent = find(world, classname, "spawnfunc_target_assault_roundend");
+	ent = find(world, classname, "target_assault_roundend");
 	if(ent)
 	{
 		if(ent.winning)	// round end has been triggered by attacking team
@@ -1657,7 +1657,7 @@ float WinningCondition_RanOutOfSpawns()
 			team4_score = 1;
 	}
 
-	for(head = world; (head = find(head, classname, "spawnfunc_info_player_deathmatch")) != world; )
+	for(head = world; (head = find(head, classname, "info_player_deathmatch")) != world; )
 	{
 		if(head.team == COLOR_TEAM1)
 			team1_score = 1;

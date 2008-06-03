@@ -383,7 +383,7 @@ void() spawnfunc_info_player_team1 =
 	self.team = COLOR_TEAM1; // red
 	spawnfunc_info_player_deathmatch();
 };
-//self.team = 4;self.classname = "spawnfunc_info_player_start";spawnfunc_info_player_start();};
+//self.team = 4;self.classname = "info_player_start";spawnfunc_info_player_start();};
 
 /*QUAKED spawnfunc_info_player_team2 (1 0 0) (-16 -16 -24) (16 16 24)
 CTF Starting point for a player in
@@ -398,7 +398,7 @@ void() spawnfunc_info_player_team2 =
 	self.team = COLOR_TEAM2; // blue
 	spawnfunc_info_player_deathmatch();
 };
-//self.team = 13;self.classname = "spawnfunc_info_player_start";spawnfunc_info_player_start();};
+//self.team = 13;self.classname = "info_player_start";spawnfunc_info_player_start();};
 
 /*QUAKED spawnfunc_info_player_team3 (1 0 0) (-16 -16 -24) (16 16 24)
 CTF Starting point for a player in
@@ -620,7 +620,7 @@ void() spawnfunc_ctf_team =
 		remove(self);
 		return;
 	}
-	self.classname = "spawnfunc_ctf_team";
+	self.classname = "ctf_team";
 	self.team = self.cnt + 1;
 };
 
@@ -630,7 +630,7 @@ void ctf_spawnteam (string teamname, float teamcolor)
 	local entity oldself;
 	oldself = self;
 	self = spawn();
-	self.classname = "spawnfunc_ctf_team";
+	self.classname = "ctf_team";
 	self.netname = teamname;
 	self.cnt = teamcolor;
 
@@ -655,7 +655,7 @@ void() ctf_delayedinit =
 	self.think = SUB_Remove;
 	self.nextthink = time;
 	// if no teams are found, spawn defaults
-	if (find(world, classname, "spawnfunc_ctf_team") == world)
+	if (find(world, classname, "ctf_team") == world)
 		ctf_spawnteams();
 };
 

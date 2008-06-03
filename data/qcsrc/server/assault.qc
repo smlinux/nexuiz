@@ -67,7 +67,7 @@ it'll trigger the next targeted entity (usually the next objective or spawnfunc_
 -------- KEYS --------
 targetname : point to e.g. next objective*/
 void spawnfunc_target_objective() {
-	self.classname = "spawnfunc_target_objective";
+	self.classname = "target_objective";
 	self.think = assault_objective_think;
 	self.use = assault_objective_use;
 	assault_objective_reset();
@@ -99,7 +99,7 @@ void assault_objective_decrease_think() {
 	found = 0;
 	objective = find(world, targetname, self.target);
 	while(objective && found == 0) {
-		if(objective.classname == "spawnfunc_target_objective") {
+		if(objective.classname == "target_objective") {
 			found = 1;
 			if(objective.health < ASSAULT_VALUE_INACTIVE) { // targeted objective is active
 				if(self.cnt == 1 && self.max_health >= ASSAULT_VALUE_INACTIVE) { 
@@ -117,7 +117,7 @@ void assault_objective_decrease_think() {
 		local entity ent;
 		ent = find(world, target, self.targetname);
 		if(ent) {
-			if(ent.classname == "spawnfunc_func_assault_destructible")
+			if(ent.classname == "func_assault_destructible")
 				self.spawnflags = 2;
 			else
 				self.spawnflags = 1;
@@ -236,7 +236,7 @@ void spawnfunc_func_assault_destructible() {
 	
 	self.cnt = 0; // not yet activated
 
-	self.classname = "spawnfunc_func_assault_destructible";
+	self.classname = "func_assault_destructible";
 	self.mdl = self.model;
 	setmodel(self, self.mdl);
 
@@ -252,7 +252,7 @@ void assault_wall_think() {
 	notvisible = 0;
 	ent = find(world, targetname, self.target);
 	while(ent) {
-		if(ent.classname == "spawnfunc_target_objective" && ent.health < 0)
+		if(ent.classname == "target_objective" && ent.health < 0)
 			notvisible = 1;
 		ent = find(ent, targetname, self.target);
 	}
@@ -269,7 +269,7 @@ void assault_wall_think() {
 }
 
 void spawnfunc_func_assault_wall() {
-	self.classname = "spawnfunc_func_assault_wall";
+	self.classname = "func_assault_wall";
 	self.mdl = self.model;
 	setmodel(self, self.mdl);
 	self.solid = SOLID_BSP;
@@ -293,7 +293,7 @@ void spawnfunc_target_assault_roundend() {
 
 	cvar_set("timelimit", ftos(self.health/60));
 	self.winning = 0; // round not yet won by attackers
-	self.classname = "spawnfunc_target_assault_roundend";
+	self.classname = "target_assault_roundend";
 	self.use = target_assault_roundend_use;
 	self.cnt = 0; // first round
 }
@@ -305,7 +305,7 @@ void assault_roundstart_use() {
 
 void spawnfunc_target_assault_roundstart() {
 	assault_attacker_team = COLOR_TEAM1;
-	self.classname = "spawnfunc_target_assault_roundstart";
+	self.classname = "target_assault_roundstart";
 	self.use = assault_roundstart_use;
 	self.think = assault_roundstart_use;
 	self.nextthink = time + 0.1;
@@ -340,7 +340,7 @@ void assault_new_round() {
 		assault_attacker_team = COLOR_TEAM1;
 	}
 
-	ent = find(world, classname, "spawnfunc_info_player_deathmatch");
+	ent = find(world, classname, "info_player_deathmatch");
 	while (ent)
 	{
 		oldself = self;
@@ -352,11 +352,11 @@ void assault_new_round() {
 		}
 		self = oldself;
 
-		ent = find(ent, classname, "spawnfunc_info_player_deathmatch");
+		ent = find(ent, classname, "info_player_deathmatch");
 	} 
 
 	// reset all objectives
-	ent = find(world, classname, "spawnfunc_target_objective");
+	ent = find(world, classname, "target_objective");
 	while (ent)
 	{
 		oldself = self;
@@ -364,11 +364,11 @@ void assault_new_round() {
 		assault_objective_reset();
 		self = oldself;
 
-		ent = find(ent, classname, "spawnfunc_target_objective");
+		ent = find(ent, classname, "target_objective");
 	} 
 
 	// reset round end triggers
-	ent = find(world, classname, "spawnfunc_target_assault_roundend");
+	ent = find(world, classname, "target_assault_roundend");
 	while (ent)
 	{
 		oldself = self;
@@ -376,7 +376,7 @@ void assault_new_round() {
 		target_assault_roundend_reset();
 		self = oldself;
 
-		ent = find(ent, classname, "spawnfunc_target_assault_roundend");
+		ent = find(ent, classname, "target_assault_roundend");
 	}
 
 	// reset all target_object_decrease
@@ -388,24 +388,24 @@ void assault_new_round() {
 	} 
 
 	// reset all spawnfunc_func_assault_destructible
-	ent = find(world, classname, "spawnfunc_func_assault_destructible");
+	ent = find(world, classname, "func_assault_destructible");
 	while (ent)
 	{
 		oldself = self;
 		self = ent;
 		assault_destructible_reset();
 		self = oldself;
-		ent = find(ent, classname, "spawnfunc_func_assault_destructible");
+		ent = find(ent, classname, "func_assault_destructible");
 	}
 
-	ent = find(world, classname, "spawnfunc_target_assault_roundstart");
+	ent = find(world, classname, "target_assault_roundstart");
 	while (ent)
 	{
 		oldself = self;
 		self = ent;
 		self.use();
 		self = oldself;
-		ent = find(ent, classname, "spawnfunc_target_assault_roundstart");
+		ent = find(ent, classname, "target_assault_roundstart");
 	}
 
 	// actually restart round... how to do that?
