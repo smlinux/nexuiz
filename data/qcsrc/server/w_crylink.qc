@@ -14,14 +14,21 @@ void W_Crylink_Think (void)
 
 void W_Crylink_Touch (void)
 {
+	float finalhit;
+	float f;
 	if (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
 	{
 		remove(self);
 		return;
 	}
 	pointparticles(particleeffectnum("crylink_impactbig"), self.origin, '0 0 0', 1);
-	RadiusDamage (self, self.realowner, cvar("g_balance_crylink_primary_damage"), cvar("g_balance_crylink_primary_edgedamage"), cvar("g_balance_crylink_primary_radius"), world, cvar("g_balance_crylink_primary_force"), IT_CRYLINK);
-	if (self.cnt <= 0 || other.takedamage != DAMAGE_NO)
+	finalhit = ((self.cnt <= 0) || (other.takedamage != DAMAGE_NO));
+	if(finalhit)
+		f = 1;
+	else
+		f = cvar("g_balance_crylink_primary_bouncedamagefactor");
+	RadiusDamage (self, self.realowner, cvar("g_balance_crylink_primary_damage") * f, cvar("g_balance_crylink_primary_edgedamage") * f, cvar("g_balance_crylink_primary_radius"), world, cvar("g_balance_crylink_primary_force") * f, IT_CRYLINK);
+	if (finalhit)
 	{
 		remove (self);
 		return;
@@ -35,14 +42,21 @@ void W_Crylink_Touch (void)
 
 void W_Crylink_Touch2 (void)
 {
+	float finalhit;
+	float f;
 	if (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
 	{
 		remove(self);
 		return;
 	}
 	pointparticles(particleeffectnum("crylink_impact"), self.origin, '0 0 0', 1);
-	RadiusDamage (self, self.realowner, cvar("g_balance_crylink_secondary_damage"), cvar("g_balance_crylink_secondary_edgedamage"), cvar("g_balance_crylink_secondary_radius"), world, cvar("g_balance_crylink_secondary_force"), IT_CRYLINK);
-	if (self.cnt <= 0 || other.takedamage != DAMAGE_NO)
+	finalhit = ((self.cnt <= 0) || (other.takedamage != DAMAGE_NO));
+	if(finalhit)
+		f = 1;
+	else
+		f = cvar("g_balance_crylink_primary_bouncedamagefactor");
+	RadiusDamage (self, self.realowner, cvar("g_balance_crylink_secondary_damage") * f, cvar("g_balance_crylink_secondary_edgedamage") * f, cvar("g_balance_crylink_secondary_radius"), world, cvar("g_balance_crylink_secondary_force") * f, IT_CRYLINK);
+	if (finalhit)
 	{
 		remove (self);
 		return;
