@@ -5,9 +5,9 @@ _diameter 2554.305176
 _spawnpoints 7
 has weapons
 type dm 30 20
-type dm 50 20 2
+type tdm 50 20 2
 type dom 200 20
 type rune 200 20
 type lms 9 20
 type arena 10 20
-
+type kh 1000 20 3
