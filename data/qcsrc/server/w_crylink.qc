@@ -54,7 +54,7 @@ void W_Crylink_Touch2 (void)
 	if(finalhit)
 		f = 1;
 	else
-		f = cvar("g_balance_crylink_primary_bouncedamagefactor");
+		f = cvar("g_balance_crylink_secondary_bouncedamagefactor");
 	RadiusDamage (self, self.realowner, cvar("g_balance_crylink_secondary_damage") * f, cvar("g_balance_crylink_secondary_edgedamage") * f, cvar("g_balance_crylink_secondary_radius"), world, cvar("g_balance_crylink_secondary_force") * f, IT_CRYLINK);
 	if (finalhit)
 	{
