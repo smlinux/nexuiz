@@ -8,6 +8,8 @@ void GotoNextMap();
 void ShuffleMaplist()
 float() DoNextMapOverride;
 
+.string fog;
+
 void SetDefaultAlpha()
 {
 	if(cvar("g_running_guns"))
@@ -164,6 +166,9 @@ float GotoFirstMap()
 float world_already_spawned;
 void spawnfunc_worldspawn (void)
 {
+	float fd, l;
+	string s;
+
 	dprint_load(); // load dprint status from cvar
 
 	if(world_already_spawned)
@@ -269,7 +274,6 @@ void spawnfunc_worldspawn (void)
 	GameLogInit(); // prepare everything
 	if(cvar("sv_eventlog"))
 	{
-		local string s;
 		GameLogEcho(":logversion:2", FALSE);
 		s = strcat(cvar_string("sv_eventlog_files_counter"), ".");
 		s = strcat(s, ftos(random()));
@@ -329,6 +333,29 @@ void spawnfunc_worldspawn (void)
 	if(g_tourney && cvar("g_tourney_warmup_unlimited_time")) {
 		timelimit_orig = cvar("timelimit");
 		cvar_set("timelimit", "0");
+	}
+
+	fd = fopen(strcat("maps/", mapname, ".cfg"), FILE_READ);
+	if(fd != -1)
+	{
+		while((s = fgets(fd)))
+		{
+			l = tokenize(s);
+			if(l < 2)
+				continue;
+			if(argv(0) != "fog")
+				continue;
+			s = "";
+			while(l >= 2)
+			{
+				--l;
+				s = strcat(argv(l), " ", s);
+			}
+			s = substring(s, 0, strlen(s) - 1);
+			print("Found ^1DEPRECATED^7 fog command in .cfg file: ", s, "\n");
+			world.fog = strzone(s);
+		}
+		fclose(fd);
 	}
 
 	world_initialized = 1;
@@ -1105,6 +1132,7 @@ CheckRules_Player
 Exit deathmatch games upon conditions
 ============
 */
+.float fogtime;
 void() CheckRules_Player =
 {
 	if (gameover)	// someone else quit the game already
@@ -1112,6 +1140,14 @@ void() CheckRules_Player =
 
 	if(self.deadflag == DEAD_NO)
 		self.play_time += frametime;
+
+	if(sv_foginterval)
+	if(world.fog)
+	if(time > self.fogtime)
+	{
+		stuffcmd(self, strcat("\nfog ", world.fog, "\n"));
+		self.fogtime = time + sv_foginterval;
+	}
 
 	// fixme: don't check players; instead check spawnfunc_dom_team and spawnfunc_ctf_team entities
 	//   (div0: and that in CheckRules_World please)

@@ -724,6 +724,7 @@ float start_armorvalue;
 void readlevelcvars(void)
 {
 	sv_cheats = cvar("sv_cheats");
+	sv_foginterval = cvar("sv_foginterval");
 	g_cloaked = cvar("g_cloaked");
 	g_footsteps = cvar("g_footsteps");
 	g_grappling_hook = cvar("g_grappling_hook");
