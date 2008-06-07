@@ -1145,7 +1145,7 @@ void() CheckRules_Player =
 	if(world.fog)
 	if(time > self.fogtime)
 	{
-		stuffcmd(self, strcat("\nfog ", world.fog, "\n"));
+		stuffcmd(self, strcat("\nfog ", world.fog, "\nr_fog_exp2 0\nr_drawfog 1\n"));
 		self.fogtime = time + sv_foginterval;
 	}
 
