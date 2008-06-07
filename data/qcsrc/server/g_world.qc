@@ -994,6 +994,7 @@ void(float final) DumpStats =
 
 void FixIntermissionClient(entity e)
 {
+	string s;
 	if(!e.autoscreenshot) // initial call
 	{
 		e.angles = e.v_angle;
@@ -1006,9 +1007,12 @@ void FixIntermissionClient(entity e)
 		e.takedamage = DAMAGE_NO;
 		if(e.weaponentity)
 			e.weaponentity.effects = EF_NODRAW;
-		stuffcmd(e, "\nscr_printspeed 1000000\n");
 		if(clienttype(e) == CLIENTTYPE_REAL)
 		{
+			stuffcmd(e, "\nscr_printspeed 1000000\n");
+			s = cvar_string("sv_intermission_cdtrack");
+			if(s != "")
+				stuffcmd(e, strcat("\ncd loop ", s, "\n"));
 			msg_entity = e;
 			WriteByte(MSG_ONE, SVC_INTERMISSION);
 		}
@@ -1042,9 +1046,12 @@ void() NextLevel =
 	else
 		intermission_exittime = -1;
 
+	/*
 	WriteByte (MSG_ALL, SVC_CDTRACK);
 	WriteByte (MSG_ALL, 3);
 	WriteByte (MSG_ALL, 3);
+	// done in FixIntermission
+	*/
 
 	//pos = FindIntermission ();
 
