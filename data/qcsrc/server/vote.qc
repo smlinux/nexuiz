@@ -111,10 +111,11 @@ float GameCommand_Vote(string s, entity e) {
 						// make kick and kickban votes a bit nicer (and reject them if formatted badly)
 						if(substring(vote, 0, 5) == "kick " || substring(vote, 0, 8) == "kickban ")
 						{
-							if(!(e = GetKickVoteVictim(vote, "vcall", e)))
+							local entity victim;
+							if(!(victim = GetKickVoteVictim(vote, "vcall", e)))
 								return TRUE;
 							vote = GetKickVoteVictim_newcommand;
-							votecalledvote_display = strzone(strcat("^1", vote, " (^7", VoteNetname(e), "^1): ", GetKickVoteVictim_reason));
+							votecalledvote_display = strzone(strcat("^1", vote, " (^7", victim.netname, "^1): ", GetKickVoteVictim_reason));
 						}
 						else
 						{
@@ -198,10 +199,11 @@ float GameCommand_Vote(string s, entity e) {
 					dovote_display = dovote;
 					if(substring(dovote, 0, 5) == "kick " || substring(dovote, 0, 8) == "kickban ")
 					{
-						if(!(e = GetKickVoteVictim(dovote, "vdo", e)))
+						local entity victim;
+						if(!(victim = GetKickVoteVictim(dovote, "vdo", e)))
 							return TRUE;
 						dovote = GetKickVoteVictim_newcommand;
-						dovote_display = strcat("^1", dovote, " (^7", VoteNetname(e), "^1): ", GetKickVoteVictim_reason);
+						dovote_display = strcat("^1", dovote, " (^7", victim.netname, "^1): ", GetKickVoteVictim_reason);
 					}
 					bprint("\{1}^2* ^3", VoteNetname(e), "^2 used his ^3master^2 status to do \"^2", dovote_display, "^2\".\n");
 					if(cvar("sv_eventlog"))
