@@ -59,6 +59,7 @@ entity GetKickVoteVictim(string vote, string cmd, entity caller)
 }
 
 float GameCommand_Vote(string s, entity e) {
+	local entity victim;
 	if(argv(0) == "help") {
 		print_to(e, "  vote COMMANDS ARGUMENTS. See 'vote help' for more info.");
 		return TRUE;
@@ -109,9 +110,8 @@ float GameCommand_Vote(string s, entity e) {
 						}
 
 						// make kick and kickban votes a bit nicer (and reject them if formatted badly)
-						if(substring(vote, 0, 5) == "kick " || substring(vote, 0, 8) == "kickban ")
+						if(substring(vote, 0, 4) == "kick" || substring(vote, 0, 7) == "kickban")
 						{
-							local entity victim;
 							if(!(victim = GetKickVoteVictim(vote, "vcall", e)))
 								return TRUE;
 							vote = GetKickVoteVictim_newcommand;
@@ -197,9 +197,8 @@ float GameCommand_Vote(string s, entity e) {
 					}
 
 					dovote_display = dovote;
-					if(substring(dovote, 0, 5) == "kick " || substring(dovote, 0, 8) == "kickban ")
+					if(substring(dovote, 0, 4) == "kick" || substring(dovote, 0, 7) == "kickban")
 					{
-						local entity victim;
 						if(!(victim = GetKickVoteVictim(dovote, "vdo", e)))
 							return TRUE;
 						dovote = GetKickVoteVictim_newcommand;
