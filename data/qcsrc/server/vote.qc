@@ -110,12 +110,17 @@ float GameCommand_Vote(string s, entity e) {
 						}
 
 						// make kick and kickban votes a bit nicer (and reject them if formatted badly)
-						if(substring(vote, 0, 4) == "kick" || substring(vote, 0, 7) == "kickban")
+						if(substring(vote, 0, 5) == "kick " || substring(vote, 0, 8) == "kickban ")
 						{
 							if(!(victim = GetKickVoteVictim(vote, "vcall", e)))
 								return TRUE;
 							vote = GetKickVoteVictim_newcommand;
 							votecalledvote_display = strzone(strcat("^1", vote, " (^7", victim.netname, "^1): ", GetKickVoteVictim_reason));
+						}
+						else if(vote == "kick " || vote == "kickban ")
+						{
+							print_to(e, strcat("Usage: ", vote, " #playernumber (as in \"status\")\n"));
+							return TRUE;
 						}
 						else
 						{
