@@ -202,12 +202,17 @@ float GameCommand_Vote(string s, entity e) {
 					}
 
 					dovote_display = dovote;
-					if(substring(dovote, 0, 4) == "kick" || substring(dovote, 0, 7) == "kickban")
+					if(substring(dovote, 0, 5) == "kick " || substring(dovote, 0, 8) == "kickban ")
 					{
 						if(!(victim = GetKickVoteVictim(dovote, "vdo", e)))
 							return TRUE;
 						dovote = GetKickVoteVictim_newcommand;
 						dovote_display = strcat("^1", dovote, " (^7", victim.netname, "^1): ", GetKickVoteVictim_reason);
+					}
+					else if(dovote == "kick" || dovote == "kickban")
+					{
+						print_to(e, strcat("Usage: ", dovote, " #playernumber (as in \"status\")\n"));
+						return TRUE;
 					}
 					bprint("\{1}^2* ^3", VoteNetname(e), "^2 used his ^3master^2 status to do \"^2", dovote_display, "^2\".\n");
 					if(cvar("sv_eventlog"))
