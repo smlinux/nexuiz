@@ -117,7 +117,7 @@ float GameCommand_Vote(string s, entity e) {
 							vote = GetKickVoteVictim_newcommand;
 							votecalledvote_display = strzone(strcat("^1", vote, " (^7", victim.netname, "^1): ", GetKickVoteVictim_reason));
 						}
-						else if(vote == "kick " || vote == "kickban ")
+						else if(vote == "kick" || vote == "kickban")
 						{
 							print_to(e, strcat("Usage: ", vote, " #playernumber (as in \"status\")\n"));
 							return TRUE;
