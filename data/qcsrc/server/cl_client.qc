@@ -786,7 +786,7 @@ void ClientKill_TeamChange (float targetteam) // 0 = don't change, -1 = auto
 			for(e = world; (e = find(e, classname, "body")) != world; )
 			{
 				if(e.enemy != self)
-					return;
+					continue;
 				e.killindicator = spawn();
 				e.killindicator.owner = e;
 				e.killindicator.scale = 0.5;
