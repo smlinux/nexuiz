@@ -1436,20 +1436,19 @@ void SpectateCopy(entity spectatee) {
 	setsize(self, spectatee.mins, spectatee.maxs);
 }
 
-void SpectateUpdate() {
+float SpectateUpdate() {
 	if(!self.enemy)
-			PutObserverInServer();
+		return 0;
 
-	if (self != self.enemy) {
-		if(self.enemy.flags & FL_NOTARGET)
-			PutObserverInServer();
-		SpectateCopy(self.enemy);
-		//msg_entity = self;
-		//WriteByte(MSG_ONE, SVC_SETANGLE);
-		//WriteAngle(MSG_ONE, self.enemy.v_angle_x);
-		//WriteAngle(MSG_ONE, self.enemy.v_angle_y);
-		//WriteAngle(MSG_ONE, self.enemy.v_angle_z);
-	}
+	if (self == self.enemy)
+		return 0;
+	
+	if(self.enemy.flags & FL_NOTARGET)
+		return 0;
+
+	SpectateCopy(self.enemy);
+
+	return 1;
 }
 
 float SpectateNext() {
@@ -1466,7 +1465,8 @@ float SpectateNext() {
 		WriteEntity(MSG_ONE, self.enemy);
 		self.wantswelcomemessage = 1;
 	 	//stuffcmd(self, "set viewsize $tmpviewsize \n");
-		SpectateUpdate();
+		if(!SpectateUpdate())
+			PutObserverInServer();
 		return 1;
 	} else {
 		return 0;
@@ -1601,6 +1601,70 @@ float vercmp(string v1, string v2)
 	if(strcasecmp(v1, v2) == 0) // early out check
 		return 0;
 	return vercmp_recursive(v1, v2);
+}
+
+void ObserverThink()
+{
+	if (self.flags & FL_JUMPRELEASED) {
+		if (self.button2 && self.version == cvar("gameversion")) {
+			self.welcomemessage_time = 0;
+			self.flags = self.flags - FL_JUMPRELEASED;
+			LeaveSpectatorMode();
+			return;
+		} else if(self.button0 && self.version == cvar("gameversion")) {
+			self.welcomemessage_time = 0;
+			self.flags = self.flags - FL_JUMPRELEASED;
+			if(SpectateNext() == 1) {
+				self.classname = "spectator";
+			}
+		}
+	} else {
+		if (!(self.button0 || self.button2)) {
+			self.flags = self.flags | FL_JUMPRELEASED;
+		}
+	}
+	if(self.button4)
+		self.wantswelcomemessage = 0;
+	if(self.wantswelcomemessage)
+		PrintWelcomeMessage(self);
+}
+
+void SpectatorThink()
+{
+	if (self.flags & FL_JUMPRELEASED) {
+		if (self.button2 && self.version == cvar("gameversion")) {
+			self.welcomemessage_time = 0;
+			self.flags = self.flags - FL_JUMPRELEASED;
+			LeaveSpectatorMode();
+			return;
+		} else if(self.button0) {
+			self.welcomemessage_time = 0;
+			self.flags = self.flags - FL_JUMPRELEASED;
+			if(SpectateNext() == 1) {
+				self.classname = "spectator";
+			} else {
+				self.classname = "observer";
+				PutClientInServer();
+			}
+		} else if (self.button3) {
+			self.welcomemessage_time = 0;
+			self.flags = self.flags - FL_JUMPRELEASED;
+			self.classname = "observer";
+			PutClientInServer();
+		} else {
+			if(!SpectateUpdate())
+				PutObserverInServer();
+		}
+	} else {
+		if (!(self.button0 || self.button3)) {
+			self.flags = self.flags | FL_JUMPRELEASED;
+		}
+	}
+	if(self.button4)
+		self.wantswelcomemessage = 0;
+	if(self.wantswelcomemessage)
+		PrintWelcomeMessage(self);
+	self.flags = self.flags | FL_CLIENT | FL_NOTARGET;
 }
 
 /*
@@ -1875,62 +1939,9 @@ void PlayerPreThink (void)
 			IntermissionThink ();	// otherwise a button could be missed between
 		return;
 	} else if(self.classname == "observer") {
-		if (self.flags & FL_JUMPRELEASED) {
-			if (self.button2 && self.version == cvar("gameversion")) {
-				self.welcomemessage_time = 0;
-				self.flags = self.flags - FL_JUMPRELEASED;
-				LeaveSpectatorMode();
-				return;
-			} else if(self.button0 && self.version == cvar("gameversion")) {
-				self.welcomemessage_time = 0;
-				self.flags = self.flags - FL_JUMPRELEASED;
-				if(SpectateNext() == 1) {
-					self.classname = "spectator";
-				}
-			}
-        	} else {
-        		if (!(self.button0 || self.button2)) {
-				self.flags = self.flags | FL_JUMPRELEASED;
-        		}
-		}
-		if(self.button4)
-			self.wantswelcomemessage = 0;
-		if(self.wantswelcomemessage)
-			PrintWelcomeMessage(self);
+		ObserverThink();
 	} else if(self.classname == "spectator") {
-		if (self.flags & FL_JUMPRELEASED) {
-			if (self.button2 && self.version == cvar("gameversion")) {
-				self.welcomemessage_time = 0;
-				self.flags = self.flags - FL_JUMPRELEASED;
-				LeaveSpectatorMode();
-				return;
-			} else if(self.button0) {
-				self.welcomemessage_time = 0;
-				self.flags = self.flags - FL_JUMPRELEASED;
-				if(SpectateNext() == 1) {
-					self.classname = "spectator";
-				} else {
-					self.classname = "observer";
-					PutClientInServer();
-				}
-			} else if (self.button3) {
-				self.welcomemessage_time = 0;
-				self.flags = self.flags - FL_JUMPRELEASED;
-				self.classname = "observer";
-				PutClientInServer();
-			} else {
-				SpectateUpdate();
-			}
-	        } else {
-	        	if (!(self.button0 || self.button3)) {
-				self.flags = self.flags | FL_JUMPRELEASED;
-        		}
-		}
-		if(self.button4)
-			self.wantswelcomemessage = 0;
-		if(self.wantswelcomemessage)
-			PrintWelcomeMessage(self);
-		self.flags = self.flags | FL_CLIENT | FL_NOTARGET;
+		SpectatorThink();
 	}
 }
 
