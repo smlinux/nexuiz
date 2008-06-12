@@ -252,10 +252,14 @@ void ImpulseCommands (void)
 					makevectors (self.v_angle);
 					self.velocity = self.velocity + v_forward * 300;
 					CopyBody(1);
+					self.lip += 1;
 					self.velocity = self.velocity - v_forward * 300;
 				}
 				else if (imp == 14)
+				{
 					CopyBody(0);
+					self.lip += 1;
+				}
 			}
 		}
 	}

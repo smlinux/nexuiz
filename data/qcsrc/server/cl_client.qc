@@ -736,19 +736,21 @@ void KillIndicator_Think()
 	else
 	{
 		if(self.cnt <= 10)
-		{
 			setmodel(self, strcat("models/sprites/", ftos(self.cnt), ".spr32"));
-			play2(self.owner, strcat("announcer/robotic/", ftos(self.cnt), ".ogg"));
-		}
-		if(self.owner.killindicator_teamchange)
+		if(clienttype(self.owner) == CLIENTTYPE_REAL)
 		{
-			if(self.owner.killindicator_teamchange == -1)
-				centerprint(self.owner, strcat("Changing team in ", ftos(self.cnt), " seconds"));
+			if(self.cnt <= 10)
+				play2(self.owner, strcat("announcer/robotic/", ftos(self.cnt), ".ogg"));
+			if(self.owner.killindicator_teamchange)
+			{
+				if(self.owner.killindicator_teamchange == -1)
+					centerprint(self.owner, strcat("Changing team in ", ftos(self.cnt), " seconds"));
+				else
+					centerprint(self.owner, strcat("Changing to ", ColoredTeamName(self.owner.killindicator_teamchange), " in ", ftos(self.cnt), " seconds"));
+			}
 			else
-				centerprint(self.owner, strcat("Changing to ", ColoredTeamName(self.owner.killindicator_teamchange), " in ", ftos(self.cnt), " seconds"));
+				centerprint(self.owner, strcat("^1Suicide in ", ftos(self.cnt), " seconds"));
 		}
-		else
-			centerprint(self.owner, strcat("^1Suicide in ", ftos(self.cnt), " seconds"));
 		self.nextthink = time + 1;
 		self.cnt -= 1;
 	}
@@ -757,6 +759,7 @@ void KillIndicator_Think()
 void ClientKill_TeamChange (float targetteam) // 0 = don't change, -1 = auto
 {
 	float killtime;
+	entity e;
 	killtime = cvar("g_balance_kill_delay");
 
 	self.killindicator_teamchange = targetteam;
@@ -775,9 +778,25 @@ void ClientKill_TeamChange (float targetteam) // 0 = don't change, -1 = auto
 			setattachment(self.killindicator, self, "");
 			setorigin(self.killindicator, '0 0 52');
 			self.killindicator.think = KillIndicator_Think;
-			self.killindicator.nextthink = time;
+			self.killindicator.nextthink = time + (self.lip) * 0.05;
 			self.killindicator.cnt = ceil(killtime);
+			self.killindicator.count = bound(0, ceil(killtime), 10);
 			sprint(self, strcat("^1You'll be dead in ", ftos(self.killindicator.cnt), " seconds\n"));
+
+			for(e = world; (e = find(e, classname, "body")) != world; )
+			{
+				if(e.enemy != self)
+					return;
+				e.killindicator = spawn();
+				e.killindicator.owner = e;
+				e.killindicator.scale = 0.5;
+				setattachment(e.killindicator, e, "");
+				setorigin(e.killindicator, '0 0 52');
+				e.killindicator.think = KillIndicator_Think;
+				e.killindicator.nextthink = time + (e.lip) * 0.05;
+				e.killindicator.cnt = ceil(killtime);
+			}
+			self.lip = 0;
 		}
 	}
 	if(self.killindicator)

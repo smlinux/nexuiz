@@ -20,6 +20,8 @@ void CopyBody(float keepvelocity)
 		return;
 	oldself = self;
 	self = spawn();
+	self.enemy = oldself;
+	self.lip = oldself.lip;
 	self.colormap = oldself.colormap;
 	self.iscreature = oldself.iscreature;
 	self.angles = oldself.angles;
@@ -440,6 +442,13 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 			self.killindicator = world;
 			if(self.killindicator_teamchange)
 				defer_ClientKill_Now_TeamChange = TRUE;
+
+			if(self.classname == "body")
+			if(deathtype == DEATH_KILL)
+			{
+				// for the lemmings fans, a small harmless explosion
+				pointparticles(particleeffectnum("rocket_explode"), self.origin, '0 0 0', 1);
+			}
 		}
 
 		// become fully visible
