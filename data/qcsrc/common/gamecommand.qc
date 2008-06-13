@@ -69,6 +69,8 @@ float GameCommand_Generic(string command)
 		print("    x dbpush -------------------------->     : pushes the top onto the database\n");
 		print("    dbpop|dbget -----------------------> x   : removes/reads DB's top\n");
 		print("    dblen|dbat ------------------------> f   : gets the DB's size/cursor pos\n");
+		print("    dbclr ----------------------------->     : clear the DB\n");
+		print("    s dbsave|dbload-------------------->     : save/load the DB to/from a file\n");
 		print("    x dbins --------------------------->     : moves the top into the DB\n");
 		print("    dbext|dbread ----------------------> x   : extract/get from the DB's cursor\n");
 		print("    f dbmov|dbgoto -------------------->     : move or set the DB's cursor\n");
@@ -347,6 +349,22 @@ float GameCommand_Generic(string command)
 					}
 				} else if(rpncmd == "dblen") {
 					rpn_push(db_get(rpn_db, "stack.pointer"));
+				} else if(rpncmd == "dbclr") {
+					db_close(rpn_db);
+					rpn_db = db_create();
+					db_put(rpn_db, "stack.pointer", "0");
+					db_put(rpn_db, "stack.pos", "-1");
+				} else if(rpncmd == "dbsave") {
+					s = rpn_pop();
+					if(!rpn_error)
+						db_save(rpn_db, s);
+				} else if(rpncmd == "dbload") {
+					s = rpn_pop();
+					if(!rpn_error)
+					{
+						db_close(rpn_db);
+						rpn_db = db_load(s);
+					}
 				} else if(rpncmd == "dbins") {
 					s = rpn_pop();
 					if(!rpn_error)
