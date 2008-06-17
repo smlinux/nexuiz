@@ -1,7 +1,7 @@
 #ifdef INTERFACE
 CLASS(NexuizMapInfoDialog) EXTENDS(NexuizDialog)
 	METHOD(NexuizMapInfoDialog, fill, void(entity))
-	METHOD(NexuizMapInfoDialog, loadMapInfo, void(entity, float))
+	METHOD(NexuizMapInfoDialog, loadMapInfo, void(entity, float, entity))
 	ATTRIB(NexuizMapInfoDialog, title, string, "Map Information")
 	ATTRIB(NexuizMapInfoDialog, color, vector, SKINCOLOR_DIALOG_MAPINFO)
 	ATTRIB(NexuizMapInfoDialog, intendedWidth, float, 0.85)
@@ -36,9 +36,10 @@ ENDCLASS(NexuizMapInfoDialog)
 #endif
 
 #ifdef IMPLEMENTATION
-void loadMapInfoNexuizMapInfoDialog(entity me, float i)
+void loadMapInfoNexuizMapInfoDialog(entity me, float i, entity mlb)
 {
 	me.currentMapIndex = i;
+	me.startButton.onClickEntity = mlb;
 	MapInfo_Get_ByID(i);
 
 	if(me.currentMapBSPName)
@@ -140,8 +141,14 @@ void fillNexuizMapInfoDialog(entity me)
 			me.descriptionLabel = e;
 
 	me.gotoRC(me, me.rows - 1, 0);
-		me.TD(me, 1, me.columns, e = makeNexuizButton("OK", '0 0 0'));
+		me.TDempty(me, 0.5);
+
+		me.TD(me, 1, me.columns - 5.5, e = makeNexuizButton("OK", '0 0 0'));
 			e.onClick = Dialog_Close;
 			e.onClickEntity = me;
+		me.TD(me, 1, me.columns - 5.5, me.startButton = e = makeNexuizButton("Play", '0 0 0'));
+			me.startButton.onClick = MapList_LoadMap;
+			me.startButton.onClickEntity = NULL; // filled later
+		me.TDempty(me, 0.5);
 }
 #endif

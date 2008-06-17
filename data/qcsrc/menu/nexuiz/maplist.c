@@ -54,6 +54,7 @@ entity makeNexuizMapList()
 	me.configureNexuizMapList(me);
 	return me;
 }
+
 void configureNexuizMapListNexuizMapList(entity me)
 {
 	me.configureNexuizListBox(me);
@@ -129,6 +130,7 @@ void resizeNotifyNexuizMapList(entity me, vector relOrigin, vector relSize, vect
 	me.checkMarkSize = (eX * (me.itemAbsSize_y / me.itemAbsSize_x) + eY) * 0.5;
 	me.checkMarkOrigin = eY + eX * (me.columnPreviewOrigin + me.columnPreviewSize) - me.checkMarkSize;
 }
+
 void clickListBoxItemNexuizMapList(entity me, float i, vector where)
 {
 	if(where_x <= me.columnPreviewOrigin + me.columnPreviewSize)
@@ -144,7 +146,7 @@ void clickListBoxItemNexuizMapList(entity me, float i, vector where)
 					{
 						// DOUBLE CLICK!
 						// pop up map info screen
-						main.mapInfoDialog.loadMapInfo(main.mapInfoDialog, i);
+						main.mapInfoDialog.loadMapInfo(main.mapInfoDialog, i, me);
 						DialogOpenButton_Click_withCoords(NULL, main.mapInfoDialog, me.origin + eX * (me.columnNameOrigin * me.size_x) + eY * ((me.itemHeight * i - me.scrollPos) * me.size_y), eY * me.itemAbsSize_y + eX * (me.itemAbsSize_x * me.columnNameSize));
 						return;
 					}
@@ -152,6 +154,7 @@ void clickListBoxItemNexuizMapList(entity me, float i, vector where)
 				me.lastClickedTime = time;
 			}
 }
+
 void drawListBoxItemNexuizMapList(entity me, float i, vector absSize, float isSelected)
 {
 	// layout: Ping, Map name, Map name, NP, TP, MP
@@ -221,6 +224,7 @@ void refilterNexuizMapList(entity me)
 		me.setSelected(me, 0);
 	}
 }
+
 void MapList_All(entity btn, entity me)
 {
 	float i;
@@ -232,19 +236,35 @@ void MapList_All(entity btn, entity me)
 	cvar_set("g_maplist", substring(s, 1, strlen(s) - 1));
 	me.refilter(me);
 }
+
 void MapList_None(entity btn, entity me)
 {
 	cvar_set("g_maplist", "");
 	me.refilter(me);
 }
+
 void MapList_LoadMap(entity btn, entity me)
 {
 	string m;
-	if(me.selectedItem >= me.nItems || me.selectedItem < 0)
+	float i;
+
+	i = me.selectedItem;
+
+	if(btn.parent.instanceOfNexuizMapInfoDialog)
+	{
+		i = btn.parent.currentMapIndex;
+		Dialog_Close(btn, btn.parent);
+	}
+
+	if(i >= me.nItems || i < 0)
 		return;
-	m = MapInfo_BSPName_ByID(me.selectedItem);
+
+	m = MapInfo_BSPName_ByID(i);
 	if not(m)
+	{
+		print("Huh? Can't play this (m is NULL). Refiltering so this won't happen again.\n");
 		return;
+	}
 	if(MapInfo_CheckMap(m))
 	{
 		localcmd("\ndisconnect\nwait\nmaxplayers $menu_maxplayers\ng_maplist_shufflenow\nhostname \"", strdecolorize(cvar_string("_cl_name")), "'s Nexuiz server\"\n");
@@ -252,7 +272,7 @@ void MapList_LoadMap(entity btn, entity me)
 	}
 	else
 	{
-		print("Huh? Can't play this. Refiltering so this won't happen again.\n");
+		print("Huh? Can't play this (invalid game type). Refiltering so this won't happen again.\n");
 		me.refilter(me);
 	}
 }
@@ -263,7 +283,7 @@ float keyDownNexuizMapList(entity me, float scan, float ascii, float shift)
 	if(scan == K_ENTER)
 	{
 		// pop up map info screen
-		main.mapInfoDialog.loadMapInfo(main.mapInfoDialog, me.selectedItem);
+		main.mapInfoDialog.loadMapInfo(main.mapInfoDialog, me.selectedItem, me);
 		DialogOpenButton_Click_withCoords(NULL, main.mapInfoDialog, me.origin + eX * (me.columnNameOrigin * me.size_x) + eY * ((me.itemHeight * me.selectedItem - me.scrollPos) * me.size_y), eY * me.itemAbsSize_y + eX * (me.itemAbsSize_x * me.columnNameSize));
 	}
 	else if(scan == K_SPACE)
@@ -316,4 +336,5 @@ float keyDownNexuizMapList(entity me, float scan, float ascii, float shift)
 		return keyDownListBox(me, scan, ascii, shift);
 	return 1;
 }
+
 #endif
