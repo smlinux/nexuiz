@@ -75,7 +75,21 @@ diffit()
 			*$newline$line$newline*)
 				;;
 			*)
-				found deleted "$line"
+				isexcluded=false
+
+				for P in $excludes; do
+					case "$line" in
+						$P)
+							found excluded "$line"
+							isexcluded=true
+							break
+							;;
+					esac
+				done
+
+				if ! $isexcluded; then
+					found deleted "$line"
+				fi
 				;;
 		esac
 	done
