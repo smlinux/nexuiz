@@ -33,8 +33,8 @@ case "$version" in
 		;;
 esac
 
-basepk3=$base/data20070531.pk3
-hotbasepk3=$base/data20080229.pk3
+basepk3=$base/data20080229.pk3
+hotbasepk3=
 nexdir=$base/nexuiz
 nexprodir=$base/nexuiz/pro
 dpdir=$base/darkplaces
@@ -268,7 +268,30 @@ rm -f "$zipdir/nexuizsource$date$ext.zip"
 zip $zipflags -9yr "$zipdir/nexuizsource$date$ext.zip"     Nexuiz/gpl.txt                                            Nexuiz/sources
 ln -snf nexuizsource$date$ext.zip "$zipdir/nexuizsource-$newest.zip"
 
-$zipdiff -o "Nexuiz/data/datapatch$tag$date.pk3" -f "$basepk3" -t Nexuiz/data/data$tag$date.pk3 -x 'sound/cdtracks/track*.ogg'
+# TODO remove these excludes after the version after 2.4.2
+$zipdiff -o "Nexuiz/data/datapatch$tag$date.pk3" -f "$basepk3" -t Nexuiz/data/data$tag$date.pk3 \
+	-x 'sound/cdtracks/track*.ogg' \
+	-x 'sound/cdtracks/brainsukker.ogg' \
+	-x 'sound/cdtracks/breakdown-easy.ogg' \
+	-x 'sound/cdtracks/calling-bogus.ogg' \
+	-x 'sound/cdtracks/chaos-fog.ogg' \
+	-x 'sound/cdtracks/digital-pursuit.ogg' \
+	-x 'sound/cdtracks/infight.ogg' \
+	-x 'sound/cdtracks/neuronal-diving.ogg' \
+	-x 'sound/cdtracks/subcities.ogg' \
+	-x 'sound/cdtracks/thru-the-mirror.ogg'
+mkdir -p sound/cdtracks
+ln -snf track001.ogg sound/cdtracks/digital-pursuit.ogg
+ln -snf track002.ogg sound/cdtracks/breakdown-easy.ogg
+ln -snf track003.ogg sound/cdtracks/brainsukker.ogg
+ln -snf track004.ogg sound/cdtracks/chaos-fog.ogg
+ln -snf track005.ogg sound/cdtracks/infight.ogg
+ln -snf track006.ogg sound/cdtracks/neuronal-diving.ogg
+ln -snf track007.ogg sound/cdtracks/subcities.ogg
+ln -snf track008.ogg sound/cdtracks/thru-the-mirror.ogg
+ln -snf track009.ogg sound/cdtracks/calling-bogus.ogg
+zip -9yr "Nexuiz/data/datapatch$tag$date.pk3" sound/cdtracks/*
+rm -rf sound
 [ -n "$hotbasepk3" ] && $zipdiff -o "Nexuiz/data/datapatch$tag$date""hotfix.pk3" -f "$hotbasepk3" -t Nexuiz/data/data$tag$date.pk3
 mkdir -p gfx
 if unzip "Nexuiz/data/data$tag$date.pk3" gfx/brand.tga; then
