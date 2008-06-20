@@ -31,6 +31,7 @@ Appendix B - Helpful extras
   i.     Team Colors
   ii.    Text Colors
 
+Appendix C - Advanced Darkplaces shaders
 
 ========================
 =I. Map Lists & Scripts=
@@ -315,9 +316,9 @@ such entities, delete the data/data/mapname.mapinfo file - or simply edit it to
 add the "type rune" line.
 
 
-=================================
-=Appendix A - Advanced mapinfo  =
-=================================
+===============================
+=Appendix A - Advanced mapinfo=
+===============================
 
 You now know how to make a basic, bare-bones mapinfo to set up a couple options
 and load your map. However, there's much more you can do!  Consider these
@@ -344,9 +345,9 @@ another is loaded. As you can see, it is possible to make per-mode temporary
 settings, and global ones.
 
 
-===============================
-=Appendix B - Helpful Extras  =
-===============================
+=============================
+=Appendix B - Helpful Extras=
+=============================
 
 ----------------
 -i. Team Colors-
@@ -389,3 +390,30 @@ Occasionally you may want to print text in color, such as team names. Here are y
 8  Grey (transparent)
 9  Grey (solid)
 0  Black
+
+==========================================
+=Appendix C - Advanced Darkplaces shaders=
+==========================================
+
+Shader parameters for DP's own features:
+- dp_reflect <distort> <r> <g> <b> <a>
+  Makes surfaces of this shader reflective with r_water. The reflection is
+  alpha blended on the texture with the given alpha, and modulated by the given
+  color. distort is used in conjunction with the normalmap to simulate a
+  nonplanar water surface.
+- dp_refract <distort> <r> <g> <b>
+  Makes surfaces of this shader refractive with r_water. The refraction
+  replaces the transparency of the texture. distort is used in conjunction with
+  the normalmap to simulate a nonplanar water surface.
+- dp_water <reflectmin> <reflectmax> <refractdistort> <reflectdistort> <refractr> <refractg> <refractb> <reflectr> <reflectg> <reflectb> <alpha>
+  This combines the effects of dp_reflect and dp_refract to simulate a water
+  surface. However, the refraction and the reflection are mixed using a Fresnel
+  equation that makes the amount of reflection slide from reflectmin when
+  looking parallel to the water to reflectmax when looking directly into the
+  water. The result of this reflection/refraction mix is then layered BELOW the
+  texture of the shader, so basically, it "fills up" the alpha values of the
+  water. The alpha value is a multiplicator for the alpha value on the texture
+  - set this to a small value like 0.1 to emphasize the reflection and make
+  the water transparent; but if r_water is 0, alpha isn't used, so the water can
+  be very visible then too.
+
