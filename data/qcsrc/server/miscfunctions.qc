@@ -146,7 +146,12 @@ void(string s, float check_dangerous) GameLogEcho =
 			logfile = fopen(fn, FILE_APPEND);
 		}
 		if(logfile >= 0)
-			fputs(logfile, strcat(s, "\n"));
+		{
+			if(cvar("sv_eventlog_files_timestamps"))
+				fputs(logfile, strcat(":time:", strftime(TRUE, "%Y-%m-%d %H:%M:%S", "\n", s, "\n")));
+			else
+				fputs(logfile, strcat(s, "\n"));
+		}
 	}
 	if(cvar("sv_eventlog_console"))
 	{
