@@ -833,7 +833,7 @@ void DoTeamChange(float destteam)
 			case COLOR_TEAM2: c0 = c2; break;
 			case COLOR_TEAM3: c0 = c3; break;
 			case COLOR_TEAM4: c0 = c4; break;
-			default:          c0 = 99;
+			default:          c0 = 999;
 		}
 		switch(t)
 		{
