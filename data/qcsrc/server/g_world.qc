@@ -274,7 +274,6 @@ void spawnfunc_worldspawn (void)
 	GameLogInit(); // prepare everything
 	if(cvar("sv_eventlog"))
 	{
-		GameLogEcho(":logversion:2", FALSE);
 		s = strcat(cvar_string("sv_eventlog_files_counter"), ".");
 		s = strcat(s, ftos(random()));
 #ifdef MAPINFO
