@@ -759,7 +759,6 @@ float FindSmallestTeam(entity pl, float ignore_pl)
 			error("Too few teams available for team deathmatch\n");
 	}
 
-
 	// count how many players are in each team
 	if(ignore_pl)
 		GetTeamCounts(pl);
@@ -858,6 +857,7 @@ float JoinBestTeam(entity pl, float only_return_best, float forcebestteam)
 
 	if(g_domination)
 	{
+		// <div0> WHY? TODO
 		if(cvar("g_domination_default_teams") < 3)
 			c3 = 999999999;
 		if(cvar("g_domination_default_teams") < 4)

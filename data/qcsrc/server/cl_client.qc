@@ -815,11 +815,47 @@ void ClientKill (void)
 
 void DoTeamChange(float destteam)
 {
+	float t, c0;
 	if(!cvar("teamplay"))
 	{
 		if(destteam >= 0)
 			SetPlayerColors(self, destteam);
 		return;
+	}
+	if(self.classname == "player")
+	if(destteam == -1)
+	{
+		CheckAllowedTeams(self);
+		t = FindSmallestTeam(self, TRUE);
+		switch(self.team)
+		{
+			case COLOR_TEAM1: c0 = c1; break;
+			case COLOR_TEAM2: c0 = c2; break;
+			case COLOR_TEAM3: c0 = c3; break;
+			case COLOR_TEAM4: c0 = c4; break;
+			default:          c0 = 99;
+		}
+		switch(t)
+		{
+			case 1:
+				if(c0 > c1)
+					destteam = COLOR_TEAM1;
+				break;
+			case 2:
+				if(c0 > c2)
+					destteam = COLOR_TEAM2;
+				break;
+			case 3:
+				if(c0 > c3)
+					destteam = COLOR_TEAM3;
+				break;
+			case 4:
+				if(c0 > c4)
+					destteam = COLOR_TEAM4;
+				break;
+		}
+		if(destteam == -1)
+			return;
 	}
 	if(destteam == self.team && !self.killindicator)
 		return;

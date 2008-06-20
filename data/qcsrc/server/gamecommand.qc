@@ -18,6 +18,8 @@ void make_mapinfo_Think()
 void GameCommand(string command)
 {
 	float argc;
+	entity client;
+	float entno;
 	argc = tokenize(command);
 
 	if(argv(0) == "help" || argc == 0)
@@ -112,8 +114,6 @@ void GameCommand(string command)
 
 	if(argv(0) == "adminmsg") if(argc == 3)
 	{
-		entity client;
-		float entno;
 		entno = stof(argv(1));
 		client = world;
 		if(entno <= maxclients)
@@ -185,6 +185,27 @@ void GameCommand(string command)
 		}
 		else
 			bprint("That command can only be used in a team-based gamemode.\n");
+		return;
+	}
+	if (argv(0) == "movetoteam") if(argc == 3)
+	{
+		entno = stof(argv(1));
+		client = world;
+		if(entno <= maxclients)
+			client = edict_num(entno);
+		if(client.flags & FL_CLIENT)
+		{
+			float lt;
+			lt = lockteams;
+			lockteams = 0;
+
+			self = client;
+			SV_ParseClientCommand(strcat("selectteam ", argv(2)));
+
+			lockteams = lt;
+		}
+		else
+			print("Client not found\n");
 		return;
 	}
 
