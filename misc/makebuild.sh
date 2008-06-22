@@ -315,3 +315,46 @@ ln -snf nexuizdocs$date$ext.zip "$zipdir/nexuizdocs-$newest.zip"
 rm -f "$zipdir/nexuizdebug$date$ext.zip"
 zip $zipflags -9yr "$zipdir/nexuizdebug$date$ext.zip"      Nexuiz/gpl.txt Nexuiz/debuginfo/* Nexuiz/sources
 ln -snf nexuizdebug$date$ext.zip "$zipdir/nexuizdebug-$newest.zip"
+
+case "$versiontag" in
+	test)
+		;;
+	*)
+		cat <<'EOF'
+
+NOTE: This is a RELEASE BUILD.
+
+To upload and finish the build, these things have to be done:
+
+- Test the build:
+  - On Linux/ATI
+  - On Vista/nvidia
+  - On Vista/ATI
+  - On Vista/Intel
+  - On OSX/ATI
+  - Turn on "developer 1"; watch out for suspicious messages.
+  - While testing, make sure all campaign levels are tested. In CTF/KH levels,
+    try to do a capture. After that, finish the game by prvm_edictset server 1
+    frags 1000.
+  - Play on a server running the new code. Ideally, that server should be public
+    and "somewhat compatible" to old clients, and some other players should be
+    on it.
+- Post the build on the forum as a test release. E.g. run this script again
+  with the "version" variable NOT SET, so the build gets marked "testing only",
+  and upload it and post it on the forum for testing. Mention the test server
+  that is already running the new code. Wait for at least one week for critical
+  bug reports.
+- If needed, fix the reported bugs and re-run this script for a release build.
+  Possibly repeat the testing process.
+- Upload the "final" build you have just made to Sourceforge (upload.sf.net,
+  incoming). Use the naming scheme nexuiz-25.zip, nexuizpatch-24-to-25.zip
+- Make the download available on sourceforge.
+- Announce the build on the forum; update the downloads website. Note that the
+  download may be still unavailable because of the SF mirror system.
+- Wait for the mirrors to catch up.
+- Edit the website: make a new news item for the new release, change the logo
+  image in the top left for the new version (ask [-z-]).
+
+EOF
+		;;
+esac
