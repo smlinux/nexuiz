@@ -1,16 +1,7 @@
-
 .float gravity;
 const vector proj_color = '1 1 1';
 
 .entity realowner;
-
-void W_Crylink_Think (void)
-{
-	self.nextthink = self.count;
-	self.angles = vectoangles(self.velocity);
-	if (time >= self.count)
-		remove(self);
-}
 
 void W_Crylink_Touch (void)
 {
@@ -27,6 +18,8 @@ void W_Crylink_Touch (void)
 		f = 1;
 	else
 		f = cvar("g_balance_crylink_primary_bouncedamagefactor");
+	if(self.alpha)
+		f *= self.alpha;
 	RadiusDamage (self, self.realowner, cvar("g_balance_crylink_primary_damage") * f, cvar("g_balance_crylink_primary_edgedamage") * f, cvar("g_balance_crylink_primary_radius"), world, cvar("g_balance_crylink_primary_force") * f, IT_CRYLINK);
 	if (finalhit)
 	{
@@ -35,7 +28,6 @@ void W_Crylink_Touch (void)
 	}
 	self.cnt = self.cnt - 1;
 	self.angles = vectoangles(self.velocity);
-	self.nextthink = time;
 	self.owner = world;
 	//self.scale = 1 + self.cnt;
 }
@@ -55,6 +47,8 @@ void W_Crylink_Touch2 (void)
 		f = 1;
 	else
 		f = cvar("g_balance_crylink_secondary_bouncedamagefactor");
+	if(self.alpha)
+		f *= self.alpha;
 	RadiusDamage (self, self.realowner, cvar("g_balance_crylink_secondary_damage") * f, cvar("g_balance_crylink_secondary_edgedamage") * f, cvar("g_balance_crylink_secondary_radius"), world, cvar("g_balance_crylink_secondary_force") * f, IT_CRYLINK);
 	if (finalhit)
 	{
@@ -63,7 +57,6 @@ void W_Crylink_Touch2 (void)
 	}
 	self.cnt = self.cnt - 1;
 	self.angles = vectoangles(self.velocity);
-	self.nextthink = time;
 	self.owner = world;
 //	self.scale = 1 + 1 * self.cnt;
 }
@@ -113,9 +106,12 @@ void W_Crylink_Attack (void)
 //		proj.velocity = (w_shotdir + randomvec() * cvar("g_balance_crylink_primary_spread")) * cvar("g_balance_crylink_primary_speed");
 		W_SetupProjectileVelocity(proj);
 		proj.touch = W_Crylink_Touch;
-		proj.count = time + cvar("g_balance_crylink_primary_lifetime");
-		proj.think = W_Crylink_Think;
-		proj.nextthink = proj.count;
+		if(counter == 0)
+			SUB_SetFade(proj, time + cvar("g_balance_crylink_primary_middle_lifetime"), cvar("g_balance_crylink_primary_middle_fadetime"));
+		else if(counter <= 3)
+			SUB_SetFade(proj, time + cvar("g_balance_crylink_primary_star_lifetime"), cvar("g_balance_crylink_primary_star_fadetime"));
+		else
+			SUB_SetFade(proj, time + cvar("g_balance_crylink_primary_other_lifetime"), cvar("g_balance_crylink_primary_other_fadetime"));
 		proj.cnt = cvar("g_balance_crylink_primary_bounces");
 		proj.scale = 1 + 1 * proj.cnt;
 
@@ -161,9 +157,10 @@ void W_Crylink_Attack2 (void)
 		proj.velocity = (w_shotdir + (((counter + 0.5) / shots) * 2 - 1) * v_right * cvar("g_balance_crylink_secondary_spread")) * cvar("g_balance_crylink_secondary_speed");
 		W_SetupProjectileVelocity(proj);
 		proj.touch = W_Crylink_Touch2;
-		proj.count = time + cvar("g_balance_crylink_primary_lifetime");
-		proj.think = W_Crylink_Think;
-		proj.nextthink = proj.count;
+		if(counter == (shots - 1) / 2)
+			SUB_SetFade(proj, time + cvar("g_balance_crylink_secondary_middle_lifetime"), cvar("g_balance_crylink_secondary_middle_fadetime"));
+		else
+			SUB_SetFade(proj, time + cvar("g_balance_crylink_secondary_line_lifetime"), cvar("g_balance_crylink_secondary_line_fadetime"));
 		proj.cnt = cvar("g_balance_crylink_secondary_bounces");
 		proj.scale = 1 + 1 * proj.cnt;
 
@@ -203,9 +200,9 @@ float(float req) w_crylink =
 	if (req == WR_AIM)
 	{
 		if (random() > 0.15)
-			self.button0 = bot_aim(cvar("g_balance_crylink_primary_speed"), 0, cvar("g_balance_crylink_primary_lifetime"), FALSE);
+			self.button0 = bot_aim(cvar("g_balance_crylink_primary_speed"), 0, cvar("g_balance_crylink_primary_middle_lifetime"), FALSE);
 		else
-			self.button3 = bot_aim(cvar("g_balance_crylink_secondary_speed"), 0, cvar("g_balance_crylink_secondary_lifetime"), FALSE);
+			self.button3 = bot_aim(cvar("g_balance_crylink_secondary_speed"), 0, cvar("g_balance_crylink_secondary_middle_lifetime"), FALSE);
 	}
 	else if (req == WR_THINK)
 	{
