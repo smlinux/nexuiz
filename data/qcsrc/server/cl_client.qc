@@ -27,116 +27,108 @@ void() spawnpoint_use =
 	}
 };
 
+// Returns:
+//   -1 if a spawn can't be used
+//   otherwise, a weight of the spawnpoint
+float Spawn_Score(entity spot, entity playerlist, float teamcheck)
+{
+	float shortest, thisdist;
+	entity player;
+
+	// filter out spots for the wrong team
+	if(teamcheck)
+	if(spot.team != teamcheck)
+		return -1;
+
+	// filter out spots for assault
+	if(spot.target != "") {
+		local entity ent;
+		ent = find(world, targetname, spot.target);
+		while(ent) {
+			if(ent.classname == "target_objective")
+				if(ent.health < 0 || ent.health >= ASSAULT_VALUE_INACTIVE)
+					return -1;
+			ent = find(ent, targetname, spot.target);
+		}
+	}
+
+	player = playerlist;
+	shortest = vlen(world.maxs - world.mins);
+	for(player = playerlist; player; player = player.chain)
+		if (player != self)
+		{
+			thisdist = vlen(player.origin - spot.origin);
+			if (thisdist < shortest)
+				shortest = thisdist;
+		}
+	return shortest;
+}
+
 float spawn_allbad;
 float spawn_allgood;
 entity Spawn_FilterOutBadSpots(entity firstspot, entity playerlist, float mindist, float teamcheck)
 {
-	local entity spot, player, nextspot, previousspot, newfirstspot;
-	local float pcount;
-	spot = firstspot;
-	newfirstspot = world;
-	previousspot = world;
+	local entity spot, spotlist, spotlistend;
 	spawn_allgood = TRUE;
 	spawn_allbad = TRUE;
-	while (spot)
+
+	spotlist = world;
+	spotlistend = world;
+
+	for(spot = firstspot; spot; spot = spot.chain)
 	{
-		nextspot = spot.chain;
-		// count team mismatches as bad spots
+		spot.frags = Spawn_Score(spot, playerlist, teamcheck);
 
-		local float spotactive;
-		spotactive = 1;
-
-		// filter out spots for assault
-		if(spot.target != "") {
-			local entity ent;
-			ent = find(world, targetname, spot.target);
-			while(ent) {
-				if(ent.classname == "target_objective")
-					if(ent.health < 0 || ent.health >= ASSAULT_VALUE_INACTIVE)
-						spotactive = 0;
-				ent = find(ent, targetname, spot.target);
-			}
-		}
-
-		if ((!teamcheck || spot.team == teamcheck) && spotactive > 0)
+		if(cvar("spawn_debugview"))
 		{
-			pcount = 0;
-			player = playerlist;
-			while (player)
+			setmodel(spot, "models/runematch/rune.mdl");
+			if(spot.frags < mindist)
 			{
-				if (player != self)
-				if (vlen(player.origin - spot.origin) < mindist)
-					pcount = pcount + 1;
-				player = player.chain;
-			}
-			if (!pcount)
-			{
-				spawn_allbad = FALSE;
-				if (newfirstspot)
-					previousspot.chain = spot;
-				else
-					newfirstspot = spot;
-				previousspot = spot;
-				spot.chain = world;
+				spot.colormod = '1 0 0';
+				spot.scale = 1;
 			}
 			else
+			{
+				spot.colormod = '0 1 0';
+				spot.scale = spot.frags / mindist;
+			}
+		}
+
+		if(spot.frags >= 0) // spawning allowed here
+		{
+			if(spot.frags < mindist)
+			{
+				// too short distance
 				spawn_allgood = FALSE;
+			}
+			else 
+			{
+				// perfect
+				spawn_allbad = FALSE;
+
+				if(spotlistend)
+					spotlistend.chain = spot;
+				spotlistend = spot;
+				if(!spotlist)
+					spotlist = spot;
+			}
 		}
-		spot = nextspot;
 	}
-	// if we couldn't find ANY good points, return world
-	return newfirstspot;
+
+	return spotlist;
 }
 
-entity Spawn_RandomPoint(entity firstspot)
+entity Spawn_WeightedPoint(entity firstspot, float lower, float upper, float exponent)
 {
+	// weight of a point: bound(lower, mindisttoplayer, upper)^exponent
+	// multiplied by spot.cnt (useful if you distribute many spawnpoints in a small area)
 	local entity spot;
-	local float numspots;
-	// count number of spots
-	numspots = 0;
-	spot = firstspot;
-	while (spot)
-	{
-		numspots = numspots + 1;
-		spot = spot.chain;
-	}
-	// pick a random one
-	numspots = numspots * random();
-	spot = firstspot;
-	while (spot.chain && numspots >= 1)
-	{
-		numspots = numspots - 1;
-		spot = spot.chain;
-	}
-	return spot;
-}
 
-entity Spawn_FurthestPoint(entity firstspot, entity playerlist)
-{
-	local entity best, spot, player;
-	local float bestrating, rating;
-	best = world;
-	bestrating = -1000000;
-	spot = firstspot;
-	while (spot)
-	{
-		rating = 1000000000;
-		player = playerlist;
-		while (player)
-		{
-			if (player != self)
-				rating = min(rating, vlen(player.origin - spot.origin));
-			player = player.chain;
-		}
-		rating = rating + random() * 16;
-		if (bestrating < rating)
-		{
-			best = spot;
-			bestrating = rating;
-		}
-		spot = spot.chain;
-	}
-	return best;
+	RandomSelection_Init();
+	for(spot = firstspot; spot; spot = spot.chain)
+		RandomSelection_Add(spot, 0, pow(bound(lower, spot.frags, upper), exponent) * spot.cnt);
+
+	return RandomSelection_chosen_ent;
 }
 
 /*
@@ -180,12 +172,17 @@ entity SelectSpawnPoint (float anypoint)
 		firstspot_new = Spawn_FilterOutBadSpots(firstspot, playerlist, 800, teamcheck);
 		if(firstspot_new)
 			firstspot = firstspot_new;
-		spot = Spawn_RandomPoint(firstspot);
+		spot = Spawn_WeightedPoint(firstspot, 1, 1, 1);
 	}
-	else if (random() > 0.5 || spawn_allbad || spawn_allgood)
-		spot = Spawn_RandomPoint(firstspot);
+	else if (random() > cvar("g_spawn_furthest"))
+		spot = Spawn_WeightedPoint(firstspot, 1, 1, 1);
 	else
-		spot = Spawn_FurthestPoint(firstspot, playerlist);
+		spot = Spawn_WeightedPoint(firstspot, 1, 5000, 5); // chooses a far far away spawnpoint
+
+	if(cvar("spawn_debugview"))
+	{
+		print("spot mindistance: ", ftos(spot.frags), "\n");
+	}
 
 	if (!spot)
 	{
