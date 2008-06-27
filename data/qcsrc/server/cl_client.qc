@@ -122,7 +122,8 @@ entity Spawn_FilterOutBadSpots(entity firstspot, entity playerlist, float mindis
 			}
 		}
 	}
-	spotlistend.chain = world;
+	if(spotlistend)
+		spotlistend.chain = world;
 
 	/*
 		entity e;
