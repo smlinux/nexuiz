@@ -111,9 +111,29 @@ entity Spawn_FilterOutBadSpots(entity firstspot, entity playerlist, float mindis
 				spotlistend = spot;
 				if(!spotlist)
 					spotlist = spot;
+
+				/*
+				if(teamcheck)
+				if(spot.team != teamcheck)
+					error("invalid spawn added");
+				*/
+
+				print("added ", etos(spot), "\n");
 			}
 		}
 	}
+	spotlistend.chain = world;
+
+	/*
+		entity e;
+		if(teamcheck)
+			for(e = spotlist; e; e = e.chain)
+			{
+				print("seen ", etos(e), "\n");
+				if(e.team != teamcheck)
+					error("invalid spawn found");
+			}
+	*/
 
 	return spotlist;
 }
@@ -182,6 +202,12 @@ entity SelectSpawnPoint (float anypoint)
 	if(cvar("spawn_debugview"))
 	{
 		print("spot mindistance: ", ftos(spot.frags), "\n");
+
+		entity e;
+		if(teamcheck)
+			for(e = firstspot; e; e = e.chain)
+				if(e.team != teamcheck)
+					error("invalid spawn found");
 	}
 
 	if (!spot)
