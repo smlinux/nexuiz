@@ -11,7 +11,7 @@ void GibDamage (entity inflictor, entity attacker, float damage, float deathtype
 	else if (r < 0.75)
 		sound (self, CHAN_IMPACT, "misc/gib_splat04.wav", 1, ATTN_NORM);
 	
-	if(cvar("sv_gentle") < 1)
+	if(sv_gentle < 1)
 		pointparticles(particleeffectnum("blood"), self.origin + '0 0 1', '0 0 30', 10);
 	self.health = self.health - damage;
 	if (self.health <= -1000)
@@ -39,7 +39,7 @@ float() Gib_customizeentityforclient =
 {
 	if(self.classname == "player") // the eye
 	{
-		if(cvar("sv_gentle")) {
+		if(sv_gentle > 0) {
 			self.model = "";
 			return TRUE;
 		}

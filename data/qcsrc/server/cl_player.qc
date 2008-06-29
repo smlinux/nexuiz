@@ -257,9 +257,8 @@ void SpawnThrownWeapon (vector org, float w)
 
 void PlayerCorpseDamage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
 {
-	local float take, save, gentle;
-	gentle = cvar("sv_gentle");
-	if(gentle < 1)	
+	local float take, save;
+	if(sv_gentle < 1)	
 		pointparticles(particleeffectnum("blood"), hitloc, force, bound(0, damage, 200));
 	// damage resistance (ignore most of the damage from a bullet or similar)
 	damage = max(damage - 5, 1);
@@ -274,7 +273,7 @@ void PlayerCorpseDamage (entity inflictor, entity attacker, float damage, float 
 	else if (take > 10)
 		sound (self, CHAN_IMPACT, "misc/bodyimpact1.wav", 1, ATTN_NORM);
 
-	if(gentle < 1) {	
+	if(sv_gentle < 1) {	
 		if (take > 50)
 			TossGib (world, "models/gibs/chunk.mdl", hitloc, force * -0.1,1);
 		if (take > 100)
@@ -310,7 +309,7 @@ void PlayerCorpseDamage (entity inflictor, entity attacker, float damage, float 
 		// make a meaty mess
 		TossGib (self, "models/gibs/eye.md3", self.origin + self.view_ofs, self.velocity + randomvec() * 150,0);
 		
-		if(gentle < 1) {
+		if(sv_gentle < 1) {
 			te_bloodshower (self.origin + self.mins, self.origin + self.maxs, 1200 * multiplier, 1000);
 			TossGib (world, "models/gibs/bloodyskull.md3", self.origin + self.view_ofs, self.velocity,0);
 
@@ -357,7 +356,7 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 	local float take, save, waves, sdelay;
 
 	damage = damage * bound(1.0, self.cvar_cl_handicap, 100.0);
-	if(cvar("sv_gentle")) {
+	if(sv_gentle > 0) {
 		pointparticles(particleeffectnum("damage_hit"), hitloc, force, bound(0, damage, 200));
 	} else {
 		pointparticles(particleeffectnum("blood"), hitloc, force, bound(0, damage, 200));
@@ -365,7 +364,7 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 
 	if (self.pain_finished < time)		//Don't switch pain sequences like crazy
 	{
-		if(!cvar("sv_gentle")) {		
+		if(sv_gentle < 1) {		
 			if (random() > 0.5)
 				player_setanim(self.anim_pain1, FALSE, TRUE, TRUE);
 			else
@@ -561,7 +560,7 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 		if(defer_ClientKill_Now_TeamChange)
 			ClientKill_Now_TeamChange();
 
-		if(cvar("sv_gentle")) {
+		if(sv_gentle > 0) {
 			// remove corpse
 			PlayerCorpseDamage (inflictor, attacker, 100.0, deathtype, hitloc, force);
 			pointparticles(particleeffectnum("damage_dissolve"), self.origin, force, 1);

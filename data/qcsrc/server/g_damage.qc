@@ -224,8 +224,13 @@ void Obituary (entity attacker, entity targ, float deathtype)
 					bprint("^1",a, "^1 drew first blood", "\n");
 				}
 
-				centerprint(attacker, strcat("^4You fragged ^7", s, "\n\n\n"));
-				centerprint(targ, strcat("^1You were fragged by ^7", a, "\n\n\n"));
+				if(sv_gentle > 0) {
+					centerprint(attacker, strcat("^4You scored against ^7", s, "\n\n\n"));
+					centerprint(targ, strcat(a,"^1 scored against you ^7\n\n\n"));
+				} else {
+					centerprint(attacker, strcat("^4You fragged ^7", s, "\n\n\n"));
+					centerprint(targ, strcat("^1You were fragged by ^7", a, "\n\n\n"));
+				}
 
 				if (deathtype == IT_LASER)
 					bprint ("^1",s, "^1 was blasted by ", a, "\n");
