@@ -116,9 +116,9 @@ entity Spawn_FilterOutBadSpots(entity firstspot, entity playerlist, float mindis
 				if(teamcheck)
 				if(spot.team != teamcheck)
 					error("invalid spawn added");
-				*/
 
 				print("added ", etos(spot), "\n");
+				*/
 			}
 		}
 	}
