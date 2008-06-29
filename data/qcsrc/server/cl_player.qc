@@ -257,8 +257,10 @@ void SpawnThrownWeapon (vector org, float w)
 
 void PlayerCorpseDamage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
 {
-	local float take, save;
-	pointparticles(particleeffectnum("blood"), hitloc, force, bound(0, damage, 200));
+	local float take, save, gentle;
+	gentle = cvar("sv_gentle");
+	if(gentle < 1)	
+		pointparticles(particleeffectnum("blood"), hitloc, force, bound(0, damage, 200));
 	// damage resistance (ignore most of the damage from a bullet or similar)
 	damage = max(damage - 5, 1);
 
@@ -272,10 +274,12 @@ void PlayerCorpseDamage (entity inflictor, entity attacker, float damage, float 
 	else if (take > 10)
 		sound (self, CHAN_IMPACT, "misc/bodyimpact1.wav", 1, ATTN_NORM);
 
-	if (take > 50)
-		TossGib (world, "models/gibs/chunk.mdl", hitloc, force * -0.1,1);
-	if (take > 100)
-		TossGib (world, "models/gibs/chunk.mdl", hitloc, force * -0.2,1);
+	if(gentle < 1) {	
+		if (take > 50)
+			TossGib (world, "models/gibs/chunk.mdl", hitloc, force * -0.1,1);
+		if (take > 100)
+			TossGib (world, "models/gibs/chunk.mdl", hitloc, force * -0.2,1);
+	}
 
 	if (!(self.flags & FL_GODMODE))
 	{
@@ -301,44 +305,48 @@ void PlayerCorpseDamage (entity inflictor, entity attacker, float damage, float 
 		multiplier = 1;
 		if (cvar("ekg"))
 			multiplier = 5;
-		te_bloodshower (self.origin + self.mins, self.origin + self.maxs, 1200 * multiplier, 1000);
+
 
 		// make a meaty mess
 		TossGib (self, "models/gibs/eye.md3", self.origin + self.view_ofs, self.velocity + randomvec() * 150,0);
-		TossGib (world, "models/gibs/bloodyskull.md3", self.origin + self.view_ofs, self.velocity,0);
+		
+		if(gentle < 1) {
+			te_bloodshower (self.origin + self.mins, self.origin + self.maxs, 1200 * multiplier, 1000);
+			TossGib (world, "models/gibs/bloodyskull.md3", self.origin + self.view_ofs, self.velocity,0);
 
-		local float c;
-		c = 0;
-		while (c < multiplier)
-		{
-			c = c + 1;
-			//TossGib (world, "models/gibs/gib1.md3", self.origin, self.velocity + randomvec() * 450,0);
-			//TossGib (world, "models/gibs/gib2.md3", self.origin, self.velocity + randomvec() * 450,0);
-			//TossGib (world, "models/gibs/gib3.md3", self.origin, self.velocity + randomvec() * 450,0);
-			//TossGib (world, "models/gibs/gib4.md3", self.origin, self.velocity + randomvec() * 450,0);
-			//TossGib (world, "models/gibs/gib5.md3", self.origin, self.velocity + randomvec() * 450,0);
-			//TossGib (world, "models/gibs/gib6.md3", self.origin, self.velocity + randomvec() * 450,0);
+			local float c;
+			c = 0;
 
-			TossGib (world, "models/gibs/arm.md3", self.origin + self.view_ofs, self.velocity + randomvec() * (random() * 120 + 90),0);
-			TossGib (world, "models/gibs/arm.md3", self.origin + self.view_ofs, self.velocity + randomvec() * (random() * 120 + 90),0);
-			//TossGib (world, "models/gibs/arm.md3", self.origin + self.view_ofs, self.velocity + randomvec() * 150,0);
-			//TossGib (world, "models/gibs/arm.md3", self.origin + self.view_ofs, self.velocity + randomvec() * 150,0);
-			TossGib (world, "models/gibs/chest.md3", self.origin + self.view_ofs * 0.5, self.velocity + randomvec() * (random() * 120 + 80),0);
-			//TossGib (world, "models/gibs/smallchest.md3", self.origin + self.view_ofs, self.velocity + randomvec() * 150,0);
-			TossGib (world, "models/gibs/smallchest.md3", self.origin + self.view_ofs, self.velocity + randomvec() * (random() * 120 + 80),0);
-			TossGib (world, "models/gibs/leg1.md3", self.origin + self.view_ofs * -0.2, self.velocity + randomvec() * (random() * 120 + 85),0);
-			TossGib (world, "models/gibs/leg2.md3", self.origin + self.view_ofs * -0.4, self.velocity + randomvec() * (random() * 120 + 85),0);
-			//TossGib (world, "models/gibs/leg1.md3", self.origin + self.view_ofs * -0.2, self.velocity + randomvec() * 150,0);
-			//TossGib (world, "models/gibs/leg2.md3", self.origin + self.view_ofs * -0.4, self.velocity + randomvec() * 150,0);
+			while (c < multiplier)
+			{
+				c = c + 1;
+				//TossGib (world, "models/gibs/gib1.md3", self.origin, self.velocity + randomvec() * 450,0);
+				//TossGib (world, "models/gibs/gib2.md3", self.origin, self.velocity + randomvec() * 450,0);
+				//TossGib (world, "models/gibs/gib3.md3", self.origin, self.velocity + randomvec() * 450,0);
+				//TossGib (world, "models/gibs/gib4.md3", self.origin, self.velocity + randomvec() * 450,0);
+				//TossGib (world, "models/gibs/gib5.md3", self.origin, self.velocity + randomvec() * 450,0);
+				//TossGib (world, "models/gibs/gib6.md3", self.origin, self.velocity + randomvec() * 450,0);
 
-			// these splat on impact
-			TossGib (world, "models/gibs/chunk.mdl", self.origin, self.velocity + randomvec() * 450,1);
-			TossGib (world, "models/gibs/chunk.mdl", self.origin, self.velocity + randomvec() * 450,1);
-			TossGib (world, "models/gibs/chunk.mdl", self.origin, self.velocity + randomvec() * 450,1);
-			TossGib (world, "models/gibs/chunk.mdl", self.origin, self.velocity + randomvec() * 450,1);
+				TossGib (world, "models/gibs/arm.md3", self.origin + self.view_ofs, self.velocity + randomvec() * (random() * 120 + 90),0);
+				TossGib (world, "models/gibs/arm.md3", self.origin + self.view_ofs, self.velocity + randomvec() * (random() * 120 + 90),0);
+				//TossGib (world, "models/gibs/arm.md3", self.origin + self.view_ofs, self.velocity + randomvec() * 150,0);
+				//TossGib (world, "models/gibs/arm.md3", self.origin + self.view_ofs, self.velocity + randomvec() * 150,0);
+				TossGib (world, "models/gibs/chest.md3", self.origin + self.view_ofs * 0.5, self.velocity + randomvec() * (random() * 120 + 80),0);
+				//TossGib (world, "models/gibs/smallchest.md3", self.origin + self.view_ofs, self.velocity + randomvec() * 150,0);
+				TossGib (world, "models/gibs/smallchest.md3", self.origin + self.view_ofs, self.velocity + randomvec() * (random() * 120 + 80),0);
+				TossGib (world, "models/gibs/leg1.md3", self.origin + self.view_ofs * -0.2, self.velocity + randomvec() * (random() * 120 + 85),0);
+				TossGib (world, "models/gibs/leg2.md3", self.origin + self.view_ofs * -0.4, self.velocity + randomvec() * (random() * 120 + 85),0);
+				//TossGib (world, "models/gibs/leg1.md3", self.origin + self.view_ofs * -0.2, self.velocity + randomvec() * 150,0);
+				//TossGib (world, "models/gibs/leg2.md3", self.origin + self.view_ofs * -0.4, self.velocity + randomvec() * 150,0);
+
+				// these splat on impact
+				TossGib (world, "models/gibs/chunk.mdl", self.origin, self.velocity + randomvec() * 450,1);
+				TossGib (world, "models/gibs/chunk.mdl", self.origin, self.velocity + randomvec() * 450,1);
+				TossGib (world, "models/gibs/chunk.mdl", self.origin, self.velocity + randomvec() * 450,1);
+				TossGib (world, "models/gibs/chunk.mdl", self.origin, self.velocity + randomvec() * 450,1);
+			}
+			sound (self, CHAN_VOICE, "misc/gib.wav", 1, ATTN_NORM);
 		}
-
-		sound (self, CHAN_VOICE, "misc/gib.wav", 1, ATTN_NORM);
 	}
 }
 
@@ -349,14 +357,20 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 	local float take, save, waves, sdelay;
 
 	damage = damage * bound(1.0, self.cvar_cl_handicap, 100.0);
+	if(cvar("sv_gentle")) {
+		pointparticles(particleeffectnum("damage_hit"), hitloc, force, bound(0, damage, 200));
+	} else {
+		pointparticles(particleeffectnum("blood"), hitloc, force, bound(0, damage, 200));
+	}
 
-	pointparticles(particleeffectnum("blood"), hitloc, force, bound(0, damage, 200));
 	if (self.pain_finished < time)		//Don't switch pain sequences like crazy
 	{
-		if (random() > 0.5)
-			player_setanim(self.anim_pain1, FALSE, TRUE, TRUE);
-		else
-			player_setanim(self.anim_pain2, FALSE, TRUE, TRUE);
+		if(!cvar("sv_gentle")) {		
+			if (random() > 0.5)
+				player_setanim(self.anim_pain1, FALSE, TRUE, TRUE);
+			else
+				player_setanim(self.anim_pain2, FALSE, TRUE, TRUE);
+		}
 		self.pain_finished = time + 0.5;	//Supajoe
 
 		// throw off bot aim temporarily
@@ -546,6 +560,12 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 
 		if(defer_ClientKill_Now_TeamChange)
 			ClientKill_Now_TeamChange();
+
+		if(cvar("sv_gentle")) {
+			// remove corpse
+			PlayerCorpseDamage (inflictor, attacker, 100.0, deathtype, hitloc, force);
+			pointparticles(particleeffectnum("damage_dissolve"), self.origin, force, 1);
+		}
 	}
 }
 
