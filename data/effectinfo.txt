@@ -2254,15 +2254,38 @@ liquidfriction 16
 velocityjitter 16 16 16
 
 // effect for removing player model
+// "teleport"
 effect damage_dissolve
-count 112
+count 96
 type static
-color 0x00FF00 0xFFFFFF
+color 0x66FF66 0xFFFFFF
 size 10 10
-alpha 64 128 256
+alpha 64 128 128
 airfriction 1
 liquidfriction 4
 originoffset 0 0 28
 originjitter 16 16 28
 velocityjitter 0 0 256
+// flare
+effect damage_dissolve
+countabsolute 1
+type static
+tex 38 38
+color 0x00FF00 0x99FF99
+size 32 32
+alpha 256 256 196
+// large sparks
+effect damage_dissolve
+count 20
+type static
+color 0x00FF00 0x99FF99
+size 16 16
+alpha 256 256 256
+//gravity 1
+bounce 1.5
+airfriction 4
+liquidfriction 16
+//velocityoffset 0 0 120
+velocityjitter 512 512 512
+
 
