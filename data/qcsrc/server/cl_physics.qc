@@ -112,6 +112,7 @@ void() CheckWaterJump =
 
 .vector movement_old;
 .float buttons_old;
+.vector v_angle_old;
 
 void Nixnex_GiveCurrentWeapon();
 void SV_PlayerPhysics()
@@ -128,6 +129,10 @@ void SV_PlayerPhysics()
 	if(self.movement != self.movement_old)
 		self.parm_idlesince = time;
 	self.movement_old = self.movement;
+
+	if(self.v_angle != self.v_angle_old)
+		self.parm_idlesince = time;
+	self.v_angle_old = self.v_angle;
 
 	if(time > self.shtest_next)
 	{
