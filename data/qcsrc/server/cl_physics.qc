@@ -122,16 +122,13 @@ void SV_PlayerPhysics()
 	string temps;
 
 	buttons = self.BUTTON_ATCK + 2 * self.BUTTON_JUMP + 4 * self.BUTTON_ATCK2 + 8 * self.BUTTON_ZOOM + 16 * self.BUTTON_CROUCH + 32 * self.BUTTON_HOOK + 64 * self.BUTTON_USE;
-	if(buttons != self.buttons_old)
-		self.parm_idlesince = time;
+	if(!sv_maxidle_spectatorsareidle || self.movetype == MOVETYPE_WALK)
+	{
+		if(buttons != self.buttons_old || self.movement != self.movement_old || self.v_angle != self.v_angle_old)
+			self.parm_idlesince = time;
+	}
 	self.buttons_old = buttons;
-
-	if(self.movement != self.movement_old)
-		self.parm_idlesince = time;
 	self.movement_old = self.movement;
-
-	if(self.v_angle != self.v_angle_old)
-		self.parm_idlesince = time;
 	self.v_angle_old = self.v_angle;
 
 	if(time > self.shtest_next)

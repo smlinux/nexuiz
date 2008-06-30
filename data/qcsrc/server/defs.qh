@@ -445,3 +445,4 @@ float lockteams;
 
 .float parm_idlesince;
 float sv_maxidle;
+float sv_maxidle_spectatorsareidle;
