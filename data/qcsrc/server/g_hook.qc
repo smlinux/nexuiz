@@ -292,6 +292,6 @@ void SetGrappleHookBindings()
 {
 	// this function has been modified for Nexuiz
 	// don't remove these lines! old server or demos coud overwrite the new aliases
-	stuffcmd(self, "alias +hook +BUTTON_HOOK\n");
-	stuffcmd(self, "alias -hook -BUTTON_HOOK\n");
+	stuffcmd(self, "alias +hook +button6\n");
+	stuffcmd(self, "alias -hook -button6\n");
 }
