@@ -882,7 +882,7 @@ void() IntermissionThink =
 		return;
 
 	if(!mapvote_initialized)
-		if (time < intermission_exittime + 10 && !self.button0 && !self.button2 && !self.button3 && !self.button6 && !self.buttonuse)
+		if (time < intermission_exittime + 10 && !self.BUTTON_ATCK && !self.BUTTON_JUMP && !self.BUTTON_ATCK2 && !self.BUTTON_HOOK && !self.BUTTON_USE)
 			return;
 
 	MapVote_Start();

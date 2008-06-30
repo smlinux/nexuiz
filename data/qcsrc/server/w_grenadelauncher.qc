@@ -152,13 +152,13 @@ float(float req) w_glauncher =
 {
 	if (req == WR_AIM)
 	{
-		self.button0 = FALSE;
-		self.button3 = FALSE;
+		self.BUTTON_ATCK = FALSE;
+		self.BUTTON_ATCK2 = FALSE;
 		if (self.bot_secondary_grenademooth == 0)
 		{
 			if(bot_aim(cvar("g_balance_grenadelauncher_primary_speed"), cvar("g_balance_grenadelauncher_primary_speed_up"), cvar("g_balance_grenadelauncher_primary_lifetime"), TRUE))
 			{
-				self.button0 = TRUE;
+				self.BUTTON_ATCK = TRUE;
 				if(random() < 0.01) self.bot_secondary_grenademooth = 1;
 			}
 		}
@@ -166,20 +166,20 @@ float(float req) w_glauncher =
 		{
 			if(bot_aim(cvar("g_balance_grenadelauncher_secondary_speed"), cvar("g_balance_grenadelauncher_secondary_speed_up"), cvar("g_balance_grenadelauncher_secondary_lifetime"), TRUE))
 			{
-				self.button3 = TRUE;
+				self.BUTTON_ATCK2 = TRUE;
 				if(random() < 0.02) self.bot_secondary_grenademooth = 0;
 			}
 		}
 	}
 	else if (req == WR_THINK)
 	{
-		if (self.button0)
+		if (self.BUTTON_ATCK)
 		if (weapon_prepareattack(0, cvar("g_balance_grenadelauncher_primary_refire")))
 		{
 			W_Grenade_Attack();
 			weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_grenadelauncher_primary_animtime"), w_ready);
 		}
-		if (self.button3)
+		if (self.BUTTON_ATCK2)
 		if (weapon_prepareattack(1, cvar("g_balance_grenadelauncher_secondary_refire")))
 		{
 			W_Grenade_Attack2();

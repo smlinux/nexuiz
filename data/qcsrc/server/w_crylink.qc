@@ -200,19 +200,19 @@ float(float req) w_crylink =
 	if (req == WR_AIM)
 	{
 		if (random() > 0.15)
-			self.button0 = bot_aim(cvar("g_balance_crylink_primary_speed"), 0, cvar("g_balance_crylink_primary_middle_lifetime"), FALSE);
+			self.BUTTON_ATCK = bot_aim(cvar("g_balance_crylink_primary_speed"), 0, cvar("g_balance_crylink_primary_middle_lifetime"), FALSE);
 		else
-			self.button3 = bot_aim(cvar("g_balance_crylink_secondary_speed"), 0, cvar("g_balance_crylink_secondary_middle_lifetime"), FALSE);
+			self.BUTTON_ATCK2 = bot_aim(cvar("g_balance_crylink_secondary_speed"), 0, cvar("g_balance_crylink_secondary_middle_lifetime"), FALSE);
 	}
 	else if (req == WR_THINK)
 	{
-		if (self.button0)
+		if (self.BUTTON_ATCK)
 		if (weapon_prepareattack(0, cvar("g_balance_crylink_primary_refire")))
 		{
 			W_Crylink_Attack();
 			weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_crylink_primary_animtime"), w_ready);
 		}
-		if (self.button3)
+		if (self.BUTTON_ATCK2)
 		if (weapon_prepareattack(1, cvar("g_balance_crylink_secondary_refire")))
 		{
 			W_Crylink_Attack2();

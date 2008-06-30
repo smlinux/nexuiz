@@ -648,7 +648,7 @@ void PutClientInServer (void)
 		self.bot_attack = TRUE;
 
 		self.statdraintime = time + 5;
-		self.button0 = self.button2 = self.button3 = 0;
+		self.BUTTON_ATCK = self.BUTTON_JUMP = self.BUTTON_ATCK2 = 0;
 
 		if(self.killcount == -666) {
 			self.killcount = 0;
@@ -1153,7 +1153,7 @@ void ClientDisconnect (void)
 	GetCvars(-1);
 }
 
-.float buttonchat;
+.float BUTTON_CHAT;
 void() ChatBubbleThink =
 {
 	self.nextthink = time;
@@ -1164,7 +1164,7 @@ void() ChatBubbleThink =
 		return;
 	}
 	setorigin(self, self.owner.origin + '0 0 15' + self.owner.maxs_z * '0 0 1');
-	if (self.owner.buttonchat && !self.owner.deadflag)
+	if (self.owner.BUTTON_CHAT && !self.owner.deadflag)
 		self.model = self.mdl;
 	else
 		self.model = "";
@@ -1201,7 +1201,7 @@ void() TeamBubbleThink =
 		return;
 	}
 //	setorigin(self, self.owner.origin + '0 0 15' + self.owner.maxs_z * '0 0 1');  // bandwidth hog. setattachment does this now
-	if (self.owner.buttonchat || self.owner.deadflag || self.owner.killindicator)
+	if (self.owner.BUTTON_CHAT || self.owner.deadflag || self.owner.killindicator)
 		self.model = "";
 	else
 		self.model = self.mdl;
@@ -1706,12 +1706,12 @@ float vercmp(string v1, string v2)
 void ObserverThink()
 {
 	if (self.flags & FL_JUMPRELEASED) {
-		if (self.button2 && self.version == cvar("gameversion")) {
+		if (self.BUTTON_JUMP && self.version == cvar("gameversion")) {
 			self.welcomemessage_time = 0;
 			self.flags = self.flags - FL_JUMPRELEASED;
 			LeaveSpectatorMode();
 			return;
-		} else if(self.button0 && self.version == cvar("gameversion")) {
+		} else if(self.BUTTON_ATCK && self.version == cvar("gameversion")) {
 			self.welcomemessage_time = 0;
 			self.flags = self.flags - FL_JUMPRELEASED;
 			if(SpectateNext() == 1) {
@@ -1719,11 +1719,11 @@ void ObserverThink()
 			}
 		}
 	} else {
-		if (!(self.button0 || self.button2)) {
+		if (!(self.BUTTON_ATCK || self.BUTTON_JUMP)) {
 			self.flags = self.flags | FL_JUMPRELEASED;
 		}
 	}
-	if(self.button4)
+	if(self.BUTTON_ZOOM)
 		self.wantswelcomemessage = 0;
 	if(self.wantswelcomemessage)
 		PrintWelcomeMessage(self);
@@ -1732,12 +1732,12 @@ void ObserverThink()
 void SpectatorThink()
 {
 	if (self.flags & FL_JUMPRELEASED) {
-		if (self.button2 && self.version == cvar("gameversion")) {
+		if (self.BUTTON_JUMP && self.version == cvar("gameversion")) {
 			self.welcomemessage_time = 0;
 			self.flags = self.flags - FL_JUMPRELEASED;
 			LeaveSpectatorMode();
 			return;
-		} else if(self.button0) {
+		} else if(self.BUTTON_ATCK) {
 			self.welcomemessage_time = 0;
 			self.flags = self.flags - FL_JUMPRELEASED;
 			if(SpectateNext() == 1) {
@@ -1746,7 +1746,7 @@ void SpectatorThink()
 				self.classname = "observer";
 				PutClientInServer();
 			}
-		} else if (self.button3) {
+		} else if (self.BUTTON_ATCK2) {
 			self.welcomemessage_time = 0;
 			self.flags = self.flags - FL_JUMPRELEASED;
 			self.classname = "observer";
@@ -1756,11 +1756,11 @@ void SpectatorThink()
 				PutObserverInServer();
 		}
 	} else {
-		if (!(self.button0 || self.button3)) {
+		if (!(self.BUTTON_ATCK || self.BUTTON_ATCK2)) {
 			self.flags = self.flags | FL_JUMPRELEASED;
 		}
 	}
-	if(self.button4)
+	if(self.BUTTON_ZOOM)
 		self.wantswelcomemessage = 0;
 	if(self.wantswelcomemessage)
 		PrintWelcomeMessage(self);
@@ -1845,7 +1845,7 @@ void PlayerPreThink (void)
 
 		CheckRules_Player();
 
-		if(self.button7)
+		if(self.BUTTON_INFO)
 			PrintWelcomeMessage(self);
 
 		if(g_lms || !cvar("sv_spectate"))
@@ -1883,7 +1883,7 @@ void PlayerPreThink (void)
 		{
 			float button_pressed, force_respawn;
 			player_anim();
-			button_pressed = (self.button0 || self.button2 || self.button3 || self.button6 || self.buttonuse);
+			button_pressed = (self.BUTTON_ATCK || self.BUTTON_JUMP || self.BUTTON_ATCK2 || self.BUTTON_HOOK || self.BUTTON_USE);
 			force_respawn = (g_lms || cvar("g_forced_respawn"));
 			if (self.deadflag == DEAD_DYING)
 			{
@@ -1944,7 +1944,7 @@ void PlayerPreThink (void)
 			}
 		}
 
-		if (self.button5 && !self.hook.state)
+		if (self.BUTTON_CROUCH && !self.hook.state)
 		{
 			if (!self.crouch)
 			{
@@ -1984,8 +1984,8 @@ void PlayerPreThink (void)
 				if(zoomspeed < 0.5 || zoomspeed > 16)
 					zoomspeed = 3.5;
 
-			zoomdir = self.button4;
-			if(self.button3)
+			zoomdir = self.BUTTON_ZOOM;
+			if(self.BUTTON_ATCK2)
 				if(self.weapon == WEP_NEX)
 					if(!g_minstagib)
 						zoomdir = 1;

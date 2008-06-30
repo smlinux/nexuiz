@@ -140,7 +140,7 @@ void() havocbot_movetogoal =
 					s = trace_fraction;
 					tracebox(self.origin + '0 0 48', self.mins, self.maxs, self.origin + self.velocity * 0.2 + '0 0 48', FALSE, self);
 					if (trace_fraction > s)
-						self.button2 = 1;
+						self.BUTTON_JUMP = 1;
 				}
 			}
 
@@ -165,12 +165,12 @@ void() havocbot_movetogoal =
 
 		dir = normalize(dir + dodge + evadeobstacle + evadelava);
 	//	self.bot_dodgevector = dir;
-	//	self.bot_dodgevector_jumpbutton = self.button2;
+	//	self.bot_dodgevector_jumpbutton = self.BUTTON_JUMP;
 	}
 
 	//dir = self.bot_dodgevector;
 	//if (self.bot_dodgevector_jumpbutton)
-	//	self.button2 = 1;
+	//	self.BUTTON_JUMP = 1;
 
 	self.movement_x = dir * v_forward * maxspeed;
 	self.movement_y = dir * v_right * maxspeed;
@@ -237,7 +237,7 @@ void() havocbot_movetogoal =
 				keyboard_z = 0;
 
 			self.havocbot_keyboard = keyboard * maxspeed;
-			if (self.havocbot_ducktime>time) self.button5=TRUE;
+			if (self.havocbot_ducktime>time) self.BUTTON_CROUCH=TRUE;
 		}
 		keyboard = self.havocbot_keyboard;
 		blend = bound(0,vlen(destorg-self.origin)/cvar("bot_ai_keyboard_distance"),1); // When getting close move with 360 degree
@@ -245,8 +245,8 @@ void() havocbot_movetogoal =
 		self.movement = self.movement + (keyboard - self.movement) * blend;
 	}
 
-	if ((dir * v_up) >= cvar("sv_jumpvelocity")*0.5 && (self.flags & FL_ONGROUND)) self.button2=1;
-	if (((dodge * v_up) > 0) && random()*frametime >= 0.2*bound(0,(10-skill)*0.1,1)) self.button2=TRUE;
+	if ((dir * v_up) >= cvar("sv_jumpvelocity")*0.5 && (self.flags & FL_ONGROUND)) self.BUTTON_JUMP=1;
+	if (((dodge * v_up) > 0) && random()*frametime >= 0.2*bound(0,(10-skill)*0.1,1)) self.BUTTON_JUMP=TRUE;
 	if (((dodge * v_up) < 0) && random()*frametime >= 0.5*bound(0,(10-skill)*0.1,1)) self.havocbot_ducktime=time+0.3/bound(0.1,skill,10);
 
 };
@@ -459,8 +459,8 @@ void() havocbot_ai =
 		weapon_action(self.weapon, WR_AIM);
 		if (cvar("bot_nofire"))
 		{
-			self.button0 = FALSE;
-			self.button3 = FALSE;
+			self.BUTTON_ATCK = FALSE;
+			self.BUTTON_ATCK2 = FALSE;
 		}
 	}
 	else if (self.goalcurrent)

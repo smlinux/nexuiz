@@ -122,10 +122,10 @@ void minstagib_ammocheck (void)
 float(float req) w_nex =
 {
 	if (req == WR_AIM)
-		self.button0 = bot_aim(1000000, 0, 1, FALSE);
+		self.BUTTON_ATCK = bot_aim(1000000, 0, 1, FALSE);
 	else if (req == WR_THINK)
 	{
-		if (self.button0)
+		if (self.BUTTON_ATCK)
 		{
 			if(g_minstagib)
 			{
@@ -144,7 +144,7 @@ float(float req) w_nex =
 				}
 			}
 		}
-		else if (self.button3)
+		else if (self.BUTTON_ATCK2)
 		{
 			if (g_minstagib)
 			{

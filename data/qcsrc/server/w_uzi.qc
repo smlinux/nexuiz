@@ -82,7 +82,7 @@ void()	uzi_fire1_02 =
 		w_ready();
 		return;
 	}
-	if (self.button0)
+	if (self.BUTTON_ATCK)
 	{
 		if (!weapon_action(self.weapon, WR_CHECKAMMO2))
 		{
@@ -105,21 +105,21 @@ float(float req) w_uzi =
 {
 	if (req == WR_AIM)
 		if(vlen(self.origin-self.enemy.origin) < 3000 - bound(0, skill, 10) * 200)
-			self.button0 = bot_aim(1000000, 0, 0.001, FALSE);
+			self.BUTTON_ATCK = bot_aim(1000000, 0, 0.001, FALSE);
 		else
 		{
-			self.button3 = bot_aim(1000000, 0, 0.001, FALSE);
+			self.BUTTON_ATCK2 = bot_aim(1000000, 0, 0.001, FALSE);
 		}
 	else if (req == WR_THINK)
 	{
-		if (self.button0)
+		if (self.BUTTON_ATCK)
 		if (weapon_prepareattack(0, cvar("g_balance_uzi_refire")))
 		{
 			self.uzi_bulletcounter = 1;
 			W_Uzi_Attack();
 			weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_uzi_sustained_refire"), uzi_fire1_02);
 		}
-		if (self.button3)
+		if (self.BUTTON_ATCK2)
 		if (weapon_prepareattack(1, cvar("g_balance_uzi_refire")))
 		{
 			self.uzi_bulletcounter = 1;

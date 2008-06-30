@@ -365,7 +365,7 @@ void PrintWelcomeMessage(entity pl)
 		return;
 	}
 
-	if(!self.button7)
+	if(!self.BUTTON_INFO)
 	{
 		if(self.classname == "observer")
 		{

@@ -735,9 +735,9 @@ float() TetrisPostFrame =
 		else if(self.movement_y > 0)
 			keysa |= TETKEY_RIGHT;
 	}
-	if (self.button0)
+	if (self.BUTTON_ATCK)
 		keysa = keysa | TETKEY_ROTRIGHT;
-	if (self.button2)
+	if (self.BUTTON_JUMP)
 		keysa = keysa | TETKEY_ROTLEFT;
 	HandleGame(keysa);
 	return 1;

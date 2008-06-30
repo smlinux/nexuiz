@@ -123,7 +123,7 @@ void GrapplingHookThink()
 					self.owner.velocity = self.owner.velocity + frametime * dir * rubberforce_overstretch;
 			}
 
-			if(!self.owner.button5) // crouch key = don't pull
+			if(!self.owner.BUTTON_CROUCH) // crouch key = don't pull
 				self.rope_length = newlength;
 
 			// then pull the player
@@ -246,7 +246,7 @@ void FireGrapplingHook (void)
 void GrapplingHookFrame()
 {
 	// this function has been modified for Nexuiz
-	if (self.button6 && g_grappling_hook)
+	if (self.BUTTON_HOOK && g_grappling_hook)
 	{
 		if (!self.hook && self.hook_time <= time && !self.button6_pressed_before)
 			if (timeoutStatus != 2) //only allow the player to fire the grappling hook if the game is not paused (timeout)
@@ -257,7 +257,7 @@ void GrapplingHookFrame()
 		if (self.hook)
 			RemoveGrapplingHook(self);
 	}
-	self.button6_pressed_before = self.button6;
+	self.button6_pressed_before = self.BUTTON_HOOK;
 	/*
 	// if I have no hook or it's not pulling yet, make sure I'm not flying!
 	if((self.hook == world || !self.hook.state) && self.movetype == MOVETYPE_FLY)
@@ -292,6 +292,6 @@ void SetGrappleHookBindings()
 {
 	// this function has been modified for Nexuiz
 	// don't remove these lines! old server or demos coud overwrite the new aliases
-	stuffcmd(self, "alias +hook +button6\n");
-	stuffcmd(self, "alias -hook -button6\n");
+	stuffcmd(self, "alias +hook +BUTTON_HOOK\n");
+	stuffcmd(self, "alias -hook -BUTTON_HOOK\n");
 }

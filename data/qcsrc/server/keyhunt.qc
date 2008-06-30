@@ -468,7 +468,7 @@ void kh_Key_Think()
 		setorigin(self, v_forward * KH_KEY_XYDIST + '0 0 1' * self.origin_z);
 #endif
 
-		if(self.owner.buttonuse)
+		if(self.owner.BUTTON_USE)
 		if(time >= self.owner.kh_droptime + cvar("g_balance_keyhunt_delay_drop"))
 		{
 			self.owner.kh_droptime = time;
@@ -680,7 +680,7 @@ string kh_CheckEnoughPlayers()
 		players = 0;
 		FOR_EACH_PLAYER(player)
 			if(player.deadflag == DEAD_NO)
-				if(!player.buttonchat)
+				if(!player.BUTTON_CHAT)
 					if(player.team == teem)
 						++players;
 		if(players == 0)
@@ -727,7 +727,7 @@ void kh_StartRound()
 		entity my_player;
 		FOR_EACH_PLAYER(player)
 			if(player.deadflag == DEAD_NO)
-				if(!player.buttonchat)
+				if(!player.BUTTON_CHAT)
 					if(player.team == teem)
 					{
 						++players;

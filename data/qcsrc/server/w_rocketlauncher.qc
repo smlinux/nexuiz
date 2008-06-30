@@ -131,12 +131,12 @@ void W_Rocket_Think (void)
 	{
 		if(g_laserguided_missile)
 		{
-			if(!self.owner.button0)
+			if(!self.owner.BUTTON_ATCK)
 				self.ltime = -1; // indicate that the player has let go of the button
 
 
 			if(self.owner.deadflag == DEAD_NO)
-			if (self.owner.button0 && self.ltime < 0) // if the player let go of the button and then pushed it again
+			if (self.owner.BUTTON_ATCK && self.ltime < 0) // if the player let go of the button and then pushed it again
 				self.rl_detonate_later = TRUE;
 			if(self.rl_detonate_later)
 				W_Rocket_RemoteExplode();
@@ -176,7 +176,7 @@ void W_Rocket_Think (void)
 		}
 		else
 		{
-			if (self.owner.button3)
+			if (self.owner.BUTTON_ATCK2)
 				self.rl_detonate_later = TRUE;
 			if(self.rl_detonate_later)
 				W_Rocket_RemoteExplode();
@@ -288,7 +288,7 @@ float(float req) w_rlauncher =
 	if (req == WR_AIM)
 	{
 		// aim and decide to fire if appropriate
-		self.button0 = bot_aim(cvar("g_balance_rocketlauncher_speed"), 0, cvar("g_balance_rocketlauncher_lifetime"), FALSE);
+		self.BUTTON_ATCK = bot_aim(cvar("g_balance_rocketlauncher_speed"), 0, cvar("g_balance_rocketlauncher_lifetime"), FALSE);
 		if(skill >= 2) // skill 0 and 1 bots won't detonate rockets!
 		{
 			// decide whether to detonate rockets
@@ -352,7 +352,7 @@ float(float req) w_rlauncher =
 						if (
 							(v_forward * normalize(missile.origin - targ.origin)< 0.1)
 							&& desirabledamage > 0.1*coredamage
-						)self.button3 = TRUE;
+						)self.BUTTON_ATCK2 = TRUE;
 						targ = targ.chain;
 					}
 				}else{
@@ -363,7 +363,7 @@ float(float req) w_rlauncher =
 						if(self.enemy.classname == "player")
 							if(desirabledamage >= 0.1*coredamage)
 								if(random()/distance*300 > frametime*bound(0,(10-skill)*0.2,1))
-									self.button3 = TRUE;
+									self.BUTTON_ATCK2 = TRUE;
 				//	dprint(ftos(random()/distance*300),">");dprint(ftos(frametime*bound(0,(10-skill)*0.2,1)),"\n");
 				}
 
@@ -372,29 +372,29 @@ float(float req) w_rlauncher =
 			// if we would be doing at X percent of the core damage, detonate it
 			// but don't fire a new shot at the same time!
 			if (desirabledamage >= 0.75 * coredamage) //this should do group damage in rare fortunate events
-				self.button3 = TRUE;
+				self.BUTTON_ATCK2 = TRUE;
 			if ((skill > 6.5) && (selfdamage > self.health))
-				self.button3 = FALSE;
-			//if(self.button3 == TRUE)
+				self.BUTTON_ATCK2 = FALSE;
+			//if(self.BUTTON_ATCK2 == TRUE)
 			//	dprint(ftos(desirabledamage),"\n");
-			if (self.button3 == TRUE) self.button0 = FALSE;
+			if (self.BUTTON_ATCK2 == TRUE) self.BUTTON_ATCK = FALSE;
 		}
 	}
 	else if (req == WR_THINK)
 	{
-		if (self.button0)
+		if (self.BUTTON_ATCK)
 		if (weapon_prepareattack(0, cvar("g_balance_rocketlauncher_refire")))
 		{
 			W_Rocket_Attack();
 			weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_rocketlauncher_animtime"), w_ready);
 		}
-		if (self.button3)
+		if (self.BUTTON_ATCK2)
 		if(time > self.rl_sound)
 		{
 			self.rl_sound = time + 1;
 			sound (self, CHAN_BODY, "weapons/rocket_det.wav", 0.5, ATTN_NORM);
 		}
-		if (self.button3)
+		if (self.BUTTON_ATCK2)
 		if(g_laserguided_missile)
 		if(self.exteriorweaponentity.attack_finished_single < time)
 		{

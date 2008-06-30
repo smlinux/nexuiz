@@ -160,21 +160,21 @@ float(float req) w_hagar =
 {
 	if (req == WR_AIM)
 		if (random()>0.15)
-			self.button0 = bot_aim(cvar("g_balance_hagar_primary_speed"), 0, cvar("g_balance_hagar_primary_lifetime"), FALSE);
+			self.BUTTON_ATCK = bot_aim(cvar("g_balance_hagar_primary_speed"), 0, cvar("g_balance_hagar_primary_lifetime"), FALSE);
 		else
 		{
 			// not using secondary_speed since these are only 15% and should cause some ricochets without re-aiming
-			self.button3 = bot_aim(cvar("g_balance_hagar_primary_speed"), 0, cvar("g_balance_hagar_primary_lifetime"), FALSE);
+			self.BUTTON_ATCK2 = bot_aim(cvar("g_balance_hagar_primary_speed"), 0, cvar("g_balance_hagar_primary_lifetime"), FALSE);
 		}
 	else if (req == WR_THINK)
 	{
-		if (self.button0)
+		if (self.BUTTON_ATCK)
 		if (weapon_prepareattack(0, cvar("g_balance_hagar_primary_refire")))
 		{
 			W_Hagar_Attack();
 			weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_hagar_primary_refire"), w_ready);
 		}
-		if (self.button3)
+		if (self.BUTTON_ATCK2)
 		if (weapon_prepareattack(1, cvar("g_balance_hagar_secondary_refire")))
 		{
 			W_Hagar_Attack2();

@@ -229,7 +229,7 @@ void SV_PlayerPhysics()
 
 	if(self.classname == "player")
 	{
-		if (self.button2)
+		if (self.BUTTON_JUMP)
 			PlayerJump ();
 		else
 			self.flags = self.flags | FL_JUMPRELEASED;
@@ -357,7 +357,7 @@ void SV_PlayerPhysics()
 		}
 
 		if (self.velocity_x || self.velocity_y)
-		if (!(self.flags & FL_JUMPRELEASED) || !self.button2)
+		if (!(self.flags & FL_JUMPRELEASED) || !self.BUTTON_JUMP)
 		{
 			v = self.velocity;
 			v_z = 0;

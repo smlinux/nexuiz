@@ -1529,7 +1529,7 @@ float(entity e) bot_shouldattack =
 		return FALSE;
 	if (e.deadflag)
 		return FALSE;
-	if (e.buttonchat)
+	if (e.BUTTON_CHAT)
 		return FALSE;
 	return TRUE;
 };
@@ -1839,23 +1839,23 @@ void() bot_think =
 	// skill 0 = ping 0.7 (slightly drunk)
 
 	// clear buttons
-	self.button0 = 0;
+	self.BUTTON_ATCK = 0;
 	self.button1 = 0;
-	self.button2 = 0;
-	self.button3 = 0;
-	self.button4 = 0;
-	self.button5 = 0;
-	self.button6 = 0;
-	self.button7 = 0;
+	self.BUTTON_JUMP = 0;
+	self.BUTTON_ATCK2 = 0;
+	self.BUTTON_ZOOM = 0;
+	self.BUTTON_CROUCH = 0;
+	self.BUTTON_HOOK = 0;
+	self.BUTTON_INFO = 0;
 	self.button8 = 0;
-	self.buttonchat = 0;
-	self.buttonuse = 0;
+	self.BUTTON_CHAT = 0;
+	self.BUTTON_USE = 0;
 
 	// if dead, just wait until we can respawn
 	if (self.deadflag)
 	{
 		if (self.deadflag == DEAD_DEAD)
-			self.button2 = 1; // press jump to respawn
+			self.BUTTON_JUMP = 1; // press jump to respawn
 		return;
 	}
 

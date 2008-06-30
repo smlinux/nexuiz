@@ -99,18 +99,18 @@ float(float req) w_shotgun =
 {
 	if (req == WR_AIM)
 		if(vlen(self.origin-self.enemy.origin)>200)
-			self.button0 = bot_aim(1000000, 0, 0.001, FALSE);
+			self.BUTTON_ATCK = bot_aim(1000000, 0, 0.001, FALSE);
 		else
-			self.button3 = bot_aim(1000000, 0, 0.001, FALSE);
+			self.BUTTON_ATCK2 = bot_aim(1000000, 0, 0.001, FALSE);
 	else if (req == WR_THINK)
 	{
-		if (self.button0)
+		if (self.BUTTON_ATCK)
 		if (weapon_prepareattack(0, cvar("g_balance_shotgun_primary_refire")))
 		{
 			W_Shotgun_Attack();
 			weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_shotgun_primary_animtime"), w_ready);
 		}
-		if (self.button3)
+		if (self.BUTTON_ATCK2)
 		if (weapon_prepareattack(1, cvar("g_balance_shotgun_secondary_refire")))
 		{
 			W_Shotgun_Attack2();

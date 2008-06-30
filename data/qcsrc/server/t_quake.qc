@@ -22,8 +22,8 @@ void junk_function ()
 	self.exteriormodeltoclient = world;
 	self.glow_trail = 0;
 	self.tag_entity = world;
-	self.button6 = 0;
-	self.button7 = 0;
+	self.BUTTON_HOOK = 0;
+	self.BUTTON_INFO = 0;
 	self.button8 = 0;
 	self.pitch_speed = 0;
 	self.drawonlytoclient = world;
