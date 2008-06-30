@@ -648,7 +648,7 @@ void PutClientInServer (void)
 		self.bot_attack = TRUE;
 
 		self.statdraintime = time + 5;
-		self.button0 = self.button1 = self.button2 = self.button3 = 0;
+		self.button0 = self.button2 = self.button3 = 0;
 
 		if(self.killcount == -666) {
 			self.killcount = 0;
@@ -700,7 +700,9 @@ SetNewParms
 */
 void SetNewParms (void)
 {
-
+	// initialize parms for a new player
+	print("SetNewParms\n");
+	parm1 = -(86400 * 366);
 }
 
 /*
@@ -710,7 +712,23 @@ SetChangeParms
 */
 void SetChangeParms (void)
 {
+	// save parms for level change
+	print("SetChangeParms\n");
+	parm1 = self.parm_idlesince - time;
+}
 
+/*
+=============
+DecodeLevelParms
+=============
+*/
+void DecodeLevelParms (void)
+{
+	// load parms
+	print("DecodeLevelParms\n");
+	self.parm_idlesince = parm1;
+	if(self.parm_idlesince == -(86400 * 366))
+		self.parm_idlesince = time;
 }
 
 /*
@@ -917,6 +935,7 @@ Called when a client connects to the server
 =============
 */
 string ColoredTeamName(float t);
+void DecodeLevelParms (void);
 //void dom_player_join_team(entity pl);
 void ClientConnect (void)
 {
@@ -930,6 +949,8 @@ void ClientConnect (void)
 		bprint(s);
 		return;
 	}
+
+	DecodeLevelParms();
 
 	self.classname = "player_joining";
 	self.flags = self.flags | FL_CLIENT;
@@ -2032,12 +2053,39 @@ PlayerPostThink
 Called every frame for each client after the physics are run
 =============
 */
+.float idlekick_lasttimeleft;
 void PlayerPostThink (void)
 {
 	// Savage: Check for nameless players
 	if (strlen(self.netname) < 1) {
 		self.netname = "Player";
 		stuffcmd(self, "seta _cl_name Player\n");
+	}
+
+	if(sv_maxidle)
+	{
+		float timeleft;
+		timeleft = ceil(sv_maxidle - (time - self.parm_idlesince));
+		if(timeleft <= 0)
+		{
+			bprint("^3", self.netname, "^3 was kicked for idling.\n");
+			play2(self, "announcer/robotic/terminated.ogg");
+			dropclient(self);
+			return;
+		}
+		else if(timeleft <= 10)
+		{
+			if(timeleft != self.idlekick_lasttimeleft)
+			{
+				centerprint_atprio(self, CENTERPRIO_IDLEKICK, strcat("^3Stop idling!\n^3Disconnecting in ", ftos(timeleft), "..."));
+				play2(self, strcat("announcer/robotic/", ftos(timeleft), ".ogg"));
+			}
+		}
+		else
+		{
+			centerprint_expire(self, CENTERPRIO_IDLEKICK);
+		}
+		self.idlekick_lasttimeleft = timeleft;
 	}
 
 	if(self.classname == "player") {

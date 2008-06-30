@@ -652,6 +652,7 @@ string decolorize(string s)
 #define CENTERPRIO_VOTE 4
 #define CENTERPRIO_NORMAL 5
 #define CENTERPRIO_MAPVOTE 9
+#define CENTERPRIO_IDLEKICK 50
 #define CENTERPRIO_ADMIN 99
 .float centerprint_priority;
 .float centerprint_expires;
@@ -766,6 +767,7 @@ void readlevelcvars(void)
 	g_rocketarena = cvar("g_rocketarena");
 	g_vampire = cvar("g_vampire");
 	g_tourney = cvar("g_tourney");
+	sv_maxidle = cvar("sv_maxidle");
 
 	g_pickup_shells                    = cvar("g_pickup_shells");
 	g_pickup_shells_max                = cvar("g_pickup_shells_max");

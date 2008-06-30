@@ -1,6 +1,16 @@
 #define MAPINFO
 float require_spawnfunc_prefix; // if this float exists, only functions with spawnfunc_ name prefix qualify as spawn functions
 
+#define BUTTON_ATCK   button0
+#define BUTTON_JUMP   button2
+#define BUTTON_ATCK2  button3
+#define BUTTON_ZOOM   button4
+#define BUTTON_CROUCH button5
+#define BUTTON_HOOK   button6
+#define BUTTON_INFO   button7
+#define BUTTON_CHAT   buttonchat
+#define BUTTON_USE    buttonuse
+
 // Globals
 
 float g_domination, g_ctf, g_tdm, g_keyhunt, g_onslaught, g_assault, g_arena, g_lms, g_runematch;
@@ -432,3 +442,6 @@ float have_team_spawns;
 void Damage (entity targ, entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force);
 
 float lockteams;
+
+.float parm_idlesince;
+float sv_maxidle;
