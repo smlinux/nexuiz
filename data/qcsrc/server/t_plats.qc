@@ -711,7 +711,7 @@ void() door_go_up;
 void door_blocked()
 {
 
-    if((self.spawnflags & 4) && (other.takedamage != DAMAGE_NO)) { // KIll Kill Kill!!
+    if((self.spawnflags & 8) && (other.takedamage != DAMAGE_NO)) { // KIll Kill Kill!!
         Damage (other, self, self, 10000, DEATH_HURTTRIGGER, other.origin, '0 0 0');
     } else {
 
@@ -1099,7 +1099,7 @@ void spawnfunc_func_door()
         self.dmg = 0;
     }
 
-    if(self.spawnflags & 4)
+    if(self.spawnflags & 8)
         self.dmg = 10000;
 
     if(self.dmg & (!self.message))
