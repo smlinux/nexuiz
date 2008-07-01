@@ -359,7 +359,7 @@ void spawnfunc_trigger_counter()
 };
 
 .float triggerhurttime;
-void spawnfunc_hurt_touch()
+void trigger_hurt_touch()
 {
 	if (!other.owner)
 	{
@@ -387,7 +387,7 @@ defalt dmg = 5
 void spawnfunc_trigger_hurt()
 {
 	InitTrigger ();
-	self.touch = spawnfunc_hurt_touch;
+	self.touch = trigger_hurt_touch;
 	if (!self.dmg)
 		self.dmg = 1000;
 	if (!self.message)
