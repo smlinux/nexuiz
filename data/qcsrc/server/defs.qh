@@ -30,9 +30,9 @@ float currentbots;
 float bots_would_leave;
 float lms_lowest_lives;
 float lms_next_place;
-float() LMS_NewPlayerLives;
+float LMS_NewPlayerLives();
 
-void(entity player, float f) UpdateFrags;
+void UpdateFrags(entity player, float f);
 .float totalfrags;
 
 float team1_score, team2_score, team3_score, team4_score;
@@ -128,7 +128,7 @@ float maxclients;
 .vector anim_backleft; // player running back and left
 
 void() player_setupanimsformodel;
-void(vector anim, float looping, float override, float restart) player_setanim;
+void player_setanim(vector anim, float looping, float override, float restart);
 
 .string mdl;
 
@@ -170,10 +170,10 @@ void(vector anim, float looping, float override, float restart) player_setanim;
 .entity exteriorweaponentity;
 .float switchweapon;
 .float autoswitch;
-float(float wpn, float wrequest) weapon_action;
-float(entity cl, float wpn, float andammo, float complain) client_hasweapon;
-void() w_clear;
-void() w_ready;
+float weapon_action(float wpn, float wrequest);
+float client_hasweapon(entity cl, float wpn, float andammo, float complain);
+void w_clear();
+void w_ready();
 // VorteX: standalone think for weapons, so normal think on weaponentity can be reserved by weaponflashes (which needs update even player dies)
 .float weapon_nextthink;
 .void() weapon_think;
@@ -213,19 +213,7 @@ float WEP_ROCKET_LAUNCHER	= 9; // float	IT_ROCKET_LAUNCHER		= 128;
 float WEP_FIRST				= 1;
 float WEP_LAST				= 9;
 
-void(entity client, string s)	stuffcmd = #21;
-void(entity client, string s)	sprint = #24;
-vector(entity e, float sped)	aim = #44;
-void(entity client, string s)	centerprint_builtin = #73;
-void(entity e)			setspawnparms = #78;
-void(float to, float f)		WriteByte = #52;
-void(float to, float f)		WriteChar = #53;
-void(float to, float f)		WriteShort = #54;
-void(float to, float f)		WriteLong = #55;
-void(float to, float f)		WriteCoord = #56;
-void(float to, float f)		WriteAngle = #57;
-void(float to, string s)	WriteString	= #58;
-void(float to, entity s)	WriteEntity	= #59;
+void(entity client, string s) centerprint_builtin = #73;
 .vector dest1, dest2;
 
 float gameover;

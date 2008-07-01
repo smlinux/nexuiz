@@ -214,16 +214,17 @@ void Item_Touch (void)
 
 // Savage: used for item garbage-collection
 // TODO: perhaps nice special effect?
-void RemoveItem(void) = {
+void RemoveItem(void) /*FIXDECL*/
+{
 	remove(self);
 }
 
 // pickup evaluation functions
 // these functions decide how desirable an item is to the bots
 
-float(entity player, entity item) generic_pickupevalfunc = {return item.bot_pickupbasevalue;};
+float generic_pickupevalfunc(entity player, entity item) {return item.bot_pickupbasevalue;};
 
-float(entity player, entity item) weapon_pickupevalfunc =
+float weapon_pickupevalfunc(entity player, entity item)
 {
 	// if we already have the weapon, rate it 1/5th normal value
 	if ((player.items & item.items) == item.items)
@@ -231,7 +232,7 @@ float(entity player, entity item) weapon_pickupevalfunc =
 	return item.bot_pickupbasevalue;
 };
 
-float(entity player, entity item) commodity_pickupevalfunc =
+float commodity_pickupevalfunc(entity player, entity item)
 {
 	float c;
 	c = 0;

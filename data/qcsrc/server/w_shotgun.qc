@@ -84,18 +84,18 @@ void W_Shotgun_Attack2 (void)
 }
 
 // weapon frames
-void()  shotgun_fire2_03 =
+void shotgun_fire2_03()
 {
 	W_Shotgun_Attack2();
 	weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_shotgun_secondary_animtime"), w_ready);
 }
-void()  shotgun_fire2_02 =
+void shotgun_fire2_02()
 {
 	W_Shotgun_Attack2();
 	weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_shotgun_secondary_animtime"), shotgun_fire2_03);
 }
 
-float(float req) w_shotgun =
+float w_shotgun(float req)
 {
 	if (req == WR_AIM)
 		if(vlen(self.origin-self.enemy.origin)>200)

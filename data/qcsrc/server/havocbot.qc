@@ -3,7 +3,7 @@
 void() havocbot_chooserole;
 .float havocbot_keyboardskill;
 
-vector() havocbot_dodge =
+vector havocbot_dodge()
 {
 	// LordHavoc: disabled because this is too expensive
 	return '0 0 0';
@@ -62,7 +62,7 @@ vector() havocbot_dodge =
 //.vector bot_dodgevector;
 //.float bot_dodgevector_time;
 //.float bot_dodgevector_jumpbutton;
-void() havocbot_movetogoal =
+void havocbot_movetogoal()
 {
 	local vector destorg;
 	local vector diff;
@@ -253,7 +253,7 @@ void() havocbot_movetogoal =
 
 .float havocbot_chooseenemy_finished;
 .float havocbot_stickenemy;
-void() havocbot_chooseenemy =
+void havocbot_chooseenemy()
 {
 	local entity head, best;
 	local float rating, bestrating;
@@ -321,7 +321,7 @@ void() havocbot_chooseenemy =
 };
 
 float(entity e) w_getbestweapon;
-void() havocbot_chooseweapon =
+void havocbot_chooseweapon()
 {
 	// TODO: clean this up by moving it to weapon code
 	if(self.enemy.classname!="player")
@@ -416,7 +416,7 @@ void() havocbot_chooseweapon =
 };
 
 .float nextaim;
-void() havocbot_aim =
+void havocbot_aim()
 {
 	local vector selfvel, enemyvel;
 	if (time < self.nextaim)
@@ -437,7 +437,7 @@ void() havocbot_aim =
 };
 
 .float bot_chooseweapontime;
-void() havocbot_ai =
+void havocbot_ai()
 {
 	if (bot_strategytoken == self)
 	if (!bot_strategytoken_taken)
@@ -492,7 +492,7 @@ void() havocbot_ai =
 	havocbot_movetogoal();
 };
 
-void() havocbot_setupbot =
+void havocbot_setupbot()
 {
 	self.bot_ai = havocbot_ai;
 	// will be updated by think code

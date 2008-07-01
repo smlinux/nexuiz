@@ -40,7 +40,7 @@ float IsFlying(entity a)
 	return 1;
 }
 
-void(entity player, float f) UpdateFrags =
+void UpdateFrags(entity player, float f)
 {
 	player.frags += f;
 	player.totalfrags += f;

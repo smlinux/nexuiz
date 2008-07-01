@@ -30,7 +30,7 @@ float   flagcaptimerecord;
 void() FlagThink;
 void() FlagTouch;
 
-void() place_flag =
+void place_flag()
 {
 	if(!self.t_width)
 		self.t_width = 0.1; // frame animation rate
@@ -76,7 +76,7 @@ void LogCTF(string mode, float flagteam, entity actor)
 	GameLogEcho(s, FALSE);
 }
 
-void(entity e) RegenFlag =
+void RegenFlag(entity e)
 {
 	setattachment(e, world, "");
 	e.movetype = MOVETYPE_NONE;
@@ -91,7 +91,7 @@ void(entity e) RegenFlag =
 	e.flags = FL_ITEM; // clear FL_ONGROUND and any other junk
 };
 
-void(entity e) ReturnFlag =
+void ReturnFlag(entity e)
 {
 	if (e.owner)
 	if (e.owner.flagcarried == e)
@@ -106,7 +106,7 @@ void(entity e) ReturnFlag =
 	RegenFlag(e);
 };
 
-void(entity e) DropFlag =
+void DropFlag(entity e)
 {
 	local entity p;
 
@@ -165,7 +165,7 @@ void AnimateFlag()
 		self.frame = 0;
 }
 
-void() FlagThink =
+void FlagThink()
 {
 	local entity e;
 
@@ -223,7 +223,7 @@ void() FlagThink =
 	}
 };
 
-void() FlagTouch =
+void FlagTouch()
 {
 	if(gameover) return;
 
@@ -378,7 +378,7 @@ Keys:
 "angle"
  viewing angle when spawning
 */
-void() spawnfunc_info_player_team1 =
+void spawnfunc_info_player_team1()
 {
 	self.team = COLOR_TEAM1; // red
 	spawnfunc_info_player_deathmatch();
@@ -393,7 +393,7 @@ Keys:
 "angle"
  viewing angle when spawning
 */
-void() spawnfunc_info_player_team2 =
+void spawnfunc_info_player_team2()
 {
 	self.team = COLOR_TEAM2; // blue
 	spawnfunc_info_player_deathmatch();
@@ -408,7 +408,7 @@ Keys:
 "angle"
  viewing angle when spawning
 */
-void() spawnfunc_info_player_team3 =
+void spawnfunc_info_player_team3()
 {
 	self.team = COLOR_TEAM3; // purple
 	spawnfunc_info_player_deathmatch();
@@ -423,7 +423,7 @@ Keys:
 "angle"
  viewing angle when spawning
 */
-void() spawnfunc_info_player_team4 =
+void spawnfunc_info_player_team4()
 {
 	self.team = COLOR_TEAM4; // yellow
 	spawnfunc_info_player_deathmatch();
@@ -457,7 +457,7 @@ Keys:
  (default ctf/respawn.wav)
 */
 
-void() spawnfunc_item_flag_team1 =
+void spawnfunc_item_flag_team1()
 {
 	if (!g_ctf)
 	{
@@ -540,7 +540,7 @@ Keys:
  (default ctf/respawn.wav)
 */
 
-void() spawnfunc_item_flag_team2 =
+void spawnfunc_item_flag_team2()
 {
 	if (!g_ctf)
 	{
@@ -613,7 +613,7 @@ Keys:
 
 */
 
-void() spawnfunc_ctf_team =
+void spawnfunc_ctf_team()
 {
 	if (!g_ctf)
 	{
@@ -640,7 +640,7 @@ void ctf_spawnteam (string teamname, float teamcolor)
 };
 
 // spawn some default teams if the map is not set up for ctf
-void() ctf_spawnteams =
+void ctf_spawnteams()
 {
 	float numteams;
 
@@ -650,7 +650,7 @@ void() ctf_spawnteams =
 	ctf_spawnteam("Blue", COLOR_TEAM2 - 1);
 };
 
-void() ctf_delayedinit =
+void ctf_delayedinit()
 {
 	self.think = SUB_Remove;
 	self.nextthink = time;
@@ -659,7 +659,7 @@ void() ctf_delayedinit =
 		ctf_spawnteams();
 };
 
-void() ctf_init =
+void ctf_init()
 {
 	local entity e;
 	e = spawn();
@@ -668,7 +668,7 @@ void() ctf_init =
 	flagcaptimerecord = stof(db_get(ServerProgsDB, strcat(GetMapname(), "/captimerecord/time")));
 };
 
-void(entity flag, float shift) ctf_setstatus2 =
+void ctf_setstatus2(entity flag, float shift)
 {
 	if (flag.cnt ==	FLAG_CARRY)
 		if (flag.owner == self)
@@ -683,7 +683,7 @@ void(entity flag, float shift) ctf_setstatus2 =
 	}
 };
 
-void() ctf_setstatus =
+void ctf_setstatus()
 {
 	self.items = self.items - (self.items & IT_RED_FLAG_TAKEN);
 	self.items = self.items - (self.items & IT_RED_FLAG_LOST);

@@ -120,7 +120,7 @@ void(string s) bcenterprint
 			centerprint(head, s);
 }
 
-void(string s, float check_dangerous) ServerConsoleEcho =
+void ServerConsoleEcho(string s, float check_dangerous)
 {
 	local string ch;
 	if (checkextension("DP_SV_PRINT"))
@@ -146,7 +146,7 @@ void(string s, float check_dangerous) ServerConsoleEcho =
 	}
 }
 
-void(string s, float check_dangerous) GameLogEcho =
+void GameLogEcho(string s, float check_dangerous)
 {
 	string fn;
 	float matches;
@@ -179,13 +179,13 @@ void(string s, float check_dangerous) GameLogEcho =
 	}
 }
 
-void() GameLogInit =
+void GameLogInit()
 {
 	logfile_open = 0;
 	// will be opened later
 }
 
-void() GameLogClose =
+void GameLogClose()
 {
 	if(logfile_open && logfile >= 0)
 	{
@@ -228,7 +228,7 @@ void relocate_spawnpoint()
 // IT WILL MOST PROBABLY DESTROY _ALL_ OTHER TEMP
 // STRINGS AND TAKE QUITE LONG. haystack and needle MUST
 // BE CONSTANT OR strzoneD!
-float(string haystack, string needle, float offset) strstr =
+float strstr(string haystack, string needle, float offset)
 {
 	float len, endpos;
 	string found;
@@ -248,7 +248,7 @@ float(string haystack, string needle, float offset) strstr =
 float NUM_NEAREST_ENTITIES = 4;
 entity nearest_entity[NUM_NEAREST_ENTITIES];
 float nearest_length[NUM_NEAREST_ENTITIES];
-entity(vector point, .string field, string value, vector axismod) findnearest =
+entity findnearest(vector point, .string field, string value, vector axismod)
 {
 	entity localhead;
 	float i;
@@ -328,14 +328,14 @@ entity(vector point, .string field, string value, vector axismod) findnearest =
 	return nearest_entity[0];
 }
 
-void() spawnfunc_target_location =
+void spawnfunc_target_location()
 {
 	self.classname = "target_location";
 	// location name in netname
 	// eventually support: count, teamgame selectors, line of sight?
 };
 
-void() spawnfunc_info_location =
+void spawnfunc_info_location()
 {
 	self.classname = "target_location";
 	self.message = self.netname;
@@ -360,7 +360,7 @@ string NearestLocation(vector p)
 	return ret;
 }
 
-string(string msg) formatmessage =
+string formatmessage(string msg)
 {
 	float p;
 	float n;
@@ -701,7 +701,7 @@ string playername(entity p)
 		return p.netname;
 }
 
-vector(vector m1, vector m2) randompos =
+vector randompos(vector m1, vector m2)
 {
 	local vector v;
 	m2 = m2 - m1;
@@ -712,10 +712,10 @@ vector(vector m1, vector m2) randompos =
 };
 
 // requires that m2>m1 in all coordinates, and that m4>m3
-float(vector m1, vector m2, vector m3, vector m4) boxesoverlap = {return m2_x >= m3_x && m1_x <= m4_x && m2_y >= m3_y && m1_y <= m4_y && m2_z >= m3_z && m1_z <= m4_z;};
+float boxesoverlap(vector m1, vector m2, vector m3, vector m4) {return m2_x >= m3_x && m1_x <= m4_x && m2_y >= m3_y && m1_y <= m4_y && m2_z >= m3_z && m1_z <= m4_z;};
 
 // requires the same, but is a stronger condition
-float(vector smins, vector smaxs, vector bmins, vector bmaxs) boxinsidebox = {return smins_x >= bmins_x && smaxs_x <= bmaxs_x && smins_y >= bmins_y && smaxs_y <= bmaxs_y && smins_z >= bmins_z && smaxs_z <= bmaxs_z;};
+float boxinsidebox(vector smins, vector smaxs, vector bmins, vector bmaxs) {return smins_x >= bmins_x && smaxs_x <= bmaxs_x && smins_y >= bmins_y && smaxs_y <= bmaxs_y && smins_z >= bmins_z && smaxs_z <= bmaxs_z;};
 
 float g_pickup_shells;
 float g_pickup_shells_max;

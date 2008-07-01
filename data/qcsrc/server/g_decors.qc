@@ -8,7 +8,7 @@ float maxdecors;
 //void(vector org, float bodydamage, float armordamage, vector vel, float damgtype) genericbleedfunc;
 
 // removes the oldest decors each frame to maintain a certain maximum decors
-void() decorframe =
+void decorframe()
 {
 	local entity estart, e, b1, b2, b3, b4, b5, b6, b7, b8, b9, b10;
 	local float bt1, bt2, bt3, bt4, bt5, bt6, bt7, bt8, bt9, bt10, iterations;
@@ -173,7 +173,7 @@ void() decorframe =
 	}
 };
 
-entity() newdecor =
+entity newdecor()
 {
 	local entity e;
 	numdecors++;
@@ -182,7 +182,7 @@ entity() newdecor =
 	return e;
 };
 
-void(entity e) removedecor =
+void removedecor(entity e)
 {
 	numdecors--;
 	remove(e);
@@ -190,7 +190,7 @@ void(entity e) removedecor =
 
 
 // used for various little bouncing debris to avoid getting stuck in the air
-void() DecorThink =
+void DecorThink()
 {
 	self.nextthink = time;
 	self.flags = self.flags - (self.flags & FL_ONGROUND);
@@ -200,7 +200,7 @@ void() DecorThink =
 
 .float  createdtime;
 
-void() InitDecors =
+void InitDecors()
 {
 	// different number of decors in multi-player (to avoid lag on modems)
 	if (maxclients > 1)

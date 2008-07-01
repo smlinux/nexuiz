@@ -20,7 +20,7 @@ float trigger_push_calculatevelocity_flighttime;
 	jump time
  */
 
-vector(vector org, entity tgt, float ht) trigger_push_calculatevelocity =
+vector trigger_push_calculatevelocity(vector org, entity tgt, float ht)
 {
 	local float grav, sdist, zdist, vs, vz, jumpheight, trajsign;
 	local vector sdir, torg;
@@ -99,7 +99,7 @@ vector(vector org, entity tgt, float ht) trigger_push_calculatevelocity =
 	return sdir * vs + '0 0 1' * vz;
 }
 
-void() trigger_push_touch =
+void trigger_push_touch()
 {
 	// FIXME: add a .float for whether an entity should be tossed by jumppads
 	if (other.classname != "player")
@@ -171,7 +171,7 @@ void() trigger_push_touch =
 
 .vector dest;
 
-void() trigger_push_findtarget =
+void trigger_push_findtarget()
 {
 	local entity e;
 	local vector org;
@@ -222,7 +222,7 @@ void() trigger_push_findtarget =
  *            values to target a point on the ceiling.
  *   movedir: if target is not set, this * speed * 10 is the velocity to be reached.
  */
-void() spawnfunc_trigger_push =
+void spawnfunc_trigger_push()
 {
 	if (self.angles != '0 0 0')
 		SetMovedir ();
@@ -249,6 +249,6 @@ void() spawnfunc_trigger_push =
 	self.nextthink = time + 0.2;
 };
 
-void() spawnfunc_target_push = {};
-void() spawnfunc_info_notnull = {};
-void() spawnfunc_target_position = {};
+void spawnfunc_target_push() {};
+void spawnfunc_info_notnull() {};
+void spawnfunc_target_position() {};

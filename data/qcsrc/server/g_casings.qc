@@ -1,4 +1,4 @@
-void() casingtouch =
+void casingtouch()
 {
 	if (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
 	{
@@ -14,7 +14,7 @@ void() casingtouch =
 	//self.dest = self.origin - self.groundentity.origin;
 };
 
-void() casingthink =
+void casingthink()
 {
 	local   float   p;
 	self.nextthink = time + 0.1;
@@ -42,7 +42,7 @@ void() casingthink =
 };
 
 // knock loose the casing when disturbed
-void() casingknockedloosefunc =
+void casingknockedloosefunc()
 {
 	self.movetype = MOVETYPE_BOUNCE;
 	self.flags = self.flags - (self.flags & FL_ONGROUND);
@@ -51,7 +51,7 @@ void() casingknockedloosefunc =
 	self.touch = casingtouch;
 };
 
-void(vector org, vector vel, float randomvel, vector ang, vector avel, float randomavel, float casingtype) SpawnCasing =
+void SpawnCasing(vector org, vector vel, float randomvel, vector ang, vector avel, float randomavel, float casingtype)
 {
 	local entity e;
 	if (cvar("temp1") & 2048)

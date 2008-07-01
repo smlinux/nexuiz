@@ -81,7 +81,7 @@ void PlayerJump (void)
 		player_setanim(self.anim_jump, FALSE, TRUE, TRUE);
 }
 
-void() CheckWaterJump =
+void CheckWaterJump()
 {
 	local vector start, end;
 

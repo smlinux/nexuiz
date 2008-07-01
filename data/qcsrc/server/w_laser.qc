@@ -75,7 +75,7 @@ void W_Laser_Attack (float issecondary)
 	missile.flags = FL_PROJECTILE;
 }
 
-float(float req) w_laser =
+float w_laser(float req)
 {
 	local float r1;
 	local float r2;

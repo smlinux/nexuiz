@@ -66,7 +66,7 @@ void CopyBody(float keepvelocity)
 }
 
 float animparseerror;
-vector(float animfile) animparseline =
+vector animparseline(float animfile)
 {
 	local string line;
 	local float c;
@@ -89,7 +89,7 @@ vector(float animfile) animparseline =
 	return anim;
 };
 
-void() player_setupanimsformodel =
+void player_setupanimsformodel()
 {
 	local string animfilename;
 	local float animfile;
@@ -158,7 +158,7 @@ void() player_setupanimsformodel =
 	player_setanim(self.anim_idle, TRUE, FALSE, TRUE);
 };
 
-void(vector anim, float looping, float override, float restart) player_setanim =
+void player_setanim(vector anim, float looping, float override, float restart)
 {
 	if (!restart)
 	if (anim_x == self.animstate_startframe)
@@ -175,7 +175,7 @@ void(vector anim, float looping, float override, float restart) player_setanim =
 	self.frame = self.animstate_startframe;
 };
 
-void() player_updateframe =
+void player_updateframe()
 {
 	if (time >= self.animstate_endtime)
 	{

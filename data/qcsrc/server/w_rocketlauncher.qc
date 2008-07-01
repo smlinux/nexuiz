@@ -283,7 +283,7 @@ void W_Rocket_Attack (void)
 	flash.effects = flash2.effects = EF_ADDITIVE | EF_FULLBRIGHT | EF_LOWPRECISION;
 }
 
-float(float req) w_rlauncher =
+float w_rlauncher(float req)
 {
 	if (req == WR_AIM)
 	{

@@ -9,14 +9,14 @@ float campaign_won;
 string campaign_index_var;
 float checkrules_equality;
 
-void(string s) CampaignBailout =
+void CampaignBailout(string s)
 {
 	cvar_set("g_campaign", "0");
 	ServerConsoleEcho(strcat("campaign initialization failed: ", s), TRUE);
 	return;
 }
 
-void() CampaignPreInit =
+void CampaignPreInit()
 {
 	float baseskill;
 	string title;
@@ -44,7 +44,7 @@ void() CampaignPreInit =
 }
 
 string GetMapname();
-void() CampaignPostInit =
+void CampaignPostInit()
 {
 	// now some sanity checks
 	string thismapname, wantedmapname;
@@ -106,7 +106,7 @@ void CampaignSaveCvar(string cvarname, float value)
 	}
 }
 
-void() CampaignPreIntermission =
+void CampaignPreIntermission()
 {
 	entity head;
 	float won;
@@ -159,7 +159,7 @@ void() CampaignPreIntermission =
 	}
 }
 
-void() CampaignPostIntermission =
+void CampaignPostIntermission()
 {
 	// NOTE: campaign_won is 0 or 1, that is, points to the next level
 
@@ -181,7 +181,7 @@ void() CampaignPostIntermission =
 
 
 
-void(float n) CampaignLevelWarp =
+void CampaignLevelWarp(float n)
 {
 	if(!sv_cheats)
 		return;

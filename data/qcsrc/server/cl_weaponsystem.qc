@@ -22,7 +22,7 @@ vector w_shotdir;
 // this function calculates w_shotorg and w_shotdir based on the weapon model
 // offset, trueaim and antilag, and won't put w_shotorg inside a wall.
 // make sure you call makevectors first (FIXME?)
-void(entity ent, vector vecs, float antilag, float recoil, string snd) W_SetupShot =
+void W_SetupShot(entity ent, vector vecs, float antilag, float recoil, string snd)
 {
 	float nudge = 1; // added to traceline target and subtracted from result
 	local vector trueaimpoint;
@@ -197,7 +197,7 @@ float CL_Weaponentity_CustomizeEntityForClient()
 }
 
 .string weaponname;
-void() CL_Weaponentity_Think =
+void CL_Weaponentity_Think()
 {
 	self.nextthink = time;
 	if (intermission_running)
@@ -250,7 +250,7 @@ void() CL_Weaponentity_Think =
 	LaserTarget_Think();
 };
 
-void() CL_ExteriorWeaponentity_Think =
+void CL_ExteriorWeaponentity_Think()
 {
 	float tag_found;
 	self.nextthink = time;
@@ -296,7 +296,7 @@ void() CL_ExteriorWeaponentity_Think =
 };
 
 // spawning weaponentity for client
-void() CL_SpawnWeaponentity =
+void CL_SpawnWeaponentity()
 {
 	self.weaponentity = spawn();
 	self.weaponentity.solid = SOLID_NOT;
@@ -322,7 +322,7 @@ void() CL_SpawnWeaponentity =
 	self.exteriorweaponentity.nextthink = time;
 };
 
-float(entity cl, float wpn, float andammo, float complain) client_hasweapon =
+float client_hasweapon(entity cl, float wpn, float andammo, float complain)
 {
 	local float itemcode, f;
 	local entity oldself;
@@ -365,7 +365,7 @@ float(entity cl, float wpn, float andammo, float complain) client_hasweapon =
 };
 
 // Weapon subs
-void() w_clear =
+void w_clear()
 {
 	if (self.weapon != -1)
 		self.weapon = 0;
@@ -377,7 +377,7 @@ void() w_clear =
 	}
 };
 
-void() w_ready =
+void w_ready()
 {
 	if (self.weaponentity)
 		self.weaponentity.state = WS_READY;
@@ -410,7 +410,7 @@ float(entity e) w_getbestweapon
 };
 
 // Setup weapon for client (after this raise frame will be launched)
-void(float windex, string wname, float hudammo) weapon_setup =
+void weapon_setup(float windex, string wname, float hudammo)
 {
 	self.items = self.items - (self.items & (IT_SHELLS | IT_NAILS | IT_ROCKETS | IT_CELLS));
 	self.items = self.items | hudammo;
@@ -421,7 +421,7 @@ void(float windex, string wname, float hudammo) weapon_setup =
 };
 
 // perform weapon to attack (weaponstate and attack_finished check is here)
-float(float secondary, float attacktime) weapon_prepareattack =
+float weapon_prepareattack(float secondary, float attacktime)
 {
 	//if sv_ready_restart_after_countdown is set, don't allow the player to shoot
 	//if all players readied up and the countdown is running
@@ -459,7 +459,7 @@ float(float secondary, float attacktime) weapon_prepareattack =
 	return TRUE;
 };
 
-void(float fr, float t, void() func) weapon_thinkf =
+void weapon_thinkf(float fr, float t, void() func)
 {
 	if (fr >= 0)
 	{
@@ -513,12 +513,12 @@ void(float fr, float t, void() func) weapon_thinkf =
 	}
 };
 
-void(float spd, vector org) weapon_boblayer1 =
+void weapon_boblayer1(float spd, vector org)
 {
 	// VorteX: haste can be added here
 };
 
-vector(vector pvelocity, vector mvelocity) W_CalculateProjectileVelocity =
+vector W_CalculateProjectileVelocity(vector pvelocity, vector mvelocity)
 {
 	vector mdirection;
 	float mspeed;
@@ -589,7 +589,7 @@ vector(vector pvelocity, vector mvelocity) W_CalculateProjectileVelocity =
 	return outvelocity;
 }
 
-void(entity missile) W_SetupProjectileVelocity =
+void W_SetupProjectileVelocity(entity missile)
 {
 	if(missile.owner == world)
 		error("Unowned missile");
@@ -597,7 +597,7 @@ void(entity missile) W_SetupProjectileVelocity =
 	missile.velocity = W_CalculateProjectileVelocity(missile.owner.velocity, missile.velocity);
 }
 
-void(float wepcode, float minammo) weapon_register =
+void weapon_register(float wepcode, float minammo)
 {
 	string s;
 	float itemcode;

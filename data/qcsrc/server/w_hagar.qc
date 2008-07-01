@@ -156,7 +156,7 @@ void W_Hagar_Attack2 (void)
 	missile.flags = FL_PROJECTILE;
 }
 
-float(float req) w_hagar =
+float w_hagar(float req)
 {
 	if (req == WR_AIM)
 		if (random()>0.15)

@@ -119,7 +119,7 @@ void minstagib_ammocheck (void)
 	self.minstagib_nextthink = time + 1;
 }
 
-float(float req) w_nex =
+float w_nex(float req)
 {
 	if (req == WR_AIM)
 		self.BUTTON_ATCK = bot_aim(1000000, 0, 1, FALSE);

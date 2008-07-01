@@ -16,7 +16,7 @@ void() plat_go_down;
 void() plat_crush;
 float PLAT_LOW_TRIGGER = 1;
 
-void() plat_spawn_inside_trigger =
+void plat_spawn_inside_trigger()
 {
 	local entity trigger;
 	local vector tmin, tmax;
@@ -47,7 +47,7 @@ void() plat_spawn_inside_trigger =
 	setsize (trigger, tmin, tmax);
 };
 
-void() plat_hit_top =
+void plat_hit_top()
 {
 	sound (self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
 	self.state = 1;
@@ -55,27 +55,27 @@ void() plat_hit_top =
 	self.nextthink = self.ltime + 3;
 };
 
-void() plat_hit_bottom =
+void plat_hit_bottom()
 {
 	sound (self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
 	self.state = 2;
 };
 
-void() plat_go_down =
+void plat_go_down()
 {
 	sound (self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
 	self.state = 3;
 	SUB_CalcMove (self.pos2, self.speed, plat_hit_bottom);
 };
 
-void() plat_go_up =
+void plat_go_up()
 {
 	sound (self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
 	self.state = 4;
 	SUB_CalcMove (self.pos1, self.speed, plat_hit_top);
 };
 
-void() plat_center_touch =
+void plat_center_touch()
 {
 	if (other.classname != "player")
 		return;
@@ -90,7 +90,7 @@ void() plat_center_touch =
 		self.nextthink = self.ltime + 1;	// delay going down
 };
 
-void() plat_outside_touch =
+void plat_outside_touch()
 {
 	if (other.classname != "player")
 		return;
@@ -103,7 +103,7 @@ void() plat_outside_touch =
 		plat_go_down ();
 };
 
-void() plat_trigger_use =
+void plat_trigger_use()
 {
 	if (self.think)
 		return;		// allready activated
@@ -111,7 +111,7 @@ void() plat_trigger_use =
 };
 
 
-void() plat_crush =
+void plat_crush()
 {
     if((self.spawnflags & 4) && (other.takedamage != DAMAGE_NO)) { // KIll Kill Kill!!
         Damage (other, self, self, 10000, DEATH_HURTTRIGGER, other.origin, '0 0 0');
@@ -132,7 +132,7 @@ void() plat_crush =
     }
 };
 
-void() plat_use =
+void plat_use()
 {
 	self.use = SUB_Null;
 	if (self.state != 4)
@@ -143,8 +143,8 @@ void() plat_use =
 
 .string sound1, sound2;
 
-void() spawnfunc_path_corner = { };
-void() spawnfunc_func_plat =
+void spawnfunc_path_corner() { };
+void spawnfunc_func_plat()
 {
 	if (!self.t_length)
 		self.t_length = 80;
@@ -228,20 +228,20 @@ void() spawnfunc_func_plat =
 void() train_next;
 void() func_train_find;
 
-void() train_blocked =
+void train_blocked()
 {
 	if (time < self.attack_finished_single)
 		return;
 	self.attack_finished_single = time + 0.5;
 };
-void() train_use =
+void train_use()
 {
 	if (self.think != func_train_find)
 		return;
 	train_next();
 };
 
-void() train_wait =
+void train_wait()
 {
 	if (self.wait)
 	{
@@ -254,7 +254,7 @@ void() train_wait =
 	self.think = train_next;
 };
 
-void() train_next =
+void train_next()
 {
 	local entity targ;
 
@@ -270,7 +270,7 @@ void() train_next =
 	SUB_CalcMove (targ.origin - self.mins, self.speed, train_wait);
 };
 
-void() func_train_find =
+void func_train_find()
 {
 	local entity targ;
 
@@ -285,7 +285,7 @@ void() func_train_find =
 };
 
 
-void() spawnfunc_func_train =
+void spawnfunc_func_train()
 {
 	if (!self.speed)
 		self.speed = 100;
@@ -324,13 +324,13 @@ void() spawnfunc_func_train =
 */
 
 void() train_next;
-void() train_wait =
+void train_wait()
 {
 	self.think = train_next;
 	self.nextthink = self.ltime + self.wait;
 };
 
-void() train_next =
+void train_next()
 {
 	local entity targ;
 	targ = find(world, targetname, self.target);
@@ -346,7 +346,7 @@ void() train_next =
 		SUB_CalcMove(targ.origin - self.mins, self.speed, train_wait);
 };
 
-void() func_train_find =
+void func_train_find()
 {
 	local entity targ;
 	targ = find(world, targetname, self.target);
@@ -361,7 +361,7 @@ Ridable platform, targets spawnfunc_path_corner path to follow.
 speed : speed the train moves (can be overridden by each spawnfunc_path_corner)
 target : targetname of first spawnfunc_path_corner (starts here)
 */
-void() spawnfunc_func_train =
+void spawnfunc_func_train()
 {
 	if (!self.target)
 		objerror("func_train without a target");
@@ -383,7 +383,7 @@ void() spawnfunc_func_train =
 
 
 
-void() rotating_blocked =
+void rotating_blocked()
 {
 
     if(self.dmg && other.takedamage != DAMAGE_NO) {
@@ -408,7 +408,7 @@ dmg     : Do this mutch dmg every .dmgtime intervall when blocked
 dmgtime : See above.
 */
 
-void() spawnfunc_func_rotating =
+void spawnfunc_func_rotating()
 {
 	if (self.noise)
 	{
@@ -453,7 +453,7 @@ void() spawnfunc_func_rotating =
 
 .float height;
 .float phase;
-void() func_bobbing_controller_think =
+void func_bobbing_controller_think()
 {
 	local vector v;
 	self.nextthink = time + 0.1;
@@ -464,7 +464,7 @@ void() func_bobbing_controller_think =
 	self.owner.velocity = (v - self.owner.origin) * 10;
 };
 
-void() bobbing_blocked =
+void bobbing_blocked()
 {
 	// no need to duplicate code
 	rotating_blocked();
@@ -479,7 +479,7 @@ noise : path/name of looping .wav file to play.
 dmg : Do this mutch dmg every .dmgtime intervall when blocked
 dmgtime : See above.
 */
-void() spawnfunc_func_bobbing =
+void spawnfunc_func_bobbing()
 {
 	local entity controller;
 	if (self.noise)
@@ -537,7 +537,7 @@ void() spawnfunc_func_bobbing =
 void() button_wait;
 void() button_return;
 
-void() button_wait =
+void button_wait()
 {
 	self.state = STATE_TOP;
 	self.nextthink = self.ltime + self.wait;
@@ -547,12 +547,12 @@ void() button_wait =
 	self.frame = 1;			// use alternate textures
 };
 
-void() button_done =
+void button_done()
 {
 	self.state = STATE_BOTTOM;
 };
 
-void() button_return =
+void button_return()
 {
 	self.state = STATE_DOWN;
 	SUB_CalcMove (self.pos1, self.speed, button_done);
@@ -562,13 +562,13 @@ void() button_return =
 };
 
 
-void() button_blocked =
+void button_blocked()
 {
 	// do nothing, just don't come all the way back out
 };
 
 
-void() button_fire =
+void button_fire()
 {
 	self.health = self.max_health;
 	self.takedamage = DAMAGE_NO;    // will be reset upon return
@@ -584,7 +584,7 @@ void() button_fire =
 };
 
 
-void() button_use =
+void button_use()
 {
 //	if (activator.classname != "player")
 //	{
@@ -595,7 +595,7 @@ void() button_use =
 	button_fire ();
 };
 
-void() button_touch =
+void button_touch()
 {
 //	if (activator.classname != "player")
 //	{
@@ -612,7 +612,7 @@ void() button_touch =
 	button_fire ();
 };
 
-void(entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force) button_damage =
+void button_damage(entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
 {
 	self.health = self.health - damage;
 	if (self.health <= 0)
@@ -643,7 +643,7 @@ When a button is touched, it moves some distance in the direction of it's angle,
 2) metallic click
 3) in-out
 */
-void() spawnfunc_func_button =
+void spawnfunc_func_button()
 {
 	SetMovedir ();
 
@@ -708,7 +708,7 @@ THINK FUNCTIONS
 void() door_go_down;
 void() door_go_up;
 
-void() door_blocked =
+void door_blocked()
 {
 
     if((self.spawnflags & 4) && (other.takedamage != DAMAGE_NO)) { // KIll Kill Kill!!
@@ -748,7 +748,7 @@ void() door_blocked =
 };
 
 
-void() door_hit_top =
+void door_hit_top()
 {
 	if (self.noise1 != "")
 		sound (self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
@@ -759,14 +759,14 @@ void() door_hit_top =
 	self.nextthink = self.ltime + self.wait;
 };
 
-void() door_hit_bottom =
+void door_hit_bottom()
 {
 	if (self.noise1 != "")
 		sound (self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
 	self.state = STATE_BOTTOM;
 };
 
-void() door_go_down =
+void door_go_down()
 {
 	if (self.noise2 != "")
 		sound (self, CHAN_VOICE, self.noise2, 1, ATTN_NORM);
@@ -780,7 +780,7 @@ void() door_go_down =
 	SUB_CalcMove (self.pos1, self.speed, door_hit_bottom);
 };
 
-void() door_go_up =
+void door_go_up()
 {
 	if (self.state == STATE_UP)
 		return;		// allready going up
@@ -808,7 +808,7 @@ ACTIVATION FUNCTIONS
 =============================================================================
 */
 
-void() door_fire =
+void door_fire()
 {
 	local entity 	oself;
 	local entity	starte;
@@ -845,7 +845,7 @@ void() door_fire =
 };
 
 
-void() door_use =
+void door_use()
 {
 	local entity oself;
 
@@ -865,7 +865,7 @@ void() door_use =
 };
 
 
-void() door_trigger_touch =
+void door_trigger_touch()
 {
 	if (other.health < 1)
 		return;
@@ -881,7 +881,7 @@ void() door_trigger_touch =
 };
 
 
-void(entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force) door_damage =
+void door_damage(entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
 {
 	local entity oself;
 	self.health = self.health - damage;
@@ -904,7 +904,7 @@ door_touch
 Prints messages
 ================
 */
-void() door_touch =
+void door_touch()
 {
 	if (other.classname != "player")
 		return;
@@ -930,7 +930,7 @@ SPAWNING FUNCTIONS
 */
 
 
-entity(vector fmins, vector fmaxs) spawn_field =
+entity spawn_field(vector fmins, vector fmaxs)
 {
 	local entity	trigger;
 	local	vector	t1, t2;
@@ -949,7 +949,7 @@ entity(vector fmins, vector fmaxs) spawn_field =
 };
 
 
-float (entity e1, entity e2) EntitiesTouching =
+float EntitiesTouching(entity e1, entity e2)
 {
 	if (e1.mins_x > e2.maxs_x)
 		return FALSE;
@@ -974,7 +974,7 @@ LinkDoors
 
 =============
 */
-void() LinkDoors =
+void LinkDoors()
 {
 	local entity	t, starte;
 	local vector	cmins, cmaxs;
@@ -1077,7 +1077,7 @@ FIXME: only one sound set available at the time being
 
 */
 
-void() spawnfunc_func_door =
+void spawnfunc_func_door()
 {
 	//if (!self.deathtype) // map makers can override this
 	//	self.deathtype = " got in the way";
@@ -1178,7 +1178,7 @@ float SECRET_NO_SHOOT = 8;		// only opened by trigger
 float SECRET_YES_SHOOT = 16;	// shootable even if targeted
 
 
-void () fd_secret_use =
+void fd_secret_use()
 {
 	local float temp;
 
@@ -1227,7 +1227,7 @@ void () fd_secret_use =
 };
 
 // Wait after first movement...
-void () fd_secret_move1 =
+void fd_secret_move1()
 {
 	self.nextthink = self.ltime + 1.0;
 	self.think = fd_secret_move2;
@@ -1236,7 +1236,7 @@ void () fd_secret_move1 =
 };
 
 // Start moving sideways w/sound...
-void () fd_secret_move2 =
+void fd_secret_move2()
 {
 	if (self.noise2 != "")
 		sound(self, CHAN_VOICE, self.noise2, 1, ATTN_NORM);
@@ -1244,7 +1244,7 @@ void () fd_secret_move2 =
 };
 
 // Wait here until time to go back...
-void () fd_secret_move3 =
+void fd_secret_move3()
 {
 	if (self.noise3 != "")
 		sound(self, CHAN_VOICE, self.noise3, 1, ATTN_NORM);
@@ -1256,7 +1256,7 @@ void () fd_secret_move3 =
 };
 
 // Move backward...
-void () fd_secret_move4 =
+void fd_secret_move4()
 {
 	if (self.noise2 != "")
 		sound(self, CHAN_VOICE, self.noise2, 1, ATTN_NORM);
@@ -1264,7 +1264,7 @@ void () fd_secret_move4 =
 };
 
 // Wait 1 second...
-void () fd_secret_move5 =
+void fd_secret_move5()
 {
 	self.nextthink = self.ltime + 1.0;
 	self.think = fd_secret_move6;
@@ -1272,14 +1272,14 @@ void () fd_secret_move5 =
 		sound(self, CHAN_VOICE, self.noise3, 1, ATTN_NORM);
 };
 
-void () fd_secret_move6 =
+void fd_secret_move6()
 {
 	if (self.noise2 != "")
 		sound(self, CHAN_VOICE, self.noise2, 1, ATTN_NORM);
 	SUB_CalcMove(self.oldorigin, self.speed, fd_secret_done);
 };
 
-void () fd_secret_done =
+void fd_secret_done()
 {
 	if (!self.targetname || self.spawnflags&SECRET_YES_SHOOT)
 	{
@@ -1291,7 +1291,7 @@ void () fd_secret_done =
 		sound(self, CHAN_VOICE, self.noise3, 1, ATTN_NORM);
 };
 
-void () secret_blocked =
+void secret_blocked()
 {
 	if (time < self.attack_finished_single)
 		return;
@@ -1306,7 +1306,7 @@ secret_touch
 Prints messages
 ================
 */
-void() secret_touch =
+void secret_touch()
 {
 	if (activator.classname != "player")
 		return;
@@ -1341,7 +1341,7 @@ If a secret door has a targetname, it will only be opened by it's botton or trig
 3) base
 */
 
-void () spawnfunc_func_door_secret =
+void spawnfunc_func_door_secret()
 {
 	/*if (!self.deathtype) // map makers can override this
 		self.deathtype = " got in the way";*/

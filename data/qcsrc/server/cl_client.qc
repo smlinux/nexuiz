@@ -17,7 +17,7 @@ void spawnfunc_info_player_deathmatch (void)
 	relocate_spawnpoint();
 }
 
-void() spawnpoint_use =
+void spawnpoint_use()
 {
 	if(teams_matter)
 	if(have_team_spawns)
@@ -1154,7 +1154,7 @@ void ClientDisconnect (void)
 }
 
 .float BUTTON_CHAT;
-void() ChatBubbleThink =
+void ChatBubbleThink()
 {
 	self.nextthink = time;
 	if (!self.owner.modelindex || self.owner.chatbubbleentity != self)
@@ -1170,7 +1170,7 @@ void() ChatBubbleThink =
 		self.model = "";
 };
 
-void() UpdateChatBubble =
+void UpdateChatBubble()
 {
 	if (!self.modelindex)
 		return;
@@ -1191,7 +1191,7 @@ void() UpdateChatBubble =
 }
 
 
-void() TeamBubbleThink =
+void TeamBubbleThink()
 {
 	self.nextthink = time;
 	if (!self.owner.modelindex || self.owner.teambubbleentity != self)
@@ -1213,7 +1213,7 @@ float() TeamBubble_customizeentityforclient
 	return (self.owner != other && self.owner.team == other.team && other.killcount > -666);
 }
 
-void() UpdateTeamBubble =
+void UpdateTeamBubble()
 {
 	if (!self.modelindex || !cvar("teamplay"))
 		return;
@@ -1238,7 +1238,7 @@ void() UpdateTeamBubble =
 
 // LordHavoc: this hack will be removed when proper _pants/_shirt layers are
 // added to the model skins
-/*void() UpdateColorModHack =
+/*void UpdateColorModHack()
 {
 	local float c;
 	c = self.clientcolors & 15;

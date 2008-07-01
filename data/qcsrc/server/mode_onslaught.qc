@@ -14,7 +14,7 @@ float ons_sprite_cp_atck_red, ons_sprite_cp_atck_blue, ons_sprite_cp_atck_neut;
 float ons_sprite_cp_dfnd_red, ons_sprite_cp_dfnd_blue;
 float ons_sprite_gen_red, ons_sprite_gen_blue, ons_sprite_gen_shielded;
 
-void() onslaught_updatelinks =
+void onslaught_updatelinks()
 {
 	local entity l, links;
 	local float stop, t1, t2, t3, t4;
@@ -309,7 +309,7 @@ float onslaught_controlpoint_attackable(entity cp, float t)
 	return 0;
 }
 
-void() onslaught_generator_think =
+void onslaught_generator_think()
 {
 	local float d;
 	local entity e;
@@ -334,7 +334,7 @@ void() onslaught_generator_think =
 	}
 };
 
-void() onslaught_generator_deaththink =
+void onslaught_generator_deaththink()
 {
 	local vector org;
 	if (self.count > 0)
@@ -353,7 +353,7 @@ void() onslaught_generator_deaththink =
 	}
 };
 
-void(entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force) onslaught_generator_damage =
+void onslaught_generator_damage(entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
 {
 	if (damage <= 0)
 		return;
@@ -414,7 +414,7 @@ void(entity inflictor, entity attacker, float damage, float deathtype, vector hi
 };
 
 // update links after a delay
-void() onslaught_generator_delayed =
+void onslaught_generator_delayed()
 {
 	onslaught_updatelinks();
 	// now begin normal thinking
@@ -494,7 +494,7 @@ keys:
 "team" - team that owns this generator (5 = red, 14 = blue, etc), MUST BE SET.
 "targetname" - name that spawnfunc_onslaught_link entities will use to target this.
 */
-void() spawnfunc_onslaught_generator =
+void spawnfunc_onslaught_generator()
 {
 	if (!g_onslaught)
 	{
@@ -579,7 +579,7 @@ void() spawnfunc_onslaught_generator =
 	self.sprite.waypointsprite_for_player = onslaught_generator_waypointsprite_for_player;
 };
 
-void() onslaught_generator_reset =
+void onslaught_generator_reset()
 {
 	self.team = self.team_saved;
 	self.lasthealth = self.max_health = self.health = cvar("g_onslaught_gen_health");
@@ -593,7 +593,7 @@ void() onslaught_generator_reset =
 	self.nextthink = time + 0.2;
 }
 
-void(entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force) onslaught_controlpoint_icon_damage =
+void onslaught_controlpoint_icon_damage(entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
 {
 	entity oself;
 	if (damage <= 0)
@@ -647,7 +647,7 @@ void(entity inflictor, entity attacker, float damage, float deathtype, vector hi
 	}
 };
 
-void() onslaught_controlpoint_icon_think =
+void onslaught_controlpoint_icon_think()
 {
 	self.nextthink = time + 0.1;
 	if (time > self.pain_finished + 1)
@@ -661,7 +661,7 @@ void() onslaught_controlpoint_icon_think =
 	self.colormod = '1 1 1' * (2 - bound(0, (self.pain_finished - time) / 10, 1));
 };
 
-void() onslaught_controlpoint_icon_buildthink =
+void onslaught_controlpoint_icon_buildthink()
 {
 	local entity oself;
 
@@ -689,7 +689,7 @@ void() onslaught_controlpoint_icon_buildthink =
 	self.colormod = '1 1 1' * (2 - bound(0, (self.pain_finished - time) / 10, 1));
 };
 
-void() onslaught_controlpoint_touch =
+void onslaught_controlpoint_touch()
 {
 	local entity e;
 	float a;
@@ -734,7 +734,7 @@ keys:
 "target" - target any entities that are tied to this control point, such as vehicles and buildable structure entities.
 "message" - name of this control point (should reflect the location in the map, such as "center bridge", "north tower", etc)
 */
-void() spawnfunc_onslaught_controlpoint =
+void spawnfunc_onslaught_controlpoint()
 {
 	local entity e;
 	if (!g_onslaught)
@@ -778,7 +778,7 @@ void() spawnfunc_onslaught_controlpoint =
 	self.sprite.waypointsprite_for_player = onslaught_controlpoint_waypointsprite_for_player;
 };
 
-void() onslaught_controlpoint_reset =
+void onslaught_controlpoint_reset()
 {
 	if(self.goalentity && self.goalentity != world)
 		remove(self.goalentity);
@@ -799,7 +799,7 @@ void() onslaught_controlpoint_reset =
 	SUB_UseTargets(); // to reset the structures, playerspawns etc.
 }
 
-void() onslaught_link_delayed =
+void onslaught_link_delayed()
 {
 	self.goalentity = find(world, targetname, self.target);
 	self.enemy = find(world, targetname, self.target2);
@@ -819,7 +819,7 @@ keys:
 "target" - first control point.
 "target2" - second control point.
 */
-void() spawnfunc_onslaught_link =
+void spawnfunc_onslaught_link()
 {
 	if (!g_onslaught)
 	{

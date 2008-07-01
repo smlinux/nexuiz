@@ -28,14 +28,14 @@ flags:
 "NOSHADOW" will not cast shadows in realtime lighting mode
 "FOLLOW" will follow the entity which "targetname" matches "target"
 */
-void() dynlight_think =
+void dynlight_think()
 {
 	if(!self.owner)
 		remove(self);
 
 	self.nextthink = 0.1;
 };
-void() dynlight_find_aiment =
+void dynlight_find_aiment()
 {
 	local entity targ;
 
@@ -49,7 +49,7 @@ void() dynlight_find_aiment =
 	self.nextthink = 0.1;
 	self.think = dynlight_think;
 };
-void() dynlight_find_path =
+void dynlight_find_path()
 {
 	local entity targ;
 
@@ -59,14 +59,14 @@ void() dynlight_find_path =
 	self.nextthink = self.ltime + 0.1;
 	self.think = train_next;
 };
-void() dynlight_use =
+void dynlight_use()
 {
 	if (self.light_lev == 0)
 		self.light_lev = self.lefty;
 	else
 		self.light_lev = 0;
 };
-void() dynlight =
+void dynlight()
 {
 	local	entity	targ;
 

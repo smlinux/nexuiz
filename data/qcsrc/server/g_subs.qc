@@ -1,4 +1,4 @@
-void() SUB_Null = {};
+void SUB_Null() {};
 
 void(vector destangle, float tspeed, void() func) SUB_CalcAngleMove;
 void()  SUB_CalcMoveDone;
@@ -368,7 +368,7 @@ InitTrigger
 ================
 */
 
-void() SetMovedir =
+void SetMovedir()
 {
 	if (self.movedir != '0 0 0')
 		self.movedir = normalize(self.movedir);
@@ -388,7 +388,7 @@ void() SetMovedir =
 	self.angles = '0 0 0';
 };
 
-void() InitTrigger =
+void InitTrigger()
 {
 // trigger angles are used for one-way touches.  An angle of 0 is assumed
 // to mean no restrictions, so use a yaw of 360 instead.
@@ -402,7 +402,7 @@ void() InitTrigger =
 	self.model = "";
 };
 
-void() InitSolidBSPTrigger =
+void InitSolidBSPTrigger()
 {
 // trigger angles are used for one-way touches.  An angle of 0 is assumed
 // to mean no restrictions, so use a yaw of 360 instead.

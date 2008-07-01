@@ -5,12 +5,12 @@
 .void() havocbot_role;
 float bot_ignore_bots;
 
-float(entity e) canreach =
+float canreach(entity e)
 {
 	return vlen(self.origin - e.origin) < 1500;
 }
 
-void(float ratingscale, vector org, float sradius) havocbot_goalrating_items =
+void havocbot_goalrating_items(float ratingscale, vector org, float sradius)
 {
 	local entity head;
 	local float t;
@@ -33,7 +33,7 @@ void(float ratingscale, vector org, float sradius) havocbot_goalrating_items =
 	}
 };
 
-void(float ratingscale, vector org, float sradius) havocbot_goalrating_controlpoints =
+void havocbot_goalrating_controlpoints(float ratingscale, vector org, float sradius)
 {
 	local entity head;
 	head = findchain(classname, "dom_controlpoint");
@@ -56,7 +56,7 @@ void(float ratingscale, vector org, float sradius) havocbot_goalrating_controlpo
 // LordHavoc: this function was already unused, but for waypoints to be a
 // useful goal the bots would have to seek out the least-recently-visited
 // ones, not the closest
-void(float ratingscale, vector org, float sradius) havocbot_goalrating_waypoints =
+void havocbot_goalrating_waypoints(float ratingscale, vector org, float sradius)
 {
 	local entity head;
 	head = findchain(classname, "waypoint");
@@ -69,7 +69,7 @@ void(float ratingscale, vector org, float sradius) havocbot_goalrating_waypoints
 };
 */
 
-void(float ratingscale, vector org, float sradius) havocbot_goalrating_enemyplayers =
+void havocbot_goalrating_enemyplayers(float ratingscale, vector org, float sradius)
 {
 	local entity head;
 	local float t, noteam;
@@ -101,7 +101,7 @@ void() havocbot_role_ctf_defense;
 void() havocbot_role_ctf_offense;
 void() havocbot_role_ctf_interceptor;
 
-void(float ratingscale, vector org, float sradius) havocbot_goalrating_ctf_carrieritems =
+void havocbot_goalrating_ctf_carrieritems(float ratingscale, vector org, float sradius)
 {
 	local entity head;
 	local float t;
@@ -127,7 +127,7 @@ void(float ratingscale, vector org, float sradius) havocbot_goalrating_ctf_carri
 
 entity ctf_worldflaglist;
 .entity ctf_worldflagnext;
-void(float ratingscale) havocbot_goalrating_ctf_ourflag =
+void havocbot_goalrating_ctf_ourflag(float ratingscale)
 {
 	local entity head;
 	head = ctf_worldflaglist;
@@ -141,7 +141,7 @@ void(float ratingscale) havocbot_goalrating_ctf_ourflag =
 		navigation_routerating(head, ratingscale, 10000);
 };
 
-void(float ratingscale) havocbot_goalrating_ctf_enemyflag =
+void havocbot_goalrating_ctf_enemyflag(float ratingscale)
 {
 	local entity head;
 	head = ctf_worldflaglist;
@@ -155,12 +155,12 @@ void(float ratingscale) havocbot_goalrating_ctf_enemyflag =
 		navigation_routerating(head, ratingscale, 10000);
 };
 
-void(float ratingscale) havocbot_goalrating_ctf_enemybase =
+void havocbot_goalrating_ctf_enemybase(float ratingscale)
 {
 	// div0: needs a change in the CTF code
 };
 
-void(float ratingscale) havocbot_goalrating_ctf_ourstolenflag =
+void havocbot_goalrating_ctf_ourstolenflag(float ratingscale)
 {
 	local entity head;
 	head = ctf_worldflaglist;
@@ -175,7 +175,7 @@ void(float ratingscale) havocbot_goalrating_ctf_ourstolenflag =
 		navigation_routerating(head, ratingscale, 10000);
 };
 
-void(float ratingscale) havocbot_goalrating_ctf_droppedflags =
+void havocbot_goalrating_ctf_droppedflags(float ratingscale)
 {
 	local entity head;
 	head = ctf_worldflaglist;
@@ -191,7 +191,7 @@ void(float ratingscale) havocbot_goalrating_ctf_droppedflags =
 
 //role rogue: (is this used?)
 //pick up items and dropped flags (with big rating boost to dropped flags)
-void() havocbot_role_ctf_rogue =
+void havocbot_role_ctf_rogue()
 {
 	if (self.bot_strategytime < time)
 	{
@@ -208,7 +208,7 @@ void() havocbot_role_ctf_rogue =
 //pick up armor and health
 //go to our flag spot
 .float bot_cantfindflag;
-void() havocbot_role_ctf_carrier =
+void havocbot_role_ctf_carrier()
 {
 	if (self.flagcarried == world)
 	{
@@ -241,7 +241,7 @@ void() havocbot_role_ctf_carrier =
 //if our flag taken, change role to interceptor
 //(60-90 second timer) change role to middle
 //go to enemy flag
-void() havocbot_role_ctf_offense =
+void havocbot_role_ctf_offense()
 {
 	local entity f;
 	if (self.flagcarried)
@@ -295,7 +295,7 @@ void() havocbot_role_ctf_offense =
 //if our flag is back, change role to previous role
 //follow our flag
 //go to least recently visited area
-void() havocbot_role_ctf_interceptor =
+void havocbot_role_ctf_interceptor()
 {
 	local entity f;
 	if (self.flagcarried)
@@ -340,7 +340,7 @@ void() havocbot_role_ctf_interceptor =
 //if see flag (of either team) follow it (this has many implications)
 //(10-20 second timer) change role to defense or offense
 //go to least recently visited area
-void() havocbot_role_ctf_middle =
+void havocbot_role_ctf_middle()
 {
 	local entity f;
 	if (self.flagcarried)
@@ -403,7 +403,7 @@ void() havocbot_role_ctf_middle =
 //if our flag taken, change role to interceptor
 //(30-50 second timer) change role to middle
 //move to nearest unclaimed defense spot
-void() havocbot_role_ctf_defense =
+void havocbot_role_ctf_defense()
 {
 	local entity f;
 	if (self.flagcarried)
@@ -483,7 +483,7 @@ void() havocbot_role_ctf_defense =
 // CTF:
 // choose a role according to the situation
 void() havocbot_role_dm;
-void() havocbot_chooserole_ctf =
+void havocbot_chooserole_ctf()
 {
 	local float r;
 	dprint("choose CTF role...\n");
@@ -503,7 +503,7 @@ void() havocbot_chooserole_ctf =
 
 //DOM:
 //go to best items, or control points you don't own
-void() havocbot_role_dom =
+void havocbot_role_dom()
 {
 	if (self.bot_strategytime < time)
 	{
@@ -519,7 +519,7 @@ void() havocbot_role_dom =
 
 //DM:
 //go to best items
-void() havocbot_role_dm =
+void havocbot_role_dm()
 {
 	if (self.bot_strategytime < time)
 	{
@@ -532,12 +532,12 @@ void() havocbot_role_dm =
 	}
 };
 
-void() havocbot_chooserole_dm =
+void havocbot_chooserole_dm()
 {
 	self.havocbot_role = havocbot_role_dm;
 };
 
-void() havocbot_chooserole_dom =
+void havocbot_chooserole_dom()
 {
 	self.havocbot_role = havocbot_role_dom;
 };
@@ -549,7 +549,7 @@ void() havocbot_chooserole_dom =
 
 entity kh_worldkeylist;
 .entity kh_worldkeynext;
-void(float ratingscale_team, float ratingscale_dropped, float ratingscale_enemy) havocbot_goalrating_kh =
+void havocbot_goalrating_kh(float ratingscale_team, float ratingscale_dropped, float ratingscale_enemy)
 {
 	local entity head;
 	for (head = kh_worldkeylist; head; head = head.kh_worldkeynext)
@@ -580,7 +580,7 @@ void() havocbot_role_kh_carrier;
 void() havocbot_role_kh_defense;
 void() havocbot_role_kh_offense;
 void() havocbot_role_kh_freelancer;
-void() havocbot_role_kh_carrier =
+void havocbot_role_kh_carrier()
 {
 	if (!(self.items & IT_KEY1))
 	{
@@ -605,7 +605,7 @@ void() havocbot_role_kh_carrier =
 	}
 }
 
-void() havocbot_role_kh_defense =
+void havocbot_role_kh_defense()
 {
 	if (self.items & IT_KEY1)
 	{
@@ -644,7 +644,7 @@ void() havocbot_role_kh_defense =
 	}
 };
 
-void() havocbot_role_kh_offense =
+void havocbot_role_kh_offense()
 {
 	if (self.items & IT_KEY1)
 	{
@@ -684,7 +684,7 @@ void() havocbot_role_kh_offense =
 	}
 };
 
-void() havocbot_role_kh_freelancer =
+void havocbot_role_kh_freelancer()
 {
 	if (self.items & IT_KEY1)
 	{
@@ -736,7 +736,7 @@ void() havocbot_role_kh_freelancer =
 
 
 
-void() havocbot_chooserole_kh =
+void havocbot_chooserole_kh()
 {
 	local float r;
 	r = random() * 3;
@@ -748,7 +748,7 @@ void() havocbot_chooserole_kh =
 		self.havocbot_role = havocbot_role_kh_freelancer;
 };
 
-void() havocbot_chooserole =
+void havocbot_chooserole()
 {
 	dprint("choose a role...\n");
 	navigation_routetogoal(world);

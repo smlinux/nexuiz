@@ -1,4 +1,4 @@
-void() tdeath_touch =
+void tdeath_touch()
 {
 	if (other == self.owner)
 		return;
@@ -28,7 +28,7 @@ void tdeath_remove()
 }
 
 // org2 is where they will return to if the teleport fails
-void(vector org, entity death_owner, vector org2) spawn_tdeath =
+void spawn_tdeath(vector org, entity death_owner, vector org2)
 {
 	local entity death;
 

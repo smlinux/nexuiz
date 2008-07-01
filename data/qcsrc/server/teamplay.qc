@@ -10,7 +10,8 @@ float cb1, cb2, cb3, cb4;
 
 float audit_teams_time;
 
-float() IsTeamBalanceForced = {
+float IsTeamBalanceForced()
+{
 	if(intermission_running)
 		return 0; // no rebalancing whatsoever please
 	if(!cvar("teamplay"))
@@ -75,7 +76,7 @@ void ctf_init();
 void runematch_init();
 void tdm_init();
 
-void(entity pl) LogTeamchange =
+void LogTeamchange(entity pl)
 {
 	string str;
 	if(!cvar("sv_eventlog"))
@@ -1308,7 +1309,7 @@ void AuditTeams()
 
 
 
-/*void(entity e, float first) UpdateTeamScore =
+/*void UpdateTeamScore(entity e, float first)
 {
 	clientno = e.FIXME;
 	if(first)
@@ -1342,7 +1343,7 @@ void tdm_spawnteam (string teamname, float teamcolor)
 };
 
 // spawn some default teams if the map is not set up for tdm
-void() tdm_spawnteams =
+void tdm_spawnteams()
 {
 	float numteams;
 
@@ -1356,7 +1357,7 @@ void() tdm_spawnteams =
 		tdm_spawnteam("Pink", COLOR_TEAM4-1);
 };
 
-void() tdm_delayedinit =
+void tdm_delayedinit()
 {
 	self.think = SUB_Remove;
 	self.nextthink = time;
@@ -1365,7 +1366,7 @@ void() tdm_delayedinit =
 		tdm_spawnteams();
 };
 
-void() tdm_init =
+void tdm_init()
 {
 	local entity e;
 	e = spawn();

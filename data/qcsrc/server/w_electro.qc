@@ -165,7 +165,7 @@ void() W_Electro_Attack2
 }
 
 .float bot_secondary_electromooth;
-float(float req) w_electro =
+float w_electro(float req)
 {
 	if (req == WR_AIM)
 	{

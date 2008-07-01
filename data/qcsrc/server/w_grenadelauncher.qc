@@ -148,7 +148,7 @@ void W_Grenade_Attack2 (void)
 }
 
 .float bot_secondary_grenademooth;
-float(float req) w_glauncher =
+float w_glauncher(float req)
 {
 	if (req == WR_AIM)
 	{

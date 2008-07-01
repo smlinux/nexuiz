@@ -96,7 +96,7 @@ void AnimateDomPoint()
 		self.frame = 0;
 }
 
-void() dompointthink =
+void dompointthink()
 {
 	local entity head;
 	local float waittime;
@@ -157,7 +157,7 @@ void() dompointthink =
 	}
 };
 
-void() dompointtouch =
+void dompointtouch()
 {
 	local entity head;
 	if (other.classname != "player")
@@ -227,7 +227,7 @@ Keys:
  (this is a global sound, like "Red team has captured a control point")
 */
 
-void() spawnfunc_dom_team =
+void spawnfunc_dom_team()
 {
 	if(!g_domination)
 	{
@@ -249,7 +249,7 @@ void() spawnfunc_dom_team =
 	self.team = self.cnt + 1;
 };
 
-void() dom_controlpoint_setup =
+void dom_controlpoint_setup()
 {
 	local entity head;
 	// find the spawnfunc_dom_team representing unclaimed points
@@ -486,7 +486,7 @@ void() dom_controlpoint_setup =
 /*QUAKED spawnfunc_dom_controlpoint (0 .5 .8) (-16 -16 -24) (16 16 32)
 Control point for Domination gameplay.
 */
-void() spawnfunc_dom_controlpoint =
+void spawnfunc_dom_controlpoint()
 {
 	if(!g_domination)
 	{
@@ -532,7 +532,7 @@ void dom_spawnteam (string teamname, float teamcolor, string pointmodel, float p
 	self = oldself;
 };
 
-void(vector org) dom_spawnpoint =
+void dom_spawnpoint(vector org)
 {
 	local entity oldself;
 	oldself = self;
@@ -546,7 +546,7 @@ void(vector org) dom_spawnpoint =
 };
 
 // spawn some default teams if the map is not set up for domination
-void() dom_spawnteams =
+void dom_spawnteams()
 {
 	float numteams;
 
@@ -561,7 +561,7 @@ void() dom_spawnteams =
 	dom_spawnteam("", 0, "models/domination/dom_unclaimed.md3", 0, "", "", "");
 };
 
-void() dom_delayedinit =
+void dom_delayedinit()
 {
 	local entity head;
 
@@ -593,7 +593,7 @@ void() dom_delayedinit =
 	}
 };
 
-void() dom_init =
+void dom_init()
 {
 	local entity e;
 	// we have to precache default models/sounds even if they might not be

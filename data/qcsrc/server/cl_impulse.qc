@@ -21,7 +21,7 @@ void DummyThink(void)
 }
 
 // from dpmod
-void(entity e, vector v) printsurfaceinfo =
+void printsurfaceinfo(entity e, vector v)
 {
 	local float surfnum, numpoints, vnum;
 	local string s;

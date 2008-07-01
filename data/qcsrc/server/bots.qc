@@ -4,7 +4,7 @@
 
 vector stepheightvec;
 float navigation_testtracewalk;
-float(entity e, vector start, vector m1, vector m2, vector end, float movemode) tracewalk =
+float tracewalk(entity e, vector start, vector m1, vector m2, vector end, float movemode)
 {
 	local vector org;
 	local vector move;
@@ -177,7 +177,7 @@ entity tracetossfaketarget;
 // 'end' vector is the place it aims for,
 // returns TRUE only if it hit targ (don't target non-solid entities)
 vector findtrajectory_velocity;
-float(vector org, vector m1, vector m2, entity targ, float shotspeed, float shotspeedupward, float maxtime, float shotdelay, entity ignore) findtrajectorywithleading =
+float findtrajectorywithleading(vector org, vector m1, vector m2, entity targ, float shotspeed, float shotspeedupward, float maxtime, float shotdelay, entity ignore)
 {
 	local float c, savesolid, shottime;
 	local vector dir, end, v;
@@ -304,7 +304,7 @@ float(vector org, vector m1, vector m2, entity targ, float shotspeed, float shot
 .vector lag5_vec3;
 .vector lag5_vec4;
 
-void() lag_update =
+void lag_update()
 {
 	if (self.lag1_time) if (time > self.lag1_time) {self.lag_func(self.lag1_time, self.lag1_float1, self.lag1_float2, self.lag1_entity1, self.lag1_vec1, self.lag1_vec2, self.lag1_vec3, self.lag1_vec4);self.lag1_time = 0;}
 	if (self.lag2_time) if (time > self.lag2_time) {self.lag_func(self.lag2_time, self.lag2_float1, self.lag2_float2, self.lag2_entity1, self.lag2_vec1, self.lag2_vec2, self.lag2_vec3, self.lag2_vec4);self.lag2_time = 0;}
@@ -313,7 +313,7 @@ void() lag_update =
 	if (self.lag5_time) if (time > self.lag5_time) {self.lag_func(self.lag5_time, self.lag5_float1, self.lag5_float2, self.lag5_entity1, self.lag5_vec1, self.lag5_vec2, self.lag5_vec3, self.lag5_vec4);self.lag5_time = 0;}
 };
 
-float(float t, float f1, float f2, entity e1, vector v1, vector v2, vector v3, vector v4) lag_additem =
+float lag_additem(float t, float f1, float f2, entity e1, vector v1, vector v2, vector v3, vector v4)
 {
 	if (self.lag1_time == 0) {self.lag1_time = t;self.lag1_float1 = f1;self.lag1_float2 = f2;self.lag1_entity1 = e1;self.lag1_vec1 = v1;self.lag1_vec2 = v2;self.lag1_vec3 = v3;self.lag1_vec4 = v4;return TRUE;}
 	if (self.lag2_time == 0) {self.lag2_time = t;self.lag2_float1 = f1;self.lag2_float2 = f2;self.lag2_entity1 = e1;self.lag2_vec1 = v1;self.lag2_vec2 = v2;self.lag2_vec3 = v3;self.lag2_vec4 = v4;return TRUE;}
@@ -382,7 +382,7 @@ float WAYPOINTFLAG_TELEPORT = 2097152;
 float WAYPOINTFLAG_NORELINK = 1048576;
 
 // add a new link to the spawnfunc_waypoint, replacing the furthest link it already has
-void(entity from, entity to) waypoint_addlink =
+void waypoint_addlink(entity from, entity to)
 {
 	local float c;
 
@@ -461,7 +461,7 @@ void(entity from, entity to) waypoint_addlink =
 // relink this spawnfunc_waypoint
 // (precompile a list of all reachable waypoints from this spawnfunc_waypoint)
 // (SLOW!)
-void() waypoint_think =
+void waypoint_think()
 {
 	local entity e;
 	local vector sv, sm1, sm2, ev, em1, em2, dv;
@@ -527,7 +527,7 @@ void() waypoint_think =
 	navigation_testtracewalk = 0;
 };
 
-void(entity wp) waypoint_clearlinks =
+void waypoint_clearlinks(entity wp)
 {
 	// clear links to other waypoints
 	local float f;
@@ -539,7 +539,7 @@ void(entity wp) waypoint_clearlinks =
 };
 
 // tell a spawnfunc_waypoint to relink
-void(entity wp) waypoint_schedulerelink =
+void waypoint_schedulerelink(entity wp)
 {
 	if (wp == world)
 		return;
@@ -574,7 +574,7 @@ void(entity wp) waypoint_schedulerelink =
 // create a new spawnfunc_waypoint and automatically link it to other waypoints, and link
 // them back to it as well
 // (suitable for spawnfunc_waypoint editor)
-entity(vector m1, vector m2, float f) waypoint_spawn =
+entity waypoint_spawn(vector m1, vector m2, float f)
 {
 	local entity w;
 	local vector org;
@@ -665,7 +665,7 @@ entity(vector m1, vector m2, float f) waypoint_spawn =
 };
 
 // spawnfunc_waypoint map entity
-void() spawnfunc_waypoint =
+void spawnfunc_waypoint()
 {
 	setorigin(self, self.origin);
 	// schedule a relink after other waypoints have had a chance to spawn
@@ -674,7 +674,7 @@ void() spawnfunc_waypoint =
 };
 
 // remove a spawnfunc_waypoint, and schedule all neighbors to relink
-void(entity e) waypoint_remove =
+void waypoint_remove(entity e)
 {
 	// tell all linked waypoints that they need to relink
 	waypoint_schedulerelink(e.wp00);
@@ -714,7 +714,7 @@ void(entity e) waypoint_remove =
 };
 
 // empties the map of waypoints
-void() waypoint_removeall =
+void waypoint_removeall()
 {
 	local entity head, next;
 	head = findchain(classname, "waypoint");
@@ -728,7 +728,7 @@ void() waypoint_removeall =
 
 // tell all waypoints to relink
 // (is this useful at all?)
-void() waypoint_schedulerelinkall =
+void waypoint_schedulerelinkall()
 {
 	local entity head;
 	head = findchain(classname, "waypoint");
@@ -741,7 +741,7 @@ void() waypoint_schedulerelinkall =
 
 // save waypoints to gamedir/data/maps/mapname.waypoints
 // TODO: support saving wayboxes
-void() waypoint_saveall =
+void waypoint_saveall()
 {
 	local string filename, s;
 	local float file, c;
@@ -783,7 +783,7 @@ void() waypoint_saveall =
 };
 
 // load waypoints from file
-float() waypoint_loadall =
+float waypoint_loadall()
 {
 	local string filename, s;
 	local float file, cwp, cwb, fl;
@@ -833,7 +833,7 @@ float() waypoint_loadall =
 	return cwp + cwb;
 };
 
-void(entity e) waypoint_spawnforitem =
+void waypoint_spawnforitem(entity e)
 {
 	local entity w;
 	local vector org;
@@ -869,7 +869,7 @@ void(entity e) waypoint_spawnforitem =
 	e.nearestwaypoint = waypoint_spawn(org, org, WAYPOINTFLAG_GENERATED | WAYPOINTFLAG_ITEM);
 };
 
-void(entity e, vector destination, float timetaken) waypoint_spawnforteleporter =
+void waypoint_spawnforteleporter(entity e, vector destination, float timetaken)
 {
 	local entity w;
 	local entity dw;
@@ -893,7 +893,7 @@ void(entity e, vector destination, float timetaken) waypoint_spawnforteleporter 
 /////////////////////////////////////////////////////////////////////////////
 
 // completely empty the goal stack, used when deciding where to go
-void() navigation_clearroute =
+void navigation_clearroute()
 {
 	self.goalcurrent = world;
 	self.goalstack01 = world;
@@ -931,7 +931,7 @@ void() navigation_clearroute =
 
 // add a new goal at the beginning of the stack
 // (in other words: add a new prerequisite before going to the later goals)
-void(entity e) navigation_pushroute =
+void navigation_pushroute(entity e)
 {
 	self.goalstack31 = self.goalstack30;
 	self.goalstack30 = self.goalstack29;
@@ -970,7 +970,7 @@ void(entity e) navigation_pushroute =
 // remove first goal from stack
 // (in other words: remove a prerequisite for reaching the later goals)
 // (used when a spawnfunc_waypoint is reached)
-void() navigation_poproute =
+void navigation_poproute()
 {
 	self.goalcurrent = self.goalstack01;
 	self.goalstack01 = self.goalstack02;
@@ -1007,7 +1007,7 @@ void() navigation_poproute =
 };
 
 // find the spawnfunc_waypoint near a dynamic goal such as a dropped weapon
-entity(entity player, float walkfromwp) navigation_findnearestwaypoint =
+entity navigation_findnearestwaypoint(entity player, float walkfromwp)
 {
 	local entity waylist, w, best;
 	local float dist, bestdist;
@@ -1079,7 +1079,7 @@ entity(entity player, float walkfromwp) navigation_findnearestwaypoint =
 }
 
 // finds the waypoints near the bot initiating a navigation query
-float(entity waylist, float maxdist) navigation_markroutes_nearestwaypoints =
+float navigation_markroutes_nearestwaypoints(entity waylist, float maxdist)
 {
 	local entity head;
 	local vector v, m1, m2, diff;
@@ -1124,7 +1124,7 @@ float(entity waylist, float maxdist) navigation_markroutes_nearestwaypoints =
 }
 
 // updates a path link if a spawnfunc_waypoint link is better than the current one
-void(entity w, entity wp, float cost2, vector p) navigation_markroutes_checkwaypoint =
+void navigation_markroutes_checkwaypoint(entity w, entity wp, float cost2, vector p)
 {
 	local vector m1;
 	local vector m2;
@@ -1150,7 +1150,7 @@ void(entity w, entity wp, float cost2, vector p) navigation_markroutes_checkwayp
 };
 
 // queries the entire spawnfunc_waypoint network for pathes leading away from the bot
-void() navigation_markroutes =
+void navigation_markroutes()
 {
 	local entity w, wp, waylist;
 	local float searching, cost, cost2;
@@ -1225,7 +1225,7 @@ void() navigation_markroutes =
 // updates the best goal according to a weighted calculation of travel cost and item value of a new proposed item
 .void() havocbot_role;
 void() havocbot_role_ctf_offense;
-void(entity e, float f, float rangebias) navigation_routerating =
+void navigation_routerating(entity e, float f, float rangebias)
 {
 	if (!e)
 		return;
@@ -1258,7 +1258,7 @@ void(entity e, float f, float rangebias) navigation_routerating =
 };
 
 // replaces the goal stack with the path to a given item
-void(entity e) navigation_routetogoal =
+void navigation_routetogoal(entity e)
 {
 	// if already going to this goal, don't stop
 	//if (self.goalentity == e)
@@ -1300,7 +1300,7 @@ void(entity e) navigation_routetogoal =
 
 // removes any currently touching waypoints from the goal stack
 // (this is how bots detect if they have reached a goal)
-void() navigation_poptouchedgoals =
+void navigation_poptouchedgoals()
 {
 	local vector org, m1, m2;
 	org = self.origin;// + self.velocity * 0.1;
@@ -1311,7 +1311,7 @@ void() navigation_poptouchedgoals =
 }
 
 // begin a goal selection session (queries spawnfunc_waypoint network)
-void() navigation_goalrating_start =
+void navigation_goalrating_start()
 {
 	navigation_bestrating = -1;
 	navigation_bestgoal = world;
@@ -1319,7 +1319,7 @@ void() navigation_goalrating_start =
 };
 
 // ends a goal selection session (updates goal stack to the best goal)
-void() navigation_goalrating_end =
+void navigation_goalrating_end()
 {
 	if (self.havocbot_role == havocbot_role_ctf_offense)
 		dprint(navigation_bestgoal.classname, " (with rating ", ftos(navigation_bestrating), ")\n");
@@ -1373,7 +1373,7 @@ vector shotdir;
 
 const float BOTSKINS = 19;
 const float BOTNAMES = 32;
-string(float r) bot_namefornumber =
+string bot_namefornumber(float r)
 {
 	if (r <  1) return "Thunderstorm";
 	if (r <  2) return "Darkness";
@@ -1409,7 +1409,7 @@ string(float r) bot_namefornumber =
 	return "Flatline";
 };
 
-string(float r) bot_skinfornumber =
+string bot_skinfornumber(float r)
 {
 	     if (r <  1) {self.playermodel = "models/player/carni.zym"          ;self.playerskin = "0";return "Carni"          ;}
 	else if (r <  2) {self.playermodel = "models/player/carni.zym"          ;self.playerskin = "1";return "Armored Carni"  ;}
@@ -1431,7 +1431,7 @@ string(float r) bot_skinfornumber =
 	else             {self.playermodel = "models/player/visitant.zym"       ;self.playerskin = "0";return "Fricka"         ;}
 };
 
-void() bot_setnameandstuff =
+void bot_setnameandstuff()
 {
 	local string name, prefix, suffix;
 	local float r, b, shirt, pants;
@@ -1497,7 +1497,7 @@ void() bot_setnameandstuff =
 		self.netname = name;
 };
 
-void() bot_endgame =
+void bot_endgame()
 {
 	local entity e;
 	//dprint("bot_endgame\n");
@@ -1511,7 +1511,7 @@ void() bot_endgame =
 };
 
 float bot_ignore_bots; // let bots not attack other bots (only works in non-teamplay)
-float(entity e) bot_shouldattack =
+float bot_shouldattack(entity e)
 {
 	if (e.team == self.team)
 	{
@@ -1534,7 +1534,7 @@ float(entity e) bot_shouldattack =
 	return TRUE;
 };
 
-void(float t, float f1, float f2, entity e1, vector v1, vector v2, vector v3, vector v4) bot_lagfunc =
+void bot_lagfunc(float t, float f1, float f2, entity e1, vector v1, vector v2, vector v3, vector v4)
 {
 	self.bot_aimtarg = e1;
 	self.bot_aimlatency = self.ping; // FIXME?  Shouldn't this be in the lag item?
@@ -1563,7 +1563,7 @@ void(float t, float f1, float f2, entity e1, vector v1, vector v2, vector v3, ve
 .vector bot_4th_order_aimfilter;
 .vector bot_5th_order_aimfilter;
 .vector bot_olddesiredang;
-float(vector v, float maxfiredeviation) bot_aimdir =
+float bot_aimdir(vector v, float maxfiredeviation)
 {
 /*
 	local float snapcos;
@@ -1738,13 +1738,13 @@ float(vector v, float maxfiredeviation) bot_aimdir =
 	return self.bot_canfire && (time < self.bot_firetimer);
 };
 
-vector(vector targorigin, vector targvelocity, float shotspeed, float shotdelay) bot_shotlead =
+vector bot_shotlead(vector targorigin, vector targvelocity, float shotspeed, float shotdelay)
 {
 	// Try to add code here that predicts gravity effect here, no clue HOW to though ... well not yet atleast...
 	return targorigin + targvelocity * (shotdelay + vlen(targorigin - shotorg) / shotspeed);
 };
 
-float(float shotspeed, float shotspeedupward, float maxshottime, float applygravity) bot_aim =
+float bot_aim(float shotspeed, float shotspeedupward, float maxshottime, float applygravity)
 {
 	local float f, r;
 	local vector v;
@@ -1802,7 +1802,7 @@ float(float shotspeed, float shotspeedupward, float maxshottime, float applygrav
 };
 
 // TODO: move this painintensity code to the player damage code
-void() bot_think =
+void bot_think()
 {
 	if (self.bot_nextthink > time)
 		return;
@@ -1867,7 +1867,7 @@ entity bot_strategytoken;
 float bot_strategytoken_taken;
 entity player_list;
 .entity nextplayer;
-void() bot_relinkplayerlist =
+void bot_relinkplayerlist()
 {
 	local entity e;
 	local entity prevbot;
@@ -1899,7 +1899,7 @@ void() bot_relinkplayerlist =
 void() havocbot_setupbot;
 float JoinBestTeam(entity pl, float only_return_best, float forcebestteam);
 
-void() bot_clientconnect =
+void bot_clientconnect()
 {
 	if (clienttype(self) != CLIENTTYPE_BOT)
 		return;
@@ -1916,7 +1916,7 @@ void() bot_clientconnect =
 	self.bot_offsetskill=random()-0.5;
 };
 
-entity() bot_spawn =
+entity bot_spawn()
 {
 	local entity oldself, bot;
 	bot = spawnclient();
@@ -1934,7 +1934,7 @@ entity() bot_spawn =
 };
 
 void CheckAllowedTeams(entity for_whom); void GetTeamCounts(entity other); float c1, c2, c3, c4;
-void() bot_removefromlargestteam =
+void bot_removefromlargestteam()
 {
 	local float besttime, bestcount, thiscount;
 	local entity best, head;
@@ -1975,7 +1975,7 @@ void() bot_removefromlargestteam =
 	dropclient(best);
 };
 
-void() bot_removenewest =
+void bot_removenewest()
 {
 	local float besttime;
 	local entity best, head;
@@ -2005,7 +2005,7 @@ void() bot_removenewest =
 };
 
 float botframe_waypointeditorlightningtime;
-void() botframe_showwaypointlinks =
+void botframe_showwaypointlinks()
 {
 	local entity player, head, w;
 	if (time < botframe_waypointeditorlightningtime)
@@ -2062,7 +2062,7 @@ void() botframe_showwaypointlinks =
 };
 
 entity botframe_dangerwaypoint;
-void(float maxupdate) botframe_updatedangerousobjects =
+void botframe_updatedangerousobjects(float maxupdate)
 {
 	local entity head, bot_dodgelist;
 	local vector m1, m2, v;
@@ -2106,7 +2106,7 @@ float botframe_nextdangertime;
 
 float autoskill_nextthink;
 .float totalfrags_lastcheck;
-void(float factor) autoskill =
+void autoskill(float factor)
 {
 	float bestbot;
 	float bestplayer;
@@ -2158,7 +2158,7 @@ void(float factor) autoskill =
 		head.totalfrags_lastcheck = head.totalfrags;
 }
 
-void() bot_serverframe =
+void bot_serverframe()
 {
 	float realplayers, bots, activerealplayers;
 	entity head;

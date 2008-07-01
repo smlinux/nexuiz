@@ -51,7 +51,7 @@ Library Functions
 
 *********************************
 */
-void (float ln, float vl) SetLine =
+void SetLine(float ln, float vl)
 {
 	if (ln == 1)
 		self.line1 = vl;
@@ -95,7 +95,7 @@ void (float ln, float vl) SetLine =
 		self.line20 = vl;
 };
 
-float (float ln) GetLine =
+float GetLine(float ln)
 {
 	if (ln == 1)
 		return self.line1;
@@ -141,7 +141,7 @@ float (float ln) GetLine =
 		return 0;
 };
 
-float(float x, float dat) GetXBlock =
+float GetXBlock(float x, float dat)
 {
 	if (x == 1)
 		return dat & 3;
@@ -167,7 +167,7 @@ float(float x, float dat) GetXBlock =
 		return 0;
 };
 
-float(float x, float dat, float new) SetXBlock =
+float SetXBlock(float x, float dat, float new)
 {
 	if (x == 1)
 		return (dat - (dat & 3)) | new;
@@ -194,12 +194,12 @@ float(float x, float dat, float new) SetXBlock =
 };
 
 
-float(float x, float y) GetSquare =
+float GetSquare(float x, float y)
 {
 	return GetXBlock(x,  GetLine(y));
 };
 
-void (float x, float y, float val) SetSquare =
+void SetSquare(float x, float y, float val)
 {
 	float dat;
 
@@ -210,7 +210,7 @@ void (float x, float y, float val) SetSquare =
 
 
 
-vector(float pc) PieceShape =
+vector PieceShape(float pc)
 {
 
 /*
@@ -275,7 +275,7 @@ vector(float pc) PieceShape =
 }
 
 // do x 1..4 and y 1..4 in case of rotation
-float(float x, float y, float rot, float pc) PieceMetric =
+float PieceMetric(float x, float y, float rot, float pc)
 {
 	float t;
 	vector piece_dat;
@@ -327,7 +327,7 @@ somewhat modified because we don't need all the fanciness Prydon Gate is capable
 
 // remove warnings by adding underscores, i hate warnings, warnings suck
 // --blub
-void(float _c1, float _c2, float _c3, float _c4, float c5, float c6) p6 =
+void p6(float _c1, float _c2, float _c3, float _c4, float c5, float c6)
 {
 	WriteChar(MSG_ONE, _c1);
 	WriteChar(MSG_ONE, _c2);
@@ -337,7 +337,7 @@ void(float _c1, float _c2, float _c3, float _c4, float c5, float c6) p6 =
 	WriteChar(MSG_ONE, c6);
 };
 
-float(float num, float dig) pnum =
+float pnum(float num, float dig)
 {
 	local float f, i;
 	if (num < 0)
@@ -359,7 +359,7 @@ float(float num, float dig) pnum =
 	return dig;
 };
 
-void (float ln) DrawLine =
+void DrawLine(float ln)
 {
 	float x, d;
 	WriteChar(MSG_ONE, TET_BORDER);
@@ -375,7 +375,7 @@ void (float ln) DrawLine =
 	WriteChar(MSG_ONE, TET_BORDER);
 }
 
-void (float pc, float ln) DrawPiece =
+void DrawPiece(float pc, float ln)
 {
 	float x, d, piece_ln, pcolor;
 	vector piece_dat;
@@ -399,7 +399,7 @@ void (float pc, float ln) DrawPiece =
 	}
 	WriteChar(MSG_ONE, TET_SPACE);	// pad to 6
 }
-void() Draw_Tetris =
+void Draw_Tetris()
 {
 	float i;
 	msg_entity = self;
@@ -457,7 +457,7 @@ Game Functions
 */
 
 // reset the game
-void() ResetTetris =
+void ResetTetris()
 {
 	float i;
 
@@ -469,7 +469,7 @@ void() ResetTetris =
 
 };
 
-void () Tet_GameOver =
+void Tet_GameOver()
 {
 	centerprint(self, "Game Over");
 	self.tetris_on = 0;
@@ -486,18 +486,18 @@ Game Mechanics
 
 *********************************
 */
-float() RandomPiece =
+float RandomPiece()
 {
 	return floor(random() * PIECES) + 1;
 };
 
-void(float n) TetAddScore =
+void TetAddScore(float n)
 {
 	self.tet_score = self.tet_score + n;
 	if (self.tet_score > tet_high_score)
 		tet_high_score = self.tet_score;
 };
-float CheckMetrics(float piece, float orgx, float orgy, float rot) =
+float CheckMetrics(float piece, float orgx, float orgy, float rot) /*FIXDECL*/
 {
 	// check to see if the piece, if moved to the locations will overlap
 
@@ -522,7 +522,7 @@ float CheckMetrics(float piece, float orgx, float orgy, float rot) =
 	return TRUE;
 }
 
-void ClearPiece(float piece, float orgx, float orgy, float rot) =
+void ClearPiece(float piece, float orgx, float orgy, float rot) /*FIXDECL*/
 {
 
 	float x, y;
@@ -541,7 +541,7 @@ void ClearPiece(float piece, float orgx, float orgy, float rot) =
 		}
 	}
 }
-void CementPiece(float piece, float orgx, float orgy, float rot) =
+void CementPiece(float piece, float orgx, float orgy, float rot) /*FIXDECL*/
 {
 	float pcolor;
 	float x, y;
@@ -568,7 +568,7 @@ void CementPiece(float piece, float orgx, float orgy, float rot) =
 float LINE_LOW = 349525;
 float LINE_HIGH = 699050; // above number times 2
 
-void() CompletedLines =
+void CompletedLines()
 {
 	float y, cleared, ln;
 
@@ -588,7 +588,7 @@ void() CompletedLines =
 	TetAddScore(cleared * cleared * 10);
 };
 
-void(float keyss) HandleGame =
+void HandleGame(float keyss)
 {
 
 	// first off, we need to see if we need a new piece
@@ -669,7 +669,7 @@ Important Linking Into Quake stuff
 */
 
 
-void(float imp) TetrisImpulses =
+void TetrisImpulses(float imp)
 {
 	if (imp == 200)
 	{
@@ -682,7 +682,7 @@ void(float imp) TetrisImpulses =
 };
 
 
-float() TetrisPreFrame =
+float TetrisPreFrame()
 {
 	if (!self.tetris_on)
 		return 0;
@@ -694,11 +694,11 @@ float() TetrisPreFrame =
 	return 1;
 
 };
-float(float v) frik_anglemoda =
+float frik_anglemoda(float v)
 {
 	return v - floor(v/360) * 360;
 };
-float (float y1, float y2) angcompa =
+float angcompa(float y1, float y2)
 {
 	y1 = frik_anglemoda(y1);
 	y2 = frik_anglemoda(y2);
@@ -713,7 +713,7 @@ float (float y1, float y2) angcompa =
 };
 
 
-float() TetrisPostFrame =
+float TetrisPostFrame()
 {
 	vector mov;
 	float keysa, norm;

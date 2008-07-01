@@ -35,7 +35,7 @@ void GibTouch ()
 
 .float gibrandom;
 .float gibmodelindex;
-float() Gib_customizeentityforclient =
+float Gib_customizeentityforclient()
 {
 	if(self.classname == "player") // the eye
 	{

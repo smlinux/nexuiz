@@ -1,7 +1,7 @@
 
 void() SUB_UseTargets;
 
-void() DelayThink =
+void DelayThink()
 {
 	activator = self.enemy;
 	SUB_UseTargets ();
@@ -27,7 +27,7 @@ match (string)self.target and call their .use function
 
 ==============================
 */
-void() SUB_UseTargets =
+void SUB_UseTargets()
 {
 	local entity t, stemp, otemp, act;
 
@@ -105,7 +105,7 @@ void() SUB_UseTargets =
 
 
 
-void() spawnfunc_trigger_reactivate =
+void spawnfunc_trigger_reactivate()
 {
 	self.solid = SOLID_TRIGGER;
 };
@@ -116,7 +116,7 @@ float	SPAWNFLAG_NOMESSAGE = 1;
 float	SPAWNFLAG_NOTOUCH = 1;
 
 // the wait time has passed, so set back up for another activation
-void() multi_wait =
+void multi_wait()
 {
 	if (self.max_health)
 	{
@@ -130,7 +130,7 @@ void() multi_wait =
 // the trigger was just touched/killed/used
 // self.enemy should be set to the activator so it can be held through a delay
 // so wait for the delay time before firing
-void() multi_trigger =
+void multi_trigger()
 {
 	if (self.nextthink > time)
 	{
@@ -170,13 +170,13 @@ void() multi_trigger =
 	}
 };
 
-void() multi_use =
+void multi_use()
 {
 	self.enemy = activator;
 	multi_trigger();
 };
 
-void() multi_touch =
+void multi_touch()
 {
 	if (other.classname != "player")
 		return;
@@ -222,7 +222,7 @@ sounds
 4)
 set "message" to text string
 */
-void() spawnfunc_trigger_multiple =
+void spawnfunc_trigger_multiple()
 {
 	if (self.sounds == 1)
 	{
@@ -279,7 +279,7 @@ sounds
 4)
 set "message" to text string
 */
-void() spawnfunc_trigger_once =
+void spawnfunc_trigger_once()
 {
 	self.wait = -1;
 	spawnfunc_trigger_multiple();
@@ -290,7 +290,7 @@ void() spawnfunc_trigger_once =
 /*QUAKED spawnfunc_trigger_relay (.5 .5 .5) (-8 -8 -8) (8 8 8)
 This fixed size trigger cannot be touched, it can only be fired by other events.  It can contain killtargets, targets, delays, and messages.
 */
-void() spawnfunc_trigger_relay =
+void spawnfunc_trigger_relay()
 {
 	self.use = SUB_UseTargets;
 };
@@ -312,7 +312,7 @@ void() spawnfunc_trigger_delay
 //=============================================================================
 
 
-void() counter_use =
+void counter_use()
 {
 	self.count = self.count - 1;
 	if (self.count < 0)
@@ -349,7 +349,7 @@ If nomessage is not set, t will print "1 more.. " etc when triggered and "sequen
 
 After the counter has been triggered "count" times (default 2), it will fire all of it's targets and remove itself.
 */
-void() spawnfunc_trigger_counter =
+void spawnfunc_trigger_counter()
 {
 	self.wait = -1;
 	if (!self.count)
@@ -359,7 +359,7 @@ void() spawnfunc_trigger_counter =
 };
 
 .float triggerhurttime;
-void() spawnfunc_hurt_touch =
+void spawnfunc_hurt_touch()
 {
 	if (!other.owner)
 	{
@@ -384,7 +384,7 @@ Any object touching this will be hurt
 set dmg to damage amount
 defalt dmg = 5
 */
-void() spawnfunc_trigger_hurt =
+void spawnfunc_trigger_hurt()
 {
 	InitTrigger ();
 	self.touch = spawnfunc_hurt_touch;
@@ -394,10 +394,10 @@ void() spawnfunc_trigger_hurt =
 		self.message = "was in the wrong place.";
 };
 
-//void() target_speaker_use = {sound(self, CHAN_VOICE, self.noise, 1, 1);}
-//void() spawnfunc_target_speaker = {self.use = target_speaker_use;}
+//void target_speaker_use() {sound(self, CHAN_VOICE, self.noise, 1, 1);}
+//void spawnfunc_target_speaker() {self.use = target_speaker_use;}
 
-void() spawnfunc_target_speaker =
+void spawnfunc_target_speaker()
 {
 if(self.noise) {
  precache_sound (self.noise);
@@ -413,7 +413,7 @@ void() spawnfunc_func_stardust {
 
 
 /*
-void() sparksthink =
+void sparksthink()
 {
   self.nextthink = time + 0.1;
 
@@ -423,7 +423,7 @@ void() sparksthink =
 }
 
 
-void() func_sparks =
+void func_sparks()
 {
   self.think = sparksthink;
   self.nextthink = time + 0.2;
@@ -446,7 +446,7 @@ void() func_sparks =
   }
 }
 */
-void() rain_think =
+void rain_think()
 {
 	self.nextthink = time + 0.1;
 	te_particlerain(self.absmin, self.absmax, self.dest, self.count, self.cnt);
@@ -471,7 +471,7 @@ Keys:
 "count"
  adjusts density, this many particles fall every second for a 1024x1024 area, default is 2000
 */
-void() spawnfunc_func_rain =
+void spawnfunc_func_rain()
 {
 	self.dest = self.velocity;
 	self.velocity = '0 0 0';
@@ -502,7 +502,7 @@ void() spawnfunc_func_rain =
 };
 
 
-void() snow_think =
+void snow_think()
 {
 	self.nextthink = time + 0.1 + random() * 0.05;
 	te_particlesnow(self.absmin, self.absmax, self.dest, self.count, self.cnt);
@@ -526,7 +526,7 @@ Keys:
 "count"
  adjusts density, this many particles fall every second for a 1024x1024 area, default is 2000
 */
-void() spawnfunc_func_snow =
+void spawnfunc_func_snow()
 {
 	self.dest = self.velocity;
 	self.velocity = '0 0 0';
@@ -558,7 +558,7 @@ void() spawnfunc_func_snow =
 
 
 void FireRailgunBullet (vector start, vector end, float bdamage, float bforce, float deathtype);
-void() misc_laser_think =
+void misc_laser_think()
 {
 	vector o;
 	if(!self.state)
@@ -605,7 +605,7 @@ Keys:
 "wait"
  delay between sending the particle effect
 */
-void() spawnfunc_misc_laser =
+void spawnfunc_misc_laser()
 {
 	if(self.mdl)
 	{

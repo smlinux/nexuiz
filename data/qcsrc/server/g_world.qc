@@ -366,7 +366,7 @@ void spawnfunc_light (void)
 	remove(self);
 }
 
-float( string pFilename ) TryFile =
+float TryFile( string pFilename )
 {
 	local float lHandle;
 	dprint("TryFile(\"", pFilename, "\")\n");
@@ -531,7 +531,7 @@ float Map_IsRecent(string m)
 	return strhasword(cvar_string("g_maplist_mostrecent"), m);
 }
 
-float(float position, float pass) Map_Check =
+float Map_Check(float position, float pass)
 {
 	string filename;
 	string map_next;
@@ -562,7 +562,7 @@ float(float position, float pass) Map_Check =
 	return 0;
 }
 
-void(string nextmapname) Map_Goto_SetStr =
+void Map_Goto_SetStr(string nextmapname)
 {
 	if(getmapname_stored != "")
 		strunzone(getmapname_stored);
@@ -572,13 +572,13 @@ void(string nextmapname) Map_Goto_SetStr =
 		getmapname_stored = strzone(nextmapname);
 }
 
-void(float position) Map_Goto_SetFloat =
+void Map_Goto_SetFloat(float position)
 {
 	cvar_set("g_maplist_index", ftos(position));
 	Map_Goto_SetStr(argv(position));
 }
 
-void() GameResetCfg =
+void GameResetCfg()
 {
 #ifdef MAPINFO
 	// settings persist, except...
@@ -596,7 +596,7 @@ void() GameResetCfg =
 #endif
 };
 
-void() Map_Goto =
+void Map_Goto()
 {
 	Map_MarkAsRecent(getmapname_stored);
 	GameResetCfg();
@@ -699,7 +699,7 @@ float(float exponent) MaplistMethod_Shuffle = // more clever shuffling
 	return -1;
 }
 
-void() Maplist_Init =
+void Maplist_Init()
 {
 	string temp;
 	temp = cvar_string("g_maplist");
@@ -729,7 +729,7 @@ void() Maplist_Init =
 	// isn't chosen in the first pass that should have been
 }
 
-string() GetNextMap =
+string GetNextMap()
 {
 	float nextMap;
 
@@ -759,7 +759,7 @@ string() GetNextMap =
 	return "";
 };
 
-float() DoNextMapOverride =
+float DoNextMapOverride()
 {
 	if(cvar("g_campaign"))
 	{
@@ -814,7 +814,7 @@ float() DoNextMapOverride =
 	return FALSE;
 };
 
-void() GotoNextMap =
+void GotoNextMap()
 {
 	//local string nextmap;
 	//local float n, nummaps;
@@ -864,7 +864,7 @@ When the player presses attack or jump, change to the next level
 void() MapVote_Start;
 void() MapVote_Think;
 float mapvote_initialized;
-void() IntermissionThink =
+void IntermissionThink()
 {
 	FixIntermissionClient(self);
 
@@ -896,7 +896,7 @@ Returns the entity to view from
 ============
 */
 /*
-entity() FindIntermission =
+entity FindIntermission()
 {
 	local	entity spot;
 	local	float cyc;
@@ -944,7 +944,7 @@ RULES
 ===============================================================================
 */
 
-void(float final) DumpStats =
+void DumpStats(float final)
 {
 	local float file;
 	local string s;
@@ -1055,7 +1055,7 @@ void FixIntermissionClient(entity e)
 go to the next level for deathmatch
 only called if a time or frag limit has expired
 */
-void() NextLevel =
+void NextLevel()
 {
 	float minTotalFrags;
 	float maxTotalFrags;
@@ -1132,7 +1132,7 @@ Exit deathmatch games upon conditions
 ============
 */
 .float fogtime;
-void() CheckRules_Player =
+void CheckRules_Player()
 {
 	if (gameover)	// someone else quit the game already
 		return;
@@ -1160,7 +1160,7 @@ float checkrules_equality;
 float checkrules_overtimewarning;
 float checkrules_overtimeend;
 
-void() InitiateOvertime =
+void InitiateOvertime()
 {
 	if(!checkrules_overtimeend)
 		checkrules_overtimeend = time + 60 * cvar("timelimit_maxovertime");
@@ -1171,7 +1171,7 @@ float WINNING_YES = 1; // winner found
 float WINNING_NEVER = 2; // no winner, enter overtime if time limit is reached
 float WINNING_STARTOVERTIME = 3; // no winner, enter overtime NOW
 
-float(float fraglimitreached, float equality) GetWinningCode =
+float GetWinningCode(float fraglimitreached, float equality)
 {
 	if(equality)
 		if(fraglimitreached)
@@ -1186,7 +1186,7 @@ float(float fraglimitreached, float equality) GetWinningCode =
 }
 
 // set the .winning flag for exactly those players with a given field value
-void(.float field, float value) SetWinners =
+void SetWinners(.float field, float value)
 {
 	entity head;
 	FOR_EACH_PLAYER(head)
@@ -1194,7 +1194,7 @@ void(.float field, float value) SetWinners =
 }
 
 // set the .winning flag for those players with a given field value
-void(.float field, float value) AddWinners =
+void AddWinners(.float field, float value)
 {
 	entity head;
 	FOR_EACH_PLAYER(head)
@@ -1203,7 +1203,7 @@ void(.float field, float value) AddWinners =
 }
 
 // clear frags for all players but the team given (when they ran out of spawnpoints)
-void(.float field, float value) ClearFragsForEveryoneBut =
+void ClearFragsForEveryoneBut(.float field, float value)
 {
 	entity head;
 	FOR_EACH_PLAYER(head)
@@ -1212,7 +1212,7 @@ void(.float field, float value) ClearFragsForEveryoneBut =
 }
 
 // clear the .winning flags
-void(void) ClearWinners =
+void ClearWinners(void)
 {
 	entity head;
 	FOR_EACH_PLAYER(head)
@@ -1221,7 +1221,7 @@ void(void) ClearWinners =
 
 // Onslaught winning condition:
 // game terminates if only one team has a working generator (or none)
-float() WinningCondition_Onslaught =
+float WinningCondition_Onslaught()
 {
 	entity head;
 	local float t1, t2, t3, t4;
@@ -1255,7 +1255,7 @@ float() WinningCondition_Onslaught =
 	return WINNING_NO;
 }
 
-float() LMS_NewPlayerLives =
+float LMS_NewPlayerLives()
 {
 	float fl;
 	fl = cvar("fraglimit");
@@ -1276,7 +1276,7 @@ float() LMS_NewPlayerLives =
 // Assault winning condition: If the attackers triggered a round end (by fulfilling all objectives)
 // they win. Otherwise the defending team wins once the timelimit passes.
 void assault_new_round();
-float() WinningCondition_Assault =
+float WinningCondition_Assault()
 {
 	local float status;
 	status = WINNING_NO;
@@ -1327,7 +1327,7 @@ float() WinningCondition_Assault =
 // LMS winning condition: game terminates if and only if there's at most one
 // one player who's living lives. Top two scores being equal cancels the time
 // limit.
-float() WinningCondition_LMS =
+float WinningCondition_LMS()
 {
 	entity head;
 	float have_player;
@@ -1416,7 +1416,7 @@ float() WinningCondition_LMS =
 // DM winning condition: game terminates if a player reached the fraglimit,
 // unless the first two players have the same score. The latter case also
 // breaks the time limit.
-float(float fraglimit) WinningCondition_MaxIndividualScore =
+float WinningCondition_MaxIndividualScore(float fraglimit)
 {
 	float checkrules_oldleaderfrags;
 	entity head;
@@ -1454,7 +1454,7 @@ float(float fraglimit) WinningCondition_MaxIndividualScore =
 	return GetWinningCode(fraglimit && checkrules_leaderfrags >= fraglimit, checkrules_equality);
 }
 
-float(float fraglimit) WinningConditionBase_Teamplay =
+float WinningConditionBase_Teamplay(float fraglimit)
 {
 	tdm_old_score = tdm_max_score;
 	tdm_max_score = max4(team1_score, team2_score, team3_score, team4_score);
@@ -1500,7 +1500,7 @@ float(float fraglimit) WinningConditionBase_Teamplay =
 // TDM winning condition: game terminates if a team's score sum reached the
 // fraglimit, unless the first two teams have the same total score. The latter
 // case also breaks the time limit.
-float(float fraglimit) WinningCondition_MaxTeamSum =
+float WinningCondition_MaxTeamSum(float fraglimit)
 {
 	entity head;
 
@@ -1524,7 +1524,7 @@ float(float fraglimit) WinningCondition_MaxTeamSum =
 // DOM/CTF winning condition: game terminates if the max of a team's players'
 // score reached the fraglimit, unless the first two teams have the same
 // maximum score. The latter case also breaks the time limit.
-float(float fraglimit) WinningCondition_MaxTeamMax =
+float WinningCondition_MaxTeamMax(float fraglimit)
 {
 	entity head;
 
@@ -1752,7 +1752,7 @@ CheckRules_World
 Exit deathmatch games upon conditions
 ============
 */
-void() CheckRules_World =
+void CheckRules_World()
 {
 	local float status;
 	local float timelimit;

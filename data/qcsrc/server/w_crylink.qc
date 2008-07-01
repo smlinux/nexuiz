@@ -195,7 +195,7 @@ void W_Crylink_Attack3 (void)
 }
 */
 
-float(float req) w_crylink =
+float w_crylink(float req)
 {
 	if (req == WR_AIM)
 	{
