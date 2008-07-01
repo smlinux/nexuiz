@@ -1,6 +1,5 @@
 // leilei's fancy muzzleflash stuff
-void() W_Uzi_Flash_Go;
-void() W_Uzi_Flash_Go {
+void W_Uzi_Flash_Go() {
 	if (self.frame > 10){
 		SUB_Remove();
 		return;

@@ -91,7 +91,7 @@ void W_Plasma_Damage (entity inflictor, entity attacker, float damage, float dea
 	}
 }
 
-void() W_Electro_Attack
+void W_Electro_Attack()
 {
 	local entity proj;
 
@@ -125,7 +125,7 @@ void() W_Electro_Attack
 	//sound (proj, CHAN_BODY, "weapons/electro_fly.wav", 1, ATTN_NORM);
 }
 
-void() W_Electro_Attack2
+void W_Electro_Attack2()
 {
 	local entity proj;
 

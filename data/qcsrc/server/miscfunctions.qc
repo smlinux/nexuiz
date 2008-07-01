@@ -111,7 +111,7 @@ string STR_PLAYER = "player";
 float logfile_open;
 float logfile;
 
-void(string s) bcenterprint
+void bcenterprint(string s)
 {
 	// TODO replace by MSG_ALL (would show it to spectators too, though)?
 	entity head;

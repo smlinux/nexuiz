@@ -72,7 +72,7 @@ float W_AmmoItemCode(float wpn)
 }
 
 // think function for tossed weapons
-void() thrown_wep_think
+void thrown_wep_think()
 {
 	self.solid = SOLID_TRIGGER;
 	self.owner = world;
@@ -81,7 +81,7 @@ void() thrown_wep_think
 };
 
 // toss current weapon
-void(vector velo, vector delta, float doreduce) W_ThrowWeapon
+void W_ThrowWeapon(vector velo, vector delta, float doreduce)
 {
 	local float w, ammo;
 	local entity wep, e;
@@ -151,7 +151,7 @@ void(vector velo, vector delta, float doreduce) W_ThrowWeapon
 };
 
 // switch between weapons
-void(float imp) W_SwitchWeapon
+void W_SwitchWeapon(float imp)
 {
 	if (self.weapon != imp)
 	if (client_hasweapon(self, imp, TRUE, TRUE))

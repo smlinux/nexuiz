@@ -295,13 +295,13 @@ void spawnfunc_trigger_relay()
 	self.use = SUB_UseTargets;
 };
 
-void() delay_use
+void delay_use()
 {
     self.think = SUB_UseTargets;
     self.nextthink = self.wait;
 }
 
-void() spawnfunc_trigger_delay
+void spawnfunc_trigger_delay()
 {
     if(!self.wait)
         self.wait = 1;
@@ -407,7 +407,7 @@ if(self.noise) {
 };
 
 
-void() spawnfunc_func_stardust {
+void spawnfunc_func_stardust() {
 	self.effects = EF_STARDUST;
 }
 

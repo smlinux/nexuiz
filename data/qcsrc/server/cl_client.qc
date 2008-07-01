@@ -1208,7 +1208,7 @@ void TeamBubbleThink()
 
 };
 
-float() TeamBubble_customizeentityforclient
+float TeamBubble_customizeentityforclient()
 {
 	return (self.owner != other && self.owner.team == other.team && other.killcount > -666);
 }
