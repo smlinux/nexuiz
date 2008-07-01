@@ -154,7 +154,7 @@ void assault_objective_decrease_use() {
 When triggered decreases health of the targeted spawnfunc_target_objective.
 -------- KEYS --------
 targetname : point to a spawnfunc_target_objective entity*/
-void target_objective_decrease() {
+void spawnfunc_target_objective_decrease() {
 
 	self.classname = "target_objective_decrease";
 
