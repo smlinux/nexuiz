@@ -25,7 +25,7 @@ const float AS_FLOAT		= 8;
 
 const float ENT_CLIENT = 0;
 const float ENT_CLIENT_DEAD = 1;
-const float ENT_CLIENT_GPS = 2;
+const float ENT_CLIENT_ENTCS = 2;
 
 ///////////////////////////
 // key constants

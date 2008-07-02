@@ -26,6 +26,8 @@ void FakeTimeLimit(entity e, float t)
 
 float   flagcaptimerecord;
 .float  flagpickuptime;
+//.float  iscommander;
+//.float  ctf_state;
 
 void() FlagThink;
 void() FlagTouch;
@@ -662,6 +664,8 @@ void ctf_delayedinit()
 void ctf_init()
 {
 	local entity e;
+
+	//addstat(STAT_CTF_STATE, AS_FLOAT_TRUNCATED, ctf_state);
 	e = spawn();
 	e.think = ctf_delayedinit;
 	e.nextthink = time + 0.1;
@@ -726,3 +730,142 @@ void ctf_setstatus()
 		}
 	}
 };
+/*
+entity(float cteam) ctf_team_has_commander =
+{
+	entity pl;
+	if(cteam != COLOR_TEAM1 || cteam != COLOR_TEAM2)
+		return world;
+	
+	FOR_EACH_REALPLAYER(pl) {
+		if(pl.team == cteam && pl.iscommander) {
+			return pl;
+		}
+	}
+	return world;
+};
+
+void(entity e, float st) ctf_setstate =
+{
+	e.ctf_state = st;
+	e.version ++;
+};
+
+void(float cteam) ctf_new_commander =
+{
+	entity pl, plmax;
+	
+	plmax = world;
+	FOR_EACH_REALPLAYER(pl) {
+		if(pl.team == cteam) {
+			if(pl.iscommander) { // don't reassign if alreay there
+				return;
+			}
+			if(plmax == world || plmax.frags < pl.frags)
+				plmax = pl;
+		}
+	}
+	if(plmax == world) {
+		bprint(strcat(ColoredTeamName(cteam), " Team has no Commander!\n"));
+		return;
+	}
+
+	plmax.iscommander = TRUE;
+	ctf_setstate(plmax, 3);
+	sprint(plmax, "^3You're the commander now!\n");
+	centerprint(plmax, "^3You're the commander now!\n");
+};
+
+void() ctf_clientconnect =
+{
+	self.iscommander = FALSE;
+	
+	if(!self.team || self.classname != "player") {
+		ctf_setstate(self, -1);
+	} else
+		ctf_setstate(self, 0);
+
+	self.team_saved = self.team;
+	
+	if(self.team != 0 && self.classname == "player" && !ctf_team_has_commander(self.team)) {
+		ctf_new_commander(self.team);
+	}
+};
+
+void() ctf_playerchanged =
+{
+	if(!self.team || self.classname != "player") {
+		ctf_setstate(self, -1);
+	} else if(self.ctf_state < 0 && self.classname == "player") {
+		ctf_setstate(self, 0);
+	}
+
+	if(self.iscommander &&
+	   (self.classname != "player" || self.team != self.team_saved)
+		)
+	{
+		self.iscommander = FALSE;
+		if(self.classname == "player")
+			ctf_setstate(self, 0);
+		else
+			ctf_setstate(self, -1);
+		ctf_new_commander(self.team_saved);
+	}
+	
+	self.team_saved = self.team;
+	
+	ctf_new_commander(self.team);
+};
+
+void() ctf_clientdisconnect =
+{
+	if(self.iscommander)
+	{
+		ctf_new_commander(self.team);
+	}
+};
+
+entity GetPlayer(string);
+float() ctf_clientcommand =
+{
+	entity e;
+	if(argv(0) == "order") {
+		if(!g_ctf) {
+			sprint(self, "This command is not supported in this gamemode.\n");
+			return TRUE;
+		}
+		if(!self.iscommander) {
+			sprint(self, "^1You are not the commander!\n");
+			return TRUE;
+		}
+		if(argv(2) == "") {
+			sprint(self, "Usage: order #player status   - (playernumber as in status)\n");
+			return TRUE;
+		}
+		e = GetPlayer(argv(1));
+		if(e == world) {
+			sprint(self, "Invalid player.\nUsage: order #player status   - (playernumber as in status)\n");
+			return TRUE;
+		}
+		if(e.team != self.team) {
+			sprint(self, "^3You can only give orders to your own team!\n");
+			return TRUE;
+		}
+		if(argv(2) == "attack") {
+			sprint(self, strcat("Ordering ", e.netname, " to attack!\n"));
+			sprint(e, "^1Attack!\n");
+			centerprint(e, "^7You've been ordered to^9\n^1Attack!\n");
+			ctf_setstate(e, 1);
+		} else if(argv(2) == "defend") {
+			sprint(self, strcat("Ordering ", e.netname, " to defend!\n"));
+			sprint(e, "^Defend!\n");
+			centerprint(e, "^7You've been ordered to^9\n^2Defend!\n");
+			ctf_setstate(e, 2);
+		} else {
+			sprint(self, "^7Invalid command, use ^3attack^7, or ^3defend^7.\n");
+		}
+		return TRUE;
+	}
+	return FALSE;
+};
+*/

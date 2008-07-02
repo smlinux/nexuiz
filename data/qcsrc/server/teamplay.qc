@@ -75,6 +75,7 @@ void dom_init();
 void ctf_init();
 void runematch_init();
 void tdm_init();
+void entcs_init();
 
 void LogTeamchange(entity pl)
 {
@@ -325,6 +326,8 @@ void InitGameplayMode()
 		tdm_init();
 	else if (game == GAME_KEYHUNT)//cvar("g_keyhunt"))
 		kh_init();
+	else if (game == GAME_ONSLAUGHT)
+		entcs_init();
 }
 
 string GetClientVersionMessage(float v) {
@@ -925,7 +928,7 @@ float JoinBestTeam(entity pl, float only_return_best, float forcebestteam)
 	return smallest;
 }
 
-
+//void() ctf_playerchanged;
 void SV_ChangeTeam(float _color)
 {
 	float scolor, dcolor, steam, dteam, dbotcount, scount, dcount;
@@ -1054,6 +1057,7 @@ void SV_ChangeTeam(float _color)
 		if(self.deadflag == DEAD_NO)
 			Damage(self, self, self, 100000, DEATH_TEAMCHANGE, self.origin, '0 0 0');
 	}
+	//ctf_playerchanged();
 }
 
 void ShufflePlayerOutOfTeam (float source_team)

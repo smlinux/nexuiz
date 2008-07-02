@@ -1,0 +1,51 @@
+// --------------------------------------------------------------------------
+// MENU Functionality
+
+void() menu_show_error;
+void() menu_sub_null;
+
+void() menu_show; // ptr
+float menu_visible;
+
+float(float bInputType, float nPrimary, float nSecondary) menu_action;
+
+// --------------------------------------------------------------------------
+// CTF
+
+void() ctf_menu_show;
+string ctf_temp_1;
+
+
+// --------------------------------------------------------------------------
+// Onslaught
+
+// Map coordinate base calculations need these
+/*vector mi_redicon;
+vector mi_blueicon;
+vector mi_redbase;
+vector mi_bluebase;
+vector mi_scale;*/
+//vector mi_min;
+//vector mi_max;
+vector mi_center;
+vector mi_scale;
+// Minimap
+string minimapname;
+float ons_showmap;
+
+// --------------------------------------------------------------------------
+// General stuff
+
+float gametype;
+entity gps_start;
+
+// Defs
+.float ctf_state;
+.float health;
+
+// Constants
+const float COLOR_TEAM_RED = 64;
+const float COLOR_TEAM_BLUE = 208;
+
+const float COLOR_TEAM1 = 64;
+const float COLOR_TEAM2 = 208;

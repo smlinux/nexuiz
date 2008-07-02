@@ -75,6 +75,8 @@ cl_weapons.qc
 //g_tetris.qc
 cl_impulse.qc
 
+ent_cs.qc
+
 cl_player.qc
 cl_client.qc
 t_plats.qc

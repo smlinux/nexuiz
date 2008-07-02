@@ -520,6 +520,7 @@ PutClientInServer
 Called when a client spawns in the server
 =============
 */
+//void() ctf_playerchanged;
 void PutClientInServer (void)
 {
 	if(clienttype(self) == CLIENTTYPE_BOT)
@@ -691,6 +692,9 @@ void PutClientInServer (void)
 	} else if(self.classname == "observer") {
 		PutObserverInServer ();
 	}
+
+	//if(g_ctf)
+	//	ctf_playerchanged();
 }
 
 /*
@@ -934,6 +938,7 @@ ClientConnect
 Called when a client connects to the server
 =============
 */
+//void ctf_clientconnect();
 string ColoredTeamName(float t);
 void DecodeLevelParms (void);
 //void dom_player_join_team(entity pl);
@@ -1071,6 +1076,13 @@ void ClientConnect (void)
 		self.classname = "observer";
 		Spawnqueue_Insert(self);
 	}
+	/*else if(g_ctf)
+	{
+		ctf_clientconnect();
+	}*/
+
+	if(entcs_start)
+		attach_entcs();
 
 	bot_relinkplayerlist();
 
@@ -1094,9 +1106,14 @@ Called when a client disconnects from the server
 void(entity e) DropFlag;
 .entity chatbubbleentity;
 .entity teambubbleentity;
+//void() ctf_clientdisconnect;
 void ClientDisconnect (void)
 {
 	float save;
+
+	if(entcs_start)
+		detach_entcs();
+	
 	if(cvar("sv_eventlog"))
 		GameLogEcho(strcat(":part:", ftos(self.playerid)), FALSE);
 	bprint ("^4",self.netname);
@@ -1145,6 +1162,11 @@ void ClientDisconnect (void)
 		Spawnqueue_Unmark(self);
 		Spawnqueue_Remove(self);
 	}
+	/*if(g_ctf)
+	{
+		ctf_clientdisconnect();
+	}
+	*/
 
 	if(self.netname_previous)
 		strunzone(self.netname_previous);

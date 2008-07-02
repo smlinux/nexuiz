@@ -2,7 +2,12 @@
 
 Defs.qc
 csqc_constants.qc
+../common/constants.qh
 csqc_builtins.qc
+
+main.qh
+ons.qc
+ctf.qc
 
 Main.qc
 View.qc
