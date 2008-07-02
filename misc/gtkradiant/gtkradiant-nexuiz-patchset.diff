@@ -1173,7 +1173,7 @@ Index: tools/quake3/q3map2/light.c
  		/* flag bouncing */
  		bouncing = qtrue;
  		VectorClear( ambientColor );
-+		floodlighty = false;
++		floodlighty = qfalse;
  		
  		/* generate diffuse lights */
  		RadFreeLights();
@@ -1275,6 +1275,38 @@ Index: tools/quake3/q3map2/q3map2.h
  Q_EXTERN qboolean			debug;
  Q_EXTERN qboolean			debugSurfaces;
  Q_EXTERN qboolean			debugUnused;
+Index: tools/quake3/q3map2/q3map2.h
+===================================================================
+--- tools/quake3/q3map2/q3map2.h	(revision 290)
++++ tools/quake3/q3map2/q3map2.h	(working copy)
+@@ -1274,6 +1274,7 @@
+ 	vec3_t				color;			/* starts out at full color, may be reduced if transparent surfaces are crossed */
+ 	
+ 	/* output */
++	vec3_t				hit;
+ 	int					compileFlags;	/* for determining surface compile flags traced through */
+ 	qboolean			passSolid;
+ 	qboolean			opaque;
+Index: tools/quake3/q3map2/light_trace.c
+===================================================================
+--- tools/quake3/q3map2/light_trace.c	(revision 290)
++++ tools/quake3/q3map2/light_trace.c	(working copy)
+@@ -1596,6 +1596,7 @@
+ 	/* bogus node number means solid, end tracing unless testing all */
+ 	if( nodeNum < 0 )
+ 	{
++		VectorCopy( origin, trace->hit );
+ 		trace->passSolid = qtrue;
+ 		return qtrue;
+ 	}
+@@ -1606,6 +1607,7 @@
+ 	/* solid? */
+ 	if( node->type == TRACE_LEAF_SOLID )
+ 	{
++		VectorCopy( origin, trace->hit );
+ 		trace->passSolid = qtrue;
+ 		return qtrue;
+ 	}
 Index: tools/quake3/q3map2/light_ydnar.c
 ===================================================================
 --- tools/quake3/q3map2/light_ydnar.c	(revision 290)
@@ -1557,23 +1589,23 @@ Index: tools/quake3/q3map2/light_ydnar.c
  					if( deluxemap )
 Index: tools/quake3/q3map2/q3map2.h
 ===================================================================
---- tools/quake3/q3map2/q3map2.h	(revision 193)
+--- tools/quake3/q3map2/q3map2.h	(revision 290)
 +++ tools/quake3/q3map2/q3map2.h	(working copy)
-@@ -35,8 +35,8 @@
+@@ -34,8 +34,8 @@
  
  
  /* version */
 -#define Q3MAP_VERSION	"2.5.11"
--#define Q3MAP_MOTD      "A well-oiled toaster oven"
+-#define Q3MAP_MOTD		"A well-oiled toaster oven"
 +#define Q3MAP_VERSION	"2.5.11-div0-obj-decomptexcoords-snapplane-UTavgcolorfix-UTfloodlight-UTtrianglecheck"
-+#define Q3MAP_MOTD		"Blackhole Box ate all the light"
-
-
++#define Q3MAP_MOTD		"Blackhole Box gives the light back"
+ 
+ 
  
 Index: include/version.default
 ===================================================================
---- include/version.default     (revision 193)
-+++ include/version.default     (working copy)
+--- include/version.default	(revision 290)
++++ include/version.default	(working copy)
 @@ -1 +1 @@
--1.5.0
-+1.5.0-div0-obj
+-1.4.0
++1.4.0-div0-obj

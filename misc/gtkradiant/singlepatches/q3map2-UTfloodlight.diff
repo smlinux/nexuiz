@@ -489,7 +489,7 @@ Index: tools/quake3/q3map2/light.c
  		/* flag bouncing */
  		bouncing = qtrue;
  		VectorClear( ambientColor );
-+		floodlighty = false;
++		floodlighty = qfalse;
  		
  		/* generate diffuse lights */
  		RadFreeLights();
@@ -591,3 +591,35 @@ Index: tools/quake3/q3map2/q3map2.h
  Q_EXTERN qboolean			debug;
  Q_EXTERN qboolean			debugSurfaces;
  Q_EXTERN qboolean			debugUnused;
+Index: tools/quake3/q3map2/q3map2.h
+===================================================================
+--- tools/quake3/q3map2/q3map2.h	(revision 290)
++++ tools/quake3/q3map2/q3map2.h	(working copy)
+@@ -1274,6 +1274,7 @@
+ 	vec3_t				color;			/* starts out at full color, may be reduced if transparent surfaces are crossed */
+ 	
+ 	/* output */
++	vec3_t				hit;
+ 	int					compileFlags;	/* for determining surface compile flags traced through */
+ 	qboolean			passSolid;
+ 	qboolean			opaque;
+Index: tools/quake3/q3map2/light_trace.c
+===================================================================
+--- tools/quake3/q3map2/light_trace.c	(revision 290)
++++ tools/quake3/q3map2/light_trace.c	(working copy)
+@@ -1596,6 +1596,7 @@
+ 	/* bogus node number means solid, end tracing unless testing all */
+ 	if( nodeNum < 0 )
+ 	{
++		VectorCopy( origin, trace->hit );
+ 		trace->passSolid = qtrue;
+ 		return qtrue;
+ 	}
+@@ -1606,6 +1607,7 @@
+ 	/* solid? */
+ 	if( node->type == TRACE_LEAF_SOLID )
+ 	{
++		VectorCopy( origin, trace->hit );
+ 		trace->passSolid = qtrue;
+ 		return qtrue;
+ 	}

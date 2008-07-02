@@ -37,24 +37,24 @@ done
 cat <<EOF
 Index: tools/quake3/q3map2/q3map2.h
 ===================================================================
---- tools/quake3/q3map2/q3map2.h	(revision 193)
+--- tools/quake3/q3map2/q3map2.h	(revision 290)
 +++ tools/quake3/q3map2/q3map2.h	(working copy)
-@@ -35,8 +35,8 @@
+@@ -34,8 +34,8 @@
  
  
  /* version */
 -#define Q3MAP_VERSION	"2.5.11"
--#define Q3MAP_MOTD      "A well-oiled toaster oven"
+-#define Q3MAP_MOTD		"A well-oiled toaster oven"
 +#define Q3MAP_VERSION	"2.5.11-div0$pq"
-+#define Q3MAP_MOTD		"Blackhole Box ate all the light"
-
-
++#define Q3MAP_MOTD		"Blackhole Box gives the light back"
+ 
+ 
  
 Index: include/version.default
 ===================================================================
---- include/version.default     (revision 193)
-+++ include/version.default     (working copy)
+--- include/version.default	(revision 290)
++++ include/version.default	(working copy)
 @@ -1 +1 @@
--1.5.0
-+1.5.0-div0$pr
+-1.4.0
++1.4.0-div0$pr
 EOF
