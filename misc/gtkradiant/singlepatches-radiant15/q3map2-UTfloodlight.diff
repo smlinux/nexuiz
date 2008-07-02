@@ -1,21 +1,20 @@
 Index: tools/quake3/q3map2/light_ydnar.c
 ===================================================================
---- tools/quake3/q3map2/light_ydnar.c	(revision 290)
+--- tools/quake3/q3map2/light_ydnar.c	(revision 191)
 +++ tools/quake3/q3map2/light_ydnar.c	(working copy)
-@@ -1449,6 +1449,8 @@
- 	vec3_t				color, averageColor, averageDir, total, temp, temp2;
+@@ -1767,6 +1864,8 @@
  	float				tests[ 4 ][ 2 ] = { { 0.0f, 0 }, { 1, 0 }, { 0, 1 }, { 1, 1 } };
  	trace_t				trace;
+ 	float				stackLightLuxels[ STACK_LL_SIZE ];
 +	vec3_t				flood;
 +	float				*floodlight;
  	
  	
  	/* bail if this number exceeds the number of raw lightmaps */
-@@ -1871,6 +1873,78 @@
- 	/* free light list */
+@@ -2223,6 +2332,78 @@
  	FreeTraceLights( &trace );
  	
-+  	/*	-----------------------------------------------------------------
+ 	/*	-----------------------------------------------------------------
 +		floodlight pass
 +		----------------------------------------------------------------- */
 +
@@ -87,10 +86,11 @@ Index: tools/quake3/q3map2/light_ydnar.c
 +		}
 +	}
 +	
- 	/* -----------------------------------------------------------------
- 	   filter pass
- 	   ----------------------------------------------------------------- */
-@@ -3123,7 +3197,320 @@
++	/*	-----------------------------------------------------------------
+ 		dirt pass
+ 		----------------------------------------------------------------- */
+ 	
+@@ -3587,7 +3768,320 @@
  	CreateTraceLightsForBounds( mins, maxs, normal, info->numSurfaceClusters, &surfaceClusters[ info->firstSurfaceCluster ], LIGHT_SURFACES, trace );
  }
  
@@ -413,9 +413,9 @@ Index: tools/quake3/q3map2/light_ydnar.c
 +
 Index: tools/quake3/q3map2/light.c
 ===================================================================
---- tools/quake3/q3map2/light.c	(revision 290)
+--- tools/quake3/q3map2/light.c	(revision 191)
 +++ tools/quake3/q3map2/light.c	(working copy)
-@@ -1363,6 +1363,56 @@
+@@ -1378,6 +1378,56 @@
  			break;
  	}
  	
@@ -472,9 +472,9 @@ Index: tools/quake3/q3map2/light.c
  	/* normalize to get primary light direction */
  	VectorNormalize( gp->dir, gp->dir );
  	
-@@ -1544,6 +1594,12 @@
- 	qboolean	minVertex, minGrid;
- 	const char	*value;
+@@ -1661,6 +1711,12 @@
+ 		RunThreadsOnIndividual( numRawLightmaps, qtrue, DirtyRawLightmap );
+ 	}
  	
 +	/* floodlight them up */
 +	if( floodlighty )
@@ -483,9 +483,9 @@ Index: tools/quake3/q3map2/light.c
 +		RunThreadsOnIndividual( numRawLightmaps, qtrue, FloodLightRawLightmap );
 +	}
  
- 	/* ydnar: smooth normals */
- 	if( shade )
-@@ -1675,6 +1731,7 @@
+ 	/* ydnar: set up light envelopes */
+ 	SetupEnvelopes( qfalse, fast );
+@@ -1703,6 +1759,7 @@
  		/* flag bouncing */
  		bouncing = qtrue;
  		VectorClear( ambientColor );
@@ -493,9 +493,9 @@ Index: tools/quake3/q3map2/light.c
  		
  		/* generate diffuse lights */
  		RadFreeLights();
-@@ -2114,6 +2171,21 @@
- 			loMem = qtrue;
- 			Sys_Printf( "Enabling low-memory (potentially slower) lighting mode\n" );
+@@ -2191,6 +2256,21 @@
+ 			cpmaHack = qtrue;
+ 			Sys_Printf( "Enabling Challenge Pro Mode Asstacular Vertex Lighting Mode (tm)\n" );
  		}
 +		else if( !strcmp( argv[ i ], "-floodlight" ) )
 +		{
@@ -513,21 +513,21 @@ Index: tools/quake3/q3map2/light.c
 +			Sys_Printf( "Low Quality FloodLighting enabled\n" );
 +		}
  		
- 		else
- 			Sys_Printf( "WARNING: Unknown option \"%s\"\n", argv[ i ] );
-@@ -2156,6 +2228,7 @@
- 	
+ 		/* r7: dirtmapping */
+ 		else if( !strcmp( argv[ i ], "-dirty" ) )
+@@ -2279,6 +2359,7 @@
  	/* ydnar: set up optimization */
  	SetupBrushes();
+ 	SetupDirt();
 +	SetupFloodLight();
  	SetupSurfaceLightmaps();
  	
  	/* initialize the surface facet tracing */
 Index: tools/quake3/q3map2/lightmaps_ydnar.c
 ===================================================================
---- tools/quake3/q3map2/lightmaps_ydnar.c	(revision 290)
+--- tools/quake3/q3map2/lightmaps_ydnar.c	(revision 191)
 +++ tools/quake3/q3map2/lightmaps_ydnar.c	(working copy)
-@@ -413,6 +413,12 @@
+@@ -414,6 +414,12 @@
  		lm->superNormals = safe_malloc( size );
  	memset( lm->superNormals, 0, size );
  	
@@ -542,25 +542,25 @@ Index: tools/quake3/q3map2/lightmaps_ydnar.c
  	if( lm->superClusters == NULL )
 Index: tools/quake3/q3map2/q3map2.h
 ===================================================================
---- tools/quake3/q3map2/q3map2.h	(revision 290)
+--- tools/quake3/q3map2/q3map2.h	(revision 191)
 +++ tools/quake3/q3map2/q3map2.h	(working copy)
-@@ -265,6 +265,7 @@
- #define SUPER_NORMAL_SIZE		3
+@@ -267,6 +267,7 @@
+ #define SUPER_NORMAL_SIZE		4
  #define SUPER_DELUXEL_SIZE		3
  #define BSP_DELUXEL_SIZE		3
 +#define SUPER_FLOODLIGHT_SIZE	1
  
  #define VERTEX_LUXEL( s, v )	(vertexLuxels[ s ] + ((v) * VERTEX_LUXEL_SIZE))
  #define RAD_VERTEX_LUXEL( s, v )(radVertexLuxels[ s ] + ((v) * VERTEX_LUXEL_SIZE))
-@@ -273,6 +274,7 @@
- #define SUPER_LUXEL( s, x, y )	(lm->superLuxels[ s ] + ((((y) * lm->sw) + (x)) * SUPER_LUXEL_SIZE))
+@@ -279,6 +280,7 @@
  #define SUPER_ORIGIN( x, y )	(lm->superOrigins + ((((y) * lm->sw) + (x)) * SUPER_ORIGIN_SIZE))
  #define SUPER_NORMAL( x, y )	(lm->superNormals + ((((y) * lm->sw) + (x)) * SUPER_NORMAL_SIZE))
+ #define SUPER_DIRT( x, y )		(lm->superNormals + ((((y) * lm->sw) + (x)) * SUPER_NORMAL_SIZE) + 3)	/* stash dirtyness in normal[ 3 ] */
 +#define SUPER_FLOODLIGHT( x, y )	(lm->superFloodLight + ((((y) * lm->sw) + (x)) * SUPER_FLOODLIGHT_SIZE) )	
- #define SUPER_CLUSTER( x, y )	(lm->superClusters + (((y) * lm->sw) + (x)))
- #define SUPER_DELUXEL( x, y )	(lm->superDeluxels + ((((y) * lm->sw) + (x)) * SUPER_DELUXEL_SIZE))
- #define BSP_DELUXEL( x, y )		(lm->bspDeluxels + ((((y) * lm->w) + (x)) * BSP_DELUXEL_SIZE))
-@@ -1364,6 +1366,7 @@
+ 
+ 
+ 
+@@ -1392,6 +1395,7 @@
  	
  	float					*superDeluxels;	/* average light direction */
  	float					*bspDeluxels;
@@ -568,26 +568,28 @@ Index: tools/quake3/q3map2/q3map2.h
  }
  rawLightmap_t;
  
-@@ -1670,6 +1673,9 @@
- void						SmoothNormals( void );
+@@ -1704,6 +1708,10 @@
+ float						DirtForSample( trace_t *trace );
+ void						DirtyRawLightmap( int num );
  
- void						MapRawLightmap( int num );
 +void						SetupFloodLight();
 +float						FloodLightForSample( trace_t *trace );
 +void						FloodLightRawLightmap( int num );
++
  void						IlluminateRawLightmap( int num );
  void						IlluminateVertexes( int num );
  
-@@ -2037,6 +2043,12 @@
- Q_EXTERN qboolean			sunOnly;
- Q_EXTERN int				approximateTolerance Q_ASSIGN( 0 );
- Q_EXTERN qboolean			noCollapse;
+@@ -2098,6 +2106,13 @@
+ Q_EXTERN float				dirtScale Q_ASSIGN( 1.0f );
+ Q_EXTERN float				dirtGain Q_ASSIGN( 1.0f );
+ 
 +Q_EXTERN qboolean			debugnormals Q_ASSIGN( qfalse );
 +Q_EXTERN qboolean			floodlighty Q_ASSIGN( qfalse );
 +Q_EXTERN qboolean			floodlight_lowquality Q_ASSIGN( qfalse );
 +Q_EXTERN vec3_t				floodlightRGB;
 +Q_EXTERN float				floodlightIntensity Q_ASSIGN( 512 );
 +Q_EXTERN float				floodlightDistance Q_ASSIGN( 1024 );
- Q_EXTERN qboolean			debug;
- Q_EXTERN qboolean			debugSurfaces;
- Q_EXTERN qboolean			debugUnused;
++
+ Q_EXTERN qboolean			dump Q_ASSIGN( qfalse );
+ Q_EXTERN qboolean			debug Q_ASSIGN( qfalse );
+ Q_EXTERN qboolean			debugUnused Q_ASSIGN( qfalse );

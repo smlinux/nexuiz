@@ -1,20 +1,8 @@
 Index: libs/picomodel/pm_obj.c
 ===================================================================
---- libs/picomodel/pm_obj.c	(revision 290)
+--- libs/picomodel/pm_obj.c	(revision 193)
 +++ libs/picomodel/pm_obj.c	(working copy)
-@@ -215,10 +215,9 @@
- 	}
- }
- 
--#if 0
- static int _obj_mtl_load( picoModel_t *model )
- {
--	//picoShader_t *curShader = NULL;
-+	picoShader_t *curShader = NULL;
- 	picoParser_t *p;
- 	picoByte_t   *mtlBuffer;
- 	int			  mtlBufSize;
-@@ -266,7 +265,7 @@
+@@ -265,7 +265,7 @@
  		/* get next token in material file */
  		if (_pico_parse( p,1 ) == NULL)
  			break;
@@ -23,7 +11,7 @@ Index: libs/picomodel/pm_obj.c
  
  		/* skip empty lines */
  		if (p->token == NULL || !strlen( p->token ))
-@@ -308,6 +307,7 @@
+@@ -307,6 +307,7 @@
  		else if (!_pico_stricmp(p->token,"map_kd"))
  		{
  			char *mapName;
@@ -31,7 +19,7 @@ Index: libs/picomodel/pm_obj.c
  
  			/* pointer to current shader must be valid */
  			if (curShader == NULL)
-@@ -322,6 +322,10 @@
+@@ -321,6 +322,10 @@
  				_pico_printf( PICO_ERROR,"Missing material map name in MTL, line %d.",p->curLine);
  				_obj_mtl_error_return;
  			}
@@ -42,15 +30,7 @@ Index: libs/picomodel/pm_obj.c
  			/* set shader map name */
  			PicoSetShaderMapName( shader,mapName );
  		}
-@@ -478,7 +482,6 @@
- 	/* return with success */
- 	return 1;
- }
--#endif
- 
- /* _obj_load:
-  *  loads a wavefront obj model file.
-@@ -523,7 +526,7 @@
+@@ -521,7 +526,7 @@
  	PicoSetModelFileName( model,fileName );
  
  	/* try loading the materials; we don't handle the result */
@@ -59,7 +39,7 @@ Index: libs/picomodel/pm_obj.c
  	_obj_mtl_load( model );
  #endif
  
-@@ -832,6 +835,41 @@
+@@ -830,6 +835,41 @@
  				curVertex += max;
  			}
  		}

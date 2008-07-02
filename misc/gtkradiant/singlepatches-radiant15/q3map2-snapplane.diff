@@ -1,8 +1,8 @@
 Index: tools/quake3/q3map2/model.c
 ===================================================================
---- tools/quake3/q3map2/model.c	(revision 290)
+--- tools/quake3/q3map2/model.c	(revision 193)
 +++ tools/quake3/q3map2/model.c	(working copy)
-@@ -221,6 +221,8 @@
+@@ -222,6 +222,8 @@
  	byte				*color;
  	picoIndex_t			*indexes;
  	remap_t				*rm, *glob;
@@ -11,7 +11,7 @@ Index: tools/quake3/q3map2/model.c
  	
  	
  	/* get model */
-@@ -399,9 +401,8 @@
+@@ -398,9 +400,8 @@
  		/* ydnar: giant hack land: generate clipping brushes for model triangles */
  		if( si->clipModel || (spawnFlags & 2) )	/* 2nd bit */
  		{
@@ -224,27 +224,32 @@ Index: tools/quake3/q3map2/model.c
  		}
 Index: tools/quake3/q3map2/map.c
 ===================================================================
---- tools/quake3/q3map2/map.c	(revision 290)
+--- tools/quake3/q3map2/map.c	(revision 193)
 +++ tools/quake3/q3map2/map.c	(working copy)
-@@ -183,9 +183,15 @@
+@@ -184,7 +184,7 @@
  snaps a plane to normal/distance epsilons
  */
  
 -void SnapPlane( vec3_t normal, vec_t *dist )
 +void SnapPlane( vec3_t normal, vec_t *dist, vec3_t center )
  {
--	SnapNormal( normal );
+ // SnapPlane disabled by LordHavoc because it often messes up collision
+ // brushes made from triangles of embedded models, and it has little effect
+@@ -193,7 +193,13 @@
+   SnapPlane reenabled by namespace because of multiple reports of
+   q3map2-crashes which were triggered by this patch.
+ */
 +	// div0: ensure the point "center" stays on the plane (actually, this
 +	// rotates the plane around the point center).
 +	// if center lies on the plane, it is guaranteed to stay on the plane by
 +	// this fix.
 +	vec_t centerDist = DotProduct(normal, center);
-+  	SnapNormal( normal );
+ 	SnapNormal( normal );
 +	*dist += (DotProduct(normal, center) - centerDist);
  
  	if( fabs( *dist - Q_rint( *dist ) ) < distanceEpsilon )
  		*dist = Q_rint( *dist );
-@@ -199,7 +205,7 @@
+@@ -207,7 +213,7 @@
  must be within an epsilon distance of the plane
  */
  
@@ -253,7 +258,7 @@ Index: tools/quake3/q3map2/map.c
  
  #ifdef USE_HASHING
  
-@@ -207,10 +213,14 @@
+@@ -215,10 +221,14 @@
  	int		i, j, hash, h;
  	plane_t	*p;
  	vec_t	d;
@@ -270,7 +275,7 @@ Index: tools/quake3/q3map2/map.c
  	hash = (PLANE_HASHES - 1) & (int) fabs( dist );
  	
  	/* search the border bins as well */
-@@ -251,7 +261,13 @@
+@@ -259,7 +269,13 @@
  	plane_t	*p;
  	
  

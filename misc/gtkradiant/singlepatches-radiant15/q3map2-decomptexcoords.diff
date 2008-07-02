@@ -1,8 +1,8 @@
 Index: tools/quake3/q3map2/convert_map.c
 ===================================================================
---- tools/quake3/q3map2/convert_map.c	(revision 290)
+--- tools/quake3/q3map2/convert_map.c	(revision 191)
 +++ tools/quake3/q3map2/convert_map.c	(working copy)
-@@ -45,6 +45,105 @@
+@@ -46,6 +46,105 @@
  #define	SNAP_FLOAT_TO_INT	4
  #define	SNAP_INT_TO_FLOAT	(1.0 / SNAP_FLOAT_TO_INT)
  
@@ -108,7 +108,7 @@ Index: tools/quake3/q3map2/convert_map.c
  static void ConvertBrush( FILE *f, int num, bspBrush_t *brush, vec3_t origin )
  {
  	int				i, j;
-@@ -53,12 +152,17 @@
+@@ -54,12 +153,17 @@
  	bspShader_t		*shader;
  	char			*texture;
  	bspPlane_t		*plane;
@@ -126,7 +126,7 @@ Index: tools/quake3/q3map2/convert_map.c
  	
  	/* clear out build brush */
  	for( i = 0; i < buildBrush->numsides; i++ )
-@@ -108,9 +212,88 @@
+@@ -109,9 +213,88 @@
  		/* get build side */
  		buildSide = &buildBrush->sides[ i ];
  		
@@ -215,7 +215,7 @@ Index: tools/quake3/q3map2/convert_map.c
  		
  		/* get texture name */
  		if( !Q_strncasecmp( buildSide->shaderInfo->shader, "textures/", 9 ) )
-@@ -129,14 +312,21 @@
+@@ -130,14 +313,21 @@
  		
  		/* print brush side */
  		/* ( 640 24 -224 ) ( 448 24 -224 ) ( 448 -232 -224 ) common/caulk 0 48 0 0.500000 0.500000 0 0 0 */
@@ -241,11 +241,11 @@ Index: tools/quake3/q3map2/convert_map.c
  
 Index: tools/quake3/q3map2/main.c
 ===================================================================
---- tools/quake3/q3map2/main.c	(revision 290)
+--- tools/quake3/q3map2/main.c	(revision 191)
 +++ tools/quake3/q3map2/main.c	(working copy)
-@@ -276,6 +276,18 @@
- 			else
- 				Sys_Printf( "Unknown conversion format \"%s\". Defaulting to ASE.\n", argv[ i ] );
+@@ -541,6 +541,18 @@
+ 					Sys_Printf( "Unknown conversion format \"%s\". Defaulting to ASE.\n", argv[ i ] );
+ 			}
   		}
 +		else if( !strcmp( argv[ i ],  "-ne" ) )
 + 		{

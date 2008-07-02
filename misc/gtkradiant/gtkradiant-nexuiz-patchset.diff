@@ -10,9 +10,21 @@ before committing new singlepatches!
 
 Index: libs/picomodel/pm_obj.c
 ===================================================================
---- libs/picomodel/pm_obj.c	(revision 193)
+--- libs/picomodel/pm_obj.c	(revision 290)
 +++ libs/picomodel/pm_obj.c	(working copy)
-@@ -265,7 +265,7 @@
+@@ -215,10 +215,9 @@
+ 	}
+ }
+ 
+-#if 0
+ static int _obj_mtl_load( picoModel_t *model )
+ {
+-	//picoShader_t *curShader = NULL;
++	picoShader_t *curShader = NULL;
+ 	picoParser_t *p;
+ 	picoByte_t   *mtlBuffer;
+ 	int			  mtlBufSize;
+@@ -266,7 +265,7 @@
  		/* get next token in material file */
  		if (_pico_parse( p,1 ) == NULL)
  			break;
@@ -21,7 +33,7 @@ Index: libs/picomodel/pm_obj.c
  
  		/* skip empty lines */
  		if (p->token == NULL || !strlen( p->token ))
-@@ -307,6 +307,7 @@
+@@ -308,6 +307,7 @@
  		else if (!_pico_stricmp(p->token,"map_kd"))
  		{
  			char *mapName;
@@ -29,7 +41,7 @@ Index: libs/picomodel/pm_obj.c
  
  			/* pointer to current shader must be valid */
  			if (curShader == NULL)
-@@ -321,6 +322,10 @@
+@@ -322,6 +322,10 @@
  				_pico_printf( PICO_ERROR,"Missing material map name in MTL, line %d.",p->curLine);
  				_obj_mtl_error_return;
  			}
@@ -40,7 +52,15 @@ Index: libs/picomodel/pm_obj.c
  			/* set shader map name */
  			PicoSetShaderMapName( shader,mapName );
  		}
-@@ -521,7 +526,7 @@
+@@ -478,7 +482,6 @@
+ 	/* return with success */
+ 	return 1;
+ }
+-#endif
+ 
+ /* _obj_load:
+  *  loads a wavefront obj model file.
+@@ -523,7 +526,7 @@
  	PicoSetModelFileName( model,fileName );
  
  	/* try loading the materials; we don't handle the result */
@@ -49,7 +69,7 @@ Index: libs/picomodel/pm_obj.c
  	_obj_mtl_load( model );
  #endif
  
-@@ -830,6 +835,41 @@
+@@ -832,6 +835,41 @@
  				curVertex += max;
  			}
  		}
@@ -91,618 +111,11 @@ Index: libs/picomodel/pm_obj.c
  		/* skip unparsed rest of line and continue */
  		_pico_parse_skip_rest( p );
  	}
-Index: libs/picomodel/pm_ase.c
-===================================================================
---- libs/picomodel/pm_ase.c	(revision 191)
-+++ libs/picomodel/pm_ase.c	(working copy)
-@@ -32,6 +32,7 @@
- 
- ----------------------------------------------------------------------------- */
- 
-+void Sys_Printf (const char *format, ...);
- 
- /* marker */
- #define PM_ASE_C
-@@ -253,7 +254,6 @@
- struct aseVertex_s
- {
- 	picoVec3_t xyz;
--	picoVec3_t normal;
- 	picoIndex_t id;
- };
- 
-@@ -276,6 +276,8 @@
- 	picoIndex_t smoothingGroup;
- 	picoIndex_t materialId;
- 	picoIndex_t subMaterialId;
-+   picoVec3_t  facenormal;
-+   picoVec3_t  vertexnormal[3];
- };
- typedef aseFace_t* aseFacesIter_t;
- 
-@@ -455,33 +457,157 @@
- 
- #endif
- 
-+static int VectorCompareExtn( picoVec3_t n1, picoVec3_t n2, float epsilon )
-+{
-+	int		i;
-+	
-+	
-+	/* test */
-+	for( i= 0; i < 3; i++ )
-+		if( fabs( n1[ i ] - n2[ i ]) > epsilon )
-+			return -1;
-+	return 1;
-+}
-+
-+#define CrossProductTemp(a,b,c)		((c)[0]=(a)[1]*(b)[2]-(a)[2]*(b)[1],(c)[1]=(a)[2]*(b)[0]-(a)[0]*(b)[2],(c)[2]=(a)[0]*(b)[1]-(a)[1]*(b)[0])
-+
- static void _ase_submit_triangles( picoModel_t* model , aseMaterial_t* materials , aseVertex_t* vertices, aseTexCoord_t* texcoords, aseColor_t* colors, aseFace_t* faces, int numFaces )
- {
--	aseFacesIter_t i = faces, end = faces + numFaces;
--	for(; i != end; ++i)
-+   
-+   picoVec3_t accum;
-+   int index;
-+   int counter;
-+   aseFacesIter_t i = faces, end = faces + numFaces;
-+   counter=0;
-+
-+   //rebuild normals
-+   for(i=faces; i != end; ++i)
-+   {
-+    
-+      //&(*i).facenormal
-+	   //vec3_t v1, v2;
-+	   //VectorSubtract(va, vb, v1);
-+	   //VectorSubtract(vc, vb, v2);
-+      //CrossProduct(v1, v2, out);
-+      
-+      picoVec3_t a,b,c;
-+      picoVec3_t v1,v2,v3;
-+      int j;
-+      counter++;
-+      for (j=0;j<3;j++)
-+      {
-+         a[j]    =  vertices[(*i).indices[0]].xyz[j];
-+         b[j]    =  vertices[(*i).indices[1]].xyz[j];
-+         c[j]    =  vertices[(*i).indices[2]].xyz[j];
-+      }
-+      for (j=0;j<3;j++)
-+      {
-+         v1[j]=a[j]-b[j];
-+         v2[j]=c[j]-b[j];
-+      }
-+      
-+      CrossProductTemp(v1,v2,v3);
-+      _pico_normalize_vec(v3);
-+      (*i).facenormal[0]=v3[0];
-+      (*i).facenormal[1]=v3[1];
-+      (*i).facenormal[2]=v3[2];
-+      
-+      
-+   }
-+   
-+   
-+   //if (counter>0) Sys_Printf( "Rebuilding %d Normals\n", counter * 3 );
-+   for(i=faces; i != end; ++i)
- 	{
--		/* look up the shader for the material/submaterial pair */
-+      /* look up the shader for the material/submaterial pair */
- 		aseSubMaterial_t* subMtl = _ase_get_submaterial_or_default( materials, (*i).materialId, (*i).subMaterialId );
--		if( subMtl == NULL )
-+
-+      if( subMtl == NULL )
- 		{
- 			return;
- 		}
- 
- 		{
- 			picoVec3_t* xyz[3];
-+         picoVec3_t *a[3];
- 			picoVec3_t* normal[3];
- 			picoVec2_t* st[3];
- 			picoColor_t* color[3];
- 			picoIndex_t smooth[3];
--			int j;
--			/* we pull the data from the vertex, color and texcoord arrays using the face index data */
--			for ( j = 0 ; j < 3 ; j ++ )
-+
-+			int j,z;
-+
-+         
-+   
-+         /* we pull the data from the vertex, color and texcoord arrays using the face index data */
-+         for ( j = 0 ; j < 3 ; j ++ )
- 			{
--				xyz[j]    = &vertices[(*i).indices[j]].xyz;
--				normal[j] = &vertices[(*i).indices[j]].normal;
-+            aseFacesIter_t q = faces;
-+            aseFacesIter_t qend = faces + numFaces;
-+
-+            xyz[j]    = &vertices[(*i).indices[j]].xyz;
-+            
-+            // Use Face normal
-+            normal[j] = &(*i).facenormal;
-+             
-+     
-+            //Oooor we can use the smoothing group
-+
-+            //Slow method, but testing
-+            //Find All faces that use this vertex, average their facenormals.
-+            // skip where smoothgroups both equal 0, or don't have any shared bits (x & y)
-+            index=(*i).indices[j];
-+    
-+//            accum[0]=0;
-+  //          accum[1]=0;
-+    //        accum[2]=0;
-+            accum[0]=(*i).facenormal[0];
-+            accum[1]=(*i).facenormal[1];
-+            accum[2]=(*i).facenormal[2];
-+            counter=1;
-+           
-+            
-+            z=0;
-+            for(; q != qend; ++q)
-+            {
-+               z++;
-+               if (q==i)
-+                  continue;
-+               // if  ( (*q).indices[0]==index || (*q).indices[1]==index || (*q).indices[2]==index) 
-+                a[0]=  &vertices[(*q).indices[0] ].xyz; 
-+                a[1]=  &vertices[(*q).indices[1] ].xyz; 
-+                a[2]=  &vertices[(*q).indices[2] ].xyz; 
-+               
-+               if ( VectorCompareExtn(*a[0],*xyz[j],0.01f)>0 ||
-+                    VectorCompareExtn(*a[1],*xyz[j],0.01f)>0 ||
-+                    VectorCompareExtn(*a[2],*xyz[j],0.01f)>0
-+                  )
-+               {
-+                  if ( (*i).smoothingGroup==0 && (*q).smoothingGroup ==0 )
-+                     continue;
-+
-+                  if ( (*i).smoothingGroup & (*q).smoothingGroup  )
-+                  {
-+                     accum[0]+=(*q).facenormal[0];
-+                     accum[1]+=(*q).facenormal[1];
-+                     accum[2]+=(*q).facenormal[2];
-+                     
-+                     counter++;
-+             
-+                  }
-+               }
-+            } 
-+            _pico_normalize_vec(accum); 
-+
-+            (*i).vertexnormal[j][0]=accum[0];
-+            (*i).vertexnormal[j][1]=accum[1];
-+            (*i).vertexnormal[j][2]=accum[2];
-+            normal[j]=&(*i).vertexnormal[j]; 
-+                        
-+
- 				st[j]     = &texcoords[(*i).indices[j + 3]].texcoord;
--	 	 	
--				if( colors != NULL && (*i).indices[j + 6] >= 0 )
-+	 	 	      
-+          	if( colors != NULL && (*i).indices[j + 6] >= 0 )
- 				{
- 					color[j] = &colors[(*i).indices[j + 6]].color;
- 				}
-@@ -490,30 +616,18 @@
- 					color[j] = &white;
- 				}
- 
--				smooth[j] = (vertices[(*i).indices[j]].id * (1 << 16)) + (*i).smoothingGroup; /* don't merge vertices */
-+				smooth[j] = 0;//  (vertices[(*i).indices[j]].id * (1 << 16)) + (*i).smoothingGroup; /* don't merge vertices */
- 				
- 			}
- 
- 			/* submit the triangle to the model */
- 			PicoAddTriangleToModel ( model , xyz , normal , 1 , st , 1 , color , subMtl->shader, smooth );
- 		}
-+
- 	}
- }
- 
--static void shadername_convert(char* shaderName)
--{
--  /* unix-style path separators */
--  char* s = shaderName;
--  for(; *s != '\0'; ++s)
--  {
--    if(*s == '\\')
--    {
--      *s = '/';
--    }
--  }
--}
- 
--
- /* _ase_load:
-  *  loads a 3dsmax ase model file.
- */
-@@ -534,6 +648,9 @@
- 	int numColorVertices = 0;
- 	int numColorVertexFaces = 0;
- 	int vertexId = 0;
-+   int currentVertexFace=0;
-+   int currentVertexIndex=0;
-+   int counter=0;
- 
- 	aseMaterial_t* materials = NULL;
- 
-@@ -610,10 +727,11 @@
- 		}
- 		else if (!_pico_stricmp(p->token,"*mesh_numvertex"))
- 		{
--			if (!_pico_parse_int( p, &numVertices) )
-+  			if (!_pico_parse_int( p, &numVertices) )
- 				_ase_error_return("Missing MESH_NUMVERTEX value");
- 
- 			vertices = _pico_calloc(numVertices, sizeof(aseVertex_t));
-+         currentVertexIndex=0;   
- 		}
- 		else if (!_pico_stricmp(p->token,"*mesh_numfaces"))
- 		{
-@@ -621,6 +739,7 @@
- 				_ase_error_return("Missing MESH_NUMFACES value");
- 
- 			faces = _pico_calloc(numFaces, sizeof(aseFace_t));
-+
- 		}
- 		else if (!_pico_stricmp(p->token,"*mesh_numtvertex"))
- 		{
-@@ -685,7 +804,20 @@
- 
- 			vertices[index].id = vertexId++;
- 		}
--		/* model mesh vertex normal */
-+		else if (!_pico_stricmp(p->token,"*mesh_facenormal"))
-+		{
-+		   //Grab the faceindex for the next vertex normals.
-+         if( numVertices == 0 )
-+				_ase_error_return("Vertex parse error (facenormals)");
-+
-+         if (!_pico_parse_int( p,&currentVertexFace ))
-+				_ase_error_return("Vertex parse error");
-+
-+ 			if (!_pico_parse_vec( p,faces[currentVertexFace].facenormal ))
-+				_ase_error_return("Vertex parse error");
-+
-+      }
-+      /* model mesh vertex normal */
- 		else if (!_pico_stricmp(p->token,"*mesh_vertexnormal"))
- 		{
- 			int			index;
-@@ -696,10 +828,25 @@
- 			/* get vertex data (orig: index +y -x +z) */
- 			if (!_pico_parse_int( p,&index ))
- 				_ase_error_return("Vertex parse error");
--			if (!_pico_parse_vec( p,vertices[index].normal ))
-+
-+         //^^ Index is 'wrong' in .ase models.  they reference the same vert index with multiple normals..
-+         // I've tried, this is a lost cause.  Use the SG's
-+         // 
-+			/*
-+         
-+         if (!_pico_parse_vec( p,vertices[counter].normal ))
- 				_ase_error_return("Vertex parse error");
-+         vertices[counter].faceid=index;
-+         counter++;
-+         */
- 		}
- 		/* model mesh face */
-+		else if (!_pico_stricmp(p->token,"*mesh_normals"))
-+      {
-+      //   counter=0; //part of the above vertex normals fix
-+      }
-+         
-+      /* model mesh face */
- 		else if (!_pico_stricmp(p->token,"*mesh_face"))
- 		{
- 			picoIndex_t indexes[3];
-@@ -736,8 +883,35 @@
- 				}
- 				if (!_pico_stricmp (p->token,"*MESH_SMOOTHING" ))
- 				{
--					_pico_parse_int ( p , &faces[index].smoothingGroup );
--				}
-+               int total=0;
-+               char* point;
-+               char* start;
-+               _pico_parse(p,0);
-+
-+               point=p->token;
-+               start=point;
-+               faces[index].smoothingGroup=0;
-+              
-+               //Super dodgy comma delimited string parse
-+               while (*point<'A') 
-+               {
-+                  if (*point<=32 || *point==',')
-+                  {
-+                     total=atoi(start);
-+                     if (total!=0)
-+                     {
-+                        faces[index].smoothingGroup+=1<<total;
-+                     }
-+                     start=point+1;
-+                  }
-+                  
-+                  point++;
-+               }
-+               
-+               
-+			      
-+               
-+            }
- 				if (!_pico_stricmp (p->token,"*MESH_MTLID" ))
- 				{
- 					_pico_parse_int ( p , &faces[index].subMaterialId );
-@@ -755,19 +929,19 @@
- 			int			index;
- 
- 			if( numVertices == 0 )
--				_ase_error_return("Texture Vertex parse error");
-+				_ase_error_return("Vertex parse error");
- 
- 			/* get uv vertex index */
--			if (!_pico_parse_int( p,&index ) || index >= numTextureVertices)
--				_ase_error_return("Texture vertex parse error");
-+			if (!_pico_parse_int( p,&index ))
-+				_ase_error_return("UV vertex parse error");
- 
- 			/* get uv vertex s */
- 			if (!_pico_parse_float( p,&texcoords[index].texcoord[0] ))
--				_ase_error_return("Texture vertex parse error");
-+				_ase_error_return("UV vertex parse error");
- 
- 			/* get uv vertex t */
- 			if (!_pico_parse_float( p,&texcoords[index].texcoord[1] ))
--				_ase_error_return("Texture vertex parse error");
-+				_ase_error_return("UV vertex parse error");
- 			
- 			/* ydnar: invert t */
- 			texcoords[index].texcoord[ 1 ] = 1.0f - texcoords[index].texcoord[ 1 ];
-@@ -831,6 +1005,13 @@
- 			
- 			/* leave alpha alone since we don't get any data from the ASE format */
- 			colors[index].color[3] = 255;
-+
-+         /* 27 hack, red as alpha */
-+         colors[index].color[3]=colors[index].color[0];
-+         colors[index].color[0]=255;
-+         colors[index].color[1]=255;
-+         colors[index].color[2]=255;
-+
- 		}
- 		/* model color face */
- 		else if (!_pico_stricmp(p->token,"*mesh_cface"))
-@@ -900,7 +1081,6 @@
- 				{
- 					/* set material name */
- 					_pico_first_token( materialName );
--          shadername_convert(materialName);
- 					PicoSetShaderName( shader, materialName);
- 
- 					/* set shader's transparency */
-@@ -1085,7 +1265,6 @@
- 				}
- 
- 				/* set material name */
--        shadername_convert(materialName);
- 				PicoSetShaderName( shader,materialName );
- 
- 				/* set shader's transparency */
-@@ -1115,8 +1294,18 @@
-           char* p = mapname;
- 
-           /* convert to shader-name format */
--          shadername_convert(mapname);
-           {
-+            /* unix-style path separators */
-+            char* s = mapname;
-+            for(; *s != '\0'; ++s)
-+            {
-+              if(*s == '\\')
-+              {
-+                *s = '/';
-+              }
-+            }
-+          }
-+          {
-             /* remove extension */
-             char* last_period = strrchr(p, '.');
-             if(last_period != NULL)
-@@ -1125,14 +1314,32 @@
-             }
-           }
- 
--          /* find shader path */
-+          /* find game root */
-           for(; *p != '\0'; ++p)
-           {
--            if(_pico_strnicmp(p, "models/", 7) == 0 || _pico_strnicmp(p, "textures/", 9) == 0)
-+            if(_pico_strnicmp(p, "quake", 5) == 0 || _pico_strnicmp(p, "doom", 4) == 0)
-             {
-               break;
-             }
-           }
-+          /* root-relative */
-+          for(; *p != '\0'; ++p)
-+          {
-+            if(*p == '/')
-+            {
-+              ++p;
-+              break;
-+            }
-+          }
-+          /* game-relative */
-+          for(; *p != '\0'; ++p)
-+          {
-+            if(*p == '/')
-+            {
-+              ++p;
-+              break;
-+            }
-+          }
- 
-           if(*p != '\0')
-           {
-Index: libs/picomodel/picomodel.c
-===================================================================
---- libs/picomodel/picomodel.c	(revision 191)
-+++ libs/picomodel/picomodel.c	(working copy)
-@@ -295,10 +295,7 @@
- 		model = PicoModuleLoadModel(module, fileName, buffer, bufSize, frameNum);
- 	}
- 	
--  if(model != 0)
--  {
--	  _pico_free(buffer);
--  }
-+	_pico_free(buffer);
- 
- 	/* return */
- 	return model;
-@@ -1573,6 +1570,7 @@
- {
- 	int		i, j;
- 	
-+//   Sys_Printf(" %f %f %f\n", normal[0] , normal[1] , normal[2] );
- 	
- 	/* dummy check */
- 	if( surface == NULL || surface->numVertexes <= 0 )
-@@ -1861,13 +1859,10 @@
- typedef picoVec3_t* picoNormalIter_t;
- typedef picoIndex_t* picoIndexIter_t;
- 
--#define THE_CROSSPRODUCTS_OF_ANY_PAIR_OF_EDGES_OF_A_GIVEN_TRIANGLE_ARE_EQUAL 1
--
- void _pico_triangles_generate_weighted_normals(picoIndexIter_t first, picoIndexIter_t end, picoVec3_t* xyz, picoVec3_t* normals)
- {
- 	for(; first != end; first += 3)
- 	{
--#if (THE_CROSSPRODUCTS_OF_ANY_PAIR_OF_EDGES_OF_A_GIVEN_TRIANGLE_ARE_EQUAL)
- 		picoVec3_t weightedNormal;
- 		{
- 			float* a = xyz[*(first + 0)];
-@@ -1878,24 +1873,11 @@
- 			_pico_subtract_vec( c, a, ca );
- 			_pico_cross_vec( ca, ba, weightedNormal );
- 		}
--#endif
- 		{
- 			int j = 0;
- 			for(; j < 3; ++j)
- 			{
- 				float* normal = normals[*(first + j)];
--#if (!THE_CROSSPRODUCTS_OF_ANY_PAIR_OF_EDGES_OF_A_GIVEN_TRIANGLE_ARE_EQUAL)
--				picoVec3_t weightedNormal;
--				{
--					float* a = xyz[*(first + ((j + 0) % 3))];
--					float* b = xyz[*(first + ((j + 1) % 3))];
--					float* c = xyz[*(first + ((j + 2) % 3))];
--					picoVec3_t ba, ca;
--					_pico_subtract_vec( b, a, ba );
--					_pico_subtract_vec( c, a, ca );
--					_pico_cross_vec( ca, ba, weightedNormal );
--				}
--#endif
- 				_pico_add_vec(weightedNormal, normal, normal);
- 			}
- 		}
-@@ -1941,7 +1923,8 @@
- {
- 	for(; first != last; ++first, ++generated)
- 	{
--		if(!_pico_normal_is_unit_length(*first) || !_pico_normal_within_tolerance(*first, *generated))
-+      //27 - fix for badly generated normals thing.
-+      //	if(!_pico_normal_is_unit_length(*first) || !_pico_normal_within_tolerance(*first, *generated))
- 		{
- 			_pico_copy_vec(*generated, *first);
- 		}
-@@ -1954,10 +1937,11 @@
- 
- 	_pico_normals_zero(normals, normals + surface->numVertexes);
- 
-+   //Just build standard no sg normals for now
- 	_pico_triangles_generate_weighted_normals(surface->index, surface->index + surface->numIndexes, surface->xyz, normals);
- 	_pico_vertices_combine_shared_normals(surface->xyz, surface->smoothingGroup, normals, surface->numVertexes);
- 
--	_pico_normals_normalize(normals, normals + surface->numVertexes);
-+	_pico_normals_normalize(normals, normals + surface->numVertexes); 
- 
- 	_pico_normals_assign_generated_normals(surface->normal, surface->normal + surface->numVertexes, normals);
- 
-@@ -2261,7 +2245,7 @@
- 		int newVertIndex = PicoGetSurfaceNumIndexes ( workSurface );
- 
- 		/* get the index of the vertex that we're going to store at newVertIndex */
--		vertDataIndex = PicoFindSurfaceVertexNum ( workSurface , *xyz[i] , *normals[i] , numSTs , st[i] , numColors , colors[i], smoothingGroup[i]);
-+      vertDataIndex = -1;// PicoFindSurfaceVertexNum ( workSurface , *xyz[i] , *normals[i] , numSTs , st[i] , numColors , colors[i], smoothingGroup[i]);
- 
- 		/* the vertex wasn't found, so create a new vertex in the pool from the data we have */
- 		if ( vertDataIndex == -1 )
-@@ -2290,3 +2274,5 @@
- 		PicoSetSurfaceIndex ( workSurface , newVertIndex , vertDataIndex );
- 	}
- }
-+
-+
-Index: plugins/model/model.cpp
-===================================================================
---- plugins/model/model.cpp	(revision 193)
-+++ plugins/model/model.cpp	(working copy)
-@@ -123,14 +123,27 @@
-     }
-     glVertexPointer(3, GL_FLOAT, sizeof(ArbitraryMeshVertex), &m_vertices.data()->vertex);
-     glDrawElements(GL_TRIANGLES, GLsizei(m_indices.size()), RenderIndexTypeID, m_indices.data());
-+
- #if defined(_DEBUG)
-+	GLfloat modelview[16];
-+	glGetFloatv(GL_MODELVIEW_MATRIX, modelview); // I know this is slow as hell, but hey - we're in _DEBUG
-+	Matrix4 modelview_inv(
-+		modelview[0], modelview[1], modelview[2], modelview[3],
-+		modelview[4], modelview[5], modelview[6], modelview[7],
-+		modelview[8], modelview[9], modelview[10], modelview[11],
-+		modelview[12], modelview[13], modelview[14], modelview[15]);
-+	matrix4_full_invert(modelview_inv);
-+	Matrix4 modelview_inv_transposed = matrix4_transposed(modelview_inv);
-+
-     glBegin(GL_LINES);
- 
-     for(Array<ArbitraryMeshVertex>::const_iterator i = m_vertices.begin(); i != m_vertices.end(); ++i)
-     {
--      Vector3 normal = vector3_added(vertex3f_to_vector3((*i).vertex), vector3_scaled(normal3f_to_vector3((*i).normal), 8));
-+	  Vector3 normal = normal3f_to_vector3((*i).normal);
-+	  normal = matrix4_transformed_direction(modelview_inv, vector3_normalised(matrix4_transformed_direction(modelview_inv_transposed, normal))); // do some magic
-+      Vector3 normalTransformed = vector3_added(vertex3f_to_vector3((*i).vertex), vector3_scaled(normal, 8));
-       glVertex3fv(vertex3f_to_array((*i).vertex));
--      glVertex3fv(vector3_to_array(normal));
-+      glVertex3fv(vector3_to_array(normalTransformed));
-     }
-     glEnd();
- #endif
-Index: games/NexuizPack/games/nexuiz.game
-===================================================================
---- games/NexuizPack/games/nexuiz.game	(revision 26)
-+++ games/NexuizPack/games/nexuiz.game	(working copy)
-@@ -17,7 +17,7 @@
-   shaderpath="scripts"
-   archivetypes="pk3"
-   texturetypes="tga jpg png"
--  modeltypes="md3 mdl md2 ase"
-+  modeltypes="md3 mdl md2 ase obj"
-   maptypes="mapq3"
-   shaders="quake3"
-   entityclass="quake3"
 Index: tools/quake3/q3map2/convert_map.c
 ===================================================================
---- tools/quake3/q3map2/convert_map.c	(revision 191)
+--- tools/quake3/q3map2/convert_map.c	(revision 290)
 +++ tools/quake3/q3map2/convert_map.c	(working copy)
-@@ -46,6 +46,105 @@
+@@ -45,6 +45,105 @@
  #define	SNAP_FLOAT_TO_INT	4
  #define	SNAP_INT_TO_FLOAT	(1.0 / SNAP_FLOAT_TO_INT)
  
@@ -808,7 +221,7 @@ Index: tools/quake3/q3map2/convert_map.c
  static void ConvertBrush( FILE *f, int num, bspBrush_t *brush, vec3_t origin )
  {
  	int				i, j;
-@@ -54,12 +153,17 @@
+@@ -53,12 +152,17 @@
  	bspShader_t		*shader;
  	char			*texture;
  	bspPlane_t		*plane;
@@ -826,7 +239,7 @@ Index: tools/quake3/q3map2/convert_map.c
  	
  	/* clear out build brush */
  	for( i = 0; i < buildBrush->numsides; i++ )
-@@ -109,9 +213,88 @@
+@@ -108,9 +212,88 @@
  		/* get build side */
  		buildSide = &buildBrush->sides[ i ];
  		
@@ -915,7 +328,7 @@ Index: tools/quake3/q3map2/convert_map.c
  		
  		/* get texture name */
  		if( !Q_strncasecmp( buildSide->shaderInfo->shader, "textures/", 9 ) )
-@@ -130,14 +313,21 @@
+@@ -129,14 +312,21 @@
  		
  		/* print brush side */
  		/* ( 640 24 -224 ) ( 448 24 -224 ) ( 448 -232 -224 ) common/caulk 0 48 0 0.500000 0.500000 0 0 0 */
@@ -941,11 +354,11 @@ Index: tools/quake3/q3map2/convert_map.c
  
 Index: tools/quake3/q3map2/main.c
 ===================================================================
---- tools/quake3/q3map2/main.c	(revision 191)
+--- tools/quake3/q3map2/main.c	(revision 290)
 +++ tools/quake3/q3map2/main.c	(working copy)
-@@ -541,6 +541,18 @@
- 					Sys_Printf( "Unknown conversion format \"%s\". Defaulting to ASE.\n", argv[ i ] );
- 			}
+@@ -276,6 +276,18 @@
+ 			else
+ 				Sys_Printf( "Unknown conversion format \"%s\". Defaulting to ASE.\n", argv[ i ] );
   		}
 +		else if( !strcmp( argv[ i ],  "-ne" ) )
 + 		{
@@ -964,9 +377,9 @@ Index: tools/quake3/q3map2/main.c
  	/* clean up map name */
 Index: tools/quake3/q3map2/model.c
 ===================================================================
---- tools/quake3/q3map2/model.c	(revision 193)
+--- tools/quake3/q3map2/model.c	(revision 290)
 +++ tools/quake3/q3map2/model.c	(working copy)
-@@ -222,6 +222,8 @@
+@@ -221,6 +221,8 @@
  	byte				*color;
  	picoIndex_t			*indexes;
  	remap_t				*rm, *glob;
@@ -975,7 +388,7 @@ Index: tools/quake3/q3map2/model.c
  	
  	
  	/* get model */
-@@ -398,9 +400,8 @@
+@@ -399,9 +401,8 @@
  		/* ydnar: giant hack land: generate clipping brushes for model triangles */
  		if( si->clipModel || (spawnFlags & 2) )	/* 2nd bit */
  		{
@@ -1188,32 +601,27 @@ Index: tools/quake3/q3map2/model.c
  		}
 Index: tools/quake3/q3map2/map.c
 ===================================================================
---- tools/quake3/q3map2/map.c	(revision 193)
+--- tools/quake3/q3map2/map.c	(revision 290)
 +++ tools/quake3/q3map2/map.c	(working copy)
-@@ -184,7 +184,7 @@
+@@ -183,9 +183,15 @@
  snaps a plane to normal/distance epsilons
  */
  
 -void SnapPlane( vec3_t normal, vec_t *dist )
 +void SnapPlane( vec3_t normal, vec_t *dist, vec3_t center )
  {
- // SnapPlane disabled by LordHavoc because it often messes up collision
- // brushes made from triangles of embedded models, and it has little effect
-@@ -193,7 +193,13 @@
-   SnapPlane reenabled by namespace because of multiple reports of
-   q3map2-crashes which were triggered by this patch.
- */
+-	SnapNormal( normal );
 +	// div0: ensure the point "center" stays on the plane (actually, this
 +	// rotates the plane around the point center).
 +	// if center lies on the plane, it is guaranteed to stay on the plane by
 +	// this fix.
 +	vec_t centerDist = DotProduct(normal, center);
- 	SnapNormal( normal );
++  	SnapNormal( normal );
 +	*dist += (DotProduct(normal, center) - centerDist);
  
  	if( fabs( *dist - Q_rint( *dist ) ) < distanceEpsilon )
  		*dist = Q_rint( *dist );
-@@ -207,7 +213,7 @@
+@@ -199,7 +205,7 @@
  must be within an epsilon distance of the plane
  */
  
@@ -1222,7 +630,7 @@ Index: tools/quake3/q3map2/map.c
  
  #ifdef USE_HASHING
  
-@@ -215,10 +221,14 @@
+@@ -207,10 +213,14 @@
  	int		i, j, hash, h;
  	plane_t	*p;
  	vec_t	d;
@@ -1239,7 +647,7 @@ Index: tools/quake3/q3map2/map.c
  	hash = (PLANE_HASHES - 1) & (int) fabs( dist );
  	
  	/* search the border bins as well */
-@@ -259,7 +269,13 @@
+@@ -251,7 +261,13 @@
  	plane_t	*p;
  	
  
@@ -1256,9 +664,9 @@ Index: tools/quake3/q3map2/map.c
  		if( PlaneEqual( p, normal, dist ) )
 Index: tools/quake3/q3map2/shaders.c
 ===================================================================
---- tools/quake3/q3map2/shaders.c	(revision 191)
+--- tools/quake3/q3map2/shaders.c	(revision 290)
 +++ tools/quake3/q3map2/shaders.c	(working copy)
-@@ -793,8 +793,14 @@
+@@ -747,8 +747,14 @@
  	}
  	
  	if( VectorLength( si->color ) <= 0.0f )
@@ -1276,21 +684,22 @@ Index: tools/quake3/q3map2/shaders.c
  
 Index: tools/quake3/q3map2/light_ydnar.c
 ===================================================================
---- tools/quake3/q3map2/light_ydnar.c	(revision 191)
+--- tools/quake3/q3map2/light_ydnar.c	(revision 290)
 +++ tools/quake3/q3map2/light_ydnar.c	(working copy)
-@@ -1767,6 +1864,8 @@
+@@ -1449,6 +1449,8 @@
+ 	vec3_t				color, averageColor, averageDir, total, temp, temp2;
  	float				tests[ 4 ][ 2 ] = { { 0.0f, 0 }, { 1, 0 }, { 0, 1 }, { 1, 1 } };
  	trace_t				trace;
- 	float				stackLightLuxels[ STACK_LL_SIZE ];
 +	vec3_t				flood;
 +	float				*floodlight;
  	
  	
  	/* bail if this number exceeds the number of raw lightmaps */
-@@ -2223,6 +2332,78 @@
+@@ -1871,6 +1873,78 @@
+ 	/* free light list */
  	FreeTraceLights( &trace );
  	
- 	/*	-----------------------------------------------------------------
++  	/*	-----------------------------------------------------------------
 +		floodlight pass
 +		----------------------------------------------------------------- */
 +
@@ -1362,11 +771,10 @@ Index: tools/quake3/q3map2/light_ydnar.c
 +		}
 +	}
 +	
-+	/*	-----------------------------------------------------------------
- 		dirt pass
- 		----------------------------------------------------------------- */
- 	
-@@ -3587,7 +3768,320 @@
+ 	/* -----------------------------------------------------------------
+ 	   filter pass
+ 	   ----------------------------------------------------------------- */
+@@ -3123,7 +3197,320 @@
  	CreateTraceLightsForBounds( mins, maxs, normal, info->numSurfaceClusters, &surfaceClusters[ info->firstSurfaceCluster ], LIGHT_SURFACES, trace );
  }
  
@@ -1689,9 +1097,9 @@ Index: tools/quake3/q3map2/light_ydnar.c
 +
 Index: tools/quake3/q3map2/light.c
 ===================================================================
---- tools/quake3/q3map2/light.c	(revision 191)
+--- tools/quake3/q3map2/light.c	(revision 290)
 +++ tools/quake3/q3map2/light.c	(working copy)
-@@ -1378,6 +1378,56 @@
+@@ -1363,6 +1363,56 @@
  			break;
  	}
  	
@@ -1748,9 +1156,9 @@ Index: tools/quake3/q3map2/light.c
  	/* normalize to get primary light direction */
  	VectorNormalize( gp->dir, gp->dir );
  	
-@@ -1661,6 +1711,12 @@
- 		RunThreadsOnIndividual( numRawLightmaps, qtrue, DirtyRawLightmap );
- 	}
+@@ -1544,6 +1594,12 @@
+ 	qboolean	minVertex, minGrid;
+ 	const char	*value;
  	
 +	/* floodlight them up */
 +	if( floodlighty )
@@ -1759,9 +1167,9 @@ Index: tools/quake3/q3map2/light.c
 +		RunThreadsOnIndividual( numRawLightmaps, qtrue, FloodLightRawLightmap );
 +	}
  
- 	/* ydnar: set up light envelopes */
- 	SetupEnvelopes( qfalse, fast );
-@@ -1703,6 +1759,7 @@
+ 	/* ydnar: smooth normals */
+ 	if( shade )
+@@ -1675,6 +1731,7 @@
  		/* flag bouncing */
  		bouncing = qtrue;
  		VectorClear( ambientColor );
@@ -1769,9 +1177,9 @@ Index: tools/quake3/q3map2/light.c
  		
  		/* generate diffuse lights */
  		RadFreeLights();
-@@ -2191,6 +2256,21 @@
- 			cpmaHack = qtrue;
- 			Sys_Printf( "Enabling Challenge Pro Mode Asstacular Vertex Lighting Mode (tm)\n" );
+@@ -2114,6 +2171,21 @@
+ 			loMem = qtrue;
+ 			Sys_Printf( "Enabling low-memory (potentially slower) lighting mode\n" );
  		}
 +		else if( !strcmp( argv[ i ], "-floodlight" ) )
 +		{
@@ -1789,21 +1197,21 @@ Index: tools/quake3/q3map2/light.c
 +			Sys_Printf( "Low Quality FloodLighting enabled\n" );
 +		}
  		
- 		/* r7: dirtmapping */
- 		else if( !strcmp( argv[ i ], "-dirty" ) )
-@@ -2279,6 +2359,7 @@
+ 		else
+ 			Sys_Printf( "WARNING: Unknown option \"%s\"\n", argv[ i ] );
+@@ -2156,6 +2228,7 @@
+ 	
  	/* ydnar: set up optimization */
  	SetupBrushes();
- 	SetupDirt();
 +	SetupFloodLight();
  	SetupSurfaceLightmaps();
  	
  	/* initialize the surface facet tracing */
 Index: tools/quake3/q3map2/lightmaps_ydnar.c
 ===================================================================
---- tools/quake3/q3map2/lightmaps_ydnar.c	(revision 191)
+--- tools/quake3/q3map2/lightmaps_ydnar.c	(revision 290)
 +++ tools/quake3/q3map2/lightmaps_ydnar.c	(working copy)
-@@ -414,6 +414,12 @@
+@@ -413,6 +413,12 @@
  		lm->superNormals = safe_malloc( size );
  	memset( lm->superNormals, 0, size );
  	
@@ -1818,25 +1226,25 @@ Index: tools/quake3/q3map2/lightmaps_ydnar.c
  	if( lm->superClusters == NULL )
 Index: tools/quake3/q3map2/q3map2.h
 ===================================================================
---- tools/quake3/q3map2/q3map2.h	(revision 191)
+--- tools/quake3/q3map2/q3map2.h	(revision 290)
 +++ tools/quake3/q3map2/q3map2.h	(working copy)
-@@ -267,6 +267,7 @@
- #define SUPER_NORMAL_SIZE		4
+@@ -265,6 +265,7 @@
+ #define SUPER_NORMAL_SIZE		3
  #define SUPER_DELUXEL_SIZE		3
  #define BSP_DELUXEL_SIZE		3
 +#define SUPER_FLOODLIGHT_SIZE	1
  
  #define VERTEX_LUXEL( s, v )	(vertexLuxels[ s ] + ((v) * VERTEX_LUXEL_SIZE))
  #define RAD_VERTEX_LUXEL( s, v )(radVertexLuxels[ s ] + ((v) * VERTEX_LUXEL_SIZE))
-@@ -279,6 +280,7 @@
+@@ -273,6 +274,7 @@
+ #define SUPER_LUXEL( s, x, y )	(lm->superLuxels[ s ] + ((((y) * lm->sw) + (x)) * SUPER_LUXEL_SIZE))
  #define SUPER_ORIGIN( x, y )	(lm->superOrigins + ((((y) * lm->sw) + (x)) * SUPER_ORIGIN_SIZE))
  #define SUPER_NORMAL( x, y )	(lm->superNormals + ((((y) * lm->sw) + (x)) * SUPER_NORMAL_SIZE))
- #define SUPER_DIRT( x, y )		(lm->superNormals + ((((y) * lm->sw) + (x)) * SUPER_NORMAL_SIZE) + 3)	/* stash dirtyness in normal[ 3 ] */
 +#define SUPER_FLOODLIGHT( x, y )	(lm->superFloodLight + ((((y) * lm->sw) + (x)) * SUPER_FLOODLIGHT_SIZE) )	
- 
- 
- 
-@@ -1392,6 +1395,7 @@
+ #define SUPER_CLUSTER( x, y )	(lm->superClusters + (((y) * lm->sw) + (x)))
+ #define SUPER_DELUXEL( x, y )	(lm->superDeluxels + ((((y) * lm->sw) + (x)) * SUPER_DELUXEL_SIZE))
+ #define BSP_DELUXEL( x, y )		(lm->bspDeluxels + ((((y) * lm->w) + (x)) * BSP_DELUXEL_SIZE))
+@@ -1364,6 +1366,7 @@
  	
  	float					*superDeluxels;	/* average light direction */
  	float					*bspDeluxels;
@@ -1844,280 +1252,34 @@ Index: tools/quake3/q3map2/q3map2.h
  }
  rawLightmap_t;
  
-@@ -1704,6 +1708,10 @@
- float						DirtForSample( trace_t *trace );
- void						DirtyRawLightmap( int num );
+@@ -1670,6 +1673,9 @@
+ void						SmoothNormals( void );
  
+ void						MapRawLightmap( int num );
 +void						SetupFloodLight();
 +float						FloodLightForSample( trace_t *trace );
 +void						FloodLightRawLightmap( int num );
-+
  void						IlluminateRawLightmap( int num );
  void						IlluminateVertexes( int num );
  
-@@ -2098,6 +2106,13 @@
- Q_EXTERN float				dirtScale Q_ASSIGN( 1.0f );
- Q_EXTERN float				dirtGain Q_ASSIGN( 1.0f );
- 
+@@ -2037,6 +2043,12 @@
+ Q_EXTERN qboolean			sunOnly;
+ Q_EXTERN int				approximateTolerance Q_ASSIGN( 0 );
+ Q_EXTERN qboolean			noCollapse;
 +Q_EXTERN qboolean			debugnormals Q_ASSIGN( qfalse );
 +Q_EXTERN qboolean			floodlighty Q_ASSIGN( qfalse );
 +Q_EXTERN qboolean			floodlight_lowquality Q_ASSIGN( qfalse );
 +Q_EXTERN vec3_t				floodlightRGB;
 +Q_EXTERN float				floodlightIntensity Q_ASSIGN( 512 );
 +Q_EXTERN float				floodlightDistance Q_ASSIGN( 1024 );
-+
- Q_EXTERN qboolean			dump Q_ASSIGN( qfalse );
- Q_EXTERN qboolean			debug Q_ASSIGN( qfalse );
- Q_EXTERN qboolean			debugUnused Q_ASSIGN( qfalse );
-Index: tools/quake3/q3map2/game_ja.h
-===================================================================
---- tools/quake3/q3map2/game_ja.h	(revision 191)
-+++ tools/quake3/q3map2/game_ja.h	(working copy)
-@@ -67,6 +67,7 @@
- 	qfalse,				/* wolf lighting model? */
- 	128,				/* lightmap width/height */
- 	1.0f,				/* lightmap gamma */
-+	1.0f,				/* lightmap exposure */
- 	1.0f,				/* lightmap compensate */
- 	"RBSP",				/* bsp file prefix */
- 	1,					/* bsp file version */
-Index: tools/quake3/q3map2/game_tremulous.h
-===================================================================
---- tools/quake3/q3map2/game_tremulous.h	(revision 191)
-+++ tools/quake3/q3map2/game_tremulous.h	(working copy)
-@@ -70,6 +70,7 @@
- 	qfalse,				/* wolf lighting model? */
- 	128,				/* lightmap width/height */
- 	1.0f,				/* lightmap gamma */
-+	1.0f,				/* lightmap exposure */
- 	1.0f,				/* lightmap compensate */
- 	"IBSP",				/* bsp file prefix */
- 	46,					/* bsp file version */
-Index: tools/quake3/q3map2/game_wolfet.h
-===================================================================
---- tools/quake3/q3map2/game_wolfet.h	(revision 191)
-+++ tools/quake3/q3map2/game_wolfet.h	(working copy)
-@@ -66,6 +66,7 @@
- 	qtrue,				/* wolf lighting model? */
- 	128,				/* lightmap width/height */
- 	1.0f,				/* lightmap gamma */
-+	1.0f,				/* lightmap exposure */
- 	1.0f,				/* lightmap compensate */
- 	"IBSP",				/* bsp file prefix */
- 	47,					/* bsp file version */
-Index: tools/quake3/q3map2/game_wolf.h
-===================================================================
---- tools/quake3/q3map2/game_wolf.h	(revision 191)
-+++ tools/quake3/q3map2/game_wolf.h	(working copy)
-@@ -129,6 +129,7 @@
- 	qtrue,				/* wolf lighting model? */
- 	128,				/* lightmap width/height */
- 	1.0f,				/* lightmap gamma */
-+	1.0f,				/* lightmap exposure */
- 	1.0f,				/* lightmap compensate */
- 	"IBSP",				/* bsp file prefix */
- 	47,					/* bsp file version */
-Index: tools/quake3/q3map2/game_sof2.h
-===================================================================
---- tools/quake3/q3map2/game_sof2.h	(revision 191)
-+++ tools/quake3/q3map2/game_sof2.h	(working copy)
-@@ -139,6 +139,7 @@
- 	qfalse,					/* wolf lighting model? */
- 	128,					/* lightmap width/height */
- 	1.0f,					/* lightmap gamma */
-+	1.0f,					/* lightmap exposure */
- 	1.0f,					/* lightmap compensate */
- 	"RBSP",					/* bsp file prefix */
- 	1,						/* bsp file version */
-Index: tools/quake3/q3map2/game_etut.h
-===================================================================
---- tools/quake3/q3map2/game_etut.h	(revision 191)
-+++ tools/quake3/q3map2/game_etut.h	(working copy)
-@@ -148,6 +148,7 @@
- 	qfalse,				/* wolf lighting model? */
- 	128,				/* lightmap width/height */
- 	2.2f,				/* lightmap gamma */
-+	1.0f,				/* lightmap exposure */
- 	1.0f,				/* lightmap compensate */
- 	"IBSP",				/* bsp file prefix */
- 	47,					/* bsp file version */
-Index: tools/quake3/q3map2/game_jk2.h
-===================================================================
---- tools/quake3/q3map2/game_jk2.h	(revision 191)
-+++ tools/quake3/q3map2/game_jk2.h	(working copy)
-@@ -64,6 +64,7 @@
- 	qfalse,				/* wolf lighting model? */
- 	128,				/* lightmap width/height */
- 	1.0f,				/* lightmap gamma */
-+	1.0f,				/* lightmap exposure */
- 	1.0f,				/* lightmap compensate */
- 	"RBSP",				/* bsp file prefix */
- 	1,					/* bsp file version */
-Index: tools/quake3/q3map2/game_qfusion.h
-===================================================================
---- tools/quake3/q3map2/game_qfusion.h	(revision 191)
-+++ tools/quake3/q3map2/game_qfusion.h	(working copy)
-@@ -115,6 +115,7 @@
- 	qfalse,				/* wolf lighting model? */
- 	512,				/* lightmap width/height */
- 	1.0f,				/* lightmap gamma */
-+	1.0f,				/* lightmap exposure */
- 	1.0f,				/* lightmap compensate */
- 	"FBSP",				/* bsp file prefix */
- 	1,					/* bsp file version */
-Index: tools/quake3/q3map2/game_tenebrae.h
-===================================================================
---- tools/quake3/q3map2/game_tenebrae.h	(revision 191)
-+++ tools/quake3/q3map2/game_tenebrae.h	(working copy)
-@@ -112,6 +112,7 @@
- 	qfalse,				/* wolf lighting model? */
- 	512,				/* lightmap width/height */
- 	2.0f,				/* lightmap gamma */
-+	1.0f,				/* lightmap exposure */
- 	1.0f,				/* lightmap compensate */
- 	"IBSP",				/* bsp file prefix */
- 	46,					/* bsp file version */
-Index: tools/quake3/q3map2/game_quake3.h
-===================================================================
---- tools/quake3/q3map2/game_quake3.h	(revision 191)
-+++ tools/quake3/q3map2/game_quake3.h	(working copy)
-@@ -112,6 +112,7 @@
- 	qfalse,				/* wolf lighting model? */
- 	128,				/* lightmap width/height */
- 	1.0f,				/* lightmap gamma */
-+	1.0f,				/* lightmap exposure */
- 	1.0f,				/* lightmap compensate */
- 	"IBSP",				/* bsp file prefix */
- 	46,					/* bsp file version */
-Index: tools/quake3/q3map2/game_ef.h
-===================================================================
---- tools/quake3/q3map2/game_ef.h	(revision 191)
-+++ tools/quake3/q3map2/game_ef.h	(working copy)
-@@ -113,6 +113,7 @@
- 	qfalse,				/* wolf lighting model? */
- 	128,				/* lightmap width/height */
- 	1.0f,				/* lightmap gamma */
-+	1.0f,				/* lightmap exposure */
- 	1.0f,				/* lightmap compensate */
- 	"IBSP",				/* bsp file prefix */
- 	46,					/* bsp file version */
+ Q_EXTERN qboolean			debug;
+ Q_EXTERN qboolean			debugSurfaces;
+ Q_EXTERN qboolean			debugUnused;
 Index: tools/quake3/q3map2/light_ydnar.c
 ===================================================================
---- tools/quake3/q3map2/light_ydnar.c	(revision 191)
+--- tools/quake3/q3map2/light_ydnar.c	(revision 290)
 +++ tools/quake3/q3map2/light_ydnar.c	(working copy)
-@@ -49,6 +49,7 @@
- 	int		i;
- 	float	max, gamma;
- 	vec3_t	sample;
-+	float 	inv, dif;
- 	
- 	
- 	/* ydnar: scaling necessary for simulating r_overbrightBits on external lightmaps */
-@@ -72,16 +73,51 @@
- 		/* gamma */
- 		sample[ i ] = pow( sample[ i ] / 255.0f, gamma ) * 255.0f;
- 	}
-+
-+	if (lightmapExposure == 1)
-+	{
-+		/* clamp with color normalization */
-+		max = sample[ 0 ];
-+		if( sample[ 1 ] > max )
-+			max = sample[ 1 ];
-+		if( sample[ 2 ] > max )
-+			max = sample[ 2 ];
-+		if( max > 255.0f )
-+			VectorScale( sample, (255.0f / max), sample );
-+	}
-+	else
-+	{
-+		if (lightmapExposure==0)
-+		{
-+			lightmapExposure=1.0f;
-+		}
-+		inv=1.f/lightmapExposure;
-+		//Exposure
-+    	
-+		max = sample[ 0 ];
-+		if( sample[ 1 ] > max )
-+			max = sample[ 1 ];
-+		if( sample[ 2 ] > max )
-+			max = sample[ 2 ];  
-+      
-+		dif = (1-  exp(-max * inv) )  *  255;
-+
-+		if (max >0) 
-+		{
-+			dif = dif / max;
-+		}
-+		else
-+		{
-+			dif = 0;
-+		}
-+
-+		for (i=0;i<3;i++)
-+		{
-+			sample[i]*=dif;
-+		}
-+	}
-+
- 	
--	/* clamp with color normalization */
--	max = sample[ 0 ];
--	if( sample[ 1 ] > max )
--		max = sample[ 1 ];
--	if( sample[ 2 ] > max )
--		max = sample[ 2 ];
--	if( max > 255.0f )
--		VectorScale( sample, (255.0f / max), sample );
--	
- 	/* compensate for ingame overbrighting/bitshifting */
- 	VectorScale( sample, (1.0f / lightmapCompensate), sample );
- 	
-Index: tools/quake3/q3map2/light.c
-===================================================================
---- tools/quake3/q3map2/light.c (revision 191)
-+++ tools/quake3/q3map2/light.c (working copy)
-@@ -1836,6 +1893,14 @@
- 			i++;
- 		}
- 		
-+		else if( !strcmp( argv[ i ], "-exposure" ) )
-+		{
-+			f = atof( argv[ i + 1 ] );
-+			lightmapExposure = f;
-+			Sys_Printf( "Lighting exposure set to %f\n", lightmapExposure );
-+			i++;
-+		}
-+		
- 		else if( !strcmp( argv[ i ], "-compensate" ) )
- 		{
- 			f = atof( argv[ i + 1 ] );
-Index: tools/quake3/q3map2/q3map2.h
-===================================================================
---- tools/quake3/q3map2/q3map2.h	(revision 191)
-+++ tools/quake3/q3map2/q3map2.h	(working copy)
-@@ -543,6 +545,7 @@
- 	qboolean			wolfLight;						/* when true, lights work like wolf q3map  */
- 	int					lightmapSize;					/* bsp lightmap width/height */
- 	float				lightmapGamma;					/* default lightmap gamma */
-+	float				lightmapExposure;				/* default lightmap exposure */
- 	float				lightmapCompensate;				/* default lightmap compensate value */
- 	char				*bspIdent;						/* 4-letter bsp file prefix */
- 	int					bspVersion;						/* bsp version to use */
-@@ -2117,6 +2132,7 @@
- 
- /* ydnar: lightmap gamma/compensation */
- Q_EXTERN float				lightmapGamma Q_ASSIGN( 1.0f );
-+Q_EXTERN float				lightmapExposure Q_ASSIGN( 1.0f );
- Q_EXTERN float				lightmapCompensate Q_ASSIGN( 1.0f );
- 
- /* ydnar: for runtime tweaking of falloff tolerance */
-Index: tools/quake3/q3map2/light_ydnar.c
-===================================================================
---- tools/quake3/q3map2/light_ydnar.c	(revision 191)
-+++ tools/quake3/q3map2/light_ydnar.c	(working copy)
-@@ -384,7 +420,7 @@
+@@ -372,7 +372,7 @@
  #define NUDGE			0.5f
  #define BOGUS_NUDGE		-99999.0f
  
@@ -2126,7 +1288,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
  {
  	int				i, x, y, numClusters, *clusters, pointCluster, *cluster;
  	float			*luxel, *origin, *normal, d, lightmapSampleOffset;
-@@ -392,6 +428,12 @@
+@@ -380,6 +380,12 @@
  	vec3_t			pNormal;
  	vec3_t			vecs[ 3 ];
  	vec3_t			nudged;
@@ -2139,7 +1301,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
  	float			*nudge;
  	static float	nudges[][ 2 ] =
  					{
-@@ -485,6 +527,51 @@
+@@ -473,6 +479,51 @@
  	/* non axial lightmap projection (explicit xyz) */
  	else
  		VectorCopy( dv->xyz, origin );
@@ -2191,7 +1353,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
  	
  	/* planar surfaces have precalculated lightmap vectors for nudging */
  	if( lm->plane != NULL )
-@@ -516,8 +603,13 @@
+@@ -504,8 +555,13 @@
  	else
  		origin[ lm->axisNum ] += lightmapSampleOffset;
  	
@@ -2206,7 +1368,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
  	
  	/* another retarded hack, storing nudge count in luxel[ 1 ] */
  	luxel[ 1 ] = 0.0f;	
-@@ -533,14 +625,14 @@
+@@ -521,14 +577,14 @@
  			for( i = 0; i < 3; i++ )
  			{
  				/* set nudged point*/
@@ -2224,7 +1386,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
  			luxel[ 1 ] += 1.0f;
  		}
  	}
-@@ -550,8 +642,8 @@
+@@ -538,8 +594,8 @@
  	{
  		VectorMA( dv->xyz, lightmapSampleOffset, dv->normal, nudged );
  		pointCluster = ClusterForPointExtFilter( nudged, LUXEL_EPSILON, numClusters, clusters );
@@ -2235,7 +1397,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
  		luxel[ 1 ] += 1.0f;
  	}
  	
-@@ -597,7 +689,7 @@
+@@ -585,7 +641,7 @@
  than the distance between two luxels (thanks jc :)
  */
  
@@ -2244,7 +1406,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
  {
  	bspDrawVert_t	mid, *dv2[ 3 ];
  	int				max;
-@@ -645,7 +737,7 @@
+@@ -633,7 +689,7 @@
  	
  	/* split the longest edge and map it */
  	LerpDrawVert( dv[ max ], dv[ (max + 1) % 3 ], &mid );
@@ -2253,7 +1415,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
  	
  	/* push the point up a little bit to account for fp creep (fixme: revisit this) */
  	//%	VectorMA( mid.xyz, 2.0f, mid.normal, mid.xyz );
-@@ -653,12 +745,12 @@
+@@ -641,12 +697,12 @@
  	/* recurse to first triangle */
  	VectorCopy( dv, dv2 );
  	dv2[ max ] = &mid;
@@ -2268,7 +1430,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
  }
  
  
-@@ -674,6 +766,7 @@
+@@ -662,6 +718,7 @@
  	int				i;
  	vec4_t			plane;
  	vec3_t			*stv, *ttv, stvStatic[ 3 ], ttvStatic[ 3 ];
@@ -2276,7 +1438,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
  	
  	
  	/* get plane if possible */
-@@ -699,16 +792,20 @@
+@@ -687,16 +744,20 @@
  		ttv = NULL;
  	}
  	
@@ -2301,7 +1463,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
  		return qtrue;
  	}
  	
-@@ -730,7 +827,7 @@
+@@ -718,7 +779,7 @@
  			dv2[ 2 ] = dv[ (i + 1) % 3 ];
  			
  			/* map the degenerate triangle */
@@ -2310,7 +1472,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
  		}
  	}
  	
-@@ -792,8 +889,8 @@
+@@ -780,8 +841,8 @@
  	LerpDrawVert( dv[ max + 2 ], dv[ (max + 3) % 4 ], &mid[ 1 ] );
  	
  	/* map the vertexes */
@@ -2321,7 +1483,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
  	
  	/* 0 and 2 */
  	if( max == 0 )
-@@ -878,10 +975,10 @@
+@@ -866,10 +927,10 @@
  	}
  	
  	/* map the vertexes */
@@ -2336,7 +1498,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
  	
  	/* subdivide the quad */
  	MapQuad_r( lm, info, dv, plane, stv, ttv );
-@@ -1173,7 +1270,7 @@
+@@ -1161,7 +1222,7 @@
  					continue;
  				
  				/* map the fake vert */
@@ -2345,7 +1507,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
  			}
  		}
  	}
-@@ -1963,22 +2062,32 @@
+@@ -1636,22 +1697,32 @@
  					deluxel = SUPER_DELUXEL( x, y );
  					origin = SUPER_ORIGIN( x, y );
  					normal = SUPER_NORMAL( x, y );
@@ -2403,7 +1565,7 @@ Index: tools/quake3/q3map2/q3map2.h
  /* version */
 -#define Q3MAP_VERSION	"2.5.17"
 -#define Q3MAP_MOTD		"Last one turns the lights off"
-+#define Q3MAP_VERSION	"2.5.17-div0-obj-UTpicomodelase-UTpicomodelnormals-decomptexcoords-snapplane-UTavgcolorfix-UTfloodlight-UTlmexposure-UTtrianglecheck"
++#define Q3MAP_VERSION	"2.5.17-div0-obj-decomptexcoords-snapplane-UTavgcolorfix-UTfloodlight-UTtrianglecheck"
 +#define Q3MAP_MOTD		"Blackhole Box ate all the light"
  
  
@@ -2414,4 +1576,4 @@ Index: include/version.default
 +++ include/version.default     (working copy)
 @@ -1 +1 @@
 -1.5.0
-+1.5.0-div0-obj-UTpicomodelase-UTpicomodelnormals-modelnormals-nexuizfixes
++1.5.0-div0-obj
