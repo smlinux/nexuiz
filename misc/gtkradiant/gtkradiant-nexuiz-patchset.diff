@@ -1563,12 +1563,12 @@ Index: tools/quake3/q3map2/q3map2.h
  
  
  /* version */
--#define Q3MAP_VERSION	"2.5.17"
--#define Q3MAP_MOTD		"Last one turns the lights off"
-+#define Q3MAP_VERSION	"2.5.17-div0-obj-decomptexcoords-snapplane-UTavgcolorfix-UTfloodlight-UTtrianglecheck"
+-#define Q3MAP_VERSION	"2.5.11"
+-#define Q3MAP_MOTD      "A well-oiled toaster oven"
++#define Q3MAP_VERSION	"2.5.11-div0-obj-decomptexcoords-snapplane-UTavgcolorfix-UTfloodlight-UTtrianglecheck"
 +#define Q3MAP_MOTD		"Blackhole Box ate all the light"
- 
- 
+
+
  
 Index: include/version.default
 ===================================================================
