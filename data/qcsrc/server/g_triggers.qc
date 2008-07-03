@@ -104,12 +104,6 @@ void SUB_UseTargets()
 };
 
 
-
-void spawnfunc_trigger_reactivate()
-{
-	self.solid = SOLID_TRIGGER;
-};
-
 //=============================================================================
 
 float	SPAWNFLAG_NOMESSAGE = 1;
