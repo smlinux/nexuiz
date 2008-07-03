@@ -8,6 +8,8 @@ void() SUB_Remove;
 
 void spawnfunc_info_null (void)
 {
+	remove(self);
+	// if anything breaks, tell the mapper to fix his map! info_null is meant to remove itself immediately.
 }
 
 /*
