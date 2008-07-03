@@ -394,16 +394,16 @@ void spawnfunc_trigger_hurt()
 		self.message = "was in the wrong place.";
 };
 
-//void target_speaker_use() {sound(self, CHAN_VOICE, self.noise, 1, 1);}
-//void spawnfunc_target_speaker() {self.use = target_speaker_use;}
+void target_speaker_use() {sound(self, CHAN_VOICE, self.noise, 1, 1);}
 
 void spawnfunc_target_speaker()
 {
-if(self.noise) {
- precache_sound (self.noise);
- ambientsound (self.origin, self.noise, 1, ATTN_STATIC);
-}
-//remove(self);
+	if(self.noise)
+		precache_sound (self.noise);
+	if(self.targetname)
+		self.use = target_speaker_use;
+	else
+		ambientsound (self.origin, self.noise, 1, ATTN_STATIC);
 };
 
 
