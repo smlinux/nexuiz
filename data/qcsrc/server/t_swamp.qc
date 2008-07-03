@@ -8,7 +8,6 @@
 
 .float swamp_interval;	//Hurt players in swamp with this interval
 .float swamp_slowdown;	//Players in swamp get slowd down by this mutch 0-1 is slowdown 1-~ is speedup (!?)
-.float swamp_ticker;	//Used localy by the swampslug to calculate when to hurt the player and check the slug.
 .entity swampslug;
 
 void spawnfunc_trigger_swamp(void);
@@ -32,7 +31,6 @@ void swampslug_think();
 */
 void swampslug_think(void) 
 {
-
 	//Slowly kill the slug
 	self.health = self.health - 1;
 
@@ -48,15 +46,12 @@ void swampslug_think(void)
 	// Or we have exited it very recently.
 	// Do the damage and renew the timer.
 	Damage (self.owner, self, self, self.dmg, DEATH_SWAMP, other.origin, '0 0 0');
-	self.swamp_ticker = time + self.swamp_interval;
 
 	self.nextthink = time + self.swamp_interval;
-
 }
 
 void swamp_touch(void) 
 {
-	
 	// If whatever thats touching the swamp is not a player
 	// or if its a dead player, just dont care abt it.
 	if((other.classname != "player")||(other.deadflag != DEAD_NO))
