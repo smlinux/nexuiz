@@ -677,7 +677,7 @@ killtarget: remove all entities with this targetname when triggered
 Any object touching this will be hurt.
 Has the useful effect of automatically returning flags, keys and runes when they touch it.
 -------- KEYS --------
-dmg: amount of damage to deal when it
+dmg: amount of damage to deal when it (default: 1000)
 message: kill message when someone gets killed by this (default: "was in the wrong place.")
 */
 
