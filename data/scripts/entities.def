@@ -865,7 +865,7 @@ message: text to print at user logon. Used for name of level. Ideally: "NAMEOFLE
 _description: one-line description of the map. Will get copied to the "description" entry of the mapinfo file when none is present.
 -------- Q3MAP2 KEYS --------
 _blocksize: vector specifying the automatic vis subdivision block size (default: 1024 1024 1024)
-gridsize: lightgrid granularity vector (default: )
+gridsize: lightgrid granularity vector (default: 64 64 128)
 _color: color of the global light parameters
 _ambient: light added to all surfaces
 _mingridlight: minimum grid light
