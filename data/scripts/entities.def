@@ -9,7 +9,7 @@ _scale : scaling factor (default 64), good values are between 50 and 300, depend
 
 /*QUAKED dom_controlpoint (.3 .3 1) (-16 -16 -16) (16 16 16) 
 Domination  controlpoint
-In order to get Domination working well in your map, you need to place %:dom_team: and dom_controlpoint entites.  You *must* have at least 3 %:dom_team: entities - 2 minimum teams and one blank one (empty netname and no team).  You can have up to 4 teams (5 %:dom_team: entities).
+In order to get Domination working well in your map, you need to place dom_team and dom_controlpoint entites.  You *must* have at least 3 dom_team entities - 2 minimum teams and one blank one (empty netname and no team).  You can have up to 4 teams (5 dom_team entities).
 -------- KEYS --------
 message : message to be displayed to all players when this point is captured, preceded by the team's name.  This defaults to " has captured a control point".  You can specify different names for each point, for example " has captured the Lava Room".
 wait : How often this point gives its controlling team frags.
@@ -18,7 +18,7 @@ frags : How many frags this point gives each wait cycle.
 
 /*QUAKED dom_team (.3 .3 1) (-16 -16 -16) (16 16 16) 
 Domination team.
-In order to get Domination working well in your map, you need to place dom_team and %:dom_controlpoint: entites.  You *must* have at least 3 dom_team entities - 2 minimum teams and one blank one (empty netname and no team).  You can have up to 4 teams (5 dom_team entities).
+In order to get Domination working well in your map, you need to place dom_team and dom_controlpoint entites.  You *must* have at least 3 dom_team entities - 2 minimum teams and one blank one (empty netname and no team).  You can have up to 4 teams (5 dom_team entities).
 -------- KEYS --------
 netname : name of team (Red Team).  Set to "" or don't define for the required blank team.
 cnt : color of the team.  See the "Helpful Extras" section for info.
@@ -36,9 +36,9 @@ targetname : The name other entities can use to target this entity
 */
 
 /*QUAKED func_assault_wall (.5 0 .5) (-8 -8 -8) (8 8 8) 
-Brush model that'll disappear once the targeted %:target_objective: is fulfilled. This can be used to restrict access to parts of the map until a certain objective has been conquered.
+Brush model that'll disappear once the targeted target_objective is fulfilled. This can be used to restrict access to parts of the map until a certain objective has been conquered.
 -------- KEYS --------
-target : targetname of a %:target_objective:
+target : targetname of a target_objective
 */
 
 /*QUAKED func_bobbing (0 .5 .8) ? X_AXIS Y_AXIS
@@ -89,7 +89,7 @@ TOGGLE : causes the door to wait in both the start and end states for a trigger 
 */
 
 /*QUAKED func_door_secret (0 .5 .8) ? OPEN_ONCE 1ST_LEFT 1ST_DOWN NO_SHOOT ALWAYS_SHOOT
-Basic secret door. Slides back, then to the side. Angle determines direction. Opens when targeted or when shot; does not create its own trigger field like %:func_door: does.
+Basic secret door. Slides back, then to the side. Angle determines direction. Opens when targeted or when shot; does not create its own trigger field like func_door does.
 -------- KEYS --------
 wait : # of seconds before coming back
 key1 : first entity key with one-line description
@@ -134,7 +134,7 @@ By default, the total amount of vertical travel of a platform is implicitly dete
 
 /*QUAKED func_rotating (0 .5 .8) ? - - X_AXIS Y_AXIS
 Brush entity that spins in place on one axis (default Z). Use an origin brush to specify define the rotation axis.
-To rotate around another axis, make a %:func_wall: with an explicit avelocity given.
+To rotate around another axis, make a func_wall with an explicit avelocity given.
 -------- KEYS --------
 speed : speed to rotate (in degrees per second)
 noise : path/name of looping .wav file to play.
@@ -151,16 +151,16 @@ Point entity with EF_STARDUST applied. This will spawn a particle cloud with mos
 */
 
 /*QUAKED func_train (0 .5 .8) ? 
-Trains are moving solids that follow a cycle of %:path_corner: entities. Origin brushes are NOT supported; they use the "mins" corner as reference (that is, lowest x, y, and z coordinates).
-At each node, the train's mins corner hits exactly the %:path_corner:.
+Trains are moving solids that follow a cycle of path_corner entities. Origin brushes are NOT supported; they use the "mins" corner as reference (that is, lowest x, y, and z coordinates).
+At each node, the train's mins corner hits exactly the path_corner.
 Trains always start on in the game.
 Trains do not damage the played when blocked.
 Trains cannot emit sound.
 Trains are not triggerable or toggle-able.
 Trains cannot be block-stopped just by getting in their way, the player must be wedged between the train and another obstacle to block it.
 -------- KEYS --------
-speed : default/initial speed of train (default 100 or overridden by speed value of targeted %:path_corner:)
-target : targetname of first %:path_corner: to move to at the default speed; ideally, this %:path_corner: shall be exactly where the train starts
+speed : default/initial speed of train (default 100 or overridden by speed value of targeted path_corner)
+target : targetname of first path_corner to move to at the default speed; ideally, this path_corner shall be exactly where the train starts
 */
 
 /*QUAKED func_wall (0 .5 .8) ? 
@@ -172,7 +172,7 @@ targetname : when invoking it by a button etc., it changes the color to the init
 
 /*QUAKED info_location (1 1 0) (-8 -8 -8) (8 8 8) 
 Location for use by the %l escape in "say" messages.
-The closest "visible" %:info_location: entity is chosen to find the right location name for a point.
+The closest "visible" info_location entity is chosen to find the right location name for a point.
 -------- KEYS --------
 message : name of location, possibly with color codes
 */
@@ -193,7 +193,7 @@ cnt : weight of spawnpoint for random selection. Set to a lower value if you hav
 Normal player spawning location in game types without team spawns. Should touch the floor, but not the walls, and should point where the player should look when he spawns there.
 -------- KEYS --------
 cnt : weight of spawnpoint for random selection. Set to a lower value if you have many spawnpoints close together. Default value is 1.
-targetname : when targeted by a %:func_button:, pressing the button will assign the spawnpoint to the team of the activator as an additional spawnpoint, or reassign it if it was already assigned. Also used to assign spawnpoints to Onslaught control points.
+targetname : when targeted by a func_button, pressing the button will assign the spawnpoint to the team of the activator as an additional spawnpoint, or reassign it if it was already assigned. Also used to assign spawnpoints to Onslaught control points.
 */
 
 /*QUAKED info_player_defender (.5 .5 .5) (-16 -16 -24) (16 16 45) 
@@ -206,28 +206,28 @@ cnt : weight of spawnpoint for random selection. Set to a lower value if you hav
 Red team's player spawning location in e.g. CTF and Onslaught. Should touch the floor, but not the walls, and should point where the player should look when he spawns there.
 -------- KEYS --------
 cnt : weight of spawnpoint for random selection. Set to a lower value if you have many spawnpoints close together. Default value is 1.
-targetname : when targeted by a %:func_button:, pressing the button will reassign the spawnpoint to the team of the activator. If a team has no more spawnpoint left, it immediately loses.
+targetname : when targeted by a func_button, pressing the button will reassign the spawnpoint to the team of the activator. If a team has no more spawnpoint left, it immediately loses.
 */
 
 /*QUAKED info_player_team2 (0 0 1) (-16 -16 -24) (16 16 45) 
 Blue team's player spawning location in e.g. CTF and Onslaught. Should touch the floor, but not the walls, and should point where the player should look when he spawns there.
 -------- KEYS --------
 cnt : weight of spawnpoint for random selection. Set to a lower value if you have many spawnpoints close together. Default value is 1.
-targetname : when targeted by a %:func_button:, pressing the button will reassign the spawnpoint to the team of the activator. If a team has no more spawnpoint left, it immediately loses.
+targetname : when targeted by a func_button, pressing the button will reassign the spawnpoint to the team of the activator. If a team has no more spawnpoint left, it immediately loses.
 */
 
 /*QUAKED info_player_team3 (1 1 0) (-16 -16 -24) (16 16 45) 
 Yellow team's player spawning location, but there is no game mode to use this yet. Anyway, should touch the floor, but not the walls, and should point where the player should look when he spawns there.
 -------- KEYS --------
 cnt : weight of spawnpoint for random selection. Set to a lower value if you have many spawnpoints close together. Default value is 1.
-targetname : when targeted by a %:func_button:, pressing the button will reassign the spawnpoint to the team of the activator. If a team has no more spawnpoint left, it immediately loses.
+targetname : when targeted by a func_button, pressing the button will reassign the spawnpoint to the team of the activator. If a team has no more spawnpoint left, it immediately loses.
 */
 
 /*QUAKED info_player_team4 (1 0 1) (-16 -16 -24) (16 16 45) 
 Pink team's player spawning location, but there is no game mode to use this yet. Anyway, should touch the floor, but not the walls, and should point where the player should look when he spawns there.
 -------- KEYS --------
 cnt : weight of spawnpoint for random selection. Set to a lower value if you have many spawnpoints close together. Default value is 1.
-targetname : when targeted by a %:func_button:, pressing the button will reassign the spawnpoint to the team of the activator. If a team has no more spawnpoint left, it immediately loses.
+targetname : when targeted by a func_button, pressing the button will reassign the spawnpoint to the team of the activator. If a team has no more spawnpoint left, it immediately loses.
 */
 
 /*QUAKED item_armor_large (.4 .8 .4) (-16 -16 0) (16 16 32) FLOATING
@@ -373,7 +373,7 @@ model="models/items/g_invincible.md3"
 /*QUAKED item_minst_cells (.3 .3 1) (-16 -16 0) (16 16 32) FLOATING
 Minstagib ammo.
 Always contains 5 (g_minstagib_ammo_drop) shots.
-It only appears when playing Minstagib and prevents auto-replacement of %:weapon_nex: & %:weapon_rocketlauncher: when used.
+It only appears when playing Minstagib and prevents auto-replacement of weapon_nex & weapon_rocketlauncher when used.
 -------- KEYS --------
 respawntime : time till it respawns (default: 45)
 -------- SPAWNFLAGS --------
@@ -435,7 +435,7 @@ NOGRIDLIGHT : Do not affect the lightgrid (dynamic entity lighting).
 /*QUAKED misc_laser (.5 .5 .5) (-8 -8 -8) (8 8 8) 
 Laser beam emitter
 -------- KEYS --------
-target : %:target_position: the laser targets (may be another entity, the laser will then target its origin. Use origin brushes, that is!)
+target : target_position the laser targets (may be another entity, the laser will then target its origin. Use origin brushes, that is!)
 mdl : name of particle effect for the beam (see effectinfo.txt; default is misc_laser_beam)
 dmg : damage inflicted by the beam per second, or -1 for an instant-death ray
 wait : delay between laser scans (beam refreshes/hurts)
@@ -460,7 +460,7 @@ effects : sum of 1 = BRIGHTFIELD, 4 = BRIGHTLIGHT, 8 = DIMLIGHT, 32 = ADDITIVE, 
 */
 
 /*QUAKED misc_teleporter_dest (1 .5 .25) (-16 -16 -24) (16 16 45) 
-Teleport destination location point for %:trigger_teleport: entities. Do not let it touch the floor, but place it slightly higher (like, 16 units above) for better flow when jumping through it.
+Teleport destination location point for trigger_teleport entities. Do not let it touch the floor, but place it slightly higher (like, 16 units above) for better flow when jumping through it.
 -------- KEYS --------
 targetname : make the trigger_teleporter point to this.
 angle : direction in which player will look when teleported, OR use
@@ -469,9 +469,9 @@ angles : pitch and yaw when coming out of the teleporter (also specifies the dir
 
 /*QUAKED onslaught_controlpoint (0 .5 .8) (-32 -32 0) (32 32 128) 
 Control point.  Be sure to give this enough clearance so that the shootable part has room to exist
-This should link to an onslaught_controlpoint entity or %:onslaught_generator: entity.
+This should link to an onslaught_controlpoint entity or onslaught_generator entity.
 -------- KEYS --------
-targetname : name that %:onslaught_link: entities will use to target this.
+targetname : name that onslaught_link entities will use to target this.
 target : target any entities that are tied to this control point, such as vehicles and buildable structure entities.
 message : name of this control point (should reflect the location in the map, such as "center bridge", "north tower", etc)
 */
@@ -479,29 +479,29 @@ message : name of this control point (should reflect the location in the map, su
 /*QUAKED onslaught_generator (0 .5 .8) (-32 -32 -24) (32 32 64) 
 Base generator.
 
-%:onslaught_link: entities can target this.
+onslaught_link entities can target this.
 -------- KEYS --------
 team : team that owns this generator (5 = red, 14 = blue, etc), MUST BE SET.
-targetname : name that %:onslaught_link: entities will use to target this.
+targetname : name that onslaught_link entities will use to target this.
 */
 
 /*QUAKED onslaught_link (0 .5 .8) (-16 -16 -16) (16 16 16) 
 Link between control points.
 
-This entity targets two different %:onslaught_controlpoint: or %:onslaught_generator: entities, and suppresses shielding on both if they are owned by different teams.
+This entity targets two different onslaught_controlpoint or onslaught_generator entities, and suppresses shielding on both if they are owned by different teams.
 -------- KEYS --------
 target : first control point.
 target2 : second control point.
 */
 
 /*QUAKED path_corner (.5 .3 0) (-8 -8 -8) (8 8 8) 
-Path corner entity that %:func_train: will follow.
-All path_corner entities of a train have to connect in a circular manner, while the %:func_train: shall point to one of the path_corners (ideally the one at the train's starting point)
+Path corner entity that func_train will follow.
+All path_corner entities of a train have to connect in a circular manner, while the func_train shall point to one of the path_corners (ideally the one at the train's starting point)
 -------- KEYS --------
 target : point to next path_corner in the path.
 targetname : the train following the path or the previous path_corner in the path points to this.
-speed : speed of %:func_train: while moving to this path corner. If unset, the value from the %:func_train: will be used.
-wait : number of seconds %:func_train: will pause on this path corner before moving to next path corner (default: 0.1; to not wait, set this to something like 0.001)
+speed : speed of func_train while moving to this path corner. If unset, the value from the func_train will be used.
+wait : number of seconds func_train will pause on this path corner before moving to next path corner (default: 0.1; to not wait, set this to something like 0.001)
 */
 
 /*QUAKED runematch_spawn_point (.3 .3 1) (-16 -16 -16) (16 16 16) 
@@ -524,24 +524,24 @@ target : targetname of the entity/entities to be triggered
 */
 
 /*QUAKED target_objective (.5 0 .5) (-8 -8 -8) (8 8 8) 
-target_objective controls an objective. Once triggered the objective is active and has 100 "health" points. If this "health" falls below zero it is assumed this objective has been fulfilled and entities targeted will be triggered (e.g. to activate the next objective or to end this round). Use %:target_objective_decrease: to decrease the objective health.
+target_objective controls an objective. Once triggered the objective is active and has 100 "health" points. If this "health" falls below zero it is assumed this objective has been fulfilled and entities targeted will be triggered (e.g. to activate the next objective or to end this round). Use target_objective_decrease to decrease the objective health.
 -------- KEYS --------
 target : targetname of the entity to be triggered once this objective is fulfilled.
 targetname : targetname for this entitiy so it can be triggered by other entities.
 */
 
 /*QUAKED target_objective_decrease (0 1 0) (-8 -8 -8) (8 8 8) 
-When triggered decreases health of the targeted %:target_objective: by the amount specified in dmg. Remember, %:target_objective: has 100 health points and is considered conquered if health falls below zero.
+When triggered decreases health of the targeted target_objective by the amount specified in dmg. Remember, target_objective has 100 health points and is considered conquered if health falls below zero.
 If you want e.g. two events to happen to conquer an objective you'd need two target_objective_decrease, each with a value for cnt of e.g. 51. To show attackers and defenders where to go, target_objective_decrease will show a fitting sprite ("Defend" to defenders, "Destroy"/"Push" to attackers) which can be seen through walls.
 -------- KEYS --------
-target : The targetname of the %:target_objective: you want to manipulate.
+target : The targetname of the target_objective you want to manipulate.
 targetname : Name for other entities to target this entity.
 dmg : The amount of "health"-points you want to subtract from the objective health. Defaults to 101.
 -------- SPAWNFLAGS --------
 */
 
 /*QUAKED target_position (0 .5 0) (-8 -8 -8) (8 8 8) 
-Aiming target for entities like %:light: and %:trigger_push:.
+Aiming target for entities like light and trigger_push.
 -------- KEYS --------
 targetname : the entity that requires an aiming direction points to this.
 */
@@ -551,20 +551,20 @@ An accelerator/dampener/wind field.
 Can be used in two ways:
 "dampener field": just set strength to a value from 0 to 1. Entering the field will slow down to this factor.
 "accelerator field": just set strength to a value from 1 to infinity. Entering the field will accelerate by this factor.
-"wind field": set strength to the amount of velocity to add per second, and target a %:target_position:. The field will apply force in the direction from its own origin to the target (use an origin brush to specify its own origin, or this will fail) when touched.
+"wind field": set strength to the amount of velocity to add per second, and target a target_position. The field will apply force in the direction from its own origin to the target (use an origin brush to specify its own origin, or this will fail) when touched.
 -------- KEYS --------
-target : "wind field": points to the %:target_position: to which the player will get pushed.
+target : "wind field": points to the target_position to which the player will get pushed.
 strength : "wind field": amount of force per second to apply in direction from origin to target. "dampener/accelerator field": slowdown/speedup factor.
 */
 
 /*QUAKED trigger_push (1 .5 0) ? 
 Jump pad. What else?
 Can be used in three ways:
-Nexuiz "target/height" way: put the %:target_position: where the player should land, and tune height to get a nice jump path. A good starting value for height is 100.
-Q3A "target" way: put the %:target_position: at the apex of the jump, and hope the player will land at the right spot. Good luck.
+Nexuiz "target/height" way: put the target_position where the player should land, and tune height to get a nice jump path. A good starting value for height is 100.
+Q3A "target" way: put the target_position at the apex of the jump, and hope the player will land at the right spot. Good luck.
 Quake "movedir/speed" way: player will get velocity movedir * speed * 10 when using the jump pad
 -------- KEYS --------
-target : point the player will fly to when using the jump pad (use a %:target_position: here)
+target : point the player will fly to when using the jump pad (use a target_position here)
 height : if height is 0, the (player's origin at the) apex of the jump will be at the target; otherwise, the apex will be abs(height) above the higher point of player's origin and the target; if positive, the apex will be reached in the jump from initial origin to target
 movedir : when target is not set, direction vector to push to
 speed : speed of jump pad (default: 1000)
@@ -572,10 +572,10 @@ noise : sound to play when jump pad is used; default is misc/jumppad.wav; you ca
 */
 
 /*QUAKED trigger_teleport (.5 .5 .5) ? 
-Touching this will teleport players to the location of the targeted %:misc_teleporter_dest: entity.
+Touching this will teleport players to the location of the targeted misc_teleporter_dest entity.
 Note that in Nexuiz, teleporters preserve momentum of the player using them.
 -------- KEYS --------
-target : this must point to a %:misc_teleporter_dest: entity.
+target : this must point to a misc_teleporter_dest entity.
 */
 
 /*QUAKED weapon_crylink (1 0 .5) (-16 -16 0) (16 16 32) FLOATING
@@ -624,7 +624,7 @@ model="models/weapons/g_hagar.md3"
 
 /*QUAKED weapon_nex (1 0 .5) (-16 -16 0) (16 16 32) FLOATING
 the Nex
-In Minstagib, this turns into an %:item_minst_cells: if no explicit %:item_minst_cells: have been placed.
+In Minstagib, this turns into an item_minst_cells if no explicit item_minst_cells have been placed.
 -------- KEYS --------
 ammo_cells : initial cells of the weapon (if unset, g_pickup_cells is used)
 respawntime : time till it respawns (default: 15 * g_balance_nex_respawntime_modifier)
@@ -636,7 +636,7 @@ model="models/weapons/g_nex.md3"
 
 /*QUAKED weapon_rocketlauncher (1 0 .5) (-16 -16 0) (16 16 32) FLOATING
 the Rocket Launcher
-In Minstagib, this turns into an %:item_minst_cells: if no explicit %:item_minst_cells: have been placed.
+In Minstagib, this turns into an item_minst_cells if no explicit item_minst_cells have been placed.
 -------- KEYS --------
 ammo_rockets : initial rockets of the weapon (if unset, g_pickup_rockets is used)
 respawntime : time till it respawns (default: 15)
