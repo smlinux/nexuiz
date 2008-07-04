@@ -20,13 +20,6 @@ string ctf_temp_1;
 // Onslaught
 
 // Map coordinate base calculations need these
-/*vector mi_redicon;
-vector mi_blueicon;
-vector mi_redbase;
-vector mi_bluebase;
-vector mi_scale;*/
-//vector mi_min;
-//vector mi_max;
 vector mi_center;
 vector mi_scale;
 // Minimap
@@ -39,6 +32,10 @@ float ons_showmap;
 float gametype;
 entity gps_start;
 
+float draw_enginesbar;
+//float sorted_players;
+//float sorted_teams;
+
 // Defs
 .float ctf_state;
 .float health;
@@ -47,5 +44,8 @@ entity gps_start;
 const float COLOR_TEAM_RED = 64;
 const float COLOR_TEAM_BLUE = 208;
 
-const float COLOR_TEAM1 = 64;
-const float COLOR_TEAM2 = 208;
+const float COLOR_TEAM1       = 4;  // red
+const float COLOR_TEAM2       = 13; // blue
+const float COLOR_TEAM3       = 12; // yellow
+const float COLOR_TEAM4       = 9; // pink
+const float COLOR_SPECTATOR = 1337;

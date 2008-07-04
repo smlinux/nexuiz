@@ -25,6 +25,8 @@ void kh_setstatus();
 float kh_HandleFrags(entity attacker, entity targ, float f);
 float kh_Key_AllOwnedByWhichTeam();
 
+void kh_show_temp();  // added by victim
+
 #define STR_ITEM_KH_KEY "item_kh_key"
 typedef void(void) kh_Think_t;
 var kh_Think_t kh_Controller_Thinkfunc;

@@ -15,8 +15,23 @@ void() menu_sub_null =
 {
 };
 
+float last_pingrequest;
+float parse_ping;
+float ping_line;
+entity pingList;
+float pingbuf;
+
 void CSQC_Init(void)
-{	
+{
+	float i;
+	last_pingrequest = 0;
+	parse_ping = 0;
+	ping_line = 0;
+
+	pingList = spawn();
+	pingList.sort_next = NULL;
+	pingList.sort_prev = NULL;
+	
 	menu_visible = FALSE;
 	menu_show = menu_show_error;
 	menu_action = menu_sub_null;
@@ -26,13 +41,30 @@ void CSQC_Init(void)
 	registercmd("ons_map");
 	//registercmd("menu_action");
 
+	registercvar("sbar_usecsqc", "1");
+
 	gametype = 0;
 
 	gps_start = world;
+
+	pingbuf = buf_create();
+	for(i = 0; i < maxclients; ++i)
+		bufstr_add(pingbuf, "-", false);
 }
 // CSQC_Shutdown : Called every time the CSQC code is shutdown (changing maps, quitting, etc)
 void CSQC_Shutdown(void)
 {
+	entity next;
+	
+	buf_del(pingbuf);
+
+	while(pingList.sort_next)
+	{
+		next = pingList.sort_next;
+		pingList.sort_next = next.sort_next;
+		remove(next);
+	}
+	remove(pingList);
 }
 
 // CSQC_ConsoleCommand : Used to parse commands in the console that have been registered with the "registercmd" function
@@ -87,38 +119,6 @@ float CSQC_InputEvent(float bInputType, float nPrimary, float nSecondary)
 void(float bIsNewEntity) CSQC_Ent_Update =
 {
 	self.enttype = ReadByte();
-
-	/*if (self.enttype == ENT_CLIENT)
-	{
-		setmodelindex(self, ReadShort());
-		self.origin_x = ReadCoord();
-		self.origin_y = ReadCoord();
-		self.origin_z = ReadCoord();
-		self.angles_x = ReadCoord();
-		self.angles_y = ReadCoord();
-		self.angles_z = ReadCoord();
-		self.velocity_x = ReadCoord();
-		self.velocity_y = ReadCoord();
-		self.velocity_z = ReadCoord();
-		pmove_org = self.origin;
-		pmove_vel = self.velocity;
-		self.avelocity_x = ReadCoord();
-		self.avelocity_y = ReadCoord();
-		self.avelocity_z = ReadCoord();
-		self.movetype = ReadShort();
-		self.frame = ReadShort();
-		self.flags = ReadShort();
-		self.colormap = ReadShort();
-		setorigin(self, self.origin); // relink
-		if (bIsNewEntity)
-		{
-			setsize(self, '0 0 0', '0 0 0');
-			self.drawmask = MASK_NORMAL;
-			//self.think = Client_Think;
-			//self.nextthink = time;
-		}
-		self.ctf_state = ReadByte();
-		}*/
 	if(self.enttype == ENT_CLIENT_ENTCS)
 	{
 		self.sv_entnum = ReadByte();
@@ -165,7 +165,8 @@ void Gamemode_Init()
 	local float len;
 	local float file;
 	local vector mi_min, mi_max;
-	
+
+	draw_enginesbar = true;
 	gametype = cvar("gametype");
 	if(gametype == GAME_ONSLAUGHT) {
 		if(!strcasecmp(substring(mapname, 0, 5), "maps/"))
@@ -211,6 +212,10 @@ void Gamemode_Init()
 		precache_pic("gfx/ons-cp-blue.tga");
 		precache_pic("gfx/ons-frame.tga");
 		precache_pic("gfx/ons-frame-team.tga");
+	} else if(gametype == GAME_KEYHUNT) {
+		precache_pic("gfx/sb_key_carrying");
+		precache_pic("gfx/sb_key_carrying_outline");
+		draw_enginesbar = false;
 	}
 }
 // CSQC_Parse_StuffCmd : Provides the stuffcmd string in the first parameter that the server provided.  To execute standard behavior, simply execute localcmd with the string.
@@ -223,10 +228,75 @@ void CSQC_Parse_StuffCmd(string strMessage)
 		Gamemode_Init();
 	}
 }
+
+void PingRequest()
+{
+	float i;
+	entity next;
+	
+	last_pingrequest = time + 5;
+
+	parse_ping = 0;
+	ping_line = 0;
+	for(i = 0; i < maxclients; ++i)
+	{
+		if(strlen(getplayerkey(i, "name")))
+			++parse_ping;
+	}
+
+	while(pingList.sort_next)
+	{
+		next = pingList.sort_next;
+		pingList.sort_next = next.sort_next;
+		remove(next);
+	}
+	pingList.sort_prev = NULL;
+		
+	localcmd("\nping\n");
+}
+
 // CSQC_Parse_Print : Provides the print string in the first parameter that the server provided.  To execute standard behavior, simply execute print with the string.
 void CSQC_Parse_Print(string strMessage)
 {
-	print(strMessage);
+	if(!parse_ping)
+		print(strMessage);
+	else if(strMessage != "Client ping times:\n")
+	{
+		float ping, i, p;
+		entity tmp;
+
+		// pingList.sort_prev = last element
+
+		ping = stof(strMessage);
+
+		/*strMessage = substring(strMessage, 5, 999);
+		print(strcat("Ping for # ", ftos(ping_line), " of ", ftos(parse_ping), " = ", ftos(ping), "   player: "));
+		print(strMessage);
+		print("   searching... ");*/
+		for(i = 0; i < maxclients; ++i)
+		{
+			if(strlen(getplayerkey(i, "name"))) {
+				++p;
+				if(p > ping_line)
+					break;
+			}
+		}
+		if(i >= maxclients)
+			i = maxclients-1;
+		
+		bufstr_set(pingbuf, i, ftos(ping));
+		/*print(getplayerkey(i, "name"));
+		  print("\n");*/
+
+		/*tmp = spawn();
+		tmp.sort_next = tmp.sort_prev = NULL;
+		pingList.sort_prev.sort_next = tmp;
+		pingList.sort_prev = tmp;*/
+
+		++ping_line;
+		if(ping_line >= parse_ping)
+			parse_ping = false;
+	}
 }
 // CSQC_Parse_CenterPrint : Provides the centerprint string in the first parameter that the server provided.  To execute standard behavior, simply execute cprint with the string.
 void CSQC_Parse_CenterPrint(string strMessage)

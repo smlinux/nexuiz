@@ -6,8 +6,13 @@ csqc_constants.qc
 csqc_builtins.qc
 
 main.qh
+
+sortlist.qc
+teamplay.qc
+
 ons.qc
 ctf.qc
 
 Main.qc
 View.qc
+sbar.qc

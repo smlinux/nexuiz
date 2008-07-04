@@ -33,15 +33,10 @@ void() order_menu_render =
 	if(getstati(STAT_CTF_STATE) == CTF_STATE_COMMANDER) {
 		drawstring(ps, "\x1D\x1E\x1E\x1E\x1E Order Menu \x1E\x1E\x1E\x1E\x1F", '8 8 0', '1 1 0', 1, 0); ps += po;
 		drawstring(ps, strcat("Order: ", ctf_temp_1), '8 8 0', '1 1 0', 1, 0); ps += po;
-		//drawstring(ps, strcat("N1 = ", ftos(player_localnum), " - N2 = ", ftos(player_localentnum)), '8 8 0', '1 1 0', 1, 0); ps += po;
 		drawcolorcodedstring(ps, "1) ^3previous page", '8 8 0', 1, 0); ps += po;
 		drawcolorcodedstring(ps, "2) ^3next page", '8 8 0', 1, 0); ps += po;
-		//drawcolorcodedstring(ps, strcat("Clients to go: ", ftos(maxclients)), '8 8 0', 1, 0); ps += po;
 		for((n = 2), (p = i = 0); i < maxclients && n > 0; ++i) {
 			frags = getplayerkey(i, "frags");
-			/*print(strcat(ftos(i), "/", ftos(p), "/", ftos(n), "/", getplayerkey(i, "viewentity"), "\n"));
-			print(strcat(" - name: ", getplayerkey(i, "name"), " - frags: ", frags, "\n"));
-			print(strcat(" - color: ", getplayerkey(i, "topcolor"), " - ", color, "\n"));*/
 			if(!frags || (i+1) == player_localentnum)
 				continue;
 			if(frags == "-666" || getplayerkey(i, "topcolor") != color)
@@ -56,7 +51,6 @@ void() order_menu_render =
 				drawcolorcodedstring(ps, strcat(ftos(n), ") ", getplayerkey(i, "name"), " : ", ftos(getstatf(STAT_CTF_STATE))), '8 8 0', 1, 0); ps += po;
 			}
 		}
-		//drawstring(ps, strcat("LocalEntNum = ", ftos(player_localnum)), '8 8 0', '1 1 0', 1, 0); ps += po;
 		drawstring(ps, "ESC) Exit Menu", '8 8 0', '1 1 0', 1, 0); ps += po;
 	} else {
 		menu_close();

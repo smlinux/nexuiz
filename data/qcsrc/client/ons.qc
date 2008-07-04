@@ -3,7 +3,7 @@ void() Cmd_ons_map =
 	ons_showmap = !ons_showmap;
 };
 
-vector(vector coord) mapCoords =
+vector(vector coord) mapcoords =
 {
 	local vector ret;
 	ret = coord; // put that up to ret's definition and it's '0 0 0' ... stupid fteqcc
@@ -37,18 +37,11 @@ void() ons_view =
 {
 	if(ons_showmap) {
 		local float color;
-		local vector coord, dir, rgb;
+		local vector coord, rgb;
 
-		color = stof(getplayerkey(player_localentnum-1, "topcolor"));
+		color = stof(getplayerkey(player_localentnum-1, "colors")) & 15;
 
-		/*dir = pmove_org - mi_redbase;
-
-		dir_x *= mi_scale_x;
-		dir_y *= -mi_scale_y;
-			
-		coord = '272 50' + mi_redicon + dir*mi_scale_z;
-		  coord_z = 0;*/
-		coord = mapCoords(pmove_org);
+		coord = mapcoords(pmove_org);
 			
 		drawpic('272 50', minimapname, '256 256', '1 1 1', 1, 0);
 		drawpic('257 35', "gfx/ons-frame.tga", '286 286', '1 1 1', 1, 0);
@@ -68,7 +61,7 @@ void() ons_view =
 		for(tm = gps_start; tm != world; tm = tm.chain)
 		{
 			//print(strcat("GPS: ", ftos(tm.sv_entnum), " - ", vtos(tm.origin), "\n"));
-			drawplayer(mapCoords(tm.origin), tm.angles, rgb);
+			drawplayer(mapcoords(tm.origin), tm.angles, rgb);
 		}
 	}
 };
