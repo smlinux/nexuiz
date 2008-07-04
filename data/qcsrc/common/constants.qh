@@ -154,5 +154,9 @@ const float K_MOUSE15		=	528;
 const float K_MOUSE16		=	529;
 
 const float ENTCS_MSG_END = 0;
-const float ENTCS_MSG_PING = 1;
-const float ENTCS_MSG_ONS = 2;
+const float ENTCS_MSG_ONS = 1;
+
+const float TE_CSQC_START = 100;
+const float TE_CSQC_PING = 100;
+
+const float TE_CSQC_END = 100;

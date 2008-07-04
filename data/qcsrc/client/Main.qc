@@ -138,7 +138,6 @@ void(float bIsNewEntity) CSQC_Ent_Update =
 		{
 			switch(msg)
 			{
-			case ENTCS_MSG_PING: ReadPings(); break;
 			case ENTCS_MSG_ONS: ReadONS(bIsNewEntity); break;
 			default:
 				error("unknown ENTCS_MSG type\n");
@@ -265,6 +264,10 @@ float CSQC_Parse_TempEntity()
 		
 	switch(nTEID)
 	{
+		case TE_CSQC_PING:
+			ReadPings();
+			bHandled = true;
+			break;
 		//case TE_GUNSHOT:
 		//	Do something cool with TE_GUNSHOT!
 		//	break;

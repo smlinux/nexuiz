@@ -357,6 +357,7 @@ void spawnfunc_worldspawn (void)
 		fclose(fd);
 	}
 
+	next_pingtime = time + 5;
 	world_initialized = 1;
 }
 

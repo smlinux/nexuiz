@@ -16,8 +16,6 @@
 .float(entity to) SendEntity;
 .float Version;
 
-.float pingtime;
-
 entity entcs_start;
 
 void entcs_init()
@@ -51,6 +49,7 @@ void entcs_ons(entity to)
 
 void entcs_common_self()
 {
+	/*
 	entity pl;
 	if(self.pingtime < time)
 	{
@@ -64,6 +63,7 @@ void entcs_common_self()
 		}
 		WriteByte(MSG_ENTITY, 0);
 	}
+	*/
 }
 
 float entcs_send(entity to)
@@ -114,8 +114,6 @@ void attach_entcs()
 	ent.model = "entcs_sender";
 	ent.modelindex = 1;
 	setsize(ent, '0 0 0', '0 0 0');
-
-	ent.pingtime = time + 5;
 		
 	ent.SendEntity = entcs_send;
 };

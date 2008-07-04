@@ -326,8 +326,8 @@ void InitGameplayMode()
 		tdm_init();
 	else if (game == GAME_KEYHUNT)//cvar("g_keyhunt"))
 		kh_init();
-	//else if (game == GAME_ONSLAUGHT)
-	entcs_init();
+	else if (game == GAME_ONSLAUGHT)
+		entcs_init();
 }
 
 string GetClientVersionMessage(float v) {
