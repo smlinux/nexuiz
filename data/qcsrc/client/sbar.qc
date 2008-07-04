@@ -224,7 +224,7 @@ void Sbar_PrintScoreboardItem(vector pos, entity pl, float is_self, float mask)
 	tmp_y = tmp_z = 0;
 	pos_x += 56;
 
-	str = bufstr_get(pingbuf, pl.sb_player);
+	str = bufstr_get(databuf, DATABUF_PING + pl.sb_player);
 	tmp_x = 4*8 - strlen(str) * 8 - 56;
 	drawstring(pos + tmp, str, '8 8 0', '0.8 0.8 0.8', 0.8, 0);
 
@@ -602,7 +602,7 @@ void Sbar_Draw (void)
 			sbar_x = (vid_conwidth - 640.0)*0.5;
 			sbar_y = vid_conheight - 47;
 			//Sbar_DrawAlphaPic (sbar_x, sbar_y, sb_scorebar, sbar_alpha_bg.value);
-			drawpic('0 0', "gfx/scorebar", '0 0 0', '1 1 1', cvar("sbar_alpha_bg"), 0);
+			//drawpic('0 0', "gfx/scorebar", '0 0 0', '1 1 1', cvar("sbar_alpha_bg"), 0);
 			Sbar_DrawScoreboard ();
 		}
 		else

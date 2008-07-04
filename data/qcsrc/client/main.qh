@@ -1,6 +1,9 @@
 // --------------------------------------------------------------------------
 // MENU Functionality
 
+#define DATABUF_PING 0
+#define DATABUF_SAMPLE (1*maxclients)
+
 void() menu_show_error;
 void() menu_sub_null;
 

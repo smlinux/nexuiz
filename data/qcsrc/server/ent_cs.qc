@@ -16,9 +16,11 @@
 .float(entity to) SendEntity;
 .float Version;
 
+.float pingtime;
+
 entity entcs_start;
 
-void() entcs_init =
+void entcs_init()
 {
 	print("Initializing ClientSide information entities\n");
 	entcs_start = spawn();
@@ -26,7 +28,7 @@ void() entcs_init =
 	entcs_start.chain = world;
 };
 
-entity(float num) get_entcs_ent =
+entity get_entcs_ent(float num)
 {
 	entity entcs;
 	entcs = spawn();
@@ -35,32 +37,64 @@ entity(float num) get_entcs_ent =
 	return entcs;
 };
 
-
-float(entity to) entcs_send =
+void entcs_ons(entity to)
 {
 	if(to == self.owner || self.team != to.team)
-		return FALSE;
+		return;
 	if(self.owner.classname == "observer" || to.classname == "observer")
-		return FALSE;
-	
-	WriteByte(MSG_ENTITY, ENT_CLIENT_ENTCS);
-	WriteByte(MSG_ENTITY, self.health); // serves as entitynumber
+		return;
+	WriteByte(MSG_ENTITY, ENTCS_MSG_ONS);
 	WriteCoord(MSG_ENTITY, self.owner.origin_x);
 	WriteCoord(MSG_ENTITY, self.owner.origin_y);
 	WriteCoord(MSG_ENTITY, self.owner.angles_y);
-	// write health maybe?
+}
+
+void entcs_common_self()
+{
+	entity pl;
+	if(self.pingtime < time)
+	{
+		self.pingtime = time + 9; // keep it 1 below the non-ons update intervall
+		// just to be safe... (blah)
+		WriteByte(MSG_ENTITY, ENTCS_MSG_PING);
+		FOR_EACH_REALCLIENT(pl)
+		{
+			WriteByte(MSG_ENTITY, num_for_edict(pl));
+			WriteShort(MSG_ENTITY, pl.ping);
+		}
+		WriteByte(MSG_ENTITY, 0);
+	}
+}
+
+float entcs_send(entity to)
+{
+	WriteByte(MSG_ENTITY, ENT_CLIENT_ENTCS);
+	WriteByte(MSG_ENTITY, self.health); // serves as entitynumber
+	
+	if(to == self.owner)
+	{
+		entcs_common_self();
+	}
+	
+	if(game == GAME_ONSLAUGHT)
+		entcs_ons(to);
+	
+	WriteByte(MSG_ENTITY, ENTCS_MSG_END);
 	return TRUE;
 };
 
-void() entcs_think =
+void entcs_think()
 {
 	self.team = self.owner.team;
 	self.Version++;
 	setorigin(self, self.owner.origin);
-	self.nextthink = time + 0.1;
+	if(game == GAME_ONSLAUGHT)
+		self.nextthink = time + 0.1;
+	else
+		self.nextthink = time + 10; // update pings every 10 seconds
 };
 
-void() attach_entcs =
+void attach_entcs()
 {
 	local float num;
 	local entity ent;
@@ -80,11 +114,13 @@ void() attach_entcs =
 	ent.model = "entcs_sender";
 	ent.modelindex = 1;
 	setsize(ent, '0 0 0', '0 0 0');
+
+	ent.pingtime = time + 5;
 		
 	ent.SendEntity = entcs_send;
 };
 
-void() detach_entcs =
+void detach_entcs()
 {
 	local float num;
 	local entity ent;

@@ -2,7 +2,6 @@
 // BEGIN REQUIRED CSQC FUNCTIONS
 //include "main.qh"
 
-
 void() menu_show_error =
 {
 	drawstring('0 200', "ERROR - MENU IS VISIBLE BUT NO MENU WAS DEFINED!", '8 8 0', '1 0 0', 1, 0);
@@ -15,26 +14,18 @@ void() menu_sub_null =
 {
 };
 
-float last_pingrequest;
-float parse_ping;
-float ping_line;
-entity pingList;
-float pingbuf;
+// let's make this a general data buffer...
+float databuf;
+float using_gps;
 
 void CSQC_Init(void)
 {
 	float i;
-	last_pingrequest = 0;
-	parse_ping = 0;
-	ping_line = 0;
 
-	pingList = spawn();
-	pingList.sort_next = NULL;
-	pingList.sort_prev = NULL;
-	
 	menu_visible = FALSE;
 	menu_show = menu_show_error;
 	menu_action = menu_sub_null;
+	using_gps = false;
 	//ctf_temp_1 = "";
 	localcmd("alias order \"cmd order $*\"");
 	//registercmd("ctf_menu");
@@ -47,24 +38,16 @@ void CSQC_Init(void)
 
 	gps_start = world;
 
-	pingbuf = buf_create();
+	databuf = buf_create();
 	for(i = 0; i < maxclients; ++i)
-		bufstr_add(pingbuf, "-", false);
+		bufstr_set(databuf, DATABUF_PING + i, "N/A");
 }
 // CSQC_Shutdown : Called every time the CSQC code is shutdown (changing maps, quitting, etc)
 void CSQC_Shutdown(void)
 {
 	entity next;
 	
-	buf_del(pingbuf);
-
-	while(pingList.sort_next)
-	{
-		next = pingList.sort_next;
-		pingList.sort_next = next.sort_next;
-		remove(next);
-	}
-	remove(pingList);
+	buf_del(databuf);
 }
 
 // CSQC_ConsoleCommand : Used to parse commands in the console that have been registered with the "registercmd" function
@@ -114,24 +97,52 @@ float CSQC_InputEvent(float bInputType, float nPrimary, float nSecondary)
 // --------------------------------------------------------------------------
 // BEGIN OPTIONAL CSQC FUNCTIONS
 
+void ReadPings()
+{
+	float plnum, ping;
+	for(plnum = ReadByte(); plnum != 0; plnum = ReadByte())
+	{
+		ping = ReadShort();
+		bufstr_set(databuf, DATABUF_PING + plnum-1, ftos(ping));
+	}
+}
+
+void ReadONS(float bIsNewEntity)
+{
+	using_gps = true;
+			
+	self.origin_x = ReadCoord();
+	self.origin_y = ReadCoord();
+	self.angles_y = ReadCoord();
+	self.origin_z = self.angles_x = self.angles_z = 0;
+
+	if(bIsNewEntity)
+	{
+		//print(strcat("Adding entity: ", ftos(self.sv_entnum), "\n"));
+		self.chain = gps_start;
+		gps_start = self;
+	}
+}
+
 // CSQC_Ent_Update : Called every frame that the server has indicated an update to the SSQC / CSQC entity has occured.
 // The only parameter reflects if the entity is "new" to the client, meaning it just came into the client's PVS.
 void(float bIsNewEntity) CSQC_Ent_Update =
 {
+	float tmp, plnum, msg;
 	self.enttype = ReadByte();
 	if(self.enttype == ENT_CLIENT_ENTCS)
 	{
-		self.sv_entnum = ReadByte();
-		self.origin_x = ReadCoord();
-		self.origin_y = ReadCoord();
-		self.angles_y = ReadCoord();
-		self.origin_z = self.angles_x = self.angles_z = 0;
+		self.sv_entnum = ReadByte()-1;
 
-		if(bIsNewEntity)
+		for(msg = ReadByte(); msg != ENTCS_MSG_END; msg = ReadByte())
 		{
-			//print(strcat("Adding entity: ", ftos(self.sv_entnum), "\n"));
-			self.chain = gps_start;
-			gps_start = self;
+			switch(msg)
+			{
+			case ENTCS_MSG_PING: ReadPings(); break;
+			case ENTCS_MSG_ONS: ReadONS(bIsNewEntity); break;
+			default:
+				error("unknown ENTCS_MSG type\n");
+			};
 		}
 	}
 	else
@@ -143,17 +154,20 @@ void CSQC_Ent_Remove()
 {
 	if(self.enttype == ENT_CLIENT_ENTCS)
 	{
-		if(gps_start == self)
-			gps_start = self.chain;
-		else
+		if(using_gps) //gametype == GAME_ONSLAUGHT)
 		{
-			local entity ent;
-			ent = gps_start;
+			if(gps_start == self)
+				gps_start = self.chain;
+			else
+			{
+				local entity ent;
+				ent = gps_start;
 			
-			while(ent.chain != self && ent.chain != world)
-				ent = ent.chain;
-			if(ent.chain == self)
-				ent.chain = self.chain;
+				while(ent.chain != self && ent.chain != world)
+					ent = ent.chain;
+				if(ent.chain == self)
+					ent.chain = self.chain;
+			}
 		}
 	}
 	remove(self);
@@ -228,75 +242,10 @@ void CSQC_Parse_StuffCmd(string strMessage)
 		Gamemode_Init();
 	}
 }
-
-void PingRequest()
-{
-	float i;
-	entity next;
-	
-	last_pingrequest = time + 5;
-
-	parse_ping = 0;
-	ping_line = 0;
-	for(i = 0; i < maxclients; ++i)
-	{
-		if(strlen(getplayerkey(i, "name")))
-			++parse_ping;
-	}
-
-	while(pingList.sort_next)
-	{
-		next = pingList.sort_next;
-		pingList.sort_next = next.sort_next;
-		remove(next);
-	}
-	pingList.sort_prev = NULL;
-		
-	localcmd("\nping\n");
-}
-
 // CSQC_Parse_Print : Provides the print string in the first parameter that the server provided.  To execute standard behavior, simply execute print with the string.
 void CSQC_Parse_Print(string strMessage)
 {
-	if(!parse_ping)
-		print(strMessage);
-	else if(strMessage != "Client ping times:\n")
-	{
-		float ping, i, p;
-		entity tmp;
-
-		// pingList.sort_prev = last element
-
-		ping = stof(strMessage);
-
-		/*strMessage = substring(strMessage, 5, 999);
-		print(strcat("Ping for # ", ftos(ping_line), " of ", ftos(parse_ping), " = ", ftos(ping), "   player: "));
-		print(strMessage);
-		print("   searching... ");*/
-		for(i = 0; i < maxclients; ++i)
-		{
-			if(strlen(getplayerkey(i, "name"))) {
-				++p;
-				if(p > ping_line)
-					break;
-			}
-		}
-		if(i >= maxclients)
-			i = maxclients-1;
-		
-		bufstr_set(pingbuf, i, ftos(ping));
-		/*print(getplayerkey(i, "name"));
-		  print("\n");*/
-
-		/*tmp = spawn();
-		tmp.sort_next = tmp.sort_prev = NULL;
-		pingList.sort_prev.sort_next = tmp;
-		pingList.sort_prev = tmp;*/
-
-		++ping_line;
-		if(ping_line >= parse_ping)
-			parse_ping = false;
-	}
+	print(strMessage);
 }
 // CSQC_Parse_CenterPrint : Provides the centerprint string in the first parameter that the server provided.  To execute standard behavior, simply execute cprint with the string.
 void CSQC_Parse_CenterPrint(string strMessage)

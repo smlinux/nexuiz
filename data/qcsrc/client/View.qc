@@ -26,10 +26,6 @@ void CSQC_UpdateView(void)
 		last_weapon = activeweapon;
 	}
 
-	if(last_pingrequest < time) {
-		PingRequest();
-	}
-
 	// ALWAYS Clear Current Scene First
 	R_ClearScene();
 
