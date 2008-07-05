@@ -346,7 +346,7 @@ noise2: sound played when flag is captured
 noise3: sound played when flag is lost in the field and respawns itself
 */
 
-/*QUAKED item_health_large (.8 .4 .4) (-16 -16 0) (16 16 32) FLOATING
+/*QUAKED item_health_large (.9 .3 .3) (-16 -16 0) (16 16 32) FLOATING
 Large Health (default 50 health points)
 -------- KEYS --------
 respawntime: time till it respawns (default: 15)
@@ -358,7 +358,7 @@ FLOATING: the item will float in air, instead of aligning to the floor by fallin
 model="models/items/g_h50.md3"
 */
 
-/*QUAKED item_health_medium (.8 .4 .4) (-16 -16 0) (16 16 32) FLOATING
+/*QUAKED item_health_medium (.9 .3 .3) (-16 -16 0) (16 16 32) FLOATING
 Medium Health (default 25 health points)
 -------- KEYS --------
 respawntime: time till it respawns (default: 15)
@@ -370,7 +370,7 @@ FLOATING: the item will float in air, instead of aligning to the floor by fallin
 model="models/items/g_h25.md3"
 */
 
-/*QUAKED item_health_mega (.8 .4 .4) (-16 -16 0) (16 16 32) FLOATING
+/*QUAKED item_health_mega (.9 .3 .3) (-16 -16 0) (16 16 32) FLOATING
 Mega Health (default 100 health points)
 In Minstagib, this randomly turns into either an invisibility, an extra lives or a speed power-up with a default respawn time of 120.
 -------- KEYS --------
@@ -383,7 +383,7 @@ FLOATING: the item will float in air, instead of aligning to the floor by fallin
 model="models/items/g_h100.md3"
 */
 
-/*QUAKED item_health_small (.8 .4 .4) (-16 -16 0) (16 16 32) FLOATING
+/*QUAKED item_health_small (.9 .3 .3) (-16 -16 0) (16 16 32) FLOATING
 Small Health (default 5 health points)
 -------- KEYS --------
 respawntime: time till it respawns (default: 15)
@@ -677,7 +677,7 @@ killtarget: remove all entities with this targetname when triggered
 Any object touching this will be hurt.
 Has the useful effect of automatically returning flags, keys and runes when they touch it.
 -------- KEYS --------
-dmg: amount of damage to deal when it (default: 1000)
+dmg: amount of damage to deal (default: 1000)
 message: kill message when someone gets killed by this (default: "was in the wrong place.")
 */
 
