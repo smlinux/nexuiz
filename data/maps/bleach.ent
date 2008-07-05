@@ -567,7 +567,7 @@
 "targetname" "t78"
 "target" "t77"
 "origin" "3564 -400 548"
-"classname" "info_null"
+"classname" "target_position"
 }
 {
 "target" "t78"
@@ -767,7 +767,7 @@
 {
 "targetname" "t3"
 "origin" "344 32 536"
-"classname" "info_null"
+"classname" "target_position"
 }
 {
 "target" "t3"
@@ -1004,7 +1004,7 @@
 "targetname" "t91"
 }
 {
-"classname" "info_null"
+"classname" "target_position"
 "origin" "3256 -1144 320"
 "targetname" "section1jump"
 }
@@ -1029,12 +1029,12 @@
 "model" "*18"
 }
 {
-"classname" "info_null"
+"classname" "target_position"
 "origin" "2936 992 476"
 "targetname" "t100"
 }
 {
-"classname" "info_null"
+"classname" "target_position"
 "origin" "3040 1324 12"
 "targetname" "t101"
 }
@@ -1049,7 +1049,7 @@
 "model" "*20"
 }
 {
-"classname" "info_null"
+"classname" "target_position"
 "origin" "3144 1508 368"
 "targetname" "t102"
 }
