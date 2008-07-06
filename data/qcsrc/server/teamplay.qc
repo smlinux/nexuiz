@@ -25,6 +25,10 @@ float IsTeamBalanceForced()
 
 void TeamchangeFrags(entity e)
 {
+	if(g_ctf)
+	{
+		e.captures = 0;
+	}
 	if(e.classname == "player")
 	{
 		// reduce frags during a team change

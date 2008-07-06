@@ -1484,7 +1484,7 @@ float WinningConditionBase_Teamplay(float fraglimit)
 			AddWinners(team, COLOR_TEAM4);
 	}
 
-	if(!g_runematch && !g_domination)
+	if(!g_runematch && !g_domination && !g_ctf)
 		if(tdm_max_score != tdm_old_score)
 		{
 			if(tdm_max_score == fraglimit - 1)
@@ -1556,6 +1556,23 @@ float WinningCondition_MaxTeamMax(float fraglimit)
 	}
 
 	return WinningConditionBase_Teamplay(fraglimit);
+}
+
+float WinningCondition_CTF(float capturelimit, float fraglimit)
+{
+	if(cvar("g_ctf_win_mode") == 2)
+		return WinningCondition_MaxTeamSum(fraglimit);
+	
+	team1_score = caps_team1;
+	team2_score = caps_team2;
+	team3_score = team4_score = 0;
+
+	if(team1_score == team2_score && cvar("g_ctf_win_mode"))
+	{
+		return WinningCondition_MaxTeamSum(0);
+	}
+
+	return WinningConditionBase_Teamplay(capturelimit);
 }
 
 void print_to(entity e, string s)
@@ -1758,6 +1775,7 @@ void CheckRules_World()
 	local float status;
 	local float timelimit;
 	local float fraglimit;
+	local float capturelimit;
 
 	VoteThink();
 	MapVote_Think();
@@ -1786,6 +1804,7 @@ void CheckRules_World()
 
 	timelimit = cvar("timelimit") * 60;
 	fraglimit = cvar("fraglimit");
+	capturelimit = cvar("capturelimit");
 
 	if(checkrules_overtimeend)
 	{
@@ -1830,6 +1849,10 @@ void CheckRules_World()
 	else if (g_onslaught)
 	{
 		status = WinningCondition_Onslaught();
+	}
+	else if(g_ctf)
+	{
+		status = WinningCondition_CTF(capturelimit, fraglimit);
 	}
 	else
 	{

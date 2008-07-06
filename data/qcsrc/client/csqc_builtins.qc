@@ -257,3 +257,4 @@ float(string s1, string s2, float len)			strncasecmp = #230;
 float(string str, string sub, float startoffs)		strstrofs = #221;
 //float(string str, string sub) 	    		strstrofs = #221;
 entity(float num)   	   				edict_num = #459;
+float(entity ent)					num_for_edict = #512;

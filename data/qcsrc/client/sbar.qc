@@ -9,6 +9,7 @@ entity sortedTeams;
 .float sb_frags;
 .float sb_team;
 .float sb_player;
+.float sb_caps;
 
 void Sbar_FinaleOverlay()
 {
@@ -115,10 +116,17 @@ float Sbar_PlayerCmp(entity l, entity r)
 {
 	if(teamplay)
 	{
-		if(l.sb_team < r.sb_team)
+		if(l.sb_team > r.sb_team)
 			return true;
 		else if(l.sb_team > r.sb_team)
 			return false;
+		if(gametype == GAME_CTF)
+		{
+			if(l.sb_caps > r.sb_caps)
+				return true;
+			else if(l.sb_caps < r.sb_caps)
+				return false;
+		}
 	}
 	if(l.sb_frags > r.sb_frags)
 		return true;
@@ -128,6 +136,13 @@ float Sbar_PlayerCmp(entity l, entity r)
 }
 float Sbar_TeamCmp(entity l, entity r)
 {
+	if(gametype == GAME_CTF)
+	{
+		if(l.sb_caps > r.sb_caps)
+			return true;
+		else if(l.sb_caps < r.sb_caps)
+			return false;
+	}
 	if(l.sb_frags > r.sb_frags)
 		return true;
 	else if(l.sb_frags < r.sb_frags)
@@ -163,6 +178,8 @@ void Sbar_SortFrags()
 
 		t1.sb_player = t2.sb_player = t3.sb_player = t4.sb_player = ts.sb_player = 0;
 		t1.sb_frags = t2.sb_frags = t3.sb_frags = t4.sb_frags = 0;
+		t1.sb_caps = caps_team1;
+		t2.sb_caps = caps_team2;
 		sortedTeams = Sort_New(Sbar_TeamCmp);
 		
 		for(i = 0; i < maxclients; ++i)
@@ -173,6 +190,8 @@ void Sbar_SortFrags()
 			tmp = spawn();
 			tmp.sb_player = i;
 			tmp.sb_frags = stof(getplayerkey(i, "frags"));
+			tmp.sb_caps = stof(bufstr_get(databuf, DATABUF_CAPTURES + tmp.sb_player));
+			
 			if(tmp.sb_frags == -666)
 				tmp.sb_team = COLOR_SPECTATOR;
 			else
@@ -220,11 +239,12 @@ void Sbar_SortFrags()
 		}
 	}
 }
-
+float xmin, xmax, ymin, ymax;
 void Sbar_PrintScoreboardItem(vector pos, entity pl, float is_self, float mask)
 {
 	vector tmp;
 	string str;
+	entity player;
 	
 	tmp_y = tmp_z = 0;
 	pos_x += 56;
@@ -233,8 +253,15 @@ void Sbar_PrintScoreboardItem(vector pos, entity pl, float is_self, float mask)
 	tmp_x = 4*8 - strlen(str) * 8 - 56;
 	drawstring(pos + tmp, str, '8 8 0', '0.8 0.8 0.8', 0.8, 0);
 
-	if(!(mask & 1))
+	if(!(mask & 1)) // not a spectator:
 	{
+		if(gametype == GAME_CTF)
+		{
+			str = bufstr_get(databuf, DATABUF_CAPTURES + pl.sb_player);
+			tmp_x = xmax - strlen(str)*8 - pos_x;
+			drawstring(pos + tmp, str, '8 8 0', '1 1 1', 1, 0);
+		}
+	
 		str = ftos(pl.sb_frags);
 		tmp_x = 4*8 - strlen(str) * 8;
 		drawstring(pos + tmp, str, '8 8 0', '1 1 1', 1, 0);
@@ -266,10 +293,11 @@ void Sbar_PrintScoreboardTeamItem(vector pos, entity tm, vector rgb, string name
 void Sbar_DrawScoreboard()
 {
 	// Assume: frags are already sorted
-	float xmin, xmax, ymin, ymax, plcount;
+	//float xmin, xmax, ymin, ymax, plcount;
+	float plcount;
 	vector pos, teammin, teammax, rgb;
 	entity pl, tm;
-	float specs;
+	float specs, minoffset;
 	specs = false;
 
 	xmin = vid_conwidth / 4;
@@ -282,7 +310,7 @@ void Sbar_DrawScoreboard()
 
 	teammin = teammax = '0 0 0';
 	teammin_x = xmin - 2;
-	teammax_x = xmax - 2;
+	teammax_x = xmax + 2;
 
 	pos_x = 0.5 * (xmin + xmax) - (24*5);
 	drawfont = FONT_USER+0;
@@ -294,29 +322,39 @@ void Sbar_DrawScoreboard()
 	drawstring(pos, "ping", '8 8 0', '1 1 1', 1, 0);
 	drawstring(pos + '48 0 0', "frags", '8 8 0', '1 1 1', 1, 0);
 	drawstring(pos + '104 0 0', "name", '8 8 0', '1 1 1', 1, 0);
+	if(gametype == GAME_CTF)
+	{
+		pos_x = xmax - 4*8;
+		drawstring(pos, "caps", '8 8 0', '1 1 1', 1, 0);
+		pos_x = xmin;
+	}
+	
 	pos_y += 16;
 	
 	if(teamplay)
 	{
-		/*teampos_z = 0;
-		teampos_y = pos_y - 40;
-		teampos_x = (vid_conwidth * 0.5) - (numteams*6*12);*/
 		for(tm = sortedTeams.sort_next; tm; tm = tm.sort_next)
 		{
+			minoffset = pos_y + 24;
 			if(!tm.sb_player || tm.sb_team == COLOR_SPECTATOR) // no players in it?
 				continue;
 
-			//Sbar_DrawXNum(teampos-sbar, tm.sb_frags, -4, 24, GetTeamRGB(tm.sb_team), 1, DRAWFLAG_NORMAL);
-			//teampos_x += 6*24;
-			Sbar_DrawXNum(pos-'106 0 0'-sbar, tm.sb_frags, 4, 24, GetTeamRGB(tm.sb_team), 1, DRAWFLAG_NORMAL);
+			rgb = GetTeamRGB(tm.sb_team);
+			if(gametype == GAME_CTF)
+			{
+				minoffset = pos_y + 24 + 12;
+				if(tm.sb_team == COLOR_TEAM1)
+					Sbar_DrawXNum(pos-'106 0 0'-sbar, caps_team1, 4, 24, rgb, 1, DRAWFLAG_NORMAL);
+				else if(tm.sb_team == COLOR_TEAM2)
+					Sbar_DrawXNum(pos-'106 0 0'-sbar, caps_team2, 4, 24, rgb, 1, DRAWFLAG_NORMAL);
+				Sbar_DrawXNum(pos-'44 -24 0'-sbar, tm.sb_frags, 4, 10, rgb, 1, DRAWFLAG_NORMAL);
+			} else
+				Sbar_DrawXNum(pos-'106 0 0'-sbar, tm.sb_frags, 4, 24, rgb, 1, DRAWFLAG_NORMAL);
 
 			teammin_y = pos_y - 2;
 			teammax_y = pos_y + 2 + 10 * (tm.sb_player);
-			rgb = GetTeamRGB(tm.sb_team);
 			drawfill(teammin, teammax - teammin, rgb, 0.2, DRAWFLAG_NORMAL);
-			/*Sbar_PrintScoreboardTeamItem(pos, tm, rgb, GetTeamName(tm.sb_team));
-			pos_y += 12;*/
-			//for(i = 0; i < maxclients; ++i)
+			
 			plcount = 0;
 			for(pl = sortedPlayers.sort_next; pl; pl = pl.sort_next)
 			{
@@ -326,9 +364,10 @@ void Sbar_DrawScoreboard()
 				pos_y += 10;
 				++plcount;
 			}
+
 			pos_y += 12;
-			if(plcount < 2)
-				pos_y += 12;
+			if(pos_y < minoffset)
+				pos_y = minoffset;
 		}
 
 		// rgb := tempvector :)

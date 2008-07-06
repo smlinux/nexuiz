@@ -20,8 +20,6 @@ float using_gps;
 
 void CSQC_Init(void)
 {
-	float i;
-
 	drawfont = 0;
 	menu_visible = FALSE;
 	menu_show = menu_show_error;
@@ -39,9 +37,23 @@ void CSQC_Init(void)
 
 	gps_start = world;
 
+	postinit = false;
+}
+
+void PostInit(void)
+{
+	float i;
+	entity pl;
+
+	print(strcat("PostInit\n    maxclients = ", ftos(maxclients), "\n"));
 	databuf = buf_create();
 	for(i = 0; i < maxclients; ++i)
+	{
 		bufstr_set(databuf, DATABUF_PING + i, "N/A");
+		bufstr_set(databuf, DATABUF_CAPTURES + i, "0");
+	}
+
+	postinit = true;
 }
 // CSQC_Shutdown : Called every time the CSQC code is shutdown (changing maps, quitting, etc)
 void CSQC_Shutdown(void)
@@ -95,31 +107,41 @@ float CSQC_InputEvent(float bInputType, float nPrimary, float nSecondary)
 
 // --------------------------------------------------------------------------
 // BEGIN OPTIONAL CSQC FUNCTIONS
-
-void ReadPings()
+void ReadONS()
 {
-	float plnum, ping;
-	for(plnum = ReadByte(); plnum != 0; plnum = ReadByte())
-	{
-		ping = ReadShort();
-		bufstr_set(databuf, DATABUF_PING + plnum-1, ftos(ping));
-	}
-}
-
-void ReadONS(float bIsNewEntity)
-{
+	entity gps;
 	using_gps = true;
-			
+
 	self.origin_x = ReadCoord();
 	self.origin_y = ReadCoord();
 	self.angles_y = ReadCoord();
 	self.origin_z = self.angles_x = self.angles_z = 0;
 
-	if(bIsNewEntity)
+	for(gps = gps_start; gps; gps = gps.chain)
 	{
-		//print(strcat("Adding entity: ", ftos(self.sv_entnum), "\n"));
+		if(gps == self)
+			break;
+	}
+	if(!gps)
+	{
 		self.chain = gps_start;
 		gps_start = self;
+	}
+}
+
+void RemoveONS()
+{
+	if(gps_start == self)
+		gps_start = self.chain;
+	else
+	{
+		local entity ent;
+		ent = gps_start;
+			
+		while(ent.chain != self && ent.chain != world)
+			ent = ent.chain;
+		if(ent.chain == self)
+			ent.chain = self.chain;
 	}
 }
 
@@ -137,7 +159,8 @@ void(float bIsNewEntity) CSQC_Ent_Update =
 		{
 			switch(msg)
 			{
-			case ENTCS_MSG_ONS: ReadONS(bIsNewEntity); break;
+			case ENTCS_MSG_ONS_GPS: ReadONS(); break;
+			case ENTCS_MSG_ONS_REMOVE: RemoveONS(); break;
 			default:
 				error("unknown ENTCS_MSG type\n");
 			}
@@ -250,6 +273,37 @@ void CSQC_Parse_CenterPrint(string strMessage)
 {
 	cprint(strMessage);
 }
+
+void ReadInit()
+{
+	maxclients = ReadByte();
+}
+
+void ReadPings()
+{
+	float plnum, ping;
+	for(plnum = ReadByte(); plnum != 0; plnum = ReadByte())
+	{
+		ping = ReadShort();
+		bufstr_set(databuf, DATABUF_PING + plnum-1, ftos(ping));
+	}
+}
+
+void ReadCaptures()
+{
+	float plnum, caps;
+	entity pl;
+	caps_team1 = ReadByte();
+	caps_team2 = ReadByte();
+	for(plnum = ReadByte(); plnum != 0; plnum = ReadByte())
+	{
+		caps = ReadByte();
+		//print(strcat("Cap update: ", ftos(plnum), " has ", ftos(caps), " caps\n"));
+		//print(strcat("Index: ", ftos(DATABUF_CAPTURES + plnum-1), " -- I AM: ", ftos(player_localentnum), "\n"));
+		bufstr_set(databuf, DATABUF_CAPTURES + plnum-1, ftos(caps));
+	}
+}
+
 // CSQC_Parse_TempEntity : Handles all temporary entity network data in the CSQC layer.
 // You must ALWAYS first acquire the temporary ID, which is sent as a byte.
 // Return value should be 1 if CSQC handled the temporary entity, otherwise return 0 to have the engine process the event.
@@ -263,18 +317,26 @@ float CSQC_Parse_TempEntity()
 		
 	switch(nTEID)
 	{
+		case TE_CSQC_INIT:
+			ReadInit();
+			bHandled = true;
+			break;
 		case TE_CSQC_PING:
 			ReadPings();
 			bHandled = true;
 			break;
-		//case TE_GUNSHOT:
-		//	Do something cool with TE_GUNSHOT!
-		//	break;
+		case TE_CSQC_CAPTURES:
+			ReadCaptures();
+			bHandled = true;
+			break;
 		default:
 			// No special logic for this temporary entity; return 0 so the engine can handle it
 			bHandled = false;
 			break;
 	}
+	
+	if(!postinit)
+		PostInit();
 		
 	return bHandled;
 }

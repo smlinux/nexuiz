@@ -214,6 +214,8 @@ void SV_ParseClientCommand(string s) {
 			kh_Key_DropAll(self, TRUE);
 			WaypointSprite_PlayerDead();
 			DistributeFragsAmongTeam(self, self.team, 1.0);
+			self.captures = 0;
+			ctf_UpdateCaptures();
 			self.classname = "observer";
 			if(blockSpectators)
 				sprint(self, strcat("^7You have to become a player within the next ", ftos(cvar("g_maxplayers_spectator_blocktime")), " seconds, otherwise you will be kicked, because spectators aren't allowed at this time!\n"));
@@ -226,6 +228,8 @@ void SV_ParseClientCommand(string s) {
 			if(isJoinAllowed()) {
 				self.classname = "player";
 				self.frags = 0;
+				self.captures = 0;
+				ctf_UpdateCaptures();
 				bprint ("^4", self.netname, "^4 is playing now\n");
 				PutClientInServer();
 			}

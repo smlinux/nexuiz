@@ -348,6 +348,7 @@ PutObserverInServer
 putting a client as observer in the server
 =============
 */
+void ctf_UpdateCaptures();
 void PutObserverInServer (void)
 {
 	entity	spot;
@@ -372,6 +373,11 @@ void PutObserverInServer (void)
 	WaypointSprite_PlayerDead();
 
 	DistributeFragsAmongTeam(self, self.team, 1);
+	if(g_ctf)
+	{
+		self.captures = 0;
+		ctf_UpdateCaptures();
+	}
 
 	if(self.frags <= 0 && self.frags > -666 && g_lms && self.killcount != -666)
 		bprint ("^4", self.netname, "^4 has no more lives left\n");
@@ -699,6 +705,23 @@ void PutClientInServer (void)
 
 /*
 =============
+SendCSQCInfo
+
+Send whatever CSQC needs NOW and cannot wait for SendServerInfo to happen...
+=============
+*/
+void SendCSQCInfo(void)
+{
+	if(clienttype(self) != CLIENTTYPE_REAL)
+		return;
+	msg_entity = self;
+	WriteByte(MSG_ONE, SVC_TEMPENTITY);
+	WriteByte(MSG_ONE, TE_CSQC_INIT);
+	WriteByte(MSG_ONE, maxclients-1);
+}
+
+/*
+=============
 SetNewParms
 =============
 */
@@ -745,6 +768,11 @@ Called when a client types 'kill' in the console
 
 void ClientKill_Now_TeamChange()
 {
+	if(g_ctf)
+	{
+		self.captures = 0;
+		ctf_UpdateCaptures();
+	}
 	if(self.killindicator_teamchange == -1)
 	{
 		self.team = -1;
@@ -941,6 +969,7 @@ Called when a client connects to the server
 //void ctf_clientconnect();
 string ColoredTeamName(float t);
 void DecodeLevelParms (void);
+void ctf_SendCaptures(entity);
 //void dom_player_join_team(entity pl);
 void ClientConnect (void)
 {
@@ -1094,6 +1123,9 @@ void ClientConnect (void)
 
 	self.jointime = time;
 	self.allowedTimeouts = cvar("sv_timeout_number");
+
+	SendCSQCInfo();
+	ctf_SendCaptures(self);
 }
 
 /*
@@ -1146,6 +1178,11 @@ void ClientDisconnect (void)
 		DropFlag(self.flagcarried);
 
 	DistributeFragsAmongTeam(self, self.team, 1);
+	if(g_ctf)
+	{
+		self.captures = 0;
+		ctf_UpdateCaptures();
+	}
 
 	save = self.flags;
 	self.flags = self.flags - (self.flags & FL_CLIENT);

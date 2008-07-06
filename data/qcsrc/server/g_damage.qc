@@ -318,8 +318,10 @@ void Obituary (entity attacker, entity targ, float deathtype)
 					else
 						bprint ("^1",s, "^1 was fragged by ", a, "\n");
 				}
-
-				GiveFrags(attacker, targ, 1);
+				if(g_ctf && targ.flagcarried)
+					GiveFrags(attacker, targ, cvar("g_ctf_flagscore_kill"));
+				else
+					GiveFrags(attacker, targ, 1);
 				if (targ.killcount > 2) {
 					if(sv_gentle)
 						bprint ("^1",s,"'s ^1", ftos(targ.killcount), " scoring spree was ended by ", a, "\n");

@@ -14,8 +14,12 @@ void CSQC_common_hud(void);
 
 void CSQC_kh_hud(void);
 void CSQC_ctf_hud(void);
+void PostInit(void);
 void CSQC_UpdateView(void)
 {
+	if(!postinit)
+		PostInit();
+	
 	sbar_alpha_fg = cvar("sbar_alpha_fg" );
 	sbar_hudselector = cvar("sbar_hudselector");
 	activeweapon = getstati(STAT_ACTIVEWEAPON);

@@ -39,20 +39,13 @@ void() ons_view =
 		local float color;
 		local vector coord, rgb;
 
-		color = stof(getplayerkey(player_localentnum-1, "colors")) & 15;
+		color = GetPlayerColor(player_localentnum-1);
+		rgb = GetTeamRGB(color);
 
 		coord = mapcoords(pmove_org);
 			
 		drawpic('272 50', minimapname, '256 256', '1 1 1', 1, 0);
 		drawpic('257 35', "gfx/ons-frame.tga", '286 286', '1 1 1', 1, 0);
-		if(color == COLOR_TEAM_RED)
-		{
-			rgb = '1 0 0';
-		} else if(color == COLOR_TEAM_BLUE) {
-			rgb = '0 0 1';
-		} else {
-			rgb = '1 1 1';
-		}
 		drawpic('257 35', "gfx/ons-frame-team.tga", '286 286', rgb, 1, 0);
 
 		drawplayer(coord, input_angles, '1 1 1');

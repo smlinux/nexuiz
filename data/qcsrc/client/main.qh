@@ -2,7 +2,8 @@
 // MENU Functionality
 
 #define DATABUF_PING 0
-#define DATABUF_SAMPLE (1*maxclients)
+#define DATABUF_CAPTURES (1*maxclients)
+#define DATABUF_NEXT (2*maxclients)
 
 void() menu_show_error;
 void() menu_sub_null;
@@ -32,7 +33,7 @@ float ons_showmap;
 // General stuff
 
 float drawfont;
-
+float postinit;
 float gametype;
 entity gps_start;
 

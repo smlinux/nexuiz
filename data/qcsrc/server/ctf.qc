@@ -4,7 +4,6 @@ entity ctf_worldflaglist; // CTF flags in the map
 
 .float next_take_time;			// the next time a player can pick up a flag (time + blah)
 								/// I used this, in part, to fix the looping score bug. - avirox
-
 //float FLAGSCORE_PICKUP        =  1;
 //float FLAGSCORE_RETURN        =  5; // returned by owner team
 //float FLAGSCORE_RETURNROGUE   = 10; // returned by rogue team
@@ -130,6 +129,12 @@ void DropFlag(entity e)
 		return;
 	}
 	bprint(p.netname, "^7 lost the ", e.netname, "\n");
+
+	if(cvar("g_ctf_flagpenalty_drop"))
+		UpdateFrags(p, -cvar("g_ctf_flagpenalty_drop"));
+	
+	//if(e.enemy && e.enemy != e)
+	//UpdateFrags(e.enemy, cvar("g_ctf_flagscore_kill"));
 	WaypointSprite_DetachCarrier(p);
 	LogCTF("dropped", p.team, p.flagcarried);
 
@@ -225,6 +230,39 @@ void FlagThink()
 	}
 };
 
+void ctf_SendCaptures(entity player)
+{
+	entity p;
+	if(clienttype(player) != CLIENTTYPE_REAL)
+		return;
+	msg_entity = player;
+	WriteByte(MSG_ONE, SVC_TEMPENTITY);
+	WriteByte(MSG_ONE, TE_CSQC_CAPTURES);
+	WriteByte(MSG_ONE, caps_team1);
+	WriteByte(MSG_ONE, caps_team2);
+	FOR_EACH_CLIENT(p)
+	{
+		WriteByte(MSG_ONE, num_for_edict(p));
+		WriteByte(MSG_ONE, p.captures);
+	}
+	WriteByte(MSG_ONE, 0);
+}
+
+void ctf_UpdateCaptures()
+{
+	entity p;
+	WriteByte(MSG_BROADCAST, SVC_TEMPENTITY);
+	WriteByte(MSG_BROADCAST, TE_CSQC_CAPTURES);
+	WriteByte(MSG_BROADCAST, caps_team1);
+	WriteByte(MSG_BROADCAST, caps_team2);
+	FOR_EACH_REALCLIENT(p)
+	{
+		WriteByte(MSG_BROADCAST, num_for_edict(p));
+		WriteByte(MSG_BROADCAST, p.captures);
+	}
+	WriteByte(MSG_BROADCAST, 0);
+}
+
 void FlagTouch()
 {
 	if(gameover) return;
@@ -277,6 +315,16 @@ void FlagTouch()
 		{
 			bprint(other.netname, "^7 captured the ", other.flagcarried.netname, " in ", s, ", failing to break ", strcat(h0, " record of ", s0, " seconds\n"));
 		}
+
+		other.captures++;
+		if(other.team == COLOR_TEAM1)
+			caps_team1++;
+		else if(other.team == COLOR_TEAM2)
+			caps_team2++;
+		else
+			print("Unknown team captured the flag!\n");
+		ctf_UpdateCaptures();
+		// FIXME: When counting captures, should the score be updated?
 
 		LogCTF("capture", other.flagcarried.team, other);
 		// give credit to the individual player
@@ -665,6 +713,13 @@ void ctf_init()
 {
 	local entity e;
 
+	caps_team1 = caps_team2 = 0;
+	registercvar("capturelimit", "8");
+	registercvar("g_ctf_win_mode", "0");
+	//registercvar("g_overtime", "1");
+	registercvar("g_ctf_flagscore_kill", "6");
+	registercvar("g_ctf_flagpenalty_drop", "0");
+	//addstat(STAT_CTF_CAPTURES, AS_INT, captures);
 	//addstat(STAT_CTF_STATE, AS_FLOAT_TRUNCATED, ctf_state);
 	e = spawn();
 	e.think = ctf_delayedinit;

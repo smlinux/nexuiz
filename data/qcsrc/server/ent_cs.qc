@@ -37,11 +37,13 @@ entity get_entcs_ent(float num)
 
 void entcs_ons(entity to)
 {
-	if(to == self.owner || self.team != to.team)
+	if(to == self.owner || self.team != to.team ||
+	   self.owner.classname == "observer" || to.classname == "observer")
+	{
+		WriteByte(MSG_ENTITY, ENTCS_MSG_ONS_REMOVE);
 		return;
-	if(self.owner.classname == "observer" || to.classname == "observer")
-		return;
-	WriteByte(MSG_ENTITY, ENTCS_MSG_ONS);
+	}
+	WriteByte(MSG_ENTITY, ENTCS_MSG_ONS_GPS);
 	WriteCoord(MSG_ENTITY, self.owner.origin_x);
 	WriteCoord(MSG_ENTITY, self.owner.origin_y);
 	WriteCoord(MSG_ENTITY, self.owner.angles_y);
@@ -76,7 +78,7 @@ float entcs_send(entity to)
 		entcs_common_self();
 	}
 	
-	if(game == GAME_ONSLAUGHT)
+	if(g_onslaught)
 		entcs_ons(to);
 	
 	WriteByte(MSG_ENTITY, ENTCS_MSG_END);
@@ -94,7 +96,7 @@ void entcs_think()
 		self.nextthink = time + 10; // update pings every 10 seconds
 };
 
-void attach_entcs()
+entity attach_entcs()
 {
 	local float num;
 	local entity ent;
@@ -116,6 +118,7 @@ void attach_entcs()
 	setsize(ent, '0 0 0', '0 0 0');
 		
 	ent.SendEntity = entcs_send;
+	return ent;
 };
 
 void detach_entcs()
