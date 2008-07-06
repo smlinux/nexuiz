@@ -22,6 +22,7 @@ void CSQC_Init(void)
 {
 	float i;
 
+	drawfont = 0;
 	menu_visible = FALSE;
 	menu_show = menu_show_error;
 	menu_action = menu_sub_null;
@@ -45,8 +46,6 @@ void CSQC_Init(void)
 // CSQC_Shutdown : Called every time the CSQC code is shutdown (changing maps, quitting, etc)
 void CSQC_Shutdown(void)
 {
-	entity next;
-	
 	buf_del(databuf);
 }
 
@@ -128,7 +127,7 @@ void ReadONS(float bIsNewEntity)
 // The only parameter reflects if the entity is "new" to the client, meaning it just came into the client's PVS.
 void(float bIsNewEntity) CSQC_Ent_Update =
 {
-	float tmp, plnum, msg;
+	float msg;
 	self.enttype = ReadByte();
 	if(self.enttype == ENT_CLIENT_ENTCS)
 	{
@@ -141,7 +140,7 @@ void(float bIsNewEntity) CSQC_Ent_Update =
 			case ENTCS_MSG_ONS: ReadONS(bIsNewEntity); break;
 			default:
 				error("unknown ENTCS_MSG type\n");
-			};
+			}
 		}
 	}
 	else

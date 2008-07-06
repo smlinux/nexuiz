@@ -7,7 +7,7 @@
 void() menu_show_error;
 void() menu_sub_null;
 
-void() menu_show; // ptr
+void() menu_show;
 float menu_visible;
 
 float(float bInputType, float nPrimary, float nSecondary) menu_action;
@@ -17,7 +17,6 @@ float(float bInputType, float nPrimary, float nSecondary) menu_action;
 
 void() ctf_menu_show;
 string ctf_temp_1;
-
 
 // --------------------------------------------------------------------------
 // Onslaught
@@ -32,6 +31,8 @@ float ons_showmap;
 // --------------------------------------------------------------------------
 // General stuff
 
+float drawfont;
+
 float gametype;
 entity gps_start;
 
@@ -40,8 +41,8 @@ float draw_enginesbar;
 //float sorted_teams;
 
 // Defs
-.float ctf_state;
-.float health;
+//.float ctf_state;
+//.float health;
 
 // Constants
 const float COLOR_TEAM_RED = 64;
@@ -52,3 +53,6 @@ const float COLOR_TEAM2       = 13; // blue
 const float COLOR_TEAM3       = 12; // yellow
 const float COLOR_TEAM4       = 9; // pink
 const float COLOR_SPECTATOR = 1337;
+
+#define FONT_DEFAULT 0
+#define FONT_USER 8

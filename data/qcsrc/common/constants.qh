@@ -1,10 +1,3 @@
-
-const float STAT_CTF_STATE = 32;
-
-const float CTF_STATE_ATTACK = 1;
-const float CTF_STATE_DEFEND = 2;
-const float CTF_STATE_COMMANDER = 3;
-
 // probably put these in common/
 // so server/ and client/ can be synced better
 const float GAME_DEATHMATCH		= 1;
@@ -160,3 +153,11 @@ const float TE_CSQC_START = 100;
 const float TE_CSQC_PING = 100;
 
 const float TE_CSQC_END = 100;
+
+const float STAT_KH_KEYS = 32;
+
+const float STAT_CTF_STATE = 33;
+const float CTF_STATE_ATTACK = 1;
+const float CTF_STATE_DEFEND = 2;
+const float CTF_STATE_COMMANDER = 3;
+

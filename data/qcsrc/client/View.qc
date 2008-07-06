@@ -107,9 +107,13 @@ void CSQC_kh_hud(void)
 	string kh_carrying, kh_outline;
 	vector red_pos, blue_pos, yellow_pos, pink_pos, kh_size;
 	vector red, blue, yellow, pink;
-	
+
+	/*
 	kh_keys = cvar("kh_keys");  // set in keyhunt.qc
 	kh_keys_status = cvar("kh_keys_status");  // set in keyhunt.qc
+	*/
+	kh_keys = getstati(STAT_KH_KEYS);
+	kh_keys_status = kh_keys / 256;
 	kh_teams_set = cvar("_teams_available");  // set in keyhunt.qc
 
 //	kh_margin_x = 10;

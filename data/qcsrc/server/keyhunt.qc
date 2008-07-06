@@ -23,8 +23,12 @@ float KH_KEY_BRIGHTNESS = 2;
 
 string kh_Controller_Waitmsg;
 
+// kh_state
+//     bits 0-7: player's key status
+//     bits 8-15: general key status
+.float kh_state;
 .float siren_time;  //  time delay the siren
-.float stuff_time;  //  time delay to stuffcmd a cvar
+//.float stuff_time;  //  time delay to stuffcmd a cvar
 
 float test[17] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 //test[0] = status of dropped keys, test[1 - 16] = player #
@@ -209,8 +213,9 @@ void kh_Key_Detach(entity key) // runs every time a key is dropped or lost. Runs
 	test[key.owner.playerid] = i;
 
 	kh_show_temp();
-
-	stuffcmd(key.owner, strcat("set kh_keys ", ftos(test[key.owner.playerid]), "\n"));  // send to current player
+	if(key.owner)
+		key.owner.kh_state = (key.owner.kh_state | 255) - 255 + test[key.owner.playerid];
+	//key.owner.kh_state += test[key.owner.playerid];
 
 #ifdef KH_PLAYER_USE_ATTACHMENT
 	entity first;
@@ -296,10 +301,6 @@ void kh_Key_AssignTo(entity key, entity player)  // runs every time a key is pic
 				i += 8;
 		test[key.owner.playerid] = i;
 
-		kh_show_temp();
-
-		stuffcmd(player, strcat("set kh_keys ", ftos(test[key.owner.playerid]), "\n"));  // send to current player
-
 		kh_Key_Attach(key);
 
 		if(key.kh_next == world)
@@ -310,7 +311,12 @@ void kh_Key_AssignTo(entity key, entity player)  // runs every time a key is pic
 			player.waypointsprite_attachedforcarrier.team = player.team;
 		}
 	}
-
+	
+	// moved that here, also update if there's no player
+	kh_show_temp();
+	if(key.owner)
+		key.owner.kh_state = (key.owner.kh_state | 255) - 255 + test[key.owner.playerid];
+		
 	key.pusher = world;
 }
 
@@ -434,11 +440,7 @@ void kh_Key_Collect(entity key, entity player)  //a player picks up a dropped ke
 	key.kh_dropperteam = 0;
 	bprint(player.netname, "^7 picked up the ", key.netname, "\n");
 
-	kh_show_temp();
-
-	stuffcmd(player, strcat("set kh_keys ", ftos(test[key.owner.playerid]), "\n"));  // send to current player
-
-	kh_Key_AssignTo(key, player);
+	kh_Key_AssignTo(key, player); // this also updates .kh_state
 
 	if(kh_Key_AllOwnedByWhichTeam() != -1)
 	{
@@ -493,18 +495,19 @@ void kh_Key_Touch()  // runs many, many times when a key has been dropped and ca
 void kh_Key_Think()  // runs all the time
 {
 	entity head;
-	entity player;  // needed by FOR_EACH_PLAYER
+	//entity player;  // needed by FOR_EACH_PLAYER
 
 	if(intermission_running)
 		return;
-
+	/*
 	if(time > self.stuff_time)
 	{
 		FOR_EACH_PLAYER(player)
-			stuffcmd(player, strcat("set kh_keys_status ", ftos(test[0]), "\n"));  // send key status to all players
+			player.kh_state = test[0]*256 + (player.kh_state&255);
 
 		self.stuff_time = time + 1;  // repeat in 1 second
 	}
+	*/
 
 #ifdef KH_KEY_ATTACHMENT_DEBUG
 	if(self.kh_prev == self.owner)
@@ -946,6 +949,8 @@ void kh_init()  // sets up th KH environment
 	setmodel(kh_controller, "models/sprites/keycarrier-yellow.sp2");
 	kh_sprite_yellow = kh_controller.modelindex;
 	setmodel(kh_controller, "");
+
+	addstat(STAT_KH_KEYS, AS_INT, kh_state);
 }
 
 void kh_finalize()
@@ -956,26 +961,15 @@ void kh_finalize()
 	kh_controller = world;
 }
 
+/**
+ * kh_show_temp originally by victim.
+ * changed it to use the kh_state stat var
+ * Updates the general key stat bits for each player
+ */
 void kh_show_temp()
 {
 	entity player;
 	float i, j;
-
-	switch(kh_teams)
-	{
-		case 2:
-			j = 3;
-			break;
-		case 3:
-			j = 7;
-			break;
-		case 4:
-			j = 15;
-			break;
-		case 5:
-			j = 31;
-			break;
-	}
 
 	j = 0;  // reset/blank j
 	for(i=1; i<17; ++i)  // replace 17 with cvar("maxplayers"); !!!!!!!!!
@@ -983,7 +977,7 @@ void kh_show_temp()
 
 	test[0] = j;
 
+	j *= 256;
 	FOR_EACH_PLAYER(player)
-		stuffcmd(player, strcat("set kh_keys_status ", ftos(test[0]), "\n"));  // send key status to all players
-
+		player.kh_state = j + (player.kh_state & 255); // update the general key bits
 }

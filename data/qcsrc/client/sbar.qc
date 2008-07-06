@@ -12,6 +12,11 @@ entity sortedTeams;
 
 void Sbar_FinaleOverlay()
 {
+	vector pos;
+	pos_x = (vid_conwidth - 1)/2;
+	pos_y = 16;
+	pos_z = 0;
+	drawpic(pos, "gfx/finale", '0 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
 }
 
 void Sbar_DrawWeapon(float nr, float fade, float active)
@@ -251,15 +256,17 @@ void Sbar_PrintScoreboardTeamItem(vector pos, entity tm, vector rgb, string name
 
 	str = ftos(tm.sb_frags);
 	tmp_x = 4*8 - strlen(str) * 8;
-	drawstring(pos + tmp, str, '8 8 0', rgb, 1, 0);
+	drawstring(pos + tmp, str, '8 8 0', '1 1 1', 1, 0);
 
+	rgb += '0.3 0.3 0.3';
+	rgb = normalize(rgb * 5);
 	drawstring(pos + '48 0 0', name, '8 8 0', rgb, 1, 0);
 }
 
 void Sbar_DrawScoreboard()
 {
 	// Assume: frags are already sorted
-	float xmin, xmax, ymin, ymax;
+	float xmin, xmax, ymin, ymax, plcount;
 	vector pos, teammin, teammax, rgb;
 	entity pl, tm;
 	float specs;
@@ -267,46 +274,61 @@ void Sbar_DrawScoreboard()
 
 	xmin = vid_conwidth / 4;
 	xmax = vid_conwidth - xmin;
-	ymin = 64;
+	ymin = 48 - 26;
 	ymax = vid_conheight - 50;
 
-	pos_x = xmin;
 	pos_y = ymin;
 	pos_z = 0;
 
 	teammin = teammax = '0 0 0';
 	teammin_x = xmin - 2;
 	teammax_x = xmax - 2;
-	
+
+	pos_x = 0.5 * (xmin + xmax) - (24*5);
+	drawfont = FONT_USER+0;
+	drawstring(pos, "Scoreboard", '24 24 0', '1 1 1', 1, DRAWFLAG_NORMAL);
+	drawfont = 0;
+	pos_x = xmin;
+	pos_y += 26;
+
 	drawstring(pos, "ping", '8 8 0', '1 1 1', 1, 0);
 	drawstring(pos + '48 0 0', "frags", '8 8 0', '1 1 1', 1, 0);
 	drawstring(pos + '104 0 0', "name", '8 8 0', '1 1 1', 1, 0);
-	pos += '0 16 0';
+	pos_y += 16;
 	
 	if(teamplay)
 	{
-		//for(t = 0; t < 4; ++t)
+		/*teampos_z = 0;
+		teampos_y = pos_y - 40;
+		teampos_x = (vid_conwidth * 0.5) - (numteams*6*12);*/
 		for(tm = sortedTeams.sort_next; tm; tm = tm.sort_next)
 		{
 			if(!tm.sb_player || tm.sb_team == COLOR_SPECTATOR) // no players in it?
 				continue;
 
+			//Sbar_DrawXNum(teampos-sbar, tm.sb_frags, -4, 24, GetTeamRGB(tm.sb_team), 1, DRAWFLAG_NORMAL);
+			//teampos_x += 6*24;
+			Sbar_DrawXNum(pos-'106 0 0'-sbar, tm.sb_frags, 4, 24, GetTeamRGB(tm.sb_team), 1, DRAWFLAG_NORMAL);
+
 			teammin_y = pos_y - 2;
-			teammax_y = pos_y + 2 + 10 * (tm.sb_player+1);
+			teammax_y = pos_y + 2 + 10 * (tm.sb_player);
 			rgb = GetTeamRGB(tm.sb_team);
 			drawfill(teammin, teammax - teammin, rgb, 0.2, DRAWFLAG_NORMAL);
-			Sbar_PrintScoreboardTeamItem(pos, tm, rgb, GetTeamName(tm.sb_team));
-			pos += '0 12 0';
+			/*Sbar_PrintScoreboardTeamItem(pos, tm, rgb, GetTeamName(tm.sb_team));
+			pos_y += 12;*/
 			//for(i = 0; i < maxclients; ++i)
+			plcount = 0;
 			for(pl = sortedPlayers.sort_next; pl; pl = pl.sort_next)
 			{
 				if(pl.sb_team != tm.sb_team)
 					continue;
 				Sbar_PrintScoreboardItem(pos, pl, (pl.sb_player == player_localentnum - 1), 0);
-				pos += '0 10 0';
+				pos_y += 10;
+				++plcount;
 			}
-			
-			pos += '0 12 0';
+			pos_y += 12;
+			if(plcount < 2)
+				pos_y += 12;
 		}
 
 		// rgb := tempvector :)
@@ -508,7 +530,7 @@ void Sbar_MiniscoreTeamItem(vector pos, float color, float frags, float is_self)
 
 void Sbar_MiniDeathmatchOverlay(vector pos)
 {
-	float i, numlines, up, down;
+	float numlines, up, down;
 	entity me, tm, pl;
 	float miniscoreboard_size;
 	miniscoreboard_size = cvar("sbar_miniscoreboard_size");
