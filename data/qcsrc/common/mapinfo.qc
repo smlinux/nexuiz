@@ -458,6 +458,7 @@ void _MapInfo_Map_Reset()
 
 void _MapInfo_Map_ApplyGametype(string s, float pWantedType, float pThisType)
 {
+	string sa;
 	MapInfo_Map_supportedGametypes |= pThisType;
 	if(!(pThisType & pWantedType))
 		return;
@@ -470,13 +471,25 @@ void _MapInfo_Map_ApplyGametype(string s, float pWantedType, float pThisType)
 
 	if(pWantedType == MAPINFO_TYPE_TEAM_DEATHMATCH)
 	{
-		cvar_set("g_tdm_teams", car(s));
+		sa = car(s);
+		if(sa != "")
+			cvar_set("g_tdm_teams", car(s));
 		s = cdr(s);
 	}
 
 	if(pWantedType == MAPINFO_TYPE_KEYHUNT)
 	{
-		cvar_set("g_keyhunt_teams", car(s));
+		sa = car(s);
+		if(sa != "")
+			cvar_set("g_keyhunt_teams", car(s));
+		s = cdr(s);
+	}
+
+	if(pWantedType == MAPINFO_TYPE_CTF)
+	{
+		sa = car(s);
+		if(sa != "")
+			cvar_set("capturelimit", car(s));
 		s = cdr(s);
 	}
 }
@@ -532,7 +545,7 @@ float MapInfo_Get_ByName(string pFilename, float pAllowGenerate, float pGametype
 		if(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_DEATHMATCH)      fputs(fh, "type dm 30 20\n");
 		if(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_TEAM_DEATHMATCH) fputs(fh, "type tdm 50 20 2\n");
 		if(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_DOMINATION)      fputs(fh, "type dom 200 20\n");
-		if(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_CTF)             fputs(fh, "type ctf 300 20\n");
+		if(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_CTF)             fputs(fh, "type ctf 300 20 10\n");
 		if(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_RUNEMATCH)       fputs(fh, "type rune 200 20\n");
 		if(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_LMS)             fputs(fh, "type lms 9 20\n");
 		if(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_ARENA)           fputs(fh, "type arena 10 20\n");

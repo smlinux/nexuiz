@@ -121,7 +121,7 @@ void ActivateTeamplay()
 
 void InitGameplayMode()
 {
-	float fraglimit_override, timelimit_override;
+	float fraglimit_override, timelimit_override, capturelimit_override;
 
 	VoteReset();
 
@@ -135,6 +135,7 @@ void InitGameplayMode()
 	// set both here, gamemode can override it later
 	timelimit_override = cvar("timelimit_override");
 	fraglimit_override = cvar("fraglimit_override");
+	capturelimit_override = cvar("capturelimit_override");
 
 	if(game == GAME_DOMINATION || cvar("g_domination"))
 	{
@@ -158,6 +159,7 @@ void InitGameplayMode()
 		ActivateTeamplay();
 
 		fraglimit_override = cvar("g_ctf_capture_limit");
+		//no capture limit override here
 
 		gamemode_name = "Capture the Flag";
 		teams_matter = 1;
@@ -263,21 +265,11 @@ void InitGameplayMode()
 	{
 		// we can only assume...
 		ResetGameCvars();
+		game = GAME_DEATHMATCH;
 		cvar_set("g_dm", "1");
 		gamemode_name = "Deathmatch";
 		teams_matter = 0;
 	}
-/*	else if(game == GAME_TEAM_DEATHMATCH)
-	{
-		if(!cvar("deathmatch"))
-			cvar_set("deathmatch", "1");
-
-		//if(!cvar("teamplay"))
-		//	cvar_set("teamplay", "3");
-		ActivateTeamplay();
-
-		fraglimit_override = cvar("fraglimit_override");
-	}*/
 
 	// those mutators rule each other out
 	if(cvar("g_minstagib"))
@@ -318,6 +310,8 @@ void InitGameplayMode()
 			cvar_set("fraglimit", ftos(fraglimit_override));
 		if(timelimit_override >= 0)
 			cvar_set("timelimit", ftos(timelimit_override));
+		if(capturelimit_override >= 0)
+			cvar_set("capturelimit", ftos(capturelimit_override));
 	}
 
 	if (game == GAME_DOMINATION)//cvar("g_domination"))
