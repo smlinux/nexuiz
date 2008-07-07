@@ -472,21 +472,21 @@ void _MapInfo_Map_ApplyGametype(string s, float pWantedType, float pThisType)
 	if(pWantedType == MAPINFO_TYPE_TEAM_DEATHMATCH)
 	{
 		sa = car(s); if(sa == "") sa = "2";
-		cvar_set("g_tdm_teams", car(s));
+		cvar_set("g_tdm_teams", sa);
 		s = cdr(s);
 	}
 
 	if(pWantedType == MAPINFO_TYPE_KEYHUNT)
 	{
 		sa = car(s); if(sa == "") sa = "3";
-		cvar_set("g_keyhunt_teams", car(s));
+		cvar_set("g_keyhunt_teams", sa);
 		s = cdr(s);
 	}
 
 	if(pWantedType == MAPINFO_TYPE_CTF)
 	{
 		sa = car(s); if(sa == "") sa = "10";
-		cvar_set("capturelimit", car(s));
+		cvar_set("capturelimit", sa);
 		s = cdr(s);
 	}
 }
