@@ -107,54 +107,51 @@ void CSQC_kh_hud(void)
 	// bind h "toggle sbar_hudselector; echo HUD $sbar_hudselector"  // change the HUD
 
 	float kh_keys, kh_keys_status, kh_teams_set;
-	float kh_margin_x, kh_margin_y;
+	float kh_margin_x, kh_margin_y, kh_key_box;
 	string kh_carrying, kh_outline;
 	vector red_pos, blue_pos, yellow_pos, pink_pos, kh_size;
 	vector red, blue, yellow, pink;
 
-	/*
-	kh_keys = cvar("kh_keys");  // set in keyhunt.qc
-	kh_keys_status = cvar("kh_keys_status");  // set in keyhunt.qc
-	*/
 	kh_keys = getstati(STAT_KH_KEYS);
 	kh_keys_status = kh_keys / 256;
 	kh_teams_set = cvar("_teams_available");  // set in keyhunt.qc
 
-//	kh_margin_x = 10;
 	kh_margin_y = 8;
-	kh_margin_x = (cvar("sbar_flagstatus_right") * sbar_hudselector * (vid_conwidth - 66)) + 10;
-	// sbar_flagstatus_right 0/1; sbar_hudselector 0/1; screen width - key width + margin
+	kh_margin_x = (cvar("sbar_flagstatus_right") * sbar_hudselector * (vid_conwidth - 67)) + 10;
+//	sbar_flagstatus_right 0/1; sbar_hudselector 0/1; screen width - key width + margin
 
 	red_pos_x = blue_pos_x = yellow_pos_x = pink_pos_x = kh_margin_x;
 
-	red_pos_y = kh_margin_y + 120*3;
-	blue_pos_y = kh_margin_y + 120*2;
-	yellow_pos_y = kh_margin_y + 120;
-	pink_pos_y = kh_margin_y + 0;
+	kh_key_box = 120;
+
+	pink_pos_y = kh_margin_y + 0;  // top
+	yellow_pos_y = kh_margin_y + kh_key_box;
+	blue_pos_y = kh_margin_y + kh_key_box * 2;
+	red_pos_y = kh_margin_y + kh_key_box * 3;  //bottom
 
 	red = '1 0 0';
 	blue = '0 0 1';
 	yellow = '1 1 0';
 	pink = '1 0 1';
 
-	kh_size = '45 116';
+	kh_size = '47 110';
 
-	kh_carrying = "gfx/sb_key_carrying";
-	kh_outline = "gfx/sb_key_carrying_outline";
+	kh_carrying = "gfx/sb_kh_full";
+	kh_outline = "gfx/sb_kh_outline";
 
-	// drawpic(vector position, string pic, vector size, vector rgb, float alpha, float flag)
-	// vector position = '0 0';  // 'x y' 0 0 (the origin) is in the top left. X 0 - 799, Y 0 - 599
+// 	drawpic(vector position, string pic, vector size, vector rgb, float alpha, float flag)
+// 	vector position = '0 0';  // 'x y' 0 0 (the origin) is the top left. X 0 - 799, Y 0 - 599
 
-	// vector size = '0 0';  // 'x y' changes the x & y dimensions. '0 0' gives the default pic size
-	// vector rgb = '0 0 0';  // 'r g b' range 0 - 1
+// 	vector size = '0 0';  // 'x y' changes the x & y dimensions. '0 0' gives the default pic size
+// 	vector rgb = '0 0 0';  // 'r g b' range 0 - 1
 
 	if (kh_keys_status & 1)  // red
 		drawpic (red_pos, kh_carrying, kh_size, red, 0.2, 0);  // show 20% alpha key
 	else
-		drawpic (red_pos, kh_outline, kh_size, red, 0.4, 0);  // show key outline
+		drawpic (red_pos, kh_outline, kh_size, red, 0.4, 0);  // show key outline 40% alpha
 
-	if (kh_keys & 1)  //red, added by victim
-		drawpic (red_pos, kh_carrying, kh_size, red, 1.0, 0);  // show solid key
+	if (kh_keys & 1)
+		drawpic (red_pos, kh_carrying, kh_size, red, 1.0, 0);  // show solid key 100% alpha
 
 
 	if (kh_keys_status & 2)  // blue
@@ -166,26 +163,26 @@ void CSQC_kh_hud(void)
 		drawpic (blue_pos, kh_carrying, kh_size, blue, 1.0, 0);
 
 
-	if (kh_teams_set & 4)  // yellow and pink
+	if (kh_teams_set & 4)  // yellow
 	{
-		if (kh_keys_status & 4)  // yellow
+		if (kh_keys_status & 4)
 			drawpic (yellow_pos, kh_carrying, kh_size, yellow, 0.2, 0);
 		else
 			drawpic (yellow_pos, kh_outline, kh_size, yellow, 0.4, 0);
 
-		if (kh_keys & 4)  //red, added by victim
+		if (kh_keys & 4)
 			drawpic (yellow_pos, kh_carrying, kh_size, yellow, 1.0, 0);
 	}
 
 
-	if (kh_teams_set & 8)  // pink only
+	if (kh_teams_set & 8)  // pink
 	{
-		if (kh_keys_status & 8)  // pink
+		if (kh_keys_status & 8)
 			drawpic (pink_pos, kh_carrying, kh_size, pink, 0.2, 0);
 		else
 			drawpic (pink_pos, kh_outline, kh_size, pink, 0.4, 0);
 
-		if (kh_keys & 8)  //red, added by victim
+		if (kh_keys & 8)
 			drawpic (pink_pos, kh_carrying, kh_size, pink, 1.0, 0);
 	}
 
