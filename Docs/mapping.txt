@@ -108,6 +108,10 @@ have weapon entities placed.
 
 There's much more power in a mapinfo file. See Appendix A for more details.
 
+By the way: the Domination and Keyhunt types allow a third number to specify
+the number of teams; the CTF type allows a third number to specify a capture
+limit (if g_ctf_win_mode is 0 or 1).
+
 
 -------------
 -mapname.cfg-
