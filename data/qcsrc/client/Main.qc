@@ -20,6 +20,7 @@ float using_gps;
 
 void CSQC_Init(void)
 {
+	float i;
 	drawfont = 0;
 	menu_visible = FALSE;
 	menu_show = menu_show_error;
@@ -30,12 +31,21 @@ void CSQC_Init(void)
 	//registercmd("ctf_menu");
 	registercmd("ons_map");
 	//registercmd("menu_action");
+	registercmd("sbar_columns_set");
+	registercmd("sbar_columns_help");
 
 	registercvar("sbar_usecsqc", "1");
+	registercvar("sbar_columns", "ping name | caps returns frags deaths");
 
 	gametype = 0;
 
 	gps_start = world;
+
+	// sbar_fields uses strunzone on the titles!
+	for(i = 0; i < MAX_SBAR_FIELDS; ++i)
+		sbar_title[i] = strzone("(null)");
+
+	localcmd(strcat("\nsbar_columns_set ", cvar_string("sbar_columns"), ";\n"));
 
 	postinit = false;
 }
@@ -43,14 +53,15 @@ void CSQC_Init(void)
 void PostInit(void)
 {
 	float i;
-	entity pl;
 
 	print(strcat("PostInit\n    maxclients = ", ftos(maxclients), "\n"));
 	databuf = buf_create();
 	for(i = 0; i < maxclients; ++i)
 	{
 		bufstr_set(databuf, DATABUF_PING + i, "N/A");
+		bufstr_set(databuf, DATABUF_DEATHS + i, "0");
 		bufstr_set(databuf, DATABUF_CAPTURES + i, "0");
+		bufstr_set(databuf, DATABUF_RETURNS + i, "0");
 	}
 
 	postinit = true;
@@ -63,13 +74,13 @@ void CSQC_Shutdown(void)
 
 // CSQC_ConsoleCommand : Used to parse commands in the console that have been registered with the "registercmd" function
 // Return value should be 1 if CSQC handled the command, otherwise return 0 to have the engine handle it.
+void Cmd_Sbar_SetFields(float);
+void Cmd_Sbar_Help(float);
 float CSQC_ConsoleCommand(string strMessage)
 {
-	local float nReturn;
-		nReturn = FALSE;
-		
+	float argc;
 	// Tokenize String
-	tokenize(strMessage);
+	argc = tokenize(strMessage);
 	
 	// Acquire Command
 	local string strCmd;
@@ -77,14 +88,20 @@ float CSQC_ConsoleCommand(string strMessage)
 
 	/*if(strCmd == "ctf_menu") {
 		ctf_menu_show();
-		nReturn = TRUE;
+		nReturn = true;
 		} else*/
 	if(strCmd == "ons_map") {
 		Cmd_ons_map();
-		nReturn = TRUE;
+		return true;
+	} else if(strCmd == "sbar_columns_set") {
+		Cmd_Sbar_SetFields(argc);
+		return true;
+	} else if(strCmd == "sbar_columns_help") {
+		Cmd_Sbar_Help(argc);
+		return true;
 	}
 	
-	return nReturn;
+	return false;
 }
 // CSQC_InputEvent : Used to perform actions based on any key pressed, key released and mouse on the client.
 // Return value should be 1 if CSQC handled the input, otherwise return 0 to have the input passed to the engine.
@@ -274,9 +291,13 @@ void CSQC_Parse_CenterPrint(string strMessage)
 	cprint(strMessage);
 }
 
+void CSQC_CheckRevision();
 void ReadInit()
 {
+	csqc_revision = ReadShort();
 	maxclients = ReadByte();
+
+	CSQC_CheckRevision();
 }
 
 void ReadPings()
@@ -291,16 +312,24 @@ void ReadPings()
 
 void ReadCaptures()
 {
-	float plnum, caps;
-	entity pl;
+	float plnum, caps, mode;
+	mode = ReadByte();
 	caps_team1 = ReadByte();
 	caps_team2 = ReadByte();
 	for(plnum = ReadByte(); plnum != 0; plnum = ReadByte())
 	{
 		caps = ReadByte();
-		//print(strcat("Cap update: ", ftos(plnum), " has ", ftos(caps), " caps\n"));
-		//print(strcat("Index: ", ftos(DATABUF_CAPTURES + plnum-1), " -- I AM: ", ftos(player_localentnum), "\n"));
 		bufstr_set(databuf, DATABUF_CAPTURES + plnum-1, ftos(caps));
+	}
+}
+
+void ReadDatabuf(float ofs)
+{
+	float plnum, data;
+	for(plnum = ReadByte(); plnum != 0; plnum = ReadByte())
+	{
+		data = ReadByte();
+		bufstr_set(databuf, ofs + plnum-1, ftos(data));
 	}
 }
 
@@ -329,6 +358,14 @@ float CSQC_Parse_TempEntity()
 			ReadCaptures();
 			bHandled = true;
 			break;
+		case TE_CSQC_RETURNS:
+			ReadDatabuf(DATABUF_RETURNS);
+			bHandled = true;
+			break;
+		case TE_CSQC_DEATHS:
+			ReadDatabuf(DATABUF_DEATHS);
+			bHandled = true;
+			break;
 		default:
 			// No special logic for this temporary entity; return 0 so the engine can handle it
 			bHandled = false;
@@ -339,4 +376,27 @@ float CSQC_Parse_TempEntity()
 		PostInit();
 		
 	return bHandled;
+}
+
+// COMMIT-TODO: Update if necessare, before committing
+float csqc_svn_map[CSQC_REVISION] =
+{
+	3795,
+};
+
+// COMMIT-TODO: Update if necessare, before committing
+void CSQC_CheckRevision()
+{
+	if(csqc_revision == CSQC_REVISION)
+	{
+		print("^2SVQC and CSQC revisions are compatible.\n");
+	} else if(csqc_revision < CSQC_REVISION) {
+		print("^1Your csprogs.dat (CSQC) version is newer than the one on the server.\n");
+		print("^1The last known svn revision for the server's CSQC is: ^7");
+		print(ftos(csqc_svn_map[csqc_revision])); // don't use strcat, fteqcc loves screwing up arrays...
+		print("\n");
+	} else if(csqc_revision > CSQC_REVISION) {
+		print("^1Your csprogs.dat (CSQC) is too old for this server.\n");
+		print("^1Please update to a newer version.\n");
+	}
 }

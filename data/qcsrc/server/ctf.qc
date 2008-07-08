@@ -230,37 +230,32 @@ void FlagThink()
 	}
 };
 
-void ctf_SendCaptures(entity player)
+void ctf_UpdateCaptures(float msg_target)
 {
 	entity p;
-	if(clienttype(player) != CLIENTTYPE_REAL)
-		return;
-	msg_entity = player;
-	WriteByte(MSG_ONE, SVC_TEMPENTITY);
-	WriteByte(MSG_ONE, TE_CSQC_CAPTURES);
-	WriteByte(MSG_ONE, caps_team1);
-	WriteByte(MSG_ONE, caps_team2);
-	FOR_EACH_CLIENT(p)
+	WriteByte(msg_target, SVC_TEMPENTITY);
+	WriteByte(msg_target, TE_CSQC_CAPTURES);
+	WriteByte(msg_target, cvar("g_ctf_win_mode"));
+	WriteByte(msg_target, caps_team1);
+	WriteByte(msg_target, caps_team2);
+	FOR_EACH_PLAYER(p)
 	{
-		WriteByte(MSG_ONE, num_for_edict(p));
-		WriteByte(MSG_ONE, p.captures);
+		WriteByte(msg_target, num_for_edict(p));
+		WriteByte(msg_target, p.captures);
 	}
-	WriteByte(MSG_ONE, 0);
+	WriteByte(msg_target, 0);
 }
-
-void ctf_UpdateCaptures()
+void ctf_UpdateReturns(float msg_target)
 {
 	entity p;
-	WriteByte(MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte(MSG_BROADCAST, TE_CSQC_CAPTURES);
-	WriteByte(MSG_BROADCAST, caps_team1);
-	WriteByte(MSG_BROADCAST, caps_team2);
-	FOR_EACH_REALCLIENT(p)
+	WriteByte(msg_target, SVC_TEMPENTITY);
+	WriteByte(msg_target, TE_CSQC_RETURNS);
+	FOR_EACH_PLAYER(p)
 	{
-		WriteByte(MSG_BROADCAST, num_for_edict(p));
-		WriteByte(MSG_BROADCAST, p.captures);
+		WriteByte(msg_target, num_for_edict(p));
+		WriteByte(msg_target, p.returns);
 	}
-	WriteByte(MSG_BROADCAST, 0);
+	WriteByte(msg_target, 0);
 }
 
 void FlagTouch()
@@ -323,7 +318,7 @@ void FlagTouch()
 			caps_team2++;
 		else
 			print("Unknown team captured the flag!\n");
-		ctf_UpdateCaptures();
+		ctf_UpdateCaptures(MSG_BROADCAST);
 		// FIXME: When counting captures, should the score be updated?
 
 		LogCTF("capture", other.flagcarried.team, other);
@@ -387,10 +382,15 @@ void FlagTouch()
 		{
 			// return flag
 			bprint(other.netname, "^7 returned the ", self.netname, "\n");
-			if (other.team == COLOR_TEAM1 || other.team == COLOR_TEAM2)
-				UpdateFrags(other, cvar("g_ctf_flagscore_return"));
-			else
-				UpdateFrags(other, cvar("g_ctf_flagscore_return_rogue"));
+			if(cvar("g_ctf_win_mode") == 2)
+			{
+				if (other.team == COLOR_TEAM1 || other.team == COLOR_TEAM2)
+					UpdateFrags(other, cvar("g_ctf_flagscore_return"));
+				else
+					UpdateFrags(other, cvar("g_ctf_flagscore_return_rogue"));
+			}
+			other.returns++;
+			ctf_UpdateReturns(MSG_BROADCAST);
 			LogCTF("return", self.team, other);
 			sound (self, CHAN_AUTO, self.noise1, 1, ATTN_NONE);
 			ReturnFlag(self);

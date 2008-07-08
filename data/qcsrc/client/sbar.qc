@@ -239,142 +239,364 @@ void Sbar_SortFrags()
 		}
 	}
 }
-float xmin, xmax, ymin, ymax;
+
+void Cmd_Sbar_Help(float argc)
+{
+	print("You can modify the scoreboard using the\n");
+	print("^3|---------------------------------------------------------------|\n");
+	print("^2sbar_columns^7 cvar and the ^2sbar_columns_set command.\n");
+	print("^2sbar_columns^7             specifies the default layout and\n");
+	print("^2sbar_columns_set^7         actually changes the layout.\n");
+	print("You can call ^2sbar_columns_set^7 with the new layout\n");
+	print("as parameters, or eithout parameters it will read the cvar.\n\n");
+	print("Usage:\n");
+	print("^2sbar_columns_set ^7filed1 field2 ...\n");
+	print("Fields which are not relevant to the current gametype\n");
+	print("won't be displayed\n\n");
+	print("The following field names are recognized (case INsensitive):\n");
+	print("^3name^7 or ^3nick^7             Name of a player\n");
+	print("^3caps^7 or ^3captures^7         Number of flags captured\n");
+	print("^3rets^7 or ^3returns^7          Number of flags returned\n");
+	print("^3frags^7 or ^3kills^7           Frags\n");
+	print("^3deaths^7 or ^3dths^7           Number of deaths\n");
+	print("^3kd^7 or ^3kdr^7 or ^3kdratio^7 or ^3k/d\n");
+	print("                         The kill-death ratio\n");
+	print("^3ping^7                     Ping time\n\n");
+	print("You can use a ^3|^7 to start the right-aligned fields.\n");
+	print("Example: ping name | caps rets frags k/d\n");
+	print("This will put the ping and the name on the left side.\n");
+	print("The captures, returns, frags and kill-death ratio will be\n");
+	print("rendered beginning on the right side.\n");
+
+}
+
+void Cmd_Sbar_SetFields(float argc)
+{
+	float i;
+	string str;
+
+	if(argc < 2)
+		argc = tokenize(strcat("x ", cvar_string("sbar_columns")));
+	
+	argc = min(MAX_SBAR_FIELDS, argc);
+	sbar_num_fields = 0;
+	for(i = 0; i < argc-1; ++i)
+	{
+		str = argv(i+1);
+		strunzone(sbar_title[i]);
+		sbar_title[i] = strzone(str);
+		sbar_size[i] = strlen(str)*8;
+		str = strtolower(str);
+		if(str == "ping") {
+			sbar_field[i] = SBF_PING;
+		} else if(str == "name" || str == "nick") {
+			sbar_field[i] = SBF_NAME;
+			sbar_size[i] = 24*8; // minimum size? any use?
+		} else if(str == "caps" || str == "captures") {
+			sbar_field[i] = SBF_CAPS;
+		} else if(str == "rets" || str == "returns") {
+			sbar_field[i] = SBF_RETS;
+		} else if(str == "frags" || str == "kills") {
+			sbar_field[i] = SBF_FRAGS;
+		} else if(str == "deaths" || str == "dths") {
+			sbar_field[i] = SBF_DEATHS;
+		} else if(str == "kdratio") {
+			sbar_field[i] = SBF_KDRATIO;
+		} else if(str == "kdr" || str == "k/d") {
+			sbar_field[i] = SBF_KDRATIO;
+		} else if(str == "kd") {
+			sbar_field[i] = SBF_KDRATIO;
+		} else if(str == "|") {
+			sbar_field[i] = SBF_SEPARATOR;
+		} else {
+			print(strcat("^1Error:^7 Unknown score field: '", str, "'\n"));
+			--sbar_num_fields;
+		}
+		++sbar_num_fields;
+	}
+	sbar_field[i] = SBF_END;
+}
+
+vector sbar_field_rgb;
+string Sbar_GetField(entity pl, float field)
+{
+	float tmp;
+	string str;
+	sbar_field_rgb = '1 1 1';
+	switch(field)
+	{
+	case SBF_PING:
+		str = bufstr_get(databuf, DATABUF_PING + pl.sb_player);
+		tmp = max(0, min(220, stof(str)-80)) / 220;
+		sbar_field_rgb = '1 1 1' - '0 1 1'*tmp;
+		return str;
+	case SBF_NAME: return getplayerkey(pl.sb_player, "name");
+	case SBF_CAPS: return ftos(pl.sb_caps);
+	case SBF_RETS: return bufstr_get(databuf, DATABUF_RETURNS + pl.sb_player);
+	case SBF_FRAGS: return ftos(pl.sb_frags);
+	case SBF_DEATHS: return bufstr_get(databuf, DATABUF_DEATHS + pl.sb_player);
+	case SBF_KDRATIO:
+		tmp = stof(bufstr_get(databuf, DATABUF_DEATHS + pl.sb_player));
+		if(tmp == 0) {
+			sbar_field_rgb = '0 1 0';
+			str = ftos(pl.sb_frags);
+		} else if(pl.sb_frags <= 0) {
+			sbar_field_rgb = '1 0 0';
+			str = ftos(pl.sb_frags / tmp);
+		} else
+			str = ftos(pl.sb_frags / tmp);
+		
+		tmp = strstrofs(str, ".", 0);
+		if(tmp > 0)
+			str = substring(str, 0, tmp+2);
+		return str;
+	}
+}
+
+float Sbar_IsFieldMasked(float field, float mask)
+{
+	if(mask&1) // spectator
+		return (field != SBF_NAME && field != SBF_PING);
+	if(gametype != GAME_CTF)
+		return (field == SBF_CAPS || field == SBF_RETS);
+	return false;
+}
+
+#define MAX_NAMELEN 24
+
+float xmin, xmax, ymin, ymax, sbwidth, sbheight;
 void Sbar_PrintScoreboardItem(vector pos, entity pl, float is_self, float mask)
 {
 	vector tmp;
-	string str;
-	entity player;
-	
-	tmp_y = tmp_z = 0;
-	pos_x += 56;
+	string str, tempstr;
+	float i, field, len;
 
-	str = bufstr_get(databuf, DATABUF_PING + pl.sb_player);
-	tmp_x = 4*8 - strlen(str) * 8 - 56;
-	drawstring(pos + tmp, str, '8 8 0', '0.8 0.8 0.8', 0.8, 0);
-
-	if(!(mask & 1)) // not a spectator:
-	{
-		if(gametype == GAME_CTF)
-		{
-			str = bufstr_get(databuf, DATABUF_CAPTURES + pl.sb_player);
-			tmp_x = xmax - strlen(str)*8 - pos_x;
-			drawstring(pos + tmp, str, '8 8 0', '1 1 1', 1, 0);
-		}
-	
-		str = ftos(pl.sb_frags);
-		tmp_x = 4*8 - strlen(str) * 8;
-		drawstring(pos + tmp, str, '8 8 0', '1 1 1', 1, 0);
-	}
-
+	// Layout:
+	tmp_z = 0;
 	if(is_self)
-		drawstring(pos + '40 0 0', "\x0D", '8 8 0', '1 1 1', 1, 0);
-	str = getplayerkey(pl.sb_player, "name");
-	tmp_x = 5*8 - strlen(str) * 8 + 56;
-	drawcolorcodedstring(pos + '48 0 0', str, '8 8 0', 1, 0);
-}
-void Sbar_PrintScoreboardTeamItem(vector pos, entity tm, vector rgb, string name)
-{
-	vector tmp;
-	string str;
+	{
+		tmp_x = sbwidth;
+		tmp_y = 8;
+		drawfill(pos - '1 1', tmp + '2 2', '1 1 1', 0.3, DRAWFLAG_NORMAL);
+	}	
+	tmp_y = 0;
 	
-	tmp_y = tmp_z = 0;
-	pos_x += 56;
+	for(i = 0; i < sbar_num_fields; ++i)
+	{
+		field = sbar_field[i];
+		if(field == SBF_SEPARATOR)
+			break;
+		if(Sbar_IsFieldMasked(field, mask))
+			continue;
 
-	str = ftos(tm.sb_frags);
-	tmp_x = 4*8 - strlen(str) * 8;
-	drawstring(pos + tmp, str, '8 8 0', '1 1 1', 1, 0);
+		str = Sbar_GetField(pl, field);
 
-	rgb += '0.3 0.3 0.3';
-	rgb = normalize(rgb * 5);
-	drawstring(pos + '48 0 0', name, '8 8 0', rgb, 1, 0);
+		if(field == SBF_NAME) {
+			len = strlen(strdecolorize(str));
+			if(len > MAX_NAMELEN)
+			{
+				while(len > MAX_NAMELEN)
+				{
+					// this way should be the fastest with 100% safety :P
+					// worst case: decolored length maxnamelen+1, and then only color codes =)
+					// cutting of reallength - (decolored-length - maxnamelen) characters
+					str = substring(str, 0, strlen(str) - (len-MAX_NAMELEN));
+					len = strlen(strdecolorize(str));
+				}
+				str = strcat(str, "^7...");
+				len += 3;
+			}
+			len *= 8;
+		} else
+			len = 8*strlen(str);
+		
+		if(sbar_size[i] < len)
+			sbar_size[i] = len;
+
+		pos_x += sbar_size[i] + 8;
+		if(field == SBF_NAME) {
+			tmp_x = sbar_size[i] + 8;
+			drawcolorcodedstring(pos - tmp, str, '8 8', 1, DRAWFLAG_NORMAL);
+		} else {
+			tmp_x = 8*strlen(str) + 8;
+			drawstring(pos - tmp, str, '8 8', sbar_field_rgb, 1, DRAWFLAG_NORMAL);
+		}
+	}
+	
+	if(sbar_field[i] == SBF_SEPARATOR)
+	{
+		pos_x = xmax;
+		for(i = sbar_num_fields-1; i > 0; --i)
+		{
+			field = sbar_field[i];
+			if(field == SBF_SEPARATOR)
+				break;
+			if(Sbar_IsFieldMasked(field, mask))
+				continue;
+			
+			str = Sbar_GetField(pl, field);
+
+			if(field == SBF_NAME) {
+				len = strlen(strdecolorize(str));
+				if(len > MAX_NAMELEN)
+				{
+					while(len > MAX_NAMELEN)
+					{
+						str = substring(str, 0, strlen(str) - (len-MAX_NAMELEN));
+						len = strlen(strdecolorize(str));
+					}
+					str = strcat(str, "^7...");
+					len += 3;
+				}
+				len *= 8;
+			} else
+				len = 8*strlen(str);
+			//len = 8*strlen(str);
+			if(sbar_size[i] < len)
+				sbar_size[i] = len;
+			
+			if(field == SBF_NAME) {
+				tmp_x = len; // left or right aligned? let's put it right...
+				drawcolorcodedstring(pos - tmp, str, '8 8', 1, DRAWFLAG_NORMAL);
+			} else {
+				tmp_x = len; //strlen(str);
+				drawstring(pos - tmp, str, '8 8', sbar_field_rgb, 1, DRAWFLAG_NORMAL);
+			}
+			pos_x -= sbar_size[i] + 8;
+		}
+	}
 }
 
 void Sbar_DrawScoreboard()
 {
-	// Assume: frags are already sorted
-	//float xmin, xmax, ymin, ymax, plcount;
-	float plcount;
-	vector pos, teammin, teammax, rgb;
+	//float xmin, ymin, xmax, ymax;
+	vector rgb, pos, tmp, sbar_save;
 	entity pl, tm;
-	float specs, minoffset;
-	specs = false;
+	float specs, i;
+	float center_x;
+	string str;
+	
+	xmin = vid_conwidth / 5;
+	ymin = 20;
 
-	xmin = vid_conwidth / 4;
 	xmax = vid_conwidth - xmin;
-	ymin = 48 - 26;
-	ymax = vid_conheight - 50;
+	ymax = vid_conheight - 0.2*vid_conheight;
 
+	sbwidth = xmax - xmin;
+	sbheight = ymax - ymin;
+
+	center_x = xmin + 0.5*sbwidth;
+
+	//Sbar_UpdateFields();
+
+	// Initializes position
+	//pos_x = xmin;
 	pos_y = ymin;
 	pos_z = 0;
 
-	teammin = teammax = '0 0 0';
-	teammin_x = xmin - 2;
-	teammax_x = xmax + 2;
-
-	pos_x = 0.5 * (xmin + xmax) - (24*5);
+	// Heading
 	drawfont = FONT_USER+0;
-	drawstring(pos, "Scoreboard", '24 24 0', '1 1 1', 1, DRAWFLAG_NORMAL);
-	drawfont = 0;
+	pos_x = center_x - 4*24;
+	drawstring(pos, "Scoreboard", '24 24', '1 1 1', 1, DRAWFLAG_NORMAL);
 	pos_x = xmin;
-	pos_y += 26;
+	pos_y += 24 + 4;
+	drawfont = FONT_DEFAULT;
 
-	drawstring(pos, "ping", '8 8 0', '1 1 1', 1, 0);
-	drawstring(pos + '48 0 0', "frags", '8 8 0', '1 1 1', 1, 0);
-	drawstring(pos + '104 0 0', "name", '8 8 0', '1 1 1', 1, 0);
-	if(gametype == GAME_CTF)
+	// Titlebar background:
+	tmp_x = sbwidth;
+	tmp_y = 8;
+	drawfill(pos - '1 1', tmp + '2 2', '0.5 0.5 0.5', 0.5, DRAWFLAG_NORMAL);
+	
+	for(i = 0; i < sbar_num_fields; ++i)
 	{
-		pos_x = xmax - 4*8;
-		drawstring(pos, "caps", '8 8 0', '1 1 1', 1, 0);
-		pos_x = xmin;
+		if(sbar_field[i] == SBF_SEPARATOR)
+			break;
+		drawstring(pos, sbar_title[i], '8 8', '1 1 1', 1, DRAWFLAG_NORMAL);
+		pos_x += sbar_size[i] + 8;
 	}
 	
-	pos_y += 16;
+	if(sbar_field[i] == SBF_SEPARATOR)
+	{
+		pos_x = xmax + 8;
+		tmp_y = tmp_z = 0;
+		for(i = sbar_num_fields-1; i > 0; --i)
+		{
+			if(sbar_field[i] == SBF_SEPARATOR)
+				break;
+			
+			pos_x -= sbar_size[i] + 8;
+			/**
+			 * FTEQCC BUG!
+			 * Using the following line will fuck it all up:
+			 **
+			 * tmp_x = sbar_size[i] - strlen(sbar_title[i])*8;
+			 */
+			tmp_x = sbar_size[i];
+			tmp_x -= strlen(sbar_title[i])*8;
+			drawstring(pos + tmp, sbar_title[i], '8 8', '1 1 1', 1, DRAWFLAG_NORMAL);
+		}
+	}
+		
+	pos_x = xmin;
+	pos_y += 12;
+
+	sbar_save = sbar;
+	sbar = '0 0 0';
 	
 	if(teamplay)
 	{
 		for(tm = sortedTeams.sort_next; tm; tm = tm.sort_next)
 		{
-			minoffset = pos_y + 24;
 			if(!tm.sb_player || tm.sb_team == COLOR_SPECTATOR) // no players in it?
 				continue;
 
 			rgb = GetTeamRGB(tm.sb_team);
+
+			pos_x = xmin - 4*24;
 			if(gametype == GAME_CTF)
 			{
-				minoffset = pos_y + 24 + 12;
 				if(tm.sb_team == COLOR_TEAM1)
-					Sbar_DrawXNum(pos-'106 0 0'-sbar, caps_team1, 4, 24, rgb, 1, DRAWFLAG_NORMAL);
+					Sbar_DrawXNum(pos, caps_team1, 4, 24, rgb, 1, DRAWFLAG_NORMAL);
 				else if(tm.sb_team == COLOR_TEAM2)
-					Sbar_DrawXNum(pos-'106 0 0'-sbar, caps_team2, 4, 24, rgb, 1, DRAWFLAG_NORMAL);
-				Sbar_DrawXNum(pos-'44 -24 0'-sbar, tm.sb_frags, 4, 10, rgb, 1, DRAWFLAG_NORMAL);
+					Sbar_DrawXNum(pos, caps_team2, 4, 24, rgb, 1, DRAWFLAG_NORMAL);
+				pos_x = xmin - 4*10;
+				Sbar_DrawXNum(pos + '0 24', tm.sb_frags, 4, 10, rgb, 1, DRAWFLAG_NORMAL);
+				pos_x = xmin;
 			} else
-				Sbar_DrawXNum(pos-'106 0 0'-sbar, tm.sb_frags, 4, 24, rgb, 1, DRAWFLAG_NORMAL);
+				Sbar_DrawXNum(pos, tm.sb_frags, 4, 24, rgb, 1, DRAWFLAG_NORMAL);
+			pos_x = xmin;
 
-			teammin_y = pos_y - 2;
-			teammax_y = pos_y + 2 + 10 * (tm.sb_player);
-			drawfill(teammin, teammax - teammin, rgb, 0.2, DRAWFLAG_NORMAL);
+			// abuse specs as playerounter
+			specs = 0;
+			for(pl = sortedPlayers.sort_next; pl; pl = pl.sort_next)
+			{
+				if(pl.sb_team == tm.sb_team)
+					++specs;
+			}
+
+			if(specs < 2)
+				specs = 2;
+			if(gametype == GAME_CTF && specs < 4)
+				specs = 4;
 			
-			plcount = 0;
+			tmp_x = sbwidth;
+			tmp_y = 10 * specs;
+			drawfill(pos - '1 1', tmp + '2 0', rgb, 0.2, DRAWFLAG_NORMAL);
+			
 			for(pl = sortedPlayers.sort_next; pl; pl = pl.sort_next)
 			{
 				if(pl.sb_team != tm.sb_team)
 					continue;
 				Sbar_PrintScoreboardItem(pos, pl, (pl.sb_player == player_localentnum - 1), 0);
 				pos_y += 10;
-				++plcount;
+				tmp_y -= 10;
 			}
-
-			pos_y += 12;
-			if(pos_y < minoffset)
-				pos_y = minoffset;
+			pos_y += tmp_y + 12;
 		}
-
 		// rgb := tempvector :)
 		rgb = pos + '0 12 0';
-		//pos += '64 24 0';
 		pos_y += 24;
-		//for(i = 0; i < maxclients; ++i)
+		specs = 0;
 		for(pl = sortedPlayers.sort_next; pl; pl = pl.sort_next)
 		{
 			if(pl.sb_team != COLOR_SPECTATOR)
@@ -382,39 +604,14 @@ void Sbar_DrawScoreboard()
 			//drawcolorcodedstring(pos, getplayerkey(pl.sb_player, "name"), '8 8 0', 1, 0);
 			Sbar_PrintScoreboardItem(pos, pl, (pl.sb_player == player_localentnum - 1), 1);
 			pos += '0 10 0';
-			specs = true;
+			++specs;
 		}
 			
 		if(specs)
 			drawstring(rgb, "Spectators", '8 8 0', '1 1 1', 1, 0);
-	} else {
-		//for(i = 0; i < maxclients; ++i)
-		for(pl = sortedPlayers.sort_next; pl; pl = pl.sort_next)
-		{
-			if(pl.sb_team != COLOR_TEAM1)
-				continue;
-			//drawstring(pos, ftos(pl.sb_frags), '8 8 0', '1 1 1', 1, 0);
-			//drawcolorcodedstring(pos + '64 0 0', getplayerkey(pl.sb_player, "name"), '8 8 0', 1, 0);
-			Sbar_PrintScoreboardItem(pos, pl, (pl.sb_player == player_localentnum - 1), 0);
-			pos += '0 12 0';
-		}
-		rgb = pos + '0 12 0';
-		//pos += '64 24 0';
-		pos_y += 24;
-		for(pl = sortedPlayers.sort_next; pl; pl = pl.sort_next)
-		{
-			if(pl.sb_team != COLOR_SPECTATOR)
-				continue;
-			specs = true;
-			//drawcolorcodedstring(pos, getplayerkey(pl.sb_player, "name"), '8 8 0', 1, 0);
-			Sbar_PrintScoreboardItem(pos, pl, (pl.sb_player == player_localentnum - 1), 1);
-			pos += '0 12 0';
-		}
-		if(specs)
-			drawstring(rgb, "Spectators", '8 8 0', '1 1 1', 1, 0);
 	}
+	sbar = sbar_save;
 }
-
 
 void Sbar_Score(float margin)
 {
@@ -865,7 +1062,22 @@ void CSQC_ctf_hud(void)
 	redflag = (stat_items/32768) & 3;
 	blueflag = (stat_items/131072) & 3;
 
-	pos_x = (cvar("sbar_flagstatus_right")) ? vid_conwidth - 10 - sbar_x - 64 : 10 - sbar_x;
+	/**
+	 * FTEQCC BUG!
+	 * For some reason now not even THAT works there...
+	 * Maybe the minus' precedence screws it up? The last one there, maybe I should use brackets
+	 **
+	 * pos_x = (cvar("sbar_flagstatus_right")) ? vid_conwidth - 10 - sbar_x - 64 : 10 - sbar_x;
+	 ** Should try those later:
+	 * pos_x = (cvar("sbar_flagstatus_right")) ? (vid_conwidth - 10 - sbar_x - 64) : (10 - sbar_x);
+	 * pos_x = ( (cvar("sbar_flagstatus_right")) ? vid_conwidth - 10 - 64 : 10 ) - sbar_x;
+	 */
+	
+	if(cvar("sbar_flagstatus_right"))
+		pos_x = vid_conwidth - 10 - sbar_x - 64;
+	else
+		pos_x = 10 - sbar_x;
+	
 	pos_z = 0;
 
 	if(sbar_hudselector == 1)

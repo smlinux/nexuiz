@@ -438,4 +438,5 @@ float sv_maxidle_spectatorsareidle;
 float next_pingtime;
 
 .float captures;
+.float returns;
 float caps_team1, caps_team2;

@@ -348,7 +348,8 @@ PutObserverInServer
 putting a client as observer in the server
 =============
 */
-void ctf_UpdateCaptures();
+void ctf_UpdateCaptures(float);
+void ctf_UpdateReturns(float);
 void PutObserverInServer (void)
 {
 	entity	spot;
@@ -376,7 +377,7 @@ void PutObserverInServer (void)
 	if(g_ctf)
 	{
 		self.captures = 0;
-		ctf_UpdateCaptures();
+		ctf_UpdateCaptures(MSG_BROADCAST);
 	}
 
 	if(self.frags <= 0 && self.frags > -666 && g_lms && self.killcount != -666)
@@ -402,6 +403,8 @@ void PutObserverInServer (void)
 	self.death_time = 0;
 	self.dead_frame = 0;
 	self.deaths = 0;
+	self.captures = 0;
+	self.returns = 0;
 	self.alpha = 0;
 	self.scale = 0;
 	self.fade_time = 0;
@@ -454,6 +457,8 @@ void PutObserverInServer (void)
 	}
 	else if(!g_lms)
 		self.frags = -666;
+	
+	net_UpdateDeaths(MSG_BROADCAST);
 }
 
 float RestrictSkin(float s)
@@ -662,6 +667,15 @@ void PutClientInServer (void)
 			if(!g_arena)
 			if(!g_lms)
 				self.frags = 0;
+			if(g_ctf)
+			{
+				self.captures = 0;
+				self.returns = 0;
+				ctf_UpdateCaptures(MSG_BROADCAST);
+				ctf_UpdateReturns(MSG_BROADCAST);
+			}
+			self.deaths = 0;
+			net_UpdateDeaths(MSG_BROADCAST);
 		}
 
 		self.cnt = WEP_LASER;
@@ -717,6 +731,7 @@ void SendCSQCInfo(void)
 	msg_entity = self;
 	WriteByte(MSG_ONE, SVC_TEMPENTITY);
 	WriteByte(MSG_ONE, TE_CSQC_INIT);
+	WriteShort(MSG_ONE, CSQC_REVISION);
 	WriteByte(MSG_ONE, maxclients-1);
 }
 
@@ -768,8 +783,12 @@ void ClientKill_Now_TeamChange()
 	if(g_ctf)
 	{
 		self.captures = 0;
-		ctf_UpdateCaptures();
+		self.returns = 0;
+		ctf_UpdateCaptures(MSG_BROADCAST);
+		ctf_UpdateReturns(MSG_BROADCAST);
 	}
+	self.deaths = 0;
+	net_UpdateDeaths(MSG_BROADCAST);
 	if(self.killindicator_teamchange == -1)
 	{
 		self.team = -1;
@@ -966,7 +985,6 @@ Called when a client connects to the server
 //void ctf_clientconnect();
 string ColoredTeamName(float t);
 void DecodeLevelParms (void);
-void ctf_SendCaptures(entity);
 //void dom_player_join_team(entity pl);
 void ClientConnect (void)
 {
@@ -1121,8 +1139,15 @@ void ClientConnect (void)
 	self.jointime = time;
 	self.allowedTimeouts = cvar("sv_timeout_number");
 
-	SendCSQCInfo();
-	ctf_SendCaptures(self);
+	if(clienttype(self) == CLIENTTYPE_REAL)
+	{
+		sprint(self, strcat("nexuiz-csqc protocol ", ftos(CSQC_REVISION), "\n"));
+		SendCSQCInfo();
+		msg_entity = self;
+		ctf_UpdateCaptures(MSG_ONE);
+		ctf_UpdateReturns(MSG_ONE);
+		net_UpdateDeaths(MSG_ONE);
+	}
 }
 
 /*
@@ -1178,7 +1203,7 @@ void ClientDisconnect (void)
 	if(g_ctf)
 	{
 		self.captures = 0;
-		ctf_UpdateCaptures();
+		ctf_UpdateCaptures(MSG_BROADCAST);
 	}
 
 	save = self.flags;

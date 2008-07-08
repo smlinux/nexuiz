@@ -3,7 +3,10 @@
 
 #define DATABUF_PING 0
 #define DATABUF_CAPTURES (1*maxclients)
-#define DATABUF_NEXT (2*maxclients)
+#define DATABUF_DEATHS (2*maxclients)
+#define DATABUF_RETURNS (3*maxclients)
+
+#define DATABUF_NEXT (5*maxclients)
 
 void() menu_show_error;
 void() menu_sub_null;
@@ -32,6 +35,8 @@ float ons_showmap;
 // --------------------------------------------------------------------------
 // General stuff
 
+float csqc_revision;
+
 float drawfont;
 float postinit;
 float gametype;
@@ -57,3 +62,24 @@ const float COLOR_SPECTATOR = 1337;
 
 #define FONT_DEFAULT 0
 #define FONT_USER 8
+
+// --------------------------------------------------------------------------
+// Scoreboard stuff
+
+#define MAX_SBAR_FIELDS 16
+
+#define SBF_END 0
+#define SBF_PING 1
+#define SBF_NAME 2
+#define SBF_CAPS 3
+#define SBF_RETS 4
+#define SBF_FRAGS 5
+#define SBF_DEATHS 6
+#define SBF_KDRATIO 7
+
+#define SBF_SEPARATOR 100
+
+float sbar_field[MAX_SBAR_FIELDS + 1];
+float sbar_size[MAX_SBAR_FIELDS + 1];
+string sbar_title[MAX_SBAR_FIELDS + 1];
+float sbar_num_fields;
