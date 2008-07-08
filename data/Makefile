@@ -6,7 +6,7 @@ ZIP ?= 7za a -tzip -mx=9
 all: qc
 
 .PHONY: qc
-qc: menu.dat progs.dat
+qc: menu.dat progs.dat csprogs.dat
 
 .PHONY: skin
 skin: gfx/menu/default/skinvalues.txt
