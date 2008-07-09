@@ -78,7 +78,7 @@ health: if set, door must be shot open
 speed: movement speed (100 default)
 wait: wait before returning (3 default, -1 = never return)
 lip: lip remaining at end of move (8 default)
-dmg: damage to inflict when blocked (2 default)
+dmg: damage to inflict when blocked (when triggered and someone is in the way)
 sounds: when 1, use default door sounds
 noise1: sound when the door opens
 noise2: sound when the door closes
