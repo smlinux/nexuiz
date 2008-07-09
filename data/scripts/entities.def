@@ -266,7 +266,7 @@ cnt: weight of spawn point for random selection. Set to a lower value if you hav
 targetname: when targeted by a func_button, pressing the button will reassign the spawn point to the team of the activator. If a team has no more spawn point left, it immediately loses.
 */
 
-/*QUAKED item_armor_large (.4 .8 .4) (-16 -16 0) (16 16 32) FLOATING
+/*QUAKED item_armor_large (.4 .8 .4) (-30 -30 0) (30 30 32) FLOATING
 Large Armor (default 100 armor points)
 -------- KEYS --------
 respawntime: time till it respawns (default: 30)
@@ -278,7 +278,7 @@ FLOATING: the item will float in air, instead of aligning to the floor by fallin
 model="models/items/g_a25.md3"
 */
 
-/*QUAKED item_armor_medium (.4 .8 .4) (-16 -16 0) (16 16 32) FLOATING
+/*QUAKED item_armor_medium (.4 .8 .4) (-30 -30 0) (30 30 32) FLOATING
 Medium Armor (default 25 armor points)
 -------- KEYS --------
 respawntime: time till it respawns (default: 30)
@@ -290,7 +290,7 @@ FLOATING: the item will float in air, instead of aligning to the floor by fallin
 model="models/items/g_armormedium.md3"
 */
 
-/*QUAKED item_armor_small (.4 .8 .4) (-16 -16 0) (16 16 32) FLOATING
+/*QUAKED item_armor_small (.4 .8 .4) (-30 -30 0) (30 30 32) FLOATING
 Small Armor (default 5 armor points)
 -------- KEYS --------
 respawntime: time till it respawns (default: 15)
@@ -302,7 +302,7 @@ FLOATING: the item will float in air, instead of aligning to the floor by fallin
 model="models/items/g_a1.md3"
 */
 
-/*QUAKED item_bullets (.3 .3 1) (-16 -16 0) (16 16 32) FLOATING
+/*QUAKED item_bullets (.3 .3 1) (-30 -30 0) (30 30 32) FLOATING
 Machine Gun ammo
 -------- KEYS --------
 ammo_nails: bullets gained by this item (if unset, g_pickup_nails is used)
@@ -313,7 +313,7 @@ FLOATING: the item will float in air, instead of aligning to the floor by fallin
 model="models/items/a_bullets.mdl"
 */
 
-/*QUAKED item_cells (.3 .3 1) (-16 -16 0) (16 16 32) FLOATING
+/*QUAKED item_cells (.3 .3 1) (-30 -30 0) (30 30 32) FLOATING
 Nex, Electro and Crylink ammo
 -------- KEYS --------
 ammo_cells: cells gained by this item (if unset, g_pickup_cells is used)
@@ -346,7 +346,7 @@ noise2: sound played when flag is captured
 noise3: sound played when flag is lost in the field and respawns itself
 */
 
-/*QUAKED item_health_large (.9 .3 .3) (-16 -16 0) (16 16 32) FLOATING
+/*QUAKED item_health_large (.9 .3 .3) (-30 -30 0) (30 30 48) FLOATING
 Large Health (default 50 health points)
 -------- KEYS --------
 respawntime: time till it respawns (default: 15)
@@ -358,7 +358,7 @@ FLOATING: the item will float in air, instead of aligning to the floor by fallin
 model="models/items/g_h50.md3"
 */
 
-/*QUAKED item_health_medium (.9 .3 .3) (-16 -16 0) (16 16 32) FLOATING
+/*QUAKED item_health_medium (.9 .3 .3) (-30 -30 0) (30 30 48) FLOATING
 Medium Health (default 25 health points)
 -------- KEYS --------
 respawntime: time till it respawns (default: 15)
@@ -370,7 +370,7 @@ FLOATING: the item will float in air, instead of aligning to the floor by fallin
 model="models/items/g_h25.md3"
 */
 
-/*QUAKED item_health_mega (.9 .3 .3) (-16 -16 0) (16 16 32) FLOATING
+/*QUAKED item_health_mega (.9 .3 .3) (-30 -30 0) (30 30 48) FLOATING
 Mega Health (default 100 health points)
 In Minstagib, this randomly turns into either an invisibility, an extra lives or a speed power-up with a default respawn time of 120.
 -------- KEYS --------
@@ -383,7 +383,7 @@ FLOATING: the item will float in air, instead of aligning to the floor by fallin
 model="models/items/g_h100.md3"
 */
 
-/*QUAKED item_health_small (.9 .3 .3) (-16 -16 0) (16 16 32) FLOATING
+/*QUAKED item_health_small (.9 .3 .3) (-30 -30 0) (30 30 48) FLOATING
 Small Health (default 5 health points)
 -------- KEYS --------
 respawntime: time till it respawns (default: 15)
@@ -395,7 +395,7 @@ FLOATING: the item will float in air, instead of aligning to the floor by fallin
 model="models/items/g_h1.md3"
 */
 
-/*QUAKED item_invincible (.3 .3 1) (-16 -16 0) (16 16 32) FLOATING
+/*QUAKED item_invincible (.3 .3 1) (-30 -30 0) (30 30 48) FLOATING
 Strong Shield
 In Minstagib, this randomly turns into either an invisibility, an extra lives or a speed power-up with a default respawn time of 120.
 -------- KEYS --------
@@ -406,7 +406,7 @@ FLOATING: the item will float in air, instead of aligning to the floor by fallin
 model="models/items/g_invincible.md3"
 */
 
-/*QUAKED item_minst_cells (.3 .3 1) (-16 -16 0) (16 16 32) FLOATING
+/*QUAKED item_minst_cells (.3 .3 1) (-30 -30 0) (30 30 32) FLOATING
 Minstagib ammo.
 Always contains 5 (g_minstagib_ammo_drop) shots.
 It only appears when playing Minstagib and prevents auto-replacement of weapon_nex & weapon_rocketlauncher when used.
@@ -418,7 +418,7 @@ FLOATING: the item will float in air, instead of aligning to the floor by fallin
 model="models/items/a_cells.md3"
 */
 
-/*QUAKED item_rockets (.3 .3 1) (-16 -16 0) (16 16 32) FLOATING
+/*QUAKED item_rockets (.3 .3 1) (-30 -30 0) (30 30 32) FLOATING
 Rocket Launcher, Hagar and Mortar ammo
 -------- KEYS --------
 ammo_rockets: rockets gained by this item (if unset, g_pickup_rockets is used)
@@ -429,7 +429,7 @@ FLOATING: the item will float in air, instead of aligning to the floor by fallin
 model="models/items/a_rockets.md3"
 */
 
-/*QUAKED item_shells (.3 .3 1) (-16 -16 0) (16 16 32) FLOATING
+/*QUAKED item_shells (.3 .3 1) (-30 -30 0) (30 30 32) FLOATING
 Shotgun ammo
 -------- KEYS --------
 ammo_shells: shells gained by this item (if unset, g_pickup_shells is used)
@@ -440,7 +440,7 @@ FLOATING: the item will float in air, instead of aligning to the floor by fallin
 model="models/items/a_shells.md3"
 */
 
-/*QUAKED item_strength (.3 .3 1) (-16 -16 0) (16 16 32) FLOATING
+/*QUAKED item_strength (.3 .3 1) (-30 -30 0) (30 30 48) FLOATING
 Strength aka Quad damage
 In Minstagib, this randomly turns into either an invisibility, an extra lives or a speed power-up with a default respawn time of 120.
 -------- KEYS --------
@@ -765,7 +765,7 @@ Note that in Nexuiz, teleporters preserve momentum of the player using them.
 target: this must point to a misc_teleporter_dest entity.
 */
 
-/*QUAKED weapon_crylink (1 0 .5) (-16 -16 0) (16 16 32) FLOATING
+/*QUAKED weapon_crylink (1 0 .5) (-30 -30 0) (30 30 32) FLOATING
 the Crylink
 -------- KEYS --------
 ammo_cells: initial cells of the weapon (if unset, g_pickup_cells is used)
@@ -776,7 +776,7 @@ FLOATING: the item will float in air, instead of aligning to the floor by fallin
 model="models/weapons/g_crylink.md3"
 */
 
-/*QUAKED weapon_electro (1 0 .5) (-16 -16 0) (16 16 32) FLOATING
+/*QUAKED weapon_electro (1 0 .5) (-30 -30 0) (30 30 32) FLOATING
 the Electro
 -------- KEYS --------
 ammo_cells: initial cells of the weapon (if unset, g_pickup_cells is used)
@@ -787,7 +787,7 @@ FLOATING: the item will float in air, instead of aligning to the floor by fallin
 model="models/weapons/g_electro.md3"
 */
 
-/*QUAKED weapon_grenadelauncher (1 0 .5) (-16 -16 0) (16 16 32) FLOATING
+/*QUAKED weapon_grenadelauncher (1 0 .5) (-30 -30 0) (30 30 32) FLOATING
 the Mortar
 -------- KEYS --------
 ammo_rockets: initial rockets of the weapon (if unset, g_pickup_rockets is used)
@@ -798,7 +798,7 @@ FLOATING: the item will float in air, instead of aligning to the floor by fallin
 model="models/weapons/g_gl.md3"
 */
 
-/*QUAKED weapon_hagar (1 0 .5) (-16 -16 0) (16 16 32) FLOATING
+/*QUAKED weapon_hagar (1 0 .5) (-30 -30 0) (30 30 32) FLOATING
 the Hagar
 -------- KEYS --------
 ammo_rockets: initial rockets of the weapon (if unset, g_pickup_rockets is used)
@@ -809,7 +809,7 @@ FLOATING: the item will float in air, instead of aligning to the floor by fallin
 model="models/weapons/g_hagar.md3"
 */
 
-/*QUAKED weapon_nex (1 0 .5) (-16 -16 0) (16 16 32) FLOATING
+/*QUAKED weapon_nex (1 0 .5) (-30 -30 0) (30 30 32) FLOATING
 the Nex
 In Minstagib, this turns into an item_minst_cells if no explicit item_minst_cells have been placed.
 -------- KEYS --------
@@ -821,7 +821,7 @@ FLOATING: the item will float in air, instead of aligning to the floor by fallin
 model="models/weapons/g_nex.md3"
 */
 
-/*QUAKED weapon_rocketlauncher (1 0 .5) (-16 -16 0) (16 16 32) FLOATING
+/*QUAKED weapon_rocketlauncher (1 0 .5) (-30 -30 0) (30 30 32) FLOATING
 the Rocket Launcher
 In Minstagib, this turns into an item_minst_cells if no explicit item_minst_cells have been placed.
 -------- KEYS --------
@@ -833,7 +833,7 @@ FLOATING: the item will float in air, instead of aligning to the floor by fallin
 model="models/weapons/g_rl.md3"
 */
 
-/*QUAKED weapon_shotgun (1 0 .5) (-16 -16 0) (16 16 32) FLOATING
+/*QUAKED weapon_shotgun (1 0 .5) (-30 -30 0) (30 30 32) FLOATING
 the Shotgun
 -------- KEYS --------
 ammo_shells: initial shells of the weapon (if unset, g_pickup_shells is used)
@@ -844,7 +844,7 @@ FLOATING: the item will float in air, instead of aligning to the floor by fallin
 model="models/weapons/g_shotgun.md3"
 */
 
-/*QUAKED weapon_uzi (1 0 .5) (-16 -16 0) (16 16 32) FLOATING
+/*QUAKED weapon_uzi (1 0 .5) (-30 -30 0) (30 30 32) FLOATING
 the Machine Gun
 -------- KEYS --------
 ammo_nails: initial bullets of the weapon (if unset, g_pickup_nails is used)
