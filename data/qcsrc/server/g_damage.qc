@@ -490,7 +490,7 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 		// Instead, prepare the victim for his death...
 		targ.armorvalue = 0;
 		targ.spawnshieldtime = 0;
-		targ.health = 1;
+		targ.health = 0.9; // this is < 1
 		targ.flags -= targ.flags & FL_GODMODE;
 		damage = 100000;
 	}
