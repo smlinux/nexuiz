@@ -759,6 +759,19 @@ Index: include/isurfaceplugin.h
  };
  
  
+Index: radiant/groupdialog.cpp
+===================================================================
+--- radiant/groupdialog.cpp	(revision 297)
++++ radiant/groupdialog.cpp	(working copy)
+@@ -1328,7 +1328,7 @@
+ 
+             {
+               // Spawnflags (4 colums wide max, or window gets too wide.)
+-              GtkWidget* LayoutTable = gtk_table_new (4, 4, FALSE);
++              LayoutTable = gtk_table_new (4, 4, FALSE);
+               gtk_box_pack_start (GTK_BOX (vbox2), LayoutTable, FALSE, TRUE, 0);
+               gtk_widget_show(LayoutTable);
+ 
 Index: tools/quake3/q3map2/convert_map.c
 ===================================================================
 --- tools/quake3/q3map2/convert_map.c	(revision 290)
@@ -2256,4 +2269,4 @@ Index: include/version.default
 +++ include/version.default	(working copy)
 @@ -1 +1 @@
 -1.4.0
-+1.4.0-div0-obj-bp2texdeffix-bpsurfacedialog
++1.4.0-div0-obj-bp2texdeffix-bpsurfacedialog-spawnflagsboxes
