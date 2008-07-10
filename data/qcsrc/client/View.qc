@@ -134,7 +134,7 @@ void CSQC_kh_hud(void)
 	yellow = '1 1 0';
 	pink = '1 0 1';
 
-	kh_size = '47 110';
+	kh_size = '0 0';  // don't resize the image
 
 	kh_carrying = "gfx/sb_kh_full";
 	kh_outline = "gfx/sb_kh_outline";

@@ -45,8 +45,6 @@ void CSQC_Init(void)
 	for(i = 0; i < MAX_SBAR_FIELDS; ++i)
 		sbar_title[i] = strzone("(null)");
 
-	localcmd(strcat("\nsbar_columns_set ", cvar_string("sbar_columns"), ";\n"));
-
 	postinit = false;
 }
 
@@ -63,6 +61,8 @@ void PostInit(void)
 		bufstr_set(databuf, DATABUF_CAPTURES + i, "0");
 		bufstr_set(databuf, DATABUF_RETURNS + i, "0");
 	}
+	
+	localcmd(strcat("\nsbar_columns_set ", cvar_string("sbar_columns"), ";\n"));
 
 	postinit = true;
 }
