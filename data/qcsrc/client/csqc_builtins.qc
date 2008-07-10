@@ -56,7 +56,7 @@ float(string s)								stof = #81;
 
 
 void (vector v1, vector min, vector max, vector v2, float nomonsters, entity forent)	tracebox = #90;
-float (string name, string value)					registercvar = #93;
+float (string name, string value, ...)					registercvar = #93;
 
 entity (entity start, .entity fld, entity match)			findentity = #98;
 entity (entity start, .float fld, float match)				findfloat = #98;

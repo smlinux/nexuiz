@@ -377,7 +377,7 @@ float Sbar_IsFieldMasked(float field, float mask)
 	return false;
 }
 
-// shamelessly stolen from menu QC :P
+// shamelessly stolen from menu QC :P <- as if I would steal YOUR code pfft ;)
 float textLengthUpToWidth(string theText, float maxWidth, float handleColors)
 {
 	// STOP.

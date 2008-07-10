@@ -84,13 +84,6 @@ float DRAWFLAG_2XMODULATE   = 3;
 
 
 ///////////////////////////
-// cvar constants
-
-float CVAR_SAVE 	= 1;
-float CVAR_NOTIFY 	= 2;
-float CVAR_READONLY	= 4;
-
-///////////////////////////
 // server list constants
 
 float SLIST_HOSTCACHEVIEWCOUNT  = 0;

@@ -149,6 +149,16 @@ const float K_MOUSE14		=	527;
 const float K_MOUSE15		=	528;
 const float K_MOUSE16		=	529;
 
+///////////////////////////
+// cvar constants
+
+float CVAR_SAVE 	= 1;
+float CVAR_NOTIFY 	= 2;
+float CVAR_READONLY	= 4;
+
+///////////////////////////
+// csqc communication stuff
+
 const float ENTCS_MSG_END = 0;
 const float ENTCS_MSG_ONS_GPS = 1;
 const float ENTCS_MSG_ONS_REMOVE = 2;
