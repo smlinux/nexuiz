@@ -454,11 +454,9 @@ void Sbar_PrintScoreboardItem(vector pos, entity pl, float is_self, float mask)
 				if(sbar_field[i+1] == SBF_SEPARATOR)
 				{
 					realsize = (xmax - xmin) / sbar_fontsize_x;
-					print("remaining size: ", ftos(realsize), "\n");
 					for(j = 0; j < sbar_num_fields; ++j) if(j != i) if(sbar_field[j] != SBF_SEPARATOR)
 						realsize -= sbar_size[j] + 1;
 					realsize += 1;
-					print("remaining size: ", ftos(realsize), "\n");
 				}
 			str = textShortenToWidth(str, realsize, TRUE);
 		}
