@@ -21,6 +21,7 @@ float using_gps;
 void CSQC_Init(void)
 {
 	float i;
+	CSQC_CheckEngine();
 	drawfont = 0;
 	menu_visible = FALSE;
 	menu_show = menu_show_error;

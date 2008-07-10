@@ -285,7 +285,7 @@ void Cmd_Sbar_SetFields(float argc)
 	
 	argc = min(MAX_SBAR_FIELDS, argc);
 	sbar_num_fields = 0;
-	drawfont = FONT_USER+1;
+	drawfont = sbar_font;
 	digit = stringwidth("0123456789", FALSE) / 10;
 	for(i = 0; i < argc-1; ++i)
 	{
@@ -519,7 +519,7 @@ void Sbar_DrawScoreboard()
 	float center_x;
 	string str;
 
-	sbar_fontsize = stov(cvar_string("sbar_fontsize"));
+	sbar_fontsize = Sbar_GetFontsize();
 	if(sbar_fontsize_x == 0)
 		sbar_fontsize = '8 8 0';
 	if(sbar_fontsize_y == 0)
@@ -544,7 +544,7 @@ void Sbar_DrawScoreboard()
 	pos_z = 0;
 
 	// Heading
-	drawfont = FONT_USER+1;
+	drawfont = sbar_font;
 	pos_x = center_x - stringwidth("Scoreboard", TRUE)*0.5*24;
 	drawstring(pos, "Scoreboard", '24 24', '1 1 1', 1, DRAWFLAG_NORMAL);
 	pos_x = xmin;
