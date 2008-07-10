@@ -212,6 +212,7 @@ float WEP_ROCKET_LAUNCHER	= 9; // float	IT_ROCKET_LAUNCHER		= 128;
 // For weapon cycling commands
 float WEP_FIRST				= 1;
 float WEP_LAST				= 9;
+float WEP_COUNT             = 10;
 
 void(entity client, string s) centerprint_builtin = #73;
 .vector dest1, dest2;
@@ -398,7 +399,7 @@ void centerprint(entity e, string s);
 
 float bot_waypoints_for_items;
 
-.float	attack_finished_for[WEP_LAST + 1];
+.float	attack_finished_for[WEP_COUNT];
 .float attack_finished_single;
 #define ATTACK_FINISHED(ent) ((ent).(attack_finished_for[(ent).weapon]))
 
