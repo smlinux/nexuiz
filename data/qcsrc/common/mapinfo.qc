@@ -133,12 +133,12 @@ void MapInfo_Cache_Store()
 		i = stof(s);
 
 	// now store all the stuff
-	bufstr_set(_MapInfo_Cache_Buf_IndexToMapData, i++, MapInfo_Map_bspname);
-	bufstr_set(_MapInfo_Cache_Buf_IndexToMapData, i++, MapInfo_Map_title);
-	bufstr_set(_MapInfo_Cache_Buf_IndexToMapData, i++, MapInfo_Map_description);
-	bufstr_set(_MapInfo_Cache_Buf_IndexToMapData, i++, MapInfo_Map_author);
-	bufstr_set(_MapInfo_Cache_Buf_IndexToMapData, i++, ftos(MapInfo_Map_supportedGametypes));
-	bufstr_set(_MapInfo_Cache_Buf_IndexToMapData, i++, ftos(MapInfo_Map_supportedFeatures));
+	bufstr_set(_MapInfo_Cache_Buf_IndexToMapData,   i, MapInfo_Map_bspname);
+	bufstr_set(_MapInfo_Cache_Buf_IndexToMapData, ++i, MapInfo_Map_title);
+	bufstr_set(_MapInfo_Cache_Buf_IndexToMapData, ++i, MapInfo_Map_description);
+	bufstr_set(_MapInfo_Cache_Buf_IndexToMapData, ++i, MapInfo_Map_author);
+	bufstr_set(_MapInfo_Cache_Buf_IndexToMapData, ++i, ftos(MapInfo_Map_supportedGametypes));
+	bufstr_set(_MapInfo_Cache_Buf_IndexToMapData, ++i, ftos(MapInfo_Map_supportedFeatures));
 }
 
 float MapInfo_Cache_Retrieve(string map)
@@ -154,12 +154,12 @@ float MapInfo_Cache_Retrieve(string map)
 	i = stof(s);
 
 	// now retrieve all the stuff
-	MapInfo_Map_bspname = bufstr_get(_MapInfo_Cache_Buf_IndexToMapData, i++);
-	MapInfo_Map_title = bufstr_get(_MapInfo_Cache_Buf_IndexToMapData, i++);
-	MapInfo_Map_description = bufstr_get(_MapInfo_Cache_Buf_IndexToMapData, i++);
-	MapInfo_Map_author = bufstr_get(_MapInfo_Cache_Buf_IndexToMapData, i++);
-	MapInfo_Map_supportedGametypes = stof(bufstr_get(_MapInfo_Cache_Buf_IndexToMapData, i++));
-	MapInfo_Map_supportedFeatures = stof(bufstr_get(_MapInfo_Cache_Buf_IndexToMapData, i++));
+	MapInfo_Map_bspname = bufstr_get(_MapInfo_Cache_Buf_IndexToMapData, i);
+	MapInfo_Map_title = bufstr_get(_MapInfo_Cache_Buf_IndexToMapData, ++i);
+	MapInfo_Map_description = bufstr_get(_MapInfo_Cache_Buf_IndexToMapData, ++i);
+	MapInfo_Map_author = bufstr_get(_MapInfo_Cache_Buf_IndexToMapData, ++i);
+	MapInfo_Map_supportedGametypes = stof(bufstr_get(_MapInfo_Cache_Buf_IndexToMapData, ++i));
+	MapInfo_Map_supportedFeatures = stof(bufstr_get(_MapInfo_Cache_Buf_IndexToMapData, ++i));
 	return 1;
 }
 
@@ -255,7 +255,7 @@ float MapInfo_FilterGametype(float pGametype, float pFeatures, float pAbortOnGen
 		_MapInfo_filtered = buf_create();
 	}
 	MapInfo_count = 0;
-	for(i = 0, j = 0; i < _MapInfo_globcount; ++i)
+	for(i = 0, j = -1; i < _MapInfo_globcount; ++i)
 	{
 		if(MapInfo_Get_ByName(_MapInfo_GlobItem(i), 1, 0) == 2) // if we generated one... BAIL OUT and let the caller continue in the next frame.
 			if(pAbortOnGenerate)
@@ -265,9 +265,9 @@ float MapInfo_FilterGametype(float pGametype, float pFeatures, float pAbortOnGen
 				return 0;
 			}
 		if(((MapInfo_Map_supportedGametypes & pGametype) != 0) && ((MapInfo_Map_supportedFeatures & pFeatures) == pFeatures))
-			bufstr_set(_MapInfo_filtered, j++, ftos(i));
+			bufstr_set(_MapInfo_filtered, ++j, ftos(i));
 	}
-	MapInfo_count = j;
+	MapInfo_count = j + 1;
 	MapInfo_ClearTemps();
 	return 1;
 }

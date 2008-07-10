@@ -35,7 +35,7 @@ float CampaignFile_Load(float offset, float n)
 
 #define CAMPAIGN_GETARG0                  if(i >= entlen)
 #define CAMPAIGN_GETARG1 CAMPAIGN_GETARG0     error("syntax error in campaign file: line has not enough fields");
-#define CAMPAIGN_GETARG2 CAMPAIGN_GETARG1 a = argv(i++);
+#define CAMPAIGN_GETARG2 CAMPAIGN_GETARG1 a = argv(++i);
 #define CAMPAIGN_GETARG3 CAMPAIGN_GETARG2 if(a == ",")
 #define CAMPAIGN_GETARG4 CAMPAIGN_GETARG3     a = "";
 #define CAMPAIGN_GETARG5 CAMPAIGN_GETARG4 else
@@ -43,7 +43,7 @@ float CampaignFile_Load(float offset, float n)
 // What you're seeing here is what people will do when your compiler supports
 // C-style macros but no line continuations.
 
-				i = 0;
+				i = -1; // starts at -1 so I don't need postincrement; that is, i points to BEFORE the current arg!
 				CAMPAIGN_GETARG; campaign_gametype[campaign_entries] = strzone(a);
 				CAMPAIGN_GETARG; campaign_mapname[campaign_entries] = strzone(a);
 				CAMPAIGN_GETARG; campaign_bots[campaign_entries] = stof(a);

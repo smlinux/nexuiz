@@ -2,6 +2,7 @@
 float sb_lines; // still don't know what to do with that NOTE: check dp's sbar.c to see what that should be
 
 vector sbar;
+vector sbar_fontsize;
 
 entity sortedPlayers;
 entity sortedTeams;
@@ -270,35 +271,49 @@ void Cmd_Sbar_Help(float argc)
 
 }
 
+#define MIN_NAMELEN 24
+#define MAX_NAMELEN 24
+
 void Cmd_Sbar_SetFields(float argc)
 {
 	float i;
 	string str;
+	float digit;
 
 	if(argc < 2)
 		argc = tokenize(strcat("x ", cvar_string("sbar_columns")));
 	
 	argc = min(MAX_SBAR_FIELDS, argc);
 	sbar_num_fields = 0;
+	drawfont = FONT_USER+1;
+	digit = stringwidth("0123456789", FALSE) / 10;
 	for(i = 0; i < argc-1; ++i)
 	{
 		str = argv(i+1);
 		strunzone(sbar_title[i]);
 		sbar_title[i] = strzone(str);
-		sbar_size[i] = strlen(str)*8;
+		sbar_size[i] = stringwidth(str, FALSE);
 		str = strtolower(str);
 		if(str == "ping") {
 			sbar_field[i] = SBF_PING;
 		} else if(str == "name" || str == "nick") {
 			sbar_field[i] = SBF_NAME;
-			sbar_size[i] = 24*8; // minimum size? any use?
+			sbar_size[i] = MIN_NAMELEN; // minimum size? any use?
 		} else if(str == "caps" || str == "captures") {
+			if(sbar_size[i] < 3*digit)
+				sbar_size[i] = 3*digit;
 			sbar_field[i] = SBF_CAPS;
 		} else if(str == "rets" || str == "returns") {
+			if(sbar_size[i] < 3*digit)
+				sbar_size[i] = 3*digit;
 			sbar_field[i] = SBF_RETS;
 		} else if(str == "frags" || str == "kills") {
+			if(sbar_size[i] < 5*digit)
+				sbar_size[i] = 5*digit;
 			sbar_field[i] = SBF_FRAGS;
 		} else if(str == "deaths" || str == "dths") {
+			if(sbar_size[i] < 5*digit)
+				sbar_size[i] = 5*digit;
 			sbar_field[i] = SBF_DEATHS;
 		} else if(str == "kdratio") {
 			sbar_field[i] = SBF_KDRATIO;
@@ -362,7 +377,46 @@ float Sbar_IsFieldMasked(float field, float mask)
 	return false;
 }
 
-#define MAX_NAMELEN 24
+// shamelessly stolen from menu QC :P
+float textLengthUpToWidth(string theText, float maxWidth, float handleColors)
+{
+	// STOP.
+	// The following function is SLOW.
+	// For your safety and for the protection of those around you...
+	// DO NOT CALL THIS AT HOME.
+	// No really, don't.
+	if(stringwidth(theText, handleColors) <= maxWidth)
+		return strlen(theText); // yeah!
+
+	// binary search for right place to cut string
+	float left, right, middle; // this always works
+	left = 0;
+	right = strlen(theText); // this always fails
+	do
+	{
+		middle = floor((left + right) / 2);
+		if(stringwidth(substring(theText, 0, middle), handleColors) <= maxWidth)
+			left = middle;
+		else
+			right = middle;
+	}
+	while(left < right - 1);
+
+	// NOTE: when color codes are involved, this binary search is,
+	// mathematically, BROKEN. However, it is obviously guaranteed to
+	// terminate, as the range still halves each time - but nevertheless, it is
+	// guaranteed that it finds ONE valid cutoff place (where "left" is in
+	// range, and "right" is outside).
+
+	return left;
+}
+string textShortenToWidth(string theText, float maxWidth, float handleColors)
+{
+	if(stringwidth(theText, handleColors) <= maxWidth)
+		return theText;
+	else
+		return strcat(substring(theText, 0, textLengthUpToWidth(theText, maxWidth - stringwidth("...", handleColors), handleColors)), "...");
+}
 
 float xmin, xmax, ymin, ymax, sbwidth, sbheight;
 void Sbar_PrintScoreboardItem(vector pos, entity pl, float is_self, float mask)
@@ -376,7 +430,7 @@ void Sbar_PrintScoreboardItem(vector pos, entity pl, float is_self, float mask)
 	if(is_self)
 	{
 		tmp_x = sbwidth;
-		tmp_y = 8;
+		tmp_y = sbar_fontsize_y;
 		drawfill(pos - '1 1', tmp + '2 2', '1 1 1', 0.3, DRAWFLAG_NORMAL);
 	}	
 	tmp_y = 0;
@@ -391,35 +445,35 @@ void Sbar_PrintScoreboardItem(vector pos, entity pl, float is_self, float mask)
 
 		str = Sbar_GetField(pl, field);
 
-		if(field == SBF_NAME) {
-			len = strlen(strdecolorize(str));
-			if(len > MAX_NAMELEN)
-			{
-				while(len > MAX_NAMELEN)
+		if(field == SBF_NAME)
+		{
+			float realsize;
+			float j;
+			realsize = sbar_size[i];
+			if(i+1 < sbar_num_fields)
+				if(sbar_field[i+1] == SBF_SEPARATOR)
 				{
-					// this way should be the fastest with 100% safety :P
-					// worst case: decolored length maxnamelen+1, and then only color codes =)
-					// cutting of reallength - (decolored-length - maxnamelen) characters
-					str = substring(str, 0, strlen(str) - (len-MAX_NAMELEN));
-					len = strlen(strdecolorize(str));
+					realsize = (xmax - xmin) / sbar_fontsize_x;
+					print("remaining size: ", ftos(realsize), "\n");
+					for(j = 0; j < sbar_num_fields; ++j) if(j != i) if(sbar_field[j] != SBF_SEPARATOR)
+						realsize -= sbar_size[j] + 1;
+					realsize += 1;
+					print("remaining size: ", ftos(realsize), "\n");
 				}
-				str = strcat(str, "^7...");
-				len += 3;
-			}
-			len *= 8;
-		} else
-			len = 8*strlen(str);
+			str = textShortenToWidth(str, realsize, TRUE);
+		}
+		len = stringwidth(str, TRUE);
 		
 		if(sbar_size[i] < len)
 			sbar_size[i] = len;
 
-		pos_x += sbar_size[i] + 8;
+		pos_x += sbar_fontsize_x*sbar_size[i] + sbar_fontsize_x;
 		if(field == SBF_NAME) {
-			tmp_x = sbar_size[i] + 8;
-			drawcolorcodedstring(pos - tmp, str, '8 8', 1, DRAWFLAG_NORMAL);
+			tmp_x = sbar_fontsize_x*sbar_size[i] + sbar_fontsize_x;
+			drawcolorcodedstring(pos - tmp, str, sbar_fontsize, 1, DRAWFLAG_NORMAL);
 		} else {
-			tmp_x = 8*strlen(str) + 8;
-			drawstring(pos - tmp, str, '8 8', sbar_field_rgb, 1, DRAWFLAG_NORMAL);
+			tmp_x = len*sbar_fontsize_x + sbar_fontsize_x;
+			drawstring(pos - tmp, str, sbar_fontsize, sbar_field_rgb, 1, DRAWFLAG_NORMAL);
 		}
 	}
 	
@@ -436,33 +490,21 @@ void Sbar_PrintScoreboardItem(vector pos, entity pl, float is_self, float mask)
 			
 			str = Sbar_GetField(pl, field);
 
-			if(field == SBF_NAME) {
-				len = strlen(strdecolorize(str));
-				if(len > MAX_NAMELEN)
-				{
-					while(len > MAX_NAMELEN)
-					{
-						str = substring(str, 0, strlen(str) - (len-MAX_NAMELEN));
-						len = strlen(strdecolorize(str));
-					}
-					str = strcat(str, "^7...");
-					len += 3;
-				}
-				len *= 8;
-			} else
-				len = 8*strlen(str);
-			//len = 8*strlen(str);
+			if(field == SBF_NAME)
+				str = textShortenToWidth(str, sbar_size[i], TRUE);
+			len = stringwidth(str, TRUE);
+
 			if(sbar_size[i] < len)
 				sbar_size[i] = len;
 			
 			if(field == SBF_NAME) {
-				tmp_x = len; // left or right aligned? let's put it right...
-				drawcolorcodedstring(pos - tmp, str, '8 8', 1, DRAWFLAG_NORMAL);
+				tmp_x = sbar_fontsize_x*len; // left or right aligned? let's put it right...
+				drawcolorcodedstring(pos - tmp, str, sbar_fontsize, 1, DRAWFLAG_NORMAL);
 			} else {
-				tmp_x = len; //strlen(str);
-				drawstring(pos - tmp, str, '8 8', sbar_field_rgb, 1, DRAWFLAG_NORMAL);
+				tmp_x = sbar_fontsize_x*len; //strlen(str);
+				drawstring(pos - tmp, str, sbar_fontsize, sbar_field_rgb, 1, DRAWFLAG_NORMAL);
 			}
-			pos_x -= sbar_size[i] + 8;
+			pos_x -= sbar_fontsize_x*sbar_size[i] + sbar_fontsize_x;
 		}
 	}
 }
@@ -475,6 +517,12 @@ void Sbar_DrawScoreboard()
 	float specs, i;
 	float center_x;
 	string str;
+
+	sbar_fontsize = stov(cvar_string("sbar_fontsize"));
+	if(sbar_fontsize_x == 0)
+		sbar_fontsize = '8 8 0';
+	if(sbar_fontsize_y == 0)
+		sbar_fontsize_y = sbar_fontsize_x;
 	
 	xmin = vid_conwidth / 5;
 	ymin = 20;
@@ -495,50 +543,49 @@ void Sbar_DrawScoreboard()
 	pos_z = 0;
 
 	// Heading
-	drawfont = FONT_USER+0;
-	pos_x = center_x - 4*24;
+	drawfont = FONT_USER+1;
+	pos_x = center_x - stringwidth("Scoreboard", TRUE)*0.5*24;
 	drawstring(pos, "Scoreboard", '24 24', '1 1 1', 1, DRAWFLAG_NORMAL);
 	pos_x = xmin;
 	pos_y += 24 + 4;
-	drawfont = FONT_DEFAULT;
 
 	// Titlebar background:
 	tmp_x = sbwidth;
-	tmp_y = 8;
+	tmp_y = sbar_fontsize_y;
 	drawfill(pos - '1 1', tmp + '2 2', '0.5 0.5 0.5', 0.5, DRAWFLAG_NORMAL);
 	
 	for(i = 0; i < sbar_num_fields; ++i)
 	{
 		if(sbar_field[i] == SBF_SEPARATOR)
 			break;
-		drawstring(pos, sbar_title[i], '8 8', '1 1 1', 1, DRAWFLAG_NORMAL);
-		pos_x += sbar_size[i] + 8;
+		drawstring(pos, sbar_title[i], sbar_fontsize, '1 1 1', 1, DRAWFLAG_NORMAL);
+		pos_x += sbar_fontsize_x*sbar_size[i] + sbar_fontsize_x;
 	}
 	
 	if(sbar_field[i] == SBF_SEPARATOR)
 	{
-		pos_x = xmax + 8;
+		pos_x = xmax + sbar_fontsize_x;
 		tmp_y = tmp_z = 0;
 		for(i = sbar_num_fields-1; i > 0; --i)
 		{
 			if(sbar_field[i] == SBF_SEPARATOR)
 				break;
 			
-			pos_x -= sbar_size[i] + 8;
+			pos_x -= sbar_fontsize_x*sbar_size[i] + sbar_fontsize_x;
 			/**
 			 * FTEQCC BUG!
 			 * Using the following line will fuck it all up:
 			 **
 			 * tmp_x = sbar_size[i] - strlen(sbar_title[i])*8;
 			 */
-			tmp_x = sbar_size[i];
-			tmp_x -= strlen(sbar_title[i])*8;
-			drawstring(pos + tmp, sbar_title[i], '8 8', '1 1 1', 1, DRAWFLAG_NORMAL);
+			tmp_x = sbar_fontsize_x*sbar_size[i];
+			tmp_x -= stringwidth(sbar_title[i], FALSE)*sbar_fontsize_x;
+			drawstring(pos + tmp, sbar_title[i], sbar_fontsize, '1 1 1', 1, DRAWFLAG_NORMAL);
 		}
 	}
 		
 	pos_x = xmin;
-	pos_y += 12;
+	pos_y += 1.5 * sbar_fontsize_y;
 
 	sbar_save = sbar;
 	sbar = '0 0 0';
@@ -580,7 +627,7 @@ void Sbar_DrawScoreboard()
 				specs = 4;
 			
 			tmp_x = sbwidth;
-			tmp_y = 10 * specs;
+			tmp_y = 1.25 * sbar_fontsize_y * specs;
 			drawfill(pos - '1 1', tmp + '2 0', rgb, 0.2, DRAWFLAG_NORMAL);
 			
 			for(pl = sortedPlayers.sort_next; pl; pl = pl.sort_next)
@@ -588,14 +635,14 @@ void Sbar_DrawScoreboard()
 				if(pl.sb_team != tm.sb_team)
 					continue;
 				Sbar_PrintScoreboardItem(pos, pl, (pl.sb_player == player_localentnum - 1), 0);
-				pos_y += 10;
-				tmp_y -= 10;
+				pos_y += 1.25 * sbar_fontsize_y;
+				tmp_y -= 1.25 * sbar_fontsize_y;
 			}
-			pos_y += tmp_y + 12;
+			pos_y += tmp_y + 1.5 * sbar_fontsize_y;
 		}
 		// rgb := tempvector :)
-		rgb = pos + '0 12 0';
-		pos_y += 24;
+		rgb = pos + '0 1.5 0' * sbar_fontsize_y;
+		pos_y += 3 * sbar_fontsize_y;
 		specs = 0;
 		for(pl = sortedPlayers.sort_next; pl; pl = pl.sort_next)
 		{
@@ -603,12 +650,12 @@ void Sbar_DrawScoreboard()
 				continue;
 			//drawcolorcodedstring(pos, getplayerkey(pl.sb_player, "name"), '8 8 0', 1, 0);
 			Sbar_PrintScoreboardItem(pos, pl, (pl.sb_player == player_localentnum - 1), 1);
-			pos += '0 10 0';
+			pos += '0 1.25 0' * sbar_fontsize_y;
 			++specs;
 		}
 			
 		if(specs)
-			drawstring(rgb, "Spectators", '8 8 0', '1 1 1', 1, 0);
+			drawstring(rgb, "Spectators", sbar_fontsize, '1 1 1', 1, 0);
 	}
 	sbar = sbar_save;
 }
@@ -727,7 +774,7 @@ void Sbar_MiniscoreItem(vector pos, entity pl, float is_self)
 		drawfill(pos + '0 1 0', '40 6 0', '0.5 0.5 0.5', 0.5, DRAWFLAG_NORMAL);
 	x = pos_x;
 	pos_x += 5*8;
-	pos_x -= strlen(ftos(pl.sb_frags))*8;
+	pos_x -= stringwidth(ftos(pl.sb_frags), FALSE)*8;
 	drawstring(pos, ftos(pl.sb_frags), '8 8 0', '1 1 1', 1, DRAWFLAG_NORMAL);
 	pos_x = x;
 	if(is_self)
@@ -751,7 +798,7 @@ void Sbar_MiniscoreTeamItem(vector pos, float color, float frags, float is_self)
 		drawfill(pos + '0 1 0', '40 6 0', '0.5 0.5 0.5', 0.5, DRAWFLAG_NORMAL);
 	x = pos_x;
 	pos_x += 5*8;
-	pos_x -= strlen(ftos(frags))*8;
+	pos_x -= stringwidth(ftos(frags), FALSE)*8;
 	drawstring(pos, ftos(frags), '8 8 0', '1 1 1', 1, DRAWFLAG_NORMAL);
 	pos_x = x;
 	if(is_self)

@@ -97,6 +97,8 @@ float	drawfill(vector position, vector size, vector rgb, float alpha, float flag
 void	drawsetcliparea(float x, float y, float width, float height) = #324;
 void	drawresetcliparea(void) = #325;
 float	drawcolorcodedstring(vector position, string text, vector scale, float alpha, float flag) = #326;
+float	stringwidth(string text, float handleColors) = #327;
+float	drawsubpic(vector position, vector size, string pic, vector srcPosition, vector srcSize, vector rgb, float alpha, float flag) = #328;
 
 
 float (float statnum)							getstatf = #330;
