@@ -176,7 +176,7 @@ void decorframe()
 entity newdecor()
 {
 	local entity e;
-	numdecors++;
+	++numdecors;
 	e = spawn();
 	e.classname = "decor";
 	return e;
@@ -184,7 +184,7 @@ entity newdecor()
 
 void removedecor(entity e)
 {
-	numdecors--;
+	--numdecors;
 	remove(e);
 };
 

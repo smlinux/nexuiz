@@ -267,7 +267,7 @@ void spawnfunc_worldspawn (void)
 	maxclients = 0;
 	while(head)
 	{
-		maxclients++;
+		++maxclients;
 		head = nextent(head);
 	}
 

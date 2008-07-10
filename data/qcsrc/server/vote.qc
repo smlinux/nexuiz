@@ -402,7 +402,7 @@ string VoteParse() {
 	vote = argv(2);
 	while(argv(index) != "") {
 		vote = strcat(vote, " ", argv(index));
-		index++;
+		++index;
 	}
 
 	// necessary for some of the string operations
@@ -419,7 +419,7 @@ float VoteAllowed(string votecommand) {
 		if(votecommand == argv(index)) {
 			return TRUE;
 		}
-		index++;
+		++index;
 	}
 	return FALSE;
 }
@@ -551,23 +551,23 @@ void VoteCount() {
 	FOR_EACH_REALCLIENT(player)
 	{
 		if(player.vote_vote == -1) {
-			nocount++;
+			++nocount;
 		} else if(player.vote_vote == 1) {
-			yescount++;
+			++yescount;
 		} else if(player.vote_vote == -2) {
-			abstaincount++;
+			++abstaincount;
 		}
-		playercount++;
+		++playercount;
 		//do the same for real players
 		if(player.classname == "player") {
 			if(player.vote_vote == -1) {
-				realplayernocount++;
+				++realplayernocount;
 			} else if(player.vote_vote == 1) {
-				realplayeryescount++;
+				++realplayeryescount;
 			} else if(player.vote_vote == -2) {
-				realplayerabstaincount++;
+				++realplayerabstaincount;
 			}
-			realplayercount++;
+			++realplayercount;
 		}
 	}
 

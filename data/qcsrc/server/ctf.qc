@@ -311,11 +311,11 @@ void FlagTouch()
 			bprint(other.netname, "^7 captured the ", other.flagcarried.netname, " in ", s, ", failing to break ", strcat(h0, " record of ", s0, " seconds\n"));
 		}
 
-		other.captures++;
+		other.captures += 1;
 		if(other.team == COLOR_TEAM1)
-			caps_team1++;
+			++caps_team1;
 		else if(other.team == COLOR_TEAM2)
-			caps_team2++;
+			++caps_team2;
 		else
 			print("Unknown team captured the flag!\n");
 		ctf_UpdateCaptures(MSG_BROADCAST);
@@ -389,7 +389,7 @@ void FlagTouch()
 				else
 					UpdateFrags(other, cvar("g_ctf_flagscore_return_rogue"));
 			}
-			other.returns++;
+			other.returns += 1;
 			ctf_UpdateReturns(MSG_BROADCAST);
 			LogCTF("return", self.team, other);
 			sound (self, CHAN_AUTO, self.noise1, 1, ATTN_NONE);
@@ -774,12 +774,12 @@ void ctf_setstatus()
 		{
 			if(flag.team == COLOR_TEAM1)
 			{
-				if(redflags-- == 0) // happens exactly once
+				if(--redflags == -1) // happens exactly once (redflags is in 0..count-1, and will --'ed count times)
 					ctf_setstatus2(flag, IT_RED_FLAG_TAKEN);
 			}
 			else if(flag.team == COLOR_TEAM2)
 			{
-				if(blueflags-- == 0) // happens exactly once
+				if(--blueflags == -1) // happens exactly once
 					ctf_setstatus2(flag, IT_BLUE_FLAG_TAKEN);
 			}
 		}
@@ -803,7 +803,7 @@ entity(float cteam) ctf_team_has_commander =
 void(entity e, float st) ctf_setstate =
 {
 	e.ctf_state = st;
-	e.version ++;
+	++e.version;
 };
 
 void(float cteam) ctf_new_commander =
