@@ -373,7 +373,10 @@ float Sbar_IsFieldMasked(float field, float mask)
 	if(mask&1) // spectator
 		return (field != SBF_NAME && field != SBF_PING);
 	if(gametype != GAME_CTF)
-		return (field == SBF_CAPS || field == SBF_RETS);
+	{
+		if(field == SBF_CAPS || field == SBF_RETS)
+			return true;
+	}
 	return false;
 }
 
@@ -554,6 +557,8 @@ void Sbar_DrawScoreboard()
 	
 	for(i = 0; i < sbar_num_fields; ++i)
 	{
+		if(Sbar_IsFieldMasked(sbar_field[i]))
+			continue;
 		if(sbar_field[i] == SBF_SEPARATOR)
 			break;
 		drawstring(pos, sbar_title[i], sbar_fontsize, '1 1 1', 1, DRAWFLAG_NORMAL);
@@ -566,6 +571,8 @@ void Sbar_DrawScoreboard()
 		tmp_y = tmp_z = 0;
 		for(i = sbar_num_fields-1; i > 0; --i)
 		{
+			if(Sbar_IsFieldMasked(sbar_field[i]))
+				continue;
 			if(sbar_field[i] == SBF_SEPARATOR)
 				break;
 			
@@ -638,6 +645,34 @@ void Sbar_DrawScoreboard()
 			}
 			pos_y += tmp_y + 1.5 * sbar_fontsize_y;
 		}
+		// rgb := tempvector :)
+		rgb = pos + '0 1.5 0' * sbar_fontsize_y;
+		pos_y += 3 * sbar_fontsize_y;
+		specs = 0;
+		for(pl = sortedPlayers.sort_next; pl; pl = pl.sort_next)
+		{
+			if(pl.sb_team != COLOR_SPECTATOR)
+				continue;
+			//drawcolorcodedstring(pos, getplayerkey(pl.sb_player, "name"), '8 8 0', 1, 0);
+			Sbar_PrintScoreboardItem(pos, pl, (pl.sb_player == player_localentnum - 1), 1);
+			pos += '0 1.25 0' * sbar_fontsize_y;
+			++specs;
+		}
+			
+		if(specs)
+			drawstring(rgb, "Spectators", sbar_fontsize, '1 1 1', 1, 0);
+	} else {
+		pos_x = xmin;
+		for(pl = sortedPlayers.sort_next; pl; pl = pl.sort_next)
+		{
+			if(pl.sb_team == COLOR_SPECTATOR)
+				continue;
+			Sbar_PrintScoreboardItem(pos, pl, (pl.sb_player == player_localentnum - 1), 0);
+			pos_y += 1.25 * sbar_fontsize_y;
+			tmp_y -= 1.25 * sbar_fontsize_y;
+		}
+		pos_y += tmp_y + 1.5 * sbar_fontsize_y;
+
 		// rgb := tempvector :)
 		rgb = pos + '0 1.5 0' * sbar_fontsize_y;
 		pos_y += 3 * sbar_fontsize_y;
