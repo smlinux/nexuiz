@@ -98,7 +98,6 @@ void	drawsetcliparea(float x, float y, float width, float height) = #324;
 void	drawresetcliparea(void) = #325;
 float	drawcolorcodedstring(vector position, string text, vector scale, float alpha, float flag) = #326;
 float	stringwidth_engine(string text, float handleColors) = #327;
-float	stringwidth(string text, float handleColors);
 float	drawsubpic(vector position, vector size, string pic, vector srcPosition, vector srcSize, vector rgb, float alpha, float flag) = #328;
 
 
@@ -260,4 +259,6 @@ float(string s1, string s2, float len)			strncasecmp = #230;
 float(string str, string sub, float startoffs)		strstrofs = #221;
 //float(string str, string sub) 	    		strstrofs = #221;
 entity(float num)   	   				edict_num = #459;
+string(void)						ReadPicture = #501;
+string(string filename)					whichpack = #503;
 float(entity ent)					num_for_edict = #512;

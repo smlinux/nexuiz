@@ -1,8 +1,14 @@
 
+float last_weapon;
+float activeweapon;
+float weapontime;
+
 float sb_lines; // still don't know what to do with that NOTE: check dp's sbar.c to see what that should be
 
 vector sbar;
 vector sbar_fontsize;
+float sbar_alpha_fg;
+float sbar_hudselector;
 
 entity sortedPlayers;
 entity sortedTeams;
@@ -12,13 +18,22 @@ entity sortedTeams;
 .float sb_player;
 .float sb_caps;
 
+entity team1, team2, team3, team4, teamspec;
+
+void CSQC_kh_hud();
+void CSQC_ctf_hud();
+void MapVote_Draw();
 void Sbar_FinaleOverlay()
 {
-	vector pos;
+	/*vector pos;
 	pos_x = (vid_conwidth - 1)/2;
 	pos_y = 16;
-	pos_z = 0;
-	drawpic(pos, "gfx/finale", '0 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
+	pos_z = 0;*/
+	
+	//drawpic(pos, "gfx/finale", '0 0', '1 1 1', sbar_alpha_fg, DRAWFLAG_NORMAL);
+	
+	//drawstring(pos, "END", sbar_fontsize, '1 1 1', 1, DRAWFLAG_NORMAL);
+	MapVote_Draw();
 }
 
 void Sbar_DrawWeapon(float nr, float fade, float active)
@@ -151,94 +166,269 @@ float Sbar_TeamCmp(entity l, entity r)
 	return (l.sb_player > r.sb_player);
 }
 
+void Sbar_Init()
+{
+	entity tm;
+	sortedPlayers = Sort_New(Sbar_PlayerCmp);
+	sortedTeams = Sort_New(Sbar_TeamCmp);
+	team1 = Sort_Next(sortedTeams);
+	team1.sb_team = COLOR_TEAM1;
+	team2 = Sort_Next(sortedTeams);
+	team2.sb_team = COLOR_TEAM2;
+	team3 = Sort_Next(sortedTeams);
+	team3.sb_team = COLOR_TEAM3;
+	team4 = Sort_Next(sortedTeams);
+	team4.sb_team = COLOR_TEAM4;
+	teamspec = Sort_Next(sortedTeams);
+	teamspec.sb_team = COLOR_SPECTATOR;
+}
+
+void Sbar_UpdatePosFrags(entity player)
+{
+	other = player.sort_prev;
+	while(other != sortedPlayers && player.sb_frags > other.sb_frags)
+	{
+		SORT_SWAP(other, player);
+		other = player.sort_prev;
+	}
+
+	other = player.sort_next;
+	while(other && player.sb_frags < other.sb_frags)
+	{
+		SORT_SWAP(player, other);
+		other = player.sort_next;
+	}
+}
+void Sbar_UpdatePosFragsCTF(entity player)
+{
+	other = player.sort_prev;
+	while(other != sortedPlayers && player.sb_frags > other.sb_frags && player.sb_caps == other.sb_caps)
+	{
+		SORT_SWAP(other, player);
+		other = player.sort_prev;
+	}
+
+	other = player.sort_next;
+	while(other && player.sb_frags < other.sb_frags && player.sb_caps == other.sb_caps)
+	{
+		SORT_SWAP(player, other);
+		other = player.sort_next;
+	}
+}
+void Sbar_UpdatePosCaps(entity player)
+{
+	other = player.sort_prev;
+	while(other != sortedPlayers && player.sb_caps > other.sb_caps)
+	{
+		SORT_SWAP(other, player);
+		other = player.sort_prev;
+	}
+	other = player.sort_next;
+	while(other && player.sb_caps < other.sb_caps)
+	{
+		SORT_SWAP(player, other);
+		other = player.sort_next;
+	}
+	// let it update the frags now too, so if we have more frags then the next guy with the same caps
+	// we beat his ass :)
+	player.sb_frags -= 1;
+}
+
+void Sbar_UpdatePosTeam(entity player)
+{
+	player.sb_caps -= 1; // team change needs a full update
+	other = player.sort_prev;
+	while(other != sortedPlayers && player.sb_team > other.sb_team)
+	{
+		SORT_SWAP(other, player);
+		other = player.sort_prev;
+	}
+
+	other = player.sort_next;
+	while(other && player.sb_team < other.sb_team)
+	{
+		SORT_SWAP(player, other);
+		other = player.sort_next;
+	}
+}
+
+void Sbar_UpdatePlayer(entity player)
+{
+	float i;
+
+	if(player.sb_frags == -666)
+		i = COLOR_SPECTATOR;
+	else
+		i = GetPlayerColor(player.sb_player);
+	
+	if(player.sb_team != i)
+	{
+		player.sb_team = i;
+		Sbar_UpdatePosTeam(player);
+	}
+	
+	if(gametype == GAME_CTF)
+	{
+		i = stof(bufstr_get(databuf, DATABUF_CAPTURES + player.sb_player));
+		if(player.sb_caps != i)
+		{
+			player.sb_caps = i;
+			Sbar_UpdatePosCaps(player);
+		}
+		i = stof(getplayerkey(player.sb_player, "frags"));
+		if(player.sb_frags != i)
+		{
+			player.sb_frags = i;
+			Sbar_UpdatePosFragsCTF(player);
+		}
+	} else {
+		i = stof(getplayerkey(player.sb_player, "frags"));
+		if(player.sb_frags != i)
+		{
+			player.sb_frags = i;
+			Sbar_UpdatePosFrags(player);
+		}
+	}
+}
+
+void Sbar_UpdateTeamPosCaps(entity tm)
+{
+	other = tm.sort_prev;
+	while(other != sortedTeams && tm.sb_caps > other.sb_caps)
+	{
+		SORT_SWAP(other, tm);
+		other = tm.sort_prev;
+	}
+
+	other = tm.sort_next;
+	while(other && tm.sb_caps < tm.sb_caps)
+	{
+		SORT_SWAP(tm, other);
+		other = tm.sort_next;
+	}
+}
+void Sbar_UpdateTeamPosFrags(entity tm)
+{
+	other = tm.sort_prev;
+	while(other != sortedTeams && tm.sb_caps == other.sb_caps && tm.sb_frags > other.sb_frags)
+	{
+		SORT_SWAP(other, tm);
+		other = tm.sort_prev;
+	}
+
+	other = tm.sort_next;
+	while(other && tm.sb_caps == tm.sb_caps && tm.sb_frags < other.sb_frags)
+	{
+		SORT_SWAP(tm, other);
+		other = tm.sort_next;
+	}
+}
+
 void Sbar_SortFrags()
 {
 	float i;
 	entity tmp;
-	entity t1, t2, t3, t4, ts;
+	float t1f, t2f, t3f, t4f;
 	
-	Sort_Remove(sortedPlayers);
-	sortedPlayers = Sort_New(Sbar_PlayerCmp);
+	Sort_Reset(sortedPlayers);
 
 	numteams = 0;
 	if(teamplay)
 	{
-		Sort_Remove(sortedTeams);
-	
-		t1 = spawn();
-		t2 = spawn();
-		t3 = spawn();
-		t4 = spawn();
-		ts = spawn();
-	
-		t1.sb_team = COLOR_TEAM1;
-		t2.sb_team = COLOR_TEAM2;
-		t3.sb_team = COLOR_TEAM3;
-		t4.sb_team = COLOR_TEAM4;
-		ts.sb_team = COLOR_SPECTATOR;
+		Sort_Reset(sortedTeams);
+		tmp = Sort_Next(sortedTeams);
 
-		t1.sb_player = t2.sb_player = t3.sb_player = t4.sb_player = ts.sb_player = 0;
-		t1.sb_frags = t2.sb_frags = t3.sb_frags = t4.sb_frags = 0;
-		t1.sb_caps = caps_team1;
-		t2.sb_caps = caps_team2;
-		sortedTeams = Sort_New(Sbar_TeamCmp);
+		team1.sb_player = 0;
+		team2.sb_player = 0;
+		team3.sb_player = 0;
+		team4.sb_player = 0;
+		teamspec.sb_player = 0;
+		
+		t1f = team1.sb_frags;
+		t2f = team2.sb_frags;
+		t3f = team3.sb_frags;
+		t4f = team4.sb_frags;
+
+		team1.sb_frags = 0;
+		team2.sb_frags = 0;
+		team3.sb_frags = 0;
+		team4.sb_frags = 0;
 		
 		for(i = 0; i < maxclients; ++i)
 		{
 			if(strlen(getplayerkey(i, "name")) <= 0)
 				continue;
-		
-			tmp = spawn();
-			tmp.sb_player = i;
-			tmp.sb_frags = stof(getplayerkey(i, "frags"));
-			tmp.sb_caps = stof(bufstr_get(databuf, DATABUF_CAPTURES + tmp.sb_player));
-			
-			if(tmp.sb_frags == -666)
-				tmp.sb_team = COLOR_SPECTATOR;
-			else
-				tmp.sb_team = GetPlayerColor(i);
 
+			Sort_Reset(sortedPlayers);
+
+			tmp = NULL;
+			while(Sort_HasNext(sortedPlayers))
+			{
+				tmp = Sort_Next(sortedPlayers);
+				if(tmp.sb_player == i)
+					break;
+			}
+			if(!tmp || tmp.sb_player != i)
+				tmp = Sort_Next(sortedPlayers);
+			
+			tmp.sb_player = i;
+			tmp.frame = time;
+			Sbar_UpdatePlayer(tmp);
+			
 			switch(tmp.sb_team)
 			{
-			case COLOR_TEAM1: t1.sb_frags += tmp.sb_frags; t1.sb_player++; break;
-			case COLOR_TEAM2: t2.sb_frags += tmp.sb_frags; t2.sb_player++; break;
-			case COLOR_TEAM3: t3.sb_frags += tmp.sb_frags; t3.sb_player++; break;
-			case COLOR_TEAM4: t4.sb_frags += tmp.sb_frags; t4.sb_player++; break;
-			case COLOR_SPECTATOR: ts.sb_frags += tmp.sb_frags; ts.sb_player++; break;
+			case COLOR_TEAM1: team1.sb_frags += tmp.sb_frags; team1.sb_player++; break;
+			case COLOR_TEAM2: team2.sb_frags += tmp.sb_frags; team2.sb_player++; break;
+			case COLOR_TEAM3: team3.sb_frags += tmp.sb_frags; team3.sb_player++; break;
+			case COLOR_TEAM4: team4.sb_frags += tmp.sb_frags; team4.sb_player++; break;
+			case COLOR_SPECTATOR: teamspec.sb_frags += tmp.sb_frags; teamspec.sb_player++; break;
 			}
 
 			if(i == player_localentnum-1)
 				myteam = tmp.sb_team;
-
-			Sort_Add(sortedPlayers, tmp);
 		}
-		if(t1.sb_player) ++numteams;
-		if(t2.sb_player) ++numteams;
-		if(t3.sb_player) ++numteams;
-		if(t4.sb_player) ++numteams;
+		if(team1.sb_player) ++numteams;
+		if(team2.sb_player) ++numteams;
+		if(team3.sb_player) ++numteams;
+		if(team4.sb_player) ++numteams;
 
-		Sort_Add(sortedTeams, t1);
-		Sort_Add(sortedTeams, t2);
-		Sort_Add(sortedTeams, t3);
-		Sort_Add(sortedTeams, t4);
-		Sort_Add(sortedTeams, ts);
-
+		if(team1.sb_caps != caps_team1)
+		{
+			team1.sb_caps = caps_team1;
+			Sbar_UpdateTeamPosCaps(team1);
+		}
+		if(team2.sb_caps != caps_team2)
+		{
+			team2.sb_caps = caps_team2;
+			Sbar_UpdateTeamPosCaps(team2);
+		}
+		if(team1.sb_frags != t1f) Sbar_UpdateTeamPosFrags(team1);
+		if(team2.sb_frags != t2f) Sbar_UpdateTeamPosFrags(team2);
+		if(team3.sb_frags != t3f) Sbar_UpdateTeamPosFrags(team3);
+		if(team4.sb_frags != t4f) Sbar_UpdateTeamPosFrags(team4);
 	} else {
 		for(i = 0; i < maxclients; ++i)
 		{
 			if(strlen(getplayerkey(i, "name")) <= 0)
 				continue;
 		
-			tmp = spawn();
+			Sort_Reset(sortedPlayers);
+			tmp = NULL;
+			while(Sort_HasNext(sortedPlayers))
+			{
+				tmp = Sort_Next(sortedPlayers);
+				if(tmp.sb_player == i)
+					break;
+			}
+			if(!tmp || tmp.sb_player != i)
+				tmp = Sort_Next(sortedPlayers);
+			
 			tmp.sb_player = i;
-			tmp.sb_frags = stof(getplayerkey(i, "frags"));
-			if(tmp.sb_frags == -666)
-				tmp.sb_team = COLOR_SPECTATOR;
-			else
-				tmp.sb_team = COLOR_TEAM1;
-			Sort_Add(sortedPlayers, tmp);
+			tmp.frame = time;
+			Sbar_UpdatePlayer(tmp);
 		}
 	}
+	Sort_RemoveOld(sortedPlayers);
 }
 
 void Cmd_Sbar_Help(float argc)
@@ -367,7 +557,8 @@ string Sbar_GetField(entity pl, float field)
 		return str;
 	}
 }
-
+#define SBAR_DEFAULT_MASK 0
+#define SBAR_MASK_SPECTATORS 1
 float Sbar_IsFieldMasked(float field, float mask)
 {
 	if(mask&1) // spectator
@@ -425,7 +616,7 @@ float xmin, xmax, ymin, ymax, sbwidth, sbheight;
 void Sbar_PrintScoreboardItem(vector pos, entity pl, float is_self, float mask)
 {
 	vector tmp;
-	string str, tempstr;
+	string str;
 	float i, field, len;
 
 	// Layout:
@@ -517,7 +708,6 @@ void Sbar_DrawScoreboard()
 	entity pl, tm;
 	float specs, i;
 	float center_x;
-	string str;
 
 	sbar_fontsize = Sbar_GetFontsize();
 	if(sbar_fontsize_x == 0)
@@ -557,7 +747,7 @@ void Sbar_DrawScoreboard()
 	
 	for(i = 0; i < sbar_num_fields; ++i)
 	{
-		if(Sbar_IsFieldMasked(sbar_field[i]))
+		if(Sbar_IsFieldMasked(sbar_field[i], SBAR_DEFAULT_MASK))
 			continue;
 		if(sbar_field[i] == SBF_SEPARATOR)
 			break;
@@ -571,7 +761,7 @@ void Sbar_DrawScoreboard()
 		tmp_y = tmp_z = 0;
 		for(i = sbar_num_fields-1; i > 0; --i)
 		{
-			if(Sbar_IsFieldMasked(sbar_field[i]))
+			if(Sbar_IsFieldMasked(sbar_field[i], SBAR_DEFAULT_MASK))
 				continue;
 			if(sbar_field[i] == SBF_SEPARATOR)
 				break;
@@ -639,7 +829,7 @@ void Sbar_DrawScoreboard()
 			{
 				if(pl.sb_team != tm.sb_team)
 					continue;
-				Sbar_PrintScoreboardItem(pos, pl, (pl.sb_player == player_localentnum - 1), 0);
+				Sbar_PrintScoreboardItem(pos, pl, (pl.sb_player == player_localentnum - 1), SBAR_DEFAULT_MASK);
 				pos_y += 1.25 * sbar_fontsize_y;
 				tmp_y -= 1.25 * sbar_fontsize_y;
 			}
@@ -654,7 +844,7 @@ void Sbar_DrawScoreboard()
 			if(pl.sb_team != COLOR_SPECTATOR)
 				continue;
 			//drawcolorcodedstring(pos, getplayerkey(pl.sb_player, "name"), '8 8 0', 1, 0);
-			Sbar_PrintScoreboardItem(pos, pl, (pl.sb_player == player_localentnum - 1), 1);
+			Sbar_PrintScoreboardItem(pos, pl, (pl.sb_player == player_localentnum - 1), SBAR_MASK_SPECTATORS);
 			pos += '0 1.25 0' * sbar_fontsize_y;
 			++specs;
 		}
@@ -667,11 +857,10 @@ void Sbar_DrawScoreboard()
 		{
 			if(pl.sb_team == COLOR_SPECTATOR)
 				continue;
-			Sbar_PrintScoreboardItem(pos, pl, (pl.sb_player == player_localentnum - 1), 0);
+			Sbar_PrintScoreboardItem(pos, pl, (pl.sb_player == player_localentnum - 1), SBAR_DEFAULT_MASK);
 			pos_y += 1.25 * sbar_fontsize_y;
 			tmp_y -= 1.25 * sbar_fontsize_y;
 		}
-		pos_y += tmp_y + 1.5 * sbar_fontsize_y;
 
 		// rgb := tempvector :)
 		rgb = pos + '0 1.5 0' * sbar_fontsize_y;
@@ -682,7 +871,7 @@ void Sbar_DrawScoreboard()
 			if(pl.sb_team != COLOR_SPECTATOR)
 				continue;
 			//drawcolorcodedstring(pos, getplayerkey(pl.sb_player, "name"), '8 8 0', 1, 0);
-			Sbar_PrintScoreboardItem(pos, pl, (pl.sb_player == player_localentnum - 1), 1);
+			Sbar_PrintScoreboardItem(pos, pl, (pl.sb_player == player_localentnum - 1), SBAR_MASK_SPECTATORS);
 			pos += '0 1.25 0' * sbar_fontsize_y;
 			++specs;
 		}

@@ -1,3 +1,6 @@
+float databuf;
+var float(string text, float handleColors) stringwidth;
+
 float stringwidth_oldfont(string text, float handleColors)
 {
 	float i, len, ch, width;
@@ -23,14 +26,18 @@ float stringwidth_oldfont(string text, float handleColors)
 
 void CSQC_CheckEngine()
 {
-	float i, tmp;
+	/*
 	registercvar("csqc_flags", "0");
 	csqc_flags = cvar("csqc_flags");
+	*/
 
-	if(csqc_flags & CSQC_FLAG_STRINGWIDTH)
+	csqc_flags = 0;
+	
+	if(checkextension("DP_SV_WRITEPICTURE"))
 	{
 		stringwidth = stringwidth_engine;
 		sbar_font = FONT_USER+1;
+		csqc_flags |= CSQC_FLAG_READPICTURE;
 	} else {
 		stringwidth = stringwidth_oldfont;
 		sbar_font = FONT_DEFAULT;
@@ -39,7 +46,42 @@ void CSQC_CheckEngine()
 
 vector Sbar_GetFontsize()
 {
-	if(csqc_flags & CSQC_FLAG_STRINGWIDTH)
+	if(csqc_flags & CSQC_FLAG_READPICTURE)
 		return stov(cvar_string("sbar_fontsize"));
 	return '8 8' ;
+}
+
+float PreviewExists(string name)
+{
+	float f;
+	string file;
+	file = strcat(name, ".tga");
+	f = fopen(file, FILE_READ);
+	if(f >= 0)
+	{
+		fclose(f);
+		return true;
+	}
+	file = strcat(name, ".png");
+	f = fopen(file, FILE_READ);
+	if(f >= 0)
+	{
+		fclose(f);
+		return true;
+	}
+	file = strcat(name, ".jpg");
+	f = fopen(file, FILE_READ);
+	if(f >= 0)
+	{
+		fclose(f);
+		return true;
+	}
+	file = strcat(name, ".pcx");
+	f = fopen(file, FILE_READ);
+	if(f >= 0)
+	{
+		fclose(f);
+		return true;
+	}
+	return false;
 }

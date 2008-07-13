@@ -1,15 +1,5 @@
 //include "main.qh"
 
-float sbar_alpha_fg;
-float last_weapon;
-float activeweapon;
-float weapontime;
-float sbar_hudselector;
-float teamplay;
-float myteam;
-
-float numteams; // NOTE: This is changed in Sbar_SortFrags, so use it only AFTER that
-
 void CSQC_common_hud(void);
 
 void CSQC_kh_hud(void);

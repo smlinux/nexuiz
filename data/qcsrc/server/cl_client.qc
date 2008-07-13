@@ -1147,6 +1147,11 @@ void ClientConnect (void)
 		ctf_UpdateCaptures(MSG_ONE);
 		ctf_UpdateReturns(MSG_ONE);
 		net_UpdateDeaths(MSG_ONE);
+		if(mapvote_initialized && !cvar("g_maplist_textonly"))
+		{
+			MapVote_SendData(MSG_ONE);
+			MapVote_UpdateData(MSG_ONE);
+		}
 	}
 }
 

@@ -14,6 +14,9 @@ teamplay.qc
 ons.qc
 ctf.qc
 
+sbar.qc
+mapvoting.qc
+
 Main.qc
 View.qc
-sbar.qc
+

@@ -11,10 +11,9 @@
 void() menu_show_error;
 void() menu_sub_null;
 
-void() menu_show;
 float menu_visible;
-
-float(float bInputType, float nPrimary, float nSecondary) menu_action;
+var void() menu_show;
+var float(float bInputType, float nPrimary, float nSecondary) menu_action;
 
 // --------------------------------------------------------------------------
 // CTF
@@ -86,4 +85,4 @@ float sbar_num_fields;
 float sbar_font;
 
 float csqc_flags;
-#define CSQC_FLAG_STRINGWIDTH 1
+#define CSQC_FLAG_READPICTURE 1

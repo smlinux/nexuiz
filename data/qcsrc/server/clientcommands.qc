@@ -172,6 +172,8 @@ void SV_ParseClientCommand(string s) {
 
 	if(GameCommand_Vote(s, self)) {
 		return;
+	} else if(GameCommand_MapVote(argv(0))) {
+		return;
 	} else if(argv(0) == "autoswitch") {
 		// be backwards compatible with older clients (enabled)
 		self.autoswitch = ("0" != argv(1));

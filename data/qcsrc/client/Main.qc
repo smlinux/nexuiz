@@ -15,11 +15,34 @@ void() menu_sub_null =
 };
 
 // let's make this a general data buffer...
-float databuf;
 float using_gps;
+
+float __engine_check;
+
+void testpassedyay() {
+	asm {
+		RETURN 0;
+	}
+}
 
 void CSQC_Init(void)
 {
+#if 0
+	asm {
+		STORE_F "DP_SV_WRITEPICTURE" PARM0;
+		CALL1 checkextension;
+		STORE_F RETURN __engine_check;
+		IF __engine_check 6;
+		STORE_F "^3Your engine build is outdated\n^3This Server uses a newer QC VM. Please update!\n" PARM0;
+		CALL1 print;
+		STORE_F "\ndisconnect\n" PARM0;
+		CALL1 localcmd;
+		DONE;
+	}
+#else
+	__engine_check = true;
+#endif
+	
 	float i;
 	CSQC_CheckEngine();
 	drawfont = 0;
@@ -47,6 +70,18 @@ void CSQC_Init(void)
 		sbar_title[i] = strzone("(null)");
 
 	postinit = false;
+
+	Sbar_Init();
+}
+
+// CSQC_Shutdown : Called every time the CSQC code is shutdown (changing maps, quitting, etc)
+void CSQC_Shutdown(void)
+{
+	asm {
+		IF __engine_check 2;
+		RETURN 0;
+	}
+	buf_del(databuf);
 }
 
 void PostInit(void)
@@ -66,11 +101,6 @@ void PostInit(void)
 	localcmd(strcat("\nsbar_columns_set ", cvar_string("sbar_columns"), ";\n"));
 
 	postinit = true;
-}
-// CSQC_Shutdown : Called every time the CSQC code is shutdown (changing maps, quitting, etc)
-void CSQC_Shutdown(void)
-{
-	buf_del(databuf);
 }
 
 // CSQC_ConsoleCommand : Used to parse commands in the console that have been registered with the "registercmd" function
@@ -104,6 +134,21 @@ float CSQC_ConsoleCommand(string strMessage)
 	
 	return false;
 }
+
+float GameCommand(string msg)
+{
+	float argc;
+	argc = tokenize(msg);
+	string cmd;
+	cmd = argv(0);
+	if(cmd == "mv_download") {
+		Cmd_MapVote_MapDownload(argc);
+		return true;
+	}
+	
+	return false;
+}
+
 // CSQC_InputEvent : Used to perform actions based on any key pressed, key released and mouse on the client.
 // Return value should be 1 if CSQC handled the input, otherwise return 0 to have the input passed to the engine.
 // All keys are in ascii.
@@ -219,7 +264,6 @@ void Gamemode_Init()
 	local float file;
 	local vector mi_min, mi_max;
 
-	draw_enginesbar = true;
 	gametype = cvar("gametype");
 	if(gametype == GAME_ONSLAUGHT) {
 		if(!strcasecmp(substring(mapname, 0, 5), "maps/"))
@@ -248,7 +292,7 @@ void Gamemode_Init()
 				}
 			}
 		} else {
-			print(strcat("^1Error: ^7Mapinfo file '", mapinfo, "' missing! Minimap will be screwed.\n"));
+			print(strcat("Map has no .info file (", mapinfo, ").\n"));
 		}
 		fclose(file);
 
@@ -268,7 +312,6 @@ void Gamemode_Init()
 	} else if(gametype == GAME_KEYHUNT) {
 		precache_pic("gfx/sb_key_carrying");
 		precache_pic("gfx/sb_key_carrying_outline");
-		draw_enginesbar = false;
 	}
 }
 // CSQC_Parse_StuffCmd : Provides the stuffcmd string in the first parameter that the server provided.  To execute standard behavior, simply execute localcmd with the string.
@@ -293,7 +336,8 @@ void CSQC_Parse_CenterPrint(string strMessage)
 }
 
 void CSQC_CheckRevision();
-void ReadInit()
+
+void Net_ReadInit()
 {
 	csqc_revision = ReadShort();
 	maxclients = ReadByte();
@@ -301,7 +345,7 @@ void ReadInit()
 	CSQC_CheckRevision();
 }
 
-void ReadPings()
+void Net_ReadPings()
 {
 	float plnum, ping;
 	for(plnum = ReadByte(); plnum != 0; plnum = ReadByte())
@@ -311,7 +355,7 @@ void ReadPings()
 	}
 }
 
-void ReadCaptures()
+void Net_ReadCaptures()
 {
 	float plnum, caps, mode;
 	mode = ReadByte();
@@ -324,13 +368,33 @@ void ReadCaptures()
 	}
 }
 
-void ReadDatabuf(float ofs)
+void Net_ReadDatabuf(float ofs)
 {
 	float plnum, data;
 	for(plnum = ReadByte(); plnum != 0; plnum = ReadByte())
 	{
 		data = ReadByte();
 		bufstr_set(databuf, ofs + plnum-1, ftos(data));
+	}
+}
+
+void Net_ReadPicture()
+{
+	string img;
+	if(csqc_flags & CSQC_FLAG_READPICTURE)
+	{
+		img = ReadPicture();
+		print(strcat("Got Picture: ", img, "\n"));
+	} else {
+		img = ReadString();
+		print(strcat("^3Warning: ^7Couldn't download ", img, ". This is probably because your engine build is outdated.\n"));
+		float psize, i;
+		psize = ReadShort();
+		// Can I be sure that ReadShort is 2 bytes and ReadLong is 4 bytes?
+		// Because then this could be optimized to first get all 4-byte-groups,
+		// then the remaining 2, then the remaining 1
+		for(i = 0; i < psize; ++i)
+			ReadByte();
 	}
 }
 
@@ -344,29 +408,39 @@ float CSQC_Parse_TempEntity()
 	// Acquire TE ID
 	local float nTEID;
 		nTEID = ReadByte();
-		
+
+		// NOTE: Could just do return instead of break...
 	switch(nTEID)
 	{
 		case TE_CSQC_INIT:
-			ReadInit();
+			Net_ReadInit();
 			bHandled = true;
 			break;
 		case TE_CSQC_PING:
-			ReadPings();
+			Net_ReadPings();
 			bHandled = true;
 			break;
 		case TE_CSQC_CAPTURES:
-			ReadCaptures();
+			Net_ReadCaptures();
 			bHandled = true;
 			break;
 		case TE_CSQC_RETURNS:
-			ReadDatabuf(DATABUF_RETURNS);
+			Net_ReadDatabuf(DATABUF_RETURNS);
 			bHandled = true;
 			break;
 		case TE_CSQC_DEATHS:
-			ReadDatabuf(DATABUF_DEATHS);
+			Net_ReadDatabuf(DATABUF_DEATHS);
 			bHandled = true;
 			break;
+		case TE_CSQC_PICTURE:
+			Net_ReadPicture();
+			bHandled = true;
+			break;
+		case TE_CSQC_MAPVOTE:
+			Net_Mapvote();
+			bHandled = true;
+			break;
+		
 		default:
 			// No special logic for this temporary entity; return 0 so the engine can handle it
 			bHandled = false;
@@ -382,7 +456,8 @@ float CSQC_Parse_TempEntity()
 // COMMIT-TODO: Update if necessare, before committing
 float csqc_svn_map[CSQC_REVISION] =
 {
-	3795,
+	3812, // 3795,
+	3815
 };
 
 // COMMIT-TODO: Update if necessare, before committing
