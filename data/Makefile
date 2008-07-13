@@ -3,14 +3,9 @@ PERL ?= perl
 PK3NAME ?= `date +../data%Y%m%d.pk3`
 ZIP ?= 7za a -tzip -mx=9
 
-# -Fparm: define PARM0, RETURN, etc. for use in asm{}
-# This will make it possible to make a non-FTE asm{} block
-# checking if the client's engine supports -TFTE.
-# At some point CSQC should use -TFTE too, and then, for at least
-# some time, it would be useful to have a well-formatted error message
-# followed by localcmd("disconnect") if the client doesn't support -TFTE
-# instead of letting him guess what the huge QCVM error message means...
-QCFLAGS_CSQC ?= -Fparm
+# NOTE: use -DUSE_FTE instead of -TFTE here!
+# It will automagically add an engine check with -TID and then change back to -TFTE
+QCFLAGS_CSQC ?= 
 
 # to be enabled when possible
 # QCFLAGS_SVQC ?= -TFTE

@@ -27,18 +27,16 @@ void testpassedyay() {
 
 void CSQC_Init(void)
 {
-#if 0
-	asm {
-		STORE_F "DP_SV_WRITEPICTURE" PARM0;
-		CALL1 checkextension;
-		STORE_F RETURN __engine_check;
-		IF __engine_check 6;
-		STORE_F "^3Your engine build is outdated\n^3This Server uses a newer QC VM. Please update!\n" PARM0;
-		CALL1 print;
-		STORE_F "\ndisconnect\n" PARM0;
-		CALL1 localcmd;
-		DONE;
+#ifdef USE_FTE
+#pragma target ID
+	__engine_check = checkextension("DP_SV_WRITEPICTURE");
+	if(!__engine_check)
+	{
+		print("^3Your engine build is outdated\n^3This Server uses a newer QC VM. Please update!\n");
+		localcmd("\ndisconnect\n");
+		return;
 	}
+#pragma target FTE
 #else
 	__engine_check = true;
 #endif
