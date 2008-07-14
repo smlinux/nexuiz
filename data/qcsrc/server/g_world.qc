@@ -2024,8 +2024,9 @@ void MapVote_Init()
 		nmax = min(MAPVOTE_COUNT, cvar("g_maplist_votable"));
 	smax = min3(nmax, cvar("g_maplist_votable_suggestions"), mapvote_suggestion_ptr);
 
-	for(i = 0; i < 100 && mapvote_count < smax; ++i)
-		MapVote_AddVotable(mapvote_suggestions[ceil(random() * mapvote_suggestion_ptr) - 1], TRUE);
+	if(mapvote_suggestion_ptr)
+		for(i = 0; i < 100 && mapvote_count < smax; ++i)
+			MapVote_AddVotable(mapvote_suggestions[ceil(random() * mapvote_suggestion_ptr) - 1], TRUE);
 
 	for(i = 0; i < 100 && mapvote_count < nmax; ++i)
 		MapVote_AddVotable(GetNextMap(), FALSE);
