@@ -1,7 +1,8 @@
 // COMMIT-TODO: Update if necessary before committing
 // Revision 1: additional statistics sent (flag caps, returns, deaths)
 // Revision 2: Mapvote preview pictures
-#define CSQC_REVISION 2
+// Revision 3: optimized map vote protocol
+#define CSQC_REVISION 3
 
 // probably put these in common/
 // so server/ and client/ can be synced better

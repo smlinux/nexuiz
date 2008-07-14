@@ -100,10 +100,10 @@ void MapVote_Draw()
 	string map;
 	float i, tmp;
 	vector pos;
-	vector center;
 	float isize;
+	float center;
 	
-	center_x = (vid_conwidth - 1)/2;
+	center = (vid_conwidth - 1)/2;
 	xmin = vid_conwidth*0.2;
 	xmax = vid_conwidth - xmin;
 	ymin = 24;
@@ -122,7 +122,7 @@ void MapVote_Draw()
 
 	pos_y = ymin;
 	pos_z = 0;
-	pos_x = center_x - stringwidth("Vote for a map", false) * 0.5 * 24;
+	pos_x = center - stringwidth("Vote for a map", false) * 0.5 * 24;
 	drawstring(pos, "Vote for a map", '24 24', '1 1 1', 1, DRAWFLAG_NORMAL);
 
 	pos_x = xmin;
@@ -201,7 +201,6 @@ void MapVote_CheckPic(string pic, string pk3, float id)
 {
 	if(PreviewExists(pic))
 	{
-		//print(strcat("^2Exists... ", pic, "\n"));
 		mv_preview[id] = true;
 		return;
 	}
@@ -210,48 +209,75 @@ void MapVote_CheckPic(string pic, string pk3, float id)
 
 void MapVote_Init()
 {
-	float i;
+	float i, power, m;
 	string map, pk3;
 	
 	mv_num_maps = min(MAPVOTE_COUNT, ReadByte());
 	mv_abstain = ReadByte();
 	if(mv_abstain)
-		mv_abstain = 1; // must be 1
+		mv_abstain = 1; // must be 1 for bool-true, makes stuff easier
 	mv_detail = ReadByte();
 	mv_ownvote = -1;
+
+	if(mv_num_maps <= 8)
+		m = ReadByte();
+	else
+		m = ReadShort();
 	
 	// Assume mv_pk3list is NULL, there should only be 1 mapvote per round
 	mv_pk3list = NULL; // I'm still paranoid!
 	
-	for(i = 0; i < mv_num_maps; ++i)
+	for(i = 0, power = 1; i < mv_num_maps; ++i, power *= 2)
 	{
 		mv_votes[i] = 0;
-		map = strzone(ReadString());
-		pk3 = strzone(ReadString());
-		mv_maps[i] = map;
-		mv_pk3[i] = pk3;
-		map = strzone(strcat("maps/", map));
-		mv_pics[i] = map;
 
-		mv_preview[i] = false;
+		if(m & power)
+		{
+			map = strzone(ReadString());
+			pk3 = strzone(ReadString());
+			mv_maps[i] = map;
+			mv_pk3[i] = pk3;
+			map = strzone(strcat("maps/", map));
+			mv_pics[i] = map;
 
-		//print(strcat("RECV: ", map, " in ", pk3, "\n"));
-		MapVote_CheckPic(map, pk3, i);
+			mv_preview[i] = false;
+
+			//print(strcat("RECV: ", map, " in ", pk3, "\n"));
+			MapVote_CheckPic(map, pk3, i);
+		}
+		else
+		{
+			mv_maps[i] = strzone("if-you-see-this-the-code-is-broken");
+			mv_pk3[i] = strzone("if-you-see-this-the-code-is-broken");
+			mv_pics[i] = strzone("if-you-see-this-the-code-is-broken");
+			mv_preview[i] = false;
+		}
 	}
 }
 
 void MapVote_Update()
 {
-	float i, e;
-	for(i = 0; i < mv_num_maps; ++i)
+	float i, power;
+	float m;
+	if(mv_num_maps <= 8)
+		m = ReadByte();
+	else
+		m = ReadShort();
+	for(i = 0, power = 1; i < mv_num_maps; ++i, power *= 2)
 	{
-		e = ReadByte();
-		mv_votes[i] = ReadByte();
-		if(!e)
+		if(m & power)
+		{
+			if(mv_detail)
+				mv_votes[i] = ReadByte();
+			else
+				mv_votes[i] = 0;
+		}
+		else
 			mv_votes[i] = -1;
 	}
 }
 
+string Net_ReadPicture();
 void Net_Mapvote()
 {
 	float type;
@@ -260,6 +286,8 @@ void Net_Mapvote()
 	{
 	case MAPVOTE_NET_INIT:
 		MapVote_Init();
+		// do we NEED this, or can we handle key presses directly in CSQC?
+		localcmd("\nin_bind 7 1 \"impulse 1\"; in_bind 7 2 \"impulse 2\"; in_bind 7 3 \"impulse 3\"; in_bind 7 4 \"impulse 4\"; in_bind 7 5 \"impulse 5\"; in_bind 7 6 \"impulse 6\"; in_bind 7 7 \"impulse 7\"; in_bind 7 8 \"impulse 8\"; in_bind 7 9 \"impulse 9\"; in_bind 7 0 \"impulse 10\"; in_bind 7 KP_1 \"impulse 1\"; in_bind 7 KP_2 \"impulse 2\"; in_bind 7 KP_3 \"impulse 3\"; in_bind 7 KP_4 \"impulse 4\"; in_bind 7 KP_5 \"impulse 5\"; in_bind 7 KP_6 \"impulse 6\"; in_bind 7 KP_7 \"impulse 7\"; in_bind 7 KP_8 \"impulse 8\"; in_bind 7 KP_9 \"impulse 9\"; in_bind 7 KP_0 \"impulse 10\"; in_bindmap 7 0\n");
 		break;
 	case MAPVOTE_NET_UPDATE:
 		MapVote_Update();
@@ -270,7 +298,7 @@ void Net_Mapvote()
 	case MAPVOTE_NET_PIC:
 		type = ReadByte();
 		mv_preview[type] = true;
-		//print(strcat("MAPVOTE_NET_PIC: ^2", ftos(type), "\n"));
+		mv_pics[type] = strzone(Net_ReadPicture());
 		break;
 	}
 }

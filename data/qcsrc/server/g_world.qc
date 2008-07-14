@@ -175,6 +175,15 @@ void spawnfunc_worldspawn (void)
 		error("world already spawned - you may have EXACTLY ONE worldspawn!");
 	world_already_spawned = TRUE;
 
+	local entity head;
+	head = nextent(world);
+	maxclients = 0;
+	while(head)
+	{
+		++maxclients;
+		head = nextent(head);
+	}
+
 	if(GotoFirstMap())
 		return;
 
@@ -261,15 +270,6 @@ void spawnfunc_worldspawn (void)
 
 	//if (g_domination)
 	//	dom_init();
-
-	local entity head;
-	head = nextent(world);
-	maxclients = 0;
-	while(head)
-	{
-		++maxclients;
-		head = nextent(head);
-	}
 
 	GameLogInit(); // prepare everything
 	if(cvar("sv_eventlog"))
@@ -1933,6 +1933,7 @@ float mapvote_votes[MAPVOTE_COUNT];
 float mapvote_run;
 float mapvote_detail;
 float mapvote_abstain;
+float mapvote_dirty;
 .float mapvote;
 
 void MapVote_ClearAllVotes()
@@ -2062,12 +2063,10 @@ void MapVote_SendPicture(float id)
 {
 	msg_entity = self;
 	WriteByte(MSG_ONE, SVC_TEMPENTITY);
-	WriteByte(MSG_ONE, TE_CSQC_PICTURE);
-	WritePicture(MSG_ONE, strcat("maps/", mapvote_maps[id]), 1024);
-	WriteByte(MSG_ONE, SVC_TEMPENTITY);
 	WriteByte(MSG_ONE, TE_CSQC_MAPVOTE);
 	WriteByte(MSG_ONE, MAPVOTE_NET_PIC);
 	WriteByte(MSG_ONE, id);
+	WritePicture(MSG_ONE, strcat("maps/", mapvote_maps[id]), 1024);
 }
 
 float GameCommand_MapVote(string cmd)
@@ -2086,6 +2085,16 @@ float GameCommand_MapVote(string cmd)
 	return FALSE;
 }
 
+float MapVote_GetMapMask()
+{
+	float mask, i, power;
+	mask = 0;
+	for(i = 0, power = 1; i < mapvote_count; ++i, power *= 2)
+		if(mapvote_maps[i] != "")
+			mask |= power;
+	return mask;
+}
+
 void MapVote_SendData(float targ)
 {
 	string mapfile;
@@ -2093,21 +2102,24 @@ void MapVote_SendData(float targ)
 	WriteByte(targ, SVC_TEMPENTITY);
 	WriteByte(targ, TE_CSQC_MAPVOTE);
 	WriteByte(targ, MAPVOTE_NET_INIT);
-	WriteByte(targ, mapvote_count);
-	WriteByte(targ, mapvote_abstain);
-	WriteByte(targ, mapvote_detail);
-	for(i = 0; i < mapvote_count; ++i)
-	{
-		WriteString(targ, mapvote_maps[i]);
-		mapfile = strcat("maps/", mapvote_maps[i], ".bsp");
-		localcmd(strcat("\ncurl --pak ", whichpack(mapfile), "\n"));
-		mapfile = whichpack(mapfile);
-		for(o = strstr(mapfile, "/", 0)+1; o > 0; o = strstr(mapfile, "/", 0)+1)
-			mapfile = substring(mapfile, o, 999);
-		for(o = strstr(mapfile, "\\", 0)+1; o > 0; o = strstr(mapfile, "\\", 0)+1)
-			mapfile = substring(mapfile, o, 999);
-		WriteString(targ, mapfile);
-	}
+
+  	WriteByte(targ, mapvote_count);
+  	WriteByte(targ, mapvote_abstain);
+  	WriteByte(targ, mapvote_detail);
+ 	if(mapvote_count <= 8)
+ 		WriteByte(targ, MapVote_GetMapMask());
+ 	else
+ 		WriteShort(targ, MapVote_GetMapMask());
+ 	for(i = 0; i < mapvote_count; ++i)
+		if(mapvote_maps[i] != "")
+		{
+			WriteString(targ, mapvote_maps[i]);
+			mapfile = strcat("maps/", mapvote_maps[i], ".bsp");
+			mapfile = whichpack(mapfile);
+			for(o = strstr(mapfile, "/", 0)+1; o > 0; o = strstr(mapfile, "/", 0)+1)
+				mapfile = substring(mapfile, o, 999);
+			WriteString(targ, mapfile);
+		}
 }
 
 void MapVote_UpdateData(float targ)
@@ -2116,15 +2128,16 @@ void MapVote_UpdateData(float targ)
 	WriteByte(targ, SVC_TEMPENTITY);
 	WriteByte(targ, TE_CSQC_MAPVOTE);
 	WriteByte(targ, MAPVOTE_NET_UPDATE);
-	for(i = 0; i < mapvote_count; ++i)
-	{
-		if(strlen(mapvote_maps[i]) <= 0)
-			WriteByte(targ, 0);
-		else
-			WriteByte(targ, 1);
-		WriteByte(targ, mapvote_votes[i]);
-	}
+	if(mapvote_count <= 8)
+		WriteByte(targ, MapVote_GetMapMask());
+	else
+		WriteShort(targ, MapVote_GetMapMask());
+	if(mapvote_detail)
+		for(i = 0; i < mapvote_count; ++i)
+			if(mapvote_maps[i] != "")
+				WriteByte(targ, mapvote_votes[i]);
 }
+
 void MapVote_TellVote(float targ, float vote)
 {
 	float i;
@@ -2191,13 +2204,6 @@ void MapVote_CheckRules_1()
 			mapvote_votes[i] = mapvote_votes[i] + 1;
 		}
 	}
-
-	if(!cvar("g_maplist_textonly"))
-	{
-		MapVote_UpdateData(MSG_BROADCAST);
-		FOR_EACH_REALCLIENT(msg_entity)
-			MapVote_TellVote(MSG_ONE, msg_entity.mapvote);
-	}
 }
 
 float MapVote_CheckRules_2()
@@ -2239,6 +2245,7 @@ float MapVote_CheckRules_2()
 		if(time > mapvote_keeptwotime || (mapvote_voters_real - firstPlaceVotes - secondPlaceVotes) < secondPlaceVotes)
 		{
 			float didntvote;
+			mapvote_dirty = TRUE;
 			mapvote_message = "Now decide between the TOP TWO!";
 			mapvote_keeptwotime = 0;
 			result = strcat(":vote:keeptwo:", mapvote_maps[firstPlace]);
@@ -2292,7 +2299,9 @@ void MapVote_Tick()
 			other.impulse = 0;
 			if(clienttype(other) == CLIENTTYPE_REAL)
 			{
-				stuffcmd(other, "\nin_bind 7 1 \"impulse 1\"; in_bind 7 2 \"impulse 2\"; in_bind 7 3 \"impulse 3\"; in_bind 7 4 \"impulse 4\"; in_bind 7 5 \"impulse 5\"; in_bind 7 6 \"impulse 6\"; in_bind 7 7 \"impulse 7\"; in_bind 7 8 \"impulse 8\"; in_bind 7 9 \"impulse 9\"; in_bind 7 0 \"impulse 10\"; in_bind 7 KP_1 \"impulse 1\"; in_bind 7 KP_2 \"impulse 2\"; in_bind 7 KP_3 \"impulse 3\"; in_bind 7 KP_4 \"impulse 4\"; in_bind 7 KP_5 \"impulse 5\"; in_bind 7 KP_6 \"impulse 6\"; in_bind 7 KP_7 \"impulse 7\"; in_bind 7 KP_8 \"impulse 8\"; in_bind 7 KP_9 \"impulse 9\"; in_bind 7 KP_0 \"impulse 10\"; in_bindmap 7 0\n");
+				if(cvar("g_maplist_textonly"))
+					stuffcmd(other, "\nin_bind 7 1 \"impulse 1\"; in_bind 7 2 \"impulse 2\"; in_bind 7 3 \"impulse 3\"; in_bind 7 4 \"impulse 4\"; in_bind 7 5 \"impulse 5\"; in_bind 7 6 \"impulse 6\"; in_bind 7 7 \"impulse 7\"; in_bind 7 8 \"impulse 8\"; in_bind 7 9 \"impulse 9\"; in_bind 7 0 \"impulse 10\"; in_bind 7 KP_1 \"impulse 1\"; in_bind 7 KP_2 \"impulse 2\"; in_bind 7 KP_3 \"impulse 3\"; in_bind 7 KP_4 \"impulse 4\"; in_bind 7 KP_5 \"impulse 5\"; in_bind 7 KP_6 \"impulse 6\"; in_bind 7 KP_7 \"impulse 7\"; in_bind 7 KP_8 \"impulse 8\"; in_bind 7 KP_9 \"impulse 9\"; in_bind 7 KP_0 \"impulse 10\"; in_bindmap 7 0\n");
+
 				msg_entity = other;
 				WriteByte(MSG_ONE, SVC_FINALE);
 				WriteString(MSG_ONE, "");
@@ -2309,7 +2318,14 @@ void MapVote_Tick()
 		// use impulses as new vote
 		if(other.impulse >= 1 && other.impulse <= mapvote_count)
 			if(mapvote_maps[other.impulse - 1] != "")
+			{
 				other.mapvote = other.impulse;
+				if(mapvote_detail)
+					mapvote_dirty = TRUE;
+
+				msg_entity = other;
+				MapVote_TellVote(MSG_ONE, other.mapvote);
+			}
 		other.impulse = 0;
 
 		if(other.mapvote)
@@ -2317,6 +2333,13 @@ void MapVote_Tick()
 	}
 
 	MapVote_CheckRules_1(); // just count
+
+	if(!cvar("g_maplist_textonly"))
+	if(mapvote_dirty) // 1 if "keeptwo" or "impulse" happened before
+	{
+		MapVote_UpdateData(MSG_BROADCAST);
+		mapvote_dirty = FALSE;
+	}
 
 	if(cvar("g_maplist_textonly"))
 	{

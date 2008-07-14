@@ -376,7 +376,7 @@ void Net_ReadDatabuf(float ofs)
 	}
 }
 
-void Net_ReadPicture()
+string Net_ReadPicture()
 {
 	string img;
 	if(csqc_flags & CSQC_FLAG_READPICTURE)
@@ -394,6 +394,7 @@ void Net_ReadPicture()
 		for(i = 0; i < psize; ++i)
 			ReadByte();
 	}
+	return img;
 }
 
 // CSQC_Parse_TempEntity : Handles all temporary entity network data in the CSQC layer.
@@ -430,10 +431,6 @@ float CSQC_Parse_TempEntity()
 			Net_ReadDatabuf(DATABUF_DEATHS);
 			bHandled = true;
 			break;
-		case TE_CSQC_PICTURE:
-			Net_ReadPicture();
-			bHandled = true;
-			break;
 		case TE_CSQC_MAPVOTE:
 			Net_Mapvote();
 			bHandled = true;
@@ -455,7 +452,7 @@ float CSQC_Parse_TempEntity()
 float csqc_svn_map[CSQC_REVISION] =
 {
 	3812, // 3795,
-	3815
+	3820 // mapvote protocol changed from there
 };
 
 // COMMIT-TODO: Update if necessare, before committing

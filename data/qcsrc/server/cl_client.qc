@@ -732,7 +732,7 @@ void SendCSQCInfo(void)
 	WriteByte(MSG_ONE, SVC_TEMPENTITY);
 	WriteByte(MSG_ONE, TE_CSQC_INIT);
 	WriteShort(MSG_ONE, CSQC_REVISION);
-	WriteByte(MSG_ONE, maxclients-1);
+	WriteByte(MSG_ONE, maxclients);
 }
 
 /*

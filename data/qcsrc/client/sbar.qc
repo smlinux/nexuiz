@@ -168,7 +168,6 @@ float Sbar_TeamCmp(entity l, entity r)
 
 void Sbar_Init()
 {
-	entity tm;
 	sortedPlayers = Sort_New(Sbar_PlayerCmp);
 	sortedTeams = Sort_New(Sbar_TeamCmp);
 	team1 = Sort_Next(sortedTeams);
