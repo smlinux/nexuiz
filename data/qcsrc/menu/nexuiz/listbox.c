@@ -10,6 +10,7 @@ CLASS(NexuizListBox) EXTENDS(ListBox)
 	ATTRIB(NexuizListBox, color, vector, SKINCOLOR_SCROLLBAR_N)
 	ATTRIB(NexuizListBox, colorF, vector, SKINCOLOR_SCROLLBAR_F)
 	ATTRIB(NexuizListBox, color2, vector, SKINCOLOR_SCROLLBAR_S)
+	ATTRIB(NexuizListBox, colorC, vector, SKINCOLOR_SCROLLBAR_C)
 ENDCLASS(NexuizListBox)
 entity makeNexuizListBox();
 #endif
