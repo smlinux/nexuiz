@@ -19,12 +19,6 @@ float using_gps;
 
 float __engine_check;
 
-void testpassedyay() {
-	asm {
-		RETURN 0;
-	}
-}
-
 void CSQC_Init(void)
 {
 #ifdef USE_FTE
