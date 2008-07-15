@@ -365,7 +365,7 @@ sub recv($)
 	my ($self) = @_;
 	for(;;)
 	{
-		my $s = $self->{connector}->recv()
+		my $s = $self->{connector}->recv();
 		die "read error\n"
 			if not defined $s;
 		length $s
