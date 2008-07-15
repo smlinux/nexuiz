@@ -122,8 +122,18 @@ sub recv($)
 {
 	my ($self) = @_;
 	my $data = "";
-	$self->{sock}->recv($data, 32768, 0);
-	return $data;
+	if(defined $self->{sock}->recv($data, 32768, 0))
+	{
+		return $data;
+	}
+	elsif($!{EAGAIN})
+	{
+		return "";
+	}
+	else
+	{
+		return undef;
+	}
 }
 
 # $sock->fds() returns the socket file descriptor.
@@ -245,7 +255,10 @@ sub recv($)
 	my ($self) = @_;
 	for(;;)
 	{
-		length(my $s = $self->{connector}->recv())
+		my $s = $self->{connector}->recv();
+		die "read error\n"
+			if not defined $s;
+		length $s
 			or last;
 		next
 			if $s !~ /^\377\377\377\377n(.*)$/s;
@@ -352,7 +365,10 @@ sub recv($)
 	my ($self) = @_;
 	for(;;)
 	{
-		length(my $s = $self->{connector}->recv())
+		my $s = $self->{connector}->recv()
+		die "read error\n"
+			if not defined $s;
+		length $s
 			or last;
 		$self->{recvbuf} .= $s;
 	}
@@ -1306,37 +1322,52 @@ for(;;)
 			}
 		}
 
-		for my $line($chan->recv())
+		eval
 		{
-			# found one! Check if it matches the regular expression of one of
-			# our handlers...
-			my $handled = 0;
-			for my $h(@handlers)
+			for my $line($chan->recv())
 			{
-				my ($chanstr_wanted, $re, $sub) = @$h;
-				next
-					if $chanstr_wanted ne $chanstr;
-				use re 'eval';
-				my @matches = ($line =~ /^$re$/s);
-				no re 'eval';
-				next
-					unless @matches;
-				# and if it is a match, handle it.
-				++$handled;
-				my $result = $sub->(@matches);
-				last
-					if $result;
+				# found one! Check if it matches the regular expression of one of
+				# our handlers...
+				my $handled = 0;
+				for my $h(@handlers)
+				{
+					my ($chanstr_wanted, $re, $sub) = @$h;
+					next
+						if $chanstr_wanted ne $chanstr;
+					use re 'eval';
+					my @matches = ($line =~ /^$re$/s);
+					no re 'eval';
+					next
+						unless @matches;
+					# and if it is a match, handle it.
+					++$handled;
+					my $result = $sub->(@matches);
+					last
+						if $result;
+				}
+				# print the message, together with info on whether it has been handled or not
+				if($handled)
+				{
+					print "           $chanstr >> $line\n";
+				}
+				else
+				{
+					print "unhandled: $chanstr >> $line\n";
+				}
 			}
-			# print the message, together with info on whether it has been handled or not
-			if($handled)
+			1;
+		} or do {
+			if($@ eq "read error\n")
 			{
-				print "           $chanstr >> $line\n";
+				$channels{system}->send("error $chanstr", 0);
+				next CHANNEL;
 			}
 			else
 			{
-				print "unhandled: $chanstr >> $line\n";
+				# re-throw
+				die $@;
 			}
-		}
+		};
 	}
 
 	# handle scheduled tasks...
