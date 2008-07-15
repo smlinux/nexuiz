@@ -1,4 +1,4 @@
-	// internal toy
+// internal toy
 void cvar_settemp(string pKey, string pValue)
 {
 	//localcmd(strcat("\nsettemp ", t, " \"", s, "\"\n"));
@@ -238,6 +238,15 @@ float MapInfo_FilterGametype(float pGametype, float pFeatures, float pAbortOnGen
 	MapInfo_ClearTemps();
 	return 1;
 }
+
+void MapInfo_Filter_Free()
+{
+	if(_MapInfo_filtered)
+	{
+		strunzone(_MapInfo_filtered);
+		_MapInfo_filtered = string_null;
+	}
+}
 #else
 float _MapInfo_filtered;
 float _MapInfo_filtered_allocated;
@@ -270,6 +279,15 @@ float MapInfo_FilterGametype(float pGametype, float pFeatures, float pAbortOnGen
 	MapInfo_count = j + 1;
 	MapInfo_ClearTemps();
 	return 1;
+}
+
+void MapInfo_Filter_Free()
+{
+	if(_MapInfo_filtered_allocated)
+	{
+		buf_del(_MapInfo_filtered);
+		_MapInfo_filtered_allocated = 0;
+	}
 }
 #endif
 
@@ -828,4 +846,17 @@ void MapInfo_ClearTemps()
 	MapInfo_Map_author = string_null;
 	MapInfo_Map_supportedGametypes = 0;
 	MapInfo_Map_supportedFeatures = 0;
+}
+
+void MapInfo_Shutdown()
+{
+	MapInfo_ClearTemps();
+	MapInfo_Filter_Free();
+	MapInfo_Cache_Destroy();
+	if(_MapInfo_globopen)
+	{
+		search_end(_MapInfo_globhandle);
+		_MapInfo_globhandle = -1;
+		_MapInfo_globopen = FALSE;
+	}
 }

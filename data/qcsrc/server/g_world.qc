@@ -2531,9 +2531,12 @@ void SV_Shutdown()
 		Ban_SaveBans();
 		if(!sv_cheats)
 			db_save(ServerProgsDB, "server.db");
+		db_close(ServerProgsDB);
 		print("done!\n");
 		// tell the bot system the game is ending now
 		bot_endgame();
+
+		MapInfo_Shutdown();
 	}
 	else
 	{
