@@ -1495,7 +1495,7 @@ void bot_setnameandstuff()
  	if(!cvar("g_campaign"))
  		self.netname = self.netname_freeme = strzone(strcat(prefix, name, suffix));
  	else
- 		self.netname = self.netname_freeme = strzone(name);
+ 		self.netname = name;
 };
 
 void bot_endgame()
@@ -1904,8 +1904,9 @@ void bot_clientdisconnect()
 {
 	if (clienttype(self) != CLIENTTYPE_BOT)
 		return;
-	strunzone(self.netname_freeme);
-	self.netname = string_null;
+	if(self.netname_freeme)
+		strunzone(self.netname_freeme);
+	self.netname_freeme = string_null;
 }
 
 void bot_clientconnect()
