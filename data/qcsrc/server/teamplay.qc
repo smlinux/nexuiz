@@ -342,8 +342,7 @@ string GetClientVersionMessage(float v) {
 	} else {
 		versionmsg = "^2client version and server version are compatible.^8";
 	}
-	return strzone(versionmsg);
-
+	return versionmsg;
 }
 
 
@@ -450,8 +449,6 @@ void PrintWelcomeMessage(entity pl)
 	if(timeoutStatus != 0)
 		s = strcat(s, "\n\n", getTimeoutText(1));
 
-	s = strzone(s);
-
 	if (g_grappling_hook)
 		s = strcat(s, "\n\n^8grappling hook is enabled, press 'e' to use it\n");
 
@@ -495,12 +492,8 @@ void PrintWelcomeMessage(entity pl)
 	if(cvar("timelimit"))
 		s = strcat(s, "\n^8time limit: ^7", cvar_string("timelimit"), " minutes");
 
-	s = strzone(s);
-
 	centerprint(pl, s);
 	//sprint(pl, s);
-
-	strunzone(s);
 }
 
 
