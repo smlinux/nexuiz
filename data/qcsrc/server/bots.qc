@@ -1494,7 +1494,7 @@ void bot_setnameandstuff()
 	if(!cvar("g_campaign"))
 		self.netname = strzone(strcat(prefix, name, suffix));
 	else
-		self.netname = name;
+		self.netname = strzone(name);
 };
 
 void bot_endgame()
@@ -1898,6 +1898,14 @@ void bot_relinkplayerlist()
 
 void() havocbot_setupbot;
 float JoinBestTeam(entity pl, float only_return_best, float forcebestteam);
+
+void bot_clientdisconnect()
+{
+	if (clienttype(self) != CLIENTTYPE_BOT)
+		return;
+	strunzone(self.netname);
+	self.netname = string_null;
+}
 
 void bot_clientconnect()
 {

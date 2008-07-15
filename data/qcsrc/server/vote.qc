@@ -405,9 +405,6 @@ string VoteParse() {
 		++index;
 	}
 
-	// necessary for some of the string operations
-	vote = strzone(vote);
-
 	return vote;
 }
 

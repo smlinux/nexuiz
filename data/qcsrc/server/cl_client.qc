@@ -1170,6 +1170,8 @@ void ClientDisconnect (void)
 {
 	float save;
 
+	bot_clientdisconnect();
+
 	if(entcs_start)
 		detach_entcs();
 	
