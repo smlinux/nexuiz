@@ -1,6 +1,7 @@
 // rough simulation of walking from one point to another to test if a path
 // can be traveled, used by havocbot
 
+.string netname_freeme;
 
 vector stepheightvec;
 float navigation_testtracewalk;
@@ -1491,10 +1492,10 @@ void bot_setnameandstuff()
 		// randomly pick a skin
 		bot_skinfornumber(floor(random() * BOTSKINS));
 	}
-	if(!cvar("g_campaign"))
-		self.netname = strzone(strcat(prefix, name, suffix));
-	else
-		self.netname = strzone(name);
+ 	if(!cvar("g_campaign"))
+ 		self.netname = self.netname_freeme = strzone(strcat(prefix, name, suffix));
+ 	else
+ 		self.netname = self.netname_freeme = strzone(name);
 };
 
 void bot_endgame()
@@ -1903,7 +1904,7 @@ void bot_clientdisconnect()
 {
 	if (clienttype(self) != CLIENTTYPE_BOT)
 		return;
-	strunzone(self.netname);
+	strunzone(self.netname_freeme);
 	self.netname = string_null;
 }
 
