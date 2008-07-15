@@ -17,7 +17,9 @@ void() menu_sub_null =
 // let's make this a general data buffer...
 float using_gps;
 
+#ifdef USE_FTE
 float __engine_check;
+#endif
 
 void CSQC_Init(void)
 {
@@ -31,8 +33,6 @@ void CSQC_Init(void)
 		return;
 	}
 #pragma target FTE
-#else
-	__engine_check = true;
 #endif
 	
 	float i;
@@ -69,10 +69,12 @@ void CSQC_Init(void)
 // CSQC_Shutdown : Called every time the CSQC code is shutdown (changing maps, quitting, etc)
 void CSQC_Shutdown(void)
 {
-	asm {
-		IF __engine_check 2;
-		RETURN 0;
-	}
+#ifdef USE_FTE
+#pragma TARGET id
+	if(!__engine_check)
+		return 0;
+#pragma TARGET fte
+#endif
 	buf_del(databuf);
 }
 
