@@ -46,8 +46,9 @@ void PlayerJump (void)
 	if (!(self.flags & FL_ONGROUND))
 		return;
 
-	if (!(self.flags & FL_JUMPRELEASED))
-		return;
+	if(!sv_pogostick)
+		if (!(self.flags & FL_JUMPRELEASED))
+			return;
 
 	if(g_runematch)
 	{
@@ -231,6 +232,14 @@ void SV_PlayerPhysics()
 
 	if(self.classname == "player")
 	{
+		if(sv_doublejump)
+		{
+			self.flags = self.flags - (self.flags & FL_ONGROUND);
+			tracebox(self.origin + '0 0 1', self.mins, self.maxs, self.origin - '0 0 2', MOVE_NORMAL, self);
+			if(trace_fraction < 1 && trace_plane_normal_z > 0.7)
+				self.flags = self.flags | FL_ONGROUND;
+		}
+
 		if (self.BUTTON_JUMP)
 			PlayerJump ();
 		else

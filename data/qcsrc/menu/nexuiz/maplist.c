@@ -39,6 +39,8 @@ CLASS(NexuizMapList) EXTENDS(NexuizListBox)
 
 	ATTRIB(NexuizMapList, typeToSearchString, string, string_null)
 	ATTRIB(NexuizMapList, typeToSearchTime, float, 0)
+
+	METHOD(NexuizMapList, destroy, void(entity))
 ENDCLASS(NexuizMapList)
 entity makeNexuizMapList();
 void MapList_All(entity btn, entity me);
@@ -47,6 +49,11 @@ void MapList_LoadMap(entity btn, entity me);
 #endif
 
 #ifdef IMPLEMENTATION
+void destroyNexuizMapList(entity me)
+{
+	MapInfo_Shutdown();
+}
+
 entity makeNexuizMapList()
 {
 	entity me;

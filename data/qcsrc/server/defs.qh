@@ -436,6 +436,9 @@ float lockteams;
 float sv_maxidle;
 float sv_maxidle_spectatorsareidle;
 
+float sv_pogostick;
+float sv_doublejump;
+
 float next_pingtime;
 
 .float captures;

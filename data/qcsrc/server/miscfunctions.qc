@@ -769,6 +769,8 @@ void readlevelcvars(void)
 	g_tourney = cvar("g_tourney");
 	sv_maxidle = cvar("sv_maxidle");
 	sv_maxidle_spectatorsareidle = cvar("sv_maxidle_spectatorsareidle");
+	sv_pogostick = cvar("sv_pogostick");
+	sv_doublejump = cvar("sv_doublejump");
 
 	g_pickup_shells                    = cvar("g_pickup_shells");
 	g_pickup_shells_max                = cvar("g_pickup_shells_max");

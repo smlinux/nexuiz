@@ -389,7 +389,14 @@ void() m_toggle =
 
 void() m_shutdown =
 {
+	entity e;
+
 	m_hide();
+	for(e = NULL; (e = nextent(e)) != NULL; )
+	{
+		if(e.destroy)
+			e.destroy(e);
+	}
 };
 
 void(string itemname) m_goto =

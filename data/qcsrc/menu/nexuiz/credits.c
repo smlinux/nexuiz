@@ -6,6 +6,7 @@ CLASS(NexuizCreditsList) EXTENDS(NexuizListBox)
 	METHOD(NexuizCreditsList, drawListBoxItem, void(entity, float, vector, float))
 	METHOD(NexuizCreditsList, resizeNotify, void(entity, vector, vector, vector, vector))
 	METHOD(NexuizCreditsList, keyDown, float(entity, float, float, float))
+	METHOD(NexuizCreditsList, destroy, void(entity))
 
 	ATTRIB(NexuizCreditsList, realFontSize, vector, '0 0 0')
 	ATTRIB(NexuizCreditsList, realUpperMargin, float, 0)
@@ -29,6 +30,10 @@ void configureNexuizCreditsListNexuizCreditsList(entity me)
 	// load the file
 	me.bufferIndex = buf_load("nexuiz-credits.txt");
 	me.nItems = buf_getsize(me.bufferIndex);
+}
+void destroyNexuizCreditsList(entity me)
+{
+	buf_del(me.bufferIndex);
 }
 void drawNexuizCreditsList(entity me)
 {

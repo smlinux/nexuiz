@@ -14,6 +14,7 @@ CLASS(Item) EXTENDS(Object)
 	METHOD(Item, showNotify, void(entity))
 	METHOD(Item, hideNotify, void(entity))
 	METHOD(Item, toString, string(entity))
+	METHOD(Item, destroy, void(entity))
 	ATTRIB(Item, focused, float, 0)
 	ATTRIB(Item, focusable, float, 0)
 	ATTRIB(Item, parent, entity, NULL)
@@ -21,6 +22,11 @@ ENDCLASS(Item)
 #endif
 
 #ifdef IMPLEMENTATION
+void destroyItem(entity me)
+{
+	// free memory associated with me
+}
+
 void relinquishFocusItem(entity me)
 {
 	if(me.parent)
