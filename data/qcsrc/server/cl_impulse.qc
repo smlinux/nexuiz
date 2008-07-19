@@ -299,6 +299,13 @@ void ImpulseCommands (void)
 						if(trace_fraction * delta_z > 1024)
 							start = trace_endpos + '0 0 1024';
 
+						// rule 3: we must not end up in trigger_hurt
+						if(tracebox_hits_trigger_hurt(start, self.mins, self.maxs, trace_endpos))
+						{
+							dprint("trigger_hurt! ouch!\n");
+							continue;
+						}
+
 						// these can be traceLINES as we already verified the starting box
 						traceline(start, start + '1 0 0' * delta_x, MOVE_NORMAL, self);
 						if(trace_fraction >= 1)

@@ -438,6 +438,7 @@ float sv_maxidle_spectatorsareidle;
 
 float sv_pogostick;
 float sv_doublejump;
+float tracebox_hits_trigger_hurt(vector start, vector mi, vector ma, vector end);
 
 float next_pingtime;
 
