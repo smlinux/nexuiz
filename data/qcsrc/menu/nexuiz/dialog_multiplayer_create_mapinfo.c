@@ -131,9 +131,9 @@ void fillNexuizMapInfoDialog(entity me)
 		{
 			me.TD(me, 1, w/4, e = makeNexuizTextLabel(0, "Assault"));
 				me.typeAssaultLabel = e;
-			me.TD(me, 1, w/4, e = makeNexuizTextLabel(0, "Onslaught"));
-				me.typeOnslaughtLabel = e;
 		}
+		me.TD(me, 1, w/4, e = makeNexuizTextLabel(0, "Onslaught"));
+			me.typeOnslaughtLabel = e;
 
 	me.gotoRC(me, me.rows - 2, 0);
 		me.TD(me, 1, me.columns, e = makeNexuizTextLabel(0.5, ""));
