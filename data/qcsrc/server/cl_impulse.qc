@@ -262,14 +262,16 @@ void ImpulseCommands (void)
 				}
 				else if (imp == 143) // actually: impulse 911
 				{
-					vector start, end;
+					vector start, end, enddown;
 					float i;
 					float m;
-					float good, evil;
+					float good, evil, evilsurf;
+					float maxattempts;
 					vector org, delta;
 
 					good = DPCONTENTS_SOLID | DPCONTENTS_CORPSE | DPCONTENTS_PLAYERCLIP;
-					evil = DPCONTENTS_NODROP | DPCONTENTS_SLIME | DPCONTENTS_LAVA | DPCONTENTS_SKY | DPCONTENTS_BODY | DPCONTENTS_DONOTENTER;
+					evil = DPCONTENTS_SLIME | DPCONTENTS_LAVA | DPCONTENTS_SKY | DPCONTENTS_BODY | DPCONTENTS_DONOTENTER;
+					evilsurf = Q3SURFACEFLAG_SKY;
 
 					m = self.dphitcontentsmask;
 					self.dphitcontentsmask = good | evil;
@@ -277,7 +279,9 @@ void ImpulseCommands (void)
 					org = world.mins;
 					delta = world.maxs - world.mins;
 
-					for(i = 100; i > 0; --i)
+					maxattempts = ((sv_cheats >= 2) ? 100000 : 100);
+
+					for(i = 0; i < maxattempts; ++i)
 					{
 						start_x = org_x + random() * delta_x;
 						start_y = org_y + random() * delta_y;
@@ -294,17 +298,13 @@ void ImpulseCommands (void)
 						dprint("hit contents ", ftos(trace_dphitcontents), "\n");
 						if(trace_dphitcontents & evil)
 							continue;
+						if(trace_dphitq3surfaceflags & evilsurf)
+							continue;
 
 						// rule 2: if we are too high, lower the point
 						if(trace_fraction * delta_z > 1024)
 							start = trace_endpos + '0 0 1024';
-
-						// rule 3: we must not end up in trigger_hurt
-						if(tracebox_hits_trigger_hurt(start, self.mins, self.maxs, trace_endpos))
-						{
-							dprint("trigger_hurt! ouch!\n");
-							continue;
-						}
+						enddown = trace_endpos;
 
 						// these can be traceLINES as we already verified the starting box
 						traceline(start, start + '1 0 0' * delta_x, MOVE_NORMAL, self);
@@ -335,17 +335,24 @@ void ImpulseCommands (void)
 						if(trace_fraction < 1)
 							continue;
 
+						// rule 4: we must not end up in trigger_hurt
+						if(tracebox_hits_trigger_hurt(start, self.mins, self.maxs, enddown))
+						{
+							dprint("trigger_hurt! ouch! and nothing else could find it!\n");
+							continue;
+						}
+
 						break;
 					}
 
-					if(i)
+					if(i < maxattempts)
 					{
 						self.origin = start;
 						self.angles = vectoangles(end - start);
 						self.angles_x = -self.angles_x;
 						self.fixangle = TRUE;
 						self.velocity = '0 0 0';
-						dprint("Needed ", ftos(101 - i), " attempts\n");
+						dprint("Needed ", ftos(i + 1), " attempts\n");
 					}
 					else
 						sprint(self, "Emergency teleport could not find a good location, forget it!\n");
