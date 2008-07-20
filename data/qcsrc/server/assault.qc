@@ -13,8 +13,8 @@ notsingle : when set to 1, entity will not spawn in Single Player mode (bot play
 -------- SPAWNFLAGS --------
 INITIAL : makes the spawnpoint the initial place for the player to spawn at the beginning of the game.*/
 void spawnfunc_info_player_attacker() {
-	spawnfunc_info_player_deathmatch();
 	self.team = COLOR_TEAM1; // red, gets swapped every round
+	spawnfunc_info_player_deathmatch();
 }
 
 //=============================================================================
@@ -32,8 +32,8 @@ notsingle : when set to 1, entity will not spawn in Single Player mode (bot play
 -------- SPAWNFLAGS --------
 INITIAL : makes the spawnpoint the initial place for the player to spawn at the beginning of the game.*/
 void spawnfunc_info_player_defender() {
-	spawnfunc_info_player_deathmatch();
 	self.team = COLOR_TEAM2; // blue, gets swapped every round
+	spawnfunc_info_player_deathmatch();
 }
 
 // reset this objective. Used when spawning an objective
