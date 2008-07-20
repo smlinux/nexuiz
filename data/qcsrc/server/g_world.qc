@@ -1892,36 +1892,12 @@ void CheckRules_World()
 		NextLevel();
 };
 
-float randsel_value;
-float randsel_priority;
-float randsel_count;
-void RandSel_Init()
-{
-	randsel_value = -1;
-	randsel_priority = -1;
-	randsel_count = -1;
-}
-void RandSel_Add(float priority, float value)
-{
-	if(priority > randsel_priority)
-	{
-		randsel_priority = priority;
-		randsel_value = value;
-		randsel_count = 1;
-	}
-	else if(priority == randsel_priority)
-	{
-		randsel_count += 1;
-		if(ceil(random() * randsel_count) == 1)
-			randsel_value = value;
-	}
-}
-
 float mapvote_nextthink;
 float mapvote_initialized;
 float mapvote_keeptwotime;
 float mapvote_timeout;
 string mapvote_message;
+string mapvote_screenshot_dir;
 
 float mapvote_count;
 float mapvote_count_real;
@@ -2058,6 +2034,11 @@ void MapVote_Init()
 		mapvote_keeptwotime = 0;
 	mapvote_message = "Choose a map and press its key!";
 
+	mapvote_screenshot_dir = cvar_string("g_maplist_votable_screenshot_dir");
+	if(mapvote_screenshot_dir == "")
+		mapvote_screenshot_dir = "maps";
+	mapvote_screenshot_dir = strzone(mapvote_screenshot_dir);
+
 	if(!cvar("g_maplist_textonly"))
 		MapVote_SendData(MSG_BROADCAST);
 }
@@ -2069,7 +2050,7 @@ void MapVote_SendPicture(float id)
 	WriteByte(MSG_ONE, TE_CSQC_MAPVOTE);
 	WriteByte(MSG_ONE, MAPVOTE_NET_PIC);
 	WriteByte(MSG_ONE, id);
-	WritePicture(MSG_ONE, strcat("maps/", mapvote_maps[id]), 1024);
+	WritePicture(MSG_ONE, strcat(mapvote_screenshot_dir, "/", mapvote_maps[id]), 1024);
 }
 
 float GameCommand_MapVote(string cmd)
@@ -2101,7 +2082,12 @@ float MapVote_GetMapMask()
 void MapVote_SendData(float targ)
 {
 	string mapfile;
-	float i, o, c;
+	float i, o;
+	WriteByte(targ, SVC_TEMPENTITY);
+	WriteByte(targ, TE_CSQC_CONFIG);
+	WriteString(targ, "mv_screenshot_dir");
+	WriteString(targ, mapvote_screenshot_dir);
+
 	WriteByte(targ, SVC_TEMPENTITY);
 	WriteByte(targ, TE_CSQC_MAPVOTE);
 	WriteByte(targ, MAPVOTE_NET_INIT);
@@ -2117,8 +2103,12 @@ void MapVote_SendData(float targ)
 		if(mapvote_maps[i] != "")
 		{
 			WriteString(targ, mapvote_maps[i]);
-			mapfile = strcat("maps/", mapvote_maps[i], ".bsp");
-			mapfile = whichpack(mapfile);
+			mapfile = strcat(mapvote_screenshot_dir, "/", mapvote_maps[i]);
+			mapfile = whichpack(strcat(mapfile, ".tga"));
+			if(mapfile == "")
+				mapfile = whichpack(strcat(mapfile, ".jpg"));
+			if(mapfile == "")
+				mapfile = whichpack(strcat(mapfile, ".png"));
 			for(o = strstr(mapfile, "/", 0)+1; o > 0; o = strstr(mapfile, "/", 0)+1)
 				mapfile = substring(mapfile, o, 999);
 			WriteString(targ, mapfile);
@@ -2143,7 +2133,6 @@ void MapVote_UpdateData(float targ)
 
 void MapVote_TellVote(float targ, float vote)
 {
-	float i;
 	WriteByte(targ, SVC_TEMPENTITY);
 	WriteByte(targ, TE_CSQC_MAPVOTE);
 	WriteByte(targ, MAPVOTE_NET_OWNVOTE);
@@ -2221,20 +2210,20 @@ float MapVote_CheckRules_2()
 	if(mapvote_abstain)
 		mapvote_voters_real -= mapvote_votes[mapvote_count - 1];
 
-	RandSel_Init();
+	RandomSelection_Init();
 	for(i = 0; i < mapvote_count_real; ++i) if(mapvote_maps[i] != "")
-		RandSel_Add(mapvote_votes[i], i);
-	firstPlace = randsel_value;
-	firstPlaceVotes = randsel_priority;
+		RandomSelection_Add(world, i, 1, mapvote_votes[i]);
+	firstPlace = RandomSelection_chosen_float;
+	firstPlaceVotes = RandomSelection_best_priority;
 	//dprint("First place: ", ftos(firstPlace), "\n");
 	//dprint("First place votes: ", ftos(firstPlaceVotes), "\n");
 
-	RandSel_Init();
+	RandomSelection_Init();
 	for(i = 0; i < mapvote_count_real; ++i) if(mapvote_maps[i] != "")
 		if(i != firstPlace)
-			RandSel_Add(mapvote_votes[i], i);
-	secondPlace = randsel_value;
-	secondPlaceVotes = randsel_priority;
+			RandomSelection_Add(world, i, 1, mapvote_votes[i]);
+	secondPlace = RandomSelection_chosen_float;
+	secondPlaceVotes = RandomSelection_best_priority;
 	//dprint("Second place: ", ftos(secondPlace), "\n");
 	//dprint("Second place votes: ", ftos(secondPlaceVotes), "\n");
 

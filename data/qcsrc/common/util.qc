@@ -16,6 +16,7 @@ string wordwrap(string s, float l)
 }
 
 #ifndef MENUQC
+#ifndef CSQC
 void wordwrap_buffer_sprint(string s)
 {
 	wordwrap_buffer = strcat(wordwrap_buffer, s);
@@ -35,6 +36,7 @@ void wordwrap_sprint(string s, float l)
 	wordwrap_buffer = "";
 	return;
 }
+#endif
 #endif
 
 string unescape(string in)

@@ -2,7 +2,8 @@
 // Revision 1: additional statistics sent (flag caps, returns, deaths)
 // Revision 2: Mapvote preview pictures
 // Revision 3: optimized map vote protocol
-#define CSQC_REVISION 3
+// Revision 4: CSQC config var system
+#define CSQC_REVISION 4
 
 // probably put these in common/
 // so server/ and client/ can be synced better
@@ -173,6 +174,7 @@ const float TE_CSQC_RETURNS = 103;
 const float TE_CSQC_DEATHS = 104;
 const float TE_CSQC_PICTURE = 105;
 const float TE_CSQC_MAPVOTE = 106;
+const float TE_CSQC_CONFIG = 107;
 
 const float STAT_KH_KEYS = 32;
 const float STAT_CTF_STATE = 33;

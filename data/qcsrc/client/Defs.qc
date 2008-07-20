@@ -10,7 +10,6 @@
 
 
 
-#define CSQC 1
 
 /*
 ==============================================================================
@@ -170,3 +169,4 @@ vector		dmg_origin;
 .float sv_entnum; // entity number sent from server
 float vid_conwidth, vid_conheight;
 float caps_team1, caps_team2;
+float configdb;

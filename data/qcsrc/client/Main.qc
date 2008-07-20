@@ -21,6 +21,16 @@ float using_gps;
 float __engine_check;
 #endif
 
+string config_get(string key, string defaultvalue)
+{
+	string s;
+	s = db_get(configdb, strcat("/s/", key));
+	if(s == "")
+		return defaultvalue;
+	else
+		return db_get(configdb, strcat("/v/", key));
+}
+
 void CSQC_Init(void)
 {
 #ifdef USE_FTE
@@ -37,6 +47,9 @@ void CSQC_Init(void)
 	
 	float i;
 	CSQC_CheckEngine();
+
+	configdb = db_create();
+
 	drawfont = 0;
 	menu_visible = FALSE;
 	menu_show = menu_show_error;
@@ -75,6 +88,7 @@ void CSQC_Shutdown(void)
 		return 0;
 #pragma TARGET fte
 #endif
+	db_close(configdb);
 	buf_del(databuf);
 }
 
@@ -393,6 +407,15 @@ string Net_ReadPicture()
 	return img;
 }
 
+void Net_Config()
+{
+	string key, value;
+	key = ReadString();
+	value = ReadString();
+	db_put(configdb, strcat("/v/", key), value);
+	db_put(configdb, strcat("/s/", key), "1");
+}
+
 // CSQC_Parse_TempEntity : Handles all temporary entity network data in the CSQC layer.
 // You must ALWAYS first acquire the temporary ID, which is sent as a byte.
 // Return value should be 1 if CSQC handled the temporary entity, otherwise return 0 to have the engine process the event.
@@ -431,7 +454,10 @@ float CSQC_Parse_TempEntity()
 			Net_Mapvote();
 			bHandled = true;
 			break;
-		
+		case TE_CSQC_CONFIG:
+			Net_Config();
+			bHandled = true;
+			break;
 		default:
 			// No special logic for this temporary entity; return 0 so the engine can handle it
 			bHandled = false;

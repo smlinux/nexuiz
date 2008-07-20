@@ -4,7 +4,10 @@ pre.qh
 Defs.qc
 csqc_constants.qc
 ../common/constants.qh
+
 csqc_builtins.qc
+
+../common/util.qh
 
 main.qh
 
@@ -21,3 +24,5 @@ mapvoting.qc
 Main.qc
 View.qc
 
+../common/util.qc
+../common/gamecommand.qc

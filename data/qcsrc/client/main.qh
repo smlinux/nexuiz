@@ -86,3 +86,5 @@ float sbar_font;
 
 float csqc_flags;
 #define CSQC_FLAG_READPICTURE 1
+
+string config_get(string key, string defaultvalue);

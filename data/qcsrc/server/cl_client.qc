@@ -147,7 +147,7 @@ entity Spawn_WeightedPoint(entity firstspot, float lower, float upper, float exp
 
 	RandomSelection_Init();
 	for(spot = firstspot; spot; spot = spot.chain)
-		RandomSelection_Add(spot, 0, pow(bound(lower, spot.frags, upper), exponent) * spot.cnt);
+		RandomSelection_Add(spot, 0, pow(bound(lower, spot.frags, upper), exponent) * spot.cnt, spot.frags >= lower);
 
 	return RandomSelection_chosen_ent;
 }
@@ -2217,6 +2217,22 @@ void PlayerPostThink (void)
 	} else if (self.classname == "spectator") {
 		//do nothing
 	}
+
+	/*
+	float i;
+	for(i = 0; i < 1000; ++i)
+	{
+		vector end;
+		end = self.origin + '0 0 1024' + 512 * randomvec();
+		tracebox(self.origin, self.mins, self.maxs, end, MOVE_NORMAL, self);
+		if(trace_fraction < 1)
+		if(!(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT))
+		{
+			print("I HIT SOLID: ", vtos(self.origin), " -> ", vtos(end), "\n");
+			break;
+		}
+	}
+	*/
 
 	Arena_Warmup();
 }

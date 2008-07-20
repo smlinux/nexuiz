@@ -217,6 +217,7 @@ void MapVote_Init()
 	if(mv_abstain)
 		mv_abstain = 1; // must be 1 for bool-true, makes stuff easier
 	mv_detail = ReadByte();
+
 	mv_ownvote = -1;
 
 	if(mv_num_maps <= 8)
@@ -237,7 +238,7 @@ void MapVote_Init()
 			pk3 = strzone(ReadString());
 			mv_maps[i] = map;
 			mv_pk3[i] = pk3;
-			map = strzone(strcat("maps/", map));
+			map = strzone(strcat(config_get("mv_screenshot_dir", "maps"), "/", map));
 			mv_pics[i] = map;
 
 			mv_preview[i] = false;
