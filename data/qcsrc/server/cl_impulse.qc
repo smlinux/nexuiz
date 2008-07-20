@@ -326,16 +326,20 @@ void ImpulseCommands (void)
 						end_x = org_x + random() * delta_x;
 						end_y = org_y + random() * delta_y;
 						end_z = org_z + random() * delta_z;
-						end = start + normalize(end - start) * 256;
+						end = start + normalize(end - start) * vlen(delta);
 
 						// rule 3: start TO end must not be too short
 						tracebox(start, self.mins, self.maxs, end, MOVE_NORMAL, self);
 						if(trace_startsolid)
 							continue;
-						if(trace_fraction < 1)
+						if(trace_fraction < 256 / vlen(delta))
 							continue;
 
-						// rule 4: we must not end up in trigger_hurt
+						// rule 4: don't want to look at sky
+						if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_SKY)
+							continue;
+
+						// rule 5: we must not end up in trigger_hurt
 						if(tracebox_hits_trigger_hurt(start, self.mins, self.maxs, enddown))
 						{
 							dprint("trigger_hurt! ouch! and nothing else could find it!\n");
