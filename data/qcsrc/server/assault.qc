@@ -131,11 +131,15 @@ void assault_objective_decrease_think() {
 // decrease the health of targeted objectives
 void assault_objective_decrease_use() {
 
-	if(self.cnt > 0)
+	if(self.cnt > 0) {
+		// did already fire
 		return;
+	}
 
-	if(activator.team != assault_attacker_team)
+	if(activator.team != assault_attacker_team) {
+		// wrong team triggered decrease
 		return;
+	}
 
 	local entity ent;
 	ent = find(world, targetname, self.target);
@@ -199,7 +203,6 @@ void assault_destructible_destroy() {
 	self.model = "";
 	self.takedamage = DAMAGE_NO;
 	self.solid = SOLID_NOT;
-	activator = other;
 	SUB_UseTargets();
 }
 
