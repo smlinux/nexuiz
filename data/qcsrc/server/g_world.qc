@@ -1316,8 +1316,12 @@ float WinningCondition_Assault()
 			}
 			else
 			{
+				local entity oldself;
+				oldself = self;
+				self = ent;
 				cvar_set("timelimit", ftos((2*time)/60));
 				assault_new_round();
+				self = oldself;
 			}
 		}
 	}
