@@ -378,9 +378,6 @@ Any object touching this will be hurt
 set dmg to damage amount
 defalt dmg = 5
 */
-.entity trigger_hurt_next;
-entity trigger_hurt_last;
-entity trigger_hurt_first;
 void spawnfunc_trigger_hurt()
 {
 	InitTrigger ();
@@ -389,74 +386,7 @@ void spawnfunc_trigger_hurt()
 		self.dmg = 1000;
 	if (!self.message)
 		self.message = "was in the wrong place.";
-
-	if(!trigger_hurt_first)
-		trigger_hurt_first = self;
-	if(trigger_hurt_last)
-		trigger_hurt_last.trigger_hurt_next = self;
-	trigger_hurt_last = self;
 };
-
-float trace_hits_box_a0, trace_hits_box_a1;
-
-float trace_hits_box_1d(float end, float thmi, float thma)
-{
-	if(end == 0)
-	{
-		// just check if x is in range
-		if(0 < thmi)
-			return FALSE;
-		if(0 > thma)
-			return FALSE;
-	}
-	else
-	{
-		// do the trace with respect to x
-		// 0 -> end has to stay in thmi -> thma
-		trace_hits_box_a0 = max(trace_hits_box_a0, min(thmi / end, thma / end));
-		trace_hits_box_a1 = min(trace_hits_box_a1, max(thmi / end, thma / end));
-		if(trace_hits_box_a0 > trace_hits_box_a1)
-			return FALSE;
-	}
-	return TRUE;
-}
-
-float trace_hits_box(vector start, vector end, vector thmi, vector thma)
-{
-	end -= start;
-	thmi -= start;
-	thma -= start;
-	// now it is a trace from 0 to end
-
-	trace_hits_box_a0 = 0;
-	trace_hits_box_a1 = 1;
-
-	if(!trace_hits_box_1d(end_x, thmi_x, thma_x))
-		return FALSE;
-	if(!trace_hits_box_1d(end_y, thmi_y, thma_y))
-		return FALSE;
-	if(!trace_hits_box_1d(end_z, thmi_z, thma_z))
-		return FALSE;
-
-	return TRUE;
-}
-
-float tracebox_hits_box(vector start, vector mi, vector ma, vector end, vector thmi, vector thma)
-{
-	return trace_hits_box(start, end, thmi - ma, thma - mi);
-}
-
-float tracebox_hits_trigger_hurt(vector start, vector mi, vector ma, vector end)
-{
-	entity th;
-
-	for(th = trigger_hurt_first; th; th = th.trigger_hurt_next)
-		if(tracebox_hits_box(start, mi, ma, end, th.absmin, th.absmax))
-			return TRUE;
-
-	return FALSE;
-}
-
 
 void target_speaker_use() {sound(self, CHAN_VOICE, self.noise, 1, 1);}
 
@@ -689,12 +619,18 @@ void spawnfunc_misc_laser()
 	self.nextthink = time;
 }
 
+// tZorks trigger impulse / gravity
+.float radius;
+.float falloff;
 .float strength;
 .float lastpushtime;
+
+// targeted (directional) mode
 void trigger_impulse_touch1()
 {
 	entity targ;
     float pushdeltatime;
+    float str;
 
 	// FIXME: Better checking for what to push and not.
 	if (other.classname != "player")
@@ -716,11 +652,17 @@ void trigger_impulse_touch1()
     targ = find(world, targetname, self.target);
     if(!targ)
     {
-        objerror("trigger_force without a (valif) .target!\n");
+        objerror("trigger_force without a (valid) .target!\n");
         remove(self);
         return;
     }
 
+    if(self.falloff == 1)
+        str = (str / self.radius) * self.strength;
+    else if(self.falloff == 2)
+        str = (1 - (str / self.radius)) * self.strength;
+    else
+        str = self.strength;
 
     pushdeltatime = time - other.lastpushtime;
     if (pushdeltatime > 0.15) pushdeltatime = 0;
@@ -730,8 +672,10 @@ void trigger_impulse_touch1()
     other.velocity = other.velocity + normalize(targ.origin - self.origin) * self.strength * pushdeltatime;
 }
 
+// Directionless (accelerator/decelerator) mode
 void trigger_impulse_touch2()
 {
+    float pushdeltatime;
 
 	// FIXME: Better checking for what to push and not.
 	if (other.classname != "player")
@@ -750,9 +694,56 @@ void trigger_impulse_touch2()
 	if (other.deadflag && other.classname == "player")
 		return;
 
-    other.velocity = other.velocity * self.strength;
+    pushdeltatime = time - other.lastpushtime;
+    if (pushdeltatime > 0.15) pushdeltatime = 0;
+    other.lastpushtime = time;
+    if(!pushdeltatime) return;
+
+    //if(self.strength > 1)
+        other.velocity = other.velocity * (self.strength * pushdeltatime);
+    //else
+    //    other.velocity = other.velocity - (other.velocity * self.strength * pushdeltatime);
 }
 
+// Spherical (gravity/repulsor) mode
+void trigger_impulse_touch3()
+{
+    float pushdeltatime;
+    float str;
+
+	// FIXME: Better checking for what to push and not.
+	if (other.classname != "player")
+	if (other.classname != "corpse")
+	if (other.classname != "body")
+	if (other.classname != "gib")
+	if (other.classname != "missile")
+	if (other.classname != "casing")
+	if (other.classname != "grenade")
+	if (other.classname != "plasma")
+	if (other.classname != "plasma_prim")
+	if (other.classname != "plasma_chain")
+	if (other.classname != "droppedweapon")
+		return;
+
+	if (other.deadflag && other.classname == "player")
+		return;
+
+    pushdeltatime = time - other.lastpushtime;
+    if (pushdeltatime > 0.15) pushdeltatime = 0;
+    other.lastpushtime = time;
+    if(!pushdeltatime) return;
+
+    setsize(self, '-1 -1 -1' * self.radius,'1 1 1' * self.radius);
+
+    if(self.falloff == 1)
+        str = (str / self.radius) * self.strength;
+    else if(self.falloff == 2)
+        str = (1 - (str / self.radius)) * self.strength;
+    else
+        str = self.strength;
+
+    other.velocity = other.velocity + normalize(other.origin - self.origin) * str * pushdeltatime;
+}
 
 /*QUAKED spawnfunc_trigger_impulse (.5 .5 .5) ?
 -------- KEYS --------
@@ -763,23 +754,37 @@ strength : This is how mutch force to add in the direction of .target each secon
            when .target is set. If not, this is hoe mutch to slow down/accelerate
            someting cought inside this trigger. (1=no change, 0,5 half speed rougthly each tic, 2 = doubble)
 
+radius   : If set, act as a spherical device rather then a liniar one.
+
+falloff : 0 = none, 1 = liniar, 2 = inverted liniar
+
 -------- NOTES --------
 Use a brush textured with common/origin in the trigger entity to determine the origin of the force
-in directional push mode. For damper/accelerator mode this is no nessesary (and has no effect).
+in directional and sperical mode. For damper/accelerator mode this is not nessesary (and has no effect).
 */
 
 void spawnfunc_trigger_impulse()
 {
     InitTrigger ();
-    if(self.target)
+    if(self.radius)
     {
-        if(!self.strength) self.strength = 950;
-        self.touch = trigger_impulse_touch1;
+        if(!self.strength) self.strength = 2000;
+        setorigin(self, self.origin);
+        setsize(self, '-1 -1 -1' * self.radius,'1 1 1' * self.radius);
+        self.touch = trigger_impulse_touch3;
     }
     else
     {
-        if(!self.strength) self.strength = 0.9;
-        self.touch = trigger_impulse_touch2;
+        if(self.target)
+        {
+            if(!self.strength) self.strength = 950;
+            self.touch = trigger_impulse_touch1;
+        }
+        else
+        {
+            if(!self.strength) self.strength = 0.9;
+            self.touch = trigger_impulse_touch2;
+        }
     }
 }
 
