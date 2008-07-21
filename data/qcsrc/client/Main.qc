@@ -173,12 +173,7 @@ float CSQC_InputEvent(float bInputType, float nPrimary, float nSecondary)
 {
 	local float bSkipKey;
 	bSkipKey = false;
-
-	if(chr2str(nSecondary) == "-") {
-		print(strcat("inputtype: ", ftos(bInputType), "\n"));
-		return true;
-	}
-
+	
 	if(menu_visible)
 		if(menu_action(bInputType, nPrimary, nSecondary))
 			return TRUE;
