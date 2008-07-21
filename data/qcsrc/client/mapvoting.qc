@@ -9,10 +9,12 @@ entity mv_pk3list;
 float mv_abstain;
 float mv_ownvote;
 float mv_detail;
+float mv_timeout;
 
 void MapVote_DrawMapItem(vector pos, float isize, string map, string pic, float count, float id)
 {
 	vector img_size;
+	vector rgb;
 	//img_size_x = img_size_y = isize;
 	img_size_y = isize;
 	img_size_x = isize / 0.75; // 4:3 x can be stretched easily, height is defined in isize
@@ -24,9 +26,11 @@ void MapVote_DrawMapItem(vector pos, float isize, string map, string pic, float 
 	pos_y += img_size_y*0.5;
 
 	if(id == mv_ownvote)
-		drawstring(pos - '40 0', strcat(ftos(id+1), "."), img_size, '1 1 0', 1, DRAWFLAG_NORMAL);
+		rgb = '1 1 0';
 	else
-		drawstring(pos - '40 0', strcat(ftos(id+1), "."), img_size, '1 1 1', 1, DRAWFLAG_NORMAL);
+		rgb = '1 1 1';
+	
+	drawstring(pos - '40 0', strcat(ftos(id+1), "."), img_size, rgb, 1, DRAWFLAG_NORMAL);
 
 	// half again for the mapname
 	img_size = img_size * 0.5; // *= broken???
@@ -34,14 +38,15 @@ void MapVote_DrawMapItem(vector pos, float isize, string map, string pic, float 
 	pos_x += isize/0.75 + 10;
 
 	if(mv_detail)
-		drawstring(pos, strcat(ftos(count), " : ", map), img_size, '1 1 1', 1, DRAWFLAG_NORMAL);
+		drawstring(pos, strcat(ftos(count), " : ", map), img_size, rgb, 1, DRAWFLAG_NORMAL);
 	else
-		drawstring(pos, map, img_size, '1 1 1', 1, DRAWFLAG_NORMAL);
+		drawstring(pos, map, img_size, rgb, 1, DRAWFLAG_NORMAL);
 }
 
 void MapVote_DrawMapNotAvailable(vector pos, float isize, string map, float count, float id)
 {
 	vector img_size, a, b;
+	vector rgb;
 	img_size_y = isize;
 	img_size_x = isize / 0.75;
 
@@ -57,23 +62,26 @@ void MapVote_DrawMapNotAvailable(vector pos, float isize, string map, float coun
 	pos_y += img_size_y*0.5;
 
 	if(id == mv_ownvote)
-		drawstring(pos - '40 0', strcat(ftos(id+1), "."), img_size, '1 1 0', 1, DRAWFLAG_NORMAL);
+		rgb = '1 1 0';
 	else
-		drawstring(pos - '40 0', strcat(ftos(id+1), "."), img_size, '1 1 1', 1, DRAWFLAG_NORMAL);
+		rgb = '1 1 1';
+	
+	drawstring(pos - '40 0', strcat(ftos(id+1), "."), img_size, rgb, 1, DRAWFLAG_NORMAL);
 	
 	img_size = img_size * 0.5; // *= broken???
 	pos_y += img_size_y*0.5;
 	pos_x += isize/0.75 + 10;
 
 	if(mv_detail)
-		drawstring(pos, strcat(ftos(count), " : ", map), img_size, '1 1 1', 1, DRAWFLAG_NORMAL);
+		drawstring(pos, strcat(ftos(count), " : ", map), img_size, rgb, 1, DRAWFLAG_NORMAL);
 	else
-		drawstring(pos, map, img_size, '1 1 1', 1, DRAWFLAG_NORMAL);
+		drawstring(pos, map, img_size, rgb, 1, DRAWFLAG_NORMAL);
 }
 
 void MapVote_DrawAbstain(vector pos, float isize, float count, float id)
 {
 	vector img_size;
+	vector rgb;
 	img_size_y = isize;
 	img_size_x = isize / 0.75;
 
@@ -81,18 +89,20 @@ void MapVote_DrawAbstain(vector pos, float isize, float count, float id)
 	pos_y += img_size_y*0.5;
 
 	if(id == mv_ownvote)
-		drawstring(pos - '40 0', strcat(ftos(id+1), "."), img_size, '1 1 0', 1, DRAWFLAG_NORMAL);
+		rgb = '1 1 0';
 	else
-		drawstring(pos - '40 0', strcat(ftos(id+1), "."), img_size, '1 1 1', 1, DRAWFLAG_NORMAL);
+		rgb = '1 1 1';
+	
+	drawstring(pos - '40 0', strcat(ftos(id+1), "."), img_size, rgb, 1, DRAWFLAG_NORMAL);
 	
 	img_size = img_size * 0.5; // *= broken???
 	pos_y += img_size_y*0.5;
 	pos_x += isize/0.75 + 10;
 
 	if(mv_detail)
-		drawstring(pos, strcat(ftos(count), " : Don't care"), img_size, '1 1 1', 1, DRAWFLAG_NORMAL);
+		drawstring(pos, strcat(ftos(count), " : Don't care"), img_size, rgb, 1, DRAWFLAG_NORMAL);
 	else
-		drawstring(pos, "Don't care", img_size, '1 1 1', 1, DRAWFLAG_NORMAL);
+		drawstring(pos, "Don't care", img_size, rgb, 1, DRAWFLAG_NORMAL);
 }
 
 void MapVote_Draw()
@@ -124,10 +134,16 @@ void MapVote_Draw()
 	pos_z = 0;
 	pos_x = center - stringwidth("Vote for a map", false) * 0.5 * 24;
 	drawstring(pos, "Vote for a map", '24 24', '1 1 1', 1, DRAWFLAG_NORMAL);
+	pos_y += 26;
 
+	i = ceil(mv_timeout - time);
+	map = strcat(ftos(i), " seconds left");
+	pos_x = center - stringwidth(map, false) * 0.5 * 16;
+	drawstring(pos, map, '16 16', '0 1 0', 1, DRAWFLAG_NORMAL);
+	pos_y += 22;
 	pos_x = xmin;
-	pos_y += 32;
-	isize = (ymax - ymin - mv_num_maps*10) / mv_num_maps;
+	
+	isize = (ymax - pos_y - mv_num_maps*10) / mv_num_maps;
 	isize = min(isize, 64);
 	for(i = 0; i < (mv_num_maps - mv_abstain); ++i) // - mv_abstain safe? make sure it's 0 or 1
 	{
@@ -214,6 +230,9 @@ void MapVote_Init()
 {
 	float i, power, m;
 	string map, pk3;
+
+	registercmd("+showscores");
+	registercmd("-showscores");
 	
 	mv_num_maps = min(MAPVOTE_COUNT, ReadByte());
 	mv_abstain = ReadByte();
@@ -222,6 +241,7 @@ void MapVote_Init()
 	mv_detail = ReadByte();
 
 	mv_ownvote = -1;
+	mv_timeout = time + ReadByte();
 
 	if(mv_num_maps <= 8)
 		m = ReadByte();

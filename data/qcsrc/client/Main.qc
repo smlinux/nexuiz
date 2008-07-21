@@ -138,6 +138,12 @@ float CSQC_ConsoleCommand(string strMessage)
 	} else if(strCmd == "sbar_columns_help") {
 		Cmd_Sbar_Help(argc);
 		return true;
+	} else if(strCmd == "+showscores") {
+		sb_showscores = true;
+		return true;
+	} else if(strCmd == "-showscores") {
+		sb_showscores = false;
+		return true;
 	}
 	
 	return false;
@@ -167,6 +173,12 @@ float CSQC_InputEvent(float bInputType, float nPrimary, float nSecondary)
 {
 	local float bSkipKey;
 	bSkipKey = false;
+
+	if(chr2str(nSecondary) == "-") {
+		print(strcat("inputtype: ", ftos(bInputType), "\n"));
+		return true;
+	}
+
 	if(menu_visible)
 		if(menu_action(bInputType, nPrimary, nSecondary))
 			return TRUE;
