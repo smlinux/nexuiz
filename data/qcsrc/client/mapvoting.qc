@@ -32,7 +32,6 @@ void MapVote_DrawMapItem(vector pos, float isize, string map, string pic, float 
 	
 	drawstring(pos - '40 0', strcat(ftos(id+1), "."), img_size, rgb, 1, DRAWFLAG_NORMAL);
 
-	pos_y += img_size_y*0.5;
 	pos_x += isize/0.75 + 10;
 
 	if(mv_detail)
@@ -66,7 +65,6 @@ void MapVote_DrawMapNotAvailable(vector pos, float isize, string map, float coun
 	
 	drawstring(pos - '40 0', strcat(ftos(id+1), "."), img_size, rgb, 1, DRAWFLAG_NORMAL);
 	
-	pos_y += img_size_y*0.5;
 	pos_x += isize/0.75 + 10;
 
 	if(mv_detail)
@@ -92,7 +90,6 @@ void MapVote_DrawAbstain(vector pos, float isize, float count, float id)
 	
 	drawstring(pos - '40 0', strcat(ftos(id+1), "."), img_size, rgb, 1, DRAWFLAG_NORMAL);
 	
-	pos_y += img_size_y*0.5;
 	pos_x += isize/0.75 + 10;
 
 	if(mv_detail)
@@ -108,6 +105,7 @@ void MapVote_Draw()
 	vector pos;
 	float isize;
 	float center;
+	float margin;
 	
 	center = (vid_conwidth - 1)/2;
 	xmin = vid_conwidth*0.2;
@@ -141,6 +139,7 @@ void MapVote_Draw()
 	
 	isize = (ymax - pos_y - mv_num_maps*10) / mv_num_maps;
 	isize = min(isize, 64);
+
 	for(i = 0; i < (mv_num_maps - mv_abstain); ++i)
 	{
 		tmp = mv_votes[i]; // FTEQCC bug: too many array accesses in the function call screw it up
