@@ -378,6 +378,9 @@ Any object touching this will be hurt
 set dmg to damage amount
 defalt dmg = 5
 */
+.entity trigger_hurt_next;
+entity trigger_hurt_last;
+entity trigger_hurt_first;
 void spawnfunc_trigger_hurt()
 {
 	InitTrigger ();
@@ -386,7 +389,74 @@ void spawnfunc_trigger_hurt()
 		self.dmg = 1000;
 	if (!self.message)
 		self.message = "was in the wrong place.";
+
+	if(!trigger_hurt_first)
+		trigger_hurt_first = self;
+	if(trigger_hurt_last)
+		trigger_hurt_last.trigger_hurt_next = self;
+	trigger_hurt_last = self;
 };
+
+float trace_hits_box_a0, trace_hits_box_a1;
+
+float trace_hits_box_1d(float end, float thmi, float thma)
+{
+	if(end == 0)
+	{
+		// just check if x is in range
+		if(0 < thmi)
+			return FALSE;
+		if(0 > thma)
+			return FALSE;
+	}
+	else
+	{
+		// do the trace with respect to x
+		// 0 -> end has to stay in thmi -> thma
+		trace_hits_box_a0 = max(trace_hits_box_a0, min(thmi / end, thma / end));
+		trace_hits_box_a1 = min(trace_hits_box_a1, max(thmi / end, thma / end));
+		if(trace_hits_box_a0 > trace_hits_box_a1)
+			return FALSE;
+	}
+	return TRUE;
+}
+
+float trace_hits_box(vector start, vector end, vector thmi, vector thma)
+{
+	end -= start;
+	thmi -= start;
+	thma -= start;
+	// now it is a trace from 0 to end
+
+	trace_hits_box_a0 = 0;
+	trace_hits_box_a1 = 1;
+
+	if(!trace_hits_box_1d(end_x, thmi_x, thma_x))
+		return FALSE;
+	if(!trace_hits_box_1d(end_y, thmi_y, thma_y))
+		return FALSE;
+	if(!trace_hits_box_1d(end_z, thmi_z, thma_z))
+		return FALSE;
+
+	return TRUE;
+}
+
+float tracebox_hits_box(vector start, vector mi, vector ma, vector end, vector thmi, vector thma)
+{
+	return trace_hits_box(start, end, thmi - ma, thma - mi);
+}
+
+float tracebox_hits_trigger_hurt(vector start, vector mi, vector ma, vector end)
+{
+	entity th;
+
+	for(th = trigger_hurt_first; th; th = th.trigger_hurt_next)
+		if(tracebox_hits_box(start, mi, ma, end, th.absmin, th.absmax))
+			return TRUE;
+
+	return FALSE;
+}
+
 
 void target_speaker_use() {sound(self, CHAN_VOICE, self.noise, 1, 1);}
 
@@ -735,10 +805,12 @@ void trigger_impulse_touch3()
 
     setsize(self, '-1 -1 -1' * self.radius,'1 1 1' * self.radius);
 
+	str = min(self.radius, vlen(self.origin - other.origin));
+
     if(self.falloff == 1)
-        str = (str / self.radius) * self.strength;
+        str = (1 - str / self.radius) * self.strength; // 1 in the inside
     else if(self.falloff == 2)
-        str = (1 - (str / self.radius)) * self.strength;
+        str = (str / self.radius) * self.strength; // 0 in the inside
     else
         str = self.strength;
 
