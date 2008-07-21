@@ -673,6 +673,9 @@ void spawnfunc_func_button()
 	if (!self.lip)
 		self.lip = 4;
 
+    if(self.noise != "")
+        precache_sound(self.noise);
+
 	self.state = STATE_BOTTOM;
 
 	self.pos1 = self.origin;
