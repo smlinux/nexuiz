@@ -2085,7 +2085,7 @@ float MapVote_GetMapMask()
 
 void MapVote_SendData(float targ)
 {
-	string mapfile;
+	string mapfile, pakfile;
 	float i, o;
 	WriteByte(targ, SVC_TEMPENTITY);
 	WriteByte(targ, TE_CSQC_CONFIG);
@@ -2109,14 +2109,15 @@ void MapVote_SendData(float targ)
 		{
 			WriteString(targ, mapvote_maps[i]);
 			mapfile = strcat(mapvote_screenshot_dir, "/", mapvote_maps[i]);
-			mapfile = whichpack(strcat(mapfile, ".tga"));
-			if(mapfile == "")
-				mapfile = whichpack(strcat(mapfile, ".jpg"));
-			if(mapfile == "")
-				mapfile = whichpack(strcat(mapfile, ".png"));
-			for(o = strstr(mapfile, "/", 0)+1; o > 0; o = strstr(mapfile, "/", 0)+1)
-				mapfile = substring(mapfile, o, 999);
-			WriteString(targ, mapfile);
+			pakfile = whichpack(strcat(mapfile, ".tga"));
+			if(pakfile == "")
+				pakfile = whichpack(strcat(mapfile, ".jpg"));
+			if(pakfile == "")
+				pakfile = whichpack(strcat(mapfile, ".png"));
+			print("pakfile is ", pakfile, "\n");
+			for(o = strstr(pakfile, "/", 0)+1; o > 0; o = strstr(pakfile, "/", 0)+1)
+				pakfile = substring(pakfile, o, 999);
+			WriteString(targ, pakfile);
 		}
 }
 
