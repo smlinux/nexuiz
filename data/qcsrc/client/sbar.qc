@@ -316,7 +316,7 @@ void Sbar_UpdateTeamPosFrags(entity tm)
 	}
 
 	other = tm.sort_next;
-	while(other && tm.sb_caps == tm.sb_caps && tm.sb_frags < other.sb_frags)
+	while(other && tm.sb_caps == other.sb_caps && tm.sb_frags < other.sb_frags)
 	{
 		SORT_SWAP(tm, other);
 		other = tm.sort_next;
