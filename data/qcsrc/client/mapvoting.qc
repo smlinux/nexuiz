@@ -32,8 +32,6 @@ void MapVote_DrawMapItem(vector pos, float isize, string map, string pic, float 
 	
 	drawstring(pos - '40 0', strcat(ftos(id+1), "."), img_size, rgb, 1, DRAWFLAG_NORMAL);
 
-	// half again for the mapname
-	img_size = img_size * 0.5; // *= broken???
 	pos_y += img_size_y*0.5;
 	pos_x += isize/0.75 + 10;
 
@@ -68,7 +66,6 @@ void MapVote_DrawMapNotAvailable(vector pos, float isize, string map, float coun
 	
 	drawstring(pos - '40 0', strcat(ftos(id+1), "."), img_size, rgb, 1, DRAWFLAG_NORMAL);
 	
-	img_size = img_size * 0.5; // *= broken???
 	pos_y += img_size_y*0.5;
 	pos_x += isize/0.75 + 10;
 
@@ -95,7 +92,6 @@ void MapVote_DrawAbstain(vector pos, float isize, float count, float id)
 	
 	drawstring(pos - '40 0', strcat(ftos(id+1), "."), img_size, rgb, 1, DRAWFLAG_NORMAL);
 	
-	img_size = img_size * 0.5; // *= broken???
 	pos_y += img_size_y*0.5;
 	pos_x += isize/0.75 + 10;
 
