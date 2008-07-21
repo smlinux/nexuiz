@@ -687,9 +687,11 @@ Can be used in two ways:
 "dampener field": just set strength to a value from 0 to 1. Entering the field will slow down to this factor.
 "accelerator field": just set strength to a value from 1 to infinity. Entering the field will accelerate by this factor.
 "wind field": set strength to the amount of velocity to add per second, and target a target_position. The field will apply force in the direction from its own origin to the target (use an origin brush to specify its own origin, or this will fail) when touched.
+"gravity field": set strength to the amount of velocity to add per second at the center, and set radius to the radius of the field. Set falloff to the desired falloff characteristics.
 -------- KEYS --------
 target: "wind field": points to the target_position to which the player will get pushed.
-strength: "wind field": amount of force per second to apply in direction from origin to target. "dampener/accelerator field": slowdown/speedup factor.
+strength: "wind field", "gravity field": amount of force per second to apply. "dampener/accelerator field": slowdown/speedup factor.
+falloff: "gravity field": 0 means no falloff, 1 means linear falloff (zero at the outside), 2 means inverted linear falloff (zero at the inside)
 */
 
 /*QUAKED trigger_multiple (.5 .5 .5) ? NOTOUCH
