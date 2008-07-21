@@ -1,0 +1,96 @@
+/*QUAKED turret_machinegun (1 0 0) (-32 -32 0) (32 32 50)
+-----------KEYS------------
+-----------SPAWNFLAGS-----------
+---------NOTES----------
+-------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
+model="models/turrets/full.md3"
+*/
+
+/*QUAKED turret_plasma (1 0 0) (-32 -32 0) (32 32 50)
+-----------KEYS------------
+-----------SPAWNFLAGS-----------
+---------NOTES----------
+-------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
+model="models/turrets/full.md3"
+*/
+
+/*QUAKED turret_plasma_dual (1 0 0) (-32 -32 0) (32 32 50)
+-----------KEYS------------
+-----------SPAWNFLAGS-----------
+---------NOTES----------
+-------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
+model="models/turrets/full.md3"
+*/
+
+/*QUAKED turret_pointdefense (1 0 0) (-32 -32 0) (32 32 50)
+-----------KEYS------------
+-----------SPAWNFLAGS-----------
+---------NOTES----------
+a automated plasma weapon.
+-------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
+model="models/turrets/full.md3"
+*/
+
+/*QUAKED turret_mlrs (1 0 0) (-32 -32 0) (32 32 50)
+-----------KEYS------------
+-----------SPAWNFLAGS-----------
+---------NOTES----------
+-------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
+model="models/turrets/full.md3"
+*/
+
+/*QUAKED turret_hellion (1 0 0) (-32 -32 0) (32 32 50)
+-----------KEYS------------
+-----------SPAWNFLAGS-----------
+---------NOTES----------
+-------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
+model="models/turrets/full.md3"
+*/
+
+/*QUAKED turret_gauss (1 0 0) (-32 -32 0) (32 32 50)
+-----------KEYS------------
+-----------SPAWNFLAGS-----------
+---------NOTES----------
+-------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
+model="models/turrets/full.md3"
+*/
+
+/*QUAKED turret_hk (1 0 0) (-32 -32 0) (32 32 50)
+-----------KEYS------------
+-----------SPAWNFLAGS-----------
+---------NOTES----------
+-------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
+model="models/turrets/full.md3"
+*/
+
+/*QUAKED turret_tesla (1 0 0) (-32 -32 0) (32 32 50)
+-----------KEYS------------
+-----------SPAWNFLAGS-----------
+---------NOTES----------
+-------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
+model="models/turrets/full.md3"
+*/
+
+/*QUAKED turret_phaser (1 0 0) (-32 -32 0) (32 32 50)
+-----------KEYS------------
+-----------SPAWNFLAGS-----------
+---------NOTES----------
+-------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
+model="models/turrets/full.md3"
+*/
+
+
+
+/*QUAKED turret_fusionreactor (1 0 0) (-32 -32 0) (32 32 50)
+-----------KEYS------------
+-----------SPAWNFLAGS-----------
+---------NOTES----------
+-------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
+model="models/turrets/fusreac.md3"
+*/
+
+
+/*QUAKED turret_targettrigger (.5 .5 .5) ?
+*/
+
+
