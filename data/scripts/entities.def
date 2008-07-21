@@ -1,3 +1,10 @@
+/*QUAKED _decal (0 1.0 0) ?
+Compiler-only entity that specifies a decal to be projected.
+Should contain 1 or more patch meshes (curves) and target an info_null entity. The distance between the center of the _decal entity and the target is the axis and distance of projection.
+-------- KEYS --------
+target: the name of the entity targeted at for projection
+*/
+
 /*QUAKED _skybox (0.77 0.88 1.0) (-4 -4 -4) (4 4 4) 
 Compiler-only entity that specifies a the origin of a sky box (a wholly contained, separate area of the map), similar to some games' portal skies. When compiled with Q3Map2, the sky box surfaces will be visible from any place where sky is normally visible. It will cast shadows on the normal parts of the map, and can be used with cloud layers and other effects. As it is compiler-only, it can't "scale up" entities in its box.
 To use this, carve a small box in some larger structure on your map, place this entity inside that box hole, and make a small version on what should be seen in the sky there.
