@@ -1,0 +1,307 @@
+/*
+* Trow a turret gib
+*/
+void turret_gib_damage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector vforce)
+{
+    self.velocity += vforce;
+}
+void turret_gibs_precash()
+{
+    precache_model("models/turrets/base-gib1.md3");
+    precache_model("models/turrets/base-gib2.md3");
+    precache_model("models/turrets/base-gib3.md3");
+    precache_model("models/turrets/base-gib4.md3");
+
+    precache_model("models/turrets/head-gib1.md3");
+    precache_model("models/turrets/head-gib2.md3");
+    precache_model("models/turrets/head-gib3.md3");
+    precache_model("models/turrets/head-gib4.md3");
+}
+
+void turret_trowgib(
+    vector v_from, vector v_to, vector v_colormod,
+    string smodel,
+    float f_lifetime, float f_fadetime, float b_burn)
+{
+    local entity gib;
+    local entity burn;
+
+    gib = spawn();
+
+    gib.classname = "turret_gib";
+    setmodel(gib,smodel);
+    setorigin(gib,v_from);
+    SUB_SetFade(gib,time + f_lifetime,2);
+
+    gib.solid              = SOLID_BBOX;
+
+    gib.movetype           = MOVETYPE_BOUNCE;
+    gib.takedamage         = DAMAGE_YES;
+    gib.event_damage       = turret_gib_damage;
+    gib.health             = -1;
+    gib.effects            = EF_LOWPRECISION;
+    gib.flags              = FL_NOTARGET;
+    gib.colormod           = v_colormod;
+    gib.velocity           = v_to;
+
+    if (b_burn)
+    {
+        burn = spawn();
+        burn.effects        = EF_LOWPRECISION|EF_FLAME;
+        setattachment(burn,gib,"");
+        setorigin(burn,(gib.mins + gib.maxs) * 0.5);
+        SUB_SetFade(burn,time + (f_lifetime * 0.5) ,2);
+    }
+}
+
+void turret_gib_boom()
+{
+    entity gib;
+    float i;
+    string s;
+
+    for(i=1;i<5;i++)
+    {
+        gib = spawn();
+        gib.classname = "turret_gib";
+
+        s = strcat("models/turrets/head-gib",ftos(i));
+        s = strcat(s,".md3");
+        // bprint("s:",s,"\n");
+        setmodel(gib,s);
+
+        setorigin(gib,self.origin);
+
+        SUB_SetFade(gib,time + 5,2);
+
+        gib.solid              = SOLID_BBOX;
+
+        gib.movetype           = MOVETYPE_BOUNCE;
+        gib.gravity            = 0.5;
+        gib.damageforcescale   = 2;
+        gib.takedamage         = DAMAGE_YES;
+        gib.event_damage       = turret_gib_damage;
+        gib.health             = -1;
+        gib.effects            = EF_LOWPRECISION;
+        gib.flags              = FL_NOTARGET;
+        gib.velocity           = self.velocity + (randomvec() * 700);
+        gib.avelocity          = randomvec() * 64;
+    }
+
+    WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+    WriteByte (MSG_BROADCAST, 78);
+    WriteCoord (MSG_BROADCAST, self.origin_x);
+    WriteCoord (MSG_BROADCAST, self.origin_y);
+    WriteCoord (MSG_BROADCAST, self.origin_z);
+
+    remove(self);
+}
+
+void turret_trowgib2(
+    vector v_from, vector v_to, vector v_colormod,
+    entity e_mimic, float boomtime)
+{
+    entity gib;
+
+    gib = spawn();
+
+    gib.classname = "turret_gib";
+    setmodel(gib,e_mimic.model);
+    setorigin(gib,v_from);
+
+    gib.solid              = SOLID_BBOX;
+
+    gib.movetype           = MOVETYPE_BOUNCE;
+    gib.gravity            = 0.75;
+    gib.damageforcescale   = 2;
+    gib.takedamage         = DAMAGE_YES;
+    gib.event_damage       = turret_gib_damage;
+    gib.health             = -1;
+    gib.effects            = EF_LOWPRECISION;
+    gib.flags              = FL_NOTARGET;
+    gib.colormod           = v_colormod;
+    gib.velocity           = v_to;
+    gib.avelocity          = randomvec() * 32;
+    gib.think              = turret_gib_boom;
+    gib.nextthink          = boomtime;
+    gib.effects            = EF_FLAME;
+
+
+}
+/*
+* Spawn a boom, trow fake bits arround
+* and hide the real ones.
+*/
+void turret_stdproc_die()
+{
+    vector org2;
+    vector t_dir;
+
+    // self.tur_active = 0;
+
+    self.deadflag = DEAD_DEAD;
+    self.tur_head.deadflag = self.deadflag;
+
+    sound (self, CHAN_BODY, "weapons/rocket_impact.wav", 1, ATTN_NORM);
+    org2 = self.origin + '0 0 40';
+
+// Explotion grafix
+    WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+    WriteByte (MSG_BROADCAST, 78);
+    WriteCoord (MSG_BROADCAST, org2_x);
+    WriteCoord (MSG_BROADCAST, org2_y);
+    WriteCoord (MSG_BROADCAST, org2_z);
+
+// Unsolidify and hide real parts
+    self.solid = SOLID_NOT;
+    self.tur_head.solid   = self.solid;
+
+    self.alpha = -1;
+    self.tur_head.alpha = -1;
+
+    self.takedamage = DAMAGE_NO;
+    self.tur_head.takedamage    = self.takedamage;
+
+    self.effects = 0;
+    self.tur_head.effects   = self.effects;
+
+    self.health             = 0;
+
+
+// Trow fake parts arround
+
+    // base
+    makevectors(self.angles);
+    if(random() > 0.5)
+    {
+        turret_trowgib(self.origin, '0 0 0','1 1 1',"models/turrets/base-gib2.md3",min(self.respawntime,20),1,1);
+        t_dir = (v_up * 700) + (randomvec() * 300);
+        turret_trowgib(self.origin, t_dir,'1 1 1',"models/turrets/base-gib3.md3",min(self.respawntime,10),1,1);
+        t_dir = (v_up * 700) + (randomvec() * 300);
+        turret_trowgib(self.origin, t_dir,'1 1 1',"models/turrets/base-gib4.md3",min(self.respawntime,10),1,1);
+    } else {
+        turret_trowgib(self.origin, '0 0 0','1 1 1',"models/turrets/base-gib1.md3",min(self.respawntime,20),1,1);
+    }
+
+    // Blow the top part up into the air
+    turret_trowgib2( self.origin + (v_up * 50),
+                     v_up * 150 + randomvec() * 50,
+                     '0.2 0.2 0.2',
+                     self.tur_head,time + 0.5 + (random() * 0.5));
+
+
+// Go boom
+    RadiusDamage (self,self, min(self.ammo,50),min(self.ammo,50) * 0.25,250,world,min(self.ammo,50)*5,IT_ROCKET_LAUNCHER);
+
+// Setup respawn
+    self.nextthink      = time + self.respawntime;
+    self.think          = self.turret_spawnfunc;
+
+    if(self.call_diehook)
+        self.turret_diehook();
+
+}
+
+void turret_stdproc_respawn()
+{
+    // self.tur_active = 1;
+
+    // Make sure all parts belong to the same team since
+    // this function doubles as "teamchange" function.
+    self.tur_head.team = self.team;
+    if (self.team == COLOR_TEAM1) self.colormod = '1.4 0.8 0.8';
+    if (self.team == COLOR_TEAM2) self.colormod = '0.8 0.8 1.4';
+
+    self.deadflag = DEAD_NO;
+    self.tur_head.deadflag = self.deadflag;
+    self.effects = self.tur_head.effects = 0;
+
+    self.solid = SOLID_BBOX;
+    self.tur_head.solid   = self.solid;
+
+    self.alpha = 1;
+    self.tur_head.alpha     = self.alpha;
+
+    self.takedamage = DAMAGE_YES;
+    self.tur_head.takedamage    = self.takedamage;
+
+    self.avelocity = '0 0 0';
+    self.tur_head.avelocity    = self.avelocity;
+    self.tur_head.angles = self.idle_aim;
+
+    self.health             = self.tur_health;
+
+    self.enemy          = world;
+    self.volly_counter  = self.shot_volly;
+    self.ammo           = self.ammo_max;
+
+    self.nextthink  = time + self.ticrate;
+    self.think      = turret_think;
+
+    if(self.call_respwnhook)
+        self.turret_respawnhook();
+
+}
+
+/*
+* Standard damage proc.
+*/
+void turret_stdproc_damage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector vforce)
+{
+    entity baseent;
+    // entity player;
+
+    if (self.health <= 0) return;
+
+    // Damage func is shared on all parts as standard, we need to know what the master entity of this turret is.
+    // if ((self.classname == "turret_head")||(self.classname == "turret_gun")||(self.classname == "turret_badge"))
+    if(self.owner)
+        baseent = self.owner;
+    else
+        baseent = self;
+
+    if (teamplay != 0)
+    {
+        if (self.team == attacker.team)
+        {
+            sprint(attacker,"Turret: Im on your team!\n");
+        } else {
+			/*
+            // This will get enoying fast...
+			FOR_EACH_PLAYER(player)
+				if(player.team == self.team)
+					sprint(player, "The enemy is attacking your base!");
+
+            */
+        }
+
+    }
+
+    baseent.health = baseent.health - damage;
+
+    // thorw head slightly off aim when hit?
+    if((self.classname == "turret_head") || (self.classname == "turret_gun"))
+    if(self.damage_flags & TFL_DMG_HEADSHAKE)
+    {
+        // makevectors(baseent.tur_head.v_angle);
+         baseent.tur_head.angles = baseent.tur_head.angles + randomvec() * damage;
+    }
+
+    if(self.turrcaps_flags & TFL_TURRCAPS_MOVE)
+    {
+        self.velocity = self.velocity + vforce;
+    }
+
+
+    // Start burning when we have 10% or less health left
+    if (self.health < (self.tur_health * 0.1))
+        self.effects = EF_FLAME;
+
+    if (self.health <= 0)
+    {
+        self = baseent;
+        baseent.turret_diefunc();
+    }
+}
+
+

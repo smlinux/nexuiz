@@ -151,6 +151,10 @@ float	DEATH_CAMP				= 10011;
 float	DEATH_SHOOTING_STAR			= 10012;
 float	DEATH_ROT				= 10013;
 float	DEATH_MIRRORDAMAGE		= 10014;
+float   DEATH_TURRET            = 10100;
+
+
+
 
 float	IT_LASER				= 4096;
 float	IT_SHOTGUN				= 1;

@@ -1,0 +1,31 @@
+#ifdef TTURRETS_ENABLED
+
+// Include section.
+#include "../system/turret_system_misc.qc"       /// Assorted junk & jewls
+#include "../system/turret_system_main.qc"       /// And routines
+#include "../system/turret_system_aimprocs.qc"   /// Aiming realted stuff
+#include "../system/turret_system_scoreprocs.qc" /// Target calssification
+#include "../system/turret_system_damage.qc"     /// Outch, they are hurting me! what should i do?
+
+#include "../units/turret_unit_common.qc"   /// Some "make life easyer" funcs.
+
+// Non combat units
+#include "../units/turret_unit_fusionreactor.qc"  /// Supply unites that need it with power
+// #include "../units/turret_unit_targetcomputer.qc" /// Optimized target selection for multiple units
+#include "../units/turret_unit_targettrigger.qc"  /// Hit me!
+
+// Combat units
+#include "../units/turret_unit_plasma.qc"  /// Basic energy cannon
+#include "../units/turret_unit_mlrs.qc"    /// Basic multibay RL
+#include "../units/turret_unit_hellion.qc" /// Seeking missiles MLRS
+#include "../units/turret_unit_flac.qc"    /// anti missile turret
+#include "../units/turret_unit_phaser.qc"   /// ZzzapT
+//#include "../units/turret_unit_gauss.qc"   /// Railgun
+#include "../units/turret_unit_hk.qc"      /// Hunter killers
+#include "../units/turret_unit_machinegun.qc" /// whacka
+//#include "../units/turret_unit_minigun.qc" /// whacka whacka
+#include "../units/turret_unit_tessla.qc"  /// Chain lightning capabale turret
+//#include "../units/turret_unit_walker.qc"
+//#include "../units/turret_unit_howitzer.qc"
+
+#endif // TTURRETS_ENABLED

@@ -1,0 +1,180 @@
+void spawnfunc_turret_plasma();
+void spawnfunc_turret_plasma_dual();
+
+void turret_plasma_std_init();
+void turret_plasma_dual_init();
+
+void turret_plasma_attack();
+void turret_plasma_projectile_explode();
+
+void turret_plasma_postthink()
+{
+    if(self.tur_head.frame != 0)
+        self.tur_head.frame = self.tur_head.frame + 1;
+
+    if(self.classname == "turret_plasma_dual")
+    {
+        if(self.tur_head.frame >= 6)
+            self.tur_head.frame = 0;
+    } else {
+        if(self.tur_head.frame >= 5)
+            self.tur_head.frame = 0;
+    }
+}
+
+void turret_plasma_attack()
+{
+    entity proj;
+
+    turret_tag_fire_update();
+
+    sound (self, CHAN_BODY, "weapons/hagar_fire.wav", 1, ATTN_NORM);
+    proj                    = spawn ();
+    setorigin(proj, self.tur_shotorg_updated);
+    setsize(proj, '0 0 0', '0 0 0');
+    setmodel(proj, "models/elaser.mdl"); // precision set above
+    proj.classname       = "plasmabomb";
+    proj.owner           = self;
+    proj.bot_dodge       = TRUE;
+    proj.bot_dodgerating = self.shot_dmg;
+    proj.think           = turret_plasma_projectile_explode;
+    proj.nextthink       = time + 9;
+    proj.solid           = SOLID_BBOX;
+    proj.movetype        = MOVETYPE_FLYMISSILE;
+    proj.velocity        = (self.tur_shotdir_updated + randomvec() * self.shot_spread) * self.shot_speed;
+    proj.angles          = vectoangles(proj.velocity);
+    proj.touch           = turret_plasma_projectile_explode;
+    proj.flags           = FL_PROJECTILE;
+    proj.effects         = EF_LOWPRECISION |  EF_BRIGHTFIELD;
+    proj.enemy           = self.enemy;
+    proj.flags           = FL_PROJECTILE | FL_NOTARGET;
+
+    if(self.tur_head.frame == 0)
+        self.tur_head.frame = 1;
+
+    // trailparticles(proj,particleeffectnum("TR_REDPLASMA"),proj.origin,proj.origin + proj.velocity);
+
+    // Snapback the head
+    // self.tur_head.angles_x = self.tur_head.angles_x + min((self.shot_dmg * 0.05),self.aim_maxpitch);
+
+    //if(self.classname == "turret_plasma_dual")
+    //    self.tur_shotorg_y = self.tur_shotorg_y * -1;
+
+}
+
+void turret_plasma_projectile_explode()
+{
+    vector org2;
+
+    org2 = findbetterlocation (self.origin, 8);
+    WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+    WriteByte (MSG_BROADCAST, 79);
+    WriteCoord (MSG_BROADCAST, org2_x);
+    WriteCoord (MSG_BROADCAST, org2_y);
+    WriteCoord (MSG_BROADCAST, org2_z);
+    WriteCoord (MSG_BROADCAST, 0);		// SeienAbunae: groan... Useless clutter
+    WriteCoord (MSG_BROADCAST, 0);
+    WriteCoord (MSG_BROADCAST, 0);
+    WriteByte (MSG_BROADCAST, 155);
+
+    self.event_damage = SUB_Null;
+
+
+#ifdef TURRET_DEBUG
+    float d;
+
+    d = RadiusDamage (self, self.owner, self.owner.shot_dmg, 0, self.owner.shot_radius, world, self.owner.shot_force, DEATH_TURRET);
+    self.owner.tur_dbg_dmg_t_h = self.owner.tur_dbg_dmg_t_h + d; //self.owner.shot_dmg;
+    self.owner.tur_dbg_dmg_t_f = self.owner.tur_dbg_dmg_t_f + self.owner.shot_dmg;
+#else
+    RadiusDamage (self, self.owner, self.owner.shot_dmg, 0, self.owner.shot_radius, world, self.owner.shot_force, DEATH_TURRET);
+#endif
+    sound (self, CHAN_BODY, "weapons/electro_impact.wav", 1, ATTN_NORM);
+
+    remove (self);
+}
+
+void turret_plasma_std_init()
+{
+    if (self.netname == "")      self.netname     = "Plasma Cannon";
+
+    precache_model ("models/turrets/plasma.md3");
+    precache_model ("models/turrets/base.md3");
+
+    self.ammo_flags = TFL_AMMO_ENERGY | TFL_AMMO_RECHARGE | TFL_AMMO_RECIVE;
+    self.aim_flags = TFL_AIM_LEAD | TFL_AIM_SHOTTIMECOMPENSATE | TFL_AIM_ZEASE;
+
+    if (turret_stdproc_init("plasma_std") == 0)
+    {
+        remove(self);
+        return;
+    }
+
+    setmodel(self,"models/turrets/base.md3");
+    setmodel(self.tur_head,"models/turrets/plasma.md3");
+
+    if(!turret_tag_setup(0))
+        dprint("Warning: Turret ",self.classname, " faild to initialize md3 tags\n");
+
+    // Our fire routine
+    self.turret_firefunc  = turret_plasma_attack;
+
+    // re-color badge & handle recoil effect
+    self.turret_postthink = turret_plasma_postthink;
+}
+
+
+void turret_plasma_dual_init()
+{
+    if (self.netname == "")      self.netname     = "Dual Plasma Cannon";
+
+    precache_model ("models/turrets/plasmad.md3");
+    precache_model ("models/turrets/base.md3");
+
+    self.ammo_flags = TFL_AMMO_ENERGY | TFL_AMMO_RECHARGE | TFL_AMMO_RECIVE;
+
+    if (turret_stdproc_init("plasma_dual") == 0)
+    {
+        remove(self);
+        return;
+    }
+
+    setmodel(self,"models/turrets/base.md3");
+    setmodel(self.tur_head,"models/turrets/plasmad.md3");
+
+    if(!turret_tag_setup(0))
+        dprint("Warning: Turret ",self.classname, " faild to initialize md3 tags\n");
+
+    // select aim
+    self.aim_flags = TFL_AIM_LEAD | TFL_AIM_SHOTTIMECOMPENSATE | TFL_AIM_ZEASE;
+
+    // Our fire routine
+    self.turret_firefunc  = turret_plasma_attack;
+
+    // re-color badge & handle recoil effect
+    self.turret_postthink = turret_plasma_postthink;
+}
+
+
+/*
+* Basic moderate (std) or fast (dual) fireing, short-mid range energy cannon.
+* Not too mutch of a therat on its own, but can be rather dangerous in groups.
+* Regenerates ammo slowly, support with a fusionreactor(s) to do some real damage.
+*/
+
+/*QUAKED turret_plasma (0 .5 .8) ?
+*/
+void spawnfunc_turret_plasma()
+{
+    self.think = turret_plasma_std_init;
+    self.nextthink = time + 0.5;
+}
+
+/*QUAKED turret_plasma_dual (0 .5 .8) ?
+*/
+void spawnfunc_turret_plasma_dual()
+{
+    self.think = turret_plasma_dual_init;
+    self.nextthink = time + 0.5;
+}
+

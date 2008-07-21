@@ -169,7 +169,7 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				else
 					centerprint(targ, "^1You grew too old without taking your medicine\n\n\n");
 			} else if (deathtype == DEATH_MIRRORDAMAGE) {
-				if(sv_gentle)				
+				if(sv_gentle)
 					centerprint(targ, "^1Don't go against team mates!\n\n\n");
 				else
 					centerprint(targ, "^1Don't shoot your team mates!\n\n\n");
@@ -187,7 +187,7 @@ void Obituary (entity attacker, entity targ, float deathtype)
 					bprint ("^1",s, "^1 didn't become friends with the Lord of Teamplay\n");
 				else
 					bprint ("^1",s, "^1 will be reinserted into the game due to his own actions\n");
-	
+
 				if(deathtype != DEATH_TEAMCHANGE)
 				{
 					LogDeath("suicide", deathtype, targ, targ);
@@ -218,7 +218,7 @@ void Obituary (entity attacker, entity targ, float deathtype)
 					bprint ("^1",s, "^1 didn't become friends with the Lord of Teamplay\n");
 				else if (deathtype != DEATH_TEAMCHANGE)
 					bprint ("^1",s, "^1 couldn't resist the urge to self-destruct\n");
-	
+
 				if(deathtype != DEATH_TEAMCHANGE)
 				{
 					LogDeath("suicide", deathtype, targ, targ);
@@ -235,7 +235,7 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				if(sv_gentle) {
 					centerprint(attacker, "^1Moron! You went against a teammate!\n\n\n");
 					bprint ("^1", a, "^1 took action against a teammate\n");
-				} else {				
+				} else {
 					centerprint(attacker, "^1Moron! You fragged a teammate!\n\n\n");
 					bprint ("^1", a, "^1 mows down a teammate\n");
 				}
@@ -315,6 +315,8 @@ void Obituary (entity attacker, entity targ, float deathtype)
 						bprint ("^1",s, "^1 was conserved by ", a, "\n");
 					else if (deathtype == DEATH_HURTTRIGGER)
 						bprint ("^1",s, "^1 was thrown into a world of hurt by ", a, "\n");
+                    else if(deathtype == DEATH_TURRET)
+                        bprint ("^1",s, "^1 was pushed into the line of fire by ^1", a, "\n");
 					else
 						bprint ("^1",s, "^1 was fragged by ", a, "\n");
 				}
@@ -432,6 +434,8 @@ void Obituary (entity attacker, entity targ, float deathtype)
 					bprint ("^1",s, "^1 discovered a swamp\n");
 				else
 					bprint ("^1",s, "^1 is now conserved for centuries to come\n");
+            else if(deathtype == DEATH_TURRET)
+                    bprint ("^1",s, "^1 was mowed down by a turret \n");
 			else
 				if(sv_gentle)
 					bprint ("^1",s, "^1 needs a restart\n");
