@@ -133,7 +133,10 @@ void MapVote_Draw()
 	{
 		tmp = mv_votes[i]; // FTEQCC bug: too many array accesses in the function call screw it up
 		if(tmp < 0)
+		{
+			pos_y += isize + 10;
 			continue;
+		}
 		map = mv_maps[i];
 		if(mv_preview[i])
 			MapVote_DrawMapItem(pos, isize, map, mv_pics[i], tmp, i);
