@@ -145,7 +145,7 @@ void MapVote_Draw()
 	
 	isize = (ymax - pos_y - mv_num_maps*10) / mv_num_maps;
 	isize = min(isize, 64);
-	for(i = 0; i < (mv_num_maps - mv_abstain); ++i) // - mv_abstain safe? make sure it's 0 or 1
+	for(i = 0; i < (mv_num_maps - mv_abstain); ++i)
 	{
 		tmp = mv_votes[i]; // FTEQCC bug: too many array accesses in the function call screw it up
 		if(tmp < 0)
