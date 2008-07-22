@@ -41,8 +41,9 @@ ______________
    :dom:taken:<previouscolor>:<ID of player>
    :scores:<gametype>_<mapname>:<map runtime>
    :player:<frags>:<deaths>:<playtime>:<team>:<ID>:<nickname>
-   :restart
+   :teamscores:<team1scores>:<team2scores>:<team3scores>:<team4scores>
    :end
+   :restart
    :gameover
    :vote:suggested:<mapname>:<playerid>
    :vote:keeptwo:<mapname>:<mapvotes>:<mapname>:<mapvotes>:::<mapname>:<mapvotes>:...:didn't vote:<notvoters>
