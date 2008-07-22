@@ -1113,6 +1113,14 @@ sub irc_joinstage($)
 		return 0;
 	} ],
 
+	# scores: Nexuiz server -> IRC channel (CTF)
+	[ dp => q{:teamscores:(\d+:-?\d*(?::\d+:-?\d*)*)} => sub {
+		my ($teams) = @_;
+		return if not exists $store{scores};
+		$store{scores}{teams} = {split /:/, $teams};
+		return 0;
+	} ],
+
 	# scores: Nexuiz server -> IRC channel
 	[ dp => q{:end} => sub {
 		return if not exists $store{scores};
@@ -1131,7 +1139,14 @@ sub irc_joinstage($)
 			{
 				my $thisteam = ($t{$_->[1]} ||= {score => 0, team => $_->[1], players => []});
 				push @{$thisteam->{players}}, [$_->[0], $_->[1], $_->[2]];
-				$thisteam->{score} += $_->[0];
+				if($store{scores}{teams})
+				{
+					$thisteam->{score} = $store{scores}{teams}{$_->[1]};
+				}
+				else
+				{
+					$thisteam->{score} += $_->[0];
+				}
 			}
 
 			# sort by team score

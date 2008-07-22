@@ -41,7 +41,7 @@ ______________
    :dom:taken:<previouscolor>:<ID of player>
    :scores:<gametype>_<mapname>:<map runtime>
    :player:<frags>:<deaths>:<playtime>:<team>:<ID>:<nickname>
-   :teamscores:<team1scores>:<team2scores>:<team3scores>:<team4scores>
+   :teamscores:<team1color>:<team1score>:<team2color>:<team2score>:...
    :end
    :restart
    :gameover
