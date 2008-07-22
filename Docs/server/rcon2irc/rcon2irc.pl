@@ -1139,9 +1139,9 @@ sub irc_joinstage($)
 			{
 				my $thisteam = ($t{$_->[1]} ||= {score => 0, team => $_->[1], players => []});
 				push @{$thisteam->{players}}, [$_->[0], $_->[1], $_->[2]];
-				if($store{scores}{teams})
+				if($s->{teams})
 				{
-					$thisteam->{score} = $store{scores}{teams}{$_->[1]};
+					$thisteam->{score} = $s->{teams}{$_->[1]};
 				}
 				else
 				{
