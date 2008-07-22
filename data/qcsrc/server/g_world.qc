@@ -1010,6 +1010,19 @@ void DumpStats(float final)
 		}
 	}
 
+	if(g_ctf)
+	if(cvar("g_ctf_win_mode") != 2)
+	{
+		s = strcat(":teamscores:", ftos(caps_team1), ":");
+		s = strcat(s, ftos(caps_team2), ":0:0");
+		if(to_console)
+			ServerConsoleEcho(s, TRUE);
+		if(to_eventlog)
+			GameLogEcho(s, TRUE);
+		if(to_file)
+			fputs(file, strcat(s, "\n"));
+	}
+
 	if(to_console)
 		ServerConsoleEcho(":end", FALSE);
 	if(to_eventlog)
