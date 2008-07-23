@@ -693,13 +693,6 @@ sub schedule($$)
 	push @tasks, [time() + $time, $sub];
 }
 
-# Build up an IO::Select object for all our channels.
-my $s = IO::Select->new();
-for my $chan(values %channels)
-{
-	$s->add($_) for $chan->fds();
-}
-
 # On IRC error, delete some data store variables of the connection, and
 # reconnect to the IRC server soon (but only if someone is actually playing)
 sub irc_error()
@@ -1316,6 +1309,13 @@ schedule sub {
 # Main loop.
 for(;;)
 {
+	# Build up an IO::Select object for all our channels.
+	my $s = IO::Select->new();
+	for my $chan(values %channels)
+	{
+		$s->add($_) for $chan->fds();
+	}
+
 	# wait for something to happen on our sockets, or wait 2 seconds without anything happening there
 	$s->can_read(2);
 	my @errors = $s->has_exception(0);
