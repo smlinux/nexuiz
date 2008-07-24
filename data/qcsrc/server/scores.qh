@@ -1,4 +1,4 @@
-#define MAX_SCORE 8
+#define MAX_SCORE 9
 #define MAX_TEAMSCORE 2
 
 /**
