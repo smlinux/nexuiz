@@ -1,41 +1,90 @@
 #define MAX_SCORE 8
 #define MAX_TEAMSCORE 2
 
-.float scores[MAX_SCORE];
-.float teamscores[MAX_TEAMSCORE];
-
+/**
+ * Attaches a PlayerScore entity to a player. Use that in ClientConnect.
+ * Remember to detach it in ClientDisconnect!
+ */
 void PlayerScore_Attach(entity player);
+
+/**
+ * Detaches a PlayerScore entity from the player. Use that in ClientDisconnect.
+ */
 void PlayerScore_Detach(entity player);
+
+/**
+ * Adds a score to the player's scores.
+ * NEVER call this if PlayerScore_Attach has not been called yet!
+ * Means: FIXME make players unable to join the game when not called ClientConnect yet.
+ */
 void PlayerScore_Add(entity player, float scorefield, float score);
+
+/**
+ * Initialize the score of this player if needed.
+ * Does nothing in teamplay.
+ * Use that when a spectator becomes a player.
+ */
 void PlayerScore_Clear(entity player);
+
+/**
+ * Adds a score to the player's team's scores.
+ * NEVER call this if team has not been set yet!
+ */
 void TeamScore_Add(entity player, float scorefield, float score);
 
+/**
+ * Initialize the scores info for the given number of teams.
+ * Immediately set all labels afterwards.
+ */
 void ScoreInfo_Init(float teams);
+
+/**
+ * Set the label of a team score item, as well as the scoring flags.
+ */
 void ScoreInfo_SetLabel_TeamScore(float i, string label, float scoreflags);
+
+/**
+ * Set the label of a player score item, as well as the scoring flags.
+ */
 void ScoreInfo_SetLabel_PlayerScore(float i, string label, float scoreflags);
-#define SFL_DECREASING         1 // e.g. lives in LMS
+
+/**
+ * Lower scores are better (e.g. deaths)
+ */
+#define SFL_DECREASING         1
+
+/**
+ * Scoring priority (NOTE: PRIMARY is used for fraglimit)
+ */
 #define SFL_SORT_PRIO_LOW      2
 #define SFL_SORT_PRIO_MED      4
 #define SFL_SORT_PRIO_HIGH     8
 #define SFL_SORT_PRIO_PRIMARY 14
 #define SFL_SORT_PRIO_MASK    14
 
+/**
+ * Sets the following results for the current scores entities.
+ */
 void WinningConditionHelper();
-float WinningConditionHelper_topscore;
-float WinningConditionHelper_equality;
-float WinningConditionHelper_winnerteam;
-entity WinningConditionHelper_winner;
+float WinningConditionHelper_topscore;   ///< highest score
+float WinningConditionHelper_equality;   ///< 1 if and only if the top two have equal scores
+float WinningConditionHelper_winnerteam; ///< the color of the winning team, or -1 if none
+entity WinningConditionHelper_winner;    ///< the winning player, or world if none
 
+#define SP_KILLS 0
+#define SP_DEATHS 1
+#define SP_SUICIDES 2
+#define SP_SCORE 3 // personal score, game modes can set it their own way
 
-#define S_KILLS 0
-#define S_DEATHS 1
-#define S_SUICIDES 2
+#define SP_CTF_CAPS 4
+#define SP_CTF_RETURNS 5
+#define ST_CTF_CAPS 0
+#define ST_CTF_SCORE 1
 
-#define S_CTF_CAPS 3
-#define S_CTF_RETURNS 4
-
-#define S_KH_COLLECT 3
-#define S_KH_LOSEKEY 4
-#define S_KH_CAPTURE 5
-#define S_KH_PUSH 6
-#define S_KH_DESTROYED 7
+#define SP_KH_COLLECT 4
+#define SP_KH_LOSEKEY 5
+#define SP_KH_CAPTURE 6
+#define SP_KH_PUSH 7
+#define SP_KH_DESTROYED 8
+#define ST_KH_CAPS 0
+#define ST_KH_SCORE 1

@@ -1,3 +1,6 @@
+.float scores[MAX_SCORE];
+.float teamscores[MAX_TEAMSCORE];
+
 .entity scorekeeper;
 entity teamscorekeepers[16];
 string scores_label[MAX_SCORE];
