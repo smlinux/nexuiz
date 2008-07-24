@@ -54,6 +54,7 @@ void TeamScore_Spawn(float t, string name)
 	ts.SendEntity = TeamScore_SendEntity;
 	ts.netname = name; // not used yet, FIXME
 	ts.Version = 1; // immediately send, so csqc knows about the team
+	ts.team = t;
 	teamscorekeepers[t] = ts;
 	++teamscores_entities_count;
 }
@@ -219,7 +220,8 @@ void PlayerScore_Add(entity player, float scorefield, float score)
 void PlayerTeamScore_Add(entity player, float pscorefield, float tscorefield, float score)
 {
 	PlayerScore_Add(player, pscorefield, score);
-	TeamScore_Add(player, tscorefield, score);
+	if(teamscores_entities_count) // only for teamplay
+		TeamScore_Add(player, tscorefield, score);
 }
 
 float PlayerScore_Compare(entity t1, entity t2)
