@@ -185,6 +185,8 @@ void SV_ParseClientCommand(string s) {
 		}
 		sprint(self, strcat("^1autoswitch turned ", autoswitchmsg, "\n"));
 	} else if(argv(0) == "clientversion") {
+		if not(self.flags & FL_CLIENT)
+			return;
 		if (argv(1) == "$gameversion") {
 			//versionmsg = "^1client is too old to get versioninfo.\nUPDATE!!! (http://www.nexuiz.com)^8";
 			// either that or someone wants to be funny
@@ -208,6 +210,8 @@ void SV_ParseClientCommand(string s) {
 	} else if(argv(0) == "sentcvar") { // new system
 		GetCvars(1);
 	} else if(argv(0) == "spectate") {
+		if not(self.flags & FL_CLIENT)
+			return;
 		if(g_lms || g_arena)
 			return; // don't allow spectating in lms, unless player runs out of lives
 		if(self.classname == "player" && cvar("sv_spectate") == 1) {
@@ -222,6 +226,8 @@ void SV_ParseClientCommand(string s) {
 			PutClientInServer();
 		}
 	} else if(argv(0) == "join") {
+		if not(self.flags & FL_CLIENT)
+			return;
 		if(!g_arena)
 		if (self.classname != "player" && !lockteams)
 		{
@@ -237,6 +243,8 @@ void SV_ParseClientCommand(string s) {
 			}
 		}
 	} else if( argv(0) == "selectteam" ) {
+		if not(self.flags & FL_CLIENT)
+			return;
 		if( !cvar("teamplay") ) {
 			sprint( self, "selecteam can only be used in teamgames\n");
 		} else if(cvar("g_campaign")) {
@@ -257,6 +265,8 @@ void SV_ParseClientCommand(string s) {
 			sprint( self, strcat( "selectteam none/red/blue/yellow/pink/auto - \"", argv(1), "\" not recognised\n" ) );
 		}
 	} else if(argv(0) == "ready") {
+		if not(self.flags & FL_CLIENT)
+			return;
 		if(cvar("sv_ready_restart"))
 		{
 			if(timeoutStatus) {
@@ -318,6 +328,8 @@ void SV_ParseClientCommand(string s) {
 	} else if(argv(0) == "suggestmap") {
 		sprint(self, strcat(MapVote_Suggest(argv(1)), "\n"));
 	} else if(argv(0) == "calltimeout") {
+		if not(self.flags & FL_CLIENT)
+			return;
 		if(cvar("sv_timeout")) {
 			if(self.classname == "player") {
 				if(votecalled)
@@ -329,6 +341,8 @@ void SV_ParseClientCommand(string s) {
 				sprint(self, "^7Error: only players can call a timeout!\n");
 		}
 	} else if(argv(0) == "resumegame") {
+		if not(self.flags & FL_CLIENT)
+			return;
 		if(cvar("sv_timeout")) {
 			evaluateResumeGame();
 		}
