@@ -1128,6 +1128,10 @@ void ClientConnect (void)
 	if(entcs_start)
 		attach_entcs();
 
+#ifdef CSQCSCORES
+	PlayerScore_Attach(self);
+#endif
+
 	bot_relinkplayerlist();
 
 	self.spectatortime = time;
@@ -1171,6 +1175,10 @@ void ClientDisconnect (void)
 	float save;
 
 	bot_clientdisconnect();
+
+#ifdef CSQCSCORES
+	PlayerScore_Detach(self);
+#endif
 
 	if(entcs_start)
 		detach_entcs();

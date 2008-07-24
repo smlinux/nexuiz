@@ -303,8 +303,8 @@ void Score_DebugPrint()
 	}
 
 	print("teamname");
-	for(i = 0; i < MAX_SCORE; ++i)
-		print(":", scores_label[i]);
+	for(i = 0; i < MAX_TEAMSCORE; ++i)
+		print(":", teamscores_label[i]);
 	print("\n");
 	for(t = 0; t < 16; ++t)
 	{

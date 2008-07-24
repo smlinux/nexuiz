@@ -124,6 +124,7 @@ void kh_Controller_Think()  // called a lot
 // frags 0: no frags
 void kh_Scores_Event(entity player, entity key, string what, float frags_player, float frags_owner)  // update the score when a key is captured
 {
+	// FIXME rename this, remove frags_* if possible, and make it log only
 	string s;
 	if(intermission_running)
 		return;
@@ -979,6 +980,22 @@ void kh_init()  // sets up th KH environment
 	setmodel(kh_controller, "");
 
 	addstat(STAT_KH_KEYS, AS_INT, kh_state);
+
+#ifdef CSQCSCORES
+	ScoreInfo_Init(kh_teams);
+	ScoreInfo_SetLabel_TeamScore  (ST_SCORE,        "score",     SFL_SORT_PRIO_PRIMARY);
+	ScoreInfo_SetLabel_TeamScore  (ST_KH_CAPS,      "caps",      SFL_SORT_PRIO_MED);
+	ScoreInfo_SetLabel_PlayerScore(SP_KILLS,        "kills",     0);
+	ScoreInfo_SetLabel_PlayerScore(SP_DEATHS,       "deaths",    SFL_DECREASING);
+	ScoreInfo_SetLabel_PlayerScore(SP_SUICIDES,     "suicides",  SFL_DECREASING);
+	ScoreInfo_SetLabel_PlayerScore(SP_SCORE,        "score",     SFL_SORT_PRIO_PRIMARY);
+	ScoreInfo_SetLabel_PlayerScore(SP_KH_COLLECT,   "collect",   0);
+	ScoreInfo_SetLabel_PlayerScore(SP_KH_LOSEKEY,   "losekey",   SFL_DECREASING);
+	ScoreInfo_SetLabel_PlayerScore(SP_KH_CAPS,      "caps",      SFL_SORT_PRIO_HIGH);
+	ScoreInfo_SetLabel_PlayerScore(SP_KH_PUSH,      "push",      SFL_SORT_PRIO_MED);
+	ScoreInfo_SetLabel_PlayerScore(SP_KH_DESTROYED, "destroyed", SFL_SORT_PRIO_MED | SFL_DECREASING);
+	ScoreInfo_SetLabel_PlayerScore(SP_KH_KCFRAG,    "kcfrag",    SFL_SORT_PRIO_MED);
+#endif
 }
 
 void kh_finalize()
