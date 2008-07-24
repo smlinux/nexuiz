@@ -124,14 +124,21 @@ void kh_Controller_Think()  // called a lot
 // frags 0: no frags
 void kh_Scores_Event(entity player, entity key, string what, float frags_player, float frags_owner)  // update the score when a key is captured
 {
-	// FIXME rename this, remove frags_* if possible, and make it log only
 	string s;
 	if(intermission_running)
 		return;
 	if(frags_player)
+	{
+		PlayerTeamScore_AddScore(player, frags_player);
+		// FIXME we soon don't use .frags or UpdateFrags any more...
 		UpdateFrags(player, frags_player);
+	}
 	if(key && key.owner && frags_owner)
+	{
+		PlayerTeamScore_AddScore(player, frags_player);
+		// FIXME we soon don't use .frags or UpdateFrags any more...
 		UpdateFrags(key.owner, frags_owner);
+	}
 	if(!cvar("sv_eventlog"))  //output extra info to the console or text file
 		return;
 	s = strcat(":keyhunt:", what, ":", ftos(player.playerid));
@@ -439,7 +446,6 @@ void kh_Key_Collect(entity key, entity player)  //a player picks up a dropped ke
 	if(key.kh_dropperteam != player.team)
 	{
 		kh_Scores_Event(player, key, "collect", cvar("g_balance_keyhunt_score_collect"), 0);
-		PlayerTeamScore_Add(player, ST_SCORE, ST_SCORE, cvar("g_balance_keyhunt_score_collect"));
 		PlayerScore_Add(player, SP_KH_COLLECT, 1);
 	}
 	key.kh_dropperteam = 0;
@@ -610,7 +616,6 @@ void kh_WinnerTeam(float teem)  // runs when a team wins
 		f = DistributeEvenly_Get(1);
 		kh_Scores_Event(key.owner, key, "capture", f, 0);
 		PlayerTeamScore_Add(key.owner, SP_KH_CAPS, ST_KH_CAPS, 1);
-		PlayerTeamScore_AddScore(key.owner, f);
 	}
 
 	first = TRUE;
@@ -674,7 +679,6 @@ void kh_LoserTeam(float teem, entity lostkey)  // runs when a player pushes a fl
 			// don't actually GIVE him the -nn points, just log
 		kh_Scores_Event(attacker, world, "push", cvar("g_balance_keyhunt_score_push"), 0);
 		PlayerScore_Add(attacker, SP_KH_PUSH, 1);
-		PlayerTeamScore_AddScore(attacker, cvar("g_balance_keyhunt_score_push"));
 		centerprint(attacker, "Your push is the best!\n\n\n");
 		bprint("The ", ColoredTeamName(teem), "^7 could not take care of the ", lostkey.netname, "^7 when ", attacker.netname, "^7 came\n");
 	}
@@ -704,7 +708,6 @@ void kh_LoserTeam(float teem, entity lostkey)  // runs when a player pushes a fl
 			{
 				f = DistributeEvenly_Get(of);
 				kh_Scores_Event(key.owner, world, "destroyed_holdingkey", f, 0);
-				PlayerTeamScore_AddScore(key.owner, f);
 			}
 
 		fragsleft = DistributeEvenly_Get(players);
@@ -731,7 +734,6 @@ void kh_LoserTeam(float teem, entity lostkey)  // runs when a player pushes a fl
 				{
 					f = DistributeEvenly_Get(1);
 					kh_Scores_Event(player, world, "destroyed", f, 0);
-					PlayerTeamScore_AddScore(key.owner, f);
 				}
 
 			--j;
@@ -905,12 +907,10 @@ float kh_HandleFrags(entity attacker, entity targ, float f)  // adds to the play
 			for(k = targ.kh_next; k != world; k = k.kh_next)
 				++nk;
 			kh_Scores_Event(attacker, targ.kh_next, "carrierfrag", -nk * cvar("g_balance_keyhunt_score_collect"), 0);
-			PlayerTeamScore_AddScore(attacker, -nk * cvar("g_balance_keyhunt_score_collect"));
 		}
 		else
 		{
 			kh_Scores_Event(attacker, targ.kh_next, "carrierfrag", cvar("g_balance_keyhunt_score_carrierfrag")-1, 0);
-			PlayerTeamScore_AddScore(attacker, cvar("g_balance_keyhunt_score_carrierfrag") - 1);
 			PlayerScore_Add(attacker, SP_KH_KCFRAG, 1);
 			// the frag gets added later
 		}
