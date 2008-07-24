@@ -1,6 +1,3 @@
-#define MAX_SCORE 10
-#define MAX_TEAMSCORE 2
-
 /**
  * Attaches a PlayerScore entity to a player. Use that in ClientConnect.
  * Remember to detach it in ClientDisconnect!
@@ -18,6 +15,15 @@ void PlayerScore_Detach(entity player);
  * Means: FIXME make players unable to join the game when not called ClientConnect yet.
  */
 void PlayerScore_Add(entity player, float scorefield, float score);
+
+/**
+ * Check if the player can have scores.
+ * This is needed for example in keyhunt, when the carrier disconnects.
+ * The key-losing happens too late... which should probably be fixed
+ * but I'm just not in the mood to do that now as I'm busy making the
+ * csqc part work <.<
+ */
+float PlayerScore_IsValid(entity player);
 
 /**
  * Initialize the score of this player if needed.
@@ -69,20 +75,6 @@ void Score_ClearAll();
 void Score_DebugPrint();
 
 /**
- * Lower scores are better (e.g. deaths)
- */
-#define SFL_DECREASING         1
-
-/**
- * Scoring priority (NOTE: PRIMARY is used for fraglimit)
- */
-#define SFL_SORT_PRIO_LOW      2
-#define SFL_SORT_PRIO_MED      4
-#define SFL_SORT_PRIO_HIGH     8
-#define SFL_SORT_PRIO_PRIMARY 14
-#define SFL_SORT_PRIO_MASK    14
-
-/**
  * Sets the following results for the current scores entities.
  */
 void WinningConditionHelper();
@@ -90,21 +82,3 @@ float WinningConditionHelper_topscore;   ///< highest score
 float WinningConditionHelper_equality;   ///< 1 if and only if the top two have equal scores
 float WinningConditionHelper_winnerteam; ///< the color of the winning team, or -1 if none
 entity WinningConditionHelper_winner;    ///< the winning player, or world if none
-
-#define SP_KILLS 0
-#define SP_DEATHS 1
-#define SP_SUICIDES 2
-#define SP_SCORE 3 // personal score, game modes can set it their own way
-#define ST_SCORE 0
-
-#define SP_CTF_CAPS 4
-#define SP_CTF_RETURNS 5
-#define ST_CTF_CAPS 1
-
-#define SP_KH_COLLECT 4
-#define SP_KH_LOSEKEY 5
-#define SP_KH_CAPS 6
-#define SP_KH_PUSH 7
-#define SP_KH_DESTROYED 8
-#define SP_KH_KCFRAG 9
-#define ST_KH_CAPS 1

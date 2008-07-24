@@ -167,6 +167,9 @@ vector		dmg_origin;
 // Basic variables
 .float enttype; // entity type sent from server
 .float sv_entnum; // entity number sent from server
+.float team;
+.float team_size;
+
 float vid_conwidth, vid_conheight;
 float caps_team1, caps_team2;
 float configdb;

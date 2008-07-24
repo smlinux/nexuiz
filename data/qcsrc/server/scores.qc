@@ -12,8 +12,12 @@ var .float scores_primary;
 var .float teamscores_primary;
 float scores_initialized;
 
-.float Version;
-.float(entity to) SendEntity;
+void Net_LinkEntity(entity e)
+{
+	e.model = "net_entity";
+	e.modelindex = 1;
+	e.effects = EF_NODEPTHTEST | EF_LOWPRECISION;
+}
 
 vector ScoreField_Compare(entity t1, entity t2, .float field, float fieldflags, vector previous) // returns: cmp value, best prio
 {
@@ -38,7 +42,7 @@ vector ScoreField_Compare(entity t1, entity t2, .float field, float fieldflags, 
  * teamscore entities
  */
 
-void TeamScore_SendEntity(entity to)
+float TeamScore_SendEntity(entity to)
 {
 	float i;
 
@@ -46,6 +50,8 @@ void TeamScore_SendEntity(entity to)
 	WriteByte(MSG_ENTITY, self.team);
 	for(i = 0; i < MAX_TEAMSCORE; ++i)
 		WriteShort(MSG_ENTITY, self.teamscores[i]);
+
+	return TRUE;
 }
 
 void TeamScore_Spawn(float t, string name)
@@ -57,6 +63,7 @@ void TeamScore_Spawn(float t, string name)
 	ts.netname = name; // not used yet, FIXME
 	ts.Version = 1; // immediately send, so csqc knows about the team
 	ts.team = t;
+	Net_LinkEntity(ts);
 	teamscorekeepers[t] = ts;
 	++teamscores_entities_count;
 }
@@ -103,7 +110,7 @@ void ScoreInfo_SetLabel_TeamScore(float i, string label, float scoreflags)
 		teamscores_primary = teamscores[i];
 }
 
-void ScoreInfo_SendEntity(entity to)
+float ScoreInfo_SendEntity(entity to)
 {
 	WriteByte(MSG_ENTITY, ENT_CLIENT_SCORES_INFO);
 	float i;
@@ -117,6 +124,7 @@ void ScoreInfo_SendEntity(entity to)
 		WriteString(MSG_ENTITY, teamscores_label[i]);
 		WriteByte(MSG_ENTITY, teamscores_flags[i]);
 	}
+	return TRUE;
 }
 
 void ScoreInfo_Init(float teams)
@@ -132,6 +140,7 @@ void ScoreInfo_Init(float teams)
 		TeamScore_Spawn(COLOR_TEAM4, "Pink");
 	entity si;
 	si = spawn();
+	Net_LinkEntity(si);
 	si.classname = "csqc_score_info";
 	si.SendEntity = ScoreInfo_SendEntity;
 	si.Version = 1;
@@ -141,7 +150,7 @@ void ScoreInfo_Init(float teams)
  * per-player score entities
  */
 
-void PlayerScore_SendEntity()
+float PlayerScore_SendEntity()
 {
 	float i;
 
@@ -149,6 +158,8 @@ void PlayerScore_SendEntity()
 	WriteByte(MSG_ENTITY, num_for_edict(self.owner));
 	for(i = 0; i < MAX_SCORE; ++i)
 		WriteShort(MSG_ENTITY, self.scores[i]);
+
+	return TRUE;
 }
 
 void PlayerScore_Clear(entity player)
@@ -189,6 +200,14 @@ void Score_ClearAll()
 	}
 }
 
+float PlayerScore_IsValid(entity player)
+{
+	if(!player.scorekeeper)
+		return FALSE;
+
+	return TRUE;
+}
+
 void PlayerScore_Attach(entity player)
 {
 	entity sk;
@@ -196,7 +215,9 @@ void PlayerScore_Attach(entity player)
 		error("player already has a scorekeeper");
 	sk = spawn();
 	sk.owner = player;
+	sk.Version = 1;
 	sk.SendEntity = PlayerScore_SendEntity;
+	Net_LinkEntity(sk);
 	player.scorekeeper = sk;
 }
 

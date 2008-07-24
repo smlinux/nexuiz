@@ -9,7 +9,7 @@ vector sbar;
 vector sbar_fontsize;
 float sbar_alpha_fg;
 float sbar_hudselector;
-
+/*
 entity sortedPlayers;
 entity sortedTeams;
 
@@ -17,6 +17,9 @@ entity sortedTeams;
 .float sb_team;
 .float sb_player;
 .float sb_caps;
+*/
+float ps_primary, ps_secondary;
+float ts_primary, ts_secondary;
 
 entity team1, team2, team3, team4, teamspec;
 
@@ -128,446 +131,281 @@ void Sbar_DrawXNum (vector pos, float num, float digits, float lettersize, vecto
 	}
 }
 
-float Sbar_PlayerCmp(entity l, entity r)
+void Cmd_Sbar_SetFields(float argc);
+void Sbar_InitScores()
 {
-	if(teamplay)
+	float i, f, primary_prio, secondary_prio;
+
+	primary_prio = secondary_prio = -1;
+	for(i = 0; i < MAX_SCORE; ++i)
 	{
-		if(l.sb_team > r.sb_team)
-			return true;
-		else if(l.sb_team > r.sb_team)
-			return false;
-		if(gametype == GAME_CTF)
+		f = (scores_flags[i] & SFL_SORT_PRIO_MASK);
+		if(f > primary_prio) {
+			ps_secondary = ps_primary;
+			ps_primary = i;
+		} else if(f > secondary_prio)
+			ps_secondary = i;
+	}
+	
+	primary_prio = secondary_prio = -1;
+	for(i = 0; i < MAX_TEAMSCORE; ++i)
+	{
+		f = (teamscores_flags[i] & SFL_SORT_PRIO_MASK);
+		if(f > primary_prio) {
+			ts_secondary = ts_primary;
+			ts_primary = i;
+		} else if(f > secondary_prio)
+			ts_secondary = i;
+	}
+
+	Cmd_Sbar_SetFields(0);
+}
+
+void Sbar_UpdatePlayerPos(entity pl);
+void Sbar_UpdatePlayerTeams()
+{
+	float Team;
+	entity pl, tmp;
+	float num;
+
+	num = 0;
+	for(pl = players.sort_next; pl; pl = pl.sort_next)
+	{
+		num += 1;
+		Team = GetPlayerColor(pl.sv_entnum);
+		if(pl.team != Team)
 		{
-			if(l.sb_caps > r.sb_caps)
-				return true;
-			else if(l.sb_caps < r.sb_caps)
-				return false;
+			tmp = GetTeam(pl.team, false);
+			tmp.team_size -= 1;
+			tmp = GetTeam(Team, true);
+			tmp.team_size += 1;
+			
+			pl.team = Team;
+
+			tmp = pl.sort_prev;
+			Sbar_UpdatePlayerPos(pl);
+			if(tmp)
+				pl = tmp;
+			else
+				pl = players.sort_next;
 		}
 	}
-	if(l.sb_frags > r.sb_frags)
+	//print(strcat("PNUM: ", ftos(num), "\n"));
+}
+
+float Sbar_ComparePlayerScores(entity left, entity right)
+{
+	float vl, vr;
+	vl = GetPlayerColor(left.sv_entnum);
+	vr = GetPlayerColor(right.sv_entnum);
+	
+	if(vl > vr)
 		return true;
-	else if(l.sb_frags < r.sb_frags)
+	if(vl < vr)
 		return false;
-	return (l.sb_player > r.sb_player);
-}
-float Sbar_TeamCmp(entity l, entity r)
-{
-	if(gametype == GAME_CTF)
-	{
-		if(l.sb_caps > r.sb_caps)
-			return true;
-		else if(l.sb_caps < r.sb_caps)
-			return false;
-	}
-	if(l.sb_frags > r.sb_frags)
-		return true;
-	else if(l.sb_frags < r.sb_frags)
-		return false;
-	return (l.sb_player > r.sb_player);
-}
 
-void Sbar_Init()
-{
-	sortedPlayers = Sort_New(Sbar_PlayerCmp);
-	sortedTeams = Sort_New(Sbar_TeamCmp);
-	team1 = Sort_Next(sortedTeams);
-	team1.sb_team = COLOR_TEAM1;
-	team2 = Sort_Next(sortedTeams);
-	team2.sb_team = COLOR_TEAM2;
-	team3 = Sort_Next(sortedTeams);
-	team3.sb_team = COLOR_TEAM3;
-	team4 = Sort_Next(sortedTeams);
-	team4.sb_team = COLOR_TEAM4;
-	teamspec = Sort_Next(sortedTeams);
-	teamspec.sb_team = COLOR_SPECTATOR;
-}
-
-void Sbar_UpdatePosFrags(entity player)
-{
-	other = player.sort_prev;
-	while(other != sortedPlayers && player.sb_frags > other.sb_frags)
-	{
-		SORT_SWAP(other, player);
-		other = player.sort_prev;
-	}
-
-	other = player.sort_next;
-	while(other && player.sb_frags < other.sb_frags)
-	{
-		SORT_SWAP(player, other);
-		other = player.sort_next;
-	}
-}
-void Sbar_UpdatePosFragsCTF(entity player)
-{
-	other = player.sort_prev;
-	while(other != sortedPlayers && player.sb_frags > other.sb_frags && player.sb_caps == other.sb_caps)
-	{
-		SORT_SWAP(other, player);
-		other = player.sort_prev;
-	}
-
-	other = player.sort_next;
-	while(other && player.sb_frags < other.sb_frags && player.sb_caps == other.sb_caps)
-	{
-		SORT_SWAP(player, other);
-		other = player.sort_next;
-	}
-}
-void Sbar_UpdatePosCaps(entity player)
-{
-	other = player.sort_prev;
-	while(other != sortedPlayers && player.sb_caps > other.sb_caps)
-	{
-		SORT_SWAP(other, player);
-		other = player.sort_prev;
-	}
-	other = player.sort_next;
-	while(other && player.sb_caps < other.sb_caps)
-	{
-		SORT_SWAP(player, other);
-		other = player.sort_next;
-	}
-	// let it update the frags now too, so if we have more frags then the next guy with the same caps
-	// we beat his ass :)
-	player.sb_frags -= 1;
-}
-
-void Sbar_UpdatePosTeam(entity player)
-{
-	player.sb_caps -= 1; // team change needs a full update
-	other = player.sort_prev;
-	while(other != sortedPlayers && player.sb_team > other.sb_team)
-	{
-		SORT_SWAP(other, player);
-		other = player.sort_prev;
-	}
-
-	other = player.sort_next;
-	while(other && player.sb_team < other.sb_team)
-	{
-		SORT_SWAP(player, other);
-		other = player.sort_next;
-	}
-}
-
-void Sbar_UpdatePlayer(entity player)
-{
-	float i;
-
-	if(player.sb_frags == -666)
-		i = COLOR_SPECTATOR;
-	else
-		i = GetPlayerColor(player.sb_player);
+	vl = left.scores[ps_primary];
+	vr = right.scores[ps_primary];
+	if(vl > vr)
+		return IS_INCREASING(scores_flags[ps_primary]);
+	if(vl < vr)
+		return IS_DECREASING(scores_flags[ps_primary]);
 	
-	if(player.sb_team != i)
-	{
-		player.sb_team = i;
-		Sbar_UpdatePosTeam(player);
-	}
+	vl = left.scores[ps_secondary];
+	vr = right.scores[ps_secondary];
+	if(vl > vr)
+		return IS_INCREASING(scores_flags[ps_secondary]);
+	if(vl < vr)
+		return IS_DECREASING(scores_flags[ps_secondary]);
 	
-	if(gametype == GAME_CTF)
+	return false;
+}
+
+void Sbar_UpdatePlayerPos(entity player)
+{
+	for(other = player.sort_next; other && Sbar_ComparePlayerScores(player, other); other = player.sort_next)
 	{
-		i = stof(bufstr_get(databuf, DATABUF_CAPTURES + player.sb_player));
-		if(player.sb_caps != i)
-		{
-			player.sb_caps = i;
-			Sbar_UpdatePosCaps(player);
-		}
-		i = stof(getplayerkey(player.sb_player, "frags"));
-		if(player.sb_frags != i)
-		{
-			player.sb_frags = i;
-			Sbar_UpdatePosFragsCTF(player);
-		}
-	} else {
-		i = stof(getplayerkey(player.sb_player, "frags"));
-		if(player.sb_frags != i)
-		{
-			player.sb_frags = i;
-			Sbar_UpdatePosFrags(player);
-		}
+		SORT_SWAP(player, other);
+	}
+	for(other = player.sort_prev; other != players && Sbar_ComparePlayerScores(other, player); other = player.sort_prev)
+	{
+		SORT_SWAP(other, player);
 	}
 }
 
-void Sbar_UpdateTeamPosCaps(entity tm)
+float Sbar_CompareTeamScores(entity left, entity right)
 {
-	other = tm.sort_prev;
-	while(other != sortedTeams && tm.sb_caps > other.sb_caps)
-	{
-		SORT_SWAP(other, tm);
-		other = tm.sort_prev;
-	}
-
-	other = tm.sort_next;
-	while(other && tm.sb_caps < tm.sb_caps)
-	{
-		SORT_SWAP(tm, other);
-		other = tm.sort_next;
-	}
-}
-void Sbar_UpdateTeamPosFrags(entity tm)
-{
-	other = tm.sort_prev;
-	while(other != sortedTeams && tm.sb_caps == other.sb_caps && tm.sb_frags > other.sb_frags)
-	{
-		SORT_SWAP(other, tm);
-		other = tm.sort_prev;
-	}
-
-	other = tm.sort_next;
-	while(other && tm.sb_caps == other.sb_caps && tm.sb_frags < other.sb_frags)
-	{
-		SORT_SWAP(tm, other);
-		other = tm.sort_next;
-	}
-}
-
-void Sbar_SortFrags()
-{
-	float i;
-	entity tmp;
-	float t1f, t2f, t3f, t4f;
+	float vl, vr;
 	
-	Sort_Reset(sortedPlayers);
+	vl = left.teamscores[ts_primary];
+	vr = right.teamscores[ts_primary];
+	if(vl > vr)
+		return IS_INCREASING(teamscores_flags[ts_primary]);
+	if(vl < vr)
+		return IS_DECREASING(teamscores_flags[ts_primary]);
+	
+	vl = left.teamscores[ts_secondary];
+	vr = right.teamscores[ts_secondary];
+	if(vl > vr)
+		return IS_INCREASING(teamscores_flags[ts_secondary]);
+	if(vl < vr)
+		return IS_DECREASING(teamscores_flags[ts_secondary]);
 
-	numteams = 0;
-	if(teamplay)
+	return false;
+}
+
+void Sbar_UpdateTeamPos(entity Team)
+{
+	for(other = Team.sort_next; other && Sbar_ComparePlayerScores(Team, other); other = Team.sort_next)
 	{
-		Sort_Reset(sortedTeams);
-		tmp = Sort_Next(sortedTeams);
-
-		team1.sb_player = 0;
-		team2.sb_player = 0;
-		team3.sb_player = 0;
-		team4.sb_player = 0;
-		teamspec.sb_player = 0;
-		
-		t1f = team1.sb_frags;
-		t2f = team2.sb_frags;
-		t3f = team3.sb_frags;
-		t4f = team4.sb_frags;
-
-		team1.sb_frags = 0;
-		team2.sb_frags = 0;
-		team3.sb_frags = 0;
-		team4.sb_frags = 0;
-		
-		for(i = 0; i < maxclients; ++i)
-		{
-			if(strlen(getplayerkey(i, "name")) <= 0)
-				continue;
-
-			Sort_Reset(sortedPlayers);
-
-			tmp = NULL;
-			while(Sort_HasNext(sortedPlayers))
-			{
-				tmp = Sort_Next(sortedPlayers);
-				if(tmp.sb_player == i)
-					break;
-			}
-			if(!tmp || tmp.sb_player != i)
-				tmp = Sort_Next(sortedPlayers);
-			
-			tmp.sb_player = i;
-			tmp.frame = time;
-			Sbar_UpdatePlayer(tmp);
-			
-			switch(tmp.sb_team)
-			{
-			case COLOR_TEAM1: team1.sb_frags += tmp.sb_frags; team1.sb_player++; break;
-			case COLOR_TEAM2: team2.sb_frags += tmp.sb_frags; team2.sb_player++; break;
-			case COLOR_TEAM3: team3.sb_frags += tmp.sb_frags; team3.sb_player++; break;
-			case COLOR_TEAM4: team4.sb_frags += tmp.sb_frags; team4.sb_player++; break;
-			case COLOR_SPECTATOR: teamspec.sb_frags += tmp.sb_frags; teamspec.sb_player++; break;
-			}
-
-			if(i == player_localentnum-1)
-				myteam = tmp.sb_team;
-		}
-		if(team1.sb_player) ++numteams;
-		if(team2.sb_player) ++numteams;
-		if(team3.sb_player) ++numteams;
-		if(team4.sb_player) ++numteams;
-
-		if(team1.sb_caps != caps_team1)
-		{
-			team1.sb_caps = caps_team1;
-			Sbar_UpdateTeamPosCaps(team1);
-		}
-		if(team2.sb_caps != caps_team2)
-		{
-			team2.sb_caps = caps_team2;
-			Sbar_UpdateTeamPosCaps(team2);
-		}
-		if(team1.sb_frags != t1f) Sbar_UpdateTeamPosFrags(team1);
-		if(team2.sb_frags != t2f) Sbar_UpdateTeamPosFrags(team2);
-		if(team3.sb_frags != t3f) Sbar_UpdateTeamPosFrags(team3);
-		if(team4.sb_frags != t4f) Sbar_UpdateTeamPosFrags(team4);
-	} else {
-		for(i = 0; i < maxclients; ++i)
-		{
-			if(strlen(getplayerkey(i, "name")) <= 0)
-				continue;
-		
-			Sort_Reset(sortedPlayers);
-			tmp = NULL;
-			while(Sort_HasNext(sortedPlayers))
-			{
-				tmp = Sort_Next(sortedPlayers);
-				if(tmp.sb_player == i)
-					break;
-			}
-			if(!tmp || tmp.sb_player != i)
-				tmp = Sort_Next(sortedPlayers);
-			
-			tmp.sb_player = i;
-			tmp.frame = time;
-			Sbar_UpdatePlayer(tmp);
-		}
+		if(other.team == COLOR_SPECTATOR)
+			break;
+		SORT_SWAP(Team, other);
 	}
-	Sort_RemoveOld(sortedPlayers);
+	for(other = Team.sort_prev; other != teams && Sbar_ComparePlayerScores(other, Team); other = Team.sort_prev)
+	{
+		SORT_SWAP(other, Team);
+	}
 }
 
 void Cmd_Sbar_Help(float argc)
 {
 	print("You can modify the scoreboard using the\n");
 	print("^3|---------------------------------------------------------------|\n");
-	print("^2sbar_columns^7 cvar and the ^2sbar_columns_set command.\n");
-	print("^2sbar_columns^7             specifies the default layout and\n");
-	print("^2sbar_columns_set^7         actually changes the layout.\n");
-	print("You can call ^2sbar_columns_set^7 with the new layout\n");
-	print("as parameters, or eithout parameters it will read the cvar.\n\n");
+	print("^1 TO BE DONE\n");
 	print("Usage:\n");
 	print("^2sbar_columns_set ^7filed1 field2 ...\n");
-	print("Fields which are not relevant to the current gametype\n");
-	print("won't be displayed\n\n");
 	print("The following field names are recognized (case INsensitive):\n");
+	print("You can use a ^3|^7 to start the right-aligned fields.\n");
+	
 	print("^3name^7 or ^3nick^7             Name of a player\n");
+	print("^3ping^7                     Ping time\n\n");
+	print("^3kd^7 or ^3kdr^7 or ^3kdratio^7 or ^3k/d\n");
+	print("                         The kill-death ratio\n");
+
+/*
 	print("^3caps^7 or ^3captures^7         Number of flags captured\n");
 	print("^3rets^7 or ^3returns^7          Number of flags returned\n");
 	print("^3frags^7 or ^3kills^7           Frags\n");
 	print("^3deaths^7 or ^3dths^7           Number of deaths\n");
-	print("^3kd^7 or ^3kdr^7 or ^3kdratio^7 or ^3k/d\n");
-	print("                         The kill-death ratio\n");
-	print("^3ping^7                     Ping time\n\n");
-	print("You can use a ^3|^7 to start the right-aligned fields.\n");
-	print("Example: ping name | caps rets frags k/d\n");
-	print("This will put the ping and the name on the left side.\n");
-	print("The captures, returns, frags and kill-death ratio will be\n");
-	print("rendered beginning on the right side.\n");
-
+	*/
+	local float i;
+	print("Additional columns:\n");
+	for(i = 0; i < MAX_SCORE; ++i)
+	{
+		if(scores_label[i])
+			print(strcat(scores_label[i], "\n"));
+	}
 }
 
 #define MIN_NAMELEN 24
 #define MAX_NAMELEN 24
 
+string Sbar_DefaultColumnLayout()
+{
+	switch(gametype)
+	{
+		case GAME_CTF: return "ping name | caps frags";
+		case GAME_KEYHUNT: return "ping name | score caps kills";
+		default: return "ping name | frags";
+			// TODO: add other gametypes
+	}
+}
+
 void Cmd_Sbar_SetFields(float argc)
 {
-	float i;
+	float i, j;
 	string str;
 	float digit;
 
-	if(argc < 2)
+	// TODO: re enable with gametype dependant cvars?
+	if(argc < 2) // no arguments provided
 		argc = tokenize(strcat("x ", cvar_string("sbar_columns")));
+
+	if(argc < 2)
+		argc = tokenize(strcat("x ", Sbar_DefaultColumnLayout()));
 	
 	argc = min(MAX_SBAR_FIELDS, argc);
 	sbar_num_fields = 0;
+
 	drawfont = sbar_font;
 	digit = stringwidth("0123456789", FALSE) / 10;
-	for(i = 0; i < argc-1; ++i)
+
+	argc = min(argc-1, MAX_SBAR_FIELDS-1);
+	for(i = 0; i < argc; ++i)
 	{
 		str = argv(i+1);
 		strunzone(sbar_title[i]);
 		sbar_title[i] = strzone(str);
 		sbar_size[i] = stringwidth(str, FALSE);
 		str = strtolower(str);
+
+		
+
 		if(str == "ping") {
-			sbar_field[i] = SBF_PING;
+			sbar_field[i] = SP_PING;
 		} else if(str == "name" || str == "nick") {
-			sbar_field[i] = SBF_NAME;
+			sbar_field[i] = SP_NAME;
 			sbar_size[i] = MIN_NAMELEN; // minimum size? any use?
-		} else if(str == "caps" || str == "captures") {
-			if(sbar_size[i] < 3*digit)
-				sbar_size[i] = 3*digit;
-			sbar_field[i] = SBF_CAPS;
-		} else if(str == "rets" || str == "returns") {
-			if(sbar_size[i] < 3*digit)
-				sbar_size[i] = 3*digit;
-			sbar_field[i] = SBF_RETS;
-		} else if(str == "frags" || str == "kills") {
-			if(sbar_size[i] < 5*digit)
-				sbar_size[i] = 5*digit;
-			sbar_field[i] = SBF_FRAGS;
-		} else if(str == "deaths" || str == "dths") {
-			if(sbar_size[i] < 5*digit)
-				sbar_size[i] = 5*digit;
-			sbar_field[i] = SBF_DEATHS;
-		} else if(str == "kdratio") {
-			sbar_field[i] = SBF_KDRATIO;
-		} else if(str == "kdr" || str == "k/d") {
-			sbar_field[i] = SBF_KDRATIO;
-		} else if(str == "kd") {
-			sbar_field[i] = SBF_KDRATIO;
 		} else if(str == "|") {
-			sbar_field[i] = SBF_SEPARATOR;
+			sbar_field[i] = SP_SEPARATOR;
 		} else {
-			print(strcat("^1Error:^7 Unknown score field: '", str, "'\n"));
-			--sbar_num_fields;
+			for(j = 0; j < MAX_SCORE; ++j)
+			{
+				if(str == strtolower(scores_label[j]))
+					break;
+			}
+			if(j == MAX_SCORE) {
+				print(strcat("^1Error:^7 Unknown score field: '", str, "'\n"));
+				--sbar_num_fields;
+			} else
+				sbar_field[i] = j;
 		}
 		++sbar_num_fields;
 	}
-	sbar_field[i] = SBF_END;
+	sbar_field[i] = SP_END;
 }
 
+// MOVEUP::
 vector sbar_field_rgb;
 string Sbar_GetField(entity pl, float field)
 {
-	float tmp;
+	float tmp, num, denom;
 	string str;
 	sbar_field_rgb = '1 1 1';
 	switch(field)
 	{
-	case SBF_PING:
-		str = bufstr_get(databuf, DATABUF_PING + pl.sb_player);
-		tmp = max(0, min(220, stof(str)-80)) / 220;
-		sbar_field_rgb = '1 1 1' - '0 1 1'*tmp;
-		return str;
-	case SBF_NAME: return getplayerkey(pl.sb_player, "name");
-	case SBF_CAPS: return ftos(pl.sb_caps);
-	case SBF_RETS: return bufstr_get(databuf, DATABUF_RETURNS + pl.sb_player);
-	case SBF_FRAGS: return ftos(pl.sb_frags);
-	case SBF_DEATHS: return bufstr_get(databuf, DATABUF_DEATHS + pl.sb_player);
-	case SBF_KDRATIO:
-		tmp = stof(bufstr_get(databuf, DATABUF_DEATHS + pl.sb_player));
-		if(tmp == 0) {
-			sbar_field_rgb = '0 1 0';
-			str = ftos(pl.sb_frags);
-		} else if(pl.sb_frags <= 0) {
-			sbar_field_rgb = '1 0 0';
-			str = ftos(pl.sb_frags / tmp);
-		} else
-			str = ftos(pl.sb_frags / tmp);
+		case SP_PING:
+			str = bufstr_get(databuf, DATABUF_PING + pl.sv_entnum);
+			tmp = max(0, min(220, stof(str)-80)) / 220;
+			sbar_field_rgb = '1 1 1' - '0 1 1'*tmp;
+			return str;
 		
-		tmp = strstrofs(str, ".", 0);
-		if(tmp > 0)
-			str = substring(str, 0, tmp+2);
-		return str;
+		case SP_NAME:
+			return getplayerkey(pl.sv_entnum, "name");
+
+		case SP_KDRATIO:
+			num = pl.(scores[SP_KILLS]);
+			denom = pl.(scores[SP_DEATHS]);
+
+			if(denom == 0) {
+				sbar_field_rgb = '0 1 0';
+				str = ftos(num);
+			} else if(num <= 0) {
+				sbar_field_rgb = '1 0 0';
+				str = ftos(num/denom);
+			} else
+				str = ftos(num/denom);
+		
+			tmp = strstrofs(str, ".", 0);
+			if(tmp > 0)
+				str = substring(str, 0, tmp+2);
+			return str;
+			
+		default:
+			return ftos(pl.(scores[field]));
 	}
-}
-#define SBAR_DEFAULT_MASK 0
-#define SBAR_MASK_SPECTATORS 1
-float Sbar_IsFieldMasked(float field, float mask)
-{
-	if(mask&1) // spectator
-		return (field != SBF_NAME && field != SBF_PING);
-	if(gametype != GAME_CTF)
-	{
-		if(field == SBF_CAPS || field == SBF_RETS)
-			return true;
-	}
-	return false;
+	return "error";
 }
 
 // shamelessly stolen from menu QC :P <- as if I would steal YOUR code pfft ;)
@@ -612,11 +450,14 @@ string textShortenToWidth(string theText, float maxWidth, float handleColors)
 }
 
 float xmin, xmax, ymin, ymax, sbwidth, sbheight;
-void Sbar_PrintScoreboardItem(vector pos, entity pl, float is_self, float mask)
+
+void Sbar_PrintScoreboardItem(vector pos, entity pl, float is_self)
 {
 	vector tmp;
 	string str;
 	float i, field, len;
+	float is_spec;
+	is_spec = (GetPlayerColor(pl.sv_entnum) == COLOR_SPECTATOR);
 
 	// Layout:
 	tmp_z = 0;
@@ -631,23 +472,25 @@ void Sbar_PrintScoreboardItem(vector pos, entity pl, float is_self, float mask)
 	for(i = 0; i < sbar_num_fields; ++i)
 	{
 		field = sbar_field[i];
-		if(field == SBF_SEPARATOR)
+		if(field == SP_SEPARATOR)
 			break;
-		if(Sbar_IsFieldMasked(field, mask))
-			continue;
 
+		if(is_spec && field != SP_NAME && field != SP_PING) {
+			pos_x += sbar_fontsize_x*sbar_size[i] + sbar_fontsize_x;
+			continue;
+		}
 		str = Sbar_GetField(pl, field);
 
-		if(field == SBF_NAME)
+		if(field == SP_NAME)
 		{
 			float realsize;
 			float j;
 			realsize = sbar_size[i];
 			if(i+1 < sbar_num_fields)
-				if(sbar_field[i+1] == SBF_SEPARATOR)
+				if(sbar_field[i+1] == SP_SEPARATOR)
 				{
 					realsize = (xmax - xmin) / sbar_fontsize_x;
-					for(j = 0; j < sbar_num_fields; ++j) if(j != i) if(sbar_field[j] != SBF_SEPARATOR)
+					for(j = 0; j < sbar_num_fields; ++j) if(j != i) if(sbar_field[j] != SP_SEPARATOR)
 						realsize -= sbar_size[j] + 1;
 					realsize += 1;
 				}
@@ -659,7 +502,8 @@ void Sbar_PrintScoreboardItem(vector pos, entity pl, float is_self, float mask)
 			sbar_size[i] = len;
 
 		pos_x += sbar_fontsize_x*sbar_size[i] + sbar_fontsize_x;
-		if(field == SBF_NAME) {
+
+		if(field == SP_NAME) {
 			tmp_x = sbar_fontsize_x*sbar_size[i] + sbar_fontsize_x;
 			drawcolorcodedstring(pos - tmp, str, sbar_fontsize, 1, DRAWFLAG_NORMAL);
 		} else {
@@ -668,27 +512,30 @@ void Sbar_PrintScoreboardItem(vector pos, entity pl, float is_self, float mask)
 		}
 	}
 	
-	if(sbar_field[i] == SBF_SEPARATOR)
+	if(sbar_field[i] == SP_SEPARATOR)
 	{
 		pos_x = xmax;
 		for(i = sbar_num_fields-1; i > 0; --i)
 		{
 			field = sbar_field[i];
-			if(field == SBF_SEPARATOR)
+			if(field == SP_SEPARATOR)
 				break;
-			if(Sbar_IsFieldMasked(field, mask))
+			
+			if(is_spec && field != SP_NAME && field != SP_PING) {
+				pos_x -= sbar_fontsize_x*sbar_size[i] + sbar_fontsize_x;
 				continue;
+			}
 			
 			str = Sbar_GetField(pl, field);
 
-			if(field == SBF_NAME)
+			if(field == SP_NAME)
 				str = textShortenToWidth(str, sbar_size[i], TRUE);
 			len = stringwidth(str, TRUE);
 
 			if(sbar_size[i] < len)
 				sbar_size[i] = len;
-			
-			if(field == SBF_NAME) {
+
+			if(field == SP_NAME) {
 				tmp_x = sbar_fontsize_x*len; // left or right aligned? let's put it right...
 				drawcolorcodedstring(pos - tmp, str, sbar_fontsize, 1, DRAWFLAG_NORMAL);
 			} else {
@@ -746,23 +593,19 @@ void Sbar_DrawScoreboard()
 	
 	for(i = 0; i < sbar_num_fields; ++i)
 	{
-		if(Sbar_IsFieldMasked(sbar_field[i], SBAR_DEFAULT_MASK))
-			continue;
-		if(sbar_field[i] == SBF_SEPARATOR)
+		if(sbar_field[i] == SP_SEPARATOR)
 			break;
 		drawstring(pos, sbar_title[i], sbar_fontsize, '1 1 1', 1, DRAWFLAG_NORMAL);
 		pos_x += sbar_fontsize_x*sbar_size[i] + sbar_fontsize_x;
 	}
 	
-	if(sbar_field[i] == SBF_SEPARATOR)
+	if(sbar_field[i] == SP_SEPARATOR)
 	{
 		pos_x = xmax + sbar_fontsize_x;
 		tmp_y = tmp_z = 0;
 		for(i = sbar_num_fields-1; i > 0; --i)
 		{
-			if(Sbar_IsFieldMasked(sbar_field[i], SBAR_DEFAULT_MASK))
-				continue;
-			if(sbar_field[i] == SBF_SEPARATOR)
+			if(sbar_field[i] == SP_SEPARATOR)
 				break;
 			
 			pos_x -= sbar_fontsize_x*sbar_size[i] + sbar_fontsize_x;
@@ -786,49 +629,33 @@ void Sbar_DrawScoreboard()
 	
 	if(teamplay)
 	{
-		for(tm = sortedTeams.sort_next; tm; tm = tm.sort_next)
+		//for(tm = sortedTeams.sort_next; tm; tm = tm.sort_next)
+		for(tm = teams.sort_next; tm; tm = tm.sort_next)
 		{
-			if(!tm.sb_player || tm.sb_team == COLOR_SPECTATOR) // no players in it?
+			if(!tm.team_size || tm.team == COLOR_SPECTATOR)
 				continue;
 
-			rgb = GetTeamRGB(tm.sb_team);
+			rgb = GetTeamRGB(tm.team);
 
 			pos_x = xmin - 4*24;
-			if(gametype == GAME_CTF)
-			{
-				if(tm.sb_team == COLOR_TEAM1)
-					Sbar_DrawXNum(pos, caps_team1, 4, 24, rgb, 1, DRAWFLAG_NORMAL);
-				else if(tm.sb_team == COLOR_TEAM2)
-					Sbar_DrawXNum(pos, caps_team2, 4, 24, rgb, 1, DRAWFLAG_NORMAL);
-				pos_x = xmin - 4*10;
-				Sbar_DrawXNum(pos + '0 24', tm.sb_frags, 4, 10, rgb, 1, DRAWFLAG_NORMAL);
-				pos_x = xmin;
-			} else
-				Sbar_DrawXNum(pos, tm.sb_frags, 4, 24, rgb, 1, DRAWFLAG_NORMAL);
+			// TODO: Print primary and secondary scores!
+			
 			pos_x = xmin;
 
-			// abuse specs as playerounter
-			specs = 0;
-			for(pl = sortedPlayers.sort_next; pl; pl = pl.sort_next)
-			{
-				if(pl.sb_team == tm.sb_team)
-					++specs;
-			}
+			specs = tm.team_size;
 
 			if(specs < 2)
 				specs = 2;
-			if(gametype == GAME_CTF && specs < 4)
-				specs = 4;
 			
 			tmp_x = sbwidth;
 			tmp_y = 1.25 * sbar_fontsize_y * specs;
 			drawfill(pos - '1 1', tmp + '2 0', rgb, 0.2, DRAWFLAG_NORMAL);
 			
-			for(pl = sortedPlayers.sort_next; pl; pl = pl.sort_next)
+			for(pl = players.sort_next; pl; pl = pl.sort_next)
 			{
-				if(pl.sb_team != tm.sb_team)
+				if(pl.team != tm.team)
 					continue;
-				Sbar_PrintScoreboardItem(pos, pl, (pl.sb_player == player_localentnum - 1), SBAR_DEFAULT_MASK);
+				Sbar_PrintScoreboardItem(pos, pl, (pl.sv_entnum == player_localentnum - 1));
 				pos_y += 1.25 * sbar_fontsize_y;
 				tmp_y -= 1.25 * sbar_fontsize_y;
 			}
@@ -838,12 +665,12 @@ void Sbar_DrawScoreboard()
 		rgb = pos + '0 1.5 0' * sbar_fontsize_y;
 		pos_y += 3 * sbar_fontsize_y;
 		specs = 0;
-		for(pl = sortedPlayers.sort_next; pl; pl = pl.sort_next)
+		for(pl = players.sort_next; pl; pl = pl.sort_next)
 		{
-			if(pl.sb_team != COLOR_SPECTATOR)
+			if(pl.team != COLOR_SPECTATOR)
 				continue;
 			//drawcolorcodedstring(pos, getplayerkey(pl.sb_player, "name"), '8 8 0', 1, 0);
-			Sbar_PrintScoreboardItem(pos, pl, (pl.sb_player == player_localentnum - 1), SBAR_MASK_SPECTATORS);
+			Sbar_PrintScoreboardItem(pos, pl, (pl.sv_entnum == player_localentnum - 1));
 			pos += '0 1.25 0' * sbar_fontsize_y;
 			++specs;
 		}
@@ -852,11 +679,11 @@ void Sbar_DrawScoreboard()
 			drawstring(rgb, "Spectators", sbar_fontsize, '1 1 1', 1, 0);
 	} else {
 		pos_x = xmin;
-		for(pl = sortedPlayers.sort_next; pl; pl = pl.sort_next)
+		for(pl = players.sort_next; pl; pl = pl.sort_next)
 		{
-			if(pl.sb_team == COLOR_SPECTATOR)
+			if(pl.team == COLOR_SPECTATOR)
 				continue;
-			Sbar_PrintScoreboardItem(pos, pl, (pl.sb_player == player_localentnum - 1), SBAR_DEFAULT_MASK);
+			Sbar_PrintScoreboardItem(pos, pl, (pl.sv_entnum == player_localentnum - 1));
 			pos_y += 1.25 * sbar_fontsize_y;
 			tmp_y -= 1.25 * sbar_fontsize_y;
 		}
@@ -865,12 +692,11 @@ void Sbar_DrawScoreboard()
 		rgb = pos + '0 1.5 0' * sbar_fontsize_y;
 		pos_y += 3 * sbar_fontsize_y;
 		specs = 0;
-		for(pl = sortedPlayers.sort_next; pl; pl = pl.sort_next)
+		for(pl = players.sort_next; pl; pl = pl.sort_next)
 		{
-			if(pl.sb_team != COLOR_SPECTATOR)
+			if(pl.team != COLOR_SPECTATOR)
 				continue;
-			//drawcolorcodedstring(pos, getplayerkey(pl.sb_player, "name"), '8 8 0', 1, 0);
-			Sbar_PrintScoreboardItem(pos, pl, (pl.sb_player == player_localentnum - 1), SBAR_MASK_SPECTATORS);
+			Sbar_PrintScoreboardItem(pos, pl, (pl.sv_entnum == player_localentnum - 1));
 			pos += '0 1.25 0' * sbar_fontsize_y;
 			++specs;
 		}
@@ -883,7 +709,7 @@ void Sbar_DrawScoreboard()
 
 void Sbar_Score(float margin)
 {
-	float timelimit, timeleft, minutes, seconds, distribution, myplace;
+	float timelimit, timeleft, minutes, seconds, distribution, myplace, score;
 	vector sbar_save, place;
 	entity tm, pl, me;
 	sbar_save = sbar;
@@ -900,38 +726,36 @@ void Sbar_Score(float margin)
 		//
 		//         TEAM2
 		//for(i = 0; i < 4; ++i)
-		for(tm = sortedTeams.sort_next; tm; tm = tm.sort_next)
+		for(tm = teams.sort_next; tm; tm = tm.sort_next)
 		{
-			if(tm.sb_team == COLOR_SPECTATOR || !tm.sb_player) // no players? don't display
+			if(tm.team == COLOR_SPECTATOR || !tm.team_size) // no players? don't display
 				continue;
 			// -32*4 = -128
-			if(tm.sb_team == myteam)
-				Sbar_DrawXNum('-128 0', tm.sb_frags, 4, 32, GetTeamRGB(tm.sb_team), 1, DRAWFLAG_NORMAL);
+			score = tm.(teamscores[ts_primary]);
+			if(tm.team == myteam)
+				Sbar_DrawXNum('-128 0', score, 4, 32, GetTeamRGB(tm.team), 1, DRAWFLAG_NORMAL);
 			else
 			{
-				Sbar_DrawXNum(place, tm.sb_frags, 4, 12, GetTeamRGB(tm.sb_team), 1, DRAWFLAG_NORMAL);
+				Sbar_DrawXNum(place, score, 4, 12, GetTeamRGB(tm.team), 1, DRAWFLAG_NORMAL);
 				place_x -= 4*12;
 			}
 		}
 	} else {
 		// me vector := [team/connected frags id]
 		myplace = 0;
-		for(me = sortedPlayers.sort_next; me; me = me.sort_next)
+		for(me = players.sort_next; me; me = me.sort_next)
 		{
-			if(me.sb_team != COLOR_SPECTATOR)
+			if(me.team != COLOR_SPECTATOR)
 				++myplace;
-			if(me.sb_player == player_localentnum - 1)
+			if(me.sv_entnum == player_localentnum - 1)
 				break;
 		}
-		pl = sortedPlayers.sort_next;
+		pl = players;
 		if(pl == me)
 			pl = pl.sort_next;
 		
-		if(pl && myplace != 1)
-		{
-			distribution = me.sb_frags - pl.sb_frags;
-		} else if(pl) {
-			distribution = me.sb_frags - pl.sb_frags;
+		if(pl) {
+			distribution = me.(scores[ps_primary]) - pl.(scores[ps_primary]);
 		} else
 			distribution = 0;
 		
@@ -942,17 +766,18 @@ void Sbar_Score(float margin)
 		else
 			Sbar_DrawXNum('-36 -12', myplace, 3, 12, '1 0 0', 1, DRAWFLAG_NORMAL);
 
+		score = me.(scores[ps_primary]);
 		if(distribution >= 0)
 		{
 			Sbar_DrawXNum('-84 -12', distribution, 4, 12, ' 1 1 1', 1, DRAWFLAG_NORMAL);
-			Sbar_DrawXNum('-128 0', me.sb_frags, 4, 32, '1 1 1', 1, DRAWFLAG_NORMAL);
+			Sbar_DrawXNum('-128 0', score, 4, 32, '1 1 1', 1, DRAWFLAG_NORMAL);
 		} else if(distribution >= -5)
 		{
 			Sbar_DrawXNum('-84 -12', distribution, 4, 12, ' 1 1 0', 1, DRAWFLAG_NORMAL);
-			Sbar_DrawXNum('-128 0', me.sb_frags, 4, 32, '1 1 0', 1, DRAWFLAG_NORMAL);
+			Sbar_DrawXNum('-128 0', score, 4, 32, '1 1 0', 1, DRAWFLAG_NORMAL);
 		} else {
 			Sbar_DrawXNum('-84 -12', distribution, 4, 12, ' 1 0 0', 1, DRAWFLAG_NORMAL);
-			Sbar_DrawXNum('-128 0', me.sb_frags, 4, 32, '1 0 0', 1, DRAWFLAG_NORMAL);
+			Sbar_DrawXNum('-128 0', score, 4, 32, '1 0 0', 1, DRAWFLAG_NORMAL);
 		}
 	}
 	timelimit = getstatf(STAT_TIMELIMIT);
@@ -986,17 +811,18 @@ void Sbar_Score(float margin)
 
 void Sbar_MiniscoreItem(vector pos, entity pl, float is_self)
 {
-	float x;
+	float x, score;
 	pos_x += 72;
 	
 	if(teamplay)
-		drawfill(pos + '0 1 0', '40 6 0', GetTeamRGB(pl.sb_team)*0.5, 1, DRAWFLAG_NORMAL);
+		drawfill(pos + '0 1 0', '40 6 0', GetTeamRGB(pl.team)*0.5, 1, DRAWFLAG_NORMAL);
 	else
 		drawfill(pos + '0 1 0', '40 6 0', '0.5 0.5 0.5', 0.5, DRAWFLAG_NORMAL);
 	x = pos_x;
 	pos_x += 5*8;
-	pos_x -= stringwidth(ftos(pl.sb_frags), FALSE)*8;
-	drawstring(pos, ftos(pl.sb_frags), '8 8 0', '1 1 1', 1, DRAWFLAG_NORMAL);
+	score = pl.(scores[ps_primary]);
+	pos_x -= stringwidth(ftos(score), FALSE)*8;
+	drawstring(pos, ftos(score), '8 8 0', '1 1 1', 1, DRAWFLAG_NORMAL);
 	pos_x = x;
 	if(is_self)
 	{
@@ -1005,7 +831,7 @@ void Sbar_MiniscoreItem(vector pos, entity pl, float is_self)
 		pos_x += 8;
 	} else
 		pos_x += 56;
-	drawcolorcodedstring(pos, getplayerkey(pl.sb_player, "name"), '8 8 0', 1, 0);
+	drawcolorcodedstring(pos, getplayerkey(pl.sv_entnum, "name"), '8 8 0', 1, 0);
 }
 
 void Sbar_MiniscoreTeamItem(vector pos, float color, float frags, float is_self)
@@ -1034,7 +860,7 @@ void Sbar_MiniscoreTeamItem(vector pos, float color, float frags, float is_self)
 
 void Sbar_MiniDeathmatchOverlay(vector pos)
 {
-	float numlines, up, down;
+	float numlines, up, down, score;
 	entity me, tm, pl;
 	float miniscoreboard_size;
 	miniscoreboard_size = cvar("sbar_miniscoreboard_size");
@@ -1053,9 +879,9 @@ void Sbar_MiniDeathmatchOverlay(vector pos)
 		return;
 
 	// me vector := [team/connected frags id]
-	for(me = sortedPlayers.sort_next; me; me = me.sort_next)
+	for(me = players.sort_next; me; me = me.sort_next)
 	{
-		if(me.sb_player == player_localentnum - 1)
+		if(me.sv_entnum == player_localentnum - 1)
 			break;
 	}
 
@@ -1071,7 +897,7 @@ void Sbar_MiniDeathmatchOverlay(vector pos)
 	// render bottom-up
 	for(pl = me.sort_next; pl && down > 0; pl = pl.sort_next)
 	{
-		if(pl.sb_team == COLOR_SPECTATOR)
+		if(pl.team == COLOR_SPECTATOR)
 			continue;
 		Sbar_MiniscoreItem(pos, pl, false);
 		pos_y -= 9;
@@ -1080,9 +906,9 @@ void Sbar_MiniDeathmatchOverlay(vector pos)
 	Sbar_MiniscoreItem(pos, me, true);
 	pos_y -= 9;
 	up += down; // if there weren't enough lines below... add them
-	for(pl = me.sort_prev; pl != sortedPlayers && up > 0; pl = pl.sort_prev)
+	for(pl = me.sort_prev; pl && up > 0; pl = pl.sort_prev)
 	{
-		if(pl.sb_team == COLOR_SPECTATOR)
+		if(pl.team == COLOR_SPECTATOR)
 			continue;
 		Sbar_MiniscoreItem(pos, pl, false);
 		pos_y -= 9;
@@ -1091,12 +917,13 @@ void Sbar_MiniDeathmatchOverlay(vector pos)
 
 	if(teamplay)
 	{
-		for(tm = sortedTeams.sort_next; tm.sort_next; tm = tm.sort_next);
-		for(; tm != sortedTeams; tm = tm.sort_prev)
+		for(tm = teams.sort_next; tm.sort_next; tm = tm.sort_next);
+		for(; tm; tm = tm.sort_prev)
 		{
-			if(!tm.sb_player || tm.sb_team == COLOR_SPECTATOR) // no players?
+			if(!tm.team_size || tm.team == COLOR_SPECTATOR)
 				continue;
-			Sbar_MiniscoreTeamItem(pos, tm.sb_team, tm.sb_frags, (tm.sb_team == me.sb_team));
+			score = tm.(teamscores[ts_primary]);
+			Sbar_MiniscoreTeamItem(pos, tm.team, score, (tm.team == me.team));
 			pos_y -= 9;
 		}
 	}
@@ -1108,7 +935,8 @@ void Sbar_Draw (void)
 	float x, fade;
 	float stat_items;
 
-	Sbar_SortFrags();
+	//Sbar_SortFrags();
+	Sbar_UpdatePlayerTeams();
 
 	sb_lines = 24;
 	

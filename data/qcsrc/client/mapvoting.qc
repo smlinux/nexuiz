@@ -105,7 +105,6 @@ void MapVote_Draw()
 	vector pos;
 	float isize;
 	float center;
-	float margin;
 	
 	center = (vid_conwidth - 1)/2;
 	xmin = vid_conwidth*0.2;

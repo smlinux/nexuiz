@@ -169,6 +169,7 @@ float CVAR_READONLY	= 4;
 const float ENTCS_MSG_END = 0;
 const float ENTCS_MSG_ONS_GPS = 1;
 const float ENTCS_MSG_ONS_REMOVE = 2;
+const float ENTCS_MSG_INIT = 3;
 
 const float TE_CSQC_INIT = 100;
 const float TE_CSQC_PING = 101;
@@ -192,3 +193,41 @@ const float MAPVOTE_NET_INIT = 0;
 const float MAPVOTE_NET_UPDATE = 1;
 const float MAPVOTE_NET_PIC = 2;
 const float MAPVOTE_NET_OWNVOTE = 3;
+
+/**
+ * Lower scores are better (e.g. deaths)
+ */
+#define SFL_DECREASING         1
+
+/**
+ * Scoring priority (NOTE: PRIMARY is used for fraglimit)
+ */
+#define SFL_SORT_PRIO_LOW      2
+#define SFL_SORT_PRIO_MED      4
+#define SFL_SORT_PRIO_HIGH     8
+#define SFL_SORT_PRIO_PRIMARY 14
+#define SFL_SORT_PRIO_MASK    14
+
+/**
+ * Score indices
+ */
+#define MAX_SCORE 10
+#define MAX_TEAMSCORE 2
+
+#define SP_KILLS 0
+#define SP_DEATHS 1
+#define SP_SUICIDES 2
+#define SP_SCORE 3 // personal score, game modes can set it their own way
+#define ST_SCORE 0
+
+#define SP_CTF_CAPS 4
+#define SP_CTF_RETURNS 5
+#define ST_CTF_CAPS 1
+
+#define SP_KH_COLLECT 4
+#define SP_KH_LOSEKEY 5
+#define SP_KH_CAPS 6
+#define SP_KH_PUSH 7
+#define SP_KH_DESTROYED 8
+#define SP_KH_KCFRAG 9
+#define ST_KH_CAPS 1

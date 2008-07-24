@@ -193,6 +193,7 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				if(deathtype != DEATH_TEAMCHANGE)
 				{
 					LogDeath("suicide", deathtype, targ, targ);
+					PlayerScore_Add(attacker, SP_SUICIDES, 1);
 					GiveFrags(attacker, targ, -1);
 				}
 				if (targ.killcount > 2)
@@ -224,6 +225,7 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				if(deathtype != DEATH_TEAMCHANGE)
 				{
 					LogDeath("suicide", deathtype, targ, targ);
+					PlayerScore_Add(attacker, SP_SUICIDES, 1);
 					GiveFrags(attacker, targ, -1);
 				}
 				if (targ.killcount > 2)
@@ -242,6 +244,7 @@ void Obituary (entity attacker, entity targ, float deathtype)
 					bprint ("^1", a, "^1 mows down a teammate\n");
 				}
 				GiveFrags(attacker, targ, -1);
+				PlayerScore_Add(attacker, -1); // teamkills DO cound as -1 kill right?
 				if (targ.killcount > 2) {
 					if(sv_gentle)
 						bprint ("^1",s,"'s ^1",ftos(targ.killcount)," scoring spree was ended by a teammate!\n");
@@ -444,6 +447,7 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				else
 					bprint ("^1",s, "^1 died\n");
 			GiveFrags(targ, targ, -1);
+			PlayerScore_Add(targ, SP_DEATHS, 1);
 			if(targ.frags == -5) {
 				announce(targ, "announcer/male/botlike.ogg");
 			}

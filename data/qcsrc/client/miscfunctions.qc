@@ -1,6 +1,111 @@
 float databuf;
 var float(string text, float handleColors) stringwidth;
 
+entity players;
+entity teams;
+
+float RegisterPlayer(entity player)
+{
+	entity pl;
+	for(pl = players.sort_next; pl; pl = pl.sort_next)
+		if(pl == player)
+			return false;
+	player.sort_next = players.sort_next;
+	player.sort_prev = players;
+	if(players.sort_next)
+		players.sort_next.sort_prev = player;
+	players.sort_next = player;
+	return true;
+}
+
+void RemovePlayer(entity player)
+{
+	entity pl, parent;
+	parent = players;
+	for(pl = players.sort_next; pl && pl != player; pl = pl.sort_next)
+		parent = pl;
+
+	if(!pl)
+	{
+		print("Trying to remove a player which is not in the playerlist!");
+		return;
+	}
+	parent.sort_next = player.sort_next;
+	if(player.sort_next)
+		player.sort_next.sort_prev = parent;
+}
+
+entity AddTeam(float num)
+{
+	entity tm;
+	tm = spawn();
+	tm.team = num;
+	tm.sort_next = teams.sort_next;
+	tm.sort_prev = teams;
+	if(teams.sort_next)
+		teams.sort_next.sort_prev = tm;
+	teams.sort_next = tm;
+	return tm;
+}
+
+void MoveToLast(entity e)
+{
+	other = e.sort_next;
+	while(other)
+	{
+		SORT_SWAP(other, e);
+		other = e.sort_next;
+	}
+}
+
+// warning: Local "team" defined with name of a global
+// FU FTEQCC, .float team is a ENTVAR shitty piece of crap!!!
+float RegisterTeam(entity Team)
+{
+	entity tm;
+	for(tm = teams.sort_next; tm; tm = tm.sort_next)
+		if(tm == Team)
+			return false;
+	Team.sort_next = teams.sort_next;
+	Team.sort_prev = teams;
+	if(teams.sort_next)
+		teams.sort_next.sort_prev = Team;
+	teams.sort_next = Team;
+	return true;
+}
+
+void RemoveTeam(entity Team)
+{
+	entity tm, parent;
+	parent = teams;
+	for(tm = teams.sort_next; tm && tm != Team; tm = tm.sort_next)
+		parent = tm;
+
+	if(!tm)
+	{
+		print("Trying to remove a team which is not in the teamlist!");
+		return;
+	}
+	parent.sort_next = Team.sort_next;
+	if(Team.sort_next)
+		Team.sort_next.sort_prev = parent;
+}
+
+entity GetTeam(float num, float add)
+{
+	entity tm;
+	for(tm = teams.sort_next; tm; tm = tm.sort_next)
+	{
+		if(tm.team == num)
+			return tm;
+	}
+	
+	if(add)
+		return AddTeam(num);
+	
+	return NULL;
+}
+
 float stringwidth_oldfont(string text, float handleColors)
 {
 	float i, len, ch, width;

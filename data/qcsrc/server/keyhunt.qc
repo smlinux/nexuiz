@@ -473,7 +473,8 @@ void kh_Key_DropAll(entity player, float suicide) // runs whenever a player dies
 		while((key = player.kh_next))
 		{
 			kh_Scores_Event(player, key, "losekey", 0, 0);
-			PlayerScore_Add(player, SP_KH_LOSEKEY, 1);
+			if(PlayerScore_IsValid(player))
+				PlayerScore_Add(player, SP_KH_LOSEKEY, 1);
 			bprint(player.netname, "^7 died and lost the ", key.netname, "\n");
 			kh_Key_AssignTo(key, world);
 			makevectors('-1 0 0' * (45 + 45 * random()) + '0 360 0' * random());

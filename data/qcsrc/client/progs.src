@@ -11,8 +11,8 @@ csqc_builtins.qc
 
 main.qh
 
-miscfunctions.qc
 sortlist.qc
+miscfunctions.qc
 teamplay.qc
 
 ons.qc

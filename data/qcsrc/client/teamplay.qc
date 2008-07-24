@@ -16,6 +16,8 @@ float TeamByColor(float color)
 
 float GetPlayerColor(float i)
 {
+	if(getplayerkey(i, "frags") == "-666")
+		return COLOR_SPECTATOR;
 	return stof(getplayerkey(i, "colors")) & 15;
 }
 

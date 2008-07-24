@@ -56,7 +56,7 @@ void CSQC_Init(void)
 	menu_action = menu_sub_null;
 	using_gps = false;
 	//ctf_temp_1 = "";
-	localcmd("alias order \"cmd order $*\"");
+	// localcmd("alias order \"cmd order $*\""); enable if ctf-command thingy is used
 	//registercmd("ctf_menu");
 	registercmd("ons_map");
 	//registercmd("menu_action");
@@ -76,7 +76,10 @@ void CSQC_Init(void)
 
 	postinit = false;
 
-	Sbar_Init();
+	teams = Sort_Spawn();
+	players = Sort_Spawn();
+	
+	teamspec = AddTeam(COLOR_SPECTATOR); // add specs first
 }
 
 // CSQC_Shutdown : Called every time the CSQC code is shutdown (changing maps, quitting, etc)
@@ -88,6 +91,9 @@ void CSQC_Shutdown(void)
 		return 0;
 #pragma TARGET fte
 #endif
+
+	remove(teams);
+	remove(players);
 	db_close(configdb);
 	buf_del(databuf);
 }
@@ -185,7 +191,7 @@ float CSQC_InputEvent(float bInputType, float nPrimary, float nSecondary)
 
 // --------------------------------------------------------------------------
 // BEGIN OPTIONAL CSQC FUNCTIONS
-void ReadONS()
+void Ent_ReadONS()
 {
 	entity gps;
 	using_gps = true;
@@ -207,7 +213,7 @@ void ReadONS()
 	}
 }
 
-void RemoveONS()
+void Ent_RemoveONS()
 {
 	if(gps_start == self)
 		gps_start = self.chain;
@@ -221,6 +227,69 @@ void RemoveONS()
 		if(ent.chain == self)
 			ent.chain = self.chain;
 	}
+}
+
+void Ent_ReadScoresInfo()
+{
+	float i;
+	for(i = 0; i < MAX_SCORE; ++i)
+	{
+		scores_label[i] = strzone(ReadString());
+		scores_flags[i] = ReadByte();
+	}
+	for(i = 0; i < MAX_TEAMSCORE; ++i)
+	{
+		teamscores_label[i] = strzone(ReadString());
+		teamscores_flags[i] = ReadByte();
+	}
+	Sbar_InitScores();
+}
+
+void Ent_ReadPlayerScore(float isNew)
+{
+	float i, Team;
+	entity tm;
+
+	// damnit -.- don't want to go change every single .sv_entnum in sbar.qc AGAIN
+	// (no I've never heard of M-x replace-string, sed, or anything like that)
+	self.sv_entnum = ReadByte()-1;
+	Team = GetPlayerColor(self.sv_entnum);
+
+	if(isNew)
+		RegisterPlayer(self);
+
+	if(isNew || Team != self.team)
+	{
+		if(!isNew)
+		{
+			tm = GetTeam(self.team, false);
+			tm.team_size -= 1;
+		}
+		
+		self.team = Team;
+		tm = GetTeam(Team, true);
+		tm.team_size += 1;
+	}
+
+	for(i = 0; i < MAX_SCORE; ++i)
+		self.(scores[i]) = ReadShort();
+
+	Sbar_UpdatePlayerPos(self);
+}
+
+void Ent_ReadTeamScore(float isNew)
+{
+	float i;
+	
+	self.team = ReadByte();
+
+	if(isNew)
+		RegisterTeam(self);
+
+	for(i = 0; i < MAX_TEAMSCORE; ++i)
+		self.(teamscores[i]) = ReadShort();
+
+	Sbar_UpdateTeamPos(self);
 }
 
 // CSQC_Ent_Update : Called every frame that the server has indicated an update to the SSQC / CSQC entity has occured.
@@ -237,13 +306,19 @@ void(float bIsNewEntity) CSQC_Ent_Update =
 		{
 			switch(msg)
 			{
-			case ENTCS_MSG_ONS_GPS: ReadONS(); break;
-			case ENTCS_MSG_ONS_REMOVE: RemoveONS(); break;
+			case ENTCS_MSG_ONS_GPS: Ent_ReadONS(); break;
+			case ENTCS_MSG_ONS_REMOVE: Ent_RemoveONS(); break;
 			default:
 				error("unknown ENTCS_MSG type\n");
 			}
 		}
 	}
+	else if(self.enttype == ENT_CLIENT_SCORES_INFO)
+		Ent_ReadScoresInfo();
+	else if(self.enttype == ENT_CLIENT_SCORES)
+		Ent_ReadPlayerScore(bIsNewEntity);
+	else if(self.enttype == ENT_CLIENT_TEAMSCORES)
+		Ent_ReadTeamScore(bIsNewEntity);
 	else
 		error("unknown entity type in CSQC_Ent_Update\n");
 	
@@ -268,6 +343,21 @@ void CSQC_Ent_Remove()
 					ent.chain = self.chain;
 			}
 		}
+	} else if(self.enttype == ENT_CLIENT_SCORES_INFO)
+	{
+		// OH NOES!! WE LOST DA SCORES INFO ENTITY
+		print("The world is going to explode.");
+		// kkthxbai
+	} else if(self.enttype == ENT_CLIENT_SCORES)
+	{
+		entity tm;
+		print("lost a client score\n");
+		tm = GetTeam(self.team, false);
+		tm.team_size -= 1;
+		RemovePlayer(self);
+	} else if(self.enttype == ENT_CLIENT_TEAMSCORES)
+	{
+		RemoveTeam(self);
 	}
 	remove(self);
 }
@@ -333,11 +423,6 @@ void Gamemode_Init()
 void CSQC_Parse_StuffCmd(string strMessage)
 {
 	localcmd(strMessage);
-	// watch for gametype changes!
-	if(gametype != cvar("gametype"))
-	{
-		Gamemode_Init();
-	}
 }
 // CSQC_Parse_Print : Provides the print string in the first parameter that the server provided.  To execute standard behavior, simply execute print with the string.
 void CSQC_Parse_Print(string strMessage)

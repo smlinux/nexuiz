@@ -7,6 +7,12 @@ void CSQC_ctf_hud(void);
 void PostInit(void);
 void CSQC_UpdateView(void)
 {
+	// watch for gametype changes here...
+	// in ParseStuffCMD the cmd isn't executed yet :/
+	// might even be better to add the gametype to TE_CSQC_INIT...?
+	if(gametype != cvar("gametype"))
+		Gamemode_Init();
+	
 	if(!postinit)
 		PostInit();
 	

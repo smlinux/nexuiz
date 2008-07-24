@@ -13,9 +13,6 @@
 // it did when I added this) But you have to use .Version
 // Capital V
 
-.float(entity to) SendEntity;
-.float Version;
-
 entity entcs_start;
 
 void entcs_init()
@@ -26,7 +23,7 @@ void entcs_init()
 	entcs_start.chain = world;
 };
 
-entity get_entcs_ent(float num)
+entity get_entcs_ent()
 {
 	entity entcs;
 	entcs = spawn();
@@ -104,7 +101,7 @@ entity attach_entcs()
 	print("Attaching ENTCS entity\n");
 
 	num = num_for_edict(self);
-	ent = get_entcs_ent(num);
+	ent = get_entcs_ent();
 
 	ent.classname = "entcs_sender";
 	ent.health = num;
