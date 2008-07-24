@@ -1,0 +1,41 @@
+#define MAX_SCORE 8
+#define MAX_TEAMSCORE 2
+
+.float scores[MAX_SCORE];
+.float teamscores[MAX_TEAMSCORE];
+
+void PlayerScore_Attach(entity player);
+void PlayerScore_Detach(entity player);
+void PlayerScore_Add(entity player, float scorefield, float score);
+void PlayerScore_Clear(entity player);
+void TeamScore_Add(entity player, float scorefield, float score);
+
+void ScoreInfo_Init(float teams);
+void ScoreInfo_SetLabel_TeamScore(float i, string label, float scoreflags);
+void ScoreInfo_SetLabel_PlayerScore(float i, string label, float scoreflags);
+#define SFL_DECREASING         1 // e.g. lives in LMS
+#define SFL_SORT_PRIO_LOW      2
+#define SFL_SORT_PRIO_MED      4
+#define SFL_SORT_PRIO_HIGH     8
+#define SFL_SORT_PRIO_PRIMARY 14
+#define SFL_SORT_PRIO_MASK    14
+
+void WinningConditionHelper();
+float WinningConditionHelper_topscore;
+float WinningConditionHelper_equality;
+float WinningConditionHelper_winnerteam;
+entity WinningConditionHelper_winner;
+
+
+#define S_KILLS 0
+#define S_DEATHS 1
+#define S_SUICIDES 2
+
+#define S_CTF_CAPS 3
+#define S_CTF_RETURNS 4
+
+#define S_KH_COLLECT 3
+#define S_KH_LOSEKEY 4
+#define S_KH_CAPTURE 5
+#define S_KH_PUSH 6
+#define S_KH_DESTROYED 7

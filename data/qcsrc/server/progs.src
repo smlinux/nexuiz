@@ -18,6 +18,8 @@ campaign.qh
 
 ../common/mapinfo.qh
 
+scores.qh
+
 ipban.qh
 
 keyhunt.qh
@@ -121,3 +123,5 @@ t_quake.qc
 
 //// tZork Turrets ////
 tturrets/include/turret_tturrets.qh
+
+scores.qc

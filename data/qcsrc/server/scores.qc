@@ -1,0 +1,248 @@
+.entity scorekeeper;
+entity teamscorekeepers[16];
+string scores_label[MAX_SCORE];
+float scores_flags[MAX_SCORE];
+string teamscores_label[MAX_TEAMSCORE];
+float teamscores_flags[MAX_TEAMSCORE];
+float teamscores_entities_count;
+var .float scores_primary;
+var .float teamscores_primary;
+
+.float Version;
+.float(entity to) SendEntity;
+
+vector ScoreField_Compare(entity t1, entity t2, .float field, float fieldflags, vector previous) // returns: cmp value, best prio
+{
+	if(fieldflags & SFL_SORT_PRIO_MASK < previous_y)
+		return previous;
+	if(t1.field == t2.field)
+		return previous;
+
+	previous_y = fieldflags & SFL_SORT_PRIO_MASK;
+
+	if(fieldflags & SFL_DECREASING)
+		previous_x = (t1.field - t2.field);
+	else
+		previous_x = (t2.field - t1.field);
+
+	return previous;
+}
+
+/*
+ * teamscore entities
+ */
+
+void TeamScore_SendEntity(entity to)
+{
+	float i;
+
+	WriteByte(MSG_ENTITY, ENT_CLIENT_TEAMSCORES);
+	WriteByte(MSG_ENTITY, self.team);
+	for(i = 0; i < MAX_TEAMSCORE; ++i)
+		WriteShort(MSG_ENTITY, self.teamscores[i]);
+}
+
+void TeamScore_Spawn(float t, string name)
+{
+	entity ts;
+	ts = spawn();
+	ts.classname = "csqc_score_team";
+	ts.SendEntity = TeamScore_SendEntity;
+	ts.netname = name; // not used yet, FIXME
+	ts.Version = 1; // immediately send, so csqc knows about the team
+	teamscorekeepers[t] = ts;
+	++teamscores_entities_count;
+}
+
+void TeamScore_Add(entity player, float scorefield, float score)
+{
+	entity s;
+	s = teamscorekeepers[player.team];
+	if(!s)
+		error("Adding score to unknown team!");
+	s.(teamscores[scorefield]) += score;
+	s.Version += 1;
+}
+
+float TeamScore_Compare(entity t1, entity t2)
+{
+	if(!t1 || !t2) return (!t2) - !t1;
+
+	vector result;
+	float i;
+	for(i = 0; i < MAX_TEAMSCORE; ++i)
+		result = ScoreField_Compare(t1, t2, teamscores[i], teamscores_flags[i], result);
+	return result_x;
+}
+
+/*
+ * the scoreinfo entity
+ */
+
+void ScoreInfo_SetLabel_PlayerScore(float i, string label, float scoreflags)
+{
+	scores_label[i] = label;
+	scores_flags[i] = scoreflags;
+	if(scoreflags & SFL_SORT_PRIO_MASK == SFL_SORT_PRIO_PRIMARY)
+		scores_primary = scores[i];
+}
+
+void ScoreInfo_SetLabel_TeamScore(float i, string label, float scoreflags)
+{
+	teamscores_label[i] = label;
+	teamscores_flags[i] = scoreflags;
+	if(scoreflags & SFL_SORT_PRIO_MASK == SFL_SORT_PRIO_PRIMARY)
+		teamscores_primary = teamscores[i];
+}
+
+void ScoreInfo_SendEntity(entity to)
+{
+	WriteByte(MSG_ENTITY, ENT_CLIENT_SCORES_INFO);
+	float i;
+	for(i = 0; i < MAX_SCORE; ++i)
+	{
+		WriteString(MSG_ENTITY, scores_label[i]);
+		WriteByte(MSG_ENTITY, scores_flags[i]);
+	}
+	for(i = 0; i < MAX_TEAMSCORE; ++i)
+	{
+		WriteString(MSG_ENTITY, teamscores_label[i]);
+		WriteByte(MSG_ENTITY, teamscores_flags[i]);
+	}
+}
+
+void ScoreInfo_Init(float teams)
+{
+	if(teams >= 1)
+		TeamScore_Spawn(COLOR_TEAM1, "Red");
+	if(teams >= 2)
+		TeamScore_Spawn(COLOR_TEAM2, "Blue");
+	if(teams >= 3)
+		TeamScore_Spawn(COLOR_TEAM3, "Yellow");
+	if(teams >= 4)
+		TeamScore_Spawn(COLOR_TEAM4, "Pink");
+	entity si;
+	si = spawn();
+	si.classname = "csqc_score_info";
+	si.SendEntity = ScoreInfo_SendEntity;
+	si.Version = 1;
+}
+
+/*
+ * per-player score entities
+ */
+
+void PlayerScore_SendEntity()
+{
+	float i;
+
+	WriteByte(MSG_ENTITY, ENT_CLIENT_SCORES);
+	WriteByte(MSG_ENTITY, num_for_edict(self.owner));
+	for(i = 0; i < MAX_SCORE; ++i)
+		WriteShort(MSG_ENTITY, self.scores[i]);
+}
+
+void PlayerScore_Clear(entity player)
+{
+	entity sk;
+	float i;
+
+	if(!teamscores_entities_count)
+	{
+		sk = player.scorekeeper;
+		for(i = 0; i < MAX_SCORE; ++i)
+			sk.(scores[i]) = 0;
+		sk.Version += 1;
+	}
+}
+
+void PlayerScore_Attach(entity player)
+{
+	entity sk;
+	if(player.scorekeeper)
+		error("player already has a scorekeeper");
+	sk = spawn();
+	sk.owner = player;
+	sk.SendEntity = PlayerScore_SendEntity;
+	player.scorekeeper = sk;
+}
+
+void PlayerScore_Detach(entity player)
+{
+	if(!player.scorekeeper)
+		error("player has no scorekeeper");
+	remove(player.scorekeeper);
+	player.scorekeeper = world;
+}
+
+void PlayerScore_Add(entity player, float scorefield, float score)
+{
+	entity s;
+	s = player.scorekeeper;
+	if(!s)
+		error("Adding score to unknown player!");
+	s.(scores[scorefield]) += score;
+	s.Version += 1;
+}
+
+float PlayerScore_Compare(entity t1, entity t2)
+{
+	if(!t1 || !t2) return (!t2) - !t1;
+
+	vector result;
+	float i;
+	for(i = 0; i < MAX_TEAMSCORE; ++i)
+		result = ScoreField_Compare(t1, t2, scores[i], scores_flags[i], result);
+	return result_x;
+}
+
+void WinningConditionHelper()
+{
+	float c;
+	if(teamscores_entities_count)
+	{
+		float t;
+		WinningConditionHelper_equality = 1;
+		WinningConditionHelper_winnerteam = 0;
+		for(t = 1; t < 16; ++t)
+		{
+			c = TeamScore_Compare(teamscorekeepers[WinningConditionHelper_winnerteam], teamscorekeepers[t]);
+			if(c == 0)
+				WinningConditionHelper_equality = 1;
+			else if(c < 0)
+			{
+				WinningConditionHelper_equality = 0;
+				WinningConditionHelper_winnerteam = t;
+			}
+		}
+
+		WinningConditionHelper_topscore = teamscorekeepers[WinningConditionHelper_winnerteam].teamscores_primary;
+
+		WinningConditionHelper_winner = world;
+		if(WinningConditionHelper_equality)
+			WinningConditionHelper_winnerteam = -1;
+	}
+	else
+	{
+		entity p;
+		WinningConditionHelper_equality = 1;
+		WinningConditionHelper_winner = world;
+		FOR_EACH_PLAYER(p)
+		{
+			c = PlayerScore_Compare(WinningConditionHelper_winner.scorekeeper, p.scorekeeper);
+			if(c == 0)
+				WinningConditionHelper_equality = 1;
+			else if(c < 0)
+			{
+				WinningConditionHelper_equality = 0;
+				WinningConditionHelper_winner = p;
+			}
+		}
+
+		WinningConditionHelper_topscore = WinningConditionHelper_winner.scorekeeper.scores_primary;
+
+		if(WinningConditionHelper_equality)
+			WinningConditionHelper_winner = world;
+		WinningConditionHelper_winnerteam = -1;
+	}
+}
