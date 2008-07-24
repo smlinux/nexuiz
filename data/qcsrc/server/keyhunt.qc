@@ -436,7 +436,11 @@ void kh_Key_Collect(entity key, entity player)  //a player picks up a dropped ke
 	sound(player, CHAN_AUTO, kh_sound_collect, 1, ATTN_NORM);
 
 	if(key.kh_dropperteam != player.team)
+	{
 		kh_Scores_Event(player, key, "collect", cvar("g_balance_keyhunt_score_collect"), 0);
+		PlayerTeamScore_Add(player, ST_SCORE, ST_SCORE, cvar("g_balance_keyhunt_score_collect"));
+		PlayerScore_Add(player, SP_KH_COLLECT, 1);
+	}
 	key.kh_dropperteam = 0;
 	bprint(player.netname, "^7 picked up the ", key.netname, "\n");
 
@@ -462,6 +466,7 @@ void kh_Key_DropAll(entity player, float suicide) // runs whenever a player dies
 		while((key = player.kh_next))
 		{
 			kh_Scores_Event(player, key, "losekey", 0, 0);
+			PlayerScore_Add(player, SP_KH_LOSEKEY, 1);
 			bprint(player.netname, "^7 died and lost the ", key.netname, "\n");
 			kh_Key_AssignTo(key, world);
 			makevectors('-1 0 0' * (45 + 45 * random()) + '0 360 0' * random());
@@ -599,7 +604,13 @@ void kh_WinnerTeam(float teem)  // runs when a team wins
 	// twice the score for 3 team games, three times the score for 4 team games!
 	// note: for a win by destroying the key, this should NOT be applied
 	FOR_EACH_KH_KEY(key)
-		kh_Scores_Event(key.owner, key, "capture", DistributeEvenly_Get(1), 0);
+	{
+		float f;
+		f = DistributeEvenly_Get(1);
+		kh_Scores_Event(key.owner, key, "capture", f, 0);
+		PlayerTeamScore_Add(key.owner, SP_KH_CAPS, ST_KH_CAPS, 1);
+		PlayerTeamScore_AddScore(key.owner, f);
+	}
 
 	first = TRUE;
 	FOR_EACH_KH_KEY(key)
@@ -645,6 +656,7 @@ void kh_LoserTeam(float teem, entity lostkey)  // runs when a player pushes a fl
 	entity player, key, attacker;
 	float players;
 	float keys;
+	float f;
 
 	attacker = world;
 	if(lostkey.pusher)
@@ -660,6 +672,8 @@ void kh_LoserTeam(float teem, entity lostkey)  // runs when a player pushes a fl
 			kh_Scores_Event(lostkey.kh_previous_owner, world, "pushed", 0, -cvar("g_balance_keyhunt_score_push"));
 			// don't actually GIVE him the -nn points, just log
 		kh_Scores_Event(attacker, world, "push", cvar("g_balance_keyhunt_score_push"), 0);
+		PlayerScore_Add(attacker, SP_KH_PUSH, 1);
+		PlayerTeamScore_AddScore(attacker, cvar("g_balance_keyhunt_score_push"));
 		centerprint(attacker, "Your push is the best!\n\n\n");
 		bprint("The ", ColoredTeamName(teem), "^7 could not take care of the ", lostkey.netname, "^7 when ", attacker.netname, "^7 came\n");
 	}
@@ -680,11 +694,17 @@ void kh_LoserTeam(float teem, entity lostkey)  // runs when a player pushes a fl
 			kh_Scores_Event(lostkey.kh_previous_owner, world, "destroyed", 0, -cvar("g_balance_keyhunt_score_destroyed"));
 			// don't actually GIVE him the -nn points, just log
 
+		PlayerScore_Add(lostkey.kh_previous_owner, SP_KH_DESTROYED, 1);
+
 		DistributeEvenly_Init(cvar("g_balance_keyhunt_score_destroyed"), keys * of + players);
 
 		FOR_EACH_KH_KEY(key)
 			if(key.owner && key.team != teem)
-				kh_Scores_Event(key.owner, world, "destroyed_holdingkey", DistributeEvenly_Get(of), 0);
+			{
+				f = DistributeEvenly_Get(of);
+				kh_Scores_Event(key.owner, world, "destroyed_holdingkey", f, 0);
+				PlayerTeamScore_AddScore(key.owner, f);
+			}
 
 		fragsleft = DistributeEvenly_Get(players);
 
@@ -707,7 +727,11 @@ void kh_LoserTeam(float teem, entity lostkey)  // runs when a player pushes a fl
 
 			FOR_EACH_PLAYER(player)
 				if(player.team == thisteam)
-					kh_Scores_Event(player, world, "destroyed", DistributeEvenly_Get(1), 0);
+				{
+					f = DistributeEvenly_Get(1);
+					kh_Scores_Event(player, world, "destroyed", f, 0);
+					PlayerTeamScore_AddScore(key.owner, f);
+				}
 
 			--j;
 		}
@@ -880,10 +904,14 @@ float kh_HandleFrags(entity attacker, entity targ, float f)  // adds to the play
 			for(k = targ.kh_next; k != world; k = k.kh_next)
 				++nk;
 			kh_Scores_Event(attacker, targ.kh_next, "carrierfrag", -nk * cvar("g_balance_keyhunt_score_collect"), 0);
+			PlayerTeamScore_AddScore(attacker, -nk * cvar("g_balance_keyhunt_score_collect"));
 		}
 		else
 		{
 			kh_Scores_Event(attacker, targ.kh_next, "carrierfrag", cvar("g_balance_keyhunt_score_carrierfrag")-1, 0);
+			PlayerTeamScore_AddScore(attacker, cvar("g_balance_keyhunt_score_carrierfrag") - 1);
+			PlayerScore_Add(attacker, SP_KH_KCFRAG, 1);
+			// the frag gets added later
 		}
 	}
 

@@ -10,6 +10,7 @@ float teamscores_flags[MAX_TEAMSCORE];
 float teamscores_entities_count;
 var .float scores_primary;
 var .float teamscores_primary;
+float scores_initialized;
 
 .float Version;
 .float(entity to) SendEntity;
@@ -60,6 +61,7 @@ void TeamScore_Spawn(float t, string name)
 void TeamScore_Add(entity player, float scorefield, float score)
 {
 	entity s;
+	if(!scores_initialized) return; // FIXME remove this when everything uses this system
 	s = teamscorekeepers[player.team];
 	if(!s)
 		error("Adding score to unknown team!");
@@ -116,6 +118,7 @@ void ScoreInfo_SendEntity(entity to)
 
 void ScoreInfo_Init(float teams)
 {
+	scores_initialized = 1;
 	if(teams >= 1)
 		TeamScore_Spawn(COLOR_TEAM1, "Red");
 	if(teams >= 2)
@@ -205,11 +208,18 @@ void PlayerScore_Detach(entity player)
 void PlayerScore_Add(entity player, float scorefield, float score)
 {
 	entity s;
+	if(!scores_initialized) return; // FIXME remove this when everything uses this system
 	s = player.scorekeeper;
 	if(!s)
 		error("Adding score to unknown player!");
 	s.(scores[scorefield]) += score;
 	s.Version += 1;
+}
+
+void PlayerTeamScore_Add(entity player, float pscorefield, float tscorefield, float score)
+{
+	PlayerScore_Add(player, pscorefield, score);
+	TeamScore_Add(player, tscorefield, score);
 }
 
 float PlayerScore_Compare(entity t1, entity t2)
@@ -271,5 +281,40 @@ void WinningConditionHelper()
 		if(WinningConditionHelper_equality)
 			WinningConditionHelper_winner = world;
 		WinningConditionHelper_winnerteam = -1;
+	}
+}
+
+void Score_DebugPrint()
+{
+	entity p, sk;
+	float i, t;
+
+	print("netname");
+	for(i = 0; i < MAX_SCORE; ++i)
+		print(":", scores_label[i]);
+	print("\n");
+	FOR_EACH_PLAYER(p)
+	{
+		sk = p.scorekeeper;
+		print(p.netname);
+		for(i = 0; i < MAX_SCORE; ++i)
+			print(":", ftos(sk.(scores[i])));
+		print("\n");
+	}
+
+	print("teamname");
+	for(i = 0; i < MAX_SCORE; ++i)
+		print(":", scores_label[i]);
+	print("\n");
+	for(t = 0; t < 16; ++t)
+	{
+		sk = teamscorekeepers[t];
+		if(sk)
+		{
+			print(ftos(t));
+			for(i = 0; i < MAX_TEAMSCORE; ++i)
+				print(":", ftos(sk.(teamscores[i])));
+			print("\n");
+		}
 	}
 }
