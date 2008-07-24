@@ -42,12 +42,14 @@ float IsFlying(entity a)
 
 void UpdateFrags(entity player, float f)
 {
+	// TODO remove this, make callers route through PlayerScores instead
 	player.frags += f;
 	player.totalfrags += f;
 }
 
 void GiveFrags (entity attacker, entity targ, float f)
 {
+	// TODO route through PlayerScores instead
 	if(gameover) return;
 
 	if(g_arena)
