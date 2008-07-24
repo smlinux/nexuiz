@@ -26,6 +26,9 @@ const float AS_FLOAT		= 8;
 const float ENT_CLIENT = 0;
 const float ENT_CLIENT_DEAD = 1;
 const float ENT_CLIENT_ENTCS = 2;
+const float ENT_CLIENT_SCORES_INFO = 3;
+const float ENT_CLIENT_SCORES = 4;
+const float ENT_CLIENT_TEAMSCORES = 5;
 
 ///////////////////////////
 // key constants
