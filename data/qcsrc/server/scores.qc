@@ -17,6 +17,8 @@ float scores_initialized;
 
 vector ScoreField_Compare(entity t1, entity t2, .float field, float fieldflags, vector previous) // returns: cmp value, best prio
 {
+	if(!(fieldflags & SFL_SORT_PRIO_MASK)) // column does not sort
+		return previous;
 	if(fieldflags & SFL_SORT_PRIO_MASK < previous_y)
 		return previous;
 	if(t1.field == t2.field)
