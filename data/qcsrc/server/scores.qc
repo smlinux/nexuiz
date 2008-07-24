@@ -159,6 +159,30 @@ void PlayerScore_Clear(entity player)
 	}
 }
 
+void Score_ClearAll()
+{
+	entity p, sk;
+	float i;
+	FOR_EACH_CLIENTSLOT(p)
+	{
+		sk = p.scorekeeper;
+		if(!sk)
+			continue;
+		for(i = 0; i < MAX_SCORE; ++i)
+			sk.(scores[i]) = 0;
+		sk.Version += 1;
+	}
+	for(i = 0; i < 16; ++i)
+	{
+		sk = teamscorekeepers[i];
+		if(!sk)
+			continue;
+		for(i = 0; i < MAX_SCORE; ++i)
+			sk.(teamscores[i]) = 0;
+		sk.Version += 1;
+	}
+}
+
 void PlayerScore_Attach(entity player)
 {
 	entity sk;

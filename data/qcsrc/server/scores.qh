@@ -49,6 +49,11 @@ void ScoreInfo_SetLabel_TeamScore(float i, string label, float scoreflags);
 void ScoreInfo_SetLabel_PlayerScore(float i, string label, float scoreflags);
 
 /**
+ * Clear ALL scores (for ready-restart).
+ */
+void Score_ClearAll();
+
+/**
  * Lower scores are better (e.g. deaths)
  */
 #define SFL_DECREASING         1
