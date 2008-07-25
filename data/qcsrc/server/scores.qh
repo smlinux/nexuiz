@@ -17,15 +17,6 @@ void PlayerScore_Detach(entity player);
 void PlayerScore_Add(entity player, float scorefield, float score);
 
 /**
- * Check if the player can have scores.
- * This is needed for example in keyhunt, when the carrier disconnects.
- * The key-losing happens too late... which should probably be fixed
- * but I'm just not in the mood to do that now as I'm busy making the
- * csqc part work <.<
- */
-float PlayerScore_IsValid(entity player);
-
-/**
  * Initialize the score of this player if needed.
  * Does nothing in teamplay.
  * Use that when a spectator becomes a player.

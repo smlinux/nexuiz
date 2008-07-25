@@ -385,6 +385,8 @@ void PutObserverInServer (void)
 	else if(self.killcount != -666)
 		bprint ("^4", self.netname, "^4 is spectating now\n");
 
+	PlayerScore_Clear(self); // clear scores when needed
+
 	self.spectatortime = time;
 	
 	self.classname = "observer";
@@ -1176,10 +1178,6 @@ void ClientDisconnect (void)
 
 	bot_clientdisconnect();
 
-#ifdef CSQCSCORES
-	PlayerScore_Detach(self);
-#endif
-
 	if(entcs_start)
 		detach_entcs();
 	
@@ -1241,6 +1239,10 @@ void ClientDisconnect (void)
 		ctf_clientdisconnect();
 	}
 	*/
+
+#ifdef CSQCSCORES
+	PlayerScore_Detach(self);
+#endif
 
 	if(self.netname_previous)
 		strunzone(self.netname_previous);

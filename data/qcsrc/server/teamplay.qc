@@ -25,6 +25,7 @@ float IsTeamBalanceForced()
 
 void TeamchangeFrags(entity e)
 {
+#ifndef CSQCSCORES
 	if(g_ctf)
 	{
 		e.captures = 0;
@@ -34,6 +35,8 @@ void TeamchangeFrags(entity e)
 		// reduce frags during a team change
 		DistributeFragsAmongTeam(e, (e.clientcolors & 0x0F) + 1, 1 - cvar("g_changeteam_fragtransfer") / 100);
 	}
+#endif
+	PlayerScore_Clear(e);
 }
 
 vector TeamColor(float teem)

@@ -200,14 +200,6 @@ void Score_ClearAll()
 	}
 }
 
-float PlayerScore_IsValid(entity player)
-{
-	if(!player.scorekeeper)
-		return FALSE;
-
-	return TRUE;
-}
-
 void PlayerScore_Attach(entity player)
 {
 	entity sk;

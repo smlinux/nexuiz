@@ -42,9 +42,12 @@ float IsFlying(entity a)
 
 void UpdateFrags(entity player, float f)
 {
+#ifndef CSQCSCORES
 	// TODO remove this, make callers route through PlayerScores instead
 	player.frags += f;
 	player.totalfrags += f;
+#endif
+	PlayerTeamScore_AddScore(player, f);
 }
 
 void GiveFrags (entity attacker, entity targ, float f)
@@ -244,7 +247,7 @@ void Obituary (entity attacker, entity targ, float deathtype)
 					bprint ("^1", a, "^1 mows down a teammate\n");
 				}
 				GiveFrags(attacker, targ, -1);
-				PlayerScore_Add(attacker, -1); // teamkills DO cound as -1 kill right?
+				PlayerScore_Add(attacker, SP_KILLS, -1); // teamkills DO cound as -1 kill right?
 				if (targ.killcount > 2) {
 					if(sv_gentle)
 						bprint ("^1",s,"'s ^1",ftos(targ.killcount)," scoring spree was ended by a teammate!\n");
