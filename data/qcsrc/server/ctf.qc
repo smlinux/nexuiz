@@ -816,7 +816,7 @@ void(float cteam) ctf_new_commander =
 			if(pl.iscommander) { // don't reassign if alreay there
 				return;
 			}
-			if(plmax == world || plmax.frags < pl.frags)
+			if(plmax == world || plmax.frags < pl.frags) <<<<<<<<<<<<<<<<< BROKEN in new scoring system
 				plmax = pl;
 		}
 	}

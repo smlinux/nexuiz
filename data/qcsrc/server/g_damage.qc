@@ -107,6 +107,8 @@ void GiveFrags (entity attacker, entity targ, float f)
 		f = 0;
 	}
 
+	attacker.totalfrags += f;
+
 	if(f)
 		UpdateFrags(attacker, f);
 }
@@ -465,8 +467,7 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				else
 					bprint ("^1",s, "^1 died\n");
 			GiveFrags(targ, targ, -1);
-			// FIXME move this into winning condition checking? or allow READING of the scores?
-			if(targ.frags == -5) {
+			if(PlayerScore_Add(targ, SP_SCORE, 0) == -5) {
 				announce(targ, "announcer/male/botlike.ogg");
 			}
 

@@ -1,3 +1,6 @@
+// let's abuse an existing field
+#define SPAWNPOINT_SCORE frags
+
 .float wantswelcomemessage;
 .string netname_previous;
 
@@ -77,12 +80,12 @@ entity Spawn_FilterOutBadSpots(entity firstspot, entity playerlist, float mindis
 
 	for(spot = firstspot; spot; spot = spot.chain)
 	{
-		spot.frags = Spawn_Score(spot, playerlist, teamcheck);
+		spot.SPAWNPOINT_SCORE = Spawn_Score(spot, playerlist, teamcheck);
 
 		if(cvar("spawn_debugview"))
 		{
 			setmodel(spot, "models/runematch/rune.mdl");
-			if(spot.frags < mindist)
+			if(spot.SPAWNPOINT_SCORE < mindist)
 			{
 				spot.colormod = '1 0 0';
 				spot.scale = 1;
@@ -90,13 +93,13 @@ entity Spawn_FilterOutBadSpots(entity firstspot, entity playerlist, float mindis
 			else
 			{
 				spot.colormod = '0 1 0';
-				spot.scale = spot.frags / mindist;
+				spot.scale = spot.SPAWNPOINT_SCORE / mindist;
 			}
 		}
 
-		if(spot.frags >= 0) // spawning allowed here
+		if(spot.SPAWNPOINT_SCORE >= 0) // spawning allowed here
 		{
-			if(spot.frags < mindist)
+			if(spot.SPAWNPOINT_SCORE < mindist)
 			{
 				// too short distance
 				spawn_allgood = FALSE;
@@ -147,7 +150,7 @@ entity Spawn_WeightedPoint(entity firstspot, float lower, float upper, float exp
 
 	RandomSelection_Init();
 	for(spot = firstspot; spot; spot = spot.chain)
-		RandomSelection_Add(spot, 0, pow(bound(lower, spot.frags, upper), exponent) * spot.cnt, spot.frags >= lower);
+		RandomSelection_Add(spot, 0, pow(bound(lower, spot.SPAWNPOINT_SCORE, upper), exponent) * spot.cnt, spot.SPAWNPOINT_SCORE >= lower);
 
 	return RandomSelection_chosen_ent;
 }
@@ -202,7 +205,7 @@ entity SelectSpawnPoint (float anypoint)
 
 	if(cvar("spawn_debugview"))
 	{
-		print("spot mindistance: ", ftos(spot.frags), "\n");
+		print("spot mindistance: ", ftos(spot.SPAWNPOINT_SCORE), "\n");
 
 		entity e;
 		if(teamcheck)

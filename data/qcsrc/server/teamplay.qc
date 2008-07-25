@@ -386,27 +386,36 @@ void PrintWelcomeMessage(entity pl)
 	{
 		if(self.classname == "observer")
 		{
-			// FIXME this is broken for LMS, fix it
-			if(g_lms && self.frags <= 0 && self.frags > -666)
-				return centerprint_atprio(self, CENTERPRIO_SPAM, strcat(NEWLINES, "^1You have no more lives left\nwait for next round\n\n\n^7press attack to spectate other players"));
-			else if(g_lms && self.frags == -666)
-				return centerprint_atprio(self, CENTERPRIO_SPAM, strcat(NEWLINES, "^1Match has already begun\nwait for next round\n\n\n^7press attack to spectate other players"));
+			if(g_lms)
+			{
+				float p;
+				p = PlayerScore_Add(self, SP_LMS_PLACE, 0);
+				if(p >= 666)
+					return centerprint_atprio(self, CENTERPRIO_SPAM, strcat(NEWLINES, "^1Match has already begun\nwait for next round\n\n\n^7press attack to spectate other players"));
+				else if(p > 0)
+					return centerprint_atprio(self, CENTERPRIO_SPAM, strcat(NEWLINES, "^1You have no more lives left\nwait for next round\n\n\n^7press attack to spectate other players"));
+			}
 		}
 		else if(self.classname == "spectator")
 		{
-			// FIXME this is broken for LMS, fix it
-			if ((g_lms && self.frags < 1) || g_arena)
-				return centerprint_atprio(self, CENTERPRIO_SPAM, strcat(NEWLINES, "spectating ", self.enemy.netname, "\n\n\n^7press attack for next player\npress attack2 for free fly mode"));
-			else {
-				local string specString;
-				specString = strcat(NEWLINES, "spectating ", self.enemy.netname, "\n\n\n^7press jump to play\n^7press attack for next player\npress attack2 for free fly mode");
-				
-				if(time < restart_countdown) //also show the countdown when being a spectator
-					specString = strcat(specString, "\n\n^1Game starts in ", ftos(restartAnnouncer.cnt + 1), " seconds^7");
-				else if (timeoutStatus != 0)
-					specString = strcat(specString, "\n\n", getTimeoutText(1));
-				return centerprint_atprio(self, CENTERPRIO_SPAM, specString);
+			if(g_lms)
+			{
+				float p;
+				p = PlayerScore_Add(self, SP_LMS_PLACE, 0);
+				if(p)
+					return centerprint_atprio(self, CENTERPRIO_SPAM, strcat(NEWLINES, "spectating ", self.enemy.netname, "\n\n\n^7press attack for next player\npress attack2 for free fly mode"));
 			}
+			if (g_arena)
+				return centerprint_atprio(self, CENTERPRIO_SPAM, strcat(NEWLINES, "spectating ", self.enemy.netname, "\n\n\n^7press attack for next player\npress attack2 for free fly mode"));
+
+			local string specString;
+			specString = strcat(NEWLINES, "spectating ", self.enemy.netname, "\n\n\n^7press jump to play\n^7press attack for next player\npress attack2 for free fly mode");
+			
+			if(time < restart_countdown) //also show the countdown when being a spectator
+				specString = strcat(specString, "\n\n^1Game starts in ", ftos(restartAnnouncer.cnt + 1), " seconds^7");
+			else if (timeoutStatus != 0)
+				specString = strcat(specString, "\n\n", getTimeoutText(1));
+			return centerprint_atprio(self, CENTERPRIO_SPAM, specString);
 		}
 	}
 
@@ -1123,25 +1132,24 @@ void ShufflePlayerOutOfTeam (float source_team)
 	lowest_player_score = 999999999;
 
 	// find the lowest-scoring player & bot of that team
-	// FIXME this is broken in new scoring system, add a helper to find the worst bot of a team
 	FOR_EACH_PLAYER(head)
 	{
 		if(head.team == steam)
 		{
 			if(head.isbot)
 			{
-				if(head.frags < lowest_bot_score)
+				if(head.totalfrags < lowest_bot_score)
 				{
 					lowest_bot = head;
-					lowest_bot_score = head.frags;
+					lowest_bot_score = head.totalfrags;
 				}
 			}
 			else
 			{
-				if(head.frags < lowest_player_score)
+				if(head.totalfrags < lowest_player_score)
 				{
 					lowest_player = head;
-					lowest_player_score = head.frags;
+					lowest_player_score = head.totalfrags;
 				}
 			}
 		}
@@ -1324,28 +1332,6 @@ void AuditTeams()
 	audit_teams_time = time + 0.7 + random()*0.3;
 }
 
-
-
-/*void UpdateTeamScore(entity e, float first)
-{
-	clientno = e.FIXME;
-	if(first)
-	{
-		WriteByte (MSG_ALL, SVC_UPDATENAME);
-		WriteByte (MSG_ALL, clientno);
-		WriteString (MSG_ALL, e.netname);
-
-		WriteByte (MSG_ALL, SVC_UPDATECOLORS);
-		WriteByte (MSG_ALL, clientno);
-		WriteByte (MSG_ALL, e.b_shirt * 16 + who.b_pants);
-	}
-
-	WriteByte (MSG_ALL, SVC_UPDATEFRAGS);
-	WriteByte (MSG_ALL, clientno);
-	WriteShort (MSG_ALL, e.frags + 10000);
-};
-
-*/
 
 
 // code from here on is just to support maps that don't have team entities

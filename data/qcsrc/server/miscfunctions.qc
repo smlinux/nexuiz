@@ -533,46 +533,6 @@ void backtrace(string msg)
 	cvar_set("developer", ftos(dev));
 }
 
-#if 0
-void DistributeFragsAmongTeam(entity p, float targetteam, float factor)
-{
-	float nTeam;
-	entity head;
-	float f;
-
-	if(!teams_matter)
-		return;
-
-	//if(p.frags < 0)
-	//{
-	//	p.frags = 0; // do not harm the new team!
-	//	return; // won't distribute negative scores
-	//}
-
-	if(p.frags == -666)
-		return;
-
-	f = ceil(factor * p.frags);
-	p.frags = p.frags - f;
-
-	nTeam = 0;
-	FOR_EACH_PLAYER(head)
-		if(head != p)
-			if(head.team == targetteam)
-				nTeam = nTeam + 1;
-
-	if(nTeam == 0)
-		return;
-
-	DistributeEvenly_Init(f, nTeam);
-
-	FOR_EACH_PLAYER(head)
-		if(head != p)
-			if(head.team == targetteam)
-				head.frags = head.frags + DistributeEvenly_Get(1);
-}
-#endif
-
 string Team_ColorCode(float teamid)
 {
 	if(teamid == COLOR_TEAM1)

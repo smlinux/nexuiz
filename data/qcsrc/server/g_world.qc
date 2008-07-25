@@ -47,14 +47,14 @@ void fteqcc_testbugs()
 	else
 		dprint("*** fteqcc test: same-function-twice bug got FINALLY FIXED! HOORAY!\n");
 
-	world.frags = -10;
+	world.cnt = -10;
 	world.enemy = world;
-	world.enemy.frags += 10;
-	if(world.frags > 0.2 || world.frags < -0.2) // don't error out if it's just roundoff errors
+	world.enemy.cnt += 10;
+	if(world.cnt > 0.2 || world.cnt < -0.2) // don't error out if it's just roundoff errors
 		dprint("*** fteqcc test: found += bug\n");
 	else
 		dprint("*** fteqcc test: += bug got FINALLY FIXED! HOORAY!\n");
-	world.frags = 0;
+	world.cnt = 0;
 }
 
 /**
@@ -1203,16 +1203,6 @@ void AddWinners(.float field, float value)
 			head.winning = 1;
 }
 
-// clear frags for all players but the team given (when they ran out of spawnpoints)
-void ClearFragsForEveryoneBut(.float field, float value)
-{
-	// FIXME make this use the new score system (probably not needed any more, can just send this as an event)
-	entity head;
-	FOR_EACH_PLAYER(head)
-		if(head.field != value)
-			head.frags = max(head.frags, 0);
-}
-
 // clear the .winning flags
 void ClearWinners(void)
 {
@@ -1415,68 +1405,6 @@ void print_to(entity e, string s)
 		ServerConsoleEcho(s, TRUE);
 }
 
-void PrintScoreboardFor(entity e, string name, string colorcode, float whichteam)
-{
-	// FIXME kill this, or make it support the new scoring system
-	entity head;
-	float v;
-	float teamvalue;
-	float fragtotal;
-	string s;
-	float found;
-	found = FALSE;
-	teamvalue = 0;
-	FOR_EACH_PLAYER(head)
-	{
-		if(!whichteam || head.team == whichteam)
-		{
-			if(name != "")
-				if(!found)
-					print_to(e, strcat(" ", colorcode, name, ":"));
-			found = TRUE;
-			fragtotal = fragtotal + head.frags;
-			s = ftos(head.frags);
-			s = strcat(s, "/", ftos(head.deaths));
-			s = strcat(s, " @ ", ftos(head.ping));
-			if(clienttype(head) == CLIENTTYPE_BOT)
-				s = strcat(s, "botms");
-			else
-				s = strcat(s, "ms");
-			v = PlayerValue(head);
-			teamvalue += v;
-			s = strcat(s, " / ", ftos(v));
-			print_to(e, strcat("  ", colorcode, head.netname, colorcode, " (", s, ")"));
-		}
-	}
-	if(whichteam && found)
-	{
-		s = ftos(fragtotal);
-		s = strcat(s, " / ", ftos(teamvalue));
-		print_to(e, strcat(colorcode, "  (total: ", s, ")"));
-	}
-}
-
-void PrintScoreboard(entity e)
-{
-	// FIXME kill this, or make it support the new scoring system
-	print_to(e, strcat("Time:      ", ftos(time / 60)));
-	print_to(e, strcat("Timelimit: ", ftos(cvar("timelimit"))));
-	print_to(e, strcat("Fraglimit: ", ftos(cvar("fraglimit"))));
-	print_to(e, "Scoreboard:");
-	if(teams_matter)
-	{
-		PrintScoreboardFor(e, "Red", "^1", COLOR_TEAM1);
-		PrintScoreboardFor(e, "Blue", "^4", COLOR_TEAM2);
-		PrintScoreboardFor(e, "Yellow", "^3", COLOR_TEAM3);
-		PrintScoreboardFor(e, "Pink", "^6", COLOR_TEAM4);
-	}
-	else
-	{
-		PrintScoreboardFor(e, "", "^7", 0);
-	}
-	print_to(e, ".");
-}
-
 void ShuffleMaplist()
 {
 	string result;
@@ -1585,26 +1513,21 @@ float WinningCondition_RanOutOfSpawns()
 	}
 	else if(team1_score + team2_score + team3_score + team4_score == 1)
 	{
-		if(team1_score)
+		float t, i;
+		if(team1_score) t = COLOR_TEAM1;
+		if(team2_score) t = COLOR_TEAM2;
+		if(team3_score) t = COLOR_TEAM3;
+		if(team4_score) t = COLOR_TEAM4;
+		CheckAllowedTeams(world);
+		for(i = 0; i < MAX_TEAMSCORE; ++i)
 		{
-			AddWinners(team, COLOR_TEAM1);
-			ClearFragsForEveryoneBut(team, COLOR_TEAM1);
+			if(t != COLOR_TEAM1) if(c1 >= 0) TeamScore_Add(COLOR_TEAM1, i, -1000);
+			if(t != COLOR_TEAM2) if(c2 >= 0) TeamScore_Add(COLOR_TEAM2, i, -1000);
+			if(t != COLOR_TEAM3) if(c3 >= 0) TeamScore_Add(COLOR_TEAM3, i, -1000);
+			if(t != COLOR_TEAM4) if(c4 >= 0) TeamScore_Add(COLOR_TEAM4, i, -1000);
 		}
-		if(team2_score)
-		{
-			AddWinners(team, COLOR_TEAM2);
-			ClearFragsForEveryoneBut(team, COLOR_TEAM2);
-		}
-		if(team3_score)
-		{
-			AddWinners(team, COLOR_TEAM3);
-			ClearFragsForEveryoneBut(team, COLOR_TEAM3);
-		}
-		if(team4_score)
-		{
-			AddWinners(team, COLOR_TEAM4);
-			ClearFragsForEveryoneBut(team, COLOR_TEAM4);
-		}
+
+		AddWinners(team, t);
 		return WINNING_YES;
 	}
 	else

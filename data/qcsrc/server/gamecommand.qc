@@ -48,12 +48,6 @@ void GameCommand(string command)
 	if(GameCommand_Generic(command))
 		return;
 
-	if(argv(0) == "teamstatus")
-	{
-		PrintScoreboard(world);
-		return;
-	}
-
 	if(argv(0) == "printstats")
 	{
 		DumpStats(FALSE);

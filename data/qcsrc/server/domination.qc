@@ -15,6 +15,8 @@ dom_init();
 Note: The only teams who can use dom control points are identified by spawnfunc_dom_team entities (if none exist these default to red and blue and use only quake models/sounds).
 */
 
+#define DOMPOINT_FRAGS frags
+
 void() dom_controlpoint_setup;
 
 void LogDom(string mode, float team_before, entity actor)
@@ -126,7 +128,7 @@ void dompointthink()
 	{
 		teamfragamt = cvar("g_domination_point_teamamt");
 		if(!teamfragamt)
-			teamfragamt = self.frags;
+			teamfragamt = self.DOMPOINTFRAGS;
 		TeamScore_AddToTeam(self.goalentity.team, ST_DOM_DOMPOINTS, teamfragamt);
 	}
 
@@ -151,7 +153,7 @@ void dompointthink()
 	{
 		individualfragamt = cvar("g_domination_point_amt");
 		if(!individualfragamt)
-			individualfragamt = self.frags;
+			individualfragamt = self.DOMPOINTFRAGS;
 		UpdateFrags(self.enemy, individualfragamt);
 		PlayerScore_Add(self.enemy, SP_DOM_DOMPOINTS, individualfragamt);
 	}
@@ -269,8 +271,8 @@ void dom_controlpoint_setup()
 	if(!self.message)
 		self.message = " has captured a control point";
 
-	if(!self.frags)
-		self.frags = 1;
+	if(!self.DOMPOINTFRAGS)
+		self.DOMPOINTFRAGS = 1;
 	if(!self.wait)
 		self.wait = 5;
 
