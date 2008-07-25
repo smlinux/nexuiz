@@ -125,7 +125,8 @@ float CSQC_ConsoleCommand(string strMessage)
 {
 	float argc;
 	// Tokenize String
-	argc = tokenize(strMessage);
+	//argc = tokenize(strMessage);
+	argc = tokenizebyseparator(strMessage, " ");
 	
 	// Acquire Command
 	local string strCmd;
@@ -229,9 +230,11 @@ void Ent_RemoveONS()
 	}
 }
 
+void Gamemode_Init();
 void Ent_ReadScoresInfo()
 {
 	float i;
+	gametype = ReadByte();
 	for(i = 0; i < MAX_SCORE; ++i)
 	{
 		scores_label[i] = strzone(ReadString());
@@ -243,6 +246,7 @@ void Ent_ReadScoresInfo()
 		teamscores_flags[i] = ReadByte();
 	}
 	Sbar_InitScores();
+	Gamemode_Init();
 }
 
 void Ent_ReadPlayerScore(float isNew)
@@ -369,7 +373,6 @@ void Gamemode_Init()
 	local float file;
 	local vector mi_min, mi_max;
 
-	gametype = cvar("gametype");
 	if(gametype == GAME_ONSLAUGHT) {
 		if(!strcasecmp(substring(mapname, 0, 5), "maps/"))
 			minimapname = substring(mapname, 5, 999);

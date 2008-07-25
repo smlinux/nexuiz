@@ -409,3 +409,18 @@ void buf_save(float buf, string pFilename)
 		fputs(fh, strcat(bufstr_get(buf, i), "\n"));
 	fclose(fh);
 }
+
+string GametypeNameFromType(float g)
+{
+	if      (g == GAME_DEATHMATCH) return "dm";
+	else if (g == GAME_TEAM_DEATHMATCH) return "tdm";
+	else if (g == GAME_DOMINATION) return "dom";
+	else if (g == GAME_CTF) return "ctf";
+	else if (g == GAME_RUNEMATCH) return "rune";
+	else if (g == GAME_LMS) return "lms";
+	else if (g == GAME_KEYHUNT) return "kh";
+	else if (g == GAME_ONSLAUGHT) return "ons";
+	else if (g == GAME_ASSAULT) return "as";
+	return "dm";
+}
+

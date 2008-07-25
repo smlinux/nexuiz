@@ -382,25 +382,7 @@ float TryFile( string pFilename )
 
 string GetGametype()
 {
-	if (game == GAME_DEATHMATCH)
-		return "dm";
-	else if (game == GAME_TEAM_DEATHMATCH)
-		return "tdm";
-	else if (game == GAME_DOMINATION)
-		return "dom";
-	else if (game == GAME_CTF)
-		return "ctf";
-	else if (game == GAME_RUNEMATCH)
-		return "rune";
-	else if (game == GAME_LMS)
-		return "lms";
-	else if (game == GAME_KEYHUNT)
-		return "kh";
-	else if (game == GAME_ONSLAUGHT)
-		return "ons";
-	else if (game == GAME_ASSAULT)
-		return "as";
-	return "dm";
+	return GametypeNameFromType(game);
 }
 
 float IsSameGametype(string mapcfgname)

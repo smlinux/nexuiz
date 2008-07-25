@@ -304,6 +304,8 @@ void Cmd_Sbar_Help(float argc)
 
 string Sbar_DefaultColumnLayout()
 {
+	return "ping name | +kh,ctf/caps -ctf,kh/kills -ctf,kh/deaths score";
+	/*
 	switch(gametype)
 	{
 		case GAME_CTF: return "ping name | caps score";
@@ -311,20 +313,21 @@ string Sbar_DefaultColumnLayout()
 		default: return "ping name | score";
 			// TODO: add other gametypes
 	}
+	*/
 }
 
 void Cmd_Sbar_SetFields(float argc)
 {
-	float i, j;
-	string str;
+	float i, j, slash;
+	string str, pattern, subpattern;
 	float digit;
 
 	// TODO: re enable with gametype dependant cvars?
 	if(argc < 2) // no arguments provided
-		argc = tokenize(strcat("x ", cvar_string("sbar_columns")));
+		argc = tokenizebyseparator(strcat("x ", cvar_string("sbar_columns")), " ");
 
-	if(argc == 2 && argv(1) == "default")
-		argc = tokenize(strcat("x ", Sbar_DefaultColumnLayout()));
+	if(argc < 2 || (argc == 2 && argv(1) == "default"))
+		argc = tokenizebyseparator(strcat("x ", Sbar_DefaultColumnLayout()), " ");
 	
 	argc = min(MAX_SBAR_FIELDS, argc);
 	sbar_num_fields = 0;
@@ -332,16 +335,38 @@ void Cmd_Sbar_SetFields(float argc)
 	drawfont = sbar_font;
 	digit = stringwidth("0123456789", FALSE) / 10;
 
+	subpattern = strcat(",", GametypeNameFromType(gametype), ",");
+
 	argc = min(argc-1, MAX_SBAR_FIELDS-1);
 	for(i = 0; i < argc; ++i)
 	{
 		str = argv(i+1);
+
+		slash = strstrofs(str, "/", 0);
+		if(slash >= 0)
+		{
+			pattern = substring(str, 0, slash);
+			str = substring(str, slash + 1, strlen(str) - (slash + 1));
+
+			if(substring(pattern, 0, 1) == "-")
+			{
+				pattern = substring(pattern, 1, strlen(pattern) - 1);
+				if(strstrofs(strcat(",", pattern, ","), subpattern, 0) >= 0)
+					continue;
+			}
+			else
+			{
+				if(substring(pattern, 0, 1) == "+")
+					pattern = substring(pattern, 1, strlen(pattern) - 1);
+				if(strstrofs(strcat(",", pattern, ","), subpattern, 0) < 0)
+					continue;
+			}
+		}
+
 		strunzone(sbar_title[sbar_num_fields]);
 		sbar_title[sbar_num_fields] = strzone(str);
 		sbar_size[sbar_num_fields] = stringwidth(str, FALSE);
 		str = strtolower(str);
-
-		
 
 		if(str == "ping") {
 			sbar_field[sbar_num_fields] = SP_PING;

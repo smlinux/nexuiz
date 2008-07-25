@@ -114,6 +114,7 @@ float ScoreInfo_SendEntity(entity to)
 {
 	WriteByte(MSG_ENTITY, ENT_CLIENT_SCORES_INFO);
 	float i;
+	WriteByte(MSG_ENTITY, game);
 	for(i = 0; i < MAX_SCORE; ++i)
 	{
 		WriteString(MSG_ENTITY, scores_label[i]);
