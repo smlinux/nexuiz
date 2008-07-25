@@ -274,6 +274,7 @@ void Cmd_Sbar_Help(float argc)
 	print("^3|---------------------------------------------------------------|\n");
 	print("^1 TO BE DONE\n");
 	print("Usage:\n");
+	print("^2sbar_columns_set default\n");
 	print("^2sbar_columns_set ^7filed1 field2 ...\n");
 	print("The following field names are recognized (case INsensitive):\n");
 	print("You can use a ^3|^7 to start the right-aligned fields.\n");
@@ -305,9 +306,9 @@ string Sbar_DefaultColumnLayout()
 {
 	switch(gametype)
 	{
-		case GAME_CTF: return "ping name | caps frags";
-		case GAME_KEYHUNT: return "ping name | score caps kills";
-		default: return "ping name | frags";
+		case GAME_CTF: return "ping name | caps score";
+		case GAME_KEYHUNT: return "ping name | caps kills score";
+		default: return "ping name | score";
 			// TODO: add other gametypes
 	}
 }
@@ -322,7 +323,7 @@ void Cmd_Sbar_SetFields(float argc)
 	if(argc < 2) // no arguments provided
 		argc = tokenize(strcat("x ", cvar_string("sbar_columns")));
 
-	if(argc < 2)
+	if(argc == 2 && argv(1) == "default")
 		argc = tokenize(strcat("x ", Sbar_DefaultColumnLayout()));
 	
 	argc = min(MAX_SBAR_FIELDS, argc);
@@ -335,20 +336,20 @@ void Cmd_Sbar_SetFields(float argc)
 	for(i = 0; i < argc; ++i)
 	{
 		str = argv(i+1);
-		strunzone(sbar_title[i]);
-		sbar_title[i] = strzone(str);
-		sbar_size[i] = stringwidth(str, FALSE);
+		strunzone(sbar_title[sbar_num_fields]);
+		sbar_title[sbar_num_fields] = strzone(str);
+		sbar_size[sbar_num_fields] = stringwidth(str, FALSE);
 		str = strtolower(str);
 
 		
 
 		if(str == "ping") {
-			sbar_field[i] = SP_PING;
+			sbar_field[sbar_num_fields] = SP_PING;
 		} else if(str == "name" || str == "nick") {
-			sbar_field[i] = SP_NAME;
-			sbar_size[i] = MIN_NAMELEN; // minimum size? any use?
+			sbar_field[sbar_num_fields] = SP_NAME;
+			sbar_size[sbar_num_fields] = MIN_NAMELEN; // minimum size? any use?
 		} else if(str == "|") {
-			sbar_field[i] = SP_SEPARATOR;
+			sbar_field[sbar_num_fields] = SP_SEPARATOR;
 		} else {
 			for(j = 0; j < MAX_SCORE; ++j)
 			{
@@ -357,13 +358,15 @@ void Cmd_Sbar_SetFields(float argc)
 			}
 			if(j == MAX_SCORE) {
 				print(strcat("^1Error:^7 Unknown score field: '", str, "'\n"));
-				--sbar_num_fields;
-			} else
-				sbar_field[i] = j;
+				continue;
+			} else {
+				//print("field ", ftos(sbar_num_fields), " is column ", ftos(j), " (", str, ")\n");
+				sbar_field[sbar_num_fields] = j;
+			}
 		}
 		++sbar_num_fields;
 	}
-	sbar_field[i] = SP_END;
+	sbar_field[sbar_num_fields] = SP_END;
 }
 
 // MOVEUP::
@@ -607,7 +610,7 @@ void Sbar_DrawScoreboard()
 		{
 			if(sbar_field[i] == SP_SEPARATOR)
 				break;
-			
+
 			pos_x -= sbar_fontsize_x*sbar_size[i] + sbar_fontsize_x;
 			/**
 			 * FTEQCC BUG!
