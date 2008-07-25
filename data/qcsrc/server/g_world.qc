@@ -1329,7 +1329,6 @@ float WinningCondition_Assault()
 
 }
 
-
 // LMS winning condition: game terminates if and only if there's at most one
 // one player who's living lives. Top two scores being equal cancels the time
 // limit.
@@ -1418,172 +1417,6 @@ float WinningCondition_LMS()
 
 	// Top two have different scores? Way to go for our beloved TIMELIMIT!
 	return WINNING_NO;
-}
-
-// DM winning condition: game terminates if a player reached the fraglimit,
-// unless the first two players have the same score. The latter case also
-// breaks the time limit.
-float WinningCondition_MaxIndividualScore(float fraglimit)
-{
-	// FIXME kill this
-	float checkrules_oldleaderfrags;
-	entity head;
-
-	checkrules_oldleaderfrags = checkrules_leaderfrags;
-	checkrules_leaderfrags = 0;
-	checkrules_equality = FALSE;
-	FOR_EACH_PLAYER(head)
-	{
-		if(head.frags > checkrules_leaderfrags)
-		{
-			checkrules_leaderfrags = head.frags;
-			checkrules_equality = FALSE;
-		}
-		else if(head.frags > 0 && head.frags == checkrules_leaderfrags)
-			checkrules_equality = TRUE;
-	}
-
-	if(checkrules_leaderfrags > 0)
-		SetWinners(frags, checkrules_leaderfrags);
-	else
-		ClearWinners();
-
-	if (!g_runematch)
-		if (checkrules_leaderfrags != checkrules_oldleaderfrags)
-		{
-			if (checkrules_leaderfrags == fraglimit - 1)
-				sound(world, CHAN_AUTO, "announcer/robotic/1fragleft.wav", 1, ATTN_NONE);
-			else if (checkrules_leaderfrags == fraglimit - 2)
-				sound(world, CHAN_AUTO, "announcer/robotic/2fragsleft.wav", 1, ATTN_NONE);
-			else if (checkrules_leaderfrags == fraglimit - 3)
-				sound(world, CHAN_AUTO, "announcer/robotic/3fragsleft.wav", 1, ATTN_NONE);
-		}
-
-	return GetWinningCode(fraglimit && checkrules_leaderfrags >= fraglimit, checkrules_equality);
-}
-
-float WinningConditionBase_Teamplay(float fraglimit)
-{
-	// FIXME kill this
-	tdm_old_score = tdm_max_score;
-	tdm_max_score = max4(team1_score, team2_score, team3_score, team4_score);
-
-	checkrules_equality =
-	(
-		(tdm_max_score > 0)
-		&&
-		(
-			  (team1_score == tdm_max_score)
-			+ (team2_score == tdm_max_score)
-			+ (team3_score == tdm_max_score)
-			+ (team4_score == tdm_max_score)
-			>= 2));
-
-	ClearWinners();
-	if(tdm_max_score > 0)
-	{
-		if(team1_score == tdm_max_score)
-			AddWinners(team, COLOR_TEAM1);
-		if(team2_score == tdm_max_score)
-			AddWinners(team, COLOR_TEAM2);
-		if(team3_score == tdm_max_score)
-			AddWinners(team, COLOR_TEAM3);
-		if(team4_score == tdm_max_score)
-			AddWinners(team, COLOR_TEAM4);
-	}
-
-	if(!g_runematch && !g_domination && !g_ctf)
-		if(tdm_max_score != tdm_old_score)
-		{
-			if(tdm_max_score == fraglimit - 1)
-				sound(world, CHAN_AUTO, "announcer/robotic/1fragleft.wav", 1, ATTN_NONE);
-			else if(tdm_max_score == fraglimit - 2)
-				sound(world, CHAN_AUTO, "announcer/robotic/2fragsleft.wav", 1, ATTN_NONE);
-			else if(tdm_max_score == fraglimit - 3)
-				sound(world, CHAN_AUTO, "announcer/robotic/3fragsleft.wav", 1, ATTN_NONE);
-		}
-
-	return GetWinningCode(fraglimit && tdm_max_score >= fraglimit, checkrules_equality);
-}
-
-// TDM winning condition: game terminates if a team's score sum reached the
-// fraglimit, unless the first two teams have the same total score. The latter
-// case also breaks the time limit.
-float WinningCondition_MaxTeamSum(float fraglimit)
-{
-	// FIXME kill this
-	entity head;
-
-	team1_score = team2_score = team3_score = team4_score = 0;
-
-	FOR_EACH_PLAYER(head)
-	{
-		if(head.team == COLOR_TEAM1)
-			team1_score += head.frags;
-		else if(head.team == COLOR_TEAM2)
-			team2_score += head.frags;
-		else if(head.team == COLOR_TEAM3)
-			team3_score += head.frags;
-		else if(head.team == COLOR_TEAM4)
-			team4_score += head.frags;
-	}
-
-	return WinningConditionBase_Teamplay(fraglimit);
-}
-
-// DOM/CTF winning condition: game terminates if the max of a team's players'
-// score reached the fraglimit, unless the first two teams have the same
-// maximum score. The latter case also breaks the time limit.
-float WinningCondition_MaxTeamMax(float fraglimit)
-{
-	// FIXME kill this
-	entity head;
-
-	team1_score = team2_score = team3_score = team4_score = 0;
-
-	FOR_EACH_PLAYER(head)
-	{
-		if(head.team == COLOR_TEAM1)
-		{
-			if(head.frags > team1_score)
-				team1_score = head.frags;
-		}
-		else if(head.team == COLOR_TEAM2)
-		{
-			if(head.frags > team2_score)
-				team2_score = head.frags;
-		}
-		else if(head.team == COLOR_TEAM3)
-		{
-			if(head.frags > team3_score)
-				team3_score = head.frags;
-		}
-		else if(head.team == COLOR_TEAM4)
-		{
-			if(head.frags > team4_score)
-				team4_score = head.frags;
-		}
-	}
-
-	return WinningConditionBase_Teamplay(fraglimit);
-}
-
-float WinningCondition_CTF(float capturelimit, float fraglimit)
-{
-	// FIXME kill this
-	if(cvar("g_ctf_win_mode") == 2)
-		return WinningCondition_MaxTeamSum(fraglimit);
-	
-	team1_score = caps_team1;
-	team2_score = caps_team2;
-	team3_score = team4_score = 0;
-
-	if(team1_score == team2_score && cvar("g_ctf_win_mode"))
-	{
-		return WinningCondition_MaxTeamSum(0);
-	}
-
-	return WinningConditionBase_Teamplay(capturelimit);
 }
 
 void print_to(entity e, string s)
@@ -1708,7 +1541,7 @@ void ShuffleMaplist()
 
 float WinningCondition_Scores(float limit)
 {
-	// TODO make everything use THIS winning condition (except LMS perhaps, but... better even LMS)
+	// TODO make everything use THIS winning condition (except LMS)
 	WinningConditionHelper();
 	
 	ClearWinners();
@@ -1867,7 +1700,7 @@ void CheckRules_World()
 	}
 	else if(g_assault)
 	{
-		status = WinningCondition_Assault();
+		status = WinningCondition_Assault(); // TODO remove this?
 	}
 	else if(g_lms)
 	{
@@ -1875,28 +1708,11 @@ void CheckRules_World()
 	}
 	else if (g_onslaught)
 	{
-		status = WinningCondition_Onslaught();
-	}
-	else if(g_ctf)
-	{
-		status = WinningCondition_CTF(capturelimit, fraglimit);
+		status = WinningCondition_Onslaught(); // TODO remove this?
 	}
 	else
 	{
-		if(teams_matter)
-		{
-			if(g_tdm || g_runematch || g_ctf || g_domination || g_keyhunt)
-				status = WinningCondition_MaxTeamSum(fraglimit);
-			//else if()
-			//	status = WinningCondition_MaxTeamMax(fraglimit);
-			else
-			{
-				dprint("div0: How can this happen?\n");
-				status = WinningCondition_MaxTeamMax(fraglimit);
-			}
-		}
-		else
-			status = WinningCondition_MaxIndividualScore(fraglimit);
+		status = WinningCondition_Scores(fraglimit);
 	}
 
 	if(status == WINNING_STARTOVERTIME)
