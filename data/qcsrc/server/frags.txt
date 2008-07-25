@@ -1,0 +1,7 @@
+TODO: remove the .frags field, except for the following values:
+
+0 = regular player
+-2 = ???, used by arena
+-666 = spectator
+
+Anything else shall go through PlayerScore!
