@@ -13,8 +13,9 @@ void PlayerScore_Detach(entity player);
  * Adds a score to the player's scores.
  * NEVER call this if PlayerScore_Attach has not been called yet!
  * Means: FIXME make players unable to join the game when not called ClientConnect yet.
+ * Returns the new score.
  */
-void PlayerScore_Add(entity player, float scorefield, float score);
+float PlayerScore_Add(entity player, float scorefield, float score);
 
 /**
  * Initialize the score of this player if needed.
@@ -26,14 +27,16 @@ void PlayerScore_Clear(entity player);
 /**
  * Adds a score to the player's team's scores.
  * NEVER call this if team has not been set yet!
+ * Returns the new score.
  */
-void TeamScore_Add(entity player, float scorefield, float score);
+float TeamScore_Add(entity player, float scorefield, float score);
 
 /**
  * Adds a score to the given team.
  * NEVER call this if team has not been set yet!
+ * Returns the new score.
  */
-void TeamScore_AddToTeam(float t, float scorefield, float score);
+float TeamScore_AddToTeam(float t, float scorefield, float score);
 
 /**
  * Adds a score to both the player and the team.

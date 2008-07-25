@@ -68,20 +68,21 @@ void TeamScore_Spawn(float t, string name)
 	++teamscores_entities_count;
 }
 
-void TeamScore_AddToTeam(float t, float scorefield, float score)
+float TeamScore_AddToTeam(float t, float scorefield, float score)
 {
 	entity s;
-	if(!scores_initialized) return; // FIXME remove this when everything uses this system
+	if(!scores_initialized) return 0; // FIXME remove this when everything uses this system
 	s = teamscorekeepers[t];
 	if(!s)
 		error("Adding score to unknown team!");
-	s.(teamscores[scorefield]) += score;
-	s.Version += 1;
+	if(score)
+		s.Version += 1;
+	return (s.(teamscores[scorefield]) += score);
 }
 
-void TeamScore_Add(entity player, float scorefield, float score)
+float TeamScore_Add(entity player, float scorefield, float score)
 {
-	TeamScore_AddToTeam(player.team, scorefield, score);
+	return TeamScore_AddToTeam(player.team, scorefield, score);
 }
 
 float TeamScore_Compare(entity t1, entity t2)
@@ -227,15 +228,16 @@ void PlayerScore_Detach(entity player)
 	player.scorekeeper = world;
 }
 
-void PlayerScore_Add(entity player, float scorefield, float score)
+float PlayerScore_Add(entity player, float scorefield, float score)
 {
 	entity s;
-	if(!scores_initialized) return; // FIXME remove this when everything uses this system
+	if(!scores_initialized) return 0; // FIXME remove this when everything uses this system
 	s = player.scorekeeper;
 	if(!s)
 		error("Adding score to unknown player!");
-	s.(scores[scorefield]) += score;
-	s.Version += 1;
+	if(score)
+		s.Version += 1;
+	return (s.(scores[scorefield]) += score);
 }
 
 void PlayerTeamScore_Add(entity player, float pscorefield, float tscorefield, float score)
