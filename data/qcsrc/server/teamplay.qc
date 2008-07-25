@@ -217,7 +217,15 @@ void InitGameplayMode()
 			fraglimit_override = -1;
 		gamemode_name = "Last Man Standing";
 		teams_matter = 0;
-		lms_lowest_lives = 999;
+		lms_lowest_lives = 9999;
+
+		ScoreInfo_Init(0);
+		ScoreInfo_SetLabel_PlayerScore(SP_KILLS,        "kills",     0);
+		ScoreInfo_SetLabel_PlayerScore(SP_DEATHS,       "deaths",    0);
+		ScoreInfo_SetLabel_PlayerScore(SP_SUICIDES,     "suicides",  SFL_DECREASING);
+		// do not define SP_SCORE for LMS
+		ScoreInfo_SetLabel_PlayerScore(SP_LMS_LIVES,    "lives",     SFL_SORT_PRIO_MED);
+		ScoreInfo_SetLabel_PlayerScore(SP_LMS_PLACE,    "place",     SFL_SORT_PRIO_PRIMARY);
 	}
 	else if(game == GAME_ARENA || cvar("g_arena"))
 	{

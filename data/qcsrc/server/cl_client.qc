@@ -373,11 +373,18 @@ void PutObserverInServer (void)
 
 	WaypointSprite_PlayerDead();
 	
-	// FIXME LMS needs the new scoring system
-	if(self.frags <= 0 && self.frags > -666 && g_lms && self.killcount != -666)
-		bprint ("^4", self.netname, "^4 has no more lives left\n");
-	else if(self.killcount != -666)
-		bprint ("^4", self.netname, "^4 is spectating now\n");
+	if(self.killcount != -666)
+	{
+		if(g_lms)
+		{
+			if(PlayerScoreAdd(self, SP_LMS_PLACE, 0) > 0)
+				bprint ("^4", self.netname, "^4 has no more lives left\n");
+			else
+				bprint ("^4", self.netname, "^4 is spectating now\n"); // TODO turn this into a proper forfeit?
+		}
+		else
+			bprint ("^4", self.netname, "^4 is spectating now\n");
+	}
 
 	PlayerScore_Clear(self); // clear scores when needed
 
@@ -444,6 +451,7 @@ void PutObserverInServer (void)
 		if(self.frags != -2)
 		{
 			Spawnqueue_Insert(self);
+			// FIXME what IS this?
 		}
 		else
 		{
@@ -451,7 +459,7 @@ void PutObserverInServer (void)
 			Spawnqueue_Remove(self);
 		}
 	}
-	else if(!g_lms)
+	else
 		self.frags = -666;
 	
 	net_UpdateDeaths(MSG_BROADCAST);
@@ -543,8 +551,11 @@ void PutClientInServer (void)
 
 	// player is dead and becomes observer
 	// FIXME fix LMS scoring for new system
-	if(g_lms && self.frags < 1)
-		self.classname = "observer";
+	if(g_lms)
+	{
+		if(PlayerScoreAdd(self, SP_LMS_PLACE, 0) > 0)
+			self.classname = "observer";
+	}
 
 	if(g_arena)
 	if(!self.spawned)
@@ -1096,14 +1107,7 @@ void ClientConnect (void)
 
 	stuffcmd(self, strcat("set gametype ", ftos(game), "\n"));
 
-	if(g_lms)
-	{
-		// FIXME fix LMS lives for new system
-		self.frags = LMS_NewPlayerLives();
-		if(!self.frags)
-			self.frags = -666;
-	}
-	else if(g_arena)
+	if(g_arena)
 	{
 		self.classname = "observer";
 		Spawnqueue_Insert(self);
@@ -1141,6 +1145,15 @@ void ClientConnect (void)
 		{
 			MapVote_SendData(MSG_ONE);
 			MapVote_UpdateData(MSG_ONE);
+		}
+	}
+
+	if(g_lms)
+	{
+		if(PlayerScoreAdd(self, SP_LMS_LIVES, LMS_NewPlayerLives()) <= 0)
+		{
+			PlayerScoreAdd(self, SP_LMS_PLACE, 666);
+			self.frags = -666; // FIXME do we still need this?
 		}
 	}
 }

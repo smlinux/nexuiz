@@ -54,17 +54,37 @@ void GiveFrags (entity attacker, entity targ, float f)
 		if(cvar("g_arena_roundbased"))
 			return;
 
+	if(f < 0)
+	{
+		if(targ == attacker)
+		{
+			// suicide
+			PlayerScore_Add(attacker, SP_SUICIDES, 1);
+		}
+		else
+		{
+			// teamkill
+			PlayerScore_Add(attacker, SP_KILLS, -1); // or maybe add a teamkills field?
+		}
+	}
+	else
+	{
+		// regular frag
+		PlayerScore_Add(attacker, SP_KILLS, 1);
+	}
+
+	PlayerScore_Add(targ, SP_DEATHS, 1);
+
 	// FIXME fix the mess this is (we have REAL points now!)
 	if(g_domination)
 	{
 		if(cvar("g_domination_disable_frags"))
 			if(f > 0)
-				return;
+				f = 0;
 	}
 	else if(g_runematch)
 	{
-		if(f > 0)
-			f = RunematchHandleFrags(attacker, targ, f);
+		f = RunematchHandleFrags(attacker, targ, f);
 	}
 	else if(g_keyhunt)
 	{
@@ -72,21 +92,19 @@ void GiveFrags (entity attacker, entity targ, float f)
 	}
 	else if(g_lms)
 	{
-		// FIXME fix LMS mode for new scoreboard
-		// count remaining lives, not frags in lms
-		targ.frags -= 1;
-		// keep track of the worst players lives
-		if(targ.frags < lms_lowest_lives)
-			lms_lowest_lives = targ.frags;
-		// player has no more lives left
-		if (!targ.frags)
+		// remove a life
+		float tl;
+		tl = PlayerScore_Add(targ, SP_LMS_LIVES, -1);
+		if(tl < lms_lowest_lives)
+			lms_lowest_lives = tl;
+		if(tl <= 0)
 		{
 			if(!lms_next_place)
 				lms_next_place = player_count;
-			targ.frags = -lms_next_place;
-			lms_next_place -= 1;
+			PlayerScore_Add(targ, SP_LMS_PLACE, lms_next_place); // won't ever spawn again
+			--lms_next_place;
 		}
-		return;
+		f = 0;
 	}
 
 	if(f)
@@ -193,8 +211,6 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				if(deathtype != DEATH_TEAMCHANGE)
 				{
 					LogDeath("suicide", deathtype, targ, targ);
-					PlayerScore_Add(targ, SP_SUICIDES, 1);
-					PlayerScore_Add(targ, SP_DEATHS, 1);
 					GiveFrags(attacker, targ, -1);
 				}
 				if (targ.killcount > 2)
@@ -226,8 +242,6 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				if(deathtype != DEATH_TEAMCHANGE)
 				{
 					LogDeath("suicide", deathtype, targ, targ);
-					PlayerScore_Add(targ, SP_SUICIDES, 1);
-					PlayerScore_Add(targ, SP_DEATHS, 1);
 					GiveFrags(attacker, targ, -1);
 				}
 				if (targ.killcount > 2)
@@ -246,8 +260,6 @@ void Obituary (entity attacker, entity targ, float deathtype)
 					bprint ("^1", a, "^1 mows down a teammate\n");
 				}
 				GiveFrags(attacker, targ, -1);
-				PlayerScore_Add(attacker, SP_KILLS, -1); // teamkills DO cound as -1 kill right? or make separate teamkill counter?
-				PlayerScore_Add(targ, SP_DEATHS, 1);
 				if (targ.killcount > 2) {
 					if(sv_gentle)
 						bprint ("^1",s,"'s ^1",ftos(targ.killcount)," scoring spree was ended by a teammate!\n");
@@ -335,8 +347,6 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				}
 				else
 					GiveFrags(attacker, targ, 1);
-				PlayerScore_Add(attacker, SP_KILLS, 1);
-				PlayerScore_Add(targ, SP_DEATHS, 1);
 				if (targ.killcount > 2) {
 					if(sv_gentle)
 						bprint ("^1",s,"'s ^1", ftos(targ.killcount), " scoring spree was ended by ", a, "\n");
@@ -455,8 +465,6 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				else
 					bprint ("^1",s, "^1 died\n");
 			GiveFrags(targ, targ, -1);
-			PlayerScore_Add(targ, SP_SUICIDES, 1);
-			PlayerScore_Add(targ, SP_DEATHS, 1);
 			// FIXME move this into winning condition checking? or allow READING of the scores?
 			if(targ.frags == -5) {
 				announce(targ, "announcer/male/botlike.ogg");

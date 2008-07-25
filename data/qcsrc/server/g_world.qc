@@ -1266,11 +1266,11 @@ float LMS_NewPlayerLives()
 
 	// first player has left the game for dying too much? Nobody else can get in.
 	if(lms_lowest_lives < 1)
-		return FALSE;
+		return 0;
 
 	if(!cvar("g_lms_join_anytime"))
 		if(lms_lowest_lives < fl - cvar("g_lms_last_join"))
-			return FALSE;
+			return 0;
 
 	return bound(1, lms_lowest_lives, fl);
 }
@@ -1361,15 +1361,18 @@ float WinningCondition_LMS()
 		else
 		{
 			// exactly one player?
+
+			ClearWinners();
+			SetWinners(winning, 0); // NOTE: exactly one player is still "player", so this works out
+
 			if(l)
 			{
-				// but no game has taken place yet
+				// game still running (that is, nobody got removed from the game by a frag yet)? then continue
+				return WINNING_NO;
 			}
 			else
 			{
 				// a winner!
-				ClearWinners(); SetWinners(winning, 0); // NOTE: exactly one player is still "player", so this works out
-				dprint("Have a winner, ending game.\n");
 				return WINNING_YES;
 			}
 		}
@@ -1391,28 +1394,13 @@ float WinningCondition_LMS()
 	}
 
 	// When we get here, we have at least two players who are actually LIVING,
-	// or one player who is still waiting for a victim to join the server. Now
-	// check if the top two players have equal score.
+	// now check if the top two players have equal score.
+	WinningConditionHelper();
 
-	checkrules_leaderfrags = 0;
-	checkrules_equality = FALSE;
-	FOR_EACH_PLAYER(head)
-	{
-		if(head.frags > checkrules_leaderfrags)
-		{
-			checkrules_leaderfrags = head.frags;
-			checkrules_equality = FALSE;
-		}
-		else if(head.frags > 0 && head.frags == checkrules_leaderfrags)
-			checkrules_equality = TRUE;
-	}
-
-	SetWinners(frags, checkrules_leaderfrags);
-
-	// The top two players have the same amount of lives? No timelimit then,
-	// enter overtime...
-
-	if(checkrules_equality)
+	ClearWinners();
+	if(WinningConditionHelper_winner)
+		WinningConditionHelper_winner.winning = TRUE;
+	if(WinningConditionHelper_equality)
 		return WINNING_NEVER;
 
 	// Top two have different scores? Way to go for our beloved TIMELIMIT!

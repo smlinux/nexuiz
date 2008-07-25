@@ -975,7 +975,7 @@ void kh_init()  // sets up th KH environment
 
 	ScoreInfo_Init(kh_teams);
 	ScoreInfo_SetLabel_TeamScore  (ST_SCORE,        "score",     SFL_SORT_PRIO_PRIMARY);
-	ScoreInfo_SetLabel_TeamScore  (ST_KH_CAPS,      "caps",      SFL_SORT_PRIO_MED);
+	ScoreInfo_SetLabel_TeamScore  (ST_KH_CAPS,      "caps",      SFL_SORT_PRIO_HIGH);
 	ScoreInfo_SetLabel_PlayerScore(SP_KILLS,        "kills",     0);
 	ScoreInfo_SetLabel_PlayerScore(SP_DEATHS,       "deaths",    0);
 	ScoreInfo_SetLabel_PlayerScore(SP_SUICIDES,     "suicides",  SFL_DECREASING);
