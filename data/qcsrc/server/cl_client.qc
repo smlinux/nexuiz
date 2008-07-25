@@ -380,7 +380,7 @@ void PutObserverInServer (void)
 	{
 		if(g_lms)
 		{
-			if(PlayerScoreAdd(self, SP_LMS_PLACE, 0) > 0)
+			if(PlayerScore_Add(self, SP_LMS_PLACE, 0) > 0)
 				bprint ("^4", self.netname, "^4 has no more lives left\n");
 			else
 				bprint ("^4", self.netname, "^4 is spectating now\n"); // TODO turn this into a proper forfeit?
@@ -556,7 +556,7 @@ void PutClientInServer (void)
 	// FIXME fix LMS scoring for new system
 	if(g_lms)
 	{
-		if(PlayerScoreAdd(self, SP_LMS_PLACE, 0) > 0)
+		if(PlayerScore_Add(self, SP_LMS_PLACE, 0) > 0)
 			self.classname = "observer";
 	}
 
@@ -1153,9 +1153,9 @@ void ClientConnect (void)
 
 	if(g_lms)
 	{
-		if(PlayerScoreAdd(self, SP_LMS_LIVES, LMS_NewPlayerLives()) <= 0)
+		if(PlayerScore_Add(self, SP_LMS_LIVES, LMS_NewPlayerLives()) <= 0)
 		{
-			PlayerScoreAdd(self, SP_LMS_PLACE, 666);
+			PlayerScore_Add(self, SP_LMS_PLACE, 666);
 			self.frags = -666; // FIXME do we still need this?
 		}
 	}

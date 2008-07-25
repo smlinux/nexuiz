@@ -15,7 +15,7 @@ dom_init();
 Note: The only teams who can use dom control points are identified by spawnfunc_dom_team entities (if none exist these default to red and blue and use only quake models/sounds).
 */
 
-#define DOMPOINT_FRAGS frags
+#define DOMPOINTFRAGS frags
 
 void() dom_controlpoint_setup;
 

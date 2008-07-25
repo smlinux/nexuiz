@@ -365,6 +365,7 @@ string GetClientVersionMessage(float v) {
 void PrintWelcomeMessage(entity pl)
 {
 	string s, mutator, modifications, padding;
+	float p;
 
 	/*if(self.welcomemessage_time > time)
 		return;
@@ -388,7 +389,6 @@ void PrintWelcomeMessage(entity pl)
 		{
 			if(g_lms)
 			{
-				float p;
 				p = PlayerScore_Add(self, SP_LMS_PLACE, 0);
 				if(p >= 666)
 					return centerprint_atprio(self, CENTERPRIO_SPAM, strcat(NEWLINES, "^1Match has already begun\nwait for next round\n\n\n^7press attack to spectate other players"));
@@ -400,7 +400,6 @@ void PrintWelcomeMessage(entity pl)
 		{
 			if(g_lms)
 			{
-				float p;
 				p = PlayerScore_Add(self, SP_LMS_PLACE, 0);
 				if(p)
 					return centerprint_atprio(self, CENTERPRIO_SPAM, strcat(NEWLINES, "spectating ", self.enemy.netname, "\n\n\n^7press attack for next player\npress attack2 for free fly mode"));
