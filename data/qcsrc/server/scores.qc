@@ -10,7 +10,6 @@ float teamscores_flags[MAX_TEAMSCORE];
 float teamscores_entities_count;
 var .float scores_primary;
 var .float teamscores_primary;
-float scores_initialized;
 
 void Net_LinkEntity(entity e)
 {
@@ -92,7 +91,11 @@ float TeamScore_Compare(entity t1, entity t2)
 	vector result;
 	float i;
 	for(i = 0; i < MAX_TEAMSCORE; ++i)
-		result = ScoreField_Compare(t1, t2, teamscores[i], teamscores_flags[i], result);
+	{
+		var .float f;
+		f = teamscores[i];
+		result = ScoreField_Compare(t1, t2, f, teamscores_flags[i], result);
+	}
 	return result_x;
 }
 
@@ -253,8 +256,12 @@ float PlayerScore_Compare(entity t1, entity t2)
 
 	vector result;
 	float i;
-	for(i = 0; i < MAX_TEAMSCORE; ++i)
-		result = ScoreField_Compare(t1, t2, scores[i], scores_flags[i], result);
+	for(i = 0; i < MAX_SCORE; ++i)
+	{
+		var .float f;
+		f = scores[i];
+		result = ScoreField_Compare(t1, t2, f, scores_flags[i], result);
+	}
 	return result_x;
 }
 

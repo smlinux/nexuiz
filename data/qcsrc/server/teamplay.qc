@@ -318,6 +318,22 @@ void InitGameplayMode()
 		kh_init();
 	else if (game == GAME_ONSLAUGHT)
 		entcs_init();
+
+	if(!scores_initialized)
+	{
+		if(teamplay)
+		{
+			CheckAllowedTeams(world);
+			ScoreInfo_Init((c1>=0) + (c2>=0) + (c3>=0) + (c4>=0)); // NOTE this assumes that if team 2 is allowed, 1 is too, and if 3 is, 2 is, and if 4 is, 3 is!
+		}
+		else
+			ScoreInfo_Init(0); // NOTE this assumes that if team 2 is allowed, 1 is too, and if 3 is, 2 is, and if 4 is, 3 is!
+		ScoreInfo_SetLabel_TeamScore  (ST_SCORE,        "score",     SFL_SORT_PRIO_PRIMARY);
+		ScoreInfo_SetLabel_PlayerScore(SP_KILLS,        "kills",     0);
+		ScoreInfo_SetLabel_PlayerScore(SP_DEATHS,       "deaths",    0);
+		ScoreInfo_SetLabel_PlayerScore(SP_SUICIDES,     "suicides",  SFL_DECREASING);
+		ScoreInfo_SetLabel_PlayerScore(SP_SCORE,        "score",     SFL_SORT_PRIO_PRIMARY);
+	}
 }
 
 string GetClientVersionMessage(float v) {
@@ -632,21 +648,24 @@ void CheckAllowedTeams (entity for_whom)
 		head = find(head, classname, teament_name);
 	}
 
-	if(cvar("bot_vs_human") > 0)
+	if(for_whom)
 	{
-		// bots are all blue
-		if(clienttype(for_whom) == CLIENTTYPE_BOT)
-			c1 = c3 = c4 = -1;
-		else
-			c2 = -1;
-	}
-	else if(cvar("bot_vs_human") < 0)
-	{
-		// bots are all red
-		if(clienttype(for_whom) == CLIENTTYPE_BOT)
-			c2 = c3 = c4 = -1;
-		else
-			c1 = -1;
+		if(cvar("bot_vs_human") > 0)
+		{
+			// bots are all blue
+			if(clienttype(for_whom) == CLIENTTYPE_BOT)
+				c1 = c3 = c4 = -1;
+			else
+				c2 = -1;
+		}
+		else if(cvar("bot_vs_human") < 0)
+		{
+			// bots are all red
+			if(clienttype(for_whom) == CLIENTTYPE_BOT)
+				c2 = c3 = c4 = -1;
+			else
+				c1 = -1;
+		}
 	}
 }
 

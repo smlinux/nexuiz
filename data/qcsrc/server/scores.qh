@@ -1,3 +1,5 @@
+float scores_initialized; // 1 when scores labels/rules have been set
+
 /**
  * Attaches a PlayerScore entity to a player. Use that in ClientConnect.
  * Remember to detach it in ClientDisconnect!
