@@ -25,17 +25,6 @@ float IsTeamBalanceForced()
 
 void TeamchangeFrags(entity e)
 {
-#ifndef CSQCSCORES
-	if(g_ctf)
-	{
-		e.captures = 0;
-	}
-	if(e.classname == "player")
-	{
-		// reduce frags during a team change
-		DistributeFragsAmongTeam(e, (e.clientcolors & 0x0F) + 1, 1 - cvar("g_changeteam_fragtransfer") / 100);
-	}
-#endif
 	PlayerScore_Clear(e);
 }
 
@@ -373,6 +362,7 @@ void PrintWelcomeMessage(entity pl)
 	{
 		if(self.classname == "observer")
 		{
+			// FIXME this is broken for LMS, fix it
 			if(g_lms && self.frags <= 0 && self.frags > -666)
 				return centerprint_atprio(self, CENTERPRIO_SPAM, strcat(NEWLINES, "^1You have no more lives left\nwait for next round\n\n\n^7press attack to spectate other players"));
 			else if(g_lms && self.frags == -666)
@@ -380,6 +370,7 @@ void PrintWelcomeMessage(entity pl)
 		}
 		else if(self.classname == "spectator")
 		{
+			// FIXME this is broken for LMS, fix it
 			if ((g_lms && self.frags < 1) || g_arena)
 				return centerprint_atprio(self, CENTERPRIO_SPAM, strcat(NEWLINES, "spectating ", self.enemy.netname, "\n\n\n^7press attack for next player\npress attack2 for free fly mode"));
 			else {
@@ -1105,6 +1096,7 @@ void ShufflePlayerOutOfTeam (float source_team)
 	lowest_player_score = 999999999;
 
 	// find the lowest-scoring player & bot of that team
+	// FIXME this is broken in new scoring system, add a helper to find the worst bot of a team
 	FOR_EACH_PLAYER(head)
 	{
 		if(head.team == steam)

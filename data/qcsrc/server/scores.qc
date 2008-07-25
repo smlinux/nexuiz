@@ -68,15 +68,20 @@ void TeamScore_Spawn(float t, string name)
 	++teamscores_entities_count;
 }
 
-void TeamScore_Add(entity player, float scorefield, float score)
+void TeamScore_AddToTeam(float t, float scorefield, float score)
 {
 	entity s;
 	if(!scores_initialized) return; // FIXME remove this when everything uses this system
-	s = teamscorekeepers[player.team];
+	s = teamscorekeepers[t];
 	if(!s)
 		error("Adding score to unknown team!");
 	s.(teamscores[scorefield]) += score;
 	s.Version += 1;
+}
+
+void TeamScore_Add(entity player, float scorefield, float score)
+{
+	TeamScore_AddToTeam(player.team, scorefield, score);
 }
 
 float TeamScore_Compare(entity t1, entity t2)

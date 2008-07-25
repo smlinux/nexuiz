@@ -30,6 +30,12 @@ void PlayerScore_Clear(entity player);
 void TeamScore_Add(entity player, float scorefield, float score);
 
 /**
+ * Adds a score to the given team.
+ * NEVER call this if team has not been set yet!
+ */
+void TeamScore_AddToTeam(float t, float scorefield, float score);
+
+/**
  * Adds a score to both the player and the team.
  */
 void PlayerTeamScore_Add(entity player, float pscorefield, float tscorefield, float score);

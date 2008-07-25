@@ -976,6 +976,7 @@ void DumpStats(float final)
 
 	FOR_EACH_CLIENT(other)
 	{
+		// FIXME make this use the new score system
 		if ((clienttype(other) == CLIENTTYPE_REAL) || (clienttype(other) == CLIENTTYPE_BOT && cvar("sv_logscores_bots")))
 		{
 			s = strcat(":player:", ftos(other.frags), ":");
@@ -1205,6 +1206,7 @@ void AddWinners(.float field, float value)
 // clear frags for all players but the team given (when they ran out of spawnpoints)
 void ClearFragsForEveryoneBut(.float field, float value)
 {
+	// FIXME make this use the new score system (probably not needed any more, can just send this as an event)
 	entity head;
 	FOR_EACH_PLAYER(head)
 		if(head.field != value)
@@ -1333,6 +1335,7 @@ float WinningCondition_Assault()
 // limit.
 float WinningCondition_LMS()
 {
+	// FIXME make this use the new score system
 	entity head;
 	float have_player;
 	float have_players;
@@ -1422,6 +1425,7 @@ float WinningCondition_LMS()
 // breaks the time limit.
 float WinningCondition_MaxIndividualScore(float fraglimit)
 {
+	// FIXME kill this
 	float checkrules_oldleaderfrags;
 	entity head;
 
@@ -1460,6 +1464,7 @@ float WinningCondition_MaxIndividualScore(float fraglimit)
 
 float WinningConditionBase_Teamplay(float fraglimit)
 {
+	// FIXME kill this
 	tdm_old_score = tdm_max_score;
 	tdm_max_score = max4(team1_score, team2_score, team3_score, team4_score);
 
@@ -1506,6 +1511,7 @@ float WinningConditionBase_Teamplay(float fraglimit)
 // case also breaks the time limit.
 float WinningCondition_MaxTeamSum(float fraglimit)
 {
+	// FIXME kill this
 	entity head;
 
 	team1_score = team2_score = team3_score = team4_score = 0;
@@ -1530,6 +1536,7 @@ float WinningCondition_MaxTeamSum(float fraglimit)
 // maximum score. The latter case also breaks the time limit.
 float WinningCondition_MaxTeamMax(float fraglimit)
 {
+	// FIXME kill this
 	entity head;
 
 	team1_score = team2_score = team3_score = team4_score = 0;
@@ -1563,6 +1570,7 @@ float WinningCondition_MaxTeamMax(float fraglimit)
 
 float WinningCondition_CTF(float capturelimit, float fraglimit)
 {
+	// FIXME kill this
 	if(cvar("g_ctf_win_mode") == 2)
 		return WinningCondition_MaxTeamSum(fraglimit);
 	
@@ -1588,6 +1596,7 @@ void print_to(entity e, string s)
 
 void PrintScoreboardFor(entity e, string name, string colorcode, float whichteam)
 {
+	// FIXME kill this, or make it support the new scoring system
 	entity head;
 	float v;
 	float teamvalue;
@@ -1628,6 +1637,7 @@ void PrintScoreboardFor(entity e, string name, string colorcode, float whichteam
 
 void PrintScoreboard(entity e)
 {
+	// FIXME kill this, or make it support the new scoring system
 	print_to(e, strcat("Time:      ", ftos(time / 60)));
 	print_to(e, strcat("Timelimit: ", ftos(cvar("timelimit"))));
 	print_to(e, strcat("Fraglimit: ", ftos(cvar("fraglimit"))));
@@ -1694,6 +1704,20 @@ void ShuffleMaplist()
 	}
 
 	cvar_set("g_maplist", result);
+}
+
+float WinningCondition_Scores(float limit)
+{
+	// TODO make everything use THIS winning condition (except LMS perhaps, but... better even LMS)
+	WinningConditionHelper();
+	
+	ClearWinners();
+	if(WinningConditionHelper_winner)
+		WinningConditionHelper_winner.winning = 1;
+	if(WinningConditionHelper_winnerteam >= 0)
+		SetWinners(team, WinningConditionHelper_winnerteam);
+	
+	return GetWinningCode(WinningConditionHelper_topscore >= limit, WinningConditionHelper_equality);
 }
 
 float WinningCondition_RanOutOfSpawns()

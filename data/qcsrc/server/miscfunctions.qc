@@ -533,6 +533,7 @@ void backtrace(string msg)
 	cvar_set("developer", ftos(dev));
 }
 
+#if 0
 void DistributeFragsAmongTeam(entity p, float targetteam, float factor)
 {
 	float nTeam;
@@ -570,6 +571,7 @@ void DistributeFragsAmongTeam(entity p, float targetteam, float factor)
 			if(head.team == targetteam)
 				head.frags = head.frags + DistributeEvenly_Get(1);
 }
+#endif
 
 string Team_ColorCode(float teamid)
 {

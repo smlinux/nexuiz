@@ -128,6 +128,8 @@ void reset_map()
 				{
 					//NEW: changed behaviour so that it prevents that previous spectators/observers suddenly spawn as players
 					if (self.classname == "player") {
+						PlayerScore_Clear(self);
+						// FIXME decide what LMS does in the new scoring system!
 						self.frags = (g_lms)?LMS_NewPlayerLives():0;
 						self.deaths = 0;
 						self.killcount = 0;

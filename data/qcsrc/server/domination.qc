@@ -120,15 +120,14 @@ void dompointthink()
 		waittime = self.wait;
 	self.delay = time + waittime;
 
-	// give credit to all players of the team (rewards large teams)
+	// give credit to the team
 	// NOTE: this defaults to 0
 	if (self.goalentity.netname)
 	{
 		teamfragamt = cvar("g_domination_point_teamamt");
-
-		FOR_EACH_PLAYER(head)
-			if (head.team == self.goalentity.team)
-				UpdateFrags(head, teamfragamt);
+		if(!teamfragamt)
+			teamfragamt = self.frags;
+		TeamScore_AddToTeam(self.goalentity.team, ST_DOM_DOMPOINTS, teamfragamt);
 	}
 
 	// if the player left the game, changed teams or became spectator, we have to find another player on the same team to give credit to
@@ -154,6 +153,7 @@ void dompointthink()
 		if(!individualfragamt)
 			individualfragamt = self.frags;
 		UpdateFrags(self.enemy, individualfragamt);
+		PlayerScore_Add(self.enemy, SP_DOM_DOMPOINTS, individualfragamt);
 	}
 };
 

@@ -42,11 +42,6 @@ float IsFlying(entity a)
 
 void UpdateFrags(entity player, float f)
 {
-#ifndef CSQCSCORES
-	// TODO remove this, make callers route through PlayerScores instead
-	player.frags += f;
-	player.totalfrags += f;
-#endif
 	PlayerTeamScore_AddScore(player, f);
 }
 
@@ -59,6 +54,7 @@ void GiveFrags (entity attacker, entity targ, float f)
 		if(cvar("g_arena_roundbased"))
 			return;
 
+	// FIXME fix the mess this is (we have REAL points now!)
 	if(g_domination)
 	{
 		if(cvar("g_domination_disable_frags"))
@@ -76,6 +72,7 @@ void GiveFrags (entity attacker, entity targ, float f)
 	}
 	else if(g_lms)
 	{
+		// FIXME fix LMS mode for new scoreboard
 		// count remaining lives, not frags in lms
 		targ.frags -= 1;
 		// keep track of the worst players lives
@@ -197,6 +194,7 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				{
 					LogDeath("suicide", deathtype, targ, targ);
 					PlayerScore_Add(attacker, SP_SUICIDES, 1);
+					PlayerScore_Add(attacker, SP_DEATHS, 1);
 					GiveFrags(attacker, targ, -1);
 				}
 				if (targ.killcount > 2)
@@ -228,7 +226,8 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				if(deathtype != DEATH_TEAMCHANGE)
 				{
 					LogDeath("suicide", deathtype, targ, targ);
-					PlayerScore_Add(attacker, SP_SUICIDES, 1);
+					PlayerScore_Add(targ, SP_SUICIDES, 1);
+					PlayerScore_Add(targ, SP_DEATHS, 1);
 					GiveFrags(attacker, targ, -1);
 				}
 				if (targ.killcount > 2)
@@ -247,7 +246,7 @@ void Obituary (entity attacker, entity targ, float deathtype)
 					bprint ("^1", a, "^1 mows down a teammate\n");
 				}
 				GiveFrags(attacker, targ, -1);
-				PlayerScore_Add(attacker, SP_KILLS, -1); // teamkills DO cound as -1 kill right?
+				PlayerScore_Add(attacker, SP_KILLS, -1); // teamkills DO cound as -1 kill right? or make separate teamkill counter?
 				if (targ.killcount > 2) {
 					if(sv_gentle)
 						bprint ("^1",s,"'s ^1",ftos(targ.killcount)," scoring spree was ended by a teammate!\n");
@@ -329,9 +328,13 @@ void Obituary (entity attacker, entity targ, float deathtype)
 						bprint ("^1",s, "^1 was fragged by ", a, "\n");
 				}
 				if(g_ctf && targ.flagcarried)
+				{
 					GiveFrags(attacker, targ, cvar("g_ctf_flagscore_kill"));
+					PlayerScore_Add(attacker, SP_CTF_CARRIERKILLS, 1);
+				}
 				else
 					GiveFrags(attacker, targ, 1);
+				PlayerScore_Add(attacker, SP_KILLS, 1);
 				if (targ.killcount > 2) {
 					if(sv_gentle)
 						bprint ("^1",s,"'s ^1", ftos(targ.killcount), " scoring spree was ended by ", a, "\n");
@@ -450,7 +453,9 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				else
 					bprint ("^1",s, "^1 died\n");
 			GiveFrags(targ, targ, -1);
+			PlayerScore_Add(targ, SP_SUICIDES, 1);
 			PlayerScore_Add(targ, SP_DEATHS, 1);
+			// FIXME move this into winning condition checking? or allow READING of the scores?
 			if(targ.frags == -5) {
 				announce(targ, "announcer/male/botlike.ogg");
 			}

@@ -372,14 +372,8 @@ void PutObserverInServer (void)
 		DropFlag(self.flagcarried);
 
 	WaypointSprite_PlayerDead();
-
-	DistributeFragsAmongTeam(self, self.team, 1);
-	if(g_ctf)
-	{
-		self.captures = 0;
-		ctf_UpdateCaptures(MSG_BROADCAST);
-	}
-
+	
+	// FIXME LMS needs the new scoring system
 	if(self.frags <= 0 && self.frags > -666 && g_lms && self.killcount != -666)
 		bprint ("^4", self.netname, "^4 has no more lives left\n");
 	else if(self.killcount != -666)
@@ -548,6 +542,7 @@ void PutClientInServer (void)
 	}
 
 	// player is dead and becomes observer
+	// FIXME fix LMS scoring for new system
 	if(g_lms && self.frags < 1)
 		self.classname = "observer";
 
@@ -665,19 +660,9 @@ void PutClientInServer (void)
 		self.BUTTON_ATCK = self.BUTTON_JUMP = self.BUTTON_ATCK2 = 0;
 
 		if(self.killcount == -666) {
+			PlayerScore_Clear(self);
 			self.killcount = 0;
-			if(!g_arena)
-			if(!g_lms)
-				self.frags = 0;
-			if(g_ctf)
-			{
-				self.captures = 0;
-				self.returns = 0;
-				ctf_UpdateCaptures(MSG_BROADCAST);
-				ctf_UpdateReturns(MSG_BROADCAST);
-			}
-			self.deaths = 0;
-			net_UpdateDeaths(MSG_BROADCAST);
+			self.frags = 0;
 		}
 
 		self.cnt = WEP_LASER;
@@ -1113,6 +1098,7 @@ void ClientConnect (void)
 
 	if(g_lms)
 	{
+		// FIXME fix LMS lives for new system
 		self.frags = LMS_NewPlayerLives();
 		if(!self.frags)
 			self.frags = -666;
@@ -1130,9 +1116,7 @@ void ClientConnect (void)
 	if(entcs_start)
 		attach_entcs();
 
-#ifdef CSQCSCORES
 	PlayerScore_Attach(self);
-#endif
 
 	bot_relinkplayerlist();
 
@@ -1212,13 +1196,6 @@ void ClientDisconnect (void)
 	if(self.flagcarried)
 		DropFlag(self.flagcarried);
 
-	DistributeFragsAmongTeam(self, self.team, 1);
-	if(g_ctf)
-	{
-		self.captures = 0;
-		ctf_UpdateCaptures(MSG_BROADCAST);
-	}
-
 	save = self.flags;
 	self.flags = self.flags - (self.flags & FL_CLIENT);
 	bot_relinkplayerlist();
@@ -1240,9 +1217,7 @@ void ClientDisconnect (void)
 	}
 	*/
 
-#ifdef CSQCSCORES
 	PlayerScore_Detach(self);
-#endif
 
 	if(self.netname_previous)
 		strunzone(self.netname_previous);

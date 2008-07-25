@@ -128,17 +128,9 @@ void kh_Scores_Event(entity player, entity key, string what, float frags_player,
 	if(intermission_running)
 		return;
 	if(frags_player)
-	{
-		PlayerTeamScore_AddScore(player, frags_player);
-		// FIXME we soon don't use .frags or UpdateFrags any more...
 		UpdateFrags(player, frags_player);
-	}
 	if(key && key.owner && frags_owner)
-	{
-		PlayerTeamScore_AddScore(player, frags_player);
-		// FIXME we soon don't use .frags or UpdateFrags any more...
 		UpdateFrags(key.owner, frags_owner);
-	}
 	if(!cvar("sv_eventlog"))  //output extra info to the console or text file
 		return;
 	s = strcat(":keyhunt:", what, ":", ftos(player.playerid));
@@ -981,7 +973,6 @@ void kh_init()  // sets up th KH environment
 
 	addstat(STAT_KH_KEYS, AS_INT, kh_state);
 
-#ifdef CSQCSCORES
 	ScoreInfo_Init(kh_teams);
 	ScoreInfo_SetLabel_TeamScore  (ST_SCORE,        "score",     SFL_SORT_PRIO_PRIMARY);
 	ScoreInfo_SetLabel_TeamScore  (ST_KH_CAPS,      "caps",      SFL_SORT_PRIO_MED);
@@ -995,7 +986,6 @@ void kh_init()  // sets up th KH environment
 	ScoreInfo_SetLabel_PlayerScore(SP_KH_PUSH,      "push",      0);
 	ScoreInfo_SetLabel_PlayerScore(SP_KH_DESTROYED, "destroyed", SFL_DECREASING);
 	ScoreInfo_SetLabel_PlayerScore(SP_KH_KCFRAG,    "kcfrag",    0);
-#endif
 }
 
 void kh_finalize()
