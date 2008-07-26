@@ -4,7 +4,7 @@
 
 void() menu_show_error =
 {
-	drawstring('0 200', "ERROR - MENU IS VISIBLE BUT NO MENU WAS DEFINED!", '8 8 0', '1 0 0', 1, 0);
+	drawstring('0 200 0', "ERROR - MENU IS VISIBLE BUT NO MENU WAS DEFINED!", '8 8 0', '1 0 0', 1, 0);
 };
 
 // CSQC_Init : Called every time the CSQC code is initialized (essentially at map load)

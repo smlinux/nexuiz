@@ -25,8 +25,8 @@ void() order_menu_render =
 	local vector ps, po;
 	local float i, p, n;
 	local string frags, color;
-	ps = '0 200';
-	po = '0 8';
+	ps = '0 200 0';
+	po = '0 8 0';
 
 	color = getplayerkey(player_localentnum-1, "topcolor");
 	
@@ -146,14 +146,14 @@ void() order_menu_show =
 void() ctf_menu_render =
 {
 	local vector ps, po;
-	ps = '0 200';
-	po = '0 8';
+	ps = '0 200 0';
+	po = '0 8 0';
 	
 	if(getstati(STAT_CTF_STATE) == CTF_STATE_COMMANDER) {
 		drawstring(ps, "\x1D\x1E\x1E\x1E\x1E Command Menu \x1E\x1E\x1E\x1E\x1F", '8 8 0', '1 1 0', 1, 0); ps += po;
 		drawstring(ps, "Issue orders:", '8 8 0', '1 1 0', 1, 0); ps += po;
 		drawstring(ps, " 1) Attack ", '8 8 0', '1 1 0', 1, 0);
-		drawstring(ps + '80 0', " \x0F", '8 8 0', '1 1 1', 1, 0); ps += po;
+		drawstring(ps + '80 0 0', " \x0F", '8 8 0', '1 1 1', 1, 0); ps += po;
 		drawstring(ps, " 2) Defend \x0E", '8 8 0', '1 1 0', 1, 0); ps += po;
 		ps += po;
 		drawstring(ps, "3) Resign from command.", '8 8 0', '1 1 0', 1, 0); ps += po;
@@ -204,13 +204,13 @@ void() ctf_view =
 	local float stat;
 	stat = getstati(STAT_CTF_STATE);
 	if(stat == CTF_STATE_ATTACK) {
-		drawpic('0 0', "gfx/ctf_ic_atk.tga", '64 64 0', '1 1 1', 1, 0);
+		drawpic('0 0 0', "gfx/ctf_ic_atk.tga", '64 64 0', '1 1 1', 1, 0);
 	} else if(stat == CTF_STATE_DEFEND) {
-		drawpic('0 0', "gfx/ctf_ic_def.tga", '64 64 0', '1 1 1', 1, 0);
+		drawpic('0 0 0', "gfx/ctf_ic_def.tga", '64 64 0', '1 1 1', 1, 0);
 	} else if(stat == CTF_STATE_COMMANDER) {
-		drawstring('0 0', "You're commander!", '8 8 0', '1 1 1', 1, 0);
+		drawstring('0 0 0', "You're commander!", '8 8 0', '1 1 1', 1, 0);
 	} else if(stat < 0) {
 	} else {
-		drawstring('0 0', "Awaiting orders...", '8 8 0', '1 1 1', 0.5, 0);
+		drawstring('0 0 0', "Awaiting orders...", '8 8 0', '1 1 1', 0.5, 0);
 	}
 };

@@ -153,7 +153,7 @@ vector Sbar_GetFontsize()
 {
 	if(csqc_flags & CSQC_FLAG_READPICTURE)
 		return stov(cvar_string("sbar_fontsize"));
-	return '8 8' ;
+	return '8 8 0' ;
 }
 
 float PreviewExists(string name)

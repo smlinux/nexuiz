@@ -11,7 +11,7 @@ vector(vector coord) mapcoords =
 	ret_x = ret_x * 256.0 / mi_scale_x;
 	ret_y = -ret_y * 256.0 / mi_scale_y;
 	ret_z = 0;
-	ret = ret + '400 178';
+	ret = ret + '400 178 0';
 	return ret;
 };
 
@@ -26,10 +26,10 @@ void(vector coord, vector pangles, vector rgb) drawplayer =
 	// Ryling on !tex[0] => texture_white
 	// beware of the order, it has to be clockwise!
 	R_BeginPolygon("", 0);
-	R_PolygonVertex(coord+v_forward*2, '0 0', rgb, 1);
-	R_PolygonVertex(coord+v_right*3-v_forward*2, '0 1', rgb, 1);
-	R_PolygonVertex(coord-v_forward, '1 0', rgb, 1);
-	R_PolygonVertex(coord-v_right*3-v_forward*2, '1 1', rgb, 1);
+	R_PolygonVertex(coord+v_forward*2, '0 0 0', rgb, 1);
+	R_PolygonVertex(coord+v_right*3-v_forward*2, '0 1 0', rgb, 1);
+	R_PolygonVertex(coord-v_forward, '1 0 0', rgb, 1);
+	R_PolygonVertex(coord-v_right*3-v_forward*2, '1 1 0', rgb, 1);
 	R_EndPolygon();
 };
 
@@ -44,9 +44,9 @@ void() ons_view =
 
 		coord = mapcoords(pmove_org);
 			
-		drawpic('272 50', minimapname, '256 256', '1 1 1', 1, 0);
-		drawpic('257 35', "gfx/ons-frame.tga", '286 286', '1 1 1', 1, 0);
-		drawpic('257 35', "gfx/ons-frame-team.tga", '286 286', rgb, 1, 0);
+		drawpic('272 50 0', minimapname, '256 256 0', '1 1 1', 1, 0);
+		drawpic('257 35 0', "gfx/ons-frame.tga", '286 286 0', '1 1 1', 1, 0);
+		drawpic('257 35 0', "gfx/ons-frame-team.tga", '286 286 0', rgb, 1, 0);
 
 		drawplayer(coord, input_angles, '1 1 1');
 

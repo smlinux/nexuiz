@@ -30,7 +30,7 @@ void MapVote_DrawMapItem(vector pos, float isize, string map, string pic, float 
 	else
 		rgb = '1 1 1';
 	
-	drawstring(pos - '40 0', strcat(ftos(id+1), "."), img_size, rgb, 1, DRAWFLAG_NORMAL);
+	drawstring(pos - '40 0 0', strcat(ftos(id+1), "."), img_size, rgb, 1, DRAWFLAG_NORMAL);
 
 	pos_x += isize/0.75 + 10;
 
@@ -63,7 +63,7 @@ void MapVote_DrawMapNotAvailable(vector pos, float isize, string map, float coun
 	else
 		rgb = '1 1 1';
 	
-	drawstring(pos - '40 0', strcat(ftos(id+1), "."), img_size, rgb, 1, DRAWFLAG_NORMAL);
+	drawstring(pos - '40 0 0', strcat(ftos(id+1), "."), img_size, rgb, 1, DRAWFLAG_NORMAL);
 	
 	pos_x += isize/0.75 + 10;
 
@@ -88,7 +88,7 @@ void MapVote_DrawAbstain(vector pos, float isize, float count, float id)
 	else
 		rgb = '1 1 1';
 	
-	drawstring(pos - '40 0', strcat(ftos(id+1), "."), img_size, rgb, 1, DRAWFLAG_NORMAL);
+	drawstring(pos - '40 0 0', strcat(ftos(id+1), "."), img_size, rgb, 1, DRAWFLAG_NORMAL);
 	
 	pos_x += isize/0.75 + 10;
 
@@ -126,13 +126,13 @@ void MapVote_Draw()
 	pos_y = ymin;
 	pos_z = 0;
 	pos_x = center - stringwidth("Vote for a map", false) * 0.5 * 24;
-	drawstring(pos, "Vote for a map", '24 24', '1 1 1', 1, DRAWFLAG_NORMAL);
+	drawstring(pos, "Vote for a map", '24 24 0', '1 1 1', 1, DRAWFLAG_NORMAL);
 	pos_y += 26;
 
 	i = ceil(mv_timeout - time);
 	map = strcat(ftos(i), " seconds left");
 	pos_x = center - stringwidth(map, false) * 0.5 * 16;
-	drawstring(pos, map, '16 16', '0 1 0', 1, DRAWFLAG_NORMAL);
+	drawstring(pos, map, '16 16 0', '0 1 0', 1, DRAWFLAG_NORMAL);
 	pos_y += 22;
 	pos_x = xmin;
 	
