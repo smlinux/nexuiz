@@ -279,7 +279,10 @@ void WinningConditionHelper()
 		WinningConditionHelper_winnerteam = 0;
 		for(t = 1; t < 16; ++t)
 		{
-			c = TeamScore_Compare(teamscorekeepers[WinningConditionHelper_winnerteam], teamscorekeepers[t]);
+			entity sk1, sk2;
+			sk1 = teamscorekeepers[WinningConditionHelper_winnerteam];
+			sk2 = teamscorekeepers[t];
+			c = TeamScore_Compare(sk1, sk2);
 			if(c == 0)
 				WinningConditionHelper_equality = 1;
 			else if(c < 0)
