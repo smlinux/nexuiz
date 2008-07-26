@@ -64,7 +64,7 @@ void CSQC_Init(void)
 	registercmd("sbar_columns_help");
 
 	registercvar("sbar_usecsqc", "1");
-	registercvar("sbar_columns", "ping name | caps returns frags deaths", CVAR_SAVE);
+	registercvar("sbar_columns", "default", CVAR_SAVE);
 
 	gametype = 0;
 

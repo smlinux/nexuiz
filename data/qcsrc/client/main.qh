@@ -90,8 +90,8 @@ float teamscores_flags[MAX_SCORE];
 .float scores[MAX_SCORE];
 .float teamscores[MAX_TEAMSCORE];
 
-#define IS_INCREASING(x) ( (x)&SFL_DECREASING )
-#define IS_DECREASING(x) ( !((x)&SFL_DECREASING) )
+#define IS_INCREASING(x) ( (x)&SFL_LOWER_IS_BETTER )
+#define IS_DECREASING(x) ( !((x)&SFL_LOWER_IS_BETTER) )
 
 float csqc_flags;
 #define CSQC_FLAG_READPICTURE 1

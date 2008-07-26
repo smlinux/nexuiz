@@ -1324,8 +1324,7 @@ float WinningCondition_Assault()
 // limit.
 float WinningCondition_LMS()
 {
-	// FIXME make this use the new score system
-	entity head;
+	entity head, head2;
 	float have_player;
 	float have_players;
 	float l;
@@ -1337,8 +1336,8 @@ float WinningCondition_LMS()
 	head = find(world, classname, "player");
 	if(head)
 		have_player = TRUE;
-	head = find(head, classname, "player");
-	if(head)
+	head2 = find(head, classname, "player");
+	if(head2)
 		have_players = TRUE;
 
 	if(have_player)
@@ -1363,6 +1362,8 @@ float WinningCondition_LMS()
 			else
 			{
 				// a winner!
+				// and assign him his first place
+				PlayerScore_Add(head, SP_LMS_PLACE, 1);
 				return WINNING_YES;
 			}
 		}

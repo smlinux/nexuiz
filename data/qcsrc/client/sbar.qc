@@ -285,6 +285,10 @@ void Cmd_Sbar_Help(float argc)
 	print("^3kd^7 or ^3kdr^7 or ^3kdratio^7 or ^3k/d\n");
 	print("                         The kill-death ratio\n");
 
+	print("Before a field you can put a + or - sign, then a comma separated list\n");
+	print("of game types, then a slash, to make the field show up only in these\n");
+	print("or in all but these game types.\n");
+
 /*
 	print("^3caps^7 or ^3captures^7         Number of flags captured\n");
 	print("^3rets^7 or ^3returns^7          Number of flags returned\n");
@@ -305,7 +309,7 @@ void Cmd_Sbar_Help(float argc)
 
 string Sbar_DefaultColumnLayout()
 {
-	return "ping name | +kh,ctf/caps -ctf,kh/kills -ctf,kh/deaths score";
+	return "ping name | +kh,ctf/caps -ctf,kh/kills -ctf,kh/deaths -lms,score +lms,lives +lms,place";
 	/*
 	switch(gametype)
 	{
@@ -433,7 +437,7 @@ string Sbar_GetField(entity pl, float field)
 			if(field == ps_primary)
 				sbar_field_rgb = '1 1 0';
 			else if(field == ps_secondary)
-				sbar_field_rgb = '1 0 1';
+				sbar_field_rgb = '0 1 1';
 			else
 				sbar_field_rgb = '1 1 1';
 			if(!tmp)

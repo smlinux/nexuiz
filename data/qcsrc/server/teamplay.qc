@@ -222,10 +222,10 @@ void InitGameplayMode()
 		ScoreInfo_Init(0);
 		ScoreInfo_SetLabel_PlayerScore(SP_KILLS,        "kills",     0);
 		ScoreInfo_SetLabel_PlayerScore(SP_DEATHS,       "deaths",    0);
-		ScoreInfo_SetLabel_PlayerScore(SP_SUICIDES,     "suicides",  SFL_DECREASING);
+		ScoreInfo_SetLabel_PlayerScore(SP_SUICIDES,     "suicides",  SFL_LOWER_IS_BETTER);
 		// do not define SP_SCORE for LMS
 		ScoreInfo_SetLabel_PlayerScore(SP_LMS_LIVES,    "lives",     SFL_SORT_PRIO_SECONDARY);
-		ScoreInfo_SetLabel_PlayerScore(SP_LMS_PLACE,    "place",     SFL_DECREASING | SFL_HIDE_ZERO | SFL_SORT_PRIO_PRIMARY);
+		ScoreInfo_SetLabel_PlayerScore(SP_LMS_PLACE,    "place",     SFL_LOWER_IS_BETTER | SFL_HIDE_ZERO | SFL_SORT_PRIO_PRIMARY);
 	}
 	else if(game == GAME_ARENA || cvar("g_arena"))
 	{
@@ -339,7 +339,7 @@ void InitGameplayMode()
 		ScoreInfo_SetLabel_TeamScore  (ST_SCORE,        "score",     SFL_SORT_PRIO_PRIMARY);
 		ScoreInfo_SetLabel_PlayerScore(SP_KILLS,        "kills",     0);
 		ScoreInfo_SetLabel_PlayerScore(SP_DEATHS,       "deaths",    0);
-		ScoreInfo_SetLabel_PlayerScore(SP_SUICIDES,     "suicides",  SFL_DECREASING);
+		ScoreInfo_SetLabel_PlayerScore(SP_SUICIDES,     "suicides",  SFL_LOWER_IS_BETTER);
 		ScoreInfo_SetLabel_PlayerScore(SP_SCORE,        "score",     SFL_SORT_PRIO_PRIMARY);
 	}
 }
