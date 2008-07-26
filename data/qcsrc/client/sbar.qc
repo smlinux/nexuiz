@@ -329,6 +329,8 @@ void Cmd_Sbar_SetFields(float argc)
 	float i, j, slash;
 	string str, pattern, subpattern;
 	float digit;
+	float have_name, have_primary, have_secondary, have_separator;
+	float missing;
 
 	// TODO: re enable with gametype dependant cvars?
 	if(argc < 2) // no arguments provided
@@ -404,8 +406,10 @@ void Cmd_Sbar_SetFields(float argc)
 		} else if(str == "name" || str == "nick") {
 			sbar_field[sbar_num_fields] = SP_NAME;
 			sbar_size[sbar_num_fields] = MIN_NAMELEN; // minimum size? any use?
+			have_name = 1;
 		} else if(str == "|") {
 			sbar_field[sbar_num_fields] = SP_SEPARATOR;
+			have_separator = 1;
 		} else {
 			for(j = 0; j < MAX_SCORE; ++j)
 				if(str == strtolower(scores_label[j]))
@@ -415,9 +419,82 @@ void Cmd_Sbar_SetFields(float argc)
 			continue;
 :found
 			sbar_field[sbar_num_fields] = j;
+			if(j == ps_primary)
+				have_primary = 1;
+			if(j == ps_secondary)
+				have_secondary = 1;
 		}
 		++sbar_num_fields;
 	}
+
+	if(ps_primary == ps_secondary)
+		have_secondary = 1;
+	missing = !have_primary + !have_secondary + !have_separator + !have_name;
+
+	if(sbar_num_fields+missing < MAX_SBAR_FIELDS)
+	{
+		if(!have_name)
+		{
+			strunzone(sbar_title[sbar_num_fields]);
+			for(i = sbar_num_fields; i > 0; --i)
+			{
+				sbar_title[i] = sbar_title[i-1];
+				sbar_size[i] = sbar_size[i-1];
+				sbar_field[i] = sbar_field[i-1];
+			}
+			sbar_title[0] = strzone("name");
+			sbar_field[0] = SP_NAME;
+			sbar_size[0] = MIN_NAMELEN; // minimum size? any use?
+			++sbar_num_fields;
+			print("fixed missing field 'name'\n");
+
+			if(!have_separator)
+			{
+				strunzone(sbar_title[sbar_num_fields]);
+				for(i = sbar_num_fields; i > 1; --i)
+				{
+					sbar_title[i] = sbar_title[i-1];
+					sbar_size[i] = sbar_size[i-1];
+					sbar_field[i] = sbar_field[i-1];
+				}
+				sbar_title[1] = strzone("|");
+				sbar_field[1] = SP_SEPARATOR;
+				sbar_size[1] = stringwidth("|", FALSE);
+				++sbar_num_fields;
+				print("fixed missing field '|'\n");
+			}
+		}
+		else if(!have_separator)
+		{
+			strunzone(sbar_title[sbar_num_fields]);
+			sbar_title[sbar_num_fields] = strzone("|");
+			sbar_size[sbar_num_fields] = stringwidth("|", FALSE);
+			sbar_field[sbar_num_fields] = SP_SEPARATOR;
+			++sbar_num_fields;
+			print("fixed missing field '|'\n");
+		}
+
+		if(!have_secondary)
+		{
+			strunzone(sbar_title[sbar_num_fields]);
+			sbar_title[sbar_num_fields] = strzone(scores_label[ps_secondary]);
+			sbar_size[sbar_num_fields] = stringwidth(sbar_title[sbar_num_fields], FALSE);
+			sbar_field[sbar_num_fields] = ps_secondary;
+			++sbar_num_fields;
+			print("fixed missing field '", scores_label[ps_secondary], "'\n");
+		}
+
+		if(!have_primary)
+		{
+			strunzone(sbar_title[sbar_num_fields]);
+			sbar_title[sbar_num_fields] = strzone(scores_label[ps_primary]);
+			sbar_size[sbar_num_fields] = stringwidth(sbar_title[sbar_num_fields], FALSE);
+			sbar_field[sbar_num_fields] = ps_primary;
+			++sbar_num_fields;
+			print("fixed missing field '", scores_label[ps_primary], "'\n");
+		}
+	}
+
 	sbar_field[sbar_num_fields] = SP_END;
 }
 
