@@ -46,7 +46,7 @@ float TeamScore_SendEntity(entity to)
 	float i;
 
 	WriteByte(MSG_ENTITY, ENT_CLIENT_TEAMSCORES);
-	WriteByte(MSG_ENTITY, self.team);
+	WriteByte(MSG_ENTITY, self.team - 1);
 	for(i = 0; i < MAX_TEAMSCORE; ++i)
 		WriteShort(MSG_ENTITY, self.teamscores[i]);
 
@@ -63,7 +63,7 @@ void TeamScore_Spawn(float t, string name)
 	ts.Version = 1; // immediately send, so csqc knows about the team
 	ts.team = t;
 	Net_LinkEntity(ts);
-	teamscorekeepers[t] = ts;
+	teamscorekeepers[t - 1] = ts;
 	++teamscores_entities_count;
 }
 
@@ -71,7 +71,9 @@ float TeamScore_AddToTeam(float t, float scorefield, float score)
 {
 	entity s;
 	if(!scores_initialized) return 0; // FIXME remove this when everything uses this system
-	s = teamscorekeepers[t];
+	if(t <= 0 || t >= 16)
+		error("Adding score to invalid team!");
+	s = teamscorekeepers[t - 1];
 	if(!s)
 		error("Adding score to unknown team!");
 	if(score)

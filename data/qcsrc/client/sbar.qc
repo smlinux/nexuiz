@@ -237,6 +237,11 @@ void Sbar_UpdatePlayerPos(entity player)
 float Sbar_CompareTeamScores(entity left, entity right)
 {
 	float vl, vr;
+
+	if(left.team == COLOR_SPECTATOR)
+		return 1;
+	if(right.team == COLOR_SPECTATOR)
+		return 0;
 	
 	vl = left.teamscores[ts_primary];
 	vr = right.teamscores[ts_primary];
@@ -257,13 +262,11 @@ float Sbar_CompareTeamScores(entity left, entity right)
 
 void Sbar_UpdateTeamPos(entity Team)
 {
-	for(other = Team.sort_next; other && Sbar_ComparePlayerScores(Team, other); other = Team.sort_next)
+	for(other = Team.sort_next; other && Sbar_CompareTeamScores(Team, other); other = Team.sort_next)
 	{
-		if(other.team == COLOR_SPECTATOR)
-			break;
 		SORT_SWAP(Team, other);
 	}
-	for(other = Team.sort_prev; other != teams && Sbar_ComparePlayerScores(other, Team); other = Team.sort_prev)
+	for(other = Team.sort_prev; other != teams && Sbar_CompareTeamScores(other, Team); other = Team.sort_prev)
 	{
 		SORT_SWAP(other, Team);
 	}
@@ -700,11 +703,19 @@ void Sbar_DrawScoreboard()
 
 			rgb = GetTeamRGB(tm.team);
 
-			pos_x = xmin - 4*24;
-			// TODO: Print primary and secondary scores!
-			
 			pos_x = xmin;
 
+			Sbar_DrawXNum(
+				pos - '6.5 0 0' * sbar_fontsize_y,
+				tm.(teamscores[ts_primary]),
+				4, sbar_fontsize_y * 1.5, rgb, 1, DRAWFLAG_NORMAL);
+
+			if(ts_primary != ts_secondary)
+			Sbar_DrawXNum(
+				pos - '4.5 0 0' * sbar_fontsize_y + '0 1.5 0' * sbar_fontsize_y,
+				tm.(teamscores[ts_secondary]),
+				4, sbar_fontsize_y * 1, rgb, 1, DRAWFLAG_NORMAL);
+			
 			specs = tm.team_size;
 
 			if(specs < 2)
