@@ -669,11 +669,20 @@ void ctf_delayedinit()
 		ctf_spawnteams();
 
 	float sp_score, sp_caps;
-	sp_score = sp_caps = SFL_SORT_PRIO_SECONDARY;
-	if(g_ctf_win_mode)
-		sp_score = SFL_SORT_PRIO_PRIMARY;
-	else
-		sp_caps = SFL_SORT_PRIO_PRIMARY;
+	sp_score = sp_caps = 0;
+	switch(g_ctf_win_mode)
+	{
+		case 0: // caps only
+			sp_caps = SFL_SORT_PRIO_PRIMARY;
+			break;
+		case 1: // caps, then score
+			sp_caps = SFL_SORT_PRIO_PRIMARY;
+			sp_score = SFL_SORT_PRIO_SECONDARY;
+			break;
+		case 2: // score only
+			sp_score = SFL_SORT_PRIO_SECONDARY;
+			break;
+	}
 
 	CheckAllowedTeams(world);
 	ScoreInfo_Init(2 + (c3>=0)); // NOTE this assumes that the rogue team is team 3

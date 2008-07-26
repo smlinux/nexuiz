@@ -1551,7 +1551,6 @@ void CheckRules_World()
 	local float status;
 	local float timelimit;
 	local float fraglimit;
-	local float capturelimit;
 
 	VoteThink();
 	MapVote_Think();
@@ -1580,7 +1579,6 @@ void CheckRules_World()
 
 	timelimit = cvar("timelimit") * 60;
 	fraglimit = cvar("fraglimit");
-	capturelimit = cvar("capturelimit");
 
 	if(checkrules_overtimeend)
 	{
@@ -1625,10 +1623,6 @@ void CheckRules_World()
 	else if (g_onslaught)
 	{
 		status = WinningCondition_Onslaught(); // TODO remove this?
-	}
-	else if(g_ctf && !g_ctf_win_mode)
-	{
-		status = WinningCondition_Scores(capturelimit);
 	}
 	else
 	{

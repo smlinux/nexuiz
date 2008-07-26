@@ -324,6 +324,10 @@ void InitGameplayMode()
 	cache_lastmutatormsg = strzone("");
 	cache_lastmotd = strzone("");
 
+	if(g_ctf)
+		if(g_ctf_win_mode != 2)
+			fraglimit_override = capturelimit_override;
+
 	// enforce the server's universal frag/time limits
 	if(!cvar("g_campaign"))
 	{
@@ -331,8 +335,6 @@ void InitGameplayMode()
 			cvar_set("fraglimit", ftos(fraglimit_override));
 		if(timelimit_override >= 0)
 			cvar_set("timelimit", ftos(timelimit_override));
-		if(capturelimit_override >= 0)
-			cvar_set("capturelimit", ftos(capturelimit_override));
 	}
 
 	if (game == GAME_DOMINATION)//cvar("g_domination"))
