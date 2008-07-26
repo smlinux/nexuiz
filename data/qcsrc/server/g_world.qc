@@ -1367,7 +1367,7 @@ float WinningCondition_LMS()
 			{
 				// a winner!
 				// and assign him his first place
-				PlayerScore_Add(head, SP_LMS_PLACE, 1);
+				PlayerScore_Add(head, SP_LMS_RANK, 1);
 				return WINNING_YES;
 			}
 		}

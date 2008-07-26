@@ -101,7 +101,7 @@ void GiveFrags (entity attacker, entity targ, float f)
 		{
 			if(!lms_next_place)
 				lms_next_place = player_count;
-			PlayerScore_Add(targ, SP_LMS_PLACE, lms_next_place); // won't ever spawn again
+			PlayerScore_Add(targ, SP_LMS_RANK, lms_next_place); // won't ever spawn again
 			--lms_next_place;
 		}
 		f = 0;

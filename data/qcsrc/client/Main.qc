@@ -373,17 +373,18 @@ void Gamemode_Init()
 	local float file;
 	local vector mi_min, mi_max;
 
+	if(!strcasecmp(substring(mapname, 0, 5), "maps/"))
+		shortmapname = substring(mapname, 5, 999);
+	else
+		shortmapname = mapname;
+	len = strlen(shortmapname);
+	if(!strcasecmp(substring(shortmapname, len-4, 4), ".bsp"))
+		shortmapname = substring(shortmapname, 0, len-4);
+	shortmapname = strzone(shortmapname);
+
 	if(gametype == GAME_ONSLAUGHT) {
-		if(!strcasecmp(substring(mapname, 0, 5), "maps/"))
-			minimapname = substring(mapname, 5, 999);
-		else
-			minimapname = mapname;
-		len = strlen(minimapname);
-		if(!strcasecmp(substring(minimapname, len-4, 4), ".bsp"))
-			minimapname = substring(minimapname, 0, len-4);
-		
 		mapinfo = strcat("maps/", minimapname, ".info");
-		minimapname = strzone(strcat("gfx/", minimapname, "_mini.tga"));
+		minimapname = strzone(strcat("gfx/", shortmapname, "_mini.tga"));
 
 		mi_min = world.mins;
 		mi_max = world.maxs;

@@ -59,6 +59,7 @@ const float		STAT_MONSTERS					= 14;
 const float		STAT_ITEMS						= 15;
 const float		STAT_VIEWHEIGHT					= 16;
 
+const float		STAT_FRAGLIMIT					= 235;
 const float		STAT_TIMELIMIT					= 236;
 
 // Sound Constants

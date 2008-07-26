@@ -246,7 +246,7 @@ void InitGameplayMode()
 		ScoreInfo_SetLabel_PlayerScore(SP_SUICIDES,     "suicides",  SFL_LOWER_IS_BETTER);
 		// do not define SP_SCORE for LMS
 		ScoreInfo_SetLabel_PlayerScore(SP_LMS_LIVES,    "lives",     SFL_SORT_PRIO_SECONDARY);
-		ScoreInfo_SetLabel_PlayerScore(SP_LMS_PLACE,    "place",     SFL_LOWER_IS_BETTER | SFL_HIDE_ZERO | SFL_SORT_PRIO_PRIMARY);
+		ScoreInfo_SetLabel_PlayerScore(SP_LMS_RANK,     "rank",      SFL_LOWER_IS_BETTER | SFL_HIDE_ZERO | SFL_SORT_PRIO_PRIMARY);
 	}
 	else if(game == GAME_ARENA || cvar("g_arena"))
 	{
@@ -401,7 +401,7 @@ void PrintWelcomeMessage(entity pl)
 		{
 			if(g_lms)
 			{
-				p = PlayerScore_Add(self, SP_LMS_PLACE, 0);
+				p = PlayerScore_Add(self, SP_LMS_RANK, 0);
 				if(p >= 666)
 					return centerprint_atprio(self, CENTERPRIO_SPAM, strcat(NEWLINES, "^1Match has already begun\nwait for next round\n\n\n^7press attack to spectate other players"));
 				else if(p > 0)
@@ -412,7 +412,7 @@ void PrintWelcomeMessage(entity pl)
 		{
 			if(g_lms)
 			{
-				p = PlayerScore_Add(self, SP_LMS_PLACE, 0);
+				p = PlayerScore_Add(self, SP_LMS_RANK, 0);
 				if(p)
 					return centerprint_atprio(self, CENTERPRIO_SPAM, strcat(NEWLINES, "spectating ", self.enemy.netname, "\n\n\n^7press attack for next player\npress attack2 for free fly mode"));
 			}

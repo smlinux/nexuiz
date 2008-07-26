@@ -312,7 +312,7 @@ void Cmd_Sbar_Help(float argc)
 
 string Sbar_DefaultColumnLayout()
 {
-	return "ping name | +kh,ctf/caps -ctf,kh/kills -ctf,kh/deaths -lms/score +lms/lives +lms/place";
+	return "ping name | +kh,ctf/caps -ctf,kh/kills -ctf,kh/deaths -lms/score +lms/lives +lms/rank";
 	/*
 	switch(gametype)
 	{
@@ -855,6 +855,36 @@ void Sbar_DrawScoreboard()
 		if(specs)
 			drawstring(rgb, "Spectators", sbar_fontsize, '1 1 1', 1, 0);
 	}
+
+	string str;
+	float tl, fl;
+	str = strcat("playing on ^2", shortmapname, "^7");
+	tl = getstatf(STAT_TIMELIMIT);
+	fl = getstatf(STAT_FRAGLIMIT);
+	if(gametype == GAME_LMS)
+	{
+		if(tl > 0)
+			str = strcat(str, " for up to ^1", ftos(tl), " minutes^7");
+	}
+	else
+	{
+		if(tl > 0)
+			str = strcat(str, " for ^1", ftos(tl), " minutes^7");
+		if(fl > 0)
+		{
+			if(tl > 0)
+				str = strcat(str, " or");
+			str = strcat(str, " until ^5", ftos(fl));
+			if(scores_label[ps_primary] == "score")
+				str = strcat(str, " points^7");
+			else
+				str = strcat(str, " ", scores_label[ps_primary]);
+		}
+	}
+	
+	pos_y += 1.5 * sbar_fontsize_y;
+	drawcolorcodedstring(pos + '0.5 0 0' * (sbwidth - sbar_fontsize_x * stringwidth(str, TRUE)), str, sbar_fontsize, 0.8, 0);
+
 	sbar = sbar_save;
 }
 
@@ -1078,6 +1108,17 @@ void Sbar_MiniDeathmatchOverlay(vector pos)
 			pos_y -= 9;
 		}
 	}
+}
+
+float Sbar_WouldDrawScoreboard ()
+{
+	if (sb_showscores)
+		return 1;
+	else if (intermission == 1)
+		return 1;
+	else if (intermission == 2)
+		return 1;
+	return 0;
 }
 
 void Sbar_Draw (void)

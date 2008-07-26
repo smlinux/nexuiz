@@ -5,6 +5,7 @@ void CSQC_common_hud(void);
 void CSQC_kh_hud(void);
 void CSQC_ctf_hud(void);
 void PostInit(void);
+float Sbar_WouldDrawScoreboard ();
 void CSQC_UpdateView(void)
 {
 	// watch for gametype changes here...
@@ -31,7 +32,7 @@ void CSQC_UpdateView(void)
 	R_SetView(VF_DRAWWORLD, 1);
 	
 	// Draw the Crosshair
-	R_SetView(VF_DRAWCROSSHAIR, 1);
+	R_SetView(VF_DRAWCROSSHAIR, !Sbar_WouldDrawScoreboard());
 	
 	// Draw the Engine Status Bar (the default Quake HUD)
 	draw_enginesbar = !cvar("sbar_usecsqc");
