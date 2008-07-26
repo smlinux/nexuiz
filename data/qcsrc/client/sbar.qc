@@ -427,6 +427,10 @@ void Cmd_Sbar_SetFields(float argc)
 		++sbar_num_fields;
 	}
 
+	if(scores_flags[ps_primary] & SFL_ALLOW_HIDE)
+		have_primary = 1;
+	if(scores_flags[ps_secondary] & SFL_ALLOW_HIDE)
+		have_secondary = 1;
 	if(ps_primary == ps_secondary)
 		have_secondary = 1;
 	missing = !have_primary + !have_secondary + !have_separator + !have_name;

@@ -246,7 +246,7 @@ void InitGameplayMode()
 		ScoreInfo_SetLabel_PlayerScore(SP_SUICIDES,     "suicides",  SFL_LOWER_IS_BETTER);
 		// do not define SP_SCORE for LMS
 		ScoreInfo_SetLabel_PlayerScore(SP_LMS_LIVES,    "lives",     SFL_SORT_PRIO_SECONDARY);
-		ScoreInfo_SetLabel_PlayerScore(SP_LMS_RANK,     "rank",      SFL_LOWER_IS_BETTER | SFL_HIDE_ZERO | SFL_SORT_PRIO_PRIMARY);
+		ScoreInfo_SetLabel_PlayerScore(SP_LMS_RANK,     "rank",      SFL_LOWER_IS_BETTER | SFL_HIDE_ZERO | SFL_SORT_PRIO_PRIMARY | SFL_ALLOW_HIDE);
 	}
 	else if(game == GAME_ARENA || cvar("g_arena"))
 	{
