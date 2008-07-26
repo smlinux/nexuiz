@@ -197,16 +197,19 @@ const float MAPVOTE_NET_OWNVOTE = 3;
 /**
  * Lower scores are better (e.g. deaths)
  */
-#define SFL_DECREASING         1
+#define SFL_DECREASING          1
+
+/**
+ * Don't show zero values as scores
+ */
+#define SFL_HIDE_ZERO           2
 
 /**
  * Scoring priority (NOTE: PRIMARY is used for fraglimit)
  */
-#define SFL_SORT_PRIO_LOW      2
-#define SFL_SORT_PRIO_MED      4
-#define SFL_SORT_PRIO_HIGH     8
-#define SFL_SORT_PRIO_PRIMARY 14
-#define SFL_SORT_PRIO_MASK    14
+#define SFL_SORT_PRIO_SECONDARY 4
+#define SFL_SORT_PRIO_PRIMARY   8
+#define SFL_SORT_PRIO_MASK     12
 
 /**
  * Score indices

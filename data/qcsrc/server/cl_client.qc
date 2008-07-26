@@ -462,6 +462,14 @@ void PutObserverInServer (void)
 			Spawnqueue_Remove(self);
 		}
 	}
+	else if(g_lms)
+	{
+		// Only if the player cannot play at all
+		if(PlayerScore_Add(self, SP_LMS_PLACE, 0) == 666)
+			self.frags = -666;
+		else
+			self.frags = -667;
+	}
 	else
 		self.frags = -666;
 	

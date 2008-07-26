@@ -136,27 +136,28 @@ void Sbar_InitScores()
 {
 	float i, f, primary_prio, secondary_prio;
 
-	primary_prio = secondary_prio = -1;
+	ps_primary = ps_secondary = ts_primary = ts_secondary = -1;
 	for(i = 0; i < MAX_SCORE; ++i)
 	{
 		f = (scores_flags[i] & SFL_SORT_PRIO_MASK);
-		if(f > primary_prio) {
-			ps_secondary = ps_primary;
+		if(f == SFL_SORT_PRIO_PRIMARY)
 			ps_primary = i;
-		} else if(f > secondary_prio)
+		if(f == SFL_SORT_PRIO_SECONDARY)
 			ps_secondary = i;
 	}
+	if(ps_secondary == -1)
+		ps_secondary = ps_primary;
 	
-	primary_prio = secondary_prio = -1;
 	for(i = 0; i < MAX_TEAMSCORE; ++i)
 	{
 		f = (teamscores_flags[i] & SFL_SORT_PRIO_MASK);
-		if(f > primary_prio) {
-			ts_secondary = ts_primary;
+		if(f == SFL_SORT_PRIO_PRIMARY)
 			ts_primary = i;
-		} else if(f > secondary_prio)
+		if(f == SFL_SORT_PRIO_SECONDARY)
 			ts_secondary = i;
 	}
+	if(ts_secondary == -1)
+		ts_secondary = ts_primary;
 
 	Cmd_Sbar_SetFields(0);
 }
@@ -394,7 +395,7 @@ void Cmd_Sbar_SetFields(float argc)
 vector sbar_field_rgb;
 string Sbar_GetField(entity pl, float field)
 {
-	float tmp, num, denom;
+	float tmp, num, denom, f;
 	string str;
 	sbar_field_rgb = '1 1 1';
 	switch(field)
@@ -427,7 +428,18 @@ string Sbar_GetField(entity pl, float field)
 			return str;
 			
 		default:
-			return ftos(pl.(scores[field]));
+			tmp = pl.(scores[field]);
+			f = scores_flags[field];
+			if(field == ps_primary)
+				sbar_field_rgb = '1 1 0';
+			else if(field == ps_secondary)
+				sbar_field_rgb = '1 0 1';
+			else
+				sbar_field_rgb = '1 1 1';
+			if(!tmp)
+				if(f & SFL_HIDE_ZERO)
+					return "";
+			return ftos(tmp);
 	}
 	//return "error";
 }

@@ -30,9 +30,9 @@ vector ScoreField_Compare(entity t1, entity t2, .float field, float fieldflags, 
 	previous_y = fieldflags & SFL_SORT_PRIO_MASK;
 
 	if(fieldflags & SFL_DECREASING)
-		previous_x = (t1.field - t2.field);
-	else
 		previous_x = (t2.field - t1.field);
+	else
+		previous_x = (t1.field - t2.field);
 
 	return previous;
 }
@@ -177,13 +177,15 @@ void PlayerScore_Clear(entity player)
 	entity sk;
 	float i;
 
-	if(!teamscores_entities_count)
-	{
-		sk = player.scorekeeper;
-		for(i = 0; i < MAX_SCORE; ++i)
-			sk.(scores[i]) = 0;
-		sk.Version += 1;
-	}
+	if(teamscores_entities_count)
+		return;
+	if(g_lms)
+		return;
+
+	sk = player.scorekeeper;
+	for(i = 0; i < MAX_SCORE; ++i)
+		sk.(scores[i]) = 0;
+	sk.Version += 1;
 }
 
 void Score_ClearAll()
