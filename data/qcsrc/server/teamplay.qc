@@ -100,6 +100,27 @@ void ResetGameCvars()
 	cvar_set("teamplay", "0");
 }
 
+void default_delayedinit()
+{
+	remove(self);
+
+	if(!scores_initialized)
+	{
+		if(teamplay)
+		{
+			CheckAllowedTeams(world);
+			ScoreInfo_Init((c1>=0) + (c2>=0) + (c3>=0) + (c4>=0)); // NOTE this assumes that if team 2 is allowed, 1 is too, and if 3 is, 2 is, and if 4 is, 3 is!
+		}
+		else
+			ScoreInfo_Init(0); // NOTE this assumes that if team 2 is allowed, 1 is too, and if 3 is, 2 is, and if 4 is, 3 is!
+		ScoreInfo_SetLabel_TeamScore  (ST_SCORE,        "score",     SFL_SORT_PRIO_PRIMARY);
+		ScoreInfo_SetLabel_PlayerScore(SP_KILLS,        "kills",     0);
+		ScoreInfo_SetLabel_PlayerScore(SP_DEATHS,       "deaths",    SFL_LOWER_IS_BETTER);
+		ScoreInfo_SetLabel_PlayerScore(SP_SUICIDES,     "suicides",  SFL_LOWER_IS_BETTER);
+		ScoreInfo_SetLabel_PlayerScore(SP_SCORE,        "score",     SFL_SORT_PRIO_PRIMARY);
+	}
+}
+
 void ActivateTeamplay()
 {
 	float teamplay_default;
@@ -327,21 +348,10 @@ void InitGameplayMode()
 	else if (game == GAME_ONSLAUGHT)
 		entcs_init();
 
-	if(!scores_initialized)
-	{
-		if(teamplay)
-		{
-			CheckAllowedTeams(world);
-			ScoreInfo_Init((c1>=0) + (c2>=0) + (c3>=0) + (c4>=0)); // NOTE this assumes that if team 2 is allowed, 1 is too, and if 3 is, 2 is, and if 4 is, 3 is!
-		}
-		else
-			ScoreInfo_Init(0); // NOTE this assumes that if team 2 is allowed, 1 is too, and if 3 is, 2 is, and if 4 is, 3 is!
-		ScoreInfo_SetLabel_TeamScore  (ST_SCORE,        "score",     SFL_SORT_PRIO_PRIMARY);
-		ScoreInfo_SetLabel_PlayerScore(SP_KILLS,        "kills",     0);
-		ScoreInfo_SetLabel_PlayerScore(SP_DEATHS,       "deaths",    0);
-		ScoreInfo_SetLabel_PlayerScore(SP_SUICIDES,     "suicides",  SFL_LOWER_IS_BETTER);
-		ScoreInfo_SetLabel_PlayerScore(SP_SCORE,        "score",     SFL_SORT_PRIO_PRIMARY);
-	}
+	entity e;
+	e = spawn();
+	e.nextthink = time + 0.3; // MUST be after all other delayed inits!
+	e.think = default_delayedinit;
 }
 
 string GetClientVersionMessage(float v) {

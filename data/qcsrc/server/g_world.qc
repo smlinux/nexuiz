@@ -977,6 +977,7 @@ void DumpStats(float final)
 	FOR_EACH_CLIENT(other)
 	{
 		// FIXME make this use the new score system
+		/*
 		if ((clienttype(other) == CLIENTTYPE_REAL) || (clienttype(other) == CLIENTTYPE_BOT && cvar("sv_logscores_bots")))
 		{
 			s = strcat(":player:", ftos(other.frags), ":");
@@ -991,8 +992,10 @@ void DumpStats(float final)
 			if(to_file)
 				fputs(file, strcat(s, other.netname, "\n"));
 		}
+		*/
 	}
 
+	/*
 	if(g_ctf)
 	if(cvar("g_ctf_win_mode") != 2)
 	{
@@ -1007,6 +1010,7 @@ void DumpStats(float final)
 		if(to_file)
 			fputs(file, strcat(s, "\n"));
 	}
+	*/
 
 	if(to_console)
 		ServerConsoleEcho(":end", FALSE);
@@ -1621,6 +1625,10 @@ void CheckRules_World()
 	else if (g_onslaught)
 	{
 		status = WinningCondition_Onslaught(); // TODO remove this?
+	}
+	else if(g_ctf && !g_ctf_win_mode)
+	{
+		status = WinningCondition_Scores(capturelimit);
 	}
 	else
 	{

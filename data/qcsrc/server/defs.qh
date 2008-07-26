@@ -16,6 +16,7 @@ float require_spawnfunc_prefix; // if this float exists, only functions with spa
 float g_domination, g_ctf, g_tdm, g_keyhunt, g_onslaught, g_assault, g_arena, g_lms, g_runematch;
 float g_cloaked, g_footsteps, g_grappling_hook, g_instagib, g_laserguided_missile, g_midair, g_minstagib, g_nixnex, g_nixnex_with_laser, g_norecoil, g_rocketarena, g_vampire, g_minstagib_invis_alpha;
 float g_tourney;
+float g_ctf_win_mode;
 float tourneyInMatchStage;
 
 float sv_cheats;
@@ -289,7 +290,6 @@ void checkSpectatorBlock();
 float timelimit_orig;
 
 .float winning;
-.float deaths;
 .float jointime;
 
 float isJoinAllowed();
@@ -444,7 +444,3 @@ float next_pingtime;
 
 .float Version;
 .float(entity to) SendEntity;
-
-.float captures;
-.float returns;
-float caps_team1, caps_team2;

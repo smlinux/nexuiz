@@ -351,19 +351,6 @@ void PlayerCorpseDamage (entity inflictor, entity attacker, float damage, float 
 
 void ClientKill_Now_TeamChange();
 
-void net_UpdateDeaths(float msg_target)
-{
-	entity p;
-	WriteByte(msg_target, SVC_TEMPENTITY);
-	WriteByte(msg_target, TE_CSQC_DEATHS);
-	FOR_EACH_PLAYER(p)
-	{
-		WriteByte(msg_target, num_for_edict(p));
-		WriteByte(msg_target, p.deaths);
-	}
-	WriteByte(msg_target, 0);
-}
-
 void PlayerDamage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
 {
 	local float take, save, waves, sdelay;
@@ -458,9 +445,6 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 	{
 		float defer_ClientKill_Now_TeamChange;
 		defer_ClientKill_Now_TeamChange = FALSE;
-
-		self.deaths += 1;
-		net_UpdateDeaths(MSG_BROADCAST);
 
 		// get rid of kill indicator
 		if(self.killindicator)

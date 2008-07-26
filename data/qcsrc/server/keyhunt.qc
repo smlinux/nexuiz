@@ -438,7 +438,7 @@ void kh_Key_Collect(entity key, entity player)  //a player picks up a dropped ke
 	if(key.kh_dropperteam != player.team)
 	{
 		kh_Scores_Event(player, key, "collect", cvar("g_balance_keyhunt_score_collect"), 0);
-		PlayerScore_Add(player, SP_KH_COLLECT, 1);
+		PlayerScore_Add(player, SP_KH_PICKUPS, 1);
 	}
 	key.kh_dropperteam = 0;
 	bprint(player.netname, "^7 picked up the ", key.netname, "\n");
@@ -465,7 +465,7 @@ void kh_Key_DropAll(entity player, float suicide) // runs whenever a player dies
 		while((key = player.kh_next))
 		{
 			kh_Scores_Event(player, key, "losekey", 0, 0);
-			PlayerScore_Add(player, SP_KH_LOSEKEY, 1);
+			PlayerScore_Add(player, SP_KH_LOSSES, 1);
 			bprint(player.netname, "^7 died and lost the ", key.netname, "\n");
 			kh_Key_AssignTo(key, world);
 			makevectors('-1 0 0' * (45 + 45 * random()) + '0 360 0' * random());
@@ -670,7 +670,7 @@ void kh_LoserTeam(float teem, entity lostkey)  // runs when a player pushes a fl
 			kh_Scores_Event(lostkey.kh_previous_owner, world, "pushed", 0, -cvar("g_balance_keyhunt_score_push"));
 			// don't actually GIVE him the -nn points, just log
 		kh_Scores_Event(attacker, world, "push", cvar("g_balance_keyhunt_score_push"), 0);
-		PlayerScore_Add(attacker, SP_KH_PUSH, 1);
+		PlayerScore_Add(attacker, SP_KH_PUSHES, 1);
 		centerprint(attacker, "Your push is the best!\n\n\n");
 		bprint("The ", ColoredTeamName(teem), "^7 could not take care of the ", lostkey.netname, "^7 when ", attacker.netname, "^7 came\n");
 	}
@@ -691,7 +691,7 @@ void kh_LoserTeam(float teem, entity lostkey)  // runs when a player pushes a fl
 			kh_Scores_Event(lostkey.kh_previous_owner, world, "destroyed", 0, -cvar("g_balance_keyhunt_score_destroyed"));
 			// don't actually GIVE him the -nn points, just log
 
-		PlayerScore_Add(lostkey.kh_previous_owner, SP_KH_DESTROYED, 1);
+		PlayerScore_Add(lostkey.kh_previous_owner, SP_KH_DESTROYS, 1);
 
 		DistributeEvenly_Init(cvar("g_balance_keyhunt_score_destroyed"), keys * of + players);
 
@@ -903,7 +903,7 @@ float kh_HandleFrags(entity attacker, entity targ, float f)  // adds to the play
 		else
 		{
 			kh_Scores_Event(attacker, targ.kh_next, "carrierfrag", cvar("g_balance_keyhunt_score_carrierfrag")-1, 0);
-			PlayerScore_Add(attacker, SP_KH_KCFRAG, 1);
+			PlayerScore_Add(attacker, SP_KH_KCKILLS, 1);
 			// the frag gets added later
 		}
 	}
@@ -977,15 +977,15 @@ void kh_init()  // sets up th KH environment
 	ScoreInfo_SetLabel_TeamScore  (ST_SCORE,        "score",     SFL_SORT_PRIO_PRIMARY);
 	ScoreInfo_SetLabel_TeamScore  (ST_KH_CAPS,      "caps",      SFL_SORT_PRIO_SECONDARY);
 	ScoreInfo_SetLabel_PlayerScore(SP_KILLS,        "kills",     0);
-	ScoreInfo_SetLabel_PlayerScore(SP_DEATHS,       "deaths",    0);
+	ScoreInfo_SetLabel_PlayerScore(SP_DEATHS,       "deaths",    SFL_LOWER_IS_BETTER);
 	ScoreInfo_SetLabel_PlayerScore(SP_SUICIDES,     "suicides",  SFL_LOWER_IS_BETTER);
 	ScoreInfo_SetLabel_PlayerScore(SP_SCORE,        "score",     SFL_SORT_PRIO_PRIMARY);
-	ScoreInfo_SetLabel_PlayerScore(SP_KH_COLLECT,   "collect",   0);
-	ScoreInfo_SetLabel_PlayerScore(SP_KH_LOSEKEY,   "losekey",   SFL_LOWER_IS_BETTER);
+	ScoreInfo_SetLabel_PlayerScore(SP_KH_PICKUPS,   "pickups",   0);
+	ScoreInfo_SetLabel_PlayerScore(SP_KH_LOSSES,    "losses",    SFL_LOWER_IS_BETTER);
 	ScoreInfo_SetLabel_PlayerScore(SP_KH_CAPS,      "caps",      SFL_SORT_PRIO_SECONDARY);
-	ScoreInfo_SetLabel_PlayerScore(SP_KH_PUSH,      "push",      0);
-	ScoreInfo_SetLabel_PlayerScore(SP_KH_DESTROYED, "destroyed", SFL_LOWER_IS_BETTER);
-	ScoreInfo_SetLabel_PlayerScore(SP_KH_KCFRAG,    "kcfrag",    0);
+	ScoreInfo_SetLabel_PlayerScore(SP_KH_PUSHES,    "pushes",    0);
+	ScoreInfo_SetLabel_PlayerScore(SP_KH_DESTROYS,  "destroyed", SFL_LOWER_IS_BETTER);
+	ScoreInfo_SetLabel_PlayerScore(SP_KH_KCKILLS,   "kckills",   0);
 }
 
 void kh_finalize()

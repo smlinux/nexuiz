@@ -351,8 +351,6 @@ PutObserverInServer
 putting a client as observer in the server
 =============
 */
-void ctf_UpdateCaptures(float);
-void ctf_UpdateReturns(float);
 void PutObserverInServer (void)
 {
 	entity	spot;
@@ -408,9 +406,6 @@ void PutObserverInServer (void)
 	self.damageforcescale = 0;
 	self.death_time = 0;
 	self.dead_frame = 0;
-	self.deaths = 0;
-	self.captures = 0;
-	self.returns = 0;
 	self.alpha = 0;
 	self.scale = 0;
 	self.fade_time = 0;
@@ -472,8 +467,6 @@ void PutObserverInServer (void)
 	}
 	else
 		self.frags = -666;
-	
-	net_UpdateDeaths(MSG_BROADCAST);
 }
 
 float RestrictSkin(float s)
@@ -789,15 +782,6 @@ Called when a client types 'kill' in the console
 
 void ClientKill_Now_TeamChange()
 {
-	if(g_ctf)
-	{
-		self.captures = 0;
-		self.returns = 0;
-		ctf_UpdateCaptures(MSG_BROADCAST);
-		ctf_UpdateReturns(MSG_BROADCAST);
-	}
-	self.deaths = 0;
-	net_UpdateDeaths(MSG_BROADCAST);
 	if(self.killindicator_teamchange == -1)
 	{
 		self.team = -1;
@@ -1149,9 +1133,6 @@ void ClientConnect (void)
 		sprint(self, strcat("nexuiz-csqc protocol ", ftos(CSQC_REVISION), "\n"));
 		SendCSQCInfo();
 		msg_entity = self;
-		ctf_UpdateCaptures(MSG_ONE);
-		ctf_UpdateReturns(MSG_ONE);
-		net_UpdateDeaths(MSG_ONE);
 		if(mapvote_initialized && !cvar("g_maplist_textonly"))
 		{
 			MapVote_SendData(MSG_ONE);

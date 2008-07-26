@@ -299,7 +299,7 @@ void Cmd_Sbar_Help(float argc)
 	print("Additional columns:\n");
 	for(i = 0; i < MAX_SCORE; ++i)
 	{
-		if(scores_label[i])
+		if(scores_label[i] != "")
 			print(strcat(scores_label[i], "\n"));
 	}
 }
@@ -331,8 +331,31 @@ void Cmd_Sbar_SetFields(float argc)
 	if(argc < 2) // no arguments provided
 		argc = tokenizebyseparator(strcat("x ", cvar_string("sbar_columns")), " ");
 
-	if(argc < 2 || (argc == 2 && argv(1) == "default"))
+	if(argc < 2)
 		argc = tokenizebyseparator(strcat("x ", Sbar_DefaultColumnLayout()), " ");
+
+	if(argc == 2)
+	{
+		if(argv(1) == "default")
+			argc = tokenizebyseparator(strcat("x ", Sbar_DefaultColumnLayout()), " ");
+		else if(argv(1) == "all")
+		{
+			string s;
+			s = "ping name |";
+			for(i = 0; i < MAX_SCORE; ++i)
+			{
+				if(i != ps_primary)
+				if(i != ps_secondary)
+				if(scores_label[i] != "")
+					s = strcat(s, " ", scores_label[i]);
+			}
+			if(ps_secondary != ps_primary)
+				s = strcat(s, " ", scores_label[ps_secondary]);
+			s = strcat(s, " ", scores_label[ps_primary]);
+			argc = tokenizebyseparator(strcat("x ", s), " ");
+		}
+	}
+		
 	
 	argc = min(MAX_SBAR_FIELDS, argc);
 	sbar_num_fields = 0;

@@ -130,7 +130,6 @@ void reset_map()
 						PlayerScore_Clear(self);
 						if(g_lms)
 							PlayerScore_Add(self, SP_LMS_LIVES, LMS_NewPlayerLives());
-						self.deaths = 0;
 						self.killcount = 0;
 						//stop the player from moving so that he stands still once he gets respawned
 						self.velocity = '0 0 0';
