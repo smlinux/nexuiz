@@ -878,7 +878,7 @@ void Sbar_DrawScoreboard()
 		{
 			if(tl > 0)
 				str = strcat(str, " or");
-			str = strcat(str, " until ^5", ftos(fl));
+			str = strcat(str, " until ^3", ftos(fl));
 			if(scores_label[ps_primary] == "score")
 				str = strcat(str, " points^7");
 			else
