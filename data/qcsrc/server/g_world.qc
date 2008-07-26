@@ -2270,6 +2270,25 @@ float RedirectionThink()
 	return TRUE;
 }
 
+void RestoreGame()
+{
+	// Loaded from a save game
+	// some things then break, so let's work around them...
+
+	// Progs DB (capture records)
+	if(sv_cheats)
+		ServerProgsDB = db_create();
+	else
+		ServerProgsDB = db_load("server.db");
+
+	// Mapinfo
+#ifdef MAPINFO
+	MapInfo_Shutdown();
+	MapInfo_Enumerate();
+	MapInfo_FilterGametype(MapInfo_CurrentGametype(), MapInfo_CurrentFeatures(), 1);
+#endif
+}
+
 void SV_Shutdown()
 {
 	if(world_initialized)
