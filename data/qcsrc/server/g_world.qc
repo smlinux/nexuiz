@@ -1795,7 +1795,7 @@ void MapVote_Init()
 	mapvote_screenshot_dir = strzone(mapvote_screenshot_dir);
 
 	if(!cvar("g_maplist_textonly"))
-		MapVote_SendData(MSG_BROADCAST);
+		MapVote_SendData(MSG_ALL);
 }
 
 void MapVote_SendPicture(float id)
