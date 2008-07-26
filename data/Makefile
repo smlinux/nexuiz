@@ -3,12 +3,13 @@ PERL ?= perl
 PK3NAME ?= `date +../data%Y%m%d.pk3`
 ZIP ?= 7za a -tzip -mx=9
 
+FTEQCCFLAGS ?= -Wall -Wno-mundane -O3
+FTEQCCFLAGS_PROGS ?= 
+FTEQCCFLAGS_MENU ?= 
+
 # NOTE: use -DUSE_FTE instead of -TFTE here!
 # It will automagically add an engine check with -TID and then change back to -TFTE
-QCFLAGS_CSQC ?= 
-
-# to be enabled when possible
-# QCFLAGS_SVQC ?= -TFTE
+FTEQCCFLAGS_CSPROGS ?= 
 
 all: qc
 
@@ -26,13 +27,13 @@ clean:
 	rm -f progs.dat menu.dat csprogs.dat
 
 csprogs.dat: qcsrc/client/*.* qcsrc/common/*.*
-	( cd qcsrc/client; $(FTEQCC) $(QCFLAGS_CSQC) )
+	cd qcsrc/client && $(FTEQCC) $(FTEQCCFLAGS) $(QCFLAGS_CSPROGS)
 
 progs.dat: qcsrc/server/*.* qcsrc/common/*.*
-	( cd qcsrc/server; $(FTEQCC) $(QCFLAGS_SVQC) )
+	cd qcsrc/server && $(FTEQCC) $(FTEQCCFLAGS) $(QCFLAGS_PROGS)
 
 menu.dat: qcsrc/menu/*.* qcsrc/menu/*/*.* qcsrc/common/*.*
-	( cd qcsrc/menu; $(FTEQCC) )
+	cd qcsrc/menu && $(FTEQCC) $(FTEQCCFLAGS) $(FTEQCCFLAGS_MENU)
 
 gfx/menu/default/skinvalues.txt: qcsrc/menu/skin-customizables.inc
 	$(PERL) qcsrc/menu/skin-customizables.inc > gfx/menu/default/skinvalues.txt

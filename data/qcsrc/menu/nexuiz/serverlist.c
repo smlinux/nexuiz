@@ -124,17 +124,17 @@ void refreshServerListNexuizServerList(entity me, float mode)
 	else */
 	{
 		float m;
-		m = SLIST_MASK_AND;
+		m = SLIST_MASK_AND - 1;
 		resethostcachemasks();
 		if(!me.filterShowFull)
-			sethostcachemasknumber(m++, SLIST_FIELD_FREESLOTS, 1, SLIST_TEST_GREATEREQUAL);
+			sethostcachemasknumber(++m, SLIST_FIELD_FREESLOTS, 1, SLIST_TEST_GREATEREQUAL);
 		if(!me.filterShowEmpty)
-			sethostcachemasknumber(m++, SLIST_FIELD_NUMHUMANS, 1, SLIST_TEST_GREATEREQUAL);
-		m = SLIST_MASK_OR;
+			sethostcachemasknumber(++m, SLIST_FIELD_NUMHUMANS, 1, SLIST_TEST_GREATEREQUAL);
+		m = SLIST_MASK_OR - 1;
 		if(me.filterString)
 		{
-			sethostcachemaskstring(m++, SLIST_FIELD_NAME, me.filterString, SLIST_TEST_CONTAINS);
-			sethostcachemaskstring(m++, SLIST_FIELD_MAP, me.filterString, SLIST_TEST_CONTAINS);
+			sethostcachemaskstring(++m, SLIST_FIELD_NAME, me.filterString, SLIST_TEST_CONTAINS);
+			sethostcachemaskstring(++m, SLIST_FIELD_MAP, me.filterString, SLIST_TEST_CONTAINS);
 		}
 		sethostcachesort(me.currentSortField, me.currentSortOrder < 0);
 		resorthostcache();
