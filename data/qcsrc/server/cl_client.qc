@@ -1004,6 +1004,8 @@ void ClientConnect (void)
 		player_count = 0;
 	}
 
+	PlayerScore_Attach(self);
+
 	bot_clientconnect();
 
 	//if(g_domination)
@@ -1114,8 +1116,6 @@ void ClientConnect (void)
 
 	if(entcs_start)
 		attach_entcs();
-
-	PlayerScore_Attach(self);
 
 	bot_relinkplayerlist();
 

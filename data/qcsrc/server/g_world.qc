@@ -1471,7 +1471,7 @@ float WinningCondition_Scores(float limit)
 	if(WinningConditionHelper_winnerteam >= 0)
 		SetWinners(team, WinningConditionHelper_winnerteam);
 	
-	return GetWinningCode(WinningConditionHelper_topscore >= limit, WinningConditionHelper_equality);
+	return GetWinningCode(limit && (WinningConditionHelper_topscore >= limit), WinningConditionHelper_equality);
 }
 
 float WinningCondition_RanOutOfSpawns()
