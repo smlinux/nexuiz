@@ -1470,6 +1470,9 @@ float WinningCondition_Scores(float limit)
 		WinningConditionHelper_winner.winning = 1;
 	if(WinningConditionHelper_winnerteam >= 0)
 		SetWinners(team, WinningConditionHelper_winnerteam);
+
+	if(WinningConditionHelper_topscore == 0)
+		WinningConditionHelper_equality = 0;
 	
 	return GetWinningCode(limit && (WinningConditionHelper_topscore >= limit), WinningConditionHelper_equality);
 }
