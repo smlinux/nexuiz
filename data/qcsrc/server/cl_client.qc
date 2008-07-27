@@ -1222,7 +1222,10 @@ void ClientDisconnect (void)
 	}
 	*/
 
-	PlayerScore_Detach(self);
+	if(self.flags & FL_CLIENT)
+		PlayerScore_Detach(self);
+	else
+		print("Warning: ClientDisconnect without ClientConnect\n");
 
 	if(self.netname_previous)
 		strunzone(self.netname_previous);
