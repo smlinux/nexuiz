@@ -136,7 +136,7 @@ void MapVote_Draw()
 	pos_y += 22;
 	pos_x = xmin;
 
-	drawfont = sbar_font;
+	drawfont = sbar_bigfont; // FIXME change this to sbar_font when it gets a SANE size later
 	
 	isize = (ymax - pos_y - mv_num_maps*10) / mv_num_maps;
 	isize = min(isize, 64);
