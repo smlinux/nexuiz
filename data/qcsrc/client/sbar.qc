@@ -900,6 +900,8 @@ void Sbar_Score(float margin)
 	vector sbar_save, place;
 	entity tm, pl, me;
 	sbar_save = sbar;
+	
+	myteam = GetPlayerColor(player_localentnum - 1);
 
 	sbar_y = vid_conheight - (32+12);
 	sbar_x -= margin;
