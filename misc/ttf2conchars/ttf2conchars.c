@@ -220,7 +220,7 @@ int mapFont(int d, char *c_)
 {
 	unsigned char *c = (unsigned char *) c_;
 	if(!d)
-		return (*c >= 0x20 && *c <= 0x7E) || (*c >= 0xA0 && *c <= 0xFE) ? 0 : -1;
+		return ((*c >= 0x20 && *c <= 0x7E) || (*c >= 0xA0 && *c <= 0xFE)) ? 0 : -1;
 	if(*c >= 0x20 && *c <= 0x7E)
 		return 0;
 	if(*c >= 0xA0 && *c <= 0xAF)
@@ -574,17 +574,27 @@ int main(int argc, char **argv)
 	{
 		fonts[0] = TTF_OpenFont(font0, currentSize);
 		if(!fonts[0])
-			errx(1, "TTF_OpenFont failed: %s", TTF_GetError());
+			errx(1, "TTF_OpenFont %s failed: %s", font0, TTF_GetError());
 
 		if(strcmp(font0, font1) || strcmp(font0, font2))
 		{
-			fonts[1] = TTF_OpenFont(font1, currentSize);
-			if(!fonts[1])
-				warnx("TTF_OpenFont failed: %s", TTF_GetError());
+			if(*font1)
+			{
+				fonts[1] = TTF_OpenFont(font1, currentSize);
+				if(!fonts[1])
+					warnx("TTF_OpenFont %s failed: %s", font1, TTF_GetError());
+			}
+			else
+				fonts[1] = NULL;
 
-			fonts[2] = TTF_OpenFont(font2, currentSize);
-			if(!fonts[2])
-				warnx("TTF_OpenFont failed: %s", TTF_GetError());
+			if(*font2)
+			{
+				fonts[2] = TTF_OpenFont(font2, currentSize);
+				if(!fonts[2])
+					warnx("TTF_OpenFont %s failed: %s", font2, TTF_GetError());
+			}
+			else
+				fonts[2] = NULL;
 
 			differentFonts = 1;
 		}
@@ -699,8 +709,8 @@ int main(int argc, char **argv)
 
 			dest.x = 0;
 			dest.y = (destBottom * referenceTop - destTop * referenceBottom) / (double) (referenceTop - referenceBottom);
-			dest.w = dest.h;
 			dest.h = cell * (destBottom - destTop) / (double) (referenceBottom - referenceTop);
+			dest.w = dest.h;
 
 			/*
 			if(dest.y < 0)
