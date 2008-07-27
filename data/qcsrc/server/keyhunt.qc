@@ -55,6 +55,7 @@ float kh_interferemsg_time, kh_interferemsg_team;
 .float kh_droptime;
 .float kh_dropperteam;
 .entity kh_previous_owner;
+.float kh_previous_owner_playerid;
 
 string kh_sound_capture = "sound/kh/capture.wav";
 string kh_sound_destroy = "sound/kh/destroy.wav";
@@ -253,6 +254,7 @@ void kh_Key_Detach(entity key) // runs every time a key is dropped or lost. Runs
 	// let key.team stay
 	key.modelindex = kh_key_dropped;
 	key.kh_previous_owner = key.owner;
+	key.kh_previous_owner_playerid = key.owner.playerid;
 }
 
 void kh_Key_AssignTo(entity key, entity player)  // runs every time a key is picked up or assigned. Runs prior to kh_key_attach
@@ -691,7 +693,8 @@ void kh_LoserTeam(float teem, entity lostkey)  // runs when a player pushes a fl
 			kh_Scores_Event(lostkey.kh_previous_owner, world, "destroyed", 0, -cvar("g_balance_keyhunt_score_destroyed"));
 			// don't actually GIVE him the -nn points, just log
 
-		PlayerScore_Add(lostkey.kh_previous_owner, SP_KH_DESTROYS, 1);
+		if(lostkey.kh_previous_owner.playerid == lostkey.kh_previous_owner_playerid)
+			PlayerScore_Add(lostkey.kh_previous_owner, SP_KH_DESTROYS, 1);
 
 		DistributeEvenly_Init(cvar("g_balance_keyhunt_score_destroyed"), keys * of + players);
 
