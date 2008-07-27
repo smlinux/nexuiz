@@ -288,7 +288,7 @@ void WinningConditionHelper()
 			else if(c < 0)
 			{
 				WinningConditionHelper_equality = 0;
-				WinningConditionHelper_winnerteam = t + 1;
+				WinningConditionHelper_winnerteam = t;
 			}
 		}
 
@@ -297,6 +297,8 @@ void WinningConditionHelper()
 		WinningConditionHelper_winner = world;
 		if(WinningConditionHelper_equality)
 			WinningConditionHelper_winnerteam = -1;
+		else
+			++WinningConditionHelper_winnerteam; // map to Nexuiz team numbers (as opposed to colors)
 	}
 	else
 	{
