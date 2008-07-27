@@ -116,7 +116,7 @@ void MapVote_Draw()
 	if(i >= 0 || ymax < (vid_conheight*0.5))
 		ymax = vid_conheight - ymin;
 
-	drawfont = sbar_font;
+	drawfont = sbar_bigfont;
 	sbar_fontsize = stov(cvar_string("sbar_fontsize"));
 	if(sbar_fontsize_x == 0)
 		sbar_fontsize = '8 8 0';
@@ -135,6 +135,8 @@ void MapVote_Draw()
 	drawstring(pos, map, '16 16 0', '0 1 0', 1, DRAWFLAG_NORMAL);
 	pos_y += 22;
 	pos_x = xmin;
+
+	drawfont = sbar_font;
 	
 	isize = (ymax - pos_y - mv_num_maps*10) / mv_num_maps;
 	isize = min(isize, 64);

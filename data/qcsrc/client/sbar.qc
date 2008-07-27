@@ -727,7 +727,7 @@ void Sbar_DrawScoreboard()
 	pos_z = 0;
 
 	// Heading
-	drawfont = sbar_font;
+	drawfont = sbar_bigfont;
 	pos_x = center_x - stringwidth("Scoreboard", TRUE)*0.5*24;
 	drawstring(pos, "Scoreboard", '24 24 0', '1 1 1', 1, DRAWFLAG_NORMAL);
 	pos_x = xmin;
@@ -738,6 +738,8 @@ void Sbar_DrawScoreboard()
 	tmp_y = sbar_fontsize_y;
 	drawfill(pos - '1 1 0', tmp + '2 2 0', '0.5 0.5 0.5', 0.5, DRAWFLAG_NORMAL);
 	
+	drawfont = sbar_font;
+
 	for(i = 0; i < sbar_num_fields; ++i)
 	{
 		if(sbar_field[i] == SP_SEPARATOR)

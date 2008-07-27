@@ -82,6 +82,7 @@ string sbar_title[MAX_SBAR_FIELDS + 1];
 float sbar_num_fields;
 
 float sbar_font;
+float sbar_bigfont;
 
 string scores_label[MAX_SCORE];
 float scores_flags[MAX_SCORE];

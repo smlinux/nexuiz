@@ -142,10 +142,12 @@ void CSQC_CheckEngine()
 	{
 		stringwidth = stringwidth_engine;
 		sbar_font = FONT_USER+1;
+		sbar_bigfont = FONT_USER+2;
 		csqc_flags |= CSQC_FLAG_READPICTURE;
 	} else {
 		stringwidth = stringwidth_oldfont;
 		sbar_font = FONT_DEFAULT;
+		sbar_bigfont = FONT_DEFAULT;
 	}
 }
 
