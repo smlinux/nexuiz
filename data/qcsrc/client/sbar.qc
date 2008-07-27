@@ -312,7 +312,7 @@ void Cmd_Sbar_Help(float argc)
 
 string Sbar_DefaultColumnLayout()
 {
-	return "ping name | -ctf,kh/kills -ctf,kh/deaths -lms/score +lms/lives +lms/rank +kh,ctf/caps +kh/pushes +kh/destroys";
+	return "ping name | -ctf,kh/kills -ctf,kh/deaths +lms/lives +lms/rank +kh,ctf/caps +kh/pushes +kh/destroyed -lms/score";
 	/*
 	switch(gametype)
 	{
