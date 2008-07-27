@@ -288,7 +288,7 @@ void WinningConditionHelper()
 			else if(c < 0)
 			{
 				WinningConditionHelper_equality = 0;
-				WinningConditionHelper_winnerteam = t;
+				WinningConditionHelper_winnerteam = t + 1;
 			}
 		}
 
