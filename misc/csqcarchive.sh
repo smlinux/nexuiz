@@ -31,6 +31,9 @@ revs()
 
 rm -f "$out"
 for rev in `revs`; do
+	if [ "$rev" -lt 3789 ]; then
+		continue
+	fi
 	svn checkout -r"$rev" svn://svn.icculus.org/nexuiz/trunk/data/qcsrc
 	rm -f Makefile csprogs.dat
 	wget -OMakefile "http://svn.icculus.org/*checkout*/nexuiz/trunk/data/Makefile?revision=$rev" || continue
