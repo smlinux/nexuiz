@@ -681,6 +681,7 @@ void ctf_delayedinit()
 			break;
 		case 2: // score only
 			sp_score = SFL_SORT_PRIO_PRIMARY;
+			sp_caps = SFL_SORT_PRIO_SECONDARY; // looks better ;)
 			break;
 	}
 
