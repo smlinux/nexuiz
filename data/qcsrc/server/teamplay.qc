@@ -105,20 +105,7 @@ void default_delayedinit()
 	remove(self);
 
 	if(!scores_initialized)
-	{
-		if(teamplay)
-		{
-			CheckAllowedTeams(world);
-			ScoreInfo_Init((c1>=0) + (c2>=0) + (c3>=0) + (c4>=0)); // NOTE this assumes that if team 2 is allowed, 1 is too, and if 3 is, 2 is, and if 4 is, 3 is!
-		}
-		else
-			ScoreInfo_Init(0); // NOTE this assumes that if team 2 is allowed, 1 is too, and if 3 is, 2 is, and if 4 is, 3 is!
-		ScoreInfo_SetLabel_TeamScore  (ST_SCORE,        "score",     SFL_SORT_PRIO_PRIMARY);
-		ScoreInfo_SetLabel_PlayerScore(SP_KILLS,        "kills",     0);
-		ScoreInfo_SetLabel_PlayerScore(SP_DEATHS,       "deaths",    SFL_LOWER_IS_BETTER);
-		ScoreInfo_SetLabel_PlayerScore(SP_SUICIDES,     "suicides",  SFL_LOWER_IS_BETTER);
-		ScoreInfo_SetLabel_PlayerScore(SP_SCORE,        "score",     SFL_SORT_PRIO_PRIMARY);
-	}
+		ScoreRules_generic();
 }
 
 void ActivateTeamplay()
@@ -240,13 +227,7 @@ void InitGameplayMode()
 		teams_matter = 0;
 		lms_lowest_lives = 9999;
 
-		ScoreInfo_Init(0);
-		ScoreInfo_SetLabel_PlayerScore(SP_KILLS,        "kills",     0);
-		ScoreInfo_SetLabel_PlayerScore(SP_DEATHS,       "deaths",    0);
-		ScoreInfo_SetLabel_PlayerScore(SP_SUICIDES,     "suicides",  SFL_LOWER_IS_BETTER);
-		// do not define SP_SCORE for LMS
-		ScoreInfo_SetLabel_PlayerScore(SP_LMS_LIVES,    "lives",     SFL_SORT_PRIO_SECONDARY);
-		ScoreInfo_SetLabel_PlayerScore(SP_LMS_RANK,     "rank",      SFL_LOWER_IS_BETTER | SFL_HIDE_ZERO | SFL_SORT_PRIO_PRIMARY | SFL_ALLOW_HIDE);
+		ScoreRules_lms();
 	}
 	else if(game == GAME_ARENA || cvar("g_arena"))
 	{

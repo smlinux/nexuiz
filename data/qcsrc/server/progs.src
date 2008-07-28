@@ -28,6 +28,8 @@ antilag.qh
 
 vote.qh
 
+scores_rules.qc
+
 miscfunctions.qc
 
 waypointsprites.qc

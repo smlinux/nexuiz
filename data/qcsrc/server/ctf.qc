@@ -668,35 +668,7 @@ void ctf_delayedinit()
 	if (find(world, classname, "ctf_team") == world)
 		ctf_spawnteams();
 
-	float sp_score, sp_caps;
-	sp_score = sp_caps = 0;
-	switch(g_ctf_win_mode)
-	{
-		case 0: // caps only
-			sp_caps = SFL_SORT_PRIO_PRIMARY;
-			break;
-		case 1: // caps, then score
-			sp_caps = SFL_SORT_PRIO_PRIMARY;
-			sp_score = SFL_SORT_PRIO_SECONDARY;
-			break;
-		case 2: // score only
-			sp_score = SFL_SORT_PRIO_PRIMARY;
-			sp_caps = SFL_SORT_PRIO_SECONDARY; // looks better ;)
-			break;
-	}
-
-	CheckAllowedTeams(world);
-	ScoreInfo_Init(2 + (c3>=0)); // NOTE this assumes that the rogue team is team 3
-	ScoreInfo_SetLabel_TeamScore  (ST_SCORE,        "score",     sp_score);
-	ScoreInfo_SetLabel_TeamScore  (ST_CTF_CAPS,     "caps",      sp_caps);
-	ScoreInfo_SetLabel_PlayerScore(SP_KILLS,        "kills",     0);
-	ScoreInfo_SetLabel_PlayerScore(SP_DEATHS,       "deaths",    SFL_LOWER_IS_BETTER);
-	ScoreInfo_SetLabel_PlayerScore(SP_SUICIDES,     "suicides",  SFL_LOWER_IS_BETTER);
-	ScoreInfo_SetLabel_PlayerScore(SP_SCORE,        "score",     sp_score);
-	ScoreInfo_SetLabel_PlayerScore(SP_CTF_CAPS,     "caps",      sp_caps);
-	ScoreInfo_SetLabel_PlayerScore(SP_CTF_RETURNS,  "returns",   0);
-	ScoreInfo_SetLabel_PlayerScore(SP_CTF_FCKILLS,  "fckills",   0);
-	ScoreInfo_SetLabel_PlayerScore(SP_CTF_PICKUPS,  "pickups",   0);
+	ScoreRules_ctf();
 };
 
 void ctf_init()
