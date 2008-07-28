@@ -11,91 +11,109 @@ float mv_ownvote;
 float mv_detail;
 float mv_timeout;
 
+// TODO: First the text, then the image above it, centered
 void MapVote_DrawMapItem(vector pos, float isize, string map, string pic, float count, float id)
 {
 	vector img_size;
 	vector rgb;
-	//img_size_x = img_size_y = isize;
-	img_size_y = isize;
-	img_size_x = isize / 0.75; // 4:3 x can be stretched easily, height is defined in isize
-
-	drawpic(pos, pic, img_size, '1 1 1', 1, DRAWFLAG_NORMAL);
-
-	// half size for the impulse number
-	img_size_x = img_size_y = isize*0.5;
-	pos_y += img_size_y*0.5;
-
+	string label;
+	float text_size;
+	
 	if(id == mv_ownvote)
 		rgb = '1 1 0';
 	else
 		rgb = '1 1 1';
 	
-	drawstring(pos - '40 0 0', strcat(ftos(id+1), "."), img_size, rgb, 1, DRAWFLAG_NORMAL);
+	isize -= sbar_fontsize_y; // respect the text when calculating the image size
+	
+	img_size_y = isize;
+	img_size_x = isize / 0.75; // 4:3 x can be stretched easily, height is defined in isize
 
-	pos_x += isize/0.75 + 10;
-
+	drawfont = sbar_font;
+	pos_y = pos_y + img_size_y;
+	
 	if(mv_detail)
-		drawstring(pos, strcat(ftos(count), " : ", map), img_size, rgb, 1, DRAWFLAG_NORMAL);
+		label = strcat(ftos(id+1), ". ", ftos(count), ": ", map);
 	else
-		drawstring(pos, map, img_size, rgb, 1, DRAWFLAG_NORMAL);
+		label = strcat(ftos(id+1), ". ", map);
+
+	text_size = stringwidth(label, false) * sbar_fontsize_x;
+	
+	pos_x -= text_size*0.5;
+	drawstring(pos, label, sbar_fontsize, rgb, 1, DRAWFLAG_NORMAL);
+	
+	pos_x = pos_x + text_size*0.5 - img_size_x*0.5;
+	pos_y = pos_y - img_size_y;
+	drawpic(pos, pic, img_size, '1 1 1', 1, DRAWFLAG_NORMAL);
 }
 
 void MapVote_DrawMapNotAvailable(vector pos, float isize, string map, float count, float id)
 {
 	vector img_size, a, b;
 	vector rgb;
-	img_size_y = isize;
-	img_size_x = isize / 0.75;
-
-	a_x = img_size_x; // for the lines
-	b_y = img_size_y;
-	drawfill(pos, img_size, '.5 .5 .5', .7, DRAWFLAG_NORMAL);
-	drawline(2, pos, pos + a, '1 1 1', 1, DRAWFLAG_NORMAL);
-	drawline(2, pos, pos + b, '1 1 1', 1, DRAWFLAG_NORMAL);
-	drawline(2, pos + img_size, pos + a, '1 1 1', 1, DRAWFLAG_NORMAL);
-	drawline(2, pos + img_size, pos + b, '1 1 1', 1, DRAWFLAG_NORMAL);
-
-	img_size_x = img_size_y = isize*0.5;
-	pos_y += img_size_y*0.5;
-
+	string label;
+	float text_size;
+	
 	if(id == mv_ownvote)
 		rgb = '1 1 0';
 	else
 		rgb = '1 1 1';
 	
-	drawstring(pos - '40 0 0', strcat(ftos(id+1), "."), img_size, rgb, 1, DRAWFLAG_NORMAL);
+	isize -= sbar_fontsize_y; // respect the text when calculating the image size
 	
-	pos_x += isize/0.75 + 10;
+	img_size_y = isize;
+	img_size_x = isize / 0.75; // 4:3 x can be stretched easily, height is defined in isize
 
+	drawfont = sbar_font;
+	pos_y = pos_y + img_size_y;
+	
 	if(mv_detail)
-		drawstring(pos, strcat(ftos(count), " : ", map), img_size, rgb, 1, DRAWFLAG_NORMAL);
+		label = strcat(ftos(id+1), ". ", ftos(count), ": ", map);
 	else
-		drawstring(pos, map, img_size, rgb, 1, DRAWFLAG_NORMAL);
+		label = strcat(ftos(id+1), ". ", map);
+
+	text_size = stringwidth(label, false) * sbar_fontsize_x;
+	
+	pos_x -= text_size*0.5;
+	drawstring(pos, label, sbar_fontsize, rgb, 1, DRAWFLAG_NORMAL);
+
+	a_x = img_size_x; // for the lines
+	b_y = img_size_y;
+	
+	pos_x = pos_x + text_size*0.5 - img_size_x*0.5;
+	pos_y = pos_y - img_size_y;
+	
+	drawfill(pos, img_size, '.5 .5 .5', .7, DRAWFLAG_NORMAL);
+	drawline(2, pos, pos + a, '1 1 1', 1, DRAWFLAG_NORMAL);
+	drawline(2, pos, pos + b, '1 1 1', 1, DRAWFLAG_NORMAL);
+	drawline(2, pos + img_size, pos + a, '1 1 1', 1, DRAWFLAG_NORMAL);
+	drawline(2, pos + img_size, pos + b, '1 1 1', 1, DRAWFLAG_NORMAL);
 }
 
 void MapVote_DrawAbstain(vector pos, float isize, float count, float id)
 {
 	vector img_size;
 	vector rgb;
-	img_size_y = isize;
-	img_size_x = isize / 0.75;
-
-	img_size_x = img_size_y = isize*0.5;
-	pos_y += img_size_y*0.5;
-
+	float text_size;
+	string label;
+	
 	if(id == mv_ownvote)
 		rgb = '1 1 0';
 	else
 		rgb = '1 1 1';
-	
-	drawstring(pos - '40 0 0', strcat(ftos(id+1), "."), img_size, rgb, 1, DRAWFLAG_NORMAL);
-	
-	pos_x += isize/0.75 + 10;
 
+	drawfont = sbar_font;
+	pos_y = pos_y + sbar_fontsize_y;
+	
 	if(mv_detail)
-		drawstring(pos, strcat(ftos(count), " : Don't care"), img_size, rgb, 1, DRAWFLAG_NORMAL);
+		label = strcat(ftos(id+1), ". ", ftos(count), ": Don't care");
 	else
-		drawstring(pos, "Don't care", img_size, rgb, 1, DRAWFLAG_NORMAL);
+		label = strcat(ftos(id+1), ". Don't care");
+
+	text_size = stringwidth(label, false) * sbar_fontsize_x;
+	
+	pos_x -= text_size*0.5;
+	drawstring(pos, label, sbar_fontsize, rgb, 1, DRAWFLAG_NORMAL);
 }
 
 void MapVote_Draw()
@@ -107,7 +125,7 @@ void MapVote_Draw()
 	float center;
 	
 	center = (vid_conwidth - 1)/2;
-	xmin = vid_conwidth*0.2;
+	xmin = vid_conwidth*0.05; // 5% border must suffice
 	xmax = vid_conwidth - xmin;
 	ymin = 24;
 	i = cvar("con_chatpos"); //*cvar("con_chatsize");
@@ -138,11 +156,30 @@ void MapVote_Draw()
 
 	drawfont = sbar_bigfont; // FIXME change this to sbar_font when it gets a SANE size later
 	
-	isize = (ymax - pos_y - mv_num_maps*10) / mv_num_maps;
-	isize = min(isize, 64);
+	// base for multi-column stuff...
+	ymin = pos_y;
+	if(mv_num_maps > 5)
+	{
+		//xmax = 0.5*(xmax - xmin);
+		isize = (ymax - pos_y - mv_num_maps*10) / floor(0.5*mv_num_maps); // or ceil?
+		pos_x = xmin + 0.25*(xmax-xmin);
+	} else {
+		isize = (ymax - pos_y - mv_num_maps*10) / mv_num_maps;
+		pos_x = xmin + 0.5*(xmax-xmin);
+	}
 
+	ymax -= isize;
 	for(i = 0; i < (mv_num_maps - mv_abstain); ++i)
 	{
+		// base for multi-column stuff
+		if(pos_y >= ymax)
+		{
+			pos_y = ymin;
+			pos_x = xmin + 0.75*(xmax-xmin);
+			//xmax = 2*xmax - xmin;
+			//xmin = pos_x;
+		}
+		
 		tmp = mv_votes[i]; // FTEQCC bug: too many array accesses in the function call screw it up
 		if(tmp < 0)
 		{

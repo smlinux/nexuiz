@@ -94,6 +94,9 @@ float teamscores_flags[MAX_SCORE];
 #define IS_INCREASING(x) ( (x)&SFL_LOWER_IS_BETTER )
 #define IS_DECREASING(x) ( !((x)&SFL_LOWER_IS_BETTER) )
 
+
+vector sbar_fontsize;
+
 float csqc_flags;
 #define CSQC_FLAG_READPICTURE 1
 
