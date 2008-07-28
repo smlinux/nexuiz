@@ -92,4 +92,6 @@ int main()
 		}
 		bufsize = newbufsize;
 	}
+
+	return 0;
 }
