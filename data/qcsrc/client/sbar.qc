@@ -292,12 +292,6 @@ void Cmd_Sbar_Help(float argc)
 	print("of game types, then a slash, to make the field show up only in these\n");
 	print("or in all but these game types.\n");
 
-/*
-	print("^3caps^7 or ^3captures^7         Number of flags captured\n");
-	print("^3rets^7 or ^3returns^7          Number of flags returned\n");
-	print("^3frags^7 or ^3kills^7           Frags\n");
-	print("^3deaths^7 or ^3dths^7           Number of deaths\n");
-	*/
 	local float i;
 	print("Additional columns:\n");
 	for(i = 0; i < MAX_SCORE; ++i)
@@ -313,15 +307,6 @@ void Cmd_Sbar_Help(float argc)
 string Sbar_DefaultColumnLayout()
 {
 	return "ping name | -ctf,kh/kills -ctf,kh/deaths +lms/lives +lms/rank +kh,ctf/caps +kh/pushes +kh/destroyed -lms/score";
-	/*
-	switch(gametype)
-	{
-		case GAME_CTF: return "ping name | caps score";
-		case GAME_KEYHUNT: return "ping name | caps kills score";
-		default: return "ping name | score";
-			// TODO: add other gametypes
-	}
-	*/
 }
 
 void Cmd_Sbar_SetFields(float argc)

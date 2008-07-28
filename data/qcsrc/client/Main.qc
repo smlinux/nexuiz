@@ -355,7 +355,6 @@ void CSQC_Ent_Remove()
 	} else if(self.enttype == ENT_CLIENT_SCORES)
 	{
 		entity tm;
-		print("lost a client score\n");
 		tm = GetTeam(self.team, false);
 		tm.team_size -= 1;
 		RemovePlayer(self);
