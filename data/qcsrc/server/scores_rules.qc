@@ -36,7 +36,7 @@ void ScoreRules_ctf()
 {
 	float sp_score, sp_caps;
 	sp_score = sp_caps = 0;
-	switch(g_ctf_win_mode)
+	switch(cvar("g_ctf_win_mode"))
 	{
 		case 0: // caps only
 			sp_caps = SFL_SORT_PRIO_PRIMARY;
@@ -46,6 +46,7 @@ void ScoreRules_ctf()
 			sp_score = SFL_SORT_PRIO_SECONDARY;
 			break;
 		case 2: // score only
+		default:
 			sp_score = SFL_SORT_PRIO_PRIMARY;
 			sp_caps = SFL_SORT_PRIO_SECONDARY; // looks better ;)
 			break;
@@ -61,8 +62,21 @@ void ScoreRules_ctf()
 }
 
 // g_domination
-#define ST_DOM_DOMPOINTS 1
-#define SP_DOM_DOMPOINTS 4
+#define ST_DOM_DOMTICKS 1
+#define SP_DOM_DOMTICKS 4
+void ScoreRules_dom()
+{
+	float sp_domticks, sp_score;
+	sp_score = sp_domticks = 0;
+	if(cvar("g_domination_disable_frags"))
+		sp_domticks = SFL_SORT_PRIO_PRIMARY;
+	else
+		sp_score = SFL_SORT_PRIO_PRIMARY;
+	CheckAllowedTeams(world);
+	ScoreRules_basics(((c4>=0) ? 4 : (c3>=0) ? 3 : 2), sp_score);
+	ScoreInfo_SetLabel_TeamScore  (ST_DOM_DOMTICKS, "domticks",  sp_domticks);
+	ScoreInfo_SetLabel_PlayerScore(SP_DOM_DOMTICKS, "domticks",  sp_domticks);
+}
 
 // LMS stuff
 #define SP_LMS_LIVES 4

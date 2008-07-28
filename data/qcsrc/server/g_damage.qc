@@ -76,13 +76,7 @@ void GiveFrags (entity attacker, entity targ, float f)
 	PlayerScore_Add(targ, SP_DEATHS, 1);
 
 	// FIXME fix the mess this is (we have REAL points now!)
-	if(g_domination)
-	{
-		if(cvar("g_domination_disable_frags"))
-			if(f > 0)
-				f = 0;
-	}
-	else if(g_runematch)
+	if(g_runematch)
 	{
 		f = RunematchHandleFrags(attacker, targ, f);
 	}

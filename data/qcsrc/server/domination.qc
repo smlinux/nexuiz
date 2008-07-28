@@ -17,6 +17,8 @@ Note: The only teams who can use dom control points are identified by spawnfunc_
 
 #define DOMPOINTFRAGS frags
 
+.float enemy_playerid;
+
 void() dom_controlpoint_setup;
 
 void LogDom(string mode, float team_before, entity actor)
@@ -102,8 +104,7 @@ void dompointthink()
 {
 	local entity head;
 	local float waittime;
-	local float teamfragamt;
-	local float individualfragamt;
+	local float fragamt;
 
 	self.nextthink = time + 0.1;
 
@@ -126,38 +127,22 @@ void dompointthink()
 	// NOTE: this defaults to 0
 	if (self.goalentity.netname)
 	{
-		teamfragamt = cvar("g_domination_point_teamamt");
-		if(!teamfragamt)
-			teamfragamt = self.DOMPOINTFRAGS;
-		TeamScore_AddToTeam(self.goalentity.team, ST_DOM_DOMPOINTS, teamfragamt);
-	}
+		fragamt = cvar("g_domination_point_amt");
+		if(!fragamt)
+			fragamt = self.DOMPOINTFRAGS;
+		TeamScore_AddToTeam(self.goalentity.team, ST_SCORE, fragamt);
+		TeamScore_AddToTeam(self.goalentity.team, ST_DOM_DOMTICKS, fragamt);
 
-	// if the player left the game, changed teams or became spectator, we have to find another player on the same team to give credit to
-	if (!self.enemy.flags || self.enemy.team != self.goalentity.team || self.enemy.killcount == -666) // flags is zero on removed clients
-	{
-		other = self.enemy;
-		FOR_EACH_PLAYER(head)
-			if (head.team == self.goalentity.team)
-				self.enemy = head;
-		if(self.enemy == other) // search returned no matching player, reset dom point
+		// give credit to the individual player, if he is still there
+		if (self.enemy.playerid == self.enemy_playerid)
 		{
-			dom_controlpoint_setup();
-			self.enemy = world;
-			self.cnt = 0;
-			self.aiment = world;
+			PlayerScore_Add(self.enemy, SP_SCORE, fragamt);
+			PlayerScore_Add(self.enemy, SP_DOM_DOMTICKS, fragamt);
 		}
+		else
+			self.enemy = world;
 	}
-
-	// give credit to the individual player
-	if (self.enemy)
-	{
-		individualfragamt = cvar("g_domination_point_amt");
-		if(!individualfragamt)
-			individualfragamt = self.DOMPOINTFRAGS;
-		UpdateFrags(self.enemy, individualfragamt);
-		PlayerScore_Add(self.enemy, SP_DOM_DOMPOINTS, individualfragamt);
-	}
-};
+}
 
 void dompointtouch()
 {
@@ -200,6 +185,7 @@ void dompointtouch()
 	self.skin = head.skin;
 
 	self.enemy = other; // individual player scoring
+	self.enemy_playerid = other.playerid;
 	dompoint_captured();
 };
 
@@ -593,6 +579,8 @@ void dom_delayedinit()
 			}
 		}
 	}
+
+	ScoreRules_dom();
 };
 
 void dom_init()

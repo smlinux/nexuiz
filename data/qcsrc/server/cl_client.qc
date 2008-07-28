@@ -1232,6 +1232,7 @@ void ClientDisconnect (void)
 
 	// free cvars
 	GetCvars(-1);
+	self.playerid = 0;
 }
 
 .float BUTTON_CHAT;
