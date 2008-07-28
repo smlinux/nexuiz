@@ -62,6 +62,10 @@ void dompoint_captured ()
 	//bprint("\n");
 
 	bprint("^3", head.netname, "^3", self.message, "\n");
+	if(self.enemy.playerid == self.enemy_playerid)
+		PlayerScore_Add(self.enemy, SP_DOM_TAKES, 1);
+	else
+		self.enemy = world;
 
 	if (head.noise != "")
 		sound(self, CHAN_BODY, head.noise, 1, ATTN_NORM);
@@ -131,13 +135,13 @@ void dompointthink()
 		if(!fragamt)
 			fragamt = self.DOMPOINTFRAGS;
 		TeamScore_AddToTeam(self.goalentity.team, ST_SCORE, fragamt);
-		TeamScore_AddToTeam(self.goalentity.team, ST_DOM_DOMTICKS, fragamt);
+		TeamScore_AddToTeam(self.goalentity.team, ST_DOM_TICKS, fragamt);
 
 		// give credit to the individual player, if he is still there
 		if (self.enemy.playerid == self.enemy_playerid)
 		{
 			PlayerScore_Add(self.enemy, SP_SCORE, fragamt);
-			PlayerScore_Add(self.enemy, SP_DOM_DOMTICKS, fragamt);
+			PlayerScore_Add(self.enemy, SP_DOM_TICKS, fragamt);
 		}
 		else
 			self.enemy = world;
