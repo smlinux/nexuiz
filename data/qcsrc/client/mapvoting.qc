@@ -158,10 +158,12 @@ void MapVote_Draw()
 	
 	// base for multi-column stuff...
 	ymin = pos_y;
+	if(mv_abstain)
+		mv_num_maps -= 1;
+	
 	if(mv_num_maps > 5)
 	{
-		//xmax = 0.5*(xmax - xmin);
-		isize = (ymax - pos_y - mv_num_maps*10) / floor(0.5*mv_num_maps); // or ceil?
+		isize = (ymax - pos_y - mv_num_maps*10) / ceil(0.5*mv_num_maps);
 		pos_x = xmin + 0.25*(xmax-xmin);
 	} else {
 		isize = (ymax - pos_y - mv_num_maps*10) / mv_num_maps;
@@ -169,10 +171,10 @@ void MapVote_Draw()
 	}
 
 	ymax -= isize;
-	for(i = 0; i < (mv_num_maps - mv_abstain); ++i)
+	for(i = 0; i < mv_num_maps; ++i)
 	{
 		// base for multi-column stuff
-		if(pos_y >= ymax)
+		if(pos_y > ymax)
 		{
 			pos_y = ymin;
 			pos_x = xmin + 0.75*(xmax-xmin);
@@ -193,8 +195,14 @@ void MapVote_Draw()
 			MapVote_DrawMapNotAvailable(pos, isize, map, tmp, i);
 		pos_y += isize + 10;
 	}
+
+	if(mv_abstain)
+		mv_num_maps++;
+	
 	if(mv_abstain && i < mv_num_maps) {
 		tmp = mv_votes[i];
+		pos_y = ymax + isize - sbar_fontsize_y;
+		pos_x = (xmax+xmin)*0.5;
 		MapVote_DrawAbstain(pos, isize, tmp, i);
 	}
 }
