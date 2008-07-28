@@ -680,7 +680,7 @@ void ctf_delayedinit()
 			sp_score = SFL_SORT_PRIO_SECONDARY;
 			break;
 		case 2: // score only
-			sp_score = SFL_SORT_PRIO_SECONDARY;
+			sp_score = SFL_SORT_PRIO_PRIMARY;
 			break;
 	}
 
