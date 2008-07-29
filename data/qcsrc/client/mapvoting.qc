@@ -11,55 +11,37 @@ float mv_ownvote;
 float mv_detail;
 float mv_timeout;
 
-// TODO: First the text, then the image above it, centered
-void MapVote_DrawMapItem(vector pos, float isize, string map, string pic, float count, float id)
+string MapVote_FormatMapItem(float id, string map, float count, float maxwidth)
 {
-	vector img_size;
-	vector rgb;
-	string label;
-	float text_size;
-	
-	if(id == mv_ownvote)
-		rgb = '1 1 0';
-	else
-		rgb = '1 1 1';
-	
-	isize -= sbar_fontsize_y; // respect the text when calculating the image size
-	
-	img_size_y = isize;
-	img_size_x = isize / 0.75; // 4:3 x can be stretched easily, height is defined in isize
-
-	drawfont = sbar_font;
-	pos_y = pos_y + img_size_y;
-	
+	string pre, post;
+	pre = strcat(ftos(id+1), ". ");
 	if(mv_detail)
-		label = strcat(ftos(id+1), ". ", ftos(count), ": ", map);
+		post = strcat(" (", ftos(count), " votes)");
 	else
-		label = strcat(ftos(id+1), ". ", map);
-
-	text_size = stringwidth(label, false) * sbar_fontsize_x;
-	
-	pos_x -= text_size*0.5;
-	drawstring(pos, label, sbar_fontsize, rgb, 1, DRAWFLAG_NORMAL);
-	
-	pos_x = pos_x + text_size*0.5 - img_size_x*0.5;
-	pos_y = pos_y - img_size_y;
-	drawpic(pos, pic, img_size, '1 1 1', 1, DRAWFLAG_NORMAL);
+		post = "";
+	maxwidth -= stringwidth(pre, FALSE) + stringwidth(post, FALSE);
+	map = textShortenToWidth(map, maxwidth, FALSE);
+	return strcat(pre, map, post);
 }
 
-void MapVote_DrawMapNotAvailable(vector pos, float isize, string map, float count, float id)
+vector MapVote_RGB(float id)
+{
+	if(id == mv_ownvote)
+		return '1 1 0';
+	else
+		return '1 1 1';
+}
+
+void MapVote_DrawMapItem(vector pos, float isize, float tsize, string map, string pic, float count, float id)
 {
 	vector img_size, a, b;
 	vector rgb;
 	string label;
 	float text_size;
 	
-	if(id == mv_ownvote)
-		rgb = '1 1 0';
-	else
-		rgb = '1 1 1';
-	
 	isize -= sbar_fontsize_y; // respect the text when calculating the image size
+
+	rgb = MapVote_RGB(id);
 	
 	img_size_y = isize;
 	img_size_x = isize / 0.75; // 4:3 x can be stretched easily, height is defined in isize
@@ -67,53 +49,60 @@ void MapVote_DrawMapNotAvailable(vector pos, float isize, string map, float coun
 	drawfont = sbar_font;
 	pos_y = pos_y + img_size_y;
 	
-	if(mv_detail)
-		label = strcat(ftos(id+1), ". ", ftos(count), ": ", map);
-	else
-		label = strcat(ftos(id+1), ". ", map);
+	label = MapVote_FormatMapItem(id, map, count, tsize / sbar_fontsize_x);
 
 	text_size = stringwidth(label, false) * sbar_fontsize_x;
 	
 	pos_x -= text_size*0.5;
 	drawstring(pos, label, sbar_fontsize, rgb, 1, DRAWFLAG_NORMAL);
-
-	a_x = img_size_x; // for the lines
-	b_y = img_size_y;
 	
 	pos_x = pos_x + text_size*0.5 - img_size_x*0.5;
 	pos_y = pos_y - img_size_y;
-	
-	drawfill(pos, img_size, '.5 .5 .5', .7, DRAWFLAG_NORMAL);
-	drawline(2, pos, pos + a, '1 1 1', 1, DRAWFLAG_NORMAL);
-	drawline(2, pos, pos + b, '1 1 1', 1, DRAWFLAG_NORMAL);
-	drawline(2, pos + img_size, pos + a, '1 1 1', 1, DRAWFLAG_NORMAL);
-	drawline(2, pos + img_size, pos + b, '1 1 1', 1, DRAWFLAG_NORMAL);
+
+	if(pic == "")
+	{
+		a_x = img_size_x; // for the lines
+		b_y = img_size_y;
+		drawfill(pos, img_size, '.5 .5 .5', .7, DRAWFLAG_NORMAL);
+		drawline(2, pos, pos + a, '1 1 1', 1, DRAWFLAG_NORMAL);
+		drawline(2, pos, pos + b, '1 1 1', 1, DRAWFLAG_NORMAL);
+		drawline(2, pos + img_size, pos + a, '1 1 1', 1, DRAWFLAG_NORMAL);
+		drawline(2, pos + img_size, pos + b, '1 1 1', 1, DRAWFLAG_NORMAL);
+	}
+	else
+	{
+		drawpic(pos, pic, img_size, '1 1 1', 1, DRAWFLAG_NORMAL);
+	}
 }
 
-void MapVote_DrawAbstain(vector pos, float isize, float count, float id)
+void MapVote_DrawAbstain(vector pos, float isize, float tsize, float count, float id)
 {
 	vector img_size;
 	vector rgb;
 	float text_size;
 	string label;
 	
-	if(id == mv_ownvote)
-		rgb = '1 1 0';
-	else
-		rgb = '1 1 1';
+	rgb = MapVote_RGB(id);
 
 	drawfont = sbar_font;
 	pos_y = pos_y + sbar_fontsize_y;
 	
-	if(mv_detail)
-		label = strcat(ftos(id+1), ". ", ftos(count), ": Don't care");
-	else
-		label = strcat(ftos(id+1), ". Don't care");
+	label = MapVote_FormatMapItem(id, "Don't care", count, tsize / sbar_fontsize_x);
 
 	text_size = stringwidth(label, false) * sbar_fontsize_x;
 	
 	pos_x -= text_size*0.5;
 	drawstring(pos, label, sbar_fontsize, rgb, 1, DRAWFLAG_NORMAL);
+}
+
+vector MapVote_GridVec(vector gridspec, float i, float m)
+{
+	float r;
+	r = mod(i, m);
+	return
+		'1 0 0' * (gridspec_x * r)
+		+
+		'0 1 0' * (gridspec_y * (i - r) / m);
 }
 
 void MapVote_Draw()
@@ -123,6 +112,9 @@ void MapVote_Draw()
 	vector pos;
 	float isize;
 	float center;
+	float columns, rows;
+	float tsize;
+	vector dist;
 	
 	center = (vid_conwidth - 1)/2;
 	xmin = vid_conwidth*0.05; // 5% border must suffice
@@ -161,49 +153,42 @@ void MapVote_Draw()
 	if(mv_abstain)
 		mv_num_maps -= 1;
 	
-	if(mv_num_maps > 5)
+	if(mv_num_maps > 3)
 	{
-		isize = (ymax - pos_y - mv_num_maps*10) / ceil(0.5*mv_num_maps);
-		pos_x = xmin + 0.25*(xmax-xmin);
+		columns = 3;
 	} else {
-		isize = (ymax - pos_y - mv_num_maps*10) / mv_num_maps;
-		pos_x = xmin + 0.5*(xmax-xmin);
+		columns = mv_num_maps;
 	}
+	rows = ceil(mv_num_maps / columns);
 
+	dist_x = (xmax - xmin) / columns;
+	dist_y = (ymax - pos_y) / rows;
+	tsize = dist_x - 10;
+	isize = min(dist_y - 10, 0.75 * tsize);
+
+	pos_x += (xmax - xmin) / (2 * columns);
+	pos_y += (dist_y - isize) / 2;
 	ymax -= isize;
 	for(i = 0; i < mv_num_maps; ++i)
 	{
-		// base for multi-column stuff
-		if(pos_y > ymax)
-		{
-			pos_y = ymin;
-			pos_x = xmin + 0.75*(xmax-xmin);
-			//xmax = 2*xmax - xmin;
-			//xmin = pos_x;
-		}
-		
 		tmp = mv_votes[i]; // FTEQCC bug: too many array accesses in the function call screw it up
 		if(tmp < 0)
-		{
-			pos_y += isize + 10;
 			continue;
-		}
 		map = mv_maps[i];
 		if(mv_preview[i])
-			MapVote_DrawMapItem(pos, isize, map, mv_pics[i], tmp, i);
+			MapVote_DrawMapItem(pos + MapVote_GridVec(dist, i, columns), isize, tsize, map, mv_pics[i], tmp, i);
 		else
-			MapVote_DrawMapNotAvailable(pos, isize, map, tmp, i);
-		pos_y += isize + 10;
+			MapVote_DrawMapItem(pos + MapVote_GridVec(dist, i, columns), isize, tsize, map, "", tmp, i);
 	}
 
 	if(mv_abstain)
-		mv_num_maps++;
+		++mv_num_maps;
 	
 	if(mv_abstain && i < mv_num_maps) {
 		tmp = mv_votes[i];
 		pos_y = ymax + isize - sbar_fontsize_y;
 		pos_x = (xmax+xmin)*0.5;
-		MapVote_DrawAbstain(pos, isize, tmp, i);
+		MapVote_DrawAbstain(pos, isize, xmax - xmin, tmp, i);
 	}
 }
 
