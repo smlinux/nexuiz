@@ -267,7 +267,7 @@ void MapVote_Init()
 	mv_detail = ReadByte();
 
 	mv_ownvote = -1;
-	mv_timeout = time + ReadByte();
+	mv_timeout = ReadCoord();
 
 	if(mv_num_maps <= 8)
 		m = ReadByte();

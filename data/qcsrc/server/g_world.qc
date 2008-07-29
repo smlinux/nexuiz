@@ -1853,7 +1853,7 @@ void MapVote_SendData(float targ)
   	WriteByte(targ, mapvote_count);
   	WriteByte(targ, mapvote_abstain);
   	WriteByte(targ, mapvote_detail);
-	WriteByte(targ, mapvote_timeout - time);
+	WriteCoord(targ, mapvote_timeout);
  	if(mapvote_count <= 8)
  		WriteByte(targ, MapVote_GetMapMask());
  	else
