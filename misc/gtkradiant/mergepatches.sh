@@ -37,16 +37,16 @@ done
 cat <<EOF
 Index: tools/quake3/q3map2/q3map2.h
 ===================================================================
---- tools/quake3/q3map2/q3map2.h	(revision 290)
+--- tools/quake3/q3map2/q3map2.h	(revision 303)
 +++ tools/quake3/q3map2/q3map2.h	(working copy)
-@@ -34,8 +34,8 @@
+@@ -35,8 +35,8 @@
  
  
  /* version */
--#define Q3MAP_VERSION	"2.5.11"
--#define Q3MAP_MOTD		"A well-oiled toaster oven"
-+#define Q3MAP_VERSION	"2.5.11-div0$pq"
-+#define Q3MAP_MOTD		"Blackhole Box gives the light back"
+-#define Q3MAP_VERSION	"2.5.17"
+-#define Q3MAP_MOTD		"Last one turns the lights off"
++#define Q3MAP_VERSION	"2.5.17-div0$pq"
++#define Q3MAP_MOTD		"Light some candles, put them on a wooden table, take a photo, and paste it on the lightmaps!"
  
  
  
