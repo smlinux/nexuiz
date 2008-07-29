@@ -84,3 +84,16 @@ float WinningConditionHelper_topscore;   ///< highest score
 float WinningConditionHelper_equality;   ///< 1 if and only if the top two have equal scores
 float WinningConditionHelper_winnerteam; ///< the color of the winning team, or -1 if none
 entity WinningConditionHelper_winner;    ///< the winning player, or world if none
+
+/**
+ * Returns score strings for eventlog etc.
+ * When called with world, or 0, as argument, they return the labels in the
+ * same order.
+ * The strings are comma separated; labels that end with !! designate primary,
+ * labels that end with ! designate high priority.
+ * Labels get an appended < if the scores are better if smaller (e.g. deaths).
+ * High priorities always come first.
+ * Example label string: score!!,kills,deaths<,suicides<
+ */
+string GetPlayerScoreString(entity pl);
+string GetTeamScoreString(float tm);

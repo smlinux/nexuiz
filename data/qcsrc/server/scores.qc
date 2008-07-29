@@ -359,3 +359,118 @@ void Score_DebugPrint()
 		}
 	}
 }
+
+string GetScoreLogLabel(string label, float fl)
+{
+	if(fl & SFL_LOWER_IS_BETTER)
+		label = strcat(label, "<");
+	if(fl & SFL_SORT_PRIO_MASK == SFL_SORT_PRIO_PRIMARY)
+		label = strcat(label, "!!");
+	else if(fl & SFL_SORT_PRIO_MASK == SFL_SORT_PRIO_SECONDARY)
+		label = strcat(label, "!");
+	return label;
+}
+
+string GetPlayerScoreString(entity pl)
+{
+	string out;
+	entity sk;
+	float i, f;
+	string l;
+
+	out = "";
+	if(!pl)
+	{
+		// label
+		for(i = 0; i < MAX_SCORE; ++i)
+			if(scores_flags[i] & SFL_SORT_PRIO_MASK == SFL_SORT_PRIO_PRIMARY)
+			{
+				f = scores_flags[i];
+				l = scores_label[i];
+				out = strcat(out, GetScoreLogLabel(l, f), ",");
+			}
+		for(i = 0; i < MAX_SCORE; ++i)
+			if(scores_flags[i] & SFL_SORT_PRIO_MASK == SFL_SORT_PRIO_SECONDARY)
+			{
+				f = scores_flags[i];
+				l = scores_label[i];
+				out = strcat(out, GetScoreLogLabel(l, f), ",");
+			}
+		for(i = 0; i < MAX_SCORE; ++i)
+			if(scores_flags[i] & SFL_SORT_PRIO_MASK != SFL_SORT_PRIO_PRIMARY)
+			if(scores_flags[i] & SFL_SORT_PRIO_MASK != SFL_SORT_PRIO_SECONDARY)
+			{
+				f = scores_flags[i];
+				l = scores_label[i];
+				out = strcat(out, GetScoreLogLabel(l, f), ",");
+			}
+		out = substring(out, 0, strlen(out) - 1);
+	}
+	else if((sk = pl.scorekeeper))
+	{
+		for(i = 0; i < MAX_SCORE; ++i)
+			if(scores_flags[i] & SFL_SORT_PRIO_MASK == SFL_SORT_PRIO_PRIMARY)
+				out = strcat(out, ftos(sk.(scores[i])), ",");
+		for(i = 0; i < MAX_SCORE; ++i)
+			if(scores_flags[i] & SFL_SORT_PRIO_MASK == SFL_SORT_PRIO_SECONDARY)
+				out = strcat(out, ftos(sk.(scores[i])), ",");
+		for(i = 0; i < MAX_SCORE; ++i)
+			if(scores_flags[i] & SFL_SORT_PRIO_MASK != SFL_SORT_PRIO_PRIMARY)
+			if(scores_flags[i] & SFL_SORT_PRIO_MASK != SFL_SORT_PRIO_SECONDARY)
+				out = strcat(out, ftos(sk.(scores[i])), ",");
+		out = substring(out, 0, strlen(out) - 1);
+	}
+	return out;
+}
+
+string GetTeamScoreString(float tm)
+{
+	string out;
+	entity sk;
+	float i, f;
+	string l;
+
+	out = "";
+	if(tm == 0)
+	{
+		// label
+		for(i = 0; i < MAX_SCORE; ++i)
+			if(teamscores_flags[i] & SFL_SORT_PRIO_MASK == SFL_SORT_PRIO_PRIMARY)
+			{
+				f = teamscores_flags[i];
+				l = teamscores_label[i];
+				out = strcat(out, GetScoreLogLabel(l, f), ",");
+			}
+		for(i = 0; i < MAX_SCORE; ++i)
+			if(teamscores_flags[i] & SFL_SORT_PRIO_MASK == SFL_SORT_PRIO_SECONDARY)
+			{
+				f = teamscores_flags[i];
+				l = teamscores_label[i];
+				out = strcat(out, GetScoreLogLabel(l, f), ",");
+			}
+		for(i = 0; i < MAX_SCORE; ++i)
+			if(teamscores_flags[i] & SFL_SORT_PRIO_MASK != SFL_SORT_PRIO_PRIMARY)
+			if(teamscores_flags[i] & SFL_SORT_PRIO_MASK != SFL_SORT_PRIO_SECONDARY)
+			{
+				f = teamscores_flags[i];
+				l = teamscores_label[i];
+				out = strcat(out, GetScoreLogLabel(l, f), ",");
+			}
+		out = substring(out, 0, strlen(out) - 1);
+	}
+	else if((sk = teamscorekeepers[tm - 1]))
+	{
+		for(i = 0; i < MAX_TEAMSCORE; ++i)
+			if(teamscores_flags[i] & SFL_SORT_PRIO_MASK == SFL_SORT_PRIO_PRIMARY)
+				out = strcat(out, ftos(sk.(teamscores[i])), ",");
+		for(i = 0; i < MAX_TEAMSCORE; ++i)
+			if(teamscores_flags[i] & SFL_SORT_PRIO_MASK == SFL_SORT_PRIO_SECONDARY)
+				out = strcat(out, ftos(sk.(teamscores[i])), ",");
+		for(i = 0; i < MAX_TEAMSCORE; ++i)
+			if(teamscores_flags[i] & SFL_SORT_PRIO_MASK != SFL_SORT_PRIO_PRIMARY)
+			if(teamscores_flags[i] & SFL_SORT_PRIO_MASK != SFL_SORT_PRIO_SECONDARY)
+				out = strcat(out, ftos(sk.(teamscores[i])), ",");
+		out = substring(out, 0, strlen(out) - 1);
+	}
+	return out;
+}

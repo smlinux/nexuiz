@@ -936,6 +936,7 @@ void DumpStats(float final)
 	local float to_console;
 	local float to_eventlog;
 	local float to_file;
+	local float i;
 
 	to_console = cvar("sv_logscores_console");
 	to_eventlog = cvar("sv_eventlog");
@@ -974,14 +975,20 @@ void DumpStats(float final)
 			fputs(file, strcat(s, "\n"));
 	}
 
+	s = strcat(":labels:player:", GetPlayerScoreString(world));
+	if(to_console)
+		ServerConsoleEcho(s, TRUE);
+	if(to_eventlog)
+		GameLogEcho(s, TRUE);
+	if(to_file)
+		fputs(file, strcat(s, "\n"));
+
 	FOR_EACH_CLIENT(other)
 	{
 		// FIXME make this use the new score system
-		/*
 		if ((clienttype(other) == CLIENTTYPE_REAL) || (clienttype(other) == CLIENTTYPE_BOT && cvar("sv_logscores_bots")))
 		{
-			s = strcat(":player:", ftos(other.frags), ":");
-			s = strcat(s, ftos(other.deaths), ":");
+			s = strcat(":player:see-labels:", GetPlayerScoreString(other), ":");
 			s = strcat(s, ftos(rint(time - other.jointime)), ":");
 			s = strcat(s, ftos(other.team), ":");
 
@@ -992,25 +999,30 @@ void DumpStats(float final)
 			if(to_file)
 				fputs(file, strcat(s, other.netname, "\n"));
 		}
-		*/
 	}
 
-	/*
-	if(g_ctf)
-	if(cvar("g_ctf_win_mode") != 2)
+	if(teamplay)
 	{
-		s = strcat(":teamscores:", ftos(COLOR_TEAM1), ":");
-		s = strcat(s, ftos(caps_team1), ":");
-		s = strcat(s, ftos(COLOR_TEAM2), ":");
-		s = strcat(s, ftos(caps_team2));
+		s = strcat(":labels:team:", GetTeamScoreString(0));
 		if(to_console)
 			ServerConsoleEcho(s, TRUE);
 		if(to_eventlog)
 			GameLogEcho(s, TRUE);
 		if(to_file)
 			fputs(file, strcat(s, "\n"));
+	
+		for(i = 1; i < 16; ++i)
+		{
+			s = strcat(":team:see-labels:", GetTeamScoreString(i));
+			s = strcat(s, ":", ftos(i));
+			if(to_console)
+				ServerConsoleEcho(s, TRUE);
+			if(to_eventlog)
+				GameLogEcho(s, TRUE);
+			if(to_file)
+				fputs(file, strcat(s, "\n"));
+		}
 	}
-	*/
 
 	if(to_console)
 		ServerConsoleEcho(":end", FALSE);

@@ -40,8 +40,10 @@ ______________
    :ctf:returned:<flagcolor>
    :dom:taken:<previouscolor>:<ID of player>
    :scores:<gametype>_<mapname>:<map runtime>
-   :player:<frags>:<deaths>:<playtime>:<team>:<ID>:<nickname>
-   :teamscores:<team1color>:<team1score>:<team2color>:<team2score>:...
+   :labels:player:<head1><flags>,<head2><flags>,...
+   :player:see-labels:<score1>,<score2>,...:<playtime>:<team>:<ID>:<nickname>
+   :labels:team:<head1><flags>,<head2><flags>,...
+   :teamscores:see-labels:<score1>,<score2>,...:<team>
    :end
    :restart
    :gameover
@@ -69,6 +71,13 @@ team colors:
    14 = Blue Team
    10 = Pink Team
    13 = Yellow Team
+
+label flags:
+   !! = primary sorting key
+   <!! = primary sorting key, lower is better
+   ! = secondary sorting key
+   <! = secondary sorting key, lower is better
+   < = lower is better
 
 itemstring:
    <weaponid><flags>
