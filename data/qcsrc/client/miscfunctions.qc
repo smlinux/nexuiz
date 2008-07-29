@@ -162,6 +162,10 @@ float PreviewExists(string name)
 {
 	float f;
 	string file;
+
+	if(cvar("cl_readpicture_force"))
+		return false;
+
 	file = strcat(name, ".tga");
 	f = fopen(file, FILE_READ);
 	if(f >= 0)
