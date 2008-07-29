@@ -1003,7 +1003,7 @@ void DumpStats(float final)
 
 	if(teamplay)
 	{
-		s = strcat(":labels:team:", GetTeamScoreString(0));
+		s = strcat(":labels:teamscores:", GetTeamScoreString(0));
 		if(to_console)
 			ServerConsoleEcho(s, TRUE);
 		if(to_eventlog)
@@ -1013,7 +1013,7 @@ void DumpStats(float final)
 	
 		for(i = 1; i < 16; ++i)
 		{
-			s = strcat(":team:see-labels:", GetTeamScoreString(i));
+			s = strcat(":teamscores:see-labels:", GetTeamScoreString(i));
 			s = strcat(s, ":", ftos(i));
 			if(to_console)
 				ServerConsoleEcho(s, TRUE);
