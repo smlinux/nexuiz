@@ -139,7 +139,7 @@ void MapVote_Draw()
 	drawstring(pos, "Vote for a map", '24 24 0', '1 1 1', 1, DRAWFLAG_NORMAL);
 	pos_y += 26;
 
-	i = ceil(mv_timeout - time);
+	i = ceil(max(0, mv_timeout - time));
 	map = strcat(ftos(i), " seconds left");
 	pos_x = center - stringwidth(map, false) * 0.5 * 16;
 	drawstring(pos, map, '16 16 0', '0 1 0', 1, DRAWFLAG_NORMAL);

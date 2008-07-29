@@ -3,7 +3,8 @@
 // Revision 2: Mapvote preview pictures
 // Revision 3: optimized map vote protocol
 // Revision 4: CSQC config var system
-#define CSQC_REVISION 4
+// Revision 5: mapvote time fix
+#define CSQC_REVISION 5
 
 // probably put these in common/
 // so server/ and client/ can be synced better
