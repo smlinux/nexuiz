@@ -42,6 +42,7 @@ ______________
    :scores:<gametype>_<mapname>:<map runtime>
    :labels:player:<head1><flags>,<head2><flags>,...
    :player:see-labels:<score1>,<score2>,...:<playtime>:<team>:<ID>:<nickname>
+   :player:see-labels:<score1>,<score2>,...:<playtime>:spectator:<ID>:<nickname>
    :labels:teamscores:<head1><flags>,<head2><flags>,...
    :teamscores:see-labels:<score1>,<score2>,...:<team>
    :end

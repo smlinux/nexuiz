@@ -990,7 +990,10 @@ void DumpStats(float final)
 		{
 			s = strcat(":player:see-labels:", GetPlayerScoreString(other), ":");
 			s = strcat(s, ftos(rint(time - other.jointime)), ":");
-			s = strcat(s, ftos(other.team), ":");
+			if(other.classname == "player")
+				s = strcat(s, ftos(other.team), ":");
+			else
+				s = strcat(s, "spectator:");
 
 			if(to_console)
 				ServerConsoleEcho(strcat(s, other.netname), TRUE);
