@@ -119,7 +119,7 @@ void MapVote_Draw()
 	center = (vid_conwidth - 1)/2;
 	xmin = vid_conwidth*0.05; // 5% border must suffice
 	xmax = vid_conwidth - xmin;
-	ymin = 24;
+	ymin = 20;
 	i = cvar("con_chatpos"); //*cvar("con_chatsize");
 	if(i < 0)
 		ymax = vid_conheight + (i - cvar("con_chat")) * cvar("con_chatsize");
