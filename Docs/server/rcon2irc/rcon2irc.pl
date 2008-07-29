@@ -1097,7 +1097,7 @@ sub irc_joinstage($)
 		return 0;
 	} ],
 
-	# scores: Nexuiz server -> IRC channel
+	# scores: Nexuiz server -> IRC channel, legacy format
 	[ dp => q{:player:(-?\d+):(\d+):(\d+):(\d+):(\d+):(.*)} => sub {
 		my ($frags, $deaths, $time, $team, $id, $name) = @_;
 		return if not exists $store{scores};
@@ -1106,11 +1106,27 @@ sub irc_joinstage($)
 		return 0;
 	} ],
 
-	# scores: Nexuiz server -> IRC channel (CTF)
+	# scores: Nexuiz server -> IRC channel (CTF), legacy format
 	[ dp => q{:teamscores:(\d+:-?\d*(?::\d+:-?\d*)*)} => sub {
 		my ($teams) = @_;
 		return if not exists $store{scores};
 		$store{scores}{teams} = {split /:/, $teams};
+		return 0;
+	} ],
+
+	# scores: Nexuiz server -> IRC channel, new format
+	[ dp => q{:player:see-labels:(\d+)[-0-9,*]:(\d+):(\d+):(\d+):(.*)} => sub {
+		my ($frags, $time, $team, $id, $name) = @_;
+		return if not exists $store{scores};
+		push @{$store{scores}{players}}, [$frags, $team, $name];
+		return 0;
+	} ],
+
+	# scores: Nexuiz server -> IRC channel (CTF), new format
+	[ dp => q{:teamscores:see-labels:(\d+)[-0-9,*]:(\d+)} => sub {
+		my ($frags, $team) = @_;
+		return if not exists $store{scores};
+		$store{scores}{teams}{$team} = $frags;
 		return 0;
 	} ],
 
