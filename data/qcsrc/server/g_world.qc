@@ -1808,7 +1808,7 @@ void MapVote_SendPicture(float id)
 	WriteByte(MSG_ONE, TE_CSQC_MAPVOTE);
 	WriteByte(MSG_ONE, MAPVOTE_NET_PIC);
 	WriteByte(MSG_ONE, id);
-	WritePicture(MSG_ONE, strcat(mapvote_screenshot_dir, "/", mapvote_maps[id]), 1024);
+	WritePicture(MSG_ONE, strcat(mapvote_screenshot_dir, "/", mapvote_maps[id]), 3072);
 }
 
 float GameCommand_MapVote(string cmd)
