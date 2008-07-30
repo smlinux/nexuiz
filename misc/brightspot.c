@@ -1,24 +1,12 @@
 #include <stdio.h>
 #include <math.h>
 
-// USAGE:
-//   for X in *.tga; do convert "$X" -geometry 512x512 -depth 8 GRAY:-; done > /tmp/foo
-//   brightspot /tmp/foo
+// USAGE: see brightspot.sh (and in the future brightspot.bat)
 // It should output the right parameters for the sun direction in q3map2's format.
 // But probably is broken.
 
 #define false 0
 #define true 1
-
-int sides_alphabet[6] =
-{
-	2, // bk
-	5, // dn
-	3, // ft
-	1, // lf
-	0, // rt
-	4  // up
-};
 
 int flip[6*3] =
 {
