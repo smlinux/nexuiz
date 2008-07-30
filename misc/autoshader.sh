@@ -47,8 +47,8 @@ EOF
 
 makeskyshader()
 {
+	coords=`sh "$mydir/brightspot.sh" "$1"`
 	s=`texnormalize "$1"`
-	coords=`sh "$mydir/brightspot.sh" "$s"`
 	case "$coords" in
 		*\ *)
 			;;
