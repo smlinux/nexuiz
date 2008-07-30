@@ -5,6 +5,15 @@ if ! [ -d "textures" ] && ! [ -d "env" ]; then
 	exit 1
 fi
 
+case "$0" in
+	*/*)
+		mydir=${0%/*}
+		;;
+	*)
+		mydir=.
+		;;
+esac
+
 makeshader()
 {
 	s=`texnormalize "$1"`
@@ -39,6 +48,15 @@ EOF
 makeskyshader()
 {
 	s=`texnormalize "$1"`
+	coords=`sh "$mydir/brightspot.sh" "$s"`
+	case "$coords" in
+		*\ *)
+			;;
+		*)
+			coords="-42 -42"
+			echo >&2 "NOTE: brightspot tool did not work"
+			;;
+	esac
 	s=${s%_up}
 	s=${s#env/}
 	dir=${s%%/*}
@@ -53,7 +71,7 @@ textures/$s
 	surfaceparm nolightmap
 	surfaceparm sky
 	surfaceparm nomarks
-	q3map_sunExt .5 .5 .7 42 90 2 16 // red green blue intensity degrees elevation deviance samples
+	q3map_sunExt .5 .5 .7 $coords 2 16 // red green blue intensity degrees elevation deviance samples
 	q3map_surfacelight 150 // intensity
 	skyparms env/$s - -
 }

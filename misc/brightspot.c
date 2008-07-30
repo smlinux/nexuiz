@@ -18,6 +18,41 @@ int flip[6*3] =
 	false, false,  true  // "dn"
 };
 
+static const double skyboxtexcoord2f[6*4*2] =
+{
+    // skyside[0]
+    0, 1,
+    1, 1,
+    1, 0,
+    0, 0,
+    // skyside[1]
+    1, 0,
+    0, 0,
+    0, 1,
+    1, 1,
+    // skyside[2]
+    1, 1,
+    1, 0,
+    0, 0,
+    0, 1,
+    // skyside[3]
+    0, 0,
+    0, 1,
+    1, 1,
+    1, 0,
+    // skyside[4]
+    0, 1,
+    1, 1,
+    1, 0,
+    0, 0,
+    // skyside[5]
+    0, 1,
+    1, 1,
+    1, 0,
+    0, 0
+};
+
+
 static const double skyboxvertex3f[6*4*3] =
 {
         // skyside[0]
@@ -52,12 +87,43 @@ static const double skyboxvertex3f[6*4*3] =
          16,  16, -16
 };
 
-void MapCoord(int pic, int x, int y, double vec[3])
+void Unmap2f(double x, double y, const double *corners, double *u, double *v)
+{
+	// x - corners[0] == *u * (corners[2] - corners[0]) + *v * (corners[4] - corners[2]);
+	// y - corners[1] == *u * (corners[3] - corners[1]) + *v * (corners[5] - corners[3]);
+	
+	double xc0 = x - corners[0];
+	double yc1 = y - corners[1];
+	double c20 = corners[2] - corners[0];
+	double c31 = corners[3] - corners[1];
+	double c42 = corners[4] - corners[2];
+	double c53 = corners[5] - corners[3];
+
+	// xc0 == *u * c20 + *v * c42;
+	// yc1 == *u * c31 + *v * c53;
+
+	double det = c20 * c53 - c31 * c42;
+	double du = xc0 * c53 - yc1 * c42;
+	double dv = c20 * yc1 - c31 * xc0;
+
+	*u = du / det;
+	*v = dv / det;
+}
+
+void Map3f(double u, double v, const double *corners, double *x, double *y, double *z)
+{
+	*x = corners[0] + u * (corners[3] - corners[0]) + v * (corners[6] - corners[3]);
+	*y = corners[1] + u * (corners[4] - corners[1]) + v * (corners[7] - corners[4]);
+	*z = corners[2] + u * (corners[5] - corners[2]) + v * (corners[8] - corners[5]);
+}
+
+void MapCoord(int pic, int y, int x, double vec[3])
 {
 	int h;
 	int flipx = flip[3*pic+0];
 	int flipy = flip[3*pic+1];
 	int flipdiag = flip[3*pic+2];
+	double u, v;
 
 	double a[3] = { skyboxvertex3f[pic*4*3+0*3+0], skyboxvertex3f[pic*4*3+0*3+1], skyboxvertex3f[pic*4*3+0*3+2] };
 	double b[3] = { skyboxvertex3f[pic*4*3+1*3+0], skyboxvertex3f[pic*4*3+1*3+1], skyboxvertex3f[pic*4*3+1*3+2] };
@@ -65,23 +131,18 @@ void MapCoord(int pic, int x, int y, double vec[3])
 	//double d[3] = { skyboxvertex3f[pic*4*3+3*3+0], skyboxvertex3f[pic*4*3+3*3+1], skyboxvertex3f[pic*4*3+3*3+2] };
 
 	if(flipx)
-	{
 		x = 511 - x;
-	}
 
 	if(flipy)
-	{
 		y = 511 - y;
-	}
 
 	if(flipdiag)
 	{
 		h = x; x = y; y = h;
 	}
 
-	vec[0] = a[0] + (b[0] - a[0]) * (x + 0.5) / 512.0 + (c[0] - b[0]) * (y + 0.5) / 512.0;
-	vec[1] = a[1] + (b[1] - a[1]) * (x + 0.5) / 512.0 + (c[1] - b[1]) * (y + 0.5) / 512.0;
-	vec[2] = a[2] + (b[2] - a[2]) * (x + 0.5) / 512.0 + (c[2] - b[2]) * (y + 0.5) / 512.0;
+	Unmap2f((x + 0.5) / 512.0, (y + 0.5) / 512.0, skyboxtexcoord2f + 4*2*pic, &u, &v);
+	Map3f(u, v, skyboxvertex3f + 6*2*pic, &vec[0], &vec[1], &vec[2]);
 }
 
 int main(int argc, char **argv)
@@ -114,13 +175,14 @@ int main(int argc, char **argv)
 			{
 				double vec[3], f;
 				MapCoord(i, j, k, vec);
-				f = exp(10 * (picture[i][j][k] - 255)) / sqrt(vec[0]*vec[0] + vec[1]*vec[1] + vec[2]*vec[2]);
+				f = pow(vec[0]*vec[0] + vec[1]*vec[1] + vec[2]*vec[2], -1.5); // I know what I am doing.
+				f *= exp(10 * (picture[i][j][k] - 255));
 				brightvec[0] += f * vec[0];
 				brightvec[1] += f * vec[1];
 				brightvec[2] += f * vec[2];
 			}
 	
-	pitch = -atan2(brightvec[2], sqrt(brightvec[0]*brightvec[0] + brightvec[1]*brightvec[1]));
+	pitch = atan2(brightvec[2], sqrt(brightvec[0]*brightvec[0] + brightvec[1]*brightvec[1]));
 	yaw = atan2(brightvec[1], brightvec[0]);
 
 	printf("%f %f\n", yaw * 180 / M_PI, pitch * 180 / M_PI);
