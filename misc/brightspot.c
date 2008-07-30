@@ -125,11 +125,6 @@ void MapCoord(int pic, int y, int x, double vec[3])
 	int flipdiag = flip[3*pic+2];
 	double u, v;
 
-	double a[3] = { skyboxvertex3f[pic*4*3+0*3+0], skyboxvertex3f[pic*4*3+0*3+1], skyboxvertex3f[pic*4*3+0*3+2] };
-	double b[3] = { skyboxvertex3f[pic*4*3+1*3+0], skyboxvertex3f[pic*4*3+1*3+1], skyboxvertex3f[pic*4*3+1*3+2] };
-	double c[3] = { skyboxvertex3f[pic*4*3+2*3+0], skyboxvertex3f[pic*4*3+2*3+1], skyboxvertex3f[pic*4*3+2*3+2] };
-	//double d[3] = { skyboxvertex3f[pic*4*3+3*3+0], skyboxvertex3f[pic*4*3+3*3+1], skyboxvertex3f[pic*4*3+3*3+2] };
-
 	if(flipx)
 		x = 511 - x;
 
