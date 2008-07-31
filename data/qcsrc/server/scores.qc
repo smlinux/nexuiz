@@ -183,6 +183,9 @@ void PlayerScore_Clear(entity player)
 		return;
 	if(g_lms)
 		return;
+	if(g_arena)
+		return;
+	//print("clear clear clear... HAHA\n");
 
 	sk = player.scorekeeper;
 	for(i = 0; i < MAX_SCORE; ++i)

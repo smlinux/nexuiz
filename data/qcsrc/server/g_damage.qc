@@ -50,10 +50,6 @@ void GiveFrags (entity attacker, entity targ, float f)
 	// TODO route through PlayerScores instead
 	if(gameover) return;
 
-	if(g_arena)
-		if(cvar("g_arena_roundbased"))
-			return;
-
 	if(f < 0)
 	{
 		if(targ == attacker)
@@ -74,6 +70,10 @@ void GiveFrags (entity attacker, entity targ, float f)
 	}
 
 	PlayerScore_Add(targ, SP_DEATHS, 1);
+
+	if(g_arena)
+		if(cvar("g_arena_roundbased"))
+			return;
 
 	// FIXME fix the mess this is (we have REAL points now!)
 	if(g_runematch)
