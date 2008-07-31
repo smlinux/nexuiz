@@ -532,8 +532,23 @@ string Sbar_GetField(entity pl, float field)
 			else
 				sbar_field_rgb = '1 1 1';
 			if(!tmp)
-				if(f & SFL_HIDE_ZERO)
+				if(f & (SFL_HIDE_ZERO | SFL_RANK))
 					return "";
+			if(f & SFL_RANK)
+			{
+				str = ftos(floor(tmp + 0.5));
+				num = strlen(str);
+				if((num >= 2) && (substring(str, num - 2, 1) == "1"))
+					return strcat(str, "th");
+				else if(substring(str, num - 1, 1) == "1")
+					return strcat(str, "st");
+				else if(substring(str, num - 1, 1) == "2")
+					return strcat(str, "nd");
+				else if(substring(str, num - 1, 1) == "3")
+					return strcat(str, "rd");
+				else
+					return strcat(str, "th");
+			}
 			return ftos(tmp);
 	}
 	//return "error";
