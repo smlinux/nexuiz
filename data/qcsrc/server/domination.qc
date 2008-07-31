@@ -129,7 +129,7 @@ void dompointthink()
 
 	// give credit to the team
 	// NOTE: this defaults to 0
-	if (self.goalentity.netname)
+	if (self.goalentity.netname != "")
 	{
 		fragamt = cvar("g_domination_point_amt");
 		if(!fragamt)
@@ -238,7 +238,8 @@ void spawnfunc_dom_team()
 	self.model = "";
 	self.modelindex = 0;
 	// this would have to be changed if used in quakeworld
-	self.team = self.cnt + 1;
+	if(self.cnt)
+		self.team = self.cnt + 1; // WHY are these different anyway?
 };
 
 void dom_controlpoint_setup()
