@@ -473,7 +473,10 @@ void ReadyCount()
 
 	//reset map immediately if this cvar is not set
 	if (!cvar("sv_ready_restart_after_countdown"))
+	{
 		reset_map();
+		Score_ClearAll();
+	}
 	
 	if(cvar("sv_eventlog"))
 		GameLogEcho(":restart", FALSE);
