@@ -496,8 +496,10 @@ string Sbar_GetField(entity pl, float field)
 	{
 		case SP_PING:
 			if not(pl.gotscores)
-				return "N/A";
+				return "\x8D\x8D\x8D"; // >>> sign
 			str = getplayerkey(pl.sv_entnum, "ping");
+			if(str == "0")
+				return "N/A";
 			tmp = max(0, min(220, stof(str)-80)) / 220;
 			sbar_field_rgb = '1 1 1' - '0 1 1'*tmp;
 			return str;
