@@ -1154,6 +1154,8 @@ float Sbar_WouldDrawScoreboard ()
 		return 1;
 	else if (intermission == 2)
 		return 1;
+	else if (getstati(STAT_HEALTH) <= 0 && cvar("cl_deathscoreboard"))
+		return 1;
 	return 0;
 }
 
