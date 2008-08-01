@@ -124,6 +124,8 @@ void ScoreInfo_SetLabel_TeamScore(float i, string label, float scoreflags)
 void ScoreInfo_Write(float targ)
 {
 	float i;
+	if not(scores_initialized)
+		return;
 	WriteByte(targ, SVC_TEMPENTITY);
 	WriteByte(targ, TE_CSQC_SCORESINFO);
 	WriteByte(targ, game);
@@ -141,6 +143,7 @@ void ScoreInfo_Write(float targ)
 
 void ScoreInfo_Init(float teams)
 {
+	entity pl;
 	scores_initialized = 1;
 	if(teams >= 1)
 		TeamScore_Spawn(COLOR_TEAM1, "Red");
@@ -150,7 +153,8 @@ void ScoreInfo_Init(float teams)
 		TeamScore_Spawn(COLOR_TEAM3, "Yellow");
 	if(teams >= 4)
 		TeamScore_Spawn(COLOR_TEAM4, "Pink");
-	ScoreInfo_Write(MSG_ALL);
+	FOR_EACH_REALCLIENT(msg_entity) // cannot use MSG_ALL here, as that may come too early on level changes (that SUCKS)
+		ScoreInfo_Write(MSG_ONE);
 }
 
 /*
