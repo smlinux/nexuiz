@@ -201,6 +201,9 @@ float Sbar_ComparePlayerScores(entity left, entity right)
 	if(vl < vr)
 		return false;
 
+	if(vl == COLOR_SPECTATOR)
+		return false; // sorting spectators is pointless, do not do it
+
 	vl = left.scores[ps_primary];
 	vr = right.scores[ps_primary];
 	if(vl > vr)
