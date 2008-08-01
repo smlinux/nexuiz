@@ -55,6 +55,7 @@ void CSQC_Init(void)
 	menu_show = menu_show_error;
 	menu_action = menu_sub_null;
 	using_gps = false;
+	maxclients = 255; // we later get the real maxclients to speed up stuff
 	//ctf_temp_1 = "";
 	// localcmd("alias order \"cmd order $*\""); enable if ctf-command thingy is used
 	//registercmd("ctf_menu");
@@ -95,7 +96,6 @@ void CSQC_Shutdown(void)
 	remove(teams);
 	remove(players);
 	db_close(configdb);
-	buf_del(databuf);
 }
 
 .float has_team;
@@ -180,12 +180,6 @@ void PostInit(void)
 	float i;
 
 	print(strcat("PostInit\n    maxclients = ", ftos(maxclients), "\n"));
-	databuf = buf_create();
-	for(i = 0; i < maxclients; ++i)
-	{
-		bufstr_set(databuf, DATABUF_PING + i, "N/A");
-	}
-	
 	localcmd(strcat("\nsbar_columns_set ", cvar_string("sbar_columns"), ";\n"));
 
 	entity playerchecker;
@@ -522,16 +516,6 @@ void Net_ReadInit()
 	CSQC_CheckRevision();
 }
 
-void Net_ReadPings()
-{
-	float plnum, ping;
-	for(plnum = ReadByte(); plnum != 0; plnum = ReadByte())
-	{
-		ping = ReadShort();
-		bufstr_set(databuf, DATABUF_PING + plnum-1, ftos(ping));
-	}
-}
-
 string Net_ReadPicture()
 {
 	string img;
@@ -578,10 +562,6 @@ float CSQC_Parse_TempEntity()
 	{
 		case TE_CSQC_INIT:
 			Net_ReadInit();
-			bHandled = true;
-			break;
-		case TE_CSQC_PING:
-			Net_ReadPings();
 			bHandled = true;
 			break;
 		case TE_CSQC_MAPVOTE:

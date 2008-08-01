@@ -302,7 +302,7 @@ void Cmd_Sbar_Help(float argc)
 
 string Sbar_DefaultColumnLayout()
 {
-	return "ping name | -ctf,kh/kills -ctf,kh/deaths +lms/lives +lms/rank +kh,ctf/caps +kh/pushes +kh/destroyed -lms/score";
+	return "ping pl name | -ctf,kh/kills -ctf,kh/deaths +lms/lives +lms/rank +kh,ctf/caps +kh/pushes +kh/destroyed -lms/score";
 }
 
 void Cmd_Sbar_SetFields(float argc)
@@ -384,6 +384,8 @@ void Cmd_Sbar_SetFields(float argc)
 
 		if(str == "ping") {
 			sbar_field[sbar_num_fields] = SP_PING;
+		} else if(str == "pl") {
+			sbar_field[sbar_num_fields] = SP_PL;
 		} else if(str == "name" || str == "nick") {
 			sbar_field[sbar_num_fields] = SP_NAME;
 			sbar_size[sbar_num_fields] = MIN_NAMELEN; // minimum size? any use?
@@ -493,14 +495,24 @@ string Sbar_GetField(entity pl, float field)
 	switch(field)
 	{
 		case SP_PING:
-			str = bufstr_get(databuf, DATABUF_PING + pl.sv_entnum);
+			if not(pl.gotscores)
+				return "N/A";
+			str = getplayerkey(pl.sv_entnum, "ping");
 			tmp = max(0, min(220, stof(str)-80)) / 220;
 			sbar_field_rgb = '1 1 1' - '0 1 1'*tmp;
 			return str;
 		
-		case SP_NAME:
+		case SP_PL:
 			if not(pl.gotscores)
-				return strcat(getplayerkey(pl.sv_entnum, "name"), " ^7(connecting)");
+				return "N/A";
+			str = getplayerkey(pl.sv_entnum, "pl");
+			if(str == "0")
+				return "";
+			tmp = bound(0, stof(str), 20) / 20; // 20% is REALLY BAD pl
+			sbar_field_rgb = '1 0.5 0.5' - '0 0.5 0.5'*tmp;
+			return str;
+		
+		case SP_NAME:
 			return getplayerkey(pl.sv_entnum, "name");
 
 		case SP_KDRATIO:
@@ -692,6 +704,7 @@ void Sbar_PrintScoreboardItem(vector pos, entity pl, float is_self)
 	}
 }
 
+float lastpingstime;
 void Sbar_DrawScoreboard()
 {
 	//float xmin, ymin, xmax, ymax;
@@ -699,6 +712,12 @@ void Sbar_DrawScoreboard()
 	entity pl, tm;
 	float specs, i;
 	float center_x;
+
+	if(time > lastpingstime + 10)
+	{
+		localcmd("pings\n");
+		lastpingstime = time;
+	}
 
 	sbar_fontsize = Sbar_GetFontsize();
 	if(sbar_fontsize_x == 0)

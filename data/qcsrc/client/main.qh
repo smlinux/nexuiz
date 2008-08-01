@@ -73,6 +73,7 @@ const float COLOR_SPECTATOR = 1337;
 #define SP_NAME -3
 #define SP_KDRATIO -4
 #define SP_CLRATIO -5
+#define SP_PL -6
 
 #define SP_SEPARATOR -100
 
