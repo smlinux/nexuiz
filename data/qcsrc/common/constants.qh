@@ -5,7 +5,7 @@
 // Revision 4: CSQC config var system
 // Revision 5: mapvote time fix
 // Revision 6: more robust against packet loss/delays, also show not yet connected clients
-#define CSQC_REVISION 5
+#define CSQC_REVISION 6
 
 // probably put these in common/
 // so server/ and client/ can be synced better
