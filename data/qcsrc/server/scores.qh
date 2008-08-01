@@ -51,12 +51,6 @@ void PlayerTeamScore_Add(entity player, float pscorefield, float tscorefield, fl
 #define PlayerTeamScore_AddScore(p,s) PlayerTeamScore_Add(p, SP_SCORE, ST_SCORE, s)
 
 /**
- * Initialize the scores info for the given number of teams.
- * Immediately set all labels afterwards.
- */
-void ScoreInfo_Init(float teams);
-
-/**
  * Set the label of a team score item, as well as the scoring flags.
  */
 void ScoreInfo_SetLabel_TeamScore(float i, string label, float scoreflags);
@@ -65,6 +59,18 @@ void ScoreInfo_SetLabel_TeamScore(float i, string label, float scoreflags);
  * Set the label of a player score item, as well as the scoring flags.
  */
 void ScoreInfo_SetLabel_PlayerScore(float i, string label, float scoreflags);
+
+/**
+ * Initialize the scores info for the given number of teams.
+ * Set all labels right before this call.
+ */
+void ScoreInfo_Init(float teams);
+
+/**
+ * Writes the scores info to the given stream. Use this in ClientConnect to
+ * notify newly connecting players.
+ */
+void ScoreInfo_Write(float targ);
 
 /**
  * Clear ALL scores (for ready-restart).

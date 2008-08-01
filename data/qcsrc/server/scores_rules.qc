@@ -3,9 +3,10 @@ void CheckAllowedTeams (entity for_whom);
 
 // NOTE: SP_ constants may not be >= MAX_SCORE; ST_constants may not be >= MAX_TEAMSCORE
 // scores that should be in all modes:
+float ScoreRules_teams;
 void ScoreRules_basics(float teams, float sprio)
 {
-	ScoreInfo_Init(teams);
+	ScoreRules_teams = teams;
 	if(sprio)
 		ScoreInfo_SetLabel_TeamScore  (ST_SCORE,        "score",     sprio);
 	ScoreInfo_SetLabel_PlayerScore(SP_KILLS,        "kills",     0);
@@ -13,6 +14,10 @@ void ScoreRules_basics(float teams, float sprio)
 	ScoreInfo_SetLabel_PlayerScore(SP_SUICIDES,     "suicides",  SFL_LOWER_IS_BETTER);
 	if(sprio)
 		ScoreInfo_SetLabel_PlayerScore(SP_SCORE,        "score",     sprio);
+}
+void ScoreRules_basics_end()
+{
+	ScoreInfo_Init(ScoreRules_teams);
 }
 void ScoreRules_generic()
 {
@@ -24,6 +29,7 @@ void ScoreRules_generic()
 	}
 	else
 		ScoreRules_basics(0, SFL_SORT_PRIO_PRIMARY);
+	ScoreRules_basics_end();
 }
 
 // g_ctf
@@ -59,6 +65,7 @@ void ScoreRules_ctf()
 	ScoreInfo_SetLabel_PlayerScore(SP_CTF_PICKUPS,  "pickups",   0);
 	ScoreInfo_SetLabel_PlayerScore(SP_CTF_FCKILLS,  "fckills",   0);
 	ScoreInfo_SetLabel_PlayerScore(SP_CTF_RETURNS,  "returns",   0);
+	ScoreRules_basics_end();
 }
 
 // g_domination
@@ -78,6 +85,7 @@ void ScoreRules_dom()
 	ScoreInfo_SetLabel_TeamScore  (ST_DOM_TICKS,    "ticks",     sp_domticks);
 	ScoreInfo_SetLabel_PlayerScore(SP_DOM_TICKS,    "ticks",     sp_domticks);
 	ScoreInfo_SetLabel_PlayerScore(SP_DOM_TAKES,    "takes",     0);
+	ScoreRules_basics_end();
 }
 
 // LMS stuff
@@ -88,6 +96,7 @@ void ScoreRules_lms()
 	ScoreRules_basics(0, 0);
 	ScoreInfo_SetLabel_PlayerScore(SP_LMS_LIVES,    "lives",     SFL_SORT_PRIO_SECONDARY);
 	ScoreInfo_SetLabel_PlayerScore(SP_LMS_RANK,     "rank",      SFL_LOWER_IS_BETTER | SFL_RANK | SFL_SORT_PRIO_PRIMARY | SFL_ALLOW_HIDE);
+	ScoreRules_basics_end();
 }
 
 // Key hunt stuff
@@ -108,4 +117,5 @@ void ScoreRules_kh(float teams)
 	ScoreInfo_SetLabel_PlayerScore(SP_KH_PICKUPS,   "pickups",   0);
 	ScoreInfo_SetLabel_PlayerScore(SP_KH_KCKILLS,   "kckills",   0);
 	ScoreInfo_SetLabel_PlayerScore(SP_KH_LOSSES,    "losses",    SFL_LOWER_IS_BETTER);
+	ScoreRules_basics_end();
 }

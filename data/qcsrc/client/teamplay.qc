@@ -16,7 +16,9 @@ float TeamByColor(float color)
 
 float GetPlayerColor(float i)
 {
-	if(getplayerkey(i, "frags") == "-666")
+	if not(playerslots[i].gotscores) // unconnected
+		return COLOR_SPECTATOR;
+	else if(getplayerkey(i, "frags") == "-666")
 		return COLOR_SPECTATOR;
 	else if(!teamplay)
 		return 0;

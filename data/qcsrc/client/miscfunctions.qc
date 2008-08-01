@@ -9,7 +9,7 @@ float RegisterPlayer(entity player)
 	entity pl;
 	for(pl = players.sort_next; pl; pl = pl.sort_next)
 		if(pl == player)
-			return false;
+			error("Player already registered!");
 	player.sort_next = players.sort_next;
 	player.sort_prev = players;
 	if(players.sort_next)
@@ -35,19 +35,6 @@ void RemovePlayer(entity player)
 		player.sort_next.sort_prev = parent;
 }
 
-entity AddTeam(float num)
-{
-	entity tm;
-	tm = spawn();
-	tm.team = num;
-	tm.sort_next = teams.sort_next;
-	tm.sort_prev = teams;
-	if(teams.sort_next)
-		teams.sort_next.sort_prev = tm;
-	teams.sort_next = tm;
-	return tm;
-}
-
 void MoveToLast(entity e)
 {
 	other = e.sort_next;
@@ -65,7 +52,7 @@ float RegisterTeam(entity Team)
 	entity tm;
 	for(tm = teams.sort_next; tm; tm = tm.sort_next)
 		if(tm == Team)
-			return false;
+			error("Team already registered!");
 	Team.sort_next = teams.sort_next;
 	Team.sort_prev = teams;
 	if(teams.sort_next)
@@ -91,19 +78,20 @@ void RemoveTeam(entity Team)
 		Team.sort_next.sort_prev = parent;
 }
 
-entity GetTeam(float num, float add)
+entity GetTeam(float Team, float add)
 {
+	float num;
 	entity tm;
-	for(tm = teams.sort_next; tm; tm = tm.sort_next)
-	{
-		if(tm.team == num)
-			return tm;
-	}
-	
-	if(add)
-		return AddTeam(num);
-	
-	return NULL;
+	num = (Team == COLOR_SPECTATOR) ? 16 : Team;
+	if(teamslots[num])
+		return teamslots[num];
+	if not(add)
+		return NULL;
+	tm = spawn();
+	tm.team = Team;
+	teamslots[num] = tm;
+	RegisterTeam(tm);
+	return tm;
 }
 
 float stringwidth_oldfont(string text, float handleColors)

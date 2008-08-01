@@ -101,3 +101,8 @@ float csqc_flags;
 #define CSQC_FLAG_READPICTURE 1
 
 string config_get(string key, string defaultvalue);
+
+entity playerslots[255]; // 255 is engine limit on maxclients
+entity teamslots[17];    // 17 teams (including "spectator team")
+.float gotscores;
+.entity owner;

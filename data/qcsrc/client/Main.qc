@@ -79,7 +79,7 @@ void CSQC_Init(void)
 	teams = Sort_Spawn();
 	players = Sort_Spawn();
 	
-	teamspec = AddTeam(COLOR_SPECTATOR); // add specs first
+	GetTeam(COLOR_SPECTATOR, true); // add specs first
 }
 
 // CSQC_Shutdown : Called every time the CSQC code is shutdown (changing maps, quitting, etc)
@@ -98,6 +98,83 @@ void CSQC_Shutdown(void)
 	buf_del(databuf);
 }
 
+.float has_team;
+float SetTeam(entity o, float Team)
+{
+	entity tm;
+	if(Team == -1) // leave
+	{
+		if(o.has_team)
+		{
+			//print("(DISCONNECT) leave team ", ftos(o.team), "\n");
+			tm = GetTeam(o.team, false);
+			tm.team_size -= 1;
+			o.has_team = 0;
+			return TRUE;
+		}
+	}
+	else
+	{
+		if not(o.has_team)
+		{
+			//print("(CONNECT) enter team ", ftos(o.team), "\n");
+			o.team = Team;
+			tm = GetTeam(Team, true);
+			tm.team_size += 1;
+			o.has_team = 1;
+			return TRUE;
+		}
+		else if(Team != o.team)
+		{
+			//print("(CHANGE) leave team ", ftos(o.team), "\n");
+			tm = GetTeam(o.team, false);
+			tm.team_size -= 1;
+			o.team = Team;
+			//print("(CHANGE) enter team ", ftos(o.team), "\n");
+			tm = GetTeam(Team, true);
+			tm.team_size += 1;
+			return TRUE;
+		}
+	}
+	return FALSE;
+}
+
+void Playerchecker_Think()
+{
+	entity pl;
+	float i;
+	for(i = 0; i < maxclients; ++i)
+	{
+		if(getplayerkey(i, "name") == "")
+		{
+			if(playerslots[i].sort_prev)
+			{
+				//print("playerchecker: KILL KILL KILL\n");
+				// player disconnected
+				SetTeam(playerslots[i], -1);
+				RemovePlayer(playerslots[i]);
+				playerslots[i].sort_prev = world;
+				playerslots[i].gotscores = 0;
+			}
+		}
+		else
+		{
+			if not(playerslots[i].sort_prev)
+			{
+				//print("playerchecker: SPAWN SPAWN SPAWN\n");
+				// player connected
+				if not(playerslots[i])
+					playerslots[i] = spawn();
+				playerslots[i].sv_entnum = i;
+				playerslots[i].gotscores = 0;
+				SetTeam(playerslots[i], COLOR_SPECTATOR);
+				RegisterPlayer(playerslots[i]);
+			}
+		}
+	}
+	self.nextthink = time + 0.2;
+}
+
 void PostInit(void)
 {
 	float i;
@@ -107,12 +184,14 @@ void PostInit(void)
 	for(i = 0; i < maxclients; ++i)
 	{
 		bufstr_set(databuf, DATABUF_PING + i, "N/A");
-		bufstr_set(databuf, DATABUF_DEATHS + i, "0");
-		bufstr_set(databuf, DATABUF_CAPTURES + i, "0");
-		bufstr_set(databuf, DATABUF_RETURNS + i, "0");
 	}
 	
 	localcmd(strcat("\nsbar_columns_set ", cvar_string("sbar_columns"), ";\n"));
+
+	entity playerchecker;
+	playerchecker = spawn();
+	playerchecker.think = Playerchecker_Think;
+	playerchecker.nextthink = time + 0.2;
 
 	postinit = true;
 }
@@ -230,70 +309,45 @@ void Ent_RemoveONS()
 	}
 }
 
-void Gamemode_Init();
-void Ent_ReadScoresInfo()
-{
-	float i;
-	gametype = ReadByte();
-	for(i = 0; i < MAX_SCORE; ++i)
-	{
-		scores_label[i] = strzone(ReadString());
-		scores_flags[i] = ReadByte();
-	}
-	for(i = 0; i < MAX_TEAMSCORE; ++i)
-	{
-		teamscores_label[i] = strzone(ReadString());
-		teamscores_flags[i] = ReadByte();
-	}
-	Sbar_InitScores();
-	Gamemode_Init();
-}
-
 void Ent_ReadPlayerScore(float isNew)
 {
 	float i, Team;
-	entity tm;
+	entity tm, o;
 
 	// damnit -.- don't want to go change every single .sv_entnum in sbar.qc AGAIN
 	// (no I've never heard of M-x replace-string, sed, or anything like that)
+	isNew = !self.owner; // workaround for DP bug
 	self.sv_entnum = ReadByte()-1;
 	Team = GetPlayerColor(self.sv_entnum);
 
-	if(isNew)
-		RegisterPlayer(self);
+	if not(playerslots[self.sv_entnum])
+		playerslots[self.sv_entnum] = spawn();
+	o = self.owner = playerslots[self.sv_entnum];
+	o.sv_entnum = self.sv_entnum;
+	o.gotscores = 1;
+	if not(o.sort_prev)
+		RegisterPlayer(o);
 
-	if(isNew || Team != self.team)
-	{
-		if(!isNew)
-		{
-			tm = GetTeam(self.team, false);
-			tm.team_size -= 1;
-		}
-		
-		self.team = Team;
-		tm = GetTeam(Team, true);
-		tm.team_size += 1;
-	}
+	SetTeam(o, Team);
 
 	for(i = 0; i < MAX_SCORE; ++i)
-		self.(scores[i]) = ReadShort();
+		o.(scores[i]) = ReadShort();
 
-	Sbar_UpdatePlayerPos(self);
+	Sbar_UpdatePlayerPos(o);
 }
 
 void Ent_ReadTeamScore(float isNew)
 {
 	float i;
+	entity o;
 	
 	self.team = ReadByte();
-
-	if(isNew)
-		RegisterTeam(self);
+	o = self.owner = GetTeam(self.team, true);
 
 	for(i = 0; i < MAX_TEAMSCORE; ++i)
-		self.(teamscores[i]) = ReadShort();
+		o.(teamscores[i]) = ReadShort();
 
-	Sbar_UpdateTeamPos(self);
+	Sbar_UpdateTeamPos(o);
 }
 
 // CSQC_Ent_Update : Called every frame that the server has indicated an update to the SSQC / CSQC entity has occured.
@@ -317,8 +371,6 @@ void(float bIsNewEntity) CSQC_Ent_Update =
 			}
 		}
 	}
-	else if(self.enttype == ENT_CLIENT_SCORES_INFO)
-		Ent_ReadScoresInfo();
 	else if(self.enttype == ENT_CLIENT_SCORES)
 		Ent_ReadPlayerScore(bIsNewEntity);
 	else if(self.enttype == ENT_CLIENT_TEAMSCORES)
@@ -347,20 +399,23 @@ void CSQC_Ent_Remove()
 					ent.chain = self.chain;
 			}
 		}
-	} else if(self.enttype == ENT_CLIENT_SCORES_INFO)
-	{
-		// OH NOES!! WE LOST DA SCORES INFO ENTITY
-		print("The world is going to explode.");
-		// kkthxbai
 	} else if(self.enttype == ENT_CLIENT_SCORES)
 	{
 		entity tm;
-		tm = GetTeam(self.team, false);
-		tm.team_size -= 1;
-		RemovePlayer(self);
+		if(self.owner)
+		{
+			SetTeam(self.owner, -1);
+			RemovePlayer(self.owner);
+			self.owner.sort_prev = NULL;
+		}
 	} else if(self.enttype == ENT_CLIENT_TEAMSCORES)
 	{
-		RemoveTeam(self);
+		/*
+		if(self.owner)
+			RemoveTeam(self.owner);
+		*/
+		// we don't NEED to remove them... they won't display anyway
+		// plus, svqc never does this anyway
 	}
 	remove(self);
 }
@@ -440,6 +495,25 @@ void CSQC_Parse_CenterPrint(string strMessage)
 
 void CSQC_CheckRevision();
 
+void Gamemode_Init();
+void Net_ReadScoresInfo()
+{
+	float i;
+	gametype = ReadByte();
+	for(i = 0; i < MAX_SCORE; ++i)
+	{
+		scores_label[i] = strzone(ReadString());
+		scores_flags[i] = ReadByte();
+	}
+	for(i = 0; i < MAX_TEAMSCORE; ++i)
+	{
+		teamscores_label[i] = strzone(ReadString());
+		teamscores_flags[i] = ReadByte();
+	}
+	Sbar_InitScores();
+	Gamemode_Init();
+}
+
 void Net_ReadInit()
 {
 	csqc_revision = ReadShort();
@@ -455,29 +529,6 @@ void Net_ReadPings()
 	{
 		ping = ReadShort();
 		bufstr_set(databuf, DATABUF_PING + plnum-1, ftos(ping));
-	}
-}
-
-void Net_ReadCaptures()
-{
-	float plnum, caps, mode;
-	mode = ReadByte();
-	caps_team1 = ReadByte();
-	caps_team2 = ReadByte();
-	for(plnum = ReadByte(); plnum != 0; plnum = ReadByte())
-	{
-		caps = ReadByte();
-		bufstr_set(databuf, DATABUF_CAPTURES + plnum-1, ftos(caps));
-	}
-}
-
-void Net_ReadDatabuf(float ofs)
-{
-	float plnum, data;
-	for(plnum = ReadByte(); plnum != 0; plnum = ReadByte())
-	{
-		data = ReadByte();
-		bufstr_set(databuf, ofs + plnum-1, ftos(data));
 	}
 }
 
@@ -533,24 +584,16 @@ float CSQC_Parse_TempEntity()
 			Net_ReadPings();
 			bHandled = true;
 			break;
-		case TE_CSQC_CAPTURES:
-			Net_ReadCaptures();
-			bHandled = true;
-			break;
-		case TE_CSQC_RETURNS:
-			Net_ReadDatabuf(DATABUF_RETURNS);
-			bHandled = true;
-			break;
-		case TE_CSQC_DEATHS:
-			Net_ReadDatabuf(DATABUF_DEATHS);
-			bHandled = true;
-			break;
 		case TE_CSQC_MAPVOTE:
 			Net_Mapvote();
 			bHandled = true;
 			break;
 		case TE_CSQC_CONFIG:
 			Net_Config();
+			bHandled = true;
+			break;
+		case TE_CSQC_SCORESINFO:
+			Net_ReadScoresInfo();
 			bHandled = true;
 			break;
 		default:

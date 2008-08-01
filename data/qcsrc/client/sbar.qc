@@ -20,8 +20,6 @@ entity sortedTeams;
 float ps_primary, ps_secondary;
 float ts_primary, ts_secondary;
 
-entity team1, team2, team3, team4, teamspec;
-
 void CSQC_kh_hud();
 void CSQC_ctf_hud();
 void MapVote_Draw();
@@ -162,6 +160,8 @@ void Sbar_InitScores()
 }
 
 void Sbar_UpdatePlayerPos(entity pl);
+float SetTeam(entity pl, float Team);
+//float lastpnum;
 void Sbar_UpdatePlayerTeams()
 {
 	float Team;
@@ -173,15 +173,8 @@ void Sbar_UpdatePlayerTeams()
 	{
 		num += 1;
 		Team = GetPlayerColor(pl.sv_entnum);
-		if(pl.team != Team)
+		if(SetTeam(pl, Team))
 		{
-			tmp = GetTeam(pl.team, false);
-			tmp.team_size -= 1;
-			tmp = GetTeam(Team, true);
-			tmp.team_size += 1;
-			
-			pl.team = Team;
-
 			tmp = pl.sort_prev;
 			Sbar_UpdatePlayerPos(pl);
 			if(tmp)
@@ -190,7 +183,11 @@ void Sbar_UpdatePlayerTeams()
 				pl = players.sort_next;
 		}
 	}
-	//print(strcat("PNUM: ", ftos(num), "\n"));
+	/*
+	if(num != lastpnum)
+		print(strcat("PNUM: ", ftos(num), "\n"));
+	lastpnum = num;
+	*/
 }
 
 float Sbar_ComparePlayerScores(entity left, entity right)
@@ -502,6 +499,8 @@ string Sbar_GetField(entity pl, float field)
 			return str;
 		
 		case SP_NAME:
+			if not(pl.gotscores)
+				return strcat(getplayerkey(pl.sv_entnum, "name"), " ^7(connecting)");
 			return getplayerkey(pl.sv_entnum, "name");
 
 		case SP_KDRATIO:

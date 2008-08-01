@@ -1138,6 +1138,7 @@ void ClientConnect (void)
 			MapVote_SendData(MSG_ONE);
 			MapVote_UpdateData(MSG_ONE);
 		}
+		ScoreInfo_Write(MSG_ONE);
 	}
 
 	if(g_lms)
