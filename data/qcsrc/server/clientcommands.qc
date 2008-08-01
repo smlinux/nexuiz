@@ -282,17 +282,21 @@ void SV_ParseClientCommand(string s) {
 			}
 		}
 	} else if(argv(0) == "maplist") {
-		local float n;
+		local float n, j;
 		local string col;
 		n = tokenize(cvar_string("g_maplist"));
 		sprint(self, "^7Maps in list: ");
-		for(i = 0; i < n; ++i)
+		for(i = 0, j = 0; i < n; ++i)
 		{
-			if(mod(i, 2))
-				col = "^2";
-			else
-				col = "^3";
-			sprint(self, strcat(col, argv(i), " "));
+			if(MapInfo_CheckMap(argv(i)))
+			{
+				if(mod(j, 2))
+					col = "^2";
+				else
+					col = "^3";
+				sprint(self, strcat(col, argv(i), " "));
+				++j;
+			}
 		}
 		sprint(self, "\n");
 #ifdef MAPINFO
