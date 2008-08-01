@@ -169,6 +169,7 @@ void Playerchecker_Think()
 				playerslots[i].gotscores = 0;
 				SetTeam(playerslots[i], COLOR_SPECTATOR);
 				RegisterPlayer(playerslots[i]);
+				Sbar_UpdatePlayerPos(playerslots[i]);
 			}
 		}
 	}

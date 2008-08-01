@@ -202,7 +202,13 @@ float Sbar_ComparePlayerScores(entity left, entity right)
 		return false;
 
 	if(vl == COLOR_SPECTATOR)
-		return false; // sorting spectators is pointless, do not do it
+	{
+		// FIRST the one with scores (spectators), THEN the ones without (downloaders)
+		// no other sorting
+		if(!left.gotscores && right.gotscores)
+			return true;
+		return false;
+	}
 
 	vl = left.scores[ps_primary];
 	vr = right.scores[ps_primary];
