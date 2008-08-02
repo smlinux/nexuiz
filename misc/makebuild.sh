@@ -33,7 +33,7 @@ case "$version" in
 		;;
 esac
 
-basepk3=$base/data20080229.pk3
+basepk3=$base/data20080229.pk3 # 2.4
 hotbasepk3=
 nexdir=$base/nexuiz
 nexprodir=$base/nexuiz/pro
@@ -202,11 +202,8 @@ cd "$fteqccdir"
 rm -f *.o *.bin
 make
 
-cd "$tmpdir/data/qcsrc/$menuqc"
-"$fteqccdir/fteqcc.bin" $fteqccflags
-
-cd "$tmpdir/data/qcsrc/server"
-"$fteqccdir/fteqcc.bin" $fteqccflags
+cd "$tmpdir/data"
+make FTEQCC="$fteqccdir/fteqcc.bin"
 
 rm -rf "$tmpdir/data/qcsrc"
 
