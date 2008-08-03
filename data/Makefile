@@ -3,7 +3,7 @@ PERL ?= perl
 PK3NAME ?= `date +../data%Y%m%d.pk3`
 ZIP ?= 7za a -tzip -mx=9
 
-FTEQCCFLAGS ?= -Wall -Wno-mundane -O3 -flo
+FTEQCCFLAGS ?= -Wall -Wno-mundane -O3 -Ono-c -Ono-cs -flo
 FTEQCCFLAGS_PROGS ?= 
 FTEQCCFLAGS_MENU ?= 
 
