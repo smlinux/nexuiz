@@ -395,6 +395,8 @@ void Cmd_Sbar_SetFields(float argc)
 			sbar_field[sbar_num_fields] = SP_PING;
 		} else if(str == "pl") {
 			sbar_field[sbar_num_fields] = SP_PL;
+		} else if(str == "kd" || str == "kdr" || str == "kdratio" || str == "k/d") {
+			sbar_field[sbar_num_fields] = SP_KDRATIO;
 		} else if(str == "name" || str == "nick") {
 			sbar_field[sbar_num_fields] = SP_NAME;
 			sbar_size[sbar_num_fields] = MIN_NAMELEN; // minimum size? any use?
