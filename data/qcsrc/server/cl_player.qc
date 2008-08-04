@@ -413,13 +413,13 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 					// exclude pain sounds for laserjumps as long as you aren't REALLY low on health and would die of the next two
 					{
 						if(self.health > 75) // TODO make a "gentle" version?
-							PlayerSound(playersound_pain100, 0);
+							PlayerSound(playersound_pain100, CHAN_AUTO, 0);
 						else if(self.health > 50)
-							PlayerSound(playersound_pain75, 0);
+							PlayerSound(playersound_pain75, CHAN_AUTO, 0);
 						else if(self.health > 25)
-							PlayerSound(playersound_pain50, 0);
+							PlayerSound(playersound_pain50, CHAN_AUTO, 0);
 						else if(self.health > 1)
-							PlayerSound(playersound_pain25, 0);
+							PlayerSound(playersound_pain25, CHAN_AUTO, 0);
 					}
 				}
 
@@ -464,9 +464,9 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 		if(sv_gentle < 1) // TODO make a "gentle" version?
 		{
 			if(deathtype == DEATH_DROWN)
-				PlayerSound(playersound_drown, 0);
+				PlayerSound(playersound_drown, CHAN_AUTO, 0);
 			else
-				PlayerSound(playersound_death, 0);
+				PlayerSound(playersound_death, CHAN_AUTO, 0);
 		}
 
 		// get rid of kill indicator
@@ -867,7 +867,7 @@ void UpdatePlayerSounds()
 	LoadPlayerSounds(strcat(self.model, ".sounds"));
 }
 
-void PlayerSound(.string samplefield, float teamsay)
+void PlayerSound(.string samplefield, float chan, float teamsay)
 {
 	// TODO precache voice messages?
 	float n;
@@ -890,21 +890,21 @@ void PlayerSound(.string samplefield, float teamsay)
 			if(self.pusher)
 				if(self.pusher.team == self.team)
 				{
-					soundto(self, self.pusher, CHAN_BODY, sample, 1, ATTN_NONE);
-					soundto(self, self, CHAN_BODY, sample, 1, ATTN_NONE);
+					soundto(self, self.pusher, chan, sample, 1, ATTN_NONE);
+					soundto(self, self, chan, sample, 1, ATTN_NONE);
 				}
 	}
 	else if(teamsay == 0) // to everyone
 	{
 		// broadcast the sound, but it's directional
-		sound(self, CHAN_BODY, sample, 1, ATTN_NORM);
+		sound(self, chan, sample, 1, ATTN_NORM);
 	}
 	else if(teamsay == 1) // to the same team
 	{
 		entity e;
 		FOR_EACH_REALCLIENT(e)
 			if(!teams_matter || e.team == self.team)
-				soundto(self, e, CHAN_BODY, sample, 1, ATTN_NONE);
+				soundto(self, e, chan, sample, 1, ATTN_NONE);
 	}
 }
 
@@ -922,5 +922,5 @@ void VoiceMessage(string type)
 
 	teamsay = GetVoiceMessageTeamsayType(type);
 
-	PlayerSound(sample, teamsay);
+	PlayerSound(sample, CHAN_VOICE, teamsay);
 }

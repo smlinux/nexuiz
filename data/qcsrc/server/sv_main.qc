@@ -25,7 +25,7 @@ void CreatureFrame (void)
 				if (self.waterlevel != 3)
 				{
 					if(self.air_finished < time + 9)
-						PlayerSound(playersound_gasp, 0);
+						PlayerSound(playersound_gasp, CHAN_AUTO, 0);
 					self.air_finished = time + 12;
 					self.dmg = 2;
 				}

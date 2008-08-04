@@ -470,5 +470,5 @@ float next_pingtime;
 void PrecachePlayerSounds(string f);
 void LoadPlayerSounds(string f);
 void UpdatePlayerSounds();
-void PlayerSound(.string samplefield, float teamsay); // 0 is normal, 1 is team, 2 is last attacker
+void PlayerSound(.string samplefield, float channel, float teamsay); // 0 is normal, 1 is team, 2 is last attacker
 void VoiceMessage(string type);
