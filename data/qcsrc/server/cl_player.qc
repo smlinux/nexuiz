@@ -409,14 +409,18 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 					else
 						player_setanim(self.anim_pain2, FALSE, TRUE, TRUE);
 
-					if(self.health > 75) // TODO make a "gentle" version?
-						PlayerSound(playersound_pain100, 0);
-					else if(self.health > 50)
-						PlayerSound(playersound_pain75, 0);
-					else if(self.health > 25)
-						PlayerSound(playersound_pain50, 0);
-					else if(self.health > 1)
-						PlayerSound(playersound_pain25, 0);
+					if(deathtype != IT_LASER || attacker != self || self.health < cvar("g_balance_laser_primary_damage") * cvar("g_balance_selfdamagepercent") + 1)
+					// exclude pain sounds for laserjumps as long as you aren't REALLY low on health and would die of the next one
+					{
+						if(self.health > 75) // TODO make a "gentle" version?
+							PlayerSound(playersound_pain100, 0);
+						else if(self.health > 50)
+							PlayerSound(playersound_pain75, 0);
+						else if(self.health > 25)
+							PlayerSound(playersound_pain50, 0);
+						else if(self.health > 1)
+							PlayerSound(playersound_pain25, 0);
+					}
 				}
 
 				// throw off bot aim temporarily
