@@ -738,6 +738,7 @@ void readlevelcvars(void)
 	sv_gentle = cvar("sv_gentle");
 	sv_foginterval = cvar("sv_foginterval");
 	g_cloaked = cvar("g_cloaked");
+	g_jump_grunt = cvar("g_jump_grunt");
 	g_footsteps = cvar("g_footsteps");
 	g_grappling_hook = cvar("g_grappling_hook");
 	g_instagib = cvar("g_instagib");

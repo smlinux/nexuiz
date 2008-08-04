@@ -81,7 +81,8 @@ void PlayerJump (void)
 	else
 		player_setanim(self.anim_jump, FALSE, TRUE, TRUE);
 
-	PlayerSound(playersound_jump, CHAN_AUTO, 0);
+	if(g_jump_grunt)
+		PlayerSound(playersound_jump, CHAN_AUTO, 0);
 }
 
 void CheckWaterJump()
