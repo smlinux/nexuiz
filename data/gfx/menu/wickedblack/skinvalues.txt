@@ -1,0 +1,162 @@
+// Values for Wicked Black by sev
+
+// font sizes (used for everything)
+FONTSIZE_NORMAL                 12
+HEIGHT_NORMAL                   1.5
+FONTSIZE_TITLE                  16
+HEIGHT_TITLE                    1.5
+HEIGHT_ZOOMEDTITLE              -1
+
+// the individual dialog background colors
+COLOR_DIALOG_MULTIPLAYER        '1 1 1'
+COLOR_DIALOG_SETTINGS           '1 1 1'
+COLOR_DIALOG_TEAMSELECT         '1 1 1'
+COLOR_DIALOG_QUIT               '0.75 0 0'
+COLOR_DIALOG_MUTATORS           '1 1 1'
+COLOR_DIALOG_MAPINFO            '1 1 1'
+COLOR_DIALOG_USERBIND           '1 1 1'
+COLOR_DIALOG_SINGLEPLAYER       '1 1 1'
+COLOR_DIALOG_CREDITS            '1 1 1'
+
+// nexposee positions of windows (they are the scale transformation
+// centers, NOT the actual positions of the windows!)
+POSITION_DIALOG_MULTIPLAYER     '0.9 0.5 0'
+POSITION_DIALOG_SINGLEPLAYER    '0.1 0.1 0'
+POSITION_DIALOG_SETTINGS        '0.1 0.9 0'
+POSITION_DIALOG_CREDITS         '0.3 1.2 0'
+POSITION_DIALOG_QUIT            '0.9 1.2 0'
+
+// mouse
+//   uses "cursor" images
+SIZE_CURSOR                     '32 32 0'
+OFFSET_CURSOR                   '0 0 0'
+ALPHA_CURSOR_INTRO              0
+
+// general
+//   uses "background" images
+//   uses "background_ingame" images
+ALPHA_BACKGROUND_INGAME         0.7
+ALPHA_DISABLED                  0.2
+ALPHA_BEHIND                    0.5
+ALPHA_TEXT                      0.7
+
+// item: button
+//   uses "button" images
+//   uses "buttongray" images
+COLOR_BUTTON_N                  '1 1 1'
+COLOR_BUTTON_C                  '1 1 1'
+COLOR_BUTTON_F                  '1 1 1'
+COLOR_BUTTON_D                  '1 1 1'
+
+// item: campaign
+ALPHA_CAMPAIGN_SELECTABLE       0.8
+COLOR_CAMPAIGN_SELECTABLE       '1 1 1'
+ALPHA_CAMPAIGN_CURRENT          1
+COLOR_CAMPAIGN_CURRENT          '1 1 1'
+ALPHA_CAMPAIGN_FUTURE           0.2
+COLOR_CAMPAIGN_FUTURE           '1 1 1'
+ALPHA_CAMPAIGN_DESCRIPTION      0.7
+
+// item: checkbox
+//   uses "checkbox" images
+COLOR_CHECKBOX_N                '1 1 1'
+COLOR_CHECKBOX_C                '1 1 1'
+COLOR_CHECKBOX_F                '1 1 1'
+COLOR_CHECKBOX_D                '1 1 1'
+
+// item: credits list
+COLOR_CREDITS_TITLE             '1 1 1'
+ALPHA_CREDITS_TITLE             1
+COLOR_CREDITS_FUNCTION          '1 1 1'
+ALPHA_CREDITS_FUNCTION          0.7
+COLOR_CREDITS_PERSON            '1 1 1'
+ALPHA_CREDITS_PERSON            1
+ROWS_CREDITS                    20
+WIDTH_CREDITS                   0.5
+
+// item: crosshair button
+//   uses "crosshairbutton" images
+
+// item: dialog
+//   uses "border" images
+//   uses "closebutton" images
+MARGIN_TOP                      8
+MARGIN_BOTTOM                   8
+MARGIN_LEFT                     8
+MARGIN_RIGHT                    8
+MARGIN_COLUMNS                  4
+MARGIN_ROWS                     4
+
+// item: input box
+//   uses "inputbox" images
+COLOR_INPUTBOX_N                '1 1 1'
+COLOR_INPUTBOX_F                '1 1 1'
+MARGIN_INPUTBOX                 0.02
+
+// item: key grabber
+COLOR_KEYGRABBER_TITLES         '1 1 1'
+ALPHA_KEYGRABBER_TITLES         1
+COLOR_KEYGRABBER_KEYS           '1 1 1'
+ALPHA_KEYGRABBER_KEYS           0.7
+
+// item: list box
+COLOR_LISTBOX_SELECTED          '1 1 1'
+ALPHA_LISTBOX_SELECTED          1
+COLOR_LISTBOX_WAITING           '1 1 1'
+ALPHA_LISTBOX_WAITING           0.5
+
+// item: map list
+COLOR_MAPLIST_TITLE             '1 1 1'
+COLOR_MAPLIST_AUTHOR            '0.75 0.75 0.75'
+COLOR_MAPLIST_INCLUDEDBG        '1 1 1'
+ALPHA_MAPLIST_INCLUDEDFG        1
+ALPHA_MAPLIST_INCLUDEDBG        0.25
+ALPHA_MAPLIST_NOTINCLUDEDFG     0.25
+
+// item: nexposee
+ALPHAS_MAINMENU                 '0.6 0.8 0.9'
+
+// item: player color button
+//   uses "colorbutton" images
+//   uses "color" images
+
+// item: player model
+COLOR_MODELTITLE                '1 1 1'
+ALPHA_MODELTITLE                1
+
+// item: player name editor
+//   uses "charmap" images
+//   uses "charmapbutton" images
+
+// item: radio button
+//   uses "radiobutton" images
+COLOR_RADIOBUTTON_N             '1 1 1'
+COLOR_RADIOBUTTON_C             '1 1 1'
+COLOR_RADIOBUTTON_F             '1 1 1'
+COLOR_RADIOBUTTON_D             '1 1 1'
+
+// item: scrollbar
+//   uses "scrollbar" images
+COLOR_SCROLLBAR_N               '1 1 1'
+COLOR_SCROLLBAR_C               '1 1 1'
+COLOR_SCROLLBAR_F               '1 1 1'
+COLOR_SCROLLBAR_S               '1 1 1'
+WIDTH_SCROLLBAR                 16
+
+// item: server list
+ALPHA_SERVERLIST_FULL           0.4
+ALPHA_SERVERLIST_EMPTY          0.7
+COLOR_SERVERLIST_LOWPING        '0 1 0'
+COLOR_SERVERLIST_MEDPING        '1 0.75 0'
+COLOR_SERVERLIST_HIGHPING       '1 0 0'
+ALPHA_SERVERLIST_HIGHPING       0.4
+
+// item: slider
+//   uses "slider" images
+COLOR_SLIDER_N                  '1 1 1'
+COLOR_SLIDER_C                  '1 1 1'
+COLOR_SLIDER_F                  '1 1 1'
+COLOR_SLIDER_D                  '1 1 1'
+COLOR_SLIDER_S                  '1 1 1'
+WIDTH_SLIDERTEXT                0.333333333333
+TOLERANCE_SLIDER                '0.2 2 0'
