@@ -230,21 +230,21 @@ vector colormapPaletteColor(float c, float isPants)
 {
 	switch(c)
 	{
-		case  0: return '0.733 0.733 0.733';
-		case  1: return '0.451 0.341 0.122';
-		case  2: return '0.000 0.733 0.733';
-		case  3: return '0.000 1.000 0.000';
-		case  4: return '1.000 0.000 0.000';
-		case  5: return '0.000 0.502 1.000';
-		case  6: return '0.812 0.561 0.169';
-		case  7: return '0.718 0.529 0.420';
-		case  8: return '0.765 0.545 0.667';
-		case  9: return '1.000 0.000 1.000';
-		case 10: return '0.639 0.529 0.482';
-		case 11: return '0.310 0.388 0.341';
-		case 12: return '1.000 1.000 0.000';
-		case 13: return '0.000 0.000 1.000';
-		case 14: return '1.000 0.502 0.000';
+		case  0: return '0.800000 0.800000 0.800000';
+		case  1: return '0.600000 0.400000 0.000000';
+		case  2: return '0.000000 1.000000 0.501961';
+		case  3: return '0.000000 1.000000 0.000000';
+		case  4: return '1.000000 0.000000 0.000000';
+		case  5: return '0.000000 0.501961 1.000000';
+		case  6: return '0.000000 1.000000 1.000000';
+		case  7: return '0.501961 1.000000 0.000000';
+		case  8: return '0.501961 0.000000 1.000000';
+		case  9: return '1.000000 0.000000 1.000000';
+		case 10: return '1.000000 0.000000 0.501961';
+		case 11: return '0.600000 0.600000 0.600000';
+		case 12: return '1.000000 1.000000 0.000000';
+		case 13: return '0.000000 0.000000 1.000000';
+		case 14: return '1.000000 0.501961 0.000000';
 		case 15:
 			if(isPants)
 				return
