@@ -409,8 +409,8 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 					else
 						player_setanim(self.anim_pain2, FALSE, TRUE, TRUE);
 
-					if(deathtype != IT_LASER || attacker != self || self.health < cvar("g_balance_laser_primary_damage") * cvar("g_balance_selfdamagepercent") + 1)
-					// exclude pain sounds for laserjumps as long as you aren't REALLY low on health and would die of the next one
+					if(deathtype != IT_LASER || attacker != self || self.health < 2 * cvar("g_balance_laser_primary_damage") * cvar("g_balance_selfdamagepercent") + 1)
+					// exclude pain sounds for laserjumps as long as you aren't REALLY low on health and would die of the next two
 					{
 						if(self.health > 75) // TODO make a "gentle" version?
 							PlayerSound(playersound_pain100, 0);
