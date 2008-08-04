@@ -80,6 +80,8 @@ void PlayerJump (void)
 		player_setanim(self.anim_duckjump, FALSE, TRUE, TRUE);
 	else
 		player_setanim(self.anim_jump, FALSE, TRUE, TRUE);
+
+	PlayerSound(playersound_jump, 0);
 }
 
 void CheckWaterJump()
@@ -452,6 +454,10 @@ void SV_PlayerPhysics()
 
 	if(self.flags & FL_ONGROUND)
 		self.lastground = time;
+
+	if(self.flags & FL_ONGROUND)
+		if not(self.lastflags & FL_ONGROUND)
+			PlayerSound(playersound_fall, 0);
 
 	self.lastflags = self.flags;
 };

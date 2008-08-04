@@ -24,6 +24,8 @@ void CreatureFrame (void)
 				}
 				if (self.waterlevel != 3)
 				{
+					if(self.air_finished < time + 9)
+						PlayerSound(playersound_gasp, 0);
 					self.air_finished = time + 12;
 					self.dmg = 2;
 				}
@@ -77,23 +79,7 @@ void CreatureFrame (void)
 				if (self.deadflag)
 					dm = (dm - cvar("g_balance_falldamage_deadminspeed")) * cvar("g_balance_falldamage_factor");
 				else
-				{
-					if (self.oldvelocity_z < self.velocity_z - 160)
-					{
-						local float soundrandom;
-						soundrandom = random() * 4;
-						if (soundrandom < 1)
-							sound (self, CHAN_BODY, "misc/hitground1.wav", 1, ATTN_NORM);
-						else if (soundrandom < 2)
-							sound (self, CHAN_BODY, "misc/hitground2.wav", 1, ATTN_NORM);
-						else if (soundrandom < 3)
-							sound (self, CHAN_BODY, "misc/hitground3.wav", 1, ATTN_NORM);
-						else if (soundrandom < 4)
-							sound (self, CHAN_BODY, "misc/hitground4.wav", 1, ATTN_NORM);
-						self.nextstep = time + 0.3 + random() * 0.1;
-					}
 					dm = min((dm - cvar("g_balance_falldamage_minspeed")) * cvar("g_balance_falldamage_factor"), cvar("g_balance_falldamage_maxdamage"));
-				}
 				if (dm > 0)
 					Damage (self, world, world, dm, DEATH_FALL, self.origin, '0 0 0');
 				else if(vlen(self.velocity) > 100000 && cvar("developer"))

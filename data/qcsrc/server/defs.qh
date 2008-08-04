@@ -444,3 +444,31 @@ float next_pingtime;
 
 .float Version;
 .float(entity to) SendEntity;
+
+// player sounds, voice messages
+.string playersound_attack;
+.string playersound_attackinfive;
+.string playersound_coverme;
+.string playersound_defend;
+.string playersound_freelance;
+.string playersound_incoming;
+.string playersound_meet;
+.string playersound_needhelp;
+.string playersound_seenflag;
+.string playersound_taunt;
+.string playersound_teamshoot;
+.string playersound_death;
+.string playersound_drown;
+.string playersound_fall; // known broken, FIXME
+.string playersound_falling; // not yet implemented, FIXME
+.string playersound_gasp;
+.string playersound_jump;
+.string playersound_pain25;
+.string playersound_pain50;
+.string playersound_pain75;
+.string playersound_pain100;
+void PrecachePlayerSounds(string f);
+void LoadPlayerSounds(string f);
+void UpdatePlayerSounds();
+void PlayerSound(.string samplefield, float teamsay); // 0 is normal, 1 is team, 2 is last attacker
+void VoiceMessage(string type);

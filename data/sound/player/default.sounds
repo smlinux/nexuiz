@@ -1,0 +1,24 @@
+//attack sound/player/voice/attack 1
+//attackinfive sound/player/voice/attackinfive 1
+//coverme sound/player/voice/coverme 1
+//defend sound/player/voice/defend 1
+//freelance sound/player/voice/freelance 1
+//incoming sound/player/voice/incoming 1
+//meet sound/player/voice/meet 1
+//needhelp sound/player/voice/needhelp 1
+//seenflag sound/player/voice/seenflag 2
+//taunt sound/player/voice/taunt 9
+//teamshoot sound/player/voice/teamshoot 5
+death sound/debug/v_death 0
+drown sound/debug/v_drown 0
+fall sound/debug/v_fall 3
+//fall misc/hitground 4
+falling sound/debug/v_falling 0
+gasp sound/debug/v_gasp 0
+jump sound/debug/v_jump 0
+pain25 sound/debug/v_pain25 0
+pain50 sound/debug/v_pain50 0
+pain75 sound/debug/v_pain75 0
+pain100 sound/debug/v_pain100 0
+
+// TODO take out ALL the debug sounds, before I will remove them again! Deadline is Oct 1 2008.
