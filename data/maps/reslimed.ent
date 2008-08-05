@@ -3,7 +3,7 @@
 "classname" "worldspawn"
 "message" "Slimepit Revisited"
 "gridsize" "128 128 256"
-"fog" "0.2 0.3 1 0 0.5 0 1024"
+"fog" "0.2 0.3 1 0 0.5 400 1024"
 }
 {
 "classname" "func_rotating"
