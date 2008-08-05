@@ -304,9 +304,10 @@ void Ent_RemoveONS()
 	}
 }
 
-void Ent_ReadPlayerScore(float isNew)
+void Ent_ReadPlayerScore()
 {
 	float i, Team;
+	float isNew;
 	entity tm, o;
 
 	// damnit -.- don't want to go change every single .sv_entnum in sbar.qc AGAIN
@@ -331,7 +332,7 @@ void Ent_ReadPlayerScore(float isNew)
 	Sbar_UpdatePlayerPos(o);
 }
 
-void Ent_ReadTeamScore(float isNew)
+void Ent_ReadTeamScore()
 {
 	float i;
 	entity o;
@@ -347,10 +348,15 @@ void Ent_ReadTeamScore(float isNew)
 
 // CSQC_Ent_Update : Called every frame that the server has indicated an update to the SSQC / CSQC entity has occured.
 // The only parameter reflects if the entity is "new" to the client, meaning it just came into the client's PVS.
+void Ent_Remove();
 void(float bIsNewEntity) CSQC_Ent_Update =
 {
-	float msg;
-	self.enttype = ReadByte();
+	float msg, t;
+	t = ReadByte();
+	if(self.enttype)
+		if(t != self.enttype)
+			Ent_Remove();
+	self.enttype = t;
 	if(self.enttype == ENT_CLIENT_ENTCS)
 	{
 		self.sv_entnum = ReadByte()-1;
@@ -367,15 +373,17 @@ void(float bIsNewEntity) CSQC_Ent_Update =
 		}
 	}
 	else if(self.enttype == ENT_CLIENT_SCORES)
-		Ent_ReadPlayerScore(bIsNewEntity);
+		Ent_ReadPlayerScore();
 	else if(self.enttype == ENT_CLIENT_TEAMSCORES)
-		Ent_ReadTeamScore(bIsNewEntity);
+		Ent_ReadTeamScore();
 	else
 		error("unknown entity type in CSQC_Ent_Update\n");
 	
 };
-// CSQC_Ent_Remove : Called when the server requests a SSQC / CSQC entity to be removed.  Essentially call remove(self) as well.
-void CSQC_Ent_Remove()
+// Destructor, but does NOT deallocate the entity by calling remove(). Also
+// used when an entity changes its type. For an entity that someone interacts
+// with others, make sure it can no longer do so.
+void Ent_Remove()
 {
 	if(self.enttype == ENT_CLIENT_ENTCS)
 	{
@@ -412,6 +420,16 @@ void CSQC_Ent_Remove()
 		// we don't NEED to remove them... they won't display anyway
 		// plus, svqc never does this anyway
 	}
+
+	self.enttype = 0;
+	self.classname = "";
+	// TODO possibly set more stuff to defaults
+}
+// CSQC_Ent_Remove : Called when the server requests a SSQC / CSQC entity to be removed.  Essentially call remove(self) as well.
+void CSQC_Ent_Remove()
+{
+	if(self.enttype)
+		Ent_Remove();
 	remove(self);
 }
 
