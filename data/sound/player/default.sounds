@@ -11,8 +11,6 @@
 //teamshoot sound/player/voice/teamshoot 5
 death sound/debug/v_death 0
 drown sound/debug/v_drown 0
-fall sound/debug/v_fall 3
-//fall misc/hitground 4
 falling sound/debug/v_falling 0
 gasp sound/debug/v_gasp 0
 jump sound/debug/v_jump 0

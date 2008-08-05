@@ -763,9 +763,11 @@ float GetVoiceMessageTeamsayType(string type)
 
 string allvoicesamples = "attack attackinfive coverme defend freelance incoming meet needhelp seenflag taunt teamshoot";
 float GetPlayerSoundSampleField_notFound;
+float GetPlayerSoundSampleField_fixed;
 .string GetVoiceMessageSampleField(string type)
 {
 	GetPlayerSoundSampleField_notFound = 0;
+	GetPlayerSoundSampleField_fixed = 0;
 	switch(type)
 	{
 		case "attack":       return playersound_attack;
@@ -787,11 +789,11 @@ float GetPlayerSoundSampleField_notFound;
 .string GetPlayerSoundSampleField(string type)
 {
 	GetPlayerSoundSampleField_notFound = 0;
+	GetPlayerSoundSampleField_fixed = 0;
 	switch(type)
 	{
 		case "death":        return playersound_death;
 		case "drown":        return playersound_drown;
-		case "fall":         return playersound_fall;
 		case "falling":      return playersound_falling;
 		case "gasp":         return playersound_gasp;
 		case "jump":         return playersound_jump;
@@ -804,10 +806,25 @@ float GetPlayerSoundSampleField_notFound;
 	return playersound_taunt;
 }
 
+void PrecacheGlobalSound(string samplestring)
+{
+	float n, i;
+	tokenize(samplestring);
+	n = stof(argv(1));
+	if(n > 0)
+	{
+		for(i = 1; i <= n; ++i)
+			precache_sound(strcat(argv(0), ftos(i), ".wav"));
+	}
+	else
+	{
+		precache_sound(strcat(argv(0), ".wav"));
+	}
+}
+
 void PrecachePlayerSounds(string f)
 {
 	float fh;
-	float i, n;
 	string s;
 	fh = fopen(f, FILE_READ);
 	if(fh < 0)
@@ -819,21 +836,36 @@ void PrecachePlayerSounds(string f)
 			dprint("Invalid sound info line: ", s, "\n");
 			continue;
 		}
-		n = stof(argv(2));
-		if(n > 0)
-		{
-			for(i = 1; i <= n; ++i)
-				precache_sound(strcat(argv(1), ftos(i), ".wav"));
-		}
-		else
-		{
-			precache_sound(strcat(argv(1), ".wav"));
-		}
+		PrecacheGlobalSound(strcat(argv(1), " ", argv(2)));
 	}
 	fclose(fh);
 }
 
-void LoadPlayerSounds(string f)
+void ClearPlayerSounds()
+{
+	if(self.playersound_attack      ) { strunzone(self.playersound_attack      ); self.playersound_attack = string_null; }
+	if(self.playersound_attackinfive) { strunzone(self.playersound_attackinfive); self.playersound_attackinfive = string_null; }
+	if(self.playersound_coverme     ) { strunzone(self.playersound_coverme     ); self.playersound_coverme = string_null; }
+	if(self.playersound_defend      ) { strunzone(self.playersound_defend      ); self.playersound_defend = string_null; }
+	if(self.playersound_freelance   ) { strunzone(self.playersound_freelance   ); self.playersound_freelance = string_null; }
+	if(self.playersound_incoming    ) { strunzone(self.playersound_incoming    ); self.playersound_incoming = string_null; }
+	if(self.playersound_meet        ) { strunzone(self.playersound_meet        ); self.playersound_meet = string_null; }
+	if(self.playersound_needhelp    ) { strunzone(self.playersound_needhelp    ); self.playersound_needhelp = string_null; }
+	if(self.playersound_seenflag    ) { strunzone(self.playersound_seenflag    ); self.playersound_seenflag = string_null; }
+	if(self.playersound_taunt       ) { strunzone(self.playersound_taunt       ); self.playersound_taunt = string_null; }
+	if(self.playersound_teamshoot   ) { strunzone(self.playersound_teamshoot   ); self.playersound_teamshoot = string_null; }
+	if(self.playersound_death       ) { strunzone(self.playersound_death       ); self.playersound_death = string_null; }
+	if(self.playersound_drown       ) { strunzone(self.playersound_drown       ); self.playersound_drown = string_null; }
+	if(self.playersound_falling     ) { strunzone(self.playersound_falling     ); self.playersound_falling = string_null; }
+	if(self.playersound_gasp        ) { strunzone(self.playersound_gasp        ); self.playersound_gasp = string_null; }
+	if(self.playersound_jump        ) { strunzone(self.playersound_jump        ); self.playersound_jump = string_null; }
+	if(self.playersound_pain25      ) { strunzone(self.playersound_pain25      ); self.playersound_pain25 = string_null; }
+	if(self.playersound_pain50      ) { strunzone(self.playersound_pain50      ); self.playersound_pain50 = string_null; }
+	if(self.playersound_pain75      ) { strunzone(self.playersound_pain75      ); self.playersound_pain75 = string_null; }
+	if(self.playersound_pain100     ) { strunzone(self.playersound_pain100     ); self.playersound_pain100 = string_null; }
+}
+
+void LoadPlayerSounds(string f, float first)
 {
 	float fh;
 	string s;
@@ -850,6 +882,9 @@ void LoadPlayerSounds(string f)
 			field = GetVoiceMessageSampleField(argv(0));
 		if(GetPlayerSoundSampleField_notFound)
 			continue;
+		if not(GetPlayerSoundSampleField_fixed)
+			if not(first)
+				continue;
 		if(self.field)
 			strunzone(self.field);
 		self.field = strzone(strcat(argv(1), " ", argv(2)));
@@ -863,16 +898,14 @@ void UpdatePlayerSounds()
 	if(self.modelindex == self.modelindex_for_playersound)
 		return;
 	self.modelindex_for_playersound = self.modelindex;
-	LoadPlayerSounds("sound/player/default.sounds");
-	LoadPlayerSounds(strcat(self.model, ".sounds"));
+	ClearPlayerSounds();
+	LoadPlayerSounds("sound/player/default.sounds", 1);
+	LoadPlayerSounds(strcat(self.model, ".sounds"), 0);
 }
 
-void PlayerSound(.string samplefield, float chan, float teamsay)
+void GlobalSound(string sample, float chan, float teamsay)
 {
-	// TODO precache voice messages?
 	float n;
-	string sample;
-	sample = self.samplefield;
 
 	if(sample == "")
 		return;
@@ -906,6 +939,13 @@ void PlayerSound(.string samplefield, float chan, float teamsay)
 			if(!teams_matter || e.team == self.team)
 				soundto(self, e, chan, sample, 1, ATTN_NONE);
 	}
+}
+
+void PlayerSound(.string samplefield, float chan, float teamsay)
+{
+	string sample;
+	sample = self.samplefield;
+	GlobalSound(sample, chan, teamsay);
 }
 
 void VoiceMessage(string type)

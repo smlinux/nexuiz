@@ -75,13 +75,15 @@ void CreatureFrame (void)
 			// check for falling damage
 			if(!self.hook.state)
 			{
-				dm = vlen(self.oldvelocity) - vlen(self.velocity); // dm is now the velocity DECREASE. Velocity INCREASE should never cause a sound.
+				dm = vlen(self.oldvelocity) - vlen(self.velocity); // dm is now the velocity DECREASE. Velocity INCREASE should never cause a sound or any damage.
 				if (self.deadflag)
 					dm = (dm - cvar("g_balance_falldamage_deadminspeed")) * cvar("g_balance_falldamage_factor");
 				else
 					dm = min((dm - cvar("g_balance_falldamage_minspeed")) * cvar("g_balance_falldamage_factor"), cvar("g_balance_falldamage_maxdamage"));
 				if (dm > 0)
+				{
 					Damage (self, world, world, dm, DEATH_FALL, self.origin, '0 0 0');
+				}
 				else if(vlen(self.velocity) > 100000 && cvar("developer"))
 				{
 					dprint(strcat(self.netname, " became too fast, please investigate: ", vtos(self.spawnorigin), "\n"));
@@ -95,24 +97,24 @@ void CreatureFrame (void)
 			if (self.flags & FL_ONGROUND)
 			if (vlen(self.velocity) > sv_maxspeed * 0.6)
 			if (!self.deadflag)
+			if (time < self.lastground + 0.2)
 			{
 				if((time > self.nextstep) || (time < (self.nextstep - 10.0)))
 				{
-					local float steprandom;
 					self.nextstep = time + 0.3 + random() * 0.1;
-					steprandom = random() * 6;
-					if (steprandom < 1)
-						sound (self, CHAN_BODY, "misc/footstep01.wav", 1, ATTN_NORM);
-					else if (steprandom < 2)
-						sound (self, CHAN_BODY, "misc/footstep02.wav", 1, ATTN_NORM);
-					else if (steprandom < 3)
-						sound (self, CHAN_BODY, "misc/footstep03.wav", 1, ATTN_NORM);
-					else if (steprandom < 4)
-						sound (self, CHAN_BODY, "misc/footstep04.wav", 1, ATTN_NORM);
-					else if (steprandom < 5)
-						sound (self, CHAN_BODY, "misc/footstep05.wav", 1, ATTN_NORM);
-					else if (steprandom <= 6)
-						sound (self, CHAN_BODY, "misc/footstep06.wav", 1, ATTN_NORM);
+					trace_dphitq3surfaceflags = 0;
+					tracebox(self.origin, self.mins, self.maxs, self.origin - '0 0 1', MOVE_NOMONSTERS, self);
+					if(trace_fraction == 1)
+						print("nohit\n");
+					else
+						print(ftos(trace_dphitq3surfaceflags), "\n");
+					if not(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOSTEPS)
+					{
+						if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_METALSTEPS)
+							GlobalSound(globalsound_metalstep, CHAN_AUTO, 0);
+						else
+							GlobalSound(globalsound_step, CHAN_AUTO, 0);
+					}
 				}
 			}
 			self.oldvelocity = self.velocity;

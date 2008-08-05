@@ -1248,6 +1248,8 @@ void ClientDisconnect (void)
 	if(self.netname_previous)
 		strunzone(self.netname_previous);
 
+	ClearPlayerSounds();
+
 	// free cvars
 	GetCvars(-1);
 	self.playerid = 0;
