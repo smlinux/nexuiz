@@ -11,6 +11,8 @@ float require_spawnfunc_prefix; // if this float exists, only functions with spa
 #define BUTTON_CHAT   buttonchat
 #define BUTTON_USE    buttonuse
 
+#define VOL_BASE 0.7
+
 // Globals
 
 float g_domination, g_ctf, g_tdm, g_keyhunt, g_onslaught, g_assault, g_arena, g_lms, g_runematch;

@@ -14,11 +14,11 @@ void CreatureFrame (void)
 				if (!(self.flags & FL_INWATER))
 				{
 					//if (self.watertype == CONTENT_LAVA)
-					//	sound (self, CHAN_BODY, "player/inlava.wav", 1, ATTN_NORM);
+					//	sound (self, CHAN_BODY, "player/inlava.wav", VOL_BASE, ATTN_NORM);
 					//if (self.watertype == CONTENT_WATER)
-					//	sound (self, CHAN_BODY, "player/inh2o.wav", 1, ATTN_NORM);
+					//	sound (self, CHAN_BODY, "player/inh2o.wav", VOL_BASE, ATTN_NORM);
 					//if (self.watertype == CONTENT_SLIME)
-					//	sound (self, CHAN_BODY, "player/slimbrn2.wav", 1, ATTN_NORM);
+					//	sound (self, CHAN_BODY, "player/slimbrn2.wav", VOL_BASE, ATTN_NORM);
 					self.flags = self.flags + FL_INWATER;
 					self.dmgtime = 0;
 				}
@@ -46,7 +46,7 @@ void CreatureFrame (void)
 						if (self.watersound_finished < time)
 						{
 							self.watersound_finished = time + 0.5;
-							sound (self, CHAN_BODY, "player/lava.wav", 1, ATTN_NORM);
+							sound (self, CHAN_BODY, "player/lava.wav", VOL_BASE, ATTN_NORM);
 						}
 						Damage (self, world, world, 6 * self.waterlevel, DEATH_LAVA, self.origin, '0 0 0');
 					}
@@ -55,7 +55,7 @@ void CreatureFrame (void)
 						if (self.watersound_finished < time)
 						{
 							self.watersound_finished = time + 0.5;
-							sound (self, CHAN_BODY, "player/slime.wav", 1, ATTN_NORM);
+							sound (self, CHAN_BODY, "player/slime.wav", VOL_BASE, ATTN_NORM);
 						}
 						Damage (self, world, world, 2 * self.waterlevel, DEATH_SLIME, self.origin, '0 0 0');
 					}

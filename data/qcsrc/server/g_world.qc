@@ -98,7 +98,7 @@ void timeoutHandler_Think() {
 				}
 			}
 			if(remainingTimeoutTime == cvar("sv_timeout_resumetime")) { //play a warning sound when only <sv_timeout_resumetime> seconds are left
-				sound(world, CHAN_AUTO, "announcer/robotic/prepareforbattle.wav", 1, ATTN_NONE);
+				sound(world, CHAN_AUTO, "announcer/robotic/prepareforbattle.wav", VOL_BASE, ATTN_NONE);
 			}
 			remainingTimeoutTime -= 1;
 			self.nextthink = time + TIMEOUT_SLOWMO_VALUE;
@@ -1603,7 +1603,7 @@ void CheckRules_World()
 		if(!checkrules_overtimewarning)
 		{
 			checkrules_overtimewarning = TRUE;
-			//sound(world, CHAN_AUTO, "announcer/robotic/1minuteremains.wav", 1, ATTN_NONE);
+			//sound(world, CHAN_AUTO, "announcer/robotic/1minuteremains.wav", VOL_BASE, ATTN_NONE);
 			bcenterprint("^3Now playing ^1OVERTIME^3!\n\n^3Keep fragging until we have a ^1winner^3!");
 		}
 	}
@@ -1622,7 +1622,7 @@ void CheckRules_World()
 	if (!checkrules_oneminutewarning && timelimit > 0 && time > timelimit - 60)
 	{
 		checkrules_oneminutewarning = TRUE;
-		sound(world, CHAN_AUTO, "announcer/robotic/1minuteremains.wav", 1, ATTN_NONE);
+		sound(world, CHAN_AUTO, "announcer/robotic/1minuteremains.wav", VOL_BASE, ATTN_NONE);
 	}
 
 	status = WinningCondition_RanOutOfSpawns();

@@ -252,7 +252,7 @@ void W_WeaponFrame()
 		}
 		else if (self.weaponentity.state == WS_READY)
 		{
-			sound (self, CHAN_WEAPON, "weapons/weapon_switch.wav", 1, ATTN_NORM);
+			sound (self, CHAN_WEAPON, "weapons/weapon_switch.wav", VOL_BASE, ATTN_NORM);
 			self.weaponentity.state = WS_DROP;
 			// set up weapon switch think in the future, and start drop anim
 			weapon_thinkf(WFRAME_IDLE, cvar("g_balance_weaponswitchdelay"), w_clear);

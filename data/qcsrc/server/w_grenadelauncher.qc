@@ -4,7 +4,7 @@ void W_Grenade_Explode (void)
 	vector	org2;
 	org2 = findbetterlocation (self.origin, 12);
 	pointparticles(particleeffectnum("grenade_explode"), org2, '0 0 0', 1);
-	sound (self, CHAN_BODY, "weapons/grenade_impact.wav", 1, ATTN_NORM);
+	sound (self, CHAN_BODY, "weapons/grenade_impact.wav", VOL_BASE, ATTN_NORM);
 
 	self.event_damage = SUB_Null;
 	RadiusDamage (self, self.owner, cvar("g_balance_grenadelauncher_primary_damage"), cvar("g_balance_grenadelauncher_primary_edgedamage"), cvar("g_balance_grenadelauncher_primary_radius"), world, cvar("g_balance_grenadelauncher_primary_force"), IT_GRENADE_LAUNCHER);
@@ -17,7 +17,7 @@ void W_Grenade_Explode2 (void)
 	vector	org2;
 	org2 = findbetterlocation (self.origin, 12);
 	pointparticles(particleeffectnum("grenade_explode"), org2, '0 0 0', 1);
-	sound (self, CHAN_BODY, "weapons/grenade_impact.wav", 1, ATTN_NORM);
+	sound (self, CHAN_BODY, "weapons/grenade_impact.wav", VOL_BASE, ATTN_NORM);
 
 	self.event_damage = SUB_Null;
 	RadiusDamage (self, self.owner, cvar("g_balance_grenadelauncher_secondary_damage"), cvar("g_balance_grenadelauncher_secondary_edgedamage"), cvar("g_balance_grenadelauncher_secondary_radius"), world, cvar("g_balance_grenadelauncher_secondary_force"), IT_GRENADE_LAUNCHER);
@@ -49,17 +49,17 @@ void W_Grenade_Touch2 (void)
 		float r;
 		r = random() * 6;
 		if(r < 1)
-			sound (self, CHAN_IMPACT, "weapons/grenade_bounce1.wav", 1, ATTN_NORM);
+			sound (self, CHAN_IMPACT, "weapons/grenade_bounce1.wav", VOL_BASE, ATTN_NORM);
 		else if(r < 2)
-			sound (self, CHAN_IMPACT, "weapons/grenade_bounce2.wav", 1, ATTN_NORM);
+			sound (self, CHAN_IMPACT, "weapons/grenade_bounce2.wav", VOL_BASE, ATTN_NORM);
 		else if(r < 3)
-			sound (self, CHAN_IMPACT, "weapons/grenade_bounce3.wav", 1, ATTN_NORM);
+			sound (self, CHAN_IMPACT, "weapons/grenade_bounce3.wav", VOL_BASE, ATTN_NORM);
 		else if(r < 4)
-			sound (self, CHAN_IMPACT, "weapons/grenade_bounce4.wav", 1, ATTN_NORM);
+			sound (self, CHAN_IMPACT, "weapons/grenade_bounce4.wav", VOL_BASE, ATTN_NORM);
 		else if(r < 5)
-			sound (self, CHAN_IMPACT, "weapons/grenade_bounce5.wav", 1, ATTN_NORM);
+			sound (self, CHAN_IMPACT, "weapons/grenade_bounce5.wav", VOL_BASE, ATTN_NORM);
 		else
-			sound (self, CHAN_IMPACT, "weapons/grenade_bounce6.wav", 1, ATTN_NORM);
+			sound (self, CHAN_IMPACT, "weapons/grenade_bounce6.wav", VOL_BASE, ATTN_NORM);
 	}
 }
 

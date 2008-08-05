@@ -927,11 +927,40 @@ void sound(entity e, float chan, string samp, float vol, float atten)
 }
 */
 
+// Sound functions
 string precache_sound (string s) = #19;
 void(entity e, float chan, string samp, float vol, float atten) sound = #8;
+float precache_sound_index (string s) = #19;
+
+void soundtoat(float dest, entity e, vector o, float chan, string samp, float vol, float atten)
+{
+	WriteByte(dest, 6);
+	WriteByte(dest, 27); // all bits except SND_LOOPING
+	WriteByte(dest, vol * 255);
+	WriteByte(dest, atten * 64);
+	WriteEntity(dest, e);
+	WriteByte(dest, chan);
+	WriteShort(dest, precache_sound_index(samp));
+	WriteCoord(dest, o_x);
+	WriteCoord(dest, o_y);
+	WriteCoord(dest, o_z);
+}
+void soundto(float dest, entity e, float chan, string samp, float vol, float atten)
+{
+	vector o;
+	o = e.origin + 0.5 * (e.mins + e.maxs);
+	soundtoat(dest, e, o, chan, samp, vol, atten);
+}
+void soundat(vector o, string samp, float vol, float atten)
+{
+	soundtoat(MSG_BROADCAST, world, o, CHAN_AUTO, samp, vol, atten);
+}
+
 void play2(entity e, string filename)
 {
-	stuffcmd(e, strcat("play2 ", filename, "\n"));
+	//stuffcmd(e, strcat("play2 ", filename, "\n"));
+	msg_entity = e;
+	soundtoat(MSG_ONE, world, '0 0 0', CHAN_AUTO, filename, VOL_BASE, ATTN_NONE);
 }
 
 void play2team(float t, string filename)
@@ -1113,6 +1142,6 @@ void precache()
 	if (self.noise)
 	{
 		precache_sound (self.noise);
-		ambientsound ('0 0 0', self.noise, 1.00, ATTN_NONE);
+		ambientsound ('0 0 0', self.noise, VOL_BASE, ATTN_NONE);
 	}
 }

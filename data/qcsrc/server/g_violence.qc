@@ -3,13 +3,13 @@ void GibDamage (entity inflictor, entity attacker, float damage, float deathtype
 	float r;
 	r = random ();
 	if (r < 0.60)
-		sound (self, CHAN_IMPACT, "misc/gib_splat01.wav", 1, ATTN_NORM);
+		sound (self, CHAN_IMPACT, "misc/gib_splat01.wav", VOL_BASE, ATTN_NORM);
 	else if (r < 0.65)
-		sound (self, CHAN_IMPACT, "misc/gib_splat02.wav", 1, ATTN_NORM);
+		sound (self, CHAN_IMPACT, "misc/gib_splat02.wav", VOL_BASE, ATTN_NORM);
 	else if (r < 0.70)
-		sound (self, CHAN_IMPACT, "misc/gib_splat03.wav", 1, ATTN_NORM);
+		sound (self, CHAN_IMPACT, "misc/gib_splat03.wav", VOL_BASE, ATTN_NORM);
 	else if (r < 0.75)
-		sound (self, CHAN_IMPACT, "misc/gib_splat04.wav", 1, ATTN_NORM);
+		sound (self, CHAN_IMPACT, "misc/gib_splat04.wav", VOL_BASE, ATTN_NORM);
 	
 	if(sv_gentle < 1)
 		pointparticles(particleeffectnum("blood"), self.origin + '0 0 1', '0 0 30', 10);

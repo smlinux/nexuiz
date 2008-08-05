@@ -185,7 +185,7 @@ void GrapplingHookTouch (void)
 	}
 
 	pointparticles(particleeffectnum("grapple_impact"), self.origin, '0 0 0', 1);
-	sound (self, CHAN_BODY, "weapons/hook_impact.wav", 1, ATTN_NORM);
+	sound (self, CHAN_BODY, "weapons/hook_impact.wav", VOL_BASE, ATTN_NORM);
 
 	self.state = 1;
 	self.think = GrapplingHookThink;
@@ -225,7 +225,7 @@ void FireGrapplingHook (void)
 
 	makevectors(self.v_angle);
 
-	sound (self, CHAN_WEAPON, "weapons/hook_fire.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "weapons/hook_fire.wav", VOL_BASE, ATTN_NORM);
 	org = self.origin + self.view_ofs + v_forward * 8 - v_right * 8 + '0 0 -12';
 	pointparticles(particleeffectnum("grapple_muzzleflash"), org, '0 0 0', 1);
 

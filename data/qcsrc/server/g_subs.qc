@@ -205,25 +205,6 @@ void main (void)
 
 }
 
-// Sound functions
-
-/*
-==================
-PointSound
-
-Play a sound at the given location
-==================
-*/
-void PointSound (vector org, string snd, float vol, float attn)
-{
-	entity	speaker;
-
-	speaker = spawn ();
-	setorigin (speaker, org);
-	sound (speaker, CHAN_BODY, snd, vol, attn);
-	remove (speaker);
-}
-
 // Misc
 
 /*

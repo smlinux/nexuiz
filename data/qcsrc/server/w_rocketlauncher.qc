@@ -5,7 +5,7 @@
 void W_Rocket_Explode (void)
 {
 	vector	org2;
-	sound (self, CHAN_BODY, "weapons/rocket_impact.wav", 1, ATTN_NORM);
+	sound (self, CHAN_BODY, "weapons/rocket_impact.wav", VOL_BASE, ATTN_NORM);
 	org2 = findbetterlocation (self.origin, 16);
 
 	pointparticles(particleeffectnum("rocket_explode"), org2, '0 0 0', 1);
@@ -190,7 +190,7 @@ void W_Rocket_Touch (void)
 		self.owner.lastrocket = world;
 	if (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
 	{
-		sound (self, CHAN_BODY, "misc/null.wav", 1, ATTN_NORM);
+		sound (self, CHAN_BODY, "misc/null.wav", VOL_BASE, ATTN_NORM);
 		remove(self);
 		return;
 	}
@@ -254,7 +254,7 @@ void W_Rocket_Attack (void)
 	missile.nextthink = time;
 	missile.cnt = time + cvar("g_balance_rocketlauncher_lifetime");
 	missile.effects = EF_LOWPRECISION;
-	sound (missile, CHAN_BODY, "weapons/rocket_fly.wav", 0.4, ATTN_NORM);
+	sound (missile, CHAN_BODY, "weapons/rocket_fly.wav", 0.4 * VOL_BASE, ATTN_NORM);
 	missile.flags = FL_PROJECTILE;
 
 	// muzzle flash for 1st person view
@@ -392,7 +392,7 @@ float w_rlauncher(float req)
 		if(time > self.rl_sound)
 		{
 			self.rl_sound = time + 1;
-			sound (self, CHAN_BODY, "weapons/rocket_det.wav", 0.5, ATTN_NORM);
+			sound (self, CHAN_BODY, "weapons/rocket_det.wav", 0.5 * VOL_BASE, ATTN_NORM);
 		}
 		if (self.BUTTON_ATCK2)
 		if(g_laserguided_missile)
@@ -400,7 +400,7 @@ float w_rlauncher(float req)
 		{
 			self.exteriorweaponentity.attack_finished_single = time + 0.4;
 			self.laser_on = !self.laser_on;
-			sound (self, CHAN_AUTO, "weapons/tink1.wav", 1, ATTN_NORM);
+			sound (self, CHAN_AUTO, "weapons/tink1.wav", VOL_BASE, ATTN_NORM);
 		}
 	}
 	else if (req == WR_PRECACHE)

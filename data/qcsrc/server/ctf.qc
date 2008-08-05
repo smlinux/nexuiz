@@ -214,7 +214,7 @@ void FlagThink()
 		if (time > self.pain_finished)
 		{
 			bprint("The ", self.netname, " has returned to base\n");
-			sound (e, CHAN_AUTO, self.noise3, 1, ATTN_NONE);
+			sound (e, CHAN_AUTO, self.noise3, VOL_BASE, ATTN_NONE);
 			LogCTF("returned", self.team, world);
 			ReturnFlag(self);
 		}
@@ -294,7 +294,7 @@ void FlagTouch()
 			if (head.team == self.team)
 				UpdateFrags(head, cvar("g_ctf_flagscore_capture_team"));
 
-		sound (self, CHAN_AUTO, self.noise2, 1, ATTN_NONE);
+		sound (self, CHAN_AUTO, self.noise2, VOL_BASE, ATTN_NONE);
 		WaypointSprite_DetachCarrier(other);
 		if(self.speedrunning)
 			FakeTimeLimit(other, -1);
@@ -325,7 +325,7 @@ void FlagTouch()
 		UpdateFrags(other, cvar("g_ctf_flagscore_pickup"));
 		PlayerScore_Add(other, SP_CTF_PICKUPS, 1);
 		LogCTF("steal", self.team, other);
-		sound (self, CHAN_AUTO, self.noise, 1, ATTN_NONE);
+		sound (self, CHAN_AUTO, self.noise, VOL_BASE, ATTN_NONE);
 
 		FOR_EACH_PLAYER(player)
 			if(player.team == self.team)
@@ -352,7 +352,7 @@ void FlagTouch()
 				UpdateFrags(other, cvar("g_ctf_flagscore_return_rogue"));
 			PlayerScore_Add(other, SP_CTF_RETURNS, 1);
 			LogCTF("return", self.team, other);
-			sound (self, CHAN_AUTO, self.noise1, 1, ATTN_NONE);
+			sound (self, CHAN_AUTO, self.noise1, VOL_BASE, ATTN_NONE);
 			ReturnFlag(self);
 		}
 		else if (!other.flagcarried)
@@ -366,7 +366,7 @@ void FlagTouch()
 			bprint(other.netname, "^7 picked up the ", self.netname, "\n");
 			UpdateFrags(other, cvar("g_ctf_flagscore_pickup"));
 			LogCTF("pickup", self.team, other);
-			sound (self, CHAN_AUTO, self.noise, 1, ATTN_NONE);
+			sound (self, CHAN_AUTO, self.noise, VOL_BASE, ATTN_NONE);
 
 			FOR_EACH_PLAYER(player)
 				if(player.team == self.team)

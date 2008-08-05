@@ -473,7 +473,7 @@ void ReadyCount()
 	}
 
 	//play the prepareforbattle sound to everyone
-	sound(world, CHAN_AUTO, "announcer/robotic/prepareforbattle.wav", 1, ATTN_NONE);
+	sound(world, CHAN_AUTO, "announcer/robotic/prepareforbattle.wav", VOL_BASE, ATTN_NONE);
 
 	//reset map immediately if this cvar is not set
 	if (!cvar("sv_ready_restart_after_countdown"))
@@ -541,7 +541,7 @@ void restartAnnouncer_Think() {
 				centerprint(plr, s);
 			}
 		}
-		sound(world, CHAN_AUTO, "announcer/robotic/begin.wav", 1, ATTN_NONE);
+		sound(world, CHAN_AUTO, "announcer/robotic/begin.wav", VOL_BASE, ATTN_NONE);
 
 		remove(self);
 		return;
@@ -555,7 +555,7 @@ void restartAnnouncer_Think() {
 		}
 
 		if(self.cnt <= 3) {
-			sound(world, CHAN_AUTO, strcat("announcer/robotic/", ftos(self.cnt), ".ogg"), 1, ATTN_NONE);
+			sound(world, CHAN_AUTO, strcat("announcer/robotic/", ftos(self.cnt), ".ogg"), VOL_BASE, ATTN_NONE);
 		}
 		self.nextthink = time + 1;
 		self.cnt -= 1;
@@ -612,7 +612,7 @@ void evaluateTimeoutCall() {
 	timeoutHandler.nextthink = time; //always let the entity think asap
 
 	//inform all connected clients about the timeout call
-	sound(world, CHAN_AUTO, "announcer/robotic/timeoutcalled.wav", 1, ATTN_NONE);
+	sound(world, CHAN_AUTO, "announcer/robotic/timeoutcalled.wav", VOL_BASE, ATTN_NONE);
 }
 
 /**

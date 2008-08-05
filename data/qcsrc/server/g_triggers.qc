@@ -56,7 +56,7 @@ void SUB_UseTargets()
 	{
 		centerprint (activator, self.message);
 		if (!self.noise)
-			sound (activator, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
+			sound (activator, CHAN_VOICE, "misc/talk.wav", VOL_BASE, ATTN_NORM);
 	}
 
 //
@@ -140,7 +140,7 @@ void multi_trigger()
 	}
 
 	if (self.noise)
-		sound (self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
+		sound (self, CHAN_VOICE, self.noise, VOL_BASE, ATTN_NORM);
 
 // don't trigger again until reset
 	self.takedamage = DAMAGE_NO;
@@ -458,7 +458,7 @@ float tracebox_hits_trigger_hurt(vector start, vector mi, vector ma, vector end)
 }
 
 
-void target_speaker_use() {sound(self, CHAN_VOICE, self.noise, 1, 1);}
+void target_speaker_use() {sound(self, CHAN_VOICE, self.noise, VOL_BASE, ATTN_NORM);}
 
 void spawnfunc_target_speaker()
 {
@@ -467,7 +467,7 @@ void spawnfunc_target_speaker()
 	if(self.targetname)
 		self.use = target_speaker_use;
 	else
-		ambientsound (self.origin, self.noise, 1, ATTN_STATIC);
+		ambientsound (self.origin, self.noise, VOL_BASE, ATTN_STATIC);
 };
 
 
@@ -506,7 +506,7 @@ void func_sparks()
   // sound
   if(self.noise) {
     precache_sound (self.noise);
-    ambientsound (self.origin, self.noise, 1, ATTN_STATIC);
+    ambientsound (self.origin, self.noise, VOL_BASE, ATTN_STATIC);
   }
 }
 */
