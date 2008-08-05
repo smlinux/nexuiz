@@ -234,19 +234,22 @@ void SV_PlayerPhysics()
 	}
 
 	if(self.flags & FL_ONGROUND)
-		if not(self.lastflags & FL_ONGROUND)
+	if not(self.lastflags & FL_ONGROUND)
+	if(self.waterlevel < 2)
+	if(time >= self.ladder_time)
+	if not(self.hook)
+	{
+		self.nextstep = time + 0.3 + random() * 0.1;
+		trace_dphitq3surfaceflags = 0;
+		tracebox(self.origin, self.mins, self.maxs, self.origin - '0 0 1', MOVE_NOMONSTERS, self);
+		if not(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOSTEPS)
 		{
-			self.nextstep = time + 0.3 + random() * 0.1;
-			trace_dphitq3surfaceflags = 0;
-			tracebox(self.origin, self.mins, self.maxs, self.origin - '0 0 1', MOVE_NOMONSTERS, self);
-			if not(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOSTEPS)
-			{
-				if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_METALSTEPS)
-					GlobalSound(globalsound_metalfall, CHAN_AUTO, 0);
-				else
-					GlobalSound(globalsound_fall, CHAN_AUTO, 0);
-			}
+			if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_METALSTEPS)
+				GlobalSound(globalsound_metalfall, CHAN_AUTO, 0);
+			else
+				GlobalSound(globalsound_fall, CHAN_AUTO, 0);
 		}
+	}
 
 	if(self.classname == "player")
 	{
