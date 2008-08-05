@@ -337,13 +337,10 @@ void InitGameplayMode()
 	e.think = default_delayedinit;
 }
 
-string GetClientVersionMessage(float v) {
+string GetClientVersionMessage() {
 	local string versionmsg;
-	if (v == 1) {
-		versionmsg = "^1client is too old to get versioninfo.\n\n\n### YOU WON'T BE ABLE TO PLAY ON THIS SERVER ###\n\n\nUPDATE!!! (http://www.nexuiz.com)^8";
-		// either that or someone wants to be funny
-	} else if (v != cvar("gameversion")) {
-		if(v < cvar("gameversion")) {
+	if (self.version_mismatch) {
+		if(self.version < cvar("gameversion")) {
 			versionmsg = "^3Your client version is outdated.\n\n\n### YOU WON'T BE ABLE TO PLAY ON THIS SERVER ###\n\n\nPlease update!!!^8";
 		} else {
 			versionmsg = "^3This server is using an outdated Nexuiz version.\n\n\n ### THIS SERVER IS INCOMPATIBLE AND THUS YOU CANNOT JOIN ###.^8";
@@ -447,7 +444,7 @@ void PrintWelcomeMessage(entity pl)
 	}
 
 	local string versionmessage;
-	versionmessage = GetClientVersionMessage(self.version);
+	versionmessage = GetClientVersionMessage();
 
 	s = strcat(s, NEWLINES, "This is Nexuiz ", cvar_string("g_nexuizversion"), "\n", versionmessage);
 	s = strcat(s, "^8\n\nmatch type is ^1", mutator, gamemode_name, "^8\n");

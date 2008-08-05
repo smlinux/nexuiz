@@ -197,7 +197,7 @@ void SV_ParseClientCommand(string s) {
 		if(self.version != cvar("gameversion"))
 		{
 			self.classname = "observer";
-			self.frags = -2;
+			self.version_mismatch = 1;
 			PutClientInServer();
 		} else if(cvar("g_campaign") || cvar("g_balance_teams") || cvar("g_balance_teams_force")) {
 			//JoinBestTeam(self, FALSE, TRUE);

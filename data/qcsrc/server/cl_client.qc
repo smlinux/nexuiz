@@ -446,15 +446,14 @@ void PutObserverInServer (void)
 
 	if(g_arena)
 	{
-		if(self.frags != -2)
-		{
-			Spawnqueue_Insert(self);
-			// FIXME what IS this?
-		}
-		else
+		if(self.version_mismatch)
 		{
 			Spawnqueue_Unmark(self);
 			Spawnqueue_Remove(self);
+		}
+		else
+		{
+			Spawnqueue_Insert(self);
 		}
 	}
 	else if(g_lms)
@@ -1808,12 +1807,12 @@ float vercmp(string v1, string v2)
 void ObserverThink()
 {
 	if (self.flags & FL_JUMPRELEASED) {
-		if (self.BUTTON_JUMP && self.version == cvar("gameversion")) {
+		if (self.BUTTON_JUMP && !self.version_mismatch) {
 			self.welcomemessage_time = 0;
 			self.flags = self.flags - FL_JUMPRELEASED;
 			LeaveSpectatorMode();
 			return;
-		} else if(self.BUTTON_ATCK && self.version == cvar("gameversion")) {
+		} else if(self.BUTTON_ATCK && !self.version_mismatch) {
 			self.welcomemessage_time = 0;
 			self.flags = self.flags - FL_JUMPRELEASED;
 			if(SpectateNext() == 1) {
@@ -1834,7 +1833,7 @@ void ObserverThink()
 void SpectatorThink()
 {
 	if (self.flags & FL_JUMPRELEASED) {
-		if (self.BUTTON_JUMP && self.version == cvar("gameversion")) {
+		if (self.BUTTON_JUMP && !self.version_mismatch) {
 			self.welcomemessage_time = 0;
 			self.flags = self.flags - FL_JUMPRELEASED;
 			LeaveSpectatorMode();

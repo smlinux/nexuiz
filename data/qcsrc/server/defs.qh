@@ -477,3 +477,5 @@ void ClearPlayerSounds();
 void PlayerSound(.string samplefield, float channel, float teamsay); // 0 is normal, 1 is team, 2 is last attacker
 void GlobalSound(string samplestring, float channel, float teamsay); // 0 is normal, 1 is team, 2 is last attacker
 void VoiceMessage(string type);
+
+.float version_mismatch;
