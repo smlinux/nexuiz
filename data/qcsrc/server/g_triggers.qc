@@ -56,7 +56,7 @@ void SUB_UseTargets()
 	{
 		centerprint (activator, self.message);
 		if (!self.noise)
-			sound (activator, CHAN_VOICE, "misc/talk.wav", VOL_BASE, ATTN_NORM);
+			play2(activator, "misc/talk.wav");
 	}
 
 //
@@ -140,7 +140,7 @@ void multi_trigger()
 	}
 
 	if (self.noise)
-		sound (self, CHAN_VOICE, self.noise, VOL_BASE, ATTN_NORM);
+		sound (self, CHAN_ITEM, self.noise, VOL_BASE, ATTN_NORM);
 
 // don't trigger again until reset
 	self.takedamage = DAMAGE_NO;
@@ -458,7 +458,7 @@ float tracebox_hits_trigger_hurt(vector start, vector mi, vector ma, vector end)
 }
 
 
-void target_speaker_use() {sound(self, CHAN_VOICE, self.noise, VOL_BASE, ATTN_NORM);}
+void target_speaker_use() {sound(self, CHAN_ITEM, self.noise, VOL_BASE, ATTN_NORM);}
 
 void spawnfunc_target_speaker()
 {

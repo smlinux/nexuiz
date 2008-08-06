@@ -5,7 +5,7 @@ void Item_Respawn (void)
 {
 	self.model = self.mdl;		// restore original model
 	self.solid = SOLID_TRIGGER;	// allow it to be touched again
-	sound (self, CHAN_VOICE, "misc/itemrespawn.wav", VOL_BASE, ATTN_NORM);	// play respawn sound
+	sound (self, CHAN_ITEM, "misc/itemrespawn.wav", VOL_BASE, ATTN_NORM);	// play respawn sound
 	setorigin (self, self.origin);
 
 	//pointparticles(particleeffectnum("item_respawn"), self.origin + self.mins_z * '0 0 1' + '0 0 48', '0 0 0', 1);
@@ -185,8 +185,7 @@ void Item_Touch (void)
 	if (!pickedup)
 		return;
 
-	sound (self, CHAN_BODY, self.noise, VOL_BASE, ATTN_NORM);
-	sound (other, CHAN_AUTO, self.item_pickupsound, VOL_BASE, ATTN_NORM);
+	sound (other, CHAN_ITEM, self.item_pickupsound, VOL_BASE, ATTN_NORM);
 
 	oldself = self;
 	self = other;
@@ -414,7 +413,6 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 	self.bot_pickupevalfunc = pickupevalfunc;
 	self.bot_pickupbasevalue = pickupbasevalue;
 	self.mdl = itemmodel;
-	//self.noise = pickupsound;
 	self.item_pickupsound = pickupsound;
 	// let mappers override respawntime
 	if (!self.respawntime)

@@ -50,7 +50,7 @@ void W_Plasma_Touch (void)
 				if(IsFlying(other))
 					announce(o, "announcer/male/electrobitch.ogg");
 	} else {
-		sound (self, CHAN_IMPACT, "weapons/electro_bounce.wav", VOL_BASE, ATTN_NORM);
+		sound (self, CHAN_BODY, "weapons/electro_bounce.wav", VOL_BASE, ATTN_NORM);
 	}
 }
 

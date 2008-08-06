@@ -951,9 +951,9 @@ void soundto(float dest, entity e, float chan, string samp, float vol, float att
 	o = e.origin + 0.5 * (e.mins + e.maxs);
 	soundtoat(dest, e, o, chan, samp, vol, atten);
 }
-void soundat(vector o, string samp, float vol, float atten)
+void soundat(entity e, vector o, float chan, string samp, float vol, float atten)
 {
-	soundtoat(MSG_BROADCAST, world, o, CHAN_AUTO, samp, vol, atten);
+	soundtoat(MSG_BROADCAST, e, o, chan, samp, vol, atten);
 }
 
 void play2(entity e, string filename)
@@ -961,6 +961,17 @@ void play2(entity e, string filename)
 	//stuffcmd(e, strcat("play2 ", filename, "\n"));
 	msg_entity = e;
 	soundtoat(MSG_ONE, world, '0 0 0', CHAN_AUTO, filename, VOL_BASE, ATTN_NONE);
+}
+
+.float announcetime;
+void announce(entity player, string msg)
+{
+	if(time > player.announcetime)
+	if(clienttype(player) == CLIENTTYPE_REAL)
+	{
+		player.announcetime = time + 0.3;
+		play2(player, msg);
+	}
 }
 
 void play2team(float t, string filename)
@@ -971,6 +982,11 @@ void play2team(float t, string filename)
 		if (head.team == t)
 			play2(head, filename);
 	}
+}
+
+void play2all(string samp)
+{
+	sound(world, CHAN_AUTO, samp, VOL_BASE, ATTN_NONE);
 }
 
 void PrecachePlayerSounds(string f);

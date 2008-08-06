@@ -13,19 +13,13 @@ void CreatureFrame (void)
 			{
 				if (!(self.flags & FL_INWATER))
 				{
-					//if (self.watertype == CONTENT_LAVA)
-					//	sound (self, CHAN_BODY, "player/inlava.wav", VOL_BASE, ATTN_NORM);
-					//if (self.watertype == CONTENT_WATER)
-					//	sound (self, CHAN_BODY, "player/inh2o.wav", VOL_BASE, ATTN_NORM);
-					//if (self.watertype == CONTENT_SLIME)
-					//	sound (self, CHAN_BODY, "player/slimbrn2.wav", VOL_BASE, ATTN_NORM);
 					self.flags = self.flags + FL_INWATER;
 					self.dmgtime = 0;
 				}
 				if (self.waterlevel != 3)
 				{
 					if(self.air_finished < time + 9)
-						PlayerSound(playersound_gasp, CHAN_AUTO, 0);
+						PlayerSound(playersound_gasp, CHAN_PLAYER, 0);
 					self.air_finished = time + 12;
 					self.dmg = 2;
 				}
@@ -46,7 +40,7 @@ void CreatureFrame (void)
 						if (self.watersound_finished < time)
 						{
 							self.watersound_finished = time + 0.5;
-							sound (self, CHAN_BODY, "player/lava.wav", VOL_BASE, ATTN_NORM);
+							sound (self, CHAN_PLAYER, "player/lava.wav", VOL_BASE, ATTN_NORM);
 						}
 						Damage (self, world, world, 6 * self.waterlevel, DEATH_LAVA, self.origin, '0 0 0');
 					}
@@ -55,7 +49,7 @@ void CreatureFrame (void)
 						if (self.watersound_finished < time)
 						{
 							self.watersound_finished = time + 0.5;
-							sound (self, CHAN_BODY, "player/slime.wav", VOL_BASE, ATTN_NORM);
+							sound (self, CHAN_PLAYER, "player/slime.wav", VOL_BASE, ATTN_NORM);
 						}
 						Damage (self, world, world, 2 * self.waterlevel, DEATH_SLIME, self.origin, '0 0 0');
 					}
@@ -111,9 +105,9 @@ void CreatureFrame (void)
 					if not(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOSTEPS)
 					{
 						if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_METALSTEPS)
-							GlobalSound(globalsound_metalstep, CHAN_AUTO, 0);
+							GlobalSound(globalsound_metalstep, CHAN_PLAYER, 0);
 						else
-							GlobalSound(globalsound_step, CHAN_AUTO, 0);
+							GlobalSound(globalsound_step, CHAN_PLAYER, 0);
 					}
 				}
 			}

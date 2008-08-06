@@ -701,7 +701,7 @@ void PutClientInServer (void)
 	 	//stuffcmd(self, "set viewsize $tmpviewsize \n");
 
 		if (cvar("g_spawnsound"))
-			sound (self, CHAN_AUTO, "misc/spawn.wav", VOL_BASE, ATTN_NORM);
+			sound (self, CHAN_ITEM, "misc/spawn.wav", VOL_BASE, ATTN_NORM);
 
 		if(g_assault) {
 			if(self.team == assault_attacker_team)
@@ -829,7 +829,7 @@ void KillIndicator_Think()
 		if(clienttype(self.owner) == CLIENTTYPE_REAL)
 		{
 			if(self.cnt <= 10)
-				play2(self.owner, strcat("announcer/robotic/", ftos(self.cnt), ".ogg"));
+				announce(self.owner, strcat("announcer/robotic/", ftos(self.cnt), ".ogg"));
 			if(self.owner.killindicator_teamchange)
 			{
 				if(self.owner.killindicator_teamchange == -1)
@@ -1695,7 +1695,7 @@ void ShowRespawnCountdown()
 		{
 			self.respawn_countdown = number - 1;
 			if(ceil(self.death_time - (time + 0.5)) == number) // only say it if it is the same number even in 0.5s; to prevent overlapping sounds
-				play2(self, strcat("announcer/robotic/", ftos(number), ".ogg"));
+				announce(self, strcat("announcer/robotic/", ftos(number), ".ogg"));
 		}
 	}
 }
@@ -2170,7 +2170,7 @@ void PlayerPostThink (void)
 		if(timeleft <= 0)
 		{
 			bprint("^3", self.netname, "^3 was kicked for idling.\n");
-			play2(self, "announcer/robotic/terminated.ogg");
+			announce(self, "announcer/robotic/terminated.ogg");
 			dropclient(self);
 			return;
 		}
@@ -2179,7 +2179,7 @@ void PlayerPostThink (void)
 			if(timeleft != self.idlekick_lasttimeleft)
 			{
 				centerprint_atprio(self, CENTERPRIO_IDLEKICK, strcat("^3Stop idling!\n^3Disconnecting in ", ftos(timeleft), "..."));
-				play2(self, strcat("announcer/robotic/", ftos(timeleft), ".ogg"));
+				announce(self, strcat("announcer/robotic/", ftos(timeleft), ".ogg"));
 			}
 		}
 		else

@@ -400,7 +400,7 @@ float w_rlauncher(float req)
 		{
 			self.exteriorweaponentity.attack_finished_single = time + 0.4;
 			self.laser_on = !self.laser_on;
-			sound (self, CHAN_AUTO, "weapons/tink1.wav", VOL_BASE, ATTN_NORM);
+			sound (self, CHAN_WEAPON, "weapons/tink1.wav", VOL_BASE, ATTN_NORM);
 		}
 	}
 	else if (req == WR_PRECACHE)

@@ -68,9 +68,9 @@ void dompoint_captured ()
 		self.enemy = world;
 
 	if (head.noise != "")
-		sound(self, CHAN_BODY, head.noise, VOL_BASE, ATTN_NORM);
+		sound(self, CHAN_ITEM, head.noise, VOL_BASE, ATTN_NORM);
 	if (head.noise1 != "")
-		sound(self, CHAN_VOICE, head.noise1, VOL_BASE, ATTN_NONE);
+		play2all(head.noise1);
 
 	//self.nextthink = time + cvar("g_domination_point_rate");
 	//self.think = dompointthink;

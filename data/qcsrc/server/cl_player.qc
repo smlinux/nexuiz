@@ -267,11 +267,11 @@ void PlayerCorpseDamage (entity inflictor, entity attacker, float damage, float 
 	take = bound(0, damage - save, damage);
 
 	if (save > 10)
-		sound (self, CHAN_IMPACT, "misc/armorimpact.wav", VOL_BASE, ATTN_NORM);
+		sound (self, CHAN_BODY, "misc/armorimpact.wav", VOL_BASE, ATTN_NORM);
 	else if (take > 30)
-		sound (self, CHAN_IMPACT, "misc/bodyimpact2.wav", VOL_BASE, ATTN_NORM);
+		sound (self, CHAN_BODY, "misc/bodyimpact2.wav", VOL_BASE, ATTN_NORM);
 	else if (take > 10)
-		sound (self, CHAN_IMPACT, "misc/bodyimpact1.wav", VOL_BASE, ATTN_NORM);
+		sound (self, CHAN_BODY, "misc/bodyimpact1.wav", VOL_BASE, ATTN_NORM);
 
 	if(sv_gentle < 1) {	
 		if (take > 50)
@@ -344,7 +344,7 @@ void PlayerCorpseDamage (entity inflictor, entity attacker, float damage, float 
 				TossGib (world, "models/gibs/chunk.mdl", self.origin, self.velocity + randomvec() * 450,1);
 				TossGib (world, "models/gibs/chunk.mdl", self.origin, self.velocity + randomvec() * 450,1);
 			}
-			sound (self, CHAN_VOICE, "misc/gib.wav", VOL_BASE, ATTN_NORM);
+			sound (self, CHAN_PLAYER, "misc/gib.wav", VOL_BASE, ATTN_NORM);
 		}
 	}
 }
@@ -379,11 +379,11 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 	}
 
 	if (save > 10)
-		sound (self, CHAN_IMPACT, "misc/armorimpact.wav", VOL_BASE, ATTN_NORM);
+		sound (self, CHAN_BODY, "misc/armorimpact.wav", VOL_BASE, ATTN_NORM);
 	else if (take > 30)
-		sound (self, CHAN_IMPACT, "misc/bodyimpact2.wav", VOL_BASE, ATTN_NORM);
+		sound (self, CHAN_BODY, "misc/bodyimpact2.wav", VOL_BASE, ATTN_NORM);
 	else if (take > 10)
-		sound (self, CHAN_IMPACT, "misc/bodyimpact1.wav", VOL_BASE, ATTN_NORM); // FIXME possibly remove them?
+		sound (self, CHAN_BODY, "misc/bodyimpact1.wav", VOL_BASE, ATTN_NORM); // FIXME possibly remove them?
 
 	if (take > 50)
 		TossGib (world, "models/gibs/chunk.mdl", hitloc, force * -0.1,1);
@@ -413,13 +413,13 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 					// exclude pain sounds for laserjumps as long as you aren't REALLY low on health and would die of the next two
 					{
 						if(self.health > 75) // TODO make a "gentle" version?
-							PlayerSound(playersound_pain100, CHAN_AUTO, 0);
+							PlayerSound(playersound_pain100, CHAN_PAIN, 0);
 						else if(self.health > 50)
-							PlayerSound(playersound_pain75, CHAN_AUTO, 0);
+							PlayerSound(playersound_pain75, CHAN_PAIN, 0);
 						else if(self.health > 25)
-							PlayerSound(playersound_pain50, CHAN_AUTO, 0);
+							PlayerSound(playersound_pain50, CHAN_PAIN, 0);
 						else if(self.health > 1)
-							PlayerSound(playersound_pain25, CHAN_AUTO, 0);
+							PlayerSound(playersound_pain25, CHAN_PAIN, 0);
 					}
 				}
 
@@ -464,9 +464,9 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 		if(sv_gentle < 1) // TODO make a "gentle" version?
 		{
 			if(deathtype == DEATH_DROWN)
-				PlayerSound(playersound_drown, CHAN_AUTO, 0);
+				PlayerSound(playersound_drown, CHAN_PAIN, 0);
 			else
-				PlayerSound(playersound_death, CHAN_AUTO, 0);
+				PlayerSound(playersound_death, CHAN_PAIN, 0);
 		}
 
 		// get rid of kill indicator

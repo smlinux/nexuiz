@@ -1,17 +1,7 @@
 
 float checkrules_firstblood;
 
-.float announcetime;
 float yoda;
-void announce(entity player, string msg)
-{
-	if(time > player.announcetime)
-	if(clienttype(player) == CLIENTTYPE_REAL)
-	{
-		player.announcetime = time + 0.3;
-		play2(player, msg);
-	}
-}
 
 float IsDifferentTeam(entity a, entity b)
 {
@@ -226,7 +216,6 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				else if (deathtype == DEATH_NOAMMO)
 				{
 					bprint ("^7",s, " ^7committed suicide. What's the point of living without ammo?\n");
-					//sound (self, CHAN_BODY, "minstagib/mockery.wav", VOL_BASE, ATTN_NONE);
 				}
 				else if (deathtype == DEATH_CAMP)
 					bprint ("^1",s, "^1 thought he found a nice camping ground\n");
@@ -277,9 +266,6 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				if (!checkrules_firstblood)
 				{
 					checkrules_firstblood = TRUE;
-					//sound(world, CHAN_AUTO, "announcer/firstblood.wav", VOL_BASE, ATTN_NONE);
-					//if (g_minstagib)
-						//sound(world, CHAN_AUTO, "announce/male/mapkill1.wav", VOL_BASE, ATTN_NONE);
 					if(sv_gentle)
 						bprint("^1",a, "^1 was the first to score", "\n");
 					else
