@@ -2,8 +2,7 @@ void forAllDescendants(entity root, void(entity, entity) funcPre, void(entity, e
 void saveAllCvars(entity root);
 void loadAllCvars(entity root);
 
-.string cvarNames;
-void saveCvarsMulti(entity me);
+void makeMulti(entity me, string otherCvars);
 
 void setDependent(entity e, string theCvarName, float theCvarMin, float theCvarMax);
 void setDependentAND(entity e, string theCvarName, float theCvarMin, float theCvarMax, string theCvar2Name, float theCvar2Min, float theCvar2Max);

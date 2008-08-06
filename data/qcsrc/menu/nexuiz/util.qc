@@ -26,16 +26,26 @@ void loadAllCvars(entity root)
 	forAllDescendants(root, loadCvarsOf, SUB_Null_ee, NULL);
 }
 
-.string cvarNames;
+.string cvarNames_Multi;
+.void(entity me) saveCvars_Multi;
 void saveCvarsMulti(entity me)
 {
 	float n, i;
 	string s;
-	n = tokenize(me.cvarNames);
-	s = ftos(me.value);
-	cvar_set(me.cvarName, s);
+
+	me.saveCvars_Multi(me);
+	s = cvar_string(me.cvarName);
+
+	n = tokenize(me.cvarNames_Multi);
 	for(i = 0; i < n; ++i)
 		cvar_set(argv(i), s);
+}
+
+void makeMulti(entity e, string otherCvars)
+{
+	e.cvarNames_Multi = otherCvars;
+	e.saveCvars_Multi = e.saveCvars;
+	e.saveCvars = saveCvarsMulti;
 }
 
 .void(entity) draw_setDependent;
