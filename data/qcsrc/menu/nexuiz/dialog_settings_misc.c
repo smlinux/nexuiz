@@ -35,7 +35,7 @@ void fillNexuizMiscSettingsTab(entity me)
 	me.TR(me);
 	me.TR(me);
 		s = makeNexuizDecibelsSlider(-20, 0, 0.5, "volume");
-		me.TD(me, 1, 1, e = makeNexuizSliderCheckBox(-1000000, 1, s, "Game (Master):"));
+		me.TD(me, 1, 1, e = makeNexuizSliderCheckBox(-1000000, 1, s, "Master:"));
 		me.TD(me, 1, 2, s);
 	me.TR(me);
 		me.TDempty(me, 0.2);
