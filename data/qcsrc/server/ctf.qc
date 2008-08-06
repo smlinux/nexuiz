@@ -214,7 +214,7 @@ void FlagThink()
 		if (time > self.pain_finished)
 		{
 			bprint("The ", self.netname, " has returned to base\n");
-			sound (e, CHAN_TRIGGER, self.noise3, VOL_BASE, ATTN_NONE);
+			sound (self, CHAN_TRIGGER, self.noise3, VOL_BASE, ATTN_NONE);
 			LogCTF("returned", self.team, world);
 			ReturnFlag(self);
 		}
