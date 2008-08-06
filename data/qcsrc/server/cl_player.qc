@@ -862,7 +862,7 @@ void LoadPlayerSounds(string f, float first)
 			field = GetVoiceMessageSampleField(argv(0));
 		if(GetPlayerSoundSampleField_notFound)
 			continue;
-		if not(GetPlayerSoundSampleField_fixed)
+		if(GetPlayerSoundSampleField_fixed)
 			if not(first)
 				continue;
 		if(self.field)
