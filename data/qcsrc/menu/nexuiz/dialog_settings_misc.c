@@ -40,7 +40,7 @@ void fillNexuizMiscSettingsTab(entity me)
 	me.TR(me);
 		me.TDempty(me, 0.2);
 		s = makeNexuizDecibelsSlider(-20, 0, 0.5, "snd_worldchannel0volume");
-		me.TD(me, 1, 0.8, e = makeNexuizSliderCheckBox(-1000000, 1, s, "Announcer/Chat:"));
+		me.TD(me, 1, 0.8, e = makeNexuizSliderCheckBox(-1000000, 1, s, "Info:"));
 		me.TD(me, 1, 2, s);
 		setDependentStringNotEqual(e, "volume", "0");
 		setDependentStringNotEqual(s, "volume", "0");
@@ -62,7 +62,7 @@ void fillNexuizMiscSettingsTab(entity me)
 		me.TDempty(me, 0.2);
 		s = makeNexuizDecibelsSlider(-20, 0, 0.5, "snd_playerchannel7volume");
 		s.saveCvars = saveCvarsMulti; s.cvarNames = "snd_entchannel7volume"; // gib sounds
-		me.TD(me, 1, 0.8, e = makeNexuizSliderCheckBox(-1000000, 1, s, "Player body:"));
+		me.TD(me, 1, 0.8, e = makeNexuizSliderCheckBox(-1000000, 1, s, "Player:"));
 		me.TD(me, 1, 2, s);
 		setDependentStringNotEqual(e, "volume", "0");
 		setDependentStringNotEqual(s, "volume", "0");
@@ -70,7 +70,7 @@ void fillNexuizMiscSettingsTab(entity me)
 		me.TDempty(me, 0.2);
 		s = makeNexuizDecibelsSlider(-20, 0, 0.5, "snd_entchannel4volume");
 		s.saveCvars = saveCvarsMulti; s.cvarNames = "snd_playerchannel4volume"; // hits to player
-		me.TD(me, 1, 0.8, e = makeNexuizSliderCheckBox(-1000000, 1, s, "Projectiles:"));
+		me.TD(me, 1, 0.8, e = makeNexuizSliderCheckBox(-1000000, 1, s, "Shots:"));
 		me.TD(me, 1, 2, s);
 		setDependentStringNotEqual(e, "volume", "0");
 		setDependentStringNotEqual(s, "volume", "0");
@@ -78,21 +78,21 @@ void fillNexuizMiscSettingsTab(entity me)
 		me.TDempty(me, 0.2);
 		s = makeNexuizDecibelsSlider(-20, 0, 0.5, "snd_entchannel3volume");
 		s.saveCvars = saveCvarsMulti; s.cvarNames = "snd_playerchannel0volume snd_playerchannel3volume";
-		me.TD(me, 1, 0.8, e = makeNexuizSliderCheckBox(-1000000, 1, s, "Triggers/Items:"));
+		me.TD(me, 1, 0.8, e = makeNexuizSliderCheckBox(-1000000, 1, s, "Items:"));
 		me.TD(me, 1, 2, s);
 		setDependentStringNotEqual(e, "volume", "0");
 		setDependentStringNotEqual(s, "volume", "0");
 	me.TR(me);
 		me.TDempty(me, 0.2);
 		s = makeNexuizDecibelsSlider(-20, 0, 0.5, "snd_playerchannel2volume");
-		me.TD(me, 1, 0.8, e = makeNexuizSliderCheckBox(-1000000, 1, s, "Voice/Radio:"));
+		me.TD(me, 1, 0.8, e = makeNexuizSliderCheckBox(-1000000, 1, s, "Voice:"));
 		me.TD(me, 1, 2, s);
 		setDependentStringNotEqual(e, "volume", "0");
 		setDependentStringNotEqual(s, "volume", "0");
 	me.TR(me);
 		me.TDempty(me, 0.2);
 		s = makeNexuizDecibelsSlider(-20, 0, 0.5, "snd_playerchannel1volume");
-		me.TD(me, 1, 0.8, e = makeNexuizSliderCheckBox(-1000000, 1, s, "Weapon fire:"));
+		me.TD(me, 1, 0.8, e = makeNexuizSliderCheckBox(-1000000, 1, s, "Weapons:"));
 		me.TD(me, 1, 2, s);
 		setDependentStringNotEqual(e, "volume", "0");
 		setDependentStringNotEqual(s, "volume", "0");
