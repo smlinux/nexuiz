@@ -185,7 +185,7 @@ void Item_Touch (void)
 	if (!pickedup)
 		return;
 
-	sound (self, CHAN_TRIGGER, self.item_pickupsound, VOL_BASE, ATTN_NORM);
+	sound (other, CHAN_AUTO, self.item_pickupsound, VOL_BASE, ATTN_NORM);
 
 	oldself = self;
 	self = other;

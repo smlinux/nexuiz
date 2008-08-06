@@ -140,7 +140,7 @@ void multi_trigger()
 	}
 
 	if (self.noise)
-		sound (self, CHAN_TRIGGER, self.noise, VOL_BASE, ATTN_NORM);
+		sound (self.enemy, CHAN_AUTO, self.noise, VOL_BASE, ATTN_NORM);
 
 // don't trigger again until reset
 	self.takedamage = DAMAGE_NO;

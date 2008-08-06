@@ -63,7 +63,7 @@ void Teleport_Touch (void)
 		return;
 
 	// Make teleport effect where the player left
-	sound (other, CHAN_TRIGGER, "misc/teleport.wav", VOL_BASE, ATTN_NORM);
+	sound (self, CHAN_TRIGGER, "misc/teleport.wav", VOL_BASE, ATTN_NORM);
 	pointparticles(particleeffectnum("teleport"), other.origin, '0 0 0', 1);
 
 	// Make teleport effect where the player arrived

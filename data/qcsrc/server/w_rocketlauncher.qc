@@ -392,7 +392,7 @@ float w_rlauncher(float req)
 		if(time > self.rl_sound)
 		{
 			self.rl_sound = time + 1;
-			sound (self, CHAN_PROJECTILE, "weapons/rocket_det.wav", 0.5 * VOL_BASE, ATTN_NORM);
+			sound (self, CHAN_WEAPON, "weapons/rocket_det.wav", 0.5 * VOL_BASE, ATTN_NORM);
 		}
 		if (self.BUTTON_ATCK2)
 		if(g_laserguided_missile)

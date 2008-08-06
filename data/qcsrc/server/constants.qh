@@ -106,12 +106,11 @@ float	TE_LIGHTNING3				= 9;
 float	TE_LAVASPLASH				= 10;
 float	TE_TELEPORT				= 11;
 
-float	CHAN_AUTO				= 0; // Announcer/Chat
+float	CHAN_AUTO				= 0; // Announcer/Chat, on player: Triggers/Items
 float	CHAN_WEAPON				= 1; // Weapon fire
 float	CHAN_VOICE				= 2; // Voice/Radio
-float	CHAN_TRIGGER			= 3; // Triggers
+float	CHAN_TRIGGER			= 3; // Triggers/Items
 float	CHAN_PROJECTILE			= 4; // Projectiles
-float	CHAN_POWERUP			= 5; // Powerups
 float	CHAN_PAIN				= 6; // Pain
 float	CHAN_PLAYER				= 7; // Player body
 

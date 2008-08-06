@@ -435,7 +435,7 @@ float kh_Key_AllOwnedByWhichTeam()  // constantly called. check to see if all th
 
 void kh_Key_Collect(entity key, entity player)  //a player picks up a dropped key
 {
-	sound(player, CHAN_TRIGGER, kh_sound_collect, VOL_BASE, ATTN_NORM);
+	sound(player, CHAN_AUTO, kh_sound_collect, VOL_BASE, ATTN_NORM);
 
 	if(key.kh_dropperteam != player.team)
 	{
@@ -477,7 +477,7 @@ void kh_Key_DropAll(entity player, float suicide) // runs whenever a player dies
 			if(suicide)
 				key.kh_dropperteam = player.team;
 		}
-		sound(player, CHAN_TRIGGER, kh_sound_drop, VOL_BASE, ATTN_NORM);
+		sound(player, CHAN_AUTO, kh_sound_drop, VOL_BASE, ATTN_NORM);
 	}
 }
 
@@ -542,7 +542,7 @@ void kh_Key_Think()  // runs all the time
 			self.pusher = world;
 			kh_Scores_Event(self.owner, self, "dropkey", 0, 0);
 			bprint(self.owner.netname, "^7 dropped the ", self.netname, "\n");
-			sound(self.owner, CHAN_TRIGGER, kh_sound_drop, VOL_BASE, ATTN_NORM);
+			sound(self.owner, CHAN_AUTO, kh_sound_drop, VOL_BASE, ATTN_NORM);
 			makevectors(self.owner.v_angle);
 			self.velocity = W_CalculateProjectileVelocity(self.owner.velocity, cvar("g_balance_keyhunt_throwvelocity") * v_forward);
 			kh_Key_AssignTo(self, world);
@@ -561,7 +561,7 @@ void kh_Key_Think()  // runs all the time
 	{
 		if(self.siren_time < time)
 		{
-			sound(self.owner, CHAN_TRIGGER, kh_sound_alarm, VOL_BASE, ATTN_NORM);  // play a simple alarm
+			sound(self.owner, CHAN_AUTO, kh_sound_alarm, VOL_BASE, ATTN_NORM);  // play a simple alarm
 			self.siren_time = time + 2.5;  // repeat every 2.5 seconds
 		}
 

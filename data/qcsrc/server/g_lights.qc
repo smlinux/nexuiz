@@ -66,7 +66,7 @@ void dynlight_use()
 	else
 		self.light_lev = 0;
 };
-void dynlight()
+void spawnfunc_dynlight()
 {
 	local	entity	targ;
 

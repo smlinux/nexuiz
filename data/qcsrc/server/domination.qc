@@ -68,7 +68,10 @@ void dompoint_captured ()
 		self.enemy = world;
 
 	if (head.noise != "")
-		sound(self, CHAN_TRIGGER, head.noise, VOL_BASE, ATTN_NORM);
+		if(self.enemy)
+			sound(self.enemy, CHAN_AUTO, head.noise, VOL_BASE, ATTN_NORM);
+		else
+			sound(self, CHAN_TRIGGER, head.noise, VOL_BASE, ATTN_NORM);
 	if (head.noise1 != "")
 		play2all(head.noise1);
 
