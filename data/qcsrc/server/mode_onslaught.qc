@@ -319,7 +319,7 @@ void onslaught_generator_think()
 	{
 		// self.max_health / 300 gives 5 minutes of overtime.
 		// control points reduce the overtime duration.
-		sound(self, CHAN_ITEM, "sound/onslaught/generator_decay.wav", VOL_BASE, ATTN_NORM);
+		sound(self, CHAN_TRIGGER, "sound/onslaught/generator_decay.wav", VOL_BASE, ATTN_NORM);
 		d = 1;
 		e = findchain(classname, "onslaught_controlpoint");
 		while (e)
@@ -343,13 +343,13 @@ void onslaught_generator_deaththink()
 		self.count = self.count - 1;
 		org = randompos(self.origin + self.mins + '8 8 8', self.origin + self.maxs + '-8 -8 -8');
 		pointparticles(particleeffectnum("onslaught_generator_smallexplosion"), org, '0 0 0', 1);
-		sound(self, CHAN_ITEM, "sound/weapons/grenade_impact.wav", VOL_BASE, ATTN_NORM);
+		sound(self, CHAN_TRIGGER, "sound/weapons/grenade_impact.wav", VOL_BASE, ATTN_NORM);
 	}
 	else
 	{
 		org = self.origin;
 		pointparticles(particleeffectnum("onslaught_generator_finalexplosion"), org, '0 0 0', 1);
-		sound(self, CHAN_ITEM, "sound/weapons/rocket_impact.wav", VOL_BASE, ATTN_NORM);
+		sound(self, CHAN_TRIGGER, "sound/weapons/rocket_impact.wav", VOL_BASE, ATTN_NORM);
 	}
 };
 
@@ -622,7 +622,7 @@ void onslaught_controlpoint_icon_damage(entity inflictor, entity attacker, float
 	self.colormod = '2 2 2';
 	if (self.health < 0)
 	{
-		sound(self, CHAN_ITEM, "sound/weapons/grenade_impact.wav", VOL_BASE, ATTN_NORM);
+		sound(self, CHAN_TRIGGER, "sound/weapons/grenade_impact.wav", VOL_BASE, ATTN_NORM);
 		pointparticles(particleeffectnum("onslaught_controlpoint_explosion"), self.origin, '0 0 0', 1);
 		{
 			string t;
@@ -672,7 +672,7 @@ void onslaught_controlpoint_icon_buildthink()
 		self.health = self.max_health;
 		self.count = self.count * 0.2; // slow repair rate from now on
 		self.think = onslaught_controlpoint_icon_think;
-		sound(self, CHAN_ITEM, "sound/onslaught/controlpoint_built.wav", VOL_BASE, ATTN_NORM);
+		sound(self, CHAN_TRIGGER, "sound/onslaught/controlpoint_built.wav", VOL_BASE, ATTN_NORM);
 		bprint(ColoredTeamName(self.team), " captured ", self.owner.message, " control point\n");
 		self.owner.iscaptured = TRUE;
 		onslaught_updatelinks();
@@ -719,7 +719,7 @@ void onslaught_controlpoint_touch()
 	e.think = onslaught_controlpoint_icon_buildthink;
 	e.nextthink = time + 0.1;
 	e.count = e.max_health / 50; // how long it takes to build
-	sound(e, CHAN_ITEM, "sound/onslaught/controlpoint_build.wav", VOL_BASE, ATTN_NORM);
+	sound(e, CHAN_TRIGGER, "sound/onslaught/controlpoint_build.wav", VOL_BASE, ATTN_NORM);
 	self.team = e.team;
 	self.colormap = e.colormap;
 };

@@ -79,7 +79,7 @@ void reset_map()
 		}
 		else if(self.flags & FL_PROJECTILE)		// remove any projectiles left
 		{
-			sound(self, CHAN_BODY, "misc/null.wav", VOL_BASE, ATTN_NORM);
+			sound(self, CHAN_PROJECTILE, "misc/null.wav", VOL_BASE, ATTN_NORM);
 			remove(self);
 		}
 		else if(self.isdecor)

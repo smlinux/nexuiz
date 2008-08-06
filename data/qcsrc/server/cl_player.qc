@@ -267,11 +267,11 @@ void PlayerCorpseDamage (entity inflictor, entity attacker, float damage, float 
 	take = bound(0, damage - save, damage);
 
 	if (save > 10)
-		sound (self, CHAN_BODY, "misc/armorimpact.wav", VOL_BASE, ATTN_NORM);
+		sound (self, CHAN_PROJECTILE, "misc/armorimpact.wav", VOL_BASE, ATTN_NORM);
 	else if (take > 30)
-		sound (self, CHAN_BODY, "misc/bodyimpact2.wav", VOL_BASE, ATTN_NORM);
+		sound (self, CHAN_PROJECTILE, "misc/bodyimpact2.wav", VOL_BASE, ATTN_NORM);
 	else if (take > 10)
-		sound (self, CHAN_BODY, "misc/bodyimpact1.wav", VOL_BASE, ATTN_NORM);
+		sound (self, CHAN_PROJECTILE, "misc/bodyimpact1.wav", VOL_BASE, ATTN_NORM);
 
 	if(sv_gentle < 1) {	
 		if (take > 50)
@@ -379,11 +379,11 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 	}
 
 	if (save > 10)
-		sound (self, CHAN_BODY, "misc/armorimpact.wav", VOL_BASE, ATTN_NORM);
+		sound (self, CHAN_PROJECTILE, "misc/armorimpact.wav", VOL_BASE, ATTN_NORM);
 	else if (take > 30)
-		sound (self, CHAN_BODY, "misc/bodyimpact2.wav", VOL_BASE, ATTN_NORM);
+		sound (self, CHAN_PROJECTILE, "misc/bodyimpact2.wav", VOL_BASE, ATTN_NORM);
 	else if (take > 10)
-		sound (self, CHAN_BODY, "misc/bodyimpact1.wav", VOL_BASE, ATTN_NORM); // FIXME possibly remove them?
+		sound (self, CHAN_PROJECTILE, "misc/bodyimpact1.wav", VOL_BASE, ATTN_NORM); // FIXME possibly remove them?
 
 	if (take > 50)
 		TossGib (world, "models/gibs/chunk.mdl", hitloc, force * -0.1,1);

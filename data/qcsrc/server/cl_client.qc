@@ -701,7 +701,7 @@ void PutClientInServer (void)
 	 	//stuffcmd(self, "set viewsize $tmpviewsize \n");
 
 		if (cvar("g_spawnsound"))
-			sound (self, CHAN_ITEM, "misc/spawn.wav", VOL_BASE, ATTN_NORM);
+			sound (self, CHAN_TRIGGER, "misc/spawn.wav", VOL_BASE, ATTN_NORM);
 
 		if(g_assault) {
 			if(self.team == assault_attacker_team)

@@ -6,11 +6,11 @@ void W_Hagar_Explode (void)
 	pointparticles(particleeffectnum("hagar_explode"), org2, '0 0 0', 1);
 	b = crandom();
 	if (b<-0.7)
-		sound (self, CHAN_BODY, "weapons/hagexp1.wav", VOL_BASE, ATTN_NORM);
+		sound (self, CHAN_PROJECTILE, "weapons/hagexp1.wav", VOL_BASE, ATTN_NORM);
 	else if (b<0.4)
-		sound (self, CHAN_BODY, "weapons/hagexp2.wav", VOL_BASE, ATTN_NORM);
+		sound (self, CHAN_PROJECTILE, "weapons/hagexp2.wav", VOL_BASE, ATTN_NORM);
 	else if (b<1)
-		sound (self, CHAN_BODY, "weapons/hagexp3.wav", VOL_BASE, ATTN_NORM);
+		sound (self, CHAN_PROJECTILE, "weapons/hagexp3.wav", VOL_BASE, ATTN_NORM);
 
 	self.event_damage = SUB_Null;
 	RadiusDamage (self, self.realowner, cvar("g_balance_hagar_primary_damage"), cvar("g_balance_hagar_primary_edgedamage"), cvar("g_balance_hagar_primary_radius"), world, cvar("g_balance_hagar_primary_force"), IT_HAGAR);
@@ -26,11 +26,11 @@ void W_Hagar_Explode2 (void)
 	pointparticles(particleeffectnum("hagar_explode"), org2, '0 0 0', 1);
 	b = crandom();
 	if (b<-0.7)
-		sound (self, CHAN_BODY, "weapons/hagexp1.wav", VOL_BASE, ATTN_NORM);
+		sound (self, CHAN_PROJECTILE, "weapons/hagexp1.wav", VOL_BASE, ATTN_NORM);
 	else if (b<0.4)
-		sound (self, CHAN_BODY, "weapons/hagexp2.wav", VOL_BASE, ATTN_NORM);
+		sound (self, CHAN_PROJECTILE, "weapons/hagexp2.wav", VOL_BASE, ATTN_NORM);
 	else if (b<1)
-		sound (self, CHAN_BODY, "weapons/hagexp3.wav", VOL_BASE, ATTN_NORM);
+		sound (self, CHAN_PROJECTILE, "weapons/hagexp3.wav", VOL_BASE, ATTN_NORM);
 
 	self.event_damage = SUB_Null;
 	RadiusDamage (self, self.realowner, cvar("g_balance_hagar_secondary_damage"), cvar("g_balance_hagar_secondary_edgedamage"), cvar("g_balance_hagar_secondary_radius"), world, cvar("g_balance_hagar_secondary_force"), IT_HAGAR);

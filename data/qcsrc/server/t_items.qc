@@ -5,7 +5,7 @@ void Item_Respawn (void)
 {
 	self.model = self.mdl;		// restore original model
 	self.solid = SOLID_TRIGGER;	// allow it to be touched again
-	sound (self, CHAN_ITEM, "misc/itemrespawn.wav", VOL_BASE, ATTN_NORM);	// play respawn sound
+	sound (self, CHAN_TRIGGER, "misc/itemrespawn.wav", VOL_BASE, ATTN_NORM);	// play respawn sound
 	setorigin (self, self.origin);
 
 	//pointparticles(particleeffectnum("item_respawn"), self.origin + self.mins_z * '0 0 1' + '0 0 48', '0 0 0', 1);
@@ -185,7 +185,7 @@ void Item_Touch (void)
 	if (!pickedup)
 		return;
 
-	sound (other, CHAN_ITEM, self.item_pickupsound, VOL_BASE, ATTN_NORM);
+	sound (other, CHAN_TRIGGER, self.item_pickupsound, VOL_BASE, ATTN_NORM);
 
 	oldself = self;
 	self = other;

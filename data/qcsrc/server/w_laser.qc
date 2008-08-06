@@ -27,7 +27,7 @@ void W_Laser_Touch (void)
 		RadiusDamage (self, self.owner, cvar("g_balance_laser_secondary_damage"), cvar("g_balance_laser_secondary_edgedamage"), cvar("g_balance_laser_secondary_radius"), world, cvar("g_balance_laser_secondary_force"), IT_LASER);
 	else
 		RadiusDamage (self, self.owner, cvar("g_balance_laser_primary_damage"), cvar("g_balance_laser_primary_edgedamage"), cvar("g_balance_laser_primary_radius"), world, cvar("g_balance_laser_primary_force"), IT_LASER);
-	sound (self, CHAN_BODY, "weapons/laserimpact.wav", VOL_BASE, ATTN_NORM);
+	sound (self, CHAN_PROJECTILE, "weapons/laserimpact.wav", VOL_BASE, ATTN_NORM);
 
 	remove (self);
 }

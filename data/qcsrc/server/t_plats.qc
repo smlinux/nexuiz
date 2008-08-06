@@ -49,7 +49,7 @@ void plat_spawn_inside_trigger()
 
 void plat_hit_top()
 {
-	sound (self, CHAN_ITEM, self.noise1, VOL_BASE, ATTN_NORM);
+	sound (self, CHAN_TRIGGER, self.noise1, VOL_BASE, ATTN_NORM);
 	self.state = 1;
 	self.think = plat_go_down;
 	self.nextthink = self.ltime + 3;
@@ -57,20 +57,20 @@ void plat_hit_top()
 
 void plat_hit_bottom()
 {
-	sound (self, CHAN_ITEM, self.noise1, VOL_BASE, ATTN_NORM);
+	sound (self, CHAN_TRIGGER, self.noise1, VOL_BASE, ATTN_NORM);
 	self.state = 2;
 };
 
 void plat_go_down()
 {
-	sound (self, CHAN_ITEM, self.noise, VOL_BASE, ATTN_NORM);
+	sound (self, CHAN_TRIGGER, self.noise, VOL_BASE, ATTN_NORM);
 	self.state = 3;
 	SUB_CalcMove (self.pos2, self.speed, plat_hit_bottom);
 };
 
 void plat_go_up()
 {
-	sound (self, CHAN_ITEM, self.noise, VOL_BASE, ATTN_NORM);
+	sound (self, CHAN_TRIGGER, self.noise, VOL_BASE, ATTN_NORM);
 	self.state = 4;
 	SUB_CalcMove (self.pos1, self.speed, plat_hit_top);
 };
@@ -246,7 +246,7 @@ void train_wait()
 	if (self.wait)
 	{
 		self.nextthink = self.ltime + self.wait;
-		sound (self, CHAN_ITEM, self.noise, VOL_BASE, ATTN_NORM);
+		sound (self, CHAN_TRIGGER, self.noise, VOL_BASE, ATTN_NORM);
 	}
 	else
 		self.nextthink = self.ltime + 0.1;
@@ -266,7 +266,7 @@ void train_next()
 		self.wait = targ.wait;
 	else
 		self.wait = 0;
-	sound (self, CHAN_ITEM, self.noise1, VOL_BASE, ATTN_NORM);
+	sound (self, CHAN_TRIGGER, self.noise1, VOL_BASE, ATTN_NORM);
 	SUB_CalcMove (targ.origin - self.mins, self.speed, train_wait);
 };
 
@@ -577,7 +577,7 @@ void button_fire()
 		return;
 
 	if (self.noise != "")
-		sound (self, CHAN_ITEM, self.noise, VOL_BASE, ATTN_NORM);
+		sound (self, CHAN_TRIGGER, self.noise, VOL_BASE, ATTN_NORM);
 
 	self.state = STATE_UP;
 	SUB_CalcMove (self.pos2, self.speed, button_wait);
@@ -754,7 +754,7 @@ void door_blocked()
 void door_hit_top()
 {
 	if (self.noise1 != "")
-		sound (self, CHAN_ITEM, self.noise1, VOL_BASE, ATTN_NORM);
+		sound (self, CHAN_TRIGGER, self.noise1, VOL_BASE, ATTN_NORM);
 	self.state = STATE_TOP;
 	if (self.spawnflags & DOOR_TOGGLE)
 		return;		// don't come down automatically
@@ -765,14 +765,14 @@ void door_hit_top()
 void door_hit_bottom()
 {
 	if (self.noise1 != "")
-		sound (self, CHAN_ITEM, self.noise1, VOL_BASE, ATTN_NORM);
+		sound (self, CHAN_TRIGGER, self.noise1, VOL_BASE, ATTN_NORM);
 	self.state = STATE_BOTTOM;
 };
 
 void door_go_down()
 {
 	if (self.noise2 != "")
-		sound (self, CHAN_ITEM, self.noise2, VOL_BASE, ATTN_NORM);
+		sound (self, CHAN_TRIGGER, self.noise2, VOL_BASE, ATTN_NORM);
 	if (self.max_health)
 	{
 		self.takedamage = DAMAGE_YES;
@@ -795,7 +795,7 @@ void door_go_up()
 	}
 
 	if (self.noise2 != "")
-		sound (self, CHAN_ITEM, self.noise2, VOL_BASE, ATTN_NORM);
+		sound (self, CHAN_TRIGGER, self.noise2, VOL_BASE, ATTN_NORM);
 	self.state = STATE_UP;
 	SUB_CalcMove (self.pos2, self.speed, door_hit_top);
 
@@ -1201,7 +1201,7 @@ void fd_secret_use()
 	// Make a sound, wait a little...
 
 	if (self.noise1 != "")
-		sound(self, CHAN_ITEM, self.noise1, VOL_BASE, ATTN_NORM);
+		sound(self, CHAN_TRIGGER, self.noise1, VOL_BASE, ATTN_NORM);
 	self.nextthink = self.ltime + 0.1;
 
 	temp = 1 - (self.spawnflags & SECRET_1ST_LEFT);	// 1 or -1
@@ -1226,7 +1226,7 @@ void fd_secret_use()
 	self.dest2 = self.dest1 + v_forward * self.t_length;
 	SUB_CalcMove(self.dest1, self.speed, fd_secret_move1);
 	if (self.noise2 != "")
-		sound(self, CHAN_ITEM, self.noise2, VOL_BASE, ATTN_NORM);
+		sound(self, CHAN_TRIGGER, self.noise2, VOL_BASE, ATTN_NORM);
 };
 
 // Wait after first movement...
@@ -1235,14 +1235,14 @@ void fd_secret_move1()
 	self.nextthink = self.ltime + 1.0;
 	self.think = fd_secret_move2;
 	if (self.noise3 != "")
-		sound(self, CHAN_ITEM, self.noise3, VOL_BASE, ATTN_NORM);
+		sound(self, CHAN_TRIGGER, self.noise3, VOL_BASE, ATTN_NORM);
 };
 
 // Start moving sideways w/sound...
 void fd_secret_move2()
 {
 	if (self.noise2 != "")
-		sound(self, CHAN_ITEM, self.noise2, VOL_BASE, ATTN_NORM);
+		sound(self, CHAN_TRIGGER, self.noise2, VOL_BASE, ATTN_NORM);
 	SUB_CalcMove(self.dest2, self.speed, fd_secret_move3);
 };
 
@@ -1250,7 +1250,7 @@ void fd_secret_move2()
 void fd_secret_move3()
 {
 	if (self.noise3 != "")
-		sound(self, CHAN_ITEM, self.noise3, VOL_BASE, ATTN_NORM);
+		sound(self, CHAN_TRIGGER, self.noise3, VOL_BASE, ATTN_NORM);
 	if (!(self.spawnflags & SECRET_OPEN_ONCE))
 	{
 		self.nextthink = self.ltime + self.wait;
@@ -1262,7 +1262,7 @@ void fd_secret_move3()
 void fd_secret_move4()
 {
 	if (self.noise2 != "")
-		sound(self, CHAN_ITEM, self.noise2, VOL_BASE, ATTN_NORM);
+		sound(self, CHAN_TRIGGER, self.noise2, VOL_BASE, ATTN_NORM);
 	SUB_CalcMove(self.dest1, self.speed, fd_secret_move5);
 };
 
@@ -1272,13 +1272,13 @@ void fd_secret_move5()
 	self.nextthink = self.ltime + 1.0;
 	self.think = fd_secret_move6;
 	if (self.noise3 != "")
-		sound(self, CHAN_ITEM, self.noise3, VOL_BASE, ATTN_NORM);
+		sound(self, CHAN_TRIGGER, self.noise3, VOL_BASE, ATTN_NORM);
 };
 
 void fd_secret_move6()
 {
 	if (self.noise2 != "")
-		sound(self, CHAN_ITEM, self.noise2, VOL_BASE, ATTN_NORM);
+		sound(self, CHAN_TRIGGER, self.noise2, VOL_BASE, ATTN_NORM);
 	SUB_CalcMove(self.oldorigin, self.speed, fd_secret_done);
 };
 
@@ -1291,7 +1291,7 @@ void fd_secret_done()
 		//self.th_pain = fd_secret_use;
         }
 	if (self.noise3 != "")
-		sound(self, CHAN_ITEM, self.noise3, VOL_BASE, ATTN_NORM);
+		sound(self, CHAN_TRIGGER, self.noise3, VOL_BASE, ATTN_NORM);
 };
 
 void secret_blocked()

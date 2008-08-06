@@ -29,7 +29,7 @@ void W_Nex_Attack (void)
 	if (trace_ent.solid == SOLID_BSP && !(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT))
 		pointparticles(particleeffectnum("nex_impact"), trace_endpos - w_shotdir * 6, '0 0 0', 1);
 	// play a sound
-	soundat (self, trace_endpos, CHAN_BODY, "weapons/neximpact.wav", VOL_BASE, ATTN_NORM);
+	soundat (self, trace_endpos, CHAN_PROJECTILE, "weapons/neximpact.wav", VOL_BASE, ATTN_NORM);
 
 	if (cvar("g_use_ammunition") && !g_instagib)
 	{

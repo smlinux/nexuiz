@@ -106,14 +106,14 @@ float	TE_LIGHTNING3				= 9;
 float	TE_LAVASPLASH				= 10;
 float	TE_TELEPORT				= 11;
 
-float	CHAN_AUTO				= 0; // announcer/feedback only
-float	CHAN_WEAPON				= 1; // firing only
-float	CHAN_VOICE				= 2; // player voice messages only
-float	CHAN_ITEM				= 3; // items only
-float	CHAN_BODY				= 4; // projectiles, or their impact on a player
-float	CHAN_POWERUP			= 5; // powerup effects
-float	CHAN_PAIN				= 6; // player pain only
-float	CHAN_PLAYER				= 7; // player body sounds only
+float	CHAN_AUTO				= 0; // Announcer/Chat
+float	CHAN_WEAPON				= 1; // Weapon fire
+float	CHAN_VOICE				= 2; // Voice/Radio
+float	CHAN_TRIGGER			= 3; // Triggers
+float	CHAN_PROJECTILE			= 4; // Projectiles
+float	CHAN_POWERUP			= 5; // Powerups
+float	CHAN_PAIN				= 6; // Pain
+float	CHAN_PLAYER				= 7; // Player body
 
 float	ATTN_NONE				= 0;
 float	ATTN_NORM				= 0.5;

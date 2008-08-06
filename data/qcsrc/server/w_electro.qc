@@ -15,7 +15,7 @@ void W_Plasma_Explode (void)
 		pointparticles(particleeffectnum("electro_impact"), org2, '0 0 0', 1);
 		RadiusDamage (self, self.owner, cvar("g_balance_electro_primary_damage"), cvar("g_balance_electro_primary_edgedamage"), cvar("g_balance_electro_primary_radius"), world, cvar("g_balance_electro_primary_force"), IT_ELECTRO);
 	}
-	sound (self, CHAN_BODY, "weapons/electro_impact.wav", VOL_BASE, ATTN_NORM);
+	sound (self, CHAN_PROJECTILE, "weapons/electro_impact.wav", VOL_BASE, ATTN_NORM);
 
 	remove (self);
 }
@@ -26,7 +26,7 @@ void W_Plasma_Explode_Combo (void) {
 	org2 = findbetterlocation (self.origin, 8);
 	pointparticles(particleeffectnum("electro_combo"), org2, '0 0 0', 1);
 
-	sound (self, CHAN_BODY, "weapons/electro_impact_combo.wav", VOL_BASE, ATTN_NORM);
+	sound (self, CHAN_PROJECTILE, "weapons/electro_impact_combo.wav", VOL_BASE, ATTN_NORM);
 
 	self.event_damage = SUB_Null;
 	RadiusDamage (self, self.owner, cvar("g_balance_electro_combo_damage"), cvar("g_balance_electro_combo_edgedamage"), cvar("g_balance_electro_combo_radius"), world, cvar("g_balance_electro_combo_force"), IT_ELECTRO);
@@ -38,7 +38,7 @@ void W_Plasma_Touch (void)
 	entity o;
 	if (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
 	{
-		sound (self, CHAN_BODY, "misc/null.wav", VOL_BASE, ATTN_NORM);
+		sound (self, CHAN_PROJECTILE, "misc/null.wav", VOL_BASE, ATTN_NORM);
 		remove(self);
 		return;
 	}
@@ -50,7 +50,7 @@ void W_Plasma_Touch (void)
 				if(IsFlying(other))
 					announce(o, "announcer/male/electrobitch.ogg");
 	} else {
-		sound (self, CHAN_BODY, "weapons/electro_bounce.wav", VOL_BASE, ATTN_NORM);
+		sound (self, CHAN_PROJECTILE, "weapons/electro_bounce.wav", VOL_BASE, ATTN_NORM);
 	}
 }
 
@@ -59,7 +59,7 @@ void W_Plasma_TouchExplode (void)
 	entity o;
 	if (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
 	{
-		sound (self, CHAN_BODY, "misc/null.wav", VOL_BASE, ATTN_NORM);
+		sound (self, CHAN_PROJECTILE, "misc/null.wav", VOL_BASE, ATTN_NORM);
 		remove(self);
 		return;
 	}
@@ -122,7 +122,7 @@ void W_Electro_Attack()
 	setsize(proj, '0 0 0', '0 0 0');
 
 	// LordHavoc: disabled because no one likes this sound and it sometimes never stops due to packet loss
-	//sound (proj, CHAN_BODY, "weapons/electro_fly.wav", VOL_BASE, ATTN_NORM);
+	//sound (proj, CHAN_PROJECTILE, "weapons/electro_fly.wav", VOL_BASE, ATTN_NORM);
 }
 
 void W_Electro_Attack2()
@@ -161,7 +161,7 @@ void W_Electro_Attack2()
 	proj.flags = FL_PROJECTILE;
 
 	// LordHavoc: disabled because no one likes this sound and it sometimes never stops due to packet loss
-	//sound (proj, CHAN_BODY, "weapons/electro_fly.wav", VOL_BASE, ATTN_NORM);
+	//sound (proj, CHAN_PROJECTILE, "weapons/electro_fly.wav", VOL_BASE, ATTN_NORM);
 }
 
 .float bot_secondary_electromooth;

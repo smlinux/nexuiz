@@ -185,7 +185,7 @@ void GrapplingHookTouch (void)
 	}
 
 	pointparticles(particleeffectnum("grapple_impact"), self.origin, '0 0 0', 1);
-	sound (self, CHAN_BODY, "weapons/hook_impact.wav", VOL_BASE, ATTN_NORM);
+	sound (self, CHAN_PROJECTILE, "weapons/hook_impact.wav", VOL_BASE, ATTN_NORM);
 
 	self.state = 1;
 	self.think = GrapplingHookThink;
