@@ -39,6 +39,13 @@ void fillNexuizMiscSettingsTab(entity me)
 		me.TD(me, 1, 2, s);
 	me.TR(me);
 		me.TDempty(me, 0.2);
+		s = makeNexuizDecibelsSlider(-20, 0, 0.5, "snd_staticvolume");
+		me.TD(me, 1, 0.8, e = makeNexuizSliderCheckBox(-1000000, 1, s, "Ambient:"));
+		me.TD(me, 1, 2, s);
+		setDependentStringNotEqual(e, "volume", "0");
+		setDependentStringNotEqual(s, "volume", "0");
+	me.TR(me);
+		me.TDempty(me, 0.2);
 		s = makeNexuizDecibelsSlider(-20, 0, 0.5, "snd_worldchannel0volume");
 		me.TD(me, 1, 0.8, e = makeNexuizSliderCheckBox(-1000000, 1, s, "Info:"));
 		me.TD(me, 1, 2, s);
@@ -46,8 +53,9 @@ void fillNexuizMiscSettingsTab(entity me)
 		setDependentStringNotEqual(s, "volume", "0");
 	me.TR(me);
 		me.TDempty(me, 0.2);
-		s = makeNexuizDecibelsSlider(-20, 0, 0.5, "snd_staticvolume");
-		me.TD(me, 1, 0.8, e = makeNexuizSliderCheckBox(-1000000, 1, s, "Ambient:"));
+		s = makeNexuizDecibelsSlider(-20, 0, 0.5, "snd_entchannel3volume");
+		s.saveCvars = saveCvarsMulti; s.cvarNames = "snd_playerchannel0volume snd_playerchannel3volume";
+		me.TD(me, 1, 0.8, e = makeNexuizSliderCheckBox(-1000000, 1, s, "Items:"));
 		me.TD(me, 1, 2, s);
 		setDependentStringNotEqual(e, "volume", "0");
 		setDependentStringNotEqual(s, "volume", "0");
@@ -71,14 +79,6 @@ void fillNexuizMiscSettingsTab(entity me)
 		s = makeNexuizDecibelsSlider(-20, 0, 0.5, "snd_entchannel4volume");
 		s.saveCvars = saveCvarsMulti; s.cvarNames = "snd_playerchannel4volume"; // hits to player
 		me.TD(me, 1, 0.8, e = makeNexuizSliderCheckBox(-1000000, 1, s, "Shots:"));
-		me.TD(me, 1, 2, s);
-		setDependentStringNotEqual(e, "volume", "0");
-		setDependentStringNotEqual(s, "volume", "0");
-	me.TR(me);
-		me.TDempty(me, 0.2);
-		s = makeNexuizDecibelsSlider(-20, 0, 0.5, "snd_entchannel3volume");
-		s.saveCvars = saveCvarsMulti; s.cvarNames = "snd_playerchannel0volume snd_playerchannel3volume";
-		me.TD(me, 1, 0.8, e = makeNexuizSliderCheckBox(-1000000, 1, s, "Items:"));
 		me.TD(me, 1, 2, s);
 		setDependentStringNotEqual(e, "volume", "0");
 		setDependentStringNotEqual(s, "volume", "0");
