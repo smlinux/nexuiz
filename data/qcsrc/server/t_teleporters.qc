@@ -62,12 +62,18 @@ void Teleport_Touch (void)
 	if (!other.flags & FL_CLIENT)	// FIXME: Make missiles firable through the teleport too
 		return;
 
+	sound (other, CHAN_TRIGGER, "misc/teleport.wav", VOL_BASE, ATTN_NORM);
+	pointparticles(particleeffectnum("teleport"), other.origin, '0 0 0', 1);
+
+	/*
 	// Make teleport effect where the player left
 	sound (self, CHAN_TRIGGER, "misc/teleport.wav", VOL_BASE, ATTN_NORM);
 	pointparticles(particleeffectnum("teleport"), other.origin, '0 0 0', 1);
 
 	// Make teleport effect where the player arrived
 	sound (self.enemy, CHAN_TRIGGER, "misc/teleport.wav", VOL_BASE, ATTN_NORM);
+	*/
+
 	makevectors (self.enemy.mangle);
 	pointparticles(particleeffectnum("teleport"), self.enemy.origin + v_forward * 32, '0 0 0', 1);
 
