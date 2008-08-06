@@ -26,6 +26,18 @@ void loadAllCvars(entity root)
 	forAllDescendants(root, loadCvarsOf, SUB_Null_ee, NULL);
 }
 
+.string cvarNames;
+void saveCvarsMulti(entity me)
+{
+	float n, i;
+	string s;
+	n = tokenize(me.cvarNames);
+	s = ftos(me.value);
+	cvar_set(me.cvarName, s);
+	for(i = 0; i < n; ++i)
+		cvar_set(argv(i), s);
+}
+
 .void(entity) draw_setDependent;
 .string cvar_setDependent;
 .float cvarMin_setDependent;
