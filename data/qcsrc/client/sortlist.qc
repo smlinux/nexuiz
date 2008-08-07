@@ -1,4 +1,4 @@
-.float(entity,entity) sort_cmp;
+//.float(entity,entity) sort_cmp;
 .entity sort_next, sort_prev;
 
 entity Sort_Spawn()
@@ -9,7 +9,7 @@ entity Sort_Spawn()
 	sort.chain = sort;
 	return sort;
 }
-
+/*
 entity Sort_New(float(entity,entity) cmp)
 {
 	entity sort;
@@ -96,6 +96,7 @@ entity Sort_Get(entity sort, float i)
 		sort = sort.sort_next;
 	return sort;
 }
+*/
 
 /**
  * Swap two neighbours in a sortlist.
@@ -110,6 +111,7 @@ entity Sort_Get(entity sort, float i)
 	a.sort_prev = b;									\
 	b.sort_next = a
 
+/*
 void Sort_Erase(entity ent)
 {
 	ent.sort_prev.sort_next = ent.sort_next;
@@ -130,3 +132,4 @@ void Sort_RemoveOld(entity sort)
 		}
 	}
 }
+*/

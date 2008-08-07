@@ -77,7 +77,6 @@ void MapVote_DrawMapItem(vector pos, float isize, float tsize, string map, strin
 
 void MapVote_DrawAbstain(vector pos, float isize, float tsize, float count, float id)
 {
-	vector img_size;
 	vector rgb;
 	float text_size;
 	string label;

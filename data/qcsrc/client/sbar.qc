@@ -8,15 +8,7 @@ float sb_lines; // still don't know what to do with that NOTE: check dp's sbar.c
 vector sbar;
 float sbar_alpha_fg;
 float sbar_hudselector;
-/*
-entity sortedPlayers;
-entity sortedTeams;
 
-.float sb_frags;
-.float sb_team;
-.float sb_player;
-.float sb_caps;
-*/
 float ps_primary, ps_secondary;
 float ts_primary, ts_secondary;
 
@@ -131,7 +123,7 @@ void Sbar_DrawXNum (vector pos, float num, float digits, float lettersize, vecto
 void Cmd_Sbar_SetFields(float argc);
 void Sbar_InitScores()
 {
-	float i, f, primary_prio, secondary_prio;
+	float i, f;
 
 	ps_primary = ps_secondary = ts_primary = ts_secondary = -1;
 	for(i = 0; i < MAX_SCORE; ++i)

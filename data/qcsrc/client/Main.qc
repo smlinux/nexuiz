@@ -608,13 +608,6 @@ float CSQC_Parse_TempEntity()
 }
 
 // COMMIT-TODO: Update if necessare, before committing
-float csqc_svn_map[CSQC_REVISION] =
-{
-	3812, // 3795,
-	3820 // mapvote protocol changed from there
-};
-
-// COMMIT-TODO: Update if necessare, before committing
 void CSQC_CheckRevision()
 {
 	if(csqc_revision == CSQC_REVISION)
@@ -622,9 +615,6 @@ void CSQC_CheckRevision()
 		print("^2SVQC and CSQC revisions are compatible.\n");
 	} else if(csqc_revision < CSQC_REVISION) {
 		print("^1Your csprogs.dat (CSQC) version is newer than the one on the server.\n");
-		print("^1The last known svn revision for the server's CSQC is: ^7");
-		print(ftos(csqc_svn_map[csqc_revision])); // don't use strcat, fteqcc loves screwing up arrays...
-		print("\n");
 	} else if(csqc_revision > CSQC_REVISION) {
 		print("^1Your csprogs.dat (CSQC) is too old for this server.\n");
 		print("^1Please update to a newer version.\n");
