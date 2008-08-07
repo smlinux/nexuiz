@@ -19,7 +19,7 @@ ENDCLASS(NexuizTeamSelectDialog)
 entity makeTeamButton(string theName, vector theColor, string commandtheName)
 {
 	entity b;
-	b = makeNexuizCommandButton(theName, theColor, commandtheName, 1);
+	b = makeNexuizBigCommandButton(theName, theColor, commandtheName, 1);
 	return b;
 }
 
@@ -46,7 +46,7 @@ void fillNexuizTeamSelectDialog(entity me)
 		me.TD(me, 2, 1, me.team4 = makeTeamButton("pink", '1 0.5 1', "cmd selectteam pink; cmd join"));
 	me.TR(me);
 	me.TR(me);
-		me.TD(me, 1, 4, makeTeamButton("spectate", '0 0 0', "cmd spectate"));
+		me.TD(me, 1, 4, makeNexuizCommandButton("spectate", '0 0 0', "cmd spectate", 1));
 }
 #endif
 

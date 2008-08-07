@@ -55,7 +55,7 @@ void fillNexuizSingleplayerDialog(entity me)
 
 	me.TR(me);
 		me.TDempty(me, (me.columns - 2) / 2);
-		me.TD(me, 2, 2, e = makeNexuizButton("Instant action!", '0 0 0'));
+		me.TD(me, 2, 2, e = makeNexuizBigButton("Instant action!", '0 0 0'));
 			e.onClick = InstantAction_LoadMap;
 			e.onClickEntity = NULL;
 	me.TR(me);
