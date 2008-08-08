@@ -29,6 +29,20 @@ vector ScoreField_Compare(entity t1, entity t2, .float field, float fieldflags, 
 
 	previous_y = fieldflags & SFL_SORT_PRIO_MASK;
 
+	if(fieldflags & SFL_ZERO_IS_WORST)
+	{
+		if(t1.field == 0)
+		{
+			previous_x = -1;
+			return previous;
+		}
+		else if(t2.field == 0)
+		{
+			previous_x = +1;
+			return previous;
+		}
+	}
+
 	if(fieldflags & SFL_LOWER_IS_BETTER)
 		previous_x = (t2.field - t1.field);
 	else

@@ -119,3 +119,14 @@ void ScoreRules_kh(float teams)
 	ScoreInfo_SetLabel_PlayerScore(SP_KH_LOSSES,    "losses",    SFL_LOWER_IS_BETTER);
 	ScoreRules_basics_end();
 }
+
+// Race stuff
+#define SP_RACE_LAPS 4
+#define SP_RACE_FASTEST 5
+void ScoreRules_race()
+{
+	ScoreRules_basics(0, 0);
+	ScoreInfo_SetLabel_PlayerScore(SP_RACE_LAPS,    "laps",      SFL_SORT_PRIO_PRIMARY);
+	ScoreInfo_SetLabel_PlayerScore(SP_RACE_FASTEST, "fastest",   SFL_SORT_PRIO_SECONDARY | SFL_LOWER_IS_BETTER | SFL_TIME);
+	ScoreRules_basics_end();
+}

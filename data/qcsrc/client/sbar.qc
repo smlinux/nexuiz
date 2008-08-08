@@ -204,6 +204,13 @@ float Sbar_ComparePlayerScores(entity left, entity right)
 
 	vl = left.scores[ps_primary];
 	vr = right.scores[ps_primary];
+	if(scores_flags[ps_primary] & SFL_ZERO_IS_WORST)
+	{
+		if(vl == 0 && vr != 0)
+			return 1;
+		if(vl != 0 && vr == 0)
+			return 0;
+	}
 	if(vl > vr)
 		return IS_INCREASING(scores_flags[ps_primary]);
 	if(vl < vr)
@@ -211,6 +218,13 @@ float Sbar_ComparePlayerScores(entity left, entity right)
 	
 	vl = left.scores[ps_secondary];
 	vr = right.scores[ps_secondary];
+	if(scores_flags[ps_secondary] & SFL_ZERO_IS_WORST)
+	{
+		if(vl == 0 && vr != 0)
+			return 1;
+		if(vl != 0 && vr == 0)
+			return 0;
+	}
 	if(vl > vr)
 		return IS_INCREASING(scores_flags[ps_secondary]);
 	if(vl < vr)
@@ -548,7 +562,7 @@ string Sbar_GetField(entity pl, float field)
 			else
 				sbar_field_rgb = '1 1 1';
 			if(!tmp)
-				if(f & (SFL_HIDE_ZERO | SFL_RANK))
+				if(f & (SFL_HIDE_ZERO | SFL_RANK | SFL_TIME))
 					return "";
 			if(f & SFL_RANK)
 			{
@@ -564,6 +578,10 @@ string Sbar_GetField(entity pl, float field)
 					return strcat(str, "rd");
 				else
 					return strcat(str, "th");
+			}
+			else if(f & SFL_TIME)
+			{
+				return mmsss(tmp);
 			}
 			return ftos(tmp);
 	}
@@ -1017,6 +1035,42 @@ void Sbar_Score(float margin)
 		drawpic(sbar + '-36 32 0', "gfx/num_colon", '12 12 0', '1 1 1', sbar_alpha_fg, 0);
 		Sbar_DrawXNum('-24 32 0', seconds, -2, 12, '1 1 1', 1, DRAWFLAG_NORMAL);
 	}
+
+	if(gametype == GAME_RACE)
+	{
+		if(race_checkpointtime)
+		if(race_checkpoint != 255)
+		{
+			float a;
+			vector m;
+			string s;
+
+			m = '0.5 0 0' * vid_conwidth + '0 0.5 0' * vid_conheight;
+
+			a = bound(0, 2 - (time - race_checkpointtime), 1);
+			drawfont = sbar_bigfont;
+			if(a >= 0)
+			{
+				if(race_checkpoint)
+					s = strcat("Intermediate ", ftos(race_checkpoint));
+				else
+					s = strcat("Finish line");
+				drawstring(m - '0 88 0' - '12 0 0' * stringwidth(s, FALSE), s, '24 24 0', '0 1 0', sbar_alpha_fg * a, 0);
+				if(race_time)
+				{
+					s = mmsss(race_time);
+					drawstring(m - '0 64 0' - '16 0 0' * stringwidth(s, FALSE), s, '32 32 0', '0 1 0', sbar_alpha_fg * a, 0);
+				}
+			}
+
+			if(race_laptime)
+			{
+				s = mmsss(10*(time - race_laptime));
+				drawstring(m - '0 64 0' - '16 0 0' * stringwidth(s, FALSE), s, '32 32 0', '1 1 1', sbar_alpha_fg * (1 - a), 0);
+			}
+		}
+	}
+
 	sbar = sbar_save;
 }
 

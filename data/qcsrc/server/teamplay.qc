@@ -97,6 +97,7 @@ void ResetGameCvars()
 	cvar_set("g_keyhunt", "0");
 	cvar_set("g_assault", "0");
 	cvar_set("g_onslaught", "0");
+	cvar_set("g_race", "0");
 	cvar_set("teamplay", "0");
 }
 
@@ -263,6 +264,17 @@ void InitGameplayMode()
 		gamemode_name = "Onslaught";
 		teams_matter = 1;
 	}
+	else if(game == GAME_RACE || cvar("g_race"))
+	{
+		ResetGameCvars();
+		game = GAME_RACE;
+		cvar_set("g_race", "1");
+		fraglimit_override = cvar("g_race_laps_limit");
+		gamemode_name = "Race";
+		teams_matter = 0;
+
+		ScoreRules_race();
+	}
 	else
 	{
 		// we can only assume...
@@ -298,6 +310,7 @@ void InitGameplayMode()
 	g_keyhunt = cvar("g_keyhunt");
 	g_onslaught = cvar("g_onslaught");
 	g_assault = cvar("g_assault");
+	g_race = cvar("g_race");
 	g_arena = cvar("g_arena");
 
 	cache_mutatormsg = strzone("");

@@ -57,3 +57,4 @@ float mod(float a, float b) { return a - (floor(a / b) * b); }
 #endif
 
 string GametypeNameFromType(float g);
+string mmsss(float t);

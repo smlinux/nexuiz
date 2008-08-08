@@ -691,6 +691,8 @@ void PutClientInServer (void)
 		self.lms_traveled_distance = 0;
 		self.speedrunning = FALSE;
 
+		race_PreparePlayer();
+
 		if(cvar("spawn_debug"))
 		{
 			sprint(self, strcat("spawnpoint origin:  ", vtos(spot.origin), "\n"));

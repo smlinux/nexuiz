@@ -565,6 +565,21 @@ void Net_Config()
 	db_put(configdb, strcat("/s/", key), "1");
 }
 
+void Net_ReadRace()
+{
+	float checkpoint, t;
+
+	race_checkpoint = ReadByte();
+	race_time = ReadShort();
+
+	race_checkpointtime = time;
+
+	if(race_checkpoint == 0)
+		race_laptime = time; // valid
+	else if(race_checkpoint == 255)
+		race_laptime = 0; // invalid
+}
+
 // CSQC_Parse_TempEntity : Handles all temporary entity network data in the CSQC layer.
 // You must ALWAYS first acquire the temporary ID, which is sent as a byte.
 // Return value should be 1 if CSQC handled the temporary entity, otherwise return 0 to have the engine process the event.
@@ -593,6 +608,10 @@ float CSQC_Parse_TempEntity()
 			break;
 		case TE_CSQC_SCORESINFO:
 			Net_ReadScoresInfo();
+			bHandled = true;
+			break;
+		case TE_CSQC_RACE:
+			Net_ReadRace();
 			bHandled = true;
 			break;
 		default:

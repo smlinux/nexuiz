@@ -6,7 +6,8 @@
 // Revision 5: mapvote time fix
 // Revision 6: more robust against packet loss/delays, also show not yet connected clients
 // Revision 7: packet loss column
-#define CSQC_REVISION 7
+// Revision 8: race
+#define CSQC_REVISION 8
 
 // probably put these in common/
 // so server/ and client/ can be synced better
@@ -20,6 +21,7 @@ const float GAME_ARENA		= 7;
 const float GAME_KEYHUNT		= 8;
 const float GAME_ASSAULT		= 9;
 const float GAME_ONSLAUGHT	= 10;
+const float GAME_RACE	= 11;
 
 const float AS_STRING		= 1;
 const float AS_INT		= 2;
@@ -183,6 +185,7 @@ const float TE_CSQC_PICTURE = 105;
 const float TE_CSQC_MAPVOTE = 106;
 const float TE_CSQC_CONFIG = 107;
 const float TE_CSQC_SCORESINFO = 108;
+const float TE_CSQC_RACE = 109;
 
 const float STAT_KH_KEYS = 32;
 const float STAT_CTF_STATE = 33;
@@ -217,6 +220,14 @@ const float MAPVOTE_NET_OWNVOTE = 3;
  * Display as a rank (with st, nd, rd, th suffix)
  */
 #define SFL_RANK               32
+
+/**
+ * Display as mm:ss.s, value is stored as 10ths of a second (AND 0 is the worst possible value!)
+ */
+#define SFL_TIME               64
+
+// not an extra constant yet
+#define SFL_ZERO_IS_WORST SFL_TIME
 
 /**
  * Scoring priority (NOTE: PRIMARY is used for fraglimit)

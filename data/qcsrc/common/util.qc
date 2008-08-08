@@ -422,6 +422,17 @@ string GametypeNameFromType(float g)
 	else if (g == GAME_KEYHUNT) return "kh";
 	else if (g == GAME_ONSLAUGHT) return "ons";
 	else if (g == GAME_ASSAULT) return "as";
+	else if (g == GAME_RACE) return "race";
 	return "dm";
 }
 
+string mmsss(float tenths)
+{
+	float minutes;
+	string s;
+	tenths = floor(tenths + 0.5);
+	minutes = floor(tenths / 600);
+	tenths -= minutes * 600;
+	s = ftos(1000 + tenths);
+	return strcat(ftos(minutes), ":", substring(s, 1, 2), ".", substring(s, 3, 1));
+}

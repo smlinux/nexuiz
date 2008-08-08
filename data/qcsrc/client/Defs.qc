@@ -174,3 +174,8 @@ float vid_conwidth, vid_conheight;
 float caps_team1, caps_team2;
 float configdb;
 string shortmapname;
+
+float race_checkpoint;
+float race_time;
+float race_laptime;
+float race_checkpointtime;

@@ -421,6 +421,8 @@ float _MapInfo_Generate(string pFilename) // 0: failure, 1: ok ent, 2: ok bsp
 					++spawnpoints;
 				else if(v == "info_player_deathmatch")
 					++spawnpoints;
+				else if(v == "trigger_race_checkpoint")
+					MapInfo_Map_supportedGametypes |= MAPINFO_TYPE_RACE;
 				else if(v == "weapon_nex")
 					{ }
 				else if(v == "weapon_railgun")
@@ -437,7 +439,7 @@ float _MapInfo_Generate(string pFilename) // 0: failure, 1: ok ent, 2: ok bsp
 	}
 	diameter = vlen(mapMaxs - mapMins);
 
-	twoBaseModes = MapInfo_Map_supportedGametypes & (MAPINFO_TYPE_CTF | MAPINFO_TYPE_ASSAULT);
+	twoBaseModes = MapInfo_Map_supportedGametypes & (MAPINFO_TYPE_CTF | MAPINFO_TYPE_ASSAULT | MAPINFO_TYPE_RACE);
 	if(twoBaseModes && (MapInfo_Map_supportedGametypes == twoBaseModes))
 	{
 		// we have a CTF-only or Assault-only map. Don't add other modes then,
@@ -522,6 +524,7 @@ float MapInfo_Type_FromString(string t)
 	else if(t == "kh")    return MAPINFO_TYPE_KEYHUNT;
 	else if(t == "as")    return MAPINFO_TYPE_ASSAULT;
 	else if(t == "ons")   return MAPINFO_TYPE_ONSLAUGHT;
+	else if(t == "race")  return MAPINFO_TYPE_RACE;
 	else if(t == "all")   return MAPINFO_TYPE_ALL;
 	else                  return 0;
 }
@@ -567,6 +570,7 @@ float MapInfo_Get_ByName(string pFilename, float pAllowGenerate, float pGametype
 		if(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_ARENA)           fputs(fh, "type arena 10 20\n");
 		if(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_KEYHUNT)         fputs(fh, "type kh 1000 20 3\n");
 		if(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_ASSAULT)         fputs(fh, "type as 20\n");
+		if(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_RACE)            fputs(fh, "type race 5 20 0\n");
 		if(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_ONSLAUGHT)       fputs(fh, "type ons 20\n");
 
 		fh2 = fopen(strcat("scripts/", pFilename, ".arena"), FILE_READ);
@@ -752,6 +756,8 @@ float MapInfo_CurrentGametype()
 		return MAPINFO_TYPE_KEYHUNT;
 	else if(cvar("g_onslaught"))
 		return MAPINFO_TYPE_ONSLAUGHT;
+	else if(cvar("g_race"))
+		return MAPINFO_TYPE_RACE;
 	else
 		return MAPINFO_TYPE_DEATHMATCH;
 }
@@ -788,6 +794,7 @@ void MapInfo_SwitchGameType(float t)
 	cvar_set("g_keyhunt",    (t == MAPINFO_TYPE_KEYHUNT)         ? "1" : "0");
 	cvar_set("g_assault",    (t == MAPINFO_TYPE_ASSAULT)         ? "1" : "0");
 	cvar_set("g_onslaught",  (t == MAPINFO_TYPE_ONSLAUGHT)       ? "1" : "0");
+	cvar_set("g_race",       (t == MAPINFO_TYPE_RACE)            ? "1" : "0");
 }
 
 void MapInfo_LoadMap(string s)

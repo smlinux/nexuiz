@@ -1240,6 +1240,7 @@ void navigation_routerating(entity e, float f, float rangebias)
 		e.nearestwaypointtimeout = time + random() * 3 + 5;
 	}
 	//dprint(e.classname, " ", ftos(f));
+	//dprint("-- checking ", e.classname, " (with cost ", ftos(e.nearestwaypoint.wpcost), ")\n");
 	if (e.nearestwaypoint)
 	if (e.nearestwaypoint.wpcost < 10000000)
 	{

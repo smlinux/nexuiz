@@ -22,6 +22,8 @@ scores.qh
 
 ipban.qh
 
+race.qh
+
 keyhunt.qh
 
 antilag.qh
@@ -121,6 +123,8 @@ ipban.qc
 t_quake3.qc
 t_halflife.qc
 t_quake.qc
+
+race.qc
 
 
 //// tZork Turrets ////
