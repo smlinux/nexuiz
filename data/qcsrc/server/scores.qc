@@ -274,9 +274,20 @@ float PlayerScore_Compare(entity t1, entity t2)
 void WinningConditionHelper()
 {
 	float c;
+	string s;
+	entity p;
+	s = GetGametype();
+	s = strcat(s, ":", GetPlayerScoreString(world, 2)); // make this 1 once we can
+
 	if(teamscores_entities_count)
 	{
 		float t;
+
+		s = strcat(s, ":", GetTeamScoreString(0, 1));
+		for(t = 0; t < 16; ++t)
+			if(teamscorekeepers[t])
+				s = strcat(s, ":", ftos(t+1), ":", GetTeamScoreString(t+1, 1));
+
 		WinningConditionHelper_equality = 1;
 		WinningConditionHelper_winnerteam = 0;
 		for(t = 1; t < 16; ++t)
@@ -304,7 +315,6 @@ void WinningConditionHelper()
 	}
 	else
 	{
-		entity p;
 		WinningConditionHelper_equality = 1;
 		WinningConditionHelper_winner = world;
 		FOR_EACH_PLAYER(p)
@@ -324,6 +334,33 @@ void WinningConditionHelper()
 		if(WinningConditionHelper_equality)
 			WinningConditionHelper_winner = world;
 		WinningConditionHelper_winnerteam = -1;
+	}
+
+	if(worldstatus)
+		strunzone(worldstatus);
+	worldstatus = strzone(s);
+
+	FOR_EACH_CLIENT(p)
+	{
+		/* this breaks qstat :( find a way to make qstat parse this at least as an int first
+		s = GetPlayerScoreString(p, 1);
+		if(clienttype(p) == CLIENTTYPE_REAL)
+			s = strcat(s, ":human");
+		else
+			s = strcat(s, ":bot");
+		if(p.classname == "player" || g_arena || g_lms)
+			s = strcat(s, ":", ftos(p.team));
+		else
+			s = strcat(s, ":spectator");
+		*/
+		if(p.classname == "player" || g_arena || g_lms)
+			s = "-666";
+		else
+			s = GetPlayerScoreString(p, 2);
+
+		if(p.clientstatus)
+			strunzone(p.clientstatus);
+		p.clientstatus = strzone(s);
 	}
 }
 
@@ -373,7 +410,7 @@ string GetScoreLogLabel(string label, float fl)
 	return label;
 }
 
-string GetPlayerScoreString(entity pl)
+string GetPlayerScoreString(entity pl, float shortString)
 {
 	string out;
 	entity sk;
@@ -391,6 +428,7 @@ string GetPlayerScoreString(entity pl)
 				l = scores_label[i];
 				out = strcat(out, GetScoreLogLabel(l, f), ",");
 			}
+		if(shortString < 2)
 		for(i = 0; i < MAX_SCORE; ++i)
 			if(scores_flags[i] & SFL_SORT_PRIO_MASK == SFL_SORT_PRIO_SECONDARY)
 			{
@@ -398,6 +436,7 @@ string GetPlayerScoreString(entity pl)
 				l = scores_label[i];
 				out = strcat(out, GetScoreLogLabel(l, f), ",");
 			}
+		if(shortString < 1)
 		for(i = 0; i < MAX_SCORE; ++i)
 			if(scores_flags[i] & SFL_SORT_PRIO_MASK != SFL_SORT_PRIO_PRIMARY)
 			if(scores_flags[i] & SFL_SORT_PRIO_MASK != SFL_SORT_PRIO_SECONDARY)
@@ -413,9 +452,11 @@ string GetPlayerScoreString(entity pl)
 		for(i = 0; i < MAX_SCORE; ++i)
 			if(scores_flags[i] & SFL_SORT_PRIO_MASK == SFL_SORT_PRIO_PRIMARY)
 				out = strcat(out, ftos(sk.(scores[i])), ",");
+		if(shortString < 2)
 		for(i = 0; i < MAX_SCORE; ++i)
 			if(scores_flags[i] & SFL_SORT_PRIO_MASK == SFL_SORT_PRIO_SECONDARY)
 				out = strcat(out, ftos(sk.(scores[i])), ",");
+		if(shortString < 1)
 		for(i = 0; i < MAX_SCORE; ++i)
 			if(scores_flags[i] & SFL_SORT_PRIO_MASK != SFL_SORT_PRIO_PRIMARY)
 			if(scores_flags[i] & SFL_SORT_PRIO_MASK != SFL_SORT_PRIO_SECONDARY)
@@ -425,7 +466,7 @@ string GetPlayerScoreString(entity pl)
 	return out;
 }
 
-string GetTeamScoreString(float tm)
+string GetTeamScoreString(float tm, float shortString)
 {
 	string out;
 	entity sk;
@@ -443,6 +484,7 @@ string GetTeamScoreString(float tm)
 				l = teamscores_label[i];
 				out = strcat(out, GetScoreLogLabel(l, f), ",");
 			}
+		if(shortString < 2)
 		for(i = 0; i < MAX_SCORE; ++i)
 			if(teamscores_flags[i] & SFL_SORT_PRIO_MASK == SFL_SORT_PRIO_SECONDARY)
 			{
@@ -450,6 +492,7 @@ string GetTeamScoreString(float tm)
 				l = teamscores_label[i];
 				out = strcat(out, GetScoreLogLabel(l, f), ",");
 			}
+		if(shortString < 1)
 		for(i = 0; i < MAX_SCORE; ++i)
 			if(teamscores_flags[i] & SFL_SORT_PRIO_MASK != SFL_SORT_PRIO_PRIMARY)
 			if(teamscores_flags[i] & SFL_SORT_PRIO_MASK != SFL_SORT_PRIO_SECONDARY)
@@ -465,9 +508,11 @@ string GetTeamScoreString(float tm)
 		for(i = 0; i < MAX_TEAMSCORE; ++i)
 			if(teamscores_flags[i] & SFL_SORT_PRIO_MASK == SFL_SORT_PRIO_PRIMARY)
 				out = strcat(out, ftos(sk.(teamscores[i])), ",");
+		if(shortString < 2)
 		for(i = 0; i < MAX_TEAMSCORE; ++i)
 			if(teamscores_flags[i] & SFL_SORT_PRIO_MASK == SFL_SORT_PRIO_SECONDARY)
 				out = strcat(out, ftos(sk.(teamscores[i])), ",");
+		if(shortString < 1)
 		for(i = 0; i < MAX_TEAMSCORE; ++i)
 			if(teamscores_flags[i] & SFL_SORT_PRIO_MASK != SFL_SORT_PRIO_PRIMARY)
 			if(teamscores_flags[i] & SFL_SORT_PRIO_MASK != SFL_SORT_PRIO_SECONDARY)

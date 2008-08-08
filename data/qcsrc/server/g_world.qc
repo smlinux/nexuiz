@@ -975,7 +975,7 @@ void DumpStats(float final)
 			fputs(file, strcat(s, "\n"));
 	}
 
-	s = strcat(":labels:player:", GetPlayerScoreString(world));
+	s = strcat(":labels:player:", GetPlayerScoreString(world, 0));
 	if(to_console)
 		ServerConsoleEcho(s, TRUE);
 	if(to_eventlog)
@@ -985,12 +985,11 @@ void DumpStats(float final)
 
 	FOR_EACH_CLIENT(other)
 	{
-		// FIXME make this use the new score system
 		if ((clienttype(other) == CLIENTTYPE_REAL) || (clienttype(other) == CLIENTTYPE_BOT && cvar("sv_logscores_bots")))
 		{
-			s = strcat(":player:see-labels:", GetPlayerScoreString(other), ":");
+			s = strcat(":player:see-labels:", GetPlayerScoreString(other, 0), ":");
 			s = strcat(s, ftos(rint(time - other.jointime)), ":");
-			if(other.classname == "player")
+			if(other.classname == "player" || g_arena || g_lms)
 				s = strcat(s, ftos(other.team), ":");
 			else
 				s = strcat(s, "spectator:");
@@ -1006,7 +1005,7 @@ void DumpStats(float final)
 
 	if(teamplay)
 	{
-		s = strcat(":labels:teamscores:", GetTeamScoreString(0));
+		s = strcat(":labels:teamscores:", GetTeamScoreString(0, 0));
 		if(to_console)
 			ServerConsoleEcho(s, TRUE);
 		if(to_eventlog)
@@ -1016,7 +1015,7 @@ void DumpStats(float final)
 	
 		for(i = 1; i < 16; ++i)
 		{
-			s = strcat(":teamscores:see-labels:", GetTeamScoreString(i));
+			s = strcat(":teamscores:see-labels:", GetTeamScoreString(i, 0));
 			s = strcat(s, ":", ftos(i));
 			if(to_console)
 				ServerConsoleEcho(s, TRUE);

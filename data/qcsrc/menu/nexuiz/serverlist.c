@@ -16,6 +16,8 @@ CLASS(NexuizServerList) EXTENDS(NexuizListBox)
 	ATTRIB(NexuizServerList, columnNameSize, float, 0)
 	ATTRIB(NexuizServerList, columnMapOrigin, float, 0)
 	ATTRIB(NexuizServerList, columnMapSize, float, 0)
+	ATTRIB(NexuizServerList, columnTypeOrigin, float, 0)
+	ATTRIB(NexuizServerList, columnTypeSize, float, 0)
 	ATTRIB(NexuizServerList, columnPlayersOrigin, float, 0)
 	ATTRIB(NexuizServerList, columnPlayersSize, float, 0)
 
@@ -35,6 +37,7 @@ CLASS(NexuizServerList) EXTENDS(NexuizListBox)
 	ATTRIB(NexuizServerList, sortButton2, entity, NULL)
 	ATTRIB(NexuizServerList, sortButton3, entity, NULL)
 	ATTRIB(NexuizServerList, sortButton4, entity, NULL)
+	ATTRIB(NexuizServerList, sortButton5, entity, NULL)
 	ATTRIB(NexuizServerList, connectButton, entity, NULL)
 	ATTRIB(NexuizServerList, currentSortOrder, float, 0)
 	ATTRIB(NexuizServerList, currentSortField, float, -1)
@@ -61,6 +64,8 @@ float SLIST_FIELD_NUMHUMANS;
 float SLIST_FIELD_NUMBOTS;
 float SLIST_FIELD_PROTOCOL;
 float SLIST_FIELD_FREESLOTS;
+float SLIST_FIELD_PLAYERS;
+float SLIST_FIELD_QCSTATUS;
 void ServerList_UpdateFieldIDs()
 {
 	SLIST_FIELD_CNAME = gethostcacheindexforkey( "cname" );
@@ -75,6 +80,8 @@ void ServerList_UpdateFieldIDs()
 	SLIST_FIELD_NUMBOTS = gethostcacheindexforkey( "numbots" );
 	SLIST_FIELD_PROTOCOL = gethostcacheindexforkey( "protocol" );
 	SLIST_FIELD_FREESLOTS = gethostcacheindexforkey( "freeslots" );
+	SLIST_FIELD_PLAYERS = gethostcacheindexforkey( "players" );
+	SLIST_FIELD_QCSTATUS = gethostcacheindexforkey( "qcstatus" );
 }
 
 entity makeNexuizServerList()
@@ -124,17 +131,35 @@ void refreshServerListNexuizServerList(entity me, float mode)
 	else */
 	{
 		float m;
+		string s, typestr;
+		s = me.filterString;
+
+		m = strstrofs(s, ":", 0);
+		if(m >= 0)
+		{
+			typestr = substring(s, 0, m);
+			s = substring(s, m + 1, strlen(s) - m - 1);
+			while(substring(s, 0, 1) == " ")
+				s = substring(s, 1, strlen(s) - 1);
+		}
+		else
+			typestr = "";
+
 		m = SLIST_MASK_AND - 1;
 		resethostcachemasks();
 		if(!me.filterShowFull)
 			sethostcachemasknumber(++m, SLIST_FIELD_FREESLOTS, 1, SLIST_TEST_GREATEREQUAL);
 		if(!me.filterShowEmpty)
 			sethostcachemasknumber(++m, SLIST_FIELD_NUMHUMANS, 1, SLIST_TEST_GREATEREQUAL);
+		if(typestr != "")
+			sethostcachemaskstring(++m, SLIST_FIELD_QCSTATUS, strcat(typestr, ":"), SLIST_TEST_STARTSWITH);
 		m = SLIST_MASK_OR - 1;
-		if(me.filterString)
+		if(s != "")
 		{
-			sethostcachemaskstring(++m, SLIST_FIELD_NAME, me.filterString, SLIST_TEST_CONTAINS);
-			sethostcachemaskstring(++m, SLIST_FIELD_MAP, me.filterString, SLIST_TEST_CONTAINS);
+			sethostcachemaskstring(++m, SLIST_FIELD_NAME, s, SLIST_TEST_CONTAINS);
+			sethostcachemaskstring(++m, SLIST_FIELD_MAP, s, SLIST_TEST_CONTAINS);
+			sethostcachemaskstring(++m, SLIST_FIELD_PLAYERS, s, SLIST_TEST_CONTAINS);
+			sethostcachemaskstring(++m, SLIST_FIELD_QCSTATUS, strcat(s, ":"), SLIST_TEST_STARTSWITH);
 		}
 		sethostcachesort(me.currentSortField, me.currentSortOrder < 0);
 		resorthostcache();
@@ -217,6 +242,52 @@ void ServerList_PlayerSort_Click(entity btn, entity me)
 {
 	me.setSortOrder(me, SLIST_FIELD_NUMHUMANS, -1);
 }
+void ServerList_TypeSort_Click(entity btn, entity me)
+{
+	string s, t;
+	float i, m;
+	s = me.filterString;
+	m = strstrofs(s, ":", 0);
+	if(m >= 0)
+	{
+		s = substring(s, 0, m);
+		while(substring(s, m+1, 1) == " ") // skip spaces
+			++m;
+	}
+	else
+		s = "";
+
+	for(i = 1; ; ++i) // 20 modes ought to be enough for anyone
+	{
+		t = GametypeNameFromType(i);
+		if(i > 1)
+			if(t == GametypeNameFromType(0)) // it repeats (default case)
+			{
+				// no type was found
+				// choose the first one
+				s = t;
+				break;
+			}
+		if(s == GametypeNameFromType(i))
+		{
+			// the type was found
+			// choose the next one
+			s = GametypeNameFromType(i + 1);
+			if(s == GametypeNameFromType(0))
+				s = "";
+			break;
+		}
+	}
+
+	if(s != "")
+		s = strcat(s, ":");
+	s = strcat(s, substring(me.filterString, m+1, strlen(me.filterString) - m - 1));
+
+	me.controlledTextbox.setText(me.controlledTextbox, s);
+	me.controlledTextbox.keyDown(me.controlledTextbox, K_END, 0, 0);
+	me.controlledTextbox.keyUp(me.controlledTextbox, K_END, 0, 0);
+	//ServerList_Filter_Change(me.controlledTextbox, me);
+}
 void ServerList_Filter_Change(entity box, entity me)
 {
 	if(me.filterString)
@@ -246,7 +317,8 @@ void setSortOrderNexuizServerList(entity me, float field, float direction)
 	me.sortButton1.forcePressed = (field == SLIST_FIELD_PING);
 	me.sortButton2.forcePressed = (field == SLIST_FIELD_NAME);
 	me.sortButton3.forcePressed = (field == SLIST_FIELD_MAP);
-	me.sortButton4.forcePressed = (field == SLIST_FIELD_NUMHUMANS);
+	me.sortButton4.forcePressed = 0;
+	me.sortButton5.forcePressed = (field == SLIST_FIELD_NUMHUMANS);
 	me.selectedItem = 0;
 	if(me.selectedServer)
 		strunzone(me.selectedServer);
@@ -281,16 +353,19 @@ void resizeNotifyNexuizServerList(entity me, vector relOrigin, vector relSize, v
 	me.columnPingOrigin = 0;
 	me.columnPingSize = me.realFontSize_x * 4;
 	me.columnMapSize = me.realFontSize_x * 12;
+	me.columnTypeSize = me.realFontSize_x * 4;
 	me.columnPlayersSize = me.realFontSize_x * 6;
-	me.columnNameSize = 1 - me.columnPlayersSize - me.columnMapSize - me.columnPingSize - 3 * me.realFontSize_x;
+	me.columnNameSize = 1 - me.columnPlayersSize - me.columnMapSize - me.columnPingSize - me.columnTypeSize - 4 * me.realFontSize_x;
 	me.columnNameOrigin = me.columnPingOrigin + me.columnPingSize + me.realFontSize_x;
 	me.columnMapOrigin = me.columnNameOrigin + me.columnNameSize + me.realFontSize_x;
-	me.columnPlayersOrigin = me.columnMapOrigin + me.columnMapSize + me.realFontSize_x;
+	me.columnTypeOrigin = me.columnMapOrigin + me.columnMapSize + me.realFontSize_x;
+	me.columnPlayersOrigin = me.columnTypeOrigin + me.columnTypeSize + me.realFontSize_x;
 
 	me.positionSortButton(me, me.sortButton1, me.columnPingOrigin, me.columnPingSize, "Ping", ServerList_PingSort_Click);
 	me.positionSortButton(me, me.sortButton2, me.columnNameOrigin, me.columnNameSize, "Host name", ServerList_NameSort_Click);
 	me.positionSortButton(me, me.sortButton3, me.columnMapOrigin, me.columnMapSize, "Map", ServerList_MapSort_Click);
-	me.positionSortButton(me, me.sortButton4, me.columnPlayersOrigin, me.columnPlayersSize, "Players", ServerList_PlayerSort_Click);
+	me.positionSortButton(me, me.sortButton4, me.columnTypeOrigin, me.columnTypeSize, "Type", ServerList_TypeSort_Click);
+	me.positionSortButton(me, me.sortButton5, me.columnPlayersOrigin, me.columnPlayersSize, "Players", ServerList_PlayerSort_Click);
 
 	float f;
 	f = me.currentSortField;
@@ -352,13 +427,21 @@ void drawListBoxItemNexuizServerList(entity me, float i, vector absSize, float i
 		theColor = eX;
 		theAlpha *= SKINALPHA_SERVERLIST_HIGHPING;
 	}
-	
+
 	s = ftos(p);
 	draw_Text(me.realUpperMargin * eY + (me.columnPingSize - draw_TextWidth(s, 0) * me.realFontSize_x) * eX, s, me.realFontSize, theColor, theAlpha, 0);
 	s = draw_TextShortenToWidth(gethostcachestring(SLIST_FIELD_NAME, i), me.columnNameSize / me.realFontSize_x, 0);
 	draw_Text(me.realUpperMargin * eY + me.columnNameOrigin * eX, s, me.realFontSize, theColor, theAlpha, 0);
 	s = draw_TextShortenToWidth(gethostcachestring(SLIST_FIELD_MAP, i), me.columnMapSize / me.realFontSize_x, 0);
 	draw_Text(me.realUpperMargin * eY + (me.columnMapOrigin + (me.columnMapSize - draw_TextWidth(s, 0) * me.realFontSize_x) * 0.5) * eX, s, me.realFontSize, theColor, theAlpha, 0);
+	s = gethostcachestring(SLIST_FIELD_QCSTATUS, i);
+	p = strstrofs(s, ":", 0);
+	if(p >= 0)
+		s = substring(s, 0, p);
+	else
+		s = "";
+	s = draw_TextShortenToWidth(s, me.columnMapSize / me.realFontSize_x, 0);
+	draw_Text(me.realUpperMargin * eY + (me.columnTypeOrigin + (me.columnTypeSize - draw_TextWidth(s, 0) * me.realFontSize_x) * 0.5) * eX, s, me.realFontSize, theColor, theAlpha, 0);
 	s = strcat(ftos(gethostcachenumber(SLIST_FIELD_NUMHUMANS, i)), "/", ftos(gethostcachenumber(SLIST_FIELD_MAXPLAYERS, i)));
 	draw_Text(me.realUpperMargin * eY + (me.columnPlayersOrigin + (me.columnPlayersSize - draw_TextWidth(s, 0) * me.realFontSize_x) * 0.5) * eX, s, me.realFontSize, theColor, theAlpha, 0);
 }

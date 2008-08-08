@@ -100,6 +100,7 @@ entity WinningConditionHelper_winner;    ///< the winning player, or world if no
  * Labels get an appended < if the scores are better if smaller (e.g. deaths).
  * High priorities always come first.
  * Example label string: score!!,kills,deaths<,suicides<
+ * If shortString is set, only the sort keys are returned.
  */
-string GetPlayerScoreString(entity pl);
-string GetTeamScoreString(float tm);
+string GetPlayerScoreString(entity pl, float shortString);
+string GetTeamScoreString(float tm, float shortString);

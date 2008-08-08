@@ -1235,6 +1235,14 @@ void(string s, ...) print = #339; // same number as in EXT_CSQC
 //description:
 //this extension allows precache_model and precache_sound (and any variants) to be used during the game (with automatic messages to clients to precache the new model/sound indices), also setmodel/sound/ambientsound can be called without precaching first (they will cause an automatic precache).
 
+//DP_SV_QCSTATUS
+//idea: div0
+//darkplaces implementation: div0
+//Fields whose contents are used instead of frags, or set as "qcstatus" field
+//in the getstatus/getinfo response.
+string worldstatus;
+.string clientstatus;
+
 //DP_SV_ROTATINGBMODEL
 //idea: id Software
 //darkplaces implementation: LordHavoc
