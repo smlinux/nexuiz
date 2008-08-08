@@ -1,0 +1,199 @@
+.float race_checkpoint; // player: next checkpoint that has to be reached
+.float race_laptime;
+
+float race_checkpoint_records[256];
+string race_checkpoint_recordholders[256];
+
+float race_highest_checkpoint;
+
+void race_SendNextCheckpoint(entity e)
+{
+	float recordtime;
+	string recordholder;
+	float cp;
+
+	if(clienttype(e) != CLIENTTYPE_REAL)
+		return;
+
+	if(!e.race_laptime)
+		return;
+
+	cp = e.race_checkpoint;
+	recordtime = race_checkpoint_records[cp];
+	recordholder = race_checkpoint_recordholders[cp];
+	/*
+	recordtime = stof(db_get(ServerProgsDB, strcat(GetMapname(), "/racerecord/", ftos(cp), "/time")));
+	recordholder = db_get(ServerProgsDB, strcat(GetMapname(), "/racerecord/", ftos(cp), "/netname"));
+	*/
+	if(recordholder == e.netname)
+		recordholder = "";
+
+	msg_entity = e;
+	WriteByte(MSG_ONE, SVC_TEMPENTITY);
+	WriteByte(MSG_ONE, TE_CSQC_RACE);
+	WriteByte(MSG_ONE, RACE_NET_CHECKPOINT_NEXT);
+	WriteByte(MSG_ONE, cp); // checkpoint the player will be at next
+	WriteShort(MSG_ONE, recordtime);
+	WriteString(MSG_ONE, recordholder);
+}
+
+void race_SendTime(entity e, float cp, float t, float tvalid)
+{
+	t = floor(0.5 + 10 * t); // make integer
+
+	if(tvalid)
+	if(cp == 0) // finish line
+	{
+		float s;
+		s = PlayerScore_Add(e, SP_RACE_FASTEST, 0);
+		if(!s || t < s)
+			PlayerScore_Add(e, SP_RACE_FASTEST, t - s);
+		PlayerScore_Add(e, SP_RACE_LAPS, 1);
+	}
+
+	float recordtime;
+	string recordholder;
+
+	if(tvalid)
+	{
+		recordtime = race_checkpoint_records[cp];
+		recordholder = strcat1(race_checkpoint_recordholders[cp]); // make a tempstring copy, as we'll possibly strunzone it!
+		if(recordholder == e.netname)
+			recordholder = "";
+
+		if(t < recordtime || recordtime == 0)
+		{
+			race_checkpoint_records[cp] = t;
+			if(race_checkpoint_recordholders[cp])
+				strunzone(race_checkpoint_recordholders[cp]);
+			race_checkpoint_recordholders[cp] = strzone(e.netname);
+			if(cp == 0)
+			{
+				float grecordtime;
+				string grecordholder;
+				grecordtime = stof(db_get(ServerProgsDB, strcat(GetMapname(), "/racerecord/time")));
+				grecordholder = db_get(ServerProgsDB, strcat(GetMapname(), "/racerecord/netname"));
+				if(grecordholder == e.netname)
+					grecordholder = "";
+				if(grecordholder == "")
+					if(grecordtime == 0)
+						bprint(e.netname, "^7 set the all-time fastest lap record with ", mmsss(t), "\n");
+					else
+						bprint(e.netname, "^7 broke his all-time fastest lap record with ", mmsss(t), "\n");
+				else
+					bprint(e.netname, "^7 broke ", grecordholder, "^7's all-time fastest lap record with ", mmsss(t), "\n");
+				db_put(ServerProgsDB, strcat(GetMapname(), "/racerecord/time"), ftos(t));
+				db_put(ServerProgsDB, strcat(GetMapname(), "/racerecord/netname"), e.netname);
+			}
+
+			entity p;
+			FOR_EACH_REALPLAYER(p)
+				if(p.race_checkpoint == cp)
+					race_SendNextCheckpoint(p);
+		}
+	}
+	else
+	{
+		// dummies
+		t = 0;
+		recordtime = 0;
+		recordholder = "";
+	}
+
+	if(clienttype(e) != CLIENTTYPE_REAL)
+		return;
+
+	msg_entity = e;
+	WriteByte(MSG_ONE, SVC_TEMPENTITY);
+	WriteByte(MSG_ONE, TE_CSQC_RACE);
+	WriteByte(MSG_ONE, RACE_NET_CHECKPOINT_HIT);
+	WriteByte(MSG_ONE, cp); // checkpoint the player now is at
+	WriteShort(MSG_ONE, t); // time to that intermediate
+	WriteShort(MSG_ONE, recordtime); // previously best time
+	WriteString(MSG_ONE, recordholder); // record holder
+	print(race_checkpoint_recordholders[cp], "\n");
+}
+
+void race_ClearTime(entity e)
+{
+	e.race_checkpoint = -1;
+	e.race_laptime = 0;
+
+	if(clienttype(e) != CLIENTTYPE_REAL)
+		return;
+
+	msg_entity = e;
+	WriteByte(MSG_ONE, SVC_TEMPENTITY);
+	WriteByte(MSG_ONE, TE_CSQC_RACE);
+	WriteByte(MSG_ONE, RACE_NET_CHECKPOINT_CLEAR); // next
+}
+
+void checkpoint_touch()
+{
+	if(other.classname != "player")
+		return;
+
+	if(other.race_checkpoint == -1 || other.race_checkpoint == self.cnt)
+	{
+		if(self.cnt == race_highest_checkpoint)
+			other.race_checkpoint = 0;
+		else
+			other.race_checkpoint = self.cnt + 1;
+
+		race_SendTime(other, self.cnt, time - other.race_laptime, !!other.race_laptime);
+
+		if(!self.cnt) // finish line
+			other.race_laptime = time;
+
+		race_SendNextCheckpoint(other);
+	}
+	else if(other.race_checkpoint == self.cnt + 1)
+	{
+		// ignored
+	}
+	else if(other.race_checkpoint == 0 && self.cnt == race_highest_checkpoint)
+	{
+		// ignored
+	}
+	else
+	{
+		Damage (other, self, self, 10000, DEATH_HURTTRIGGER, other.origin, '0 0 0');
+	}
+}
+
+void checkpoint_use()
+{
+	other = activator;
+	checkpoint_touch();
+}
+
+void spawnfunc_trigger_race_checkpoint()
+{
+	vector o;
+	if(!g_race)
+		return;
+	InitTrigger();
+	if(self.targetname)
+		self.use = checkpoint_use;
+	else
+		self.touch = checkpoint_touch;
+
+	o = (self.absmin + self.absmax) * 0.5;
+	traceline(o, o - '0 0 1' * (o_z - self.absmin_z), MOVE_NORMAL, self);
+	o = trace_endpos - '0 0 1' * PL_MIN_z;
+	self.nearestwaypoint = waypoint_spawn(o, o, WAYPOINTFLAG_GENERATED);
+	self.nearestwaypointtimeout = time + 1000000000;
+
+	if(!self.message)
+		self.message = "went backwards";
+
+	if(self.cnt > race_highest_checkpoint)
+		race_highest_checkpoint = self.cnt;
+}
+
+void race_PreparePlayer()
+{
+	if(!g_race)
+		return;
+	race_ClearTime(self);
+}

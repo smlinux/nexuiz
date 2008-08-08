@@ -551,12 +551,10 @@ void havocbot_role_race()
 		{
 			if(e.cnt == self.race_checkpoint)
 			{
-				print("found good checkpoint\n");
 				navigation_routerating(e, 1000000, 5000);
 			}
 			else if(self.race_checkpoint == -1)
 			{
-				print("found good checkpoint -1\n");
 				navigation_routerating(e, 1000000, 5000);
 			}
 		}

@@ -10,6 +10,8 @@ float teamscores_flags[MAX_TEAMSCORE];
 float teamscores_entities_count;
 var .float scores_primary;
 var .float teamscores_primary;
+float scores_flags_primary;
+float teamscores_flags_primary;
 
 void Net_LinkEntity(entity e)
 {
@@ -124,7 +126,10 @@ void ScoreInfo_SetLabel_PlayerScore(float i, string label, float scoreflags)
 	scores_label[i] = label;
 	scores_flags[i] = scoreflags;
 	if(scoreflags & SFL_SORT_PRIO_MASK == SFL_SORT_PRIO_PRIMARY)
+	{
 		scores_primary = scores[i];
+		scores_flags_primary = scoreflags;
+	}
 }
 
 void ScoreInfo_SetLabel_TeamScore(float i, string label, float scoreflags)
@@ -132,7 +137,10 @@ void ScoreInfo_SetLabel_TeamScore(float i, string label, float scoreflags)
 	teamscores_label[i] = label;
 	teamscores_flags[i] = scoreflags;
 	if(scoreflags & SFL_SORT_PRIO_MASK == SFL_SORT_PRIO_PRIMARY)
+	{
 		teamscores_primary = teamscores[i];
+		teamscores_flags_primary = scoreflags;
+	}
 }
 
 void ScoreInfo_Write(float targ)
@@ -320,6 +328,7 @@ void WinningConditionHelper()
 		}
 
 		WinningConditionHelper_topscore = teamscorekeepers[WinningConditionHelper_winnerteam].teamscores_primary;
+		WinningConditionHelper_lowerisbetter = (teamscores_flags_primary & SFL_LOWER_IS_BETTER);
 
 		WinningConditionHelper_winner = world;
 		if(WinningConditionHelper_equality)
@@ -344,6 +353,7 @@ void WinningConditionHelper()
 		}
 
 		WinningConditionHelper_topscore = WinningConditionHelper_winner.scorekeeper.scores_primary;
+		WinningConditionHelper_lowerisbetter = (scores_flags_primary & SFL_LOWER_IS_BETTER);
 
 		if(WinningConditionHelper_equality)
 			WinningConditionHelper_winner = world;

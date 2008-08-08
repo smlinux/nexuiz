@@ -124,10 +124,8 @@ string STR_PLAYER = "player";
 #define FOR_EACH_REALPLAYER(v) FOR_EACH_REALCLIENT(v) if(v.classname == STR_PLAYER)
 #endif
 
-// change that to actually calling strcat when running on an engine without
-// unlimited tempstrings:
-// string strcat1(string s) = #115; // FRIK_FILE
-#define strcat1(s) (s)
+// copies a string to a tempstring (so one can strunzone it)
+string strcat1(string s) = #115; // FRIK_FILE
 
 float logfile_open;
 float logfile;
@@ -593,62 +591,6 @@ string Team_ColorNameLowerCase(float t)
 		return "pink";
 	return "neutral";
 }
-
-/*
-string decolorize(string s)
-{
-	string out;
-	out = "";
-	while(s != "")
-	{
-		float n;
-		string ch1, ch2;
-		n = 1;
-		ch1 = substring(s, 0, 1);
-		ch2 = substring(s, 1, 1);
-		if(ch1 == "^")
-		{
-			n = 2;
-			if(ch2 == "^")
-				out = strcat(out, "^^");
-			else if(ch2 == "0")
-				out = strcat1(out);
-			else if(ch2 == "1")
-				out = strcat1(out);
-			else if(ch2 == "2")
-				out = strcat1(out);
-			else if(ch2 == "3")
-				out = strcat1(out);
-			else if(ch2 == "4")
-				out = strcat1(out);
-			else if(ch2 == "5")
-				out = strcat1(out);
-			else if(ch2 == "6")
-				out = strcat1(out);
-			else if(ch2 == "7")
-				out = strcat1(out);
-			else if(ch2 == "8")
-				out = strcat1(out);
-			else if(ch2 == "9")
-				out = strcat1(out);
-			else
-			{
-				n = 1;
-				out = strcat(out, "^^");
-			}
-			s = substring(s, n, strlen(s) - n);
-		}
-		else
-		{
-			s = substring(s, 1, strlen(s) - 1);
-			out = strcat(out, ch1);
-		}
-	}
-	return out;
-}
-#define strdecolorize(s) decolorize(s)
-#define strlennocol(s) strlen(decolorize(s))
-*/
 
 #define CENTERPRIO_POINT 1
 #define CENTERPRIO_SPAM 2

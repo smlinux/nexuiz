@@ -90,6 +90,7 @@ float WinningConditionHelper_topscore;   ///< highest score
 float WinningConditionHelper_equality;   ///< 1 if and only if the top two have equal scores
 float WinningConditionHelper_winnerteam; ///< the color of the winning team, or -1 if none
 entity WinningConditionHelper_winner;    ///< the winning player, or world if none
+float WinningConditionHelper_lowerisbetter; ///< lower is better, duh
 
 /**
  * Returns score strings for eventlog etc.

@@ -1488,6 +1488,12 @@ float WinningCondition_Scores(float limit)
 	if(WinningConditionHelper_topscore == 0)
 		WinningConditionHelper_equality = 0;
 	
+	if(WinningConditionHelper_lowerisbetter)
+	{
+		WinningConditionHelper_topscore = -WinningConditionHelper_topscore;
+		limit = -limit;
+	}
+	
 	return GetWinningCode(limit && (WinningConditionHelper_topscore >= limit), WinningConditionHelper_equality);
 }
 

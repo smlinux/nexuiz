@@ -934,6 +934,53 @@ void Sbar_DrawScoreboard()
 	sbar = sbar_save;
 }
 
+string MakeRaceString(float cp, float mytime, float histime, string hisname)
+{
+	string col;
+	string timestr;
+	string cpname;
+
+	if(histime == 0) // goal hit
+	{
+		if(mytime >= 0)
+		{
+			timestr = strcat("+", ftos_decimals(+mytime, 1));
+			col = "^1";
+		}
+		else
+		{
+			timestr = strcat("-", ftos_decimals(-mytime, 1));
+			col = "^2";
+		}
+	}
+	else if(histime > 0) // anticipation
+	{
+		if(mytime >= histime)
+			timestr = strcat("+", ftos_decimals(mytime - histime, 1));
+		else
+			timestr = mmsss(histime * 10);
+		col = "^3";
+	}
+	else
+		col = "^7";
+
+	if(cp)
+		cpname = strcat("Intermediate ", ftos(cp));
+	else
+		cpname = "Finish line";
+	
+	if(histime < 0)
+		return strcat(col, cpname);
+	else if(hisname == "")
+		return strcat(col, cpname, " (", timestr, ")");
+	else
+		return strcat(col, cpname, " (", timestr, " ", hisname, col, ")");
+}
+
+void dummyfunction(float a1, float a2, float a3, float a4, float a5, float a6, float a7, float a8)
+{
+}
+
 void Sbar_Score(float margin)
 {
 	float timelimit, timeleft, minutes, seconds, distribution, myplace, score;
@@ -1038,8 +1085,9 @@ void Sbar_Score(float margin)
 
 	if(gametype == GAME_RACE)
 	{
+		drawfont = sbar_bigfont;
+
 		if(race_checkpointtime)
-		if(race_checkpoint != 255)
 		{
 			float a;
 			vector m;
@@ -1048,27 +1096,41 @@ void Sbar_Score(float margin)
 			m = '0.5 0 0' * vid_conwidth + '0 0.5 0' * vid_conheight;
 
 			a = bound(0, 2 - (time - race_checkpointtime), 1);
-			drawfont = sbar_bigfont;
-			if(a >= 0)
+			s = "";
+			if(a > 0) // just hit a checkpoint?
 			{
-				if(race_checkpoint)
-					s = strcat("Intermediate ", ftos(race_checkpoint));
+				if(race_time && race_previousbesttime)
+					s = MakeRaceString(race_checkpoint, race_time / 10 - race_previousbesttime / 10, 0, race_previousbestname);
 				else
-					s = strcat("Finish line");
-				drawstring(m - '0 88 0' - '12 0 0' * stringwidth(s, FALSE), s, '24 24 0', '0 1 0', sbar_alpha_fg * a, 0);
-				if(race_time)
+					s = MakeRaceString(race_checkpoint, 0, -1, race_previousbestname);
+			}
+			else
+			{
+				if(race_laptime && race_nextbesttime)
 				{
-					s = mmsss(race_time);
-					drawstring(m - '0 64 0' - '16 0 0' * stringwidth(s, FALSE), s, '32 32 0', '0 1 0', sbar_alpha_fg * a, 0);
+					a = bound(0, 2 - ((race_laptime + race_nextbesttime/10) - time), 1);
+					if(a > 0) // next one?
+					{
+						s = MakeRaceString(race_nextcheckpoint, time - race_laptime, race_nextbesttime / 10, race_nextbestname);
+					}
 				}
+			}
+
+			if(s != "")
+			if(a > 0)
+			{
+				dummyfunction(0, 0, 0, 0, 0, 0, 0, 0); // work around DP bug (set OFS_PARAM5 to 0)
+				drawcolorcodedstring(m - '0 80 0' - '8 0 0' * stringwidth(s, TRUE), s, '16 16 0', sbar_alpha_fg * a, 0);
 			}
 
 			if(race_laptime)
 			{
 				s = mmsss(10*(time - race_laptime));
-				drawstring(m - '0 64 0' - '16 0 0' * stringwidth(s, FALSE), s, '32 32 0', '1 1 1', sbar_alpha_fg * (1 - a), 0);
+				drawstring(m - '0 64 0' - '16 0 0' * stringwidth(s, FALSE), s, '32 32 0', '1 1 1', sbar_alpha_fg, 0);
 			}
 		}
+
+		drawfont = sbar_font;
 	}
 
 	sbar = sbar_save;

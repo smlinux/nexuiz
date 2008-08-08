@@ -568,16 +568,41 @@ void Net_Config()
 void Net_ReadRace()
 {
 	float checkpoint, t;
+	float b;
 
-	race_checkpoint = ReadByte();
-	race_time = ReadShort();
+	b = ReadByte();
 
-	race_checkpointtime = time;
+	switch(b)
+	{
+		case RACE_NET_CHECKPOINT_HIT:
+			race_checkpoint = ReadByte();
+			race_time = ReadShort();
+			race_previousbesttime = ReadShort();
+			if(race_previousbestname)
+				strunzone(race_previousbestname);
+			race_previousbestname = strzone(ReadString());
 
-	if(race_checkpoint == 0)
-		race_laptime = time; // valid
-	else if(race_checkpoint == 255)
-		race_laptime = 0; // invalid
+			race_checkpointtime = time;
+
+			if(race_checkpoint == 0)
+				race_laptime = time; // valid
+
+			break;
+
+		case RACE_NET_CHECKPOINT_CLEAR:
+			race_laptime = 0;
+			race_checkpointtime = 0;
+			break;
+
+		case RACE_NET_CHECKPOINT_NEXT:
+			race_nextcheckpoint = ReadByte();
+
+			race_nextbesttime = ReadShort();
+			if(race_nextbestname)
+				strunzone(race_nextbestname);
+			race_nextbestname = strzone(ReadString());
+			break;
+	}
 }
 
 // CSQC_Parse_TempEntity : Handles all temporary entity network data in the CSQC layer.
