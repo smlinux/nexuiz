@@ -228,7 +228,7 @@ void relocate_spawnpoint()
 		self.mins = PL_MIN;
 		self.maxs = PL_MAX;
 		move_out_of_solid(self);
-		print("^1NOTE: this map needs FIXING. Spawnpoint at ", vtos(o));
+		print("^1NOTE: this map needs FIXING. Spawnpoint at ", vtos(o - '0 0 1'));
 		print(" needs to be moved out of solid, e.g. by '", ftos(self.origin_x - o_x));
 		print(" ", ftos(self.origin_y - o_y));
 		print(" ", ftos(self.origin_z - o_z), "'\n");
