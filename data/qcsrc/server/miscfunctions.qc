@@ -223,6 +223,17 @@ void relocate_spawnpoint()
 	tracebox(self.origin, PL_MIN, PL_MAX, self.origin, TRUE, self);
 	if (trace_startsolid)
 	{
+		vector o;
+		o = self.origin;
+		self.mins = PL_MIN;
+		self.maxs = PL_MAX;
+		move_out_of_solid(self);
+		print("^1NOTE: this map needs FIXING. Spawnpoint at ", vtos(o));
+		print(" needs to be moved out of solid, e.g. by '", ftos(self.origin_x - o_x));
+		print(" ", ftos(self.origin_y - o_y));
+		print(" ", ftos(self.origin_z - o_z), "'\n");
+		self.origin = o;
+		self.mins = self.maxs = '0 0 0';
 		objerror("player spawn point in solid, mapper sucks!\n");
 		return;
 	}
