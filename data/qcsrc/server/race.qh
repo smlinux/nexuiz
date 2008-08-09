@@ -1,4 +1,5 @@
 void race_PreparePlayer();
+void race_RetractPlayer(); // go back by one checkpoint
 float race_teams;
 float race_spawns;
 float race_PreviousCheckpoint(float f);

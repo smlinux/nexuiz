@@ -702,9 +702,13 @@ void PutClientInServer (void)
 
 		if(g_race)
 			if(self.killcount != -666)
+			{
 				if(spot.target == "")
 					// let the player run without timing, if he did not spawn at a targetting spawnpoint
 					race_PreparePlayer();
+				else
+					race_RetractPlayer();
+			}
 
 		if(self.killcount == -666) {
 			PlayerScore_Clear(self);

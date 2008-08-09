@@ -244,7 +244,18 @@ void race_PreparePlayer()
 {
 	if(!g_race)
 		return;
+	print("prepare\n");
 	race_ClearTime(self);
+}
+
+void race_RetractPlayer()
+{
+	if(!g_race)
+		return;
+	print("retract\n");
+	self.race_checkpoint = race_PreviousCheckpoint(self.race_checkpoint);
+	if(self.race_checkpoint == 0)
+		race_ClearTime(self);
 }
 
 void spawnfunc_info_player_race (void)
