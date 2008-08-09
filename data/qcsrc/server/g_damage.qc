@@ -543,7 +543,6 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 			}
 		}
 
-		if(g_lms)
 		if(targ.classname == "player")
 		if(attacker.classname == "player")
 		if(attacker != targ)
