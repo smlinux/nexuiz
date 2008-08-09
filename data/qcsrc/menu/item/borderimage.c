@@ -13,6 +13,7 @@ CLASS(BorderImage) EXTENDS(Label)
 	ATTRIB(BorderImage, isNexposeeTitleBar, float, 0)
 	ATTRIB(BorderImage, zoomedOutTitleBarPosition, float, 0)
 	ATTRIB(BorderImage, zoomedOutTitleBar, float, 0)
+	ATTRIB(BorderImage, borderLines, float, 1)
 ENDCLASS(BorderImage)
 #endif
 
@@ -59,7 +60,7 @@ void drawBorderImage(entity me)
 	//print(vtos(me.borderVec), "\n");
 
 	if(me.src)
-		draw_BorderPicture('0 0 0', me.src, '1 1 0', me.color, 1, me.borderVec);
+		draw_BorderPicture('0 0 0', me.src, '1 1 0', me.color, 1, me.borderLines * me.borderVec);
 	if(me.fontSize > 0)
 	{
 		vector ro, rf;
