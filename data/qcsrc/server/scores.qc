@@ -202,10 +202,9 @@ void PlayerScore_Clear(entity player)
 
 	if(teamscores_entities_count)
 		return;
-	if(g_lms)
-		return;
-	if(g_arena)
-		return;
+	if(g_lms) return;
+	if(g_arena) return;
+	if(g_race) return;
 	//print("clear clear clear... HAHA\n");
 
 	sk = player.scorekeeper;
