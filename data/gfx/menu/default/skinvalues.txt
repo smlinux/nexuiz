@@ -86,6 +86,7 @@ MARGIN_LEFT                     8
 MARGIN_RIGHT                    8
 MARGIN_COLUMNS                  4
 MARGIN_ROWS                     4
+HEIGHT_DIALOGBORDER             1
 
 // item: input box
 //   uses "inputbox" images
