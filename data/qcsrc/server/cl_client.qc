@@ -54,7 +54,8 @@ float Spawn_Score(entity spot, entity playerlist, float teamcheck)
 				if(ent.health < 0 || ent.health >= ASSAULT_VALUE_INACTIVE)
 					return -1;
 			else if(ent.classname == "trigger_race_checkpoint")
-				if(self.race_checkpoint != -1 && self.race_checkpoint != ent.cnt)
+				if(max(0, self.race_checkpoint) != ent.cnt)
+				// checkpoint -1 players (freshly spawned) spawn close to finish!
 					return -1;
 			ent = find(ent, targetname, spot.target);
 		}
