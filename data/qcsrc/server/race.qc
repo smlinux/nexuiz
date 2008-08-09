@@ -196,11 +196,13 @@ void spawnfunc_trigger_race_checkpoint()
 {
 	vector o;
 	if(!g_race)
+	{
+		remove(self);
 		return;
+	}
 	InitTrigger();
-	if(self.targetname)
-		self.use = checkpoint_use;
-	else
+	self.use = checkpoint_use;
+	if not(self.spawnflags & 1)
 		self.touch = checkpoint_touch;
 
 	o = (self.absmin + self.absmax) * 0.5;
@@ -232,4 +234,14 @@ void race_PreparePlayer()
 	if(!g_race)
 		return;
 	race_ClearTime(self);
+}
+
+void spawnfunc_info_player_race (void)
+{
+	if(!g_race)
+	{
+		remove(self);
+		return;
+	}
+	spawnfunc_info_player_deathmatch();
 }

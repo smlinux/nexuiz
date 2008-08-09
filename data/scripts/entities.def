@@ -226,6 +226,13 @@ target: this should point to a target_objective to decide when this spawning poi
 cnt: weight of spawn point for random selection. Set to a lower value if you have many spawn points close together. Default value is 1.
 */
 
+/*QUAKED info_player_race (1 0.5 0) (-16 -16 -24) (16 16 45) 
+Race spawn point.
+-------- KEYS --------
+target: this should point to a trigger_race_checkpoint to decide when this spawning point is active. The checkpoint has to be AFTER this spawn.
+cnt: weight of spawn point for random selection. Set to a lower value if you have many spawn points close together. Default value is 1.
+*/
+
 /*QUAKED info_player_deathmatch (0 1 0) (-16 -16 -24) (16 16 45) 
 Normal player spawning location in game types without team spawns. Should touch the floor, but not the walls, and should point where the player should look when he spawns there.
 -------- KEYS --------
@@ -887,12 +894,14 @@ _receiveshadows: Allows per-entity control over shadow reception. Defaults to 1 
 _celshader: Sets the cel shader used for this geometry. Note: omit the "textures/" prefix.
 */
 
-/*QUAKED trigger_race_checkpoint (0 1 0) ? - - CRUSH
+/*QUAKED trigger_race_checkpoint (0 1 0) ? NOTOUCH - CRUSH
 A checkpoint, for the race game mode. Be sure to make them quite long, so they actually catch a player reliably!
 -------- KEYS --------
 cnt: Number of the checkpoint. 0 for finish line, and at least two other checkpoints have to exist. They MUST be touched in sequential order!
 message: Death message, when touching checkpoints in the wrong order.
+targetname: Name of the checkpoint. info_player_race can target this to assign a spawn to a checkpoint. Also used for triggering a checkpoint by an event.
 -------- SPAWNFLAGS --------
+NOTOUCH: the checkpoint will not become active when touched, it HAS to be targeted
 CRUSH: the checkpoint kills when used at the wrong time
 */
 
