@@ -393,7 +393,8 @@ void InitSolidBSPTrigger()
 	if (self.angles != '0 0 0')
 		SetMovedir ();
 	self.solid = SOLID_BSP;
-	setmodel (self, self.model);	// set size and link into world, no precision needed
+	if(self.model != "")
+		setmodel (self, self.model);	// set size and link into world, no precision needed
 	self.movetype = MOVETYPE_PUSH;
 //	self.modelindex = 0;
 	self.model = "";
