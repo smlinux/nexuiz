@@ -444,6 +444,8 @@ void PutObserverInServer (void)
 	self.viewzoom = 1;
 	self.wantswelcomemessage = 1;
 
+	race_PreparePlayer();
+
 	if(g_arena)
 	{
 		if(self.version_mismatch)
