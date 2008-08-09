@@ -43,20 +43,34 @@ float Spawn_Score(entity spot, entity playerlist, float teamcheck)
 	if(spot.team != teamcheck)
 		return -1;
 
+	if(race_spawns)
+		if(spot.target == "")
+			return -1;
+
 	// filter out spots for assault
 	if(spot.target != "") {
 		local entity ent;
 		ent = find(world, targetname, spot.target);
 		if(!ent)
+		{
 			return -1;
+		}
 		while(ent) {
 			if(ent.classname == "target_objective")
+			{
 				if(ent.health < 0 || ent.health >= ASSAULT_VALUE_INACTIVE)
 					return -1;
+			}
 			else if(ent.classname == "trigger_race_checkpoint")
-				if(max(0, self.race_checkpoint) != ent.cnt)
-				// checkpoint -1 players (freshly spawned) spawn close to finish!
+			{
+				if(self.classname == "player") // spectators may spawn everywhere
+				if(ent.cnt != race_PreviousCheckpoint(self.race_checkpoint))
+					// checkpoint -1 players (freshly spawned) spawn close to finish!
 					return -1;
+			}
+			else
+			{
+			}
 			ent = find(ent, targetname, spot.target);
 		}
 	}

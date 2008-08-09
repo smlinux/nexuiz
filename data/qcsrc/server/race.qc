@@ -8,6 +8,24 @@ string race_checkpoint_recordholders[256];
 
 float race_highest_checkpoint;
 
+float race_NextCheckpoint(float f)
+{
+	if(f >= race_highest_checkpoint)
+		return 0;
+	else
+		return f + 1;
+}
+
+float race_PreviousCheckpoint(float f)
+{
+	if(f == -1)
+		return 0;
+	else if(f == 0)
+		return race_highest_checkpoint;
+	else
+		return f - 1;
+}
+
 void race_SendNextCheckpoint(entity e)
 {
 	float recordtime;
@@ -149,10 +167,7 @@ void checkpoint_touch()
 
 	if(other.race_checkpoint == -1 || other.race_checkpoint == self.cnt)
 	{
-		if(self.cnt == race_highest_checkpoint)
-			other.race_checkpoint = 0;
-		else
-			other.race_checkpoint = self.cnt + 1;
+		other.race_checkpoint = race_NextCheckpoint(self.cnt);
 
 		race_SendTime(other, self.cnt, time - other.race_laptime, !!other.race_laptime);
 
@@ -161,11 +176,7 @@ void checkpoint_touch()
 
 		race_SendNextCheckpoint(other);
 	}
-	else if(other.race_checkpoint == self.cnt + 1)
-	{
-		// ignored
-	}
-	else if(other.race_checkpoint == 0 && self.cnt == race_highest_checkpoint)
+	else if(other.race_checkpoint == race_NextCheckpoint(self.cnt))
 	{
 		// ignored
 	}
@@ -243,5 +254,6 @@ void spawnfunc_info_player_race (void)
 		remove(self);
 		return;
 	}
+	++race_spawns;
 	spawnfunc_info_player_deathmatch();
 }

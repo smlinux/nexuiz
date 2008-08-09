@@ -1,2 +1,5 @@
 void race_PreparePlayer();
 float race_teams;
+float race_spawns;
+float race_PreviousCheckpoint(float f);
+float race_NextCheckpoint(float f);
