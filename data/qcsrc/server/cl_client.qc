@@ -47,9 +47,14 @@ float Spawn_Score(entity spot, entity playerlist, float teamcheck)
 	if(spot.target != "") {
 		local entity ent;
 		ent = find(world, targetname, spot.target);
+		if(!ent)
+			return -1;
 		while(ent) {
 			if(ent.classname == "target_objective")
 				if(ent.health < 0 || ent.health >= ASSAULT_VALUE_INACTIVE)
+					return -1;
+			else if(ent.classname == "trigger_race_checkpoint")
+				if(self.race_checkpoint != -1 && self.race_checkpoint != ent.cnt)
 					return -1;
 			ent = find(ent, targetname, spot.target);
 		}
@@ -444,7 +449,8 @@ void PutObserverInServer (void)
 	self.viewzoom = 1;
 	self.wantswelcomemessage = 1;
 
-	race_PreparePlayer();
+	if(g_race)
+		race_PreparePlayer();
 
 	if(g_arena)
 	{
@@ -569,6 +575,10 @@ void PutClientInServer (void)
 	if(self.classname == "player") {
 		entity	spot;
 
+		if(g_race)
+			if(self.killcount == -666)
+				race_PreparePlayer();
+
 		spot = SelectSpawnPoint (FALSE);
 		if(!spot)
 		{
@@ -675,6 +685,12 @@ void PutClientInServer (void)
 		self.statdraintime = time + 5;
 		self.BUTTON_ATCK = self.BUTTON_JUMP = self.BUTTON_ATCK2 = 0;
 
+		if(g_race)
+			if(self.killcount != -666)
+				if(spot.target == "")
+					// let the player run without timing, if he did not spawn at a targetting spawnpoint
+					race_PreparePlayer();
+
 		if(self.killcount == -666) {
 			PlayerScore_Clear(self);
 			self.killcount = 0;
@@ -692,8 +708,6 @@ void PutClientInServer (void)
 		self.lms_nextcheck = time + cvar("g_lms_campcheck_interval")*2;
 		self.lms_traveled_distance = 0;
 		self.speedrunning = FALSE;
-
-		race_PreparePlayer();
 
 		if(cvar("spawn_debug"))
 		{
