@@ -185,6 +185,12 @@ void spawnfunc_trigger_teleport (void)
 
 	if(self.model != "")
 		setmodel (self, self.model); // no precision needed
+	else
+	{
+		// force relinking
+		setorigin(self, self.origin);
+		setsize (self, self.mins, self.maxs);
+	}
 
 	self.model = "";
 	self.modelindex = 0;
