@@ -408,7 +408,8 @@ void Ent_Remove()
 		if(self.owner)
 		{
 			SetTeam(self.owner, -1);
-			RemovePlayer(self.owner);
+			if(self.owner.sort_prev)
+				RemovePlayer(self.owner);
 			self.owner.sort_prev = NULL;
 		}
 	} else if(self.enttype == ENT_CLIENT_TEAMSCORES)
