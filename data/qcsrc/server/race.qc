@@ -94,7 +94,10 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 				}
 				else
 				{
-					bprint(e.netname, "^7's new fastest lap could not break ", grecordholder, "^7's all-time fastest lap record of ", mmsss(grecordtime), "\n");
+					if(grecordholder == "")
+						bprint(e.netname, "^7's new fastest lap could not break his all-time fastest lap record of ", mmsss(grecordtime), "\n");
+					else
+						bprint(e.netname, "^7's new fastest lap could not break ", grecordholder, "^7's all-time fastest lap record of ", mmsss(grecordtime), "\n");
 				}
 			}
 
@@ -202,8 +205,7 @@ void spawnfunc_trigger_race_checkpoint()
 
 	o = (self.absmin + self.absmax) * 0.5;
 	tracebox(o, PL_MIN, PL_MAX, o - '0 0 1' * (o_z - self.absmin_z), MOVE_NORMAL, self);
-	o = trace_endpos;
-	self.nearestwaypoint = waypoint_spawn(o, o, WAYPOINTFLAG_GENERATED);
+	self.nearestwaypoint = waypoint_spawn(trace_endpos, trace_endpos, WAYPOINTFLAG_GENERATED);
 	self.nearestwaypointtimeout = time + 1000000000;
 
 	if(!self.message)
