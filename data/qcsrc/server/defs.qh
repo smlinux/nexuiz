@@ -481,3 +481,5 @@ void GlobalSound(string samplestring, float channel, float teamsay); // 0 is nor
 void VoiceMessage(string type);
 
 .float version_mismatch;
+
+float independent_players;

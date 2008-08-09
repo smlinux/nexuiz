@@ -282,6 +282,8 @@ void InitGameplayMode()
 		{
 			race_teams = 0;
 			teams_matter = 0;
+			if(cvar("g_race_qualifying"))
+				independent_players = 1;
 		}
 
 		ScoreRules_race();
