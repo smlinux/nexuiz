@@ -77,15 +77,25 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 				grecordholder = db_get(ServerProgsDB, strcat(GetMapname(), "/racerecord/netname"));
 				if(grecordholder == e.netname)
 					grecordholder = "";
-				if(grecordholder == "")
-					if(grecordtime == 0)
-						bprint(e.netname, "^7 set the all-time fastest lap record with ", mmsss(t), "\n");
-					else
+				if(grecordtime == 0)
+				{
+					bprint(e.netname, "^7 set the all-time fastest lap record with ", mmsss(t), "\n");
+					db_put(ServerProgsDB, strcat(GetMapname(), "/racerecord/time"), ftos(t));
+					db_put(ServerProgsDB, strcat(GetMapname(), "/racerecord/netname"), e.netname);
+				}
+				else if(t < grecordtime)
+				{
+					if(grecordholder == "")
 						bprint(e.netname, "^7 broke his all-time fastest lap record with ", mmsss(t), "\n");
+					else
+						bprint(e.netname, "^7 broke ", grecordholder, "^7's all-time fastest lap record with ", mmsss(t), "\n");
+					db_put(ServerProgsDB, strcat(GetMapname(), "/racerecord/time"), ftos(t));
+					db_put(ServerProgsDB, strcat(GetMapname(), "/racerecord/netname"), e.netname);
+				}
 				else
-					bprint(e.netname, "^7 broke ", grecordholder, "^7's all-time fastest lap record with ", mmsss(t), "\n");
-				db_put(ServerProgsDB, strcat(GetMapname(), "/racerecord/time"), ftos(t));
-				db_put(ServerProgsDB, strcat(GetMapname(), "/racerecord/netname"), e.netname);
+				{
+					bprint(e.netname, "^7's new fastest lap could not break ", grecordholder, "^7's all-time fastest lap record of ", mmsss(grecordtime), "\n");
+				}
 			}
 
 			entity p;
@@ -113,7 +123,6 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 	WriteShort(MSG_ONE, t); // time to that intermediate
 	WriteShort(MSG_ONE, recordtime); // previously best time
 	WriteString(MSG_ONE, recordholder); // record holder
-	print(race_checkpoint_recordholders[cp], "\n");
 }
 
 void race_ClearTime(entity e)
