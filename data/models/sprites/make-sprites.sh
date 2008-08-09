@@ -161,3 +161,5 @@ sprite ons-cp-atck-red    "CONTROL POINT" ff0000 000000 0.5 ff0000 ffff00 0.5
 sprite ons-cp-atck-blue   "CONTROL POINT" 0000ff 000000 0.5 0000ff ffff00 0.5
 sprite ons-cp-dfnd-red    "CONTROL POINT" ff0000 000000 0.5 ff0000 ffffff 0.5
 sprite ons-cp-dfnd-blue   "CONTROL POINT" 0000ff 000000 0.5 0000ff ffffff 0.5
+sprite race-checkpoint    "CHECKPOINT"    000000 ffffff 0.0
+sprite race-finish        "FINISH"        000000 ffffff 0.0

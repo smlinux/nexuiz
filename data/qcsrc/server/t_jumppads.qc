@@ -4,6 +4,8 @@ float PUSH_SILENT		= 2;
 .float pushltime;
 .float height;
 
+void() SUB_UseTargets;
+
 float trigger_push_calculatevelocity_flighttime;
 
 /*
@@ -153,6 +155,16 @@ void trigger_push_touch()
 
 		if(self.message)
 			centerprint(other, self.message);
+	}
+
+	if(self.enemy.target)
+	{
+		entity oldself;
+		oldself = self;
+		activator = other;
+		self = self.enemy;
+		SUB_UseTargets();
+		self = oldself;
 	}
 
 	// reset tracking of who pushed you into a hazard (for kill credit)

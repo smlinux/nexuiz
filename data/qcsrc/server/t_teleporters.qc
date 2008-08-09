@@ -56,6 +56,7 @@ void spawn_tdeath(vector org, entity death_owner, vector org2)
 void Teleport_Touch (void)
 {
 	entity head;
+	entity oldself;
 
 	if (other.health < 1)
 		return;
@@ -120,10 +121,18 @@ void Teleport_Touch (void)
 
 	// stop player name display
 	{
-		entity oldself;
 		oldself = self;
 		self = other;
 		ClearSelectedPlayer();
+		self = oldself;
+	}
+
+	if(self.enemy.target)
+	{
+		oldself = self;
+		activator = other;
+		self = self.enemy;
+		SUB_UseTargets();
 		self = oldself;
 	}
 }

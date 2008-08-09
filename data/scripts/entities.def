@@ -559,6 +559,7 @@ _celshader: Sets the cel shader used for this geometry. Note: omit the "textures
 Teleport destination location point for trigger_teleport entities. Do not let it touch the floor, but place it slightly higher (like, 16 units above) for better flow when jumping through it.
 -------- KEYS --------
 targetname: make the trigger_teleporter point to this.
+target: target to activate when a teleporter targeting this is used
 angle: direction in which player will look when teleported, OR use
 angles: pitch and yaw when coming out of the teleporter (also specifies the direction the player will aim when coming out)
 */
@@ -640,6 +641,7 @@ dmg: The amount of "health"-points you want to subtract from the objective healt
 Aiming target for entities like light and trigger_push.
 -------- KEYS --------
 targetname: the entity that requires an aiming direction points to this.
+target: target to activate when a jumppad targeting this is used
 */
 
 /*QUAKED target_speaker (0 .7 .7) (-8 -8 -8) (8 8 8) 
@@ -885,10 +887,12 @@ _receiveshadows: Allows per-entity control over shadow reception. Defaults to 1 
 _celshader: Sets the cel shader used for this geometry. Note: omit the "textures/" prefix.
 */
 
-/*QUAKED trigger_race_checkpoint (0 1 0) ? 
+/*QUAKED trigger_race_checkpoint (0 1 0) ? - - CRUSH
 A checkpoint, for the race game mode. Be sure to make them quite long, so they actually catch a player reliably!
 -------- KEYS --------
 cnt: Number of the checkpoint. 0 for finish line, and at least two other checkpoints have to exist. They MUST be touched in sequential order!
 message: Death message, when touching checkpoints in the wrong order.
+-------- SPAWNFLAGS --------
+CRUSH: the checkpoint kills when used at the wrong time
 */
 

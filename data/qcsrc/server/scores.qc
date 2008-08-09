@@ -329,6 +329,16 @@ void WinningConditionHelper()
 
 		WinningConditionHelper_topscore = teamscorekeepers[WinningConditionHelper_winnerteam].teamscores_primary;
 		WinningConditionHelper_lowerisbetter = (teamscores_flags_primary & SFL_LOWER_IS_BETTER);
+		if(teamscores_flags_primary & SFL_ZERO_IS_WORST)
+			if(WinningConditionHelper_topscore == 0)
+			{
+				if(WinningConditionHelper_lowerisbetter)
+					WinningConditionHelper_topscore = 999999999;
+				else
+					WinningConditionHelper_topscore = -999999999;
+			}
+		if(teamscores_flags_primary & SFL_TIME)
+			WinningConditionHelper_topscore /= 10;
 
 		WinningConditionHelper_winner = world;
 		if(WinningConditionHelper_equality)
@@ -354,6 +364,16 @@ void WinningConditionHelper()
 
 		WinningConditionHelper_topscore = WinningConditionHelper_winner.scorekeeper.scores_primary;
 		WinningConditionHelper_lowerisbetter = (scores_flags_primary & SFL_LOWER_IS_BETTER);
+		if(scores_flags_primary & SFL_ZERO_IS_WORST)
+			if(WinningConditionHelper_topscore == 0)
+			{
+				if(WinningConditionHelper_lowerisbetter)
+					WinningConditionHelper_topscore = 999999999;
+				else
+					WinningConditionHelper_topscore = -999999999;
+			}
+		if(teamscores_flags_primary & SFL_TIME)
+			WinningConditionHelper_topscore /= 10;
 
 		if(WinningConditionHelper_equality)
 			WinningConditionHelper_winner = world;

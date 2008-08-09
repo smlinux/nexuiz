@@ -1,6 +1,8 @@
 .float race_checkpoint; // player: next checkpoint that has to be reached
 .float race_laptime;
 
+.entity sprite;
+
 float race_checkpoint_records[256];
 string race_checkpoint_recordholders[256];
 
@@ -157,7 +159,8 @@ void checkpoint_touch()
 	}
 	else
 	{
-		Damage (other, self, self, 10000, DEATH_HURTTRIGGER, other.origin, '0 0 0');
+		if(self.spawnflags & 4)
+			Damage (other, self, self, 10000, DEATH_HURTTRIGGER, other.origin, '0 0 0');
 	}
 }
 
@@ -165,6 +168,16 @@ void checkpoint_use()
 {
 	other = activator;
 	checkpoint_touch();
+}
+
+float race_waypointsprite_for_player(entity e)
+{
+	if(e.race_checkpoint == -1)
+		return self.modelindex;
+	else if(e.race_checkpoint == self.owner.cnt)
+		return self.modelindex;
+	else
+		return FALSE;
 }
 
 void spawnfunc_trigger_race_checkpoint()
@@ -179,8 +192,8 @@ void spawnfunc_trigger_race_checkpoint()
 		self.touch = checkpoint_touch;
 
 	o = (self.absmin + self.absmax) * 0.5;
-	traceline(o, o - '0 0 1' * (o_z - self.absmin_z), MOVE_NORMAL, self);
-	o = trace_endpos - '0 0 1' * PL_MIN_z;
+	tracebox(o, PL_MIN, PL_MAX, o - '0 0 1' * (o_z - self.absmin_z), MOVE_NORMAL, self);
+	o = trace_endpos;
 	self.nearestwaypoint = waypoint_spawn(o, o, WAYPOINTFLAG_GENERATED);
 	self.nearestwaypointtimeout = time + 1000000000;
 
@@ -189,6 +202,18 @@ void spawnfunc_trigger_race_checkpoint()
 
 	if(self.cnt > race_highest_checkpoint)
 		race_highest_checkpoint = self.cnt;
+
+	if(self.cnt)
+	{
+		precache_model("models/sprites/race-checkpoint.sp2");
+		WaypointSprite_SpawnFixed("race-checkpoint", o, self, sprite);
+	}
+	else
+	{
+		precache_model("models/sprites/race-finish.sp2");
+		WaypointSprite_SpawnFixed("race-finish", o, self, sprite);
+	}
+	self.sprite.waypointsprite_for_player = race_waypointsprite_for_player;
 }
 
 void race_PreparePlayer()
