@@ -510,6 +510,14 @@ void _MapInfo_Map_ApplyGametype(string s, float pWantedType, float pThisType)
 			cvar_set("fraglimit", sa);
 		s = cdr(s);
 	}
+
+	if(pWantedType == MAPINFO_TYPE_RACE)
+	{
+		sa = car(s); if(sa == "") sa = cvar_string("fraglimit");
+		if(cvar("g_race_teams"))
+			cvar_set("fraglimit", sa);
+		s = cdr(s);
+	}
 }
 
 float MapInfo_Type_FromString(string t)
@@ -570,7 +578,7 @@ float MapInfo_Get_ByName(string pFilename, float pAllowGenerate, float pGametype
 		if(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_ARENA)           fputs(fh, "type arena 10 20\n");
 		if(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_KEYHUNT)         fputs(fh, "type kh 1000 20 3\n");
 		if(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_ASSAULT)         fputs(fh, "type as 20\n");
-		if(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_RACE)            fputs(fh, "type race 5 20 0\n");
+		if(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_RACE)            fputs(fh, "type race 5 20 15\n");
 		if(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_ONSLAUGHT)       fputs(fh, "type ons 20\n");
 
 		fh2 = fopen(strcat("scripts/", pFilename, ".arena"), FILE_READ);

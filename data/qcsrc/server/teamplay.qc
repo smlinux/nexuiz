@@ -271,7 +271,18 @@ void InitGameplayMode()
 		cvar_set("g_race", "1");
 		fraglimit_override = cvar("g_race_laps_limit");
 		gamemode_name = "Race";
-		teams_matter = 0;
+
+		if(cvar("g_race_teams"))
+		{
+			ActivateTeamplay();
+			teams_matter = 1;
+			race_teams = bound(2, cvar("g_race_teams"), 4);
+		}
+		else
+		{
+			race_teams = 0;
+			teams_matter = 0;
+		}
 
 		ScoreRules_race();
 	}
@@ -610,6 +621,8 @@ void CheckAllowedTeams (entity for_whom)
 		// cover anything else by treating it like tdm with no teams spawned
 		if(g_keyhunt)
 			dm = kh_teams;
+		else if(g_race)
+			dm = race_teams;
 		else
 			dm = cvar("g_tdm_teams");
 		if(dm < 2)

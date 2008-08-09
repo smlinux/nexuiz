@@ -1,1 +1,2 @@
 void race_PreparePlayer();
+float race_teams;

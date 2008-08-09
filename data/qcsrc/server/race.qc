@@ -50,7 +50,7 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 		s = PlayerScore_Add(e, SP_RACE_FASTEST, 0);
 		if(!s || t < s)
 			PlayerScore_Add(e, SP_RACE_FASTEST, t - s);
-		PlayerScore_Add(e, SP_RACE_LAPS, 1);
+		PlayerTeamScore_Add(e, SP_RACE_LAPS, ST_RACE_LAPS, 1);
 	}
 
 	float recordtime;
