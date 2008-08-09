@@ -108,6 +108,8 @@ void reset_map()
 	FOR_EACH_CLIENT(self) {
 		if(self.flags & FL_CLIENT)				// reset all players
 		{
+			if(g_race)
+				race_PreparePlayer();
 			if(g_arena)
 			{
 				if(self.spawned)
