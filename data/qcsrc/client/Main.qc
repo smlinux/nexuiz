@@ -609,6 +609,8 @@ void Net_ReadRace()
 			race_mycheckpointtime = time;
 			race_mycheckpointdelta = ReadShort();
 			race_mycheckpointlapsdelta = ReadByte();
+			if(race_mycheckpointlapsdelta >= 128)
+				race_mycheckpointlapsdelta -= 128;
 			if(race_mycheckpointenemy)
 				strunzone(race_mycheckpointenemy);
 			race_mycheckpointenemy = strzone(ReadString());
@@ -619,6 +621,8 @@ void Net_ReadRace()
 			race_othercheckpointtime = time;
 			race_othercheckpointdelta = ReadShort();
 			race_othercheckpointlapsdelta = ReadByte();
+			if(race_othercheckpointlapsdelta >= 128)
+				race_othercheckpointlapsdelta -= 128;
 			if(race_othercheckpointenemy)
 				strunzone(race_othercheckpointenemy);
 			race_othercheckpointenemy = strzone(ReadString());
