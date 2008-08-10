@@ -262,8 +262,8 @@ void spawnfunc_worldspawn (void)
 	if(cvar("g_campaign"))
 		CampaignPreInit();
 
-	InitGameplayMode();
 	readlevelcvars();
+	InitGameplayMode();
 	precache();
 
 	WaypointSprite_Init();
