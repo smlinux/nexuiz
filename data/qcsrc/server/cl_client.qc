@@ -65,9 +65,11 @@ float Spawn_Score(entity spot, entity playerlist, float teamcheck)
 				{
 					if(ent.race_checkpoint != race_PreviousCheckpoint(self.race_checkpoint))
 						return -1;
-					if(race_place_valid && (spot.race_place != self.race_place))
-						return -1;
-					if(!race_place_valid && (spot.race_place != 0))
+					float pl;
+					pl = self.race_place;
+					if(pl > race_highest_place_spawn)
+						pl = 0;
+					if(spot.race_place != pl)
 						return -1;
 				}
 				good = 1;

@@ -423,8 +423,5 @@ void race_ReadyRestart()
 		ScoreRules_race();
 	}
 
-	if(PlayerScore_Sort(race_place) <= race_highest_place_spawn)
-		race_place_valid = 1;
-	else
-		race_place_valid = 0;
+	PlayerScore_Sort(race_place);
 }

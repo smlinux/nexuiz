@@ -91,6 +91,8 @@ float WinningConditionHelper_equality;   ///< 1 if and only if the top two have 
 float WinningConditionHelper_winnerteam; ///< the color of the winning team, or -1 if none
 entity WinningConditionHelper_winner;    ///< the winning player, or world if none
 float WinningConditionHelper_lowerisbetter; ///< lower is better, duh
+float WinningConditionHelper_zeroisworst;   ///< zero is worst, duh
+#define WINNINGCONDITIONHELPER_LOWERISBETTER_WORST 999999999
 
 /**
  * Returns score strings for eventlog etc.

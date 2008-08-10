@@ -1494,7 +1494,7 @@ float WinningCondition_Scores(float limit)
 		limit = -limit;
 	}
 	
-	return GetWinningCode(limit && (WinningConditionHelper_topscore >= limit), WinningConditionHelper_equality);
+	return GetWinningCode(limit && WinningConditionHelper_topscore && (WinningConditionHelper_topscore >= limit), WinningConditionHelper_equality);
 }
 
 float WinningCondition_RanOutOfSpawns()

@@ -6,6 +6,6 @@ float race_teams;
 float race_spawns;
 float race_PreviousCheckpoint(float f);
 float race_NextCheckpoint(float f);
-float race_place_valid;
+float race_highest_place_spawn;
 float race_fraglimit;
 .float race_place;
