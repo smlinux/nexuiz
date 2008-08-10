@@ -66,6 +66,7 @@ void race_SendNextCheckpoint(entity e)
 void race_SendTime(entity e, float cp, float t, float tvalid)
 {
 	t = floor(0.5 + 10 * t); // make integer
+	float snew;
 
 	if(tvalid)
 	if(cp == 0) // finish line
@@ -80,7 +81,8 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 		else
 		{
 			s = PlayerScore_Add(e, SP_RACE_TIME, 0);
-			PlayerScore_Add(e, SP_RACE_TIME, floor(0.5 + 10 * (time - s)));
+			snew = floor(0.5 + 10 * (time - restart_countdown));
+			PlayerScore_Add(e, SP_RACE_TIME, snew - s);
 			PlayerTeamScore_Add(e, SP_RACE_LAPS, ST_RACE_LAPS, 1);
 		}
 	}
