@@ -344,6 +344,12 @@ void InitGameplayMode()
 			cvar_set("timelimit", ftos(timelimit_override));
 	}
 
+	if(g_race_qualifying)
+	{
+		race_fraglimit = cvar("fraglimit");
+		cvar_set("fraglimit", "0");
+	}
+
 	if (game == GAME_DOMINATION)//cvar("g_domination"))
 		dom_init();
 	else if (game == GAME_CTF)//cvar("g_ctf"))
