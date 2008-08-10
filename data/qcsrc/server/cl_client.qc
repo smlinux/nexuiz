@@ -2054,7 +2054,7 @@ void PlayerPreThink (void)
 			return;
 		}
 
-		if((g_race || g_lms) && !self.deadflag && cvar("g_lms_campcheck_interval"))
+		if(g_lms && !self.deadflag && cvar("g_lms_campcheck_interval"))
 		{
 			vector dist;
 
