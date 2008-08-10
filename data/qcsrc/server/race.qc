@@ -7,6 +7,9 @@
 
 float race_checkpoint_records[MAX_CHECKPOINTS];
 string race_checkpoint_recordholders[MAX_CHECKPOINTS];
+float race_checkpoint_lasttimes[MAX_CHECKPOINTS];
+float race_checkpoint_lastlaps[MAX_CHECKPOINTS];
+entity race_checkpoint_lastplayers[MAX_CHECKPOINTS];
 
 float race_highest_checkpoint;
 float race_highest_place_spawn;
@@ -54,7 +57,7 @@ void race_SendNextCheckpoint(entity e)
 	msg_entity = e;
 	WriteByte(MSG_ONE, SVC_TEMPENTITY);
 	WriteByte(MSG_ONE, TE_CSQC_RACE);
-	WriteByte(MSG_ONE, RACE_NET_CHECKPOINT_NEXT);
+	WriteByte(MSG_ONE, RACE_NET_CHECKPOINT_NEXT_QUALIFYING);
 	WriteByte(MSG_ONE, cp); // checkpoint the player will be at next
 	WriteShort(MSG_ONE, recordtime);
 	WriteString(MSG_ONE, recordholder);
@@ -68,85 +71,162 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 	if(cp == 0) // finish line
 	{
 		float s;
-		s = PlayerScore_Add(e, SP_RACE_FASTEST, 0);
-		if(!s || t < s)
-			PlayerScore_Add(e, SP_RACE_FASTEST, t - s);
-		PlayerTeamScore_Add(e, SP_RACE_LAPS, ST_RACE_LAPS, 1);
+		if(g_race_qualifying)
+		{
+			s = PlayerScore_Add(e, SP_RACE_FASTEST, 0);
+			if(!s || t < s)
+				PlayerScore_Add(e, SP_RACE_FASTEST, t - s);
+		}
+		else
+		{
+			s = PlayerScore_Add(e, SP_RACE_TIME, 0);
+			PlayerScore_Add(e, SP_RACE_TIME, time - s);
+			PlayerTeamScore_Add(e, SP_RACE_LAPS, ST_RACE_LAPS, 1);
+		}
 	}
 
 	float recordtime;
 	string recordholder;
 
-	if(tvalid)
+	if(g_race_qualifying)
 	{
-		recordtime = race_checkpoint_records[cp];
-		recordholder = strcat1(race_checkpoint_recordholders[cp]); // make a tempstring copy, as we'll possibly strunzone it!
-		if(recordholder == e.netname)
-			recordholder = "";
-
-		if(t < recordtime || recordtime == 0)
+		if(tvalid)
 		{
-			race_checkpoint_records[cp] = t;
-			if(race_checkpoint_recordholders[cp])
-				strunzone(race_checkpoint_recordholders[cp]);
-			race_checkpoint_recordholders[cp] = strzone(e.netname);
-			if(cp == 0)
+			recordtime = race_checkpoint_records[cp];
+			recordholder = strcat1(race_checkpoint_recordholders[cp]); // make a tempstring copy, as we'll possibly strunzone it!
+			if(recordholder == e.netname)
+				recordholder = "";
+
+			if(t < recordtime || recordtime == 0)
 			{
-				float grecordtime;
-				string grecordholder;
-				grecordtime = stof(db_get(ServerProgsDB, strcat(GetMapname(), "/racerecord/time")));
-				grecordholder = db_get(ServerProgsDB, strcat(GetMapname(), "/racerecord/netname"));
-				if(grecordholder == e.netname)
-					grecordholder = "";
-				if(grecordtime == 0)
+				race_checkpoint_records[cp] = t;
+				if(race_checkpoint_recordholders[cp])
+					strunzone(race_checkpoint_recordholders[cp]);
+				race_checkpoint_recordholders[cp] = strzone(e.netname);
+				if(cp == 0)
 				{
-					bprint(e.netname, "^7 set the all-time fastest lap record with ", mmsss(t), "\n");
-					db_put(ServerProgsDB, strcat(GetMapname(), "/racerecord/time"), ftos(t));
-					db_put(ServerProgsDB, strcat(GetMapname(), "/racerecord/netname"), e.netname);
-				}
-				else if(t < grecordtime)
-				{
-					if(grecordholder == "")
-						bprint(e.netname, "^7 broke his all-time fastest lap record with ", mmsss(t), "\n");
+					float grecordtime;
+					string grecordholder;
+					grecordtime = stof(db_get(ServerProgsDB, strcat(GetMapname(), "/racerecord/time")));
+					grecordholder = db_get(ServerProgsDB, strcat(GetMapname(), "/racerecord/netname"));
+					if(grecordholder == e.netname)
+						grecordholder = "";
+					if(grecordtime == 0)
+					{
+						bprint(e.netname, "^7 set the all-time fastest lap record with ", mmsss(t), "\n");
+						db_put(ServerProgsDB, strcat(GetMapname(), "/racerecord/time"), ftos(t));
+						db_put(ServerProgsDB, strcat(GetMapname(), "/racerecord/netname"), e.netname);
+					}
+					else if(t < grecordtime)
+					{
+						if(grecordholder == "")
+							bprint(e.netname, "^7 broke his all-time fastest lap record with ", mmsss(t), "\n");
+						else
+							bprint(e.netname, "^7 broke ", grecordholder, "^7's all-time fastest lap record with ", mmsss(t), "\n");
+						db_put(ServerProgsDB, strcat(GetMapname(), "/racerecord/time"), ftos(t));
+						db_put(ServerProgsDB, strcat(GetMapname(), "/racerecord/netname"), e.netname);
+					}
 					else
-						bprint(e.netname, "^7 broke ", grecordholder, "^7's all-time fastest lap record with ", mmsss(t), "\n");
-					db_put(ServerProgsDB, strcat(GetMapname(), "/racerecord/time"), ftos(t));
-					db_put(ServerProgsDB, strcat(GetMapname(), "/racerecord/netname"), e.netname);
+					{
+						if(grecordholder == "")
+							bprint(e.netname, "^7's new fastest lap could not break his all-time fastest lap record of ", mmsss(grecordtime), "\n");
+						else
+							bprint(e.netname, "^7's new fastest lap could not break ", grecordholder, "^7's all-time fastest lap record of ", mmsss(grecordtime), "\n");
+					}
 				}
-				else
+
+				if(g_race_qualifying)
 				{
-					if(grecordholder == "")
-						bprint(e.netname, "^7's new fastest lap could not break his all-time fastest lap record of ", mmsss(grecordtime), "\n");
-					else
-						bprint(e.netname, "^7's new fastest lap could not break ", grecordholder, "^7's all-time fastest lap record of ", mmsss(grecordtime), "\n");
+					entity p;
+					FOR_EACH_REALPLAYER(p)
+						if(p.race_checkpoint == cp)
+							race_SendNextCheckpoint(p);
 				}
 			}
+		}
+		else
+		{
+			// dummies
+			t = 0;
+			recordtime = 0;
+			recordholder = "";
+		}
 
-			entity p;
-			FOR_EACH_REALPLAYER(p)
-				if(p.race_checkpoint == cp)
-					race_SendNextCheckpoint(p);
+		if(clienttype(e) == CLIENTTYPE_REAL)
+		{
+			msg_entity = e;
+			if(g_race_qualifying)
+			{
+				WriteByte(MSG_ONE, SVC_TEMPENTITY);
+				WriteByte(MSG_ONE, TE_CSQC_RACE);
+				WriteByte(MSG_ONE, RACE_NET_CHECKPOINT_HIT_QUALIFYING);
+				WriteByte(MSG_ONE, cp); // checkpoint the player now is at
+				WriteShort(MSG_ONE, t); // time to that intermediate
+				WriteShort(MSG_ONE, recordtime); // previously best time
+				WriteString(MSG_ONE, recordholder); // record holder
+			}
 		}
 	}
-	else
+	else // RACE! Not Qualifying
 	{
-		// dummies
-		t = 0;
-		recordtime = 0;
-		recordholder = "";
+		float lself, lother, othtime;
+		entity oth;
+		oth = race_checkpoint_lastplayers[cp];
+		if(oth)
+		{
+			lself = PlayerScore_Add(e, SP_RACE_LAPS, 0);
+			lother = race_checkpoint_lastlaps[cp];
+			othtime = race_checkpoint_lasttimes[cp];
+		}
+		else
+			lself = lother = othtime = 0;
+
+		if(clienttype(e) == CLIENTTYPE_REAL)
+		{
+			msg_entity = e;
+			WriteByte(MSG_ONE, SVC_TEMPENTITY);
+			WriteByte(MSG_ONE, TE_CSQC_RACE);
+			WriteByte(MSG_ONE, RACE_NET_CHECKPOINT_HIT_RACE);
+			WriteByte(MSG_ONE, cp); // checkpoint the player now is at
+			if(e == oth)
+			{
+				WriteShort(MSG_ONE, 0);
+				WriteByte(MSG_ONE, 0);
+				WriteString(MSG_ONE, "");
+			}
+			else
+			{
+				WriteShort(MSG_ONE, floor(10 * (time - race_checkpoint_lasttimes[cp]) + 0.5));
+				WriteByte(MSG_ONE, lself - lother);
+				WriteString(MSG_ONE, oth.netname); // record holder
+			}
+		}
+
+		race_checkpoint_lastplayers[cp] = e;
+		race_checkpoint_lasttimes[cp] = time;
+		race_checkpoint_lastlaps[cp] = lself;
+
+		if(clienttype(oth) == CLIENTTYPE_REAL)
+		{
+			msg_entity = oth;
+			WriteByte(MSG_ONE, SVC_TEMPENTITY);
+			WriteByte(MSG_ONE, TE_CSQC_RACE);
+			WriteByte(MSG_ONE, RACE_NET_CHECKPOINT_HIT_RACE_BY_OPPONENT);
+			WriteByte(MSG_ONE, cp); // checkpoint the player now is at
+			if(e == oth)
+			{
+				WriteShort(MSG_ONE, 0);
+				WriteByte(MSG_ONE, 0);
+				WriteString(MSG_ONE, "");
+			}
+			else
+			{
+				WriteShort(MSG_ONE, floor(10 * (time - othtime) + 0.5));
+				WriteByte(MSG_ONE, lother - lself);
+				WriteString(MSG_ONE, e.netname); // record holder
+			}
+		}
 	}
-
-	if(clienttype(e) != CLIENTTYPE_REAL)
-		return;
-
-	msg_entity = e;
-	WriteByte(MSG_ONE, SVC_TEMPENTITY);
-	WriteByte(MSG_ONE, TE_CSQC_RACE);
-	WriteByte(MSG_ONE, RACE_NET_CHECKPOINT_HIT);
-	WriteByte(MSG_ONE, cp); // checkpoint the player now is at
-	WriteShort(MSG_ONE, t); // time to that intermediate
-	WriteShort(MSG_ONE, recordtime); // previously best time
-	WriteString(MSG_ONE, recordholder); // record holder
 }
 
 void race_ClearTime(entity e)
@@ -177,7 +257,8 @@ void checkpoint_touch()
 		if(!self.race_checkpoint) // finish line
 			other.race_laptime = time;
 
-		race_SendNextCheckpoint(other);
+		if(g_race_qualifying)
+			race_SendNextCheckpoint(other);
 	}
 	else if(other.race_checkpoint == race_NextCheckpoint(self.race_checkpoint))
 	{

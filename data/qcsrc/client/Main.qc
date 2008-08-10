@@ -575,7 +575,7 @@ void Net_ReadRace()
 
 	switch(b)
 	{
-		case RACE_NET_CHECKPOINT_HIT:
+		case RACE_NET_CHECKPOINT_HIT_QUALIFYING:
 			race_checkpoint = ReadByte();
 			race_time = ReadShort();
 			race_previousbesttime = ReadShort();
@@ -595,13 +595,33 @@ void Net_ReadRace()
 			race_checkpointtime = 0;
 			break;
 
-		case RACE_NET_CHECKPOINT_NEXT:
+		case RACE_NET_CHECKPOINT_NEXT_QUALIFYING:
 			race_nextcheckpoint = ReadByte();
 
 			race_nextbesttime = ReadShort();
 			if(race_nextbestname)
 				strunzone(race_nextbestname);
 			race_nextbestname = strzone(ReadString());
+			break;
+
+		case RACE_NET_CHECKPOINT_HIT_RACE:
+			race_mycheckpoint = ReadByte();
+			race_mycheckpointtime = time;
+			race_mycheckpointdelta = ReadShort();
+			race_mycheckpointlapsdelta = ReadByte();
+			if(race_mycheckpointenemy)
+				strunzone(race_mycheckpointenemy);
+			race_mycheckpointenemy = strzone(ReadString());
+			break;
+
+		case RACE_NET_CHECKPOINT_HIT_RACE_BY_OPPONENT:
+			race_othercheckpoint = ReadByte();
+			race_othercheckpointtime = time;
+			race_othercheckpointdelta = ReadShort();
+			race_othercheckpointlapsdelta = ReadByte();
+			if(race_othercheckpointenemy)
+				strunzone(race_othercheckpointenemy);
+			race_othercheckpointenemy = strzone(ReadString());
 			break;
 	}
 }
