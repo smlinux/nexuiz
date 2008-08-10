@@ -1,4 +1,4 @@
-// Values for Wicked Black by sev
+// Values for Wicked 2 Black by sev
 
 // font sizes (used for everything)
 FONTSIZE_NORMAL                 12
@@ -43,8 +43,6 @@ ALPHA_TEXT                      0.7
 // item: button
 //   uses "button" images
 //   uses "buttongray" images
-//   uses "bigbutton" images
-//   uses "bigbuttongray" images
 COLOR_BUTTON_N                  '1 1 1'
 COLOR_BUTTON_C                  '1 1 1'
 COLOR_BUTTON_F                  '1 1 1'
@@ -52,18 +50,18 @@ COLOR_BUTTON_D                  '1 1 1'
 
 // item: campaign
 ALPHA_CAMPAIGN_SELECTABLE       0.8
-COLOR_CAMPAIGN_SELECTABLE       '1 1 1'
+COLOR_CAMPAIGN_SELECTABLE       '0.75 0.75 0.75'
 ALPHA_CAMPAIGN_CURRENT          1
-COLOR_CAMPAIGN_CURRENT          '1 1 1'
+COLOR_CAMPAIGN_CURRENT          '0.75 0.75 0.75'
 ALPHA_CAMPAIGN_FUTURE           0.2
-COLOR_CAMPAIGN_FUTURE           '1 1 1'
+COLOR_CAMPAIGN_FUTURE           '0.75 0.75 0.75'
 ALPHA_CAMPAIGN_DESCRIPTION      0.7
 
 // item: checkbox
 //   uses "checkbox" images
 COLOR_CHECKBOX_N                '1 1 1'
 COLOR_CHECKBOX_C                '1 1 1'
-COLOR_CHECKBOX_F                '1 1 1'
+COLOR_CHECKBOX_F                '0.75 0.75 0.75'
 COLOR_CHECKBOX_D                '1 1 1'
 
 // item: credits list
@@ -93,7 +91,7 @@ MARGIN_ROWS                     4
 //   uses "inputbox" images
 COLOR_INPUTBOX_N                '1 1 1'
 COLOR_INPUTBOX_F                '1 1 1'
-MARGIN_INPUTBOX_CHARS           1
+MARGIN_INPUTBOX                 0.02
 
 // item: key grabber
 COLOR_KEYGRABBER_TITLES         '1 1 1'
@@ -102,15 +100,15 @@ COLOR_KEYGRABBER_KEYS           '1 1 1'
 ALPHA_KEYGRABBER_KEYS           0.7
 
 // item: list box
-COLOR_LISTBOX_SELECTED          '1 1 1'
+COLOR_LISTBOX_SELECTED          '0.875 0.875 0.875'
 ALPHA_LISTBOX_SELECTED          1
-COLOR_LISTBOX_WAITING           '1 1 1'
+COLOR_LISTBOX_WAITING           '0.875 0.875 0.875'
 ALPHA_LISTBOX_WAITING           0.5
 
 // item: map list
 COLOR_MAPLIST_TITLE             '1 1 1'
 COLOR_MAPLIST_AUTHOR            '0.75 0.75 0.75'
-COLOR_MAPLIST_INCLUDEDBG        '1 1 1'
+COLOR_MAPLIST_INCLUDEDBG        '0.75 0.75 0.75'
 ALPHA_MAPLIST_INCLUDEDFG        1
 ALPHA_MAPLIST_INCLUDEDBG        0.25
 ALPHA_MAPLIST_NOTINCLUDEDFG     0.25
@@ -134,14 +132,14 @@ ALPHA_MODELTITLE                1
 //   uses "radiobutton" images
 COLOR_RADIOBUTTON_N             '1 1 1'
 COLOR_RADIOBUTTON_C             '1 1 1'
-COLOR_RADIOBUTTON_F             '1 1 1'
+COLOR_RADIOBUTTON_F             '0.75 0.75 0.75'
 COLOR_RADIOBUTTON_D             '1 1 1'
 
 // item: scrollbar
 //   uses "scrollbar" images
 COLOR_SCROLLBAR_N               '1 1 1'
 COLOR_SCROLLBAR_C               '1 1 1'
-COLOR_SCROLLBAR_F               '1 1 1'
+COLOR_SCROLLBAR_F               '0.75 0.75 0.75'
 COLOR_SCROLLBAR_S               '1 1 1'
 WIDTH_SCROLLBAR                 16
 
@@ -157,7 +155,7 @@ ALPHA_SERVERLIST_HIGHPING       0.4
 //   uses "slider" images
 COLOR_SLIDER_N                  '1 1 1'
 COLOR_SLIDER_C                  '1 1 1'
-COLOR_SLIDER_F                  '1 1 1'
+COLOR_SLIDER_F                  '0.75 0.75 0.75'
 COLOR_SLIDER_D                  '1 1 1'
 COLOR_SLIDER_S                  '1 1 1'
 WIDTH_SLIDERTEXT                0.333333333333
