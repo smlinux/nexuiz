@@ -50,29 +50,39 @@ float Spawn_Score(entity spot, entity playerlist, float teamcheck)
 	// filter out spots for assault
 	if(spot.target != "") {
 		local entity ent;
+		float good;
 		ent = find(world, targetname, spot.target);
-		if(!ent)
-		{
-			return -1;
-		}
 		while(ent) {
 			if(ent.classname == "target_objective")
 			{
 				if(ent.health < 0 || ent.health >= ASSAULT_VALUE_INACTIVE)
 					return -1;
+				good = 1;
 			}
 			else if(ent.classname == "trigger_race_checkpoint")
 			{
 				if(self.classname == "player") // spectators may spawn everywhere
-				if(ent.cnt != race_PreviousCheckpoint(self.race_checkpoint))
-					// checkpoint -1 players (freshly spawned) spawn close to finish!
-					return -1;
+				{
+					if(ent.race_checkpoint != race_PreviousCheckpoint(self.race_checkpoint))
+						return -1;
+					print(ftos(race_place_valid), ": ");
+					print(ftos(self.race_place), " <-> ");
+					print(ftos(spot.race_place), "\n");
+					if(race_place_valid && (spot.race_place != self.race_place))
+						return -1;
+					if(!race_place_valid && (spot.race_place != 0))
+						return -1;
+				}
+				good = 1;
 			}
 			else
 			{
 			}
 			ent = find(ent, targetname, spot.target);
 		}
+
+		if(!good)
+			return -1;
 	}
 
 	player = playerlist;
@@ -374,6 +384,9 @@ putting a client as observer in the server
 void PutObserverInServer (void)
 {
 	entity	spot;
+
+	race_PreSpawnObserver();
+
 	spot = SelectSpawnPoint (TRUE);
 	if(!spot)
 		error("No spawnpoints for observers?!?\n");
@@ -463,9 +476,6 @@ void PutObserverInServer (void)
 	self.customizeentityforclient = Client_customizeentityforclient;
 	self.viewzoom = 1;
 	self.wantswelcomemessage = 1;
-
-	if(g_race)
-		race_PreparePlayer();
 
 	if(g_arena)
 	{
@@ -590,9 +600,7 @@ void PutClientInServer (void)
 	if(self.classname == "player") {
 		entity	spot;
 
-		if(g_race)
-			if(self.killcount == -666)
-				race_PreparePlayer();
+		race_PreSpawn();
 
 		spot = SelectSpawnPoint (FALSE);
 		if(!spot)
@@ -703,16 +711,6 @@ void PutClientInServer (void)
 		self.statdraintime = time + 5;
 		self.BUTTON_ATCK = self.BUTTON_JUMP = self.BUTTON_ATCK2 = 0;
 
-		if(g_race)
-			if(self.killcount != -666)
-			{
-				if(spot.target == "")
-					// let the player run without timing, if he did not spawn at a targetting spawnpoint
-					race_PreparePlayer();
-				else
-					race_RetractPlayer();
-			}
-
 		if(self.killcount == -666) {
 			PlayerScore_Clear(self);
 			self.killcount = 0;
@@ -730,6 +728,8 @@ void PutClientInServer (void)
 		self.lms_nextcheck = time + cvar("g_lms_campcheck_interval")*2;
 		self.lms_traveled_distance = 0;
 		self.speedrunning = FALSE;
+
+		race_PostSpawn(spot);
 
 		if(cvar("spawn_debug"))
 		{
@@ -1060,6 +1060,8 @@ void ClientConnect (void)
 	PlayerScore_Attach(self);
 
 	bot_clientconnect();
+
+	race_PreSpawnObserver();
 
 	//if(g_domination)
 	//	dom_player_join_team(self);
@@ -2195,6 +2197,8 @@ Called every frame for each client after the physics are run
 =============
 */
 .float idlekick_lasttimeleft;
+.float race_penalty;
+.float race_penalty_nagged;
 void PlayerPostThink (void)
 {
 	// Savage: Check for nameless players
@@ -2246,11 +2250,34 @@ void PlayerPostThink (void)
 			if(time < restart_countdown) {
 				if (!cvar("sv_ready_restart_after_countdown"))
 				{
+					if(self.movement != '0 0 0' && g_race && !g_race_qualifying)
+					{
+						if(time < restart_countdown - 2)
+						{
+							if(!self.race_penalty_nagged)
+							{
+								centerprint_atprio(self, CENTERPRIO_IDLEKICK, "^1DO NOT MOVE DURING THE COUNTDOWN.");
+								self.race_penalty_nagged = 1;
+							}
+						}
+						else if(!self.race_penalty)
+						{
+							centerprint_atprio(self, CENTERPRIO_IDLEKICK, "^1FIVE SECONDS PENALTY.");
+							self.race_penalty = time + 5;
+						}
+					}
 					self.movetype = MOVETYPE_NONE;		
 					self.velocity = '0 0 0';
 					self.avelocity = '0 0 0';
 					self.movement = '0 0 0';
 				}
+			}
+			else if (time < self.race_penalty)
+			{
+				self.movetype = MOVETYPE_NONE;		
+				self.velocity = '0 0 0';
+				self.avelocity = '0 0 0';
+				self.movement = '0 0 0';
 			}
 			else
 			{
@@ -2261,6 +2288,8 @@ void PlayerPostThink (void)
 					{
 						self.movetype = MOVETYPE_WALK;
 					}
+					self.race_penalty = 0;
+					self.race_penalty_nagged = 0;
 				}
 			}
 		}

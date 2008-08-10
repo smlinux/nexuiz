@@ -260,6 +260,18 @@ void relocate_spawnpoint()
 	if(g_ctf || g_assault || g_onslaught || g_domination)
 	if(self.team)
 		have_team_spawns = 1;
+
+	if(cvar("r_showbboxes"))
+	{
+		// show where spawnpoints point at too
+		makevectors(self.angles);
+		entity e;
+		e = spawn();
+		e.classname = "info_player_foo";
+		setorigin(e, self.origin + v_forward * 24);
+		setsize(e, '-8 -8 -8', '8 8 8');
+		e.solid = SOLID_TRIGGER;
+	}
 }
 
 #define strstr strstrofs
@@ -719,6 +731,7 @@ void readlevelcvars(void)
 	sv_pogostick = cvar("sv_pogostick");
 	sv_doublejump = cvar("sv_doublejump");
 	g_ctf_win_mode = cvar("g_ctf_win_mode");
+	g_race_qualifying = cvar("g_race_qualifying");
 
 	g_pickup_shells                    = cvar("g_pickup_shells");
 	g_pickup_shells_max                = cvar("g_pickup_shells_max");

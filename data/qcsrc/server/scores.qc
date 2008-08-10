@@ -564,3 +564,61 @@ string GetTeamScoreString(float tm, float shortString)
 	}
 	return out;
 }
+
+float PlayerTeamScore_Compare(entity p1, entity p2)
+{
+	if(teamscores_entities_count)
+		if(p1.team != p2.team)
+		{
+			entity t1, t2;
+			t1 = teamscorekeepers[p1.team];
+			t2 = teamscorekeepers[p2.team];
+			return TeamScore_Compare(t1, t2);
+		}
+	
+	return PlayerScore_Compare(p1.scorekeeper, p2.scorekeeper);
+}
+
+float PlayerScore_Sort(.float field)
+{
+	entity p, plist, pprev, pbest, pbestprev;
+	float i;
+	plist = world;
+
+	FOR_EACH_CLIENT(p)
+		p.field = 0;
+
+	FOR_EACH_PLAYER(p) if(p.scorekeeper)
+	{
+		p.chain = plist;
+		plist = p;
+	}
+	// Now plist points to the whole list.
+
+	i = 0;
+	while(plist)
+	{
+		pprev = pbestprev = world;
+		pbest = plist;
+		for(p = plist; (p = p.chain); )
+		{
+			if(PlayerTeamScore_Compare(p, pbest) > 0)
+			{
+				pbest = p;
+				pbestprev = pprev;
+			}
+			pprev = p;
+		}
+
+		// remove pbest out of the chain
+		if(pbestprev == world)
+			plist = pbest.chain;
+		else
+			pbestprev.chain = pbest.chain;
+		pbest.chain = world;
+
+		pbest.field = ++i;
+	}
+
+	return i;
+}

@@ -1,12 +1,15 @@
+#define MAX_CHECKPOINTS 255
+
 .float race_checkpoint; // player: next checkpoint that has to be reached
 .float race_laptime;
 
 .entity sprite;
 
-float race_checkpoint_records[256];
-string race_checkpoint_recordholders[256];
+float race_checkpoint_records[MAX_CHECKPOINTS];
+string race_checkpoint_recordholders[MAX_CHECKPOINTS];
 
 float race_highest_checkpoint;
+float race_highest_place_spawn;
 
 float race_NextCheckpoint(float f)
 {
@@ -165,18 +168,18 @@ void checkpoint_touch()
 	if(other.classname != "player")
 		return;
 
-	if(other.race_checkpoint == -1 || other.race_checkpoint == self.cnt)
+	if(other.race_checkpoint == -1 || other.race_checkpoint == self.race_checkpoint)
 	{
-		other.race_checkpoint = race_NextCheckpoint(self.cnt);
+		other.race_checkpoint = race_NextCheckpoint(self.race_checkpoint);
 
-		race_SendTime(other, self.cnt, time - other.race_laptime, !!other.race_laptime);
+		race_SendTime(other, self.race_checkpoint, time - other.race_laptime, !!other.race_laptime);
 
-		if(!self.cnt) // finish line
+		if(!self.race_checkpoint) // finish line
 			other.race_laptime = time;
 
 		race_SendNextCheckpoint(other);
 	}
-	else if(other.race_checkpoint == race_NextCheckpoint(self.cnt))
+	else if(other.race_checkpoint == race_NextCheckpoint(self.race_checkpoint))
 	{
 		// ignored
 	}
@@ -197,7 +200,7 @@ float race_waypointsprite_for_player(entity e)
 {
 	if(e.race_checkpoint == -1)
 		return self.modelindex;
-	else if(e.race_checkpoint == self.owner.cnt)
+	else if(e.race_checkpoint == self.owner.race_checkpoint)
 		return self.modelindex;
 	else
 		return FALSE;
@@ -223,11 +226,13 @@ void spawnfunc_trigger_race_checkpoint()
 
 	if(!self.message)
 		self.message = "went backwards";
+	
+	self.race_checkpoint = self.cnt;
 
-	if(self.cnt > race_highest_checkpoint)
-		race_highest_checkpoint = self.cnt;
+	if(self.race_checkpoint > race_highest_checkpoint)
+		race_highest_checkpoint = self.race_checkpoint;
 
-	if(self.cnt)
+	if(self.race_checkpoint)
 	{
 		precache_model("models/sprites/race-checkpoint.sp2");
 		WaypointSprite_SpawnFixed("race-checkpoint", o, self, sprite);
@@ -242,9 +247,8 @@ void spawnfunc_trigger_race_checkpoint()
 
 void race_PreparePlayer()
 {
-	if(!g_race)
-		return;
 	race_ClearTime(self);
+	self.race_place = 0;
 }
 
 void race_RetractPlayer()
@@ -253,7 +257,44 @@ void race_RetractPlayer()
 		return;
 	self.race_checkpoint = race_PreviousCheckpoint(self.race_checkpoint);
 	if(self.race_checkpoint == 0)
+	{
 		race_ClearTime(self);
+		self.race_checkpoint = 0;
+	}
+}
+
+void race_PreSpawn()
+{
+	if(!g_race)
+		return;
+	if(self.killcount == -666 || g_race_qualifying)
+		race_PreparePlayer();
+}
+
+void race_PostSpawn(entity spot)
+{
+	if(!g_race)
+		return;
+	if(self.killcount != -666 && !g_race_qualifying)
+	{
+		if(spot.target == "")
+			// let the player run without timing, if he did not spawn at a targetting spawnpoint
+			race_PreparePlayer();
+		else
+			race_RetractPlayer();
+	}
+
+	if(spot.target != "" && self.race_checkpoint == -1)
+		self.race_checkpoint = 0;
+
+	self.race_place = 0;
+}
+
+void race_PreSpawnObserver()
+{
+	if(!g_race)
+		return;
+	race_PreparePlayer();
 }
 
 void spawnfunc_info_player_race (void)
@@ -265,4 +306,42 @@ void spawnfunc_info_player_race (void)
 	}
 	++race_spawns;
 	spawnfunc_info_player_deathmatch();
+
+	if(self.race_place > race_highest_place_spawn)
+		race_highest_place_spawn = self.race_place;
+}
+
+void race_ClearRecords()
+{
+	float i;
+	entity e;
+
+	for(i = 0; i < MAX_CHECKPOINTS; ++i)
+	{
+		race_checkpoint_records[i] = 0;
+		if(race_checkpoint_recordholders[i])
+			strunzone(race_checkpoint_recordholders[i]);
+		race_checkpoint_recordholders[i] = string_null;
+	}
+
+	FOR_EACH_CLIENT(e)
+		race_ClearTime(e);
+}
+
+void race_ReadyRestart()
+{
+	race_ClearRecords();
+
+	if(g_race_qualifying == 2)
+	{
+		g_race_qualifying = 0;
+		independent_players = 0;
+		ScoreRules_race();
+	}
+
+	if(PlayerScore_Sort(race_place) <= race_highest_place_spawn)
+		race_place_valid = 1;
+	else
+		race_place_valid = 0;
+	print("VALID: ", ftos(race_place_valid), "\n");
 }

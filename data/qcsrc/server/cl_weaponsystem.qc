@@ -422,12 +422,13 @@ void weapon_setup(float windex, string wname, float hudammo)
 };
 
 // perform weapon to attack (weaponstate and attack_finished check is here)
+.float race_penalty;
 float weapon_prepareattack(float secondary, float attacktime)
 {
 	//if sv_ready_restart_after_countdown is set, don't allow the player to shoot
 	//if all players readied up and the countdown is running
 	if (cvar("sv_ready_restart_after_countdown"))
-		if(time < restart_countdown) {
+		if(time < restart_countdown || time < self.race_penalty) {
 			return FALSE;
 		}
 	

@@ -133,13 +133,15 @@ void ScoreRules_race()
 		ScoreInfo_SetLabel_PlayerScore(SP_RACE_LAPS,    "laps",      SFL_SORT_PRIO_PRIMARY);
 		ScoreInfo_SetLabel_PlayerScore(SP_RACE_FASTEST, "fastest",   SFL_SORT_PRIO_SECONDARY | SFL_LOWER_IS_BETTER | SFL_TIME);
 	}
-	else if(cvar("g_race_qualifying"))
+	else if(g_race_qualifying)
 	{
+		ScoreInfo_SetLabel_TeamScore(  ST_RACE_LAPS,    "laps",      0);
 		ScoreInfo_SetLabel_PlayerScore(SP_RACE_LAPS,    "laps",      0);
 		ScoreInfo_SetLabel_PlayerScore(SP_RACE_FASTEST, "fastest",   SFL_SORT_PRIO_PRIMARY | SFL_LOWER_IS_BETTER | SFL_TIME);
 	}
 	else
 	{
+		ScoreInfo_SetLabel_TeamScore(  ST_RACE_LAPS,    "laps",      0);
 		ScoreInfo_SetLabel_PlayerScore(SP_RACE_LAPS,    "laps",      SFL_SORT_PRIO_PRIMARY);
 		ScoreInfo_SetLabel_PlayerScore(SP_RACE_FASTEST, "fastest",   SFL_SORT_PRIO_SECONDARY | SFL_LOWER_IS_BETTER | SFL_TIME);
 	}

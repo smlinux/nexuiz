@@ -105,3 +105,9 @@ float WinningConditionHelper_lowerisbetter; ///< lower is better, duh
  */
 string GetPlayerScoreString(entity pl, float shortString);
 string GetTeamScoreString(float tm, float shortString);
+
+/**
+ * Sorts the players and stores their place in the given field, starting with
+ * 1. Non-players get 0 written into that field.
+ */
+float PlayerScore_Sort(.float field);

@@ -28,10 +28,12 @@ void reset_map()
 	if(g_arena)
 	if(cvar("g_arena_warmup"))
 		warmup = time + cvar("g_arena_warmup");
-	
+
 	lms_lowest_lives = 999;
 	lms_next_place = player_count;
 
+	race_ReadyRestart();
+	
 	self = nextent(world);
 	while(self)
 	{
@@ -108,8 +110,6 @@ void reset_map()
 	FOR_EACH_CLIENT(self) {
 		if(self.flags & FL_CLIENT)				// reset all players
 		{
-			if(g_race)
-				race_PreparePlayer();
 			if(g_arena)
 			{
 				if(self.spawned)

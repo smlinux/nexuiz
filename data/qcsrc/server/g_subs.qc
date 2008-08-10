@@ -386,6 +386,7 @@ void InitTrigger()
 		// force relinking
 		setorigin(self, self.origin);
 		setsize (self, self.mins, self.maxs);
+		print("size: ", vtos(self.maxs), "\n");
 	}
 	self.movetype = MOVETYPE_NONE;
 	self.modelindex = 0;
