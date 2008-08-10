@@ -206,6 +206,10 @@ void GameCommand(string command)
 	{
 		Score_DebugPrint();
 	}
+	if (argv(0) == "allready")
+	{
+		ReadyRestart();
+	}
 
 	print("Invalid command. For a list of supported commands, try sv_cmd help.\n");
 }

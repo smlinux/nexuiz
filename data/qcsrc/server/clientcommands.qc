@@ -378,6 +378,81 @@ void SV_ParseClientCommand(string s) {
 	}
 }
 
+void ReadyRestart()
+{
+	local entity e;
+
+	bprint("^1Server is restarting...\n");
+
+	// no arena, assault support yet...
+	if(g_arena | g_assault | gameover | intermission_running)
+		localcmd("restart\n");
+
+	if(readyNagActive) { //if every player is ready, remove the ready-nagger again
+		readyNagActive = 0;
+		remove(readyNagger);
+	}
+
+	if(g_tourney) {
+		tourneyInMatchStage = 1; //once the game is restarted the game is in match stage
+		//reset weapons and ammo, health and armor to default:
+		start_items = IT_LASER | IT_SHOTGUN;
+		start_switchweapon = WEP_SHOTGUN;
+		start_ammo_shells = cvar("g_start_ammo_shells");
+		start_ammo_nails = cvar("g_start_ammo_nails");
+		start_ammo_rockets = cvar("g_start_ammo_rockets");
+		start_ammo_cells = cvar("g_start_ammo_cells");
+		start_health = cvar("g_balance_health_start");
+		start_armorvalue = cvar("g_balance_armor_start");
+	}
+	restart_countdown = time + RESTART_COUNTDOWN;
+	restart_mapalreadyrestarted = 0; //reset this var, needed when cvar sv_ready_restart_repeatable is in use
+	//reset the .ready status of all players (also spectators)
+	FOR_EACH_CLIENT(e)
+	{
+		e.ready = 0;
+	}
+	if(0<cvar("timelimit") || (g_tourney && cvar("g_tourney_warmup_unlimited_time")) )
+	{
+		// remember original timelimit on first restart
+		if(!timelimit_orig)
+			timelimit_orig = cvar("timelimit");
+		//only set the new timelimit if, when loading the map, a timelimit was really set
+		if(timelimit_orig)
+			cvar_set("timelimit", ftos(timelimit_orig + ceil(restart_countdown)/60));
+	}
+
+	if(cvar("teamplay_lockonrestart") && teams_matter) {
+		lockteams = 1;
+		bprint("^1The teams are now locked.\n");
+	}
+	
+	//initiate the restart-countdown-announcer entity
+	restartAnnouncer = spawn();
+	restartAnnouncer.think = restartAnnouncer_Think;
+	restartAnnouncer.nextthink = time;
+	restartAnnouncer.cnt = RESTART_COUNTDOWN;
+	
+	//after a restart every players number of allowed timeouts gets reset, too
+	if(cvar("sv_timeout"))
+	{
+		FOR_EACH_REALPLAYER(e)
+		{
+			e.allowedTimeouts = cvar("sv_timeout_number");
+		}
+	}
+
+	//play the prepareforbattle sound to everyone
+	play2all("announcer/robotic/prepareforbattle.wav");
+
+	//reset map immediately if this cvar is not set
+	if (!cvar("sv_ready_restart_after_countdown"))
+		reset_map();
+	
+	if(cvar("sv_eventlog"))
+		GameLogEcho(":restart", FALSE);
+}
+
 /**
  * Counts how many players are ready. If not enough players are ready, the function
  * does nothing. If all players are ready, the timelimit will be extended and the
@@ -411,79 +486,8 @@ void ReadyCount()
 
 	if(!p || r < p)
 		return;
-
-	bprint("^1Server is restarting...\n");
-
-	// no arena, assault support yet...
-	if(g_arena | g_assault | gameover | intermission_running)
-		localcmd("restart\n");
-
-	if(readyNagActive) { //if every player is ready, remove the ready-nagger again
-		readyNagActive = 0;
-		remove(readyNagger);
-	}
-
-	if(g_tourney) {
-		tourneyInMatchStage = 1; //once the game is restarted the game is in match stage
-		//reset weapons and ammo, health and armor to default:
-		start_items = IT_LASER | IT_SHOTGUN;
-		start_switchweapon = WEP_SHOTGUN;
-		start_ammo_shells = cvar("g_start_ammo_shells");
-		start_ammo_nails = cvar("g_start_ammo_nails");
-		start_ammo_rockets = cvar("g_start_ammo_rockets");
-		start_ammo_cells = cvar("g_start_ammo_cells");
-		start_health = cvar("g_balance_health_start");
-		start_armorvalue = cvar("g_balance_armor_start");
-	}
-
-	restart_countdown = time + RESTART_COUNTDOWN;
-	restart_mapalreadyrestarted = 0; //reset this var, needed when cvar sv_ready_restart_repeatable is in use
-	//reset the .ready status of all players (also spectators)
-	FOR_EACH_CLIENT(e)
-	{
-		e.ready = 0;
-	}
-	if(0<cvar("timelimit") || (g_tourney && cvar("g_tourney_warmup_unlimited_time")) )
-	{
-		// remember original timelimit on first restart
-		if(!timelimit_orig)
-			timelimit_orig = cvar("timelimit");
-		//only set the new timelimit if, when loading the map, a timelimit was really set
-		if(timelimit_orig)
-			cvar_set("timelimit", ftos(timelimit_orig + ceil(restart_countdown)/60));
-	}
-	if(cvar("teamplay_lockonrestart") && teams_matter) {
-		lockteams = 1;
-		bprint("^1The teams are now locked.\n");
-	}
 	
-	//initiate the restart-countdown-announcer entity
-	restartAnnouncer = spawn();
-	restartAnnouncer.think = restartAnnouncer_Think;
-	restartAnnouncer.nextthink = time;
-	restartAnnouncer.cnt = RESTART_COUNTDOWN;
-	
-	//after a restart every players number of allowed timeouts gets reset, too
-	if(cvar("sv_timeout"))
-	{
-		FOR_EACH_REALPLAYER(e)
-		{
-			e.allowedTimeouts = cvar("sv_timeout_number");
-		}
-	}
-
-	//play the prepareforbattle sound to everyone
-	play2all("announcer/robotic/prepareforbattle.wav");
-
-	//reset map immediately if this cvar is not set
-	if (!cvar("sv_ready_restart_after_countdown"))
-	{
-		reset_map();
-		Score_ClearAll();
-	}
-	
-	if(cvar("sv_eventlog"))
-		GameLogEcho(":restart", FALSE);
+	ReadyRestart();
 }
 
 /**
