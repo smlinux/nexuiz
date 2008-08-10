@@ -65,9 +65,6 @@ float Spawn_Score(entity spot, entity playerlist, float teamcheck)
 				{
 					if(ent.race_checkpoint != race_PreviousCheckpoint(self.race_checkpoint))
 						return -1;
-					print(ftos(race_place_valid), ": ");
-					print(ftos(self.race_place), " <-> ");
-					print(ftos(spot.race_place), "\n");
 					if(race_place_valid && (spot.race_place != self.race_place))
 						return -1;
 					if(!race_place_valid && (spot.race_place != 0))

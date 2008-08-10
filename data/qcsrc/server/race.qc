@@ -343,5 +343,4 @@ void race_ReadyRestart()
 		race_place_valid = 1;
 	else
 		race_place_valid = 0;
-	print("VALID: ", ftos(race_place_valid), "\n");
 }
