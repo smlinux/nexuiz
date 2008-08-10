@@ -739,7 +739,7 @@ float MapInfo_CurrentFeatures()
 {
 	float req;
 	req = 0;
-	if(!(cvar("g_lms") || cvar("g_instagib") || cvar("g_minstagib") || cvar("g_nixnex") || cvar("g_rocketarena")))
+	if(!(cvar("g_lms") || cvar("g_instagib") || cvar("g_minstagib") || cvar("g_nixnex") || cvar("g_rocketarena") || !cvar("g_pickup_items")))
 		req |= MAPINFO_FEATURE_WEAPONS;
 	return req;
 }
