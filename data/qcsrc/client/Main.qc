@@ -141,7 +141,6 @@ float SetTeam(entity o, float Team)
 
 void Playerchecker_Think()
 {
-	entity pl;
 	float i;
 	for(i = 0; i < maxclients; ++i)
 	{
@@ -178,8 +177,6 @@ void Playerchecker_Think()
 
 void PostInit(void)
 {
-	float i;
-
 	print(strcat("PostInit\n    maxclients = ", ftos(maxclients), "\n"));
 	localcmd(strcat("\nsbar_columns_set ", cvar_string("sbar_columns"), ";\n"));
 
@@ -308,7 +305,7 @@ void Ent_ReadPlayerScore()
 {
 	float i, Team;
 	float isNew;
-	entity tm, o;
+	entity o;
 
 	// damnit -.- don't want to go change every single .sv_entnum in sbar.qc AGAIN
 	// (no I've never heard of M-x replace-string, sed, or anything like that)
@@ -404,7 +401,6 @@ void Ent_Remove()
 		}
 	} else if(self.enttype == ENT_CLIENT_SCORES)
 	{
-		entity tm;
 		if(self.owner)
 		{
 			SetTeam(self.owner, -1);
@@ -568,7 +564,6 @@ void Net_Config()
 
 void Net_ReadRace()
 {
-	float checkpoint, t;
 	float b;
 
 	b = ReadByte();

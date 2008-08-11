@@ -151,18 +151,20 @@ void		end_sys_fields;			// flag for structure dumping
 float		intermission;
 float		sb_showscores;
 .string		message;
-float		coop;
-float		deathmatch;
+// float		coop;
+// float		deathmatch;
 
-float		dmg_take;
-float		dmg_save;
-vector		dmg_origin;
+// float		dmg_take;
+// float		dmg_save;
+// vector		dmg_origin;
 
 // Darkplaces Render Modifications
+#if 0
 .float alpha;
 .float renderflags;
 .vector colormod;
 .float scale;
+#endif
 
 // Basic variables
 .float enttype; // entity type sent from server
@@ -171,7 +173,6 @@ vector		dmg_origin;
 .float team_size;
 
 float vid_conwidth, vid_conheight;
-float caps_team1, caps_team2;
 float configdb;
 string shortmapname;
 
@@ -180,7 +181,6 @@ float race_checkpoint;
 float race_time;
 float race_laptime;
 float race_checkpointtime;
-float race_delta;
 float race_previousbesttime;
 string race_previousbestname;
 float race_nextcheckpoint;

@@ -1,4 +1,3 @@
-float databuf;
 var float(string text, float handleColors) stringwidth;
 
 entity players;
