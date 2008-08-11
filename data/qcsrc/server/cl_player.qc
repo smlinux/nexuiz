@@ -354,7 +354,6 @@ void ClientKill_Now_TeamChange();
 void PlayerDamage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
 {
 	local float take, save, waves, sdelay;
-	float painsequence;
 
 	damage = damage * bound(1.0, self.cvar_cl_handicap, 100.0);
 	if(sv_gentle > 0) {

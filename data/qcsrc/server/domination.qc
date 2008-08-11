@@ -109,7 +109,6 @@ void AnimateDomPoint()
 
 void dompointthink()
 {
-	local entity head;
 	local float waittime;
 	local float fragamt;
 

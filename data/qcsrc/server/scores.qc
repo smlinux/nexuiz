@@ -165,7 +165,6 @@ void ScoreInfo_Write(float targ)
 
 void ScoreInfo_Init(float teams)
 {
-	entity pl;
 	scores_initialized = 1;
 	if(teams >= 1)
 		TeamScore_Spawn(COLOR_TEAM1, "Red");

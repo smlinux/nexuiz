@@ -386,7 +386,7 @@ string GetClientVersionMessage() {
 
 void PrintWelcomeMessage(entity pl)
 {
-	string s, mutator, modifications, padding;
+	string s, mutator, modifications;
 	float p;
 
 	/*if(self.welcomemessage_time > time)

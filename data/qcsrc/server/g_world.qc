@@ -1172,8 +1172,6 @@ void CheckRules_Player()
 };
 
 float checkrules_oneminutewarning;
-float checkrules_leaderfrags;
-float tdm_max_score, tdm_old_score;
 
 float checkrules_equality;
 float checkrules_overtimewarning;
