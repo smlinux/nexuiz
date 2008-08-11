@@ -659,6 +659,10 @@ float CSQC_Parse_TempEntity()
 			Net_ReadRace();
 			bHandled = true;
 			break;
+		case TE_CSQC_FORCESCOREBOARD:
+			sb_showscores_force = true;
+			bHandled = true;
+			break;
 		default:
 			// No special logic for this temporary entity; return 0 so the engine can handle it
 			bHandled = false;

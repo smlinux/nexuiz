@@ -98,7 +98,8 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 				if(clienttype(e) == CLIENTTYPE_REAL)
 				{
 					msg_entity = e;
-					WriteByte(MSG_ONE, SVC_INTERMISSION);
+					WriteByte(MSG_ONE, SVC_TEMPENTITY);
+					WriteByte(MSG_ONE, TE_CSQC_FORCESCOREBOARD);
 					// he can still move, but will see the scoreboard now
 				}
 			}
@@ -370,6 +371,20 @@ void race_PreSpawn()
 		return;
 	if(self.killcount == -666 || g_race_qualifying)
 		race_PreparePlayer();
+
+	if(race_completing)
+	{
+		self.race_completed = 1;
+		MAKE_INDEPENDENT_PLAYER(self);
+		bprint(self.netname, "^7 has abandoned the race.\n");
+		if(clienttype(self) == CLIENTTYPE_REAL)
+		{
+			msg_entity = self;
+			WriteByte(MSG_ONE, SVC_TEMPENTITY);
+			WriteByte(MSG_ONE, TE_CSQC_FORCESCOREBOARD);
+			// he can still move, but will see the scoreboard now
+		}
+	}
 }
 
 void race_PostSpawn(entity spot)

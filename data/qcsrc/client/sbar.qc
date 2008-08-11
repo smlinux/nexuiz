@@ -1326,7 +1326,7 @@ void Sbar_Draw (void)
 		Sbar_FinaleOverlay();
 	else
 	{
-		if (sb_showscores || (getstati(STAT_HEALTH) <= 0 && cvar("cl_deathscoreboard")))
+		if (sb_showscores || sb_showscores_force || (getstati(STAT_HEALTH) <= 0 && cvar("cl_deathscoreboard")))
 		{
 			sbar_x = (vid_conwidth - 640.0)*0.5;
 			sbar_y = vid_conheight - 47;
