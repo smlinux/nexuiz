@@ -41,9 +41,10 @@ float TeamScore_Add(entity player, float scorefield, float score);
 float TeamScore_AddToTeam(float t, float scorefield, float score);
 
 /**
- * Adds a score to both the player and the team.
+ * Adds a score to both the player and the team. Returns the team score if
+ * possible, otherwise the player score.
  */
-void PlayerTeamScore_Add(entity player, float pscorefield, float tscorefield, float score);
+float PlayerTeamScore_Add(entity player, float pscorefield, float tscorefield, float score);
 
 /**
  * Adds to the generic score fields for both the player and the team.

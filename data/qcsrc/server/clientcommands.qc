@@ -385,7 +385,7 @@ void ReadyRestart()
 	bprint("^1Server is restarting...\n");
 
 	// no arena, assault support yet...
-	if(g_arena | g_assault | gameover | intermission_running)
+	if(g_arena | g_assault | gameover | intermission_running | race_completing)
 		localcmd("restart\n");
 
 	if(readyNagActive) { //if every player is ready, remove the ready-nagger again

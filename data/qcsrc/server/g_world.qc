@@ -1497,6 +1497,24 @@ float WinningCondition_Scores(float limit)
 	return GetWinningCode(limit && WinningConditionHelper_topscore && (WinningConditionHelper_topscore >= limit), WinningConditionHelper_equality);
 }
 
+float WinningCondition_Race(float fraglimit)
+{
+	float wc;
+	entity p;
+	wc = WinningCondition_Scores(fraglimit);
+
+	// ALWAYS initiate overtime, unless EVERYONE has finished the race!
+	if(wc == WINNING_YES || wc == WINNING_STARTOVERTIME)
+	// do NOT support equality when the laps are all raced!
+	{
+		FOR_EACH_PLAYER(p)
+			if not(p.race_completed)
+				return WINNING_STARTOVERTIME;
+		return WINNING_YES;
+	}
+	return wc;
+}
+
 float WinningCondition_RanOutOfSpawns()
 {
 	entity head;
@@ -1609,7 +1627,10 @@ void CheckRules_World()
 		{
 			checkrules_overtimewarning = TRUE;
 			//announceall("announcer/robotic/1minuteremains.wav");
-			bcenterprint("^3Now playing ^1OVERTIME^3!\n\n^3Keep fragging until we have a ^1winner^3!");
+			if(!g_race_qualifying)
+				bcenterprint("^3Everyone, finish your lap! The race is over!");
+			else
+				bcenterprint("^3Now playing ^1OVERTIME^3!\n\n^3Keep fragging until we have a ^1winner^3!");
 		}
 	}
 	else
@@ -1634,6 +1655,10 @@ void CheckRules_World()
 	if(status == WINNING_YES)
 	{
 		bprint("Hey! Someone ran out of spawns!\n");
+	}
+	else if(g_race && !g_race_qualifying)
+	{
+		status = WinningCondition_Race(fraglimit);
 	}
 	else if(g_assault)
 	{

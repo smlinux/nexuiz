@@ -484,3 +484,5 @@ void VoiceMessage(string type);
 .float version_mismatch;
 
 float independent_players;
+#define IS_INDEPENDENT_PLAYER(e) ((e).solid == SOLID_TRIGGER)
+#define MAKE_INDEPENDENT_PLAYER(e) ((e).solid = SOLID_TRIGGER)

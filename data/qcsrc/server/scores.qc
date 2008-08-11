@@ -270,11 +270,13 @@ float PlayerScore_Add(entity player, float scorefield, float score)
 	return (s.(scores[scorefield]) += score);
 }
 
-void PlayerTeamScore_Add(entity player, float pscorefield, float tscorefield, float score)
+float PlayerTeamScore_Add(entity player, float pscorefield, float tscorefield, float score)
 {
-	PlayerScore_Add(player, pscorefield, score);
+	float r;
+	r = PlayerScore_Add(player, pscorefield, score);
 	if(teamscores_entities_count) // only for teamplay
-		TeamScore_Add(player, tscorefield, score);
+		r = TeamScore_Add(player, tscorefield, score);
+	return r;
 }
 
 float PlayerScore_Compare(entity t1, entity t2)

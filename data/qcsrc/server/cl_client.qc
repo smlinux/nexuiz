@@ -613,10 +613,9 @@ void PutClientInServer (void)
 		self.classname = "player";
 		self.iscreature = TRUE;
 		self.movetype = MOVETYPE_WALK;
+		self.solid = SOLID_SLIDEBOX;
 		if(independent_players)
-			self.solid = SOLID_TRIGGER;
-		else
-			self.solid = SOLID_SLIDEBOX;
+			MAKE_INDEPENDENT_PLAYER(self);
 		self.flags = FL_CLIENT;
 		self.takedamage = DAMAGE_AIM;
 		if(g_minstagib)

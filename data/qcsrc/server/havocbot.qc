@@ -258,7 +258,7 @@ void havocbot_chooseenemy()
 	local entity head, best;
 	local float rating, bestrating;
 	local vector eye, v;
-	if (cvar("bot_nofire") || independent_players)
+	if (cvar("bot_nofire") || IS_INDEPENDENT_PLAYER(self))
 	{
 		self.enemy = world;
 		return;
@@ -457,7 +457,7 @@ void havocbot_ai()
 	if (self.bot_aimtarg)
 	{
 		weapon_action(self.weapon, WR_AIM);
-		if (cvar("bot_nofire") || independent_players)
+		if (cvar("bot_nofire") || IS_INDEPENDENT_PLAYER(self))
 		{
 			self.BUTTON_ATCK = FALSE;
 			self.BUTTON_ATCK2 = FALSE;

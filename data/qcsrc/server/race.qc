@@ -65,11 +65,12 @@ void race_SendNextCheckpoint(entity e)
 
 void race_SendTime(entity e, float cp, float t, float tvalid)
 {
+	float snew, l;
 	t = floor(0.5 + 10 * t); // make integer
-	float snew;
 
 	if(tvalid)
 	if(cp == 0) // finish line
+	if not(e.race_completed)
 	{
 		float s;
 		if(g_race_qualifying)
@@ -83,7 +84,24 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 			s = PlayerScore_Add(e, SP_RACE_TIME, 0);
 			snew = floor(0.5 + 10 * (time - restart_countdown));
 			PlayerScore_Add(e, SP_RACE_TIME, snew - s);
-			PlayerTeamScore_Add(e, SP_RACE_LAPS, ST_RACE_LAPS, 1);
+			l = PlayerTeamScore_Add(e, SP_RACE_LAPS, ST_RACE_LAPS, 1);
+
+			if(cvar("fraglimit"))
+				if(l > cvar("fraglimit"))
+					race_completing = 1;
+
+			if(race_completing)
+			{
+				e.race_completed = 1;
+				MAKE_INDEPENDENT_PLAYER(e);
+				bprint(e.netname, "^7 has finished the race.\n");
+				if(clienttype(e) == CLIENTTYPE_REAL)
+				{
+					msg_entity = e;
+					WriteByte(MSG_ONE, SVC_INTERMISSION);
+					// he can still move, but will see the scoreboard now
+				}
+			}
 		}
 	}
 

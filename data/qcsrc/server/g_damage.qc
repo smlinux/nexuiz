@@ -515,7 +515,7 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 		if(deathtype != DEATH_TELEFRAG)
 		if(attacker.classname == "player")
 		{
-			if(independent_players && targ != attacker && targ.classname == "player")
+			if(targ.classname == "player" && targ != attacker && IS_INDEPENDENT_PLAYER(attacker) && IS_INDEPENDENT_PLAYER(targ))
 			{
 				damage = 0;
 				force = '0 0 0';
