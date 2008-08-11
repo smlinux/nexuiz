@@ -87,7 +87,7 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 			l = PlayerTeamScore_Add(e, SP_RACE_LAPS, ST_RACE_LAPS, 1);
 
 			if(cvar("fraglimit"))
-				if(l > cvar("fraglimit"))
+				if(l >= cvar("fraglimit"))
 					race_completing = 1;
 
 			if(race_completing)
