@@ -992,7 +992,7 @@ string MakeRaceString(float cp, float mytime, float histime, float lapdelta, str
 	else if(hisname == "")
 		return strcat(col, cpname, " (", timestr, ")");
 	else
-		return strcat(col, cpname, " (", timestr, " ", strcat(hisname, lapstr), col, ")");
+		return strcat(col, cpname, " (", timestr, " ", strcat(hisname, col, lapstr), ")");
 }
 
 void dummyfunction(float a1, float a2, float a3, float a4, float a5, float a6, float a7, float a8)
