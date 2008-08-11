@@ -1214,6 +1214,7 @@ Called when a client disconnects from the server
 void(entity e) DropFlag;
 .entity chatbubbleentity;
 .entity teambubbleentity;
+void ReadyCount();
 //void() ctf_clientdisconnect;
 void ClientDisconnect (void)
 {
