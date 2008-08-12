@@ -228,6 +228,7 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 		race_checkpoint_lastlaps[cp] = lself;
 
 		if(clienttype(oth) == CLIENTTYPE_REAL)
+		if(oth.flags & FL_CLIENT)
 		{
 			msg_entity = oth;
 			WriteByte(MSG_ONE, SVC_TEMPENTITY);
