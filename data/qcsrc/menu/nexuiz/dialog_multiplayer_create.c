@@ -31,7 +31,7 @@ void fillNexuizServerCreateTab(entity me)
 	float n;
 
 	me.TR(me);
-		n = 9 + 1 * !!cvar("developer");
+		n = 10 + 1 * !!cvar("developer");
 		// NOTE: not using ?: due to fteqcc bug
 		// this actually means: cvar("developer") ? 10 : 9
 		me.TD(me, 2, me.columns / n, e = makeNexuizGametypeButton(1, "g_dm", "DM"));
@@ -56,6 +56,8 @@ void fillNexuizServerCreateTab(entity me)
 				if(e.checked) e0 = NULL;
 		}
 		me.TD(me, 2, me.columns / n, e = makeNexuizGametypeButton(1, "g_onslaught", "Onslaught"));
+			if(e.checked) e0 = NULL;
+		me.TD(me, 2, me.columns / n, e = makeNexuizGametypeButton(1, "g_race", "Race"));
 			if(e.checked) e0 = NULL;
 		if(e0)
 		{

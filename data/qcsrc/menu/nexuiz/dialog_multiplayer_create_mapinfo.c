@@ -24,6 +24,7 @@ CLASS(NexuizMapInfoDialog) EXTENDS(NexuizDialog)
 	ATTRIB(NexuizMapInfoDialog, typeCTFLabel, entity, NULL)
 	ATTRIB(NexuizMapInfoDialog, typeAssaultLabel, entity, NULL)
 	ATTRIB(NexuizMapInfoDialog, typeOnslaughtLabel, entity, NULL)
+	ATTRIB(NexuizMapInfoDialog, typeRaceLabel, entity, NULL)
 
 	ATTRIB(NexuizMapInfoDialog, currentMapIndex, float, 0)
 	ATTRIB(NexuizMapInfoDialog, currentMapBSPName, string, string_null)
@@ -73,10 +74,9 @@ void loadMapInfoNexuizMapInfoDialog(entity me, float i, entity mlb)
 	me.typeRuneLabel.disabled = !(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_RUNEMATCH);
 	me.typeKeyHuntLabel.disabled = !(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_KEYHUNT);
 	me.typeCTFLabel.disabled = !(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_CTF);
-	if(me.typeAssaultLabel)
-		me.typeAssaultLabel.disabled = !(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_ASSAULT);
-	if(me.typeOnslaughtLabel)
-		me.typeOnslaughtLabel.disabled = !(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_ONSLAUGHT);
+	me.typeAssaultLabel.disabled = !(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_ASSAULT);
+	me.typeOnslaughtLabel.disabled = !(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_ONSLAUGHT);
+	me.typeRaceLabel.disabled = !(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_RACE);
 
 	MapInfo_ClearTemps();
 }
@@ -127,13 +127,12 @@ void fillNexuizMapInfoDialog(entity me)
 		me.TD(me, 1, w/4, e = makeNexuizTextLabel(0, "CTF"));
 			me.typeCTFLabel = e;
 	me.TR(me);
-		if(cvar("developer"))
-		{
-			me.TD(me, 1, w/4, e = makeNexuizTextLabel(0, "Assault"));
-				me.typeAssaultLabel = e;
-		}
+		me.TD(me, 1, w/4, e = makeNexuizTextLabel(0, "Assault"));
+			me.typeAssaultLabel = e;
 		me.TD(me, 1, w/4, e = makeNexuizTextLabel(0, "Onslaught"));
 			me.typeOnslaughtLabel = e;
+		me.TD(me, 1, w/4, e = makeNexuizTextLabel(0, "Race"));
+			me.typeRaceLabel = e;
 
 	me.gotoRC(me, me.rows - 2, 0);
 		me.TD(me, 1, me.columns, e = makeNexuizTextLabel(0.5, ""));
