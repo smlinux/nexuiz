@@ -1513,6 +1513,43 @@ float WinningCondition_Race(float fraglimit)
 	return wc;
 }
 
+void ReadyRestart();
+float WinningCondition_QualifyingThenRace()
+{
+	float wc;
+	wc = WinningCondition_Scores(0);
+
+	// NEVER initiate overtime
+	if(wc == WINNING_YES || wc == WINNING_STARTOVERTIME)
+	// do NOT support equality when the laps are all raced!
+	{
+		float totalplayers;
+		float playerswithlaps;
+		entity head;
+		totalplayers = playerswithlaps = 0;
+		FOR_EACH_PLAYER(head)
+		{
+			++totalplayers;
+			if(PlayerScore_Add(head, SP_RACE_FASTEST, 0))
+				++playerswithlaps;
+		}
+
+		// at least 2/3 of the players have completed a lap: start the RACE
+		// otherwise, the players should end the qualifying on their own
+		if(totalplayers >= 3)
+		if(playerswithlaps >= totalplayers * 2 / 3)
+		{
+			checkrules_overtimeend = 0;
+			ReadyRestart();
+			return WINNING_NEVER;
+		}
+
+		return WINNING_YES;
+	}
+
+	return wc;
+}
+
 float WinningCondition_RanOutOfSpawns()
 {
 	entity head;
@@ -1657,6 +1694,10 @@ void CheckRules_World()
 	else if(g_race && !g_race_qualifying)
 	{
 		status = WinningCondition_Race(fraglimit);
+	}
+	else if(g_race && g_race_qualifying == 2 && timelimit > 0)
+	{
+		status = WinningCondition_QualifyingThenRace();
 	}
 	else if(g_assault)
 	{
