@@ -1691,11 +1691,11 @@ void CheckRules_World()
 	{
 		bprint("Hey! Someone ran out of spawns!\n");
 	}
-	else if(g_race && !g_race_qualifying)
+	else if(g_race && !g_race_qualifying && timelimit >= 0)
 	{
 		status = WinningCondition_Race(fraglimit);
 	}
-	else if(g_race && g_race_qualifying == 2 && timelimit > 0)
+	else if(g_race && g_race_qualifying == 2 && timelimit >= 0)
 	{
 		status = WinningCondition_QualifyingThenRace();
 	}
