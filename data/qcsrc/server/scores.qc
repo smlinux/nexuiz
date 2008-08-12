@@ -310,7 +310,7 @@ void WinningConditionHelper()
 			if(teamscorekeepers[t])
 				s = strcat(s, ":", ftos(t+1), ":", GetTeamScoreString(t+1, 1));
 
-		WinningConditionHelper_equality = 1;
+		WinningConditionHelper_equality = 0;
 		WinningConditionHelper_winnerteam = 0;
 		for(t = 1; t < 16; ++t)
 		{
@@ -341,7 +341,7 @@ void WinningConditionHelper()
 	}
 	else
 	{
-		WinningConditionHelper_equality = 1;
+		WinningConditionHelper_equality = 0;
 		WinningConditionHelper_winner = world;
 		FOR_EACH_PLAYER(p)
 		{
