@@ -1,58 +1,3 @@
-void tdeath_touch()
-{
-	if (other == self.owner)
-		return;
-	// so teleporting shots etc can't telefrag
-	if (!self.owner.takedamage)
-		return;
-	if (!other.takedamage)
-		return;
-
-	if ((self.owner.classname == "player") && (self.owner.health >= 1))
-		Damage (other, self, self.owner, 10000, DEATH_TELEFRAG, other.origin, '0 0 0');
-	else if (other.health < 1) // corpses gib
-		Damage (other, self, self.owner, 10000, DEATH_TELEFRAG, other.origin, '0 0 0');
-	else // dead bodies and monsters gib themselves instead of telefragging
-		Damage (self.owner, self, self.owner, 10000, DEATH_TELEFRAG, self.owner.origin, '0 0 0');
-};
-
-void tdeath_remove()
-{
-	if (self.owner)
-	{
-		self.owner.effects = self.owner.effects - (self.owner.effects & EF_NODRAW);
-		if (self.owner.weaponentity)
-			self.owner.weaponentity.flags = self.owner.weaponentity.flags - (self.owner.weaponentity.flags & FL_FLY);
-	}
-	remove(self);
-}
-
-// org2 is where they will return to if the teleport fails
-void spawn_tdeath(vector org, entity death_owner, vector org2)
-{
-	local entity death;
-
-	death = spawn();
-//	death.classname = "teledeath";
-	death.movetype = MOVETYPE_NONE;
-	death.solid = SOLID_TRIGGER;
-	death.angles = '0 0 0';
-	death.dest2 = org2;
-	setsize (death, death_owner.mins - '1 1 1', death_owner.maxs + '1 1 1');
-	setorigin (death, org);
-	death.touch = tdeath_touch;
-	death.nextthink = time + 0.2;
-	death.think = tdeath_remove;
-	death.owner = death_owner;
-
-	// hide entity to avoid "ghosts" between teleporter and destination caused by clientside interpolation
-	death.owner.effects = death.owner.effects | EF_NODRAW;
-	if (death.owner.weaponentity) // misuse FL_FLY to avoid EF_NODRAW on viewmodel
-		death.owner.weaponentity.flags = death.owner.weaponentity.flags | FL_FLY;
-
-	force_retouch = 2;		// make sure even still objects get hit
-};
-
 void Teleport_Touch (void)
 {
 	entity head;
@@ -85,7 +30,7 @@ void Teleport_Touch (void)
 	other.velocity = v_forward * vlen(other.velocity);
 
 	// Kill anyone else in the teleporter box (NO MORE TDEATH)
-	if(other.takedamage)
+	if(other.takedamage && !g_race)
 	{
 		vector deathmin;
 		vector deathmax;
