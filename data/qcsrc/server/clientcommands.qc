@@ -474,6 +474,9 @@ void ReadyCount()
 			r += 1;
 	}
 
+	if(!r)
+		return; // NOTE: this also excludes !p, as r <= p
+
 	if(cvar("sv_ready_restart_nag")) {
 		if(!readyNagActive) {
 			readyNagger = spawn();
@@ -484,7 +487,7 @@ void ReadyCount()
 		}
 	}
 
-	if(!p || r < p)
+	if(r < p)
 		return;
 	
 	ReadyRestart();
