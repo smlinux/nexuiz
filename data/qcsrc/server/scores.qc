@@ -594,14 +594,13 @@ float PlayerScore_Sort(.float field)
 	{
 		pprev = pbestprev = world;
 		pbest = plist;
-		for(p = plist; (p = p.chain); )
+		for(p = plist; (pprev = p), (p = p.chain); )
 		{
 			if(PlayerTeamScore_Compare(p, pbest) > 0)
 			{
 				pbest = p;
 				pbestprev = pprev;
 			}
-			pprev = p;
 		}
 
 		// remove pbest out of the chain
