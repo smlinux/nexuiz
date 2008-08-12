@@ -1301,6 +1301,8 @@ float Sbar_WouldDrawScoreboard ()
 		return 1;
 	else if (getstati(STAT_HEALTH) <= 0 && cvar("cl_deathscoreboard"))
 		return 1;
+	else if(sb_showscores_force)
+		return 1;
 	return 0;
 }
 
