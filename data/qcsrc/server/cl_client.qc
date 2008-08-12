@@ -1267,8 +1267,6 @@ void ClientDisconnect (void)
 	bot_relinkplayerlist();
 	self.flags = save;
 
-	ReadyCount();
-
 	// remove laserdot
 	if(self.weaponentity)
 		if(self.weaponentity.lasertarget)
@@ -1295,6 +1293,8 @@ void ClientDisconnect (void)
 	// free cvars
 	GetCvars(-1);
 	self.playerid = 0;
+
+	ReadyCount();
 }
 
 .float BUTTON_CHAT;
