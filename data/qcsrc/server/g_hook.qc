@@ -94,7 +94,7 @@ void GrapplingHookThink()
 	}
 	if(LostMovetypeFollow(self))
 	{
-		remove(self);
+		RemoveGrapplingHook(self.owner);
 		return;
 	}
 
