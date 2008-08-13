@@ -544,10 +544,7 @@ void spawnfunc_func_rain()
 	self.angles = '0 0 0';
 	self.movetype = MOVETYPE_NONE;
 	self.solid = SOLID_NOT;
-	if(self.model != "")
-		setmodel(self, self.model); // no precision needed
-	setorigin(self, self.origin);
-	setsize(self, self.mins, self.maxs);
+	SetBrushEntityModel();
 	self.model = "";
 	if (!self.cnt)
 		self.cnt = 12;
@@ -599,10 +596,7 @@ void spawnfunc_func_snow()
 	self.angles = '0 0 0';
 	self.movetype = MOVETYPE_NONE;
 	self.solid = SOLID_NOT;
-	if(self.model != "")
-		setmodel(self, self.model); // no precision needed
-	setorigin(self, self.origin);
-	setsize(self, self.mins, self.maxs);
+	SetBrushEntityModel();
 	self.model = "";
 	if (!self.cnt)
 		self.cnt = 12;

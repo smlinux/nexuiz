@@ -239,11 +239,7 @@ void spawnfunc_trigger_push()
 	if (self.angles != '0 0 0')
 		SetMovedir ();
 
-	self.solid = SOLID_TRIGGER;
-	setmodel (self, self.model); // no precision needed
-	self.movetype = MOVETYPE_NONE;
-	self.modelindex = 0;
-	self.model = "";
+	InitTrigger();
 
 	self.touch = trigger_push_touch;
 

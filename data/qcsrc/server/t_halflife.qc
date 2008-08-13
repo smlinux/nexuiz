@@ -51,8 +51,7 @@ void spawnfunc_func_ladder()
 
 void spawnfunc_func_water()
 {
-	self.solid = SOLID_TRIGGER;
-	setmodel (self, self.model);	// set size and link into world, precision set by mapper
+	InitTrigger ();
 	self.touch = func_ladder_touch;
 };
 

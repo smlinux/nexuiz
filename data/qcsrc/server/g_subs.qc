@@ -344,6 +344,16 @@ float angc (float a1, float a2)
 	return a;
 }
 
+void SetBrushEntityModel()
+{
+	if(self.model != "")
+	{
+		precache_model(self.model);
+		setmodel(self, self.model); // no precision needed
+	}
+	setorigin(self, self.origin);
+	setsize(self, self.mins, self.maxs);
+}
 
 /*
 ================
@@ -379,14 +389,7 @@ void InitTrigger()
 	if (self.angles != '0 0 0')
 		SetMovedir ();
 	self.solid = SOLID_TRIGGER;
-	if(self.model != "")
-		setmodel (self, self.model);	// set size and link into world, no precision needed
-	else
-	{
-		// force relinking
-		setorigin(self, self.origin);
-		setsize (self, self.mins, self.maxs);
-	}
+	SetBrushEntityModel();
 	self.movetype = MOVETYPE_NONE;
 	self.modelindex = 0;
 	self.model = "";
@@ -400,15 +403,17 @@ void InitSolidBSPTrigger()
 	if (self.angles != '0 0 0')
 		SetMovedir ();
 	self.solid = SOLID_BSP;
-	if(self.model != "")
-		setmodel (self, self.model);	// set size and link into world, no precision needed
-	else
-	{
-		// force relinking
-		setorigin(self, self.origin);
-		setsize (self, self.mins, self.maxs);
-	}
+	SetBrushEntityModel();
 	self.movetype = MOVETYPE_PUSH;
 //	self.modelindex = 0;
 	self.model = "";
+};
+
+void InitMovingBrushTrigger()
+{
+// trigger angles are used for one-way touches.  An angle of 0 is assumed
+// to mean no restrictions, so use a yaw of 360 instead.
+	self.solid = SOLID_BSP;
+	SetBrushEntityModel();
+	self.movetype = MOVETYPE_PUSH;
 };

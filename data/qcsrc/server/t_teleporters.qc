@@ -125,20 +125,7 @@ void spawnfunc_trigger_teleport (void)
 {
 	self.angles = '0 0 0';
 
-	self.solid = SOLID_TRIGGER;
-	self.movetype = MOVETYPE_NONE;
-
-	if(self.model != "")
-		setmodel (self, self.model); // no precision needed
-	else
-	{
-		// force relinking
-		setorigin(self, self.origin);
-		setsize (self, self.mins, self.maxs);
-	}
-
-	self.model = "";
-	self.modelindex = 0;
+	InitTrigger();
 
 	self.think = teleport_findtarget;
 	self.nextthink = time + 0.2;

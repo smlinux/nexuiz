@@ -191,10 +191,7 @@ void spawnfunc_func_plat()
 	self.angles = '0 0 0';
 
 	self.classname = "plat";
-	self.solid = SOLID_BSP;
-	self.movetype = MOVETYPE_PUSH;
-	setorigin (self, self.origin);
-	setmodel (self, self.model); // precision set below
+	InitMovingBrushTrigger();
 	self.effects |= EF_LOWPRECISION;
 	setsize (self, self.mins , self.maxs);
 
@@ -308,16 +305,12 @@ void spawnfunc_func_train()
 		precache_sound ("plats/train1.wav");
 	}
 
-	self.solid = SOLID_BSP;
-	self.movetype = MOVETYPE_PUSH;
 	self.blocked = train_blocked;
 	self.use = train_use;
 	self.classname = "train";
 
-	setmodel (self, self.model); // precision set below
+	InitMovingBrushTrigger();
 	self.effects |= EF_LOWPRECISION;
-	setsize (self, self.mins , self.maxs);
-	setorigin (self, self.origin);
 	self.nextthink = self.ltime + 0.1;
 	self.think = func_train_find;
 };
@@ -368,13 +361,8 @@ void spawnfunc_func_train()
 	if (!self.speed)
 		self.speed = 100;
 
-	self.solid = SOLID_BSP;
-	self.movetype = MOVETYPE_PUSH;
-
-	setmodel(self, self.model); // precision set below
+	InitMovingBrushTrigger();
 	self.effects |= EF_LOWPRECISION;
-	setsize(self, self.mins, self.maxs);
-	setorigin(self, self.origin);
 
 	// wait for targets to spawn
 	self.nextthink = self.ltime + 0.1;
@@ -436,13 +424,8 @@ void spawnfunc_func_rotating()
 
     self.dmgtime2 = time;
 
-
-	self.solid = SOLID_BSP;
-	self.movetype = MOVETYPE_PUSH;
-
-	setmodel(self, self.model); // no lowprecision here! evil!
-	setsize(self, self.mins, self.maxs);
-	setorigin(self, self.origin);
+	InitMovingBrushTrigger();
+	// no EF_LOWPRECISION here, as rounding angles is bad
 
     self.blocked = rotating_blocked;
 
@@ -512,12 +495,7 @@ void spawnfunc_func_bobbing()
 	else // Z
 		self.movedir = '0 0 1' * self.height;
 
-	self.solid = SOLID_BSP;
-	self.movetype = MOVETYPE_PUSH;
-
-	setmodel(self, self.model); // precision set below
-	setsize(self, self.mins, self.maxs);
-	setorigin(self, self.origin);
+	InitMovingBrushTrigger();
 
 	// wait for targets to spawn
 	controller = spawn();
@@ -647,9 +625,7 @@ void spawnfunc_func_button()
 {
 	SetMovedir ();
 
-	self.movetype = MOVETYPE_PUSH;
-	self.solid = SOLID_BSP;
-	setmodel (self, self.model); // precision set below
+	InitMovingBrushTrigger();
 	self.effects |= EF_LOWPRECISION;
 
 	self.blocked = button_blocked;
@@ -1087,10 +1063,7 @@ void spawnfunc_func_door()
 	SetMovedir ();
 
 	self.max_health = self.health;
-	self.solid = SOLID_BSP;
-	self.movetype = MOVETYPE_PUSH;
-	setorigin (self, self.origin);
-	setmodel (self, self.model); // precision set below
+	InitMovingBrushTrigger();
 	self.effects |= EF_LOWPRECISION;
 	self.classname = "door";
 
@@ -1355,12 +1328,9 @@ void spawnfunc_func_door_secret()
 	// Magic formula...
 	self.mangle = self.angles;
 	self.angles = '0 0 0';
-	self.solid = SOLID_BSP;
-	self.movetype = MOVETYPE_PUSH;
 	self.classname = "door";
-	setmodel (self, self.model); // precision set below
+	InitMovingBrushTrigger();
 	self.effects |= EF_LOWPRECISION;
-	setorigin (self, self.origin);
 
 	self.touch = secret_touch;
 	self.blocked = secret_blocked;

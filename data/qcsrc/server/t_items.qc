@@ -792,9 +792,7 @@ void spawnfunc_item_quad (void) {self.classname = "item_strength";spawnfunc_item
 
 void spawnfunc_misc_models (void)
 {
-	precache_model (self.model);
-	setmodel (self, self.model); // precision set by mapper
-	setsize (self, self.mins, self.maxs);
+	SetBrushEntityModel();
 }
 
 void func_wall_use (void)
@@ -813,9 +811,7 @@ void func_wall_use (void)
 
 void spawnfunc_func_wall (void)
 {
-	precache_model (self.model);
-	setmodel (self, self.model); // precision set by mapper
-	setsize (self, self.mins, self.maxs);
+	SetBrushEntityModel();
 	self.solid = SOLID_BSP;
 	self.use = func_wall_use;
 }
