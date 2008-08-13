@@ -1106,7 +1106,7 @@ void Sbar_Score(float margin)
 		drawfont = sbar_bigfont;
 		float a;
 		vector m;
-		string s;
+		string s, forcetime;
 
 		m = '0.5 0 0' * vid_conwidth + '0 0.25 0' * vid_conheight;
 
@@ -1115,12 +1115,15 @@ void Sbar_Score(float margin)
 
 			a = bound(0, 2 - (time - race_checkpointtime), 1);
 			s = "";
+			forcetime = "";
 			if(a > 0) // just hit a checkpoint?
 			{
 				if(race_time && race_previousbesttime)
 					s = MakeRaceString(race_checkpoint, race_time / 10 - race_previousbesttime / 10, 0, 0, race_previousbestname);
 				else
 					s = MakeRaceString(race_checkpoint, 0, -1, 0, race_previousbestname);
+				if(race_time)
+					forcetime = mmsss(race_time);
 			}
 			else
 			{
@@ -1134,17 +1137,27 @@ void Sbar_Score(float margin)
 				}
 			}
 
-			if(s != "")
-			if(a > 0)
+			if(s != "" && a > 0)
 			{
 				dummyfunction(0, 0, 0, 0, 0, 0, 0, 0); // work around DP bug (set OFS_PARAM5 to 0)
 				drawcolorcodedstring(m - '0 16 0' - '8 0 0' * stringwidth(s, TRUE), s, '16 16 0', sbar_alpha_fg * a, 0);
 			}
 
+			if(forcetime != "")
+			{
+				float sz;
+				a = bound(0, 1 - 2 * (time - race_checkpointtime), 1);
+				sz = 1.2 / (a + 0.2);
+				drawstring(m - '0 0 0' - '0 16 0' * (sz - 1) - '16 0 0' * sz * stringwidth(forcetime, FALSE), forcetime, '32 32 0' * sz, '1 1 1', sbar_alpha_fg * a, 0);
+				a = 1 - a;
+			}
+			else
+				a = 1;
+
 			if(race_laptime)
 			{
 				s = mmsss(10*(time - race_laptime));
-				drawstring(m - '0 0 0' - '16 0 0' * stringwidth(s, FALSE), s, '32 32 0', '1 1 1', sbar_alpha_fg, 0);
+				drawstring(m - '0 0 0' - '16 0 0' * stringwidth(s, FALSE), s, '32 32 0', '1 1 1', sbar_alpha_fg * a, 0);
 			}
 		}
 		else
