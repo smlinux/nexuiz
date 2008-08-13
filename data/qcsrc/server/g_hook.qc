@@ -47,6 +47,25 @@ And you should be done!
 
 ============================================*/
 
+.string aiment_classname;
+void SetMovetypeFollow(entity ent, entity e)
+{
+	ent.movetype = MOVETYPE_FOLLOW; // make the hole follow
+	ent.solid = SOLID_NOT; // MOVETYPE_FOLLOW is always non-solid
+	ent.aiment = e; // make the hole follow bmodel
+	ent.punchangle = e.angles; // the original angles of bmodel
+	ent.view_ofs = ent.origin - e.origin; // relative origin
+	ent.v_angle = ent.angles - e.angles; // relative angles
+	ent.aiment_classname = strzone(e.classname);
+}
+float LostMovetypeFollow(entity ent)
+{
+	if(ent.aiment)
+		if(ent.aiment.classname != ent.aiment_classname)
+			return 1;
+	return 0;
+}
+
 .float rope_length;
 .float button6_pressed_before;
 
@@ -70,6 +89,11 @@ void GrapplingHookThink()
 	vector dir, org, end;
 	if(self.owner.health <= 0 || self.owner.hook != self)	// how did that happen?
 	{														// well, better fix it anyway
+		remove(self);
+		return;
+	}
+	if(LostMovetypeFollow(self))
+	{
 		remove(self);
 		return;
 	}
@@ -194,6 +218,10 @@ void GrapplingHookTouch (void)
 	self.velocity = '0 0 0';
 	self.movetype = MOVETYPE_NONE;
 	self.rope_length = -1;
+
+	if(other)
+		if(other.movetype != MOVETYPE_NONE)
+			SetMovetypeFollow(self, other);
 
 	//self.owner.disableclientprediction = TRUE;
 }
