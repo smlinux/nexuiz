@@ -174,8 +174,7 @@ void ScoreInfo_Init(float teams)
 		TeamScore_Spawn(COLOR_TEAM3, "Yellow");
 	if(teams >= 4)
 		TeamScore_Spawn(COLOR_TEAM4, "Pink");
-	FOR_EACH_REALCLIENT(msg_entity) // cannot use MSG_ALL here, as that may come too early on level changes (that SUCKS)
-		ScoreInfo_Write(MSG_ONE);
+	ScoreInfo_Write(MSG_ALL);
 }
 
 /*

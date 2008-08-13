@@ -1882,12 +1882,7 @@ void MapVote_Init()
 	mapvote_screenshot_dir = strzone(mapvote_screenshot_dir);
 
 	if(!cvar("g_maplist_textonly"))
-	{
-		// FIXME reenable this when it works in the engine
-		// MapVote_SendData(MSG_ALL);
-		FOR_EACH_REALCLIENT(msg_entity)
-			MapVote_SendData(MSG_ONE);
-	}
+		MapVote_SendData(MSG_ALL);
 }
 
 void MapVote_SendPicture(float id)
@@ -2178,10 +2173,7 @@ void MapVote_Tick()
 	if(!cvar("g_maplist_textonly"))
 	if(mapvote_dirty) // 1 if "keeptwo" or "impulse" happened before
 	{
-		// FIXME reenable this when it works in the engine
-		// MapVote_UpdateData(MSG_BROADCAST);
-		FOR_EACH_REALCLIENT(msg_entity)
-			MapVote_UpdateData(MSG_ONE);
+		MapVote_UpdateData(MSG_BROADCAST);
 		mapvote_dirty = FALSE;
 	}
 
