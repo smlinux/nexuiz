@@ -2,6 +2,8 @@
 // BEGIN REQUIRED CSQC FUNCTIONS
 //include "main.qh"
 
+#define DP_CSQC_ENTITY_REMOVE_IS_B0RKED
+
 void() menu_show_error =
 {
 	drawstring('0 200 0', "ERROR - MENU IS VISIBLE BUT NO MENU WAS DEFINED!", '8 8 0', '1 0 0', 1, 0);
@@ -301,16 +303,29 @@ void Ent_RemoveONS()
 	}
 }
 
+void Ent_Remove();
 void Ent_ReadPlayerScore()
 {
-	float i, Team;
+	float i, Team, n;
 	float isNew;
 	entity o;
 
 	// damnit -.- don't want to go change every single .sv_entnum in sbar.qc AGAIN
 	// (no I've never heard of M-x replace-string, sed, or anything like that)
 	isNew = !self.owner; // workaround for DP bug
-	self.sv_entnum = ReadByte()-1;
+	n = ReadByte()-1;
+
+#ifdef DP_CSQC_ENTITY_REMOVE_IS_B0RKED
+	if(!isNew && n != self.sv_entnum)
+	{
+		print("A CSQC entity changed its owner!\n");
+		isNew = true;
+		Ent_Remove();
+		self.enttype = ENT_CLIENT_SCORES;
+	}
+#endif
+
+	self.sv_entnum = n;
 	Team = GetPlayerColor(self.sv_entnum);
 
 	if not(playerslots[self.sv_entnum])
@@ -345,14 +360,18 @@ void Ent_ReadTeamScore()
 
 // CSQC_Ent_Update : Called every frame that the server has indicated an update to the SSQC / CSQC entity has occured.
 // The only parameter reflects if the entity is "new" to the client, meaning it just came into the client's PVS.
-void Ent_Remove();
 void(float bIsNewEntity) CSQC_Ent_Update =
 {
 	float msg, t;
 	t = ReadByte();
+#ifdef DP_CSQC_ENTITY_REMOVE_IS_B0RKED
 	if(self.enttype)
 		if(t != self.enttype)
+		{
+			print("A CSQC entity changed its type!\n");
 			Ent_Remove();
+		}
+#endif
 	self.enttype = t;
 	if(self.enttype == ENT_CLIENT_ENTCS)
 	{
