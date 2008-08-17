@@ -43,6 +43,8 @@ ALPHA_TEXT                      0.7
 // item: button
 //   uses "button" images
 //   uses "buttongray" images
+//   uses "bigbutton" images
+//   uses "bigbuttongray" images
 COLOR_BUTTON_N                  '0.5 0.75 1'
 COLOR_BUTTON_C                  '0.5 0.75 1'
 COLOR_BUTTON_F                  '0.5 0.75 1'
@@ -91,7 +93,7 @@ MARGIN_ROWS                     4
 //   uses "inputbox" images
 COLOR_INPUTBOX_N                '0.5 0.75 1'
 COLOR_INPUTBOX_F                '0.5 0.75 1'
-MARGIN_INPUTBOX                 0.02
+MARGIN_INPUTBOX_CHARS           1
 
 // item: key grabber
 COLOR_KEYGRABBER_TITLES         '1 1 1'
