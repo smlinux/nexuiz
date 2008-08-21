@@ -32,7 +32,7 @@ float race_PreviousCheckpoint(float f)
 		return f - 1;
 }
 
-void race_SendNextCheckpoint(entity e)
+void race_SendNextCheckpoint(entity e, float spec)
 {
 	float recordtime;
 	string recordholder;
@@ -51,15 +51,28 @@ void race_SendNextCheckpoint(entity e)
 	if(recordholder == e.netname)
 		recordholder = "";
 
-	msg_entity = e;
+	if(!spec)
+		msg_entity = e;
 	WRITESPECTATABLE_MSG_ONE({
 		WriteByte(MSG_ONE, SVC_TEMPENTITY);
 		WriteByte(MSG_ONE, TE_CSQC_RACE);
-		WriteByte(MSG_ONE, RACE_NET_CHECKPOINT_NEXT_QUALIFYING);
+		if(spec)
+		{
+			WriteByte(MSG_ONE, RACE_NET_CHECKPOINT_NEXT_SPEC_QUALIFYING);
+			WriteCoord(MSG_ONE, e.race_laptime);
+		}
+		else
+			WriteByte(MSG_ONE, RACE_NET_CHECKPOINT_NEXT_QUALIFYING);
 		WriteByte(MSG_ONE, cp); // checkpoint the player will be at next
 		WriteShort(MSG_ONE, recordtime);
 		WriteString(MSG_ONE, recordholder);
 	});
+}
+
+void race_InitSpectator()
+{
+	if(self.enemy.race_laptime)
+		race_SendNextCheckpoint(self.enemy, 1);
 }
 
 void race_SendTime(entity e, float cp, float t, float tvalid)
@@ -162,7 +175,7 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 					entity p;
 					FOR_EACH_REALPLAYER(p)
 						if(p.race_checkpoint == cp)
-							race_SendNextCheckpoint(p);
+							race_SendNextCheckpoint(p, 0);
 				}
 			}
 		}
@@ -276,7 +289,7 @@ void checkpoint_touch()
 			other.race_laptime = time;
 
 		if(g_race_qualifying)
-			race_SendNextCheckpoint(other);
+			race_SendNextCheckpoint(other, 0);
 	}
 	else if(other.race_checkpoint == race_NextCheckpoint(self.race_checkpoint))
 	{

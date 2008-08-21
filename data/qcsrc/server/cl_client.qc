@@ -2202,6 +2202,8 @@ void PlayerPreThink (void)
 		WriteByte(MSG_ONE, SVC_TEMPENTITY);
 		WriteByte(MSG_ONE, TE_CSQC_SPECTATING);
 		WriteByte(MSG_ONE, self.spectatee_status);
+		if(g_race)
+			race_InitSpectator();
 	}
 }
 

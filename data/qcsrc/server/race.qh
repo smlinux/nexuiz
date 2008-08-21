@@ -1,3 +1,4 @@
+void race_InitSpectator();
 void race_PreSpawnObserver();
 void race_PreSpawn();
 void race_PostSpawn(entity spot);
