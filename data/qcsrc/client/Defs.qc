@@ -199,3 +199,6 @@ float race_othercheckpointdelta;
 float race_othercheckpointlapsdelta;
 string race_othercheckpointenemy;
 float sb_showscores_force;
+
+// Spectating
+float spectatee_status;

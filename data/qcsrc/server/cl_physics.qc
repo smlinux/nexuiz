@@ -14,6 +14,7 @@ float sv_airaccel_qw;
 .float lastflags;
 .float lastground;
 .float wasFlying;
+.float spectatorspeed;
 
 #define SHTEST_DELTA 15
 .float shtest_next;
@@ -206,7 +207,28 @@ void SV_PlayerPhysics()
 	}
 
 	if(self.flags & FL_NOTARGET)
+	{
 		maxspd_mod = cvar("sv_spectator_speed_multiplier");
+		if(!self.spectatorspeed)
+			self.spectatorspeed = maxspd_mod;
+		if(self.impulse && self.impulse <= 12)
+		{
+			if(self.lastflags & FL_NOTARGET)
+			{
+				if(self.impulse == 10)
+					self.spectatorspeed = bound(1, self.spectatorspeed + 0.5, 5);
+				else if(self.impulse == 11)
+					self.spectatorspeed = maxspd_mod;
+				else if(self.impulse == 12)
+					self.spectatorspeed = bound(1, self.spectatorspeed - 0.5, 5);
+				else if(self.impulse >= 1 && self.impulse <= 9)
+					self.spectatorspeed = 1 + 0.5 * (self.impulse - 1);
+			} // otherwise just clear
+			self.impulse = 0;
+			print("impulse\n");
+		}
+		maxspd_mod = self.spectatorspeed;
+	}
 
 	spd = sv_maxspeed * maxspd_mod * swampspd_mod;
 

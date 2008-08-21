@@ -742,12 +742,6 @@ void Sbar_DrawScoreboard()
 		lastpingstime = time;
 	}
 
-	sbar_fontsize = Sbar_GetFontsize();
-	if(sbar_fontsize_x == 0)
-		sbar_fontsize = '8 8 0';
-	if(sbar_fontsize_y == 0)
-		sbar_fontsize_y = sbar_fontsize_x;
-	
 	xmin = vid_conwidth / 5;
 	ymin = 20;
 
@@ -1325,11 +1319,86 @@ void Sbar_Draw (void)
 	float x, fade;
 	float stat_items;
 
+	sbar_fontsize = Sbar_GetFontsize();
+
+	if(spectatee_status)
+	{
+		string s;
+		vector o;
+		o = '1 0 0' * vid_conwidth;
+		if(spectatee_status == -1)
+			s = "^1Observing";
+		else
+			s = strcat("^1Spectating ^7", getplayerkey(spectatee_status - 1, "name"));
+		dummyfunction(0, 0, 0, 0, 0, 0, 0, 0); // work around DP bug (set OFS_PARAM5 to 0)
+		drawcolorcodedstring(
+			o - sbar_fontsize_x * '1 0 0' * stringwidth(s, TRUE),
+			s,
+			sbar_fontsize,
+			sbar_alpha_fg,
+			0
+		);
+		o += sbar_fontsize_y * '0 1 0';
+
+		if(spectatee_status == -1)
+			s = "^1Press ^3primary fire^1 to spectate";
+		else
+			s = "^1Press ^3primary fire^1 for another player";
+		dummyfunction(0, 0, 0, 0, 0, 0, 0, 0); // work around DP bug (set OFS_PARAM5 to 0)
+		drawcolorcodedstring(
+			o - sbar_fontsize_x * '1 0 0' * stringwidth(s, TRUE),
+			s,
+			sbar_fontsize,
+			sbar_alpha_fg,
+			0
+		);
+		o += sbar_fontsize_y * '0 1 0';
+
+		if(spectatee_status != -1)
+			s = "^1Use ^3weapon switching^1 to change the speed";
+		else
+			s = "^1Press ^3secondary fire^1 to observe";
+		dummyfunction(0, 0, 0, 0, 0, 0, 0, 0); // work around DP bug (set OFS_PARAM5 to 0)
+		drawcolorcodedstring(
+			o - sbar_fontsize_x * '1 0 0' * stringwidth(s, TRUE),
+			s,
+			sbar_fontsize,
+			sbar_alpha_fg,
+			0
+		);
+		o += sbar_fontsize_y * '0 1 0';
+
+		if(gametype == GAME_ARENA)
+			s = "^1Wait for your turn to join";
+		else if(gametype == GAME_LMS)
+		{
+			entity sk;
+			sk = playerslots[player_localentnum - 1];
+			if(sk.(scores[ps_primary]) >= 666)
+				s = "^1Match has already begun";
+			else if(sk.(scores[ps_primary]) > 0)
+				s = "^1You have no more lives left";
+			else
+				s = "^1Press ^7jump^1 to join";
+		}
+		else
+			s = "^1Press ^7jump^1 to join";
+		dummyfunction(0, 0, 0, 0, 0, 0, 0, 0); // work around DP bug (set OFS_PARAM5 to 0)
+		drawcolorcodedstring(
+			o - sbar_fontsize_x * '1 0 0' * stringwidth(s, TRUE),
+			s,
+			sbar_fontsize,
+			sbar_alpha_fg,
+			0
+		);
+		o += sbar_fontsize_y * '0 1 0';
+	}
+	
 	//Sbar_SortFrags();
 	Sbar_UpdatePlayerTeams();
 
 	sb_lines = 24;
-	
+
 	if (sb_showscores)
 		Sbar_DrawScoreboard();
 	else if (intermission == 1)

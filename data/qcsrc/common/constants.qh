@@ -9,7 +9,8 @@
 // Revision 8: race
 // Revision 9: race delta
 // Revision 10: scoreboard force
-#define CSQC_REVISION 9
+// Revision 11: scoreboard unforce; spectator support beginning
+#define CSQC_REVISION 11
 
 // probably put these in common/
 // so server/ and client/ can be synced better
@@ -189,6 +190,7 @@ const float TE_CSQC_CONFIG = 107;
 const float TE_CSQC_SCORESINFO = 108;
 const float TE_CSQC_RACE = 109;
 const float TE_CSQC_FORCESCOREBOARD = 110;
+const float TE_CSQC_SPECTATING = 111;
 
 const float STAT_KH_KEYS = 32;
 const float STAT_CTF_STATE = 33;

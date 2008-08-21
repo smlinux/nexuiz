@@ -110,6 +110,8 @@ void move_out_of_solid(entity e)
 }
 
 string STR_PLAYER = "player";
+string STR_SPECTATOR = "spectator";
+string STR_OBSERVER = "observer";
 
 #if 0
 #define FOR_EACH_CLIENT(v) for(v = world; (v = findflags(v, flags, FL_CLIENT)) != world; )
@@ -1137,3 +1139,21 @@ void precache()
 		ambientsound ('0 0 0', self.noise, VOL_BASE, ATTN_NONE);
 	}
 }
+
+#define WRITESPECTATABLE_MSG_ONE_VARNAME(varname,statement) \
+	entity varname; \
+	varname = msg_entity; \
+	FOR_EACH_REALCLIENT(msg_entity) \
+		if(msg_entity == varname || (msg_entity.classname == STR_SPECTATOR && msg_entity.enemy == varname)) \
+			statement \
+	msg_entity = varname
+#define WRITESPECTATABLE_MSG_ONE(statement) \
+	WRITESPECTATABLE_MSG_ONE_VARNAME(oldmsg_entity, statement)
+#define WRITESPECTATABLE(msg,statement) \
+	if(msg == MSG_ONE) \
+	{ \
+		WRITESPECTATABLE_MSG_ONE(statement); \
+	} \
+	else \
+		statement \
+	float WRITESPECTATABLE_workaround = 0

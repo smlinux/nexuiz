@@ -141,7 +141,16 @@ void CSQC_CheckEngine()
 vector Sbar_GetFontsize()
 {
 	if(csqc_flags & CSQC_FLAG_READPICTURE)
-		return stov(cvar_string("sbar_fontsize"));
+	{
+		vector v;
+		v = stov(cvar_string("sbar_fontsize"));
+		if(v_x == 0)
+			v = '8 8 0';
+		if(v_y == 0)
+			v_y = v_x;
+		v_z = 0;
+		return v;
+	}
 	return '8 8 0' ;
 }
 

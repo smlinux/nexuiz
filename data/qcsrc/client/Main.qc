@@ -644,6 +644,28 @@ void Net_ReadRace()
 	}
 }
 
+void Net_ReadForceScoreboard()
+{
+	sb_showscores_force = ReadByte();
+}
+
+void Net_Reset()
+{
+	race_laptime = 0;
+	race_checkpointtime = 0;
+}
+
+void Net_ReadSpectating()
+{
+	float newspectatee_status;
+	newspectatee_status = ReadByte();
+	if(newspectatee_status == player_localentnum)
+		newspectatee_status = -1; // observing
+	if(newspectatee_status != spectatee_status)
+		Net_Reset();
+	spectatee_status = newspectatee_status;
+}
+
 // CSQC_Parse_TempEntity : Handles all temporary entity network data in the CSQC layer.
 // You must ALWAYS first acquire the temporary ID, which is sent as a byte.
 // Return value should be 1 if CSQC handled the temporary entity, otherwise return 0 to have the engine process the event.
@@ -679,7 +701,11 @@ float CSQC_Parse_TempEntity()
 			bHandled = true;
 			break;
 		case TE_CSQC_FORCESCOREBOARD:
-			sb_showscores_force = true;
+			Net_ReadForceScoreboard();
+			bHandled = true;
+			break;
+		case TE_CSQC_SPECTATING:
+			Net_ReadSpectating();
 			bHandled = true;
 			break;
 		default:

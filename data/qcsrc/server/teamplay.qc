@@ -344,7 +344,7 @@ void InitGameplayMode()
 			cvar_set("timelimit", ftos(timelimit_override));
 	}
 
-	if(g_race_qualifying)
+	if(g_race && g_race_qualifying)
 	{
 		race_fraglimit = cvar("fraglimit");
 		cvar_set("fraglimit", "0");
@@ -407,37 +407,16 @@ void PrintWelcomeMessage(entity pl)
 
 	if(!self.BUTTON_INFO)
 	{
-		if(self.classname == "observer")
-		{
-			if(g_lms)
-			{
-				p = PlayerScore_Add(self, SP_LMS_RANK, 0);
-				if(p >= 666)
-					return centerprint_atprio(self, CENTERPRIO_SPAM, strcat(NEWLINES, "^1Match has already begun\nwait for next round\n\n\n^7press attack to spectate other players"));
-				else if(p > 0)
-					return centerprint_atprio(self, CENTERPRIO_SPAM, strcat(NEWLINES, "^1You have no more lives left\nwait for next round\n\n\n^7press attack to spectate other players"));
-			}
-		}
-		else if(self.classname == "spectator")
-		{
-			if(g_lms)
-			{
-				p = PlayerScore_Add(self, SP_LMS_RANK, 0);
-				if(p)
-					return centerprint_atprio(self, CENTERPRIO_SPAM, strcat(NEWLINES, "spectating ", self.enemy.netname, "\n\n\n^7press attack for next player\npress attack2 for free fly mode"));
-			}
-			if (g_arena)
-				return centerprint_atprio(self, CENTERPRIO_SPAM, strcat(NEWLINES, "spectating ", self.enemy.netname, "\n\n\n^7press attack for next player\npress attack2 for free fly mode"));
-
-			local string specString;
-			specString = strcat(NEWLINES, "spectating ", self.enemy.netname, "\n\n\n^7press jump to play\n^7press attack for next player\npress attack2 for free fly mode");
-			
-			if(time < restart_countdown) //also show the countdown when being a spectator
-				specString = strcat(specString, "\n\n^1Game starts in ", ftos(restartAnnouncer.cnt + 1), " seconds^7");
-			else if (timeoutStatus != 0)
-				specString = strcat(specString, "\n\n", getTimeoutText(1));
-			return centerprint_atprio(self, CENTERPRIO_SPAM, specString);
-		}
+		// TODO get rid of this too
+		local string specString;
+		specString = NEWLINES;
+		if(time < restart_countdown) //also show the countdown when being a spectator
+			specString = strcat(specString, "\n\n^1Game starts in ", ftos(restartAnnouncer.cnt + 1), " seconds^7");
+		else if (timeoutStatus != 0)
+			specString = strcat(specString, "\n\n", getTimeoutText(1));
+		else
+			return;
+		return centerprint_atprio(self, CENTERPRIO_SPAM, specString);
 	}
 
 	if(g_minstagib)
