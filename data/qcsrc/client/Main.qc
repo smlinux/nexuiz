@@ -611,6 +611,7 @@ void Net_ReadRace()
 
 		case RACE_NET_CHECKPOINT_NEXT_SPEC_QUALIFYING:
 			race_laptime = ReadCoord();
+			race_checkpointtime = -99999;
 			// fall through
 		case RACE_NET_CHECKPOINT_NEXT_QUALIFYING:
 			race_nextcheckpoint = ReadByte();

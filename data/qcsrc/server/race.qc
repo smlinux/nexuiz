@@ -71,8 +71,9 @@ void race_SendNextCheckpoint(entity e, float spec)
 
 void race_InitSpectator()
 {
-	if(self.enemy.race_laptime)
-		race_SendNextCheckpoint(self.enemy, 1);
+	if(g_race_qualifying)
+		if(msg_entity.enemy.race_laptime)
+			race_SendNextCheckpoint(msg_entity.enemy, 1);
 }
 
 void race_SendTime(entity e, float cp, float t, float tvalid)

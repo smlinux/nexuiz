@@ -2199,6 +2199,7 @@ void PlayerPreThink (void)
 		self.spectatee_status = 0;
 	if(self.spectatee_status != oldspectatee_status)
 	{
+		msg_entity = self;
 		WriteByte(MSG_ONE, SVC_TEMPENTITY);
 		WriteByte(MSG_ONE, TE_CSQC_SPECTATING);
 		WriteByte(MSG_ONE, self.spectatee_status);

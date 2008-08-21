@@ -1354,7 +1354,7 @@ void Sbar_Draw (void)
 		);
 		o += sbar_fontsize_y * '0 1 0';
 
-		if(spectatee_status != -1)
+		if(spectatee_status == -1)
 			s = "^1Use ^3weapon switching^1 to change the speed";
 		else
 			s = "^1Press ^3secondary fire^1 to observe";
