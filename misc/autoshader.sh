@@ -37,7 +37,7 @@ $s
 		// or: alphafunc GE128
 	}
 	{
-		map $lightmap
+		map \$lightmap
 		blendfunc filter
 		rgbGen identity
 	}
