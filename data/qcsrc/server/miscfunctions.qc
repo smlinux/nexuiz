@@ -1172,6 +1172,9 @@ float ExactTriggerHit()
 {
 	float f, s;
 
+	if not(self.modelindex)
+		return 1;
+
 	s = self.solid;
 	self.solid = SOLID_BSP;
 	ExactTriggerHit_mins = other.absmin + '1 1 1';

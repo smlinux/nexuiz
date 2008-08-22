@@ -355,17 +355,25 @@ void spawnfunc_trigger_counter()
 .float triggerhurttime;
 void trigger_hurt_touch()
 {
+	// only do the EXACTTRIGGER_TOUCH checks when really needed (saves some cpu)
 	if (!other.owner)
 	{
 		if (other.items & IT_KEY1 || other.items & IT_KEY2)	// reset flag
+		{
+			EXACTTRIGGER_TOUCH;
 			other.pain_finished = min(other.pain_finished, time + 2);
+		}
 		else if (other.classname == "rune")			// reset runes
+		{
+			EXACTTRIGGER_TOUCH;
 			other.nextthink = min(other.nextthink, time + 1);
+		}
 	}
 
 	if (other.takedamage)
 	if (other.triggerhurttime < time)
 	{
+		EXACTTRIGGER_TOUCH;
 		other.triggerhurttime = time + 1;
 		Damage (other, self, self, self.dmg, DEATH_HURTTRIGGER, other.origin, '0 0 0');
 	}
@@ -713,6 +721,8 @@ void trigger_impulse_touch1()
 	if (other.deadflag && other.classname == "player")
 		return;
 
+	EXACTTRIGGER_TOUCH;
+
     targ = find(world, targetname, self.target);
     if(!targ)
     {
@@ -758,6 +768,8 @@ void trigger_impulse_touch2()
 	if (other.deadflag && other.classname == "player")
 		return;
 
+	EXACTTRIGGER_TOUCH;
+
     pushdeltatime = time - other.lastpushtime;
     if (pushdeltatime > 0.15) pushdeltatime = 0;
     other.lastpushtime = time;
@@ -791,6 +803,8 @@ void trigger_impulse_touch3()
 
 	if (other.deadflag && other.classname == "player")
 		return;
+
+	EXACTTRIGGER_TOUCH;
 
     pushdeltatime = time - other.lastpushtime;
     if (pushdeltatime > 0.15) pushdeltatime = 0;
@@ -831,7 +845,7 @@ in directional and sperical mode. For damper/accelerator mode this is not nesses
 
 void spawnfunc_trigger_impulse()
 {
-    InitTrigger ();
+	EXACTTRIGGER_INIT;
     if(self.radius)
     {
         if(!self.strength) self.strength = 2000;
