@@ -384,6 +384,8 @@ void ReadyRestart()
 
 	bprint("^1Server is restarting...\n");
 
+	VoteReset();
+
 	// no arena, assault support yet...
 	if(g_arena | g_assault | gameover | intermission_running | race_completing)
 		localcmd("restart\n");
