@@ -1477,6 +1477,14 @@ float WinningCondition_Scores(float limit)
 	// TODO make everything use THIS winning condition (except LMS)
 	WinningConditionHelper();
 	
+	if(teams_matter)
+	{
+		team1_score = TeamScore_GetCompareValue(COLOR_TEAM1);
+		team2_score = TeamScore_GetCompareValue(COLOR_TEAM2);
+		team3_score = TeamScore_GetCompareValue(COLOR_TEAM3);
+		team4_score = TeamScore_GetCompareValue(COLOR_TEAM4);
+	}
+	
 	ClearWinners();
 	if(WinningConditionHelper_winner)
 		WinningConditionHelper_winner.winning = 1;
@@ -1491,7 +1499,7 @@ float WinningCondition_Scores(float limit)
 		WinningConditionHelper_topscore = -WinningConditionHelper_topscore;
 		limit = -limit;
 	}
-	
+
 	return GetWinningCode(limit && WinningConditionHelper_topscore && (WinningConditionHelper_topscore >= limit), WinningConditionHelper_equality);
 }
 

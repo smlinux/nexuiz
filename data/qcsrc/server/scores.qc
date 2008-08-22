@@ -613,3 +613,23 @@ float PlayerScore_Sort(.float field)
 
 	return i;
 }
+
+float TeamScore_GetCompareValue(float t)
+{
+	float s;
+	entity sk;
+
+	if(t <= 0 || t >= 16)
+		error("Reading score of invalid team!");
+
+	sk = teamscorekeepers[t - 1];
+	if not(sk)
+		return -999999999;
+	s = sk.teamscores_primary;
+	if(teamscores_flags_primary & SFL_ZERO_IS_WORST)
+		if(!s)
+			return -999999999;
+	if(teamscores_flags_primary & SFL_LOWER_IS_BETTER)
+		s = -s;
+	return s;
+}

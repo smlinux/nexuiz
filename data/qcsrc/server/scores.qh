@@ -41,6 +41,11 @@ float TeamScore_Add(entity player, float scorefield, float score);
 float TeamScore_AddToTeam(float t, float scorefield, float score);
 
 /**
+ * Returns a value indicating the team score (and higher is better).
+ */
+float TeamScore_GetCompareValue(float t);
+
+/**
  * Adds a score to both the player and the team. Returns the team score if
  * possible, otherwise the player score.
  */
