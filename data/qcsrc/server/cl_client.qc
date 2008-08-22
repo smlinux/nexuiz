@@ -1552,6 +1552,7 @@ void player_powerups (void)
 	if (g_midair)
 		self.spawnshieldtime = max(self.spawnshieldtime, time + cvar("g_midair_shieldtime"));
 
+	if (time > restart_countdown)
 	if (time < self.spawnshieldtime)
 		self.effects = self.effects | (EF_ADDITIVE | EF_FULLBRIGHT);
 }
