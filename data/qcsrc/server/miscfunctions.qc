@@ -1140,20 +1140,48 @@ void precache()
 	}
 }
 
-#define WRITESPECTATABLE_MSG_ONE_VARNAME(varname,statement) \
-	entity varname; \
-	varname = msg_entity; \
-	FOR_EACH_REALCLIENT(msg_entity) \
-		if(msg_entity == varname || (msg_entity.classname == STR_SPECTATOR && msg_entity.enemy == varname)) \
-			statement \
-	msg_entity = varname
-#define WRITESPECTATABLE_MSG_ONE(statement) \
-	WRITESPECTATABLE_MSG_ONE_VARNAME(oldmsg_entity, statement)
-#define WRITESPECTATABLE(msg,statement) \
-	if(msg == MSG_ONE) \
-	{ \
-		WRITESPECTATABLE_MSG_ONE(statement); \
-	} \
-	else \
-		statement \
-	float WRITESPECTATABLE_workaround = 0
+// sorry, but using \ in macros breaks line numbers
+#define WRITESPECTATABLE_MSG_ONE_VARNAME(varname,statement) entity varname; varname = msg_entity; FOR_EACH_REALCLIENT(msg_entity) if(msg_entity == varname || (msg_entity.classname == STR_SPECTATOR && msg_entity.enemy == varname)) statement msg_entity = varname
+#define WRITESPECTATABLE_MSG_ONE(statement) WRITESPECTATABLE_MSG_ONE_VARNAME(oldmsg_entity, statement)
+#define WRITESPECTATABLE(msg,statement) if(msg == MSG_ONE) { WRITESPECTATABLE_MSG_ONE(statement); } else statement float WRITESPECTATABLE_workaround = 0
+
+vector ExactTriggerHit_mins;
+vector ExactTriggerHit_maxs;
+float ExactTriggerHit_Recurse()
+{
+	float s;
+	entity se;
+	float f;
+
+	tracebox('0 0 0', ExactTriggerHit_mins, ExactTriggerHit_maxs, '0 0 0', MOVE_NORMAL, world);
+	if not(trace_ent)
+		return 0;
+	if(trace_ent == self)
+		return 1;
+
+	se = trace_ent;
+	s = se.solid;
+	se.solid = SOLID_NOT;
+	f = ExactTriggerHit_Recurse();
+	se.solid = s;
+
+	return f;
+}
+
+float ExactTriggerHit()
+{
+	float f, s;
+
+	s = self.solid;
+	self.solid = SOLID_BSP;
+	ExactTriggerHit_mins = other.absmin + '1 1 1';
+	ExactTriggerHit_maxs = other.absmax - '1 1 1';
+	f = ExactTriggerHit_Recurse();
+	self.solid = s;
+
+	return f;
+}
+
+// WARNING: this kills the trace globals
+#define EXACTTRIGGER_TOUCH if not(ExactTriggerHit()) return
+#define EXACTTRIGGER_INIT  InitSolidBSPTrigger(); self.solid = SOLID_TRIGGER

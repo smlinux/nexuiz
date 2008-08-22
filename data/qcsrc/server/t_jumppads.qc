@@ -120,6 +120,8 @@ void trigger_push_touch()
 	if (other.deadflag && other.classname == "player")
 		return;
 
+	EXACTTRIGGER_TOUCH;
+
 	if(self.target)
 		self.movedir = trigger_push_calculatevelocity(other.origin, self.enemy, self.height);
 
@@ -239,7 +241,7 @@ void spawnfunc_trigger_push()
 	if (self.angles != '0 0 0')
 		SetMovedir ();
 
-	InitTrigger();
+	EXACTTRIGGER_INIT;
 
 	self.touch = trigger_push_touch;
 

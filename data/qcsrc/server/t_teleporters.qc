@@ -8,6 +8,8 @@ void Teleport_Touch (void)
 	if (!other.flags & FL_CLIENT)	// FIXME: Make missiles firable through the teleport too
 		return;
 
+	EXACTTRIGGER_TOUCH;
+
 	sound (other, CHAN_TRIGGER, "misc/teleport.wav", VOL_BASE, ATTN_NORM);
 	pointparticles(particleeffectnum("teleport"), other.origin, '0 0 0', 1);
 
@@ -125,7 +127,7 @@ void spawnfunc_trigger_teleport (void)
 {
 	self.angles = '0 0 0';
 
-	InitTrigger();
+	EXACTTRIGGER_INIT;
 
 	self.think = teleport_findtarget;
 	self.nextthink = time + 0.2;
