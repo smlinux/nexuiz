@@ -586,6 +586,7 @@ float MapInfo_Get_ByName(string pFilename, float pAllowGenerate, float pGametype
 		fputs(fh, strcat("title ", MapInfo_Map_title, "\n"));
 		fputs(fh, strcat("description ", MapInfo_Map_description, "\n"));
 		fputs(fh, strcat("author ", MapInfo_Map_author, "\n"));
+		fputs(fh, strcat("cdtrack ", ftos(ceil(random() * 9 + 1)), "\n"); // track from 2 to 10
 		if(MapInfo_Map_supportedFeatures & MAPINFO_FEATURE_WEAPONS)       fputs(fh, "has weapons\n");
 		if(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_DEATHMATCH)      fputs(fh, "type dm 30 20\n");
 		if(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_TEAM_DEATHMATCH) fputs(fh, "type tdm 50 20 2\n");
