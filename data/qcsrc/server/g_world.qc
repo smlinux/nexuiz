@@ -166,7 +166,7 @@ float GotoFirstMap()
 float world_already_spawned;
 void spawnfunc_worldspawn (void)
 {
-	float fd, l, complain;
+	float fd, l;
 	string s;
 
 	dprint_load(); // load dprint status from cvar
