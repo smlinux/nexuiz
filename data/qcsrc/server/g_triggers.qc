@@ -393,7 +393,7 @@ entity trigger_hurt_last;
 entity trigger_hurt_first;
 void spawnfunc_trigger_hurt()
 {
-	InitTrigger ();
+	EXACTTRIGGER_INIT;
 	self.touch = trigger_hurt_touch;
 	if (!self.dmg)
 		self.dmg = 1000;

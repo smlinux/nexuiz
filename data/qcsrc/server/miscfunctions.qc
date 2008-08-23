@@ -1187,4 +1187,4 @@ float ExactTriggerHit()
 
 // WARNING: this kills the trace globals
 #define EXACTTRIGGER_TOUCH if not(ExactTriggerHit()) return
-#define EXACTTRIGGER_INIT  InitSolidBSPTrigger(); self.solid = SOLID_TRIGGER
+#define EXACTTRIGGER_INIT  InitSolidBSPTrigger(); self.solid = SOLID_BSP

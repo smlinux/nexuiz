@@ -57,6 +57,8 @@ void swamp_touch(void)
 	if((other.classname != "player")||(other.deadflag != DEAD_NO))
 		return;
 
+	EXACTTRIGGER_TOUCH;
+
 	// Chech if player alredy got a swampslug.
 	if(other.in_swamp != 1) {
 		// If not attach one.
@@ -86,7 +88,7 @@ get slowd down and damaged
 void spawnfunc_trigger_swamp(void)
 {
 	// Init stuff
-	InitTrigger ();
+	EXACTTRIGGER_INIT;
 	self.touch = swamp_touch;	
 
 	// Setup default keys, if missing
