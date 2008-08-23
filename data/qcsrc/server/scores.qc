@@ -436,41 +436,6 @@ void WinningConditionHelper()
 	}
 }
 
-void Score_DebugPrint()
-{
-	entity p, sk;
-	float i, t;
-
-	print("netname");
-	for(i = 0; i < MAX_SCORE; ++i)
-		print(":", scores_label[i]);
-	print("\n");
-	FOR_EACH_PLAYER(p)
-	{
-		sk = p.scorekeeper;
-		print(p.netname);
-		for(i = 0; i < MAX_SCORE; ++i)
-			print(":", ftos(sk.(scores[i])));
-		print("\n");
-	}
-
-	print("teamname");
-	for(i = 0; i < MAX_TEAMSCORE; ++i)
-		print(":", teamscores_label[i]);
-	print("\n");
-	for(t = 0; t < 16; ++t)
-	{
-		sk = teamscorekeepers[t];
-		if(sk)
-		{
-			print(ftos(t));
-			for(i = 0; i < MAX_TEAMSCORE; ++i)
-				print(":", ftos(sk.(teamscores[i])));
-			print("\n");
-		}
-	}
-}
-
 string GetScoreLogLabel(string label, float fl)
 {
 	if(fl & SFL_LOWER_IS_BETTER)
@@ -600,17 +565,21 @@ float PlayerTeamScore_Compare(entity p1, entity p2)
 		if(p1.team != p2.team)
 		{
 			entity t1, t2;
-			t1 = teamscorekeepers[p1.team];
-			t2 = teamscorekeepers[p2.team];
-			return TeamScore_Compare(t1, t2);
+			float r;
+			t1 = teamscorekeepers[p1.team - 1];
+			t2 = teamscorekeepers[p2.team - 1];
+			r = TeamScore_Compare(t1, t2);
+			if(r == 0) // ensure a deterministic order
+				r = p1.team - p2.team;
+			return r;
 		}
 	
 	return PlayerScore_Compare(p1.scorekeeper, p2.scorekeeper);
 }
 
-float PlayerScore_Sort(.float field)
+entity PlayerScore_Sort(.float field)
 {
-	entity p, plist, pprev, pbest, pbestprev;
+	entity p, plist, pprev, pbest, pbestprev, pfirst, plast;
 	float i;
 	plist = world;
 
@@ -623,6 +592,8 @@ float PlayerScore_Sort(.float field)
 		plist = p;
 	}
 	// Now plist points to the whole list.
+	
+	pfirst = plast = world;
 
 	i = 0;
 	while(plist)
@@ -646,9 +617,14 @@ float PlayerScore_Sort(.float field)
 		pbest.chain = world;
 
 		pbest.field = ++i;
+		if not(pfirst)
+			pfirst = pbest;
+		if(plast)
+			plast.chain = pbest;
+		plast = pbest;
 	}
 
-	return i;
+	return pfirst;
 }
 
 float TeamScore_GetCompareValue(float t)
@@ -670,3 +646,136 @@ float TeamScore_GetCompareValue(float t)
 		s = -s;
 	return s;
 }
+
+#define NAMEWIDTH 22
+#define SCORESWIDTH 58
+// TODO put this somewhere in common?
+string Score_NicePrint_ItemColor(float vflags)
+{
+	if(vflags & SFL_SORT_PRIO_PRIMARY)
+		return "^3";
+	else if(vflags & SFL_SORT_PRIO_SECONDARY)
+		return "^5";
+	else
+		return "^7";
+}
+
+void Score_NicePrint_Team(entity to, float t, float w)
+{
+	string s, s2;
+	float i;
+	entity sk;
+	float fl, sc;
+	s = "";
+
+	sk = teamscorekeepers[t - 1];
+	if(sk)
+	{
+		s = strcat(s, ColoredTeamName(t));
+		for(i = 0; i < MAX_TEAMSCORE; ++i)
+			if(teamscores_label[i] != "")
+			{
+				fl = teamscores_flags[i];
+				sc = sk.(teamscores[i]);
+				s = strcat(s, " ", Score_NicePrint_ItemColor(fl), ScoreString(fl, sc));
+			}
+	}
+	else
+		s = "Scores:";
+
+	s = strcat(s, strpad(max(0, NAMEWIDTH - strlennocol(s)), ""));
+	
+	for(i = 0; i < MAX_SCORE; ++i)
+		if(scores_label[i] != "")
+		{
+			fl = scores_flags[i];
+			s2 = scores_label[i];
+			s = strcat(s, " ", Score_NicePrint_ItemColor(fl), strpad(-w, substring(s2, 0, w)));
+		}
+
+	print_to(to, s);
+}
+
+void Score_NicePrint_Player(entity to, entity p, float w)
+{
+	string s;
+	float i;
+	entity sk;
+	float fl, sc;
+	s = "  ";
+
+	sk = p.scorekeeper;
+
+	s = strcat(s, p.netname);
+	for(;;)
+	{
+		i = strlennocol(s) - NAMEWIDTH;
+		if(i > 0)
+			s = substring(s, 0, strlen(s) - i);
+		else
+		{
+			s = strcat(s, strpad(i, ""));
+			break;
+		}
+	}
+	
+	for(i = 0; i < MAX_SCORE; ++i)
+		if(scores_label[i] != "")
+		{
+			fl = scores_flags[i];
+			sc = sk.(scores[i]);
+			s = strcat(s, " ", Score_NicePrint_ItemColor(fl), strpad(-w, ScoreString(fl, sc)));
+		}
+
+	print_to(to, s);
+}
+
+void Score_NicePrint_Spectators(entity to)
+{
+	print_to(to, "Spectators:");
+}
+
+void Score_NicePrint_Spectator(entity to, entity p)
+{
+	print_to(to, strcat("  ", p.netname));
+}
+
+.float score_dummyfield;
+void Score_NicePrint(entity to)
+{
+	entity p;
+	float t, i;
+	float w;
+
+	t = 0;
+	for(i = 0; i < MAX_SCORE; ++i)
+		if(scores_label[i] != "")
+			++t;
+	w = bound(6, floor(SCORESWIDTH / t - 1), 9);
+
+	p = PlayerScore_Sort(score_dummyfield);
+	t = -1;
+
+	if(!teamscores_entities_count)
+		Score_NicePrint_Team(to, t, w);
+	while(p)
+	{
+		if(teamscores_entities_count)
+			if(t != p.team)
+				Score_NicePrint_Team(to, p.team, w);
+		Score_NicePrint_Player(to, p, w);
+		t = p.team;
+		p = p.chain;
+	}
+	
+	t = 0;
+	FOR_EACH_CLIENT(p)
+	if(p.classname != "player")
+	{
+		if not(t)
+			Score_NicePrint_Spectators(to);
+		Score_NicePrint_Spectator(to, p);
+		t = 1;
+	}
+}
+

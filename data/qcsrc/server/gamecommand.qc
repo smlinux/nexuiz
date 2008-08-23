@@ -202,13 +202,15 @@ void GameCommand(string command)
 			print("Client not found\n");
 		return;
 	}
-	if (argv(0) == "sdp")
+	if (argv(0) == "teamstatus")
 	{
-		Score_DebugPrint();
+		Score_NicePrint(world);
+		return;
 	}
 	if (argv(0) == "allready")
 	{
 		ReadyRestart();
+		return;
 	}
 
 	print("Invalid command. For a list of supported commands, try sv_cmd help.\n");

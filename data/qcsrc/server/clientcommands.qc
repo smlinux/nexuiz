@@ -347,6 +347,8 @@ void SV_ParseClientCommand(string s) {
 		if(cvar("sv_timeout")) {
 			evaluateResumeGame();
 		}
+	} else if(argv(0) == "teamstatus") {
+		Score_NicePrint(self);
 	} else {
 		//if(ctf_clientcommand())
 		//	return;

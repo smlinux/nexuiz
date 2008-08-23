@@ -436,3 +436,35 @@ string mmsss(float tenths)
 	s = ftos(1000 + tenths);
 	return strcat(ftos(minutes), ":", substring(s, 1, 2), ".", substring(s, 3, 1));
 }
+
+string ScoreString(float vflags, float value)
+{
+	string valstr;
+	float l;
+
+	value = floor(value + 0.5); // round
+
+	if((value == 0) && (vflags & (SFL_HIDE_ZERO | SFL_RANK | SFL_TIME)))
+		valstr = "";
+	else if(vflags & SFL_RANK)
+	{
+		valstr = ftos(value);
+		l = strlen(valstr);
+		if((l >= 2) && (substring(valstr, l - 2, 1) == "1"))
+			valstr = strcat(valstr, "th");
+		else if(substring(valstr, l - 1, 1) == "1")
+			valstr = strcat(valstr, "st");
+		else if(substring(valstr, l - 1, 1) == "2")
+			valstr = strcat(valstr, "nd");
+		else if(substring(valstr, l - 1, 1) == "3")
+			valstr = strcat(valstr, "rd");
+		else
+			valstr = strcat(valstr, "th");
+	}
+	else if(vflags & SFL_TIME)
+		valstr = mmsss(value);
+	else
+		valstr = ftos(value);
+	
+	return valstr;
+}

@@ -84,9 +84,9 @@ void ScoreInfo_Write(float targ);
 void Score_ClearAll();
 
 /**
- * Prints the scores (ugly!) to the console.
+ * Prints the scores to the console of a player.
  */
-void Score_DebugPrint();
+void Score_NicePrint(entity to);
 
 /**
  * Sets the following results for the current scores entities.
@@ -117,5 +117,6 @@ string GetTeamScoreString(float tm, float shortString);
 /**
  * Sorts the players and stores their place in the given field, starting with
  * 1. Non-players get 0 written into that field.
+ * Returns the beginning of a sorted chain of the non-spectators.
  */
-float PlayerScore_Sort(.float field);
+entity PlayerScore_Sort(.float field);
