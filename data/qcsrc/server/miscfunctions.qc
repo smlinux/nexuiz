@@ -1153,7 +1153,7 @@ float ExactTriggerHit_Recurse()
 	entity se;
 	float f;
 
-	tracebox('0 0 0', ExactTriggerHit_mins, ExactTriggerHit_maxs, '0 0 0', MOVE_NORMAL, world);
+	tracebox('0 0 0', ExactTriggerHit_mins, ExactTriggerHit_maxs, '0 0 0', MOVE_NORMAL, other);
 	if not(trace_ent)
 		return 0;
 	if(trace_ent == self)
@@ -1187,4 +1187,4 @@ float ExactTriggerHit()
 
 // WARNING: this kills the trace globals
 #define EXACTTRIGGER_TOUCH if not(ExactTriggerHit()) return
-#define EXACTTRIGGER_INIT  InitSolidBSPTrigger(); self.solid = SOLID_BSP
+#define EXACTTRIGGER_INIT  InitSolidBSPTrigger(); self.solid = SOLID_TRIGGER
