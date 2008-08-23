@@ -187,6 +187,8 @@ void multi_touch()
 			return;		// not facing the right way
 	}
 
+	EXACTTRIGGER_TOUCH;
+
 	self.enemy = other;
 	multi_trigger ();
 };
@@ -238,7 +240,7 @@ void spawnfunc_trigger_multiple()
 		self.wait = 0.2;
 	self.use = multi_use;
 
-	InitTrigger ();
+	EXACTTRIGGER_INIT;
 
 	if (self.health)
 	{
