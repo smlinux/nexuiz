@@ -34,8 +34,8 @@ void reset_map()
 
 	race_ReadyRestart();
 	
-	self = nextent(world);
-	while(self)
+	for(self = world; (self = nextent(self)); )
+	if(clienttype(self) == CLIENTTYPE_NOTACLIENT)
 	{
 		if(self.classname == STR_ITEM_KH_KEY)
 		{
@@ -102,7 +102,6 @@ void reset_map()
 		{
 			self.team = self.team_saved;
 		}
-		self = nextent(self);
 	}
 
 	// Moving the player reset code here since the player-reset depends
