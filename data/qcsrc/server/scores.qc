@@ -242,7 +242,7 @@ void PlayerScore_Clear(entity player)
 void Score_ClearAll()
 {
 	entity p, sk;
-	float i;
+	float i, t;
 	FOR_EACH_CLIENTSLOT(p)
 	{
 		sk = p.scorekeeper;
@@ -256,9 +256,9 @@ void Score_ClearAll()
 			sk.(scores[i]) = 0;
 		}
 	}
-	for(i = 0; i < 16; ++i)
+	for(t = 0; t < 16; ++t)
 	{
-		sk = teamscorekeepers[i];
+		sk = teamscorekeepers[t];
 		if(!sk)
 			continue;
 		for(i = 0; i < MAX_SCORE; ++i)
