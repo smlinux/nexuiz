@@ -336,57 +336,39 @@ void spawnfunc_worldspawn (void)
 		cvar_set("timelimit", "0");
 	}
 
-	complain = (whichpack(strcat("maps/", mapname, ".cfg")) != "");
-	fd = fopen(strcat("maps/", mapname, ".cfg"), FILE_READ);
-	if(fd != -1)
+	if(whichpack(strcat("maps/", mapname, ".cfg")) != "")
 	{
-		while((s = fgets(fd)))
+		fd = fopen(strcat("maps/", mapname, ".cfg"), FILE_READ);
+		if(fd != -1)
 		{
-			l = tokenize(s);
-			if(l < 2)
-				continue;
-			if(argv(0) == "cd")
+			while((s = fgets(fd)))
 			{
-				if(complain)
+				l = tokenize(s);
+				if(l < 2)
+					continue;
+				if(argv(0) == "cd")
 				{
-					bprint("Found ^1DEPRECATED^7 cd loop command in .cfg file; put this line in mapinfo instead:\n");
-					bprint("  cdtrack ", argv(2), "\n");
+					print("Found ^1DEPRECATED^7 cd loop command in .cfg file; put this line in mapinfo instead:\n");
+					print("  cdtrack ", argv(2), "\n");
+				}
+				else if(argv(0) == "fog")
+				{
+					print("Found ^1DEPRECATED^7 fog command in .cfg file; put this line in worldspawn in the .map/.bsp/.ent file instead:\n");
+					print("  \"fog\" \"", s, "\"\n");
+				}
+				else if(argv(0) == "set")
+				{
+					print("Found ^1DEPRECATED^7 set command in .cfg file; put this line in mapinfo instead:\n");
+					print("  clientsettemp_for_type all ", argv(1), " ", argv(2), "\n");
+				}
+				else if(argv(0) != "//")
+				{
+					print("Found ^1DEPRECATED^7 set command in .cfg file; put this line in mapinfo instead:\n");
+					print("  clientsettemp_for_type all ", argv(0), " ", argv(1), "\n");
 				}
 			}
-			else if(argv(0) == "fog")
-			{
-				s = "";
-				while(l >= 2)
-				{
-					--l;
-					s = strcat(argv(l), " ", s);
-				}
-				s = substring(s, 0, strlen(s) - 1);
-				if(complain)
-				{
-					bprint("Found ^1DEPRECATED^7 fog command in .cfg file; put this line in worldspawn in the .map/.bsp/.ent file instead:\n");
-					bprint("  \"fog\" \"", s, "\"\n");
-				}
-				world.fog = strzone(s);
-			}
-			else if(argv(0) == "set")
-			{
-				if(complain)
-				{
-					bprint("Found ^1DEPRECATED^7 set command in .cfg file; put this line in mapinfo instead:\n");
-					bprint("  clientsettemp_for_type all ", argv(1), " ", argv(2), "\n");
-				}
-			}
-			else if(argv(0) != "//")
-			{
-				if(complain)
-				{
-					bprint("Found ^1DEPRECATED^7 set command in .cfg file; put this line in mapinfo instead:\n");
-					bprint("  clientsettemp_for_type all ", argv(0), " ", argv(1), "\n");
-				}
-			}
+			fclose(fd);
 		}
-		fclose(fd);
 	}
 
 	next_pingtime = time + 5;
