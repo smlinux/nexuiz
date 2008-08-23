@@ -274,6 +274,7 @@ void InitGameplayMode()
 
 		if(cvar("g_race_teams"))
 		{
+			g_race_qualifying = 0; // not supported!
 			ActivateTeamplay();
 			teams_matter = 1;
 			race_teams = bound(2, cvar("g_race_teams"), 4);
