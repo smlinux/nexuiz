@@ -48,6 +48,7 @@ And you should be done!
 ============================================*/
 
 .string aiment_classname;
+.float aiment_deadflag;
 void SetMovetypeFollow(entity ent, entity e)
 {
 	ent.movetype = MOVETYPE_FOLLOW; // make the hole follow
@@ -57,12 +58,17 @@ void SetMovetypeFollow(entity ent, entity e)
 	ent.view_ofs = ent.origin - e.origin; // relative origin
 	ent.v_angle = ent.angles - e.angles; // relative angles
 	ent.aiment_classname = strzone(e.classname);
+	ent.aiment_deadflag = e.deadflag;
 }
 float LostMovetypeFollow(entity ent)
 {
 	if(ent.aiment)
+	{
 		if(ent.aiment.classname != ent.aiment_classname)
 			return 1;
+		if(ent.aiment.deadflag != ent.aiment_deadflag)
+			return 1;
+	}
 	return 0;
 }
 
