@@ -98,6 +98,10 @@ void CSQC_Shutdown(void)
 	remove(teams);
 	remove(players);
 	db_close(configdb);
+
+	entity e;
+	for(e = world; (e = find(e, classname, "saved_cvar_value")); )
+			cvar_set(e.netname, e.message);
 }
 
 .float has_team;
@@ -238,6 +242,18 @@ float GameCommand(string msg)
 	if(cmd == "mv_download") {
 		Cmd_MapVote_MapDownload(argc);
 		return true;
+	}
+	else if(cmd == "settemp") {
+		entity e;
+		for(e = world; (e = find(e, classname, "saved_cvar_value")); )
+			if(e.netname == argv(1))
+				goto saved;
+		e = spawn();
+		e.classname = "saved_cvar_value";
+		e.netname = strzone(argv(1));
+		e.message = strzone(cvar_string(argv(1)));
+:saved
+		cvar_set(argv(1), argv(2));
 	}
 	
 	return false;
