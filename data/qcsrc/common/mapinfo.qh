@@ -20,6 +20,7 @@ string MapInfo_Map_bspname;
 string MapInfo_Map_title;
 string MapInfo_Map_description;
 string MapInfo_Map_author;
+string MapInfo_Map_clientstuff;
 float MapInfo_Map_supportedGametypes;
 float MapInfo_Map_supportedFeatures;
 

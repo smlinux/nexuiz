@@ -1102,10 +1102,8 @@ void ClientConnect (void)
 
 	self.welcomemessage_time = 0;
 
+	stuffcmd(self, strcat(clientstuff, "\n"));
 	stuffcmd(self, strcat("exec maps/", mapname, ".cfg\n"));
-	// TODO: is this being used for anything else than cd tracks?
-	// Remember: SVC_CDTRACK exists. Maybe it should be used.
-	//
 	stuffcmd(self, "cl_particles_reloadeffects\n");
 
 	FixClientCvars(self);

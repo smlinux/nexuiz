@@ -474,6 +474,7 @@ void _MapInfo_Map_Reset()
 	MapInfo_Map_author = "<AUTHOR>";
 	MapInfo_Map_supportedGametypes = 0;
 	MapInfo_Map_supportedFeatures = 0;
+	MapInfo_Map_clientstuff = "";
 }
 
 void _MapInfo_Map_ApplyGametype(string s, float pWantedType, float pThisType)
@@ -535,6 +536,23 @@ float MapInfo_Type_FromString(string t)
 	else if(t == "race")  return MAPINFO_TYPE_RACE;
 	else if(t == "all")   return MAPINFO_TYPE_ALL;
 	else                  return 0;
+}
+
+float cvar_value_issafe(string s)
+{
+	if(strstrofs(s, "\"", 0) >= 0)
+		return 0;
+	if(strstrofs(s, "\\", 0) >= 0)
+		return 0;
+	if(strstrofs(s, ";", 0) >= 0)
+		return 0;
+	if(strstrofs(s, "$", 0) >= 0)
+		return 0;
+	if(strstrofs(s, "\r", 0) >= 0)
+		return 0;
+	if(strstrofs(s, "\n", 0) >= 0)
+		return 0;
+	return 1;
 }
 
 // load info about a map by name into the MapInfo_Map_* globals
@@ -643,17 +661,9 @@ float MapInfo_Get_ByName(string pFilename, float pAllowGenerate, float pGametype
 				if(f & pGametypeToSet)
 				{
 					t = car(s); s = cdr(s);
-					if(strstrofs(t, "\"", 0) >= 0)
+					if not(cvar_value_issafe(t))
 						print("Map ", pFilename, " contains a potentially harmful setting, ignored\n");
-					else if(strstrofs(t, "\\", 0) >= 0)
-						print("Map ", pFilename, " contains a potentially harmful setting, ignored\n");
-					else if(strstrofs(t, ";", 0) >= 0)
-						print("Map ", pFilename, " contains a potentially harmful setting, ignored\n");
-					else if(strstrofs(s, "\"", 0) >= 0)
-						print("Map ", pFilename, " contains a potentially harmful setting, ignored\n");
-					else if(strstrofs(s, "\\", 0) >= 0)
-						print("Map ", pFilename, " contains a potentially harmful setting, ignored\n");
-					else if(strstrofs(s, ";", 0) >= 0)
+					else if not (cvar_value_issafe(s))
 						print("Map ", pFilename, " contains a potentially harmful setting, ignored\n");
 					else
 					{
@@ -665,6 +675,44 @@ float MapInfo_Get_ByName(string pFilename, float pAllowGenerate, float pGametype
 			else
 			{
 				dprint("Map ", pFilename, " has a setting for unknown game type ", t, ", ignored\n");
+			}
+		}
+		else if(t == "clientsettemp_for_type")
+		{
+			t = car(s); s = cdr(s);
+			if((f = MapInfo_Type_FromString(t)))
+			{
+				if(f & pGametypeToSet)
+				{
+					t = car(s); s = cdr(s);
+					if not(cvar_value_issafe(t))
+						print("Map ", pFilename, " contains a potentially harmful client setting, ignored\n");
+					else if not (cvar_value_issafe(s))
+						print("Map ", pFilename, " contains a potentially harmful client setting, ignored\n");
+					else
+					{
+						dprint("Applying temporary client setting ", t, " := ", s, "\n");
+						MapInfo_Map_clientstuff = strcat(
+							MapInfo_Map_clientstuff, "cl_cmd settemp \"", t, "\" \"", s, "\"\n"
+						);
+					}
+				}
+			}
+			else
+			{
+				dprint("Map ", pFilename, " has a client setting for unknown game type ", t, ", ignored\n");
+			}
+		}
+		else if(t == "cdtrack")
+		{
+			if(pGametypeToSet)
+			{
+				if not(cvar_value_issafe(t))
+					print("Map ", pFilename, " contains a potentially harmful cdtrack, ignored\n");
+				else
+					MapInfo_Map_clientstuff = strcat(
+						MapInfo_Map_clientstuff, "cd loop \"", s, "\"\n"
+					);
 			}
 		}
 		else
@@ -851,7 +899,6 @@ void MapInfo_LoadMapSettings(string s) // to be called from worldspawn
 	}
 	cvar_settemp_restore();
 	MapInfo_Get_ByName(s, 1, MapInfo_CurrentGametype());
-	MapInfo_ClearTemps();
 }
 
 void MapInfo_ClearTemps()
@@ -860,6 +907,7 @@ void MapInfo_ClearTemps()
 	MapInfo_Map_title = string_null;
 	MapInfo_Map_description = string_null;
 	MapInfo_Map_author = string_null;
+	MapInfo_Map_clientstuff = string_null;
 	MapInfo_Map_supportedGametypes = 0;
 	MapInfo_Map_supportedFeatures = 0;
 }
