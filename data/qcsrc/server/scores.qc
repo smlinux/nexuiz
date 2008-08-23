@@ -57,14 +57,26 @@ vector ScoreField_Compare(entity t1, entity t2, .float field, float fieldflags, 
  * teamscore entities
  */
 
-float TeamScore_SendEntity(entity to)
+float TeamScore_SendEntity(entity to, float sendflags)
 {
 	float i;
 
 	WriteByte(MSG_ENTITY, ENT_CLIENT_TEAMSCORES);
 	WriteByte(MSG_ENTITY, self.team - 1);
+#if MAX_TEAMSCORE <= 3
 	for(i = 0; i < MAX_TEAMSCORE; ++i)
 		WriteShort(MSG_ENTITY, self.teamscores[i]);
+#else
+#if MAX_TEAMSCORE <= 8
+	WriteByte(MSG_ENTITY, sendflags);
+#else
+	WriteShort(MSG_ENTITY, sendflags);
+#endif
+	float p;
+	for(i = 0, p = 1; i < MAX_TEAMSCORE; ++i, p *= 2)
+		if(sendflags & p)
+			WriteShort(MSG_ENTITY, self.teamscores[i]);
+#endif
 
 	return TRUE;
 }
@@ -76,7 +88,7 @@ void TeamScore_Spawn(float t, string name)
 	ts.classname = "csqc_score_team";
 	ts.SendEntity = TeamScore_SendEntity;
 	ts.netname = name; // not used yet, FIXME
-	ts.Version = 1; // immediately send, so csqc knows about the team
+	//ts.SendFlags = SENDFLAGS_CREATE; // immediately send, so csqc knows about the team
 	ts.team = t;
 	Net_LinkEntity(ts);
 	teamscorekeepers[t - 1] = ts;
@@ -93,7 +105,8 @@ float TeamScore_AddToTeam(float t, float scorefield, float score)
 	if(!s)
 		error("Adding score to unknown team!");
 	if(score)
-		s.Version += 1;
+		if(teamscores_label[scorefield] != "")
+			s.SendFlags |= pow(2, scorefield);
 	return (s.(teamscores[scorefield]) += score);
 }
 
@@ -181,14 +194,26 @@ void ScoreInfo_Init(float teams)
  * per-player score entities
  */
 
-float PlayerScore_SendEntity()
+float PlayerScore_SendEntity(entity to, float sendflags)
 {
 	float i;
 
 	WriteByte(MSG_ENTITY, ENT_CLIENT_SCORES);
 	WriteByte(MSG_ENTITY, num_for_edict(self.owner));
+#if MAX_SCORE <= 3
 	for(i = 0; i < MAX_SCORE; ++i)
 		WriteShort(MSG_ENTITY, self.scores[i]);
+#else
+#if MAX_SCORE <= 8
+	WriteByte(MSG_ENTITY, sendflags);
+#else
+	WriteShort(MSG_ENTITY, sendflags);
+#endif
+	float p;
+	for(i = 0, p = 1; i < MAX_SCORE; ++i, p *= 2)
+		if(sendflags & p)
+			WriteShort(MSG_ENTITY, self.scores[i]);
+#endif
 
 	return TRUE;
 }
@@ -206,8 +231,12 @@ void PlayerScore_Clear(entity player)
 
 	sk = player.scorekeeper;
 	for(i = 0; i < MAX_SCORE; ++i)
+	{
+		if(sk.(scores[i]) != 0)
+			if(scores_label[i] != "")
+				sk.SendFlags |= pow(2, i);
 		sk.(scores[i]) = 0;
-	sk.Version += 1;
+	}
 }
 
 void Score_ClearAll()
@@ -220,8 +249,12 @@ void Score_ClearAll()
 		if(!sk)
 			continue;
 		for(i = 0; i < MAX_SCORE; ++i)
+		{
+			if(sk.(scores[i]) != 0)
+				if(scores_label[i] != "")
+					sk.SendFlags |= pow(2, i);
 			sk.(scores[i]) = 0;
-		sk.Version += 1;
+		}
 	}
 	for(i = 0; i < 16; ++i)
 	{
@@ -229,8 +262,12 @@ void Score_ClearAll()
 		if(!sk)
 			continue;
 		for(i = 0; i < MAX_SCORE; ++i)
+		{
+			if(sk.(teamscores[i]) != 0)
+				if(teamscores_label[i] != "")
+					sk.SendFlags |= pow(2, i);
 			sk.(teamscores[i]) = 0;
-		sk.Version += 1;
+		}
 	}
 }
 
@@ -241,7 +278,6 @@ void PlayerScore_Attach(entity player)
 		error("player already has a scorekeeper");
 	sk = spawn();
 	sk.owner = player;
-	sk.Version = 1;
 	sk.SendEntity = PlayerScore_SendEntity;
 	Net_LinkEntity(sk);
 	player.scorekeeper = sk;
@@ -263,7 +299,8 @@ float PlayerScore_Add(entity player, float scorefield, float score)
 	if(!s)
 		error("Adding score to unknown player!");
 	if(score)
-		s.Version += 1;
+		if(scores_label[scorefield] != "")
+			s.SendFlags |= pow(2, scorefield);
 	return (s.(scores[scorefield]) += score);
 }
 

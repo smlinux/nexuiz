@@ -10,7 +10,8 @@
 // Revision 9: race delta
 // Revision 10: scoreboard force
 // Revision 11: scoreboard unforce; spectator support beginning
-#define CSQC_REVISION 11
+// Revision 12: smaller scores updates (SERVER: requires new engine)
+#define CSQC_REVISION 12
 
 // probably put these in common/
 // so server/ and client/ can be synced better

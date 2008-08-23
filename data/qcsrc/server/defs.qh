@@ -446,7 +446,8 @@ float tracebox_hits_trigger_hurt(vector start, vector mi, vector ma, vector end)
 float next_pingtime;
 
 .float Version;
-.float(entity to) SendEntity;
+.float SendFlags;
+.float(entity to, float sendflags) SendEntity;
 
 // player sounds, voice messages
 .string playersound_attack;

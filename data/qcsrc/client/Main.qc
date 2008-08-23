@@ -338,8 +338,21 @@ void Ent_ReadPlayerScore()
 
 	SetTeam(o, Team);
 
+#if MAX_SCORE <= 3
 	for(i = 0; i < MAX_SCORE; ++i)
 		o.(scores[i]) = ReadShort();
+#else
+	float sf;
+#if MAX_SCORE <= 8
+	sf = ReadByte();
+#else
+	sf = ReadShort();
+#endif
+	float p;
+	for(i = 0, p = 1; i < MAX_SCORE; ++i, p *= 2)
+		if(sf & p)
+			o.(scores[i]) = ReadShort();
+#endif
 
 	Sbar_UpdatePlayerPos(o);
 }
@@ -352,8 +365,21 @@ void Ent_ReadTeamScore()
 	self.team = ReadByte();
 	o = self.owner = GetTeam(self.team, true);
 
+#if MAX_TEAMSCORE <= 3
 	for(i = 0; i < MAX_TEAMSCORE; ++i)
 		o.(teamscores[i]) = ReadShort();
+#else
+	float sf;
+#if MAX_TEAMSCORE <= 8
+	sf = ReadByte();
+#else
+	sf = ReadShort();
+#endif
+	float p;
+	for(i = 0, p = 1; i < MAX_TEAMSCORE; ++i, p *= 2)
+		if(sf & p)
+			o.(teamscores[i]) = ReadShort();
+#endif
 
 	Sbar_UpdateTeamPos(o);
 }
