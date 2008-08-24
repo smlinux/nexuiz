@@ -76,6 +76,7 @@ Braden "meoblast001" Walters - Music
 Amos "torus" Dudley - Announcer voices
 William "Willis" Weilep - Master server host
 Tyler "-z-" Mulligan - Site Design
+"sev" - "Wicked" menu skins
 
 Qantourisc
 Tymo
