@@ -356,8 +356,9 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 	local float take, save, waves, sdelay;
 
 	if(self.hook)
-		if(self.hook.aiment == attacker)
-			RemoveGrapplingHook(self); // STOP THAT, you parasite!
+		if(self.hook.aiment)
+			if(self.hook.aiment == attacker)
+				RemoveGrapplingHook(self); // STOP THAT, you parasite!
 
 	damage = damage * bound(1.0, self.cvar_cl_handicap, 100.0);
 	if(sv_gentle > 0) {
