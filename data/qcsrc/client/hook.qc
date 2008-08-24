@@ -1,10 +1,11 @@
-vector HookStart[255];
-vector HookEnd[255];
-float HookKillTime[255];
+.vector HookStart;
+.vector HookEnd;
+.float HookKillTime;
 void Net_GrapplingHook()
 {
 	float i;
 	vector start, end;
+	entity p;
 
 	i = ReadShort();
 	end_x = ReadCoord();
@@ -18,9 +19,13 @@ void Net_GrapplingHook()
 		return;
 	--i;
 
-	HookKillTime[i] = time + 0.1;
-	HookStart[i] = start;
-	HookEnd[i] = end;
+	p = playerslots[i];
+	if(!p)
+		return;
+
+	p.HookKillTime = time + 0.1;
+	p.HookStart = start;
+	p.HookEnd = end;
 }
 
 void Draw_GrapplingHookLine(vector from, vector to, float thickness, vector org, vector view_forward)
@@ -54,19 +59,23 @@ void Draw_GrapplingHook()
 {
 	float i;
 	vector a, b, o;
+	entity e;
 
 	o = pmove_org + '0 0 1' * getstati(STAT_VIEWHEIGHT);
 	makevectors(input_angles);
 
 	for(i = 0; i < 255; ++i)
 	{
-		if(time >= HookKillTime[i])
+		e = playerslots[i];
+		if(!e)
+			continue;
+		if(time >= e.HookKillTime)
 			continue;
 		if(i == player_localentnum - 1)
 			a = o + v_forward * 8 - v_right * 8 + v_up * -12;
 		else
-			a = HookStart[i];
-		b = HookEnd[i];
+			a = e.HookStart;
+		b = e.HookEnd;
 		Draw_GrapplingHookLine(a, b, 8, o, v_forward);
 	}
 }
