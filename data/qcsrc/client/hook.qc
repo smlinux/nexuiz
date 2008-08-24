@@ -47,7 +47,7 @@ void Draw_GrapplingHookLine(vector from, vector to, float thickness, vector org,
 	C = to + thickdir * (thickness / 2);
 	D = to - thickdir * (thickness / 2);
 
-	R_BeginPolygon("particles/nexbeam", DRAWFLAG_ADDITIVE);
+	R_BeginPolygon("particles/hookbeam", 0);
 		R_PolygonVertex(A, '0 0 0', '.5 1 0', 1);
 		R_PolygonVertex(B, '1 0 0', '.5 1 0', 1);
 		R_PolygonVertex(C, '1 0 0' + length_tex * '0 1 0', '.5 1 0', 1);
