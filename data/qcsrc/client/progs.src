@@ -21,6 +21,8 @@ ctf.qc
 sbar.qc
 mapvoting.qc
 
+hook.qc
+
 Main.qc
 View.qc
 

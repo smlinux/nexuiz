@@ -59,3 +59,5 @@ float mod(float a, float b) { return a - (floor(a / b) * b); }
 string GametypeNameFromType(float g);
 string mmsss(float t);
 string ScoreString(float vflags, float value);
+
+vector cross(vector a, vector b);

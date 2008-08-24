@@ -754,6 +754,10 @@ float CSQC_Parse_TempEntity()
 			Net_ReadSpectating();
 			bHandled = true;
 			break;
+		case 13: // TE_BEAM
+			Net_GrapplingHook();
+			bHandled = true;
+			break;
 		default:
 			// No special logic for this temporary entity; return 0 so the engine can handle it
 			bHandled = false;

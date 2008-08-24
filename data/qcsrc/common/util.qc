@@ -468,3 +468,11 @@ string ScoreString(float vflags, float value)
 	
 	return valstr;
 }
+
+vector cross(vector a, vector b)
+{
+	return
+		'1 0 0' * (a_y * b_z - a_z * b_y)
+	+	'0 1 0' * (a_z * b_x - a_x * b_z)
+	+	'0 0 1' * (a_x * b_y - a_y * b_x);
+}

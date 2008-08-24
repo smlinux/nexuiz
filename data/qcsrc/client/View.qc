@@ -52,6 +52,7 @@ void CSQC_UpdateView(void)
 	R_AddEntities(MASK_NORMAL | MASK_ENGINE | MASK_ENGINEVIEWMODELS);
 
 	// Render the Scene
+	Draw_GrapplingHook();
 	R_RenderScene();
 
 	// Draw the mouse cursor

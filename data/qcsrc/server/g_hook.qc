@@ -181,7 +181,7 @@ void GrapplingHookThink()
 	}
 
 	makevectors(self.angles_x * '-1 0 0' + self.angles_y * '0 1 0');
-	te_beam(self, self.origin + v_forward * (-9), org);
+	te_beam(self.owner, self.origin + v_forward * (-9), org);
 }
 
 void GrapplingHookTouch (void)
