@@ -93,7 +93,7 @@ void Draw_GrapplingHook()
 		else if(e.team == COLOR_TEAM4)
 			tex = "particles/hook_pink";
 		else
-			tex = "particles/hook_red";
+			tex = "particles/hook_green";
 		Draw_GrapplingHookLine(b, a, 8, o, v_forward, tex, 0.25, '1 1 1');
 	}
 }
