@@ -33,8 +33,12 @@ void Draw_GrapplingHookLine(vector from, vector to, float thickness, vector org,
 	// I want to draw a quad...
 	// from and to are MIDPOINTS.
 	
+	float t;
 	vector axis, thickdir, A, B, C, D;
 	float length_tex;
+
+	t = -2 * time;
+	t = random();
 
 	axis = normalize(to - from);
 	length_tex = aspect * vlen(to - from) / thickness;
@@ -51,10 +55,10 @@ void Draw_GrapplingHookLine(vector from, vector to, float thickness, vector org,
 		R_BeginPolygon(texture, 0);
 	else
 		R_BeginPolygon("", 0);
-	R_PolygonVertex(A, '0 0 0', rgb, 1);
-	R_PolygonVertex(B, '0 1 0', rgb, 1);
-	R_PolygonVertex(C, '0 1 0' + length_tex * '1 0 0', rgb, 1);
-	R_PolygonVertex(D, '0 0 0' + length_tex * '1 0 0', rgb, 1);
+	R_PolygonVertex(A, '0 0 0' + t * '1 0 0', rgb, 1);
+	R_PolygonVertex(B, '0 1 0' + t * '1 0 0', rgb, 1);
+	R_PolygonVertex(C, '0 1 0' + (t + length_tex) * '1 0 0', rgb, 1);
+	R_PolygonVertex(D, '0 0 0' + (t + length_tex) * '1 0 0', rgb, 1);
 	R_EndPolygon();
 }
 
@@ -63,6 +67,7 @@ void Draw_GrapplingHook()
 	float i;
 	vector a, b, o;
 	entity e;
+	string tex;
 
 	o = pmove_org + '0 0 1' * getstati(STAT_VIEWHEIGHT);
 	makevectors(input_angles);
@@ -79,6 +84,16 @@ void Draw_GrapplingHook()
 		else
 			a = e.HookStart;
 		b = e.HookEnd;
-		Draw_GrapplingHookLine(b, a, 8, o, v_forward, "particles/hookbeam", 0.5, '1 1 1');
+		if(e.team == COLOR_TEAM1)
+			tex = "particles/hook_red";
+		else if(e.team == COLOR_TEAM2)
+			tex = "particles/hook_blue";
+		else if(e.team == COLOR_TEAM3)
+			tex = "particles/hook_yellow";
+		else if(e.team == COLOR_TEAM4)
+			tex = "particles/hook_pink";
+		else
+			tex = "particles/hook_red";
+		Draw_GrapplingHookLine(b, a, 8, o, v_forward, tex, 0.25, '1 1 1');
 	}
 }
