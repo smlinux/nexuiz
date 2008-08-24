@@ -28,7 +28,7 @@ void Net_GrapplingHook()
 	p.HookEnd = end;
 }
 
-void Draw_GrapplingHookLine(vector from, vector to, float thickness, vector org, vector view_forward)
+void Draw_GrapplingHookLine(vector from, vector to, float thickness, vector org, vector view_forward, string texture, float aspect, vector rgb)
 {
 	// I want to draw a quad...
 	// from and to are MIDPOINTS.
@@ -37,7 +37,7 @@ void Draw_GrapplingHookLine(vector from, vector to, float thickness, vector org,
 	float length_tex;
 
 	axis = normalize(to - from);
-	length_tex = vlen(to - from) / thickness;
+	length_tex = aspect * vlen(to - from) / thickness;
 
 	// direction is perpendicular to the view normal, and perpendicular to the axis
 	thickdir = normalize(cross(axis, org - from));
@@ -48,13 +48,13 @@ void Draw_GrapplingHookLine(vector from, vector to, float thickness, vector org,
 	D = to - thickdir * (thickness / 2);
 
 	if(checkextension("DP_SV_WRITEPICTURE"))
-		R_BeginPolygon("particles/hookbeam", 0);
+		R_BeginPolygon(texture, 0);
 	else
 		R_BeginPolygon("", 0);
-	R_PolygonVertex(A, '0 0 0', '.5 1 0', 1);
-	R_PolygonVertex(B, '1 0 0', '.5 1 0', 1);
-	R_PolygonVertex(C, '1 0 0' + length_tex * '0 1 0', '.5 1 0', 1);
-	R_PolygonVertex(D, '0 0 0' + length_tex * '0 1 0', '.5 1 0', 1);
+	R_PolygonVertex(A, '0 0 0', rgb, 1);
+	R_PolygonVertex(B, '0 1 0', rgb, 1);
+	R_PolygonVertex(C, '0 1 0' + length_tex * '1 0 0', rgb, 1);
+	R_PolygonVertex(D, '0 0 0' + length_tex * '1 0 0', rgb, 1);
 	R_EndPolygon();
 }
 
@@ -79,6 +79,6 @@ void Draw_GrapplingHook()
 		else
 			a = e.HookStart;
 		b = e.HookEnd;
-		Draw_GrapplingHookLine(a, b, 8, o, v_forward);
+		Draw_GrapplingHookLine(b, a, 8, o, v_forward, "particles/hookbeam", 0.5, '1 1 1');
 	}
 }
