@@ -170,6 +170,8 @@ void GrapplingHookThink()
 					self.owner.velocity = self.owner.velocity - dv * 0.5;
 					self.aiment.velocity = self.aiment.velocity - dv * 0.5;
 					self.aiment.flags = self.aiment.flags - (self.aiment.flags & FL_ONGROUND);
+					self.aiment.pusher = self.owner;
+					self.aiment.pushltime = time + cvar("g_maxpushtime");
 				}
 			}
 		}
