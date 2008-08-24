@@ -92,7 +92,7 @@ void RemoveGrapplingHook(entity pl)
 void GrapplingHookThink()
 {
 	float spd, dist, minlength, pullspeed, ropestretch, ropeairfriction, rubberforce, newlength, rubberforce_overstretch;
-	vector dir, org, end;
+	vector dir, org, end, v0, dv;
 	if(self.owner.health <= 0 || self.owner.hook != self)	// how did that happen?
 	{														// well, better fix it anyway
 		remove(self);
@@ -142,6 +142,7 @@ void GrapplingHookThink()
 		if(cvar("g_grappling_hook_tarzan"))
 		{
 			newlength = self.rope_length;
+			v0 = self.owner.velocity;
 
 			// first pull the rope...
 			newlength = max(newlength - pullspeed * frametime, minlength);
@@ -160,6 +161,17 @@ void GrapplingHookThink()
 			spd = bound(0, (dist - self.rope_length) / ropestretch, 1);
 			self.owner.velocity = self.owner.velocity * (1 - frametime * ropeairfriction);
 			self.owner.velocity = self.owner.velocity + frametime * dir * spd * rubberforce;
+
+			dv = ((self.owner.velocity - v0) * dir) * dir;
+			if(cvar("g_grappling_hook_tarzan") >= 2)
+			{
+				if(self.aiment.movetype == MOVETYPE_WALK || self.aiment.movetype == MOVETYPE_TOSS)
+				{
+					self.owner.velocity = self.owner.velocity - dv * 0.5;
+					self.aiment.velocity = self.aiment.velocity - dv * 0.5;
+					self.aiment.flags = self.aiment.flags - (self.aiment.flags & FL_ONGROUND);
+				}
+			}
 		}
 		else
 		{
