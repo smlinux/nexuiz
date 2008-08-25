@@ -51,10 +51,7 @@ void Draw_GrapplingHookLine(vector from, vector to, float thickness, vector org,
 	C = to + thickdir * (thickness / 2);
 	D = to - thickdir * (thickness / 2);
 
-	if(checkextension("DP_SV_WRITEPICTURE"))
-		R_BeginPolygon(texture, 0);
-	else
-		R_BeginPolygon("", 0);
+	R_BeginPolygon(texture, 0);
 	R_PolygonVertex(A, '0 0 0' + t * '1 0 0', rgb, 1);
 	R_PolygonVertex(B, '0 1 0' + t * '1 0 0', rgb, 1);
 	R_PolygonVertex(C, '0 1 0' + (t + length_tex) * '1 0 0', rgb, 1);
@@ -68,6 +65,7 @@ void Draw_GrapplingHook()
 	vector a, b, o;
 	entity e;
 	string tex;
+	vector rgb;
 
 	o = pmove_org + '0 0 1' * getstati(STAT_VIEWHEIGHT);
 	makevectors(input_angles);
@@ -85,15 +83,33 @@ void Draw_GrapplingHook()
 			a = e.HookStart;
 		b = e.HookEnd;
 		if(e.team == COLOR_TEAM1)
+		{
 			tex = "particles/hook_red";
+			rgb = '1 .3 .3';
+		}
 		else if(e.team == COLOR_TEAM2)
+		{
 			tex = "particles/hook_blue";
+			rgb = '.3 .3 1';
+		}
 		else if(e.team == COLOR_TEAM3)
+		{
 			tex = "particles/hook_yellow";
+			rgb = '1 1 .3';
+		}
 		else if(e.team == COLOR_TEAM4)
+		{
 			tex = "particles/hook_pink";
+			rgb = '1 .3 1';
+		}
 		else
+		{
 			tex = "particles/hook_green";
-		Draw_GrapplingHookLine(b, a, 8, o, v_forward, tex, 0.25, '1 1 1');
+			rgb = '.3 1 .3';
+		}
+		if(checkextension("DP_SV_WRITEPICTURE"))
+			Draw_GrapplingHookLine(b, a, 8, o, v_forward, tex, 0.25, '1 1 1');
+		else
+			Draw_GrapplingHookLine(b, a, 1, o, v_forward, "", 0.25, rgb);
 	}
 }
