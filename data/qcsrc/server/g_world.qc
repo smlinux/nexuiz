@@ -187,12 +187,6 @@ void spawnfunc_worldspawn (void)
 	if(GotoFirstMap())
 		return;
 
-#ifdef MAPINFO
-	MapInfo_LoadMapSettings(mapname);
-	clientstuff = strzone(MapInfo_Map_clientstuff);
-	MapInfo_ClearTemps();
-#endif
-
 	if(sv_cheats)
 		ServerProgsDB = db_create();
 	else
@@ -248,24 +242,22 @@ void spawnfunc_worldspawn (void)
 	// 63 testing
 	lightstyle(63, "a");
 
-	// for setting by mapinfo
-	q3acompat_machineshotgunswap = cvar("sv_q3acompat_machineshotgunswap");
-	cvar_set("sv_q3acompat_machineshotgunswap", "0");
+	if(cvar("g_campaign"))
+		CampaignPreInit();
+
+	InitGameplayMode();
+	readlevelcvars();
 
 	player_count = 0;
-	lms_lowest_lives = 0;
-	lms_next_place = 0;
-
 	bot_waypoints_for_items = cvar("g_waypoints_for_items");
 	if(bot_waypoints_for_items == 1)
 		if(self.spawnflags & SPAWNFLAG_NO_WAYPOINTS_FOR_ITEMS)
 			bot_waypoints_for_items = 0;
 
-	if(cvar("g_campaign"))
-		CampaignPreInit();
+	// for setting by mapinfo
+	q3acompat_machineshotgunswap = cvar("sv_q3acompat_machineshotgunswap");
+	cvar_set("sv_q3acompat_machineshotgunswap", "0");
 
-	readlevelcvars();
-	InitGameplayMode();
 	precache();
 
 	WaypointSprite_Init();

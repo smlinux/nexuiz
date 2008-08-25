@@ -732,8 +732,10 @@ void readlevelcvars(void)
 	sv_maxidle_spectatorsareidle = cvar("sv_maxidle_spectatorsareidle");
 	sv_pogostick = cvar("sv_pogostick");
 	sv_doublejump = cvar("sv_doublejump");
-	g_ctf_win_mode = cvar("g_ctf_win_mode");
-	g_race_qualifying = cvar("g_race_qualifying");
+
+	if(g_instagib) g_minstagib = g_nixnex = g_rocketarena = 0;
+	if(g_minstagib) g_nixnex = g_rocketarena = 0;
+	if(g_nixnex) g_rocketarena = 0;
 
 	g_pickup_shells                    = cvar("g_pickup_shells");
 	g_pickup_shells_max                = cvar("g_pickup_shells_max");

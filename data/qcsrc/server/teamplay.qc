@@ -85,20 +85,59 @@ void LogTeamchange(entity pl)
 	GameLogEcho(str, FALSE);
 }
 
-void ResetGameCvars()
+void WriteGameCvars()
 {
-	cvar_set("g_dm", "0");
-	cvar_set("g_tdm", "0");
-	cvar_set("g_domination", "0");
-	cvar_set("g_ctf", "0");
-	cvar_set("g_runematch", "0");
-	cvar_set("g_lms", "0");
-	cvar_set("g_arena", "0");
-	cvar_set("g_keyhunt", "0");
-	cvar_set("g_assault", "0");
-	cvar_set("g_onslaught", "0");
-	cvar_set("g_race", "0");
-	cvar_set("teamplay", "0");
+	cvar_set("g_dm", ftos(g_dm));
+	cvar_set("g_tdm", ftos(g_tdm));
+	cvar_set("g_domination", ftos(g_domination));
+	cvar_set("g_ctf", ftos(g_ctf));
+	cvar_set("g_runematch", ftos(g_runematch));
+	cvar_set("g_lms", ftos(g_lms));
+	cvar_set("g_arena", ftos(g_arena));
+	cvar_set("g_keyhunt", ftos(g_keyhunt));
+	cvar_set("g_assault", ftos(g_assault));
+	cvar_set("g_onslaught", ftos(g_onslaught));
+	cvar_set("g_race", ftos(g_race));
+}
+
+void ReadGameCvars()
+{
+	float found;
+	float prev;
+	float i;
+
+	found = 0;
+	prev = cvar("gamecfg");
+	for(i = 0; i < 2; ++i)
+	{
+		found += (g_dm = (!found && (prev != GAME_DEATHMATCH) && cvar("g_dm")));
+		found += (g_tdm = (!found && (prev != GAME_TEAM_DEATHMATCH) && cvar("g_tdm")));
+		found += (g_domination = (!found && (prev != GAME_DOMINATION) && cvar("g_domination")));
+		found += (g_ctf = (!found && (prev != GAME_CTF) && cvar("g_ctf")));
+		found += (g_runematch = (!found && (prev != GAME_RUNEMATCH) && cvar("g_runematch")));
+		found += (g_lms = (!found && (prev != GAME_LMS) && cvar("g_lms")));
+		found += (g_arena = (!found && (prev != GAME_ARENA) && cvar("g_arena")));
+		found += (g_keyhunt = (!found && (prev != GAME_KEYHUNT) && cvar("g_keyhunt")));
+		found += (g_assault = (!found && (prev != GAME_ASSAULT) && cvar("g_assault")));
+		found += (g_onslaught = (!found && (prev != GAME_ONSLAUGHT) && cvar("g_onslaught")));
+		found += (g_race = (!found && (prev != GAME_RACE) && cvar("g_race")));
+
+		if(found)
+			break;
+
+		prev = -1; // second attempt takes place WITHOUT prev set
+	}
+
+	if(!found)
+		g_dm = 1;
+
+	if(g_dm && cvar("deathmatch_force_teamplay"))
+	{
+		g_dm = 0;
+		g_tdm = 1;
+	}
+
+	teams_matter = 0;
 }
 
 void default_delayedinit()
@@ -118,6 +157,8 @@ void ActivateTeamplay()
 		cvar_set("teamplay", ftos(teamplay_default));
 	else
 		cvar_set("teamplay", "3");
+
+	teams_matter = 1;
 }
 
 void InitGameplayMode()
@@ -125,216 +166,157 @@ void InitGameplayMode()
 	float fraglimit_override, timelimit_override, capturelimit_override;
 
 	VoteReset();
+	
+	teams_matter = 0;
+	cvar_set("teamplay", "0");
 
-	game = cvar("gamecfg");	// load game options
+	// make sure only ONE type is selected
+	ReadGameCvars();
+	WriteGameCvars();
 
-	// game cvars get reset before map changes
-	// then map's cfg sets them as desired
+#ifdef MAPINFO
+	MapInfo_LoadMapSettings(mapname);
+	clientstuff = strzone(MapInfo_Map_clientstuff);
+	MapInfo_ClearTemps();
 
-	// FIXME: also set a message or game mode name to print to players when the join
+	// in case mapinfo switched the type
+	ReadGameCvars();
+#endif
 
 	// set both here, gamemode can override it later
 	timelimit_override = cvar("timelimit_override");
 	fraglimit_override = cvar("fraglimit_override");
-	capturelimit_override = cvar("capturelimit_override");
 
-	if(game == GAME_DOMINATION || cvar("g_domination"))
+	if(g_dm)
 	{
-		ResetGameCvars();
+		game = GAME_DEATHMATCH;
+		gamemode_name = "Deathmatch";
+	}
+
+	if(g_tdm)
+	{
+		game = GAME_TEAM_DEATHMATCH;
+		gamemode_name = "Team Deathmatch";
+		ActivateTeamplay();
+		tdm_init();
+	}
+
+	if(g_domination)
+	{
 		game = GAME_DOMINATION;
-		cvar_set("g_domination", "1");
-
-		ActivateTeamplay();
-
-		fraglimit_override = cvar("g_domination_point_limit");
-
 		gamemode_name = "Domination";
-		teams_matter = 1;
-	}
-	else if(game == GAME_CTF || cvar("g_ctf"))
-	{
-		ResetGameCvars();
-		game = GAME_CTF;
-		cvar_set("g_ctf", "1");
-
 		ActivateTeamplay();
-
-		fraglimit_override = cvar("g_ctf_capture_limit");
-		//no capture limit override here
-
-		gamemode_name = "Capture the Flag";
-		teams_matter = 1;
+		fraglimit_override = cvar("g_domination_point_limit");
+		dom_init();
 	}
-	else if(game == GAME_RUNEMATCH || cvar("g_runematch"))
+
+	if(g_ctf)
+	{
+		game = GAME_CTF;
+		gamemode_name = "Capture the Flag";
+		ActivateTeamplay();
+		g_ctf_win_mode = cvar("g_ctf_win_mode");
+		if(g_ctf_win_mode == 2)
+			fraglimit_override = cvar("g_ctf_capture_limit");
+		else
+			fraglimit_override = cvar("capturelimit_override");
+		ctf_init();
+	}
+
+	if(g_runematch)
 	{
 		game = GAME_RUNEMATCH;
-		cvar_set("g_runematch", "1");
-		cvar_set("g_minstagib", "0");
-
+		gamemode_name = "Rune Match";
 		if(cvar("deathmatch_force_teamplay"))
 			ActivateTeamplay();
-
 		fraglimit_override = cvar("g_runematch_point_limit");
-
-		gamemode_name = "Rune Match";
-		if(cvar("teamplay"))
-			teams_matter = 1;
-		else
-			teams_matter = 0;
+		runematch_init();
 	}
-	else if(game == GAME_DEATHMATCH || game == GAME_TEAM_DEATHMATCH || cvar("g_tdm"))
-	{
-		if(!cvar("deathmatch"))
-			cvar_set("deathmatch", "1");
 
-
-		if(game == GAME_TEAM_DEATHMATCH || cvar("g_tdm") || cvar("deathmatch_force_teamplay"))
-		{
-			ResetGameCvars();
-			game = GAME_TEAM_DEATHMATCH;
-			gamemode_name = "Team Deathmatch";
-			ActivateTeamplay();
-			teams_matter = 1;
-			cvar_set("g_tdm", "1");
-		}
-		else
-		{
-			ResetGameCvars();
-			game = GAME_DEATHMATCH;
-			gamemode_name = "Deathmatch";
-			teams_matter = 0;
-		}
-
-		fraglimit_override = cvar("fraglimit_override");
-	}
-	else if(game == GAME_ASSAULT || cvar("g_assault"))
+	if(g_lms)
 	{
-		ResetGameCvars();
-		game = GAME_ASSAULT;
-		gamemode_name = "Assault";
-		ActivateTeamplay();
-		teams_matter = 1;
-		cvar_set("g_assault", "1");
-	}
-	else if(game == GAME_LMS || cvar("g_lms"))
-	{
-		ResetGameCvars();
 		game = GAME_LMS;
-		cvar_set("g_lms", "1");
+		gamemode_name = "Last Man Standing";
 		fraglimit_override = cvar("g_lms_lives_override");
 		if(fraglimit_override == 0)
 			fraglimit_override = -1;
-		gamemode_name = "Last Man Standing";
-		teams_matter = 0;
 		lms_lowest_lives = 9999;
-
+		lms_next_place = 0;
 		ScoreRules_lms();
 	}
-	else if(game == GAME_ARENA || cvar("g_arena"))
+
+	if(g_arena)
 	{
-		ResetGameCvars();
 		game = GAME_ARENA;
-		cvar_set("g_arena", "1");
+		gamemode_name = "Arena";
 		fraglimit_override = cvar("g_arena_point_limit");
 		maxspawned = cvar("g_arena_maxspawned");
 		if(maxspawned < 2)
 			maxspawned = 2;
 		arena_roundbased = cvar("g_arena_roundbased");
-		gamemode_name = "Arena";
-		teams_matter = 0;
 	}
-	else if(game == GAME_KEYHUNT || cvar("g_keyhunt"))
+
+	if(g_keyhunt)
 	{
-		ResetGameCvars();
 		game = GAME_KEYHUNT;
-		cvar_set("g_keyhunt", "1");
-		fraglimit_override = cvar("g_keyhunt_point_limit");
-		ActivateTeamplay();
 		gamemode_name = "Key Hunt";
-		teams_matter = 1;
-	}
-	else if(game == GAME_ONSLAUGHT || cvar("g_onslaught"))
-	{
-		ResetGameCvars();
-		game = GAME_ONSLAUGHT;
-		cvar_set("g_onslaught", "1");
-
 		ActivateTeamplay();
-
-		gamemode_name = "Onslaught";
-		teams_matter = 1;
+		fraglimit_override = cvar("g_keyhunt_point_limit");
+		kh_init();
 	}
-	else if(game == GAME_RACE || cvar("g_race"))
+
+	if(g_assault)
 	{
-		ResetGameCvars();
+		game = GAME_ASSAULT;
+		gamemode_name = "Assault";
+		ActivateTeamplay();
+	}
+
+	if(g_onslaught)
+	{
+		game = GAME_ONSLAUGHT;
+		gamemode_name = "Onslaught";
+		ActivateTeamplay();
+		entcs_init();
+	}
+
+	if(g_race)
+	{
 		game = GAME_RACE;
-		cvar_set("g_race", "1");
-		fraglimit_override = cvar("g_race_laps_limit");
 		gamemode_name = "Race";
+		g_race_qualifying = cvar("g_race_qualifying");
+
+		// In campaign, only this mode makes sense...
+		if(cvar("g_campaign"))
+			g_race_qualifying = 1;
 
 		if(cvar("g_race_teams"))
 		{
 			g_race_qualifying = 0; // not supported!
 			ActivateTeamplay();
-			teams_matter = 1;
 			race_teams = bound(2, cvar("g_race_teams"), 4);
 		}
 		else
-		{
 			race_teams = 0;
-			teams_matter = 0;
-			if(cvar("g_race_qualifying"))
-				independent_players = 1;
-		}
+
+		if(g_race_qualifying == 1)
+			fraglimit_override = 0;
+		else
+			fraglimit_override = cvar("g_race_laps_limit");
+
+		if(g_race_qualifying)
+			independent_players = 1;
 
 		ScoreRules_race();
 	}
-	else
-	{
-		// we can only assume...
-		ResetGameCvars();
-		game = GAME_DEATHMATCH;
-		cvar_set("g_dm", "1");
-		gamemode_name = "Deathmatch";
-		teams_matter = 0;
-	}
 
-	// those mutators rule each other out
-	if(cvar("g_minstagib"))
-	{
-		cvar_set("g_instagib", "0");
-		cvar_set("g_rocketarena", "0");
-	}
-	if(cvar("g_instagib"))
-	{
-		cvar_set("g_minstagib", "0");
-		cvar_set("g_rocketarena", "0");
-	}
-	if(cvar("g_rocketarena"))
-	{
-		cvar_set("g_instagib", "0");
-		cvar_set("g_minstagib", "0");
-	}
-
-	g_domination = cvar("g_domination");
-	g_ctf = cvar("g_ctf");
-	g_lms = cvar("g_lms");
-	g_tdm = cvar("g_tdm");
-	g_runematch = cvar("g_runematch");
-	g_keyhunt = cvar("g_keyhunt");
-	g_onslaught = cvar("g_onslaught");
-	g_assault = cvar("g_assault");
-	g_race = cvar("g_race");
-	g_arena = cvar("g_arena");
+	// save it (for the next startup)
+	cvar_set("gamecfg", ftos(game));
 
 	cache_mutatormsg = strzone("");
 	cache_motd = strzone("");
 	cache_lastmutatormsg = strzone("");
 	cache_lastmotd = strzone("");
-
-	if(g_ctf)
-		if(g_ctf_win_mode != 2)
-			fraglimit_override = capturelimit_override;
 
 	// enforce the server's universal frag/time limits
 	if(!cvar("g_campaign"))
@@ -345,24 +327,11 @@ void InitGameplayMode()
 			cvar_set("timelimit", ftos(timelimit_override));
 	}
 
-	if(g_race && g_race_qualifying)
+	if(g_race && g_race_qualifying == 2)
 	{
 		race_fraglimit = cvar("fraglimit");
 		cvar_set("fraglimit", "0");
 	}
-
-	if (game == GAME_DOMINATION)//cvar("g_domination"))
-		dom_init();
-	else if (game == GAME_CTF)//cvar("g_ctf"))
-		ctf_init();
-	else if (game == GAME_RUNEMATCH)//cvar("g_runematch"))
-		runematch_init();
-	else if (game == GAME_TEAM_DEATHMATCH)//cvar("g_runematch"))
-		tdm_init();
-	else if (game == GAME_KEYHUNT)//cvar("g_keyhunt"))
-		kh_init();
-	else if (game == GAME_ONSLAUGHT)
-		entcs_init();
 
 	entity e;
 	e = spawn();
