@@ -1528,10 +1528,10 @@ float WinningCondition_Race(float fraglimit)
 }
 
 void ReadyRestart();
-float WinningCondition_QualifyingThenRace()
+float WinningCondition_QualifyingThenRace(float limit)
 {
 	float wc;
-	wc = WinningCondition_Scores(0);
+	wc = WinningCondition_Scores(limit);
 
 	// NEVER initiate overtime
 	if(wc == WINNING_YES || wc == WINNING_STARTOVERTIME)
@@ -1711,7 +1711,7 @@ void CheckRules_World()
 	}
 	else if(g_race && g_race_qualifying == 2 && timelimit >= 0)
 	{
-		status = WinningCondition_QualifyingThenRace();
+		status = WinningCondition_QualifyingThenRace(fraglimit);
 	}
 	else if(g_assault)
 	{
