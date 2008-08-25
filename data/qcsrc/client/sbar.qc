@@ -892,9 +892,11 @@ void Sbar_DrawScoreboard()
 		{
 			if(tl > 0)
 				str = strcat(str, " or");
-			str = strcat(str, " until ^3", ftos(fl));
+			str = strcat(str, " until ^3", ScoreString(scores_flags[ps_primary], fl));
 			if(scores_label[ps_primary] == "score")
 				str = strcat(str, " points^7");
+			else if(scores_label[ps_primary] == "fastest")
+				str = strcat(str, " is beaten^7");
 			else
 				str = strcat(str, " ", scores_label[ps_primary]);
 		}
