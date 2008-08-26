@@ -514,6 +514,20 @@ float pointparticles_SendEntity(entity to)
 
 float pointparticles_use()
 {
+	if(self.wait && time < self.nextthink)
+	{
+		self.nextthink = time + self.wait; // extend the time
+		return;
+	}
+
+	if(self.wait)
+		self.nextthink = time + self.wait; // toggle back after a delay
+	self.state = !self.state;
+	self.Version += 1;
+}
+
+float pointparticles_think()
+{
 	self.state = !self.state;
 	self.Version += 1;
 }
@@ -540,6 +554,7 @@ void spawnfunc_func_pointparticles()
 			self.state = 1;
 		else
 			self.state = 0;
+		self.think = pointparticles_think;
 	}
 	else
 		self.state = 1;
@@ -564,6 +579,7 @@ void spawnfunc_func_sparks()
 	self.velocity = '0 0 -1';
 	self.mdl = "func_sparks";
 	self.impulse = 0.1 / self.wait;
+	self.wait = 0;
 
 	spawnfunc_func_pointparticles();
 }
