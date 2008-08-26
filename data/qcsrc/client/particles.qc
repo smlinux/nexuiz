@@ -1,4 +1,8 @@
+#ifdef POINTINBRUSH_WORKS
 vector PointInBrush_vec;
+entity PointInBrush_brush;
+entity PointInBrush_allmask;
+.float dphitcontentsmask;
 float PointInBrush_Recurse()
 {
 	float s;
@@ -8,7 +12,7 @@ float PointInBrush_Recurse()
 	traceline(PointInBrush_vec, PointInBrush_vec, 0, world);
 	if not(trace_ent)
 		return 0;
-	if(trace_ent == self)
+	if(trace_ent == PointInBrush_brush)
 		return 1;
 
 	se = trace_ent;
@@ -23,17 +27,19 @@ float PointInBrush(entity brush, vector point)
 {
 	float f, s;
 
-	if not(self.modelindex)
+	if not(brush.modelindex)
 		return 1;
 
-	s = self.solid;
-	self.solid = SOLID_BSP;
+	s = brush.solid;
+	brush.solid = SOLID_BSP;
 	PointInBrush_vec = point;
+	PointInBrush_brush = brush;
 	f = PointInBrush_Recurse();
-	self.solid = s;
+	brush.solid = s;
 
 	return f;
 }
+#endif
 
 .float cnt; // effect number
 .vector velocity; // particle velocity
@@ -61,7 +67,9 @@ void Draw_PointParticles()
 		p_x += random() * sz_x;
 		p_y += random() * sz_y;
 		p_z += random() * sz_z;
+#ifdef POINTINBRUSH_WORKS
 		if(PointInBrush(self, p))
+#endif
 		{
 			if(self.movedir != '0 0 0')
 			{
@@ -77,11 +85,13 @@ void Draw_PointParticles()
 				sound(self, CHAN_AUTO, self.noise, 1, ATTN_NORM);
 			}
 		}
+#ifdef POINTINBRUSH_WORKS
 		else if(self.absolute)
 		{
 			++fail;
 			--i;
 		}
+#endif
 	}
 	self.origin = o;
 }
