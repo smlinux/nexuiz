@@ -1179,8 +1179,8 @@ float ExactTriggerHit()
 
 	s = self.solid;
 	self.solid = SOLID_BSP;
-	ExactTriggerHit_mins = other.absmin + '1 1 1';
-	ExactTriggerHit_maxs = other.absmax - '1 1 1';
+	ExactTriggerHit_mins = other.absmin;
+	ExactTriggerHit_maxs = other.absmax;
 	f = ExactTriggerHit_Recurse();
 	self.solid = s;
 
