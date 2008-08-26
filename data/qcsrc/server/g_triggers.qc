@@ -620,10 +620,7 @@ void spawnfunc_func_rain()
 		self.count = 2000;
 	self.count = 0.01 * self.count * (self.size_x / 1024) * (self.size_y / 1024);
 	if (self.count < 1)
-	{
-		remove(self);
-		return;
-	}
+		self.count = 1;
 	if(self.count > 65535)
 		self.count = 65535;
 
@@ -664,10 +661,7 @@ void spawnfunc_func_snow()
 		self.count = 2000;
 	self.count = 0.01 * self.count * (self.size_x / 1024) * (self.size_y / 1024);
 	if (self.count < 1)
-	{
-		remove(self);
-		return;
-	}
+		self.count = 1;
 	if(self.count > 65535)
 		self.count = 65535;
 
@@ -688,6 +682,7 @@ void misc_laser_aim()
 	if(self.enemy)
 	{
 		a = vectoangles(self.enemy.origin - self.origin);
+		a_x = -a_x;
 		if(a != self.angles)
 		{
 			self.angles = a;
