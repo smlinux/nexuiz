@@ -791,10 +791,12 @@ void door_fire()
 {
 	local entity 	oself;
 	local entity	starte;
+	string oldmessage;
 
 	if (self.owner != self)
 		objerror ("door_fire: self.owner != self");
 
+	oldmessage = self.message;
 	self.message = ""; // no more message
 	oself = self;
 
@@ -821,6 +823,8 @@ void door_fire()
 		self = self.enemy;
 	} while ( (self != starte) && (self != world) );
 	self = oself;
+
+	self.message = oldmessage;
 };
 
 
@@ -829,11 +833,6 @@ void door_use()
 	local entity oself;
 
 	//dprint("door_use (model: ");dprint(self.model);dprint(")\n");
-	self.message = "";			// door message are for touch only
-	if (self.owner)
-		self.owner.message = "";
-	if (self.enemy)
-		self.enemy.message = "";
 	if (self.owner)
 	{
 		oself = self;
@@ -1157,6 +1156,7 @@ float SECRET_YES_SHOOT = 16;	// shootable even if targeted
 void fd_secret_use()
 {
 	local float temp;
+	string message_save;
 
 	self.health = 10000;
 	self.bot_attack = TRUE;
@@ -1165,9 +1165,10 @@ void fd_secret_use()
 	if (self.origin != self.oldorigin)
 		return;
 
+	message_save = self.message;
 	self.message = ""; // no more message
-
 	SUB_UseTargets();				// fire all targets / killtargets
+	self.message = message_save;
 
 	self.velocity = '0 0 0';
 
