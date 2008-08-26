@@ -36,7 +36,7 @@ textures/toxic/toxic_grate
 
 textures/toxic/toxic_slime
 {
-	qer_editorimage textures/liquids/slime1.tga
+	qer_editorimage textures/liquids/slime2.tga
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	surfaceparm slime
@@ -47,7 +47,7 @@ textures/toxic/toxic_slime
 	qer_trans 0.5
 	q3map_surfacelight 1200
 	{
-		map textures/liquids/slime1.tga
+		map textures/liquids/slime2.tga
 		blendfunc add
 		rgbGen identity
 		tcMod turb 0 0.2 0 0.04
@@ -56,7 +56,7 @@ textures/toxic/toxic_slime
 
 textures/toxic/toxic_slime_tube
 {
-	qer_editorimage textures/liquids/slime1.tga
+	qer_editorimage textures/liquids/slime2.tga
 	surfaceparm noimpact
 	surfaceparm nonsolid
 	surfaceparm slime
@@ -67,9 +67,9 @@ textures/toxic/toxic_slime_tube
 	qer_trans 0.5
 	q3map_surfacelight 1200
 	{
-		map textures/liquids/slime1.tga
+		map textures/liquids/slime2.tga
 		blendfunc add
 		rgbGen identity
-		tcMod scroll 0 0.2
+		tcMod scroll 0 -0.2
 	}
 }
