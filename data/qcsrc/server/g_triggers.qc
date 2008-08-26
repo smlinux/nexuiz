@@ -512,7 +512,7 @@ float pointparticles_SendEntity(entity to)
 	return 1;
 }
 
-float pointparticles_use()
+void pointparticles_use()
 {
 	if(self.wait && time < self.nextthink)
 	{
@@ -526,7 +526,7 @@ float pointparticles_use()
 	self.Version += 1;
 }
 
-float pointparticles_think()
+void pointparticles_think()
 {
 	self.state = !self.state;
 	self.Version += 1;
@@ -584,18 +584,20 @@ void spawnfunc_func_sparks()
 	spawnfunc_func_pointparticles();
 }
 
-void rain_think()
+float rainsnow_SendEntity(float to)
 {
-	self.nextthink = time + 0.1;
-	te_particlerain(self.absmin, self.absmax, self.dest, self.count, self.cnt);
-//	te_particlesnow(self.absmin, self.absmax, self.dest * 0.25, self.count, self.cnt);
-//	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-//	WriteByte (MSG_BROADCAST, TE_PARTICLERAIN);
-//	WriteVec (MSG_BROADCAST, self.absmin);
-//	WriteVec (MSG_BROADCAST, self.absmax);
-//	WriteVec (MSG_BROADCAST, self.dest);
-//	WriteShort (MSG_BROADCAST, self.count);
-//	WriteByte (MSG_BROADCAST, self.cnt);
+	WriteByte(MSG_ENTITY, ENT_CLIENT_RAINSNOW);
+	WriteByte(MSG_ENTITY, self.state);
+	WriteCoord(MSG_ENTITY, self.origin_x + self.mins_x);
+	WriteCoord(MSG_ENTITY, self.origin_y + self.mins_y);
+	WriteCoord(MSG_ENTITY, self.origin_z + self.mins_z);
+	WriteCoord(MSG_ENTITY, self.maxs_x - self.mins_x);
+	WriteCoord(MSG_ENTITY, self.maxs_y - self.mins_y);
+	WriteCoord(MSG_ENTITY, self.maxs_z - self.mins_z);
+	WriteShort(MSG_ENTITY, compressShortVector(self.dest));
+	WriteShort(MSG_ENTITY, self.count);
+	WriteByte(MSG_ENTITY, self.cnt);
+	return 1;
 };
 
 /*QUAKED spawnfunc_func_rain (0 .5 .8) ?
@@ -630,25 +632,17 @@ void spawnfunc_func_rain()
 		remove(self);
 		return;
 	}
-	// convert from per second to per 0.1 sec,
-	self.count = ceil(self.count * 0.1);
-	self.think = rain_think;
-	self.nextthink = time + 0.5;
+	if(self.count > 65535)
+		self.count = 65535;
+
+	self.state = 1; // 1 is rain, 0 is snow
+	self.effects = EF_NODEPTHTEST;
+	self.SendEntity = rainsnow_SendEntity;
+	self.Version = 1;
+	self.modelindex = 1;
+	self.model = "net_entity";
 };
 
-
-void snow_think()
-{
-	self.nextthink = time + 0.1 + random() * 0.05;
-	te_particlesnow(self.absmin, self.absmax, self.dest, self.count, self.cnt);
-//	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-//	WriteByte (MSG_BROADCAST, TE_PARTICLESNOW);
-//	WriteVec (MSG_BROADCAST, self.absmin);
-//	WriteVec (MSG_BROADCAST, self.absmax);
-//	WriteVec (MSG_BROADCAST, self.dest);
-//	WriteShort (MSG_BROADCAST, self.count);
-//	WriteByte (MSG_BROADCAST, self.cnt);
-};
 
 /*QUAKED spawnfunc_func_snow (0 .5 .8) ?
 This is an invisible area like a trigger, which snow falls inside of.
@@ -676,16 +670,21 @@ void spawnfunc_func_snow()
 		self.cnt = 12;
 	if (!self.count)
 		self.count = 2000;
-	self.count = 0.1 * self.count * (self.size_x / 1024) * (self.size_y / 1024);
+	self.count = 0.01 * self.count * (self.size_x / 1024) * (self.size_y / 1024);
 	if (self.count < 1)
 	{
 		remove(self);
 		return;
 	}
-	// convert from per second to per 0.1 sec,
-	self.count = ceil(self.count * 0.1);
-	self.think = snow_think;
-	self.nextthink = time + 0.5;
+	if(self.count > 65535)
+		self.count = 65535;
+
+	self.state = 0; // 1 is rain, 0 is snow
+	self.effects = EF_NODEPTHTEST;
+	self.SendEntity = rainsnow_SendEntity;
+	self.Version = 1;
+	self.modelindex = 1;
+	self.model = "net_entity";
 };
 
 

@@ -121,3 +121,39 @@ void Ent_PointParticles()
 	self.solid = SOLID_NOT;
 	self.draw = Draw_PointParticles;
 }
+
+void Draw_Rain()
+{
+    te_particlerain(self.origin + self.mins, self.origin + self.maxs, self.velocity, self.count * drawframetime, self.glow_color);
+}
+
+void Draw_Snow()
+{
+    te_particlesnow(self.origin + self.mins, self.origin + self.maxs, self.velocity, self.count * drawframetime, self.glow_color);
+}
+
+void Ent_RainOrSnow()
+{
+	self.impulse = ReadByte(); // Rain, Snow, or Whatever
+	self.origin_x = ReadCoord();
+	self.origin_y = ReadCoord();
+	self.origin_z = ReadCoord();
+	self.maxs_x = ReadCoord();
+	self.maxs_y = ReadCoord();
+	self.maxs_z = ReadCoord();
+	self.velocity = decompressShortVector(ReadShort());
+	self.count = ReadShort() * 10;
+	self.glow_color = ReadByte(); // color
+
+	self.mins    = -0.5 * self.maxs;
+	self.maxs    =  0.5 * self.maxs;
+	self.origin  = self.origin - self.mins;
+
+	setorigin(self, self.origin);
+	setsize(self, self.mins, self.maxs);
+	self.solid = SOLID_NOT;
+	if(self.impulse)
+		self.draw = Draw_Rain;
+	else
+		self.draw = Draw_Snow;
+}
