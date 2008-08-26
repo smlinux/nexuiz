@@ -1,0 +1,114 @@
+vector PointInBrush_vec;
+float PointInBrush_Recurse()
+{
+	float s;
+	entity se;
+	float f;
+
+	traceline(PointInBrush_vec, PointInBrush_vec, 0, world);
+	if not(trace_ent)
+		return 0;
+	if(trace_ent == self)
+		return 1;
+
+	se = trace_ent;
+	s = se.solid;
+	se.solid = SOLID_NOT;
+	f = PointInBrush_Recurse();
+	se.solid = s;
+
+	return f;
+}
+float PointInBrush(entity brush, vector point)
+{
+	float f, s;
+
+	if not(self.modelindex)
+		return 1;
+
+	s = self.solid;
+	self.solid = SOLID_BSP;
+	PointInBrush_vec = point;
+	f = PointInBrush_Recurse();
+	self.solid = s;
+
+	return f;
+}
+
+.float cnt; // effect number
+.vector velocity; // particle velocity
+.float waterlevel; // direction jitter
+.float count; // count multiplier
+.float glow_color; // palette color
+.float impulse; // density
+.string noise; // sound
+
+void Draw_PointParticles()
+{
+	float n, i;
+	vector p;
+	vector sz;
+	vector o;
+	o = self.origin;
+	sz = self.maxs - self.mins;
+	n = self.impulse * drawframetime;
+	for(i = random(); i <= n; ++i)
+	{
+		p = o + self.mins;
+		p_x += random() * sz_x;
+		p_y += random() * sz_y;
+		p_z += random() * sz_z;
+		if(PointInBrush(self, p))
+		{
+			pointparticles(self.cnt, p, self.velocity + randomvec() * self.waterlevel, self.count, self.glow_color);
+			if(self.noise != "")
+			{
+				self.origin = p;
+				sound(self, CHAN_AUTO, self.noise, 1, ATTN_NORM);
+			}
+		}
+	}
+	self.origin = o;
+}
+
+.vector velocity; // particle velocity
+.float waterlevel; // direction jitter
+.float count; // count multiplier
+.float glow_color; // palette color
+.float impulse; // density
+.string noise; // sound
+void Ent_PointParticles()
+{
+	self.modelindex = ReadShort();
+	self.origin_x = ReadCoord();
+	self.origin_y = ReadCoord();
+	self.origin_z = ReadCoord();
+	self.maxs_x = ReadCoord();
+	self.maxs_y = ReadCoord();
+	self.maxs_z = ReadCoord();
+	self.cnt = ReadShort(); // effect number
+	self.impulse = ReadCoord(); // density (<0: point, >0: volume)
+	if(self.impulse == 0)
+		self.impulse = 1; // one per sec
+	self.velocity_x = ReadCoord();
+	self.velocity_y = ReadCoord();
+	self.velocity_z = ReadCoord();
+	self.waterlevel = ReadCoord();
+	self.count = ReadCoord();
+	self.glow_color = ReadByte();
+	if(self.noise)
+		strunzone(self.noise);
+	self.noise = strzone(ReadString());
+
+	if(self.impulse < 0) // negative = volume weighted: impulse = particles/100qu^3 cube
+		self.impulse *= -(self.maxs_x * self.maxs_y * self.maxs_z) / 1000000;
+
+	self.mins    = -0.5 * self.maxs;
+	self.maxs    =  0.5 * self.maxs;
+	self.origin  = self.origin - self.mins;
+
+	setorigin(self, self.origin);
+	setsize(self, self.mins, self.maxs);
+	self.solid = SOLID_NOT;
+	self.draw = Draw_PointParticles;
+}
