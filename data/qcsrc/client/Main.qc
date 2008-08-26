@@ -437,6 +437,8 @@ void(float bIsNewEntity) CSQC_Ent_Update =
 		Ent_ReadTeamScore();
 	else if(self.enttype == ENT_CLIENT_POINTPARTICLES)
 		Ent_PointParticles();
+	else if(self.enttype == ENT_CLIENT_RAINSNOW)
+		Ent_RainOrSnow();
 	else
 		error("unknown entity type in CSQC_Ent_Update\n");
 	
@@ -484,6 +486,7 @@ void Ent_Remove()
 
 	self.enttype = 0;
 	self.classname = "";
+	self.draw = menu_sub_null;
 	// TODO possibly set more stuff to defaults
 }
 // CSQC_Ent_Remove : Called when the server requests a SSQC / CSQC entity to be removed.  Essentially call remove(self) as well.
