@@ -491,7 +491,6 @@ float pointparticles_SendEntity(entity to, float fl)
 	WriteByte(MSG_ENTITY, fl);
 	if(fl & 2)
 	{
-		print("state changed, sending: ", ftos(self.state), "\n");
 		if(self.state)
 			WriteCoord(MSG_ENTITY, self.impulse);
 		else
