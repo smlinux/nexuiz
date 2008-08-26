@@ -60,6 +60,13 @@ void CSQC_UpdateView(void)
 
 	// Render the Scene
 	
+	view_origin = pmove_org + '0 0 1' * getstati(STAT_VIEWHEIGHT);
+	view_angles = input_angles;
+	makevectors(view_angles);
+	view_forward = v_forward;
+	view_right = v_right;
+	view_up = v_up;
+	
 	e = self;
 	for(self = world; (self = nextent(self)); )
 		if(self.draw)

@@ -11,8 +11,9 @@
 // Revision 10: scoreboard force
 // Revision 11: scoreboard unforce; spectator support beginning
 // Revision 12: smaller scores updates (SERVER: requires new engine)
-// Revision 12: pointparticles
-#define CSQC_REVISION 13
+// Revision 13: pointparticles
+// Revision 14: laser
+#define CSQC_REVISION 14
 
 // probably put these in common/
 // so server/ and client/ can be synced better
@@ -41,6 +42,7 @@ const float ENT_CLIENT_SCORES = 4;
 const float ENT_CLIENT_TEAMSCORES = 5;
 const float ENT_CLIENT_POINTPARTICLES = 6;
 const float ENT_CLIENT_RAINSNOW = 7;
+const float ENT_CLIENT_LASER = 8;
 
 ///////////////////////////
 // key constants

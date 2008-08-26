@@ -439,6 +439,8 @@ void(float bIsNewEntity) CSQC_Ent_Update =
 		Ent_PointParticles();
 	else if(self.enttype == ENT_CLIENT_RAINSNOW)
 		Ent_RainOrSnow();
+	else if(self.enttype == ENT_CLIENT_LASER)
+		Ent_Laser();
 	else
 		error("unknown entity type in CSQC_Ent_Update\n");
 	
@@ -482,6 +484,9 @@ void Ent_Remove()
 		*/
 		// we don't NEED to remove them... they won't display anyway
 		// plus, svqc never does this anyway
+	} else if(self.enttype == ENT_CLIENT_POINTPARTICLES)
+	{
+		Ent_PointParticles_Remove();
 	}
 
 	self.enttype = 0;

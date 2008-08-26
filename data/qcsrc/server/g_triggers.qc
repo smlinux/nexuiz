@@ -485,30 +485,37 @@ void spawnfunc_func_stardust() {
 	self.effects = EF_STARDUST;
 }
 
-float pointparticles_SendEntity(entity to)
+float pointparticles_SendEntity(entity to, float fl)
 {
 	WriteByte(MSG_ENTITY, ENT_CLIENT_POINTPARTICLES);
-	if(self.modelindex != 4.2)
-		WriteShort(MSG_ENTITY, self.modelindex);
-	else
-		WriteShort(MSG_ENTITY, 0);
-	WriteCoord(MSG_ENTITY, self.origin_x + self.mins_x);
-	WriteCoord(MSG_ENTITY, self.origin_y + self.mins_y);
-	WriteCoord(MSG_ENTITY, self.origin_z + self.mins_z);
-	WriteCoord(MSG_ENTITY, self.maxs_x - self.mins_x);
-	WriteCoord(MSG_ENTITY, self.maxs_y - self.mins_y);
-	WriteCoord(MSG_ENTITY, self.maxs_z - self.mins_z);
-	WriteShort(MSG_ENTITY, self.cnt);
-	if(self.state)
-		WriteCoord(MSG_ENTITY, self.impulse);
-	else
-		WriteCoord(MSG_ENTITY, 0); // off
-	WriteShort(MSG_ENTITY, compressShortVector(self.velocity));
-	WriteShort(MSG_ENTITY, compressShortVector(self.movedir));
-	WriteCoord(MSG_ENTITY, self.waterlevel);
-	WriteCoord(MSG_ENTITY, self.count);
-	WriteByte(MSG_ENTITY, self.glow_color);
-	WriteString(MSG_ENTITY, self.noise);
+	WriteByte(MSG_ENTITY, fl);
+	if(fl & 2)
+	{
+		if(self.state)
+			WriteCoord(MSG_ENTITY, self.impulse);
+		else
+			WriteCoord(MSG_ENTITY, 0); // off
+	}
+	if(fl & 1)
+	{
+		if(self.modelindex != 4.2)
+			WriteShort(MSG_ENTITY, self.modelindex);
+		else
+			WriteShort(MSG_ENTITY, 0);
+		WriteCoord(MSG_ENTITY, self.origin_x + self.mins_x);
+		WriteCoord(MSG_ENTITY, self.origin_y + self.mins_y);
+		WriteCoord(MSG_ENTITY, self.origin_z + self.mins_z);
+		WriteCoord(MSG_ENTITY, self.maxs_x - self.mins_x);
+		WriteCoord(MSG_ENTITY, self.maxs_y - self.mins_y);
+		WriteCoord(MSG_ENTITY, self.maxs_z - self.mins_z);
+		WriteShort(MSG_ENTITY, self.cnt);
+		WriteShort(MSG_ENTITY, compressShortVector(self.velocity));
+		WriteShort(MSG_ENTITY, compressShortVector(self.movedir));
+		WriteCoord(MSG_ENTITY, self.waterlevel);
+		WriteCoord(MSG_ENTITY, self.count);
+		WriteByte(MSG_ENTITY, self.glow_color);
+		WriteString(MSG_ENTITY, self.noise);
+	}
 	return 1;
 }
 
@@ -523,13 +530,13 @@ void pointparticles_use()
 	if(self.wait)
 		self.nextthink = time + self.wait; // toggle back after a delay
 	self.state = !self.state;
-	self.Version += 1;
+	self.SendFlags |= 2;
 }
 
 void pointparticles_think()
 {
 	self.state = !self.state;
-	self.Version += 1;
+	self.SendFlags |= 2;
 }
 
 void spawnfunc_func_pointparticles()
@@ -541,7 +548,7 @@ void spawnfunc_func_pointparticles()
 
 	self.effects = EF_NODEPTHTEST;
 	self.SendEntity = pointparticles_SendEntity;
-	self.Version = 1;
+	self.SendFlags = 3;
 	if(!self.modelindex)
 		self.modelindex = 4.2;
 	self.model = "net_entity";
@@ -691,7 +698,7 @@ void spawnfunc_func_snow()
 void FireRailgunBullet (vector start, vector end, float bdamage, float bforce, float deathtype);
 void misc_laser_think()
 {
-	vector o;
+	vector o, a;
 	if(!self.state)
 	{
 		self.enemy = find(world, targetname, self.target);
@@ -700,6 +707,12 @@ void misc_laser_think()
 	if(self.enemy)
 	{
 		o = self.enemy.origin;
+		a = vectoangles(o - self.origin);
+		if(a != self.angles)
+		{
+			self.angles = a;
+			self.Version += 1;
+		}
 	}
 	else
 	{
@@ -714,46 +727,66 @@ void misc_laser_think()
 		else
 			FireRailgunBullet(self.origin, o, self.dmg * frametime, 0, DEATH_HURTTRIGGER);
 	}
-
-	if(time > self.ltime)
-	{
-		traceline(self.origin, o, MOVE_WORLDONLY, self);
-		trailparticles(self, self.cnt, self.origin, trace_endpos);
-		pointparticles(self.lip, trace_endpos, trace_plane_normal, 256 * frametime);
-		self.ltime = time + self.wait;
-	}
-	self.nextthink = time;
 }
+float laser_SendEntity(entity to, float fl)
+{
+	WriteByte(MSG_ENTITY, ENT_CLIENT_LASER);
+	WriteByte(MSG_ENTITY, fl);
+	if(fl & 1)
+	{
+		WriteCoord(MSG_ENTITY, self.origin_x);
+		WriteCoord(MSG_ENTITY, self.origin_y);
+		WriteCoord(MSG_ENTITY, self.origin_z);
+		WriteByte(MSG_ENTITY, self.colormod_x * 255.0);
+		WriteByte(MSG_ENTITY, self.colormod_y * 255.0);
+		WriteByte(MSG_ENTITY, self.colormod_z * 255.0);
+		WriteShort(MSG_ENTITY, self.cnt);
+	}
+	if(fl & 2)
+	{
+		WriteCoord(MSG_ENTITY, self.velocity_x);
+		WriteCoord(MSG_ENTITY, self.velocity_y);
+		WriteCoord(MSG_ENTITY, self.velocity_z);
+	}
+	return 1;
+}
+
 /*QUAKED spawnfunc_misc_laser (.5 .5 .5) ?
 Any object touching the beam will be hurt
 Keys:
 "target"
  spawnfunc_target_position where the laser ends
 "mdl"
- name of beam effect to use
+ name of beam end effect to use
+"colormod"
+ color of the beam (default: red)
 "dmg"
  damage per second (-1 for a laser that kills immediately)
-"wait"
- delay between sending the particle effect
 */
 void spawnfunc_misc_laser()
 {
 	if(self.mdl)
 	{
-		self.cnt = particleeffectnum(self.mdl);
-		self.lip = particleeffectnum(strcat(self.mdl, "_end"));
+		self.cnt = particleeffectnum(strcat(self.mdl, "_end"));
+		if(self.cnt < 0)
+			self.cnt = particleeffectnum(self.mdl);
 	}
 	else
 	{
-		self.cnt = particleeffectnum("misc_laser_beam");
-		self.lip = particleeffectnum("misc_laser_beam_end");
+		self.cnt = particleeffectnum("misc_laser_beam_end");
 	}
-	if(!self.wait)
-		self.wait = 1;
+	if(self.colormod == '0 0 0')
+		self.colormod = '1 0 0';
 	if(!self.message)
 		self.message = "saw the light";
 	self.think = misc_laser_think;
 	self.nextthink = time;
+
+	self.effects = EF_NODEPTHTEST;
+	self.SendEntity = laser_SendEntity;
+	self.SendFlags = 3;
+	self.modelindex = 1;
+	self.model = "net_entity";
 }
 
 // tZorks trigger impulse / gravity

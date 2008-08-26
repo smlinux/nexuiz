@@ -1,3 +1,5 @@
+const string string_null;
+
 // --------------------------------------------------------------------------
 // MENU Functionality
 
@@ -110,3 +112,4 @@ entity teamslots[17];    // 17 teams (including "spectator team")
 
 .void(void) draw;
 float drawframetime;
+vector view_origin, view_angles, view_forward, view_right, view_up;

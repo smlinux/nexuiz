@@ -88,38 +88,54 @@ void Draw_PointParticles()
 
 void Ent_PointParticles()
 {
-	self.modelindex = ReadShort();
-	self.origin_x = ReadCoord();
-	self.origin_y = ReadCoord();
-	self.origin_z = ReadCoord();
-	self.maxs_x = ReadCoord();
-	self.maxs_y = ReadCoord();
-	self.maxs_z = ReadCoord();
-	self.cnt = ReadShort(); // effect number
-	self.impulse = ReadCoord(); // density (<0: point, >0: volume)
-	if(self.impulse == 0)
-		self.impulse = 1; // one per sec
-	self.velocity = decompressShortVector(ReadShort());
-	self.movedir = decompressShortVector(ReadShort());
-	self.waterlevel = ReadCoord();
-	self.count = ReadCoord();
-	self.glow_color = ReadByte();
-	if(self.noise)
-		strunzone(self.noise);
-	self.noise = strzone(ReadString());
+	float f;
+	f = ReadByte();
+	if(f & 2)
+	{
+		self.impulse = ReadCoord(); // density (<0: point, >0: volume)
+		if(self.impulse == 0)
+			self.impulse = 1; // one per sec
+		self.absolute = (self.impulse >= 0);
+		if(!self.absolute)
+			self.impulse *= -self.maxs_x * self.maxs_y * self.maxs_z / 262144; // relative: particles per 64^3 cube
+	}
+	if(f & 1)
+	{
+		self.modelindex = ReadShort();
+		self.origin_x = ReadCoord();
+		self.origin_y = ReadCoord();
+		self.origin_z = ReadCoord();
+		self.maxs_x = ReadCoord();
+		self.maxs_y = ReadCoord();
+		self.maxs_z = ReadCoord();
 
-	self.absolute = (self.impulse >= 0);
-	if(!self.absolute)
-		self.impulse *= -self.maxs_x * self.maxs_y * self.maxs_z / 262144; // relative: particles per 64^3 cube
+		self.mins    = -0.5 * self.maxs;
+		self.maxs    =  0.5 * self.maxs;
+		self.origin  = self.origin - self.mins;
 
-	self.mins    = -0.5 * self.maxs;
-	self.maxs    =  0.5 * self.maxs;
-	self.origin  = self.origin - self.mins;
+		self.cnt = ReadShort(); // effect number
+
+		self.velocity = decompressShortVector(ReadShort());
+		self.movedir = decompressShortVector(ReadShort());
+		self.waterlevel = ReadCoord();
+		self.count = ReadCoord();
+		self.glow_color = ReadByte();
+		if(self.noise)
+			strunzone(self.noise);
+		self.noise = strzone(ReadString());
+	}
 
 	setorigin(self, self.origin);
 	setsize(self, self.mins, self.maxs);
 	self.solid = SOLID_NOT;
 	self.draw = Draw_PointParticles;
+}
+
+void Ent_PointParticles_Remove()
+{
+	if(self.noise)
+		strunzone(self.noise);
+	self.noise = string_null;
 }
 
 void Draw_Rain()

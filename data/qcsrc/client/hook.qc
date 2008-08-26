@@ -2,7 +2,7 @@
 .vector HookEnd;
 .float HookKillTime;
 
-void Draw_GrapplingHookLine(vector from, vector to, float thickness, vector org, vector view_forward, string texture, float aspect, vector rgb)
+void Draw_CylindricLine(vector from, vector to, float thickness, string texture, float aspect, vector rgb, float drawflag)
 {
 	// I want to draw a quad...
 	// from and to are MIDPOINTS.
@@ -18,14 +18,14 @@ void Draw_GrapplingHookLine(vector from, vector to, float thickness, vector org,
 	length_tex = aspect * vlen(to - from) / thickness;
 
 	// direction is perpendicular to the view normal, and perpendicular to the axis
-	thickdir = normalize(cross(axis, org - from));
+	thickdir = normalize(cross(axis, view_origin - from));
 
 	A = from - thickdir * (thickness / 2);
 	B = from + thickdir * (thickness / 2);
 	C = to + thickdir * (thickness / 2);
 	D = to - thickdir * (thickness / 2);
 
-	R_BeginPolygon(texture, 0);
+	R_BeginPolygon(texture, drawflag);
 	R_PolygonVertex(A, '0 0 0' + t * '1 0 0', rgb, 1);
 	R_PolygonVertex(B, '0 1 0' + t * '1 0 0', rgb, 1);
 	R_PolygonVertex(C, '0 1 0' + (t + length_tex) * '1 0 0', rgb, 1);
@@ -39,13 +39,10 @@ void Draw_GrapplingHook()
 	string tex;
 	vector rgb;
 
-	o = pmove_org + '0 0 1' * getstati(STAT_VIEWHEIGHT);
-	makevectors(input_angles);
-
 	if(time >= self.HookKillTime)
 		return;
 	if(self.sv_entnum == player_localentnum - 1)
-		a = o + v_forward * 8 - v_right * 8 + v_up * -12;
+		a = view_origin + view_forward * 8 - view_right * 8 + view_up * -12;
 	else
 		a = self.HookStart;
 	b = self.HookEnd;
@@ -75,9 +72,9 @@ void Draw_GrapplingHook()
 		rgb = '.3 1 .3';
 	}
 	if(checkextension("DP_SV_WRITEPICTURE"))
-		Draw_GrapplingHookLine(b, a, 8, o, v_forward, tex, 0.25, '1 1 1');
+		Draw_CylindricLine(b, a, 8, tex, 0.25, '1 1 1', DRAWFLAG_NORMAL);
 	else
-		Draw_GrapplingHookLine(b, a, 1, o, v_forward, "", 0.25, rgb);
+		Draw_CylindricLine(b, a, 1, "", 0.25, rgb, DRAWFLAG_NORMAL);
 }
 
 void Net_GrapplingHook()
