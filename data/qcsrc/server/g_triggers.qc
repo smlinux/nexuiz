@@ -742,6 +742,9 @@ float laser_SendEntity(entity to, float fl)
 		WriteCoord(MSG_ENTITY, self.origin_x);
 		WriteCoord(MSG_ENTITY, self.origin_y);
 		WriteCoord(MSG_ENTITY, self.origin_z);
+	}
+	if(fl & 8)
+	{
 		WriteByte(MSG_ENTITY, self.colormod_x * 255.0);
 		WriteByte(MSG_ENTITY, self.colormod_y * 255.0);
 		WriteByte(MSG_ENTITY, self.colormod_z * 255.0);

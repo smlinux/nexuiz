@@ -25,6 +25,9 @@ void Ent_Laser()
 		self.origin_x = ReadCoord();
 		self.origin_y = ReadCoord();
 		self.origin_z = ReadCoord();
+	}
+	if(f & 8)
+	{
 		self.colormod_x = ReadByte() / 255.0;
 		self.colormod_y = ReadByte() / 255.0;
 		self.colormod_z = ReadByte() / 255.0;
