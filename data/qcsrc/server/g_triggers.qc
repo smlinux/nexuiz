@@ -699,6 +699,9 @@ void misc_laser_aim()
 void misc_laser_think()
 {
 	vector o;
+
+	self.nextthink = time;
+
 	if(!self.count)
 	{
 		self.enemy = find(world, targetname, self.target);
@@ -721,6 +724,7 @@ void misc_laser_think()
 			FireRailgunBullet(self.origin, o, self.dmg * frametime, 0, DEATH_HURTTRIGGER);
 	}
 }
+
 float laser_SendEntity(entity to, float fl)
 {
 	WriteByte(MSG_ENTITY, ENT_CLIENT_LASER);
