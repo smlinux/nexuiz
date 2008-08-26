@@ -489,7 +489,10 @@ void spawnfunc_func_stardust() {
 float pointparticles_SendEntity(entity to)
 {
 	WriteByte(MSG_ENTITY, ENT_CLIENT_POINTPARTICLES);
-	WriteShort(MSG_ENTITY, self.modelindex);
+	if(self.modelindex != 4.2)
+		WriteShort(MSG_ENTITY, self.modelindex);
+	else
+		WriteShort(MSG_ENTITY, 0);
 	WriteCoord(MSG_ENTITY, self.origin_x + self.mins_x);
 	WriteCoord(MSG_ENTITY, self.origin_y + self.mins_y);
 	WriteCoord(MSG_ENTITY, self.origin_z + self.mins_z);
@@ -528,14 +531,15 @@ void spawnfunc_func_sparks()
 	self.effects = EF_NODEPTHTEST;
 	self.SendEntity = pointparticles_SendEntity;
 	self.Version = 1;
-	self.modelindex = 1;
+	if(!self.modelindex)
+		self.modelindex = 4.2;
 	self.model = "net_entity";
 
 	self.count = self.cnt;
 	self.mins = '0 0 0';
 	self.maxs = '0 0 0';
 	self.velocity = '0 0 -1';
-	self.cnt = particleeffectnum("TE_SPARK");
+	self.cnt = particleeffectnum("func_sparks");
 	self.impulse = 0.1 / self.wait;
 }
 
