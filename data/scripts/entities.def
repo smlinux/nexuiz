@@ -907,3 +907,17 @@ cnt: weight of spawn point for random selection. Set to a lower value if you hav
 race_place: if target points to the trigger_race_checkpoint with cnt 0 (finish line), this sets which place the spawn corresponds to
 */
 
+/*QUAKED func_pointparticles (.5 .5 .5) ? START_ON
+A brush that emits particles.
+-------- KEYS --------
+mdl: particle effect name from effectinfo.txt
+impulse: when positive, number of particles to emit per second; when negative; number of particles to emit per second and 64^3 block
+velocity: particle direction and speed
+waterlevel: extra velocity jitter amount
+count: particle count multiplier (per spawned particle)
+movedir: when set, trace direction (particles will then be emitted from the surface the trace hits); the length of the vector is used as strength of taking the normal of the trace into account
+glow_color: particle palette color
+noise: sound to play when the particle is emitted
+-------- SPAWNFLAGS --------
+START_ON: when targeted, the particle emitter will start switched on
+*/

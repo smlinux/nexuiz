@@ -485,7 +485,6 @@ void spawnfunc_func_stardust() {
 	self.effects = EF_STARDUST;
 }
 
-
 float pointparticles_SendEntity(entity to)
 {
 	WriteByte(MSG_ENTITY, ENT_CLIENT_POINTPARTICLES);
@@ -500,7 +499,10 @@ float pointparticles_SendEntity(entity to)
 	WriteCoord(MSG_ENTITY, self.maxs_y - self.mins_y);
 	WriteCoord(MSG_ENTITY, self.maxs_z - self.mins_z);
 	WriteShort(MSG_ENTITY, self.cnt);
-	WriteCoord(MSG_ENTITY, self.impulse);
+	if(self.state)
+		WriteCoord(MSG_ENTITY, self.impulse);
+	else
+		WriteCoord(MSG_ENTITY, 0); // off
 	WriteShort(MSG_ENTITY, compressShortVector(self.velocity));
 	WriteShort(MSG_ENTITY, compressShortVector(self.movedir));
 	WriteCoord(MSG_ENTITY, self.waterlevel);
@@ -508,6 +510,39 @@ float pointparticles_SendEntity(entity to)
 	WriteByte(MSG_ENTITY, self.glow_color);
 	WriteString(MSG_ENTITY, self.noise);
 	return 1;
+}
+
+float pointparticles_use()
+{
+	self.state = !self.state;
+	self.Version += 1;
+}
+
+void spawnfunc_func_pointparticles()
+{
+	if(self.model != "")
+		setmodel(self, self.model);
+	if(self.noise != "")
+		precache_sound (self.noise);
+
+	self.effects = EF_NODEPTHTEST;
+	self.SendEntity = pointparticles_SendEntity;
+	self.Version = 1;
+	if(!self.modelindex)
+		self.modelindex = 4.2;
+	self.model = "net_entity";
+	if(!self.cnt)
+		self.cnt = particleeffectnum(self.mdl);
+	if(self.targetname != "")
+	{
+		self.use = pointparticles_use;
+		if(self.spawnflags & 1)
+			self.state = 1;
+		else
+			self.state = 0;
+	}
+	else
+		self.state = 1;
 }
 
 void spawnfunc_func_sparks()
@@ -523,23 +558,14 @@ void spawnfunc_func_sparks()
 		self.wait = 0.25; // nice default value
 	}
 
-	// sound
-	if(self.noise)
-		precache_sound (self.noise);
-
-	self.effects = EF_NODEPTHTEST;
-	self.SendEntity = pointparticles_SendEntity;
-	self.Version = 1;
-	if(!self.modelindex)
-		self.modelindex = 4.2;
-	self.model = "net_entity";
-
 	self.count = self.cnt;
 	self.mins = '0 0 0';
 	self.maxs = '0 0 0';
 	self.velocity = '0 0 -1';
-	self.cnt = particleeffectnum("func_sparks");
+	self.mdl = "func_sparks";
 	self.impulse = 0.1 / self.wait;
+
+	spawnfunc_func_pointparticles();
 }
 
 void rain_think()
