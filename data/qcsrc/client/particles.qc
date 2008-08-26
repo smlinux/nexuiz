@@ -42,17 +42,19 @@ float PointInBrush(entity brush, vector point)
 .float glow_color; // palette color
 .float impulse; // density
 .string noise; // sound
+.float absolute;
 
 void Draw_PointParticles()
 {
-	float n, i;
+	float n, i, fail;
 	vector p;
 	vector sz;
 	vector o;
 	o = self.origin;
 	sz = self.maxs - self.mins;
 	n = self.impulse * drawframetime;
-	for(i = random(); i <= n; ++i)
+	fail = 0;
+	for(i = random(); i <= n && fail <= 64*n; ++i)
 	{
 		p = o + self.mins;
 		p_x += random() * sz_x;
@@ -67,16 +69,15 @@ void Draw_PointParticles()
 				sound(self, CHAN_AUTO, self.noise, 1, ATTN_NORM);
 			}
 		}
+		else if(self.absolute)
+		{
+			++fail;
+			--i;
+		}
 	}
 	self.origin = o;
 }
 
-.vector velocity; // particle velocity
-.float waterlevel; // direction jitter
-.float count; // count multiplier
-.float glow_color; // palette color
-.float impulse; // density
-.string noise; // sound
 void Ent_PointParticles()
 {
 	self.modelindex = ReadShort();
@@ -100,8 +101,9 @@ void Ent_PointParticles()
 		strunzone(self.noise);
 	self.noise = strzone(ReadString());
 
-	if(self.impulse < 0) // negative = volume weighted: impulse = particles/100qu^3 cube
-		self.impulse *= -(self.maxs_x * self.maxs_y * self.maxs_z) / 1000000;
+	self.absolute = (self.impulse >= 0);
+	if(!self.absolute)
+		self.impulse *= -self.maxs_x * self.maxs_y * self.maxs_z / 262144; // relative: particles per 64^3 cube
 
 	self.mins    = -0.5 * self.maxs;
 	self.maxs    =  0.5 * self.maxs;
