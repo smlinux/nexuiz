@@ -103,12 +103,15 @@ void Ent_PointParticles()
 		if(!self.absolute)
 			self.impulse *= -self.maxs_x * self.maxs_y * self.maxs_z / 262144; // relative: particles per 64^3 cube
 	}
-	if(f & 1)
+	if(f & 4)
 	{
-		self.modelindex = ReadShort();
 		self.origin_x = ReadCoord();
 		self.origin_y = ReadCoord();
 		self.origin_z = ReadCoord();
+	}
+	if(f & 1)
+	{
+		self.modelindex = ReadShort();
 		if(self.modelindex)
 		{
 			self.mins_x = ReadCoord();
@@ -120,12 +123,10 @@ void Ent_PointParticles()
 		}
 		else
 		{
+			self.mins    = '0 0 0';
 			self.maxs_x = ReadCoord();
 			self.maxs_y = ReadCoord();
 			self.maxs_z = ReadCoord();
-			self.mins    = -0.5 * self.maxs;
-			self.maxs    =  0.5 * self.maxs;
-			self.origin  = self.origin - self.mins;
 		}
 
 		self.cnt = ReadShort(); // effect number

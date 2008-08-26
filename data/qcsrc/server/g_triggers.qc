@@ -496,14 +496,17 @@ float pointparticles_SendEntity(entity to, float fl)
 		else
 			WriteCoord(MSG_ENTITY, 0); // off
 	}
+	if(fl & 4)
+	{
+		WriteCoord(MSG_ENTITY, self.origin_x);
+		WriteCoord(MSG_ENTITY, self.origin_y);
+		WriteCoord(MSG_ENTITY, self.origin_z);
+	}
 	if(fl & 1)
 	{
 		if(self.modelindex != 4.2)
 		{
 			WriteShort(MSG_ENTITY, self.modelindex);
-			WriteCoord(MSG_ENTITY, self.origin_x);
-			WriteCoord(MSG_ENTITY, self.origin_y);
-			WriteCoord(MSG_ENTITY, self.origin_z);
 			WriteCoord(MSG_ENTITY, self.mins_x);
 			WriteCoord(MSG_ENTITY, self.mins_y);
 			WriteCoord(MSG_ENTITY, self.mins_z);
@@ -514,12 +517,9 @@ float pointparticles_SendEntity(entity to, float fl)
 		else
 		{
 			WriteShort(MSG_ENTITY, 0);
-			WriteCoord(MSG_ENTITY, self.origin_x + self.mins_x);
-			WriteCoord(MSG_ENTITY, self.origin_y + self.mins_y);
-			WriteCoord(MSG_ENTITY, self.origin_z + self.mins_z);
-			WriteCoord(MSG_ENTITY, self.maxs_x - self.mins_x);
-			WriteCoord(MSG_ENTITY, self.maxs_y - self.mins_y);
-			WriteCoord(MSG_ENTITY, self.maxs_z - self.mins_z);
+			WriteCoord(MSG_ENTITY, self.maxs_x);
+			WriteCoord(MSG_ENTITY, self.maxs_y);
+			WriteCoord(MSG_ENTITY, self.maxs_z);
 		}
 		WriteShort(MSG_ENTITY, self.cnt);
 		WriteShort(MSG_ENTITY, compressShortVector(self.velocity));
@@ -538,6 +538,15 @@ void pointparticles_use()
 	self.SendFlags |= 2;
 }
 
+void pointparticles_think()
+{
+	if(self.origin != self.oldorigin)
+	{
+		self.SendFlags |= 4;
+		self.oldorigin = self.origin;
+	}
+}
+
 void spawnfunc_func_pointparticles()
 {
 	if(self.model != "")
@@ -549,7 +558,11 @@ void spawnfunc_func_pointparticles()
 	self.SendEntity = pointparticles_SendEntity;
 	self.SendFlags = 3;
 	if(!self.modelindex)
+	{
 		self.modelindex = 4.2;
+		self.origin += self.mins;
+		self.maxs -= self.mins;
+	}
 	self.model = "net_entity";
 	if(!self.cnt)
 		self.cnt = particleeffectnum(self.mdl);
@@ -563,6 +576,8 @@ void spawnfunc_func_pointparticles()
 	}
 	else
 		self.state = 1;
+	self.think = pointparticles_think;
+	self.nextthink = time;
 }
 
 void spawnfunc_func_sparks()
@@ -1041,21 +1056,21 @@ void spawnfunc_trigger_monoflop()
 
 void follow_think()
 {
-	entity source, dest;
-	source = find(world, targetname, self.killtarget);
-	dest = find(world, targetname, self.target);
+	entity src, dst;
+	src = find(world, targetname, self.killtarget);
+	dst = find(world, targetname, self.target);
 
-	if(!source || !dest)
+	if(!src || !dst)
 	{
 		objerror("follow: could not find target/killtarget");
 		return;
 	}
 
-	dest.movetype = MOVETYPE_FOLLOW;
-	dest.aiment = source;
-	dest.punchangle = source.angles;
-	dest.view_ofs = dest.origin - source.origin;
-	dest.v_angle = dest.angles - source.angles;
+	dst.movetype = MOVETYPE_FOLLOW;
+	dst.aiment = src;
+	dst.punchangle = src.angles;
+	dst.view_ofs = dst.origin - src.origin;
+	dst.v_angle = dst.angles - src.angles;
 
 	remove(self);
 }
