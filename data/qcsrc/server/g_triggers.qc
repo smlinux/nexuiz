@@ -702,6 +702,8 @@ void misc_laser_aim()
 			self.SendFlags |= 2;
 		}
 	}
+	if(self.origin != self.oldorigin)
+		self.SendFlags |= 1;
 }
 
 void misc_laser_think()
@@ -800,7 +802,7 @@ void spawnfunc_misc_laser()
 
 	self.effects = EF_NODEPTHTEST;
 	self.SendEntity = laser_SendEntity;
-	self.SendFlags = 7;
+	self.SendFlags = 15;
 	self.modelindex = 1;
 	self.model = "net_entity";
 
