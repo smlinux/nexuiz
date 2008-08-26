@@ -1038,3 +1038,30 @@ void spawnfunc_trigger_monoflop()
     self.think = monoflop_think;
 	self.state = 0;
 }
+
+void follow_think()
+{
+	entity source, dest;
+	source = find(world, targetname, self.killtarget);
+	dest = find(world, targetname, self.target);
+
+	if(!source || !dest)
+	{
+		objerror("follow: could not find target/killtarget");
+		return;
+	}
+
+	dest.movetype = MOVETYPE_FOLLOW;
+	dest.aiment = source;
+	dest.punchangle = source.angles;
+	dest.view_ofs = dest.origin - source.origin;
+	dest.v_angle = dest.angles - source.angles;
+
+	remove(self);
+}
+
+void spawnfunc_misc_follow()
+{
+	self.think = follow_think;
+	self.nextthink = time;
+}
