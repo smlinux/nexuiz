@@ -175,6 +175,8 @@ void spawnfunc_worldspawn (void)
 		error("world already spawned - you may have EXACTLY ONE worldspawn!");
 	world_already_spawned = TRUE;
 
+	compressShortVector_init();
+
 	local entity head;
 	head = nextent(world);
 	maxclients = 0;

@@ -51,6 +51,7 @@ void CSQC_Init(void)
 	CSQC_CheckEngine();
 
 	configdb = db_create();
+	compressShortVector_init();
 
 	drawfont = 0;
 	menu_visible = FALSE;

@@ -43,6 +43,7 @@ float PointInBrush(entity brush, vector point)
 .float impulse; // density
 .string noise; // sound
 .float absolute;
+.vector movedir; // trace direction
 
 void Draw_PointParticles()
 {
@@ -62,7 +63,14 @@ void Draw_PointParticles()
 		p_z += random() * sz_z;
 		if(PointInBrush(self, p))
 		{
-			pointparticles(self.cnt, p, self.velocity + randomvec() * self.waterlevel, self.count, self.glow_color);
+			if(self.movedir != '0 0 0')
+			{
+				traceline(p, p + normalize(self.movedir) * 4096, 0, world);
+				p = trace_endpos;
+				pointparticles(self.cnt, p, trace_plane_normal * vlen(self.movedir) + self.velocity + randomvec() * self.waterlevel, self.count, self.glow_color);
+			}
+			else
+				pointparticles(self.cnt, p, self.velocity + randomvec() * self.waterlevel, self.count, self.glow_color);
 			if(self.noise != "")
 			{
 				self.origin = p;
@@ -91,9 +99,8 @@ void Ent_PointParticles()
 	self.impulse = ReadCoord(); // density (<0: point, >0: volume)
 	if(self.impulse == 0)
 		self.impulse = 1; // one per sec
-	self.velocity_x = ReadCoord();
-	self.velocity_y = ReadCoord();
-	self.velocity_z = ReadCoord();
+	self.velocity = decompressShortVector(ReadShort());
+	self.movedir = decompressShortVector(ReadShort());
 	self.waterlevel = ReadCoord();
 	self.count = ReadCoord();
 	self.glow_color = ReadByte();

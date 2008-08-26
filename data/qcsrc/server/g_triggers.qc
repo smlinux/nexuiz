@@ -501,9 +501,8 @@ float pointparticles_SendEntity(entity to)
 	WriteCoord(MSG_ENTITY, self.maxs_z - self.mins_z);
 	WriteShort(MSG_ENTITY, self.cnt);
 	WriteCoord(MSG_ENTITY, self.impulse);
-	WriteCoord(MSG_ENTITY, self.velocity_x);
-	WriteCoord(MSG_ENTITY, self.velocity_y);
-	WriteCoord(MSG_ENTITY, self.velocity_z);
+	WriteShort(MSG_ENTITY, compressShortVector(self.velocity));
+	WriteShort(MSG_ENTITY, compressShortVector(self.movedir));
 	WriteCoord(MSG_ENTITY, self.waterlevel);
 	WriteCoord(MSG_ENTITY, self.count);
 	WriteByte(MSG_ENTITY, self.glow_color);

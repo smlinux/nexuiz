@@ -476,3 +476,139 @@ vector cross(vector a, vector b)
 	+	'0 1 0' * (a_z * b_x - a_x * b_z)
 	+	'0 0 1' * (a_x * b_y - a_y * b_x);
 }
+
+// compressed vector format:
+// like MD3, just even shorter
+//   4 bit pitch (16 angles), 0 is -90, 8 is 0, 16 would be 90
+//   5 bit yaw (32 angles), 0=0, 8=90, 16=180, 24=270
+//   7 bit length (logarithmic encoding), 1/8 .. about 7844
+//     length = 2^(length_encoded/8) / 8
+// if pitch is 90, yaw does nothing and therefore indicates the sign (yaw is then either 11111 or 11110); 11111 is pointing DOWN
+// thus, valid values are from 0000.11110.0000000 to 1111.11111.1111111
+// the special value 0 indicates the zero vector
+
+float lengthLogTable[128];
+
+float invertLengthLog(float x)
+{
+	float l, r, m, lerr, rerr;
+
+	if(x >= lengthLogTable[127])
+		return 127;
+	if(x <= lengthLogTable[0])
+		return 0;
+
+	l = 0;
+	r = 127;
+
+	while(r - l > 1)
+	{
+		m = floor((l + r) / 2);
+		if(lengthLogTable[m] < x)
+			l = m;
+		else
+			r = m;
+	}
+
+	// now: r is >=, l is <
+	lerr = (x - lengthLogTable[l]);
+	rerr = (lengthLogTable[r] - x);
+	if(lerr < rerr)
+		return l;
+	return r;
+}
+
+vector decompressShortVector(float data)
+{
+	vector out;
+	float pitch, yaw, len;
+	if(data == 0)
+		return '0 0 0';
+	pitch = (data & 0xF000) / 0x1000;
+	yaw =   (data & 0x0F80) / 0x80;
+	len =   (data & 0x007F);
+
+	//print("\ndecompress: pitch ", ftos(pitch)); print("yaw ", ftos(yaw)); print("len ", ftos(len), "\n");
+
+	if(pitch == 0)
+	{
+		out_x = 0;
+		out_y = 0;
+		if(yaw == 31)
+			out_z = -1;
+		else
+			out_z = +1;
+	}
+	else
+	{
+		yaw   = .19634954084936207740 * yaw;
+		pitch = .19634954084936207740 * pitch - 1.57079632679489661922;
+		out_x = cos(yaw) *  cos(pitch);
+		out_y = sin(yaw) *  cos(pitch);
+		out_z =            -sin(pitch);
+	}
+
+	//print("decompressed: ", vtos(out), "\n");
+
+	return out * lengthLogTable[len];
+}
+
+float compressShortVector(vector vec)
+{
+	vector ang;
+	float pitch, yaw, len;
+	if(vlen(vec) == 0)
+		return 0;
+	//print("compress: ", vtos(vec), "\n");
+	ang = vectoangles(vec);
+	ang_x = -ang_x;
+	if(ang_x < -90)
+		ang_x += 360;
+	if(ang_x < -90 && ang_x > +90)
+		error("BOGUS vectoangles");
+	//print("angles: ", vtos(ang), "\n");
+
+	pitch = floor(0.5 + (ang_x + 90) * 16 / 180) & 15; // -90..90 to 0..14
+	if(pitch == 0)
+	{
+		if(vec_z < 0)
+			yaw = 31;
+		else
+			yaw = 30;
+	}
+	else
+		yaw = floor(0.5 + ang_y * 32 / 360)          & 31; // 0..360 to 0..32
+	len = invertLengthLog(vlen(vec));
+
+	//print("compressed: pitch ", ftos(pitch)); print("yaw ", ftos(yaw)); print("len ", ftos(len), "\n");
+
+	return (pitch * 0x1000) + (yaw * 0x80) + len;
+}
+
+void compressShortVector_init()
+{
+	float l, f, i;
+	l = 1;
+	f = pow(2, 1/8);
+	for(i = 0; i < 128; ++i)
+	{
+		lengthLogTable[i] = l;
+		l *= f;
+	}
+
+	if(cvar("developer"))
+	{
+		print("Verifying vector compression table...\n");
+		for(i = 0x0F00; i < 0xFFFF; ++i)
+			if(i != compressShortVector(decompressShortVector(i)))
+			{
+				print("BROKEN vector compression: ", ftos(i));
+				print(" -> ", vtos(decompressShortVector(i)));
+				print(" -> ", ftos(compressShortVector(decompressShortVector(i))));
+				print("\n");
+				error("b0rk");
+			}
+		print("Done.\n");
+	}
+}
+

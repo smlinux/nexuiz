@@ -61,3 +61,7 @@ string mmsss(float t);
 string ScoreString(float vflags, float value);
 
 vector cross(vector a, vector b);
+
+void compressShortVector_init();
+vector decompressShortVector(float data);
+float compressShortVector(vector vec);
