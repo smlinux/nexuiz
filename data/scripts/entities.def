@@ -939,12 +939,14 @@ targetname: name that identifies this entity so it can be triggered
 START_ON: assume it is already turned on (so the first event is NOT passed through)
 */
 
-/*QUAKED trigger_monoflop (.5 .5 .5) (-8 -8 -8) (8 8 8)
+/*QUAKED trigger_monoflop (.5 .5 .5) (-8 -8 -8) (8 8 8) FIXED
 "Mono-flop" trigger gate... turns trigger events into pairs of events
 -------- KEYS --------
 target: trigger all entities with this targetname when triggered
 targetname: name that identifies this entity so it can be triggered
-wait: time to wait until the "off" event is fired (when it is triggered again in the meantime, the "off" delay is extended and no new "on" event is fired)
+wait: time to wait until the "off" event is fired
+-------- SPAWNFLAGS --------
+FIXED: do pulses of fixed length (so the "off" delay is NOT extended as usual and new events are just ignored)
 */
 
 /*QUAKED misc_follow (.5 .5 .5) (-8 -8 -8) (8 8 8)

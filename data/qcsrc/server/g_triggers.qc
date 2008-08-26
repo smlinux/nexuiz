@@ -491,6 +491,7 @@ float pointparticles_SendEntity(entity to, float fl)
 	WriteByte(MSG_ENTITY, fl);
 	if(fl & 2)
 	{
+		print("state changed, sending: ", ftos(self.state), "\n");
 		if(self.state)
 			WriteCoord(MSG_ENTITY, self.impulse);
 		else
@@ -545,6 +546,7 @@ void pointparticles_think()
 		self.SendFlags |= 4;
 		self.oldorigin = self.origin;
 	}
+	self.nextthink = time;
 }
 
 void spawnfunc_func_pointparticles()
@@ -556,7 +558,7 @@ void spawnfunc_func_pointparticles()
 
 	self.effects = EF_NODEPTHTEST;
 	self.SendEntity = pointparticles_SendEntity;
-	self.SendFlags = 3;
+	self.SendFlags = 7;
 	if(!self.modelindex)
 	{
 		self.modelindex = 4.2;
@@ -1038,6 +1040,14 @@ void monoflop_use()
 	self.state = 1;
 	SUB_UseTargets();
 }
+void monoflop_fixed_use()
+{
+	if(self.state)
+		return;
+	self.nextthink = time + self.wait;
+	self.state = 1;
+	SUB_UseTargets();
+}
 
 void monoflop_think()
 {
@@ -1049,8 +1059,11 @@ void spawnfunc_trigger_monoflop()
 {
 	if(!self.wait)
 		self.wait = 1;
-    self.use = monoflop_use;
-    self.think = monoflop_think;
+	if(self.spawnflags & 1)
+		self.use = monoflop_fixed_use;
+	else
+		self.use = monoflop_use;
+	self.think = monoflop_think;
 	self.state = 0;
 }
 

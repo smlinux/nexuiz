@@ -58,6 +58,8 @@ void Draw_PointParticles()
 	o = self.origin;
 	sz = self.maxs - self.mins;
 	n = self.impulse * drawframetime;
+	if(n == 0)
+		return;
 	fail = 0;
 	for(i = random(); i <= n && fail <= 64*n; ++i)
 	{
@@ -97,8 +99,6 @@ void Ent_PointParticles()
 	if(f & 2)
 	{
 		self.impulse = ReadCoord(); // density (<0: point, >0: volume)
-		if(self.impulse == 0)
-			self.impulse = 1; // one per sec
 		self.absolute = (self.impulse >= 0);
 		if(!self.absolute)
 			self.impulse *= -self.maxs_x * self.maxs_y * self.maxs_z / 262144; // relative: particles per 64^3 cube
