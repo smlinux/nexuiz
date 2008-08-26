@@ -11,7 +11,7 @@ void Draw_Laser()
 		return;
 	makevectors(self.angles);
 	traceline(self.origin, self.origin + v_forward * 32768, 0, self);
-	Draw_CylindricLine(self.origin, trace_endpos, 4, "particles/laserbeam", 1, self.colormod, DRAWFLAG_ADDITIVE); // TODO make a texture to make the laser look smoother
+	Draw_CylindricLine(self.origin, trace_endpos, 2, "particles/laserbeam", 1, self.colormod, DRAWFLAG_ADDITIVE); // TODO make a texture to make the laser look smoother
 	pointparticles(self.cnt, trace_endpos, trace_plane_normal, 256 * drawframetime);
 }
 
