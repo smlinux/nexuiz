@@ -107,3 +107,6 @@ entity playerslots[255]; // 255 is engine limit on maxclients
 entity teamslots[17];    // 17 teams (including "spectator team")
 .float gotscores;
 .entity owner;
+
+.void(void) draw;
+float drawframetime;

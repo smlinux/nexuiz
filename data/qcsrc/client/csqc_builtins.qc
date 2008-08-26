@@ -110,7 +110,7 @@ string (float i)							modelnameforindex = #334;
 
 float(string efname)							particleeffectnum = #335;
 void(entity ent, float effectnum, vector start, vector end, ...)	trailparticles = #336;
-void (float efnum, vector org, vector vel, float countmultiplier)	pointparticles = #337;
+void (float efnum, vector org, vector vel, float countmultiplier, ...)	pointparticles = #337;
 
 void (string s, ...)							cprint = #338;
 void (string s, ...)							print = #339;

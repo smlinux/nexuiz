@@ -22,6 +22,7 @@ sbar.qc
 mapvoting.qc
 
 hook.qc
+particles.qc
 
 Main.qc
 View.qc

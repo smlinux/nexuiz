@@ -434,6 +434,8 @@ void(float bIsNewEntity) CSQC_Ent_Update =
 		Ent_ReadPlayerScore();
 	else if(self.enttype == ENT_CLIENT_TEAMSCORES)
 		Ent_ReadTeamScore();
+	else if(self.enttype == ENT_CLIENT_POINTPARTICLES)
+		Ent_PointParticles();
 	else
 		error("unknown entity type in CSQC_Ent_Update\n");
 	

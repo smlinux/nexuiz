@@ -1,5 +1,7 @@
 //include "main.qh"
 
+float drawtime;
+
 void CSQC_common_hud(void);
 
 void CSQC_kh_hud(void);
@@ -8,6 +10,11 @@ void PostInit(void);
 float Sbar_WouldDrawScoreboard ();
 void CSQC_UpdateView(void)
 {
+	entity e;
+
+	drawframetime = time - drawtime;
+	drawtime = time;
+
 	// watch for gametype changes here...
 	// in ParseStuffCMD the cmd isn't executed yet :/
 	// might even be better to add the gametype to TE_CSQC_INIT...?
@@ -52,7 +59,12 @@ void CSQC_UpdateView(void)
 	R_AddEntities(MASK_NORMAL | MASK_ENGINE | MASK_ENGINEVIEWMODELS);
 
 	// Render the Scene
-	Draw_GrapplingHook();
+	
+	e = self;
+	for(self = world; (self = nextent(self)); )
+		if(self.draw)
+			self.draw();
+	self = e;
 	R_RenderScene();
 
 	// Draw the mouse cursor

@@ -486,40 +486,59 @@ void spawnfunc_func_stardust() {
 }
 
 
-/*
-void sparksthink()
+float pointparticles_SendEntity(entity to)
 {
-  self.nextthink = time + 0.1;
-
-  if(random() < self.wait) {
-    te_spark(self.origin,'0 0 -1',self.cnt);
-  }
+	WriteByte(MSG_ENTITY, ENT_CLIENT_POINTPARTICLES);
+	WriteShort(MSG_ENTITY, self.modelindex);
+	WriteCoord(MSG_ENTITY, self.origin_x + self.mins_x);
+	WriteCoord(MSG_ENTITY, self.origin_y + self.mins_y);
+	WriteCoord(MSG_ENTITY, self.origin_z + self.mins_z);
+	WriteCoord(MSG_ENTITY, self.maxs_x - self.mins_x);
+	WriteCoord(MSG_ENTITY, self.maxs_y - self.mins_y);
+	WriteCoord(MSG_ENTITY, self.maxs_z - self.mins_z);
+	WriteShort(MSG_ENTITY, self.cnt);
+	WriteCoord(MSG_ENTITY, self.impulse);
+	WriteCoord(MSG_ENTITY, self.velocity_x);
+	WriteCoord(MSG_ENTITY, self.velocity_y);
+	WriteCoord(MSG_ENTITY, self.velocity_z);
+	WriteCoord(MSG_ENTITY, self.waterlevel);
+	WriteCoord(MSG_ENTITY, self.count);
+	WriteByte(MSG_ENTITY, self.glow_color);
+	WriteString(MSG_ENTITY, self.noise);
+	return 1;
 }
 
-
-void func_sparks()
+void spawnfunc_func_sparks()
 {
-  self.think = sparksthink;
-  self.nextthink = time + 0.2;
+	// self.cnt is the amount of sparks that one burst will spawn
+	if(self.cnt < 1) {
+		self.cnt = 25.0; // nice default value
+	}
 
-  // self.cnt is the amount of sparks that one burst will spawn
-  if(self.cnt < 1) {
-    self.cnt = 25.0; // nice default value
-  }
+	// self.wait is the probability that a sparkthink will spawn a spark shower
+	// range: 0 - 1, but 0 makes little sense, so...
+	if(self.wait < 0.05) {
+		self.wait = 0.25; // nice default value
+	}
 
-  // self.wait is the probability that a sparkthink will spawn a spark shower
-  // range: 0 - 1, but 0 makes little sense, so...
-  if(self.wait < 0.05) {
-    self.wait = 0.25; // nice default value
-  }
+	// sound
+	if(self.noise)
+		precache_sound (self.noise);
 
-  // sound
-  if(self.noise) {
-    precache_sound (self.noise);
-    ambientsound (self.origin, self.noise, VOL_BASE, ATTN_STATIC);
-  }
+	self.effects = EF_NODEPTHTEST;
+	self.SendEntity = pointparticles_SendEntity;
+	self.Version = 1;
+	self.modelindex = 1;
+	self.model = "net_entity";
+
+	self.count = self.cnt;
+	self.mins = '0 0 0';
+	self.maxs = '0 0 0';
+	self.velocity = '0 0 -1';
+	self.cnt = particleeffectnum("TE_SPARK");
+	self.impulse = 0.1 / self.wait;
 }
-*/
+
 void rain_think()
 {
 	self.nextthink = time + 0.1;

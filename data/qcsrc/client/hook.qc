@@ -1,32 +1,6 @@
 .vector HookStart;
 .vector HookEnd;
 .float HookKillTime;
-void Net_GrapplingHook()
-{
-	float i;
-	vector start, end;
-	entity p;
-
-	i = ReadShort();
-	end_x = ReadCoord();
-	end_y = ReadCoord();
-	end_z = ReadCoord();
-	start_x = ReadCoord();
-	start_y = ReadCoord();
-	start_z = ReadCoord();
-
-	if(i <= 0 || i >= 256) // not owned by a client
-		return;
-	--i;
-
-	p = playerslots[i];
-	if(!p)
-		return;
-
-	p.HookKillTime = time + 0.1;
-	p.HookStart = start;
-	p.HookEnd = end;
-}
 
 void Draw_GrapplingHookLine(vector from, vector to, float thickness, vector org, vector view_forward, string texture, float aspect, vector rgb)
 {
@@ -61,55 +35,75 @@ void Draw_GrapplingHookLine(vector from, vector to, float thickness, vector org,
 
 void Draw_GrapplingHook()
 {
-	float i;
 	vector a, b, o;
-	entity e;
 	string tex;
 	vector rgb;
 
 	o = pmove_org + '0 0 1' * getstati(STAT_VIEWHEIGHT);
 	makevectors(input_angles);
 
-	for(i = 0; i < 255; ++i)
+	if(time >= self.HookKillTime)
+		return;
+	if(self.sv_entnum == player_localentnum - 1)
+		a = o + v_forward * 8 - v_right * 8 + v_up * -12;
+	else
+		a = self.HookStart;
+	b = self.HookEnd;
+	if(self.team == COLOR_TEAM1)
 	{
-		e = playerslots[i];
-		if(!e)
-			continue;
-		if(time >= e.HookKillTime)
-			continue;
-		if(i == player_localentnum - 1)
-			a = o + v_forward * 8 - v_right * 8 + v_up * -12;
-		else
-			a = e.HookStart;
-		b = e.HookEnd;
-		if(e.team == COLOR_TEAM1)
-		{
-			tex = "particles/hook_red";
-			rgb = '1 .3 .3';
-		}
-		else if(e.team == COLOR_TEAM2)
-		{
-			tex = "particles/hook_blue";
-			rgb = '.3 .3 1';
-		}
-		else if(e.team == COLOR_TEAM3)
-		{
-			tex = "particles/hook_yellow";
-			rgb = '1 1 .3';
-		}
-		else if(e.team == COLOR_TEAM4)
-		{
-			tex = "particles/hook_pink";
-			rgb = '1 .3 1';
-		}
-		else
-		{
-			tex = "particles/hook_green";
-			rgb = '.3 1 .3';
-		}
-		if(checkextension("DP_SV_WRITEPICTURE"))
-			Draw_GrapplingHookLine(b, a, 8, o, v_forward, tex, 0.25, '1 1 1');
-		else
-			Draw_GrapplingHookLine(b, a, 1, o, v_forward, "", 0.25, rgb);
+		tex = "particles/hook_red";
+		rgb = '1 .3 .3';
 	}
+	else if(self.team == COLOR_TEAM2)
+	{
+		tex = "particles/hook_blue";
+		rgb = '.3 .3 1';
+	}
+	else if(self.team == COLOR_TEAM3)
+	{
+		tex = "particles/hook_yellow";
+		rgb = '1 1 .3';
+	}
+	else if(self.team == COLOR_TEAM4)
+	{
+		tex = "particles/hook_pink";
+		rgb = '1 .3 1';
+	}
+	else
+	{
+		tex = "particles/hook_green";
+		rgb = '.3 1 .3';
+	}
+	if(checkextension("DP_SV_WRITEPICTURE"))
+		Draw_GrapplingHookLine(b, a, 8, o, v_forward, tex, 0.25, '1 1 1');
+	else
+		Draw_GrapplingHookLine(b, a, 1, o, v_forward, "", 0.25, rgb);
+}
+
+void Net_GrapplingHook()
+{
+	float i;
+	vector start, end;
+	entity p;
+
+	i = ReadShort();
+	end_x = ReadCoord();
+	end_y = ReadCoord();
+	end_z = ReadCoord();
+	start_x = ReadCoord();
+	start_y = ReadCoord();
+	start_z = ReadCoord();
+
+	if(i <= 0 || i >= 256) // not owned by a client
+		return;
+	--i;
+
+	p = playerslots[i];
+	if(!p)
+		return;
+
+	p.HookKillTime = time + 0.1;
+	p.HookStart = start;
+	p.HookEnd = end;
+	p.draw = Draw_GrapplingHook;
 }
