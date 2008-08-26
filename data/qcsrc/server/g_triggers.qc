@@ -499,15 +499,28 @@ float pointparticles_SendEntity(entity to, float fl)
 	if(fl & 1)
 	{
 		if(self.modelindex != 4.2)
+		{
 			WriteShort(MSG_ENTITY, self.modelindex);
+			WriteCoord(MSG_ENTITY, self.origin_x);
+			WriteCoord(MSG_ENTITY, self.origin_y);
+			WriteCoord(MSG_ENTITY, self.origin_z);
+			WriteCoord(MSG_ENTITY, self.mins_x);
+			WriteCoord(MSG_ENTITY, self.mins_y);
+			WriteCoord(MSG_ENTITY, self.mins_z);
+			WriteCoord(MSG_ENTITY, self.maxs_x);
+			WriteCoord(MSG_ENTITY, self.maxs_y);
+			WriteCoord(MSG_ENTITY, self.maxs_z);
+		}
 		else
+		{
 			WriteShort(MSG_ENTITY, 0);
-		WriteCoord(MSG_ENTITY, self.origin_x + self.mins_x);
-		WriteCoord(MSG_ENTITY, self.origin_y + self.mins_y);
-		WriteCoord(MSG_ENTITY, self.origin_z + self.mins_z);
-		WriteCoord(MSG_ENTITY, self.maxs_x - self.mins_x);
-		WriteCoord(MSG_ENTITY, self.maxs_y - self.mins_y);
-		WriteCoord(MSG_ENTITY, self.maxs_z - self.mins_z);
+			WriteCoord(MSG_ENTITY, self.origin_x + self.mins_x);
+			WriteCoord(MSG_ENTITY, self.origin_y + self.mins_y);
+			WriteCoord(MSG_ENTITY, self.origin_z + self.mins_z);
+			WriteCoord(MSG_ENTITY, self.maxs_x - self.mins_x);
+			WriteCoord(MSG_ENTITY, self.maxs_y - self.mins_y);
+			WriteCoord(MSG_ENTITY, self.maxs_z - self.mins_z);
+		}
 		WriteShort(MSG_ENTITY, self.cnt);
 		WriteShort(MSG_ENTITY, compressShortVector(self.velocity));
 		WriteShort(MSG_ENTITY, compressShortVector(self.movedir));

@@ -1,4 +1,3 @@
-#ifdef POINTINBRUSH_WORKS
 vector PointInBrush_vec;
 entity PointInBrush_brush;
 entity PointInBrush_allmask;
@@ -39,7 +38,6 @@ float PointInBrush(entity brush, vector point)
 
 	return f;
 }
-#endif
 
 .float cnt; // effect number
 .vector velocity; // particle velocity
@@ -67,9 +65,7 @@ void Draw_PointParticles()
 		p_x += random() * sz_x;
 		p_y += random() * sz_y;
 		p_z += random() * sz_z;
-#ifdef POINTINBRUSH_WORKS
 		if(PointInBrush(self, p))
-#endif
 		{
 			if(self.movedir != '0 0 0')
 			{
@@ -85,13 +81,11 @@ void Draw_PointParticles()
 				sound(self, CHAN_AUTO, self.noise, 1, ATTN_NORM);
 			}
 		}
-#ifdef POINTINBRUSH_WORKS
 		else if(self.absolute)
 		{
 			++fail;
 			--i;
 		}
-#endif
 	}
 	self.origin = o;
 }
@@ -115,13 +109,24 @@ void Ent_PointParticles()
 		self.origin_x = ReadCoord();
 		self.origin_y = ReadCoord();
 		self.origin_z = ReadCoord();
-		self.maxs_x = ReadCoord();
-		self.maxs_y = ReadCoord();
-		self.maxs_z = ReadCoord();
-
-		self.mins    = -0.5 * self.maxs;
-		self.maxs    =  0.5 * self.maxs;
-		self.origin  = self.origin - self.mins;
+		if(self.modelindex)
+		{
+			self.mins_x = ReadCoord();
+			self.mins_y = ReadCoord();
+			self.mins_z = ReadCoord();
+			self.maxs_x = ReadCoord();
+			self.maxs_y = ReadCoord();
+			self.maxs_z = ReadCoord();
+		}
+		else
+		{
+			self.maxs_x = ReadCoord();
+			self.maxs_y = ReadCoord();
+			self.maxs_z = ReadCoord();
+			self.mins    = -0.5 * self.maxs;
+			self.maxs    =  0.5 * self.maxs;
+			self.origin  = self.origin - self.mins;
+		}
 
 		self.cnt = ReadShort(); // effect number
 
