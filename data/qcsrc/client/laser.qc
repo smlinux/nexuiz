@@ -1,12 +1,16 @@
-// a laser goes from origin in direction velocity
+// a laser goes from origin in direction angles
 // it has color 'colormod'
 // and stops when something is in the way
 .float cnt; // end effect
 .vector colormod;
+.float state; // on-off
 
 void Draw_Laser()
 {
-	traceline(self.origin, self.origin + self.velocity, 0, self);
+	if(!self.state)
+		return;
+	makevectors(self.angles);
+	traceline(self.origin, self.origin + v_forward * 32768, 0, self);
 	Draw_CylindricLine(self.origin, trace_endpos, 4, "particles/laserbeam", 1, self.colormod, DRAWFLAG_ADDITIVE); // TODO make a texture to make the laser look smoother
 	pointparticles(self.cnt, trace_endpos, trace_plane_normal, 256 * drawframetime);
 }
@@ -28,9 +32,10 @@ void Ent_Laser()
 	}
 	if(f & 2)
 	{
-		self.velocity_x = ReadCoord();
-		self.velocity_y = ReadCoord();
-		self.velocity_z = ReadCoord();
+		self.angles_x = ReadCoord();
+		self.angles_y = ReadCoord();
 	}
+	if(f & 4)
+		self.state = ReadByte();
 	self.draw = Draw_Laser;
 }

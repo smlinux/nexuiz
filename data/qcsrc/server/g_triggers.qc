@@ -521,20 +521,6 @@ float pointparticles_SendEntity(entity to, float fl)
 
 void pointparticles_use()
 {
-	if(self.wait && time < self.nextthink)
-	{
-		self.nextthink = time + self.wait; // extend the time
-		return;
-	}
-
-	if(self.wait)
-		self.nextthink = time + self.wait; // toggle back after a delay
-	self.state = !self.state;
-	self.SendFlags |= 2;
-}
-
-void pointparticles_think()
-{
 	self.state = !self.state;
 	self.SendFlags |= 2;
 }
@@ -561,7 +547,6 @@ void spawnfunc_func_pointparticles()
 			self.state = 1;
 		else
 			self.state = 0;
-		self.think = pointparticles_think;
 	}
 	else
 		self.state = 1;
@@ -696,29 +681,37 @@ void spawnfunc_func_snow()
 
 
 void FireRailgunBullet (vector start, vector end, float bdamage, float bforce, float deathtype);
-void misc_laser_think()
+
+void misc_laser_aim()
 {
-	vector o, a;
-	if(!self.state)
-	{
-		self.enemy = find(world, targetname, self.target);
-		self.state = 1;
-	}
+	vector a;
 	if(self.enemy)
 	{
-		o = self.enemy.origin;
-		a = vectoangles(o - self.origin);
+		a = vectoangles(self.enemy.origin - self.origin);
 		if(a != self.angles)
 		{
 			self.angles = a;
-			self.Version += 1;
+			self.SendFlags |= 2;
 		}
 	}
-	else
+}
+
+void misc_laser_think()
+{
+	vector o;
+	if(!self.count)
 	{
-		makevectors(self.angles);
-		o = self.origin + v_forward * MAX_SHOT_DISTANCE;
+		self.enemy = find(world, targetname, self.target);
+		self.count = 1;
 	}
+
+	if(!self.state)
+		return;
+
+	misc_laser_aim();
+
+	makevectors(self.angles);
+	o = self.origin + 32768 * v_forward;
 
 	if(self.dmg)
 	{
@@ -744,14 +737,15 @@ float laser_SendEntity(entity to, float fl)
 	}
 	if(fl & 2)
 	{
-		WriteCoord(MSG_ENTITY, self.velocity_x);
-		WriteCoord(MSG_ENTITY, self.velocity_y);
-		WriteCoord(MSG_ENTITY, self.velocity_z);
+		WriteCoord(MSG_ENTITY, self.angles_x);
+		WriteCoord(MSG_ENTITY, self.angles_y);
 	}
+	if(fl & 4)
+		WriteByte(MSG_ENTITY, self.state);
 	return 1;
 }
 
-/*QUAKED spawnfunc_misc_laser (.5 .5 .5) ?
+/*QUAKED spawnfunc_misc_laser (.5 .5 .5) ? START_ON
 Any object touching the beam will be hurt
 Keys:
 "target"
@@ -763,6 +757,13 @@ Keys:
 "dmg"
  damage per second (-1 for a laser that kills immediately)
 */
+void laser_use()
+{
+	self.state = !self.state;
+	self.SendFlags |= 4;
+	misc_laser_aim();
+}
+
 void spawnfunc_misc_laser()
 {
 	if(self.mdl)
@@ -784,9 +785,20 @@ void spawnfunc_misc_laser()
 
 	self.effects = EF_NODEPTHTEST;
 	self.SendEntity = laser_SendEntity;
-	self.SendFlags = 3;
+	self.SendFlags = 7;
 	self.modelindex = 1;
 	self.model = "net_entity";
+
+	if(self.targetname != "")
+	{
+		self.use = laser_use;
+		if(self.spawnflags & 1)
+			self.state = 1;
+		else
+			self.state = 0;
+	}
+	else
+		self.state = 1;
 }
 
 // tZorks trigger impulse / gravity
@@ -966,3 +978,46 @@ void spawnfunc_trigger_impulse()
     }
 }
 
+/*QUAKED spawnfunc_trigger_flipflop (.5 .5 .5) (-8 -8 -8) (8 8 8) START_ENABLED
+"Flip-flop" trigger gate... lets only every second trigger event through
+*/
+void flipflop_use()
+{
+	self.state = !self.state;
+	if(self.state)
+		SUB_UseTargets();
+}
+
+void spawnfunc_trigger_flipflop()
+{
+	if(self.spawnflags & 1)
+		self.state = 1;
+    self.use = flipflop_use;
+}
+
+/*QUAKED spawnfunc_trigger_monoflop (.5 .5 .5) (-8 -8 -8) (8 8 8)
+"Mono-flop" trigger gate... turns one trigger event into one "on" and one "off" event, separated by a delay of "wait"
+*/
+void monoflop_use()
+{
+	self.nextthink = time + self.wait;
+	if(self.state)
+		return;
+	self.state = 1;
+	SUB_UseTargets();
+}
+
+void monoflop_think()
+{
+	self.state = 0;
+	SUB_UseTargets();
+}
+
+void spawnfunc_trigger_monoflop()
+{
+	if(!self.wait)
+		self.wait = 1;
+    self.use = monoflop_use;
+    self.think = monoflop_think;
+	self.state = 0;
+}
