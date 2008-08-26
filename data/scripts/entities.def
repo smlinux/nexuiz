@@ -500,9 +500,9 @@ NOANGLE: Ignore angle attenuation.
 Laser beam emitter
 -------- KEYS --------
 target: target_position the laser targets (may be another entity, the laser will then target its origin. Use origin brushes, that is!)
-mdl: name of particle effect for the beam (see effectinfo.txt; default is misc_laser_beam)
+mdl: name of particle effect for the beam end point (see effectinfo.txt; default is misc_laser_beam_end)
+colormod: color of the laser beam (default: red, that is, 1 0 0)
 dmg: damage inflicted by the beam per second, or -1 for an instant-death ray
-wait: delay between laser scans (beam refreshes/hurts)
 */
 
 /*QUAKED misc_model (1 .5 .25) (-16 -16 -16) (16 16 16) - SOLID - EXTRUDE_NORMALS EXTRUDE_TERRAIN
