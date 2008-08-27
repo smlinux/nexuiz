@@ -719,7 +719,10 @@ void misc_laser_aim()
 		}
 	}
 	if(self.origin != self.oldorigin)
+	{
 		self.SendFlags |= 1;
+		self.oldorigin = self.origin;
+	}
 }
 
 void misc_laser_think()
