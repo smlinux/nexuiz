@@ -334,7 +334,8 @@ void WinningConditionHelper()
 	string s;
 	entity p;
 	s = GetGametype();
-	s = strcat(s, ":", GetPlayerScoreString(world, 2)); // make this 1 once we can
+	s = strcat(s, ":", cvar_string("g_nexuizversion"));
+	s = strcat(s, "::", GetPlayerScoreString(world, 2)); // make this 1 once we can
 
 	if(teamscores_entities_count)
 	{
