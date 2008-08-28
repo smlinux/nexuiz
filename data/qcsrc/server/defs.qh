@@ -490,3 +490,4 @@ float independent_players;
 #define MAKE_INDEPENDENT_PLAYER(e) ((e).solid = SOLID_TRIGGER)
 
 string clientstuff;
+.float stat_sys_ticrate;

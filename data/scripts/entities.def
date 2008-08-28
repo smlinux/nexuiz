@@ -496,7 +496,7 @@ LINEAR: Use a linear falloff. Default is inverse distance squared (more realisti
 NOANGLE: Ignore angle attenuation.
 */
 
-/*QUAKED misc_laser (.5 .5 .5) (-8 -8 -8) (8 8 8) START_ON
+/*QUAKED misc_laser (.5 .5 .5) (-8 -8 -8) (8 8 8) START_ON FINITE
 Laser beam emitter
 -------- KEYS --------
 target: target_position the laser targets (may be another entity, the laser will then target its origin. Use origin brushes, that is!)
@@ -504,8 +504,10 @@ mdl: name of particle effect for the beam end point (see effectinfo.txt; default
 colormod: color of the laser beam (default: red, that is, 1 0 0)
 dmg: damage inflicted by the beam per second, or -1 for an instant-death ray
 targetname: name to target this (then its state is toggled)
+alpha: when set, makes a dark laser of the given strength; may be combined with colormod
 -------- SPAWNFLAGS --------
 START_ON: when targeted, the laser will start switched on
+FINITE: the laser does not extend over its target like light would do, but stops there (takes more bandwidth)
 -------- NOTES --------
 Use trigger_monoflop if you want the laser to turn off for a while, then turn back on
 */

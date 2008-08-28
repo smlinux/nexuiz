@@ -2,17 +2,13 @@
 .vector HookEnd;
 .float HookKillTime;
 
-void Draw_CylindricLine(vector from, vector to, float thickness, string texture, float aspect, vector rgb, float drawflag)
+void Draw_CylindricLine(vector from, vector to, float thickness, string texture, float aspect, float shift, vector rgb, float alpha, float drawflag)
 {
 	// I want to draw a quad...
 	// from and to are MIDPOINTS.
 	
-	float t;
 	vector axis, thickdir, A, B, C, D;
 	float length_tex;
-
-	t = -2 * time;
-	t = random();
 
 	axis = normalize(to - from);
 	length_tex = aspect * vlen(to - from) / thickness;
@@ -26,10 +22,10 @@ void Draw_CylindricLine(vector from, vector to, float thickness, string texture,
 	D = to - thickdir * (thickness / 2);
 
 	R_BeginPolygon(texture, drawflag);
-	R_PolygonVertex(A, '0 0 0' + t * '1 0 0', rgb, 1);
-	R_PolygonVertex(B, '0 1 0' + t * '1 0 0', rgb, 1);
-	R_PolygonVertex(C, '0 1 0' + (t + length_tex) * '1 0 0', rgb, 1);
-	R_PolygonVertex(D, '0 0 0' + (t + length_tex) * '1 0 0', rgb, 1);
+	R_PolygonVertex(A, '0 0 0' + shift * '1 0 0', rgb, alpha);
+	R_PolygonVertex(B, '0 1 0' + shift * '1 0 0', rgb, alpha);
+	R_PolygonVertex(C, '0 1 0' + (shift + length_tex) * '1 0 0', rgb, alpha);
+	R_PolygonVertex(D, '0 0 0' + (shift + length_tex) * '1 0 0', rgb, alpha);
 	R_EndPolygon();
 }
 
@@ -72,9 +68,9 @@ void Draw_GrapplingHook()
 		rgb = '.3 1 .3';
 	}
 	if(checkextension("DP_SV_WRITEPICTURE"))
-		Draw_CylindricLine(b, a, 8, tex, 0.25, '1 1 1', DRAWFLAG_NORMAL);
+		Draw_CylindricLine(b, a, 8, tex, 0.25, random(), '1 1 1', 1, DRAWFLAG_NORMAL);
 	else
-		Draw_CylindricLine(b, a, 1, "", 0.25, rgb, DRAWFLAG_NORMAL);
+		Draw_CylindricLine(b, a, 1, "", 0.25, 0, rgb, 1, DRAWFLAG_NORMAL);
 }
 
 void Net_GrapplingHook()

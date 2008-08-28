@@ -1922,6 +1922,7 @@ void() ctf_setstatus;
 .float spectatee_status;
 void PlayerPreThink (void)
 {
+	self.stat_sys_ticrate = cvar("sys_ticrate");
 	if(blockSpectators)
 		checkSpectatorBlock();
 	
