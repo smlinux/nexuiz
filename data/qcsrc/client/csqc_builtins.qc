@@ -115,7 +115,7 @@ void (float efnum, vector org, vector vel, float countmultiplier, ...)	pointpart
 void (string s, ...)							cprint = #338;
 void (string s, ...)							print = #339;
 
-void (float scale)							setsensitivityscale = #347;
+void (float scale)							setsensitivityscale = #346;
 
 
 void (float framenum)							RetrieveMovementFrame = #345;

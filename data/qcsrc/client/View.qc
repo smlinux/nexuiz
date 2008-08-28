@@ -16,8 +16,9 @@ float atan2(float y, float x)
 
 vector GetCurrentFov()
 {
-	float zoomspeed, zoomfactor, zoomdir;
+	float zoomsensitivity, zoomspeed, zoomfactor, zoomdir;
 
+	zoomsensitivity = cvar("cl_zoomsensitivity");
 	zoomfactor = cvar("cl_zoomfactor");
 	if(zoomfactor < 1 || zoomfactor > 16)
 		zoomfactor = 2.5;
@@ -54,6 +55,11 @@ vector GetCurrentFov()
 				current_viewzoom = bound(1 / zoomfactor, current_viewzoom + drawframetime * zoomspeed * (1 - 1 / zoomfactor), 1);
 		}
 	}
+
+	if(zoomsensitivity > 0)
+		setsensitivityscale(pow(current_viewzoom, zoomsensitivity));
+	else
+		setsensitivityscale(1);
 
 	float frustumx, frustumy, fovx, fovy;
 	frustumy = tan(cvar("fov") * 0.00872664625997164788) * 0.75 * current_viewzoom;
