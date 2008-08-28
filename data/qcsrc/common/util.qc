@@ -277,8 +277,11 @@ void db_save(float db, string pFilename)
 {
 	float fh, i, n;
 	fh = fopen(pFilename, FILE_WRITE);
-	if(fh < 0)
-		error(strcat("Can't write DB to ", pFilename));
+	if(fh < 0) 
+	{
+		dprint(strcat("Can't write DB to ", pFilename));
+		return;
+	}
 	n = buf_getsize(db);
 	fputs(fh, strcat(ftos(DB_BUCKETS), "\n"));
 	for(i = 0; i < n; ++i)
