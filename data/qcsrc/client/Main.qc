@@ -67,6 +67,11 @@ void CSQC_Init(void)
 	registercmd("sbar_columns_set");
 	registercmd("sbar_columns_help");
 
+	registercmd("+button3");
+	registercmd("-button3");
+	registercmd("+button4");
+	registercmd("-button4");
+
 	registercvar("sbar_usecsqc", "1");
 	registercvar("sbar_columns", "default", CVAR_SAVE);
 
@@ -197,6 +202,7 @@ void PostInit(void)
 
 // CSQC_ConsoleCommand : Used to parse commands in the console that have been registered with the "registercmd" function
 // Return value should be 1 if CSQC handled the command, otherwise return 0 to have the engine handle it.
+float button_zoom;
 void Cmd_Sbar_SetFields(float);
 void Cmd_Sbar_Help(float);
 float CSQC_ConsoleCommand(string strMessage)
@@ -210,11 +216,19 @@ float CSQC_ConsoleCommand(string strMessage)
 	local string strCmd;
 	strCmd = argv(0);
 
-	/*if(strCmd == "ctf_menu") {
-		ctf_menu_show();
-		nReturn = true;
-		} else*/
-	if(strCmd == "ons_map") {
+	if(strCmd == "+button4") { // zoom
+		button_zoom = 1;
+		return true;
+	} else if(strCmd == "-button4") { // zoom
+		button_zoom = 0;
+		return true;
+	} else if(strCmd == "+button3") { // secondary
+		button_attack2 = 1;
+		return false;
+	} else if(strCmd == "-button3") { // secondary
+		button_attack2 = 0;
+		return false;
+	} else if(strCmd == "ons_map") {
 		Cmd_ons_map();
 		return true;
 	} else if(strCmd == "sbar_columns_set") {
@@ -600,6 +614,7 @@ void Net_ReadInit()
 {
 	csqc_revision = ReadShort();
 	maxclients = ReadByte();
+	minstagib = ReadByte();
 
 	CSQC_CheckRevision();
 }
@@ -723,6 +738,12 @@ void Net_ReadSpectating()
 	spectatee_status = newspectatee_status;
 }
 
+void Net_ReadSpawn()
+{
+	zoomin_effect = 1;
+	current_viewzoom = 0.6;
+}
+
 // CSQC_Parse_TempEntity : Handles all temporary entity network data in the CSQC layer.
 // You must ALWAYS first acquire the temporary ID, which is sent as a byte.
 // Return value should be 1 if CSQC handled the temporary entity, otherwise return 0 to have the engine process the event.
@@ -767,6 +788,10 @@ float CSQC_Parse_TempEntity()
 			break;
 		case 13: // TE_BEAM
 			Net_GrapplingHook();
+			bHandled = true;
+			break;
+		case TE_CSQC_SPAWN: // TE_BEAM
+			Net_ReadSpawn();
 			bHandled = true;
 			break;
 		default:

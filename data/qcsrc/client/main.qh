@@ -113,3 +113,10 @@ entity teamslots[17];    // 17 teams (including "spectator team")
 .void(void) draw;
 float drawframetime;
 vector view_origin, view_angles, view_forward, view_right, view_up;
+
+float button_zoom;
+float button_attack2;
+float activeweapon;
+float minstagib;
+float current_viewzoom;
+float zoomin_effect;

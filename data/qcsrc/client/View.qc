@@ -2,6 +2,68 @@
 
 float drawtime;
 
+float tan(float x)
+{ 
+	return sin(x) / cos(x);
+}
+float atan2(float y, float x)
+{
+	vector v;
+	v = '1 0 0' * x + '0 1 0' * y;
+	v = vectoangles(v);
+	return v_y * 0.01745329251994329576;
+}
+
+vector GetCurrentFov()
+{
+	float zoomspeed, zoomfactor, zoomdir;
+
+	zoomfactor = cvar("cl_zoomfactor");
+	if(zoomfactor < 1 || zoomfactor > 16)
+		zoomfactor = 2.5;
+	zoomspeed = cvar("cl_zoomspeed");
+	if(zoomspeed >= 0)
+		if(zoomspeed < 0.5 || zoomspeed > 16)
+			zoomspeed = 3.5;
+
+	zoomdir = button_zoom;
+	if(activeweapon == 7 && !minstagib)
+		zoomdir += button_attack2;
+
+	if(zoomdir)
+		zoomin_effect = 0;
+
+	if(zoomin_effect)
+	{
+		current_viewzoom = min(1, current_viewzoom + drawframetime);
+	}
+	else
+	{
+		if(zoomspeed < 0) // instant zoom
+		{
+			if(zoomdir)
+				current_viewzoom = 1 / zoomfactor;
+			else
+				current_viewzoom = 1;
+		}
+		else
+		{
+			if(zoomdir)
+				current_viewzoom = 1 / bound(1, 1 / current_viewzoom + drawframetime * zoomspeed * (zoomfactor - 1), zoomfactor);
+			else
+				current_viewzoom = bound(1 / zoomfactor, current_viewzoom + drawframetime * zoomspeed * (1 - 1 / zoomfactor), 1);
+		}
+	}
+
+	float frustumx, frustumy, fovx, fovy;
+	frustumy = tan(cvar("fov") * 0.00872664625997164788) * 0.75 * current_viewzoom;
+	frustumx = frustumy * cvar("vid_width") / cvar("vid_height") / cvar("vid_pixelheight");
+	fovx = atan2(frustumx, 1) / 0.00872664625997164788;
+	fovy = atan2(frustumy, 1) / 0.00872664625997164788;
+
+	return '1 0 0' * fovx + '0 1 0' * fovy;
+}
+
 void CSQC_common_hud(void);
 
 void CSQC_kh_hud(void);
@@ -37,6 +99,8 @@ void CSQC_UpdateView(void)
 	// Assign Standard Viewflags
 	// Draw the World (and sky)
 	R_SetView(VF_DRAWWORLD, 1);
+
+	R_SetView(VF_FOV, GetCurrentFov());
 	
 	// Draw the Crosshair
 	R_SetView(VF_DRAWCROSSHAIR, !Sbar_WouldDrawScoreboard());

@@ -473,7 +473,6 @@ void PutObserverInServer (void)
 	self.punchvector = '0 0 0';
 	self.oldvelocity = self.velocity;
 	self.customizeentityforclient = Client_customizeentityforclient;
-	self.viewzoom = 1;
 	self.wantswelcomemessage = 1;
 
 	if(g_arena)
@@ -680,8 +679,11 @@ void PutClientInServer (void)
 		self.punchvector = '0 0 0';
 		self.oldvelocity = self.velocity;
 
-		self.viewzoom = 0.6;
-		self.has_zoomed = 0;
+		msg_entity = self;
+		WRITESPECTATABLE_MSG_ONE({
+			WriteByte(MSG_ONE, SVC_TEMPENTITY);
+			WriteByte(MSG_ONE, TE_CSQC_SPAWN);
+		});
 
 		self.customizeentityforclient = Client_customizeentityforclient;
 
@@ -772,6 +774,7 @@ void SendCSQCInfo(void)
 	WriteByte(MSG_ONE, TE_CSQC_INIT);
 	WriteShort(MSG_ONE, CSQC_REVISION);
 	WriteByte(MSG_ONE, maxclients);
+	WriteByte(MSG_ONE, g_minstagib);
 }
 
 /*
@@ -1668,7 +1671,6 @@ void SpectateCopy(entity spectatee) {
 	self.punchangle = spectatee.punchangle;
 	self.view_ofs = spectatee.view_ofs;
 	self.v_angle = spectatee.v_angle;
-	self.viewzoom = spectatee.viewzoom;
 	self.velocity = spectatee.velocity;
 	self.dmg_take = spectatee.dmg_take;
 	self.dmg_save = spectatee.dmg_save;
@@ -2118,53 +2120,6 @@ void PlayerPreThink (void)
 		GrapplingHookFrame();
 
 		W_WeaponFrame();
-
-		{
-			float zoomfactor, zoomspeed, zoomdir;
-			zoomfactor = self.cvar_cl_zoomfactor;
-			if(zoomfactor < 1 || zoomfactor > 16)
-				zoomfactor = 2.5;
-			zoomspeed = self.cvar_cl_zoomspeed;
-			if(zoomspeed >= 0) // < 0 is instant zoom
-				if(zoomspeed < 0.5 || zoomspeed > 16)
-					zoomspeed = 3.5;
-
-			zoomdir = self.BUTTON_ZOOM;
-			if(self.BUTTON_ATCK2)
-				if(self.weapon == WEP_NEX)
-					if(!g_minstagib)
-						zoomdir = 1;
-
-			if(zoomdir)
-				self.has_zoomed = 1;
-
-			if(self.has_zoomed)
-			{
-				if(zoomspeed <= 0) // instant zoom
-				{
-					if(zoomdir)
-						self.viewzoom = 1 / zoomfactor;
-					else
-						self.viewzoom = 1;
-				}
-				else
-				{
-					// geometric zoom would be:
-					//   self.viewzoom = bound(1 / zoomfactor, self.viewzoom * pow(zoomfactor, (zoomdir ? -1 : 1) * frametime * zoomspeed), 1);
-					// however, testing showed that arithmetic/harmonic zoom works better
-					if(zoomdir)
-						// self.viewzoom = 1 / bound(1, 1 / self.viewzoom + (zoomdir ? 1 : -1) * frametime * zoomspeed * (zoomfactor - 1), zoomfactor);
-						// zoom in = arithmetic: 1x, 2x, 3x, 4x, ..., 8x
-						self.viewzoom = 1 / bound(1, 1 / self.viewzoom + frametime * zoomspeed * (zoomfactor - 1), zoomfactor);
-					else
-						// self.viewzoom = bound(1 / zoomfactor, self.viewzoom + (zoomdir ? -1 : 1) * frametime * zoomspeed * (1 - 1 / zoomfactor), 1);
-						// zoom out = harmonic: 8/1x, 8/2x, 8/3x, 8/4x, ..., 8/8x
-						self.viewzoom = bound(1 / zoomfactor, self.viewzoom + frametime * zoomspeed * (1 - 1 / zoomfactor), 1);
-				}
-			}
-			else
-				self.viewzoom = min(1, self.viewzoom + frametime); // spawn zoom-in
-		}
 
 		player_powerups();
 		player_regen();

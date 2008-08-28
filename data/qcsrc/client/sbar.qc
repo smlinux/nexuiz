@@ -1,6 +1,5 @@
 
 float last_weapon;
-float activeweapon;
 float weapontime;
 
 float sb_lines; // still don't know what to do with that NOTE: check dp's sbar.c to see what that should be
