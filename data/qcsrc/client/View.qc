@@ -56,8 +56,8 @@ vector GetCurrentFov()
 		}
 	}
 
-	if(zoomsensitivity > 0)
-		setsensitivityscale(pow(current_viewzoom, zoomsensitivity));
+	if(zoomsensitivity < 1)
+		setsensitivityscale(pow(current_viewzoom, 1 - zoomsensitivity));
 	else
 		setsensitivityscale(1);
 
