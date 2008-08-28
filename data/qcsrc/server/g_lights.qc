@@ -33,11 +33,13 @@ void dynlight_think()
 	if(!self.owner)
 		remove(self);
 
-	self.nextthink = 0.1;
+	self.nextthink = time + 0.1;
 };
 void dynlight_find_aiment()
 {
 	local entity targ;
+	if (!self.target)
+		objerror ("dynlight: no target to follow");
 
 	targ = find(world, targetname, self.target);
 	self.movetype = MOVETYPE_FOLLOW;
@@ -46,19 +48,33 @@ void dynlight_find_aiment()
 	self.punchangle = targ.angles;
 	self.view_ofs = self.origin - targ.origin;
 	self.v_angle = self.angles - targ.angles;
-	self.nextthink = 0.1;
 	self.think = dynlight_think;
+	self.nextthink = time + 0.1;
 };
 void dynlight_find_path()
 {
 	local entity targ;
+	if (!self.target)
+		objerror ("dynlight: no target to follow");
 
 	targ = find(world, targetname, self.target);
 	self.target = targ.target;
 	setorigin (self, targ.origin);
-	self.nextthink = self.ltime + 0.1;
 	self.think = train_next;
+	self.nextthink = time + 0.1;
 };
+void dynlight_find_target()
+{
+	local entity targ;
+	if (!self.target)
+		objerror ("dynlight: no target to follow");
+
+	targ = find(world, targetname, self.target);
+	setattachment(self, targ, self.dtagname);
+	self.owner = targ;
+	self.think = dynlight_think;
+	self.nextthink = time + 0.1;
+}
 void dynlight_use()
 {
 	if (self.light_lev == 0)
@@ -89,22 +105,14 @@ void spawnfunc_dynlight()
 //tag attaching
 	if (self.dtagname)
 	{
-		if (!self.target)
-			objerror ("dynlight: no target to follow");
-		targ = find(world, targetname, self.target);
-		setattachment(self, targ, self.dtagname);
-		self.owner = targ;
-		self.think = dynlight_think;
+		InitializeEntity(self, dynlight_find_target, INITPRIO_FINDTARGET);
 		return;
 	}
 
 // entity following
 	if (self.spawnflags & DFOLLOW)
 	{
-		if (!self.target)
-			objerror ("dynlight: no target to follow");
-		self.nextthink = time + 0.1;
-		self.think = dynlight_find_aiment;
+		InitializeEntity(self, dynlight_find_aiment, INITPRIO_FINDTARGET);
 		return;
 	}
 // path following
@@ -114,7 +122,7 @@ void spawnfunc_dynlight()
 		self.movetype = MOVETYPE_PUSH;
 		if (!self.speed)
 			self.speed = 100;
-		self.nextthink = self.ltime + 0.1;
-		self.think = dynlight_find_path;
+		InitializeEntity(self, dynlight_find_path, INITPRIO_FINDTARGET);
+		return;
 	}
 };

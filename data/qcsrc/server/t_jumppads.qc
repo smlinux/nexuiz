@@ -255,8 +255,7 @@ void spawnfunc_trigger_push()
 	precache_sound (self.noise);
 
 	// this must be called to spawn the teleport waypoints for bots
-	self.think = trigger_push_findtarget;
-	self.nextthink = time + 0.2;
+	InitializeEntity(self, trigger_push_findtarget, INITPRIO_FINDTARGET);
 };
 
 void spawnfunc_target_push() {};

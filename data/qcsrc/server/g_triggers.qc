@@ -712,9 +712,9 @@ void misc_laser_aim()
 	{
 		a = vectoangles(self.enemy.origin - self.origin);
 		a_x = -a_x;
-		if(a != self.angles)
+		if(a != self.mangle)
 		{
-			self.angles = a;
+			self.mangle = a;
 			self.SendFlags |= 2;
 		}
 	}
@@ -725,24 +725,23 @@ void misc_laser_aim()
 	}
 }
 
+void misc_laser_init()
+{
+	self.enemy = find(world, targetname, self.target);
+}
+
 void misc_laser_think()
 {
 	vector o;
 
 	self.nextthink = time;
 
-	if(!self.count)
-	{
-		self.enemy = find(world, targetname, self.target);
-		self.count = 1;
-	}
-
 	if(!self.state)
 		return;
 
 	misc_laser_aim();
 
-	makevectors(self.angles);
+	makevectors(self.mangle);
 	o = self.origin + 32768 * v_forward;
 
 	if(self.dmg)
@@ -773,8 +772,8 @@ float laser_SendEntity(entity to, float fl)
 	}
 	if(fl & 2)
 	{
-		WriteCoord(MSG_ENTITY, self.angles_x);
-		WriteCoord(MSG_ENTITY, self.angles_y);
+		WriteCoord(MSG_ENTITY, self.mangle_x);
+		WriteCoord(MSG_ENTITY, self.mangle_y);
 	}
 	if(fl & 4)
 		WriteByte(MSG_ENTITY, self.state);
@@ -818,6 +817,7 @@ void spawnfunc_misc_laser()
 		self.message = "saw the light";
 	self.think = misc_laser_think;
 	self.nextthink = time;
+	InitializeEntity(self, misc_laser_init, INITPRIO_FINDTARGET);
 
 	self.effects = EF_NODEPTHTEST;
 	self.SendEntity = laser_SendEntity;
@@ -1069,7 +1069,7 @@ void spawnfunc_trigger_monoflop()
 	self.state = 0;
 }
 
-void follow_think()
+void follow_init()
 {
 	entity src, dst;
 	src = find(world, targetname, self.killtarget);
@@ -1092,6 +1092,5 @@ void follow_think()
 
 void spawnfunc_misc_follow()
 {
-	self.think = follow_think;
-	self.nextthink = time;
+	InitializeEntity(self, follow_init, INITPRIO_FINDTARGET);
 }

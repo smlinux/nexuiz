@@ -344,6 +344,8 @@ void func_train_find()
 	local entity targ;
 	targ = find(world, targetname, self.target);
 	self.target = targ.target;
+	if (!self.target)
+		objerror("func_train_find: no next target");
 	setorigin(self, targ.origin - self.mins);
 	self.nextthink = self.ltime + 1;
 	self.think = train_next;
@@ -365,8 +367,7 @@ void spawnfunc_func_train()
 	self.effects |= EF_LOWPRECISION;
 
 	// wait for targets to spawn
-	self.nextthink = self.ltime + 0.1;
-	self.think = func_train_find;
+	InitializeEntity(self, func_train_find, INITPRIO_SETLOCATION);
 };
 
 
@@ -1126,8 +1127,7 @@ void spawnfunc_func_door()
 
 // LinkDoors can't be done until all of the doors have been spawned, so
 // the sizes can be detected properly.
-	self.think = LinkDoors;
-	self.nextthink = self.ltime + 0.1;
+	InitializeEntity(self, LinkDoors, INITPRIO_FINDTARGET);
 };
 
 /*

@@ -560,8 +560,6 @@ void dom_delayedinit()
 {
 	local entity head;
 
-	self.think = SUB_Remove;
-	self.nextthink = time;
 	// if no teams are found, spawn defaults
 	if (find(world, classname, "dom_team") == world)
 		dom_spawnteams();
@@ -592,7 +590,6 @@ void dom_delayedinit()
 
 void dom_init()
 {
-	local entity e;
 	// we have to precache default models/sounds even if they might not be
 	// used because spawnfunc_worldspawn is executed before any other entities are read,
 	// so we don't even know yet if this map is set up for domination...
@@ -602,9 +599,7 @@ void dom_init()
 	precache_model("models/domination/dom_pink.md3");
 	precache_model("models/domination/dom_unclaimed.md3");
 	precache_sound("domination/claim.wav");
-	e = spawn();
-	e.think = dom_delayedinit;
-	e.nextthink = time + 0.1;
+	InitializeEntity(world, dom_delayedinit, INITPRIO_GAMETYPE);
 
 	// teamplay is always on in domination, defaults to hurt self but not teammates
 	//if(!cvar("teamplay"))

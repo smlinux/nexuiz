@@ -662,8 +662,6 @@ void ctf_spawnteams()
 
 void ctf_delayedinit()
 {
-	self.think = SUB_Remove;
-	self.nextthink = time;
 	// if no teams are found, spawn defaults
 	if (find(world, classname, "ctf_team") == world)
 		ctf_spawnteams();
@@ -673,11 +671,7 @@ void ctf_delayedinit()
 
 void ctf_init()
 {
-	local entity e;
-
-	e = spawn();
-	e.think = ctf_delayedinit;
-	e.nextthink = time + 0.1;
+	InitializeEntity(world, ctf_delayedinit, INITPRIO_GAMETYPE);
 	flagcaptimerecord = stof(db_get(ServerProgsDB, strcat(GetMapname(), "/captimerecord/time")));
 };
 

@@ -142,8 +142,6 @@ void ReadGameCvars()
 
 void default_delayedinit()
 {
-	remove(self);
-
 	if(!scores_initialized)
 		ScoreRules_generic();
 }
@@ -333,10 +331,7 @@ void InitGameplayMode()
 		cvar_set("fraglimit", "0");
 	}
 
-	entity e;
-	e = spawn();
-	e.nextthink = time + 0.3; // MUST be after all other delayed inits!
-	e.think = default_delayedinit;
+	InitializeEntity(world, default_delayedinit, INITPRIO_GAMETYPE_FALLBACK);
 }
 
 string GetClientVersionMessage() {
@@ -1323,8 +1318,6 @@ void tdm_spawnteams()
 
 void tdm_delayedinit()
 {
-	self.think = SUB_Remove;
-	self.nextthink = time;
 	// if no teams are found, spawn defaults
 	if (find(world, classname, "tdm_team") == world)
 		tdm_spawnteams();
@@ -1332,10 +1325,5 @@ void tdm_delayedinit()
 
 void tdm_init()
 {
-	local entity e;
-	e = spawn();
-	e.think = tdm_delayedinit;
-	e.nextthink = time + 0.1;
+	InitializeEntity(world, tdm_delayedinit, INITPRIO_GAMETYPE);
 };
-
-

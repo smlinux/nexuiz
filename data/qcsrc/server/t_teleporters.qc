@@ -129,8 +129,8 @@ void spawnfunc_trigger_teleport (void)
 
 	EXACTTRIGGER_INIT;
 
-	self.think = teleport_findtarget;
-	self.nextthink = time + 0.2;
+	// this must be called to spawn the teleport waypoints for bots
+	InitializeEntity(self, teleport_findtarget, INITPRIO_FINDTARGET);
 
 	if (!self.target)
 		objerror ("Teleporter with no target");
