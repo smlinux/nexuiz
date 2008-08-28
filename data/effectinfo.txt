@@ -600,7 +600,7 @@ velocitymultiplier 1
 
 // sparks (quake effect)
 effect TE_SPARK
-count 1000
+count 1
 type spark
 color 0x8f4333 0xfff31b
 size 0.4 0.4
@@ -2289,15 +2289,3 @@ liquidfriction 16
 velocityjitter 512 512 512
 
 
-// sparks
-effect func_sparks
-count 1000
-type spark
-color 0x8f4333 0xfff31b
-size 0.4 0.4
-alpha 0 256 768
-gravity 1
-bounce -1
-velocityoffset 0 0 80
-velocityjitter 64 64 64
-velocitymultiplier 1
