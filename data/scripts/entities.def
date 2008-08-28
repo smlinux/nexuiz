@@ -283,7 +283,7 @@ model="models/items/g_a25.md3"
 /*QUAKED item_armor_medium (.4 .8 .4) (-30 -30 0) (30 30 32) FLOATING
 Medium Armor (default 25 armor points)
 -------- KEYS --------
-respawntime: time till it respawns (default: 30)
+respawntime: time till it respawns (default: 20)
 armorvalue: amount of armor it gives (default: 25 (g_pickup_armormedium))
 max_armorvalue: max of armor it increases to (default: 999 (g_pickup_armormedium_max))
 -------- SPAWNFLAGS --------
@@ -351,7 +351,7 @@ noise3: sound played when flag is lost in the field and respawns itself
 /*QUAKED item_health_large (.9 .3 .3) (-30 -30 0) (30 30 48) FLOATING
 Large Health (default 50 health points)
 -------- KEYS --------
-respawntime: time till it respawns (default: 15)
+respawntime: time till it respawns (default: 20)
 health: amount of health it gives (default: 50 (g_pickup_healthlarge))
 max_health: max of health it increases to (default: 999 (g_pickup_healthlarge_max))
 -------- SPAWNFLAGS --------

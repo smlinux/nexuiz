@@ -683,7 +683,7 @@ void spawnfunc_item_armor_medium (void) {
 		self.armorvalue = g_pickup_armormedium;
 	if(!self.max_armorvalue)
 		self.max_armorvalue = g_pickup_armormedium_max;
-	StartItem ("models/items/g_armormedium.md3", "misc/armor1.wav", 30, "25 Armor", IT_ARMOR, 0, commodity_pickupevalfunc, 20000);
+	StartItem ("models/items/g_armormedium.md3", "misc/armor1.wav", 20, "25 Armor", IT_ARMOR, 0, commodity_pickupevalfunc, 20000);
 }
 
 void spawnfunc_item_armor_large (void) {
@@ -715,7 +715,7 @@ void spawnfunc_item_health_large (void) {
 		self.max_health = g_pickup_healthlarge_max;
 	if(!self.health)
 		self.health = g_pickup_healthlarge;
-	StartItem ("models/items/g_h50.md3", "misc/mediumhealth.wav", 15, "50 Health", IT_25HP, 0, commodity_pickupevalfunc, 20000);
+	StartItem ("models/items/g_h50.md3", "misc/mediumhealth.wav", 20, "50 Health", IT_25HP, 0, commodity_pickupevalfunc, 20000);
 }
 
 void spawnfunc_item_health_mega (void) {
