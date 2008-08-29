@@ -257,6 +257,7 @@ void spawnfunc_trigger_multiple()
 		if ( !(self.spawnflags & SPAWNFLAG_NOTOUCH) )
 		{
 			self.touch = multi_touch;
+			setorigin (self, self.origin);	// make sure it links into the world
 		}
 	}
 };

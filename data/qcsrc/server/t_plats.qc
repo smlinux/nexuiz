@@ -140,6 +140,11 @@ void plat_use()
 	plat_go_down();
 };
 
+void plat_init_movedown()
+{
+	setorigin (self, self.pos2);
+	self.state = 2;
+}
 
 .string sound1, sound2;
 
@@ -214,10 +219,7 @@ void spawnfunc_func_plat()
 		self.use = plat_use;
 	}
 	else
-	{
-		setorigin (self, self.pos2);
-		self.state = 2;
-	}
+		InitializeEntity(self, plat_init_movedown, INITPRIO_SETLOCATION);
 };
 
 
@@ -961,6 +963,13 @@ FIXME: only one sound set available at the time being
 
 */
 
+void door_init_startopen()
+{
+	setorigin (self, self.pos2);
+	self.pos2 = self.pos1;
+	self.pos1 = self.origin;
+}
+
 void spawnfunc_func_door()
 {
 	//if (!self.deathtype) // map makers can override this
@@ -1006,11 +1015,7 @@ void spawnfunc_func_door()
 // DOOR_START_OPEN is to allow an entity to be lighted in the closed position
 // but spawn in the open position
 	if (self.spawnflags & DOOR_START_OPEN)
-	{
-		setorigin (self, self.pos2);
-		self.pos2 = self.pos1;
-		self.pos1 = self.origin;
-	}
+		InitializeEntity(self, door_init_startopen, INITPRIO_SETLOCATION);
 
 	self.state = STATE_BOTTOM;
 
@@ -1027,7 +1032,7 @@ void spawnfunc_func_door()
 
 // LinkDoors can't be done until all of the doors have been spawned, so
 // the sizes can be detected properly.
-	InitializeEntity(self, LinkDoors, INITPRIO_FINDTARGET);
+	InitializeEntity(self, LinkDoors, INITPRIO_LINKDOORS);
 };
 
 /*
