@@ -14,7 +14,7 @@ float atan2(float y, float x)
 	return v_y * 0.01745329251994329576;
 }
 
-vector GetCurrentFov()
+vector GetCurrentFov(float fov)
 {
 	float zoomsensitivity, zoomspeed, zoomfactor, zoomdir;
 
@@ -70,7 +70,7 @@ vector GetCurrentFov()
 		setsensitivityscale(1);
 
 	float frustumx, frustumy, fovx, fovy;
-	frustumy = tan(cvar("fov") * 0.00872664625997164788) * 0.75 * current_viewzoom;
+	frustumy = tan(fov * 0.00872664625997164788) * 0.75 * current_viewzoom;
 	frustumx = frustumy * cvar("vid_width") / cvar("vid_height") / cvar("vid_pixelheight");
 	fovx = atan2(frustumx, 1) / 0.00872664625997164788;
 	fovy = atan2(frustumy, 1) / 0.00872664625997164788;
@@ -84,9 +84,11 @@ void CSQC_kh_hud(void);
 void CSQC_ctf_hud(void);
 void PostInit(void);
 float Sbar_WouldDrawScoreboard ();
+float zoomscript_caught;
 void CSQC_UpdateView(void)
 {
 	entity e;
+	float fov;
 
 	drawframetime = time - drawtime;
 	drawtime = time;
@@ -96,6 +98,26 @@ void CSQC_UpdateView(void)
 	// might even be better to add the gametype to TE_CSQC_INIT...?
 	if(!postinit)
 		PostInit();
+
+	fov = cvar("fov");
+	if(fov < 50)
+	{
+		if(!zoomscript_caught)
+		{
+			localcmd("+button4\n");
+			zoomscript_caught = 1;
+			ignore_plus_zoom += 1;
+		}
+	}
+	else
+	{
+		if(zoomscript_caught)
+		{
+			localcmd("-button4\n");
+			zoomscript_caught = 0;
+			ignore_minus_zoom += 1;
+		}
+	}
 	
 	sbar_alpha_fg = cvar("sbar_alpha_fg" );
 	sbar_hudselector = cvar("sbar_hudselector");
@@ -114,7 +136,7 @@ void CSQC_UpdateView(void)
 	// Draw the World (and sky)
 	R_SetView(VF_DRAWWORLD, 1);
 
-	R_SetView(VF_FOV, GetCurrentFov());
+	R_SetView(VF_FOV, GetCurrentFov(fov));
 	
 	// Draw the Crosshair
 	R_SetView(VF_DRAWCROSSHAIR, !Sbar_WouldDrawScoreboard());

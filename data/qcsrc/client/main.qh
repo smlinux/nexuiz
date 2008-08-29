@@ -121,3 +121,5 @@ float activeweapon;
 float minstagib;
 float current_viewzoom;
 float zoomin_effect;
+float ignore_plus_zoom;
+float ignore_minus_zoom;
