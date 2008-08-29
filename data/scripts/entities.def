@@ -641,7 +641,6 @@ If you want e.g. two events to happen to conquer an objective you'd need two tar
 target: The targetname of the target_objective you want to manipulate.
 targetname: Name for other entities to target this entity.
 dmg: The amount of "health"-points you want to subtract from the objective health. Defaults to 101.
--------- SPAWNFLAGS --------
 */
 
 /*QUAKED target_position (0 .5 0) (-8 -8 -8) (8 8 8) 
@@ -949,6 +948,18 @@ targetname: name that identifies this entity so it can be triggered
 wait: time to wait until the "off" event is fired
 -------- SPAWNFLAGS --------
 FIXED: do pulses of fixed length (so the "off" delay is NOT extended as usual and new events are just ignored)
+*/
+
+/*QUAKED trigger_multivibrator (.5 .5 .5) (-8 -8 -8) (8 8 8) START_ON
+"Multivibrator" trigger gate... repeatedly sends trigger events. When triggered, turns on or off.
+-------- KEYS --------
+target: trigger all entities with this targetname when it goes off
+targetname: name that identifies this entity so it can be triggered
+phase: phase of the multivibrator (it is added to the time)
+wait: "on" cycle time (default: 1)
+respawntime: "off" cycle time (default: same as wait)
+-------- SPAWNFLAGS --------
+START_ON: assume it is already turned on (when targeted)
 */
 
 /*QUAKED misc_follow (.5 .5 .5) (-8 -8 -8) (8 8 8)

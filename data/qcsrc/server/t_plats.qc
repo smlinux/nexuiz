@@ -343,7 +343,6 @@ void spawnfunc_func_rotating()
 };
 
 .float height;
-.float phase;
 void func_bobbing_controller_think()
 {
 	local vector v;

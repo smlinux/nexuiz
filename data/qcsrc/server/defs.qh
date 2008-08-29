@@ -489,3 +489,4 @@ float independent_players;
 
 string clientstuff;
 .float stat_sys_ticrate;
+.float phase;
