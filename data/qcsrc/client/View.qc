@@ -100,7 +100,7 @@ void CSQC_UpdateView(void)
 		PostInit();
 
 	fov = cvar("fov");
-	if(button_zoom || fov < 60)
+	if(button_zoom || fov <= 59.5)
 	{
 		if(!zoomscript_caught)
 		{
