@@ -224,7 +224,7 @@ float CSQC_ConsoleCommand(string strMessage)
 			return false;
 		}
 		button_zoom = 1;
-		return false;
+		return true;
 	} else if(strCmd == "-button4") { // zoom
 		if(ignore_minus_zoom)
 		{
@@ -232,7 +232,7 @@ float CSQC_ConsoleCommand(string strMessage)
 			return false;
 		}
 		button_zoom = 0;
-		return false;
+		return true;
 	} else if(strCmd == "+button3") { // secondary
 		button_attack2 = 1;
 		return false;
