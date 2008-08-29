@@ -92,7 +92,10 @@ void spawnfunc_info_teleport_destination (void)
 	//setorigin (self, self.origin + '0 0 27');	// To fix a mappers' habit as old as Quake
 	setorigin (self, self.origin);
 
-	if (!self.targetname)
+	IFTARGETED
+	{
+	}
+	else
 		objerror ("Teleport destination without a targetname");
 }
 

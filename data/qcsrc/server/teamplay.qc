@@ -161,7 +161,7 @@ void ActivateTeamplay()
 
 void InitGameplayMode()
 {
-	float fraglimit_override, timelimit_override, capturelimit_override;
+	float fraglimit_override, timelimit_override;
 
 	VoteReset();
 	
@@ -352,7 +352,6 @@ string GetClientVersionMessage() {
 void PrintWelcomeMessage(entity pl)
 {
 	string s, mutator, modifications;
-	float p;
 
 	/*if(self.welcomemessage_time > time)
 		return;

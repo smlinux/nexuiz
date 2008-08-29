@@ -1260,3 +1260,6 @@ void InitializeEntitiesRun()
 	}
 	initialize_entity_first = world;
 }
+
+.float nottargeted;
+#define IFTARGETED if(!self.nottargeted && self.targetname != "")

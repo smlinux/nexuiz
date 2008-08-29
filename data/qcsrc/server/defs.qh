@@ -338,8 +338,6 @@ float playerid_last;
 float default_player_alpha;
 float default_weapon_alpha;
 
-.float has_zoomed;
-
 .float() customizeentityforclient;
 .float cvar_cl_handicap;
 .float cvar_cl_zoomfactor;

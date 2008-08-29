@@ -245,7 +245,6 @@ void kh_Key_Detach(entity key) // runs every time a key is dropped or lost. Runs
 	setattachment(key, world, "");
 	key.angles_y += key.owner.angles_y;
 #endif
-	key.aiment = world;
 	key.flags = FL_ITEM;
 	key.solid = SOLID_TRIGGER;
 	key.movetype = MOVETYPE_TOSS;

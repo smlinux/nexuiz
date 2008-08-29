@@ -474,7 +474,7 @@ void spawnfunc_target_speaker()
 {
 	if(self.noise)
 		precache_sound (self.noise);
-	if(self.targetname)
+	IFTARGETED
 		self.use = target_speaker_use;
 	else
 		ambientsound (self.origin, self.noise, VOL_BASE, ATTN_STATIC);
@@ -567,7 +567,7 @@ void spawnfunc_func_pointparticles()
 	self.model = "net_entity";
 	if(!self.cnt)
 		self.cnt = particleeffectnum(self.mdl);
-	if(self.targetname != "")
+	IFTARGETED
 	{
 		self.use = pointparticles_use;
 		if(self.spawnflags & 1)
@@ -854,7 +854,7 @@ void spawnfunc_misc_laser()
 	self.modelindex = 1;
 	self.model = "net_entity";
 
-	if(self.targetname != "")
+	IFTARGETED
 	{
 		self.use = laser_use;
 		if(self.spawnflags & 1)

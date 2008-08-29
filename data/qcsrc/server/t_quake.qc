@@ -52,5 +52,6 @@ void junk_function ()
 	trace_dphittexturename = "";
 	require_spawnfunc_prefix = 1;
 	self.movetypesteplandevent = SUB_Null;
+	self.viewzoom = 0;
 }
 

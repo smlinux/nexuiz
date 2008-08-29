@@ -40,7 +40,7 @@ void dompoint_captured ()
 	local float old_delay, old_team, real_team;
 
 	// now that the delay has expired, switch to the latest team to lay claim to this point
-	head = self.aiment;
+	head = self.owner;
 
 	real_team = self.cnt;
 	self.cnt = -1;
@@ -170,7 +170,7 @@ void dompointtouch()
 	self.team = self.goalentity.team; // this stores the PREVIOUS team!
 
 	self.cnt = other.team;
-	self.aiment = head; // team to switch to after the delay
+	self.owner = head; // team to switch to after the delay
 	self.dmg_inflictor = other;
 
 	// self.state = 1;
