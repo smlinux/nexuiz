@@ -30,6 +30,14 @@ vector GetCurrentFov()
 	zoomdir = button_zoom;
 	if(activeweapon == 7 && !minstagib)
 		zoomdir += button_attack2;
+	if(spectatee_status > 0 || isdemo())
+	{
+		if(spectatorbutton_zoom)
+			zoomdir = 0 + !zoomdir;
+			// do not even THINK about removing this 0
+			// _I_ know what I am doing
+			// fteqcc does not
+	}
 
 	if(zoomdir)
 		zoomin_effect = 0;

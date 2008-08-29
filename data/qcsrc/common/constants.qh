@@ -13,7 +13,8 @@
 // Revision 12: smaller scores updates (SERVER: requires new engine)
 // Revision 13: pointparticles
 // Revision 14: laser
-#define CSQC_REVISION 14
+// Revision 15: zoom
+#define CSQC_REVISION 15
 
 // probably put these in common/
 // so server/ and client/ can be synced better
@@ -198,6 +199,7 @@ const float TE_CSQC_RACE = 109;
 const float TE_CSQC_FORCESCOREBOARD = 110;
 const float TE_CSQC_SPECTATING = 111;
 const float TE_CSQC_SPAWN = 112;
+const float TE_CSQC_ZOOMNOTIFY = 113;
 
 const float STAT_KH_KEYS = 32;
 const float STAT_CTF_STATE = 33;

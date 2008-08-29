@@ -1655,6 +1655,21 @@ void player_regen (void)
 		self.event_damage(self, self, 1, DEATH_ROT, self.origin, '0 0 0');
 }
 
+.float zoomstate;
+float zoomstate_set;
+void SetZoomState(float z)
+{
+	if(z != self.zoomstate)
+	{
+		msg_entity = self;
+		WriteByte(MSG_ONE, SVC_TEMPENTITY);
+		WriteByte(MSG_ONE, TE_CSQC_ZOOMNOTIFY);
+		WriteByte(MSG_ONE, z);
+		self.zoomstate = z;
+	}
+	zoomstate_set = 1;
+}
+
 /*
 ======================
 spectate mode routines
@@ -1679,6 +1694,7 @@ void SpectateCopy(entity spectatee) {
 	self.fixangle = TRUE;
 	setorigin(self, spectatee.origin);
 	setsize(self, spectatee.mins, spectatee.maxs);
+	SetZoomState(spectatee.zoomstate);
 }
 
 float SpectateUpdate() {
@@ -1928,6 +1944,8 @@ void PlayerPreThink (void)
 	if(blockSpectators)
 		checkSpectatorBlock();
 	
+	zoomstate_set = 0;
+
 	if(self.netname_previous != self.netname)
 	{
 		if(cvar("sv_eventlog"))
@@ -2143,6 +2161,9 @@ void PlayerPreThink (void)
 	} else if(self.classname == "spectator") {
 		SpectatorThink();
 	}
+
+	if(!zoomstate_set)
+		SetZoomState(self.BUTTON_ZOOM || (self.BUTTON_ATCK2 && !g_minstagib && self.weapon == WEP_NEX));
 
 	float oldspectatee_status;
 	oldspectatee_status = self.spectatee_status;

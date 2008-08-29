@@ -217,11 +217,12 @@ float CSQC_ConsoleCommand(string strMessage)
 	strCmd = argv(0);
 
 	if(strCmd == "+button4") { // zoom
+		// return false, because the message shall be sent to the server anyway (for demos/speccing)
 		button_zoom = 1;
-		return true;
+		return false;
 	} else if(strCmd == "-button4") { // zoom
 		button_zoom = 0;
-		return true;
+		return false;
 	} else if(strCmd == "+button3") { // secondary
 		button_attack2 = 1;
 		return false;
@@ -738,6 +739,11 @@ void Net_ReadSpectating()
 	spectatee_status = newspectatee_status;
 }
 
+void Net_ReadZoomNotify()
+{
+	spectatorbutton_zoom = ReadByte();
+}
+
 void Net_ReadSpawn()
 {
 	zoomin_effect = 1;
@@ -790,8 +796,12 @@ float CSQC_Parse_TempEntity()
 			Net_GrapplingHook();
 			bHandled = true;
 			break;
-		case TE_CSQC_SPAWN: // TE_BEAM
+		case TE_CSQC_SPAWN:
 			Net_ReadSpawn();
+			bHandled = true;
+			break;
+		case TE_CSQC_ZOOMNOTIFY:
+			Net_ReadZoomNotify();
 			bHandled = true;
 			break;
 		default:

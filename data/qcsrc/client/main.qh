@@ -115,6 +115,7 @@ float drawframetime;
 vector view_origin, view_angles, view_forward, view_right, view_up;
 
 float button_zoom;
+float spectatorbutton_zoom;
 float button_attack2;
 float activeweapon;
 float minstagib;
