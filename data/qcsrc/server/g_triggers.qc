@@ -730,6 +730,14 @@ void misc_laser_aim()
 			}
 		}
 	}
+	else
+	{
+		if(self.angles != self.mangle)
+		{
+			self.mangle = self.angles;
+			self.SendFlags |= 2;
+		}
+	}
 	if(self.origin != self.oldorigin)
 	{
 		self.SendFlags |= 1;
@@ -739,7 +747,8 @@ void misc_laser_aim()
 
 void misc_laser_init()
 {
-	self.enemy = find(world, targetname, self.target);
+	if(self.target != "")
+		self.enemy = find(world, targetname, self.target);
 }
 
 void misc_laser_think()
@@ -753,9 +762,17 @@ void misc_laser_think()
 
 	misc_laser_aim();
 
-	o = self.enemy.origin;
-	if not(self.spawnflags & 2)
-		o = self.origin + normalize(o - self.origin) * 32768;
+	if(self.enemy)
+	{
+		o = self.enemy.origin;
+		if not(self.spawnflags & 2)
+			o = self.origin + normalize(o - self.origin) * 32768;
+	}
+	else
+	{
+		makevectors(self.mangle);
+		o = self.origin + v_forward * 32768;
+	}
 
 	if(self.dmg)
 	{
@@ -854,6 +871,7 @@ void spawnfunc_misc_laser()
 	self.SendFlags = 15;
 	self.modelindex = 1;
 	self.model = "net_entity";
+	self.mangle = self.angles;
 
 	IFTARGETED
 	{
