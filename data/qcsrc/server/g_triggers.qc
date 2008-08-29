@@ -751,9 +751,11 @@ void misc_laser_init()
 		self.enemy = find(world, targetname, self.target);
 }
 
+.entity pusher;
 void misc_laser_think()
 {
 	vector o;
+	entity oldself;
 
 	self.nextthink = time;
 
@@ -780,6 +782,38 @@ void misc_laser_think()
 			FireRailgunBullet(self.origin, o, 100000, 0, DEATH_HURTTRIGGER);
 		else
 			FireRailgunBullet(self.origin, o, self.dmg * frametime, 0, DEATH_HURTTRIGGER);
+	}
+
+	if(self.enemy.target != "") // DETECTOR laser
+	{
+		traceline(self.origin, o, MOVE_NORMAL, self);
+		if(trace_ent.classname == "player")
+		{
+			self.pusher = trace_ent;
+			if(!self.count)
+			{
+				self.count = 1;
+
+				oldself = self;
+				self = self.enemy;
+				activator = self.pusher;
+				SUB_UseTargets();
+				self = oldself;
+			}
+		}
+		else
+		{
+			if(self.count)
+			{
+				self.count = 0;
+
+				oldself = self;
+				self = self.enemy;
+				activator = self.pusher;
+				SUB_UseTargets();
+				self = oldself;
+			}
+		}
 	}
 }
 
