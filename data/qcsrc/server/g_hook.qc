@@ -117,7 +117,7 @@ void GrapplingHookThink()
 
 	tracebox(org, self.mins, self.maxs, self.origin, MOVE_NOMONSTERS, self.owner);
 	// do not hit players with this, as they tend to get in the way just too often
-	if(trace_fraction < 1 && !self.aiment || trace_ent != self.aiment)
+	if(trace_fraction < 1 && (!self.aiment || trace_ent != self.aiment))
 	{
 		// 1. detach the hook
 		if(self.aiment)
