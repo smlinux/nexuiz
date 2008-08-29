@@ -136,7 +136,7 @@ void fillNexuizPlayerSettingsTab(entity me)
 			e.configureNexuizTextSliderValues(e);
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Client UDP port:"));
-		me.TD(me, 1, 0.5, e = makeNexuizInputBox(0, "cl_port"));
+		me.TD(me, 1, 0.64, e = makeNexuizInputBox(0, "cl_port"));
 
 	me.gotoRC(me, me.rows - 1, 0);
 		me.TD(me, 1, me.columns, makeNexuizCommandButton("Apply immediately", '0 0 0', "color -1 -1;name \"$_cl_name\";sendcvar cl_zoomfactor;sendcvar cl_zoomspeed;sendcvar cl_autoswitch;sendcvar cl_hidewaypoints;sendcvar cl_shownames;rate $_cl_rate", COMMANDBUTTON_APPLY));
