@@ -299,7 +299,6 @@ void SV_ParseClientCommand(string s) {
 			}
 		}
 		sprint(self, "\n");
-#ifdef MAPINFO
 	} else if(argv(0) == "lsmaps") {
 		sprint(self, "^7Maps available: ");
 		for(i = 0; i < MapInfo_count; ++i)
@@ -311,7 +310,6 @@ void SV_ParseClientCommand(string s) {
 			sprint(self, strcat(col, MapInfo_BSPName_ByID(i), " "));
 		}
 		sprint(self, "\n");
-#endif
 	} else if(argv(0) == "voice") {
 		VoiceMessage(argv(1));
 	} else if(argv(0) == "say") {

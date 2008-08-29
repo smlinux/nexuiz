@@ -86,7 +86,6 @@ float GameCommand_Generic(string command)
 	{
 		if(argv(1) == "add" && argc == 3)
 		{
-#ifdef MAPINFO
 			f = fopen(strcat("maps/", argv(2), ".bsp"), FILE_READ);
 			if(f != -1)
 				fclose(f);
@@ -98,50 +97,26 @@ float GameCommand_Generic(string command)
 				cvar_set("g_maplist", argv(2));
 			else
 				cvar_set("g_maplist", strcat(argv(2), " ", cvar_string("g_maplist")));
-#else
-			f = fopen(strcat("maps/", argv(2), ".mapcfg"), FILE_READ);
-			if(f != -1)
-				fclose(f);
-			else {
-				print("maplist: ERROR: ", argv(2), " does not exist!\n");
-				return TRUE;
-			}
-			cvar_set("g_maplist", strcat("'", argv(2), "'", cvar_string("g_maplist")));
-#endif
 			return TRUE;
 		}
 		else if(argv(1) == "remove" && argc == 3)
 		{
 			s = argv(2);
-#ifdef MAPINFO
 			n = tokenizebyseparator(cvar_string("g_maplist"), " ");
-#else
-			n = tokenize(cvar_string("g_maplist"));
-#endif
 			s2 = "";
 			for(i = 0; i < n; ++i)
 				if(argv(i) != s)
 				{
-#ifdef MAPINFO
 					s2 = strcat(s2, " ", argv(i));
-#else
-					s2 = strcat(s2, "'", argv(i), "'");
-#endif
 				}
-#ifdef MAPINFO
 			s2 = substring(s2, 1, strlen(s2) - 1);
-#endif
 			cvar_set("g_maplist", s2);
 			return TRUE;
 		}
 		else if(argv(1) == "shuffle" && argc == 2)
 		{
 			s = cvar_string("g_maplist");
-#ifdef MAPINFO
 			for(i = 1; i < (n = tokenizebyseparator(s, " ")); ++i)
-#else
-			for(i = 1; i < (n = tokenize(s)); ++i)
-#endif
 			{
 				// swap i-th item at a random position from 0 to i
 				// proof for even distribution:
@@ -158,13 +133,8 @@ float GameCommand_Generic(string command)
 
 				s2 = "";
 				for(j = 0; j < n; ++j)
-#ifdef MAPINFO
 					s2 = strcat(s2, " ", argv((j == i) ? f : (j == f) ? i : j));
 				s = substring(s2, 1, strlen(s2) - 1);
-#else
-					s2 = strcat(s2, "'", argv((j == i) ? f : (j == f) ? i : j), "'");
-				s = s2;
-#endif
 			}
 			cvar_set("g_maplist", s);
 			return TRUE;

@@ -77,7 +77,6 @@ void GameCommand(string command)
 		return;
 	}
 
-#ifdef MAPINFO
 	if(argv(0) == "gametype") if(argc == 2)
 	{
 		float t, tsave;
@@ -104,7 +103,6 @@ void GameCommand(string command)
 			bprint("Game type switch to ", s, " failed: this type does not exist!\n");
 		return;
 	}
-#endif
 
 	if(argv(0) == "adminmsg") if(argc == 3)
 	{

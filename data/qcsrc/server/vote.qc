@@ -348,40 +348,23 @@ string VoteNetname(entity e)
 
 string ValidateMap(string m, entity e)
 {
-#ifdef MAPINFO
 	m = MapInfo_FixName(m);
 	if(!m)
 	{
 		print_to(e, "This map is not available on this server.");
 		return string_null;
 	}
-#else
-	if(!cvar("sv_vote_change_gametype"))
-		if(!IsSameGametype(m))
-		{
-			print_to(e, "This server does not allow changing the game type by map votes.");
-			return string_null;
-		}
-#endif
 	if(!cvar("sv_vote_override_mostrecent"))
 		if(Map_IsRecent(m))
 		{
 			print_to(e, "This server does not allow for recent maps to be played again. Please be patient for some rounds.");
 			return string_null;
 		}
-#ifdef MAPINFO
 	if(!MapInfo_CheckMap(m))
 	{
 		print_to(e, strcat("^1Invalid mapname, \"^3", m, "^1\" does not support the current game mode."));
 		return string_null;
 	}
-#else
-	if(!TryFile(strcat("maps/", m, ".mapcfg")))
-	{
-		print_to(e, strcat("^1Invalid mapname, \"^3", m, "^1\" does not exist on this server."));
-		return string_null;
-	}
-#endif
 
 	return m;
 }

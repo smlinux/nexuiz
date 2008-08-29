@@ -50,14 +50,9 @@ void CampaignPostInit()
 	string thismapname, wantedmapname;
 	thismapname = GetMapname();
 	wantedmapname = campaign_gametype[0];
-#ifdef MAPINFO
-	// TODO check game type
 	if(MapInfo_CurrentGametype() != MapInfo_Type_FromString(wantedmapname))
 		return CampaignBailout("wrong game type!");
 	wantedmapname = campaign_mapname[0];
-#else
-	wantedmapname = strcat(wantedmapname, "_", campaign_mapname[0]);
-#endif
 	if(wantedmapname != thismapname)
 		return CampaignBailout(strcat("wrong map: ", wantedmapname, " != ", thismapname));
 	cvar_set("fraglimit", ftos(campaign_fraglimit[0]));

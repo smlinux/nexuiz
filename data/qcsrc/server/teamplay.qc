@@ -172,14 +172,12 @@ void InitGameplayMode()
 	ReadGameCvars();
 	WriteGameCvars();
 
-#ifdef MAPINFO
 	MapInfo_LoadMapSettings(mapname);
 	clientstuff = strzone(MapInfo_Map_clientstuff);
 	MapInfo_ClearTemps();
 
 	// in case mapinfo switched the type
 	ReadGameCvars();
-#endif
 
 	// set both here, gamemode can override it later
 	timelimit_override = cvar("timelimit_override");
