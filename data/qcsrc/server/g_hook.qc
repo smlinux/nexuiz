@@ -60,6 +60,12 @@ void SetMovetypeFollow(entity ent, entity e)
 	ent.aiment_classname = strzone(e.classname);
 	ent.aiment_deadflag = e.deadflag;
 }
+void UnsetMovetypeFollow(entity ent)
+{
+	ent.movetype = MOVETYPE_FLY;
+	ent.solid = SOLID_BBOX;
+	ent.aiment = world;
+}
 float LostMovetypeFollow(entity ent)
 {
 	if(ent.aiment)
@@ -108,6 +114,23 @@ void GrapplingHookThink()
 
 	makevectors(self.owner.v_angle);
 	org = self.owner.origin + self.owner.view_ofs + v_forward * 8 - v_right * 8 + v_up * -12;
+
+	tracebox(org, self.mins, self.maxs, self.origin, MOVE_NOMONSTERS, self.owner);
+	// do not hit players with this, as they tend to get in the way just too often
+	if(trace_fraction < 1 && !self.aiment || trace_ent != self.aiment)
+	{
+		// 1. detach the hook
+		if(self.aiment)
+			UnsetMovetypeFollow(self);
+
+		// 2. cut it off
+		self.origin = trace_endpos;
+
+		// 3. reattach the hook
+		if(trace_ent)
+			if(trace_ent.movetype != MOVETYPE_NONE)
+				SetMovetypeFollow(self, trace_ent);
+	}
 
 	if(self.rope_length < 0)
 		self.rope_length = vlen(org - self.origin);
