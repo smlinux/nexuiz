@@ -39,7 +39,7 @@ void InterpolateOrigin_Note()
 	if(dt < 0.2)
 	{
 		self.itime1 = time;
-		self.itime2 = time + getstatf(STAT_SYS_TICRATE);
+		self.itime2 = time + getstatf(STAT_SYS_TICRATE) * getstatf(STAT_MOVEVARS_TIMESCALE);
 	}
 	else
 	{
