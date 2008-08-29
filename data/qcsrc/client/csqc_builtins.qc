@@ -39,7 +39,7 @@ float (string s)							cvar = #45;
 void (string s, ...)							localcmd = #46;
 entity (entity e)							nextent = #47;
 
-vector (vector v)							vectoangles = #51;
+vector (vector v, ...)							vectoangles = #51;
 
 void (string var, string val)						cvar_set = #72;
 
