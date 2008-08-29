@@ -240,10 +240,20 @@ void train_next()
 	self.wait = targ.wait;
 	if (!self.wait)
 		self.wait = 0.1;
-	if (targ.speed)
-		SUB_CalcMove(targ.origin - self.mins, targ.speed, train_wait);
+	if(self.wait < 0)
+	{
+		if (targ.speed)
+			SUB_CalcMove(targ.origin - self.mins, targ.speed, train_next);
+		else
+			SUB_CalcMove(targ.origin - self.mins, self.speed, train_next);
+	}
 	else
-		SUB_CalcMove(targ.origin - self.mins, self.speed, train_wait);
+	{
+		if (targ.speed)
+			SUB_CalcMove(targ.origin - self.mins, targ.speed, train_wait);
+		else
+			SUB_CalcMove(targ.origin - self.mins, self.speed, train_wait);
+	}
 };
 
 void func_train_find()

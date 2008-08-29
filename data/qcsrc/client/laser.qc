@@ -100,7 +100,7 @@ void Draw_Laser()
 	}
 	else
 	{
-		Draw_CylindricLine(self.origin, trace_endpos, 2, "particles/laserbeam", 0, time * 3, self.colormod, 1, DRAWFLAG_ADDITIVE); // TODO make a texture to make the laser look smoother
+		Draw_CylindricLine(self.origin, trace_endpos, 2, "particles/laserbeam", 0, time * 3, self.colormod, 0.5, DRAWFLAG_ADDITIVE); // TODO make a texture to make the laser look smoother
 	}
 	pointparticles(self.cnt, trace_endpos, trace_plane_normal, 256 * drawframetime);
 }

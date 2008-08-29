@@ -605,7 +605,7 @@ All path_corner entities of a train have to connect in a circular manner, while 
 target: point to next path_corner in the path.
 targetname: the train following the path or the previous path_corner in the path points to this.
 speed: speed of func_train while moving to this path corner. If unset, the value from the func_train will be used.
-wait: number of seconds func_train will pause on this path corner before moving to next path corner (default: 0.1; to not wait, set this to something like 0.001)
+wait: number of seconds func_train will pause on this path corner before moving to next path corner (default: 0.1; to not wait, set this to -1
 */
 
 /*QUAKED runematch_spawn_point (.3 .3 1) (-16 -16 -16) (16 16 16) 
