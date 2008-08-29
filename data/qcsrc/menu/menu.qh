@@ -2,8 +2,6 @@
 
 #define NULL (null_entity)
 
-#define MAPINFO
-
 // constants
 
 const string string_null;

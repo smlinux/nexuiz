@@ -1,4 +1,3 @@
-#define MAPINFO
 float require_spawnfunc_prefix; // if this float exists, only functions with spawnfunc_ name prefix qualify as spawn functions
 
 #define BUTTON_ATCK   button0
