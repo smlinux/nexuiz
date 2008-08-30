@@ -175,7 +175,7 @@ size 3 3
 alpha 256 256 0
 originjitter 6 6 6
 // dust/smoke drifting away from the impact
-effect TE_SPIKE
+effect TE_SUPERSPIKE
 count 8
 type smoke
 tex 0 8
@@ -1984,7 +1984,7 @@ lightcolor 1 0 0
 
 
 
-effect misc_laser_beam
+effect nex242_misc_laser_beam
 countabsolute 1
 type beam
 tex 60 60
@@ -1993,7 +1993,7 @@ alpha 256 256 64
 color 0xff0000 0xff0000
 sizeincrease 1
 
-effect misc_laser_beam_end
+effect nex242_misc_laser_beam_end
 count 1
 type spark
 color 0x8f4333 0xfff31b
@@ -2006,7 +2006,7 @@ velocitymultiplier 100
 
 
 
-effect misc_laser_beam_fast
+effect nex242_misc_laser_beam_fast
 countabsolute 1
 type beam
 tex 60 60
@@ -2015,7 +2015,7 @@ alpha 256 256 640
 color 0xff0000 0xff0000
 sizeincrease 0.1
 
-effect misc_laser_beam_fast_end
+effect nex242_misc_laser_beam_fast_end
 count 1
 type spark
 color 0x8f4333 0xfff31b
@@ -2027,7 +2027,7 @@ velocityjitter 64 64 64
 velocitymultiplier 100
 
 // additional laser colors (mike)
-effect misc_laser_green_beam
+effect nex242_misc_laser_green_beam
 countabsolute 1
 type beam
 tex 60 60
@@ -2036,7 +2036,7 @@ alpha 256 256 64
 color 0x00ff00 0x00ff00
 sizeincrease 1
 
-effect misc_laser_green_beam_end
+effect nex242_misc_laser_green_beam_end
 count 1
 type spark
 color 0x8f4333 0xfff31b
@@ -2047,7 +2047,7 @@ bounce -1
 velocityjitter 64 64 64
 velocitymultiplier 100
 
-effect misc_laser_blue_beam
+effect nex242_misc_laser_blue_beam
 countabsolute 1
 type beam
 tex 60 60
@@ -2056,7 +2056,7 @@ alpha 256 256 64
 color 0x0000ff 0x0000ff
 sizeincrease 1
 
-effect misc_laser_blue_beam_end
+effect nex242_misc_laser_blue_beam_end
 count 1
 type spark
 color 0x8f4333 0xfff31b
@@ -2067,7 +2067,7 @@ bounce -1
 velocityjitter 64 64 64
 velocitymultiplier 100
 
-effect misc_laser_yellow_beam
+effect nex242_misc_laser_yellow_beam
 countabsolute 1
 type beam
 tex 60 60
@@ -2076,7 +2076,7 @@ alpha 256 256 64
 color 0xffff00 0xffff00
 sizeincrease 1
 
-effect misc_laser_yellow_beam_end
+effect nex242_misc_laser_yellow_beam_end
 count 1
 type spark
 color 0x8f4333 0xfff31b
@@ -2087,7 +2087,7 @@ bounce -1
 velocityjitter 64 64 64
 velocitymultiplier 100
 
-effect misc_laser_cyan_beam
+effect nex242_misc_laser_cyan_beam
 countabsolute 1
 type beam
 tex 60 60
@@ -2096,7 +2096,7 @@ alpha 256 256 64
 color 0x00ffff 0x00ffff
 sizeincrease 1
 
-effect misc_laser_cyan_beam_end
+effect nex242_misc_laser_cyan_beam_end
 count 1
 type spark
 color 0x8f4333 0xfff31b
@@ -2107,7 +2107,7 @@ bounce -1
 velocityjitter 64 64 64
 velocitymultiplier 100
 
-effect misc_laser_magenta_beam
+effect nex242_misc_laser_magenta_beam
 countabsolute 1
 type beam
 tex 60 60
@@ -2116,7 +2116,7 @@ alpha 256 256 64
 color 0xff00ff 0xff00ff
 sizeincrease 1
 
-effect misc_laser_magenta_beam_end
+effect nex242_misc_laser_magenta_beam_end
 count 1
 type spark
 color 0x8f4333 0xfff31b
@@ -2127,7 +2127,7 @@ bounce -1
 velocityjitter 64 64 64
 velocitymultiplier 100
 
-effect misc_laser_white_beam
+effect nex242_misc_laser_white_beam
 countabsolute 1
 type beam
 tex 60 60
@@ -2136,7 +2136,7 @@ alpha 256 256 64
 color 0xffffff 0xffffff
 sizeincrease 1
 
-effect misc_laser_white_beam_end
+effect nex242_misc_laser_white_beam_end
 count 1
 type spark
 color 0x8f4333 0xfff31b
@@ -2147,7 +2147,7 @@ bounce -1
 velocityjitter 64 64 64
 velocitymultiplier 100
 
-effect misc_laser_black_beam
+effect nex242_misc_laser_black_beam
 countabsolute 1
 type beam
 tex 60 60
@@ -2156,7 +2156,7 @@ alpha 256 256 64
 color 0x000000 0x000000
 sizeincrease 1
 
-effect misc_laser_black_beam_end
+effect nex242_misc_laser_black_beam_end
 count 1
 type spark
 color 0x8f4333 0xfff31b
@@ -2167,7 +2167,7 @@ bounce -1
 velocityjitter 64 64 64
 velocitymultiplier 100
 
-effect misc_laser_orange_beam
+effect nex242_misc_laser_orange_beam
 countabsolute 1
 type beam
 tex 60 60
@@ -2176,7 +2176,7 @@ alpha 256 256 64
 color 0xff6600 0xff6600
 sizeincrease 1
 
-effect misc_laser_orange_beam_end
+effect nex242_misc_laser_orange_beam_end
 count 1
 type spark
 color 0x8f4333 0xfff31b
@@ -2288,4 +2288,40 @@ liquidfriction 16
 //velocityoffset 0 0 120
 velocityjitter 512 512 512
 
-
+// decal
+effect laser_deadly
+countabsolute 1
+type decal
+tex 56 59
+size 5 5
+alpha 256 256 0
+originjitter 6 6 6
+// dust/smoke drifting away from the impact
+effect laser_deadly
+count 0.05 // 50 per second
+type smoke
+tex 48 55
+color 0xFFFFFF 0xFFFFFF
+size 3 3
+alpha 0 64 64
+originjitter 1 1 1
+airfriction 7
+liquidfriction 16
+velocityjitter 15 15 15
+sizeincrease 2
+velocitymultiplier 20
+// sparks
+effect laser_deadly
+notunderwater
+count 0.05 // 50 per second
+type spark
+tex 40 40
+color 0xFDFFD9 0xFDFFD9
+size 0.6 0.6
+alpha 256 256 768
+gravity 1
+bounce 1
+airfriction 5
+originjitter 1 1 1
+velocityjitter 100 100 100
+velocitymultiplier 100

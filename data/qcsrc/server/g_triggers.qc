@@ -839,7 +839,7 @@ float laser_SendEntity(entity to, float fl)
 		WriteByte(MSG_ENTITY, self.colormod_z * 255.0);
 		if(fl & 0x40)
 			WriteByte(MSG_ENTITY, self.alpha * 255.0);
-		WriteShort(MSG_ENTITY, self.cnt);
+		WriteShort(MSG_ENTITY, self.cnt + 1);
 	}
 	if(fl & 2)
 	{
@@ -883,14 +883,16 @@ void spawnfunc_misc_laser()
 {
 	if(self.mdl)
 	{
-		self.cnt = particleeffectnum(strcat(self.mdl, "_end"));
-		if(self.cnt < 0)
-			self.cnt = particleeffectnum(self.mdl);
+		self.cnt = particleeffectnum(self.mdl);
 	}
-	else
+	else if(!self.cnt)
 	{
-		self.cnt = particleeffectnum("misc_laser_beam_end");
+		if(self.dmg)
+			self.cnt = particleeffectnum("laser_deadly");
+		else
+			self.cnt = -1;
 	}
+
 	if(self.colormod == '0 0 0')
 		if(!self.alpha)
 			self.colormod = '1 0 0';
