@@ -883,7 +883,10 @@ void spawnfunc_misc_laser()
 {
 	if(self.mdl)
 	{
-		self.cnt = particleeffectnum(self.mdl);
+		if(self.mdl == "none")
+			self.cnt = -1;
+		else
+			self.cnt = particleeffectnum(self.mdl);
 	}
 	else if(!self.cnt)
 	{
