@@ -80,6 +80,11 @@ void InterpolateOrigin_Undo()
 .vector velocity;
 .float alpha;
 
+// TODO move these into a heade file
+float trace_dphitq3surfaceflags;
+float Q3SURFACEFLAG_SKY = 4; // sky surface (also has NOIMPACT and NOMARKS set)
+float Q3SURFACEFLAG_NOIMPACT = 16; // projectiles should remove themselves on impact (this is set on sky)
+
 void Draw_Laser()
 {
 	if(!self.state)
@@ -93,6 +98,8 @@ void Draw_Laser()
 	{
 		makevectors(self.angles);
 		traceline(self.origin, self.origin + v_forward * 32768, 0, self);
+		if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_SKY)
+			trace_endpos = self.origin + v_forward * 1048576;
 	}
 	if(self.alpha)
 	{
