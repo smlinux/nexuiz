@@ -30,6 +30,7 @@ void Teleport_Touch (void)
 	other.angles = self.enemy.mangle;
 	other.fixangle = TRUE;
 	other.velocity = v_forward * vlen(other.velocity);
+	RemoveGrapplingHook(other);
 
 	// Kill anyone else in the teleporter box (NO MORE TDEATH)
 	if(other.takedamage && !g_race)

@@ -95,6 +95,21 @@ void RemoveGrapplingHook(entity pl)
 	//pl.disableclientprediction = FALSE;
 }
 
+void GrapplingHookThink();
+void GrapplingHook_Stop()
+{
+	pointparticles(particleeffectnum("grapple_impact"), self.origin, '0 0 0', 1);
+	sound (self, CHAN_PROJECTILE, "weapons/hook_impact.wav", VOL_BASE, ATTN_NORM);
+
+	self.state = 1;
+	self.think = GrapplingHookThink;
+	self.nextthink = time;
+	self.touch = SUB_Null;
+	self.velocity = '0 0 0';
+	self.movetype = MOVETYPE_NONE;
+	self.rope_length = -1;
+}
+
 void GrapplingHookThink()
 {
 	float spd, dist, minlength, pullspeed, ropestretch, ropeairfriction, rubberforce, newlength, rubberforce_overstretch;
@@ -117,8 +132,14 @@ void GrapplingHookThink()
 
 	tracebox(org, self.mins, self.maxs, self.origin, MOVE_NOMONSTERS, self.owner);
 	// do not hit players with this, as they tend to get in the way just too often
+	// NOTE: this assumes sky brushes cannot get in the way
+	// if they can, assume the map is broken! :P
 	if(trace_fraction < 1 && (!self.aiment || trace_ent != self.aiment))
 	{
+		// 0. stop it
+		if(self.state != 1)
+			GrapplingHook_Stop();
+
 		// 1. detach the hook
 		if(self.aiment)
 			UnsetMovetypeFollow(self);
@@ -251,21 +272,11 @@ void GrapplingHookTouch (void)
 		}
 	}
 
-	pointparticles(particleeffectnum("grapple_impact"), self.origin, '0 0 0', 1);
-	sound (self, CHAN_PROJECTILE, "weapons/hook_impact.wav", VOL_BASE, ATTN_NORM);
-
-	self.state = 1;
-	self.think = GrapplingHookThink;
-	self.nextthink = time;
-	self.touch = SUB_Null;
-	self.velocity = '0 0 0';
-	self.movetype = MOVETYPE_NONE;
-	self.rope_length = -1;
-
 	if(other)
 		if(other.movetype != MOVETYPE_NONE)
 			SetMovetypeFollow(self, other);
 
+	GrapplingHook_Stop();
 	//self.owner.disableclientprediction = TRUE;
 }
 
