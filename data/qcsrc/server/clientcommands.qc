@@ -389,6 +389,10 @@ void ReadyRestart()
 	if(g_arena | g_assault | gameover | intermission_running | race_completing)
 		localcmd("restart\n");
 
+	// clear overtime
+	if(checkrules_overtimeend)
+		checkrules_overtimeend = 0;
+
 	if(readyNagActive) { //if every player is ready, remove the ready-nagger again
 		readyNagActive = 0;
 		remove(readyNagger);
