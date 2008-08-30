@@ -279,7 +279,7 @@ void db_save(float db, string pFilename)
 	fh = fopen(pFilename, FILE_WRITE);
 	if(fh < 0) 
 	{
-		dprint(strcat("Can't write DB to ", pFilename));
+		print(strcat("^1Can't write DB to ", pFilename));
 		return;
 	}
 	n = buf_getsize(db);
