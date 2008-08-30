@@ -116,7 +116,7 @@ void GrapplingHookThink()
 	vector dir, org, end, v0, dv;
 	if(self.owner.health <= 0 || self.owner.hook != self)	// how did that happen?
 	{														// well, better fix it anyway
-		RemoveGrapplingHook(self.owner);
+		remove(self);
 		return;
 	}
 	if(LostMovetypeFollow(self))
