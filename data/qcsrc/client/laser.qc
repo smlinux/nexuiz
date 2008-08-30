@@ -109,7 +109,7 @@ void Draw_Laser()
 	{
 		Draw_CylindricLine(self.origin, trace_endpos, 2, "particles/laserbeam", 0, time * 3, self.colormod, 0.5, DRAWFLAG_ADDITIVE); // TODO make a texture to make the laser look smoother
 	}
-	if not(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
+	if not(trace_dphitq3surfaceflags & (Q3SURFACEFLAG_SKY | Q3SURFACEFLAG_NOIMPACT))
 	{
 		if(self.cnt >= 0)
 			pointparticles(self.cnt, trace_endpos, trace_plane_normal, drawframetime * 1000);
