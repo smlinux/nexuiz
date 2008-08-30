@@ -4,6 +4,7 @@ game: assault bugfixed
 game: cmd maplist improved
 game: colors improved (TODO credit sev in nexuiz-credits.txt!)
 game: command allready
+game: crylink weakened
 game: ctf flag touching when dead bug fixed
 game: cvar g_jump_grunt
 game: cvar g_spawnpoints_auto_move_out_of_solid
