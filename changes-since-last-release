@@ -1,4 +1,4 @@
-CHANGES since 2.4.2:
+CHANGES since 2.4.2 to r4251:
 compat-q3a: switch crylink/hagar, as crylink is closer to BFG and hagar is closer to Plasmagun
 game: assault bugfixed
 game: cmd maplist improved
