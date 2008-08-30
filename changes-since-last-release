@@ -1,0 +1,54 @@
+CHANGES since 2.4.2:
+compat-q3a: switch crylink/hagar, as crylink is closer to BFG and hagar is closer to Plasmagun
+game: assault bugfixed
+game: cmd maplist improved
+game: colors improved (TODO credit sev in nexuiz-credits.txt!)
+game: command allready
+game: ctf flag touching when dead bug fixed
+game: cvar g_jump_grunt
+game: cvar g_spawnpoints_auto_move_out_of_solid
+game: cvar sv_gentle
+game: cvar sv_maxidle
+game: fix some memory leaks
+game: hook attaches to moving objects
+game: hook can pull players
+game: hook jitter-less
+game: hook no longer goes through walls
+game: hook sky-attach bug fixed
+game: item respawn: 20s for 50health and 25armor
+game: map voting: nodetail 1 as default
+game: map voting: with previews
+game: performance improved (fteqcc -O3)
+game: race game type
+game: scoreboard improved
+game: scores per-team
+game: sounds: model specific player sounds
+game: turrets
+game: zoom unlagged, detect zoom scripts (for spectating/demos)
+mapping: allow mins/maxs specification for brush entities instead of models (as alternative)
+mapping: automatic shader generator script
+mapping: entities.def updated
+mapping: entity func_door: make DOOR_NOT_LINK work
+mapping: entity func_pointparticles
+mapping: entity func_sparks
+mapping: entity func_train now supports -1 wait on path_corner, making it NOT wait
+mapping: entity info_null now removes itself (as it should); this DOES break some maps that need fixing now
+mapping: entity misc_follow
+mapping: entity misc_laser changed and improved
+mapping: entity trigger_flipflop, trigger_monoflip, trigger_multivibrator
+mapping: field nottargeted overrides targetname checks in e.g. func_door (so it can be used for misc_follow without needing an extra trigger)
+mapping: mapname.cfg is deprecated. Use clientsettemp_for_type and cdtrack in mapname.mapinfo
+mapping: triggers now MUST be common/trigger; their exact shape now works (no longer their bbox)
+mapping: zeroradiant support, bugfix patchset updated
+map: reslimed: less distracting fog
+map: starship and silvercity: no CTF
+menu: channel mixer
+menu: game type in server browser
+menu: input box margin now in chars, not percent
+menu: new playermodel previews (sev)
+menuskins: big buttons as extra graphics
+menuskins: COLOR_SCROLLBAR_C
+menuskins: HEIGHT_DIALOGBORDER
+menu: wicked skins
+misc: +exec benchmark.cfg
+rcon2irc: disconnect fix
