@@ -90,7 +90,7 @@ void CSQC_UpdateView(void)
 	entity e;
 	float fov;
 
-	drawframetime = time - drawtime;
+	drawframetime = max(0.000001, time - drawtime);
 	drawtime = time;
 
 	// watch for gametype changes here...
