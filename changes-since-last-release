@@ -25,7 +25,8 @@ game: cvar sv_ready_restart_repeatable
 game: cvar teamplay_lockonrestart
 game: fix some memory leaks
 game: hook attaches to moving objects
-game: hook can pull players
+game: hook can pull players (but detaches when that player shoots you)
+game: hook detaches when teleporting
 game: hook jitter-less
 game: hook no longer goes through walls
 game: hook sky-attach bug fixed
