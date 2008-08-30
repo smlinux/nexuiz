@@ -102,10 +102,13 @@ void Draw_Laser()
 	{
 		Draw_CylindricLine(self.origin, trace_endpos, 2, "particles/laserbeam", 0, time * 3, self.colormod, 0.5, DRAWFLAG_ADDITIVE); // TODO make a texture to make the laser look smoother
 	}
-	if(self.cnt >= 0)
-		pointparticles(self.cnt, trace_endpos, trace_plane_normal, drawframetime * 1000);
-	if(self.colormod != '0 0 0')
-		R_AddDynamicLight(trace_endpos + trace_plane_normal * 1, 50, self.colormod * 5);
+	if not(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
+	{
+		if(self.cnt >= 0)
+			pointparticles(self.cnt, trace_endpos, trace_plane_normal, drawframetime * 1000);
+		if(self.colormod != '0 0 0')
+			R_AddDynamicLight(trace_endpos + trace_plane_normal * 1, 50, self.colormod * 5);
+	}
 }
 
 void Ent_Laser()
