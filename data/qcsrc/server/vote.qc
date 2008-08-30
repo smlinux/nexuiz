@@ -137,7 +137,7 @@ float GameCommand_Vote(string s, entity e) {
 						}
 						bprint("\{1}^2* ^3", VoteNetname(votecaller), "^2 calls a vote for ", votecalledvote_display, "\n");
 						if(cvar("sv_eventlog"))
-							GameLogEcho(strcat(":vote:vcall:", ftos(votecaller.playerid), ":", votecalledvote_display), TRUE);
+							GameLogEcho(strcat(":vote:vcall:", ftos(votecaller.playerid), ":", votecalledvote_display));
 						VoteCount(); // needed if you are the only one
 					} else {
 						print_to(e, "^1This vote is not ok. See help for more info.");
@@ -175,7 +175,7 @@ float GameCommand_Vote(string s, entity e) {
 					}
 					bprint("\{1}^2* ^3", VoteNetname(votecaller), "^2 calls a vote to become ^3master^2.\n");
 					if(cvar("sv_eventlog"))
-						GameLogEcho(strcat(":vote:vcall:", ftos(votecaller.playerid), ":", votecalledvote_display), FALSE);
+						GameLogEcho(strcat(":vote:vcall:", ftos(votecaller.playerid), ":", votecalledvote_display));
 					VoteCount(); // needed if you are the only one
 				}
 			} else {
@@ -216,7 +216,7 @@ float GameCommand_Vote(string s, entity e) {
 					}
 					bprint("\{1}^2* ^3", VoteNetname(e), "^2 used his ^3master^2 status to do \"^2", dovote_display, "^2\".\n");
 					if(cvar("sv_eventlog"))
-						GameLogEcho(strcat(":vote:vdo:", ftos(e.playerid), ":", dovote_display), FALSE);
+						GameLogEcho(strcat(":vote:vdo:", ftos(e.playerid), ":", dovote_display));
 					localcmd(strcat(dovote, "\n"));
 				} else {
 					print_to(e, "^1This command is not ok. See help for more info.");
@@ -233,13 +233,13 @@ float GameCommand_Vote(string s, entity e) {
 				if (e)
 					e.vote_master = granted;
 				if(granted) {
-					ServerConsoleEcho(strcat("Accepted master login from ", VoteNetname(e)), TRUE);
+					print("Accepted master login from ", VoteNetname(e), "\n");
 					bprint("\{1}^2* ^3", VoteNetname(e), "^2 logged in as ^3master^2\n");
 					if(cvar("sv_eventlog"))
-						GameLogEcho(strcat(":vote:vlogin:", ftos(e.playerid)), FALSE);
+						GameLogEcho(strcat(":vote:vlogin:", ftos(e.playerid)));
 				}
 				else
-					ServerConsoleEcho(strcat("REJECTED master login from ", VoteNetname(e)), TRUE);
+					print("REJECTED master login from ", VoteNetname(e), "\n");
 			}
 			else
 				print_to(e, "^1Login to become master is NOT allowed.");
@@ -465,7 +465,7 @@ void VoteTimeout() {
 void VoteStop(entity stopper) {
 	bprint("\{1}^2* ^3", VoteNetname(stopper), "^2 stopped ^3", VoteNetname(votecaller), "^2's vote\n");
 	if(cvar("sv_eventlog"))
-		GameLogEcho(strcat(":vote:vstop:", ftos(stopper.playerid)), FALSE);
+		GameLogEcho(strcat(":vote:vstop:", ftos(stopper.playerid)));
 	if(stopper == votecaller) {
 		// no wait for next vote so you can correct your vote
 		if(votecaller) {
@@ -507,7 +507,7 @@ void VoteSpam(float yescount, float nocount, float abstaincount, float notvoters
 		s = strcat(s, ":", ftos(abstaincount));
 		s = strcat(s, ":", ftos(notvoters));
 		s = strcat(s, ":", ftos(mincount));
-		GameLogEcho(s, FALSE);
+		GameLogEcho(s);
 	}
 }
 

@@ -82,7 +82,7 @@ void LogTeamchange(entity pl)
 		return;
 	str = strcat(":team:", ftos(pl.playerid), ":");
 	str = strcat(str, ftos(pl.team));
-	GameLogEcho(str, FALSE);
+	GameLogEcho(str);
 }
 
 void WriteGameCvars()
@@ -1201,7 +1201,7 @@ void CauseRebalance(float source_team, float howmany_toomany)
 			steam = COLOR_TEAM3;
 		else if(source_team == 4)
 			steam = COLOR_TEAM4;
-		ServerConsoleEcho(strcat("Team ", ftos(source_team), " too large, complaining."), TRUE);
+		print("Team ", ftos(source_team), " too large, complaining.\n");
 		FOR_EACH_REALPLAYER(head)
 		{
 			if(head.team == steam)

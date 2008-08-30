@@ -78,7 +78,7 @@ void Ban_View()
 		msg = strcat("#", ftos(i), ": ");
 		msg = strcat(msg, ban_ip[i], " is still banned for ");
 		msg = strcat(msg, ftos(ban_expire[i] - time), " seconds");
-		ServerConsoleEcho(msg, FALSE);
+		print(msg, "\n");
 	}
 }
 
@@ -149,7 +149,7 @@ float Ban_Insert(string ip, float bantime)
 		return FALSE;
 	// okay, insert our new victim as i
 	Ban_Delete(i);
-	ServerConsoleEcho(strcat(ip, " has been banned for ", ftos(bantime), " seconds"), FALSE);
+	print(ip, " has been banned for ", ftos(bantime), " seconds\n");
 	ban_expire[i] = time + bantime;
 	ban_ip[i] = strzone(ip);
 	ban_count = max(ban_count, i + 1);

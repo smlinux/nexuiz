@@ -143,7 +143,7 @@ void kh_Scores_Event(entity player, entity key, string what, float frags_player,
 	s = strcat(s, ":", ftos(frags_owner), ":");
 	if(key)
 		s = strcat(s, key.netname);
-	GameLogEcho(s, FALSE);
+	GameLogEcho(s);
 }
 
 vector kh_AttachedOrigin(entity e)  // runs when a team captures the flag, it can run 2 or 3 times.

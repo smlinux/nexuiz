@@ -141,33 +141,7 @@ void bcenterprint(string s)
 			centerprint(head, s);
 }
 
-void ServerConsoleEcho(string s, float check_dangerous)
-{
-	local string ch;
-	if (checkextension("DP_SV_PRINT"))
-		print(s, "\n");
-	else
-	{
-		localcmd("echo \"");
-		if(check_dangerous)
-		{
-			while(strlen(s))
-			{
-				ch = substring(s, 0, 1);
-				if(ch != "\"" && ch != "\r" && ch != "\n")
-					localcmd(ch);
-				s = substring(s, 1, strlen(s) - 1);
-			}
-		}
-		else
-		{
-			localcmd(s);
-		}
-		localcmd("\"\n");
-	}
-}
-
-void GameLogEcho(string s, float check_dangerous)
+void GameLogEcho(string s)
 {
 	string fn;
 	float matches;
@@ -196,7 +170,7 @@ void GameLogEcho(string s, float check_dangerous)
 	}
 	if(cvar("sv_eventlog_console"))
 	{
-		ServerConsoleEcho(s, check_dangerous);
+		print(s, "\n");
 	}
 }
 

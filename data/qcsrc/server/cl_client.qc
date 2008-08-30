@@ -1083,10 +1083,10 @@ void ClientConnect (void)
 			s = "player";
 		else
 			s = "bot";
-		GameLogEcho(strcat(":join:", ftos(self.playerid), ":", s, ":", self.netname), TRUE);
+		GameLogEcho(strcat(":join:", ftos(self.playerid), ":", s, ":", self.netname));
 		s = strcat(":team:", ftos(self.playerid), ":");
 		s = strcat(s, ftos(self.team));
-		GameLogEcho(s, FALSE);
+		GameLogEcho(s);
 	}
 	self.netname_previous = strzone(self.netname);
 
@@ -1233,7 +1233,7 @@ void ClientDisconnect (void)
 		detach_entcs();
 	
 	if(cvar("sv_eventlog"))
-		GameLogEcho(strcat(":part:", ftos(self.playerid)), FALSE);
+		GameLogEcho(strcat(":part:", ftos(self.playerid)));
 	bprint ("^4",self.netname);
 	bprint ("^4 disconnected\n");
 
@@ -1949,7 +1949,7 @@ void PlayerPreThink (void)
 	if(self.netname_previous != self.netname)
 	{
 		if(cvar("sv_eventlog"))
-			GameLogEcho(strcat(":name:", ftos(self.playerid), ":", self.netname), TRUE);
+			GameLogEcho(strcat(":name:", ftos(self.playerid), ":", self.netname));
 		if(self.netname_previous)
 			strunzone(self.netname_previous);
 		self.netname_previous = strzone(self.netname);

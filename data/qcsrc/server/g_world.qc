@@ -265,7 +265,7 @@ void spawnfunc_worldspawn (void)
 	{
 		s = strcat(cvar_string("sv_eventlog_files_counter"), ".");
 		s = strcat(s, ftos(random()));
-		GameLogEcho(strcat(":gamestart:", GetGametype(), "_", GetMapname(), ":", s), FALSE);
+		GameLogEcho(strcat(":gamestart:", GetGametype(), "_", GetMapname(), ":", s));
 		s = ":gameinfo:mutators:LIST";
 		if(cvar("g_grappling_hook"))
 			s = strcat(s, ":grappling_hook");
@@ -289,8 +289,8 @@ void spawnfunc_worldspawn (void)
 			s = strcat(s, ":midair");
 		if(cvar("g_minstagib"))
 			s = strcat(s, ":minstagib");
-		GameLogEcho(s, FALSE);
-		GameLogEcho(":gameinfo:end", FALSE);
+		GameLogEcho(s);
+		GameLogEcho(":gameinfo:end");
 	}
 
 	cvar_set("nextmap", "");
@@ -886,9 +886,9 @@ void DumpStats(float final)
 	s = strcat(s, GetGametype(), "_", GetMapname(), ":", ftos(rint(time)));
 
 	if(to_console)
-		ServerConsoleEcho(s, FALSE);
+		print(s, "\n");
 	if(to_eventlog)
-		GameLogEcho(s, FALSE);
+		GameLogEcho(s);
 	if(to_file)
 	{
 		file = fopen(cvar_string("sv_logscores_filename"), FILE_APPEND);
@@ -899,10 +899,9 @@ void DumpStats(float final)
 	}
 
 	s = strcat(":labels:player:", GetPlayerScoreString(world, 0));
-	if(to_console)
-		ServerConsoleEcho(s, TRUE);
+		print(s, "\n");
 	if(to_eventlog)
-		GameLogEcho(s, TRUE);
+		GameLogEcho(s);
 	if(to_file)
 		fputs(file, strcat(s, "\n"));
 
@@ -918,9 +917,9 @@ void DumpStats(float final)
 				s = strcat(s, "spectator:");
 
 			if(to_console)
-				ServerConsoleEcho(strcat(s, other.netname), TRUE);
+				print(s, other.netname, "\n");
 			if(to_eventlog)
-				GameLogEcho(strcat(s, ftos(other.playerid), ":", other.netname), TRUE);
+				GameLogEcho(strcat(s, ftos(other.playerid), ":", other.netname));
 			if(to_file)
 				fputs(file, strcat(s, other.netname, "\n"));
 		}
@@ -930,9 +929,9 @@ void DumpStats(float final)
 	{
 		s = strcat(":labels:teamscores:", GetTeamScoreString(0, 0));
 		if(to_console)
-			ServerConsoleEcho(s, TRUE);
+			print(s, "\n");
 		if(to_eventlog)
-			GameLogEcho(s, TRUE);
+			GameLogEcho(s);
 		if(to_file)
 			fputs(file, strcat(s, "\n"));
 	
@@ -941,18 +940,18 @@ void DumpStats(float final)
 			s = strcat(":teamscores:see-labels:", GetTeamScoreString(i, 0));
 			s = strcat(s, ":", ftos(i));
 			if(to_console)
-				ServerConsoleEcho(s, TRUE);
+				print(s, "\n");
 			if(to_eventlog)
-				GameLogEcho(s, TRUE);
+				GameLogEcho(s);
 			if(to_file)
 				fputs(file, strcat(s, "\n"));
 		}
 	}
 
 	if(to_console)
-		ServerConsoleEcho(":end", FALSE);
+		print(":end\n");
 	if(to_eventlog)
-		GameLogEcho(":end", FALSE);
+		GameLogEcho(":end");
 	if(to_file)
 	{
 		fputs(file, ":end\n");
@@ -1028,7 +1027,7 @@ void NextLevel()
 	DumpStats(TRUE);
 
 	if(cvar("sv_eventlog"))
-		GameLogEcho(":gameover", FALSE);
+		GameLogEcho(":gameover");
 
 	GameLogClose();
 
@@ -1342,7 +1341,7 @@ void print_to(entity e, string s)
 	if(e)
 		sprint(e, strcat(s, "\n"));
 	else
-		ServerConsoleEcho(s, TRUE);
+		print(s, "\n");
 }
 
 void ShuffleMaplist()
@@ -1712,7 +1711,7 @@ string MapVote_Suggest(string m)
 		strunzone(mapvote_suggestions[i]);
 	mapvote_suggestions[i] = strzone(m);
 	if(cvar("sv_eventlog"))
-		GameLogEcho(strcat(":vote:suggested:", m, ":", ftos(self.playerid)), TRUE);
+		GameLogEcho(strcat(":vote:suggested:", m, ":", ftos(self.playerid)));
 	return strcat("Suggestion of ", m, " accepted.");
 }
 
@@ -1907,9 +1906,9 @@ float MapVote_Finished(float mappos)
 			}
 		result = strcat(result, ":didn't vote:", ftos(didntvote));
 
-		GameLogEcho(result, FALSE);
+		GameLogEcho(result);
 		if(mapvote_maps_suggested[mappos])
-			GameLogEcho(strcat(":vote:suggestion_accepted:", mapvote_maps[mappos]), FALSE);
+			GameLogEcho(strcat(":vote:suggestion_accepted:", mapvote_maps[mappos]));
 	}
 
 	FOR_EACH_REALCLIENT(other)
@@ -2008,7 +2007,7 @@ float MapVote_CheckRules_2()
 				}
 			result = strcat(result, ":didn't vote:", ftos(didntvote));
 			if(cvar("sv_eventlog"))
-				GameLogEcho(result, FALSE);
+				GameLogEcho(result);
 		}
 
 	return FALSE;
@@ -2236,7 +2235,7 @@ float RedirectionThink()
 	clients_found = 0;
 	FOR_EACH_REALCLIENT(self)
 	{
-		ServerConsoleEcho(strcat("Redirecting: sending connect command to ", self.netname), FALSE);
+		print("Redirecting: sending connect command to ", self.netname, "\n");
 		if(redirection_target == "self")
 			stuffcmd(self, "\ndisconnect; reconnect\n");
 		else
@@ -2244,7 +2243,7 @@ float RedirectionThink()
 		++clients_found;
 	}
 
-	ServerConsoleEcho(strcat("Redirecting: ", ftos(clients_found), " clients left."), FALSE);
+	print("Redirecting: ", ftos(clients_found), " clients left.\n");
 
 	if(time > redirection_timeout || clients_found == 0)
 		localcmd("\nwait; wait; wait; quit\n");

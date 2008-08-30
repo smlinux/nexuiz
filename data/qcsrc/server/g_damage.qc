@@ -137,7 +137,7 @@ void LogDeath(string mode, float deathtype, entity killer, entity killed)
 		s = strcat(s, ":victimitems=");
 		s = AppendItemcodes(s, killed);
 	}
-	GameLogEcho(s, FALSE);
+	GameLogEcho(s);
 }
 
 void Obituary (entity attacker, entity targ, float deathtype)

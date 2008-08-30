@@ -12,7 +12,7 @@ float checkrules_equality;
 void CampaignBailout(string s)
 {
 	cvar_set("g_campaign", "0");
-	ServerConsoleEcho(strcat("campaign initialization failed: ", s), TRUE);
+	print("campaign initialization failed: ", s, "\n");
 	return;
 }
 

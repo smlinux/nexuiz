@@ -29,7 +29,7 @@ void LogDom(string mode, float team_before, entity actor)
 	s = strcat(":dom:", mode);
 	s = strcat(s, ":", ftos(team_before));
 	s = strcat(s, ":", ftos(actor.playerid));
-	GameLogEcho(s, FALSE);
+	GameLogEcho(s);
 }
 
 void() dom_spawnteams;
