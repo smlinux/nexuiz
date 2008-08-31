@@ -35,7 +35,6 @@ string W_Name(float weaponid)
 	if(weaponid == WEP_HAGAR)             return "Hagar";
 	if(weaponid == WEP_ROCKET_LAUNCHER)   return "Rocket Launcher";
 	if(weaponid == WEP_CRYLINK)           return "Crylink";
-	if(weaponid == WEP_ANTINEX)	      return "Antinex";
 	return "@!#%'n Tuba";
 }
 
@@ -68,7 +67,6 @@ float W_AmmoItemCode(float wpn)
 		case WEP_NEX:              return IT_CELLS;
 		case WEP_HAGAR:            return IT_ROCKETS;
 		case WEP_ROCKET_LAUNCHER:  return IT_ROCKETS;
-		case WEP_ANTINEX:	   return IT_ROCKETS;
 		default:                   return 0;
 	}
 }
