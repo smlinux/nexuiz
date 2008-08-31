@@ -443,6 +443,10 @@ float weapon_prepareattack(float secondary, float attacktime)
 	if (timeoutStatus == 2) //don't allow the player to shoot while game is paused
 		return FALSE;
 
+	// do not even think about shooting if switching
+	if(self.switchweapon != self.weapon)
+		return FALSE;
+
 	// don't fire if previous attack is not finished
 	if (ATTACK_FINISHED(self) > time + frametime * 0.5)
 		return FALSE;

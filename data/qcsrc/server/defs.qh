@@ -212,11 +212,10 @@ float WEP_CRYLINK			= 6; // float	IT_CRYLINK				= 16;
 float WEP_NEX				= 7; // float	IT_NEX					= 32;
 float WEP_HAGAR				= 8; // float	IT_HAGAR				= 64;
 float WEP_ROCKET_LAUNCHER	= 9; // float	IT_ROCKET_LAUNCHER		= 128;
-float WEP_ANTINEX			= 10;
 // For weapon cycling commands
 float WEP_FIRST				= 1;
-float WEP_LAST				= 10;
-float WEP_COUNT             = 11;
+float WEP_LAST				= 9;
+float WEP_COUNT             = 10;
 
 void(entity client, string s) centerprint_builtin = #73;
 .vector dest1, dest2;
