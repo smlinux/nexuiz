@@ -49,7 +49,7 @@ entity	nextent (entity e)								= #47;
 void	particle (vector v, vector d, float colour, float count)			= #48;
 void	ChangeYaw (void)								= #49;
 
-vector	vectoangles (vector v)								= #51;
+vector	vectoangles (vector v, ...)								= #51;
 void(float to, float f)		WriteByte = #52;
 void(float to, float f)		WriteChar = #53;
 void(float to, float f)		WriteShort = #54;

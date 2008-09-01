@@ -1,5 +1,5 @@
 .entity pusher;
-void TeleportPlayer(entity teleporter, entity player, vector to, vector to_angles)
+void TeleportPlayer(entity teleporter, entity player, vector to, vector to_angles, vector to_velocity)
 {
 	entity head;
 	entity oldself;
@@ -15,7 +15,7 @@ void TeleportPlayer(entity teleporter, entity player, vector to, vector to_angle
 	setorigin (player, to + '0 0 1' * (1 - player.mins_z - 24));
 	player.angles = to_angles;
 	player.fixangle = TRUE;
-	player.velocity = v_forward * vlen(player.velocity);
+	player.velocity = to_velocity;
 	RemoveGrapplingHook(player);
 
 	// Kill anyone else in the teleporter box (NO MORE TDEATH)
@@ -84,7 +84,8 @@ void Teleport_Touch (void)
 
 	EXACTTRIGGER_TOUCH;
 
-	TeleportPlayer(self, other, self.enemy.origin + '0 0 1' * (1 - other.mins_z - 24), self.enemy.mangle);
+	makevectors(self.enemy.mangle);
+	TeleportPlayer(self, other, self.enemy.origin + '0 0 1' * (1 - other.mins_z - 24), self.enemy.mangle, v_forward * vlen(other.velocity));
 
 	if(self.enemy.target)
 	{

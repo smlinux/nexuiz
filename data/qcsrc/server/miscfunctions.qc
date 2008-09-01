@@ -73,21 +73,18 @@ void move_out_of_solid_expand(entity e, vector by)
 	}
 }
 
-void move_out_of_solid(entity e)
+float move_out_of_solid(entity e)
 {
 	vector o, m0, m1;
 
 	o = e.origin;
 	traceline(o, o, MOVE_WORLDONLY, e);
 	if(trace_startsolid)
-	{
-		dprint("origin is in solid too! (", vtos(o), ")");
-		return;
-	}
+		return 0;
 
 	tracebox(o, e.mins, e.maxs, o, MOVE_WORLDONLY, e);
 	if(!trace_startsolid)
-		return;
+		return 1;
 
 	m0 = e.mins;
 	m1 = e.maxs;
@@ -103,10 +100,9 @@ void move_out_of_solid(entity e)
 
 	tracebox(e.origin, e.mins, e.maxs, e.origin, MOVE_WORLDONLY, e);
 	if(trace_startsolid)
-	{
-		dprint("could not get out of solid (", vtos(o), ")\n");
-		return;
-	}
+		return 0;
+
+	return 1;
 }
 
 string STR_PLAYER = "player";
@@ -202,7 +198,8 @@ void relocate_spawnpoint()
 		o = self.origin;
 		self.mins = PL_MIN;
 		self.maxs = PL_MAX;
-		move_out_of_solid(self);
+		if(!move_out_of_solid(self))
+			objerror("could not get out of solid at all!");
 		print("^1NOTE: this map needs FIXING. Spawnpoint at ", vtos(o - '0 0 1'));
 		print(" needs to be moved out of solid, e.g. by '", ftos(self.origin_x - o_x));
 		print(" ", ftos(self.origin_y - o_y));
