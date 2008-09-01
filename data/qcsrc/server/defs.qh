@@ -1,3 +1,5 @@
+#define INDEPENDENT_ATTACK_FINISHED
+
 float require_spawnfunc_prefix; // if this float exists, only functions with spawnfunc_ name prefix qualify as spawn functions
 
 #define BUTTON_ATCK   button0
@@ -401,7 +403,11 @@ float bot_waypoints_for_items;
 
 .float	attack_finished_for[WEP_COUNT];
 .float attack_finished_single;
+#ifdef INDEPENDENT_ATTACK_FINISHED
 #define ATTACK_FINISHED(ent) ((ent).(attack_finished_for[(ent).weapon]))
+#else
+#define ATTACK_FINISHED(ent) ((ent).attack_finished_single)
+#endif
 
 // assault game mode: Which team is attacking in this round?
 float assault_attacker_team;
