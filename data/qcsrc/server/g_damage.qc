@@ -286,8 +286,8 @@ void Obituary (entity attacker, entity targ, float deathtype)
 					if(deathtype >= WEP_FIRST && deathtype <= WEP_LAST)
 					{
 						w_deathtypestring = "was blasted by";
-						weapon_action(deathtype, WR_SUICIDEMESSAGE);
-						p = strstrofs(w_deathtypestring, "|", 0);
+						weapon_action(deathtype, WR_KILLMESSAGE);
+						p = strstrofs(w_deathtypestring, "#", 0);
 						if(p < 0)
 							bprint("^1", s, "^1 ", w_deathtypestring, " ", a, "\n");
 						else
