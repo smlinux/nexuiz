@@ -64,29 +64,42 @@ void printsurfaceinfo(entity e, vector v)
  * 10: next weapon
  * 11: most recently used weapon
  * 12: previous weapon
- * 13: moving clone
- * 14: fixed clone
+ * 13: best weapon
  * 17: throw weapon
- * 19: printsurfaceinfo
- * 20: distance
+ *
  * 30 to 39: create waypoints
  * 47: clear personal waypoints
  * 48: clear team waypoints
  * 49: turn base waypoints on/off
- * 77: ctf speedrun
+ *
  * 99: loaded
+ *
+ * 140: moving clone
+ * 141: ctf speedrun
+ * 142: fixed clone
  * 143: emergency teleport
+ * 144: printsurfaceinfo
+ * 145: distance
  *
  * TODO:
- * 200 to 219: individual weapons
+ * 200 to 209: prev weapon shortcuts
+ * 210 to 219: best weapon shortcuts
  * 220 to 229: next weapon shortcuts
- * 230 to 239: prev weapon shortcuts
- * 240 to 249: best weapon shortcuts
+ * 230 to 253: individual weapons (up to 24)
  */
 
 void ImpulseCommands (void)
 {
 	local float imp;
+	vector start, end, enddown;
+	float i;
+	float m;
+	float good, evil, evilsurf;
+	float maxattempts;
+	vector org, delta;
+	float wep;
+	entity e;
+
 	imp = self.impulse;
 	if (!imp || gameover)
 		return;
@@ -95,130 +108,188 @@ void ImpulseCommands (void)
 	if (timeoutStatus == 2) //don't allow any impulses while the game is paused
 		return;
 
-	if (imp >= 1 && imp <= 12)
+	if (imp >= 1 && imp <= 9)
 	{
 		// weapon switching impulses
 		if(self.deadflag == DEAD_NO)
 		{
-			if (imp <= 9)
-				W_SwitchWeapon (imp);
-			else if (imp == 10)
-				W_NextWeapon ();
-			else if (imp == 12)
-				W_PreviousWeapon ();
-			else if (imp == 11) // last weapon
-				W_SwitchWeapon (self.cnt);
+			switch(imp)
+			{
+				case 1: W_CycleWeapon("1", 0); break;
+				case 2: W_CycleWeapon("2", 0); break;
+				case 3: W_CycleWeapon("3", 0); break;
+				case 4: W_CycleWeapon("4", 0); break;
+				case 5: W_CycleWeapon("5", 0); break;
+				case 6: W_CycleWeapon("6", 0); break;
+				case 7: W_CycleWeapon("7", 0); break;
+				case 8: W_CycleWeapon("8", 0); break;
+				case 9: W_CycleWeapon("9", 0); break;
+			}
 		}
 		else
 			self.impulse = imp; // retry in next frame
 	}
-	// throw weapon
-	else if (imp == 17)
+	else if(imp >= 10 && imp <= 17)
 	{
 		if(self.deadflag == DEAD_NO)
-		if (!g_minstagib)
-			W_ThrowWeapon(W_CalculateProjectileVelocity(self.velocity, v_forward * 750), '0 0 0', TRUE);
+		{
+			switch(imp)
+			{
+				case 10:
+					W_NextWeapon ();
+					break;
+				case 11:
+					W_SwitchWeapon (self.cnt); // previously used
+					break;
+				case 12:
+					W_PreviousWeapon ();
+					break;
+				case 13:
+					W_SwitchWeapon (w_getbestweapon(self));
+					break;
+				case 17:
+					if (!g_minstagib)
+						W_ThrowWeapon(W_CalculateProjectileVelocity(self.velocity, v_forward * 750), '0 0 0', TRUE);
+					break;
+				}
+		}
+		else
+			self.impulse = imp; // retry in next frame
+	}
+	else if(imp >= 200 && imp <= 229)
+	{
+		if(self.deadflag == DEAD_NO)
+		{
+			// custom order weapon cycling
+			i = mod(imp, 10);
+			m = (imp - (210 + i)); // <0 for prev, =0 for best, >0 for next
+			W_CycleWeapon(self.(cvar_cl_weaponpriorities[i]), m);
+		}
+		else
+			self.impulse = imp; // retry in next frame
+	}
+	else if(imp >= 230 && imp <= 253)
+	{
+		if(self.deadflag == DEAD_NO)
+			W_SwitchWeapon (imp - 230 + WEP_FIRST);
+		else
+			self.impulse = imp; // retry in next frame
 	}
 	// deploy waypoints
 	else if (imp >= 30 && imp <= 49)
 	{
-		if(imp == 30)
+		switch(imp)
 		{
-			WaypointSprite_DeployPersonal("waypoint", self.origin);
-			self.personal_v_angle = self.v_angle;
-			self.personal_velocity = self.velocity;
-			sprint(self, "personal waypoint spawned at location\n");
-		}
-		else if(imp == 31)
-		{
-			WaypointSprite_DeployPersonal("waypoint", self.cursor_trace_endpos);
-			self.personal_v_angle = self.v_angle;
-			self.personal_velocity = '0 0 0';
-			sprint(self, "personal waypoint spawned at crosshair\n");
-		}
-		else if(imp == 32 && vlen(self.death_origin))
-		{
-			WaypointSprite_DeployPersonal("waypoint", self.death_origin);
-			self.personal_v_angle = self.v_angle;
-			self.personal_velocity = '0 0 0';
-			sprint(self, "personal waypoint spawned at death location\n");
-		}
-		else if(imp == 33 && self.deadflag == DEAD_NO && teams_matter)
-		{
-			WaypointSprite_Attach("helpme", TRUE);
-			sprint(self, "HELP ME attached\n");
-		}
-		else if(imp == 34)
-		{
-			WaypointSprite_DeployFixed("here", FALSE, self.origin);
-			sprint(self, "HERE spawned at location\n");
-		}
-		else if(imp == 35)
-		{
-			WaypointSprite_DeployFixed("here", FALSE, self.cursor_trace_endpos);
-			sprint(self, "HERE spawned at crosshair\n");
-		}
-		else if(imp == 36 && vlen(self.death_origin))
-		{
-			WaypointSprite_DeployFixed("here", FALSE, self.death_origin);
-			sprint(self, "HERE spawned at death location\n");
-		}
-		else if(imp == 37)
-		{
-			WaypointSprite_DeployFixed("danger", FALSE, self.origin);
-			sprint(self, "DANGER spawned at location\n");
-		}
-		else if(imp == 38)
-		{
-			WaypointSprite_DeployFixed("danger", FALSE, self.cursor_trace_endpos);
-			sprint(self, "DANGER spawned at crosshair\n");
-		}
-		else if(imp == 39 && vlen(self.death_origin))
-		{
-			WaypointSprite_DeployFixed("danger", FALSE, self.death_origin);
-			sprint(self, "DANGER spawned at death location\n");
-		}
-		else if(imp == 47)
-		{
-			WaypointSprite_ClearPersonal();
-			sprint(self, "personal waypoint cleared\n");
-		}
-		else if(imp == 48)
-		{
-			WaypointSprite_ClearOwned();
-			sprint(self, "all waypoints cleared\n");
-		}
-		else if(imp == 49)
-		{
-			self.cvar_cl_hidewaypoints = !(self.cvar_cl_hidewaypoints);
-			sprint(self, "fixed waypoints now ");
-			if(self.cvar_cl_hidewaypoints)
-				sprint(self, "OFF\n");
-			else
-				sprint(self, "ON\n");
+			case 30:
+				WaypointSprite_DeployPersonal("waypoint", self.origin);
+				self.personal_v_angle = self.v_angle;
+				self.personal_velocity = self.velocity;
+				sprint(self, "personal waypoint spawned at location\n");
+				break;
+			case 31:
+				WaypointSprite_DeployPersonal("waypoint", self.cursor_trace_endpos);
+				self.personal_v_angle = self.v_angle;
+				self.personal_velocity = '0 0 0';
+				sprint(self, "personal waypoint spawned at crosshair\n");
+				break;
+			case 32:
+				if(vlen(self.death_origin))
+				{
+					WaypointSprite_DeployPersonal("waypoint", self.death_origin);
+					self.personal_v_angle = self.v_angle;
+					self.personal_velocity = '0 0 0';
+					sprint(self, "personal waypoint spawned at death location\n");
+				}
+				break;
+			case 33:
+				if(self.deadflag == DEAD_NO && teams_matter)
+				{
+					WaypointSprite_Attach("helpme", TRUE);
+					sprint(self, "HELP ME attached\n");
+				}
+				break;
+			case 34:
+				WaypointSprite_DeployFixed("here", FALSE, self.origin);
+				sprint(self, "HERE spawned at location\n");
+				break;
+			case 35:
+				WaypointSprite_DeployFixed("here", FALSE, self.cursor_trace_endpos);
+				sprint(self, "HERE spawned at crosshair\n");
+				break;
+			case 36:
+				if(vlen(self.death_origin))
+				{
+					WaypointSprite_DeployFixed("here", FALSE, self.death_origin);
+					sprint(self, "HERE spawned at death location\n");
+				}
+				break;
+			case 37:
+				WaypointSprite_DeployFixed("danger", FALSE, self.origin);
+				sprint(self, "DANGER spawned at location\n");
+				break;
+			case 38:
+				WaypointSprite_DeployFixed("danger", FALSE, self.cursor_trace_endpos);
+				sprint(self, "DANGER spawned at crosshair\n");
+				break;
+			case 39:
+				if(vlen(self.death_origin))
+				{
+					WaypointSprite_DeployFixed("danger", FALSE, self.death_origin);
+					sprint(self, "DANGER spawned at death location\n");
+				}
+				break;
+			case 47:
+				WaypointSprite_ClearPersonal();
+				sprint(self, "personal waypoint cleared\n");
+				break;
+			case 48:
+				WaypointSprite_ClearOwned();
+				sprint(self, "all waypoints cleared\n");
+				break;
+			case 49:
+				self.cvar_cl_hidewaypoints = !(self.cvar_cl_hidewaypoints);
+				sprint(self, "fixed waypoints now ");
+				if(self.cvar_cl_hidewaypoints)
+					sprint(self, "OFF\n");
+				else
+					sprint(self, "ON\n");
+				break;
 		}
 	}
-	else
+	else if(imp >= 140 && imp <= 149 || imp == 99) // 10 cheats ought to be enough for anyone
 	{
-		if (sv_cheats)
+		if(sv_cheats)
+		if(self.deadflag == DEAD_NO)
 		{
-			if(imp == 19)
+			switch(imp)
 			{
-				makevectors(self.v_angle);
-				traceline(self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * MAX_SHOT_DISTANCE, FALSE, self);
-				if (trace_fraction < 1)
-					printsurfaceinfo(trace_ent, trace_endpos);
-			}
-			else if(imp == 20)
-			{
-				makevectors(self.v_angle);
-				traceline(self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * 65536, FALSE, self);
-				sprint(self, strcat("distance: ", ftos(fabs(vlen(trace_endpos - (self.origin + self.view_ofs)))), "\n"));
-			}
-			else if(self.deadflag == DEAD_NO)
-			{
-				if(imp == 77)
-				{
+				case 99:
+					self.items |= (IT_LASER | IT_UZI | IT_SHOTGUN | IT_GRENADE_LAUNCHER | IT_ELECTRO | IT_CRYLINK | IT_NEX | IT_HAGAR | IT_ROCKET_LAUNCHER);
+					self.ammo_shells = g_pickup_shells_max;
+					self.ammo_nails = g_pickup_nails_max;
+					self.ammo_rockets = g_pickup_rockets_max;
+					self.ammo_cells = g_pickup_cells_max;
+					self.health = g_pickup_healthsmall_max;
+					self.armorvalue = g_pickup_armorsmall_max;
+					self.pauserotarmor_finished = time + cvar("g_balance_pause_armor_rot_spawn");
+					self.pauserothealth_finished = time + cvar("g_balance_pause_health_rot_spawn");
+					self.pauseregen_finished = time + cvar("g_balance_pause_health_regen_spawn");
+					// precache weapon models/sounds
+					wep = WEP_FIRST;
+					while (wep <= WEP_LAST)
+					{
+						weapon_action(wep, WR_PRECACHE);
+						wep = wep + 1;
+					}
+					break;
+				case 140:
+					makevectors (self.v_angle);
+					self.velocity = self.velocity + v_forward * 300;
+					CopyBody(1);
+					self.lip += 1;
+					self.velocity = self.velocity - v_forward * 300;
+					break;
+				case 141:
 					if(self.waypointsprite_deployed_personal)
 					{
 						self.speedrunning = TRUE;
@@ -251,52 +322,16 @@ void ImpulseCommands (void)
 						self.pauserothealth_finished = time + cvar("g_balance_pause_health_rot_spawn");
 						self.pauseregen_finished = time + cvar("g_balance_pause_health_regen_spawn");
 					}
+					else if(self.deadflag != DEAD_NO)
+						sprint(self, "UR DEAD AHAHAH))\n");
 					else
 						sprint(self, "No waypoint set, cheater (use g_waypointsprite_personal to set one)\n");
-				}
-				else if(imp == 99)
-				{
-					self.items |= (IT_LASER | IT_UZI | IT_SHOTGUN | IT_GRENADE_LAUNCHER | IT_ELECTRO | IT_CRYLINK | IT_NEX | IT_HAGAR | IT_ROCKET_LAUNCHER);
-					self.ammo_shells = g_pickup_shells_max;
-					self.ammo_nails = g_pickup_nails_max;
-					self.ammo_rockets = g_pickup_rockets_max;
-					self.ammo_cells = g_pickup_cells_max;
-					self.health = g_pickup_healthsmall_max;
-					self.armorvalue = g_pickup_armorsmall_max;
-					self.pauserotarmor_finished = time + cvar("g_balance_pause_armor_rot_spawn");
-					self.pauserothealth_finished = time + cvar("g_balance_pause_health_rot_spawn");
-					self.pauseregen_finished = time + cvar("g_balance_pause_health_regen_spawn");
-					// precache weapon models/sounds
-					local float wep;
-					wep = WEP_FIRST;
-					while (wep <= WEP_LAST)
-					{
-						weapon_action(wep, WR_PRECACHE);
-						wep = wep + 1;
-					}
-				}
-				else if (imp == 13)
-				{
-					makevectors (self.v_angle);
-					self.velocity = self.velocity + v_forward * 300;
-					CopyBody(1);
-					self.lip += 1;
-					self.velocity = self.velocity - v_forward * 300;
-				}
-				else if (imp == 14)
-				{
+					break;
+				case 142:
 					CopyBody(0);
 					self.lip += 1;
-				}
-				else if (imp == 143) // actually: impulse 911
-				{
-					vector start, end, enddown;
-					float i;
-					float m;
-					float good, evil, evilsurf;
-					float maxattempts;
-					vector org, delta;
-
+					break;
+				case 143:
 					good = DPCONTENTS_SOLID | DPCONTENTS_CORPSE | DPCONTENTS_PLAYERCLIP;
 					evil = DPCONTENTS_SLIME | DPCONTENTS_LAVA | DPCONTENTS_SKY | DPCONTENTS_BODY | DPCONTENTS_DONOTENTER;
 					evilsurf = Q3SURFACEFLAG_SKY;
@@ -390,18 +425,43 @@ void ImpulseCommands (void)
 						sprint(self, "Emergency teleport could not find a good location, forget it!\n");
 
 					self.dphitcontentsmask = m;
-				}
+					break;
+				case 144:
+					makevectors(self.v_angle);
+					traceline(self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * MAX_SHOT_DISTANCE, FALSE, self);
+					if (trace_fraction < 1)
+						printsurfaceinfo(trace_ent, trace_endpos);
+					break;
+				case 145:
+					makevectors(self.v_angle);
+					traceline(self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * 65536, FALSE, self);
+					sprint(self, strcat("distance: ", ftos(fabs(vlen(trace_endpos - (self.origin + self.view_ofs)))), "\n"));
+					break;
 			}
 		}
 	}
-
-	if (cvar("g_waypointeditor"))
+	else if(imp >= 103 && imp <= 106)
 	{
-		local entity e;
-		if (imp == 103) waypoint_schedulerelink(waypoint_spawn(self.origin, self.origin, 0));
-		else if (imp == 104) {e = navigation_findnearestwaypoint(self, FALSE);if (e) waypoint_remove(e);}
-		else if (imp == 105) waypoint_schedulerelinkall();
-		else if (imp == 106) waypoint_saveall();
+		if(cvar("g_waypointeditor"))
+		{
+			switch(imp)
+			{
+				case 103:
+					waypoint_schedulerelink(waypoint_spawn(self.origin, self.origin, 0));
+					break;
+				case 104:
+					e = navigation_findnearestwaypoint(self, FALSE);
+					if (e)
+						waypoint_remove(e);
+					break;
+				case 105:
+					waypoint_schedulerelinkall();
+					break;
+				case 106:
+					waypoint_saveall();
+					break;
+			}
+		}
 	}
 
 	//TetrisImpulses(imp);

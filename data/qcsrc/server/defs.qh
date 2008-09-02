@@ -347,16 +347,7 @@ float default_weapon_alpha;
 .float cvar_cl_hidewaypoints;
 .string cvar_g_nexuizversion;
 .string cvar_cl_weaponpriority;
-.string cvar_cl_weaponpriority0;
-.string cvar_cl_weaponpriority1;
-.string cvar_cl_weaponpriority2;
-.string cvar_cl_weaponpriority3;
-.string cvar_cl_weaponpriority4;
-.string cvar_cl_weaponpriority5;
-.string cvar_cl_weaponpriority6;
-.string cvar_cl_weaponpriority7;
-.string cvar_cl_weaponpriority8;
-.string cvar_cl_weaponpriority9;
+.string cvar_cl_weaponpriorities[10];
 
 .float version_nagtime;
 

@@ -9,12 +9,12 @@ void W_SwitchWeapon(float imp)
 	}
 };
 
-float W_GetCycleWeapon(entity pl, string weaponorder, float dir)
+float W_GetCycleWeapon(entity pl, string weaponorder, float dir, float complain)
 {
 	float n, i, weaponwant, first_valid, prev_valid, switchtonext, switchtolast;
 	n = tokenize(weaponorder);
 	switchtonext = switchtolast = 0;
-	first_valid = prev_valid = -1;
+	first_valid = prev_valid = 0;
 
 	if(dir == 0)
 		switchtonext = 1;
@@ -26,14 +26,14 @@ float W_GetCycleWeapon(entity pl, string weaponorder, float dir)
 		{
 			if(switchtonext)
 				return weaponwant;
-			if(first_valid < 0)
+			if(!first_valid)
 				first_valid = weaponwant;
 			prev_valid = weaponwant;
 			if(weaponwant == pl.switchweapon)
 			{
 				if(dir >= 0)
 					switchtonext = 1;
-				else if(prev_valid >= 0)
+				else if(prev_valid)
 					return prev_valid;
 				else
 				{
@@ -43,25 +43,31 @@ float W_GetCycleWeapon(entity pl, string weaponorder, float dir)
 			}
 		}
 	}
-	if(first_valid >= 0)
+	if(first_valid)
 	{
 		if(switchtolast)
 			return prev_valid;
 		else
 			return first_valid;
 	}
-	return -1;
+	// complain
+	if(complain)
+	{
+		for(i = 0; i < n; ++i)
+		{
+			weaponwant = stof(argv(i));
+			client_hasweapon(pl, weaponwant, TRUE, TRUE);
+		}
+	}
+	return 0;
 }
 
 void W_CycleWeapon(string weaponorder, float dir)
 {
 	float w;
-	w = W_GetCycleWeapon(self, weaponorder, dir);
-	if(w >= 0)
+	w = W_GetCycleWeapon(self, weaponorder, dir, 1);
+	if(w > 0)
 		W_SwitchWeapon(w);
-	else
-		// none available
-		sprint(self, "You do not have any of the specified weapons.\n");
 }
 
 // next weapon
@@ -117,7 +123,7 @@ string W_FixWeaponOrder_ForceComplete(string order)
 
 float w_getbestweapon(entity e)
 { 
-	return W_GetCycleWeapon(e, e.cvar_cl_weaponpriority, 0);
+	return W_GetCycleWeapon(e, e.cvar_cl_weaponpriority, 0, 0);
 };
 
 // generic weapons table
