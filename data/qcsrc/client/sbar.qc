@@ -1296,7 +1296,7 @@ void Sbar_Draw (void)
 {
 	float i;
 	float x, fade;
-	float stat_items;
+	float stat_items, stat_weapons;
 
 	sbar_fontsize = Sbar_GetFontsize();
 
@@ -1402,6 +1402,7 @@ void Sbar_Draw (void)
 			if (sb_lines && sbar_hudselector == 1)
 			{
 				stat_items = getstati(STAT_ITEMS);
+				stat_weapons = getstati(STAT_WEAPONS);
 
 				sbar_x = (vid_conwidth - 320.0)*0.5;
 				sbar_y = vid_conheight - 24.0 - 16.0;
@@ -1411,18 +1412,13 @@ void Sbar_Draw (void)
 				fade = bound(0.7, fade, 1);
 
 				x = 1.0;
-				for(i = 0; i < 8; ++i)
+				for(i = WEP_FIRST; i <= WEP_LAST; ++i)
 				{
-					if(stat_items & x)
+					if(stat_weapons & x)
 					{
-						Sbar_DrawWeapon(i+1, fade, (i + 2 == activeweapon));
+						Sbar_DrawWeapon(i-1, fade, (i == activeweapon));
 					}
 					x *= 2;
-				}
-				x *= 2*2*2*2;
-				if(stat_items & x)
-				{
-					Sbar_DrawWeapon(0, fade, (activeweapon == 1));
 				}
 
 				// armor
@@ -1465,15 +1461,15 @@ void Sbar_Draw (void)
 
 				// ammo
 				x = getstati(STAT_AMMO);
-				if ((stat_items & (NEX_IT_SHELLS | NEX_IT_BULLETS | NEX_IT_ROCKETS | NEX_IT_CELLS)) || x != 0)
+				if ((stat_items & IT_AMMO) || x != 0)
 				{
-					if (stat_items & NEX_IT_SHELLS)
+					if (stat_items & IT_SHELLS)
 						drawpic(sbar + '296 0 0', "gfx/sb_shells", '24 24 0', '1 1 1', sbar_alpha_fg, 0);
-					else if (stat_items & NEX_IT_BULLETS)
+					else if (stat_items & IT_NAILS)
 						drawpic(sbar + '296 0 0', "gfx/sb_bullets", '24 24 0', '1 1 1', sbar_alpha_fg, 0);
-					else if (stat_items & NEX_IT_ROCKETS)
+					else if (stat_items & IT_ROCKETS)
 						drawpic(sbar + '296 0 0', "gfx/sb_rocket", '24 24 0', '1 1 1', sbar_alpha_fg, 0);
-					else if (stat_items & NEX_IT_CELLS)
+					else if (stat_items & IT_CELLS)
 						drawpic(sbar + '296 0 0', "gfx/sb_cells", '24 24 0', '1 1 1', sbar_alpha_fg, 0);
 					if(x > 10)
 						Sbar_DrawXNum('224 0 0', x, 3, 24, '0.6 0.7 0.8', 1, 0);
@@ -1492,6 +1488,7 @@ void Sbar_Draw (void)
 			{
 			
 				stat_items = getstati(STAT_ITEMS);
+				stat_weapons = getstati(STAT_ITEMS);
 			
 				sbar_x = (vid_conwidth - 640.0)*0.5;
 				sbar_y = vid_conheight - 47;
@@ -1500,18 +1497,13 @@ void Sbar_Draw (void)
 				fade = 3 - 2 * (time - weapontime);
 
 				x = 1.0;
-				for(i = 0; i < 8; ++i)
+				for(i = WEP_FIRST; i <= WEP_LAST; ++i)
 				{
-					if(stat_items & x)
+					if(stat_weapons & x)
 					{
-						Sbar_DrawWeapon(i+1, fade, (i + 2 == activeweapon));
+						Sbar_DrawWeapon(i-1, fade, (i == activeweapon));
 					}
 					x *= 2;
-				}
-				x *= 2*2*2*2;
-				if(stat_items & x)
-				{
-					Sbar_DrawWeapon(0, fade, (activeweapon == 1));
 				}
 
 				if (sb_lines > 24)
@@ -1538,13 +1530,13 @@ void Sbar_Draw (void)
 				if(activeweapon != 12)
 				{
 					// (519-3*24) = 447
-					if (stat_items & NEX_IT_SHELLS)
+					if (stat_items & IT_SHELLS)
 						drawpic(sbar + '519 0 0', "gfx/sb_shells", '0 0 0', '1 1 1', sbar_alpha_fg, 0);
-					else if (stat_items & NEX_IT_BULLETS)
+					else if (stat_items & IT_NAILS)
 						drawpic(sbar + '519 0 0', "gfx/sb_bullets", '0 0 0', '1 1 1', sbar_alpha_fg, 0);
-					else if (stat_items & NEX_IT_ROCKETS)
+					else if (stat_items & IT_ROCKETS)
 						drawpic(sbar + '519 0 0', "gfx/sb_rocket", '0 0 0', '1 1 1', sbar_alpha_fg, 0);
-					else if (stat_items & NEX_IT_CELLS)
+					else if (stat_items & IT_CELLS)
 						drawpic(sbar + '519 0 0', "gfx/sb_cells", '0 0 0', '1 1 1', sbar_alpha_fg, 0);
 					if(x > 10)
 						Sbar_DrawXNum('447 12 0', x, 3, 24, '0.6 0.7 0.8', 1, 0);

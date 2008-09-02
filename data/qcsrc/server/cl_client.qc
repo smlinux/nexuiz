@@ -461,6 +461,7 @@ void PutObserverInServer (void)
 	setsize (self, '0 0 0', '0 0 0');
 	self.oldorigin = self.origin;
 	self.items = 0;
+	self.weapons = 0;
 	self.model = "";
 	self.modelindex = 0;
 	self.weapon = 0;
@@ -630,7 +631,8 @@ void PutClientInServer (void)
 		self.ammo_cells = start_ammo_cells;
 		self.health = start_health;
 		self.armorvalue = start_armorvalue;
-		self.items = start_items;
+		self.items = 0;
+		self.weapons = start_weapons;
 		self.switchweapon = start_switchweapon;
 		self.cnt = start_switchweapon;
 		self.weapon = 0;
@@ -1122,15 +1124,6 @@ void ClientConnect (void)
 
 	// get version info from player
 	stuffcmd(self, "cmd clientversion $gameversion\n");
-
-	// send all weapon info strings
-	stuffcmd(self, "register_bestweapon clear\n"); // clear the Quake stuff
-	wep = WEP_FIRST;
-	while (wep <= WEP_LAST)
-	{
-		weapon_action(wep, WR_REGISTER);
-		wep = wep + 1;
-	}
 
 	// get other cvars from player
 	GetCvars(0);
@@ -1683,6 +1676,7 @@ void SpectateCopy(entity spectatee) {
 	self.health = spectatee.health;
 	self.impulse = 0;
 	self.items = spectatee.items;
+	self.weapons = spectatee.weapons;
 	self.punchangle = spectatee.punchangle;
 	self.view_ofs = spectatee.view_ofs;
 	self.v_angle = spectatee.v_angle;

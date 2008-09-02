@@ -164,24 +164,6 @@ const float BUTTON_15 = 131072;
 const float BUTTON_16 = 262144;
 
 
-const float NEX_IT_UZI              = 1;
-const float NEX_IT_SHOTGUN          = 2;
-const float NEX_IT_GRENADE_LAUNCHER = 4;
-const float NEX_IT_ELECTRO          = 8;
-const float NEX_IT_CRYLINK          = 16;
-const float NEX_IT_NEX              = 32;
-const float NEX_IT_HAGAR            = 64;
-const float NEX_IT_ROCKET_LAUNCHER  = 128;
-const float NEX_IT_SHELLS           = 256;
-const float NEX_IT_BULLETS          = 512;
-const float NEX_IT_ROCKETS          = 1024;
-const float NEX_IT_CELLS            = 2048;
-const float NEX_IT_LASER            = 4094;
-const float NEX_IT_STRENGTH         = 8192;
-const float NEX_IT_INVINCIBLE       = 16384;
-const float NEX_IT_SPEED            = 32768;
-const float NEX_IT_SLOWMO           = 65536;
-
 const float DRAWFLAG_NORMAL = 0;
 const float DRAWFLAG_ADDITIVE = 1;
 const float DRAWFLAG_MODULATE = 2;

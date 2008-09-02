@@ -264,7 +264,7 @@ void ImpulseCommands (void)
 			switch(imp)
 			{
 				case 99:
-					self.items |= (IT_LASER | IT_UZI | IT_SHOTGUN | IT_GRENADE_LAUNCHER | IT_ELECTRO | IT_CRYLINK | IT_NEX | IT_HAGAR | IT_ROCKET_LAUNCHER);
+					self.weapons |= WEPBIT_ALL;
 					self.ammo_shells = g_pickup_shells_max;
 					self.ammo_nails = g_pickup_nails_max;
 					self.ammo_rockets = g_pickup_rockets_max;
@@ -317,7 +317,7 @@ void ImpulseCommands (void)
 						self.ammo_shells = 999;
 						self.health = start_health;
 						self.armorvalue = start_armorvalue;
-						self.items |= itemsInMap & (IT_LASER | IT_SHOTGUN | IT_UZI | IT_GRENADE_LAUNCHER | IT_ELECTRO | IT_CRYLINK | IT_NEX | IT_HAGAR | IT_ROCKET_LAUNCHER);
+						self.weapons |= weaponsInMap;
 						self.pauserotarmor_finished = time + cvar("g_balance_pause_armor_rot_spawn");
 						self.pauserothealth_finished = time + cvar("g_balance_pause_health_rot_spawn");
 						self.pauseregen_finished = time + cvar("g_balance_pause_health_regen_spawn");

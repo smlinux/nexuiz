@@ -154,43 +154,6 @@ float	DEATH_ROT				= 10013;
 float	DEATH_MIRRORDAMAGE		= 10014;
 float   DEATH_TURRET            = 10100;
 
-
-
-
-float	IT_LASER				= 4096;
-float	IT_SHOTGUN				= 1;
-float	IT_UZI					= 2;
-float	IT_GRENADE_LAUNCHER			= 4;
-float	IT_ELECTRO				= 8;
-float	IT_CRYLINK				= 16;
-float	IT_NEX					= 32;
-float	IT_HAGAR				= 64;
-float	IT_ROCKET_LAUNCHER			= 128;
-
-float	IT_SHELLS				= 256;
-float	IT_NAILS				= 512;
-float	IT_ROCKETS				= 1024;
-float	IT_CELLS				= 2048;
-
-float	IT_STRENGTH				= 8192;
-float	IT_INVINCIBLE				= 16384;
-float	IT_HEALTH				= 32768;
-
-float	IT_KEY1					= 131072;
-float	IT_KEY2					= 262144;
-
-float	IT_RED_FLAG_TAKEN			= 32768;
-float	IT_RED_FLAG_LOST			= 65536;
-float	IT_RED_FLAG_CARRING			= 98304;
-float	IT_BLUE_FLAG_TAKEN			= 131072;
-float	IT_BLUE_FLAG_LOST			= 262144;
-float	IT_BLUE_FLAG_CARRING			= 393216;
-
-float	IT_5HP					= 524288;
-float	IT_25HP					= 1048576;
-float	IT_ARMOR_SHARD				= 2097152;
-float	IT_ARMOR				= 4194304;
-
 vector	PL_VIEW_OFS				= '0 0 35';
 vector	PL_MIN					= '-16 -16 -24';
 vector	PL_MAX					= '16 16 45';

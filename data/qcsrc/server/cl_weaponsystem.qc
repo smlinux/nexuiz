@@ -324,7 +324,7 @@ void CL_SpawnWeaponentity()
 
 float client_hasweapon(entity cl, float wpn, float andammo, float complain)
 {
-	local float itemcode, f;
+	local float weaponbit, f;
 	local entity oldself;
 
 	if (wpn < WEP_FIRST || wpn > WEP_LAST)
@@ -333,8 +333,8 @@ float client_hasweapon(entity cl, float wpn, float andammo, float complain)
 			sprint(self, "Invalid weapon\n");
 		return FALSE;
 	}
-	itemcode = W_ItemCode(wpn);
-	if (cl.items & itemcode)
+	weaponbit = W_WeaponBit(wpn);
+	if (cl.weapons & weaponbit)
 	{
 		if (andammo)
 		{
@@ -356,7 +356,7 @@ float client_hasweapon(entity cl, float wpn, float andammo, float complain)
 	{
 		// DRESK - 3/16/07
 		// Report Proper Weapon Status / Modified Weapon Ownership Message
-		if(itemsInMap & itemcode)
+		if(weaponsInMap & weaponbit)
 			sprint(cl, strcat("You do not have the ^2", W_Name(wpn), "\n") );
 		else
 			sprint(cl, strcat("The ^2", W_Name(wpn), "^7 is ^1NOT AVAILABLE^7 in this map\n") );
@@ -575,29 +575,4 @@ void W_SetupProjectileVelocity(entity missile)
 		error("Unowned missile");
 
 	missile.velocity = W_CalculateProjectileVelocity(missile.owner.velocity, missile.velocity);
-}
-
-void weapon_register(float wepcode, float minammo)
-{
-	string s;
-	float itemcode;
-	s = strcat("register_bestweapon ", ftos(wepcode), " "); // char for bestweapon
-	s = strcat(s, ftos(wepcode), " "); // impulse
-	s = strcat(s, ftos(W_ItemCode(wepcode)), " "); // item code
-	s = strcat(s, ftos(wepcode), " "); // self.weapon code
-
-	// ammo stat
-	itemcode = W_AmmoItemCode(wepcode);
-	if(itemcode == IT_SHELLS)
-		s = strcat(s, "6 ");
-	else if(itemcode == IT_NAILS)
-		s = strcat(s, "7 ");
-	else if(itemcode == IT_ROCKETS)
-		s = strcat(s, "8 ");
-	else // if(itemcode == IT_CELLS)
-		s = strcat(s, "9 ");
-
-	s = strcat(s, ftos(minammo), "\n");
-	//dprint(s);
-	stuffcmd(self, s);
 }

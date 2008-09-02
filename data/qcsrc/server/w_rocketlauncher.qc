@@ -12,7 +12,7 @@ void W_Rocket_Explode (void)
 
 	//effect (org2, "models/sprites/rockexpl.spr", 0, 12, 35);
 	self.event_damage = SUB_Null;
-	RadiusDamage (self, self.owner, cvar("g_balance_rocketlauncher_damage"), cvar("g_balance_rocketlauncher_edgedamage"), cvar("g_balance_rocketlauncher_radius"), world, cvar("g_balance_rocketlauncher_force"), IT_ROCKET_LAUNCHER);
+	RadiusDamage (self, self.owner, cvar("g_balance_rocketlauncher_damage"), cvar("g_balance_rocketlauncher_edgedamage"), cvar("g_balance_rocketlauncher_radius"), world, cvar("g_balance_rocketlauncher_force"), WEP_ROCKET_LAUNCHER);
 
 	if (self.owner.weapon == WEP_ROCKET_LAUNCHER)
 	{
@@ -428,7 +428,5 @@ float w_rlauncher(float req)
 	}
 	else if (req == WR_CHECKAMMO2)
 		return FALSE;
-	else if (req == WR_REGISTER)
-		weapon_register(WEP_ROCKET_LAUNCHER, cvar("g_balance_rocketlauncher_ammo"));
 	return TRUE;
 };

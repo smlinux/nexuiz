@@ -401,7 +401,7 @@ void ReadyRestart()
 	if(g_tourney) {
 		tourneyInMatchStage = 1; //once the game is restarted the game is in match stage
 		//reset weapons and ammo, health and armor to default:
-		start_items = IT_LASER | IT_SHOTGUN;
+		start_weapons = WEPBIT_LASER | WEPBIT_SHOTGUN;
 		start_switchweapon = WEP_SHOTGUN;
 		start_ammo_shells = cvar("g_start_ammo_shells");
 		start_ammo_nails = cvar("g_start_ammo_nails");

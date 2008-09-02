@@ -20,7 +20,7 @@ void W_Crylink_Touch (void)
 		f = cvar("g_balance_crylink_primary_bouncedamagefactor");
 	if(self.alpha)
 		f *= self.alpha;
-	RadiusDamage (self, self.realowner, cvar("g_balance_crylink_primary_damage") * f, cvar("g_balance_crylink_primary_edgedamage") * f, cvar("g_balance_crylink_primary_radius"), world, cvar("g_balance_crylink_primary_force") * f, IT_CRYLINK);
+	RadiusDamage (self, self.realowner, cvar("g_balance_crylink_primary_damage") * f, cvar("g_balance_crylink_primary_edgedamage") * f, cvar("g_balance_crylink_primary_radius"), world, cvar("g_balance_crylink_primary_force") * f, WEP_CRYLINK);
 	if (finalhit)
 	{
 		remove (self);
@@ -49,7 +49,7 @@ void W_Crylink_Touch2 (void)
 		f = cvar("g_balance_crylink_secondary_bouncedamagefactor");
 	if(self.alpha)
 		f *= self.alpha;
-	RadiusDamage (self, self.realowner, cvar("g_balance_crylink_secondary_damage") * f, cvar("g_balance_crylink_secondary_edgedamage") * f, cvar("g_balance_crylink_secondary_radius"), world, cvar("g_balance_crylink_secondary_force") * f, IT_CRYLINK);
+	RadiusDamage (self, self.realowner, cvar("g_balance_crylink_secondary_damage") * f, cvar("g_balance_crylink_secondary_edgedamage") * f, cvar("g_balance_crylink_secondary_radius"), world, cvar("g_balance_crylink_secondary_force") * f, WEP_CRYLINK);
 	if (finalhit)
 	{
 		remove (self);
@@ -191,7 +191,7 @@ void W_Crylink_Attack3 (void)
 	trailparticles(world, particleeffectnum("lightning_beam", w_shotorg, trace_endpos);
 
 	if (trace_fraction < 1)
-		Damage(trace_ent, self, self, cvar("g_balance_crylink_primary_damage"), IT_CRYLINK, trace_endpos, '0 0 0');
+		Damage(trace_ent, self, self, cvar("g_balance_crylink_primary_damage"), WEP_CRYLINK, trace_endpos, '0 0 0');
 }
 */
 
@@ -234,7 +234,5 @@ float w_crylink(float req)
 		return self.ammo_cells >= cvar("g_balance_crylink_primary_ammo");
 	else if (req == WR_CHECKAMMO2)
 		return self.ammo_cells >= cvar("g_balance_crylink_secondary_ammo");
-	else if (req == WR_REGISTER)
-		weapon_register(WEP_CRYLINK, min(cvar("g_balance_crylink_primary_ammo"), cvar("g_balance_crylink_secondary_ammo")));
 	return TRUE;
 };

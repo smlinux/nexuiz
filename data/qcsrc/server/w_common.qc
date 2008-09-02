@@ -6,7 +6,7 @@ void W_GiveWeapon (entity e, float wep, string name)
 	if (!wep)
 		return;
 
-	e.items = e.items | wep;
+	e.weapons = e.weapons | wep;
 
 	oldself = self;
 	self = e;
@@ -141,7 +141,7 @@ void fireBullet (vector start, vector dir, float spread, float damage, float for
 	{
 		if (trace_ent.solid == SOLID_BSP && !(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT))
 		{
-			if (dtype == IT_SHOTGUN)
+			if (dtype == WEP_SHOTGUN)
 				pointparticles(particleeffectnum("shotgun_impact"), trace_endpos, trace_plane_normal * 1000, 1);
 			else
 				pointparticles(particleeffectnum("machinegun_impact"), trace_endpos, trace_plane_normal * 1000, 1);

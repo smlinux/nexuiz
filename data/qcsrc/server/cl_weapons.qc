@@ -165,19 +165,19 @@ string W_Name(float weaponid)
 	return "@!#%'n Tuba";
 }
 
-float W_ItemCode(float wpn)
+float W_WeaponBit(float wpn)
 {
 	switch(wpn)
 	{
-		case WEP_LASER:            return IT_LASER;
-		case WEP_SHOTGUN:          return IT_SHOTGUN;
-		case WEP_UZI:              return IT_UZI;
-		case WEP_GRENADE_LAUNCHER: return IT_GRENADE_LAUNCHER;
-		case WEP_ELECTRO:          return IT_ELECTRO;
-		case WEP_CRYLINK:          return IT_CRYLINK;
-		case WEP_NEX:              return IT_NEX;
-		case WEP_HAGAR:            return IT_HAGAR;
-		case WEP_ROCKET_LAUNCHER:  return IT_ROCKET_LAUNCHER;
+		case WEP_LASER:            return WEPBIT_LASER;
+		case WEP_SHOTGUN:          return WEPBIT_SHOTGUN;
+		case WEP_UZI:              return WEPBIT_UZI;
+		case WEP_GRENADE_LAUNCHER: return WEPBIT_GRENADE_LAUNCHER;
+		case WEP_ELECTRO:          return WEPBIT_ELECTRO;
+		case WEP_CRYLINK:          return WEPBIT_CRYLINK;
+		case WEP_NEX:              return WEPBIT_NEX;
+		case WEP_HAGAR:            return WEPBIT_HAGAR;
+		case WEP_ROCKET_LAUNCHER:  return WEPBIT_ROCKET_LAUNCHER;
 		default:                   return 0;
 	}
 }
@@ -210,7 +210,7 @@ void thrown_wep_think()
 // toss current weapon
 void W_ThrowWeapon(vector velo, vector delta, float doreduce)
 {
-	local float w, ammo;
+	local float w, ammo, wb;
 	local entity wep, e;
 	local .float ammofield;
 
@@ -227,7 +227,7 @@ void W_ThrowWeapon(vector velo, vector delta, float doreduce)
 		return;
 	if (g_nixnex)
 		return;
-	if (!cvar("g_pickup_items"))
+	if (!cvar("g_pickup_weapons"))
 		return;
 
 	e = self;
@@ -241,13 +241,13 @@ void W_ThrowWeapon(vector velo, vector delta, float doreduce)
 	SUB_SetFade(wep, time + 20, 1);
 
 	ammofield = Item_CounterField(W_AmmoItemCode(w));
-	w = W_ItemCode(w);
-	if(!(e.items & w))
+	wb = W_WeaponBit(w);
+	if(!(e.weapons & wb))
 	{
 		remove(wep);
 		goto leave;
 	}
-	Item_SpawnByItemCode(w);
+	Item_SpawnByWeaponCode(w);
 	if(startitem_failed)
 		goto leave;
 	if(doreduce)
@@ -257,7 +257,7 @@ void W_ThrowWeapon(vector velo, vector delta, float doreduce)
 		e.ammofield -= ammo;
 	}
 
-	if(e.items & w)
+	if(e.weapons & wb)
 		if(e.health >= 1)
 			sprint(e, strcat("You dropped the ^2", wep.netname, " with ", ftos(wep.ammofield), " ammo", "\n"));
 
@@ -267,7 +267,7 @@ void W_ThrowWeapon(vector velo, vector delta, float doreduce)
 	wep.think = thrown_wep_think;
 	wep.classname = "droppedweapon";
 	wep.flags = wep.flags | FL_TOSSED;
-	e.items = e.items - (e.items & w);
+	e.weapons = e.weapons - (e.weapons & wb);
 	e.switchweapon = w_getbestweapon(e);
 	wep.colormap = e.colormap;
 	if (e.switchweapon != e.weapon)
@@ -451,10 +451,10 @@ void Nixnex_GiveCurrentWeapon()
 			self.nixnex_nextincr = time + cvar("g_balance_nixnex_incrtime");
 		}
 
-		self.items = self.items - (self.items & (IT_LASER | IT_SHOTGUN | IT_UZI | IT_GRENADE_LAUNCHER | IT_ELECTRO | IT_CRYLINK | IT_NEX | IT_HAGAR | IT_ROCKET_LAUNCHER));
+		self.weapons = 0;
 		if(g_nixnex_with_laser)
-			self.items = self.items | IT_LASER;
-		self.items = self.items | W_ItemCode(nixnex_weapon);
+			self.weapons = self.weapons | WEPBIT_LASER;
+		self.weapons = self.weapons | W_WeaponBit(nixnex_weapon);
 
 		if(self.switchweapon != nixnex_weapon)
 			if(!client_hasweapon(self, self.switchweapon, TRUE, FALSE))

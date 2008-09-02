@@ -202,22 +202,6 @@ float WR_CHECKAMMO1	  = 3; // checks ammo for weapon
 float WR_CHECKAMMO2	  = 4; // checks ammo for weapon
 float WR_AIM		  = 5; // runs bot aiming code for this weapon
 float WR_PRECACHE	  = 6; // precaches models/sounds used by this weapon
-float WR_REGISTER	  = 7; // send data about the weapon to the client self (for ClientConnect)
-
-// Weapon indexes
-float WEP_LASER				= 1; // float	IT_LASER				= 4096;
-float WEP_SHOTGUN			= 2; // float	IT_SHOTGUN				= 1;
-float WEP_UZI				= 3; // float	IT_UZI					= 2;
-float WEP_GRENADE_LAUNCHER	= 4; // float	IT_GRENADE_LAUNCHER		= 4;
-float WEP_ELECTRO			= 5; // float	IT_ELECTRO				= 8;
-float WEP_CRYLINK			= 6; // float	IT_CRYLINK				= 16;
-float WEP_NEX				= 7; // float	IT_NEX					= 32;
-float WEP_HAGAR				= 8; // float	IT_HAGAR				= 64;
-float WEP_ROCKET_LAUNCHER	= 9; // float	IT_ROCKET_LAUNCHER		= 128;
-// For weapon cycling commands
-float WEP_FIRST				= 1;
-float WEP_LAST				= 9;
-float WEP_COUNT             = 10;
 
 void(entity client, string s) centerprint_builtin = #73;
 .vector dest1, dest2;
@@ -372,11 +356,10 @@ void DropAllRunes(entity pl);
 
 typedef .float floatfield;
 floatfield Item_CounterField(float it);
-float Item_WeaponCode(float it);
-void Item_SpawnByItemCode(float it);
+void Item_SpawnByWeaponCode(float it);
 
 float W_AmmoItemCode(float wpn);
-float W_ItemCode(float wpn);
+float W_WeaponBit(float wpn);
 string W_Name(float weaponid);
 
 void UpdateSelectedPlayer();
@@ -391,7 +374,7 @@ void ClearSelectedPlayer();
 void FixIntermissionClient(entity e);
 void FixClientCvars(entity e);
 
-float itemsInMap;
+float weaponsInMap;
 
 void centerprint_atprio(entity e, float prio, string s);
 void centerprint_expire(entity e, float prio);
@@ -494,3 +477,4 @@ float independent_players;
 string clientstuff;
 .float stat_sys_ticrate;
 .float phase;
+.float weapons;

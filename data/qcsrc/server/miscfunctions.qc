@@ -697,7 +697,7 @@ float g_pickup_healthlarge_max;
 float g_pickup_healthmega;
 float g_pickup_healthmega_max;
 
-float start_items;
+float start_weapons;
 float start_switchweapon;
 float start_ammo_shells;
 float start_ammo_nails;
@@ -758,7 +758,7 @@ void readlevelcvars(void)
 	g_pickup_healthmega_max            = cvar("g_pickup_healthmega_max");
 
 	// initialize starting values for players
-	start_items = 0;
+	start_weapons = 0;
 	start_switchweapon = 0;
 	start_ammo_shells = 0;
 	start_ammo_nails = 0;
@@ -769,28 +769,28 @@ void readlevelcvars(void)
 
 	if(g_instagib)
 	{
-		start_items = IT_NEX;
+		start_weapons = WEPBIT_NEX;
 		start_switchweapon = WEP_NEX;
 		weapon_action(start_switchweapon, WR_PRECACHE);
 		start_ammo_cells = 999;
 	}
 	else if(g_rocketarena)
 	{
-		start_items = IT_ROCKET_LAUNCHER;
+		start_weapons = WEPBIT_ROCKET_LAUNCHER;
 		start_switchweapon = WEP_ROCKET_LAUNCHER;
 		weapon_action(start_switchweapon, WR_PRECACHE);
 		start_ammo_rockets = 999;
 	}
 	else if(g_nixnex)
 	{
-		start_items = 0;
+		start_weapons = 0;
 		// will be done later
 	}
 	else if(g_minstagib)
 	{
 		start_health = 100;
 		start_armorvalue = 0;
-		start_items = IT_NEX;
+		start_weapons = WEPBIT_NEX;
 		start_switchweapon = WEP_NEX;
 		weapon_action(start_switchweapon, WR_PRECACHE);
 		start_ammo_cells = cvar("g_minstagib_ammo_start");
@@ -829,55 +829,55 @@ void readlevelcvars(void)
 
 		if (cvar("g_start_weapon_laser") || g_lms)
 		{
-			start_items = start_items | IT_LASER;
+			start_weapons = start_weapons | WEPBIT_LASER;
 			start_switchweapon = WEP_LASER;
 			weapon_action(start_switchweapon, WR_PRECACHE);
 		}
 		if (cvar("g_start_weapon_shotgun") || g_lms)
 		{
-			start_items = start_items | IT_SHOTGUN;
+			start_weapons = start_weapons | WEPBIT_SHOTGUN;
 			start_switchweapon = WEP_SHOTGUN;
 			weapon_action(start_switchweapon, WR_PRECACHE);
 		}
 		if (cvar("g_start_weapon_uzi") || g_lms || g_tourney)
 		{
-			start_items = start_items | IT_UZI;
+			start_weapons = start_weapons | WEPBIT_UZI;
 			start_switchweapon = WEP_UZI;
 			weapon_action(start_switchweapon, WR_PRECACHE);
 		}
 		if (cvar("g_start_weapon_grenadelauncher") || g_lms || g_tourney)
 		{
-			start_items = start_items | IT_GRENADE_LAUNCHER;
+			start_weapons = start_weapons | WEPBIT_GRENADE_LAUNCHER;
 			start_switchweapon = WEP_GRENADE_LAUNCHER;
 			weapon_action(start_switchweapon, WR_PRECACHE);
 		}
 		if (cvar("g_start_weapon_electro") || g_lms || g_tourney)
 		{
-			start_items = start_items | IT_ELECTRO;
+			start_weapons = start_weapons | WEPBIT_ELECTRO;
 			start_switchweapon = WEP_ELECTRO;
 			weapon_action(start_switchweapon, WR_PRECACHE);
 		}
 		if (cvar("g_start_weapon_crylink") || g_lms || g_tourney)
 		{
-			start_items = start_items | IT_CRYLINK;
+			start_weapons = start_weapons | WEPBIT_CRYLINK;
 			start_switchweapon = WEP_CRYLINK;
 			weapon_action(start_switchweapon, WR_PRECACHE);
 		}
 		if (cvar("g_start_weapon_nex") || g_lms || g_tourney)
 		{
-			start_items = start_items | IT_NEX;
+			start_weapons = start_weapons | WEPBIT_NEX;
 			start_switchweapon = WEP_NEX;
 			weapon_action(start_switchweapon, WR_PRECACHE);
 		}
 		if (cvar("g_start_weapon_hagar") || g_lms || g_tourney)
 		{
-			start_items = start_items | IT_HAGAR;
+			start_weapons = start_weapons | WEPBIT_HAGAR;
 			start_switchweapon = WEP_HAGAR;
 			weapon_action(start_switchweapon, WR_PRECACHE);
 		}
 		if (cvar("g_start_weapon_rocketlauncher") || g_lms || g_tourney)
 		{
-			start_items = start_items | IT_ROCKET_LAUNCHER;
+			start_weapons = start_weapons | WEPBIT_ROCKET_LAUNCHER;
 			start_switchweapon = WEP_ROCKET_LAUNCHER;
 			weapon_action(start_switchweapon, WR_PRECACHE);
 		}

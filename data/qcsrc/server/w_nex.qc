@@ -10,11 +10,11 @@ void W_Nex_Attack (void)
 
 	// assure that nexdamage is high enough in minstagib
 	if (g_minstagib || g_instagib)
-		FireRailgunBullet (w_shotorg, w_shotorg + w_shotdir * MAX_SHOT_DISTANCE, 1000, 800, IT_NEX);
+		FireRailgunBullet (w_shotorg, w_shotorg + w_shotdir * MAX_SHOT_DISTANCE, 1000, 800, WEP_NEX);
 	else
 	{
 		yoda = 0;
-		FireRailgunBullet (w_shotorg, w_shotorg + w_shotdir * MAX_SHOT_DISTANCE, cvar("g_balance_nex_damage"), cvar("g_balance_nex_force"), IT_NEX);
+		FireRailgunBullet (w_shotorg, w_shotorg + w_shotdir * MAX_SHOT_DISTANCE, cvar("g_balance_nex_damage"), cvar("g_balance_nex_force"), WEP_NEX);
 
 		if(yoda)
 			if(flying)
@@ -178,12 +178,5 @@ float w_nex(float req)
 	}
 	else if (req == WR_CHECKAMMO2)
 		return FALSE;
-	else if (req == WR_REGISTER)
-	{
-		if(g_minstagib)
-			weapon_register(WEP_NEX, 1);
-		else
-			weapon_register(WEP_NEX, cvar("g_balance_nex_ammo"));
-	}
 	return TRUE;
 };
