@@ -283,6 +283,8 @@ void W_Rocket_Attack (void)
 	flash.effects = flash2.effects = EF_ADDITIVE | EF_FULLBRIGHT | EF_LOWPRECISION;
 }
 
+void spawnfunc_weapon_rocketlauncher (void); // defined in t_items.qc
+
 float w_rlauncher(float req)
 {
 	if (req == WR_AIM)
@@ -418,7 +420,7 @@ float w_rlauncher(float req)
 			precache_model ("models/laser_dot.mdl"); // rocket launcher
 	}
 	else if (req == WR_SETUP)
-		weapon_setup(WEP_ROCKET_LAUNCHER, "rl", IT_ROCKETS);
+		weapon_setup(WEP_ROCKET_LAUNCHER, "rl");
 	else if (req == WR_CHECKAMMO1)
 	{
 		// don't switch while guiding a missile
@@ -428,5 +430,11 @@ float w_rlauncher(float req)
 	}
 	else if (req == WR_CHECKAMMO2)
 		return FALSE;
+	else if (req == WR_SUICIDEMESSAGE)
+		w_deathtypestring = "exploded";
+	else if (req == WR_KILLMESSAGE)
+		w_deathtypestring = "almost dodged #'s rocket";
+	else if (req == WR_SPAWNFUNC)
+		spawnfunc_weapon_rocketlauncher();
 	return TRUE;
 };

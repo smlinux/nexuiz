@@ -164,6 +164,11 @@ void W_Electro_Attack2()
 	//sound (proj, CHAN_PROJECTILE, "weapons/electro_fly.wav", VOL_BASE, ATTN_NORM);
 }
 
+void spawnfunc_weapon_electro (void)
+{
+	weapon_defaultspawnfunc(WEP_ELECTRO, 5000);
+}
+
 .float bot_secondary_electromooth;
 float w_electro(float req)
 {
@@ -220,10 +225,15 @@ float w_electro(float req)
 		precache_sound ("weapons/electro_impact_combo.wav");
 	}
 	else if (req == WR_SETUP)
-		weapon_setup(WEP_ELECTRO, "electro", IT_CELLS);
+		weapon_setup(WEP_ELECTRO, "electro");
 	else if (req == WR_CHECKAMMO1)
 		return self.ammo_cells >= cvar("g_balance_electro_primary_ammo");
 	else if (req == WR_CHECKAMMO2)
 		return self.ammo_cells >= cvar("g_balance_electro_secondary_ammo");
+	else if (req == WR_SUICIDEMESSAGE)
+		w_deathtypestring = "played with plasma";
+	else if (req == WR_SPAWNFUNC)
+		spawnfunc_weapon_electro();
+	// else if (req == WR_KILLMESSAGE) // TODO
 	return TRUE;
 };

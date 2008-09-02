@@ -124,79 +124,25 @@ float w_getbestweapon(entity e)
 };
 
 // generic weapons table
-// add new weapons here
+// TODO should they be macros instead?
 float weapon_action(float wpn, float wrequest)
 {
-	// %weaponaddpoint
-	if (wpn == WEP_LASER)
-		return w_laser(wrequest);
-	else if (wpn == WEP_SHOTGUN)
-		return w_shotgun(wrequest);
-	else if (wpn == WEP_UZI)
-		return w_uzi(wrequest);
-	else if (wpn == WEP_GRENADE_LAUNCHER)
-		return w_glauncher(wrequest);
-	else if (wpn == WEP_ELECTRO)
-		return w_electro(wrequest);
-	else if (wpn == WEP_CRYLINK)
-		return w_crylink(wrequest);
-	else if (wpn == WEP_NEX)
-		return w_nex(wrequest);
-	else if (wpn == WEP_HAGAR)
-		return w_hagar(wrequest);
-	else if (wpn == WEP_ROCKET_LAUNCHER)
-		return w_rlauncher(wrequest);
-	return FALSE;
+	return (get_weaponinfo(wpn)).weapon_func(wrequest);
 };
 
 string W_Name(float weaponid)
 {
-	// %weaponaddpoint
-	if(weaponid == WEP_LASER)             return "Laser";
-	if(weaponid == WEP_UZI)               return "Machine Gun";
-	if(weaponid == WEP_SHOTGUN)           return "Shotgun";
-	if(weaponid == WEP_GRENADE_LAUNCHER)  return "Mortar";
-	if(weaponid == WEP_ELECTRO)           return "Electro";
-	if(weaponid == WEP_NEX)               return "Nex";
-	if(weaponid == WEP_HAGAR)             return "Hagar";
-	if(weaponid == WEP_ROCKET_LAUNCHER)   return "Rocket Launcher";
-	if(weaponid == WEP_CRYLINK)           return "Crylink";
-	return "@!#%'n Tuba";
+	return (get_weaponinfo(weaponid)).message;
 }
 
 float W_WeaponBit(float wpn)
 {
-	// %weaponaddpoint
-	switch(wpn)
-	{
-		case WEP_LASER:            return WEPBIT_LASER;
-		case WEP_SHOTGUN:          return WEPBIT_SHOTGUN;
-		case WEP_UZI:              return WEPBIT_UZI;
-		case WEP_GRENADE_LAUNCHER: return WEPBIT_GRENADE_LAUNCHER;
-		case WEP_ELECTRO:          return WEPBIT_ELECTRO;
-		case WEP_CRYLINK:          return WEPBIT_CRYLINK;
-		case WEP_NEX:              return WEPBIT_NEX;
-		case WEP_HAGAR:            return WEPBIT_HAGAR;
-		case WEP_ROCKET_LAUNCHER:  return WEPBIT_ROCKET_LAUNCHER;
-		default:                   return 0;
-	}
+	return (get_weaponinfo(wpn)).weapons;
 }
 
 float W_AmmoItemCode(float wpn)
 {
-	// %weaponaddpoint
-	switch(wpn)
-	{
-		case WEP_SHOTGUN:          return IT_SHELLS;
-		case WEP_UZI:              return IT_NAILS;
-		case WEP_GRENADE_LAUNCHER: return IT_ROCKETS;
-		case WEP_ELECTRO:          return IT_CELLS;
-		case WEP_CRYLINK:          return IT_CELLS;
-		case WEP_NEX:              return IT_CELLS;
-		case WEP_HAGAR:            return IT_ROCKETS;
-		case WEP_ROCKET_LAUNCHER:  return IT_ROCKETS;
-		default:                   return 0;
-	}
+	return (get_weaponinfo(wpn)).items;
 }
 
 // think function for tossed weapons
@@ -228,7 +174,7 @@ void W_ThrowWeapon(vector velo, vector delta, float doreduce)
 		return;
 	if (g_nixnex)
 		return;
-	if (!cvar("g_pickup_weapons"))
+	if (!cvar("g_pickup_items"))
 		return;
 
 	e = self;
@@ -250,7 +196,9 @@ void W_ThrowWeapon(vector velo, vector delta, float doreduce)
 	}
 	Item_SpawnByWeaponCode(w);
 	if(startitem_failed)
+	{
 		goto leave;
+	}
 	if(doreduce)
 	{
 		ammo = min(e.ammofield, wep.ammofield);
@@ -464,3 +412,16 @@ void Nixnex_GiveCurrentWeapon()
 	}
 }
 
+void RegisterWeapons()
+{
+	// %weaponaddpoint
+	register_weapon(WEP_LASER, w_laser, 0, "laser", "laser", "Laser");
+	register_weapon(WEP_SHOTGUN, w_shotgun, IT_SHELLS, "shotgun", "shotgun", "Shotgun");
+	register_weapon(WEP_UZI, w_uzi, IT_NAILS, "uzi", "uzi", "Machine Gun");
+	register_weapon(WEP_GRENADE_LAUNCHER, w_glauncher, IT_ROCKETS, "gl", "grenadelauncher", "Mortar");
+	register_weapon(WEP_ELECTRO, w_electro, IT_CELLS, "electro", "electro", "Electro");
+	register_weapon(WEP_CRYLINK, w_crylink, IT_CELLS, "crylink", "crylink", "Crylink");
+	register_weapon(WEP_NEX, w_nex, IT_CELLS, "nex", "nex", "Nex");
+	register_weapon(WEP_HAGAR, w_hagar, IT_ROCKETS, "hagar", "hagar", "Hagar");
+	register_weapon(WEP_ROCKET_LAUNCHER, w_rlauncher, IT_ROCKETS, "rl", "rocketlauncher", "Rocket Launcher");
+}

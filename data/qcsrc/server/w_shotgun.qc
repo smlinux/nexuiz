@@ -95,6 +95,8 @@ void shotgun_fire2_02()
 	weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_shotgun_secondary_animtime"), shotgun_fire2_03);
 }
 
+void spawnfunc_weapon_shotgun(); // defined in t_items.qc
+
 float w_shotgun(float req)
 {
 	if (req == WR_AIM)
@@ -134,10 +136,16 @@ float w_shotgun(float req)
 			precache_model ("models/casing_shell.mdl");
 	}
 	else if (req == WR_SETUP)
-		weapon_setup(WEP_SHOTGUN, "shotgun", IT_SHELLS);
+		weapon_setup(WEP_SHOTGUN, "shotgun");
 	else if (req == WR_CHECKAMMO1)
 		return self.ammo_shells >= cvar("g_balance_shotgun_primary_ammo");
 	else if (req == WR_CHECKAMMO2)
 		return self.ammo_shells >= cvar("g_balance_shotgun_secondary_ammo") * 3;
+	else if (req == WR_SUICIDEMESSAGE)
+		w_deathtypestring = "did the impossible";
+	else if (req == WR_KILLMESSAGE)
+		w_deathtypestring = "was gunned by";
+	else if (req == WR_SPAWNFUNC)
+		spawnfunc_weapon_shotgun();
 	return TRUE;
 };

@@ -385,14 +385,16 @@ void w_ready()
 };
 
 // Setup weapon for client (after this raise frame will be launched)
-void weapon_setup(float windex, string wname, float hudammo)
+void weapon_setup(float windex, string wname)
 {
-	self.items = self.items - (self.items & (IT_SHELLS | IT_NAILS | IT_ROCKETS | IT_CELLS));
-	self.items = self.items | hudammo;
+	entity e;
+	e = get_weaponinfo(windex);
+	self.items = self.items - (self.items & IT_AMMO);
+	self.items = self.items | e.items;
 
 	// the two weapon entities will notice this has changed and update their models
 	self.weapon = windex;
-	self.weaponname = wname;
+	self.weaponname = e.mdl;
 };
 
 // perform weapon to attack (weaponstate and attack_finished check is here)
@@ -575,4 +577,48 @@ void W_SetupProjectileVelocity(entity missile)
 		error("Unowned missile");
 
 	missile.velocity = W_CalculateProjectileVelocity(missile.owner.velocity, missile.velocity);
+}
+
+
+// WEAPON PLUGIN SYSTEM
+entity weapon_info[24];
+entity dummy_weapon_info;
+.float(float) weapon_func;
+void register_weapon(float id, float(float) func, float ammotype, string modelname, string shortname, string name)
+{
+	entity e;
+	weapon_info[id - 1] = e = spawn();
+	e.classname = "weapon_info";
+	e.weapon = id;
+	e.weapons = power2of(id - 1);
+	e.netname = shortname;
+	e.message = name;
+	e.items = ammotype;
+	e.weapon_func = func;
+	e.mdl = modelname;
+	e.model = strzone(strcat("models/weapons/g_", modelname, ".md3"));
+}
+float w_null(float dummy)
+{
+	return 0;
+}
+void register_dummy_weapon()
+{
+	dummy_weapon_info = spawn();
+	dummy_weapon_info.classname = "weapon_info";
+	dummy_weapon_info.weapon = 0;
+	dummy_weapon_info.weapons = 0;
+	dummy_weapon_info.netname = "@!#%'n Tuba";
+	dummy_weapon_info.items = 0;
+	dummy_weapon_info.weapon_func = w_null;
+	dummy_weapon_info.mdl = "";
+	dummy_weapon_info.model = "";
+}
+entity get_weaponinfo(float id)
+{
+	entity w;
+	w = weapon_info[id - 1];
+	if(w)
+		return w;
+	return dummy_weapon_info;
 }

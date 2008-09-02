@@ -195,6 +195,11 @@ void W_Crylink_Attack3 (void)
 }
 */
 
+void spawnfunc_weapon_crylink (void)
+{
+	weapon_defaultspawnfunc(WEP_CRYLINK, 5000);
+}
+
 float w_crylink(float req)
 {
 	if (req == WR_AIM)
@@ -229,10 +234,14 @@ float w_crylink(float req)
 		precache_sound ("weapons/crylink_fire.wav");
 	}
 	else if (req == WR_SETUP)
-		weapon_setup(WEP_CRYLINK, "crylink", IT_CELLS);
+		weapon_setup(WEP_CRYLINK, "crylink");
 	else if (req == WR_CHECKAMMO1)
 		return self.ammo_cells >= cvar("g_balance_crylink_primary_ammo");
 	else if (req == WR_CHECKAMMO2)
 		return self.ammo_cells >= cvar("g_balance_crylink_secondary_ammo");
+	else if (req == WR_SPAWNFUNC)
+		spawnfunc_weapon_crylink();
+	// else if (req == WR_SUICIDEMESSAGE) // TODO
+	// else if (req == WR_KILLMESSAGE) // TODO
 	return TRUE;
 };

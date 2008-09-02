@@ -143,6 +143,7 @@ void LogDeath(string mode, float deathtype, entity killer, entity killed)
 void Obituary (entity attacker, entity targ, float deathtype)
 {
 	string	s, a;
+	float p;
 
 	if (targ.classname == "player" || targ.classname == "corpse")
 	{
@@ -202,13 +203,12 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				if (targ.killcount > 2)
 					bprint ("^1",s,"^1 ended it all with a ",ftos(targ.killcount)," scoring spree\n");
 			} else {
-				// %weaponaddpoint
-				if (deathtype == WEP_GRENADE_LAUNCHER)
-					bprint ("^1",s, "^1 detonated\n");
-				else if (deathtype == WEP_ELECTRO)
-					bprint ("^1",s, "^1 played with plasma\n");
-				else if (deathtype == WEP_ROCKET_LAUNCHER)
-					bprint ("^1",s, "^1 exploded\n");
+				if(deathtype >= WEP_FIRST && deathtype <= WEP_LAST)
+				{
+					w_deathtypestring = "couldn't resist the urge to self-destruct";
+					weapon_action(deathtype, WR_SUICIDEMESSAGE);
+					bprint("^1", s, "^1 ", w_deathtypestring, "\n");
+				}
 				else if (deathtype == DEATH_KILL)
 					bprint ("^1",s, "^1 couldn't take it anymore\n");
 				else if (deathtype == DEATH_ROT)
@@ -283,25 +283,16 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				if(sv_gentle) {
 					bprint ("^1",s, "^1 needs a restart thanks to ", a, "\n");
 				} else {
-					// %weaponaddpoint
-					if (deathtype == WEP_LASER)
-						bprint ("^1",s, "^1 was blasted by ", a, "\n");
-					else if (deathtype == WEP_UZI)
-						bprint ("^1",s, "^1 was riddled full of holes by ", a, "\n");
-					else if (deathtype == WEP_SHOTGUN)
-						bprint ("^1",s, "^1 was gunned by ", a, "\n");
-					else if (deathtype == WEP_GRENADE_LAUNCHER)
-						bprint ("^1", s, "^1 was blasted by ", a, "\n");
-					else if (deathtype == WEP_ELECTRO)
-						bprint ("^1",s, "^1 was blasted by ", a, "\n");
-					else if (deathtype == WEP_CRYLINK)
-						bprint ("^1",s, "^1 was blasted by ", a, "\n");
-					else if (deathtype == WEP_NEX)
-						bprint ("^1",s, "^1 has been vaporized by ", a, "\n");
-					else if (deathtype == WEP_HAGAR)
-						bprint ("^1",s, "^1 was pummeled by ", a, "\n");
-					else if (deathtype == WEP_ROCKET_LAUNCHER)
-						bprint ("^1",s, "^1 was blasted by ", a, "\n");
+					if(deathtype >= WEP_FIRST && deathtype <= WEP_LAST)
+					{
+						w_deathtypestring = "was blasted by";
+						weapon_action(deathtype, WR_SUICIDEMESSAGE);
+						p = strstrofs(w_deathtypestring, "|", 0);
+						if(p < 0)
+							bprint("^1", s, "^1 ", w_deathtypestring, " ", a, "\n");
+						else
+							bprint("^1", s, "^1 ", substring(w_deathtypestring, 0, p), a, "^1", substring(w_deathtypestring, p+1, strlen(w_deathtypestring) - (p+1)), "\n");
+					}
 					else if (deathtype == DEATH_TELEFRAG)
 						bprint ("^1",s, "^1 was telefragged by ", a, "\n");
 					else if (deathtype == DEATH_DROWN)

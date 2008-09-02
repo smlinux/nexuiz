@@ -100,6 +100,8 @@ void uzi_fire1_02()
 		weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_uzi_sustained_refire"), w_ready);
 };
 
+void spawnfunc_weapon_machinegun(); // defined in t_items.qc
+
 float w_uzi(float req)
 {
 	if (req == WR_AIM)
@@ -142,10 +144,16 @@ float w_uzi(float req)
 			precache_model ("models/casing_bronze.mdl");
 	}
 	else if (req == WR_SETUP)
-		weapon_setup(WEP_UZI, "uzi", IT_NAILS);
+		weapon_setup(WEP_UZI, "uzi");
 	else if (req == WR_CHECKAMMO1)
 		return self.ammo_nails >= cvar("g_balance_uzi_first_ammo");
 	else if (req == WR_CHECKAMMO2)
 		return self.ammo_nails >= cvar("g_balance_uzi_first_ammo");
+	else if (req == WR_SUICIDEMESSAGE)
+		w_deathtypestring = "did the impossible";
+	else if (req == WR_KILLMESSAGE)
+		w_deathtypestring = "was riddled full of holes by";
+	else if (req == WR_SPAWNFUNC)
+		spawnfunc_weapon_machinegun();
 	return TRUE;
 };

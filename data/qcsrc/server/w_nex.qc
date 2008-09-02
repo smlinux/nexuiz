@@ -119,6 +119,8 @@ void minstagib_ammocheck (void)
 	self.minstagib_nextthink = time + 1;
 }
 
+void spawnfunc_weapon_nex (void); // defined in t_items.qc
+
 float w_nex(float req)
 {
 	if (req == WR_AIM)
@@ -168,7 +170,7 @@ float w_nex(float req)
 			w_laser(WR_PRECACHE);
 	}
 	else if (req == WR_SETUP)
-		weapon_setup(WEP_NEX, "nex", IT_CELLS);
+		weapon_setup(WEP_NEX, "nex");
 	else if (req == WR_CHECKAMMO1)
 	{
 		if (g_minstagib)
@@ -178,5 +180,11 @@ float w_nex(float req)
 	}
 	else if (req == WR_CHECKAMMO2)
 		return FALSE;
+	else if (req == WR_SUICIDEMESSAGE)
+		w_deathtypestring = "did the impossible";
+	else if (req == WR_KILLMESSAGE)
+		w_deathtypestring = "has been vaporized by";
+	else if (req == WR_SPAWNFUNC)
+		spawnfunc_weapon_nex();
 	return TRUE;
 };

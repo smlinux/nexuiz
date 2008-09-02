@@ -156,6 +156,11 @@ void W_Hagar_Attack2 (void)
 	missile.flags = FL_PROJECTILE;
 }
 
+void spawnfunc_weapon_hagar (void)
+{
+	weapon_defaultspawnfunc(WEP_HAGAR, 5000);
+}
+
 float w_hagar(float req)
 {
 	if (req == WR_AIM)
@@ -193,10 +198,15 @@ float w_hagar(float req)
 		precache_sound ("weapons/hagexp3.wav");
 	}
 	else if (req == WR_SETUP)
-		weapon_setup(WEP_HAGAR, "hagar", IT_ROCKETS);
+		weapon_setup(WEP_HAGAR, "hagar");
 	else if (req == WR_CHECKAMMO1)
 		return self.ammo_rockets >= cvar("g_balance_hagar_primary_ammo");
 	else if (req == WR_CHECKAMMO2)
 		return self.ammo_rockets >= cvar("g_balance_hagar_secondary_ammo");
+	// else if (req == WR_SUICIDEMESSAGE) // TODO
+	else if (req == WR_KILLMESSAGE)
+		w_deathtypestring = "was pummeled by";
+	else if (req == WR_SPAWNFUNC)
+		spawnfunc_weapon_hagar();
 	return TRUE;
 };

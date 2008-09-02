@@ -128,10 +128,18 @@ float w_laser(float req)
 		precache_sound ("weapons/laserimpact.wav");
 	}
 	else if (req == WR_SETUP)
-		weapon_setup(WEP_LASER, "laser", 0);
+		weapon_setup(WEP_LASER, "laser");
 	else if (req == WR_CHECKAMMO1)
 		return TRUE;
 	else if (req == WR_CHECKAMMO2)
 		return TRUE;
+	else if (req == WR_SUICIDEMESSAGE)
+		w_deathtypestring = "did the impossible";
+	// else if (req == WR_KILLMESSAGE) // TODO
+	else if (req == WR_SPAWNFUNC)
+	{
+		remove(self); // cannot spawn this
+		self = world;
+	}
 	return TRUE;
 };

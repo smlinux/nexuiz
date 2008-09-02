@@ -188,6 +188,11 @@ void W_Grenade_Attack2 (void)
 #endif
 }
 
+void spawnfunc_weapon_grenadelauncher (void)
+{
+	weapon_defaultspawnfunc(WEP_GRENADE_LAUNCHER, 5000);
+}
+
 .float bot_secondary_grenademooth;
 float w_glauncher(float req)
 {
@@ -243,10 +248,16 @@ float w_glauncher(float req)
 		precache_sound ("weapons/grenade_impact.wav");
 	}
 	else if (req == WR_SETUP)
-		weapon_setup(WEP_GRENADE_LAUNCHER, "gl", IT_ROCKETS);
+		weapon_setup(WEP_GRENADE_LAUNCHER, "gl");
 	else if (req == WR_CHECKAMMO1)
 		return self.ammo_rockets >= cvar("g_balance_grenadelauncher_primary_ammo");
 	else if (req == WR_CHECKAMMO2)
 		return self.ammo_rockets >= cvar("g_balance_grenadelauncher_secondary_ammo");
+	else if (req == WR_SUICIDEMESSAGE)
+		w_deathtypestring = "detonated";
+	else if (req == WR_KILLMESSAGE)
+		w_deathtypestring = "was blasted by";
+	else if (req == WR_SPAWNFUNC)
+		spawnfunc_weapon_grenadelauncher();
 	return TRUE;
 };

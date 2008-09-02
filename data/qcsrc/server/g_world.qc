@@ -157,6 +157,7 @@ float GotoFirstMap()
 }
 
 float world_already_spawned;
+void RegisterWeapons();
 void spawnfunc_worldspawn (void)
 {
 	float fd, l;
@@ -236,6 +237,8 @@ void spawnfunc_worldspawn (void)
 
 	// 63 testing
 	lightstyle(63, "a");
+
+	RegisterWeapons();
 
 	if(cvar("g_campaign"))
 		CampaignPreInit();

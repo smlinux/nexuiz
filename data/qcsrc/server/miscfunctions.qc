@@ -706,8 +706,13 @@ float start_ammo_cells;
 float start_health;
 float start_armorvalue;
 
+entity get_weaponinfo(float w);
+
 void readlevelcvars(void)
 {
+	entity e;
+	float i;
+
 	sv_cheats = cvar("sv_cheats");
 	sv_gentle = cvar("sv_gentle");
 	sv_foginterval = cvar("sv_foginterval");
@@ -827,60 +832,17 @@ void readlevelcvars(void)
 			start_ammo_cells = cvar("g_pickup_cells_max");
 		}
 
-		// %weaponaddpoint (except for superweapons)
-		if (cvar("g_start_weapon_laser") || g_lms)
+		for(i = WEP_FIRST; i <= WEP_LAST; ++i)
 		{
-			start_weapons = start_weapons | WEPBIT_LASER;
-			start_switchweapon = WEP_LASER;
-			weapon_action(start_switchweapon, WR_PRECACHE);
-		}
-		if (cvar("g_start_weapon_shotgun") || g_lms)
-		{
-			start_weapons = start_weapons | WEPBIT_SHOTGUN;
-			start_switchweapon = WEP_SHOTGUN;
-			weapon_action(start_switchweapon, WR_PRECACHE);
-		}
-		if (cvar("g_start_weapon_uzi") || g_lms || g_tourney)
-		{
-			start_weapons = start_weapons | WEPBIT_UZI;
-			start_switchweapon = WEP_UZI;
-			weapon_action(start_switchweapon, WR_PRECACHE);
-		}
-		if (cvar("g_start_weapon_grenadelauncher") || g_lms || g_tourney)
-		{
-			start_weapons = start_weapons | WEPBIT_GRENADE_LAUNCHER;
-			start_switchweapon = WEP_GRENADE_LAUNCHER;
-			weapon_action(start_switchweapon, WR_PRECACHE);
-		}
-		if (cvar("g_start_weapon_electro") || g_lms || g_tourney)
-		{
-			start_weapons = start_weapons | WEPBIT_ELECTRO;
-			start_switchweapon = WEP_ELECTRO;
-			weapon_action(start_switchweapon, WR_PRECACHE);
-		}
-		if (cvar("g_start_weapon_crylink") || g_lms || g_tourney)
-		{
-			start_weapons = start_weapons | WEPBIT_CRYLINK;
-			start_switchweapon = WEP_CRYLINK;
-			weapon_action(start_switchweapon, WR_PRECACHE);
-		}
-		if (cvar("g_start_weapon_nex") || g_lms || g_tourney)
-		{
-			start_weapons = start_weapons | WEPBIT_NEX;
-			start_switchweapon = WEP_NEX;
-			weapon_action(start_switchweapon, WR_PRECACHE);
-		}
-		if (cvar("g_start_weapon_hagar") || g_lms || g_tourney)
-		{
-			start_weapons = start_weapons | WEPBIT_HAGAR;
-			start_switchweapon = WEP_HAGAR;
-			weapon_action(start_switchweapon, WR_PRECACHE);
-		}
-		if (cvar("g_start_weapon_rocketlauncher") || g_lms || g_tourney)
-		{
-			start_weapons = start_weapons | WEPBIT_ROCKET_LAUNCHER;
-			start_switchweapon = WEP_ROCKET_LAUNCHER;
-			weapon_action(start_switchweapon, WR_PRECACHE);
+			e = get_weaponinfo(i);
+			if(!(e.weapon))
+				continue;
+			if((e.items != IT_SUPERWEAPON && (g_lms || g_tourney)) || cvar(strcat("g_start_weapon_", e.netname)))
+			{
+				start_weapons |= e.weapons;
+				start_switchweapon = e.weapon;
+				weapon_action(e.weapon, WR_PRECACHE);
+			}
 		}
 	}
 }
@@ -1262,3 +1224,82 @@ void InitializeEntitiesRun()
 
 .float nottargeted;
 #define IFTARGETED if(!self.nottargeted && self.targetname != "")
+
+float power2of(float e)
+{
+	return pow(2, e);
+}
+float log2of(float x)
+{
+	// NOTE: generated code
+	if(x > 2048)
+		if(x > 131072)
+			if(x > 1048576)
+				if(x > 4194304)
+					return 23;
+				else
+					if(x > 2097152)
+						return 22;
+					else
+						return 21;
+			else
+				if(x > 524288)
+					return 20;
+				else
+					if(x > 262144)
+						return 19;
+					else
+						return 18;
+		else
+			if(x > 16384)
+				if(x > 65536)
+					return 17;
+				else
+					if(x > 32768)
+						return 16;
+					else
+						return 15;
+			else
+				if(x > 8192)
+					return 14;
+				else
+					if(x > 4096)
+						return 13;
+					else
+						return 12;
+	else
+		if(x > 32)
+			if(x > 256)
+				if(x > 1024)
+					return 11;
+				else
+					if(x > 512)
+						return 10;
+					else
+						return 9;
+			else
+				if(x > 128)
+					return 8;
+				else
+					if(x > 64)
+						return 7;
+					else
+						return 6;
+		else
+			if(x > 4)
+				if(x > 16)
+					return 5;
+				else
+					if(x > 8)
+						return 4;
+					else
+						return 3;
+			else
+				if(x > 2)
+					return 2;
+				else
+					if(x > 1)
+						return 1;
+					else
+						return 0;
+}

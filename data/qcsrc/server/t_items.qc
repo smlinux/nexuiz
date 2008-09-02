@@ -1,3 +1,38 @@
+floatfield Item_CounterField(float it)
+{
+	switch(it)
+	{
+		case IT_SHELLS:      return ammo_shells;
+		case IT_NAILS:       return ammo_nails;
+		case IT_ROCKETS:     return ammo_rockets;
+		case IT_CELLS:       return ammo_cells;
+		case IT_5HP:         return health;
+		case IT_25HP:        return health;
+		case IT_HEALTH:      return health;
+		case IT_ARMOR_SHARD: return armorvalue;
+		case IT_ARMOR:       return armorvalue;
+		// add more things here (health, armor)
+		default:             error("requested item has no counter field");
+	}
+}
+
+string Item_CounterFieldName(float it)
+{
+	switch(it)
+	{
+		case IT_SHELLS:      return "shells";
+		case IT_NAILS:       return "nails";
+		case IT_ROCKETS:     return "rockets";
+		case IT_CELLS:       return "cells";
+		// add more things here (health, armor)
+		default:             error("requested item has no counter field name");
+	}
+}
+
+void Item_SpawnByWeaponCode(float it)
+{
+	weapon_action(it, WR_SPAWNFUNC);
+}
 
 .float max_armorvalue;
 
@@ -14,10 +49,12 @@ void Item_Respawn (void)
 
 void Item_Touch (void)
 {
-	local entity oldself;
-	local float _switchweapon;
-	local float pickedup;
-	local float it;
+	entity oldself;
+	float _switchweapon;
+	float pickedup;
+	float it;
+	float i;
+	entity e;
 
 	// remove the item if it's currnetly in a NODROP brush or hits a NOIMPACT surface (such as sky)
 	if (((trace_dpstartcontents | trace_dphitcontents) & DPCONTENTS_NODROP) || (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT))
@@ -135,15 +172,12 @@ void Item_Touch (void)
 		if ((it = self.weapons - (self.weapons & other.weapons)))
 		{
 			pickedup = TRUE;
-			// %weaponaddpoint
-			if (it & WEPBIT_UZI)                W_GiveWeapon (other, WEP_UZI, self.netname);
-			if (it & WEPBIT_SHOTGUN)            W_GiveWeapon (other, WEP_SHOTGUN, self.netname);
-			if (it & WEPBIT_GRENADE_LAUNCHER)   W_GiveWeapon (other, WEP_GRENADE_LAUNCHER, self.netname);
-			if (it & WEPBIT_ELECTRO)            W_GiveWeapon (other, WEP_ELECTRO, self.netname);
-			if (it & WEPBIT_NEX)                W_GiveWeapon (other, WEP_NEX, self.netname);
-			if (it & WEPBIT_HAGAR)              W_GiveWeapon (other, WEP_HAGAR, self.netname);
-			if (it & WEPBIT_ROCKET_LAUNCHER)    W_GiveWeapon (other, WEP_ROCKET_LAUNCHER, self.netname);
-			if (it & WEPBIT_CRYLINK)            W_GiveWeapon (other, WEP_CRYLINK, self.netname);
+			for(i = WEP_FIRST; i <= WEP_LAST; ++i)
+			{
+				e = get_weaponinfo(i);
+				if(it & e.weapons)
+					W_GiveWeapon (other, e.weapon, self.netname);
+			}
 		}
 
 		if (self.strength_finished)
@@ -508,23 +542,34 @@ void minst_remove_item (void) {
 
 float weaponswapping;
 
+void weapon_defaultspawnfunc(float wpn, float weight)
+{
+	entity e;
+	var .float ammofield;
+	e = get_weaponinfo(wpn);
+
+	if(e.items)
+	{
+		ammofield = Item_CounterField(e.items);
+		if(!self.ammofield)
+			self.ammofield = cvar(strcat("g_pickup_", Item_CounterFieldName(e.items)));
+	}
+
+	StartItem (e.model, "weapons/weaponpickup.wav", 15, e.message, 0, e.weapons, FL_WEAPON, weapon_pickupevalfunc, weight);
+	if (self.modelindex) // don't precache if self was removed
+		weapon_action(e.weapon, WR_PRECACHE);
+}
+
 void spawnfunc_weapon_shotgun (void);
 void spawnfunc_weapon_uzi (void) {
 	if(!weaponswapping)
 	if(q3acompat_machineshotgunswap)
 	if(self.classname != "droppedweapon")
 	{
-		weaponswapping = TRUE;
-		spawnfunc_weapon_shotgun();
-		weaponswapping = FALSE;
+		weapon_defaultspawnfunc(WEP_SHOTGUN, 2500);
 		return;
 	}
-
-	if(!self.ammo_nails)
-		self.ammo_nails = cvar("g_pickup_nails");
-	StartItem ("models/weapons/g_uzi.md3", "weapons/weaponpickup.wav", 15, W_Name(WEP_UZI), 0, WEPBIT_UZI, FL_WEAPON, weapon_pickupevalfunc, 5000);
-	if (self.modelindex) // don't precache if self was removed
-		weapon_action(WEP_UZI, WR_PRECACHE);
+	weapon_defaultspawnfunc(WEP_UZI, 5000);
 }
 
 void spawnfunc_weapon_shotgun (void) {
@@ -532,44 +577,10 @@ void spawnfunc_weapon_shotgun (void) {
 	if(q3acompat_machineshotgunswap)
 	if(self.classname != "droppedweapon")
 	{
-		weaponswapping = TRUE;
-		spawnfunc_weapon_uzi();
-		weaponswapping = FALSE;
+		weapon_defaultspawnfunc(WEP_UZI, 5000);
 		return;
 	}
-
-	if(!self.ammo_shells)
-		self.ammo_shells = cvar("g_pickup_shells");
-	StartItem ("models/weapons/g_shotgun.md3", "weapons/weaponpickup.wav", 15, W_Name(WEP_SHOTGUN), 0, WEPBIT_SHOTGUN, FL_WEAPON, weapon_pickupevalfunc, 2500);
-	if (self.modelindex) // don't precache if self was removed
-		weapon_action(WEP_SHOTGUN, WR_PRECACHE);
-}
-
-void spawnfunc_weapon_grenadelauncher (void)
-{
-	if(!self.ammo_rockets)
-		self.ammo_rockets = cvar("g_pickup_rockets");
-	StartItem ("models/weapons/g_gl.md3", "weapons/weaponpickup.wav", 15, W_Name(WEP_GRENADE_LAUNCHER), 0, WEPBIT_GRENADE_LAUNCHER, FL_WEAPON, weapon_pickupevalfunc, 5000);
-	if (self.modelindex) // don't precache if self was removed
-		weapon_action(WEP_GRENADE_LAUNCHER, WR_PRECACHE);
-}
-
-void spawnfunc_weapon_electro (void)
-{
-	if(!self.ammo_cells)
-		self.ammo_cells = cvar("g_pickup_cells");
-	StartItem ("models/weapons/g_electro.md3", "weapons/weaponpickup.wav", 15, W_Name(WEP_ELECTRO), 0, WEPBIT_ELECTRO, FL_WEAPON, weapon_pickupevalfunc, 5000);
-	if (self.modelindex) // don't precache if self was removed
-		weapon_action(WEP_ELECTRO, WR_PRECACHE);
-}
-
-void spawnfunc_weapon_crylink (void)
-{
-	if(!self.ammo_cells)
-		self.ammo_cells = cvar("g_pickup_cells");
-	StartItem ("models/weapons/g_crylink.md3", "weapons/weaponpickup.wav", 15, W_Name(WEP_CRYLINK), 0, WEPBIT_CRYLINK, FL_WEAPON, weapon_pickupevalfunc, 2500);
-	if (self.modelindex) // don't precache if self was removed
-		weapon_action(WEP_CRYLINK, WR_PRECACHE);
+	weapon_defaultspawnfunc(WEP_SHOTGUN, 2500);
 }
 
 void spawnfunc_weapon_nex (void)
@@ -582,25 +593,7 @@ void spawnfunc_weapon_nex (void)
 		self.nextthink = time + cvar("sys_ticrate");
 		return;
 	}
-	if(!self.ammo_cells)
-		self.ammo_cells = cvar("g_pickup_cells");
-	nextime = cvar("g_balance_nex_respawntime_modifier");
-	if(nextime)
-		nextime = 15 * nextime;
-	else
-		nextime = 15;
-	StartItem ("models/weapons/g_nex.md3", "weapons/weaponpickup.wav", nextime, W_Name(WEP_NEX), 0, WEPBIT_NEX, FL_WEAPON, weapon_pickupevalfunc, 10000);
-	if (self.modelindex) // don't precache if self was removed
-		weapon_action(WEP_NEX, WR_PRECACHE);
-}
-
-void spawnfunc_weapon_hagar (void)
-{
-	if(!self.ammo_rockets)
-		self.ammo_rockets = cvar("g_pickup_rockets");
-	StartItem ("models/weapons/g_hagar.md3", "weapons/weaponpickup.wav", 15, W_Name(WEP_HAGAR), 0, WEPBIT_HAGAR, FL_WEAPON, weapon_pickupevalfunc, 5000);
-	if (self.modelindex) // don't precache if self was removed
-		weapon_action(WEP_HAGAR, WR_PRECACHE);
+	weapon_defaultspawnfunc(WEP_NEX, 10000);
 }
 
 void spawnfunc_weapon_rocketlauncher (void)
@@ -612,11 +605,7 @@ void spawnfunc_weapon_rocketlauncher (void)
 		self.nextthink = time + cvar("sys_ticrate");
 		return;
 	}
-	if(!self.ammo_rockets)
-		self.ammo_rockets = g_pickup_rockets;
-	StartItem ("models/weapons/g_rl.md3", "weapons/weaponpickup.wav", 15, W_Name(WEP_ROCKET_LAUNCHER), 0, WEPBIT_ROCKET_LAUNCHER, FL_WEAPON, weapon_pickupevalfunc, 10000);
-	if (self.modelindex) // don't precache if self was removed
-		weapon_action(WEP_ROCKET_LAUNCHER, WR_PRECACHE);
+	weapon_defaultspawnfunc(WEP_ROCKET_LAUNCHER, 10000);
 }
 
 void spawnfunc_item_rockets (void) {
@@ -811,39 +800,3 @@ void spawnfunc_func_wall (void)
 	self.use = func_wall_use;
 }
 
-floatfield Item_CounterField(float it)
-{
-	switch(it)
-	{
-		case IT_SHELLS:      return ammo_shells;
-		case IT_NAILS:       return ammo_nails;
-		case IT_ROCKETS:     return ammo_rockets;
-		case IT_CELLS:       return ammo_cells;
-		case IT_5HP:         return health;
-		case IT_25HP:        return health;
-		case IT_HEALTH:      return health;
-		case IT_ARMOR_SHARD: return armorvalue;
-		case IT_ARMOR:       return armorvalue;
-		// add more things here (health, armor)
-		default:             error("requested item has no counter field");
-	}
-}
-
-void Item_SpawnByWeaponCode(float it)
-{
-	// %weaponaddpoint
-	switch(it)
-	{
-		case WEP_SHOTGUN:          spawnfunc_weapon_shotgun(); break;
-		case WEP_UZI:              spawnfunc_weapon_uzi(); break;
-		case WEP_GRENADE_LAUNCHER: spawnfunc_weapon_grenadelauncher(); break;
-		case WEP_ELECTRO:          spawnfunc_weapon_electro(); break;
-		case WEP_CRYLINK:          spawnfunc_weapon_crylink(); break;
-		case WEP_NEX:              spawnfunc_weapon_nex(); break;
-		case WEP_HAGAR:            spawnfunc_weapon_hagar(); break;
-		case WEP_ROCKET_LAUNCHER:  spawnfunc_weapon_rocketlauncher(); break;
-		// add all other item spawn functions here
-		default:
-			error("requested item can't be spawned");
-	}
-}
