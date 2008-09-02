@@ -130,6 +130,7 @@ void GrapplingHookThink()
 	makevectors(self.owner.v_angle);
 	org = self.owner.origin + self.owner.view_ofs + v_forward * 8 - v_right * 8 + v_up * -12;
 
+#if 0
 	tracebox(org, self.mins, self.maxs, self.origin, MOVE_NOMONSTERS, self.owner);
 	// do not hit players with this, as they tend to get in the way just too often
 	// NOTE: this assumes sky brushes cannot get in the way
@@ -152,6 +153,7 @@ void GrapplingHookThink()
 			if(trace_ent.movetype != MOVETYPE_NONE)
 				SetMovetypeFollow(self, trace_ent);
 	}
+#endif
 
 	if(self.rope_length < 0)
 		self.rope_length = vlen(org - self.origin);
