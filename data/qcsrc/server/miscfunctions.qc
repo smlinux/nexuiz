@@ -827,6 +827,7 @@ void readlevelcvars(void)
 			start_ammo_cells = cvar("g_pickup_cells_max");
 		}
 
+		// %weaponaddpoint
 		if (cvar("g_start_weapon_laser") || g_lms)
 		{
 			start_weapons = start_weapons | WEPBIT_LASER;

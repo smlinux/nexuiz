@@ -130,6 +130,7 @@ float w_getbestweapon(entity e)
 // add new weapons here
 float weapon_action(float wpn, float wrequest)
 {
+	// %weaponaddpoint
 	if (wpn == WEP_LASER)
 		return w_laser(wrequest);
 	else if (wpn == WEP_SHOTGUN)
@@ -153,6 +154,7 @@ float weapon_action(float wpn, float wrequest)
 
 string W_Name(float weaponid)
 {
+	// %weaponaddpoint
 	if(weaponid == WEP_LASER)             return "Laser";
 	if(weaponid == WEP_UZI)               return "Machine Gun";
 	if(weaponid == WEP_SHOTGUN)           return "Shotgun";
@@ -167,6 +169,7 @@ string W_Name(float weaponid)
 
 float W_WeaponBit(float wpn)
 {
+	// %weaponaddpoint
 	switch(wpn)
 	{
 		case WEP_LASER:            return WEPBIT_LASER;
@@ -184,6 +187,7 @@ float W_WeaponBit(float wpn)
 
 float W_AmmoItemCode(float wpn)
 {
+	// %weaponaddpoint
 	switch(wpn)
 	{
 		case WEP_SHOTGUN:          return IT_SHELLS;

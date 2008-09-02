@@ -354,6 +354,7 @@ void havocbot_chooseweapon()
 	//	*(Time to get to target * weapon specfic hitchange bonus) / (in a time of maxdelaytime)
 	//	*(Spread change of hit) // if it applies
 	//	*(Penality for target beeing in air)
+	// %weaponaddpoint
 	if (client_hasweapon(self, WEP_ROCKET_LAUNCHER, TRUE, FALSE))
 		rocket = (cvar("g_balance_rocketlauncher_damage")/cvar("g_balance_rocketlauncher_refire")*0.75)
 			* bound(0,(cvar("g_balance_rocketlauncher_speed")/distance*maxdelaytime),1)*1.5;

@@ -135,6 +135,7 @@ void Item_Touch (void)
 		if ((it = self.weapons - (self.weapons & other.weapons)))
 		{
 			pickedup = TRUE;
+			// %weaponaddpoint
 			if (it & WEPBIT_UZI)                W_GiveWeapon (other, WEP_UZI, self.netname);
 			if (it & WEPBIT_SHOTGUN)            W_GiveWeapon (other, WEP_SHOTGUN, self.netname);
 			if (it & WEPBIT_GRENADE_LAUNCHER)   W_GiveWeapon (other, WEP_GRENADE_LAUNCHER, self.netname);
@@ -143,7 +144,6 @@ void Item_Touch (void)
 			if (it & WEPBIT_HAGAR)              W_GiveWeapon (other, WEP_HAGAR, self.netname);
 			if (it & WEPBIT_ROCKET_LAUNCHER)    W_GiveWeapon (other, WEP_ROCKET_LAUNCHER, self.netname);
 			if (it & WEPBIT_CRYLINK)            W_GiveWeapon (other, WEP_CRYLINK, self.netname);
-			// %weaponaddpoint
 		}
 
 		if (self.strength_finished)
@@ -831,6 +831,7 @@ floatfield Item_CounterField(float it)
 
 void Item_SpawnByWeaponCode(float it)
 {
+	// %weaponaddpoint
 	switch(it)
 	{
 		case WEP_SHOTGUN:          spawnfunc_weapon_shotgun(); break;

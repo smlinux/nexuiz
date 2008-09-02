@@ -202,7 +202,7 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				if (targ.killcount > 2)
 					bprint ("^1",s,"^1 ended it all with a ",ftos(targ.killcount)," scoring spree\n");
 			} else {
-
+				// %weaponaddpoint
 				if (deathtype == WEP_GRENADE_LAUNCHER)
 					bprint ("^1",s, "^1 detonated\n");
 				else if (deathtype == WEP_ELECTRO)
@@ -283,6 +283,7 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				if(sv_gentle) {
 					bprint ("^1",s, "^1 needs a restart thanks to ", a, "\n");
 				} else {
+					// %weaponaddpoint
 					if (deathtype == WEP_LASER)
 						bprint ("^1",s, "^1 was blasted by ", a, "\n");
 					else if (deathtype == WEP_UZI)

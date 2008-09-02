@@ -274,6 +274,7 @@ const float RACE_NET_CHECKPOINT_NEXT_SPEC_QUALIFYING = 5; // byte nextcheckpoint
 // game mode specific indices are not in common/, but in server/scores_rules.qc!
 
 // Weapon indexes
+// %weaponaddpoint
 float WEP_FIRST				= 1;
 float WEP_LASER				= 1; float WEPBIT_LASER				= 1; // always: 2^(w-1)
 float WEP_SHOTGUN			= 2; float WEPBIT_SHOTGUN			= 2;
