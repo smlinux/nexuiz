@@ -217,6 +217,55 @@ void W_PreviousWeapon()
 	self.switchweapon = weaponwant;
 };
 
+void W_CycleWeapon(string weaponorder, float dir)
+{
+	float n, i, weaponwant, first_valid, prev_valid, switchtonext, switchtolast;
+	n = tokenize(weaponorder);
+	switchtonext = switchtolast = 0;
+	first_valid = prev_valid = -1;
+
+	if(dir == 0)
+		switchtonext = 1;
+
+	for(i = 0; i < n; ++i)
+	{
+		weaponwant = stof(argv(i));
+		if(client_hasweapon(self, weaponwant, TRUE, FALSE))
+		{
+			if(switchtonext)
+			{
+				W_SwitchWeapon(weaponwant);
+				return;
+			}
+			if(first_valid < 0)
+				first_valid = weaponwant;
+			prev_valid = weaponwant;
+			if(weaponwant == self.weapon)
+			{
+				if(dir >= 0)
+					switchtonext = 1;
+				else if(prev_valid >= 0)
+					W_SwitchWeapon(prev_valid);
+				else
+				{
+					switchtolast = 1;
+					break;
+				}
+			}
+		}
+	}
+	if(first_valid >= 0)
+	{
+		if(switchtolast)
+			W_SwitchWeapon(prev_valid);
+		else
+			W_SwitchWeapon(first_valid);
+		return;
+	}
+	// none available
+	sprint(self, "You do not have any of the specified weapons.\n");
+}
+
 // Bringed back weapon frame
 void W_WeaponFrame()
 {
@@ -250,8 +299,8 @@ void W_WeaponFrame()
 		}
 		else if (self.weaponentity.state == WS_READY)
 		{
-#ifdef INDEPENDENT_ATTACK_FINISHED
-			if(ATTACK_FINISHED(self) > time + frametime * 0.5)
+#ifndef INDEPENDENT_ATTACK_FINISHED
+			if(ATTACK_FINISHED(self) <= time + frametime * 0.5)
 			{
 #endif
 			sound (self, CHAN_WEAPON, "weapons/weapon_switch.wav", VOL_BASE, ATTN_NORM);
@@ -259,7 +308,7 @@ void W_WeaponFrame()
 			// set up weapon switch think in the future, and start drop anim
 			weapon_thinkf(WFRAME_IDLE, cvar("g_balance_weaponswitchdelay"), w_clear);
 			weapon_boblayer1(PLAYER_WEAPONSELECTION_SPEED, PLAYER_WEAPONSELECTION_RANGE);
-#ifdef INDEPENDENT_ATTACK_FINISHED
+#ifndef INDEPENDENT_ATTACK_FINISHED
 			}
 #endif
 		}
