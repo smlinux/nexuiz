@@ -26,7 +26,7 @@ void W_Porto_Attack (void)
 	local entity gren;
 
 	if (cvar("g_use_ammunition"))
-		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_porto_primary_ammo");
+		self.ammo_cells = self.ammo_cells - cvar("g_balance_porto_primary_ammo");
 	W_SetupShot (self, '0 0 0', FALSE, 4, "weapons/grenade_fire.wav");
 
 	//pointparticles(particleeffectnum("grenadelauncher_muzzleflash"), w_shotorg, w_shotdir * 1000, 1);
