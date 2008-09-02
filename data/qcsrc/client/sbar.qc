@@ -341,7 +341,7 @@ void Cmd_Sbar_SetFields(float argc)
 		else if(argv(1) == "all")
 		{
 			string s;
-			s = "ping name |";
+			s = "ping pl name |";
 			for(i = 0; i < MAX_SCORE; ++i)
 			{
 				if(i != ps_primary)
