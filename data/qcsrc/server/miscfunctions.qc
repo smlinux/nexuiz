@@ -486,6 +486,21 @@ void GetCvars_handleString(float f, .string field, string name)
 	else
 		stuffcmd(self, strcat("sendcvar ", name, "\n"));
 }
+void GetCvars_handleString_Fixup(float f, .string field, string name, string(string) func)
+{
+	GetCvars_handleString(f, field, name);
+	if(f >= 0) // also initialize to the fitting value for "" when sending cvars out
+	if(argv(f) == name)
+	{
+		string s;
+		s = func(strcat1(self.field));
+		if(s != self.field)
+		{
+			strunzone(self.field);
+			self.field = strzone(s);
+		}
+	}
+}
 void GetCvars_handleFloat(float f, .float field, string name)
 {
 	if(f < 0)
@@ -499,18 +514,29 @@ void GetCvars_handleFloat(float f, .float field, string name)
 	else
 		stuffcmd(self, strcat("sendcvar ", name, "\n"));
 }
+string W_FixWeaponOrder_ForceComplete(string s);
+string W_FixWeaponOrder_AllowIncomplete(string s);
 void GetCvars(float f)
 {
 	GetCvars_handleFloat(f, autoswitch, "cl_autoswitch");
 	GetCvars_handleFloat(f, cvar_cl_hidewaypoints, "cl_hidewaypoints");
-	GetCvars_handleFloat(f, cvar_cl_zoomfactor, "cl_zoomfactor");
-	GetCvars_handleFloat(f, cvar_cl_zoomspeed, "cl_zoomspeed");
 	GetCvars_handleFloat(f, cvar_cl_playerdetailreduction, "cl_playerdetailreduction");
 	GetCvars_handleFloat(f, cvar_cl_nogibs, "cl_nogibs");
 	GetCvars_handleFloat(f, cvar_scr_centertime, "scr_centertime");
 	GetCvars_handleFloat(f, cvar_cl_shownames, "cl_shownames");
 	GetCvars_handleString(f, cvar_g_nexuizversion, "g_nexuizversion");
 	GetCvars_handleFloat(f, cvar_cl_handicap, "cl_handicap");
+	GetCvars_handleString_Fixup(f, cvar_cl_weaponpriority, "cl_weaponpriority", W_FixWeaponOrder_ForceComplete);
+	GetCvars_handleString_Fixup(f, cvar_cl_weaponpriority0, "cl_weaponpriority0", W_FixWeaponOrder_AllowIncomplete);
+	GetCvars_handleString_Fixup(f, cvar_cl_weaponpriority1, "cl_weaponpriority1", W_FixWeaponOrder_AllowIncomplete);
+	GetCvars_handleString_Fixup(f, cvar_cl_weaponpriority2, "cl_weaponpriority2", W_FixWeaponOrder_AllowIncomplete);
+	GetCvars_handleString_Fixup(f, cvar_cl_weaponpriority3, "cl_weaponpriority3", W_FixWeaponOrder_AllowIncomplete);
+	GetCvars_handleString_Fixup(f, cvar_cl_weaponpriority4, "cl_weaponpriority4", W_FixWeaponOrder_AllowIncomplete);
+	GetCvars_handleString_Fixup(f, cvar_cl_weaponpriority5, "cl_weaponpriority5", W_FixWeaponOrder_AllowIncomplete);
+	GetCvars_handleString_Fixup(f, cvar_cl_weaponpriority6, "cl_weaponpriority6", W_FixWeaponOrder_AllowIncomplete);
+	GetCvars_handleString_Fixup(f, cvar_cl_weaponpriority7, "cl_weaponpriority7", W_FixWeaponOrder_AllowIncomplete);
+	GetCvars_handleString_Fixup(f, cvar_cl_weaponpriority8, "cl_weaponpriority8", W_FixWeaponOrder_AllowIncomplete);
+	GetCvars_handleString_Fixup(f, cvar_cl_weaponpriority9, "cl_weaponpriority9", W_FixWeaponOrder_AllowIncomplete);
 }
 
 float fexists(string f)

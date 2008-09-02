@@ -384,33 +384,6 @@ void w_ready()
 	weapon_thinkf(WFRAME_IDLE, 1000000, w_ready);
 };
 
-// FIXME: add qw-style client-custom weaponrating (cl_weaponrating)?
-// by using W_GetCycleWeapon
-float w_getbestweapon(entity e)
-{ 
-// add new weapons here
-	if (client_hasweapon(e, WEP_ROCKET_LAUNCHER, TRUE, FALSE))
-		return WEP_ROCKET_LAUNCHER;
-	else if (client_hasweapon(e, WEP_NEX, TRUE, FALSE))
-		return WEP_NEX;
-	else if (client_hasweapon(e, WEP_HAGAR, TRUE, FALSE))
-		return WEP_HAGAR;
-	else if (client_hasweapon(e, WEP_GRENADE_LAUNCHER, TRUE, FALSE))
-		return WEP_GRENADE_LAUNCHER;
-	else if (client_hasweapon(e, WEP_ELECTRO, TRUE, FALSE))
-		return WEP_ELECTRO;
-	else if (client_hasweapon(e, WEP_CRYLINK, TRUE, FALSE))
-		return WEP_CRYLINK;
-	else if (client_hasweapon(e, WEP_UZI, TRUE, FALSE))
-		return WEP_UZI;
-	else if (client_hasweapon(e, WEP_SHOTGUN, TRUE, FALSE))
-		return WEP_SHOTGUN;
-	else if (client_hasweapon(e, WEP_LASER, FALSE, FALSE))
-		return WEP_LASER;
-	else
-		return 0;
-};
-
 // Setup weapon for client (after this raise frame will be launched)
 void weapon_setup(float windex, string wname, float hudammo)
 {

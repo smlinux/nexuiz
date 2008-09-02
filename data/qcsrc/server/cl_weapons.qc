@@ -1,3 +1,124 @@
+// switch between weapons
+void W_SwitchWeapon(float imp)
+{
+	if (self.weapon != imp)
+	if (client_hasweapon(self, imp, TRUE, TRUE))
+	{
+		self.cnt = self.weapon ? self.weapon : self.switchweapon;
+		self.switchweapon = imp;
+	}
+};
+
+float W_GetCycleWeapon(entity pl, string weaponorder, float dir)
+{
+	float n, i, weaponwant, first_valid, prev_valid, switchtonext, switchtolast;
+	n = tokenize(weaponorder);
+	switchtonext = switchtolast = 0;
+	first_valid = prev_valid = -1;
+
+	if(dir == 0)
+		switchtonext = 1;
+
+	for(i = 0; i < n; ++i)
+	{
+		weaponwant = stof(argv(i));
+		if(client_hasweapon(pl, weaponwant, TRUE, FALSE))
+		{
+			if(switchtonext)
+				return weaponwant;
+			if(first_valid < 0)
+				first_valid = weaponwant;
+			prev_valid = weaponwant;
+			if(weaponwant == pl.switchweapon)
+			{
+				if(dir >= 0)
+					switchtonext = 1;
+				else if(prev_valid >= 0)
+					return prev_valid;
+				else
+				{
+					switchtolast = 1;
+					break;
+				}
+			}
+		}
+	}
+	if(first_valid >= 0)
+	{
+		if(switchtolast)
+			return prev_valid;
+		else
+			return first_valid;
+	}
+	return -1;
+}
+
+void W_CycleWeapon(string weaponorder, float dir)
+{
+	float w;
+	w = W_GetCycleWeapon(self, weaponorder, dir);
+	if(w >= 0)
+		W_SwitchWeapon(w);
+	else
+		// none available
+		sprint(self, "You do not have any of the specified weapons.\n");
+}
+
+// next weapon
+void W_NextWeapon()
+{
+	W_CycleWeapon(self.cvar_cl_weaponpriority, +1);
+}
+
+// prev weapon
+void W_PreviousWeapon()
+{
+	W_CycleWeapon(self.cvar_cl_weaponpriority, -1);
+}
+
+string W_FixWeaponOrder(string order, float complete)
+{
+	string neworder;
+	float i, n, w;
+
+	n = tokenize(order);
+	for(i = 0; i < n; ++i)
+	{
+		w = stof(argv(i));
+		if(w >= WEP_FIRST && w <= WEP_LAST && w == floor(w))
+			neworder = strcat(neworder, ftos(w), " ");
+	}
+
+	if(complete)
+	{
+		n = tokenize(neworder);
+		for(w = WEP_FIRST; w <= WEP_LAST; ++w)
+		{
+			for(i = 0; i < n; ++i)
+				if(stof(argv(i)) == w)
+					break;
+			if(i == n) // not found
+				neworder = strcat(neworder, ftos(w), " ");
+		}
+	}
+	
+	return substring(neworder, 0, strlen(neworder) - 1);
+}
+
+string W_FixWeaponOrder_AllowIncomplete(string order)
+{
+	return W_FixWeaponOrder(order, 0);
+}
+
+string W_FixWeaponOrder_ForceComplete(string order)
+{
+	return W_FixWeaponOrder(order, 1);
+}
+
+float w_getbestweapon(entity e)
+{ 
+	return W_GetCycleWeapon(e, e.cvar_cl_weaponpriority, 0);
+};
 
 // generic weapons table
 // add new weapons here
@@ -149,157 +270,6 @@ void W_ThrowWeapon(vector velo, vector delta, float doreduce)
 :leave
 	self = e;
 };
-
-// switch between weapons
-void W_SwitchWeapon(float imp)
-{
-	if (self.weapon != imp)
-	if (client_hasweapon(self, imp, TRUE, TRUE))
-	{
-		self.cnt = self.weapon ? self.weapon : self.switchweapon;
-		self.switchweapon = imp;
-	}
-};
-
-// next weapon
-void W_NextWeapon()
-{
-	local float weaponwant, maxtries;
-
-	maxtries = WEP_LAST;
-
-	weaponwant = self.switchweapon + 1;
-	if (weaponwant < WEP_FIRST)
-		weaponwant = WEP_LAST;
-	if (weaponwant > WEP_LAST)
-		weaponwant = WEP_FIRST;
-	while(!client_hasweapon(self, weaponwant, TRUE, FALSE))
-	{
-		if(!maxtries)
-			return;
-
-		maxtries -= 1;
-		weaponwant = weaponwant + 1;
-		if (weaponwant < WEP_FIRST)
-			weaponwant = WEP_LAST;
-		if (weaponwant > WEP_LAST)
-			weaponwant = WEP_FIRST;
-	}
-	self.cnt = self.weapon ? self.weapon : self.switchweapon;
-	self.switchweapon = weaponwant;
-};
-
-// prev weapon
-void W_PreviousWeapon()
-{
-	local float weaponwant, maxtries;
-
-	maxtries = WEP_LAST;
-
-	weaponwant = self.switchweapon - 1;
-	if (weaponwant < WEP_FIRST)
-		weaponwant = WEP_LAST;
-	if (weaponwant > WEP_LAST)
-		weaponwant = WEP_FIRST;
-	while(!client_hasweapon(self, weaponwant, TRUE, FALSE))
-	{
-		if(!maxtries)
-			return;
-
-		maxtries -= 1;
-		weaponwant = weaponwant - 1;
-		if (weaponwant < WEP_FIRST)
-			weaponwant = WEP_LAST;
-		if (weaponwant > WEP_LAST)
-			weaponwant = WEP_FIRST;
-	}
-	self.cnt = self.weapon ? self.weapon : self.switchweapon;
-	self.switchweapon = weaponwant;
-};
-
-float W_GetCycleWeapon(string weaponorder, float dir)
-{
-	float n, i, weaponwant, first_valid, prev_valid, switchtonext, switchtolast;
-	n = tokenize(weaponorder);
-	switchtonext = switchtolast = 0;
-	first_valid = prev_valid = -1;
-
-	if(dir == 0)
-		switchtonext = 1;
-
-	for(i = 0; i < n; ++i)
-	{
-		weaponwant = stof(argv(i));
-		if(client_hasweapon(self, weaponwant, TRUE, FALSE))
-		{
-			if(switchtonext)
-				return weaponwant;
-			if(first_valid < 0)
-				first_valid = weaponwant;
-			prev_valid = weaponwant;
-			if(weaponwant == self.switchweapon)
-			{
-				if(dir >= 0)
-					switchtonext = 1;
-				else if(prev_valid >= 0)
-					return prev_valid;
-				else
-				{
-					switchtolast = 1;
-					break;
-				}
-			}
-		}
-	}
-	if(first_valid >= 0)
-	{
-		if(switchtolast)
-			return prev_valid;
-		else
-			return first_valid;
-	}
-	return -1;
-}
-
-void W_CycleWeapon(string weaponorder, float dir)
-{
-	float w;
-	w = W_GetCycleWeapon(weaponorder, dir);
-	if(w >= 0)
-		W_SwitchWeapon(w);
-	else
-		// none available
-		sprint(self, "You do not have any of the specified weapons.\n");
-}
-
-string W_FixWeaponOrder(string order, float complete)
-{
-	string neworder;
-	float i, n, w;
-
-	n = tokenize(order);
-	for(i = 0; i < n; ++i)
-	{
-		w = stof(argv(i));
-		if(w >= WEP_FIRST && w <= WEP_LAST && w == floor(w))
-			neworder = strcat(neworder, ftos(w), " ");
-	}
-
-	if(complete)
-	{
-		n = tokenize(neworder);
-		for(w = WEP_FIRST; w <= WEP_LAST; ++w)
-		{
-			for(i = 0; i < n; ++i)
-				if(stof(argv(i)) == w)
-					break;
-			if(i == n) // not found
-				neworder = strcat(neworder, ftos(w), " ");
-		}
-	}
-	
-	return substring(neworder, 0, strlen(neworder) - 1);
-}
 
 // Bringed back weapon frame
 void W_WeaponFrame()

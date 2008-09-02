@@ -56,6 +56,34 @@ void printsurfaceinfo(entity e, vector v)
 	}
 };
 
+/*
+ * Impulse map:
+ *
+ * 0 reserved (no input)
+ * 1 to 9: weapon shortcuts
+ * 10: next weapon
+ * 11: most recently used weapon
+ * 12: previous weapon
+ * 13: moving clone
+ * 14: fixed clone
+ * 17: throw weapon
+ * 19: printsurfaceinfo
+ * 20: distance
+ * 30 to 39: create waypoints
+ * 47: clear personal waypoints
+ * 48: clear team waypoints
+ * 49: turn base waypoints on/off
+ * 77: ctf speedrun
+ * 99: loaded
+ * 143: emergency teleport
+ *
+ * TODO:
+ * 200 to 219: individual weapons
+ * 220 to 229: next weapon shortcuts
+ * 230 to 239: prev weapon shortcuts
+ * 240 to 249: best weapon shortcuts
+ */
+
 void ImpulseCommands (void)
 {
 	local float imp;
