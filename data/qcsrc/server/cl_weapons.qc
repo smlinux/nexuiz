@@ -237,7 +237,7 @@ float W_GetCycleWeapon(string weaponorder, float dir)
 			if(first_valid < 0)
 				first_valid = weaponwant;
 			prev_valid = weaponwant;
-			if(weaponwant == self.weapon)
+			if(weaponwant == self.switchweapon)
 			{
 				if(dir >= 0)
 					switchtonext = 1;
