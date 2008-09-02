@@ -18,6 +18,8 @@ campaign.qh
 
 ../common/mapinfo.qh
 
+portals.qh
+
 scores.qh
 
 ipban.qh
@@ -131,3 +133,5 @@ race.qc
 tturrets/include/turret_tturrets.qh
 
 scores.qc
+
+portals.qc

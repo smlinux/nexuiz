@@ -16,60 +16,64 @@ void TeleportPlayer(entity teleporter, entity player, vector to, vector to_angle
 	player.angles = to_angles;
 	player.fixangle = TRUE;
 	player.velocity = to_velocity;
-	RemoveGrapplingHook(player);
 
-	// Kill anyone else in the teleporter box (NO MORE TDEATH)
-	if(player.takedamage && !g_race)
+	if(player.classname == "player")
 	{
-		vector deathmin;
-		vector deathmax;
-		float deathradius;
-		deathmin = player.absmin;
-		deathmax = player.absmax;
-		deathradius = max(vlen(deathmin), vlen(deathmax));
-		for(head = findradius(player.origin, deathradius); head; head = head.chain)
-			if(head != player)
-				if(head.takedamage)
-					if(boxesoverlap(deathmin, deathmax, head.absmin, head.absmax))
-					{
-						if ((player.classname == "player") && (player.health >= 1))
-							Damage (head, teleporter, player, 10000, DEATH_TELEFRAG, head.origin, '0 0 0');
-						else if (player.health < 1) // corpses gib
-							Damage (head, teleporter, player, 10000, DEATH_TELEFRAG, head.origin, '0 0 0');
-						else // dead bodies and monsters gib themselves instead of telefragging
-							Damage (player, teleporter, player, 10000, DEATH_TELEFRAG, player.origin, '0 0 0');
-					}
-	}
+		RemoveGrapplingHook(player);
 
-	// hide myself a tic
-	player.effects = player.effects | EF_NODRAW;
-	if (player.weaponentity) // misuse FL_FLY to avoid EF_NODRAW on viewmodel
-		player.weaponentity.flags = player.weaponentity.flags | FL_FLY;
-	player.teleport_time = time + cvar("sys_ticrate");
+		// Kill anyone else in the teleporter box (NO MORE TDEATH)
+		if(player.takedamage && !g_race)
+		{
+			vector deathmin;
+			vector deathmax;
+			float deathradius;
+			deathmin = player.absmin;
+			deathmax = player.absmax;
+			deathradius = max(vlen(deathmin), vlen(deathmax));
+			for(head = findradius(player.origin, deathradius); head; head = head.chain)
+				if(head != player)
+					if(head.takedamage)
+						if(boxesoverlap(deathmin, deathmax, head.absmin, head.absmax))
+						{
+							if ((player.classname == "player") && (player.health >= 1))
+								Damage (head, teleporter, player, 10000, DEATH_TELEFRAG, head.origin, '0 0 0');
+							else if (player.health < 1) // corpses gib
+								Damage (head, teleporter, player, 10000, DEATH_TELEFRAG, head.origin, '0 0 0');
+							else // dead bodies and monsters gib themselves instead of telefragging
+								Damage (player, teleporter, player, 10000, DEATH_TELEFRAG, player.origin, '0 0 0');
+						}
+		}
 
-	// player no longer is on ground
-	player.flags = player.flags - (player.flags & FL_ONGROUND);
+		// hide myself a tic
+		player.effects = player.effects | EF_NODRAW;
+		if (player.weaponentity) // misuse FL_FLY to avoid EF_NODRAW on viewmodel
+			player.weaponentity.flags = player.weaponentity.flags | FL_FLY;
+		player.teleport_time = time + cvar("sys_ticrate");
 
-	// reset tracking of oldvelocity for impact damage (sudden velocity changes)
-	player.oldvelocity = player.velocity;
+		// player no longer is on ground
+		player.flags = player.flags - (player.flags & FL_ONGROUND);
 
-	// reset tracking of who pushed you into a hazard (for kill credit)
-	if(teleporter.owner)
-	{
-		player.pusher = teleporter.owner;
-		player.pushltime = time + cvar("g_maxpushtime");
-	}
-	else
-	{
-		player.pushltime = 0;
-	}
+		// reset tracking of oldvelocity for impact damage (sudden velocity changes)
+		player.oldvelocity = player.velocity;
 
-	// stop player name display
-	{
-		oldself = self;
-		self = player;
-		ClearSelectedPlayer();
-		self = oldself;
+		// reset tracking of who pushed you into a hazard (for kill credit)
+		if(teleporter.owner)
+		{
+			player.pusher = teleporter.owner;
+			player.pushltime = time + cvar("g_maxpushtime");
+		}
+		else
+		{
+			player.pushltime = 0;
+		}
+
+		// stop player name display
+		{
+			oldself = self;
+			self = player;
+			ClearSelectedPlayer();
+			self = oldself;
+		}
 	}
 }
 

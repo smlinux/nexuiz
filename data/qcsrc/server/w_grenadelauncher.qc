@@ -1,4 +1,8 @@
+#ifdef PORTAR
+.float portar_grenade_id;
+#endif
 
+#ifndef PORTAR
 void W_Grenade_Explode (void)
 {
 	vector	org2;
@@ -72,6 +76,27 @@ void W_Grenade_Damage (entity inflictor, entity attacker, float damage, float de
 		self.think ();
 	}
 }
+#else
+void W_Grenade_Explode (void)
+{
+	remove(self);
+}
+void W_Grenade_Touch1 (void)
+{
+	print(vtos(trace_plane_normal), "\n");
+	if(self.portar_grenade_id == 0)
+	{
+		self.portar_grenade_id = time;
+		if(!Portal_SpawnInPortalAtTrace(self.owner, self.velocity, self.portar_grenade_id))
+			remove(self);
+	}
+	else
+	{
+		Portal_SpawnOutPortalAtTrace(self.owner, self.velocity, self.portar_grenade_id);
+		remove(self);
+	}
+}
+#endif
 
 void W_Grenade_Attack (void)
 {
@@ -110,6 +135,7 @@ void W_Grenade_Attack (void)
 
 void W_Grenade_Attack2 (void)
 {
+#ifndef PORTAR
 	local entity gren;
 
 	if (cvar("g_use_ammunition"))
@@ -145,6 +171,9 @@ void W_Grenade_Attack2 (void)
 
 	gren.angles = vectoangles (gren.velocity);
 	gren.flags = FL_PROJECTILE;
+#else
+	// nothing yet (maybe find the last one and detonate it?)
+#endif
 }
 
 .float bot_secondary_grenademooth;
