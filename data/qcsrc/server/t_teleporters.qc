@@ -22,7 +22,7 @@ void TeleportPlayer(entity teleporter, entity player, vector to, vector to_angle
 		RemoveGrapplingHook(player);
 
 		// Kill anyone else in the teleporter box (NO MORE TDEATH)
-		if(player.takedamage && !g_race)
+		if(player.takedamage && player.deadflag == DEAD_NO && !g_race)
 		{
 			vector deathmin;
 			vector deathmax;

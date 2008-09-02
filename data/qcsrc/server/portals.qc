@@ -95,11 +95,15 @@ void Portal_TeleportPlayer(entity teleporter, entity player)
 	makevectors(teleporter.enemy.angles);
 	safe = teleporter.enemy.portal_safe_origin; // a valid player origin
 	step = to + ((safe - to) * v_forward) * v_forward;
-	tracebox(safe, PL_MIN, PL_MAX, step, MOVE_NOMONSTERS, player);
+	tracebox(safe, PL_MIN, PL_MAX, step, MOVE_WORLDONLY, player);
 	if(trace_startsolid)
-		error("'safe' teleport location is not safe!");
+	{
+		bprint("'safe' teleport location is not safe!\n");
+		// FAIL TODO why does this happen?
+		return;
+	}
 	safe = trace_endpos;
-	tracebox(safe, PL_MIN, PL_MAX, to, MOVE_NOMONSTERS, player);
+	tracebox(safe, PL_MIN, PL_MAX, to, MOVE_WORLDONLY, player);
 	if(trace_startsolid)
 		error("trace_endpos in solid!");
 	to = trace_endpos;
@@ -255,6 +259,13 @@ entity Portal_Spawn(entity own, vector org, vector ang)
 
 float Portal_SpawnInPortalAtTrace(entity own, vector dir, float portal_id_val)
 {
+	if(trace_ent.classname == "player")
+	{
+		print("hit a player, adjusting...\n");
+		trace_endpos = trace_ent.origin + '0 0 1' * PL_MIN_z;
+		trace_plane_normal = '0 0 1';
+	}
+
 	if(own.portal_in)
 	{
 		if(own.portal_out)
@@ -288,6 +299,13 @@ float Portal_SpawnInPortalAtTrace(entity own, vector dir, float portal_id_val)
 
 float Portal_SpawnOutPortalAtTrace(entity own, vector dir, float portal_id_val)
 {
+	if(trace_ent.classname == "player")
+	{
+		print("hit a player, adjusting...\n");
+		trace_endpos = trace_ent.origin + '0 0 1' * PL_MIN_z;
+		trace_plane_normal = '0 0 1';
+	}
+
 	if(!own.portal_in)
 		return 0; // sorry
 
