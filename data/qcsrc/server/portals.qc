@@ -252,7 +252,7 @@ entity Portal_Spawn(entity own, vector org, vector ang)
 		return world;
 	}
 
-	setsize(portal, '-32 -32 -32', '32 32 32');
+	setsize(portal, '-64 -64 -64', '64 64 64');
 
 	return portal;
 }
