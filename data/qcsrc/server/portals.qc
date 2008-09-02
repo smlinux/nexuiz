@@ -17,14 +17,20 @@ vector fixedvectoangles(vector v)
 vector fixedvectoangles2(vector v, vector w)
 {
 	vector a;
-	a = vectoangles(v, w);
+	a = vectoangles2(v, w);
 	a_x = -a_x;
 	return a;
 }
 
+void fixedmakevectors(vector a)
+{
+	//a_x = -a_x;
+	makevectors(a);
+}
+
 vector Portal_Transform_Apply(vector transform, vector v)
 {
-	makevectors(transform);
+	fixedmakevectors(transform);
 	return v_forward * v_x
 	     + v_right   * (-v_y)
 		 + v_up      * v_z;
@@ -33,7 +39,7 @@ vector Portal_Transform_Apply(vector transform, vector v)
 vector Portal_Transform_Multiply(vector t1, vector t2)
 {
 	vector m_forward, m_up;
-	makevectors(t2); m_forward = v_forward; m_up = v_up;
+	fixedmakevectors(t2); m_forward = v_forward; m_up = v_up;
 	m_forward = Portal_Transform_Apply(t1, m_forward);
 	m_up = Portal_Transform_Apply(t1, m_up);
 	return fixedvectoangles2(m_forward, m_up);
@@ -42,7 +48,7 @@ vector Portal_Transform_Multiply(vector t1, vector t2)
 vector Portal_Transform_Invert(vector transform)
 {
 	vector i_forward, i_up;
-	makevectors(transform);
+	fixedmakevectors(transform);
 	// we want angles that turn v_forward into '1 0 0', v_right into '0 1 0' and v_up into '0 0 1'
 	// but these are orthogonal unit vectors!
 	// so to invert, we can simply vectoangles the TRANSPOSED matrix
@@ -59,7 +65,7 @@ vector Portal_Transform_Invert(vector transform)
 	print("Transform: ", vtos(transform), "\n");
 	print("Inverted: ", vtos(v), "\n");
 	print("Verify: ", vtos(Portal_Transform_Multiply(v, transform)), "\n");
-	makevectors(Portal_Transform_Multiply(v, transform));
+	fixedmakevectors(Portal_Transform_Multiply(v, transform));
 	print("Verify: ", vtos(v_forward), "\n");
 	print("Verify: ", vtos(v_right), "\n");
 	print("Verify: ", vtos(v_up), "\n");
@@ -92,7 +98,7 @@ void Portal_TeleportPlayer(entity teleporter, entity player)
 	// this now is INSIDE the plane... can't use that
 
 	// shift it out
-	makevectors(teleporter.enemy.angles);
+	fixedmakevectors(teleporter.enemy.mangle);
 	safe = teleporter.enemy.portal_safe_origin; // a valid player origin
 	step = to + ((safe - to) * v_forward) * v_forward;
 	tracebox(safe, PL_MIN, PL_MAX, step, MOVE_WORLDONLY, player);
@@ -115,7 +121,7 @@ void Portal_TeleportPlayer(entity teleporter, entity player)
 	}
 	else
 	{
-		ang = Portal_Transform_Multiply(transform, player.angles);
+		ang = Portal_Transform_Multiply(transform, player.mangle);
 	}
 
 	print("previous velocity: ", vtos(player.velocity), "\n");
@@ -147,7 +153,7 @@ void Portal_Touch()
 		return;
 	if(time < self.portal_activatetime)
 		return;
-	makevectors(self.angles);
+	fixedmakevectors(self.mangle);
 	if((other.origin - self.origin) * v_forward < 0)
 		return;
 	if(other.mins_x < PL_MIN_x || other.mins_y < PL_MIN_y || other.mins_z < PL_MIN_z
@@ -197,7 +203,7 @@ void Portal_Disconnect(entity teleporter, entity destination)
 
 void Portal_Connect(entity teleporter, entity destination)
 {
-	teleporter.portal_transform = Portal_Transform_Divide(Portal_Transform_TurnDirection(destination.angles), teleporter.angles);
+	teleporter.portal_transform = Portal_Transform_Divide(Portal_Transform_TurnDirection(destination.mangle), teleporter.mangle);
 	teleporter.enemy = destination;
 	destination.enemy = teleporter;
 	Portal_MakeInPortal(teleporter);
@@ -235,18 +241,41 @@ void Portal_RequestVanish(entity portal)
 	self = oldself;
 }
 
+float CheckWireframeBox(vector v0, vector dvx, vector dvy, vector dvz)
+{
+	traceline(v0, v0 + dvx, MOVE_NORMAL, world); if(trace_fraction < 1) return 0;
+	traceline(v0, v0 + dvy, MOVE_NORMAL, world); if(trace_fraction < 1) return 0;
+	traceline(v0, v0 + dvz, MOVE_NORMAL, world); if(trace_fraction < 1) return 0;
+	traceline(v0 + dvx, v0 + dvx + dvy, MOVE_NORMAL, world); if(trace_fraction < 1) return 0;
+	traceline(v0 + dvx, v0 + dvx + dvz, MOVE_NORMAL, world); if(trace_fraction < 1) return 0;
+	traceline(v0 + dvy, v0 + dvy + dvx, MOVE_NORMAL, world); if(trace_fraction < 1) return 0;
+	traceline(v0 + dvy, v0 + dvy + dvz, MOVE_NORMAL, world); if(trace_fraction < 1) return 0;
+	traceline(v0 + dvz, v0 + dvz + dvx, MOVE_NORMAL, world); if(trace_fraction < 1) return 0;
+	traceline(v0 + dvz, v0 + dvz + dvy, MOVE_NORMAL, world); if(trace_fraction < 1) return 0;
+	traceline(v0 + dvx + dvy, v0 + dvx + dvy + dvz, MOVE_NORMAL, world); if(trace_fraction < 1) return 0;
+	traceline(v0 + dvx + dvz, v0 + dvx + dvy + dvz, MOVE_NORMAL, world); if(trace_fraction < 1) return 0;
+	traceline(v0 + dvy + dvz, v0 + dvx + dvy + dvz, MOVE_NORMAL, world); if(trace_fraction < 1) return 0;
+	return 1;
+}
+
 entity Portal_Spawn(entity own, vector org, vector ang)
 {
+	fixedmakevectors(ang);
+	if(!CheckWireframeBox(org - 64 * v_right - 64 * v_up, 128 * v_right, 128 * v_up, 32 * v_forward))
+		return world;
+
 	entity portal;
 	portal = spawn();
 	portal.classname = "portal";
 	portal.owner = own;
 	portal.origin = org;
+	portal.mangle = ang;
+	ang_x = -ang_x;
 	portal.angles = ang;
 	portal.think = Portal_Vanish;
 	portal.nextthink = time + 60;
 	portal.portal_activatetime = time + 0.1;
-	setmodel(portal, "models/items/g_h100.md3");
+	setmodel(portal, "models/portal.md3");
 
 	if(!Portal_FindSafeOrigin(portal))
 	{
@@ -287,7 +316,7 @@ float Portal_SpawnInPortalAtTrace(entity own, vector dir, float portal_id_val)
 	}
 		
 	print("Plane normal: ", vtos(trace_plane_normal), "\n");
-	print("Portal angles: ", vtos(fixedvectoangles(trace_plane_normal)), "\n");
+	print("Portal angles: ", vtos(vectoangles(trace_plane_normal)), "\n");
 	own.portal_in = Portal_Spawn(own, trace_endpos + trace_plane_normal, fixedvectoangles2(trace_plane_normal, dir));
 	if(!own.portal_in)
 		return 0;
@@ -322,8 +351,8 @@ float Portal_SpawnOutPortalAtTrace(entity own, vector dir, float portal_id_val)
 	}
 		
 	print("Plane normal: ", vtos(trace_plane_normal), "\n");
-	print("Portal angles: ", vtos(fixedvectoangles(trace_plane_normal)), "\n");
-	own.portal_out = Portal_Spawn(own, trace_endpos + trace_plane_normal, fixedvectoangles2(trace_plane_normal, dir));
+	print("Portal angles: ", vtos(vectoangles(trace_plane_normal)), "\n");
+	own.portal_out = Portal_Spawn(own, trace_endpos + trace_plane_normal, fixedvectoangles2(trace_plane_normal, -1 * dir));
 	if(!own.portal_out)
 		return 0;
 	own.portal_out.portal_id = portal_id_val;
