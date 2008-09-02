@@ -217,7 +217,7 @@ void W_PreviousWeapon()
 	self.switchweapon = weaponwant;
 };
 
-void W_CycleWeapon(string weaponorder, float dir)
+float W_GetCycleWeapon(string weaponorder, float dir)
 {
 	float n, i, weaponwant, first_valid, prev_valid, switchtonext, switchtolast;
 	n = tokenize(weaponorder);
@@ -233,10 +233,7 @@ void W_CycleWeapon(string weaponorder, float dir)
 		if(client_hasweapon(self, weaponwant, TRUE, FALSE))
 		{
 			if(switchtonext)
-			{
-				W_SwitchWeapon(weaponwant);
-				return;
-			}
+				return weaponwant;
 			if(first_valid < 0)
 				first_valid = weaponwant;
 			prev_valid = weaponwant;
@@ -245,7 +242,7 @@ void W_CycleWeapon(string weaponorder, float dir)
 				if(dir >= 0)
 					switchtonext = 1;
 				else if(prev_valid >= 0)
-					W_SwitchWeapon(prev_valid);
+					return prev_valid;
 				else
 				{
 					switchtolast = 1;
@@ -257,13 +254,22 @@ void W_CycleWeapon(string weaponorder, float dir)
 	if(first_valid >= 0)
 	{
 		if(switchtolast)
-			W_SwitchWeapon(prev_valid);
+			return prev_valid;
 		else
-			W_SwitchWeapon(first_valid);
-		return;
+			return first_valid;
 	}
-	// none available
-	sprint(self, "You do not have any of the specified weapons.\n");
+	return -1;
+}
+
+void W_CycleWeapon(string weaponorder, float dir)
+{
+	float w;
+	w = W_GetCycleWeapon(weaponorder, dir);
+	if(w >= 0)
+		W_SwitchWeapon(w);
+	else
+		// none available
+		sprint(self, "You do not have any of the specified weapons.\n");
 }
 
 // Bringed back weapon frame
