@@ -385,6 +385,7 @@ void w_ready()
 };
 
 // FIXME: add qw-style client-custom weaponrating (cl_weaponrating)?
+// by using W_GetCycleWeapon
 float w_getbestweapon(entity e)
 { 
 // add new weapons here
