@@ -354,6 +354,7 @@ void spawnfunc_worldspawn (void)
 
 	addstat(STAT_SYS_TICRATE, AS_FLOAT, stat_sys_ticrate);
 	addstat(STAT_WEAPONS, AS_INT, weapons);
+	addstat(STAT_SWITCHWEAPON, AS_INT, switchweapon);
 
 	next_pingtime = time + 5;
 	world_initialized = 1;

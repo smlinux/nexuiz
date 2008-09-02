@@ -121,7 +121,7 @@ void CSQC_UpdateView(void)
 	
 	sbar_alpha_fg = cvar("sbar_alpha_fg" );
 	sbar_hudselector = cvar("sbar_hudselector");
-	activeweapon = getstati(STAT_ACTIVEWEAPON);
+	activeweapon = getstati(STAT_SWITCHWEAPON);
 	teamplay = cvar("teamplay");
 
 	if(last_weapon != activeweapon) {

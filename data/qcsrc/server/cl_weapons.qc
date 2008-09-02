@@ -28,7 +28,6 @@ float W_GetCycleWeapon(entity pl, string weaponorder, float dir, float complain)
 				return weaponwant;
 			if(!first_valid)
 				first_valid = weaponwant;
-			prev_valid = weaponwant;
 			if(weaponwant == pl.switchweapon)
 			{
 				if(dir >= 0)
@@ -36,11 +35,9 @@ float W_GetCycleWeapon(entity pl, string weaponorder, float dir, float complain)
 				else if(prev_valid)
 					return prev_valid;
 				else
-				{
 					switchtolast = 1;
-					break;
-				}
 			}
+			prev_valid = weaponwant;
 		}
 	}
 	if(first_valid)
@@ -73,13 +70,13 @@ void W_CycleWeapon(string weaponorder, float dir)
 // next weapon
 void W_NextWeapon()
 {
-	W_CycleWeapon(self.cvar_cl_weaponpriority, +1);
+	W_CycleWeapon(self.cvar_cl_weaponpriority, -1);
 }
 
 // prev weapon
 void W_PreviousWeapon()
 {
-	W_CycleWeapon(self.cvar_cl_weaponpriority, -1);
+	W_CycleWeapon(self.cvar_cl_weaponpriority, +1);
 }
 
 string W_FixWeaponOrder(string order, float complete)
