@@ -500,7 +500,7 @@ NOANGLE: Ignore angle attenuation.
 Laser beam emitter
 -------- KEYS --------
 target: target_position the laser targets (may be another entity, preferably target_position, possibly controlled by misc_follow)
-mdl: name of particle effect for the beam end point (see effectinfo.txt; default is misc_laser_beam_end)
+mdl: name of particle effect for the beam end point (see effectinfo.txt; default is laser_deadly if dmg is set, and none if not)
 colormod: color of the laser beam (default: red, that is, 1 0 0)
 dmg: damage inflicted by the beam per second, or -1 for an instant-death ray
 targetname: name to target this (then its state is toggled)

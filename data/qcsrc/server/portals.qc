@@ -143,6 +143,8 @@ float Portal_FindSafeOrigin(entity portal)
 
 void Portal_Touch()
 {
+	if(other.classname == "porto")
+		return;
 	if(time < self.portal_activatetime)
 		return;
 	makevectors(self.angles);

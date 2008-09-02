@@ -1,8 +1,3 @@
-#ifdef PORTAR
-.float portar_grenade_id;
-#endif
-
-#ifndef PORTAR
 void W_Grenade_Explode (void)
 {
 	vector	org2;
@@ -76,27 +71,6 @@ void W_Grenade_Damage (entity inflictor, entity attacker, float damage, float de
 		self.think ();
 	}
 }
-#else
-void W_Grenade_Explode (void)
-{
-	remove(self);
-}
-void W_Grenade_Touch1 (void)
-{
-	print(vtos(trace_plane_normal), "\n");
-	if(self.portar_grenade_id == 0)
-	{
-		self.portar_grenade_id = time;
-		if(!Portal_SpawnInPortalAtTrace(self.owner, self.velocity, self.portar_grenade_id))
-			remove(self);
-	}
-	else
-	{
-		Portal_SpawnOutPortalAtTrace(self.owner, self.velocity, self.portar_grenade_id);
-		remove(self);
-	}
-}
-#endif
 
 void W_Grenade_Attack (void)
 {
@@ -104,11 +78,7 @@ void W_Grenade_Attack (void)
 
 	if (cvar("g_use_ammunition"))
 		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_grenadelauncher_primary_ammo");
-#ifndef PORTAR
 	W_SetupShot (self, '25 6 -8', FALSE, 4, "weapons/grenade_fire.wav");
-#else
-	W_SetupShot (self, '0 0 0', FALSE, 4, "weapons/grenade_fire.wav");
-#endif
 	//W_SetupShot (self, '25 8 -8', FALSE, 4, "weapons/grenade_fire.wav"); // TODO: move model to the right a little
 
 	pointparticles(particleeffectnum("grenadelauncher_muzzleflash"), w_shotorg, w_shotdir * 1000, 1);
@@ -118,11 +88,7 @@ void W_Grenade_Attack (void)
 	gren.classname = "grenade";
 	gren.bot_dodge = TRUE;
 	gren.bot_dodgerating = cvar("g_balance_grenadelauncher_primary_damage");
-#ifndef PORTAR
 	gren.movetype = MOVETYPE_BOUNCE;
-#else
-	gren.movetype = MOVETYPE_BOUNCEMISSILE;
-#endif
 	gren.solid = SOLID_BBOX;
 	gren.effects = EF_LOWPRECISION;
 	gren.modelflags = MF_GRENADE;
@@ -133,11 +99,7 @@ void W_Grenade_Attack (void)
 	gren.nextthink = time + cvar("g_balance_grenadelauncher_primary_lifetime");
 	gren.think = W_Grenade_Explode;
 	gren.touch = W_Grenade_Touch1;
-#ifndef PORTAR
 	gren.velocity = w_shotdir * cvar("g_balance_grenadelauncher_primary_speed") + v_up * cvar("g_balance_grenadelauncher_primary_speed_up");
-#else
-	gren.velocity = w_shotdir * cvar("g_balance_grenadelauncher_primary_speed");
-#endif
 	W_SetupProjectileVelocity(gren);
 	gren.avelocity_x = random () * -500 - 500;
 
@@ -147,7 +109,6 @@ void W_Grenade_Attack (void)
 
 void W_Grenade_Attack2 (void)
 {
-#ifndef PORTAR
 	local entity gren;
 
 	if (cvar("g_use_ammunition"))
@@ -183,9 +144,6 @@ void W_Grenade_Attack2 (void)
 
 	gren.angles = vectoangles (gren.velocity);
 	gren.flags = FL_PROJECTILE;
-#else
-	// nothing yet (maybe find the last one and detonate it?)
-#endif
 }
 
 void spawnfunc_weapon_grenadelauncher (void)

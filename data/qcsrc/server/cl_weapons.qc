@@ -415,13 +415,14 @@ void Nixnex_GiveCurrentWeapon()
 void RegisterWeapons()
 {
 	// %weaponaddpoint
-	register_weapon(WEP_LASER, w_laser, 0, "laser", "laser", "Laser");
-	register_weapon(WEP_SHOTGUN, w_shotgun, IT_SHELLS, "shotgun", "shotgun", "Shotgun");
-	register_weapon(WEP_UZI, w_uzi, IT_NAILS, "uzi", "uzi", "Machine Gun");
-	register_weapon(WEP_GRENADE_LAUNCHER, w_glauncher, IT_ROCKETS, "gl", "grenadelauncher", "Mortar");
-	register_weapon(WEP_ELECTRO, w_electro, IT_CELLS, "electro", "electro", "Electro");
-	register_weapon(WEP_CRYLINK, w_crylink, IT_CELLS, "crylink", "crylink", "Crylink");
-	register_weapon(WEP_NEX, w_nex, IT_CELLS, "nex", "nex", "Nex");
-	register_weapon(WEP_HAGAR, w_hagar, IT_ROCKETS, "hagar", "hagar", "Hagar");
-	register_weapon(WEP_ROCKET_LAUNCHER, w_rlauncher, IT_ROCKETS, "rl", "rocketlauncher", "Rocket Launcher");
+	register_weapon(WEP_LASER,            w_laser,     0,          "laser",   "laser",           "Laser");
+	register_weapon(WEP_SHOTGUN,          w_shotgun,   IT_SHELLS,  "shotgun", "shotgun",         "Shotgun");
+	register_weapon(WEP_UZI,              w_uzi,       IT_NAILS,   "uzi",     "uzi",             "Machine Gun");
+	register_weapon(WEP_GRENADE_LAUNCHER, w_glauncher, IT_ROCKETS, "gl",      "grenadelauncher", "Mortar");
+	register_weapon(WEP_ELECTRO,          w_electro,   IT_CELLS,   "electro", "electro",         "Electro");
+	register_weapon(WEP_CRYLINK,          w_crylink,   IT_CELLS,   "crylink", "crylink",         "Crylink");
+	register_weapon(WEP_NEX,              w_nex,       IT_CELLS,   "nex",     "nex",             "Nex");
+	register_weapon(WEP_HAGAR,            w_hagar,     IT_ROCKETS, "hagar",   "hagar",           "Hagar");
+	register_weapon(WEP_ROCKET_LAUNCHER,  w_rlauncher, IT_ROCKETS, "rl",      "rocketlauncher",  "Rocket Launcher");
+	register_weapon(WEP_PORTO,            w_porto,     IT_CELLS,   "porto" ,  "porto",           "Port-O-Launch");
 }

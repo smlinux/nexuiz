@@ -80,6 +80,7 @@ w_crylink.qc
 w_nex.qc
 w_hagar.qc
 w_rocketlauncher.qc
+w_porto.qc
 
 t_items.qc
 cl_weapons.qc
