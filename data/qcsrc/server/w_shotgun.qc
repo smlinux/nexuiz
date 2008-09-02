@@ -136,7 +136,7 @@ float w_shotgun(float req)
 			precache_model ("models/casing_shell.mdl");
 	}
 	else if (req == WR_SETUP)
-		weapon_setup(WEP_SHOTGUN, "shotgun");
+		weapon_setup(WEP_SHOTGUN);
 	else if (req == WR_CHECKAMMO1)
 		return self.ammo_shells >= cvar("g_balance_shotgun_primary_ammo");
 	else if (req == WR_CHECKAMMO2)

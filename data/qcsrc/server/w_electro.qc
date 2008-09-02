@@ -225,7 +225,7 @@ float w_electro(float req)
 		precache_sound ("weapons/electro_impact_combo.wav");
 	}
 	else if (req == WR_SETUP)
-		weapon_setup(WEP_ELECTRO, "electro");
+		weapon_setup(WEP_ELECTRO);
 	else if (req == WR_CHECKAMMO1)
 		return self.ammo_cells >= cvar("g_balance_electro_primary_ammo");
 	else if (req == WR_CHECKAMMO2)

@@ -144,7 +144,7 @@ float w_uzi(float req)
 			precache_model ("models/casing_bronze.mdl");
 	}
 	else if (req == WR_SETUP)
-		weapon_setup(WEP_UZI, "uzi");
+		weapon_setup(WEP_UZI);
 	else if (req == WR_CHECKAMMO1)
 		return self.ammo_nails >= cvar("g_balance_uzi_first_ammo");
 	else if (req == WR_CHECKAMMO2)

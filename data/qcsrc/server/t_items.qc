@@ -585,7 +585,6 @@ void spawnfunc_weapon_shotgun (void) {
 
 void spawnfunc_weapon_nex (void)
 {
-	float nextime;
 	if (g_minstagib)
 	{
 		minstagib_items(IT_CELLS);

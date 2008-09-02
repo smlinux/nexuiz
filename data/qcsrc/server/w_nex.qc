@@ -170,7 +170,7 @@ float w_nex(float req)
 			w_laser(WR_PRECACHE);
 	}
 	else if (req == WR_SETUP)
-		weapon_setup(WEP_NEX, "nex");
+		weapon_setup(WEP_NEX);
 	else if (req == WR_CHECKAMMO1)
 	{
 		if (g_minstagib)

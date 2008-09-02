@@ -248,7 +248,7 @@ float w_glauncher(float req)
 		precache_sound ("weapons/grenade_impact.wav");
 	}
 	else if (req == WR_SETUP)
-		weapon_setup(WEP_GRENADE_LAUNCHER, "gl");
+		weapon_setup(WEP_GRENADE_LAUNCHER);
 	else if (req == WR_CHECKAMMO1)
 		return self.ammo_rockets >= cvar("g_balance_grenadelauncher_primary_ammo");
 	else if (req == WR_CHECKAMMO2)

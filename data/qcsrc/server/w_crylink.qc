@@ -234,7 +234,7 @@ float w_crylink(float req)
 		precache_sound ("weapons/crylink_fire.wav");
 	}
 	else if (req == WR_SETUP)
-		weapon_setup(WEP_CRYLINK, "crylink");
+		weapon_setup(WEP_CRYLINK);
 	else if (req == WR_CHECKAMMO1)
 		return self.ammo_cells >= cvar("g_balance_crylink_primary_ammo");
 	else if (req == WR_CHECKAMMO2)

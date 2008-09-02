@@ -198,7 +198,7 @@ float w_hagar(float req)
 		precache_sound ("weapons/hagexp3.wav");
 	}
 	else if (req == WR_SETUP)
-		weapon_setup(WEP_HAGAR, "hagar");
+		weapon_setup(WEP_HAGAR);
 	else if (req == WR_CHECKAMMO1)
 		return self.ammo_rockets >= cvar("g_balance_hagar_primary_ammo");
 	else if (req == WR_CHECKAMMO2)

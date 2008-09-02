@@ -385,7 +385,7 @@ void w_ready()
 };
 
 // Setup weapon for client (after this raise frame will be launched)
-void weapon_setup(float windex, string wname)
+void weapon_setup(float windex)
 {
 	entity e;
 	e = get_weaponinfo(windex);

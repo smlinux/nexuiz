@@ -420,7 +420,7 @@ float w_rlauncher(float req)
 			precache_model ("models/laser_dot.mdl"); // rocket launcher
 	}
 	else if (req == WR_SETUP)
-		weapon_setup(WEP_ROCKET_LAUNCHER, "rl");
+		weapon_setup(WEP_ROCKET_LAUNCHER);
 	else if (req == WR_CHECKAMMO1)
 	{
 		// don't switch while guiding a missile

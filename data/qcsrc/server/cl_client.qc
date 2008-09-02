@@ -1031,7 +1031,6 @@ void DecodeLevelParms (void);
 void ClientConnect (void)
 {
 	local string s;
-	float wep;
 
 	if(self.flags & FL_CLIENT)
 	{

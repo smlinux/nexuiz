@@ -128,7 +128,7 @@ float w_laser(float req)
 		precache_sound ("weapons/laserimpact.wav");
 	}
 	else if (req == WR_SETUP)
-		weapon_setup(WEP_LASER, "laser");
+		weapon_setup(WEP_LASER);
 	else if (req == WR_CHECKAMMO1)
 		return TRUE;
 	else if (req == WR_CHECKAMMO2)
