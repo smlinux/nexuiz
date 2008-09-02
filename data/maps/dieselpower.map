@@ -25408,7 +25408,7 @@ common/clip
 // entity 12
 {
 "origin" "1232 -864 -1008"
-"classname" "ammo_bullets"
+"classname" "ammo_shells"
 }
 // entity 13
 {
@@ -25519,7 +25519,7 @@ common/clip
 // entity 31
 {
 "origin" "816 912 -232"
-"classname" "ammo_bullets"
+"classname" "ammo_shells"
 }
 // entity 32
 {
