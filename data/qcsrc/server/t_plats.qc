@@ -1252,6 +1252,9 @@ void spawnfunc_func_door_secret()
 	self.speed = 50;
 	self.use = fd_secret_use;
 	IFTARGETED
+	{
+	}
+	else
 		self.spawnflags |= SECRET_YES_SHOOT;
 
 	if(self.spawnflags&SECRET_YES_SHOOT)
