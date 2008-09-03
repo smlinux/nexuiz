@@ -123,7 +123,7 @@ float w_minstanex(float req)
 		{
 			if (weapon_prepareattack(0, cvar("g_balance_minstanex_refire")))
 			{
-				W_Nex_Attack();
+				W_MinstaNex_Attack();
 				weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_minstanex_animtime"), w_ready);
 			}
 		}

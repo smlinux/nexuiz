@@ -22,8 +22,6 @@ string toStringNexuizMutatorsDialog(entity me)
 {
 	string s;
 	s = "";
-	if(cvar("g_instagib"))
-		s = strcat(s, ", InstaGib");
 	if(cvar("g_minstagib"))
 		s = strcat(s, ", MinstaGib");
 	if(cvar("g_nixnex"))
@@ -71,8 +69,6 @@ void fillNexuizMutatorsDialog(entity me)
 		me.TD(me, 1, 2, makeNexuizTextLabel(0, "Arena mutators:"));
 	me.TR(me);
 		me.TD(me, 1, 2, e = makeNexuizRadioButton(1, string_null, string_null, "Regular"));
-	me.TR(me);
-		me.TD(me, 1, 2, e = makeNexuizRadioButton(1, "g_instagib", string_null, "InstaGib"));
 	me.TR(me);
 		me.TD(me, 1, 2, e = makeNexuizRadioButton(1, "g_minstagib", string_null, "MinstaGib"));
 	me.TR(me);

@@ -277,7 +277,7 @@ const float RACE_NET_CHECKPOINT_NEXT_SPEC_QUALIFYING = 5; // byte nextcheckpoint
 
 // Weapon indexes
 // %weaponaddpoint
-float WEP_FIRST				= 1;
+float WEP_FIRST				=  1;
 float WEP_LASER				=  1; float WEPBIT_LASER			= 1; // always: 2^(w-1)
 float WEP_SHOTGUN			=  2; float WEPBIT_SHOTGUN			= 2;
 float WEP_UZI				=  3; float WEPBIT_UZI				= 4;
@@ -288,8 +288,9 @@ float WEP_NEX				=  7; float WEPBIT_NEX				= 64;
 float WEP_HAGAR				=  8; float WEPBIT_HAGAR			= 128;
 float WEP_ROCKET_LAUNCHER	=  9; float WEPBIT_ROCKET_LAUNCHER	= 256;
 float WEP_PORTO				= 10; float WEPBIT_PORTO			= 512;
-float WEP_LAST				= 10; float WEPBIT_ALL              = 1023;
-float WEP_COUNT             = 11;
+float WEP_MINSTANEX			= 11; float WEPBIT_MINSTANEX		= 1024;
+float WEP_LAST				= 11; float WEPBIT_ALL              = 2047;
+float WEP_COUNT             = 12;
 
 float	IT_SHELLS				= 256;
 float	IT_NAILS				= 512;
