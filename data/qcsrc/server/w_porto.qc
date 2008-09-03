@@ -60,6 +60,7 @@ void W_Porto_Attack (void)
 	gren.flags = FL_PROJECTILE;
 
 	self.porto_grenade_id = gren.porto_grenade_id = time;
+	gren.playerid = self.playerid;
 }
 
 void spawnfunc_weapon_porto (void)
@@ -113,7 +114,8 @@ float w_porto(float req)
 		}
 		v_angle_save = self.v_angle;
 		if(self.porto_v_angle_held)
-			self.v_angle = self.porto_v_angle;
+			makevectors(self.porto_v_angle); // override the previously set angles
+
 		if (self.BUTTON_ATCK)
 		if (!self.porto_grenade_id)
 		if (weapon_prepareattack(0, cvar("g_balance_porto_primary_refire")))
@@ -121,7 +123,6 @@ float w_porto(float req)
 			W_Porto_Attack();
 			weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_porto_primary_animtime"), w_ready);
 		}
-		self.v_angle = v_angle_save;
 	}
 	else if (req == WR_PRECACHE)
 	{

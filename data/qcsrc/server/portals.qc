@@ -136,6 +136,8 @@ float Portal_FindSafeOrigin(entity portal)
 	o = portal.origin;
 	portal.mins = PL_MIN - '8 8 8';
 	portal.maxs = PL_MAX + '8 8 8';
+	fixedmakevectors(portal.mangle);
+	portal.origin += 16 * v_forward;
 	if(!move_out_of_solid(portal))
 	{
 		print("NO SAFE ORIGIN\n");
@@ -173,6 +175,15 @@ void Portal_MakeBrokenPortal(entity portal)
 	portal.solid = SOLID_NOT;
 	portal.touch = SUB_Null;
 	portal.effects = 0;
+	//portal.colormod = '1 1 1';
+	portal.nextthink = 0;
+}
+
+void Portal_MakeWaitingPortal(entity portal)
+{
+	portal.solid = SOLID_NOT;
+	portal.touch = SUB_Null;
+	portal.effects = EF_ADDITIVE;
 	portal.colormod = '1 1 1';
 	portal.nextthink = 0;
 }
@@ -190,7 +201,7 @@ void Portal_MakeOutPortal(entity portal)
 {
 	portal.solid = SOLID_NOT;
 	portal.touch = SUB_Null;
-	portal.effects = EF_STARDUST;
+	portal.effects = EF_STARDUST | EF_BLUE;
 	portal.colormod = '0 0 1';
 	portal.nextthink = 0;
 }
@@ -255,7 +266,7 @@ void Portal_Think()
 				continue;
 		// if e would hit the portal in a frame...
 		// already teleport him
-		tracebox(e.origin, e.mins, e.maxs, e.origin + e.velocity * 3 * frametime, MOVE_NORMAL, e);
+		tracebox(e.origin, e.mins, e.maxs, e.origin + e.velocity * 2 * frametime, MOVE_NORMAL, e);
 		if(trace_ent == self)
 			Portal_TeleportPlayer(self, e);
 	}
@@ -314,12 +325,10 @@ void Portal_ClearAll(entity own)
 	if(own.portal_out)
 		Portal_Remove(own.portal_out);
 }
-float Portal_VerifyPortalAtTrace(vector ang)
+float Portal_VerifyPortal(vector org, vector ang)
 {
-	if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
-		return 0;
 	fixedmakevectors(ang);
-	if(!CheckWireframeBox(trace_endpos - 48 * v_right - 48 * v_up + 16 * v_forward, 96 * v_right, 96 * v_up, 16 * v_forward))
+	if(!CheckWireframeBox(org - 48 * v_right - 48 * v_up + 16 * v_forward, 96 * v_right, 96 * v_up, 16 * v_forward))
 		return 0;
 	return 1;
 }
@@ -335,7 +344,7 @@ entity Portal_Spawn(entity own, vector org, vector ang)
 	ang_x = -ang_x;
 	portal.angles = ang;
 	portal.think = Portal_Think;
-	portal.nextthink = time;
+	portal.nextthink = 0;
 	portal.fade_time = time + 10;
 	portal.portal_activatetime = time + 0.1;
 	setmodel(portal, "models/portal.md3");
@@ -347,6 +356,7 @@ entity Portal_Spawn(entity own, vector org, vector ang)
 	}
 
 	setsize(portal, '-48 -48 -48', '48 48 48');
+	Portal_MakeWaitingPortal(portal);
 
 	return portal;
 }
@@ -355,6 +365,7 @@ float Portal_SpawnInPortalAtTrace(entity own, vector dir, float portal_id_val)
 {
 	entity portal;
 	vector ang;
+	vector org;
 
 	if(trace_ent.classname == "player")
 	{
@@ -363,7 +374,10 @@ float Portal_SpawnInPortalAtTrace(entity own, vector dir, float portal_id_val)
 		trace_plane_normal = '0 0 1';
 	}
 
-	if(!Portal_VerifyPortalAtTrace(dir))
+	org = trace_endpos;
+	ang = fixedvectoangles2(trace_plane_normal, dir);
+
+	if((trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT) || !Portal_VerifyPortal(org, ang))
 	{
 		// cannot create a portal here
 		// clear all to make sure
@@ -371,8 +385,7 @@ float Portal_SpawnInPortalAtTrace(entity own, vector dir, float portal_id_val)
 		return 0;
 	}
 
-	ang = fixedvectoangles2(trace_plane_normal, dir);
-	portal = Portal_Spawn(own, trace_endpos, ang);
+	portal = Portal_Spawn(own, org, ang);
 	Portal_SetInPortal(own, portal);
 
 	return 1;
@@ -382,6 +395,7 @@ float Portal_SpawnOutPortalAtTrace(entity own, vector dir, float portal_id_val)
 {
 	entity portal;
 	vector ang;
+	vector org;
 
 	if(trace_ent.classname == "player")
 	{
@@ -392,7 +406,10 @@ float Portal_SpawnOutPortalAtTrace(entity own, vector dir, float portal_id_val)
 	else
 		dir = -1 * dir; // invert the sense of the second portal
 
-	if(!Portal_VerifyPortalAtTrace(dir))
+	org = trace_endpos;
+	ang = fixedvectoangles2(trace_plane_normal, dir);
+
+	if((trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT) || !Portal_VerifyPortal(org, ang))
 	{
 		// cannot create a portal here
 		// clear all to make sure
@@ -400,8 +417,7 @@ float Portal_SpawnOutPortalAtTrace(entity own, vector dir, float portal_id_val)
 		return 0;
 	}
 
-	ang = fixedvectoangles2(trace_plane_normal, dir);
-	portal = Portal_Spawn(own, trace_endpos, ang);
+	portal = Portal_Spawn(own, org, ang);
 	Portal_SetOutPortal(own, portal);
 
 	return 1;
