@@ -1,4 +1,45 @@
-//include "main.qh"
+entity porto;
+void Porto_Draw()
+{
+	vector v0, v1, v2, dir, ang;
+
+	if(activeweapon != WEP_PORTO)
+		return;
+
+	dir = view_forward;
+	v0 = view_origin;
+	traceline(v0, v0 + 65536 * dir, TRUE, world);
+	if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
+		return;
+	v1 = trace_endpos;
+
+	dir = dir - 2 * (dir * trace_plane_normal) * trace_plane_normal; // mirror dir at trace_plane_normal
+
+	ang = vectoangles(trace_plane_normal, dir);
+	ang_x = -ang_x;
+	makevectors(ang);
+	if(!CheckWireframeBox(v1 - 48 * v_right - 48 * v_up + 16 * v_forward, 96 * v_right, 96 * v_up, 16 * v_forward))
+		return;
+
+	traceline(v1, v1 + 65536 * dir, TRUE, world);
+	if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
+		return;
+	v2 = trace_endpos;
+
+	ang = vectoangles(trace_plane_normal, -1 * dir);
+	ang_x = -ang_x;
+	makevectors(ang);
+	if(!CheckWireframeBox(v2 - 48 * v_right - 48 * v_up + 16 * v_forward, 96 * v_right, 96 * v_up, 16 * v_forward))
+		return;
+
+	Draw_CylindricLine(v1, v2, 4, "", 1, 0, '1 0 0', 0.5, DRAWFLAG_NORMAL);
+}
+void Porto_Init()
+{
+	porto = spawn();
+	porto.classname = "porto";
+	porto.draw = Porto_Draw;
+}
 
 float drawtime;
 

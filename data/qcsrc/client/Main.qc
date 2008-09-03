@@ -187,6 +187,7 @@ void Playerchecker_Think()
 	self.nextthink = time + 0.2;
 }
 
+void Porto_Init();
 void PostInit(void)
 {
 	print(strcat("PostInit\n    maxclients = ", ftos(maxclients), "\n"));
@@ -196,6 +197,8 @@ void PostInit(void)
 	playerchecker = spawn();
 	playerchecker.think = Playerchecker_Think;
 	playerchecker.nextthink = time + 0.2;
+
+	Porto_Init();
 
 	postinit = true;
 }

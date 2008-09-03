@@ -7,6 +7,12 @@
 ===========================================================================
 */
 
+void W_SwitchWeapon_Force(entity e, float w)
+{
+	e.cnt = e.weapon ? e.weapon : e.switchweapon;
+	e.switchweapon = w;
+}
+
 .float antilag_debug;
 
 // VorteX: static frame globals
@@ -410,9 +416,7 @@ float weapon_prepareattack(float secondary, float attacktime)
 	
 	if (!weapon_action(self.weapon, WR_CHECKAMMO1 + secondary))
 	{
-		self.switchweapon = w_getbestweapon(self);
-		if (self.switchweapon != self.weapon)
-			self.cnt = self.weapon;
+		W_SwitchWeapon_Force(self, w_getbestweapon(self));
 		return FALSE;
 	}
 

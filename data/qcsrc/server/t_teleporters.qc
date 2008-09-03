@@ -1,5 +1,5 @@
 .entity pusher;
-void TeleportPlayer(entity teleporter, entity player, vector to, vector to_angles, vector to_velocity)
+void TeleportPlayer(entity teleporter, entity player, vector to, vector to_angles, vector to_velocity, vector telefragmin, vector telefragmax)
 {
 	entity head;
 	entity oldself;
@@ -29,6 +29,12 @@ void TeleportPlayer(entity teleporter, entity player, vector to, vector to_angle
 			float deathradius;
 			deathmin = player.absmin;
 			deathmax = player.absmax;
+			if(deathmin_x > telefragmin_x) deathmin_x = telefragmin_x;
+			if(deathmin_y > telefragmin_y) deathmin_y = telefragmin_y;
+			if(deathmin_z > telefragmin_z) deathmin_z = telefragmin_z;
+			if(deathmax_x < telefragmax_x) deathmax_x = telefragmax_x;
+			if(deathmax_y < telefragmax_y) deathmax_y = telefragmax_y;
+			if(deathmax_z < telefragmax_z) deathmax_z = telefragmax_z;
 			deathradius = max(vlen(deathmin), vlen(deathmax));
 			for(head = findradius(player.origin, deathradius); head; head = head.chain)
 				if(head != player)
@@ -89,7 +95,7 @@ void Teleport_Touch (void)
 	EXACTTRIGGER_TOUCH;
 
 	makevectors(self.enemy.mangle);
-	TeleportPlayer(self, other, self.enemy.origin + '0 0 1' * (1 - other.mins_z - 24), self.enemy.mangle, v_forward * vlen(other.velocity));
+	TeleportPlayer(self, other, self.enemy.origin + '0 0 1' * (1 - other.mins_z - 24), self.enemy.mangle, v_forward * vlen(other.velocity), '0 0 0', '0 0 0');
 
 	if(self.enemy.target)
 	{

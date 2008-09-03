@@ -101,7 +101,7 @@ void Portal_TeleportPlayer(entity teleporter, entity player)
 	fixedmakevectors(teleporter.enemy.mangle);
 	safe = teleporter.enemy.portal_safe_origin; // a valid player origin
 	step = to + ((safe - to) * v_forward) * v_forward;
-	tracebox(safe, PL_MIN, PL_MAX, step, MOVE_WORLDONLY, player);
+	tracebox(safe, PL_MIN, PL_MAX, step, MOVE_NOMONSTERS, player);
 	if(trace_startsolid)
 	{
 		bprint("'safe' teleport location is not safe!\n");
@@ -109,7 +109,7 @@ void Portal_TeleportPlayer(entity teleporter, entity player)
 		return;
 	}
 	safe = trace_endpos;
-	tracebox(safe, PL_MIN, PL_MAX, to, MOVE_WORLDONLY, player);
+	tracebox(safe, PL_MIN, PL_MAX, to, MOVE_NOMONSTERS, player);
 	if(trace_startsolid)
 		error("trace_endpos in solid!");
 	to = trace_endpos;
@@ -124,11 +124,11 @@ void Portal_TeleportPlayer(entity teleporter, entity player)
 		ang = Portal_Transform_Multiply(transform, player.mangle);
 	}
 
-	print("previous velocity: ", vtos(player.velocity), "\n");
-	print("previous origin: ", vtos(player.origin), "\n");
-	TeleportPlayer(teleporter, player, to, ang, Portal_Transform_Apply(transform, player.velocity));
-	print("new velocity: ", vtos(player.velocity), "\n");
-	print("new origin: ", vtos(player.origin), "\n");
+	TeleportPlayer(teleporter, player, to, ang, Portal_Transform_Apply(transform, player.velocity), teleporter.enemy.absmin, teleporter.enemy.absmax);
+
+	// reset fade counter
+	teleporter.portal_wants_to_vanish = 0;
+	teleporter.fade_time = time + 10;
 }
 
 float Portal_FindSafeOrigin(entity portal)
@@ -152,7 +152,11 @@ void Portal_Touch()
 	if(other.classname == "porto")
 		return;
 	if(time < self.portal_activatetime)
-		return;
+		if(other == self.owner)
+		{
+			self.portal_activatetime = time + 0.1;
+			return;
+		}
 	fixedmakevectors(self.mangle);
 	if((other.origin - self.origin) * v_forward < 0)
 		return;
@@ -163,10 +167,6 @@ void Portal_Touch()
 		return;
 	}
 	Portal_TeleportPlayer(self, other);
-
-	// reset fade counter
-	self.portal_wants_to_vanish = 0;
-	self.nextthink = time + 60;
 }
 
 void Portal_MakeBrokenPortal(entity portal)
@@ -208,14 +208,45 @@ void Portal_Connect(entity teleporter, entity destination)
 	destination.enemy = teleporter;
 	Portal_MakeInPortal(teleporter);
 	Portal_MakeOutPortal(destination);
-	teleporter.nextthink = time + 60;
-	destination.nextthink = time + 60;
+	teleporter.fade_time = time + 10;
+	destination.fade_time = time + 10;
 	teleporter.portal_wants_to_vanish = 0;
 	destination.portal_wants_to_vanish = 0;
 }
 
-void Portal_Vanish()
+void Portal_Think()
 {
+	entity e, o;
+	float m;
+
+	if(self.solid == SOLID_TRIGGER)
+	{
+		m = self.modelindex;
+		o = self.owner;
+		self.solid = SOLID_BBOX;
+		self.owner = world;
+		self.modelindex = 0;
+		FOR_EACH_PLAYER(e)
+		{
+			if(time < self.portal_activatetime)
+				if(e == o)
+					continue;
+			// if e would hit the portal in a frame...
+			// already teleport him
+			tracebox(e.origin, e.mins, e.maxs, e.origin + e.velocity * 3 * frametime, MOVE_NORMAL, e);
+			if(trace_ent == self)
+				Portal_TeleportPlayer(self, e);
+		}
+		self.solid = SOLID_TRIGGER;
+		self.owner = o;
+		self.modelindex = m;
+	}
+
+	self.nextthink = time;
+
+	if(time < self.fade_time)
+		return;
+
 	self.portal_wants_to_vanish = 1;
 
 	if(self.enemy)
@@ -237,31 +268,14 @@ void Portal_RequestVanish(entity portal)
 	self = portal;
 	if(self.enemy)
 		self.enemy.portal_wants_to_vanish = 1;
-	Portal_Vanish();
+	Portal_Think();
 	self = oldself;
-}
-
-float CheckWireframeBox(vector v0, vector dvx, vector dvy, vector dvz)
-{
-	traceline(v0, v0 + dvx, MOVE_NORMAL, world); if(trace_fraction < 1) return 0;
-	traceline(v0, v0 + dvy, MOVE_NORMAL, world); if(trace_fraction < 1) return 0;
-	traceline(v0, v0 + dvz, MOVE_NORMAL, world); if(trace_fraction < 1) return 0;
-	traceline(v0 + dvx, v0 + dvx + dvy, MOVE_NORMAL, world); if(trace_fraction < 1) return 0;
-	traceline(v0 + dvx, v0 + dvx + dvz, MOVE_NORMAL, world); if(trace_fraction < 1) return 0;
-	traceline(v0 + dvy, v0 + dvy + dvx, MOVE_NORMAL, world); if(trace_fraction < 1) return 0;
-	traceline(v0 + dvy, v0 + dvy + dvz, MOVE_NORMAL, world); if(trace_fraction < 1) return 0;
-	traceline(v0 + dvz, v0 + dvz + dvx, MOVE_NORMAL, world); if(trace_fraction < 1) return 0;
-	traceline(v0 + dvz, v0 + dvz + dvy, MOVE_NORMAL, world); if(trace_fraction < 1) return 0;
-	traceline(v0 + dvx + dvy, v0 + dvx + dvy + dvz, MOVE_NORMAL, world); if(trace_fraction < 1) return 0;
-	traceline(v0 + dvx + dvz, v0 + dvx + dvy + dvz, MOVE_NORMAL, world); if(trace_fraction < 1) return 0;
-	traceline(v0 + dvy + dvz, v0 + dvx + dvy + dvz, MOVE_NORMAL, world); if(trace_fraction < 1) return 0;
-	return 1;
 }
 
 entity Portal_Spawn(entity own, vector org, vector ang)
 {
 	fixedmakevectors(ang);
-	if(!CheckWireframeBox(org - 64 * v_right - 64 * v_up, 128 * v_right, 128 * v_up, 32 * v_forward))
+	if(!CheckWireframeBox(org - 48 * v_right - 48 * v_up + 16 * v_forward, 96 * v_right, 96 * v_up, 16 * v_forward))
 		return world;
 
 	entity portal;
@@ -272,8 +286,9 @@ entity Portal_Spawn(entity own, vector org, vector ang)
 	portal.mangle = ang;
 	ang_x = -ang_x;
 	portal.angles = ang;
-	portal.think = Portal_Vanish;
-	portal.nextthink = time + 60;
+	portal.think = Portal_Think;
+	portal.nextthink = time;
+	portal.fade_time = time + 10;
 	portal.portal_activatetime = time + 0.1;
 	setmodel(portal, "models/portal.md3");
 
@@ -283,13 +298,16 @@ entity Portal_Spawn(entity own, vector org, vector ang)
 		return world;
 	}
 
-	setsize(portal, '-64 -64 -64', '64 64 64');
+	setsize(portal, '-48 -48 -48', '48 48 48');
 
 	return portal;
 }
 
 float Portal_SpawnInPortalAtTrace(entity own, vector dir, float portal_id_val)
 {
+	if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
+		return 0;
+
 	if(trace_ent.classname == "player")
 	{
 		print("hit a player, adjusting...\n");
@@ -315,8 +333,6 @@ float Portal_SpawnInPortalAtTrace(entity own, vector dir, float portal_id_val)
 		own.portal_out = world;
 	}
 		
-	print("Plane normal: ", vtos(trace_plane_normal), "\n");
-	print("Portal angles: ", vtos(vectoangles(trace_plane_normal)), "\n");
 	own.portal_in = Portal_Spawn(own, trace_endpos + trace_plane_normal, fixedvectoangles2(trace_plane_normal, dir));
 	if(!own.portal_in)
 		return 0;
@@ -330,6 +346,9 @@ float Portal_SpawnInPortalAtTrace(entity own, vector dir, float portal_id_val)
 
 float Portal_SpawnOutPortalAtTrace(entity own, vector dir, float portal_id_val)
 {
+	if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
+		return 0;
+
 	if(trace_ent.classname == "player")
 	{
 		print("hit a player, adjusting...\n");
@@ -350,15 +369,12 @@ float Portal_SpawnOutPortalAtTrace(entity own, vector dir, float portal_id_val)
 		own.portal_out = world;
 	}
 		
-	print("Plane normal: ", vtos(trace_plane_normal), "\n");
-	print("Portal angles: ", vtos(vectoangles(trace_plane_normal)), "\n");
 	own.portal_out = Portal_Spawn(own, trace_endpos + trace_plane_normal, fixedvectoangles2(trace_plane_normal, -1 * dir));
 	if(!own.portal_out)
 		return 0;
 	own.portal_out.portal_id = portal_id_val;
 
 	Portal_Connect(own.portal_in, own.portal_out);
-	print("Portal transform: ", vtos(own.portal_in.portal_transform), "\n");
 
 	return 1;
 }

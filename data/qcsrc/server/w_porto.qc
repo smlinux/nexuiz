@@ -7,16 +7,19 @@ void W_Porto_Explode (void)
 
 void W_Porto_Touch1 (void)
 {
-	print(vtos(trace_plane_normal), "\n");
 	if(self.porto_grenade_id == 0)
 	{
 		self.porto_grenade_id = time;
 		if(!Portal_SpawnInPortalAtTrace(self.owner, self.velocity, self.porto_grenade_id))
+		{
+			self.porto_grenade_id = 0;
 			remove(self);
+		}
 	}
 	else
 	{
 		Portal_SpawnOutPortalAtTrace(self.owner, self.velocity, self.porto_grenade_id);
+		self.porto_grenade_id = 0;
 		remove(self);
 	}
 }
@@ -26,7 +29,7 @@ void W_Porto_Attack (void)
 	local entity gren;
 
 	if (cvar("g_use_ammunition"))
-		self.ammo_cells = self.ammo_cells - cvar("g_balance_porto_primary_ammo");
+		self.weapons = self.weapons - (self.weapons & WEPBIT_PORTO);
 	W_SetupShot (self, '0 0 0', FALSE, 4, "weapons/grenade_fire.wav");
 
 	//pointparticles(particleeffectnum("grenadelauncher_muzzleflash"), w_shotorg, w_shotdir * 1000, 1);
@@ -92,10 +95,6 @@ float w_porto(float req)
 	}
 	else if (req == WR_SETUP)
 		weapon_setup(WEP_PORTO);
-	else if (req == WR_CHECKAMMO1)
-		return self.ammo_cells >= cvar("g_balance_porto_primary_ammo");
-	else if (req == WR_CHECKAMMO2)
-		return FALSE;
 	else if (req == WR_SUICIDEMESSAGE)
 		w_deathtypestring = "did the impossible";
 	else if (req == WR_KILLMESSAGE)

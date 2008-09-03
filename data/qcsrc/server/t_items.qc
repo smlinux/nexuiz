@@ -226,9 +226,7 @@ void Item_Touch (void)
 	self = other;
 
 	if (_switchweapon)
-		self.switchweapon = w_getbestweapon(self);
-	if (self.switchweapon != self.weapon)
-		self.cnt = self.weapon;
+		W_SwitchWeapon_Force(self, w_getbestweapon(self));
 
 	self = oldself;
 
@@ -548,7 +546,7 @@ void weapon_defaultspawnfunc(float wpn, float weight)
 	var .float ammofield;
 	e = get_weaponinfo(wpn);
 
-	if(e.items)
+	if(e.items && e.items != IT_SUPERWEAPON)
 	{
 		ammofield = Item_CounterField(e.items);
 		if(!self.ammofield)

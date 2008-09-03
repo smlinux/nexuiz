@@ -3,10 +3,7 @@ void W_SwitchWeapon(float imp)
 {
 	if (self.weapon != imp)
 	if (client_hasweapon(self, imp, TRUE, TRUE))
-	{
-		self.cnt = self.weapon ? self.weapon : self.switchweapon;
-		self.switchweapon = imp;
-	}
+		W_SwitchWeapon_Force(self, imp);
 };
 
 float W_GetCycleWeapon(entity pl, string weaponorder, float dir, float complain)
@@ -157,7 +154,7 @@ void thrown_wep_think()
 // toss current weapon
 void W_ThrowWeapon(vector velo, vector delta, float doreduce)
 {
-	local float w, ammo, wb;
+	local float w, ammo, wb, wa;
 	local entity wep, e;
 	local .float ammofield;
 
@@ -187,28 +184,44 @@ void W_ThrowWeapon(vector velo, vector delta, float doreduce)
 	wep.velocity = velo; // e.velocity * 0.5 + v_forward * 750;
 	SUB_SetFade(wep, time + 20, 1);
 
-	ammofield = Item_CounterField(W_AmmoItemCode(w));
-	wb = W_WeaponBit(w);
-	if(!(e.weapons & wb))
+	wa = W_AmmoItemCode(w);
+	if(wa == IT_SUPERWEAPON || wa == 0)
 	{
-		remove(wep);
-		goto leave;
+		wb = W_WeaponBit(w);
+		if(!(e.weapons & wb))
+		{
+			remove(wep);
+			goto leave;
+		}
+		Item_SpawnByWeaponCode(w);
+		if(startitem_failed)
+			goto leave;
+		if(e.weapons & wb)
+			if(e.health >= 1)
+				sprint(e, strcat("You dropped the ^2", wep.netname, "\n"));
 	}
-	Item_SpawnByWeaponCode(w);
-	if(startitem_failed)
+	else
 	{
-		goto leave;
+		ammofield = Item_CounterField(wa);
+		wb = W_WeaponBit(w);
+		if(!(e.weapons & wb))
+		{
+			remove(wep);
+			goto leave;
+		}
+		Item_SpawnByWeaponCode(w);
+		if(startitem_failed)
+			goto leave;
+		if(doreduce)
+		{
+			ammo = min(e.ammofield, wep.ammofield);
+			wep.ammofield = ammo;
+			e.ammofield -= ammo;
+		}
+		if(e.weapons & wb)
+			if(e.health >= 1)
+				sprint(e, strcat("You dropped the ^2", wep.netname, " with ", ftos(wep.ammofield), " ammo", "\n"));
 	}
-	if(doreduce)
-	{
-		ammo = min(e.ammofield, wep.ammofield);
-		wep.ammofield = ammo;
-		e.ammofield -= ammo;
-	}
-
-	if(e.weapons & wb)
-		if(e.health >= 1)
-			sprint(e, strcat("You dropped the ^2", wep.netname, " with ", ftos(wep.ammofield), " ammo", "\n"));
 
 	wep.owner = e;
 	setorigin(wep, wep.origin);
@@ -217,10 +230,8 @@ void W_ThrowWeapon(vector velo, vector delta, float doreduce)
 	wep.classname = "droppedweapon";
 	wep.flags = wep.flags | FL_TOSSED;
 	e.weapons = e.weapons - (e.weapons & wb);
-	e.switchweapon = w_getbestweapon(e);
 	wep.colormap = e.colormap;
-	if (e.switchweapon != e.weapon)
-		e.cnt = e.weapon;
+	W_SwitchWeapon_Force(e, w_getbestweapon(e));
 
 :leave
 	self = e;
@@ -274,6 +285,9 @@ void W_WeaponFrame()
 		}
 	}
 
+	float wb;
+	wb = W_WeaponBit(self.weapon);
+
 	// call the think code which may fire the weapon
 	// and do so multiple times to resolve framerate dependency issues if the
 	// server framerate is very low and the weapon fire rate very high
@@ -282,7 +296,13 @@ void W_WeaponFrame()
 	while (c < 5)
 	{
 		c = c + 1;
-		weapon_action(self.weapon, WR_THINK);
+		if(wb && self.weapons & wb == 0)
+		{
+			W_SwitchWeapon_Force(self, w_getbestweapon(self));
+			wb = 0;
+		}
+		if(wb)
+			weapon_action(self.weapon, WR_THINK);
 		if (time + frametime * 0.5 >= self.weapon_nextthink)
 			self.weapon_think();
 	}
@@ -415,14 +435,14 @@ void Nixnex_GiveCurrentWeapon()
 void RegisterWeapons()
 {
 	// %weaponaddpoint
-	register_weapon(WEP_LASER,            w_laser,     0,          "laser",   "laser",           "Laser");
-	register_weapon(WEP_SHOTGUN,          w_shotgun,   IT_SHELLS,  "shotgun", "shotgun",         "Shotgun");
-	register_weapon(WEP_UZI,              w_uzi,       IT_NAILS,   "uzi",     "uzi",             "Machine Gun");
-	register_weapon(WEP_GRENADE_LAUNCHER, w_glauncher, IT_ROCKETS, "gl",      "grenadelauncher", "Mortar");
-	register_weapon(WEP_ELECTRO,          w_electro,   IT_CELLS,   "electro", "electro",         "Electro");
-	register_weapon(WEP_CRYLINK,          w_crylink,   IT_CELLS,   "crylink", "crylink",         "Crylink");
-	register_weapon(WEP_NEX,              w_nex,       IT_CELLS,   "nex",     "nex",             "Nex");
-	register_weapon(WEP_HAGAR,            w_hagar,     IT_ROCKETS, "hagar",   "hagar",           "Hagar");
-	register_weapon(WEP_ROCKET_LAUNCHER,  w_rlauncher, IT_ROCKETS, "rl",      "rocketlauncher",  "Rocket Launcher");
-	register_weapon(WEP_PORTO,            w_porto,     IT_CELLS,   "porto" ,  "porto",           "Port-O-Launch");
+	register_weapon(WEP_LASER,            w_laser,     0,              "laser",   "laser",           "Laser");
+	register_weapon(WEP_SHOTGUN,          w_shotgun,   IT_SHELLS,      "shotgun", "shotgun",         "Shotgun");
+	register_weapon(WEP_UZI,              w_uzi,       IT_NAILS,       "uzi",     "uzi",             "Machine Gun");
+	register_weapon(WEP_GRENADE_LAUNCHER, w_glauncher, IT_ROCKETS,     "gl",      "grenadelauncher", "Mortar");
+	register_weapon(WEP_ELECTRO,          w_electro,   IT_CELLS,       "electro", "electro",         "Electro");
+	register_weapon(WEP_CRYLINK,          w_crylink,   IT_CELLS,       "crylink", "crylink",         "Crylink");
+	register_weapon(WEP_NEX,              w_nex,       IT_CELLS,       "nex",     "nex",             "Nex");
+	register_weapon(WEP_HAGAR,            w_hagar,     IT_ROCKETS,     "hagar",   "hagar",           "Hagar");
+	register_weapon(WEP_ROCKET_LAUNCHER,  w_rlauncher, IT_ROCKETS,     "rl",      "rocketlauncher",  "Rocket Launcher");
+	register_weapon(WEP_PORTO,            w_porto,     IT_SUPERWEAPON, "porto" ,  "porto",           "Port-O-Launch");
 }

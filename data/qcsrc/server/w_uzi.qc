@@ -85,9 +85,7 @@ void uzi_fire1_02()
 	{
 		if (!weapon_action(self.weapon, WR_CHECKAMMO2))
 		{
-			self.switchweapon = w_getbestweapon(self);
-			if (self.switchweapon != self.weapon)
-				self.cnt = self.weapon;
+			W_SwitchWeapon_Force(self, w_getbestweapon(self));
 			w_ready();
 			return;
 		}

@@ -615,3 +615,21 @@ void compressShortVector_init()
 	}
 }
 
+#ifndef MENUQC
+float CheckWireframeBox(vector v0, vector dvx, vector dvy, vector dvz)
+{
+	traceline(v0, v0 + dvx, TRUE, world); if(trace_fraction < 1) return 0;
+	traceline(v0, v0 + dvy, TRUE, world); if(trace_fraction < 1) return 0;
+	traceline(v0, v0 + dvz, TRUE, world); if(trace_fraction < 1) return 0;
+	traceline(v0 + dvx, v0 + dvx + dvy, TRUE, world); if(trace_fraction < 1) return 0;
+	traceline(v0 + dvx, v0 + dvx + dvz, TRUE, world); if(trace_fraction < 1) return 0;
+	traceline(v0 + dvy, v0 + dvy + dvx, TRUE, world); if(trace_fraction < 1) return 0;
+	traceline(v0 + dvy, v0 + dvy + dvz, TRUE, world); if(trace_fraction < 1) return 0;
+	traceline(v0 + dvz, v0 + dvz + dvx, TRUE, world); if(trace_fraction < 1) return 0;
+	traceline(v0 + dvz, v0 + dvz + dvy, TRUE, world); if(trace_fraction < 1) return 0;
+	traceline(v0 + dvx + dvy, v0 + dvx + dvy + dvz, TRUE, world); if(trace_fraction < 1) return 0;
+	traceline(v0 + dvx + dvz, v0 + dvx + dvy + dvz, TRUE, world); if(trace_fraction < 1) return 0;
+	traceline(v0 + dvy + dvz, v0 + dvx + dvy + dvz, TRUE, world); if(trace_fraction < 1) return 0;
+	return 1;
+}
+#endif
