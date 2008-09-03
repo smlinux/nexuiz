@@ -620,7 +620,7 @@ void register_dummy_weapon()
 	dummy_weapon_info.mdl = "";
 	dummy_weapon_info.model = "";
 	dummy_weapon_info.spawnflags = 0;
-	dummy_weapon_info.impulse = 0;
+	dummy_weapon_info.impulse = -1;
 }
 entity get_weaponinfo(float id)
 {

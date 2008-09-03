@@ -118,8 +118,9 @@ float button_zoom;
 float spectatorbutton_zoom;
 float button_attack2;
 float activeweapon;
-float minstagib;
 float current_viewzoom;
 float zoomin_effect;
 float ignore_plus_zoom;
 float ignore_minus_zoom;
+
+float weaponimpulse[24];

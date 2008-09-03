@@ -626,10 +626,11 @@ void Net_ReadScoresInfo()
 
 void Net_ReadInit()
 {
+	float i;
 	csqc_revision = ReadShort();
 	maxclients = ReadByte();
-	minstagib = ReadByte();
-
+	for(i = 0; i < 24; ++i)
+		weaponimpulse[i] = ReadByte() - 1;
 	CSQC_CheckRevision();
 }
 

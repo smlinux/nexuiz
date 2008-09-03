@@ -15,7 +15,8 @@
 // Revision 14: laser
 // Revision 15: zoom
 // Revision 16: multi-weapons
-#define CSQC_REVISION 16
+// Revision 17: multi-weaponimpulses
+#define CSQC_REVISION 17
 
 // probably put these in common/
 // so server/ and client/ can be synced better

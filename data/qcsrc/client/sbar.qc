@@ -27,10 +27,23 @@ void Sbar_FinaleOverlay()
 	MapVote_Draw();
 }
 
+float weaponspace[10];
+void Sbar_DrawWeapon_Clear()
+{
+	float idx;
+	for(idx = 0; idx < 10; ++idx)
+		weaponspace[idx] = 0;
+}
 void Sbar_DrawWeapon(float nr, float fade, float active)
 {
 	vector pos, vsize, color;
-	float value;
+	float value, idx, imp, sp;
+
+	imp = weaponimpulse[nr];
+	if(imp == 0)
+		idx = 9;
+	else
+		idx = imp - 1;
 	
 	value = (active) ? 1 : 0.6;
 	color_x = color_y = color_z = value;
@@ -39,9 +52,12 @@ void Sbar_DrawWeapon(float nr, float fade, float active)
 	{
 		// width = 300, height = 100
 		const float w_width = 32, w_height = 12, w_space = 2, font_size = 8;
+
+		sp = weaponspace[idx] + 1;
+		weaponspace[idx] = sp;
 		
-		pos_x = (vid_conwidth - w_width * 9) * 0.5 + w_width * nr;
-		pos_y = (vid_conheight - w_height);
+		pos_x = (vid_conwidth - w_width * 9) * 0.5 + w_width * idx;
+		pos_y = (vid_conheight - w_height * sp);
 		pos_z = 0;
 		vsize_x = w_width;
 		vsize_y = w_height;
@@ -52,8 +68,7 @@ void Sbar_DrawWeapon(float nr, float fade, float active)
 		vsize_x = font_size;
 		vsize_y = font_size;
 		vsize_z = 0;
-		drawstring(pos, ftos(nr+1), vsize, '1 1 0', sbar_alpha_fg, 0);
-
+		drawstring(pos, ftos(imp), vsize, '1 1 0', sbar_alpha_fg, 0);
 	}
 	else
 	{
@@ -1412,8 +1427,10 @@ void Sbar_Draw (void)
 				fade = bound(0.7, fade, 1);
 
 				x = 1.0;
-				for(i = WEP_FIRST; i <= WEP_LAST; ++i)
+				Sbar_DrawWeapon_Clear();
+				for(i = 1; i <= 24; ++i)
 				{
+					if(weaponimpulse[i-1] >= 0)
 					if(stat_weapons & x)
 					{
 						Sbar_DrawWeapon(i-1, fade, (i == activeweapon));
@@ -1497,8 +1514,10 @@ void Sbar_Draw (void)
 				fade = 3 - 2 * (time - weapontime);
 
 				x = 1.0;
+				Sbar_DrawWeapon_Clear();
 				for(i = WEP_FIRST; i <= WEP_LAST; ++i)
 				{
+					if(weaponimpulse[i-1] >= 0)
 					if(stat_weapons & x)
 					{
 						Sbar_DrawWeapon(i-1, fade, (i == activeweapon));

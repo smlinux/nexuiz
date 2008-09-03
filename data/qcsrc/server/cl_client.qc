@@ -771,6 +771,7 @@ Send whatever CSQC needs NOW and cannot wait for SendServerInfo to happen...
 */
 void SendCSQCInfo(void)
 {
+	float i;
 	if(clienttype(self) != CLIENTTYPE_REAL)
 		return;
 	msg_entity = self;
@@ -778,7 +779,8 @@ void SendCSQCInfo(void)
 	WriteByte(MSG_ONE, TE_CSQC_INIT);
 	WriteShort(MSG_ONE, CSQC_REVISION);
 	WriteByte(MSG_ONE, maxclients);
-	WriteByte(MSG_ONE, g_minstagib);
+	for(i = 1; i <= 24; ++i)
+		WriteByte(MSG_ONE, (get_weaponinfo(i)).impulse + 1);
 }
 
 /*

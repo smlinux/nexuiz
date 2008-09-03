@@ -94,7 +94,7 @@ vector GetCurrentFov(float fov)
 			zoomspeed = 3.5;
 
 	zoomdir = button_zoom;
-	if(activeweapon == 7 && !minstagib)
+	if(activeweapon == WEP_NEX)
 		zoomdir += button_attack2;
 	if(spectatee_status > 0 || isdemo())
 	{

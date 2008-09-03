@@ -3,7 +3,7 @@ void W_MinstaNex_Attack (void)
 	float flying;
 	flying = IsFlying(self); // do this BEFORE to make the trace values from FireRailgunBullet last
 
-	W_SetupShot (self, '25 4 -4', TRUE, 5, "weapons/nexfire.wav");
+	W_SetupShot (self, '25 8 -4', TRUE, 5, "weapons/nexfire.wav");
 
 	yoda = 0;
 	FireRailgunBullet (w_shotorg, w_shotorg + w_shotdir * MAX_SHOT_DISTANCE, 1000, 800, WEP_MINSTANEX);
@@ -16,7 +16,7 @@ void W_MinstaNex_Attack (void)
 	pointparticles(particleeffectnum("nex_muzzleflash"), w_shotorg, w_shotdir * 1000, 1);
 
 	// beam effect
-	trailparticles(world, particleeffectnum("nex_beam"), w_shotorg, trace_endpos);
+	trailparticles(world, particleeffectnum("TE_TEI_G3"), w_shotorg, trace_endpos);
 	// flash and burn the wall
 	if (trace_ent.solid == SOLID_BSP && !(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT))
 		pointparticles(particleeffectnum("nex_impact"), trace_endpos - w_shotdir * 6, '0 0 0', 1);
