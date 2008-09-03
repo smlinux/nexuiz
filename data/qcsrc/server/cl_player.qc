@@ -504,6 +504,7 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 			kh_Key_DropAll(self, FALSE);
 		else
 			kh_Key_DropAll(self, TRUE);
+		Portal_ClearAll(self);
 		if(self.flagcarried)
 			DropFlag(self.flagcarried);
 		// clear waypoints

@@ -401,6 +401,8 @@ void PutObserverInServer (void)
 	DropAllRunes(self);
 	kh_Key_DropAll(self, TRUE);
 
+	Portal_ClearAll(self);
+
 	if(self.flagcarried)
 		DropFlag(self.flagcarried);
 
@@ -1251,6 +1253,8 @@ void ClientDisconnect (void)
 
 	DropAllRunes(self);
 	kh_Key_DropAll(self, TRUE);
+
+	Portal_ClearAll(self);
 
 	if(self.flagcarried)
 		DropFlag(self.flagcarried);
