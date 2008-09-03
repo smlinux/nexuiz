@@ -175,6 +175,7 @@ void Portal_MakeBrokenPortal(entity portal)
 	portal.touch = SUB_Null;
 	portal.effects = 0;
 	portal.colormod = '1 1 1';
+	portal.nextthink = 0;
 }
 
 void Portal_MakeInPortal(entity portal)
@@ -183,6 +184,7 @@ void Portal_MakeInPortal(entity portal)
 	portal.touch = Portal_Touch;
 	portal.effects = EF_RED;
 	portal.colormod = '1 0 0';
+	portal.nextthink = time;
 }
 
 void Portal_MakeOutPortal(entity portal)
@@ -191,6 +193,7 @@ void Portal_MakeOutPortal(entity portal)
 	portal.touch = SUB_Null;
 	portal.effects = EF_STARDUST;
 	portal.colormod = '0 0 1';
+	portal.nextthink = 0;
 }
 
 void Portal_Disconnect(entity teleporter, entity destination)
@@ -214,84 +217,116 @@ void Portal_Connect(entity teleporter, entity destination)
 	destination.portal_wants_to_vanish = 0;
 }
 
+void Portal_Remove(entity portal)
+{
+	entity e;
+	e = portal.enemy;
+
+	if(e)
+	{
+		Portal_Disconnect(portal, e);
+		Portal_Remove(e);
+	}
+
+	if(portal == portal.owner.portal_in)
+		portal.owner.portal_in = world;
+	if(portal == portal.owner.portal_out)
+		portal.owner.portal_out = world;
+	portal.owner = world;
+
+	// makes the portal vanish
+	Portal_MakeBrokenPortal(portal);
+	SUB_SetFade(portal, time, 0.5);
+}
+
 void Portal_Think()
 {
 	entity e, o;
-	float m;
 
-	if(self.solid == SOLID_TRIGGER)
+	if(self.solid != SOLID_TRIGGER)
+		error("Portal_Think called for a portal that should not be thinking");
+
+	o = self.owner;
+	self.solid = SOLID_BBOX;
+	self.owner = world;
+	FOR_EACH_PLAYER(e)
 	{
-		m = self.modelindex;
-		o = self.owner;
-		self.solid = SOLID_BBOX;
-		self.owner = world;
-		self.modelindex = 0;
-		FOR_EACH_PLAYER(e)
-		{
-			if(time < self.portal_activatetime)
-				if(e == o)
-					continue;
-			// if e would hit the portal in a frame...
-			// already teleport him
-			tracebox(e.origin, e.mins, e.maxs, e.origin + e.velocity * 3 * frametime, MOVE_NORMAL, e);
-			if(trace_ent == self)
-				Portal_TeleportPlayer(self, e);
-		}
-		self.solid = SOLID_TRIGGER;
-		self.owner = o;
-		self.modelindex = m;
+		if(time < self.portal_activatetime)
+			if(e == o)
+				continue;
+		// if e would hit the portal in a frame...
+		// already teleport him
+		tracebox(e.origin, e.mins, e.maxs, e.origin + e.velocity * 3 * frametime, MOVE_NORMAL, e);
+		if(trace_ent == self)
+			Portal_TeleportPlayer(self, e);
 	}
+	self.solid = SOLID_TRIGGER;
+	self.owner = o;
 
 	self.nextthink = time;
 
-	if(time < self.fade_time)
-		return;
-
-	self.portal_wants_to_vanish = 1;
-
-	if(self.enemy)
-		if(!self.enemy.portal_wants_to_vanish)
-			return;
-
-	SUB_SetFade(self, time + 1, 1);
-	if(self.enemy)
-	{
-		SUB_SetFade(self.enemy, time + 1, 1);
-		Portal_Disconnect(self, self.enemy);
-	}
-	if(self.owner.portal_in == self)
-	{
-		self.owner.portal_in = world;
-		print("fixed in-portal ownership\n");
-	}
-	if(self.owner.portal_out == self)
-	{
-		self.owner.portal_out = world;
-		print("fixed out-portal ownership\n");
-	}
+	if(time > self.fade_time)
+		Portal_Remove(self);
 }
 
-void Portal_RequestVanish(entity portal)
+
+// cleanup:
+//   when creating in-portal:
+//     disconnect
+//     clear existing out-portal
+//     make existing in-portal an out-portal and connect
+//     set as in-portal
+//   when creating out-portal:
+//     disconnect
+//     clear existing out-portal
+//     set as out-portal
+//   when player dies:
+//     disconnect portals
+//     clear both portals
+//   after timeout of in-portal:
+//     disconnect portals
+//     clear both portals
+//   TODO: ensure only one portal shot at once
+float Portal_SetInPortal(entity own, entity portal)
 {
-	entity oldself;
-	oldself = self;
-	self = portal;
-	if(self.enemy)
-	{
-		self.enemy.portal_wants_to_vanish = 1;
-		self.enemy.fade_time = time;
-	}
-	self.fade_time = time;
-	Portal_Think();
-	self = oldself;
+	if(own.portal_out)
+		Portal_Remove(own.portal_out);
+	if(own.portal_in)
+		own.portal_out = own.portal_in;
+	own.portal_in = portal;
+	if(own.portal_out)
+		Portal_Connect(own.portal_in, own.portal_out);
+	return 1;
+}
+float Portal_SetOutPortal(entity own, entity portal)
+{
+	if(!own.portal_in)
+		return 0;
+	if(own.portal_out)
+		Portal_Remove(own.portal_out);
+	own.portal_out = portal;
+	Portal_Connect(own.portal_in, own.portal_out);
+	return 1;
+}
+void Portal_ClearAll(entity own)
+{
+	if(own.portal_in)
+		Portal_Remove(own.portal_in);
+	if(own.portal_out)
+		Portal_Remove(own.portal_out);
+}
+float Portal_VerifyPortalAtTrace(vector ang)
+{
+	if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
+		return 0;
+	fixedmakevectors(ang);
+	if(!CheckWireframeBox(trace_endpos - 48 * v_right - 48 * v_up + 16 * v_forward, 96 * v_right, 96 * v_up, 16 * v_forward))
+		return 0;
+	return 1;
 }
 
 entity Portal_Spawn(entity own, vector org, vector ang)
 {
-	fixedmakevectors(ang);
-	if(!CheckWireframeBox(org - 48 * v_right - 48 * v_up + 16 * v_forward, 96 * v_right, 96 * v_up, 16 * v_forward))
-		return world;
-
 	entity portal;
 	portal = spawn();
 	portal.classname = "portal";
@@ -319,8 +354,8 @@ entity Portal_Spawn(entity own, vector org, vector ang)
 
 float Portal_SpawnInPortalAtTrace(entity own, vector dir, float portal_id_val)
 {
-	if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
-		return 0;
+	entity portal;
+	vector ang;
 
 	if(trace_ent.classname == "player")
 	{
@@ -329,85 +364,46 @@ float Portal_SpawnInPortalAtTrace(entity own, vector dir, float portal_id_val)
 		trace_plane_normal = '0 0 1';
 	}
 
-	if(own.portal_in)
+	if(!Portal_VerifyPortalAtTrace(dir))
 	{
-		if(own.portal_out)
-		{
-			Portal_Disconnect(own.portal_in, own.portal_out);
-			Portal_RequestVanish(own.portal_out);
-		}
-		own.portal_out = own.portal_in;
-		own.portal_in = world;
-		own.portal_out.portal_id = portal_id_val;
-	}
-	else if(own.portal_out)
-	{
-		print("this DID happen, no idea why (1)\n");
-		Portal_RequestVanish(own.portal_out);
-		own.portal_out = world;
-	}
-		
-	own.portal_in = Portal_Spawn(own, trace_endpos + trace_plane_normal, fixedvectoangles2(trace_plane_normal, dir));
-	if(!own.portal_in)
-	{
-		if(own.portal_out)
-		{
-			Portal_RequestVanish(own.portal_out);
-			own.portal_out = world;
-		}
+		// cannot create a portal here
+		// clear all to make sure
+		Portal_ClearAll(own);
 		return 0;
 	}
-	own.portal_in.portal_id = portal_id_val;
 
-	if(own.portal_out)
-		Portal_Connect(own.portal_in, own.portal_out);
+	ang = fixedvectoangles2(trace_plane_normal, dir);
+	portal = Portal_Spawn(own, trace_endpos, ang);
+	Portal_SetInPortal(own, portal);
 
 	return 1;
 }
 
 float Portal_SpawnOutPortalAtTrace(entity own, vector dir, float portal_id_val)
 {
-	if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
-	{
-		if(own.portal_in.portal_id == portal_id_val)
-		{
-			Portal_RequestVanish(own.portal_in);
-			own.portal_in = world;
-		}
-		return 0;
-	}
+	entity portal;
+	vector ang;
 
 	if(trace_ent.classname == "player")
 	{
 		print("hit a player, adjusting...\n");
 		trace_endpos = trace_ent.origin + '0 0 1' * PL_MIN_z;
 		trace_plane_normal = '0 0 1';
-		dir = -1 * dir; // fix orientation
 	}
+	else
+		dir = -1 * dir; // invert the sense of the second portal
 
-	if(!own.portal_in)
-		return 0; // sorry
-
-	if(own.portal_in.portal_id != portal_id_val)
-		return 0; // we need MATCHING portals
-
-	if(own.portal_out)
+	if(!Portal_VerifyPortalAtTrace(dir))
 	{
-		Portal_Disconnect(own.portal_in, own.portal_out);
-		Portal_RequestVanish(own.portal_out);
-		own.portal_out = world;
-	}
-		
-	own.portal_out = Portal_Spawn(own, trace_endpos + trace_plane_normal, fixedvectoangles2(trace_plane_normal, -1 * dir));
-	if(!own.portal_out)
-	{
-		Portal_RequestVanish(own.portal_in);
-		own.portal_in = world;
+		// cannot create a portal here
+		// clear all to make sure
+		Portal_ClearAll(own);
 		return 0;
 	}
-	own.portal_out.portal_id = portal_id_val;
 
-	Portal_Connect(own.portal_in, own.portal_out);
+	ang = fixedvectoangles2(trace_plane_normal, dir);
+	portal = Portal_Spawn(own, trace_endpos, ang);
+	Portal_SetOutPortal(own, portal);
 
 	return 1;
 }

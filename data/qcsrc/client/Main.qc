@@ -766,6 +766,7 @@ void Net_ReadSpawn()
 // CSQC_Parse_TempEntity : Handles all temporary entity network data in the CSQC layer.
 // You must ALWAYS first acquire the temporary ID, which is sent as a byte.
 // Return value should be 1 if CSQC handled the temporary entity, otherwise return 0 to have the engine process the event.
+void Net_ReadHoldAngles();
 float CSQC_Parse_TempEntity()
 {
 	local float bHandled;
@@ -815,6 +816,10 @@ float CSQC_Parse_TempEntity()
 			break;
 		case TE_CSQC_ZOOMNOTIFY:
 			Net_ReadZoomNotify();
+			bHandled = true;
+			break;
+		case TE_CSQC_HOLDANGLES:
+			Net_ReadHoldAngles();
 			bHandled = true;
 			break;
 		default:

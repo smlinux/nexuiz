@@ -1,3 +1,21 @@
+float angles_held_status[24];
+vector angles_held[24];
+void Net_ReadHoldAngles()
+{
+	float wpn;
+	vector v;
+	wpn = ReadByte();
+	--wpn;
+	angles_held_status[wpn] = ReadByte();
+	if(angles_held_status[wpn])
+	{
+		v_x = ReadCoord();
+		v_y = ReadCoord();
+		v_z = 0;
+		angles_held[wpn] = v;
+	}
+}
+
 entity porto;
 void Porto_Draw()
 {
@@ -7,6 +25,13 @@ void Porto_Draw()
 		return;
 
 	dir = view_forward;
+
+	if(angles_held_status[WEP_PORTO-1])
+	{
+		makevectors(angles_held[WEP_PORTO-1]);
+		dir = v_forward;
+	}
+
 	v0 = view_origin;
 	traceline(v0, v0 + 65536 * dir, TRUE, world);
 	if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
