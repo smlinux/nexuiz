@@ -134,6 +134,9 @@ void ImpulseCommands (void)
 				case 13:
 					W_SwitchWeapon (w_getbestweapon(self));
 					break;
+				case 14:
+					W_NextWeaponOnImpulse(0);
+					break;
 				case 17:
 					if (!g_minstagib)
 						W_ThrowWeapon(W_CalculateProjectileVelocity(self.velocity, v_forward * 750), '0 0 0', TRUE);

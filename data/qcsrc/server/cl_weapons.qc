@@ -20,7 +20,7 @@ float W_GetCycleWeapon(entity pl, string weaponorder, float dir, float imp, floa
 	{
 		weaponwant = stof(argv(i));
 
-		if(imp)
+		if(imp >= 0)
 			if((get_weaponinfo(weaponwant)).impulse != imp)
 				continue;
 
@@ -55,7 +55,7 @@ float W_GetCycleWeapon(entity pl, string weaponorder, float dir, float imp, floa
 		for(i = 0; i < n; ++i)
 		{
 			weaponwant = stof(argv(i));
-			if(imp)
+			if(imp >= 0)
 				if((get_weaponinfo(weaponwant)).impulse != imp)
 					continue;
 			client_hasweapon(pl, weaponwant, TRUE, TRUE);
@@ -67,7 +67,7 @@ float W_GetCycleWeapon(entity pl, string weaponorder, float dir, float imp, floa
 void W_CycleWeapon(string weaponorder, float dir)
 {
 	float w;
-	w = W_GetCycleWeapon(self, weaponorder, dir, 0, 1);
+	w = W_GetCycleWeapon(self, weaponorder, dir, -1, 1);
 	if(w > 0)
 		W_SwitchWeapon(w);
 }
@@ -135,7 +135,7 @@ string W_FixWeaponOrder_ForceComplete(string order)
 
 float w_getbestweapon(entity e)
 { 
-	return W_GetCycleWeapon(e, e.cvar_cl_weaponpriority, 0, 0, 0);
+	return W_GetCycleWeapon(e, e.cvar_cl_weaponpriority, 0, -1, 0);
 };
 
 // generic weapons table
@@ -460,6 +460,6 @@ void RegisterWeapons()
 	register_weapon(WEP_NEX,              w_nex,       IT_CELLS,       7, 1, "nex",     "nex",             "Nex");
 	register_weapon(WEP_HAGAR,            w_hagar,     IT_ROCKETS,     8, 1, "hagar",   "hagar",           "Hagar");
 	register_weapon(WEP_ROCKET_LAUNCHER,  w_rlauncher, IT_ROCKETS,     9, 1, "rl",      "rocketlauncher",  "Rocket Launcher");
-	register_weapon(WEP_PORTO,            w_porto,     IT_SUPERWEAPON, 1, 0, "porto" ,  "porto",           "Port-O-Launch");
+	register_weapon(WEP_PORTO,            w_porto,     IT_SUPERWEAPON, 0, 0, "porto" ,  "porto",           "Port-O-Launch");
 	register_weapon(WEP_MINSTANEX,        w_minstanex, IT_CELLS,       7, 0, "nex",     "minstanex",       "MinstaNex");
 }
