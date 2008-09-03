@@ -450,6 +450,7 @@ void Nixnex_GiveCurrentWeapon()
 
 void RegisterWeapons()
 {
+	register_dummy_weapon();
 	// %weaponaddpoint
 	register_weapon(WEP_LASER,            w_laser,     0,              1, 1, "laser",     "laser",           "Laser");
 	register_weapon(WEP_SHOTGUN,          w_shotgun,   IT_SHELLS,      2, 1, "shotgun",   "shotgun",         "Shotgun");

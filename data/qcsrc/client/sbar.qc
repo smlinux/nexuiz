@@ -28,11 +28,23 @@ void Sbar_FinaleOverlay()
 }
 
 float weaponspace[10];
+float weapon_first, weapon_last;
 void Sbar_DrawWeapon_Clear()
 {
 	float idx;
+	weapon_first = -2;
+	weapon_last = -1;
 	for(idx = 0; idx < 10; ++idx)
 		weaponspace[idx] = 0;
+	for(idx = 0; idx <= 23; ++idx)
+	{
+		if(weaponimpulse[idx] >= 0)
+		{
+			if(weapon_first < 0)
+				weapon_first = idx;
+			weapon_last = idx;
+		}
+	}
 }
 void Sbar_DrawWeapon(float nr, float fade, float active)
 {
@@ -76,11 +88,14 @@ void Sbar_DrawWeapon(float nr, float fade, float active)
 		const float w2_width = 300, w2_height = 100, w2_space = 10;
 		const float w2_scale = 0.4;
 
-		pos_x = vid_conwidth - (w2_width + w2_space) * w2_scale;
-		pos_y = (w2_height + w2_space) * w2_scale * nr + w2_space;
+		float f;
+		f = 9 / (weapon_last + 1 - weapon_first);
+
+		pos_x = vid_conwidth - (w2_width + w2_space) * w2_scale * f;
+		pos_y = (w2_height + w2_space) * w2_scale * nr * f + w2_space;
 		pos_z = 0;
-		vsize_x = w2_width * w2_scale;
-		vsize_y = w2_height * w2_scale;
+		vsize_x = w2_width * w2_scale * f;
+		vsize_y = w2_height * w2_scale * f;
 		vsize_z = 0;
 		
 		drawpic(pos, strcat("gfx/inv_weapon", ftos(nr)), vsize, color, value * fade * sbar_alpha_fg, 0);
@@ -1505,7 +1520,7 @@ void Sbar_Draw (void)
 			{
 			
 				stat_items = getstati(STAT_ITEMS);
-				stat_weapons = getstati(STAT_ITEMS);
+				stat_weapons = getstati(STAT_WEAPONS);
 			
 				sbar_x = (vid_conwidth - 640.0)*0.5;
 				sbar_y = vid_conheight - 47;
@@ -1515,7 +1530,7 @@ void Sbar_Draw (void)
 
 				x = 1.0;
 				Sbar_DrawWeapon_Clear();
-				for(i = WEP_FIRST; i <= WEP_LAST; ++i)
+				for(i = 1; i <= 24; ++i)
 				{
 					if(weaponimpulse[i-1] >= 0)
 					if(stat_weapons & x)
