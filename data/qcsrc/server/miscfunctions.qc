@@ -828,7 +828,7 @@ void readlevelcvars(void)
 			e = get_weaponinfo(i);
 			if(!(e.weapon))
 				continue;
-			if((!(e.items & IT_SUPERWEAPON) && (g_lms || g_tourney)) || cvar(strcat("g_start_weapon_", e.netname)))
+			if(((e.spawnflags & 1) && (g_lms || g_tourney)) || cvar(strcat("g_start_weapon_", e.netname)))
 			{
 				start_weapons |= e.weapons;
 				start_switchweapon = e.weapon;
