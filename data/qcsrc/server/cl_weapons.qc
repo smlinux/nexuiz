@@ -108,13 +108,13 @@ string W_FixWeaponOrder(string order, float complete)
 	if(complete)
 	{
 		n = tokenize(neworder);
-		for(w = WEP_FIRST; w <= WEP_LAST; ++w)
+		for(w = WEP_LAST; w >= WEP_FIRST; --w)
 		{
 			for(i = 0; i < n; ++i)
 				if(stof(argv(i)) == w)
 					break;
 			if(i == n) // not found
-				neworder = strcat(ftos(w), " ", neworder);
+				neworder = strcat(neworder, ftos(w), " ");
 		}
 	}
 	
