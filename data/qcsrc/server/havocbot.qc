@@ -340,6 +340,7 @@ void havocbot_chooseweapon()
 	local float uzi     ; uzi      =-1000;
 	local float shotgun ; shotgun  =-1000;
 	local float laser   ; laser    =-1000;
+	local float minstanex ; minstanex =-1000;
 	local float currentscore;
 	local float bestscore; bestscore = 0;
 	local float bestweapon; bestweapon=self.switchweapon;
@@ -355,6 +356,9 @@ void havocbot_chooseweapon()
 	//	*(Spread change of hit) // if it applies
 	//	*(Penality for target beeing in air)
 	// %weaponaddpoint
+	if (client_hasweapon(self, WEP_MINSTANEX, TRUE, FALSE))
+		minstanex = (1000/cvar("g_balance_minstanex_refire")*1.0)
+			* (0.5);
 	if (client_hasweapon(self, WEP_ROCKET_LAUNCHER, TRUE, FALSE))
 		rocket = (cvar("g_balance_rocketlauncher_damage")/cvar("g_balance_rocketlauncher_refire")*0.75)
 			* bound(0,(cvar("g_balance_rocketlauncher_speed")/distance*maxdelaytime),1)*1.5;
@@ -401,15 +405,16 @@ void havocbot_chooseweapon()
 	dprint("Laser   :", ftos(laser   ), "\n\n");
 	*/
 	currentscore = -1;
-	w = WEP_ROCKET_LAUNCHER  ;s = rocket ;if (s > bestscore){bestscore = s;bestweapon = w;} if (self.switchweapon == w) currentscore = s;
-	w = WEP_NEX              ;s = nex    ;if (s > bestscore){bestscore = s;bestweapon = w;} if (self.switchweapon == w) currentscore = s;
-	w = WEP_HAGAR            ;s = hagar  ;if (s > bestscore){bestscore = s;bestweapon = w;} if (self.switchweapon == w) currentscore = s;
-	w = WEP_GRENADE_LAUNCHER ;s = grenade;if (s > bestscore){bestscore = s;bestweapon = w;} if (self.switchweapon == w) currentscore = s;
-	w = WEP_ELECTRO          ;s = electro;if (s > bestscore){bestscore = s;bestweapon = w;} if (self.switchweapon == w) currentscore = s;
-	w = WEP_CRYLINK          ;s = crylink;if (s > bestscore){bestscore = s;bestweapon = w;} if (self.switchweapon == w) currentscore = s;
-	w = WEP_UZI              ;s = uzi    ;if (s > bestscore){bestscore = s;bestweapon = w;} if (self.switchweapon == w) currentscore = s;
-	w = WEP_SHOTGUN          ;s = shotgun;if (s > bestscore){bestscore = s;bestweapon = w;} if (self.switchweapon == w) currentscore = s;
-	w = WEP_LASER            ;s = laser  ;if (s > bestscore){bestscore = s;bestweapon = w;} if (self.switchweapon == w) currentscore = s;
+	w = WEP_MINSTANEX        ;s = minstanex;if (s > bestscore){bestscore = s;bestweapon = w;} if (self.switchweapon == w) currentscore = s;
+	w = WEP_ROCKET_LAUNCHER  ;s = rocket   ;if (s > bestscore){bestscore = s;bestweapon = w;} if (self.switchweapon == w) currentscore = s;
+	w = WEP_NEX              ;s = nex      ;if (s > bestscore){bestscore = s;bestweapon = w;} if (self.switchweapon == w) currentscore = s;
+	w = WEP_HAGAR            ;s = hagar    ;if (s > bestscore){bestscore = s;bestweapon = w;} if (self.switchweapon == w) currentscore = s;
+	w = WEP_GRENADE_LAUNCHER ;s = grenade  ;if (s > bestscore){bestscore = s;bestweapon = w;} if (self.switchweapon == w) currentscore = s;
+	w = WEP_ELECTRO          ;s = electro  ;if (s > bestscore){bestscore = s;bestweapon = w;} if (self.switchweapon == w) currentscore = s;
+	w = WEP_CRYLINK          ;s = crylink  ;if (s > bestscore){bestscore = s;bestweapon = w;} if (self.switchweapon == w) currentscore = s;
+	w = WEP_UZI              ;s = uzi      ;if (s > bestscore){bestscore = s;bestweapon = w;} if (self.switchweapon == w) currentscore = s;
+	w = WEP_SHOTGUN          ;s = shotgun  ;if (s > bestscore){bestscore = s;bestweapon = w;} if (self.switchweapon == w) currentscore = s;
+	w = WEP_LASER            ;s = laser    ;if (s > bestscore){bestscore = s;bestweapon = w;} if (self.switchweapon == w) currentscore = s;
 
 	// switch if the best weapon would provide a significant damage increase
 	if (bestscore > currentscore*1.5)

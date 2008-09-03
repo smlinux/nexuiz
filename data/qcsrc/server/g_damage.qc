@@ -564,14 +564,14 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 				(deathtype == DEATH_SLIME) ||
 				(deathtype == DEATH_LAVA))
 				return;
-			if (targ.armorvalue && (deathtype == WEP_NEX) && damage)
+			if (targ.armorvalue && (deathtype == WEP_MINSTANEX) && damage)
 			{
 				targ.armorvalue -= 1;
 				centerprint(targ, strcat("^3Remaining extra lives: ",ftos(targ.armorvalue),"\n"));
 				damage = 0;
 				targ.hitsound += 1;
 			}
-			else if (deathtype == WEP_NEX && targ.items & IT_STRENGTH)
+			else if (deathtype == WEP_MINSTANEX && targ.items & IT_STRENGTH)
 			{
 				if(clienttype(attacker) == CLIENTTYPE_REAL)
 					if(IsDifferentTeam(targ, attacker))
@@ -663,7 +663,6 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 		// Savage: vampire mode
 		if (g_vampire)
 		if (!g_minstagib)
-		if (!g_instagib)
 		if (time > self.spawnshieldtime)
 		{
 			attacker.health += damage;

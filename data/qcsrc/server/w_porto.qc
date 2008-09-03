@@ -130,6 +130,7 @@ float w_porto(float req)
 		precache_model ("models/weapons/v_porto.md3");
 		precache_model ("models/weapons/w_porto.zym");
 		precache_sound ("weapons/grenade_fire.wav");
+		precache_model ("models/portal.md3");
 	}
 	else if (req == WR_SETUP)
 		weapon_setup(WEP_PORTO);

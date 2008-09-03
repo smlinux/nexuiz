@@ -383,8 +383,6 @@ void PrintWelcomeMessage(entity pl)
 
 	if(g_minstagib)
 		mutator = "^2Minstagib ^1";
-	else if(g_instagib)
-		mutator = "^2Instagib ^1";
 	else if(g_rocketarena)
 		mutator = "^2Rocketarena ^1";
 	else if(g_nixnex)

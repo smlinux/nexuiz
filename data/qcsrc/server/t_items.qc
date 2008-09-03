@@ -91,8 +91,8 @@ void Item_Touch (void)
 			// else if(self.items == IT_CELLS)
 			//	play2(other, "announce/robotic/ammo.ogg");
 
-			if (self.weapons & WEPBIT_NEX)
-				W_GiveWeapon (other, WEP_NEX, "Nex");
+			if (self.weapons & WEPBIT_MINSTANEX)
+				W_GiveWeapon (other, WEP_MINSTANEX, "Nex");
 			if (self.ammo_cells)
 				other.ammo_cells = min (other.ammo_cells + cvar("g_minstagib_ammo_drop"), 999);
 			other.health = 100;
@@ -403,7 +403,7 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 
 		weaponsInMap |= weaponid;
 
-		if(g_lms || g_instagib || g_rocketarena)
+		if(g_lms || g_rocketarena)
 		{
 			startitem_failed = TRUE;
 			remove(self);
@@ -476,7 +476,7 @@ void minstagib_items (float itemid)
 		self.ammo_cells = 25;
 		StartItem ("models/weapons/g_nex.md3",
 			"weapons/weaponpickup.wav", 15,
-			"Nex Gun", 0, WEPBIT_NEX, FL_WEAPON, generic_pickupevalfunc, 1000);
+			"MinstaNex", 0, WEPBIT_MINSTANEX, FL_WEAPON, generic_pickupevalfunc, 1000);
 		return;
 	}
 
@@ -591,6 +591,18 @@ void spawnfunc_weapon_nex (void)
 		return;
 	}
 	weapon_defaultspawnfunc(WEP_NEX, 10000);
+}
+
+void spawnfunc_weapon_minstanex (void)
+{
+	if (g_minstagib)
+	{
+		minstagib_items(IT_CELLS);
+		self.think = minst_remove_item;
+		self.nextthink = time + cvar("sys_ticrate");
+		return;
+	}
+	weapon_defaultspawnfunc(WEP_MINSTANEX, 10000);
 }
 
 void spawnfunc_weapon_rocketlauncher (void)

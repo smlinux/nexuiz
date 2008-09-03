@@ -6,7 +6,7 @@ void W_SwitchWeapon(float imp)
 		W_SwitchWeapon_Force(self, imp);
 };
 
-float W_GetCycleWeapon(entity pl, string weaponorder, float dir, float complain)
+float W_GetCycleWeapon(entity pl, string weaponorder, float dir, float imp, float complain)
 {
 	float n, i, weaponwant, first_valid, prev_valid, switchtonext, switchtolast;
 	n = tokenize(weaponorder);
@@ -19,6 +19,11 @@ float W_GetCycleWeapon(entity pl, string weaponorder, float dir, float complain)
 	for(i = 0; i < n; ++i)
 	{
 		weaponwant = stof(argv(i));
+
+		if(imp)
+			if((get_weaponinfo(weaponwant)).impulse != imp)
+				continue;
+
 		if(client_hasweapon(pl, weaponwant, TRUE, FALSE))
 		{
 			if(switchtonext)
@@ -50,6 +55,9 @@ float W_GetCycleWeapon(entity pl, string weaponorder, float dir, float complain)
 		for(i = 0; i < n; ++i)
 		{
 			weaponwant = stof(argv(i));
+			if(imp)
+				if((get_weaponinfo(weaponwant)).impulse != imp)
+					continue;
 			client_hasweapon(pl, weaponwant, TRUE, TRUE);
 		}
 	}
@@ -59,7 +67,15 @@ float W_GetCycleWeapon(entity pl, string weaponorder, float dir, float complain)
 void W_CycleWeapon(string weaponorder, float dir)
 {
 	float w;
-	w = W_GetCycleWeapon(self, weaponorder, dir, 1);
+	w = W_GetCycleWeapon(self, weaponorder, dir, 0, 1);
+	if(w > 0)
+		W_SwitchWeapon(w);
+}
+
+void W_NextWeaponOnImpulse(float imp)
+{
+	float w;
+	w = W_GetCycleWeapon(self, self.cvar_cl_weaponpriority, +1, imp, 1);
 	if(w > 0)
 		W_SwitchWeapon(w);
 }
@@ -98,7 +114,7 @@ string W_FixWeaponOrder(string order, float complete)
 				if(stof(argv(i)) == w)
 					break;
 			if(i == n) // not found
-				neworder = strcat(neworder, ftos(w), " ");
+				neworder = strcat(ftos(w), " ", neworder);
 		}
 	}
 	
@@ -117,7 +133,7 @@ string W_FixWeaponOrder_ForceComplete(string order)
 
 float w_getbestweapon(entity e)
 { 
-	return W_GetCycleWeapon(e, e.cvar_cl_weaponpriority, 0, 0);
+	return W_GetCycleWeapon(e, e.cvar_cl_weaponpriority, 0, 0, 0);
 };
 
 // generic weapons table
@@ -162,8 +178,6 @@ void W_ThrowWeapon(vector velo, vector delta, float doreduce)
 	if (w == 0)
 		return; // just in case
 	if (w == WEP_LASER)
-		return;
-	if (g_instagib)
 		return;
 	if (g_rocketarena)
 		return;
@@ -435,14 +449,15 @@ void Nixnex_GiveCurrentWeapon()
 void RegisterWeapons()
 {
 	// %weaponaddpoint
-	register_weapon(WEP_LASER,            w_laser,     0,              "laser",   "laser",           "Laser");
-	register_weapon(WEP_SHOTGUN,          w_shotgun,   IT_SHELLS,      "shotgun", "shotgun",         "Shotgun");
-	register_weapon(WEP_UZI,              w_uzi,       IT_NAILS,       "uzi",     "uzi",             "Machine Gun");
-	register_weapon(WEP_GRENADE_LAUNCHER, w_glauncher, IT_ROCKETS,     "gl",      "grenadelauncher", "Mortar");
-	register_weapon(WEP_ELECTRO,          w_electro,   IT_CELLS,       "electro", "electro",         "Electro");
-	register_weapon(WEP_CRYLINK,          w_crylink,   IT_CELLS,       "crylink", "crylink",         "Crylink");
-	register_weapon(WEP_NEX,              w_nex,       IT_CELLS,       "nex",     "nex",             "Nex");
-	register_weapon(WEP_HAGAR,            w_hagar,     IT_ROCKETS,     "hagar",   "hagar",           "Hagar");
-	register_weapon(WEP_ROCKET_LAUNCHER,  w_rlauncher, IT_ROCKETS,     "rl",      "rocketlauncher",  "Rocket Launcher");
-	register_weapon(WEP_PORTO,            w_porto,     IT_SUPERWEAPON, "porto" ,  "porto",           "Port-O-Launch");
+	register_weapon(WEP_LASER,            w_laser,     0,              1, 1, "laser",   "laser",           "Laser");
+	register_weapon(WEP_SHOTGUN,          w_shotgun,   IT_SHELLS,      2, 1, "shotgun", "shotgun",         "Shotgun");
+	register_weapon(WEP_UZI,              w_uzi,       IT_NAILS,       3, 1, "uzi",     "uzi",             "Machine Gun");
+	register_weapon(WEP_GRENADE_LAUNCHER, w_glauncher, IT_ROCKETS,     4, 1, "gl",      "grenadelauncher", "Mortar");
+	register_weapon(WEP_ELECTRO,          w_electro,   IT_CELLS,       5, 1, "electro", "electro",         "Electro");
+	register_weapon(WEP_CRYLINK,          w_crylink,   IT_CELLS,       6, 1, "crylink", "crylink",         "Crylink");
+	register_weapon(WEP_NEX,              w_nex,       IT_CELLS,       7, 1, "nex",     "nex",             "Nex");
+	register_weapon(WEP_HAGAR,            w_hagar,     IT_ROCKETS,     8, 1, "hagar",   "hagar",           "Hagar");
+	register_weapon(WEP_ROCKET_LAUNCHER,  w_rlauncher, IT_ROCKETS,     9, 1, "rl",      "rocketlauncher",  "Rocket Launcher");
+	register_weapon(WEP_PORTO,            w_porto,     IT_SUPERWEAPON, 1, 0, "porto" ,  "porto",           "Port-O-Launch");
+	register_weapon(WEP_MINSTANEX,        w_minstanex, IT_CELLS,       7, 0, "nex",     "minstanex",       "MinstaNex");
 }

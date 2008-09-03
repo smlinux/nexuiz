@@ -720,7 +720,6 @@ void readlevelcvars(void)
 	g_jump_grunt = cvar("g_jump_grunt");
 	g_footsteps = cvar("g_footsteps");
 	g_grappling_hook = cvar("g_grappling_hook");
-	g_instagib = cvar("g_instagib");
 	g_laserguided_missile = cvar("g_laserguided_missile");
 	g_midair = cvar("g_midair");
 	g_minstagib = cvar("g_minstagib");
@@ -735,7 +734,6 @@ void readlevelcvars(void)
 	sv_pogostick = cvar("sv_pogostick");
 	sv_doublejump = cvar("sv_doublejump");
 
-	if(g_instagib) g_minstagib = g_nixnex = g_rocketarena = 0;
 	if(g_minstagib) g_nixnex = g_rocketarena = 0;
 	if(g_nixnex) g_rocketarena = 0;
 
@@ -772,14 +770,7 @@ void readlevelcvars(void)
 	start_health = cvar("g_balance_health_start");
 	start_armorvalue = cvar("g_balance_armor_start");
 
-	if(g_instagib)
-	{
-		start_weapons = WEPBIT_NEX;
-		start_switchweapon = WEP_NEX;
-		weapon_action(start_switchweapon, WR_PRECACHE);
-		start_ammo_cells = 999;
-	}
-	else if(g_rocketarena)
+	if(g_rocketarena)
 	{
 		start_weapons = WEPBIT_ROCKET_LAUNCHER;
 		start_switchweapon = WEP_ROCKET_LAUNCHER;
@@ -795,8 +786,8 @@ void readlevelcvars(void)
 	{
 		start_health = 100;
 		start_armorvalue = 0;
-		start_weapons = WEPBIT_NEX;
-		start_switchweapon = WEP_NEX;
+		start_weapons = WEPBIT_MINSTANEX;
+		start_switchweapon = WEP_MINSTANEX;
 		weapon_action(start_switchweapon, WR_PRECACHE);
 		start_ammo_cells = cvar("g_minstagib_ammo_start");
 		g_minstagib_invis_alpha = cvar("g_minstagib_invis_alpha");
@@ -837,7 +828,7 @@ void readlevelcvars(void)
 			e = get_weaponinfo(i);
 			if(!(e.weapon))
 				continue;
-			if((e.items != IT_SUPERWEAPON && (g_lms || g_tourney)) || cvar(strcat("g_start_weapon_", e.netname)))
+			if(!(e.items & IT_SUPERWEAPON && (g_lms || g_tourney)) || cvar(strcat("g_start_weapon_", e.netname)))
 			{
 				start_weapons |= e.weapons;
 				start_switchweapon = e.weapon;

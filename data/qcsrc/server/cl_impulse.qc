@@ -112,20 +112,7 @@ void ImpulseCommands (void)
 	{
 		// weapon switching impulses
 		if(self.deadflag == DEAD_NO)
-		{
-			switch(imp)
-			{
-				case 1: W_CycleWeapon("1", +1); break;
-				case 2: W_CycleWeapon("2", +1); break;
-				case 3: W_CycleWeapon("3", +1); break;
-				case 4: W_CycleWeapon("4", +1); break;
-				case 5: W_CycleWeapon("5", +1); break;
-				case 6: W_CycleWeapon("6", +1); break;
-				case 7: W_CycleWeapon("7", +1); break;
-				case 8: W_CycleWeapon("8", +1); break;
-				case 9: W_CycleWeapon("9", +1); break;
-			}
-		}
+			W_NextWeaponOnImpulse(imp);
 		else
 			self.impulse = imp; // retry in next frame
 	}

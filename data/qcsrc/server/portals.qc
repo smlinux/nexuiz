@@ -1,7 +1,6 @@
 .vector portal_transform;
 .vector portal_safe_origin;
 .float portal_wants_to_vanish;
-.float portal_id;
 .float portal_activatetime;
 
 .entity portal_in, portal_out;
