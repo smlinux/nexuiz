@@ -403,8 +403,11 @@ float Portal_SpawnOutPortalAtTrace(entity own, vector dir, float portal_id_val)
 		trace_endpos = trace_ent.origin + '0 0 1' * PL_MIN_z;
 		trace_plane_normal = '0 0 1';
 	}
+	/*
 	else
 		dir = -1 * dir; // invert the sense of the second portal
+		// no, better don't, it is weirder IF it is inverted
+	*/
 
 	org = trace_endpos;
 	ang = fixedvectoangles2(trace_plane_normal, dir);
