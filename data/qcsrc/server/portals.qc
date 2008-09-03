@@ -347,13 +347,18 @@ float Portal_SpawnInPortalAtTrace(entity own, vector dir, float portal_id_val)
 float Portal_SpawnOutPortalAtTrace(entity own, vector dir, float portal_id_val)
 {
 	if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
+	{
+		if(own.portal_in.portal_id == portal_id_val)
+			Portal_RequestVanish(own.portal_in);
 		return 0;
+	}
 
 	if(trace_ent.classname == "player")
 	{
 		print("hit a player, adjusting...\n");
 		trace_endpos = trace_ent.origin + '0 0 1' * PL_MIN_z;
 		trace_plane_normal = '0 0 1';
+		dir = -1 * dir; // fix orientation
 	}
 
 	if(!own.portal_in)
@@ -371,7 +376,10 @@ float Portal_SpawnOutPortalAtTrace(entity own, vector dir, float portal_id_val)
 		
 	own.portal_out = Portal_Spawn(own, trace_endpos + trace_plane_normal, fixedvectoangles2(trace_plane_normal, -1 * dir));
 	if(!own.portal_out)
+	{
+		Portal_RequestVanish(own.portal_in);
 		return 0;
+	}
 	own.portal_out.portal_id = portal_id_val;
 
 	Portal_Connect(own.portal_in, own.portal_out);
