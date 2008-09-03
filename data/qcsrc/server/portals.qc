@@ -259,6 +259,16 @@ void Portal_Think()
 		SUB_SetFade(self.enemy, time + 1, 1);
 		Portal_Disconnect(self, self.enemy);
 	}
+	if(self.owner.portal_in == self)
+	{
+		self.owner.portal_in = world;
+		print("fixed in-portal ownership\n");
+	}
+	if(self.owner.portal_out == self)
+	{
+		self.owner.portal_out = world;
+		print("fixed out-portal ownership\n");
+	}
 }
 
 void Portal_RequestVanish(entity portal)
@@ -267,7 +277,11 @@ void Portal_RequestVanish(entity portal)
 	oldself = self;
 	self = portal;
 	if(self.enemy)
+	{
 		self.enemy.portal_wants_to_vanish = 1;
+		self.enemy.fade_time = time;
+	}
+	self.fade_time = time;
 	Portal_Think();
 	self = oldself;
 }
@@ -335,7 +349,14 @@ float Portal_SpawnInPortalAtTrace(entity own, vector dir, float portal_id_val)
 		
 	own.portal_in = Portal_Spawn(own, trace_endpos + trace_plane_normal, fixedvectoangles2(trace_plane_normal, dir));
 	if(!own.portal_in)
+	{
+		if(own.portal_out)
+		{
+			Portal_RequestVanish(own.portal_out);
+			own.portal_out = world;
+		}
 		return 0;
+	}
 	own.portal_in.portal_id = portal_id_val;
 
 	if(own.portal_out)
@@ -349,7 +370,10 @@ float Portal_SpawnOutPortalAtTrace(entity own, vector dir, float portal_id_val)
 	if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
 	{
 		if(own.portal_in.portal_id == portal_id_val)
+		{
 			Portal_RequestVanish(own.portal_in);
+			own.portal_in = world;
+		}
 		return 0;
 	}
 
@@ -378,6 +402,7 @@ float Portal_SpawnOutPortalAtTrace(entity own, vector dir, float portal_id_val)
 	if(!own.portal_out)
 	{
 		Portal_RequestVanish(own.portal_in);
+		own.portal_in = world;
 		return 0;
 	}
 	own.portal_out.portal_id = portal_id_val;
