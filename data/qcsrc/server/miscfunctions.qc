@@ -737,6 +737,11 @@ void readlevelcvars(void)
 	sv_pogostick = cvar("sv_pogostick");
 	sv_doublejump = cvar("sv_doublejump");
 
+	g_pickup_respawntime_short = cvar("g_pickup_respawntime_short");
+	g_pickup_respawntime_medium = cvar("g_pickup_respawntime_medium");
+	g_pickup_respawntime_long = cvar("g_pickup_respawntime_long");
+	g_pickup_respawntime_powerup = cvar("g_pickup_respawntime_powerup");
+
 	if(g_minstagib) g_nixnex = g_rocketarena = 0;
 	if(g_nixnex) g_rocketarena = 0;
 

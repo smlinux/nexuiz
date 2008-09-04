@@ -22,6 +22,10 @@ float g_tourney;
 float g_ctf_win_mode;
 float g_race_qualifying;
 float tourneyInMatchStage;
+float g_pickup_respawntime_short;
+float g_pickup_respawntime_medium;
+float g_pickup_respawntime_long;
+float g_pickup_respawntime_powerup;
 
 float sv_cheats;
 float sv_gentle;
