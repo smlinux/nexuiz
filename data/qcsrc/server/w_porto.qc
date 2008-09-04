@@ -1,15 +1,52 @@
 .float porto_grenade_id;
 .vector porto_v_angle; // holds "held" view angles
 .float porto_v_angle_held;
+.vector right_vector;
 
-void W_Porto_Explode (void)
+void W_Porto_Success (void)
 {
 	self.owner.porto_grenade_id = 0;
 	remove(self);
 }
 
-void W_Porto_Touch1 (void)
+float W_ThrowNewWeapon(entity own, float wpn, float doreduce, vector org, vector velo);
+void W_Porto_Fail (void)
 {
+	centerprint(self.owner, "^1Portal deployment failed.\n\n^2Catch it to try again!");
+	self.owner.porto_grenade_id = 0;
+	// TODO maybe instead throw the portal gun there?
+	// self.owner.weapons = self.owner.weapons | WEPBIT_PORTO;
+	setsize (self, '-16 -16 0', '16 16 32');
+	setorigin(self, self.origin + trace_plane_normal);
+	if(move_out_of_solid(self))
+	{
+		self.flags = FL_ITEM;
+		self.velocity = trigger_push_calculatevelocity(self.origin, self.owner, 128);
+		tracetoss(self, self);
+		if(vlen(trace_endpos - self.owner.origin) > 128)
+			self.velocity = '0 0 0';
+		W_ThrowNewWeapon(self.owner, WEP_PORTO, 0, self.origin, self.velocity);
+	}
+	else
+	{
+		W_ThrowNewWeapon(self.owner, WEP_PORTO, 0, self.origin, '0 0 0');
+	}
+	remove(self);
+}
+
+void W_Porto_Think (void)
+{
+	trace_plane_normal = '0 0 0';
+	if(self.owner.playerid != self.playerid)
+		remove(self);
+	else
+		W_Porto_Fail();
+}
+
+void W_Porto_Touch (void)
+{
+	vector norm;
+	norm = trace_plane_normal;
 	if(self.owner.playerid != self.playerid)
 	{
 		remove(self);
@@ -17,14 +54,26 @@ void W_Porto_Touch1 (void)
 	else if(self.cnt == 0)
 	{
 		self.cnt = 1;
-		if(!Portal_SpawnInPortalAtTrace(self.owner, self.velocity, self.porto_grenade_id))
-			W_Porto_Explode();
+		if(!Portal_SpawnInPortalAtTrace(self.owner, self.right_vector, self.porto_grenade_id))
+		{
+			trace_plane_normal = norm;
+			W_Porto_Fail();
+			return;
+		}
+		trace_plane_normal = norm;
+		self.right_vector = self.right_vector - 2 * trace_plane_normal * (self.right_vector * trace_plane_normal);
 	}
 	else
 	{
-		Portal_SpawnOutPortalAtTrace(self.owner, self.velocity, self.porto_grenade_id);
-		W_Porto_Explode();
+		if(!Portal_SpawnOutPortalAtTrace(self.owner, self.right_vector, self.porto_grenade_id))
+		{
+			trace_plane_normal = norm;
+			W_Porto_Fail();
+		}
+		else
+			W_Porto_Success();
 	}
+
 }
 
 void W_Porto_Attack (void)
@@ -51,8 +100,8 @@ void W_Porto_Attack (void)
 	setorigin(gren, w_shotorg);
 
 	gren.nextthink = time + cvar("g_balance_porto_primary_lifetime");
-	gren.think = W_Porto_Explode;
-	gren.touch = W_Porto_Touch1;
+	gren.think = W_Porto_Think;
+	gren.touch = W_Porto_Touch;
 	gren.velocity = w_shotdir * cvar("g_balance_porto_primary_speed");
 	W_SetupProjectileVelocity(gren);
 
@@ -61,6 +110,10 @@ void W_Porto_Attack (void)
 
 	self.porto_grenade_id = gren.porto_grenade_id = time;
 	gren.playerid = self.playerid;
+	fixedmakevectors(vectoangles(gren.velocity));
+	gren.right_vector = v_right;
+
+	gren.dphitcontentsmask = DPCONTENTS_SOLID | DPCONTENTS_BODY | DPCONTENTS_PLAYERCLIP;
 }
 
 void spawnfunc_weapon_porto (void)

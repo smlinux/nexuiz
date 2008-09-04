@@ -43,7 +43,7 @@ void Porto_Draw()
 	ang = vectoangles(trace_plane_normal, dir);
 	ang_x = -ang_x;
 	makevectors(ang);
-	if(!CheckWireframeBox(v1 - 48 * v_right - 48 * v_up + 16 * v_forward, 96 * v_right, 96 * v_up, 16 * v_forward))
+	if(!CheckWireframeBox(porto, v1 - 48 * v_right - 48 * v_up + 16 * v_forward, 96 * v_right, 96 * v_up, 96 * v_forward))
 		return;
 
 	traceline(v1, v1 + 65536 * dir, TRUE, world);
@@ -54,16 +54,20 @@ void Porto_Draw()
 	ang = vectoangles(trace_plane_normal, -1 * dir);
 	ang_x = -ang_x;
 	makevectors(ang);
-	if(!CheckWireframeBox(v2 - 48 * v_right - 48 * v_up + 16 * v_forward, 96 * v_right, 96 * v_up, 16 * v_forward))
+	if(!CheckWireframeBox(porto, v2 - 48 * v_right - 48 * v_up + 16 * v_forward, 96 * v_right, 96 * v_up, 96 * v_forward))
 		return;
 
 	Draw_CylindricLine(v1, v2, 4, "", 1, 0, '1 0 0', 0.5, DRAWFLAG_NORMAL);
 }
+float DPCONTENTS_SOLID = 1; // hit a bmodel, not a bounding box
+float DPCONTENTS_BODY = 32; // hit a bounding box, not a bmodel
+float DPCONTENTS_PLAYERCLIP = 256; // blocks player movement
 void Porto_Init()
 {
 	porto = spawn();
 	porto.classname = "porto";
 	porto.draw = Porto_Draw;
+	porto.dphitcontentsmask = DPCONTENTS_SOLID | DPCONTENTS_BODY | DPCONTENTS_PLAYERCLIP;
 }
 
 float drawtime;

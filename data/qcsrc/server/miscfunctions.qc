@@ -100,7 +100,10 @@ float move_out_of_solid(entity e)
 
 	tracebox(e.origin, e.mins, e.maxs, e.origin, MOVE_WORLDONLY, e);
 	if(trace_startsolid)
+	{
+		setorigin(e, o);
 		return 0;
+	}
 
 	return 1;
 }

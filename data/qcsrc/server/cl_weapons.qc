@@ -160,27 +160,74 @@ float W_AmmoItemCode(float wpn)
 	return (get_weaponinfo(wpn)).items;
 }
 
-// think function for tossed weapons
 void thrown_wep_think()
 {
 	self.solid = SOLID_TRIGGER;
 	self.owner = world;
 	SUB_SetFade(self, time + 20, 1);
-	setorigin(self, self.origin);
-};
+}
+
+// returns amount of ammo used, or -1 for failure, or 0 for no ammo count
+float W_ThrowNewWeapon(entity own, float wpn, float doreduce, vector org, vector velo)
+{
+	entity oldself, wep;
+	float wa, ammo;
+	var .float ammofield;
+
+	wep = spawn();
+
+	setorigin(wep, org);
+	wep.classname = "droppedweapon";
+	wep.velocity = velo;
+	wep.owner = own;
+	wep.classname = "droppedweapon";
+	wep.flags = wep.flags | FL_TOSSED;
+	wep.colormap = own.colormap;
+
+	wa = W_AmmoItemCode(wpn);
+	if(wa == IT_SUPERWEAPON || wa == 0)
+	{
+		oldself = self;
+		self = wep;
+		Item_SpawnByWeaponCode(wpn);
+		self = oldself;
+		if(startitem_failed)
+			return -1;
+		wep.think = thrown_wep_think;
+		wep.nextthink = time + 0.5;
+		return 0;
+	}
+	else
+	{
+		ammofield = Item_CounterField(wa);
+		oldself = self;
+		self = wep;
+		Item_SpawnByWeaponCode(wpn);
+		self = oldself;
+		if(startitem_failed)
+			return -1;
+		if(doreduce)
+		{
+			ammo = min(own.ammofield, wep.ammofield);
+			wep.ammofield = ammo;
+			own.ammofield -= ammo;
+		}
+		wep.think = thrown_wep_think;
+		wep.nextthink = time + 0.5;
+		return wep.ammofield;
+	}
+}
 
 // toss current weapon
 void W_ThrowWeapon(vector velo, vector delta, float doreduce)
 {
-	local float w, ammo, wb, wa;
-	local entity wep, e;
-	local .float ammofield;
+	local float w, a, wb;
 
 	w = self.weapon;
 	if (w == 0)
 		return; // just in case
 	if (w == WEP_LASER)
-		return;
+		return; // just in case
 	if (g_rocketarena)
 		return;
 	if (g_lms)
@@ -190,67 +237,19 @@ void W_ThrowWeapon(vector velo, vector delta, float doreduce)
 	if (!cvar("g_pickup_items"))
 		return;
 
-	e = self;
-	wep = spawn();
-	self = wep;
-
-	setorigin(wep, e.origin + delta);
-	makevectors(e.angles);
-	wep.classname = "droppedweapon";
-	wep.velocity = velo; // e.velocity * 0.5 + v_forward * 750;
-	SUB_SetFade(wep, time + 20, 1);
-
-	wa = W_AmmoItemCode(w);
-	if(wa == IT_SUPERWEAPON || wa == 0)
+	wb = W_WeaponBit(w);
+	self.weapons = self.weapons - (self.weapons & wb);
+	W_SwitchWeapon_Force(self, w_getbestweapon(self));
+	a = W_ThrowNewWeapon(self, w, doreduce, self.origin + delta, velo);
+	if(a < 0)
+		return;
+	if(self.health >= 1)
 	{
-		wb = W_WeaponBit(w);
-		if(!(e.weapons & wb))
-		{
-			remove(wep);
-			goto leave;
-		}
-		Item_SpawnByWeaponCode(w);
-		if(startitem_failed)
-			goto leave;
-		if(e.weapons & wb)
-			if(e.health >= 1)
-				sprint(e, strcat("You dropped the ^2", wep.netname, "\n"));
+		if(a == 0)
+			sprint(self, strcat("You dropped the ^2", W_Name(w), "\n"));
+		else
+			sprint(self, strcat("You dropped the ^2", W_Name(w), " with ", ftos(a), " ", Item_CounterFieldName(W_AmmoItemCode(w)), "\n"));
 	}
-	else
-	{
-		ammofield = Item_CounterField(wa);
-		wb = W_WeaponBit(w);
-		if(!(e.weapons & wb))
-		{
-			remove(wep);
-			goto leave;
-		}
-		Item_SpawnByWeaponCode(w);
-		if(startitem_failed)
-			goto leave;
-		if(doreduce)
-		{
-			ammo = min(e.ammofield, wep.ammofield);
-			wep.ammofield = ammo;
-			e.ammofield -= ammo;
-		}
-		if(e.weapons & wb)
-			if(e.health >= 1)
-				sprint(e, strcat("You dropped the ^2", wep.netname, " with ", ftos(wep.ammofield), " ammo", "\n"));
-	}
-
-	wep.owner = e;
-	setorigin(wep, wep.origin);
-	wep.nextthink = time + 0.5;
-	wep.think = thrown_wep_think;
-	wep.classname = "droppedweapon";
-	wep.flags = wep.flags | FL_TOSSED;
-	e.weapons = e.weapons - (e.weapons & wb);
-	wep.colormap = e.colormap;
-	W_SwitchWeapon_Force(e, w_getbestweapon(e));
-
-:leave
-	self = e;
 };
 
 // Bringed back weapon frame

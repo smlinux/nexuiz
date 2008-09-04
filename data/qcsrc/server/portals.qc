@@ -5,28 +5,6 @@
 
 .entity portal_in, portal_out;
 
-vector fixedvectoangles(vector v)
-{
-	vector a;
-	a = vectoangles(v);
-	a_x = -a_x;
-	return a;
-}
-
-vector fixedvectoangles2(vector v, vector w)
-{
-	vector a;
-	a = vectoangles2(v, w);
-	a_x = -a_x;
-	return a;
-}
-
-void fixedmakevectors(vector a)
-{
-	//a_x = -a_x;
-	makevectors(a);
-}
-
 vector Portal_Transform_Apply(vector transform, vector v)
 {
 	fixedmakevectors(transform);
@@ -41,7 +19,7 @@ vector Portal_Transform_Multiply(vector t1, vector t2)
 	fixedmakevectors(t2); m_forward = v_forward; m_up = v_up;
 	m_forward = Portal_Transform_Apply(t1, m_forward);
 	m_up = Portal_Transform_Apply(t1, m_up);
-	return fixedvectoangles2(m_forward, m_up);
+	return vectoangles2(m_forward, m_up);
 }
 
 vector Portal_Transform_Invert(vector transform)
@@ -60,7 +38,7 @@ vector Portal_Transform_Invert(vector transform)
 	i_up_z = v_up_z;
 #ifdef DEBUG
 	vector v;
-	v = fixedvectoangles2(i_forward, i_up);
+	v = vectoangles2(i_forward, i_up);
 	print("Transform: ", vtos(transform), "\n");
 	print("Inverted: ", vtos(v), "\n");
 	print("Verify: ", vtos(Portal_Transform_Multiply(v, transform)), "\n");
@@ -69,16 +47,15 @@ vector Portal_Transform_Invert(vector transform)
 	print("Verify: ", vtos(v_right), "\n");
 	print("Verify: ", vtos(v_up), "\n");
 #endif
-	return fixedvectoangles2(i_forward, i_up);
+	return vectoangles2(i_forward, i_up);
 }
 
 vector Portal_Transform_TurnDirection(vector transform)
 {
-	vector t_angles;
-	t_angles_x = -transform_x;
-	t_angles_y = mod(transform_y + 180, 360);
-	t_angles_z = -transform_z;
-	return t_angles;
+	// turn 180 degrees around v_up
+	// changes in-direction to out-direction
+	fixedmakevectors(transform);
+	return vectoangles2(-1 * v_forward, 1 * v_up);
 }
 
 vector Portal_Transform_Divide(vector to_transform, vector from_transform)
@@ -88,16 +65,25 @@ vector Portal_Transform_Divide(vector to_transform, vector from_transform)
 
 void Portal_TeleportPlayer(entity teleporter, entity player)
 {
-	vector from, to, safe, step, transform, ang;
+	vector from, to, safe, step, transform, ang, newvel;
+	float planeshift;
 	from = teleporter.origin;
 	to = teleporter.enemy.origin;
 	transform = teleporter.portal_transform;
 
 	to = to + Portal_Transform_Apply(teleporter.portal_transform, player.origin - from);
 	// this now is INSIDE the plane... can't use that
-
+	
 	// shift it out
-	fixedmakevectors(teleporter.enemy.mangle);
+	fixedmakevectors(teleporter.enemy.angles);
+
+	// first shift it ON the plane if needed
+	planeshift = ((teleporter.enemy.origin - to) * v_forward);
+	if(planeshift > 0)
+		to += v_forward * planeshift;
+	else
+		print("no planeshift?\n");
+
 	safe = teleporter.enemy.portal_safe_origin; // a valid player origin
 	step = to + ((safe - to) * v_forward) * v_forward;
 	tracebox(safe, PL_MIN, PL_MAX, step, MOVE_NOMONSTERS, player);
@@ -113,21 +99,29 @@ void Portal_TeleportPlayer(entity teleporter, entity player)
 		error("trace_endpos in solid!");
 	to = trace_endpos;
 
+	// ang_x stuff works around weird quake angles
 	if(player.classname == "player")
 	{
-		ang = Portal_Transform_Multiply(transform, player.v_angle);
+		ang = player.v_angle;
+		ang_x = -ang_x;
+		ang = Portal_Transform_Multiply(transform, ang);
 		ang_z = player.angles_z;
 	}
 	else
 	{
-		ang = Portal_Transform_Multiply(transform, player.mangle);
+		ang = player.angles;
+		ang_x = -ang_x;
+		ang = Portal_Transform_Multiply(transform, player.angles);
 	}
+	ang_x = -ang_x;
 
-	TeleportPlayer(teleporter, player, to, ang, Portal_Transform_Apply(transform, player.velocity), teleporter.enemy.absmin, teleporter.enemy.absmax);
+	newvel = Portal_Transform_Apply(transform, player.velocity);
+
+	TeleportPlayer(teleporter, player, to, ang, newvel, teleporter.enemy.absmin, teleporter.enemy.absmax);
 
 	// reset fade counter
 	teleporter.portal_wants_to_vanish = 0;
-	teleporter.fade_time = time + 10;
+	teleporter.fade_time = time + 15;
 }
 
 float Portal_FindSafeOrigin(entity portal)
@@ -136,11 +130,13 @@ float Portal_FindSafeOrigin(entity portal)
 	o = portal.origin;
 	portal.mins = PL_MIN - '8 8 8';
 	portal.maxs = PL_MAX + '8 8 8';
-	fixedmakevectors(portal.mangle);
+	fixedmakevectors(portal.angles);
 	portal.origin += 16 * v_forward;
 	if(!move_out_of_solid(portal))
 	{
+#ifdef DEBUG
 		print("NO SAFE ORIGIN\n");
+#endif
 		return 0;
 	}
 	portal.portal_safe_origin = portal.origin;
@@ -158,7 +154,7 @@ void Portal_Touch()
 			self.portal_activatetime = time + 0.1;
 			return;
 		}
-	fixedmakevectors(self.mangle);
+	fixedmakevectors(self.angles);
 	if((other.origin - self.origin) * v_forward < 0)
 		return;
 	if(other.mins_x < PL_MIN_x || other.mins_y < PL_MIN_y || other.mins_z < PL_MIN_z
@@ -177,6 +173,7 @@ void Portal_MakeBrokenPortal(entity portal)
 	portal.effects = 0;
 	//portal.colormod = '1 1 1';
 	portal.nextthink = 0;
+	portal.takedamage = DAMAGE_NO;
 }
 
 void Portal_MakeWaitingPortal(entity portal)
@@ -186,6 +183,7 @@ void Portal_MakeWaitingPortal(entity portal)
 	portal.effects = EF_ADDITIVE;
 	portal.colormod = '1 1 1';
 	portal.nextthink = 0;
+	portal.takedamage = DAMAGE_YES;
 }
 
 void Portal_MakeInPortal(entity portal)
@@ -195,6 +193,7 @@ void Portal_MakeInPortal(entity portal)
 	portal.effects = EF_RED;
 	portal.colormod = '1 0 0';
 	portal.nextthink = time;
+	portal.takedamage = DAMAGE_NO;
 }
 
 void Portal_MakeOutPortal(entity portal)
@@ -204,6 +203,7 @@ void Portal_MakeOutPortal(entity portal)
 	portal.effects = EF_STARDUST | EF_BLUE;
 	portal.colormod = '0 0 1';
 	portal.nextthink = 0;
+	portal.takedamage = DAMAGE_YES;
 }
 
 void Portal_Disconnect(entity teleporter, entity destination)
@@ -216,18 +216,47 @@ void Portal_Disconnect(entity teleporter, entity destination)
 
 void Portal_Connect(entity teleporter, entity destination)
 {
-	teleporter.portal_transform = Portal_Transform_Divide(Portal_Transform_TurnDirection(destination.mangle), teleporter.mangle);
+	teleporter.portal_transform = Portal_Transform_Divide(Portal_Transform_TurnDirection(destination.angles), teleporter.angles);
+
+#ifdef DEBUG
+	{
+		// let's verify the transform
+		vector in_f, in_r, in_u;
+		vector out_f, out_r, out_u;
+		fixedmakevectors(teleporter.angles);
+		in_f = v_forward;
+		in_r = v_right;
+		in_u = v_up;
+		print("teleporter: ", vtos(in_f), " ", vtos(in_r), " ", vtos(in_u), "\n");
+		fixedmakevectors(destination.angles);
+		out_f = v_forward;
+		out_r = v_right;
+		out_u = v_up;
+		print("dest: ", vtos(out_f), " ", vtos(out_r), " ", vtos(out_u), "\n");
+		// INTENDED TRANSFORM:
+		//   in_f -> -out_f
+		//   in_r -> -out_r
+		//   in_u -> +out_u
+		print("FORWARD: ", vtos(in_f), " -> ", vtos(Portal_Transform_Apply(teleporter.portal_transform, in_f)), ", should be", vtos(-1 * out_f), "\n");
+		print("RIGHT: ", vtos(in_r), " -> ", vtos(Portal_Transform_Apply(teleporter.portal_transform, in_r)), ", should be", vtos(-1 * out_r), "\n");
+		print("UP: ", vtos(in_u), " -> ", vtos(Portal_Transform_Apply(teleporter.portal_transform, in_u)), ", should be", vtos(out_u), "\n");
+
+		te_lightning3(world, teleporter.origin, teleporter.origin + in_r * 1000);
+		te_lightning3(world, destination.origin, destination.origin + out_r * 1000);
+	}
+#endif
+
 	teleporter.enemy = destination;
 	destination.enemy = teleporter;
 	Portal_MakeInPortal(teleporter);
 	Portal_MakeOutPortal(destination);
-	teleporter.fade_time = time + 10;
-	destination.fade_time = time + 10;
+	teleporter.fade_time = time + 15;
+	destination.fade_time = time + 15;
 	teleporter.portal_wants_to_vanish = 0;
 	destination.portal_wants_to_vanish = 0;
 }
 
-void Portal_Remove(entity portal)
+void Portal_Remove(entity portal, float killed)
 {
 	entity e;
 	e = portal.enemy;
@@ -235,7 +264,7 @@ void Portal_Remove(entity portal)
 	if(e)
 	{
 		Portal_Disconnect(portal, e);
-		Portal_Remove(e);
+		Portal_Remove(e, killed);
 	}
 
 	if(portal == portal.owner.portal_in)
@@ -245,8 +274,28 @@ void Portal_Remove(entity portal)
 	portal.owner = world;
 
 	// makes the portal vanish
-	Portal_MakeBrokenPortal(portal);
-	SUB_SetFade(portal, time, 0.5);
+	if(killed)
+	{
+		fixedmakevectors(portal.angles);
+		pointparticles(particleeffectnum("rocket_explode"), portal.origin + v_forward * 16, v_forward * 1024, 4);
+		remove(portal);
+	}
+	else
+	{
+		Portal_MakeBrokenPortal(portal);
+		SUB_SetFade(portal, time, 0.5);
+	}
+}
+
+void Portal_Damage(entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
+{
+	if(deathtype == DEATH_TELEFRAG)
+		return;
+	self.health -= damage;
+	if(self.health < 0)
+	{
+		Portal_Remove(self, 1);
+	}
 }
 
 void Portal_Think()
@@ -276,7 +325,7 @@ void Portal_Think()
 	self.nextthink = time;
 
 	if(time > self.fade_time)
-		Portal_Remove(self);
+		Portal_Remove(self, 0);
 }
 
 
@@ -300,7 +349,11 @@ void Portal_Think()
 float Portal_SetInPortal(entity own, entity portal)
 {
 	if(own.portal_out)
-		Portal_Remove(own.portal_out);
+	{
+		if(own.portal_in)
+			Portal_Disconnect(own.portal_in, own.portal_out);
+		Portal_Remove(own.portal_out, 0);
+	}
 	if(own.portal_in)
 		own.portal_out = own.portal_in;
 	own.portal_in = portal;
@@ -313,7 +366,10 @@ float Portal_SetOutPortal(entity own, entity portal)
 	if(!own.portal_in)
 		return 0;
 	if(own.portal_out)
-		Portal_Remove(own.portal_out);
+	{
+		Portal_Disconnect(own.portal_in, own.portal_out);
+		Portal_Remove(own.portal_out, 0);
+	}
 	own.portal_out = portal;
 	Portal_Connect(own.portal_in, own.portal_out);
 	return 1;
@@ -321,14 +377,14 @@ float Portal_SetOutPortal(entity own, entity portal)
 void Portal_ClearAll(entity own)
 {
 	if(own.portal_in)
-		Portal_Remove(own.portal_in);
+		Portal_Remove(own.portal_in, 0);
 	if(own.portal_out)
-		Portal_Remove(own.portal_out);
+		Portal_Remove(own.portal_out, 0);
 }
-float Portal_VerifyPortal(vector org, vector ang)
+float Portal_VerifyPortal(entity own, vector org, vector ang)
 {
 	fixedmakevectors(ang);
-	if(!CheckWireframeBox(org - 48 * v_right - 48 * v_up + 16 * v_forward, 96 * v_right, 96 * v_up, 16 * v_forward))
+	if(!CheckWireframeBox(own, org - 48 * v_right - 48 * v_up + 16 * v_forward, 96 * v_right, 96 * v_up, 96 * v_forward))
 		return 0;
 	return 1;
 }
@@ -340,13 +396,13 @@ entity Portal_Spawn(entity own, vector org, vector ang)
 	portal.classname = "portal";
 	portal.owner = own;
 	portal.origin = org;
-	portal.mangle = ang;
-	ang_x = -ang_x;
 	portal.angles = ang;
 	portal.think = Portal_Think;
 	portal.nextthink = 0;
-	portal.fade_time = time + 10;
+	portal.fade_time = time + 15;
 	portal.portal_activatetime = time + 0.1;
+	portal.event_damage = Portal_Damage;
+	portal.health = 300;
 	setmodel(portal, "models/portal.md3");
 
 	if(!Portal_FindSafeOrigin(portal))
@@ -367,17 +423,34 @@ float Portal_SpawnInPortalAtTrace(entity own, vector dir, float portal_id_val)
 	vector ang;
 	vector org;
 
-	if(trace_ent.classname == "player")
+#ifdef DEBUG
 	{
-		print("hit a player, adjusting...\n");
+		vector a, b;
+		a = randomvec();
+		a = '0 0 -1';
+		a = normalize(a);
+		b = randomvec();
+		b = '1 0 0';
+		b = normalize(b - (b * a) * a);
+		print("f/u = ", vtos(a), " ", vtos(b), "\n");
+		a = vectoangles2(a, b);
+		print("ang = ", vtos(a), "\n");
+		fixedmakevectors(a);
+		print("f/u = ", vtos(v_forward), " ", vtos(v_up), "\n");
+	}
+#endif
+
+	if(trace_ent.movetype == MOVETYPE_WALK)
+	{
 		trace_endpos = trace_ent.origin + '0 0 1' * PL_MIN_z;
 		trace_plane_normal = '0 0 1';
 	}
 
 	org = trace_endpos;
-	ang = fixedvectoangles2(trace_plane_normal, dir);
+	ang = vectoangles2(trace_plane_normal, dir);
+	fixedmakevectors(ang);
 
-	if((trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT) || !Portal_VerifyPortal(org, ang))
+	if((trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT) || !Portal_VerifyPortal(own, org, ang))
 	{
 		// cannot create a portal here
 		// clear all to make sure
@@ -397,22 +470,17 @@ float Portal_SpawnOutPortalAtTrace(entity own, vector dir, float portal_id_val)
 	vector ang;
 	vector org;
 
-	if(trace_ent.classname == "player")
+	if(trace_ent.movetype == MOVETYPE_WALK)
 	{
-		print("hit a player, adjusting...\n");
 		trace_endpos = trace_ent.origin + '0 0 1' * PL_MIN_z;
 		trace_plane_normal = '0 0 1';
 	}
-	/*
-	else
-		dir = -1 * dir; // invert the sense of the second portal
-		// no, better don't, it is weirder IF it is inverted
-	*/
 
 	org = trace_endpos;
-	ang = fixedvectoangles2(trace_plane_normal, dir);
+	ang = vectoangles2(trace_plane_normal, dir);
+	fixedmakevectors(ang);
 
-	if((trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT) || !Portal_VerifyPortal(org, ang))
+	if((trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT) || !Portal_VerifyPortal(own, org, ang))
 	{
 		// cannot create a portal here
 		// clear all to make sure
