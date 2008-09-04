@@ -180,6 +180,9 @@ void spawnfunc_worldspawn (void)
 		head = nextent(head);
 	}
 
+	// needs to be done so early as they would still spawn
+	RegisterWeapons();
+
 	if(GotoFirstMap())
 		return;
 
@@ -237,8 +240,6 @@ void spawnfunc_worldspawn (void)
 
 	// 63 testing
 	lightstyle(63, "a");
-
-	RegisterWeapons();
 
 	if(cvar("g_campaign"))
 		CampaignPreInit();
