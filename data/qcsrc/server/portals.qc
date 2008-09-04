@@ -63,6 +63,17 @@ vector Portal_Transform_Divide(vector to_transform, vector from_transform)
 	return Portal_Transform_Multiply(to_transform, Portal_Transform_Invert(from_transform));
 }
 
+float PlayerEdgeDistance(entity p, vector v)
+{
+	vector vbest;
+
+	if(v_x < 0) vbest_x = p.mins_x; else vbest_x = p.maxs_x;
+	if(v_y < 0) vbest_y = p.mins_y; else vbest_y = p.maxs_y;
+	if(v_z < 0) vbest_z = p.mins_z; else vbest_z = p.maxs_z;
+
+	return vbest * v;
+}
+
 void Portal_TeleportPlayer(entity teleporter, entity player)
 {
 	vector from, to, safe, step, transform, ang, newvel;
@@ -78,7 +89,7 @@ void Portal_TeleportPlayer(entity teleporter, entity player)
 	fixedmakevectors(teleporter.enemy.angles);
 
 	// first shift it ON the plane if needed
-	planeshift = ((teleporter.enemy.origin - to) * v_forward);
+	planeshift = ((teleporter.enemy.origin - to) * v_forward) + PlayerEdgeDistance(player, v_forward);
 	if(planeshift > 0)
 		to += v_forward * planeshift;
 	else
@@ -444,6 +455,7 @@ float Portal_SpawnInPortalAtTrace(entity own, vector dir, float portal_id_val)
 	{
 		trace_endpos = trace_ent.origin + '0 0 1' * PL_MIN_z;
 		trace_plane_normal = '0 0 1';
+		dir = -1 * dir; // create telefrag portals the other way round
 	}
 
 	org = trace_endpos;
@@ -474,6 +486,7 @@ float Portal_SpawnOutPortalAtTrace(entity own, vector dir, float portal_id_val)
 	{
 		trace_endpos = trace_ent.origin + '0 0 1' * PL_MIN_z;
 		trace_plane_normal = '0 0 1';
+		dir = -1 * dir; // create telefrag portals the other way round
 	}
 
 	org = trace_endpos;
