@@ -135,6 +135,7 @@ void Portal_TeleportPlayer(entity teleporter, entity player)
 	// reset fade counter
 	teleporter.portal_wants_to_vanish = 0;
 	teleporter.fade_time = time + 15;
+	teleporter.enemy.health = 300;
 }
 
 float Portal_FindSafeOrigin(entity portal)
@@ -372,7 +373,7 @@ float Portal_SetInPortal(entity own, entity portal)
 	own.portal_in = portal;
 	if(own.portal_out)
 		Portal_Connect(own.portal_in, own.portal_out);
-	return 1;
+	return 2;
 }
 float Portal_SetOutPortal(entity own, entity portal)
 {
