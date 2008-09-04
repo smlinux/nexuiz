@@ -346,9 +346,9 @@ void Portal_Think()
 // cleanup:
 //   when creating in-portal:
 //     disconnect
-//     clear existing out-portal
-//     make existing in-portal an out-portal and connect
+//     clear existing in-portal
 //     set as in-portal
+//     connect
 //   when creating out-portal:
 //     disconnect
 //     clear existing out-portal
@@ -362,14 +362,12 @@ void Portal_Think()
 //   TODO: ensure only one portal shot at once
 float Portal_SetInPortal(entity own, entity portal)
 {
-	if(own.portal_out)
-	{
-		if(own.portal_in)
-			Portal_Disconnect(own.portal_in, own.portal_out);
-		Portal_Remove(own.portal_out, 0);
-	}
 	if(own.portal_in)
-		own.portal_out = own.portal_in;
+	{
+		if(own.portal_out)
+			Portal_Disconnect(own.portal_in, own.portal_out);
+		Portal_Remove(own.portal_in, 0);
+	}
 	own.portal_in = portal;
 	if(own.portal_out)
 		Portal_Connect(own.portal_in, own.portal_out);
@@ -377,15 +375,15 @@ float Portal_SetInPortal(entity own, entity portal)
 }
 float Portal_SetOutPortal(entity own, entity portal)
 {
-	if(!own.portal_in)
-		return 0;
 	if(own.portal_out)
 	{
-		Portal_Disconnect(own.portal_in, own.portal_out);
+		if(own.portal_in)
+			Portal_Disconnect(own.portal_in, own.portal_out);
 		Portal_Remove(own.portal_out, 0);
 	}
 	own.portal_out = portal;
-	Portal_Connect(own.portal_in, own.portal_out);
+	if(own.portal_in)
+		Portal_Connect(own.portal_in, own.portal_out);
 	return 1;
 }
 void Portal_ClearAll(entity own)
