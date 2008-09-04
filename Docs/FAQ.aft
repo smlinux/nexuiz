@@ -48,6 +48,9 @@ This happens when the engine can't load the data*.pk3 file or has trouble to ini
 	4. the engine could not initialize OpenGL.  Please install the latest drivers for your graphic card.  You will probably find one for your card there: [intel (http://intel.com)] [ati (http://ati.com)] [nvidia (http://nvidia.com)]
 	5. your download might be corrupted, please download Nexuiz again
 
+** When i start Nexuiz my screen is flickering
+This in known to happen on windows with intel grahpic chips and is a bug in the graphics drivers.  A workaround is to set |Flip-Policiy| to |blit|.  Open the control panel, there should be an icon called |Intel(R) GMA driver| (or something like that), double click it. Click on |3D Settings| to find the screen with that settings.
+
 ** How can I speed up my frame rate?
 You can choose predefined performance settings in the |Settings / Video| menu.  |Normal| is the default, |Medium| and |Low| run faster while |High|, |Ultra| and |Ultimate| enable more features you might want to test if you have a high end graphic card.  Or you can dis/enable single features.  The greatest performance boost can be achieved by turning off dynamic lights and shadows in the |Settings / Effects| menu.  Bloom is also quite resource intensive.  Other fps boots include disabling |Deluxemapping| and |Coronas|.  On older graphics cards or on-board/notebook chips with little video ram you can try to lower the texture quality in the |Settings / Video| menu.
 Some graphic cards (mostly ATI or quite old cards) run A LOT faster if you disable the |Vertex Buffer Objects| in the |Settings / Video| menu.  An other thing that can greatly help on such cards is to disable the |OpenGL 2.0 Shaders|.  Having that option enabled is faster on most cards however thats why both are active by default.
