@@ -202,7 +202,7 @@ float W_ThrowNewWeapon(entity own, float wpn, float doreduce, vector org, vector
 		ammofield = Item_CounterField(wa);
 		oldself = self;
 		self = wep;
-		Item_SpawnByWeaponCode(wpn);
+		weapon_defaultspawnfunc(wpn);
 		self = oldself;
 		if(startitem_failed)
 			return -1;

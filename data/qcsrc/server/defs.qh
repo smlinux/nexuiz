@@ -366,7 +366,6 @@ void DropAllRunes(entity pl);
 
 typedef .float floatfield;
 floatfield Item_CounterField(float it);
-void Item_SpawnByWeaponCode(float it);
 
 float W_AmmoItemCode(float wpn);
 float W_WeaponBit(float wpn);
