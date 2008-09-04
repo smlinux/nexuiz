@@ -3,6 +3,12 @@ void TeleportPlayer(entity teleporter, entity player, vector to, vector to_angle
 {
 	entity head;
 	entity oldself;
+	entity telefragger;
+
+	if(teleporter.owner)
+		telefragger = teleporter.owner;
+	else
+		telefragger = player;
 
 	sound (player, CHAN_TRIGGER, "misc/teleport.wav", VOL_BASE, ATTN_NORM);
 	pointparticles(particleeffectnum("teleport"), player.origin, '0 0 0', 1);
@@ -42,11 +48,11 @@ void TeleportPlayer(entity teleporter, entity player, vector to, vector to_angle
 						if(boxesoverlap(deathmin, deathmax, head.absmin, head.absmax))
 						{
 							if ((player.classname == "player") && (player.health >= 1))
-								Damage (head, teleporter, player, 10000, DEATH_TELEFRAG, head.origin, '0 0 0');
-							else if (player.health < 1) // corpses gib
-								Damage (head, teleporter, player, 10000, DEATH_TELEFRAG, head.origin, '0 0 0');
+								Damage (head, teleporter, telefragger, 10000, DEATH_TELEFRAG, head.origin, '0 0 0');
+							else if (telefragger.health < 1) // corpses gib
+								Damage (head, teleporter, telefragger, 10000, DEATH_TELEFRAG, head.origin, '0 0 0');
 							else // dead bodies and monsters gib themselves instead of telefragging
-								Damage (player, teleporter, player, 10000, DEATH_TELEFRAG, player.origin, '0 0 0');
+								Damage (telefragger, teleporter, telefragger, 10000, DEATH_TELEFRAG, telefragger.origin, '0 0 0');
 						}
 		}
 
