@@ -68,6 +68,6 @@ float compressShortVector(vector vec);
 
 #ifndef MENUQC
 float CheckWireframeBox(entity forent, vector v0, vector dvx, vector dvy, vector dvz);
-#endif
 
 void fixedmakevectors(vector a);
+#endif

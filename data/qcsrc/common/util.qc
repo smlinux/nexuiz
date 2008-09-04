@@ -632,7 +632,6 @@ float CheckWireframeBox(entity forent, vector v0, vector dvx, vector dvy, vector
 	traceline(v0 + dvy + dvz, v0 + dvx + dvy + dvz, TRUE, forent); if(trace_fraction < 1) return 0;
 	return 1;
 }
-#endif
 
 // a makevectors that inverts vectoangles
 void fixedmakevectors(vector a)
@@ -640,3 +639,4 @@ void fixedmakevectors(vector a)
 	a_x = -a_x;
 	makevectors(a);
 }
+#endif
