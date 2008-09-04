@@ -148,7 +148,7 @@ void W_Grenade_Attack2 (void)
 
 void spawnfunc_weapon_grenadelauncher (void)
 {
-	weapon_defaultspawnfunc(WEP_GRENADE_LAUNCHER, 5000);
+	weapon_defaultspawnfunc(WEP_GRENADE_LAUNCHER);
 }
 
 .float bot_secondary_grenademooth;
@@ -215,7 +215,5 @@ float w_glauncher(float req)
 		w_deathtypestring = "detonated";
 	else if (req == WR_KILLMESSAGE)
 		w_deathtypestring = "was blasted by";
-	else if (req == WR_SPAWNFUNC)
-		spawnfunc_weapon_grenadelauncher();
 	return TRUE;
 };

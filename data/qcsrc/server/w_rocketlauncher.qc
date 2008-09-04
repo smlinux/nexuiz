@@ -434,7 +434,5 @@ float w_rlauncher(float req)
 		w_deathtypestring = "exploded";
 	else if (req == WR_KILLMESSAGE)
 		w_deathtypestring = "almost dodged #'s rocket";
-	else if (req == WR_SPAWNFUNC)
-		spawnfunc_weapon_rocketlauncher();
 	return TRUE;
 };

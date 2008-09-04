@@ -166,7 +166,7 @@ void W_Electro_Attack2()
 
 void spawnfunc_weapon_electro (void)
 {
-	weapon_defaultspawnfunc(WEP_ELECTRO, 5000);
+	weapon_defaultspawnfunc(WEP_ELECTRO);
 }
 
 .float bot_secondary_electromooth;
@@ -232,8 +232,6 @@ float w_electro(float req)
 		return self.ammo_cells >= cvar("g_balance_electro_secondary_ammo");
 	else if (req == WR_SUICIDEMESSAGE)
 		w_deathtypestring = "played with plasma";
-	else if (req == WR_SPAWNFUNC)
-		spawnfunc_weapon_electro();
 	// else if (req == WR_KILLMESSAGE) // TODO
 	return TRUE;
 };

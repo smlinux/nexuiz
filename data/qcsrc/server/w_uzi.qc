@@ -151,7 +151,5 @@ float w_uzi(float req)
 		w_deathtypestring = "did the impossible";
 	else if (req == WR_KILLMESSAGE)
 		w_deathtypestring = "was riddled full of holes by";
-	else if (req == WR_SPAWNFUNC)
-		spawnfunc_weapon_machinegun();
 	return TRUE;
 };

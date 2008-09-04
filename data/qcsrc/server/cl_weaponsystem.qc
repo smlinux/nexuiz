@@ -588,7 +588,7 @@ void W_SetupProjectileVelocity(entity missile)
 entity weapon_info[24];
 entity dummy_weapon_info;
 .float(float) weapon_func;
-void register_weapon(float id, float(float) func, float ammotype, float i, float normalweapon, string modelname, string shortname, string name)
+void register_weapon(float id, float(float) func, float ammotype, float i, float normalweapon, float pickupbasevalue, string modelname, string shortname, string name)
 {
 	entity e;
 	weapon_info[id - 1] = e = spawn();
@@ -603,6 +603,7 @@ void register_weapon(float id, float(float) func, float ammotype, float i, float
 	e.model = strzone(strcat("models/weapons/g_", modelname, ".md3"));
 	e.spawnflags = normalweapon;
 	e.impulse = i;
+	e.bot_pickupbasevalue = pickupbasevalue;
 }
 float w_null(float dummy)
 {
@@ -621,6 +622,7 @@ void register_dummy_weapon()
 	dummy_weapon_info.model = "";
 	dummy_weapon_info.spawnflags = 0;
 	dummy_weapon_info.impulse = -1;
+	dummy_weapon_info.bot_pickupbasevalue = 0;
 }
 entity get_weaponinfo(float id)
 {

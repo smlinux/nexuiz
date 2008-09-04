@@ -29,11 +29,6 @@ string Item_CounterFieldName(float it)
 	}
 }
 
-void Item_SpawnByWeaponCode(float it)
-{
-	weapon_action(it, WR_SPAWNFUNC);
-}
-
 .float max_armorvalue;
 
 void Item_Respawn (void)
@@ -587,12 +582,39 @@ void minst_remove_item (void) {
 }
 
 float weaponswapping;
+float internalteam;
 
-void weapon_defaultspawnfunc(float wpn, float weight)
+void weapon_defaultspawnfunc(float wpn)
 {
 	entity e;
 	float t;
 	var .float ammofield;
+	string s;
+	entity oldself;
+	float i;
+
+	if(self.classname != "droppedweapon" && self.classname != "replacedweapon")
+	{
+		s = cvar_string(strcat("g_weaponreplace_", ftos(wpn)));
+		t = tokenize(s);
+		if(t >= 2)
+		{
+			self.team = --internalteam;
+			for(i = 1; i < t; ++i)
+			{
+				oldself = self;
+				self = spawn();
+				copyentity(oldself, self);
+				self.classname = "replacedweapon";
+				weapon_defaultspawnfunc(stof(argv(i)));
+				self = oldself;
+				print("replaced by ", argv(i), "\n");
+			}
+		}
+		if(t >= 1)
+			wpn = stof(argv(0));
+	}
+
 	e = get_weaponinfo(wpn);
 
 	t = g_pickup_respawntime_short;
@@ -607,32 +629,30 @@ void weapon_defaultspawnfunc(float wpn, float weight)
 	if(e.items == IT_SUPERWEAPON)
 		t = g_pickup_respawntime_powerup;
 
-	StartItem (e.model, "weapons/weaponpickup.wav", t, e.message, 0, e.weapons, FL_WEAPON, weapon_pickupevalfunc, weight);
+	StartItem(e.model, "weapons/weaponpickup.wav", t, e.message, 0, e.weapons, FL_WEAPON, weapon_pickupevalfunc, e.bot_pickupbasevalue);
 	if (self.modelindex) // don't precache if self was removed
 		weapon_action(e.weapon, WR_PRECACHE);
 }
 
 void spawnfunc_weapon_shotgun (void);
 void spawnfunc_weapon_uzi (void) {
-	if(!weaponswapping)
 	if(q3acompat_machineshotgunswap)
 	if(self.classname != "droppedweapon")
 	{
-		weapon_defaultspawnfunc(WEP_SHOTGUN, 2500);
+		weapon_defaultspawnfunc(WEP_SHOTGUN);
 		return;
 	}
-	weapon_defaultspawnfunc(WEP_UZI, 5000);
+	weapon_defaultspawnfunc(WEP_UZI);
 }
 
 void spawnfunc_weapon_shotgun (void) {
-	if(!weaponswapping)
 	if(q3acompat_machineshotgunswap)
 	if(self.classname != "droppedweapon")
 	{
-		weapon_defaultspawnfunc(WEP_UZI, 5000);
+		weapon_defaultspawnfunc(WEP_UZI);
 		return;
 	}
-	weapon_defaultspawnfunc(WEP_SHOTGUN, 2500);
+	weapon_defaultspawnfunc(WEP_SHOTGUN);
 }
 
 void spawnfunc_weapon_nex (void)
@@ -644,7 +664,7 @@ void spawnfunc_weapon_nex (void)
 		self.nextthink = time + cvar("sys_ticrate");
 		return;
 	}
-	weapon_defaultspawnfunc(WEP_NEX, 10000);
+	weapon_defaultspawnfunc(WEP_NEX);
 }
 
 void spawnfunc_weapon_minstanex (void)
@@ -656,7 +676,7 @@ void spawnfunc_weapon_minstanex (void)
 		self.nextthink = time + cvar("sys_ticrate");
 		return;
 	}
-	weapon_defaultspawnfunc(WEP_MINSTANEX, 10000);
+	weapon_defaultspawnfunc(WEP_MINSTANEX);
 }
 
 void spawnfunc_weapon_rocketlauncher (void)
@@ -668,7 +688,7 @@ void spawnfunc_weapon_rocketlauncher (void)
 		self.nextthink = time + cvar("sys_ticrate");
 		return;
 	}
-	weapon_defaultspawnfunc(WEP_ROCKET_LAUNCHER, 10000);
+	weapon_defaultspawnfunc(WEP_ROCKET_LAUNCHER);
 }
 
 void spawnfunc_item_rockets (void) {

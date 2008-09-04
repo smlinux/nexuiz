@@ -158,7 +158,7 @@ void W_Hagar_Attack2 (void)
 
 void spawnfunc_weapon_hagar (void)
 {
-	weapon_defaultspawnfunc(WEP_HAGAR, 5000);
+	weapon_defaultspawnfunc(WEP_HAGAR);
 }
 
 float w_hagar(float req)
@@ -206,7 +206,5 @@ float w_hagar(float req)
 	// else if (req == WR_SUICIDEMESSAGE) // TODO
 	else if (req == WR_KILLMESSAGE)
 		w_deathtypestring = "was pummeled by";
-	else if (req == WR_SPAWNFUNC)
-		spawnfunc_weapon_hagar();
 	return TRUE;
 };

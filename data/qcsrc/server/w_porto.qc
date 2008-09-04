@@ -118,7 +118,7 @@ void W_Porto_Attack (void)
 
 void spawnfunc_weapon_porto (void)
 {
-	weapon_defaultspawnfunc(WEP_PORTO, 5000);
+	weapon_defaultspawnfunc(WEP_PORTO);
 }
 
 float w_porto(float req)
@@ -192,7 +192,5 @@ float w_porto(float req)
 		w_deathtypestring = "did the impossible";
 	else if (req == WR_KILLMESSAGE)
 		w_deathtypestring = "felt # doing the impossible";
-	else if (req == WR_SPAWNFUNC)
-		spawnfunc_weapon_porto();
 	return TRUE;
 };

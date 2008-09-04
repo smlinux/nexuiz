@@ -133,13 +133,7 @@ float w_laser(float req)
 		return TRUE;
 	else if (req == WR_CHECKAMMO2)
 		return TRUE;
-	else if (req == WR_SUICIDEMESSAGE)
-		w_deathtypestring = "did the impossible";
+	// else if (req == WR_SUICIDEMESSAGE) // TODO
 	// else if (req == WR_KILLMESSAGE) // TODO
-	else if (req == WR_SPAWNFUNC)
-	{
-		remove(self); // cannot spawn this
-		self = world;
-	}
 	return TRUE;
 };

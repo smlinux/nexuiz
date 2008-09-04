@@ -64,7 +64,5 @@ float w_nex(float req)
 		w_deathtypestring = "did the impossible";
 	else if (req == WR_KILLMESSAGE)
 		w_deathtypestring = "has been vaporized by";
-	else if (req == WR_SPAWNFUNC)
-		spawnfunc_weapon_nex();
 	return TRUE;
 };

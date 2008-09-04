@@ -208,9 +208,8 @@ float WR_AIM		    = 5; // runs bot aiming code for this weapon
 float WR_PRECACHE	    = 6; // precaches models/sounds used by this weapon
 float WR_SUICIDEMESSAGE = 7; // sets w_deathtypestring or leaves it alone
 float WR_KILLMESSAGE    = 8; // sets w_deathtypestring or leaves it alone
-float WR_SPAWNFUNC      = 9; // calls the spawn function (which just needs to call weapon_defaultspawnfunc)
 
-void weapon_defaultspawnfunc(float wpn, float weight);
+void weapon_defaultspawnfunc(float wpn);
 
 string w_deathtypestring;
 

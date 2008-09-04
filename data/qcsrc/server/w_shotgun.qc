@@ -145,7 +145,5 @@ float w_shotgun(float req)
 		w_deathtypestring = "did the impossible";
 	else if (req == WR_KILLMESSAGE)
 		w_deathtypestring = "was gunned by";
-	else if (req == WR_SPAWNFUNC)
-		spawnfunc_weapon_shotgun();
 	return TRUE;
 };
