@@ -47,14 +47,178 @@ void Item_Respawn (void)
 	pointparticles(particleeffectnum("item_respawn"), self.origin + 0.5 * (self.mins + self.maxs), '0 0 0', 1);
 }
 
-void Item_Touch (void)
+float Item_GiveTo(entity item, entity player)
 {
-	entity oldself;
 	float _switchweapon;
 	float pickedup;
 	float it;
 	float i;
 	entity e;
+
+	// if nothing happens to player, just return without taking the item
+	pickedup = FALSE;
+	_switchweapon = FALSE;
+
+	if (g_minstagib)
+	{
+		_switchweapon = TRUE;
+		if (item.ammo_cells)
+		{
+			pickedup = TRUE;
+			// play some cool sounds ;)
+			centerprint(player, "\n");
+			if(player.health <= 5)
+				announce(player, "announcer/robotic/lastsecond.ogg");
+			else if(player.health < 50)
+				announce(player, "announcer/robotic/narrowly.ogg");
+			// sound not available
+			// else if(item.items == IT_CELLS)
+			//	play2(player, "announce/robotic/ammo.ogg");
+
+			if (item.weapons & WEPBIT_MINSTANEX)
+				W_GiveWeapon (player, WEP_MINSTANEX, "Nex");
+			if (item.ammo_cells)
+				player.ammo_cells = min (player.ammo_cells + cvar("g_minstagib_ammo_drop"), 999);
+			player.health = 100;
+		}
+
+		// extralife powerup
+		if (item.max_health)
+		{
+			pickedup = TRUE;
+			// sound not available
+			// play2(player, "announce/robotic/extra.ogg\nplay2 announce/robotic/_lives.ogg");
+			player.armorvalue = player.armorvalue + cvar("g_minstagib_extralives");
+			sprint(player, "^3You picked up some extra lives\n");
+		}
+
+		// invis powerup
+		if (item.strength_finished)
+		{
+			pickedup = TRUE;
+			// sound not available
+			// play2(player, "announce/robotic/invisible.ogg");
+			player.strength_finished = max(player.strength_finished, time) + cvar("g_balance_powerup_strength_time");
+		}
+
+		// speed powerup
+		if (item.invincible_finished)
+		{
+			pickedup = TRUE;
+			// sound not available
+			// play2(player, "announce/robotic/speed.ogg");
+			player.invincible_finished = max(player.invincible_finished, time) + cvar("g_balance_powerup_strength_time");
+		}
+	}
+	else
+	{
+		if (cvar("deathmatch") == 2 || cvar("g_weapon_stay"))
+		{
+			if (item.flags & FL_WEAPON && player.weapons & item.weapons && item.classname != "droppedweapon")
+				return 0;
+			if (player.weapons & item.weapons && item.flags & FL_TOSSED)	// don't let players stack ammo by tossing weapons
+				return 0;
+		}
+
+		// in case the player has autoswitch enabled do the following:
+		// if the player is using their best weapon before items are given, they
+		// probably want to switch to an even better weapon after items are given
+		if (player.autoswitch)
+		if (player.switchweapon == w_getbestweapon(player))
+			_switchweapon = TRUE;
+
+		if (item.ammo_shells)
+		if (player.ammo_shells < g_pickup_shells_max)
+		{
+			pickedup = TRUE;
+			player.ammo_shells = min (player.ammo_shells + item.ammo_shells, g_pickup_shells_max);
+		}
+		if (item.ammo_nails)
+		if (player.ammo_nails < g_pickup_nails_max)
+		{
+			pickedup = TRUE;
+			player.ammo_nails = min (player.ammo_nails + item.ammo_nails, g_pickup_nails_max);
+		}
+		if (item.ammo_rockets)
+		if (player.ammo_rockets < g_pickup_rockets_max)
+		{
+			pickedup = TRUE;
+			player.ammo_rockets = min (player.ammo_rockets + item.ammo_rockets, g_pickup_rockets_max);
+		}
+		if (item.ammo_cells)
+		if (player.ammo_cells < g_pickup_cells_max)
+		{
+			pickedup = TRUE;
+			player.ammo_cells = min (player.ammo_cells + item.ammo_cells, g_pickup_cells_max);
+		}
+
+		if (item.flags & FL_WEAPON)
+		if ((it = item.weapons - (item.weapons & player.weapons)))
+		{
+			pickedup = TRUE;
+			for(i = WEP_FIRST; i <= WEP_LAST; ++i)
+			{
+				e = get_weaponinfo(i);
+				if(it & e.weapons)
+					W_GiveWeapon (player, e.weapon, item.netname);
+			}
+		}
+
+		if (item.strength_finished)
+		{
+			pickedup = TRUE;
+			player.strength_finished = max(player.strength_finished, time) + cvar("g_balance_powerup_strength_time");
+		}
+		if (item.invincible_finished)
+		{
+			pickedup = TRUE;
+			player.invincible_finished = max(player.invincible_finished, time) + cvar("g_balance_powerup_invincible_time");
+		}
+		//if (item.speed_finished)
+		//{
+		//	pickedup = TRUE;
+		//	player.speed_finished = max(player.speed_finished, time) + cvar("g_balance_powerup_speed_time");
+		//}
+		//if (item.slowmo_finished)
+		//{
+		//	pickedup = TRUE;
+		//	player.slowmo_finished = max(player.slowmo_finished, time) + (cvar("g_balance_powerup_slowmo_time") * cvar("g_balance_powerup_slowmo_speed"));
+		//}
+
+		if (item.health)
+		if (player.health < item.max_health)
+		{
+			pickedup = TRUE;
+			player.health = min(player.health + item.health, item.max_health);
+			player.pauserothealth_finished = max(player.pauserothealth_finished, time + cvar("g_balance_pause_health_rot"));
+		}
+		if (item.armorvalue)
+		if (player.armorvalue < item.max_armorvalue)
+		{
+			pickedup = TRUE;
+			player.armorvalue = min(player.armorvalue + item.armorvalue, item.max_armorvalue);
+			player.pauserotarmor_finished = max(player.pauserotarmor_finished, time + cvar("g_balance_pause_armor_rot"));
+		}
+	}
+
+	// always eat teamed entities
+	if(item.team)
+		pickedup = TRUE;
+
+	if (!pickedup)
+		return 0;
+
+	sound (player, CHAN_AUTO, item.item_pickupsound, VOL_BASE, ATTN_NORM);
+	if (_switchweapon)
+		W_SwitchWeapon_Force(player, w_getbestweapon(item));
+
+	return 1;
+}
+
+void Item_Touch (void)
+{
+	entity e, head;
+	float n;
 
 	// remove the item if it's currnetly in a NODROP brush or hits a NOIMPACT surface (such as sky)
 	if (((trace_dpstartcontents | trace_dphitcontents) & DPCONTENTS_NODROP) || (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT))
@@ -71,176 +235,54 @@ void Item_Touch (void)
 	if (self.owner == other)
 		return;
 
-	// if nothing happens to other, just return without taking the item
-	pickedup = FALSE;
-	_switchweapon = FALSE;
-
-	if (g_minstagib)
-	{
-		_switchweapon = TRUE;
-		if (self.ammo_cells)
-		{
-			pickedup = TRUE;
-			// play some cool sounds ;)
-			centerprint(other, "\n");
-			if(other.health <= 5)
-				announce(other, "announcer/robotic/lastsecond.ogg");
-			else if(other.health < 50)
-				announce(other, "announcer/robotic/narrowly.ogg");
-			// sound not available
-			// else if(self.items == IT_CELLS)
-			//	play2(other, "announce/robotic/ammo.ogg");
-
-			if (self.weapons & WEPBIT_MINSTANEX)
-				W_GiveWeapon (other, WEP_MINSTANEX, "Nex");
-			if (self.ammo_cells)
-				other.ammo_cells = min (other.ammo_cells + cvar("g_minstagib_ammo_drop"), 999);
-			other.health = 100;
-		}
-
-		// extralife powerup
-		if (self.max_health)
-		{
-			pickedup = TRUE;
-			// sound not available
-			// play2(other, "announce/robotic/extra.ogg\nplay2 announce/robotic/_lives.ogg");
-			other.armorvalue = other.armorvalue + cvar("g_minstagib_extralives");
-			sprint(other, "^3You picked up some extra lives\n");
-		}
-
-		// invis powerup
-		if (self.strength_finished)
-		{
-			pickedup = TRUE;
-			// sound not available
-			// play2(other, "announce/robotic/invisible.ogg");
-			other.strength_finished = max(other.strength_finished, time) + cvar("g_balance_powerup_strength_time");
-		}
-
-		// speed powerup
-		if (self.invincible_finished)
-		{
-			pickedup = TRUE;
-			// sound not available
-			// play2(other, "announce/robotic/speed.ogg");
-			other.invincible_finished = max(other.invincible_finished, time) + cvar("g_balance_powerup_strength_time");
-		}
-	}
-	else
-	{
-		if (cvar("deathmatch") == 2 || cvar("g_weapon_stay"))
-		{
-			if (self.flags & FL_WEAPON && other.weapons & self.weapons && self.classname != "droppedweapon")
-				return;
-			if (other.weapons & self.weapons && self.flags & FL_TOSSED)	// don't let players stack ammo by tossing weapons
-				return;
-		}
-
-		// in case the player has autoswitch enabled do the following:
-		// if the player is using their best weapon before items are given, they
-		// probably want to switch to an even better weapon after items are given
-		if (other.autoswitch)
-		if (other.switchweapon == w_getbestweapon(other))
-			_switchweapon = TRUE;
-
-		if (self.ammo_shells)
-		if (other.ammo_shells < g_pickup_shells_max)
-		{
-			pickedup = TRUE;
-			other.ammo_shells = min (other.ammo_shells + self.ammo_shells, g_pickup_shells_max);
-		}
-		if (self.ammo_nails)
-		if (other.ammo_nails < g_pickup_nails_max)
-		{
-			pickedup = TRUE;
-			other.ammo_nails = min (other.ammo_nails + self.ammo_nails, g_pickup_nails_max);
-		}
-		if (self.ammo_rockets)
-		if (other.ammo_rockets < g_pickup_rockets_max)
-		{
-			pickedup = TRUE;
-			other.ammo_rockets = min (other.ammo_rockets + self.ammo_rockets, g_pickup_rockets_max);
-		}
-		if (self.ammo_cells)
-		if (other.ammo_cells < g_pickup_cells_max)
-		{
-			pickedup = TRUE;
-			other.ammo_cells = min (other.ammo_cells + self.ammo_cells, g_pickup_cells_max);
-		}
-
-		if (self.flags & FL_WEAPON)
-		if ((it = self.weapons - (self.weapons & other.weapons)))
-		{
-			pickedup = TRUE;
-			for(i = WEP_FIRST; i <= WEP_LAST; ++i)
-			{
-				e = get_weaponinfo(i);
-				if(it & e.weapons)
-					W_GiveWeapon (other, e.weapon, self.netname);
-			}
-		}
-
-		if (self.strength_finished)
-		{
-			pickedup = TRUE;
-			other.strength_finished = max(other.strength_finished, time) + cvar("g_balance_powerup_strength_time");
-		}
-		if (self.invincible_finished)
-		{
-			pickedup = TRUE;
-			other.invincible_finished = max(other.invincible_finished, time) + cvar("g_balance_powerup_invincible_time");
-		}
-		//if (self.speed_finished)
-		//{
-		//	pickedup = TRUE;
-		//	other.speed_finished = max(other.speed_finished, time) + cvar("g_balance_powerup_speed_time");
-		//}
-		//if (self.slowmo_finished)
-		//{
-		//	pickedup = TRUE;
-		//	other.slowmo_finished = max(other.slowmo_finished, time) + (cvar("g_balance_powerup_slowmo_time") * cvar("g_balance_powerup_slowmo_speed"));
-		//}
-
-		if (self.health)
-		if (other.health < self.max_health)
-		{
-			pickedup = TRUE;
-			other.health = min(other.health + self.health, self.max_health);
-			other.pauserothealth_finished = max(other.pauserothealth_finished, time + cvar("g_balance_pause_health_rot"));
-		}
-		if (self.armorvalue)
-		if (other.armorvalue < self.max_armorvalue)
-		{
-			pickedup = TRUE;
-			other.armorvalue = min(other.armorvalue + self.armorvalue, self.max_armorvalue);
-			other.pauserotarmor_finished = max(other.pauserotarmor_finished, time + cvar("g_balance_pause_armor_rot"));
-		}
-	}
-
-	if (!pickedup)
+	if(!Item_GiveTo(self, other))
 		return;
-
-	sound (other, CHAN_AUTO, self.item_pickupsound, VOL_BASE, ATTN_NORM);
-
-	oldself = self;
-	self = other;
-
-	if (_switchweapon)
-		W_SwitchWeapon_Force(self, w_getbestweapon(self));
-
-	self = oldself;
 
 	if (self.classname == "droppedweapon")
 		remove (self);
-	else if(self.flags & FL_WEAPON && (cvar("deathmatch") == 2 || cvar("g_weapon_stay")))
+	else if((self.flags & FL_WEAPON) && !self.team && (cvar("deathmatch") == 2 || cvar("g_weapon_stay")))
 		return;
 	else
 	{
 		self.solid = SOLID_NOT;
 		self.model = string_null;
-		self.nextthink = time + self.respawntime;
-		self.think = Item_Respawn;
-		setorigin (self, self.origin);
+		if(self.team)
+		{
+			RandomSelection_Init();
+			for(head = world; (head = findfloat(head, team, self.team)); ) if(head.flags & FL_ITEM)
+				RandomSelection_Add(head, 0, 1, 0);
+			e = RandomSelection_chosen_ent;
+		}
+		else
+			e = self;
+		e.nextthink = time + self.respawntime;
+		e.think = Item_Respawn;
+	}
+}
+
+void Item_FindTeam()
+{
+	entity head, e;
+
+	if(self.effects & EF_NODRAW)
+	{
+		// marker for item team search
+		dprint("Initializing item team ", ftos(self.team), "\n");
+		RandomSelection_Init();
+		for(head = world; (head = findfloat(head, team, self.team)); ) if(head.flags & FL_ITEM)
+			RandomSelection_Add(head, 0, 1, 0);
+		e = RandomSelection_chosen_ent;
+
+		for(head = world; (head = findfloat(head, team, self.team)); ) if(head.flags & FL_ITEM)
+		{
+			if(head != e)
+			{
+				// make it a non-spawned item
+				head.solid = SOLID_NOT;
+				head.model = string_null;
+			}
+			head.effects = head.effects - (head.effects & EF_NODRAW);
+		}
 	}
 }
 
@@ -461,6 +503,12 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 
 	if (cvar("g_fullbrightitems"))
 		self.effects = self.effects | EF_FULLBRIGHT;
+	
+	if(self.team)
+	{
+		self.effects = self.effects | EF_NODRAW; // marker for item team search
+		InitializeEntity(self, Item_FindTeam, INITPRIO_FINDTARGET);
+	}
 }
 
 /* replace items in minstagib
