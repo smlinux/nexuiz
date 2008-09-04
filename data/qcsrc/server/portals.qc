@@ -128,6 +128,8 @@ void Portal_TeleportPlayer(entity teleporter, entity player)
 
 	newvel = Portal_Transform_Apply(transform, player.velocity);
 
+	if(player.flagcarried)
+		DropFlag(player.flagcarried);
 	TeleportPlayer(teleporter, player, to, ang, newvel, teleporter.enemy.absmin, teleporter.enemy.absmax);
 
 	// reset fade counter
