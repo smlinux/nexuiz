@@ -199,6 +199,10 @@ void Portal_Touch()
 		if(other.classname == "player")
 			if(IS_INDEPENDENT_PLAYER(other) || IS_INDEPENDENT_PLAYER(self.owner))
 				return; // cannot go through someone else's portal
+	if(other.owner != self.owner)
+		if(other.owner.classname == "player")
+			if(IS_INDEPENDENT_PLAYER(other.owner) || IS_INDEPENDENT_PLAYER(self.owner))
+				return; // cannot go through someone else's portal
 	fixedmakevectors(self.angles);
 	if((other.origin - self.origin) * v_forward < 0)
 		return;
