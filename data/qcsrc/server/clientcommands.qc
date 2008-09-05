@@ -265,7 +265,8 @@ void SV_ParseClientCommand(string s) {
 	} else if(argv(0) == "ready") {
 		if not(self.flags & FL_CLIENT)
 			return;
-		if(cvar("sv_ready_restart"))
+		if((g_tourney && 0 < g_tourney_warmup_limit) // with unlimited warmup players have to be able to restart
+		   || cvar("sv_ready_restart"))
 		{
 			if(timeoutStatus) {
 				return sprint(self, "^1You cannot reset the game while a timeout is active!\n");
@@ -401,6 +402,7 @@ void ReadyRestart()
 	if(g_tourney) {
 		tourneyInMatchStage = 1; //once the game is restarted the game is in match stage
 		//reset weapons and ammo, health and armor to default:
+		// TODO is this really the right way?!? see miscfunction.qc readlevelcvars()
 		start_weapons = WEPBIT_LASER | WEPBIT_SHOTGUN;
 		start_switchweapon = WEP_SHOTGUN;
 		start_ammo_shells = cvar("g_start_ammo_shells");
@@ -417,7 +419,7 @@ void ReadyRestart()
 	{
 		e.ready = 0;
 	}
-	if(0<cvar("timelimit") || (g_tourney && cvar("g_tourney_warmup_unlimited_time")) )
+	if(0<cvar("timelimit") || (g_tourney && (-1 == g_tourney_warmup_limit)) )
 	{
 		// remember original timelimit on first restart
 		if(!timelimit_orig)

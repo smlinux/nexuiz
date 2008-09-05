@@ -733,6 +733,7 @@ void readlevelcvars(void)
 	g_rocketarena = cvar("g_rocketarena");
 	g_vampire = cvar("g_vampire");
 	g_tourney = cvar("g_tourney");
+	g_tourney_warmup_limit = cvar("g_tourney_warmup_limit");
 	sv_maxidle = cvar("sv_maxidle");
 	sv_maxidle_spectatorsareidle = cvar("sv_maxidle_spectatorsareidle");
 	sv_pogostick = cvar("sv_pogostick");
