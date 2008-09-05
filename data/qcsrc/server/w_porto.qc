@@ -1,11 +1,11 @@
-.float porto_grenade_id;
+.float portal_id;
 .vector porto_v_angle; // holds "held" view angles
 .float porto_v_angle_held;
 .vector right_vector;
 
 void W_Porto_Success (void)
 {
-	self.owner.porto_grenade_id = 0;
+	self.owner.portal_id = 0;
 	remove(self);
 }
 
@@ -13,7 +13,11 @@ float W_ThrowNewWeapon(entity own, float wpn, float doreduce, vector org, vector
 void W_Porto_Fail (void)
 {
 	centerprint(self.owner, "^1Portal deployment failed.\n\n^2Catch it to try again!");
-	self.owner.porto_grenade_id = 0;
+
+	// no portals here!
+	Portal_ClearWithID(self.owner, self.portal_id);
+
+	self.owner.portal_id = 0;
 	// TODO maybe instead throw the portal gun there?
 	// self.owner.weapons = self.owner.weapons | WEPBIT_PORTO;
 	setsize (self, '-16 -16 0', '16 16 32');
@@ -51,27 +55,41 @@ void W_Porto_Touch (void)
 	{
 		remove(self);
 	}
+	else if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_SLICK)
+	{
+		// just reflect
+		self.right_vector = self.right_vector - 2 * trace_plane_normal * (self.right_vector * trace_plane_normal);
+	}
+	else if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
+	{
+		W_Porto_Fail();
+	}
 	else if(self.cnt == 0)
 	{
 		self.cnt = 1;
-		if(!Portal_SpawnInPortalAtTrace(self.owner, self.right_vector, self.porto_grenade_id))
+		if(Portal_SpawnInPortalAtTrace(self.owner, self.right_vector, self.portal_id))
+		{
+			trace_plane_normal = norm;
+			self.right_vector = self.right_vector - 2 * trace_plane_normal * (self.right_vector * trace_plane_normal);
+			self.angles = vectoangles(self.velocity);
+		}
+		else
 		{
 			trace_plane_normal = norm;
 			W_Porto_Fail();
-			return;
 		}
-		trace_plane_normal = norm;
-		self.right_vector = self.right_vector - 2 * trace_plane_normal * (self.right_vector * trace_plane_normal);
 	}
 	else
 	{
-		if(!Portal_SpawnOutPortalAtTrace(self.owner, self.right_vector, self.porto_grenade_id))
+		if(Portal_SpawnOutPortalAtTrace(self.owner, self.right_vector, self.portal_id))
+		{
+			W_Porto_Success();
+		}
+		else
 		{
 			trace_plane_normal = norm;
 			W_Porto_Fail();
 		}
-		else
-			W_Porto_Success();
 	}
 
 }
@@ -108,7 +126,7 @@ void W_Porto_Attack (void)
 	gren.angles = vectoangles (gren.velocity);
 	gren.flags = FL_PROJECTILE;
 
-	self.porto_grenade_id = gren.porto_grenade_id = time;
+	self.portal_id = gren.portal_id = time;
 	gren.playerid = self.playerid;
 	fixedmakevectors(vectoangles(gren.velocity));
 	gren.right_vector = v_right;
@@ -177,7 +195,7 @@ float w_porto(float req)
 			makevectors(self.porto_v_angle); // override the previously set angles
 
 		if (self.BUTTON_ATCK)
-		if (!self.porto_grenade_id)
+		if (!self.portal_id)
 		if (weapon_prepareattack(0, cvar("g_balance_porto_primary_refire")))
 		{
 			W_Porto_Attack();

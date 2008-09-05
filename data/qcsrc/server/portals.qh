@@ -1,3 +1,4 @@
 void Portal_ClearAll(entity own);
-float Portal_SpawnOutPortalAtTrace(entity own, vector dir, float portal_id);
-float Portal_SpawnInPortalAtTrace(entity own, vector dir, float portal_id);
+float Portal_SpawnOutPortalAtTrace(entity own, vector dir, float id);
+float Portal_SpawnInPortalAtTrace(entity own, vector dir, float id);
+void Portal_ClearWithID(entity own, float id);
