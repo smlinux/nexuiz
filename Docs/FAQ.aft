@@ -49,7 +49,7 @@ This happens when the engine can't load the data*.pk3 file or has trouble to ini
 	5. your download might be corrupted, please download Nexuiz again
 
 ** When i start Nexuiz my screen is flickering
-This in known to happen on windows with intel grahpic chips and is a bug in the graphics drivers.  A workaround is to set |Flip-Policiy| to |blit|.  Open the control panel, there should be an icon called |Intel(R) GMA driver| (or something like that), double click it. Click on |3D Settings| to find the screen with that settings.
+This in known to happen on Windows with Intel grahpic chips and is a bug in the graphics drivers.  A workaround is to set |Flip-Policiy| to |blit|.  Open the control panel, there should be an icon called |Intel(R) GMA driver| (or something like that), double click it. Click on |3D Settings| to find the screen with that settings.
 
 ** How can I speed up my frame rate?
 You can choose predefined performance settings in the |Settings / Video| menu.  |Normal| is the default, |Medium| and |Low| run faster while |High|, |Ultra| and |Ultimate| enable more features you might want to test if you have a high end graphic card.  Or you can dis/enable single features.  The greatest performance boost can be achieved by turning off dynamic lights and shadows in the |Settings / Effects| menu.  Bloom is also quite resource intensive.  Other fps boots include disabling |Deluxemapping| and |Coronas|.  On older graphics cards or on-board/notebook chips with little video ram you can try to lower the texture quality in the |Settings / Video| menu.
