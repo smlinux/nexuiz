@@ -469,16 +469,34 @@ float tracebox_hits_trigger_hurt(vector start, vector mi, vector ma, vector end)
 }
 
 
-void target_speaker_use() {sound(self, CHAN_TRIGGER, self.noise, VOL_BASE, ATTN_NORM);}
+// TODO add a way to do looped sounds with sound(); then complete this entity
+.float volume, atten;
+void target_speaker_use() {sound(self, CHAN_TRIGGER, self.noise, VOL_BASE * self.volume, self.atten);}
 
 void spawnfunc_target_speaker()
 {
 	if(self.noise)
 		precache_sound (self.noise);
 	IFTARGETED
+	{
+		if(!self.atten)
+			self.atten = ATTN_NORM;
+		else if(self.atten < 0)
+			self.atten = 0;
+		if(!self.volume)
+			self.volume = 1;
 		self.use = target_speaker_use;
+	}
 	else
-		ambientsound (self.origin, self.noise, VOL_BASE, ATTN_STATIC);
+	{
+		if(!self.atten)
+			self.atten = ATTN_STATIC;
+		else if(self.atten < 0)
+			self.atten = 0;
+		if(!self.volume)
+			self.volume = 1;
+		ambientsound (self.origin, self.noise, VOL_BASE * self.volume, self.atten);
+	}
 };
 
 

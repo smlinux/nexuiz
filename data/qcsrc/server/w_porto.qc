@@ -52,8 +52,6 @@ void W_Porto_Touch (void)
 {
 	vector norm;
 	norm = trace_plane_normal;
-	print(ftos(trace_dphitq3surfaceflags), "\n");
-	print((trace_dphittexturename), "\n");
 	if(self.owner.playerid != self.playerid)
 	{
 		remove(self);
@@ -62,20 +60,20 @@ void W_Porto_Touch (void)
 	{
 		// just reflect
 		self.right_vector = self.right_vector - 2 * trace_plane_normal * (self.right_vector * trace_plane_normal);
-		self.angles = vectoangles(self.velocity);
+		self.angles = vectoangles(self.velocity - 2 * trace_plane_normal * (self.velocity * trace_plane_normal));
 	}
 	else if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
 	{
 		W_Porto_Fail(0);
 	}
-	else if(self.cnt == 0)
+	else if(self.effects & EF_RED)
 	{
-		self.cnt = 1;
+		self.effects += EF_BLUE - EF_RED;
 		if(Portal_SpawnInPortalAtTrace(self.owner, self.right_vector, self.portal_id))
 		{
 			trace_plane_normal = norm;
 			self.right_vector = self.right_vector - 2 * trace_plane_normal * (self.right_vector * trace_plane_normal);
-			self.angles = vectoangles(self.velocity);
+			self.angles = vectoangles(self.velocity - 2 * trace_plane_normal * (self.velocity * trace_plane_normal));
 		}
 		else
 		{
@@ -115,7 +113,8 @@ void W_Porto_Attack (void)
 	gren.bot_dodgerating = 200;
 	gren.movetype = MOVETYPE_BOUNCEMISSILE;
 	gren.solid = SOLID_BBOX;
-	gren.effects = EF_LOWPRECISION;
+	gren.effects = EF_LOWPRECISION | EF_RED;
+	gren.scale = 4;
 	gren.modelflags = MF_GRENADE;
 	setmodel(gren, "models/grenademodel.md3"); // precision set above
 	setsize(gren, '0 0 0', '0 0 0');

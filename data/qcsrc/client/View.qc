@@ -73,7 +73,7 @@ void Porto_Draw()
 		p = polyline[idx-2];
 		q = polyline[idx-1];
 		if(idx == 2)
-			p = p - '0 0 16';
+			p = p - view_up * 16;
 		if(idx-1 >= portal1_idx)
 		{
 			Draw_CylindricLine(p, q, 4, "", 1, 0, '0 0 1', 0.5, DRAWFLAG_NORMAL);

@@ -199,8 +199,8 @@ void Portal_Touch()
 	}
 	if(Portal_TeleportPlayer(self, other))
 		if(other.classname == "porto")
-			if(other.cnt == 0)
-				other.cnt = 1;
+			if(other.effects & EF_RED)
+				other.effects += EF_BLUE - EF_RED;
 }
 
 void Portal_MakeBrokenPortal(entity portal)
@@ -497,6 +497,7 @@ float Portal_SpawnInPortalAtTrace(entity own, vector dir, float portal_id_val)
 
 	portal.portal_id = portal_id_val;
 	Portal_SetInPortal(own, portal);
+	sound(portal, CHAN_PROJECTILE, "misc/invshot.wav", VOL_BASE, ATTN_NORM);
 
 	return 1;
 }
@@ -528,6 +529,7 @@ float Portal_SpawnOutPortalAtTrace(entity own, vector dir, float portal_id_val)
 
 	portal.portal_id = portal_id_val;
 	Portal_SetOutPortal(own, portal);
+	sound(portal, CHAN_PROJECTILE, "misc/invshot.wav", VOL_BASE, ATTN_NORM);
 
 	return 1;
 }

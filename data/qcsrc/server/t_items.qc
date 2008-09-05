@@ -887,17 +887,27 @@ void spawnfunc_func_wall (void)
 
 float trigger_item_func_set(float a, float b)
 {
-	return b;
+	if(b == 0)
+		return a;
+	else if(b < 0)
+		return 0;
+	else
+		return b;
 }
 
 float trigger_item_func_min(float a, float b)
 {
-	return min(a, b);
+	if(b == 0)
+		return a;
+	else if(b < 0)
+		return 0;
+	else
+		return min(a, b);
 }
 
 float trigger_item_func_max(float a, float b)
 {
-	return min(a, b);
+	return max(a, b);
 }
 
 float trigger_item_func_and(float a, float b)
@@ -983,6 +993,11 @@ void trigger_items_use (void)
 		trigger_item_change(0, armorvalue, trigger_item_func_set, "misc/armor25.wav", "");
 		trigger_item_change(1, items, trigger_item_func_set, "misc/powerup.wav", "");
 		trigger_item_change(1, weapons, trigger_item_func_set, "weapons/weaponpickup.wav", "");
+
+		if((self.items & activator.items) & IT_STRENGTH)
+			activator.strength_finished = time + self.strength_finished;
+		if((self.items & activator.items) & IT_INVINCIBLE)
+			activator.invincible_finished = time + self.invincible_finished;
 	}
 	else if(self.spawnflags == 1) // AND/MIN
 	{
@@ -994,6 +1009,11 @@ void trigger_items_use (void)
 		trigger_item_change(0, armorvalue, trigger_item_func_min, "misc/armor25.wav", "");
 		trigger_item_change(1, items, trigger_item_func_and, "misc/powerup.wav", "");
 		trigger_item_change(1, weapons, trigger_item_func_and, "weapons/weaponpickup.wav", "");
+
+		if((self.items & activator.items) & IT_STRENGTH)
+			activator.strength_finished = min(activator.strength_finished, time + self.strength_finished);
+		if((self.items & activator.items) & IT_INVINCIBLE)
+			activator.invincible_finished = min(activator.invincible_finished, time + self.invincible_finished);
 	}
 	else if(self.spawnflags == 2) // OR/MAX
 	{
@@ -1005,6 +1025,11 @@ void trigger_items_use (void)
 		trigger_item_change(0, armorvalue, trigger_item_func_max, "misc/armor25.wav", "");
 		trigger_item_change(1, items, trigger_item_func_or, "misc/powerup.wav", "");
 		trigger_item_change(1, weapons, trigger_item_func_or, "weapons/weaponpickup.wav", "");
+
+		if((self.items & activator.items) & IT_STRENGTH)
+			activator.strength_finished = max(activator.strength_finished, time + self.strength_finished);
+		if((self.items & activator.items) & IT_INVINCIBLE)
+			activator.invincible_finished = max(activator.invincible_finished, time + self.invincible_finished);
 	}
 	else if(self.spawnflags == 4) // ANDNOT/MIN
 	{
@@ -1016,12 +1041,13 @@ void trigger_items_use (void)
 		trigger_item_change(0, armorvalue, trigger_item_func_min, "misc/armor25.wav", "");
 		trigger_item_change(1, items, trigger_item_func_andnot, "misc/powerup.wav", "");
 		trigger_item_change(1, weapons, trigger_item_func_andnot, "weapons/weaponpickup.wav", "");
+
+		if((self.items & activator.items) & IT_STRENGTH)
+			activator.strength_finished = min(activator.strength_finished, time + self.strength_finished);
+		if((self.items & activator.items) & IT_INVINCIBLE)
+			activator.invincible_finished = min(activator.invincible_finished, time + self.invincible_finished);
 	}
 
-	if((self.items & activator.items) & IT_STRENGTH)
-		activator.strength_finished = max(activator.strength_finished, time + self.strength_finished);
-	if((self.items & activator.items) & IT_INVINCIBLE)
-		activator.invincible_finished = max(activator.invincible_finished, time + self.invincible_finished);
 	if not(activator.items & IT_STRENGTH)
 		activator.strength_finished = 0;
 	if not(activator.items & IT_INVINCIBLE)
@@ -1060,7 +1086,7 @@ void spawnfunc_trigger_items (void)
 	{
 		if(argv(i) == "unlimited_ammo") self.items |= IT_UNLIMITED_AMMO;
 		if(argv(i) == "strength")       self.items |= IT_STRENGTH;
-		if(argv(i) == "shield")         self.items |= IT_INVINCIBLE;
+		if(argv(i) == "invincible")     self.items |= IT_INVINCIBLE;
 		for(j = WEP_FIRST; j <= WEP_LAST; ++j)
 		{
 			e = get_weaponinfo(j);
