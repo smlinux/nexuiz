@@ -12,11 +12,14 @@ game: crylink bounce does half damage
 game: crylink primary does 2 cells
 game: crylink weakened
 game: ctf flag touching when dead bug fixed
+game: cvar cl_weaponpriority* (custom weapon orders)
+game: cvar g_instagib REMOVED (no demand)
 game: cvar g_jump_grunt
 game: cvar g_maxplayers
 game: cvar g_spawn_furthest
 game: cvar g_spawnpoints_auto_move_out_of_solid
 game: cvar g_tourney*
+game: cvar g_weaponreplace_*
 game: cvar sv_gentle
 game: cvar sv_maxidle
 game: cvar sv_ready_restart_after_countdown
@@ -29,6 +32,7 @@ game: hook can pull players (but detaches when that player shoots you)
 game: hook detaches when teleporting
 game: hook jitter-less
 game: hook sky-attach bug fixed
+game: improved weapon system, new weapons Port-O-Launch and MinstaNex; now up to 24 weapons supported
 game: item respawn: 20s for 50health and 25armor
 game: lemmings countdown ;)
 game: log can get :time: events
@@ -50,6 +54,7 @@ map: aggressor supports keyhunt
 mapping: allow mins/maxs specification for brush entities instead of models (as alternative)
 mapping: automatic shader generator script
 mapping: entities.def updated
+mapping: entity func_breakable
 mapping: entity func_door: make DOOR_NOT_LINK work
 mapping: entity func_pointparticles
 mapping: entity func_sparks
@@ -58,7 +63,9 @@ mapping: entity info_null now removes itself (as it should); this DOES break som
 mapping: entity misc_follow
 mapping: entity misc_laser changed and improved
 mapping: entity trigger_flipflop, trigger_monoflip, trigger_multivibrator
+mapping: entity trigger_items
 mapping: field nottargeted overrides targetname checks in e.g. func_door (so it can be used for misc_follow without needing an extra trigger)
+mapping: field team on items
 mapping: mapname.cfg is deprecated. Use clientsettemp_for_type and cdtrack in mapname.mapinfo
 mapping: triggers now MUST be common/trigger; their exact shape now works (no longer their bbox)
 mapping: zeroradiant support, bugfix patchset updated
