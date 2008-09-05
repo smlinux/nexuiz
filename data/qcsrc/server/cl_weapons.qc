@@ -238,7 +238,10 @@ void W_ThrowWeapon(vector velo, vector delta, float doreduce)
 		return;
 
 	wb = W_WeaponBit(w);
-	self.weapons = self.weapons - (self.weapons & wb);
+	if(self.weapons & wb != wb)
+		return;
+
+	self.weapons = self.weapons - wb;
 	W_SwitchWeapon_Force(self, w_getbestweapon(self));
 	a = W_ThrowNewWeapon(self, w, doreduce, self.origin + delta, velo);
 	if(a < 0)
