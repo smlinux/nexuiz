@@ -92,9 +92,12 @@ float Portal_TeleportPlayer(entity teleporter, entity player)
 	fixedmakevectors(teleporter.enemy.angles);
 
 	// first shift it ON the plane if needed
-	planeshift = ((teleporter.enemy.origin - to) * v_forward) + PlayerEdgeDistance(player, v_forward);
-	if(planeshift > 0)
+	planeshift = ((teleporter.enemy.origin - to) * v_forward) + PlayerEdgeDistance(player, v_forward) + 1;
+	if(planeshift > 0 && (newvel * v_forward) > vlen(newvel) * 0.01)
+		// if we can't, let us not do the planeshift and do somewhat incorrect transformation in the end
 		to += newvel * (planeshift / (newvel * v_forward));
+	else
+		to += trace_plane_normal * planeshift;
 	
 	s = (to - teleporter.enemy.origin) * v_right;
 	t = (to - teleporter.enemy.origin) * v_up;
@@ -173,6 +176,14 @@ float Portal_FindSafeOrigin(entity portal)
 
 void Portal_Touch()
 {
+	if(trace_fraction < 1)
+		return; // only handle TouchAreaGrid ones (only these can teleport)
+		// for some unknown reason, this also gets collisions from SV_Impact sometimes
+	if(!self.enemy)
+	{
+		objerror("Portal_Touch called for [unconnected] portal\n");
+		return;
+	}
 	if(other.classname == "porto")
 	{
 		if(other.portal_id == self.portal_id)
@@ -197,6 +208,7 @@ void Portal_Touch()
 		// can't teleport this
 		return;
 	}
+
 	if(Portal_TeleportPlayer(self, other))
 		if(other.classname == "porto")
 			if(other.effects & EF_RED)
@@ -253,6 +265,8 @@ void Portal_Disconnect(entity teleporter, entity destination)
 
 void Portal_Connect(entity teleporter, entity destination)
 {
+	float id;
+
 	teleporter.portal_transform = Portal_Transform_Divide(Portal_Transform_TurnDirection(destination.angles), teleporter.angles);
 
 #ifdef DEBUG
@@ -328,6 +342,9 @@ void Portal_Damage(entity inflictor, entity attacker, float damage, float deatht
 {
 	if(deathtype == DEATH_TELEFRAG)
 		return;
+	if(attacker != self.owner)
+		if(IS_INDEPENDENT_PLAYER(attacker) || IS_INDEPENDENT_PLAYER(self.owner))
+			return;
 	self.health -= damage;
 	if(self.health < 0)
 	{
@@ -368,6 +385,18 @@ void Portal_Think()
 		Portal_Remove(self, 0);
 }
 
+float Portal_Customize()
+{
+	if(other.classname == "spectator")
+		other = other.enemy;
+	if(other == self.owner)
+		return TRUE;
+	if(IS_INDEPENDENT_PLAYER(other))
+		return FALSE;
+	if(IS_INDEPENDENT_PLAYER(self.owner))
+		return FALSE;
+	return TRUE;
+}
 
 // cleanup:
 //   when creating in-portal:
@@ -396,7 +425,10 @@ float Portal_SetInPortal(entity own, entity portal)
 	}
 	own.portal_in = portal;
 	if(own.portal_out)
+	{
+		own.portal_out.portal_id = portal.portal_id;
 		Portal_Connect(own.portal_in, own.portal_out);
+	}
 	return 2;
 }
 float Portal_SetOutPortal(entity own, entity portal)
@@ -409,7 +441,10 @@ float Portal_SetOutPortal(entity own, entity portal)
 	}
 	own.portal_out = portal;
 	if(own.portal_in)
+	{
+		own.portal_in.portal_id = portal.portal_id;
 		Portal_Connect(own.portal_in, own.portal_out);
+	}
 	return 1;
 }
 void Portal_ClearAll(entity own)
@@ -457,6 +492,7 @@ entity Portal_Spawn(entity own, vector org, vector ang)
 	portal.event_damage = Portal_Damage;
 	portal.health = 300;
 	setmodel(portal, "models/portal.md3");
+	portal.customizeentityforclient = Portal_Customize;
 
 	if(!Portal_FindSafeOrigin(portal))
 	{

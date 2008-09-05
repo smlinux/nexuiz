@@ -51,6 +51,10 @@ void W_Porto_Think (void)
 void W_Porto_Touch (void)
 {
 	vector norm;
+
+	if(other.classname == "portal")
+		return; // handled by the portal
+
 	norm = trace_plane_normal;
 	if(self.owner.playerid != self.playerid)
 	{
