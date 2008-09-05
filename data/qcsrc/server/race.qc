@@ -301,6 +301,8 @@ void dumpsurface(entity e)
 
 void checkpoint_touch()
 {
+	EXACTTRIGGER_TOUCH;
+
 	if(other.classname == "porto")
 	{
 		// do not allow portalling through checkpoints
@@ -318,16 +320,14 @@ void checkpoint_touch()
 	 */
 	Portal_ClearAll(other);
 
-	/*
-	 * Trigger targets
-	 */
-	activator = other;
-	SUB_UseTargets();
-
-	EXACTTRIGGER_TOUCH;
-
 	if(other.race_checkpoint == -1 || other.race_checkpoint == self.race_checkpoint)
 	{
+		/*
+		 * Trigger targets
+		 */
+		activator = other;
+		SUB_UseTargets();
+
 		other.race_checkpoint = race_NextCheckpoint(self.race_checkpoint);
 
 		race_SendTime(other, self.race_checkpoint, time - other.race_laptime, !!other.race_laptime);
