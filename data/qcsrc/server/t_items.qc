@@ -882,8 +882,70 @@ void spawnfunc_func_wall (void)
 	self.use = func_wall_use;
 }
 
+float trigger_item_func_set(float a, float b)
+{
+	return b;
+}
+
+float trigger_item_func_min(float a, float b)
+{
+	return min(a, b);
+}
+
+float trigger_item_func_max(float a, float b)
+{
+	return min(a, b);
+}
+
+float trigger_item_func_and(float a, float b)
+{
+	return a & b;
+}
+
+float trigger_item_func_or(float a, float b)
+{
+	return a | b;
+}
+
+float trigger_item_func_andnot(float a, float b)
+{
+	return a - (a & b);
+}
+
+void trigger_item_change(float binary, .float field, float(float a, float b) func, string sound_increase, string sound_decrease)
+{
+	float n, d;
+	n = func(activator.field, self.field);
+
+	if(binary)
+	{
+		d = n & activator.field;
+		if(d != n) // bits added?
+			d = +1;
+		else if(d != activator.field) // bits removed?
+			d = -1;
+		else
+			d = 0;
+	}
+	else
+		d = n - activator.field;
+
+	if(d < 0)
+	{
+		if(sound_decrease != "")
+			sound (activator, CHAN_AUTO, sound_decrease, VOL_BASE, ATTN_NORM);
+	}
+	else if(d > 0)
+	{
+		if(sound_increase != "")
+			sound (activator, CHAN_AUTO, sound_increase, VOL_BASE, ATTN_NORM);
+	}
+	activator.field = n;
+}
+
 void trigger_items_use (void)
 {
+	float h0, a0;
 	if(activator.classname != "player")
 		return;
 	if(activator.deadflag != DEAD_NO)
@@ -896,98 +958,70 @@ void trigger_items_use (void)
 		if (activator.switchweapon == w_getbestweapon(activator))
 			_switchweapon = TRUE;
 
+	a0 = activator.armorvalue;
+	h0 = activator.health;
+
 	if(self.spawnflags == 0) // SET
 	{
-		activator.ammo_shells = self.ammo_shells;
-		activator.ammo_nails = self.ammo_nails;
-		activator.ammo_rockets = self.ammo_rockets;
-		activator.ammo_cells = self.ammo_cells;
-		activator.health = self.health;
-		activator.armorvalue = self.armorvalue;
-		activator.weapons = self.weapons;
-		activator.items = self.items;
-
-		if(self.weapons)
-			sound (activator, CHAN_AUTO, "weapons/weaponpickup.wav", VOL_BASE, ATTN_NORM);
-		if(self.items)
-			sound (activator, CHAN_AUTO, "misc/itempickup.wav", VOL_BASE, ATTN_NORM);
-		if(self.health)
-			sound (activator, CHAN_AUTO, "misc/megahealth.wav", VOL_BASE, ATTN_NORM);
-		if(self.armorvalue)
-			sound (activator, CHAN_AUTO, "misc/armor25.wav", VOL_BASE, ATTN_NORM);
-		if(self.items & IT_STRENGTH)
-		{
-			sound (activator, CHAN_AUTO, "misc/powerup.wav", VOL_BASE, ATTN_NORM);
-			activator.strength_finished = max(activator.strength_finished, time + self.strength_finished);
-		}
-		if(self.items & IT_INVINCIBLE)
-		{
-			sound (activator, CHAN_AUTO, "misc/powerup_shield.wav", VOL_BASE, ATTN_NORM);
-			activator.invincible_finished = max(activator.invincible_finished, time + self.invincible_finished);
-		}
+		trigger_item_change(0, ammo_shells, trigger_item_func_set, "misc/itempickup.wav", "");
+		trigger_item_change(0, ammo_nails, trigger_item_func_set, "misc/itempickup.wav", "");
+		trigger_item_change(0, ammo_rockets, trigger_item_func_set, "misc/itempickup.wav", "");
+		trigger_item_change(0, ammo_cells, trigger_item_func_set, "misc/itempickup.wav", "");
+		trigger_item_change(0, health, trigger_item_func_set, "misc/megahealth.wav", "");
+		trigger_item_change(0, armorvalue, trigger_item_func_set, "misc/armor25.wav", "");
+		trigger_item_change(1, items, trigger_item_func_set, "misc/powerup.wav", "");
+		trigger_item_change(1, weapons, trigger_item_func_set, "weapons/weaponpickup.wav", "");
 	}
 	else if(self.spawnflags == 1) // AND/MIN
 	{
-		activator.ammo_shells = min(activator.ammo_shells, self.ammo_shells);
-		activator.ammo_nails = min(activator.ammo_nails, self.ammo_nails);
-		activator.ammo_rockets = min(activator.ammo_rockets, self.ammo_rockets);
-		activator.ammo_cells = min(activator.ammo_cells, self.ammo_cells);
-		activator.health = min(activator.health, self.health);
-		activator.armorvalue = min(activator.armorvalue, self.armorvalue);
-		activator.weapons = activator.weapons & self.weapons;
-		activator.items = activator.items & self.items;
-
-		if not(self.items & IT_STRENGTH)
-			activator.strength_finished = 0;
-		if not(self.items & IT_INVINCIBLE)
-			activator.invincible_finished = 0;
+		trigger_item_change(0, ammo_shells, trigger_item_func_min, "misc/itempickup.wav", "");
+		trigger_item_change(0, ammo_nails, trigger_item_func_min, "misc/itempickup.wav", "");
+		trigger_item_change(0, ammo_rockets, trigger_item_func_min, "misc/itempickup.wav", "");
+		trigger_item_change(0, ammo_cells, trigger_item_func_min, "misc/itempickup.wav", "");
+		trigger_item_change(0, health, trigger_item_func_min, "misc/megahealth.wav", "");
+		trigger_item_change(0, armorvalue, trigger_item_func_min, "misc/armor25.wav", "");
+		trigger_item_change(1, items, trigger_item_func_and, "misc/powerup.wav", "");
+		trigger_item_change(1, weapons, trigger_item_func_and, "weapons/weaponpickup.wav", "");
 	}
 	else if(self.spawnflags == 2) // OR/MAX
 	{
-		activator.ammo_shells = max(activator.ammo_shells, self.ammo_shells);
-		activator.ammo_nails = max(activator.ammo_nails, self.ammo_nails);
-		activator.ammo_rockets = max(activator.ammo_rockets, self.ammo_rockets);
-		activator.ammo_cells = max(activator.ammo_cells, self.ammo_cells);
-		activator.health = max(activator.health, self.health);
-		activator.armorvalue = max(activator.armorvalue, self.armorvalue);
-		activator.weapons |= self.weapons;
-		activator.items |= self.items;
-
-		if(self.weapons)
-			sound (activator, CHAN_AUTO, "weapons/weaponpickup.wav", VOL_BASE, ATTN_NORM);
-		if(self.items)
-			sound (activator, CHAN_AUTO, "misc/itempickup.wav", VOL_BASE, ATTN_NORM);
-		if(self.health)
-			sound (activator, CHAN_AUTO, "misc/megahealth.wav", VOL_BASE, ATTN_NORM);
-		if(self.armorvalue)
-			sound (activator, CHAN_AUTO, "misc/armor25.wav", VOL_BASE, ATTN_NORM);
-		if(self.items & IT_STRENGTH)
-		{
-			sound (activator, CHAN_AUTO, "misc/powerup.wav", VOL_BASE, ATTN_NORM);
-			activator.strength_finished = max(activator.strength_finished, time + self.strength_finished);
-		}
-		if(self.items & IT_INVINCIBLE)
-		{
-			sound (activator, CHAN_AUTO, "misc/powerup_shield.wav", VOL_BASE, ATTN_NORM);
-			activator.invincible_finished = max(activator.invincible_finished, time + self.invincible_finished);
-		}
+		trigger_item_change(0, ammo_shells, trigger_item_func_max, "misc/itempickup.wav", "");
+		trigger_item_change(0, ammo_nails, trigger_item_func_max, "misc/itempickup.wav", "");
+		trigger_item_change(0, ammo_rockets, trigger_item_func_max, "misc/itempickup.wav", "");
+		trigger_item_change(0, ammo_cells, trigger_item_func_max, "misc/itempickup.wav", "");
+		trigger_item_change(0, health, trigger_item_func_max, "misc/megahealth.wav", "");
+		trigger_item_change(0, armorvalue, trigger_item_func_max, "misc/armor25.wav", "");
+		trigger_item_change(1, items, trigger_item_func_or, "misc/powerup.wav", "");
+		trigger_item_change(1, weapons, trigger_item_func_or, "weapons/weaponpickup.wav", "");
 	}
 	else if(self.spawnflags == 4) // ANDNOT/MIN
 	{
-		activator.ammo_shells = min(activator.ammo_shells, self.ammo_shells);
-		activator.ammo_nails = min(activator.ammo_nails, self.ammo_nails);
-		activator.ammo_rockets = min(activator.ammo_rockets, self.ammo_rockets);
-		activator.ammo_cells = min(activator.ammo_cells, self.ammo_cells);
-		activator.health = min(activator.health, self.health);
-		activator.armorvalue = min(activator.armorvalue, self.armorvalue);
-		activator.weapons -= activator.weapons & self.weapons;
-		activator.items -= activator.items & self.items;
-
-		if(self.items & IT_STRENGTH)
-			activator.strength_finished = 0;
-		if(self.items & IT_INVINCIBLE)
-			activator.invincible_finished = 0;
+		trigger_item_change(0, ammo_shells, trigger_item_func_min, "misc/itempickup.wav", "");
+		trigger_item_change(0, ammo_nails, trigger_item_func_min, "misc/itempickup.wav", "");
+		trigger_item_change(0, ammo_rockets, trigger_item_func_min, "misc/itempickup.wav", "");
+		trigger_item_change(0, ammo_cells, trigger_item_func_min, "misc/itempickup.wav", "");
+		trigger_item_change(0, health, trigger_item_func_min, "misc/megahealth.wav", "");
+		trigger_item_change(0, armorvalue, trigger_item_func_min, "misc/armor25.wav", "");
+		trigger_item_change(1, items, trigger_item_func_andnot, "misc/powerup.wav", "");
+		trigger_item_change(1, weapons, trigger_item_func_andnot, "weapons/weaponpickup.wav", "");
 	}
+
+	if((self.items & activator.items) & IT_STRENGTH)
+		activator.strength_finished = max(activator.strength_finished, time + self.strength_finished);
+	if((self.items & activator.items) & IT_INVINCIBLE)
+		activator.invincible_finished = max(activator.invincible_finished, time + self.invincible_finished);
+	if not(activator.items & IT_STRENGTH)
+		activator.strength_finished = 0;
+	if not(activator.items & IT_INVINCIBLE)
+		activator.invincible_finished = 0;
+	
+	if(activator.health > h0)
+		activator.pauserothealth_finished = max(activator.pauserothealth_finished, time + cvar("g_balance_pause_health_rot"));
+	else if(activator.health < h0)
+		activator.pauseregen_finished = max(activator.pauseregen_finished, time + cvar("g_balance_pause_health_regen"));
+
+	if(activator.armorvalue > a0)
+		activator.pauserotarmor_finished = max(activator.pauserothealth_finished, time + cvar("g_balance_pause_health_rot"));
 
 	if not(activator.weapons & W_WeaponBit(activator.switchweapon))
 		_switchweapon = TRUE;

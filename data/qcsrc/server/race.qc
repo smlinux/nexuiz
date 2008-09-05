@@ -320,13 +320,25 @@ void checkpoint_touch()
 	 */
 	Portal_ClearAll(other);
 
+	/*
+	 * Trigger targets
+	 */
+	if(self.spawnflags & 2)
+	{
+		activator = other;
+		SUB_UseTargets();
+	}
+
 	if(other.race_checkpoint == -1 || other.race_checkpoint == self.race_checkpoint)
 	{
 		/*
 		 * Trigger targets
 		 */
-		activator = other;
-		SUB_UseTargets();
+		if not(self.spawnflags & 2)
+		{
+			activator = other;
+			SUB_UseTargets();
+		}
 
 		other.race_checkpoint = race_NextCheckpoint(self.race_checkpoint);
 
