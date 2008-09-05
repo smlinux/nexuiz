@@ -712,65 +712,12 @@ float start_armorvalue;
 
 entity get_weaponinfo(float w);
 
-void readlevelcvars(void)
+void readplayerstartcvars() 
 {
 	entity e;
 	float i;
 
-	sv_cheats = cvar("sv_cheats");
-	sv_gentle = cvar("sv_gentle");
-	sv_foginterval = cvar("sv_foginterval");
-	g_cloaked = cvar("g_cloaked");
-	g_jump_grunt = cvar("g_jump_grunt");
-	g_footsteps = cvar("g_footsteps");
-	g_grappling_hook = cvar("g_grappling_hook");
-	g_laserguided_missile = cvar("g_laserguided_missile");
-	g_midair = cvar("g_midair");
-	g_minstagib = cvar("g_minstagib");
-	g_nixnex = cvar("g_nixnex");
-	g_nixnex_with_laser = cvar("g_nixnex_with_laser");
-	g_norecoil = cvar("g_norecoil");
-	g_rocketarena = cvar("g_rocketarena");
-	g_vampire = cvar("g_vampire");
-	g_tourney = cvar("g_tourney");
-	g_tourney_warmup_limit = cvar("g_tourney_warmup_limit");
-	sv_maxidle = cvar("sv_maxidle");
-	sv_maxidle_spectatorsareidle = cvar("sv_maxidle_spectatorsareidle");
-	sv_pogostick = cvar("sv_pogostick");
-	sv_doublejump = cvar("sv_doublejump");
-
-	g_pickup_respawntime_short = cvar("g_pickup_respawntime_short");
-	g_pickup_respawntime_medium = cvar("g_pickup_respawntime_medium");
-	g_pickup_respawntime_long = cvar("g_pickup_respawntime_long");
-	g_pickup_respawntime_powerup = cvar("g_pickup_respawntime_powerup");
-
-	if(g_minstagib) g_nixnex = g_rocketarena = 0;
-	if(g_nixnex) g_rocketarena = 0;
-
-	g_pickup_shells                    = cvar("g_pickup_shells");
-	g_pickup_shells_max                = cvar("g_pickup_shells_max");
-	g_pickup_nails                     = cvar("g_pickup_nails");
-	g_pickup_nails_max                 = cvar("g_pickup_nails_max");
-	g_pickup_rockets                   = cvar("g_pickup_rockets");
-	g_pickup_rockets_max               = cvar("g_pickup_rockets_max");
-	g_pickup_cells                     = cvar("g_pickup_cells");
-	g_pickup_cells_max                 = cvar("g_pickup_cells_max");
-	g_pickup_armorsmall                = cvar("g_pickup_armorsmall");
-	g_pickup_armorsmall_max            = cvar("g_pickup_armorsmall_max");
-	g_pickup_armormedium               = cvar("g_pickup_armormedium");
-	g_pickup_armormedium_max           = cvar("g_pickup_armormedium_max");
-	g_pickup_armorlarge                = cvar("g_pickup_armorlarge");
-	g_pickup_armorlarge_max            = cvar("g_pickup_armorlarge_max");
-	g_pickup_healthsmall               = cvar("g_pickup_healthsmall");
-	g_pickup_healthsmall_max           = cvar("g_pickup_healthsmall_max");
-	g_pickup_healthmedium              = cvar("g_pickup_healthmedium");
-	g_pickup_healthmedium_max          = cvar("g_pickup_healthmedium_max");
-	g_pickup_healthlarge               = cvar("g_pickup_healthlarge");
-	g_pickup_healthlarge_max           = cvar("g_pickup_healthlarge_max");
-	g_pickup_healthmega                = cvar("g_pickup_healthmega");
-	g_pickup_healthmega_max            = cvar("g_pickup_healthmega_max");
-
-	// initialize starting values for players
+  	// initialize starting values for players
 	start_weapons = 0;
 	start_items = 0;
 	start_switchweapon = 0;
@@ -815,7 +762,7 @@ void readlevelcvars(void)
 			start_health = cvar("g_lms_start_health");
 			start_armorvalue = cvar("g_lms_start_armor");
 		}
-		else if(g_tourney) {
+		else if(g_tourney && !tourneyInMatchStage) {
 			start_ammo_shells = cvar("g_tourney_start_ammo_shells");
 			start_ammo_nails = cvar("g_tourney_start_ammo_nails");
 			start_ammo_rockets = cvar("g_tourney_start_ammo_rockets");
@@ -841,7 +788,7 @@ void readlevelcvars(void)
 			e = get_weaponinfo(i);
 			if(!(e.weapon))
 				continue;
-			if(((e.spawnflags & 1) && (g_lms || g_tourney)) || cvar(strcat("g_start_weapon_", e.netname)))
+			if(((e.spawnflags & 1) && (g_lms || (g_tourney && g_tourney_warmup_allguns))) || cvar(strcat("g_start_weapon_", e.netname)))
 			{
 				start_weapons |= e.weapons;
 				start_switchweapon = e.weapon;
@@ -849,6 +796,65 @@ void readlevelcvars(void)
 			}
 		}
 	}
+}
+
+void readlevelcvars(void)
+{
+	sv_cheats = cvar("sv_cheats");
+	sv_gentle = cvar("sv_gentle");
+	sv_foginterval = cvar("sv_foginterval");
+	g_cloaked = cvar("g_cloaked");
+	g_jump_grunt = cvar("g_jump_grunt");
+	g_footsteps = cvar("g_footsteps");
+	g_grappling_hook = cvar("g_grappling_hook");
+	g_laserguided_missile = cvar("g_laserguided_missile");
+	g_midair = cvar("g_midair");
+	g_minstagib = cvar("g_minstagib");
+	g_nixnex = cvar("g_nixnex");
+	g_nixnex_with_laser = cvar("g_nixnex_with_laser");
+	g_norecoil = cvar("g_norecoil");
+	g_rocketarena = cvar("g_rocketarena");
+	g_vampire = cvar("g_vampire");
+	g_tourney = cvar("g_tourney");
+	g_tourney_warmup_limit = cvar("g_tourney_warmup_limit");
+	g_tourney_warmup_allguns = cvar("g_tourney_warmup_allguns");
+	sv_maxidle = cvar("sv_maxidle");
+	sv_maxidle_spectatorsareidle = cvar("sv_maxidle_spectatorsareidle");
+	sv_pogostick = cvar("sv_pogostick");
+	sv_doublejump = cvar("sv_doublejump");
+
+	g_pickup_respawntime_short = cvar("g_pickup_respawntime_short");
+	g_pickup_respawntime_medium = cvar("g_pickup_respawntime_medium");
+	g_pickup_respawntime_long = cvar("g_pickup_respawntime_long");
+	g_pickup_respawntime_powerup = cvar("g_pickup_respawntime_powerup");
+
+	if(g_minstagib) g_nixnex = g_rocketarena = 0;
+	if(g_nixnex) g_rocketarena = 0;
+
+	g_pickup_shells                    = cvar("g_pickup_shells");
+	g_pickup_shells_max                = cvar("g_pickup_shells_max");
+	g_pickup_nails                     = cvar("g_pickup_nails");
+	g_pickup_nails_max                 = cvar("g_pickup_nails_max");
+	g_pickup_rockets                   = cvar("g_pickup_rockets");
+	g_pickup_rockets_max               = cvar("g_pickup_rockets_max");
+	g_pickup_cells                     = cvar("g_pickup_cells");
+	g_pickup_cells_max                 = cvar("g_pickup_cells_max");
+	g_pickup_armorsmall                = cvar("g_pickup_armorsmall");
+	g_pickup_armorsmall_max            = cvar("g_pickup_armorsmall_max");
+	g_pickup_armormedium               = cvar("g_pickup_armormedium");
+	g_pickup_armormedium_max           = cvar("g_pickup_armormedium_max");
+	g_pickup_armorlarge                = cvar("g_pickup_armorlarge");
+	g_pickup_armorlarge_max            = cvar("g_pickup_armorlarge_max");
+	g_pickup_healthsmall               = cvar("g_pickup_healthsmall");
+	g_pickup_healthsmall_max           = cvar("g_pickup_healthsmall_max");
+	g_pickup_healthmedium              = cvar("g_pickup_healthmedium");
+	g_pickup_healthmedium_max          = cvar("g_pickup_healthmedium_max");
+	g_pickup_healthlarge               = cvar("g_pickup_healthlarge");
+	g_pickup_healthlarge_max           = cvar("g_pickup_healthlarge_max");
+	g_pickup_healthmega                = cvar("g_pickup_healthmega");
+	g_pickup_healthmega_max            = cvar("g_pickup_healthmega_max");
+
+	readplayerstartcvars();
 }
 
 /*

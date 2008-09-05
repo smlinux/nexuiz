@@ -402,15 +402,7 @@ void ReadyRestart()
 	if(g_tourney) {
 		tourneyInMatchStage = 1; //once the game is restarted the game is in match stage
 		//reset weapons and ammo, health and armor to default:
-		// TODO is this really the right way?!? see miscfunction.qc readlevelcvars()
-		start_weapons = WEPBIT_LASER | WEPBIT_SHOTGUN;
-		start_switchweapon = WEP_SHOTGUN;
-		start_ammo_shells = cvar("g_start_ammo_shells");
-		start_ammo_nails = cvar("g_start_ammo_nails");
-		start_ammo_rockets = cvar("g_start_ammo_rockets");
-		start_ammo_cells = cvar("g_start_ammo_cells");
-		start_health = cvar("g_balance_health_start");
-		start_armorvalue = cvar("g_balance_armor_start");
+		readplayerstartcvars();
 	}
 	restart_countdown = time + RESTART_COUNTDOWN;
 	restart_mapalreadyrestarted = 0; //reset this var, needed when cvar sv_ready_restart_repeatable is in use
