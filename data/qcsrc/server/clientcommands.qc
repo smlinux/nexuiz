@@ -415,7 +415,7 @@ void ReadyRestart()
 	restart_countdown = time + RESTART_COUNTDOWN;
 	restart_mapalreadyrestarted = 0; //reset this var, needed when cvar sv_ready_restart_repeatable is in use
 	//reset the .ready status of all players (also spectators)
-	FOR_EACH_CLIENT(e)
+	FOR_EACH_CLIENTSLOT(e)
 	{
 		e.ready = 0;
 	}
@@ -473,6 +473,8 @@ void ReadyCount()
 {
 	local entity e;
 	local float r, p;
+
+	r = p = 0;
 
 	FOR_EACH_REALPLAYER(e)
 	{
