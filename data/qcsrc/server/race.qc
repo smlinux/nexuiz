@@ -301,6 +301,9 @@ void dumpsurface(entity e)
 
 void checkpoint_touch()
 {
+	string oldmsg;
+	entity oldself;
+
 	EXACTTRIGGER_TOUCH;
 
 	if(other.classname == "porto")
@@ -308,8 +311,20 @@ void checkpoint_touch()
 		// do not allow portalling through checkpoints
 		trace_plane_normal = normalize(-1 * other.velocity);
 		self = other;
-		W_Porto_Fail();
+		W_Porto_Fail(0);
 		return;
+	}
+
+	/*
+	 * Trigger targets
+	 */
+	if not(self.spawnflags & 2)
+	{
+		activator = other;
+		oldmsg = self.message;
+		self.message = "";
+		SUB_UseTargets();
+		self.message = oldmsg;
 	}
 
 	if(other.classname != "player")
@@ -319,14 +334,12 @@ void checkpoint_touch()
 	 * Remove unauthorized equipment
 	 */
 	Portal_ClearAll(other);
-
-	/*
-	 * Trigger targets
-	 */
-	if(self.spawnflags & 2)
+	if(other.porto_current)
 	{
-		activator = other;
-		SUB_UseTargets();
+		oldself = self;
+		self = other.porto_current;
+		W_Porto_Fail(1);
+		self = other;
 	}
 
 	if(other.race_checkpoint == -1 || other.race_checkpoint == self.race_checkpoint)
@@ -334,10 +347,13 @@ void checkpoint_touch()
 		/*
 		 * Trigger targets
 		 */
-		if not(self.spawnflags & 2)
+		if(self.spawnflags & 2)
 		{
 			activator = other;
+			oldmsg = self.message;
+			self.message = "";
 			SUB_UseTargets();
+			self.message = oldmsg;
 		}
 
 		other.race_checkpoint = race_NextCheckpoint(self.race_checkpoint);

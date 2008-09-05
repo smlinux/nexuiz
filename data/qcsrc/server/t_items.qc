@@ -123,6 +123,9 @@ float Item_GiveTo(entity item, entity player)
 		if (player.switchweapon == w_getbestweapon(player))
 			_switchweapon = TRUE;
 
+		if not(player.weapons & W_WeaponBit(player.switchweapon))
+			_switchweapon = TRUE;
+
 		if (item.ammo_shells)
 		if (player.ammo_shells < g_pickup_shells_max)
 		{
@@ -912,6 +915,7 @@ float trigger_item_func_andnot(float a, float b)
 	return a - (a & b);
 }
 
+float trigger_item_changed;
 void trigger_item_change(float binary, .float field, float(float a, float b) func, string sound_increase, string sound_decrease)
 {
 	float n, d;
@@ -934,11 +938,13 @@ void trigger_item_change(float binary, .float field, float(float a, float b) fun
 	{
 		if(sound_decrease != "")
 			sound (activator, CHAN_AUTO, sound_decrease, VOL_BASE, ATTN_NORM);
+		trigger_item_changed = 1;
 	}
 	else if(d > 0)
 	{
 		if(sound_increase != "")
 			sound (activator, CHAN_AUTO, sound_increase, VOL_BASE, ATTN_NORM);
+		trigger_item_changed = 1;
 	}
 	activator.field = n;
 }
@@ -952,6 +958,11 @@ void trigger_items_use (void)
 		return;
 	EXACTTRIGGER_TOUCH;
 
+	entity e;
+	for(e = world; (e = find(e, classname, "droppedweapon")); )
+		if(e.enemy == activator)
+			remove(e);
+
 	float _switchweapon;
 	_switchweapon = FALSE;
 	if (activator.autoswitch)
@@ -960,6 +971,7 @@ void trigger_items_use (void)
 
 	a0 = activator.armorvalue;
 	h0 = activator.health;
+	trigger_item_changed = 0;
 
 	if(self.spawnflags == 0) // SET
 	{
@@ -1027,6 +1039,9 @@ void trigger_items_use (void)
 		_switchweapon = TRUE;
 	if(_switchweapon)
 		W_SwitchWeapon_Force(activator, w_getbestweapon(activator));
+
+	if(trigger_item_changed)
+		centerprint(activator, self.message);
 }
 
 void spawnfunc_trigger_items (void)
@@ -1040,7 +1055,7 @@ void spawnfunc_trigger_items (void)
 	if(!self.invincible_finished)
 		self.invincible_finished = cvar("g_balance_powerup_invincible_time");
 	
-	n = tokenize(self.message);
+	n = tokenize(self.netname);
 	for(i = 0; i < n; ++i)
 	{
 		if(argv(i) == "unlimited_ammo") self.items |= IT_UNLIMITED_AMMO;

@@ -179,7 +179,7 @@ float W_ThrowNewWeapon(entity own, float wpn, float doreduce, vector org, vector
 	setorigin(wep, org);
 	wep.classname = "droppedweapon";
 	wep.velocity = velo;
-	wep.owner = own;
+	wep.owner = wep.enemy = own;
 	wep.classname = "droppedweapon";
 	wep.flags = wep.flags | FL_TOSSED;
 	wep.colormap = own.colormap;

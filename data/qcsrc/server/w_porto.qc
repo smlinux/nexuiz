@@ -1,39 +1,40 @@
 .float portal_id;
+.entity porto_current;
 .vector porto_v_angle; // holds "held" view angles
 .float porto_v_angle_held;
 .vector right_vector;
 
 void W_Porto_Success (void)
 {
-	self.owner.portal_id = 0;
+	self.owner.porto_current = world;
 	remove(self);
 }
 
 float W_ThrowNewWeapon(entity own, float wpn, float doreduce, vector org, vector velo);
-void W_Porto_Fail (void)
+void W_Porto_Fail (float failhard)
 {
-	centerprint(self.owner, "^1Portal deployment failed.\n\n^2Catch it to try again!");
-
 	// no portals here!
 	Portal_ClearWithID(self.owner, self.portal_id);
+	self.owner.porto_current = world;
 
-	self.owner.portal_id = 0;
-	// TODO maybe instead throw the portal gun there?
-	// self.owner.weapons = self.owner.weapons | WEPBIT_PORTO;
-	setsize (self, '-16 -16 0', '16 16 32');
-	setorigin(self, self.origin + trace_plane_normal);
-	if(move_out_of_solid(self))
+	if(!failhard)
 	{
-		self.flags = FL_ITEM;
-		self.velocity = trigger_push_calculatevelocity(self.origin, self.owner, 128);
-		tracetoss(self, self);
-		if(vlen(trace_endpos - self.owner.origin) > 128)
-			self.velocity = '0 0 0';
-		W_ThrowNewWeapon(self.owner, WEP_PORTO, 0, self.origin, self.velocity);
-	}
-	else
-	{
-		W_ThrowNewWeapon(self.owner, WEP_PORTO, 0, self.origin, '0 0 0');
+		centerprint(self.owner, "^1Portal deployment failed.\n\n^2Catch it to try again!");
+		setsize (self, '-16 -16 0', '16 16 32');
+		setorigin(self, self.origin + trace_plane_normal);
+		if(move_out_of_solid(self))
+		{
+			self.flags = FL_ITEM;
+			self.velocity = trigger_push_calculatevelocity(self.origin, self.owner, 128);
+			tracetoss(self, self);
+			if(vlen(trace_endpos - self.owner.origin) > 128)
+				self.velocity = '0 0 0';
+			W_ThrowNewWeapon(self.owner, WEP_PORTO, 0, self.origin, self.velocity);
+		}
+		else
+		{
+			W_ThrowNewWeapon(self.owner, WEP_PORTO, 0, self.origin, '0 0 0');
+		}
 	}
 	remove(self);
 }
@@ -44,13 +45,15 @@ void W_Porto_Think (void)
 	if(self.owner.playerid != self.playerid)
 		remove(self);
 	else
-		W_Porto_Fail();
+		W_Porto_Fail(0);
 }
 
 void W_Porto_Touch (void)
 {
 	vector norm;
 	norm = trace_plane_normal;
+	print(ftos(trace_dphitq3surfaceflags), "\n");
+	print((trace_dphittexturename), "\n");
 	if(self.owner.playerid != self.playerid)
 	{
 		remove(self);
@@ -59,10 +62,11 @@ void W_Porto_Touch (void)
 	{
 		// just reflect
 		self.right_vector = self.right_vector - 2 * trace_plane_normal * (self.right_vector * trace_plane_normal);
+		self.angles = vectoangles(self.velocity);
 	}
 	else if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
 	{
-		W_Porto_Fail();
+		W_Porto_Fail(0);
 	}
 	else if(self.cnt == 0)
 	{
@@ -76,7 +80,7 @@ void W_Porto_Touch (void)
 		else
 		{
 			trace_plane_normal = norm;
-			W_Porto_Fail();
+			W_Porto_Fail(0);
 		}
 	}
 	else
@@ -88,7 +92,7 @@ void W_Porto_Touch (void)
 		else
 		{
 			trace_plane_normal = norm;
-			W_Porto_Fail();
+			W_Porto_Fail(0);
 		}
 	}
 
@@ -126,7 +130,8 @@ void W_Porto_Attack (void)
 	gren.angles = vectoangles (gren.velocity);
 	gren.flags = FL_PROJECTILE;
 
-	self.portal_id = gren.portal_id = time;
+	gren.portal_id = time;
+	self.porto_current = gren;
 	gren.playerid = self.playerid;
 	fixedmakevectors(vectoangles(gren.velocity));
 	gren.right_vector = v_right;
@@ -195,7 +200,7 @@ float w_porto(float req)
 			makevectors(self.porto_v_angle); // override the previously set angles
 
 		if (self.BUTTON_ATCK)
-		if (!self.portal_id)
+		if (!self.porto_current)
 		if (weapon_prepareattack(0, cvar("g_balance_porto_primary_refire")))
 		{
 			W_Porto_Attack();
