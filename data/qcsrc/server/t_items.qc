@@ -910,6 +910,11 @@ float trigger_item_func_max(float a, float b)
 	return max(a, b);
 }
 
+float trigger_item_func_bitset(float a, float b)
+{
+	return b;
+}
+
 float trigger_item_func_and(float a, float b)
 {
 	return a & b;
@@ -991,8 +996,8 @@ void trigger_items_use (void)
 		trigger_item_change(0, ammo_cells, trigger_item_func_set, "misc/itempickup.wav", "");
 		trigger_item_change(0, health, trigger_item_func_set, "misc/megahealth.wav", "");
 		trigger_item_change(0, armorvalue, trigger_item_func_set, "misc/armor25.wav", "");
-		trigger_item_change(1, items, trigger_item_func_set, "misc/powerup.wav", "");
-		trigger_item_change(1, weapons, trigger_item_func_set, "weapons/weaponpickup.wav", "");
+		trigger_item_change(1, items, trigger_item_func_bitset, "misc/powerup.wav", "");
+		trigger_item_change(1, weapons, trigger_item_func_bitset, "weapons/weaponpickup.wav", "");
 
 		if((self.items & activator.items) & IT_STRENGTH)
 			activator.strength_finished = time + self.strength_finished;
