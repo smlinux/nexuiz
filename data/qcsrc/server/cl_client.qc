@@ -633,7 +633,7 @@ void PutClientInServer (void)
 		self.ammo_cells = start_ammo_cells;
 		self.health = start_health;
 		self.armorvalue = start_armorvalue;
-		self.items = 0;
+		self.items = start_items;
 		self.weapons = start_weapons;
 		self.switchweapon = start_switchweapon;
 		self.cnt = start_switchweapon;

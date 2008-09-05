@@ -399,19 +399,19 @@ void Nixnex_GiveCurrentWeapon()
 		if(nixnex_nextchange != self.nixnex_lastchange_id) // this shall only be called once per round!
 		{
 			self.nixnex_lastchange_id = nixnex_nextchange;
-			if (cvar("g_use_ammunition"))
-			{
-				self.ammo_shells = cvar("g_balance_nixnex_ammo_shells");
-				self.ammo_nails = cvar("g_balance_nixnex_ammo_nails");
-				self.ammo_rockets = cvar("g_balance_nixnex_ammo_rockets");
-				self.ammo_cells = cvar("g_balance_nixnex_ammo_cells");
-			}
-			else
+			if (self.items & IT_UNLIMITED_AMMO)
 			{
 				self.ammo_shells = cvar("g_pickup_shells_max");
 				self.ammo_nails = cvar("g_pickup_nails_max");
 				self.ammo_rockets = cvar("g_pickup_rockets_max");
 				self.ammo_cells = cvar("g_pickup_cells_max");
+			}
+			else
+			{
+				self.ammo_shells = cvar("g_balance_nixnex_ammo_shells");
+				self.ammo_nails = cvar("g_balance_nixnex_ammo_nails");
+				self.ammo_rockets = cvar("g_balance_nixnex_ammo_rockets");
+				self.ammo_cells = cvar("g_balance_nixnex_ammo_cells");
 			}
 			self.nixnex_nextincr = time + cvar("g_balance_nixnex_incrtime");
 			if(dt >= 1 && dt <= 5)
@@ -426,7 +426,7 @@ void Nixnex_GiveCurrentWeapon()
 				centerprint(self, strcat("^3", ftos(dt), "^2 seconds until weapon change...\n\nNext weapon: ^3", W_Name(nixnex_nextweapon), "\n"));
 		}
 
-		if(cvar("g_use_ammunition") && time > self.nixnex_nextincr)
+		if(!(self.items & IT_UNLIMITED_AMMO) && time > self.nixnex_nextincr)
 		{
 			self.ammo_shells = self.ammo_shells + cvar("g_balance_nixnex_ammoincr_shells");
 			self.ammo_nails = self.ammo_nails + cvar("g_balance_nixnex_ammoincr_nails");

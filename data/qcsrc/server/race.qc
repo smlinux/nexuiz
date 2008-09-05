@@ -301,8 +301,28 @@ void dumpsurface(entity e)
 
 void checkpoint_touch()
 {
+	if(other.classname == "porto")
+	{
+		// do not allow portalling through checkpoints
+		trace_plane_normal = normalize(-1 * other.velocity);
+		self = other;
+		W_Porto_Fail();
+		return;
+	}
+
 	if(other.classname != "player")
 		return;
+
+	/*
+	 * Remove unauthorized equipment
+	 */
+	Portal_ClearAll(other);
+
+	/*
+	 * Trigger targets
+	 */
+	activator = other;
+	SUB_UseTargets();
 
 	EXACTTRIGGER_TOUCH;
 

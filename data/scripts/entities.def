@@ -922,6 +922,7 @@ A checkpoint, for the race game mode. Be sure to make them quite long, so they a
 cnt: Number of the checkpoint. 0 for finish line, and at least two other checkpoints have to exist. They MUST be touched in sequential order!
 message: Death message, when touching checkpoints in the wrong order.
 targetname: Name of the checkpoint. info_player_race can target this to assign a spawn to a checkpoint. Also used for triggering a checkpoint by an event.
+target: when the checkpoint is passed, these entities are triggered. Useful for forcing items in certain areas using trigger_items
 -------- SPAWNFLAGS --------
 NOTOUCH: the checkpoint will not become active when touched, it HAS to be targeted
 CRUSH: the checkpoint kills when used at the wrong time
@@ -1006,6 +1007,7 @@ model="models/weapons/g_minstanex.md3"
 
 /*QUAKED weapon_porto (1 0 .5) (-30 -30 0) (30 30 32) FLOATING
 the Port-O-Launch. Only can be shot once.
+Portals cannot be made on noimpact surfaces, and the portal missile will bounce on slick surfaces.
 -------- KEYS --------
 respawntime: time till it respawns (default: 120)
 team: out of items with the same value here, only one (random one) will spawn. Useful to put multiple items on one spot.
@@ -1013,4 +1015,20 @@ team: out of items with the same value here, only one (random one) will spawn. U
 FLOATING: the item will float in air, instead of aligning to the floor by falling
 -------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
 model="models/weapons/g_porto.md3"
+*/
+
+/*QUAKED trigger_items (0 0 1) (-8 -8 -8) (8 8 8) AND OR ANDNOT
+Sets the items of any player who triggers this.
+-------- KEYS --------
+message: space separated list of items (either weapon short names (like in g_start_weapon_* cvars), or item short names "unlimited_ammo", "shield" and "strength"
+ammo_shells: amount of shells
+ammo_nails: amount of bullets
+ammo_rockets: amount of rockets
+ammo_cells: amount of cells
+health: amount of health
+armorvalue: amount of armor
+-------- SPAWNFLAGS --------
+AND: any items not listed will get removed, and none will get added
+OR: the player may keep items not listed
+ANDNOT: the items listed will get removed from the player
 */

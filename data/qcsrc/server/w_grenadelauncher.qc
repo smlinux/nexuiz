@@ -76,7 +76,7 @@ void W_Grenade_Attack (void)
 {
 	local entity gren;
 
-	if (cvar("g_use_ammunition"))
+	if not(self.items & IT_UNLIMITED_AMMO)
 		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_grenadelauncher_primary_ammo");
 	W_SetupShot (self, '25 6 -8', FALSE, 4, "weapons/grenade_fire.wav");
 	//W_SetupShot (self, '25 8 -8', FALSE, 4, "weapons/grenade_fire.wav"); // TODO: move model to the right a little
@@ -111,7 +111,7 @@ void W_Grenade_Attack2 (void)
 {
 	local entity gren;
 
-	if (cvar("g_use_ammunition"))
+	if not(self.items & IT_UNLIMITED_AMMO)
 		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_grenadelauncher_secondary_ammo");
 	W_SetupShot (self, '25 6 -8', FALSE, 4, "weapons/grenade_fire.wav");
 	//W_SetupShot (self, '25 8 -8', FALSE, 4, "weapons/grenade_fire.wav"); // TODO: move model to the right a little

@@ -701,6 +701,7 @@ float g_pickup_healthmega;
 float g_pickup_healthmega_max;
 
 float start_weapons;
+float start_items;
 float start_switchweapon;
 float start_ammo_shells;
 float start_ammo_nails;
@@ -770,6 +771,7 @@ void readlevelcvars(void)
 
 	// initialize starting values for players
 	start_weapons = 0;
+	start_items = 0;
 	start_switchweapon = 0;
 	start_ammo_shells = 0;
 	start_ammo_nails = 0;
@@ -784,6 +786,7 @@ void readlevelcvars(void)
 		start_switchweapon = WEP_ROCKET_LAUNCHER;
 		weapon_action(start_switchweapon, WR_PRECACHE);
 		start_ammo_rockets = 999;
+		start_items |= IT_UNLIMITED_AMMO;
 	}
 	else if(g_nixnex)
 	{
@@ -829,6 +832,7 @@ void readlevelcvars(void)
 			start_ammo_nails = cvar("g_pickup_nails_max");
 			start_ammo_rockets = cvar("g_pickup_rockets_max");
 			start_ammo_cells = cvar("g_pickup_cells_max");
+			start_items |= IT_UNLIMITED_AMMO;
 		}
 
 		for(i = WEP_FIRST; i <= WEP_LAST; ++i)

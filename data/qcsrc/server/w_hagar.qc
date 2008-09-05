@@ -80,7 +80,7 @@ void W_Hagar_Attack (void)
 {
 	local entity missile;
 
-	if (cvar("g_use_ammunition"))
+	if not(self.items & IT_UNLIMITED_AMMO)
 		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_hagar_primary_ammo");
 	W_SetupShot (self, '25 5 -8', FALSE, 2, "weapons/hagar_fire.wav");
 	//W_SetupShot (self, '25 8 -8', FALSE, 2, "weapons/hagar_fire.wav"); // TODO: move model a little to the right
@@ -119,7 +119,7 @@ void W_Hagar_Attack2 (void)
 {
 	local entity missile;
 
-	if (cvar("g_use_ammunition"))
+	if not(self.items & IT_UNLIMITED_AMMO)
 		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_hagar_secondary_ammo");
 	W_SetupShot (self, '25 5 -8', FALSE, 2, "weapons/hagar_fire.wav");
 	//W_SetupShot (self, '25 8 -8', FALSE, 2, "weapons/hagar_fire.wav"); // TODO: move model a little to the right

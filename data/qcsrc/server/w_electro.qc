@@ -109,7 +109,7 @@ void W_Electro_Attack()
 	proj.solid = SOLID_BBOX;
 	setorigin(proj, w_shotorg);
 
-	if (cvar("g_use_ammunition"))
+	if not(self.items & IT_UNLIMITED_AMMO)
 		self.ammo_cells = self.ammo_cells - cvar("g_balance_electro_primary_ammo");
 	proj.effects = EF_BRIGHTFIELD | EF_LOWPRECISION;
 	proj.movetype = MOVETYPE_FLY;
@@ -143,7 +143,7 @@ void W_Electro_Attack2()
 	proj.solid = SOLID_BBOX;
 	setorigin(proj, w_shotorg);
 
-	if (cvar("g_use_ammunition"))
+	if not(self.items & IT_UNLIMITED_AMMO)
 		self.ammo_cells = self.ammo_cells - cvar("g_balance_electro_secondary_ammo");
 	proj.effects = EF_LOWPRECISION;
 	//proj.glow_size = 50;

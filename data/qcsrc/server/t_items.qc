@@ -24,6 +24,7 @@ string Item_CounterFieldName(float it)
 		case IT_NAILS:       return "nails";
 		case IT_ROCKETS:     return "rockets";
 		case IT_CELLS:       return "cells";
+
 		// add more things here (health, armor)
 		default:             error("requested item has no counter field name");
 	}
@@ -881,3 +882,141 @@ void spawnfunc_func_wall (void)
 	self.use = func_wall_use;
 }
 
+void trigger_items_use (void)
+{
+	if(activator.classname != "player")
+		return;
+	if(activator.deadflag != DEAD_NO)
+		return;
+	EXACTTRIGGER_TOUCH;
+
+	float _switchweapon;
+	_switchweapon = FALSE;
+	if (activator.autoswitch)
+		if (activator.switchweapon == w_getbestweapon(activator))
+			_switchweapon = TRUE;
+
+	if(self.spawnflags == 0) // SET
+	{
+		activator.ammo_shells = self.ammo_shells;
+		activator.ammo_nails = self.ammo_nails;
+		activator.ammo_rockets = self.ammo_rockets;
+		activator.ammo_cells = self.ammo_cells;
+		activator.health = self.health;
+		activator.armorvalue = self.armorvalue;
+		activator.weapons = self.weapons;
+		activator.items = self.items;
+
+		if(self.weapons)
+			sound (activator, CHAN_AUTO, "weapons/weaponpickup.wav", VOL_BASE, ATTN_NORM);
+		if(self.items)
+			sound (activator, CHAN_AUTO, "misc/itempickup.wav", VOL_BASE, ATTN_NORM);
+		if(self.health)
+			sound (activator, CHAN_AUTO, "misc/megahealth.wav", VOL_BASE, ATTN_NORM);
+		if(self.armorvalue)
+			sound (activator, CHAN_AUTO, "misc/armor25.wav", VOL_BASE, ATTN_NORM);
+		if(self.items & IT_STRENGTH)
+		{
+			sound (activator, CHAN_AUTO, "misc/powerup.wav", VOL_BASE, ATTN_NORM);
+			activator.strength_finished = max(activator.strength_finished, time + self.strength_finished);
+		}
+		if(self.items & IT_INVINCIBLE)
+		{
+			sound (activator, CHAN_AUTO, "misc/powerup_shield.wav", VOL_BASE, ATTN_NORM);
+			activator.invincible_finished = max(activator.invincible_finished, time + self.invincible_finished);
+		}
+	}
+	else if(self.spawnflags == 1) // AND/MIN
+	{
+		activator.ammo_shells = min(activator.ammo_shells, self.ammo_shells);
+		activator.ammo_nails = min(activator.ammo_nails, self.ammo_nails);
+		activator.ammo_rockets = min(activator.ammo_rockets, self.ammo_rockets);
+		activator.ammo_cells = min(activator.ammo_cells, self.ammo_cells);
+		activator.health = min(activator.health, self.health);
+		activator.armorvalue = min(activator.armorvalue, self.armorvalue);
+		activator.weapons = activator.weapons & self.weapons;
+		activator.items = activator.items & self.items;
+
+		if not(self.items & IT_STRENGTH)
+			activator.strength_finished = 0;
+		if not(self.items & IT_INVINCIBLE)
+			activator.invincible_finished = 0;
+	}
+	else if(self.spawnflags == 2) // OR/MAX
+	{
+		activator.ammo_shells = max(activator.ammo_shells, self.ammo_shells);
+		activator.ammo_nails = max(activator.ammo_nails, self.ammo_nails);
+		activator.ammo_rockets = max(activator.ammo_rockets, self.ammo_rockets);
+		activator.ammo_cells = max(activator.ammo_cells, self.ammo_cells);
+		activator.health = max(activator.health, self.health);
+		activator.armorvalue = max(activator.armorvalue, self.armorvalue);
+		activator.weapons |= self.weapons;
+		activator.items |= self.items;
+
+		if(self.weapons)
+			sound (activator, CHAN_AUTO, "weapons/weaponpickup.wav", VOL_BASE, ATTN_NORM);
+		if(self.items)
+			sound (activator, CHAN_AUTO, "misc/itempickup.wav", VOL_BASE, ATTN_NORM);
+		if(self.health)
+			sound (activator, CHAN_AUTO, "misc/megahealth.wav", VOL_BASE, ATTN_NORM);
+		if(self.armorvalue)
+			sound (activator, CHAN_AUTO, "misc/armor25.wav", VOL_BASE, ATTN_NORM);
+		if(self.items & IT_STRENGTH)
+		{
+			sound (activator, CHAN_AUTO, "misc/powerup.wav", VOL_BASE, ATTN_NORM);
+			activator.strength_finished = max(activator.strength_finished, time + self.strength_finished);
+		}
+		if(self.items & IT_INVINCIBLE)
+		{
+			sound (activator, CHAN_AUTO, "misc/powerup_shield.wav", VOL_BASE, ATTN_NORM);
+			activator.invincible_finished = max(activator.invincible_finished, time + self.invincible_finished);
+		}
+	}
+	else if(self.spawnflags == 4) // ANDNOT/MIN
+	{
+		activator.ammo_shells = min(activator.ammo_shells, self.ammo_shells);
+		activator.ammo_nails = min(activator.ammo_nails, self.ammo_nails);
+		activator.ammo_rockets = min(activator.ammo_rockets, self.ammo_rockets);
+		activator.ammo_cells = min(activator.ammo_cells, self.ammo_cells);
+		activator.health = min(activator.health, self.health);
+		activator.armorvalue = min(activator.armorvalue, self.armorvalue);
+		activator.weapons -= activator.weapons & self.weapons;
+		activator.items -= activator.items & self.items;
+
+		if(self.items & IT_STRENGTH)
+			activator.strength_finished = 0;
+		if(self.items & IT_INVINCIBLE)
+			activator.invincible_finished = 0;
+	}
+
+	if not(activator.weapons & W_WeaponBit(activator.switchweapon))
+		_switchweapon = TRUE;
+	if(_switchweapon)
+		W_SwitchWeapon_Force(activator, w_getbestweapon(activator));
+}
+
+void spawnfunc_trigger_items (void)
+{
+	float n, i, j;
+	entity e;
+	EXACTTRIGGER_INIT;
+	self.use = trigger_items_use;
+	if(!self.strength_finished)
+		self.strength_finished = cvar("g_balance_powerup_strength_time");
+	if(!self.invincible_finished)
+		self.invincible_finished = cvar("g_balance_powerup_invincible_time");
+	
+	n = tokenize(self.message);
+	for(i = 0; i < n; ++i)
+	{
+		if(argv(i) == "unlimited_ammo") self.items |= IT_UNLIMITED_AMMO;
+		if(argv(i) == "strength")       self.items |= IT_STRENGTH;
+		if(argv(i) == "shield")         self.items |= IT_INVINCIBLE;
+		for(j = WEP_FIRST; j <= WEP_LAST; ++j)
+		{
+			e = get_weaponinfo(j);
+			if(argv(i) == e.netname)
+				self.weapons |= e.weapons;
+		}
+	}
+}

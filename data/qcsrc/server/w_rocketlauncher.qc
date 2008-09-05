@@ -213,7 +213,7 @@ void W_Rocket_Attack (void)
 	local entity missile;
 	local entity flash, flash2;
 
-	if (cvar("g_use_ammunition") && !g_rocketarena)
+	if not(self.items & IT_UNLIMITED_AMMO)
 		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_rocketlauncher_ammo");
 
 	W_SetupShot (self, '25 3 -4', FALSE, 5, "weapons/rocket_fire.wav");

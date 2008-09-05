@@ -67,7 +67,7 @@ void W_Crylink_Attack (void)
 	local entity proj;
 	local vector s;
 
-	if (cvar("g_use_ammunition"))
+	if not(self.items & IT_UNLIMITED_AMMO)
 		self.ammo_cells = self.ammo_cells - cvar("g_balance_crylink_primary_ammo");
 
 	W_SetupShot (self, '25 8 -8', FALSE, 2, "weapons/crylink_fire.wav");
@@ -131,7 +131,7 @@ void W_Crylink_Attack2 (void)
 	local float counter, shots;
 	local entity proj;
 
-	if (cvar("g_use_ammunition"))
+	if not(self.items & IT_UNLIMITED_AMMO)
 		self.ammo_cells = self.ammo_cells - cvar("g_balance_crylink_secondary_ammo");
 
 	W_SetupShot (self, '25 8 -8', FALSE, 2, "weapons/crylink_fire.wav");
@@ -180,7 +180,7 @@ void W_Crylink_Attack2 (void)
 // experimental lightning gun
 void W_Crylink_Attack3 (void)
 {
-	if (cvar("g_use_ammunition"))
+	if not(self.items & IT_UNLIMITED_AMMO)
 		self.ammo_cells = self.ammo_cells - cvar("g_balance_crylink_primary_ammo");
 	W_SetupShot (self, '25 8 -8', TRUE, 0, "weapons/crylink_fire.wav");
 

@@ -293,6 +293,8 @@ float WEP_MINSTANEX			= 11; float WEPBIT_MINSTANEX		= 1024;
 float WEP_LAST				= 11; float WEPBIT_ALL              = 2047;
 float WEP_COUNT             = 12;
 
+float	IT_UNLIMITED_AMMO       = 1;
+// when this bit is set, using a weapon does not reduce ammo. Checkpoints can give this powerup.
 float	IT_SHELLS				= 256;
 float	IT_NAILS				= 512;
 float	IT_ROCKETS				= 1024;
