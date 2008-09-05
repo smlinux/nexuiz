@@ -96,12 +96,14 @@ float Portal_TeleportPlayer(entity teleporter, entity player)
 	if(planeshift > 0)
 		to += newvel * (planeshift / (newvel * v_forward));
 	
-	s = bound(-48, (to - teleporter.enemy.origin) * v_right, 48);
-	t = bound(-48, (to - teleporter.enemy.origin) * v_up, 48);
+	s = (to - teleporter.enemy.origin) * v_right;
+	t = (to - teleporter.enemy.origin) * v_up;
+	s = bound(-48, s, 48);
+	t = bound(-48, t, 48);
 	to = teleporter.enemy.origin
-	   + (to * v_forward) * v_forward
-	   +     s            * v_right
-	   +     t            * v_up;
+	   + ((to - teleporter.enemy.origin) * v_forward) * v_forward
+	   +     s                                        * v_right
+	   +     t                                        * v_up;
 
 	safe = teleporter.enemy.portal_safe_origin; // a valid player origin
 	step = to + ((safe - to) * v_forward) * v_forward;
