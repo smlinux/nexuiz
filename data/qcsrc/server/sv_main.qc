@@ -153,7 +153,8 @@ void StartFrame (void)
 	Spawnqueue_Check();
 
 	// if in warmup stage and limit for warmup is hit start match
-	if (!tourneyInMatchStage
+	if (g_tourney
+	    && !tourneyInMatchStage
 	    && 0 < g_tourney_warmup_limit
 	    && (time + RESTART_COUNTDOWN) >= g_tourney_warmup_limit)
 	{
