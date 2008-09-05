@@ -265,8 +265,6 @@ void Portal_Disconnect(entity teleporter, entity destination)
 
 void Portal_Connect(entity teleporter, entity destination)
 {
-	float id;
-
 	teleporter.portal_transform = Portal_Transform_Divide(Portal_Transform_TurnDirection(destination.angles), teleporter.angles);
 
 #ifdef DEBUG

@@ -1,4 +1,6 @@
 float scores_initialized; // 1 when scores labels/rules have been set
+.float scores[MAX_SCORE];
+.float teamscores[MAX_TEAMSCORE];
 
 /**
  * Attaches a PlayerScore entity to a player. Use that in ClientConnect.

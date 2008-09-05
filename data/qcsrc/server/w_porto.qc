@@ -17,7 +17,7 @@ void W_Porto_Fail (float failhard)
 	Portal_ClearWithID(self.owner, self.portal_id);
 	self.owner.porto_current = world;
 
-	if(!failhard)
+	if(!failhard && !(self.owner.weapons & WEPBIT_PORTO))
 	{
 		centerprint(self.owner, "^1Portal deployment failed.\n\n^2Catch it to try again!");
 		setsize (self, '-16 -16 0', '16 16 32');

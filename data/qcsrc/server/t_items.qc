@@ -217,7 +217,6 @@ float Item_GiveTo(entity item, entity player)
 void Item_Touch (void)
 {
 	entity e, head;
-	float n;
 
 	// remove the item if it's currnetly in a NODROP brush or hits a NOIMPACT surface (such as sky)
 	if (((trace_dpstartcontents | trace_dphitcontents) & DPCONTENTS_NODROP) || (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT))

@@ -53,5 +53,8 @@ void junk_function ()
 	require_spawnfunc_prefix = 1;
 	self.movetypesteplandevent = SUB_Null;
 	self.viewzoom = 0;
+	self.cvar_cl_weaponpriorities = "";
+	self.scores = 0;
+	self.teamscores = 0;
 }
 
