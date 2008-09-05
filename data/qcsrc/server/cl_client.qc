@@ -586,6 +586,11 @@ void PutClientInServer (void)
 		WriteEntity(MSG_ONE, self);
 	}
 
+	msg_entity = self;
+	WriteByte(MSG_ONE, SVC_TEMPENTITY);
+	WriteByte(MSG_ONE, TE_CSQC_WARMUP);
+	WriteByte(MSG_ONE, !tourneyInMatchStage);
+
 	// player is dead and becomes observer
 	// FIXME fix LMS scoring for new system
 	if(g_lms)

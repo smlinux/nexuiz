@@ -16,7 +16,8 @@
 // Revision 15: zoom
 // Revision 16: multi-weapons
 // Revision 17: multi-weaponimpulses
-#define CSQC_REVISION 17
+// Revision 18: warmup
+#define CSQC_REVISION 18
 
 // probably put these in common/
 // so server/ and client/ can be synced better
@@ -203,6 +204,7 @@ const float TE_CSQC_SPECTATING = 111;
 const float TE_CSQC_SPAWN = 112;
 const float TE_CSQC_ZOOMNOTIFY = 113;
 const float TE_CSQC_HOLDANGLES = 114;
+const float TE_CSQC_WARMUP = 115;
 
 const float STAT_KH_KEYS = 32;
 const float STAT_CTF_STATE = 33;

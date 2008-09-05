@@ -931,9 +931,17 @@ void Sbar_DrawScoreboard()
 		}
 	}
 	
+
 	pos_y += 1.5 * sbar_fontsize_y;
 	drawcolorcodedstring(pos + '0.5 0 0' * (sbwidth - sbar_fontsize_x * stringwidth(str, TRUE)), str, sbar_fontsize, 0.8, 0);
 
+	if(warmup_stage) 
+	{
+		str = "^1Currently just warmup phase";
+		pos_y += 1.5 * sbar_fontsize_y;
+		drawcolorcodedstring(pos + '0.5 0 0' * (sbwidth - sbar_fontsize_x * stringwidth(str, TRUE)), str, sbar_fontsize, 0.8, 0);
+	}
+	
 	sbar = sbar_save;
 }
 

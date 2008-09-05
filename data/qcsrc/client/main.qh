@@ -122,5 +122,6 @@ float current_viewzoom;
 float zoomin_effect;
 float ignore_plus_zoom;
 float ignore_minus_zoom;
+float warmup_stage;
 
 float weaponimpulse[24];

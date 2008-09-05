@@ -417,6 +417,11 @@ void ReadyRestart()
 	//reset the .ready status of all players (also spectators)
 	FOR_EACH_CLIENTSLOT(e)
 	{
+		msg_entity = e;
+		WriteByte(MSG_ONE, SVC_TEMPENTITY);
+		WriteByte(MSG_ONE, TE_CSQC_WARMUP);
+		WriteByte(MSG_ONE, !tourneyInMatchStage);
+
 		e.ready = 0;
 	}
 	if(0<cvar("timelimit") || (g_tourney && (-1 == g_tourney_warmup_limit)) )
