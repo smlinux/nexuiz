@@ -144,14 +144,7 @@ void W_Porto_Attack (void)
 
 void spawnfunc_weapon_porto (void)
 {
-	if(g_race)
-	{
-		startitem_failed = TRUE;
-		remove(self);
-		return;
-	}
-	else
-		weapon_defaultspawnfunc(WEP_PORTO);
+	weapon_defaultspawnfunc(WEP_PORTO);
 }
 
 float w_porto(float req)
