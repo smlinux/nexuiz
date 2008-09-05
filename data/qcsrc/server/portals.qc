@@ -184,6 +184,10 @@ void Portal_Touch()
 			self.portal_activatetime = time + 0.1;
 			return;
 		}
+	if(other != self.owner)
+		if(other.classname == "player")
+			if(IS_INDEPENDENT_PLAYER(other) || IS_INDEPENDENT_PLAYER(self.owner))
+				return; // cannot go through someone else's portal
 	fixedmakevectors(self.angles);
 	if((other.origin - self.origin) * v_forward < 0)
 		return;
@@ -346,6 +350,9 @@ void Portal_Think()
 		if(time < self.portal_activatetime)
 			if(e == o)
 				continue;
+		if(e != o)
+			if(IS_INDEPENDENT_PLAYER(e) || IS_INDEPENDENT_PLAYER(o))
+				continue; // cannot go through someone else's portal
 		// if e would hit the portal in a frame...
 		// already teleport him
 		tracebox(e.origin, e.mins, e.maxs, e.origin + e.velocity * 2 * frametime, MOVE_NORMAL, e);

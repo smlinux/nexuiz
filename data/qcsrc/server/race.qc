@@ -339,7 +339,7 @@ void checkpoint_touch()
 		oldself = self;
 		self = other.porto_current;
 		W_Porto_Fail(1);
-		self = other;
+		self = oldself;
 	}
 
 	if(other.race_checkpoint == -1 || other.race_checkpoint == self.race_checkpoint)
