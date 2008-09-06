@@ -23,8 +23,8 @@ ______________
       a no_ prefix if the cvar is 0)
 
    :gameinfo:end
-   :join:<ID>:player:<nickname>
-   :join:<ID>:bot:<nickname>
+   :join:<ID>:player:<slot>:<nickname>
+   :join:<ID>:bot:<slot>:<nickname>
    :name:<ID>:<nickname>
    :part:<ID>
    :team:<ID>:<team>
@@ -60,6 +60,7 @@ ______________
    :vote:vlogin:<ID of player>
    :vote:vdo:<ID of player>:<do command display string>
    :time:<YYYY-MM-DD HH:MM:SS>
+   :recordset:<ID of player>:<time in seconds>
 
    Note that only the :join and :player lines ever contain player names. The
    :time event only appears in the log files if sv_eventlog_files_timestamps

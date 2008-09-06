@@ -270,6 +270,7 @@ void FlagTouch()
 			flagcaptimerecord = t;
 			db_put(ServerProgsDB, strcat(GetMapname(), "/captimerecord/time"), ftos(t));
 			db_put(ServerProgsDB, strcat(GetMapname(), "/captimerecord/netname"), h1);
+			GameLogEcho(strcat(":recordset:", ftos(other.playerid), ":", ftos(t)));
 		}
 		else if (t < flagcaptimerecord)
 		{
@@ -277,6 +278,7 @@ void FlagTouch()
 			flagcaptimerecord = t;
 			db_put(ServerProgsDB, strcat(GetMapname(), "/captimerecord/time"), ftos(t));
 			db_put(ServerProgsDB, strcat(GetMapname(), "/captimerecord/netname"), h1);
+			GameLogEcho(strcat(":recordset:", ftos(other.playerid), ":", ftos(t)));
 		}
 		else
 		{

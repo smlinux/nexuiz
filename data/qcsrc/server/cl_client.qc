@@ -1096,7 +1096,7 @@ void ClientConnect (void)
 			s = "player";
 		else
 			s = "bot";
-		GameLogEcho(strcat(":join:", ftos(self.playerid), ":", s, ":", self.netname));
+		GameLogEcho(strcat(":join:", ftos(self.playerid), ":", s, ":", ftos(num_for_edict(self)), ":", self.netname));
 		s = strcat(":team:", ftos(self.playerid), ":");
 		s = strcat(s, ftos(self.team));
 		GameLogEcho(s);
