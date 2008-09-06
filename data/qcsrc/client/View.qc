@@ -1,4 +1,3 @@
-float angles_held_status[24];
 vector angles_held[24];
 void Net_ReadHoldAngles()
 {

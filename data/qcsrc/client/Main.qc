@@ -738,8 +738,11 @@ void Net_ReadForceScoreboard()
 
 void Net_Reset()
 {
+	float i;
 	race_laptime = 0;
 	race_checkpointtime = 0;
+	for(i = 0; i < 24; ++i)
+		angles_held_status[i] = 0;
 }
 
 void Net_ReadSpectating()

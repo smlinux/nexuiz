@@ -125,3 +125,4 @@ float ignore_minus_zoom;
 float warmup_stage;
 
 float weaponimpulse[24];
+float angles_held_status[24];
