@@ -255,6 +255,7 @@ void ImpulseCommands (void)
 			{
 				case 99:
 					self.weapons |= WEPBIT_ALL;
+					self.items |= IT_UNLIMITED_AMMO;
 					self.ammo_shells = g_pickup_shells_max;
 					self.ammo_nails = g_pickup_nails_max;
 					self.ammo_rockets = g_pickup_rockets_max;
