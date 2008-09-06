@@ -110,11 +110,15 @@ sub markmap($$$$;$)
 	my $name = $config{irc_nick};
 	$name =~ s/Nex//; # haggerNexCTF -> haggerCTF
 	my $pattern = "/nexuiz/data/home/.nexuiz/extramaps-$name/sv_autodemos/*.dem";
+	print "Checking $pattern...\n";
 	for(glob $pattern)
 	{
+		print "Writable? $_\n";
 		next if not -w $_;   # protected demo (by record, or other markers)
+		print "Old? $_\n";
 		next if -M $_ < 1/(24*60); # not old enough yet
 		print "Cleaning up demos: deleting $_\n";
 		unlink $_;
 	}
+	return 0;
 } ],
