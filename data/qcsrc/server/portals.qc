@@ -78,6 +78,7 @@ float PlayerEdgeDistance(entity p, vector v)
 float Portal_TeleportPlayer(entity teleporter, entity player)
 {
 	vector from, to, safe, step, transform, ang, newvel;
+	vector old_forward, new_forward;
 	float planeshift, s, t;
 	from = teleporter.origin;
 	transform = teleporter.portal_transform;
@@ -126,8 +127,42 @@ float Portal_TeleportPlayer(entity teleporter, entity player)
 	if(player.classname == "player")
 	{
 		ang = player.v_angle;
+		/*
 		ang_x = bound(-89, mod(-ang_x + 180, 360) - 180, 89);
 		ang = Portal_Transform_Multiply(transform, ang);
+		*/
+
+		// PLAYERS use different math
+		ang_x = -ang_x;
+		makevectors(ang);
+		old_forward = v_forward;
+		old_up = v_up;
+
+		// their forward aiming direction is portalled...
+		new_forward = Portal_Transform_Multiply(transform, old_forward);
+		new_up = Portal_Transform_Multiply(transform, old_up);
+
+		// but their "up" direction is difficult
+		// it must always go up...
+		// but if I used vectoangles2 on these now, it'd put part of it in the "roll" component
+		// DO NOT WANT
+		
+		if(new_forward_z > 0.9) // far up; in this case, the "up" vector points backwards
+		{
+			ang = fixedvectoangles(new_forward); // this still gets us a nice pitch value...
+			ang_y = vectoyaw(-1 * new_up); // this vector is the yaw we want
+		}
+		else if(new_forward_z < -0.9) // far down; in this case, the "up" vector points forward
+		{
+			ang = fixedvectoangles(new_forward); // this still gets us a nice pitch value...
+			ang_y = vectoyaw(new_up); // this vector is the yaw we want
+		}
+		else
+		{
+			// good angles
+			ang = fixedvectoangles2(new_forward, new_up);
+		}
+
 		ang_z = player.angles_z;
 	}
 	else
