@@ -23,8 +23,8 @@ ______________
       a no_ prefix if the cvar is 0)
 
    :gameinfo:end
-   :join:<ID>:player:<slot>:<nickname>
-   :join:<ID>:bot:<slot>:<nickname>
+   :join:<ID>:<slot>:<ip>:<nickname>
+   :join:<ID>:<slot>:bot:<nickname>
    :name:<ID>:<nickname>
    :part:<ID>
    :team:<ID>:<team>

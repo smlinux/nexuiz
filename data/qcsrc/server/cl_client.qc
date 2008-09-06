@@ -1093,10 +1093,9 @@ void ClientConnect (void)
 	if(cvar("sv_eventlog"))
 	{
 		if(clienttype(self) == CLIENTTYPE_REAL)
-			s = "player";
+			GameLogEcho(strcat(":join:", ftos(self.playerid), ":", ftos(num_for_edict(self)), ":", self.netaddress, ":", self.netname));
 		else
-			s = "bot";
-		GameLogEcho(strcat(":join:", ftos(self.playerid), ":", s, ":", ftos(num_for_edict(self)), ":", self.netname));
+			GameLogEcho(strcat(":join:", ftos(self.playerid), ":", ftos(num_for_edict(self)), ":bot:", self.netname));
 		s = strcat(":team:", ftos(self.playerid), ":");
 		s = strcat(s, ftos(self.team));
 		GameLogEcho(s);
