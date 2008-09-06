@@ -586,7 +586,6 @@ float Portal_SpawnInPortalAtTrace(entity own, vector dir, float portal_id_val)
 
 	portal.portal_id = portal_id_val;
 	Portal_SetInPortal(own, portal);
-	sound(portal, CHAN_PROJECTILE, "misc/invshot.wav", VOL_BASE, ATTN_NORM);
 
 	return 1;
 }
@@ -618,7 +617,6 @@ float Portal_SpawnOutPortalAtTrace(entity own, vector dir, float portal_id_val)
 
 	portal.portal_id = portal_id_val;
 	Portal_SetOutPortal(own, portal);
-	sound(portal, CHAN_PROJECTILE, "misc/invshot.wav", VOL_BASE, ATTN_NORM);
 
 	return 1;
 }

@@ -75,6 +75,8 @@ void W_Porto_Touch (void)
 		self.effects += EF_BLUE - EF_RED;
 		if(Portal_SpawnInPortalAtTrace(self.owner, self.right_vector, self.portal_id))
 		{
+			sound(self, CHAN_PROJECTILE, "misc/invshot.wav", VOL_BASE, ATTN_NORM);
+			centerprint(self.owner, "^1In^7-portal created.\n");
 			trace_plane_normal = norm;
 			self.right_vector = self.right_vector - 2 * trace_plane_normal * (self.right_vector * trace_plane_normal);
 			self.angles = vectoangles(self.velocity - 2 * trace_plane_normal * (self.velocity * trace_plane_normal));
@@ -89,6 +91,8 @@ void W_Porto_Touch (void)
 	{
 		if(Portal_SpawnOutPortalAtTrace(self.owner, self.right_vector, self.portal_id))
 		{
+			sound(self, CHAN_PROJECTILE, "misc/invshot.wav", VOL_BASE, ATTN_NORM);
+			centerprint(self.owner, "^4Out^7-portal created.\n");
 			W_Porto_Success();
 		}
 		else
