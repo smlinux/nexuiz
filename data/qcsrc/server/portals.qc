@@ -443,11 +443,17 @@ float Portal_Customize()
 	if(other.classname == "spectator")
 		other = other.enemy;
 	if(other == self.owner)
-		return TRUE;
-	if(IS_INDEPENDENT_PLAYER(other))
-		return FALSE;
-	if(IS_INDEPENDENT_PLAYER(self.owner))
-		return FALSE;
+	{
+		self.modelindex = self.modelindex_lod0;
+	}
+	else if(IS_INDEPENDENT_PLAYER(other) || IS_INDEPENDENT_PLAYER(self.owner))
+	{
+		self.modelindex = 0;
+	}
+	else
+	{
+		self.modelindex = self.modelindex_lod0;
+	}
 	return TRUE;
 }
 
@@ -545,6 +551,7 @@ entity Portal_Spawn(entity own, vector org, vector ang)
 	portal.event_damage = Portal_Damage;
 	portal.health = 300;
 	setmodel(portal, "models/portal.md3");
+	portal.modelindex_lod0 = portal.modelindex;
 	portal.customizeentityforclient = Portal_Customize;
 
 	if(!Portal_FindSafeOrigin(portal))

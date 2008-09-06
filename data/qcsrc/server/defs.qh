@@ -347,8 +347,8 @@ float default_weapon_alpha;
 
 .float version_nagtime;
 
-#ifdef ALLOW_VARIABLE_LOD
 .float modelindex_lod0;
+#ifdef ALLOW_VARIABLE_LOD
 .float modelindex_lod1;
 .float modelindex_lod2;
 #endif
