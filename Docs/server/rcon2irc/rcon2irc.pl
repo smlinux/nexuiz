@@ -991,10 +991,12 @@ sub irc_joinstage($)
 	} ],
 
 	# chat: Nexuiz server -> IRC channel, nick set
-	[ dp => q{:join:(\d+):(?:player|bot):(.*)} => sub {
-		my ($id, $nick) = @_;
+	[ dp => q{:join:(\d+):(\d+):([^:]*):(.*)} => sub {
+		my ($id, $slot, $ip, $nick) = @_;
 		$nick = color_dp2irc $nick;
 		$store{"playernick_$id"} = $nick;
+		$store{"playerslot_$id"} = $slot;
+		$store{"playerip_$id"} = $ip;
 		return 0;
 	} ],
 
