@@ -92,8 +92,12 @@ sub markmap($$$$;$)
 	my $pattern = "/nexuiz/data/home/.nexuiz/extramaps-$name/sv_autodemos/????-??-??_??-??_${map}_${slot}_${ip}-*.dem";
 	if(my @result = glob $pattern)
 	{
-		print "Cleaning up demos: protecting $result[0]\n";
-		chmod 0444, @result;
+		for(@result)
+		{
+			next if -M $_ > 1/24/60; # too old
+			print "Cleaning up demos: protecting $_\n";
+			chmod 0444, $_;
+		}
 	}
 	else
 	{
@@ -109,7 +113,7 @@ sub markmap($$$$;$)
 	for(glob $pattern)
 	{
 		next if not -w $_;   # protected demo (by record, or other markers)
-		next if -M $_ > 0.1; # not old enough yet
+		next if -M $_ < 1/24/60; # not old enough yet
 		print "Cleaning up demos: deleting $_\n";
 		unlink $_;
 	}
