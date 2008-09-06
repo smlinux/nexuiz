@@ -78,7 +78,10 @@ float PlayerEdgeDistance(entity p, vector v)
 float Portal_TeleportPlayer(entity teleporter, entity player)
 {
 	vector from, to, safe, step, transform, ang, newvel;
-	vector old_forward, new_forward;
+	vector new_forward, new_up;
+	vector old_forward, old_up;
+	vector new_yawforward;
+	vector old_yawforward;
 	float planeshift, s, t;
 	from = teleporter.origin;
 	transform = teleporter.portal_transform;
@@ -134,33 +137,42 @@ float Portal_TeleportPlayer(entity teleporter, entity player)
 
 		// PLAYERS use different math
 		ang_x = -ang_x;
-		makevectors(ang);
+
+		//print("reference: ", vtos(Portal_Transform_Multiply(transform, ang)), "\n");
+
+		fixedmakevectors(ang);
 		old_forward = v_forward;
 		old_up = v_up;
+		fixedmakevectors(ang_y * '0 1 0');
+		old_yawforward = v_forward;
 
-		// their forward aiming direction is portalled...
-		new_forward = Portal_Transform_Multiply(transform, old_forward);
-		new_up = Portal_Transform_Multiply(transform, old_up);
+		// their aiming directions are portalled...
+		new_forward = Portal_Transform_Apply(transform, old_forward);
+		new_up = Portal_Transform_Apply(transform, old_up);
+		new_yawforward = Portal_Transform_Apply(transform, old_yawforward);
 
-		// but their "up" direction is difficult
-		// it must always go up...
-		// but if I used vectoangles2 on these now, it'd put part of it in the "roll" component
-		// DO NOT WANT
-		
-		if(new_forward_z > 0.9) // far up; in this case, the "up" vector points backwards
+		// but now find a new sense of direction
+		// this is NOT easy!
+		// assume new_forward points straight up.
+		// What is our yaw?
+		//
+		// new_up could now point forward OR backward... which direction to choose?
+
+		if(new_forward_z > 0.7 || new_forward_z < -0.7) // far up; in this case, the "up" vector points backwards
 		{
+			// new_yawforward and new_yawup define the new aiming half-circle
+			// we "just" need to find out whether new_up or -new_up is in that half circle
 			ang = fixedvectoangles(new_forward); // this still gets us a nice pitch value...
-			ang_y = vectoyaw(-1 * new_up); // this vector is the yaw we want
-		}
-		else if(new_forward_z < -0.9) // far down; in this case, the "up" vector points forward
-		{
-			ang = fixedvectoangles(new_forward); // this still gets us a nice pitch value...
+			if(new_up * new_yawforward < 0)
+				new_up = -1 * new_up;
 			ang_y = vectoyaw(new_up); // this vector is the yaw we want
+			//print("UP/DOWN path: ", vtos(ang), "\n");
 		}
 		else
 		{
-			// good angles
-			ang = fixedvectoangles2(new_forward, new_up);
+			// good angles; here, "forward" suffices
+			ang = fixedvectoangles(new_forward);
+			//print("GOOD path: ", vtos(ang), "\n");
 		}
 
 		ang_z = player.angles_z;
