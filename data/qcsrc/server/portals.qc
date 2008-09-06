@@ -219,10 +219,12 @@ void Portal_Touch()
 				other.effects += EF_BLUE - EF_RED;
 }
 
+void Portal_Think();
 void Portal_MakeBrokenPortal(entity portal)
 {
 	portal.solid = SOLID_NOT;
 	portal.touch = SUB_Null;
+	portal.think = SUB_Null;
 	portal.effects = 0;
 	//portal.colormod = '1 1 1';
 	portal.nextthink = 0;
@@ -233,6 +235,7 @@ void Portal_MakeWaitingPortal(entity portal)
 {
 	portal.solid = SOLID_NOT;
 	portal.touch = SUB_Null;
+	portal.think = SUB_Null;
 	portal.effects = EF_ADDITIVE;
 	portal.colormod = '1 1 1';
 	portal.nextthink = 0;
@@ -243,6 +246,7 @@ void Portal_MakeInPortal(entity portal)
 {
 	portal.solid = SOLID_TRIGGER;
 	portal.touch = Portal_Touch;
+	portal.think = Portal_Think;
 	portal.effects = EF_RED;
 	portal.colormod = '1 0 0';
 	portal.nextthink = time;
@@ -253,6 +257,7 @@ void Portal_MakeOutPortal(entity portal)
 {
 	portal.solid = SOLID_NOT;
 	portal.touch = SUB_Null;
+	portal.think = SUB_Null;
 	portal.effects = EF_STARDUST | EF_BLUE;
 	portal.colormod = '0 0 1';
 	portal.nextthink = 0;
