@@ -70,4 +70,6 @@ float compressShortVector(vector vec);
 float CheckWireframeBox(entity forent, vector v0, vector dvx, vector dvy, vector dvz);
 
 void fixedmakevectors(vector a);
+#define fixedvectoangles2 vectoangles2
+#define fixedvectoangles vectoangles
 #endif

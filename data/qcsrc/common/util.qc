@@ -633,9 +633,9 @@ float CheckWireframeBox(entity forent, vector v0, vector dvx, vector dvy, vector
 	return 1;
 }
 
-// a makevectors that inverts vectoangles
 void fixedmakevectors(vector a)
 {
+	// a makevectors that actually inverts vectoangles
 	a_x = -a_x;
 	makevectors(a);
 }
