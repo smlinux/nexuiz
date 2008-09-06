@@ -86,8 +86,10 @@ sub markmap($$$$;$)
 	my $slot = $store{"playerslot_$id"};
 	my $name = $config{irc_nick};
 	$name =~ s/Nex//; # haggerNexCTF -> haggerCTF
+	my $map = $store{map};
+	$map =~ s/^[a-z]*_//;
 	$ip =~ s/\./-/g;
-	my $pattern = "/nexuiz/data/home/.nexuiz/extramaps-$name/sv_autodemos/????-??-??_??-??_$store{map}_${slot}_$ip-*.dem";
+	my $pattern = "/nexuiz/data/home/.nexuiz/extramaps-$name/sv_autodemos/????-??-??_??-??_${map}_${slot}_${ip}-*.dem";
 	if(my @result = glob $pattern)
 	{
 		print "Cleaning up demos: protecting $result[0]\n";
@@ -95,7 +97,7 @@ sub markmap($$$$;$)
 	}
 	else
 	{
-		print "Record set but could not find the demo.\n";
+		print "Record set but could not find the demo using $pattern\n";
 	}
 	return 0;
 } ],
