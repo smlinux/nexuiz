@@ -433,8 +433,7 @@ void VoteAccept() {
 		}
 	} else {
 		//in g_tourney mode and if the vote is a timelimit-change, don't change it immediately but after restart
-		if(cvar("g_tourney")
-		   && substring(votecalledvote, 0, 10) == "timelimit ") {
+		if(g_tourney && substring(votecalledvote, 0, 10) == "timelimit ") {
 			if( stof(substring(votecalledvote, 10, strlen(votecalledvote) - 10)) > 0 ) {
 				timelimit_orig = stof(substring(votecalledvote, 10, strlen(votecalledvote) - 10));
 				bprint(strcat("The timelimit will be set to ", ftos(timelimit_orig), " minutes after the next restart!\n"));
@@ -552,7 +551,7 @@ void VoteCount() {
 	}
 
 	//in tournament mode, if we have at least one player then don't make the vote dependent on spectators (so specs don't have to press F1)
-	if(cvar("g_tourney"))
+	if(g_tourney)
 	if(realplayercount > 0) {
 		yescount = realplayeryescount;
 		nocount = realplayernocount;

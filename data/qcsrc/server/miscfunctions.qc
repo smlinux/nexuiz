@@ -823,6 +823,9 @@ void readlevelcvars(void)
 	sv_pogostick = cvar("sv_pogostick");
 	sv_doublejump = cvar("sv_doublejump");
 
+	if(g_race && g_race_qualifying == 2)
+		g_tourney = 0; // these modes cannot work together
+
 	g_pickup_respawntime_short = cvar("g_pickup_respawntime_short");
 	g_pickup_respawntime_medium = cvar("g_pickup_respawntime_medium");
 	g_pickup_respawntime_long = cvar("g_pickup_respawntime_long");
