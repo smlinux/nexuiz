@@ -94,7 +94,7 @@ sub markmap($$$$;$)
 	{
 		for(@result)
 		{
-			next if -M $_ > 1/24/60; # too old
+			next if -M $_ > 1/(24*60); # too old
 			print "Cleaning up demos: protecting $_\n";
 			chmod 0444, $_;
 		}
@@ -113,7 +113,7 @@ sub markmap($$$$;$)
 	for(glob $pattern)
 	{
 		next if not -w $_;   # protected demo (by record, or other markers)
-		next if -M $_ < 1/24/60; # not old enough yet
+		next if -M $_ < 1/(24*60); # not old enough yet
 		print "Cleaning up demos: deleting $_\n";
 		unlink $_;
 	}
