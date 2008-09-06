@@ -1,7 +1,7 @@
 Index: tools/quake3/q3map2/convert_map.c
 ===================================================================
---- tools/quake3/q3map2/convert_map.c	(revision 191)
-+++ tools/quake3/q3map2/convert_map.c	(working copy)
+--- tools/quake3/q3map2/convert_map.c.orig	2008-09-06 15:32:05.000000000 +0200
++++ tools/quake3/q3map2/convert_map.c	2008-09-06 15:32:11.000000000 +0200
 @@ -46,6 +46,105 @@
  #define	SNAP_FLOAT_TO_INT	4
  #define	SNAP_INT_TO_FLOAT	(1.0 / SNAP_FLOAT_TO_INT)
@@ -132,7 +132,7 @@ Index: tools/quake3/q3map2/convert_map.c
  		
 +		/* get plane */
 +		buildPlane = &mapplanes[ buildSide->planenum ];
-+		
++
  		/* dummy check */
  		if( buildSide->shaderInfo == NULL || buildSide->winding == NULL )
  			continue;
@@ -202,7 +202,7 @@ Index: tools/quake3/q3map2/convert_map.c
 +			else
 +				fprintf(stderr, "degenerate triangle found when solving texMat equations for\n(%f %f %f) (%f %f %f) (%f %f %f)\n( %f %f %f )\n( %f %f %f ) -> ( %f %f )\n( %f %f %f ) -> ( %f %f )\n( %f %f %f ) -> ( %f %f )\n",
 +					buildPlane->normal[0], buildPlane->normal[1], buildPlane->normal[2],
-+					vert[0]->normal[0], vert[0]->normal[1], vert[0]->normal[2], 
++					vert[0]->normal[0], vert[0]->normal[1], vert[0]->normal[2],
 +					texX[0], texX[1], texX[2], texY[0], texY[1], texY[2],
 +					vert[0]->xyz[0], vert[0]->xyz[1], vert[0]->xyz[2], xy1I[0], xy1I[1],
 +					vert[1]->xyz[0], vert[1]->xyz[1], vert[1]->xyz[2], xy1J[0], xy1J[1],
@@ -241,8 +241,8 @@ Index: tools/quake3/q3map2/convert_map.c
  
 Index: tools/quake3/q3map2/main.c
 ===================================================================
---- tools/quake3/q3map2/main.c	(revision 191)
-+++ tools/quake3/q3map2/main.c	(working copy)
+--- tools/quake3/q3map2/main.c.orig	2008-09-06 15:32:05.000000000 +0200
++++ tools/quake3/q3map2/main.c	2008-09-06 15:32:11.000000000 +0200
 @@ -541,6 +541,18 @@
  					Sys_Printf( "Unknown conversion format \"%s\". Defaulting to ASE.\n", argv[ i ] );
  			}

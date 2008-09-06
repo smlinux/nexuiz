@@ -1,8 +1,8 @@
 Index: tools/quake3/q3map2/light_ydnar.c
 ===================================================================
---- tools/quake3/q3map2/light_ydnar.c	(revision 191)
-+++ tools/quake3/q3map2/light_ydnar.c	(working copy)
-@@ -384,7 +420,7 @@
+--- tools/quake3/q3map2/light_ydnar.c.orig	2008-09-06 15:32:16.000000000 +0200
++++ tools/quake3/q3map2/light_ydnar.c	2008-09-06 15:32:18.000000000 +0200
+@@ -420,7 +420,7 @@
  #define NUDGE			0.5f
  #define BOGUS_NUDGE		-99999.0f
  
@@ -11,7 +11,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
  {
  	int				i, x, y, numClusters, *clusters, pointCluster, *cluster;
  	float			*luxel, *origin, *normal, d, lightmapSampleOffset;
-@@ -392,6 +428,12 @@
+@@ -428,6 +428,12 @@
  	vec3_t			pNormal;
  	vec3_t			vecs[ 3 ];
  	vec3_t			nudged;
@@ -24,7 +24,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
  	float			*nudge;
  	static float	nudges[][ 2 ] =
  					{
-@@ -485,6 +527,51 @@
+@@ -521,6 +527,51 @@
  	/* non axial lightmap projection (explicit xyz) */
  	else
  		VectorCopy( dv->xyz, origin );
@@ -38,7 +38,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
 +	{
 +		for (j=0;j<3;j++)
 +		{
-+			VectorCopy(worldverts[j],cverts[j]);    
++			VectorCopy(worldverts[j],cverts[j]);
 +		}
 +		PlaneFromPoints(hostplane,cverts[0],cverts[1],cverts[2]);
 +
@@ -53,7 +53,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
 +				VectorAdd(temp,hostplane,temp);
 +				PlaneFromPoints(sideplane,cverts[i],cverts[ next ], temp);
 +
-+				//planetest sample point  
++				//planetest sample point
 +				e=DotProduct(origin,sideplane);
 +				e=e-sideplane[3];
 +				if (e>0)
@@ -66,7 +66,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
 +					origin[2]-=sideplane[2]*(e+1);
 +#ifdef DEBUG_27_1
 +					VectorClear(origin);
-+#endif 
++#endif
 +				}
 +			}
 +		}
@@ -76,7 +76,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
  	
  	/* planar surfaces have precalculated lightmap vectors for nudging */
  	if( lm->plane != NULL )
-@@ -516,8 +603,13 @@
+@@ -552,8 +603,13 @@
  	else
  		origin[ lm->axisNum ] += lightmapSampleOffset;
  	
@@ -84,14 +84,14 @@ Index: tools/quake3/q3map2/light_ydnar.c
 +	origintwo[0]+=vecs[2][0];
 +	origintwo[1]+=vecs[2][1];
 +	origintwo[2]+=vecs[2][2];
-+	
++
  	/* get cluster */
 -	pointCluster = ClusterForPointExtFilter( origin, LUXEL_EPSILON, numClusters, clusters );
 +	pointCluster = ClusterForPointExtFilter( origintwo, LUXEL_EPSILON, numClusters, clusters );
  	
  	/* another retarded hack, storing nudge count in luxel[ 1 ] */
  	luxel[ 1 ] = 0.0f;	
-@@ -533,14 +625,14 @@
+@@ -569,14 +625,14 @@
  			for( i = 0; i < 3; i++ )
  			{
  				/* set nudged point*/
@@ -104,12 +104,12 @@ Index: tools/quake3/q3map2/light_ydnar.c
  			pointCluster = ClusterForPointExtFilter( nudged, LUXEL_EPSILON, numClusters, clusters ); //% + 0.625 );
 -			if( pointCluster >= 0 )	
 -				VectorCopy( nudged, origin );
-+			//if( pointCluster >= 0 )	
++			//if( pointCluster >= 0 )
 +   			//	VectorCopy( nudged, origin );
  			luxel[ 1 ] += 1.0f;
  		}
  	}
-@@ -550,8 +642,8 @@
+@@ -586,8 +642,8 @@
  	{
  		VectorMA( dv->xyz, lightmapSampleOffset, dv->normal, nudged );
  		pointCluster = ClusterForPointExtFilter( nudged, LUXEL_EPSILON, numClusters, clusters );
@@ -120,7 +120,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
  		luxel[ 1 ] += 1.0f;
  	}
  	
-@@ -597,7 +689,7 @@
+@@ -633,7 +689,7 @@
  than the distance between two luxels (thanks jc :)
  */
  
@@ -129,7 +129,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
  {
  	bspDrawVert_t	mid, *dv2[ 3 ];
  	int				max;
-@@ -645,7 +737,7 @@
+@@ -681,7 +737,7 @@
  	
  	/* split the longest edge and map it */
  	LerpDrawVert( dv[ max ], dv[ (max + 1) % 3 ], &mid );
@@ -138,7 +138,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
  	
  	/* push the point up a little bit to account for fp creep (fixme: revisit this) */
  	//%	VectorMA( mid.xyz, 2.0f, mid.normal, mid.xyz );
-@@ -653,12 +745,12 @@
+@@ -689,12 +745,12 @@
  	/* recurse to first triangle */
  	VectorCopy( dv, dv2 );
  	dv2[ max ] = &mid;
@@ -153,7 +153,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
  }
  
  
-@@ -674,6 +766,7 @@
+@@ -710,6 +766,7 @@
  	int				i;
  	vec4_t			plane;
  	vec3_t			*stv, *ttv, stvStatic[ 3 ], ttvStatic[ 3 ];
@@ -161,14 +161,14 @@ Index: tools/quake3/q3map2/light_ydnar.c
  	
  	
  	/* get plane if possible */
-@@ -699,16 +792,20 @@
+@@ -735,16 +792,20 @@
  		ttv = NULL;
  	}
  	
 +	VectorCopy( dv[ 0 ]->xyz, worldverts[ 0 ] );
 +	VectorCopy( dv[ 1 ]->xyz, worldverts[ 1 ] );
 +	VectorCopy( dv[ 2 ]->xyz, worldverts[ 2 ] );
-+	
++
  	/* map the vertexes */
 -	MapSingleLuxel( lm, info, dv[ 0 ], plane, 1, stv, ttv );
 -	MapSingleLuxel( lm, info, dv[ 1 ], plane, 1, stv, ttv );
@@ -186,7 +186,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
  		return qtrue;
  	}
  	
-@@ -730,7 +827,7 @@
+@@ -766,7 +827,7 @@
  			dv2[ 2 ] = dv[ (i + 1) % 3 ];
  			
  			/* map the degenerate triangle */
@@ -195,7 +195,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
  		}
  	}
  	
-@@ -792,8 +889,8 @@
+@@ -828,8 +889,8 @@
  	LerpDrawVert( dv[ max + 2 ], dv[ (max + 3) % 4 ], &mid[ 1 ] );
  	
  	/* map the vertexes */
@@ -206,7 +206,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
  	
  	/* 0 and 2 */
  	if( max == 0 )
-@@ -878,10 +975,10 @@
+@@ -914,10 +975,10 @@
  	}
  	
  	/* map the vertexes */
@@ -221,7 +221,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
  	
  	/* subdivide the quad */
  	MapQuad_r( lm, info, dv, plane, stv, ttv );
-@@ -1173,7 +1270,7 @@
+@@ -1209,7 +1270,7 @@
  					continue;
  				
  				/* map the fake vert */
@@ -230,7 +230,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
  			}
  		}
  	}
-@@ -1963,22 +2062,32 @@
+@@ -2001,22 +2062,32 @@
  					deluxel = SUPER_DELUXEL( x, y );
  					origin = SUPER_ORIGIN( x, y );
  					normal = SUPER_NORMAL( x, y );
@@ -261,16 +261,16 @@ Index: tools/quake3/q3map2/light_ydnar.c
 +					{
 +						/* set contribution count */
 +						lightLuxel[ 3 ] = 1.0f;
-+						
++
 +						/* setup trace */
 +						trace.cluster = *cluster;
 +						VectorCopy( origin, trace.origin );
 +						VectorCopy( normal, trace.normal );
-+						
++
 +						/* get light for this sample */
 +						LightContributionToSample( &trace );
 +						VectorCopy( trace.color, lightLuxel );
-+						
++
 +						/* add to count */
 +						if( trace.color[ 0 ] || trace.color[ 1 ] || trace.color[ 2 ] )
 +							totalLighted++;

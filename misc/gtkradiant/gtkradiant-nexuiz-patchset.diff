@@ -10,8 +10,8 @@ before committing new singlepatches!
 
 Index: libs/picomodel/pm_obj.c
 ===================================================================
---- libs/picomodel/pm_obj.c	(revision 290)
-+++ libs/picomodel/pm_obj.c	(working copy)
+--- libs/picomodel/pm_obj.c.orig	2008-09-06 15:32:05.000000000 +0200
++++ libs/picomodel/pm_obj.c	2008-09-06 15:32:09.000000000 +0200
 @@ -215,10 +215,9 @@
  	}
  }
@@ -113,8 +113,8 @@ Index: libs/picomodel/pm_obj.c
  	}
 Index: radiant/map.cpp
 ===================================================================
---- radiant/map.cpp	(revision 304)
-+++ radiant/map.cpp	(working copy)
+--- radiant/map.cpp.orig	2008-09-06 15:32:05.000000000 +0200
++++ radiant/map.cpp	2008-09-06 15:32:10.000000000 +0200
 @@ -270,6 +270,100 @@
    ents->RemoveAll();
  }
@@ -192,7 +192,7 @@ Index: radiant/map.cpp
 +			if(e_target != NULL)
 +			{
 +				const char *targetname = ValueForKey(e_target, "targetname");
-+				if( (targetname != NULL) && (strcmp(target, targetname) == 0) ) 
++				if( (targetname != NULL) && (strcmp(target, targetname) == 0) )
 +				{
 +					SetKeyValue(e_target, "targetname", newtarget);
 +				}
@@ -227,9 +227,7 @@ Index: radiant/map.cpp
 -        entity_t *e_target;
 -        const char *target = ValueForKey(e, "target");
 -        qboolean bCollision=FALSE;
-+      // keep a list of ents added to avoid testing collisions against them
-+      g_ptr_array_add(new_ents, (gpointer)e);
- 
+-
 -        // check the current map entities for an actual collision
 -        for (e_target = entities.next; e_target != &entities; e_target = e_target->next)
 -        {
@@ -269,7 +267,9 @@ Index: radiant/map.cpp
 -          g_ptr_array_free(t_ents, FALSE);
 -        }
 -      }
--
++      // keep a list of ents added to avoid testing collisions against them
++      g_ptr_array_add(new_ents, (gpointer)e);
+ 
        // add the entity to the end of the entity list
        Entity_AddToList(e, &entities);
        g_qeglobals.d_num_entities++;
@@ -295,8 +295,8 @@ Index: radiant/map.cpp
    g_ptr_array_free(new_ents, FALSE);
 Index: radiant/drag.cpp
 ===================================================================
---- radiant/drag.cpp	(revision 304)
-+++ radiant/drag.cpp	(working copy)
+--- radiant/drag.cpp.orig	2008-09-06 15:32:05.000000000 +0200
++++ radiant/drag.cpp	2008-09-06 15:32:10.000000000 +0200
 @@ -255,54 +255,6 @@
  
  entity_t *peLink;
@@ -354,8 +354,8 @@ Index: radiant/drag.cpp
  Drag_Begin
 Index: radiant/xywindow.cpp
 ===================================================================
---- radiant/xywindow.cpp	(revision 304)
-+++ radiant/xywindow.cpp	(working copy)
+--- radiant/xywindow.cpp.orig	2008-09-06 15:32:05.000000000 +0200
++++ radiant/xywindow.cpp	2008-09-06 15:32:10.000000000 +0200
 @@ -270,16 +270,17 @@
  void DrawPathLines (void)
  {
@@ -440,8 +440,8 @@ Index: radiant/xywindow.cpp
  
 Index: radiant/targetname.cpp
 ===================================================================
---- radiant/targetname.cpp	(revision 304)
-+++ radiant/targetname.cpp	(working copy)
+--- radiant/targetname.cpp.orig	2008-09-06 15:32:05.000000000 +0200
++++ radiant/targetname.cpp	2008-09-06 15:32:10.000000000 +0200
 @@ -24,11 +24,11 @@
  /*!
  connects two entities creating a unique target/targetname value 
@@ -535,8 +535,8 @@ Index: radiant/targetname.cpp
  	if (fFound)
 Index: radiant/qe3.cpp
 ===================================================================
---- radiant/qe3.cpp	(revision 304)
-+++ radiant/qe3.cpp	(working copy)
+--- radiant/qe3.cpp.orig	2008-09-06 15:32:05.000000000 +0200
++++ radiant/qe3.cpp	2008-09-06 15:32:10.000000000 +0200
 @@ -704,7 +704,7 @@
  from the first selected to the secon
  ===============
@@ -572,8 +572,8 @@ Index: radiant/qe3.cpp
    }
 Index: radiant/qe3.h
 ===================================================================
---- radiant/qe3.h	(revision 304)
-+++ radiant/qe3.h	(working copy)
+--- radiant/qe3.h.orig	2008-09-06 15:32:05.000000000 +0200
++++ radiant/qe3.h	2008-09-06 15:32:10.000000000 +0200
 @@ -229,7 +229,7 @@
  void SelectEdgeByRay (vec3_t org, vec3_t dir);
  void SelectVertexByRay (vec3_t org, vec3_t dir);
@@ -594,8 +594,8 @@ Index: radiant/qe3.h
  // xywindow.cpp
 Index: tools/quake3/q3map2/convert_map.c
 ===================================================================
---- tools/quake3/q3map2/convert_map.c	(revision 191)
-+++ tools/quake3/q3map2/convert_map.c	(working copy)
+--- tools/quake3/q3map2/convert_map.c.orig	2008-09-06 15:32:05.000000000 +0200
++++ tools/quake3/q3map2/convert_map.c	2008-09-06 15:32:11.000000000 +0200
 @@ -46,6 +46,105 @@
  #define	SNAP_FLOAT_TO_INT	4
  #define	SNAP_INT_TO_FLOAT	(1.0 / SNAP_FLOAT_TO_INT)
@@ -726,7 +726,7 @@ Index: tools/quake3/q3map2/convert_map.c
  		
 +		/* get plane */
 +		buildPlane = &mapplanes[ buildSide->planenum ];
-+		
++
  		/* dummy check */
  		if( buildSide->shaderInfo == NULL || buildSide->winding == NULL )
  			continue;
@@ -796,7 +796,7 @@ Index: tools/quake3/q3map2/convert_map.c
 +			else
 +				fprintf(stderr, "degenerate triangle found when solving texMat equations for\n(%f %f %f) (%f %f %f) (%f %f %f)\n( %f %f %f )\n( %f %f %f ) -> ( %f %f )\n( %f %f %f ) -> ( %f %f )\n( %f %f %f ) -> ( %f %f )\n",
 +					buildPlane->normal[0], buildPlane->normal[1], buildPlane->normal[2],
-+					vert[0]->normal[0], vert[0]->normal[1], vert[0]->normal[2], 
++					vert[0]->normal[0], vert[0]->normal[1], vert[0]->normal[2],
 +					texX[0], texX[1], texX[2], texY[0], texY[1], texY[2],
 +					vert[0]->xyz[0], vert[0]->xyz[1], vert[0]->xyz[2], xy1I[0], xy1I[1],
 +					vert[1]->xyz[0], vert[1]->xyz[1], vert[1]->xyz[2], xy1J[0], xy1J[1],
@@ -835,8 +835,8 @@ Index: tools/quake3/q3map2/convert_map.c
  
 Index: tools/quake3/q3map2/main.c
 ===================================================================
---- tools/quake3/q3map2/main.c	(revision 191)
-+++ tools/quake3/q3map2/main.c	(working copy)
+--- tools/quake3/q3map2/main.c.orig	2008-09-06 15:32:05.000000000 +0200
++++ tools/quake3/q3map2/main.c	2008-09-06 15:32:11.000000000 +0200
 @@ -541,6 +541,18 @@
  					Sys_Printf( "Unknown conversion format \"%s\". Defaulting to ASE.\n", argv[ i ] );
  			}
@@ -858,8 +858,8 @@ Index: tools/quake3/q3map2/main.c
  	/* clean up map name */
 Index: tools/quake3/q3map2/model.c
 ===================================================================
---- tools/quake3/q3map2/model.c	(revision 193)
-+++ tools/quake3/q3map2/model.c	(working copy)
+--- tools/quake3/q3map2/model.c.orig	2008-09-06 15:32:05.000000000 +0200
++++ tools/quake3/q3map2/model.c	2008-09-06 15:32:12.000000000 +0200
 @@ -222,6 +222,8 @@
  	byte				*color;
  	picoIndex_t			*indexes;
@@ -1056,7 +1056,7 @@ Index: tools/quake3/q3map2/model.c
 +						buildBrush->sides[ 2 ].planenum = FindFloatPlane( pb, pb[ 3 ], 2, &points[ 0 ] ); // pb contains points[0] and points[1]
 +						buildBrush->sides[ 3 ].planenum = FindFloatPlane( pc, pc[ 3 ], 2, &points[ 2 ] ); // pc contains points[2] and points[0] (copied to points[3]
 +						buildBrush->sides[ 4 ].planenum = FindFloatPlane( reverse, reverse[ 3 ], 3, backs );
- 					}
++					}
 +					else
 +					{
 +						free(buildBrush);
@@ -1074,7 +1074,7 @@ Index: tools/quake3/q3map2/model.c
 +						buildBrush->next = entities[ mapEntityNum ].brushes;
 +						entities[ mapEntityNum ].brushes = buildBrush;
 +						entities[ mapEntityNum ].numBrushes++;
-+					}
+ 					}
 +					else
 +						free( buildBrush );
  				}
@@ -1082,8 +1082,8 @@ Index: tools/quake3/q3map2/model.c
  		}
 Index: tools/quake3/q3map2/map.c
 ===================================================================
---- tools/quake3/q3map2/map.c	(revision 193)
-+++ tools/quake3/q3map2/map.c	(working copy)
+--- tools/quake3/q3map2/map.c.orig	2008-09-06 15:32:04.000000000 +0200
++++ tools/quake3/q3map2/map.c	2008-09-06 15:32:12.000000000 +0200
 @@ -184,7 +184,7 @@
  snaps a plane to normal/distance epsilons
  */
@@ -1120,13 +1120,13 @@ Index: tools/quake3/q3map2/map.c
  	int		i, j, hash, h;
  	plane_t	*p;
  	vec_t	d;
+-	
 +	vec3_t centerofweight;
 +
 +	VectorClear(centerofweight);
 +	for(i = 0; i < numPoints; ++i)
 +		VectorMA(centerofweight, 1.0 / numPoints, points[i], centerofweight);
  	
--	
  	/* hash the plane */
 -	SnapPlane( normal, &dist );
 +	SnapPlane( normal, &dist, centerofweight );
@@ -1143,16 +1143,16 @@ Index: tools/quake3/q3map2/map.c
 +	VectorClear(centerofweight);
 +	for(i = 0; i < numPoints; ++i)
 +		VectorMA(centerofweight, 1.0 / numPoints, points[i], centerofweight);
-+	
++
 +	SnapPlane( normal, &dist, centerofweight );
  	for( i = 0, p = mapplanes; i < nummapplanes; i++, p++ )
  	{
  		if( PlaneEqual( p, normal, dist ) )
 Index: tools/quake3/q3map2/shaders.c
 ===================================================================
---- tools/quake3/q3map2/shaders.c	(revision 191)
-+++ tools/quake3/q3map2/shaders.c	(working copy)
-@@ -793,8 +793,14 @@
+--- tools/quake3/q3map2/shaders.c.orig	2008-09-06 15:32:04.000000000 +0200
++++ tools/quake3/q3map2/shaders.c	2008-09-06 15:32:13.000000000 +0200
+@@ -794,8 +794,14 @@
  	}
  	
  	if( VectorLength( si->color ) <= 0.0f )
@@ -1170,9 +1170,9 @@ Index: tools/quake3/q3map2/shaders.c
  
 Index: tools/quake3/q3map2/light_ydnar.c
 ===================================================================
---- tools/quake3/q3map2/light_ydnar.c	(revision 191)
-+++ tools/quake3/q3map2/light_ydnar.c	(working copy)
-@@ -1767,6 +1864,8 @@
+--- tools/quake3/q3map2/light_ydnar.c.orig	2008-09-06 15:32:04.000000000 +0200
++++ tools/quake3/q3map2/light_ydnar.c	2008-09-06 15:32:14.000000000 +0200
+@@ -1767,6 +1767,8 @@
  	float				tests[ 4 ][ 2 ] = { { 0.0f, 0 }, { 1, 0 }, { 0, 1 }, { 1, 1 } };
  	trace_t				trace;
  	float				stackLightLuxels[ STACK_LL_SIZE ];
@@ -1181,7 +1181,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
  	
  	
  	/* bail if this number exceeds the number of raw lightmaps */
-@@ -2223,6 +2332,78 @@
+@@ -2223,6 +2225,78 @@
  	FreeTraceLights( &trace );
  	
  	/*	-----------------------------------------------------------------
@@ -1196,7 +1196,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
 +			/* early out */
 +			if( lm->superLuxels[ lightmapNum ] == NULL )
 +				continue;
-+			
++
 +			/* apply floodlight to each luxel */
 +			for( y = 0; y < lm->sh; y++ )
 +			{
@@ -1206,21 +1206,21 @@ Index: tools/quake3/q3map2/light_ydnar.c
 +					cluster	= SUPER_CLUSTER( x, y );
 +					//%	if( *cluster < 0 )
 +					//%		continue;
-+					
++
 +					/* get particulars */
 +					luxel = SUPER_LUXEL( lightmapNum, x, y );
 +					floodlight = SUPER_FLOODLIGHT( x, y );
-+					
++
 +					flood[0]=floodlightRGB[0]*floodlightIntensity;
 +					flood[1]=floodlightRGB[1]*floodlightIntensity;
 +					flood[2]=floodlightRGB[2]*floodlightIntensity;
-+					             
++
 +					/* scale light value */
 +					VectorScale( flood, *floodlight, flood );
 +					luxel[0]+=flood[0];
 +					luxel[1]+=flood[1];
 +					luxel[2]+=flood[2];
-+					
++
 +					if (luxel[3]==0) luxel[3]=1;
 +				}
 +			}
@@ -1234,7 +1234,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
 +			/* early out */
 +			if( lm->superLuxels[ lightmapNum ] == NULL )
 +				continue;
-+			
++
 +			for( y = 0; y < lm->sh; y++ )
 +			{
 +				for( x = 0; x < lm->sw; x++ )
@@ -1243,11 +1243,11 @@ Index: tools/quake3/q3map2/light_ydnar.c
 +					cluster	= SUPER_CLUSTER( x, y );
 +					//%	if( *cluster < 0 )
 +					//%		continue;
-+					
++
 +					/* get particulars */
 +					luxel = SUPER_LUXEL( lightmapNum, x, y );
 +					normal = SUPER_NORMAL (  x, y );
-+               
++
 +					luxel[0]=(normal[0]*127)+127;
 +					luxel[1]=(normal[1]*127)+127;
 +					luxel[2]=(normal[2]*127)+127;
@@ -1255,39 +1255,39 @@ Index: tools/quake3/q3map2/light_ydnar.c
 +			}
 +		}
 +	}
-+	
++
 +	/*	-----------------------------------------------------------------
  		dirt pass
  		----------------------------------------------------------------- */
  	
-@@ -3587,7 +3768,320 @@
+@@ -3587,7 +3661,320 @@
  	CreateTraceLightsForBounds( mins, maxs, normal, info->numSurfaceClusters, &surfaceClusters[ info->firstSurfaceCluster ], LIGHT_SURFACES, trace );
  }
  
 +/////////////////////////////////////////////////////////////
- 
++
 +#define FLOODLIGHT_CONE_ANGLE			88	/* degrees */
 +#define FLOODLIGHT_NUM_ANGLE_STEPS		16
 +#define FLOODLIGHT_NUM_ELEVATION_STEPS	4
 +#define FLOODLIGHT_NUM_VECTORS			(FLOODLIGHT_NUM_ANGLE_STEPS * FLOODLIGHT_NUM_ELEVATION_STEPS)
- 
++
 +static vec3_t	floodVectors[ FLOODLIGHT_NUM_VECTORS ];
 +static int		numFloodVectors = 0;
- 
++
 +void SetupFloodLight( void )
 +{
 +	int		i, j;
 +	float	angle, elevation, angleStep, elevationStep;
 +	const char	*value;
 +	double v1,v2,v3,v4,v5;
-+	
++
 +	/* note it */
 +	Sys_FPrintf( SYS_VRB, "--- SetupFloodLight ---\n" );
-+	
++
 +	/* calculate angular steps */
 +	angleStep = DEG2RAD( 360.0f / FLOODLIGHT_NUM_ANGLE_STEPS );
 +	elevationStep = DEG2RAD( FLOODLIGHT_CONE_ANGLE / FLOODLIGHT_NUM_ELEVATION_STEPS );
-+	
++
 +	/* iterate angle */
 +	angle = 0.0f;
 +	for( i = 0, angle = 0.0f; i < FLOODLIGHT_NUM_ANGLE_STEPS; i++, angle += angleStep )
@@ -1301,36 +1301,36 @@ Index: tools/quake3/q3map2/light_ydnar.c
 +			numFloodVectors++;
 +		}
 +	}
-+	
++
 +	/* emit some statistics */
 +	Sys_FPrintf( SYS_VRB, "%9d numFloodVectors\n", numFloodVectors );
  
 +      /* floodlight */
 +	value = ValueForKey( &entities[ 0 ], "_floodlight" );
-+	
+ 
 +	if( value[ 0 ] != '\0' )
 +	{
 +		v1=v2=v3=0;
 +		v4=floodlightDistance;
 +		v5=floodlightIntensity;
-+		
++
 +		sscanf( value, "%lf %lf %lf %lf %lf", &v1, &v2, &v3, &v4, &v5);
-+		
++
 +		floodlightRGB[0]=v1;
 +		floodlightRGB[1]=v2;
 +		floodlightRGB[2]=v3;
-+		
++
 +		if (VectorLength(floodlightRGB)==0)
 +		{
 +			VectorSet(floodlightRGB,240,240,255);
 +		}
-+		
+ 
 +		if (v4<1) v4=1024;
 +		if (v5<1) v5=128;
-+		
++
 +		floodlightDistance=v4;
 +		floodlightIntensity=v5;
-+    
++
 +		floodlighty = qtrue;
 +		Sys_Printf( "FloodLighting enabled via worldspawn _floodlight key.\n" );
 +	}
@@ -1352,14 +1352,14 @@ Index: tools/quake3/q3map2/light_ydnar.c
 +	rawLightmap_t		*lm;
 +	surfaceInfo_t		*info;
 +	trace_t				trace;
-+	
++
 +	/* bail if this number exceeds the number of raw lightmaps */
 +	if( rawLightmapNum >= numRawLightmaps )
 +		return;
-+	
++
 +	/* get lightmap */
 +	lm = &rawLightmaps[ rawLightmapNum ];
-+	
++
 +	memset(&trace,0,sizeof(trace_t));
 +	/* setup trace */
 +	trace.testOcclusion = qtrue;
@@ -1371,14 +1371,14 @@ Index: tools/quake3/q3map2/light_ydnar.c
 +	trace.inhibitRadius = DEFAULT_INHIBIT_RADIUS;
 +	trace.testAll = qfalse;
 +	trace.distance = 1024;
-+	
++
 +	/* twosided lighting (may or may not be a good idea for lightmapped stuff) */
 +	//trace.twoSided = qfalse;
 +	for( i = 0; i < trace.numSurfaces; i++ )
 +	{
 +		/* get surface */
 +		info = &surfaceInfos[ trace.surfaces[ i ] ];
-+		
++
 +		/* check twosidedness */
 +		if( info->si->twoSided )
 +		{
@@ -1386,7 +1386,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
 +			break;
 +		}
 +	}
-+	
++
 +	/* gather dirt */
 +	for( y = 0; y < lm->sh; y++ )
 +	{
@@ -1397,29 +1397,29 @@ Index: tools/quake3/q3map2/light_ydnar.c
 +			origin = SUPER_ORIGIN( x, y );
 +			normal = SUPER_NORMAL( x, y );
 +			floodlight = SUPER_FLOODLIGHT( x, y );
-+			
++
 +			/* set default dirt */
 +			*floodlight = 0.0f;
-+			
++
 +			/* only look at mapped luxels */
 +			if( *cluster < 0 )
 +				continue;
-+			
++
 +			/* copy to trace */
 +			trace.cluster = *cluster;
 +			VectorCopy( origin, trace.origin );
 +			VectorCopy( normal, trace.normal );
-+         
 +
-+		
++
++
 +			/* get dirt */
 +			*floodlight = FloodLightForSample( &trace );
 +		}
 +	}
-+	
++
 +	/* testing no filtering */
 +	return;
-+	
++
 +	/* filter "dirt" */
 +	for( y = 0; y < lm->sh; y++ )
 +	{
@@ -1428,7 +1428,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
 +			/* get luxel */
 +			cluster = SUPER_CLUSTER( x, y );
 +			floodlight = SUPER_FLOODLIGHT( x, y );
-+			
++
 +			/* filter dirt by adjacency to unmapped luxels */
 +			average = *floodlight;
 +			samples = 1.0f;
@@ -1436,32 +1436,32 @@ Index: tools/quake3/q3map2/light_ydnar.c
 +			{
 +				if( sy < 0 || sy >= lm->sh )
 +					continue;
-+				
++
 +				for( sx = (x - 1); sx <= (x + 1); sx++ )
 +				{
 +					if( sx < 0 || sx >= lm->sw || (sx == x && sy == y) )
 +						continue;
-+					
++
 +					/* get neighboring luxel */
 +					cluster = SUPER_CLUSTER( sx, sy );
 +					floodlight2 = SUPER_FLOODLIGHT( sx, sy );
 +					if( *cluster < 0 || *floodlight2 <= 0.0f )
 +						continue;
-+					
++
 +					/* add it */
 +					average += *floodlight2;
 +					samples += 1.0f;
 +				}
-+				
++
 +				/* bail */
 +				if( samples <= 0.0f )
 +					break;
 +			}
-+			
++
 +			/* bail */
 +			if( samples <= 0.0f )
 +				continue;
-+			
++
 +			/* scale dirt */
 +			*floodlight = average / samples;
 +		}
@@ -1483,23 +1483,23 @@ Index: tools/quake3/q3map2/light_ydnar.c
 +	vec3_t	normal, worldUp, myUp, myRt, direction, displacement;
 +	float 	dd;
 +	int 	vecs = 0;
-+ 
++
 +	gatherLight=0;
 +	/* dummy check */
 +	//if( !dirty )
 +	//	return 1.0f;
 +	if( trace == NULL || trace->cluster < 0 )
 +		return 0.0f;
-+	
++
 +
 +	/* setup */
 +	dd = floodlightDistance;
 +	VectorCopy( trace->normal, normal );
-+	
++
 +	/* check if the normal is aligned to the world-up */
 +	if( normal[ 0 ] == 0.0f && normal[ 1 ] == 0.0f )
 +	{
-+		if( normal[ 2 ] == 1.0f )		
++		if( normal[ 2 ] == 1.0f )
 +		{
 +			VectorSet( myRt, 1.0f, 0.0f, 0.0f );
 +			VectorSet( myUp, 0.0f, 1.0f, 0.0f );
@@ -1528,7 +1528,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
 +		}
 +
 +		vecs++;
-+         
++
 +		/* transform vector into tangent space */
 +		direction[ 0 ] = myRt[ 0 ] * floodVectors[ i ][ 0 ] + myUp[ 0 ] * floodVectors[ i ][ 1 ] + normal[ 0 ] * floodVectors[ i ][ 2 ];
 +		direction[ 1 ] = myRt[ 1 ] * floodVectors[ i ][ 0 ] + myUp[ 1 ] * floodVectors[ i ][ 1 ] + normal[ 1 ] * floodVectors[ i ][ 2 ];
@@ -1538,7 +1538,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
 +		VectorMA( trace->origin, dd, direction, trace->end );
 +
 +		//VectorMA( trace->origin, 1, direction, trace->origin );
-+			
++
 +		SetupTrace( trace );
 +		/* trace */
 +	  	TraceLine( trace );
@@ -1553,21 +1553,21 @@ Index: tools/quake3/q3map2/light_ydnar.c
 +			VectorSubtract( trace->hit, trace->origin, displacement );
 +			d=VectorLength( displacement );
 +
-+			// d=trace->distance;            
++			// d=trace->distance;
 +			//if (d>256) gatherDirt+=1;
 +			contribution=d/dd;
-+			if (contribution>1) contribution=1.0f; 
-+             
++			if (contribution>1) contribution=1.0f;
++
 +			//gatherDirt += 1.0f - ooDepth * VectorLength( displacement );
 +		}
-+         
++
 +		gatherLight+=contribution;
 +	}
-+   
++
 +	/* early out */
 +	if( gatherLight <= 0.0f )
 +		return 0.0f;
-+   	
++
 +	sub=vecs;
 +
 +	if (sub<1) sub=1;
@@ -1576,15 +1576,15 @@ Index: tools/quake3/q3map2/light_ydnar.c
 +	outLight=gatherLight;
 +	if( outLight > 1.0f )
 +		outLight = 1.0f;
-+	
++
 +	/* return to sender */
 +	return outLight;
 +}
-+
+ 
 Index: tools/quake3/q3map2/light.c
 ===================================================================
---- tools/quake3/q3map2/light.c	(revision 191)
-+++ tools/quake3/q3map2/light.c	(working copy)
+--- tools/quake3/q3map2/light.c.orig	2008-09-06 15:32:04.000000000 +0200
++++ tools/quake3/q3map2/light.c	2008-09-06 15:32:14.000000000 +0200
 @@ -1378,6 +1378,56 @@
  			break;
  	}
@@ -1599,12 +1599,12 @@ Index: tools/quake3/q3map2/light.c
 +		col[0]=col[1]=col[2]=floodlightIntensity;
 +		dir[0]=dir[1]=0;
 +		dir[2]=1;
-+      
++
 +		trace.testOcclusion = qtrue;
 +		trace.forceSunlight = qfalse;
 +		trace.inhibitRadius = DEFAULT_INHIBIT_RADIUS;
-+		trace.testAll = qtrue;     
-+      
++		trace.testAll = qtrue;
++
 +		for (q=0;q<2;q++)
 +		{
 +			if (q==0) //upper hemisphere
@@ -1631,7 +1631,7 @@ Index: tools/quake3/q3map2/light.c
 +			contributions[ numCon ].dir[2]=dir[2];
 +
 +			contributions[ numCon ].style = 0;
-+			numCon++;		
++			numCon++;
 +			/* push average direction around */
 +			addSize = VectorLength( col );
 +			VectorMA( gp->dir, addSize, dir, gp->dir );
@@ -1663,7 +1663,7 @@ Index: tools/quake3/q3map2/light.c
  		
  		/* generate diffuse lights */
  		RadFreeLights();
-@@ -2191,6 +2256,21 @@
+@@ -2191,6 +2248,21 @@
  			cpmaHack = qtrue;
  			Sys_Printf( "Enabling Challenge Pro Mode Asstacular Vertex Lighting Mode (tm)\n" );
  		}
@@ -1685,7 +1685,7 @@ Index: tools/quake3/q3map2/light.c
  		
  		/* r7: dirtmapping */
  		else if( !strcmp( argv[ i ], "-dirty" ) )
-@@ -2279,6 +2359,7 @@
+@@ -2279,6 +2351,7 @@
  	/* ydnar: set up optimization */
  	SetupBrushes();
  	SetupDirt();
@@ -1695,8 +1695,8 @@ Index: tools/quake3/q3map2/light.c
  	/* initialize the surface facet tracing */
 Index: tools/quake3/q3map2/lightmaps_ydnar.c
 ===================================================================
---- tools/quake3/q3map2/lightmaps_ydnar.c	(revision 191)
-+++ tools/quake3/q3map2/lightmaps_ydnar.c	(working copy)
+--- tools/quake3/q3map2/lightmaps_ydnar.c.orig	2008-09-06 15:32:04.000000000 +0200
++++ tools/quake3/q3map2/lightmaps_ydnar.c	2008-09-06 15:32:14.000000000 +0200
 @@ -414,6 +414,12 @@
  		lm->superNormals = safe_malloc( size );
  	memset( lm->superNormals, 0, size );
@@ -1706,15 +1706,15 @@ Index: tools/quake3/q3map2/lightmaps_ydnar.c
 +	if( lm->superFloodLight == NULL )
 +		lm->superFloodLight = safe_malloc( size );
 +	memset( lm->superFloodLight, 0, size );
-+	
++
  	/* allocate cluster map storage */
  	size = lm->sw * lm->sh * sizeof( int );
  	if( lm->superClusters == NULL )
 Index: tools/quake3/q3map2/q3map2.h
 ===================================================================
---- tools/quake3/q3map2/q3map2.h	(revision 191)
-+++ tools/quake3/q3map2/q3map2.h	(working copy)
-@@ -267,6 +267,7 @@
+--- tools/quake3/q3map2/q3map2.h.orig	2008-09-06 15:32:04.000000000 +0200
++++ tools/quake3/q3map2/q3map2.h	2008-09-06 15:32:14.000000000 +0200
+@@ -266,6 +266,7 @@
  #define SUPER_NORMAL_SIZE		4
  #define SUPER_DELUXEL_SIZE		3
  #define BSP_DELUXEL_SIZE		3
@@ -1722,23 +1722,23 @@ Index: tools/quake3/q3map2/q3map2.h
  
  #define VERTEX_LUXEL( s, v )	(vertexLuxels[ s ] + ((v) * VERTEX_LUXEL_SIZE))
  #define RAD_VERTEX_LUXEL( s, v )(radVertexLuxels[ s ] + ((v) * VERTEX_LUXEL_SIZE))
-@@ -279,6 +280,7 @@
+@@ -278,6 +279,7 @@
  #define SUPER_ORIGIN( x, y )	(lm->superOrigins + ((((y) * lm->sw) + (x)) * SUPER_ORIGIN_SIZE))
  #define SUPER_NORMAL( x, y )	(lm->superNormals + ((((y) * lm->sw) + (x)) * SUPER_NORMAL_SIZE))
  #define SUPER_DIRT( x, y )		(lm->superNormals + ((((y) * lm->sw) + (x)) * SUPER_NORMAL_SIZE) + 3)	/* stash dirtyness in normal[ 3 ] */
-+#define SUPER_FLOODLIGHT( x, y )	(lm->superFloodLight + ((((y) * lm->sw) + (x)) * SUPER_FLOODLIGHT_SIZE) )	
++#define SUPER_FLOODLIGHT( x, y )	(lm->superFloodLight + ((((y) * lm->sw) + (x)) * SUPER_FLOODLIGHT_SIZE) )
  
  
  
-@@ -1392,6 +1395,7 @@
+@@ -1400,6 +1402,7 @@
  	
  	float					*superDeluxels;	/* average light direction */
  	float					*bspDeluxels;
-+	float					*superFloodLight; 
++	float					*superFloodLight;
  }
  rawLightmap_t;
  
-@@ -1704,6 +1708,10 @@
+@@ -1712,6 +1715,10 @@
  float						DirtForSample( trace_t *trace );
  void						DirtyRawLightmap( int num );
  
@@ -1749,7 +1749,7 @@ Index: tools/quake3/q3map2/q3map2.h
  void						IlluminateRawLightmap( int num );
  void						IlluminateVertexes( int num );
  
-@@ -2098,6 +2106,13 @@
+@@ -2106,6 +2113,13 @@
  Q_EXTERN float				dirtScale Q_ASSIGN( 1.0f );
  Q_EXTERN float				dirtGain Q_ASSIGN( 1.0f );
  
@@ -1765,8 +1765,8 @@ Index: tools/quake3/q3map2/q3map2.h
  Q_EXTERN qboolean			debugUnused Q_ASSIGN( qfalse );
 Index: tools/quake3/q3map2/game_ja.h
 ===================================================================
---- tools/quake3/q3map2/game_ja.h	(revision 191)
-+++ tools/quake3/q3map2/game_ja.h	(working copy)
+--- tools/quake3/q3map2/game_ja.h.orig	2008-09-06 15:32:04.000000000 +0200
++++ tools/quake3/q3map2/game_ja.h	2008-09-06 15:32:16.000000000 +0200
 @@ -67,6 +67,7 @@
  	qfalse,				/* wolf lighting model? */
  	128,				/* lightmap width/height */
@@ -1777,8 +1777,8 @@ Index: tools/quake3/q3map2/game_ja.h
  	1,					/* bsp file version */
 Index: tools/quake3/q3map2/game_tremulous.h
 ===================================================================
---- tools/quake3/q3map2/game_tremulous.h	(revision 191)
-+++ tools/quake3/q3map2/game_tremulous.h	(working copy)
+--- tools/quake3/q3map2/game_tremulous.h.orig	2008-09-06 15:32:04.000000000 +0200
++++ tools/quake3/q3map2/game_tremulous.h	2008-09-06 15:32:16.000000000 +0200
 @@ -70,6 +70,7 @@
  	qfalse,				/* wolf lighting model? */
  	128,				/* lightmap width/height */
@@ -1789,8 +1789,8 @@ Index: tools/quake3/q3map2/game_tremulous.h
  	46,					/* bsp file version */
 Index: tools/quake3/q3map2/game_wolfet.h
 ===================================================================
---- tools/quake3/q3map2/game_wolfet.h	(revision 191)
-+++ tools/quake3/q3map2/game_wolfet.h	(working copy)
+--- tools/quake3/q3map2/game_wolfet.h.orig	2008-09-06 15:32:04.000000000 +0200
++++ tools/quake3/q3map2/game_wolfet.h	2008-09-06 15:32:16.000000000 +0200
 @@ -66,6 +66,7 @@
  	qtrue,				/* wolf lighting model? */
  	128,				/* lightmap width/height */
@@ -1801,8 +1801,8 @@ Index: tools/quake3/q3map2/game_wolfet.h
  	47,					/* bsp file version */
 Index: tools/quake3/q3map2/game_wolf.h
 ===================================================================
---- tools/quake3/q3map2/game_wolf.h	(revision 191)
-+++ tools/quake3/q3map2/game_wolf.h	(working copy)
+--- tools/quake3/q3map2/game_wolf.h.orig	2008-09-06 15:32:04.000000000 +0200
++++ tools/quake3/q3map2/game_wolf.h	2008-09-06 15:32:16.000000000 +0200
 @@ -129,6 +129,7 @@
  	qtrue,				/* wolf lighting model? */
  	128,				/* lightmap width/height */
@@ -1813,8 +1813,8 @@ Index: tools/quake3/q3map2/game_wolf.h
  	47,					/* bsp file version */
 Index: tools/quake3/q3map2/game_sof2.h
 ===================================================================
---- tools/quake3/q3map2/game_sof2.h	(revision 191)
-+++ tools/quake3/q3map2/game_sof2.h	(working copy)
+--- tools/quake3/q3map2/game_sof2.h.orig	2008-09-06 15:32:04.000000000 +0200
++++ tools/quake3/q3map2/game_sof2.h	2008-09-06 15:32:16.000000000 +0200
 @@ -139,6 +139,7 @@
  	qfalse,					/* wolf lighting model? */
  	128,					/* lightmap width/height */
@@ -1825,8 +1825,8 @@ Index: tools/quake3/q3map2/game_sof2.h
  	1,						/* bsp file version */
 Index: tools/quake3/q3map2/game_etut.h
 ===================================================================
---- tools/quake3/q3map2/game_etut.h	(revision 191)
-+++ tools/quake3/q3map2/game_etut.h	(working copy)
+--- tools/quake3/q3map2/game_etut.h.orig	2008-09-06 15:32:04.000000000 +0200
++++ tools/quake3/q3map2/game_etut.h	2008-09-06 15:32:16.000000000 +0200
 @@ -148,6 +148,7 @@
  	qfalse,				/* wolf lighting model? */
  	128,				/* lightmap width/height */
@@ -1837,8 +1837,8 @@ Index: tools/quake3/q3map2/game_etut.h
  	47,					/* bsp file version */
 Index: tools/quake3/q3map2/game_jk2.h
 ===================================================================
---- tools/quake3/q3map2/game_jk2.h	(revision 191)
-+++ tools/quake3/q3map2/game_jk2.h	(working copy)
+--- tools/quake3/q3map2/game_jk2.h.orig	2008-09-06 15:32:04.000000000 +0200
++++ tools/quake3/q3map2/game_jk2.h	2008-09-06 15:32:16.000000000 +0200
 @@ -64,6 +64,7 @@
  	qfalse,				/* wolf lighting model? */
  	128,				/* lightmap width/height */
@@ -1849,8 +1849,8 @@ Index: tools/quake3/q3map2/game_jk2.h
  	1,					/* bsp file version */
 Index: tools/quake3/q3map2/game_qfusion.h
 ===================================================================
---- tools/quake3/q3map2/game_qfusion.h	(revision 191)
-+++ tools/quake3/q3map2/game_qfusion.h	(working copy)
+--- tools/quake3/q3map2/game_qfusion.h.orig	2008-09-06 15:32:04.000000000 +0200
++++ tools/quake3/q3map2/game_qfusion.h	2008-09-06 15:32:16.000000000 +0200
 @@ -115,6 +115,7 @@
  	qfalse,				/* wolf lighting model? */
  	512,				/* lightmap width/height */
@@ -1861,8 +1861,8 @@ Index: tools/quake3/q3map2/game_qfusion.h
  	1,					/* bsp file version */
 Index: tools/quake3/q3map2/game_tenebrae.h
 ===================================================================
---- tools/quake3/q3map2/game_tenebrae.h	(revision 191)
-+++ tools/quake3/q3map2/game_tenebrae.h	(working copy)
+--- tools/quake3/q3map2/game_tenebrae.h.orig	2008-09-06 15:32:04.000000000 +0200
++++ tools/quake3/q3map2/game_tenebrae.h	2008-09-06 15:32:16.000000000 +0200
 @@ -112,6 +112,7 @@
  	qfalse,				/* wolf lighting model? */
  	512,				/* lightmap width/height */
@@ -1873,8 +1873,8 @@ Index: tools/quake3/q3map2/game_tenebrae.h
  	46,					/* bsp file version */
 Index: tools/quake3/q3map2/game_quake3.h
 ===================================================================
---- tools/quake3/q3map2/game_quake3.h	(revision 191)
-+++ tools/quake3/q3map2/game_quake3.h	(working copy)
+--- tools/quake3/q3map2/game_quake3.h.orig	2008-09-06 15:32:04.000000000 +0200
++++ tools/quake3/q3map2/game_quake3.h	2008-09-06 15:32:16.000000000 +0200
 @@ -112,6 +112,7 @@
  	qfalse,				/* wolf lighting model? */
  	128,				/* lightmap width/height */
@@ -1882,11 +1882,11 @@ Index: tools/quake3/q3map2/game_quake3.h
 +	1.0f,				/* lightmap exposure */
  	1.0f,				/* lightmap compensate */
  	"IBSP",				/* bsp file prefix */
- 	46,					/* bsp file version */
+ 	47,					/* bsp file version */
 Index: tools/quake3/q3map2/game_ef.h
 ===================================================================
---- tools/quake3/q3map2/game_ef.h	(revision 191)
-+++ tools/quake3/q3map2/game_ef.h	(working copy)
+--- tools/quake3/q3map2/game_ef.h.orig	2008-09-06 15:32:04.000000000 +0200
++++ tools/quake3/q3map2/game_ef.h	2008-09-06 15:32:16.000000000 +0200
 @@ -113,6 +113,7 @@
  	qfalse,				/* wolf lighting model? */
  	128,				/* lightmap width/height */
@@ -1897,8 +1897,8 @@ Index: tools/quake3/q3map2/game_ef.h
  	46,					/* bsp file version */
 Index: tools/quake3/q3map2/light_ydnar.c
 ===================================================================
---- tools/quake3/q3map2/light_ydnar.c	(revision 191)
-+++ tools/quake3/q3map2/light_ydnar.c	(working copy)
+--- tools/quake3/q3map2/light_ydnar.c.orig	2008-09-06 15:32:14.000000000 +0200
++++ tools/quake3/q3map2/light_ydnar.c	2008-09-06 15:32:16.000000000 +0200
 @@ -49,6 +49,7 @@
  	int		i;
  	float	max, gamma;
@@ -1907,10 +1907,19 @@ Index: tools/quake3/q3map2/light_ydnar.c
  	
  	
  	/* ydnar: scaling necessary for simulating r_overbrightBits on external lightmaps */
-@@ -72,16 +73,51 @@
+@@ -72,15 +73,50 @@
  		/* gamma */
  		sample[ i ] = pow( sample[ i ] / 255.0f, gamma ) * 255.0f;
  	}
+-	
+-	/* clamp with color normalization */
+-	max = sample[ 0 ];
+-	if( sample[ 1 ] > max )
+-		max = sample[ 1 ];
+-	if( sample[ 2 ] > max )
+-		max = sample[ 2 ];
+-	if( max > 255.0f )
+-		VectorScale( sample, (255.0f / max), sample );
 +
 +	if (lightmapExposure == 1)
 +	{
@@ -1931,16 +1940,16 @@ Index: tools/quake3/q3map2/light_ydnar.c
 +		}
 +		inv=1.f/lightmapExposure;
 +		//Exposure
-+    	
++
 +		max = sample[ 0 ];
 +		if( sample[ 1 ] > max )
 +			max = sample[ 1 ];
 +		if( sample[ 2 ] > max )
-+			max = sample[ 2 ];  
-+      
++			max = sample[ 2 ];
++
 +		dif = (1-  exp(-max * inv) )  *  255;
 +
-+		if (max >0) 
++		if (max >0)
 +		{
 +			dif = dif / max;
 +		}
@@ -1956,23 +1965,33 @@ Index: tools/quake3/q3map2/light_ydnar.c
 +	}
 +
  	
--	/* clamp with color normalization */
--	max = sample[ 0 ];
--	if( sample[ 1 ] > max )
--		max = sample[ 1 ];
--	if( sample[ 2 ] > max )
--		max = sample[ 2 ];
--	if( max > 255.0f )
--		VectorScale( sample, (255.0f / max), sample );
--	
  	/* compensate for ingame overbrighting/bitshifting */
  	VectorScale( sample, (1.0f / lightmapCompensate), sample );
- 	
+Index: tools/quake3/q3map2/q3map2.h
+===================================================================
+--- tools/quake3/q3map2/q3map2.h.orig	2008-09-06 15:32:14.000000000 +0200
++++ tools/quake3/q3map2/q3map2.h	2008-09-06 15:32:16.000000000 +0200
+@@ -553,6 +553,7 @@
+ 	qboolean			wolfLight;						/* when true, lights work like wolf q3map  */
+ 	int					lightmapSize;					/* bsp lightmap width/height */
+ 	float				lightmapGamma;					/* default lightmap gamma */
++	float				lightmapExposure;				/* default lightmap exposure */
+ 	float				lightmapCompensate;				/* default lightmap compensate value */
+ 	char				*bspIdent;						/* 4-letter bsp file prefix */
+ 	int					bspVersion;						/* bsp version to use */
+@@ -2139,6 +2140,7 @@
+ 
+ /* ydnar: lightmap gamma/compensation */
+ Q_EXTERN float				lightmapGamma Q_ASSIGN( 1.0f );
++Q_EXTERN float				lightmapExposure Q_ASSIGN( 1.0f );
+ Q_EXTERN float				lightmapCompensate Q_ASSIGN( 1.0f );
+ 
+ /* ydnar: for runtime tweaking of falloff tolerance */
 Index: tools/quake3/q3map2/light.c
 ===================================================================
---- tools/quake3/q3map2/light.c (revision 191)
-+++ tools/quake3/q3map2/light.c (working copy)
-@@ -1836,6 +1893,14 @@
+--- tools/quake3/q3map2/light.c.orig	2008-09-06 15:32:14.000000000 +0200
++++ tools/quake3/q3map2/light.c	2008-09-06 15:32:16.000000000 +0200
+@@ -1893,6 +1893,14 @@
  			i++;
  		}
  		
@@ -1983,35 +2002,15 @@ Index: tools/quake3/q3map2/light.c
 +			Sys_Printf( "Lighting exposure set to %f\n", lightmapExposure );
 +			i++;
 +		}
-+		
++
  		else if( !strcmp( argv[ i ], "-compensate" ) )
  		{
  			f = atof( argv[ i + 1 ] );
-Index: tools/quake3/q3map2/q3map2.h
-===================================================================
---- tools/quake3/q3map2/q3map2.h	(revision 191)
-+++ tools/quake3/q3map2/q3map2.h	(working copy)
-@@ -543,6 +545,7 @@
- 	qboolean			wolfLight;						/* when true, lights work like wolf q3map  */
- 	int					lightmapSize;					/* bsp lightmap width/height */
- 	float				lightmapGamma;					/* default lightmap gamma */
-+	float				lightmapExposure;				/* default lightmap exposure */
- 	float				lightmapCompensate;				/* default lightmap compensate value */
- 	char				*bspIdent;						/* 4-letter bsp file prefix */
- 	int					bspVersion;						/* bsp version to use */
-@@ -2117,6 +2132,7 @@
- 
- /* ydnar: lightmap gamma/compensation */
- Q_EXTERN float				lightmapGamma Q_ASSIGN( 1.0f );
-+Q_EXTERN float				lightmapExposure Q_ASSIGN( 1.0f );
- Q_EXTERN float				lightmapCompensate Q_ASSIGN( 1.0f );
- 
- /* ydnar: for runtime tweaking of falloff tolerance */
 Index: tools/quake3/q3map2/light_ydnar.c
 ===================================================================
---- tools/quake3/q3map2/light_ydnar.c	(revision 191)
-+++ tools/quake3/q3map2/light_ydnar.c	(working copy)
-@@ -384,7 +420,7 @@
+--- tools/quake3/q3map2/light_ydnar.c.orig	2008-09-06 15:32:16.000000000 +0200
++++ tools/quake3/q3map2/light_ydnar.c	2008-09-06 15:32:18.000000000 +0200
+@@ -420,7 +420,7 @@
  #define NUDGE			0.5f
  #define BOGUS_NUDGE		-99999.0f
  
@@ -2020,7 +2019,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
  {
  	int				i, x, y, numClusters, *clusters, pointCluster, *cluster;
  	float			*luxel, *origin, *normal, d, lightmapSampleOffset;
-@@ -392,6 +428,12 @@
+@@ -428,6 +428,12 @@
  	vec3_t			pNormal;
  	vec3_t			vecs[ 3 ];
  	vec3_t			nudged;
@@ -2033,7 +2032,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
  	float			*nudge;
  	static float	nudges[][ 2 ] =
  					{
-@@ -485,6 +527,51 @@
+@@ -521,6 +527,51 @@
  	/* non axial lightmap projection (explicit xyz) */
  	else
  		VectorCopy( dv->xyz, origin );
@@ -2047,7 +2046,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
 +	{
 +		for (j=0;j<3;j++)
 +		{
-+			VectorCopy(worldverts[j],cverts[j]);    
++			VectorCopy(worldverts[j],cverts[j]);
 +		}
 +		PlaneFromPoints(hostplane,cverts[0],cverts[1],cverts[2]);
 +
@@ -2062,7 +2061,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
 +				VectorAdd(temp,hostplane,temp);
 +				PlaneFromPoints(sideplane,cverts[i],cverts[ next ], temp);
 +
-+				//planetest sample point  
++				//planetest sample point
 +				e=DotProduct(origin,sideplane);
 +				e=e-sideplane[3];
 +				if (e>0)
@@ -2075,7 +2074,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
 +					origin[2]-=sideplane[2]*(e+1);
 +#ifdef DEBUG_27_1
 +					VectorClear(origin);
-+#endif 
++#endif
 +				}
 +			}
 +		}
@@ -2085,7 +2084,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
  	
  	/* planar surfaces have precalculated lightmap vectors for nudging */
  	if( lm->plane != NULL )
-@@ -516,8 +603,13 @@
+@@ -552,8 +603,13 @@
  	else
  		origin[ lm->axisNum ] += lightmapSampleOffset;
  	
@@ -2093,14 +2092,14 @@ Index: tools/quake3/q3map2/light_ydnar.c
 +	origintwo[0]+=vecs[2][0];
 +	origintwo[1]+=vecs[2][1];
 +	origintwo[2]+=vecs[2][2];
-+	
++
  	/* get cluster */
 -	pointCluster = ClusterForPointExtFilter( origin, LUXEL_EPSILON, numClusters, clusters );
 +	pointCluster = ClusterForPointExtFilter( origintwo, LUXEL_EPSILON, numClusters, clusters );
  	
  	/* another retarded hack, storing nudge count in luxel[ 1 ] */
  	luxel[ 1 ] = 0.0f;	
-@@ -533,14 +625,14 @@
+@@ -569,14 +625,14 @@
  			for( i = 0; i < 3; i++ )
  			{
  				/* set nudged point*/
@@ -2113,12 +2112,12 @@ Index: tools/quake3/q3map2/light_ydnar.c
  			pointCluster = ClusterForPointExtFilter( nudged, LUXEL_EPSILON, numClusters, clusters ); //% + 0.625 );
 -			if( pointCluster >= 0 )	
 -				VectorCopy( nudged, origin );
-+			//if( pointCluster >= 0 )	
++			//if( pointCluster >= 0 )
 +   			//	VectorCopy( nudged, origin );
  			luxel[ 1 ] += 1.0f;
  		}
  	}
-@@ -550,8 +642,8 @@
+@@ -586,8 +642,8 @@
  	{
  		VectorMA( dv->xyz, lightmapSampleOffset, dv->normal, nudged );
  		pointCluster = ClusterForPointExtFilter( nudged, LUXEL_EPSILON, numClusters, clusters );
@@ -2129,7 +2128,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
  		luxel[ 1 ] += 1.0f;
  	}
  	
-@@ -597,7 +689,7 @@
+@@ -633,7 +689,7 @@
  than the distance between two luxels (thanks jc :)
  */
  
@@ -2138,7 +2137,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
  {
  	bspDrawVert_t	mid, *dv2[ 3 ];
  	int				max;
-@@ -645,7 +737,7 @@
+@@ -681,7 +737,7 @@
  	
  	/* split the longest edge and map it */
  	LerpDrawVert( dv[ max ], dv[ (max + 1) % 3 ], &mid );
@@ -2147,7 +2146,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
  	
  	/* push the point up a little bit to account for fp creep (fixme: revisit this) */
  	//%	VectorMA( mid.xyz, 2.0f, mid.normal, mid.xyz );
-@@ -653,12 +745,12 @@
+@@ -689,12 +745,12 @@
  	/* recurse to first triangle */
  	VectorCopy( dv, dv2 );
  	dv2[ max ] = &mid;
@@ -2162,7 +2161,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
  }
  
  
-@@ -674,6 +766,7 @@
+@@ -710,6 +766,7 @@
  	int				i;
  	vec4_t			plane;
  	vec3_t			*stv, *ttv, stvStatic[ 3 ], ttvStatic[ 3 ];
@@ -2170,14 +2169,14 @@ Index: tools/quake3/q3map2/light_ydnar.c
  	
  	
  	/* get plane if possible */
-@@ -699,16 +792,20 @@
+@@ -735,16 +792,20 @@
  		ttv = NULL;
  	}
  	
 +	VectorCopy( dv[ 0 ]->xyz, worldverts[ 0 ] );
 +	VectorCopy( dv[ 1 ]->xyz, worldverts[ 1 ] );
 +	VectorCopy( dv[ 2 ]->xyz, worldverts[ 2 ] );
-+	
++
  	/* map the vertexes */
 -	MapSingleLuxel( lm, info, dv[ 0 ], plane, 1, stv, ttv );
 -	MapSingleLuxel( lm, info, dv[ 1 ], plane, 1, stv, ttv );
@@ -2195,7 +2194,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
  		return qtrue;
  	}
  	
-@@ -730,7 +827,7 @@
+@@ -766,7 +827,7 @@
  			dv2[ 2 ] = dv[ (i + 1) % 3 ];
  			
  			/* map the degenerate triangle */
@@ -2204,7 +2203,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
  		}
  	}
  	
-@@ -792,8 +889,8 @@
+@@ -828,8 +889,8 @@
  	LerpDrawVert( dv[ max + 2 ], dv[ (max + 3) % 4 ], &mid[ 1 ] );
  	
  	/* map the vertexes */
@@ -2215,7 +2214,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
  	
  	/* 0 and 2 */
  	if( max == 0 )
-@@ -878,10 +975,10 @@
+@@ -914,10 +975,10 @@
  	}
  	
  	/* map the vertexes */
@@ -2230,7 +2229,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
  	
  	/* subdivide the quad */
  	MapQuad_r( lm, info, dv, plane, stv, ttv );
-@@ -1173,7 +1270,7 @@
+@@ -1209,7 +1270,7 @@
  					continue;
  				
  				/* map the fake vert */
@@ -2239,7 +2238,7 @@ Index: tools/quake3/q3map2/light_ydnar.c
  			}
  		}
  	}
-@@ -1963,22 +2062,32 @@
+@@ -2001,22 +2062,32 @@
  					deluxel = SUPER_DELUXEL( x, y );
  					origin = SUPER_ORIGIN( x, y );
  					normal = SUPER_NORMAL( x, y );
@@ -2270,16 +2269,16 @@ Index: tools/quake3/q3map2/light_ydnar.c
 +					{
 +						/* set contribution count */
 +						lightLuxel[ 3 ] = 1.0f;
-+						
++
 +						/* setup trace */
 +						trace.cluster = *cluster;
 +						VectorCopy( origin, trace.origin );
 +						VectorCopy( normal, trace.normal );
-+						
++
 +						/* get light for this sample */
 +						LightContributionToSample( &trace );
 +						VectorCopy( trace.color, lightLuxel );
-+						
++
 +						/* add to count */
 +						if( trace.color[ 0 ] || trace.color[ 1 ] || trace.color[ 2 ] )
 +							totalLighted++;

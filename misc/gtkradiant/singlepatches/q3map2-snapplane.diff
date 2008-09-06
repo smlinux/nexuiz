@@ -1,7 +1,7 @@
 Index: tools/quake3/q3map2/model.c
 ===================================================================
---- tools/quake3/q3map2/model.c	(revision 193)
-+++ tools/quake3/q3map2/model.c	(working copy)
+--- tools/quake3/q3map2/model.c.orig	2008-09-06 15:32:05.000000000 +0200
++++ tools/quake3/q3map2/model.c	2008-09-06 15:32:12.000000000 +0200
 @@ -222,6 +222,8 @@
  	byte				*color;
  	picoIndex_t			*indexes;
@@ -198,7 +198,7 @@ Index: tools/quake3/q3map2/model.c
 +						buildBrush->sides[ 2 ].planenum = FindFloatPlane( pb, pb[ 3 ], 2, &points[ 0 ] ); // pb contains points[0] and points[1]
 +						buildBrush->sides[ 3 ].planenum = FindFloatPlane( pc, pc[ 3 ], 2, &points[ 2 ] ); // pc contains points[2] and points[0] (copied to points[3]
 +						buildBrush->sides[ 4 ].planenum = FindFloatPlane( reverse, reverse[ 3 ], 3, backs );
- 					}
++					}
 +					else
 +					{
 +						free(buildBrush);
@@ -216,7 +216,7 @@ Index: tools/quake3/q3map2/model.c
 +						buildBrush->next = entities[ mapEntityNum ].brushes;
 +						entities[ mapEntityNum ].brushes = buildBrush;
 +						entities[ mapEntityNum ].numBrushes++;
-+					}
+ 					}
 +					else
 +						free( buildBrush );
  				}
@@ -224,8 +224,8 @@ Index: tools/quake3/q3map2/model.c
  		}
 Index: tools/quake3/q3map2/map.c
 ===================================================================
---- tools/quake3/q3map2/map.c	(revision 193)
-+++ tools/quake3/q3map2/map.c	(working copy)
+--- tools/quake3/q3map2/map.c.orig	2008-09-06 15:32:04.000000000 +0200
++++ tools/quake3/q3map2/map.c	2008-09-06 15:32:12.000000000 +0200
 @@ -184,7 +184,7 @@
  snaps a plane to normal/distance epsilons
  */
@@ -262,13 +262,13 @@ Index: tools/quake3/q3map2/map.c
  	int		i, j, hash, h;
  	plane_t	*p;
  	vec_t	d;
+-	
 +	vec3_t centerofweight;
 +
 +	VectorClear(centerofweight);
 +	for(i = 0; i < numPoints; ++i)
 +		VectorMA(centerofweight, 1.0 / numPoints, points[i], centerofweight);
  	
--	
  	/* hash the plane */
 -	SnapPlane( normal, &dist );
 +	SnapPlane( normal, &dist, centerofweight );
@@ -285,7 +285,7 @@ Index: tools/quake3/q3map2/map.c
 +	VectorClear(centerofweight);
 +	for(i = 0; i < numPoints; ++i)
 +		VectorMA(centerofweight, 1.0 / numPoints, points[i], centerofweight);
-+	
++
 +	SnapPlane( normal, &dist, centerofweight );
  	for( i = 0, p = mapplanes; i < nummapplanes; i++, p++ )
  	{

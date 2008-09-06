@@ -1,7 +1,7 @@
 Index: radiant/map.cpp
 ===================================================================
---- radiant/map.cpp	(revision 304)
-+++ radiant/map.cpp	(working copy)
+--- radiant/map.cpp.orig	2008-09-06 15:32:05.000000000 +0200
++++ radiant/map.cpp	2008-09-06 15:32:10.000000000 +0200
 @@ -270,6 +270,100 @@
    ents->RemoveAll();
  }
@@ -79,7 +79,7 @@ Index: radiant/map.cpp
 +			if(e_target != NULL)
 +			{
 +				const char *targetname = ValueForKey(e_target, "targetname");
-+				if( (targetname != NULL) && (strcmp(target, targetname) == 0) ) 
++				if( (targetname != NULL) && (strcmp(target, targetname) == 0) )
 +				{
 +					SetKeyValue(e_target, "targetname", newtarget);
 +				}
@@ -114,9 +114,7 @@ Index: radiant/map.cpp
 -        entity_t *e_target;
 -        const char *target = ValueForKey(e, "target");
 -        qboolean bCollision=FALSE;
-+      // keep a list of ents added to avoid testing collisions against them
-+      g_ptr_array_add(new_ents, (gpointer)e);
- 
+-
 -        // check the current map entities for an actual collision
 -        for (e_target = entities.next; e_target != &entities; e_target = e_target->next)
 -        {
@@ -156,7 +154,9 @@ Index: radiant/map.cpp
 -          g_ptr_array_free(t_ents, FALSE);
 -        }
 -      }
--
++      // keep a list of ents added to avoid testing collisions against them
++      g_ptr_array_add(new_ents, (gpointer)e);
+ 
        // add the entity to the end of the entity list
        Entity_AddToList(e, &entities);
        g_qeglobals.d_num_entities++;
@@ -182,8 +182,8 @@ Index: radiant/map.cpp
    g_ptr_array_free(new_ents, FALSE);
 Index: radiant/drag.cpp
 ===================================================================
---- radiant/drag.cpp	(revision 304)
-+++ radiant/drag.cpp	(working copy)
+--- radiant/drag.cpp.orig	2008-09-06 15:32:05.000000000 +0200
++++ radiant/drag.cpp	2008-09-06 15:32:10.000000000 +0200
 @@ -255,54 +255,6 @@
  
  entity_t *peLink;
@@ -241,8 +241,8 @@ Index: radiant/drag.cpp
  Drag_Begin
 Index: radiant/xywindow.cpp
 ===================================================================
---- radiant/xywindow.cpp	(revision 304)
-+++ radiant/xywindow.cpp	(working copy)
+--- radiant/xywindow.cpp.orig	2008-09-06 15:32:05.000000000 +0200
++++ radiant/xywindow.cpp	2008-09-06 15:32:10.000000000 +0200
 @@ -270,16 +270,17 @@
  void DrawPathLines (void)
  {
@@ -327,8 +327,8 @@ Index: radiant/xywindow.cpp
  
 Index: radiant/targetname.cpp
 ===================================================================
---- radiant/targetname.cpp	(revision 304)
-+++ radiant/targetname.cpp	(working copy)
+--- radiant/targetname.cpp.orig	2008-09-06 15:32:05.000000000 +0200
++++ radiant/targetname.cpp	2008-09-06 15:32:10.000000000 +0200
 @@ -24,11 +24,11 @@
  /*!
  connects two entities creating a unique target/targetname value 
@@ -422,8 +422,8 @@ Index: radiant/targetname.cpp
  	if (fFound)
 Index: radiant/qe3.cpp
 ===================================================================
---- radiant/qe3.cpp	(revision 304)
-+++ radiant/qe3.cpp	(working copy)
+--- radiant/qe3.cpp.orig	2008-09-06 15:32:05.000000000 +0200
++++ radiant/qe3.cpp	2008-09-06 15:32:10.000000000 +0200
 @@ -704,7 +704,7 @@
  from the first selected to the secon
  ===============
@@ -459,8 +459,8 @@ Index: radiant/qe3.cpp
    }
 Index: radiant/qe3.h
 ===================================================================
---- radiant/qe3.h	(revision 304)
-+++ radiant/qe3.h	(working copy)
+--- radiant/qe3.h.orig	2008-09-06 15:32:05.000000000 +0200
++++ radiant/qe3.h	2008-09-06 15:32:10.000000000 +0200
 @@ -229,7 +229,7 @@
  void SelectEdgeByRay (vec3_t org, vec3_t dir);
  void SelectVertexByRay (vec3_t org, vec3_t dir);
