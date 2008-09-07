@@ -113,15 +113,15 @@ float Portal_TeleportPlayer(entity teleporter, entity player)
 
 	safe = teleporter.enemy.portal_safe_origin; // a valid player origin
 	step = to + ((safe - to) * v_forward) * v_forward;
-	tracebox(safe, PL_MIN, PL_MAX, step, MOVE_NOMONSTERS, player);
+	tracebox(safe, player.mins - '1 1 1', player.maxs + '1 1 1', step, MOVE_NOMONSTERS, player);
 	if(trace_startsolid)
 	{
-		bprint("'safe' teleport location is not safe!\n");
+		print("'safe' teleport location is not safe!\n");
 		// FAIL TODO why does this happen?
 		return 0;
 	}
 	safe = trace_endpos;
-	tracebox(safe, PL_MIN, PL_MAX, to, MOVE_NOMONSTERS, player);
+	tracebox(safe, player.mins - '1 1 1', player.maxs + '1 1 1', to, MOVE_NOMONSTERS, player);
 	if(trace_startsolid)
 		error("trace_endpos in solid!");
 	to = trace_endpos;
