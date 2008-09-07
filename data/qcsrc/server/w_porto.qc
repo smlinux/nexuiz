@@ -132,6 +132,8 @@ void W_Porto_Attack (void)
 	gren.think = W_Porto_Think;
 	gren.touch = W_Porto_Touch;
 	gren.velocity = w_shotdir * cvar("g_balance_porto_primary_speed");
+	if(self.items & IT_STRENGTH)
+		gren.velocity = gren.velocity * cvar("g_balance_powerup_strength_force");
 	W_SetupProjectileVelocity(gren);
 
 	gren.angles = vectoangles (gren.velocity);
