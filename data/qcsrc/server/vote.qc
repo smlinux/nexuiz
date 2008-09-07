@@ -76,9 +76,7 @@ float GameCommand_Vote(string s, entity e) {
 			}
 		} else if(argv(1) == "call") {
 			if(!e || cvar("sv_vote_call")) {
-				if(tourneyInMatchStage
-				   && cvar("g_tourney_disable_spec_vote")
-				   && e.classname != "player") {
+				if(cvar("sv_vote_nospectators") && e.classname != "player") {
 					print_to(e, "^1Error: Only players can call a vote during the match-stage.");
 				}
 				else if(timeoutStatus) { //don't allow a vote call during a timeout
@@ -432,17 +430,7 @@ void VoteAccept() {
 			votecaller.vote_master = 1;
 		}
 	} else {
-		//in g_tourney mode and if the vote is a timelimit-change, don't change it immediately but after restart
-		if(g_tourney && substring(votecalledvote, 0, 10) == "timelimit ") {
-			if( stof(substring(votecalledvote, 10, strlen(votecalledvote) - 10)) > 0 ) {
-				timelimit_orig = stof(substring(votecalledvote, 10, strlen(votecalledvote) - 10));
-				bprint(strcat("The timelimit will be set to ", ftos(timelimit_orig), " minutes after the next restart!\n"));
-			}
-			else //calls like "timelimit -1" can pass immediately
-				localcmd(strcat(votecalledvote, "\n"));
-		}
-		else
-			localcmd(strcat(votecalledvote, "\n"));
+		localcmd(strcat(votecalledvote, "\n"));
 	}
 	if(votecaller) {
 		votecaller.vote_next = 0; // people like your votes,
@@ -551,7 +539,7 @@ void VoteCount() {
 	}
 
 	//in tournament mode, if we have at least one player then don't make the vote dependent on spectators (so specs don't have to press F1)
-	if(g_tourney)
+	if(cvar("sv_vote_nospectators"))
 	if(realplayercount > 0) {
 		yescount = realplayeryescount;
 		nocount = realplayernocount;

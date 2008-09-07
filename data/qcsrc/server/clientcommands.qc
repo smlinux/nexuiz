@@ -122,9 +122,7 @@ void Say(entity source, float teamsay, string msgin)
 	}
 	else
 	{
-		//when g_tourney is active and g_tourney_disable_spec_chat is set and game is in matchstage
-		//don't print the text from specs/observers to the players but only the other spectators
-		if(g_tourney && cvar("g_tourney_disable_spec_chat") && tourneyInMatchStage && source.classname != "player") {
+		if(cvar("g_chat_nospectators") && source.classname != "player") {
 			FOR_EACH_REALCLIENT(head) if(head.classname != "player") {
 				sprint(head, msgstr);
 			}
@@ -265,7 +263,7 @@ void SV_ParseClientCommand(string s) {
 	} else if(argv(0) == "ready") {
 		if not(self.flags & FL_CLIENT)
 			return;
-		if((g_tourney && 0 < g_tourney_warmup_limit) // with unlimited warmup players have to be able to restart
+		if((inWarmupStage && 0 < g_warmup_limit) // with unlimited warmup players have to be able to restart
 		   || cvar("sv_ready_restart"))
 		{
 			if(timeoutStatus) {
@@ -399,24 +397,9 @@ void ReadyRestart()
 		remove(readyNagger);
 	}
 
-	if(g_tourney) {
-		tourneyInMatchStage = 1; //once the game is restarted the game is in match stage
-		//reset weapons and ammo, health and armor to default:
-		readplayerstartcvars();
-	}
 	restart_countdown = time + RESTART_COUNTDOWN;
 	restart_mapalreadyrestarted = 0; //reset this var, needed when cvar sv_ready_restart_repeatable is in use
-	//reset the .ready status of all players (also spectators)
-	FOR_EACH_CLIENTSLOT(e)
-	{
-		msg_entity = e;
-		WriteByte(MSG_ONE, SVC_TEMPENTITY);
-		WriteByte(MSG_ONE, TE_CSQC_WARMUP);
-		WriteByte(MSG_ONE, !tourneyInMatchStage);
-
-		e.ready = 0;
-	}
-	if(0<cvar("timelimit") || (g_tourney && (-1 == g_tourney_warmup_limit)) )
+	if(0 < cvar("timelimit") || inWarmupStage)
 	{
 		// remember original timelimit on first restart
 		if(!timelimit_orig)
@@ -424,6 +407,19 @@ void ReadyRestart()
 		//only set the new timelimit if, when loading the map, a timelimit was really set
 		if(timelimit_orig)
 			cvar_set("timelimit", ftos(timelimit_orig + ceil(restart_countdown)/60));
+	}
+
+	inWarmupStage = 0; //once the game is restarted the game is in match stage
+
+	//reset the .ready status of all players (also spectators)
+	FOR_EACH_CLIENTSLOT(e)
+		e.ready = 0;
+	FOR_EACH_REALCLIENT(e)
+	{
+		msg_entity = e;
+		WriteByte(MSG_ONE, SVC_TEMPENTITY);
+		WriteByte(MSG_ONE, TE_CSQC_WARMUP);
+		WriteByte(MSG_ONE, 0);
 	}
 
 	if(cvar("teamplay_lockonrestart") && teams_matter) {
@@ -441,9 +437,7 @@ void ReadyRestart()
 	if(cvar("sv_timeout"))
 	{
 		FOR_EACH_REALPLAYER(e)
-		{
 			e.allowedTimeouts = cvar("sv_timeout_number");
-		}
 	}
 
 	//play the prepareforbattle sound to everyone
@@ -452,6 +446,9 @@ void ReadyRestart()
 	//reset map immediately if this cvar is not set
 	if (!cvar("sv_ready_restart_after_countdown"))
 		reset_map();
+
+	// reset ALL scores
+	Score_ClearAll();
 	
 	if(cvar("sv_eventlog"))
 		GameLogEcho(":restart");
@@ -586,7 +583,7 @@ void restartAnnouncer_Think() {
  * This function is called when a player issues the calltimeout command.
  */
 void evaluateTimeoutCall() {
-	if (g_tourney && !tourneyInMatchStage && !cvar("g_tourney_warmup_allow_timeout"))
+	if (inWarmupStage && !g_warmup_allow_timeout)
 		return sprint(self, "^7Error: You can not call a timeout in warmup-stage!\n");
 	if (time < restart_countdown )
 		return sprint(self, "^7Error: You can not call a timeout while the map is being restarted!\n");

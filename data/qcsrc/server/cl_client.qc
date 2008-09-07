@@ -586,14 +586,6 @@ void PutClientInServer (void)
 		WriteEntity(MSG_ONE, self);
 	}
 
-	if(g_tourney)
-	{
-		msg_entity = self;
-		WriteByte(MSG_ONE, SVC_TEMPENTITY);
-		WriteByte(MSG_ONE, TE_CSQC_WARMUP);
-		WriteByte(MSG_ONE, !tourneyInMatchStage);
-	}
-
 	// player is dead and becomes observer
 	// FIXME fix LMS scoring for new system
 	if(g_lms)
@@ -635,16 +627,29 @@ void PutClientInServer (void)
 		self.air_finished = time + 12;
 		self.dmg = 2;
 
-		self.ammo_shells = start_ammo_shells;
-		self.ammo_nails = start_ammo_nails;
-		self.ammo_rockets = start_ammo_rockets;
-		self.ammo_cells = start_ammo_cells;
-		self.health = start_health;
-		self.armorvalue = start_armorvalue;
+		if(inWarmupStage)
+		{
+			self.ammo_shells = warmup_start_ammo_shells;
+			self.ammo_nails = warmup_start_ammo_nails;
+			self.ammo_rockets = warmup_start_ammo_rockets;
+			self.ammo_cells = warmup_start_ammo_cells;
+			self.health = warmup_start_health;
+			self.armorvalue = warmup_start_armorvalue;
+			self.weapons = warmup_start_weapons;
+		}
+		else
+		{
+			self.ammo_shells = start_ammo_shells;
+			self.ammo_nails = start_ammo_nails;
+			self.ammo_rockets = start_ammo_rockets;
+			self.ammo_cells = start_ammo_cells;
+			self.health = start_health;
+			self.armorvalue = start_armorvalue;
+			self.weapons = start_weapons;
+		}
 		self.items = start_items;
-		self.weapons = start_weapons;
-		self.switchweapon = start_switchweapon;
-		self.cnt = start_switchweapon;
+		self.switchweapon = w_getbestweapon(self);
+		self.cnt = self.switchweapon;
 		self.weapon = 0;
 		self.jump_interval = time;
 
@@ -1081,7 +1086,7 @@ void ClientConnect (void)
 	//	dom_player_join_team(self);
 
 	//JoinBestTeam(self, FALSE, FALSE);
-
+	//
 	if((cvar("sv_spectate") == 1 && !g_lms) || cvar("g_campaign")) {
 		self.classname = "observer";
 	} else {
@@ -1196,6 +1201,14 @@ void ClientConnect (void)
 			MapVote_UpdateData(MSG_ONE);
 		}
 		ScoreInfo_Write(MSG_ONE);
+	}
+
+	if(inWarmupStage)
+	{
+		msg_entity = self;
+		WriteByte(MSG_ONE, SVC_TEMPENTITY);
+		WriteByte(MSG_ONE, TE_CSQC_WARMUP);
+		WriteByte(MSG_ONE, 1);
 	}
 
 	if(g_lms)

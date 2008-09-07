@@ -149,8 +149,6 @@ void reset_map()
 	if(g_arena)
 	if(champion)
 		UpdateFrags(champion, +1);
-
-	Score_ClearAll();
 }
 
 void Spawnqueue_Insert(entity e)

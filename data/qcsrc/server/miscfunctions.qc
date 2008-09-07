@@ -702,13 +702,19 @@ float g_pickup_healthmega_max;
 
 float start_weapons;
 float start_items;
-float start_switchweapon;
 float start_ammo_shells;
 float start_ammo_nails;
 float start_ammo_rockets;
 float start_ammo_cells;
 float start_health;
 float start_armorvalue;
+float warmup_start_weapons;
+float warmup_start_ammo_shells;
+float warmup_start_ammo_nails;
+float warmup_start_ammo_rockets;
+float warmup_start_ammo_cells;
+float warmup_start_health;
+float warmup_start_armorvalue;
 
 entity get_weaponinfo(float w);
 
@@ -720,7 +726,6 @@ void readplayerstartcvars()
   	// initialize starting values for players
 	start_weapons = 0;
 	start_items = 0;
-	start_switchweapon = 0;
 	start_ammo_shells = 0;
 	start_ammo_nails = 0;
 	start_ammo_rockets = 0;
@@ -731,8 +736,7 @@ void readplayerstartcvars()
 	if(g_rocketarena)
 	{
 		start_weapons = WEPBIT_ROCKET_LAUNCHER;
-		start_switchweapon = WEP_ROCKET_LAUNCHER;
-		weapon_action(start_switchweapon, WR_PRECACHE);
+		weapon_action(WEP_ROCKET_LAUNCHER, WR_PRECACHE);
 		start_ammo_rockets = 999;
 		start_items |= IT_UNLIMITED_AMMO;
 	}
@@ -746,8 +750,7 @@ void readplayerstartcvars()
 		start_health = 100;
 		start_armorvalue = 0;
 		start_weapons = WEPBIT_MINSTANEX;
-		start_switchweapon = WEP_MINSTANEX;
-		weapon_action(start_switchweapon, WR_PRECACHE);
+		weapon_action(WEP_MINSTANEX, WR_PRECACHE);
 		start_ammo_cells = cvar("g_minstagib_ammo_start");
 		g_minstagib_invis_alpha = cvar("g_minstagib_invis_alpha");
 	}
@@ -761,16 +764,7 @@ void readplayerstartcvars()
 			start_ammo_cells = cvar("g_lms_start_ammo_cells");
 			start_health = cvar("g_lms_start_health");
 			start_armorvalue = cvar("g_lms_start_armor");
-		}
-		else if(g_tourney && !tourneyInMatchStage) {
-			start_ammo_shells = cvar("g_tourney_start_ammo_shells");
-			start_ammo_nails = cvar("g_tourney_start_ammo_nails");
-			start_ammo_rockets = cvar("g_tourney_start_ammo_rockets");
-			start_ammo_cells = cvar("g_tourney_start_ammo_cells");
-			start_health = cvar("g_tourney_start_health");
-			start_armorvalue = cvar("g_tourney_start_armor");
-		}
-		else if (cvar("g_use_ammunition")) {
+		} else if (cvar("g_use_ammunition")) {
 			start_ammo_shells = cvar("g_start_ammo_shells");
 			start_ammo_nails = cvar("g_start_ammo_nails");
 			start_ammo_rockets = cvar("g_start_ammo_rockets");
@@ -788,11 +782,48 @@ void readplayerstartcvars()
 			e = get_weaponinfo(i);
 			if(!(e.weapon))
 				continue;
-			if(((e.spawnflags & 1) && (g_lms || (g_tourney && g_tourney_warmup_allguns))) || cvar(strcat("g_start_weapon_", e.netname)))
+			if(((e.spawnflags & 1) && g_lms) || cvar(strcat("g_start_weapon_", e.netname)))
 			{
 				start_weapons |= e.weapons;
-				start_switchweapon = e.weapon;
 				weapon_action(e.weapon, WR_PRECACHE);
+			}
+		}
+	}
+
+	if(inWarmupStage)
+	{
+		warmup_start_ammo_shells = start_ammo_shells;
+		warmup_start_ammo_nails = start_ammo_nails;
+		warmup_start_ammo_rockets = start_ammo_rockets;
+		warmup_start_ammo_cells = start_ammo_cells;
+		warmup_start_health = start_health;
+		warmup_start_armorvalue = start_armorvalue;
+		warmup_start_weapons = start_weapons;
+
+		if(!g_rocketarena && !g_nixnex && !g_minstagib)
+		{
+			if(cvar("g_use_ammunition"))
+			{
+				warmup_start_ammo_shells = cvar("g_warmup_start_ammo_shells");
+				warmup_start_ammo_cells = cvar("g_warmup_start_ammo_cells");
+				warmup_start_ammo_nails = cvar("g_warmup_start_ammo_nails");
+				warmup_start_ammo_rockets = cvar("g_warmup_start_ammo_rockets");
+			}
+			warmup_start_health = cvar("g_warmup_start_health");
+			warmup_start_armorvalue = cvar("g_warmup_start_armor");
+			if(cvar("g_warmup_allguns"))
+			{
+				for(i = WEP_FIRST; i <= WEP_LAST; ++i)
+				{
+					e = get_weaponinfo(i);
+					if(!(e.weapon))
+						continue;
+					if(e.spawnflags & 1)
+					{
+						warmup_start_weapons |= e.weapons;
+						weapon_action(e.weapon, WR_PRECACHE);
+					}
+				}
 			}
 		}
 	}
@@ -815,16 +846,18 @@ void readlevelcvars(void)
 	g_norecoil = cvar("g_norecoil");
 	g_rocketarena = cvar("g_rocketarena");
 	g_vampire = cvar("g_vampire");
-	g_tourney = cvar("g_tourney");
-	g_tourney_warmup_limit = cvar("g_tourney_warmup_limit");
-	g_tourney_warmup_allguns = cvar("g_tourney_warmup_allguns");
 	sv_maxidle = cvar("sv_maxidle");
 	sv_maxidle_spectatorsareidle = cvar("sv_maxidle_spectatorsareidle");
 	sv_pogostick = cvar("sv_pogostick");
 	sv_doublejump = cvar("sv_doublejump");
 
-	if(g_race && g_race_qualifying == 2)
-		g_tourney = 0; // these modes cannot work together
+	inWarmupStage = cvar("g_warmup");
+	g_warmup_limit = cvar("g_warmup_limit");
+	g_warmup_allguns = cvar("g_warmup_allguns");
+	g_warmup_allow_timeout = cvar("g_warmup_allow_timeout");
+
+	if(g_race && g_race_qualifying == 2 || g_arena || g_assault || cvar("g_campaign"))
+		inWarmupStage = 0; // these modes cannot work together, sorry
 
 	g_pickup_respawntime_short = cvar("g_pickup_respawntime_short");
 	g_pickup_respawntime_medium = cvar("g_pickup_respawntime_medium");

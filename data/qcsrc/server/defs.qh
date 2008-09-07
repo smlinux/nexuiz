@@ -18,12 +18,13 @@ float require_spawnfunc_prefix; // if this float exists, only functions with spa
 
 float g_dm, g_domination, g_ctf, g_tdm, g_keyhunt, g_onslaught, g_assault, g_arena, g_lms, g_runematch, g_race;
 float g_cloaked, g_footsteps, g_jump_grunt, g_grappling_hook, g_laserguided_missile, g_midair, g_minstagib, g_nixnex, g_nixnex_with_laser, g_norecoil, g_rocketarena, g_vampire, g_minstagib_invis_alpha;
-float g_tourney;
-float g_tourney_warmup_limit;
-float g_tourney_warmup_allguns;
+float g_warmup;
+float g_warmup_limit;
+float g_warmup_allguns;
+float g_warmup_allow_timeout;
 float g_ctf_win_mode;
 float g_race_qualifying;
-float tourneyInMatchStage;
+float inWarmupStage;
 float g_pickup_respawntime_short;
 float g_pickup_respawntime_medium;
 float g_pickup_respawntime_long;

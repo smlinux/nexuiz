@@ -316,7 +316,7 @@ void spawnfunc_worldspawn (void)
 	MapInfo_FilterGametype(MapInfo_CurrentGametype(), MapInfo_CurrentFeatures(), 1);
 
 	//if tourney is used map starts in warmup mode. if this mode shall stay unlimited, reset timelimit, but save the original one
-	if(g_tourney && (-1 == g_tourney_warmup_limit)) {
+	if(inWarmupStage) {
 		timelimit_orig = cvar("timelimit");
 		cvar_set("timelimit", "0");
 	}
@@ -1576,6 +1576,9 @@ void CheckRules_World()
 
 	timelimit = cvar("timelimit") * 60;
 	fraglimit = cvar("fraglimit");
+
+	if(inWarmupStage)
+		fraglimit = 0; // no fraglimit for now
 
 	if(checkrules_overtimeend)
 	{

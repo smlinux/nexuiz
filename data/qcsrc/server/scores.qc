@@ -258,7 +258,7 @@ void Score_ClearAll()
 		sk = teamscorekeepers[t];
 		if(!sk)
 			continue;
-		for(i = 0; i < MAX_SCORE; ++i)
+		for(i = 0; i < MAX_TEAMSCORE; ++i)
 		{
 			if(sk.(teamscores[i]) != 0)
 				if(teamscores_label[i] != "")
