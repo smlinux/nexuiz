@@ -222,6 +222,15 @@ float Portal_FindSafeOrigin(entity portal)
 
 void Portal_Touch()
 {
+	// portal is being removed?
+	if(self.solid != SOLID_TRIGGER)
+		return; // possibly engine bug
+	
+	if(!self.enemy)
+	{
+		error("Portal_Touch called for a broken portal\n");
+	}
+
 	if(trace_fraction < 1)
 		return; // only handle TouchAreaGrid ones (only these can teleport)
 		// for some unknown reason, this also gets collisions from SV_Impact sometimes
@@ -409,8 +418,14 @@ void Portal_Think()
 {
 	entity e, o;
 
+	// portal is being removed?
 	if(self.solid != SOLID_TRIGGER)
-		error("Portal_Think called for a portal that should not be thinking");
+		return; // possibly engine bug
+
+	if(!self.enemy)
+	{
+		error("Portal_Think called for a broken portal\n");
+	}
 
 	o = self.owner;
 	self.solid = SOLID_BBOX;
