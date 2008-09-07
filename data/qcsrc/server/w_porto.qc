@@ -6,6 +6,12 @@
 
 void W_Porto_Success (void)
 {
+	if(self.owner == world)
+	{
+		objerror("Cannot succeed successfully: no owner\n");
+		return;
+	}
+
 	self.owner.porto_current = world;
 	remove(self);
 }
@@ -13,6 +19,12 @@ void W_Porto_Success (void)
 float W_ThrowNewWeapon(entity own, float wpn, float doreduce, vector org, vector velo);
 void W_Porto_Fail (float failhard)
 {
+	if(self.owner == world)
+	{
+		objerror("Cannot fail successfully: no owner\n");
+		return;
+	}
+
 	// no portals here!
 	Portal_ClearWithID(self.owner, self.portal_id);
 	self.owner.porto_current = world;
