@@ -1024,8 +1024,9 @@ model="models/weapons/g_porto.md3"
 /*QUAKED target_items (0 0 1) ? AND OR ANDNOT
 Sets the items of any player who triggers this.
 For the number fields, not specifying a value means not changing it. To clear armor, you need to explicitly set "armor" to "-1".
+You may want to target this by a race checkpoint, a teleporter, or a trigger_multiple with ALLENTS set (so it removes weapons thrown through the field to avoid getting a weapon through it).
 -------- KEYS --------
-targetname: used to trigger this. If not set, anyone touching this gets the item changes.
+targetname: used to trigger this
 netname: space separated list of items (either weapon short names (like in g_start_weapon_* cvars), or item short names "unlimited_ammo", "invincible" and "strength"
 message: message to print
 ammo_shells: amount of shells
