@@ -121,24 +121,6 @@ textures/Reaptxt/lud_Corona
 	}
 }
 
-//Corona for sun.tga by HipShot
-//This shader is for DarkPlaces Engine - Nexuiz
-
-textures/Reaptxt/sun
-{
-	qer_editorimage textures/Reaptxt/sun.jpg
-	surfaceparm trans
-	surfaceparm nonsolid
-	surfaceparm nolightmap
-	deformVertexes autosprite
-	cull disable
-	{
-		clampmap textures/Reaptxt/sun.jpg
-		blendFunc add
-		rgbGen identity
-	}
-}
-
 //Water for Q3texture, temp use.
 //This shader is for DarkPlaces Engine - Nexuiz
 
