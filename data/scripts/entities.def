@@ -1020,10 +1020,11 @@ FLOATING: the item will float in air, instead of aligning to the floor by fallin
 model="models/weapons/g_porto.md3"
 */
 
-/*QUAKED trigger_items (0 0 1) (-8 -8 -8) (8 8 8) AND OR ANDNOT
+/*QUAKED trigger_items (0 0 1) ? AND OR ANDNOT
 Sets the items of any player who triggers this.
 For the number fields, not specifying a value means not changing it. To clear armor, you need to explicitly set "armor" to "-1".
 -------- KEYS --------
+targetname: used to trigger this. If not set, anyone touching this gets the item changes.
 netname: space separated list of items (either weapon short names (like in g_start_weapon_* cvars), or item short names "unlimited_ammo", "invincible" and "strength"
 message: message to print
 ammo_shells: amount of shells

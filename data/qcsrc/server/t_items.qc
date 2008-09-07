@@ -919,6 +919,16 @@ float trigger_item_func_and(float a, float b)
 	return a & b;
 }
 
+float trigger_item_func_itembitset(float a, float b)
+{
+	return (b - (b & (IT_UNLIMITED_AMMO | IT_STRENGTH | IT_INVINCIBLE))) | a;
+}
+
+float trigger_item_func_itemand(float a, float b)
+{
+	return (b - (b & (IT_UNLIMITED_AMMO | IT_STRENGTH | IT_INVINCIBLE))) | (a & b);
+}
+
 float trigger_item_func_or(float a, float b)
 {
 	return a | b;
@@ -996,7 +1006,7 @@ void trigger_items_use (void)
 		trigger_item_change(0, health, trigger_item_func_set, "misc/megahealth.wav", "");
 		trigger_item_change(0, armorvalue, trigger_item_func_set, "misc/armor25.wav", "");
 		trigger_item_change(1, items, trigger_item_func_bitset, "misc/powerup.wav", "");
-		trigger_item_change(1, weapons, trigger_item_func_bitset, "weapons/weaponpickup.wav", "");
+		trigger_item_change(1, weapons, trigger_item_func_itembitset, "weapons/weaponpickup.wav", "");
 
 		if((self.items & activator.items) & IT_STRENGTH)
 			activator.strength_finished = time + self.strength_finished;
@@ -1012,7 +1022,7 @@ void trigger_items_use (void)
 		trigger_item_change(0, health, trigger_item_func_min, "misc/megahealth.wav", "");
 		trigger_item_change(0, armorvalue, trigger_item_func_min, "misc/armor25.wav", "");
 		trigger_item_change(1, items, trigger_item_func_and, "misc/powerup.wav", "");
-		trigger_item_change(1, weapons, trigger_item_func_and, "weapons/weaponpickup.wav", "");
+		trigger_item_change(1, weapons, trigger_item_func_itemand, "weapons/weaponpickup.wav", "");
 
 		if((self.items & activator.items) & IT_STRENGTH)
 			activator.strength_finished = min(activator.strength_finished, time + self.strength_finished);
@@ -1074,17 +1084,39 @@ void trigger_items_use (void)
 		centerprint(activator, self.message);
 }
 
+void trigger_items_touch (void)
+{
+	activator = other;
+	trigger_items_use();
+}
+
 void spawnfunc_trigger_items (void)
 {
 	float n, i, j;
 	entity e;
-	EXACTTRIGGER_INIT;
-	self.use = trigger_items_use;
+	IFTARGETED
+	{
+		self.use = trigger_items_use;
+	}
+	else
+	{
+		EXACTTRIGGER_INIT;
+		self.touch = trigger_items_touch;
+	}
 	if(!self.strength_finished)
 		self.strength_finished = cvar("g_balance_powerup_strength_time");
 	if(!self.invincible_finished)
 		self.invincible_finished = cvar("g_balance_powerup_invincible_time");
 	
+	precache_sound("misc/itempickup.wav");
+	precache_sound("misc/itempickup.wav");
+	precache_sound("misc/itempickup.wav");
+	precache_sound("misc/itempickup.wav");
+	precache_sound("misc/megahealth.wav");
+	precache_sound("misc/armor25.wav");
+	precache_sound("misc/powerup.wav");
+	precache_sound("weapons/weaponpickup.wav");
+
 	n = tokenize(self.netname);
 	for(i = 0; i < n; ++i)
 	{
@@ -1095,7 +1127,11 @@ void spawnfunc_trigger_items (void)
 		{
 			e = get_weaponinfo(j);
 			if(argv(i) == e.netname)
+			{
 				self.weapons |= e.weapons;
+				if(self.spawnflags == 0 || self.spawnflags == 2)
+					weapon_action(e.weapon, WR_PRECACHE);
+			}
 		}
 	}
 }
