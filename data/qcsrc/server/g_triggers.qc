@@ -172,12 +172,15 @@ void multi_use()
 
 void multi_touch()
 {
-	if (other.classname != "player")
-		return;
+	if not(self.spawnflags & 2)
+	{
+		if (other.classname != "player")
+			return;
 
-    if(self.team)
-    if(self.team == other.team)
-        return;
+		if(self.team)
+		if(self.team == other.team)
+			return;
+	}
 
 // if the trigger has an angles field, check player's facing direction
 	if (self.movedir != '0 0 0')

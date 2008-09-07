@@ -721,7 +721,7 @@ strength: "wind field", "gravity field": amount of force per second to apply. "d
 falloff: "gravity field": 0 means no falloff, 1 means linear falloff (zero at the outside), 2 means inverted linear falloff (zero at the inside)
 */
 
-/*QUAKED trigger_multiple (.5 .5 .5) ? NOTOUCH
+/*QUAKED trigger_multiple (.5 .5 .5) ? NOTOUCH ALLENTS
 Variable sized repeatable trigger.  Must be targeted at one or more entities.  If "health" is set, the trigger must be killed to activate each time.
 -------- KEYS --------
 health: amount of damage that has to be dealt to the trigger to activate (it then won't respond to merely touching it)
@@ -735,6 +735,7 @@ message: print this message to the player who activated the trigger
 killtarget: remove all entities with this targetname when triggered
 -------- SPAWNFLAGS --------
 NOTOUCH: the trigger can only be triggered by other entities, not by touching or firing (you should probably use trigger_relay or trigger_delay instead)
+ALLENTS: the trigger responds to all entities, not just players (useful for targetting trigger_items)
 */
 
 /*QUAKED trigger_once (.5 .5 .5) ? NOTOUCH
