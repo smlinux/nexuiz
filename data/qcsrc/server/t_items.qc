@@ -1005,8 +1005,8 @@ void target_items_use (void)
 		target_item_change(0, ammo_cells, target_item_func_set, "misc/itempickup.wav", "");
 		target_item_change(0, health, target_item_func_set, "misc/megahealth.wav", "");
 		target_item_change(0, armorvalue, target_item_func_set, "misc/armor25.wav", "");
-		target_item_change(1, items, target_item_func_bitset, "misc/powerup.wav", "");
-		target_item_change(1, weapons, target_item_func_itembitset, "weapons/weaponpickup.wav", "");
+		target_item_change(1, items, target_item_func_itembitset, "misc/powerup.wav", "");
+		target_item_change(1, weapons, target_item_func_bitset, "weapons/weaponpickup.wav", "");
 
 		if((self.items & activator.items) & IT_STRENGTH)
 			activator.strength_finished = time + self.strength_finished;
@@ -1021,8 +1021,8 @@ void target_items_use (void)
 		target_item_change(0, ammo_cells, target_item_func_min, "misc/itempickup.wav", "");
 		target_item_change(0, health, target_item_func_min, "misc/megahealth.wav", "");
 		target_item_change(0, armorvalue, target_item_func_min, "misc/armor25.wav", "");
-		target_item_change(1, items, target_item_func_and, "misc/powerup.wav", "");
-		target_item_change(1, weapons, target_item_func_itemand, "weapons/weaponpickup.wav", "");
+		target_item_change(1, items, target_item_func_itemand, "misc/powerup.wav", "");
+		target_item_change(1, weapons, target_item_func_and, "weapons/weaponpickup.wav", "");
 
 		if((self.items & activator.items) & IT_STRENGTH)
 			activator.strength_finished = min(activator.strength_finished, time + self.strength_finished);
