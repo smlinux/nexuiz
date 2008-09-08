@@ -344,6 +344,8 @@ void checkpoint_touch()
 		self = oldself;
 	}
 
+	other.porto_forbidden = 2; // decreased by 1 each StartFrame
+
 	if(other.race_checkpoint == -1 || other.race_checkpoint == self.race_checkpoint)
 	{
 		/*

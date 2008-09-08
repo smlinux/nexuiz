@@ -177,4 +177,7 @@ void StartFrame (void)
 		self = RandomSelection_chosen_ent;
 		SelectSpawnPoint(0);
 	}
+
+	FOR_EACH_PLAYER(self)
+		self.porto_forbidden = max(0, self.porto_forbidden - 1);
 }
