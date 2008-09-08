@@ -620,8 +620,6 @@ void weapon_defaultspawnfunc(float wpn)
 
 	e = get_weaponinfo(wpn);
 
-	t = g_pickup_respawntime_short;
-
 	if(e.items && e.items != IT_SUPERWEAPON)
 	{
 		ammofield = Item_CounterField(e.items);
@@ -629,6 +627,7 @@ void weapon_defaultspawnfunc(float wpn)
 			self.ammofield = cvar(strcat("g_pickup_", Item_CounterFieldName(e.items)));
 	}
 
+	t = g_pickup_respawntime_short;
 	if(e.items == IT_SUPERWEAPON)
 		t = g_pickup_respawntime_powerup;
 
