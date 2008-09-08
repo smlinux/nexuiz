@@ -2,8 +2,32 @@
 
 set -e
 
-base=`pwd`
+# Options:
+#   pw=foo          extract password
+#   version=2.5     make a FINAL build
+#   tag=FOO         insert FOO before the date in build names
 
+# customizable specific stuff
+basepk3=$base/data20080229.pk3 # 2.4
+hotbasepk3= # hotfix
+nexdir=$base/nexuiz
+nexprodir=$base/nexuiz/pro
+dpdir=$base/darkplaces
+tmpdir=/tmp/NEX
+zipdir=$base/builds
+buildfiles=$base/nexuiz/misc/buildfiles
+mingwdlls=$buildfiles/w32
+osxapps=$buildfiles/osx
+copystrip=$buildfiles/copystrip
+zipdiff=$base/nexuiz/misc/zipdiff
+fteqccdir="$base/fteqcc"
+fteqccflags=""
+menuqc=menu
+newest=NEWEST
+aft="perl -I/chroot/debian-etch/usr/share/aft /chroot/debian-etch/usr/bin/aft"
+# end system specific stuff
+
+base=`pwd`
 
 case "$pw" in
 	'')
@@ -32,25 +56,6 @@ case "$version" in
 		ext=_$version
 		;;
 esac
-
-basepk3=$base/data20080229.pk3 # 2.4
-hotbasepk3=
-nexdir=$base/nexuiz
-nexprodir=$base/nexuiz/pro
-dpdir=$base/darkplaces
-tmpdir=/tmp/NEX
-zipdir=$base/builds
-buildfiles=$base/nexuiz/misc/buildfiles
-mingwdlls=$buildfiles/w32
-osxapps=$buildfiles/osx
-copystrip=$buildfiles/copystrip
-zipdiff=$base/nexuiz/misc/zipdiff
-fteqccdir="$base/fteqcc"
-fteqccflags=""
-menuqc=menu
-newest=NEWEST
-aft="perl -I/chroot/debian-etch/usr/share/aft /chroot/debian-etch/usr/bin/aft"
-tag=
 
 mk7z()
 {
@@ -111,6 +116,7 @@ build()
 		mv "$tmpdir/nexuiz-osx-sdl"     "$tmpdir/Nexuiz-SDL.app/Contents/MacOS/nexuiz-osx-sdl-bin"
 }
 
+# avoid dupes
 i=
 while [ -f "$zipdir/nexuiz$date$i$ext.zip" ]; do
 	if [ -z "$i" ]; then
@@ -124,10 +130,7 @@ ext=$i$ext
 echo "Using build name nexuiz$date$ext"
 sleep 3
 
-if [ -n "$1" ]; then
-	osxhost="$1"
-fi
-
+# check for remains
 conflicts=`find "$dpdir" "$nexdir" -name '*.orig' -o -name '*.rej' -o -name '*.mine' -o -name '.#*' -o -name '.*~'`
 if [ -n "$conflicts" ]; then
 	echo "CONFLICTS OR UNNEEDED FILES HAVE BEEN FOUND!"
@@ -139,9 +142,11 @@ fi
 
 set -x
 
+# prepare temp dir
 rm -rf "$tmpdir"
 mkdir -p "$tmpdir"
 
+# clean up and patch DP
 cd "$dpdir"
 quilt pop -a || true
 svn revert -R .
@@ -149,15 +154,18 @@ if [ -s patches/series ]; then
 	quilt push -a # apply all patches
 fi
 
+# prepare directory structure
 cp -r "$osxapps"/*.app "$tmpdir"
 mkdir "$tmpdir/debuginfo"
 mkdir "$tmpdir/fteqcc"
 
+# prepare fteqcc build
 svn export "$fteqccdir" "$tmpdir/fteqcc/source"
 svn info "$fteqccdir" > "$tmpdir/fteqcc/source/fteqcc-base-revision.txt"
 fteqccrev=$((`grep "Last Changed Rev:" "$tmpdir/fteqcc/source/fteqcc-base-revision.txt" | cut -d : -f 2`))
 echo "fteqcc rev $fteqccrev"
 
+# build all executables
 rm -f *.exe nexuiz-* *-withdebug* *.o
 make clean
 build
@@ -165,48 +173,56 @@ rm -f *.exe nexuiz-* *-withdebug '.#'* *.o
 rm -rf fteqcc copystrip
 make clean
 
+# move shell scripts and license
 cd "$tmpdir"
 cp "$nexdir/"nexuiz-*.sh "$tmpdir/"
 cp "$nexdir/gpl.txt" "$tmpdir/"
 
+# prepare data
 cd "$nexdir/data"
 svn export . "$tmpdir/data"
 svn info . > "$tmpdir/data/nexuiz-data-base-revision.txt"
 svn log > "$tmpdir/data/ChangeLog"
 
+# prepare pro
 cd "$nexprodir"
 svn export . "$tmpdir/pro"
 
+# prepare Docs
 cd "$nexdir/Docs"
 svn export . "$tmpdir/Docs"
 
+# make gamesource
 cd "$tmpdir/data"
 mkdir -p "$tmpdir/sources"
 mk7z ../sources/gamesource$date.zip qcsrc nexuiz-data-base-revision.txt ChangeLog
 
+# make enginesource
 cd "$dpdir"
 svn export . "$tmpdir/darkplaces"
 svn info > "$tmpdir/darkplaces/nexuiz-base-revision.txt"
 svn diff > "$tmpdir/darkplaces/nexuiz-engine-changes.diff"
 svn log > "$tmpdir/darkplaces/ChangeLog"
-
 cd "$tmpdir"
 mk7z "$tmpdir/sources/enginesource$date.zip" "darkplaces"
 rm -rf darkplaces
 
+# make fteqcc archive
 cd "$tmpdir"
 zip -9r "$tmpdir/sources/fteqcc-binaries-and-source-rev$fteqccrev.zip" "fteqcc"
 rm -rf fteqcc
 
+# clean fteqcc dir
 cd "$fteqccdir"
 rm -f *.o *.bin
 make
 
+# make local compiler
 cd "$tmpdir/data"
 make FTEQCC="$fteqccdir/fteqcc.bin"
 
+# prepare root
 rm -rf "$tmpdir/data/qcsrc"
-
 cd "$tmpdir/Docs"
 perl -pi -e '/^#---SET nexversion=([0-9.]*)$/ and $_ = "#---SET nexversion='$version'\n"' FAQ.aft
 perl -pi -e '/^\s*Version ([0-9.]*)<\/div>$/ and $_ = "Version '$version'</div>\n"' Readme.htm
@@ -214,7 +230,6 @@ cp "$dpdir/darkplaces.txt" .
 $aft FAQ.aft
 $aft FAQ.aft
 rm FAQ.aft-TOC
-
 cd "$tmpdir/data"
 mv common-spog.pk3 ..
 perl -pi -e '/^set g_nexuizversion "?([0-9.]*)[^"]*"?/ and $_ = "set g_nexuizversion '$version'\n"' default.cfg
@@ -225,7 +240,6 @@ fi
 echo >> default.cfg
 echo "$defaultcfg" >> default.cfg
 mk7z ../data.pk3 .
-
 cd "$tmpdir/pro"
 perl -pi -e '/^set g_nexuizversion "?([0-9.]*)[^"]*"?/ and $_ = "set g_nexuizversion '$version-pro'\n"' default.cfg
 if [ -n "$versiontag" ]; then
@@ -235,6 +249,7 @@ echo >> default.cfg
 echo "$defaultcfg" >> default.cfg
 mk7z ../pro.pk3 .
 
+# make data pk3
 cd "$tmpdir"
 rm -rf data
 mkdir data
@@ -248,6 +263,7 @@ cp -r "$mingwdlls"/* .
 # fix up permissions
 chmod 644 *.dll *.exe
 
+# make main structure
 mkdir Nexuiz
 mv * Nexuiz/ || true
 
@@ -292,8 +308,8 @@ rm -rf sound
 [ -n "$hotbasepk3" ] && $zipdiff -o "Nexuiz/data/datapatch$tag$date""hotfix.pk3" -f "$hotbasepk3" -t Nexuiz/data/data$tag$date.pk3
 mkdir -p gfx
 if unzip "Nexuiz/data/data$tag$date.pk3" gfx/brand.tga; then
-	zip $zipflags -9r "Nexuiz/data/datapatch$tag$date.pk3" gfx/brand.tga
-	[ -n "$hotbasepk3" ] && zip $zipflags -9r "Nexuiz/data/datapatch$tag$date""hotfix.pk3" gfx/brand.tga
+	zip -9r "Nexuiz/data/datapatch$tag$date.pk3" gfx/brand.tga
+	[ -n "$hotbasepk3" ] && zip -9r "Nexuiz/data/datapatch$tag$date""hotfix.pk3" gfx/brand.tga
 	rm -rf gfx
 fi
 
