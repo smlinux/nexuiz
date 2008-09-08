@@ -563,7 +563,10 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 				(deathtype == DEATH_DROWN) ||
 				(deathtype == DEATH_SLIME) ||
 				(deathtype == DEATH_LAVA))
+			{
+				self = oldself;
 				return;
+			}
 			if (targ.armorvalue && (deathtype == WEP_MINSTANEX) && damage)
 			{
 				targ.armorvalue -= 1;
