@@ -934,13 +934,6 @@ void Sbar_DrawScoreboard()
 
 	pos_y += 1.5 * sbar_fontsize_y;
 	drawcolorcodedstring(pos + '0.5 0 0' * (sbwidth - sbar_fontsize_x * stringwidth(str, TRUE)), str, sbar_fontsize, 0.8, 0);
-
-	if(warmup_stage) 
-	{
-		str = "^1Currently just warmup phase";
-		pos_y += 1.5 * sbar_fontsize_y;
-		drawcolorcodedstring(pos + '0.5 0 0' * (sbwidth - sbar_fontsize_x * stringwidth(str, TRUE)), str, sbar_fontsize, 0.8, 0);
-	}
 	
 	sbar = sbar_save;
 }
@@ -1335,14 +1328,27 @@ void Sbar_Draw (void)
 	float i;
 	float x, fade;
 	float stat_items, stat_weapons;
+	vector o; o = '1 0 0' * vid_conwidth;
+	string s;
 
 	sbar_fontsize = Sbar_GetFontsize();
+	
+	if(warmup_stage) 
+	{
+		s = "^7Currently just ^1warmup^7 phase";
+		dummyfunction(0, 0, 0, 0, 0, 0, 0, 0); // work around DP bug (set OFS_PARAM5 to 0)
+		drawcolorcodedstring(
+			o - sbar_fontsize_x * '1 0 0' * stringwidth(s, TRUE),
+			s,
+			sbar_fontsize,
+			sbar_alpha_fg,
+			0
+		);
+		o += sbar_fontsize_y * '0 1 0';
+	}
 
 	if(spectatee_status)
 	{
-		string s;
-		vector o;
-		o = '1 0 0' * vid_conwidth;
 		if(spectatee_status == -1)
 			s = "^1Observing";
 		else
@@ -1410,7 +1416,7 @@ void Sbar_Draw (void)
 		);
 		o += sbar_fontsize_y * '0 1 0';
 	}
-	
+		
 	//Sbar_SortFrags();
 	Sbar_UpdatePlayerTeams();
 
@@ -1606,7 +1612,7 @@ void Sbar_Draw (void)
 				//   to the right!
 			}
 		
-		
+
 			if(gametype == GAME_KEYHUNT)
 			{
 				CSQC_kh_hud();
