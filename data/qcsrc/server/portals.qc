@@ -437,7 +437,7 @@ void Portal_Think()
 	if(!self.enemy)
 		error("Portal_Think called for a broken portal\n");
 
-	print("Portal ID ", etos(self), " verified working.\n");
+	//print("Portal ID ", etos(self), " verified working.\n");
 	portals_must_not_break = 1;
 
 	o = self.owner;
