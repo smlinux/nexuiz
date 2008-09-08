@@ -111,7 +111,16 @@ void fillNexuizMiscSettingsTab(entity me)
 			e.configureNexuizTextSliderValues(e);
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Channels:"));
-		me.TD(me, 1, 2, e = makeNexuizSlider(1, 8, 1, "snd_channels"));
+		me.TD(me, 1, 2, e = makeNexuizTextSlider("snd_channels"));
+			e.addValue(e, "Mono", "1");
+			e.addValue(e, "Stereo", "2");
+			e.addValue(e, "2.1", "3");
+			e.addValue(e, "3.1", "4");
+			e.addValue(e, "4.1", "5");
+			e.addValue(e, "5.1", "6");
+			e.addValue(e, "6.1", "7");
+			e.addValue(e, "7.1", "8");
+			e.configureNexuizTextSliderValues(e);
 	me.TR(me);
 		me.TDempty(me, 0.2);
 		me.TD(me, 1, 2.8, e = makeNexuizCheckBox(0, "snd_swapstereo", "Swap Stereo"));
