@@ -199,6 +199,7 @@ void rune_touch()
 	setattachment(self, world, "");
 
 	self.movetype = MOVETYPE_FOLLOW;
+	self.aiment = other;
 	self.view_ofs = other.origin;
 
 	setorigin(self, '0 0 0');
