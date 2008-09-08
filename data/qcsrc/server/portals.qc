@@ -182,15 +182,14 @@ float Portal_TeleportPlayer(entity teleporter, entity player)
 			//print("GOOD path: ", vtos(ang), "\n");
 		}
 
+		ang_x = -ang_x;
 		ang_z = player.angles_z;
 	}
 	else
 	{
 		ang = player.angles;
-		ang_x = -ang_x;
 		ang = Portal_Transform_Multiply(transform, player.angles);
 	}
-	ang_x = -ang_x;
 
 	// factor -1 allows chaining portals, but may be weird
 	player.right_vector = -1 * Portal_Transform_Apply(transform, player.right_vector);
