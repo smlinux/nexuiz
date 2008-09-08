@@ -31,7 +31,6 @@ void W_Porto_Fail (float failhard)
 
 	if(!failhard && !(self.owner.weapons & WEPBIT_PORTO))
 	{
-		centerprint(self.owner, "^1Portal deployment failed.\n\n^2Catch it to try again!");
 		setsize (self, '-16 -16 0', '16 16 32');
 		setorigin(self, self.origin + trace_plane_normal);
 		if(move_out_of_solid(self))
@@ -39,13 +38,11 @@ void W_Porto_Fail (float failhard)
 			self.flags = FL_ITEM;
 			self.velocity = trigger_push_calculatevelocity(self.origin, self.owner, 128);
 			tracetoss(self, self);
-			if(vlen(trace_endpos - self.owner.origin) > 128)
-				self.velocity = '0 0 0';
-			W_ThrowNewWeapon(self.owner, WEP_PORTO, 0, self.origin, self.velocity);
-		}
-		else
-		{
-			W_ThrowNewWeapon(self.owner, WEP_PORTO, 0, self.origin, '0 0 0');
+			if(vlen(trace_endpos - self.owner.origin) < 128)
+			{
+				W_ThrowNewWeapon(self.owner, WEP_PORTO, 0, self.origin, self.velocity);
+				centerprint(self.owner, "^1Portal deployment failed.\n\n^2Catch it to try again!");
+			}
 		}
 	}
 	remove(self);

@@ -398,7 +398,7 @@ void Portal_Remove(entity portal, float killed)
 		portal.owner.portal_in = world;
 	if(portal == portal.owner.portal_out)
 		portal.owner.portal_out = world;
-	portal.owner = world;
+	//portal.owner = world;
 
 	// makes the portal vanish
 	if(killed)
