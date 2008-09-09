@@ -15,6 +15,7 @@ COLOR_DIALOG_MAPINFO            '0.7 0.7 1'
 COLOR_DIALOG_USERBIND           '0.7 0.7 1'
 COLOR_DIALOG_SINGLEPLAYER       '1 1 0.7'
 COLOR_DIALOG_CREDITS            '0.7 0.7 1'
+COLOR_DIALOG_WEAPONS            '1 0.7 0.7'
 
 // nexposee positions of windows (they are the scale transformation
 // centers, NOT the actual positions of the windows!)
