@@ -81,15 +81,25 @@ void W_NextWeaponOnImpulse(float imp)
 }
 
 // next weapon
-void W_NextWeapon()
+void W_NextWeapon(float list)
 {
-	W_CycleWeapon(self.cvar_cl_weaponpriority, -1);
+	if(list == 0)
+		W_CycleWeapon(weaponpriority_hudselector_0, -1);
+	else if(list == 1)
+		W_CycleWeapon(weaponpriority_hudselector_1, -1);
+	else if(list == 2)
+		W_CycleWeapon(self.cvar_cl_weaponpriority, -1);
 }
 
 // prev weapon
-void W_PreviousWeapon()
+void W_PreviousWeapon(float list)
 {
-	W_CycleWeapon(self.cvar_cl_weaponpriority, +1);
+	if(list == 0)
+		W_CycleWeapon(weaponpriority_hudselector_0, +1);
+	else if(list == 1)
+		W_CycleWeapon(weaponpriority_hudselector_1, +1);
+	else if(list == 2)
+		W_CycleWeapon(self.cvar_cl_weaponpriority, +1);
 }
 
 string W_FixWeaponOrder(string order, float complete)
@@ -452,7 +462,6 @@ void Nixnex_GiveCurrentWeapon()
 
 void RegisterWeapons()
 {
-	register_dummy_weapon();
 	// %weaponaddpoint
 	register_weapon(WEP_LASER,            w_laser,     0,              1, 1,     0, "laser",     "laser",           "Laser");
 	register_weapon(WEP_SHOTGUN,          w_shotgun,   IT_SHELLS,      2, 1,  2500, "shotgun",   "shotgun",         "Shotgun");
@@ -465,4 +474,5 @@ void RegisterWeapons()
 	register_weapon(WEP_ROCKET_LAUNCHER,  w_rlauncher, IT_ROCKETS,     9, 1, 10000, "rl",        "rocketlauncher",  "Rocket Launcher");
 	register_weapon(WEP_PORTO,            w_porto,     IT_SUPERWEAPON, 0, 0,     0, "porto" ,    "porto",           "Port-O-Launch");
 	register_weapon(WEP_MINSTANEX,        w_minstanex, IT_CELLS,       7, 0, 10000, "minstanex", "minstanex",       "MinstaNex");
+	register_weapons_done();
 }

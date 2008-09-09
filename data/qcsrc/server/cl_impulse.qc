@@ -60,12 +60,16 @@ void printsurfaceinfo(entity e, vector v)
  * Impulse map:
  *
  * 0 reserved (no input)
- * 1 to 9: weapon shortcuts
- * 10: next weapon
+ * 1 to 9, 14: weapon shortcuts
+ * 10: next weapon according to linear list
  * 11: most recently used weapon
- * 12: previous weapon
- * 13: best weapon
+ * 12: previous weapon according to linear list
+ * 13: best weapon according to priority list
+ * 15: next weapon according to priority list
+ * 16: previous weapon according to priority list
  * 17: throw weapon
+ * 18: next weapon according to sbar_hudselector 1 list
+ * 19: previous weapon according to sbar_hudselector 1 list
  *
  * 30 to 39: create waypoints
  * 47: clear personal waypoints
@@ -116,20 +120,20 @@ void ImpulseCommands (void)
 		else
 			self.impulse = imp; // retry in next frame
 	}
-	else if(imp >= 10 && imp <= 17)
+	else if(imp >= 10 && imp <= 19)
 	{
 		if(self.deadflag == DEAD_NO)
 		{
 			switch(imp)
 			{
 				case 10:
-					W_NextWeapon ();
+					W_NextWeapon (0);
 					break;
 				case 11:
 					W_SwitchWeapon (self.cnt); // previously used
 					break;
 				case 12:
-					W_PreviousWeapon ();
+					W_PreviousWeapon (0);
 					break;
 				case 13:
 					W_SwitchWeapon (w_getbestweapon(self));
@@ -137,9 +141,21 @@ void ImpulseCommands (void)
 				case 14:
 					W_NextWeaponOnImpulse(0);
 					break;
+				case 15:
+					W_NextWeapon (2);
+					break;
+				case 16:
+					W_PreviousWeapon (2);
+					break;
 				case 17:
 					if (!g_minstagib)
 						W_ThrowWeapon(W_CalculateProjectileVelocity(self.velocity, v_forward * 750), '0 0 0', TRUE);
+					break;
+				case 18:
+					W_NextWeapon (1);
+					break;
+				case 19:
+					W_PreviousWeapon (1);
 					break;
 				}
 		}

@@ -4,6 +4,27 @@
 
 #define DP_CSQC_ENTITY_REMOVE_IS_B0RKED
 
+void cvar_settemp(string cvar, string val)
+{
+	entity e;
+	for(e = world; (e = find(e, classname, "saved_cvar_value")); )
+		if(e.netname == argv(1))
+			goto saved;
+	e = spawn();
+	e.classname = "saved_cvar_value";
+	e.netname = strzone(argv(1));
+	e.message = strzone(cvar_string(argv(1)));
+:saved
+	cvar_set(argv(1), argv(2));
+}
+
+void cvar_settemp_restore()
+{
+	entity e;
+	for(e = world; (e = find(e, classname, "saved_cvar_value")); )
+			cvar_set(e.netname, e.message);
+}
+
 void() menu_show_error =
 {
 	drawstring('0 200 0', "ERROR - MENU IS VISIBLE BUT NO MENU WAS DEFINED!", '8 8 0', '1 0 0', 1, 0);
@@ -89,6 +110,8 @@ void CSQC_Init(void)
 	players = Sort_Spawn();
 	
 	GetTeam(COLOR_SPECTATOR, true); // add specs first
+
+	cvar_settemp("_supports_weaponpriority", "1");
 }
 
 // CSQC_Shutdown : Called every time the CSQC code is shutdown (changing maps, quitting, etc)
@@ -105,9 +128,7 @@ void CSQC_Shutdown(void)
 	remove(players);
 	db_close(configdb);
 
-	entity e;
-	for(e = world; (e = find(e, classname, "saved_cvar_value")); )
-			cvar_set(e.netname, e.message);
+	cvar_settemp_restore();
 }
 
 .float has_team;
@@ -273,16 +294,7 @@ float GameCommand(string msg)
 		return true;
 	}
 	else if(cmd == "settemp") {
-		entity e;
-		for(e = world; (e = find(e, classname, "saved_cvar_value")); )
-			if(e.netname == argv(1))
-				goto saved;
-		e = spawn();
-		e.classname = "saved_cvar_value";
-		e.netname = strzone(argv(1));
-		e.message = strzone(cvar_string(argv(1)));
-:saved
-		cvar_set(argv(1), argv(2));
+		cvar_settemp(argv(1), argv(2));
 	}
 	
 	return false;

@@ -588,6 +588,9 @@ void W_SetupProjectileVelocity(entity missile)
 entity weapon_info[24];
 entity dummy_weapon_info;
 .float(float) weapon_func;
+string weaponpriority_hudselector_0;
+string weaponpriority_hudselector_1;
+
 void register_weapon(float id, float(float) func, float ammotype, float i, float normalweapon, float pickupbasevalue, string modelname, string shortname, string name)
 {
 	entity e;
@@ -609,7 +612,7 @@ float w_null(float dummy)
 {
 	return 0;
 }
-void register_dummy_weapon()
+void register_weapons_done()
 {
 	dummy_weapon_info = spawn();
 	dummy_weapon_info.classname = "weapon_info";
@@ -623,6 +626,22 @@ void register_dummy_weapon()
 	dummy_weapon_info.spawnflags = 0;
 	dummy_weapon_info.impulse = -1;
 	dummy_weapon_info.bot_pickupbasevalue = 0;
+
+	float i;
+	weaponpriority_hudselector_0 = "";
+	for(i = 24; i > 0; --i)
+		if(weapon_info[i-1])
+			weaponpriority_hudselector_0 = strcat(weaponpriority_hudselector_0, " ", ftos(i+1));
+
+	float imp;
+	weaponpriority_hudselector_1 = "";
+	for(imp = 10; imp > 0; --imp)
+		for(i = 24; i > 0; --i)
+			if(weapon_info[i-1] && weapon_info[i-1].impulse == mod(imp, 10))
+				weaponpriority_hudselector_1 = strcat(weaponpriority_hudselector_1, " ", ftos(i+1));
+
+	weaponpriority_hudselector_0 = strzone(substring(weaponpriority_hudselector_0, 1, strlen(weaponpriority_hudselector_0) - 1));
+	weaponpriority_hudselector_1 = strzone(substring(weaponpriority_hudselector_1, 1, strlen(weaponpriority_hudselector_1) - 1));
 }
 entity get_weaponinfo(float id)
 {
