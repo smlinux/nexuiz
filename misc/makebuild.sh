@@ -7,6 +7,8 @@ set -e
 #   version=2.5     make a FINAL build
 #   tag=FOO         insert FOO before the date in build names
 
+base=`pwd`
+
 # customizable specific stuff
 basepk3=$base/data20080229.pk3 # 2.4
 hotbasepk3= # hotfix
@@ -26,8 +28,6 @@ menuqc=menu
 newest=NEWEST
 aft="perl -I/chroot/debian-etch/usr/share/aft /chroot/debian-etch/usr/bin/aft"
 # end system specific stuff
-
-base=`pwd`
 
 case "$pw" in
 	'')
