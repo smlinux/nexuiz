@@ -64,14 +64,18 @@ void MapVote_DrawMapItem(vector pos, float isize, float tsize, string map, strin
 		a_x = img_size_x; // for the lines
 		b_y = img_size_y;
 		drawfill(pos, img_size, '.5 .5 .5', .7, DRAWFLAG_NORMAL);
-		drawline(2, pos, pos + a, '1 1 1', 1, DRAWFLAG_NORMAL);
-		drawline(2, pos, pos + b, '1 1 1', 1, DRAWFLAG_NORMAL);
-		drawline(2, pos + img_size, pos + a, '1 1 1', 1, DRAWFLAG_NORMAL);
-		drawline(2, pos + img_size, pos + b, '1 1 1', 1, DRAWFLAG_NORMAL);
 	}
 	else
 	{
 		drawpic(pos, pic, img_size, '1 1 1', 1, DRAWFLAG_NORMAL);
+	}
+
+	if(id == mv_ownvote || pic == "")
+	{
+		drawfill(pos,                                   '1 0 0' * img_size_x + '0  2 0', rgb, 1, DRAWFLAG_NORMAL);
+		drawfill(pos + '0 2 0',                         '0 1 0' * img_size_y + '2 -4 0', rgb, 1, DRAWFLAG_NORMAL);
+		drawfill(pos + '1 0 0' * img_size_x + '-2 2 0', '0 1 0' * img_size_y + '2 -4 0', rgb, 1, DRAWFLAG_NORMAL);
+		drawfill(pos + '0 1 0' * img_size_y + '0 -2 0', '1 0 0' * img_size_x + '0  2 0', rgb, 1, DRAWFLAG_NORMAL);
 	}
 }
 
