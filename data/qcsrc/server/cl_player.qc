@@ -506,6 +506,7 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 			kh_Key_DropAll(self, TRUE);
 		if(self.flagcarried)
 			DropFlag(self.flagcarried);
+		Portal_ClearAllLater(self);
 		// clear waypoints
 		WaypointSprite_PlayerDead();
 		// make the corpse upright (not tilted)

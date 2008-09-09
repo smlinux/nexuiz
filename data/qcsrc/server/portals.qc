@@ -543,6 +543,24 @@ void Portal_ClearAll(entity own)
 	if(own.portal_out)
 		Portal_Remove(own.portal_out, 0);
 }
+void Portal_RemoveLater_Think()
+{
+	Portal_Remove(self, self.cnt);
+}
+void Portal_RemoveLater(entity portal, float kill)
+{
+	Portal_MakeBrokenPortal(portal);
+	portal.cnt = kill;
+	portal.think = Portal_RemoveLater_Think;
+	portal.nextthink = time;
+}
+void Portal_ClearAllLater(entity own)
+{
+	if(own.portal_in)
+		Portal_RemoveLater(own.portal_in, 0);
+	if(own.portal_out)
+		Portal_RemoveLater(own.portal_out, 0);
+}
 void Portal_ClearWithID(entity own, float id)
 {
 	if(own.portal_in)
