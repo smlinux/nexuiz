@@ -8,11 +8,13 @@ game: command lockteams, unlockteams
 game: command movetoteam_red, ...
 game: command nospectators
 game: command vlogin must be used instead of vdo login now
+game: command weapbest
 game: crylink bounce does half damage
 game: crylink primary does 2 cells
 game: crylink weakened
 game: ctf flag touching when dead bug fixed
 game: cvar cl_weaponpriority* (custom weapon orders)
+game: cvar cl_weaponpriority_useforcycling
 game: cvar g_instagib REMOVED (no demand)
 game: cvar g_jump_grunt
 game: cvar g_maxplayers
@@ -78,6 +80,7 @@ menu: input box margin now in chars, not percent
 menu: mouse fixed in -game pro
 menu: new playermodel previews (sev)
 menu: play button in map info
+menu: weapon priority dialog
 menuskins: big buttons as extra graphics
 menuskins: COLOR_SCROLLBAR_C
 menuskins: HEIGHT_DIALOGBORDER
