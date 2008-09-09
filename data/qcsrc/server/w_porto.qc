@@ -60,9 +60,19 @@ void W_Porto_Think (void)
 void W_Porto_Touch (void)
 {
 	vector norm;
+	float noreflect;
 
 	if(other.classname == "portal")
 		return; // handled by the portal
+
+	noreflect = 0;
+	if(trace_ent.movetype == MOVETYPE_WALK)
+	{
+		traceline(trace_ent.origin, trace_ent.origin + '0 0 2' * PL_MIN_z, MOVE_NORMAL, self);
+		if(trace_fraction >= 1)
+			return;
+		noreflect = 1;
+	}
 
 	norm = trace_plane_normal;
 	if(self.owner.playerid != self.playerid)
@@ -71,13 +81,17 @@ void W_Porto_Touch (void)
 	}
 	else if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_SLICK)
 	{
-		// just reflect
-		self.right_vector = self.right_vector - 2 * trace_plane_normal * (self.right_vector * trace_plane_normal);
-		self.angles = vectoangles(self.velocity - 2 * trace_plane_normal * (self.velocity * trace_plane_normal));
+		if(!noreflect)
+		{
+			// just reflect
+			self.right_vector = self.right_vector - 2 * trace_plane_normal * (self.right_vector * trace_plane_normal);
+			self.angles = vectoangles(self.velocity - 2 * trace_plane_normal * (self.velocity * trace_plane_normal));
+		}
 	}
 	else if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
 	{
-		W_Porto_Fail(0);
+		if(!noreflect)
+			W_Porto_Fail(0);
 	}
 	else if(self.effects & EF_RED)
 	{
@@ -87,8 +101,11 @@ void W_Porto_Touch (void)
 			sound(self, CHAN_PROJECTILE, "misc/invshot.wav", VOL_BASE, ATTN_NORM);
 			centerprint(self.owner, "^1In^7-portal created.\n");
 			trace_plane_normal = norm;
-			self.right_vector = self.right_vector - 2 * trace_plane_normal * (self.right_vector * trace_plane_normal);
-			self.angles = vectoangles(self.velocity - 2 * trace_plane_normal * (self.velocity * trace_plane_normal));
+			if(!noreflect)
+			{
+				self.right_vector = self.right_vector - 2 * trace_plane_normal * (self.right_vector * trace_plane_normal);
+				self.angles = vectoangles(self.velocity - 2 * trace_plane_normal * (self.velocity * trace_plane_normal));
+			}
 		}
 		else
 		{

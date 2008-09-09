@@ -602,13 +602,6 @@ float Portal_SpawnInPortalAtTrace(entity own, vector dir, float portal_id_val)
 	vector ang;
 	vector org;
 
-	if(trace_ent.movetype == MOVETYPE_WALK)
-	{
-		trace_endpos = trace_ent.origin + '0 0 1' * PL_MIN_z;
-		trace_plane_normal = '0 0 1';
-		dir = -1 * dir; // create telefrag portals the other way round
-	}
-
 	org = trace_endpos;
 	ang = fixedvectoangles2(trace_plane_normal, dir);
 	fixedmakevectors(ang);
@@ -632,13 +625,6 @@ float Portal_SpawnOutPortalAtTrace(entity own, vector dir, float portal_id_val)
 	entity portal;
 	vector ang;
 	vector org;
-
-	if(trace_ent.movetype == MOVETYPE_WALK)
-	{
-		trace_endpos = trace_ent.origin + '0 0 1' * PL_MIN_z;
-		trace_plane_normal = '0 0 1';
-		dir = -1 * dir; // create telefrag portals the other way round
-	}
 
 	org = trace_endpos;
 	ang = fixedvectoangles2(trace_plane_normal, dir);
