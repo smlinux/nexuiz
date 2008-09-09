@@ -243,18 +243,21 @@ void drawListBox(entity me)
 	if(me.pressed == 2)
 		me.mouseDrag(me, me.dragScrollPos); // simulate mouseDrag event
 	me.updateControlTopBottom(me);
-	draw_VertButtonPicture(eX * (1 - me.controlWidth), strcat(me.src, "_s"), eX * me.controlWidth + eY, me.color2, 1);
-	if(me.nItems * me.itemHeight > 1)
+	if(me.controlWidth)
 	{
-		vector o, s;
-		o = eX * (1 - me.controlWidth) + eY * me.controlTop;
-		s = eX * me.controlWidth + eY * (me.controlBottom - me.controlTop);
-		if(me.pressed == 1)
-			draw_VertButtonPicture(o, strcat(me.src, "_c"), s, me.colorC, 1);
-		else if(me.focused)
-			draw_VertButtonPicture(o, strcat(me.src, "_f"), s, me.colorF, 1);
-		else
-			draw_VertButtonPicture(o, strcat(me.src, "_n"), s, me.color, 1);
+		draw_VertButtonPicture(eX * (1 - me.controlWidth), strcat(me.src, "_s"), eX * me.controlWidth + eY, me.color2, 1);
+		if(me.nItems * me.itemHeight > 1)
+		{
+			vector o, s;
+			o = eX * (1 - me.controlWidth) + eY * me.controlTop;
+			s = eX * me.controlWidth + eY * (me.controlBottom - me.controlTop);
+			if(me.pressed == 1)
+				draw_VertButtonPicture(o, strcat(me.src, "_c"), s, me.colorC, 1);
+			else if(me.focused)
+				draw_VertButtonPicture(o, strcat(me.src, "_f"), s, me.colorF, 1);
+			else
+				draw_VertButtonPicture(o, strcat(me.src, "_n"), s, me.color, 1);
+		}
 	}
 	draw_SetClip();
 	oldshift = draw_shift;

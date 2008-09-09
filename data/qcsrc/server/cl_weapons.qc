@@ -104,31 +104,7 @@ void W_PreviousWeapon(float list)
 
 string W_FixWeaponOrder(string order, float complete)
 {
-	string neworder;
-	float i, n, w;
-
-	n = tokenize(order);
-	for(i = 0; i < n; ++i)
-	{
-		w = stof(argv(i));
-		if(w >= WEP_FIRST && w <= WEP_LAST && w == floor(w))
-			neworder = strcat(neworder, ftos(w), " ");
-	}
-
-	if(complete)
-	{
-		n = tokenize(neworder);
-		for(w = WEP_LAST; w >= WEP_FIRST; --w)
-		{
-			for(i = 0; i < n; ++i)
-				if(stof(argv(i)) == w)
-					break;
-			if(i == n) // not found
-				neworder = strcat(neworder, ftos(w), " ");
-		}
-	}
-	
-	return substring(neworder, 0, strlen(neworder) - 1);
+	return fixPriorityList(order, WEP_FIRST, WEP_LAST, complete);
 }
 
 string W_FixWeaponOrder_AllowIncomplete(string order)

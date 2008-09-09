@@ -640,3 +640,57 @@ void fixedmakevectors(vector a)
 	makevectors(a);
 }
 #endif
+
+string fixPriorityList(string order, float from, float to, float complete)
+{
+	string neworder;
+	float i, n, w;
+
+	n = tokenize(order);
+	for(i = 0; i < n; ++i)
+	{
+		w = stof(argv(i));
+		if(w >= from && w <= to && w == floor(w))
+			neworder = strcat(neworder, ftos(w), " ");
+	}
+
+	if(complete)
+	{
+		n = tokenize(neworder);
+		for(w = to; w >= from; --w)
+		{
+			for(i = 0; i < n; ++i)
+				if(stof(argv(i)) == w)
+					break;
+			if(i == n) // not found
+				neworder = strcat(neworder, ftos(w), " ");
+		}
+	}
+	
+	return substring(neworder, 0, strlen(neworder) - 1);
+}
+
+string swapInPriorityList(string order, float i, float j)
+{
+	string s;
+	float w, n;
+
+	n = tokenize(order);
+
+	if(i >= 0 && i < n && j >= 0 && j < n && i != j)
+	{
+		s = "";
+		for(w = 0; w < n; ++w)
+		{
+			if(w == i)
+				s = strcat(s, argv(j), " ");
+			else if(w == j)
+				s = strcat(s, argv(i), " ");
+			else
+				s = strcat(s, argv(w), " ");
+		}
+		return substring(s, 0, strlen(s) - 1);
+	}
+	
+	return order;
+}

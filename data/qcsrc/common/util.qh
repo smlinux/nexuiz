@@ -73,3 +73,6 @@ void fixedmakevectors(vector a);
 #define fixedvectoangles2 vectoangles2
 #define fixedvectoangles vectoangles
 #endif
+
+string fixPriorityList(string pl, float from, float to, float complete);
+string swapInPriorityList(string order, float i, float j);
