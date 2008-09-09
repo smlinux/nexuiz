@@ -25,6 +25,9 @@ void onslaught_controlpoint_reset();
  */
 void reset_map()
 {
+	entity oldself;
+	oldself = self;
+
 	if(g_arena)
 	if(cvar("g_arena_warmup"))
 		warmup = time + cvar("g_arena_warmup");
@@ -149,6 +152,8 @@ void reset_map()
 	if(g_arena)
 	if(champion)
 		UpdateFrags(champion, +1);
+
+	self = oldself;
 }
 
 void Spawnqueue_Insert(entity e)
