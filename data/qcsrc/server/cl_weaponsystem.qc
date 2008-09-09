@@ -637,7 +637,7 @@ void register_weapons_done()
 	weaponpriority_hudselector_1 = "";
 	for(imp = 10; imp > 0; --imp)
 		for(i = 1; i <= 24; ++i)
-			if(weapon_info[i-1] && weapon_info[i-1].impulse == mod(imp, 10))
+			if(weapon_info[i-1] && weapon_info[i-1].impulse == (imp == 10 ? 0 : imp))
 				weaponpriority_hudselector_1 = strcat(weaponpriority_hudselector_1, " ", ftos(i));
 
 	weaponpriority_hudselector_0 = strzone(substring(weaponpriority_hudselector_0, 1, strlen(weaponpriority_hudselector_0) - 1));

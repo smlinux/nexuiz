@@ -8,14 +8,14 @@ void cvar_settemp(string cvar, string val)
 {
 	entity e;
 	for(e = world; (e = find(e, classname, "saved_cvar_value")); )
-		if(e.netname == argv(1))
+		if(e.netname == cvar)
 			goto saved;
 	e = spawn();
 	e.classname = "saved_cvar_value";
-	e.netname = strzone(argv(1));
-	e.message = strzone(cvar_string(argv(1)));
+	e.netname = strzone(cvar);
+	e.message = strzone(cvar_string(cvar));
 :saved
-	cvar_set(argv(1), argv(2));
+	cvar_set(cvar, val);
 }
 
 void cvar_settemp_restore()
