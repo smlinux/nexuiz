@@ -649,6 +649,8 @@ void register_weapons_done()
 entity get_weaponinfo(float id)
 {
 	entity w;
+	if(id < WEP_FIRST || id > WEP_LAST)
+		return dummy_weapon_info;
 	w = weapon_info[id - 1];
 	if(w)
 		return w;
