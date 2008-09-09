@@ -635,9 +635,12 @@ void register_weapons_done()
 
 	float imp;
 	weaponpriority_hudselector_1 = "";
-	for(imp = 10; imp > 0; --imp)
+	for(i = 1; i <= 24; ++i)
+		if(weapon_info[i-1] && weapon_info[i-1].impulse == 0)
+			weaponpriority_hudselector_1 = strcat(weaponpriority_hudselector_1, " ", ftos(i));
+	for(imp = 9; imp > 0; --imp)
 		for(i = 1; i <= 24; ++i)
-			if(weapon_info[i-1] && weapon_info[i-1].impulse == (imp == 10 ? 0 : imp))
+			if(weapon_info[i-1] && weapon_info[i-1].impulse == imp)
 				weaponpriority_hudselector_1 = strcat(weaponpriority_hudselector_1, " ", ftos(i));
 
 	weaponpriority_hudselector_0 = strzone(substring(weaponpriority_hudselector_0, 1, strlen(weaponpriority_hudselector_0) - 1));
