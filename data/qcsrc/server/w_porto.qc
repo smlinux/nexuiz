@@ -60,52 +60,46 @@ void W_Porto_Think (void)
 void W_Porto_Touch (void)
 {
 	vector norm;
-	float noreflect;
 
 	if(other.classname == "portal")
 		return; // handled by the portal
 
-	noreflect = 0;
+	norm = trace_plane_normal;
 	if(trace_ent.movetype == MOVETYPE_WALK)
 	{
 		traceline(trace_ent.origin, trace_ent.origin + '0 0 2' * PL_MIN_z, MOVE_NORMAL, self);
 		if(trace_fraction >= 1)
 			return;
-		noreflect = 1;
+		if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_SLICK)
+			return;
+		if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
+			return;
 	}
 
-	norm = trace_plane_normal;
 	if(self.owner.playerid != self.playerid)
 	{
 		remove(self);
 	}
 	else if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_SLICK)
 	{
-		if(!noreflect)
-		{
-			// just reflect
-			self.right_vector = self.right_vector - 2 * trace_plane_normal * (self.right_vector * trace_plane_normal);
-			self.angles = vectoangles(self.velocity - 2 * trace_plane_normal * (self.velocity * trace_plane_normal));
-		}
+		// just reflect
+		self.right_vector = self.right_vector - 2 * trace_plane_normal * (self.right_vector * trace_plane_normal);
+		self.angles = vectoangles(self.velocity - 2 * trace_plane_normal * (self.velocity * trace_plane_normal));
 	}
 	else if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
 	{
-		if(!noreflect)
-			W_Porto_Fail(0);
+		W_Porto_Fail(0);
 	}
 	else if(self.effects & EF_RED)
 	{
 		self.effects += EF_BLUE - EF_RED;
 		if(Portal_SpawnInPortalAtTrace(self.owner, self.right_vector, self.portal_id))
 		{
+			trace_plane_normal = norm;
 			sound(self, CHAN_PROJECTILE, "misc/invshot.wav", VOL_BASE, ATTN_NORM);
 			centerprint(self.owner, "^1In^7-portal created.\n");
-			trace_plane_normal = norm;
-			if(!noreflect)
-			{
-				self.right_vector = self.right_vector - 2 * trace_plane_normal * (self.right_vector * trace_plane_normal);
-				self.angles = vectoangles(self.velocity - 2 * trace_plane_normal * (self.velocity * trace_plane_normal));
-			}
+			self.right_vector = self.right_vector - 2 * trace_plane_normal * (self.right_vector * norm);
+			self.angles = vectoangles(self.velocity - 2 * trace_plane_normal * (self.velocity * norm));
 		}
 		else
 		{
@@ -117,13 +111,13 @@ void W_Porto_Touch (void)
 	{
 		if(Portal_SpawnOutPortalAtTrace(self.owner, self.right_vector, self.portal_id))
 		{
+			trace_plane_normal = norm;
 			sound(self, CHAN_PROJECTILE, "misc/invshot.wav", VOL_BASE, ATTN_NORM);
 			centerprint(self.owner, "^4Out^7-portal created.\n");
 			W_Porto_Success();
 		}
 		else
 		{
-			trace_plane_normal = norm;
 			W_Porto_Fail(0);
 		}
 	}
