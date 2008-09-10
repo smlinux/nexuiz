@@ -78,7 +78,7 @@ void fillNexuizPlayerSettingsTab(entity me)
 	me.TR(me);
 		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "cl_autoswitch", "Auto switch weapons on pickup"));
 	me.TR(me);
-		me.TD(me, 1, 1, e = makeNexuizButton("Weapon priority...", '0 0 0'));
+		me.TD(me, 1, 1, e = makeNexuizButton("Weapon order...", '0 0 0'));
 			e.onClick = DialogOpenButton_Click;
 			e.onClickEntity = main.weaponsDialog;
 		me.TD(me, 1, 2, e0 = makeNexuizTextLabel(0, string_null));
