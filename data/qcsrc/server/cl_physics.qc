@@ -16,7 +16,8 @@ float sv_airaccel_qw;
 .float wasFlying;
 .float spectatorspeed;
 
-#define SHTEST_DELTA 15
+#define SHTEST_DELTA 10
+#define SHTEST_THRESHOLD 1.1
 .float shtest_next;
 .float shtest_accumulator;
 
@@ -144,9 +145,9 @@ void SV_PlayerPhysics()
 			// self.shtest_accumulator:
 			//   started at time - SHTEST_DELTA
 			//   should be at SHTEST_DELTA
-			shtest_score = self.shtest_accumulator / SHTEST_DELTA;
-			if(shtest_score > 1.2)
-				dprint("TIME PARADOX: shtest for ", self.netname, " said ", ftos(shtest_score), "\n");
+			shtest_score = self.shtest_accumulator / (SHTEST_DELTA + time - self.shtest_next);
+			if(shtest_score > SHTEST_THRESHOLD)
+				print("TIME PARADOX: shtest for ", self.netname, " said ", ftos(shtest_score), "\n");
 			else if(cvar("developer_shtest"))
 				dprint("okay: shtest for ", self.netname, " said ", ftos(shtest_score), "\n");
 		}
