@@ -596,6 +596,16 @@ void weapon_defaultspawnfunc(float wpn)
 	entity oldself;
 	float i;
 
+	// set the respawntime in advance (so replaced weapons can copy it)
+	if(!self.respawntime)
+	{
+		e = get_weaponinfo(wpn);
+		if(e.items == IT_SUPERWEAPON)
+			self.respawntime = g_pickup_respawntime_powerup;
+		else
+			self.respawntime = g_pickup_respawntime_short;
+	}
+
 	if(self.classname != "droppedweapon" && self.classname != "replacedweapon")
 	{
 		s = cvar_string(strcat("g_weaponreplace_", ftos(wpn)));
@@ -611,7 +621,6 @@ void weapon_defaultspawnfunc(float wpn)
 				self.classname = "replacedweapon";
 				weapon_defaultspawnfunc(stof(argv(i)));
 				self = oldself;
-				print("replaced by ", argv(i), "\n");
 			}
 		}
 		if(t >= 1)
@@ -627,11 +636,7 @@ void weapon_defaultspawnfunc(float wpn)
 			self.ammofield = cvar(strcat("g_pickup_", Item_CounterFieldName(e.items)));
 	}
 
-	t = g_pickup_respawntime_short;
-	if(e.items == IT_SUPERWEAPON)
-		t = g_pickup_respawntime_powerup;
-
-	StartItem(e.model, "weapons/weaponpickup.wav", t, e.message, 0, e.weapons, FL_WEAPON, weapon_pickupevalfunc, e.bot_pickupbasevalue);
+	StartItem(e.model, "weapons/weaponpickup.wav", self.respawntime, e.message, 0, e.weapons, FL_WEAPON, weapon_pickupevalfunc, e.bot_pickupbasevalue);
 	if (self.modelindex) // don't precache if self was removed
 		weapon_action(e.weapon, WR_PRECACHE);
 }
