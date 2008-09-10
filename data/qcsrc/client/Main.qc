@@ -4,18 +4,18 @@
 
 #define DP_CSQC_ENTITY_REMOVE_IS_B0RKED
 
-void cvar_settemp(string cvar, string val)
+void cvar_settemp(string cv, string val)
 {
 	entity e;
 	for(e = world; (e = find(e, classname, "saved_cvar_value")); )
-		if(e.netname == cvar)
+		if(e.netname == cv)
 			goto saved;
 	e = spawn();
 	e.classname = "saved_cvar_value";
-	e.netname = strzone(cvar);
-	e.message = strzone(cvar_string(cvar));
+	e.netname = strzone(cv);
+	e.message = strzone(cvar_string(cv));
 :saved
-	cvar_set(cvar, val);
+	cvar_set(cv, val);
 }
 
 void cvar_settemp_restore()

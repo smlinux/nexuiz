@@ -17,7 +17,9 @@ void Net_ReadHoldAngles()
 
 entity porto;
 vector polyline[16];
+float trace_dphitcontents;
 float Q3SURFACEFLAG_SLICK = 2; // low friction surface
+float DPCONTENTS_PLAYERCLIP = 256; // blocks player movement
 void Porto_Draw()
 {
 	vector p, dir, ang, q, nextdir;
@@ -53,7 +55,7 @@ void Porto_Draw()
 		++idx;
 		if(idx >= 16)
 			return;
-		if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_SLICK)
+		if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_SLICK || trace_dphitcontents & DPCONTENTS_PLAYERCLIP)
 			continue;
 		++portal_number;
 		ang = vectoangles(trace_plane_normal, dir);
@@ -87,7 +89,6 @@ void Porto_Draw()
 
 float DPCONTENTS_SOLID = 1; // hit a bmodel, not a bounding box
 float DPCONTENTS_BODY = 32; // hit a bounding box, not a bmodel
-float DPCONTENTS_PLAYERCLIP = 256; // blocks player movement
 void Porto_Init()
 {
 	porto = spawn();
