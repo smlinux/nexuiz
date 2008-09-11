@@ -39,7 +39,7 @@ string toStringNexuizMutatorsDialog(entity me)
 	if(cvar("g_laserguided_missile"))
 		s = strcat(s, ", LG missiles");
 	if(cvar("g_midair"))
-		s = strcat(s, ", Mid-air");
+		s = strcat(s, ", Midair");
 	if(cvar("g_vampire"))
 		s = strcat(s, ", Vampire");
 	if(s == "")
@@ -55,13 +55,13 @@ void fillNexuizMutatorsDialog(entity me)
 	me.TR(me);
 		me.TD(me, 1, 2, e = makeNexuizCheckBox(0, "g_cloaked", "Cloaked"));
 	me.TR(me);
-		me.TD(me, 1, 2, e = makeNexuizCheckBox(0, "g_footsteps", "Foot steps"));
+		me.TD(me, 1, 2, e = makeNexuizCheckBox(0, "g_footsteps", "Footsteps"));
 	me.TR(me);
 		me.TD(me, 1, 2, e = makeNexuizCheckBox(0, "g_grappling_hook", "Grappling hook"));
 	me.TR(me);
 		me.TD(me, 1, 2, e = makeNexuizCheckBox(0, "g_laserguided_missile", "Laser guided missiles"));
 	me.TR(me);
-		me.TD(me, 1, 2, e = makeNexuizCheckBox(0, "g_midair", "Mid-air"));
+		me.TD(me, 1, 2, e = makeNexuizCheckBox(0, "g_midair", "Midair"));
 	me.TR(me);
 		me.TD(me, 1, 2, e = makeNexuizCheckBox(0, "g_vampire", "Vampire"));
 

@@ -388,12 +388,24 @@ void PrintWelcomeMessage(entity pl)
 	else if(g_nixnex)
 		mutator = "^2No Items Nexuiz ^1";
 
-	if(g_midair) {
+	if(g_cloaked) {
 		// to protect against unheedingly made changes
 		if (modifications) {
 			modifications = strcat(modifications, ", ");
 		}
-		modifications = "midair";
+		modifications = "cloaked";
+	}
+	if(g_footsteps) {
+		if (modifications) {
+			modifications = strcat(modifications, ", ");
+		}
+		modifications = strcat(modifications, "footsteps");
+	}
+	if(g_midair) {
+		if (modifications) {
+			modifications = strcat(modifications, ", ");
+		}
+		modifications = strcat(modifications, "midair");
 	}
 	if(g_vampire) {
 		if (modifications) {
@@ -405,7 +417,13 @@ void PrintWelcomeMessage(entity pl)
 		if (modifications) {
 			modifications = strcat(modifications, ", ");
 		}
-		modifications = strcat(modifications, "laser-guided-missiles");
+		modifications = strcat(modifications, "laser guided missiles");
+	}
+	if(cvar("sv_gravity") < 800) {
+		if (modifications) {
+			modifications = strcat(modifications, ", ");
+		}
+		modifications = strcat(modifications, "low gravity");
 	}
 
 	local string versionmessage;
@@ -424,7 +442,7 @@ void PrintWelcomeMessage(entity pl)
 		s = strcat(s, "\n\n", getTimeoutText(1));
 
 	if (g_grappling_hook)
-		s = strcat(s, "\n\n^8grappling hook is enabled, press 'e' to use it\n");
+		s = strcat(s, "\n\n^3grappling hook^8 is enabled, press 'e' to use it\n");
 
 	if(cache_lastmutatormsg != cvar_string("g_mutatormsg"))
 	{
