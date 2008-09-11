@@ -1338,13 +1338,13 @@ void Sbar_Draw (void)
 		s = "^7Currently just ^1warmup^7 phase";
 		dummyfunction(0, 0, 0, 0, 0, 0, 0, 0); // work around DP bug (set OFS_PARAM5 to 0)
 		drawcolorcodedstring(
-			o - sbar_fontsize_x * '1 0 0' * stringwidth(s, TRUE),
+			o - sbar_fontsize_x * '2 0 0' * stringwidth(s, TRUE),
 			s,
-			sbar_fontsize,
+			sbar_fontsize * 2,
 			sbar_alpha_fg,
 			0
 		);
-		o += sbar_fontsize_y * '0 1 0';
+		o += sbar_fontsize_y * '0 2 0';
 	}
 
 	if(spectatee_status)
