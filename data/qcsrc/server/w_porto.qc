@@ -78,16 +78,19 @@ void W_Porto_Touch (void)
 
 	if(self.owner.playerid != self.playerid)
 	{
+		sound(self, CHAN_PROJECTILE, "porto/unsupported.ogg", VOL_BASE, ATTN_NORM);
 		remove(self);
 	}
 	else if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_SLICK || trace_dphitcontents & DPCONTENTS_PLAYERCLIP)
 	{
+		sound(self, CHAN_PROJECTILE, "porto/bounce.ogg", VOL_BASE, ATTN_NORM);
 		// just reflect
 		self.right_vector = self.right_vector - 2 * trace_plane_normal * (self.right_vector * trace_plane_normal);
 		self.angles = vectoangles(self.velocity - 2 * trace_plane_normal * (self.velocity * trace_plane_normal));
 	}
 	else if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
 	{
+		sound(self, CHAN_PROJECTILE, "porto/unsupported.ogg", VOL_BASE, ATTN_NORM);
 		W_Porto_Fail(0);
 	}
 	else if(self.effects & EF_RED)
@@ -95,14 +98,15 @@ void W_Porto_Touch (void)
 		self.effects += EF_BLUE - EF_RED;
 		if(Portal_SpawnInPortalAtTrace(self.owner, self.right_vector, self.portal_id))
 		{
+			sound(self, CHAN_PROJECTILE, "porto/create.ogg", VOL_BASE, ATTN_NORM);
 			trace_plane_normal = norm;
-			sound(self, CHAN_PROJECTILE, "misc/invshot.wav", VOL_BASE, ATTN_NORM);
 			centerprint(self.owner, "^1In^7-portal created.\n");
 			self.right_vector = self.right_vector - 2 * trace_plane_normal * (self.right_vector * norm);
 			self.angles = vectoangles(self.velocity - 2 * trace_plane_normal * (self.velocity * norm));
 		}
 		else
 		{
+			sound(self, CHAN_PROJECTILE, "porto/unsupported.ogg", VOL_BASE, ATTN_NORM);
 			trace_plane_normal = norm;
 			W_Porto_Fail(0);
 		}
@@ -111,13 +115,14 @@ void W_Porto_Touch (void)
 	{
 		if(Portal_SpawnOutPortalAtTrace(self.owner, self.right_vector, self.portal_id))
 		{
+			sound(self, CHAN_PROJECTILE, "porto/create.ogg", VOL_BASE, ATTN_NORM);
 			trace_plane_normal = norm;
-			sound(self, CHAN_PROJECTILE, "misc/invshot.wav", VOL_BASE, ATTN_NORM);
 			centerprint(self.owner, "^4Out^7-portal created.\n");
 			W_Porto_Success();
 		}
 		else
 		{
+			sound(self, CHAN_PROJECTILE, "porto/unsupported.ogg", VOL_BASE, ATTN_NORM);
 			W_Porto_Fail(0);
 		}
 	}
@@ -130,7 +135,7 @@ void W_Porto_Attack (void)
 
 	if not(self.items & IT_UNLIMITED_AMMO)
 		self.weapons = self.weapons - (self.weapons & WEPBIT_PORTO);
-	W_SetupShot (self, '0 0 0', FALSE, 4, "weapons/grenade_fire.wav");
+	W_SetupShot (self, '0 0 0', FALSE, 4, "porto/fire.ogg");
 
 	//pointparticles(particleeffectnum("grenadelauncher_muzzleflash"), w_shotorg, w_shotdir * 1000, 1);
 
@@ -236,8 +241,13 @@ float w_porto(float req)
 		precache_model ("models/weapons/g_porto.md3");
 		precache_model ("models/weapons/v_porto.md3");
 		precache_model ("models/weapons/w_porto.zym");
-		precache_sound ("weapons/grenade_fire.wav");
 		precache_model ("models/portal.md3");
+		precache_sound ("porto/bounce.ogg");
+		precache_sound ("porto/create.ogg");
+		precache_sound ("porto/expire.ogg");
+		precache_sound ("porto/explode.ogg");
+		precache_sound ("porto/fire.ogg");
+		precache_sound ("porto/unsupported.ogg");
 	}
 	else if (req == WR_SETUP)
 		weapon_setup(WEP_PORTO);
