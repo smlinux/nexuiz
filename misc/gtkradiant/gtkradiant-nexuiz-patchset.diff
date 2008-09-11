@@ -856,6 +856,19 @@ Index: tools/quake3/q3map2/main.c
  	}
  	
  	/* clean up map name */
+Index: tools/quake3/q3map2/game_quake3.h
+===================================================================
+--- tools/quake3/q3map2/game_quake3.h.orig	2008-09-11 10:59:01.000000000 +0200
++++ tools/quake3/q3map2/game_quake3.h	2008-09-11 10:59:07.000000000 +0200
+@@ -114,7 +114,7 @@
+ 	1.0f,				/* lightmap gamma */
+ 	1.0f,				/* lightmap compensate */
+ 	"IBSP",				/* bsp file prefix */
+-	47,					/* bsp file version */
++	46,					/* bsp file version */
+ 	qfalse,				/* cod-style lump len/ofs order */
+ 	LoadIBSPFile,		/* bsp load function */
+ 	WriteIBSPFile,		/* bsp write function */
 Index: tools/quake3/q3map2/model.c
 ===================================================================
 --- tools/quake3/q3map2/model.c.orig	2008-09-06 15:32:05.000000000 +0200
@@ -2296,7 +2309,7 @@ Index: tools/quake3/q3map2/q3map2.h
  /* version */
 -#define Q3MAP_VERSION	"2.5.17"
 -#define Q3MAP_MOTD		"Last one turns the lights off"
-+#define Q3MAP_VERSION	"2.5.17-div0-obj-decomptexcoords-snapplane-UTavgcolorfix-UTfloodlight-UTlmexposure-UTtrianglecheck"
++#define Q3MAP_VERSION	"2.5.17-div0-obj-decomptexcoords-format46-snapplane-UTavgcolorfix-UTfloodlight-UTlmexposure-UTtrianglecheck"
 +#define Q3MAP_MOTD		"Light some candles, put them on a wooden table, take a photo, and paste it on the lightmaps!"
  
  
