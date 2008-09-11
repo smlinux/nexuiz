@@ -146,7 +146,7 @@ void W_Porto_Attack (void)
 	gren.bot_dodgerating = 200;
 	gren.movetype = MOVETYPE_BOUNCEMISSILE;
 	gren.solid = SOLID_BBOX;
-	gren.effects = EF_LOWPRECISION | EF_RED;
+	gren.effects = EF_LOWPRECISION | EF_RED | EF_ADDITIVE;
 	gren.scale = 4;
 	gren.modelflags = MF_GRENADE;
 	setmodel(gren, "models/grenademodel.md3"); // precision set above
