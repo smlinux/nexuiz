@@ -1335,7 +1335,7 @@ void Sbar_Draw (void)
 	
 	if(warmup_stage) 
 	{
-		s = "^7Currently just ^1warmup^7 phase";
+		s = "^1Press ^3ready^1 to end warmup";
 		dummyfunction(0, 0, 0, 0, 0, 0, 0, 0); // work around DP bug (set OFS_PARAM5 to 0)
 		drawcolorcodedstring(
 			o - sbar_fontsize_x * '2 0 0' * stringwidth(s, TRUE),
