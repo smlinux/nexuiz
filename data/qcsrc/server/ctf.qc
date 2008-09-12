@@ -107,7 +107,7 @@ void ReturnFlag(entity e)
 	RegenFlag(e);
 };
 
-void DropFlag(entity e)
+void DropFlag(entity e, float penalty)
 {
 	local entity p;
 
@@ -129,6 +129,12 @@ void DropFlag(entity e)
 		return;
 	}
 	bprint(p.netname, "^7 lost the ", e.netname, "\n");
+
+	if(penalty)
+	{
+		UpdateFrags(p, -cvar("g_ctf_flagscore_pickup"));
+		PlayerScore_Add(p, SP_CTF_PICKUPS, -1);
+	}
 
 	if(cvar("g_ctf_flagpenalty_drop"))
 		UpdateFrags(p, -cvar("g_ctf_flagpenalty_drop"));
@@ -225,7 +231,7 @@ void FlagThink()
 	if (e.classname != "player" || (e.deadflag) || (e.flagcarried != self))
 	{
 		dprint("CANNOT HAPPEN - player dead and STILL had a flag!\n");
-		DropFlag(self);
+		DropFlag(self, 0);
 		return;
 	}
 };

@@ -12,7 +12,6 @@ float warmup;
 
 void PutObserverInServer();
 void PutClientInServer();
-void(entity e) DropFlag;
 void(entity e) ReturnFlag;
 void(entity e) removedecor;
 void dom_controlpoint_setup();
@@ -55,7 +54,7 @@ void reset_map()
 		}
 		else if(self.items & (IT_KEY1 | IT_KEY2))
 		{
-			DropFlag(self);
+			DropFlag(self, 0);
 			ReturnFlag(self);
 		}
 		else if(self.classname == "rune")

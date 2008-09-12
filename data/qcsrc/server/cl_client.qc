@@ -406,7 +406,7 @@ void PutObserverInServer (void)
 	Portal_ClearAll(self);
 
 	if(self.flagcarried)
-		DropFlag(self.flagcarried);
+		DropFlag(self.flagcarried, 0);
 
 	WaypointSprite_PlayerDead();
 	
@@ -1230,7 +1230,6 @@ ClientDisconnect
 Called when a client disconnects from the server
 =============
 */
-void(entity e) DropFlag;
 .entity chatbubbleentity;
 .entity teambubbleentity;
 void ReadyCount();
@@ -1281,7 +1280,7 @@ void ClientDisconnect (void)
 	Portal_ClearAll(self);
 
 	if(self.flagcarried)
-		DropFlag(self.flagcarried);
+		DropFlag(self.flagcarried, 0);
 
 	save = self.flags;
 	self.flags = self.flags - (self.flags & FL_CLIENT);
