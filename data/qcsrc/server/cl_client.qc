@@ -280,6 +280,8 @@ string CheckPlayerModel(string plyermodel) {
 		if(substring(plyermodel,strlen(plyermodel)-4,4) != ".md3")
 		if(substring(plyermodel,strlen(plyermodel)-4,4) != ".psk")
 			return FallbackPlayerModel;
+		if(plyermodel != strtolower(plyermodel))
+			return FallbackPlayerModel;
 		if(!fexists(plyermodel))
 			return FallbackPlayerModel;
 	}
