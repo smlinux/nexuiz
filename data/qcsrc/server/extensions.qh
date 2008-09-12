@@ -908,6 +908,18 @@ string(string filename) whichpack = #503;
 string(string in) uri_escape = #510;
 string(string in) uri_unescape = #511;
 
+//DP_QC_URI_GET
+//idea: div0
+//darkplaces implementation: div0
+//loads text from an URL into a string
+//the following callback will receive the data and MUST exist!
+//  void(float id, float status, string data) URI_Get_Callback;
+//status is either
+//  negative for an internal error,
+//  0 for success, or
+//  the HTTP response code on server error (e.g. 404)
+float(string url, float id) uri_get = #513;
+
 //DP_SV_SPAWNFUNC_PREFIX
 //idea: div0
 //darkplaces implementation: div0
