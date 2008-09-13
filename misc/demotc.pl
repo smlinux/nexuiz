@@ -4,11 +4,6 @@
 # works by looking for time codes in the demo
 # and injecting playback speed commands
 
-# usage:
-#   ./demotc.pl infile outfile tc0 tc1 - cuts the demo file for playback
-#   ./demotc.pl infile outfile tc0 tc1 --capture - cuts the demo file for video capture (it will automatically write a dpvideo001.avi file of the selected time range when playing)
-#   ./demotc.pl infile pattern - looks for a pattern, prints parentheses matches
-
 use strict;
 use warnings;
 
@@ -21,19 +16,46 @@ sub sanitize($)
 
 # opening the files
 
-die "Usage: $0 infile outfile tc_start tc_end [--capture], or $0 infile pattern"
-	if @ARGV != 2 && @ARGV != 4 && @ARGV != 5;
-my ($in, $out, $tc0, $tc1, $capture) = (@ARGV, undef, undef, undef);
+my ($in, $out, $tc0, $tc1, $pattern, $capture);
 
-$in ne $out
-	or die "Input and output file may not be the same!";
+my $mode = shift @ARGV;
+$mode = 'help' if not defined $mode;
+
+if($mode eq 'grep' && @ARGV == 2)
+{
+	$in = $ARGV[0];
+	$pattern = $ARGV[1];
+}
+elsif($mode eq 'uncut' && @ARGV == 2)
+{
+	$in = $ARGV[0];
+	$out = $ARGV[1];
+}
+elsif($mode eq 'cut' && (@ARGV == 4 || @ARGV == 5))
+{
+	$in = $ARGV[0];
+	$out = $ARGV[1];
+	$tc0 = $ARGV[2];
+	$tc1 = $ARGV[3];
+	$capture = (@ARGV == 5);
+}
+else
+{
+	die "Usage: $0 cut infile outfile tc_start tc_end [--capture], or $0 uncut infile outfile, or $0 grep infile pattern\n"
+}
+
+if($mode ne 'grep')
+{
+	$in ne $out
+		or die "Input and output file may not be the same!";
+}
 
 open my $infh, "<", $in
 	or die "open $in: $!";
 binmode $infh;
 
 my $outfh;
-if(defined $tc0) # cutting
+if($mode ne 'grep') # cutting
 {
 	open $outfh, ">", $out
 		or die "open $out: $!";
@@ -44,11 +66,11 @@ if(defined $tc0) # cutting
 
 $/ = "\012";
 my $cdtrack = <$infh>;
-print $outfh $cdtrack if $outfh;
+print $outfh $cdtrack if $mode ne 'grep';
 
 # 2. packets
 
-my $tc = 0;
+my $tc = undef;
 
 my $first = 1;
 my $demo_started = 0;
@@ -65,37 +87,40 @@ for(;;)
 	die "Invalid demo packet"
 		unless $length == read $infh, my($data), $length;
 	
+	# remove existing cut marks
+	$data =~ s{^\011\n//CUTMARK\n[^\0]*\0}{};
+	
 	if(substr($data, 0, 1) eq "\007") # svc_time
 	{
 		$tc = unpack "f", substr $data, 1, 4;
 	}
 
-	if(defined $tc0)
+	if($mode eq 'cut' && defined $tc)
 	{
 		if($first)
 		{
-			$inject_buffer = "\011\nslowmo 100\n\000";
+			$inject_buffer = "\011\n//CUTMARK\nslowmo 100\n\000";
 			$first = 0;
 		}
 		if($demo_started < 1 && $tc > $tc0 - 50)
 		{
-			$inject_buffer = "\011\nslowmo 10\n\000";
+			$inject_buffer = "\011\n//CUTMARK\nslowmo 10\n\000";
 			$demo_started = 1;
 		}
 		if($demo_started < 2 && $tc > $tc0 - 5)
 		{
-			$inject_buffer = "\011\nslowmo 1\n\000";
+			$inject_buffer = "\011\n//CUTMARK\nslowmo 1\n\000";
 			$demo_started = 2;
 		}
 		if($demo_started < 3 && $tc > $tc0)
 		{
 			if($capture)
 			{
-				$inject_buffer = "\011\ncl_capturevideo 1\n\000";
+				$inject_buffer = "\011\n//CUTMARK\ncl_capturevideo 1\n\000";
 			}
 			else
 			{
-				$inject_buffer = "\011\nslowmo 0; defer 1 \"slowmo 1\"\n\000";
+				$inject_buffer = "\011\n//CUTMARK\nslowmo 0; defer 1 \"slowmo 1\"\n\000";
 			}
 			$demo_started = 3;
 		}
@@ -103,18 +128,18 @@ for(;;)
 		{
 			if($capture)
 			{
-				$inject_buffer = "\011\ncl_capturevideo 0; defer 0.5 \"disconnect\"\n\000";
+				$inject_buffer = "\011\n//CUTMARK\ncl_capturevideo 0; defer 0.5 \"disconnect\"\n\000";
 			}
 			else
 			{
-				$inject_buffer = "\011\ndefer 0.5 \"disconnect\"\n\000";
+				$inject_buffer = "\011\n//CUTMARK\ndefer 0.5 \"disconnect\"\n\000";
 			}
 			$demo_stopped = 1;
 		}
 	}
-	else
+	elsif($mode eq 'grep')
 	{
-		if(my @l = ($data =~ /$out/))
+		if(my @l = ($data =~ /$pattern/))
 		{
 			print "$tc:";
 			for(@l)
@@ -125,10 +150,10 @@ for(;;)
 		}
 	}
 	
-	next unless $outfh;
-	if(length($data . $inject_buffer) < 65536)
+	next if $mode eq 'grep';
+	if(length($inject_buffer . $data) < 65536)
 	{
-		$data .= $inject_buffer;
+		$data = $inject_buffer . $data;
 		$inject_buffer = "";
 	}
 	print $outfh pack("V", length $data);
@@ -136,5 +161,5 @@ for(;;)
 	print $outfh $data;
 }
 
-close $outfh if $outfh;
+close $outfh if $mode ne 'grep';
 close $infh;
