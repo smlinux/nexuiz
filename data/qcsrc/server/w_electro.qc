@@ -156,7 +156,7 @@ void W_Electro_Attack2()
 	setsize(proj, '0 0 -3', '0 0 -3');
 	proj.takedamage = DAMAGE_YES;
 	proj.damageforcescale = 4;
-	proj.health = 5;
+	proj.health = cvar("g_balance_electro_secondary_health");
 	proj.event_damage = W_Plasma_Damage;
 	proj.flags = FL_PROJECTILE;
 
