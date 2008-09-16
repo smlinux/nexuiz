@@ -322,7 +322,7 @@ float db_load(string pFilename)
 		{
 			n = tokenizebyseparator(l, "\\");
 			for(j = 2; j < n; j += 2)
-				db_put(db, uri_unescape(argv(j-1)), uri_unescape(argv(j)));
+				db_put(db, argv(j-1), uri_unescape(argv(j)));
 		}
 	}
 	fclose(fh);
