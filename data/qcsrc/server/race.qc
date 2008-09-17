@@ -12,7 +12,6 @@ float race_checkpoint_lastlaps[MAX_CHECKPOINTS];
 entity race_checkpoint_lastplayers[MAX_CHECKPOINTS];
 
 float race_highest_checkpoint;
-float race_highest_place_spawn;
 
 float race_NextCheckpoint(float f)
 {
@@ -301,12 +300,10 @@ void dumpsurface(entity e)
 	}
 }
 
-void checkpoint_touch()
+void checkpoint_passed()
 {
 	string oldmsg;
 	entity oldself;
-
-	EXACTTRIGGER_TOUCH;
 
 	if(other.classname == "porto")
 	{
@@ -381,10 +378,16 @@ void checkpoint_touch()
 	}
 }
 
+void checkpoint_touch()
+{
+	EXACTTRIGGER_TOUCH;
+	checkpoint_passed();
+}
+
 void checkpoint_use()
 {
 	other = activator;
-	checkpoint_touch();
+	checkpoint_passed();
 }
 
 float race_waypointsprite_for_player(entity e)
@@ -518,6 +521,8 @@ void spawnfunc_info_player_race (void)
 
 	if(self.race_place > race_highest_place_spawn)
 		race_highest_place_spawn = self.race_place;
+	if(self.race_place < race_lowest_place_spawn)
+		race_lowest_place_spawn = self.race_place;
 }
 
 void race_ClearRecords()

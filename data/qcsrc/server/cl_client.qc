@@ -63,14 +63,25 @@ float Spawn_Score(entity spot, entity playerlist, float teamcheck)
 			{
 				if(self.classname == "player") // spectators may spawn everywhere
 				{
-					if(ent.race_checkpoint != race_PreviousCheckpoint(self.race_checkpoint))
-						return -1;
-					float pl;
-					pl = self.race_place;
-					if(pl > race_highest_place_spawn)
-						pl = 0;
-					if(spot.race_place != pl)
-						return -1;
+					if(g_race_qualifying)
+					{
+						// spawn at first
+						if(ent.race_checkpoint != 0)
+							return -1;
+						if(ent.race_place != race_lowest_place_spawn)
+							return -1;
+					}
+					else
+					{
+						if(ent.race_checkpoint != race_PreviousCheckpoint(self.race_checkpoint))
+							return -1;
+						float pl;
+						pl = self.race_place;
+						if(pl > race_highest_place_spawn)
+							pl = 0;
+						if(spot.race_place != pl)
+							return -1;
+					}
 				}
 				good = 1;
 			}

@@ -938,7 +938,7 @@ NOTE for race_place: when the race starts after the qualifying, the player with 
 -------- KEYS --------
 target: this should point to a trigger_race_checkpoint to decide when this spawning point is active. The checkpoint has to be AFTER this spawn.
 cnt: weight of spawn point for random selection. Set to a lower value if you have many spawn points close together. Default value is 1.
-race_place: if target points to the trigger_race_checkpoint with cnt 0 (finish line), this sets which place the spawn corresponds to
+race_place: if target points to the trigger_race_checkpoint with cnt 0 (finish line), this sets which place the spawn corresponds to; the special value 0 stands for spawns for players who come in later (have to be behind the ones with race_place set to an actual place), and -1 marks the spawnpoint for qualifying mode only
 */
 
 /*QUAKED func_pointparticles (.5 .5 .5) ? START_ON

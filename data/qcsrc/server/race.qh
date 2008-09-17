@@ -7,7 +7,8 @@ float race_teams;
 float race_spawns;
 float race_PreviousCheckpoint(float f);
 float race_NextCheckpoint(float f);
-float race_highest_place_spawn;
+float race_highest_place_spawn; // number of places; a place higher gets spawned at 0
+float race_lowest_place_spawn; // where to spawn in qualifying
 float race_fraglimit;
 .float race_place;
 .float race_completed;
