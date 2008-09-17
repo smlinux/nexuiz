@@ -68,7 +68,7 @@ float Spawn_Score(entity spot, entity playerlist, float teamcheck)
 						// spawn at first
 						if(ent.race_checkpoint != 0)
 							return -1;
-						if(ent.race_place != race_lowest_place_spawn)
+						if(spot.race_place != race_lowest_place_spawn)
 							return -1;
 					}
 					else
