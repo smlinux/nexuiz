@@ -884,25 +884,28 @@ string getcommandkey(string text, string command)
 		return text;
 
 	keys = db_get(binddb, command);
-	if (!keys) 
+	if(csqc_flags & CSQC_FLAG_READPICTURE)
 	{
-		n = tokenize(findkeysforcommand(command));
-		for(j = 0; j < n; ++j)
+		if (!keys) 
 		{
-			k = stof(argv(j));
-			if(k != -1) 
+			n = tokenize(findkeysforcommand(command));
+			for(j = 0; j < n; ++j)
 			{
-				if ("" == keys)
-					keys = keynumtostring(k);
-				else
-					keys = strcat(keys, ", ", keynumtostring(k));
+				k = stof(argv(j));
+				if(k != -1) 
+				{
+					if ("" == keys)
+						keys = keynumtostring(k);
+					else
+						keys = strcat(keys, ", ", keynumtostring(k));
 
-				++l;
-				if (sbar_showbinds_limit > 0 && sbar_showbinds_limit >= l) break;
+					++l;
+					if (sbar_showbinds_limit > 0 && sbar_showbinds_limit >= l) break;
+				}
+			
 			}
-		
+			db_put(binddb, command, keys);
 		}
-		db_put(binddb, command, keys);
 	}
 	
 	if ("" == keys) {
