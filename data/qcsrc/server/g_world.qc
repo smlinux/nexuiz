@@ -1404,9 +1404,6 @@ float WinningCondition_Scores(float limit)
 	if(WinningConditionHelper_winnerteam >= 0)
 		SetWinners(team, WinningConditionHelper_winnerteam);
 
-	if(WinningConditionHelper_topscore == 0)
-		WinningConditionHelper_equality = 0;
-	
 	if(WinningConditionHelper_lowerisbetter)
 	{
 		WinningConditionHelper_topscore = -WinningConditionHelper_topscore;

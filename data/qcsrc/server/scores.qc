@@ -363,14 +363,30 @@ void WinningConditionHelper()
 		WinningConditionHelper_topscore = teamscorekeepers[WinningConditionHelper_winnerteam].teamscores_primary;
 		WinningConditionHelper_lowerisbetter = (teamscores_flags_primary & SFL_LOWER_IS_BETTER);
 		WinningConditionHelper_zeroisworst = (teamscores_flags_primary & SFL_ZERO_IS_WORST);
+
 		if(teamscores_flags_primary & SFL_TIME)
 			WinningConditionHelper_topscore /= 10;
+
+		if(WinningConditionHelper_equality)
+			WinningConditionHelper_winnerteam = -1;
 
 		WinningConditionHelper_winner = world;
 		if(WinningConditionHelper_equality)
 			WinningConditionHelper_winnerteam = -1;
 		else
 			++WinningConditionHelper_winnerteam; // map to Nexuiz team numbers (as opposed to colors)
+
+		if(WinningConditionHelper_topscore == 0)
+		{
+			if(scores_flags_primary & SFL_ZERO_IS_WORST)
+			{
+				if(WinningConditionHelper_lowerisbetter)
+					WinningConditionHelper_topscore = 999999999;
+				else
+					WinningConditionHelper_topscore = -999999999;
+			}
+			WinningConditionHelper_equality = 0;
+		}
 	}
 	else
 	{
@@ -390,20 +406,26 @@ void WinningConditionHelper()
 
 		WinningConditionHelper_topscore = WinningConditionHelper_winner.scorekeeper.scores_primary;
 		WinningConditionHelper_lowerisbetter = (scores_flags_primary & SFL_LOWER_IS_BETTER);
-		if(scores_flags_primary & SFL_ZERO_IS_WORST)
-			if(WinningConditionHelper_topscore == 0)
+		WinningConditionHelper_zeroisworst = (teamscores_flags_primary & SFL_ZERO_IS_WORST);
+
+		if(teamscores_flags_primary & SFL_TIME)
+			WinningConditionHelper_topscore /= 10;
+
+		WinningConditionHelper_winnerteam = -1;
+		if(WinningConditionHelper_equality)
+			WinningConditionHelper_winner = world;
+
+		if(WinningConditionHelper_topscore == 0)
+		{
+			if(scores_flags_primary & SFL_ZERO_IS_WORST)
 			{
 				if(WinningConditionHelper_lowerisbetter)
 					WinningConditionHelper_topscore = 999999999;
 				else
 					WinningConditionHelper_topscore = -999999999;
 			}
-		if(teamscores_flags_primary & SFL_TIME)
-			WinningConditionHelper_topscore /= 10;
-
-		if(WinningConditionHelper_equality)
-			WinningConditionHelper_winner = world;
-		WinningConditionHelper_winnerteam = -1;
+			WinningConditionHelper_equality = 0;
+		}
 	}
 
 	if(worldstatus)
