@@ -1068,13 +1068,8 @@ void ClientConnect (void)
 		return;
 	}
 
-	if(Ban_IsClientBanned(self))
-	{
-		s = strcat("^1NOTE:^7 banned client ", self.netaddress, " just tried to enter\n");
-		dropclient(self);
-		bprint(s);
+	if(Ban_MaybeEnforceBan(self))
 		return;
-	}
 
 	DecodeLevelParms();
 

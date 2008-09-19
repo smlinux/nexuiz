@@ -116,6 +116,19 @@ float Ban_IsClientBanned(entity client)
 	return FALSE;
 }
 
+float Ban_MaybeEnforceBan(entity client)
+{
+	if(Ban_IsClientBanned(client))
+	{
+		string s;
+		s = strcat("^1NOTE:^7 banned client ", client.netaddress, " just tried to enter\n");
+		dropclient(client);
+		bprint(s);
+		return TRUE;
+	}
+	return FALSE;
+}
+
 float Ban_Insert(string ip, float bantime)
 {
 	float i;
