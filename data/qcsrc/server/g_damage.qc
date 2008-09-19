@@ -605,13 +605,33 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 		// apply strength multiplier
 		if (attacker.items & IT_STRENGTH && !g_minstagib)
 		{
-			damage = damage * cvar("g_balance_powerup_strength_damage");
-			force = force * cvar("g_balance_powerup_strength_force");
+			if(targ == attacker)
+			{
+				damage = damage * cvar("g_balance_powerup_strength_selfdamage");
+				force = force * cvar("g_balance_powerup_strength_selfforce");
+			}
+			else
+			{
+				damage = damage * cvar("g_balance_powerup_strength_damage");
+				force = force * cvar("g_balance_powerup_strength_force");
+			}
 		}
+
 		// apply invincibility multiplier
 		if (targ.items & IT_INVINCIBLE && !g_minstagib)
 			damage = damage * cvar("g_balance_powerup_invincible_takedamage");
 
+		if (targ == attacker)
+			damage = damage * cvar("g_balance_selfdamagepercent");	// Partial damage if the attacker hits himself
+
+		// CTF: reduce damage/force
+		if(g_ctf)
+		if(targ == attacker)
+		if(targ.flagcarried)
+		{
+			damage = damage * cvar("g_ctf_flagcarrier_selfdamage");
+			force = force * cvar("g_ctf_flagcarrier_selfforce");
+		}
 
 		if(g_runematch)
 		{
@@ -782,8 +802,6 @@ float RadiusDamage (entity inflictor, entity attacker, float coredamage, float e
 						if (targ.classname == "player")
 							center = targ.origin + targ.view_ofs;
 						force = normalize(center - blastorigin) * (finaldmg / coredamage) * forceintensity;
-						if (targ == attacker)
-							finaldmg = finaldmg * cvar("g_balance_selfdamagepercent");	// Partial damage if the attacker hits himself
 						// test line of sight to multiple positions on box,
 						// and do damage if any of them hit
 						local float c;
