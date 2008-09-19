@@ -246,6 +246,10 @@ void CSQC_UpdateView(void)
 	vid_conwidth = cvar("vid_conwidth");
 	vid_conheight = cvar("vid_conheight");
 
+	// fetch this one only once per frame
+	sbar_showbinds = cvar("sbar_showbinds");
+	sbar_showbinds_limit = cvar("sbar_showbinds_limit");
+
 	// Update the mouse position
 	/*
 	mousepos_x = vid_conwidth;

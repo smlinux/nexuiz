@@ -268,3 +268,6 @@ float(float caseinsensitive, string s, ...) crc16 = #494;
 string(string info, string key) infoget = #227;
 string(string info, string key, string value, ...) infoadd = #226;
 string(string in) uri_escape = #510;
+
+string	keynumtostring(float keynum) = #520;
+string	findkeysforcommand(string command) = #521;

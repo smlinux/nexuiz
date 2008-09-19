@@ -72,6 +72,7 @@ void CSQC_Init(void)
 	CSQC_CheckEngine();
 
 	configdb = db_create();
+	binddb = db_create();
 	compressShortVector_init();
 
 	drawfont = 0;
@@ -127,6 +128,7 @@ void CSQC_Shutdown(void)
 	remove(teams);
 	remove(players);
 	db_close(configdb);
+	db_close(binddb);
 
 	cvar_settemp_restore();
 }
@@ -871,4 +873,46 @@ void CSQC_CheckRevision()
 		print("^1Your csprogs.dat (CSQC) is too old for this server.\n");
 		print("^1Please update to a newer version.\n");
 	}
+}
+
+string getcommandkey(string text, string command)
+{
+	string keys;
+	float n, j, k, l;
+
+	if (!sbar_showbinds)
+		return text;
+
+	keys = db_get(binddb, command);
+	if (!keys) 
+	{
+		n = tokenize(findkeysforcommand(command));
+		for(j = 0; j < n; ++j)
+		{
+			k = stof(argv(j));
+			if(k != -1) 
+			{
+				if ("" == keys)
+					keys = keynumtostring(k);
+				else
+					keys = strcat(keys, ", ", keynumtostring(k));
+
+				++l;
+				if (sbar_showbinds_limit > 0 && sbar_showbinds_limit >= l) break;
+			}
+		
+		}
+		db_put(binddb, command, keys);
+	}
+	
+	if ("" == keys) {
+		if (sbar_showbinds > 1)
+			return strcat(text, " (not bound)");
+		else
+			return text;
+	}
+	else if (sbar_showbinds > 1)
+		return strcat(text, " (", keys, ")");
+	else
+		return keys;
 }

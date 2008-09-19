@@ -118,6 +118,12 @@ void fillNexuizPlayerSettingsTab(entity me)
 		me.TD(me, 1, 2.8, e = makeNexuizCheckBox(0, "sbar_hudselector", "Use alternate HUD layout"));
 			setDependent(e, "viewsize", 0, 110);
 	me.TR(me);
+		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Show Binds:"));
+		me.TD(me, 1, 2, e = makeNexuizTextSlider("sbar_showbinds"));
+			e.addValue(e, "None", "0");
+			e.addValue(e, "Short", "1");
+			e.addValue(e, "Long", "2");
+			e.configureNexuizTextSliderValues(e);
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Show names:"));
 		me.TD(me, 1, 2, e = makeNexuizTextSlider("cl_shownames"));

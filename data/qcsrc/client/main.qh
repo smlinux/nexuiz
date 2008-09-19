@@ -126,3 +126,6 @@ float warmup_stage;
 
 float weaponimpulse[24];
 float angles_held_status[24];
+string getcommandkey(string text, string command);
+float sbar_showbinds;
+float sbar_showbinds_limit;

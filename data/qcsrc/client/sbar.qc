@@ -1335,7 +1335,7 @@ void Sbar_Draw (void)
 	
 	if(warmup_stage) 
 	{
-		s = "^1Press ^3ready^1 to end warmup";
+		s = strcat("^1Press ^3", getcommandkey("ready", "ready"), "^1 to end warmup");
 		dummyfunction(0, 0, 0, 0, 0, 0, 0, 0); // work around DP bug (set OFS_PARAM5 to 0)
 		drawcolorcodedstring(
 			o - sbar_fontsize_x * '2 0 0' * stringwidth(s, TRUE),
@@ -1364,9 +1364,9 @@ void Sbar_Draw (void)
 		o += sbar_fontsize_y * '0 1 0';
 
 		if(spectatee_status == -1)
-			s = "^1Press ^3primary fire^1 to spectate";
+			s = strcat("^1Press ^3", getcommandkey("primary fire", "+attack"), "^1 to spectate");
 		else
-			s = "^1Press ^3primary fire^1 for another player";
+			s = strcat("^1Press ^3", getcommandkey("primary fire", "+attack"), "^1 for another player");
 		dummyfunction(0, 0, 0, 0, 0, 0, 0, 0); // work around DP bug (set OFS_PARAM5 to 0)
 		drawcolorcodedstring(
 			o - sbar_fontsize_x * '1 0 0' * stringwidth(s, TRUE),
@@ -1378,9 +1378,9 @@ void Sbar_Draw (void)
 		o += sbar_fontsize_y * '0 1 0';
 
 		if(spectatee_status == -1)
-			s = "^1Use ^3weapon switching^1 to change the speed";
+			s = strcat("^1Use ^3", getcommandkey("next-weapon", "weapnext"), "^1 or ^3", getcommandkey("previous-weapon", "weapprev"), "^1 to change the speed");
 		else
-			s = "^1Press ^3secondary fire^1 to observe";
+			s = strcat("^1Press ^3", getcommandkey("secondary fire", "+altattack"), getcommandkey("", "weapprev"), "^1 to observe");
 		dummyfunction(0, 0, 0, 0, 0, 0, 0, 0); // work around DP bug (set OFS_PARAM5 to 0)
 		drawcolorcodedstring(
 			o - sbar_fontsize_x * '1 0 0' * stringwidth(s, TRUE),
@@ -1402,10 +1402,10 @@ void Sbar_Draw (void)
 			else if(sk.(scores[ps_primary]) > 0)
 				s = "^1You have no more lives left";
 			else
-				s = "^1Press ^7jump^1 to join";
+				s = strcat("^1Press ^7", getcommandkey("jump", "+jump"), "^1 to join");
 		}
 		else
-			s = "^1Press ^7jump^1 to join";
+			s = strcat("^1Press ^7", getcommandkey("jump", "+jump"), "^1 to join");
 		dummyfunction(0, 0, 0, 0, 0, 0, 0, 0); // work around DP bug (set OFS_PARAM5 to 0)
 		drawcolorcodedstring(
 			o - sbar_fontsize_x * '1 0 0' * stringwidth(s, TRUE),

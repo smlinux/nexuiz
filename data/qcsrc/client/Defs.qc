@@ -174,6 +174,7 @@ float		sb_showscores;
 
 float vid_conwidth, vid_conheight;
 float configdb;
+float binddb;
 string shortmapname;
 
 // QUALIFYING
