@@ -497,6 +497,7 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 		SpawnThrownWeapon (self.origin + (self.mins + self.maxs) * 0.5, self.switchweapon);
 		// print an obituary message
 		Obituary (attacker, self, deathtype);
+		race_PreDie();
 		DropAllRunes(self);
 		if(self == attacker)
 			kh_Key_DropAll(self, TRUE);

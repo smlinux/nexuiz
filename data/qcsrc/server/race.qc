@@ -78,6 +78,8 @@ void race_InitSpectator()
 void race_SendTime(entity e, float cp, float t, float tvalid)
 {
 	float snew, l;
+	entity p;
+
 	t = floor(0.5 + 10 * t); // make integer
 
 	if(tvalid)
@@ -100,7 +102,12 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 
 			if(cvar("fraglimit"))
 				if(l >= cvar("fraglimit"))
+				{
 					race_completing = 1;
+					FOR_EACH_PLAYER(p)
+						if(p.deadflag != DEAD_NO)
+							race_AbandonRaceCheck(p);
+				}
 
 			if(race_completing)
 			{
@@ -174,7 +181,6 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 
 				if(g_race_qualifying)
 				{
-					entity p;
 					FOR_EACH_REALPLAYER(p)
 						if(p.race_checkpoint == cp)
 							race_SendNextCheckpoint(p, 0);
@@ -441,6 +447,25 @@ void spawnfunc_trigger_race_checkpoint()
 	self.sprite.waypointsprite_for_player = race_waypointsprite_for_player;
 }
 
+void race_AbandonRaceCheck(entity p)
+{
+	if(race_completing && !p.race_completed)
+	{
+		p.race_completed = 1;
+		MAKE_INDEPENDENT_PLAYER(p);
+		bprint(p.netname, "^7 has abandoned the race.\n");
+		// TODO support spectators with this (e.g. set a flag for forced sbar)
+		if(clienttype(p) == CLIENTTYPE_REAL)
+		{
+			msg_entity = p;
+			WriteByte(MSG_ONE, SVC_TEMPENTITY);
+			WriteByte(MSG_ONE, TE_CSQC_FORCESCOREBOARD);
+			WriteByte(MSG_ONE, 1);
+			// he can still move, but will see the scoreboard now
+		}
+	}
+}
+
 void race_PreparePlayer()
 {
 	race_ClearTime(self);
@@ -459,6 +484,11 @@ void race_RetractPlayer()
 	}
 }
 
+void race_PreDie()
+{
+	race_AbandonRaceCheck(self);
+}
+
 void race_PreSpawn()
 {
 	if(!g_race)
@@ -466,21 +496,7 @@ void race_PreSpawn()
 	if(self.killcount == -666 || g_race_qualifying)
 		race_PreparePlayer();
 
-	if(race_completing)
-	{
-		self.race_completed = 1;
-		MAKE_INDEPENDENT_PLAYER(self);
-		bprint(self.netname, "^7 has abandoned the race.\n");
-		// TODO support spectators with this (e.g. set a flag for forced sbar)
-		if(clienttype(self) == CLIENTTYPE_REAL)
-		{
-			msg_entity = self;
-			WriteByte(MSG_ONE, SVC_TEMPENTITY);
-			WriteByte(MSG_ONE, TE_CSQC_FORCESCOREBOARD);
-			WriteByte(MSG_ONE, 1);
-			// he can still move, but will see the scoreboard now
-		}
-	}
+	race_AbandonRaceCheck(self);
 }
 
 void race_PostSpawn(entity spot)

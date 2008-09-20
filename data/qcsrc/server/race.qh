@@ -2,11 +2,13 @@ void race_InitSpectator();
 void race_PreSpawnObserver();
 void race_PreSpawn();
 void race_PostSpawn(entity spot);
+void race_PreDie();
 void race_ReadyRestart();
 float race_teams;
 float race_spawns;
 float race_PreviousCheckpoint(float f);
 float race_NextCheckpoint(float f);
+void race_AbandonRaceCheck(entity p);
 float race_highest_place_spawn; // number of places; a place higher gets spawned at 0
 float race_lowest_place_spawn; // where to spawn in qualifying
 float race_fraglimit;

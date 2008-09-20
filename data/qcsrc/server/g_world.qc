@@ -1443,19 +1443,21 @@ float WinningCondition_QualifyingThenRace(float limit)
 	{
 		float totalplayers;
 		float playerswithlaps;
+		float readyplayers;
 		entity head;
-		totalplayers = playerswithlaps = 0;
+		totalplayers = playerswithlaps = readyplayers = 0;
 		FOR_EACH_PLAYER(head)
 		{
 			++totalplayers;
 			if(PlayerScore_Add(head, SP_RACE_FASTEST, 0))
 				++playerswithlaps;
+			if(head.ready)
+				++readyplayers;
 		}
 
 		// at least 2/3 of the players have completed a lap: start the RACE
 		// otherwise, the players should end the qualifying on their own
-		if(totalplayers >= 3)
-		if(playerswithlaps >= totalplayers * 2 / 3)
+		if(readyplayers || ((totalplayers >= 3) && (playerswithlaps * 3 >= totalplayers * 2)))
 		{
 			checkrules_overtimeend = 0;
 			ReadyRestart();
