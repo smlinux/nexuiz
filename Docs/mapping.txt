@@ -385,6 +385,12 @@ Similar settings are also possible for the client:
 
     clientsettemp_for_type all r_shadow_glossexponent 96
 
+Another possibility is to specify fog settings in the mapinfo, for convenience
+in case you set sv_foginterval by it too (to force the fog on the clients):
+
+    fog 0.2 0.25 0.3 0.3 1 1500
+    settemp_for_type all sv_foginterval 5
+
 
 =============================
 =Appendix B - Helpful Extras=
