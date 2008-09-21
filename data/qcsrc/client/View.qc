@@ -187,6 +187,8 @@ void CSQC_UpdateView(void)
 	entity e;
 	float fov;
 
+	Fog_Force();
+
 	drawframetime = max(0.000001, time - drawtime);
 	drawtime = time;
 

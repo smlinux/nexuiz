@@ -1047,14 +1047,25 @@ void FixClientCvars(entity e)
 	 */
 }
 
-.float fogtime;
+.float fog_set;
 void SendFog()
 {
 	if(world.fog) // NOT string_null!
-	if(!self.fogtime || (sv_foginterval && time > self.fogtime))
 	{
-		stuffcmd(self, strcat("\nfog ", world.fog, "\nr_fog_exp2 0\nr_drawfog 1\n"));
-		self.fogtime = time + sv_foginterval;
+		if(!self.fog_set)
+		{
+			if(sv_foginterval)
+			{
+				msg_entity = self;
+				WriteByte(MSG_ONE, SVC_TEMPENTITY);
+				WriteByte(MSG_ONE, TE_CSQC_FOG);
+				WriteString(MSG_ONE, world.fog);
+			}
+			else
+				// set it once
+				stuffcmd(self, strcat("\nfog ", world.fog, "\nr_fog_exp2 0\nr_drawfog 1\n"));
+		}
+		self.fog_set = 1;
 	}
 }
 

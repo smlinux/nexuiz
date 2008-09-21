@@ -54,6 +54,7 @@ string config_get(string key, string defaultvalue)
 		return db_get(configdb, strcat("/v/", key));
 }
 
+string forcefog;
 void CSQC_Init(void)
 {
 #ifdef USE_FTE
@@ -619,6 +620,23 @@ void CSQC_Parse_CenterPrint(string strMessage)
 
 void CSQC_CheckRevision();
 
+void Fog_Force()
+{
+	string s;
+
+	// TODO somehow thwart prvm_globalset client ...
+
+	if(forcefog != "")
+		localcmd(strcat("\nfog ", forcefog, "\nr_fog_exp2 0\nr_drawfog 1\n"));
+}
+
+void Net_ReadFog()
+{
+	if(forcefog)
+		strunzone(forcefog);
+	forcefog = strzone(ReadString());
+}
+
 void Gamemode_Init();
 void Net_ReadScoresInfo()
 {
@@ -847,6 +865,10 @@ float CSQC_Parse_TempEntity()
 			break;
 		case TE_CSQC_WARMUP:
 			Net_ReadWarmupStage();
+			bHandled = true;
+			break;
+		case TE_CSQC_FOG:
+			Net_ReadFog();
 			bHandled = true;
 			break;
 		default:
