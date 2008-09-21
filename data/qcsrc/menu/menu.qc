@@ -150,13 +150,13 @@ void(float key, float ascii) m_keydown =
 	else
 	{
 		draw_reset();
+		if(key >= K_MOUSE1 && key <= K_MOUSE3)
+			if(!mouseButtonsPressed)
+				main.mousePress(main, menuMousePos);
 		if(!main.keyDown(main, key, ascii, menuShiftState))
 			if(key == K_ESCAPE)
 				if(gamestatus & (GAME_ISSERVER | GAME_CONNECTED)) // don't back out to console only
 					m_hide(); // disable menu on unhandled ESC
-		if(key >= K_MOUSE1 && key <= K_MOUSE3)
-			if(!mouseButtonsPressed)
-				main.mousePress(main, menuMousePos);
 	}
 	if(key >= K_MOUSE1 && key <= K_MOUSE3)
 	{

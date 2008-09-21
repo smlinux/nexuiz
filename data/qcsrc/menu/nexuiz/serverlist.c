@@ -66,6 +66,7 @@ float SLIST_FIELD_PROTOCOL;
 float SLIST_FIELD_FREESLOTS;
 float SLIST_FIELD_PLAYERS;
 float SLIST_FIELD_QCSTATUS;
+float SLIST_FIELD_ISFAVORITE;
 void ServerList_UpdateFieldIDs()
 {
 	SLIST_FIELD_CNAME = gethostcacheindexforkey( "cname" );
@@ -82,6 +83,7 @@ void ServerList_UpdateFieldIDs()
 	SLIST_FIELD_FREESLOTS = gethostcacheindexforkey( "freeslots" );
 	SLIST_FIELD_PLAYERS = gethostcacheindexforkey( "players" );
 	SLIST_FIELD_QCSTATUS = gethostcacheindexforkey( "qcstatus" );
+	SLIST_FIELD_ISFAVORITE = gethostcacheindexforkey( "isfavorite" );
 }
 
 entity makeNexuizServerList()
@@ -130,7 +132,7 @@ void refreshServerListNexuizServerList(entity me, float mode)
 	}
 	else */
 	{
-		float m;
+		float m, o;
 		string s, typestr;
 		s = me.filterString;
 
@@ -161,7 +163,10 @@ void refreshServerListNexuizServerList(entity me, float mode)
 			sethostcachemaskstring(++m, SLIST_FIELD_PLAYERS, s, SLIST_TEST_CONTAINS);
 			sethostcachemaskstring(++m, SLIST_FIELD_QCSTATUS, strcat(s, ":"), SLIST_TEST_STARTSWITH);
 		}
-		sethostcachesort(me.currentSortField, me.currentSortOrder < 0);
+		o = 2; // favorites first
+		if(me.currentSortOrder < 0)
+			o |= 1; // descending
+		sethostcachesort(me.currentSortField, o);
 		resorthostcache();
 		if(mode >= 1)
 			refreshhostcache();
@@ -428,6 +433,12 @@ void drawListBoxItemNexuizServerList(entity me, float i, vector absSize, float i
 		theAlpha *= SKINALPHA_SERVERLIST_HIGHPING;
 	}
 
+	if(gethostcachenumber(SLIST_FIELD_ISFAVORITE, i))
+	{
+		theColor = theColor * (1 - SKINALPHA_SERVERLIST_FAVORITE) + SKINCOLOR_SERVERLIST_FAVORITE * SKINALPHA_SERVERLIST_FAVORITE;
+		theAlpha = theAlpha * (1 - SKINALPHA_SERVERLIST_FAVORITE) + SKINALPHA_SERVERLIST_FAVORITE;
+	}
+
 	s = ftos(p);
 	draw_Text(me.realUpperMargin * eY + (me.columnPingSize - draw_TextWidth(s, 0) * me.realFontSize_x) * eX, s, me.realFontSize, theColor, theAlpha, 0);
 	s = draw_TextShortenToWidth(gethostcachestring(SLIST_FIELD_NAME, i), me.columnNameSize / me.realFontSize_x, 0);
@@ -448,10 +459,36 @@ void drawListBoxItemNexuizServerList(entity me, float i, vector absSize, float i
 
 float keyDownNexuizServerList(entity me, float scan, float ascii, float shift)
 {
+	float i, o;
+	string s;
+
 	if(scan == K_ENTER)
 	{
 		ServerList_Connect_Click(NULL, me);
 		return 1;
+	}
+	else if(scan == K_INS || scan == K_MOUSE2 || scan == K_MOUSE3)
+	{
+		i = me.selectedItem;
+		if(i < me.nItems)
+		{
+			s = cvar_string("net_slist_favorites");
+			o = strstrofs(strcat(" ", s, " "), strcat(" ", me.selectedServer, " "), 0);
+			if(o == -1)
+			{
+				cvar_set("net_slist_favorites", strcat(s, " ", me.selectedServer));
+			}
+			else
+			{
+				cvar_set("net_slist_favorites", strcat(
+					substring(s, 0, o - 1), substring(s, o + strlen(me.selectedServer), strlen(s) - o - strlen(me.selectedServer))
+				));
+			}
+			resorthostcache();
+		}
+		me.lastClickedServer = -1; // inhibit double clicks using these buttons
+		if(scan != K_INS)
+			me.setSelected(me, me.selectedItem);
 	}
 	else if(keyDownListBox(me, scan, ascii, shift))
 		return 1;
