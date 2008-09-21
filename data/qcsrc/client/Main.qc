@@ -634,6 +634,7 @@ void Net_ReadFog()
 {
 	if(forcefog)
 		strunzone(forcefog);
+	ReadCoord(); // ignore fog interval
 	forcefog = strzone(ReadString());
 }
 

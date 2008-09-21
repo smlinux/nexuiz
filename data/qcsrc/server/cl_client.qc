@@ -1059,6 +1059,7 @@ void SendFog()
 				msg_entity = self;
 				WriteByte(MSG_ONE, SVC_TEMPENTITY);
 				WriteByte(MSG_ONE, TE_CSQC_FOG);
+				WriteCoord(MSG_ONE, sv_foginterval);
 				WriteString(MSG_ONE, world.fog);
 			}
 			else
