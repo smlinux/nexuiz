@@ -486,6 +486,9 @@ void race_RetractPlayer()
 
 void race_PreDie()
 {
+	if(!g_race)
+		return;
+
 	race_AbandonRaceCheck(self);
 }
 

@@ -1065,8 +1065,9 @@ void SendFog()
 			else
 				// set it once
 				stuffcmd(self, strcat("\nfog ", world.fog, "\nr_fog_exp2 0\nr_drawfog 1\n"));
+
+			self.fog_set = 1;
 		}
-		self.fog_set = 1;
 	}
 }
 
