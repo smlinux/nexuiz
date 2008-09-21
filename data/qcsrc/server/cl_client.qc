@@ -1050,6 +1050,7 @@ void FixClientCvars(entity e)
 .float fog_set;
 void SendFog()
 {
+	if(clienttype(self) == CLIENTTYPE_REAL)
 	if(world.fog) // NOT string_null!
 	{
 		if(!self.fog_set)
