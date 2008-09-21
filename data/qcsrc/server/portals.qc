@@ -422,6 +422,9 @@ void Portal_Think()
 	o = self.owner;
 	self.solid = SOLID_BBOX;
 	self.owner = world;
+
+	fixedmakevectors(self.angles);
+
 	FOR_EACH_PLAYER(e)
 	{
 		if(time < self.portal_activatetime)
@@ -430,6 +433,9 @@ void Portal_Think()
 		if(e != o)
 			if(IS_INDEPENDENT_PLAYER(e) || IS_INDEPENDENT_PLAYER(o))
 				continue; // cannot go through someone else's portal
+		if((e.origin - self.origin) * v_forward < 0) // wrong side of the plane? no teleport
+			continue;
+
 		// if e would hit the portal in a frame...
 		// already teleport him
 		tracebox(e.origin, e.mins, e.maxs, e.origin + e.velocity * 2 * frametime, MOVE_NORMAL, e);
