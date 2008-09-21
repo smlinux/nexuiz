@@ -76,3 +76,5 @@ void fixedmakevectors(vector a);
 
 string fixPriorityList(string pl, float from, float to, float complete);
 string swapInPriorityList(string order, float i, float j);
+
+float cvar_value_issafe(string s);

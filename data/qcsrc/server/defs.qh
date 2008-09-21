@@ -491,3 +491,5 @@ string clientstuff;
 .float weapons;
 
 .float porto_forbidden;
+
+.string fog;

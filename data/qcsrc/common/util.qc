@@ -694,3 +694,20 @@ string swapInPriorityList(string order, float i, float j)
 	
 	return order;
 }
+
+float cvar_value_issafe(string s)
+{
+	if(strstrofs(s, "\"", 0) >= 0)
+		return 0;
+	if(strstrofs(s, "\\", 0) >= 0)
+		return 0;
+	if(strstrofs(s, ";", 0) >= 0)
+		return 0;
+	if(strstrofs(s, "$", 0) >= 0)
+		return 0;
+	if(strstrofs(s, "\r", 0) >= 0)
+		return 0;
+	if(strstrofs(s, "\n", 0) >= 0)
+		return 0;
+	return 1;
+}

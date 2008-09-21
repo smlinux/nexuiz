@@ -475,6 +475,7 @@ void _MapInfo_Map_Reset()
 	MapInfo_Map_supportedGametypes = 0;
 	MapInfo_Map_supportedFeatures = 0;
 	MapInfo_Map_clientstuff = "";
+	MapInfo_Map_fog = "";
 }
 
 void _MapInfo_Map_ApplyGametype(string s, float pWantedType, float pThisType)
@@ -536,23 +537,6 @@ float MapInfo_Type_FromString(string t)
 	else if(t == "race")  return MAPINFO_TYPE_RACE;
 	else if(t == "all")   return MAPINFO_TYPE_ALL;
 	else                  return 0;
-}
-
-float cvar_value_issafe(string s)
-{
-	if(strstrofs(s, "\"", 0) >= 0)
-		return 0;
-	if(strstrofs(s, "\\", 0) >= 0)
-		return 0;
-	if(strstrofs(s, ";", 0) >= 0)
-		return 0;
-	if(strstrofs(s, "$", 0) >= 0)
-		return 0;
-	if(strstrofs(s, "\r", 0) >= 0)
-		return 0;
-	if(strstrofs(s, "\n", 0) >= 0)
-		return 0;
-	return 1;
 }
 
 // load info about a map by name into the MapInfo_Map_* globals
@@ -703,6 +687,13 @@ float MapInfo_Get_ByName(string pFilename, float pAllowGenerate, float pGametype
 			{
 				dprint("Map ", pFilename, " has a client setting for unknown game type ", t, ", ignored\n");
 			}
+		}
+		else if(t == "fog")
+		{
+			if not(cvar_value_issafe(t))
+				print("Map ", pFilename, " contains a potentially harmful fog setting, ignored\n");
+			else
+				MapInfo_Map_fog = s;
 		}
 		else if(t == "cdtrack")
 		{

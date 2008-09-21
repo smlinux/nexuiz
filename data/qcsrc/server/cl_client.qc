@@ -1047,6 +1047,17 @@ void FixClientCvars(entity e)
 	 */
 }
 
+.float fogtime;
+void SendFog()
+{
+	if(world.fog) // NOT string_null!
+	if(!self.fogtime || (sv_foginterval && time > self.fogtime))
+	{
+		stuffcmd(self, strcat("\nfog ", world.fog, "\nr_fog_exp2 0\nr_drawfog 1\n"));
+		self.fogtime = time + sv_foginterval;
+	}
+}
+
 /*
 =============
 ClientConnect
@@ -1227,6 +1238,8 @@ void ClientConnect (void)
 			self.frags = -666; // FIXME do we still need this?
 		}
 	}
+
+	SendFog();
 }
 
 /*
@@ -2028,7 +2041,11 @@ void PlayerPreThink (void)
 	}
 
 	if(frametime)
+	{
 		antilag_record(self);
+
+		SendFog();
+	}
 
 	if(self.classname == "player") {
 //		if(self.netname == "Wazat")

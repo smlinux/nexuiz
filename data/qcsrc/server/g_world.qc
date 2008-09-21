@@ -8,8 +8,6 @@ void GotoNextMap();
 void ShuffleMaplist()
 float() DoNextMapOverride;
 
-.string fog;
-
 void SetDefaultAlpha()
 {
 	if(cvar("g_running_guns"))
@@ -1078,7 +1076,6 @@ CheckRules_Player
 Exit deathmatch games upon conditions
 ============
 */
-.float fogtime;
 void CheckRules_Player()
 {
 	if (gameover)	// someone else quit the game already
@@ -1086,14 +1083,6 @@ void CheckRules_Player()
 
 	if(self.deadflag == DEAD_NO)
 		self.play_time += frametime;
-
-	if(sv_foginterval)
-	if(world.fog)
-	if(time > self.fogtime)
-	{
-		stuffcmd(self, strcat("\nfog ", world.fog, "\nr_fog_exp2 0\nr_drawfog 1\n"));
-		self.fogtime = time + sv_foginterval;
-	}
 
 	// fixme: don't check players; instead check spawnfunc_dom_team and spawnfunc_ctf_team entities
 	//   (div0: and that in CheckRules_World please)

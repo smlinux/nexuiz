@@ -173,6 +173,16 @@ void InitGameplayMode()
 	WriteGameCvars();
 
 	MapInfo_LoadMapSettings(mapname);
+	if not(cvar_value_issafe(world.fog))
+	{
+		print("The current map contains a potentially harmful fog setting, ignored\n");
+		world.fog = string_null;
+	}
+	if(MapInfo_Map_fog != "")
+		if(MapInfo_Map_fog == "none")
+			world.fog = string_null;
+		else
+			world.fog = strzone(MapInfo_Map_fog);
 	clientstuff = strzone(MapInfo_Map_clientstuff);
 	MapInfo_ClearTemps();
 
