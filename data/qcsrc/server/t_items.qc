@@ -270,6 +270,7 @@ void Item_FindTeam()
 		for(head = world; (head = findfloat(head, team, self.team)); ) if(head.flags & FL_ITEM)
 			RandomSelection_Add(head, 0, 1, 0);
 		e = RandomSelection_chosen_ent;
+		e.cnt = 0;
 
 		for(head = world; (head = findfloat(head, team, self.team)); ) if(head.flags & FL_ITEM)
 		{
@@ -278,6 +279,7 @@ void Item_FindTeam()
 				// make it a non-spawned item
 				head.solid = SOLID_NOT;
 				head.model = string_null;
+				head.cnt = 1; // cnt 1 = initially hidden item
 			}
 			head.effects = head.effects - (head.effects & EF_NODRAW);
 		}

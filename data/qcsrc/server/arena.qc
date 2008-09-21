@@ -75,8 +75,16 @@ void reset_map()
 		}
 		else if(self.flags & FL_ITEM)			// reset items
 		{
-			self.model = self.mdl;
-			self.solid = SOLID_TRIGGER;
+			if(self.cnt == 1)
+			{
+				self.model = string_null;
+				self.solid = SOLID_NOT;
+			}
+			else
+			{
+				self.model = self.mdl;
+				self.solid = SOLID_TRIGGER;
+			}
 			setorigin (self, self.origin);
 			self.think = SUB_Null;
 			self.nextthink = 0;
