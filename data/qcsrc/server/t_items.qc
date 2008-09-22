@@ -627,6 +627,11 @@ void weapon_defaultspawnfunc(float wpn)
 		}
 		if(t >= 1)
 			wpn = stof(argv(0));
+		if(wpn == 0)
+		{
+			remove(self);
+			return;
+		}
 	}
 
 	e = get_weaponinfo(wpn);
