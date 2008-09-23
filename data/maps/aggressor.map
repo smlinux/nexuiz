@@ -3,6 +3,7 @@
 {
 "classname" "worldspawn"
 "message" "Aggressor - by Tyrann"
+"_keeplights" "1"
 // brush 0
 {
 ( -32 -192 288 ) ( -32 -192 304 ) ( -64 -224 304 ) e7/e7panelwood2 448 -21 -270 0.5 0.5 0 0 0
