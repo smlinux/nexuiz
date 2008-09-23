@@ -18,13 +18,13 @@ use POSIX;
 	our $Q3MAP2FLAGS = '';
 
 	# Default flags for the -bsp stage
-	our $BSPFLAGS    = '-samplesize 8 -mv 1000000 -mi 6000000';
+	our $BSPFLAGS    = '-samplesize 8 -minsamplesize 4 -mv 1000000 -mi 6000000';
 
 	# Default flags for the -vis stage
 	our $VISFLAGS    = '';
 
 	# Default flags for the -light stage
-	our $LIGHTFLAGS  = '-deluxe -patchshadows -samples 3';
+	our $LIGHTFLAGS  = '-deluxe -patchshadows -samples 3 -lightmapsize 512 -bounce 8 -fastbounce -bouncegrid';
 
 # end of user changable part
 
@@ -171,6 +171,7 @@ for my $m(@{$options->{maps}})
 		}
 		close $shaderlist;
 
+		unlink <$m/lm_*>; # delete old external lightmaps
 		q3map2 '-bsp', '-meta', @{$options->{bsp}},   "$m.map"
 			or die "-bsp: $?";
 		if($prescale != 1)
