@@ -98,10 +98,12 @@ void CreatureFrame (void)
 					self.nextstep = time + 0.3 + random() * 0.1;
 					trace_dphitq3surfaceflags = 0;
 					tracebox(self.origin, self.mins, self.maxs, self.origin - '0 0 1', MOVE_NOMONSTERS, self);
+					/*
 					if(trace_fraction == 1)
 						dprint("nohit\n");
 					else
 						dprint(ftos(trace_dphitq3surfaceflags), "\n");
+					*/
 					if not(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOSTEPS)
 					{
 						if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_METALSTEPS)
