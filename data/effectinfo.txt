@@ -2367,6 +2367,57 @@ size 16 16
 alpha 256 256 1024
 velocityjitter 256 256 256
 
+// Zero-violence effects
+
+// impact effect indicating damage
+effect damage_hit
+count 1
+type static
+color 0x20FF30 0x80FFC0
+size 1 1
+alpha 256 256 256
+gravity -0.4
+bounce 1.5
+airfriction 8
+liquidfriction 16
+//velocityoffset 0 0 120
+velocityjitter 16 16 16
+
+// effect for removing player model
+// "teleport"
+effect damage_dissolve
+count 96
+type static
+color 0x66FF66 0xFFFFFF
+size 10 10
+alpha 64 128 128
+airfriction 1
+liquidfriction 4
+originoffset 0 0 28
+originjitter 16 16 28
+velocityjitter 0 0 256
+// flare
+effect damage_dissolve
+countabsolute 1
+type static
+tex 38 38
+color 0x00FF00 0x99FF99
+size 32 32
+alpha 256 256 196
+// large sparks
+effect damage_dissolve
+count 20
+type static
+color 0x00FF00 0x99FF99
+size 16 16
+alpha 256 256 256
+//gravity 1
+bounce 1.5
+airfriction 4
+liquidfriction 16
+//velocityoffset 0 0 120
+velocityjitter 512 512 512
+
 // decal
 effect laser_deadly
 countabsolute 1
