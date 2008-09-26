@@ -128,7 +128,7 @@ eval
 or do
 {
 	die $1
-		if $@ =~ /^THROW: (.*)/s)
+		if $@ =~ /^THROW: (.*)/s;
 	# if we get here, symlinks do not work, as symlink() itself raised the exception
 	# this should only happen on Win32
 	if($^O ne "MSWin32")
