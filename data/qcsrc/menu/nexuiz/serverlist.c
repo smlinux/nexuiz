@@ -49,6 +49,7 @@ void ServerList_Connect_Click(entity btn, entity me);
 void ServerList_ShowEmpty_Click(entity box, entity me);
 void ServerList_ShowFull_Click(entity box, entity me);
 void ServerList_Filter_Change(entity box, entity me);
+void ServerList_AddRemoveFavorites(string fav, float resolv, float addonly);
 #endif
 
 #ifdef IMPLEMENTATION
@@ -385,6 +386,32 @@ void ServerList_Connect_Click(entity btn, entity me)
 	if(me.nItems > 0)
 		localcmd("connect ", me.selectedServer, "\n");
 }
+void ServerList_AddRemoveFavorites(string fav, float resolv, float addonly)
+{
+	string s;
+	float i, o;
+
+	if (resolv)
+	{
+		o = strstrofs(fav, ":", 0);
+		if (o != -1)
+		{
+			i = stof(substring(fav, o + 1, strlen(fav) - o - 1));
+			fav = substring(fav, 0, o);
+		}
+		s = netaddress_resolve(fav, i);
+		if(s!="") fav = s;
+	}
+	
+	s = cvar_string("net_slist_favorites");
+	o = strstrofs(strcat(" ", s, " "), strcat(" ", fav, " "), 0);
+	if(o == -1)
+		cvar_set("net_slist_favorites", strcat(s, " ", fav));
+	else if(!addonly)
+			cvar_set("net_slist_favorites", strcat(
+					 substring(s, 0, o - 1), substring(s, o + strlen(fav), strlen(s) - o - strlen(fav))));
+	resorthostcache();
+}
 void clickListBoxItemNexuizServerList(entity me, float i, vector where)
 {
 	if(i == me.lastClickedServer)
@@ -472,19 +499,7 @@ float keyDownNexuizServerList(entity me, float scan, float ascii, float shift)
 		i = me.selectedItem;
 		if(i < me.nItems)
 		{
-			s = cvar_string("net_slist_favorites");
-			o = strstrofs(strcat(" ", s, " "), strcat(" ", me.selectedServer, " "), 0);
-			if(o == -1)
-			{
-				cvar_set("net_slist_favorites", strcat(s, " ", me.selectedServer));
-			}
-			else
-			{
-				cvar_set("net_slist_favorites", strcat(
-					substring(s, 0, o - 1), substring(s, o + strlen(me.selectedServer), strlen(s) - o - strlen(me.selectedServer))
-				));
-			}
-			resorthostcache();
+			ServerList_AddRemoveFavorites(me.selectedServer, false, false);
 		}
 		me.lastClickedServer = -1; // inhibit double clicks using these buttons
 		if(scan != K_INS)
