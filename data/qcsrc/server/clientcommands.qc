@@ -36,11 +36,13 @@ void Nagger_Init()
 }
 void Nagger_VoteChanged()
 {
-	nagger.SendFlags = 128;
+	if(nagger)
+		nagger.SendFlags = 128;
 }
 void Nagger_ReadyCounted()
 {
-	nagger.SendFlags = 1;
+	if(nagger)
+		nagger.SendFlags = 1;
 }
 
 void ReadyCount();
