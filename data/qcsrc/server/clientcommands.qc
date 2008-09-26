@@ -124,6 +124,7 @@ void Say(entity source, float teamsay, string msgin)
 	}
 	else
 	{
+		// TODO invent a cvar name for allowing global chat by spectators during warmup anyway
 		if(cvar("g_chat_nospectators") && source.classname != "player") {
 			FOR_EACH_REALCLIENT(head) if(head.classname != "player") {
 				sprint(head, msgstr);

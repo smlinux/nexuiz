@@ -77,7 +77,7 @@ float GameCommand_Vote(string s, entity e) {
 		} else if(argv(1) == "call") {
 			if(!e || cvar("sv_vote_call")) {
 				if(cvar("sv_vote_nospectators") && e.classname != "player") {
-					print_to(e, "^1Error: Only players can call a vote during the match-stage.");
+					print_to(e, "^1Error: Only players can call a vote."); // TODO invent a cvar name for allowing votes by spectators during warmup anyway
 				}
 				else if(timeoutStatus) { //don't allow a vote call during a timeout
 					print_to(e, "^1Error: You can not call a vote while a timeout is active.");
