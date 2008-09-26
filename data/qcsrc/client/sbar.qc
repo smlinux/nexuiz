@@ -1361,7 +1361,7 @@ void Sbar_Draw (void)
 		o = Sbar_DrawNoteLine(o, s);
 
 		if(spectatee_status == -1)
-			s = strcat("^1Use ^3", getcommandkey("next-weapon", "weapnext"), "^1 or ^3", getcommandkey("previous-weapon", "weapprev"), "^1 to change the speed");
+			s = strcat("^1Use ^3", getcommandkey("next weapon", "weapnext"), "^1 or ^3", getcommandkey("previous weapon", "weapprev"), "^1 to change the speed");
 		else
 			s = strcat("^1Press ^3", getcommandkey("secondary fire", "+altattack"), getcommandkey("", "weapprev"), "^1 to observe");
 		o = Sbar_DrawNoteLine(o, s);
@@ -1409,13 +1409,13 @@ void Sbar_Draw (void)
 
 		if(vote_waiting_for_me)
 		{
-			s = strcat("^1Press ^3", getcommandkey("vyes", "vyes"), "^1 to accept");
+			s = strcat("^1Press ^3", getcommandkey("vote yes", "vyes"), "^1 to accept");
 			o = Sbar_DrawNoteLine(o, s);
 
-			s = strcat("^1Press ^3", getcommandkey("vno", "vno"), "^1 to reject");
+			s = strcat("^1Press ^3", getcommandkey("vote no", "vno"), "^1 to reject");
 			o = Sbar_DrawNoteLine(o, s);
 
-			s = strcat("^1Press ^3", getcommandkey("vabstain", "vabstain"), "^1 to abstain");
+			s = strcat("^1Press ^3", getcommandkey("vote abstain", "vabstain"), "^1 to abstain");
 			o = Sbar_DrawNoteLine(o, s);
 		}
 		else
