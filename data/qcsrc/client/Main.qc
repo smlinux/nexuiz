@@ -444,6 +444,26 @@ void Ent_ReadTeamScore()
 	Sbar_UpdateTeamPos(o);
 }
 
+void Ent_Nagger()
+{
+	float nags;
+	string s;
+
+	nags = ReadByte();
+
+	if(nags & 128)
+	{
+		if(vote_called_vote)
+			strunzone(vote_called_vote);
+		vote_called_vote = strzone(ReadString());
+	}
+
+	ready_waiting = (nags & 1);
+	ready_waiting_for_me = (nags & 2);
+	vote_waiting = (nags & 4);
+	vote_waiting_for_me = (nags & 8);
+}
+
 // CSQC_Ent_Update : Called every frame that the server has indicated an update to the SSQC / CSQC entity has occured.
 // The only parameter reflects if the entity is "new" to the client, meaning it just came into the client's PVS.
 void(float bIsNewEntity) CSQC_Ent_Update =
@@ -484,6 +504,8 @@ void(float bIsNewEntity) CSQC_Ent_Update =
 		Ent_RainOrSnow();
 	else if(self.enttype == ENT_CLIENT_LASER)
 		Ent_Laser();
+	else if(self.enttype == ENT_CLIENT_NAGGER)
+		Ent_Nagger();
 	else
 		error("unknown entity type in CSQC_Ent_Update\n");
 	

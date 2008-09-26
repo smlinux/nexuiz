@@ -1,3 +1,48 @@
+entity nagger;
+float readycount;
+void Nagger_SendEntity(entity to, float sendflags)
+{
+	float nags;
+	WriteByte(MSG_ENTITY, ENT_CLIENT_NAGGER);
+
+	nags = 0;
+	if(readycount)
+	{
+		nags |= 1;
+		if(to.ready == 0)
+			nags |= 2;
+	}
+	if(votecalled)
+	{
+		nags |= 4;
+		if(to.vote_vote == 0)
+			nags |= 8;
+	}
+
+	if(sendflags & 128)
+	{
+		WriteByte(MSG_ENTITY, nags | 128);
+		WriteString(MSG_ENTITY, votecalledvote);
+	}
+	else
+		WriteByte(MSG_ENTITY, nags);
+}
+void Nagger_Init()
+{
+	nagger = spawn();
+	Net_LinkEntity(nagger);
+	nagger.SendFlags = 128;
+	nagger.SendEntity = Nagger_SendEntity;
+}
+void Nagger_VoteChanged()
+{
+	nagger.SendFlags = 128;
+}
+void Nagger_ReadyCounted()
+{
+	nagger.SendFlags = 1;
+}
+
 void ReadyCount();
 string MapVote_Suggest(string m);
 
@@ -395,11 +440,6 @@ void ReadyRestart()
 	if(checkrules_overtimeend)
 		checkrules_overtimeend = 0;
 
-	if(readyNagActive) { //if every player is ready, remove the ready-nagger again
-		readyNagActive = 0;
-		remove(readyNagger);
-	}
-
 	restart_countdown = time + RESTART_COUNTDOWN;
 	restart_mapalreadyrestarted = 0; //reset this var, needed when cvar sv_ready_restart_repeatable is in use
 	if(0 < cvar("timelimit") || inWarmupStage)
@@ -480,57 +520,13 @@ void ReadyCount()
 			r += 1;
 	}
 
-	if(!r)
-		return; // NOTE: this also excludes !p, as r <= p
+	readycount = r;
 
-	if(cvar("sv_ready_restart_nag")) {
-		if(!readyNagActive) {
-			readyNagger = spawn();
-			readyNagger.think = readyNagger_Think;
-			readyNagger.cnt = cvar("sv_ready_restart_nag_duration");
-			readyNagger.nextthink = time;
-			readyNagActive = 1;
-		}
-	}
+	if(r) // at least one is ready
+	if(r == p) // and, everyone is ready
+		ReadyRestart();
 
-	if(r < p)
-		return;
-	
-	ReadyRestart();
-}
-
-/**
- * Centerprints the information to all players who didn't ready up yet to do so.
- */
-void readyNagger_Think() {
-	local entity plr;
-	if(self.cnt <= 0) { //have a break showing the ready nag
-		//make sure that the old ready-nag-centerprint isn't shown too long:
-		FOR_EACH_REALCLIENT(plr) {
-			if(plr.classname == "player") {
-				if (!plr.ready)
-					centerprint_atprio(plr, CENTERPRIO_SPAM, "");
-			}
-		}
-		self.cnt = cvar("sv_ready_restart_nag_duration");
-		self.nextthink = time + cvar("sv_ready_restart_nag_interval");
-	}
-	else {
-		//show the ready nagging to all players who aren't ready yet
-		FOR_EACH_REALCLIENT(plr) {
-			if(plr.classname == "player") {
-				if (!plr.ready) {
-					centerprint_atprio(plr, CENTERPRIO_SPAM, "^2Please ready up (F4 by default)!");
-					//play reminder sound once the centerprint appears for the first time after the pause:
-					if (self.cnt == cvar("sv_ready_restart_nag_duration"))
-						play2(plr, "misc/talk2.wav");
-				}
-			}
-		}
-
-		self.nextthink = time + 1;
-		self.cnt -= 1;
-	}
+	Nagger_ReadyCounted();
 }
 
 /**

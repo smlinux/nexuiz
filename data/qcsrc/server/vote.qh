@@ -15,6 +15,5 @@ void VoteAccept();
 void VoteReject();
 void VoteTimeout();
 void VoteStop(entity stopper);
-void VoteNag();
 void VoteSpam(float yescount, float nocount, float abstaincount, float notvoters, float mincount, string result);
 void VoteCount();

@@ -1323,6 +1323,19 @@ float Sbar_WouldDrawScoreboard ()
 	return 0;
 }
 
+vector Sbar_DrawNoteLine(vector offset, string s)
+{
+	dummyfunction(0, 0, 0, 0, 0, 0, 0, 0); // work around DP bug (set OFS_PARAM5 to 0)
+	drawcolorcodedstring(
+		offset - sbar_fontsize_x * '1 0 0' * stringwidth(s, TRUE),
+		s,
+		sbar_fontsize,
+		sbar_alpha_fg,
+		0
+	);
+	return offset + sbar_fontsize_y * '0 1 0';
+}
+
 void Sbar_Draw (void)
 {
 	float i;
@@ -1333,63 +1346,25 @@ void Sbar_Draw (void)
 
 	sbar_fontsize = Sbar_GetFontsize();
 	
-	if(warmup_stage) 
-	{
-		s = strcat("^1Press ^3", getcommandkey("ready", "ready"), "^1 to end warmup");
-		dummyfunction(0, 0, 0, 0, 0, 0, 0, 0); // work around DP bug (set OFS_PARAM5 to 0)
-		drawcolorcodedstring(
-			o - sbar_fontsize_x * '2 0 0' * stringwidth(s, TRUE),
-			s,
-			sbar_fontsize * 2,
-			sbar_alpha_fg,
-			0
-		);
-		o += sbar_fontsize_y * '0 2 0';
-	}
-
 	if(spectatee_status)
 	{
 		if(spectatee_status == -1)
 			s = "^1Observing";
 		else
 			s = strcat("^1Spectating ^7", getplayerkey(spectatee_status - 1, "name"));
-		dummyfunction(0, 0, 0, 0, 0, 0, 0, 0); // work around DP bug (set OFS_PARAM5 to 0)
-		drawcolorcodedstring(
-			o - sbar_fontsize_x * '1 0 0' * stringwidth(s, TRUE),
-			s,
-			sbar_fontsize,
-			sbar_alpha_fg,
-			0
-		);
-		o += sbar_fontsize_y * '0 1 0';
+		o = Sbar_DrawNoteLine(o, s);
 
 		if(spectatee_status == -1)
 			s = strcat("^1Press ^3", getcommandkey("primary fire", "+attack"), "^1 to spectate");
 		else
 			s = strcat("^1Press ^3", getcommandkey("primary fire", "+attack"), "^1 for another player");
-		dummyfunction(0, 0, 0, 0, 0, 0, 0, 0); // work around DP bug (set OFS_PARAM5 to 0)
-		drawcolorcodedstring(
-			o - sbar_fontsize_x * '1 0 0' * stringwidth(s, TRUE),
-			s,
-			sbar_fontsize,
-			sbar_alpha_fg,
-			0
-		);
-		o += sbar_fontsize_y * '0 1 0';
+		o = Sbar_DrawNoteLine(o, s);
 
 		if(spectatee_status == -1)
 			s = strcat("^1Use ^3", getcommandkey("next-weapon", "weapnext"), "^1 or ^3", getcommandkey("previous-weapon", "weapprev"), "^1 to change the speed");
 		else
 			s = strcat("^1Press ^3", getcommandkey("secondary fire", "+altattack"), getcommandkey("", "weapprev"), "^1 to observe");
-		dummyfunction(0, 0, 0, 0, 0, 0, 0, 0); // work around DP bug (set OFS_PARAM5 to 0)
-		drawcolorcodedstring(
-			o - sbar_fontsize_x * '1 0 0' * stringwidth(s, TRUE),
-			s,
-			sbar_fontsize,
-			sbar_alpha_fg,
-			0
-		);
-		o += sbar_fontsize_y * '0 1 0';
+		o = Sbar_DrawNoteLine(o, s);
 
 		if(gametype == GAME_ARENA)
 			s = "^1Wait for your turn to join";
@@ -1406,17 +1381,50 @@ void Sbar_Draw (void)
 		}
 		else
 			s = strcat("^1Press ^7", getcommandkey("jump", "+jump"), "^1 to join");
-		dummyfunction(0, 0, 0, 0, 0, 0, 0, 0); // work around DP bug (set OFS_PARAM5 to 0)
-		drawcolorcodedstring(
-			o - sbar_fontsize_x * '1 0 0' * stringwidth(s, TRUE),
-			s,
-			sbar_fontsize,
-			sbar_alpha_fg,
-			0
-		);
-		o += sbar_fontsize_y * '0 1 0';
+		o = Sbar_DrawNoteLine(o, s);
 	}
 		
+	if(ready_waiting)
+	{
+		if(ready_waiting_for_me)
+		{
+			if(warmup_stage) 
+				s = strcat("^1Press ^3", getcommandkey("ready", "ready"), "^1 to end warmup");
+			else
+				s = strcat("^1Press ^3", getcommandkey("ready", "ready"), "^1 once you are ready");
+		}
+		else
+		{
+			if(warmup_stage) 
+				s = strcat("^1Waiting for others to ready up to end warmup...");
+			else
+				s = strcat("^1Waiting for others to ready up...");
+		}
+		o = Sbar_DrawNoteLine(o, s);
+	}
+	if(vote_waiting)
+	{
+		s = strcat("^1A vote has been called for ", vote_called_vote);
+		o = Sbar_DrawNoteLine(o, s);
+
+		if(vote_waiting_for_me)
+		{
+			s = strcat("^1Press ^3", getcommandkey("vyes", "vyes"), "^1 to accept");
+			o = Sbar_DrawNoteLine(o, s);
+
+			s = strcat("^1Press ^3", getcommandkey("vno", "vno"), "^1 to reject");
+			o = Sbar_DrawNoteLine(o, s);
+
+			s = strcat("^1Press ^3", getcommandkey("vabstain", "vabstain"), "^1 to abstain");
+			o = Sbar_DrawNoteLine(o, s);
+		}
+		else
+		{
+			s = strcat("^1Waiting for others to vote...");
+			o = Sbar_DrawNoteLine(o, s);
+		}
+	}
+
 	//Sbar_SortFrags();
 	Sbar_UpdatePlayerTeams();
 

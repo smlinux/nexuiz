@@ -129,3 +129,9 @@ float angles_held_status[24];
 string getcommandkey(string text, string command);
 float sbar_showbinds;
 float sbar_showbinds_limit;
+
+string vote_called_vote;
+float ready_waiting;
+float ready_waiting_for_me;
+float vote_waiting;
+float vote_waiting_for_me;

@@ -387,10 +387,15 @@ void PrintWelcomeMessage(entity pl)
 		else if (timeoutStatus != 0)
 			specString = strcat(specString, "\n\n", getTimeoutText(1));
 		else
-			return;
+		{
+			if(!self.BUTTON_INFO && self.classname == "player")
+				return;
+			goto normal;
+		}
 		return centerprint_atprio(self, CENTERPRIO_SPAM, specString);
 	}
 
+:normal
 	if(g_minstagib)
 		mutator = "^2Minstagib ^1";
 	else if(g_rocketarena)

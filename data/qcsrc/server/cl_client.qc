@@ -1937,8 +1937,10 @@ void ObserverThink()
 			self.flags = self.flags | FL_JUMPRELEASED;
 		}
 	}
+	/*
 	if(self.BUTTON_ZOOM)
 		self.wantswelcomemessage = 0;
+	*/
 	if(self.wantswelcomemessage)
 		PrintWelcomeMessage(self);
 }
@@ -1974,8 +1976,10 @@ void SpectatorThink()
 			self.flags = self.flags | FL_JUMPRELEASED;
 		}
 	}
+	/*
 	if(self.BUTTON_ZOOM)
 		self.wantswelcomemessage = 0;
+	*/
 	if(self.wantswelcomemessage)
 		PrintWelcomeMessage(self);
 	self.flags = self.flags | FL_CLIENT | FL_NOTARGET;
@@ -1989,7 +1993,6 @@ Called every frame for each client before the physics are run
 =============
 */
 void() ctf_setstatus;
-.float vote_nagtime;
 .float spectatee_status;
 void PlayerPreThink (void)
 {
@@ -2038,14 +2041,6 @@ void PlayerPreThink (void)
 				}
 				self.version_nagtime = 0;
 			}
-
-	// vote nagging
-	if(self.cvar_scr_centertime)
-		if(time > self.vote_nagtime)
-		{
-			VoteNag();
-			self.vote_nagtime = time + self.cvar_scr_centertime * 0.6;
-		}
 
 	// GOD MODE info
 	if(!(self.flags & FL_GODMODE)) if(self.max_armorvalue)

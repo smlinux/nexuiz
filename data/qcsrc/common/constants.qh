@@ -18,7 +18,8 @@
 // Revision 17: multi-weaponimpulses
 // Revision 18: warmup
 // Revision 19: fog
-#define CSQC_REVISION 19
+// Revision 20: naggers
+#define CSQC_REVISION 20
 
 // probably put these in common/
 // so server/ and client/ can be synced better
@@ -48,6 +49,7 @@ const float ENT_CLIENT_TEAMSCORES = 5;
 const float ENT_CLIENT_POINTPARTICLES = 6;
 const float ENT_CLIENT_RAINSNOW = 7;
 const float ENT_CLIENT_LASER = 8;
+const float ENT_CLIENT_NAGGER = 9; // [flags] [votecalledvote]
 
 ///////////////////////////
 // key constants

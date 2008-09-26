@@ -657,8 +657,6 @@ void centerprint(entity e, string s)
 	centerprint_atprio(e, CENTERPRIO_NORMAL, s);
 }
 
-void VoteNag();
-
 // decolorizes and team colors the player name when needed
 string playername(entity p)
 {
@@ -1454,3 +1452,11 @@ void spawnfunc_func_breakable() {
 	self.use = assault_destructible_use;	// shared use function, b/c they woudl do the same thing anyways
 	self.event_damage = func_breakable_damage;
 }
+
+void Net_LinkEntity(entity e)
+{
+	e.model = "net_entity";
+	e.modelindex = 1;
+	e.effects = EF_NODEPTHTEST | EF_LOWPRECISION;
+}
+

@@ -137,6 +137,7 @@ float GameCommand_Vote(string s, entity e) {
 						if(cvar("sv_eventlog"))
 							GameLogEcho(strcat(":vote:vcall:", ftos(votecaller.playerid), ":", votecalledvote_display));
 						VoteCount(); // needed if you are the only one
+						Nagger_VoteChanged();
 					} else {
 						print_to(e, "^1This vote is not ok. See help for more info.");
 					}
@@ -175,6 +176,7 @@ float GameCommand_Vote(string s, entity e) {
 					if(cvar("sv_eventlog"))
 						GameLogEcho(strcat(":vote:vcall:", ftos(votecaller.playerid), ":", votecalledvote_display));
 					VoteCount(); // needed if you are the only one
+					Nagger_VoteChanged();
 				}
 			} else {
 				print_to(e, "^1Vote to become master is NOT allowed.");
@@ -420,6 +422,7 @@ void VoteReset() {
 	votecalled = FALSE;
 	votecalledmaster = FALSE;
 	votefinished = 0;
+	Nagger_VoteChanged();
 }
 
 void VoteAccept() {
@@ -460,12 +463,6 @@ void VoteStop(entity stopper) {
 		}
 	}
 	VoteReset();
-}
-
-void VoteNag() {
-	if(votecalled)
-	if(self.vote_vote == 0)
-		centerprint_atprio(self, CENTERPRIO_VOTE, strcat("^7^3", VoteNetname(votecaller), "^2 called a vote for ", votecalledvote_display, "\n\n^2You have not voted yet!\n^2HINT: By default, F1 is yes and F2 is no."));
 }
 
 void VoteSpam(float yescount, float nocount, float abstaincount, float notvoters, float mincount, string result)

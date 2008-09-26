@@ -10,13 +10,6 @@ var .float teamscores_primary;
 float scores_flags_primary;
 float teamscores_flags_primary;
 
-void Net_LinkEntity(entity e)
-{
-	e.model = "net_entity";
-	e.modelindex = 1;
-	e.effects = EF_NODEPTHTEST | EF_LOWPRECISION;
-}
-
 vector ScoreField_Compare(entity t1, entity t2, .float field, float fieldflags, vector previous) // returns: cmp value, best prio
 {
 	if(!(fieldflags & SFL_SORT_PRIO_MASK)) // column does not sort
