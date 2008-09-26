@@ -105,9 +105,11 @@ while(@ARGV)
 	}
 }
 
+my $game = 'compile.' . int rand 99999999; # mktemp on win32?
+
 sub q3map2(@)
 {
-	my @args = ($Q3MAP2, split(/\s+/, $Q3MAP2FLAGS), '-game', 'quake3', '-fs_basepath', $NEXUIZDIR, '-fs_game', 'data', '-v', @_);
+	my @args = ($Q3MAP2, split(/\s+/, $Q3MAP2FLAGS), '-game', 'nexuiz', '-fs_basepath', $NEXUIZDIR, '-fs_game', $game, '-v', @_);
 	print "\$ @args\n";
 	return !system @args;
 }
@@ -115,10 +117,29 @@ sub q3map2(@)
 (my $mapdir = getcwd()) =~ s!/[^/]*(?:$)!!;
 $mapdir = "/" if $mapdir eq "";
 
-unlink "$ENV{HOME}/.q3a/data";
-mkdir "$ENV{HOME}/.q3a";
-symlink "$mapdir", "$ENV{HOME}/.q3a/data"
-	or die "Setting up directory structure, $mapdir -> $ENV{HOME}/.q3a/data: $!";
+unlink "$NEXUIZDIR/$game";
+mkdir "$NEXUIZDIR";
+eval
+{
+	symlink "$mapdir", "$NEXUIZDIR/$game"
+		or die "THROW: Setting up directory structure, $mapdir -> $NEXUIZDIR/$game: $!";
+	1;
+}
+or do
+{
+	die $1
+		if $@ =~ /^THROW: (.*)/s)
+	# if we get here, symlinks do not work, as symlink() itself raised the exception
+	# this should only happen on Win32
+	if($^O ne "MSWin32")
+	{
+		die "Symlinks not supported ($@) but invalid OS signature, this must be MSWin32, but $^O got reported";
+	}
+
+	# TODO support Windows here somehow
+	# maybe by copying all files and copying back the finished compile? (ugh)
+	die "Windows is not supported yet.";
+};
 
 my ($prescale, $postscale) = ($options->{scale} =~ /^([0-9.]+)(?::([0-9.]+))?$/);
 $postscale = 1 if not defined $postscale;
