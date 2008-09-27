@@ -602,9 +602,10 @@ velocitymultiplier 1
 effect TE_SPARK
 count 1
 type spark
+tex 40 40
 color 0x8f4333 0xfff31b
-size 0.4 0.4
-alpha 0 256 768
+size 0.4 0.6
+alpha 64 256 768
 gravity 1
 bounce -1
 velocityoffset 0 0 80
