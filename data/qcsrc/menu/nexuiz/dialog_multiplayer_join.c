@@ -53,7 +53,7 @@ void fillNexuizServerListTab(entity me)
 		me.TD(me, me.rows - 3, me.columns, slist);
 
 	me.gotoRC(me, me.rows - 1, 0);
-		me.TD(me, 1, 0.5, e = makeNexuizTextLabel(0, "Address:"));
+		me.TD(me, 1, 0.6, e = makeNexuizTextLabel(0, "Address:"));
 		me.TD(me, 1, 1.5, e = makeNexuizInputBox(0, string_null));
 			e.onEnter = ServerList_Connect_Click;
 			e.onEnterEntity = slist;
@@ -62,7 +62,7 @@ void fillNexuizServerListTab(entity me)
 			e.onClick = ServerList_Favorite_Click;
 			e.onClickEntity = slist;
 			slist.favoriteButton = e;
-		me.TD(me, 1, me.columns - 0.5 - 1.5 - 1, e = makeNexuizButton("Join!", '0 0 0'));
+		me.TD(me, 1, me.columns - 0.6 - 1.5 - 1, e = makeNexuizButton("Join!", '0 0 0'));
 			e.onClick = ServerList_Connect_Click;
 			e.onClickEntity = slist;
 			slist.connectButton = e;
