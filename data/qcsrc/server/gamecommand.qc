@@ -1,5 +1,128 @@
 string GotoMap(string m);
 
+#if 0
+// TODO make this algorithm work (no idea why it is failing), it would be much faster
+float FullTraceFraction(vector a, vector mi, vector ma, vector b)
+{
+	vector c;
+	float d;
+	if(a_z > b_z)
+		return 0;
+	tracebox(a, mi, ma, b, MOVE_WORLDONLY, world);
+	if(trace_startsolid)
+	{
+		// a leaves solid, then hits trace_endpos
+		// where does a leave solid?
+		c = trace_endpos;
+		tracebox(c, mi, ma, a, MOVE_WORLDONLY, world);
+		// a to trace_endpos is solid
+		// trace_endpos to c is not solid
+		d = trace_endpos_z - a_z;
+		return FullTraceFraction(c + '0 0 1', mi, ma, b) + d;
+	}
+	else
+	{
+		// a hits trace_endpos
+		return FullTraceFraction(trace_endpos + '0 0 1', mi, ma, b);
+	}
+}
+
+float RoughMapAtPoint(float x, float y, float w, float h)
+{
+	vector a, b, mi, ma;
+	mi = '0 0 0';
+	ma = '1 0 0' * w + '0 1 0' * h;
+	a = '1 0 0' * x + '0 1 0' * y + '0 0 1' * world.mins_z;
+	b = '1 0 0' * x + '0 1 0' * y + '0 0 1' * world.maxs_z;
+	return floor(FullTraceFraction(a, mi, ma, b) / (world.maxs_z - world.mins_z) * 255);
+}
+#else
+float RoughMapAtPoint(float x, float y, float w, float h)
+{
+	vector o, mi, ma;
+	float i, r;
+	vector dz;
+	mi = '0 0 0';
+	dz = ((world.maxs_z - world.mins_z) / 64) * '0 0 1';
+	ma = '1 0 0' * w + '0 1 0' * h + dz;
+	o = '1 0 0' * x + '0 1 0' * y + '0 0 1' * world.mins_z;
+	
+	r = 0;
+	for(i = 0; i < 51; ++i)
+	{
+		tracebox(o + dz * i, mi, ma, o + dz * i, MOVE_WORLDONLY, world);
+		if(trace_startsolid)
+			++r;
+	}
+	return r * 5; // 0 .. 255
+}
+#endif
+
+string doublehex = "000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F202122232425262728292A2B2C2D2E2F303132333435363738393A3B3C3D3E3F404142434445464748494A4B4C4D4E4F505152535455565758595A5B5C5D5E5F606162636465666768696A6B6C6D6E6F707172737475767778797A7B7C7D7E7F808182838485868788898A8B8C8D8E8F909192939495969798999A9B9C9D9E9FA0A1A2A3A4A5A6A7A8A9AAABACADAEAFB0B1B2B3B4B5B6B7B8B9BABBBCBDBEBFC0C1C2C3C4C5C6C7C8C9CACBCCCDCECFD0D1D2D3D4D5D6D7D8D9DADBDCDDDEDFE0E1E2E3E4E5E6E7E8E9EAEBECEDEEEFF0F1F2F3F4F5F6F7F8F9FAFBFCFDFEFF";
+
+void RoughMap()
+{
+	float x0, y0, w, h;
+	float m, n;
+	float x, y;
+	float l;
+	float f;
+	float i;
+	string si;
+	string fn;
+
+	m = 256;
+	n = 256;
+
+	x0 = world.mins_x;
+	y0 = world.mins_y;
+	w = (world.maxs_x - x0) / m;
+	h = (world.maxs_y - y0) / n;
+	// TODO fix aspect
+	w = h = max(w, h);
+
+	/*
+	m = min(m, ceil((world.maxs_x - x0) / w));
+	n = min(n, ceil((world.maxs_y - y0) / h));
+	*/
+
+	fn = strcat("maps/", mapname, ".xpm");
+	f = fopen(fn, FILE_WRITE);
+	if(f < 0)
+	{
+		print("Error writing ", fn, "\n");
+		return;
+	}
+	print("Writing to ", fn, "...\n");
+	fputs(f, "/* XPM */\n");
+	fputs(f, "static char *RoughMap[] = {\n");
+	fputs(f, "/* columns rows colors chars-per-pixel */\n");
+	fputs(f, strcat("\"", ftos(m), " ", ftos(n), " 256 2\",\n"));
+	for(i = 0; i < 256; ++i)
+	{
+		si = substring(doublehex, i*2, 2);
+		fputs(f, strcat("\"", si, " c #", si, si, si, "\",\n"));
+	}
+	for(y = n-1; y >= 0; --y)
+	{
+		fputs(f, "\"");
+		for(x = 0; x < m; ++x)
+		{
+			l = RoughMapAtPoint(x0 + x * w, y0 + y * h, w, h);
+			fputs(f, substring(doublehex, 2 * l, 2));
+		}
+		if(y == 0)
+			fputs(f, "\"\n");
+		else
+		{
+			fputs(f, "\",\n");
+			print(ftos(y), " lines left\n");
+		}
+	}
+	fputs(f, "};\n");
+	print("Finished. Please edit data/", fn, " with an image editing application and place it with the name XXX in the TGA format in the same folder as the BSP file.\n");
+}
+
 void EffectIndexDump()
 {
 	float d;
@@ -99,6 +222,7 @@ void GameCommand(string command)
 		print("  loaddb filename\n");
 		print("  allready\n");
 		print("  effectindexdump\n");
+		print("  roughmap\n");
 		GameCommand_Vote("help", world);
 		GameCommand_Ban("help");
 		GameCommand_Generic("help");
@@ -279,6 +403,11 @@ void GameCommand(string command)
 	if (argv(0) == "effectindexdump")
 	{
 		EffectIndexDump();
+		return;
+	}
+	if (argv(0) == "roughmap")
+	{
+		RoughMap();
 		return;
 	}
 
