@@ -18,7 +18,7 @@ void TeleportPlayer(entity teleporter, entity player, vector to, vector to_angle
 
 	// Relocate the player
 	// assuming to allows PL_MIN to PL_MAX box and some more
-	setorigin (player, to + '0 0 1' * (1 - player.mins_z - 24));
+	setorigin (player, to);
 	player.angles = to_angles;
 	player.fixangle = TRUE;
 	player.velocity = to_velocity;

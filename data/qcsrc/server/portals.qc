@@ -1,3 +1,6 @@
+#define SAFENUDGE '1 1 1'
+#define SAFERNUDGE '8 8 8'
+
 .vector portal_transform;
 .vector portal_safe_origin;
 .float portal_wants_to_vanish;
@@ -114,18 +117,19 @@ float Portal_TeleportPlayer(entity teleporter, entity player)
 
 	safe = teleporter.enemy.portal_safe_origin; // a valid player origin
 	step = to + ((safe - to) * v_forward) * v_forward;
-	tracebox(safe, player.mins - '1 1 1', player.maxs + '1 1 1', step, MOVE_NOMONSTERS, player);
+	tracebox(safe, player.mins - SAFENUDGE, player.maxs + SAFENUDGE, step, MOVE_NOMONSTERS, player);
 	if(trace_startsolid)
 	{
 		print("'safe' teleport location is not safe!\n");
 		// FAIL TODO why does this happen?
 		return 0;
 	}
-	safe = trace_endpos;
-	tracebox(safe, player.mins - '1 1 1', player.maxs + '1 1 1', to, MOVE_NOMONSTERS, player);
+	safe = trace_endpos + normalize(safe - trace_endpos) * 0;
+	tracebox(safe, player.mins - SAFENUDGE, player.maxs + SAFENUDGE, to, MOVE_NOMONSTERS, player);
 	if(trace_startsolid)
 		error("trace_endpos in solid!");
-	to = trace_endpos;
+	to = trace_endpos + normalize(safe - trace_endpos) * 0;
+	//print(vtos(to), "\n");
 
 	// ang_x stuff works around weird quake angles
 	if(player.classname == "player")
@@ -204,8 +208,8 @@ float Portal_FindSafeOrigin(entity portal)
 {
 	vector o;
 	o = portal.origin;
-	portal.mins = PL_MIN - '8 8 8';
-	portal.maxs = PL_MAX + '8 8 8';
+	portal.mins = PL_MIN - SAFERNUDGE;
+	portal.maxs = PL_MAX + SAFERNUDGE;
 	fixedmakevectors(portal.angles);
 	portal.origin += 16 * v_forward;
 	if(!move_out_of_solid(portal))
