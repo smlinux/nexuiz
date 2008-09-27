@@ -508,7 +508,7 @@ void _MapInfo_Map_ApplyGametype(string s, float pWantedType, float pThisType)
 	if(pWantedType == MAPINFO_TYPE_CTF)
 	{
 		sa = car(s); if(sa == "") sa = "10";
-		if(cvar("g_ctf_win_mode") != 2)
+		if(cvar("g_ctf_win_mode") < 2)
 			cvar_set("fraglimit", sa);
 		s = cdr(s);
 	}

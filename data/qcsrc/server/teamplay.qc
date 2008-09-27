@@ -222,7 +222,7 @@ void InitGameplayMode()
 		gamemode_name = "Capture the Flag";
 		ActivateTeamplay();
 		g_ctf_win_mode = cvar("g_ctf_win_mode");
-		if(g_ctf_win_mode == 2)
+		if(g_ctf_win_mode >= 2)
 			fraglimit_override = cvar("g_ctf_capture_limit");
 		else
 			fraglimit_override = cvar("capturelimit_override");
