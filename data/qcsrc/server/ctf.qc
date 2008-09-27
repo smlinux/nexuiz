@@ -373,6 +373,7 @@ void FlagTouch()
 			self.cnt = FLAG_CARRY;
 			bprint(other.netname, "^7 picked up the ", self.netname, "\n");
 			UpdateFrags(other, cvar("g_ctf_flagscore_pickup"));
+			PlayerScore_Add(other, SP_CTF_PICKUPS, 1);
 			LogCTF("pickup", self.team, other);
 			sound (other, CHAN_AUTO, self.noise, VOL_BASE, ATTN_NONE);
 
