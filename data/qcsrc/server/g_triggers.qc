@@ -623,6 +623,7 @@ void spawnfunc_func_sparks()
 	self.mdl = "TE_SPARK";
 	self.impulse = 0.1 / self.wait;
 	self.wait = 0;
+	self.cnt = 0; // use mdl
 
 	spawnfunc_func_pointparticles();
 }
