@@ -621,7 +621,7 @@ void spawnfunc_func_sparks()
 	self.maxs = '0 0 0';
 	self.velocity = '0 0 -1';
 	self.mdl = "TE_SPARK";
-	self.impulse = 0.1 / self.wait;
+	self.impulse = 10 * self.wait; // by default 2.5/sec
 	self.wait = 0;
 	self.cnt = 0; // use mdl
 
