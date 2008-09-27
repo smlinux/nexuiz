@@ -28,6 +28,8 @@ CLASS(NexuizServerList) EXTENDS(NexuizListBox)
 	ATTRIB(NexuizServerList, filterShowFull, float, 1)
 	ATTRIB(NexuizServerList, filterString, string, string_null)
 	ATTRIB(NexuizServerList, controlledTextbox, entity, NULL)
+	ATTRIB(NexuizServerList, ipAddressBox, entity, NULL)
+	ATTRIB(NexuizServerList, favoriteButton, entity, NULL)
 	ATTRIB(NexuizServerList, nextRefreshTime, float, 0)
 	METHOD(NexuizServerList, refreshServerList, void(entity, float)) // refresh mode: 0 = just reparametrize, 1 = send new requests, 2 = clear
 	ATTRIB(NexuizServerList, needsRefresh, float, 1)
@@ -49,7 +51,7 @@ void ServerList_Connect_Click(entity btn, entity me);
 void ServerList_ShowEmpty_Click(entity box, entity me);
 void ServerList_ShowFull_Click(entity box, entity me);
 void ServerList_Filter_Change(entity box, entity me);
-void ServerList_AddRemoveFavorites(string fav, float resolv, float addonly);
+void ServerList_Favorite_Click(entity btn, entity me);
 #endif
 
 #ifdef IMPLEMENTATION
@@ -87,6 +89,36 @@ void ServerList_UpdateFieldIDs()
 	SLIST_FIELD_ISFAVORITE = gethostcacheindexforkey( "isfavorite" );
 }
 
+float IsFavorite(string srv)
+{
+	string s;
+	float o;
+	s = cvar_string("net_slist_favorites");
+	s = strcat(" ", s, " ");
+	srv = strcat(" ", srv, " ");
+	o = strstrofs(s, srv, 0);
+	return (o != -1);
+}
+
+void ToggleFavorite(string srv)
+{
+	string s;
+	float o;
+	s = cvar_string("net_slist_favorites");
+	o = strstrofs(strcat(" ", s, " "), strcat(" ", srv, " "), 0);
+	if(o == -1)
+	{
+		cvar_set("net_slist_favorites", strcat(s, " ", srv));
+	}
+	else
+	{
+		cvar_set("net_slist_favorites", strcat(
+					substring(s, 0, o - 1), substring(s, o + strlen(srv), strlen(s) - o - strlen(srv))
+					));
+	}
+	resorthostcache();
+}
+
 entity makeNexuizServerList()
 {
 	entity me;
@@ -115,9 +147,13 @@ void setSelectedNexuizServerList(entity me, float i)
 		return;
 	if(gethostcachevalue(SLIST_HOSTCACHEVIEWCOUNT) != me.nItems)
 		return; // sorry, it would be wrong
+
 	if(me.selectedServer)
 		strunzone(me.selectedServer);
 	me.selectedServer = strzone(gethostcachestring(SLIST_FIELD_CNAME, me.selectedItem));
+
+	me.ipAddressBox.setText(me.ipAddressBox, me.selectedServer);
+	me.ipAddressBox.cursorPos = strlen(me.selectedServer);
 }
 void refreshServerListNexuizServerList(entity me, float mode)
 {
@@ -185,7 +221,7 @@ void focusEnterNexuizServerList(entity me)
 }
 void drawNexuizServerList(entity me)
 {
-	float i, found;
+	float i, found, owned;
 
 	if(me.currentSortField == -1)
 	{
@@ -201,6 +237,8 @@ void drawNexuizServerList(entity me)
 		me.needsRefresh = 0;
 		me.refreshServerList(me, 0);
 	}
+
+	owned = (me.selectedServer == me.ipAddressBox.text);
 
 	me.nItems = gethostcachevalue(SLIST_HOSTCACHEVIEWCOUNT);
 	me.connectButton.disabled = (me.nItems == 0);
@@ -229,6 +267,17 @@ void drawNexuizServerList(entity me)
 				strunzone(me.selectedServer);
 			me.selectedServer = strzone(gethostcachestring(SLIST_FIELD_CNAME, me.selectedItem));
 		}
+
+	if(owned)
+	{
+		me.ipAddressBox.setText(me.ipAddressBox, me.selectedServer);
+		me.ipAddressBox.cursorPos = strlen(me.selectedServer);
+	}
+
+	if(IsFavorite(me.ipAddressBox.text))
+		me.favoriteButton.setText(me.favoriteButton, "Remove");
+	else
+		me.favoriteButton.setText(me.favoriteButton, "Bookmark");
 
 	drawListBox(me);
 }
@@ -383,34 +432,18 @@ void resizeNotifyNexuizServerList(entity me, vector relOrigin, vector relSize, v
 }
 void ServerList_Connect_Click(entity btn, entity me)
 {
-	if(me.nItems > 0)
-		localcmd("connect ", me.selectedServer, "\n");
+	localcmd("connect ", me.ipAddressBox.text, "\n");
 }
-void ServerList_AddRemoveFavorites(string fav, float resolv, float addonly)
+void ServerList_Favorite_Click(entity btn, entity me)
 {
-	string s;
-	float i, o;
-
-	if (resolv)
+	string ipstr;
+	ipstr = netaddress_resolve(me.ipAddressBox.text, 26000);
+	if(ipstr != "")
 	{
-		o = strstrofs(fav, ":", 0);
-		if (o != -1)
-		{
-			i = stof(substring(fav, o + 1, strlen(fav) - o - 1));
-			fav = substring(fav, 0, o);
-		}
-		s = netaddress_resolve(fav, i);
-		if(s!="") fav = s;
+		me.ipAddressBox.setText(me.ipAddressBox, ipstr);
+		me.ipAddressBox.cursorPos = strlen(ipstr);
+		ToggleFavorite(ipstr);
 	}
-	
-	s = cvar_string("net_slist_favorites");
-	o = strstrofs(strcat(" ", s, " "), strcat(" ", fav, " "), 0);
-	if(o == -1)
-		cvar_set("net_slist_favorites", strcat(s, " ", fav));
-	else if(!addonly)
-			cvar_set("net_slist_favorites", strcat(
-					 substring(s, 0, o - 1), substring(s, o + strlen(fav), strlen(s) - o - strlen(fav))));
-	resorthostcache();
 }
 void clickListBoxItemNexuizServerList(entity me, float i, vector where)
 {
@@ -498,9 +531,7 @@ float keyDownNexuizServerList(entity me, float scan, float ascii, float shift)
 	{
 		i = me.selectedItem;
 		if(i < me.nItems)
-		{
-			ServerList_AddRemoveFavorites(me.selectedServer, false, false);
-		}
+			ToggleFavorite(me.selectedServer);
 		me.lastClickedServer = -1; // inhibit double clicks using these buttons
 		if(scan != K_INS)
 			me.setSelected(me, me.selectedItem);

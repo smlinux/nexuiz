@@ -7,6 +7,8 @@ CLASS(NexuizInputBox) EXTENDS(InputBox)
 	ATTRIB(NexuizInputBox, image, string, SKINGFX_INPUTBOX)
 	ATTRIB(NexuizInputBox, onChange, void(entity, entity), SUB_Null)
 	ATTRIB(NexuizInputBox, onChangeEntity, entity, NULL)
+	ATTRIB(NexuizInputBox, onEnter, void(entity, entity), SUB_Null)
+	ATTRIB(NexuizInputBox, onEnterEntity, entity, NULL)
 	ATTRIB(NexuizInputBox, marginLeft, float, SKINMARGIN_INPUTBOX_CHARS)
 	ATTRIB(NexuizInputBox, marginRight, float, SKINMARGIN_INPUTBOX_CHARS)
 	ATTRIB(NexuizInputBox, color, vector, SKINCOLOR_INPUTBOX_N)
@@ -69,11 +71,14 @@ float keyDownNexuizInputBox(entity me, float key, float ascii, float shift)
 	float r;
 	r = 0;
 	if(key == K_ENTER)
+	{
 		if(me.cvarName)
 		{
 			me.saveCvars(me);
 			r = 1;
 		}
+		me.onEnter(me, me.onEnterEntity);
+	}
 	if(keyDownInputBox(me, key, ascii, shift))
 		r = 1;
 	return r;
