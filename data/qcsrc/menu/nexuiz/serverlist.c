@@ -527,14 +527,11 @@ float keyDownNexuizServerList(entity me, float scan, float ascii, float shift)
 		ServerList_Connect_Click(NULL, me);
 		return 1;
 	}
-	else if(scan == K_INS || scan == K_MOUSE2 || scan == K_MOUSE3)
+	else if(scan == K_INS)
 	{
 		i = me.selectedItem;
 		if(i < me.nItems)
 			ToggleFavorite(me.selectedServer);
-		me.lastClickedServer = -1; // inhibit double clicks using these buttons
-		if(scan != K_INS)
-			me.setSelected(me, me.selectedItem);
 	}
 	else if(keyDownListBox(me, scan, ascii, shift))
 		return 1;
