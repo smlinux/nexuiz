@@ -90,6 +90,12 @@ void GiveFrags (entity attacker, entity targ, float f)
 		}
 		f = 0;
 	}
+	else if(g_ctf)
+	{
+		if(g_ctf_win_mode == 3)
+		if(!targ.flagcarried || self == targ)
+			f = 0;
+	}
 
 	attacker.totalfrags += f;
 
