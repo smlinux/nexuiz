@@ -749,7 +749,7 @@ void Sbar_DrawScoreboard()
 		lastpingstime = time;
 	}
 
-	xmin = vid_conwidth / 5;
+	xmin = vid_conwidth / 10;
 	ymin = 20;
 
 	xmax = vid_conwidth - xmin;
