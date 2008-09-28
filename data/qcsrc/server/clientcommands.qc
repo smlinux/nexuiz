@@ -1,6 +1,6 @@
 entity nagger;
 float readycount;
-void Nagger_SendEntity(entity to, float sendflags)
+float Nagger_SendEntity(entity to, float sendflags)
 {
 	float nags;
 	WriteByte(MSG_ENTITY, ENT_CLIENT_NAGGER);
@@ -22,10 +22,15 @@ void Nagger_SendEntity(entity to, float sendflags)
 	if(sendflags & 128)
 	{
 		WriteByte(MSG_ENTITY, nags | 128);
-		WriteString(MSG_ENTITY, votecalledvote);
+		if(votecalled)
+			WriteString(MSG_ENTITY, votecalledvote_display);
+		else
+			WriteString(MSG_ENTITY, "");
 	}
 	else
 		WriteByte(MSG_ENTITY, nags);
+
+	return TRUE;
 }
 void Nagger_Init()
 {
@@ -36,11 +41,13 @@ void Nagger_Init()
 }
 void Nagger_VoteChanged()
 {
+	print("VoteChanged\n");
 	if(nagger)
 		nagger.SendFlags = 128;
 }
 void Nagger_ReadyCounted()
 {
+	print("ReadyCounted\n");
 	if(nagger)
 		nagger.SendFlags = 1;
 }

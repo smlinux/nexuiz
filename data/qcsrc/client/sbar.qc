@@ -1376,10 +1376,10 @@ void Sbar_Draw (void)
 			else if(sk.(scores[ps_primary]) > 0)
 				s = "^1You have no more lives left";
 			else
-				s = strcat("^1Press ^7", getcommandkey("jump", "+jump"), "^1 to join");
+				s = strcat("^1Press ^3", getcommandkey("jump", "+jump"), "^1 to join");
 		}
 		else
-			s = strcat("^1Press ^7", getcommandkey("jump", "+jump"), "^1 to join");
+			s = strcat("^1Press ^3", getcommandkey("jump", "+jump"), "^1 to join");
 		o = Sbar_DrawNoteLine(o, s);
 	}
 		
@@ -1388,38 +1388,38 @@ void Sbar_Draw (void)
 		if(ready_waiting_for_me)
 		{
 			if(warmup_stage) 
-				s = strcat("^1Press ^3", getcommandkey("ready", "ready"), "^1 to end warmup");
+				s = strcat("^2Press ^3", getcommandkey("ready", "ready"), "^2 to end warmup");
 			else
-				s = strcat("^1Press ^3", getcommandkey("ready", "ready"), "^1 once you are ready");
+				s = strcat("^2Press ^3", getcommandkey("ready", "ready"), "^2 once you are ready");
 		}
 		else
 		{
 			if(warmup_stage) 
-				s = strcat("^1Waiting for others to ready up to end warmup...");
+				s = strcat("^2Waiting for others to ready up to end warmup...");
 			else
-				s = strcat("^1Waiting for others to ready up...");
+				s = strcat("^2Waiting for others to ready up...");
 		}
 		o = Sbar_DrawNoteLine(o, s);
 	}
 	if(vote_waiting)
 	{
-		s = strcat("^1A vote has been called for ", vote_called_vote);
+		s = strcat("^2A vote has been called for ^1", vote_called_vote);
 		o = Sbar_DrawNoteLine(o, s);
 
 		if(vote_waiting_for_me)
 		{
-			s = strcat("^1Press ^3", getcommandkey("vote yes", "vyes"), "^1 to accept");
+			s = strcat("^2Press ^3", getcommandkey("vote yes", "vyes"), "^2 to accept");
 			o = Sbar_DrawNoteLine(o, s);
 
-			s = strcat("^1Press ^3", getcommandkey("vote no", "vno"), "^1 to reject");
+			s = strcat("^2Press ^3", getcommandkey("vote no", "vno"), "^2 to reject");
 			o = Sbar_DrawNoteLine(o, s);
 
-			s = strcat("^1Press ^3", getcommandkey("vote abstain", "vabstain"), "^1 to abstain");
+			s = strcat("^2Press ^3", getcommandkey("vote abstain", "vabstain"), "^2 to abstain");
 			o = Sbar_DrawNoteLine(o, s);
 		}
 		else
 		{
-			s = strcat("^1Waiting for others to vote...");
+			s = strcat("^2Waiting for others to vote...");
 			o = Sbar_DrawNoteLine(o, s);
 		}
 	}
