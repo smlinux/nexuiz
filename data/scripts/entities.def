@@ -564,6 +564,12 @@ colormap: 1024 + 16 * pantscolor + shirtcolor
 velocity: when movetype isn't 0, initial velocity vector
 angles: initial looking direction
 effects: sum of 1 = BRIGHTFIELD, 4 = BRIGHTLIGHT, 8 = DIMLIGHT, 32 = ADDITIVE, 64 = BLUE, 128 = RED, 512 = FULLBRIGHT, 1024 = FLAME, 2048 = STARDUST, 4096 = NOSHADOW, 8192 = NODEPTHTEST, 32768 = DOUBLESIDED, 8388608 = NOMODELFLAGS (ignores the following coming from a model file), 16777216 = ROCKET, 33554432 = GRENADE, 67108864 = GIB, 134217728 = ROTATE, 268435456 = TRACER, 536870912 = ZOMGIB, 1073741824 = TRACER2, -2147483648 = TRACER3
+loddistance1: distance after which to show the first LOD model replacement (default: 1000)
+loddistance2: distance after which to show the second LOD model replacement (default: 2000)
+lodmodel1: file name of the first LOD model replacement
+lodmodel2: file name of the second LOD model replacement
+lodtarget1: targetname of the first LOD model entity (can be used instead of lodmodel1 to use a brush model instead)
+lodtarget2: targetname of the second LOD model entity (can be used instead of lodmodel2 to use a brush model instead)
 -------- Q3MAP2 KEYS --------
 _frame: frame of model to include (set equal to frame if _castshadows is set)
 modelscale: scaling factor (set equal to scale if _castshadows is set)

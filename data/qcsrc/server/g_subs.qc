@@ -344,13 +344,99 @@ float angc (float a1, float a2)
 	return a;
 }
 
+.string lodtarget1;
+.string lodtarget2;
+.string lodmodel1;
+.string lodmodel2;
+.float lodmodelindex0;
+.float lodmodelindex1;
+.float lodmodelindex2;
+.float loddistance1;
+.float loddistance2;
+
+float LOD_customize()
+{
+	float d;
+
+	// TODO csqc network this so it only gets sent once
+	d = vlen(self.origin - other.origin);
+	if(d < self.loddistance1)
+		self.modelindex = self.lodmodelindex0;
+	else if(!self.lodmodelindex2 || d < self.loddistance2)
+		self.modelindex = self.lodmodelindex1;
+	else
+		self.modelindex = self.lodmodelindex2;
+
+	return TRUE;
+}
+
+void LOD_uncustomize()
+{
+	self.modelindex = self.lodmodelindex0;
+}
+
+void LODmodel_attach()
+{
+	entity e;
+
+	if(!self.loddistance1)
+		self.loddistance1 = 1000;
+	if(!self.loddistance2)
+		self.loddistance2 = 2000;
+	self.lodmodelindex0 = self.modelindex;
+
+	if(self.lodtarget1 != "")
+	{
+		e = find(world, targetname, self.lodtarget1);
+		if(e)
+		{
+			self.lodmodel1 = e.model;
+			remove(e);
+		}
+	}
+	if(self.lodtarget2 != "")
+	{
+		e = find(world, targetname, self.lodtarget2);
+		if(e)
+		{
+			self.lodmodel2 = e.model;
+			remove(e);
+		}
+	}
+
+	if(self.lodmodel1 != "")
+	{
+		vector mi, ma;
+		mi = self.mins;
+		ma = self.maxs;
+
+		precache_model(self.lodmodel1);
+		setmodel(self, self.lodmodel1);
+		self.lodmodelindex1 = self.modelindex;
+
+		if(self.lodmodel2 != "")
+		{
+			precache_model(self.lodmodel2);
+			setmodel(self, self.lodmodel2);
+			self.lodmodelindex2 = self.modelindex;
+		}
+
+		self.modelindex = self.lodmodelindex0;
+		setsize(self, mi, ma);
+	}
+
+	if(self.lodmodelindex1)
+		SetCustomizer(self, LOD_customize, LOD_uncustomize);
+}
+
 void SetBrushEntityModel()
 {
-	if(self.model != "")
-	{
-		precache_model(self.model);
-		setmodel(self, self.model); // no precision needed
-	}
+ 	if(self.model != "")
+ 	{
+ 		precache_model(self.model);
+ 		setmodel(self, self.model); // no precision needed
+		InitializeEntity(self, LODmodel_attach, INITPRIO_FINDTARGET);
+ 	}
 	setorigin(self, self.origin);
 	setsize(self, self.mins, self.maxs);
 }

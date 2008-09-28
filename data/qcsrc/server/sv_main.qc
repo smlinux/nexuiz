@@ -139,6 +139,7 @@ void StartFrame (void)
 		return;
 
 	InitializeEntitiesRun();
+	UncustomizeEntitiesRun();
 
 	sv_maxairspeed = cvar("sv_maxairspeed");
 	sv_maxspeed = cvar ("sv_maxspeed");
