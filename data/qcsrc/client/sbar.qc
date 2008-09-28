@@ -346,7 +346,7 @@ void Cmd_Sbar_Help(float argc)
 
 string Sbar_DefaultColumnLayout()
 {
-	return "ping pl name | -ctf,kh/kills -ctf,kh/deaths +kh/caps +kh/pushes +kh/destroyed +ctf/caps +ctf/pickups +ctf/drops +ctf/fckills +ctf/returns -lms/score";
+	return "ping pl name | -ctf,kh/kills -ctf,kh/deaths +kh/caps +kh/pushes +kh/destroyed +ctf/caps +ctf/pickups +ctf/fckills +ctf/returns -lms/score";
 }
 
 void Cmd_Sbar_SetFields(float argc)
@@ -636,7 +636,7 @@ string textShortenToWidth(string theText, float maxWidth, float handleColors)
 		return strcat(substring(theText, 0, textLengthUpToWidth(theText, maxWidth - stringwidth("...", handleColors), handleColors)), "...");
 }
 
-float xmin, xmax, ymin, ymax, sbwidth, sbheight;
+float xmin, xmax, ymin, ymax, sbwidth;
 
 void Sbar_PrintScoreboardItem(vector pos, entity pl, float is_self)
 {
@@ -749,14 +749,13 @@ void Sbar_DrawScoreboard()
 		lastpingstime = time;
 	}
 
-	xmin = vid_conwidth / 10;
+	sbwidth = Sbar_GetWidth(6.5 * sbar_fontsize_y);
+
+	xmin = 0.5 * (vid_conwidth - sbwidth);
 	ymin = 20;
 
 	xmax = vid_conwidth - xmin;
-	ymax = vid_conheight - 0.2*vid_conheight;
-
-	sbwidth = xmax - xmin;
-	sbheight = ymax - ymin;
+    ymax = vid_conheight - 0.2*vid_conheight;
 
 	center_x = xmin + 0.5*sbwidth;
 

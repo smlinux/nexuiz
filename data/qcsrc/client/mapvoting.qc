@@ -130,11 +130,7 @@ void MapVote_Draw()
 		ymax = vid_conheight - ymin;
 
 	drawfont = sbar_bigfont;
-	sbar_fontsize = stov(cvar_string("sbar_fontsize"));
-	if(sbar_fontsize_x == 0)
-		sbar_fontsize = '8 8 0';
-	if(sbar_fontsize_y == 0)
-		sbar_fontsize_y = sbar_fontsize_x;
+	sbar_fontsize = Sbar_GetFontsize();
 
 	pos_y = ymin;
 	pos_z = 0;
