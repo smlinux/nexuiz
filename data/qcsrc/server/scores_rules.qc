@@ -49,8 +49,9 @@ void ScoreRules_generic()
 #define ST_CTF_CAPS 1
 #define SP_CTF_CAPS 4
 #define SP_CTF_PICKUPS 5
-#define SP_CTF_FCKILLS 6
-#define SP_CTF_RETURNS 7
+#define SP_CTF_DROPS 6
+#define SP_CTF_FCKILLS 7
+#define SP_CTF_RETURNS 8
 void ScoreRules_ctf()
 {
 	float sp_score, sp_caps;
@@ -65,6 +66,7 @@ void ScoreRules_ctf()
 			sp_score = SFL_SORT_PRIO_SECONDARY;
 			break;
 		case 2: // score only
+		case 3: // score only, no frags
 		default:
 			sp_score = SFL_SORT_PRIO_PRIMARY;
 			sp_caps = SFL_SORT_PRIO_SECONDARY; // looks better ;)
@@ -78,6 +80,7 @@ void ScoreRules_ctf()
 	ScoreInfo_SetLabel_PlayerScore(SP_CTF_PICKUPS,  "pickups",   0);
 	ScoreInfo_SetLabel_PlayerScore(SP_CTF_FCKILLS,  "fckills",   0);
 	ScoreInfo_SetLabel_PlayerScore(SP_CTF_RETURNS,  "returns",   0);
+	ScoreInfo_SetLabel_PlayerScore(SP_CTF_DROPS,    "drops",     SFL_LOWER_IS_BETTER);
 	ScoreRules_basics_end();
 }
 

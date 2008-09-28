@@ -138,6 +138,7 @@ void DropFlag(entity e, float penalty)
 
 	if(cvar("g_ctf_flagpenalty_drop"))
 		UpdateFrags(p, -cvar("g_ctf_flagpenalty_drop"));
+	PlayerScore_Add(p, SP_CTF_DROPS, +1);
 	
 	//if(e.enemy && e.enemy != e)
 	//UpdateFrags(e.enemy, cvar("g_ctf_flagscore_kill"));

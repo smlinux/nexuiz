@@ -346,7 +346,7 @@ void Cmd_Sbar_Help(float argc)
 
 string Sbar_DefaultColumnLayout()
 {
-	return "ping pl name | -ctf,kh/kills -ctf,kh/deaths +kh/caps +kh/pushes +kh/destroyed +ctf/caps +ctf/pickups +ctf/fckills +ctf/returns -lms/score";
+	return "ping pl name | -ctf,kh/kills -ctf,kh/deaths +kh/caps +kh/pushes +kh/destroyed +ctf/caps +ctf/pickups +ctf/drops +ctf/fckills +ctf/returns -lms/score";
 }
 
 void Cmd_Sbar_SetFields(float argc)
