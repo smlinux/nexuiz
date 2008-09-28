@@ -54,7 +54,7 @@ void reset_map()
 		}
 		else if(self.items & (IT_KEY1 | IT_KEY2))
 		{
-			DropFlag(self, 0);
+			DropFlag(self, world);
 			ReturnFlag(self);
 		}
 		else if(self.classname == "rune")

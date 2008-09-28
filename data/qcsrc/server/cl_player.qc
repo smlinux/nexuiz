@@ -507,10 +507,12 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 			kh_Key_DropAll(self, TRUE);
 		if(self.flagcarried)
 		{
-			if(attacker.classname != "player" || attacker.team == self.team)
-				DropFlag(self.flagcarried, 1); // penalty for flag loss by suicide
+			if(attacker.classname != "player" && attacker.classname != "gib")
+				DropFlag(self.flagcarried, self); // penalty for flag loss by suicide
+			else if(attacker.team == self.team)
+				DropFlag(self.flagcarried, attacker); // penalty for flag loss by suicide/teamkill
 			else
-				DropFlag(self.flagcarried, 0);
+				DropFlag(self.flagcarried, world);
 		}
 		Portal_ClearAllLater(self);
 		// clear waypoints

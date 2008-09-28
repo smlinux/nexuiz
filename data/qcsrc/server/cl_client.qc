@@ -417,7 +417,7 @@ void PutObserverInServer (void)
 	Portal_ClearAll(self);
 
 	if(self.flagcarried)
-		DropFlag(self.flagcarried, 0);
+		DropFlag(self.flagcarried, world);
 
 	WaypointSprite_PlayerDead();
 	
@@ -1313,7 +1313,7 @@ void ClientDisconnect (void)
 	Portal_ClearAll(self);
 
 	if(self.flagcarried)
-		DropFlag(self.flagcarried, 0);
+		DropFlag(self.flagcarried, world);
 
 	save = self.flags;
 	self.flags = self.flags - (self.flags & FL_CLIENT);

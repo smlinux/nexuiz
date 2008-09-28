@@ -359,7 +359,7 @@ float teams_matter;
 
 float startitem_failed;
 
-void DropFlag(entity flag, float penalty);
+void DropFlag(entity flag, entity penalty_receiver);
 void DropAllRunes(entity pl);
 
 

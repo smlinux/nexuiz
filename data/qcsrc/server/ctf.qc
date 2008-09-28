@@ -8,7 +8,6 @@ entity ctf_worldflaglist; // CTF flags in the map
 //float FLAGSCORE_RETURN        =  5; // returned by owner team
 //float FLAGSCORE_RETURNROGUE   = 10; // returned by rogue team
 //float FLAGSCORE_CAPTURE       =  5;
-//float FLAGSCORE_CAPTURE_TEAM  = 20;
 
 #define FLAG_CARRY_POS '-15 0 7'
 
@@ -107,7 +106,7 @@ void ReturnFlag(entity e)
 	RegenFlag(e);
 };
 
-void DropFlag(entity e, float penalty)
+void DropFlag(entity e, entity penalty_receiver)
 {
 	local entity p;
 
@@ -130,13 +129,9 @@ void DropFlag(entity e, float penalty)
 	}
 	bprint(p.netname, "^7 lost the ", e.netname, "\n");
 
-	if(penalty)
-	{
-		UpdateFrags(p, -cvar("g_ctf_flagscore_pickup"));
-		PlayerScore_Add(p, SP_CTF_PICKUPS, -1);
-	}
-
-	if(cvar("g_ctf_flagpenalty_drop"))
+	if(penalty_receiver)
+		UpdateFrags(penalty_receiver, -cvar("g_ctf_flagpenalty_suicidedrop"));
+	else
 		UpdateFrags(p, -cvar("g_ctf_flagpenalty_drop"));
 	PlayerScore_Add(p, SP_CTF_DROPS, +1);
 	
@@ -232,7 +227,7 @@ void FlagThink()
 	if (e.classname != "player" || (e.deadflag) || (e.flagcarried != self))
 	{
 		dprint("CANNOT HAPPEN - player dead and STILL had a flag!\n");
-		DropFlag(self, 0);
+		DropFlag(self, world);
 		return;
 	}
 };
@@ -242,7 +237,6 @@ void FlagTouch()
 	if(gameover) return;
 
 	local float t;
-	local entity head;
 	local entity player;
 	local string s, s0, h0, h1;
 	if (other.classname != "player")
@@ -297,12 +291,6 @@ void FlagTouch()
 		// give credit to the individual player
 		UpdateFrags(other, cvar("g_ctf_flagscore_capture"));
 
-		// give credit to all players of the team (rewards large teams)
-		// NOTE: this defaults to 0
-		FOR_EACH_PLAYER(head)
-			if (head.team == self.team)
-				UpdateFrags(head, cvar("g_ctf_flagscore_capture_team"));
-
 		sound (other, CHAN_AUTO, self.noise2, VOL_BASE, ATTN_NONE);
 		WaypointSprite_DetachCarrier(other);
 		if(self.speedrunning)
@@ -355,10 +343,20 @@ void FlagTouch()
 		{
 			// return flag
 			bprint(other.netname, "^7 returned the ", self.netname, "\n");
-			if (other.team == COLOR_TEAM1 || other.team == COLOR_TEAM2)
-				UpdateFrags(other, cvar("g_ctf_flagscore_return"));
+			if(other == self.enemy)
+			{
+				if (other.team == COLOR_TEAM1 || other.team == COLOR_TEAM2)
+					UpdateFrags(other, cvar("g_ctf_flagscore_return_by_killer"));
+				else
+					UpdateFrags(other, cvar("g_ctf_flagscore_return_rogue_by_killer"));
+			}
 			else
-				UpdateFrags(other, cvar("g_ctf_flagscore_return_rogue"));
+			{
+				if (other.team == COLOR_TEAM1 || other.team == COLOR_TEAM2)
+					UpdateFrags(other, cvar("g_ctf_flagscore_return"));
+				else
+					UpdateFrags(other, cvar("g_ctf_flagscore_return_rogue"));
+			}
 			PlayerScore_Add(other, SP_CTF_RETURNS, 1);
 			LogCTF("return", self.team, other);
 			sound (other, CHAN_AUTO, self.noise1, VOL_BASE, ATTN_NONE);
