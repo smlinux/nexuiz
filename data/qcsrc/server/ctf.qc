@@ -138,7 +138,7 @@ void DropFlag(entity e, entity penalty_receiver)
 	//if(e.enemy && e.enemy != e)
 	//UpdateFrags(e.enemy, cvar("g_ctf_flagscore_kill"));
 	WaypointSprite_DetachCarrier(p);
-	LogCTF("dropped", p.team, p.flagcarried);
+	LogCTF("dropped", p.team, p);
 
 	setattachment(e, world, "");
 
