@@ -35,6 +35,7 @@ void UpdateFrags(entity player, float f)
 	PlayerTeamScore_AddScore(player, f);
 }
 
+// NOTE: f=0 means still count as a (positive) kill, but count no frags for it
 void GiveFrags (entity attacker, entity targ, float f)
 {
 	// TODO route through PlayerScores instead
@@ -324,6 +325,7 @@ void Obituary (entity attacker, entity targ, float deathtype)
 					//GiveFrags(attacker, targ, cvar("g_ctf_flagscore_kill"));
 					UpdateFrags(attacker, cvar("g_ctf_flagscore_kill"));
 					PlayerScore_Add(attacker, SP_CTF_FCKILLS, 1);
+					GiveFrags(attacker, targ, 0);
 				}
 				else
 					GiveFrags(attacker, targ, 1);
