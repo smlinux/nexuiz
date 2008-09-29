@@ -294,7 +294,9 @@ void CSQC_UpdateView(void)
 	} else */
 	if(!draw_enginesbar)
 	{
-		CSQC_common_hud();
+		if(cvar("r_letterbox") == 0)
+		if(cvar("viewsize") < 120)
+			CSQC_common_hud();
 	}
 	
 	if(gametype == GAME_ONSLAUGHT)
