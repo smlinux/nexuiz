@@ -595,7 +595,6 @@
 "saved2"
 "saved3"
 "saved4"
-"scr_screenshot_name"
 "scratch1"
 "scratch2"
 "scratch3"
