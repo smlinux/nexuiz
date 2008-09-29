@@ -178,7 +178,7 @@ void cvar_changes_init()
 		d = cvar_defstring(k);
 		if(v != d)
 		{
-			cvar_changes = strcat(cvar_changes, k, " \"", v, "\" // ", d, "\n");
+			cvar_changes = strcat(cvar_changes, k, " \"", v, "\" // \"", d, "\"\n");
 			if(strlen(cvar_changes) > 16384)
 			{
 				cvar_changes = "// too many settings have been changed to show them here\n";
