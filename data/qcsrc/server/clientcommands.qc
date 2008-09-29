@@ -402,6 +402,8 @@ void SV_ParseClientCommand(string s) {
 		}
 	} else if(argv(0) == "teamstatus") {
 		Score_NicePrint(self);
+	} else if(argv(0) == "cvar_changes") {
+		sprint(self, cvar_changes);
 	} else {
 		//if(ctf_clientcommand())
 		//	return;

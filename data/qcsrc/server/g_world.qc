@@ -154,6 +154,42 @@ float GotoFirstMap()
 	return 0;
 }
 
+void cvar_changes_init()
+{
+	float fh;
+	string s, k, v, d;
+	float n;
+
+	if(cvar_changes)
+		strunzone(cvar_changes);
+	cvar_changes = string_null;
+	fh = fopen("cvars.txt", FILE_READ);
+	if(fh < 0)
+		return;
+	while((s = fgets(fh)))
+	{
+		n = tokenize(s);
+		if(n < 1)
+			continue;
+		if(argv(0) == "//")
+			continue;
+		k = argv(0);
+		v = cvar_string(v);
+		d = cvar_defstring(v);
+		if(v != d)
+		{
+			cvar_changes = strcat(cvar_changes, k, " \"", v, "\" // ", d, "\n");
+			if(strlen(cvar_changes) > 16384)
+			{
+				cvar_changes = "// too many settings have been changed to show them here\n";
+				break;
+			}
+		}
+	}
+	fclose(fh);
+	cvar_changes = strzone(cvar_changes);
+}
+
 float world_already_spawned;
 void RegisterWeapons();
 void Nagger_Init();
@@ -362,6 +398,8 @@ void spawnfunc_worldspawn (void)
 
 	next_pingtime = time + 5;
 	world_initialized = 1;
+
+	InitializeEntity(self, cvar_changes_init, INITPRIO_CVARS);
 }
 
 void spawnfunc_light (void)

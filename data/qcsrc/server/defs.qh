@@ -490,3 +490,5 @@ string clientstuff;
 .float porto_forbidden;
 
 .string fog;
+
+string cvar_changes;

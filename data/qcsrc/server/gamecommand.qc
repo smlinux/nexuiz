@@ -410,6 +410,11 @@ void GameCommand(string command)
 		RoughMap();
 		return;
 	}
+	if (argv(0) == "cvar_changes")
+	{
+		print(cvar_changes);
+		return;
+	}
 
 	print("Invalid command. For a list of supported commands, try sv_cmd help.\n");
 }
