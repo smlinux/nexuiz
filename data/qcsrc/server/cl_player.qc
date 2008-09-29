@@ -508,11 +508,11 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 		if(self.flagcarried)
 		{
 			if(attacker.classname != "player" && attacker.classname != "gib")
-				DropFlag(self.flagcarried, self); // penalty for flag loss by suicide
+				DropFlag(self.flagcarried, self, attacker); // penalty for flag loss by suicide
 			else if(attacker.team == self.team)
-				DropFlag(self.flagcarried, attacker); // penalty for flag loss by suicide/teamkill
+				DropFlag(self.flagcarried, attacker, attacker); // penalty for flag loss by suicide/teamkill
 			else
-				DropFlag(self.flagcarried, world);
+				DropFlag(self.flagcarried, world, attacker);
 		}
 		Portal_ClearAllLater(self);
 		// clear waypoints

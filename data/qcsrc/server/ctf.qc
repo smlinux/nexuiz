@@ -106,7 +106,7 @@ void ReturnFlag(entity e)
 	RegenFlag(e);
 };
 
-void DropFlag(entity e, entity penalty_receiver)
+void DropFlag(entity e, entity penalty_receiver, entity attacker)
 {
 	local entity p;
 
@@ -134,9 +134,8 @@ void DropFlag(entity e, entity penalty_receiver)
 	else
 		UpdateFrags(p, -cvar("g_ctf_flagpenalty_drop"));
 	PlayerScore_Add(p, SP_CTF_DROPS, +1);
+	e.playerid = attacker.playerid;
 	
-	//if(e.enemy && e.enemy != e)
-	//UpdateFrags(e.enemy, cvar("g_ctf_flagscore_kill"));
 	WaypointSprite_DetachCarrier(p);
 	LogCTF("dropped", p.team, p);
 
@@ -227,7 +226,7 @@ void FlagThink()
 	if (e.classname != "player" || (e.deadflag) || (e.flagcarried != self))
 	{
 		dprint("CANNOT HAPPEN - player dead and STILL had a flag!\n");
-		DropFlag(self, world);
+		DropFlag(self, world, world);
 		return;
 	}
 };
@@ -319,7 +318,7 @@ void FlagTouch()
 		self.cnt = FLAG_CARRY;
 		self.angles = '0 0 0';
 		bprint(other.netname, "^7 got the ", self.netname, "\n");
-		UpdateFrags(other, cvar("g_ctf_flagscore_pickup"));
+		UpdateFrags(other, cvar("g_ctf_flagscore_pickup_base"));
 		PlayerScore_Add(other, SP_CTF_PICKUPS, 1);
 		LogCTF("steal", self.team, other);
 		sound (other, CHAN_AUTO, self.noise, VOL_BASE, ATTN_NONE);
@@ -343,7 +342,7 @@ void FlagTouch()
 		{
 			// return flag
 			bprint(other.netname, "^7 returned the ", self.netname, "\n");
-			if(other == self.enemy)
+			if(other.playerid == self.playerid) // is this the guy who killed the FC last?
 			{
 				if (other.team == COLOR_TEAM1 || other.team == COLOR_TEAM2)
 					UpdateFrags(other, cvar("g_ctf_flagscore_return_by_killer"));
@@ -371,7 +370,14 @@ void FlagTouch()
 			other.flagcarried = self;
 			self.cnt = FLAG_CARRY;
 			bprint(other.netname, "^7 picked up the ", self.netname, "\n");
-			UpdateFrags(other, cvar("g_ctf_flagscore_pickup"));
+
+			float f;
+			f = (time - self.pain_finished) / cvar("g_ctf_flag_returntime");
+			f = cvar("g_ctf_flagscore_pickup_dropped_late") * (1-f)
+			  + cvar("g_ctf_flagscore_pickup_dropped_early") * f;
+			f = floor(f + 0.5);
+
+			UpdateFrags(other, f);
 			PlayerScore_Add(other, SP_CTF_PICKUPS, 1);
 			LogCTF("pickup", self.team, other);
 			sound (other, CHAN_AUTO, self.noise, VOL_BASE, ATTN_NONE);

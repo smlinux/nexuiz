@@ -193,7 +193,7 @@ float Portal_TeleportPlayer(entity teleporter, entity player)
 	player.right_vector = -1 * Portal_Transform_Apply(transform, player.right_vector);
 
 	if(player.flagcarried)
-		DropFlag(player.flagcarried, player);
+		DropFlag(player.flagcarried, player, world);
 	TeleportPlayer(teleporter, player, to, ang, newvel, teleporter.enemy.absmin, teleporter.enemy.absmax);
 
 	// reset fade counter

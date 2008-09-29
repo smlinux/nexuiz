@@ -270,7 +270,7 @@ void SV_ParseClientCommand(string s) {
 			return; // don't allow spectating in lms, unless player runs out of lives
 		if(self.classname == "player" && cvar("sv_spectate") == 1) {
 			if(self.flagcarried)
-				DropFlag(self.flagcarried, world);
+				DropFlag(self.flagcarried, world, world);
 			kh_Key_DropAll(self, TRUE);
 			WaypointSprite_PlayerDead();
 			self.classname = "observer";
