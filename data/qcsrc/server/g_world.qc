@@ -174,8 +174,8 @@ void cvar_changes_init()
 		if(argv(0) == "//")
 			continue;
 		k = argv(0);
-		v = cvar_string(v);
-		d = cvar_defstring(v);
+		v = cvar_string(k);
+		d = cvar_defstring(k);
 		if(v != d)
 		{
 			cvar_changes = strcat(cvar_changes, k, " \"", v, "\" // ", d, "\n");
@@ -187,6 +187,10 @@ void cvar_changes_init()
 		}
 	}
 	fclose(fh);
+	if(cvar_changes == "")
+		cvar_changes = "// this server runs at default settings\n";
+	else
+		cvar_changes = strcat("// this server runs at modified settings:\n", cvar_changes);
 	cvar_changes = strzone(cvar_changes);
 }
 
