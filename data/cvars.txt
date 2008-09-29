@@ -54,7 +54,6 @@
 "developer_networking"
 "edgefriction"
 "ekg" "TODO: describe me"
-"exit_cfg" "TODO: describe me"
 "fraglimit_override" "TODO: describe me"
 "fs_empty_files_in_pack_mark_deletions"
 "g_antilag" "TODO: describe me"
