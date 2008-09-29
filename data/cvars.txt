@@ -677,7 +677,6 @@
 "sv_maxrate"
 "sv_maxspeed"
 "sv_maxvelocity"
-"sv_motd" "TODO: describe me"
 "sv_newflymove"
 "sv_nostep"
 "sv_playerphysicsqc"

@@ -64,6 +64,7 @@ my $ignore_re = qr{
 |	hostname                         # shown already
 |	g_maplist                        # too long
 |	g_maplist_mostrecent             # too long
+|	sv_motd                          # too long
 }x;
 
 while(<DATA>)
