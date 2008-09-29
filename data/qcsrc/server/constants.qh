@@ -111,6 +111,7 @@ float	CHAN_WEAPON				= 1; // Weapon fire
 float	CHAN_VOICE				= 2; // Voice/Radio
 float	CHAN_TRIGGER			= 3; // Triggers/Items
 float	CHAN_PROJECTILE			= 4; // Projectiles
+float	CHAN_WEAPON2			= 5; // Nex fire (separated as it is a very long sound)
 float	CHAN_PAIN				= 6; // Pain
 float	CHAN_PLAYER				= 7; // Player body
 

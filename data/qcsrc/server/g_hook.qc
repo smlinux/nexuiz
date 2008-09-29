@@ -309,7 +309,8 @@ void FireGrapplingHook (void)
 
 	makevectors(self.v_angle);
 
-	sound (self, CHAN_WEAPON, "weapons/hook_fire.wav", VOL_BASE, ATTN_NORM);
+	// UGLY WORKAROUND: play this on CHAN_WEAPON2 so it can't cut off fire sounds
+	sound (self, CHAN_WEAPON2, "weapons/hook_fire.wav", VOL_BASE, ATTN_NORM);
 	org = self.origin + self.view_ofs + v_forward * 8 - v_right * 8 + '0 0 -12';
 	pointparticles(particleeffectnum("grapple_muzzleflash"), org, '0 0 0', 1);
 
