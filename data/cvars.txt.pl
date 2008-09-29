@@ -55,6 +55,7 @@ my $ignore_re = qr{
 |	g_dm                             # mapinfo
 |	g_domination                     # mapinfo
 |	g_keyhunt                        # mapinfo
+|	g_keyhunt_teams                  # mapinfo
 |	g_onslaught                      # mapinfo
 |	g_race                           # mapinfo
 |	g_runematch                      # mapinfo
@@ -221,7 +222,6 @@ __DATA__
 ^7developer_networking is "0" ["0"] prints all received and sent packets (recommended only for debugging)
 ^7edgefriction is "1" ["1"] how much you slow down when nearing a ledge you might fall off
 ^7ekg is "0" ["0"] custom cvar
-^7exit_cfg is "empty.cfg" ["empty.cfg"] custom cvar
 ^7fraglimit is "30" ["0"] ends level if this many frags is reached by any player
 ^7fraglimit_override is "-1" ["-1"] custom cvar
 ^7fs_empty_files_in_pack_mark_deletions is "1" ["1"] if enabled, empty files in a pak/pk3 count as not existing but cancel the search in further packs, effectively allowing patch pak/pk3 files to 'delete' files

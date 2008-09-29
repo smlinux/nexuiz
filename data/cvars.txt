@@ -392,7 +392,6 @@
 "g_grappling_hook_tarzan" "TODO: describe me"
 "g_jump_grunt" "TODO: describe me"
 "g_keyhunt_point_limit" "TODO: describe me"
-"g_keyhunt_teams" "TODO: describe me"
 "g_keyhunt_teams_override" "TODO: describe me"
 "g_laserguided_missile" "TODO: describe me"
 "g_lms" "TODO: describe me"
