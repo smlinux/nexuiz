@@ -56,6 +56,7 @@ my $ignore_re = qr{
 |	g_race                           # mapinfo
 |	g_runematch                      # mapinfo
 |	g_tdm                            # mapinfo
+|	teamplay                         # mapinfo
 
 |	hostname                         # shown already
 |	g_maplist                        # too long
