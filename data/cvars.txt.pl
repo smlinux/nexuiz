@@ -8,6 +8,7 @@ my $ignore_re = qr{
 |	csqc_.*                          # internal
 |	gamecfg                          # internal
 |	g_configversion                  # internal
+|	g_maplist_index                  # internal
 |	halflifebsp                      # internal
 
 |	cl_.*	                         # client
@@ -20,6 +21,7 @@ my $ignore_re = qr{
 |	net_slist_.*	                 # client
 |	r_.*                             # client
 |	sbar_.*	                         # client
+|	scr_.*	                         # client
 |	userbind.*                       # client
 |	v_.*                             # client
 |	vid_.*                           # client
@@ -30,6 +32,7 @@ my $ignore_re = qr{
 |	net_address                      # private
 |	port                             # private
 |	rcon_.*                          # private
+|	savedgamecfg                     # private
 |	settemp_.*                       # private
 |	sv_allowdownloads_.*             # private
 |	sv_autodemo.*                    # private
