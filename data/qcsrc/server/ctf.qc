@@ -372,10 +372,12 @@ void FlagTouch()
 			bprint(other.netname, "^7 picked up the ", self.netname, "\n");
 
 			float f;
-			f = (time - self.pain_finished) / cvar("g_ctf_flag_returntime");
+			f = bound(0, (self.pain_finished - time) / cvar("g_ctf_flag_returntime"), 1);
+			//print("factor is ", ftos(f), "\n");
 			f = cvar("g_ctf_flagscore_pickup_dropped_late") * (1-f)
 			  + cvar("g_ctf_flagscore_pickup_dropped_early") * f;
 			f = floor(f + 0.5);
+			//print("score is ", ftos(f), "\n");
 
 			UpdateFrags(other, f);
 			PlayerScore_Add(other, SP_CTF_PICKUPS, 1);
