@@ -597,4 +597,6 @@ void VoteCount() {
 			}
 		}
 	}
+
+	Nagger_VoteCountChanged();
 }
