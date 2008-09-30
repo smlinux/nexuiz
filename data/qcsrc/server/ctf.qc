@@ -342,6 +342,19 @@ void FlagTouch()
 		{
 			// return flag
 			bprint(other.netname, "^7 returned the ", self.netname, "\n");
+
+			// punish the player who last had it
+			FOR_EACH_PLAYER(player)
+				if(player.playerid == self.playerid)
+					PlayerScore_Add(player, SP_SCORE, -cvar("g_ctf_flagpenalty_returned"));
+
+			// punish the team who was last carrying it
+			if(self.team == COLOR_TEAM1)
+				TeamScore_AddToTeam(COLOR_TEAM2, ST_SCORE, -cvar("g_ctf_flagpenalty_returned"));
+			else
+				TeamScore_AddToTeam(COLOR_TEAM1, ST_SCORE, -cvar("g_ctf_flagpenalty_returned"));
+
+			// reward the player who returned it
 			if(other.playerid == self.playerid) // is this the guy who killed the FC last?
 			{
 				if (other.team == COLOR_TEAM1 || other.team == COLOR_TEAM2)
