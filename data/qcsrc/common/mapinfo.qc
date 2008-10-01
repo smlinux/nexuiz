@@ -1,32 +1,3 @@
-// internal toy
-void cvar_settemp(string pKey, string pValue)
-{
-	//localcmd(strcat("\nsettemp ", t, " \"", s, "\"\n"));
-	
-	// duplicate what this alias does:
-	// alias settemp "settemp_list \"1 $1 $settemp_var $settemp_list\"; set $settemp_var \"${$1}\"; settemp_var ${settemp_var}x; $1 \"$2\""
-	
-	cvar_set("settemp_list", strcat("1 ", pKey, " ", cvar_string("settemp_var"), " ", cvar_string("settemp_list")));
-#ifdef MENUQC
-	registercvar(cvar_string("settemp_var"), "", 0);
-#else
-	registercvar(cvar_string("settemp_var"), "");
-#endif
-	cvar_set(cvar_string("settemp_var"), cvar_string(pKey));
-	cvar_set("settemp_var", strcat(cvar_string("settemp_var"), "x"));
-	cvar_set(pKey, pValue);
-}
-
-void cvar_settemp_restore()
-{
-	// undo what cvar_settemp did
-	float n, i;
-	n = tokenize(cvar_string("settemp_list"));
-	for(i = 0; i < n - 3; i += 3)
-		cvar_set(argv(i + 1), cvar_string(argv(i + 2)));
-	cvar_set("settemp_list", "0");
-}
-
 #ifdef HSOI
 // HUGE SET - stored in a string
 string HugeSetOfIntegers_empty()
@@ -476,6 +447,8 @@ void _MapInfo_Map_Reset()
 	MapInfo_Map_supportedFeatures = 0;
 	MapInfo_Map_clientstuff = "";
 	MapInfo_Map_fog = "";
+	MapInfo_Map_mins = '0 0 0';
+	MapInfo_Map_maxs = '0 0 0';
 }
 
 void _MapInfo_Map_ApplyGametype(string s, float pWantedType, float pThisType)
@@ -591,6 +564,11 @@ float MapInfo_Get_ByName(string pFilename, float pAllowGenerate, float pGametype
 			fputs(fh, "settemp_for_type all sv_q3acompat_machineshotgunswap 1\n");
 		}
 
+		fputs(fh, "// optional: fog density red green blue alpha mindist maxdist\n");
+		fputs(fh, "// optional: settemp_for_type (all|gametypename) cvarname value\n");
+		fputs(fh, "// optional: clientsettemp_for_type (all|gametypename) cvarname value\n");
+		fputs(fh, "// optional: size mins_x mins_y mins_z maxs_x maxs_y maxs_z (for team map)\n");
+
 		fclose(fh);
 		r = 2;
 		// return r;
@@ -637,6 +615,37 @@ float MapInfo_Get_ByName(string pFilename, float pAllowGenerate, float pGametype
 				_MapInfo_Map_ApplyGametype (s, pGametypeToSet, f);
 			else
 				dprint("Map ", pFilename, " supports unknown game type ", t, ", ignored\n");
+		}
+		else if(t == "size")
+		{
+			float a, b, c, d, e, f;
+			t = car(s); s = cdr(s); a = stof(t);
+			t = car(s); s = cdr(s); b = stof(t);
+			t = car(s); s = cdr(s); c = stof(t);
+			t = car(s); s = cdr(s); d = stof(t);
+			t = car(s); s = cdr(s); e = stof(t);
+			if(s == "")
+				print("Map ", pFilename, " contains an incorrect size line, syntax: size mins_x mins_y mins_z maxs_x maxs_y maxs_z\n");
+			else
+			{
+				t = car(s); s = cdr(s); f = stof(t);
+				if(s == "")
+					print("Map ", pFilename, " contains an incorrect size line, syntax: size mins_x mins_y mins_z maxs_x maxs_y maxs_z\n");
+				else
+				{
+					if(a >= d || b >= e || c >= f)
+						print("Map ", pFilename, " contains an incorrect size line, mins have to be < maxs\n");
+					else
+					{
+						MapInfo_Map_mins_x = a;
+						MapInfo_Map_mins_y = b;
+						MapInfo_Map_mins_z = c;
+						MapInfo_Map_maxs_x = d;
+						MapInfo_Map_maxs_y = e;
+						MapInfo_Map_maxs_z = f;
+					}
+				}
+			}
 		}
 		else if(t == "settemp_for_type")
 		{

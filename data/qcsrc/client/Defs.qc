@@ -175,7 +175,6 @@ float		sb_showscores;
 float vid_conwidth, vid_conheight;
 float configdb;
 float binddb;
-string shortmapname;
 
 // QUALIFYING
 float race_checkpoint;
@@ -203,3 +202,6 @@ float sb_showscores_force;
 
 // Spectating
 float spectatee_status;
+
+// short mapname
+string shortmapname;

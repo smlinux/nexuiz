@@ -58,7 +58,7 @@ void Porto_Draw()
 		if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_SLICK || trace_dphitcontents & DPCONTENTS_PLAYERCLIP)
 			continue;
 		++portal_number;
-		ang = vectoangles(trace_plane_normal, dir);
+		ang = vectoangles2(trace_plane_normal, dir);
 		ang_x = -ang_x;
 		makevectors(ang);
 		if(!CheckWireframeBox(porto, p - 48 * v_right - 48 * v_up + 16 * v_forward, 96 * v_right, 96 * v_up, 96 * v_forward))

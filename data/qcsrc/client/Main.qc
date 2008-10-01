@@ -4,7 +4,7 @@
 
 #define DP_CSQC_ENTITY_REMOVE_IS_B0RKED
 
-void cvar_settemp(string cv, string val)
+void cvar_clientsettemp(string cv, string val)
 {
 	entity e;
 	for(e = world; (e = find(e, classname, "saved_cvar_value")); )
@@ -18,7 +18,7 @@ void cvar_settemp(string cv, string val)
 	cvar_set(cv, val);
 }
 
-void cvar_settemp_restore()
+void cvar_clientsettemp_restore()
 {
 	entity e;
 	for(e = world; (e = find(e, classname, "saved_cvar_value")); )
@@ -113,7 +113,7 @@ void CSQC_Init(void)
 	
 	GetTeam(COLOR_SPECTATOR, true); // add specs first
 
-	cvar_settemp("_supports_weaponpriority", "1");
+	cvar_clientsettemp("_supports_weaponpriority", "1");
 }
 
 // CSQC_Shutdown : Called every time the CSQC code is shutdown (changing maps, quitting, etc)
@@ -131,7 +131,7 @@ void CSQC_Shutdown(void)
 	db_close(configdb);
 	db_close(binddb);
 
-	cvar_settemp_restore();
+	cvar_clientsettemp_restore();
 }
 
 .float has_team;
@@ -297,7 +297,7 @@ float GameCommand(string msg)
 		return true;
 	}
 	else if(cmd == "settemp") {
-		cvar_settemp(argv(1), argv(2));
+		cvar_clientsettemp(argv(1), argv(2));
 	}
 	
 	return false;
@@ -572,46 +572,14 @@ void Gamemode_Init()
 	local string mapinfo, infoline;
 	local float len;
 	local float file;
-	local vector mi_min, mi_max;
 
-	if(!strcasecmp(substring(mapname, 0, 5), "maps/"))
-		shortmapname = substring(mapname, 5, 999);
-	else
-		shortmapname = mapname;
-	len = strlen(shortmapname);
-	if(!strcasecmp(substring(shortmapname, len-4, 4), ".bsp"))
-		shortmapname = substring(shortmapname, 0, len-4);
-	shortmapname = strzone(shortmapname);
+	get_mi_min_max();
+	mi_center = (mi_min + mi_max) * 0.5;
+	mi_scale = mi_max - mi_min;
+	minimapname = strzone(strcat("gfx/", mi_shortname, "_mini.tga"));
+	shortmapname = mi_shortname;
 
 	if(gametype == GAME_ONSLAUGHT) {
-		mapinfo = strcat("maps/", minimapname, ".info");
-		minimapname = strzone(strcat("gfx/", shortmapname, "_mini.tga"));
-
-		mi_min = world.mins;
-		mi_max = world.maxs;
-		
-		file = fopen(mapinfo, FILE_READ);
-		if(file >= 0) {
-			while((infoline = fgets(file))) {
-				if(!strncasecmp(infoline, "mins", 4)) {
-					mi_min = stov(substring(infoline, 5, 999));
-				} else if(!strncasecmp(infoline, "maxs", 4)) {
-					mi_max = stov(substring(infoline, 5, 999));
-				} else if(strncasecmp(infoline, "//", 2)) { // don't print comment-style lines
-					print(strcat("mapinfo: ", infoline, "\n"));
-				}
-			}
-		} else {
-			print(strcat("Map has no .info file (", mapinfo, ").\n"));
-		}
-		fclose(file);
-
-		print(strcat("Mins: ", vtos(mi_min), "    Maxs: ", vtos(mi_max), "\n"));
-		
-		mi_center = (mi_min + mi_max) * 0.5;
-		mi_scale = mi_max - mi_min;
-		
-		
 		print(strcat("Using ", minimapname, " as minimap.\n"));
 		precache_pic(minimapname);
 		precache_pic("gfx/ons-cp-neutral.tga");

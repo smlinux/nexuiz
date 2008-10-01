@@ -1,8 +1,0 @@
-// This file is necessary if world.mins/maxs is wrong.
-// It happens when q3map2 fucks up, or you put entities far outside the map,
-// like ons-reborn the trains.
-// Every unrecognized line in this file will be printed to the console
-// unless it begins with double slashes
-// This is a sample file =)
-mins -8224.0 -8224.0 -96.0
-maxs 8224.0 8224.0 6496.0

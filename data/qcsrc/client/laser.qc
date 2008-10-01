@@ -1,75 +1,3 @@
-// FIXME make this generic code, to be used for other entities too?
-.vector iorigin1, iorigin2;
-.vector ivelocity1, ivelocity2;
-.vector iforward1, iforward2;
-.vector iright1, iright2;
-.float itime1, itime2;
-void InterpolateOrigin_Note()
-{
-	float dt;
-
-	makevectors(self.angles);
-
-	self.iorigin1 = self.iorigin2;
-	self.iforward1 = self.iforward2;
-	self.iright1 = self.iright2;
-	self.ivelocity1 = self.ivelocity2;
-
-	self.iorigin2 = self.origin;
-	self.iforward2 = v_forward;
-	self.iright2 = v_right;
-	self.ivelocity2 = self.velocity;
-
-	dt = time - self.itime1;
-
-	if(vlen(self.iorigin2 - self.iorigin1) > 1000)
-	{
-		self.iorigin1 = self.iorigin2;
-		self.iforward1 = self.iforward2;
-		self.iright1 = self.iright2;
-		self.ivelocity1 = self.ivelocity2;
-	}
-	else if(vlen(self.ivelocity2 - self.ivelocity1) > 1000)
-	{
-		self.iforward1 = self.iforward2;
-		self.iright1 = self.iright2;
-		self.ivelocity1 = self.ivelocity2;
-	}
-
-	if(dt < 0.2)
-	{
-		self.itime1 = time;
-		self.itime2 = time + getstatf(STAT_SYS_TICRATE) * getstatf(STAT_MOVEVARS_TIMESCALE);
-	}
-	else
-	{
-		// don't lerp
-		self.itime1 = self.itime2 = time;
-	}
-}
-void InterpolateOrigin_Do()
-{
-	vector forward, right;
-	if(self.itime1 && self.itime2 && self.itime1 != self.itime2)
-	{
-		float f;
-		f = bound(0, (time - self.itime1) / (self.itime2 - self.itime1), 1);
-		self.origin = (1 - f) * self.iorigin1 + f * self.iorigin2;
-		forward = (1 - f) * self.iforward1 + f * self.iforward2;
-		right = (1 - f) * self.iright1 + f * self.iright2;
-		self.angles = vectoangles(forward, right);
-		self.angles_x = -self.angles_x;
-		self.velocity = (1 - f) * self.ivelocity1 + f * self.ivelocity2;
-	}
-}
-void InterpolateOrigin_Undo()
-{
-	self.origin = self.iorigin2;
-	self.angles = vectoangles(self.iforward2, self.iright2);
-	self.angles_x = -self.angles_x;
-	self.velocity = self.ivelocity2;
-}
-
 // a laser goes from origin in direction angles
 // it has color 'colormod'
 // and stops when something is in the way
@@ -121,10 +49,17 @@ void Draw_Laser()
 void Ent_Laser()
 {
 	float f;
+	InterpolateOrigin_Undo();
+
 	// 30 bytes, or 13 bytes for just moving
 	f = ReadByte();
 	self.count = (f & 0xC0);
-	InterpolateOrigin_Undo();
+
+	if(self.count & 0x80)
+		self.iflags = IFLAG_VELOCITY;
+	else
+		self.iflags = IFLAG_ANGLES;
+
 	if(f & 1)
 	{
 		self.origin_x = ReadCoord();

@@ -13,10 +13,9 @@ tturrets/include/turret_tturrets_early.qh
 
 campaign.qh
 ../common/campaign_common.qh
+../common/mapinfo.qh
 ../common/util.qh
 ../common/util.qc
-
-../common/mapinfo.qh
 
 portals.qh
 

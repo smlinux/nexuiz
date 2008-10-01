@@ -78,3 +78,19 @@ string fixPriorityList(string pl, float from, float to, float complete);
 string swapInPriorityList(string order, float i, float j);
 
 float cvar_value_issafe(string s);
+
+void cvar_settemp(string pKey, string pValue);
+void cvar_settemp_restore();
+
+#ifndef MENUQC
+string mi_shortname;
+vector mi_min;
+vector mi_max;
+vector mi_picmin; // adjusted mins that map to the picture (square)
+vector mi_picmax; // adjusted maxs that map to the picture (square)
+vector mi_pictexcoord0; // texcoords of the image corners (after transforming, these are 2D coords too)
+vector mi_pictexcoord1; // texcoords of the image corners (after transforming, these are 2D coords too)
+vector mi_pictexcoord2; // texcoords of the image corners (after transforming, these are 2D coords too)
+vector mi_pictexcoord3; // texcoords of the image corners (after transforming, these are 2D coords too)
+void get_mi_min_max();
+#endif

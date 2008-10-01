@@ -24,6 +24,8 @@ string MapInfo_Map_clientstuff;
 string MapInfo_Map_fog;
 float MapInfo_Map_supportedGametypes;
 float MapInfo_Map_supportedFeatures;
+vector MapInfo_Map_mins; // these are '0 0 0' if not supported!
+vector MapInfo_Map_maxs; // these are '0 0 0' if not specified!
 
 // load MapInfo_count; generate mapinfo for maps that miss them, and clear the
 // cache; you need to call MapInfo_FilterGametype afterwards!

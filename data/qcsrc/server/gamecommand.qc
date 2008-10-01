@@ -37,15 +37,15 @@ float RoughMapAtPoint(float x, float y, float w, float h)
 	return floor(FullTraceFraction(a, mi, ma, b) / (world.maxs_z - world.mins_z) * 255);
 }
 #else
-float RoughMapAtPoint(float x, float y, float w, float h)
+float RoughMapAtPoint(float x, float y, float w, float h, vector mi_min, vector mi_max)
 {
 	vector o, mi, ma;
 	float i, r;
 	vector dz;
 	mi = '0 0 0';
-	dz = ((world.maxs_z - world.mins_z) / 64) * '0 0 1';
+	dz = ((mi_max_z - mi_min_z) / 64) * '0 0 1';
 	ma = '1 0 0' * w + '0 1 0' * h + dz;
-	o = '1 0 0' * x + '0 1 0' * y + '0 0 1' * world.mins_z;
+	o = '1 0 0' * x + '0 1 0' * y + '0 0 1' * mi_min_z;
 	
 	r = 0;
 	for(i = 0; i < 51; ++i)
@@ -62,7 +62,7 @@ string doublehex = "000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D
 
 void RoughMap()
 {
-	float x0, y0, w, h;
+	float w, h;
 	float m, n;
 	float x, y;
 	float l;
@@ -71,22 +71,17 @@ void RoughMap()
 	string si;
 	string fn;
 
+	get_mi_min_max();
+
 	m = 256;
 	n = 256;
 
-	x0 = world.mins_x;
-	y0 = world.mins_y;
-	w = (world.maxs_x - x0) / m;
-	h = (world.maxs_y - y0) / n;
-	// TODO fix aspect
-	w = h = max(w, h);
+	w = (mi_picmax_x - mi_picmin_x) / m;
+	h = (mi_picmax_y - mi_picmin_y) / n;
 
-	/*
-	m = min(m, ceil((world.maxs_x - x0) / w));
-	n = min(n, ceil((world.maxs_y - y0) / h));
-	*/
+	print("Picture mins/maxs: ", ftos(w), " and ", ftos(h), " should match\n");
 
-	fn = strcat("maps/", mapname, ".xpm");
+	fn = strcat("maps/", mi_shortname, "_mini.xpm");
 	f = fopen(fn, FILE_WRITE);
 	if(f < 0)
 	{
@@ -108,7 +103,7 @@ void RoughMap()
 		fputs(f, "\"");
 		for(x = 0; x < m; ++x)
 		{
-			l = RoughMapAtPoint(x0 + x * w, y0 + y * h, w, h);
+			l = RoughMapAtPoint(mi_min_x + x * w, mi_min_y + y * h, w, h, mi_picmin, mi_picmax);
 			fputs(f, substring(doublehex, 2 * l, 2));
 		}
 		if(y == 0)
@@ -120,7 +115,8 @@ void RoughMap()
 		}
 	}
 	fputs(f, "};\n");
-	print("Finished. Please edit data/", fn, " with an image editing application and place it with the name XXX in the TGA format in the same folder as the BSP file.\n");
+	fclose(f);
+	print("Finished. Please edit data/", fn, " with an image editing application and place it in the TGA format in the same folder as the BSP file.\n");
 }
 
 void EffectIndexDump()

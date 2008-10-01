@@ -7,8 +7,8 @@ mbuiltin.qh
 oo/base.h
 
 ../common/constants.qh
-../common/util.qh
 ../common/mapinfo.qh
+../common/util.qh
 ../common/campaign_common.qh
 
 gamecommand.qh
