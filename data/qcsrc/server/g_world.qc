@@ -947,6 +947,7 @@ void DumpStats(float final)
 	}
 
 	s = strcat(":labels:player:", GetPlayerScoreString(world, 0));
+	if(to_console)
 		print(s, "\n");
 	if(to_eventlog)
 		GameLogEcho(s);
