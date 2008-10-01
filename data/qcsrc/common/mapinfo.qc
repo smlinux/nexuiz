@@ -618,7 +618,7 @@ float MapInfo_Get_ByName(string pFilename, float pAllowGenerate, float pGametype
 		}
 		else if(t == "size")
 		{
-			float a, b, c, d, e, f;
+			float a, b, c, d, e;
 			t = car(s); s = cdr(s); a = stof(t);
 			t = car(s); s = cdr(s); b = stof(t);
 			t = car(s); s = cdr(s); c = stof(t);

@@ -161,6 +161,8 @@ vector GetCurrentFov(float fov)
 		}
 	}
 
+	current_zoomfraction = (current_viewzoom - 1) / (1/zoomfactor - 1);
+
 	if(zoomsensitivity < 1)
 		setsensitivityscale(pow(current_viewzoom, 1 - zoomsensitivity));
 	else
@@ -306,6 +308,8 @@ void CSQC_UpdateView(void)
 		ons_view();
 		//drawresetcliparea();
 	}
+	else if(teamplay)
+		teamradar_view();
 }
 
 void Sbar_Draw();

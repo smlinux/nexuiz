@@ -325,15 +325,19 @@ float CSQC_InputEvent(float bInputType, float nPrimary, float nSecondary)
 
 // --------------------------------------------------------------------------
 // BEGIN OPTIONAL CSQC FUNCTIONS
-void Ent_ReadONS()
+void Ent_ReadEntCS()
 {
 	entity gps;
 	using_gps = true;
+
+	InterpolateOrigin_Undo();
 
 	self.origin_x = ReadCoord();
 	self.origin_y = ReadCoord();
 	self.angles_y = ReadCoord();
 	self.origin_z = self.angles_x = self.angles_z = 0;
+
+	InterpolateOrigin_Note();
 
 	for(gps = gps_start; gps; gps = gps.chain)
 	{
@@ -487,7 +491,7 @@ void(float bIsNewEntity) CSQC_Ent_Update =
 		{
 			switch(msg)
 			{
-			case ENTCS_MSG_ONS_GPS: Ent_ReadONS(); break;
+			case ENTCS_MSG_ONS_GPS: Ent_ReadEntCS(); break;
 			case ENTCS_MSG_ONS_REMOVE: Ent_RemoveONS(); break;
 			default:
 				error("unknown ENTCS_MSG type\n");
@@ -576,7 +580,7 @@ void Gamemode_Init()
 	get_mi_min_max();
 	mi_center = (mi_min + mi_max) * 0.5;
 	mi_scale = mi_max - mi_min;
-	minimapname = strzone(strcat("gfx/", mi_shortname, "_mini.tga"));
+	minimapname = strzone(strcat("maps/", mi_shortname, "_mini.tga"));
 	shortmapname = mi_shortname;
 
 	if(gametype == GAME_ONSLAUGHT) {

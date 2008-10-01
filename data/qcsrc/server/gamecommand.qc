@@ -37,7 +37,7 @@ float RoughMapAtPoint(float x, float y, float w, float h)
 	return floor(FullTraceFraction(a, mi, ma, b) / (world.maxs_z - world.mins_z) * 255);
 }
 #else
-float RoughMapAtPoint(float x, float y, float w, float h, vector mi_min, vector mi_max)
+float RoughMapAtPoint(float x, float y, float w, float h)
 {
 	vector o, mi, ma;
 	float i, r;
@@ -103,7 +103,7 @@ void RoughMap()
 		fputs(f, "\"");
 		for(x = 0; x < m; ++x)
 		{
-			l = RoughMapAtPoint(mi_min_x + x * w, mi_min_y + y * h, w, h, mi_picmin, mi_picmax);
+			l = RoughMapAtPoint(mi_min_x + x * w, mi_min_y + y * h, w, h);
 			fputs(f, substring(doublehex, 2 * l, 2));
 		}
 		if(y == 0)

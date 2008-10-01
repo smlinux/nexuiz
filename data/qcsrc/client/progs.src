@@ -10,6 +10,7 @@ csqc_builtins.qc
 ../common/mapinfo.qh
 ../common/util.qh
 interpolate.qh
+teamradar.qh
 
 main.qh
 
@@ -30,6 +31,7 @@ laser.qc
 Main.qc
 View.qc
 interpolate.qc
+teamradar.qc
 
 ../common/util.qc
 ../common/gamecommand.qc

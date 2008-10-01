@@ -283,7 +283,6 @@ void InitGameplayMode()
 		game = GAME_ONSLAUGHT;
 		gamemode_name = "Onslaught";
 		ActivateTeamplay();
-		entcs_init();
 	}
 
 	if(g_race)
@@ -315,6 +314,9 @@ void InitGameplayMode()
 
 		ScoreRules_race();
 	}
+
+	if(teams_matter)
+		entcs_init();
 
 	// save it (for the next startup)
 	cvar_set("gamecfg", ftos(game));
