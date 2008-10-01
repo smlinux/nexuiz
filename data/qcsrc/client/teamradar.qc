@@ -36,13 +36,13 @@ vector yinvert(vector v)
 	return v;
 }
 
-void draw_teamradar_background()
+void draw_teamradar_background(float a)
 {
 	R_BeginPolygon(minimapname, 0);
-	R_PolygonVertex('1 0 0' * (teamradar_origin2d_x - teamradar_size2d_x * 0.5) + '0 1 0' * (teamradar_origin2d_y - teamradar_size2d_y * 0.5), '0 0 0', '0 0 0', 1);
-	R_PolygonVertex('1 0 0' * (teamradar_origin2d_x + teamradar_size2d_x * 0.5) + '0 1 0' * (teamradar_origin2d_y - teamradar_size2d_y * 0.5), '0 0 0', '0 0 0', 1);
-	R_PolygonVertex('1 0 0' * (teamradar_origin2d_x + teamradar_size2d_x * 0.5) + '0 1 0' * (teamradar_origin2d_y + teamradar_size2d_y * 0.5), '0 0 0', '0 0 0', 1);
-	R_PolygonVertex('1 0 0' * (teamradar_origin2d_x - teamradar_size2d_x * 0.5) + '0 1 0' * (teamradar_origin2d_y + teamradar_size2d_y * 0.5), '0 0 0', '0 0 0', 1);
+	R_PolygonVertex('1 0 0' * (teamradar_origin2d_x - teamradar_size2d_x * 0.5) + '0 1 0' * (teamradar_origin2d_y - teamradar_size2d_y * 0.5), '0 0 0', '0 0 0', a);
+	R_PolygonVertex('1 0 0' * (teamradar_origin2d_x + teamradar_size2d_x * 0.5) + '0 1 0' * (teamradar_origin2d_y - teamradar_size2d_y * 0.5), '0 0 0', '0 0 0', a);
+	R_PolygonVertex('1 0 0' * (teamradar_origin2d_x + teamradar_size2d_x * 0.5) + '0 1 0' * (teamradar_origin2d_y + teamradar_size2d_y * 0.5), '0 0 0', '0 0 0', a);
+	R_PolygonVertex('1 0 0' * (teamradar_origin2d_x - teamradar_size2d_x * 0.5) + '0 1 0' * (teamradar_origin2d_y + teamradar_size2d_y * 0.5), '0 0 0', '0 0 0', a);
 	R_EndPolygon();
 	R_BeginPolygon(minimapname, DRAWFLAG_ADDITIVE);
 	R_PolygonVertex(teamradar_texcoord_to_2dcoord(mi_pictexcoord0), yinvert(mi_pictexcoord0), '1 1 1', 1);
@@ -102,7 +102,9 @@ void() teamradar_view =
 		mi_picmax_y - mi_picmin_y
 	);
 
-	teamradar_angle = input_angles_y - 90;
+	teamradar_angle = cvar("cl_teamradar_rotation") * 4;
+	if(!teamradar_angle)
+		teamradar_angle = input_angles_y - 90;
 	teamradar_origin2d = '64 64 0';
 	teamradar_size2d = '128 128 0';
 	teamradar_scale = 2048;
@@ -123,7 +125,7 @@ void() teamradar_view =
 		teamradar_size2d_y
 	);
 
-	draw_teamradar_background();
+	draw_teamradar_background(cvar("cl_teamradar_background_alpha"));
 	draw_teamradar_player(pmove_org, input_angles, '1 1 1');
 	for(tm = gps_start; tm != world; tm = tm.chain)
 		draw_teamradar_player(tm.origin, tm.angles, rgb);
