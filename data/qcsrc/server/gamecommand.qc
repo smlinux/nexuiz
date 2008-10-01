@@ -46,6 +46,15 @@ float RoughMapAtPoint(float x, float y, float w, float h, float zmin, float zsiz
 	dz = (zsize / 256) * '0 0 1';
 	ma = '1 0 0' * w + '0 1 0' * h + dz;
 	o = '1 0 0' * x + '0 1 0' * y + '0 0 1' * zmin;
+
+	if(x < world.mins_x - w)
+		return 0;
+	if(y < world.mins_y - h)
+		return 0;
+	if(x > world.maxs_x)
+		return 0;
+	if(y > world.maxs_y)
+		return 0;
 	
 	r = 0;
 	for(i = 0; i < 255; ++i)
@@ -77,7 +86,7 @@ void RoughMap_Think()
 		get_mi_min_max();
 		self.size_x = 512;
 		self.size_y = 512;
-		self.mins = mi_min;
+		self.mins = mi_picmin;
 		self.maxs_x = (mi_picmax_x - mi_picmin_x) / self.size_x;
 		self.maxs_y = (mi_picmax_y - mi_picmin_y) / self.size_y;
 		self.maxs_z = mi_max_z - mi_min_z;

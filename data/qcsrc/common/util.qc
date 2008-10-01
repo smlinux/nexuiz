@@ -715,6 +715,8 @@ float cvar_value_issafe(string s)
 #ifndef MENUQC
 void get_mi_min_max()
 {
+	vector extend;
+
 	if(mi_shortname)
 		strunzone(mi_shortname);
 	mi_shortname = mapname;
@@ -737,8 +739,23 @@ void get_mi_min_max()
 	mi_picmax = mi_max;
 
 	// extend mi_picmax to get a square aspect ratio
-	mi_picmax_x = max(mi_picmax_x, mi_picmin_x + (mi_max_y - mi_min_y));
-	mi_picmax_y = max(mi_picmax_y, mi_picmin_y + (mi_max_x - mi_min_x));
+	// center the map in that area
+	extend = mi_picmax - mi_picmin;
+	if(extend_y > extend_x)
+	{
+		mi_picmin_x -= (extend_y - extend_x) * 0.5;
+		mi_picmax_x += (extend_y - extend_x) * 0.5;
+	}
+	else
+	{
+		mi_picmin_y -= (extend_x - extend_y) * 0.5;
+		mi_picmax_y += (extend_x - extend_y) * 0.5;
+	}
+
+	// add another some percent
+	extend = (mi_picmax - mi_picmin) * (1 / 64.0);
+	mi_picmin -= extend;
+	mi_picmax += extend;
 
 	// calculate the texcoords
 	mi_pictexcoord0 = mi_pictexcoord1 = mi_pictexcoord2 = mi_pictexcoord3 = '0 0 0';
