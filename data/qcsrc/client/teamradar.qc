@@ -94,7 +94,7 @@ void() teamradar_view =
 	teamradar_angle = input_angles_y - 90;
 	teamradar_origin2d = '64 64 0';
 	teamradar_size2d = '128 128 0';
-	teamradar_scale = 1024;
+	teamradar_scale = 2048;
 
 	normalsize = teamradar_size2d_x * scale2d / teamradar_scale;
 	bigsize = teamradar_size2d_x * scale2d / max(teamradar_scale, vlen(mi_min - mi_max));
