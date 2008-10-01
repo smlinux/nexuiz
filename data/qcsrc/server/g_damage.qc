@@ -503,6 +503,10 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 		targ.flags -= targ.flags & FL_GODMODE;
 		damage = 100000;
 	}
+	else if(deathtype == DEATH_MIRRORDAMAGE)
+	{
+		// no processing
+	}
 	else
 	{
 		if (targ.classname == "player")

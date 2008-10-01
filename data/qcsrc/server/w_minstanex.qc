@@ -6,7 +6,7 @@ void W_MinstaNex_Attack (void)
 	W_SetupShot (self, '25 8 -4', TRUE, 5, "weapons/nexfire.wav");
 
 	yoda = 0;
-	FireRailgunBullet (w_shotorg, w_shotorg + w_shotdir * MAX_SHOT_DISTANCE, 1000, 800, WEP_MINSTANEX);
+	FireRailgunBullet (w_shotorg, w_shotorg + w_shotdir * MAX_SHOT_DISTANCE, 10000, 800, WEP_MINSTANEX);
 
 	if(!g_minstagib)
 	if(yoda)
