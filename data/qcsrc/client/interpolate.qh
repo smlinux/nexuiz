@@ -1,0 +1,12 @@
+.float iflags;
+#define IFLAG_VELOCITY 1
+#define IFLAG_ANGLES 2
+
+// call this BEFORE reading an entity update
+void InterpolateOrigin_Undo();
+
+// call this AFTER receiving an entity update
+void InterpolateOrigin_Note();
+
+// call this BEFORE drawing
+void InterpolateOrigin_Do();
