@@ -74,7 +74,8 @@ float turret_stdproc_targetscore_generic(entity e_turret,entity e_target)
     a_score = 1 - aim_delay;
     */
 
-    a_score = 1 - (tvt_thadf / max(e_turret.aim_maxrot,e_turret.aim_maxpitch));
+    //a_score = 1 - (tvt_thadf / max(e_turret.aim_maxrot,e_turret.aim_maxpitch));
+    a_score = 1 - tvt_thadf / e_turret.aim_maxrot;
 
     if ((e_turret.target_select_missilebias > 0) && (e_target.flags & FL_PROJECTILE))
         m_score = 1;

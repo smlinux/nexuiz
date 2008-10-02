@@ -28,7 +28,7 @@ void turret_plasma_attack()
 
     turret_tag_fire_update();
 
-    sound (self, CHAN_BODY, "weapons/hagar_fire.wav", 1, ATTN_NORM);
+    sound (self, CHAN_WEAPON, "weapons/hagar_fire.wav", 1, ATTN_NORM);
     proj                    = spawn ();
     setorigin(proj, self.tur_shotorg_updated);
     setsize(proj, '0 0 0', '0 0 0');
@@ -89,7 +89,7 @@ void turret_plasma_projectile_explode()
 #else
     RadiusDamage (self, self.owner, self.owner.shot_dmg, 0, self.owner.shot_radius, world, self.owner.shot_force, DEATH_TURRET);
 #endif
-    sound (self, CHAN_BODY, "weapons/electro_impact.wav", 1, ATTN_NORM);
+    sound (self, CHAN_PROJECTILE, "weapons/electro_impact.wav", 1, ATTN_NORM);
 
     remove (self);
 }
@@ -102,7 +102,7 @@ void turret_plasma_std_init()
     precache_model ("models/turrets/base.md3");
 
     self.ammo_flags = TFL_AMMO_ENERGY | TFL_AMMO_RECHARGE | TFL_AMMO_RECIVE;
-    self.aim_flags = TFL_AIM_LEAD | TFL_AIM_SHOTTIMECOMPENSATE | TFL_AIM_ZEASE;
+    self.aim_flags = TFL_AIM_LEAD | TFL_AIM_SHOTTIMECOMPENSATE | TFL_AIM_ZEASE | TFL_AIM_GROUND2;
 
     if (turret_stdproc_init("plasma_std") == 0)
     {
@@ -141,6 +141,12 @@ void turret_plasma_dual_init()
 
     setmodel(self,"models/turrets/base.md3");
     setmodel(self.tur_head,"models/turrets/plasmad.md3");
+
+	setorigin(self, self.origin);
+	setorigin(self.tur_head, self.tur_head.origin);
+
+	setsize(self, self.mins, self.maxs);
+	setsize(self.tur_head, self.tur_head.mins, self.tur_head.maxs);
 
     if(!turret_tag_setup(0))
         dprint("Warning: Turret ",self.classname, " faild to initialize md3 tags\n");

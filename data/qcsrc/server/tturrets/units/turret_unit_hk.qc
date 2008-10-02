@@ -47,11 +47,14 @@ float hk_is_valid_target(entity e_target)
         return 0;
 
     // player
-    if ((e_target.flags & FL_CLIENT) && (self.owner.target_select_playerbias < 0))
-        return 0;
+    if (e_target.flags & FL_CLIENT)
+    {
+        if(self.owner.target_select_playerbias < 0)
+            return 0;
 
-    if ((e_target.flags & FL_CLIENT) && (e_target.deadflag != DEAD_NO))
-        return 0;
+        if (e_target.deadflag != DEAD_NO)
+            return 0;
+    }
 
     // Missile
     if ((e_target.flags & FL_PROJECTILE) && (self.owner.target_select_missilebias < 0))
@@ -82,13 +85,13 @@ void turret_hk_attack()
     local entity missile;
     //local entity flash2;
 
-    sound (self, CHAN_BODY, "weapons/rocket_fire.wav", 1, ATTN_NORM);
+    sound (self, CHAN_WEAPON, "weapons/rocket_fire.wav", 1, ATTN_NORM);
 
     missile                    = spawn ();
     missile.solid            = SOLID_BBOX;
     setmodel (missile, "models/turrets/hunter2.md3"); // precision set below
     setsize (missile, '-3 -3 -3', '3 3 3'); // give it some size so it can be shot
-    sound    (missile, CHAN_BODY, "weapons/rocket_fly.wav", 0.4, ATTN_NORM);
+    sound    (missile, CHAN_VOICE, "weapons/rocket_fly.wav", 0.4, ATTN_NORM);
     setorigin(missile, self.tur_shotorg_updated);
 
     missile.scale            = 1;
@@ -111,6 +114,7 @@ void turret_hk_attack()
     missile.enemy            = self.enemy;
     missile.team             = self.team;
     missile.cnt              = time + 30;
+    missile.ticrate          = max(cvar("sys_ticrate"),0.05);
 
     te_explosion (missile.origin);
 
@@ -151,8 +155,7 @@ void turret_hk_missile_think()
     entity e;
     float ad;
 
-    // 25fps
-    self.nextthink = time + 0.04;
+    self.nextthink = time + self.ticrate;
 
     //if (self.cnt < time)
     //    turret_hk_missile_explode();
@@ -185,6 +188,13 @@ void turret_hk_missile_think()
 
     if (self.enemy)
     {
+        // Close enougth to do decent damage?
+        if ( vlen(self.origin - self.enemy.origin) <= (self.owner.shot_radius * 0.25) )
+        {
+            turret_hk_missile_explode();
+            return;
+        }
+
         // Get data on enemy position
         pre_pos = self.enemy.origin +
                   self.enemy.velocity *
@@ -194,12 +204,6 @@ void turret_hk_missile_think()
         ve = normalize(pre_pos - self.origin);
         fe = trace_fraction;
 
-        // Close enougth to do decent damage?
-        if ( vlen(self.origin - self.enemy.origin) <= (self.owner.shot_radius * 0.25) )
-        {
-            turret_hk_missile_explode();
-            return;
-        }
     }
     else
     {
@@ -301,7 +305,7 @@ void turret_hk_missile_think()
         self.cnt = time + 0.25;
         self.nextthink = 0;
         self.movetype         = MOVETYPE_BOUNCE;
-        sound    (self, CHAN_BODY, "", 0.4, ATTN_NORM);
+        sound    (self, CHAN_VOICE, "", 0.4, ATTN_NORM);
         return;
     }
 
@@ -352,7 +356,7 @@ void turret_hk_missile_explode()
         return;
 
     //vector	org2;
-    sound (self, CHAN_BODY, "weapons/rocket_impact.wav", 1, ATTN_NORM);
+    sound (self, CHAN_PROJECTILE, "weapons/rocket_impact.wav", 1, ATTN_NORM);
     org2 = findbetterlocation (self.origin, 16);
 
     // LordHavoc: TE_TEI_BIGEXPLOSION

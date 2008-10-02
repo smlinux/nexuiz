@@ -40,7 +40,7 @@ void beam_think()
         self.owner.attack_finished = time + self.owner.shot_refire;
         self.owner.fireflag = 2;
         self.owner.tur_head.frame = 10;
-        sound (self, CHAN_BODY, "", 1, ATTN_NORM);
+        sound (self, CHAN_PROJECTILE, "", 1, ATTN_NORM);
         remove(self);
         return;
     }
@@ -50,7 +50,7 @@ void beam_think()
     if(time - self.shot_spread > 0)
     {
             self.shot_spread = time + 2;
-            sound (self, CHAN_BODY, "turrets/phaser.ogg", 1, ATTN_NORM);
+            sound (self, CHAN_VOICE, "turrets/phaser.ogg", 1, ATTN_NORM);
     }
 
 
@@ -93,7 +93,7 @@ void turret_phaser_attack()
     beam.enemy = self.enemy;
 	beam.bot_dodge = TRUE;
 	beam.bot_dodgerating = beam.shot_dmg;
-	sound (beam, CHAN_BODY, "turrets/phaser.ogg", 1, ATTN_NORM);
+	sound (beam, CHAN_VOICE, "turrets/phaser.ogg", 1, ATTN_NORM);
     self.fireflag = 1;
 
     beam.attack_finished = self.attack_finished;
@@ -101,7 +101,7 @@ void turret_phaser_attack()
 
     setattachment(beam,self.tur_head,"tag_fire");
 
-    PointSound (trace_endpos, "weapons/neximpact.wav", 1, ATTN_NORM);
+    soundat (self, trace_endpos, CHAN_PROJECTILE, "weapons/neximpact.wav", VOL_BASE, ATTN_NORM);
 
     if(self.tur_head.frame == 0)
         self.tur_head.frame = 1;

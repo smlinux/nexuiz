@@ -1,5 +1,5 @@
 // Comment out below to skip turrets
-//#define TTURRETS_ENABLED
+#define TTURRETS_ENABLED
 
 #ifdef TTURRETS_ENABLED
 
@@ -37,6 +37,8 @@ vector real_origin(entity ent);
 #define TFL_AIM_NO                  512
 /// Go for ground, not direct hit
 #define TFL_AIM_GROUND              2
+/// Go for ground, not direct hit if target is on ground too
+#define TFL_AIM_GROUND2              1024
 /// Use balistic aim (not implemented)
 #define TFL_AIM_BALISTIC            4
 /// Try to predict target movement

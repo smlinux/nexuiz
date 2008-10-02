@@ -37,7 +37,7 @@ void paint_target(entity onwho, float f_size, vector v_color, float f_time)
     setmodel(e, "models/turrets/c512.md3"); // precision set above
     e.scale = (f_size/512);
     setsize(e, '0 0 0', '0 0 0');
-    ///setattachment(e,onwho,"");
+    //setattachment(e,onwho,"");
     setorigin(e,onwho.origin + '0 0 1');
     e.alpha = 0.15;
     e.movetype = MOVETYPE_FLY;

@@ -142,7 +142,7 @@ void turret_stdproc_die()
     self.deadflag = DEAD_DEAD;
     self.tur_head.deadflag = self.deadflag;
 
-    sound (self, CHAN_BODY, "weapons/rocket_impact.wav", 1, ATTN_NORM);
+    sound (self, CHAN_PLAYER, "weapons/rocket_impact.wav", 1, ATTN_NORM);
     org2 = self.origin + '0 0 40';
 
 // Explotion grafix
@@ -191,7 +191,7 @@ void turret_stdproc_die()
 
 
 // Go boom
-    RadiusDamage (self,self, min(self.ammo,50),min(self.ammo,50) * 0.25,250,world,min(self.ammo,50)*5,IT_ROCKET_LAUNCHER);
+    RadiusDamage (self,self, min(self.ammo,50),min(self.ammo,50) * 0.25,250,world,min(self.ammo,50)*5,0);
 
 // Setup respawn
     self.nextthink      = time + self.respawntime;
@@ -265,6 +265,7 @@ void turret_stdproc_damage (entity inflictor, entity attacker, float damage, flo
         if (self.team == attacker.team)
         {
             sprint(attacker,"Turret: Im on your team!\n");
+            return;
         } else {
 			/*
             // This will get enoying fast...

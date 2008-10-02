@@ -9,7 +9,7 @@ void turret_flac_attack()
 
     turret_tag_fire_update();
 
-    sound (self, CHAN_BODY, "weapons/hagar_fire.wav", 1, ATTN_NORM);
+    sound (self, CHAN_WEAPON, "weapons/hagar_fire.wav", 1, ATTN_NORM);
     proj = spawn ();
     setorigin(proj, self.tur_shotorg_updated);
     setmodel(proj, "models/turrets/pd_proj.md3");
@@ -46,11 +46,11 @@ void turret_flac_projectile_explode()
 
     b = crandom();
     if (b<-0.7)
-        sound (self, CHAN_BODY, "weapons/hagexp1.wav", 1, ATTN_NORM);
+        sound (self, CHAN_PROJECTILE, "weapons/hagexp1.wav", 1, ATTN_NORM);
     else if (b<0.4)
-        sound (self, CHAN_BODY, "weapons/hagexp2.wav", 1, ATTN_NORM);
+        sound (self, CHAN_PROJECTILE, "weapons/hagexp2.wav", 1, ATTN_NORM);
     else if (b<1)
-        sound (self, CHAN_BODY, "weapons/hagexp3.wav", 1, ATTN_NORM);
+        sound (self, CHAN_PROJECTILE, "weapons/hagexp3.wav", 1, ATTN_NORM);
 
 
     self.event_damage = SUB_Null;

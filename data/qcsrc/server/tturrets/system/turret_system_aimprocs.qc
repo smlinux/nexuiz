@@ -81,7 +81,8 @@ vector turret_stdproc_aim_generic()
 
 
     // This turret should hit the ground neer a target rather the do a direct hit
-    if (self.aim_flags & TFL_AIM_GROUND)
+    if ( (self.aim_flags & TFL_AIM_GROUND) ||
+         ((self.aim_flags & TFL_AIM_GROUND2) && (self.enemy.flags & FL_ONGROUND)) )
     {
         traceline(pre_pos + '0 0 512',pre_pos - '0 0 2048',1,self.enemy);
         pre_pos = trace_endpos;

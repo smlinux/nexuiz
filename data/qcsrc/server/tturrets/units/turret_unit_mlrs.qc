@@ -16,12 +16,12 @@ void turret_mlrs_attack()
 
     turret_tag_fire_update();
 
-    sound (self, CHAN_BODY, "weapons/rocket_fire.wav", 1, ATTN_NORM);
+    sound (self, CHAN_WEAPON, "weapons/rocket_fire.wav", 1, ATTN_NORM);
 
     missile                    = spawn ();
     setmodel (missile, "models/turrets/rocket.md3"); // precision set below
     setsize (missile, '-3 -3 -3', '3 3 3'); // give it some size so it can be shot
-    sound (missile, CHAN_BODY, "weapons/rocket_fly.wav", 0.4, ATTN_NORM);
+    sound (missile, CHAN_VOICE, "weapons/rocket_fly.wav", 0.4, ATTN_NORM);
     setorigin(missile, self.tur_shotorg_updated);
     missile.classname          = "mlrs_missile";
     missile.owner              = self;
@@ -52,7 +52,7 @@ void turret_mlrs_projectile_explode()
     vector org2;
 
     //vector	org2;
-    sound (self, CHAN_BODY, "weapons/rocket_impact.wav", 1, ATTN_NORM);
+    sound (self, CHAN_PROJECTILE, "weapons/rocket_impact.wav", 1, ATTN_NORM);
     org2 = findbetterlocation (self.origin, 16);
     pointparticles(particleeffectnum("rocket_explode"), org2, '0 0 0', 1);
 

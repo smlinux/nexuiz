@@ -1,6 +1,6 @@
 #define cvar_base "g_turrets_unit_"
 
-.float tur_lastscore;
+//.float tur_lastscore;
 .string cvar_basename;
 
 string cvar_gets(string s_base,string s_add)
@@ -143,8 +143,10 @@ void turret_do_updates(entity e_turret)
 void turret_stdproc_track()
 {
     vector wish_angle;  // This is where we'd need to be
+
     vector real_angle;  // This is where we can go
     float f_tmp;
+
 
     if (self.track_flags == TFL_TRACK_NO)
         return;
@@ -158,26 +160,32 @@ void turret_stdproc_track()
     }
     else
     {
+        // Find the direction
         if (self.turrcaps_flags & TFL_TURRCAPS_LINKED)
-            wish_angle = normalize(self.tur_aimpos - self.origin); // Find the direction
+            wish_angle = normalize(self.tur_aimpos - self.origin);
         else
-            wish_angle = normalize(self.tur_aimpos - self.tur_head.origin); // Find the direction
+            wish_angle = normalize(self.tur_aimpos - self.tur_head.origin);
 
-        wish_angle = vectoangles(wish_angle);                           // And make a angle
+        wish_angle = vectoangles(wish_angle); // And make a angle
     }
 
     // Find the diffrence between where we currently aim and where we want to aim
     if (self.turrcaps_flags & TFL_TURRCAPS_LINKED)
-        real_angle = wish_angle - (self.tur_head.angles + self.angles);
+        real_angle = wish_angle - (self.angles + self.tur_head.angles);
     else
-        real_angle = wish_angle - self.tur_head.angles;
+    {
+        //if(vlen(wish_angle - self.tur_head.angles) > vlen(self.tur_head.angles - wish_angle))
+            real_angle = wish_angle - self.tur_head.angles;
+        //else
+        //    real_angle =  self.tur_head.angles - wish_angle;
+    }
 
     // Constrain it within +/- 360
-    if (real_angle_x < 0) real_angle_x += 360;
-    if (real_angle_x > 180) real_angle_x -= 360;
+    if (real_angle_x <= 0) real_angle_x += 360;
+    if (real_angle_x >= 180) real_angle_x -= 360;
 
-    if (real_angle_y < 0) real_angle_y += 360;
-    if (real_angle_y > 180) real_angle_y -= 360;
+    //if (real_angle_y <= 0) real_angle_y += 360;
+    if (real_angle_y >= 180) real_angle_y -= 360;
 
 
     if (self.track_type == TFL_TRACKTYPE_STEPMOTOR)
@@ -227,8 +235,7 @@ void turret_stdproc_track()
             self.tur_head.angles_x = self.aim_maxpitch;
             self.tur_head.avelocity_x = 0;
         }
-
-        if (self.tur_head.angles_x < (self.aim_maxpitch * -1))
+        else if (self.tur_head.angles_x < (self.aim_maxpitch * -1))
         {
             self.tur_head.angles_x = (self.aim_maxpitch * -1);
             self.tur_head.avelocity_x = 0;
@@ -237,18 +244,18 @@ void turret_stdproc_track()
 
     // Limit rot
     if (self.track_flags & TFL_TRACK_ROT)
+    {
         if (self.tur_head.angles_y > self.aim_maxrot)
         {
             self.tur_head.angles_y = self.aim_maxrot;
             self.tur_head.avelocity_y = 0;
         }
-
-    if (self.track_flags & TFL_TRACK_ROT)
-        if (self.tur_head.angles_y < (self.aim_maxrot * -1))
+        else if (self.tur_head.angles_y < (self.aim_maxrot * -1))
         {
             self.tur_head.angles_y = (self.aim_maxrot * -1);
             self.tur_head.avelocity_y = 0;
         }
+    }
 
 
 }
@@ -398,7 +405,6 @@ float turret_validate_target(entity e_turret,entity e_target,float validate_flag
 
             if (e_turret.team != e_target.owner.team)
                 return -8.5;
-
         }
         else
         {
@@ -490,7 +496,7 @@ entity turret_select_target()
         e = e.chain;
     }
 
-    self.tur_lastscore = m_score;
+//    self.tur_lastscore = m_score;
 
     //if (self.enemy != e_enemy)
     //self.volly_counter = 0;
@@ -578,10 +584,10 @@ void turret_think()
         else
         {
             // turret_do_updates(self);
-            if (turret_validate_target(self,self.enemy,self.target_validate_flags) <= 0)// || (self.cnt < time))
+            if ((turret_validate_target(self,self.enemy,self.target_validate_flags) <= 0) || (self.cnt < time))
             {
                 self.enemy = turret_select_target();
-                self.cnt = time + self.ticrate * 5;
+                self.cnt = time + self.ticrate * 3;
             }
         }
 
@@ -597,7 +603,7 @@ void turret_think()
             // And bail.
             return;
         }
-
+        // te_lightning1(world,self.origin,self.enemy.origin);
         // Update
         turret_do_updates(self);
 
@@ -802,7 +808,7 @@ float turret_stdproc_init (string cvar_base_name)
 
     if (self.track_type != TFL_TRACKTYPE_STEPMOTOR)
     {
-        // Fluid / ineria mode. Looks mutch nicer, bit experimental &
+        // Fluid / Ineria mode. Looks mutch nicer, bit experimental &
         // Can inmapt aim preformance alot.
         // needs a bit diffrent aimspeed
         if (!self.aim_speed) self.aim_speed = 180;
