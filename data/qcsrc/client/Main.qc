@@ -55,6 +55,7 @@ string config_get(string key, string defaultvalue)
 }
 
 string forcefog;
+void WaypointSprite_Init();
 void CSQC_Init(void)
 {
 #ifdef USE_FTE
@@ -114,6 +115,26 @@ void CSQC_Init(void)
 	GetTeam(COLOR_SPECTATOR, true); // add specs first
 
 	cvar_clientsettemp("_supports_weaponpriority", "1");
+
+
+
+
+	cs_project_is_b0rked = TRUE;
+	R_SetView(VF_VIEWPORT, '0 0 0', '640 480 0');
+	R_SetView(VF_FOV, '90 90 0');
+	R_SetView(VF_ORIGIN, '0 0 0');
+	R_SetView(VF_ANGLES, '0 0 0');
+	R_SetView(VF_PERSPECTIVE, 1);
+	makevectors('0 0 0');
+	vector v;
+	v = cs_project(v_forward);
+	if(v_x - 320 < +1)
+	if(v_x - 320 > -1)
+	if(v_y - 240 < +1)
+	if(v_y - 240 > -1)
+		cs_project_is_b0rked = FALSE;
+
+	WaypointSprite_Init();
 }
 
 // CSQC_Shutdown : Called every time the CSQC code is shutdown (changing maps, quitting, etc)
@@ -511,8 +532,10 @@ void(float bIsNewEntity) CSQC_Ent_Update =
 		Ent_Laser();
 	else if(self.enttype == ENT_CLIENT_NAGGER)
 		Ent_Nagger();
+	else if(self.enttype == ENT_CLIENT_WAYPOINT)
+		Ent_WaypointSprite();
 	else
-		error("unknown entity type in CSQC_Ent_Update\n");
+		error("unknown entity type in CSQC_Ent_Update: ", ftos(self.enttype), "\n");
 	
 };
 // Destructor, but does NOT deallocate the entity by calling remove(). Also
@@ -558,6 +581,8 @@ void Ent_Remove()
 	{
 		Ent_PointParticles_Remove();
 	}
+	else if(self.enttype == ENT_CLIENT_WAYPOINT)
+		Ent_RemoveWaypointSprite();
 
 	self.enttype = 0;
 	self.classname = "";

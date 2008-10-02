@@ -19,7 +19,7 @@
 // Revision 18: warmup
 // Revision 19: fog
 // Revision 20: naggers
-// Revision 21: entcs for players optimized (position data down from 12 to 7 bytes)
+// Revision 21: entcs for players optimized (position data down from 12 to 7 bytes); waypointsprites in csqc for team radar
 #define CSQC_REVISION 21
 
 // probably put these in common/
@@ -50,8 +50,14 @@ const float ENT_CLIENT_TEAMSCORES = 5;
 const float ENT_CLIENT_POINTPARTICLES = 6;
 const float ENT_CLIENT_RAINSNOW = 7;
 const float ENT_CLIENT_LASER = 8;
-const float ENT_CLIENT_NAGGER = 9; // [flags] [votecalledvote]
-const float ENT_CLIENT_WAYPOINT = 10;
+const float ENT_CLIENT_NAGGER = 9; // flags [votecalledvote]
+const float ENT_CLIENT_WAYPOINT = 10; // flags origin [team displayrule] [spritename] [spritename2] [spritename3] [lifetime maxdistance hideable]
+
+	const float SPRITERULE_DEFAULT = 0;
+	const float SPRITERULE_TEAMPLAY = 1;
+
+	const float RADARICON_FLAG = 1;
+	const float RADARICON_FLAGCARRIER = 2;
 
 ///////////////////////////
 // key constants

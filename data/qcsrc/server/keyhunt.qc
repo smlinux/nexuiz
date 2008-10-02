@@ -308,8 +308,16 @@ void kh_Key_AssignTo(entity key, entity player)  // runs every time a key is pic
 		{
 			// player is now a key carrier
 			WaypointSprite_AttachCarrier("", player);
-			player.waypointsprite_attachedforcarrier.waypointsprite_for_player = kh_KeyCarrier_waypointsprite_for_player;
-			player.waypointsprite_attachedforcarrier.team = player.team;
+			player.waypointsprite_attachedforcarrier.waypointsprite_visible_for_player = kh_KeyCarrier_waypointsprite_visible_for_player;
+			WaypointSprite_UpdateRule(player.waypointsprite_attachedforcarrier, player.team, SPRITERULE_TEAMPLAY);
+			if(player.team == COLOR_TEAM1)
+				WaypointSprite_UpdateSprites(player.waypointsprite_attachedforcarrier, "keycarrier-red", "keycarrier-friend", "");
+			else if(player.team == COLOR_TEAM2)
+				WaypointSprite_UpdateSprites(player.waypointsprite_attachedforcarrier, "keycarrier-blue", "keycarrier-friend", "");
+			else if(player.team == COLOR_TEAM3)
+				WaypointSprite_UpdateSprites(player.waypointsprite_attachedforcarrier, "keycarrier-yellow", "keycarrier-friend", "");
+			else if(player.team == COLOR_TEAM4)
+				WaypointSprite_UpdateSprites(player.waypointsprite_attachedforcarrier, "keycarrier-pink", "keycarrier-friend", "");
 		}
 	}
 	
@@ -378,7 +386,7 @@ void kh_Key_Spawn(entity initial_owner, float angle)  // runs every time a new f
 	centerprint(initial_owner, strcat("You are starting with the ", key.netname, "\n"));  // message to player at start of round
 
 	WaypointSprite_Spawn("", 0, 0, key, '0 0 1' * KH_KEY_WP_ZSHIFT, world, key.team, key, waypointsprite_attachedforcarrier, FALSE);
-	key.waypointsprite_attachedforcarrier.waypointsprite_for_player = kh_Key_waypointsprite_for_player;
+	key.waypointsprite_attachedforcarrier.waypointsprite_visible_for_player = kh_Key_waypointsprite_visible_for_player;
 
 	kh_Key_AssignTo(key, initial_owner);
 }
@@ -450,6 +458,8 @@ void kh_Key_Collect(entity key, entity player)  //a player picks up a dropped ke
 	{
 		kh_interferemsg_time = time + 0.2;
 		kh_interferemsg_team = player.team;
+
+		// audit all key carrier sprites, update them to RUN HERE
 	}
 }
 
@@ -853,37 +863,24 @@ void kh_EnableTrackingDevice()  // runs after each round
 	kh_tracking_enabled = TRUE;
 }
 
-float kh_Key_waypointsprite_for_player(entity e) // ??
+float kh_Key_waypointsprite_visible_for_player(entity e) // ??
 {
 	if(!kh_tracking_enabled)
-		return 0;
+		return FALSE;
 	if(!self.owner)
-		return kh_sprite_dropped;
+		return TRUE;
 	if(!self.owner.owner)
-		return kh_sprite_dropped;
-	return 0;  // draw only when key is not owned
+		return TRUE;
+	return FALSE;  // draw only when key is not owned
 }
 
-float kh_KeyCarrier_waypointsprite_for_player(entity e)  // runs all the time
+float kh_KeyCarrier_waypointsprite_visible_for_player(entity e)  // runs all the time
 {
 	if(e.classname != "player" || self.team != e.team)
 		if(!kh_tracking_enabled)
-			return 0;
+			return FALSE;
 
-	// e is spectator? That's no team mate...
-	if(e.classname != "player")
-		return kh_GetCarrierSprite(self.team, -1);
-
-	// e is no key carrier: simple case...
-	if(!e.kh_next)
-		return kh_GetCarrierSprite(self.team, e.team);
-
-	// e is a key carrier: if any key is dropped or owned by another team, show
-	// the carrier sprite; otherwise show run here
-	if(kh_Key_AllOwnedByWhichTeam() == e.team)
-		return kh_sprite_finish;
-
-	return kh_GetCarrierSprite(self.team, e.team);
+	return TRUE;
 }
 
 float kh_HandleFrags(entity attacker, entity targ, float f)  // adds to the player score

@@ -147,7 +147,7 @@ entity (.string fld, string match)					findchain = #402;
 entity (.float fld, float match)					findchainflags = #450;
 entity (.entity fld, entity match)					findchainentity = #403;
 entity (.float fld, float match)					findchainfloat = #403;
-entity (entity start, .entity fld, float match)				findflags = #449;
+entity (entity start, .float fld, float match)				findflags = #449;
 
 float (string pattern, float caseinsensitive, float quiet)		search_begin = #444;
 void (float handle)							search_end = #445;

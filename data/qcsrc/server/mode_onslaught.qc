@@ -422,6 +422,7 @@ void onslaught_generator_delayed()
 	self.nextthink = time;
 };
 
+#ifdef YOU_HAVE_FIXED_ONSLAUGHT_WAYPOINTS
 float onslaught_generator_waypointsprite_for_player(entity e)
 {
 	if(e.classname == "player")
@@ -484,6 +485,7 @@ float onslaught_controlpoint_waypointsprite_for_player(entity e)
 	}
 	return 0;
 }
+#endif
 
 /*QUAKED spawnfunc_onslaught_generator (0 .5 .8) (-32 -32 -24) (32 32 64)
 Base generator.
@@ -502,6 +504,7 @@ void spawnfunc_onslaught_generator()
 		return;
 	}
 
+#ifdef YOU_HAVE_FIXED_ONSLAUGHT_WAYPOINTS
 	if(!ons_sprite_cp_blue)
 	{
 		precache_model("models/sprites/ons-cp-blue.sp2");
@@ -538,6 +541,7 @@ void spawnfunc_onslaught_generator()
 		setmodel(self, "models/sprites/ons-gen-shielded.sp2");
 		ons_sprite_gen_shielded = self.modelindex;
 	}
+#endif
 
 	local entity e;
 	precache_model("models/onslaught/generator.md3");
@@ -575,8 +579,10 @@ void spawnfunc_onslaught_generator()
 	self.think = onslaught_generator_delayed;
 	self.nextthink = time + 0.2;
 
+#ifdef YOU_HAVE_FIXED_ONSLAUGHT_WAYPOINTS
 	WaypointSprite_SpawnFixed(string_null, e.origin + '0 0 1' * e.maxs_z, self, sprite);
 	self.sprite.waypointsprite_for_player = onslaught_generator_waypointsprite_for_player;
+#endif
 };
 
 void onslaught_generator_reset()
@@ -774,8 +780,10 @@ void spawnfunc_onslaught_controlpoint()
 
 	waypoint_spawnforitem(self);
 
+#ifdef YOU_HAVE_FIXED_ONSLAUGHT_WAYPOINTS
 	WaypointSprite_SpawnFixed(string_null, e.origin + '0 0 1' * e.maxs_z, self, sprite);
 	self.sprite.waypointsprite_for_player = onslaught_controlpoint_waypointsprite_for_player;
+#endif
 };
 
 void onslaught_controlpoint_reset()

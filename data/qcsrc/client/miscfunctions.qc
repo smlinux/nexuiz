@@ -209,3 +209,14 @@ float PreviewExists(string name)
 	}
 	return false;
 }
+
+float PI      = 3.14159265359;
+float DEG2RAD = 0.01745329252;
+vector rotate(vector v, float a)
+{
+	vector w;
+	// FTEQCC SUCKS AGAIN
+	w_x =      v_x * cos(a) + v_y * sin(a);
+	w_y = -1 * v_x * sin(a) + v_y * cos(a);
+	return w;
+}

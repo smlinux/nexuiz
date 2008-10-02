@@ -170,7 +170,7 @@ vector GetCurrentFov(float fov)
 
 	float frustumx, frustumy, fovx, fovy;
 	frustumy = tan(fov * 0.00872664625997164788) * 0.75 * current_viewzoom;
-	frustumx = frustumy * cvar("vid_width") / cvar("vid_height") / cvar("vid_pixelheight");
+	frustumx = frustumy * vid_width / vid_height / cvar("vid_pixelheight");
 	fovx = atan2(frustumx, 1) / 0.00872664625997164788;
 	fovy = atan2(frustumy, 1) / 0.00872664625997164788;
 
@@ -188,6 +188,32 @@ void CSQC_UpdateView(void)
 {
 	entity e;
 	float fov;
+
+	// Render the Scene
+	view_origin = pmove_org + '0 0 1' * getstati(STAT_VIEWHEIGHT);
+	view_angles = input_angles;
+	makevectors(view_angles);
+	view_forward = v_forward;
+	view_right = v_right;
+	view_up = v_up;
+
+#if 0
+	if(cs_project_is_b0rked)
+	{
+#endif
+		vid_width = cvar("vid_width");
+		vid_height = cvar("vid_height");
+#if 0
+	}
+	else
+	{
+		// THIS IS BROKEN if you had just shot (kicktime)
+		vector v;
+		v = cs_project(view_origin + 1024 * view_forward);
+		vid_width = floor(v_x * 2 + 0.5);
+		vid_height = floor(v_y * 2 + 0.5);
+	}
+#endif
 
 	Fog_Force();
 
@@ -263,15 +289,6 @@ void CSQC_UpdateView(void)
 
 	R_AddEntities(MASK_NORMAL | MASK_ENGINE | MASK_ENGINEVIEWMODELS);
 
-	// Render the Scene
-	
-	view_origin = pmove_org + '0 0 1' * getstati(STAT_VIEWHEIGHT);
-	view_angles = input_angles;
-	makevectors(view_angles);
-	view_forward = v_forward;
-	view_right = v_right;
-	view_up = v_up;
-	
 	e = self;
 	for(self = world; (self = nextent(self)); )
 		if(self.draw)
@@ -310,6 +327,12 @@ void CSQC_UpdateView(void)
 	}
 	else if(teamplay)
 		teamradar_view();
+
+	e = self;
+	for(self = world; (self = nextent(self)); )
+		if(self.draw2d)
+			self.draw2d();
+	self = e;
 }
 
 void Sbar_Draw();

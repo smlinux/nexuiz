@@ -396,12 +396,12 @@ void checkpoint_use()
 	checkpoint_passed();
 }
 
-float race_waypointsprite_for_player(entity e)
+float race_waypointsprite_visible_for_player(entity e)
 {
 	if(e.race_checkpoint == -1)
-		return self.modelindex;
+		return TRUE;
 	else if(e.race_checkpoint == self.owner.race_checkpoint)
-		return self.modelindex;
+		return TRUE;
 	else
 		return FALSE;
 }
@@ -444,7 +444,7 @@ void spawnfunc_trigger_race_checkpoint()
 		precache_model("models/sprites/race-finish.sp2");
 		WaypointSprite_SpawnFixed("race-finish", o, self, sprite);
 	}
-	self.sprite.waypointsprite_for_player = race_waypointsprite_for_player;
+	self.sprite.waypointsprite_visible_for_player = race_waypointsprite_visible_for_player;
 }
 
 void race_AbandonRaceCheck(entity p)

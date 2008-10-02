@@ -111,6 +111,7 @@ entity teamslots[17];    // 17 teams (including "spectator team")
 .entity owner;
 
 .void(void) draw;
+.void(void) draw2d;
 float drawframetime;
 vector view_origin, view_angles, view_forward, view_right, view_up;
 
@@ -137,3 +138,6 @@ float vote_waiting;
 float vote_waiting_for_me;
 
 float current_zoomfraction;
+
+float cs_project_is_b0rked;
+float vid_width, vid_height;

@@ -1,5 +1,3 @@
-float DEG2RAD = 0.01745329251994329576;
-
 float teamradar_angle; // player yaw angle
 vector teamradar_origin3d_in_texcoord; // player origin
 vector teamradar_origin2d; // 2D origin
@@ -21,9 +19,8 @@ vector teamradar_texcoord_to_2dcoord(vector in)
 	vector out;
 	in -= teamradar_origin3d_in_texcoord;
 
-	out_x = in_y * sin(teamradar_angle * DEG2RAD) + in_x * cos(teamradar_angle * DEG2RAD);
-	out_y = in_y * cos(teamradar_angle * DEG2RAD) - in_x * sin(teamradar_angle * DEG2RAD);
-	out_y = - out_y; // WHY?!? TODO find out whether the map images are mirrored too
+	out = rotate(in, teamradar_angle * DEG2RAD);
+	out_y = - out_y; // screen space is reversed
 
 	out = out * teamradar_size;
 	out += teamradar_origin2d;
@@ -84,6 +81,23 @@ void(vector coord3d, vector pangles, vector rgb) draw_teamradar_player =
 	R_EndPolygon();
 };
 
+void draw_teamradar_icon(vector coord, float icon, float pingtime, vector rgb, float a)
+{
+	float dt;
+	vector v;
+
+	coord = teamradar_texcoord_to_2dcoord(teamradar_3dcoord_to_texcoord(coord));
+	drawpic(coord - '4 4 0', strcat("gfx/teamradar_icon_", ftos(icon)), '8 8 0', rgb, a, 0);
+	if(pingtime != 0)
+	{
+		dt = time - pingtime;
+		if(dt > 1)
+			return;
+		v = '2 2 0' * teamradar_size * dt;
+		drawpic(coord - 0.5 * v, "gfx/teamradar_ping", v, '1 1 1', 1 - dt, DRAWFLAG_ADDITIVE);
+	}
+}
+
 void() teamradar_view =
 {
 	local float color;
@@ -129,6 +143,8 @@ void() teamradar_view =
 	draw_teamradar_player(pmove_org, input_angles, '1 1 1');
 	for(tm = gps_start; tm != world; tm = tm.chain)
 		draw_teamradar_player(tm.origin, tm.angles, rgb);
+	for(tm = world; (tm = findflags(tm, teamradar_icon, 0xFFFFFF)); )
+		draw_teamradar_icon(tm.origin, tm.teamradar_icon, tm.teamradar_time, tm.teamradar_color, tm.alpha);
 
 	drawresetcliparea();
 };

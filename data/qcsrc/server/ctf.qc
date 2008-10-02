@@ -136,6 +136,7 @@ void DropFlag(entity e, entity penalty_receiver, entity attacker)
 	PlayerScore_Add(p, SP_CTF_DROPS, +1);
 	e.playerid = attacker.playerid;
 	
+	WaypointSprite_Ping(p.waypointsprite_attachedforcarrier);
 	WaypointSprite_DetachCarrier(p);
 	LogCTF("dropped", p.team, p);
 
@@ -331,6 +332,8 @@ void FlagTouch()
 		setorigin(self, FLAG_CARRY_POS);
 		setattachment(self, other, "");
 		WaypointSprite_AttachCarrier("flagcarrier", other);
+		WaypointSprite_UpdateTeamRadar(other.waypointsprite_attachedforcarrier, RADARICON_FLAGCARRIER, '1 1 0');
+		WaypointSprite_Ping(self.sprite);
 
 		return;
 	}
@@ -405,6 +408,7 @@ void FlagTouch()
 			setorigin(self, FLAG_CARRY_POS);
 			setattachment(self, other, "");
 			WaypointSprite_AttachCarrier("flagcarrier", other);
+			WaypointSprite_UpdateTeamRadar(other.waypointsprite_attachedforcarrier, RADARICON_FLAGCARRIER, '1 1 0');
 		}
 	}
 };
@@ -552,6 +556,7 @@ void spawnfunc_item_flag_team1()
 	waypoint_spawnforitem(self);
 
 	WaypointSprite_SpawnFixed("redbase", self.origin + '0 0 37', self, sprite);
+	WaypointSprite_UpdateTeamRadar(self.sprite, RADARICON_FLAG, '1 0 0');
 };
 
 /*QUAKED spawnfunc_item_flag_team2 (0 0.5 0.8) (-48 -48 -24) (48 48 64)
@@ -634,6 +639,7 @@ void spawnfunc_item_flag_team2()
 	waypoint_spawnforitem(self);
 
 	WaypointSprite_SpawnFixed("bluebase", self.origin + '0 0 37', self, sprite);
+	WaypointSprite_UpdateTeamRadar(self.sprite, RADARICON_FLAG, '0 0 1');
 };
 
 

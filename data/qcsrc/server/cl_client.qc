@@ -1305,8 +1305,6 @@ void ClientDisconnect (void)
 		self.killindicator = world;
 	}
 
-	WaypointSprite_PlayerGone();
-
 	DropAllRunes(self);
 	kh_Key_DropAll(self, TRUE);
 
@@ -1314,6 +1312,8 @@ void ClientDisconnect (void)
 
 	if(self.flagcarried)
 		DropFlag(self.flagcarried, world, world);
+
+	WaypointSprite_PlayerGone();
 
 	save = self.flags;
 	self.flags = self.flags - (self.flags & FL_CLIENT);

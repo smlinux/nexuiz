@@ -1,1 +1,6 @@
 void teamradar_view();
+
+// to make entities have dots on the team radar
+.float teamradar_icon;
+.float teamradar_time;
+.vector teamradar_color;

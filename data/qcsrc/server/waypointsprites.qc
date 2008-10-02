@@ -1,64 +1,86 @@
-float waypointsprite_normdistance;
-float waypointsprite_minscale;
-float waypointsprite_fadedistance;
-float waypointsprite_minalpha;
-float waypointsprite_distancealphaexponent;
-float waypointsprite_timealphaexponent;
-float waypointsprite_deployed_lifetime;
-float waypointsprite_deadlifetime;
-float waypointsprite_limitedrange;
-
 ..entity owned_by_field;
-.float(entity) waypointsprite_for_player; // returns a model index or 0 for hide
-float waypointsprite_for_player_default(entity e)
-{
-	// personal waypoints
-	if(self.enemy)
-		if(self.enemy != other)
-			return FALSE;
+.float rule;
+.string model2;
+.string model3;
 
-	// team waypoints
-	if(self.team)
+.float(entity) waypointsprite_visible_for_player;
+
+void WaypointSprite_UpdateSprites(entity e, string m1, string m2, string m3)
+{
+	if(m1 != e.model)
 	{
-		if(self.team != other.team)
-			return FALSE;
-		if(other.classname != "player")
-			return FALSE;
+		e.model = m1;
+		e.SendFlags |= 2;
+	}
+	if(m2 != e.model2)
+	{
+		e.model2 = m2;
+		e.SendFlags |= 4;
+	}
+	if(m3 != e.model3)
+	{
+		e.model3 = m3;
+		e.SendFlags |= 8;
+	}
+}
+
+void WaypointSprite_UpdateOrigin(entity e, vector o)
+{
+	e.origin = o;
+	e.SendFlags |= 128;
+}
+
+void WaypointSprite_UpdateRule(entity e, float t, float r)
+{
+	e.rule = r;
+	e.team = t;
+	e.SendFlags |= 1;
+}
+
+void WaypointSprite_UpdateTeamRadar(entity e, float icon, vector col)
+{
+	e.cnt = (icon & 0x7F);
+	e.colormod = col;
+	e.SendFlags |= 32;
+}
+
+void WaypointSprite_Ping(entity e)
+{
+	e.cnt |= 0x80;
+	e.SendFlags |= 32;
+}
+
+void WaypointSprite_FadeOutIn(entity e, float t)
+{
+	if(!e.health)
+	{
+		e.health = t;
+		e.teleport_time = time + t;
+	}
+	else if(t < (e.teleport_time - time))
+	{
+		// accelerate the waypoint's dying
+		// ensure:
+		//   (e.teleport_time - time) / wp.health stays
+		//   e.teleport_time = time + fadetime
+		float current_fadetime;
+		current_fadetime = e.teleport_time - time;
+		e.teleport_time = time + t;
+		e.health = e.health * t / current_fadetime;
 	}
 
-	// fixed waypoints
-	if(self.currentammo) // hidable?
-		if(other.cvar_cl_hidewaypoints) // wants to hide;
-			return FALSE;
-
-	// otherwise, accept the model
-	return self.modelindex;
+	e.SendFlags |= 16;
 }
 
+float waypointsprite_limitedrange, waypointsprite_deployed_lifetime, waypointsprite_deadlifetime;
 void WaypointSprite_Init()
 {
-	waypointsprite_fadedistance = vlen(world.maxs - world.mins);
-	waypointsprite_normdistance = cvar("g_waypointsprite_normdistance");
-	waypointsprite_minscale = cvar("g_waypointsprite_minscale");
-	waypointsprite_minalpha = cvar("g_waypointsprite_minalpha");
-	waypointsprite_distancealphaexponent = cvar("g_waypointsprite_distancealphaexponent");
-	waypointsprite_timealphaexponent = cvar("g_waypointsprite_timealphaexponent");
+	waypointsprite_limitedrange = cvar("g_waypointsprite_limitedrange");
 	waypointsprite_deployed_lifetime = cvar("g_waypointsprite_deployed_lifetime");
 	waypointsprite_deadlifetime = cvar("g_waypointsprite_deadlifetime");
-	waypointsprite_limitedrange = cvar("g_waypointsprite_limitedrange");
-
-	precache_model("models/sprites/bluebase.sp2");
-	precache_model("models/sprites/flagcarrier.sp2");
-	precache_model("models/sprites/here.sp2");
-	precache_model("models/sprites/helpme.sp2");
-	precache_model("models/sprites/redbase.sp2");
-	precache_model("models/sprites/waypoint.sp2");
-	precache_model("models/sprites/danger.sp2");
 }
-
 void WaypointSprite_InitClient(entity e)
 {
-	stuffcmd(e, "\nalias \"g_waypointsprite_personal\" \"impulse 30\"\n alias \"g_waypointsprite_personal_p\" \"impulse 31\"\n alias \"g_waypointsprite_personal_d\" \"impulse 32\"\n alias \"g_waypointsprite_team_helpme\" \"impulse 33\"\n alias \"g_waypointsprite_team_here\" \"impulse 34\"\n alias \"g_waypointsprite_team_here_p\" \"impulse 35\"\n alias \"g_waypointsprite_team_here_d\" \"impulse 36\"\n alias \"g_waypointsprite_team_danger\" \"impulse 37\"\n alias \"g_waypointsprite_team_danger_p\" \"impulse 38\"\n alias \"g_waypointsprite_team_danger_d\" \"impulse 39\"\n alias \"g_waypointsprite_clear_personal\" \"impulse 47\"\n alias \"g_waypointsprite_clear\" \"impulse 48\"\n alias \"g_waypointsprite_toggle\" \"impulse 49\"\n");
 }
 
 void WaypointSprite_Kill(entity wp)
@@ -77,34 +99,11 @@ void WaypointSprite_Disown(entity wp, float fadetime)
 	if(wp.owner)
 	{
 		if(wp.exteriormodeltoclient == wp.owner)
-		{
-			setattachment(wp, world, "");
-#ifdef ATTACHMENT_WORKS_WITH_EF_NODEPTHTEST
-			setorigin(wp, wp.origin + wp.exteriormodeltoclient.origin);
-#else
-			setorigin(wp, wp.view_ofs + wp.exteriormodeltoclient.origin);
-#endif
 			wp.exteriormodeltoclient = world;
-		}
 		wp.owner.(wp.owned_by_field) = world;
 		wp.owner = world;
 
-		if(!wp.health)
-		{
-			wp.health = fadetime;
-			wp.teleport_time = time + fadetime;
-		}
-		else if(fadetime < (wp.teleport_time - time))
-		{
-			// accelerate the spawnfunc_waypoint's dying
-			// ensure:
-			//   (wp.teleport_time - time) / wp.health stays
-			//   wp.teleport_time = time + fadetime
-			float current_fadetime;
-			current_fadetime = wp.teleport_time - time;
-			wp.teleport_time = time + fadetime;
-			wp.health = wp.health * fadetime / current_fadetime;
-		}
+		WaypointSprite_FadeOutIn(wp, fadetime);
 	}
 }
 
@@ -115,90 +114,90 @@ void WaypointSprite_Think()
 	doremove = FALSE;
 
 	if(self.health)
+	{
 		if(time >= self.teleport_time)
 			doremove = TRUE;
+	}
+
+	if(self.exteriormodeltoclient)
+		WaypointSprite_UpdateOrigin(self, self.exteriormodeltoclient.origin + self.view_ofs);
 
 	if(doremove)
 		WaypointSprite_Kill(self);
 	else
-		self.nextthink = time;
+		self.nextthink = time; // WHY?!?
 }
 
-float WaypointSprite_CustomizeEntityForClient()
+float WaypointSprite_visible_for_player(entity e)
 {
-	vector realorigin, porigin;
-	float distancealpha, timealpha;
-	float distance;
-	float newmodel;
-
-	if(self.health)
-	{
-		timealpha = bound(0, (self.teleport_time - time) / self.health, 1);
-		if(timealpha == 0)
-			return FALSE;
-		timealpha = pow(timealpha, waypointsprite_timealphaexponent);
-	}
-	else
-		timealpha = 1;
-
-	// customize WP
-	newmodel = self.waypointsprite_for_player(other);
-	if(newmodel == 0)
-		return FALSE;
-	self.modelindex = newmodel;
-
-	porigin = other.origin + other.view_ofs_z * '0 0 1';
-
-#ifdef ATTACHMENT_WORKS_WITH_EF_NODEPTHTEST
-	realorigin = self.exteriormodeltoclient.origin + self.origin;
-#else
-	if(self.exteriormodeltoclient)
-	{
-		if(self.exteriormodeltoclient == other)
-		{
-			setattachment(self, other, "");
-			setorigin(self, self.view_ofs);
-			realorigin = other.origin + self.origin;
-		}
-		else
-		{
-			setattachment(self, world, "");
-			setorigin(self, self.exteriormodeltoclient.origin + self.view_ofs);
-			realorigin = self.origin;
-		}
-	}
-	else
-		realorigin = self.origin;
-#endif
-
-	distance = vlen(realorigin - porigin);
-
-	if(self.max_health)
-		if(distance >= self.max_health)
+	// personal waypoints
+	if(self.enemy)
+		if(self.enemy != other)
 			return FALSE;
 
-	self.scale = max(1, distance / waypointsprite_normdistance) * waypointsprite_minscale;
-
-	if(self.max_health > waypointsprite_normdistance)
+	// team waypoints
+	if(self.team && self.rule == SPRITERULE_DEFAULT)
 	{
-		// alpha 1 at normdistance, alpha 0 at maxdistance
-		distancealpha = bound(0, (self.max_health - distance) / (self.max_health - waypointsprite_normdistance), 1);
-		distancealpha = pow(distancealpha, waypointsprite_distancealphaexponent);
-	}
-	else if(self.max_health)
-	{
-		// alpha 1 if visible
-		distancealpha = 1;
-	}
-	else
-	{
-		// alpha 1 at normdistance, alpha minalpha at fadedistance
-		distancealpha = bound(0, (waypointsprite_fadedistance - distance) / (waypointsprite_fadedistance - waypointsprite_normdistance), 1);
-		distancealpha = pow(distancealpha, waypointsprite_distancealphaexponent);
-		distancealpha = distancealpha * (1 - waypointsprite_minalpha) + waypointsprite_minalpha;
+		if(self.team != other.team)
+			return FALSE;
+		if(other.classname != "player")
+			return FALSE;
 	}
 
-	self.alpha = timealpha * distancealpha;
+	return TRUE;
+}
+
+float WaypointSprite_Customize()
+{
+	// this is not in SendEntity because it shall run every frame, not just every update
+
+	return self.waypointsprite_visible_for_player(other);
+}
+
+float WaypointSprite_SendEntity(entity to, float sendflags)
+{
+	WriteByte(MSG_ENTITY, ENT_CLIENT_WAYPOINT);
+	WriteByte(MSG_ENTITY, sendflags);
+	WriteCoord(MSG_ENTITY, self.origin_x);
+	WriteCoord(MSG_ENTITY, self.origin_y);
+	WriteCoord(MSG_ENTITY, self.origin_z);
+
+	if(sendflags & 1)
+	{
+		WriteByte(MSG_ENTITY, self.team);
+		WriteByte(MSG_ENTITY, self.rule);
+	}
+
+	if(sendflags & 2)
+		WriteString(MSG_ENTITY, self.model);
+
+	if(sendflags & 4)
+		WriteString(MSG_ENTITY, self.model2);
+
+	if(sendflags & 8)
+		WriteString(MSG_ENTITY, self.model3);
+
+	if(sendflags & 16)
+	{
+		WriteCoord(MSG_ENTITY, self.health);
+		WriteCoord(MSG_ENTITY, self.teleport_time);
+		WriteShort(MSG_ENTITY, self.max_health); // maxdist
+		float f;
+		f = 0;
+		if(self.currentammo)
+			f |= 1; // hideable
+		if(self.exteriormodeltoclient == to)
+			f |= 2; // my own
+		WriteByte(MSG_ENTITY, f);
+	}
+
+	if(sendflags & 32)
+	{
+		WriteByte(MSG_ENTITY, self.cnt); // icon on radar
+		WriteByte(MSG_ENTITY, self.colormod_x * 255.0);
+		WriteByte(MSG_ENTITY, self.colormod_y * 255.0);
+		WriteByte(MSG_ENTITY, self.colormod_z * 255.0);
+	}
 
 	return TRUE;
 }
@@ -219,14 +218,7 @@ entity WaypointSprite_Spawn(
 	wp.health = lifetime;
 	wp.exteriormodeltoclient = ref;
 	if(ref)
-	{
-#ifdef ATTACHMENT_WORKS_WITH_EF_NODEPTHTEST
-		setattachment(wp, ref, "");
-		setorigin(wp, ofs);
-#else
 		wp.view_ofs = ofs;
-#endif
-	}
 	else
 		setorigin(wp, ofs);
 	wp.enemy = showto;
@@ -241,16 +233,14 @@ entity WaypointSprite_Spawn(
 		wp.owned_by_field = ownfield;
 	}
 	wp.max_health = maxdistance;
-	wp.customizeentityforclient = WaypointSprite_CustomizeEntityForClient;
 	wp.think = WaypointSprite_Think;
 	wp.nextthink = time;
 	wp.effects = EF_NODEPTHTEST | EF_LOWPRECISION;
-	if(spr != "")
-		setmodel(wp, strcat("models/sprites/", spr, ".sp2")); // precision set above
-	else
-		wp.model = "waypoint";
-	setsize(wp, '0 0 0', '0 0 0');
-	wp.waypointsprite_for_player = waypointsprite_for_player_default;
+	wp.model = spr;
+	wp.modelindex = 1;
+	wp.SendEntity = WaypointSprite_SendEntity;
+	wp.customizeentityforclient = WaypointSprite_Customize;
+	wp.waypointsprite_visible_for_player = WaypointSprite_visible_for_player;
 	return wp;
 }
 
