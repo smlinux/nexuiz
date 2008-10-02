@@ -72,6 +72,7 @@ void CSQC_Init(void)
 	
 	float i;
 	CSQC_CheckEngine();
+	dprint_load();
 
 	configdb = db_create();
 	binddb = db_create();

@@ -188,6 +188,7 @@ void CSQC_UpdateView(void)
 {
 	entity e;
 	float fov;
+	dprint_load();
 
 	// Render the Scene
 	view_origin = pmove_org + '0 0 1' * getstati(STAT_VIEWHEIGHT);
