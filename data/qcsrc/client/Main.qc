@@ -332,9 +332,10 @@ void Ent_ReadEntCS()
 
 	InterpolateOrigin_Undo();
 
-	self.origin_x = ReadCoord();
-	self.origin_y = ReadCoord();
-	self.angles_y = ReadCoord();
+	self.origin_x = ReadShort();
+	self.origin_y = ReadShort();
+	self.origin_z = ReadShort();
+	self.angles_y = ReadByte() * 360.0 / 256;
 	self.origin_z = self.angles_x = self.angles_z = 0;
 
 	InterpolateOrigin_Note();

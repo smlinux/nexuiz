@@ -19,7 +19,8 @@
 // Revision 18: warmup
 // Revision 19: fog
 // Revision 20: naggers
-#define CSQC_REVISION 20
+// Revision 21: entcs for players optimized (position data down from 12 to 7 bytes)
+#define CSQC_REVISION 21
 
 // probably put these in common/
 // so server/ and client/ can be synced better

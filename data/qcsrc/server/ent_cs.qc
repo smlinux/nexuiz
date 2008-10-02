@@ -41,9 +41,10 @@ void entcs_ons(entity to)
 		return;
 	}
 	WriteByte(MSG_ENTITY, ENTCS_MSG_ONS_GPS);
-	WriteCoord(MSG_ENTITY, self.owner.origin_x);
-	WriteCoord(MSG_ENTITY, self.owner.origin_y);
-	WriteCoord(MSG_ENTITY, self.owner.angles_y);
+	WriteShort(MSG_ENTITY, self.owner.origin_x);
+	WriteShort(MSG_ENTITY, self.owner.origin_y);
+	WriteShort(MSG_ENTITY, self.owner.origin_z);
+	WriteByte(MSG_ENTITY, self.owner.angles_y * 256.0 / 360);
 }
 
 void entcs_common_self()
