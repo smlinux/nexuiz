@@ -258,8 +258,12 @@ void kh_Key_Detach(entity key) // runs every time a key is dropped or lost. Runs
 
 void kh_Key_AssignTo(entity key, entity player)  // runs every time a key is picked up or assigned. Runs prior to kh_key_attach
 {
+	entity k;
+	float ownerteam0, ownerteam;
 	if(key.owner == player)
 		return;
+
+	ownerteam0 = kh_Key_AllOwnedByWhichTeam();
 
 	if(key.owner)
 	{
@@ -275,6 +279,7 @@ void kh_Key_AssignTo(entity key, entity player)  // runs every time a key is pic
 		if(key.owner.kh_next == world)
 		{
 			// No longer a key carrier
+			WaypointSprite_Ping(key.owner.waypointsprite_attachedforcarrier);
 			WaypointSprite_DetachCarrier(key.owner);
 		}
 	}
@@ -318,6 +323,8 @@ void kh_Key_AssignTo(entity key, entity player)  // runs every time a key is pic
 				WaypointSprite_UpdateSprites(player.waypointsprite_attachedforcarrier, "keycarrier-yellow", "keycarrier-friend", "");
 			else if(player.team == COLOR_TEAM4)
 				WaypointSprite_UpdateSprites(player.waypointsprite_attachedforcarrier, "keycarrier-pink", "keycarrier-friend", "");
+			WaypointSprite_UpdateTeamRadar(player.waypointsprite_attachedforcarrier, RADARICON_FLAGCARRIER, colormapPaletteColor(player.team - 1));
+			WaypointSprite_Ping(player.waypointsprite_attachedforcarrier);
 		}
 	}
 	
@@ -327,6 +334,32 @@ void kh_Key_AssignTo(entity key, entity player)  // runs every time a key is pic
 		key.owner.kh_state = (key.owner.kh_state | 255) - 255 + test[key.owner.playerid];
 		
 	key.pusher = world;
+
+	ownerteam = kh_Key_AllOwnedByWhichTeam();
+	if(ownerteam != ownerteam0)
+	{
+		if(ownerteam != -1)
+		{
+			kh_interferemsg_time = time + 0.2;
+			kh_interferemsg_team = player.team;
+
+			// audit all key carrier sprites, update them to RUN HERE
+			FOR_EACH_KH_KEY(k)
+			{
+				if(k.owner)
+					WaypointSprite_UpdateSprites(k.owner.waypointsprite_attachedforcarrier, k.owner.waypointsprite_attachedforcarrier.model, "keycarrier-finish", "");
+			}
+		}
+		else
+		{
+			// audit all key carrier sprites, update them to RUN HERE
+			FOR_EACH_KH_KEY(k)
+			{
+				if(k.owner)
+					WaypointSprite_UpdateSprites(k.owner.waypointsprite_attachedforcarrier, k.owner.waypointsprite_attachedforcarrier.model, "keycarrier-friend", "");
+			}
+		}
+	}
 }
 
 void kh_Key_Damage(entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
@@ -385,8 +418,9 @@ void kh_Key_Spawn(entity initial_owner, float angle)  // runs every time a new f
 
 	centerprint(initial_owner, strcat("You are starting with the ", key.netname, "\n"));  // message to player at start of round
 
-	WaypointSprite_Spawn("", 0, 0, key, '0 0 1' * KH_KEY_WP_ZSHIFT, world, key.team, key, waypointsprite_attachedforcarrier, FALSE);
+	WaypointSprite_Spawn("key-dropped", 0, 0, key, '0 0 1' * KH_KEY_WP_ZSHIFT, world, key.team, key, waypointsprite_attachedforcarrier, FALSE);
 	key.waypointsprite_attachedforcarrier.waypointsprite_visible_for_player = kh_Key_waypointsprite_visible_for_player;
+	WaypointSprite_UpdateTeamRadar(key.waypointsprite_attachedforcarrier, RADARICON_FLAG, '0 1 1');
 
 	kh_Key_AssignTo(key, initial_owner);
 }
@@ -442,6 +476,9 @@ float kh_Key_AllOwnedByWhichTeam()  // constantly called. check to see if all th
 
 void kh_Key_Collect(entity key, entity player)  //a player picks up a dropped key
 {
+	float ownerteam;
+	entity k;
+
 	sound(player, CHAN_AUTO, kh_sound_collect, VOL_BASE, ATTN_NORM);
 
 	if(key.kh_dropperteam != player.team)
@@ -453,14 +490,6 @@ void kh_Key_Collect(entity key, entity player)  //a player picks up a dropped ke
 	bprint(player.netname, "^7 picked up the ", key.netname, "\n");
 
 	kh_Key_AssignTo(key, player); // this also updates .kh_state
-
-	if(kh_Key_AllOwnedByWhichTeam() != -1)
-	{
-		kh_interferemsg_time = time + 0.2;
-		kh_interferemsg_team = player.team;
-
-		// audit all key carrier sprites, update them to RUN HERE
-	}
 }
 
 void kh_Key_DropAll(entity player, float suicide) // runs whenever a player dies

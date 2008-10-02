@@ -535,7 +535,7 @@ void(float bIsNewEntity) CSQC_Ent_Update =
 	else if(self.enttype == ENT_CLIENT_WAYPOINT)
 		Ent_WaypointSprite();
 	else
-		error("unknown entity type in CSQC_Ent_Update: ", ftos(self.enttype), "\n");
+		error(strcat("unknown entity type in CSQC_Ent_Update: ", ftos(self.enttype), "\n"));
 	
 };
 // Destructor, but does NOT deallocate the entity by calling remove(). Also
