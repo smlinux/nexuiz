@@ -606,7 +606,7 @@ void Gamemode_Init()
 	get_mi_min_max();
 	mi_center = (mi_min + mi_max) * 0.5;
 	mi_scale = mi_max - mi_min;
-	minimapname = strzone(strcat("maps/", mi_shortname, "_mini.tga"));
+	minimapname = strzone(strcat("gfx/", mi_shortname, "_mini.tga"));
 	shortmapname = mi_shortname;
 
 	if(gametype == GAME_ONSLAUGHT) {

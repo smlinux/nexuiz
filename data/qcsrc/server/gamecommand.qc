@@ -91,7 +91,7 @@ void RoughMap_Think()
 		self.maxs_y = (mi_picmax_y - mi_picmin_y) / self.size_y;
 		self.maxs_z = mi_max_z - mi_min_z;
 		print("Picture mins/maxs: ", ftos(self.maxs_x), " and ", ftos(self.maxs_y), " should match\n");
-		self.netname = strzone(strcat("maps/", mi_shortname, "_mini.xpm"));
+		self.netname = strzone(strcat("gfx/", mi_shortname, "_mini.xpm"));
 		if(!(self.count & 1))
 		{
 			self.cnt = fopen(self.netname, FILE_READ);
@@ -155,7 +155,7 @@ void RoughMap_Think()
 		// close the file
 		fputs(self.cnt, "};\n");
 		fclose(self.cnt);
-		print("Finished. Please edit data/", self.netname, " with an image editing application and place it in the TGA format in the same folder as the BSP file.\n");
+		print("Finished. Please edit data/", self.netname, " with an image editing application and place it in the TGA format in the gfx folder.\n");
 		if(self.count & 2)
 		{
 			if(self.count & 1)
