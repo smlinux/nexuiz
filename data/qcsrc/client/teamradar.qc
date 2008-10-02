@@ -116,7 +116,7 @@ void() teamradar_view =
 		mi_picmax_y - mi_picmin_y
 	);
 
-	teamradar_angle = cvar("cl_teamradar_rotation") * 4;
+	teamradar_angle = cvar("cl_teamradar_rotation") * 90;
 	if(!teamradar_angle)
 		teamradar_angle = input_angles_y - 90;
 	teamradar_origin2d = '64 64 0';

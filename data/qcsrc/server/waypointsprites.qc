@@ -162,6 +162,9 @@ float WaypointSprite_SendEntity(entity to, float sendflags)
 	WriteCoord(MSG_ENTITY, self.origin_y);
 	WriteCoord(MSG_ENTITY, self.origin_z);
 
+	if(self.model == "key-dropped")
+		print("flags: ", ftos(sendflags), "\n");
+
 	if(sendflags & 1)
 	{
 		WriteByte(MSG_ENTITY, self.team);
