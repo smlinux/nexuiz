@@ -71,6 +71,9 @@ void Draw_WaypointSprite()
 	if(self.hideflags & 2)
 		return; // radar only
 
+	if(cvar("cl_hidewaypoints") >= 2)
+		return;
+
 	if(self.hideflags & 1)
 		if(cvar("cl_hidewaypoints"))
 			return; // fixed waypoint
