@@ -34,10 +34,9 @@ entity get_entcs_ent()
 
 void entcs_ons(entity to)
 {
-	if(to == self.owner || self.team != to.team ||
-			self.owner.classname == "observer" || to.classname == "observer")
+	if(to == self.owner || self.team != to.team || self.owner.classname == "observer" || to.classname == "observer" || self.deadflag != DEAD_NO)
 	{
-		WriteByte(MSG_ENTITY, ENTCS_MSG_ONS_REMOVE);
+		WriteByte(MSG_ENTITY, ENTCS_MSG_ONS_REMOVE); // looks like a waste to me
 		return;
 	}
 	WriteByte(MSG_ENTITY, ENTCS_MSG_ONS_GPS);
