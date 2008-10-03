@@ -106,14 +106,39 @@ float	TE_LIGHTNING3				= 9;
 float	TE_LAVASPLASH				= 10;
 float	TE_TELEPORT				= 11;
 
-float	CHAN_AUTO				= 0; // Announcer/Chat, on player: Triggers/Items
+// this assignment must match menu/nexuiz/dialog_settings_misc.c!
+float	CHAN_AUTO				= 0;
+	// on world: info (announcers, ...)
+	// on players: item pickup
+	// on entities: UNUSED
 float	CHAN_WEAPON				= 1; // Weapon fire
+	// on world: UNUSED
+	// on players: weapon firing
+	// on entities: turret firing
 float	CHAN_VOICE				= 2; // Voice/Radio
+	// on world: UNUSED
+	// on players: voice
+	// on entities: ambient
 float	CHAN_TRIGGER			= 3; // Triggers/Items
+	// on world: UNUSED
+	// on players: item pickup
+	// on entities: platforms moving etc.
 float	CHAN_PROJECTILE			= 4; // Projectiles
+	// on world: UNUSED
+	// on players: projectiles hitting player
+	// on entities: projectiles
 float	CHAN_WEAPON2			= 5; // Nex fire (separated as it is a very long sound)
+	// on world: UNUSED
+	// on players: weapon firing
+	// on entities: turret firing
 float	CHAN_PAIN				= 6; // Pain
+	// on world: UNUSED
+	// on players: pain
+	// on entities: UNUSED
 float	CHAN_PLAYER				= 7; // Player body
+	// on world: UNUSED
+	// on players: player sounds
+	// on entities: player sounds
 
 float	ATTN_NONE				= 0;
 float	ATTN_NORM				= 0.5;

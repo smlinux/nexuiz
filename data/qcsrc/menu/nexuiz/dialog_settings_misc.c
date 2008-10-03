@@ -41,6 +41,7 @@ void fillNexuizMiscSettingsTab(entity me)
 		me.TDempty(me, 0.2);
 		s = makeNexuizDecibelsSlider(-20, 0, 0.5, "snd_staticvolume");
 		me.TD(me, 1, 0.8, e = makeNexuizSliderCheckBox(-1000000, 1, s, "Ambient:"));
+		makeMulti(s, "snd_entchannel2volume");
 		me.TD(me, 1, 2, s);
 		setDependentStringNotEqual(e, "volume", "0");
 		setDependentStringNotEqual(s, "volume", "0");
@@ -92,7 +93,7 @@ void fillNexuizMiscSettingsTab(entity me)
 	me.TR(me);
 		me.TDempty(me, 0.2);
 		s = makeNexuizDecibelsSlider(-20, 0, 0.5, "snd_playerchannel1volume");
-		makeMulti(s, "snd_playerchannel5volume");
+		makeMulti(s, "snd_playerchannel5volume snd_entchannel1volume snd_entchannel5volume");
 		me.TD(me, 1, 0.8, e = makeNexuizSliderCheckBox(-1000000, 1, s, "Weapons:"));
 		me.TD(me, 1, 2, s);
 		setDependentStringNotEqual(e, "volume", "0");
