@@ -140,11 +140,11 @@ void() teamradar_view =
 	);
 
 	draw_teamradar_background(cvar("cl_teamradar_background_alpha"));
-	draw_teamradar_player(pmove_org, input_angles, '1 1 1');
-	for(tm = gps_start; tm != world; tm = tm.chain)
-		draw_teamradar_player(tm.origin, tm.angles, rgb);
 	for(tm = world; (tm = findflags(tm, teamradar_icon, 0xFFFFFF)); )
 		draw_teamradar_icon(tm.origin, tm.teamradar_icon, tm.teamradar_time, tm.teamradar_color, tm.alpha);
+	for(tm = gps_start; tm != world; tm = tm.chain)
+		draw_teamradar_player(tm.origin, tm.angles, rgb);
+	draw_teamradar_player(pmove_org, input_angles, '1 1 1');
 
 	drawresetcliparea();
 };
