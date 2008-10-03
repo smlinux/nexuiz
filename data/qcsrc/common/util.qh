@@ -94,3 +94,5 @@ vector mi_pictexcoord2; // texcoords of the image corners (after transforming, t
 vector mi_pictexcoord3; // texcoords of the image corners (after transforming, these are 2D coords too)
 void get_mi_min_max();
 #endif
+
+#define FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(x) void reference_##x() { x = x; }

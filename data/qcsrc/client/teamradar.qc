@@ -108,7 +108,7 @@ void() teamradar_view =
 	local vector rgb;
 	local entity tm;
 	float scale2d, normalsize, bigsize;
-	float a;
+	float a, f;
 
 	if(!cvar("cl_teamradar"))
 		return;
@@ -121,15 +121,22 @@ void() teamradar_view =
 		mi_picmax_y - mi_picmin_y
 	);
 
+	f = current_zoomfraction;
 	teamradar_scale = cvar("cl_teamradar_scale");
 	a = cvar("cl_teamradar_background_alpha");
 	teamradar_angle = cvar("cl_teamradar_rotation") * 90;
 
 	// fix undefined cvars first
 	if(!teamradar_scale)
-		teamradar_scale = 2048;
+		teamradar_scale = 4096;
 	if(!a)
 		a = 0.75;
+
+	if(teamradar_scale < 0)
+	{
+		current_zoomfraction = 1 - current_zoomfraction;
+		teamradar_scale = -teamradar_scale;
+	}
 
 	if(!teamradar_angle)
 		teamradar_angle = input_angles_y - 90;
@@ -141,11 +148,11 @@ void() teamradar_view =
 	if(bigsize > normalsize)
 		normalsize = bigsize;
 	teamradar_size =
-		  current_zoomfraction * bigsize
-		+ (1 - current_zoomfraction) * normalsize;
+		  f * bigsize
+		+ (1 - f) * normalsize;
 	teamradar_origin3d_in_texcoord = teamradar_3dcoord_to_texcoord(
-		  current_zoomfraction * (mi_min + mi_max) * 0.5
-		+ (1 - current_zoomfraction) * pmove_org);
+		  f * (mi_min + mi_max) * 0.5
+		+ (1 - f) * pmove_org);
 
 	drawsetcliparea(
 		teamradar_origin2d_x - teamradar_size2d_x * 0.5,
