@@ -228,7 +228,7 @@ void ImpulseCommands (void)
 				{
 					wp = WaypointSprite_Attach("helpme", TRUE);
 					if(wp)
-						WaypointSprite_UpdateTeamRadar(wp, RADARICON_HELPME, '1 1 0');
+						WaypointSprite_UpdateTeamRadar(wp, RADARICON_HELPME, '1 0.5 0'); // TODO choose better color
 					if(!wp)
 						wp = self.waypointsprite_attachedforcarrier; // flag sprite?
 					if(wp)
