@@ -65,16 +65,17 @@ void(vector coord3d, vector pangles, vector rgb) draw_teamradar_player =
 	v_right_x = -v_forward_y;
 	v_right_y = v_forward_x;
 
-	if(rgb != '1 1 1')
-	{
+	if(rgb == '1 1 1')
+		rgb2 = '0 0 0';
+	else
 		rgb2 = '1 1 1';
-		R_BeginPolygon("", 0);
-		R_PolygonVertex(coord+v_forward*3, '0 0 0', rgb2, 1);
-		R_PolygonVertex(coord+v_right*4-v_forward*2.5, '0 1 0', rgb2, 1);
-		R_PolygonVertex(coord-v_forward*2, '1 0 0', rgb2, 1);
-		R_PolygonVertex(coord-v_right*4-v_forward*2.5, '1 1 0', rgb2, 1);
-		R_EndPolygon();
-	}
+
+	R_BeginPolygon("", 0);
+	R_PolygonVertex(coord+v_forward*3, '0 0 0', rgb2, 1);
+	R_PolygonVertex(coord+v_right*4-v_forward*2.5, '0 1 0', rgb2, 1);
+	R_PolygonVertex(coord-v_forward*2, '1 0 0', rgb2, 1);
+	R_PolygonVertex(coord-v_right*4-v_forward*2.5, '1 1 0', rgb2, 1);
+	R_EndPolygon();
 
 	R_BeginPolygon("", 0);
 	R_PolygonVertex(coord+v_forward*2, '0 0 0', rgb, 1);

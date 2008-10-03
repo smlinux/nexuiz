@@ -336,8 +336,9 @@ void CSQC_UpdateView(void)
 	}
 	else if(teamplay)
 	{
-		if(intermission != 1)
-		if(intermission != 2)
+		//if(intermission != 1)
+		//if(intermission != 2)
+		if(!scoreboard_active)
 			teamradar_view();
 	}
 }
