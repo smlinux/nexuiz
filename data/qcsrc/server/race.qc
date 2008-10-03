@@ -436,12 +436,10 @@ void spawnfunc_trigger_race_checkpoint()
 
 	if(self.race_checkpoint)
 	{
-		precache_model("models/sprites/race-checkpoint.sp2");
 		WaypointSprite_SpawnFixed("race-checkpoint", o, self, sprite);
 	}
 	else
 	{
-		precache_model("models/sprites/race-finish.sp2");
 		WaypointSprite_SpawnFixed("race-finish", o, self, sprite);
 	}
 	self.sprite.waypointsprite_visible_for_player = race_waypointsprite_visible_for_player;

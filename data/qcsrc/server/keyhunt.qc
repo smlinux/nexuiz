@@ -64,18 +64,7 @@ string kh_sound_drop = "sound/kh/drop.wav";
 string kh_sound_collect = "sound/kh/collect.wav";
 string kh_sound_alarm = "sound/kh/alarm.wav";  // the new siren/alarm
 
-float kh_sprite_dropped, kh_sprite_finish, kh_sprite_red, kh_sprite_blue, kh_sprite_pink, kh_sprite_yellow, kh_sprite_friend;
 float kh_key_dropped, kh_key_carried;
-
-float kh_GetCarrierSprite(float t, float e)  // runs all the time
-{
-	if(t == e)           return kh_sprite_friend;
-	if(t == COLOR_TEAM1) return kh_sprite_red;
-	if(t == COLOR_TEAM2) return kh_sprite_blue;
-	if(t == COLOR_TEAM3) return kh_sprite_yellow;
-	if(t == COLOR_TEAM4) return kh_sprite_pink;
-	return 0;
-}
 
 void kh_Controller_SetThink(float t, string msg, kh_Think_t func)  // runs occasionaly
 {
@@ -953,13 +942,6 @@ void kh_init()  // sets up th KH environment
 	precache_sound(kh_sound_collect);
 	precache_sound(kh_sound_alarm);  // the new siren
 
-	precache_model("models/sprites/key-dropped.sp2");
-	precache_model("models/sprites/keycarrier-finish.sp2");
-	precache_model("models/sprites/keycarrier-friend.sp2");
-	precache_model("models/sprites/keycarrier-red.sp2");
-	precache_model("models/sprites/keycarrier-blue.sp2");
-	precache_model("models/sprites/keycarrier-yellow.sp2");
-	precache_model("models/sprites/keycarrier-pink.sp2");
 #ifdef KH_PLAYER_USE_CARRIEDMODEL
 	precache_model("models/keyhunt/key-carried.md3");
 #endif
@@ -989,21 +971,6 @@ void kh_init()  // sets up th KH environment
 #else
 	kh_key_carried = kh_key_dropped;
 #endif
-	setmodel(kh_controller, "models/sprites/key-dropped.sp2");
-	kh_sprite_dropped = kh_controller.modelindex;
-	setmodel(kh_controller, "models/sprites/keycarrier-finish.sp2");
-	kh_sprite_finish = kh_controller.modelindex;
-	setmodel(kh_controller, "models/sprites/keycarrier-friend.sp2");
-	kh_sprite_friend = kh_controller.modelindex;
-	setmodel(kh_controller, "models/sprites/keycarrier-red.sp2");
-	kh_sprite_red = kh_controller.modelindex;
-	setmodel(kh_controller, "models/sprites/keycarrier-blue.sp2");
-	kh_sprite_blue = kh_controller.modelindex;
-	setmodel(kh_controller, "models/sprites/keycarrier-pink.sp2");
-	kh_sprite_pink = kh_controller.modelindex;
-	setmodel(kh_controller, "models/sprites/keycarrier-yellow.sp2");
-	kh_sprite_yellow = kh_controller.modelindex;
-	setmodel(kh_controller, "");
 
 	addstat(STAT_KH_KEYS, AS_INT, kh_state);
 
