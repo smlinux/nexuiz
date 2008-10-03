@@ -9,10 +9,12 @@
 .float isshielded;
 .float lasthealth;
 
+#ifdef YOU_HAVE_FIXED_ONSLAUGHT_WAYPOINTS
 float ons_sprite_cp_red, ons_sprite_cp_blue, ons_sprite_cp_neut;
 float ons_sprite_cp_atck_red, ons_sprite_cp_atck_blue, ons_sprite_cp_atck_neut;
 float ons_sprite_cp_dfnd_red, ons_sprite_cp_dfnd_blue;
 float ons_sprite_gen_red, ons_sprite_gen_blue, ons_sprite_gen_shielded;
+#endif
 
 void onslaught_updatelinks()
 {

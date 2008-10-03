@@ -157,7 +157,7 @@ void thrown_wep_think()
 float W_ThrowNewWeapon(entity own, float wpn, float doreduce, vector org, vector velo)
 {
 	entity oldself, wep;
-	float wa, ammo;
+	float wa, thisammo;
 	var .float ammofield;
 
 	wep = spawn();
@@ -194,9 +194,9 @@ float W_ThrowNewWeapon(entity own, float wpn, float doreduce, vector org, vector
 			return -1;
 		if(doreduce)
 		{
-			ammo = min(own.ammofield, wep.ammofield);
-			wep.ammofield = ammo;
-			own.ammofield -= ammo;
+			thisammo = min(own.ammofield, wep.ammofield);
+			wep.ammofield = thisammo;
+			own.ammofield -= thisammo;
 		}
 		wep.think = thrown_wep_think;
 		wep.nextthink = time + 0.5;

@@ -314,7 +314,7 @@ void kh_Key_AssignTo(entity key, entity player)  // runs every time a key is pic
 				WaypointSprite_UpdateSprites(player.waypointsprite_attachedforcarrier, "keycarrier-yellow", "keycarrier-friend", "");
 			else if(player.team == COLOR_TEAM4)
 				WaypointSprite_UpdateSprites(player.waypointsprite_attachedforcarrier, "keycarrier-pink", "keycarrier-friend", "");
-			WaypointSprite_UpdateTeamRadar(player.waypointsprite_attachedforcarrier, RADARICON_FLAGCARRIER, colormapPaletteColor(player.team - 1));
+			WaypointSprite_UpdateTeamRadar(player.waypointsprite_attachedforcarrier, RADARICON_FLAGCARRIER, colormapPaletteColor(player.team - 1, 0));
 			if(!kh_no_radar_circles)
 				WaypointSprite_Ping(player.waypointsprite_attachedforcarrier);
 		}
@@ -468,9 +468,6 @@ float kh_Key_AllOwnedByWhichTeam()  // constantly called. check to see if all th
 
 void kh_Key_Collect(entity key, entity player)  //a player picks up a dropped key
 {
-	float ownerteam;
-	entity k;
-
 	sound(player, CHAN_AUTO, kh_sound_collect, VOL_BASE, ATTN_NORM);
 
 	if(key.kh_dropperteam != player.team)
