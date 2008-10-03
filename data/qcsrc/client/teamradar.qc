@@ -132,7 +132,7 @@ void() teamradar_view =
 
 	if(teamradar_scale < 0)
 	{
-		current_zoomfraction = 1 - current_zoomfraction;
+		f = 1 - f;
 		teamradar_scale = -teamradar_scale;
 	}
 
