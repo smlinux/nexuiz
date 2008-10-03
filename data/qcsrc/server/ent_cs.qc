@@ -34,7 +34,7 @@ entity get_entcs_ent()
 
 void entcs_ons(entity to)
 {
-	if(to == self.owner || self.team != to.team || self.owner.classname == "observer" || to.classname == "observer" || self.owner.deadflag != DEAD_NO)
+	if(to == self.owner || self.team != to.team || self.owner.classname != "player" || to.classname != "player" || self.owner.deadflag != DEAD_NO)
 	{
 		WriteByte(MSG_ENTITY, ENTCS_MSG_ONS_REMOVE); // looks like a waste to me
 		return;
