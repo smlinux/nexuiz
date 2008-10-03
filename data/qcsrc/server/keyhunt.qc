@@ -22,6 +22,7 @@ vector KH_KEY_MAX = '10 10 3';
 float KH_KEY_BRIGHTNESS = 2;
 
 string kh_Controller_Waitmsg;
+float kh_no_radar_circles;
 
 // kh_state
 //     bits 0-7: player's key status
@@ -279,7 +280,8 @@ void kh_Key_AssignTo(entity key, entity player)  // runs every time a key is pic
 		if(key.owner.kh_next == world)
 		{
 			// No longer a key carrier
-			WaypointSprite_Ping(key.owner.waypointsprite_attachedforcarrier);
+			if(!kh_no_radar_circles)
+				WaypointSprite_Ping(key.owner.waypointsprite_attachedforcarrier);
 			WaypointSprite_DetachCarrier(key.owner);
 		}
 	}
@@ -324,7 +326,8 @@ void kh_Key_AssignTo(entity key, entity player)  // runs every time a key is pic
 			else if(player.team == COLOR_TEAM4)
 				WaypointSprite_UpdateSprites(player.waypointsprite_attachedforcarrier, "keycarrier-pink", "keycarrier-friend", "");
 			WaypointSprite_UpdateTeamRadar(player.waypointsprite_attachedforcarrier, RADARICON_FLAGCARRIER, colormapPaletteColor(player.team - 1));
-			WaypointSprite_Ping(player.waypointsprite_attachedforcarrier);
+			if(!kh_no_radar_circles)
+				WaypointSprite_Ping(player.waypointsprite_attachedforcarrier);
 		}
 	}
 	
@@ -785,8 +788,11 @@ void kh_FinishRound()  // runs when a team captures the keys
 	// prepare next round
 	kh_interferemsg_time = 0;
 	entity key;
+
+	kh_no_radar_circles = TRUE;
 	FOR_EACH_KH_KEY(key)
 		kh_Key_Remove(key);
+	kh_no_radar_circles = FALSE;
 
 	kh_Controller_SetThink(cvar("g_balance_keyhunt_delay_round"), "Round starts in ", kh_StartRound);
 }
