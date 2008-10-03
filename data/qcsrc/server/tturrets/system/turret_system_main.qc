@@ -66,7 +66,7 @@ void load_unit_settings(entity ent,string unitname,float is_reload)
     ent.ammo_recharge = cvar(cvar_gets(sbase,"_ammo_recharge")) * ent.turret_scale_ammo;
 
     ent.aim_firetolerance_dist = cvar(cvar_gets(sbase,"_aim_firetolerance_dist"));
-    ent.aim_firetolerance_angle = cvar(cvar_gets(sbase,"_aim_firetolerance_angle"));
+//    ent.aim_firetolerance_angle = cvar(cvar_gets(sbase,"_aim_firetolerance_angle"));
     ent.aim_speed = cvar(cvar_gets(sbase,"_aim_speed")) * ent.turret_scale_aim;
     ent.aim_maxrot = cvar(cvar_gets(sbase,"_aim_maxrot"));
     ent.aim_maxpitch = cvar(cvar_gets(sbase,"_aim_maxpitch"));
@@ -289,7 +289,7 @@ float turret_stdproc_firecheck()
 
     // Ready?
     if (self.firecheck_flags & TFL_FIRECHECK_REFIRE)
-        if (self.attack_finished >= time) return 0;
+        if (self.attack_finished_single >= time) return 0;
 
     //
     if (self.firecheck_flags & TFL_FIRECHECK_DEAD)
@@ -328,7 +328,7 @@ float turret_stdproc_firecheck()
     if (self.shot_volly > 1)
     {
         if (self.volly_counter == self.shot_volly)
-            if (self.ammo < (self.shot_dmg * self.shot_volly +1))
+            if (self.ammo < (self.shot_dmg * self.shot_volly))
                 return 0;
     }
 
@@ -517,8 +517,9 @@ void turret_think()
         {
             if (e.tur_head != world)
             {
+
                 load_unit_settings(e,e.cvar_basename,1);
-                self.turret_postthink();
+                e.turret_postthink();
             }
 
             e = nextent(e);
@@ -548,7 +549,8 @@ void turret_think()
     {
         dprint("Warning: Inactive or dead turret running the think function!\n");
         self.enemy = world;
-        self.turret_track();
+        //self.turret_track();
+        turret_stdproc_track();
         return;
     }
 
@@ -577,25 +579,20 @@ void turret_think()
     else
     {
         // Check if we have a vailid enemy, and get one if we dont.
-        if (self.emaster != world)
-        {
-            self.enemy = self.emaster.enemy;
-        }
-        else
-        {
             // turret_do_updates(self);
-            if ((turret_validate_target(self,self.enemy,self.target_validate_flags) <= 0) || (self.cnt < time))
-            {
-                self.enemy = turret_select_target();
-                self.cnt = time + self.ticrate * 3;
-            }
+        if ((turret_validate_target(self,self.enemy,self.target_validate_flags) <= 0) || (self.cnt < time))
+        {
+            self.enemy = turret_select_target();
+            self.cnt = time + self.ticrate * 3;
         }
+
 
         // No target, just go to idle, do any custom stuff and bail.
         if (self.enemy == world)
         {
             // Turn & pitch
-            self.turret_track();
+            if (!self.track_flags & TFL_TRACK_NO)
+                turret_stdproc_track();
 
             // do any per-turret stuff
             self.turret_postthink();
@@ -609,11 +606,13 @@ void turret_think()
 
         // Predict or whatnot
         if (!self.aim_flags & TFL_AIM_NO)
-            self.tur_aimpos = self.turret_aim();
+            self.tur_aimpos = turret_stdproc_aim_generic();
+            //self.tur_aimpos = self.turret_aim();
 
         // Turn & pitch
         if (!self.track_flags & TFL_TRACK_NO)
-            self.turret_track();
+            turret_stdproc_track();
+            //self.turret_track();
 
         // Update
         turret_do_updates(self);
@@ -634,7 +633,7 @@ void turret_fire()
 
     self.turret_firefunc();
 
-    self.attack_finished    = time + self.shot_refire;
+    self.attack_finished_single    = time + self.shot_refire;
     self.ammo               = self.ammo - self.shot_dmg;
     self.volly_counter      = self.volly_counter - 1;
 
@@ -645,7 +644,7 @@ void turret_fire()
         if (self.shoot_flags & TFL_SHOOT_CLEARTARGET) self.enemy = world;
 
         if (self.shot_volly > 1)
-            self.attack_finished = time + self.shot_volly_refire;
+            self.attack_finished_single = time + self.shot_volly_refire;
     }
 
 
@@ -798,8 +797,8 @@ float turret_stdproc_init (string cvar_base_name)
     if (!self.aim_firetolerance_dist)     self.aim_firetolerance_dist  = 5 + (self.shot_radius * 2);
     self.aim_firetolerance_dist = bound(0.1,self.aim_firetolerance_dist,MAX_SHOT_DISTANCE);
 
-    if (!self.aim_firetolerance_angle)     self.aim_firetolerance_angle  = 10;
-    self.aim_firetolerance_angle = bound(0.1,self.aim_firetolerance_angle,360);
+//    if (!self.aim_firetolerance_angle)     self.aim_firetolerance_angle  = 10;
+//    self.aim_firetolerance_angle = bound(0.1,self.aim_firetolerance_angle,360);
 
     if (!self.aim_flags) self.aim_flags = TFL_AIM_LEAD | TFL_AIM_SHOTTIMECOMPENSATE | TFL_AIM_ZEASE;
 
@@ -875,17 +874,6 @@ float turret_stdproc_init (string cvar_base_name)
     self.tur_head.netname = self.tur_head.classname     = "turret_head";
     self.tur_head.team = self.team;
 
-    //Slave mode?
-    if (self.master_nameof != "")
-    {
-        self.emaster = find(world, master_name, self.master_name);
-        if (self.emaster == world)
-        {
-            self.master_nameof = "";
-            dprint("Turret has bad invalid!\n");
-        }
-    }
-
     // Defend mode?
     if (self.target != "")
     {
@@ -936,18 +924,18 @@ float turret_stdproc_init (string cvar_base_name)
     {
         self.turret_prethink        = turret_stdproc_true;
         self.turret_score_target    = turret_stdproc_targetscore_support;
-        self.turret_aim             = turret_stdproc_aim_generic;
-        self.turret_track           = turret_stdproc_track;
+        //self.turret_aim             = turret_stdproc_aim_generic;
+        //self.turret_track           = turret_stdproc_track;
         self.turret_firecheckfunc   = turret_stdproc_firecheck;
         self.turret_firefunc        = turret_stdproc_fire;
         self.turret_postthink       = turret_stdproc_nothing;
 
-        self.turret_damagefunc          = turret_stdproc_damage;
+        //self.turret_damagefunc          = turret_stdproc_damage;
         self.event_damage               = turret_stdproc_damage;
         self.tur_head.event_damage      = turret_stdproc_damage;
 
-        self.turret_diefunc             = turret_stdproc_die;
-        self.turret_spawnfunc           = turret_stdproc_respawn;
+        //self.turret_diefunc             = turret_stdproc_die;
+        //self.turret_spawnfunc           = turret_stdproc_respawn;
 
     }
     else
@@ -956,22 +944,22 @@ float turret_stdproc_init (string cvar_base_name)
         self.turret_prethink        = turret_stdproc_true;
         self.turret_score_target    = turret_stdproc_targetscore_generic;
 
-        if (self.aim_flags & TFL_AIM_SIMPLE)
-            self.turret_aim             = turret_stdproc_aim_simple;
-        else
-            self.turret_aim             = turret_stdproc_aim_generic;
+        //if (self.aim_flags & TFL_AIM_SIMPLE)
+        //    self.turret_aim             = turret_stdproc_aim_simple;
+        //else
+        //    self.turret_aim             = turret_stdproc_aim_generic;
 
-        self.turret_track           = turret_stdproc_track;
+        //self.turret_track           = turret_stdproc_track;
         self.turret_firecheckfunc   = turret_stdproc_firecheck;
         self.turret_firefunc        = turret_stdproc_fire;
         self.turret_postthink       = turret_stdproc_nothing;
 
-        self.turret_damagefunc          = turret_stdproc_damage;
+        //self.turret_damagefunc          = turret_stdproc_damage;
         self.event_damage               = turret_stdproc_damage;
         self.tur_head.event_damage      = turret_stdproc_damage;
 
-        self.turret_diefunc             = turret_stdproc_die;
-        self.turret_spawnfunc           = turret_stdproc_respawn;
+        //self.turret_diefunc             = turret_stdproc_die;
+        //self.turret_spawnfunc           = turret_stdproc_respawn;
         self.turret_addtarget           = turret_stdproc_false;
     }
 

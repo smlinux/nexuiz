@@ -23,7 +23,7 @@ float turret_hk_addtarget(entity e_target,entity e_sender)
 {
     if (e_target)
     {
-       if (turret_validate_target(self,e_target,self.target_validate_flags) > 0)
+        if (turret_validate_target(self,e_target,self.target_validate_flags) > 0)
         {
             self.enemy = e_target;
             return 1;
@@ -49,7 +49,7 @@ float hk_is_valid_target(entity e_target)
     // player
     if (e_target.flags & FL_CLIENT)
     {
-        if(self.owner.target_select_playerbias < 0)
+        if (self.owner.target_select_playerbias < 0)
             return 0;
 
         if (e_target.deadflag != DEAD_NO)
@@ -91,7 +91,7 @@ void turret_hk_attack()
     missile.solid            = SOLID_BBOX;
     setmodel (missile, "models/turrets/hunter2.md3"); // precision set below
     setsize (missile, '-3 -3 -3', '3 3 3'); // give it some size so it can be shot
-    sound    (missile, CHAN_VOICE, "weapons/rocket_fly.wav", 0.4, ATTN_NORM);
+    sound    (missile, CHAN_PROJECTILE, "weapons/rocket_fly.wav", 0.4, ATTN_NORM);
     setorigin(missile, self.tur_shotorg_updated);
 
     missile.scale            = 1;
@@ -118,7 +118,7 @@ void turret_hk_attack()
 
     te_explosion (missile.origin);
 
-    if(self.tur_head.frame == 0)
+    if (self.tur_head.frame == 0)
         self.tur_head.frame = self.tur_head.frame + 1;
 
 }
@@ -296,11 +296,11 @@ void turret_hk_missile_think()
         //wishdir = normalize(self.enemy.origin - (self.enemy.origin + self.enemy.velocity));
     }
 
-    if((myspeed > hk_minspeed) && (self.cnt > time))
+    if ((myspeed > hk_minspeed) && (self.cnt > time))
         myspeed = min(myspeed * hk_accel2,hk_maxspeed);
 
     // Ranoutagazfish?
-    if(self.cnt < time)
+    if (self.cnt < time)
     {
         self.cnt = time + 0.25;
         self.nextthink = 0;
@@ -383,7 +383,7 @@ void turret_hk_missile_explode()
 
 void turret_hk_postthink()
 {
-    if(cvar("g_turrets_reloadcvars"))
+    if (cvar("g_turrets_reloadcvars"))
     {
         hk_maxspeed = cvar("g_turrets_unit_hk_std_shot_speed_max");
         hk_minspeed = cvar("g_turrets_unit_hk_std_shot_speed");
@@ -392,10 +392,10 @@ void turret_hk_postthink()
         hk_decel    = cvar("g_turrets_unit_hk_std_shot_speed_decel");
     }
 
-    if(self.tur_head.frame != 0)
+    if (self.tur_head.frame != 0)
         self.tur_head.frame = self.tur_head.frame + 1;
 
-    if(self.tur_head.frame > 5)
+    if (self.tur_head.frame > 5)
         self.tur_head.frame = 0;
 
 }
@@ -424,12 +424,6 @@ void turret_hk_dinit()
 
     self.shoot_flags = TFL_SHOOT_CLEARTARGET;
 
-
-    precache_model ( "models/turrets/hunter2.md3");
-
-    precache_model ("models/turrets/base.md3");
-    precache_model ("models/turrets/hk.md3");
-
     if (turret_stdproc_init("hk_std") == 0)
     {
         remove(self);
@@ -441,7 +435,7 @@ void turret_hk_dinit()
     setmodel(self,"models/turrets/base.md3");
     setmodel(self.tur_head,"models/turrets/hk.md3");
 
-    if(!turret_tag_setup(0))
+    if (!turret_tag_setup(0))
         dprint("Warning: Turret ",self.classname, " faild to initialize md3 tags\n");
 
     // Our fire routine
@@ -466,6 +460,10 @@ hunter-killer missiles.
 
 void spawnfunc_turret_hk()
 {
+    precache_model ( "models/turrets/hunter2.md3");
+    precache_model ("models/turrets/base.md3");
+    precache_model ("models/turrets/hk.md3");
+
     self.think = turret_hk_dinit;
     self.nextthink = time + 0.5;
 }

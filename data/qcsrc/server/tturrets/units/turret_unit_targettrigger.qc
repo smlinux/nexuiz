@@ -4,14 +4,14 @@ void turret_targettrigger_touch();
 void turret_targettrigger_touch()
 {
     entity e;
-    if(self.cnt > time) return;
+    if (self.cnt > time) return;
     entity oldself;
     oldself = self;
 
     e = find(world, targetname, self.target);
     while (e)
     {
-        if(e.turrcaps_flags & TFL_TURRCAPS_RECIVETARGETS)
+        if (e.turrcaps_flags & TFL_TURRCAPS_RECIVETARGETS)
         {
             self = e;
             e.turret_addtarget(other,oldself);
@@ -29,7 +29,7 @@ void turret_targettrigger_touch()
 */
 void spawnfunc_turret_targettrigger()
 {
-    if(!cvar("g_turrets"))
+    if (!cvar("g_turrets"))
     {
         remove(self);
         return;

@@ -10,16 +10,16 @@ void turret_hellion_missile_damage (entity inflictor, entity attacker, float dam
 
 void turret_hellion_postthink()
 {
-    if(cvar("g_turrets_reloadcvars"))
+    if (cvar("g_turrets_reloadcvars"))
     {
-        if(!self.shot_speed_max)  self.shot_speed_max  = cvar("g_turrets_unit_hellion_std_shot_speed_max");
-        if(!self.shot_speed_gain) self.shot_speed_gain = cvar("g_turrets_unit_hellion_std_shot_speed_gain");
+        if (!self.shot_speed_max)  self.shot_speed_max  = cvar("g_turrets_unit_hellion_std_shot_speed_max");
+        if (!self.shot_speed_gain) self.shot_speed_gain = cvar("g_turrets_unit_hellion_std_shot_speed_gain");
     }
 
-    if(self.tur_head.frame != 0)
+    if (self.tur_head.frame != 0)
         self.tur_head.frame = self.tur_head.frame + 1;
 
-    if(self.tur_head.frame > 7)
+    if (self.tur_head.frame > 7)
         self.tur_head.frame = 0;
 }
 
@@ -31,7 +31,7 @@ void turret_hellion_attack()
 
     missile = spawn ();
     setorigin(missile, self.tur_shotorg_updated);
-    sound (missile, CHAN_VOICE, "weapons/rocket_fly.wav", 0.4, ATTN_NORM);
+    sound (missile, CHAN_PROJECTILE, "weapons/rocket_fly.wav", 0.4, ATTN_NORM);
     setmodel (missile, "models/turrets/mlrs_rocket.md3"); // precision set below
     setsize (missile, '-3 -3 -3', '3 3 3'); // give it some size so it can be shot
 
@@ -60,7 +60,7 @@ void turret_hellion_attack()
     // switch tubes
     self.tur_shotorg_y = self.tur_shotorg_y * -1;
 
-    if(self.tur_head.frame == 0)
+    if (self.tur_head.frame == 0)
         self.tur_head.frame = self.tur_head.frame + 1;
 
 }
@@ -109,12 +109,14 @@ void turret_hellion_missile_think()
 
     olddir = normalize(self.velocity);
 
-    if(self.enemy)
+    if (self.enemy)
     {
         // Predict enemy position
         itime = vlen(self.enemy.origin - self.origin) / vlen(self.velocity);
         pre_pos = self.enemy.origin + self.enemy.velocity * itime;
-    } else {
+    }
+    else
+    {
         pre_pos = self.origin + olddir * 1024;
     }
 
@@ -176,18 +178,14 @@ void turret_hellion_dinit()
 {
     if (self.netname == "")      self.netname  = "Hellion Missile Turret";
 
-    if(!self.shot_speed_max)  self.shot_speed_max  = cvar("g_turrets_unit_hellion_std_shot_speed_max");
-    if(!self.shot_speed_gain) self.shot_speed_gain = cvar("g_turrets_unit_hellion_std_shot_speed_gain");
+    if (!self.shot_speed_max)  self.shot_speed_max  = cvar("g_turrets_unit_hellion_std_shot_speed_max");
+    if (!self.shot_speed_gain) self.shot_speed_gain = cvar("g_turrets_unit_hellion_std_shot_speed_gain");
 
     self.turrcaps_flags = TFL_TURRCAPS_RADIUSDMG | TFL_TURRCAPS_FASTPROJ | TFL_TURRCAPS_PLAYERKILL | TFL_TURRCAPS_MISSILEKILL;
     self.aim_flags = TFL_AIM_SIMPLE;
     self.target_select_flags = TFL_TARGETSELECT_LOS | TFL_TARGETSELECT_PLAYERS | TFL_TARGETSELECT_TRIGGERTARGET | TFL_TARGETSELECT_RANGELIMTS | TFL_TARGETSELECT_TEAMCHECK ;
     self.firecheck_flags = TFL_FIRECHECK_WORLD | TFL_FIRECHECK_DEAD | TFL_FIRECHECK_DISTANCES | TFL_FIRECHECK_TEAMCECK | TFL_FIRECHECK_REFIRE | TFL_FIRECHECK_AFF | TFL_FIRECHECK_OWM_AMMO;
     self.ammo_flags = TFL_AMMO_ROCKETS | TFL_AMMO_RECHARGE;
-
-    precache_model ( "models/turrets/mlrs_rocket.md3");
-    precache_model ("models/turrets/hellion.md3");
-    precache_model ("models/turrets/base.md3");
 
     if (turret_stdproc_init("hellion_std") == 0)
     {
@@ -198,7 +196,7 @@ void turret_hellion_dinit()
     setmodel(self,"models/turrets/base.md3");
     setmodel(self.tur_head,"models/turrets/hellion.md3");
 
-    if(!turret_tag_setup(0))
+    if (!turret_tag_setup(0))
         dprint("Warning: Turret ",self.classname, " faild to initialize md3 tags\n");
 
     // Our fire routine
@@ -212,6 +210,10 @@ void turret_hellion_dinit()
 */
 void spawnfunc_turret_hellion()
 {
+    precache_model ( "models/turrets/mlrs_rocket.md3");
+    precache_model ("models/turrets/hellion.md3");
+    precache_model ("models/turrets/base.md3");
+
     self.think = turret_hellion_dinit;
     self.nextthink = time + 0.5;
 }

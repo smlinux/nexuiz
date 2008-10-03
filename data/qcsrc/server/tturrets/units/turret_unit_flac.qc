@@ -31,31 +31,28 @@ void turret_flac_attack()
     proj.nextthink          = time + (vlen(self.tur_aimpos - self.tur_shotorg_updated) / self.shot_speed) + (random() * self.shot_spread);
 
     self.tur_head.frame = self.tur_head.frame + 1;
-    if(self.tur_head.frame >= 4) self.tur_head.frame = 0;
+    if (self.tur_head.frame >= 4) self.tur_head.frame = 0;
 
 }
 
 void turret_flac_projectile_explode()
 {
-    //vector org2;
-    float d;
+    float ftmp;
 
-    float b;
-    //org2 = findbetterlocation (self.origin, 12);
     te_explosion (self.origin);
 
-    b = crandom();
-    if (b<-0.7)
+    ftmp = crandom();
+    if (ftmp<-0.7)
         sound (self, CHAN_PROJECTILE, "weapons/hagexp1.wav", 1, ATTN_NORM);
-    else if (b<0.4)
+    else if (ftmp<0.4)
         sound (self, CHAN_PROJECTILE, "weapons/hagexp2.wav", 1, ATTN_NORM);
-    else if (b<1)
+    else if (ftmp<1)
         sound (self, CHAN_PROJECTILE, "weapons/hagexp3.wav", 1, ATTN_NORM);
 
 
     self.event_damage = SUB_Null;
 
-    d = RadiusDamage (self, self.owner, self.owner.shot_dmg, 0, self.owner.shot_radius, world, self.owner.shot_force, DEATH_TURRET);
+    ftmp = RadiusDamage (self, self.owner, self.owner.shot_dmg, 0, self.owner.shot_radius, world, self.owner.shot_force, DEATH_TURRET);
 
 #ifdef TURRET_DEBUG
     self.owner.tur_dbg_dmg_t_h = self.owner.tur_dbg_dmg_t_h + d; //self.owner.shot_dmg;
@@ -75,12 +72,6 @@ void turret_flac_dinit()
     self.ammo_flags     = TFL_AMMO_ROCKETS | TFL_AMMO_RECHARGE;
     self.aim_flags      = TFL_AIM_LEAD | TFL_AIM_SHOTTIMECOMPENSATE;
 
-
-
-    precache_model ("models/turrets/base.md3");
-    precache_model ("models/turrets/flac.md3");
-    precache_model("models/turrets/pd_proj.md3");
-
     if (turret_stdproc_init("flac_std") == 0)
     {
         remove(self);
@@ -90,7 +81,7 @@ void turret_flac_dinit()
     setmodel(self,"models/turrets/base.md3");
     setmodel(self.tur_head,"models/turrets/flac.md3");
 
-    if(!turret_tag_setup(0))
+    if (!turret_tag_setup(0))
         dprint("Warning: Turret ",self.classname, " faild to initialize md3 tags\n");
 
     // Our fire routine
@@ -102,6 +93,10 @@ void turret_flac_dinit()
 
 void spawnfunc_turret_flac()
 {
+    precache_model ("models/turrets/base.md3");
+    precache_model ("models/turrets/flac.md3");
+    precache_model("models/turrets/pd_proj.md3");
+
     self.think = turret_flac_dinit;
     self.nextthink = time + 0.5;
 }

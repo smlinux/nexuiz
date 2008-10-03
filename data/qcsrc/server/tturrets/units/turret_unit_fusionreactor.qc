@@ -47,8 +47,6 @@ void turret_fusionreactor_dinit()
 
     self.track_flags = TFL_TRACK_NO;
 
-    precache_model ("models/turrets/reactor.md3");
-    precache_model ("models/turrets/base.md3");
     if (turret_stdproc_init("fusreac_std") == 0)
     {
         remove(self);
@@ -76,7 +74,9 @@ void turret_fusionreactor_dinit()
 */
 void spawnfunc_turret_fusionreactor()
 {
-    // return;
+    precache_model ("models/turrets/reactor.md3");
+    precache_model ("models/turrets/base.md3");
+
     self.think = turret_fusionreactor_dinit;
     self.nextthink = time + 0.5;
 }

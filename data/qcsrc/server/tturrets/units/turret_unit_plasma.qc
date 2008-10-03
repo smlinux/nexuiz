@@ -9,15 +9,17 @@ void turret_plasma_projectile_explode();
 
 void turret_plasma_postthink()
 {
-    if(self.tur_head.frame != 0)
+    if (self.tur_head.frame != 0)
         self.tur_head.frame = self.tur_head.frame + 1;
 
-    if(self.classname == "turret_plasma_dual")
+    if (self.classname == "turret_plasma_dual")
     {
-        if(self.tur_head.frame >= 6)
+        if (self.tur_head.frame >= 6)
             self.tur_head.frame = 0;
-    } else {
-        if(self.tur_head.frame >= 5)
+    }
+    else
+    {
+        if (self.tur_head.frame >= 5)
             self.tur_head.frame = 0;
     }
 }
@@ -49,7 +51,7 @@ void turret_plasma_attack()
     proj.enemy           = self.enemy;
     proj.flags           = FL_PROJECTILE | FL_NOTARGET;
 
-    if(self.tur_head.frame == 0)
+    if (self.tur_head.frame == 0)
         self.tur_head.frame = 1;
 
     // trailparticles(proj,particleeffectnum("TR_REDPLASMA"),proj.origin,proj.origin + proj.velocity);
@@ -98,9 +100,6 @@ void turret_plasma_std_init()
 {
     if (self.netname == "")      self.netname     = "Plasma Cannon";
 
-    precache_model ("models/turrets/plasma.md3");
-    precache_model ("models/turrets/base.md3");
-
     self.ammo_flags = TFL_AMMO_ENERGY | TFL_AMMO_RECHARGE | TFL_AMMO_RECIVE;
     self.aim_flags = TFL_AIM_LEAD | TFL_AIM_SHOTTIMECOMPENSATE | TFL_AIM_ZEASE | TFL_AIM_GROUND2;
 
@@ -113,7 +112,8 @@ void turret_plasma_std_init()
     setmodel(self,"models/turrets/base.md3");
     setmodel(self.tur_head,"models/turrets/plasma.md3");
 
-    if(!turret_tag_setup(0))
+
+    if (!turret_tag_setup(0))
         dprint("Warning: Turret ",self.classname, " faild to initialize md3 tags\n");
 
     // Our fire routine
@@ -128,9 +128,6 @@ void turret_plasma_dual_init()
 {
     if (self.netname == "")      self.netname     = "Dual Plasma Cannon";
 
-    precache_model ("models/turrets/plasmad.md3");
-    precache_model ("models/turrets/base.md3");
-
     self.ammo_flags = TFL_AMMO_ENERGY | TFL_AMMO_RECHARGE | TFL_AMMO_RECIVE;
 
     if (turret_stdproc_init("plasma_dual") == 0)
@@ -142,13 +139,7 @@ void turret_plasma_dual_init()
     setmodel(self,"models/turrets/base.md3");
     setmodel(self.tur_head,"models/turrets/plasmad.md3");
 
-	setorigin(self, self.origin);
-	setorigin(self.tur_head, self.tur_head.origin);
-
-	setsize(self, self.mins, self.maxs);
-	setsize(self.tur_head, self.tur_head.mins, self.tur_head.maxs);
-
-    if(!turret_tag_setup(0))
+    if (!turret_tag_setup(0))
         dprint("Warning: Turret ",self.classname, " faild to initialize md3 tags\n");
 
     // select aim
@@ -172,6 +163,9 @@ void turret_plasma_dual_init()
 */
 void spawnfunc_turret_plasma()
 {
+    precache_model ("models/turrets/plasma.md3");
+    precache_model ("models/turrets/base.md3");
+
     self.think = turret_plasma_std_init;
     self.nextthink = time + 0.5;
 }
@@ -180,6 +174,9 @@ void spawnfunc_turret_plasma()
 */
 void spawnfunc_turret_plasma_dual()
 {
+    precache_model ("models/turrets/plasmad.md3");
+    precache_model ("models/turrets/base.md3");
+
     self.think = turret_plasma_dual_init;
     self.nextthink = time + 0.5;
 }

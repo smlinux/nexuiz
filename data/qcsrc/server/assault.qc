@@ -322,7 +322,8 @@ void assault_roundstart_use() {
         self = ent;
 
         // Dubbles as teamchange
-        ent.turret_spawnfunc();
+        turret_stdproc_respawn();
+        //ent.turret_spawnfunc();
 
 		ent = find(ent, classname, "turret_main");
 	}

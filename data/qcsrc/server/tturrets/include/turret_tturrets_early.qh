@@ -3,7 +3,7 @@
 
 #ifdef TTURRETS_ENABLED
 
-#message "with tZork turrets rc1"
+#message "with tZork turrets rc2"
 
 vector real_origin(entity ent);
 
@@ -104,7 +104,7 @@ vector real_origin(entity ent);
 #define TFL_FIRECHECK_OWM_AMMO   1024
 /// Others ammo need to be < others .ammo_max
 #define TFL_FIRECHECK_OTHER_AMMO 2048
-/// Check own .attack_finished vs time
+/// Check own .attack_finished_single vs time
 #define TFL_FIRECHECK_REFIRE     4096
 
 /// How shooting is done
@@ -170,7 +170,7 @@ vector real_origin(entity ent);
 #define  TFL_AMMO_ROCKETS  8
 /// Regenerates ammo on its own
 #define  TFL_AMMO_RECHARGE 16
- /// Can recive ammo from others
+/// Can recive ammo from others
 #define  TFL_AMMO_RECIVE   32
 
 /// How incomming damage is handeld
@@ -233,15 +233,13 @@ vector real_origin(entity ent);
 .float      tur_dist_toaimpos;
 /// Decresment counter form .shot_volly to 0.
 .float      volly_counter;
-/// Pointer to master when in slave mode
-.entity     emaster;            // A slave?
 
 /*
 * Projectile/missile. its up to the individual turret implementation to
 ** deal the damage, blow upp the missile or whatever.
 */
 /// Track then refireing is possible
-.float attack_finished;
+//.float attack_finished; = attack_finished_single
 /// Shoot this often
 .float shot_refire;
 /// Shots travel this fast, when appliable
@@ -290,7 +288,7 @@ vector real_origin(entity ent);
 /// Maximum offset between impact and aim spot to fire
 .float aim_firetolerance_dist;
 /// Maximum angular offset between head and aimspot to fire
-.float aim_firetolerance_angle;
+//.float aim_firetolerance_angle;
 /// How fast can i rotate/pitch (per second in stepmotor mode, base force in smooth modes)
 .float aim_speed;
 /// cant aim higher/lower then this
@@ -306,15 +304,6 @@ vector real_origin(entity ent);
 /// Max amount of ammo i can hold
 .float ammo_max;
 
-// Am i enslaved?
-// Slave turrets always target the same target as their master.
-// However; Depending on their individual capabiliteis, they may not fire at the same time
-// or at all. (slaves ranges, rotaion limits, ammo etc still apply)
-
-/// Set to another turrets .master_nameof to enslave me
-.string master_name;
-/// Set another turrets .master_name to this to enslave it
-.string master_nameof;
 
 // Uncomment below to enable various debug output.
 //#define TURRET_DEBUG
@@ -350,29 +339,43 @@ void turret_fire();
 /// Add a target
 .float(entity e_target,entity e_sender) turret_addtarget;
 
-.float call_diehook;
-.float call_respwnhook;
+//.float call_diehook;
+//.float call_respwnhook;
 .void() turret_diehook;
 .void() turret_respawnhook;
+
+/*
+#define TEH_THINK 2
+#define TEH_DAMAGE 4
+#define TEH_DIE 8
+#define TEH_RESPAWN 16
+#define TEH_TRACK 32
+#define TEH_AIM 64
+#define TEH_SELECT 128
+.float(float event_id) turret_eventhook;
+*/
 
 /*
 * Some turrets need other aimsystems then other.
 * This should return the place to aim at, not acctualy turn or
 * pitch anyting.
 *
-* use turret_stdproc_aim# or Make your own.
+* use turret_stdproc_aim* or Make your own.
 * Make sure you update tur_enemy_dist and tur_enemy_adist
 * with the apropriate info, if you do.
+
+removed.
 */
 /// function used to aim, usualy turret_stdproc_aim_generic
-.vector() turret_aim;
+//.vector() turret_aim;
 
 /*
 * This is where the acctual turret turning should take place
 * Use turret_stdproc_track or make your own.
+wkacked to save mem.
 */
-/// Function used to turn and pitch the .tur_head usualy turret_stdproc_track
-.void() turret_track;
+// Function used to turn and pitch the .tur_head usualy turret_stdproc_track
+//.void() turret_track;
 
 /*
 * Target selection, preferably but not nessesarely
@@ -385,12 +388,13 @@ void turret_fire();
 * Damage, death and respawn.
 */
 void turret_gibs_precash();
-/// Function to handle incomming damage. usualy turret_stdproc_damage
-.void(entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector vforce) turret_damagefunc;
-/// Function to handle the event of death. usualy turret_stdproc_die
-.void() turret_diefunc;
- /// Function that handles rebirth. usualy turret_stdproc_respawn
-.void() turret_spawnfunc;
+// generalized so save mem (on fields)
+// Function to handle incomming damage. usualy turret_stdproc_damage
+//.void(entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector vforce) turret_damagefunc;
+// Function to handle the event of death. usualy turret_stdproc_die
+//.void() turret_diefunc;
+// Function that handles rebirth. usualy turret_stdproc_respawn
+//.void() turret_spawnfunc;
 
 /*
 * Stuff to plug into requierd but unused callbacks.
@@ -423,8 +427,8 @@ float turret_stdproc_targetscore_support(entity e_turret,entity e_target);
 */
 /// Generic aimer guided by self.aim_flags
 vector turret_stdproc_aim_generic()
-/// Straight line, current location
-vector  turret_stdproc_aim_simple()
+// Straight line, current location
+//vector  turret_stdproc_aim_simple()
 
 /*
 * Turret turning & pitch

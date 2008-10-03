@@ -6,18 +6,18 @@ void turret_phaser_attack();
 
 float turret_phaser_firecheck()
 {
-    if(self.fireflag != 0) return 0;
+    if (self.fireflag != 0) return 0;
     return turret_stdproc_firecheck();
 }
 
 void turret_phaser_postthink()
 {
-    if(self.tur_head.frame == 0)
+    if (self.tur_head.frame == 0)
         return;
 
-    if(self.fireflag == 1)
+    if (self.fireflag == 1)
     {
-        if(self.tur_head.frame == 10)
+        if (self.tur_head.frame == 10)
             self.tur_head.frame = 1;
         else
             self.tur_head.frame = self.tur_head.frame +1;
@@ -25,7 +25,7 @@ void turret_phaser_postthink()
     else if (self.fireflag == 2 )
     {
         self.tur_head.frame = self.tur_head.frame +1;
-        if(self.tur_head.frame == 15)
+        if (self.tur_head.frame == 15)
         {
             self.tur_head.frame = 0;
             self.fireflag = 0;
@@ -35,9 +35,9 @@ void turret_phaser_postthink()
 
 void beam_think()
 {
-    if((time > self.cnt)||(self.owner.deadflag != DEAD_NO))
+    if ((time > self.cnt)||(self.owner.deadflag != DEAD_NO))
     {
-        self.owner.attack_finished = time + self.owner.shot_refire;
+        self.owner.attack_finished_single = time + self.owner.shot_refire;
         self.owner.fireflag = 2;
         self.owner.tur_head.frame = 10;
         sound (self, CHAN_PROJECTILE, "", 1, ATTN_NORM);
@@ -47,16 +47,16 @@ void beam_think()
 
     turret_do_updates(self.owner);
 
-    if(time - self.shot_spread > 0)
+    if (time - self.shot_spread > 0)
     {
-            self.shot_spread = time + 2;
-            sound (self, CHAN_VOICE, "turrets/phaser.ogg", 1, ATTN_NORM);
+        self.shot_spread = time + 2;
+        sound (self, CHAN_VOICE, "turrets/phaser.ogg", 1, ATTN_NORM);
     }
 
 
     self.nextthink = time + self.ticrate;
 
-    self.owner.attack_finished = time + frametime;
+    self.owner.attack_finished_single = time + frametime;
     entity oldself;
     oldself = self;
     self = self.owner;
@@ -89,21 +89,21 @@ void turret_phaser_attack()
     beam.owner = self;
     beam.shot_dmg = self.shot_dmg / (self.shot_speed / beam.ticrate);
     beam.scale = self.target_range_fire / 256;
-	beam.movetype = MOVETYPE_NONE;
+    beam.movetype = MOVETYPE_NONE;
     beam.enemy = self.enemy;
-	beam.bot_dodge = TRUE;
-	beam.bot_dodgerating = beam.shot_dmg;
-	sound (beam, CHAN_VOICE, "turrets/phaser.ogg", 1, ATTN_NORM);
+    beam.bot_dodge = TRUE;
+    beam.bot_dodgerating = beam.shot_dmg;
+    sound (beam, CHAN_PROJECTILE, "turrets/phaser.ogg", 1, ATTN_NORM);
     self.fireflag = 1;
 
-    beam.attack_finished = self.attack_finished;
-    self.attack_finished = time; // + cvar("sys_ticrate");
+    beam.attack_finished_single = self.attack_finished_single;
+    self.attack_finished_single = time; // + cvar("sys_ticrate");
 
     setattachment(beam,self.tur_head,"tag_fire");
 
     soundat (self, trace_endpos, CHAN_PROJECTILE, "weapons/neximpact.wav", VOL_BASE, ATTN_NORM);
 
-    if(self.tur_head.frame == 0)
+    if (self.tur_head.frame == 0)
         self.tur_head.frame = 1;
 }
 
@@ -115,12 +115,6 @@ void turret_phaser_dinit()
     self.ammo_flags = TFL_AMMO_ENERGY | TFL_AMMO_RECHARGE | TFL_AMMO_RECIVE;
     self.aim_flags = TFL_AIM_ZEASE | TFL_AIM_LEAD;
 
-
-    precache_sound ("turrets/phaser.ogg");
-    precache_model ("models/turrets/phaser.md3");
-    precache_model ("models/turrets/phaser_beam.md3");
-    precache_model ("models/turrets/base.md3");
-
     if (turret_stdproc_init("phaser_std") == 0)
     {
         remove(self);
@@ -130,7 +124,7 @@ void turret_phaser_dinit()
     setmodel(self,"models/turrets/base.md3");
     setmodel(self.tur_head,"models/turrets/phaser.md3");
 
-    if(!turret_tag_setup(0))
+    if (!turret_tag_setup(0))
         dprint("Warning: Turret ",self.classname, " faild to initialize md3 tags\n");
 
     self.turret_firecheckfunc = turret_phaser_firecheck;
@@ -143,6 +137,11 @@ void turret_phaser_dinit()
 */
 void spawnfunc_turret_phaser()
 {
+    precache_sound ("turrets/phaser.ogg");
+    precache_model ("models/turrets/phaser.md3");
+    precache_model ("models/turrets/phaser_beam.md3");
+    precache_model ("models/turrets/base.md3");
+
     self.think = turret_phaser_dinit;
     self.nextthink = time + 0.5;
 }

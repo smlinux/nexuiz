@@ -6,7 +6,7 @@ void turret_mlrs_projectile_explode();
 void turret_mlrs_postthink()
 {
 
-    if((self.tur_head.frame >= 6) && (self.attack_finished <= time))
+    if ((self.tur_head.frame >= 6) && (self.attack_finished_single <= time))
         self.tur_head.frame = 0;
 }
 
@@ -21,7 +21,7 @@ void turret_mlrs_attack()
     missile                    = spawn ();
     setmodel (missile, "models/turrets/rocket.md3"); // precision set below
     setsize (missile, '-3 -3 -3', '3 3 3'); // give it some size so it can be shot
-    sound (missile, CHAN_VOICE, "weapons/rocket_fly.wav", 0.4, ATTN_NORM);
+    sound (missile, CHAN_PROJECTILE, "weapons/rocket_fly.wav", 0.4, ATTN_NORM);
     setorigin(missile, self.tur_shotorg_updated);
     missile.classname          = "mlrs_missile";
     missile.owner              = self;
@@ -57,13 +57,15 @@ void turret_mlrs_projectile_explode()
     pointparticles(particleeffectnum("rocket_explode"), org2, '0 0 0', 1);
 
     self.event_damage = SUB_Null;
-    RadiusDamage (self, self.owner, self.owner.shot_dmg, 0, self.owner.shot_radius, world, self.owner.shot_force, DEATH_TURRET);
 
 #ifdef TURRET_DEBUG
     float d;
+
     d = RadiusDamage (self, self.owner, self.owner.shot_dmg, 0, self.owner.shot_radius, world, self.owner.shot_force, DEATH_TURRET);
     self.owner.tur_dbg_dmg_t_h = self.owner.tur_dbg_dmg_t_h + d; //self.owner.shot_dmg;
     self.owner.tur_dbg_dmg_t_f = self.owner.tur_dbg_dmg_t_f + self.owner.shot_dmg;
+#else
+    RadiusDamage (self, self.owner, self.owner.shot_dmg, 0, self.owner.shot_radius, world, self.owner.shot_force, DEATH_TURRET);
 #endif
 
     // Target dead, get another is still targeting the same.
@@ -81,10 +83,6 @@ void turret_mlrs_dinit()
     self.ammo_flags = TFL_AMMO_ROCKETS | TFL_AMMO_RECHARGE;
     self.aim_flags = TFL_AIM_LEAD | TFL_AIM_ZEASE | TFL_AIM_SHOTTIMECOMPENSATE;
 
-    precache_model ( "models/turrets/rocket.md3");
-    precache_model ("models/turrets/mlrs.md3");
-    precache_model ("models/turrets/base.md3");
-
     if (turret_stdproc_init("mlrs_std") == 0)
     {
         remove(self);
@@ -94,7 +92,7 @@ void turret_mlrs_dinit()
     setmodel(self,"models/turrets/base.md3");
     setmodel(self.tur_head,"models/turrets/mlrs.md3");
 
-    if(!turret_tag_setup(0))
+    if (!turret_tag_setup(0))
         dprint("Warning: Turret ",self.classname, " faild to initialize md3 tags\n");
 
     // Our fire routine
@@ -108,6 +106,10 @@ void turret_mlrs_dinit()
 
 void spawnfunc_turret_mlrs()
 {
+    precache_model ( "models/turrets/rocket.md3");
+    precache_model ("models/turrets/mlrs.md3");
+    precache_model ("models/turrets/base.md3");
+
     self.think = turret_mlrs_dinit;
     self.nextthink = time + 0.5;
 }
