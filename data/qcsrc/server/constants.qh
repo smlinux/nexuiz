@@ -108,37 +108,37 @@ float	TE_TELEPORT				= 11;
 
 // this assignment must match menu/nexuiz/dialog_settings_misc.c!
 float	CHAN_AUTO				= 0;
-	// on world: info (announcers, ...)
-	// on players: item pickup
+	// on world: announcers, ...                     INFO
+	// on players: item pickup                       ITEMS
 	// on entities: UNUSED
 float	CHAN_WEAPON				= 1; // Weapon fire
 	// on world: UNUSED
-	// on players: weapon firing
-	// on entities: turret firing
+	// on players: weapon firing                     WEAPONS
+	// on entities: turret firing                    WEAPONS
 float	CHAN_VOICE				= 2; // Voice/Radio
 	// on world: UNUSED
-	// on players: voice
-	// on entities: ambient
+	// on players: voice                             VOICE
+	// on entities: ambient                          AMBIENT
 float	CHAN_TRIGGER			= 3; // Triggers/Items
 	// on world: UNUSED
-	// on players: item pickup
-	// on entities: platforms moving etc.
+	// on players: item pickup                       ITEMS
+	// on entities: platforms moving etc.            ITEMS
 float	CHAN_PROJECTILE			= 4; // Projectiles
 	// on world: UNUSED
-	// on players: projectiles hitting player
-	// on entities: projectiles
+	// on players: projectiles hitting player        SHOTS
+	// on entities: projectiles                      SHOTS
 float	CHAN_WEAPON2			= 5; // Nex fire (separated as it is a very long sound)
 	// on world: UNUSED
-	// on players: weapon firing
-	// on entities: turret firing
+	// on players: weapon firing                     WEAPONS
+	// on entities: turret firing                    WEAPONS
 float	CHAN_PAIN				= 6; // Pain
 	// on world: UNUSED
-	// on players: pain
+	// on players: pain                              PAIN
 	// on entities: UNUSED
 float	CHAN_PLAYER				= 7; // Player body
 	// on world: UNUSED
-	// on players: player sounds
-	// on entities: player sounds
+	// on players: player sounds                     PLAYER
+	// on entities: player sounds                    PLAYER
 
 float	ATTN_NONE				= 0;
 float	ATTN_NORM				= 0.5;
