@@ -198,7 +198,7 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 		msg_entity = e;
 		if(g_race_qualifying)
 		{
-			WRITESPECTATABLE_MSG_ONE({
+			WRITESPECTATABLE_MSG_ONE_VARNAME(dummy1, {
 				WriteByte(MSG_ONE, SVC_TEMPENTITY);
 				WriteByte(MSG_ONE, TE_CSQC_RACE);
 				WriteByte(MSG_ONE, RACE_NET_CHECKPOINT_HIT_QUALIFYING);
@@ -224,7 +224,7 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 			lself = lother = othtime = 0;
 
 		msg_entity = e;
-		WRITESPECTATABLE_MSG_ONE({
+		WRITESPECTATABLE_MSG_ONE_VARNAME(dummy2, {
 			WriteByte(MSG_ONE, SVC_TEMPENTITY);
 			WriteByte(MSG_ONE, TE_CSQC_RACE);
 			WriteByte(MSG_ONE, RACE_NET_CHECKPOINT_HIT_RACE);
@@ -248,7 +248,7 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 		race_checkpoint_lastlaps[cp] = lself;
 
 		msg_entity = oth;
-		WRITESPECTATABLE_MSG_ONE({
+		WRITESPECTATABLE_MSG_ONE_VARNAME(dummy3, {
 			WriteByte(MSG_ONE, SVC_TEMPENTITY);
 			WriteByte(MSG_ONE, TE_CSQC_RACE);
 			WriteByte(MSG_ONE, RACE_NET_CHECKPOINT_HIT_RACE_BY_OPPONENT);

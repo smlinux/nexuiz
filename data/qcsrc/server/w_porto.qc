@@ -196,7 +196,7 @@ float w_porto(float req)
 			if(!self.BUTTON_ATCK2)
 			{
 				msg_entity = self;
-				WRITESPECTATABLE_MSG_ONE({
+				WRITESPECTATABLE_MSG_ONE_VARNAME(dummy1, {
 					WriteByte(MSG_ONE, SVC_TEMPENTITY);
 					WriteByte(MSG_ONE, TE_CSQC_HOLDANGLES);
 					WriteByte(MSG_ONE, WEP_PORTO);
@@ -211,7 +211,7 @@ float w_porto(float req)
 			{
 				self.porto_v_angle = self.v_angle;
 				msg_entity = self;
-				WRITESPECTATABLE_MSG_ONE({
+				WRITESPECTATABLE_MSG_ONE_VARNAME(dummy2, {
 					WriteByte(MSG_ONE, SVC_TEMPENTITY);
 					WriteByte(MSG_ONE, TE_CSQC_HOLDANGLES);
 					WriteByte(MSG_ONE, WEP_PORTO);
