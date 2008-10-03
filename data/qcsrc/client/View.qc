@@ -267,7 +267,9 @@ void CSQC_UpdateView(void)
 	R_SetView(VF_FOV, GetCurrentFov(fov));
 	
 	// Draw the Crosshair
-	R_SetView(VF_DRAWCROSSHAIR, !Sbar_WouldDrawScoreboard());
+	float scoreboard_active;
+	scoreboard_active = Sbar_WouldDrawScoreboard();
+	R_SetView(VF_DRAWCROSSHAIR, !scoreboard_active);
 	
 	// Draw the Engine Status Bar (the default Quake HUD)
 	draw_enginesbar = !cvar("sbar_usecsqc");
@@ -318,6 +320,12 @@ void CSQC_UpdateView(void)
 		if(cvar("viewsize") < 120)
 			CSQC_common_hud();
 	}
+
+	e = self;
+	for(self = world; (self = nextent(self)); )
+		if(self.draw2d)
+			self.draw2d();
+	self = e;
 	
 	if(gametype == GAME_ONSLAUGHT)
 	{
@@ -327,13 +335,11 @@ void CSQC_UpdateView(void)
 		//drawresetcliparea();
 	}
 	else if(teamplay)
-		teamradar_view();
-
-	e = self;
-	for(self = world; (self = nextent(self)); )
-		if(self.draw2d)
-			self.draw2d();
-	self = e;
+	{
+		if(intermission != 1)
+		if(intermission != 2)
+			teamradar_view();
+	}
 }
 
 void Sbar_Draw();
