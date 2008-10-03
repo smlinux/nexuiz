@@ -57,7 +57,11 @@ const float ENT_CLIENT_WAYPOINT = 10; // flags origin [team displayrule] [sprite
 	const float SPRITERULE_TEAMPLAY = 1;
 
 	const float RADARICON_FLAG = 1;
-	const float RADARICON_FLAGCARRIER = 2;
+	const float RADARICON_FLAGCARRIER = 1;
+	const float RADARICON_HERE = 1; // TODO make these 3 and 4, and make images for them
+	const float RADARICON_DANGER = 1;
+	const float RADARICON_WAYPOINT = 1;
+	const float RADARICON_HELPME = 1;
 
 ///////////////////////////
 // key constants
