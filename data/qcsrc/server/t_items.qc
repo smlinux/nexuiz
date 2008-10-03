@@ -869,8 +869,20 @@ void spawnfunc_item_minst_cells (void) {
 // compatibility:
 void spawnfunc_item_quad (void) {self.classname = "item_strength";spawnfunc_item_strength();}
 
+void spawnfunc_misc_gamemodel (void)
+{
+	SetBrushEntityModel();
+}
+
 void spawnfunc_misc_models (void)
 {
+	// exists as alias name for 2.4.2 compat
+	SetBrushEntityModel();
+}
+
+void spawnfunc_func_static (void)
+{
+	// exists as alias name for having it with brushes
 	SetBrushEntityModel();
 }
 
