@@ -329,17 +329,22 @@ void CSQC_UpdateView(void)
 	
 	if(gametype == GAME_ONSLAUGHT)
 	{
+		if(cvar("cl_teamradar") >= 2)
+		{
+			if(!scoreboard_active)
+				teamradar_view();
+		}
+		else
+			ons_view();
 		//drawstring('0 0', minimapname, '8 8 0', '1 1 1', 1, 0);
 		//drawsetcliparea(0,0,800,600);
-		ons_view();
 		//drawresetcliparea();
 	}
 	else if(teamplay)
 	{
-		//if(intermission != 1)
-		//if(intermission != 2)
-		if(!scoreboard_active)
-			teamradar_view();
+		if(cvar("cl_teamradar") >= 1)
+			if(!scoreboard_active)
+				teamradar_view();
 	}
 }
 

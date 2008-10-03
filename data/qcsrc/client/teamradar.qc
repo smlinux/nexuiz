@@ -29,7 +29,7 @@ vector teamradar_texcoord_to_2dcoord(vector in)
 
 vector yinvert(vector v)
 {
-	v_y = -v_y;
+	v_y = 1 - v_y;
 	return v;
 }
 
@@ -44,6 +44,7 @@ void draw_teamradar_background(float a)
 	R_PolygonVertex('1 0 0' * (teamradar_origin2d_x + teamradar_size2d_x * 0.5) + '0 1 0' * (teamradar_origin2d_y + teamradar_size2d_y * 0.5), '0 0 0', '0 0 0', a);
 	R_PolygonVertex('1 0 0' * (teamradar_origin2d_x - teamradar_size2d_x * 0.5) + '0 1 0' * (teamradar_origin2d_y + teamradar_size2d_y * 0.5), '0 0 0', '0 0 0', a);
 	R_EndPolygon();
+
 	R_BeginPolygon(minimapname, DRAWFLAG_ADDITIVE);
 	R_PolygonVertex(teamradar_texcoord_to_2dcoord(mi_pictexcoord0), yinvert(mi_pictexcoord0), '1 1 1', 1);
 	R_PolygonVertex(teamradar_texcoord_to_2dcoord(mi_pictexcoord1), yinvert(mi_pictexcoord1), '1 1 1', 1);
@@ -109,9 +110,6 @@ void() teamradar_view =
 	local entity tm;
 	float scale2d, normalsize, bigsize;
 	float a, f;
-
-	if(!cvar("cl_teamradar"))
-		return;
 
 	color = GetPlayerColor(player_localentnum-1);
 	rgb = GetTeamRGB(color);
