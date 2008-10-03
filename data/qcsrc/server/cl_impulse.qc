@@ -226,12 +226,13 @@ void ImpulseCommands (void)
 			case 33:
 				if(self.deadflag == DEAD_NO && teams_matter)
 				{
-					WaypointSprite_Attach("helpme", TRUE);
-					if(self.waypointsprite_attachedforcarrier) // this can also be the FLAG CARRIER sprite
-					{
-						WaypointSprite_UpdateTeamRadar(self.waypointsprite_attachedforcarrier, RADARICON_HELPME, '1 1 0');
-						WaypointSprite_Ping(self.waypointsprite_attachedforcarrier);
-					}
+					wp = WaypointSprite_Attach("helpme", TRUE);
+					if(wp)
+						WaypointSprite_UpdateTeamRadar(wp, RADARICON_HELPME, '1 1 0');
+					if(!wp)
+						wp = self.waypointsprite_attachedforcarrier; // flag sprite?
+					if(wp)
+						WaypointSprite_Ping(wp);
 					sprint(self, "HELP ME attached\n");
 				}
 				break;
