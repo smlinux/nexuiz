@@ -519,8 +519,7 @@ void drawListBoxItemNexuizServerList(entity me, float i, vector absSize, float i
 
 float keyDownNexuizServerList(entity me, float scan, float ascii, float shift)
 {
-	float i, o;
-	string s;
+	float i;
 
 	if(scan == K_ENTER)
 	{
