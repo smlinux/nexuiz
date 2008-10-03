@@ -105,7 +105,7 @@ void draw_teamradar_icon(vector coord, float icon, float pingtime, vector rgb, f
 void() teamradar_view =
 {
 	local float color;
-	local vector coord, rgb;
+	local vector rgb;
 	local entity tm;
 	float scale2d, normalsize, bigsize;
 	float a;

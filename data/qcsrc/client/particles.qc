@@ -1,6 +1,5 @@
 vector PointInBrush_vec;
 entity PointInBrush_brush;
-entity PointInBrush_allmask;
 .float dphitcontentsmask;
 float PointInBrush_Recurse()
 {

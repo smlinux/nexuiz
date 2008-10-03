@@ -474,7 +474,6 @@ void Ent_ReadTeamScore()
 void Ent_Nagger()
 {
 	float nags;
-	string s;
 
 	nags = ReadByte();
 
@@ -600,10 +599,6 @@ void CSQC_Ent_Remove()
 
 void Gamemode_Init()
 {
-	local string mapinfo, infoline;
-	local float len;
-	local float file;
-
 	get_mi_min_max();
 	mi_center = (mi_min + mi_max) * 0.5;
 	mi_scale = mi_max - mi_min;
@@ -643,8 +638,6 @@ void CSQC_CheckRevision();
 
 void Fog_Force()
 {
-	string s;
-
 	// TODO somehow thwart prvm_globalset client ...
 
 	if(forcefog != "")

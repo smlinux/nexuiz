@@ -34,7 +34,7 @@ vector MapVote_RGB(float id)
 
 void MapVote_DrawMapItem(vector pos, float isize, float tsize, string map, string pic, float count, float id)
 {
-	vector img_size, a, b;
+	vector img_size;
 	vector rgb;
 	string label;
 	float text_size;
@@ -61,8 +61,6 @@ void MapVote_DrawMapItem(vector pos, float isize, float tsize, string map, strin
 
 	if(pic == "")
 	{
-		a_x = img_size_x; // for the lines
-		b_y = img_size_y;
 		drawfill(pos, img_size, '.5 .5 .5', .7, DRAWFLAG_NORMAL);
 	}
 	else

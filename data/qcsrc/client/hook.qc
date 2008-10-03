@@ -31,7 +31,7 @@ void Draw_CylindricLine(vector from, vector to, float thickness, string texture,
 
 void Draw_GrapplingHook()
 {
-	vector a, b, o;
+	vector a, b;
 	string tex;
 	vector rgb;
 
