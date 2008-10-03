@@ -629,7 +629,7 @@ float MapInfo_Get_ByName(string pFilename, float pAllowGenerate, float pGametype
 			else
 			{
 				t = car(s); s = cdr(s); f = stof(t);
-				if(s == "")
+				if(s != "")
 					print("Map ", pFilename, " contains an incorrect size line, syntax: size mins_x mins_y mins_z maxs_x maxs_y maxs_z\n");
 				else
 				{

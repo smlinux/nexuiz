@@ -440,18 +440,18 @@ string mmsss(float tenths)
 	return strcat(ftos(minutes), ":", substring(s, 1, 2), ".", substring(s, 3, 1));
 }
 
-string ScoreString(float vflags, float value)
+string ScoreString(float pFlags, float pValue)
 {
 	string valstr;
 	float l;
 
-	value = floor(value + 0.5); // round
+	pValue = floor(pValue + 0.5); // round
 
-	if((value == 0) && (vflags & (SFL_HIDE_ZERO | SFL_RANK | SFL_TIME)))
+	if((pValue == 0) && (pFlags & (SFL_HIDE_ZERO | SFL_RANK | SFL_TIME)))
 		valstr = "";
-	else if(vflags & SFL_RANK)
+	else if(pFlags & SFL_RANK)
 	{
-		valstr = ftos(value);
+		valstr = ftos(pValue);
 		l = strlen(valstr);
 		if((l >= 2) && (substring(valstr, l - 2, 1) == "1"))
 			valstr = strcat(valstr, "th");
@@ -464,10 +464,10 @@ string ScoreString(float vflags, float value)
 		else
 			valstr = strcat(valstr, "th");
 	}
-	else if(vflags & SFL_TIME)
-		valstr = mmsss(value);
+	else if(pFlags & SFL_TIME)
+		valstr = mmsss(pValue);
 	else
-		valstr = ftos(value);
+		valstr = ftos(pValue);
 	
 	return valstr;
 }
