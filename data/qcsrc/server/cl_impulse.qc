@@ -229,8 +229,8 @@ void ImpulseCommands (void)
 					WaypointSprite_Attach("helpme", TRUE);
 					if(waypointsprite_attachedforcarrier) // this can also be the FLAG CARRIER sprite
 					{
-						WaypointSprite_UpdateTeamRadar(waypointsprite_attachedforcarrier, RADARICON_HELPME, '1 1 0');
-						WaypointSprite_Ping(waypointsprite_attachedforcarrier);
+						WaypointSprite_UpdateTeamRadar(self.waypointsprite_attachedforcarrier, RADARICON_HELPME, '1 1 0');
+						WaypointSprite_Ping(self.waypointsprite_attachedforcarrier);
 					}
 					sprint(self, "HELP ME attached\n");
 				}
