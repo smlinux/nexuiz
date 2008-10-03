@@ -35,6 +35,9 @@ vector yinvert(vector v)
 
 void draw_teamradar_background(float a)
 {
+	if(a <= 0)
+		return;
+
 	R_BeginPolygon(minimapname, 0);
 	R_PolygonVertex('1 0 0' * (teamradar_origin2d_x - teamradar_size2d_x * 0.5) + '0 1 0' * (teamradar_origin2d_y - teamradar_size2d_y * 0.5), '0 0 0', '0 0 0', a);
 	R_PolygonVertex('1 0 0' * (teamradar_origin2d_x + teamradar_size2d_x * 0.5) + '0 1 0' * (teamradar_origin2d_y - teamradar_size2d_y * 0.5), '0 0 0', '0 0 0', a);
@@ -104,6 +107,7 @@ void() teamradar_view =
 	local vector coord, rgb;
 	local entity tm;
 	float scale2d, normalsize, bigsize;
+	float a;
 
 	if(!cvar("cl_teamradar"))
 		return;
@@ -116,15 +120,25 @@ void() teamradar_view =
 		mi_picmax_y - mi_picmin_y
 	);
 
+	teamradar_scale = cvar("cl_teamradar_scale");
+	a = cvar("cl_teamradar_background_alpha");
 	teamradar_angle = cvar("cl_teamradar_rotation") * 90;
+
+	// fix undefined cvars first
+	if(!teamradar_scale)
+		teamradar_scale = 2048;
+	if(!a)
+		a = 0.75;
+
 	if(!teamradar_angle)
 		teamradar_angle = input_angles_y - 90;
 	teamradar_origin2d = '64 64 0';
 	teamradar_size2d = '128 128 0';
-	teamradar_scale = 2048;
 
 	normalsize = teamradar_size2d_x * scale2d / teamradar_scale;
-	bigsize = teamradar_size2d_x * scale2d / max(teamradar_scale, vlen(mi_min - mi_max));
+	bigsize = teamradar_size2d_x * scale2d / vlen(mi_min - mi_max);
+	if(bigsize > normalsize)
+		normalsize = bigsize;
 	teamradar_size =
 		  current_zoomfraction * bigsize
 		+ (1 - current_zoomfraction) * normalsize;
@@ -139,7 +153,7 @@ void() teamradar_view =
 		teamradar_size2d_y
 	);
 
-	draw_teamradar_background(cvar("cl_teamradar_background_alpha"));
+	draw_teamradar_background(a);
 	for(tm = world; (tm = findflags(tm, teamradar_icon, 0xFFFFFF)); )
 		draw_teamradar_icon(tm.origin, tm.teamradar_icon, tm.teamradar_time, tm.teamradar_color, tm.alpha);
 	for(tm = gps_start; tm != world; tm = tm.chain)
