@@ -342,7 +342,8 @@ void CSQC_UpdateView(void)
 	}
 	else if(teamplay)
 	{
-		if(cvar("cl_teamradar") >= 1)
+		//if(cvar("cl_teamradar") >= 1) // TODO change it back to this
+		if(cvar_string("cl_teamradar") != "0") // (so it is on by default)
 			if(!scoreboard_active)
 				teamradar_view();
 	}
