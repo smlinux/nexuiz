@@ -607,7 +607,6 @@ void Gamemode_Init()
 
 	if(gametype == GAME_ONSLAUGHT) {
 		print(strcat("Using ", minimapname, " as minimap.\n"));
-		precache_pic(minimapname);
 		precache_pic("gfx/ons-cp-neutral.tga");
 		precache_pic("gfx/ons-cp-red.tga");
 		precache_pic("gfx/ons-cp-blue.tga");

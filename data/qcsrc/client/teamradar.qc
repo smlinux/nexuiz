@@ -5,6 +5,11 @@ vector teamradar_size2d; // 2D size
 float teamradar_size; // 2D scale factor
 float teamradar_scale; // window size = ...qu
 
+float vlen_maxnorm(vector v)
+{
+	return max6(v_x, v_y, v_z, -v_x, -v_y, -v_z);
+}
+
 vector teamradar_3dcoord_to_texcoord(vector in)
 {
 	vector out;
@@ -38,14 +43,14 @@ void draw_teamradar_background(float a)
 	if(a <= 0)
 		return;
 
-	R_BeginPolygon(minimapname, 0);
+	R_BeginPolygon("", 0);
 	R_PolygonVertex('1 0 0' * (teamradar_origin2d_x - teamradar_size2d_x * 0.5) + '0 1 0' * (teamradar_origin2d_y - teamradar_size2d_y * 0.5), '0 0 0', '0 0 0', a);
 	R_PolygonVertex('1 0 0' * (teamradar_origin2d_x + teamradar_size2d_x * 0.5) + '0 1 0' * (teamradar_origin2d_y - teamradar_size2d_y * 0.5), '0 0 0', '0 0 0', a);
 	R_PolygonVertex('1 0 0' * (teamradar_origin2d_x + teamradar_size2d_x * 0.5) + '0 1 0' * (teamradar_origin2d_y + teamradar_size2d_y * 0.5), '0 0 0', '0 0 0', a);
 	R_PolygonVertex('1 0 0' * (teamradar_origin2d_x - teamradar_size2d_x * 0.5) + '0 1 0' * (teamradar_origin2d_y + teamradar_size2d_y * 0.5), '0 0 0', '0 0 0', a);
 	R_EndPolygon();
 
-	R_BeginPolygon(minimapname, DRAWFLAG_ADDITIVE);
+	R_BeginPolygon(minimapname, DRAWFLAG_ADDITIVE | DRAWFLAG_MIPMAP);
 	R_PolygonVertex(teamradar_texcoord_to_2dcoord(mi_pictexcoord0), yinvert(mi_pictexcoord0), '1 1 1', 1);
 	R_PolygonVertex(teamradar_texcoord_to_2dcoord(mi_pictexcoord1), yinvert(mi_pictexcoord1), '1 1 1', 1);
 	R_PolygonVertex(teamradar_texcoord_to_2dcoord(mi_pictexcoord2), yinvert(mi_pictexcoord2), '1 1 1', 1);
@@ -109,7 +114,7 @@ void() teamradar_view =
 	local vector rgb;
 	local entity tm;
 	float scale2d, normalsize, bigsize;
-	float a, f;
+	float a, f, sz;
 
 	color = GetPlayerColor(player_localentnum-1);
 	rgb = GetTeamRGB(color);
@@ -123,12 +128,15 @@ void() teamradar_view =
 	teamradar_scale = cvar("cl_teamradar_scale");
 	a = cvar("cl_teamradar_background_alpha");
 	teamradar_angle = cvar("cl_teamradar_rotation") * 90;
+	sz = cvar("cl_teamradar_background_size");
 
 	// fix undefined cvars first
 	if(!teamradar_scale)
 		teamradar_scale = 4096;
 	if(!a)
 		a = 0.75;
+	if(!sz)
+		sz = 128;
 
 	if(teamradar_scale < 0)
 	{
@@ -138,11 +146,15 @@ void() teamradar_view =
 
 	if(!teamradar_angle)
 		teamradar_angle = input_angles_y - 90;
-	teamradar_origin2d = '64 64 0';
-	teamradar_size2d = '128 128 0';
+	teamradar_size2d = '1 1 0' * sz;
+	teamradar_origin2d = 0.5 * teamradar_size2d;
 
 	normalsize = teamradar_size2d_x * scale2d / teamradar_scale;
-	bigsize = teamradar_size2d_x * scale2d / vlen(mi_min - mi_max);
+
+	if(cvar("cl_teamradar_rotation"))
+		bigsize = teamradar_size2d_x * scale2d / (1.05 * vlen_maxnorm(mi_min - mi_max));
+	else
+		bigsize = teamradar_size2d_x * scale2d / (1.05 * vlen(mi_min - mi_max));
 	if(bigsize > normalsize)
 		normalsize = bigsize;
 	teamradar_size =
