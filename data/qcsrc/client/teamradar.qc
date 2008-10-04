@@ -128,7 +128,7 @@ void() teamradar_view =
 	teamradar_scale = cvar("cl_teamradar_scale");
 	a = cvar("cl_teamradar_background_alpha");
 	teamradar_angle = cvar("cl_teamradar_rotation") * 90;
-	sz = cvar("cl_teamradar_background_size");
+	sz = cvar("cl_teamradar_size");
 
 	// fix undefined cvars first
 	if(!teamradar_scale)
