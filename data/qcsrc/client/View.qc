@@ -314,12 +314,6 @@ void CSQC_UpdateView(void)
 	{
 		ctf_view();
 	} else */
-	if(!draw_enginesbar)
-	{
-		if(cvar("r_letterbox") == 0)
-		if(cvar("viewsize") < 120)
-			CSQC_common_hud();
-	}
 
 	e = self;
 	for(self = world; (self = nextent(self)); )
@@ -346,6 +340,13 @@ void CSQC_UpdateView(void)
 		if(cvar_string("cl_teamradar") != "0") // (so it is on by default)
 			if(!scoreboard_active)
 				teamradar_view();
+	}
+
+	if(!draw_enginesbar)
+	{
+		if(cvar("r_letterbox") == 0)
+		if(cvar("viewsize") < 120)
+			CSQC_common_hud();
 	}
 }
 
