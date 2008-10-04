@@ -5,9 +5,6 @@
 .vector portal_safe_origin;
 .float portal_wants_to_vanish;
 .float portal_activatetime;
-.float portal_id;
-
-.entity portal_in, portal_out;
 
 vector Portal_Transform_Apply(vector transform, vector v)
 {

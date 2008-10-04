@@ -1,4 +1,3 @@
-.float portal_id;
 .entity porto_current;
 .vector porto_v_angle; // holds "held" view angles
 .float porto_v_angle_held;
@@ -113,12 +112,20 @@ void W_Porto_Touch (void)
 	}
 	else
 	{
-		if(Portal_SpawnOutPortalAtTrace(self.owner, self.right_vector, self.portal_id))
+		if(self.owner.portal_in.portal_id == self.portal_id)
 		{
-			sound(self, CHAN_PROJECTILE, "porto/create.ogg", VOL_BASE, ATTN_NORM);
-			trace_plane_normal = norm;
-			centerprint(self.owner, "^4Out^7-portal created.\n");
-			W_Porto_Success();
+			if(Portal_SpawnOutPortalAtTrace(self.owner, self.right_vector, self.portal_id))
+			{
+				sound(self, CHAN_PROJECTILE, "porto/create.ogg", VOL_BASE, ATTN_NORM);
+				trace_plane_normal = norm;
+				centerprint(self.owner, "^4Out^7-portal created.\n");
+				W_Porto_Success();
+			}
+			else
+			{
+				sound(self, CHAN_PROJECTILE, "porto/unsupported.ogg", VOL_BASE, ATTN_NORM);
+				W_Porto_Fail(0);
+			}
 		}
 		else
 		{
