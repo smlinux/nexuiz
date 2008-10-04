@@ -127,7 +127,11 @@ float Portal_TeleportPlayer(entity teleporter, entity player)
 	safe = trace_endpos + normalize(safe - trace_endpos) * 0;
 	tracebox(safe, player.mins - SAFENUDGE, player.maxs + SAFENUDGE, to, MOVE_NOMONSTERS, player);
 	if(trace_startsolid)
-		error("trace_endpos in solid!");
+	{
+		print("trace_endpos in solid, this can't be!\n");
+		// FAIL TODO why does this happen? (reported by MrBougo)
+		return 0;
+	}
 	to = trace_endpos + normalize(safe - trace_endpos) * 0;
 	//print(vtos(to), "\n");
 
