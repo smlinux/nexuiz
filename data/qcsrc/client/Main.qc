@@ -605,6 +605,12 @@ void Gamemode_Init()
 	minimapname = strzone(strcat("gfx/", mi_shortname, "_mini.tga"));
 	shortmapname = mi_shortname;
 
+	if(precache_pic(minimapname) == "")
+	{
+		strunzone(minimapname);
+		minimapname = ""; // FAIL
+	}
+
 	if(gametype == GAME_ONSLAUGHT) {
 		print(strcat("Using ", minimapname, " as minimap.\n"));
 		precache_pic("gfx/ons-cp-neutral.tga");

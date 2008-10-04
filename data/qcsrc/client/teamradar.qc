@@ -147,6 +147,9 @@ void() teamradar_view =
 	float scale2d, normalsize, bigsize;
 	float f;
 
+	if(minimapname == "")
+		return;
+
 	teamradar_loadcvars();
 
 	switch(cl_teamradar_zoommode)
