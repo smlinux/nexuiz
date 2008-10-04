@@ -671,11 +671,11 @@ void PutClientInServer (void)
 		self.pauserothealth_finished = time + cvar("g_balance_pause_health_rot_spawn");
 		self.pauseregen_finished = time + cvar("g_balance_pause_health_regen_spawn");
 		//extend the pause of rotting if client was reset at the beginning of the countdown
-		if(!cvar("sv_ready_restart_after_countdown") && time < restart_countdown) {
-			self.spawnshieldtime += RESTART_COUNTDOWN;
-			self.pauserotarmor_finished += RESTART_COUNTDOWN;
-			self.pauserothealth_finished += RESTART_COUNTDOWN;
-			self.pauseregen_finished += RESTART_COUNTDOWN;
+		if(!cvar("sv_ready_restart_after_countdown") && time < game_starttime) { // TODO why is this cvar NOTted?
+			self.spawnshieldtime += game_starttime - time;
+			self.pauserotarmor_finished += game_starttime - time;
+			self.pauserothealth_finished += game_starttime - time;
+			self.pauseregen_finished += game_starttime - time;
 		}
 		self.damageforcescale = 2;
 		self.death_time = 0;
@@ -1605,7 +1605,7 @@ void player_powerups (void)
 	if (g_midair)
 		self.spawnshieldtime = max(self.spawnshieldtime, time + cvar("g_midair_shieldtime"));
 
-	if (time > restart_countdown)
+	if (time >= game_starttime)
 	if (time < self.spawnshieldtime)
 		self.effects = self.effects | (EF_ADDITIVE | EF_FULLBRIGHT);
 }
@@ -1997,6 +1997,8 @@ void() ctf_setstatus;
 void PlayerPreThink (void)
 {
 	self.stat_sys_ticrate = cvar("sys_ticrate");
+	self.stat_game_starttime = game_starttime;
+
 	if(blockSpectators)
 		checkSpectatorBlock();
 	
@@ -2140,7 +2142,7 @@ void PlayerPreThink (void)
 			dist_z = 0;
 			self.lms_traveled_distance += fabs(vlen(dist));
 
-			if((cvar("g_campaign") && !campaign_bots_may_start) || (time < restart_countdown))
+			if((cvar("g_campaign") && !campaign_bots_may_start) || (time < game_starttime))
 			{
 				self.lms_nextcheck = time + cvar("g_lms_campcheck_interval")*2;
 				self.lms_traveled_distance = 0;
@@ -2294,16 +2296,16 @@ void PlayerPostThink (void)
 		//if (TetrisPostFrame()) return;
 
 		// restart countdown
-		if (restart_countdown) {
-			if(time < restart_countdown) {
+			if(time < game_starttime) {
 				if (!cvar("sv_ready_restart_after_countdown"))
 				{
 					if(self.movement != '0 0 0' && g_race && !g_race_qualifying)
 					{
-						if(time < restart_countdown - 2)
+						if(time < game_starttime - 2)
 						{
 							if(!self.race_penalty_nagged)
 							{
+								// TODO better notification for this!
 								centerprint_atprio(self, CENTERPRIO_IDLEKICK, "^1DO NOT MOVE DURING THE COUNTDOWN.");
 								self.race_penalty_nagged = 1;
 							}
@@ -2340,7 +2342,6 @@ void PlayerPostThink (void)
 					self.race_penalty_nagged = 0;
 				}
 			}
-		}
 		
 	} else if (self.classname == "observer") {
 		//do nothing

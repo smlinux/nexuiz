@@ -1078,11 +1078,12 @@ void Sbar_Score(float margin)
 		}
 	}
 	timelimit = getstatf(STAT_TIMELIMIT);
-	if(timelimit)
+	if(timelimit > 0)
 	{
-		timeleft = max(0, timelimit * 60 - time);
+		timeleft = max(0, timelimit * 60 + getstatf(STAT_GAMESTARTTIME) - time);
+		timeleft = ceil(timeleft);
 		minutes = floor(timeleft / 60);
-		seconds = floor(timeleft - minutes*60);
+		seconds = timeleft - minutes*60;
 		if(minutes >= 5)
 		{
 			Sbar_DrawXNum('-72 32 0', minutes, 3, 12, '1 1 1', 1, DRAWFLAG_NORMAL);

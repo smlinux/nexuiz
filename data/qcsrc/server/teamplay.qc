@@ -368,7 +368,7 @@ void PrintWelcomeMessage(entity pl)
 	self.welcomemessage_time = time + 0.8; */
 
 	if(self.cvar_scr_centertime == 0) return;
-	if( !(timeoutStatus >= 1 || (time < restart_countdown) ) ) { //really print the WelcomeMessage to the player every frame when timeout-seconds are shown or the game is restarted, to make sure that the shown number is accurate
+	if( !(timeoutStatus >= 1 || (time < game_starttime) ) ) { //really print the WelcomeMessage to the player every frame when timeout-seconds are shown or the game is restarted, to make sure that the shown number is accurate
 		if(self.welcomemessage_time > time) return;
 		self.welcomemessage_time = time + self.cvar_scr_centertime * 0.6;
 	}
@@ -384,7 +384,7 @@ void PrintWelcomeMessage(entity pl)
 		// TODO get rid of this too
 		local string specString;
 		specString = NEWLINES;
-		if(time < restart_countdown) //also show the countdown when being a spectator
+		if(time < game_starttime) //also show the countdown when being a spectator
 			specString = strcat(specString, "\n\n^1Game starts in ", ftos(restartAnnouncer.cnt + 1), " seconds^7");
 		else if (timeoutStatus != 0)
 			specString = strcat(specString, "\n\n", getTimeoutText(1));
@@ -452,7 +452,7 @@ void PrintWelcomeMessage(entity pl)
 	if(modifications != "")
 		s = strcat(s, "^8\nactive modifications: ^3", modifications, "^8\n");
 
-	if(time < restart_countdown)
+	if(time < game_starttime)
 		s = strcat(s, "\n^1Game starts in ", ftos(restartAnnouncer.cnt + 1), " seconds^7");
 
 	if(timeoutStatus != 0)

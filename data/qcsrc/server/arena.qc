@@ -134,7 +134,7 @@ void reset_map()
 				restart_mapalreadyrestarted to 1 after the countdown ended or when
 				sv_ready_restart_after_countdown is not used and countdown is still running
 				*/
-				if (restart_mapalreadyrestarted || (time < restart_countdown))
+				if (restart_mapalreadyrestarted || (time < game_starttime))
 				{
 					//NEW: changed behaviour so that it prevents that previous spectators/observers suddenly spawn as players
 					if (self.classname == "player") {
@@ -154,7 +154,7 @@ void reset_map()
 	}
 
 	if(g_keyhunt)
-		kh_Controller_SetThink(cvar("g_balance_keyhunt_delay_round")+RESTART_COUNTDOWN, "", kh_StartRound);
+		kh_Controller_SetThink(cvar("g_balance_keyhunt_delay_round")+(game_starttime - time), "", kh_StartRound);
 
 	if(g_arena)
 	if(champion)
@@ -225,7 +225,7 @@ void Arena_Warmup()
 	float f;
 	string msg;
 
-	if(!g_arena || !arena_roundbased || (time < restart_countdown))
+	if(!g_arena || !arena_roundbased || (time < game_starttime))
 		return;
 
 	f = rint(warmup - time);

@@ -121,7 +121,7 @@ void dompointthink()
 
 	// give points
 
-	if (gameover || self.delay > time || time < restart_countdown)	// game has ended, don't keep giving points
+	if (gameover || self.delay > time || time < game_starttime)	// game has ended, don't keep giving points
 		return;
 
 	waittime = cvar("g_domination_point_rate");

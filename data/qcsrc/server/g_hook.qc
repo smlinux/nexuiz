@@ -304,7 +304,7 @@ void FireGrapplingHook (void)
 	local entity missile;
 	local vector org;
 
-	if((arena_roundbased && time < warmup) || (time < restart_countdown))
+	if((arena_roundbased && time < warmup) || (time < game_starttime))
 		return;
 
 	makevectors(self.v_angle);

@@ -151,7 +151,7 @@ void RuneCarriedThink()
 	vector ang;
 	entity rune;
 
-	if(self.owner.classname != "player" || time < restart_countdown)
+	if(self.owner.classname != "player" || time < game_starttime)
 	{
 		rune_respawn();
 		return;

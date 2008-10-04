@@ -244,7 +244,7 @@ void W_ThrowWeapon(vector velo, vector delta, float doreduce)
 // Bringed back weapon frame
 void W_WeaponFrame()
 {
-	if((arena_roundbased && time < warmup) || ((time < restart_countdown) && !cvar("sv_ready_restart_after_countdown")))
+	if((arena_roundbased && time < warmup) || ((time < game_starttime) && !cvar("sv_ready_restart_after_countdown")))
 		return;
 
 	if (!self.weaponentity || self.health < 1)

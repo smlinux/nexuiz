@@ -330,7 +330,7 @@ void SV_ParseClientCommand(string s) {
 				return sprint(self, "^1You cannot reset the game while a timeout is active!\n");
 			}
 			
-			if(!restart_countdown || cvar("sv_ready_restart_repeatable"))
+			if(game_starttime == 0 || cvar("sv_ready_restart_repeatable"))
 			{
 				self.ready = TRUE;
 				bprint(self.netname, "^2 is ready\n");
@@ -454,17 +454,8 @@ void ReadyRestart()
 	if(checkrules_overtimeend)
 		checkrules_overtimeend = 0;
 
-	restart_countdown = time + RESTART_COUNTDOWN;
+	game_starttime = time + RESTART_COUNTDOWN;
 	restart_mapalreadyrestarted = 0; //reset this var, needed when cvar sv_ready_restart_repeatable is in use
-	if(0 < cvar("timelimit") || inWarmupStage)
-	{
-		// remember original timelimit on first restart
-		if(!timelimit_orig)
-			timelimit_orig = cvar("timelimit");
-		//only set the new timelimit if, when loading the map, a timelimit was really set
-		if(timelimit_orig)
-			cvar_set("timelimit", ftos(timelimit_orig + ceil(restart_countdown)/60));
-	}
 
 	inWarmupStage = 0; //once the game is restarted the game is in match stage
 
@@ -598,22 +589,19 @@ void restartAnnouncer_Think() {
 void evaluateTimeoutCall() {
 	if (inWarmupStage && !g_warmup_allow_timeout)
 		return sprint(self, "^7Error: You can not call a timeout in warmup-stage!\n");
-	if (time < restart_countdown )
+	if (time < game_starttime )
 		return sprint(self, "^7Error: You can not call a timeout while the map is being restarted!\n");
 	if (timeoutStatus != 2) {
 		//if the map uses a timelimit make sure that timeout cannot be called right before the map ends
 		if (cvar("timelimit")) {
 			//a timelimit was used
 			local float myTl;
-			if (cvar("timelimit"))
-				myTl = cvar("timelimit");
-			else
-				myTl = timelimit_orig;
+			myTl = cvar("timelimit");
 
 			local float lastPossibleTimeout;
 			lastPossibleTimeout = (myTl*60) - cvar("sv_timeout_leadtime") - 1;
 
-			if (lastPossibleTimeout < time)
+			if (lastPossibleTimeout < time - game_starttime)
 				return sprint(self, "^7Error: It is too late to call a timeout now!\n");
 		}
 	}

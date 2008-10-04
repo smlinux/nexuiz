@@ -354,12 +354,6 @@ void spawnfunc_worldspawn (void)
 	MapInfo_Enumerate();
 	MapInfo_FilterGametype(MapInfo_CurrentGametype(), MapInfo_CurrentFeatures(), 1);
 
-	//if tourney is used map starts in warmup mode. if this mode shall stay unlimited, reset timelimit, but save the original one
-	if(inWarmupStage) {
-		timelimit_orig = cvar("timelimit");
-		cvar_set("timelimit", "0");
-	}
-
 	if(whichpack(strcat("maps/", mapname, ".cfg")) != "")
 	{
 		fd = fopen(strcat("maps/", mapname, ".cfg"), FILE_READ);
@@ -398,6 +392,7 @@ void spawnfunc_worldspawn (void)
 	addstat(STAT_SYS_TICRATE, AS_FLOAT, stat_sys_ticrate);
 	addstat(STAT_WEAPONS, AS_INT, weapons);
 	addstat(STAT_SWITCHWEAPON, AS_INT, switchweapon);
+	addstat(STAT_GAMESTARTTIME, AS_FLOAT, stat_game_starttime);
 	Nagger_Init();
 
 	next_pingtime = time + 5;
@@ -1286,7 +1281,7 @@ float WinningCondition_Assault()
 				local entity oldself;
 				oldself = self;
 				self = ent;
-				cvar_set("timelimit", ftos((2*time)/60));
+				cvar_set("timelimit", ftos((2*time)/60)); // FIXME use game_starttime here
 				assault_new_round();
 				self = oldself;
 			}
@@ -1610,8 +1605,14 @@ void CheckRules_World()
 	timelimit = cvar("timelimit") * 60;
 	fraglimit = cvar("fraglimit");
 
-	if(inWarmupStage)
+	if(inWarmupStage || time <= game_starttime) // NOTE: this is <= to prevent problems in the very tic where the game starts
+	{
+		timelimit = 0; // timelimit is not made for warmup
 		fraglimit = 0; // no fraglimit for now
+	}
+
+	if(timelimit > 0)
+		timelimit += game_starttime;
 
 	if(checkrules_overtimeend)
 	{

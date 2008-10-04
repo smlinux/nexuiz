@@ -96,7 +96,7 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 		else
 		{
 			s = PlayerScore_Add(e, SP_RACE_TIME, 0);
-			snew = floor(0.5 + 10 * (time - restart_countdown));
+			snew = floor(0.5 + 10 * (time - game_starttime));
 			PlayerScore_Add(e, SP_RACE_TIME, snew - s);
 			l = PlayerTeamScore_Add(e, SP_RACE_LAPS, ST_RACE_LAPS, 1);
 
