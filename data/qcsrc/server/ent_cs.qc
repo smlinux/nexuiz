@@ -14,21 +14,22 @@
 // Capital V
 
 entity entcs_start;
+.entity entcs_next;
 
 void entcs_init()
 {
 	print("Initializing ClientSide information entities\n");
 	entcs_start = spawn();
 	entcs_start.solid = SOLID_NOT;
-	entcs_start.chain = world;
+	entcs_start.entcs_next = world;
 };
 
 entity get_entcs_ent()
 {
 	entity entcs;
 	entcs = spawn();
-	entcs.chain = entcs_start.chain;
-	entcs_start.chain = entcs;
+	entcs.entcs_next = entcs_start.entcs_next;
+	entcs_start.entcs_next = entcs;
 	return entcs;
 };
 
@@ -101,12 +102,13 @@ entity attach_entcs()
 void detach_entcs()
 {
 	local float num;
-	local entity ent;
+	local entity ent, n;
 	num = num_for_edict(self);
-	for(ent = entcs_start; ent.chain.owner != self && ent.chain != world; ent = ent.chain);
-	if(ent.chain != world && ent.chain.owner == self)
+	for(ent = entcs_start; ent.entcs_next.owner != self && ent.entcs_next != world; ent = ent.entcs_next);
+	if(ent.entcs_next != world && ent.entcs_next.owner == self)
 	{
-		remove(ent.chain);
-		ent.chain = ent.chain.chain;
+		n = ent.entcs_next.entcs_next;
+		remove(ent.entcs_next);
+		ent.entcs_next = n;
 	}
 };
