@@ -28,7 +28,7 @@ void W_Porto_Fail (float failhard)
 	Portal_ClearWithID(self.owner, self.portal_id);
 	self.owner.porto_current = world;
 
-	if(!failhard && !(self.owner.weapons & WEPBIT_PORTO))
+	if(!failhard && self.owner.playerid == self.playerid && self.owner.deadflag == DEAD_NO && !(self.owner.weapons & WEPBIT_PORTO))
 	{
 		setsize (self, '-16 -16 0', '16 16 32');
 		setorigin(self, self.origin + trace_plane_normal);
@@ -148,6 +148,7 @@ void W_Porto_Attack (void)
 
 	gren = spawn ();
 	gren.owner = self;
+	gren.playerid = self.playerid;
 	gren.classname = "porto";
 	gren.bot_dodge = TRUE;
 	gren.bot_dodgerating = 200;
