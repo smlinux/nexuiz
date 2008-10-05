@@ -1014,7 +1014,7 @@ sub irc_joinstage($)
 	[ dp => q{:vote:vcall:(\d+):(.*)} => sub {
 		my ($id, $command) = @_;
 		$command = color_dp2irc $command;
-		my $oldnick = $store{"playernick_$id"};
+		my $oldnick = $id ? $store{"playernick_$id"} : "(console)";
 		out irc => 0, "PRIVMSG $config{irc_channel} :* $oldnick\017 calls a vote for \"$command\017\"";
 		return 0;
 	} ],
@@ -1022,7 +1022,7 @@ sub irc_joinstage($)
 	# chat: Nexuiz server -> IRC channel, vote stop
 	[ dp => q{:vote:vstop:(\d+)} => sub {
 		my ($id) = @_;
-		my $oldnick = $store{"playernick_$id"};
+		my $oldnick = $id ? $store{"playernick_$id"} : "(console)";
 		out irc => 0, "PRIVMSG $config{irc_channel} :* $oldnick\017 stopped the vote";
 		return 0;
 	} ],
@@ -1030,7 +1030,7 @@ sub irc_joinstage($)
 	# chat: Nexuiz server -> IRC channel, master login
 	[ dp => q{:vote:vlogin:(\d+)} => sub {
 		my ($id) = @_;
-		my $oldnick = $store{"playernick_$id"};
+		my $oldnick = $id ? $store{"playernick_$id"} : "(console)";
 		out irc => 0, "PRIVMSG $config{irc_channel} :* $oldnick\017 logged in as master";
 		return 0;
 	} ],
@@ -1038,7 +1038,7 @@ sub irc_joinstage($)
 	# chat: Nexuiz server -> IRC channel, master do
 	[ dp => q{:vote:vdo:(\d+):(.*)} => sub {
 		my ($id, $command) = @_;
-		my $oldnick = $store{"playernick_$id"};
+		my $oldnick = $id ? $store{"playernick_$id"} : "(console)";
 		out irc => 0, "PRIVMSG $config{irc_channel} :* $oldnick\017 used his master status to do \"$command\017\"";
 		return 0;
 	} ],
