@@ -170,7 +170,9 @@ void Draw_WaypointSprite()
 	}
 	o_z = 0;
 
-	drawrotpic(o, rot * 90 * DEG2RAD, strcat("models/sprites/", spriteimage), SPRITE_SIZE * waypointsprite_scale, SPRITE_HOTSPOT * waypointsprite_scale, '1 1 1', a, 0);
+	float vidscale;
+	vidscale = max(vid_conwidth / vid_width, vid_conheight / vid_height);
+	drawrotpic(o, rot * 90 * DEG2RAD, strcat("models/sprites/", spriteimage), SPRITE_SIZE * waypointsprite_scale * vidscale, SPRITE_HOTSPOT * waypointsprite_scale * vidscale, '1 1 1', a, 0);
 }
 
 void Ent_WaypointSprite()
