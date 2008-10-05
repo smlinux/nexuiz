@@ -1736,6 +1736,8 @@ void SpectateCopy(entity spectatee) {
 	self.impulse = 0;
 	self.items = spectatee.items;
 	self.weapons = spectatee.weapons;
+	self.switchweapon = spectatee.switchweapon;
+	self.weapon = spectatee.weapon;
 	self.punchangle = spectatee.punchangle;
 	self.view_ofs = spectatee.view_ofs;
 	self.v_angle = spectatee.v_angle;
