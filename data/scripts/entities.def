@@ -27,7 +27,7 @@ noise: Sound to be played on the control point when it's captured.  Only players
 noise1: Sound to be played to all players when the control point is captured.  Also good for an announcer voice ("Red Team has captured a control point")
 */
 
-/*QUAKED func_assault_destructible (.5 0 .5) (-8 -8 -8) (8 8 8) 
+/*QUAKED func_assault_destructible (.5 0 .5) ?
 This is a brush model which can be damaged. Once triggered it's active and will happily receive damage players inflict upon it. Once all health is consumed it'll disappear and trigger the targeted entity/entities. As damage is received the brush model will be tinted in an increasingly visible flavor of red to give visible feedback.
 -------- KEYS --------
 health: The damage this trigger can take
@@ -35,7 +35,7 @@ target: The entity/entities to be triggered once this entity gets invisible
 targetname: The name other entities can use to target this entity
 */
 
-/*QUAKED func_assault_wall (.5 0 .5) (-8 -8 -8) (8 8 8) 
+/*QUAKED func_assault_wall (.5 0 .5) ?
 Brush model that will disappear once the targeted target_objective is fulfilled. This can be used to restrict access to parts of the map until a certain objective has been conquered.
 -------- KEYS --------
 target: targetname of a target_objective
