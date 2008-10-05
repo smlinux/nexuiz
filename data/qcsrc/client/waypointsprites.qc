@@ -17,6 +17,7 @@ float waypointsprite_minscale;
 float waypointsprite_minalpha;
 float waypointsprite_distancealphaexponent;
 float waypointsprite_timealphaexponent;
+float waypointsprite_scale;
 
 .float rule;
 .string netname; // primary picture
@@ -169,7 +170,7 @@ void Draw_WaypointSprite()
 	}
 	o_z = 0;
 
-	drawrotpic(o, rot * 90 * DEG2RAD, strcat("models/sprites/", spriteimage), SPRITE_SIZE, SPRITE_HOTSPOT, '1 1 1', a, 0);
+	drawrotpic(o, rot * 90 * DEG2RAD, strcat("models/sprites/", spriteimage), SPRITE_SIZE * waypointsprite_scale, SPRITE_HOTSPOT * waypointsprite_scale, '1 1 1', a, 0);
 }
 
 void Ent_WaypointSprite()
@@ -245,7 +246,7 @@ void Ent_RemoveWaypointSprite()
 		strunzone(self.netname3);
 }
 
-void WaypointSprite_Init()
+void WaypointSprite_Load()
 {
 	waypointsprite_fadedistance = vlen(world.maxs - world.mins);
 	waypointsprite_normdistance = cvar("g_waypointsprite_normdistance");
@@ -253,4 +254,7 @@ void WaypointSprite_Init()
 	waypointsprite_minalpha = cvar("g_waypointsprite_minalpha");
 	waypointsprite_distancealphaexponent = cvar("g_waypointsprite_distancealphaexponent");
 	waypointsprite_timealphaexponent = cvar("g_waypointsprite_timealphaexponent");
+	waypointsprite_scale = cvar("g_waypointsprite_scale");
+	if(!waypointsprite_scale)
+		waypointsprite_scale = 1.0;
 }

@@ -55,7 +55,7 @@ string config_get(string key, string defaultvalue)
 }
 
 string forcefog;
-void WaypointSprite_Init();
+void WaypointSprite_Load();
 void CSQC_Init(void)
 {
 #ifdef USE_FTE
@@ -135,7 +135,7 @@ void CSQC_Init(void)
 	if(v_y - 240 > -1)
 		cs_project_is_b0rked = FALSE;
 
-	WaypointSprite_Init();
+	WaypointSprite_Load();
 }
 
 // CSQC_Shutdown : Called every time the CSQC code is shutdown (changing maps, quitting, etc)

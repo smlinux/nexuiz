@@ -189,6 +189,7 @@ void CSQC_UpdateView(void)
 	entity e;
 	float fov;
 	dprint_load();
+	WaypointSprite_Load();
 
 	// Render the Scene
 	view_origin = pmove_org + '0 0 1' * getstati(STAT_VIEWHEIGHT);
@@ -299,6 +300,11 @@ void CSQC_UpdateView(void)
 	self = e;
 	R_RenderScene();
 
+	// now switch to 2D drawing mode by calling a 2D drawing function
+	// then polygon drawing will draw as 2D stuff, and NOT get queued until the
+	// next R_RenderScene call
+	drawstring('0 0 0', "", '1 1 0', '1 1 1', 0, 0);
+
 	// Draw the mouse cursor
 	// NOTE: drawpic must happen after R_RenderScene for some reason
 	//drawpic(getmousepos(), "gfx/cursor.tga", '11 14 0', '1 1 1', 1, 0);
@@ -315,19 +321,14 @@ void CSQC_UpdateView(void)
 		ctf_view();
 	} else */
 
-	if(!draw_enginesbar)
-	{
-		if(cvar("r_letterbox") == 0)
-		if(cvar("viewsize") < 120)
-			CSQC_common_hud();
-	}
-
+	// draw 2D entities
 	e = self;
 	for(self = world; (self = nextent(self)); )
 		if(self.draw2d)
 			self.draw2d();
 	self = e;
 	
+	// draw radar
 	if(gametype == GAME_ONSLAUGHT)
 	{
 		if(cvar("cl_teamradar") >= 2)
@@ -347,6 +348,14 @@ void CSQC_UpdateView(void)
 		if(cvar_string("cl_teamradar") != "0") // (so it is on by default)
 			if(!scoreboard_active)
 				teamradar_view();
+	}
+
+	// draw sbar
+	if(!draw_enginesbar)
+	{
+		if(cvar("r_letterbox") == 0)
+		if(cvar("viewsize") < 120)
+			CSQC_common_hud();
 	}
 }
 
