@@ -47,6 +47,18 @@ void W_Porto_Fail (float failhard)
 	remove(self);
 }
 
+void W_Porto_Remove (entity p)
+{
+	if(p.porto_current)
+	{
+		entity oldself;
+		oldself = self;
+		self = p.porto_current;
+		W_Porto_Fail(1);
+		self = oldself;
+	}
+}
+
 void W_Porto_Think (void)
 {
 	trace_plane_normal = '0 0 0';

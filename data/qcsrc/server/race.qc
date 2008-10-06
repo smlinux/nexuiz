@@ -309,7 +309,6 @@ void dumpsurface(entity e)
 void checkpoint_passed()
 {
 	string oldmsg;
-	entity oldself;
 
 	if(other.classname == "porto")
 	{
@@ -339,13 +338,6 @@ void checkpoint_passed()
 	 * Remove unauthorized equipment
 	 */
 	Portal_ClearAll(other);
-	if(other.porto_current)
-	{
-		oldself = self;
-		self = other.porto_current;
-		W_Porto_Fail(1);
-		self = oldself;
-	}
 
 	other.porto_forbidden = 2; // decreased by 1 each StartFrame
 

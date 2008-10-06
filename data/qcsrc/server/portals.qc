@@ -524,12 +524,17 @@ float Portal_SetOutPortal(entity own, entity portal)
 	}
 	return 1;
 }
-void Portal_ClearAll(entity own)
+void Portal_ClearAll_PortalsOnly(entity own)
 {
 	if(own.portal_in)
 		Portal_Remove(own.portal_in, 0);
 	if(own.portal_out)
 		Portal_Remove(own.portal_out, 0);
+}
+void Portal_ClearAll(entity own)
+{
+	Portal_ClearAll_PortalsOnly(own);
+	W_Porto_Remove(own);
 }
 void Portal_RemoveLater_Think()
 {
@@ -542,12 +547,17 @@ void Portal_RemoveLater(entity portal, float kill)
 	portal.think = Portal_RemoveLater_Think;
 	portal.nextthink = time;
 }
-void Portal_ClearAllLater(entity own)
+void Portal_ClearAllLater_PortalsOnly(entity own)
 {
 	if(own.portal_in)
 		Portal_RemoveLater(own.portal_in, 0);
 	if(own.portal_out)
 		Portal_RemoveLater(own.portal_out, 0);
+}
+void Portal_ClearAllLater(entity own)
+{
+	Portal_ClearAllLater_PortalsOnly(own);
+	W_Porto_Remove(own);
 }
 void Portal_ClearWithID(entity own, float id)
 {
@@ -616,7 +626,7 @@ float Portal_SpawnInPortalAtTrace(entity own, vector dir, float portal_id_val)
 	if(!portal)
 	{
 		// if(!own.portal_out || own.portal_out.portal_id == portal_id_val)
-			Portal_ClearAll(own);
+			Portal_ClearAll_PortalsOnly(own);
 		return 0;
 	}
 
@@ -640,7 +650,7 @@ float Portal_SpawnOutPortalAtTrace(entity own, vector dir, float portal_id_val)
 	if(!portal)
 	{
 		// if(!own.portal_in || own.portal_in.portal_id == portal_id_val)
-			Portal_ClearAll(own);
+			Portal_ClearAll_PortalsOnly(own);
 		return 0;
 	}
 
