@@ -625,12 +625,12 @@ float MapInfo_Get_ByName(string pFilename, float pAllowGenerate, float pGametype
 			t = car(s); s = cdr(s); d = stof(t);
 			t = car(s); s = cdr(s); e = stof(t);
 			if(s == "")
-				print("Map ", pFilename, " contains an incorrect size line, syntax: size mins_x mins_y mins_z maxs_x maxs_y maxs_z\n");
+				print("Map ", pFilename, " contains an incorrect size line (not enough params), syntax: size mins_x mins_y mins_z maxs_x maxs_y maxs_z\n");
 			else
 			{
 				t = car(s); s = cdr(s); f = stof(t);
 				if(s != "")
-					print("Map ", pFilename, " contains an incorrect size line, syntax: size mins_x mins_y mins_z maxs_x maxs_y maxs_z\n");
+					print("Map ", pFilename, " contains an incorrect size line (too many params), syntax: size mins_x mins_y mins_z maxs_x maxs_y maxs_z\n");
 				else
 				{
 					if(a >= d || b >= e || c >= f)
