@@ -26,12 +26,16 @@ void WaypointSprite_UpdateSprites(entity e, string m1, string m2, string m3)
 
 void WaypointSprite_UpdateOrigin(entity e, vector o)
 {
-	e.origin = o;
-	e.SendFlags |= 128;
+	if(o != e.origin)
+	{
+		e.origin = o;
+		e.SendFlags |= 128;
+	}
 }
 
 void WaypointSprite_UpdateRule(entity e, float t, float r)
 {
+	// no check, as this is never called without doing an actual change (usually only once)
 	e.rule = r;
 	e.team = t;
 	e.SendFlags |= 1;
@@ -39,13 +43,15 @@ void WaypointSprite_UpdateRule(entity e, float t, float r)
 
 void WaypointSprite_UpdateTeamRadar(entity e, float icon, vector col)
 {
-	e.cnt = (icon & 0x7F);
+	// no check, as this is never called without doing an actual change (usually only once)
+	e.cnt = (icon & 0x7F) | (e.cnt & 0x80);
 	e.colormod = col;
 	e.SendFlags |= 32;
 }
 
 void WaypointSprite_Ping(entity e)
 {
+	// ALWAYS sends (this causes a radar circle), thus no check
 	e.cnt |= 0x80;
 	e.SendFlags |= 32;
 }
