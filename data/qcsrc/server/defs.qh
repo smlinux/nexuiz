@@ -335,7 +335,6 @@ float default_weapon_alpha;
 .float cvar_cl_nogibs;
 .float cvar_scr_centertime;
 .float cvar_cl_shownames;
-.float cvar_cl_hidewaypoints;
 .string cvar_g_nexuizversion;
 .string cvar_cl_weaponpriority;
 .string cvar_cl_weaponpriorities[10];

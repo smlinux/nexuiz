@@ -526,7 +526,6 @@ void GetCvars(float f)
 	if(f > 0)
 		s = strcat1(argv(f));
 	GetCvars_handleFloat(s, f, autoswitch, "cl_autoswitch");
-	GetCvars_handleFloat(s, f, cvar_cl_hidewaypoints, "cl_hidewaypoints");
 	GetCvars_handleFloat(s, f, cvar_cl_playerdetailreduction, "cl_playerdetailreduction");
 	GetCvars_handleFloat(s, f, cvar_cl_nogibs, "cl_nogibs");
 	GetCvars_handleFloat(s, f, cvar_scr_centertime, "scr_centertime");

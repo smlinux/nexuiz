@@ -74,7 +74,6 @@ void printsurfaceinfo(entity e, vector v)
  * 30 to 39: create waypoints
  * 47: clear personal waypoints
  * 48: clear team waypoints
- * 49: turn base waypoints on/off
  *
  * 99: loaded
  *
@@ -303,14 +302,6 @@ void ImpulseCommands (void)
 			case 48:
 				WaypointSprite_ClearOwned();
 				sprint(self, "all waypoints cleared\n");
-				break;
-			case 49:
-				self.cvar_cl_hidewaypoints = !(self.cvar_cl_hidewaypoints);
-				sprint(self, "fixed waypoints now ");
-				if(self.cvar_cl_hidewaypoints)
-					sprint(self, "OFF\n");
-				else
-					sprint(self, "ON\n");
 				break;
 		}
 	}
