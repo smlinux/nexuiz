@@ -37,9 +37,6 @@ void() menu_sub_null =
 {
 };
 
-// let's make this a general data buffer...
-float using_gps;
-
 #ifdef USE_FTE
 float __engine_check;
 #endif
@@ -82,7 +79,6 @@ void CSQC_Init(void)
 	menu_visible = FALSE;
 	menu_show = menu_show_error;
 	menu_action = menu_sub_null;
-	using_gps = false;
 	maxclients = 255; // we later get the real maxclients to speed up stuff
 	//ctf_temp_1 = "";
 	// localcmd("alias order \"cmd order $*\""); enable if ctf-command thingy is used
@@ -101,8 +97,6 @@ void CSQC_Init(void)
 	registercvar("sbar_columns", "default", CVAR_SAVE);
 
 	gametype = 0;
-
-	gps_start = world;
 
 	// sbar_fields uses strunzone on the titles!
 	for(i = 0; i < MAX_SBAR_FIELDS; ++i)
@@ -349,11 +343,10 @@ float CSQC_InputEvent(float bInputType, float nPrimary, float nSecondary)
 // BEGIN OPTIONAL CSQC FUNCTIONS
 void Ent_ReadEntCS()
 {
-	entity gps;
-	using_gps = true;
-
 	InterpolateOrigin_Undo();
 
+	self.classname = "entcs_receiver";
+	self.sv_entnum = ReadByte() - 1;
 	self.origin_x = ReadShort();
 	self.origin_y = ReadShort();
 	self.origin_z = ReadShort();
@@ -361,33 +354,10 @@ void Ent_ReadEntCS()
 	self.origin_z = self.angles_x = self.angles_z = 0;
 
 	InterpolateOrigin_Note();
-
-	for(gps = gps_start; gps; gps = gps.chain)
-	{
-		if(gps == self)
-			break;
-	}
-	if(!gps)
-	{
-		self.chain = gps_start;
-		gps_start = self;
-	}
 }
 
-void Ent_RemoveONS()
+void Ent_RemoveEntCS()
 {
-	if(gps_start == self)
-		gps_start = self.chain;
-	else
-	{
-		local entity ent;
-		ent = gps_start;
-			
-		while(ent.chain != self && ent.chain != world)
-			ent = ent.chain;
-		if(ent.chain == self)
-			ent.chain = self.chain;
-	}
 }
 
 void Ent_Remove();
@@ -494,7 +464,7 @@ void Ent_Nagger()
 // The only parameter reflects if the entity is "new" to the client, meaning it just came into the client's PVS.
 void(float bIsNewEntity) CSQC_Ent_Update =
 {
-	float msg, t;
+	float t;
 	t = ReadByte();
 #ifdef DP_CSQC_ENTITY_REMOVE_IS_B0RKED
 	if(self.enttype)
@@ -506,20 +476,7 @@ void(float bIsNewEntity) CSQC_Ent_Update =
 #endif
 	self.enttype = t;
 	if(self.enttype == ENT_CLIENT_ENTCS)
-	{
-		self.sv_entnum = ReadByte()-1;
-
-		for(msg = ReadByte(); msg != ENTCS_MSG_END; msg = ReadByte())
-		{
-			switch(msg)
-			{
-			case ENTCS_MSG_ONS_GPS: Ent_ReadEntCS(); break;
-			case ENTCS_MSG_ONS_REMOVE: Ent_RemoveONS(); break;
-			default:
-				error("unknown ENTCS_MSG type\n");
-			}
-		}
-	}
+		Ent_ReadEntCS();
 	else if(self.enttype == ENT_CLIENT_SCORES)
 		Ent_ReadPlayerScore();
 	else if(self.enttype == ENT_CLIENT_TEAMSCORES)
@@ -545,21 +502,7 @@ void Ent_Remove()
 {
 	if(self.enttype == ENT_CLIENT_ENTCS)
 	{
-		if(using_gps) //gametype == GAME_ONSLAUGHT)
-		{
-			if(gps_start == self)
-				gps_start = self.chain;
-			else
-			{
-				local entity ent;
-				ent = gps_start;
-			
-				while(ent.chain != self && ent.chain != world)
-					ent = ent.chain;
-				if(ent.chain == self)
-					ent.chain = self.chain;
-			}
-		}
+		Ent_RemoveEntCS();
 	} else if(self.enttype == ENT_CLIENT_SCORES)
 	{
 		if(self.owner)

@@ -13,102 +13,80 @@
 // it did when I added this) But you have to use .Version
 // Capital V
 
-entity entcs_start;
-.entity entcs_next;
+.entity entcs;
 
 void entcs_init()
 {
 	print("Initializing ClientSide information entities\n");
-	entcs_start = spawn();
-	entcs_start.solid = SOLID_NOT;
-	entcs_start.entcs_next = world;
 };
 
-entity get_entcs_ent()
+float entcs_customize()
 {
-	entity entcs;
-	entcs = spawn();
-	entcs.entcs_next = entcs_start.entcs_next;
-	entcs_start.entcs_next = entcs;
-	return entcs;
-};
-
-void entcs_ons(entity to)
-{
-	if(to == self.owner || self.team != to.team || self.owner.classname != "player" || to.classname != "player" || self.owner.deadflag != DEAD_NO)
-	{
-		WriteByte(MSG_ENTITY, ENTCS_MSG_ONS_REMOVE); // looks like a waste to me
-		return;
-	}
-	WriteByte(MSG_ENTITY, ENTCS_MSG_ONS_GPS);
-	WriteShort(MSG_ENTITY, self.owner.origin_x);
-	WriteShort(MSG_ENTITY, self.owner.origin_y);
-	WriteShort(MSG_ENTITY, self.owner.origin_z);
-	WriteByte(MSG_ENTITY, self.owner.angles_y * 256.0 / 360);
-}
-
-void entcs_common_self()
-{
+	entity o;
+	o = self.owner;
+	if(o.deadflag != DEAD_NO)
+		return FALSE;
+	if(o.classname != "player")
+		return FALSE;
+	if(other == o)
+		return FALSE;
+	if(other.classname == "player")
+		if(o.team != other.team)
+			return FALSE;
+	return TRUE;
 }
 
 float entcs_send(entity to)
 {
+	entity o;
+	o = self.owner;
 	WriteByte(MSG_ENTITY, ENT_CLIENT_ENTCS);
-	WriteByte(MSG_ENTITY, self.health); // serves as entitynumber
-
-	if(to == self.owner)
-	{
-		entcs_common_self();
-	}
-
-	if(teams_matter)
-		entcs_ons(to);
-
-	WriteByte(MSG_ENTITY, ENTCS_MSG_END);
+	WriteByte(MSG_ENTITY, num_for_edict(o));
+	WriteShort(MSG_ENTITY, o.origin_x);
+	WriteShort(MSG_ENTITY, o.origin_y);
+	WriteShort(MSG_ENTITY, o.origin_z);
+	WriteByte(MSG_ENTITY, o.angles_y * 256.0 / 360);
 	return TRUE;
 };
 
 void entcs_think()
 {
-	self.team = self.owner.team;
-	self.Version++;
-	setorigin(self, self.owner.origin);
 	self.nextthink = time;
+
+	entity o;
+	o = self.owner;
+
+	if(o.origin != self.origin || o.angles != self.angles)
+	{
+		self.origin = o.origin;
+		self.angles = o.angles;
+		self.SendFlags |= 1;
+	}
 };
 
 entity attach_entcs()
 {
-	local float num;
 	local entity ent;
 
-	num = num_for_edict(self);
-	ent = get_entcs_ent();
-
-	ent.classname = "entcs_sender";
-	ent.health = num;
-	setorigin(ent, self.origin);
+	ent = spawn();
+	ent.classname = "entcs_sender_v2";
 	ent.owner = self;
 	ent.think = entcs_think;
 	ent.nextthink = time;
 	ent.effects = EF_NODEPTHTEST | EF_LOWPRECISION;
 	ent.model = "entcs_sender";
 	ent.modelindex = 1;
-	setsize(ent, '0 0 0', '0 0 0');
 
 	ent.SendEntity = entcs_send;
+	ent.customizeentityforclient = entcs_customize;
+
+	self.entcs = ent;
+
 	return ent;
 };
 
 void detach_entcs()
 {
-	local float num;
-	local entity ent, n;
-	num = num_for_edict(self);
-	for(ent = entcs_start; ent.entcs_next.owner != self && ent.entcs_next != world; ent = ent.entcs_next);
-	if(ent.entcs_next != world && ent.entcs_next.owner == self)
-	{
-		n = ent.entcs_next.entcs_next;
-		remove(ent.entcs_next);
-		ent.entcs_next = n;
-	}
+	remove(self.entcs);
+	self.entcs = world;
 };

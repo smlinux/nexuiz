@@ -51,7 +51,8 @@ void() ons_view =
 		drawplayer(coord, input_angles, '1 1 1');
 
 		local entity tm;
-		for(tm = gps_start; tm != world; tm = tm.chain)
+		for(tm = world; (tm = find(tm, classname, "entcs_receiver")); )
+		if(GetPlayerColor(tm.sv_entnum) == color)
 		{
 			//print(strcat("GPS: ", ftos(tm.sv_entnum), " - ", vtos(tm.origin), "\n"));
 			drawplayer(mapcoords(tm.origin), tm.angles, rgb);

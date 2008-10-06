@@ -141,7 +141,7 @@ void teamradar_loadcvars()
 
 void() teamradar_view =
 {
-	local float color;
+	local float color, color2;
 	local vector rgb;
 	local entity tm;
 	float scale2d, normalsize, bigsize;
@@ -233,8 +233,12 @@ void() teamradar_view =
 	draw_teamradar_background(cl_teamradar_background_alpha);
 	for(tm = world; (tm = findflags(tm, teamradar_icon, 0xFFFFFF)); )
 		draw_teamradar_icon(tm.origin, tm.teamradar_icon, tm.teamradar_time, tm.teamradar_color, tm.alpha);
-	for(tm = gps_start; tm != world; tm = tm.chain)
-		draw_teamradar_player(tm.origin, tm.angles, rgb);
+	for(tm = world; (tm = find(tm, classname, "entcs_receiver")); )
+	{
+		color2 = GetPlayerColor(tm.sv_entnum);
+		//if(color == COLOR_SPECTATOR || color == color2)
+			draw_teamradar_player(tm.origin, tm.angles, GetTeamRGB(color2));
+	}
 	draw_teamradar_player(pmove_org, input_angles, '1 1 1');
 
 	drawresetcliparea();

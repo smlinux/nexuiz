@@ -1209,7 +1209,7 @@ void ClientConnect (void)
 		ctf_clientconnect();
 	}*/
 
-	if(entcs_start)
+	if(teams_matter)
 		attach_entcs();
 
 	bot_relinkplayerlist();
@@ -1279,7 +1279,7 @@ void ClientDisconnect (void)
 
 	bot_clientdisconnect();
 
-	if(entcs_start)
+	if(teams_matter)
 		detach_entcs();
 	
 	if(cvar("sv_eventlog"))
