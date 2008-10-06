@@ -43,7 +43,6 @@ float postinit;
 float gametype;
 entity gps_start;
 
-float draw_enginesbar;
 //float sorted_players;
 //float sorted_teams;
 

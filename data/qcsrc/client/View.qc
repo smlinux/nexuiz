@@ -273,8 +273,7 @@ void CSQC_UpdateView(void)
 	R_SetView(VF_DRAWCROSSHAIR, !scoreboard_active);
 	
 	// Draw the Engine Status Bar (the default Quake HUD)
-	draw_enginesbar = !cvar("sbar_usecsqc");
-	R_SetView(VF_DRAWENGINESBAR, draw_enginesbar);
+	R_SetView(VF_DRAWENGINESBAR, 0);
 
 	// Set the console size vars
 	vid_conwidth = cvar("vid_conwidth");
@@ -351,12 +350,9 @@ void CSQC_UpdateView(void)
 	}
 
 	// draw sbar
-	if(!draw_enginesbar)
-	{
-		if(cvar("r_letterbox") == 0)
-		if(cvar("viewsize") < 120)
-			CSQC_common_hud();
-	}
+	if(cvar("r_letterbox") == 0)
+	if(cvar("viewsize") < 120)
+		CSQC_common_hud();
 }
 
 void Sbar_Draw();

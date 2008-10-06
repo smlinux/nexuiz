@@ -89,7 +89,15 @@ void Draw_WaypointSprite()
 	switch(self.rule)
 	{
 		case SPRITERULE_DEFAULT:
-			spriteimage = self.netname;
+			if(self.team)
+			{
+				if(self.team == t)
+					spriteimage = self.netname;
+				else
+					spriteimage = "";
+			}
+			else
+				spriteimage = self.netname;
 			break;
 		case SPRITERULE_TEAMPLAY:
 			if(self.team == t)
