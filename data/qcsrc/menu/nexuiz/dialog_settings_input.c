@@ -62,6 +62,13 @@ void fillNexuizInputSettingsTab(entity me)
 	me.TR(me);
 		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "con_closeontoggleconsole", "\"enter console\" also closes"));
 	me.TR(me);
+		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Show binds:"));
+		me.TD(me, 1, 2, e = makeNexuizTextSlider("sbar_showbinds"));
+			e.addValue(e, "None", "0");
+			e.addValue(e, "Short", "1");
+			e.addValue(e, "Long", "2");
+			e.configureNexuizTextSliderValues(e);
+	me.TR(me);
 		if(cvar_type("vid_dgamouse") & CVAR_TYPEFLAG_ENGINE)
 			me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "vid_dgamouse", "Turn off OS mouse acceleration"));
 		else if(cvar_type("apple_mouse_noaccel") & CVAR_TYPEFLAG_ENGINE)

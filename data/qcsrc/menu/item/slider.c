@@ -56,9 +56,9 @@ void resizeNotifySlider(entity me, vector relOrigin, vector relSize, vector absO
 }
 string valueToTextSlider(entity me, float val)
 {
-	if(val < me.valueMin) return "";
-	if(val > me.valueMax) return "";
-	return ftos_decimals(val * me.valueDisplayMultiplier, me.valueDigits);
+	if(almost_in_bounds(me.valueMin, val, me.valueMax))
+		return ftos_decimals(val * me.valueDisplayMultiplier, me.valueDigits);
+	return "";
 }
 void configureSliderVisualsSlider(entity me, float sz, float theAlign, float theTextSpace, string gfx)
 {
@@ -205,7 +205,7 @@ void drawSlider(entity me)
 	if(me.disabled)
 		draw_alpha *= me.disabledAlpha;
 	draw_ButtonPicture('0 0 0', strcat(me.src, "_s"), eX * (1 - me.textSpace) + eY, me.color2, 1);
-	if(me.value == median(me.valueMin, me.value, me.valueMax))
+	if(almost_in_bounds(me.valueMin, me.value, me.valueMax))
 	{
 		controlLeft = (me.value - me.valueMin) / (me.valueMax - me.valueMin) * (1 - me.textSpace - me.controlWidth);
 		if(me.disabled)

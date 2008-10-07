@@ -96,3 +96,6 @@ void get_mi_min_max();
 #endif
 
 #define FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(x) void reference_##x() { x = x; }
+
+float almost_equals(float a, float b);
+float almost_in_bounds(float a, float b, float c);

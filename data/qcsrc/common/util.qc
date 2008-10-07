@@ -805,3 +805,17 @@ void cvar_settemp_restore()
 	cvar_set("settemp_list", "0");
 }
 #endif
+
+float almost_equals(float a, float b)
+{
+	float eps;
+	eps = (max(a, -a) + max(b, -b)) * 0.001;
+	if(a - b < eps && b - a < eps)
+		return TRUE;
+	return FALSE;
+}
+
+float almost_in_bounds(float a, float b, float c)
+{
+	return almost_equals(b, median(a, b, c));
+}

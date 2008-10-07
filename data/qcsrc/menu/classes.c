@@ -67,3 +67,4 @@
 #include "nexuiz/credits.c"
 #include "nexuiz/dialog_multiplayer_playersetup_weapons.c"
 #include "nexuiz/weaponslist.c"
+#include "nexuiz/dialog_multiplayer_playersetup_radar.c"

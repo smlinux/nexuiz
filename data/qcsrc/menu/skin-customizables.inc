@@ -48,6 +48,7 @@ SKINBEGIN
 	SKINVECTOR(COLOR_DIALOG_SINGLEPLAYER, '1 1 0.7');
 	SKINVECTOR(COLOR_DIALOG_CREDITS, '0.7 0.7 1');
 	SKINVECTOR(COLOR_DIALOG_WEAPONS, '1 0.7 0.7');
+	SKINVECTOR(COLOR_DIALOG_RADAR, '0.7 0.7 1');
 
 	// nexposee positions of windows (they are the scale transformation
 	// centers, NOT the actual positions of the windows!)

@@ -45,6 +45,7 @@ void drawrotpic(vector org, float rot, string pic, vector sz, vector hotspot, ve
 	v4 = hotspot                  + '0 1 0' * sz_y;
 
 	// rotate them, and make them absolute
+	rot = -rot; // rotate by the opposite angle, as our coordinate system is reversed
 	v1 = rotate(v1, rot) + org;
 	v2 = rotate(v2, rot) + org;
 	v3 = rotate(v3, rot) + org;
@@ -149,13 +150,13 @@ void Draw_WaypointSprite()
 			{
 				// RIGHT edge
 				d = d * (0.5 / f1);
-				rot = 1;
+				rot = 3;
 			}
 			else
 			{
 				// LEFT edge
 				d = d * (-0.5 / f1);
-				rot = 3;
+				rot = 1;
 			}
 		}
 		else
