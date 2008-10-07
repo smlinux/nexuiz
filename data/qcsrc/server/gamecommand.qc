@@ -98,7 +98,11 @@ void RoughMap_Think()
 			if(self.cnt >= 0)
 			{
 				print(self.netname, " already exists, aborting (you may want to specify --force)\n");
-				if(self.count & 2)
+				if(self.count & 4)
+				{
+					localcmd("quit\n");
+				}
+				else if(self.count & 2)
 				{
 					if(self.count & 1)
 						localcmd("defer 1 \"sv_cmd roughmap --force --loop\"\n");
@@ -107,6 +111,7 @@ void RoughMap_Think()
 					GotoNextMap();
 				}
 				remove(self);
+				roughmapper = world;
 				return;
 			}
 		}
@@ -156,7 +161,11 @@ void RoughMap_Think()
 		fputs(self.cnt, "};\n");
 		fclose(self.cnt);
 		print("Finished. Please edit data/", self.netname, " with an image editing application and place it in the TGA format in the gfx folder.\n");
-		if(self.count & 2)
+		if(self.count & 4)
+		{
+			localcmd("quit\n");
+		}
+		else if(self.count & 2)
 		{
 			if(self.count & 1)
 				localcmd("defer 1 \"sv_cmd roughmap --force --loop\"\n");
@@ -186,6 +195,8 @@ void RoughMap(float argc)
 			roughmapper.count |= 1;
 		if(argv(i) == "--loop")
 			roughmapper.count |= 2;
+		if(argv(i) == "--quit")
+			roughmapper.count |= 4;
 	}
 }
 
