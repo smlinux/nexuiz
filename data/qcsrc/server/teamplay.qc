@@ -173,6 +173,11 @@ void InitGameplayMode()
 	WriteGameCvars();
 
 	MapInfo_LoadMapSettings(mapname);
+	if(MapInfo_Map_mins_x < MapInfo_Map_maxs_x)
+	{
+		world.mins = MapInfo_Map_mins;
+		world.maxs = MapInfo_Map_maxs;
+	}
 	if not(cvar_value_issafe(world.fog))
 	{
 		print("The current map contains a potentially harmful fog setting, ignored\n");

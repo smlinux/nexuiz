@@ -567,7 +567,7 @@ float MapInfo_Get_ByName(string pFilename, float pAllowGenerate, float pGametype
 		fputs(fh, "// optional: fog density red green blue alpha mindist maxdist\n");
 		fputs(fh, "// optional: settemp_for_type (all|gametypename) cvarname value\n");
 		fputs(fh, "// optional: clientsettemp_for_type (all|gametypename) cvarname value\n");
-		fputs(fh, "// optional: size mins_x mins_y mins_z maxs_x maxs_y maxs_z (for team map)\n");
+		fputs(fh, "// optional: size mins_x mins_y mins_z maxs_x maxs_y maxs_z\n");
 
 		fclose(fh);
 		r = 2;
