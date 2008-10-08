@@ -1,3 +1,5 @@
+void objerror(string s);
+
 void() spawnfunc_info_player_deathmatch; // needed for the other spawnpoints
 void() spawnpoint_use;
 string ColoredTeamName(float t);
@@ -1218,6 +1220,44 @@ float ExactTriggerHit()
 .float initialize_entity_order;
 .entity initialize_entity_next;
 entity initialize_entity_first;
+
+void make_safe_for_remove(entity e)
+{
+	if(e.initialize_entity)
+	{
+		entity ent, prev;
+		for(ent = initialize_entity_first; ent; )
+		{
+			if((ent == e) || ((ent.classname == "initialize_entity") && (ent.enemy == e)))
+			{
+				print("make_safe_for_remove: getting rid of initializer ", etos(ent), "\n");
+				// skip it in linked list
+				if(prev)
+				{
+					prev.initialize_entity_next = ent.initialize_entity_next;
+					ent = prev.initialize_entity_next;
+				}
+				else
+				{
+					initialize_entity_first = ent.initialize_entity_next;
+					ent = initialize_entity_first;
+				}
+			}
+			else
+			{
+				prev = ent;
+				ent = ent.initialize_entity_next;
+			}
+		}
+	}
+}
+
+void objerror(string s)
+{
+	make_safe_for_remove(self);
+	objerror_builtin(s);
+}
+
 void InitializeEntity(entity e, void(void) func, float order)
 {
 	entity prev, cur;

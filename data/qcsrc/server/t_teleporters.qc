@@ -161,14 +161,14 @@ void spawnfunc_trigger_teleport (void)
 {
 	self.angles = '0 0 0';
 
+	EXACTTRIGGER_INIT;
+
+	// this must be called to spawn the teleport waypoints for bots
+	InitializeEntity(self, teleport_findtarget, INITPRIO_FINDTARGET);
+
 	if (!self.target)
 	{
 		objerror ("Teleporter with no target");
 		return;
 	}
-
-	EXACTTRIGGER_INIT;
-
-	// this must be called to spawn the teleport waypoints for bots
-	InitializeEntity(self, teleport_findtarget, INITPRIO_FINDTARGET);
 }
