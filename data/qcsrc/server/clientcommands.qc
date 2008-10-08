@@ -462,6 +462,8 @@ void ReadyRestart()
 	//reset the .ready status of all players (also spectators)
 	FOR_EACH_CLIENTSLOT(e)
 		e.ready = 0;
+	readycount = 0;
+	Nagger_ReadyCounted();
 	FOR_EACH_REALCLIENT(e)
 	{
 		msg_entity = e;
