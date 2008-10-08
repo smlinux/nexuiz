@@ -1620,7 +1620,7 @@ void CheckRules_World()
 		{
 			checkrules_overtimewarning = TRUE;
 			//announceall("announcer/robotic/1minuteremains.wav");
-			if(!g_race_qualifying)
+			if(g_race && !g_race_qualifying)
 				bcenterprint("^3Everyone, finish your lap! The race is over!");
 			else
 				bcenterprint("^3Now playing ^1OVERTIME^3!\n\n^3Keep fragging until we have a ^1winner^3!");
