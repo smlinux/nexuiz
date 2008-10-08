@@ -495,10 +495,12 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 		setsize (self, '-16 -16 0', '16 16 48');
 	else
 		setsize (self, '-16 -16 0', '16 16 32');
+
+	if (self.classname != "droppedweapon") // if dropped, colormap is already set up nicely
 	if (itemflags & FL_WEAPON)
 	{
 		// neutral team color for pickup weapons
-		self.colormap = 160 * 1024 + 160;
+		self.colormap = 1024; // color shirt=0 pants=0 grey
 	}
 
 	if (cvar("g_fullbrightitems"))
