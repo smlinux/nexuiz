@@ -344,6 +344,8 @@ void kh_Key_AssignTo(entity key, entity player)  // runs every time a key is pic
 		}
 		else
 		{
+			kh_interferemsg_time = 0;
+
 			// audit all key carrier sprites, update them to RUN HERE
 			FOR_EACH_KH_KEY(k)
 			{
@@ -452,8 +454,10 @@ float kh_Key_AllOwnedByWhichTeam()  // constantly called. check to see if all th
 {
 	entity key;
 	float teem;
+	float keys;
 
 	teem = -1;
+	keys = kh_teams;
 	FOR_EACH_KH_KEY(key)
 	{
 		if(!key.owner)
@@ -462,7 +466,10 @@ float kh_Key_AllOwnedByWhichTeam()  // constantly called. check to see if all th
 			teem = key.team;
 		else if(teem != key.team)
 			return -1;
+		--keys;
 	}
+	if(keys != 0)
+		return -1;
 	return teem;
 }
 
