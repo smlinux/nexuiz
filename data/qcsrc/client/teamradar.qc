@@ -55,7 +55,10 @@ void draw_teamradar_background(float a)
 	R_PolygonVertex('1 0 0' * (teamradar_origin2d_x - teamradar_size2d_x * 0.5) + '0 1 0' * (teamradar_origin2d_y + teamradar_size2d_y * 0.5), '0 0 0', '0 0 0', a);
 	R_EndPolygon();
 
-	R_BeginPolygon(minimapname, DRAWFLAG_ADDITIVE | DRAWFLAG_MIPMAP);
+	if(csqc_flags & CSQC_FLAG_READPICTURE) // not 2.4.2
+		R_BeginPolygon(minimapname, DRAWFLAG_ADDITIVE | DRAWFLAG_MIPMAP);
+	else
+		R_BeginPolygon(minimapname, DRAWFLAG_ADDITIVE);
 	R_PolygonVertex(teamradar_texcoord_to_2dcoord(mi_pictexcoord0), yinvert(mi_pictexcoord0), '1 1 1', 1);
 	R_PolygonVertex(teamradar_texcoord_to_2dcoord(mi_pictexcoord1), yinvert(mi_pictexcoord1), '1 1 1', 1);
 	R_PolygonVertex(teamradar_texcoord_to_2dcoord(mi_pictexcoord2), yinvert(mi_pictexcoord2), '1 1 1', 1);
