@@ -161,7 +161,12 @@ vector GetCurrentFov(float fov)
 		}
 	}
 
-	current_zoomfraction = (current_viewzoom - 1) / (1/zoomfactor - 1);
+	if(almost_equals(current_viewzoom, 1))
+		current_zoomfraction = 0;
+	else if(almost_equals(current_viewzoom, 1/zoomfactor))
+		current_zoomfraction = 1;
+	else
+		current_zoomfraction = (current_viewzoom - 1) / (1/zoomfactor - 1);
 
 	if(zoomsensitivity < 1)
 		setsensitivityscale(pow(current_viewzoom, 1 - zoomsensitivity));
