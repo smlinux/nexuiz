@@ -200,6 +200,83 @@ void RoughMap(float argc)
 	}
 }
 
+void BBox()
+{
+	print("Original size: ", ftos(world.absmin_x), " ", ftos(world.absmin_y), " ", ftos(world.absmin_z));
+	print(" ", ftos(world.absmax_x), " ", ftos(world.absmax_y), " ", ftos(world.absmax_z), "\n");
+	print("Currently set size: ", ftos(world.mins_x), " ", ftos(world.mins_y), " ", ftos(world.mins_z));
+	print(" ", ftos(world.maxs_x), " ", ftos(world.maxs_y), " ", ftos(world.maxs_z), "\n");
+	print("Solid bounding box size:");
+
+	tracebox('1 0 0' * world.absmin_x,
+	         '0 1 0' * world.absmin_y + '0 0 1' * world.absmin_z,
+	         '0 1 0' * world.absmax_y + '0 0 1' * world.absmax_z,
+	         '1 0 0' * world.absmax_x,
+			 MOVE_WORLDONLY,
+			 world);
+	if(trace_startsolid)
+		print(" ", ftos(world.absmin_x));
+	else
+		print(" ", ftos(trace_endpos_x));
+
+	tracebox('0 1 0' * world.absmin_y,
+	         '1 0 0' * world.absmin_x + '0 0 1' * world.absmin_z,
+	         '1 0 0' * world.absmax_x + '0 0 1' * world.absmax_z,
+	         '0 1 0' * world.absmax_y,
+			 MOVE_WORLDONLY,
+			 world);
+	if(trace_startsolid)
+		print(" ", ftos(world.absmin_y));
+	else
+		print(" ", ftos(trace_endpos_y));
+
+	tracebox('0 0 1' * world.absmin_z,
+	         '1 0 0' * world.absmin_x + '0 1 0' * world.absmin_y,
+	         '1 0 0' * world.absmax_x + '0 1 0' * world.absmax_y,
+	         '0 0 1' * world.absmax_z,
+			 MOVE_WORLDONLY,
+			 world);
+	if(trace_startsolid)
+		print(" ", ftos(world.absmin_z));
+	else
+		print(" ", ftos(trace_endpos_z));
+
+	tracebox('1 0 0' * world.absmax_x,
+	         '0 1 0' * world.absmin_y + '0 0 1' * world.absmin_z,
+	         '0 1 0' * world.absmax_y + '0 0 1' * world.absmax_z,
+	         '1 0 0' * world.absmin_x,
+			 MOVE_WORLDONLY,
+			 world);
+	if(trace_startsolid)
+		print(" ", ftos(world.absmax_x));
+	else
+		print(" ", ftos(trace_endpos_x));
+
+	tracebox('0 1 0' * world.absmax_y,
+	         '1 0 0' * world.absmin_x + '0 0 1' * world.absmin_z,
+	         '1 0 0' * world.absmax_x + '0 0 1' * world.absmax_z,
+	         '0 1 0' * world.absmin_y,
+			 MOVE_WORLDONLY,
+			 world);
+	if(trace_startsolid)
+		print(" ", ftos(world.absmax_y));
+	else
+		print(" ", ftos(trace_endpos_y));
+
+	tracebox('0 0 1' * world.absmax_z,
+	         '1 0 0' * world.absmin_x + '0 1 0' * world.absmin_y,
+	         '1 0 0' * world.absmax_x + '0 1 0' * world.absmax_y,
+	         '0 0 1' * world.absmin_z,
+			 MOVE_WORLDONLY,
+			 world);
+	if(trace_startsolid)
+		print(" ", ftos(world.absmax_z));
+	else
+		print(" ", ftos(trace_endpos_z));
+
+	print("\n");
+}
+
 void EffectIndexDump()
 {
 	float d;
@@ -300,6 +377,7 @@ void GameCommand(string command)
 		print("  allready\n");
 		print("  effectindexdump\n");
 		print("  roughmap\n");
+		print("  bbox\n");
 		GameCommand_Vote("help", world);
 		GameCommand_Ban("help");
 		GameCommand_Generic("help");
@@ -485,6 +563,11 @@ void GameCommand(string command)
 	if (argv(0) == "roughmap")
 	{
 		RoughMap(argc);
+		return;
+	}
+	if (argv(0) == "bbox")
+	{
+		BBox();
 		return;
 	}
 	if (argv(0) == "cvar_changes")
