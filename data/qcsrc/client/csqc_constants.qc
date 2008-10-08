@@ -177,3 +177,9 @@ const float DRAWFLAG_MIPMAP = 0x100; // only for R_BeginPolygon
 #define        SOLID_SLIDEBOX                  3               // touch on edge, but not an onground
 #define        SOLID_BSP                               4               // bsp clip, touch on edge, block
 #define        SOLID_CORPSE                    5               // same as SOLID_BBOX, except it behaves as SOLID_NOT against SOLID_SLIDEBOX objects (players/monsters)
+
+float MOVE_NORMAL = 0; // same as FALSE
+float MOVE_NOMONSTERS = 1; // same as TRUE
+float MOVE_MISSILE = 2; // save as movement with .movetype == MOVETYPE_FLYMISSILE
+float MOVE_HITMODEL = 4;
+float MOVE_WORLDONLY = 3;

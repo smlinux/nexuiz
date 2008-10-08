@@ -713,9 +713,9 @@ float cvar_value_issafe(string s)
 }
 
 #ifndef MENUQC
-void get_mi_min_max()
+void get_mi_min_max(float mode)
 {
-	vector extend;
+	vector mi, ma;
 
 	if(mi_shortname)
 		strunzone(mi_shortname);
@@ -726,14 +726,90 @@ void get_mi_min_max()
 		mi_shortname = substring(mi_shortname, 0, strlen(mi_shortname) - 4);
 	mi_shortname = strzone(mi_shortname);
 
-	mi_min = world.mins;
-	mi_max = world.maxs;
+#ifdef CSQC
+	mi = world.mins;
+	ma = world.maxs;
+#else
+	mi = world.absmin;
+	ma = world.absmax;
+#endif
+
+	mi_min = mi;
+	mi_max = ma;
 	MapInfo_Get_ByName(mi_shortname, 0, 0);
 	if(MapInfo_Map_mins_x < MapInfo_Map_maxs_x)
 	{
 		mi_min = MapInfo_Map_mins;
 		mi_max = MapInfo_Map_maxs;
 	}
+	else
+	{
+		// not specified
+		if(mode)
+		{
+			// be clever
+			tracebox('1 0 0' * mi_x,
+					 '0 1 0' * mi_y + '0 0 1' * mi_z,
+					 '0 1 0' * ma_y + '0 0 1' * ma_z,
+					 '1 0 0' * ma_x,
+					 MOVE_WORLDONLY,
+					 world);
+			if(!trace_startsolid)
+				mi_min_x = trace_endpos_x;
+
+			tracebox('0 1 0' * mi_y,
+					 '1 0 0' * mi_x + '0 0 1' * mi_z,
+					 '1 0 0' * ma_x + '0 0 1' * ma_z,
+					 '0 1 0' * ma_y,
+					 MOVE_WORLDONLY,
+					 world);
+			if(!trace_startsolid)
+				mi_min_y = trace_endpos_y;
+
+			tracebox('0 0 1' * mi_z,
+					 '1 0 0' * mi_x + '0 1 0' * mi_y,
+					 '1 0 0' * ma_x + '0 1 0' * ma_y,
+					 '0 0 1' * ma_z,
+					 MOVE_WORLDONLY,
+					 world);
+			if(!trace_startsolid)
+				mi_min_z = trace_endpos_z;
+
+			tracebox('1 0 0' * ma_x,
+					 '0 1 0' * mi_y + '0 0 1' * mi_z,
+					 '0 1 0' * ma_y + '0 0 1' * ma_z,
+					 '1 0 0' * mi_x,
+					 MOVE_WORLDONLY,
+					 world);
+			if(!trace_startsolid)
+				mi_max_x = trace_endpos_x;
+
+			tracebox('0 1 0' * ma_y,
+					 '1 0 0' * mi_x + '0 0 1' * mi_z,
+					 '1 0 0' * ma_x + '0 0 1' * ma_z,
+					 '0 1 0' * mi_y,
+					 MOVE_WORLDONLY,
+					 world);
+			if(!trace_startsolid)
+				mi_max_y = trace_endpos_y;
+
+			tracebox('0 0 1' * ma_z,
+					 '1 0 0' * mi_x + '0 1 0' * mi_y,
+					 '1 0 0' * ma_x + '0 1 0' * ma_y,
+					 '0 0 1' * mi_z,
+					 MOVE_WORLDONLY,
+					 world);
+			if(!trace_startsolid)
+				mi_max_z = trace_endpos_z;
+		}
+	}
+}
+
+void get_mi_min_max_texcoords(float mode)
+{
+	vector extend;
+
+	get_mi_min_max(mode);
 
 	mi_picmin = mi_min;
 	mi_picmax = mi_max;

@@ -542,17 +542,23 @@ void CSQC_Ent_Remove()
 
 void Gamemode_Init()
 {
-	get_mi_min_max();
-	mi_center = (mi_min + mi_max) * 0.5;
-	mi_scale = mi_max - mi_min;
-	minimapname = strzone(strcat("gfx/", mi_shortname, "_mini.tga"));
+	get_mi_min_max_texcoords(1); // try the CLEVER way first
+	minimapname = strcat("gfx/", mi_shortname, "_radar.tga");
 	shortmapname = mi_shortname;
 
 	if(precache_pic(minimapname) == "")
 	{
-		strunzone(minimapname);
-		minimapname = ""; // FAIL
+		// but maybe we have a non-clever minimap
+		minimapname = strcat("gfx/", mi_shortname, "_mini.tga");
+		if(precache_pic(minimapname) == "")
+			minimapname = ""; // FAIL
+		else
+			get_mi_min_max_texcoords(0); // load new texcoords
 	}
+
+	mi_center = (mi_min + mi_max) * 0.5;
+	mi_scale = mi_max - mi_min;
+	minimapname = strzone(minimapname);
 
 	if(gametype == GAME_ONSLAUGHT) {
 		print(strcat("Using ", minimapname, " as minimap.\n"));
