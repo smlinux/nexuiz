@@ -47,13 +47,13 @@ float RadarMapAtPoint(float x, float y, float w, float h, float zmin, float zsiz
 	ma = '1 0 0' * w + '0 1 0' * h + dz;
 	o = '1 0 0' * x + '0 1 0' * y + '0 0 1' * zmin;
 
-	if(x < world.mins_x - w)
+	if(x < world.absmin_x - w)
 		return 0;
-	if(y < world.mins_y - h)
+	if(y < world.absmin_y - h)
 		return 0;
-	if(x > world.maxs_x)
+	if(x > world.absmax_x)
 		return 0;
-	if(y > world.maxs_y)
+	if(y > world.absmax_y)
 		return 0;
 	
 	r = 0;
