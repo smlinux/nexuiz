@@ -471,7 +471,7 @@ void GameCommand(string command)
 		print("  loaddb filename\n");
 		print("  allready\n");
 		print("  effectindexdump\n");
-		print("  radarmap\n");
+		print("  radarmap [--force] [--quit | --loop] [sharpness]\n");
 		print("  bbox\n");
 		GameCommand_Vote("help", world);
 		GameCommand_Ban("help");
