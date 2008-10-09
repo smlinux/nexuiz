@@ -208,6 +208,8 @@ void spawnfunc_worldspawn (void)
 		error("world already spawned - you may have EXACTLY ONE worldspawn!");
 	world_already_spawned = TRUE;
 
+	remove = remove_safely; // during spawning, watch what you remove!
+
 	compressShortVector_init();
 
 	local entity head;

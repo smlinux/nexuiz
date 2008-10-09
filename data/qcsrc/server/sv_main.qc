@@ -133,6 +133,8 @@ float RedirectionThink();
 entity SelectSpawnPoint (float anypoint);
 void StartFrame (void)
 {
+	remove = remove_builtin; // not during spawning!
+
 	dprint_load(); // load dprint status from cvar
 
 	if(RedirectionThink())

@@ -1,3 +1,4 @@
+var void remove(entity e);
 void objerror(string s);
 void droptofloor();
 .vector dropped_origin;
@@ -1261,6 +1262,12 @@ void objerror(string s)
 	objerror_builtin(s);
 }
 
+void remove_safely(entity e)
+{
+	make_safe_for_remove(e);
+	remove_builtin(e);
+}
+
 void InitializeEntity(entity e, void(void) func, float order)
 {
 	entity prev, cur;
@@ -1310,7 +1317,7 @@ void InitializeEntitiesRun()
 		{
 			entity e_old;
 			e_old = self.enemy;
-			remove(self);
+			remove_builtin(self);
 			self = e_old;
 		}
 		dprint("Delayed initialization: ", self.classname, "\n");

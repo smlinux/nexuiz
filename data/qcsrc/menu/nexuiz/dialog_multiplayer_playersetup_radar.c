@@ -6,7 +6,7 @@ CLASS(NexuizRadarDialog) EXTENDS(NexuizDialog)
 	ATTRIB(NexuizRadarDialog, title, string, "Radar & Waypoints")
 	ATTRIB(NexuizRadarDialog, color, vector, SKINCOLOR_DIALOG_RADAR)
 	ATTRIB(NexuizRadarDialog, intendedWidth, float, 0.7)
-	ATTRIB(NexuizRadarDialog, rows, float, 17)
+	ATTRIB(NexuizRadarDialog, rows, float, 18)
 	ATTRIB(NexuizRadarDialog, columns, float, 4)
 ENDCLASS(NexuizRadarDialog)
 #endif
@@ -83,6 +83,10 @@ void fillNexuizRadarDialog(entity me)
 		me.TDempty(me, 2);
 		me.TD(me, 1, 1, e = makeNexuizRadioButton(1, "cl_teamradar_rotation", "2", "South"));
 		me.TDempty(me, 1);
+	me.TR(me);
+		me.TDempty(me, 0.2);
+		me.TD(me, 1, 0.8, e = makeNexuizTextLabel(0, "Foreground:"));
+		me.TD(me, 1, 3, makeNexuizSlider(0.1, 1.0, 0.01, "cl_teamradar_foreground_alpha"));
 	me.TR(me);
 		me.TDempty(me, 0.2);
 		sl = makeNexuizSlider(0.1, 1.0, 0.01, "cl_teamradar_background_alpha");

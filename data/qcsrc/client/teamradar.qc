@@ -43,27 +43,30 @@ vector yinvert(vector v)
 	return v;
 }
 
-void draw_teamradar_background(float a)
+void draw_teamradar_background(float fg, float bg)
 {
-	if(a <= 0)
-		return;
+	if(bg > 0)
+	{
+		R_BeginPolygon("", 0);
+		R_PolygonVertex('1 0 0' * (teamradar_origin2d_x - teamradar_size2d_x * 0.5) + '0 1 0' * (teamradar_origin2d_y - teamradar_size2d_y * 0.5), '0 0 0', '0 0 0', bg);
+		R_PolygonVertex('1 0 0' * (teamradar_origin2d_x + teamradar_size2d_x * 0.5) + '0 1 0' * (teamradar_origin2d_y - teamradar_size2d_y * 0.5), '0 0 0', '0 0 0', bg);
+		R_PolygonVertex('1 0 0' * (teamradar_origin2d_x + teamradar_size2d_x * 0.5) + '0 1 0' * (teamradar_origin2d_y + teamradar_size2d_y * 0.5), '0 0 0', '0 0 0', bg);
+		R_PolygonVertex('1 0 0' * (teamradar_origin2d_x - teamradar_size2d_x * 0.5) + '0 1 0' * (teamradar_origin2d_y + teamradar_size2d_y * 0.5), '0 0 0', '0 0 0', bg);
+		R_EndPolygon();
+	}
 
-	R_BeginPolygon("", 0);
-	R_PolygonVertex('1 0 0' * (teamradar_origin2d_x - teamradar_size2d_x * 0.5) + '0 1 0' * (teamradar_origin2d_y - teamradar_size2d_y * 0.5), '0 0 0', '0 0 0', a);
-	R_PolygonVertex('1 0 0' * (teamradar_origin2d_x + teamradar_size2d_x * 0.5) + '0 1 0' * (teamradar_origin2d_y - teamradar_size2d_y * 0.5), '0 0 0', '0 0 0', a);
-	R_PolygonVertex('1 0 0' * (teamradar_origin2d_x + teamradar_size2d_x * 0.5) + '0 1 0' * (teamradar_origin2d_y + teamradar_size2d_y * 0.5), '0 0 0', '0 0 0', a);
-	R_PolygonVertex('1 0 0' * (teamradar_origin2d_x - teamradar_size2d_x * 0.5) + '0 1 0' * (teamradar_origin2d_y + teamradar_size2d_y * 0.5), '0 0 0', '0 0 0', a);
-	R_EndPolygon();
-
-	if(csqc_flags & CSQC_FLAG_READPICTURE) // not 2.4.2
-		R_BeginPolygon(minimapname, DRAWFLAG_ADDITIVE | DRAWFLAG_MIPMAP);
-	else
-		R_BeginPolygon(minimapname, DRAWFLAG_ADDITIVE);
-	R_PolygonVertex(teamradar_texcoord_to_2dcoord(mi_pictexcoord0), yinvert(mi_pictexcoord0), '1 1 1', 1);
-	R_PolygonVertex(teamradar_texcoord_to_2dcoord(mi_pictexcoord1), yinvert(mi_pictexcoord1), '1 1 1', 1);
-	R_PolygonVertex(teamradar_texcoord_to_2dcoord(mi_pictexcoord2), yinvert(mi_pictexcoord2), '1 1 1', 1);
-	R_PolygonVertex(teamradar_texcoord_to_2dcoord(mi_pictexcoord3), yinvert(mi_pictexcoord3), '1 1 1', 1);
-	R_EndPolygon();
+	if(fg > 0)
+	{
+		if(csqc_flags & CSQC_FLAG_READPICTURE) // not 2.4.2
+			R_BeginPolygon(minimapname, DRAWFLAG_ADDITIVE | DRAWFLAG_MIPMAP);
+		else
+			R_BeginPolygon(minimapname, DRAWFLAG_ADDITIVE);
+		R_PolygonVertex(teamradar_texcoord_to_2dcoord(mi_pictexcoord0), yinvert(mi_pictexcoord0), '1 1 1', fg);
+		R_PolygonVertex(teamradar_texcoord_to_2dcoord(mi_pictexcoord1), yinvert(mi_pictexcoord1), '1 1 1', fg);
+		R_PolygonVertex(teamradar_texcoord_to_2dcoord(mi_pictexcoord2), yinvert(mi_pictexcoord2), '1 1 1', fg);
+		R_PolygonVertex(teamradar_texcoord_to_2dcoord(mi_pictexcoord3), yinvert(mi_pictexcoord3), '1 1 1', fg);
+		R_EndPolygon();
+	}
 }
 
 void(vector coord3d, vector pangles, vector rgb) draw_teamradar_player =
@@ -118,6 +121,7 @@ void draw_teamradar_icon(vector coord, float icon, float pingtime, vector rgb, f
 
 float cl_teamradar_scale;
 float cl_teamradar_background_alpha;
+float cl_teamradar_foreground_alpha;
 float cl_teamradar_rotation;
 vector cl_teamradar_size;
 vector cl_teamradar_position;
@@ -127,6 +131,7 @@ void teamradar_loadcvars()
 {
 	cl_teamradar_scale = cvar("cl_teamradar_scale");
 	cl_teamradar_background_alpha = cvar("cl_teamradar_background_alpha");
+	cl_teamradar_foreground_alpha = cvar("cl_teamradar_background_alpha");
 	cl_teamradar_rotation = cvar("cl_teamradar_rotation");
 	cl_teamradar_size = stov(cvar_string("cl_teamradar_size"));
 	cl_teamradar_position = stov(cvar_string("cl_teamradar_position"));
@@ -136,6 +141,7 @@ void teamradar_loadcvars()
 	// match this to defaultNexuiz.cfg!
 	if(!cl_teamradar_scale) cl_teamradar_scale = 4096;
 	if(!cl_teamradar_background_alpha) cl_teamradar_background_alpha = 0.25;
+	if(!cl_teamradar_foreground_alpha) cl_teamradar_background_alpha = 1;
 	if(!cl_teamradar_size_x) cl_teamradar_size_x = 128;
 	if(!cl_teamradar_size_y) cl_teamradar_size_y = cl_teamradar_size_x;
 
@@ -234,7 +240,7 @@ void() teamradar_view =
 		teamradar_size2d_y
 	);
 
-	draw_teamradar_background(cl_teamradar_background_alpha);
+	draw_teamradar_background(cl_teamradar_background_alpha, cl_teamradar_foreground_alpha);
 	for(tm = world; (tm = findflags(tm, teamradar_icon, 0xFFFFFF)); )
 		draw_teamradar_icon(tm.origin, tm.teamradar_icon, tm.teamradar_time, tm.teamradar_color, tm.alpha);
 	for(tm = world; (tm = find(tm, classname, "entcs_receiver")); )
