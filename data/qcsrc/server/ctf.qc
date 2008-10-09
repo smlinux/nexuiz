@@ -543,7 +543,7 @@ void spawnfunc_item_flag_team1()
 	precache_sound (self.noise2);
 	precache_sound (self.noise3);
 	//setsize(self, '-16 -16 -37', '16 16 37');
-	setsize(self, PL_MIN, PL_MAX);
+	setsize(self, PL_MIN + '0 0 -13', PL_MAX + '0 0 -13');
 	setorigin(self, self.origin + '0 0 37');
 	self.nextthink = time + 0.2; // start after doors etc
 	self.think = place_flag;
@@ -629,7 +629,7 @@ void spawnfunc_item_flag_team2()
 	precache_sound (self.noise2);
 	precache_sound (self.noise3);
 	//setsize(self, '-16 -16 -37', '16 16 37');
-	setsize(self, PL_MIN, PL_MAX);
+	setsize(self, PL_MIN + '0 0 -13', PL_MAX + '0 0 -13');
 	setorigin(self, self.origin + '0 0 37');
 	self.nextthink = time + 0.2; // start after doors etc
 	self.think = place_flag;
