@@ -39,8 +39,8 @@ void spawnfunc_runematch_spawn_point()
 		return;
 	}
 
+	setsize(self, '0 0 -35', '0 0 0');
 	droptofloor();
-	setorigin(self, self.origin + '0 0 35');
 }
 
 string RuneName(float r)

@@ -1,4 +1,6 @@
 void objerror(string s);
+void droptofloor();
+.vector dropped_origin;
 
 void() spawnfunc_info_player_deathmatch; // needed for the other spawnpoints
 void() spawnpoint_use;
@@ -1212,6 +1214,7 @@ float ExactTriggerHit()
 #define INITPRIO_GAMETYPE_FALLBACK  1
 #define INITPRIO_CVARS              5
 #define INITPRIO_FINDTARGET        10
+#define INITPRIO_DROPTOFLOOR       20
 #define INITPRIO_SETLOCATION       90
 #define INITPRIO_LINKDOORS         91
 #define INITPRIO_LAST              99
@@ -1537,4 +1540,16 @@ void adaptor_think2use()
 	self.use();
 	other = o;
 	activator = a;
+}
+
+// deferred dropping
+void DropToFloor_Handler()
+{
+	droptofloor_builtin();
+	self.dropped_origin = self.origin;
+}
+
+void droptofloor()
+{
+	InitializeEntity(self, DropToFloor_Handler, INITPRIO_DROPTOFLOOR);
 }

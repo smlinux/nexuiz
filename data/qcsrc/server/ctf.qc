@@ -51,17 +51,15 @@ void place_flag()
 	self.mangle = self.angles;
 	self.dphitcontentsmask = DPCONTENTS_SOLID | DPCONTENTS_BODY | DPCONTENTS_PLAYERCLIP;
 	//self.effects = self.effects | EF_DIMLIGHT;
-	if(!self.noalign)
+	if(self.noalign)
 	{
-		self.movetype = MOVETYPE_TOSS;
-		if (!droptofloor())
-		{
-			dprint("Flag fell out of level at ", vtos(self.origin), "\n");
-			remove(self);
-			return;
-		}
+		self.dropped_origin = self.origin;
 	}
-	self.oldorigin = self.origin;
+	else
+	{
+		droptofloor();
+		self.movetype = MOVETYPE_TOSS;
+	}
 };
 
 void LogCTF(string mode, float flagteam, entity actor)
@@ -85,7 +83,7 @@ void RegenFlag(entity e)
 		e.movetype = MOVETYPE_TOSS;
 	e.solid = SOLID_TRIGGER;
 	// TODO: play a sound here
-	setorigin(e, e.oldorigin);
+	setorigin(e, e.dropped_origin);
 	e.angles = e.mangle;
 	e.cnt = FLAG_BASE;
 	e.owner = world;
@@ -556,8 +554,6 @@ void spawnfunc_item_flag_team1()
 	self.effects = self.effects | EF_LOWPRECISION;
 	if(cvar("g_ctf_fullbrightflags"))
 		self.effects |= EF_FULLBRIGHT;
-	if(!self.noalign)
-		droptofloor();
 
 	waypoint_spawnforitem(self);
 
@@ -642,8 +638,6 @@ void spawnfunc_item_flag_team2()
 	self.effects = self.effects | EF_LOWPRECISION;
 	if(cvar("g_ctf_fullbrightflags"))
 		self.effects |= EF_FULLBRIGHT;
-	if(!self.noalign)
-		droptofloor();
 
 	waypoint_spawnforitem(self);
 
