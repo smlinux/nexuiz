@@ -20,7 +20,7 @@ void W_Crylink_Touch (void)
 		f = cvar("g_balance_crylink_primary_bouncedamagefactor");
 	if(self.alpha)
 		f *= self.alpha;
-	RadiusDamage (self, self.realowner, cvar("g_balance_crylink_primary_damage") * f, cvar("g_balance_crylink_primary_edgedamage") * f, cvar("g_balance_crylink_primary_radius"), world, cvar("g_balance_crylink_primary_force") * f, WEP_CRYLINK);
+	RadiusDamage (self, self.realowner, cvar("g_balance_crylink_primary_damage") * f, cvar("g_balance_crylink_primary_edgedamage") * f, cvar("g_balance_crylink_primary_radius"), world, cvar("g_balance_crylink_primary_force") * f, self.projectiledeathtype, other);
 	if (finalhit)
 	{
 		remove (self);
@@ -29,6 +29,7 @@ void W_Crylink_Touch (void)
 	self.cnt = self.cnt - 1;
 	self.angles = vectoangles(self.velocity);
 	self.owner = world;
+	self.projectiledeathtype |= HITTYPE_BOUNCE;
 	//self.scale = 1 + self.cnt;
 }
 
@@ -49,7 +50,7 @@ void W_Crylink_Touch2 (void)
 		f = cvar("g_balance_crylink_secondary_bouncedamagefactor");
 	if(self.alpha)
 		f *= self.alpha;
-	RadiusDamage (self, self.realowner, cvar("g_balance_crylink_secondary_damage") * f, cvar("g_balance_crylink_secondary_edgedamage") * f, cvar("g_balance_crylink_secondary_radius"), world, cvar("g_balance_crylink_secondary_force") * f, WEP_CRYLINK);
+	RadiusDamage (self, self.realowner, cvar("g_balance_crylink_secondary_damage") * f, cvar("g_balance_crylink_secondary_edgedamage") * f, cvar("g_balance_crylink_secondary_radius"), world, cvar("g_balance_crylink_secondary_force") * f, self.projectiledeathtype, other);
 	if (finalhit)
 	{
 		remove (self);
@@ -58,6 +59,7 @@ void W_Crylink_Touch2 (void)
 	self.cnt = self.cnt - 1;
 	self.angles = vectoangles(self.velocity);
 	self.owner = world;
+	self.projectiledeathtype |= HITTYPE_BOUNCE;
 //	self.scale = 1 + 1 * self.cnt;
 }
 
@@ -84,6 +86,7 @@ void W_Crylink_Attack (void)
 
 		proj.movetype = MOVETYPE_BOUNCEMISSILE;
 		proj.solid = SOLID_BBOX;
+		proj.projectiledeathtype = WEP_CRYLINK;
 		//proj.gravity = 0.001;
 
 		setmodel (proj, "models/plasmatrail.mdl"); // precision set below
@@ -148,6 +151,7 @@ void W_Crylink_Attack2 (void)
 
 		proj.movetype = MOVETYPE_BOUNCEMISSILE;
 		proj.solid = SOLID_BBOX;
+		proj.projectiledeathtype = WEP_CRYLINK | HITTYPE_SECONDARY;
 		//proj.gravity = 0.001;
 
 		setmodel (proj, "models/plasmatrail.mdl"); // precision set below
@@ -191,7 +195,7 @@ void W_Crylink_Attack3 (void)
 	trailparticles(world, particleeffectnum("lightning_beam", w_shotorg, trace_endpos);
 
 	if (trace_fraction < 1)
-		Damage(trace_ent, self, self, cvar("g_balance_crylink_primary_damage"), WEP_CRYLINK, trace_endpos, '0 0 0');
+		Damage(trace_ent, self, self, cvar("g_balance_crylink_primary_damage"), WEP_CRYLINK | HITTYPE_SECONDARY, trace_endpos, '0 0 0');
 }
 */
 
@@ -239,7 +243,18 @@ float w_crylink(float req)
 		return self.ammo_cells >= cvar("g_balance_crylink_primary_ammo");
 	else if (req == WR_CHECKAMMO2)
 		return self.ammo_cells >= cvar("g_balance_crylink_secondary_ammo");
-	// else if (req == WR_SUICIDEMESSAGE) // TODO
-	// else if (req == WR_KILLMESSAGE) // TODO
+	else if (req == WR_SUICIDEMESSAGE)
+	{
+		w_deathtypestring = "succeeded at self-destructing himself with the Crylink";
+	}
+	else if (req == WR_KILLMESSAGE)
+	{
+		if(w_deathtype & HITTYPE_BOUNCE)
+			w_deathtypestring = "could not hide from #'s Crylink"; // unchecked: SPLASH (SECONDARY can't be)
+		else if(w_deathtype & HITTYPE_SPLASH)
+			w_deathtypestring = "was too close to #'s Crylink"; // unchecked: SECONDARY
+		else
+			w_deathtypestring = "took a close look at #'s Crylink"; // unchecked: SECONDARY
+	}
 	return TRUE;
 };

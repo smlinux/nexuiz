@@ -11,7 +11,7 @@ void W_Uzi_Flash_Go() {
 };
 
 .float uzi_bulletcounter;
-void W_Uzi_Attack (void)
+void W_Uzi_Attack (float deathtype)
 {
 	local entity flash, flash2;
 
@@ -34,9 +34,9 @@ void W_Uzi_Attack (void)
 	ATTACK_FINISHED(self) = time + cvar("g_balance_uzi_first_refire");
 
 	if (self.uzi_bulletcounter == 1)
-		fireBullet (w_shotorg, w_shotdir, cvar("g_balance_uzi_first_spread"), cvar("g_balance_uzi_first_damage"), cvar("g_balance_uzi_first_force"), WEP_UZI, TRUE);
+		fireBullet (w_shotorg, w_shotdir, cvar("g_balance_uzi_first_spread"), cvar("g_balance_uzi_first_damage"), cvar("g_balance_uzi_first_force"), deathtype, TRUE);
 	else
-		fireBullet (w_shotorg, w_shotdir, cvar("g_balance_uzi_sustained_spread"), cvar("g_balance_uzi_sustained_damage"), cvar("g_balance_uzi_sustained_force"), WEP_UZI, (self.uzi_bulletcounter & 3) == 0);
+		fireBullet (w_shotorg, w_shotdir, cvar("g_balance_uzi_sustained_spread"), cvar("g_balance_uzi_sustained_damage"), cvar("g_balance_uzi_sustained_force"), deathtype, (self.uzi_bulletcounter & 3) == 0);
 
 	pointparticles(particleeffectnum("uzi_muzzleflash"), w_shotorg, w_shotdir * 1000, 1);
 
@@ -91,7 +91,7 @@ void uzi_fire1_02()
 		}
 		ATTACK_FINISHED(self) = time + cvar("g_balance_uzi_refire");
 		self.uzi_bulletcounter = self.uzi_bulletcounter + 1;
-		W_Uzi_Attack();
+		W_Uzi_Attack(WEP_UZI);
 		weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_uzi_sustained_refire"), uzi_fire1_02);
 	}
 	else
@@ -115,14 +115,14 @@ float w_uzi(float req)
 		if (weapon_prepareattack(0, cvar("g_balance_uzi_refire")))
 		{
 			self.uzi_bulletcounter = 1;
-			W_Uzi_Attack();
+			W_Uzi_Attack(WEP_UZI);
 			weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_uzi_sustained_refire"), uzi_fire1_02);
 		}
 		if (self.BUTTON_ATCK2)
 		if (weapon_prepareattack(1, cvar("g_balance_uzi_refire")))
 		{
 			self.uzi_bulletcounter = 1;
-			W_Uzi_Attack();
+			W_Uzi_Attack(WEP_UZI | HITTYPE_SECONDARY);
 			weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_uzi_sustained_refire"), w_ready);
 		}
 	}
@@ -150,6 +150,11 @@ float w_uzi(float req)
 	else if (req == WR_SUICIDEMESSAGE)
 		w_deathtypestring = "did the impossible";
 	else if (req == WR_KILLMESSAGE)
-		w_deathtypestring = "was riddled full of holes by";
+	{
+		if(w_deathtype & HITTYPE_SECONDARY)
+			w_deathtypestring = "was sniped by";
+		else
+			w_deathtypestring = "was riddled full of holes by";
+	}
 	return TRUE;
 };

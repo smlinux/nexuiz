@@ -274,6 +274,6 @@ float w_porto(float req)
 	else if (req == WR_SUICIDEMESSAGE)
 		w_deathtypestring = "did the impossible";
 	else if (req == WR_KILLMESSAGE)
-		w_deathtypestring = "felt # doing the impossible";
+		w_deathtypestring = "felt # doing the impossible to him";
 	return TRUE;
 };

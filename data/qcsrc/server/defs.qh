@@ -208,12 +208,13 @@ float WR_CHECKAMMO1	    = 3; // checks ammo for weapon
 float WR_CHECKAMMO2	    = 4; // checks ammo for weapon
 float WR_AIM		    = 5; // runs bot aiming code for this weapon
 float WR_PRECACHE	    = 6; // precaches models/sounds used by this weapon
-float WR_SUICIDEMESSAGE = 7; // sets w_deathtypestring or leaves it alone
+float WR_SUICIDEMESSAGE = 7; // sets w_deathtypestring or leaves it alone (and may inspect w_deathtype for details)
 float WR_KILLMESSAGE    = 8; // sets w_deathtypestring or leaves it alone
 
 void weapon_defaultspawnfunc(float wpn);
 
 string w_deathtypestring;
+float w_deathtype;
 
 void(entity client, string s) centerprint_builtin = #73;
 .vector dest1, dest2;
@@ -494,3 +495,5 @@ float game_starttime; //point in time when the countdown is over
 .float stat_game_starttime;
 
 void W_Porto_Remove (entity p);
+
+.float projectiledeathtype;

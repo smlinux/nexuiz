@@ -209,10 +209,11 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				if (targ.killcount > 2)
 					bprint ("^1",s,"^1 ended it all with a ",ftos(targ.killcount)," scoring spree\n");
 			} else {
-				if(deathtype >= WEP_FIRST && deathtype <= WEP_LAST)
+				if(deathtype < DEATH_SPECIAL_START && deathtype & DEATH_WEAPONMASK >= WEP_FIRST && deathtype & DEATH_WEAPONMASK <= WEP_LAST)
 				{
 					w_deathtypestring = "couldn't resist the urge to self-destruct";
-					weapon_action(deathtype, WR_SUICIDEMESSAGE);
+					w_deathtype = deathtype;
+					weapon_action(deathtype & DEATH_WEAPONMASK, WR_SUICIDEMESSAGE);
 					bprint("^1", s, "^1 ", w_deathtypestring, "\n");
 				}
 				else if (deathtype == DEATH_KILL)
@@ -289,10 +290,11 @@ void Obituary (entity attacker, entity targ, float deathtype)
 				if(sv_gentle) {
 					bprint ("^1",s, "^1 needs a restart thanks to ", a, "\n");
 				} else {
-					if(deathtype >= WEP_FIRST && deathtype <= WEP_LAST)
+					if(deathtype < DEATH_SPECIAL_START && deathtype & DEATH_WEAPONMASK >= WEP_FIRST && deathtype & DEATH_WEAPONMASK <= WEP_LAST)
 					{
 						w_deathtypestring = "was blasted by";
-						weapon_action(deathtype, WR_KILLMESSAGE);
+						w_deathtype = deathtype;
+						weapon_action(deathtype & DEATH_WEAPONMASK, WR_KILLMESSAGE);
 						p = strstrofs(w_deathtypestring, "#", 0);
 						if(p < 0)
 							bprint("^1", s, "^1 ", w_deathtypestring, " ", a, "\n");
@@ -771,7 +773,7 @@ vector NearestPointOnBox(entity box, vector org)
 	return nearest;
 }
 
-float RadiusDamage (entity inflictor, entity attacker, float coredamage, float edgedamage, float rad, entity ignore, float forceintensity, float deathtype)
+float RadiusDamage (entity inflictor, entity attacker, float coredamage, float edgedamage, float rad, entity ignore, float forceintensity, float deathtype, entity directhitentity)
 // Returns total damage applies to creatures
 {
 	entity	targ;
@@ -829,7 +831,10 @@ float RadiusDamage (entity inflictor, entity attacker, float coredamage, float e
 							{
 								if(targ.iscreature)
 									total_damage_to_creatures += finaldmg;
-								Damage (targ, inflictor, attacker, finaldmg, deathtype, nearest, force);
+								if(targ == directhitentity)
+									Damage (targ, inflictor, attacker, finaldmg, deathtype, nearest, force);
+								else
+									Damage (targ, inflictor, attacker, finaldmg, deathtype | HITTYPE_SPLASH, nearest, force);
 								break;
 							}
 							nearest_x = targ.mins_x + random() * targ.size_x;

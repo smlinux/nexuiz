@@ -1518,3 +1518,23 @@ void Net_LinkEntity(entity e)
 	e.effects = EF_NODEPTHTEST | EF_LOWPRECISION;
 }
 
+void adaptor_think2touch()
+{
+	entity o;
+	o = other;
+	other = world;
+	self.touch();
+	other = o;
+}
+
+void adaptor_think2use()
+{
+	entity o, a;
+	o = other;
+	a = activator;
+	activator = world;
+	other = world;
+	self.use();
+	other = o;
+	activator = a;
+}

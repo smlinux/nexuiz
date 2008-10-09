@@ -58,7 +58,7 @@ void W_Shotgun_Attack2 (void)
 
 	W_SetupShot (self, '25 8 -8', TRUE, 5, "weapons/shotgun_fire.wav");
 	for (sc = 0;sc < bullets;sc = sc + 1)
-		fireBullet (w_shotorg, w_shotdir, spread, d, f, WEP_SHOTGUN, sc < 3);
+		fireBullet (w_shotorg, w_shotdir, spread, d, f, WEP_SHOTGUN | HITTYPE_SECONDARY, sc < 3);
 	if not(self.items & IT_UNLIMITED_AMMO)
 		self.ammo_shells = self.ammo_shells - cvar("g_balance_shotgun_secondary_ammo");
 
@@ -144,6 +144,8 @@ float w_shotgun(float req)
 	else if (req == WR_SUICIDEMESSAGE)
 		w_deathtypestring = "did the impossible";
 	else if (req == WR_KILLMESSAGE)
-		w_deathtypestring = "was gunned by";
+	{
+		w_deathtypestring = "was gunned by"; // unchecked: SECONDARY
+	}
 	return TRUE;
 };

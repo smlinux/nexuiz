@@ -24,9 +24,9 @@ void W_Laser_Touch (void)
 
 	self.event_damage = SUB_Null;
 	if (self.dmg)
-		RadiusDamage (self, self.owner, cvar("g_balance_laser_secondary_damage"), cvar("g_balance_laser_secondary_edgedamage"), cvar("g_balance_laser_secondary_radius"), world, cvar("g_balance_laser_secondary_force"), WEP_LASER);
+		RadiusDamage (self, self.owner, cvar("g_balance_laser_secondary_damage"), cvar("g_balance_laser_secondary_edgedamage"), cvar("g_balance_laser_secondary_radius"), world, cvar("g_balance_laser_secondary_force"), self.projectiledeathtype, other);
 	else
-		RadiusDamage (self, self.owner, cvar("g_balance_laser_primary_damage"), cvar("g_balance_laser_primary_edgedamage"), cvar("g_balance_laser_primary_radius"), world, cvar("g_balance_laser_primary_force"), WEP_LASER);
+		RadiusDamage (self, self.owner, cvar("g_balance_laser_primary_damage"), cvar("g_balance_laser_primary_edgedamage"), cvar("g_balance_laser_primary_radius"), world, cvar("g_balance_laser_primary_force"), self.projectiledeathtype, other);
 	sound (self, CHAN_PROJECTILE, "weapons/laserimpact.wav", VOL_BASE, ATTN_NORM);
 
 	remove (self);
@@ -51,6 +51,9 @@ void W_Laser_Attack (float issecondary)
 
 	missile.movetype = MOVETYPE_FLY;
 	missile.solid = SOLID_BBOX;
+	missile.projectiledeathtype = WEP_LASER;
+	if(issecondary)
+		missile.projectiledeathtype |= HITTYPE_SECONDARY;
 
 	setmodel (missile, "models/laser.mdl"); // precision set below
 	setsize (missile, '0 0 0', '0 0 0');
@@ -133,7 +136,11 @@ float w_laser(float req)
 		return TRUE;
 	else if (req == WR_CHECKAMMO2)
 		return TRUE;
-	// else if (req == WR_SUICIDEMESSAGE) // TODO
-	// else if (req == WR_KILLMESSAGE) // TODO
+	else if (req == WR_SUICIDEMESSAGE)
+		w_deathtypestring = "lasered himself to hell";
+	else if (req == WR_KILLMESSAGE)
+	{
+		w_deathtypestring = "was lasered to death by"; // unchecked: SPLASH
+	}
 	return TRUE;
 };

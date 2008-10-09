@@ -13,7 +13,7 @@ void W_Hagar_Explode (void)
 		sound (self, CHAN_PROJECTILE, "weapons/hagexp3.wav", VOL_BASE, ATTN_NORM);
 
 	self.event_damage = SUB_Null;
-	RadiusDamage (self, self.realowner, cvar("g_balance_hagar_primary_damage"), cvar("g_balance_hagar_primary_edgedamage"), cvar("g_balance_hagar_primary_radius"), world, cvar("g_balance_hagar_primary_force"), WEP_HAGAR);
+	RadiusDamage (self, self.realowner, cvar("g_balance_hagar_primary_damage"), cvar("g_balance_hagar_primary_edgedamage"), cvar("g_balance_hagar_primary_radius"), world, cvar("g_balance_hagar_primary_force"), self.projectiledeathtype, other);
 
 	remove (self);
 }
@@ -33,7 +33,7 @@ void W_Hagar_Explode2 (void)
 		sound (self, CHAN_PROJECTILE, "weapons/hagexp3.wav", VOL_BASE, ATTN_NORM);
 
 	self.event_damage = SUB_Null;
-	RadiusDamage (self, self.realowner, cvar("g_balance_hagar_secondary_damage"), cvar("g_balance_hagar_secondary_edgedamage"), cvar("g_balance_hagar_secondary_radius"), world, cvar("g_balance_hagar_secondary_force"), WEP_HAGAR);
+	RadiusDamage (self, self.realowner, cvar("g_balance_hagar_secondary_damage"), cvar("g_balance_hagar_secondary_edgedamage"), cvar("g_balance_hagar_secondary_radius"), world, cvar("g_balance_hagar_secondary_force"), self.projectiledeathtype, other);
 
 	remove (self);
 }
@@ -48,7 +48,7 @@ void W_Hagar_Touch (void)
 	if (other == self.owner)
 		return;
 
-	self.think ();
+	self.use ();
 }
 
 void W_Hagar_Touch2 (void)
@@ -60,12 +60,13 @@ void W_Hagar_Touch2 (void)
 	}
 
 	if(self.cnt > 0 || other.takedamage == DAMAGE_AIM) {
-		self.think();
+		self.use();
 	} else {
 		self.cnt++;
 		pointparticles(particleeffectnum("hagar_bounce"), self.origin, self.velocity, 1);
 		self.angles = vectoangles (self.velocity);
 		self.owner = world;
+		self.projectiledeathtype |= HITTYPE_BOUNCE;
 	}
 }
 
@@ -93,10 +94,12 @@ void W_Hagar_Attack (void)
 	missile.bot_dodge = TRUE;
 	missile.bot_dodgerating = cvar("g_balance_hagar_primary_damage");
 	missile.touch = W_Hagar_Touch;
-	missile.think = W_Hagar_Explode;
+	missile.use = W_Hagar_Explode;
+	missile.think = adaptor_think2use;
 	missile.nextthink = time + cvar("g_balance_hagar_primary_lifetime");
 	missile.solid = SOLID_BBOX;
 	missile.scale = 0.4; // BUG: the model is too big
+	missile.projectiledeathtype = WEP_HAGAR;
 	setorigin (missile, w_shotorg);
 	setmodel (missile, "models/hagarmissile.mdl"); // precision set below
 	setsize (missile, '0 0 0', '0 0 0');
@@ -133,10 +136,12 @@ void W_Hagar_Attack2 (void)
 	missile.bot_dodgerating = cvar("g_balance_hagar_secondary_damage");
 	missile.touch = W_Hagar_Touch2;
 	missile.cnt = 0;
-	missile.think = W_Hagar_Explode;
+	missile.use = W_Hagar_Explode;
+	missile.think = adaptor_think2use;
 	missile.nextthink = time + cvar("g_balance_hagar_secondary_lifetime");
 	missile.solid = SOLID_BBOX;
 	missile.scale = 0.4; // BUG: the model is too big
+	missile.projectiledeathtype = WEP_HAGAR | HITTYPE_SECONDARY;
 	setorigin (missile, w_shotorg);
 	setmodel (missile, "models/hagarmissile.mdl"); // precision set below
 	setsize (missile, '0 0 0', '0 0 0');
@@ -203,8 +208,14 @@ float w_hagar(float req)
 		return self.ammo_rockets >= cvar("g_balance_hagar_primary_ammo");
 	else if (req == WR_CHECKAMMO2)
 		return self.ammo_rockets >= cvar("g_balance_hagar_secondary_ammo");
-	// else if (req == WR_SUICIDEMESSAGE) // TODO
+	else if (req == WR_SUICIDEMESSAGE)
+		w_deathtypestring = "played with tiny rockets";
 	else if (req == WR_KILLMESSAGE)
-		w_deathtypestring = "was pummeled by";
+	{
+		if(w_deathtype & HITTYPE_BOUNCE) // must be secondary; unchecked: SPLASH
+			w_deathtypestring = "hoped #'s missiles wouldn't bounce";
+		else // unchecked: SPLASH, SECONDARY
+			w_deathtypestring = "was pummeled by";
+	}
 	return TRUE;
 };

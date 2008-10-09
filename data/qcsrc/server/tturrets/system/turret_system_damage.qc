@@ -193,7 +193,7 @@ void turret_stdproc_die()
 
 
 // Go boom
-    RadiusDamage (self,self, min(self.ammo,50),min(self.ammo,50) * 0.25,250,world,min(self.ammo,50)*5,0);
+    RadiusDamage (self,self, min(self.ammo,50),min(self.ammo,50) * 0.25,250,world,min(self.ammo,50)*5,0,world);
 
 // Setup respawn
     self.nextthink      = time + self.respawntime;

@@ -163,6 +163,7 @@ float	MSG_ENTITY				= 5;
 
 // Deathtypes (weapon deathtypes are the IT_* constants below)
 // NOTE: when adding death types, please add an explanation to Docs/spamlog.txt too.
+float	DEATH_SPECIAL_START     = 10000;
 float	DEATH_FALL				= 10000;
 float	DEATH_TELEFRAG				= 10001;
 float	DEATH_DROWN				= 10002;
@@ -179,6 +180,12 @@ float	DEATH_SHOOTING_STAR			= 10012;
 float	DEATH_ROT				= 10013;
 float	DEATH_MIRRORDAMAGE		= 10014;
 float   DEATH_TURRET            = 10100;
+
+float	DEATH_WEAPONMASK        = 0xFF;
+float	DEATH_HITTYPEMASK		= 0xF00; // which is WAY below 10000 used for normal deaths
+float	HITTYPE_SECONDARY = 0x100;
+float	HITTYPE_SPLASH = 0x200;
+float	HITTYPE_BOUNCE = 0x400;
 
 vector	PL_VIEW_OFS				= '0 0 35';
 vector	PL_MIN					= '-16 -16 -24';

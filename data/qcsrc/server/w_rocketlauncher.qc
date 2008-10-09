@@ -12,7 +12,7 @@ void W_Rocket_Explode (void)
 
 	//effect (org2, "models/sprites/rockexpl.spr", 0, 12, 35);
 	self.event_damage = SUB_Null;
-	RadiusDamage (self, self.owner, cvar("g_balance_rocketlauncher_damage"), cvar("g_balance_rocketlauncher_edgedamage"), cvar("g_balance_rocketlauncher_radius"), world, cvar("g_balance_rocketlauncher_force"), WEP_ROCKET_LAUNCHER);
+	RadiusDamage (self, self.owner, cvar("g_balance_rocketlauncher_damage"), cvar("g_balance_rocketlauncher_edgedamage"), cvar("g_balance_rocketlauncher_radius"), world, cvar("g_balance_rocketlauncher_force"), self.projectiledeathtype, other);
 
 	if (self.owner.weapon == WEP_ROCKET_LAUNCHER)
 	{
@@ -89,6 +89,8 @@ void W_Rocket_RemoteExplode()
 			: (vlen(NearestPointOnBox(self.owner, self.origin) - self.origin) > cvar("g_balance_rocketlauncher_radius")) // safety device
 		)
 		{
+			other = world;
+			self.projectiledeathtype |= HITTYPE_BOUNCE;
 			W_Rocket_Explode ();
 		}
 		else
@@ -105,6 +107,8 @@ void W_Rocket_Think (void)
 	self.nextthink = time;
 	if (time > self.cnt)
 	{
+		other = world;
+		self.projectiledeathtype |= HITTYPE_BOUNCE;
 		W_Rocket_Explode ();
 		return;
 	}
@@ -238,6 +242,7 @@ void W_Rocket_Attack (void)
 
 	missile.movetype = MOVETYPE_FLY;
 	missile.solid = SOLID_BBOX;
+	missile.projectiledeathtype = WEP_ROCKET_LAUNCHER;
 	setmodel (missile, "models/rocket.md3"); // precision set below
 	setsize (missile, '-3 -3 -3', '3 3 3'); // give it some size so it can be shot
 
@@ -435,6 +440,13 @@ float w_rlauncher(float req)
 	else if (req == WR_SUICIDEMESSAGE)
 		w_deathtypestring = "exploded";
 	else if (req == WR_KILLMESSAGE)
-		w_deathtypestring = "almost dodged #'s rocket";
+	{
+		if(w_deathtype & HITTYPE_BOUNCE) // (remote detonation)
+			w_deathtypestring = "got too close to #'s rocket";
+		else if(w_deathtype & HITTYPE_SPLASH)
+			w_deathtypestring = "almost dodged #'s rocket";
+		else
+			w_deathtypestring = "ate #'s rocket";
+	}
 	return TRUE;
 };

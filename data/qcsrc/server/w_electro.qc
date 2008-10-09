@@ -8,12 +8,12 @@ void W_Plasma_Explode (void)
 	if (self.movetype == MOVETYPE_BOUNCE)
 	{
 		pointparticles(particleeffectnum("electro_ballexplode"), org2, '0 0 0', 1);
-		RadiusDamage (self, self.owner, cvar("g_balance_electro_secondary_damage"), cvar("g_balance_electro_secondary_edgedamage"), cvar("g_balance_electro_secondary_radius"), world, cvar("g_balance_electro_secondary_force"), WEP_ELECTRO);
+		RadiusDamage (self, self.owner, cvar("g_balance_electro_secondary_damage"), cvar("g_balance_electro_secondary_edgedamage"), cvar("g_balance_electro_secondary_radius"), world, cvar("g_balance_electro_secondary_force"), self.projectiledeathtype, other);
 	}
 	else
 	{
 		pointparticles(particleeffectnum("electro_impact"), org2, '0 0 0', 1);
-		RadiusDamage (self, self.owner, cvar("g_balance_electro_primary_damage"), cvar("g_balance_electro_primary_edgedamage"), cvar("g_balance_electro_primary_radius"), world, cvar("g_balance_electro_primary_force"), WEP_ELECTRO);
+		RadiusDamage (self, self.owner, cvar("g_balance_electro_primary_damage"), cvar("g_balance_electro_primary_edgedamage"), cvar("g_balance_electro_primary_radius"), world, cvar("g_balance_electro_primary_force"), self.projectiledeathtype, other);
 	}
 	sound (self, CHAN_PROJECTILE, "weapons/electro_impact.wav", VOL_BASE, ATTN_NORM);
 
@@ -29,7 +29,7 @@ void W_Plasma_Explode_Combo (void) {
 	sound (self, CHAN_PROJECTILE, "weapons/electro_impact_combo.wav", VOL_BASE, ATTN_NORM);
 
 	self.event_damage = SUB_Null;
-	RadiusDamage (self, self.owner, cvar("g_balance_electro_combo_damage"), cvar("g_balance_electro_combo_edgedamage"), cvar("g_balance_electro_combo_radius"), world, cvar("g_balance_electro_combo_force"), WEP_ELECTRO);
+	RadiusDamage (self, self.owner, cvar("g_balance_electro_combo_damage"), cvar("g_balance_electro_combo_edgedamage"), cvar("g_balance_electro_combo_radius"), world, cvar("g_balance_electro_combo_force"), WEP_ELECTRO | HITTYPE_BOUNCE, other); // use THIS type for a combo because primary can't bounce
 	remove (self);
 }
 
@@ -51,6 +51,7 @@ void W_Plasma_Touch (void)
 					announce(o, "announcer/male/electrobitch.ogg");
 	} else {
 		sound (self, CHAN_PROJECTILE, "weapons/electro_bounce.wav", VOL_BASE, ATTN_NORM);
+		self.projectiledeathtype |= HITTYPE_BOUNCE;
 	}
 }
 
@@ -104,9 +105,11 @@ void W_Electro_Attack()
 	proj.owner = self;
 	proj.bot_dodge = TRUE;
 	proj.bot_dodgerating = cvar("g_balance_electro_primary_damage");
-	proj.think = W_Plasma_Explode;
+	proj.use = W_Plasma_Explode;
+	proj.think = adaptor_think2use;
 	proj.nextthink = time + cvar("g_balance_electro_primary_lifetime");
 	proj.solid = SOLID_BBOX;
+	proj.projectiledeathtype = WEP_ELECTRO;
 	setorigin(proj, w_shotorg);
 
 	if not(self.items & IT_UNLIMITED_AMMO)
@@ -136,11 +139,13 @@ void W_Electro_Attack2()
 	proj = spawn ();
 	proj.classname = "plasma";
 	proj.owner = self;
-	proj.think = W_Plasma_Explode;
+	proj.use = W_Plasma_Explode;
+	proj.think = adaptor_think2use;
 	proj.bot_dodge = TRUE;
 	proj.bot_dodgerating = cvar("g_balance_electro_secondary_damage");
 	proj.nextthink = time + cvar("g_balance_electro_secondary_lifetime");
 	proj.solid = SOLID_BBOX;
+	proj.projectiledeathtype = WEP_ELECTRO | HITTYPE_SECONDARY;
 	setorigin(proj, w_shotorg);
 
 	if not(self.items & IT_UNLIMITED_AMMO)
@@ -231,7 +236,30 @@ float w_electro(float req)
 	else if (req == WR_CHECKAMMO2)
 		return self.ammo_cells >= cvar("g_balance_electro_secondary_ammo");
 	else if (req == WR_SUICIDEMESSAGE)
-		w_deathtypestring = "played with plasma";
-	// else if (req == WR_KILLMESSAGE) // TODO
+	{
+		if(w_deathtype & HITTYPE_SECONDARY)
+			w_deathtypestring = "could not remember where he put plasma";
+		else
+			w_deathtypestring = "played with plasma";
+	}
+	else if (req == WR_KILLMESSAGE)
+	{
+		if(w_deathtype & HITTYPE_SECONDARY)
+		{
+			if(w_deathtype & HITTYPE_SPLASH) // unchecked: BOUNCE
+				w_deathtypestring = "just noticed #'s blue ball";
+			else // unchecked: BOUNCE
+				w_deathtypestring = "got in touch with #'s blue ball";
+		}
+		else
+		{
+			if(w_deathtype & HITTYPE_BOUNCE) // combo
+				w_deathtypestring = "felt the electrifying air of #'s combo";
+			else if(w_deathtype & HITTYPE_SPLASH)
+				w_deathtypestring = "got too close to #'s blue beam";
+			else
+				w_deathtypestring = "was blasted by #'s blue beam";
+		}
+	}
 	return TRUE;
 };

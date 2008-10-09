@@ -6,7 +6,7 @@ void W_Grenade_Explode (void)
 	sound (self, CHAN_PROJECTILE, "weapons/grenade_impact.wav", VOL_BASE, ATTN_NORM);
 
 	self.event_damage = SUB_Null;
-	RadiusDamage (self, self.owner, cvar("g_balance_grenadelauncher_primary_damage"), cvar("g_balance_grenadelauncher_primary_edgedamage"), cvar("g_balance_grenadelauncher_primary_radius"), world, cvar("g_balance_grenadelauncher_primary_force"), WEP_GRENADE_LAUNCHER);
+	RadiusDamage (self, self.owner, cvar("g_balance_grenadelauncher_primary_damage"), cvar("g_balance_grenadelauncher_primary_edgedamage"), cvar("g_balance_grenadelauncher_primary_radius"), world, cvar("g_balance_grenadelauncher_primary_force"), self.projectiledeathtype, other);
 
 	remove (self);
 }
@@ -19,7 +19,7 @@ void W_Grenade_Explode2 (void)
 	sound (self, CHAN_PROJECTILE, "weapons/grenade_impact.wav", VOL_BASE, ATTN_NORM);
 
 	self.event_damage = SUB_Null;
-	RadiusDamage (self, self.owner, cvar("g_balance_grenadelauncher_secondary_damage"), cvar("g_balance_grenadelauncher_secondary_edgedamage"), cvar("g_balance_grenadelauncher_secondary_radius"), world, cvar("g_balance_grenadelauncher_secondary_force"), WEP_GRENADE_LAUNCHER);
+	RadiusDamage (self, self.owner, cvar("g_balance_grenadelauncher_secondary_damage"), cvar("g_balance_grenadelauncher_secondary_edgedamage"), cvar("g_balance_grenadelauncher_secondary_radius"), world, cvar("g_balance_grenadelauncher_secondary_force"), self.projectiledeathtype, other);
 
 	remove (self);
 }
@@ -42,7 +42,7 @@ void W_Grenade_Touch2 (void)
 		return;
 	}
 	if (other.takedamage == DAMAGE_AIM)
-		self.think ();
+		self.use ();
 	else
 	{
 		float r;
@@ -59,6 +59,7 @@ void W_Grenade_Touch2 (void)
 			sound (self, CHAN_PROJECTILE, "weapons/grenade_bounce5.wav", VOL_BASE, ATTN_NORM);
 		else
 			sound (self, CHAN_PROJECTILE, "weapons/grenade_bounce6.wav", VOL_BASE, ATTN_NORM);
+		self.projectiledeathtype |= HITTYPE_BOUNCE;
 	}
 }
 
@@ -92,12 +93,14 @@ void W_Grenade_Attack (void)
 	gren.solid = SOLID_BBOX;
 	gren.effects = EF_LOWPRECISION;
 	gren.modelflags = MF_GRENADE;
+	gren.projectiledeathtype = WEP_GRENADE_LAUNCHER;
 	setmodel(gren, "models/grenademodel.md3"); // precision set above
 	setsize(gren, '0 0 0', '0 0 0');
 	setorigin(gren, w_shotorg);
 
 	gren.nextthink = time + cvar("g_balance_grenadelauncher_primary_lifetime");
-	gren.think = W_Grenade_Explode;
+	gren.think = adaptor_think2use;
+	gren.use = W_Grenade_Explode;
 	gren.touch = W_Grenade_Touch1;
 	gren.velocity = w_shotdir * cvar("g_balance_grenadelauncher_primary_speed") + v_up * cvar("g_balance_grenadelauncher_primary_speed_up");
 	W_SetupProjectileVelocity(gren);
@@ -127,12 +130,14 @@ void W_Grenade_Attack2 (void)
 	gren.solid = SOLID_BBOX;
 	gren.effects = EF_LOWPRECISION;
 	gren.modelflags = MF_GRENADE;
+	gren.projectiledeathtype = WEP_GRENADE_LAUNCHER | HITTYPE_SECONDARY;
 	setmodel(gren, "models/grenademodel.md3"); // precision set above
 	setsize(gren, '0 0 -3', '0 0 -3');
 	setorigin(gren, w_shotorg);
 
 	gren.nextthink = time + cvar("g_balance_grenadelauncher_secondary_lifetime");
-	gren.think = W_Grenade_Explode2;
+	gren.think = adaptor_think2use;
+	gren.use = W_Grenade_Explode2;
 	gren.touch = W_Grenade_Touch2;
 	gren.takedamage = DAMAGE_YES;
 	gren.health = cvar("g_balance_grenadelauncher_secondary_health");
@@ -212,8 +217,21 @@ float w_glauncher(float req)
 	else if (req == WR_CHECKAMMO2)
 		return self.ammo_rockets >= cvar("g_balance_grenadelauncher_secondary_ammo");
 	else if (req == WR_SUICIDEMESSAGE)
-		w_deathtypestring = "detonated";
+	{
+		if(w_deathtype & HITTYPE_SECONDARY)
+			w_deathtypestring = "tried out his own grenade";
+		else
+			w_deathtypestring = "detonated";
+	}
 	else if (req == WR_KILLMESSAGE)
-		w_deathtypestring = "was blasted by";
+	{
+		if(w_deathtype & HITTYPE_SPLASH)
+			if(w_deathtype & HITTYPE_BOUNCE) // (must be secondary then)
+				w_deathtypestring = "didn't see #'s grenade";
+			else // unchecked: SECONDARY
+				w_deathtypestring = "almost dodged #'s grenade";
+		else // unchecked: SECONDARY, BOUNCE
+			w_deathtypestring = "ate #'s grenade";
+	}
 	return TRUE;
 };
