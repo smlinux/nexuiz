@@ -79,6 +79,7 @@ void LogCTF(string mode, float flagteam, entity actor)
 void RegenFlag(entity e)
 {
 	setattachment(e, world, "");
+	e.damageforcescale = 0;
 	e.movetype = MOVETYPE_NONE;
 	if(!self.noalign)
 		e.movetype = MOVETYPE_TOSS;
@@ -141,6 +142,7 @@ void DropFlag(entity e, entity penalty_receiver, entity attacker)
 	LogCTF("dropped", p.team, p);
 
 	setattachment(e, world, "");
+	e.damageforcescale = cvar("g_balance_ctf_damageforcescale");
 
 	if (p.flagcarried == e)
 		p.flagcarried = world;
@@ -407,6 +409,7 @@ void FlagTouch()
 			self.movetype = MOVETYPE_NONE;	// flag must have MOVETYPE_NONE here, otherwise it will drop through the floor...
 			setorigin(self, FLAG_CARRY_POS);
 			setattachment(self, other, "");
+			self.damageforcescale = 0;
 			WaypointSprite_AttachCarrier("flagcarrier", other);
 			WaypointSprite_UpdateTeamRadar(other.waypointsprite_attachedforcarrier, RADARICON_FLAGCARRIER, '1 1 0');
 		}
@@ -539,7 +542,8 @@ void spawnfunc_item_flag_team1()
 	precache_sound (self.noise1);
 	precache_sound (self.noise2);
 	precache_sound (self.noise3);
-	setsize(self, '-16 -16 -37', '16 16 37');
+	//setsize(self, '-16 -16 -37', '16 16 37');
+	setsize(self, PL_MIN, PL_MAX);
 	setorigin(self, self.origin + '0 0 37');
 	self.nextthink = time + 0.2; // start after doors etc
 	self.think = place_flag;
@@ -549,7 +553,9 @@ void spawnfunc_item_flag_team1()
 	//if(!self.glow_size)
 	//	self.glow_size = 50;
 
-	self.effects = self.effects | EF_FULLBRIGHT | EF_LOWPRECISION;
+	self.effects = self.effects | EF_LOWPRECISION;
+	if(cvar("g_ctf_fullbrightflags"))
+		self.effects |= EF_FULLBRIGHT;
 	if(!self.noalign)
 		droptofloor();
 
@@ -622,7 +628,8 @@ void spawnfunc_item_flag_team2()
 	precache_sound (self.noise1);
 	precache_sound (self.noise2);
 	precache_sound (self.noise3);
-	setsize(self, '-16 -16 -37', '16 16 37');
+	//setsize(self, '-16 -16 -37', '16 16 37');
+	setsize(self, PL_MIN, PL_MAX);
 	setorigin(self, self.origin + '0 0 37');
 	self.nextthink = time + 0.2; // start after doors etc
 	self.think = place_flag;
@@ -632,7 +639,9 @@ void spawnfunc_item_flag_team2()
 	//if(!self.glow_size)
 	//	self.glow_size = 50;
 
-	self.effects = self.effects | EF_FULLBRIGHT | EF_LOWPRECISION;
+	self.effects = self.effects | EF_LOWPRECISION;
+	if(cvar("g_ctf_fullbrightflags"))
+		self.effects |= EF_FULLBRIGHT;
 	if(!self.noalign)
 		droptofloor();
 
