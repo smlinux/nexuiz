@@ -199,9 +199,9 @@ float Portal_TeleportPlayer(entity teleporter, entity player)
 
 	// reset fade counter
 	teleporter.portal_wants_to_vanish = 0;
-	teleporter.fade_time = time + 15;
-	teleporter.health = 200;
-	teleporter.enemy.health = 200;
+	teleporter.fade_time = time + cvar("g_balance_portal_lifetime");
+	teleporter.health = cvar("g_balance_portal_health");
+	teleporter.enemy.health = cvar("g_balance_portal_health");
 
 	return 1;
 }
@@ -593,10 +593,11 @@ entity Portal_Spawn(entity own, vector org, vector ang)
 	portal.angles = ang;
 	portal.think = Portal_Think;
 	portal.nextthink = 0;
-	portal.fade_time = time + 15;
-	portal.portal_activatetime = time + 0.1;
+	portal.portal_activatetime = time + 1.1;
 	portal.event_damage = Portal_Damage;
 	portal.health = 200;
+	portal.fade_time = time + cvar("g_balance_portal_lifetime");
+	portal.health = cvar("g_balance_portal_health");
 	setmodel(portal, "models/portal.md3");
 	portal.modelindex_lod0 = portal.modelindex;
 	portal.customizeentityforclient = Portal_Customize;
