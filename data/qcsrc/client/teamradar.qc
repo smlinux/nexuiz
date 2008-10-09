@@ -131,7 +131,7 @@ void teamradar_loadcvars()
 {
 	cl_teamradar_scale = cvar("cl_teamradar_scale");
 	cl_teamradar_background_alpha = cvar("cl_teamradar_background_alpha");
-	cl_teamradar_foreground_alpha = cvar("cl_teamradar_background_alpha");
+	cl_teamradar_foreground_alpha = cvar("cl_teamradar_foreground_alpha");
 	cl_teamradar_rotation = cvar("cl_teamradar_rotation");
 	cl_teamradar_size = stov(cvar_string("cl_teamradar_size"));
 	cl_teamradar_position = stov(cvar_string("cl_teamradar_position"));
