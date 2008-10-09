@@ -200,7 +200,8 @@ float Portal_TeleportPlayer(entity teleporter, entity player)
 	// reset fade counter
 	teleporter.portal_wants_to_vanish = 0;
 	teleporter.fade_time = time + 15;
-	teleporter.enemy.health = 300;
+	teleporter.health = 200;
+	teleporter.enemy.health = 200;
 
 	return 1;
 }
@@ -595,7 +596,7 @@ entity Portal_Spawn(entity own, vector org, vector ang)
 	portal.fade_time = time + 15;
 	portal.portal_activatetime = time + 0.1;
 	portal.event_damage = Portal_Damage;
-	portal.health = 300;
+	portal.health = 200;
 	setmodel(portal, "models/portal.md3");
 	portal.modelindex_lod0 = portal.modelindex;
 	portal.customizeentityforclient = Portal_Customize;
