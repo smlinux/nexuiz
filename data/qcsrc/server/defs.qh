@@ -497,3 +497,5 @@ float game_starttime; //point in time when the countdown is over
 void W_Porto_Remove (entity p);
 
 .float projectiledeathtype;
+
+.string message2;

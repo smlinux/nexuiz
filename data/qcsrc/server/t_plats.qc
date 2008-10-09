@@ -163,7 +163,9 @@ void spawnfunc_func_plat()
         self.dmg = 10000;
 
     if(self.dmg && (!self.message))
-		self.message = "was in the wrong place.";
+		self.message = "was squished";
+    if(self.dmg && (!self.message2))
+		self.message2 = "was squished by";
 
 	if (self.sounds == 1)
 	{
@@ -334,7 +336,9 @@ void spawnfunc_func_rotating()
 		self.avelocity = '0 1 0' * self.speed;
 
     if(self.dmg & (!self.message))
-        self.message = " was in the wrong place.";
+        self.message = " was squished";
+    if(self.dmg && (!self.message2))
+		self.message2 = "was squished by";
 
 
     if(self.dmg && (!self.dmgtime))
@@ -399,7 +403,9 @@ void spawnfunc_func_bobbing()
 	// damage when blocked
 	self.blocked = bobbing_blocked;
 	if(self.dmg & (!self.message))
-		self.message = " was in the wrong place.";
+		self.message = " was squished";
+    if(self.dmg && (!self.message2))
+		self.message2 = "was squished by";
 	if(self.dmg && (!self.dmgtime))
 		self.dmgtime = 0.25;
 	self.dmgtime2 = time;
@@ -808,7 +814,7 @@ void door_touch()
 
 	self.owner.attack_finished_single = time + 2;
 
-	if (self.owner.message != "")
+	if (!self.dmg && self.owner.message != "")
 	{
 		if (other.flags & FL_CLIENT)
 			centerprint (other, self.owner.message);
@@ -996,10 +1002,10 @@ void spawnfunc_func_door()
     if(self.spawnflags & 8)
         self.dmg = 10000;
 
-    if(self.dmg & (!self.message))
-		self.message = "was in the wrong place.";
-
-
+    if(self.dmg && (!self.message))
+		self.message = "was squished";
+    if(self.dmg && (!self.message2))
+		self.message2 = "was squished by";
 
 	if (self.sounds > 0)
 	{

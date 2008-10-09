@@ -146,7 +146,7 @@ void LogDeath(string mode, float deathtype, entity killer, entity killed)
 	GameLogEcho(s);
 }
 
-void Obituary (entity attacker, entity targ, float deathtype)
+void Obituary (entity attacker, entity inflictor, entity targ, float deathtype)
 {
 	string	s, a;
 	float p;
@@ -315,8 +315,14 @@ void Obituary (entity attacker, entity targ, float deathtype)
 						bprint ("^1",s, "^1 was shot into space by ", a, "\n");
 					else if (deathtype == DEATH_SWAMP)
 						bprint ("^1",s, "^1 was conserved by ", a, "\n");
-					else if (deathtype == DEATH_HURTTRIGGER)
-						bprint ("^1",s, "^1 was thrown into a world of hurt by ", a, "\n");
+					else if (deathtype == DEATH_HURTTRIGGER && attacker.message2 != "")
+					{
+						p = strstrofs(inflictor.message2, "#", 0);
+						if(p < 0)
+							bprint("^1", s, "^1 ", inflictor.message2, " ", a, "\n");
+						else
+							bprint("^1", s, "^1 ", substring(inflictor.message2, 0, p), a, "^1", substring(inflictor.message2, p+1, strlen(inflictor.message2) - (p+1)), "\n");
+					}
                     else if(deathtype == DEATH_TURRET)
                         bprint ("^1",s, "^1 was pushed into the line of fire by ^1", a, "\n");
 					else

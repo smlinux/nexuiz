@@ -402,7 +402,9 @@ void spawnfunc_trigger_hurt()
 	if (!self.dmg)
 		self.dmg = 1000;
 	if (!self.message)
-		self.message = "was in the wrong place.";
+		self.message = "was in the wrong place";
+	if (!self.message2)
+		self.message2 = "was thrown into a world of hurt by";
 
 	if(!trigger_hurt_first)
 		trigger_hurt_first = self;
@@ -923,6 +925,8 @@ void spawnfunc_misc_laser()
 			self.colormod = '1 0 0';
 	if(!self.message)
 		self.message = "saw the light";
+	if (!self.message2)
+		self.message2 = "was pushed into a laser by";
 	self.think = misc_laser_think;
 	self.nextthink = time;
 	InitializeEntity(self, misc_laser_init, INITPRIO_FINDTARGET);

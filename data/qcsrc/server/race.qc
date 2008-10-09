@@ -420,6 +420,8 @@ void spawnfunc_trigger_race_checkpoint()
 
 	if(!self.message)
 		self.message = "went backwards";
+	if (!self.message2)
+		self.message2 = "was pushed backwards by";
 	
 	self.race_checkpoint = self.cnt;
 

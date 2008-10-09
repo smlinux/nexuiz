@@ -51,6 +51,7 @@ noise: path/name of .wav or .ogg file to play. Use looping sounds only (e.g. sou
 dmg: damage a player who gets crushed by it receives
 dmgtime: interval to apply dmg to a player who is s in the way
 message: death message when a player gets crushed
+message2: death message when someone gets pushed into this (default: "was thrown into a world of hurt by"). The # character is replaced by the attacker name if present (and it instead does not get appended to the end)
 -------- SPAWNFLAGS --------
 X_AXIS: entity will bob along the X axis.
 Y_AXIS: entity will bob along the Y axis.
@@ -71,7 +72,8 @@ health: (default 0) if set to any non-zero value, the button must take damage (a
 Normal sliding door entity. By default, the door will activate when player walks close to it or when damage is inflicted to it.
 If DOOR_DONT_LINK is not set, the door will be linked with all doors it touches.
 -------- KEYS --------
-message: is printed when the door is touched if it is a trigger door and it hasn't been fired yet
+message: is printed when the door is touched if it is a trigger door and it hasn't been fired yet, or death message if dmg is set
+message2: death message when someone gets pushed into this (default: "was thrown into a world of hurt by"). The # character is replaced by the attacker name if present (and it instead does not get appended to the end)
 angle: determines the opening direction
 targetname: if set, no touch field will be spawned and a remote button or trigger field activates the door.
 health: if set, door must be shot open
@@ -97,7 +99,8 @@ key2: second entity key with one-line description
 t_width: override WIDTH to move back (or height if going down)
 t_length: override LENGTH to move sideways
 dmg: damage to inflict when blocked (2 default)
-message: text to display when activating the door
+message: text to display when activating the door, or death message if dmg is set
+message2: death message when someone gets pushed into this (default: "was thrown into a world of hurt by"). The # character is replaced by the attacker name if present (and it instead does not get appended to the end)
 noise1: sound when opening backwards or closing
 noise2: sound when opening sideways
 noise3: sound when stopping
@@ -140,6 +143,7 @@ sounds: 2 for alternate sound set, -1 for silence, or use the fields below
 sound1: platform starts moving sound
 sound2: platform stop sound
 message: kill message, when someone gets killed by this plat
+message2: death message when someone gets pushed into this (default: "was thrown into a world of hurt by"). The # character is replaced by the attacker name if present (and it instead does not get appended to the end)
 -------- SPAWNFLAGS --------
 CRUSH: crush players hit by the platform instantly
 -------- NOTES --------
@@ -163,6 +167,7 @@ noise: path/name of looping .wav file to play.
 dmg: Do this much dmg every .dmgtime interval when blocked
 dmgtime: See above. (0.25s default)
 message: kill message when crushed by this
+message2: death message when someone gets pushed into this (default: "was thrown into a world of hurt by"). The # character is replaced by the attacker name if present (and it instead does not get appended to the end)
 -------- SPAWNFLAGS --------
 X_AXIS: rotate around the X axis
 Y_AXIS: rotate around the Y axis
@@ -736,7 +741,8 @@ Any object touching this will be hurt.
 Has the useful effect of automatically returning flags, keys and runes when they touch it.
 -------- KEYS --------
 dmg: amount of damage to deal (default: 1000)
-message: kill message when someone gets killed by this (default: "was in the wrong place.")
+message: kill message when someone gets killed by this (default: "was in the wrong place")
+message2: kill message when someone gets pushed into this (default: "was thrown into a world of hurt by"). The # character is replaced by the attacker name if present (and it instead does not get appended to the end)
 */
 
 /*QUAKED trigger_impulse (.5 .5 .5) ? 
@@ -955,6 +961,7 @@ A checkpoint, for the race game mode. Be sure to make them quite long, so they a
 -------- KEYS --------
 cnt: Number of the checkpoint. 0 for finish line, and at least two other checkpoints have to exist. They MUST be touched in sequential order!
 message: Death message, when touching checkpoints in the wrong order.
+message2: Death message when someone gets pushed into this (default: "was thrown into a world of hurt by"). The # character is replaced by the attacker name if present (and it instead does not get appended to the end)
 targetname: Name of the checkpoint. info_player_race can target this to assign a spawn to a checkpoint. Also used for triggering a checkpoint by an event.
 target: when the checkpoint is passed, these entities are triggered. Useful for forcing items in certain areas using trigger_items
 -------- SPAWNFLAGS --------
