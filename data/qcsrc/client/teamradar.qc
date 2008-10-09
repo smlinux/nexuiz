@@ -43,7 +43,7 @@ vector yinvert(vector v)
 	return v;
 }
 
-void draw_teamradar_background(float fg, float bg)
+void draw_teamradar_background(float bg, float fg)
 {
 	if(bg > 0)
 	{
