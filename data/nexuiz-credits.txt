@@ -10,7 +10,7 @@ SavageX
 *Project Maintainer
 
 Rudolf "div0" Polzer
-* Programmer
+*Programmer
 
 
 
@@ -27,6 +27,15 @@ Peter "Morphed" Pielak
 
 Paul "Strahlemann" Evers
 *Level Designer
+
+Wolfgang "Blub\0" Bumiller
+*Programmer
+
+Tyler "-z-" Mulligan
+*Web Developer and Graphic Designer
+
+Tenshihan
+*Sound FX
 
 
 
@@ -58,9 +67,6 @@ Rick "Rat" Kelley
 Gottfried "Toddd" Hofmann
 *Sound FX
 
-Tenshihan
-*Sound FX
-
 Marko "Urre" Permanto
 *Bot Programmer
 
@@ -78,7 +84,6 @@ Gerd "Elysis" Raudenbusch - Music
 Braden "meoblast001" Walters - Music
 Amos "torus" Dudley - Announcer voices
 William "Willis" Weilep - Master server host
-Tyler "-z-" Mulligan - Site Design
 "sev" - "Wicked" menu skins
 
 Qantourisc
@@ -124,6 +129,5 @@ dstrek
 Netzwerg
 Ulrich Galbraith
 Christian Ice
-Wolfgang "Blub\0" Bumiller
 FruitieX
 Edward "Ed" Holness
