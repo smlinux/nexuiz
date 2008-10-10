@@ -64,11 +64,6 @@ void reset_map()
 				DropAllRunes(self.owner);
 			rune_respawn();
 		}
-		else if(self.classname == "sprite_waypoint")
-		{
-			if(self.health | g_keyhunt)
-				WaypointSprite_Kill(self);
-		}
 		else if(self.classname == "dom_controlpoint")
 		{
 			dom_controlpoint_setup();
@@ -113,6 +108,14 @@ void reset_map()
 			self.team = self.team_saved;
 		}
 	}
+
+	// Waypoints come LAST (keyhunt keys reference them)
+	for(self = world; (self = nextent(self)); )
+		if(self.classname == "sprite_waypoint")
+		{
+			if(self.health | g_keyhunt)
+				WaypointSprite_Kill(self);
+		}
 
 	// Moving the player reset code here since the player-reset depends
 	// on spawnpoint entities which have to be reset first --blub
