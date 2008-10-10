@@ -1,0 +1,113 @@
+#!/bin/sh
+
+# list of files v2.4.2 clients need to play on svn servers
+
+COMPAT_FILES="
+	effectinfo.txt
+	gfx/aggressor_mini.tga
+	gfx/aneurysm_mini.tga
+	gfx/basementctf_mini.tga
+	gfx/bleach_mini.tga
+	gfx/bloodprisonctf_mini.tga
+	gfx/bloodprison_mini.tga
+	gfx/bluesky_mini.tga
+	gfx/dieselpower_mini.tga
+	gfx/dismal_mini.tga
+	gfx/final_rage_mini.tga
+	gfx/inv_weapon10.tga
+	gfx/inv_weapon9.tga
+	gfx/reslimed_mini.tga
+	gfx/runningman_1on1remix_mini.tga
+	gfx/runningmanctf_mini.tga
+	gfx/runningman_mini.tga
+	gfx/silvercity_mini.tga
+	gfx/stormkeep_mini.tga
+	gfx/strength_mini.tga
+	gfx/teamradar_icon_1.tga
+	gfx/teamradar_icon_2.tga
+	gfx/teamradar_ping.tga
+	gfx/toxic_mini.tga
+	gfx/warfare_mini.tga
+	models/portal.md3
+	models/sprites/bluebase.tga
+	models/sprites/danger.tga
+	models/sprites/defend.tga
+	models/sprites/destroy.tga
+	models/sprites/flagcarrier.tga
+	models/sprites/helpme.tga
+	models/sprites/here.tga
+	models/sprites/keycarrier-blue.tga
+	models/sprites/keycarrier-finish.tga
+	models/sprites/keycarrier-friend.tga
+	models/sprites/keycarrier-pink.tga
+	models/sprites/keycarrier-red.tga
+	models/sprites/keycarrier-yellow.tga
+	models/sprites/key-dropped.tga
+	models/sprites/ons-cp-atck-blue.tga
+	models/sprites/ons-cp-atck-neut.tga
+	models/sprites/ons-cp-atck-red.tga
+	models/sprites/ons-cp-blue.tga
+	models/sprites/ons-cp-dfnd-blue.tga
+	models/sprites/ons-cp-dfnd-red.tga
+	models/sprites/ons-cp-neut.tga
+	models/sprites/ons-cp-red.tga
+	models/sprites/ons-gen-blue.tga
+	models/sprites/ons-gen-red.tga
+	models/sprites/ons-gen-shielded.tga
+	models/sprites/push.tga
+	models/sprites/race-checkpoint.sp2
+	models/sprites/race-checkpoint.tga
+	models/sprites/race-finish.sp2
+	models/sprites/race-finish.tga
+	models/sprites/redbase.tga
+	models/sprites/waypoint.tga
+	models/weapons/g_minstanex.md3
+	models/weapons/g_porto.md3
+	models/weapons/v_minstanex.md3
+	models/weapons/v_porto.md3
+	models/weapons/w_minstanex.zym
+	models/weapons/w_porto.zym
+	particles/particlefont.tga
+	sound/player/default.sounds
+	sound/player/torus/attack.ogg
+	sound/player/torus/coverme.ogg
+	sound/player/torus/death.ogg
+	sound/player/torus/drown.ogg
+	sound/player/torus/fall.ogg
+	sound/player/torus/flagseen.ogg
+	sound/player/torus/gasp.ogg
+	sound/player/torus/hooah.ogg
+	sound/player/torus/incoming.ogg
+	sound/player/torus/jump.ogg
+	sound/player/torus/letsgo.ogg
+	sound/player/torus/needhelp.ogg
+	sound/player/torus/pain100.ogg
+	sound/player/torus/pain25.ogg
+	sound/player/torus/pain50.ogg
+	sound/player/torus/pain75.ogg
+	sound/player/torus/taunt.ogg
+	sound/player/torus/teamshoot.ogg
+	sound/player/torus/waypoint.ogg
+	sound/porto/bounce.ogg
+	sound/porto/create.ogg
+	sound/porto/expire.ogg
+	sound/porto/explode.ogg
+	sound/porto/fire.ogg
+	sound/porto/unsupported.ogg
+	textures/nex_bump.tga
+	textures/nex_gloss.tga
+	textures/nex_glow.tga
+	textures/nex_pants.tga
+	textures/nex_shirt.tga
+	textures/nex.tga
+	textures/portalgun_gloss.tga
+	textures/portalgun_glow.tga
+	textures/portalgun_norm.tga
+	textures/portalgun.tga
+"
+
+rev=`svnversion`
+pack="zzz_svn-serversupport-$rev"
+echo "Support files to play on svn servers of revision $rev" > "$pack.txt"
+7za a -tzip -mx=9 "$pack.pk3" $COMPAT_FILES "$pack.txt"
+rm -f "$pack.txt"
