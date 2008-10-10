@@ -93,7 +93,7 @@ void GiveFrags (entity attacker, entity targ, float f)
 	}
 	else if(g_ctf)
 	{
-		if(g_ctf_win_mode == 3)
+		if(g_ctf_ignore_frags)
 			f = 0;
 	}
 
@@ -330,10 +330,9 @@ void Obituary (entity attacker, entity inflictor, entity targ, float deathtype)
 				}
 				if(g_ctf && targ.flagcarried)
 				{
-					//GiveFrags(attacker, targ, cvar("g_ctf_flagscore_kill"));
-					UpdateFrags(attacker, cvar("g_ctf_flagscore_kill"));
+					UpdateFrags(attacker, ctf_score_value("score_kill"));
 					PlayerScore_Add(attacker, SP_CTF_FCKILLS, 1);
-					GiveFrags(attacker, targ, 0);
+					GiveFrags(attacker, targ, 0); // for logging
 				}
 				else
 					GiveFrags(attacker, targ, 1);

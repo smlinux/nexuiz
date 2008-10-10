@@ -11,6 +11,14 @@ entity ctf_worldflaglist; // CTF flags in the map
 
 #define FLAG_CARRY_POS '-15 0 7'
 
+float ctf_score_value(string parameter)
+{
+	if(g_ctf_win_mode != 2)
+		return cvar(strcat("g_ctf_personal", parameter));
+	else
+		return cvar(strcat("g_ctf_flag", parameter));
+}
+
 void FakeTimeLimit(entity e, float t)
 {
 	msg_entity = e;
@@ -129,9 +137,9 @@ void DropFlag(entity e, entity penalty_receiver, entity attacker)
 	bprint(p.netname, "^7 lost the ", e.netname, "\n");
 
 	if(penalty_receiver)
-		UpdateFrags(penalty_receiver, -cvar("g_ctf_flagpenalty_suicidedrop"));
+		UpdateFrags(penalty_receiver, -ctf_score_value("penalty_suicidedrop"));
 	else
-		UpdateFrags(p, -cvar("g_ctf_flagpenalty_drop"));
+		UpdateFrags(p, -ctf_score_value("penalty_drop"));
 	PlayerScore_Add(p, SP_CTF_DROPS, +1);
 	e.playerid = attacker.playerid;
 	
@@ -289,7 +297,7 @@ void FlagTouch()
 		PlayerTeamScore_Add(other, SP_CTF_CAPS, ST_CTF_CAPS, 1);
 		LogCTF("capture", other.flagcarried.team, other);
 		// give credit to the individual player
-		UpdateFrags(other, cvar("g_ctf_flagscore_capture"));
+		UpdateFrags(other, ctf_score_value("score_capture"));
 
 		sound (other, CHAN_AUTO, self.noise2, VOL_BASE, ATTN_NONE);
 		WaypointSprite_DetachCarrier(other);
@@ -319,7 +327,7 @@ void FlagTouch()
 		self.cnt = FLAG_CARRY;
 		self.angles = '0 0 0';
 		bprint(other.netname, "^7 got the ", self.netname, "\n");
-		UpdateFrags(other, cvar("g_ctf_flagscore_pickup_base"));
+		UpdateFrags(other, ctf_score_value("score_pickup_base"));
 		PlayerScore_Add(other, SP_CTF_PICKUPS, 1);
 		LogCTF("steal", self.team, other);
 		sound (other, CHAN_AUTO, self.noise, VOL_BASE, ATTN_NONE);
@@ -349,28 +357,28 @@ void FlagTouch()
 			// punish the player who last had it
 			FOR_EACH_PLAYER(player)
 				if(player.playerid == self.playerid)
-					PlayerScore_Add(player, SP_SCORE, -cvar("g_ctf_flagpenalty_returned"));
+					PlayerScore_Add(player, SP_SCORE, -ctf_score_value("penalty_returned"));
 
 			// punish the team who was last carrying it
 			if(self.team == COLOR_TEAM1)
-				TeamScore_AddToTeam(COLOR_TEAM2, ST_SCORE, -cvar("g_ctf_flagpenalty_returned"));
+				TeamScore_AddToTeam(COLOR_TEAM2, ST_SCORE, -ctf_score_value("penalty_returned"));
 			else
-				TeamScore_AddToTeam(COLOR_TEAM1, ST_SCORE, -cvar("g_ctf_flagpenalty_returned"));
+				TeamScore_AddToTeam(COLOR_TEAM1, ST_SCORE, -ctf_score_value("penalty_returned"));
 
 			// reward the player who returned it
 			if(other.playerid == self.playerid) // is this the guy who killed the FC last?
 			{
 				if (other.team == COLOR_TEAM1 || other.team == COLOR_TEAM2)
-					UpdateFrags(other, cvar("g_ctf_flagscore_return_by_killer"));
+					UpdateFrags(other, ctf_score_value("score_return_by_killer"));
 				else
-					UpdateFrags(other, cvar("g_ctf_flagscore_return_rogue_by_killer"));
+					UpdateFrags(other, ctf_score_value("score_return_rogue_by_killer"));
 			}
 			else
 			{
 				if (other.team == COLOR_TEAM1 || other.team == COLOR_TEAM2)
-					UpdateFrags(other, cvar("g_ctf_flagscore_return"));
+					UpdateFrags(other, ctf_score_value("score_return"));
 				else
-					UpdateFrags(other, cvar("g_ctf_flagscore_return_rogue"));
+					UpdateFrags(other, ctf_score_value("score_return_rogue"));
 			}
 			PlayerScore_Add(other, SP_CTF_RETURNS, 1);
 			LogCTF("return", self.team, other);
@@ -390,8 +398,8 @@ void FlagTouch()
 			float f;
 			f = bound(0, (self.pain_finished - time) / cvar("g_ctf_flag_returntime"), 1);
 			//print("factor is ", ftos(f), "\n");
-			f = cvar("g_ctf_flagscore_pickup_dropped_late") * (1-f)
-			  + cvar("g_ctf_flagscore_pickup_dropped_early") * f;
+			f = ctf_score_value("score_pickup_dropped_late") * (1-f)
+			  + ctf_score_value("score_pickup_dropped_early") * f;
 			f = floor(f + 0.5);
 			//print("score is ", ftos(f), "\n");
 

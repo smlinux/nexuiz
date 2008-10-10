@@ -66,7 +66,6 @@ void ScoreRules_ctf()
 			sp_score = SFL_SORT_PRIO_SECONDARY;
 			break;
 		case 2: // score only
-		case 3: // score only, no frags
 		default:
 			sp_score = SFL_SORT_PRIO_PRIMARY;
 			sp_caps = SFL_SORT_PRIO_SECONDARY; // looks better ;)
