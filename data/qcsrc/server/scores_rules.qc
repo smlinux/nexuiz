@@ -4,7 +4,7 @@ void CheckAllowedTeams (entity for_whom);
 // NOTE: SP_ constants may not be >= MAX_SCORE; ST_constants may not be >= MAX_TEAMSCORE
 // scores that should be in all modes:
 float ScoreRules_teams;
-void ScoreRules_basics(float teams, float sprio, float score_enabled)
+void ScoreRules_basics(float teams, float sprio, float stprio, float score_enabled)
 {
 	float i;
 	for(i = 0; i < MAX_SCORE; ++i)
@@ -15,7 +15,7 @@ void ScoreRules_basics(float teams, float sprio, float score_enabled)
 	ScoreRules_teams = teams;
 
 	if(score_enabled)
-		ScoreInfo_SetLabel_TeamScore  (ST_SCORE,        "score",     sprio);
+		ScoreInfo_SetLabel_TeamScore  (ST_SCORE,        "score",     stprio);
 
 	if not(independent_players)
 		ScoreInfo_SetLabel_PlayerScore(SP_KILLS,        "kills",     0);
@@ -38,10 +38,10 @@ void ScoreRules_generic()
 	if(teamplay)
 	{
 		CheckAllowedTeams(world);
-		ScoreRules_basics(((c4>=0) ? 4 : (c3>=0) ? 3 : 2), SFL_SORT_PRIO_PRIMARY, TRUE);
+		ScoreRules_basics(((c4>=0) ? 4 : (c3>=0) ? 3 : 2), SFL_SORT_PRIO_PRIMARY, SFL_SORT_PRIO_PRIMARY, TRUE);
 	}
 	else
-		ScoreRules_basics(0, SFL_SORT_PRIO_PRIMARY, TRUE);
+		ScoreRules_basics(0, SFL_SORT_PRIO_PRIMARY, SFL_SORT_PRIO_PRIMARY, TRUE);
 	ScoreRules_basics_end();
 }
 
@@ -60,6 +60,7 @@ void ScoreRules_ctf()
 	{
 		case 0: // caps only
 			sp_caps = SFL_SORT_PRIO_PRIMARY;
+			sp_score = SFL_SORT_PRIO_SECONDARY;
 			break;
 		case 1: // caps, then score
 			sp_caps = SFL_SORT_PRIO_PRIMARY;
@@ -67,15 +68,15 @@ void ScoreRules_ctf()
 			break;
 		case 2: // score only
 		default:
-			sp_score = SFL_SORT_PRIO_PRIMARY;
 			sp_caps = SFL_SORT_PRIO_SECONDARY; // looks better ;)
+			sp_score = SFL_SORT_PRIO_PRIMARY;
 			break;
 	}
 
 	CheckAllowedTeams(world);
-	ScoreRules_basics(2 + (c3>=0), sp_score, TRUE); // NOTE this assumes that the rogue team is team 3
+	ScoreRules_basics(2 + (c3>=0), SFL_SORT_PRIO_PRIMARY, sp_score, TRUE); // NOTE this assumes that the rogue team is team 3
 	ScoreInfo_SetLabel_TeamScore  (ST_CTF_CAPS,     "caps",      sp_caps);
-	ScoreInfo_SetLabel_PlayerScore(SP_CTF_CAPS,     "caps",      sp_caps);
+	ScoreInfo_SetLabel_PlayerScore(SP_CTF_CAPS,     "caps",      SFL_SORT_PRIO_SECONDARY);
 	ScoreInfo_SetLabel_PlayerScore(SP_CTF_PICKUPS,  "pickups",   0);
 	ScoreInfo_SetLabel_PlayerScore(SP_CTF_FCKILLS,  "fckills",   0);
 	ScoreInfo_SetLabel_PlayerScore(SP_CTF_RETURNS,  "returns",   0);
@@ -96,7 +97,7 @@ void ScoreRules_dom()
 	else
 		sp_score = SFL_SORT_PRIO_PRIMARY;
 	CheckAllowedTeams(world);
-	ScoreRules_basics(((c4>=0) ? 4 : (c3>=0) ? 3 : 2), sp_score, TRUE);
+	ScoreRules_basics(((c4>=0) ? 4 : (c3>=0) ? 3 : 2), sp_score, sp_score, TRUE);
 	ScoreInfo_SetLabel_TeamScore  (ST_DOM_TICKS,    "ticks",     sp_domticks);
 	ScoreInfo_SetLabel_PlayerScore(SP_DOM_TICKS,    "ticks",     sp_domticks);
 	ScoreInfo_SetLabel_PlayerScore(SP_DOM_TAKES,    "takes",     0);
@@ -108,7 +109,7 @@ void ScoreRules_dom()
 #define SP_LMS_RANK 5
 void ScoreRules_lms()
 {
-	ScoreRules_basics(0, 0, FALSE);
+	ScoreRules_basics(0, 0, 0, FALSE);
 	ScoreInfo_SetLabel_PlayerScore(SP_LMS_LIVES,    "lives",     SFL_SORT_PRIO_SECONDARY);
 	ScoreInfo_SetLabel_PlayerScore(SP_LMS_RANK,     "rank",      SFL_LOWER_IS_BETTER | SFL_RANK | SFL_SORT_PRIO_PRIMARY | SFL_ALLOW_HIDE);
 	ScoreRules_basics_end();
@@ -124,7 +125,7 @@ void ScoreRules_lms()
 #define SP_KH_LOSSES 9
 void ScoreRules_kh(float teams)
 {
-	ScoreRules_basics(teams, SFL_SORT_PRIO_PRIMARY, TRUE);
+	ScoreRules_basics(teams, SFL_SORT_PRIO_PRIMARY, SFL_SORT_PRIO_PRIMARY, TRUE);
 	ScoreInfo_SetLabel_TeamScore  (ST_KH_CAPS,      "caps",      SFL_SORT_PRIO_SECONDARY);
 	ScoreInfo_SetLabel_PlayerScore(SP_KH_CAPS,      "caps",      SFL_SORT_PRIO_SECONDARY);
 	ScoreInfo_SetLabel_PlayerScore(SP_KH_PUSHES,    "pushes",    0);
@@ -142,7 +143,7 @@ void ScoreRules_kh(float teams)
 #define SP_RACE_TIME 5
 void ScoreRules_race()
 {
-	ScoreRules_basics(race_teams, 0, FALSE);
+	ScoreRules_basics(race_teams, 0, 0, FALSE);
 	if(race_teams)
 	{
 		ScoreInfo_SetLabel_TeamScore(  ST_RACE_LAPS,    "laps",      SFL_SORT_PRIO_PRIMARY);
