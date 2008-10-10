@@ -413,6 +413,7 @@ our %config = (
 	irc_user => undef,
 	irc_channel => undef,
 	irc_ping_delay => 120,
+	irc_trigger => "",
 
 	irc_nickserv_password => "",
 	irc_nickserv_identify => 'PRIVMSG NickServ :IDENTIFY %2$s',
@@ -1052,7 +1053,7 @@ sub irc_joinstage($)
 	} ],
 
 	# chat: IRC channel -> Nexuiz server
-	[ irc => q{:([^! ]*)![^ ]* (?i:PRIVMSG) (?i:(??{$config{irc_channel}})) :(?i:(??{$store{irc_nick}}))(?: |: ?)(.*)} => sub {
+	[ irc => q{:([^! ]*)![^ ]* (?i:PRIVMSG) (?i:(??{$config{irc_channel}})) :(?i:(??{$store{irc_nick}}))(?: |: ?|, ?)(.*)} => sub {
 		my ($nick, $message) = @_;
 		$nick = color_dpfix $nick;
 			# allow the nickname to contain colors in DP format! Therefore, NO color_irc2dp on the nickname!
@@ -1061,6 +1062,22 @@ sub irc_joinstage($)
 		out dp => 0, "rcon2irc_say_as \"$nick on IRC\" \"$message\"";
 		return 0;
 	} ],
+
+	(
+		length $config{irc_trigger}
+			?
+				[ irc => q{:([^! ]*)![^ ]* (?i:PRIVMSG) (?i:(??{$config{irc_channel}})) :(?i:(??{$config{irc_trigger}}))(?: |: ?|, ?)(.*)} => sub {
+					my ($nick, $message) = @_;
+					$nick = color_dpfix $nick;
+						# allow the nickname to contain colors in DP format! Therefore, NO color_irc2dp on the nickname!
+					$message = color_irc2dp $message;
+					$message =~ s/(["\\])/\\$1/g;
+					out dp => 0, "rcon2irc_say_as \"$nick on IRC\" \"$message\"";
+					return 0;
+				} ]
+			:
+				()
+	),
 
 	# irc: CTCP VERSION reply
 	[ irc => q{:([^! ]*)![^ ]* (?i:PRIVMSG) (?i:(??{$store{irc_nick}})) :\001VERSION( .*)?\001} => sub {
