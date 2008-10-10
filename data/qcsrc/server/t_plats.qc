@@ -362,7 +362,7 @@ void func_bobbing_controller_think()
 	local vector v;
 	self.nextthink = time + 0.1;
 	// calculate sinewave using makevectors
-	makevectors((time * self.owner.cnt + self.owner.phase) * '0 1 0');
+	makevectors((time * self.owner.cnt + self.owner.phase * 360) * '0 1 0');
 	v = self.owner.destvec + self.owner.movedir * v_forward_y;
 	// * 10 so it will arrive in 0.1 sec
 	self.owner.velocity = (v - self.owner.origin) * 10;
