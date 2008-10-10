@@ -20,6 +20,8 @@ COMPAT_FILES="
 	gfx/runningman_1on1remix_mini.tga
 	gfx/runningmanctf_mini.tga
 	gfx/runningman_mini.tga
+	gfx/sb_kh_full.tga
+	gfx/sb_kh_outline.tga
 	gfx/silvercity_mini.tga
 	gfx/stormkeep_mini.tga
 	gfx/strength_mini.tga
