@@ -107,7 +107,7 @@ COMPAT_FILES="
 "
 
 rev=`svnversion`
-pack="zzz_svn-serversupport-$rev"
+pack="zzz_svn-compat-$rev"
 echo "Support files to play on svn servers of revision $rev" > "$pack.txt"
 7za a -tzip -mx=9 "$pack.pk3" $COMPAT_FILES "$pack.txt"
 rm -f "$pack.txt"
