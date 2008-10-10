@@ -963,14 +963,16 @@ void play2(entity e, string filename)
 }
 
 .float announcetime;
-void announce(entity player, string msg)
+float announce(entity player, string msg)
 {
 	if(time > player.announcetime)
 	if(clienttype(player) == CLIENTTYPE_REAL)
 	{
 		player.announcetime = time + 0.3;
 		play2(player, msg);
+		return TRUE;
 	}
+	return FALSE;
 }
 
 void play2team(float t, string filename)

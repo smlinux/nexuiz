@@ -21,12 +21,12 @@ void W_MinstaNex_Attack (void)
 	{
 		if(yoda && flying)
 			announce(self, "announcer/male/yoda.ogg");
-		else if(headshot)
+		if(headshot)
 			announce(self, "announcer/male/headshot.ogg");
-		else if(damage_goodhits && self.minstanex_lasthit)
+		if(damage_goodhits && self.minstanex_lasthit)
 		{
-			announce(self, "announcer/male/impressive.ogg");
-			damage_goodhits = 0; // only every second time
+			if(announce(self, "announcer/male/impressive.ogg"))
+				damage_goodhits = 0; // only every second time
 		}
 	}
 
