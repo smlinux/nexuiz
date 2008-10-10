@@ -976,6 +976,9 @@ void kh_init()  // sets up th KH environment
 	kh_key_carried = kh_key_dropped;
 #endif
 
+	kh_controller.model = "";
+	kh_controller.modelindex = 0;
+
 	addstat(STAT_KH_KEYS, AS_INT, kh_state);
 
 	ScoreRules_kh(kh_teams);
