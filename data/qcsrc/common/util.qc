@@ -893,5 +893,7 @@ float almost_equals(float a, float b)
 
 float almost_in_bounds(float a, float b, float c)
 {
-	return almost_equals(b, median(a, b, c));
+	float eps;
+	eps = (max(a, -a) + max(c, -c)) * 0.001;
+	return b == median(a - eps, b, c + eps);
 }
