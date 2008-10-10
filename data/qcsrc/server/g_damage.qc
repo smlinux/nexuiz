@@ -572,13 +572,6 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 			attacker.lms_traveled_distance = cvar("g_lms_campcheck_distance");
 		}
 
-		if(targ != attacker)
-		if(!targ.deadflag)
-		if(damage > 0)
-		if(targ.classname == "player")
-		if(attacker)
-			attacker.hitsound += 1;
-
 		if (g_minstagib)
 		{
 			if ((deathtype == DEATH_FALL)  ||
@@ -678,11 +671,15 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 		}
 
 		// count the damage
+		if(attacker)
+		if(targ.classname == "player")
 		if(IsDifferentTeam(targ, attacker))
-		if (!targ.deadflag)
+		if(!targ.deadflag)
 		if(targ.takedamage == DAMAGE_AIM)
 		if(damage > 0)
 		{
+			attacker.hitsound += 1;
+
 			damage_goodhits += 1;
 			damage_gooddamage += damage;
 
