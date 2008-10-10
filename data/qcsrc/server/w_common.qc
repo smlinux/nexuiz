@@ -28,6 +28,9 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float bforce, f
 	local entity ent, endent;
 	local float endq3surfaceflags;
 	//local entity explosion;
+	
+	railgun_start = start;
+	railgun_end = end;
 
 	dir = normalize(end - start);
 	force = dir * bforce;

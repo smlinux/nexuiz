@@ -1,7 +1,10 @@
-
 float checkrules_firstblood;
 
 float yoda;
+float damage_goodhits;
+float damage_gooddamage;
+float headshot;
+
 
 float IsDifferentTeam(entity a, entity b)
 {
@@ -593,12 +596,6 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 				damage = 0;
 				targ.hitsound += 1;
 			}
-			else if (deathtype == WEP_MINSTANEX && targ.items & IT_STRENGTH)
-			{
-				if(clienttype(attacker) == CLIENTTYPE_REAL)
-					if(IsDifferentTeam(targ, attacker))
-						yoda = 1;
-			}
 			if (deathtype == WEP_LASER)
 			{
 				damage = 0;
@@ -613,12 +610,6 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 					attacker = targ;
 				}
 			}
-		} else {
-			if (!targ.deadflag)
-				if(targ.takedamage == DAMAGE_AIM)
-					if(IsFlying(targ))
-						if(IsDifferentTeam(targ, attacker))
-							yoda = 1;
 		}
 
 		// apply strength multiplier
@@ -684,6 +675,33 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 			}
 			else if (targ.runes & CURSE_VULNER)
 				damage = damage * cvar("g_balance_curse_vulner_takedamage");
+		}
+
+		// count the damage
+		if(IsDifferentTeam(targ, attacker))
+		if (!targ.deadflag)
+		if(targ.takedamage == DAMAGE_AIM)
+		if(damage > 0)
+		{
+			damage_goodhits += 1;
+			damage_gooddamage += damage;
+
+			if(!g_minstagib)
+			if(IsFlying(targ))
+				yoda = 1;
+
+			if(g_minstagib)
+			if(targ.items & IT_STRENGTH)
+				yoda = 1;
+
+			// HEAD SHOT:
+			// find height of hit on player axis
+			// if above view_ofs and below maxs, and also in the middle half of the bbox, it is head shot
+			vector headmins, headmaxs;
+			headmins = targ.origin + '0.5 0 0' * targ.mins_x + '0 0.5 0' * targ.mins_y + '0 0 1' * targ.view_ofs_z;
+			headmaxs = targ.origin + '0.5 0 0' * targ.maxs_x + '0 0.5 0' * targ.maxs_y + '0 0 1' * targ.maxs_z;
+			if(trace_hits_box(railgun_start, railgun_end, headmins, headmaxs))
+				headshot = 1;
 		}
 	}
 

@@ -413,55 +413,6 @@ void spawnfunc_trigger_hurt()
 	trigger_hurt_last = self;
 };
 
-float trace_hits_box_a0, trace_hits_box_a1;
-
-float trace_hits_box_1d(float end, float thmi, float thma)
-{
-	if(end == 0)
-	{
-		// just check if x is in range
-		if(0 < thmi)
-			return FALSE;
-		if(0 > thma)
-			return FALSE;
-	}
-	else
-	{
-		// do the trace with respect to x
-		// 0 -> end has to stay in thmi -> thma
-		trace_hits_box_a0 = max(trace_hits_box_a0, min(thmi / end, thma / end));
-		trace_hits_box_a1 = min(trace_hits_box_a1, max(thmi / end, thma / end));
-		if(trace_hits_box_a0 > trace_hits_box_a1)
-			return FALSE;
-	}
-	return TRUE;
-}
-
-float trace_hits_box(vector start, vector end, vector thmi, vector thma)
-{
-	end -= start;
-	thmi -= start;
-	thma -= start;
-	// now it is a trace from 0 to end
-
-	trace_hits_box_a0 = 0;
-	trace_hits_box_a1 = 1;
-
-	if(!trace_hits_box_1d(end_x, thmi_x, thma_x))
-		return FALSE;
-	if(!trace_hits_box_1d(end_y, thmi_y, thma_y))
-		return FALSE;
-	if(!trace_hits_box_1d(end_z, thmi_z, thma_z))
-		return FALSE;
-
-	return TRUE;
-}
-
-float tracebox_hits_box(vector start, vector mi, vector ma, vector end, vector thmi, vector thma)
-{
-	return trace_hits_box(start, end, thmi - ma, thma - mi);
-}
-
 float tracebox_hits_trigger_hurt(vector start, vector mi, vector ma, vector end)
 {
 	entity th;
