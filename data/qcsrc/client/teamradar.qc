@@ -141,7 +141,7 @@ void teamradar_loadcvars()
 	// match this to defaultNexuiz.cfg!
 	if(!cl_teamradar_scale) cl_teamradar_scale = 4096;
 	if(!cl_teamradar_background_alpha) cl_teamradar_background_alpha = 0.25;
-	if(!cl_teamradar_foreground_alpha) cl_teamradar_background_alpha = 1;
+	if(!cl_teamradar_foreground_alpha) cl_teamradar_foreground_alpha = 1;
 	if(!cl_teamradar_size_x) cl_teamradar_size_x = 128;
 	if(!cl_teamradar_size_y) cl_teamradar_size_y = cl_teamradar_size_x;
 
