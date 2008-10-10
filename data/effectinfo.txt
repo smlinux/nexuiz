@@ -1244,19 +1244,16 @@ airfriction 12
 // hagar trail
 // smoke
 effect TR_GRENADE
-trailspacing 5
+trailspacing 6
 type alphastatic
 color 0x303030 0x000000
 tex 0 8
 size 1 2
 bounce 1
-sizeincrease 5
-alpha 200 300 200
-lightradius 30
-lighttime 0
-lightcolor 6 3 1
-originjitter 2 2 2
-velocityjitter 3 3 3
+sizeincrease 2
+alpha 100 200 280
+originjitter 1 1 1
+velocityjitter 1 1 1
 velocitymultiplier -0.02
 //gravity -0.11
 // fire
@@ -1266,12 +1263,12 @@ trailspacing 2
 type static
 color 0xffdf72 0x811200
 tex 48 55
-size 4 4
+size 1 2
 sizeincrease -15
-alpha 100 144 588
+alpha 100 144 988
 airfriction 8
 velocityjitter 32 32 32
-velocitymultiplier -1.5
+velocitymultiplier -1.0
 // bubbles
 effect TR_GRENADE
 underwater
@@ -2092,15 +2089,15 @@ notunderwater
 count 28
 type smoke
 tex 48 55
-color 0x8f0d00 0xfffde4
+color 0xea691b 0xeed05a
 size 33 44
-sizeincrease 45
+sizeincrease 55
 alpha 200 256 612
-bounce 1.5
+bounce 2.5
 airfriction 19
 liquidfriction 19
 originjitter 8 8 8
-velocityjitter 812 812 812
+velocityjitter 912 912 912
 // smoke
 effect rocket_explode
 type alphastatic
@@ -2134,9 +2131,9 @@ notunderwater
 count 64
 type spark
 tex 40 40
-color 0x903010 0xFFD030
-size 2 2
-sizeincrease 5
+color 0xffa800 0xffedaf
+size 1 1
+sizeincrease 2
 alpha 44 256 384
 gravity 1
 airfriction -1
@@ -2144,7 +2141,7 @@ bounce 1.5
 liquidfriction 0.8
 velocityoffset 0 0 80
 originjitter 16 16 16
-velocityjitter 284 284 384
+velocityjitter 224 224 324
 
 
 
