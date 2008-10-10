@@ -92,7 +92,7 @@ void W_Grenade_Attack (void)
 	gren.movetype = MOVETYPE_BOUNCE;
 	gren.solid = SOLID_BBOX;
 	gren.effects = EF_LOWPRECISION;
-	gren.modelflags = MF_GRENADE;
+	gren.modelflags = MF_TRACER2;
 	gren.projectiledeathtype = WEP_GRENADE_LAUNCHER;
 	setmodel(gren, "models/grenademodel.md3"); // precision set above
 	setsize(gren, '0 0 0', '0 0 0');
@@ -129,7 +129,7 @@ void W_Grenade_Attack2 (void)
 	gren.movetype = MOVETYPE_BOUNCE;
 	gren.solid = SOLID_BBOX;
 	gren.effects = EF_LOWPRECISION;
-	gren.modelflags = MF_GRENADE;
+	gren.modelflags = MF_TRACER2;
 	gren.projectiledeathtype = WEP_GRENADE_LAUNCHER | HITTYPE_SECONDARY;
 	setmodel(gren, "models/grenademodel.md3"); // precision set above
 	setsize(gren, '0 0 -3', '0 0 -3');

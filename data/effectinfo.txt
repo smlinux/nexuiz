@@ -1241,9 +1241,56 @@ airfriction 12
 
 
 
-// grenade/hagar trail
+// hagar trail
 // smoke
 effect TR_GRENADE
+trailspacing 5
+type alphastatic
+color 0x303030 0x000000
+tex 0 8
+size 1 2
+bounce 1
+sizeincrease 5
+alpha 200 300 200
+lightradius 30
+lighttime 0
+lightcolor 6 3 1
+originjitter 2 2 2
+velocityjitter 3 3 3
+velocitymultiplier -0.02
+//gravity -0.11
+// fire
+effect TR_GRENADE
+notunderwater
+trailspacing 2
+type static
+color 0xffdf72 0x811200
+tex 48 55
+size 4 4
+sizeincrease -15
+alpha 100 144 588
+airfriction 8
+velocityjitter 32 32 32
+velocitymultiplier -1.5
+// bubbles
+effect TR_GRENADE
+underwater
+trailspacing 8
+type bubble
+tex 62 62
+color 0x404040 0x808080
+size 1 1
+alpha 256 256 256
+gravity -0.125
+bounce 1.5
+liquidfriction 4
+velocityjitter 16 16 16
+
+
+
+// mortar trail
+// smoke
+effect TR_KNIGHTSPIKE // used for MF_TRACER2
 notunderwater
 trailspacing 5
 type alphastatic
@@ -1258,7 +1305,7 @@ velocityjitter 3 3 3
 velocitymultiplier -0.02
 gravity -0.11
 //marker
-effect TR_GRENADE
+effect TR_KNIGHTSPIKE // used for MF_TRACER2
 type alphastatic
 color 0xFF0000 0xFF0000
 tex 62 62
@@ -1267,7 +1314,7 @@ sizeincrease -0.1
 trailspacing 1
 alpha 256 256 720
 // bubbles
-effect TR_GRENADE
+effect TR_KNIGHTSPIKE // used for MF_TRACER2
 underwater
 trailspacing 16
 type bubble
