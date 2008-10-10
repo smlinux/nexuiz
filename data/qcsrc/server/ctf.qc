@@ -1,6 +1,7 @@
 .entity sprite;
 entity ctf_worldflaglist; // CTF flags in the map
 .entity ctf_worldflagnext;
+.float dropperid;
 
 .float next_take_time;			// the next time a player can pick up a flag (time + blah)
 								/// I used this, in part, to fix the looping score bug. - avirox
@@ -328,6 +329,7 @@ void FlagTouch()
 		self.angles = '0 0 0';
 		bprint(other.netname, "^7 got the ", self.netname, "\n");
 		UpdateFrags(other, ctf_score_value("score_pickup_base"));
+		self.dropperid = other.playerid;
 		PlayerScore_Add(other, SP_CTF_PICKUPS, 1);
 		LogCTF("steal", self.team, other);
 		sound (other, CHAN_AUTO, self.noise, VOL_BASE, ATTN_NONE);
@@ -356,7 +358,7 @@ void FlagTouch()
 
 			// punish the player who last had it
 			FOR_EACH_PLAYER(player)
-				if(player.playerid == self.playerid)
+				if(player.playerid == self.dropperid)
 					PlayerScore_Add(player, SP_SCORE, -ctf_score_value("penalty_returned"));
 
 			// punish the team who was last carrying it
@@ -401,6 +403,7 @@ void FlagTouch()
 			f = ctf_score_value("score_pickup_dropped_late") * (1-f)
 			  + ctf_score_value("score_pickup_dropped_early") * f;
 			f = floor(f + 0.5);
+			self.dropperid = other.playerid;
 			//print("score is ", ftos(f), "\n");
 
 			UpdateFrags(other, f);
