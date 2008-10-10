@@ -2,6 +2,7 @@
 entity ctf_worldflaglist; // CTF flags in the map
 .entity ctf_worldflagnext;
 .float dropperid;
+.float ctf_droptime;
 
 .float next_take_time;			// the next time a player can pick up a flag (time + blah)
 								/// I used this, in part, to fix the looping score bug. - avirox
@@ -143,6 +144,7 @@ void DropFlag(entity e, entity penalty_receiver, entity attacker)
 		UpdateFrags(p, -ctf_score_value("penalty_drop"));
 	PlayerScore_Add(p, SP_CTF_DROPS, +1);
 	e.playerid = attacker.playerid;
+	e.ctf_droptime = time;
 	
 	WaypointSprite_Ping(p.waypointsprite_attachedforcarrier);
 	WaypointSprite_DetachCarrier(p);
@@ -239,6 +241,10 @@ void FlagThink()
 		DropFlag(self, world, world);
 		return;
 	}
+
+	if(cvar("g_ctf_allow_drop"))
+	if(e.BUTTON_USE)
+		DropFlag(self, e, world);
 };
 
 void FlagTouch()
@@ -387,7 +393,7 @@ void FlagTouch()
 			sound (other, CHAN_AUTO, self.noise1, VOL_BASE, ATTN_NONE);
 			ReturnFlag(self);
 		}
-		else if (!other.flagcarried)
+		else if (!other.flagcarried && (other.playerid != self.dropperid || time > self.ctf_droptime + cvar("g_balance_ctf_delay_collect")))
 		{
 			// pick up
 			self.solid = SOLID_NOT;
