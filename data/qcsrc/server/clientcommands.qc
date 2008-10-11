@@ -225,7 +225,7 @@ void SV_ParseClientCommand(string s) {
 	local string cmd;
 	local float i;
 
-	tokenize(s);
+	tokenize_sane(s);
 
 	if(GameCommand_Vote(s, self)) {
 		return;
@@ -342,7 +342,7 @@ void SV_ParseClientCommand(string s) {
 	} else if(argv(0) == "maplist") {
 		local float n, j;
 		local string col;
-		n = tokenize(cvar_string("g_maplist"));
+		n = tokenize_sane(cvar_string("g_maplist"));
 		sprint(self, "^7Maps in list: ");
 		for(i = 0, j = 0; i < n; ++i)
 		{
@@ -371,10 +371,10 @@ void SV_ParseClientCommand(string s) {
 	} else if(argv(0) == "voice") {
 		VoiceMessage(argv(1));
 	} else if(argv(0) == "say") {
-		Say(self, FALSE, substring(s, 4, strlen(s) - 4));
+		Say(self, FALSE, substring(s, argv_start_index(1), argv_end_index(-1) - argv_start_index(1)));
 		//clientcommand(self, formatmessage(s));
 	} else if(argv(0) == "say_team") {
-		Say(self, TRUE, substring(s, 9, strlen(s) - 9));
+		Say(self, TRUE, substring(s, argv_start_index(1), argv_end_index(-1) - argv_start_index(1)));
 		//clientcommand(self, formatmessage(s));
 	} else if(argv(0) == "info") {
 		cmd = cvar_string(strcat("sv_info_", argv(1)));

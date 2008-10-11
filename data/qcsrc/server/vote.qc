@@ -14,11 +14,11 @@ float VoteCheckNasty(string cmd)
 entity GetKickVoteVictim(string vote, string cmd, entity caller)
 {
 	float tokens;
-	float i, n, t;
+	float n, t;
 	string ns;
 	entity e;
 
-	tokens = tokenize(vote);
+	tokens = tokenize_sane(vote);
 	ns = "";
 
 	if(tokens >= 2)
@@ -37,10 +37,7 @@ entity GetKickVoteVictim(string vote, string cmd, entity caller)
 
 	if(ns != "")
 	{
-		GetKickVoteVictim_reason = "";
-		for(i = t; i < tokens; ++i)
-			GetKickVoteVictim_reason = strcat(GetKickVoteVictim_reason, argv(i), " ");
-		GetKickVoteVictim_reason = substring(GetKickVoteVictim_reason, 0, strlen(GetKickVoteVictim_reason) - 1);
+		GetKickVoteVictim_reason = substring(vote, argv_start_index(t), argv_end_index(-1) - argv_start_index(t));
 
 		n = stof(ns);
 		if(ns == ftos(n)) if(n >= 1) if(n <= maxclients)
@@ -58,8 +55,57 @@ entity GetKickVoteVictim(string vote, string cmd, entity caller)
 	return world;
 }
 
+string RemapVote_display;
+string RemapVote_vote;
+float RemapVote(string vote, string cmd, entity e)
+{
+	float vote_argc;
+	entity victim;
+	vote_argc = tokenize_sane(vote);
+
+	print(">>", vote, "<<\n");
+
+	if(!VoteAllowed(argv(0)))
+	{
+		return FALSE;
+	}
+
+	// VoteAllowed tokenizes!
+	vote_argc = tokenize_sane(vote);
+
+	// remap chmap to gotomap (forces intermission)
+	if(vote_argc < 2)
+		if(argv(0) == "chmap" || argv(0) == "gotomap" || argv(0) == "kick" || argv(0) == "kickban") // won't work without arguments
+			return FALSE;
+	if(argv(0) == "chmap")
+		vote = strcat("gotomap ", substring(vote, argv_start_index(1), argv_end_index(-1) - argv_start_index(1)));
+	if(argv(0) == "gotomap")
+	{
+		if(!(vote = ValidateMap(substring(vote, argv_start_index(1), argv_end_index(-1) - argv_start_index(1)), e)))
+			return FALSE;
+		vote = strcat("gotomap ", vote);
+		vote_argc = tokenize_sane(vote); // ValidateMap may have done some stuff to it
+	}
+
+	// make kick and kickban votes a bit nicer (and reject them if formatted badly)
+	if(argv(0) == "kick" || argv(0) == "kickban")
+	{
+		if(!(victim = GetKickVoteVictim(vote, cmd, e)))
+			return FALSE;
+		RemapVote_vote = GetKickVoteVictim_newcommand;
+		RemapVote_display = strcat("^1", vote, " (^7", victim.netname, "^1): ", GetKickVoteVictim_reason);
+	}
+	else
+	{
+		RemapVote_vote = vote;
+		RemapVote_display = strzone(strcat("^1", vote));
+	}
+
+	return TRUE;
+}
+
 float GameCommand_Vote(string s, entity e) {
-	local entity victim;
+	tokenize_sane(s);
 	if(argv(0) == "help") {
 		print_to(e, "  vote COMMANDS ARGUMENTS. See 'vote help' for more info.");
 		return TRUE;
@@ -86,7 +132,7 @@ float GameCommand_Vote(string s, entity e) {
 					print_to(e, "^1There is already a vote called.");
 				} else {
 					local string vote;
-					vote = VoteParse();
+					vote = VoteParse(s);
 					if(vote == "") {
 						print_to(e, "^1Your vote is empty. See help for more info.");
 					} else if(e
@@ -94,37 +140,9 @@ float GameCommand_Vote(string s, entity e) {
 							print_to(e, strcat("^1You have to wait ^2", ftos(e.vote_next - time), "^1 seconds before you can again call a vote."));
 					} else if(VoteCheckNasty(vote)) {
 						print_to(e, "Syntax error in command. See help for more info.");
-					} else if(VoteAllowed(strcat1(argv(2)))) { // strcat seems to be necessary
-						// remap chmap to gotomap (forces intermission)
-						if(vote == "chmap" || vote == "gotomap") // won't work without arguments
-							return TRUE;
-						if(substring(vote, 0, 6) == "chmap ")
-							vote = strcat("gotomap ", substring(vote, 6, strlen(vote) - 6));
-						if(substring(vote, 0, 8) == "gotomap ")
-						{
-							if(!(vote = ValidateMap(substring(vote, 8, strlen(vote) - 8), e)))
-								return TRUE;
-							vote = strcat("gotomap ", vote);
-						}
-
-						// make kick and kickban votes a bit nicer (and reject them if formatted badly)
-						if(substring(vote, 0, 5) == "kick " || substring(vote, 0, 8) == "kickban ")
-						{
-							if(!(victim = GetKickVoteVictim(vote, "vcall", e)))
-								return TRUE;
-							vote = GetKickVoteVictim_newcommand;
-							votecalledvote_display = strzone(strcat("^1", vote, " (^7", victim.netname, "^1): ", GetKickVoteVictim_reason));
-						}
-						else if(vote == "kick" || vote == "kickban")
-						{
-							print_to(e, strcat("Usage: ", vote, " #playernumber (as in \"status\")\n"));
-							return TRUE;
-						}
-						else
-						{
-							votecalledvote_display = strzone(strcat("^1", vote));
-						}
-						votecalledvote = strzone(vote);
+					} else if(RemapVote(vote, "vcall", e)) {
+						votecalledvote = strzone(RemapVote_vote);
+						votecalledvote_display = strzone(RemapVote_display);
 						votecalled = TRUE;
 						votecalledmaster = FALSE;
 						votefinished = time + cvar("sv_vote_timeout");
@@ -183,41 +201,17 @@ float GameCommand_Vote(string s, entity e) {
 			}
 		} else if(argv(1) == "do") {
 			if(!e || e.vote_master) {
-				local string dovote, dovote_display;
-				dovote = VoteParse();
+				local string dovote;
+				dovote = VoteParse(s);
 				if(dovote == "") {
 					print_to(e, "^1Your command was empty. See help for more info.");
 				} else if(VoteCheckNasty(dovote)) {
 					print_to(e, "Syntax error in command. See help for more info.");
-				} else if(VoteAllowed(strcat1(argv(2)))) { // strcat seems to be necessary
-					if(dovote == "chmap" || dovote == "gotomap") // won't work without arguments
-						return TRUE;
-					if(substring(dovote, 0, 6) == "chmap ")
-						dovote = strcat("gotomap ", substring(dovote, 6, strlen(dovote) - 6));
-					if(substring(dovote, 0, 8) == "gotomap ")
-					{
-						if(!(dovote = ValidateMap(substring(dovote, 8, strlen(dovote) - 8), e)))
-							return TRUE;
-						dovote = strcat("gotomap ", dovote);
-					}
-
-					dovote_display = dovote;
-					if(substring(dovote, 0, 5) == "kick " || substring(dovote, 0, 8) == "kickban ")
-					{
-						if(!(victim = GetKickVoteVictim(dovote, "vdo", e)))
-							return TRUE;
-						dovote = GetKickVoteVictim_newcommand;
-						dovote_display = strcat("^1", dovote, " (^7", victim.netname, "^1): ", GetKickVoteVictim_reason);
-					}
-					else if(dovote == "kick" || dovote == "kickban")
-					{
-						print_to(e, strcat("Usage: ", dovote, " #playernumber (as in \"status\")\n"));
-						return TRUE;
-					}
-					bprint("\{1}^2* ^3", VoteNetname(e), "^2 used his ^3master^2 status to do \"^2", dovote_display, "^2\".\n");
+				} else if(RemapVote(dovote, "vdo", e)) { // strcat seems to be necessary
+					bprint("\{1}^2* ^3", VoteNetname(e), "^2 used his ^3master^2 status to do \"^2", RemapVote_display, "^2\".\n");
 					if(cvar("sv_eventlog"))
-						GameLogEcho(strcat(":vote:vdo:", ftos(e.playerid), ":", dovote_display));
-					localcmd(strcat(dovote, "\n"));
+						GameLogEcho(strcat(":vote:vdo:", ftos(e.playerid), ":", RemapVote_display));
+					localcmd(strcat(RemapVote_vote, "\n"));
 				} else {
 					print_to(e, "^1This command is not ok. See help for more info.");
 				}
@@ -378,21 +372,12 @@ void VoteThink() {
 	}
 }
 
-string VoteParse() {
-	local float index;
-	index = 3;
-	local string vote;
-	vote = argv(2);
-	while(argv(index) != "") {
-		vote = strcat(vote, " ", argv(index));
-		++index;
-	}
-
-	return vote;
+string VoteParse(string all) {
+	return substring(all, argv_start_index(2), argv_end_index(-1) - argv_start_index(2));
 }
 
 float VoteAllowed(string votecommand) {
-	tokenize(cvar_string("sv_vote_commands"));
+	tokenize_sane(cvar_string("sv_vote_commands"));
 	local float index;
 	index = 0;
 	while(argv(index) != "") {

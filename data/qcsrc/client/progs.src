@@ -1,14 +1,14 @@
 ../../csprogs.dat
 pre.qh
 
+../common/util-pre.qh
 Defs.qc
 csqc_constants.qc
 ../common/constants.qh
-
 csqc_builtins.qc
+../common/util.qh
 
 ../common/mapinfo.qh
-../common/util.qh
 interpolate.qh
 teamradar.qh
 waypointsprites.qh

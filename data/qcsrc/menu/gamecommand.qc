@@ -34,7 +34,7 @@ void _dumptree_close(entity pass, entity me)
 void GameCommand(string theCommand)
 {
 	float argc;
-	argc = tokenize(theCommand);
+	argc = tokenize_sane(theCommand);
 
 	if(argv(0) == "help" || argc == 0)
 	{

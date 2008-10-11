@@ -36,7 +36,7 @@ void saveCvarsMulti(entity me)
 	me.saveCvars_Multi(me);
 	s = cvar_string(me.cvarName);
 
-	n = tokenize(me.cvarNames_Multi);
+	n = tokenize_sane(me.cvarNames_Multi);
 	for(i = 0; i < n; ++i)
 		cvar_set(argv(i), s);
 }
@@ -193,7 +193,7 @@ void() Item_Nex_ExtResponseSystem_CheckForResponse =
 	local float argc;
 	while(strlen((s = getextresponse())))
 	{
-		argc = tokenize(s);
+		argc = tokenize_sane(s);
 		Item_Nex_ExtResponseSystem_Parse(argc);
 	}
 }

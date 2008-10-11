@@ -245,7 +245,6 @@ float votefinished;
 .float vote_next;
 .float vote_vote;
 void VoteThink();
-string VoteParse();
 float VoteAllowed(string vote);
 void VoteReset();
 void VoteAccept();

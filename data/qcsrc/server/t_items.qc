@@ -613,7 +613,7 @@ void weapon_defaultspawnfunc(float wpn)
 	if(self.classname != "droppedweapon" && self.classname != "replacedweapon")
 	{
 		s = cvar_string(strcat("g_weaponreplace_", ftos(wpn)));
-		t = tokenize(s);
+		t = tokenize_sane(s);
 		if(t >= 2)
 		{
 			self.team = --internalteam;
@@ -1128,7 +1128,7 @@ void spawnfunc_target_items (void)
 	precache_sound("misc/powerup.wav");
 	precache_sound("weapons/weaponpickup.wav");
 
-	n = tokenize(self.netname);
+	n = tokenize_sane(self.netname);
 	for(i = 0; i < n; ++i)
 	{
 		if(argv(i) == "unlimited_ammo") self.items |= IT_UNLIMITED_AMMO;

@@ -82,7 +82,7 @@ void() m_init_delayed =
 	}
 	draw_currentSkin = strzone(draw_currentSkin);
 	while((s = fgets(fh)))
-		if(tokenize(s) == 2)
+		if(tokenize_insane(s) == 2) // uses '...' syntax for vectors
 			Skin_ApplySetting(argv(0), argv(1));
 	fclose(fh);
 

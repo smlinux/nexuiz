@@ -168,7 +168,7 @@ void cvar_changes_init()
 		return;
 	while((s = fgets(fh)))
 	{
-		n = tokenize(s);
+		n = tokenize_sane(s);
 		if(n < 1)
 			continue;
 		if(argv(0) == "//")
@@ -363,7 +363,7 @@ void spawnfunc_worldspawn (void)
 		{
 			while((s = fgets(fd)))
 			{
-				l = tokenize(s);
+				l = tokenize_sane(s);
 				if(l < 2)
 					continue;
 				if(argv(0) == "cd")

@@ -420,7 +420,7 @@ void EffectIndexDump()
 	fh = fopen("effectinfo.txt", FILE_READ);
 	while((s = fgets(fh)))
 	{
-		tokenize(s);
+		tokenize_sane(s);
 		if(argv(0) == "effect")
 		{
 			if(db_get(d, argv(1)) != "1")
@@ -456,7 +456,7 @@ void GameCommand(string command)
 	float argc;
 	entity client;
 	float entno;
-	argc = tokenize(command);
+	argc = tokenize_sane(command);
 
 	if(argv(0) == "help" || argc == 0)
 	{

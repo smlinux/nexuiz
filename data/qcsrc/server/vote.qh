@@ -8,7 +8,7 @@ void VoteHelp(entity e);
 string VoteNetname(entity e);
 string ValidateMap(string m, entity e);
 void VoteThink();
-string VoteParse();
+string VoteParse(string s);
 float VoteAllowed(string votecommand);
 void VoteReset();
 void VoteAccept();

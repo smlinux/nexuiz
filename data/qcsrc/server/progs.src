@@ -1,12 +1,13 @@
 ../../progs.dat // output filename
 
+../common/util-pre.qh
 sys.qh
 builtins.qh
 constants.qh
 ../common/constants.qh
 defs.qh		// Should rename this, it has fields and globals
-
 extensions.qh
+../common/util.qh
 
 //// tZork Turrets ////
 tturrets/include/turret_tturrets_early.qh
@@ -14,7 +15,6 @@ tturrets/include/turret_tturrets_early.qh
 campaign.qh
 ../common/campaign_common.qh
 ../common/mapinfo.qh
-../common/util.qh
 ../common/util.qc
 
 portals.qh

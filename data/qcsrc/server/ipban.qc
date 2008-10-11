@@ -55,7 +55,7 @@ void Ban_LoadBans()
 		Ban_Delete(i);
 	ban_count = 0;
 	ban_loaded = TRUE;
-	n = tokenize(cvar_string("g_banned_list"));
+	n = tokenize_sane(cvar_string("g_banned_list"));
 	if(stof(argv(0)) == 1)
 	{
 		ban_count = (n - 1) / 2;
@@ -207,7 +207,7 @@ float GameCommand_Ban(string command)
 	float entno;
 	float masksize;
 
-	argc = tokenize(command);
+	argc = tokenize_sane(command);
 	if(argv(0) == "help")
 	{
 		print("  kickban # n m p - kickban player n for m seconds, using mask size p (1 to 4)\n");

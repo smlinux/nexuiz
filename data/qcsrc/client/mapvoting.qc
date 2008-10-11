@@ -242,7 +242,7 @@ void MapVote_CheckPK3(string pic, string pk3, float id)
 	}
 	else
 	{
-		Cmd_MapVote_MapDownload(tokenize(strcat("mv_download ", ftos(id))));
+		Cmd_MapVote_MapDownload(tokenize_sane(strcat("mv_download ", ftos(id))));
 	}
 }
 

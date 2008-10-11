@@ -105,3 +105,14 @@ void get_mi_min_max_texcoords(float mode);
 
 float almost_equals(float a, float b);
 float almost_in_bounds(float a, float b, float c);
+
+#undef tokenize
+#undef tokenizebyseparator
+#undef argv
+
+var string(float) argv;
+var float(float) argv_start_index;
+var float(float) argv_end_index;
+float tokenize_sane(string s);
+float tokenize_insane(string s);
+float tokenizebyseparator(string s, string sep);

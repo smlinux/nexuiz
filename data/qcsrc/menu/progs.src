@@ -1,14 +1,15 @@
 ../../menu.dat
 
 config.qh
+../common/util-pre.qh
 msys.qh
 mbuiltin.qh
+../common/util.qh
 
 oo/base.h
 
 ../common/constants.qh
 ../common/mapinfo.qh
-../common/util.qh
 ../common/campaign_common.qh
 
 gamecommand.qh

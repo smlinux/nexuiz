@@ -253,7 +253,7 @@ float CSQC_ConsoleCommand(string strMessage)
 	float argc;
 	// Tokenize String
 	//argc = tokenize(strMessage);
-	argc = tokenizebyseparator(strMessage, " ");
+	argc = tokenize_sane(strMessage);
 	
 	// Acquire Command
 	local string strCmd;
@@ -305,7 +305,7 @@ float CSQC_ConsoleCommand(string strMessage)
 float GameCommand(string msg)
 {
 	float argc;
-	argc = tokenize(msg);
+	argc = tokenize_sane(msg);
 	string cmd;
 	cmd = argv(0);
 	if(cmd == "mv_download") {
@@ -879,7 +879,7 @@ string getcommandkey(string text, string command)
 	{
 		if (!keys) 
 		{
-			n = tokenize(findkeysforcommand(command));
+			n = tokenize_insane(findkeysforcommand(command)); // uses '...' strings
 			for(j = 0; j < n; ++j)
 			{
 				k = stof(argv(j));
