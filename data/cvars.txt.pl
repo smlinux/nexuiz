@@ -71,7 +71,7 @@ my $ignore_re = qr{
 while(<DATA>)
 {
 	chomp;
-	if(/^\^7([a-z0-9_]*) is "(.*?)" \["(.*?)"\] (.*)$/)
+	if(/^(?:\^7)?([a-z0-9_]*) is "(.*?)" \["(.*?)"\] (.*)$/)
 	{
 		my ($cvar, $value, $default, $description) = ($1, $2, $3, $4);
 		if($cvar =~ /^$ignore_re$/)
@@ -94,7 +94,33 @@ while(<DATA>)
 }
 
 __DATA__
-====== Log started (Mon Sep 29 13:10:47 2008) ======
+List made using:
+nexuiz-dedicated +sys_colortranslation 2 +sys_specialcharactertranslation 0 +cvarlist +quit
+
+Nexuiz Linux 21:05:53 Oct 10 2008 8527 debug
+Trying to load library... "libz.so.1" - loaded.
+Added packfile data/common-spog.pk3 (26 files)
+Trying to load library... "libcurl.so.4" "libcurl.so.3" - loaded.
+execing quake.rc
+execing default.cfg
+execing defaultNexuiz.cfg
+Warning: Could not expand $qport in alias if_dedicated
+execing physicsQBR.cfg
+execing newhook.cfg
+execing ctfscoring-nex242.cfg
+execing weapons.cfg
+execing normal.cfg
+Warning: Could not expand $r_showsurfaces
+Warning: Could not expand $gl_finish
+Warning: Could not expand $v_kicktime
+couldn't exec config.cfg
+execing config_update.cfg
+Warning: Could not expand $v_hwgamma in alias _update_configversion_0
+Warning: Could not expand $r_glsl_contrastboost in alias _update_configversion_0
+Warning: Could not expand $r_glsl_contrastboost in alias _update_0_r_glsl_cb_1
+Ignore the error message above, the check works fine otherwise 
+couldn't exec data/campaign.cfg
+couldn't exec autoexec.cfg
 ^7_alientrap_net_banlist is "" [""] custom cvar
 ^7_backup_con_chatvars_set is "0" ["0"] custom cvar
 ^7_cl_color is "102" ["102"] internal storage cvar for current player colors (changed by color command)
@@ -103,7 +129,6 @@ __DATA__
 ^7_cl_playerskin is "0" ["0"] internal storage cvar for current player skin in Nexuiz (changed by playerskin command)
 ^7_cl_rate is "20000" ["20000"] internal storage cvar for current rate (changed by rate command)
 ^7_supports_weaponpriority is "0" ["0"] custom cvar
-^7_sv_init is "0" ["1"] custom cvar
 ^7_update_0_have_r_glsl_cb is "1" ["1"] custom cvar
 ^7bot_ai_aimskill_blendrate is "2" ["2"] custom cvar
 ^7bot_ai_aimskill_firetolerance_distdegrees is "180" ["180"] custom cvar
@@ -163,6 +188,14 @@ __DATA__
 ^7cl_playerdetailreduction is "0" ["0"] custom cvar
 ^7cl_port is "0" ["0"] forces client to use chosen port number if not 0
 ^7cl_shownames is "1" ["1"] custom cvar
+^7cl_teamradar is "1" ["1"] custom cvar
+^7cl_teamradar_background_alpha is "0.4" ["0.4"] custom cvar
+^7cl_teamradar_foreground_alpha is "0.8" ["0.8"] custom cvar
+^7cl_teamradar_position is "0 0" ["0 0"] custom cvar
+^7cl_teamradar_rotation is "0" ["0"] custom cvar
+^7cl_teamradar_scale is "4096" ["4096"] custom cvar
+^7cl_teamradar_size is "128 128" ["128 128"] custom cvar
+^7cl_teamradar_zoommode is "0" ["0"] custom cvar
 ^7cl_weaponpriority is "10 9 8 11 7 6 5 4 3 2 1" ["10 9 8 11 7 6 5 4 3 2 1"] custom cvar
 ^7cl_weaponpriority0 is "9 8 4" ["9 8 4"] custom cvar
 ^7cl_weaponpriority1 is "7 6 5 1" ["7 6 5 1"] custom cvar
@@ -178,7 +211,7 @@ __DATA__
 ^7cl_zoomfactor is "5" ["5"] custom cvar
 ^7cl_zoomsensitivity is "0" ["0"] custom cvar
 ^7cl_zoomspeed is "3.5" ["3.5"] custom cvar
-^7cmdline is "/nexuiz/haggerCTF/Nexuiz/darkplaces/nexuiz-dedicated " ["/nexuiz/haggerCTF/Nexuiz/darkplaces/nexuiz-dedicated "] contains commandline the engine was launched with
+^7cmdline is "/nexuiz/haggerCTF/Nexuiz/darkplaces/nexuiz-dedicated +sys_colortranslation 2 +sys_specialcharactertranslation 0 +cvarlist +quit " ["/nexuiz/haggerCTF/Nexuiz/darkplaces/nexuiz-dedicated +sys_colortranslation 2 +sys_specialcharactertranslation 0 +cvarlist +quit "] contains commandline the engine was launched with
 ^7collision_endnudge is "0" ["0"] how much to bias collision trace end
 ^7collision_enternudge is "0" ["0"] how much to bias collision entry fraction
 ^7collision_impactnudge is "0.03125" ["0.03125"] how much to back off from the impact
@@ -222,7 +255,7 @@ __DATA__
 ^7developer_networking is "0" ["0"] prints all received and sent packets (recommended only for debugging)
 ^7edgefriction is "1" ["1"] how much you slow down when nearing a ledge you might fall off
 ^7ekg is "0" ["0"] custom cvar
-^7fraglimit is "30" ["0"] ends level if this many frags is reached by any player
+^7fraglimit is "0" ["0"] ends level if this many frags is reached by any player
 ^7fraglimit_override is "-1" ["-1"] custom cvar
 ^7fs_empty_files_in_pack_mark_deletions is "1" ["1"] if enabled, empty files in a pak/pk3 count as not existing but cancel the search in further packs, effectively allowing patch pak/pk3 files to 'delete' files
 ^7g_antilag is "1" ["1"] custom cvar
@@ -275,6 +308,8 @@ __DATA__
 ^7g_balance_crylink_secondary_shots is "7" ["7"] custom cvar
 ^7g_balance_crylink_secondary_speed is "7000" ["7000"] custom cvar
 ^7g_balance_crylink_secondary_spread is "0.08" ["0.08"] custom cvar
+^7g_balance_ctf_damageforcescale is "1" ["1"] custom cvar
+^7g_balance_ctf_delay_collect is "1.0" ["1.0"] custom cvar
 ^7g_balance_curse_empathy_minhealth is "20" ["20"] custom cvar
 ^7g_balance_curse_empathy_takedamage is "-0.4" ["-0.4"] custom cvar
 ^7g_balance_curse_slow_atkrate is "1.5" ["1.5"] custom cvar
@@ -428,6 +463,8 @@ __DATA__
 ^7g_balance_pause_health_regen_spawn is "0" ["0"] custom cvar
 ^7g_balance_pause_health_rot is "5" ["5"] custom cvar
 ^7g_balance_pause_health_rot_spawn is "10" ["10"] custom cvar
+^7g_balance_portal_health is "200" ["200"] custom cvar
+^7g_balance_portal_lifetime is "15" ["15"] custom cvar
 ^7g_balance_porto_primary_ammo is "25" ["25"] custom cvar
 ^7g_balance_porto_primary_lifetime is "30" ["30"] custom cvar
 ^7g_balance_porto_primary_refire is "1.5" ["1.5"] custom cvar
@@ -532,21 +569,37 @@ __DATA__
 ^7g_cloaked is "0" ["0"] custom cvar
 ^7g_configversion is "1" ["0"] custom cvar
 ^7g_ctf is "0" ["0"] custom cvar
+^7g_ctf_allow_drop is "0" ["0"] custom cvar
 ^7g_ctf_capture_limit is "-1" ["-1"] custom cvar
 ^7g_ctf_flag_returntime is "30" ["30"] custom cvar
 ^7g_ctf_flagcarrier_selfdamage is "1" ["1"] custom cvar
 ^7g_ctf_flagcarrier_selfforce is "1" ["1"] custom cvar
 ^7g_ctf_flagpenalty_drop is "0" ["0"] custom cvar
+^7g_ctf_flagpenalty_returned is "0" ["0"] custom cvar
 ^7g_ctf_flagpenalty_suicidedrop is "1" ["1"] custom cvar
 ^7g_ctf_flagscore_capture is "20" ["20"] custom cvar
 ^7g_ctf_flagscore_kill is "1" ["1"] custom cvar
 ^7g_ctf_flagscore_pickup_base is "1" ["1"] custom cvar
 ^7g_ctf_flagscore_pickup_dropped_early is "1" ["1"] custom cvar
-^7g_ctf_flagscore_pickup_dropped_late is "5" ["5"] custom cvar
+^7g_ctf_flagscore_pickup_dropped_late is "1" ["1"] custom cvar
 ^7g_ctf_flagscore_return is "5" ["5"] custom cvar
 ^7g_ctf_flagscore_return_by_killer is "5" ["5"] custom cvar
 ^7g_ctf_flagscore_return_rogue is "10" ["10"] custom cvar
 ^7g_ctf_flagscore_return_rogue_by_killer is "10" ["10"] custom cvar
+^7g_ctf_fullbrightflags is "1" ["1"] custom cvar
+^7g_ctf_ignore_frags is "0" ["0"] custom cvar
+^7g_ctf_personalpenalty_drop is "0" ["0"] custom cvar
+^7g_ctf_personalpenalty_returned is "0" ["0"] custom cvar
+^7g_ctf_personalpenalty_suicidedrop is "1" ["1"] custom cvar
+^7g_ctf_personalscore_capture is "20" ["20"] custom cvar
+^7g_ctf_personalscore_kill is "1" ["1"] custom cvar
+^7g_ctf_personalscore_pickup_base is "1" ["1"] custom cvar
+^7g_ctf_personalscore_pickup_dropped_early is "1" ["1"] custom cvar
+^7g_ctf_personalscore_pickup_dropped_late is "1" ["1"] custom cvar
+^7g_ctf_personalscore_return is "5" ["5"] custom cvar
+^7g_ctf_personalscore_return_by_killer is "5" ["5"] custom cvar
+^7g_ctf_personalscore_return_rogue is "10" ["10"] custom cvar
+^7g_ctf_personalscore_return_rogue_by_killer is "10" ["10"] custom cvar
 ^7g_ctf_respawn_delay is "0" ["0"] custom cvar
 ^7g_ctf_respawn_waves is "0" ["0"] custom cvar
 ^7g_ctf_win_mode is "2" ["2"] custom cvar
@@ -593,10 +646,10 @@ __DATA__
 ^7g_lms_start_ammo_shells is "50" ["50"] custom cvar
 ^7g_lms_start_armor is "100" ["100"] custom cvar
 ^7g_lms_start_health is "250" ["250"] custom cvar
-^7g_maplist is "silvercity soylent basement basementctf toxic skyway slimepit ruiner starship runningman bloodprison farewell darkzone strength aneurysm final_rage bloodprisonctf warfare dismal reslimed runningman_1on1remix stormkeep bluesky aggressor bleach dieselpower evilspace runningmanctf downer" ["aggressor aneurysm basement basementctf bleach bloodprison bloodprisonctf bluesky darkzone dieselpower dismal downer evilspace farewell final_rage reslimed ruiner runningman_1on1remix runningman runningmanctf silvercity skyway slimepit soylent starship stormkeep strength toxic warfare"] custom cvar
+^7g_maplist is "aggressor aneurysm basement basementctf bleach bloodprison bloodprisonctf bluesky darkzone dieselpower dismal downer evilspace farewell final_rage reslimed ruiner runningman_1on1remix runningman runningmanctf silvercity skyway slimepit soylent starship stormkeep strength toxic warfare" ["aggressor aneurysm basement basementctf bleach bloodprison bloodprisonctf bluesky darkzone dieselpower dismal downer evilspace farewell final_rage reslimed ruiner runningman_1on1remix runningman runningmanctf silvercity skyway slimepit soylent starship stormkeep strength toxic warfare"] custom cvar
 ^7g_maplist_check_waypoints is "0" ["0"] custom cvar
 ^7g_maplist_index is "0" ["0"] custom cvar
-^7g_maplist_mostrecent is "silvercity " [""] custom cvar
+^7g_maplist_mostrecent is "" [""] custom cvar
 ^7g_maplist_mostrecent_count is "3" ["3"] custom cvar
 ^7g_maplist_selectrandom is "0" ["0"] custom cvar
 ^7g_maplist_shuffle is "1" ["1"] custom cvar
@@ -737,6 +790,7 @@ __DATA__
 ^7g_waypointsprite_minalpha is "0.4" ["0.4"] custom cvar
 ^7g_waypointsprite_minscale is "1" ["1"] custom cvar
 ^7g_waypointsprite_normdistance is "512" ["512"] custom cvar
+^7g_waypointsprite_scale is "1" ["1"] custom cvar
 ^7g_waypointsprite_stuffbinds is "0" ["0"] custom cvar
 ^7g_waypointsprite_timealphaexponent is "1" ["1"] custom cvar
 ^7g_weapon_stay is "0" ["0"] custom cvar
@@ -775,7 +829,7 @@ __DATA__
 ^7joyyawsensitivity is "-1.8" ["-1.8"] custom cvar
 ^7lastlevel is "" [""] custom cvar
 ^7log_dest_udp is "" [""] UDP address to log messages to (in QW rcon compatible format); multiple destinations can be separated by spaces; DO NOT SPECIFY DNS NAMES HERE
-^7log_file is "x" [""] filename to log messages to
+^7log_file is "" [""] filename to log messages to
 ^7menu_cdtrack is "digital-pursuit" ["digital-pursuit"] custom cvar
 ^7menu_maxplayers is "8" ["8"] custom cvar
 ^7menu_mouse_absolute is "0" ["0"] custom cvar
@@ -1014,8 +1068,8 @@ __DATA__
 ^7sv_wateraccelerate is "-1" ["-1"] rate at which a player accelerates to sv_maxspeed while in the air, if less than 0 the sv_accelerate variable is used instead
 ^7sv_waterfriction is "-1" ["-1"] how fast you slow down, if less than 0 the sv_friction variable is used instead
 ^7sv_writepicture_quality is "10" ["10"] WritePicture quality offset (higher means better quality, but slower)
-^7sys_colortranslation is "1" ["1"] terminal console color translation (supported values: 0 = strip color codes, 1 = translate to ANSI codes, 2 = no translation)
-^7sys_specialcharactertranslation is "1" ["1"] terminal console conchars to ASCII translation (set to 0 if your conchars.tga is for an 8bit character set or if you want raw output)
+^7sys_colortranslation is "2" ["1"] terminal console color translation (supported values: 0 = strip color codes, 1 = translate to ANSI codes, 2 = no translation)
+^7sys_specialcharactertranslation is "0" ["1"] terminal console conchars to ASCII translation (set to 0 if your conchars.tga is for an 8bit character set or if you want raw output)
 ^7sys_ticrate is "0.05" ["0.05"] how long a server frame is in seconds, 0.05 is 20fps server rate, 0.1 is 10fps (can not be set higher than 0.1), 0 runs as many server frames as possible (makes games against bots a little smoother, overwhelms network players), 0.0138889 matches QuakeWorld physics
 ^7sys_useclockgettime is "0" ["0"] use POSIX clock_gettime function (which has issues if the system clock speed is far off, as it can't get fixed by NTP) for timing rather than gettimeofday (which has issues if the system time is stepped by ntpdate, or apparently on some Xen installations)
 ^7sys_usenoclockbutbenchmark is "0" ["0"] don't use ANY real timing, and simulate a clock (for benchmarking); the game then runs as fast as possible. Run a QC mod with bots that does some stuff, then does a quit at the end, to benchmark a server. NEVER do this on a public server.
@@ -1132,5 +1186,4 @@ __DATA__
 ^7v_kicktime is "$v_kicktime" ["$v_kicktime"] custom cvar
 ^7vid_x11_display is "" [""] custom cvar
 ^7welcome_message_time is "8" ["8"] custom cvar
-^71038 cvar(s)
-====== Log stopped (Mon Sep 29 13:10:51 2008) ======
+^71065 cvar(s)
