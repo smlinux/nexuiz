@@ -82,8 +82,11 @@ void() m_init_delayed =
 	}
 	draw_currentSkin = strzone(draw_currentSkin);
 	while((s = fgets(fh)))
-		if(tokenize_insane(s) == 2) // uses '...' syntax for vectors
-			Skin_ApplySetting(argv(0), argv(1));
+	{
+		n = tokenize_sane(s);
+		if(n >= 2)
+			Skin_ApplySetting(argv(0), substring(s, argv_start_index(1), argv_end_index(-1) - argv_start_index(1)));
+	}
 	fclose(fh);
 
 	glob = search_begin(strcat(draw_currentSkin, "/*.tga"), TRUE, TRUE);
