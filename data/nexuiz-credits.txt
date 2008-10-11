@@ -32,7 +32,7 @@ Wolfgang "Blub\0" Bumiller
 *Programmer
 
 Tyler "-z-" Mulligan
-*Web Developer and Graphic Designer
+*Web Developer and Interaction Designer
 
 Tenshihan
 *Sound FX
