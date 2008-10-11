@@ -431,6 +431,7 @@ our %config = (
 	dp_password => undef,
 	dp_status_delay => 30,
 	dp_server_from_wan => "",
+	irc_local => "",
 
 	plugins => "",
 );
@@ -643,7 +644,7 @@ $SIG{TERM} = sub {
 
 # Create the two channels to gateway between...
 
-$channels{irc} = new Channel::Line(new Connection::Socket(tcp => "" => $config{irc_server} => 6667));
+$channels{irc} = new Channel::Line(new Connection::Socket(tcp => $config{irc_local} => $config{irc_server} => 6667));
 $channels{dp} = new Channel::QW(my $dpsock = new Connection::Socket(udp => $config{dp_listen} => $config{dp_server} => 26000), $config{dp_password});
 $config{dp_listen} = $dpsock->sockname();
 print "Listening on $config{dp_listen}\n";
