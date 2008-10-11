@@ -1214,6 +1214,7 @@ void CauseRebalance(float source_team, float howmany_toomany)
 	}
 	else
 	{
+		if(cvar("g_balance_teams_complain"))
 		if(howmany_toomany < cvar("g_balance_teams_complain"))
 			return;
 		if(time < lastRebalanceInfo + 90)
