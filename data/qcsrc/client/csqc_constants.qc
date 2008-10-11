@@ -168,7 +168,7 @@ const float DRAWFLAG_NORMAL = 0;
 const float DRAWFLAG_ADDITIVE = 1;
 const float DRAWFLAG_MODULATE = 2;
 const float DRAWFLAG_2XMODULATE = 3;
-const float DRAWFLAG_NUMFLAGS = 4;
+const float DRAWFLAG_SCREEN = 4;
 const float DRAWFLAG_MIPMAP = 0x100; // only for R_BeginPolygon
 
 #define        SOLID_NOT                               0               // no interaction with other objects

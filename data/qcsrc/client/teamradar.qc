@@ -58,7 +58,7 @@ void draw_teamradar_background(float bg, float fg)
 	if(fg > 0)
 	{
 		if(csqc_flags & CSQC_FLAG_READPICTURE) // not 2.4.2
-			R_BeginPolygon(minimapname, DRAWFLAG_ADDITIVE | DRAWFLAG_MIPMAP);
+			R_BeginPolygon(minimapname, DRAWFLAG_SCREEN | DRAWFLAG_MIPMAP);
 		else
 			R_BeginPolygon(minimapname, DRAWFLAG_ADDITIVE);
 		R_PolygonVertex(teamradar_texcoord_to_2dcoord(mi_pictexcoord0), yinvert(mi_pictexcoord0), '1 1 1', fg);
