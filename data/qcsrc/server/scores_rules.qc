@@ -60,7 +60,6 @@ void ScoreRules_ctf()
 	{
 		case 0: // caps only
 			sp_caps = SFL_SORT_PRIO_PRIMARY;
-			sp_score = SFL_SORT_PRIO_SECONDARY;
 			break;
 		case 1: // caps, then score
 			sp_caps = SFL_SORT_PRIO_PRIMARY;
