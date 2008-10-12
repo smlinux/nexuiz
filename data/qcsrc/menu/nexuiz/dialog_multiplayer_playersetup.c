@@ -46,12 +46,12 @@ void fillNexuizPlayerSettingsTab(entity me)
 	me.TR(me);
 	me.TR(me);
 	me.TR(me);
-		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Shirt Color:"));
+		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "First Color:"));
 		n = 16 - !cvar("developer");
 		for(i = 0; i < n; ++i)
 			me.TDNoMargin(me, 1, 2 / n, e = makeNexuizColorButton(1, 0, i), '1 0 0');
 	me.TR(me);
-		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Pants Color:"));
+		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Second Color:"));
 		for(i = 0; i < n; ++i)
 			me.TDNoMargin(me, 1, 2 / n, e = makeNexuizColorButton(2, 1, i), '1 0 0');
 	me.TR(me);
