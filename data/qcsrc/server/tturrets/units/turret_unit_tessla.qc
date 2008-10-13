@@ -72,7 +72,7 @@ void turret_tesla_fire()
 
     self.attack_finished_single = time + self.shot_refire;
     self.ammo = self.ammo - self.shot_dmg;
-    for (i = 0;i < 10;i++)
+    for (i = 0;i < 10;i = i + 1)
     {
         d *= 0.5;
         r *= 0.75;
@@ -137,8 +137,8 @@ void turret_tesla_dinit()
 */
 void spawnfunc_turret_tesla()
 {
-    precache_model ("models/turrets/tesla_head.md3");
-    precache_model ("models/turrets/tesla_base.md3");
+    //precache_model ("models/turrets/tesla_head.md3");
+    //precache_model ("models/turrets/tesla_base.md3");
 
 
     self.think = turret_tesla_dinit;

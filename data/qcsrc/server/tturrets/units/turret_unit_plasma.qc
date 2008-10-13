@@ -163,8 +163,8 @@ void turret_plasma_dual_init()
 */
 void spawnfunc_turret_plasma()
 {
-    precache_model ("models/turrets/plasma.md3");
-    precache_model ("models/turrets/base.md3");
+    //precache_model ("models/turrets/plasma.md3");
+    //precache_model ("models/turrets/base.md3");
 
     self.think = turret_plasma_std_init;
     self.nextthink = time + 0.5;
@@ -174,8 +174,8 @@ void spawnfunc_turret_plasma()
 */
 void spawnfunc_turret_plasma_dual()
 {
-    precache_model ("models/turrets/plasmad.md3");
-    precache_model ("models/turrets/base.md3");
+    //precache_model ("models/turrets/plasmad.md3");
+    //precache_model ("models/turrets/base.md3");
 
     self.think = turret_plasma_dual_init;
     self.nextthink = time + 0.5;

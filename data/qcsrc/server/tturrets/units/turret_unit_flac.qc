@@ -93,9 +93,9 @@ void turret_flac_dinit()
 
 void spawnfunc_turret_flac()
 {
-    precache_model ("models/turrets/base.md3");
-    precache_model ("models/turrets/flac.md3");
-    precache_model("models/turrets/pd_proj.md3");
+    //precache_model ("models/turrets/base.md3");
+    //precache_model ("models/turrets/flac.md3");
+    //precache_model("models/turrets/pd_proj.md3");
 
     self.think = turret_flac_dinit;
     self.nextthink = time + 0.5;

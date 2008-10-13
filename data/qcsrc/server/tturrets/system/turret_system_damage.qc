@@ -5,18 +5,6 @@ void turret_gib_damage (entity inflictor, entity attacker, float damage, float d
 {
     self.velocity += vforce;
 }
-void turret_gibs_precash()
-{
-    precache_model("models/turrets/base-gib1.md3");
-    precache_model("models/turrets/base-gib2.md3");
-    precache_model("models/turrets/base-gib3.md3");
-    precache_model("models/turrets/base-gib4.md3");
-
-    precache_model("models/turrets/head-gib1.md3");
-    precache_model("models/turrets/head-gib2.md3");
-    precache_model("models/turrets/head-gib3.md3");
-    precache_model("models/turrets/head-gib4.md3");
-}
 
 void turret_trowgib(
     vector v_from, vector v_to, vector v_colormod,
@@ -60,7 +48,7 @@ void turret_gib_boom()
     float i;
     string s;
 
-    for (i=1;i<5;i++)
+    for (i = 1; i < 5; i = i +1)
     {
         gib = spawn();
         gib.classname = "turret_gib";

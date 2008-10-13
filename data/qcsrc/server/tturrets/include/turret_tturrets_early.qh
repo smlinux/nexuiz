@@ -331,8 +331,8 @@ void turret_fire();
 .void()  turret_firefunc;
 /// prefire checks go here. return 1 to go bang, 0 not to.
 .float() turret_firecheckfunc;
-/// Execure BEFORE main ai loop. return 0 to cancel any following proccessing.
-.float() turret_prethink;
+// Execure BEFORE main ai loop. return 0 to cancel any following proccessing.
+//.float() turret_prethink;
 /// Execure AFTER main AI loop UNLESS turret_prethink returnd 0
 .void()  turret_postthink;
 
@@ -387,7 +387,7 @@ wkacked to save mem.
 /*
 * Damage, death and respawn.
 */
-void turret_gibs_precash();
+//void turret_gibs_precash();
 // generalized so save mem (on fields)
 // Function to handle incomming damage. usualy turret_stdproc_damage
 //.void(entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector vforce) turret_damagefunc;
@@ -420,7 +420,7 @@ float   turret_stdproc_targetscore_defend(entity e_turret, entity e_target);
 /// Generic fairly smart bias-aware target selection.
 float   turret_stdproc_targetscore_generic(entity e_turret, entity e_target);
 /// Experimental supportunits targetselector
-float turret_stdproc_targetscore_support(entity e_turret,entity e_target);
+float   turret_stdproc_targetscore_support(entity e_turret,entity e_target);
 
 /*
 * Aim functions
@@ -462,4 +462,5 @@ void turret_do_updates(entity e_turret);
 .vector tur_shotorg_updated;
 .vector tur_shotdir_updated;
 
+void turrets_precash();
 #endif // TTURRETS_ENABLED

@@ -62,8 +62,8 @@ void turret_machinegun_std_init()
 */
 void spawnfunc_turret_machinegun()
 {
-    precache_model ("models/turrets/machinegun.md3");
-    precache_model ("models/turrets/base.md3");
+    //precache_model ("models/turrets/machinegun.md3");
+    //precache_model ("models/turrets/base.md3");
 
     self.think = turret_machinegun_std_init;
     self.nextthink = time + 0.5;

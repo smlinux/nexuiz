@@ -510,6 +510,36 @@ void turret_think()
 
     self.nextthink = (time + self.ticrate);
 
+    // ONS uses somewhat backwards linking.
+    if(teamplay)
+    {
+        if(g_onslaught)
+        {
+
+            /*
+            // see turret_stdproc_use()
+            if(self.targetname)
+            {
+                e = find(world,target,self.targetname);
+                if(e != world)
+                    self.team = e.team;
+            }*/
+        }
+        else
+        {
+            if(self.target)
+            {
+                e = find(world,targetname,self.target);
+                if(e != world)
+                    self.team = e.team;
+            }
+        }
+
+        if(self.team != self.tur_head.team)
+            turret_stdproc_respawn();
+    }
+
+
     if (cvar("g_turrets_reloadcvars") == 1)
     {
         e = nextent(world);
@@ -538,7 +568,7 @@ void turret_think()
 #endif
 
     //Do custom prethink, and bail if it fails.
-    if (!self.turret_prethink()) return;
+    //if (!self.turret_prethink()) return;
 
     // Handle ammo
     if (self.ammo < self.ammo_max)
@@ -660,11 +690,29 @@ void turret_stdproc_fire()
 
 void turret_stdproc_use()
 {
-    // bprint("Used:",self.netname,"\n");
-    if (self.tur_active)
-        self.tur_active = 0;
+    // bprint("Used:",self.netname, " By ",other.netname,"\n");
+
+    if(g_onslaught)
+    {
+        entity e;
+
+        if(self.targetname)
+        {
+            e = find(world,target,self.targetname);
+            if(e != world)
+                self.team = e.team;
+        }
+
+        if(self.team != self.tur_head.team)
+            turret_stdproc_respawn();
+    }
     else
-        self.tur_active = 1;
+    {
+        if (self.tur_active)
+            self.tur_active = 0;
+        else
+            self.tur_active = 1;
+    }
 
 }
 
@@ -681,7 +729,7 @@ float turret_stdproc_init (string cvar_base_name)
     if (cvar("g_turrets") == 0) return 0;
 
     // Better more then once then never.
-    turret_gibs_precash();
+    // turret_gibs_precash();
 
     if (self.spawnflags & 2)
     {
@@ -922,7 +970,7 @@ float turret_stdproc_init (string cvar_base_name)
     // Attach stdprocs. override when and what needed
     if (self.turrcaps_flags & TFL_TURRCAPS_SUPPORT)
     {
-        self.turret_prethink        = turret_stdproc_true;
+        //self.turret_prethink        = turret_stdproc_true;
         self.turret_score_target    = turret_stdproc_targetscore_support;
         //self.turret_aim             = turret_stdproc_aim_generic;
         //self.turret_track           = turret_stdproc_track;
@@ -941,7 +989,7 @@ float turret_stdproc_init (string cvar_base_name)
     else
     {
 
-        self.turret_prethink        = turret_stdproc_true;
+        //self.turret_prethink        = turret_stdproc_true;
         self.turret_score_target    = turret_stdproc_targetscore_generic;
 
         //if (self.aim_flags & TFL_AIM_SIMPLE)

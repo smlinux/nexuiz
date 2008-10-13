@@ -66,7 +66,6 @@ void turret_fusionreactor_dinit()
     self.turret_firecheckfunc = turret_fusionreactor_firecheck;
     self.turret_firefunc = turret_fusionreactor_fire;
 
-    // re-color badge & handle recoil effect
     self.turret_postthink = turret_fusionreactor_postthink;
 }
 
@@ -74,8 +73,8 @@ void turret_fusionreactor_dinit()
 */
 void spawnfunc_turret_fusionreactor()
 {
-    precache_model ("models/turrets/reactor.md3");
-    precache_model ("models/turrets/base.md3");
+    //precache_model ("models/turrets/reactor.md3");
+    //precache_model ("models/turrets/base.md3");
 
     self.think = turret_fusionreactor_dinit;
     self.nextthink = time + 0.5;
