@@ -194,33 +194,35 @@ float SetTeam(entity o, float Team)
 void Playerchecker_Think()
 {
 	float i;
+	entity e;
 	for(i = 0; i < maxclients; ++i)
 	{
+		e = playerslots[i];
 		if(getplayerkey(i, "name") == "")
 		{
-			if(playerslots[i].sort_prev)
+			if(e.sort_prev)
 			{
 				//print("playerchecker: KILL KILL KILL\n");
 				// player disconnected
-				SetTeam(playerslots[i], -1);
-				RemovePlayer(playerslots[i]);
-				playerslots[i].sort_prev = world;
-				//playerslots[i].gotscores = 0;
+				SetTeam(e, -1);
+				RemovePlayer(e);
+				e.sort_prev = world;
+				//e.gotscores = 0;
 			}
 		}
 		else
 		{
-			if not(playerslots[i].sort_prev)
+			if not(e.sort_prev)
 			{
 				//print("playerchecker: SPAWN SPAWN SPAWN\n");
 				// player connected
-				if not(playerslots[i])
-					playerslots[i] = spawn();
-				playerslots[i].sv_entnum = i;
-				//playerslots[i].gotscores = 0; // we might already have the scores...
-				SetTeam(playerslots[i], GetPlayerColor(i)); // will not hurt; later updates come with Sbar_UpdatePlayerTeams
-				RegisterPlayer(playerslots[i]);
-				Sbar_UpdatePlayerPos(playerslots[i]);
+				if not(e)
+					playerslots[i] = e = spawn();
+				e.sv_entnum = i;
+				//e.gotscores = 0; // we might already have the scores...
+				SetTeam(e, GetPlayerColor(i)); // will not hurt; later updates come with Sbar_UpdatePlayerTeams
+				RegisterPlayer(e);
+				Sbar_UpdatePlayerPos(e);
 			}
 		}
 	}
