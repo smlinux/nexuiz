@@ -193,6 +193,7 @@ void CSQC_UpdateView(void)
 {
 	entity e;
 	float fov;
+	float f;
 	dprint_load();
 	WaypointSprite_Load();
 
@@ -256,7 +257,12 @@ void CSQC_UpdateView(void)
 	sbar_alpha_fg = cvar("sbar_alpha_fg" );
 	sbar_hudselector = cvar("sbar_hudselector");
 	activeweapon = getstati(STAT_SWITCHWEAPON);
-	teamplay = cvar("teamplay");
+	f = cvar("teamplay");
+	if(f != teamplay)
+	{
+		teamplay = f;
+		Sbar_InitScores();
+	}
 
 	if(last_weapon != activeweapon) {
 		weapontime = time;
