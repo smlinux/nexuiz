@@ -3,9 +3,31 @@ var float(string text, float handleColors) stringwidth;
 entity players;
 entity teams;
 
+void AuditLists()
+{
+	entity e;
+	entity prev;
+
+	prev = players;
+	for(e = prev.sort_next; e; prev = e, e = e.sort_next)
+	{
+		if(prev != e.sort_prev)
+			error(strcat("sort list chain error\nplease submit the output of 'prvm_edicts client' to the developers"));
+	}
+
+	prev = teams;
+	for(e = prev.sort_next; e; prev = e, e = e.sort_next)
+	{
+		if(prev != e.sort_prev)
+			error(strcat("sort list chain error\nplease submit the output of 'prvm_edicts client' to the developers"));
+	}
+}
+
+
 float RegisterPlayer(entity player)
 {
 	entity pl;
+	AuditLists();
 	for(pl = players.sort_next; pl; pl = pl.sort_next)
 		if(pl == player)
 			error("Player already registered!");
@@ -14,12 +36,14 @@ float RegisterPlayer(entity player)
 	if(players.sort_next)
 		players.sort_next.sort_prev = player;
 	players.sort_next = player;
+	AuditLists();
 	return true;
 }
 
 void RemovePlayer(entity player)
 {
 	entity pl, parent;
+	AuditLists();
 	parent = players;
 	for(pl = players.sort_next; pl && pl != player; pl = pl.sort_next)
 		parent = pl;
@@ -32,16 +56,19 @@ void RemovePlayer(entity player)
 	parent.sort_next = player.sort_next;
 	if(player.sort_next)
 		player.sort_next.sort_prev = parent;
+	AuditLists();
 }
 
 void MoveToLast(entity e)
 {
+	AuditLists();
 	other = e.sort_next;
 	while(other)
 	{
 		SORT_SWAP(other, e);
 		other = e.sort_next;
 	}
+	AuditLists();
 }
 
 // warning: Local "team" defined with name of a global
@@ -49,6 +76,7 @@ void MoveToLast(entity e)
 float RegisterTeam(entity Team)
 {
 	entity tm;
+	AuditLists();
 	for(tm = teams.sort_next; tm; tm = tm.sort_next)
 		if(tm == Team)
 			error("Team already registered!");
@@ -57,12 +85,14 @@ float RegisterTeam(entity Team)
 	if(teams.sort_next)
 		teams.sort_next.sort_prev = Team;
 	teams.sort_next = Team;
+	AuditLists();
 	return true;
 }
 
 void RemoveTeam(entity Team)
 {
 	entity tm, parent;
+	AuditLists();
 	parent = teams;
 	for(tm = teams.sort_next; tm && tm != Team; tm = tm.sort_next)
 		parent = tm;
@@ -75,6 +105,7 @@ void RemoveTeam(entity Team)
 	parent.sort_next = Team.sort_next;
 	if(Team.sort_next)
 		Team.sort_next.sort_prev = parent;
+	AuditLists();
 }
 
 entity GetTeam(float Team, float add)

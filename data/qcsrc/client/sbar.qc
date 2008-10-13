@@ -216,6 +216,11 @@ float Sbar_ComparePlayerScores(entity left, entity right)
 	float vl, vr;
 	vl = GetPlayerColor(left.sv_entnum);
 	vr = GetPlayerColor(right.sv_entnum);
+
+	if(!left.gotscores)
+		vl = COLOR_SPECTATOR;
+	if(!right.gotscores)
+		vr = COLOR_SPECTATOR;
 	
 	if(vl > vr)
 		return true;
