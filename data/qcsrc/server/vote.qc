@@ -78,7 +78,10 @@ float RemapVote(string vote, string cmd, entity e)
 		if(argv(0) == "chmap" || argv(0) == "gotomap" || argv(0) == "kick" || argv(0) == "kickban") // won't work without arguments
 			return FALSE;
 	if(argv(0) == "chmap")
+	{
 		vote = strcat("gotomap ", substring(vote, argv_start_index(1), argv_end_index(-1) - argv_start_index(1)));
+		vote_argc = tokenize_sane(vote);
+	}
 	if(argv(0) == "gotomap")
 	{
 		if(!(vote = ValidateMap(substring(vote, argv_start_index(1), argv_end_index(-1) - argv_start_index(1)), e)))
