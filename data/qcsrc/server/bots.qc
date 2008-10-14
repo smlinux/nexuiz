@@ -1442,9 +1442,9 @@ void bot_setnameandstuff()
 	suffix = cvar_string("bot_suffix");
 
 	// this is really only a default, JoinBestTeam is called later
-	pants = bound(0, floor(random() * 13), 13);
-	//shirt = bound(0, floor(random() * 16), 15);
-	shirt = pants;
+	pants = floor(random() * 15);
+	shirt = floor(random() * 15);
+	//shirt = pants;
 	setcolor(self, shirt * 16 + pants);
 	self.bot_preferredcolors = self.clientcolors;
 
