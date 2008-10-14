@@ -2055,8 +2055,6 @@ void PlayerPreThink (void)
 
 	if(frametime)
 	{
-		antilag_record(self);
-
 		SendFog();
 	}
 

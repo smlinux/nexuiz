@@ -1,4 +1,4 @@
-#define ANTILAG_MAX_ORIGINS 16
+#define ANTILAG_MAX_ORIGINS 64
 .vector antilag_origins[ANTILAG_MAX_ORIGINS];
 .float antilag_times[ANTILAG_MAX_ORIGINS];
 .float antilag_index;
