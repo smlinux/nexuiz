@@ -415,6 +415,7 @@ float q3acompat_machineshotgunswap;
 
 // database
 float ServerProgsDB;
+float TemporaryDB;
 
 .float team_saved;
 

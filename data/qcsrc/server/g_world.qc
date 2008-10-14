@@ -232,6 +232,8 @@ void spawnfunc_worldspawn (void)
 	else
 		ServerProgsDB = db_load("server.db");
 
+	TemporaryDB = db_create();
+
 	/*
 	TODO sound pack system
 	// initialize sound pack system
@@ -2322,7 +2324,10 @@ void SV_Shutdown()
 		Ban_SaveBans();
 		if(!sv_cheats)
 			db_save(ServerProgsDB, "server.db");
+		if(cvar("developer"))
+			db_save(TemporaryDB, "server-temp.db");
 		db_close(ServerProgsDB);
+		db_close(TemporaryDB);
 		print("done!\n");
 		// tell the bot system the game is ending now
 		bot_endgame();

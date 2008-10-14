@@ -136,3 +136,5 @@ tturrets/include/turret_tturrets.qh
 scores.qc
 
 portals.qc
+
+target_spawn.qc

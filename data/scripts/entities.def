@@ -1080,3 +1080,25 @@ AND: any items not listed will get removed, and none will get added
 OR: the player may keep items not listed
 ANDNOT: the items listed will get removed from the player
 */
+
+/*QUAKED target_spawn (1 0 1) (-8 -8 -8) (8 8 8) SPAWNFUNC ONLOAD
+Spawns an entity when triggered.
+The entity field list is a single string of the form:
+"field" "value" "field" "value" ... "classname" "item_bullets" ... "field" "value"
+Field values can use various variable replacements:
+$E
+$E.field
+$E.field+offset
+where "E" can be self, activator and pusher.
+Example is a Mario-style question mark block which could throw a new weapon_nex when activated like this:
+{
+"classname" "target_spawn"
+"message" "origin \"$self.origin+0 0 128\" velocity \"$activator.velocity+0 0 200\" owner $activator flags 65536 colormap $activator.colormap target_spawn_spawnfunc weapon_nex classname droppedweapon think thrown_wep_think nextthink $time+0.5"
+}
+-------- KEYS --------
+targetname: used to trigger this
+message: entity field list
+-------- SPAWNFLAGS --------
+SPAWNFUNC: call the spawn function when the "classname" key is mentioned in the fields list
+ONLOAD: create a first entity on map load
+*/
