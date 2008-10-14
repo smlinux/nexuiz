@@ -513,7 +513,7 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 		targ.flags -= targ.flags & FL_GODMODE;
 		damage = 100000;
 	}
-	else if(deathtype == DEATH_MIRRORDAMAGE)
+	else if(deathtype == DEATH_MIRRORDAMAGE || deathtype == DEATH_NOAMMO)
 	{
 		// no processing
 	}
@@ -694,9 +694,10 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 			// HEAD SHOT:
 			// find height of hit on player axis
 			// if above view_ofs and below maxs, and also in the middle half of the bbox, it is head shot
-			vector headmins, headmaxs;
-			headmins = targ.origin + '0.5 0 0' * targ.mins_x + '0 0.5 0' * targ.mins_y + '0 0 1' * targ.view_ofs_z;
-			headmaxs = targ.origin + '0.5 0 0' * targ.maxs_x + '0 0.5 0' * targ.maxs_y + '0 0 1' * targ.maxs_z;
+			vector headmins, headmaxs, org;
+			org = antilag_takebackorigin(targ, time - (self.ping * 0.001));
+			headmins = org + '0.5 0 0' * targ.mins_x + '0 0.5 0' * targ.mins_y + '0 0 1' * targ.view_ofs_z;
+			headmaxs = org + '0.5 0 0' * targ.maxs_x + '0 0.5 0' * targ.maxs_y + '0 0 1' * targ.maxs_z;
 			if(trace_hits_box(railgun_start, railgun_end, headmins, headmaxs))
 				headshot = 1;
 		}
