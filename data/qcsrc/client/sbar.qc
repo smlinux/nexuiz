@@ -911,7 +911,7 @@ void Sbar_DrawScoreboard()
 			pos_x -= sbar_fontsize_x*sbar_size[i] + sbar_fontsize_x;
 			/**
 			 * FTEQCC BUG!
-			 * Using the following line will fuck it all up:
+			 * Using the following line will mess it all up:
 			 **
 			 * tmp_x = sbar_size[i] - strlen(sbar_title[i])*8;
 			 */

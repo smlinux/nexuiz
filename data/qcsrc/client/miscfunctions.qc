@@ -71,8 +71,6 @@ void MoveToLast(entity e)
 	AuditLists();
 }
 
-// warning: Local "team" defined with name of a global
-// FU FTEQCC, .float team is a ENTVAR shitty piece of crap!!!
 float RegisterTeam(entity Team)
 {
 	entity tm;

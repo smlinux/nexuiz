@@ -202,7 +202,7 @@ string ftos_decimals(float number, float decimals)
 	result = ftos(number);
 	len = strlen(result);
 	// does it have a decimal point (should not happen)? If there is one, it is always at len-7)
-		// if ftos had fucked it up, which should never happen: "34278.000000"
+		// if ftos had messed it up, which should never happen: "34278.000000"
 	if(len >= 7)
 		if(substring(result, len - 7, 1) == ".")
 		{
