@@ -215,7 +215,7 @@ A version of traceline that must be used by SOLID_SLIDEBOX things that want to h
 Additionally it moves players back into the past before the trace and restores them afterward.
 ==================
 */
-void traceline_antilag (entity source, vector v1, vector v2, float nomonst, entity forent, float lag)
+void traceline_antilag_force (entity source, vector v1, vector v2, float nomonst, entity forent, float lag)
 {
 	local entity player;
 	local float oldsolid;
@@ -225,9 +225,6 @@ void traceline_antilag (entity source, vector v1, vector v2, float nomonst, enti
 		lag = 0;
 	if (clienttype(forent) != CLIENTTYPE_REAL)
 		lag = 0; // only antilag for clients
-	if (lag)
-	if (cvar("g_antilag") != 2)
-		lag = 0;
 
 	// change shooter to SOLID_BBOX so the shot can hit corpses
 	oldsolid = source.solid;
@@ -260,6 +257,12 @@ void traceline_antilag (entity source, vector v1, vector v2, float nomonst, enti
 
 	// restore shooter solid type
 	source.solid = oldsolid;
+}
+void traceline_antilag (entity source, vector v1, vector v2, float nomonst, entity forent, float lag)
+{
+	if (cvar("g_antilag") != 2)
+		lag = 0;
+	traceline_antilag_force(source, v1, v2, nomonst, forent, lag);
 }
 
 /*
