@@ -14,7 +14,7 @@ void target_spawn_use()
 {
 	float i, n, valuefieldpos, sPWNed;
 	entity e;
-	string key, value, valuefield, valueoffset;
+	string key, value, valuefield, valueoffset, valueoffsetrandom;
 	entity valueent;
 	vector data, data2;
 	entity oldself;
@@ -59,8 +59,16 @@ void target_spawn_use()
 				valueoffset = "";
 				if(valuefieldpos != -1)
 				{
-					valueoffset = substring(valuefield, valuefieldpos + 1, strlen(value) - valuefieldpos - 1);
+					valueoffset = substring(valuefield, valuefieldpos + 1, strlen(valueoffset) - valuefieldpos - 1);
 					valuefield = substring(valuefield, 0, valuefieldpos);
+				}
+
+				valuefieldpos = strstrofs(valueoffset, "+", 0);
+				valueoffsetrandom = "";
+				if(valuefieldpos != -1)
+				{
+					valueoffsetrandom = substring(valueoffset, valuefieldpos + 1, strlen(valueoffset) - valuefieldpos - 1);
+					valueoffset = substring(valueoffset, 0, valuefieldpos);
 				}
 
 				if(value == "self")
@@ -131,6 +139,23 @@ void target_spawn_use()
 							break;
 					}
 				}
+
+				if(valueoffsetrandom != "")
+				{
+					switch(data_y)
+					{
+						case FIELD_FLOAT:
+							value = ftos(stof(value) + random() * stof(valueoffsetrandom));
+							break;
+						case FIELD_VECTOR:
+							data2 = stov(valueoffsetrandom);
+							value = vtos(stov(value) + random() * data2_x * '1 0 0' + random() * data2_y * '0 1 0' + random() * data2_z * '0 0 1');
+							break;
+						default:
+							print("target_spawn: only float and vector fields can do random calculations, calculation ignored!\n");
+							break;
+					}
+				}
 			}
 		}
 		putentityfieldstring(data_x, e, value);
@@ -184,6 +209,6 @@ void spawnfunc_target_spawn()
 
 		target_spawn_initialized = 1;
 	}
-	if(self.spawnflags & 2)
-		InitializeEntity(self, target_spawn_spawnfirst, INITPRIO_LAST);
+	self.use = target_spawn_use;
+	InitializeEntity(self, target_spawn_spawnfirst, INITPRIO_LAST);
 }

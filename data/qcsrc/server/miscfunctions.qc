@@ -1313,7 +1313,10 @@ void InitializeEntity(entity e, void(void) func, float order)
 }
 void InitializeEntitiesRun()
 {
-	for(self = initialize_entity_first; self; )
+	entity startoflist;
+	startoflist = initialize_entity_first;
+	initialize_entity_first = world;
+	for(self = startoflist; self; )
 	{
 		entity e;
 		var void(void) func;
@@ -1333,7 +1336,6 @@ void InitializeEntitiesRun()
 		func();
 		self = e;
 	}
-	initialize_entity_first = world;
 }
 
 .float uncustomizeentityforclient_set;

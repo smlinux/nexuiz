@@ -1089,6 +1089,7 @@ Field values can use various variable replacements:
 $E
 $E.field
 $E.field+offset
+$E.field+offset+randomoffset
 where "E" can be self, activator and pusher.
 Example is a Mario-style question mark block which could throw a new weapon_nex when activated like this:
 {
