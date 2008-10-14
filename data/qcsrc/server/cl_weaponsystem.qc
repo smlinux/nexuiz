@@ -616,6 +616,8 @@ float w_null(float dummy)
 }
 void register_weapons_done()
 {
+	entity wi;
+
 	dummy_weapon_info = spawn();
 	dummy_weapon_info.classname = "weapon_info";
 	dummy_weapon_info.weapon = 0;
@@ -638,12 +640,18 @@ void register_weapons_done()
 	float imp;
 	weaponpriority_hudselector_1 = "";
 	for(i = 1; i <= 24; ++i)
-		if(weapon_info[i-1] && weapon_info[i-1].impulse == 0)
+	{
+		wi = weapon_info[i-1];
+		if(wi && wi.impulse == 0)
 			weaponpriority_hudselector_1 = strcat(weaponpriority_hudselector_1, " ", ftos(i));
+	}
 	for(imp = 9; imp > 0; --imp)
 		for(i = 1; i <= 24; ++i)
-			if(weapon_info[i-1] && weapon_info[i-1].impulse == imp)
+		{
+			wi = weapon_info[i-1];
+			if(wi && wi.impulse == imp)
 				weaponpriority_hudselector_1 = strcat(weaponpriority_hudselector_1, " ", ftos(i));
+		}
 
 	weaponpriority_hudselector_0 = strzone(substring(weaponpriority_hudselector_0, 1, strlen(weaponpriority_hudselector_0) - 1));
 	weaponpriority_hudselector_1 = strzone(substring(weaponpriority_hudselector_1, 1, strlen(weaponpriority_hudselector_1) - 1));
