@@ -346,7 +346,7 @@ void Nixnex_ChooseNextWeapon()
 	numberof = WEP_LAST - WEP_FIRST; // all but the current one
 	if(g_nixnex_with_laser)
 		numberof = numberof - 1;
-	id = WEP_FIRST + ceil(random() * numberof) - 1;
+	id = WEP_FIRST + floor(random() * numberof);
 
 	if(g_nixnex_with_laser) // skip the laser if needed
 		id = id + 1;

@@ -906,7 +906,7 @@ void GlobalSound(string sample, float chan, float teamsay)
 	tokenize_sane(sample);
 	n = stof(argv(1));
 	if(n > 0)
-		sample = strcat(argv(0), ftos(ceil(random() * n)), ".wav"); // randomization
+		sample = strcat(argv(0), ftos(floor(random() * n + 1)), ".wav"); // randomization
 	else
 		sample = strcat(argv(0), ".wav"); // randomization
 

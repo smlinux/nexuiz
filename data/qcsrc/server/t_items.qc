@@ -898,7 +898,7 @@ void func_wall_use (void)
 			self.colormap = 0x00;
 	}
 	else
-		self.colormap = ceil(random() * 256) - 1;
+		self.colormap = floor(random() * 256);
 	self.colormap |= 1024; // RENDER_COLORMAPPED
 }
 

@@ -228,7 +228,7 @@ void rune_respawn()
 	float num, r;
 	entity spot;
 	num = count_rune_spawnpoints();
-	r = ceil(random()*num);
+	r = floor(random()*num) + 1;
 
 	if(self.owner.classname == "runematch_spawn_point")
 	{
@@ -380,7 +380,7 @@ void DropAllRunes(entity pl)
 		{
 			// avoid pairing runes and curses that match each other
 			do{
-				rand = ceil(random()*ccount);
+				rand = floor(random()*ccount) + 1;
 				curse = FindRune(pl, "curse", rand);
 				tries = tries - 1;
 			}while(RuneMatchesCurse(rune.runes, curse.runes) && tries > 0);
@@ -391,7 +391,7 @@ void DropAllRunes(entity pl)
 		}
 		else
 		{
-				rand = ceil(random()*ccount);
+				rand = floor(random()*ccount) + 1;
 				curse = FindRune(pl, "curse", rand);
 		}
 
@@ -476,7 +476,7 @@ void spawn_runes()
 
 	while(numrunes > 0)
 	{
-		r = ceil(random()*numrunes);
+		r = floor(random()*numrunes) + 1;
 		if(r == 1)
 			rn = RUNE_STRENGTH;
 		else if(r == 2)
@@ -493,7 +493,7 @@ void spawn_runes()
 			tries = 15;
 			// avoid pairing runes and curses that match each other
 			do{
-				r = ceil(random()*numrunes);
+				r = floor(random()*numrunes) + 1;
 				if(r == 1)
 					cs = CURSE_WEAK;
 				else if(r == 2)
@@ -513,7 +513,7 @@ void spawn_runes()
 		}
 		else
 		{
-			r = ceil(random()*numrunes);
+			r = floor(random()*numrunes) + 1;
 			if(r == 1)
 				cs = CURSE_WEAK;
 			else if(r == 2)
@@ -531,7 +531,7 @@ void spawn_runes()
 		if(num <= 1)
 			r = 1;
 		else
-			r = ceil(random()*num*1.25);
+			r = floor(random()*num*1.25) + 1;
 
 		spot = rune_find_spawnpoint(num, r);
 

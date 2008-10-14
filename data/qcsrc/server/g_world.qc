@@ -629,7 +629,7 @@ float() MaplistMethod_Random = // random map selection
 	for(i = 0; i <= imax; ++i)
 	{
 		float mapindex;
-		mapindex = mod(Map_Current + ceil(random() * (Map_Count - 1)), Map_Count); // any OTHER map
+		mapindex = mod(Map_Current + floor(random() * (Map_Count - 1) + 1), Map_Count); // any OTHER map
 		if(Map_Check(mapindex, 1))
 			return mapindex;
 	}
@@ -1399,7 +1399,7 @@ void ShuffleMaplist()
 		result = "";
 
 		// select a random item
-		selected = ceil(random() * (litems - start) + start) - 1;
+		selected = floor(random() * (litems - start) + start);
 
 		// shift this item to the place start
 		for(i = 0; i < start; ++i)
@@ -1747,7 +1747,7 @@ string MapVote_Suggest(string m)
 			return "This map was already suggested.";
 	if(mapvote_suggestion_ptr >= MAPVOTE_COUNT)
 	{
-		i = ceil(random() * mapvote_suggestion_ptr) - 1;
+		i = floor(random() * mapvote_suggestion_ptr);
 	}
 	else
 	{
@@ -1797,7 +1797,7 @@ void MapVote_Init()
 
 	if(mapvote_suggestion_ptr)
 		for(i = 0; i < 100 && mapvote_count < smax; ++i)
-			MapVote_AddVotable(mapvote_suggestions[ceil(random() * mapvote_suggestion_ptr) - 1], TRUE);
+			MapVote_AddVotable(mapvote_suggestions[floor(random() * mapvote_suggestion_ptr)], TRUE);
 
 	for(i = 0; i < 100 && mapvote_count < nmax; ++i)
 		MapVote_AddVotable(GetNextMap(), FALSE);

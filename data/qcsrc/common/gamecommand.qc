@@ -127,7 +127,7 @@ float GameCommand_Generic(string command)
 				//     to be on place n+1, their chance will be 1/(n+1)
 				//     1/n * n/(n+1) = 1/(n+1)
 				//     q.e.d.
-				f = ceil(random() * (i + 1)) - 1; // 0 to i
+				f = floor(random() * (i + 1)); // 0 to i
 				if(f == i)
 					continue; // no change
 
@@ -511,7 +511,7 @@ float GameCommand_Generic(string command)
 					for(i = 0; i < f - 1; ++i) {
 						// move a random item from i..f-1 to position i
 						s = "";
-						f2 = ceil(random() * (f - i) + i) - 1;
+						f2 = floor(random() * (f - i) + i);
 						for(j = 0; j < i; ++j)
 							s = strcat(s, " ", argv(j));
 						s = strcat(s, " ", argv(f2));
