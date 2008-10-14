@@ -46,7 +46,7 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float bforce, f
 		if(self.antilag_debug)
 			traceline_antilag (self, start, end, FALSE, self, self.antilag_debug);
 		else
-			traceline_antilag (self, start, end, FALSE, self, self.ping * 0.001);
+			traceline_antilag (self, start, end, FALSE, self, ANTILAG_LATENCY(self));
 
 		// if it is world we can't hurt it so stop now
 		if (trace_ent == world || trace_fraction == 1)
@@ -121,7 +121,7 @@ void fireBullet (vector start, vector dir, float spread, float damage, float for
 	if(self.antilag_debug)
 		traceline_antilag (self, start, end, FALSE, self, self.antilag_debug);
 	else
-		traceline_antilag (self, start, end, FALSE, self, self.ping * 0.001);
+		traceline_antilag (self, start, end, FALSE, self, ANTILAG_LATENCY(self));
 
 	if (tracer)
 	{

@@ -79,7 +79,7 @@ void W_SetupShot(entity ent, vector vecs, float antilag, float recoil, string sn
 				if(self.antilag_debug)
 					antilag_takeback(self.cursor_trace_ent, time - self.antilag_debug);
 				else
-					antilag_takeback(self.cursor_trace_ent, time - self.ping * 0.001);
+					antilag_takeback(self.cursor_trace_ent, time - ANTILAG_LATENCY(self));
 
 				traceline(self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * MAX_SHOT_DISTANCE, MOVE_NORMAL, self);
 				antilag_restore(self.cursor_trace_ent);
@@ -100,8 +100,8 @@ void W_SetupShot(entity ent, vector vecs, float antilag, float recoil, string sn
 				{
 					vector v, vplus, vel;
 					float X;
-					v     = antilag_takebackorigin(self.cursor_trace_ent, time - (self.ping * 0.001       ));
-					vplus = antilag_takebackorigin(self.cursor_trace_ent, time - (self.ping * 0.001 + 0.01));
+					v     = antilag_takebackorigin(self.cursor_trace_ent, time - (ANTILAG_LATENCY(self)       ));
+					vplus = antilag_takebackorigin(self.cursor_trace_ent, time - (ANTILAG_LATENCY(self) + 0.01));
 					vel = (vplus - v) * (1 / 0.01);
 					// solve: v + X * vel = closest to self.origin + self.view_ofs, v_forward axis
 					v     -= (self.origin + self.view_ofs);
@@ -113,7 +113,7 @@ void W_SetupShot(entity ent, vector vecs, float antilag, float recoil, string sn
 					// (v + X * vel)^2 closest to 0
 					// v^2 + 2 * X * (v * vel) + X^2 * vel^2 closest to 0
 					X = -(v * vel) / (vel * vel);
-					dprint("dead center needs adjustment of ", ftos(X * 1000), " (that is, ", ftos(self.ping + X * 1000), " instead of ", ftos(self.ping), "\n");
+					dprint("dead center needs adjustment of ", ftos(X), " (that is, ", ftos(ANTILAG_LATENCY(self) + X), " instead of ", ftos(ANTILAG_LATENCY(self)), "\n");
 				}
 			}
 		}
