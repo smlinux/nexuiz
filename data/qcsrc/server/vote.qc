@@ -37,7 +37,10 @@ entity GetKickVoteVictim(string vote, string cmd, entity caller)
 
 	if(ns != "")
 	{
-		GetKickVoteVictim_reason = substring(vote, argv_start_index(t), argv_end_index(-1) - argv_start_index(t));
+		if(t < tokens)
+			GetKickVoteVictim_reason = substring(vote, argv_start_index(t), argv_end_index(-1) - argv_start_index(t));
+		else
+			GetKickVoteVictim_reason = "";
 
 		n = stof(ns);
 		if(ns == ftos(n)) if(n >= 1) if(n <= maxclients)
@@ -108,7 +111,8 @@ float RemapVote(string vote, string cmd, entity e)
 }
 
 float GameCommand_Vote(string s, entity e) {
-	tokenize_sane(s);
+	float argc;
+	argc = tokenize_sane(s);
 	if(argv(0) == "help") {
 		print_to(e, "  vote COMMANDS ARGUMENTS. See 'vote help' for more info.");
 		return TRUE;
@@ -135,7 +139,7 @@ float GameCommand_Vote(string s, entity e) {
 					print_to(e, "^1There is already a vote called.");
 				} else {
 					local string vote;
-					vote = VoteParse(s);
+					vote = VoteParse(s, argc);
 					if(vote == "") {
 						print_to(e, "^1Your vote is empty. See help for more info.");
 					} else if(e
@@ -205,7 +209,7 @@ float GameCommand_Vote(string s, entity e) {
 		} else if(argv(1) == "do") {
 			if(!e || e.vote_master) {
 				local string dovote;
-				dovote = VoteParse(s);
+				dovote = VoteParse(s, argc);
 				if(dovote == "") {
 					print_to(e, "^1Your command was empty. See help for more info.");
 				} else if(VoteCheckNasty(dovote)) {
@@ -375,7 +379,9 @@ void VoteThink() {
 	}
 }
 
-string VoteParse(string all) {
+string VoteParse(string all, float argc) {
+	if(argc < 3)
+		return "";
 	return substring(all, argv_start_index(2), argv_end_index(-1) - argv_start_index(2));
 }
 

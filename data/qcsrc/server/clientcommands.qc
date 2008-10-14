@@ -223,9 +223,9 @@ entity GetPlayer(string name)
 //float ctf_clientcommand();
 void SV_ParseClientCommand(string s) {
 	local string cmd;
-	local float i;
+	local float i, tokens;
 
-	tokenize_sane(s);
+	tokens = tokenize_sane(s);
 
 	if(GameCommand_Vote(s, self)) {
 		return;
@@ -371,10 +371,12 @@ void SV_ParseClientCommand(string s) {
 	} else if(argv(0) == "voice") {
 		VoiceMessage(argv(1));
 	} else if(argv(0) == "say") {
-		Say(self, FALSE, substring(s, argv_start_index(1), argv_end_index(-1) - argv_start_index(1)));
+		if(tokens >= 2)
+			Say(self, FALSE, substring(s, argv_start_index(1), argv_end_index(-1) - argv_start_index(1)));
 		//clientcommand(self, formatmessage(s));
 	} else if(argv(0) == "say_team") {
-		Say(self, TRUE, substring(s, argv_start_index(1), argv_end_index(-1) - argv_start_index(1)));
+		if(tokens >= 2)
+			Say(self, TRUE, substring(s, argv_start_index(1), argv_end_index(-1) - argv_start_index(1)));
 		//clientcommand(self, formatmessage(s));
 	} else if(argv(0) == "info") {
 		cmd = cvar_string(strcat("sv_info_", argv(1)));
