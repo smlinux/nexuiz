@@ -1094,6 +1094,7 @@ Example is a Mario-style question mark block which could throw a new weapon_nex 
 {
 "classname" "target_spawn"
 "message" "origin \"$self.origin+0 0 128\" velocity \"$activator.velocity+0 0 200\" owner $activator flags 65536 colormap $activator.colormap target_spawn_spawnfunc weapon_nex classname droppedweapon think thrown_wep_think nextthink $time+0.5"
+"spawnflags" "1"
 }
 -------- KEYS --------
 targetname: used to trigger this
