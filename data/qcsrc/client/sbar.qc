@@ -701,7 +701,7 @@ float sbar_fixscoreboardcolumnwidth_iconlen;
 
 string Sbar_FixScoreboardColumnWidth(float i, string str)
 {
-	float field, maxsize, j;
+	float field, maxsize, j, f;
 	vector sz;
 	field = sbar_field[i];
 
@@ -722,22 +722,31 @@ string Sbar_FixScoreboardColumnWidth(float i, string str)
 	if(sbar_field_icon0 != "")
 	{
 		sz = drawgetimagesize(sbar_field_icon0);
-		if(sbar_fixscoreboardcolumnwidth_iconlen < sz_x / sz_y)
-			sbar_fixscoreboardcolumnwidth_iconlen = sz_x / sz_y;
+		f = sz_x / sz_y;
+		if(str != "")
+			f += stringwidth(" ", FALSE);
+		if(sbar_fixscoreboardcolumnwidth_iconlen < f)
+			sbar_fixscoreboardcolumnwidth_iconlen = f;
 	}
 
 	if(sbar_field_icon1 != "")
 	{
 		sz = drawgetimagesize(sbar_field_icon1);
-		if(sbar_fixscoreboardcolumnwidth_iconlen < sz_x / sz_y)
-			sbar_fixscoreboardcolumnwidth_iconlen = sz_x / sz_y;
+		f = sz_x / sz_y;
+		if(str != "")
+			f += stringwidth(" ", FALSE);
+		if(sbar_fixscoreboardcolumnwidth_iconlen < f)
+			sbar_fixscoreboardcolumnwidth_iconlen = f;
 	}
 
 	if(sbar_field_icon2 != "")
 	{
 		sz = drawgetimagesize(sbar_field_icon2);
-		if(sbar_fixscoreboardcolumnwidth_iconlen < sz_x / sz_y)
-			sbar_fixscoreboardcolumnwidth_iconlen = sz_x / sz_y;
+		f = sz_x / sz_y;
+		if(str != "")
+			f += stringwidth(" ", FALSE);
+		if(sbar_fixscoreboardcolumnwidth_iconlen < f)
+			sbar_fixscoreboardcolumnwidth_iconlen = f;
 	}
 
 	sbar_fixscoreboardcolumnwidth_iconlen *= sbar_fontsize_y / sbar_fontsize_x; // fix icon aspect
