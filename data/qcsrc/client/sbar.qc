@@ -452,11 +452,6 @@ void Cmd_Sbar_SetFields(float argc)
 			sbar_field[sbar_num_fields] = SP_PL;
 		} else if(str == "kd" || str == "kdr" || str == "kdratio" || str == "k/d") {
 			sbar_field[sbar_num_fields] = SP_KDRATIO;
-		} else if(str == "color") {
-			if(!teamplay)
-				sbar_field[sbar_num_fields] = SP_COLOR;
-			else
-				continue; // can't put this column in teamplay, it is redundant and stupid
 		} else if(str == "name" || str == "nick") {
 			sbar_field[sbar_num_fields] = SP_NAME;
 			sbar_size[sbar_num_fields] = MIN_NAMELEN; // minimum size? any use?
@@ -611,21 +606,21 @@ string Sbar_GetField(entity pl, float field)
 			return str;
 		
 		case SP_NAME:
+			if(teamplay)
+			{
+				f = stof(getplayerkey(pl.sv_entnum, "colors"));
+				sbar_field_icon0 = "gfx/sb_playercolor_base";
+				sbar_field_icon1 = "gfx/sb_playercolor_shirt";
+				sbar_field_icon1_rgb = colormapPaletteColor(floor(f / 16), 0);
+				sbar_field_icon2 = "gfx/sb_playercolor_pants";
+				sbar_field_icon2_rgb = colormapPaletteColor(mod(f, 16), 1);
+			}
 			return getplayerkey(pl.sv_entnum, "name");
 
 		case SP_FRAGS:
 			f = pl.(scores[SP_KILLS]);
 			f -= pl.(scores[SP_SUICIDES]);
 			return ftos(f);
-
-		case SP_COLOR:
-			f = stof(getplayerkey(pl.sv_entnum, "colors"));
-			sbar_field_icon0 = "gfx/sb_playercolor_base";
-			sbar_field_icon1 = "gfx/sb_playercolor_shirt";
-			sbar_field_icon1_rgb = colormapPaletteColor(floor(f / 16), 0);
-			sbar_field_icon2 = "gfx/sb_playercolor_pants";
-			sbar_field_icon2_rgb = colormapPaletteColor(mod(f, 16), 1);
-			return "";
 
 		case SP_KDRATIO:
 			num = pl.(scores[SP_KILLS]);

@@ -22,6 +22,9 @@ COMPAT_FILES="
 	gfx/runningman_mini.tga
 	gfx/sb_kh_full.tga
 	gfx/sb_kh_outline.tga
+	gfx/sb_playercolor_base.tga
+	gfx/sb_playercolor_shirt.tga
+	gfx/sb_playercolor_pants.tga
 	gfx/silvercity_mini.tga
 	gfx/stormkeep_mini.tga
 	gfx/strength_mini.tga
