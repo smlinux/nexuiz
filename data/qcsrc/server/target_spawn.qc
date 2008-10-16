@@ -12,7 +12,7 @@ float target_spawn_spawnfunc_field;
 
 void target_spawn_useon(entity e)
 {
-	float i, n, valuefieldpos, sPWNed;
+	float i, n, valuefieldpos;
 	string key, value, valuefield, valueoffset, valueoffsetrandom;
 	entity valueent;
 	vector data, data2;
@@ -21,17 +21,23 @@ void target_spawn_useon(entity e)
 
 	n = tokenize_sane(self.message);
 
-	sPWNed = FALSE;
-
 	for(i = 0; i < n-1; i += 2)
 	{
 		key = argv(i);
 		value = argv(i+1);
-		data = stov(db_get(TemporaryDB, strcat("/target_spawn/field/", key)));
-		if(data_y == 0) // undefined field, i.e., invalid type
+		if(key == "$")
 		{
-			print("target_spawn: invalid/unknown entity key ", key, " specified, ignored!\n");
-			continue;
+			data_x = -1;
+			data_y = FIELD_STRING;
+		}
+		else
+		{
+			data = stov(db_get(TemporaryDB, strcat("/target_spawn/field/", key)));
+			if(data_y == 0) // undefined field, i.e., invalid type
+			{
+				print("target_spawn: invalid/unknown entity key ", key, " specified, ignored!\n");
+				continue;
+			}
 		}
 		if(substring(value, 0, 1) == "$")
 		{
@@ -45,20 +51,12 @@ void target_spawn_useon(entity e)
 			else
 			{
 				// replace me!
-				valuefieldpos = strstrofs(value, ".", 0);
-				valuefield = "";
-				if(valuefieldpos != -1)
-				{
-					valuefield = substring(value, valuefieldpos + 1, strlen(value) - valuefieldpos - 1);
-					value = substring(value, 0, valuefieldpos);
-				}
-
 				valuefieldpos = strstrofs(value, "+", 0);
 				valueoffset = "";
 				if(valuefieldpos != -1)
 				{
-					valueoffset = substring(valuefield, valuefieldpos + 1, strlen(valueoffset) - valuefieldpos - 1);
-					valuefield = substring(valuefield, 0, valuefieldpos);
+					valueoffset = substring(value, valuefieldpos + 1, strlen(value) - valuefieldpos - 1);
+					value = substring(value, 0, valuefieldpos);
 				}
 
 				valuefieldpos = strstrofs(valueoffset, "+", 0);
@@ -67,6 +65,14 @@ void target_spawn_useon(entity e)
 				{
 					valueoffsetrandom = substring(valueoffset, valuefieldpos + 1, strlen(valueoffset) - valuefieldpos - 1);
 					valueoffset = substring(valueoffset, 0, valuefieldpos);
+				}
+
+				valuefieldpos = strstrofs(value, ".", 0);
+				valuefield = "";
+				if(valuefieldpos != -1)
+				{
+					valuefield = substring(value, valuefieldpos + 1, strlen(value) - valuefieldpos - 1);
+					value = substring(value, 0, valuefieldpos);
 				}
 
 				if(value == "self")
@@ -113,7 +119,7 @@ void target_spawn_useon(entity e)
 					data2 = stov(db_get(TemporaryDB, strcat("/target_spawn/field/", valuefield)));
 					if(data2_y == 0) // undefined field, i.e., invalid type
 					{
-						print("target_spawn: invalid/unknown entity key replacement ", value, " specified, ignored!\n");
+						print("target_spawn: invalid/unknown entity key replacement ", valuefield, " specified, ignored!\n");
 						continue;
 					}
 					value = getentityfieldstring(data2_x, valueent);
@@ -156,27 +162,26 @@ void target_spawn_useon(entity e)
 				}
 			}
 		}
-		putentityfieldstring(data_x, e, value);
-
-		if(key == "classname" && !sPWNed)
+		if(key == "$")
 		{
-			if(self.spawnflags & 1)
-			{
-				if(!e.target_spawn_spawnfunc)
-					putentityfieldstring(target_spawn_spawnfunc_field, e, strcat("spawnfunc_", value));
+			putentityfieldstring(target_spawn_spawnfunc_field, e, value);
 
-				oldself = self;
-				oldactivator = activator;
+			oldself = self;
+			oldactivator = activator;
 
-				self = e;
-				activator = self.target_spawn_activator;
+			self = e;
+			activator = self.target_spawn_activator;
 
-				self.target_spawn_spawnfunc();
+			self.target_spawn_spawnfunc();
 
-				self = oldself;
-				activator = oldactivator;
-			}
-			sPWNed = TRUE;
+			self = oldself;
+			activator = oldactivator;
+		}
+		else
+		{
+			if(data_y == FIELD_VECTOR)
+				value = strreplace("'", "", value); // why?!?
+			putentityfieldstring(data_x, e, value);
 		}
 	}
 }
@@ -202,7 +207,8 @@ void target_spawn_use()
 void target_spawn_spawnfirst()
 {
 	activator = self.target_spawn_activator;
-	target_spawn_use();
+	if(self.spawnflags & 2)
+		target_spawn_use();
 }
 
 void spawnfunc_target_spawn()
@@ -211,6 +217,7 @@ void spawnfunc_target_spawn()
 	{
 		float n, i;
 		string fn;
+		vector prev, new;
 		float ft;
 
 		n = numentityfields();
@@ -218,13 +225,19 @@ void spawnfunc_target_spawn()
 		{
 			fn = entityfieldname(i);
 			ft = entityfieldtype(i);
-			db_put(TemporaryDB, strcat("/target_spawn/field/", fn), vtos(i * '1 0 0' + ft * '0 1 0' + '0 0 1'));
-			if(fn == "target_spawn_spawnfunc")
-				target_spawn_spawnfunc_field = i;
+			new = i * '1 0 0' + ft * '0 1 0' + '0 0 1';
+			prev = stov(db_get(TemporaryDB, strcat("/target_spawn/field/", fn)));
+			if(prev_y == 0)
+			{
+				db_put(TemporaryDB, strcat("/target_spawn/field/", fn), vtos(new));
+				if(fn == "target_spawn_spawnfunc")
+					target_spawn_spawnfunc_field = i;
+			}
 		}
 
 		target_spawn_initialized = 1;
 	}
 	self.use = target_spawn_use;
+	self.message = strzone(strreplace("'", "\"", self.message));
 	InitializeEntity(self, target_spawn_spawnfirst, INITPRIO_LAST);
 }
