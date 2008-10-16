@@ -73,6 +73,10 @@ COMPAT_FILES="
 	models/weapons/w_minstanex.zym
 	models/weapons/w_porto.zym
 	particles/particlefont.tga
+	sound/announcer/male/impressive.ogg
+	sound/announcer/male/airshot.ogg
+	sound/announcer/male/headshot.ogg
+	sound/misc/typehit.wav
 	sound/player/default.sounds
 	sound/player/torus/attack.ogg
 	sound/player/torus/coverme.ogg
