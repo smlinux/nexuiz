@@ -1093,7 +1093,8 @@ void precache()
 	precache_sound ("player/slime.wav");
 
 	// announcer sounds - male
-	//precache_sound ("announcer/male/electrobitch.wav");
+	precache_sound ("announcer/male/electrobitch.wav");
+	precache_sound ("announcer/male/airshot.wav");
 	precache_sound ("announcer/male/03kills.wav");
 	precache_sound ("announcer/male/05kills.wav");
 	precache_sound ("announcer/male/10kills.wav");
