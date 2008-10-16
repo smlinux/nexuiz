@@ -6,6 +6,8 @@ float damage_gooddamage;
 float headshot;
 
 .float teamkill_complain;
+.float teamkill_soundtime;
+.entity teamkill_soundsource;
 .entity pusher;
 
 
@@ -718,14 +720,9 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 				attacker.typehitsound += 1; // TODO possibly trigger teamkill complain sound!
 				if(time > attacker.teamkill_complain)
 				{
-					entity oldpusher;
-
-					// note: here, self is actually targ!
-					oldpusher = self.pusher; self.pusher = attacker;
-					VoiceMessage("teamshoot_auto");
-					self.pusher = oldpusher;
-
 					attacker.teamkill_complain = time + 5;
+					attacker.teamkill_soundtime = time + 0.5;
+					attacker.teamkill_soundsource = targ;
 				}
 			}
 		}
