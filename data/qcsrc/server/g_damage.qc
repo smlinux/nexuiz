@@ -5,6 +5,9 @@ float damage_goodhits;
 float damage_gooddamage;
 float headshot;
 
+.float teamkill_complain;
+.entity pusher;
+
 
 float IsDifferentTeam(entity a, entity b)
 {
@@ -672,34 +675,57 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 
 		// count the damage
 		if(attacker)
-		if(targ.classname == "player")
-		if(IsDifferentTeam(targ, attacker))
 		if(!targ.deadflag)
 		if(targ.takedamage == DAMAGE_AIM)
-		if(damage > 0)
+		if(targ != attacker)
+		if(targ.classname == "player")
 		{
-			attacker.hitsound += 1;
+			if(IsDifferentTeam(targ, attacker))
+			{
+				if(damage > 0)
+				{
+					if(targ.BUTTON_CHAT)
+						attacker.typehitsound += 1;
+					else
+						attacker.hitsound += 1;
 
-			damage_goodhits += 1;
-			damage_gooddamage += damage;
+					damage_goodhits += 1;
+					damage_gooddamage += damage;
 
-			if(!g_minstagib)
-			if(IsFlying(targ))
-				yoda = 1;
+					if(!g_minstagib)
+					if(IsFlying(targ))
+						yoda = 1;
 
-			if(g_minstagib)
-			if(targ.items & IT_STRENGTH)
-				yoda = 1;
+					if(g_minstagib)
+					if(targ.items & IT_STRENGTH)
+						yoda = 1;
 
-			// HEAD SHOT:
-			// find height of hit on player axis
-			// if above view_ofs and below maxs, and also in the middle half of the bbox, it is head shot
-			vector headmins, headmaxs, org;
-			org = antilag_takebackorigin(targ, time - ANTILAG_LATENCY(attacker));
-			headmins = org + '0.5 0 0' * targ.mins_x + '0 0.5 0' * targ.mins_y + '0 0 1' * targ.view_ofs_z;
-			headmaxs = org + '0.5 0 0' * targ.maxs_x + '0 0.5 0' * targ.maxs_y + '0 0 1' * targ.maxs_z;
-			if(trace_hits_box(railgun_start, railgun_end, headmins, headmaxs))
-				headshot = 1;
+					// HEAD SHOT:
+					// find height of hit on player axis
+					// if above view_ofs and below maxs, and also in the middle half of the bbox, it is head shot
+					vector headmins, headmaxs, org;
+					org = antilag_takebackorigin(targ, time - ANTILAG_LATENCY(attacker));
+					headmins = org + '0.5 0 0' * targ.mins_x + '0 0.5 0' * targ.mins_y + '0 0 1' * targ.view_ofs_z;
+					headmaxs = org + '0.5 0 0' * targ.maxs_x + '0 0.5 0' * targ.maxs_y + '0 0 1' * targ.maxs_z;
+					if(trace_hits_box(railgun_start, railgun_end, headmins, headmaxs))
+						headshot = 1;
+				}
+			}
+			else
+			{
+				attacker.typehitsound += 1; // TODO possibly trigger teamkill complain sound!
+				if(time > attacker.teamkill_complain)
+				{
+					entity oldpusher;
+
+					// note: here, self is actually targ!
+					oldpusher = self.pusher; self.pusher = attacker;
+					VoiceMessage("teamshoot_auto");
+					self.pusher = oldpusher;
+
+					attacker.teamkill_complain = time + 5;
+				}
+			}
 		}
 	}
 

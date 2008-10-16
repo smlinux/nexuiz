@@ -172,12 +172,13 @@ void InitGameplayMode()
 	ReadGameCvars();
 	WriteGameCvars();
 
+	// find out good world mins/maxs bounds, either the static bounds found by looking for solid, or the mapinfo specified bounds
+	get_mi_min_max(1);
+	world.mins = mi_min;
+	world.maxs = mi_max;
+
 	MapInfo_LoadMapSettings(mapname);
-	if(MapInfo_Map_mins_x < MapInfo_Map_maxs_x)
-	{
-		world.mins = MapInfo_Map_mins;
-		world.maxs = MapInfo_Map_maxs;
-	}
+	
 	if not(cvar_value_issafe(world.fog))
 	{
 		print("The current map contains a potentially harmful fog setting, ignored\n");

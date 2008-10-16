@@ -2237,17 +2237,24 @@ void EndFrame()
 	{
 		if(self.classname == "spectator")
 		{
-			if(self.enemy.hitsound)
+			if(self.enemy.typehitsound)
+				play2(self, "misc/typehit.wav");
+			else if(self.enemy.hitsound)
 				play2(self, "misc/hit.wav");
 		}
 		else
 		{
-			if(self.hitsound)
+			if(self.typehitsound)
+				play2(self, "misc/typehit.wav");
+			else if(self.hitsound)
 				play2(self, "misc/hit.wav");
 		}
 	}
 	FOR_EACH_CLIENT(self)
+	{
 		self.hitsound = FALSE;
+		self.typehitsound = FALSE;
+	}
 }
 
 

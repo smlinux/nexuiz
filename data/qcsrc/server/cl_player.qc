@@ -751,6 +751,8 @@ float GetVoiceMessageTeamsayType(string type)
 		return 0;
 	if(type == "teamshoot")
 		return 2;
+	if(type == "teamshoot_auto")
+		return 3;
 	return 1;
 }
 
@@ -763,17 +765,18 @@ float GetPlayerSoundSampleField_fixed;
 	GetPlayerSoundSampleField_fixed = 0;
 	switch(type)
 	{
-		case "attack":       return playersound_attack;
-		case "attackinfive": return playersound_attackinfive;
-		case "coverme":      return playersound_coverme;
-		case "defend":       return playersound_defend;
-		case "freelance":    return playersound_freelance;
-		case "incoming":     return playersound_incoming;
-		case "meet":         return playersound_meet;
-		case "needhelp":     return playersound_needhelp;
-		case "seenflag":     return playersound_seenflag;
-		case "taunt":        return playersound_taunt;
-		case "teamshoot":    return playersound_teamshoot;
+		case "attack":            return playersound_attack;
+		case "attackinfive":      return playersound_attackinfive;
+		case "coverme":           return playersound_coverme;
+		case "defend":            return playersound_defend;
+		case "freelance":         return playersound_freelance;
+		case "incoming":          return playersound_incoming;
+		case "meet":              return playersound_meet;
+		case "needhelp":          return playersound_needhelp;
+		case "seenflag":          return playersound_seenflag;
+		case "taunt":             return playersound_taunt;
+		case "teamshoot":         return playersound_teamshoot;
+		case "teamshoot_auto":    return playersound_teamshoot;
 	}
 	GetPlayerSoundSampleField_notFound = 1;
 	return playersound_taunt;
@@ -910,17 +913,28 @@ void GlobalSound(string sample, float chan, float teamsay)
 	else
 		sample = strcat(argv(0), ".wav"); // randomization
 
-	if(teamsay == 2) // only to last attacker
+	if(teamsay == 3) // only to last attacker
 	{
-		if(teams_matter)
-			if(self.pusher)
-				if(self.pusher.team == self.team)
-				{
-					msg_entity = self.pusher;
+		if(self.pusher)
+			if(self.pusher.team == self.team)
+			{
+				msg_entity = self.pusher;
+				if(clienttype(msg_entity) == CLIENTTYPE_REAL)
 					soundto(MSG_ONE, self, chan, sample, VOL_BASE, ATTN_NONE);
-					msg_entity = self;
+			}
+	}
+	else if(teamsay == 2) // only to last attacker and self
+	{
+		if(self.pusher)
+			if(self.pusher.team == self.team)
+			{
+				msg_entity = self.pusher;
+				if(clienttype(msg_entity) == CLIENTTYPE_REAL)
 					soundto(MSG_ONE, self, chan, sample, VOL_BASE, ATTN_NONE);
-				}
+				msg_entity = self;
+				if(clienttype(msg_entity) == CLIENTTYPE_REAL)
+					soundto(MSG_ONE, self, chan, sample, VOL_BASE, ATTN_NONE);
+			}
 	}
 	else if(teamsay == 0) // to everyone
 	{

@@ -168,7 +168,7 @@ void player_setanim(vector anim, float looping, float override, float restart);
 .float		dmgtime;
 
 .float		killcount;
-.float hitsound;
+.float hitsound, typehitsound;
 
 .float watersound_finished;
 .float iscreature;

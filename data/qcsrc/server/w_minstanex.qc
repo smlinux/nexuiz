@@ -22,7 +22,10 @@ void W_MinstaNex_Attack (void)
 		if(yoda && flying)
 			announce(self, "announcer/male/yoda.ogg");
 		if(headshot)
+		{
 			announce(self, "announcer/male/headshot.ogg");
+			print("h\n");
+		}
 		if(damage_goodhits && self.minstanex_lasthit)
 		{
 			if(announce(self, "announcer/male/impressive.ogg"))
