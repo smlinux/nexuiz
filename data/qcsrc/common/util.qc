@@ -921,7 +921,7 @@ string _argv_sane(float i)
 	// Perl-ish -1 for the last argument
 	if(i < 0)
 		i = _argc_sane + i;
-	return _argv_sane_buffer[i];
+	return strcat("", _argv_sane_buffer[i]); // force tempstring
 }
 
 float _argv_start_index_sane(float i)
