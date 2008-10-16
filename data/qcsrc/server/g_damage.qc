@@ -721,7 +721,7 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 				if(time > attacker.teamkill_complain)
 				{
 					attacker.teamkill_complain = time + 5;
-					attacker.teamkill_soundtime = time + 0.3;
+					attacker.teamkill_soundtime = time + 0.4;
 					attacker.teamkill_soundsource = targ;
 				}
 			}
