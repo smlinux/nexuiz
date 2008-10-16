@@ -66,9 +66,7 @@ float RemapVote(string vote, string cmd, entity e)
 	entity victim;
 	vote_argc = tokenize_sane(vote);
 
-	print(">>", vote, "<<\n");
-
-	if(!VoteAllowed(argv(0)))
+	if(!VoteAllowed(strcat1(argv(0))))
 	{
 		return FALSE;
 	}
