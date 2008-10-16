@@ -10,17 +10,15 @@ float target_spawn_initialized;
 float target_spawn_spawnfunc_field;
 .entity target_spawn_activator;
 
-void target_spawn_use()
+void target_spawn_useon(entity e)
 {
 	float i, n, valuefieldpos, sPWNed;
-	entity e;
 	string key, value, valuefield, valueoffset, valueoffsetrandom;
 	entity valueent;
 	vector data, data2;
 	entity oldself;
 	entity oldactivator;
 
-	e = spawn();
 	n = tokenize_sane(self.message);
 
 	sPWNed = FALSE;
@@ -180,6 +178,24 @@ void target_spawn_use()
 			}
 			sPWNed = TRUE;
 		}
+	}
+}
+
+void target_spawn_use()
+{
+	entity e;
+
+	if(self.target == "")
+	{
+		// spawn new entity
+		e = spawn();
+		target_spawn_useon(e);
+	}
+	else
+	{
+		// edit entity
+		for(e = world; (e = find(e, targetname, self.target)); )
+			target_spawn_useon(e);
 	}
 }
 
