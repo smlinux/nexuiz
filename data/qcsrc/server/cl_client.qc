@@ -2056,6 +2056,7 @@ void PlayerPreThink (void)
 	if(frametime)
 	{
 		SendFog();
+		antilag_record(self);
 	}
 
 	if(self.classname == "player") {
