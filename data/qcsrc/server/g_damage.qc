@@ -155,7 +155,7 @@ void LogDeath(string mode, float deathtype, entity killer, entity killed)
 void Obituary (entity attacker, entity inflictor, entity targ, float deathtype)
 {
 	string	s, a;
-	float p;
+	float p, w;
 
 	if (targ.classname == "player" || targ.classname == "corpse")
 	{
@@ -215,11 +215,12 @@ void Obituary (entity attacker, entity inflictor, entity targ, float deathtype)
 				if (targ.killcount > 2)
 					bprint ("^1",s,"^1 ended it all with a ",ftos(targ.killcount)," scoring spree\n");
 			} else {
-				if(deathtype < DEATH_SPECIAL_START && deathtype & DEATH_WEAPONMASK >= WEP_FIRST && deathtype & DEATH_WEAPONMASK <= WEP_LAST)
+				w = DEATH_WEAPONOF(deathtype);
+				if(WEP_VALID(w))
 				{
 					w_deathtypestring = "couldn't resist the urge to self-destruct";
 					w_deathtype = deathtype;
-					weapon_action(deathtype & DEATH_WEAPONMASK, WR_SUICIDEMESSAGE);
+					weapon_action(w, WR_SUICIDEMESSAGE);
 					bprint("^1", s, "^1 ", w_deathtypestring, "\n");
 				}
 				else if (deathtype == DEATH_KILL)
@@ -296,11 +297,12 @@ void Obituary (entity attacker, entity inflictor, entity targ, float deathtype)
 				if(sv_gentle) {
 					bprint ("^1",s, "^1 needs a restart thanks to ", a, "\n");
 				} else {
-					if(deathtype < DEATH_SPECIAL_START && deathtype & DEATH_WEAPONMASK >= WEP_FIRST && deathtype & DEATH_WEAPONMASK <= WEP_LAST)
+					w = DEATH_WEAPONOF(deathtype);
+					if(WEP_VALID(w))
 					{
 						w_deathtypestring = "was blasted by";
 						w_deathtype = deathtype;
-						weapon_action(deathtype & DEATH_WEAPONMASK, WR_KILLMESSAGE);
+						weapon_action(w, WR_KILLMESSAGE);
 						p = strstrofs(w_deathtypestring, "#", 0);
 						if(p < 0)
 							bprint("^1", s, "^1 ", w_deathtypestring, " ", a, "\n");
@@ -592,7 +594,7 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 				damage = 0;
 				targ.hitsound += 1;
 			}
-			if (deathtype == WEP_LASER)
+			if (DEATH_ISWEAPON(deathtype, WEP_LASER))
 			{
 				damage = 0;
 				if (targ != attacker)
@@ -609,7 +611,7 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 		}
 
 		// apply strength multiplier
-		if (attacker.items & IT_STRENGTH && !g_minstagib)
+		if ((attacker.items & IT_STRENGTH) && !g_minstagib)
 		{
 			if(targ == attacker)
 			{

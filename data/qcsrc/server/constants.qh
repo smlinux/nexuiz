@@ -187,6 +187,13 @@ float	HITTYPE_SECONDARY = 0x100;
 float	HITTYPE_SPLASH = 0x200;
 float	HITTYPE_BOUNCE = 0x400;
 
+// macros to access these
+#define DEATH_ISSPECIAL(t)            ((t) >= DEATH_SPECIAL_START)
+#define DEATH_WEAPONOFWEAPONDEATH(t)  ((t) & DEATH_WEAPONMASK)
+#define DEATH_ISWEAPON(t,w)           (!DEATH_ISSPECIAL(t) && DEATH_WEAPONOFWEAPONDEATH(t) == (w))
+#define DEATH_WEAPONOF(t)             (DEATH_ISSPECIAL(t) ? 0 : DEATH_WEAPONOFWEAPONDEATH(t))
+#define WEP_VALID(w)                  ((w) >= WEP_FIRST && (w) <= WEP_LAST)
+
 vector	PL_VIEW_OFS				= '0 0 35';
 vector	PL_MIN					= '-16 -16 -24';
 vector	PL_MAX					= '16 16 45';

@@ -144,7 +144,7 @@ void fireBullet (vector start, vector dir, float spread, float damage, float for
 	{
 		if (trace_ent.solid == SOLID_BSP && !(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT))
 		{
-			if (dtype < DEATH_SPECIAL_START && (dtype & DEATH_WEAPONMASK) == WEP_SHOTGUN)
+			if (DEATH_ISWEAPON(dtype, WEP_SHOTGUN))
 				pointparticles(particleeffectnum("shotgun_impact"), trace_endpos, trace_plane_normal * 1000, 1);
 			else
 				pointparticles(particleeffectnum("machinegun_impact"), trace_endpos, trace_plane_normal * 1000, 1);
