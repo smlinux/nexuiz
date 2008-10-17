@@ -11,3 +11,4 @@ type ctf 300 20
 type rune 200 20
 type lms 9 20
 cdtrack 7
+hidden

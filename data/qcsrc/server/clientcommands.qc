@@ -223,7 +223,7 @@ entity GetPlayer(string name)
 //float ctf_clientcommand();
 void SV_ParseClientCommand(string s) {
 	local string cmd;
-	local float i, tokens;
+	local float i, j, tokens;
 
 	tokens = tokenize_sane(s);
 
@@ -340,7 +340,7 @@ void SV_ParseClientCommand(string s) {
 			}
 		}
 	} else if(argv(0) == "maplist") {
-		local float n, j;
+		local float n;
 		local string col;
 		n = tokenize_sane(cvar_string("g_maplist"));
 		sprint(self, "^7Maps in list: ");
@@ -359,13 +359,18 @@ void SV_ParseClientCommand(string s) {
 		sprint(self, "\n");
 	} else if(argv(0) == "lsmaps") {
 		sprint(self, "^7Maps available: ");
-		for(i = 0; i < MapInfo_count; ++i)
+		for(i = 0, j = 0; i < MapInfo_count; ++i)
 		{
-			if(mod(i, 2))
-				col = "^2";
-			else
-				col = "^3";
-			sprint(self, strcat(col, MapInfo_BSPName_ByID(i), " "));
+			if(MapInfo_Get_ByID(i))
+			if not(MapInfo_Map_flags & MAPINFO_FLAG_HIDDEN)
+			{
+				if(mod(i, 2))
+					col = "^2";
+				else
+					col = "^3";
+				++j;
+				sprint(self, strcat(col, MapInfo_Map_bspname, " "));
+			}
 		}
 		sprint(self, "\n");
 	} else if(argv(0) == "voice") {

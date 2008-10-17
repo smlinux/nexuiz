@@ -13,6 +13,8 @@ float MAPINFO_TYPE_ALL              = 65535; // this has to include all above bi
 
 float MAPINFO_FEATURE_WEAPONS       = 1; // not defined for minstagib-only maps
 
+float MAPINFO_FLAG_HIDDEN           = 1; // not in lsmaps/menu/vcall/etc., can just be changed to manually
+
 float MapInfo_count;
 
 // info about a map that MapInfo loads
@@ -20,10 +22,11 @@ string MapInfo_Map_bspname;
 string MapInfo_Map_title;
 string MapInfo_Map_description;
 string MapInfo_Map_author;
-string MapInfo_Map_clientstuff;
-string MapInfo_Map_fog;
+string MapInfo_Map_clientstuff; // not in cache, only for map load
+string MapInfo_Map_fog; // not in cache, only for map load
 float MapInfo_Map_supportedGametypes;
 float MapInfo_Map_supportedFeatures;
+float MapInfo_Map_flags;
 vector MapInfo_Map_mins; // these are '0 0 0' if not supported!
 vector MapInfo_Map_maxs; // these are '0 0 0' if not specified!
 
@@ -33,7 +36,7 @@ void MapInfo_Enumerate();
 
 // filter the info by game type mask (updates MapInfo_count)
 float MapInfo_progress;
-float MapInfo_FilterGametype(float gametype, float features, float pAbortOnGenerate); // 1 on success, 0 on temporary failure (call it again next frame then; use MapInfo_progress as progress indicator)
+float MapInfo_FilterGametype(float gametype, float features, float pFlagsRequired, float pFlagsForbidden, float pAbortOnGenerate); // 1 on success, 0 on temporary failure (call it again next frame then; use MapInfo_progress as progress indicator)
 float MapInfo_CurrentFeatures(); // retrieves currently required features from cvars
 float MapInfo_CurrentGametype(); // retrieves current gametype from cvars
 
@@ -55,7 +58,7 @@ float MapInfo_CheckMap(string s); // returns 0 if the map can't be played with t
 void MapInfo_LoadMap(string s);
 
 // list all maps for the current game type
-string MapInfo_ListAllowedMaps();
+string MapInfo_ListAllowedMaps(float pFlagsRequired, float pFlagsForbidden);
 
 // gets a gametype from a string
 float MapInfo_Type_FromString(string t);

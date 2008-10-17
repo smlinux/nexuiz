@@ -863,6 +863,7 @@ void readlevelcvars(void)
 	sv_maxidle_spectatorsareidle = cvar("sv_maxidle_spectatorsareidle");
 	sv_pogostick = cvar("sv_pogostick");
 	sv_doublejump = cvar("sv_doublejump");
+	g_maplist_allow_hidden = cvar("g_maplist_allow_hidden");
 
 	inWarmupStage = cvar("g_warmup");
 	g_warmup_limit = cvar("g_warmup_limit");

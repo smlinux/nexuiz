@@ -207,7 +207,7 @@ float preMenuInit()
 
 	MapInfo_Cache_Create();
 	MapInfo_Enumerate();
-	if(!MapInfo_FilterGametype(MAPINFO_TYPE_ALL, 0, 1))
+	if(!MapInfo_FilterGametype(MAPINFO_TYPE_ALL, 0, 0, 0, 1))
 	{
 		draw_reset();
 

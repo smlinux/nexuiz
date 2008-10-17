@@ -438,10 +438,10 @@ void EffectIndexDump()
 
 void make_mapinfo_Think()
 {
-	if(MapInfo_FilterGametype(MAPINFO_TYPE_ALL, 0, 1))
+	if(MapInfo_FilterGametype(MAPINFO_TYPE_ALL, 0, 0, 0, 1))
 	{
 		print("Done rebuiling mapinfos.\n");
-		MapInfo_FilterGametype(MapInfo_CurrentGametype(), MapInfo_CurrentFeatures(), 0);
+		MapInfo_FilterGametype(MapInfo_CurrentGametype(), MapInfo_CurrentFeatures(), 0, (g_maplist_allow_hidden ? MAPINFO_FLAG_HIDDEN : 0), 0);
 		remove(self);
 	}
 	else
@@ -527,16 +527,17 @@ void GameCommand(string command)
 		if(t)
 		{
 			MapInfo_SwitchGameType(t);
-			MapInfo_FilterGametype(MapInfo_CurrentGametype(), MapInfo_CurrentFeatures(), 0);
+			MapInfo_FilterGametype(MapInfo_CurrentGametype(), MapInfo_CurrentFeatures(), 0, MAPINFO_FLAG_HIDDEN, 0);
 			if(MapInfo_count > 0)
 			{
 				bprint("Game type successfully switched to ", s, "\n");
+				MapInfo_FilterGametype(MapInfo_CurrentGametype(), MapInfo_CurrentFeatures(), 0, (g_maplist_allow_hidden ? MAPINFO_FLAG_HIDDEN : 0), 0);
 			}
 			else
 			{
 				bprint("Cannot use this game type: no map for it found\n");
 				MapInfo_SwitchGameType(tsave);
-				MapInfo_FilterGametype(MapInfo_CurrentGametype(), MapInfo_CurrentFeatures(), 0);
+				MapInfo_FilterGametype(MapInfo_CurrentGametype(), MapInfo_CurrentFeatures(), 0, (g_maplist_allow_hidden ? MAPINFO_FLAG_HIDDEN : 0), 0);
 			}
 		}
 		else
