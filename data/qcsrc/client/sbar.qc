@@ -412,7 +412,6 @@ void Cmd_Sbar_SetFields(float argc)
 	else
 		subpattern2 = ",noteams,";
 
-	argc = min(argc-1, MAX_SBAR_FIELDS-1);
 	for(i = 0; i < argc; ++i)
 	{
 		str = argv(i+1);
@@ -481,6 +480,8 @@ void Cmd_Sbar_SetFields(float argc)
 				have_secondary = 1;
 		}
 		++sbar_num_fields;
+		if(sbar_num_fields >= MAX_SBAR_FIELDS)
+			break;
 	}
 
 	if(scores_flags[ps_primary] & SFL_ALLOW_HIDE)
