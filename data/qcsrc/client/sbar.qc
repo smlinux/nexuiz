@@ -400,7 +400,6 @@ void Cmd_Sbar_SetFields(float argc)
 	}
 		
 	
-	argc = min(MAX_SBAR_FIELDS, argc);
 	sbar_num_fields = 0;
 
 	drawfont = sbar_font;
@@ -412,7 +411,7 @@ void Cmd_Sbar_SetFields(float argc)
 	else
 		subpattern2 = ",noteams,";
 
-	for(i = 0; i < argc; ++i)
+	for(i = 0; i < argc - 1; ++i)
 	{
 		str = argv(i+1);
 
