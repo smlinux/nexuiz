@@ -68,9 +68,11 @@ void fillNexuizPlayerSettingsTab(entity me)
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Field of View:"));
 		me.TD(me, 1, 2, e = makeNexuizSlider(60, 130, 1, "fov"));
 	me.TR(me);
-
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Zoom Factor:"));
 		me.TD(me, 1, 2, e = makeNexuizSlider(2, 16, 0.5, "cl_zoomfactor"));
+	me.TR(me);
+		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Zoom Sensitivity:"));
+		me.TD(me, 1, 2, e = makeNexuizSlider(0, 1, 0.01, "cl_zoomsensitivity"));
 	me.TR(me);
 		sl = makeNexuizSlider(1, 8, 0.5, "cl_zoomspeed");
 		me.TD(me, 1, 1, e = makeNexuizSliderCheckBox(-1, 1, sl, "Zoom speed:"));
@@ -117,7 +119,6 @@ void fillNexuizPlayerSettingsTab(entity me)
 		me.TDempty(me, 0.2);
 		me.TD(me, 1, 2.8, e = makeNexuizCheckBox(0, "sbar_hudselector", "Use alternate HUD layout"));
 			setDependent(e, "viewsize", 0, 110);
-	me.TR(me);
 	me.TR(me);
 		me.TDempty(me, 0.5);
 		me.TD(me, 1, 2, e = makeNexuizButton("Radar & Waypoints...", '0 0 0'));
