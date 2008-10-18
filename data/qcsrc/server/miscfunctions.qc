@@ -864,6 +864,7 @@ void readlevelcvars(void)
 	sv_pogostick = cvar("sv_pogostick");
 	sv_doublejump = cvar("sv_doublejump");
 	g_maplist_allow_hidden = cvar("g_maplist_allow_hidden");
+	g_ctf_reverse = cvar("g_ctf_reverse");
 
 	inWarmupStage = cvar("g_warmup");
 	g_warmup_limit = cvar("g_warmup_limit");
