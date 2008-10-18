@@ -777,9 +777,9 @@ void ctf_setstatus()
 
 		for (flag = ctf_worldflaglist; flag; flag = flag.ctf_worldflagnext) if(flag.cnt != FLAG_BASE)
 		{
-			if(flag.team == COLOR_TEAM1)
+			if(flag.items & IT_KEY2) // blue
 				++redflags;
-			else if(flag.team == COLOR_TEAM2)
+			else if(flag.items & IT_KEY1) // red
 				++blueflags;
 		}
 
@@ -791,12 +791,12 @@ void ctf_setstatus()
 
 		for (flag = ctf_worldflaglist; flag; flag = flag.ctf_worldflagnext) if(flag.cnt != FLAG_BASE)
 		{
-			if(flag.team == COLOR_TEAM1)
+			if(flag.items & IT_KEY2) // blue
 			{
 				if(--redflags == -1) // happens exactly once (redflags is in 0..count-1, and will --'ed count times)
 					ctf_setstatus2(flag, IT_RED_FLAG_TAKEN);
 			}
-			else if(flag.team == COLOR_TEAM2)
+			else if(flag.items & IT_KEY1) // red
 			{
 				if(--blueflags == -1) // happens exactly once
 					ctf_setstatus2(flag, IT_BLUE_FLAG_TAKEN);
