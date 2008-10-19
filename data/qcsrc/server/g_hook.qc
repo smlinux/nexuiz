@@ -390,8 +390,6 @@ void GrapplingHookFrame()
 			if not(self.hook || (self.hook_state & HOOK_WAITING_FOR_REFIRE))
 			{
 				self.hook_state |= HOOK_FIRING;
-				self.hook_state |= HOOK_PULLING;
-				self.hook_state (-) HOOK_RELEASING;
 				self.hook_state |= HOOK_WAITING_FOR_REFIRE;
 			}
 		}
@@ -400,21 +398,20 @@ void GrapplingHookFrame()
 			if(self.hook)
 			{
 				self.hook_state |= HOOK_REMOVING;
-				self.hook_state (-) HOOK_PULLING;
-				self.hook_state (-) HOOK_RELEASING;
 				self.hook_state (-) HOOK_WAITING_FOR_REFIRE;
 			}
 		}
 
+		self.hook_state (-) HOOK_RELEASING;
 		if(self.BUTTON_CROUCH)
 		{
 			self.hook_state (-) HOOK_PULLING;
-			self.hook_state |= HOOK_RELEASING;
+			//self.hook_state |= HOOK_RELEASING;
 		}
 		else
 		{
 			self.hook_state |= HOOK_PULLING;
-			self.hook_state (-) HOOK_RELEASING;
+			//self.hook_state (-) HOOK_RELEASING;
 		}
 	}
 
