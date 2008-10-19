@@ -19,6 +19,8 @@ campaign.qh
 
 portals.qh
 
+g_hook.qh
+
 scores.qh
 
 ipban.qh

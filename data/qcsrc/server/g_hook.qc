@@ -83,8 +83,7 @@ float LostMovetypeFollow(entity ent)
 	return 0;
 }
 
-.float rope_length;
-.float button6_pressed_before;
+.float hook_length;
 
 void RemoveGrapplingHook(entity pl)
 {
@@ -94,8 +93,6 @@ void RemoveGrapplingHook(entity pl)
 	pl.hook = world;
 	if(pl.movetype == MOVETYPE_FLY)
 		pl.movetype = MOVETYPE_WALK;
-
-	pl.hook_time = time + 0.0;
 
 	//pl.disableclientprediction = FALSE;
 }
@@ -112,7 +109,7 @@ void GrapplingHook_Stop()
 	self.touch = SUB_Null;
 	self.velocity = '0 0 0';
 	self.movetype = MOVETYPE_NONE;
-	self.rope_length = -1;
+	self.hook_length = -1;
 }
 
 void GrapplingHookThink()
@@ -160,8 +157,8 @@ void GrapplingHookThink()
 	}
 #endif
 
-	if(self.rope_length < 0)
-		self.rope_length = vlen(org - self.origin);
+	if(self.hook_length < 0)
+		self.hook_length = vlen(org - self.origin);
 
 	if(self.state == 1)
 	{
@@ -192,38 +189,50 @@ void GrapplingHookThink()
 
 		if(cvar("g_grappling_hook_tarzan"))
 		{
-			newlength = self.rope_length;
 			v0 = self.owner.velocity;
 
 			// first pull the rope...
-			newlength = max(newlength - pullspeed * frametime, minlength);
-
-			if(newlength < dist - ropestretch) // overstretched?
+			if(self.owner.hook_state & HOOK_PULLING)
 			{
-				newlength = dist - ropestretch;
-				if(self.owner.velocity * dir < 0) // only if not already moving in hook direction
-					self.owner.velocity = self.owner.velocity + frametime * dir * rubberforce_overstretch;
+				newlength = self.hook_length;
+				newlength = max(newlength - pullspeed * frametime, minlength);
+
+				if(newlength < dist - ropestretch) // overstretched?
+				{
+					newlength = dist - ropestretch;
+					if(self.owner.velocity * dir < 0) // only if not already moving in hook direction
+						self.owner.velocity = self.owner.velocity + frametime * dir * rubberforce_overstretch;
+				}
+
+				self.hook_length = newlength;
 			}
 
-			if(!self.owner.BUTTON_CROUCH) // crouch key = don't pull
-				self.rope_length = newlength;
-
-			// then pull the player
-			spd = bound(0, (dist - self.rope_length) / ropestretch, 1);
-			self.owner.velocity = self.owner.velocity * (1 - frametime * ropeairfriction);
-			self.owner.velocity = self.owner.velocity + frametime * dir * spd * rubberforce;
-
-			dv = ((self.owner.velocity - v0) * dir) * dir;
-			if(cvar("g_grappling_hook_tarzan") >= 2)
+			if(self.owner.hook_state & HOOK_RELEASING)
 			{
-				if(self.aiment.movetype == MOVETYPE_WALK || self.aiment.movetype == MOVETYPE_TOSS)
+				newlength = dist;
+				self.hook_length = newlength;
+			}
+			else
+			{
+				// then pull the player
+				spd = bound(0, (dist - self.hook_length) / ropestretch, 1);
+				self.owner.velocity = self.owner.velocity * (1 - frametime * ropeairfriction);
+				self.owner.velocity = self.owner.velocity + frametime * dir * spd * rubberforce;
+
+				dv = ((self.owner.velocity - v0) * dir) * dir;
+				if(cvar("g_grappling_hook_tarzan") >= 2)
 				{
-					self.owner.velocity = self.owner.velocity - dv * 0.5;
-					self.aiment.velocity = self.aiment.velocity - dv * 0.5;
-					self.aiment.flags = self.aiment.flags - (self.aiment.flags & FL_ONGROUND);
-					self.aiment.pusher = self.owner;
-					self.aiment.pushltime = time + cvar("g_maxpushtime");
+					if(self.aiment.movetype == MOVETYPE_WALK || self.aiment.movetype == MOVETYPE_TOSS)
+					{
+						self.owner.velocity = self.owner.velocity - dv * 0.5;
+						self.aiment.velocity = self.aiment.velocity - dv * 0.5;
+						self.aiment.flags = self.aiment.flags - (self.aiment.flags & FL_ONGROUND);
+						self.aiment.pusher = self.owner;
+						self.aiment.pushltime = time + cvar("g_maxpushtime");
+					}
 				}
+
+				self.owner.flags (-) FL_ONGROUND;
 			}
 		}
 		else
@@ -238,9 +247,9 @@ void GrapplingHookThink()
 				spd = 0;
 			self.owner.velocity = dir*spd;
 			self.owner.movetype = MOVETYPE_FLY;
-		}
 
-		self.owner.flags = self.owner.flags - (self.owner.flags & FL_ONGROUND);
+			self.owner.flags (-) FL_ONGROUND;
+		}
 
 		org = org + dir*50; // get the beam out of the player's eyes
 	}
@@ -352,21 +361,76 @@ void FireGrapplingHook (void)
 	missile.damageforcescale = 0;
 }
 
+//  void GrapplingHookFrame()
+//  {
+//         // this function has been modified for Nexuiz
+// -       if (self.BUTTON_HOOK && g_grappling_hook)
+//         {
+// -               if (!self.hook && self.hook_time <= time && !self.button6_pressed_before)
+// -                       if (timeoutStatus != 2) //only allow the player to fire the grappling hook if the game is not paused (timeout)
+// -                               FireGrapplingHook();
+//         }
+// -       else
+//         {
+//                 if (self.hook)
+//                         RemoveGrapplingHook(self);
+//         }
+// -       self.button6_pressed_before = self.BUTTON_HOOK;
+//         /*
+//         // if I have no hook or it's not pulling yet, make sure I'm not flying!
+//         if((self.hook == world || !self.hook.state) && self.movetype == MOVETYPE_FLY)
+
 void GrapplingHookFrame()
 {
-	// this function has been modified for Nexuiz
-	if (self.BUTTON_HOOK && g_grappling_hook)
+	if(g_grappling_hook && timeoutStatus != 2)
 	{
-		if (!self.hook && self.hook_time <= time && !self.button6_pressed_before)
-			if (timeoutStatus != 2) //only allow the player to fire the grappling hook if the game is not paused (timeout)
-				FireGrapplingHook();
+		// offhand hook controls
+		if(self.BUTTON_HOOK)
+		{
+			if not(self.hook || (self.hook_state & HOOK_WAITING_FOR_REFIRE))
+			{
+				self.hook_state |= HOOK_FIRING;
+				self.hook_state |= HOOK_PULLING;
+				self.hook_state (-) HOOK_RELEASING;
+				self.hook_state |= HOOK_WAITING_FOR_REFIRE;
+			}
+		}
+		else
+		{
+			if(self.hook)
+			{
+				self.hook_state |= HOOK_REMOVING;
+				self.hook_state (-) HOOK_PULLING;
+				self.hook_state (-) HOOK_RELEASING;
+				self.hook_state (-) HOOK_WAITING_FOR_REFIRE;
+			}
+		}
+
+		if(self.BUTTON_CROUCH)
+		{
+			self.hook_state (-) HOOK_PULLING;
+			self.hook_state |= HOOK_RELEASING;
+		}
+		else
+		{
+			self.hook_state |= HOOK_PULLING;
+			self.hook_state (-) HOOK_RELEASING;
+		}
 	}
-	else
+
+	if (self.hook_state & HOOK_FIRING)
 	{
 		if (self.hook)
 			RemoveGrapplingHook(self);
+		FireGrapplingHook();
+		self.hook_state (-) HOOK_FIRING;
 	}
-	self.button6_pressed_before = self.BUTTON_HOOK;
+	else if(self.hook_state & HOOK_REMOVING)
+	{
+		if (self.hook)
+			RemoveGrapplingHook(self);
+		self.hook_state (-) HOOK_REMOVING;
+	}
 	/*
 	// if I have no hook or it's not pulling yet, make sure I'm not flying!
 	if((self.hook == world || !self.hook.state) && self.movetype == MOVETYPE_FLY)
