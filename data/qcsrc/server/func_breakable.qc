@@ -1,0 +1,136 @@
+// TODO add assault's colormodding to this, make assault redirect to this one
+// TODO add the fields this uses to the entities.def when done
+
+.string mdl_dead; // or "" to hide when broken
+.string debris; // space separated list of debris models
+// other fields:
+//   mdl = particle effect name
+//   count = particle effect multiplier
+//   targetname = target to trigger to unbreak the model
+//   target = targets to trigger when broken
+// notes:
+//   for mdl_dead to work, origin must be set (using a common/origin brush).
+//   Otherwise mdl_dead will be displayed at the map origin, and nobody would
+//   want that!
+
+.vector mins_save, maxs_save;
+
+void func_breakable_damage(entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force);
+
+//
+// func_breakable
+// - basically func_assault_destructible for general gameplay use
+//
+void LaunchDebris (string debrisname) =
+{
+	local	entity dbr;
+
+	dbr = spawn();
+	dbr.origin = self.origin + self.absmin
+	           + '1 0 0' * random() * (self.absmax_x - self.absmin_x)
+	           + '0 1 0' * random() * (self.absmax_y - self.absmin_y)
+	           + '0 0 1' * random() * (self.absmax_z - self.absmin_z);
+	setmodel (dbr, debrisname );
+	dbr.movetype = MOVETYPE_BOUNCE;
+	dbr.solid = SOLID_NOT;
+	// TODO parametrize this
+	dbr.velocity_x = 70 * crandom();
+	dbr.velocity_y = 70 * crandom();
+	dbr.velocity_z = 140 + 70 * random();
+	dbr.avelocity_x = random()*600;
+	dbr.avelocity_y = random()*600;
+	dbr.avelocity_z = random()*600;
+	SUB_SetFade(dbr, time + 1 + random() * 5, 1);
+};
+
+void func_breakable_make_destroyed()
+{
+	if(self.mdl_dead == "")
+	{
+		self.model = "";
+		self.solid = SOLID_NOT;
+	}
+	else
+	{
+		setmodel(self, self.mdl_dead);
+		self.solid = SOLID_BSP;
+	}
+	self.health = self.max_health;
+	self.takedamage = DAMAGE_NO;
+	self.event_damage = SUB_Null;
+	self.state = 1;
+	setsize(self, '0 0 0', '0 0 0');
+}
+
+void func_breakable_restore()
+{
+	setmodel(self, self.mdl);
+	self.solid = SOLID_BSP;
+	self.health = self.max_health;
+	self.takedamage = DAMAGE_AIM;
+	self.event_damage = func_breakable_damage;
+	self.state = 0;
+	setsize(self, self.mins_save, self.maxs_save);
+}
+
+void func_breakable_destroy() {
+	float n, i;
+
+	func_breakable_make_destroyed();
+
+	// now throw around the debris
+	n = tokenize_sane(self.debris);
+	for(i = 0; i < n; ++i)
+		LaunchDebris(argv(i));
+
+	if(self.cnt)
+		pointparticles(self.cnt, self.absmin * 0.5 + self.absmax * 0.5, '0 0 0', self.count);
+
+	SUB_UseTargets();
+}
+
+void func_breakable_damage(entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
+{
+	if(self.state == 1)
+		return;
+	self.health = self.health - damage;
+	if(self.health < 0)
+	{
+		activator = attacker;
+		func_breakable_destroy();
+	}
+}
+
+// destructible walls that can be used to trigger target_objective_decrease
+void spawnfunc_func_breakable() {
+	float n, i;
+	if(!self.health)
+		self.health = 100;
+	self.max_health = self.health;
+
+	if(self.mdl != "")
+		self.cnt = particleeffectnum(self.mdl);
+	if(self.count == 0)
+		self.count = 1;
+
+	self.mdl = self.model;
+	SetBrushEntityModel();
+	self.mins_save = self.mins;
+	self.maxs_save = self.mins;
+
+	self.use = func_breakable_restore;
+
+	// precache all the models
+	if (self.mdl_dead)
+		precache_model(self.mdl_dead);
+	n = tokenize_sane(self.debris);
+	for(i = 0; i < n; ++i)
+		precache_model(argv(i));
+
+	self.event_damage = func_breakable_damage;
+
+	if(self.state)
+		func_breakable_make_destroyed();
+	else
+		func_breakable_restore();
+}

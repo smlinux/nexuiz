@@ -141,3 +141,4 @@ scores.qc
 portals.qc
 
 target_spawn.qc
+func_breakable.qc
