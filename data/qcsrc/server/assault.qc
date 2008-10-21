@@ -1,3 +1,5 @@
+void spawnfunc_func_breakable();
+
 //=============================================================================
 
 /*QUAKED spawnfunc_info_player_attacker (1 0 0) (-16 -16 -24) (16 16 45) INITIAL
@@ -194,59 +196,10 @@ void assault_destructible_reset() {
 	}
 }
 
-void assault_destructible_use() {
-	self.cnt = 1; // mark active
-	self.takedamage = DAMAGE_YES;
-}
-
-void assault_destructible_destroy() {
-	self.model = "";
-	self.takedamage = DAMAGE_NO;
-	self.solid = SOLID_NOT;
-	SUB_UseTargets();
-}
-
-void assault_destructible_damage(entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force) {
-
-	if(self.cnt > 0 && assault_attacker_team == attacker.team) {
-		self.health = self.health - damage;
-		if(self.health / self.max_health < 0.25)
-			self.colormod = '1 0 0';
-		else if(self.health / self.max_health < 0.375)
-			self.colormod = '1 0.25 0';
-		else if(self.health / self.max_health < 0.50)
-			self.colormod = '1 0.5 0';
-		else if(self.health / self.max_health < 0.625)
-			self.colormod = '1 0.75 0';
-		else if(self.health / self.max_health < 0.75)
-			self.colormod = '1 1 0';
-		else
-			self.colormod = '1 1 1';
-	}
-
-	if(self.health < 0) {
-		activator = attacker;
-		assault_destructible_destroy();
-	}
-}
-
 // destructible walls that can be used to trigger target_objective_decrease
 void spawnfunc_func_assault_destructible() {
-	if(!self.health)
-		self.health = 100;
-
-	self.max_health = self.health;
-
-	self.cnt = 0; // not yet activated
-
-	self.classname = "func_assault_destructible";
-	self.mdl = self.model;
-	setmodel(self, self.mdl);
-
-	self.solid = SOLID_BSP;
-	self.use = assault_destructible_use;
-	self.event_damage = assault_destructible_damage;
-
+	self.spawnflags = 3;
+	spawnfunc_func_breakable();
 }
 
 void assault_wall_think() {

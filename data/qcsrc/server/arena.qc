@@ -17,6 +17,7 @@ void(entity e) removedecor;
 void dom_controlpoint_setup();
 void onslaught_generator_reset();
 void onslaught_controlpoint_reset();
+void func_breakable_reset();
 
 /**
  * Resets the state of all clients, items, flags, runes, keys, weapons, waypoints, ... of the map.
@@ -106,6 +107,10 @@ void reset_map()
 		else if(self.classname == "info_player_deathmatch")
 		{
 			self.team = self.team_saved;
+		}
+		else if(self.classname == "func_breakable" || self.classname == "func_assault_destructible")
+		{
+			func_breakable_reset();
 		}
 	}
 

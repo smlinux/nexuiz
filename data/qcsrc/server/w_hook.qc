@@ -58,6 +58,12 @@ void W_Hook_Attack2()
 
 void spawnfunc_weapon_hook (void)
 {
+	if(g_grappling_hook) // offhand hook
+	{
+		startitem_failed = TRUE;
+		remove(self);
+		return;
+	}
 	weapon_defaultspawnfunc(WEP_HOOK);
 }
 

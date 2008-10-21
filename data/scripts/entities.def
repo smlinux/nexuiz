@@ -1059,7 +1059,7 @@ FLOATING: the item will float in air, instead of aligning to the floor by fallin
 model="models/weapons/g_porto.md3"
 */
 
-/*QUAKED target_items (0 0 1) ? AND OR ANDNOT
+/*QUAKED target_items (0 0 1) (-8 -8 -8) (8 8 8) AND OR ANDNOT
 Sets the items of any player who triggers this.
 For the number fields, not specifying a value means not changing it. To clear armor, you need to explicitly set "armor" to "-1".
 You may want to target this by a race checkpoint, a teleporter, or a trigger_multiple with ALLENTS set (so it removes weapons thrown through the field to avoid getting a weapon through it).
@@ -1114,4 +1114,21 @@ message: entity field list
 target: when set, target_spawn edits entities, instead of creating new ones
 -------- SPAWNFLAGS --------
 ONLOAD: create a first entity on map load
+*/
+
+/*QUAKED func_breakable (1 0 0) ? DISABLED INDICATE
+This is a brush model which can be damaged.
+Once all health is consumed it'll disappear and trigger the targeted entity/entities.
+When triggered, it resets to full health, and unbreaks.
+-------- KEYS --------
+health: The damage this trigger can take
+target: The entity/entities to be triggered once this entity gets invisible
+targetname: The name other entities can use to target this entity
+mdl: particle effect name to show when destroyed
+count: particle effect multiplier
+mdl_dead: optional replacement model to show when destroyed
+debris: names of debris models to show when destroyed, separated by spaces
+-------- SPAWNFLAGS --------
+DISABLED: do not allow damaging this until it is first activated
+INDICATE: indicate amount of damage already taken by coloring
 */

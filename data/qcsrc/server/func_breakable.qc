@@ -8,6 +8,10 @@
 //   count = particle effect multiplier
 //   targetname = target to trigger to unbreak the model
 //   target = targets to trigger when broken
+//   health = amount of damage it can take
+//   spawnflags:
+//     1 = start disabled (needs to be triggered to activate)
+//     2 = indicate damage
 // notes:
 //   for mdl_dead to work, origin must be set (using a common/origin brush).
 //   Otherwise mdl_dead will be displayed at the map origin, and nobody would
@@ -43,7 +47,21 @@ void LaunchDebris (string debrisname) =
 	SUB_SetFade(dbr, time + 1 + random() * 5, 1);
 };
 
-void func_breakable_make_destroyed()
+void func_breakable_colormod()
+{
+	float h;
+	if not(self.spawnflags & 2)
+		return;
+	h = self.health / self.max_health;
+	if(h < 0.25)
+		self.colormod = '1 0 0';
+	else if(h <= 0.75)
+		self.colormod = '1 0 0' + '0 1 0' * (2 * h - 0.5);
+	else
+		self.colormod = '1 1 1';
+}
+
+void func_breakable_look_destroyed()
 {
 	if(self.mdl_dead == "")
 	{
@@ -55,28 +73,50 @@ void func_breakable_make_destroyed()
 		setmodel(self, self.mdl_dead);
 		self.solid = SOLID_BSP;
 	}
+}
+
+void func_breakable_look_restore()
+{
+	setmodel(self, self.mdl);
+	self.solid = SOLID_BSP;
+}
+
+void func_breakable_behave_destroyed()
+{
 	self.health = self.max_health;
 	self.takedamage = DAMAGE_NO;
 	self.event_damage = SUB_Null;
 	self.state = 1;
 	setsize(self, '0 0 0', '0 0 0');
+	func_breakable_colormod();
 }
 
-void func_breakable_restore()
+void func_breakable_behave_restore()
 {
-	setmodel(self, self.mdl);
-	self.solid = SOLID_BSP;
 	self.health = self.max_health;
 	self.takedamage = DAMAGE_AIM;
 	self.event_damage = func_breakable_damage;
 	self.state = 0;
 	setsize(self, self.mins_save, self.maxs_save);
+	func_breakable_colormod();
+}
+
+void func_breakable_destroyed()
+{
+	func_breakable_look_destroyed();
+	func_breakable_behave_destroyed();
+}
+
+void func_breakable_restore()
+{
+	func_breakable_look_restore();
+	func_breakable_behave_restore();
 }
 
 void func_breakable_destroy() {
 	float n, i;
 
-	func_breakable_make_destroyed();
+	func_breakable_destroyed();
 
 	// now throw around the debris
 	n = tokenize_sane(self.debris);
@@ -99,6 +139,16 @@ void func_breakable_damage(entity inflictor, entity attacker, float damage, floa
 		activator = attacker;
 		func_breakable_destroy();
 	}
+	func_breakable_colormod();
+}
+
+void func_breakable_reset()
+{
+	func_breakable_look_restore();
+	if(self.spawnflags & 1)
+		func_breakable_behave_destroyed();
+	else
+		func_breakable_behave_restore();
 }
 
 // destructible walls that can be used to trigger target_objective_decrease
@@ -127,10 +177,5 @@ void spawnfunc_func_breakable() {
 	for(i = 0; i < n; ++i)
 		precache_model(argv(i));
 
-	self.event_damage = func_breakable_damage;
-
-	if(self.state)
-		func_breakable_make_destroyed();
-	else
-		func_breakable_restore();
+	func_breakable_reset();
 }
