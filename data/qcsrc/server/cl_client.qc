@@ -2266,6 +2266,7 @@ Called every frame for each client after the physics are run
 .float idlekick_lasttimeleft;
 .float race_penalty;
 .float race_penalty_nagged;
+.float race_penalty_nagtime;
 void PlayerPostThink (void)
 {
 	// Savage: Check for nameless players
@@ -2323,15 +2324,27 @@ void PlayerPostThink (void)
 							if(!self.race_penalty_nagged)
 							{
 								// TODO better notification for this!
-								centerprint_atprio(self, CENTERPRIO_IDLEKICK, "^1DO NOT MOVE DURING THE COUNTDOWN.");
+								self.race_penalty_nagtime = 0;
 								self.race_penalty_nagged = 1;
 							}
 						}
 						else if(!self.race_penalty)
 						{
-							centerprint_atprio(self, CENTERPRIO_IDLEKICK, "^1FIVE SECONDS PENALTY.");
+							self.race_penalty_nagtime = 0;
 							self.race_penalty = time + 5;
 						}
+					}
+					if(time > self.race_penalty_nagtime)
+					{
+						if(self.race_penalty > time)
+						{
+							centerprint_atprio(self, CENTERPRIO_IDLEKICK, "^1FIVE SECONDS PENALTY.");
+						}
+						else if(self.race_penalty_nagged && time < game_starttime - 2)
+						{
+							centerprint_atprio(self, CENTERPRIO_IDLEKICK, "^1DO NOT MOVE DURING THE COUNTDOWN.");
+						}
+						self.race_penalty_nagtime = time + self.cvar_scr_centertime * 0.6;
 					}
 					self.movetype = MOVETYPE_NONE;		
 					self.velocity = '0 0 0';
