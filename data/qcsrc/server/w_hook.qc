@@ -7,7 +7,7 @@ void W_Hook_Explode2 (void)
 	sound (self, CHAN_PROJECTILE, "weapons/hookbomb_impact.wav", VOL_BASE, ATTN_NORM);
 
 	self.event_damage = SUB_Null;
-	RadiusDamage (self, self.owner, cvar("g_balance_hook_secondary_damage"), cvar("g_balance_hook_secondary_edgedamage"), cvar("g_balance_hook_secondary_radius"), world, cvar("g_balance_hook_secondary_force"), self.projectiledeathtype, other);
+	RadiusDamage (self, self.owner, cvar("g_balance_hook_secondary_damage"), cvar("g_balance_hook_secondary_edgedamage"), cvar("g_balance_hook_secondary_radius"), self.owner, cvar("g_balance_hook_secondary_force"), self.projectiledeathtype, other);
 
 	remove(self);
 }
