@@ -392,7 +392,7 @@ void PrintWelcomeMessage(entity pl)
 		local string specString;
 		specString = NEWLINES;
 		if(time < game_starttime) //also show the countdown when being a spectator
-			specString = strcat(specString, "\n\n^1Game starts in ", ftos(restartAnnouncer.cnt + 1), " seconds^7");
+			specString = strcat(specString, "\n\n^1Game starts in ", ftos(ceil(game_starttime - time)), " seconds^7");
 		else if (timeoutStatus != 0)
 			specString = strcat(specString, "\n\n", getTimeoutText(1));
 		else

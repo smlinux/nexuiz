@@ -221,6 +221,7 @@ entity GetPlayer(string name)
 }
 
 //float ctf_clientcommand();
+float readyrestart_happened;
 void SV_ParseClientCommand(string s) {
 	local string cmd;
 	local float i, j, tokens;
@@ -330,13 +331,16 @@ void SV_ParseClientCommand(string s) {
 				return sprint(self, "^1You cannot reset the game while a timeout is active!\n");
 			}
 			
-			if(game_starttime == 0 || cvar("sv_ready_restart_repeatable"))
+			//if(!restartAnnouncer)
 			{
-				self.ready = TRUE;
-				bprint(self.netname, "^2 is ready\n");
-				ReadyCount();
-			} else {
-				sprint(self, "^1game has already been restarted\n");
+				if(!readyrestart_happened || cvar("sv_ready_restart_repeatable"))
+				{
+					self.ready = TRUE;
+					bprint(self.netname, "^2 is ready\n");
+					ReadyCount();
+				} else {
+					sprint(self, "^1game has already been restarted\n");
+				}
 			}
 		}
 	} else if(argv(0) == "maplist") {
@@ -461,6 +465,7 @@ void ReadyRestart()
 	if(checkrules_overtimeend)
 		checkrules_overtimeend = 0;
 
+	readyrestart_happened = 1;
 	game_starttime = time + RESTART_COUNTDOWN;
 	restart_mapalreadyrestarted = 0; //reset this var, needed when cvar sv_ready_restart_repeatable is in use
 
@@ -488,7 +493,7 @@ void ReadyRestart()
 	restartAnnouncer = spawn();
 	restartAnnouncer.think = restartAnnouncer_Think;
 	restartAnnouncer.nextthink = time;
-	restartAnnouncer.cnt = RESTART_COUNTDOWN;
+	restartAnnouncer.spawnflags = !!cvar("sv_ready_restart_after_countdown");
 	
 	//after a restart every players number of allowed timeouts gets reset, too
 	if(cvar("sv_timeout"))
@@ -552,8 +557,12 @@ void ReadyCount()
 void restartAnnouncer_Think() {
 	local entity plr;
 	local string s;
-	if(self.cnt <= 0) { //show the "Begin" message and
-		if (cvar("sv_ready_restart_after_countdown")) {
+	float f, c;
+	c = game_starttime - time;
+	f = floor(0.5 + c);
+	if(c <= 0) { //show the "Begin" message and
+		if(self.spawnflags & 1)
+		{
 			restart_mapalreadyrestarted = 1;
 			reset_map();
 		}
@@ -572,16 +581,15 @@ void restartAnnouncer_Think() {
 	else {
 		FOR_EACH_REALCLIENT(plr) {
 			if(plr.classname == "player") {
-				s = strcat(NEWLINES, "^1Game starts in ", ftos(self.cnt), " seconds");
+				s = strcat(NEWLINES, "^1Game starts in ", ftos(f), " seconds");
 				centerprint(plr, s);
 			}
 		}
 
-		if(self.cnt <= 3) {
-			play2all(strcat("announcer/robotic/", ftos(self.cnt), ".ogg"));
+		if(f <= 3) {
+			play2all(strcat("announcer/robotic/", ftos(f), ".ogg"));
 		}
-		self.nextthink = time + 1;
-		self.cnt -= 1;
+		self.nextthink = game_starttime - (f - 1);
 	}
 }
 

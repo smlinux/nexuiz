@@ -911,6 +911,18 @@ void readlevelcvars(void)
 	g_pickup_healthmega                = cvar("g_pickup_healthmega");
 	g_pickup_healthmega_max            = cvar("g_pickup_healthmega_max");
 
+	if not(inWarmupStage)
+	{
+		game_starttime                 = cvar("g_start_delay");
+		if(game_starttime)
+		{
+			restartAnnouncer = spawn();
+			restartAnnouncer.think = restartAnnouncer_Think;
+			restartAnnouncer.nextthink = time + 0.1;
+			restartAnnouncer.spawnflags = 0;
+		}
+	}
+
 	readplayerstartcvars();
 }
 
