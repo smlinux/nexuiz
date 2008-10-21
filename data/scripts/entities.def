@@ -1082,7 +1082,7 @@ ANDNOT: the items listed will get removed from the player
 */
 
 /*QUAKED target_spawn (1 0 1) (-8 -8 -8) (8 8 8) - ONLOAD
-Spawns an entity when triggered.
+Spawns or modifies an entity when triggered.
 The entity field list is a single string of the form:
 'field' 'value' 'field' 'value' ... 'classname' 'item_bullets' ... 'field' 'value'
 The special "field" name $ calls a void(void) function, for example a spawn function.
@@ -1091,7 +1091,7 @@ $E
 $E.field
 $E.field+offset
 $E.field+offset+randomoffset
-where "E" can be self, activator and pusher.
+where "E" can be self, activator, target (the entity being created/modified) and pusher.
 Example is a Mario-style question mark block which could throw a new weapon_nex when activated like this:
 {
 "classname" "func_button"

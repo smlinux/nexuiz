@@ -93,6 +93,11 @@ void target_spawn_useon(entity e)
 						valueent = world;
 					value = "";
 				}
+				else if(value == "target")
+				{
+					valueent = e;
+					value = "";
+				}
 				else if(value == "time")
 				{
 					valueent = world;
