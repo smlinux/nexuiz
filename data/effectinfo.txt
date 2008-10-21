@@ -2546,3 +2546,60 @@ originjitter 5 5 5
 velocityjitter 81 81 150
 color 0x7cbaff 0xcfd1ff
 velocitymultiplier 2
+
+
+
+// decal
+effect hookbomb_explode
+countabsolute 1
+type decal
+tex 8 16
+size 96 96
+alpha 256 256 0
+originjitter 40 40 40
+lightradius 1600
+lightradiusfade 800
+lightcolor 1 4 8
+// fire effect which make brigt dot inside
+effect hookbomb_explode
+notunderwater
+count 100
+type static
+tex 48 55
+color 0x003fe0 0x92dfff
+size 12 32
+sizeincrease 80
+alpha 512 328 756
+bounce 1
+airfriction 8
+liquidfriction 8
+originjitter 8 8 8
+velocityjitter 1024 1024 1024
+// smoke
+effect hookbomb_explode
+type alphastatic
+notunderwater
+tex 0 8
+count 160
+size 80 160
+sizeincrease 300
+alpha 500 600 556
+velocityoffset 0 0 0
+velocityjitter 256 256 256
+airfriction 0
+color 0x000000 0x111111
+bounce 6
+// underwater bubbles
+effect hookbomb_explode
+underwater
+count 60
+type bubble
+tex 62 62
+color 0x404040 0x808080
+size 3 3
+alpha 128 256 64
+gravity -0.125
+bounce 1.5
+liquidfriction 0.0625
+originjitter 16 16 16
+velocityjitter 192 192 192

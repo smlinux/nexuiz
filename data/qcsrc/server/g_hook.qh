@@ -10,5 +10,5 @@ float HOOK_FIRING = 1;
 float HOOK_REMOVING = 2;
 float HOOK_PULLING = 4;
 float HOOK_RELEASING = 8;
-float HOOK_WAITING_FOR_REFIRE = 16;
+float HOOK_WAITING_FOR_RELEASE = 16;
 .float hook_state;

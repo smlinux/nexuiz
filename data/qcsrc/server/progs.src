@@ -83,6 +83,7 @@ w_minstanex.qc
 w_hagar.qc
 w_rocketlauncher.qc
 w_porto.qc
+w_hook.qc
 
 t_items.qc
 cl_weapons.qc

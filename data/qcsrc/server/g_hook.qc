@@ -387,10 +387,10 @@ void GrapplingHookFrame()
 		// offhand hook controls
 		if(self.BUTTON_HOOK)
 		{
-			if not(self.hook || (self.hook_state & HOOK_WAITING_FOR_REFIRE))
+			if not(self.hook || (self.hook_state & HOOK_WAITING_FOR_RELEASE))
 			{
 				self.hook_state |= HOOK_FIRING;
-				self.hook_state |= HOOK_WAITING_FOR_REFIRE;
+				self.hook_state |= HOOK_WAITING_FOR_RELEASE;
 			}
 		}
 		else
@@ -398,7 +398,7 @@ void GrapplingHookFrame()
 			if(self.hook)
 			{
 				self.hook_state |= HOOK_REMOVING;
-				self.hook_state (-) HOOK_WAITING_FOR_REFIRE;
+				self.hook_state (-) HOOK_WAITING_FOR_RELEASE;
 			}
 		}
 
@@ -413,6 +413,12 @@ void GrapplingHookFrame()
 			self.hook_state |= HOOK_PULLING;
 			//self.hook_state (-) HOOK_RELEASING;
 		}
+	}
+
+	if(!g_grappling_hook && self.weapon != WEP_HOOK)
+	{
+		self.hook_state (-) HOOK_FIRING;
+		self.hook_state |= HOOK_REMOVING;
 	}
 
 	if (self.hook_state & HOOK_FIRING)
