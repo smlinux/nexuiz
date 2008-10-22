@@ -195,7 +195,7 @@ void() teamradar_view =
 	float scale2d, normalsize, bigsize;
 	float f;
 
-	if(minimapname == "")
+	if(minimapname == "" && !ons_showmap)
 		return;
 
 	teamradar_loadcvars();
@@ -278,7 +278,8 @@ void() teamradar_view =
 		teamradar_size2d_y
 	);
 
-	draw_teamradar_background(cl_teamradar_background_alpha, cl_teamradar_foreground_alpha);
+	if(minimapname != "")
+		draw_teamradar_background(cl_teamradar_background_alpha, cl_teamradar_foreground_alpha);
 
 	if(ons_showmap)
 	{
