@@ -125,9 +125,9 @@ float w_hook(float req)
 	}
 	else if (req == WR_PRECACHE)
 	{
-		precache_model ("models/weapons/g_hook.md3");
-		precache_model ("models/weapons/v_hook.md3");
-		precache_model ("models/weapons/w_hook.zym");
+		precache_model ("models/weapons/g_hookgun.md3");
+		precache_model ("models/weapons/v_hookgun.md3");
+		precache_model ("models/weapons/w_hookgun.zym");
 		precache_sound ("weapons/hook_fire.wav");
 		precache_sound ("weapons/hook_impact.wav");
 		precache_sound ("weapons/hookbomb_fire.wav");
