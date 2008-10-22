@@ -92,6 +92,7 @@ string WeaponName(float w)
 		case WEP_ROCKET_LAUNCHER:  return "Rocket Launcher";
 		case WEP_PORTO:            return "Port-O-Launch";
 		case WEP_MINSTANEX:        return "MinstaNex";
+		case WEP_HOOK:             return "Grappling Hook";
 		default:                   return "(fix qcsrc/menu/nexuiz/weaponslist.c)";
 	}
 }
