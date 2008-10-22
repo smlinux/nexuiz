@@ -281,7 +281,7 @@ void CSQC_UpdateView(void)
 	// Draw the Crosshair
 	float scoreboard_active;
 	scoreboard_active = Sbar_WouldDrawScoreboard();
-	R_SetView(VF_DRAWCROSSHAIR, !scoreboard_active);
+	R_SetView(VF_DRAWCROSSHAIR, !scoreboard_active && !ons_showmap);
 	
 	// Draw the Engine Status Bar (the default Quake HUD)
 	R_SetView(VF_DRAWENGINESBAR, 0);
