@@ -15,6 +15,7 @@ COMPAT_FILES="
 	gfx/dismal_mini.tga
 	gfx/final_rage_mini.tga
 	gfx/inv_weapon10.tga
+	gfx/inv_weapon11.tga
 	gfx/inv_weapon9.tga
 	gfx/reslimed_mini.tga
 	gfx/runningman_1on1remix_mini.tga
@@ -23,8 +24,8 @@ COMPAT_FILES="
 	gfx/sb_kh_full.tga
 	gfx/sb_kh_outline.tga
 	gfx/sb_playercolor_base.tga
-	gfx/sb_playercolor_shirt.tga
 	gfx/sb_playercolor_pants.tga
+	gfx/sb_playercolor_shirt.tga
 	gfx/silvercity_mini.tga
 	gfx/stormkeep_mini.tga
 	gfx/strength_mini.tga
@@ -48,7 +49,17 @@ COMPAT_FILES="
 	models/sprites/keycarrier-red.tga
 	models/sprites/keycarrier-yellow.tga
 	models/sprites/key-dropped.tga
+	models/sprites/ons-cp-atck-blue_frame0.tga
+	models/sprites/ons-cp-atck-blue_frame1.tga
+	models/sprites/ons-cp-atck-neut_frame0.tga
+	models/sprites/ons-cp-atck-neut_frame1.tga
+	models/sprites/ons-cp-atck-red_frame0.tga
+	models/sprites/ons-cp-atck-red_frame1.tga
 	models/sprites/ons-cp-blue.tga
+	models/sprites/ons-cp-dfnd-blue_frame0.tga
+	models/sprites/ons-cp-dfnd-blue_frame1.tga
+	models/sprites/ons-cp-dfnd-red_frame0.tga
+	models/sprites/ons-cp-dfnd-red_frame1.tga
 	models/sprites/ons-cp-neut.tga
 	models/sprites/ons-cp-red.tga
 	models/sprites/ons-gen-blue.tga
@@ -61,16 +72,19 @@ COMPAT_FILES="
 	models/sprites/race-finish.tga
 	models/sprites/redbase.tga
 	models/sprites/waypoint.tga
+	models/weapons/g_hookgun.md3
 	models/weapons/g_minstanex.md3
 	models/weapons/g_porto.md3
+	models/weapons/v_hookgun.md3
 	models/weapons/v_minstanex.md3
 	models/weapons/v_porto.md3
+	models/weapons/w_hookgun.zym
 	models/weapons/w_minstanex.zym
 	models/weapons/w_porto.zym
 	particles/particlefont.tga
-	sound/announcer/male/impressive.ogg
 	sound/announcer/male/airshot.ogg
 	sound/announcer/male/headshot.ogg
+	sound/announcer/male/impressive.ogg
 	sound/misc/typehit.wav
 	sound/player/default.sounds
 	sound/player/torus/attack.ogg
@@ -98,6 +112,10 @@ COMPAT_FILES="
 	sound/porto/explode.ogg
 	sound/porto/fire.ogg
 	sound/porto/unsupported.ogg
+	textures/hookgun_gloss.tga
+	textures/hookgun_norm.tga
+	textures/hookgun_pants.tga
+	textures/hookgun.tga
 	textures/nex_bump.tga
 	textures/nex_gloss.tga
 	textures/nex_glow.tga
@@ -108,24 +126,6 @@ COMPAT_FILES="
 	textures/portalgun_glow.tga
 	textures/portalgun_norm.tga
 	textures/portalgun.tga
-	gfx/inv_weapon11.tga
-	models/weapons/g_hookgun.md3
-	models/weapons/v_hookgun.md3
-	models/weapons/w_hookgun.zym
-	textures/hookgun.tga
-	textures/hookgun_gloss.tga
-	textures/hookgun_norm.tga
-	textures/hookgun_pants.tga
-	models/sprites/ons-cp-atck-blue_frame0.tga
-	models/sprites/ons-cp-atck-blue_frame1.tga
-	models/sprites/ons-cp-atck-neut_frame0.tga
-	models/sprites/ons-cp-atck-neut_frame1.tga
-	models/sprites/ons-cp-atck-red_frame0.tga
-	models/sprites/ons-cp-atck-red_frame1.tga
-	models/sprites/ons-cp-dfnd-blue_frame0.tga
-	models/sprites/ons-cp-dfnd-blue_frame1.tga
-	models/sprites/ons-cp-dfnd-red_frame0.tga
-	models/sprites/ons-cp-dfnd-red_frame1.tga
 "
 
 rev=`svnversion`
