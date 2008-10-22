@@ -951,7 +951,7 @@ float _tokenize_sane(string s)
 	float data;
 	float end;
 	float i;
-	
+
 	_argc_sane = 0;
 	data = 0;
 	end = strlen(s);

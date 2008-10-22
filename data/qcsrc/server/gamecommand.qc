@@ -420,7 +420,7 @@ void EffectIndexDump()
 	fh = fopen("effectinfo.txt", FILE_READ);
 	while((s = fgets(fh)))
 	{
-		tokenize_sane(s);
+		tokenize_insane(s); // tokenize_sane would hit the loop counter :(
 		if(argv(0) == "effect")
 		{
 			if(db_get(d, argv(1)) != "1")
