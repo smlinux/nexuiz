@@ -141,8 +141,6 @@ void draw_teamradar_link(vector start, vector end, float colors)
 	R_PolygonVertex(end + norm, '1 1 0', c1, 1);
 	R_PolygonVertex(end - norm, '1 0 0', c1, 1);
 	R_EndPolygon();
-
-	print("p\n");
 }
 
 float cl_teamradar_scale;
