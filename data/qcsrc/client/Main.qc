@@ -287,7 +287,7 @@ float CSQC_ConsoleCommand(string strMessage)
 		button_attack2 = 0;
 		return false;
 	} else if(strCmd == "ons_map") {
-		Cmd_ons_map();
+		ons_showmap = !ons_showmap;
 		return true;
 	} else if(strCmd == "sbar_columns_set") {
 		Cmd_Sbar_SetFields(argc);
@@ -640,6 +640,9 @@ void Net_ReadInit()
 	maxclients = ReadByte();
 	for(i = 0; i < 24; ++i)
 		weaponimpulse[i] = ReadByte() - 1;
+	hook_shotorigin_x = ReadCoord();
+	hook_shotorigin_y = ReadCoord();
+	hook_shotorigin_z = ReadCoord();
 	CSQC_CheckRevision();
 }
 

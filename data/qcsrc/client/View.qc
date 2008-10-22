@@ -339,25 +339,10 @@ void CSQC_UpdateView(void)
 	self = e;
 	
 	// draw radar
-	if(gametype == GAME_ONSLAUGHT)
+	if(teamplay)
 	{
-		if(cvar("cl_teamradar") >= 2)
-		{
-			if(!scoreboard_active)
-				teamradar_view();
-		}
-		else
-			ons_view();
-		//drawstring('0 0', minimapname, '8 8 0', '1 1 1', 1, 0);
-		//drawsetcliparea(0,0,800,600);
-		//drawresetcliparea();
-	}
-	else if(teamplay)
-	{
-		//if(cvar("cl_teamradar") >= 1) // TODO change it back to this
-		if(cvar_string("cl_teamradar") != "0") // (so it is on by default)
-			if(!scoreboard_active)
-				teamradar_view();
+		if((cvar_string("cl_teamradar") != "0" && !scoreboard_active) || ons_showmap)
+			teamradar_view();
 	}
 
 	// draw sbar

@@ -38,7 +38,7 @@ void Draw_GrapplingHook()
 	if(time >= self.HookKillTime)
 		return;
 	if(self.sv_entnum == player_localentnum - 1)
-		a = view_origin + view_forward * 8 - view_right * 8 + view_up * -12;
+		a = view_origin + view_forward * hook_shotorigin_x + view_right * hook_shotorigin_y + view_up * hook_shotorigin_z;
 	else
 		a = self.HookStart;
 	b = self.HookEnd;

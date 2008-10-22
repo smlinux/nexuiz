@@ -208,3 +208,4 @@ string shortmapname;
 
 // database for misc stuff
 float tempdb;
+vector hook_shotorigin;

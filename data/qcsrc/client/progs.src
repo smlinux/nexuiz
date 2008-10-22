@@ -19,7 +19,6 @@ sortlist.qc
 miscfunctions.qc
 teamplay.qc
 
-ons.qc
 ctf.qc
 
 sbar.qc

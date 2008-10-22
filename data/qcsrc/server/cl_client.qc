@@ -807,6 +807,9 @@ void SendCSQCInfo(void)
 	WriteByte(MSG_ONE, maxclients);
 	for(i = 1; i <= 24; ++i)
 		WriteByte(MSG_ONE, (get_weaponinfo(i)).impulse + 1);
+	WriteCoord(MSG_ONE, hook_shotorigin_x);
+	WriteCoord(MSG_ONE, hook_shotorigin_y);
+	WriteCoord(MSG_ONE, hook_shotorigin_z);
 }
 
 /*

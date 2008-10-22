@@ -130,7 +130,7 @@ void GrapplingHookThink()
 	self.nextthink = time;
 
 	makevectors(self.owner.v_angle);
-	org = self.owner.origin + self.owner.view_ofs + v_forward * 8 - v_right * 8 + v_up * -12;
+	org = self.owner.origin + self.owner.view_ofs + v_forward * hook_shotorigin_x + v_right * hook_shotorigin_y + v_up * hook_shotorigin_z;
 
 #if 0
 	tracebox(org, self.mins, self.maxs, self.origin, MOVE_NOMONSTERS, self.owner);
@@ -250,8 +250,6 @@ void GrapplingHookThink()
 
 			self.owner.flags (-) FL_ONGROUND;
 		}
-
-		org = org + dir*50; // get the beam out of the player's eyes
 	}
 
 	makevectors(self.angles_x * '-1 0 0' + self.angles_y * '0 1 0');
@@ -462,6 +460,14 @@ void GrapplingHookFrame()
 		}
 	}*/
 	// note: The hook entity does the actual pulling
+}
+
+void GrappleHookInit()
+{
+	if(g_grappling_hook)
+		hook_shotorigin = '8 -8 -12';
+	else
+		hook_shotorigin = '25 6 -8';
 }
 
 void SetGrappleHookBindings()

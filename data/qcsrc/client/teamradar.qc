@@ -121,7 +121,6 @@ void draw_teamradar_icon(vector coord, float icon, float pingtime, vector rgb, f
 
 void draw_teamradar_link(vector start, vector end, float colors)
 {
-	float dt;
 	vector c0, c1, norm;
 
 	start = teamradar_texcoord_to_2dcoord(teamradar_3dcoord_to_texcoord(start));
@@ -153,24 +152,39 @@ float cl_teamradar_zoommode;
 
 void teamradar_loadcvars()
 {
-	cl_teamradar_scale = cvar("cl_teamradar_scale");
-	cl_teamradar_background_alpha = cvar("cl_teamradar_background_alpha");
-	cl_teamradar_foreground_alpha = cvar("cl_teamradar_foreground_alpha");
-	cl_teamradar_rotation = cvar("cl_teamradar_rotation");
-	cl_teamradar_size = stov(cvar_string("cl_teamradar_size"));
-	cl_teamradar_position = stov(cvar_string("cl_teamradar_position"));
-	cl_teamradar_zoommode = cvar("cl_teamradar_zoommode");
+	if(ons_showmap)
+	{
+		cl_teamradar_scale = 42; // dummy, not used (see zoommode)
+		cl_teamradar_background_alpha = 1;
+		cl_teamradar_foreground_alpha = 1;
+		cl_teamradar_rotation = cvar("cl_teamradar_rotation");
+		if(!cl_teamradar_rotation)
+			cl_teamradar_rotation = 4;
+		cl_teamradar_size = '256 256 0'; // TODO make somewhat variable?
+		cl_teamradar_position = '0.5 0.5 0';
+		cl_teamradar_zoommode = 3;
+	}
+	else
+	{
+		cl_teamradar_scale = cvar("cl_teamradar_scale");
+		cl_teamradar_background_alpha = cvar("cl_teamradar_background_alpha");
+		cl_teamradar_foreground_alpha = cvar("cl_teamradar_foreground_alpha");
+		cl_teamradar_rotation = cvar("cl_teamradar_rotation");
+		cl_teamradar_size = stov(cvar_string("cl_teamradar_size"));
+		cl_teamradar_position = stov(cvar_string("cl_teamradar_position"));
+		cl_teamradar_zoommode = cvar("cl_teamradar_zoommode");
 
-	// others default to 0
-	// match this to defaultNexuiz.cfg!
-	if(!cl_teamradar_scale) cl_teamradar_scale = 4096;
-	if(!cl_teamradar_background_alpha) cl_teamradar_background_alpha = 0.4;
-	if(!cl_teamradar_foreground_alpha) cl_teamradar_foreground_alpha = 0.8;
-	if(!cl_teamradar_size_x) cl_teamradar_size_x = 128;
-	if(!cl_teamradar_size_y) cl_teamradar_size_y = cl_teamradar_size_x;
+		// others default to 0
+		// match this to defaultNexuiz.cfg!
+		if(!cl_teamradar_scale) cl_teamradar_scale = 4096;
+		if(!cl_teamradar_background_alpha) cl_teamradar_background_alpha = 0.4;
+		if(!cl_teamradar_foreground_alpha) cl_teamradar_foreground_alpha = 0.8;
+		if(!cl_teamradar_size_x) cl_teamradar_size_x = 128;
+		if(!cl_teamradar_size_y) cl_teamradar_size_y = cl_teamradar_size_x;
 
-	cl_teamradar_size_z = 0;
-	cl_teamradar_position_z = 0;
+		cl_teamradar_size_z = 0;
+		cl_teamradar_position_z = 0;
+	}
 }
 
 void() teamradar_view =
@@ -265,6 +279,29 @@ void() teamradar_view =
 	);
 
 	draw_teamradar_background(cl_teamradar_background_alpha, cl_teamradar_foreground_alpha);
+
+	if(ons_showmap)
+	{
+		drawresetcliparea();
+
+		vector frame_origin, frame_size;
+		frame_origin = frame_size = '0 0 0';
+
+		frame_origin_x = teamradar_origin2d_x - teamradar_size2d_x * 0.55859375;
+		frame_origin_y = teamradar_origin2d_y - teamradar_size2d_y * 0.55859375;
+		frame_size_x = teamradar_size2d_x * 1.1171875;
+		frame_size_y = teamradar_size2d_y * 1.1171875;
+		drawpic(frame_origin, "gfx/ons-frame.tga", frame_size, '1 1 1', 1, 0);
+		drawpic(frame_origin, "gfx/ons-frame-team.tga", frame_size, rgb, 1, 0);
+
+		drawsetcliparea(
+			teamradar_origin2d_x - teamradar_size2d_x * 0.5,
+			teamradar_origin2d_y - teamradar_size2d_y * 0.5,
+			teamradar_size2d_x,
+			teamradar_size2d_y
+		);
+	}
+
 	for(tm = world; (tm = find(tm, classname, "radarlink")); )
 		draw_teamradar_link(tm.origin, tm.velocity, tm.team);
 	for(tm = world; (tm = findflags(tm, teamradar_icon, 0xFFFFFF)); )
@@ -286,7 +323,7 @@ void() teamradar_view =
 
 void Ent_RadarLink()
 {
-	float sendflags, f;
+	float sendflags;
 	sendflags = ReadByte();
 
 	InterpolateOrigin_Undo();

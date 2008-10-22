@@ -20,7 +20,8 @@
 // Revision 19: fog
 // Revision 20: naggers
 // Revision 21: entcs for players optimized (position data down from 12 to 7 bytes); waypointsprites in csqc for team radar
-#define CSQC_REVISION 21
+// Revision 22: hook shot origin
+#define CSQC_REVISION 22
 
 // probably put these in common/
 // so server/ and client/ can be synced better

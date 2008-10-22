@@ -12,3 +12,6 @@ float HOOK_PULLING = 4;
 float HOOK_RELEASING = 8;
 float HOOK_WAITING_FOR_RELEASE = 16;
 .float hook_state;
+
+void GrappleHookInit();
+vector hook_shotorigin;
