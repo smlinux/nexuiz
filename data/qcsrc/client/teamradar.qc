@@ -119,6 +119,32 @@ void draw_teamradar_icon(vector coord, float icon, float pingtime, vector rgb, f
 	}
 }
 
+void draw_teamradar_link(vector start, vector end, float colors)
+{
+	float dt;
+	vector c0, c1, norm;
+
+	start = teamradar_texcoord_to_2dcoord(teamradar_3dcoord_to_texcoord(start));
+	end = teamradar_texcoord_to_2dcoord(teamradar_3dcoord_to_texcoord(end));
+	norm = normalize(start - end);
+	norm_z = norm_x;
+	norm_x = -norm_y;
+	norm_y = norm_z;
+	norm_z = 0;
+
+	c0 = colormapPaletteColor(colors & 0x0F, FALSE);
+	c1 = colormapPaletteColor((colors & 0xF0) / 0x10, FALSE);
+
+	R_BeginPolygon("", 0);
+	R_PolygonVertex(start - norm, '0 0 0', c0, 1);
+	R_PolygonVertex(start + norm, '0 1 0', c0, 1);
+	R_PolygonVertex(end + norm, '1 1 0', c1, 1);
+	R_PolygonVertex(end - norm, '1 0 0', c1, 1);
+	R_EndPolygon();
+
+	print("p\n");
+}
+
 float cl_teamradar_scale;
 float cl_teamradar_background_alpha;
 float cl_teamradar_foreground_alpha;
@@ -241,6 +267,8 @@ void() teamradar_view =
 	);
 
 	draw_teamradar_background(cl_teamradar_background_alpha, cl_teamradar_foreground_alpha);
+	for(tm = world; (tm = find(tm, classname, "radarlink")); )
+		draw_teamradar_link(tm.origin, tm.velocity, tm.team);
 	for(tm = world; (tm = findflags(tm, teamradar_icon, 0xFFFFFF)); )
 		draw_teamradar_icon(tm.origin, tm.teamradar_icon, tm.teamradar_time, tm.teamradar_color, tm.alpha);
 	for(tm = world; (tm = find(tm, classname, "entcs_receiver")); )
@@ -253,3 +281,39 @@ void() teamradar_view =
 
 	drawresetcliparea();
 };
+
+
+
+// radar links
+
+void Ent_RadarLink()
+{
+	float sendflags, f;
+	sendflags = ReadByte();
+
+	InterpolateOrigin_Undo();
+
+	self.iflags = IFLAG_VELOCITY;
+	self.classname = "radarlink";
+
+	if(sendflags & 1)
+	{
+		self.origin_x = ReadCoord();
+		self.origin_y = ReadCoord();
+		self.origin_z = ReadCoord();
+	}
+
+	if(sendflags & 2)
+	{
+		self.velocity_x = ReadCoord();
+		self.velocity_y = ReadCoord();
+		self.velocity_z = ReadCoord();
+	}
+
+	if(sendflags & 4)
+	{
+		self.team = ReadByte();
+	}
+
+	InterpolateOrigin_Note();
+}

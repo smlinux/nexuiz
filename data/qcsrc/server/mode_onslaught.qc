@@ -1,5 +1,6 @@
 void onslaught_generator_updatesprite(entity e);
 void onslaught_controlpoint_updatesprite(entity e);
+void onslaught_link_checkupdate();
 
 .entity sprite;
 .string target2;
@@ -839,6 +840,71 @@ void onslaught_controlpoint_reset()
 	SUB_UseTargets(); // to reset the structures, playerspawns etc.
 }
 
+float onslaught_link_send(entity to, float sendflags)
+{
+	WriteByte(MSG_ENTITY, ENT_CLIENT_RADARLINK);
+	WriteByte(MSG_ENTITY, sendflags);
+	if(sendflags & 1)
+	{
+		WriteCoord(MSG_ENTITY, self.goalentity.origin_x);
+		WriteCoord(MSG_ENTITY, self.goalentity.origin_y);
+		WriteCoord(MSG_ENTITY, self.goalentity.origin_z);
+	}
+	if(sendflags & 2)
+	{
+		WriteCoord(MSG_ENTITY, self.enemy.origin_x);
+		WriteCoord(MSG_ENTITY, self.enemy.origin_y);
+		WriteCoord(MSG_ENTITY, self.enemy.origin_z);
+	}
+	if(sendflags & 4)
+	{
+		WriteByte(MSG_ENTITY, self.clientcolors); // which is goalentity's color + enemy's color * 16
+	}
+	return TRUE;
+}
+
+void onslaught_link_checkupdate()
+{
+	// TODO check if the two sides have moved (currently they won't move anyway)
+	float redpower, bluepower;
+
+	redpower = bluepower = 0;
+	if(self.goalentity.islinked)
+	{
+		if(self.goalentity.team == COLOR_TEAM1)
+			redpower = 1;
+		else if(self.goalentity.team == COLOR_TEAM2)
+			bluepower = 1;
+	}
+	if(self.enemy.islinked)
+	{
+		if(self.enemy.team == COLOR_TEAM1)
+			redpower = 2;
+		else if(self.enemy.team == COLOR_TEAM2)
+			bluepower = 2;
+	}
+
+	float cc;
+	if(redpower == 1 && bluepower == 2)
+		cc = (COLOR_TEAM1 - 1) * 0x01 + (COLOR_TEAM2 - 1) * 0x10;
+	else if(redpower == 2 && bluepower == 1)
+		cc = (COLOR_TEAM1 - 1) * 0x10 + (COLOR_TEAM2 - 1) * 0x01;
+	else if(redpower)
+		cc = (COLOR_TEAM1 - 1) * 0x11;
+	else if(bluepower)
+		cc = (COLOR_TEAM2 - 1) * 0x11;
+	else
+		cc = 0;
+
+	if(cc != self.clientcolors)
+	{
+		self.clientcolors = cc;
+		self.SendFlags |= 4;
+	}
+
+	self.nextthink = time;
+}
+
 void onslaught_link_delayed()
 {
 	self.goalentity = find(world, targetname, self.target);
@@ -848,6 +914,10 @@ void onslaught_link_delayed()
 	if (!self.enemy)
 		objerror("can not find target2\n");
 	dprint(etos(self.goalentity), " linked with ", etos(self.enemy), "\n");
+
+	self.SendFlags |= 3;
+	self.think = onslaught_link_checkupdate;
+	self.nextthink = time;
 }
 
 /*QUAKED spawnfunc_onslaught_link (0 .5 .8) (-16 -16 -16) (16 16 16)
@@ -870,4 +940,6 @@ void spawnfunc_onslaught_link()
 		objerror("target and target2 must be set\n");
 	self.think = onslaught_link_delayed;
 	self.nextthink = time + 0.1;
+	self.SendEntity = onslaught_link_send;
+	Net_LinkEntity(self);
 };

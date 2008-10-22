@@ -466,6 +466,7 @@ void Ent_Nagger()
 
 // CSQC_Ent_Update : Called every frame that the server has indicated an update to the SSQC / CSQC entity has occured.
 // The only parameter reflects if the entity is "new" to the client, meaning it just came into the client's PVS.
+void Ent_RadarLink();
 void(float bIsNewEntity) CSQC_Ent_Update =
 {
 	float t;
@@ -495,6 +496,8 @@ void(float bIsNewEntity) CSQC_Ent_Update =
 		Ent_Nagger();
 	else if(self.enttype == ENT_CLIENT_WAYPOINT)
 		Ent_WaypointSprite();
+	else if(self.enttype == ENT_CLIENT_RADARLINK)
+		Ent_RadarLink();
 	else
 		error(strcat("unknown entity type in CSQC_Ent_Update: ", ftos(self.enttype), "\n"));
 	
