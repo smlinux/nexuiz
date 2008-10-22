@@ -451,6 +451,6 @@ void RegisterWeapons()
 	register_weapon(WEP_ROCKET_LAUNCHER,  w_rlauncher, IT_ROCKETS,     9, 1, 10000, "rl",        "rocketlauncher",  "Rocket Launcher");
 	register_weapon(WEP_PORTO,            w_porto,     IT_SUPERWEAPON, 0, 0,     0, "porto" ,    "porto",           "Port-O-Launch");
 	register_weapon(WEP_MINSTANEX,        w_minstanex, IT_CELLS,       7, 0, 10000, "minstanex", "minstanex",       "MinstaNex");
-	register_weapon(WEP_HOOK,             w_hook,      IT_CELLS,       0, 0,     0, "hook",      "hook",            "Grappling Hook");
+	register_weapon(WEP_HOOK,             w_hook,      IT_CELLS,       0, 0,     0, "hookgun",   "hook",            "Grappling Hook");
 	register_weapons_done();
 }
