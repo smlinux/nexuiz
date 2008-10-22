@@ -324,7 +324,7 @@ void FireGrapplingHook (void)
 
 	// UGLY WORKAROUND: play this on CHAN_WEAPON2 so it can't cut off fire sounds
 	sound (self, CHAN_WEAPON2, "weapons/hook_fire.wav", VOL_BASE, ATTN_NORM);
-	org = self.origin + self.view_ofs + v_forward * 8 - v_right * 8 + '0 0 -12';
+	org = self.origin + self.view_ofs + v_forward * hook_shotorigin_x + v_right * hook_shotorigin_y + v_up * hook_shotorigin_z;
 	pointparticles(particleeffectnum("grapple_muzzleflash"), org, '0 0 0', 1);
 
 	missile = spawn ();
@@ -467,7 +467,7 @@ void GrappleHookInit()
 	if(g_grappling_hook)
 		hook_shotorigin = '8 -8 -12';
 	else
-		hook_shotorigin = '25 6 -8';
+		hook_shotorigin = '25 8 -8';
 }
 
 void SetGrappleHookBindings()
