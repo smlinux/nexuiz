@@ -843,8 +843,8 @@ void readplayerstartcvars()
 
 	if(g_grappling_hook) // offhand hook
 	{
-		start_weapons (-) WEP_HOOK;
-		warmup_start_weapons (-) WEP_HOOK;
+		start_weapons (-) WEPBIT_HOOK;
+		warmup_start_weapons (-) WEPBIT_HOOK;
 	}
 }
 
