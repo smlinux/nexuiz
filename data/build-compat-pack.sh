@@ -113,6 +113,24 @@ COMPAT_FILES="
 	textures/portalgun_glow.tga
 	textures/portalgun_norm.tga
 	textures/portalgun.tga
+	gfx/inv_weapon11.tga
+	models/weapons/g_hookgun.md3
+	models/weapons/v_hookgun.md3
+	models/weapons/w_hookgun.zym
+	textures/hookgun.tga
+	textures/hookgun_gloss.tga
+	textures/hookgun_norm.tga
+	textures/hookgun_pants.tga
+	models/sprites/ons-cp-atck-blue_frame0.tga
+	models/sprites/ons-cp-atck-blue_frame1.tga
+	models/sprites/ons-cp-atck-neut_frame0.tga
+	models/sprites/ons-cp-atck-neut_frame1.tga
+	models/sprites/ons-cp-atck-red_frame0.tga
+	models/sprites/ons-cp-atck-red_frame1.tga
+	models/sprites/ons-cp-dfnd-blue_frame0.tga
+	models/sprites/ons-cp-dfnd-blue_frame1.tga
+	models/sprites/ons-cp-dfnd-red_frame0.tga
+	models/sprites/ons-cp-dfnd-red_frame1.tga
 "
 
 rev=`svnversion`
