@@ -224,7 +224,8 @@ entity GetPlayer(string name)
 float readyrestart_happened;
 void SV_ParseClientCommand(string s) {
 	local string cmd;
-	local float i, j, tokens;
+	local float i, j, tokens, f, effectnum;
+	local vector start, end;
 
 	tokens = tokenize_sane(s);
 
@@ -418,6 +419,36 @@ void SV_ParseClientCommand(string s) {
 		Score_NicePrint(self);
 	} else if(argv(0) == "cvar_changes") {
 		sprint(self, cvar_changes);
+	} else if(argv(0) == "pointparticles") {
+		if(sv_cheats && tokens == 5)
+		{
+			// arguments:
+			//   effectname
+			//   origin (0..1, on crosshair line)
+			//   velocity
+			//   howmany
+			effectnum = particleeffectnum(argv(1));
+			f = stof(argv(2));
+			start = (1-f) * self.origin + f * self.cursor_trace_endpos;
+			end = stov(argv(3));
+			f = stof(argv(4));
+			pointparticles(effectnum, start, end, f);
+		}
+		else
+			print("Usage: sv_cheats 1; restart; cmd pointparticles effectname position(0..1) velocityvector multiplier\n");
+	} else if(argv(0) == "trailparticles") {
+		if(sv_cheats && tokens == 3)
+		{
+			// arguments:
+			//   effectname
+			//   shot origin vector
+			effectnum = particleeffectnum(argv(1));
+			W_SetupShot(self, stov(argv(2)), FALSE, FALSE, "");
+			traceline(w_shotorg, w_shotorg + w_shotdir * MAX_SHOT_DISTANCE, MOVE_NORMAL, self);
+			trailparticles(self, effectnum, w_shotorg, trace_endpos);
+		}
+		else
+			print("Usage: sv_cheats 1; restart; cmd trailparticles effectname shotorigin\n");
 	} else {
 		//if(ctf_clientcommand())
 		//	return;
