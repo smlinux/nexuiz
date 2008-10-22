@@ -48,12 +48,7 @@ COMPAT_FILES="
 	models/sprites/keycarrier-red.tga
 	models/sprites/keycarrier-yellow.tga
 	models/sprites/key-dropped.tga
-	models/sprites/ons-cp-atck-blue.tga
-	models/sprites/ons-cp-atck-neut.tga
-	models/sprites/ons-cp-atck-red.tga
 	models/sprites/ons-cp-blue.tga
-	models/sprites/ons-cp-dfnd-blue.tga
-	models/sprites/ons-cp-dfnd-red.tga
 	models/sprites/ons-cp-neut.tga
 	models/sprites/ons-cp-red.tga
 	models/sprites/ons-gen-blue.tga
