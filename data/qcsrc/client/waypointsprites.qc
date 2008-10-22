@@ -11,6 +11,7 @@ vector project_3d_to_2d(vector vec)
 	return vec;
 }
 
+float waypointsprite_initialized;
 float waypointsprite_fadedistance;
 float waypointsprite_normdistance;
 float waypointsprite_minscale;
@@ -101,7 +102,9 @@ void Draw_WaypointSprite()
 				spriteimage = self.netname;
 			break;
 		case SPRITERULE_TEAMPLAY:
-			if(self.team == t)
+			if(t == COLOR_SPECTATOR + 1)
+				spriteimage = self.netname3;
+			else if(self.team == t)
 				spriteimage = self.netname2;
 			else
 				spriteimage = self.netname;
@@ -181,7 +184,14 @@ void Draw_WaypointSprite()
 
 	float vidscale;
 	vidscale = max(vid_conwidth / vid_width, vid_conheight / vid_height);
-	drawrotpic(o, rot * 90 * DEG2RAD, strcat("models/sprites/", spriteimage), SPRITE_SIZE * waypointsprite_scale * vidscale, SPRITE_HOTSPOT * waypointsprite_scale * vidscale, '1 1 1', a, 0);
+
+	t = stof(db_get(tempdb, strcat("/spriteframes/", spriteimage)));
+	if(t == 0)
+		spriteimage = strcat("models/sprites/", spriteimage);
+	else
+		spriteimage = strcat("models/sprites/", spriteimage, "_frame", ftos(mod(floor(time * 2), t)));
+
+	drawrotpic(o, rot * 90 * DEG2RAD, spriteimage, SPRITE_SIZE * waypointsprite_scale * vidscale, SPRITE_HOTSPOT * waypointsprite_scale * vidscale, '1 1 1', a, DRAWFLAG_MIPMAP);
 }
 
 void Ent_WaypointSprite()
@@ -268,4 +278,29 @@ void WaypointSprite_Load()
 	waypointsprite_scale = cvar("g_waypointsprite_scale");
 	if(!waypointsprite_scale)
 		waypointsprite_scale = 1.0;
+
+	if(!waypointsprite_initialized)
+	{
+		float dh, n, i, o, f;
+		string s, sname, sframes;
+		dh = search_begin("models/sprites/*_frame*.tga", FALSE, FALSE);
+		n = search_getsize(dh);
+		for(i = 0; i < n; ++i)
+		{
+			s = search_getfilename(dh, i);
+			if(substring(s, 0, 15) != "models/sprites/")
+				continue;
+			if(substring(s, strlen(s) - 4, 4) != ".tga")
+				continue;
+			s = substring(s, 15, strlen(s) - 19);
+
+			o = strstrofs(s, "_frame", 0);
+			sname = strcat("/spriteframes/", substring(s, 0, o));
+			sframes = substring(s, o + 6, strlen(s) - o - 6);
+			f = stof(sframes) + 1;
+			db_put(tempdb, sname, ftos(max(f, stof(db_get(tempdb, sname)))));
+		}
+		search_end(dh);
+	}
+	waypointsprite_initialized = 1;
 }

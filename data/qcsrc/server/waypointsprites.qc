@@ -1,5 +1,6 @@
 ..entity owned_by_field;
 .float rule;
+.string model1;
 .string model2;
 .string model3;
 
@@ -7,9 +8,9 @@
 
 void WaypointSprite_UpdateSprites(entity e, string m1, string m2, string m3)
 {
-	if(m1 != e.model)
+	if(m1 != e.model1)
 	{
-		e.model = m1;
+		e.model1 = m1;
 		e.SendFlags |= 2;
 	}
 	if(m2 != e.model2)
@@ -175,7 +176,7 @@ float WaypointSprite_SendEntity(entity to, float sendflags)
 	}
 
 	if(sendflags & 2)
-		WriteString(MSG_ENTITY, self.model);
+		WriteString(MSG_ENTITY, self.model1);
 
 	if(sendflags & 4)
 		WriteString(MSG_ENTITY, self.model2);
@@ -242,7 +243,8 @@ entity WaypointSprite_Spawn(
 	wp.think = WaypointSprite_Think;
 	wp.nextthink = time;
 	wp.effects = EF_NODEPTHTEST | EF_LOWPRECISION;
-	wp.model = spr;
+	wp.model1 = spr;
+	wp.model = "net_entity";
 	wp.modelindex = 1;
 	wp.SendEntity = WaypointSprite_SendEntity;
 	wp.customizeentityforclient = WaypointSprite_Customize;
