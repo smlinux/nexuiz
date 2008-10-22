@@ -16,6 +16,7 @@ COLOR_DIALOG_USERBIND           '0.7 0.7 1'
 COLOR_DIALOG_SINGLEPLAYER       '1 1 0.7'
 COLOR_DIALOG_CREDITS            '0.7 0.7 1'
 COLOR_DIALOG_WEAPONS            '1 0.7 0.7'
+COLOR_DIALOG_RADAR              '0.7 0.7 1'
 
 // nexposee positions of windows (they are the scale transformation
 // centers, NOT the actual positions of the windows!)
@@ -152,6 +153,8 @@ COLOR_SERVERLIST_LOWPING        '0 1 0'
 COLOR_SERVERLIST_MEDPING        '1 1 0'
 COLOR_SERVERLIST_HIGHPING       '1 0 0'
 ALPHA_SERVERLIST_HIGHPING       0.4
+ALPHA_SERVERLIST_FAVORITE       0.8
+COLOR_SERVERLIST_FAVORITE       '1 1 1'
 
 // item: slider
 //   uses "slider" images
