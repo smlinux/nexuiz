@@ -286,15 +286,6 @@ float CSQC_ConsoleCommand(string strMessage)
 	} else if(strCmd == "-button3") { // secondary
 		button_attack2 = 0;
 		return false;
-	} else if(strCmd == "ons_map") {
-		ons_showmap = !ons_showmap;
-		return true;
-	} else if(strCmd == "sbar_columns_set") {
-		Cmd_Sbar_SetFields(argc);
-		return true;
-	} else if(strCmd == "sbar_columns_help") {
-		Cmd_Sbar_Help(argc);
-		return true;
 	} else if(strCmd == "+showscores") {
 		sb_showscores = true;
 		return true;
@@ -318,6 +309,15 @@ float GameCommand(string msg)
 	}
 	else if(cmd == "settemp") {
 		cvar_clientsettemp(argv(1), argv(2));
+	}
+	else if(cmd == "radar") {
+		ons_showmap = !ons_showmap;
+	}
+	else if(cmd == "sbar_columns_set") {
+		Cmd_Sbar_SetFields(argc);
+	}
+	else if(cmd == "sbar_columns_help") {
+		Cmd_Sbar_Help(argc);
 	}
 	
 	return false;
