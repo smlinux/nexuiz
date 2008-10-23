@@ -695,17 +695,6 @@ void spawnfunc_weapon_minstanex (void)
 	weapon_defaultspawnfunc(WEP_MINSTANEX);
 }
 
-void spawnfunc_weapon_hlac (void)
-{
-	weapon_defaultspawnfunc(WEP_HLAC);
-}
-
-void spawnfunc_weapon_seeker (void)
-{
-	weapon_defaultspawnfunc(WEP_SEEKER);
-}
-
-
 void spawnfunc_weapon_rocketlauncher (void)
 {
 	if (g_minstagib)

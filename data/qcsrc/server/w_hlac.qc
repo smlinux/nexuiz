@@ -205,7 +205,10 @@ void HLAC_fire1_02()
 	}
 };
 
-void spawnfunc_weapon_hlac(); // defined in t_items.qc
+void spawnfunc_weapon_hlac (void)
+{
+	weapon_defaultspawnfunc(WEP_HLAC);
+}
 
 float w_hlac(float req)
 {
