@@ -116,6 +116,8 @@ void FireImoBeam (vector start,vector end,vector smin,vector smax,
 
 void turrets_precash()
 {
+    precache_model ("models/turrets/c512.md3");
+
     precache_sound ("turrets/phaser.ogg");
 
     precache_model ("models/turrets/base-gib1.md3");

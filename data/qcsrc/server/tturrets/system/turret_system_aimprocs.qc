@@ -7,6 +7,7 @@
 supports:
 TFL_AIM_NO
 */
+/*
 vector turret_stdproc_aim_simple()
 {
     float s_bu;     // Solidity backup (for ground shooters)
@@ -29,6 +30,7 @@ vector turret_stdproc_aim_simple()
     // This is where its at.
     return aim_pos;
 }
+*/
 
 /*
 * Generic aim
@@ -45,9 +47,12 @@ TFL_AIM_ZEASE
 not supported:
 TFL_AIM_BALISTIC
 */
+
+
 vector turret_stdproc_aim_generic()
 {
     vector pre_pos;
+    // entity mover;
 
     if (self.aim_flags == TFL_AIM_NO)
         return self.idle_aim;
@@ -55,40 +60,56 @@ vector turret_stdproc_aim_generic()
     // Baseline
     pre_pos = real_origin(self.enemy);
 
+    if(self.aim_flags & TFL_AIM_SIMPLE)
+        return pre_pos;
+
     // Lead?
+    //pre_pos = pre_pos + bot_shotlead(self.enemy.origin, self.enemy.velocity, self.shot_speed, 0.01); //self.enemy.velocity;  * (self.tur_dist_enemy / self.shot_speed);
     if (self.aim_flags & TFL_AIM_LEAD)
         if (self.aim_flags & TFL_AIM_SHOTTIMECOMPENSATE)       // Need to conpensate for shot traveltime
-            pre_pos += self.enemy.velocity * (self.tur_dist_enemy / self.shot_speed);
+        {
+            pre_pos = pre_pos + self.enemy.velocity  * (self.tur_dist_enemy / self.shot_speed);
+
+            // FIXME slow projectiles misspredict (well all do, bit the slow ons miss :P)
+        }
         else if (self.turrcaps_flags & TFL_TURRCAPS_HITSCAN)   // Hitscan gun, conpensate for frametime and posibly refire offset.
-            pre_pos += self.enemy.velocity * (frametime + min(max(self.attack_finished_single - time,0),self.ticrate*2));
+            pre_pos = pre_pos + self.enemy.velocity * (frametime + min(max(self.attack_finished_single - time,0),self.ticrate*2));
         else                                                   // No lead
             pre_pos += self.enemy.velocity;
 
+
     // Smooth out predict-Z?
+    /*
     if (self.aim_flags & TFL_AIM_ZEASE)
     {
         vector v;
         v = real_origin(self.enemy);
-        //pre_pos_z = (pre_pos_z * 0.5) + (v_z * 0.5);
         pre_pos_z = (pre_pos_z  + v_z) * 0.5;
     }
+    */
 
+    /*
     if (self.aim_flags & TFL_AIM_INFRONT)   // Aim a bit in front of the target
         pre_pos -= normalize(self.tur_aimorg_updated - pre_pos) * 32;
 
     if (self.aim_flags & TFL_AIM_BEHIND)    // Aim a bit behind the target
         pre_pos += normalize(self.tur_aimorg_updated - pre_pos) * 32;
 
-
+    */
     // This turret should hit the ground neer a target rather the do a direct hit
+
     if ( (self.aim_flags & TFL_AIM_GROUND) ||
          ((self.aim_flags & TFL_AIM_GROUND2) && (self.enemy.flags & FL_ONGROUND)) )
     {
-        traceline(pre_pos + '0 0 512',pre_pos - '0 0 2048',1,self.enemy);
+        traceline(pre_pos + '0 0 8',pre_pos - '0 0 10000',1,self.enemy);
         pre_pos = trace_endpos;
     }
 
-    // self.tur_impacttime = vlen(pre_pos - self.origin) / self.shot_speed;
+
+
+
+
+
 
     return pre_pos;
 }
@@ -99,6 +120,7 @@ vector turret_stdproc_aim_generic()
 supports:
 TFL_AIM_NO
 */
+/*
 vector turret_stdproc_aim_rail()
 {
     vector pre_pos;
@@ -115,6 +137,4 @@ vector turret_stdproc_aim_rail()
     return pre_pos;
 
 }
-
-
-
+*/

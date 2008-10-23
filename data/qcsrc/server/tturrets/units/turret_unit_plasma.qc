@@ -12,21 +12,61 @@ void turret_plasma_postthink()
     if (self.tur_head.frame != 0)
         self.tur_head.frame = self.tur_head.frame + 1;
 
-    if (self.classname == "turret_plasma_dual")
-    {
-        if (self.tur_head.frame >= 6)
-            self.tur_head.frame = 0;
-    }
-    else
-    {
-        if (self.tur_head.frame >= 5)
-            self.tur_head.frame = 0;
-    }
+    if (self.tur_head.frame >= 5)
+        self.tur_head.frame = 0;
+
+}
+
+void turret_plasma_dualpostthink()
+{
+    if (self.tur_head.frame != 0)
+        self.tur_head.frame = self.tur_head.frame + 1;
+
+    if (self.tur_head.frame >= 6)
+        self.tur_head.frame = 0;
 }
 
 void turret_plasma_attack()
 {
     entity proj;
+
+    turret_tag_fire_update();
+
+    sound (self, CHAN_WEAPON, "weapons/hagar_fire.wav", 1, ATTN_NORM);
+    proj                    = spawn ();
+    setorigin(proj, self.tur_shotorg_updated);
+    setsize(proj, '-0.5 -0.5 -0.5', '0.5 0.5 0.5');
+    setmodel(proj, "models/elaser.mdl"); // precision set above
+    proj.classname       = "plasmabomb";
+    proj.owner           = self;
+    proj.bot_dodge       = FALSE;
+    //proj.bot_dodgerating = self.shot_dmg;
+    proj.think           = turret_plasma_projectile_explode;
+    proj.nextthink       = time + 9;
+    proj.solid           = SOLID_BBOX;
+    proj.movetype        = MOVETYPE_FLYMISSILE;
+    proj.velocity        = (self.tur_shotdir_updated + randomvec() * self.shot_spread) * self.shot_speed;
+    proj.angles          = vectoangles(proj.velocity);
+    proj.touch           = turret_plasma_projectile_explode;
+    proj.flags           = FL_PROJECTILE;
+    proj.effects         = EF_LOWPRECISION |  EF_BRIGHTFIELD;
+    proj.enemy           = self.enemy;
+    proj.flags           = FL_PROJECTILE | FL_NOTARGET;
+
+    if (self.tur_head.frame == 0)
+        self.tur_head.frame = 1;
+
+    // Snapback the head
+    // self.tur_head.angles_x = self.tur_head.angles_x + min((self.shot_dmg * 0.05),self.aim_maxpitch);
+
+}
+
+void turret_plasma_dual_attack()
+{
+    entity proj;
+
+    if (self.tur_head.frame > 2)
+        self.tur_head.frame = 1;
 
     turret_tag_fire_update();
 
@@ -54,13 +94,8 @@ void turret_plasma_attack()
     if (self.tur_head.frame == 0)
         self.tur_head.frame = 1;
 
-    // trailparticles(proj,particleeffectnum("TR_REDPLASMA"),proj.origin,proj.origin + proj.velocity);
-
     // Snapback the head
     // self.tur_head.angles_x = self.tur_head.angles_x + min((self.shot_dmg * 0.05),self.aim_maxpitch);
-
-    //if(self.classname == "turret_plasma_dual")
-    //    self.tur_shotorg_y = self.tur_shotorg_y * -1;
 
 }
 
@@ -117,10 +152,10 @@ void turret_plasma_std_init()
         dprint("Warning: Turret ",self.classname, " faild to initialize md3 tags\n");
 
     // Our fire routine
-    self.turret_firefunc  = turret_plasma_attack;
+    self.turret_firefunc  = turret_plasma_dual_attack;
 
     // re-color badge & handle recoil effect
-    self.turret_postthink = turret_plasma_postthink;
+    self.turret_postthink = turret_plasma_dualpostthink;
 }
 
 
@@ -143,7 +178,7 @@ void turret_plasma_dual_init()
         dprint("Warning: Turret ",self.classname, " faild to initialize md3 tags\n");
 
     // select aim
-    self.aim_flags = TFL_AIM_LEAD | TFL_AIM_SHOTTIMECOMPENSATE | TFL_AIM_ZEASE;
+    self.aim_flags = TFL_AIM_LEAD | TFL_AIM_SHOTTIMECOMPENSATE | TFL_AIM_ZEASE | TFL_AIM_GROUND2;
 
     // Our fire routine
     self.turret_firefunc  = turret_plasma_attack;

@@ -99,8 +99,6 @@ void turret_stdproc_nothing()
 **/
 void turret_do_updates(entity e_turret)
 {
-    //vector trueaimpoint;
-
     if (self.turrcaps_flags & TFL_TURRCAPS_LINKED)
     {
         e_turret.tur_head.angles_x = e_turret.tur_head.angles_x * -1;
@@ -115,23 +113,20 @@ void turret_do_updates(entity e_turret)
         makevectors(e_turret.tur_head.angles);
         e_turret.tur_head.angles_x = e_turret.tur_head.angles_x * -1;
     }
-
-    //traceline_hitcorpse(e_turret, e_turret.origin, e_turret.origin + v_forward * MAX_SHOT_DISTANCE, MOVE_NOMONSTERS, e_turret);
-    //trueaimpoint = trace_endpos;
-
+    // v_right = (v_right * -1);
     e_turret.tur_shotorg_updated = e_turret.origin + v_forward * e_turret.tur_shotorg_x + v_right * e_turret.tur_shotorg_y + v_up * e_turret.tur_shotorg_z;
-    //e_turret.tur_shotdir_updated = normalize(trueaimpoint - e_turret.tur_shotorg_updated);
-    e_turret.tur_shotdir_updated = normalize((e_turret.tur_shotorg_updated + v_forward * 512) - e_turret.tur_shotorg_updated);
+
+    e_turret.tur_shotdir_updated = normalize((e_turret.tur_shotorg_updated + v_forward) - e_turret.tur_shotorg_updated);
     e_turret.tur_aimorg_updated = e_turret.origin + v_forward * e_turret.tur_aimorg_x + v_right * e_turret.tur_aimorg_y + v_up * e_turret.tur_aimorg_z;
-    //e_turret.tur_aimorg_updated = e_turret.tur_shotorg_updated;
+
 
     e_turret.tur_dist_enemy = vlen(e_turret.tur_aimorg_updated - real_origin(e_turret.enemy));
-    //e_turret.tur_dist_enemy = vlen(e_turret.tur_aimpos - e_turret.tur_shotorg_updated);
 
-    traceline(e_turret.tur_aimorg_updated,e_turret.tur_aimorg_updated+(e_turret.tur_shotdir_updated * e_turret.tur_dist_enemy),TRUE,e_turret);
+    traceline(e_turret.tur_aimorg_updated,e_turret.tur_aimorg_updated+(e_turret.tur_shotdir_updated * e_turret.tur_dist_enemy),MOVE_NORMAL,e_turret);
 
     e_turret.tur_impactpoint = trace_endpos;
     e_turret.tur_impactent = trace_ent;
+    //e_turret.tur_impacttime = e_turret.tur_dist_enemy / e_turret.shot_speed;
     e_turret.tur_impacttime = e_turret.tur_dist_enemy / e_turret.shot_speed;
     e_turret.tur_dist_toaimpos = vlen(trace_endpos - e_turret.tur_aimpos);
 }
@@ -156,7 +151,8 @@ void turret_stdproc_track()
         if (self.turrcaps_flags & TFL_TURRCAPS_LINKED)
             wish_angle = self.idle_aim + self.angles;
         else
-            wish_angle = self.idle_aim;
+            wish_angle = self.tur_head.angles;
+            //wish_angle = self.idle_aim;
     }
     else
     {
@@ -175,17 +171,39 @@ void turret_stdproc_track()
     else
     {
         //if(vlen(wish_angle - self.tur_head.angles) > vlen(self.tur_head.angles - wish_angle))
-            real_angle = wish_angle - self.tur_head.angles;
+        real_angle = wish_angle - self.tur_head.angles;
         //else
         //    real_angle =  self.tur_head.angles - wish_angle;
     }
 
-    // Constrain it within +/- 360
-    if (real_angle_x <= 0) real_angle_x += 360;
-    if (real_angle_x >= 180) real_angle_x -= 360;
+    /*
+    if(real_angle_y > 180)
+        bprint("^3");
+    if(real_angle_y < -180)
+        bprint("^1");
+    string s;
+    s = vtos(real_angle);
+    bprint("RA1: ",s);
+    */
 
-    //if (real_angle_y <= 0) real_angle_y += 360;
+
+    if (real_angle_x < 0) real_angle_x += 360;
+    if (real_angle_x > 180) real_angle_x -= 360;
+
+    if (real_angle_y < 0) real_angle_y += 360;
     if (real_angle_y >= 180) real_angle_y -= 360;
+
+    //s = vtos(real_angle);
+    //bprint(" RA2: ",s,"\n");
+
+    // Limit pitch
+
+    if (self.track_flags & TFL_TRACK_PITCH)
+        real_angle_x = bound(self.aim_maxpitch * -1,real_angle_x,self.aim_maxpitch);
+
+    // Limit rot
+    if (self.track_flags & TFL_TRACK_ROT)
+        real_angle_y = bound(self.aim_maxrot * -1,real_angle_y,self.aim_maxrot);
 
 
     if (self.track_type == TFL_TRACKTYPE_STEPMOTOR)
@@ -228,6 +246,7 @@ void turret_stdproc_track()
     }
 
     // Limit pitch
+    /*
     if (self.track_flags & TFL_TRACK_PITCH)
     {
         if (self.tur_head.angles_x > self.aim_maxpitch)
@@ -256,6 +275,7 @@ void turret_stdproc_track()
             self.tur_head.avelocity_y = 0;
         }
     }
+    */
 
 
 }
@@ -522,9 +542,9 @@ void turret_think()
     self.nextthink = (time + self.ticrate);
 
     // ONS uses somewhat backwards linking.
-    if(teamplay)
+    if (teamplay)
     {
-        if(g_onslaught)
+        if (g_onslaught)
         {
             /*
             // see turret_stdproc_use()
@@ -538,15 +558,15 @@ void turret_think()
         }
         else
         {
-            if(self.target)
+            if (self.target)
             {
                 e = find(world,targetname,self.target);
-                if(e != world)
+                if (e != world)
                     self.team = e.team;
             }
         }
 
-        if(self.team != self.tur_head.team)
+        if (self.team != self.tur_head.team)
             turret_stdproc_respawn();
     }
 
@@ -620,7 +640,7 @@ void turret_think()
     else
     {
         // Check if we have a vailid enemy, and get one if we dont.
-            // turret_do_updates(self);
+        // turret_do_updates(self);
         if ((turret_validate_target(self,self.enemy,self.target_validate_flags) <= 0) || (self.cnt < time))
         {
             self.enemy = turret_select_target();
@@ -641,21 +661,22 @@ void turret_think()
             // And bail.
             return;
         }
-        // te_lightning1(world,self.origin,self.enemy.origin);
-        // Update
+
         turret_do_updates(self);
 
         // Predict or whatnot
-        if (!self.aim_flags & TFL_AIM_NO)
+        if not((self.aim_flags & TFL_AIM_NO))
             self.tur_aimpos = turret_stdproc_aim_generic();
-            //self.tur_aimpos = self.turret_aim();
+
+        // Fire?
+        if (self.turret_firecheckfunc() != 0)
+            turret_fire();
+        turret_do_updates(self);
 
         // Turn & pitch
         if (!self.track_flags & TFL_TRACK_NO)
             turret_stdproc_track();
-            //self.turret_track();
 
-        // Update
         turret_do_updates(self);
 
         // Fire?
@@ -703,18 +724,18 @@ void turret_stdproc_use()
 {
     // bprint("Used:",self.netname, " By ",other.netname,"\n");
 
-    if(g_onslaught)
+    if (g_onslaught)
     {
         entity e;
 
-        if(self.targetname)
+        if (self.targetname)
         {
             e = find(world,target,self.targetname);
-            if(e != world)
+            if (e != world)
                 self.team = e.team;
         }
 
-        if(self.team != self.tur_head.team)
+        if (self.team != self.tur_head.team)
             turret_stdproc_respawn();
     }
     else
@@ -1032,6 +1053,7 @@ float turret_stdproc_init (string cvar_base_name)
     }
 
     self.use = turret_stdproc_use;
+    self.bot_attack = TRUE;
 
     // Initiate the main AI loop
     self.think     = turret_think;

@@ -90,7 +90,7 @@ void turret_hk_attack()
     missile                    = spawn ();
     missile.solid            = SOLID_BBOX;
     setmodel (missile, "models/turrets/hunter2.md3"); // precision set below
-    setsize (missile, '-3 -3 -3', '3 3 3'); // give it some size so it can be shot
+    setsize (missile, missile.mins,missile.maxs); // give it some size so it can be shot
     sound    (missile, CHAN_PROJECTILE, "weapons/rocket_fly.wav", 0.4, ATTN_NORM);
     setorigin(missile, self.tur_shotorg_updated);
 
@@ -100,8 +100,8 @@ void turret_hk_attack()
     missile.bot_dodge        = TRUE;
     missile.bot_dodgerating  = self.shot_dmg;
     missile.takedamage       = DAMAGE_YES;
-    missile.damageforcescale = 2;
-    missile.health           = 35;
+    missile.damageforcescale = 4;
+    missile.health           = 10;
     missile.think            = turret_hk_missile_think;
     missile.event_damage     = turret_hk_missile_damage;
     missile.nextthink        = time + 0.25;
@@ -153,7 +153,7 @@ void turret_hk_missile_think()
     vector pre_pos;
     float myspeed;
     entity e;
-    float ad;
+    float ad,edist;
 
     self.nextthink = time + self.ticrate;
 
@@ -188,8 +188,9 @@ void turret_hk_missile_think()
 
     if (self.enemy)
     {
+        edist = vlen(self.origin - self.enemy.origin);
         // Close enougth to do decent damage?
-        if ( vlen(self.origin - self.enemy.origin) <= (self.owner.shot_radius * 0.25) )
+        if ( edist <= (self.owner.shot_radius * 0.25) )
         {
             turret_hk_missile_explode();
             return;
@@ -210,12 +211,12 @@ void turret_hk_missile_think()
         fe = 0;
     }
 
-    if ((fe != 1) || (self.enemy == world))
+    if ((fe != 1) || (self.enemy == world) || (edist > 1000))
     {
         myspeed = vlen(self.velocity);
 
-        lt_for  = myspeed * 2;
-        lt_seek = myspeed * 1.5;
+        lt_for  = myspeed * 3;
+        lt_seek = myspeed * 2.95;
 
         // Trace forward
         traceline(self.origin, self.origin + v_forward * lt_for,FALSE,self);
@@ -225,10 +226,8 @@ void turret_hk_missile_think()
         // Find angular offset
         ad = vlen(vectoangles(normalize(self.enemy.origin - self.origin)) - self.angles);
 
-        //Calculate new speed
-
         // To close to something, Slow down!
-        if ( ((ff < 0.7) || (ad > 5)) && (myspeed > hk_minspeed) )
+        if ( ((ff < 0.7) || (ad > 4)) && (myspeed > hk_minspeed) )
             myspeed = max(myspeed * hk_decel,hk_minspeed);
 
         // Failry clear, accelerate.
@@ -237,7 +236,7 @@ void turret_hk_missile_think()
 
         // Setup trace pitch
         pt_seek = 1 - ff;
-        pt_seek = bound(0.125,pt_seek,0.8);
+        pt_seek = bound(0.15,pt_seek,0.8);
         if (ff < 0.5) pt_seek = 1;
 
         // Trace left
@@ -327,7 +326,7 @@ void turret_hk_missile_think()
 
 #ifdef TURRET_DEBUG_HK
     //if(self.atime < time) {
-    if (fe <= 0.99)
+    if ((fe <= 0.99)||(edist > 1000))
     {
         te_lightning2(world,self.origin, self.origin + vr * lt_seek);
         te_lightning2(world,self.origin, self.origin + vl * lt_seek);

@@ -6,8 +6,12 @@ void turret_mlrs_projectile_explode();
 void turret_mlrs_postthink()
 {
 
-    if ((self.tur_head.frame >= 6) && (self.attack_finished_single <= time))
-        self.tur_head.frame = 0;
+    // 0 = full, 6 = empty
+
+    self.tur_head.frame = rint(6 - (self.ammo / self.shot_dmg));
+
+    //if ((self.tur_head.frame >= 6) && (self.attack_finished_single <= time))
+    //    self.tur_head.frame = 0;
 }
 
 void turret_mlrs_attack()
@@ -44,7 +48,7 @@ void turret_mlrs_attack()
 
     te_explosion (missile.origin);
 
-    self.tur_head.frame = 7 - self.volly_counter;
+    //self.tur_head.frame = 7 - self.volly_counter;
 }
 
 void turret_mlrs_projectile_explode()
