@@ -216,7 +216,7 @@ void target_spawn_spawnfirst()
 		target_spawn_use();
 }
 
-void spawnfunc_target_spawn()
+void initialize_field_db()
 {
 	if(!target_spawn_initialized)
 	{
@@ -242,7 +242,56 @@ void spawnfunc_target_spawn()
 
 		target_spawn_initialized = 1;
 	}
+}
+
+void spawnfunc_target_spawn()
+{
+	initialize_field_db();
 	self.use = target_spawn_use;
 	self.message = strzone(strreplace("'", "\"", self.message));
 	InitializeEntity(self, target_spawn_spawnfirst, INITPRIO_LAST);
 }
+
+
+void trigger_relay_if_use()
+{
+	float n;
+	var .string fld;
+	entity e;
+	n = self.count;
+
+	// TODO make this generic AND faster than nextent()ing through all, if somehow possible
+	if(self.netname == "targetname")
+		fld = targetname;
+	else if(self.netname == "netname")
+		fld = netname;
+	else if(self.netname == "target")
+		fld = target;
+	else if(self.netname == "classname")
+		fld = classname;
+	else
+	{
+		objerror("invalid field specified for trigger_relay_if");
+		return;
+	}
+
+	for(e = world; (e = find(e, fld, self.message)) && (n > 0); --n)
+		;
+
+	if(self.spawnflags & 1) // MORE THAN count valid targets
+	{
+		if(n)
+			SUB_UseTargets();
+	}
+	else // AT MOST count valid targets
+	{
+		if(!n)
+			SUB_UseTargets();
+	}
+}
+
+void spawnfunc_trigger_relay_if()
+{
+	self.use = trigger_relay_if_use;
+};
+
