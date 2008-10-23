@@ -33,6 +33,7 @@ void spawnpoint_use()
 // Returns:
 //   -1 if a spawn can't be used
 //   otherwise, a weight of the spawnpoint
+.float islinked; // onslaught
 float Spawn_Score(entity spot, entity playerlist, float teamcheck)
 {
 	float shortest, thisdist;
@@ -56,6 +57,12 @@ float Spawn_Score(entity spot, entity playerlist, float teamcheck)
 			if(ent.classname == "target_objective")
 			{
 				if(ent.health < 0 || ent.health >= ASSAULT_VALUE_INACTIVE)
+					return -1;
+				good = 1;
+			}
+			else if(ent.classname == "onslaught_controlpoint")
+			{
+				if(!ent.islinked)
 					return -1;
 				good = 1;
 			}
