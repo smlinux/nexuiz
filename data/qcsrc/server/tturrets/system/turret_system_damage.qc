@@ -183,13 +183,24 @@ void turret_stdproc_die()
 // Go boom
     RadiusDamage (self,self, min(self.ammo,50),min(self.ammo,50) * 0.25,250,world,min(self.ammo,50)*5,0,world);
 
-// Setup respawn
-    self.nextthink      = time + self.respawntime;
-    //self.think          = self.turret_spawnfunc;
-    self.think          = turret_stdproc_respawn;
+    if(self.damage_flags & TFL_DMG_DEATH_NORESPAWN)
+    {
+        if (self.turret_diehook)
+            self.turret_diehook();
 
-    if (self.turret_diehook)
-        self.turret_diehook();
+        remove(self.tur_head);
+        remove(self);
+    }
+    else
+    {
+    // Setup respawn
+        self.nextthink      = time + self.respawntime;
+        //self.think          = self.turret_spawnfunc;
+        self.think          = turret_stdproc_respawn;
+        if (self.turret_diehook)
+            self.turret_diehook();
+    }
+
 }
 
 void turret_stdproc_respawn()

@@ -195,6 +195,8 @@ vector real_origin(entity ent);
 #define  TFL_DMG_AIMSHAKE        64
 /// Reciving damage slaps the head arround
 #define  TFL_DMG_HEADSHAKE       128
+/// Die and stay dead.
+#define  TFL_DMG_DEATH_NORESPAWN 256
 
 // Spawnflags
 /// Spawn in teambased modes
