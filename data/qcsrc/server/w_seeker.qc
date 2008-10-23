@@ -192,6 +192,7 @@ void Seeker_Fire_Missile(vector f_org)
     missile.takedamage          = DAMAGE_YES;
     missile.damageforcescale    = 4;
     missile.health              = 5;
+	missile.projectiledeathtype = WEP_SEEKER;
 
     setorigin (missile, w_shotorg);
     setmodel  (missile, "models/tagrocket.md3");
@@ -441,6 +442,7 @@ void Seeker_Fire_Flac()
 	setorigin (missile, w_shotorg);
 	setmodel (missile, "models/hagarmissile.mdl"); // precision set below
 	setsize (missile, '0 0 0', '0 0 0');
+	missile.projectiledeathtype = WEP_SEEKER | HITTYPE_SECONDARY;
 
 	missile.effects = EF_LOWPRECISION;
 	missile.modelflags = MF_GRENADE;
@@ -497,7 +499,12 @@ float w_seeker(float req)
     else if (req == WR_SUICIDEMESSAGE)
         w_deathtypestring = "played with tiny rockets";
     else if (req == WR_KILLMESSAGE)
-            w_deathtypestring = "was taged by";
+	{
+		if(w_deathtype & HITTYPE_SECONDARY)
+			w_deathtypestring = "ran into #'s flac";
+		else
+			w_deathtypestring = "was tagged by";
+	}
     return TRUE;
 };
 
