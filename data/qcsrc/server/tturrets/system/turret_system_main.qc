@@ -395,7 +395,7 @@ float turret_validate_target(entity e_turret,entity e_target,float validate_flag
 	// enemy turrets
 	if (e_target.turret_firefunc || e_target.owner.tur_head == e_target)
 	{
-		if (!(validate_flags & TFL_TARGETSELECT_TURRETS))
+		if (validate_flags & TFL_TARGETSELECT_NOTURRETS)
 			return -5.5;
 	}
 

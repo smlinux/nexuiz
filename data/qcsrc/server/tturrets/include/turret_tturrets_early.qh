@@ -30,8 +30,8 @@ vector real_origin(entity ent);
 #define TFL_TARGETSELECT_NOBUILTIN     256
 /// TFL_TARGETSELECT_TEAMCHECK is inverted (selects only mebers of own .team)
 #define TFL_TARGETSELECT_OWNTEAM       2048
-/// Turrets are valid targets
-#define TFL_TARGETSELECT_TURRETS       128
+/// Turrets aren't valid targets
+#define TFL_TARGETSELECT_NOTURRETS     128
 
 /// aim flags
 .float aim_flags;
