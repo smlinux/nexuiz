@@ -769,7 +769,11 @@ void turret_walker_dinit()
             //remove(self);
             //return;
         }
-        self.goalcurrent = e;
+
+        if(e.classname != "walker_checkpoint")
+            dprint("Warning: not a walker path\n");
+        else
+            self.goalcurrent = e;
     }
 
 
