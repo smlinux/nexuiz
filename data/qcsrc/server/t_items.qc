@@ -505,7 +505,7 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 
 	if (cvar("g_fullbrightitems"))
 		self.effects = self.effects | EF_FULLBRIGHT;
-	
+
 	if(self.team)
 	{
 		self.effects = self.effects | EF_NODRAW; // marker for item team search
@@ -694,6 +694,12 @@ void spawnfunc_weapon_minstanex (void)
 	}
 	weapon_defaultspawnfunc(WEP_MINSTANEX);
 }
+
+void spawnfunc_weapon_hlac (void)
+{
+	weapon_defaultspawnfunc(WEP_HLAC);
+}
+
 
 void spawnfunc_weapon_rocketlauncher (void)
 {
@@ -1091,7 +1097,7 @@ void target_items_use (void)
 		activator.strength_finished = 0;
 	if not(activator.items & IT_INVINCIBLE)
 		activator.invincible_finished = 0;
-	
+
 	if(activator.health > h0)
 		activator.pauserothealth_finished = max(activator.pauserothealth_finished, time + cvar("g_balance_pause_health_rot"));
 	else if(activator.health < h0)
@@ -1118,7 +1124,7 @@ void spawnfunc_target_items (void)
 		self.strength_finished = cvar("g_balance_powerup_strength_time");
 	if(!self.invincible_finished)
 		self.invincible_finished = cvar("g_balance_powerup_invincible_time");
-	
+
 	precache_sound("misc/itempickup.wav");
 	precache_sound("misc/itempickup.wav");
 	precache_sound("misc/itempickup.wav");

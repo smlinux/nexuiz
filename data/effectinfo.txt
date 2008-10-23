@@ -2543,3 +2543,28 @@ bounce 1.5
 liquidfriction 0.0625
 originjitter 16 16 16
 velocityjitter 192 192 192
+
+
+// smoke
+effect EF_MGTURRETTRAIL
+notunderwater
+trailspacing 2
+type smoke
+color 0xd0d0a0 0xfffff0
+tex 0 8
+size 6 2
+alpha 16 32 16
+// bubbles
+effect EF_MGTURRETTRAIL
+underwater
+trailspacing 16
+type bubble
+tex 62 62
+color 0x404040 0x808080
+size 1 1
+alpha 256 256 256
+gravity -0.125
+bounce 1.5
+liquidfriction 4
+velocityjitter 16 16 16
+

@@ -39,3 +39,19 @@ models/turrets/reactor_beams
 	}
 }
 
+models/turrets/r_fx1
+{
+	surfaceparm nomarks
+	surfaceparm trans
+	surfaceparm pointlight
+	surfaceparm nolightmap	
+	nopicmip
+	qer_editorimage models/turrets/r_fx1_1
+
+	{
+		animmap 10 models/turrets/r_fx1_3 models/turrets/r_fx1_4 models/turrets/r_fx1_5 models/turrets/r_fx1_4 models/turrets/r_fx1_3 models/turrets/r_fx1_2  models/turrets/r_fx1_1 models/turrets/r_fx1_2 
+	}
+
+}
+
+

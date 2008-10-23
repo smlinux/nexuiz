@@ -25,7 +25,7 @@
 #include "../units/turret_unit_machinegun.qc" /// whacka
 //#include "../units/turret_unit_minigun.qc" /// whacka whacka
 #include "../units/turret_unit_tessla.qc"  /// Chain lightning capabale turret
-//#include "../units/turret_unit_walker.qc"
+#include "../units/turret_unit_walker.qc"
 //#include "../units/turret_unit_howitzer.qc"
 
 #endif // TTURRETS_ENABLED

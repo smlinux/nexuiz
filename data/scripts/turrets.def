@@ -192,3 +192,36 @@ model="models/turrets/radiant/reactor.md3"
 /*QUAKED turret_targettrigger (.5 .5 .5) ?
 Used to feed turrets capable of it with remote target info. currently only turret_hk supports this.
 */
+
+
+/*QUAKED walker_checkpoint (1 0 1) (-16 -16 -16) (16 16 16)
+-----------KEYS------------
+target: .targetname of next wapoint in chain. 
+
+-----------SPAWNFLAGS-----------
+
+---------NOTES----------
+If a loop is of targets are formed, any walker entering this loop will patrol it indefinitly.
+If the checkpoint chain in not looped, teh walker will go "Roaming" when teh last point is reached. 
+*/
+
+/*QUAKED turret_walker (1 0 0) (-32 -32 0) (32 32 50)
+-----------KEYS------------
+turret_scale_damage: 2 = double damage, 0.5 = half
+turret_scale_range:  2 = double range, 0.5 = half
+turret_scale_refire: 2 = doubble refire (SLOWER!), 0.5 = half (FASTER!)
+turret_scale_ammo:   2 = doubble ammo carry & regen, 0.5 = half ammo carry & regen
+turret_scale_aim:    2 = aim twice as fast, 0,5 = aim at half speed
+turret_scale_health: 2 = double health, 0.5 = half
+
+target : Enter this walker_checkpoint chain
+
+team : 5=red, 14=blue
+-----------SPAWNFLAGS-----------
+---------NOTES----------
+
+A nasty mechanical ceature that will engage longrange target with missiles, midrange with its miniguna and meele things up close and personal.
+
+-------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
+model="models/turrets/radiant/walker.md3"
+*/

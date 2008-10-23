@@ -36,25 +36,27 @@ vector real_origin(entity ent);
 /// aim flags
 .float aim_flags;
 /// Dont aim.
-#define TFL_AIM_NO                  512
+#define TFL_AIM_NO                  1
 /// Go for ground, not direct hit
 #define TFL_AIM_GROUND              2
 /// Go for ground, not direct hit if target is on ground too
-#define TFL_AIM_GROUND2              1024
+#define TFL_AIM_GROUND2              4
 /// Use balistic aim (not implemented)
-#define TFL_AIM_BALISTIC            4
-/// Try to predict target movement
-#define TFL_AIM_LEAD                8
+#define TFL_AIM_BALISTIC            8
+/// Try to predict target movement (does not account for gravity)
+#define TFL_AIM_LEAD                16
 /// Compensate for shot traveltime when lead
-#define TFL_AIM_SHOTTIMECOMPENSATE  16
+#define TFL_AIM_SHOTTIMECOMPENSATE  32
 /// Aim slightly in front of target
-#define TFL_AIM_INFRONT             32
+#define TFL_AIM_INFRONT             64
 /// Aim slightly behind target
-#define TFL_AIM_BEHIND              64
+#define TFL_AIM_BEHIND              128
 /// blend real and predicted z positions. (fake bounce prediction)
-#define TFL_AIM_ZEASE               128
+#define TFL_AIM_ZEASE               256
+/// Try to do real prediction of targets z pos at impact.
+//#define TFL_AIM_ZPREDICT            256
 /// Just poitn at target's current location
-#define TFL_AIM_SIMPLE              256
+#define TFL_AIM_SIMPLE              512
 
 /// track (turn and pitch head) flags
 .float track_flags;
