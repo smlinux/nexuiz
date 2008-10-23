@@ -22,7 +22,7 @@ void W_HLAC_Touch (void)
 
 	self.event_damage = SUB_Null;
 
-    RadiusDamage (self, self.owner, cvar("g_balance_hlac_primary_damage"), cvar("g_balance_hlac_primary_edgedamage"), cvar("g_balance_hlac_primary_radius"), world, cvar("g_balance_hlac_primary_force"), WEP_HLAC, other);
+    RadiusDamage (self, self.owner, cvar("g_balance_hlac_primary_damage"), cvar("g_balance_hlac_primary_edgedamage"), cvar("g_balance_hlac_primary_radius"), world, cvar("g_balance_hlac_primary_force"), self.projectiledeathtype, other);
 	sound (self, CHAN_PROJECTILE, "weapons/laserimpact.wav", VOL_BASE, ATTN_NORM);
 
 	remove (self);
@@ -51,7 +51,7 @@ void W_HLAC_Touch2 (void)
 
 	//self.event_damage = SUB_Null;
 
-    RadiusDamage (self, self.owner, cvar("g_balance_hlac_secondary_damage"), cvar("g_balance_hlac_secondary_edgedamage"), cvar("g_balance_hlac_secondary_radius"), world, cvar("g_balance_hlac_secondary_force"), WEP_HLAC, other);
+    RadiusDamage (self, self.owner, cvar("g_balance_hlac_secondary_damage"), cvar("g_balance_hlac_secondary_edgedamage"), cvar("g_balance_hlac_secondary_radius"), world, cvar("g_balance_hlac_secondary_force"), self.projectiledeathtype, other);
 	sound (self, CHAN_PROJECTILE, "weapons/laserimpact.wav", VOL_BASE, ATTN_NORM);
 
 	remove (self);
@@ -107,6 +107,7 @@ void W_HLAC_Attack (void)
 
 	missile.effects = EF_LOWPRECISION;
 	missile.flags = FL_PROJECTILE;
+	missile.projectiledeathtype = WEP_HLAC;
 }
 
 void W_HLAC_Attack2f (void)
@@ -150,6 +151,7 @@ void W_HLAC_Attack2f (void)
 
 	missile.effects = EF_LOWPRECISION;
 	missile.flags = FL_PROJECTILE;
+	missile.projectiledeathtype = WEP_HLAC | HITTYPE_SECONDARY;
 }
 
 void W_HLAC_Attack2 (void)
