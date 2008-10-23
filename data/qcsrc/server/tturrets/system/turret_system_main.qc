@@ -546,15 +546,7 @@ void turret_think()
     {
         if (g_onslaught)
         {
-            /*
-            // see turret_stdproc_use()
-            if(self.targetname)
-            {
-                e = find(world,target,self.targetname);
-                if(e != world)
-                    self.team = e.team;
-            }
-			*/
+
         }
         else
         {
@@ -724,6 +716,7 @@ void turret_stdproc_use()
 {
     // bprint("Used:",self.netname, " By ",other.netname,"\n");
 
+    // ONS Uses _use to communicate.
     if (g_onslaught)
     {
         entity e;
@@ -737,6 +730,15 @@ void turret_stdproc_use()
 
         if (self.team != self.tur_head.team)
             turret_stdproc_respawn();
+
+        if(self.team == 0)
+        {
+            self.tur_active = 0;
+            self.tur_head.angles = '-25 0 0';
+        }
+        else
+            self.tur_active = 1;
+
     }
     else
     {
@@ -1076,6 +1078,9 @@ float turret_stdproc_init (string cvar_base_name)
     self.classname = "turret_main";
 
     self.tur_active = 1;
+
+    if (g_onslaught)
+        self.use();
 
     return 1;
 }
