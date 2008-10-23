@@ -199,8 +199,12 @@ void turret_stdproc_respawn()
     // Make sure all parts belong to the same team since
     // this function doubles as "teamchange" function.
     self.tur_head.team = self.team;
-    if (self.team == COLOR_TEAM1) self.colormod = '1.4 0.8 0.8';
-    if (self.team == COLOR_TEAM2) self.colormod = '0.8 0.8 1.4';
+	if (self.team == COLOR_TEAM1)
+		self.colormod = '1.4 0.8 0.8';
+	else if (self.team == COLOR_TEAM2)
+		self.colormod = '0.8 0.8 1.4';
+	else
+		self.colormod = '0 0 0'; // reset
 
     self.deadflag = DEAD_NO;
     self.tur_head.deadflag = self.deadflag;
@@ -254,7 +258,7 @@ void turret_stdproc_damage (entity inflictor, entity attacker, float damage, flo
     {
         if (self.team == attacker.team)
         {
-            sprint(attacker,"Turret: Im on your team!\n");
+            sprint(attacker, "\{1}Turret tells you: I'm on your team!\n");
             return;
         }
         else

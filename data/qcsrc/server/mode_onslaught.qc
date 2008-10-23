@@ -602,6 +602,7 @@ void spawnfunc_onslaught_generator()
 	self.isshielded = TRUE;
 	// spawn shield model which indicates whether this can be damaged
 	self.enemy = e = spawn();
+	e.classname = "onslaught_generator_shield";
 	e.solid = SOLID_NOT;
 	e.movetype = MOVETYPE_NONE;
 	e.effects = EF_ADDITIVE;
@@ -742,6 +743,7 @@ void onslaught_controlpoint_touch()
 	// so start building the captured point icon (which only captures this
 	// point if it successfully builds without being destroyed first)
 	self.goalentity = e = spawn();
+	e.classname = "onslaught_controlpoint_icon";
 	e.owner = self;
 	e.max_health = cvar("g_onslaught_cp_health");
 	e.health = e.max_health * 0.1;
@@ -803,6 +805,7 @@ void spawnfunc_onslaught_controlpoint()
 	self.isshielded = TRUE;
 	// spawn shield model which indicates whether this can be damaged
 	self.enemy = e = spawn();
+	e.classname = "onslaught_controlpoint_shield";
 	e.solid = SOLID_NOT;
 	e.movetype = MOVETYPE_NONE;
 	e.effects = EF_ADDITIVE;

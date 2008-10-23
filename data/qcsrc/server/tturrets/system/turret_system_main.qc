@@ -367,6 +367,10 @@ float turret_validate_target(entity e_turret,entity e_target,float validate_flag
     if (e_target.classname == "grapplinghook")
         return - 1.5;
 
+	if(g_onslaught)
+		if (substring(e_target.classname, 0, 10) == "onslaught_") // don't attack onslaught targets, that's the player's job!
+			return - 1.75;
+
     if (validate_flags & TFL_TARGETSELECT_NO)
         return -2;
 
@@ -387,6 +391,13 @@ float turret_validate_target(entity e_turret,entity e_target,float validate_flag
         if (e_target.deadflag != DEAD_NO)
             return -6;
     }
+
+	// enemy turrets
+	if (e_target.turret_firefunc || e_target.owner.tur_head == e_target)
+	{
+		if (!(validate_flags & TFL_TARGETSELECT_TURRETS))
+			return -5.5;
+	}
 
     // Missile
     if (e_target.flags & FL_PROJECTILE)
@@ -515,7 +526,6 @@ void turret_think()
     {
         if(g_onslaught)
         {
-
             /*
             // see turret_stdproc_use()
             if(self.targetname)
@@ -523,7 +533,8 @@ void turret_think()
                 e = find(world,target,self.targetname);
                 if(e != world)
                     self.team = e.team;
-            }*/
+            }
+			*/
         }
         else
         {
@@ -725,6 +736,8 @@ void turret_stdproc_use()
 */
 float turret_stdproc_init (string cvar_base_name)
 {
+	entity e;
+
     // Are turrets allowed atm?
     if (cvar("g_turrets") == 0) return 0;
 
@@ -751,9 +764,16 @@ float turret_stdproc_init (string cvar_base_name)
         if (!self.team)
             self.team = 14; // Assume turrets are on the defending side if not explicitly set otehrwize
     }
-    else
-        if ((!teamplay) || (!self.team))
-            self.team = MAX_SHOT_DISTANCE;
+    else if (!teamplay)
+		self.team = MAX_SHOT_DISTANCE;
+	else if(g_onslaught && self.targetname)
+	{
+		e = find(world,target,self.targetname);
+		if(e != world)
+			self.team = e.team;
+	}
+	else if(!self.team)
+		self.team = MAX_SHOT_DISTANCE;
 
 
     /*
