@@ -455,11 +455,6 @@ void Seeker_Fire_Flac()
 	missile.flags = FL_PROJECTILE;
 }
 
-void spawnfunc_weapon_seeker (void)
-{
-    weapon_defaultspawnfunc(WEP_SEEKER);
-}
-
 float w_seeker(float req)
 {
     if (req == WR_AIM)
