@@ -314,8 +314,10 @@ float WEP_ROCKET_LAUNCHER	=  9; float WEPBIT_ROCKET_LAUNCHER	= 256;
 float WEP_PORTO				= 10; float WEPBIT_PORTO			= 512;
 float WEP_MINSTANEX			= 11; float WEPBIT_MINSTANEX		= 1024;
 float WEP_HOOK     			= 12; float WEPBIT_HOOK     		= 2048;
-float WEP_LAST				= 12; float WEPBIT_ALL              = 4095;
-float WEP_COUNT             = 13;
+float WEP_HLAC			    = 13; float WEPBIT_HLAC		        = 4096;
+float WEP_SEEKER			= 14; float WEPBIT_SEEKER		    = 8192;
+float WEP_LAST				= 14; float WEPBIT_ALL              = 16383;
+float WEP_COUNT             = 15;
 
 float	IT_UNLIMITED_AMMO       = 1;
 // when this bit is set, using a weapon does not reduce ammo. Checkpoints can give this powerup.

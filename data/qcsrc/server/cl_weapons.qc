@@ -120,7 +120,7 @@ string W_FixWeaponOrder_ForceComplete(string order)
 }
 
 float w_getbestweapon(entity e)
-{ 
+{
 	return W_GetCycleWeapon(e, e.cvar_cl_weaponpriority, 0, -1, 0);
 };
 
@@ -452,5 +452,9 @@ void RegisterWeapons()
 	register_weapon(WEP_PORTO,            w_porto,     IT_SUPERWEAPON, 0, 0,     0, "porto" ,    "porto",           "Port-O-Launch");
 	register_weapon(WEP_MINSTANEX,        w_minstanex, IT_CELLS,       7, 0, 10000, "minstanex", "minstanex",       "MinstaNex");
 	register_weapon(WEP_HOOK,             w_hook,      IT_CELLS,       0, 0,     0, "hookgun",   "hook",            "Grappling Hook");
+
+	register_weapon(WEP_SEEKER,           w_seeker,    IT_ROCKETS,     0, 0,     0, "seeker",     "seeker",         "T.A.G. Seeker");
+	register_weapon(WEP_HLAC,             w_hlac,      IT_CELLS,       0, 0,     0, "hlac",       "hlac",           "Heavy Laser Assault Cannon");
+
 	register_weapons_done();
 }
