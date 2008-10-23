@@ -16,6 +16,8 @@ COMPAT_FILES="
 	gfx/final_rage_mini.tga
 	gfx/inv_weapon10.tga
 	gfx/inv_weapon11.tga
+	gfx/inv_weapon12.tga
+	gfx/inv_weapon13.tga
 	gfx/inv_weapon9.tga
 	gfx/reslimed_mini.tga
 	gfx/runningman_1on1remix_mini.tga
@@ -72,15 +74,129 @@ COMPAT_FILES="
 	models/sprites/race-finish.tga
 	models/sprites/redbase.tga
 	models/sprites/waypoint.tga
+    models/tagrocket.md3
+    models/tagrocket.tga
+	models/turrets/aabody_gloss.tga
+	models/turrets/aabody_norm.tga
+	models/turrets/aabody.tga
+	models/turrets/aagun_gloss.tga
+	models/turrets/aagun_norm.tga
+	models/turrets/aagun.tga
+	models/turrets/basedestroyed_glow.tga
+	models/turrets/basedestroyed_norm.tga
+	models/turrets/basedestroyed.tga
+	models/turrets/base-gib1.md3
+	models/turrets/base-gib2.md3
+	models/turrets/base-gib3.md3
+	models/turrets/base-gib4.md3
+	models/turrets/base_gloss.tga
+	models/turrets/base.md3
+	models/turrets/base_norm.tga
+	models/turrets/base.tga
+	models/turrets/c512.md3
+	models/turrets/c8.md3
+	models/turrets/chrome.tga
+	models/turrets/flac.md3
+	models/turrets/fusion_top.md3
+	models/turrets/fusreac.md3
+	models/turrets/head-gib1.md3
+	models/turrets/head-gib2.md3
+	models/turrets/head-gib3.md3
+	models/turrets/head-gib4.md3
+	models/turrets/hellion.md3
+	models/turrets/hk.md3
+	models/turrets/hunter2.md3
+	models/turrets/machinegun.md3
+	models/turrets/mgbody_gloss.tga
+	models/turrets/mgbody_norm.tga
+	models/turrets/mgbody.tga
+	models/turrets/mggun_gloss.tga
+	models/turrets/mggun_norm.tga
+	models/turrets/mggun.tga
+	models/turrets/mlrs_gloss.tga
+	models/turrets/mlrs_glow.tga
+	models/turrets/mlrs.md3
+	models/turrets/mlrs_norm.tga
+	models/turrets/mlrs_rocket.md3
+	models/turrets/mlrs.tga
+	models/turrets/noise1.tga
+	models/turrets/pd_proj.md3
+	models/turrets/phaser_beam2.tga
+	models/turrets/phaser_beam3.tga
+	models/turrets/phaser_beam.md3
+	models/turrets/phaser_beam.tga
+	models/turrets/phaserbody_gloss.tga
+	models/turrets/phaserbody_glow.tga
+	models/turrets/phaserbody_norm.tga
+	models/turrets/phaserbody.tga
+	models/turrets/phasermag_gloss.tga
+	models/turrets/phasermag_glow.tga
+	models/turrets/phasermag_norm.tga
+	models/turrets/phasermag.tga
+	models/turrets/phaser.md3
+	models/turrets/plasmabody_gloss.tga
+	models/turrets/plasmabody_norm.tga
+	models/turrets/plasmabody.tga
+	models/turrets/plasmad.md3
+	models/turrets/plasmagun_gloss.tga
+	models/turrets/plasmagun_glow.tga
+	models/turrets/plasmagun_norm.tga
+	models/turrets/plasmagun.tga
+	models/turrets/plasma.md3
+	models/turrets/reactor_gloss.tga
+	models/turrets/reactor_glow.tga
+	models/turrets/reactor.md3
+	models/turrets/reactor_norm.tga
+	models/turrets/reactor.tga
+	models/turrets/r_fx1_1.tga
+	models/turrets/r_fx1_2.tga
+	models/turrets/r_fx1_3.tga
+	models/turrets/r_fx1_4.tga
+	models/turrets/r_fx1_5.tga
+	models/turrets/rlbody_gloss.tga
+	models/turrets/rlbody_norm.tga
+	models/turrets/rlbody.tga
+	models/turrets/rldouble_gloss.tga
+	models/turrets/rldouble_norm.tga
+	models/turrets/rldouble.tga
+	models/turrets/rlgun_gloss.tga
+	models/turrets/rlgun_norm.tga
+	models/turrets/rlgun.tga
+	models/turrets/rocket_gloss.tga
+	models/turrets/rocket_glow.tga
+	models/turrets/rocket.md3
+	models/turrets/rocket_norm.tga
+	models/turrets/rocket.tga
+	models/turrets/tesla_base.md3
+	models/turrets/tesla_gloss.tga
+	models/turrets/tesla_glow.tga
+	models/turrets/tesla_head.md3
+	models/turrets/tesla.md3
+	models/turrets/tesla_norm.tga
+	models/turrets/tesla.tga
+	models/turrets/walker_base.tga
+	models/turrets/walker_body.md3
+	models/turrets/walker_head_minigun.md3
+	models/turrets/walker_mghead.md3
+	models/turrets/walker_minigun.tga
+	models/turrets/walker_props.md3
+	models/turrets/walker_spawn.md3
+	models/turrets/white.tga
+    models/weapons/g_hlac.md3
 	models/weapons/g_hookgun.md3
 	models/weapons/g_minstanex.md3
 	models/weapons/g_porto.md3
+    models/weapons/g_seeker.md3
+    models/weapons/v_hlac.md3
 	models/weapons/v_hookgun.md3
 	models/weapons/v_minstanex.md3
 	models/weapons/v_porto.md3
+    models/weapons/v_seeker.md3
+    models/weapons/w_hlac.zym
 	models/weapons/w_hookgun.zym
 	models/weapons/w_minstanex.zym
 	models/weapons/w_porto.zym
+    models/weapons/w_seeker.zym
 	particles/particlefont.tga
 	sound/announcer/male/airshot.ogg
 	sound/announcer/male/headshot.ogg
