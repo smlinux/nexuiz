@@ -1101,6 +1101,7 @@ void spawnfunc_trigger_flipflop()
 void monoflop_use()
 {
 	self.nextthink = time + self.wait;
+	self.enemy = activator;
 	if(self.state)
 		return;
 	self.state = 1;
@@ -1112,12 +1113,14 @@ void monoflop_fixed_use()
 		return;
 	self.nextthink = time + self.wait;
 	self.state = 1;
+	self.enemy = activator;
 	SUB_UseTargets();
 }
 
 void monoflop_think()
 {
 	self.state = 0;
+	activator = self.enemy;
 	SUB_UseTargets();
 }
 
@@ -1142,6 +1145,7 @@ void multivibrator_send()
 
 	newstate = (time < cyclestart + self.wait);
 
+	activator = self;
 	if(self.state != newstate)
 		SUB_UseTargets();
 	self.state = newstate;

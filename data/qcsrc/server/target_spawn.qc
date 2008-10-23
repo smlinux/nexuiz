@@ -9,6 +9,8 @@ float target_spawn_initialized;
 .void() target_spawn_spawnfunc;
 float target_spawn_spawnfunc_field;
 .entity target_spawn_activator;
+.float target_spawn_id;
+float target_spawn_count;
 
 void target_spawn_useon(entity e)
 {
@@ -20,6 +22,7 @@ void target_spawn_useon(entity e)
 	entity oldactivator;
 
 	n = tokenize_sane(self.message);
+	self.target_spawn_activator = activator;
 
 	for(i = 0; i < n-1; i += 2)
 	{
@@ -175,7 +178,7 @@ void target_spawn_useon(entity e)
 			oldactivator = activator;
 
 			self = e;
-			activator = self.target_spawn_activator;
+			activator = oldself.target_spawn_activator;
 
 			self.target_spawn_spawnfunc();
 
@@ -191,6 +194,25 @@ void target_spawn_useon(entity e)
 	}
 }
 
+float target_spawn_cancreate()
+{
+	float c;
+	entity e;
+
+	c = self.count;
+	if(c == 0) // no limit?
+		return 1;
+
+	++c; // increase count to not include MYSELF
+	for(e = world; (e = findfloat(e, target_spawn_id, self.target_spawn_id)); --c)
+		;
+	
+	// if c now is 0, we have AT LEAST the given count (maybe more), so don't spawn any more
+	if(c == 0)
+		return 0;
+	return 1;
+}
+
 void target_spawn_use()
 {
 	entity e;
@@ -198,8 +220,11 @@ void target_spawn_use()
 	if(self.target == "")
 	{
 		// spawn new entity
+		if(!target_spawn_cancreate())
+			return;
 		e = spawn();
 		target_spawn_useon(e);
+		e.target_spawn_id = self.target_spawn_id;
 	}
 	else
 	{
@@ -249,6 +274,7 @@ void spawnfunc_target_spawn()
 	initialize_field_db();
 	self.use = target_spawn_use;
 	self.message = strzone(strreplace("'", "\"", self.message));
+	self.target_spawn_id = ++target_spawn_count;
 	InitializeEntity(self, target_spawn_spawnfirst, INITPRIO_LAST);
 }
 
