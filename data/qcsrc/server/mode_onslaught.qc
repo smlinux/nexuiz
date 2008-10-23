@@ -634,6 +634,7 @@ void onslaught_generator_reset()
 	self.nextthink = time + 0.2;
 }
 
+.float waslinked;
 void onslaught_controlpoint_icon_damage(entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
 {
 	entity oself;
@@ -680,9 +681,11 @@ void onslaught_controlpoint_icon_damage(entity inflictor, entity attacker, float
 		// Use targets now (somebody make sure this is in the right place..)
 		oself = self;
 		self = self.owner;
-		activator = self.owner;
+		activator = self;
 		SUB_UseTargets ();
 		self = oself;
+
+		self.owner.waslinked = self.owner.islinked;
 
 		remove(self);
 	}
@@ -690,6 +693,7 @@ void onslaught_controlpoint_icon_damage(entity inflictor, entity attacker, float
 
 void onslaught_controlpoint_icon_think()
 {
+	entity oself;
 	self.nextthink = time + 0.1;
 	if (time > self.pain_finished + 1)
 	{
@@ -700,14 +704,41 @@ void onslaught_controlpoint_icon_think()
 	self.alpha = self.health / self.max_health;
 	// colormod flash when shot
 	self.colormod = '1 1 1' * (2 - bound(0, (self.pain_finished - time) / 10, 1));
+
+	if(self.owner.islinked != self.owner.waslinked)
+	{
+		// unteam the spawnpoint if needed
+		float t;
+		t = self.owner.team;
+		if(!self.owner.islinked)
+			self.owner.team = 0;
+
+		oself = self;
+		self = self.owner;
+		activator = self;
+		SUB_UseTargets ();
+		self = oself;
+
+		self.owner.team = t;
+
+		self.owner.waslinked = self.owner.islinked;
+	}
 };
 
 void onslaught_controlpoint_icon_buildthink()
 {
 	local entity oself;
+	float a;
 
 	self.nextthink = time + 0.1;
+
+	// only do this if there is power
+	a = onslaught_controlpoint_can_be_linked(self.owner, self.owner.team);
+	if(!a)
+		return;
+
 	self.health = self.health + self.count;
+
 	if (self.health >= self.max_health)
 	{
 		self.health = self.max_health;
