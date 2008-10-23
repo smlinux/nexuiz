@@ -335,7 +335,7 @@ void Seeker_Tag_Touch()
 void Seeker_Fire_Tag()
 {
     local entity missile;
-    if (cvar("g_use_ammunition"))
+    if not(self.items & IT_UNLIMITED_AMMO)
         self.ammo_rockets = self.ammo_rockets - cvar("g_balance_seeker_tag_ammo");
 
     W_SetupShot (self, '56 13 -15', FALSE, 2, "weapons/hagar_fire.ogg");
