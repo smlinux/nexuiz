@@ -11,11 +11,11 @@ void Seeker_Missile_Explode ()
 
     b = crandom();
     if (b<-0.7)
-        sound (self, CHAN_PROJECTILE, "weapons/hagexp1.ogg", 1, ATTN_NORM);
+        sound (self, CHAN_PROJECTILE, "weapons/hagexp1.wav", 1, ATTN_NORM);
     else if (b<0.4)
-        sound (self, CHAN_PROJECTILE, "weapons/hagexp2.ogg", 1, ATTN_NORM);
+        sound (self, CHAN_PROJECTILE, "weapons/hagexp2.wav", 1, ATTN_NORM);
     else if (b<1)
-        sound (self, CHAN_PROJECTILE, "weapons/hagexp3.ogg", 1, ATTN_NORM);
+        sound (self, CHAN_PROJECTILE, "weapons/hagexp3.wav", 1, ATTN_NORM);
 
     self.event_damage = SUB_Null;
     RadiusDamage (self, self.owner, cvar("g_balance_seeker_missile_damage"), cvar("g_balance_seeker_missile_edgedamage"), cvar("g_balance_seeker_missile_radius"), world, cvar("g_balance_seeker_missile_force"), self.projectiledeathtype, other);
@@ -165,7 +165,7 @@ void Seeker_Fire_Missile(vector f_org)
         self.ammo_rockets = self.ammo_rockets - cvar("g_balance_seeker_missile_ammo");
 
     makevectors(self.v_angle);
-    W_SetupShot (self, f_org, FALSE, 2, "weapons/hagar_fire.ogg");
+    W_SetupShot (self, f_org, FALSE, 2, "weapons/hagar_fire.wav");
     pointparticles(particleeffectnum("hagar_muzzleflash"), w_shotorg, w_shotdir * 1000, 1);
 
     //self.detornator         = FALSE;
@@ -307,7 +307,7 @@ void Seeker_Tag_Touch()
     te_knightspike(org2);
 
     self.event_damage = SUB_Null;
-    sound (self, CHAN_PROJECTILE, "weapons/laserimpact.ogg", 1, ATTN_NORM);
+    sound (self, CHAN_PROJECTILE, "weapons/laserimpact.wav", 1, ATTN_NORM);
 
     if (other.classname == "player")
     {
@@ -339,7 +339,7 @@ void Seeker_Fire_Tag()
     if not(self.items & IT_UNLIMITED_AMMO)
         self.ammo_rockets = self.ammo_rockets - cvar("g_balance_seeker_tag_ammo");
 
-    W_SetupShot (self, '56 13 -15', FALSE, 2, "weapons/hagar_fire.ogg");
+    W_SetupShot (self, '56 13 -15', FALSE, 2, "weapons/hagar_fire.wav");
 
     missile                 = spawn();
     missile.owner           = self;
@@ -420,7 +420,7 @@ void Seeker_Fire_Flac()
             f_org = '40 17 -29';
             break;
         case 3:
-            f_org = '40 09.5 -29';
+            f_org = '40 9.5 -29';
             break;
     }
     W_SetupShot (self, f_org, FALSE, 2, "weapons/hagar_fire.wav");
@@ -494,6 +494,7 @@ float w_seeker(float req)
         precache_sound ("weapons/hagexp1.wav");
         precache_sound ("weapons/hagexp2.wav");
         precache_sound ("weapons/hagexp3.wav");
+        precache_sound ("weapons/laserimpact.wav");
     }
     else if (req == WR_SETUP)
         weapon_setup(WEP_SEEKER);
