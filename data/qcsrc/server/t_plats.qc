@@ -770,7 +770,7 @@ void door_use()
 
 void door_trigger_touch()
 {
-	if (other.health < 1)
+	if (other.health < 1 && !other.iscreature)
 		return;
 
 	if (time < self.attack_finished_single)
@@ -809,7 +809,7 @@ Prints messages
 */
 void door_touch()
 {
-	if not(other.iscreature)
+	if(other.classname != "player")
 		return;
 	if (self.owner.attack_finished_single > time)
 		return;

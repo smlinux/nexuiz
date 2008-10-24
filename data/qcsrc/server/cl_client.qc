@@ -439,6 +439,7 @@ void PutObserverInServer (void)
 	self.spectatortime = time;
 	
 	self.classname = "observer";
+	self.iscreature = FALSE;
 	self.health = -666;
 	self.takedamage = DAMAGE_NO;
 	self.solid = SOLID_NOT;
