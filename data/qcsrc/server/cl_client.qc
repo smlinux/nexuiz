@@ -629,6 +629,7 @@ void PutClientInServer (void)
 		self.iscreature = TRUE;
 		self.movetype = MOVETYPE_WALK;
 		self.solid = SOLID_SLIDEBOX;
+		self.dphitcontentsmask = DPCONTENTS_SOLID | DPCONTENTS_BODY | DPCONTENTS_PLAYERCLIP;
 		if(independent_players)
 			MAKE_INDEPENDENT_PLAYER(self);
 		self.flags = FL_CLIENT;
