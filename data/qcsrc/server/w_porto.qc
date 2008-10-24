@@ -76,7 +76,7 @@ void W_Porto_Touch (void)
 		return; // handled by the portal
 
 	norm = trace_plane_normal;
-	if(trace_ent.movetype == MOVETYPE_WALK)
+	if(trace_ent.iscreature)
 	{
 		traceline(trace_ent.origin, trace_ent.origin + '0 0 2' * PL_MIN_z, MOVE_NORMAL, self);
 		if(trace_fraction >= 1)
