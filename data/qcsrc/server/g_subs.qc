@@ -26,6 +26,20 @@ void SUB_Remove (void)
 
 /*
 ==================
+SUB_Friction
+
+Applies some friction to self
+==================
+*/
+.float friction;
+void SUB_Friction (void)
+{
+	self.nextthink = time;
+	self.velocity = self.velocity * (1 - frametime * self.friction);
+}
+
+/*
+==================
 SUB_VanishOrRemove
 
 Makes client invisible or removes non-client
