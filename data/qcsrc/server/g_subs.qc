@@ -35,7 +35,8 @@ Applies some friction to self
 void SUB_Friction (void)
 {
 	self.nextthink = time;
-	self.velocity = self.velocity * (1 - frametime * self.friction);
+	if(self.flags & FL_ONGROUND)
+		self.velocity = self.velocity * (1 - frametime * self.friction);
 }
 
 /*
