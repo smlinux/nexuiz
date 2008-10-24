@@ -1,5 +1,4 @@
-
-.float rl_sound;
+.float rl_release;
 .float rl_detonate_later;
 
 void W_Rocket_Explode (void)
@@ -135,13 +134,6 @@ void W_Rocket_Think (void)
 	{
 		if(g_laserguided_missile)
 		{
-			if(!self.owner.BUTTON_ATCK)
-				self.ltime = -1; // indicate that the player has let go of the button
-
-
-			if(self.owner.deadflag == DEAD_NO)
-			if (self.owner.BUTTON_ATCK && self.ltime < 0) // if the player let go of the button and then pushed it again
-				self.rl_detonate_later = TRUE;
 			if(self.rl_detonate_later)
 				W_Rocket_RemoteExplode();
 
@@ -180,8 +172,6 @@ void W_Rocket_Think (void)
 		}
 		else
 		{
-			if (self.owner.BUTTON_ATCK2)
-				self.rl_detonate_later = TRUE;
 			if(self.rl_detonate_later)
 				W_Rocket_RemoteExplode();
 		}
@@ -231,7 +221,7 @@ void W_Rocket_Attack (void)
 		missile.spawnshieldtime = time + cvar("g_balance_rocketlauncher_detonatedelay");
 	else
 		missile.spawnshieldtime = -1;
-	missile.classname = "missile";
+	missile.classname = "rocket";
 	missile.bot_dodge = TRUE;
 	missile.bot_dodgerating = cvar("g_balance_rocketlauncher_primary_damage") * 2; // * 2 because it can be detonated inflight which makes it even more dangerous
 
@@ -292,6 +282,8 @@ void spawnfunc_weapon_rocketlauncher (void); // defined in t_items.qc
 
 float w_rlauncher(float req)
 {
+	entity rock;
+	float rockfound;
 	if (req == WR_AIM)
 	{
 		// aim and decide to fire if appropriate
@@ -310,12 +302,12 @@ float w_rlauncher(float req)
 			teamdamage = 0;
 			enemydamage = 0;
 			targetlist = findchainfloat(bot_attack, TRUE);
-			missile = find(world, classname, "missile");
+			missile = find(world, classname, "rocket");
 			while (missile)
 			{
 				if (missile.owner != self)
 				{
-					missile = find(missile, classname, "missile");
+					missile = find(missile, classname, "rocket");
 					continue;
 				}
 				targ = targetlist;
@@ -332,7 +324,7 @@ float w_rlauncher(float req)
 						enemydamage = enemydamage + d;
 					targ = targ.chain;
 				}
-				missile = find(missile, classname, "missile");
+				missile = find(missile, classname, "rocket");
 			}
 			local float desirabledamage;
 			desirabledamage = enemydamage;
@@ -341,12 +333,12 @@ float w_rlauncher(float req)
 			if (self.team && teamplay == 2)
 				desirabledamage = desirabledamage - teamdamage;
 
-			missile = find(world, classname, "missile");
+			missile = find(world, classname, "rocket");
 			while (missile)
 			{
 				if (missile.owner != self)
 				{
-					missile = find(missile, classname, "missile");
+					missile = find(missile, classname, "rocket");
 					continue;
 				}
 				makevectors(missile.v_angle);
@@ -374,7 +366,7 @@ float w_rlauncher(float req)
 				//	dprint(ftos(random()/distance*300),">");dprint(ftos(frametime*bound(0,(10-skill)*0.2,1)),"\n");
 				}
 
-				missile = find(missile, classname, "missile");
+				missile = find(missile, classname, "rocket");
 			}
 			// if we would be doing at X percent of the core damage, detonate it
 			// but don't fire a new shot at the same time!
@@ -389,27 +381,61 @@ float w_rlauncher(float req)
 	}
 	else if (req == WR_THINK)
 	{
-		if (self.BUTTON_ATCK)
-		if (weapon_prepareattack(0, cvar("g_balance_rocketlauncher_refire")))
-		{
-			W_Rocket_Attack();
-			weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_rocketlauncher_animtime"), w_ready);
-		}
-		if (self.BUTTON_ATCK2)
-		if(time > self.rl_sound)
-		{
-			self.rl_sound = time + 1;
-			// UGLY WORKAROUND: play this on CHAN_WEAPON2 so it can't cut off fire sounds
-			sound (self, CHAN_WEAPON2, "weapons/rocket_det.wav", 0.5 * VOL_BASE, ATTN_NORM);
-		}
-		if (self.BUTTON_ATCK2)
 		if(g_laserguided_missile)
-		if(self.exteriorweaponentity.attack_finished_single < time)
 		{
-			self.exteriorweaponentity.attack_finished_single = time + 0.4;
-			self.laser_on = !self.laser_on;
-			// UGLY WORKAROUND: play this on CHAN_WEAPON2 so it can't cut off fire sounds
-			sound (self, CHAN_WEAPON2, "weapons/tink1.wav", VOL_BASE, ATTN_NORM);
+			if (self.BUTTON_ATCK && self.rl_release)
+			{
+				rockfound = 0;
+				for(rock = world; (rock = find(rock, classname, "rocket")); ) if(rock.owner == self)
+				{
+					rock.rl_detonate_later = TRUE;
+					rockfound = 1;
+				}
+				if(rockfound)
+					sound (self, CHAN_WEAPON2, "weapons/rocket_det.wav", 0.5 * VOL_BASE, ATTN_NORM);
+				else
+				{
+					if (weapon_prepareattack(0, cvar("g_balance_rocketlauncher_refire")))
+					{
+						W_Rocket_Attack();
+						weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_rocketlauncher_animtime"), w_ready);
+					}
+				}
+				self.rl_release = 0;
+			}
+			if (!self.BUTTON_ATCK)
+				self.rl_release = 1;
+			if (self.BUTTON_ATCK2)
+			if(self.exteriorweaponentity.attack_finished_single < time)
+			{
+				self.exteriorweaponentity.attack_finished_single = time + 0.4;
+				self.laser_on = !self.laser_on;
+				// UGLY WORKAROUND: play this on CHAN_WEAPON2 so it can't cut off fire sounds
+				sound (self, CHAN_WEAPON2, "weapons/tink1.wav", VOL_BASE, ATTN_NORM);
+			}
+		}
+		else
+		{
+			if (self.BUTTON_ATCK)
+			if (weapon_prepareattack(0, cvar("g_balance_rocketlauncher_refire")))
+			{
+				W_Rocket_Attack();
+				weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_rocketlauncher_animtime"), w_ready);
+			}
+			if (self.BUTTON_ATCK2 && self.rl_release)
+			{
+				rockfound = 0;
+				for(rock = world; (rock = find(rock, classname, "rocket")); ) if(rock.owner == self)
+				{
+					rock.rl_detonate_later = TRUE;
+					rockfound = 1;
+				}
+				if(rockfound)
+					sound (self, CHAN_WEAPON2, "weapons/rocket_det.wav", 0.5 * VOL_BASE, ATTN_NORM);
+				self.rl_release = 0;
+			}
+			if (!self.BUTTON_ATCK2)
+				self.rl_release = 1;
 		}
 	}
 	else if (req == WR_PRECACHE)
@@ -427,7 +453,10 @@ float w_rlauncher(float req)
 			precache_model ("models/laser_dot.mdl"); // rocket launcher
 	}
 	else if (req == WR_SETUP)
+	{
 		weapon_setup(WEP_ROCKET_LAUNCHER);
+		self.rl_release = 1;
+	}
 	else if (req == WR_CHECKAMMO1)
 	{
 		// don't switch while guiding a missile
