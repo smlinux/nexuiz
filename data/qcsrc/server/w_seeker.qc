@@ -272,11 +272,11 @@ void Seeker_Tag_Explode ()
 
     b = crandom();
     if (b<-0.7)
-        sound (self, CHAN_PROJECTILE, "weapons/hagexp1.ogg", 1, ATTN_NORM);
+        sound (self, CHAN_PROJECTILE, "weapons/hagexp1.wav", 1, ATTN_NORM);
     else if (b<0.4)
-        sound (self, CHAN_PROJECTILE, "weapons/hagexp2.ogg", 1, ATTN_NORM);
+        sound (self, CHAN_PROJECTILE, "weapons/hagexp2.wav", 1, ATTN_NORM);
     else if (b<1)
-        sound (self, CHAN_PROJECTILE, "weapons/hagexp3.ogg", 1, ATTN_NORM);
+        sound (self, CHAN_PROJECTILE, "weapons/hagexp3.wav", 1, ATTN_NORM);
 
     remove (self);
 }
@@ -379,11 +379,11 @@ void Seeker_Flac_Explode ()
 
     b = crandom();
     if (b<-0.7)
-        sound (self, CHAN_PROJECTILE, "weapons/hagexp1.ogg", 1, ATTN_NORM);
+        sound (self, CHAN_PROJECTILE, "weapons/hagexp1.wav", 1, ATTN_NORM);
     else if (b<0.4)
-        sound (self, CHAN_PROJECTILE, "weapons/hagexp2.ogg", 1, ATTN_NORM);
+        sound (self, CHAN_PROJECTILE, "weapons/hagexp2.wav", 1, ATTN_NORM);
     else if (b<1)
-        sound (self, CHAN_PROJECTILE, "weapons/hagexp3.ogg", 1, ATTN_NORM);
+        sound (self, CHAN_PROJECTILE, "weapons/hagexp3.wav", 1, ATTN_NORM);
 
     self.event_damage = SUB_Null;
 
