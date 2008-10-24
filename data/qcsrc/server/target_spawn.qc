@@ -12,6 +12,16 @@ float target_spawn_spawnfunc_field;
 .float target_spawn_id;
 float target_spawn_count;
 
+void target_spawn_helper_setmodel()
+{
+	setmodel(self, self.model);
+}
+
+void target_spawn_helper_setsize()
+{
+	setsize(self, self.mins, self.maxs);
+}
+
 void target_spawn_useon(entity e)
 {
 	float i, n, valuefieldpos;
@@ -172,6 +182,8 @@ void target_spawn_useon(entity e)
 		}
 		if(key == "$")
 		{
+			if(substring(value, 0, 1) == "_")
+				value = strcat("target_spawn_helper", value);
 			putentityfieldstring(target_spawn_spawnfunc_field, e, value);
 
 			oldself = self;
@@ -320,4 +332,3 @@ void spawnfunc_trigger_relay_if()
 {
 	self.use = trigger_relay_if_use;
 };
-

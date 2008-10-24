@@ -1292,6 +1292,12 @@ void objerror(string s)
 	objerror_builtin(s);
 }
 
+void remove_unsafely(entity e)
+{
+	e.classname = "";
+	remove_builtin(e);
+}
+
 void remove_safely(entity e)
 {
 	make_safe_for_remove(e);

@@ -1086,6 +1086,7 @@ Spawns or modifies an entity when triggered.
 The entity field list is a single string of the form:
 'field' 'value' 'field' 'value' ... 'classname' 'item_bullets' ... 'field' 'value'
 The special "field" name $ calls a void(void) function, for example a spawn function.
+Special function names available are _setmodel and _setsize.
 Field values can use various variable replacements:
 $E
 $E.field

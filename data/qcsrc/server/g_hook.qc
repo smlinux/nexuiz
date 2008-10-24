@@ -222,7 +222,7 @@ void GrapplingHookThink()
 				dv = ((self.owner.velocity - v0) * dir) * dir;
 				if(cvar("g_grappling_hook_tarzan") >= 2)
 				{
-					if(self.aiment.movetype == MOVETYPE_WALK || self.aiment.movetype == MOVETYPE_TOSS)
+					if(self.aiment.movetype == MOVETYPE_WALK)
 					{
 						self.owner.velocity = self.owner.velocity - dv * 0.5;
 						self.aiment.velocity = self.aiment.velocity - dv * 0.5;

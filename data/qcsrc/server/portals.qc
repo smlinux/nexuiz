@@ -239,6 +239,9 @@ void Portal_Touch()
 		return; // only handle TouchAreaGrid ones (only these can teleport)
 		// for some unknown reason, this also gets collisions from SV_Impact sometimes
 
+	if(other.classname == "grapplinghook")
+		return;
+
 	if(other.classname == "porto")
 	{
 		if(other.portal_id == self.portal_id)
@@ -261,12 +264,15 @@ void Portal_Touch()
 	fixedmakevectors(self.angles);
 	if((other.origin - self.origin) * v_forward < 0)
 		return;
+
+	/*
 	if(other.mins_x < PL_MIN_x || other.mins_y < PL_MIN_y || other.mins_z < PL_MIN_z
 	|| other.maxs_x > PL_MAX_x || other.maxs_y > PL_MAX_y || other.maxs_z > PL_MAX_z)
 	{
 		// can't teleport this
 		return;
 	}
+	*/
 
 	if(Portal_TeleportPlayer(self, other))
 		if(other.classname == "porto")
