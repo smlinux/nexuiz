@@ -770,7 +770,8 @@ void door_use()
 
 void door_trigger_touch()
 {
-	if (other.health < 1 && !other.iscreature)
+	if (other.health < 1)
+	if not(other.iscreature && other.deadflag == DEAD_NO)
 		return;
 
 	if (time < self.attack_finished_single)
