@@ -946,12 +946,12 @@ float target_item_func_and(float a, float b)
 
 float target_item_func_itembitset(float a, float b)
 {
-	return (a - (a & (IT_UNLIMITED_AMMO | IT_STRENGTH | IT_INVINCIBLE))) | b;
+	return (a - (a & (IT_UNLIMITED_WEAPON_AMMO | IT_STRENGTH | IT_INVINCIBLE))) | b;
 }
 
 float target_item_func_itemand(float a, float b)
 {
-	return (a - (a & (IT_UNLIMITED_AMMO | IT_STRENGTH | IT_INVINCIBLE))) | (a & b);
+	return (a - (a & (IT_UNLIMITED_WEAPON_AMMO | IT_STRENGTH | IT_INVINCIBLE))) | (a & b);
 }
 
 float target_item_func_or(float a, float b)
@@ -1131,9 +1131,11 @@ void spawnfunc_target_items (void)
 	n = tokenize_sane(self.netname);
 	for(i = 0; i < n; ++i)
 	{
-		if(argv(i) == "unlimited_ammo") self.items |= IT_UNLIMITED_AMMO;
-		if(argv(i) == "strength")       self.items |= IT_STRENGTH;
-		if(argv(i) == "invincible")     self.items |= IT_INVINCIBLE;
+		if(argv(i) == "unlimited_ammo")         self.items |= IT_UNLIMITED_AMMO;
+		if(argv(i) == "unlimited_weapon_ammo")  self.items |= IT_UNLIMITED_WEAPON_AMMO;
+		if(argv(i) == "unlimited_superweapons") self.items |= IT_UNLIMITED_SUPERWEAPONS;
+		if(argv(i) == "strength")               self.items |= IT_STRENGTH;
+		if(argv(i) == "invincible")             self.items |= IT_INVINCIBLE;
 		for(j = WEP_FIRST; j <= WEP_LAST; ++j)
 		{
 			e = get_weaponinfo(j);

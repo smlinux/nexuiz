@@ -751,7 +751,7 @@ void readplayerstartcvars()
 		start_weapons = WEPBIT_ROCKET_LAUNCHER;
 		weapon_action(WEP_ROCKET_LAUNCHER, WR_PRECACHE);
 		start_ammo_rockets = 999;
-		start_items |= IT_UNLIMITED_AMMO;
+		start_items |= IT_UNLIMITED_WEAPON_AMMO;
 	}
 	else if(g_nixnex)
 	{
@@ -787,7 +787,7 @@ void readplayerstartcvars()
 			start_ammo_nails = cvar("g_pickup_nails_max");
 			start_ammo_rockets = cvar("g_pickup_rockets_max");
 			start_ammo_cells = cvar("g_pickup_cells_max");
-			start_items |= IT_UNLIMITED_AMMO;
+			start_items |= IT_UNLIMITED_WEAPON_AMMO;
 		}
 
 		for(i = WEP_FIRST; i <= WEP_LAST; ++i)

@@ -161,7 +161,7 @@ void Seeker_Fire_Missile(vector f_org)
 {
     local entity missile;
 
-    if not(self.items & IT_UNLIMITED_AMMO)
+    if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
         self.ammo_rockets = self.ammo_rockets - cvar("g_balance_seeker_missile_ammo");
 
     makevectors(self.v_angle);
@@ -336,7 +336,7 @@ void Seeker_Tag_Touch()
 void Seeker_Fire_Tag()
 {
     local entity missile;
-    if not(self.items & IT_UNLIMITED_AMMO)
+    if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
         self.ammo_rockets = self.ammo_rockets - cvar("g_balance_seeker_tag_ammo");
 
     W_SetupShot (self, '56 13 -15', FALSE, 2, "weapons/hagar_fire.wav");
@@ -405,7 +405,7 @@ void Seeker_Fire_Flac()
 	local entity missile;
     vector f_org;
 
-	if not(self.items & IT_UNLIMITED_AMMO)
+	if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
 		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_seeker_flac_ammo");
 
     switch(floor(random() * 3))

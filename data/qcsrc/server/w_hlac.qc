@@ -62,7 +62,7 @@ void W_HLAC_Attack (void)
 	local entity missile;
     float spread;
 
-    if not(self.items & IT_UNLIMITED_AMMO)
+    if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
     {
         self.ammo_cells = self.ammo_cells - cvar("g_balance_hlac_primary_ammo");
     }
@@ -158,7 +158,7 @@ void W_HLAC_Attack2 (void)
 {
     float i;
 
-    if not(self.items & IT_UNLIMITED_AMMO)
+    if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
     {
         self.ammo_cells = self.ammo_cells - cvar("g_balance_hlac_secondary_ammo");
     }

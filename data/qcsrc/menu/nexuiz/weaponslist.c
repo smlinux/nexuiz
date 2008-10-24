@@ -93,6 +93,8 @@ string WeaponName(float w)
 		case WEP_PORTO:            return "Port-O-Launch";
 		case WEP_MINSTANEX:        return "MinstaNex";
 		case WEP_HOOK:             return "Grappling Hook";
+		case WEP_HLAC:             return "Heavy Laser Assault Cannon";
+		case WEP_SEEKER:           return "T.A.G. Seeker";
 		default:                   return "(fix qcsrc/menu/nexuiz/weaponslist.c)";
 	}
 }

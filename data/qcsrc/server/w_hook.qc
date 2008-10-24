@@ -26,7 +26,7 @@ void W_Hook_Attack2()
 {
 	local entity gren;
 
-	if not(self.items & IT_UNLIMITED_AMMO)
+	if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
 		self.ammo_cells = self.ammo_cells - cvar("g_balance_hook_secondary_ammo");
 	W_SetupShot (self, '25 6 -8', FALSE, 4, "weapons/hookbomb_fire.wav");
 
@@ -81,7 +81,7 @@ float w_hook(float req)
 			if not(self.hook_state & HOOK_WAITING_FOR_RELEASE)
 			if (weapon_prepareattack(0, cvar("g_balance_hook_primary_refire")))
 			{
-				if not(self.items & IT_UNLIMITED_AMMO)
+				if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
 					self.ammo_cells = self.ammo_cells - cvar("g_balance_hook_primary_ammo");
 				self.hook_state |= HOOK_FIRING;
 				weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_hook_primary_animtime"), w_ready);

@@ -21,7 +21,7 @@ void W_Nex_Attack (void)
 	// play a sound
 	soundat (self, trace_endpos, CHAN_PROJECTILE, "weapons/neximpact.wav", VOL_BASE, ATTN_NORM);
 
-	if not(self.items & IT_UNLIMITED_AMMO)
+	if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
 	{
 		self.ammo_cells = self.ammo_cells - cvar("g_balance_nex_ammo");
 	}

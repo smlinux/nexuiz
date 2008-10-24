@@ -15,7 +15,7 @@ void W_Uzi_Attack (float deathtype)
 {
 	local entity flash, flash2;
 
-	if not(self.items & IT_UNLIMITED_AMMO)
+	if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
 	{
 		if (self.uzi_bulletcounter == 1)
 			self.ammo_nails = self.ammo_nails - cvar("g_balance_uzi_first_ammo");

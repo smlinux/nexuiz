@@ -1065,7 +1065,7 @@ For the number fields, not specifying a value means not changing it. To clear ar
 You may want to target this by a race checkpoint, a teleporter, or a trigger_multiple with ALLENTS set (so it removes weapons thrown through the field to avoid getting a weapon through it).
 -------- KEYS --------
 targetname: used to trigger this
-netname: space separated list of items (either weapon short names (like in g_start_weapon_* cvars), or item short names "unlimited_ammo", "invincible" and "strength"
+netname: space separated list of items (either weapon short names (like in g_start_weapon_* cvars), or item short names "unlimited_ammo", "unlimited_weapon_ammo", "unlimited_superweapons", "invincible" and "strength"
 message: message to print
 ammo_shells: amount of shells
 ammo_nails: amount of bullets

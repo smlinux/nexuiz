@@ -152,7 +152,7 @@ void W_Porto_Attack (void)
 {
 	local entity gren;
 
-	if not(self.items & IT_UNLIMITED_AMMO)
+	if not(self.items & IT_UNLIMITED_SUPERWEAPONS)
 		self.weapons = self.weapons - (self.weapons & WEPBIT_PORTO);
 	W_SetupShot (self, '0 0 0', FALSE, 4, "porto/fire.ogg");
 

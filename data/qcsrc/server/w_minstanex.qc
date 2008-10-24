@@ -45,7 +45,7 @@ void W_MinstaNex_Attack (void)
 	// play a sound
 	soundat (self, trace_endpos, CHAN_PROJECTILE, "weapons/neximpact.wav", VOL_BASE, ATTN_NORM);
 
-	if not(self.items & IT_UNLIMITED_AMMO)
+	if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
 	{
 		if (g_minstagib)
 			self.ammo_cells = self.ammo_cells - 1;

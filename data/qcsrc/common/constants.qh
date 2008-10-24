@@ -319,8 +319,12 @@ float WEP_SEEKER			= 14; float WEPBIT_SEEKER		    = 8192;
 float WEP_LAST				= 14; float WEPBIT_ALL              = 16383;
 float WEP_COUNT             = 15;
 
-float	IT_UNLIMITED_AMMO       = 1;
+float	IT_UNLIMITED_WEAPON_AMMO  = 1;
 // when this bit is set, using a weapon does not reduce ammo. Checkpoints can give this powerup.
+float	IT_UNLIMITED_SUPERWEAPONS = 2;
+// when this bit is set, using a superweapon does not throw it away. Checkpoints can give this powerup.
+float	IT_UNLIMITED_AMMO         = 3;
+// both of these combined
 float	IT_SHELLS				= 256;
 float	IT_NAILS				= 512;
 float	IT_ROCKETS				= 1024;
