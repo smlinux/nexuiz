@@ -37,7 +37,7 @@ void spawnfunc_func_healthcharger() {};
 
 void func_ladder_touch()
 {
-	if (other.classname != "player")
+	if not(other.iscreature)
 		return;
 
 	EXACTTRIGGER_TOUCH;

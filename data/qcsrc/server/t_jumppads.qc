@@ -104,7 +104,7 @@ vector trigger_push_calculatevelocity(vector org, entity tgt, float ht)
 void trigger_push_touch()
 {
 	// FIXME: add a .float for whether an entity should be tossed by jumppads
-	if (other.classname != "player")
+	if (!other.iscreature)
 	if (other.classname != "corpse")
 	if (other.classname != "body")
 	if (other.classname != "gib")
@@ -118,7 +118,7 @@ void trigger_push_touch()
 	if (other.classname != "droppedweapon")
 		return;
 
-	if (other.deadflag && other.classname == "player")
+	if (other.deadflag && other.iscreature)
 		return;
 
 	EXACTTRIGGER_TOUCH;
@@ -152,12 +152,12 @@ void trigger_push_touch()
 				other.(jumppadsused[mod(other.jumppadcount, NUM_JUMPPADSUSED)]) = self;
 				other.jumppadcount = other.jumppadcount + 1;
 			}
+
+			if(self.message)
+				centerprint(other, self.message);
 		}
 		else
 			other.jumppadcount = TRUE;
-
-		if(self.message)
-			centerprint(other, self.message);
 	}
 
 	if(self.enemy.target)
