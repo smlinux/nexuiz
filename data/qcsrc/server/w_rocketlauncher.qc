@@ -388,8 +388,11 @@ float w_rlauncher(float req)
 				rockfound = 0;
 				for(rock = world; (rock = find(rock, classname, "rocket")); ) if(rock.owner == self)
 				{
-					rock.rl_detonate_later = TRUE;
-					rockfound = 1;
+					if(!rock.rl_detonate_later)
+					{
+						rock.rl_detonate_later = TRUE;
+						rockfound = 1;
+					}
 				}
 				if(rockfound)
 					sound (self, CHAN_WEAPON2, "weapons/rocket_det.wav", 0.5 * VOL_BASE, ATTN_NORM);
@@ -422,20 +425,20 @@ float w_rlauncher(float req)
 				W_Rocket_Attack();
 				weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_rocketlauncher_animtime"), w_ready);
 			}
-			if (self.BUTTON_ATCK2 && self.rl_release)
+			if (self.BUTTON_ATCK2)
 			{
 				rockfound = 0;
 				for(rock = world; (rock = find(rock, classname, "rocket")); ) if(rock.owner == self)
 				{
-					rock.rl_detonate_later = TRUE;
-					rockfound = 1;
+					if(!rock.rl_detonate_later)
+					{
+						rock.rl_detonate_later = TRUE;
+						rockfound = 1;
+					}
 				}
 				if(rockfound)
 					sound (self, CHAN_WEAPON2, "weapons/rocket_det.wav", 0.5 * VOL_BASE, ATTN_NORM);
-				self.rl_release = 0;
 			}
-			if (!self.BUTTON_ATCK2)
-				self.rl_release = 1;
 		}
 	}
 	else if (req == WR_PRECACHE)
