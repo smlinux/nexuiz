@@ -25,8 +25,6 @@ void TeleportPlayer(entity teleporter, entity player, vector to, vector to_angle
 
 	if(player.classname == "player")
 	{
-		RemoveGrapplingHook(player);
-
 		// Kill anyone else in the teleporter box (NO MORE TDEATH)
 		if(player.takedamage && player.deadflag == DEAD_NO && !g_race)
 		{
@@ -104,6 +102,10 @@ void Teleport_Touch (void)
 	EXACTTRIGGER_TOUCH;
 
 	makevectors(self.enemy.mangle);
+
+	if(other.classname == "player")
+		RemoveGrapplingHook(other);
+
 	TeleportPlayer(self, other, self.enemy.origin + '0 0 1' * (1 - other.mins_z - 24), self.enemy.mangle, v_forward * vlen(other.velocity), '0 0 0', '0 0 0');
 
 	if(self.enemy.target)
