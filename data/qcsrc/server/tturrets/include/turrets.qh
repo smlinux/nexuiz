@@ -1,0 +1,28 @@
+#ifdef TTURRETS_ENABLED
+
+// Include section.
+#include "../system/system_misc.qc"       /// Assorted junk & jewls
+#include "../system/system_main.qc"       /// And routines
+#include "../system/system_aimprocs.qc"   /// Aiming realted stuff
+#include "../system/system_scoreprocs.qc" /// Target calssification
+#include "../system/system_damage.qc"     /// Outch, they are hurting me! what should i do?
+
+#include "../units/unit_common.qc"   /// Some "make life easyer" funcs.
+
+// Non combat units
+#include "../units/unit_fusionreactor.qc"  /// Supply unites that need it with power
+#include "../units/unit_targettrigger.qc"  /// Hit me!
+
+// Combat units
+#include "../units/unit_plasma.qc"  /// Basic energy cannon
+#include "../units/unit_mlrs.qc"    /// Basic multibay RL
+#include "../units/unit_hellion.qc" /// Seeking missiles MLRS
+#include "../units/unit_flac.qc"    /// anti missile turret
+#include "../units/unit_phaser.qc"   /// ZzzapT
+#include "../units/unit_hk.qc"      /// Hunter killers
+#include "../units/unit_machinegun.qc" /// whacka
+#include "../units/unit_tessla.qc"  /// Chain lightning capabale turret
+#include "../units/unit_walker.qc"
+
+
+#endif // TTURRETS_ENABLED

@@ -10,15 +10,12 @@
 #define ANIM_MEELE 7
 .float animflag;
 
-//.float e_time;
-//.vector v_home;
-//.vector movepoint;
-//.entity wkr_waypoint;
 .entity wkr_props;
 .entity wkr_spawn;
 
-//.entity next;
-//.entity prev;
+#define WALKER_MIN '-70 -70 5'
+#define WALKER_MAX '70 70 70'
+
 /*
 .entity goalcurrent, goalstack01, goalstack02, goalstack03;
 .entity goalstack04, goalstack05, goalstack06, goalstack07;
@@ -29,62 +26,6 @@
 .entity goalstack24, goalstack25, goalstack26, goalstack27;
 .entity goalstack28, goalstack29, goalstack30, goalstack31;
 */
-
-void checkpoint_think()
-{
-    if(self.goalcurrent != world)
-        te_lightning1(self,self.origin,self.goalcurrent.origin);
-
-
-    self.nextthink = time + 0.5;
-}
-
-void turret_checkpoint_dinit()
-{
-    entity e;
-
-
-    if(self.target != "")
-    {
-        e = find(world,targetname,self.target);
-        if(!e)
-        {
-            bprint("turret_checkpoint without valid target! (",vtos(self.origin),")\n");
-            remove(self);
-            return;
-        }
-
-        // TODO:: ADD WORLD-INTERACTIVE PATH SUBDEVISION IF PATH NOT CLEAR
-        self.goalcurrent = e;
-    }
-
-    /*
-    if(self.goalcurrent == world)
-    {
-        bprint("turret_checkpoint without valid target (",vtos(self.origin),")\n");
-        remove(self);
-        return;
-    }
-    */
-
-    //self.think = checkpoint_think;
-    //self.nextthink = 1;
-
-}
-
-/**
-.wait
-**/
-void spawnfunc_walker_checkpoint()
-{
-    if(!self.wait)
-        self.wait = 5;
-
-    self.think = turret_checkpoint_dinit;
-    self.nextthink = time + 0.25;
-}
-
-
 
 float walker_firecheck()
 {
@@ -504,7 +445,7 @@ void walker_postthink()
         //   self.animflag = ANIM_TURN;
         //else
         //{
-            if(vlen(self.origin  - self.goalcurrent.origin) < 32)
+            if(vlen(self.origin  - self.goalcurrent.origin) < 64)
                 if(self.goalcurrent.goalcurrent == world)
                     self.goalcurrent = world; // Path endpoint reached, go roaming.
                 else
@@ -536,15 +477,6 @@ void walker_postthink()
                     self.animflag = ANIM_WALK;
                 else
                     self.animflag = ANIM_TURN;
-
-                /*
-                if(self.tur_dist_enemy > self.target_range_fire)
-                    self.animflag = ANIM_RUN;
-                else if(vlen(self.origin - self.enemy.origin) > self.target_range_min)
-                    self.animflag = ANIM_WALK;
-                else
-                    self.animflag = ANIM_TURN;
-                */
             }
 
         }
@@ -586,6 +518,8 @@ void walker_postthink()
         else
             v_forward = normalize(self.goalcurrent.origin - self.origin);
 
+        makevectors(self.angles);
+
         if(s_speed > s_turn)
             self.velocity = (v_forward * max((s_speed - s_decel),s_turn));
         if(s_speed < s_turn)
@@ -620,16 +554,16 @@ void walker_postthink()
 
         self.angles_y = self.angles_y + real_angle_y;
 
-
         if(self.goalcurrent)
             v_forward = normalize(self.goalcurrent.origin - self.origin);
         else
             if(self.enemy)
                 v_forward = normalize(self.enemy.origin - self.origin);
 
+        makevectors(self.angles);
         //self.velocity = v_forward * s_walk;
 
-        if(self.flags & FL_ONGROUND)
+        //if(self.flags & FL_ONGROUND)
         {
             if(s_speed > s_walk)
                 self.velocity = (v_forward * max((s_speed - s_decel),s_walk));
@@ -672,6 +606,8 @@ void walker_postthink()
             v_forward = normalize(self.enemy.origin - self.origin);
         else
             v_forward = normalize(self.goalcurrent.origin - self.origin);
+
+        makevectors(self.angles);
 
         if(self.flags & FL_ONGROUND)
         {
@@ -804,7 +740,7 @@ void turret_walker_dinit()
     //self.flags      = FL_CLIENT;
     self.iscreature = TRUE;
     self.movetype   = MOVETYPE_WALK;
-    self.solid      = SOLID_SLIDEBOX;
+    self.solid      = SOLID_BBOX;// SOLID_SLIDEBOX;
     self.takedamage = DAMAGE_AIM;
 
     setmodel(self.wkr_props,"models/turrets/walker_props.md3");
@@ -829,9 +765,8 @@ void turret_walker_dinit()
     v = gettaginfo(self.tur_head,f);
     v_y = v_y * -1;
 
-
-    //setsize(self,self.maxs,self.mins);
-
+    setsize(self,WALKER_MIN,WALKER_MAX);
+    //setsize(self,'-70 -70 0','70 70 55');
 
     self.tur_shotorg = v;
     self.tur_aimorg  = v;

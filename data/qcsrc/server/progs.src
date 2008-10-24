@@ -10,7 +10,7 @@ extensions.qh
 ../common/util.qh
 
 //// tZork Turrets ////
-tturrets/include/turret_tturrets_early.qh
+tturrets/include/turrets_early.qh
 
 campaign.qh
 ../common/campaign_common.qh
@@ -136,7 +136,7 @@ race.qc
 
 
 //// tZork Turrets ////
-tturrets/include/turret_tturrets.qh
+tturrets/include/turrets.qh
 
 scores.qc
 
