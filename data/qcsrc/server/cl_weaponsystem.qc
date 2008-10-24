@@ -389,11 +389,18 @@ float client_hasweapon(entity cl, float wpn, float andammo, float complain)
 	{
 		if (andammo)
 		{
-			oldself = self;
-			self = cl;
-			f = weapon_action(wpn, WR_CHECKAMMO1);
-			f = f + weapon_action(wpn, WR_CHECKAMMO2);
-			self = oldself;
+			if(cl.items & IT_UNLIMITED_AMMO)
+			{
+				f = 1;
+			}
+			else
+			{
+				oldself = self;
+				self = cl;
+				f = weapon_action(wpn, WR_CHECKAMMO1);
+				f = f + weapon_action(wpn, WR_CHECKAMMO2);
+				self = oldself;
+			}
 			if (!f)
 			{
 				if (complain)
@@ -459,6 +466,7 @@ float weapon_prepareattack(float secondary, float attacktime)
 			return FALSE;
 		}
 	
+	if not(self.items & IT_UNLIMITED_AMMO)
 	if (!weapon_action(self.weapon, WR_CHECKAMMO1 + secondary))
 	{
 		W_SwitchWeapon_Force(self, w_getbestweapon(self));
