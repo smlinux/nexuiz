@@ -146,13 +146,20 @@ void turret_stdproc_track()
     if (self.track_flags == TFL_TRACK_NO)
         return;
 
-    if (self.enemy == world)
+    if(!self.tur_active)
+    {
+        wish_angle = self.idle_aim - ('1 0 0' * self.aim_maxpitch);
+    }
+    else if (self.enemy == world)
     {
         if (self.turrcaps_flags & TFL_TURRCAPS_LINKED)
             wish_angle = self.idle_aim + self.angles;
         else
-            wish_angle = self.tur_head.angles;
-            //wish_angle = self.idle_aim;
+            if(cvar("g_turrets_aimidle_delay") > (time - self.lip))
+                wish_angle = self.idle_aim;
+            else
+                wish_angle = self.tur_head.angles;
+
     }
     else
     {
@@ -598,15 +605,25 @@ void turret_think()
         self.ammo = min(self.ammo + self.ammo_recharge,self.ammo_max);
 
 
-    if ((!self.tur_active) || (self.deadflag != DEAD_NO))
+    // Inactive turrets needs to run the think loop too
+    // So they can handle animation and wake up if need be.
+    if(!self.tur_active)
     {
-        dprint("Warning: Inactive or dead turret running the think function!\n");
-        self.enemy = world;
-        //self.turret_track();
         turret_stdproc_track();
         return;
     }
 
+    //This is just wrong :|
+    if(self.deadflag != DEAD_NO)
+    {
+        dprint("Warning:dead turret running the think function!\n");
+        //self.enemy = world;
+        //turret_stdproc_track();
+        return;
+    }
+
+    // This is typicaly used for zaping every target in range
+    // turret_fusionreactor uses this to recharge friendlys.
     if (self.shoot_flags & TFL_SHOOT_HITALLVALID)
     {
 
@@ -631,12 +648,11 @@ void turret_think()
     }
     else
     {
-        // Check if we have a vailid enemy, and get one if we dont.
-        // turret_do_updates(self);
+        // Check if we have a vailid enemy, and try to find one if we dont.
         if ((turret_validate_target(self,self.enemy,self.target_validate_flags) <= 0) || (self.cnt < time))
         {
             self.enemy = turret_select_target();
-            self.cnt = time + self.ticrate * 3;
+            self.cnt = time + cvar("g_turrets_targetscan_mindelay");
         }
 
 
@@ -653,6 +669,8 @@ void turret_think()
             // And bail.
             return;
         }
+        else
+            self.lip = time; // Keep track of the last time we had a target.
 
         turret_do_updates(self);
 
@@ -663,6 +681,7 @@ void turret_think()
         // Fire?
         if (self.turret_firecheckfunc() != 0)
             turret_fire();
+
         turret_do_updates(self);
 
         // Turn & pitch
@@ -732,10 +751,7 @@ void turret_stdproc_use()
             turret_stdproc_respawn();
 
         if(self.team == 0)
-        {
             self.tur_active = 0;
-            self.tur_head.angles = '-25 0 0';
-        }
         else
             self.tur_active = 1;
 
