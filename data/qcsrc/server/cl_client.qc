@@ -1271,11 +1271,8 @@ Called when a client disconnects from the server
 .entity chatbubbleentity;
 .entity teambubbleentity;
 void ReadyCount();
-//void() ctf_clientdisconnect;
 void ClientDisconnect (void)
 {
-	float save;
-
 	if not(self.flags & FL_CLIENT)
 	{
 		print("Warning: ClientDisconnect without ClientConnect\n");
@@ -1292,24 +1289,6 @@ void ClientDisconnect (void)
 	bprint ("^4",self.netname);
 	bprint ("^4 disconnected\n");
 
-	if (self.chatbubbleentity)
-	{
-		remove (self.chatbubbleentity);
-		self.chatbubbleentity = world;
-	}
-
-	if (self.teambubbleentity)
-	{
-		remove (self.teambubbleentity);
-		self.teambubbleentity = world;
-	}
-
-	if (self.killindicator)
-	{
-		remove (self.killindicator);
-		self.killindicator = world;
-	}
-
 	DropAllRunes(self);
 	kh_Key_DropAll(self, TRUE);
 
@@ -1318,12 +1297,22 @@ void ClientDisconnect (void)
 	if(self.flagcarried)
 		DropFlag(self.flagcarried, world, world);
 
+	// Here, everything has been done that requires this player to be a client.
+
+	self.flags (-) FL_CLIENT;
+
+	if (self.chatbubbleentity)
+		remove (self.chatbubbleentity);
+
+	if (self.teambubbleentity)
+		remove (self.teambubbleentity);
+
+	if (self.killindicator)
+		remove (self.killindicator);
+
 	WaypointSprite_PlayerGone();
 
-	save = self.flags;
-	self.flags = self.flags - (self.flags & FL_CLIENT);
 	bot_relinkplayerlist();
-	self.flags = save;
 
 	// remove laserdot
 	if(self.weaponentity)
@@ -1335,11 +1324,6 @@ void ClientDisconnect (void)
 		Spawnqueue_Unmark(self);
 		Spawnqueue_Remove(self);
 	}
-	/*if(g_ctf)
-	{
-		ctf_clientdisconnect();
-	}
-	*/
 
 	PlayerScore_Detach(self);
 
@@ -1348,11 +1332,11 @@ void ClientDisconnect (void)
 
 	ClearPlayerSounds();
 
+	self.playerid = 0;
+	ReadyCount();
+
 	// free cvars
 	GetCvars(-1);
-	self.playerid = 0;
-
-	ReadyCount();
 }
 
 .float BUTTON_CHAT;

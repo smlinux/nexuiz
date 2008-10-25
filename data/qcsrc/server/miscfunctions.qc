@@ -481,6 +481,7 @@ void GetCvars_handleString(string thisname, float f, .string field, string name)
 	{
 		if(self.field)
 			strunzone(self.field);
+		self.field = string_null;
 	}
 	else if(f > 0)
 	{
@@ -787,7 +788,7 @@ void readplayerstartcvars()
 			start_ammo_nails = cvar("g_pickup_nails_max");
 			start_ammo_rockets = cvar("g_pickup_rockets_max");
 			start_ammo_cells = cvar("g_pickup_cells_max");
-			start_items |= IT_UNLIMITED_WEAPON_AMMO;
+			start_items |= IT_UNLIMITED_AMMO;
 		}
 
 		for(i = WEP_FIRST; i <= WEP_LAST; ++i)
