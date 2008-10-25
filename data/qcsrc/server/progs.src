@@ -39,12 +39,16 @@ miscfunctions.qc
 
 waypointsprites.qc
 
+
 // general bot utility functions and management
 bots.qc
 
 // LordHavoc's bots
 havocbot_roles.qc
 havocbot.qc
+
+// tZorks pathlib
+pathlib.qc
 
 g_subs.qc
 
