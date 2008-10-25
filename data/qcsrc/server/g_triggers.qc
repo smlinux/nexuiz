@@ -540,7 +540,7 @@ void spawnfunc_func_pointparticles()
 	{
 		self.modelindex = 4.2;
 		self.origin += self.mins;
-		self.maxs -= self.mins;
+		self.maxs = self.maxs - self.mins;
 	}
 	self.model = "net_entity";
 	if(!self.cnt)
