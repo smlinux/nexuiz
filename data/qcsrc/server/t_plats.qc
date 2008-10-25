@@ -700,7 +700,11 @@ void door_go_up()
 	self.state = STATE_UP;
 	SUB_CalcMove (self.pos2, self.speed, door_hit_top);
 
+	string oldmessage;
+	oldmessage = self.message;
+	self.message = "";
 	SUB_UseTargets();
+	self.message = oldmessage;
 };
 
 
@@ -716,13 +720,10 @@ void door_fire()
 {
 	local entity 	oself;
 	local entity	starte;
-	string oldmessage;
 
 	if (self.owner != self)
 		objerror ("door_fire: self.owner != self");
 
-	oldmessage = self.message;
-	self.message = ""; // no more message
 	oself = self;
 
 	if (self.spawnflags & DOOR_TOGGLE)
@@ -748,8 +749,6 @@ void door_fire()
 		self = self.enemy;
 	} while ( (self != starte) && (self != world) );
 	self = oself;
-
-	self.message = oldmessage;
 };
 
 
@@ -817,7 +816,7 @@ void door_touch()
 
 	self.owner.attack_finished_single = time + 2;
 
-	if (!self.dmg && self.owner.message != "")
+	if (!(self.owner.dmg) && (self.owner.message != ""))
 	{
 		if (other.flags & FL_CLIENT)
 			centerprint (other, self.owner.message);
@@ -1024,8 +1023,6 @@ void spawnfunc_func_door()
 		self.wait = 3;
 	if (!self.lip)
 		self.lip = 8;
-	if (!self.dmg)
-		self.dmg = 2;
 
 	self.pos1 = self.origin;
 	self.pos2 = self.pos1 + self.movedir*(fabs(self.movedir*self.size) - self.lip);
