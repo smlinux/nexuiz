@@ -15,6 +15,33 @@ void color_test(double x, double y, double z, double *r, double *g, double *b)
 	*b = 0.5 + 0.5 * z;
 }
 
+#define MAXITER 4096
+double mandelbrot(double zx, double zy, double cx, double cy)
+{
+	double tmp;
+	int i;
+
+	for(i = 1; i < MAXITER; ++i)
+	{
+		tmp = zx;
+		zx = zx * zx - zy * zy + cx;
+		zy = 2 * tmp * zy + cy;
+		if(zx * zx + zy * zy > 4)
+			break;
+	}
+
+	return ((i - 1.0) * MAXITER) / (i * (MAXITER - 1.0));
+	// i.e. 0 for i=1, 1 for i=maxiter
+}
+
+void color_mandelbrot(double x, double y, double z, double *r, double *g, double *b)
+{
+	double iterations = mandelbrot(0, z*0.5, x - 1, y);
+	*r = pow(iterations, 100);
+	*g = pow(iterations,  25);
+	*b = pow(iterations,  10);
+}
+
 void map_back(double x_in, double y_in, double *x_out, double *y_out, double *z_out)
 {
 	*x_out = 2 * x_in - 1;
@@ -94,9 +121,9 @@ void writepic(colorfunc_t f, mapfunc_t m, const char *fn)
 			yyy /= r;
 			zzz /= r;
 			f(xxx, yyy, zzz, &rr, &gg, &bb);
-			rgb[0] = floor(0.5 + rr * 255);
+			rgb[2] = floor(0.5 + rr * 255);
 			rgb[1] = floor(0.5 + gg * 255);
-			rgb[2] = floor(0.5 + bb * 255);
+			rgb[0] = floor(0.5 + bb * 255);
 			fwrite(rgb, sizeof(rgb), 1, file);
 		}
 	
@@ -118,6 +145,6 @@ int main(int argc, char **argv)
 {
 	if(argc != 2)
 		errx(1, "file name argument missing");
-	map_all(argv[1], color_test);
+	map_all(argv[1], color_mandelbrot);
 	return 0;
 }
