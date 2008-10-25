@@ -87,6 +87,8 @@ void fillNexuizEffectsSettingsTab(entity me)
 		me.TDempty(me, 0.2);
 		me.TD(me, 1, 2.8, e = makeNexuizCheckBox(1, "r_picmipworld", "Reduce model texture quality only"));
 			setDependent(e, "gl_picmip", 0.5, -0.5);
+	me.TR(me);
+		me.TD(me, 1, 3, e = makeNexuizCheckBox(1, "mod_q3bsp_nolightmaps", "Use lightmaps"));
 
 	me.TR(me);
 
@@ -110,8 +112,6 @@ void fillNexuizEffectsSettingsTab(entity me)
 			e.addValue(e, "Many", "0.5");
 			e.addValue(e, "Lots", "0");
 			e.configureNexuizTextSliderValues(e);
-
-	me.TR(me);
 
 	me.TR(me);
 		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "r_coronas", "Coronas"));
