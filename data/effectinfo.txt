@@ -493,6 +493,7 @@ liquidfriction 4
 velocityjitter 64 64 64
 velocitymultiplier 1
 
+
 // sparks (quake effect)
 // used in qcsrc/server/antilag.qc:		te_spark(antilag_takebackorigin(e, time - e.antilag_debug), '0 0 0', 32)
 // used in qcsrc/server/g_triggers.qc:	self.mdl = "TE_SPARK"
@@ -746,30 +747,40 @@ effect blood
 count 0.333
 type blood
 tex 24 32
-size 8 8
+size 3 8
 alpha 256 256 64
 bounce -1
 airfriction 1
 liquidfriction 4
 velocityjitter 64 64 64
-velocitymultiplier 1
-
+velocitymultiplier 5
+//blood mist
+effect blood
+countabsolute 1
+type alphastatic
+tex 0 8
+size 25 30
+alpha 100 256 400
+color 0xff0000 0xe62b00
+originjitter 11 11 11
 
 
 // player teleport effect
 // used in qcsrc/server/t_teleporters.qc:	pointparticles(particleeffectnum("teleport"), player.origin, '0 0 0', 1)
 // used in qcsrc/server/t_teleporters.qc:	pointparticles(particleeffectnum("teleport"), to + v_forward * 32, '0 0 0', 1)
 effect teleport
-count 112
-type static
-color 0xA0A0A0 0xFFFFFF
-size 10 10
-alpha 64 128 256
-airfriction 1
-liquidfriction 4
-originoffset 0 0 28
-originjitter 16 16 28
-velocityjitter 0 0 256
+count 1000
+type spark
+tex 40 40
+color 0x807aff 0x4463d5
+size 1 3
+alpha 0 256 100
+//gravity 1
+bounce 1.5
+originjitter 1 1 1
+velocityjitter 2000 2000 3000
+velocitymultiplier 0.5
+airfriction 2
 
 
 
@@ -2486,63 +2497,55 @@ velocityjitter 81 81 150
 color 0x7cbaff 0xcfd1ff
 velocitymultiplier 2
 
-
-
 // decal
 // used in qcsrc/server/w_hook.qc:	pointparticles(particleeffectnum("hookbomb_explode"), org2, '0 0 0', 1)
 effect hookbomb_explode
+count 50
+type static
+tex 38 38
+color 0x807aff 0x4463d5
+size 150 200
+sizeincrease -160
+alpha 0 256 200
+//gravity 1
+bounce 1.5
+originjitter 10 10 10
+velocityjitter 550 550 550
+//velocitymultiplier -20
+airfriction 10
+// decal in the air
+effect hookbomb_explode
+countabsolute 3
+type static
+tex 38 38
+color 0x807aff 0x4463d5
+size 160 200
+alpha 256 265 100
+sizeincrease -60
+originoffset 0 0 6
+// decal on the ground
+effect hookbomb_explode
 countabsolute 1
 type decal
-tex 8 16
-size 96 96
+tex 39 39
+size 80 100
 alpha 256 256 0
-originjitter 40 40 40
-lightradius 1600
-lightradiusfade 800
-lightcolor 1 4 8
-// fire effect which make brigt dot inside
+originjitter 6 6 6
+// some sparks
 effect hookbomb_explode
-notunderwater
-count 100
-type static
-tex 48 55
-color 0x003fe0 0x92dfff
-size 12 32
-sizeincrease 80
-alpha 512 328 756
-bounce 1
-airfriction 8
-liquidfriction 8
-originjitter 8 8 8
-velocityjitter 1024 1024 1024
-// smoke
-effect hookbomb_explode
-type alphastatic
-notunderwater
-tex 0 8
-count 160
-size 80 160
-sizeincrease 300
-alpha 500 600 556
-velocityoffset 0 0 0
-velocityjitter 256 256 256
-airfriction 0
-color 0x000000 0x111111
-bounce 6
-// underwater bubbles
-effect hookbomb_explode
-underwater
 count 60
-type bubble
-tex 62 62
-color 0x404040 0x808080
-size 3 3
-alpha 128 256 64
-gravity -0.125
+type spark
+tex 38 38
+color 0x807aff 0x4463d5
+size 20 30
+alpha 256 256 456
+sizeincrease -60
+gravity 1
 bounce 1.5
-liquidfriction 0.0625
-originjitter 16 16 16
-velocityjitter 192 192 192
+originjitter 1 1 1
+velocityjitter 1900 1900 1300
+velocitymultiplier 0.5
+airfriction 2
 
 
 // smoke
@@ -2568,3 +2571,400 @@ bounce 1.5
 liquidfriction 4
 velocityjitter 16 16 16
 
+//fire_big
+//fire
+effect fire_big
+//notunderwater
+count 52
+type smoke
+tex 48 55
+size 11 31
+alpha 200 356 512
+gravity -0.5
+color 0x8f0d00 0xff5a00
+bounce 2
+sizeincrease -3
+originjitter 33 33 33
+velocityjitter 22 22 50
+// smoke
+effect fire_big
+type alphastatic
+count 22
+tex 0 8
+size 22 33
+sizeincrease 11
+alpha 200 256 200
+color 0x000000 0x111111
+gravity -0.3
+originjitter 44 44 44
+velocityjitter 11 11 50
+bounce 2
+
+//red_flare
+//smoke
+effect red_flare
+type alphastatic
+count 21
+tex 0 8
+size 1 11
+sizeincrease 11
+alpha 200 256 160
+color 0xff0000 0xdc7171
+gravity -0.24
+originjitter 2 2 0
+velocityjitter 15 15 30
+bounce 1
+
+//blue_flare
+//smoke
+effect blue_flare
+type alphastatic
+count 21
+tex 0 8
+size 1 11
+sizeincrease 11
+alpha 200 256 160
+color 0x0000ff 0x7194dc
+gravity -0.24
+originjitter 2 2 0
+velocityjitter 15 15 30
+bounce 1
+
+//smoke_ring
+//smoke
+effect smoke_ring
+type smoke
+count 90
+tex 0 8
+size 1 11
+sizeincrease 21
+gravity 0.1
+airfriction 3
+alpha 100 156 200
+color 0x111111 0x979797
+//originjitter 2 2 0
+velocityjitter 190 190 50
+bounce 1.1
+notunderwater
+
+//smoke_large
+//smoke
+effect smoke_large
+type alphastatic
+count 50
+tex 0 8
+size 11 21
+sizeincrease 21
+gravity -0.15
+airfriction 7
+alpha 140 256 190
+color 0x9e895f 0xffd39b
+//originjitter 2 2 0
+velocityjitter 390 390 390
+bounce 1.1
+notunderwater
+
+//sparks
+effect sparks
+count 30
+type spark
+tex 40 40
+color 0xFFFDD9 0xFFFDD9
+size 1 3
+alpha 0 256 256
+gravity 1
+bounce 1.5
+originjitter 1 1 1
+velocityjitter 300 300 200
+velocitymultiplier 1.5
+airfriction 3
+
+//sparks
+effect electricity_sparks
+count 70
+type spark
+tex 40 40
+color 0x807aff 0x4463d5
+size 1 3
+alpha 0 256 556
+gravity 1
+bounce 1.5
+originjitter 1 1 1
+velocityjitter 300 300 300
+velocitymultiplier 0.5
+airfriction 3
+
+//steam, it needs direction
+effect steam
+effect steam
+type smoke
+count 2
+tex 0 8
+size 1 3
+sizeincrease 7
+gravity -0.25
+velocitymultiplier 14
+airfriction 5
+alpha 140 256 190
+color 0xfffbdf 0xffffff
+//originjitter 2 2 0
+velocityjitter 19 19 19
+bounce 1.1
+notunderwater
+
+// smoke emiter
+effect smoking
+count 20
+type alphastatic
+tex 0 8
+color 0x292929 0x000000
+size 10 40
+sizeincrease 5
+alpha 100 256 100
+gravity -0.1
+bounce 1.5
+originjitter 10 10 10
+velocityjitter 5 5 20
+//velocitymultiplier -20
+airfriction -1
+
+//golden dust (create it once per second to cover large area in small yellow particles)
+effect goldendust  
+count 50
+type snow
+tex 38 38
+color 0xff9600 0xffefb8
+size 2 3
+sizeincrease -0.3
+alpha 256 256 70
+//gravity -0.1
+bounce 1.5
+originjitter 500 500 500
+velocityjitter 0.1 0.1 0.1
+//velocitymultiplier -20
+//airfriction -0.1
+
+effect healing_fx
+count 50
+type spark
+tex 40 40
+color 0xff0000 0xff0000
+size 1 3
+sizeincrease -0.05
+alpha 256 256 170
+gravity -0.1
+bounce 1.5
+originjitter 5 5 100
+velocityjitter 50 50 0
+//velocitymultiplier 20
+airfriction -0.5
+
+effect armorrepair_fx
+count 50
+type spark
+tex 40 40
+color 0x00ff00 0x00ff00
+size 1 3
+sizeincrease -0.05
+alpha 256 256 170
+gravity -0.1
+bounce 1.5
+originjitter 5 5 50
+velocityjitter 50 50 0
+//velocitymultiplier 20
+airfriction -0.5
+
+effect ammoregen_fx
+count 50
+type spark
+tex 40 40
+color 0x0000ff 0x0000ff
+size 1 3
+sizeincrease -0.05
+alpha 256 256 170
+gravity -0.1
+bounce 1.5
+originjitter 5 5 50
+velocityjitter 50 50 0
+//velocitymultiplier 20
+airfriction -0.5
+
+// red-yellow flame like fx
+effect rage
+count 5
+type smoke
+tex 35 36
+color 0xff0000 0xff7800
+size 1 3
+sizeincrease 10
+gravity -0.06
+alpha 256 256 190
+originjitter 5 5 5
+velocityjitter 25 25 25
+airfriction 2
+
+// pieces of glass or ice falling on the floor 
+effect iceorglass
+count 30
+type alphastatic
+tex 44 44
+color 0xffffff 0xb2d3e6
+size 3 7
+//sizeincrease 10
+gravity 1.3
+alpha 256 256 0
+time 1 3
+bounce 2
+originjitter 30 30 30
+velocityjitter 100 100 100
+airfriction 3
+
+// cover small area in poison gas, spawn it once per second
+effect poisonfield
+count 30
+type smoke
+tex 0 8
+color 0x00ff00 0x7db843
+size 1 1
+sizeincrease 30
+ gravity -0.01
+alpha 256 256 50
+bounce 1.5
+originjitter 333 333 50
+velocityjitter 5 5 5
+airfriction 1
+
+// cover small area in icy mist, spawn it once per second
+effect icefield
+count 20
+type smoke
+tex 0 8
+color 0x008aff 0x75e7ff
+size 1 1
+sizeincrease 10
+ gravity -0.01
+alpha 256 256 50
+bounce 1.5
+originjitter 333 333 0
+velocityjitter 5 5 30
+airfriction 1
+effect icefield
+count 10 
+type smoke
+tex 48 55
+size 1 1
+sizeincrease 10
+color 0x008aff 0x75e7ff
+alpha 256 256 50
+gravity -0.001
+originjitter 333 333 0
+
+
+// cover very small area in flames, spawn it 3 times per second (or more often to get better looking fire at cost of fps hit )
+// flames that go up
+effect firefield
+count 200
+type smoke
+tex 48 55
+color 0x8f0d00 0xff5a00
+size 1 1 
+sizeincrease 20
+ gravity -0.06
+alpha 50 256 200
+bounce 1.5
+originjitter 180 180 0
+velocityjitter 5 5 30
+airfriction 1
+//flames that stay on the ground
+effect firefield
+count 100
+type smoke
+tex 48 55
+color 0x8f0d00 0xff5a00
+size 1 1 
+sizeincrease 40
+alpha 50 256 200
+originjitter 180 180 0
+// smoke
+effect firefield
+count 40
+type alphastatic
+tex 0 8
+size 1 1
+sizeincrease 7
+color 0x000000 0x111111
+alpha 256 256 70
+gravity -0.02
+originjitter 180 180 0
+
+//flamethrower, spawn it as fast as you can  20 times per second or more, it needs direction
+//fast fire
+effect flamethrower
+count 6
+type smoke
+tex 48 55
+color 0x8f0d00 0xff5a00
+size 5 5 
+sizeincrease 20
+ gravity -0.06
+alpha 50 256 250
+bounce 1.5
+velocityjitter 40 40 11
+velocitymultiplier 30
+airfriction 1.2
+//slowfire
+effect flamethrower
+count 5
+type smoke
+tex 48 55
+color 0x8f0d00 0xff5a00
+size 5 5 
+sizeincrease 20
+ gravity -0.06
+alpha 50 256 200
+bounce 1.5
+velocityjitter 40 40 40
+velocitymultiplier 20
+airfriction 1.2
+// very slow and small fire
+effect flamethrower
+count 3
+type smoke
+tex 48 55
+color 0x8f0d00 0xff5a00
+size 5 5 
+sizeincrease 10
+ gravity -0.06
+alpha 50 256 200
+bounce 1.5
+velocityjitter 30 30 30
+velocitymultiplier 10
+airfriction 0.3
+//decreasing fire
+effect flamethrower
+count 4
+type smoke
+tex 48 55
+color 0x8f0d00 0xff5a00
+size 20 30
+sizeincrease -10
+ gravity -0.06
+alpha 50 256 200
+bounce 1.5
+velocityjitter 10 10 10
+velocitymultiplier 15
+airfriction 0.3
+//smoke
+effect flamethrower
+count 1
+type alphastatic
+tex 0 8
+size 5 15
+sizeincrease 7
+color 0x000000 0x111111
+alpha 256 256 90
+//gravity -0.2
+originjitter 10 10 10
+velocitymultiplier 20
+velocityoffset 0 0 10
+airfriction 1
