@@ -183,7 +183,7 @@ void fillNexuizEffectsSettingsTab(entity me)
 			me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "r_showsurfaces", "Show surfaces"));
 
 	me.gotoRC(me, me.rows - 1, 0);
-		me.TD(me, 1, me.columns, makeNexuizCommandButton("Apply immediately", '0 0 0', "sendcvar cl_nogibs; r_restart", COMMANDBUTTON_APPLY));
+		me.TD(me, 1, me.columns, makeNexuizCommandButton("Apply immediately", '0 0 0', "sendcvar cl_nogibs; gl_flashblend_update; r_restart", COMMANDBUTTON_APPLY));
 }
 /*
  * [X] depth first world [X] depth first models (?????)
