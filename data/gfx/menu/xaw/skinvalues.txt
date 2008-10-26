@@ -6,15 +6,17 @@ HEIGHT_TITLE                    1.5
 HEIGHT_ZOOMEDTITLE              0
 
 // the individual dialog background colors
-COLOR_DIALOG_MAPINFO            '1 1 1'
 COLOR_DIALOG_MULTIPLAYER        '1 1 1'
-COLOR_DIALOG_MUTATORS           '1 1 1'
-COLOR_DIALOG_QUIT               '1 0 0'
 COLOR_DIALOG_SETTINGS           '1 1 1'
 COLOR_DIALOG_TEAMSELECT         '1 1 1'
+COLOR_DIALOG_QUIT               '1 0 0'
+COLOR_DIALOG_MUTATORS           '1 1 1'
+COLOR_DIALOG_MAPINFO            '1 1 1'
 COLOR_DIALOG_USERBIND           '1 1 1'
 COLOR_DIALOG_SINGLEPLAYER       '1 1 1'
 COLOR_DIALOG_CREDITS            '1 1 1'
+COLOR_DIALOG_WEAPONS            '1 1 1'
+COLOR_DIALOG_RADAR              '1 1 1'
 
 // nexposee positions of windows (they are the scale transformation
 // centers, NOT the actual positions of the windows!)
@@ -25,13 +27,13 @@ POSITION_DIALOG_CREDITS         '0.3 1.2 0'
 POSITION_DIALOG_QUIT            '0.9 1.2 0'
 
 // mouse
-//   uses cursor.tga
+//   uses "cursor" images
 SIZE_CURSOR                     '32 32 0'
 OFFSET_CURSOR                   '0.5 0.5 0'
 ALPHA_CURSOR_INTRO              1
 
 // general
-//   uses background.tga
+//   uses "background" images
 //   uses "background_ingame" images
 ALPHA_BACKGROUND_INGAME         0
 ALPHA_DISABLED                  0.2
@@ -39,10 +41,10 @@ ALPHA_BEHIND                    1
 ALPHA_TEXT                      0.7
 
 // item: button
-//   uses button.tga
-//   uses buttongray.tga
-//   uses bigbutton.tga
-//   uses bigbuttongray.tga
+//   uses "button" images
+//   uses "buttongray" images
+//   uses "bigbutton" images
+//   uses "bigbuttongray" images
 COLOR_BUTTON_N                  '1 1 1'
 COLOR_BUTTON_C                  '1 1 1'
 COLOR_BUTTON_F                  '1 1 1'
@@ -58,14 +60,11 @@ COLOR_CAMPAIGN_FUTURE           '1 1 1'
 ALPHA_CAMPAIGN_DESCRIPTION      0.7
 
 // item: checkbox
-//   uses checkbox.tga
+//   uses "checkbox" images
 COLOR_CHECKBOX_N                '1 1 1'
 COLOR_CHECKBOX_C                '1 1 1'
 COLOR_CHECKBOX_F                '1 1 1'
 COLOR_CHECKBOX_D                '1 1 1'
-
-// item: crosshair button
-//   uses crosshairbutton.tga
 
 // item: credits list
 COLOR_CREDITS_TITLE             '1 1 1'
@@ -77,18 +76,22 @@ ALPHA_CREDITS_PERSON            1
 ROWS_CREDITS                    10
 WIDTH_CREDITS                   0.75
 
+// item: crosshair button
+//   uses "crosshairbutton" images
+
 // item: dialog
-//   uses border.tga
-//   uses closebutton.tga
+//   uses "border" images
+//   uses "closebutton" images
 MARGIN_TOP                      8
 MARGIN_BOTTOM                   8
 MARGIN_LEFT                     8
 MARGIN_RIGHT                    8
 MARGIN_COLUMNS                  4
 MARGIN_ROWS                     4
+HEIGHT_DIALOGBORDER             1
 
 // item: input box
-//   uses inputbox.tga
+//   uses "inputbox" images
 COLOR_INPUTBOX_N                '1 1 1'
 COLOR_INPUTBOX_F                '1 1 1'
 MARGIN_INPUTBOX_CHARS           1
@@ -117,28 +120,29 @@ ALPHA_MAPLIST_NOTINCLUDEDFG     0.4
 ALPHAS_MAINMENU                 '1 1 1'
 
 // item: player color button
-//   uses colorbutton.tga
-//   uses color.tga
+//   uses "colorbutton" images
+//   uses "color" images
 
 // item: player model
 COLOR_MODELTITLE                '1 1 1'
 ALPHA_MODELTITLE                1
 
 // item: player name editor
-//   uses charmap.tga
-//   uses charmapbutton.tga
+//   uses "charmap" images
+//   uses "charmapbutton" images
 
 // item: radio button
-//   uses radiobutton.tga
+//   uses "radiobutton" images
 COLOR_RADIOBUTTON_N             '1 1 1'
 COLOR_RADIOBUTTON_C             '1 1 1'
 COLOR_RADIOBUTTON_F             '1 1 1'
 COLOR_RADIOBUTTON_D             '1 1 1'
 
 // item: scrollbar
-//   uses scrollbar.tga
+//   uses "scrollbar" images
 COLOR_SCROLLBAR_N               '1 1 1'
 COLOR_SCROLLBAR_F               '1 1 1'
+COLOR_SCROLLBAR_C               '1 1 1'
 COLOR_SCROLLBAR_S               '1 1 1'
 WIDTH_SCROLLBAR                 16
 
@@ -149,9 +153,11 @@ COLOR_SERVERLIST_LOWPING        '0 1 0'
 COLOR_SERVERLIST_MEDPING        '1 1 0'
 COLOR_SERVERLIST_HIGHPING       '1 0 0'
 ALPHA_SERVERLIST_HIGHPING       0.2
+ALPHA_SERVERLIST_FAVORITE       0.8
+COLOR_SERVERLIST_FAVORITE       '1 1 1'
 
 // item: slider
-//   uses slider.tga
+//   uses "slider" images
 COLOR_SLIDER_N                  '1 1 1'
 COLOR_SLIDER_C                  '1 1 1'
 COLOR_SLIDER_F                  '1 1 1'

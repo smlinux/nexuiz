@@ -16,6 +16,8 @@ COLOR_DIALOG_MUTATORS           '1 1 1'
 COLOR_DIALOG_MAPINFO            '1 1 1'
 COLOR_DIALOG_USERBIND           '1 1 1'
 COLOR_DIALOG_SINGLEPLAYER       '1 1 1'
+COLOR_DIALOG_WEAPONS            '1 0.7 0.7'
+COLOR_DIALOG_RADAR              '1 1 1'
 COLOR_DIALOG_CREDITS            '1 1 1'
 
 // nexposee positions of windows (they are the scale transformation
@@ -88,6 +90,7 @@ MARGIN_LEFT                     8
 MARGIN_RIGHT                    8
 MARGIN_COLUMNS                  4
 MARGIN_ROWS                     4
+HEIGHT_DIALOGBORDER             1
 
 // item: input box
 //   uses "inputbox" images
@@ -140,8 +143,8 @@ COLOR_RADIOBUTTON_D             '1 1 1'
 // item: scrollbar
 //   uses "scrollbar" images
 COLOR_SCROLLBAR_N               '1 1 1'
-COLOR_SCROLLBAR_C               '1 1 1'
 COLOR_SCROLLBAR_F               '0.75 0.75 0.75'
+COLOR_SCROLLBAR_C               '1 1 1'
 COLOR_SCROLLBAR_S               '1 1 1'
 WIDTH_SCROLLBAR                 16
 
@@ -152,6 +155,8 @@ COLOR_SERVERLIST_LOWPING        '0 1 0'
 COLOR_SERVERLIST_MEDPING        '1 0.75 0'
 COLOR_SERVERLIST_HIGHPING       '1 0 0'
 ALPHA_SERVERLIST_HIGHPING       0.4
+ALPHA_SERVERLIST_FAVORITE       0.8
+COLOR_SERVERLIST_FAVORITE       '1 1 1'
 
 // item: slider
 //   uses "slider" images

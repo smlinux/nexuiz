@@ -29,22 +29,16 @@ COLOR_DIALOG_MAPINFO            '0.4 0.8 0.9'
 COLOR_DIALOG_USERBIND           '0.4 0.8 0.9'
 COLOR_DIALOG_SINGLEPLAYER       '0.4 0.8 0.9'
 COLOR_DIALOG_CREDITS            '0.4 0.8 0.9'
+COLOR_DIALOG_WEAPONS            '0.4 0.8 0.9'
+COLOR_DIALOG_RADAR              '0.4 0.8 0.9'
 
 // nexposee positions of windows (they are the scale transformation
 // centers, NOT the actual positions of the windows!)
-// 0 0 0 = Left Top size??
-
 POSITION_DIALOG_MULTIPLAYER     '0.8 0.4 0'
 POSITION_DIALOG_SINGLEPLAYER    '0.2 0.4 0'
 POSITION_DIALOG_SETTINGS        '0.5 1 0'
 POSITION_DIALOG_CREDITS         '-0.05 1.2 0'
 POSITION_DIALOG_QUIT            '1.05 1.2 0'
-
-//POSITION_DIALOG_MULTIPLAYER     '0.9 0.5 0'
-//POSITION_DIALOG_SINGLEPLAYER    '0.1 0.1 0'
-//POSITION_DIALOG_SETTINGS        '0.1 0.9 0'
-//POSITION_DIALOG_CREDITS         '0.3 1.2 0'
-//POSITION_DIALOG_QUIT            '0.9 1.2 0'
 
 // mouse
 //   uses "cursor" images
@@ -63,7 +57,8 @@ ALPHA_TEXT                      0.7
 // item: button
 //   uses "button" images
 //   uses "buttongray" images
-
+//   uses "bigbutton" images
+//   uses "bigbuttongray" images
 COLOR_BUTTON_N                  '0.5 0.3 0'	// Default Color
 COLOR_BUTTON_C                  '0.6 0.4 0.1'	// Selected
 COLOR_BUTTON_F                  '0.45 0.55 0.45'// Focused / hover
@@ -107,6 +102,7 @@ MARGIN_LEFT                     8
 MARGIN_RIGHT                    8
 MARGIN_COLUMNS                  4
 MARGIN_ROWS                     4
+HEIGHT_DIALOGBORDER             1
 
 // item: input box
 //   uses "inputbox" images
@@ -171,6 +167,8 @@ COLOR_SERVERLIST_LOWPING        '0 1 0'
 COLOR_SERVERLIST_MEDPING        '1 0.75 0'
 COLOR_SERVERLIST_HIGHPING       '1 0 0'
 ALPHA_SERVERLIST_HIGHPING       0.4
+ALPHA_SERVERLIST_FAVORITE       0.8
+COLOR_SERVERLIST_FAVORITE       '1 1 1'
 
 // item: slider
 //   uses "slider" images
