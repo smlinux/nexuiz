@@ -6,7 +6,6 @@ CLASS(NexuizSettingsDialog) EXTENDS(NexuizDialog)
 	ATTRIB(NexuizSettingsDialog, intendedWidth, float, 0.96)
 	ATTRIB(NexuizSettingsDialog, rows, float, 17)
 	ATTRIB(NexuizSettingsDialog, columns, float, 6)
-	ATTRIB(NexuizSettingsDialog, name, string, "__skinselect_window")
 ENDCLASS(NexuizSettingsDialog)
 #endif
 

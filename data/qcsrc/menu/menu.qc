@@ -408,6 +408,33 @@ void() m_shutdown =
 	}
 };
 
+void m_activate_window(entity wnd)
+{
+	entity par;
+	par = wnd.parent;
+	if(par)
+		m_activate_window(par);
+
+	if(par.instanceOfModalController)
+	{
+		// tabs
+		par.initializeDialog(par, wnd);
+	}
+	else if(par.instanceOfNexposee)
+	{
+		// nexposee (sorry for violating abstraction here)
+		par.selectedChild = wnd;
+		par.animationState = 1;
+		setFocusContainer(par, NULL);
+	}
+	else if(par.instanceOfContainer)
+	{
+		// other containers
+		if(par.focused)
+			par.setFocus(par, wnd);
+	}
+}
+
 void(string itemname) m_goto =
 {
 	entity e;
@@ -419,17 +446,17 @@ void(string itemname) m_goto =
 			m_hide();
 		else
 		{
-			main.initializeDialog(main, main.firstChild);
+			m_activate_window(main.mainNexposee);
 			m_display();
 		}
 	}
 	else
 	{
 		e = findstring(NULL, name, itemname);
-		if(e && e.parent == main)
+		if(e)
 		{
 			m_hide();
-			main.initializeDialog(main, e);
+			m_activate_window(e);
 			m_display();
 		}
 	}
@@ -440,8 +467,5 @@ void() m_goto_skin_selector =
 	if(!menuInitialized)
 		return;
 	// TODO add code to switch back to the skin selector (no idea how to do it now)
-	m_hide();
-	//main.initializeDialog(main, main.firstChild);
-	//main.firstChild.setFocus(main.firstChild, findstring(NULL, name, "__skinselect_window"));
-	m_display();
+	m_goto("skinselector");
 }

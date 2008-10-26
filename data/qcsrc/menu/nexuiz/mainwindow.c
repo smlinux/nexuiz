@@ -7,6 +7,7 @@ CLASS(MainWindow) EXTENDS(ModalController)
 	ATTRIB(MainWindow, userbindEditDialog, entity, NULL)
 	ATTRIB(MainWindow, winnerDialog, entity, NULL)
 	ATTRIB(MainWindow, radarDialog, entity, NULL)
+	ATTRIB(MainWindow, mainNexposee, entity, NULL)
 	ATTRIB(MainWindow, fadedAlpha, float, SKINALPHA_BEHIND)
 ENDCLASS(MainWindow)
 #endif
@@ -53,7 +54,7 @@ void configureMainWindowMainWindow(entity me)
 	i.configureDialog(i);
 	me.addItemCentered(me, i, i.intendedWidth * eX + i.intendedHeight * eY, SKINALPHAS_MAINMENU_z);
 
-	n = spawnNexuizNexposee();
+	me.mainNexposee = n = spawnNexuizNexposee();
 	/*
 		if(checkextension("DP_GECKO_SUPPORT"))
 		{

@@ -5,7 +5,6 @@ CLASS(NexuizMiscSettingsTab) EXTENDS(NexuizTab)
 	ATTRIB(NexuizMiscSettingsTab, intendedWidth, float, 0.9)
 	ATTRIB(NexuizMiscSettingsTab, rows, float, 15)
 	ATTRIB(NexuizMiscSettingsTab, columns, float, 6.5)
-
 ENDCLASS(NexuizMiscSettingsTab)
 entity makeNexuizMiscSettingsTab();
 #endif
@@ -28,16 +27,11 @@ void fillNexuizMiscSettingsTab(entity me)
 	me.TR(me);
 		me.TD(me, me.rows - 2, 3, sk = makeNexuizSkinList());		
 	me.gotoRC(me, me.rows - 1, 0);
-		me.TDempty(me, 0.5);
-		me.TD(me, 1, 2, e = makeNexuizButton("Apply", '0 0 0'));
-			e.onClick = setSkin;
+		me.TD(me, 1, 3, e = makeNexuizButton("Apply immediately", '0 0 0'));
+			e.onClick = SetSkin_Click;
 			e.onClickEntity = sk;
-		me.TDempty(me, 0.5);
 		
-	
-	
 	me.gotoRC(me, 0, 3.5); me.setFirstColumn(me, me.currentColumn);
-
 		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "cl_autodemo", "Demo recording"));
 	me.TR(me);
 	me.TR(me);
@@ -58,7 +52,5 @@ void fillNexuizMiscSettingsTab(entity me)
 		me.TD(me, 1, 2.8/3, e = makeNexuizRadioButton(1, "showspeed", "3", "km/h"));
 		me.TD(me, 1, 2.8/3, e = makeNexuizRadioButton(1, "showspeed", "4", "mph"));
 		me.TD(me, 1, 2.8/3, e = makeNexuizRadioButton(1, "showspeed", "5", "knots"));
-
-	
 }
 #endif
