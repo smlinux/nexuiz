@@ -230,21 +230,7 @@ void Seeker_Vollycontroler_Think()
     oldenemy = self.enemy;
     self.enemy = oldself.enemy;
 
-    switch(oldself.cnt)
-    {
-        case 0:
-            Seeker_Fire_Missile('37.5 17 -22');
-            break;
-        case 1:
-            Seeker_Fire_Missile('37.5 9.5 -22');
-            break;
-        case 2:
-            Seeker_Fire_Missile('40 17 -29');
-            break;
-        case 3:
-            Seeker_Fire_Missile('40 09.5 -29');
-            break;
-    }
+	Seeker_Fire_Missile('56 13 -15' + 7 * randomvec());
 
 
 
@@ -403,27 +389,11 @@ void Seeker_Flac_Touch()
 void Seeker_Fire_Flac()
 {
 	local entity missile;
-    vector f_org;
 
 	if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
 		self.ammo_rockets = self.ammo_rockets - cvar("g_balance_seeker_flac_ammo");
 
-    switch(floor(random() * 3))
-    {
-        case 0:
-            f_org = '37.5 17 -22';
-            break;
-        case 1:
-            f_org = '37.5 9.5 -22';
-            break;
-        case 2:
-            f_org = '40 17 -29';
-            break;
-        case 3:
-            f_org = '40 9.5 -29';
-            break;
-    }
-    W_SetupShot (self, f_org, FALSE, 2, "weapons/hagar_fire.wav");
+    W_SetupShot (self, '56 13 -15', FALSE, 2, "weapons/hagar_fire.wav");
 
 	pointparticles(particleeffectnum("hagar_muzzleflash"), w_shotorg, w_shotdir * 1000, 1);
 
@@ -501,7 +471,7 @@ float w_seeker(float req)
     else if (req == WR_CHECKAMMO1)
         return self.ammo_rockets >= cvar("g_balance_seeker_tag_ammo");
     else if (req == WR_CHECKAMMO2)
-        return self.ammo_rockets >= cvar("g_balance_seeker_secondary_ammo");
+        return self.ammo_rockets >= cvar("g_balance_seeker_flac_ammo");
     else if (req == WR_SUICIDEMESSAGE)
         w_deathtypestring = "played with tiny rockets";
     else if (req == WR_KILLMESSAGE)

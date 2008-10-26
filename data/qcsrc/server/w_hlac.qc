@@ -163,7 +163,7 @@ void W_HLAC_Attack2 (void)
         self.ammo_cells = self.ammo_cells - cvar("g_balance_hlac_secondary_ammo");
     }
 
-    for(i=0;i<6;++i)
+    for(i=cvar("g_balance_hlac_secondary_shots");i>0;--i)
         W_HLAC_Attack2f();
 
 	if (!g_norecoil)

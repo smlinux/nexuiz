@@ -242,8 +242,8 @@ void traceline_antilag_force (entity source, vector v1, vector v2, float nomonst
 		lag = 0; // only antilag for clients
 
 	// change shooter to SOLID_BBOX so the shot can hit corpses
-	oldsolid = source.solid;
-	source.solid = SOLID_BBOX;
+	oldsolid = source.dphitcontentsmask;
+	source.dphitcontentsmask = DPCONTENTS_SOLID | DPCONTENTS_BODY | DPCONTENTS_CORPSE;
 
 	if (lag)
 	{
@@ -271,7 +271,7 @@ void traceline_antilag_force (entity source, vector v1, vector v2, float nomonst
 	}
 
 	// restore shooter solid type
-	source.solid = oldsolid;
+	source.dphitcontentsmask = oldsolid;
 }
 void traceline_antilag (entity source, vector v1, vector v2, float nomonst, entity forent, float lag)
 {

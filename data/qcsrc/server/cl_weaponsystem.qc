@@ -33,8 +33,8 @@ void W_SetupShot(entity ent, vector vecs, float antilag, float recoil, string sn
 	float nudge = 1; // added to traceline target and subtracted from result
 	local vector trueaimpoint;
 	local float oldsolid;
-	oldsolid = self.solid;
-	self.solid = SOLID_BBOX; // make all shot test traces bypass playerclip
+	oldsolid = self.dphitcontentsmask;
+	self.dphitcontentsmask = DPCONTENTS_SOLID | DPCONTENTS_BODY | DPCONTENTS_CORPSE;
 	traceline(self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * MAX_SHOT_DISTANCE, MOVE_NOMONSTERS, self);
 	trueaimpoint = trace_endpos;
 
@@ -162,7 +162,7 @@ void W_SetupShot(entity ent, vector vecs, float antilag, float recoil, string sn
 	}
 #endif
 
-	self.solid = oldsolid; // restore solid type (generally SOLID_SLIDEBOX)
+	self.dphitcontentsmask = oldsolid; // restore solid type (generally SOLID_SLIDEBOX)
 
 	if (!g_norecoil)
 		self.punchangle_x = recoil * -1;
