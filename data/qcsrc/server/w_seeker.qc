@@ -196,7 +196,7 @@ void Seeker_Fire_Missile(vector f_org)
 
     setorigin (missile, w_shotorg);
     setmodel  (missile, "models/tagrocket.md3");
-    setsize (missile, '0 0 0', '0 0 0');
+    setsize (missile, '-2 -2 -2', '2 2 2');
 
 
     missile.movetype    = MOVETYPE_FLYMISSILE;// MOVETYPE_TOSS;
