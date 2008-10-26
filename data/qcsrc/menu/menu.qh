@@ -29,6 +29,7 @@ entity main;
 void m_hide();
 void m_display();
 void m_goto(string name);
+void m_goto_skin_selector();
 .string name;
 
 entity keyGrabber;

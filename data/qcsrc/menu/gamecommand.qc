@@ -61,6 +61,12 @@ void GameCommand(string theCommand)
 		return;
 	}
 
+	if(argv(0) == "skinselect")
+	{
+		m_goto_skin_selector();
+		return;
+	}
+
 	if(argv(0) == "dumptree")
 	{
 		_dumptree_space = "";

@@ -434,3 +434,14 @@ void(string itemname) m_goto =
 		}
 	}
 }
+
+void() m_goto_skin_selector =
+{
+	if(!menuInitialized)
+		return;
+	// TODO add code to switch back to the skin selector (no idea how to do it now)
+	m_hide();
+	//main.initializeDialog(main, main.firstChild);
+	//main.firstChild.setFocus(main.firstChild, findstring(NULL, name, "__skinselect_window"));
+	m_display();
+}
