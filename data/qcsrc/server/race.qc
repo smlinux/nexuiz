@@ -80,7 +80,8 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 	float snew, l;
 	entity p;
 
-	t = floor(0.5 + 10 * t); // make integer
+	t = floor(0.4 + 10 * t); // make integer
+	// adding just 0.4 so it rounds down in the .5 case (matching the timer display)
 
 	if(tvalid)
 	if(cp == 0) // finish line
@@ -139,6 +140,7 @@ void race_SendTime(entity e, float cp, float t, float tvalid)
 			if(recordholder == e.netname)
 				recordholder = "";
 
+			if(t != 0)
 			if(t < recordtime || recordtime == 0)
 			{
 				race_checkpoint_records[cp] = t;
