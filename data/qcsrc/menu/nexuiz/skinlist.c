@@ -11,6 +11,7 @@ CLASS(NexuizSkinList) EXTENDS(NexuizListBox)
 	METHOD(NexuizSkinList, skinName, string(entity, float))
 	METHOD(NexuizSkinList, clickListBoxItem, void(entity, float, vector))
 	METHOD(NexuizSkinList, keyDown, float(entity, float, float, float))
+	METHOD(NexuizSkinList, destroy, void(entity))
 
 	ATTRIB(NexuizSkinList, skinlist, float, -1)
 	ATTRIB(NexuizSkinList, realFontSize, vector, '0 0 0')
@@ -25,7 +26,7 @@ CLASS(NexuizSkinList) EXTENDS(NexuizListBox)
 	ATTRIB(NexuizSkinList, lastClickedSkin, float, -1)
 	ATTRIB(NexuizSkinList, lastClickedTime, float, 0)
 
-	ATTRIB(NexuizMiscSettingsTab, name, string, "skinselector")
+	ATTRIB(NexuizSkinList, name, string, "skinselector")
 ENDCLASS(NexuizSkinList)
 
 entity makeNexuizSkinList();
@@ -80,10 +81,13 @@ string skinNameNexuizSkinList(entity me, float i)
 
 void getSkinsNexuizSkinList(entity me)
 {
-	float glob,i;
-		
 	me.skinlist = search_begin("gfx/menu/*/skinvalues.txt", TRUE, TRUE);
 	me.nItems = search_getsize(me.skinlist);
+}
+
+void destroyNexuizSkinList(entity me)
+{
+	search_end(me.skinlist);
 }
 
 void resizeNotifyNexuizSkinList(entity me, vector relOrigin, vector relSize, vector absOrigin, vector absSize)
@@ -105,7 +109,6 @@ void resizeNotifyNexuizSkinList(entity me, vector relOrigin, vector relSize, vec
 void drawListBoxItemNexuizSkinList(entity me, float i, vector absSize, float isSelected)
 {
 	string s;
-	float theAlpha;
 	
 	if(isSelected)
 		draw_Fill('0 0 0', '1 1 0', SKINCOLOR_LISTBOX_SELECTED, SKINALPHA_LISTBOX_SELECTED);
