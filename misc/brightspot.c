@@ -145,8 +145,9 @@ int main(int argc, char **argv)
 	FILE *f;
 	int i, j, k;
 	unsigned char picture[6][512][512];
+	unsigned char max;
 	double brightvec[3];
-	double pitch, yaw;
+	double pitch, yaw, l;
 
 	if(argc != 2)
 	{
@@ -164,6 +165,12 @@ int main(int argc, char **argv)
 	fclose(f);
 
 	brightvec[0] = brightvec[1] = brightvec[2] = 0;
+	max = 0;
+	for(i = 0; i < 6; ++i)
+		for(j = 0; j < 512; ++j)
+			for(k = 0; k < 512; ++k)
+				if(picture[i][j][k] > max)
+					max = picture[i][j][k];
 	for(i = 0; i < 6; ++i)
 		for(j = 0; j < 512; ++j)
 			for(k = 0; k < 512; ++k)
@@ -171,11 +178,14 @@ int main(int argc, char **argv)
 				double vec[3], f;
 				MapCoord(i, j, k, vec);
 				f = pow(vec[0]*vec[0] + vec[1]*vec[1] + vec[2]*vec[2], -1.5); // I know what I am doing.
-				f *= exp(10 * (picture[i][j][k] - 255));
+				f *= exp(10 * (picture[i][j][k] - max));
 				brightvec[0] += f * vec[0];
 				brightvec[1] += f * vec[1];
 				brightvec[2] += f * vec[2];
 			}
+
+	l = sqrt(brightvec[0]*brightvec[0] + brightvec[1]*brightvec[1] + brightvec[2]*brightvec[2]);
+	fprintf(stderr, "vec = %f %f %f\n", brightvec[0] / l, brightvec[1] / l, brightvec[2] / l);
 	
 	pitch = atan2(brightvec[2], sqrt(brightvec[0]*brightvec[0] + brightvec[1]*brightvec[1]));
 	yaw = atan2(brightvec[1], brightvec[0]);
