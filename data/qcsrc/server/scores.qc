@@ -439,9 +439,9 @@ void WinningConditionHelper()
 			s = strcat(s, ":spectator");
 		*/
 		if(p.classname == "player" || g_arena || g_lms)
-			s = "-666";
-		else
 			s = GetPlayerScoreString(p, 2);
+		else
+			s = "-666";
 
 		if(p.clientstatus)
 			strunzone(p.clientstatus);
