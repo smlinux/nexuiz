@@ -469,7 +469,7 @@ float w_seeker(float req)
     else if (req == WR_SETUP)
         weapon_setup(WEP_SEEKER);
     else if (req == WR_CHECKAMMO1)
-        return self.ammo_rockets >= cvar("g_balance_seeker_tag_ammo");
+        return self.ammo_rockets >= cvar("g_balance_seeker_tag_ammo") + cvar("g_balance_seeker_missile_ammo");
     else if (req == WR_CHECKAMMO2)
         return self.ammo_rockets >= cvar("g_balance_seeker_flac_ammo");
     else if (req == WR_SUICIDEMESSAGE)
