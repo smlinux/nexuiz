@@ -117,7 +117,7 @@ void fillNexuizPlayerSettingsTab(entity me)
 			e.configureNexuizTextSliderValues(e);
 	me.TR(me);
 		me.TDempty(me, 0.2);
-		me.TD(me, 1, 2.8, e = makeNexuizCheckBox(0, "sbar_hudselector", "Use alternate HUD layout"));
+		me.TD(me, 1, 2.8, e = makeNexuizCheckBox(1, "sbar_hudselector", "Use old-style HUD layout"));
 			setDependent(e, "viewsize", 0, 110);
 	me.TR(me);
 		me.TDempty(me, 0.5);
