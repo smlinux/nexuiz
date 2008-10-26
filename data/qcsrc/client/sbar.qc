@@ -1722,9 +1722,8 @@ void Sbar_Draw (void)
 				else
 					Sbar_DrawXNum('81 12 0', x, 3, 24, '0.6 0.7 0.8', 1, 0);
 
-				// AK dont draw ammo for the laser
 				x = getstati(STAT_AMMO);
-				if(activeweapon != 12)
+				if ((stat_items & IT_AMMO) || x != 0)
 				{
 					// (519-3*24) = 447
 					if (stat_items & IT_SHELLS)
