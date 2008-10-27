@@ -819,6 +819,7 @@ vector NearestPointOnBox(entity box, vector org)
 	return nearest;
 }
 
+float RadiusDamage_running;
 float RadiusDamage (entity inflictor, entity attacker, float coredamage, float edgedamage, float rad, entity ignore, float forceintensity, float deathtype, entity directhitentity)
 // Returns total damage applies to creatures
 {
@@ -831,6 +832,21 @@ float RadiusDamage (entity inflictor, entity attacker, float coredamage, float e
 	vector  center;
 	vector  nearest;
 	float   total_damage_to_creatures;
+
+	if(RadiusDamage_running)
+	{
+		string save;
+		print("RadiusDamage called recursively!\n");
+		print("Expect stuff to go HORRIBLY wrong.\n");
+		print("Causing a stack trace...\n");
+		save = cvar_string("prvm_backtraceforwarnings");
+		cvar_set("prvm_backtraceforwarnings", "1");
+		fclose(-1); // calls VM_Warning
+		cvar_set("prvm_backtraceforwarnings", save);
+		return 0;
+	}
+
+	RadiusDamage_running = 1;
 
 	blastorigin = (inflictor.origin + (inflictor.mins + inflictor.maxs) * 0.5);
 	total_damage_to_creatures = 0;
@@ -892,6 +908,8 @@ float RadiusDamage (entity inflictor, entity attacker, float coredamage, float e
 			}
 		targ = targ.chain;
 	}
+
+	RadiusDamage_running = 0;
 
 	return total_damage_to_creatures;
 }
