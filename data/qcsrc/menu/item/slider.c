@@ -88,7 +88,7 @@ float keyDownSlider(entity me, float key, float ascii, float shift)
 	float inRange;
 	if(me.disabled)
 		return 0;
-	inRange = (me.value == median(me.valueMin, me.value, me.valueMax));
+	inRange = (almost_in_bounds(me.valueMin, me.value, me.valueMax));
 	if(key == K_LEFTARROW)
 	{
 		if(inRange)
@@ -178,10 +178,39 @@ float mousePressSlider(entity me, vector pos)
 	}
 	else
 	{
+		float clickValue, pageValue, inRange;
+		clickValue = median(0, (pos_x - me.pressOffset - 0.5 * me.controlWidth) / (1 - me.textSpace - me.controlWidth), 1) * (me.valueMax - me.valueMin) + me.valueMin;
+		inRange = (almost_in_bounds(me.valueMin, me.value, me.valueMax));
 		if(pos_x < controlCenter)
-			me.keyDown(me, K_PGUP, 0, 0);
+		{
+			pageValue = me.value - me.valuePageStep;
+			if(me.valueStep)
+				clickValue = floor(clickValue / me.valueStep) * me.valueStep;
+			pageValue = max(pageValue, clickValue);
+			if(inRange)
+				me.setValue(me, median(me.valueMin, pageValue, me.valueMax));
+			else
+				me.setValue(me, me.valueMax);
+		}
 		else
-			me.keyDown(me, K_PGDN, 0, 0);
+		{
+			pageValue = me.value + me.valuePageStep;
+			if(me.valueStep)
+				clickValue = ceil(clickValue / me.valueStep) * me.valueStep;
+			pageValue = min(pageValue, clickValue);
+			if(inRange)
+				me.setValue(me, median(me.valueMin, pageValue, me.valueMax));
+			else
+				me.setValue(me, me.valueMax);
+		}
+		if(pageValue == clickValue)
+		{
+			controlCenter = (me.value - me.valueMin) / (me.valueMax - me.valueMin) * (1 - me.textSpace - me.controlWidth) + 0.5 * me.controlWidth;
+			me.pressed = 1;
+			me.pressOffset = pos_x - controlCenter;
+			me.previousValue = me.value;
+			//me.mouseDrag(me, pos);
+		}
 	}
 	return 1;
 }
