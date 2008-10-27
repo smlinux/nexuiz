@@ -1,3 +1,6 @@
+title Simply Gray
+author ???
+
 // font sizes (used for everything)
 FONTSIZE_NORMAL                 12
 HEIGHT_NORMAL                   1.5
@@ -155,6 +158,10 @@ COLOR_SERVERLIST_HIGHPING       '1 0 0'
 ALPHA_SERVERLIST_HIGHPING       0.2
 ALPHA_SERVERLIST_FAVORITE       0.8
 COLOR_SERVERLIST_FAVORITE       '1 1 1'
+
+// item: skin list
+COLOR_SKINLIST_TITLE            '1 1 1'
+COLOR_SKINLIST_AUTHOR           '0.4 0.4 0.7'
 
 // item: slider
 //   uses "slider" images

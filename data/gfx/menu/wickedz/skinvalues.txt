@@ -1,3 +1,6 @@
+title Wicked Z
+author [-z-]
+
 // Values for Wicked Z by -z-
 // Based on sev's wicked series
 // http://alientrap.org/forum/viewtopic.php?t=3430
@@ -169,6 +172,10 @@ COLOR_SERVERLIST_HIGHPING       '1 0 0'
 ALPHA_SERVERLIST_HIGHPING       0.4
 ALPHA_SERVERLIST_FAVORITE       0.8
 COLOR_SERVERLIST_FAVORITE       '1 1 1'
+
+// item: skin list
+COLOR_SKINLIST_TITLE            '1 1 1'
+COLOR_SKINLIST_AUTHOR           '0.75 0.75 0.75'
 
 // item: slider
 //   uses "slider" images

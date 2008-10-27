@@ -1,4 +1,5 @@
-// Values for Wicked 2 White by sev
+title Wicked 2 White
+author sev
 
 // font sizes (used for everything)
 FONTSIZE_NORMAL                 12
@@ -157,6 +158,10 @@ COLOR_SERVERLIST_HIGHPING       '1 0 0'
 ALPHA_SERVERLIST_HIGHPING       0.4
 ALPHA_SERVERLIST_FAVORITE       0.8
 COLOR_SERVERLIST_FAVORITE       '1 1 1'
+
+// item: skin list
+COLOR_SKINLIST_TITLE            '1 1 1'
+COLOR_SKINLIST_AUTHOR           '0.75 0.75 0.75'
 
 // item: slider
 //   uses "slider" images
