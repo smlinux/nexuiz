@@ -209,6 +209,7 @@ void spawnfunc_worldspawn (void)
 	world_already_spawned = TRUE;
 
 	remove = remove_safely; // during spawning, watch what you remove!
+	remove_empty_template = spawn(); // make an empty entity
 
 	compressShortVector_init();
 

@@ -51,6 +51,10 @@ void Seeker_Missile_Think()
         self.switchweapon = self.switchweapon * cvar("g_balance_seeker_missile_decel");
 
     if (self.enemy != world)
+		if (self.enemy.takedamage != DAMAGE_AIM || self.enemy.deadflag != DEAD_NO)
+			self.enemy = world;
+
+    if (self.enemy != world)
     {
         e               = self.enemy;
         turnrate        = cvar("g_balance_seeker_missile_turnrate");		    // how fast to turn
@@ -144,8 +148,13 @@ void Seeker_Missile_Animate()
     self.frame = self.frame +1;
     self.nextthink = time + 0.05;
 
+    if (self.enemy != world)
+		if (self.enemy.takedamage != DAMAGE_AIM || self.enemy.deadflag != DEAD_NO)
+			self.enemy = world;
+
     if(self.frame == 5)
-    {   self.think           = Seeker_Missile_Think;
+    {
+		self.think           = Seeker_Missile_Think;
         self.nextthink       = time + cvar("g_balance_seeker_missile_activate_delay");
         self.effects         = EF_LOWPRECISION | EF_NOSHADOW | EF_ROCKET;
 
@@ -153,7 +162,6 @@ void Seeker_Missile_Animate()
             self.movetype    = MOVETYPE_BOUNCEMISSILE;
         else
             self.movetype    = MOVETYPE_FLYMISSILE;
-
     }
 }
 
@@ -295,9 +303,8 @@ void Seeker_Tag_Touch()
     self.event_damage = SUB_Null;
     sound (self, CHAN_PROJECTILE, "weapons/laserimpact.wav", 1, ATTN_NORM);
 
-    if (other.classname == "player")
+    if (other.takedamage && other.deadflag == DEAD_NO)
     {
-
         entity e;
         e           = spawn();
         e.cnt       = cvar("g_balance_seeker_missile_count");
