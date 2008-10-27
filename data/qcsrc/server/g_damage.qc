@@ -832,6 +832,7 @@ float RadiusDamage (entity inflictor, entity attacker, float coredamage, float e
 	vector  center;
 	vector  nearest;
 	float   total_damage_to_creatures;
+	entity  next;
 
 	if(RadiusDamage_running)
 	{
@@ -854,6 +855,7 @@ float RadiusDamage (entity inflictor, entity attacker, float coredamage, float e
 	targ = findradius (blastorigin, rad);
 	while (targ)
 	{
+		next = targ.chain;
 		if (targ != inflictor)
 			if (ignore != targ)
 			{
@@ -906,7 +908,7 @@ float RadiusDamage (entity inflictor, entity attacker, float coredamage, float e
 					}
 				}
 			}
-		targ = targ.chain;
+		targ = next;
 	}
 
 	RadiusDamage_running = 0;
