@@ -1,5 +1,5 @@
 title Silver
-author tZork
+author morfar
 
 // font sizes (used for everything)
 FONTSIZE_NORMAL                 12
