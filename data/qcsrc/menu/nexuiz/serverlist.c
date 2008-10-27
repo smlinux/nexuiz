@@ -241,7 +241,6 @@ void drawNexuizServerList(entity me)
 	owned = (me.selectedServer == me.ipAddressBox.text);
 
 	me.nItems = gethostcachevalue(SLIST_HOSTCACHEVIEWCOUNT);
-	me.connectButton.disabled = (me.nItems == 0);
 
 	found = 0;
 	if(me.selectedServer)
@@ -352,16 +351,25 @@ void ServerList_Filter_Change(entity box, entity me)
 	else
 		me.filterString = string_null;
 	me.refreshServerList(me, 0);
+
+	me.ipAddressBox.setText(me.ipAddressBox, "");
+	me.ipAddressBox.cursorPos = 0;
 }
 void ServerList_ShowEmpty_Click(entity box, entity me)
 {
 	box.setChecked(box, me.filterShowEmpty = !me.filterShowEmpty);
 	me.refreshServerList(me, 0);
+
+	me.ipAddressBox.setText(me.ipAddressBox, "");
+	me.ipAddressBox.cursorPos = 0;
 }
 void ServerList_ShowFull_Click(entity box, entity me)
 {
 	box.setChecked(box, me.filterShowFull = !me.filterShowFull);
 	me.refreshServerList(me, 0);
+
+	me.ipAddressBox.setText(me.ipAddressBox, "");
+	me.ipAddressBox.cursorPos = 0;
 }
 void setSortOrderNexuizServerList(entity me, float field, float direction)
 {
