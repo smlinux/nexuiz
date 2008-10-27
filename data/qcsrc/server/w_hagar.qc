@@ -74,7 +74,7 @@ void W_Hagar_Damage (entity inflictor, entity attacker, float damage, float deat
 {
 	self.health = self.health - damage;
 	if (self.health <= 0)
-		self.think ();
+		W_PrepareExplosionByDamage(attacker, self.think);
 }
 
 void W_Hagar_Attack (void)

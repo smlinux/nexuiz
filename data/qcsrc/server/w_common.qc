@@ -152,3 +152,15 @@ void fireBullet (vector start, vector dir, float spread, float damage, float for
 		Damage (trace_ent, self, self, damage, dtype, trace_endpos, dir * force);
 	}
 }
+
+void W_PrepareExplosionByDamage(entity attacker, void() explode)
+{
+	self.takedamage = DAMAGE_NO;
+	self.event_damage = SUB_Null;
+	self.owner = attacker;
+
+	// do not explode NOW but in the NEXT FRAME!
+	// because recursive calls to RadiusDamage are not allowed
+	self.nextthink = time;
+	self.think = explode;
+}

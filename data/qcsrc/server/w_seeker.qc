@@ -129,7 +129,6 @@ void Seeker_Missile_Think()
 
 void Seeker_Missile_Damage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
 {
-
     float d;
     d = damage;
 
@@ -139,7 +138,7 @@ void Seeker_Missile_Damage (entity inflictor, entity attacker, float damage, flo
     self.health = self.health - d;
 
     if (self.health <= 0)
-        Seeker_Missile_Explode();
+		W_PrepareExplosionByDamage(attacker, Seeker_Missile_Explode);
 }
 
 #define EF_ROCKET				16777216
