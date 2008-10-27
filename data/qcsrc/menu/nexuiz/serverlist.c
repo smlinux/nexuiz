@@ -242,6 +242,8 @@ void drawNexuizServerList(entity me)
 
 	me.nItems = gethostcachevalue(SLIST_HOSTCACHEVIEWCOUNT);
 
+	me.connectButton.disabled = ((me.nItems == 0) && (me.ipAddressBox.text == ""));
+
 	found = 0;
 	if(me.selectedServer)
 	{
@@ -440,7 +442,10 @@ void resizeNotifyNexuizServerList(entity me, vector relOrigin, vector relSize, v
 }
 void ServerList_Connect_Click(entity btn, entity me)
 {
-	localcmd("connect ", me.ipAddressBox.text, "\n");
+	if(me.ipAddressBox.text == "")
+		localcmd("connect ", me.selectedServer, "\n");
+	else
+		localcmd("connect ", me.ipAddressBox.text, "\n");
 }
 void ServerList_Favorite_Click(entity btn, entity me)
 {
