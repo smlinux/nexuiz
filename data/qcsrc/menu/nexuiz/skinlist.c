@@ -129,7 +129,7 @@ void getSkinsNexuizSkinList(entity me)
 
 void destroyNexuizSkinList(entity me)
 {
-	buf_delete(me.skinlist);
+	buf_del(me.skinlist);
 }
 
 void resizeNotifyNexuizSkinList(entity me, vector relOrigin, vector relSize, vector absOrigin, vector absSize)
