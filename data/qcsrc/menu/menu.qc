@@ -83,6 +83,11 @@ void() m_init_delayed =
 	draw_currentSkin = strzone(draw_currentSkin);
 	while((s = fgets(fh)))
 	{
+		// these two are handled by skinlist.qc
+		if(substring(s, 0, 6) == "title ")
+			continue;
+		if(substring(s, 0, 7) == "author ")
+			continue;
 		n = tokenize_sane(s);
 		if(n >= 2)
 			Skin_ApplySetting(argv(0), substring(s, argv_start_index(1), argv_end_index(-1) - argv_start_index(1)));

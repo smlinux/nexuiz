@@ -8,7 +8,7 @@ CLASS(NexuizSkinList) EXTENDS(NexuizListBox)
 	METHOD(NexuizSkinList, setSkin, void(entity))
 	METHOD(NexuizSkinList, loadCvars, void(entity))
 	METHOD(NexuizSkinList, saveCvars, void(entity))
-	METHOD(NexuizSkinList, skinName, string(entity, float))
+	METHOD(NexuizSkinList, skinParameter, string(entity, float, float))
 	METHOD(NexuizSkinList, clickListBoxItem, void(entity, float, vector))
 	METHOD(NexuizSkinList, keyDown, float(entity, float, float, float))
 	METHOD(NexuizSkinList, destroy, void(entity))
@@ -19,7 +19,8 @@ CLASS(NexuizSkinList) EXTENDS(NexuizListBox)
 	ATTRIB(NexuizSkinList, columnPreviewSize, float, 0)
 	ATTRIB(NexuizSkinList, columnNameOrigin, float, 0)
 	ATTRIB(NexuizSkinList, columnNameSize, float, 0)
-	ATTRIB(NexuizSkinList, realUpperMargin, float, 0)	
+	ATTRIB(NexuizSkinList, realUpperMargin1, float, 0)
+	ATTRIB(NexuizSkinList, realUpperMargin2, float, 0)
 	ATTRIB(NexuizSkinList, origin, vector, '0 0 0')
 	ATTRIB(NexuizSkinList, itemAbsSize, vector, '0 0 0')
 
@@ -34,6 +35,12 @@ void SetSkin_Click(entity btn, entity me);
 #endif
 
 #ifdef IMPLEMENTATION
+
+#define SKINPARM_NAME 0
+#define SKINPARM_TITLE 1
+#define SKINPARM_AUTHOR 2
+#define SKINPARM_PREVIEW 3
+#define SKINPARM_COUNT 4
 
 entity makeNexuizSkinList()
 {
@@ -58,7 +65,7 @@ void loadCvarsNexuizSkinList(entity me)
 	n = me.nItems;
 	for(i = 0; i < n; ++i)
 	{
-		if(me.skinName(me, i) == s)
+		if(me.skinParameter(me, i, SKINPARM_NAME) == s)
 		{
 			me.selectedItem = i;
 			break;
@@ -68,21 +75,56 @@ void loadCvarsNexuizSkinList(entity me)
 
 void saveCvarsNexuizSkinList(entity me)
 {
-	cvar_set("menu_skin", me.skinName(me, me.selectedItem));
+	cvar_set("menu_skin", me.skinParameter(me, me.selectedItem, SKINPARM_NAME));
 }
 
-string skinNameNexuizSkinList(entity me, float i)
+string skinParameterNexuizSkinList(entity me, float i, float key)
 {
-	string s;
-	s = search_getfilename(me.skinlist, i);
-	s = substring(s, 9, strlen(s) - 9 - 15);  // gfx/menu/, skinvalues.txt
-	return s;
+	return bufstr_get(me.skinlist, i * SKINPARM_COUNT + key);
 }
 
 void getSkinsNexuizSkinList(entity me)
 {
-	me.skinlist = search_begin("gfx/menu/*/skinvalues.txt", TRUE, TRUE);
-	me.nItems = search_getsize(me.skinlist);
+	float glob, buf, i, n, fh;
+	string s;
+
+	buf = buf_create();
+	glob = search_begin("gfx/menu/*/skinvalues.txt", TRUE, TRUE);
+	if(glob < 0)
+	{
+		me.skinlist = buf;
+		me.nItems = 0;
+		return;
+	}
+
+	n = search_getsize(glob);
+	for(i = 0; i < n; ++i)
+	{
+		s = search_getfilename(glob, i);
+		bufstr_set(buf, i * SKINPARM_COUNT + SKINPARM_NAME, substring(s, 9, strlen(s) - 24)); // the * part
+		bufstr_set(buf, i * SKINPARM_COUNT + SKINPARM_TITLE, "<TITLE>");
+		bufstr_set(buf, i * SKINPARM_COUNT + SKINPARM_AUTHOR, "<AUTHOR>");
+		bufstr_set(buf, i * SKINPARM_COUNT + SKINPARM_PREVIEW, strcat("/gfx/menu/", substring(s, 9, strlen(s) - 24), "/skinpreview"));
+		fh = fopen(s, FILE_READ);
+		if(fh < 0)
+		{
+			print("Warning: can't open skinvalues.txt file\n");
+			continue;
+		}
+		while((s = fgets(fh)))
+		{
+			// these two are handled by skinlist.qc
+			if(substring(s, 0, 6) == "title ")
+				bufstr_set(buf, i * SKINPARM_COUNT + SKINPARM_TITLE, substring(s, 6, strlen(s) - 6));
+			else if(substring(s, 0, 7) == "author ")
+				bufstr_set(buf, i * SKINPARM_COUNT + SKINPARM_AUTHOR, substring(s, 7, strlen(s) - 7));
+		}
+	}
+
+	search_end(glob);
+
+	me.skinlist = buf;
+	me.nItems = n;
 }
 
 void destroyNexuizSkinList(entity me)
@@ -98,7 +140,8 @@ void resizeNotifyNexuizSkinList(entity me, vector relOrigin, vector relSize, vec
 
 	me.realFontSize_y = me.fontSize / (me.itemAbsSize_y = (absSize_y * me.itemHeight));
 	me.realFontSize_x = me.fontSize / (me.itemAbsSize_x = (absSize_x * (1 - me.controlWidth)));
-	me.realUpperMargin = 0.5 * (1 - me.realFontSize_y);
+	me.realUpperMargin1 = 0.5 * (1 - 2.5 * me.realFontSize_y);
+	me.realUpperMargin2 = me.realUpperMargin1 + 1.5 * me.realFontSize_y;
 
 	me.columnPreviewOrigin = 0;
 	me.columnPreviewSize = me.itemAbsSize_y / me.itemAbsSize_x * 4 / 3;
@@ -113,11 +156,17 @@ void drawListBoxItemNexuizSkinList(entity me, float i, vector absSize, float isS
 	if(isSelected)
 		draw_Fill('0 0 0', '1 1 0', SKINCOLOR_LISTBOX_SELECTED, SKINALPHA_LISTBOX_SELECTED);
 		
-	s = me.skinName(me, i);
-	draw_Picture(me.columnPreviewOrigin * eX, strcat("/gfx/menu/", s, "/skinpreview"), me.columnPreviewSize * eX + eY, '1 1 1', 1);
+	s = me.skinParameter(me, i, SKINPARM_PREVIEW);
+	draw_Picture(me.columnPreviewOrigin * eX, s, me.columnPreviewSize * eX + eY, '1 1 1', 1);
 	
+	s = me.skinParameter(me, i, SKINPARM_NAME);
+	s = strcat(s, ": ", me.skinParameter(me, i, SKINPARM_TITLE));
 	s = draw_TextShortenToWidth(s, me.columnNameSize / me.realFontSize_x, 0);
-	draw_Text(me.realUpperMargin * eY + (me.columnNameOrigin + 0.00 * (me.columnNameSize - draw_TextWidth(s, 0) * me.realFontSize_x)) * eX, s, me.realFontSize, '1 1 1', SKINALPHA_TEXT, 0);
+	draw_Text(me.realUpperMargin1 * eY + (me.columnNameOrigin + 0.00 * (me.columnNameSize - draw_TextWidth(s, 0) * me.realFontSize_x)) * eX, s, me.realFontSize, SKINCOLOR_SKINLIST_TITLE, SKINALPHA_TEXT, 0);
+
+	s = me.skinParameter(me, i, SKINPARM_AUTHOR);
+	s = draw_TextShortenToWidth(s, me.columnNameSize / me.realFontSize_x, 0);
+	draw_Text(me.realUpperMargin2 * eY + (me.columnNameOrigin + 1.00 * (me.columnNameSize - draw_TextWidth(s, 0) * me.realFontSize_x)) * eX, s, me.realFontSize, SKINCOLOR_SKINLIST_AUTHOR, SKINALPHA_TEXT, 0);
 }
 
 void setSkinNexuizSkinList(entity me)

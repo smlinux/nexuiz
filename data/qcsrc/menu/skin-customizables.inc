@@ -1,5 +1,8 @@
 #if 0
 "Perl code to convert this to a skinvalues.txt file.";
+print "title <TITLE>\n";
+print "author <AUTHOR>\n";
+print "\n";
 while(<DATA>)
 {
 	chomp;
@@ -187,6 +190,10 @@ SKINBEGIN
 	SKINFLOAT(ALPHA_SERVERLIST_HIGHPING, 0.4);
 	SKINFLOAT(ALPHA_SERVERLIST_FAVORITE, 0.8);
 	SKINVECTOR(COLOR_SERVERLIST_FAVORITE, '1 1 1');
+
+	// item: skin list
+	SKINVECTOR(COLOR_SKINLIST_TITLE, '1 1 1');
+	SKINVECTOR(COLOR_SKINLIST_AUTHOR, '0.4 0.4 0.7');
 
 	// item: slider
 	SKINSTRING(GFX_SLIDER, "slider");
