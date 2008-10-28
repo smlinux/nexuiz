@@ -1613,8 +1613,10 @@ void CheckRules_World()
 
 	if(inWarmupStage || time <= game_starttime) // NOTE: this is <= to prevent problems in the very tic where the game starts
 	{
-		timelimit = 0; // timelimit is not made for warmup
-		fraglimit = 0; // no fraglimit for now
+		if(timelimit > 0)
+			timelimit = 0; // timelimit is not made for warmup
+		if(fraglimit > 0)
+			fraglimit = 0; // no fraglimit for now
 	}
 
 	if(timelimit > 0)
