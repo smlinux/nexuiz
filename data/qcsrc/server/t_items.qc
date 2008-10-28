@@ -656,7 +656,7 @@ void weapon_defaultspawnfunc(float wpn)
 				e = get_weaponinfo(j);
 				if(e.netname == s)
 				{
-					wpn = i;
+					wpn = j;
 					break;
 				}
 			}
