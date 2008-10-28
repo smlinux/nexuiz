@@ -1333,10 +1333,8 @@ void objerror(string s)
 	objerror_builtin(s);
 }
 
-entity remove_empty_template;
 void remove_unsafely(entity e)
 { 
-	copyentity(remove_empty_template, e); // zero all fields
 	remove_builtin(e);
 }
 
