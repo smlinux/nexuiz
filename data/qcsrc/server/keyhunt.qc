@@ -339,7 +339,7 @@ void kh_Key_AssignTo(entity key, entity player)  // runs every time a key is pic
 			FOR_EACH_KH_KEY(k)
 			{
 				if(k.owner)
-					WaypointSprite_UpdateSprites(k.owner.waypointsprite_attachedforcarrier, k.owner.waypointsprite_attachedforcarrier.model, "keycarrier-finish", k.owner.waypointsprite_attachedforcarrier.model);
+					WaypointSprite_UpdateSprites(k.owner.waypointsprite_attachedforcarrier, k.owner.waypointsprite_attachedforcarrier.model1, "keycarrier-finish", k.owner.waypointsprite_attachedforcarrier.model3);
 			}
 		}
 		else
@@ -350,7 +350,7 @@ void kh_Key_AssignTo(entity key, entity player)  // runs every time a key is pic
 			FOR_EACH_KH_KEY(k)
 			{
 				if(k.owner)
-					WaypointSprite_UpdateSprites(k.owner.waypointsprite_attachedforcarrier, k.owner.waypointsprite_attachedforcarrier.model, "keycarrier-friend", k.owner.waypointsprite_attachedforcarrier.model);
+					WaypointSprite_UpdateSprites(k.owner.waypointsprite_attachedforcarrier, k.owner.waypointsprite_attachedforcarrier.model1, "keycarrier-friend", k.owner.waypointsprite_attachedforcarrier.model3);
 			}
 		}
 	}
