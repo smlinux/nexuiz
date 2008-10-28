@@ -1,0 +1,21 @@
+attack sound/player/reptilian/coms/attack 0
+//attackinfive sound/player/reptilian/letsgo 0
+coverme sound/player/reptilian/coms/coverme 0
+defend sound/player/reptilian/coms/defend 0
+freelance sound/player/reptilian/coms/freelance 2
+//incoming sound/player/reptilian/incoming 0
+//meet sound/player/reptilian/waypoint 0
+//needhelp sound/player/reptilian/needhelp 0
+//seenflag sound/player/reptilian/flagseen 0
+//taunt sound/player/reptilian/player/taunt 1
+teamshoot sound/player/reptilian/coms/teamshoot 3
+death sound/player/reptilian/player/death 3
+drown sound/player/reptilian/player/drown 0
+falling sound/player/reptilian/player/falling 0
+gasp sound/player/reptilian/player/gasp 0
+jump sound/player/reptilian/player/jump 0
+pain25 sound/player/reptilian/player/pain25 0
+pain50 sound/player/reptilian/player/pain50 0
+pain75 sound/player/reptilian/player/pain75 0
+pain100 sound/player/reptilian/player/pain100 0
+//

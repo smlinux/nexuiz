@@ -1,0 +1,21 @@
+attack sound/player/marine/coms/attack 0
+attackinfive sound/player/marine/coms/attackinfive 0
+coverme sound/player/marine/coms/coverme 0
+defend sound/player/marine/coms/defend 0
+freelance sound/player/marine/coms/freelance 2
+incoming sound/player/marine/coms/incoming 0
+//meet sound/player/marine/waypoint 0
+needhelp sound/player/marine/coms/needhelp 2
+//seenflag sound/player/marine/coms/flagseen 0
+taunt sound/player/marine/coms/taunt 1
+teamshoot sound/player/marine/coms/teamshoot 4
+death sound/player/marine/player/death 3
+drown sound/player/marine/player/drown 0
+falling sound/player/marine/player/fall 1
+gasp sound/player/marine/player/gasp 0
+jump sound/player/marine/player/jump 0
+pain25 sound/player/marine/player/pain25 0
+pain50 sound/player/marine/player/pain50 0
+pain75 sound/player/marine/player/pain75 0
+pain100 sound/player/marine/player/pain100 0
+//

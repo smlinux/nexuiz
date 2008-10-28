@@ -1,0 +1,21 @@
+attack sound/player/soldier/coms/attack 0
+//attackinfive sound/player/soldier/letsgo 0
+coverme sound/player/soldier/coms/coverme 0
+defend sound/player/soldier/coms/defend 0
+freelance sound/player/soldier/coms/freelance 2
+//incoming sound/player/soldier/incoming 0
+//meet sound/player/soldier/waypoint 0
+//needhelp sound/player/soldier/needhelp 0
+//seenflag sound/player/soldier/flagseen 0
+//taunt sound/player/soldier/player/taunt 1
+teamshoot sound/player/soldier/coms/teamshoot 3
+death sound/player/soldier/player/death 3
+drown sound/player/soldier/player/drown 0
+falling sound/player/soldier/player/falling 0
+gasp sound/player/soldier/player/gasp 0
+jump sound/player/soldier/player/jump 0
+pain25 sound/player/soldier/player/pain25 0
+pain50 sound/player/soldier/player/pain50 0
+pain75 sound/player/soldier/player/pain75 0
+pain100 sound/player/soldier/player/pain100 0
+//

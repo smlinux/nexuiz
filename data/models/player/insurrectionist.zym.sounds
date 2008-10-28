@@ -1,0 +1,21 @@
+attack sound/player/insurrectionist/coms/attack 0
+//attackinfive sound/player/insurrectionist/letsgo 0
+coverme sound/player/insurrectionist/coms/coverme 0
+defend sound/player/insurrectionist/coms/defend 0
+freelance sound/player/insurrectionist/coms/freelance 2
+//incoming sound/player/insurrectionist/incoming 0
+//meet sound/player/insurrectionist/waypoint 0
+//needhelp sound/player/insurrectionist/needhelp 0
+//seenflag sound/player/insurrectionist/flagseen 0
+//taunt sound/player/insurrectionist/player/taunt 1
+teamshoot sound/player/insurrectionist/coms/teamshoot 3
+death sound/player/insurrectionist/player/death 3
+drown sound/player/insurrectionist/player/drown 0
+falling sound/player/insurrectionist/player/falling 0
+gasp sound/player/insurrectionist/player/gasp 0
+jump sound/player/insurrectionist/player/jump 0
+pain25 sound/player/insurrectionist/player/pain25 0
+pain50 sound/player/insurrectionist/player/pain50 0
+pain75 sound/player/insurrectionist/player/pain75 0
+pain100 sound/player/insurrectionist/player/pain100 0
+//
