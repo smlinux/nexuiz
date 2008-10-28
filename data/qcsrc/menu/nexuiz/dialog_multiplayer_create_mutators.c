@@ -72,9 +72,6 @@ void fillNexuizMutatorsDialog(entity me)
 	me.TR(me);
 		me.TD(me, 1, 2, e = makeNexuizRadioButton(1, "g_minstagib", string_null, "MinstaGib"));
 	me.TR(me);
-		me.TD(me, 1, 2, e = makeNexuizRadioButton(1, "g_weaponarena", "nex", "InstaGib"));
-			e.cvarOffValue = "0";
-	me.TR(me);
 		me.TD(me, 1, 2, e = makeNexuizRadioButton(1, "g_nixnex", string_null, "NixNex"));
 	me.TR(me);
 		me.TDempty(me, 0.2);
