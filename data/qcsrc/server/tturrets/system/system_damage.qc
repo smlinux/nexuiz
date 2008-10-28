@@ -125,10 +125,8 @@ void turret_stdproc_die()
     vector org2;
     vector t_dir;
 
-    // self.tur_active = 0;
-
-    self.deadflag = DEAD_DEAD;
-    self.tur_head.deadflag = self.deadflag;
+    self.deadflag           = DEAD_DEAD;
+    self.tur_head.deadflag  = self.deadflag;
 
     sound (self, CHAN_PLAYER, "weapons/rocket_impact.wav", 1, ATTN_NORM);
     org2 = self.origin + '0 0 40';
@@ -141,23 +139,23 @@ void turret_stdproc_die()
     WriteCoord (MSG_BROADCAST, org2_z);
 
 // Unsolidify and hide real parts
-    self.solid = SOLID_NOT;
-    self.tur_head.solid   = self.solid;
+    self.solid              = SOLID_NOT;
+    self.tur_head.solid     = self.solid;
 
-    self.alpha = -1;
-    self.tur_head.alpha = -1;
+    self.alpha             = -1;
+    self.tur_head.alpha    = self.alpha;
 
-    self.takedamage = DAMAGE_NO;
+    self.event_damage           = SUB_Null;
+    self.tur_head.event_damage  = SUB_Null;
+    self.takedamage             = DAMAGE_NO;
     self.tur_head.takedamage    = self.takedamage;
 
-    self.effects = 0;
+    self.effects            = 0;
     self.tur_head.effects   = self.effects;
-
     self.health             = 0;
 
 
 // Trow fake parts arround
-
     // base
     makevectors(self.angles);
     if (random() > 0.5)
@@ -205,10 +203,9 @@ void turret_stdproc_die()
 
 void turret_stdproc_respawn()
 {
-    // self.tur_active = 1;
-
     // Make sure all parts belong to the same team since
     // this function doubles as "teamchange" function.
+
     self.tur_head.team = self.team;
 	if (self.team == COLOR_TEAM1)
 		self.colormod = '1.4 0.8 0.8';
@@ -217,28 +214,30 @@ void turret_stdproc_respawn()
 	else
 		self.colormod = '0 0 0'; // reset
 
-    self.deadflag = DEAD_NO;
-    self.tur_head.deadflag = self.deadflag;
-    self.effects = self.tur_head.effects = 0;
+    self.deadflag           = DEAD_NO;
+    self.tur_head.deadflag  = self.deadflag;
+    self.effects            = 0;
+    self.tur_head.effects   = self.effects;
 
-    self.solid = SOLID_BBOX;
-    self.tur_head.solid   = self.solid;
+    self.solid              = SOLID_BBOX;
+    self.tur_head.solid     = self.solid;
 
     self.alpha = 1;
     self.tur_head.alpha     = self.alpha;
 
-    self.takedamage = DAMAGE_YES;
+    self.takedamage = DAMAGE_AIM;
     self.tur_head.takedamage    = self.takedamage;
 
-    self.avelocity = '0 0 0';
-    self.tur_head.avelocity    = self.avelocity;
-    self.tur_head.angles = self.idle_aim;
+    self.event_damage           = turret_stdproc_damage;
+    self.tur_head.event_damage  = self.event_damage;
 
-    self.health             = self.tur_health;
-
-    self.enemy          = world;
-    self.volly_counter  = self.shot_volly;
-    self.ammo           = self.ammo_max;
+    self.avelocity              = '0 0 0';
+    self.tur_head.avelocity     = self.avelocity;
+    self.tur_head.angles        = self.idle_aim;
+    self.health                 = self.tur_health;
+    self.enemy                  = world;
+    self.volly_counter          = self.shot_volly;
+    self.ammo                   = self.ammo_max;
 
     self.nextthink  = time + self.ticrate;
     self.think      = turret_think;
