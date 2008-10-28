@@ -72,13 +72,17 @@ void fillNexuizMutatorsDialog(entity me)
 	me.TR(me);
 		me.TD(me, 1, 2, e = makeNexuizRadioButton(1, "g_minstagib", string_null, "MinstaGib"));
 	me.TR(me);
+		me.TD(me, 1, 2, e = makeNexuizRadioButton(1, "g_weaponarena", "nex", "InstaGib"));
+			e.cvarOffValue = "0";
+	me.TR(me);
 		me.TD(me, 1, 2, e = makeNexuizRadioButton(1, "g_nixnex", string_null, "NixNex"));
 	me.TR(me);
 		me.TDempty(me, 0.2);
 		me.TD(me, 1, 1.8, e = makeNexuizCheckBox(1, "g_nixnex_with_laser", "with laser"));
 			setDependent(e, "g_nixnex", 1, 1);
 	me.TR(me);
-		me.TD(me, 1, 2, e = makeNexuizRadioButton(1, "g_rocketarena", string_null, "Rocket launcher arena"));
+		me.TD(me, 1, 2, e = makeNexuizRadioButton(1, "g_weaponarena", "rocketlauncher", "Rocket launcher arena"));
+			e.cvarOffValue = "0";
 
 	me.gotoRC(me, me.rows - 2, 0);
 		s = makeNexuizSlider(80, 400, 8, "sv_gravity");

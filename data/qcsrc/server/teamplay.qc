@@ -407,8 +407,8 @@ void PrintWelcomeMessage(entity pl)
 :normal
 	if(g_minstagib)
 		mutator = "^2Minstagib ^1";
-	else if(g_rocketarena)
-		mutator = "^2Rocketarena ^1";
+	else if(g_weaponarena)
+		mutator = "^2", g_weaponarena_list, " Arena ^1";
 	else if(g_nixnex)
 		mutator = "^2No Items Nexuiz ^1";
 

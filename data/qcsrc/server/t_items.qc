@@ -445,7 +445,7 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 
 		weaponsInMap |= weaponid;
 
-		if(g_lms || g_rocketarena)
+		if(g_lms || g_weaponarena)
 		{
 			startitem_failed = TRUE;
 			remove(self);
@@ -598,7 +598,7 @@ void weapon_defaultspawnfunc(float wpn)
 	var .float ammofield;
 	string s;
 	entity oldself;
-	float i;
+	float i, j;
 
 	// set the respawntime in advance (so replaced weapons can copy it)
 	if(!self.respawntime)
@@ -612,26 +612,63 @@ void weapon_defaultspawnfunc(float wpn)
 
 	if(self.classname != "droppedweapon" && self.classname != "replacedweapon")
 	{
-		s = cvar_string(strcat("g_weaponreplace_", ftos(wpn)));
+		e = get_weaponinfo(wpn);
+		s = cvar_string(strcat("g_weaponreplace_", e.netname));
+		if(s == "0")
+		{
+			remove(self);
+			startitem_failed = TRUE;
+			return;
+		}
 		t = tokenize_sane(s);
 		if(t >= 2)
 		{
 			self.team = --internalteam;
+			oldself = self;
 			for(i = 1; i < t; ++i)
 			{
-				oldself = self;
-				self = spawn();
-				copyentity(oldself, self);
-				self.classname = "replacedweapon";
-				weapon_defaultspawnfunc(stof(argv(i)));
-				self = oldself;
+				s = argv(i);
+				for(j = WEP_FIRST; j <= WEP_LAST; ++j)
+				{
+					e = get_weaponinfo(j);
+					if(e.netname == s)
+					{
+						self = spawn();
+						copyentity(oldself, self);
+						self.classname = "replacedweapon";
+						weapon_defaultspawnfunc(j);
+						break;
+					}
+				}
+				if(j > WEP_LAST)
+				{
+					print("The weapon replace list for ", oldself.classname, " contains an unknown weapon ", s, ". Skipped.\n");
+				}
 			}
+			self = oldself;
 		}
 		if(t >= 1)
-			wpn = stof(argv(0));
+		{
+			s = argv(0);
+			wpn = 0;
+			for(j = WEP_FIRST; j <= WEP_LAST; ++j)
+			{
+				e = get_weaponinfo(j);
+				if(e.netname == s)
+				{
+					wpn = i;
+					break;
+				}
+			}
+			if(j > WEP_LAST)
+			{
+				print("The weapon replace list for ", self.classname, " contains an unknown weapon ", s, ". Skipped.\n");
+			}
+		}
 		if(wpn == 0)
 		{
 			remove(self);
+			startitem_failed = TRUE;
 			return;
 		}
 	}

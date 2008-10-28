@@ -12,6 +12,7 @@ CLASS(NexuizRadioButton) EXTENDS(RadioButton)
 
 	ATTRIB(NexuizRadioButton, cvarName, string, string_null)
 	ATTRIB(NexuizRadioButton, cvarValue, string, string_null)
+	ATTRIB(NexuizRadioButton, cvarOffValue, string, string_null)
 	METHOD(NexuizRadioButton, loadCvars, void(entity))
 	METHOD(NexuizRadioButton, saveCvars, void(entity))
 
@@ -92,6 +93,8 @@ void saveCvarsNexuizRadioButton(entity me)
 	{
 		if(me.checked)
 			cvar_set(me.cvarName, me.cvarValue);
+		else if(me.cvarOffValue)
+			cvar_set(me.cvarName, me.cvarOffValue);
 	}
 	else
 	{

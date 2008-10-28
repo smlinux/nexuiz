@@ -214,7 +214,7 @@ void W_ThrowWeapon(vector velo, vector delta, float doreduce)
 		return; // just in case
 	if (w == WEP_LASER)
 		return; // just in case
-	if (g_rocketarena)
+	if (g_weaponarena)
 		return;
 	if (g_lms)
 		return;
