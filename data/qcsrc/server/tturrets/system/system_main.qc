@@ -736,7 +736,8 @@ void turret_stdproc_use()
     // bprint("Used:",self.netname, " By ",other.netname,"\n");
 
     // ONS Uses _use to communicate.
-    if (g_onslaught)
+    //if (g_onslaught)
+    if (1) // if anyone ever figures out why i needed a active toggle here, fix this
     {
         entity e;
 
