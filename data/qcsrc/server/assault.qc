@@ -259,6 +259,7 @@ void assault_roundstart_use() {
 	activator = self;
 	SUB_UseTargets();
 
+/*
 #ifdef TTURRETS_ENABLED
     entity ent,oldself;
 
@@ -282,6 +283,7 @@ void assault_roundstart_use() {
 	}
 	self = oldself;
 #endif
+*/
 
 }
 

@@ -735,8 +735,16 @@ void turret_stdproc_use()
 {
     // bprint("Used:",self.netname, " By ",other.netname,"\n");
 
+    self.team = activator.team;
+
+    if(self.team == 0)
+        self.tur_active = 0;
+    else
+        self.tur_active = 1;
+
     // ONS Uses _use to communicate.
     //if (g_onslaught)
+    /*
     if (1) // if anyone ever figures out why i needed a active toggle here, fix this
     {
         entity e;
@@ -764,6 +772,7 @@ void turret_stdproc_use()
         else
             self.tur_active = 1;
     }
+    */
 
 }
 
