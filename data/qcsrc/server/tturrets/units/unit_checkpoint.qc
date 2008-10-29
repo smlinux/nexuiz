@@ -1,41 +1,62 @@
-void checkpoint_think()
+/**
+    turret_checkpoint
+    Semi smart pathing system for move capable turrets.
+**/
+
+#define checkpoint_path swampslug
+#define checkpoint_target enemy
+
+#define checkpoint_cache_who flagcarried
+#define checkpoint_cache_from lastrocket
+#define checkpoint_cache_to selected_player
+
+entity path_makeorcache(entity forwho,entity start, entity end)
 {
-    if(self.goalcurrent != world)
-        te_lightning1(self,self.origin,self.goalcurrent.origin);
+    entity oldself;
+    entity pth;
+    oldself = self;
+    self = forwho;
 
-
-    self.nextthink = time + 0.5;
+    pth = pathlib_makepath(start.origin,end.origin,PLF_GROUNDSNAP,500,1.5);
+    self = oldself;
+    return pth;
 }
 
-void turret_checkpoint_dinit()
+void turret_checkpoint_use()
 {
-    entity e;
+    if(other.checkpoint_path)
+        pathlib_deletepath(other.checkpoint_path);
 
+    other.checkpoint_path = world;
 
+    if(self.checkpoint_target)
+        other.checkpoint_path = path_makeorcache(other,self,self.checkpoint_target);
+
+}
+
+/*QUAKED turret_checkpoint (1 0 1) (-32 -32 -32) (32 32 32)
+-----------KEYS------------
+target: .targetname of next waypoint in chain.
+wait:   Pause at this point # seconds.
+-----------SPAWNFLAGS-----------
+---------NOTES----------
+If a loop is of targets are formed, any unit entering this loop will patrol it indefinitly.
+If the checkpoint chain in not looped, the unit will go "Roaming" when the last point is reached.
+*/
+void spawnfunc_turret_checkpoint()
+{
     if(self.target != "")
     {
-        e = find(world,targetname,self.target);
-        if(!e)
-        {
-            bprint("turret_checkpoint without valid target! (",vtos(self.origin),")\n");
-            remove(self);
-            return;
-        }
-
-        // TODO:: ADD WORLD-INTERACTIVE PATH SUBDEVISION IF PATH NOT CLEAR
-        self.goalcurrent = e;
+        self.checkpoint_target = find(world,targetname,self.target);
+        if(!self.checkpoint_target)
+            dprint("A turret_checkpoint faild to find its target!\n");
     }
 
 }
 
-/**
-.wait
-**/
-void spawnfunc_turret_checkpoint()
+// Compat.
+void spawnfunc_walker_checkpoint()
 {
-    if(!self.wait)
-        self.wait = 5;
-
-    self.think = turret_checkpoint_dinit;
-    self.nextthink = time + 0.25;
+    self.classname = "turret_checkpoint";
+    spawnfunc_turret_checkpoint();
 }

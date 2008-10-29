@@ -154,29 +154,30 @@ void turret_stdproc_die()
     self.tur_head.effects   = self.effects;
     self.health             = 0;
 
-
 // Trow fake parts arround
     // base
-    makevectors(self.angles);
-    if (random() > 0.5)
+    if not(self.damage_flags & RFL_DMG_DEATH_NOGIBS)
     {
-        turret_trowgib(self.origin, '0 0 0','1 1 1',"models/turrets/base-gib2.md3",min(self.respawntime,20),1,1);
-        t_dir = (v_up * 700) + (randomvec() * 300);
-        turret_trowgib(self.origin, t_dir,'1 1 1',"models/turrets/base-gib3.md3",min(self.respawntime,10),1,1);
-        t_dir = (v_up * 700) + (randomvec() * 300);
-        turret_trowgib(self.origin, t_dir,'1 1 1',"models/turrets/base-gib4.md3",min(self.respawntime,10),1,1);
-    }
-    else
-    {
-        turret_trowgib(self.origin, '0 0 0','1 1 1',"models/turrets/base-gib1.md3",min(self.respawntime,20),1,1);
-    }
+        makevectors(self.angles);
+        if (random() > 0.5)
+        {
+            turret_trowgib(self.origin, '0 0 0','1 1 1',"models/turrets/base-gib2.md3",min(self.respawntime,20),1,1);
+            t_dir = (v_up * 700) + (randomvec() * 300);
+            turret_trowgib(self.origin, t_dir,'1 1 1',"models/turrets/base-gib3.md3",min(self.respawntime,10),1,1);
+            t_dir = (v_up * 700) + (randomvec() * 300);
+            turret_trowgib(self.origin, t_dir,'1 1 1',"models/turrets/base-gib4.md3",min(self.respawntime,10),1,1);
+        }
+        else
+        {
+            turret_trowgib(self.origin, '0 0 0','1 1 1',"models/turrets/base-gib1.md3",min(self.respawntime,20),1,1);
+        }
 
-    // Blow the top part up into the air
-    turret_trowgib2( self.origin + (v_up * 50),
-                     v_up * 150 + randomvec() * 50,
-                     '0.2 0.2 0.2',
-                     self.tur_head,time + 0.5 + (random() * 0.5));
-
+        // Blow the top part up into the air
+        turret_trowgib2( self.origin + (v_up * 50),
+                         v_up * 150 + randomvec() * 50,
+                         '0.2 0.2 0.2',
+                         self.tur_head,time + 0.5 + (random() * 0.5));
+    }
 
 // Go boom
     RadiusDamage (self,self, min(self.ammo,50),min(self.ammo,50) * 0.25,250,world,min(self.ammo,50)*5,0,world);
@@ -207,12 +208,34 @@ void turret_stdproc_respawn()
     // this function doubles as "teamchange" function.
 
     self.tur_head.team = self.team;
-	if (self.team == COLOR_TEAM1)
-		self.colormod = '1.4 0.8 0.8';
-	else if (self.team == COLOR_TEAM2)
-		self.colormod = '0.8 0.8 1.4';
-	else
-		self.colormod = '0 0 0'; // reset
+
+    /*
+    COLOR_TEAM1       = 4;  // red
+    COLOR_TEAM2       = 13; // blue
+    COLOR_TEAM3       = 12; // yellow
+    COLOR_TEAM4       = 9; // pink
+    */
+
+	self.colormod = '0 0 0';
+
+	switch(self.team)
+	{
+        case COLOR_TEAM1: // Red
+            self.colormod = '1.4 0.8 0.8';
+            break;
+
+        case COLOR_TEAM2: // Blue
+            self.colormod = '0.8 0.8 1.4';
+            break;
+
+        case COLOR_TEAM3: // Yellow
+            self.colormod = '1.4 1.4 0.6';
+            break;
+
+        case COLOR_TEAM4: // Pink
+            self.colormod = '1.4 0.6 1.4';
+            break;
+	}
 
     self.deadflag           = DEAD_NO;
     self.tur_head.deadflag  = self.deadflag;
@@ -253,16 +276,17 @@ void turret_stdproc_respawn()
 void turret_stdproc_damage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector vforce)
 {
     entity baseent,oldself;
-    // entity player;
 
     if (self.health <= 0) return;
 
     // Damage func is shared on all parts as standard, we need to know what the master entity of this turret is.
-    // if ((self.classname == "turret_head")||(self.classname == "turret_gun")||(self.classname == "turret_badge"))
     if (self.owner)
         baseent = self.owner;
     else
         baseent = self;
+
+    oldself = self;
+    self = baseent;
 
     if (teamplay != 0)
     {
@@ -278,41 +302,38 @@ void turret_stdproc_damage (entity inflictor, entity attacker, float damage, flo
             FOR_EACH_PLAYER(player)
             	if(player.team == self.team)
             		sprint(player, "The enemy is attacking your base!");
-
             */
         }
-
     }
 
     baseent.health = baseent.health - damage;
 
     // thorw head slightly off aim when hit?
-    if ((self.classname == "turret_head") || (self.classname == "turret_gun"))
+    if (oldself.classname == "turret_head")
         if (self.damage_flags & TFL_DMG_HEADSHAKE)
-        {
-            // makevectors(baseent.tur_head.v_angle);
-            baseent.tur_head.angles = baseent.tur_head.angles + randomvec() * damage;
-        }
+            self.tur_head.angles = self.tur_head.angles + randomvec() * damage;
 
     if (self.turrcaps_flags & TFL_TURRCAPS_MOVE)
-    {
         self.velocity = self.velocity + vforce;
-    }
-
 
     // Start burning when we have 10% or less health left
     if (self.health < (self.tur_health * 0.1))
-        self.effects = EF_FLAME;
+        self.tur_head.effects = EF_FLAME;
 
-    if (self.health <= 0)
+    self = oldself;
+
+    if (baseent.health <= 0)
     {
-        oldself = self;
-        self = baseent;
-        turret_stdproc_die();
-        self = oldself;
-
-        //baseent.turret_diefunc();
+        baseent.event_damage           = SUB_Null;
+        baseent.tur_head.event_damage  = SUB_Null;
+        baseent.takedamage             = DAMAGE_NO;
+        baseent.tur_head.takedamage    = baseent.takedamage;
+        baseent.nextthink = time;
+        baseent.think = turret_stdproc_die;
     }
+
+
+
 }
 
 

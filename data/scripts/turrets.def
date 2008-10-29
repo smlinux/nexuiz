@@ -194,17 +194,6 @@ Used to feed turrets capable of it with remote target info. currently only turre
 */
 
 
-/*QUAKED walker_checkpoint (1 0 1) (-16 -16 -16) (16 16 16)
------------KEYS------------
-target: .targetname of next wapoint in chain. 
-
------------SPAWNFLAGS-----------
-
----------NOTES----------
-If a loop is of targets are formed, any walker entering this loop will patrol it indefinitly.
-If the checkpoint chain in not looped, teh walker will go "Roaming" when teh last point is reached. 
-*/
-
 /*QUAKED turret_walker (1 0 0) (-32 -32 0) (32 32 50)
 -----------KEYS------------
 turret_scale_damage: 2 = double damage, 0.5 = half
@@ -214,8 +203,6 @@ turret_scale_ammo:   2 = doubble ammo carry & regen, 0.5 = half ammo carry & reg
 turret_scale_aim:    2 = aim twice as fast, 0,5 = aim at half speed
 turret_scale_health: 2 = double health, 0.5 = half
 
-target : Enter this walker_checkpoint chain
-
 team : 5=red, 14=blue
 -----------SPAWNFLAGS-----------
 ---------NOTES----------
@@ -224,4 +211,36 @@ A nasty mechanical ceature that will engage longrange target with missiles, midr
 
 -------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
 model="models/turrets/radiant/walker.md3"
+*/
+
+
+/*QUAKED turret_ewheel (1 0 0) (-32 -32 0) (32 32 50)
+-----------KEYS------------
+turret_scale_damage: 2 = double damage, 0.5 = half
+turret_scale_range:  2 = double range, 0.5 = half
+turret_scale_refire: 2 = doubble refire (SLOWER!), 0.5 = half (FASTER!)
+turret_scale_ammo:   2 = doubble ammo carry & regen, 0.5 = half ammo carry & regen
+turret_scale_aim:    2 = aim twice as fast, 0,5 = aim at half speed
+turret_scale_health: 2 = double health, 0.5 = half
+
+team : 5=red, 14=blue
+-----------SPAWNFLAGS-----------
+---------NOTES----------
+
+Small, agile and move capable turret.
+
+-------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
+model="models/turrets/radiant/ewheel.md3"
+*/
+
+
+/*QUAKED turret_checkpoint (1 0 1) (-32 -32 -32) (32 32 32)
+-----------KEYS------------
+target: .targetname of next wapoint in chain.
+wait:   Pause at this point # seconds.
+-----------SPAWNFLAGS-----------
+
+---------NOTES----------
+If a loop is of targets are formed, any unit entering this loop will patrol it indefinitly.
+If the checkpoint chain in not looped, the unit will go "Roaming" when the last point is reached.
 */

@@ -12,6 +12,7 @@
 // Non combat units
 #include "../units/unit_fusionreactor.qc"  /// Supply unites that need it with power
 #include "../units/unit_targettrigger.qc"  /// Hit me!
+#include "../units/unit_checkpoint.qc"     /// Halfsmart pathing.
 
 // Combat units
 #include "../units/unit_plasma.qc"  /// Basic energy cannon
@@ -23,6 +24,6 @@
 #include "../units/unit_machinegun.qc" /// whacka
 #include "../units/unit_tessla.qc"  /// Chain lightning capabale turret
 #include "../units/unit_walker.qc"
-
+#include "../units/unit_ewheel.qc"
 
 #endif // TTURRETS_ENABLED

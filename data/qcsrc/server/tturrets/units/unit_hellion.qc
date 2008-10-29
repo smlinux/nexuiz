@@ -149,6 +149,14 @@ void turret_hellion_missile_explode()
     vector org2;
     float d;
 
+    if(self.event_damage != SUB_Null)
+    {
+        self.event_damage = SUB_Null;
+        self.think = turret_hellion_missile_explode;
+        self.nextthink = time;
+        return;
+    }
+
     sound (self, CHAN_PROJECTILE, "weapons/rocket_impact.wav", 1, ATTN_NORM);
     org2 = findbetterlocation (self.origin, 16);
 

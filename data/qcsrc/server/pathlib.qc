@@ -1,14 +1,27 @@
-.float pathgroup;
+#define PLF_GROUNDSNAP 1
+#define PLF_NOOPTIMIZE 2
+#define PLF_SUBPATH3D  4
 
+#define path_flags lip
+
+//.float pathgroup;
+// #define pathgroup version
+#define path_subpathing_size autoswitch
+#define path_subpathing_bboxexpand welcomemessage_time
+/*
 .entity path_next;
 .entity path_prev;
-// .entity path_start;
+*/
+#define path_next swampslug
+#define path_prev lasertarget
+
+#define pathlib_garbagetime 120
 
 .float(vector start,vector end) path_validate;
 
 float pathlib_stdproc_path_validate(vector start,vector end)
 {
-    tracebox(start, self.mins, self.maxs, end, MOVE_NOMONSTERS, self);
+    tracebox(start, self.mins, self.maxs, end, MOVE_NORMAL, self);
 
     if(vlen(trace_endpos - end) < 32)
         return 1;
@@ -16,26 +29,30 @@ float pathlib_stdproc_path_validate(vector start,vector end)
     return 0;
 }
 
-void pathlib_point_use()
+vector pathlib_groundsnap(vector where,entity path)
 {
-    remove(self);
+    float lsize;
+
+    lsize = vlen(self.mins - self.maxs) * 0.25;
+
+    traceline(where + ('0 0 1' * lsize) ,where - '0 0 10000',MOVE_NORMAL,self);
+
+    return trace_endpos + ('0 0 1' * lsize);
+
 }
 
 entity pathlib_createpoint(entity parent,entity next,entity first,vector where)
 {
     entity point;
+
     point = spawn();
     point.classname = "path_node";
 
-    //bprint("Create point\n");
-
-    traceline(where + '0 0 32' ,where - '0 0 10000',MOVE_NOMONSTERS,self);
-    where = trace_endpos + '0 0 32';
-
-    setorigin(point,where);
+    //point.think = SUB_Remove;
+    //point.nectthink = time + pathlib_garbagetime;
 
     if(first)
-        point.owner = parent;
+        point.owner = first;
     else
     {
         point.classname = "path_master";
@@ -50,54 +67,62 @@ entity pathlib_createpoint(entity parent,entity next,entity first,vector where)
     else
         point.classname = "path_end";
 
+    if(point.owner.path_flags & PLF_GROUNDSNAP)
+        where = pathlib_groundsnap(where,parent);
+
+
+    setorigin(point,where);
+
+
     return point;
 }
 
 #define pathib_maxdivide 128
-
-vector pathlib_findsubpath(vector start,vector vcrash,vector end,float maxsize)
+vector pathlib_findsubpath(entity start,vector vcrash,entity end,float maxsize)
 {
-    float x,y;//,z;
+    float x,y,z;
     float step;
-    float clear;
     float dist;
     float pathlength;
     float pathlength_best;
     vector bestpoint;
     vector point;
-    //string s;
+    float zmin,zmax;
 
     pathlength_best = 1000000;
 
-    step = vlen(self.maxs - self.mins) * 1.5;
-    //s = ftos(step);
+    step = vlen(self.maxs - self.mins) * start.owner.path_subpathing_bboxexpand;
 
-    //bprint("pathlib_findsubpath: step=",s);
-    //s = ftos(maxsize);
-    //bprint(" size=",s,"\n");
+    if(start.owner.path_flags & PLF_SUBPATH3D)
+    {
+        zmin = maxsize * -1;
+        zmax = maxsize;
+    }
+    else
+    {
+        zmin = 0;
+        zmax = 1;
+    }
 
-    //for(z = -maxsize; z < maxsize; z += step)
+    for(z = zmin; z < zmax; z += step)
     for(y = -maxsize; y < maxsize; y += step)
     for(x = -maxsize; x < maxsize; x += step)
     {
 
-        point = vcrash;
-        point_x = point_x + x;
-        point_y = point_y + y;
+        point_z = vcrash_z + z;
+        point_x = vcrash_x + x;
+        point_y = vcrash_y + y;
 
-        traceline(point + '0 0 32' ,point - '0 0 10000',MOVE_NOMONSTERS,self);
-        point = trace_endpos + '0 0 32';
 
-        clear = self.path_validate(start,point);
+        if(start.owner.path_flags & PLF_GROUNDSNAP)
+            point = pathlib_groundsnap(point,start);
 
-        if(clear)
+        if(self.path_validate(start.origin,point))
         {
-            //bprint("Good point\n");
-
-            dist = vlen(start - point);
+            dist = vlen(start.origin - point);
             if(dist > step)
             {
-                pathlength = dist + vlen(point - end);
+                pathlength = dist + vlen(point - end.origin);
                 if(pathlength < pathlength_best)
                 {
                     bestpoint = point;
@@ -119,7 +144,6 @@ float pathlib_path(entity start,entity end)
     vector vcrash;
     vector subpath_point;
     entity subpoint;
-    //bprint("pathlib_path...\n");
 
     // Fail.
     if(start.cnt > pathib_maxdivide)
@@ -130,66 +154,39 @@ float pathlib_path(entity start,entity end)
 
     vcrash = trace_endpos;
 
-    subpath_point = pathlib_findsubpath(start.origin,vcrash,end.origin,500);
+    subpath_point = pathlib_findsubpath(start,vcrash,end,start.owner.path_subpathing_size);
 
     if(subpath_point == vcrash)
         return 0; // Fail.
 
     subpoint = pathlib_createpoint(start,end,start.owner,subpath_point);
+
     subpoint.cnt = start.cnt +1;
     start.path_next = subpoint;
     end.path_prev = subpoint;
+
     if(self.path_validate(start.origin,end.origin))
         return 1;
 
     return pathlib_path(subpoint,end);
-
-    /*
-    while(!clear)
-    {
-        ++c;
-
-        if(c > pathib_maxdivide)
-            return 0;
-
-        subpath_point = pathlib_findsubpath(subpoint2.origin,vcrash,end.origin,2000);
-        if(subpath_point == vcrash)
-            return 0; // Fail.
-
-        subpoint = pathlib_createpoint(subpoint2,end,start.owner,subpath_point);
-        subpoint.cnt = subpoint2.cnt +1;
-        subpoint2.path_next = subpoint;
-
-        clear = self.path_validate(subpoint2.origin,end.origin);
-        vcrash = trace_endpos;
-        if(clear)
-            return 1;
-        subpoint2 = subpoint;
-
-        // Fail.
-
-    }*
-
-    */
-
-
-    return 1;
 }
 
 void pathlib_path_optimize(entity start,entity end)
 {
     entity point,point_tmp;
-    point = start.path_next;
     float c;
+
+    point = start.path_next;
 
     while(point != end)
     {
         c++;
-        if(c > 200)
+        if(c > 5000)
         {
-            //bprint("pathlib_path_optimize runaway!\n");
+            dprint("pathlib_path_optimize runaway!\n");
             return;
         }
+
         point_tmp = point;
         point = point.path_next;
         if(self.path_validate(point_tmp.path_prev.origin,point_tmp.path_next.origin))
@@ -225,25 +222,34 @@ void pathlib_showpath(entity start)
     }
 }
 
-entity dynpath_make(vector from, vector to)
+entity pathlib_makepath(vector from, vector to,float pathflags,float subpathing_size, float subpathing_bboxexpand)
 {
     entity e_start,e_end;
-
-    //float t;
-    //t = time;
 
     if(!self.path_validate)
         self.path_validate = pathlib_stdproc_path_validate;
 
+
+    if(subpathing_size < 10)
+        subpathing_size = 500;
+
+    if(subpathing_bboxexpand < 1)
+        subpathing_bboxexpand = 1;
+
     e_start = pathlib_createpoint(world,world,world,from);
+    e_start.path_flags = pathflags;
+
+    e_start.path_subpathing_size = subpathing_size;
+    e_start.path_subpathing_bboxexpand = subpathing_bboxexpand;
+
     e_start.owner = e_start;
+
     e_end = pathlib_createpoint(e_start,world,e_start,to);
     e_start.path_next = e_end;
     e_start.cnt = 0;
 
     if(!pathlib_path(e_start,e_end))
     {
-        //bprint("Crap.\n");
         pathlib_deletepath(e_start);
         remove(e_start);
         return world;
@@ -251,26 +257,20 @@ entity dynpath_make(vector from, vector to)
 
     pathlib_path_optimize(e_start,e_end);
 
-    //string s;
-    //t = time - t;
-    //s = ftos(t);
-    //bprint("^2Path created in ", s, " seconds\n");
-
     return e_start;
 
 }
 
 void pathlib_test_think()
 {
-    //bprint("pathlib_test tink...\n");
     pathlib_showpath(self.enemy);
+
     self.nextthink = time + 0.5;
 }
 void pathlib_test_dinit()
 {
     entity path;
     entity end;
-    // bprint("pathlib_test spawning...\n");
 
     if(self.target == "")
     {
@@ -287,8 +287,9 @@ void pathlib_test_dinit()
         return;
     }
 
-    setsize(self,'-70 -70 0','70 70 70');
-    path = dynpath_make(self.origin,end.origin);
+    setsize(self,'-50 -50 0','50 50 50');
+    path = pathlib_makepath(self.origin,end.origin, PLF_GROUNDSNAP,500,1.25);
+
     if(!path)
     {
         bprint("^1 ==== ERROR: pathlib_test pathing fail ====\n");

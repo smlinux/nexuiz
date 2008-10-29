@@ -1,7 +1,7 @@
 void spawnfunc_turret_mlrs();
 void turret_mlrs_dinit();
 void turret_mlrs_attack();
-void turret_mlrs_projectile_explode();
+void turret_mlrs_rocket_explode();
 
 void turret_mlrs_postthink()
 {
@@ -34,14 +34,14 @@ void turret_mlrs_attack()
     missile.takedamage         = DAMAGE_YES;
     missile.damageforcescale   = 4;
     missile.health             = 30;
-    missile.think              = turret_mlrs_projectile_explode;
+    missile.think              = turret_mlrs_rocket_explode;
     missile.nextthink          = time + max(self.tur_impacttime,(self.shot_radius * 2) / self.shot_speed);
     missile.solid              = SOLID_BBOX;
     missile.movetype           = MOVETYPE_FLYMISSILE;
     missile.effects            = EF_LOWPRECISION;
     missile.velocity           = (self.tur_shotdir_updated + randomvec() * self.shot_spread) * self.shot_speed;
     missile.angles             = vectoangles(missile.velocity);
-    missile.touch              = turret_mlrs_projectile_explode;
+    missile.touch              = turret_mlrs_rocket_explode;
     missile.flags              = FL_PROJECTILE;
     missile.solid              = SOLID_BBOX;
     missile.enemy              = self.enemy;
@@ -51,16 +51,22 @@ void turret_mlrs_attack()
     //self.tur_head.frame = 7 - self.volly_counter;
 }
 
-void turret_mlrs_projectile_explode()
+void turret_mlrs_rocket_explode()
 {
     vector org2;
 
-    //vector	org2;
+    if(self.event_damage != SUB_Null)
+    {
+        self.event_damage = SUB_Null;
+        self.think = turret_mlrs_rocket_explode;
+        self.nextthink = time;
+        return;
+    }
+
+
     sound (self, CHAN_PROJECTILE, "weapons/rocket_impact.wav", 1, ATTN_NORM);
     org2 = findbetterlocation (self.origin, 16);
     pointparticles(particleeffectnum("rocket_explode"), org2, '0 0 0', 1);
-
-    self.event_damage = SUB_Null;
 
 #ifdef TURRET_DEBUG
     float d;

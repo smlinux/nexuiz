@@ -197,14 +197,15 @@ vector real_origin(entity ent);
 #define  TFL_DMG_HEADSHAKE       128
 /// Die and stay dead.
 #define  TFL_DMG_DEATH_NORESPAWN 256
+/// Supress std turret gibs on death
+#define  RFL_DMG_DEATH_NOGIBS    512
 
 // Spawnflags
 /// Spawn in teambased modes
 #define TFL_SPAWN_TEAM      2
 /// Spawn in FFA modes
 #define TFL_SPAWN_FFA       4
-/// Respawn after death
-#define TFL_SPAWN_RESPAWN   8
+
 
 /*
 * Fields commnly used by turrets

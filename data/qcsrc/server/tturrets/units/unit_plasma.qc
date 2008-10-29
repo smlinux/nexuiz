@@ -33,6 +33,8 @@ void turret_plasma_attack()
     turret_tag_fire_update();
 
     sound (self, CHAN_WEAPON, "weapons/hagar_fire.wav", 1, ATTN_NORM);
+    pointparticles(particleeffectnum("laser_muzzleflash"), self.tur_shotorg_updated, self.tur_shotdir_updated * 1000, 1);
+
     proj                    = spawn ();
     setorigin(proj, self.tur_shotorg_updated);
     setsize(proj, '-0.5 -0.5 -0.5', '0.5 0.5 0.5');
@@ -53,11 +55,8 @@ void turret_plasma_attack()
     proj.enemy           = self.enemy;
     proj.flags           = FL_PROJECTILE | FL_NOTARGET;
 
-    if (self.tur_head.frame == 0)
-        self.tur_head.frame = 1;
-
-    // Snapback the head
-    // self.tur_head.angles_x = self.tur_head.angles_x + min((self.shot_dmg * 0.05),self.aim_maxpitch);
+    if(self.tur_head.frame )
+        self.tur_head.frame = 0;
 
 }
 

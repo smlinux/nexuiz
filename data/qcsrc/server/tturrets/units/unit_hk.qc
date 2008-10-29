@@ -351,6 +351,14 @@ void turret_hk_missile_explode()
     vector org2;
     float d;
 
+    if(self.event_damage != SUB_Null)
+    {
+        self.event_damage = SUB_Null;
+        self.think = turret_hk_missile_explode;
+        self.nextthink = time;
+        return;
+    }
+
     if ((other == self.owner)||(other == self.owner.tur_head))
         return;
 
