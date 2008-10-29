@@ -302,7 +302,7 @@ void Seeker_Tag_Touch()
     self.event_damage = SUB_Null;
     sound (self, CHAN_PROJECTILE, "weapons/laserimpact.wav", 1, ATTN_NORM);
 
-    if (other.takedamage != DAMAGE_AIM && other.deadflag == DEAD_NO)
+    if (other.takedamage == DAMAGE_AIM && other.deadflag == DEAD_NO)
     {
         entity e;
         e           = spawn();
