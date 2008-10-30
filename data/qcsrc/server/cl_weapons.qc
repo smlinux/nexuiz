@@ -207,7 +207,7 @@ float W_ThrowNewWeapon(entity own, float wpn, float doreduce, vector org, vector
 // toss current weapon
 void W_ThrowWeapon(vector velo, vector delta, float doreduce)
 {
-	local float w, a, wb;
+	local float w, a, wb, wa;
 
 	w = self.weapon;
 	if (w == 0)
@@ -224,8 +224,20 @@ void W_ThrowWeapon(vector velo, vector delta, float doreduce)
 		return;
 
 	wb = W_WeaponBit(w);
+	wa = W_AmmoItemCode(w);
+	if(!wb)
+		return;
 	if(self.weapons & wb != wb)
 		return;
+	if(start_weapons & wb)
+	{
+		if(wa == IT_SUPERWEAPON && start_items & IT_UNLIMITED_SUPERWEAPONS)
+			return;
+		if(wa != IT_SUPERWEAPON && start_items & IT_UNLIMITED_WEAPON_AMMO)
+			return;
+		if(wa == 0)
+			return;
+	}
 
 	self.weapons = self.weapons - wb;
 	W_SwitchWeapon_Force(self, w_getbestweapon(self));
