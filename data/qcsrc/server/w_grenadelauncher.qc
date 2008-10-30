@@ -5,14 +5,14 @@ void W_Grenade_Explode (void)
 	pointparticles(particleeffectnum("grenade_explode"), org2, '0 0 0', 1);
 	sound (self, CHAN_PROJECTILE, "weapons/grenade_impact.wav", VOL_BASE, ATTN_NORM);
 
-	self.event_damage = SUB_Null;
-	RadiusDamage (self, self.owner, cvar("g_balance_grenadelauncher_primary_damage"), cvar("g_balance_grenadelauncher_primary_edgedamage"), cvar("g_balance_grenadelauncher_primary_radius"), world, cvar("g_balance_grenadelauncher_primary_force"), self.projectiledeathtype, other);
-
 	if(other.takedamage == DAMAGE_AIM)
 		if(other.classname == "player")
 			if(IsDifferentTeam(self.owner, other))
 				if(IsFlying(other))
 					announce(self.owner, "announcer/male/airshot.ogg");
+
+	self.event_damage = SUB_Null;
+	RadiusDamage (self, self.owner, cvar("g_balance_grenadelauncher_primary_damage"), cvar("g_balance_grenadelauncher_primary_edgedamage"), cvar("g_balance_grenadelauncher_primary_radius"), world, cvar("g_balance_grenadelauncher_primary_force"), self.projectiledeathtype, other);
 
 	remove (self);
 }
