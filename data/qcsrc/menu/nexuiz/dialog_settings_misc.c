@@ -32,7 +32,7 @@ void fillNexuizMiscSettingsTab(entity me)
 			e.onClickEntity = sk;
 		
 	me.gotoRC(me, 0, 3.5); me.setFirstColumn(me, me.currentColumn);
-		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "cl_autodemo", "Demo recording"));
+		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "cl_autodemo", "Automatic demo recording"));
 	me.TR(me);
 	me.TR(me);
 		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "showtime", "Show current time"));
