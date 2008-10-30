@@ -508,6 +508,12 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
         damage_inflictor = inflictor;
         damage_attacker = attacker;
 		attacker_save = attacker;
+	
+	if(targ.classname == "player")
+		if(targ.hook)
+			if(targ.hook.aiment)
+				if(targ.hook.aiment == attacker)
+					RemoveGrapplingHook(targ); // STOP THAT, you parasite!
 
 	if(deathtype == DEATH_KILL || deathtype == DEATH_TEAMCHANGE || deathtype == DEATH_AUTOTEAMCHANGE)
 	{
