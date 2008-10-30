@@ -168,7 +168,7 @@ void W_Porto_Attack (void)
 	gren.solid = SOLID_BBOX;
 	gren.effects = EF_LOWPRECISION | EF_RED | EF_ADDITIVE;
 	gren.scale = 4;
-	gren.modelflags = MF_GRENADE;
+	gren.modelflags = MF_TRACER;
 	setmodel(gren, "models/grenademodel.md3"); // precision set above
 	setsize(gren, '0 0 0', '0 0 0');
 	setorigin(gren, w_shotorg);

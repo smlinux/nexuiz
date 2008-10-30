@@ -173,7 +173,7 @@ void Seeker_Fire_Missile(vector f_org)
 
     makevectors(self.v_angle);
     W_SetupShot (self, f_org, FALSE, 2, "weapons/hagar_fire.wav");
-    pointparticles(particleeffectnum("hagar_muzzleflash"), w_shotorg, w_shotdir * 1000, 1);
+    pointparticles(particleeffectnum("seeker_muzzleflash"), w_shotorg, w_shotdir * 1000, 1);
 
     //self.detornator         = FALSE;
 
@@ -349,10 +349,11 @@ void Seeker_Fire_Tag()
     missile.event_damage    = Seeker_Tag_Explode;
     missile.health          = 5;
 
-    setmodel (missile, "models/laser.mdl");
+    setmodel (missile, "models/laser.mdl"); // TODO make this seeker specific
     setorigin (missile, w_shotorg);
 
-    missile.effects     = EF_BRIGHTFIELD | EF_FULLBRIGHT | EF_NOSHADOW | EF_LOWPRECISION;
+    missile.effects     = EF_FULLBRIGHT | EF_NOSHADOW | EF_LOWPRECISION;
+    missile.modelflags  = MF_TRACER3;
     missile.flags       = FL_PROJECTILE;
 
     missile.velocity    = w_shotdir  * cvar("g_balance_seeker_tag_speed");
@@ -421,7 +422,7 @@ void Seeker_Fire_Flac()
 	missile.projectiledeathtype = WEP_SEEKER | HITTYPE_SECONDARY;
 
 	missile.effects = EF_LOWPRECISION;
-	missile.modelflags = MF_GRENADE;
+	missile.modelflags = MF_TRACER3;
 
 	missile.movetype = MOVETYPE_FLY;
 	w_shotdir = w_shotdir + '0 0 0.3';

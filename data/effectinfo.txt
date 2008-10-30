@@ -2968,3 +2968,63 @@ originjitter 10 10 10
 velocitymultiplier 20
 velocityoffset 0 0 10
 airfriction 1
+
+// port-o-launch trail
+// glowing vapor trail
+effect TR_WIZSPIKE
+trailspacing 2
+type static
+color 0x404040 0x404040
+size 3 3
+tex 62 62
+alpha 256 256 968
+//velocityjitter 16 16 16
+lightradius 90
+lighttime 0
+lightcolor 1.5 3 6
+velocitymultiplier -0.1
+// bright sparks
+effect TR_WIZSPIKE
+trailspacing 6
+count 3
+type snow
+tex 42 42
+color 0x404040 0x404040
+size 2 4
+sizeincrease -20
+alpha 444 512 1866
+bounce 1
+velocityoffset 0 0 15
+airfriction 12
+originjitter 1 1 1
+velocityjitter 50 50 50
+
+// TAG trail
+// glowing vapor trail
+effect TR_VORESPIKE
+trailspacing 2
+type static
+color 0x804000 0x804000
+size 3 3
+tex 62 62
+alpha 256 256 968
+//velocityjitter 16 16 16
+lightradius 90
+lighttime 0
+lightcolor 1.5 3 6
+velocitymultiplier -0.1
+// bright sparks
+effect TR_VORESPIKE
+trailspacing 6
+count 3
+type snow
+tex 42 42
+color 0xff8000 0xff8000
+size 2 4
+sizeincrease -20
+alpha 444 512 1866
+bounce 1
+velocityoffset 0 0 15
+airfriction 12
+originjitter 1 1 1
+velocityjitter 50 50 50
