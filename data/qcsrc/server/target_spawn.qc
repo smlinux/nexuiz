@@ -299,33 +299,12 @@ void trigger_relay_if_use()
 	n = self.count;
 
 	// TODO make this generic AND faster than nextent()ing through all, if somehow possible
-	if(self.netname == "targetname")
-		fld = targetname;
-	else if(self.netname == "netname")
-		fld = netname;
-	else if(self.netname == "target")
-		fld = target;
-	else if(self.netname == "classname")
-		fld = classname;
-	else
-	{
-		objerror("invalid field specified for trigger_relay_if");
-		return;
-	}
+	n = (cvar_string(self.netname) == cvar_string(self.message));
+	if(self.spawnflags & 1)
+		n = !n;
 
-	for(e = world; (e = find(e, fld, self.message)) && (n > 0); --n)
-		;
-
-	if(self.spawnflags & 1) // MORE THAN count valid targets
-	{
-		if(n)
-			SUB_UseTargets();
-	}
-	else // AT MOST count valid targets
-	{
-		if(!n)
-			SUB_UseTargets();
-	}
+	if(n)
+		SUB_UseTargets();
 }
 
 void spawnfunc_trigger_relay_if()

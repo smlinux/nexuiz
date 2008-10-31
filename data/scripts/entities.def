@@ -1135,16 +1135,16 @@ DISABLED: do not allow damaging this until it is first activated
 INDICATE: indicate amount of damage already taken by coloring
 */
 
-/*QUAKED trigger_relay_if (0 1 0) (-8 -8 -8) (8 8 8) MORETHAN
-Relays the trigger event if there are at most count entities of the given type.
+/*QUAKED trigger_relay_if (0 1 0) (-8 -8 -8) (8 8 8) NEGATE
+Relays the trigger event if a cvar is set to a specified value.
 -------- KEYS --------
 target: The entity/entities to relay the trigger events to
 targetname: The name other entities can use to target this entity
-netname: The name of the field to check (can currently only be targetname, netname, target or classname)
-message: The value of the field to check
+netname: The name of the cvar to check
+message: The value of the cvar to check
 count: The count of entities that must be found
 -------- SPAWNFLAGS --------
-MORETHAN: trigger if there are more than the given count, not at least
+NEGATE: trigger if the cvar does NOT match the value.
 */
 
 /*QUAKED weapon_hlac (1 0 .5) (-30 -30 0) (30 30 32) FLOATING
