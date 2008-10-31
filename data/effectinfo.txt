@@ -778,7 +778,7 @@ alpha 0 256 100
 //gravity 1
 bounce 1.5
 originjitter 1 1 1
-velocityjitter 2000 2000 3000
+velocityjitter 1000 1000 1500
 velocitymultiplier 0.5
 airfriction 2
 
