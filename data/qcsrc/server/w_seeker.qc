@@ -463,6 +463,7 @@ float w_seeker(float req)
     }
     else if (req == WR_PRECACHE)
     {
+        precache_model ("models/hagarmissile.mdl");
         precache_model ("models/tagrocket.md3");
         precache_model ("models/weapons/g_seeker.md3");
         precache_model ("models/weapons/v_seeker.md3");
