@@ -18,6 +18,7 @@ CLASS(ModalController) EXTENDS(Container)
 	ATTRIB(ModalController, fadedAlpha, float, 0.3)
 ENDCLASS(ModalController)
 
+.entity tabSelectingButton;
 .vector origin;
 .vector size;
 void TabButton_Click(entity button, entity tab); // assumes a button has set the above fields to its own absolute origin, its size, and the tab to activate
@@ -229,6 +230,7 @@ void addTabModalController(entity me, entity other, entity tabButton)
 	me.addItem(me, other, '0 0 0', '1 1 1', 1);
 	tabButton.onClick = TabButton_Click;
 	tabButton.onClickEntity = other;
+	other.tabSelectingButton = tabButton;
 	if(other == me.firstChild)
 	{
 		tabButton.forcePressed = 1;

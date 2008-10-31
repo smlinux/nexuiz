@@ -422,8 +422,12 @@ void m_activate_window(entity wnd)
 
 	if(par.instanceOfModalController)
 	{
-		// tabs
-		par.initializeDialog(par, wnd);
+		if(wnd.tabSelectingButton)
+			// tabs
+			TabButton_Click(wnd.tabSelectingButton, wnd);
+		else
+			// root
+			par.initializeDialog(par, wnd);
 	}
 	else if(par.instanceOfNexposee)
 	{

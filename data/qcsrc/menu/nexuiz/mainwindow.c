@@ -53,7 +53,7 @@ void configureMainWindowMainWindow(entity me)
 	me.radarDialog = i = spawnNexuizRadarDialog();
 	i.configureDialog(i);
 	me.addItemCentered(me, i, i.intendedWidth * eX + i.intendedHeight * eY, SKINALPHAS_MAINMENU_z);
-
+	
 	me.mainNexposee = n = spawnNexuizNexposee();
 	/*
 		if(checkextension("DP_GECKO_SUPPORT"))
