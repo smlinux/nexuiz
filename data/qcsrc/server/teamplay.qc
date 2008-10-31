@@ -298,10 +298,6 @@ void InitGameplayMode()
 		gamemode_name = "Race";
 		g_race_qualifying = cvar("g_race_qualifying");
 
-		// In campaign, only this mode makes sense...
-		if(cvar("g_campaign"))
-			g_race_qualifying = 1;
-
 		if(cvar("g_race_teams"))
 		{
 			g_race_qualifying = 0; // not supported!

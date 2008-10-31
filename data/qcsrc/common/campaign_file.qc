@@ -16,6 +16,7 @@ float CampaignFile_Load(float offset, float n)
 
 	campaign_offset = offset;
 	campaign_entries = 0;
+	campaign_title = string_null;
 
 	fn = strcat("maps/campaign", campaign_name, ".txt");
 	fh = fopen(fn, FILE_READ);
@@ -25,8 +26,12 @@ float CampaignFile_Load(float offset, float n)
 		{
 			if(strlen(l) == 0)
 				continue; // empty line
+			if(substring(l, 0, 11) == "//campaign:")
+				campaign_title = substring(l, 11, strlen(l) - 11);
 			if(substring(l, 0, 2) == "//")
 				continue; // comment
+			if(substring(l, 0, 12) == "\"//campaign:")
+				campaign_title = substring(l, 12, strlen(l) - 13);
 			if(substring(l, 0, 3) == "\"//")
 				continue; // comment
 			if(lineno >= offset)
@@ -62,19 +67,26 @@ float CampaignFile_Load(float offset, float n)
 		fclose(fh);
 	}
 
+	campaign_title = strzone(campaign_title);
+
 	return campaign_entries;
 }
 
 void CampaignFile_Unload()
 {
 	float i;
-	for(i = 0; i < campaign_entries; ++i)
+	if(campaign_title)
 	{
-		strunzone(campaign_gametype[i]);
-		strunzone(campaign_mapname[i]);
-		strunzone(campaign_mutators[i]);
-		strunzone(campaign_shortdesc[i]);
-		strunzone(campaign_longdesc[i]);
+		strunzone(campaign_title);
+		for(i = 0; i < campaign_entries; ++i)
+		{
+			strunzone(campaign_gametype[i]);
+			strunzone(campaign_mapname[i]);
+			strunzone(campaign_mutators[i]);
+			strunzone(campaign_shortdesc[i]);
+			strunzone(campaign_longdesc[i]);
+		}
+		campaign_entries = 0;
+		campaign_title = string_null;
 	}
-	campaign_entries = 0;
 }

@@ -38,7 +38,6 @@ CLASS(NexuizCampaignList) EXTENDS(NexuizListBox)
 	ATTRIB(NexuizCampaignList, buttonNext, entity, NULL)
 	ATTRIB(NexuizCampaignList, buttonPrev, entity, NULL)
 	ATTRIB(NexuizCampaignList, labelTitle, entity, NULL)
-	ATTRIB(NexuizCampaignList, campaignTitle, string, string_null)
 ENDCLASS(NexuizCampaignList)
 entity makeNexuizCampaignList();
 void CampaignList_LoadMap(entity btn, entity me);
@@ -134,6 +133,7 @@ void loadCvarsNexuizCampaignList(entity me)
 	campaign_name = strzone(cvar_string("g_campaign_name"));
 	me.cvarName = strzone(strcat("g_campaign", campaign_name, "_index"));
 	registercvar(me.cvarName, "", 0); // saved by server QC anyway
+	CampaignFile_Unload();
 	CampaignFile_Load(0, CAMPAIGN_MAX_ENTRIES);
 	me.campaignIndex = bound(0, cvar(me.cvarName), campaign_entries);
 	cvar_set(me.cvarName, ftos(me.campaignIndex));
@@ -142,14 +142,8 @@ void loadCvarsNexuizCampaignList(entity me)
 	me.nItems = min(me.campaignIndex + 2, campaign_entries);
 	me.selectedItem = min(me.campaignIndex, me.nItems - 1);
 	me.scrollPos = me.nItems * me.itemHeight - 1;
-	if(me.campaignTitle)
-		strunzone(me.campaignTitle);
-	if(campaign_name == "")
-		me.campaignTitle = strzone("Nexuiz Multiplayer Training Campaign");
-	else
-		me.campaignTitle = strzone(strreplace("_", " ", campaign_name));
 	if(me.labelTitle)
-		me.labelTitle.setText(me.labelTitle, me.campaignTitle);
+		me.labelTitle.setText(me.labelTitle, campaign_title);
 }
 
 void saveCvarsNexuizCampaignList(entity me)
@@ -194,6 +188,8 @@ void campaignGoNexuizCampaignList(entity me, float step)
 			s = substring(s, 13, strlen(s) - 17);
 			cvar_set("g_campaign_name", s);
 			me.loadCvars(me);
+			canNext = (j != n - 1);
+			canPrev = (j != 0);
 		}
 	}
 

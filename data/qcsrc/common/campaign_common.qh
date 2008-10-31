@@ -13,6 +13,7 @@ float campaign_fraglimit[CAMPAIGN_MAX_ENTRIES];
 string campaign_mutators[CAMPAIGN_MAX_ENTRIES];
 string campaign_shortdesc[CAMPAIGN_MAX_ENTRIES];
 string campaign_longdesc[CAMPAIGN_MAX_ENTRIES];
+string campaign_title; // filled upon loading
 
 // load the campaign file, but use the given offset and limit the number of
 // entries being read. Returns the number of entries successfully read (this
