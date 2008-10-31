@@ -51,7 +51,7 @@ void InstantAction_LoadMap(entity btn, entity dummy)
 
 void fillNexuizSingleplayerDialog(entity me)
 {
-	entity e;
+	entity e, btnPrev, btnNext, lblTitle;
 
 	me.TR(me);
 		me.TDempty(me, (me.columns - 2) / 2);
@@ -61,7 +61,19 @@ void fillNexuizSingleplayerDialog(entity me)
 	me.TR(me);
 	me.TR(me);
 	me.TR(me);
-		me.TD(me, me.rows - 5, me.columns, me.campaignBox = makeNexuizCampaignList());
+		me.TD(me, 1, 1, btnPrev = makeNexuizButton("<<", '0 0 0'));
+		me.TD(me, 1, me.columns - 2, lblTitle = makeNexuizTextLabel(0.5, "???"));
+		me.TD(me, 1, 1, btnNext = makeNexuizButton(">>", '0 0 0'));
+	me.TR(me);
+		me.TD(me, me.rows - 6, me.columns, me.campaignBox = makeNexuizCampaignList());
+			btnPrev.onClick = MultiCampaign_Prev;
+			btnPrev.onClickEntity = me.campaignBox;
+			btnNext.onClick = MultiCampaign_Next;
+			btnNext.onClickEntity = me.campaignBox;
+			me.campaignBox.buttonNext = btnNext;
+			me.campaignBox.buttonPrev = btnPrev;
+			me.campaignBox.labelTitle = lblTitle;
+			me.campaignBox.campaignGo(me.campaignBox, 0);
 
 	me.gotoRC(me, me.rows - 1, 0);
 		me.TD(me, 1, me.columns, e = makeNexuizButton("Start!", '0 0 0'));
