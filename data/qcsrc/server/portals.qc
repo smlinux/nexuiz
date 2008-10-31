@@ -256,6 +256,9 @@ void Portal_Touch()
 
 	if(other.classname == "player")
 		return; // handled by think
+
+	if(other.classname == "item_flag_team")
+		return; // never portal these
 	
 	if(other.classname == "grapplinghook")
 		return; // handled by think
