@@ -1040,6 +1040,7 @@ sub irc_joinstage($)
 	# chat: Nexuiz server -> IRC channel, master do
 	[ dp => q{:vote:vdo:(\d+):(.*)} => sub {
 		my ($id, $command) = @_;
+		$command = color_dp2irc $command;
 		my $oldnick = $id ? $store{"playernick_$id"} : "(console)";
 		out irc => 0, "PRIVMSG $config{irc_channel} :* $oldnick\017 used his master status to do \"$command\017\"";
 		return 0;
