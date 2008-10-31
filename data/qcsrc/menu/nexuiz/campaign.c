@@ -9,6 +9,7 @@ CLASS(NexuizCampaignList) EXTENDS(NexuizListBox)
 	METHOD(NexuizCampaignList, setSelected, void(entity, float))
 	METHOD(NexuizCampaignList, keyDown, float(entity, float, float, float))
 	METHOD(NexuizCampaignList, campaignGo, void(entity, float))
+	METHOD(NexuizCampaignList, destroy, void(entity))
 
 	ATTRIB(NexuizCampaignList, campaignGlob, float, 0)
 	ATTRIB(NexuizCampaignList, realFontSize, vector, '0 0 0')
@@ -121,6 +122,12 @@ void configureNexuizCampaignListNexuizCampaignList(entity me)
 	me.campaignGlob = search_begin("maps/campaign*.txt", TRUE, TRUE);
 	me.loadCvars(me);
 	me.campaignGo(me, 0); // takes care of enabling/disabling buttons too
+}
+
+void destroyNexuizCampaignList(entity me)
+{
+	if(me.campaignGlob >= 0)
+		search_end(me.campaignGlob);
 }
 
 void loadCvarsNexuizCampaignList(entity me)
