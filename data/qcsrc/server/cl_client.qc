@@ -551,8 +551,9 @@ void FixPlayermodel()
 
 	if(self.modelindex == 0)
 	{
-		bprint("\{1}^1Player ", self.netname, "^1 has a zero modelindex, trying to fix...\n");
-		self.model = "INVALID"; // force the != checks to return true
+		if(self.model != "")
+			bprint("\{1}^1Player ", self.netname, "^1 has a zero modelindex, trying to fix...\n");
+		self.model = ""; // force the != checks to return true
 	}
 
 	if(defaultmodel != "")
