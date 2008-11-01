@@ -521,8 +521,8 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 		if(targ.classname == "player")
 			if not(IsDifferentTeam(targ, attacker))
 			{
-				damage = 0;
-				force = '0 0 0';
+				self = oldself;
+				return;
 			}
 	}
 
