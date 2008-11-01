@@ -25,6 +25,11 @@ void Seeker_Missile_Explode ()
 
 void Seeker_Missile_Touch()
 {
+	if (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
+	{
+		remove(self);
+		return;
+	}
     if (other == self.owner)
         return;
 
@@ -290,7 +295,6 @@ void Seeker_Tag_Touch()
 		remove(self);
 		return;
 	}
-
     if (other == self.owner)
         return;
 
@@ -387,6 +391,11 @@ void Seeker_Flac_Explode ()
 
 void Seeker_Flac_Touch()
 {
+	if (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
+	{
+		remove(self);
+		return;
+	}
     if (other == self.owner)
         return;
 
