@@ -393,10 +393,14 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 	else if (take > 10)
 		sound (self, CHAN_PROJECTILE, "misc/bodyimpact1.wav", VOL_BASE, ATTN_NORM); // FIXME possibly remove them?
 
-	if (take > 50)
-		TossGib (world, "models/gibs/chunk.mdl", hitloc, force * -0.1,1);
-	if (take > 100)
-		TossGib (world, "models/gibs/chunk.mdl", hitloc, force * -0.2,1);
+	if(sv_gentle < 1)
+	if not(independent_players)
+	{
+		if (take > 50)
+			TossGib (world, "models/gibs/chunk.mdl", hitloc, force * -0.1,1);
+		if (take > 100)
+			TossGib (world, "models/gibs/chunk.mdl", hitloc, force * -0.2,1);
+	}
 
 	if (time > self.spawnshieldtime)
 	{
