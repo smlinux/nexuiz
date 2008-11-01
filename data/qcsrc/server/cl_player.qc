@@ -273,7 +273,7 @@ void PlayerCorpseDamage (entity inflictor, entity attacker, float damage, float 
 	else if (take > 10)
 		sound (self, CHAN_PROJECTILE, "misc/bodyimpact1.wav", VOL_BASE, ATTN_NORM);
 
-	if not(IS_INDEPENDENT_PLAYER(self))
+	if(independent_players)
 	if(sv_gentle < 1) {	
 		if (take > 50)
 			TossGib (world, "models/gibs/chunk.mdl", hitloc, force * -0.1,1);
@@ -308,16 +308,16 @@ void PlayerCorpseDamage (entity inflictor, entity attacker, float damage, float 
 
 
 		// make a meaty mess
-		if(IS_INDEPENDENT_PLAYER(self))
+		if(independent_players)
 		{
 			TossGib (self, "models/gibs/eye.md3", self.origin + self.view_ofs, self.velocity + randomvec() * 150,0);
-			MAKE_INDEPENDENT_PLAYER(self); // undo SOLID_CORPSE
+			self.solid = SOLID_TRIGGER; // undo SOLID_CORPSE
 			self.takedamage = DAMAGE_NO; // can't damage this gib, to prevent better jumps from it
 		}
 		else
 			TossGib (self, "models/gibs/eye.md3", self.origin + self.view_ofs, self.velocity + randomvec() * 150,0);
 		
-		if not(IS_INDEPENDENT_PLAYER(self))
+		if not(independent_players)
 		if(sv_gentle < 1) {
 			te_bloodshower (self.origin + self.mins, self.origin + self.maxs, 1200 * multiplier, 1000);
 			TossGib (world, "models/gibs/bloodyskull.md3", self.origin + self.view_ofs, self.velocity,0);
