@@ -1,0 +1,397 @@
+/**
+    Pull toward a point, The further away, the stronger the pull.
+**/
+vector steerlib_arrive(vector point,float maximal_distance)
+{
+    float distance;
+    vector direction;
+
+    distance = bound(0.001,vlen(self.origin - point),maximal_distance);
+    direction = normalize(point - self.origin);
+    return  direction * (distance / maximal_distance);
+}
+
+/**
+    Pull toward a point increasing the pull the closer we get
+**/
+vector steerlib_attract(vector point, float maximal_distance)
+{
+    float distance;
+    vector direction;
+
+    distance = bound(0.001,vlen(self.origin - point),maximal_distance);
+    direction = normalize(point - self.origin);
+
+    return  direction * (1-(distance / maximal_distance));
+}
+
+/**
+    Move away from a point.
+**/
+vector steerlib_repell(vector point,float maximal_distance)
+{
+    float distance;
+    vector direction;
+
+    distance = bound(0.001,vlen(self.origin - point),maximal_distance);
+    direction = normalize(self.origin - point);
+
+    return  direction * (1-(distance / maximal_distance));
+}
+
+/**
+    Keep at ideal_distance away from point
+**/
+vector steerlib_standoff(vector point,float ideal_distance)
+{
+    float distance;
+    vector direction;
+
+    distance = vlen(self.origin - point);
+
+
+    if(distance < ideal_distance)
+    {
+        direction = normalize(self.origin - point);
+        return direction * (distance / ideal_distance);
+    }
+
+    direction = normalize(point - self.origin);
+    return direction * (ideal_distance / distance);
+
+}
+
+/**
+    A random heading in a forward halfcicrle
+**/
+vector steerlib_waner(float range,float tresh,vector oldpoint)
+{
+    vector wander_point;
+    wander_point = v_forward - oldpoint;
+
+    if (vlen(wander_point) > tresh)
+        return oldpoint;
+
+    range = bound(0,range,1);
+
+    wander_point = self.origin + v_forward * 128;
+    wander_point = wander_point + randomvec() * (range * 128) - randomvec() * (range * 128);
+
+    return normalize(wander_point - self.origin);
+}
+
+/**
+    Dodge a point-
+**/
+vector steerlib_dodge(vector point,vector dodge_dir,float min_distance)
+{
+    float distance;
+
+    distance = max(vlen(self.origin - point),min_distance);
+
+    return dodge_dir * (min_distance/distance);
+}
+
+/**
+    flocking by .flock_id
+    Group will move towards the unified direction while keeping close to eachother.
+**/
+.float flock_id;
+vector steerlib_flock(float radius, float standoff,float separation_force,float flock_force)
+{
+    entity flock_member;
+    vector push,pull;
+    float ccount;
+
+    flock_member = findradius(self.origin,radius);
+    while(flock_member)
+    {
+        if(flock_member != self)
+        if(flock_member.flock_id == self.flock_id)
+        {
+            ++ccount;
+            push = push + (steerlib_repell(flock_member.origin,standoff) * separation_force);
+            pull = pull + (steerlib_arrive(flock_member.origin + flock_member.velocity,radius) * flock_force);
+        }
+        flock_member = flock_member.chain;
+    }
+    return push + (pull* (1 / ccount));
+}
+
+/**
+    All members want to be in the center, and keep away from eachother.
+    The furtehr form the center the more they want to be there.
+**/
+vector steerlib_swarm(float radius, float standoff,float separation_force,float swarm_force)
+{
+    entity swarm_member;
+    vector force,center;
+    float ccount;
+
+    swarm_member = findradius(self.origin,radius);
+
+    while(swarm_member)
+    {
+        if(swarm_member.flock_id == self.flock_id)
+        {
+            ++ccount;
+            center = center + swarm_member.origin;
+            force = force + (steerlib_repell(swarm_member.origin,standoff) * separation_force);
+        }
+        swarm_member = swarm_member.chain;
+    }
+
+    center = center * (1 / ccount);
+    force = force + (steerlib_arrive(center,radius) * swarm_force);
+
+    return force;
+}
+
+/**
+    Steer towards the direction least obstructed.
+    Run four tracelines in a forward funnel, bias each diretion negative if something is found there.
+**/
+vector steerlib_traceavoid(float pitch,float length)
+{
+    vector vup_left,vup_right,vdown_left,vdown_right;
+    float fup_left,fup_right,fdown_left,fdown_right;
+    vector v_left,v_down;
+    //vector point;
+
+    /*
+    traceline(self.origin,self.origin + v_forward * length,MOVE_NOMONSTERS,self);
+    if(trace_fraction == 1)
+        return '0 0 0';
+    */
+
+    v_left = v_right * -1;
+    v_down = v_up * -1;
+
+    vup_left = (v_forward + (v_left * pitch + v_up * pitch)) * length;
+    traceline(self.origin, self.origin +  vup_left,MOVE_NOMONSTERS,self);
+    //vup_left = trace_endpos;
+    fup_left = trace_fraction;
+
+    //te_lightning1(world,self.origin, trace_endpos);
+
+    vup_right = (v_forward + (v_right * pitch + v_up * pitch)) * length;
+    traceline(self.origin,self.origin + vup_right ,MOVE_NOMONSTERS,self);
+    //vup_right = trace_endpos;
+    fup_right = trace_fraction;
+
+    //te_lightning1(world,self.origin, trace_endpos);
+
+    vdown_left = (v_forward + (v_left * pitch + v_down * pitch)) * length;
+    traceline(self.origin,self.origin + vdown_left,MOVE_NOMONSTERS,self);
+    //vdown_left = trace_endpos;
+    fdown_left = trace_fraction;
+
+    //te_lightning1(world,self.origin, trace_endpos);
+
+    vdown_right = (v_forward + (v_right * pitch + v_down * pitch)) * length;
+    traceline(self.origin,self.origin + vdown_right,MOVE_NOMONSTERS,self);
+    //vdown_right = trace_endpos;
+    fdown_right = trace_fraction;
+
+    //te_lightning1(world,self.origin, trace_endpos);
+
+    //(v_for * f_for) +
+
+    //point = self.origin + (vup_left * fup_left) + (vup_right * fup_right) +
+    //        (vdown_left * fdown_left) + (vdown_right * fdown_right);
+
+    vector upwish,downwish,leftwish,rightwish;
+    upwish    = v_up    * (fup_left   + fup_right);
+    downwish  = v_down  * (fdown_left + fdown_right);
+    leftwish  = v_left  * (fup_left   + fdown_left);
+    rightwish = v_right * (fup_right  + fdown_right);
+
+    return (upwish+leftwish+downwish+rightwish) * 0.25;
+
+    //point = point * 0.2; // /5
+
+   // return normalize(point - self.origin) * (1- (fup_left+fup_right+fdown_left+fdown_right) * 0.25);
+}
+
+
+
+//////////////////////////////////////////////
+//     Testting                             //
+// Everything below this point is a mess :D //
+//////////////////////////////////////////////
+#define TLIBS_TETSLIBS
+#ifdef TLIBS_TETSLIBS
+void flocker_die()
+{
+	sound (self, CHAN_PROJECTILE, "weapons/rocket_impact.wav", VOL_BASE, ATTN_NORM);
+
+	pointparticles(particleeffectnum("rocket_explode"), self.origin, '0 0 0', 1);
+
+    self.owner.cnt += 1;
+    self.owner = world;
+
+    self.nextthink = time;
+    self.think = SUB_Remove;
+}
+
+
+void flocker_think()
+{
+    vector dodgemove,swarmmove;
+    vector reprellmove,wandermove,newmove;
+
+    self.angles_x = self.angles_x * -1;
+    makevectors(self.angles);
+    self.angles_x = self.angles_x * -1;
+
+    dodgemove   = steerlib_traceavoid(0.35,1000);
+    swarmmove   = steerlib_swarm(1000,100,150,400);
+    reprellmove = steerlib_repell(self.owner.enemy.origin+self.enemy.velocity,1000) * 700;
+
+    if(vlen(dodgemove) == 0)
+    {
+        self.pos1 = steerlib_waner(0.5,0.1,self.pos1);
+        wandermove  = self.pos1 * 50;
+    }
+    else
+        self.pos1 = normalize(self.velocity);
+
+    dodgemove = dodgemove * 700;
+
+    newmove = swarmmove + reprellmove + wandermove + dodgemove;
+    self.velocity = movelib_inertmove_byspeed(newmove,900,0.4,0.8);
+    //self.velocity  = movelib_inertmove(dodgemove,0.65);
+
+    self.velocity = movelib_drag(0.02,0.6);
+
+    self.angles = vectoangles(self.velocity);
+
+    if(self.health <= 0)
+        flocker_die();
+    else
+        self.nextthink = time + 0.1;
+}
+
+
+void spawn_flocker()
+{
+    entity flocker;
+
+    flocker = spawn ();
+
+    setorigin(flocker, self.origin + '0 0 32');
+    setmodel (flocker, "models/turrets/rocket.md3");
+    setsize (flocker, '-3 -3 -3', '3 3 3');
+
+    flocker.flock_id   = self.flock_id;
+    flocker.classname  = "flocker";
+    flocker.owner      = self;
+    flocker.think      = flocker_think;
+    flocker.nextthink  = time + random() * 5;
+    flocker.solid      = SOLID_BBOX;
+    flocker.movetype   = MOVETYPE_BOUNCEMISSILE;
+    flocker.effects    = EF_LOWPRECISION;
+    flocker.velocity   = randomvec() * 300;
+    flocker.angles     = vectoangles(flocker.velocity);
+    flocker.health     = 10;
+    flocker.pos1      = normalize(flocker.velocity + randomvec() * 0.1);
+
+    self.cnt = self.cnt -1;
+
+}
+
+void flockerspawn_think()
+{
+
+
+    if(self.cnt > 0)
+        spawn_flocker();
+
+    self.nextthink = time + self.delay;
+
+}
+
+void flocker_hunter_think()
+{
+    vector dodgemove,attractmove,newmove;
+    entity e,ee;
+    float d,bd;
+
+    self.angles_x = self.angles_x * -1;
+    makevectors(self.angles);
+    self.angles_x = self.angles_x * -1;
+
+    if(self.enemy)
+    if(vlen(self.enemy.origin - self.origin) < 64)
+    {
+        ee = self.enemy;
+        ee.health = -1;
+        self.enemy = world;
+
+    }
+
+    if(!self.enemy)
+    {
+        e = findchainfloat(flock_id,self.flock_id);
+        while(e)
+        {
+            d = vlen(self.origin - e.origin);
+
+            if(e != self.owner)
+            if(e != ee)
+            if(d > bd)
+            {
+                self.enemy = e;
+                bd = d;
+            }
+            e = e.chain;
+        }
+    }
+
+    if(self.enemy)
+        attractmove = steerlib_attract(self.enemy.origin,5000) * 1100;
+    else
+        attractmove = normalize(self.velocity) * 200;
+
+    dodgemove = steerlib_traceavoid(0.35,1500) * 1700;
+
+    newmove = dodgemove + attractmove;
+    self.velocity = movelib_inertmove_byspeed(newmove,850,0.5,0.9);
+    self.velocity = movelib_drag(0.01,0.5);
+
+
+    self.angles = vectoangles(self.velocity);
+    self.nextthink = time + 0.1;
+}
+
+
+float globflockcnt;
+void spawnfunc_flockerspawn()
+{
+    precache_model ( "models/turrets/rocket.md3");
+    precache_model("models/turrets/c512.md3");
+    ++globflockcnt;
+
+    if(!self.cnt)      self.cnt = 20;
+    if(!self.delay)    self.delay = 0.25;
+    if(!self.flock_id) self.flock_id = globflockcnt;
+
+    self.think     = flockerspawn_think;
+    self.nextthink = time + 0.25;
+
+    self.enemy = spawn();
+
+    setmodel(self.enemy, "models/turrets/rocket.md3");
+    setorigin(self.enemy,self.origin + '0 0 768' + (randomvec() * 128));
+
+    self.enemy.classname = "FLock Hunter";
+    self.enemy.scale     = 3;
+    self.enemy.effects   = EF_LOWPRECISION;
+    self.enemy.movetype  = MOVETYPE_BOUNCEMISSILE;
+    self.enemy.solid     = SOLID_BBOX;
+    self.enemy.think     = flocker_hunter_think;
+    self.enemy.nextthink = time + 10;
+    self.enemy.flock_id  = self.flock_id;
+    self.enemy.owner     = self;
+}
+#endif

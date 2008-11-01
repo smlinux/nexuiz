@@ -2,20 +2,26 @@
 #define PLF_NOOPTIMIZE 2
 #define PLF_SUBPATH3D  4
 
-#define path_flags lip
+//#define PATHLIB_RDFIELDS
+#ifdef PATHLIB_RDFIELDS
+    #define path_flags lip
 
-//.float pathgroup;
-// #define pathgroup version
-#define path_subpathing_size autoswitch
-#define path_subpathing_bboxexpand welcomemessage_time
-/*
-.entity path_next;
-.entity path_prev;
-*/
-#define path_next swampslug
-#define path_prev lasertarget
+    #define path_subpathing_size autoswitch
+    #define path_subpathing_bboxexpand welcomemessage_time
+
+    #define path_next swampslug
+    #define path_prev lasertarget
+#else
+    .entity path_next;
+    .entity path_prev;
+
+    .float path_subpathing_size;
+    .float path_subpathing_bboxexpand;
+    .float path_flags;
+#endif
 
 #define pathlib_garbagetime 120
+#define pathib_maxdivide 256
 
 .float(vector start,vector end) path_validate;
 
@@ -48,9 +54,6 @@ entity pathlib_createpoint(entity parent,entity next,entity first,vector where)
     point = spawn();
     point.classname = "path_node";
 
-    //point.think = SUB_Remove;
-    //point.nectthink = time + pathlib_garbagetime;
-
     if(first)
         point.owner = first;
     else
@@ -63,7 +66,10 @@ entity pathlib_createpoint(entity parent,entity next,entity first,vector where)
         point.path_prev = parent;
 
     if(next)
+    {
         point.path_next = next;
+        //point.path_nodelength = vlen(point.origin - next.origin)
+    }
     else
         point.classname = "path_end";
 
@@ -77,7 +83,6 @@ entity pathlib_createpoint(entity parent,entity next,entity first,vector where)
     return point;
 }
 
-#define pathib_maxdivide 128
 vector pathlib_findsubpath(entity start,vector vcrash,entity end,float maxsize)
 {
     float x,y,z;
@@ -222,6 +227,9 @@ void pathlib_showpath(entity start)
     }
 }
 
+/**
+    Run a A*-like pathing from 'from' to 'to'
+**/
 entity pathlib_makepath(vector from, vector to,float pathflags,float subpathing_size, float subpathing_bboxexpand)
 {
     entity e_start,e_end;
@@ -261,6 +269,8 @@ entity pathlib_makepath(vector from, vector to,float pathflags,float subpathing_
 
 }
 
+
+/* TESTING */
 void pathlib_test_think()
 {
     pathlib_showpath(self.enemy);
