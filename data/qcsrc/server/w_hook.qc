@@ -14,11 +14,7 @@ void W_Hook_Explode2 (void)
 
 void W_Hook_Touch2 (void)
 {
-	if (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
-	{
-		remove(self);
-		return;
-	}
+	PROJECTILE_TOUCH;
 	self.use();
 }
 

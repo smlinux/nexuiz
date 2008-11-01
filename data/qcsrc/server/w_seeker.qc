@@ -25,13 +25,7 @@ void Seeker_Missile_Explode ()
 
 void Seeker_Missile_Touch()
 {
-	if (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
-	{
-		remove(self);
-		return;
-	}
-    if (other == self.owner)
-        return;
+	PROJECTILE_TOUCH;
 
     Seeker_Missile_Explode();
 }
@@ -290,13 +284,7 @@ void Seeker_Tag_Touch()
     vector dir;
     vector org2;
 
-	if (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
-	{
-		remove(self);
-		return;
-	}
-    if (other == self.owner)
-        return;
+	PROJECTILE_TOUCH;
 
     dir     = normalize (self.owner.origin - self.origin);
     org2    = findbetterlocation (self.origin, 8);
@@ -355,6 +343,7 @@ void Seeker_Fire_Tag()
 
     setmodel (missile, "models/laser.mdl"); // TODO make this seeker specific
     setorigin (missile, w_shotorg);
+    setsize (missile, '0 0 0', '0 0 0');
 
     missile.effects     = EF_FULLBRIGHT | EF_NOSHADOW | EF_LOWPRECISION;
     missile.modelflags  = MF_TRACER3;
@@ -391,13 +380,7 @@ void Seeker_Flac_Explode ()
 
 void Seeker_Flac_Touch()
 {
-	if (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
-	{
-		remove(self);
-		return;
-	}
-    if (other == self.owner)
-        return;
+	PROJECTILE_TOUCH;
 
     Seeker_Flac_Explode();
 }

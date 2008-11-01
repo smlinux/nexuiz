@@ -42,12 +42,7 @@ void W_Plasma_Explode_Combo (void) {
 
 void W_Plasma_Touch (void)
 {
-	if (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
-	{
-		sound (self, CHAN_PROJECTILE, "misc/null.wav", VOL_BASE, ATTN_NORM);
-		remove(self);
-		return;
-	}
+	PROJECTILE_TOUCH_NOSOUND;
 	if (other.takedamage == DAMAGE_AIM) {
 		W_Plasma_Explode ();
 	} else {
@@ -58,14 +53,7 @@ void W_Plasma_Touch (void)
 
 void W_Plasma_TouchExplode (void)
 {
-	entity o;
-	if (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
-	{
-		sound (self, CHAN_PROJECTILE, "misc/null.wav", VOL_BASE, ATTN_NORM);
-		remove(self);
-		return;
-	}
-	o = self.owner;
+	PROJECTILE_TOUCH_NOSOUND;
 	W_Plasma_Explode ();
 }
 

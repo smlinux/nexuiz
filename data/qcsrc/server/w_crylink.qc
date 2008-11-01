@@ -7,11 +7,7 @@ void W_Crylink_Touch (void)
 {
 	float finalhit;
 	float f;
-	if (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
-	{
-		remove(self);
-		return;
-	}
+	PROJECTILE_TOUCH;
 	pointparticles(particleeffectnum("crylink_impactbig"), self.origin, '0 0 0', 1);
 	finalhit = ((self.cnt <= 0) || (other.takedamage != DAMAGE_NO));
 	if(finalhit)
@@ -37,11 +33,7 @@ void W_Crylink_Touch2 (void)
 {
 	float finalhit;
 	float f;
-	if (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
-	{
-		remove(self);
-		return;
-	}
+	PROJECTILE_TOUCH;
 	pointparticles(particleeffectnum("crylink_impact"), self.origin, '0 0 0', 1);
 	finalhit = ((self.cnt <= 0) || (other.takedamage != DAMAGE_NO));
 	if(finalhit)

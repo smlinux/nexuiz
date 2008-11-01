@@ -38,21 +38,13 @@ void W_Grenade_Explode2 (void)
 
 void W_Grenade_Touch1 (void)
 {
-	if (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
-	{
-		remove(self);
-		return;
-	}
+	PROJECTILE_TOUCH;
 	W_Grenade_Explode ();
 }
 
 void W_Grenade_Touch2 (void)
 {
-	if (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
-	{
-		remove(self);
-		return;
-	}
+	PROJECTILE_TOUCH;
 	if (other.takedamage == DAMAGE_AIM)
 	{
 		self.use ();

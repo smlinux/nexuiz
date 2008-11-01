@@ -365,26 +365,31 @@ void spawnfunc_trigger_counter()
 void trigger_hurt_touch()
 {
 	// only do the EXACTTRIGGER_TOUCH checks when really needed (saves some cpu)
-	if (!other.owner)
+	if (other.iscreature)
 	{
-		if (other.items & IT_KEY1 || other.items & IT_KEY2)	// reset flag
+		if (other.takedamage)
+		if (other.triggerhurttime < time)
 		{
 			EXACTTRIGGER_TOUCH;
-			other.pain_finished = min(other.pain_finished, time + 2);
-		}
-		else if (other.classname == "rune")			// reset runes
-		{
-			EXACTTRIGGER_TOUCH;
-			other.nextthink = min(other.nextthink, time + 1);
+			other.triggerhurttime = time + 1;
+			Damage (other, self, self, self.dmg, DEATH_HURTTRIGGER, other.origin, '0 0 0');
 		}
 	}
-
-	if (other.takedamage)
-	if (other.triggerhurttime < time)
+	else
 	{
-		EXACTTRIGGER_TOUCH;
-		other.triggerhurttime = time + 1;
-		Damage (other, self, self, self.dmg, DEATH_HURTTRIGGER, other.origin, '0 0 0');
+		if (!other.owner)
+		{
+			if (other.items & IT_KEY1 || other.items & IT_KEY2)	// reset flag
+			{
+				EXACTTRIGGER_TOUCH;
+				other.pain_finished = min(other.pain_finished, time + 2);
+			}
+			else if (other.classname == "rune")			// reset runes
+			{
+				EXACTTRIGGER_TOUCH;
+				other.nextthink = min(other.nextthink, time + 1);
+			}
+		}
 	}
 
 	return;

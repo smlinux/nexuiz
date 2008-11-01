@@ -40,24 +40,13 @@ void W_Hagar_Explode2 (void)
 
 void W_Hagar_Touch (void)
 {
-	if (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
-	{
-		remove(self);
-		return;
-	}
-	if (other == self.owner)
-		return;
-
+	PROJECTILE_TOUCH;
 	self.use ();
 }
 
 void W_Hagar_Touch2 (void)
 {
-	if (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
-	{
-		remove(self);
-		return;
-	}
+	PROJECTILE_TOUCH;
 
 	if(self.cnt > 0 || other.takedamage == DAMAGE_AIM) {
 		self.use();

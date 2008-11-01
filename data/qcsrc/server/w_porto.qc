@@ -72,6 +72,8 @@ void W_Porto_Touch (void)
 {
 	vector norm;
 
+	// do not use PROJECTILE_TOUCH here
+
 	if(other.classname == "portal")
 		return; // handled by the portal
 

@@ -182,12 +182,7 @@ void W_Rocket_Touch (void)
 {
 	if(self.owner && self.owner.lastrocket == self)
 		self.owner.lastrocket = world;
-	if (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
-	{
-		sound (self, CHAN_PROJECTILE, "misc/null.wav", VOL_BASE, ATTN_NORM);
-		remove(self);
-		return;
-	}
+	PROJECTILE_TOUCH_NOSOUND;
 	W_Rocket_Explode ();
 }
 

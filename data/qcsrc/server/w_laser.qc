@@ -6,14 +6,7 @@ void W_Laser_Touch (void)
 	vector org2;
 	vector normal;
 
-	if (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
-	{
-		remove(self);
-		return;
-	}
-
-	if (other == self.owner)
-		return;
+	PROJECTILE_TOUCH;
 
 	normal = trace_plane_normal;
 	dir = normalize (self.owner.origin - self.origin);

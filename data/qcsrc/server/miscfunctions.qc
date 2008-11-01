@@ -1595,3 +1595,33 @@ float tracebox_hits_box(vector start, vector mi, vector ma, vector end, vector t
 {
 	return trace_hits_box(start, end, thmi - ma, thma - mi);
 }
+
+float SUB_NoImpactCheck()
+{
+	if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
+		return 1;
+	if(other == world && self.size != '0 0 0')
+	{
+		vector tic;
+		tic = self.velocity * sys_ticrate;
+		tic = tic + normalize(tic) * vlen(self.maxs - self.mins);
+		traceline(self.origin - tic, self.origin + tic, MOVE_NORMAL, self);
+		if(trace_fraction >= 1)
+		{
+			dprint("Odd... did not hit...?\n");
+		}
+		else if (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
+		{
+			dprint("Detected and prevented the sky-grapple bug.\n");
+			return 1;
+		}
+	}
+
+	return 0;
+}
+
+#define SUB_OwnerCheck() (other == self.owner)
+
+#define PROJECTILE_TOUCH do { if(SUB_OwnerCheck()) return; if(SUB_NoImpactCheck()) { remove(self); return; } } while(0)
+const string STR_MISC_NULL_WAV = "misc/null.wav";
+#define PROJECTILE_TOUCH_NOSOUND do { if(SUB_OwnerCheck()) return; if(SUB_NoImpactCheck()) { sound (self, CHAN_PROJECTILE, STR_MISC_NULL_WAV, VOL_BASE, ATTN_NORM); remove(self); return; } } while(0)
