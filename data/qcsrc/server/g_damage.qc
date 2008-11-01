@@ -515,6 +515,17 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 				if(targ.hook.aiment == attacker)
 					RemoveGrapplingHook(targ); // STOP THAT, you parasite!
 
+	// special rule: gravity bomb does not hit team mates (other than for disconnecting the hook)
+	if(DEATH_WEAPONOF(deathtype) == WEP_HOOK)
+	{
+		if(targ.classname == "player")
+			if not(IsDifferentTeam(targ, attacker))
+			{
+				damage = 0;
+				force = '0 0 0';
+			}
+	}
+
 	if(deathtype == DEATH_KILL || deathtype == DEATH_TEAMCHANGE || deathtype == DEATH_AUTOTEAMCHANGE)
 	{
 		// These are ALWAYS lethal
