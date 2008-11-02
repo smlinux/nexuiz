@@ -25,5 +25,6 @@ ENDCLASS(NexuizTab)
 void showNotifyNexuizTab(entity me)
 {
 	loadAllCvars(me);
+	showNotifyContainer(me);
 }
 #endif
