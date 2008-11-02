@@ -10,6 +10,7 @@ CLASS(NexuizDemoList) EXTENDS(NexuizListBox)
     METHOD(NexuizDemoList, clickListBoxItem, void(entity, float, vector))
     METHOD(NexuizDemoList, keyDown, float(entity, float, float, float))
     METHOD(NexuizDemoList, destroy, void(entity))
+    METHOD(NexuizDemoList, showNotify, void(entity))
     ATTRIB(NexuizDemoList, listDemo, float, -1)
     ATTRIB(NexuizDemoList, realFontSize, vector, '0 0 0')
     ATTRIB(NexuizDemoList, columnNameOrigin, float, 0)
@@ -98,6 +99,11 @@ void drawListBoxItemNexuizDemoList(entity me, float i, vector absSize, float isS
     s = me.demoName(me,i);
     s = draw_TextShortenToWidth(s, me.columnNameSize / me.realFontSize_x, 0);
     draw_Text(me.realUpperMargin * eY + (me.columnNameOrigin + 0.00 * (me.columnNameSize - draw_TextWidth(s, 0) * me.realFontSize_x)) * eX, s, me.realFontSize, '1 1 1', SKINALPHA_TEXT, 0);		
+}
+
+void showNotifyNexuizDemoList(entity me)
+{
+    me.getDemos(me);
 }
 
 void DemoList_Filter_Change(entity box, entity me)
