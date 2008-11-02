@@ -908,11 +908,6 @@ void spawnfunc_item_minst_cells (void) {
 // compatibility:
 void spawnfunc_item_quad (void) {self.classname = "item_strength";spawnfunc_item_strength();}
 
-void spawnfunc_misc_gamemodel (void)
-{
-	SetBrushEntityModel();
-}
-
 void spawnfunc_misc_models (void)
 {
 	// exists as alias name for 2.4.2 compat
@@ -942,7 +937,23 @@ void func_wall_use (void)
 void spawnfunc_func_wall (void)
 {
 	SetBrushEntityModel();
-	self.solid = SOLID_BSP;
+	if(!self.solid)
+		self.solid = SOLID_BSP;
+	self.use = func_wall_use;
+}
+
+void spawnfunc_func_illusionary (void)
+{
+	SetBrushEntityModel();
+	self.use = func_wall_use;
+}
+
+.float modelscale;
+void spawnfunc_misc_gamemodel (void)
+{
+	if(!self.scale)
+		self.scale = self.modelscale;
+	SetBrushEntityModel();
 	self.use = func_wall_use;
 }
 
