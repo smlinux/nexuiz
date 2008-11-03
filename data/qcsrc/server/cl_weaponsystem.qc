@@ -9,7 +9,7 @@
 
 void W_SwitchWeapon_Force(entity e, float w)
 {
-	e.cnt = e.weapon ? e.weapon : e.switchweapon;
+	e.cnt = e.switchweapon;
 	e.switchweapon = w;
 }
 

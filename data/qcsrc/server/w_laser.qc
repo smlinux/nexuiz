@@ -109,8 +109,7 @@ float w_laser(float req)
 			}
 			else
 			{
-				if (self.BUTTON_ATCK2)
-				if (client_hasweapon(self, self.cnt, TRUE, FALSE))
+				if(self.switchweapon == WEP_LASER) // don't do this if already switching
 					W_SwitchWeapon (self.cnt);
 			}
 		}
