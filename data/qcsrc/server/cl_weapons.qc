@@ -1,7 +1,7 @@
 // switch between weapons
 void W_SwitchWeapon(float imp)
 {
-	if (self.switchweapon != imp)
+	if (self.weapon != imp)
 	if (client_hasweapon(self, imp, TRUE, TRUE))
 		W_SwitchWeapon_Force(self, imp);
 };
