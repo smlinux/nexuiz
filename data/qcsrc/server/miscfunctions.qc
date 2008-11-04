@@ -1620,7 +1620,7 @@ float SUB_NoImpactCheck()
 	return 0;
 }
 
-#define SUB_OwnerCheck() (other == self.owner)
+#define SUB_OwnerCheck() (other && (other == self.owner))
 
 #define PROJECTILE_TOUCH do { if(SUB_OwnerCheck()) return; if(SUB_NoImpactCheck()) { remove(self); return; } } while(0)
 const string STR_MISC_NULL_WAV = "misc/null.wav";
