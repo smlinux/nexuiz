@@ -1,4 +1,4 @@
-CHANGES since 2.4.2 to r4887:
+CHANGES since 2.4.2 to r4976:
 compat-q3a: switch crylink/hagar, as crylink is closer to BFG and hagar is closer to Plasmagun
 game: airshot announcer
 game: alternate HUD is now default
@@ -59,6 +59,7 @@ game: more different death types
 game: new music track by meoblast001 (TODO nexuiz-credits.txt)
 game: new particles
 game: new tokenizer fixing weirdly split kick reasons/vote commands
+game: new weapon and player sounds
 game: performance improved (fteqcc -O3)
 game: race game type
 game: rocket launcher detonation fixed when button was pressed only for a very short time
@@ -86,6 +87,7 @@ mapping: entity func_train now supports -1 wait on path_corner, making it NOT wa
 mapping: entity info_null now removes itself (as it should); this DOES break some maps that need fixing now
 mapping: entity misc_follow
 mapping: entity misc_laser changed and improved
+mapping: entity misc_gamemodel, func_illusionary replacing misc_models
 mapping: entity target_spawn (BEWARE OF THE)
 mapping: entity trigger_flipflop, trigger_monoflip, trigger_multivibrator
 mapping: entity trigger_hurt now can set a message2 as death message for push-kills
@@ -103,6 +105,7 @@ map: starship and silvercity: no CTF
 menu: channel mixer
 menu: game type in server browser
 menu: input box margin now in chars, not percent
+menu: multicampaign
 menu: mouse fixed in -game pro
 menu: new playermodel previews (sev)
 menu: new skin "wickedz"
