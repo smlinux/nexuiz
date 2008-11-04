@@ -8,6 +8,7 @@ void W_Crylink_Touch (void)
 	float finalhit;
 	float f;
 	PROJECTILE_TOUCH;
+	sound (self, CHAN_PROJECTILE, "weapons/cryplink_impact.wav", VOL_BASE, ATTN_NORM);
 	pointparticles(particleeffectnum("crylink_impactbig"), self.origin, '0 0 0', 1);
 	finalhit = ((self.cnt <= 0) || (other.takedamage != DAMAGE_NO));
 	if(finalhit)
@@ -34,6 +35,7 @@ void W_Crylink_Touch2 (void)
 	float finalhit;
 	float f;
 	PROJECTILE_TOUCH;
+	sound (self, CHAN_PROJECTILE, "weapons/cryplink_impact2.wav", VOL_BASE, ATTN_NORM);
 	pointparticles(particleeffectnum("crylink_impact"), self.origin, '0 0 0', 1);
 	finalhit = ((self.cnt <= 0) || (other.takedamage != DAMAGE_NO));
 	if(finalhit)
@@ -129,7 +131,7 @@ void W_Crylink_Attack2 (void)
 	if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
 		self.ammo_cells = self.ammo_cells - cvar("g_balance_crylink_secondary_ammo");
 
-	W_SetupShot (self, '25 8 -8', FALSE, 2, "weapons/crylink_fire.wav");
+	W_SetupShot (self, '25 8 -8', FALSE, 2, "weapons/crylink_fire2.wav");
 
 	shots = cvar("g_balance_crylink_secondary_shots");
 	pointparticles(particleeffectnum("crylink_muzzleflash"), w_shotorg, w_shotdir * 1000, shots);
@@ -228,6 +230,9 @@ float w_crylink(float req)
 		precache_model ("models/weapons/v_crylink.md3");
 		precache_model ("models/weapons/w_crylink.zym");
 		precache_sound ("weapons/crylink_fire.wav");
+		precache_sound ("weapons/crylink_fire2.wav");
+		precache_sound ("weapons/crylink_impact.wav");
+		precache_sound ("weapons/crylink_impact2.wav");
 	}
 	else if (req == WR_SETUP)
 		weapon_setup(WEP_CRYLINK);
