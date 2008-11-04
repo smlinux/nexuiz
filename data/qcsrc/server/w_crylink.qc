@@ -8,7 +8,7 @@ void W_Crylink_Touch (void)
 	float finalhit;
 	float f;
 	PROJECTILE_TOUCH;
-	sound (self, CHAN_PROJECTILE, "weapons/cryplink_impact.wav", VOL_BASE, ATTN_NORM);
+	sound (self, CHAN_PROJECTILE, "weapons/crylink_impact.wav", VOL_BASE, ATTN_NORM);
 	pointparticles(particleeffectnum("crylink_impactbig"), self.origin, '0 0 0', 1);
 	finalhit = ((self.cnt <= 0) || (other.takedamage != DAMAGE_NO));
 	if(finalhit)
@@ -35,7 +35,7 @@ void W_Crylink_Touch2 (void)
 	float finalhit;
 	float f;
 	PROJECTILE_TOUCH;
-	sound (self, CHAN_PROJECTILE, "weapons/cryplink_impact2.wav", VOL_BASE, ATTN_NORM);
+	sound (self, CHAN_PROJECTILE, "weapons/crylink_impact2.wav", VOL_BASE, ATTN_NORM);
 	pointparticles(particleeffectnum("crylink_impact"), self.origin, '0 0 0', 1);
 	finalhit = ((self.cnt <= 0) || (other.takedamage != DAMAGE_NO));
 	if(finalhit)
