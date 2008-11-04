@@ -463,23 +463,23 @@ COMPAT_FILES="
 	textures/portalgun_glow.tga
 	textures/portalgun_norm.tga
 	textures/portalgun.tga
-	sound/weapons/crylink_impact.wav
-	sound/weapons/crylink_impact2.wav
-	sound/weapons/crylink_fire2.wav
-	sound/weapons/tag_fire.wav
-	sound/weapons/tag_impact.wav
-	sound/weapons/tagexp1.wav
-	sound/weapons/tagexp2.wav
-	sound/weapons/tagexp3.wav
-	sound/weapons/tag_rocket_fly.wav
-	sound/weapons/flac_fire.wav
-	sound/weapons/flacexp1.wav
-	sound/weapons/flacexp2.wav
-	sound/weapons/flacexp3.wav
-	sound/weapons/seeker_fire.wav
-	sound/weapons/seekerexp1.wav
-	sound/weapons/seekerexp2.wav
-	sound/weapons/seekerexp3.wav
+	sound/weapons/crylink_impact.ogg
+	sound/weapons/crylink_impact2.ogg
+	sound/weapons/crylink_fire2.ogg
+	sound/weapons/tag_fire.ogg
+	sound/weapons/tag_impact.ogg
+	sound/weapons/tagexp1.ogg
+	sound/weapons/tagexp2.ogg
+	sound/weapons/tagexp3.ogg
+	sound/weapons/tag_rocket_fly.ogg
+	sound/weapons/flac_fire.ogg
+	sound/weapons/flacexp1.ogg
+	sound/weapons/flacexp2.ogg
+	sound/weapons/flacexp3.ogg
+	sound/weapons/seeker_fire.ogg
+	sound/weapons/seekerexp1.ogg
+	sound/weapons/seekerexp2.ogg
+	sound/weapons/seekerexp3.ogg
 "
 
 rev=`svnversion`
