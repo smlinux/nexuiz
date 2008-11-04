@@ -299,7 +299,7 @@ void Seeker_Tag_Touch()
 	vector dir;
 	vector org2;
 
-	PROJECTILE_TOUCH;
+	PROJECTILE_TOUCH_NOSOUND;
 
 	dir     = normalize (self.owner.origin - self.origin);
 	org2    = findbetterlocation (self.origin, 8);
@@ -362,6 +362,7 @@ void Seeker_Fire_Tag()
 
 	missile.effects     = EF_FULLBRIGHT | EF_NOSHADOW | EF_LOWPRECISION;
 	missile.modelflags  = MF_TRACER3;
+	sound (missile, CHAN_PROJECTILE, "weapons/tag_rocket_fly.wav", VOL_BASE, ATTN_NORM);
 	missile.flags       = FL_PROJECTILE;
 
 	missile.velocity    = w_shotdir  * cvar("g_balance_seeker_tag_speed");
@@ -499,6 +500,7 @@ float w_seeker(float req)
 		precache_sound ("weapons/hagexp2.wav");
 		precache_sound ("weapons/hagexp3.wav");
 		precache_sound ("weapons/laserimpact.wav");
+		precache_sound ("weapons/tag_rocket_fly.wav");
 	}
 	else if (req == WR_SETUP)
 		weapon_setup(WEP_SEEKER);
