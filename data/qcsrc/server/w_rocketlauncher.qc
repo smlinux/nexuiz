@@ -241,7 +241,7 @@ void W_Rocket_Attack (void)
 	missile.nextthink = time;
 	missile.cnt = time + cvar("g_balance_rocketlauncher_lifetime");
 	missile.effects = EF_LOWPRECISION;
-	sound (missile, CHAN_PROJECTILE, "weapons/rocket_fly.wav", 0.4 * VOL_BASE, ATTN_NORM);
+	sound (missile, CHAN_PROJECTILE, "weapons/rocket_fly.wav", VOL_BASE, ATTN_NORM);
 	missile.flags = FL_PROJECTILE;
 
 	// muzzle flash for 1st person view
@@ -387,7 +387,7 @@ float w_rlauncher(float req)
 					}
 				}
 				if(rockfound)
-					sound (self, CHAN_WEAPON2, "weapons/rocket_det.wav", 0.5 * VOL_BASE, ATTN_NORM);
+					sound (self, CHAN_WEAPON2, "weapons/rocket_det.wav", VOL_BASE, ATTN_NORM);
 				else
 				{
 					if (weapon_prepareattack(0, cvar("g_balance_rocketlauncher_refire")))
@@ -429,7 +429,7 @@ float w_rlauncher(float req)
 					}
 				}
 				if(rockfound)
-					sound (self, CHAN_WEAPON2, "weapons/rocket_det.wav", 0.5 * VOL_BASE, ATTN_NORM);
+					sound (self, CHAN_WEAPON2, "weapons/rocket_det.wav", VOL_BASE, ATTN_NORM);
 			}
 		}
 	}
