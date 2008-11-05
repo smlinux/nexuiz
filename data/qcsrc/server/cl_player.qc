@@ -764,7 +764,7 @@ float GetVoiceMessageTeamsayType(string type)
 	return 1;
 }
 
-string allvoicesamples = "attack attackinfive coverme defend freelance incoming meet needhelp seenflag taunt teamshoot";
+string allvoicesamples;
 float GetPlayerSoundSampleField_notFound;
 float GetPlayerSoundSampleField_fixed;
 .string GetVoiceMessageSampleField(string type)
@@ -830,6 +830,14 @@ void PrecachePlayerSounds(string f)
 		PrecacheGlobalSound(strcat(argv(1), " ", argv(2)));
 	}
 	fclose(fh);
+
+	if not(allvoicesamples)
+	{
+#define _VOICEMSG(m) allvoicesamples = strcat(allvoicesamples, " ", #m);
+		ALLVOICEMSGS
+#undef _VOICEMSG
+		allvoicesamples = strzone(substring(allvoicesamples, 1, strlen(allvoicesamples) - 1));
+	}
 }
 
 void ClearPlayerSounds()

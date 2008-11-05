@@ -470,7 +470,6 @@ float next_pingtime;
 		_VOICEMSG(seenenemy) \
 		_VOICEMSG(getflag) \
 		_VOICEMSG(droppedflag) \
-		_VOICEMSG(getourflagback) \
 		_VOICEMSG(flagcarriertakingdamage)
 #define _VOICEMSG(m) .string playersound_##m;
 ALLPLAYERSOUNDS
