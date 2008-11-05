@@ -891,6 +891,7 @@ void readplayerstartcvars()
 
 void readlevelcvars(void)
 {
+ 	sv_clones = cvar("sv_clones");
 	sv_cheats = cvar("sv_cheats");
 	sv_gentle = cvar("sv_gentle");
 	sv_foginterval = cvar("sv_foginterval");

@@ -307,186 +307,195 @@ void ImpulseCommands (void)
 	}
 	else if(imp >= 140 && imp <= 149 || imp == 99) // 10 cheats ought to be enough for anyone
 	{
-		if(sv_cheats)
 		if(self.deadflag == DEAD_NO)
 		{
-			switch(imp)
+			if(sv_cheats || (self.lip < sv_clones))
 			{
-				case 99:
-					self.weapons |= WEPBIT_ALL;
-					self.items |= IT_UNLIMITED_WEAPON_AMMO;
-					self.ammo_shells = g_pickup_shells_max;
-					self.ammo_nails = g_pickup_nails_max;
-					self.ammo_rockets = g_pickup_rockets_max;
-					self.ammo_cells = g_pickup_cells_max;
-					self.health = g_pickup_healthsmall_max;
-					self.armorvalue = g_pickup_armorsmall_max;
-					self.pauserotarmor_finished = time + cvar("g_balance_pause_armor_rot_spawn");
-					self.pauserothealth_finished = time + cvar("g_balance_pause_health_rot_spawn");
-					self.pauseregen_finished = time + cvar("g_balance_pause_health_regen_spawn");
-					// precache weapon models/sounds
-					wep = WEP_FIRST;
-					while (wep <= WEP_LAST)
-					{
-						weapon_action(wep, WR_PRECACHE);
-						wep = wep + 1;
-					}
-					break;
-				case 140:
-					makevectors (self.v_angle);
-					self.velocity = self.velocity + v_forward * 300;
-					CopyBody(1);
-					self.lip += 1;
-					self.velocity = self.velocity - v_forward * 300;
-					break;
-				case 141:
-					if(self.waypointsprite_deployed_personal)
-					{
-						self.speedrunning = TRUE;
-						tracebox(self.waypointsprite_deployed_personal.origin, self.mins, self.maxs, self.waypointsprite_deployed_personal.origin, MOVE_WORLDONLY, self);
-						if(trace_startsolid)
-						{
-							sprint(self, "Cannot move there, cheater - only waypoints set using g_waypointsprite_personal work\n");
-						}
-						else
-						{
-							// Abort speedrun, teleport back
-							setorigin(self, self.waypointsprite_deployed_personal.origin);
-							self.oldvelocity = self.velocity = self.personal_velocity;
-							self.angles = self.personal_v_angle;
-							self.fixangle = TRUE;
-							if(self.flagcarried)
-							{
-								bprint("The ", self.flagcarried.netname, " was returned to base by its carrier\n");
-								ReturnFlag(self.flagcarried);
-							}
-						}
-						self.ammo_rockets = 999;
-						self.ammo_nails = 999;
-						self.ammo_cells = 999;
-						self.ammo_shells = 999;
-						self.health = start_health;
-						self.armorvalue = start_armorvalue;
-						self.weapons |= weaponsInMap;
+				switch(imp)
+				{	
+					 case 140:
+						makevectors (self.v_angle);
+						self.velocity = self.velocity + v_forward * 300;
+						CopyBody(1);
+						self.lip += 1;
+						self.velocity = self.velocity - v_forward * 300;
+						break;
+					case 142:
+						CopyBody(0);
+						self.lip += 1;
+						break;
+				 }
+			}
+
+			if(sv_cheats)
+			{
+				switch(imp)
+				{
+					case 99:
+						self.weapons |= WEPBIT_ALL;
+						self.items |= IT_UNLIMITED_WEAPON_AMMO;
+						self.ammo_shells = g_pickup_shells_max;
+						self.ammo_nails = g_pickup_nails_max;
+						self.ammo_rockets = g_pickup_rockets_max;
+						self.ammo_cells = g_pickup_cells_max;
+						self.health = g_pickup_healthsmall_max;
+						self.armorvalue = g_pickup_armorsmall_max;
 						self.pauserotarmor_finished = time + cvar("g_balance_pause_armor_rot_spawn");
 						self.pauserothealth_finished = time + cvar("g_balance_pause_health_rot_spawn");
 						self.pauseregen_finished = time + cvar("g_balance_pause_health_regen_spawn");
-					}
-					else if(self.deadflag != DEAD_NO)
-						sprint(self, "UR DEAD AHAHAH))\n");
-					else
-						sprint(self, "No waypoint set, cheater (use g_waypointsprite_personal to set one)\n");
-					break;
-				case 142:
-					CopyBody(0);
-					self.lip += 1;
-					break;
-				case 143:
-					good = DPCONTENTS_SOLID | DPCONTENTS_CORPSE | DPCONTENTS_PLAYERCLIP;
-					evil = DPCONTENTS_SLIME | DPCONTENTS_LAVA | DPCONTENTS_SKY | DPCONTENTS_BODY | DPCONTENTS_DONOTENTER;
-					evilsurf = Q3SURFACEFLAG_SKY;
-
-					m = self.dphitcontentsmask;
-					self.dphitcontentsmask = good | evil;
-
-					org = world.mins;
-					delta = world.maxs - world.mins;
-
-					maxattempts = ((sv_cheats >= 2) ? 100000 : 100);
-
-					for(i = 0; i < maxattempts; ++i)
-					{
-						start_x = org_x + random() * delta_x;
-						start_y = org_y + random() * delta_y;
-						start_z = org_z + random() * delta_z;
-
-						// rule 1: start inside world bounds, and outside
-						// solid, and don't start from somewhere where you can
-						// fall down to evil
-						tracebox(start, self.mins, self.maxs, start - '0 0 1' * delta_z, MOVE_NORMAL, self);
-						if(trace_fraction >= 1)
-							continue;
-						if(trace_startsolid)
-							continue;
-						dprint("hit contents ", ftos(trace_dphitcontents), "\n");
-						if(trace_dphitcontents & evil)
-							continue;
-						if(trace_dphitq3surfaceflags & evilsurf)
-							continue;
-
-						// rule 2: if we are too high, lower the point
-						if(trace_fraction * delta_z > 1024)
-							start = trace_endpos + '0 0 1024';
-						enddown = trace_endpos;
-
-						// these can be traceLINES as we already verified the starting box
-						traceline(start, start + '1 0 0' * delta_x, MOVE_NORMAL, self);
-						if(trace_fraction >= 1)
-							continue;
-						traceline(start, start - '1 0 0' * delta_x, MOVE_NORMAL, self);
-						if(trace_fraction >= 1)
-							continue;
-						traceline(start, start + '0 1 0' * delta_y, MOVE_NORMAL, self);
-						if(trace_fraction >= 1)
-							continue;
-						traceline(start, start - '0 1 0' * delta_y, MOVE_NORMAL, self);
-						if(trace_fraction >= 1)
-							continue;
-						traceline(start, start + '0 0 1' * delta_z, MOVE_NORMAL, self);
-						if(trace_fraction >= 1)
-							continue;
-
-						end_x = org_x + random() * delta_x;
-						end_y = org_y + random() * delta_y;
-						end_z = org_z + random() * delta_z;
-						end = start + normalize(end - start) * vlen(delta);
-
-						// rule 3: start TO end must not be too short
-						tracebox(start, self.mins, self.maxs, end, MOVE_NORMAL, self);
-						if(trace_startsolid)
-							continue;
-						if(trace_fraction < 256 / vlen(delta))
-							continue;
-
-						// rule 4: don't want to look at sky
-						if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_SKY)
-							continue;
-
-						// rule 5: we must not end up in trigger_hurt
-						if(tracebox_hits_trigger_hurt(start, self.mins, self.maxs, enddown))
+						// precache weapon models/sounds
+						wep = WEP_FIRST;
+						while (wep <= WEP_LAST)
 						{
-							dprint("trigger_hurt! ouch! and nothing else could find it!\n");
-							continue;
+							weapon_action(wep, WR_PRECACHE);
+							wep = wep + 1;
+						}
+						break;
+					case 141:
+						if(self.waypointsprite_deployed_personal)
+						{
+							self.speedrunning = TRUE;
+							tracebox(self.waypointsprite_deployed_personal.origin, self.mins, self.maxs, self.waypointsprite_deployed_personal.origin, MOVE_WORLDONLY, self);
+							if(trace_startsolid)
+							{
+								sprint(self, "Cannot move there, cheater - only waypoints set using g_waypointsprite_personal work\n");
+							}
+							else
+							{
+								// Abort speedrun, teleport back
+								setorigin(self, self.waypointsprite_deployed_personal.origin);
+								self.oldvelocity = self.velocity = self.personal_velocity;
+								self.angles = self.personal_v_angle;
+								self.fixangle = TRUE;
+								if(self.flagcarried)
+								{
+									bprint("The ", self.flagcarried.netname, " was returned to base by its carrier\n");
+									ReturnFlag(self.flagcarried);
+								}
+							}
+							self.ammo_rockets = 999;
+							self.ammo_nails = 999;
+							self.ammo_cells = 999;
+							self.ammo_shells = 999;
+							self.health = start_health;
+							self.armorvalue = start_armorvalue;
+							self.weapons |= weaponsInMap;
+							self.pauserotarmor_finished = time + cvar("g_balance_pause_armor_rot_spawn");
+							self.pauserothealth_finished = time + cvar("g_balance_pause_health_rot_spawn");
+							self.pauseregen_finished = time + cvar("g_balance_pause_health_regen_spawn");
+						}
+						else if(self.deadflag != DEAD_NO)
+							sprint(self, "UR DEAD AHAHAH))\n");
+						else
+							sprint(self, "No waypoint set, cheater (use g_waypointsprite_personal to set one)\n");
+						break;
+					case 143:
+						good = DPCONTENTS_SOLID | DPCONTENTS_CORPSE | DPCONTENTS_PLAYERCLIP;
+						evil = DPCONTENTS_SLIME | DPCONTENTS_LAVA | DPCONTENTS_SKY | DPCONTENTS_BODY | DPCONTENTS_DONOTENTER;
+						evilsurf = Q3SURFACEFLAG_SKY;
+
+						m = self.dphitcontentsmask;
+						self.dphitcontentsmask = good | evil;
+
+						org = world.mins;
+						delta = world.maxs - world.mins;
+
+						maxattempts = ((sv_cheats >= 2) ? 100000 : 100);
+
+						for(i = 0; i < maxattempts; ++i)
+						{
+							start_x = org_x + random() * delta_x;
+							start_y = org_y + random() * delta_y;
+							start_z = org_z + random() * delta_z;
+
+							// rule 1: start inside world bounds, and outside
+							// solid, and don't start from somewhere where you can
+							// fall down to evil
+							tracebox(start, self.mins, self.maxs, start - '0 0 1' * delta_z, MOVE_NORMAL, self);
+							if(trace_fraction >= 1)
+								continue;
+							if(trace_startsolid)
+								continue;
+							dprint("hit contents ", ftos(trace_dphitcontents), "\n");
+							if(trace_dphitcontents & evil)
+								continue;
+							if(trace_dphitq3surfaceflags & evilsurf)
+								continue;
+
+							// rule 2: if we are too high, lower the point
+							if(trace_fraction * delta_z > 1024)
+								start = trace_endpos + '0 0 1024';
+							enddown = trace_endpos;
+
+							// these can be traceLINES as we already verified the starting box
+							traceline(start, start + '1 0 0' * delta_x, MOVE_NORMAL, self);
+							if(trace_fraction >= 1)
+								continue;
+							traceline(start, start - '1 0 0' * delta_x, MOVE_NORMAL, self);
+							if(trace_fraction >= 1)
+								continue;
+							traceline(start, start + '0 1 0' * delta_y, MOVE_NORMAL, self);
+							if(trace_fraction >= 1)
+								continue;
+							traceline(start, start - '0 1 0' * delta_y, MOVE_NORMAL, self);
+							if(trace_fraction >= 1)
+								continue;
+							traceline(start, start + '0 0 1' * delta_z, MOVE_NORMAL, self);
+							if(trace_fraction >= 1)
+								continue;
+
+							end_x = org_x + random() * delta_x;
+							end_y = org_y + random() * delta_y;
+							end_z = org_z + random() * delta_z;
+							end = start + normalize(end - start) * vlen(delta);
+
+							// rule 3: start TO end must not be too short
+							tracebox(start, self.mins, self.maxs, end, MOVE_NORMAL, self);
+							if(trace_startsolid)
+								continue;
+							if(trace_fraction < 256 / vlen(delta))
+								continue;
+
+							// rule 4: don't want to look at sky
+							if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_SKY)
+								continue;
+
+							// rule 5: we must not end up in trigger_hurt
+							if(tracebox_hits_trigger_hurt(start, self.mins, self.maxs, enddown))
+							{
+								dprint("trigger_hurt! ouch! and nothing else could find it!\n");
+								continue;
+							}
+
+							break;
 						}
 
+						if(i < maxattempts)
+						{
+							self.origin = start;
+							self.angles = vectoangles(end - start);
+							self.angles_x = -self.angles_x;
+							self.fixangle = TRUE;
+							self.velocity = '0 0 0';
+							dprint("Needed ", ftos(i + 1), " attempts\n");
+						}
+						else
+							sprint(self, "Emergency teleport could not find a good location, forget it!\n");
+
+						self.dphitcontentsmask = m;
 						break;
-					}
-
-					if(i < maxattempts)
-					{
-						self.origin = start;
-						self.angles = vectoangles(end - start);
-						self.angles_x = -self.angles_x;
-						self.fixangle = TRUE;
-						self.velocity = '0 0 0';
-						dprint("Needed ", ftos(i + 1), " attempts\n");
-					}
-					else
-						sprint(self, "Emergency teleport could not find a good location, forget it!\n");
-
-					self.dphitcontentsmask = m;
-					break;
-				case 144:
-					makevectors(self.v_angle);
-					traceline(self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * MAX_SHOT_DISTANCE, FALSE, self);
-					if (trace_fraction < 1)
-						printsurfaceinfo(trace_ent, trace_endpos);
-					break;
-				case 145:
-					makevectors(self.v_angle);
-					traceline(self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * 65536, FALSE, self);
-					sprint(self, strcat("distance: ", ftos(fabs(vlen(trace_endpos - (self.origin + self.view_ofs)))), "\n"));
-					break;
+					case 144:
+						makevectors(self.v_angle);
+						traceline(self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * MAX_SHOT_DISTANCE, FALSE, self);
+						if (trace_fraction < 1)
+							printsurfaceinfo(trace_ent, trace_endpos);
+						break;
+					case 145:
+						makevectors(self.v_angle);
+						traceline(self.origin + self.view_ofs, self.origin + self.view_ofs + v_forward * 65536, FALSE, self);
+						sprint(self, strcat("distance: ", ftos(fabs(vlen(trace_endpos - (self.origin + self.view_ofs)))), "\n"));
+						break;
+				}
 			}
 		}
 	}
