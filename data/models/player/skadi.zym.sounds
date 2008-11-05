@@ -1,14 +1,15 @@
-//attack sound/player/pyria-skadi/coms/attack 0
-//attackinfive sound/player/pyria-skadi/letsgo 0
+//TAG: pyria-skadi
+attack sound/player/pyria-skadi/coms/attack 2
+attackinfive sound/player/pyria-skadi/coms/attackinfive 0
 //coverme sound/player/pyria-skadi/coms/coverme 0
 //defend sound/player/pyria-skadi/coms/defend 0
-//freelance sound/player/pyria-skadi/coms/freelance 2
-//incoming sound/player/pyria-skadi/incoming 0
-//meet sound/player/pyria-skadi/waypoint 0
-//needhelp sound/player/pyria-skadi/needhelp 0
-//seenflag sound/player/pyria-skadi/flagseen 0
-//taunt sound/player/pyria-skadi/player/taunt 1
-//teamshoot sound/player/pyria-skadi/coms/teamshoot 3
+freelance sound/player/pyria-skadi/coms/freelance 2
+//incoming sound/player/pyria-skadi/coms/incoming 0
+meet sound/player/pyria-skadi/coms/meet 0
+needhelp sound/player/pyria-skadi/coms/needhelp 1
+seenflag sound/player/pyria-skadi/coms/seenflag 0
+taunt sound/player/pyria-skadi/coms/taunt 5
+teamshoot sound/player/pyria-skadi/coms/teamshoot 4
 death sound/player/pyria-skadi/player/death 3
 drown sound/player/pyria-skadi/player/drown 0
 falling sound/player/pyria-skadi/player/falling 0
@@ -18,4 +19,3 @@ pain25 sound/player/pyria-skadi/player/pain25 0
 pain50 sound/player/pyria-skadi/player/pain50 0
 pain75 sound/player/pyria-skadi/player/pain75 0
 pain100 sound/player/pyria-skadi/player/pain100 0
-//

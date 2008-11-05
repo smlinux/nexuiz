@@ -1,13 +1,14 @@
+//TAG: carni-lycan
 attack sound/player/carni-lycan/coms/attack 0
-//attackinfive sound/player/carni-lycan/letsgo 0
+attackinfive sound/player/carni-lycan/coms/attackinfive 0
 coverme sound/player/carni-lycan/coms/coverme 0
 defend sound/player/carni-lycan/coms/defend 0
 freelance sound/player/carni-lycan/coms/freelance 2
-//incoming sound/player/carni-lycan/incoming 0
-//meet sound/player/carni-lycan/waypoint 0
-//needhelp sound/player/carni-lycan/needhelp 0
-//seenflag sound/player/carni-lycan/flagseen 0
-//taunt sound/player/carni-lycan/player/taunt 1
+incoming sound/player/carni-lycan/coms/incoming 0
+meet sound/player/carni-lycan/coms/meet 0
+needhelp sound/player/carni-lycan/coms/needhelp 2
+seenflag sound/player/carni-lycan/coms/seenflag 0
+taunt sound/player/carni-lycan/coms/taunt 3
 teamshoot sound/player/carni-lycan/coms/teamshoot 3
 death sound/player/carni-lycan/player/death 3
 drown sound/player/carni-lycan/player/drown 0
@@ -18,4 +19,3 @@ pain25 sound/player/carni-lycan/player/pain25 0
 pain50 sound/player/carni-lycan/player/pain50 0
 pain75 sound/player/carni-lycan/player/pain75 0
 pain100 sound/player/carni-lycan/player/pain100 0
-//

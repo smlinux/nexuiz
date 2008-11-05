@@ -58,11 +58,11 @@ float kh_interferemsg_time, kh_interferemsg_team;
 .entity kh_previous_owner;
 .float kh_previous_owner_playerid;
 
-string kh_sound_capture = "sound/kh/capture.wav";
-string kh_sound_destroy = "sound/kh/destroy.wav";
-string kh_sound_drop = "sound/kh/drop.wav";
-string kh_sound_collect = "sound/kh/collect.wav";
-string kh_sound_alarm = "sound/kh/alarm.wav";  // the new siren/alarm
+string kh_sound_capture = "kh/capture.wav";
+string kh_sound_destroy = "kh/destroy.wav";
+string kh_sound_drop = "kh/drop.wav";
+string kh_sound_collect = "kh/collect.wav";
+string kh_sound_alarm = "kh/alarm.wav";  // the new siren/alarm
 
 float kh_key_dropped, kh_key_carried;
 

@@ -1,14 +1,15 @@
-//attack sound/player/fricka/coms/attack 0
-//attackinfive sound/player/fricka/letsgo 0
+//TAG: fricka
+attack sound/player/fricka/coms/attack 0
+attackinfive sound/player/fricka/coms/attackinfive 0
 //coverme sound/player/fricka/coms/coverme 0
-//defend sound/player/fricka/coms/defend 0
-//freelance sound/player/fricka/coms/freelance 2
-//incoming sound/player/fricka/incoming 0
-//meet sound/player/fricka/waypoint 0
-//needhelp sound/player/fricka/needhelp 0
-//seenflag sound/player/fricka/flagseen 0
-//taunt sound/player/fricka/player/taunt 1
-//teamshoot sound/player/fricka/coms/teamshoot 3
+defend sound/player/fricka/coms/defend 0
+freelance sound/player/fricka/coms/freelance 2
+incoming sound/player/fricka/coms/incoming 0
+meet sound/player/fricka/coms/waypoint 0
+//needhelp sound/player/fricka/coms/needhelp 0
+seenflag sound/player/fricka/coms/flagseen 0
+taunt sound/player/fricka/coms/taunt 4
+teamshoot sound/player/fricka/coms/teamshoot 3
 death sound/player/fricka/player/death 3
 drown sound/player/fricka/player/drown 0
 falling sound/player/fricka/player/falling 0
@@ -18,4 +19,3 @@ pain25 sound/player/fricka/player/pain25 0
 pain50 sound/player/fricka/player/pain50 0
 pain75 sound/player/fricka/player/pain75 0
 pain100 sound/player/fricka/player/pain100 0
-//
