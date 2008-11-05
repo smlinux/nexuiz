@@ -330,7 +330,6 @@ COMPAT_FILES="
 	sound/player/reptilian/player/pain25.ogg
 	sound/player/reptilian/player/pain50.ogg
 	sound/player/reptilian/player/pain75.ogg
-	sound/player/slime.ogg
 	sound/player/soldier/coms/attackinfive.ogg
 	sound/player/soldier/coms/attack.ogg
 	sound/player/soldier/coms/coverme.ogg
@@ -471,7 +470,6 @@ COMPAT_FILES="
 	sound/weapons/tagexp1.ogg
 	sound/weapons/tagexp2.ogg
 	sound/weapons/tagexp3.ogg
-	sound/weapons/tag_rocket_fly.ogg
 	sound/weapons/flac_fire.ogg
 	sound/weapons/flacexp1.ogg
 	sound/weapons/flacexp2.ogg
