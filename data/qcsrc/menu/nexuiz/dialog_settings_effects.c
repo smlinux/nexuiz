@@ -3,7 +3,7 @@ CLASS(NexuizEffectsSettingsTab) EXTENDS(NexuizTab)
 	METHOD(NexuizEffectsSettingsTab, fill, void(entity))
 	ATTRIB(NexuizEffectsSettingsTab, title, string, "Effects")
 	ATTRIB(NexuizEffectsSettingsTab, intendedWidth, float, 0.9)
-	ATTRIB(NexuizEffectsSettingsTab, rows, float, 15)
+	ATTRIB(NexuizEffectsSettingsTab, rows, float, 17)
 	ATTRIB(NexuizEffectsSettingsTab, columns, float, 6.5)
 ENDCLASS(NexuizEffectsSettingsTab)
 entity makeNexuizEffectsSettingsTab();
@@ -114,7 +114,9 @@ void fillNexuizEffectsSettingsTab(entity me)
 			e.configureNexuizTextSliderValues(e);
 
 	me.TR(me);
+	me.TR(me);
 		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "r_coronas", "Coronas"));
+	me.TR(me);
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizCheckBox(0, "r_bloom", "Bloom"));
 			setDependent(e, "r_hdr", 0, 0);
@@ -138,7 +140,11 @@ void fillNexuizEffectsSettingsTab(entity me)
 	me.TR(me);
 
 	me.TR(me);
-		me.TD(me, 1, 2, e = makeNexuizCheckBox(0, "r_shadow_realtime_dlight", "Realtime dynamic lighting"));
+		me.TD(me, 1, 3, e = makeNexuizRadioButton(1, string_null, string_null, "No dynamic lighting"));
+	me.TR(me);
+		me.TD(me, 1, 3, e = makeNexuizRadioButton(1, "gl_flashblend", string_null, "Flash blend approximation"));
+	me.TR(me);
+		me.TD(me, 1, 2, e = makeNexuizRadioButton(1, "r_shadow_realtime_dlight", string_null, "Realtime dynamic lighting"));
 		me.TD(me, 1, 1, e = makeNexuizCheckBox(0, "r_shadow_realtime_dlight_shadows", "Shadows"));
 			setDependent(e, "r_shadow_realtime_dlight", 1, 1);
 
@@ -153,7 +159,6 @@ void fillNexuizEffectsSettingsTab(entity me)
 			setDependentOR(e, "r_shadow_realtime_dlight", 1, 1, "r_shadow_realtime_world", 1, 1);
 	
 	me.TR(me);
-
 	me.TR(me);
 		me.TD(me, 1, 1.5, e = makeNexuizCheckBox(0, "r_glsl_offsetmapping", "Offset mapping"));
 			setDependent(e, "r_glsl", 1, 1);
@@ -183,7 +188,7 @@ void fillNexuizEffectsSettingsTab(entity me)
 			me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "r_showsurfaces", "Show surfaces"));
 
 	me.gotoRC(me, me.rows - 1, 0);
-		me.TD(me, 1, me.columns, makeNexuizCommandButton("Apply immediately", '0 0 0', "sendcvar cl_nogibs; gl_flashblend_update; r_restart", COMMANDBUTTON_APPLY));
+		me.TD(me, 1, me.columns, makeNexuizCommandButton("Apply immediately", '0 0 0', "sendcvar cl_nogibs; r_restart", COMMANDBUTTON_APPLY));
 }
 /*
  * [X] depth first world [X] depth first models (?????)

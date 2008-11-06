@@ -3,7 +3,7 @@ CLASS(NexuizInputSettingsTab) EXTENDS(NexuizTab)
 	METHOD(NexuizInputSettingsTab, fill, void(entity))
 	ATTRIB(NexuizInputSettingsTab, title, string, "Input")
 	ATTRIB(NexuizInputSettingsTab, intendedWidth, float, 0.9)
-	ATTRIB(NexuizInputSettingsTab, rows, float, 15)
+	ATTRIB(NexuizInputSettingsTab, rows, float, 17)
 	ATTRIB(NexuizInputSettingsTab, columns, float, 6.5)
 ENDCLASS(NexuizInputSettingsTab)
 entity makeNexuizInputSettingsTab();

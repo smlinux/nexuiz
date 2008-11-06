@@ -3,7 +3,7 @@ CLASS(NexuizMiscSettingsTab) EXTENDS(NexuizTab)
 	METHOD(NexuizMiscSettingsTab, fill, void(entity))
 	ATTRIB(NexuizMiscSettingsTab, title, string, "Misc")
 	ATTRIB(NexuizMiscSettingsTab, intendedWidth, float, 0.9)
-	ATTRIB(NexuizMiscSettingsTab, rows, float, 15)
+	ATTRIB(NexuizMiscSettingsTab, rows, float, 17)
 	ATTRIB(NexuizMiscSettingsTab, columns, float, 6.5)
 ENDCLASS(NexuizMiscSettingsTab)
 entity makeNexuizMiscSettingsTab();

@@ -4,7 +4,7 @@ CLASS(NexuizSettingsDialog) EXTENDS(NexuizDialog)
 	ATTRIB(NexuizSettingsDialog, title, string, "Settings")
 	ATTRIB(NexuizSettingsDialog, color, vector, SKINCOLOR_DIALOG_SETTINGS)
 	ATTRIB(NexuizSettingsDialog, intendedWidth, float, 0.96)
-	ATTRIB(NexuizSettingsDialog, rows, float, 17)
+	ATTRIB(NexuizSettingsDialog, rows, float, 19)
 	ATTRIB(NexuizSettingsDialog, columns, float, 6)
 ENDCLASS(NexuizSettingsDialog)
 #endif
