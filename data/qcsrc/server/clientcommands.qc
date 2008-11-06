@@ -618,7 +618,7 @@ void restartAnnouncer_Think() {
 		}
 
 		if(f <= 3) {
-			play2all(strcat("announcer/robotic/", ftos(f), ".ogg"));
+			play2all(strcat("announcer/robotic/", ftos(f), ".wav"));
 		}
 		self.nextthink = game_starttime - (f - 1);
 	}

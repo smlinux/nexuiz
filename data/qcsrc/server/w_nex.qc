@@ -9,7 +9,7 @@ void W_Nex_Attack (void)
 	FireRailgunBullet (w_shotorg, w_shotorg + w_shotdir * MAX_SHOT_DISTANCE, cvar("g_balance_nex_damage"), cvar("g_balance_nex_force"), WEP_NEX);
 
 	if(yoda && flying)
-		announce(self, "announcer/male/yoda.ogg");
+		announce(self, "announcer/male/yoda.wav");
 
 	pointparticles(particleeffectnum("nex_muzzleflash"), w_shotorg, w_shotdir * 1000, 1);
 

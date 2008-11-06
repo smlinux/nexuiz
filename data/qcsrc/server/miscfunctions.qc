@@ -1165,9 +1165,9 @@ void precache()
 	precache_sound ("announcer/male/25kills.wav");
 	precache_sound ("announcer/male/30kills.wav");
 	precache_sound ("announcer/male/botlike.wav");
-	precache_sound ("announcer/male/yoda.ogg");
-	precache_sound ("announcer/male/headshot.ogg");
-	precache_sound ("announcer/male/impressive.ogg");
+	precache_sound ("announcer/male/yoda.wav");
+	precache_sound ("announcer/male/headshot.wav");
+	precache_sound ("announcer/male/impressive.wav");
 
 	// announcer sounds - robotic
 	precache_sound ("announcer/robotic/prepareforbattle.wav");
@@ -1193,16 +1193,16 @@ void precache()
 	precache_model ("models/sprites/8.spr32");
 	precache_model ("models/sprites/9.spr32");
 	precache_model ("models/sprites/10.spr32");
-	precache_sound ("announcer/robotic/1.ogg");
-	precache_sound ("announcer/robotic/2.ogg");
-	precache_sound ("announcer/robotic/3.ogg");
-	precache_sound ("announcer/robotic/4.ogg");
-	precache_sound ("announcer/robotic/5.ogg");
-	precache_sound ("announcer/robotic/6.ogg");
-	precache_sound ("announcer/robotic/7.ogg");
-	precache_sound ("announcer/robotic/8.ogg");
-	precache_sound ("announcer/robotic/9.ogg");
-	precache_sound ("announcer/robotic/10.ogg");
+	precache_sound ("announcer/robotic/1.wav");
+	precache_sound ("announcer/robotic/2.wav");
+	precache_sound ("announcer/robotic/3.wav");
+	precache_sound ("announcer/robotic/4.wav");
+	precache_sound ("announcer/robotic/5.wav");
+	precache_sound ("announcer/robotic/6.wav");
+	precache_sound ("announcer/robotic/7.wav");
+	precache_sound ("announcer/robotic/8.wav");
+	precache_sound ("announcer/robotic/9.wav");
+	precache_sound ("announcer/robotic/10.wav");
 
 	// common weapon precaches
 	precache_sound ("weapons/weapon_switch.wav");

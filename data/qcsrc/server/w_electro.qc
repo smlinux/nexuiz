@@ -8,7 +8,7 @@ void W_Plasma_Explode (void)
 		if(other.classname == "player")
 			if(IsDifferentTeam(self.owner, other))
 				if(IsFlying(other))
-					announce(self.owner, "announcer/male/electrobitch.ogg");
+					announce(self.owner, "announcer/male/electrobitch.wav");
 
 	self.event_damage = SUB_Null;
 	if (self.movetype == MOVETYPE_BOUNCE)

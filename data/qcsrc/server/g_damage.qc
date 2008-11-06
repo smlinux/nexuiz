@@ -465,7 +465,7 @@ void Obituary (entity attacker, entity inflictor, entity targ, float deathtype)
 					bprint ("^1",s, "^1 died\n");
 			GiveFrags(targ, targ, -1);
 			if(PlayerScore_Add(targ, SP_SCORE, 0) == -5) {
-				announce(targ, "announcer/male/botlike.ogg");
+				announce(targ, "announcer/male/botlike.wav");
 			}
 
 			if (targ.killcount > 2)
