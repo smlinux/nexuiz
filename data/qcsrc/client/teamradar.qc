@@ -4,6 +4,7 @@ vector teamradar_origin2d; // 2D origin
 vector teamradar_size2d; // 2D size
 float teamradar_size; // 2D scale factor
 float cl_teamradar_scale; // window size = ...qu
+float v_flipped;
 
 float vlen_maxnorm2d(vector v)
 {
@@ -33,6 +34,8 @@ vector teamradar_texcoord_to_2dcoord(vector in)
 	out_y = - out_y; // screen space is reversed
 
 	out = out * teamradar_size;
+	if(v_flipped)
+		out_x = -out_x;
 	out += teamradar_origin2d;
 	return out;
 }
@@ -61,10 +64,20 @@ void draw_teamradar_background(float bg, float fg)
 			R_BeginPolygon(minimapname, DRAWFLAG_SCREEN | DRAWFLAG_MIPMAP);
 		else
 			R_BeginPolygon(minimapname, DRAWFLAG_ADDITIVE);
-		R_PolygonVertex(teamradar_texcoord_to_2dcoord(mi_pictexcoord0), yinvert(mi_pictexcoord0), '1 1 1', fg);
-		R_PolygonVertex(teamradar_texcoord_to_2dcoord(mi_pictexcoord1), yinvert(mi_pictexcoord1), '1 1 1', fg);
-		R_PolygonVertex(teamradar_texcoord_to_2dcoord(mi_pictexcoord2), yinvert(mi_pictexcoord2), '1 1 1', fg);
-		R_PolygonVertex(teamradar_texcoord_to_2dcoord(mi_pictexcoord3), yinvert(mi_pictexcoord3), '1 1 1', fg);
+		if(v_flipped)
+		{
+			R_PolygonVertex(teamradar_texcoord_to_2dcoord(mi_pictexcoord3), yinvert(mi_pictexcoord3), '1 1 1', fg);
+			R_PolygonVertex(teamradar_texcoord_to_2dcoord(mi_pictexcoord2), yinvert(mi_pictexcoord2), '1 1 1', fg);
+			R_PolygonVertex(teamradar_texcoord_to_2dcoord(mi_pictexcoord1), yinvert(mi_pictexcoord1), '1 1 1', fg);
+			R_PolygonVertex(teamradar_texcoord_to_2dcoord(mi_pictexcoord0), yinvert(mi_pictexcoord0), '1 1 1', fg);
+		}
+		else
+		{
+			R_PolygonVertex(teamradar_texcoord_to_2dcoord(mi_pictexcoord0), yinvert(mi_pictexcoord0), '1 1 1', fg);
+			R_PolygonVertex(teamradar_texcoord_to_2dcoord(mi_pictexcoord1), yinvert(mi_pictexcoord1), '1 1 1', fg);
+			R_PolygonVertex(teamradar_texcoord_to_2dcoord(mi_pictexcoord2), yinvert(mi_pictexcoord2), '1 1 1', fg);
+			R_PolygonVertex(teamradar_texcoord_to_2dcoord(mi_pictexcoord3), yinvert(mi_pictexcoord3), '1 1 1', fg);
+		}
 		R_EndPolygon();
 	}
 }
@@ -76,6 +89,12 @@ void(vector coord3d, vector pangles, vector rgb) draw_teamradar_player =
 	coord = teamradar_texcoord_to_2dcoord(teamradar_3dcoord_to_texcoord(coord3d));
 
 	makevectors(pangles - '0 1 0' * teamradar_angle);
+	if(v_flipped)
+	{
+		v_forward_x = -v_forward_x;
+		v_right_x = -v_right_x;
+		v_up_x = -v_up_x;
+	}
 	v_forward_z = 0;
 	v_forward = normalize(v_forward);
 	v_forward_y *= -1.0;
@@ -152,6 +171,7 @@ float cl_teamradar_zoommode;
 
 void teamradar_loadcvars()
 {
+	v_flipped = cvar("v_flipped");
 	if(ons_showmap)
 	{
 		cl_teamradar_scale = 42; // dummy, not used (see zoommode)
