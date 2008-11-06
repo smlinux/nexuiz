@@ -355,7 +355,7 @@ void Cmd_Sbar_Help(float argc)
 string Sbar_DefaultColumnLayout()
 {
 	return strcat( // fteqcc sucks
-		"ping pl color name | ",
+		"ping pl name | ",
 		"+noteams/kills +noteams/deaths +noteams/suicides -noteams,tdm/frags ", // tdm already has this in "score"
 		"+kh/caps +kh/pushes +kh/destroyed ",
 		"+ctf/caps +ctf/pickups +ctf/fckills +ctf/returns ",
