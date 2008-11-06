@@ -802,7 +802,7 @@ void spawnfunc_item_armor_medium (void) {
 		self.armorvalue = g_pickup_armormedium;
 	if(!self.max_armorvalue)
 		self.max_armorvalue = g_pickup_armormedium_max;
-	StartItem ("models/items/g_armormedium.md3", "misc/armor1.wav", g_pickup_respawntime_medium, "25 Armor", IT_ARMOR, 0, 0, commodity_pickupevalfunc, 20000);
+	StartItem ("models/items/g_armormedium.md3", "misc/armor10.wav", g_pickup_respawntime_medium, "25 Armor", IT_ARMOR, 0, 0, commodity_pickupevalfunc, 20000);
 }
 
 void spawnfunc_item_armor_large (void) {
