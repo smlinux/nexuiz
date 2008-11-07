@@ -1781,8 +1781,8 @@ void CSQC_ctf_hud(void)
 	vector pos;
 	
 	stat_items = getstati(STAT_ITEMS);
-	redflag = (stat_items/32768) & 3;
-	blueflag = (stat_items/131072) & 3;
+	redflag = (stat_items/IT_RED_FLAG_TAKEN) & 3;
+	blueflag = (stat_items/IT_BLUE_FLAG_TAKEN) & 3;
 
 	/**
 	 * FTEQCC BUG!
@@ -1814,6 +1814,10 @@ void CSQC_ctf_hud(void)
 	case 1: drawpic(pos, "gfx/sb_flag_red_taken", '0 0 0', '1 1 1', 1, DRAWFLAG_NORMAL); break;
 	case 2: drawpic(pos, "gfx/sb_flag_red_lost", '0 0 0', '1 1 1', 1, DRAWFLAG_NORMAL); break;
 	case 3: drawpic(pos, "gfx/sb_flag_red_carrying", '0 0 0', '1 1 1', 1, DRAWFLAG_NORMAL); break;
+	default:
+		if(stat_items & IT_CTF_SHIELDED)
+			if(myteam == COLOR_TEAM2)
+				drawpic(pos, "gfx/sb_flag_red_shielded", '0 0 0', '1 1 1', 1, DRAWFLAG_NORMAL); break;
 	}
 
 	pos_y -= 64;
@@ -1823,5 +1827,9 @@ void CSQC_ctf_hud(void)
 	case 1: drawpic(pos, "gfx/sb_flag_blue_taken", '0 0 0', '1 1 1', 1, 0); break;
 	case 2: drawpic(pos, "gfx/sb_flag_blue_lost", '0 0 0', '1 1 1', 1, 0); break;
 	case 3: drawpic(pos, "gfx/sb_flag_blue_carrying", '0 0 0', '1 1 1', 1, 0); break;
+	default:
+		if(stat_items & IT_CTF_SHIELDED)
+			if(myteam == COLOR_TEAM1)
+				drawpic(pos, "gfx/sb_flag_blue_shielded", '0 0 0', '1 1 1', 1, DRAWFLAG_NORMAL); break;
 	}
 }

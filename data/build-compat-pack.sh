@@ -23,6 +23,8 @@ COMPAT_FILES="
 	gfx/runningman_1on1remix_mini.tga
 	gfx/runningmanctf_mini.tga
 	gfx/runningman_mini.tga
+	gfx/sb_flag_blue_shielded.tga
+	gfx/sb_flag_red_shielded.tga
 	gfx/sb_kh_full.tga
 	gfx/sb_kh_outline.tga
 	gfx/sb_playercolor_base.tga
@@ -156,6 +158,7 @@ COMPAT_FILES="
 	sound/kh/collect.wav
 	sound/kh/destroy.wav
 	sound/kh/drop.wav
+	sound/misc/armor10.wav
 	sound/misc/armor1.wav
 	sound/misc/armor25.wav
 	sound/misc/footstep01.wav
@@ -217,6 +220,22 @@ COMPAT_FILES="
 	sound/player/carni-lycan/player/pain50.ogg
 	sound/player/carni-lycan/player/pain75.ogg
 	sound/player/default.sounds
+	sound/player/fricka/coms/attackinfive.ogg
+	sound/player/fricka/coms/attack.ogg
+	sound/player/fricka/coms/coverme.ogg
+	sound/player/fricka/coms/defend.ogg
+	sound/player/fricka/coms/flagseen.ogg
+	sound/player/fricka/coms/freelance1.ogg
+	sound/player/fricka/coms/freelance2.ogg
+	sound/player/fricka/coms/incoming.ogg
+	sound/player/fricka/coms/taunt1.ogg
+	sound/player/fricka/coms/taunt2.ogg
+	sound/player/fricka/coms/taunt3.ogg
+	sound/player/fricka/coms/taunt4.ogg
+	sound/player/fricka/coms/teamshoot1.ogg
+	sound/player/fricka/coms/teamshoot2.ogg
+	sound/player/fricka/coms/teamshoot3.ogg
+	sound/player/fricka/coms/waypoint.ogg
 	sound/player/fricka/player/death1.ogg
 	sound/player/fricka/player/death2.ogg
 	sound/player/fricka/player/death3.ogg
@@ -277,6 +296,7 @@ COMPAT_FILES="
 	sound/player/marine/coms/teamshoot1.ogg
 	sound/player/marine/coms/teamshoot2.ogg
 	sound/player/marine/coms/teamshoot3.ogg
+	sound/player/marine/coms/teamshoot4.ogg
 	sound/player/marine/player/death1.ogg
 	sound/player/marine/player/death2.ogg
 	sound/player/marine/player/death3.ogg
@@ -289,6 +309,26 @@ COMPAT_FILES="
 	sound/player/marine/player/pain25.ogg
 	sound/player/marine/player/pain50.ogg
 	sound/player/marine/player/pain75.ogg
+	sound/player/pyria-skadi/coms/attack1.ogg
+	sound/player/pyria-skadi/coms/attack2.ogg
+	sound/player/pyria-skadi/coms/attackinfive.ogg
+	sound/player/pyria-skadi/coms/coverme.ogg
+	sound/player/pyria-skadi/coms/defend.ogg
+	sound/player/pyria-skadi/coms/freelance1.ogg
+	sound/player/pyria-skadi/coms/freelance2.ogg
+	sound/player/pyria-skadi/coms/incoming.ogg
+	sound/player/pyria-skadi/coms/meet.ogg
+	sound/player/pyria-skadi/coms/needhelp1.ogg
+	sound/player/pyria-skadi/coms/seenflag.ogg
+	sound/player/pyria-skadi/coms/taunt1.ogg
+	sound/player/pyria-skadi/coms/taunt2.ogg
+	sound/player/pyria-skadi/coms/taunt3.ogg
+	sound/player/pyria-skadi/coms/taunt4.ogg
+	sound/player/pyria-skadi/coms/taunt5.ogg
+	sound/player/pyria-skadi/coms/teamshoot1.ogg
+	sound/player/pyria-skadi/coms/teamshoot2.ogg
+	sound/player/pyria-skadi/coms/teamshoot3.ogg
+	sound/player/pyria-skadi/coms/teamshoot4.ogg
 	sound/player/pyria-skadi/player/death1.ogg
 	sound/player/pyria-skadi/player/death2.ogg
 	sound/player/pyria-skadi/player/death3.ogg
@@ -330,6 +370,7 @@ COMPAT_FILES="
 	sound/player/reptilian/player/pain25.ogg
 	sound/player/reptilian/player/pain50.ogg
 	sound/player/reptilian/player/pain75.ogg
+	sound/player/slime.wav
 	sound/player/soldier/coms/attackinfive.ogg
 	sound/player/soldier/coms/attack.ogg
 	sound/player/soldier/coms/coverme.ogg
@@ -375,9 +416,11 @@ COMPAT_FILES="
 	sound/player/specop/coms/taunt1.ogg
 	sound/player/specop/coms/taunt2.ogg
 	sound/player/specop/coms/taunt3.ogg
+	sound/player/specop/coms/taunt4.ogg
 	sound/player/specop/coms/teamshoot1.ogg
 	sound/player/specop/coms/teamshoot2.ogg
 	sound/player/specop/coms/teamshoot3.ogg
+	sound/player/specop/coms/teamshoot4.ogg
 	sound/player/specop/player/death1.ogg
 	sound/player/specop/player/death2.ogg
 	sound/player/specop/player/death3.ogg
@@ -415,12 +458,19 @@ COMPAT_FILES="
 	sound/porto/explode.ogg
 	sound/porto/fire.ogg
 	sound/porto/unsupported.ogg
+	sound/weapons/crylink_fire2.ogg
 	sound/weapons/crylink_fire.ogg
+	sound/weapons/crylink_impact2.ogg
+	sound/weapons/crylink_impact.ogg
 	sound/weapons/electro_bounce.ogg
 	sound/weapons/electro_fire2.ogg
 	sound/weapons/electro_fire.ogg
 	sound/weapons/electro_fly.wav
 	sound/weapons/electro_impact.ogg
+	sound/weapons/flacexp1.ogg
+	sound/weapons/flacexp2.ogg
+	sound/weapons/flacexp3.ogg
+	sound/weapons/flac_fire.ogg
 	sound/weapons/grenade_bounce1.ogg
 	sound/weapons/grenade_bounce2.ogg
 	sound/weapons/grenade_bounce3.ogg
@@ -443,8 +493,18 @@ COMPAT_FILES="
 	sound/weapons/rocket_fire.ogg
 	sound/weapons/rocket_fly.wav
 	sound/weapons/rocket_impact.ogg
+	sound/weapons/seekerexp1.ogg
+	sound/weapons/seekerexp2.ogg
+	sound/weapons/seekerexp3.ogg
+	sound/weapons/seeker_fire.ogg
 	sound/weapons/shotgun_fire.ogg
 	sound/weapons/strength_fire.ogg
+	sound/weapons/tagexp1.ogg
+	sound/weapons/tagexp2.ogg
+	sound/weapons/tagexp3.ogg
+	sound/weapons/tag_fire.ogg
+	sound/weapons/tag_impact.ogg
+	sound/weapons/tag_rocket_fly.wav
 	sound/weapons/uzi_fire.ogg
 	sound/weapons/weaponpickup.ogg
 	sound/weapons/weapon_switch.ogg
@@ -462,64 +522,6 @@ COMPAT_FILES="
 	textures/portalgun_glow.tga
 	textures/portalgun_norm.tga
 	textures/portalgun.tga
-	sound/weapons/crylink_impact.ogg
-	sound/weapons/crylink_impact2.ogg
-	sound/weapons/crylink_fire2.ogg
-	sound/weapons/tag_fire.ogg
-	sound/weapons/tag_impact.ogg
-	sound/weapons/tagexp1.ogg
-	sound/weapons/tagexp2.ogg
-	sound/weapons/tagexp3.ogg
-	sound/weapons/flac_fire.ogg
-	sound/weapons/flacexp1.ogg
-	sound/weapons/flacexp2.ogg
-	sound/weapons/flacexp3.ogg
-	sound/weapons/seeker_fire.ogg
-	sound/weapons/seekerexp1.ogg
-	sound/weapons/seekerexp2.ogg
-	sound/weapons/seekerexp3.ogg
-	sound/misc/armor10.wav
-	sound/player/specop/coms/taunt4.ogg
-	sound/player/specop/coms/teamshoot4.ogg
-	sound/player/fricka/coms/freelance1.ogg
-	sound/player/fricka/coms/freelance2.ogg
-	sound/player/fricka/coms/attack.ogg
-	sound/player/fricka/coms/attackinfive.ogg
-	sound/player/fricka/coms/waypoint.ogg
-	sound/player/fricka/coms/taunt1.ogg
-	sound/player/fricka/coms/taunt2.ogg
-	sound/player/fricka/coms/taunt3.ogg
-	sound/player/fricka/coms/taunt4.ogg
-	sound/player/fricka/coms/teamshoot1.ogg
-	sound/player/fricka/coms/flagseen.ogg
-	sound/player/fricka/coms/defend.ogg
-	sound/player/fricka/coms/teamshoot2.ogg
-	sound/player/fricka/coms/teamshoot3.ogg
-	sound/player/fricka/coms/coverme.ogg
-	sound/player/fricka/coms/incoming.ogg
-	sound/player/slime.wav
-	sound/player/marine/coms/teamshoot4.ogg
-	sound/player/pyria-skadi/coms/freelance1.ogg
-	sound/player/pyria-skadi/coms/needhelp1.ogg
-	sound/player/pyria-skadi/coms/freelance2.ogg
-	sound/player/pyria-skadi/coms/attackinfive.ogg
-	sound/player/pyria-skadi/coms/taunt1.ogg
-	sound/player/pyria-skadi/coms/taunt2.ogg
-	sound/player/pyria-skadi/coms/taunt3.ogg
-	sound/player/pyria-skadi/coms/taunt4.ogg
-	sound/player/pyria-skadi/coms/taunt5.ogg
-	sound/player/pyria-skadi/coms/teamshoot1.ogg
-	sound/player/pyria-skadi/coms/seenflag.ogg
-	sound/player/pyria-skadi/coms/defend.ogg
-	sound/player/pyria-skadi/coms/teamshoot2.ogg
-	sound/player/pyria-skadi/coms/teamshoot3.ogg
-	sound/player/pyria-skadi/coms/teamshoot4.ogg
-	sound/player/pyria-skadi/coms/attack1.ogg
-	sound/player/pyria-skadi/coms/attack2.ogg
-	sound/player/pyria-skadi/coms/meet.ogg
-	sound/player/pyria-skadi/coms/coverme.ogg
-	sound/player/pyria-skadi/coms/incoming.ogg
-	sound/weapons/tag_rocket_fly.wav
 "
 
 rev=`svnversion`

@@ -13,6 +13,111 @@ entity ctf_worldflaglist; // CTF flags in the map
 
 #define FLAG_CARRY_POS '-15 0 7'
 
+.float ctf_captureshielded; // set to 1 if the player is too bad to be allowed to capture
+
+float captureshield_min_negscore; // punish at -20 points
+float captureshield_max_ratio; // punish at most 30% of each team
+float captureshield_force; // push force of the shield
+
+float ctf_captureshield_shielded(entity p)
+{
+	float s, se;
+	entity e;
+	float players_worseeq, players_total;
+
+	if(captureshield_max_ratio <= 0)
+		return FALSE;
+
+	s = PlayerScore_Add(p, SP_SCORE, 0);
+	if(s >= -captureshield_min_negscore)
+		return FALSE;
+
+	players_total = players_worseeq = 0;
+	FOR_EACH_PLAYER(e)
+	{
+		if(e.team != p.team)
+			continue;
+		se = PlayerScore_Add(e, SP_SCORE, 0);
+		if(se <= s)
+			++players_worseeq;
+		++players_total;
+	}
+
+	// player is in the worse half, if >= half the players are better than him, or consequently, if < half of the players are worse
+	// use this rule here
+	
+	if(players_worseeq >= players_total * captureshield_max_ratio)
+		return FALSE;
+
+	return TRUE;
+}
+
+void ctf_captureshield_update(entity p, float dir)
+{
+	float should;
+	if(dir == p.ctf_captureshielded) // 0: shield only, 1: unshield only
+	{
+		should = ctf_captureshield_shielded(p);
+		if(should != dir)
+		{
+			if(should)
+			{
+				centerprint_atprio(p, CENTERPRIO_SHIELDING, "^3You are now ^4shielded^3 from the flag\n^3for ^1too many unsuccessful attempts^3 to capture.\n\n^3Make some defensive scores before trying again.");
+				// TODO csqc notifier for this
+			}
+			else
+			{
+				centerprint_atprio(p, CENTERPRIO_SHIELDING, "^3You are now free.\n\n^3Feel free to ^1try to capture^3 the flag again\n^3if you think you will succeed.");
+				// TODO csqc notifier for this
+			}
+			p.ctf_captureshielded = should;
+		}
+	}
+}
+
+float ctf_captureshield_customize()
+{
+	if not(other.ctf_captureshielded)
+		return FALSE;
+	if(self.team == other.team)
+		return FALSE;
+	return TRUE;
+}
+
+void ctf_captureshield_touch()
+{
+	if not(other.ctf_captureshielded)
+		return;
+	if(self.team == other.team)
+		return;
+	vector mymid;
+	vector othermid;
+	mymid = (self.absmin + self.absmax) * 0.5;
+	othermid = (other.absmin + other.absmax) * 0.5;
+	Damage(other, self, self, 0, DEATH_HURTTRIGGER, mymid, normalize(othermid - mymid) * captureshield_force);
+	centerprint_atprio(other, CENTERPRIO_SHIELDING, "^3You are ^4shielded^3 from the flag\n^3for ^1too many unsuccessful attempts^3 to capture.\n\n^3Get some defensive scores before trying again.");
+}
+
+void ctf_captureshield_spawn()
+{
+	entity e;
+	e = spawn();
+	e.enemy = self;
+	e.team = self.team;
+	e.touch = ctf_captureshield_touch;
+	e.customizeentityforclient = ctf_captureshield_customize;
+	e.classname = "ctf_captureshield";
+	e.effects = EF_ADDITIVE;
+	e.movetype = MOVETYPE_NOCLIP;
+	e.solid = SOLID_TRIGGER;
+	e.avelocity = '7 0 11';
+	setorigin(e, self.origin);
+	setmodel(e, "models/onslaught/generator_shield.md3");
+	e.scale = 0.5;
+	setsize(e, e.scale * e.mins, e.scale * e.maxs);
+	print(etos(e), "\n");
+}
+
 float ctf_score_value(string parameter)
 {
 	if(g_ctf_win_mode != 2)
@@ -70,6 +175,7 @@ void place_flag()
 		droptofloor();
 		self.movetype = MOVETYPE_TOSS;
 	}
+	InitializeEntity(self, ctf_captureshield_spawn, INITPRIO_SETLOCATION);
 };
 
 void LogCTF(string mode, float flagteam, entity actor)
@@ -143,6 +249,7 @@ void DropFlag(entity e, entity penalty_receiver, entity attacker)
 	else
 		UpdateFrags(p, -ctf_score_value("penalty_drop"));
 	PlayerScore_Add(p, SP_CTF_DROPS, +1);
+	ctf_captureshield_update(p, 0); // shield only
 	e.playerid = attacker.playerid;
 	e.ctf_droptime = time;
 	
@@ -190,6 +297,12 @@ void FlagThink()
 	local entity e;
 
 	self.nextthink = time + 0.1;
+
+	if(self == ctf_worldflaglist) // only for the first flag
+	{
+		FOR_EACH_CLIENT(e)
+			ctf_captureshield_update(e, 1); // release shield only
+	}
 
 	AnimateFlag();
 
@@ -318,6 +431,7 @@ void FlagTouch()
 	if (other.team == COLOR_TEAM1 || other.team == COLOR_TEAM2) // only red and blue team can steal flags
 	if (other.team != self.team)
 	if (!other.flagcarried)
+	if (!other.ctf_captureshielded)
 	{
 		if (other.next_take_time > time)
 			return;
@@ -365,7 +479,10 @@ void FlagTouch()
 			// punish the player who last had it
 			FOR_EACH_PLAYER(player)
 				if(player.playerid == self.dropperid)
+				{
 					PlayerScore_Add(player, SP_SCORE, -ctf_score_value("penalty_returned"));
+					ctf_captureshield_update(player, 0); // shield only
+				}
 
 			// punish the team who was last carrying it
 			if(self.team == COLOR_TEAM1)
@@ -584,6 +701,8 @@ void spawnfunc_item_flag_team1()
 
 	WaypointSprite_SpawnFixed("redbase", self.origin + '0 0 37', self, sprite);
 	WaypointSprite_UpdateTeamRadar(self.sprite, RADARICON_FLAG, '1 0 0');
+
+	precache_model("models/onslaught/generator_shield.md3");
 };
 
 /*QUAKED spawnfunc_item_flag_team2 (0 0.5 0.8) (-48 -48 -24) (48 48 64)
@@ -676,6 +795,8 @@ void spawnfunc_item_flag_team2()
 
 	WaypointSprite_SpawnFixed("bluebase", self.origin + '0 0 37', self, sprite);
 	WaypointSprite_UpdateTeamRadar(self.sprite, RADARICON_FLAG, '0 0 1');
+
+	precache_model("models/onslaught/generator_shield.md3");
 };
 
 
@@ -744,6 +865,10 @@ void ctf_init()
 {
 	InitializeEntity(world, ctf_delayedinit, INITPRIO_GAMETYPE);
 	flagcaptimerecord = stof(db_get(ServerProgsDB, strcat(GetMapname(), "/captimerecord/time")));
+
+	captureshield_min_negscore = cvar("g_ctf_shield_min_negscore");
+	captureshield_max_ratio = cvar("g_ctf_shield_max_ratio");
+	captureshield_force = cvar("g_ctf_shield_force");
 };
 
 void ctf_setstatus2(entity flag, float shift)
@@ -763,14 +888,18 @@ void ctf_setstatus2(entity flag, float shift)
 
 void ctf_setstatus()
 {
-	self.items = self.items - (self.items & IT_RED_FLAG_TAKEN);
-	self.items = self.items - (self.items & IT_RED_FLAG_LOST);
-	self.items = self.items - (self.items & IT_BLUE_FLAG_TAKEN);
-	self.items = self.items - (self.items & IT_BLUE_FLAG_LOST);
+	self.items (-) IT_RED_FLAG_TAKEN;
+	self.items (-) IT_RED_FLAG_LOST;
+	self.items (-) IT_BLUE_FLAG_TAKEN;
+	self.items (-) IT_BLUE_FLAG_LOST;
+	self.items (-) IT_CTF_SHIELDED;
 
 	if (g_ctf) {
 		local entity flag;
 		float redflags, blueflags;
+
+		if(self.ctf_captureshielded)
+			self.items |= IT_CTF_SHIELDED;
 
 		redflags = 0;
 		blueflags = 0;
