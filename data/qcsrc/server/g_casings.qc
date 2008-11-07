@@ -5,7 +5,7 @@ void casingtouch()
 	if (other.solid == SOLID_BSP)
 	if (vlen(self.velocity) >= 50)
 	if (time >= self.attack_finished_single)
-	sound (self, CHAN_PROJECTILE, "weapons/tink1.wav", VOL_BASE, ATTN_NORM);
+	sound (self, CHAN_PROJECTILE, "weapons/casing.wav", VOL_BASE, ATTN_NORM);
 	self.attack_finished_single = time + 0.2;
 	//self.touch = SUB_Null; // one tink is enough
 	//self.dest = self.origin - self.groundentity.origin;

@@ -131,9 +131,11 @@ float w_shotgun(float req)
 		precache_sound ("weapons/ric2.wav");
 		precache_sound ("weapons/ric3.wav");
 		precache_sound ("weapons/shotgun_fire.wav");
-		precache_sound ("weapons/tink1.wav");
 		if (cvar("g_casings") >= 1)
+		{
+			precache_sound ("weapons/casing.wav");
 			precache_model ("models/casing_shell.mdl");
+		}
 	}
 	else if (req == WR_SETUP)
 		weapon_setup(WEP_SHOTGUN);
