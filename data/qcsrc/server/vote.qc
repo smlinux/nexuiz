@@ -66,7 +66,7 @@ float RemapVote(string vote, string cmd, entity e)
 	entity victim;
 	vote_argc = tokenize_sane(vote);
 
-	if(!VoteAllowed(argv(0)))
+	if(!VoteAllowed(argv(0), cmd))
 	{
 		return FALSE;
 	}
@@ -383,9 +383,10 @@ string VoteParse(string all, float argc) {
 	return substring(all, argv_start_index(2), argv_end_index(-1) - argv_start_index(2));
 }
 
-float VoteAllowed(string votecommand) {
-	tokenize_sane(cvar_string("sv_vote_commands"));
+float VoteAllowed(string votecommand, string cmd) {
 	local float index;
+
+	tokenize_sane(cvar_string("sv_vote_commands"));
 	index = 0;
 	while(argv(index) != "") {
 		if(votecommand == argv(index)) {
@@ -393,6 +394,19 @@ float VoteAllowed(string votecommand) {
 		}
 		++index;
 	}
+
+	if(cmd == "vdo")
+		tokenize_sane(cvar_string("sv_vote_master_commands"));
+	else
+		tokenize_sane(cvar_string("sv_vote_only_commands"));
+	index = 0;
+	while(argv(index) != "") {
+		if(votecommand == argv(index)) {
+			return TRUE;
+		}
+		++index;
+	}
+
 	return FALSE;
 }
 

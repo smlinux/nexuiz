@@ -1,3 +1,13 @@
+float votecalled;
+string votecalledvote;
+string votecalledvote_display;
+float votecalledmaster;
+entity votecaller;
+float votefinished;
+.float vote_master;
+.float vote_next;
+.float vote_vote;
+
 string GetKickVoteVictim_newcommand;
 string GetKickVoteVictim_reason;
 
@@ -9,7 +19,7 @@ string VoteNetname(entity e);
 string ValidateMap(string m, entity e);
 void VoteThink();
 string VoteParse(string s, float tokens);
-float VoteAllowed(string votecommand);
+float VoteAllowed(string vote, string cmd);
 void VoteReset();
 void VoteAccept();
 void VoteReject();

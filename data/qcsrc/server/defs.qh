@@ -237,25 +237,6 @@ float alreadychangedlevel;
 .float welcomemessage_time;
 .float version;
 
-// esteel's voting
-float votecalled;
-string votecalledvote;
-string votecalledvote_display;
-float votecalledmaster;
-entity votecaller;
-float votefinished;
-.float vote_master;
-.float vote_next;
-.float vote_vote;
-void VoteThink();
-float VoteAllowed(string vote);
-void VoteReset();
-void VoteAccept();
-void VoteReject();
-void VoteTimeout();
-void VoteStop(entity stopper);
-void VoteCount();
-
 // Laser target for laser-guided weapons
 .entity lasertarget;
 .float laser_on;
