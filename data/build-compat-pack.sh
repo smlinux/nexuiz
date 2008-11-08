@@ -458,6 +458,12 @@ COMPAT_FILES="
 	sound/porto/explode.ogg
 	sound/porto/fire.ogg
 	sound/porto/unsupported.ogg
+	sound/weapons/brass1.ogg
+	sound/weapons/brass2.ogg
+	sound/weapons/brass3.ogg
+	sound/weapons/casing1.ogg
+	sound/weapons/casing2.ogg
+	sound/weapons/casing3.ogg
 	sound/weapons/crylink_fire2.ogg
 	sound/weapons/crylink_fire.ogg
 	sound/weapons/crylink_impact2.ogg
@@ -493,6 +499,7 @@ COMPAT_FILES="
 	sound/weapons/rocket_fire.ogg
 	sound/weapons/rocket_fly.wav
 	sound/weapons/rocket_impact.ogg
+	sound/weapons/rocket_mode.ogg
 	sound/weapons/seekerexp1.ogg
 	sound/weapons/seekerexp2.ogg
 	sound/weapons/seekerexp3.ogg
