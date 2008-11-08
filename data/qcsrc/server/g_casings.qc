@@ -11,7 +11,7 @@ void casingtouch()
 
 		f = floor(random() * 3) + 1;
 		if(self.state == 1)
-			s = strcat("weapons/casing", ftos(f), ".wav");
+			s = strcat("weapons/casings", ftos(f), ".wav");
 		else if(self.state == 2)
 			s = strcat("weapons/steel", ftos(f), ".wav");
 		else

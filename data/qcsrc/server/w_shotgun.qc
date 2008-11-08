@@ -133,9 +133,9 @@ float w_shotgun(float req)
 		precache_sound ("weapons/shotgun_fire.wav");
 		if (cvar("g_casings") >= 1)
 		{
-			precache_sound ("weapons/casing1.wav");
-			precache_sound ("weapons/casing2.wav");
-			precache_sound ("weapons/casing3.wav");
+			precache_sound ("weapons/casings1.wav");
+			precache_sound ("weapons/casings2.wav");
+			precache_sound ("weapons/casings3.wav");
 			precache_model ("models/casing_shell.mdl");
 		}
 	}

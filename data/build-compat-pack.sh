@@ -461,9 +461,9 @@ COMPAT_FILES="
 	sound/weapons/brass1.ogg
 	sound/weapons/brass2.ogg
 	sound/weapons/brass3.ogg
-	sound/weapons/casing1.ogg
-	sound/weapons/casing2.ogg
-	sound/weapons/casing3.ogg
+	sound/weapons/casings1.ogg
+	sound/weapons/casings2.ogg
+	sound/weapons/casings3.ogg
 	sound/weapons/crylink_fire2.ogg
 	sound/weapons/crylink_fire.ogg
 	sound/weapons/crylink_impact2.ogg
