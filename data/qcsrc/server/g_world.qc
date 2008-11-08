@@ -225,7 +225,10 @@ void spawnfunc_worldspawn (void)
 	RegisterWeapons();
 
 	if(GotoFirstMap())
+	{
+		world_initialized = -1; // don't complain
 		return;
+	}
 
 	if(sv_cheats)
 		ServerProgsDB = db_create();
@@ -401,9 +404,9 @@ void spawnfunc_worldspawn (void)
 	Nagger_Init();
 
 	next_pingtime = time + 5;
-	world_initialized = 1;
-
 	InitializeEntity(self, cvar_changes_init, INITPRIO_CVARS);
+
+	world_initialized = 1;
 }
 
 void spawnfunc_light (void)
@@ -2327,7 +2330,7 @@ void RestoreGame()
 
 void SV_Shutdown()
 {
-	if(world_initialized)
+	if(world_initialized > 0)
 	{
 		world_initialized = 0;
 		print("Saving persistent data...\n");
@@ -2344,7 +2347,7 @@ void SV_Shutdown()
 
 		MapInfo_Shutdown();
 	}
-	else
+	else if(world_initialized == 0)
 	{
 		print("NOTE: crashed before even initializing the world, not saving persistent data\n");
 	}
