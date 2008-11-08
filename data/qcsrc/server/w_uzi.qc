@@ -139,7 +139,9 @@ float w_uzi(float req)
 		precache_sound ("weapons/uzi_fire.wav");
 		if (cvar("g_casings") >= 2)
 		{
-			precache_sound ("weapons/casing.wav");
+			precache_sound ("weapons/brass1.wav");
+			precache_sound ("weapons/brass2.wav");
+			precache_sound ("weapons/brass3.wav");
 			precache_model ("models/casing_bronze.mdl");
 		}
 	}

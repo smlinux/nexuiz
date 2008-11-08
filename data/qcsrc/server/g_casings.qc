@@ -5,7 +5,19 @@ void casingtouch()
 	if (other.solid == SOLID_BSP)
 	if (vlen(self.velocity) >= 50)
 	if (time >= self.attack_finished_single)
-	sound (self, CHAN_PROJECTILE, "weapons/casing.wav", VOL_BASE, ATTN_NORM);
+	{
+		string s;
+		float f;
+
+		f = floor(random() * 3) + 1;
+		if(self.state == 1)
+			s = strcat("weapons/casing", ftos(f), ".wav");
+		else if(self.state == 2)
+			s = strcat("weapons/steel", ftos(f), ".wav");
+		else
+			s = strcat("weapons/brass", ftos(f), ".wav");
+		sound (self, CHAN_PROJECTILE, s, VOL_BASE, ATTN_NORM);
+	}
 	self.attack_finished_single = time + 0.2;
 	//self.touch = SUB_Null; // one tink is enough
 	//self.dest = self.origin - self.groundentity.origin;
@@ -57,6 +69,7 @@ void SpawnCasing(vector org, vector vel, float randomvel, vector ang, vector ave
 	e = newdecor();
 	e.isdecor = TRUE;
 	e.alpha = 1;
+	e.state = casingtype;
 	//e.forcescale = 15;
 	e.movetype = MOVETYPE_BOUNCE;
 	e.solid = SOLID_TRIGGER;
