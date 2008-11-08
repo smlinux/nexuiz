@@ -789,6 +789,8 @@ void PutClientInServer (void)
 				centerprint(self, "You are defending!\n");
 		}
 
+		target_voicescript_clear(self);
+
 	} else if(self.classname == "observer") {
 		PutObserverInServer ();
 	}
@@ -2251,6 +2253,8 @@ void PlayerPreThink (void)
 		self.pusher = oldpusher;
 		self = oldself;
 	}
+
+	target_voicescript_next(self);
 }
 
 
