@@ -26,8 +26,8 @@ string toStringNexuizMutatorsDialog(entity me)
 		s = strcat(s, ", MinstaGib");
 	if(cvar("g_nixnex"))
 		s = strcat(s, ", NixNex");
-	if(cvar("g_rocketarena"))
-		s = strcat(s, ", RL arena");
+	if(cvar_string("g_weaponarena") != "0")
+		s = strcat(s, ", ", cvar_string("g_weaponarena"), " arena");
 	if(cvar("sv_gravity") < 800)
 		s = strcat(s, ", Low gravity");
 	if(cvar("g_cloaked"))
