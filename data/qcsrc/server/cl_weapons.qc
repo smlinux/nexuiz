@@ -102,11 +102,6 @@ void W_PreviousWeapon(float list)
 		W_CycleWeapon(self.cvar_cl_weaponpriority, +1);
 }
 
-string W_FixWeaponOrder(string order, float complete)
-{
-	return fixPriorityList(order, WEP_FIRST, WEP_LAST, complete);
-}
-
 string W_FixWeaponOrder_AllowIncomplete(string order)
 {
 	return W_FixWeaponOrder(order, 0);
@@ -447,25 +442,4 @@ void Nixnex_GiveCurrentWeapon()
 				if(client_hasweapon(self, nixnex_weapon, TRUE, FALSE))
 					W_SwitchWeapon(nixnex_weapon);
 	}
-}
-
-void RegisterWeapons()
-{
-	// %weaponaddpoint
-	register_weapon(WEP_LASER,            w_laser,     0,              1, 1,     0, "laser",     "laser",           "Laser");
-	register_weapon(WEP_SHOTGUN,          w_shotgun,   IT_SHELLS,      2, 1,  2500, "shotgun",   "shotgun",         "Shotgun");
-	register_weapon(WEP_UZI,              w_uzi,       IT_NAILS,       3, 1,  5000, "uzi",       "uzi",             "Machine Gun");
-	register_weapon(WEP_GRENADE_LAUNCHER, w_glauncher, IT_ROCKETS,     4, 1,  5000, "gl",        "grenadelauncher", "Mortar");
-	register_weapon(WEP_ELECTRO,          w_electro,   IT_CELLS,       5, 1,  5000, "electro",   "electro",         "Electro");
-	register_weapon(WEP_CRYLINK,          w_crylink,   IT_CELLS,       6, 1,  5000, "crylink",   "crylink",         "Crylink");
-	register_weapon(WEP_NEX,              w_nex,       IT_CELLS,       7, 1, 10000, "nex",       "nex",             "Nex");
-	register_weapon(WEP_HAGAR,            w_hagar,     IT_ROCKETS,     8, 1,  5000, "hagar",     "hagar",           "Hagar");
-	register_weapon(WEP_ROCKET_LAUNCHER,  w_rlauncher, IT_ROCKETS,     9, 1, 10000, "rl",        "rocketlauncher",  "Rocket Launcher");
-	register_weapon(WEP_PORTO,            w_porto,     IT_SUPERWEAPON, 0, 0,     0, "porto" ,    "porto",           "Port-O-Launch");
-	register_weapon(WEP_MINSTANEX,        w_minstanex, IT_CELLS,       7, 0, 10000, "minstanex", "minstanex",       "MinstaNex");
-	register_weapon(WEP_HOOK,             w_hook,      IT_CELLS,       0, 0,     0, "hookgun",   "hook",            "Grappling Hook");
-	register_weapon(WEP_SEEKER,           w_seeker,    IT_ROCKETS,     8, 1,     0, "seeker",    "seeker",          "T.A.G. Seeker");
-	register_weapon(WEP_HLAC,             w_hlac,      IT_CELLS,       6, 1,     0, "hlac",      "hlac",            "Heavy Laser Assault Cannon");
-
-	register_weapons_done();
 }

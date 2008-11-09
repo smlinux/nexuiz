@@ -63,6 +63,8 @@ void() m_init_delayed =
 	menuInitialized = 1;
 	GameCommand_Init();
 
+	RegisterWeapons();
+
 	fh = -1;
 	if(cvar_string("menu_skin") != "")
 	{

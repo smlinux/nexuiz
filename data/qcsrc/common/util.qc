@@ -1052,3 +1052,82 @@ float tokenizebyseparator(string s, string sep)
 	argv_end_index = func_null;
 	return _tokenizebyseparator_builtin(s, sep);
 }
+
+float power2of(float e)
+{
+	return pow(2, e);
+}
+float log2of(float x)
+{
+	// NOTE: generated code
+	if(x > 2048)
+		if(x > 131072)
+			if(x > 1048576)
+				if(x > 4194304)
+					return 23;
+				else
+					if(x > 2097152)
+						return 22;
+					else
+						return 21;
+			else
+				if(x > 524288)
+					return 20;
+				else
+					if(x > 262144)
+						return 19;
+					else
+						return 18;
+		else
+			if(x > 16384)
+				if(x > 65536)
+					return 17;
+				else
+					if(x > 32768)
+						return 16;
+					else
+						return 15;
+			else
+				if(x > 8192)
+					return 14;
+				else
+					if(x > 4096)
+						return 13;
+					else
+						return 12;
+	else
+		if(x > 32)
+			if(x > 256)
+				if(x > 1024)
+					return 11;
+				else
+					if(x > 512)
+						return 10;
+					else
+						return 9;
+			else
+				if(x > 128)
+					return 8;
+				else
+					if(x > 64)
+						return 7;
+					else
+						return 6;
+		else
+			if(x > 4)
+				if(x > 16)
+					return 5;
+				else
+					if(x > 8)
+						return 4;
+					else
+						return 3;
+			else
+				if(x > 2)
+					return 2;
+				else
+					if(x > 1)
+						return 1;
+					else
+						return 0;
+}

@@ -1,0 +1,77 @@
+// Weapon indexes
+// %weaponaddpoint
+float WEP_FIRST				=  1;
+float WEP_LASER				=  1; float WEPBIT_LASER			= 1; // always: 2^(w-1)
+float WEP_SHOTGUN			=  2; float WEPBIT_SHOTGUN			= 2;
+float WEP_UZI				=  3; float WEPBIT_UZI				= 4;
+float WEP_GRENADE_LAUNCHER	=  4; float WEPBIT_GRENADE_LAUNCHER	= 8;
+float WEP_ELECTRO			=  5; float WEPBIT_ELECTRO			= 16;
+float WEP_CRYLINK			=  6; float WEPBIT_CRYLINK			= 32;
+float WEP_NEX				=  7; float WEPBIT_NEX				= 64;
+float WEP_HAGAR				=  8; float WEPBIT_HAGAR			= 128;
+float WEP_ROCKET_LAUNCHER	=  9; float WEPBIT_ROCKET_LAUNCHER	= 256;
+float WEP_PORTO				= 10; float WEPBIT_PORTO			= 512;
+float WEP_MINSTANEX			= 11; float WEPBIT_MINSTANEX		= 1024;
+float WEP_HOOK     			= 12; float WEPBIT_HOOK     		= 2048;
+float WEP_HLAC			    = 13; float WEPBIT_HLAC		        = 4096;
+float WEP_SEEKER			= 14; float WEPBIT_SEEKER		    = 8192;
+float WEP_LAST				= 14; float WEPBIT_ALL              = 16383;
+float WEP_COUNT             = 15;
+
+float	IT_UNLIMITED_WEAPON_AMMO  = 1;
+// when this bit is set, using a weapon does not reduce ammo. Checkpoints can give this powerup.
+float	IT_UNLIMITED_SUPERWEAPONS = 2;
+// when this bit is set, using a superweapon does not throw it away. Checkpoints can give this powerup.
+float	IT_UNLIMITED_AMMO         = 3;
+// both of these combined
+float	IT_CTF_SHIELDED           = 4; // set for the flag shield
+float	IT_SHELLS				= 256;
+float	IT_NAILS				= 512;
+float	IT_ROCKETS				= 1024;
+float	IT_CELLS				= 2048;
+float	IT_SUPERWEAPON			= 4096;
+float	IT_AMMO					= 7936;
+float	IT_STRENGTH				= 8192;
+float	IT_INVINCIBLE			= 16384;
+float	IT_HEALTH				= 32768;
+// union:
+	// for items:
+	float	IT_KEY1					= 131072;
+	float	IT_KEY2					= 262144;
+	// for players:
+	float	IT_RED_FLAG_TAKEN		= 32768;
+	float	IT_RED_FLAG_LOST		= 65536;
+	float	IT_RED_FLAG_CARRING		= 98304;
+	float	IT_BLUE_FLAG_TAKEN		= 131072;
+	float	IT_BLUE_FLAG_LOST		= 262144;
+	float	IT_BLUE_FLAG_CARRING	= 393216;
+// end
+float	IT_5HP					= 524288;
+float	IT_25HP					= 1048576;
+float	IT_ARMOR_SHARD			= 2097152;
+float	IT_ARMOR				= 4194304;
+
+// variables:
+string weaponpriority_hudselector_0;
+string weaponpriority_hudselector_1;
+
+// functions:
+entity get_weaponinfo(float id);
+string W_FixWeaponOrder(string order, float complete);
+void RegisterWeapons();
+
+#define WEPSPAWNFLAG_NORMAL 1
+#define WEPSPAWNFLAG_CANCLIMB 2
+
+// entity properties of weaponinfo:
+.float weapon; // WEP_...
+.float weapons; // WEPBIT_...
+.string netname; // short name
+.string message; // human readable name
+.float items; // IT_...
+.float(float) weapon_func; // w_...
+.string mdl; // modelname without g_, v_, w_
+.string model; // full name of g_ model
+.float spawnflags; // WEPSPAWNFLAG_... combined
+.float impulse; // weapon impulse
+.float bot_pickupbasevalue; // bot weapon priority

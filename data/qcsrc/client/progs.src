@@ -7,6 +7,7 @@ csqc_constants.qc
 ../common/constants.qh
 csqc_builtins.qc
 ../common/util.qh
+../common/items.qh
 
 ../common/mapinfo.qh
 interpolate.qh
@@ -37,3 +38,4 @@ waypointsprites.qc
 ../common/util.qc
 ../common/gamecommand.qc
 ../common/mapinfo.qc
+../common/items.qc

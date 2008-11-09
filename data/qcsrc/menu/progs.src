@@ -11,6 +11,7 @@ oo/base.h
 ../common/constants.qh
 ../common/mapinfo.qh
 ../common/campaign_common.qh
+../common/items.qh
 
 gamecommand.qh
 menu.qh
@@ -36,3 +37,4 @@ nexuiz/util.qc
 ../common/campaign_file.qc
 ../common/campaign_setup.qc
 ../common/mapinfo.qc
+../common/items.qc

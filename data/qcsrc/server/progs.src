@@ -3,11 +3,13 @@
 ../common/util-pre.qh
 sys.qh
 builtins.qh
+extensions.qh
 constants.qh
 ../common/constants.qh
-defs.qh		// Should rename this, it has fields and globals
-extensions.qh
 ../common/util.qh
+../common/items.qh
+
+defs.qh		// Should rename this, it has fields and globals
 
 //// tZork Turrets ////
 tturrets/include/turrets_early.qh
@@ -152,3 +154,5 @@ portals.qc
 
 target_spawn.qc
 func_breakable.qc
+
+../common/items.qc

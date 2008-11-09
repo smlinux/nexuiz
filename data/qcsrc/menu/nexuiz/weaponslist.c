@@ -76,43 +76,27 @@ float mouseDragNexuizWeaponsList(entity me, vector pos)
 		cvar_set("cl_weaponpriority", swapInPriorityList(cvar_string("cl_weaponpriority"), me.selectedItem, i));
 	return f;
 }
-string WeaponName(float w)
-{
-	switch(w)
-	{
-		//%weaponaddpoint
-		case WEP_LASER:            return "Laser";
-		case WEP_SHOTGUN:          return "Shotgun";
-		case WEP_UZI:              return "Machine Gun";
-		case WEP_GRENADE_LAUNCHER: return "Mortar";
-		case WEP_ELECTRO:          return "Electro";
-		case WEP_CRYLINK:          return "Crylink";
-		case WEP_NEX:              return "Nex";
-		case WEP_HAGAR:            return "Hagar";
-		case WEP_ROCKET_LAUNCHER:  return "Rocket Launcher";
-		case WEP_PORTO:            return "Port-O-Launch";
-		case WEP_MINSTANEX:        return "MinstaNex";
-		case WEP_HOOK:             return "Grappling Hook";
-		case WEP_HLAC:             return "Heavy Laser Assault Cannon";
-		case WEP_SEEKER:           return "T.A.G. Seeker";
-		default:                   return "(fix qcsrc/menu/nexuiz/weaponslist.c)";
-	}
-}
 string toStringNexuizWeaponsList(entity me)
 {
 	float n, i;
 	string s;
+	entity e;
 	n = tokenize_sane(cvar_string("cl_weaponpriority"));
 	s = "";
 	for(i = 0; i < n; ++i)
-		s = strcat(s, WeaponName(stof(argv(i))), ", ");
+	{
+		e = get_weaponinfo(stof(argv(i)));
+		s = strcat(s, e.message, ", ");
+	}
 	return substring(s, 0, strlen(s) - 2);
 }
 void drawListBoxItemNexuizWeaponsList(entity me, float i, vector absSize, float isSelected)
 {
+	entity e;
 	if(isSelected)
 		draw_Fill('0 0 0', '1 1 0', SKINCOLOR_LISTBOX_SELECTED, SKINALPHA_LISTBOX_SELECTED);
-	draw_Text(me.realUpperMargin * eY, WeaponName(stof(argv(i))), me.realFontSize, '1 1 1', SKINALPHA_TEXT, 0);
+	e = get_weaponinfo(stof(argv(i)));
+	draw_Text(me.realUpperMargin * eY, e.message, me.realFontSize, '1 1 1', SKINALPHA_TEXT, 0);
 }
 
 float keyDownNexuizWeaponsList(entity me, float scan, float ascii, float shift)
