@@ -753,7 +753,33 @@ void readplayerstartcvars()
 
 	g_weaponarena = 0;
 	s = cvar_string("g_weaponarena");
-	if(s != "0")
+	if(s == "0")
+	{
+	}
+	else if(s == "all")
+	{
+		g_weaponarena_list = "All Weapons";
+		for(j = WEP_FIRST; j <= WEP_LAST; ++j)
+		{
+			e = get_weaponinfo(j);
+			g_weaponarena |= e.weapons;
+			weapon_action(e.weapon, WR_PRECACHE);
+		}
+	}
+	else if(s == "most")
+	{
+		g_weaponarena_list = "Most Weapons";
+		for(j = WEP_FIRST; j <= WEP_LAST; ++j)
+		{
+			e = get_weaponinfo(j);
+			if(e.spawnflags & 1)
+			{
+				g_weaponarena |= e.weapons;
+				weapon_action(e.weapon, WR_PRECACHE);
+			}
+		}
+	}
+	else
 	{
 		t = tokenize_sane(s);
 		g_weaponarena_list = "";
