@@ -78,15 +78,17 @@ void fillNexuizPlayerSettingsTab(entity me)
 		me.TD(me, 1, 1, e = makeNexuizSliderCheckBox(-1, 1, sl, "Zoom speed:"));
 		me.TD(me, 1, 2, sl);
 	me.TR(me);
-		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "cl_autoswitch", "Auto switch weapons on pickup"));
+		sl = makeNexuizSlider(0.45, 0.75, 0.05, "cl_bobcycle");
+		me.TD(me, 1, 1, e = makeNexuizSliderCheckBox(0, 1, sl, "View bobbing:"));
+		me.TD(me, 1, 2, sl);
+
 	me.TR(me);
-		me.TD(me, 1, 1, e = makeNexuizButton("Weapon order...", '0 0 0'));
+		me.TD(me, 1, 1, e = makeNexuizButton("Weapon settings...", '0 0 0'));
 			e.onClick = DialogOpenButton_Click;
 			e.onClickEntity = main.weaponsDialog;
 		me.TD(me, 1, 2, e0 = makeNexuizTextLabel(0, string_null));
 			e0.textEntity = main.weaponsDialog;
 			e0.allowCut = 1;
-	me.TR(me);
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Crosshair:"));
 		n = 12;
