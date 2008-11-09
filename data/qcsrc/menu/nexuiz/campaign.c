@@ -191,7 +191,6 @@ void campaignGoNexuizCampaignList(entity me, float step)
 			else
 				j = mod(j + step, n);
 			s = search_getfilename(me.campaignGlob, j);
-			print(s, "\n");
 			s = substring(s, 13, strlen(s) - 17);
 			cvar_set("g_campaign_name", s);
 			me.loadCvars(me);
