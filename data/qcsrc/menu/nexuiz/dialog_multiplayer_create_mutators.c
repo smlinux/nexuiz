@@ -7,7 +7,7 @@ CLASS(NexuizMutatorsDialog) EXTENDS(NexuizDialog)
 	ATTRIB(NexuizMutatorsDialog, title, string, "Mutators")
 	ATTRIB(NexuizMutatorsDialog, color, vector, SKINCOLOR_DIALOG_MUTATORS)
 	ATTRIB(NexuizMutatorsDialog, intendedWidth, float, 0.8)
-	ATTRIB(NexuizMutatorsDialog, rows, float, 16)
+	ATTRIB(NexuizMutatorsDialog, rows, float, 15)
 	ATTRIB(NexuizMutatorsDialog, columns, float, 6)
 	ATTRIB(NexuizMutatorsDialog, refilterEntity, entity, NULL)
 ENDCLASS(NexuizMutatorsDialog)
@@ -108,6 +108,15 @@ void fillNexuizMutatorsDialog(entity me)
 		me.TD(me, 1, 2, e = makeNexuizCheckBox(0, "g_midair", "Midair"));
 	me.TR(me);
 		me.TD(me, 1, 2, e = makeNexuizCheckBox(0, "g_vampire", "Vampire"));
+	me.TR(me);
+		s = makeNexuizSlider(80, 400, 8, "sv_gravity");
+			s.valueDigits = 0;
+			s.valueDisplayMultiplier = 0.125; // show gravity in percent
+		me.TD(me, 1, 2, e = makeNexuizSliderCheckBox(800, 1, s, "Low gravity"));
+			e.savedValue = 200; // good on silvercity
+	me.TR(me);
+		me.TDempty(me, 0.2);
+		me.TD(me, 1, 1.8, s);
 
 	me.gotoRC(me, 0, 2); me.setFirstColumn(me, me.currentColumn);
 		me.TD(me, 1, 4, makeNexuizTextLabel(0, "Weapon arenas:"));
@@ -141,14 +150,6 @@ void fillNexuizMutatorsDialog(entity me)
 	me.TR(me);
 		me.TD(me, 1, 4, e = makeNexuizRadioButton(1, "g_weaponarena", "all", "All weapons"));
 			e.cvarOffValue = "0";
-
-	me.gotoRC(me, me.rows - 2, 0);
-		s = makeNexuizSlider(80, 400, 8, "sv_gravity");
-			s.valueDigits = 0;
-			s.valueDisplayMultiplier = 0.125; // show gravity in percent
-		me.TD(me, 1, 1, e = makeNexuizSliderCheckBox(800, 1, s, "Low gravity"));
-			e.savedValue = 200; // good on silvercity
-		me.TD(me, 1, 5, s);
 
 	me.gotoRC(me, me.rows - 1, 0);
 		me.TD(me, 1, me.columns, e = makeNexuizButton("OK", '0 0 0'));
