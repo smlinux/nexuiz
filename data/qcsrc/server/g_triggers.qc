@@ -1265,7 +1265,7 @@ void target_voicescript_use()
 	{
 		activator.voicescript = self;
 		activator.voicescript_index = 0;
-		activator.voicescript_nextthink = time;
+		activator.voicescript_nextthink = time + self.delay;
 	}
 }
 
@@ -1318,6 +1318,7 @@ void spawnfunc_target_voicescript()
 	// message: list of "sound file" duration "sound file" duration, a *, and again a list
 	//          foo1 4.1 foo2 4.0 foo3 3.1 * fool1 1.1 fool2 7.1 fool3 9.1 fool4 3.7
 	// wait: average time between messages
+	// delay: initial delay before the first message
 	
 	float i, n;
 	self.use = target_voicescript_use;
