@@ -90,6 +90,7 @@ void fillNexuizPlayerSettingsTab(entity me)
 			e0.textEntity = main.weaponsDialog;
 			e0.allowCut = 1;
 	me.TR(me);
+	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Crosshair:"));
 		n = 12;
 		for(i = 1; i <= n; ++i)
