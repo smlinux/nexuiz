@@ -392,34 +392,37 @@ void FlagTouch()
 		{
 			return;
 		}
-		t = time - other.flagcarried.flagpickuptime;
-		s = ftos_decimals(t, 2);
-		s0 = ftos_decimals(flagcaptimerecord, 2);
-		h0 = db_get(ServerProgsDB, strcat(GetMapname(), "/captimerecord/netname"));
-		h1 = other.netname;
-		if(h0 == h1)
-			h0 = "his";
-		else
-			h0 = strcat(h0, "^7's"); // h0: display text for previous netname
-		if (flagcaptimerecord == 0)
+		if(player_count - currentbots <= 1) // at most one human
 		{
-			bprint(other.netname, "^7 captured the ", other.flagcarried.netname, " in ", s, " seconds\n");
-			flagcaptimerecord = t;
-			db_put(ServerProgsDB, strcat(GetMapname(), "/captimerecord/time"), ftos(t));
-			db_put(ServerProgsDB, strcat(GetMapname(), "/captimerecord/netname"), h1);
-			GameLogEcho(strcat(":recordset:", ftos(other.playerid), ":", ftos(t)));
-		}
-		else if (t < flagcaptimerecord)
-		{
-			bprint(other.netname, "^7 captured the ", other.flagcarried.netname, " in ", s, ", breaking ", strcat(h0, " previous record of ", s0, " seconds\n"));
-			flagcaptimerecord = t;
-			db_put(ServerProgsDB, strcat(GetMapname(), "/captimerecord/time"), ftos(t));
-			db_put(ServerProgsDB, strcat(GetMapname(), "/captimerecord/netname"), h1);
-			GameLogEcho(strcat(":recordset:", ftos(other.playerid), ":", ftos(t)));
-		}
-		else
-		{
-			bprint(other.netname, "^7 captured the ", other.flagcarried.netname, " in ", s, ", failing to break ", strcat(h0, " record of ", s0, " seconds\n"));
+			t = time - other.flagcarried.flagpickuptime;
+			s = ftos_decimals(t, 2);
+			s0 = ftos_decimals(flagcaptimerecord, 2);
+			h0 = db_get(ServerProgsDB, strcat(GetMapname(), "/captimerecord/netname"));
+			h1 = other.netname;
+			if(h0 == h1)
+				h0 = "his";
+			else
+				h0 = strcat(h0, "^7's"); // h0: display text for previous netname
+			if (flagcaptimerecord == 0)
+			{
+				bprint(other.netname, "^7 captured the ", other.flagcarried.netname, " in ", s, " seconds\n");
+				flagcaptimerecord = t;
+				db_put(ServerProgsDB, strcat(GetMapname(), "/captimerecord/time"), ftos(t));
+				db_put(ServerProgsDB, strcat(GetMapname(), "/captimerecord/netname"), h1);
+				GameLogEcho(strcat(":recordset:", ftos(other.playerid), ":", ftos(t)));
+			}
+			else if (t < flagcaptimerecord)
+			{
+				bprint(other.netname, "^7 captured the ", other.flagcarried.netname, " in ", s, ", breaking ", strcat(h0, " previous record of ", s0, " seconds\n"));
+				flagcaptimerecord = t;
+				db_put(ServerProgsDB, strcat(GetMapname(), "/captimerecord/time"), ftos(t));
+				db_put(ServerProgsDB, strcat(GetMapname(), "/captimerecord/netname"), h1);
+				GameLogEcho(strcat(":recordset:", ftos(other.playerid), ":", ftos(t)));
+			}
+			else
+			{
+				bprint(other.netname, "^7 captured the ", other.flagcarried.netname, " in ", s, ", failing to break ", strcat(h0, " record of ", s0, " seconds\n"));
+			}
 		}
 
 		PlayerTeamScore_Add(other, SP_CTF_CAPS, ST_CTF_CAPS, 1);
