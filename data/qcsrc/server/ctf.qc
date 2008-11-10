@@ -253,8 +253,16 @@ void DropFlag(entity e, entity penalty_receiver, entity attacker)
 	e.playerid = attacker.playerid;
 	e.ctf_droptime = time;
 	
-	WaypointSprite_Ping(p.waypointsprite_attachedforcarrier);
-	WaypointSprite_DetachCarrier(p);
+	if(p.waypointsprite_attachedforcarrier)
+	{
+		WaypointSprite_Ping(p.waypointsprite_attachedforcarrier);
+		WaypointSprite_DetachCarrier(p);
+	}
+	else
+	{
+		bprint("\{1}^1Flag carrier had no flag sprite?!?\n");
+		backtrace("Flag carrier had no flag sprite?!?");
+	}
 	LogCTF("dropped", p.team, p);
 
 	setattachment(e, world, "");
