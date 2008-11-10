@@ -447,7 +447,7 @@ float w_rlauncher(float req)
 		if (g_laserguided_missile)
 		{
 			precache_model ("models/laser_dot.mdl"); // rocket launcher
-			precache_sound ("weapons/tink1.wav");
+			precache_sound ("weapons/rocket_mode.wav");
 		}
 	}
 	else if (req == WR_SETUP)
