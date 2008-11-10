@@ -1945,10 +1945,8 @@ void ObserverThink()
 			self.flags = self.flags | FL_JUMPRELEASED;
 		}
 	}
-	/*
 	if(self.BUTTON_ZOOM)
 		self.wantswelcomemessage = 0;
-	*/
 	if(self.wantswelcomemessage)
 		PrintWelcomeMessage(self);
 }
@@ -1984,10 +1982,8 @@ void SpectatorThink()
 			self.flags = self.flags | FL_JUMPRELEASED;
 		}
 	}
-	/*
 	if(self.BUTTON_ZOOM)
 		self.wantswelcomemessage = 0;
-	*/
 	if(self.wantswelcomemessage)
 		PrintWelcomeMessage(self);
 	self.flags = self.flags | FL_CLIENT | FL_NOTARGET;
