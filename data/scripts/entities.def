@@ -229,7 +229,7 @@ cnt: weight of spawn point for random selection. Set to a lower value if you hav
 Normal player spawning location in game types without team spawns. Should touch the floor, but not the walls, and should point where the player should look when he spawns there.
 -------- KEYS --------
 cnt: weight of spawn point for random selection. Set to a lower value if you have many spawn points close together. Default value is 1.
-target2: trigger all entities with this targetname when someone spawns
+target: trigger all entities with this targetname when someone spawns
 targetname: when targeted by a func_button, pressing the button will assign the spawn point to the team of the activator as an additional spawn point, or reassign it if it was already assigned. Also used to assign spawn points to Onslaught control points.
 */
 
@@ -245,7 +245,7 @@ cnt: weight of spawn point for random selection. Set to a lower value if you hav
 Red team's player spawning location in e.g. CTF and Onslaught. Should touch the floor, but not the walls, and should point where the player should look when he spawns there.
 -------- KEYS --------
 cnt: weight of spawn point for random selection. Set to a lower value if you have many spawn points close together. Default value is 1.
-target2: trigger all entities with this targetname when someone spawns
+target: trigger all entities with this targetname when someone spawns
 targetname: when targeted by a func_button, pressing the button will reassign the spawn point to the team of the activator. If a team has no more spawn point left, it immediately loses.
 */
 
@@ -253,7 +253,7 @@ targetname: when targeted by a func_button, pressing the button will reassign th
 Blue team's player spawning location in e.g. CTF and Onslaught. Should touch the floor, but not the walls, and should point where the player should look when he spawns there.
 -------- KEYS --------
 cnt: weight of spawn point for random selection. Set to a lower value if you have many spawn points close together. Default value is 1.
-target2: trigger all entities with this targetname when someone spawns
+target: trigger all entities with this targetname when someone spawns
 targetname: when targeted by a func_button, pressing the button will reassign the spawn point to the team of the activator. If a team has no more spawn point left, it immediately loses.
 */
 
@@ -261,7 +261,7 @@ targetname: when targeted by a func_button, pressing the button will reassign th
 Yellow team's player spawning location, but there is no game mode to use this yet. Anyway, should touch the floor, but not the walls, and should point where the player should look when he spawns there.
 -------- KEYS --------
 cnt: weight of spawn point for random selection. Set to a lower value if you have many spawn points close together. Default value is 1.
-target2: trigger all entities with this targetname when someone spawns
+target: trigger all entities with this targetname when someone spawns
 targetname: when targeted by a func_button, pressing the button will reassign the spawn point to the team of the activator. If a team has no more spawn point left, it immediately loses.
 */
 
@@ -269,7 +269,7 @@ targetname: when targeted by a func_button, pressing the button will reassign th
 Pink team's player spawning location, but there is no game mode to use this yet. Anyway, should touch the floor, but not the walls, and should point where the player should look when he spawns there.
 -------- KEYS --------
 cnt: weight of spawn point for random selection. Set to a lower value if you have many spawn points close together. Default value is 1.
-target2: trigger all entities with this targetname when someone spawns
+target: trigger all entities with this targetname when someone spawns
 targetname: when targeted by a func_button, pressing the button will reassign the spawn point to the team of the activator. If a team has no more spawn point left, it immediately loses.
 */
 

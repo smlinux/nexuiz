@@ -386,6 +386,9 @@ void checkpoint_touch()
 
 void checkpoint_use()
 {
+	if(other.classname == "info_player_deathmatch") // a spawn, a spawn
+		return;
+
 	other = activator;
 	checkpoint_passed();
 }

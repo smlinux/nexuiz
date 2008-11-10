@@ -1,4 +1,3 @@
-// let's abuse an existing field
 #define SPAWNPOINT_SCORE frags
 
 .float wantswelcomemessage;
@@ -621,7 +620,6 @@ void PutClientInServer (void)
 
 	if(self.classname == "player") {
 		entity spot, oldself;
-		string s;
 
 		race_PreSpawn();
 
@@ -792,15 +790,12 @@ void PutClientInServer (void)
 
 		target_voicescript_clear(self);
 
-		s = spot.target;
-		spot.target = string_null;
-			oldself = self;
-			self = spot;
-				activator = oldself;
-					SUB_UseTargets();
-				activator = world;
-			self = oldself;
-		spot.target = s;
+		oldself = self;
+		self = spot;
+			activator = oldself;
+				SUB_UseTargets();
+			activator = world;
+		self = oldself;
 
 	} else if(self.classname == "observer") {
 		PutObserverInServer ();

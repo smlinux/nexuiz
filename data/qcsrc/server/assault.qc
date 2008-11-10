@@ -132,6 +132,8 @@ void assault_objective_decrease_think() {
 
 // decrease the health of targeted objectives
 void assault_objective_decrease_use() {
+	if(other.classname == "info_player_deathmatch") // a spawn, a spawn
+		return;
 
 	if(self.cnt > 0) {
 		// did already fire
