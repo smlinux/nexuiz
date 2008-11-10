@@ -502,3 +502,7 @@ vector railgun_start, railgun_end; // filled by FireRailgunBullet, used by damag
 
 void target_voicescript_next(entity pl);
 void target_voicescript_clear(entity pl);
+
+.string target2;
+.string target3;
+.string target4;

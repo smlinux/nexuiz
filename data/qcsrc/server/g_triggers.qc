@@ -30,6 +30,8 @@ match (string)self.target and call their .use function
 void SUB_UseTargets()
 {
 	local entity t, stemp, otemp, act;
+	string s;
+	float i;
 
 //
 // check for a delay
@@ -65,45 +67,46 @@ void SUB_UseTargets()
 //
 // kill the killtagets
 //
-	if (self.killtarget)
+	s = self.killtarget;
+	if (s != "")
 	{
-		t = world;
-		do
-		{
-			t = find (t, targetname, self.killtarget);
-			if (!t)
-				return;
-			remove (t);
-		} while ( 1 );
+		for(t = world; (t = find(t, targetname, s)); )
+			remove(t);
 	}
 
 //
 // fire targets
 //
-	if (self.target)
+	act = activator;
+	stemp = self;
+	otemp = other;
+
+	for(i = 0; i < 4; ++i)
 	{
-		act = activator;
-		t = world;
-		do
+		switch(i)
 		{
-			t = find (t, targetname, self.target);
-			if (!t)
+			default:
+			case 0: s = self.target; break;
+			case 1: s = self.target2; break;
+			case 2: s = self.target3; break;
+			case 3: s = self.target4; break;
+		}
+		if (s != "")
+		{
+			for(t = world; (t = find(t, targetname, s)); )
+			if(t.use)
 			{
-				return;
+				self = t;
+				other = stemp;
+				activator = act;
+				self.use();
 			}
-			stemp = self;
-			otemp = other;
-			self = t;
-			other = stemp;
-			if (self.use)
-				self.use ();
-			self = stemp;
-			other = otemp;
-			activator = act;
-		} while ( 1 );
+		}
 	}
 
-
+	activator = act;
+	self = stemp;
+	other = otemp;
 };
 
 

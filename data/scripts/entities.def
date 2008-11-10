@@ -221,6 +221,7 @@ targetname: the entity that requires an aiming direction points to this.
 Attacking team's player spawning location in Assault. Should touch the floor, but not the walls, and should point where the player should look when he spawns there.
 -------- KEYS --------
 target: this should point to a target_objective to decide when this spawning point is active.
+target2: trigger all entities with this targetname when someone spawns
 cnt: weight of spawn point for random selection. Set to a lower value if you have many spawn points close together. Default value is 1.
 */
 
@@ -228,6 +229,7 @@ cnt: weight of spawn point for random selection. Set to a lower value if you hav
 Normal player spawning location in game types without team spawns. Should touch the floor, but not the walls, and should point where the player should look when he spawns there.
 -------- KEYS --------
 cnt: weight of spawn point for random selection. Set to a lower value if you have many spawn points close together. Default value is 1.
+target2: trigger all entities with this targetname when someone spawns
 targetname: when targeted by a func_button, pressing the button will assign the spawn point to the team of the activator as an additional spawn point, or reassign it if it was already assigned. Also used to assign spawn points to Onslaught control points.
 */
 
@@ -235,6 +237,7 @@ targetname: when targeted by a func_button, pressing the button will assign the 
 Defending team's player spawning location in Assault. Should touch the floor, but not the walls, and should point where the player should look when he spawns there.
 -------- KEYS --------
 target: this should point to a target_objective to decide when this spawning point is active.
+target2: trigger all entities with this targetname when someone spawns
 cnt: weight of spawn point for random selection. Set to a lower value if you have many spawn points close together. Default value is 1.
 */
 
@@ -242,6 +245,7 @@ cnt: weight of spawn point for random selection. Set to a lower value if you hav
 Red team's player spawning location in e.g. CTF and Onslaught. Should touch the floor, but not the walls, and should point where the player should look when he spawns there.
 -------- KEYS --------
 cnt: weight of spawn point for random selection. Set to a lower value if you have many spawn points close together. Default value is 1.
+target2: trigger all entities with this targetname when someone spawns
 targetname: when targeted by a func_button, pressing the button will reassign the spawn point to the team of the activator. If a team has no more spawn point left, it immediately loses.
 */
 
@@ -249,6 +253,7 @@ targetname: when targeted by a func_button, pressing the button will reassign th
 Blue team's player spawning location in e.g. CTF and Onslaught. Should touch the floor, but not the walls, and should point where the player should look when he spawns there.
 -------- KEYS --------
 cnt: weight of spawn point for random selection. Set to a lower value if you have many spawn points close together. Default value is 1.
+target2: trigger all entities with this targetname when someone spawns
 targetname: when targeted by a func_button, pressing the button will reassign the spawn point to the team of the activator. If a team has no more spawn point left, it immediately loses.
 */
 
@@ -256,6 +261,7 @@ targetname: when targeted by a func_button, pressing the button will reassign th
 Yellow team's player spawning location, but there is no game mode to use this yet. Anyway, should touch the floor, but not the walls, and should point where the player should look when he spawns there.
 -------- KEYS --------
 cnt: weight of spawn point for random selection. Set to a lower value if you have many spawn points close together. Default value is 1.
+target2: trigger all entities with this targetname when someone spawns
 targetname: when targeted by a func_button, pressing the button will reassign the spawn point to the team of the activator. If a team has no more spawn point left, it immediately loses.
 */
 
@@ -263,6 +269,7 @@ targetname: when targeted by a func_button, pressing the button will reassign th
 Pink team's player spawning location, but there is no game mode to use this yet. Anyway, should touch the floor, but not the walls, and should point where the player should look when he spawns there.
 -------- KEYS --------
 cnt: weight of spawn point for random selection. Set to a lower value if you have many spawn points close together. Default value is 1.
+target2: trigger all entities with this targetname when someone spawns
 targetname: when targeted by a func_button, pressing the button will reassign the spawn point to the team of the activator. If a team has no more spawn point left, it immediately loses.
 */
 
@@ -782,6 +789,9 @@ wait: prevent triggering again for this amount of time
 sounds: 1 to play misc/secret.wav, 2 to play misc/talk.wav, 3 to play misc/trigger1.wav
 noise: path to sound file, if you want to play something else
 target: trigger all entities with this targetname when triggered
+target2: trigger all entities with this targetname when triggered
+target3: trigger all entities with this targetname when triggered
+target4: trigger all entities with this targetname when triggered
 targetname: name that identifies this entity so it can be triggered
 delay: delay the triggering by the given time
 message: print this message to the player who activated the trigger
@@ -991,6 +1001,7 @@ Race spawn point.
 NOTE for race_place: when the race starts after the qualifying, the player with the fastest map ends up at the info_player_race with race_place 1, and so on. If there are too many players, or if someone comes in later, he will spawn at an info_player_race with race_place not set. So for each trigger_race_checkpoint, there must be at least one corresponding info_player_race with race_place NOT set.
 -------- KEYS --------
 target: this should point to a trigger_race_checkpoint to decide when this spawning point is active. The checkpoint has to be AFTER this spawn.
+target2: trigger all entities with this targetname when someone spawns
 cnt: weight of spawn point for random selection. Set to a lower value if you have many spawn points close together. Default value is 1.
 race_place: if target points to the trigger_race_checkpoint with cnt 0 (finish line), this sets which place the spawn corresponds to; the special value 0 stands for spawns for players who come in later (have to be behind the ones with race_place set to an actual place), and -1 marks the spawnpoint for qualifying mode only
 */

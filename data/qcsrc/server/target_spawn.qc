@@ -294,8 +294,6 @@ void spawnfunc_target_spawn()
 void trigger_relay_if_use()
 {
 	float n;
-	var .string fld;
-	entity e;
 	n = self.count;
 
 	// TODO make this generic AND faster than nextent()ing through all, if somehow possible

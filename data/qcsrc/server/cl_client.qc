@@ -620,7 +620,8 @@ void PutClientInServer (void)
 		self.classname = "observer";
 
 	if(self.classname == "player") {
-		entity	spot;
+		entity spot, oldself;
+		string s;
 
 		race_PreSpawn();
 
@@ -790,6 +791,16 @@ void PutClientInServer (void)
 		}
 
 		target_voicescript_clear(self);
+
+		s = spot.target;
+		spot.target = string_null;
+			oldself = self;
+			self = spot;
+				activator = oldself;
+					SUB_UseTargets();
+				activator = world;
+			self = oldself;
+		spot.target = s;
 
 	} else if(self.classname == "observer") {
 		PutObserverInServer ();
