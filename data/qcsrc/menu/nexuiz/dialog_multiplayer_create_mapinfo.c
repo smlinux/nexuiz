@@ -91,14 +91,12 @@ void fillNexuizMapInfoDialog(entity me)
 	w = me.columns - me.currentColumn;
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Title:"));
 		me.TD(me, 1, w-1, e = makeNexuizTextLabel(0, ""));
-			e.alpha = 1;
 			e.colorL = SKINCOLOR_MAPLIST_TITLE;
 			e.allowCut = 1;
 			me.titleLabel = e;
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Author:"));
 		me.TD(me, 1, w-1, e = makeNexuizTextLabel(0, ""));
-			e.alpha = 1;
 			e.colorL = SKINCOLOR_MAPLIST_AUTHOR;
 			e.allowCut = 1;
 			me.authorLabel = e;
