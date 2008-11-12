@@ -41,6 +41,7 @@ CLASS(NexuizServerList) EXTENDS(NexuizListBox)
 	ATTRIB(NexuizServerList, sortButton4, entity, NULL)
 	ATTRIB(NexuizServerList, sortButton5, entity, NULL)
 	ATTRIB(NexuizServerList, connectButton, entity, NULL)
+	ATTRIB(NexuizServerList, infoButton, entity, NULL)
 	ATTRIB(NexuizServerList, currentSortOrder, float, 0)
 	ATTRIB(NexuizServerList, currentSortField, float, -1)
 	ATTRIB(NexuizServerList, lastClickedServer, float, -1)
@@ -52,6 +53,7 @@ void ServerList_ShowEmpty_Click(entity box, entity me);
 void ServerList_ShowFull_Click(entity box, entity me);
 void ServerList_Filter_Change(entity box, entity me);
 void ServerList_Favorite_Click(entity btn, entity me);
+void ServerList_Info_Click(entity btn, entity me);
 #endif
 
 #ifdef IMPLEMENTATION
@@ -243,6 +245,7 @@ void drawNexuizServerList(entity me)
 	me.nItems = gethostcachevalue(SLIST_HOSTCACHEVIEWCOUNT);
 
 	me.connectButton.disabled = ((me.nItems == 0) && (me.ipAddressBox.text == ""));
+	me.infoButton.disabled = ((me.nItems == 0) || !owned);
 
 	found = 0;
 	if(me.selectedServer)
@@ -458,6 +461,11 @@ void ServerList_Favorite_Click(entity btn, entity me)
 		ToggleFavorite(ipstr);
 	}
 }
+void ServerList_Info_Click(entity btn, entity me)
+{
+	main.serverInfoDialog.loadServerInfo(main.serverInfoDialog, me.selectedItem);
+	DialogOpenButton_Click(me, main.serverInfoDialog);
+}
 void clickListBoxItemNexuizServerList(entity me, float i, vector where)
 {
 	if(i == me.lastClickedServer)
@@ -486,7 +494,7 @@ void drawListBoxItemNexuizServerList(entity me, float i, vector absSize, float i
 		theAlpha = SKINALPHA_SERVERLIST_EMPTY;
 	else
 		theAlpha = 1;
-	
+
 	p = gethostcachenumber(SLIST_FIELD_PING, i);
 #define PING_LOW 75
 #define PING_MED 200
@@ -544,7 +552,7 @@ float keyDownNexuizServerList(entity me, float scan, float ascii, float shift)
 		return 1;
 	}
 	else if(scan == K_MOUSE2 || scan == K_SPACE)
-	{	
+	{
 		main.serverInfoDialog.loadServerInfo(main.serverInfoDialog, me.selectedItem);
 		DialogOpenButton_Click_withCoords(me, main.serverInfoDialog, org, sz);
 	}

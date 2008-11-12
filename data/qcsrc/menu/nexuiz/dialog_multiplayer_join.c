@@ -62,11 +62,13 @@ void fillNexuizServerListTab(entity me)
 			e.onClick = ServerList_Favorite_Click;
 			e.onClickEntity = slist;
 			slist.favoriteButton = e;
-		me.TD(me, 1, me.columns - 0.6 - 1.5 - 1, e = makeNexuizButton("Join!", '0 0 0'));
+		me.TD(me, 1, 1, e = makeNexuizButton("Info", '0 0 0'));
+			e.onClick = ServerList_Info_Click;
+			e.onClickEntity = slist;
+			slist.infoButton = e;
+		me.TD(me, 1, me.columns - 0.6 - 1.5 - 1 - 1, e = makeNexuizButton("Join!", '0 0 0'));
 			e.onClick = ServerList_Connect_Click;
 			e.onClickEntity = slist;
 			slist.connectButton = e;
 }
 #endif
-
-
