@@ -259,7 +259,7 @@ float(string s1, string s2, float len) strncmp = #228;
 float(string s1, string s2) strcasecmp = #229;
 float(string s1, string s2, float len) strncasecmp = #230;
 
-string(string s) strdecolorize(string s) = #477;
+string(string s) strdecolorize = #477;
 
 //DP_QC_STRINGBUFFERS
 //idea: ??

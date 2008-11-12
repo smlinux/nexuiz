@@ -42,6 +42,8 @@
 #include "nexuiz/textslider.c"
 #include "nexuiz/colorbutton.c"
 #include "nexuiz/dialog_multiplayer_join.c"
+#include "nexuiz/dialog_multiplayer_join_serverinfo.c"
+#include "nexuiz/playerlist.c"
 #include "nexuiz/listbox.c"
 #include "nexuiz/serverlist.c"
 #include "nexuiz/inputbox.c"

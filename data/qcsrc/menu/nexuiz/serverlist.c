@@ -545,6 +545,23 @@ float keyDownNexuizServerList(entity me, float scan, float ascii, float shift)
 		if(i < me.nItems)
 			ToggleFavorite(me.selectedServer);
 	}
+	else if(scan == K_MOUSE2)
+	{	
+		if(i == me.lastClickedDemo)
+		if(time < me.lastClickedTime + 0.3)
+		{
+			// DOUBLE CLICK!
+			main.serverInfoDialog.loadServerInfo(main.serverInfoDialog, me.selectedItem);
+			DialogOpenButton_Click(NULL, main.serverInfoDialog);
+		}
+		me.lastClickedServer = i;
+		me.lastClickedTime = time;
+	}
+	else if(scan == K_MOUSE3 || scan == K_SPACE)
+	{
+		main.serverInfoDialog.loadServerInfo(main.serverInfoDialog, me.selectedItem);
+		DialogOpenButton_Click(NULL, main.serverInfoDialog);
+	}
 	else if(keyDownListBox(me, scan, ascii, shift))
 		return 1;
 	else if(!me.controlledTextbox)
