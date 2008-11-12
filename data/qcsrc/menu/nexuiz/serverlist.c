@@ -533,6 +533,10 @@ void drawListBoxItemNexuizServerList(entity me, float i, vector absSize, float i
 float keyDownNexuizServerList(entity me, float scan, float ascii, float shift)
 {
 	float i;
+	vector org, sz;
+
+	org = boxToGlobal(eY * (me.selectedItem * me.itemHeight - me.scrollPos), me.origin, me.size);
+	sz = boxToGlobalSize(eY * me.itemHeight + eX * (1 - me.controlWidth), me.size);
 
 	if(scan == K_ENTER)
 	{
@@ -552,7 +556,7 @@ float keyDownNexuizServerList(entity me, float scan, float ascii, float shift)
 		{
 			// DOUBLE CLICK!
 			main.serverInfoDialog.loadServerInfo(main.serverInfoDialog, me.selectedItem);
-			DialogOpenButton_Click(NULL, main.serverInfoDialog);
+			DialogOpenButton_Click_withCoords(me, main.serverInfoDialog, org, sz);
 		}
 		me.lastClickedServer = i;
 		me.lastClickedTime = time;
@@ -560,7 +564,7 @@ float keyDownNexuizServerList(entity me, float scan, float ascii, float shift)
 	else if(scan == K_MOUSE3 || scan == K_SPACE)
 	{
 		main.serverInfoDialog.loadServerInfo(main.serverInfoDialog, me.selectedItem);
-		DialogOpenButton_Click(NULL, main.serverInfoDialog);
+		DialogOpenButton_Click_withCoords(me, main.serverInfoDialog, org, sz);
 	}
 	else if(keyDownListBox(me, scan, ascii, shift))
 		return 1;

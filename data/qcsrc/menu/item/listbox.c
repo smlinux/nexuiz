@@ -10,6 +10,7 @@ CLASS(ListBox) EXTENDS(Item)
 	ATTRIB(ListBox, focusable, float, 1)
 	ATTRIB(ListBox, selectedItem, float, 0)
 	ATTRIB(ListBox, size, vector, '0 0 0')
+	ATTRIB(ListBox, origin, vector, '0 0 0')
 	ATTRIB(ListBox, scrollPos, float, 0) // measured in window heights, fixed when needed
 	ATTRIB(ListBox, previousValue, float, 0)
 	ATTRIB(ListBox, pressed, float, 0) // 0 = normal, 1 = scrollbar dragging, 2 = item dragging, 3 = released
@@ -45,6 +46,7 @@ void setSelectedListBox(entity me, float i)
 void resizeNotifyListBox(entity me, vector relOrigin, vector relSize, vector absOrigin, vector absSize)
 {
 	me.size = absSize;
+	me.origin = absOrigin;
 	me.controlWidth = me.scrollbarWidth / absSize_x;
 }
 void configureListBoxListBox(entity me, float theScrollbarWidth, float theItemHeight)

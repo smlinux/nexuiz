@@ -29,9 +29,8 @@ CLASS(NexuizServerInfoDialog) EXTENDS(NexuizDialog)
 	ATTRIB(NexuizServerInfoDialog, modLabel, entity, NULL)
 	ATTRIB(NexuizServerInfoDialog, versionLabel, entity, NULL)
 	ATTRIB(NexuizServerInfoDialog, pingLabel, entity, NULL)
-
 ENDCLASS(NexuizServerInfoDialog)
-#endif
+
 float SLIST_FIELD_NAME;
 float SLIST_FIELD_CNAME;
 float SLIST_FIELD_QCSTATUS;
@@ -44,6 +43,8 @@ float SLIST_FIELD_MOD;
 float SLIST_FIELD_PING;
 string CURRENT_IP; //used by join button
 void Join_Click(entity me);
+#endif
+
 #ifdef IMPLEMENTATION
 void loadServerInfoNexuizServerInfoDialog(entity me, float i)
 {
@@ -114,20 +115,17 @@ void fillNexuizServerInfoDialog(entity me)
 	entity e;
 	me.TR(me);
 		me.TD(me, 1, me.columns, e = makeNexuizTextLabel(0.5, ""));
-			e.alpha = 1;
 			e.colorL = SKINCOLOR_SERVERINFO_NAME;
 			e.allowCut = 1;
 			me.nameLabel = e;
 	me.TR(me);
 		me.TD(me, 1, me.columns, e = makeNexuizTextLabel(0.5, ""));
-			e.alpha = 1;
 			e.colorL = SKINCOLOR_SERVERINFO_IP;
 			e.allowCut = 1;
 			me.cnameLabel = e;
 
 	me.TR(me);
-		me.TD(me, 1, 6, e = makeNexuizTextLabel(0, "Players :"));
-			e.alpha = 1;
+		me.TD(me, 1, 6, e = makeNexuizTextLabel(0, "Players:"));
 	me.TR(me);
 		me.TD(me, me.rows - 4, 5.5, e = makeNexuizPlayerList());
 			me.rawPlayerList = e;
@@ -135,44 +133,37 @@ void fillNexuizServerInfoDialog(entity me)
 	me.gotoRC(me, 1, 6); me.setFirstColumn(me, me.currentColumn);
 
 	me.TR(me);
-		me.TD(me, 1, 1.75, e = makeNexuizTextLabel(0, "Type :"));
-			e.alpha = 1;
+		me.TD(me, 1, 1.75, e = makeNexuizTextLabel(0, "Type:"));
 		me.TD(me, 1, 4.5, e = makeNexuizTextLabel(0, ""));
 			e.allowCut = 1;
 			me.typeLabel = e;
 	me.TR(me);
-		me.TD(me, 1, 1.75, e = makeNexuizTextLabel(0, "Map :"));
-			e.alpha = 1;
+		me.TD(me, 1, 1.75, e = makeNexuizTextLabel(0, "Map:"));
 		me.TD(me, 1, 4.5, e = makeNexuizTextLabel(0, ""));
 			e.allowCut = 1;
 			me.mapLabel = e;
 	me.TR(me);
-		me.TD(me, 1, 1.75, e = makeNexuizTextLabel(0, "Players :"));
-			e.alpha = 1;
+		me.TD(me, 1, 1.75, e = makeNexuizTextLabel(0, "Players:"));
 		me.TD(me, 1, 4.5, e = makeNexuizTextLabel(0, ""));
 			e.allowCut = 1;
 			me.numPlayersLabel = e;
 	me.TR(me);
-		me.TD(me, 1, 1.75, e = makeNexuizTextLabel(0, "Bots :"));
-			e.alpha = 1;
+		me.TD(me, 1, 1.75, e = makeNexuizTextLabel(0, "Bots:"));
 		me.TD(me, 1, 4.5, e = makeNexuizTextLabel(0, ""));
 			e.allowCut = 1;
 			me.numBotsLabel = e;
 	me.TR(me);
-		me.TD(me, 1, 1.75, e = makeNexuizTextLabel(0, "Mod :"));
-			e.alpha = 1;
+		me.TD(me, 1, 1.75, e = makeNexuizTextLabel(0, "Mod:"));
 		me.TD(me, 1, 4.5, e = makeNexuizTextLabel(0, ""));
 			e.allowCut = 1;
 			me.modLabel = e;
 	me.TR(me);
-		me.TD(me, 1, 1.75, e = makeNexuizTextLabel(0, "Version :"));
-			e.alpha = 1;
+		me.TD(me, 1, 1.75, e = makeNexuizTextLabel(0, "Version:"));
 		me.TD(me, 1, 4.5, e = makeNexuizTextLabel(0, ""));
 			e.allowCut = 1;
 			me.versionLabel = e;
 	me.TR(me);
-		me.TD(me, 1, 1.75, e = makeNexuizTextLabel(0, "Ping :"));
-			e.alpha = 1;
+		me.TD(me, 1, 1.75, e = makeNexuizTextLabel(0, "Ping:"));
 		me.TD(me, 1, 4.5, e = makeNexuizTextLabel(0, ""));
 			e.allowCut = 1;
 			me.pingLabel = e;
