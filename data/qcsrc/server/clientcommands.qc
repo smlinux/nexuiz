@@ -325,7 +325,7 @@ void SV_ParseClientCommand(string s) {
 	} else if(argv(0) == "ready") {
 		if not(self.flags & FL_CLIENT)
 			return;
-		if((inWarmupStage && 0 < g_warmup_limit) // with unlimited warmup players have to be able to restart
+		if((inWarmupStage && 0 <= g_warmup_limit) // with unlimited warmup players have to be able to restart
 		   || cvar("sv_ready_restart"))
 		{
 			if(timeoutStatus) {
@@ -572,11 +572,11 @@ void ReadyCount()
 
 	readycount = r;
 
+	Nagger_ReadyCounted();
+
 	if(r) // at least one is ready
 	if(r == p) // and, everyone is ready
 		ReadyRestart();
-
-	Nagger_ReadyCounted();
 }
 
 /**
