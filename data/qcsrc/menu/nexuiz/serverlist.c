@@ -545,7 +545,6 @@ float keyDownNexuizServerList(entity me, float scan, float ascii, float shift)
 	}
 	else if(scan == K_MOUSE2 || scan == K_SPACE)
 	{	
-		// DOUBLE CLICK!
 		main.serverInfoDialog.loadServerInfo(main.serverInfoDialog, me.selectedItem);
 		DialogOpenButton_Click_withCoords(me, main.serverInfoDialog, org, sz);
 	}
