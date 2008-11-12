@@ -189,11 +189,13 @@ void CSQC_ctf_hud(void);
 void PostInit(void);
 float Sbar_WouldDrawScoreboard ();
 float zoomscript_caught;
-void CSQC_UpdateView(void)
+void CSQC_UpdateView(float w, float h)
 {
 	entity e;
 	float fov;
 	float f;
+	vector v1, v2;
+
 	dprint_load();
 	WaypointSprite_Load();
 
@@ -205,23 +207,24 @@ void CSQC_UpdateView(void)
 	view_right = v_right;
 	view_up = v_up;
 
-#if 0
-	if(cs_project_is_b0rked)
+	f = floor(cvar("v_flipped"));
+	cvar_set("v_flipped", ftos(!f));
+	v1 = cs_unproject('-100 -100 1000');
+	cvar_set("v_flipped", ftos(f));
+	v2 = cs_unproject('-100 -100 1000');
+
+	if(v1 == v2)
 	{
-#endif
+		// non-supporting engine
 		vid_width = cvar("vid_width");
 		vid_height = cvar("vid_height");
-#if 0
 	}
 	else
 	{
-		// THIS IS BROKEN if you had just shot (kicktime)
-		vector v;
-		v = cs_project(view_origin + 1024 * view_forward);
-		vid_width = floor(v_x * 2 + 0.5);
-		vid_height = floor(v_y * 2 + 0.5);
+		// supporting engine
+		vid_width = w;
+		vid_height = h;
 	}
-#endif
 
 	Fog_Force();
 
