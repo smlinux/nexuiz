@@ -580,23 +580,9 @@ void Gamemode_Init()
 		precache_pic("gfx/sb_key_carrying_outline");
 	}
 }
-
-void Net_FileInfo(float challenge, string fn)
-{
-	if(fn == "<")
-		FileInfo_Init();
-	else if(fn == ">")
-		localcmd(strcat("\ncmd fileinfo ", ftos(FileInfo_Value), "\n"));
-	else
-		FileInfo_Add(challenge, fn);
-}
-
 // CSQC_Parse_StuffCmd : Provides the stuffcmd string in the first parameter that the server provided.  To execute standard behavior, simply execute localcmd with the string.
 void CSQC_Parse_StuffCmd(string strMessage)
 {
-	tokenizebyseparator(strMessage, " ");
-	if(argv(0) == "\n//fileinfo")
-		Net_FileInfo(stof(argv(1)), argv(2));
 	localcmd(strMessage);
 }
 // CSQC_Parse_Print : Provides the print string in the first parameter that the server provided.  To execute standard behavior, simply execute print with the string.
