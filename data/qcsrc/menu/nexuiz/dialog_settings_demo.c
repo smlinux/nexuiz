@@ -40,8 +40,11 @@ void fillNexuizDemoSettingsTab(entity me)
 	me.TR(me);
 		me.TD(me, me.rows - 4, me.columns, dlist);
 	me.gotoRC(me, me.rows - 1, 0);
-		me.TD(me, 1, me.columns, e = makeNexuizButton("Play", '0 0 0'));
+		me.TD(me, 1, me.columns / 2, e = makeNexuizButton("Play", '0 0 0'));
 			e.onClick = StartDemo_Click;
+			e.onClickEntity = dlist;
+		me.TD(me, me.columns / 2, me.columns, e = makeNexuizButton("Timedemo", '0 0 0'));
+			e.onClick = TimeDemo_Click;
 			e.onClickEntity = dlist;
 }
 #endif

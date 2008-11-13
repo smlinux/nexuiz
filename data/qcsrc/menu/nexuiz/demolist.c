@@ -25,6 +25,7 @@ ENDCLASS(NexuizDemoList)
 
 entity makeNexuizDemoList();
 void StartDemo_Click(entity btn, entity me);
+void TimeDemo_Click(entity btn, entity me);
 void DemoList_Filter_Change(entity box, entity me);
 #endif
 
@@ -129,6 +130,13 @@ void startDemoNexuizDemoList(entity me)
 void StartDemo_Click(entity btn, entity me)
 {
     me.startDemo(me);
+}
+
+void TimeDemo_Click(entity btn, entity me)
+{
+    string s;
+    s = me.demoName(me,me.selectedItem);
+    localcmd("timedemo demos/", s, ".dem\nwait\ntogglemenu\n");	
 }
 
 void clickListBoxItemNexuizDemoList(entity me, float i, vector where)
