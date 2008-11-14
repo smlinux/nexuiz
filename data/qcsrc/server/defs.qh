@@ -75,6 +75,7 @@ float maxclients;
 //.float	style;
 //.float	skill;
 .float	sounds;
+.string	music;
 
 .string killtarget;
 
