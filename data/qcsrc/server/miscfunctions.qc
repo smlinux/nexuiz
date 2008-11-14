@@ -1252,6 +1252,9 @@ void precache()
 		}
 	}
 
+	if (!self.noise && self.music) // quake 3 uses the music field
+		self.noise = self.music;
+
 	// plays music for the level if there is any
 	if (self.noise)
 	{
