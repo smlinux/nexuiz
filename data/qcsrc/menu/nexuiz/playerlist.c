@@ -77,61 +77,12 @@ void resizeNotifyNexuizPlayerList(entity me, vector relOrigin, vector relSize, v
 
 void drawListBoxItemNexuizPlayerList(entity me, float i, vector absSize, float isSelected)
 {
-	string s, ch, ch2;
-	float maxTextLen, textLen;
-	float j;
-	vector theOrigin, theSize, theColor;
-	float theAlpha;
-	float brightness;
-
+	string s;
 
 	s = me.getPlayerList(me, i, PLAYERPARM_NAME);
-	maxTextLen = strlen(draw_TextShortenToWidth(strdecolorize(s), 0.95 * me.columnNameSize / me.realFontSize_x, 0));
-	brightness = cvar("r_textbrightness");
-	theOrigin = me.realUpperMargin * eY + (me.columnNameOrigin + 0.00 * (me.columnNameSize - draw_TextWidth(s, 0) * me.realFontSize_x)) * eX ;
-	theSize = me.realFontSize;
-	theColor = '1 1 1';
-	theAlpha = 1;
 
-	for(j = 0; j < strlen(s); ++j)
-	{
-		ch = substring(s, j, 1);
-		if(ch == "^")
-		{
-			ch2 = substring(s, j+1, 1);
-			if(ch2 == "0" || stof(ch2))// digit?
-			{
-				switch(stof(ch2))
-				{
-					case 0: theColor = '0 0 0'; theAlpha = 1; break;
-					case 1: theColor = '1 0 0'; theAlpha = 1; break;
-					case 2: theColor = '0 1 0'; theAlpha = 1; break;
-					case 3: theColor = '1 1 0'; theAlpha = 1; break;
-					case 4: theColor = '0 0 1'; theAlpha = 1; break;
-					case 5: theColor = '0 1 1'; theAlpha = 1; break;
-					case 6: theColor = '1 0 1'; theAlpha = 1; break;
-					case 7: theColor = '1 1 1'; theAlpha = 1; break;
-					case 8: theColor = '1 1 1'; theAlpha = 0.5; break;
-					case 9: theColor = '0.5 0.5 0.5'; theAlpha = 1; break;
-				}
-				theColor = theColor * (1 - brightness) + brightness * '1 1 1';
-				++j;
-				continue;
-			}
-		}
-
-		if (textLen < maxTextLen)
-		{
-			draw_Text(theOrigin, ch, theSize, theColor, theAlpha, 0);
-			theOrigin += eX * draw_TextWidth(ch, 0) * me.realFontSize_x;
-			++textLen;
-		}
-		else
-		{
-			draw_Text(theOrigin, "...", theSize, theColor, theAlpha, 0);
-			break;
-		}
-	}
+	s = draw_TextShortenToWidth(s, me.columnNameSize / me.realFontSize_x, 1);
+	draw_Text(me.realUpperMargin2 * eY + (me.columnNameOrigin + 1.00 * (me.columnNameSize - draw_TextWidth(s, 0) * me.realFontSize_x)) * eX, s, me.realFontSize, SKINCOLOR_MAPLIST_AUTHOR, 1, 1);
 }
 
 #endif

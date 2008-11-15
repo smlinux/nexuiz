@@ -65,6 +65,8 @@ void getDemosNexuizDemoList(entity me)
     	s="demos/*.dem";
 	
     //dprint("Search demos with the pattern ", s, "\n");    
+	if(me.listDemo >= 0)
+		search_end(me.listDemo);
     me.listDemo = search_begin(s, FALSE, TRUE);
     if(me.listDemo < 0)
     	me.nItems=0;
