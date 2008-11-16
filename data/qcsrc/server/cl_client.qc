@@ -1254,14 +1254,14 @@ void ClientConnect (void)
 			MapVote_UpdateData(MSG_ONE);
 		}
 		ScoreInfo_Write(MSG_ONE);
-	}
 
-	if(inWarmupStage)
-	{
-		msg_entity = self;
-		WriteByte(MSG_ONE, SVC_TEMPENTITY);
-		WriteByte(MSG_ONE, TE_CSQC_WARMUP);
-		WriteByte(MSG_ONE, 1);
+		if(inWarmupStage)
+		{
+			msg_entity = self;
+			WriteByte(MSG_ONE, SVC_TEMPENTITY);
+			WriteByte(MSG_ONE, TE_CSQC_WARMUP);
+			WriteByte(MSG_ONE, 1);
+		}
 	}
 
 	if(g_lms)
