@@ -325,7 +325,7 @@ void Obituary (entity attacker, entity inflictor, entity targ, float deathtype)
 						bprint ("^1",s, "^1 was shot into space by ", a, "\n");
 					else if (deathtype == DEATH_SWAMP)
 						bprint ("^1",s, "^1 was conserved by ", a, "\n");
-					else if (deathtype == DEATH_HURTTRIGGER && attacker.message2 != "")
+					else if (deathtype == DEATH_HURTTRIGGER && inflictor.message2 != "")
 					{
 						p = strstrofs(inflictor.message2, "#", 0);
 						if(p < 0)
