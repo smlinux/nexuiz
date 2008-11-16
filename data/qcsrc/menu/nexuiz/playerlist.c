@@ -82,7 +82,7 @@ void drawListBoxItemNexuizPlayerList(entity me, float i, vector absSize, float i
 	s = me.getPlayerList(me, i, PLAYERPARM_NAME);
 
 	s = draw_TextShortenToWidth(s, me.columnNameSize / me.realFontSize_x, 1);
-	draw_Text(me.realUpperMargin2 * eY + (me.columnNameOrigin + 1.00 * (me.columnNameSize - draw_TextWidth(s, 0) * me.realFontSize_x)) * eX, s, me.realFontSize, SKINCOLOR_MAPLIST_AUTHOR, 1, 1);
+	draw_Text(me.realUpperMargin2 * eY + (me.columnNameOrigin + 0.00 * (me.columnNameSize - draw_TextWidth(s, 1) * me.realFontSize_x)) * eX, s, me.realFontSize, SKINCOLOR_MAPLIST_AUTHOR, 1, 1);
 }
 
 #endif
