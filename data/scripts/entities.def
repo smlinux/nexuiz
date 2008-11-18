@@ -1195,3 +1195,11 @@ FLOATING: the item will float in air, instead of aligning to the floor by fallin
 -------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
 model="models/weapons/g_seeker.md3"
 */
+
+/*QUAKED trigger_heal (.5 .5 .5) ?
+Any object touching this will be healed.
+-------- KEYS --------
+health: health to give per second (default 10)
+max_health: max health this trigger will give (default 200)
+noise: sound file to play (use misc/null.wav to make it silent), default = item_health_medium sound
+*/

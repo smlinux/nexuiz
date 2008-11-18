@@ -435,6 +435,59 @@ float tracebox_hits_trigger_hurt(vector start, vector mi, vector ma, vector end)
 	return FALSE;
 }
 
+//////////////////////////////////////////////////////////////
+//
+//
+//
+//Trigger heal --a04191b92fbd93aa67214ef7e72d6d2e
+//
+//////////////////////////////////////////////////////////////
+
+.float triggerhealtime;
+void trigger_heal_touch()
+{
+	// only do the EXACTTRIGGER_TOUCH checks when really needed (saves some cpu)
+	if (other.iscreature)
+	{
+		if (other.takedamage)
+		if (other.triggerhealtime < time)
+		{
+			EXACTTRIGGER_TOUCH;
+			other.triggerhealtime = time + 1;
+			
+			if (other.health < self.max_health)
+			{
+				other.health = min(other.health + self.health, self.max_health);
+				other.pauserothealth_finished = max(other.pauserothealth_finished, time + cvar("g_balance_pause_health_rot"));
+				sound (other, CHAN_AUTO, self.noise, VOL_BASE, ATTN_NORM);
+			}
+		}
+	}
+};
+
+void spawnfunc_trigger_heal()
+{
+	EXACTTRIGGER_INIT;
+	self.touch = trigger_heal_touch;
+	if (!self.health)
+		self.health = 10;
+	if (!self.max_health)
+		self.max_health = 200; //Max health topoff for field
+	if(self.noise == "")
+		self.noise = "misc/mediumhealth.wav";
+	precache_sound(self.noise);
+};
+
+
+//////////////////////////////////////////////////////////////
+//
+//
+//
+//End trigger_heal
+//
+//////////////////////////////////////////////////////////////
+
+
 
 // TODO add a way to do looped sounds with sound(); then complete this entity
 .float volume, atten;
