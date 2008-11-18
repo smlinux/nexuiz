@@ -55,3 +55,23 @@ $(PK3NAME): qc
 		cd $$TDIR; \
 		$(RM) -r qcsrc common-spog.pk3 \
 		$(ZIP) $$ABSPK3NAME .
+
+.PHONY: log
+log:
+	cd .. && svn log -r HEAD:BASE
+
+.PHONY: logv
+logv:
+	cd .. && svn log -r HEAD:BASE -v
+
+.PHONY: update
+update:
+	cd .. && svn up
+
+.PHONY: logupdate
+logupdate:
+	cd .. && svn log -r HEAD:BASE && svn up
+
+.PHONY: logvupdate
+logvupdate:
+	cd .. && svn log -r HEAD:BASE -v && svn up
