@@ -6,15 +6,18 @@ Lee Vermeulen
 Forest "LordHavoc" Hale
 *Lead Programmer and Co-Designer
 
-SavageX
-*Project Maintainer
-
 Rudolf "div0" Polzer
 *Programmer
 
 
+**Project maintainers:
 
-**Development Team
+Kristian "morfar" Johansson
+
+SavageX
+
+
+**Development Team:
 
 Andreas "Black" Kirsch
 *Programmer
@@ -92,7 +95,6 @@ Spirit
 Attila "WW3" Houtkooper
 GreEn`mArine
 Dan "Digger" Korostelev
-Kristian "morfar" Johansson
 leileilol
 Jody Gallagher
 Donkey
