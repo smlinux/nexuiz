@@ -6,7 +6,7 @@ CLASS(NexuizWeaponsDialog) EXTENDS(NexuizDialog)
 	ATTRIB(NexuizWeaponsDialog, title, string, "Weapon settings")
 	ATTRIB(NexuizWeaponsDialog, color, vector, SKINCOLOR_DIALOG_WEAPONS)
 	ATTRIB(NexuizWeaponsDialog, intendedWidth, float, 0.35)
-	ATTRIB(NexuizWeaponsDialog, rows, float, 12)
+	ATTRIB(NexuizWeaponsDialog, rows, float, 13)
 	ATTRIB(NexuizWeaponsDialog, columns, float, 4)
 	ATTRIB(NexuizWeaponsDialog, weaponsList, entity, NULL)
 ENDCLASS(NexuizWeaponsDialog)
@@ -27,19 +27,21 @@ void fillNexuizWeaponsDialog(entity me)
 	me.TR(me);
 		me.TD(me, 1, 4, makeNexuizTextLabel(0, "Weapon priority list:"));
 	me.TR(me);
-		me.TD(me, me.rows - 3, 3, e = me.weaponsList = makeNexuizWeaponsList());
-	me.gotoRC(me, (me.rows - 1) / 2 - 1, 3);
+		me.TD(me, me.rows - 5, 3, e = me.weaponsList = makeNexuizWeaponsList());
+	me.gotoRC(me, (me.rows - 5) / 2, 3);
 		me.TD(me, 1, 1, e = makeNexuizButton("Up", '0 0 0'));
 			e.onClick = WeaponsList_MoveUp_Click;
 			e.onClickEntity = me.weaponsList;
-	me.gotoRC(me, (me.rows - 1) / 2, 3);
+	me.gotoRC(me, (me.rows - 5) / 2 + 1, 3);
 		me.TD(me, 1, 1, e = makeNexuizButton("Down", '0 0 0'));
 			e.onClick = WeaponsList_MoveDown_Click;
 			e.onClickEntity = me.weaponsList;
-	me.gotoRC(me, me.rows - 3, 0);
+	me.gotoRC(me, me.rows - 4, 0);
 		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "cl_weaponpriority_useforcycling", "Use for weapon cycling"));
 	me.TR(me);
 		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "cl_autoswitch", "Auto switch weapons on pickup"));
+	me.TR(me);
+		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "r_drawviewmodel", "Draw 1st person weapon model"));
 	me.TR(me);
 		me.TD(me, 1, me.columns, e = makeNexuizButton("OK", '0 0 0'));
 			e.onClick = Dialog_Close;
