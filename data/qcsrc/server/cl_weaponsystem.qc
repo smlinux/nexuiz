@@ -338,7 +338,7 @@ void CL_ExteriorWeaponentity_Think()
 			self.model = "";
 	}
 	self.effects = self.owner.effects | EF_LOWPRECISION;
-	self.effects = self.effects - (self.effects & (EF_BLUE | EF_RED)); // eat performance
+	self.effects = self.effects & EFMASK_CHEAP; // eat performance
 	if(self.owner.alpha >= 0)
 		self.alpha = self.owner.alpha;
 	else

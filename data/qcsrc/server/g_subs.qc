@@ -376,6 +376,18 @@ float LOD_customize()
 {
 	float d;
 
+	if(cvar("loddebug"))
+	{
+		d = cvar("loddebug");
+		if(d == 1)
+			self.modelindex = self.lodmodelindex0;
+		else if(d == 2)
+			self.modelindex = self.lodmodelindex1;
+		else // if(d == 3)
+			self.modelindex = self.lodmodelindex2;
+		return TRUE;
+	}
+
 	// TODO csqc network this so it only gets sent once
 	d = vlen(self.origin - other.origin);
 	if(d < self.loddistance1)

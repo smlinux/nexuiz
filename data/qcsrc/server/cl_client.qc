@@ -1737,7 +1737,7 @@ void SpectateCopy(entity spectatee) {
 	self.armortype = spectatee.armortype;
 	self.armorvalue = spectatee.armorvalue;
 	self.currentammo = spectatee.currentammo;
-	self.effects = spectatee.effects;
+	self.effects = spectatee.effects & EFMASK_CHEAP; // eat performance
 	self.health = spectatee.health;
 	self.impulse = 0;
 	self.items = spectatee.items;
