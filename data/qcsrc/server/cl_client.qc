@@ -634,7 +634,10 @@ void PutClientInServer (void)
 
 		self.classname = "player";
 		self.iscreature = TRUE;
-		self.movetype = MOVETYPE_WALK;
+		if(cvar("g_bigrigs"))
+			self.movetype = MOVETYPE_PUSH;
+		else
+			self.movetype = MOVETYPE_WALK;
 		self.solid = SOLID_SLIDEBOX;
 		self.dphitcontentsmask = DPCONTENTS_SOLID | DPCONTENTS_BODY | DPCONTENTS_PLAYERCLIP;
 		if(independent_players)

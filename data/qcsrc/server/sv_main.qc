@@ -143,6 +143,7 @@ void StartFrame (void)
 	UncustomizeEntitiesRun();
 	InitializeEntitiesRun();
 
+	sv_gravity = cvar("sv_gravity");
 	sv_maxairspeed = cvar("sv_maxairspeed");
 	sv_maxspeed = cvar ("sv_maxspeed");
 	sv_friction = cvar ("sv_friction");

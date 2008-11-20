@@ -249,7 +249,7 @@ void SV_PlayerPhysics()
 	if (self.deadflag)
 		return;
 
-	if (!self.fixangle)
+	if (!self.fixangle && self.movetype != MOVETYPE_PUSH)
 	{
 		self.angles_x = 0;
 		self.angles_y = self.v_angle_y;
@@ -330,6 +330,79 @@ void SV_PlayerPhysics()
 			if (f > 0)
 				self.velocity = self.velocity + wishdir * min(f, sv_accelerate*maxspd_mod * frametime * wishspeed);
 		}
+	}
+	else if (self.movetype == MOVETYPE_PUSH)
+	{
+		// using this move type for "big rigs"
+		// the engine does not push the entity!
+
+		float accel, steer, myspeed, steerfactor, accelfactor, upspeed, friction;
+		vector neworigin, up, angles_save;
+
+		accel = self.movement_x / sv_maxspeed;
+		steer = self.movement_y / sv_maxspeed;
+
+		angles_save = self.angles;
+		self.angles_x = 0;
+		self.angles_z = 0;
+		makevectors(self.angles); // new forward direction!
+		myspeed = self.velocity * v_forward;
+		upspeed = self.velocity * v_up;
+		if(myspeed <= 0 && accel < 0)
+			steerfactor = -5000; // LOL
+		else
+			steerfactor = -400 * 400 / (400 + myspeed);
+		accelfactor = 2000 * 400 / (400 + max(myspeed, -myspeed));
+		friction = 5 * 100 / (100 + max(myspeed, -myspeed));
+
+		self.angles_y += steer * frametime * steerfactor; // apply steering
+		makevectors(self.angles); // new forward direction!
+
+		myspeed = myspeed * (1 - frametime * friction);
+		myspeed += accel * accelfactor * frametime;
+		if(myspeed < 0)
+			myspeed = 0;
+
+		self.velocity = v_forward * myspeed;
+		upspeed -= frametime * sv_gravity;
+
+		tracebox(self.origin, self.mins, self.maxs, self.origin + '0 0 1024', MOVE_NORMAL, self);
+		up = trace_endpos - self.origin;
+
+		// can we move?
+		neworigin = trace_endpos + self.velocity * frametime;
+		tracebox(trace_endpos, self.mins, self.maxs, neworigin, MOVE_NORMAL, self);
+
+		// align to surface
+		tracebox(trace_endpos, self.mins, self.maxs, neworigin - up + '0 0 1' * upspeed * frametime, MOVE_NORMAL, self);
+
+		if(trace_fraction >= 0.5)
+			self.origin = trace_endpos;
+		else
+			trace_fraction = 1;
+
+		// now set angles_x so that the car points parallel to the surface
+		if(trace_fraction < 1)
+		{
+			self.angles = vectoangles(normalize(
+				'1 0 0' * v_forward_x * trace_plane_normal_z
+				+
+				'0 1 0' * v_forward_y * trace_plane_normal_z
+				+
+				'0 0 1' * -(v_forward_x * trace_plane_normal_x + v_forward_y * trace_plane_normal_y)
+			));
+			self.flags |= FL_ONGROUND;
+		}
+		else
+		{
+			self.angles_x = angles_save_x;
+			self.angles_z = angles_save_z;
+			self.velocity += '0 0 1' * upspeed;
+			self.flags (-) FL_ONGROUND;
+		}
+
+		// relink
+		setorigin(self, self.origin);
 	}
 	else if (self.waterlevel >= 2)
 	{

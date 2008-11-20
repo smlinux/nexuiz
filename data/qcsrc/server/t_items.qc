@@ -948,6 +948,25 @@ void spawnfunc_func_illusionary (void)
 	self.use = func_wall_use;
 }
 
+void gamemodel_drop()
+{
+	if(self.spawnflags & 3 == 1) // ALIGN_ORIGIN
+	{
+		traceline(self.origin, self.origin - '0 0 1024', MOVE_NOMONSTERS, self);
+		setorigin(self, trace_endpos);
+	}
+	else if(self.spawnflags & 3 == 2) // ALIGN_BOTTOM
+	{
+		tracebox(self.origin, self.mins, self.maxs, self.origin - '0 0 1024', MOVE_NOMONSTERS, self);
+		setorigin(self, trace_endpos);
+	}
+	else if(self.spawnflags & 3 == 3) // ALIGN_ORIGIN | ALIGN_BOTTOM
+	{
+		traceline(self.origin, self.origin - '0 0 1024', MOVE_NOMONSTERS, self);
+		setorigin(self, trace_endpos - '0 0 1' * self.mins_z);
+	}
+}
+
 .float modelscale;
 void spawnfunc_misc_gamemodel (void)
 {
@@ -955,6 +974,8 @@ void spawnfunc_misc_gamemodel (void)
 		self.scale = self.modelscale;
 	SetBrushEntityModel();
 	self.use = func_wall_use;
+
+	InitializeEntity(self, gamemodel_drop, INITPRIO_DROPTOFLOOR);
 }
 
 float target_item_func_set(float a, float b)

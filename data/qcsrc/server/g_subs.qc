@@ -372,6 +372,7 @@ float angc (float a1, float a2)
 .float loddistance1;
 .float loddistance2;
 
+vector NearestPointOnBox(entity box, vector org);
 float LOD_customize()
 {
 	float d;
@@ -389,7 +390,7 @@ float LOD_customize()
 	}
 
 	// TODO csqc network this so it only gets sent once
-	d = vlen(self.origin - other.origin);
+	d = vlen(NearestPointOnBox(self, other.origin) - other.origin);
 	if(d < self.loddistance1)
 		self.modelindex = self.lodmodelindex0;
 	else if(!self.lodmodelindex2 || d < self.loddistance2)
@@ -468,7 +469,10 @@ void SetBrushEntityModel()
 		InitializeEntity(self, LODmodel_attach, INITPRIO_FINDTARGET);
  	}
 	setorigin(self, self.origin);
-	setsize(self, self.mins, self.maxs);
+	if(self.scale)
+		setsize(self, self.mins * self.scale, self.maxs * self.scale);
+	else
+		setsize(self, self.mins, self.maxs);
 }
 
 /*
