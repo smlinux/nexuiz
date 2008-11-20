@@ -63,9 +63,15 @@ Almost all weapons in Nexuiz have two firing modes, so make sure you know both. 
 
 	*The laser is not often used as a weapon, as it does not do much damage - but it's a useful tool to move around the map, because it has a significant push.  The 'explosion' from its projectile will push you and other players around a lot.  The trick to using it to move around is to use this push to gain speed or to do huge jumps.  For an easy start, take the laser, look down at the floor, and press fire.  It will push you high into the air.  If you press jump and fire at the same time, you will get even higher - but it depends on the timing, and, for more advanced jumps, also on the angle you fire at the floor, as well as how fast and in which direction you move.  Play around with it, and watch others, and you will learn a very useful skill in Nexuiz.  The secondary fire mode of the laser switches back to the last used weapon.  The laser does not use up any ammo.
 
+	*The grappling hook is an other movement tool.  The primary mode attaches itself to all sorts of solid objects will pull you there to move through the map like spider man.  You can get very fast that way or reach spots you would not get to by other means.  The secondary firemode drops a small gravity bomb that will affect enemy players and also releases a lot of smoke which will make you harder to see and hit.  The gravity bomb uses cell ammo.
+
+	*The port-o-launch is the perfection of movement.  The grenade it launches creates two portals.  On first impact it creates the entrace portal, on secondary impact the exit portal.  If you enter the first one you (or others and also projectiles!!) will be teleported to the secondary portal.  As the first portal will teleport everything it can't be hit but the second portal is quite fragile and thanks to the used wormhole technology will take the other poral along if it lost too much energy.  The wormhole is also the reason why the portals energy decays after some time.  You can replentish the energy by simply teleporting something thru it.
+
 	*The shotgun is very similar to that of other games.  It shoots several hitscan pellets with a high spread, so it does very high damage at close range, but becomes very inaccurate at distance.  It is also very useful to knock opponents out after you already hit them hard with a rocket or other projectile, and subsequently closed to a distance where these are no longer as useful, because it's hard to miss with at close range.  The primary fire mode fires once with a short reload, while the secondary fire mode shoots three very quick shots, but with a long reload afterwards.  Starting with Nexuiz 2.3 the secondary firemode will also have a higher spread so the primary is useful for a longer distance then the secondary firemode.  The shotgun uses pellet ammo which is not shared with any other weapons.
 
 	*The machinegun is also quite self-explanatory.  It shoots hitscan bullets (do not get fooled by the eyecandy from the tracers, the mg IS HITSCAN it hits the moment you press fire were you aim) at a high rate of fire, and can do significant damage.  The primary fire mode has a high spread and is thus quite inaccurate - but it fires very fast and deals more damage per second than any other weapon.  It is therefore devastating when used at close quarters.  One of the machinegun's unique features is that the first bullet after pressing fire does more damage than the rest - keep this in mind when using it.  The secondary fire mode is much slower, but more accurate, and does even more damage per bullet, the same as the primary modes ''first'' bullets.  It is therefore very useful as an improvised sniper weapon for long range kills.  Like the shotgun, it is an excellent finishing weapon, but its effective use relies heavily on a good, steady aim.  The machinegun uses bullet ammo which is not shared with any other weapons.
+
+	*The HLAC (heavy laser assault cannon) is a similar gun but fires highly accelerated laser bolts at an insane refire rate.  The bolds explode on impact and for some extra damage the secondary firemode files several of them at once.  This is only gun that has reduced spread when crouching!  Beware of your cell ammo, this baby eats it like crazy.
 
 	*The mortar is a grenade-launcher on steroids.  Both firing modes shoot a fast-moving projectile grenade which is influenced by gravity, and thus moves in a trajectory.  The primary fire mode shoots grenades that explode on impact while the secondary fire mode shoots grenades which will bounce off objects, and either explode on contact with an other player, or after a few seconds if they are not triggered.  The grenades' arc makes them harder to aim, but also hard to dodge.  Since they deal quite high damage, with an excellent rate of fire, the mortar is a solid all-round weapon once you've got the hang of aiming it.  The mortar uses rocket ammo which is shared with the rocket launcher and the hagar.
 
@@ -75,11 +81,16 @@ Almost all weapons in Nexuiz have two firing modes, so make sure you know both. 
 
 	*The nex is a powerful sniper weapon.  Its primary fire mode fires a hitscan antimatter lance for significant damage, but requires a very precise aim, and has a relatively long reload time.  The secondary fire mode activates zoom.  The nex uses cell ammo which is shared with the crylink and the electro.
 
+	*The minsta nex is the snipers wet dream.  Simiar to the nex but MUCH more powerful.  One hit, one kill, no kidding!  The secondary firemode is identical to the lasers primary shot.  Back in the glory days this gun was used to train steady aim and fast movement.
+
 	*The hagar can be compared to the plasma gun from Quake3.  It has a very high rate of fire, with moderate damage, and some splash damage.  The primary fire mode shoots small projectile missiles at high speed and an extraordinary rate of fire.  The secondary fire mode shoots the same missiles, but at a slower speed and rate of fire, and without the instant trigger.  This means that they will bounce once when hitting a floor or wall, giving you the opportunity to fire around corners, or double your chances to hit someone by spamming an area.  The hagar uses rocket ammo which is shared with the mortar and the rocket launcher.
 
 	*The rocket launcher is a little different from that of other games, in that the rockets move relatively slowly.  The primary fire mode shoots a slow-moving, high-damage rocket projectile at a medium rate of fire.  The secondary fire mode will explode all your rockets at once.  This means that you don't need to hit your opponent directly - just get the rocket ''near'' him, and use the secondary fire to cause splash damage which will badly hurt him.  The rocket launcher uses rocket ammo which is shared with the mortar and the hagar.
 
-Now that you know all the guns you also have to understand that in Nexuiz each projectile can be set off by explostions.  So its possible to blow up the rocket an opponent is shooting at you.  So a good strategy against someone with a rocketlauncher is to spam him with the hagar.  Chances are high you make his own rocket explode and hurt him!
+	*The t.a.g. seeker is a unique weapon system.  The primary fire mode launcher a small tagging device.  If it hits someone it will automatically release several target seeking rockets that will follow the tagged one for quite a while.  Its fun watching them run!  The secondary firemode launches small rockets that explode after a few meters and thus create a sort of explosion shield that will severly damage everyone in its radius and also stops in comming tag-rockets.
+
+Now that you know all the guns you also have to understand that in Nexuiz each projectile can be set off by explostions.  So its possible to blow up the rocket an opponent is shooting at you.  So a good strategy against someone with a rocketlauncher is to spam him with the hagar.  Chances are high you make his own rocket explode and hurt him!  This is also the primary way to make sure the t.a.g. seekers rockets do not hit you!
+Also not that some objects are affected / pushed by explosion like the keys in Keyhunt or the flags in Capture the Flag.
 
 **''Using Jumping Effectively''
 You will need to be able to get around the map quickly and efficiently if you are to hunt down your opponents, and collect items well.  As already mentioned, the laser is useful for jumping and gaining speed - but you can use all explosive weapons for a similar effect.  Other weapons, however, will cause more damage to your health, and not all offer the same strong push as the laser.  The rocket launcher will push you twice as far, but you will also take ''lots'' more damage.  The mortar has the same push as the laser, but its explosion is bigger so the timing and the right angle are less of an issue.  For this reason, the mortar is better for a beginner to learn these sorts of jumps.
@@ -100,35 +111,61 @@ Nexuiz supports several different game modes and some smaller changes called mut
 
 **''Modes''
 	*Deathmatch (DM) is the most simple game mode.  It is a free-for-all fragfest with every man for himself.  All items are free to grab, and the player with the most frags will win (either by hitting the frag limit, or when the time limit expires).
+
 	*Team Deathmatch (TDM) is similar, but pits teams of players against each other.  Only shoot players with a different color than yourself.  Look at your gun to see your color.  The team with the most frags wins.
+
 	*Capture The Flag (CTF) is a team match in which you have two teams, two bases, and two flags.  You have to get into the enemy base, grab their flag, and bring it back to your own flag to score.  Scoring gives the most points, normal fragging and returning the flag gives some points.  The team with the most points wins.  CTF is a surprisingly complicated game mode, so see the comprehensive CTF guide in the Nexuiz forum for more information ({+http://alientrap.org/forum/viewtopic.php?t=849+}).
-	*Instagib removes all items from the map, and equips everyone with a nexgun.  One hit will kill, and this means some very fast action.  The player with the most frags wins.
-	*Minstagib is an improved instagib.  You can pick up lives, so you can survive two shots, and you can pick up an item to become almost invisible.  The secondary fire mode is the laser, so you can laser jump around the map.
+
+	*Minstagib is an improved instagib.  You can pick up lives, so you can survive two shots, and you can pick up an item to become almost invisible.  This is were the minstanex got its name from.
+
 	*Runematch places five runes into the map in addition to the normal items.  A rune gives you a bonus but also a curse - but you only get points for fragging if you carry a rune, so make sure you have one.  You also get points for fragging a rune carrier, and for just holding a rune (but fragging is the quicker way to gain points).  The player with the most points wins.
+
 	*Domination is also a team mode.  Throughout the map are domination points.  Touch them and your team will own that point.  You get points for each second you own such a domination point.  Touch points the other team holds to turn it into your own.  The team with the most points wins.
+
 	*Last Man Standing (LMS) puts all players into a map without any items.  Each player has several lives, and starts with all weapons when he spawns.  Each time you are fragged you lose a life.  The winner is the last surviving player.
+
 	*Arena mode is similar to deathmatch, but it only puts two players into a map, with the others waiting in a queue.  When one of both is fragged the next one in the queue will play against the winner.
+
 	*Keyhunt (KH) is a new team mode in Nexuiz 2.3.  Each team has one key and the goal is the collect all keys.  The team with the most points wins.  You get small points for fragging, fragging a keycarrier and picking up a key but you should go for the BIG points you get when ''one team has all the keys and all the keycarriers meet''.  Of cource it also works when ONE player gets all the keys for his team but this is ''much'' harder.
 
 **''Mutators''
-	*The hook mutator will add grappling hook which can be used to move through the map like spider man.  Fire the hook at a ceiling or wall using the key configured through the menu or bound using ''bind "key" "+hook"''.  Hold down this key while the hook is attached to be pulled toward it.
-	*Laser-guided rockets will give you a laser dot which you can use to guide the most recently fired rocket.
+	*The hook mutator will add an off-hand hook which can be used like the grappling hook but can be used while you whield other guns.  Fire the hook at a ceiling or wall using the key configured through the menu or bound using ''bind "key" "+hook"''.  Hold down this key while the hook is attached to be pulled toward it.
+
+	*Laser-guided rockets will give you a laser dot on the rocket launcher which you can use to guide the most recently fired rocket.
+
 	*Vampire will add whatever damage you do to your opponent to your own health.
+
 	*Nixnex will remove normal guns from the map and give all players the same gun.  That gun is changed after a while.
+
 	*Footsteps will add footstep sounds to your movements.
+
+	*Weapon Arena equips everyone with the ''arena gun'' choosen by the server admin.
+
 There are some more of these mutators, but those are the most important ones.
 
 A list of useful links:
 	*The official Nexuiz forum: {+http://alientrap.org/forum+}
+
 	*The semiofficial Nexuiz wiki: {+http://alientrap.org/wiki+}
+
 	*The official Nexuiz ladder: {+http://planetnexuiz.com/ladder+}
+
 	*The Official Nexuiz tournaments: {+http://planetnexuiz.com/tourney+}
+
 	*General Nexuiz Tips and Tricks: {+http://alientrap.org/forum/viewtopic.php?t=90+}
+
 	*How to get more help via IRC: {+http://alientrap.org/forum/viewtopic.php?t=497+}
+
 	*CTF guide and ctf MAPS guide: {+http://alientrap.org/forum/viewtopic.php?t=849+}
+
 	*Team communication explained: {+http://alientrap.org/forum/viewtopic.php?t=555+}
+
 	*A few useful jumps: http://esteel.planetnexuiz.de/nexuiz/demos/jumps.pk3  (copy the file into Nexuiz/data and you should find the demos in the demos menu)
+
 	*FPS settings: {+http://alientrap.org/forum/viewtopic.php?t=1628+}
+
 	*A list of all available variables in Nexuiz: {+http://alientrap.org/wiki/pmwiki.php?n=Main.GameTweaks+}
+
 	*A list of all available commands in Nexuiz: {+http://alientrap.org/wiki/pmwiki.php?n=Main.ConsoleCommands+}
+
 	*Some info about generic strategy in games: {+http://alientrap.org/forum/viewtopic.php?t=3496+}
