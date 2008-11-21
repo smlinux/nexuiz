@@ -354,20 +354,33 @@ void SV_PlayerPhysics()
 		makevectors(self.angles); // new forward direction!
 		myspeed = self.velocity * v_forward;
 		upspeed = self.velocity * v_up;
-		if(myspeed <= 0 && accel < 0)
-			steerfactor = -5000; // LOL
+
+		// responsiveness factor for steering and acceleration
+		f = 1 / (1 + pow(max(0, myspeed / 400), 2));
+
+		steerfactor = -myspeed * f;
+		accelfactor = f * 800;
+
+		// BUG RIGS: make friction FAIL if reversing
+		if(accel < 0)
+		{
+			if(myspeed <= 0)
+				friction = 0;
+			else
+				myspeed = max(0, myspeed - frametime * 1000);
+		}
 		else
-			steerfactor = -400 * 400 / (400 + myspeed);
-		accelfactor = 2000 * 400 / (400 + max(myspeed, -myspeed));
-		friction = 5 * 100 / (100 + max(myspeed, -myspeed));
+			myspeed = max(0, myspeed - frametime * 50);
+			// terminal velocity = velocity at which 50 == accelfactor, that is, 1549 units/sec
+
+		// BUG RIGS: stop when reversing and releasing the button
+		if(myspeed < 0 && accel == 0)
+			myspeed = 0;
 
 		self.angles_y += steer * frametime * steerfactor; // apply steering
 		makevectors(self.angles); // new forward direction!
 
-		myspeed = myspeed * (1 - frametime * friction);
 		myspeed += accel * accelfactor * frametime;
-		if(myspeed < 0)
-			myspeed = 0;
 
 		self.velocity = v_forward * myspeed;
 		upspeed -= frametime * sv_gravity;
@@ -375,6 +388,7 @@ void SV_PlayerPhysics()
 		tracebox(self.origin, self.mins, self.maxs, self.origin + '0 0 1024', MOVE_NORMAL, self);
 		up = trace_endpos - self.origin;
 
+		// BUG RIGS: align the move to the surface instead of doing collision testing
 		// can we move?
 		neworigin = trace_endpos + self.velocity * frametime;
 		tracebox(trace_endpos, self.mins, self.maxs, neworigin, MOVE_NORMAL, self);
