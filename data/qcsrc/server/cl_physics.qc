@@ -165,7 +165,7 @@ void SV_PlayerPhysics()
 	if(g_bugrigs && self.movetype == MOVETYPE_WALK)
 	{
 		self.disableclientprediction = 1;
-		self.movetype = MOVETYPE_NONE;
+		self.movetype = MOVETYPE_NOCLIP;
 	}
 
 	if (self.punchangle != '0 0 0')
@@ -316,6 +316,114 @@ void SV_PlayerPhysics()
 			self.teleport_time = 0;
 		}
 	}
+	else if (g_bugrigs && self.classname == "player")
+	{
+		// using this move type for "big rigs"
+		// the engine does not push the entity!
+		
+		float accel, steer, myspeed, steerfactor, accelfactor, upspeed, friction;
+		vector neworigin, up, angles_save, rigvel, rigvel_xy;
+
+		angles_save = self.angles;
+		accel = self.movement_x / sv_maxspeed;
+		steer = self.movement_y / sv_maxspeed;
+
+		// if(self.flags & FL_ONGROUND || 1) // BUG RIGS: responsive to movement while in air (matches big rigs better where the car is NEVER in air)
+		{
+			self.angles_x = 0;
+			self.angles_z = 0;
+			makevectors(self.angles); // new forward direction!
+			myspeed = self.velocity * v_forward;
+			upspeed = self.velocity * v_up;
+
+			// responsiveness factor for steering and acceleration
+			f = 1 / (1 + pow(max(0, myspeed / 400), 2));
+
+			steerfactor = -myspeed * f;
+			accelfactor = f * 800;
+
+			// BUG RIGS: make friction FAIL if reversing
+			if(accel < 0)
+			{
+				if(myspeed <= 0)
+					friction = 0;
+				else
+					myspeed = max(0, myspeed - frametime * 1000);
+			}
+			else
+				myspeed = max(0, myspeed - frametime * 50);
+				// terminal velocity = velocity at which 50 == accelfactor, that is, 1549 units/sec
+
+			// BUG RIGS: stop when reversing and releasing the button
+			if(myspeed < 0 && accel == 0)
+				myspeed = 0;
+
+			self.angles_y += steer * frametime * steerfactor; // apply steering
+			makevectors(self.angles); // new forward direction!
+
+			myspeed += accel * accelfactor * frametime;
+
+			rigvel = myspeed * v_forward + '0 0 1' * upspeed;
+		}
+		/*
+		else
+		{
+			myspeed = vlen(self.velocity);
+
+			// responsiveness factor for steering and acceleration
+			f = 1 / (1 + pow(max(0, myspeed / 400), 2));
+			steerfactor = -myspeed * f;
+			self.angles_y += steer * frametime * steerfactor; // apply steering
+
+			rigvel = self.velocity;
+			makevectors(self.angles); // new forward direction!
+		}
+		*/
+
+		rigvel_z -= frametime * sv_gravity; // 4x gravity plays better
+		rigvel_xy = rigvel;
+		rigvel_xy_z = 0;
+
+		tracebox(self.origin, self.mins, self.maxs, self.origin + '0 0 1024', MOVE_NORMAL, self);
+		up = trace_endpos - self.origin;
+
+		// BUG RIGS: align the move to the surface instead of doing collision testing
+		// can we move?
+		tracebox(trace_endpos, self.mins, self.maxs, trace_endpos + rigvel_xy * frametime, MOVE_NORMAL, self);
+
+		// align to surface
+		tracebox(trace_endpos, self.mins, self.maxs, trace_endpos - up + '0 0 1' * rigvel_z * frametime, MOVE_NORMAL, self);
+
+		if(trace_fraction < 0.5)
+		{
+			trace_fraction = 1;
+			neworigin = self.origin;
+		}
+		else
+			neworigin = trace_endpos;
+
+		// now set angles_x so that the car points parallel to the surface
+		if(trace_fraction < 1)
+		{
+			self.angles = vectoangles(
+				'1 0 0' * v_forward_x * trace_plane_normal_z
+				+
+				'0 1 0' * v_forward_y * trace_plane_normal_z
+				+
+				'0 0 1' * -(v_forward_x * trace_plane_normal_x + v_forward_y * trace_plane_normal_y)
+			);
+			self.flags |= FL_ONGROUND;
+		}
+		else
+		{
+			self.angles_x = angles_save_x;
+			self.angles_z = angles_save_z;
+			self.velocity += '0 0 1' * upspeed;
+			self.flags (-) FL_ONGROUND;
+		}
+
+		self.velocity = (neworigin - self.origin) * (1.0 / frametime);
+	}
 	else if (self.movetype == MOVETYPE_NOCLIP || self.movetype == MOVETYPE_FLY)
 	{
 		// noclipping or flying
@@ -336,93 +444,6 @@ void SV_PlayerPhysics()
 			if (f > 0)
 				self.velocity = self.velocity + wishdir * min(f, sv_accelerate*maxspd_mod * frametime * wishspeed);
 		}
-	}
-	else if (g_bugrigs)
-	{
-		// using this move type for "big rigs"
-		// the engine does not push the entity!
-
-		float accel, steer, myspeed, steerfactor, accelfactor, upspeed, friction;
-		vector neworigin, up, angles_save;
-
-		accel = self.movement_x / sv_maxspeed;
-		steer = self.movement_y / sv_maxspeed;
-
-		angles_save = self.angles;
-		self.angles_x = 0;
-		self.angles_z = 0;
-		makevectors(self.angles); // new forward direction!
-		myspeed = self.velocity * v_forward;
-		upspeed = self.velocity * v_up;
-
-		// responsiveness factor for steering and acceleration
-		f = 1 / (1 + pow(max(0, myspeed / 400), 2));
-
-		steerfactor = -myspeed * f;
-		accelfactor = f * 800;
-
-		// BUG RIGS: make friction FAIL if reversing
-		if(accel < 0)
-		{
-			if(myspeed <= 0)
-				friction = 0;
-			else
-				myspeed = max(0, myspeed - frametime * 1000);
-		}
-		else
-			myspeed = max(0, myspeed - frametime * 50);
-			// terminal velocity = velocity at which 50 == accelfactor, that is, 1549 units/sec
-
-		// BUG RIGS: stop when reversing and releasing the button
-		if(myspeed < 0 && accel == 0)
-			myspeed = 0;
-
-		self.angles_y += steer * frametime * steerfactor; // apply steering
-		makevectors(self.angles); // new forward direction!
-
-		myspeed += accel * accelfactor * frametime;
-
-		self.velocity = v_forward * myspeed;
-		upspeed -= frametime * sv_gravity;
-
-		tracebox(self.origin, self.mins, self.maxs, self.origin + '0 0 1024', MOVE_NORMAL, self);
-		up = trace_endpos - self.origin;
-
-		// BUG RIGS: align the move to the surface instead of doing collision testing
-		// can we move?
-		neworigin = trace_endpos + self.velocity * frametime;
-		tracebox(trace_endpos, self.mins, self.maxs, neworigin, MOVE_NORMAL, self);
-
-		// align to surface
-		tracebox(trace_endpos, self.mins, self.maxs, neworigin - up + '0 0 1' * upspeed * frametime, MOVE_NORMAL, self);
-
-		if(trace_fraction >= 0.5)
-			self.origin = trace_endpos;
-		else
-			trace_fraction = 1;
-
-		// now set angles_x so that the car points parallel to the surface
-		if(trace_fraction < 1)
-		{
-			self.angles = vectoangles(normalize(
-				'1 0 0' * v_forward_x * trace_plane_normal_z
-				+
-				'0 1 0' * v_forward_y * trace_plane_normal_z
-				+
-				'0 0 1' * -(v_forward_x * trace_plane_normal_x + v_forward_y * trace_plane_normal_y)
-			));
-			self.flags |= FL_ONGROUND;
-		}
-		else
-		{
-			self.angles_x = angles_save_x;
-			self.angles_z = angles_save_z;
-			self.velocity += '0 0 1' * upspeed;
-			self.flags (-) FL_ONGROUND;
-		}
-
-		// relink
-		setorigin(self, self.origin);
 	}
 	else if (self.waterlevel >= 2)
 	{
