@@ -24,6 +24,7 @@ mflag
 morphed
 nexdm18_rmx
 official_cmp1
+portals
 reaper
 ruiner
 savdm6ish
