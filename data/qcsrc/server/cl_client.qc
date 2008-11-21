@@ -1263,7 +1263,7 @@ void ClientConnect (void)
 			WriteByte(MSG_ONE, 1);
 		}
 
-		if(cvar("g_bigrigs"))
+		if(cvar("g_bugrigs"))
 			stuffcmd(self, "cl_cmd settemp chase_active 1\n");
 	}
 
