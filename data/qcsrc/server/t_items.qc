@@ -952,17 +952,17 @@ void gamemodel_drop()
 {
 	if(self.spawnflags & 3 == 1) // ALIGN_ORIGIN
 	{
-		traceline(self.origin, self.origin - '0 0 1024', MOVE_NOMONSTERS, self);
+		traceline(self.origin, self.origin - '0 0 4096', MOVE_NOMONSTERS, self);
 		setorigin(self, trace_endpos);
 	}
 	else if(self.spawnflags & 3 == 2) // ALIGN_BOTTOM
 	{
-		tracebox(self.origin, self.mins, self.maxs, self.origin - '0 0 1024', MOVE_NOMONSTERS, self);
+		tracebox(self.origin, self.mins, self.maxs, self.origin - '0 0 4096', MOVE_NOMONSTERS, self);
 		setorigin(self, trace_endpos);
 	}
 	else if(self.spawnflags & 3 == 3) // ALIGN_ORIGIN | ALIGN_BOTTOM
 	{
-		traceline(self.origin, self.origin - '0 0 1024', MOVE_NOMONSTERS, self);
+		traceline(self.origin, self.origin - '0 0 4096', MOVE_NOMONSTERS, self);
 		setorigin(self, trace_endpos - '0 0 1' * self.mins_z);
 	}
 }
