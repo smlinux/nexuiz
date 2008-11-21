@@ -634,10 +634,7 @@ void PutClientInServer (void)
 
 		self.classname = "player";
 		self.iscreature = TRUE;
-		if(cvar("g_bigrigs"))
-			self.movetype = MOVETYPE_PUSH;
-		else
-			self.movetype = MOVETYPE_WALK;
+		self.movetype = MOVETYPE_WALK;
 		self.solid = SOLID_SLIDEBOX;
 		self.dphitcontentsmask = DPCONTENTS_SOLID | DPCONTENTS_BODY | DPCONTENTS_PLAYERCLIP;
 		if(independent_players)
@@ -1265,6 +1262,9 @@ void ClientConnect (void)
 			WriteByte(MSG_ONE, TE_CSQC_WARMUP);
 			WriteByte(MSG_ONE, 1);
 		}
+
+		if(cvar("g_bigrigs"))
+			stuffcmd(self, "cl_cmd settemp chase_active 1\n");
 	}
 
 	if(g_lms)

@@ -159,8 +159,14 @@ void SV_PlayerPhysics()
 	if (clienttype(self) == CLIENTTYPE_BOT)
 		bot_think();
 
-	if (self.movetype == MOVETYPE_NONE)
+	if (self.movetype == MOVETYPE_NONE && self.disableclientprediction != 2)
 		return;
+
+	if(g_bigrigs && self.movetype == MOVETYPE_WALK)
+	{
+		self.disableclientprediction = 1;
+		self.movetype = MOVETYPE_NONE;
+	}
 
 	if (self.punchangle != '0 0 0')
 	{
@@ -249,7 +255,7 @@ void SV_PlayerPhysics()
 	if (self.deadflag)
 		return;
 
-	if (!self.fixangle && self.movetype != MOVETYPE_PUSH)
+	if (!self.fixangle && !g_bigrigs)
 	{
 		self.angles_x = 0;
 		self.angles_y = self.v_angle_y;
@@ -331,7 +337,7 @@ void SV_PlayerPhysics()
 				self.velocity = self.velocity + wishdir * min(f, sv_accelerate*maxspd_mod * frametime * wishspeed);
 		}
 	}
-	else if (self.movetype == MOVETYPE_PUSH)
+	else if (g_bigrigs)
 	{
 		// using this move type for "big rigs"
 		// the engine does not push the entity!

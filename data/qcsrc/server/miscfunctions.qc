@@ -692,6 +692,7 @@ float boxesoverlap(vector m1, vector m2, vector m3, vector m4) {return m2_x >= m
 // requires the same, but is a stronger condition
 float boxinsidebox(vector smins, vector smaxs, vector bmins, vector bmaxs) {return smins_x >= bmins_x && smaxs_x <= bmaxs_x && smins_y >= bmins_y && smaxs_y <= bmaxs_y && smins_z >= bmins_z && smaxs_z <= bmaxs_z;};
 
+float g_bigrigs;
 float g_pickup_shells;
 float g_pickup_shells_max;
 float g_pickup_nails;
@@ -919,6 +920,7 @@ void readplayerstartcvars()
 void readlevelcvars(void)
 {
  	sv_clones = cvar("sv_clones");
+ 	g_bigrigs = cvar("g_bigrigs");
 	sv_cheats = cvar("sv_cheats");
 	sv_gentle = cvar("sv_gentle");
 	sv_foginterval = cvar("sv_foginterval");
