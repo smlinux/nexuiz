@@ -117,6 +117,26 @@ void CheckWaterJump()
 	}
 };
 
+float racecar_angle(float forward, float down)
+{
+	float ret, angle_mult;
+
+	if(forward < 0)
+	{
+		forward = -forward;
+		down = -down;
+	}
+
+	ret = vectoyaw('0 1 0' * down + '1 0 0' * forward);
+
+	angle_mult = forward / (800 + forward);
+
+	if(ret > 180)
+		return ret * angle_mult + 360 * (1 - angle_mult);
+	else
+		return ret * angle_mult;
+}
+
 .vector movement_old;
 .float buttons_old;
 .vector v_angle_old;
@@ -328,11 +348,14 @@ void SV_PlayerPhysics()
 		accel = self.movement_x / sv_maxspeed;
 		steer = self.movement_y / sv_maxspeed;
 
-		// if(self.flags & FL_ONGROUND || 1) // BUG RIGS: responsive to movement while in air (matches big rigs better where the car is NEVER in air)
+		self.angles_x = 0;
+		self.angles_z = 0;
+		makevectors(self.angles); // new forward direction!
+
+		if(self.flags & FL_ONGROUND || g_bugrigs == 1)
+		// BUG RIGS: responsive to movement while in air (matches big rigs better where the car is NEVER in air)
+		// g_bugrigs 2 turns off that bug
 		{
-			self.angles_x = 0;
-			self.angles_z = 0;
-			makevectors(self.angles); // new forward direction!
 			myspeed = self.velocity * v_forward;
 			upspeed = self.velocity * v_up;
 
@@ -365,7 +388,6 @@ void SV_PlayerPhysics()
 
 			rigvel = myspeed * v_forward + '0 0 1' * upspeed;
 		}
-		/*
 		else
 		{
 			myspeed = vlen(self.velocity);
@@ -378,7 +400,6 @@ void SV_PlayerPhysics()
 			rigvel = self.velocity;
 			makevectors(self.angles); // new forward direction!
 		}
-		*/
 
 		rigvel_z -= frametime * sv_gravity; // 4x gravity plays better
 		rigvel_xy = rigvel;
@@ -402,9 +423,11 @@ void SV_PlayerPhysics()
 		else
 			neworigin = trace_endpos;
 
-		// now set angles_x so that the car points parallel to the surface
+		self.velocity = (neworigin - self.origin) * (1.0 / frametime);
+
 		if(trace_fraction < 1)
 		{
+			// now set angles_x so that the car points parallel to the surface
 			self.angles = vectoangles(
 				'1 0 0' * v_forward_x * trace_plane_normal_z
 				+
@@ -416,13 +439,30 @@ void SV_PlayerPhysics()
 		}
 		else
 		{
-			self.angles_x = angles_save_x;
-			self.angles_z = angles_save_z;
-			self.velocity += '0 0 1' * upspeed;
+			// now set angles_x so that the car points forward, but is tilted in velocity direction
+			vector vel_local;
+
+			vel_local_x = v_forward * self.velocity;
+			vel_local_y = v_right * self.velocity;
+			vel_local_z = v_up * self.velocity;
+
+			self.angles_x = racecar_angle(vel_local_x, vel_local_z);
+			self.angles_z = racecar_angle(-vel_local_y, vel_local_z);
+
 			self.flags (-) FL_ONGROUND;
 		}
 
-		self.velocity = (neworigin - self.origin) * (1.0 / frametime);
+		// smooth the angles
+		vector vf1, vu1, smoothangles;
+		makevectors(self.angles);
+		vf1 = v_forward * frametime * 5;
+		vu1 = v_up;
+		makevectors(angles_save);
+		vf1 = vf1 + v_forward * (1 - frametime * 5);
+		vu1 = vu1 + v_up * (1 - frametime * 5);
+		smoothangles = vectoangles2(vf1, vu1);
+		self.angles_x = -smoothangles_x;
+		self.angles_z =  smoothangles_z;
 	}
 	else if (self.movetype == MOVETYPE_NOCLIP || self.movetype == MOVETYPE_FLY)
 	{
