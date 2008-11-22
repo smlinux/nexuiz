@@ -455,11 +455,12 @@ void SV_PlayerPhysics()
 		// smooth the angles
 		vector vf1, vu1, smoothangles;
 		makevectors(self.angles);
-		vf1 = v_forward * frametime * 5;
-		vu1 = v_up;
+		f = frametime * 5;
+		vf1 = v_forward * f;
+		vu1 = v_up * f;
 		makevectors(angles_save);
-		vf1 = vf1 + v_forward * (1 - frametime * 5);
-		vu1 = vu1 + v_up * (1 - frametime * 5);
+		vf1 = vf1 + v_forward * (1 - f);
+		vu1 = vu1 + v_up * (1 - f);
 		smoothangles = vectoangles2(vf1, vu1);
 		self.angles_x = -smoothangles_x;
 		self.angles_z =  smoothangles_z;
