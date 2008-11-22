@@ -348,6 +348,15 @@ void SV_PlayerPhysics()
 		accel = bound(-1, self.movement_x / sv_maxspeed, 1);
 		steer = bound(-1, self.movement_y / sv_maxspeed, 1);
 
+		if(accel < 0)
+		{
+			// back accel is DIGITAL
+			if(accel < -0.5)
+				accel = -1;
+			else
+				accel = 0;
+		}
+
 		self.angles_x = 0;
 		self.angles_z = 0;
 		makevectors(self.angles); // new forward direction!
@@ -378,7 +387,7 @@ void SV_PlayerPhysics()
 				// terminal velocity = velocity at which 50 == accelfactor, that is, 1549 units/sec
 
 			// BUG RIGS: stop when reversing and releasing the button
-			if(myspeed < 0 && accel == 0)
+			if(myspeed < 0 && accel >= 0)
 				myspeed = 0;
 
 			self.angles_y += steer * frametime * steerfactor; // apply steering
