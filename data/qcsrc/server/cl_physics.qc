@@ -345,8 +345,8 @@ void SV_PlayerPhysics()
 		vector neworigin, up, angles_save, rigvel, rigvel_xy;
 
 		angles_save = self.angles;
-		accel = self.movement_x / sv_maxspeed;
-		steer = self.movement_y / sv_maxspeed;
+		accel = bound(-1, self.movement_x / sv_maxspeed, 1);
+		steer = bound(-1, self.movement_y / sv_maxspeed, 1);
 
 		self.angles_x = 0;
 		self.angles_z = 0;
