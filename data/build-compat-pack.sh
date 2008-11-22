@@ -52,6 +52,22 @@ COMPAT_FILES="
 	models/player/visitant.zym.sounds
 	models/player/xolar.zym.sounds
 	models/portal.md3
+	models/portal.md3_0.skin
+	models/portal.md3_1.skin
+	models/portal.md3_2.skin
+	textures/portals/portals_blue_gloss.tga
+	textures/portals/portals_blue_glow.tga
+	textures/portals/portals_blue_norm.tga
+	textures/portals/portals_blue.tga
+	textures/portals/portals_blue_vortex.tga
+	textures/portals/portals_inactive.tga
+	textures/portals/portals_inactive_vortex.tga
+	textures/portals/portals_red_gloss.tga
+	textures/portals/portals_red_glow.tga
+	textures/portals/portals_red_norm.tga
+	textures/portals/portals_red.tga
+	textures/portals/portals_red_vortex.tga
+	scripts/portals.shader
 	models/sprites/bluebase.tga
 	models/sprites/danger.tga
 	models/sprites/defend.tga
