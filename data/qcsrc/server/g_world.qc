@@ -1476,31 +1476,7 @@ float WinningCondition_QualifyingThenRace(float limit)
 
 	// NEVER initiate overtime
 	if(wc == WINNING_YES || wc == WINNING_STARTOVERTIME)
-	// do NOT support equality when the laps are all raced!
 	{
-		float totalplayers;
-		float playerswithlaps;
-		float readyplayers;
-		entity head;
-		totalplayers = playerswithlaps = readyplayers = 0;
-		FOR_EACH_PLAYER(head)
-		{
-			++totalplayers;
-			if(PlayerScore_Add(head, SP_RACE_FASTEST, 0))
-				++playerswithlaps;
-			if(head.ready)
-				++readyplayers;
-		}
-
-		// at least 2/3 of the players have completed a lap: start the RACE
-		// otherwise, the players should end the qualifying on their own
-		if(readyplayers || ((totalplayers >= 3) && (playerswithlaps * 3 >= totalplayers * 2)))
-		{
-			checkrules_overtimeend = 0;
-			ReadyRestart();
-			return WINNING_NEVER;
-		}
-
 		return WINNING_YES;
 	}
 
@@ -1639,7 +1615,34 @@ void CheckRules_World()
 	else
 	{
 		if (timelimit && time >= timelimit)
-			InitiateOvertime();
+		{
+			if(g_race && g_race_qualifying == 2)
+			{
+				float totalplayers;
+				float playerswithlaps;
+				float readyplayers;
+				entity head;
+				totalplayers = playerswithlaps = readyplayers = 0;
+				FOR_EACH_PLAYER(head)
+				{
+					++totalplayers;
+					if(PlayerScore_Add(head, SP_RACE_FASTEST, 0))
+						++playerswithlaps;
+					if(head.ready)
+						++readyplayers;
+				}
+
+				// at least 2/3 of the players have completed a lap: start the RACE
+				// otherwise, the players should end the qualifying on their own
+				if(readyplayers || ((totalplayers >= 3) && (playerswithlaps * 3 >= totalplayers * 2)))
+				{
+					checkrules_overtimeend = 0;
+					ReadyRestart(); // go to race
+				}
+			}
+			else
+				InitiateOvertime();
+		}
 	}
 
 	if (checkrules_overtimeend && time >= checkrules_overtimeend)
