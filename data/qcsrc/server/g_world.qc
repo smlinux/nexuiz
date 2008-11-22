@@ -1616,7 +1616,7 @@ void CheckRules_World()
 	{
 		if (timelimit && time >= timelimit)
 		{
-			if(g_race && g_race_qualifying == 2)
+			if(g_race && g_race_qualifying == 2 && timelimit > 0)
 			{
 				float totalplayers;
 				float playerswithlaps;
@@ -1639,6 +1639,8 @@ void CheckRules_World()
 					checkrules_overtimeend = 0;
 					ReadyRestart(); // go to race
 				}
+				else
+					InitiateOvertime();
 			}
 			else
 				InitiateOvertime();
