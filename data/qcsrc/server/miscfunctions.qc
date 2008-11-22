@@ -1142,6 +1142,41 @@ void precache()
 		//precache_model("models/player/visitant.zym");
 	}
 
+	if(cvar("sv_defaultcharacter"))
+	{
+		string s;
+		s = cvar_string("sv_defaultplayermodel_red");
+		if(s != "")
+		{
+			precache_model(s);
+			PrecachePlayerSounds(strcat(s, ".sounds"));
+		}
+		s = cvar_string("sv_defaultplayermodel_blue");
+		if(s != "")
+		{
+			precache_model(s);
+			PrecachePlayerSounds(strcat(s, ".sounds"));
+		}
+		s = cvar_string("sv_defaultplayermodel_yellow");
+		if(s != "")
+		{
+			precache_model(s);
+			PrecachePlayerSounds(strcat(s, ".sounds"));
+		}
+		s = cvar_string("sv_defaultplayermodel_pink");
+		if(s != "")
+		{
+			precache_model(s);
+			PrecachePlayerSounds(strcat(s, ".sounds"));
+		}
+		s = cvar_string("sv_defaultplayermodel");
+		if(s != "")
+		{
+			precache_model(s);
+			PrecachePlayerSounds(strcat(s, ".sounds"));
+		}
+	}
+
 	if (g_footsteps)
 	{
 		PrecacheGlobalSound((globalsound_step = "misc/footstep0 6"));
