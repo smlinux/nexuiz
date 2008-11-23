@@ -692,7 +692,6 @@ float boxesoverlap(vector m1, vector m2, vector m3, vector m4) {return m2_x >= m
 // requires the same, but is a stronger condition
 float boxinsidebox(vector smins, vector smaxs, vector bmins, vector bmaxs) {return smins_x >= bmins_x && smaxs_x <= bmaxs_x && smins_y >= bmins_y && smaxs_y <= bmaxs_y && smins_z >= bmins_z && smaxs_z <= bmaxs_z;};
 
-float g_bugrigs;
 float g_pickup_shells;
 float g_pickup_shells_max;
 float g_pickup_nails;
@@ -917,10 +916,39 @@ void readplayerstartcvars()
 	}
 }
 
+float g_bugrigs;
+float g_bugrigs_planar_movement;
+float g_bugrigs_reverse_spinning;
+float g_bugrigs_reverse_speeding;
+float g_bugrigs_reverse_stopping;
+float g_bugrigs_air_steering;
+float g_bugrigs_angle_smoothing;
+float g_bugrigs_friction_floor;
+float g_bugrigs_friction_brake;
+float g_bugrigs_friction_air;
+float g_bugrigs_accel;
+float g_bugrigs_speed_ref;
+float g_bugrigs_speed_pow;
+float g_bugrigs_steer;
+
 void readlevelcvars(void)
 {
- 	sv_clones = cvar("sv_clones");
  	g_bugrigs = cvar("g_bugrigs");
+ 	g_bugrigs_planar_movement = cvar("g_bugrigs_planar_movement");
+ 	g_bugrigs_reverse_spinning = cvar("g_bugrigs_reverse_spinning");
+ 	g_bugrigs_reverse_speeding = cvar("g_bugrigs_reverse_speeding");
+ 	g_bugrigs_reverse_stopping = cvar("g_bugrigs_reverse_stopping");
+ 	g_bugrigs_air_steering = cvar("g_bugrigs_air_steering");
+ 	g_bugrigs_angle_smoothing = cvar("g_bugrigs_angle_smoothing");
+ 	g_bugrigs_friction_floor = cvar("g_bugrigs_friction_floor");
+ 	g_bugrigs_friction_brake = cvar("g_bugrigs_friction_brake");
+ 	g_bugrigs_friction_air = cvar("g_bugrigs_friction_air");
+ 	g_bugrigs_accel = cvar("g_bugrigs_accel");
+ 	g_bugrigs_speed_ref = cvar("g_bugrigs_speed_ref");
+ 	g_bugrigs_speed_pow = cvar("g_bugrigs_speed_pow");
+ 	g_bugrigs_steer = cvar("g_bugrigs_steer");
+
+ 	sv_clones = cvar("sv_clones");
 	sv_cheats = cvar("sv_cheats");
 	sv_gentle = cvar("sv_gentle");
 	sv_foginterval = cvar("sv_foginterval");
