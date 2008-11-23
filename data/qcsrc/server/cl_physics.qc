@@ -239,20 +239,26 @@ void RaceCarPhysics()
 	if(g_bugrigs_planar_movement)
 	{
 		vector rigvel_xy, neworigin, up;
+		float mt;
 
 		rigvel_z -= frametime * sv_gravity; // 4x gravity plays better
 		rigvel_xy = rigvel;
 		rigvel_xy_z = 0;
 
-		tracebox(self.origin, self.mins, self.maxs, self.origin + '0 0 1024', MOVE_NORMAL, self);
+		if(g_bugrigs_planar_movement_car_jumping)
+			mt = MOVE_NORMAL;
+		else
+			mt = MOVE_NOMONSTERS;
+
+		tracebox(self.origin, self.mins, self.maxs, self.origin + '0 0 1024', mt, self);
 		up = trace_endpos - self.origin;
 
 		// BUG RIGS: align the move to the surface instead of doing collision testing
 		// can we move?
-		tracebox(trace_endpos, self.mins, self.maxs, trace_endpos + rigvel_xy * frametime, MOVE_NORMAL, self);
+		tracebox(trace_endpos, self.mins, self.maxs, trace_endpos + rigvel_xy * frametime, mt, self);
 
 		// align to surface
-		tracebox(trace_endpos, self.mins, self.maxs, trace_endpos - up + '0 0 1' * rigvel_z * frametime, MOVE_NORMAL, self);
+		tracebox(trace_endpos, self.mins, self.maxs, trace_endpos - up + '0 0 1' * rigvel_z * frametime, mt, self);
 
 		if(trace_fraction < 0.5)
 		{

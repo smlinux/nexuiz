@@ -918,6 +918,7 @@ void readplayerstartcvars()
 
 float g_bugrigs;
 float g_bugrigs_planar_movement;
+float g_bugrigs_planar_movement_car_jumping;
 float g_bugrigs_reverse_spinning;
 float g_bugrigs_reverse_speeding;
 float g_bugrigs_reverse_stopping;
@@ -935,6 +936,7 @@ void readlevelcvars(void)
 {
  	g_bugrigs = cvar("g_bugrigs");
  	g_bugrigs_planar_movement = cvar("g_bugrigs_planar_movement");
+ 	g_bugrigs_planar_movement_car_jumping = cvar("g_bugrigs_planar_movement_car_jumping");
  	g_bugrigs_reverse_spinning = cvar("g_bugrigs_reverse_spinning");
  	g_bugrigs_reverse_speeding = cvar("g_bugrigs_reverse_speeding");
  	g_bugrigs_reverse_stopping = cvar("g_bugrigs_reverse_stopping");
