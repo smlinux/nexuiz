@@ -585,26 +585,19 @@ void FixPlayermodel()
 				setcolor(self, cvar("sv_defaultplayercolors"));
 }
 
-.float touchexplode_time;
-
-void PlayerTouchExplode()
+void PlayerTouchExplode(entity p1, entity p2)
 {
-	if(self.owner.classname == "player")
-	if(self.owner.deadflag == DEAD_NO)
-	if(self.enemy.classname == "player")
-	if(self.enemy.deadflag == DEAD_NO)
-	if not(IS_INDEPENDENT_PLAYER(self.owner))
-	if not(IS_INDEPENDENT_PLAYER(self.enemy))
-	{
-		vector org;
-		org = (self.owner.origin + self.enemy.origin) * 0.5;
-		org_z += (self.owner.mins_z + self.enemy.mins_z) * 0.5;
-		setorigin(self, org);
+	vector org;
+	org = (p1.origin + p2.origin) * 0.5;
+	org_z += (p1.mins_z + p2.mins_z) * 0.5;
 
-		te_explosion(org);
-		RadiusDamage(self, world, g_touchexplode_damage, g_touchexplode_edgedamage, g_touchexplode_radius, world, g_touchexplode_force, DEATH_TOUCHEXPLODE, world);
-	}
-	remove(self);
+	te_explosion(org);
+
+	entity e;
+	e = spawn();
+	setorigin(e, org);
+	RadiusDamage(e, world, g_touchexplode_damage, g_touchexplode_edgedamage, g_touchexplode_radius, world, g_touchexplode_force, DEATH_TOUCHEXPLODE, world);
+	remove(e);
 }
 
 /*
@@ -2014,6 +2007,8 @@ void SpectatorThink()
 	self.flags = self.flags | FL_CLIENT | FL_NOTARGET;
 }
 
+.float touchexplode_time;
+
 /*
 =============
 PlayerPreThink
@@ -2161,6 +2156,7 @@ void PlayerPreThink (void)
 			return;
 		}
 
+		if(g_touchexplode)
 		if(time > self.touchexplode_time)
 		if(self.classname == "player")
 		if(self.deadflag == DEAD_NO)
@@ -2173,14 +2169,7 @@ void PlayerPreThink (void)
 			if not(IS_INDEPENDENT_PLAYER(other))
 			if(boxesoverlap(self.absmin, self.absmax, other.absmin, other.absmax))
 			{
-				entity e;
-				e = spawn();
-				e.classname = "touchexplode";
-				e.think = PlayerTouchExplode;
-				e.nextthink = time;
-				e.owner = self;
-				e.enemy = other;
-
+				PlayerTouchExplode(self, other);
 				self.touchexplode_time = other.touchexplode_time = time + 0.2;
 			}
 		}
