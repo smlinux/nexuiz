@@ -545,6 +545,12 @@ COMPAT_FILES="
 	textures/portalgun_glow.tga
 	textures/portalgun_norm.tga
 	textures/portalgun.tga
+	textures/hlac.tga
+	textures/seeker_gloss.tga
+	textures/seeker_glow.tga
+	textures/seeker_norm.tga
+	textures/seeker_pants.tga
+	textures/seeker.tga
 "
 
 rev=`svnversion`
