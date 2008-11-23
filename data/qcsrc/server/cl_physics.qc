@@ -245,7 +245,7 @@ void RaceCarPhysics()
 		rigvel_xy = rigvel;
 		rigvel_xy_z = 0;
 
-		if(g_bugrigs_planar_movement_car_jumping)
+		if(g_bugrigs_planar_movement_car_jumping && !g_touchexplode) // touchexplode is a better way to handle collisions
 			mt = MOVE_NORMAL;
 		else
 			mt = MOVE_NOMONSTERS;
