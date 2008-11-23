@@ -470,7 +470,6 @@ void PutObserverInServer (void)
 	self.angles_z = 0;
 	self.fixangle = TRUE;
 	self.crouch = FALSE;
-	self.touch = SUB_Null;
 
 	self.view_ofs = PL_VIEW_OFS;
 	setorigin (self, spot.origin);
@@ -606,30 +605,6 @@ void PlayerTouchExplode()
 		RadiusDamage(self, world, g_touchexplode_damage, g_touchexplode_edgedamage, g_touchexplode_radius, world, g_touchexplode_force, DEATH_TOUCHEXPLODE, world);
 	}
 	remove(self);
-}
-
-void PlayerTouch()
-{
-	if(g_touchexplode && time > self.touchexplode_time && time > other.touchexplode_time)
-	{
-		if(self.classname == "player")
-		if(self.deadflag == DEAD_NO)
-		if(other.classname == "player")
-		if(other.deadflag == DEAD_NO)
-		if not(IS_INDEPENDENT_PLAYER(self))
-		if not(IS_INDEPENDENT_PLAYER(other))
-		{
-			entity e;
-			e = spawn();
-			e.classname = "touchexplode";
-			e.think = PlayerTouchExplode;
-			e.nextthink = time;
-			e.owner = self;
-			e.enemy = other;
-
-			self.touchexplode_time = other.touchexplode_time = time + 0.2;
-		}
-	}
 }
 
 /*
@@ -776,7 +751,6 @@ void PutClientInServer (void)
 		FixPlayermodel();
 
 		self.crouch = FALSE;
-		self.touch = PlayerTouch;
 		self.view_ofs = PL_VIEW_OFS;
 		setsize (self, PL_MIN, PL_MAX);
 		self.spawnorigin = spot.origin;
@@ -2185,6 +2159,30 @@ void PlayerPreThink (void)
 			}
 			ShowRespawnCountdown();
 			return;
+		}
+
+		if(time > self.touchexplode_time)
+		if(self.classname == "player")
+		if(self.deadflag == DEAD_NO)
+		if not(IS_INDEPENDENT_PLAYER(self))
+		FOR_EACH_PLAYER(other) if(self != other)
+		{
+			if(time > other.touchexplode_time)
+			if(other.classname == "player")
+			if(other.deadflag == DEAD_NO)
+			if not(IS_INDEPENDENT_PLAYER(other))
+			if(boxesoverlap(self.absmin, self.absmax, other.absmin, other.absmax))
+			{
+				entity e;
+				e = spawn();
+				e.classname = "touchexplode";
+				e.think = PlayerTouchExplode;
+				e.nextthink = time;
+				e.owner = self;
+				e.enemy = other;
+
+				self.touchexplode_time = other.touchexplode_time = time + 0.2;
+			}
 		}
 
 		if(g_lms && !self.deadflag && cvar("g_lms_campcheck_interval"))
