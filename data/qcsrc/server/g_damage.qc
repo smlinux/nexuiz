@@ -335,6 +335,8 @@ void Obituary (entity attacker, entity inflictor, entity targ, float deathtype)
 					}
                     else if(deathtype == DEATH_TURRET)
                         bprint ("^1",s, "^1 was pushed into the line of fire by ^1", a, "\n");
+                    else if(deathtype == DEATH_TOUCHEXPLODE)
+                        bprint ("^1",s, "^1 was pushed into an accident by ^1", a, "\n");
 					else
 						bprint ("^1",s, "^1 was fragged by ", a, "\n");
 				}
@@ -458,6 +460,8 @@ void Obituary (entity attacker, entity inflictor, entity targ, float deathtype)
 					bprint ("^1",s, "^1 is now conserved for centuries to come\n");
             else if(deathtype == DEATH_TURRET)
                     bprint ("^1",s, "^1 was mowed down by a turret \n");
+			else if(deathtype == DEATH_TOUCHEXPLODE)
+				bprint ("^1",s, "^1 died in an accident\n");
 			else
 				if(sv_gentle)
 					bprint ("^1",s, "^1 needs a restart\n");
@@ -912,7 +916,7 @@ float RadiusDamage (entity inflictor, entity attacker, float coredamage, float e
 							{
 								if(targ.iscreature)
 									total_damage_to_creatures += finaldmg;
-								if(targ == directhitentity)
+								if(targ == directhitentity || DEATH_ISSPECIAL(deathtype))
 									Damage (targ, inflictor, attacker, finaldmg, deathtype, nearest, force);
 								else
 									Damage (targ, inflictor, attacker, finaldmg, deathtype | HITTYPE_SPLASH, nearest, force);

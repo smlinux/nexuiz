@@ -932,6 +932,12 @@ float g_bugrigs_speed_ref;
 float g_bugrigs_speed_pow;
 float g_bugrigs_steer;
 
+float g_touchexplode;
+float g_touchexplode_radius;
+float g_touchexplode_damage;
+float g_touchexplode_edgedamage;
+float g_touchexplode_force;
+
 void readlevelcvars(void)
 {
  	g_bugrigs = cvar("g_bugrigs");
@@ -949,6 +955,12 @@ void readlevelcvars(void)
  	g_bugrigs_speed_ref = cvar("g_bugrigs_speed_ref");
  	g_bugrigs_speed_pow = cvar("g_bugrigs_speed_pow");
  	g_bugrigs_steer = cvar("g_bugrigs_steer");
+
+	g_touchexplode = cvar("g_touchexplode");
+	g_touchexplode_radius = cvar("g_touchexplode_radius");
+	g_touchexplode_damage = cvar("g_touchexplode_damage");
+	g_touchexplode_edgedamage = cvar("g_touchexplode_edgedamage");
+	g_touchexplode_force = cvar("g_touchexplode_force");
 
  	sv_clones = cvar("sv_clones");
 	sv_cheats = cvar("sv_cheats");

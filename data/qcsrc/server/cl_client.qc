@@ -470,6 +470,7 @@ void PutObserverInServer (void)
 	self.angles_z = 0;
 	self.fixangle = TRUE;
 	self.crouch = FALSE;
+	self.touch = SUB_Null;
 
 	self.view_ofs = PL_VIEW_OFS;
 	setorigin (self, spot.origin);
@@ -583,6 +584,52 @@ void FixPlayermodel()
 		if(strlen(cvar_string("sv_defaultplayercolors")))
 			if(self.clientcolors != cvar("sv_defaultplayercolors"))
 				setcolor(self, cvar("sv_defaultplayercolors"));
+}
+
+.float touchexplode_time;
+
+void PlayerTouchExplode()
+{
+	if(self.owner.classname == "player")
+	if(self.owner.deadflag == DEAD_NO)
+	if(self.enemy.classname == "player")
+	if(self.enemy.deadflag == DEAD_NO)
+	if not(IS_INDEPENDENT_PLAYER(self.owner))
+	if not(IS_INDEPENDENT_PLAYER(self.enemy))
+	{
+		vector org;
+		org = (self.owner.origin + self.enemy.origin) * 0.5;
+		org_z += (self.owner.mins_z + self.enemy.mins_z) * 0.5;
+		setorigin(self, org);
+
+		te_explosion(org);
+		RadiusDamage(self, world, g_touchexplode_damage, g_touchexplode_edgedamage, g_touchexplode_radius, world, g_touchexplode_force, DEATH_TOUCHEXPLODE, world);
+	}
+	remove(self);
+}
+
+void PlayerTouch()
+{
+	if(g_touchexplode && time > self.touchexplode_time && time > other.touchexplode_time)
+	{
+		if(self.classname == "player")
+		if(self.deadflag == DEAD_NO)
+		if(other.classname == "player")
+		if(other.deadflag == DEAD_NO)
+		if not(IS_INDEPENDENT_PLAYER(self))
+		if not(IS_INDEPENDENT_PLAYER(other))
+		{
+			entity e;
+			e = spawn();
+			e.classname = "touchexplode";
+			e.think = PlayerTouchExplode;
+			e.nextthink = time;
+			e.owner = self;
+			e.enemy = other;
+
+			self.touchexplode_time = other.touchexplode_time = time + 0.2;
+		}
+	}
 }
 
 /*
@@ -729,6 +776,7 @@ void PutClientInServer (void)
 		FixPlayermodel();
 
 		self.crouch = FALSE;
+		self.touch = PlayerTouch;
 		self.view_ofs = PL_VIEW_OFS;
 		setsize (self, PL_MIN, PL_MAX);
 		self.spawnorigin = spot.origin;
