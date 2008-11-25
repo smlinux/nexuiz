@@ -877,6 +877,9 @@ void DecodeLevelParms (void)
 	self.parm_idlesince = parm1;
 	if(self.parm_idlesince == -(86400 * 366))
 		self.parm_idlesince = time;
+
+	// whatever happens, allow 60 seconds of idling directly after connect for map loading
+	self.parm_idlesince = max(self.parm_idlesince, time - sv_maxidle + 60);
 }
 
 /*
