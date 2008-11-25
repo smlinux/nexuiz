@@ -175,6 +175,7 @@ void RaceCarPhysics()
 
 		// responsiveness factor for steering and acceleration
 		f = 1 / (1 + pow(max(-myspeed, myspeed) / g_bugrigs_speed_ref, g_bugrigs_speed_pow));
+		//MAXIMA: f(v) := 1 / (1 + (v / g_bugrigs_speed_ref) ^ g_bugrigs_speed_pow);
 
 		if(myspeed < 0 && g_bugrigs_reverse_spinning)
 			steerfactor = -myspeed * g_bugrigs_steer;
@@ -185,6 +186,7 @@ void RaceCarPhysics()
 			accelfactor = g_bugrigs_accel;
 		else
 			accelfactor = f * g_bugrigs_accel;
+		//MAXIMA: accel(v) := f(v) * g_bugrigs_accel;
 
 		if(accel < 0)
 		{
@@ -213,6 +215,7 @@ void RaceCarPhysics()
 			}
 		}
 		// terminal velocity = velocity at which 50 == accelfactor, that is, 1549 units/sec
+		//MAXIMA: friction(v) := g_bugrigs_friction_floor;
 
 		self.angles_y += steer * frametime * steerfactor; // apply steering
 		makevectors(self.angles); // new forward direction!
@@ -235,6 +238,9 @@ void RaceCarPhysics()
 	}
 
 	rigvel = rigvel * max(0, 1 - vlen(rigvel) * g_bugrigs_friction_air * frametime);
+	//MAXIMA: airfriction(v) := v * v * g_bugrigs_friction_air;
+	//MAXIMA: total_acceleration(v) := accel(v) - friction(v) - airfriction(v);
+	//MAXIMA: solve(total_acceleration(v) = 0, v);
 
 	if(g_bugrigs_planar_movement)
 	{

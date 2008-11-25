@@ -364,7 +364,13 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 {
 	local float take, save, waves, sdelay;
 
-	damage = damage * bound(1.0, self.cvar_cl_handicap, 100.0);
+	if(!DEATH_ISSPECIAL(deathtype))
+	{
+		damage *= sqrt(bound(1.0, self.cvar_cl_handicap, 100.0));
+		if(self != attacker)
+			damage /= sqrt(bound(1.0, attacker.cvar_cl_handicap, 100.0));
+	}
+
 	if(sv_gentle > 0) {
 		pointparticles(particleeffectnum("damage_hit"), hitloc, force, bound(0, damage, 200));
 	} else {
