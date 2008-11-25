@@ -551,6 +551,8 @@ COMPAT_FILES="
 	textures/seeker_norm.tga
 	textures/seeker_pants.tga
 	textures/seeker.tga
+	sound/weapons/hook_fire.wav
+	sound/weapons/hook_impact.wav
 "
 
 rev=`svnversion`
