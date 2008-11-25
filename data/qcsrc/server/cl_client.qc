@@ -2204,6 +2204,8 @@ void PlayerPreThink (void)
 			}
 		}
 
+		self.oldorigin = self.origin;
+
 		if (self.BUTTON_CROUCH && !self.hook.state)
 		{
 			if (!self.crouch)
