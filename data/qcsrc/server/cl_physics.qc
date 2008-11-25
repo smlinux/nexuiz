@@ -234,7 +234,7 @@ void RaceCarPhysics()
 		makevectors(self.angles); // new forward direction!
 	}
 
-	rigvel = rigvel * max(0, 1 - vlen(rigvel) * g_bugrigs_friction_air);
+	rigvel = rigvel * max(0, 1 - vlen(rigvel) * g_bugrigs_friction_air * frametime);
 
 	if(g_bugrigs_planar_movement)
 	{
