@@ -166,7 +166,7 @@ void spawnfunc_func_breakable() {
 	self.mdl = self.model;
 	SetBrushEntityModel();
 	self.mins_save = self.mins;
-	self.maxs_save = self.mins;
+	self.maxs_save = self.maxs;
 
 	self.use = func_breakable_restore;
 
