@@ -300,12 +300,13 @@ void RaceCarPhysics()
 	tracebox(self.origin, self.mins, self.maxs, self.origin - '0 0 4', MOVE_NORMAL, self);
 	if(trace_fraction != 1)
 	{
-		self.angles = vectoangles(
+		self.angles = vectoangles2(
 				'1 0 0' * v_forward_x * trace_plane_normal_z
 				+
 				'0 1 0' * v_forward_y * trace_plane_normal_z
 				+
-				'0 0 1' * -(v_forward_x * trace_plane_normal_x + v_forward_y * trace_plane_normal_y)
+				'0 0 1' * -(v_forward_x * trace_plane_normal_x + v_forward_y * trace_plane_normal_y),
+				trace_plane_normal
 				);
 	}
 	else
