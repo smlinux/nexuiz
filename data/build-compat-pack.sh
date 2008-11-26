@@ -55,19 +55,9 @@ COMPAT_FILES="
 	models/portal.md3_0.skin
 	models/portal.md3_1.skin
 	models/portal.md3_2.skin
-	textures/portals/portals_blue_gloss.tga
-	textures/portals/portals_blue_glow.tga
-	textures/portals/portals_blue_norm.tga
-	textures/portals/portals_blue.tga
-	textures/portals/portals_blue_vortex.tga
-	textures/portals/portals_inactive.tga
-	textures/portals/portals_inactive_vortex.tga
-	textures/portals/portals_red_gloss.tga
-	textures/portals/portals_red_glow.tga
-	textures/portals/portals_red_norm.tga
-	textures/portals/portals_red.tga
-	textures/portals/portals_red_vortex.tga
-	scripts/portals.shader
+	models/sprites/as-defend_frame0.tga
+	models/sprites/as-destroy_frame0.tga
+	models/sprites/as-push_frame0.tga
 	models/sprites/bluebase.tga
 	models/sprites/danger.tga
 	models/sprites/defend.tga
@@ -158,6 +148,7 @@ COMPAT_FILES="
 	models/weapons/w_porto.zym
     models/weapons/w_seeker.zym
 	particles/particlefont.tga
+	scripts/portals.shader
 	sound/announcer/male/airshot.ogg
 	sound/announcer/male/electrobitch.ogg
 	sound/announcer/male/headshot.ogg
@@ -506,6 +497,8 @@ COMPAT_FILES="
 	sound/weapons/hagexp2.ogg
 	sound/weapons/hagexp3.ogg
 	sound/weapons/hook_fire.ogg
+	sound/weapons/hook_fire.wav
+	sound/weapons/hook_impact.wav
 	sound/weapons/lasergun_fire.ogg
 	sound/weapons/laserimpact.ogg
 	sound/weapons/minstanexfire.ogg
@@ -531,6 +524,7 @@ COMPAT_FILES="
 	sound/weapons/uzi_fire.ogg
 	sound/weapons/weaponpickup.ogg
 	sound/weapons/weapon_switch.ogg
+	textures/hlac.tga
 	textures/hookgun_gloss.tga
 	textures/hookgun_norm.tga
 	textures/hookgun_pants.tga
@@ -545,14 +539,23 @@ COMPAT_FILES="
 	textures/portalgun_glow.tga
 	textures/portalgun_norm.tga
 	textures/portalgun.tga
-	textures/hlac.tga
+	textures/portals/portals_blue_gloss.tga
+	textures/portals/portals_blue_glow.tga
+	textures/portals/portals_blue_norm.tga
+	textures/portals/portals_blue.tga
+	textures/portals/portals_blue_vortex.tga
+	textures/portals/portals_inactive.tga
+	textures/portals/portals_inactive_vortex.tga
+	textures/portals/portals_red_gloss.tga
+	textures/portals/portals_red_glow.tga
+	textures/portals/portals_red_norm.tga
+	textures/portals/portals_red.tga
+	textures/portals/portals_red_vortex.tga
 	textures/seeker_gloss.tga
 	textures/seeker_glow.tga
 	textures/seeker_norm.tga
 	textures/seeker_pants.tga
 	textures/seeker.tga
-	sound/weapons/hook_fire.wav
-	sound/weapons/hook_impact.wav
 "
 
 rev=`svnversion`
