@@ -141,6 +141,7 @@ void target_objective_decrease_activate()
 			WaypointSprite_UpdateSprites(spr, "as-defend", "as-destroy", "as-destroy");
 		else
 			WaypointSprite_UpdateSprites(spr, "as-defend", "as-push", "as-push");
+		WaypointSprite_UpdateTeamRadar(spr, RADARICON_OBJECTIVE, '1 0.5 0');
 	}
 }
 
@@ -256,8 +257,7 @@ void spawnfunc_target_assault_roundstart() {
 	assault_attacker_team = COLOR_TEAM1;
 	self.classname = "target_assault_roundstart";
 	self.use = assault_roundstart_use;
-	self.think = assault_roundstart_use;
-	self.nextthink = time + 0.1;
+	InitializeEntity(self, assault_roundstart_use, INITPRIO_FINDTARGET);
 }
 
 // trigger new round

@@ -1,4 +1,5 @@
-// TODO add assault's colormodding to this, make assault redirect to this one
+.entity sprite;
+
 // TODO add the fields this uses to the entities.def when done
 
 .string mdl_dead; // or "" to hide when broken
@@ -133,6 +134,11 @@ void func_breakable_damage(entity inflictor, entity attacker, float damage, floa
 {
 	if(self.state == 1)
 		return;
+	if(self.team)
+		if(attacker.team == self.team)
+			return;
+	if(self.sprite)
+		WaypointSprite_Ping(self.sprite);
 	self.health = self.health - damage;
 	if(self.health < 0)
 	{
