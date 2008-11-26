@@ -142,7 +142,13 @@ void Draw_WaypointSprite()
 		// scale it to be just in view
 		vector d;
 		float f1, f2;
-		d = o - '0.5 0 0' * vid_conwidth - '0 0.5 0' * vid_conheight;
+
+		// get the waypoint angle vector
+		d_x = view_right * (self.origin - view_origin) * cvar("vid_pixelheight") * vid_conwidth / vid_width;
+		d_y = -view_up * (self.origin - view_origin) * vid_conheight / vid_height;
+		d_z = 0;
+		
+		//d = o - '0.5 0 0' * vid_conwidth - '0 0.5 0' * vid_conheight;
 
 		f1 = d_x / vid_conwidth;
 		f2 = d_y / vid_conheight;
