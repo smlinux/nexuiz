@@ -694,20 +694,25 @@ This entity ends the current assault round if triggered or if the timelimit is r
 Ending a round means swapping attacker/defender teams, resetting objectives and rewarding the winning team.
 Every assault map needs this entity. There should only be one per map.
 -------- KEYS --------
-health: Time in seconds how long a round in assault shall last. Default is 300 seconds.
 targetname: Name to target this entity
 */
 
 /*QUAKED target_assault_roundstart (.5 0 .5) (-8 -8 -8) (8 8 8) 
 This entity triggers its targets whenever a new assault round is started. This can be used to e.g. activate the first objective.
 -------- KEYS --------
-target: targetname of the entity/entities to be triggered
+target: targetname of entities to be enabled/triggered on round start (e.g. the first target_objective)
+target2: targetname of entities to be enabled/triggered on round start (e.g. the func_assault_destructibles targeting the target_objective)
+target3: targetname of entities to be enabled/triggered on round start
+target4: targetname of entities to be enabled/triggered on round start
 */
 
 /*QUAKED target_objective (.5 0 .5) (-8 -8 -8) (8 8 8) 
 target_objective controls an objective. Once triggered the objective is active and has 100 "health" points. If this "health" falls below zero it is assumed this objective has been fulfilled and entities targeted will be triggered (e.g. to activate the next objective or to end this round). Use target_objective_decrease to decrease the objective health.
 -------- KEYS --------
-target: targetname of the entity to be triggered once this objective is fulfilled.
+target: targetname of entities to be enabled/triggered on objective fulfilling (e.g. the next target_objective, or target_assault_roundend)
+target2: targetname of entities to be enabled/triggered on objective fulfilling (e.g. the func_assault_destructibles targeting the target_objective)
+target3: targetname of entities to be enabled/triggered on objective fulfilling
+target4: targetname of entities to be enabled/triggered on objective fulfilling
 targetname: targetname for this entity so it can be triggered by other entities.
 */
 
@@ -717,7 +722,7 @@ If you want e.g. two events to happen to conquer an objective you'd need two tar
 -------- KEYS --------
 target: The targetname of the target_objective you want to manipulate.
 targetname: Name for other entities to target this entity.
-dmg: The amount of "health"-points you want to subtract from the objective health. Defaults to 101.
+dmg: The amount of "health"-points you want to subtract from the objective health. Defaults to 101. Also used as score for triggering this objective.
 */
 
 /*QUAKED target_position (0 .5 0) (-8 -8 -8) (8 8 8) 
