@@ -130,12 +130,18 @@ sprite()
 		shift
 		shift
 		pngsprite "${name}_frame$frame" "$color" "$bgcolor" "$text"
+		convert "${name}_frame$frame.png" "${name}_frame$frame.tga"
 		args="$args -sprite ${name}_frame$frame.png $(($sprwidth / 2)) $(($sprheight - 1)) $interval"
 		frame=$(($frame + 1))
 	done
 	./makespr32 -o "$name.sp2" -proj 5 -group $args
 }
 
+sprite as-push            "PUSH"          ff8000 000000 0.0
+sprite as-destroy         "DESTROY"       ff8000 000000 0.0
+sprite as-defend          "DEFEND"        0080ff 000000 0.0
+sprite bluebase           "BLUE BASE"     0000ff 000000 0.0
+sprite bluebase           "BLUE BASE"     0000ff 000000 0.0
 sprite bluebase           "BLUE BASE"     0000ff 000000 0.0
 sprite danger             "DANGER"        ff0000 ffff00 0.0
 sprite flagcarrier        "FLAG CARRIER"  ffff00 000000 0.0
