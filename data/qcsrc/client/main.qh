@@ -139,4 +139,4 @@ float vote_waiting_for_me;
 float current_zoomfraction;
 
 float cs_project_is_b0rked;
-float vid_width, vid_height;
+float vid_width, vid_height, vid_pixelheight;

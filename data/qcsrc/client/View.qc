@@ -175,7 +175,7 @@ vector GetCurrentFov(float fov)
 
 	float frustumx, frustumy, fovx, fovy;
 	frustumy = tan(fov * 0.00872664625997164788) * 0.75 * current_viewzoom;
-	frustumx = frustumy * vid_width / vid_height / cvar("vid_pixelheight");
+	frustumx = frustumy * vid_width / vid_height / vid_pixelheight;
 	fovx = atan2(frustumx, 1) / 0.00872664625997164788;
 	fovy = atan2(frustumy, 1) / 0.00872664625997164788;
 
@@ -292,6 +292,7 @@ void CSQC_UpdateView(float w, float h)
 	// Set the console size vars
 	vid_conwidth = cvar("vid_conwidth");
 	vid_conheight = cvar("vid_conheight");
+	vid_pixelheight = cvar("vid_pixelheight");
 
 	// fetch this one only once per frame
 	sbar_showbinds = cvar("sbar_showbinds");
