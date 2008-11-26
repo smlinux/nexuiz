@@ -480,17 +480,13 @@ void SV_ParseClientCommand(string s) {
 	}
 }
 
-void ReadyRestart()
+void ReadyRestartForce()
 {
 	local entity e;
 
 	bprint("^1Server is restarting...\n");
 
 	VoteReset();
-
-	// no arena, assault support yet...
-	if(g_arena | g_assault | gameover | intermission_running | race_completing)
-		localcmd("restart\n");
 
 	// clear overtime
 	if(checkrules_overtimeend)
@@ -539,12 +535,21 @@ void ReadyRestart()
 	//reset map immediately if this cvar is not set
 	if (!cvar("sv_ready_restart_after_countdown"))
 		reset_map();
-
-	// reset ALL scores
-	Score_ClearAll();
 	
 	if(cvar("sv_eventlog"))
 		GameLogEcho(":restart");
+}
+
+void ReadyRestart()
+{
+	// no arena, assault support yet...
+	if(g_arena | g_assault | gameover | intermission_running | race_completing)
+		localcmd("restart\n");
+
+	// reset ALL scores
+	Score_ClearAll();
+
+	ReadyRestartForce();
 }
 
 /**

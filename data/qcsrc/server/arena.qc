@@ -18,6 +18,8 @@ void dom_controlpoint_setup();
 void onslaught_generator_reset();
 void onslaught_controlpoint_reset();
 void func_breakable_reset();
+void assault_objective_reset();
+void target_assault_roundend_reset();
 
 /**
  * Resets the state of all clients, items, flags, runes, keys, weapons, waypoints, ... of the map.
@@ -108,9 +110,25 @@ void reset_map()
 		{
 			self.team = self.team_saved;
 		}
-		else if(self.classname == "func_breakable" || self.classname == "func_assault_destructible")
+		else if(self.classname == "func_breakable")
 		{
 			func_breakable_reset();
+		}
+		else if(self.classname == "func_assault_destructible")
+		{
+			func_breakable_reset();
+		}
+		else if(self.classname == "target_objective")
+		{
+			assault_objective_reset();
+		}
+		else if(self.classname == "target_assault_roundend")
+		{
+			target_assault_roundend_reset();
+		}
+		else if(self.classname == "target_assault_roundstart")
+		{
+			self.use();
 		}
 	}
 

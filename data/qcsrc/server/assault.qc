@@ -1,39 +1,24 @@
 void spawnfunc_func_breakable();
+void target_objective_decrease_activate();
+.entity assault_decreaser;
+.entity sprite;
 
-//=============================================================================
-
-/*QUAKED spawnfunc_info_player_attacker (1 0 0) (-16 -16 -24) (16 16 45) INITIAL
-Normal attacker spawning location for Nexuiz Asssault
--------- KEYS --------
-angle : direction in which player will look when spawning in the game. Does not apply to bots.
-target : this should point to a spawnfunc_target_objective to decide when this spawning point is active.
-nobots : when set to 1, bots will never use this spawn point to respawn in the game.
-nohumans : when set to 1, human players will never use this spawn point to respawn in the game.
-notfree : when set to 1, entity will not spawn in "Free for all" and "Tournament" modes.
-notteam : when set to 1, entity will not spawn in "Teamplay" and "CTF" modes.
-notsingle : when set to 1, entity will not spawn in Single Player mode (bot play mode).
--------- SPAWNFLAGS --------
-INITIAL : makes the spawnpoint the initial place for the player to spawn at the beginning of the game.*/
 void spawnfunc_info_player_attacker() {
+	if(!g_assault)
+	{
+		remove(self);
+		return;
+	}
 	self.team = COLOR_TEAM1; // red, gets swapped every round
 	spawnfunc_info_player_deathmatch();
 }
 
-//=============================================================================
-
-/*QUAKED spawnfunc_info_player_defender (0 1 0) (-16 -16 -24) (16 16 45) INITIAL
-Normal defender spawning location for Nexuiz Asssault
--------- KEYS --------
-angle : direction in which player will look when spawning in the game. Does not apply to bots.
-target : this should point to a spawnfunc_target_objective to decide when this spawning point is active.
-nobots : when set to 1, bots will never use this spawn point to respawn in the game.
-nohumans : when set to 1, human players will never use this spawn point to respawn in the game.
-notfree : when set to 1, entity will not spawn in "Free for all" and "Tournament" modes.
-notteam : when set to 1, entity will not spawn in "Teamplay" and "CTF" modes.
-notsingle : when set to 1, entity will not spawn in Single Player mode (bot play mode).
--------- SPAWNFLAGS --------
-INITIAL : makes the spawnpoint the initial place for the player to spawn at the beginning of the game.*/
 void spawnfunc_info_player_defender() {
+	if(!g_assault)
+	{
+		remove(self);
+		return;
+	}
 	self.team = COLOR_TEAM2; // blue, gets swapped every round
 	spawnfunc_info_player_deathmatch();
 }
@@ -45,123 +30,127 @@ void assault_objective_reset() {
 }
 
 void assault_objective_use() {
+	if(other.classname == "info_player_deathmatch") // a spawn, a spawn
+		return;
+
 	// activate objective
 	self.health = 100;
-	self.nextthink = time + 0.1;
-}
+	print("^2Activated objective ", self.targetname, "=", etos(self), "\n");
+	print("Activator is ", activator.classname, "\n");
 
-void assault_objective_think() {
-	if(self.health < 0) {
-		//self.effects = 0;
-		activator = self;
-		SUB_UseTargets();
-	} else {
-		//self.effects = EF_STARDUST;
-		self.nextthink = time + 0.1;
+	entity oldself;
+	oldself = self;
+
+	for(self = world; (self = find(self, target, oldself.targetname)); )
+	{
+		if(self.classname == "target_objective_decrease")
+			target_objective_decrease_activate();
 	}
 
+	self = oldself;
 }
-//=============================================================================
 
-/*QUAKED spawnfunc_target_objective (0 .5 0) (-8 -8 -8) (8 8 8)
-Objective controller for Nexuiz Assault. When active it has 100 health. If it falls below 0 then
-it'll trigger the next targeted entity (usually the next objective or spawnfunc_target_assault_roundend etc.)
--------- KEYS --------
-targetname : point to e.g. next objective*/
 void spawnfunc_target_objective() {
 	self.classname = "target_objective";
-	self.think = assault_objective_think;
 	self.use = assault_objective_use;
 	assault_objective_reset();
-}
-
-float assault_objective_decrease_customizeforclient() {
-	if(!self.spawnflags)
-		return FALSE;
-
-	if(self.cnt == 0) {
-		if(other.team == assault_attacker_team)
-			if(self.spawnflags == 1)
-				setmodel(self, "models/sprites/push.sp2");
-			else
-				setmodel(self, "models/sprites/destroy.sp2");
-		else
-			setmodel(self, "models/sprites/defend.sp2");
-	} else {
-		return FALSE;
-	}
-	return TRUE;
-}
-
-
-void assault_objective_decrease_think() {
-
-	local entity objective;
-	local float found;
-	found = 0;
-	objective = find(world, targetname, self.target);
-	while(objective && found == 0) {
-		if(objective.classname == "target_objective") {
-			found = 1;
-			if(objective.health < ASSAULT_VALUE_INACTIVE) { // targeted objective is active
-				if(self.cnt == 1 && self.max_health >= ASSAULT_VALUE_INACTIVE) {
-					// decrease was fired already, but objective did recover (round reset)
-					self.cnt = 0;
-				}
-			} else { // objective isn't active
-				self.cnt = 1;
-			}
-			self.max_health = objective.health; // save current objective status for next think
-		}
-	}
-
-	if(!self.spawnflags) {
-		local entity ent;
-		ent = find(world, target, self.targetname);
-		if(ent) {
-			if(ent.classname == "func_assault_destructible")
-				self.spawnflags = 2;
-			else
-				self.spawnflags = 1;
-		}
-	}
-
-	self.nextthink = time + 0.2;
 }
 
 
 // decrease the health of targeted objectives
 void assault_objective_decrease_use() {
-	if(other.classname == "info_player_deathmatch") // a spawn, a spawn
-		return;
-
-	if(self.cnt > 0) {
-		// did already fire
-		return;
-	}
-
 	if(activator.team != assault_attacker_team) {
 		// wrong team triggered decrease
 		return;
 	}
 
-	local entity ent;
-	ent = find(world, targetname, self.target);
-	while(ent) {
-		if(ent.health > 0 && ent.health < ASSAULT_VALUE_INACTIVE)
-			ent.health = ent.health - self.dmg;
-		ent = find(ent, targetname, self.target);
+	if(other.sprite.classname == "assault_decreaser_sprite")
+		WaypointSprite_Disown(other.sprite, waypointsprite_deadlifetime);
+
+	if(self.enemy.health < ASSAULT_VALUE_INACTIVE)
+	{
+		if(self.enemy.health - self.dmg > 0.5)
+		{
+			PlayerTeamScore_Add(activator, SP_SCORE, ST_SCORE, self.dmg);
+			self.enemy.health = self.enemy.health - self.dmg;
+		}
+		else
+		{
+			PlayerTeamScore_Add(activator, SP_SCORE, ST_SCORE, self.enemy.health);
+			PlayerTeamScore_Add(activator, SP_ASSAULT_OBJECTIVES, ST_ASSAULT_OBJECTIVES, 1);
+			self.enemy.health = -1;
+
+			entity oldself, oldactivator;
+
+			oldself = self;
+			self = oldself.enemy;
+				oldactivator = activator;
+				activator = oldself;
+					SUB_UseTargets();
+				activator = oldactivator;
+			self = oldself;
+		}
+	}
+}
+
+void assault_setenemytoobjective()
+{
+	local entity objective;
+	for(objective = world; (objective = find(objective, targetname, self.target)); ) {
+		if(objective.classname == "target_objective") {
+			if(self.enemy == world)
+				self.enemy = objective;
+			else
+				objerror("more than one objective as target - fix the map!");
+			break;
+		}
 	}
 
-	self.cnt = 1;
+	if(self.enemy == world)
+		objerror("no objective as target - fix the map!");
+}
+
+float assault_decreaser_sprite_visible(entity e)
+{
+	entity decreaser;
+	entity object;
+
+	decreaser = self.assault_decreaser;
+
+	if(decreaser.enemy.health >= ASSAULT_VALUE_INACTIVE)
+		return FALSE;
+
+	return TRUE;
+}
+
+void target_objective_decrease_activate()
+{
+	entity ent, spr;
+	self.owner = world;
+	for(ent = world; (ent = find(ent, target, self.targetname)); )
+	{
+		if(ent.sprite != world)
+			WaypointSprite_Disown(ent.sprite, waypointsprite_deadlifetime);
+
+		spr = WaypointSprite_SpawnFixed("<placeholder>", 0.5 * (ent.absmin + ent.absmax), ent, sprite);
+		spr.assault_decreaser = self;
+		spr.waypointsprite_visible_for_player = assault_decreaser_sprite_visible;
+		spr.classname = "assault_decreaser_sprite";
+		WaypointSprite_UpdateRule(spr, assault_attacker_team, SPRITERULE_TEAMPLAY);
+		if(ent.classname == "func_assault_destructible")
+			WaypointSprite_UpdateSprites(spr, "as-defend", "as-destroy", "as-destroy");
+		else
+			WaypointSprite_UpdateSprites(spr, "as-defend", "as-push", "as-push");
+	}
+}
+
+void target_objective_decrease_findtarget()
+{
+	assault_setenemytoobjective();
 }
 
 //=============================================================================
 
-/*QUAKED target_objective_decrease (0 .5 0) (-8 -8 -8) (8 8 8)
-When triggered decreases health of the targeted spawnfunc_target_objective.
--------- KEYS --------
-targetname : point to a spawnfunc_target_objective entity*/
 void spawnfunc_target_objective_decrease() {
 
 	self.classname = "target_objective_decrease";
@@ -173,29 +162,12 @@ void spawnfunc_target_objective_decrease() {
 	if(!self.dmg) {
 		self.dmg = 101;
 	}
-	self.cnt = 0; // not used yet
 	self.use = assault_objective_decrease_use;
-	self.mdl = "models/sprites/here.sp2";
-	self.effects = EF_NODEPTHTEST;
 	self.health = ASSAULT_VALUE_INACTIVE;
 	self.max_health = ASSAULT_VALUE_INACTIVE;
-	self.think = assault_objective_decrease_think;
-	self.customizeentityforclient = assault_objective_decrease_customizeforclient;
-	self.nextthink = time;
-}
+	self.enemy = world;
 
-
-void assault_destructible_reset() {
-	self.health = self.max_health;
-	self.model = self.mdl;
-	self.solid = SOLID_BSP;
-	self.colormod = '1 1 1';
-	self.cnt = 0; // not active
-	if(self.spawnflags)
-	{
-		activator = self;
-		self.use();
-	}
+	InitializeEntity(self, target_objective_decrease_findtarget, INITPRIO_FINDTARGET);
 }
 
 // destructible walls that can be used to trigger target_objective_decrease
@@ -205,17 +177,7 @@ void spawnfunc_func_assault_destructible() {
 }
 
 void assault_wall_think() {
-	local entity ent;
-	local float notvisible;
-	notvisible = 0;
-	ent = find(world, targetname, self.target);
-	while(ent) {
-		if(ent.classname == "target_objective" && ent.health < 0)
-			notvisible = 1;
-		ent = find(ent, targetname, self.target);
-	}
-
-	if(notvisible) {
+	if(self.enemy.health < 0) {
 		self.model = "";
 		self.solid = SOLID_NOT;
 	} else {
@@ -233,6 +195,7 @@ void spawnfunc_func_assault_wall() {
 	self.solid = SOLID_BSP;
 	self.think = assault_wall_think;
 	self.nextthink = time;
+	InitializeEntity(self, assault_setenemytoobjective, INITPRIO_FINDTARGET);
 }
 
 
@@ -261,27 +224,27 @@ void assault_roundstart_use() {
 	activator = self;
 	SUB_UseTargets();
 
-/*
+	/*
 #ifdef TTURRETS_ENABLED
-    entity ent,oldself;
+entity ent,oldself;
 
 	//(Re)spawn all turrets
 	oldself = self;
 	ent = find(world, classname, "turret_main");
 	while(ent) {
-	    // Swap turret teams
-        if(ent.team == COLOR_TEAM1)
-            ent.team = COLOR_TEAM2;
-        else
-            ent.team = COLOR_TEAM1;
+	// Swap turret teams
+	if(ent.team == COLOR_TEAM1)
+	ent.team = COLOR_TEAM2;
+	else
+	ent.team = COLOR_TEAM1;
 
-        self = ent;
+	self = ent;
 
-        // Dubbles as teamchange
-        turret_stdproc_respawn();
-        //ent.turret_spawnfunc();
+	// Dubbles as teamchange
+	turret_stdproc_respawn();
+	//ent.turret_spawnfunc();
 
-		ent = find(ent, classname, "turret_main");
+	ent = find(ent, classname, "turret_main");
 	}
 	self = oldself;
 #endif
@@ -300,24 +263,12 @@ void spawnfunc_target_assault_roundstart() {
 // trigger new round
 // reset objectives, toggle spawnpoints, reset triggers, ...
 void assault_new_round() {
+	bprint("ASSAULT: new round\n");
 
 	// up round counter
 	self.winning = self.winning + 1;
 	// set end time for next round
 	self.cnt = time + self.health;
-
-	// swap spawn point teams
-	local entity ent;
-	local entity oldself;
-
-	// reward attackers for winning the round
-	ent = find(world, classname, "player");
-	while(ent) {
-		if(ent.team == assault_attacker_team) {
-			UpdateFrags(ent, 10);
-		}
-		ent = find(ent, classname, "player");
-	}
 
 	// swap attacker/defender roles
 	if(assault_attacker_team == COLOR_TEAM1) {
@@ -326,92 +277,32 @@ void assault_new_round() {
 		assault_attacker_team = COLOR_TEAM1;
 	}
 
+	// swap spawn point teams
+	local entity ent;
+	local entity oldself;
 	ent = find(world, classname, "info_player_deathmatch");
 	while (ent)
 	{
-		oldself = self;
-		self = ent;
-		if(self.team == COLOR_TEAM1) {
-			self.team = COLOR_TEAM2;
+		if(ent.team == COLOR_TEAM1) {
+			ent.team = COLOR_TEAM2;
 		} else {
-			self.team = COLOR_TEAM1;
+			ent.team = COLOR_TEAM1;
 		}
-		self = oldself;
-
 		ent = find(ent, classname, "info_player_deathmatch");
 	}
 
-	// reset all objectives
-	ent = find(world, classname, "target_objective");
-	while (ent)
-	{
-		oldself = self;
-		self = ent;
-		assault_objective_reset();
-		self = oldself;
-
-		ent = find(ent, classname, "target_objective");
-	}
-
-	// reset round end triggers
-	ent = find(world, classname, "target_assault_roundend");
-	while (ent)
-	{
-		oldself = self;
-		self = ent;
-		target_assault_roundend_reset();
-		self = oldself;
-
-		ent = find(ent, classname, "target_assault_roundend");
-	}
-
-	// reset all target_object_decrease
-	ent = find(world, classname, "target_objective_decrease");
-	while (ent)
-	{
-		ent.cnt = 0;
-		ent = find(ent, classname, "target_objective_decrease");
-	}
-
-	// reset all spawnfunc_func_assault_destructible
+	// swap all destructibles
 	ent = find(world, classname, "func_assault_destructible");
 	while (ent)
 	{
-		oldself = self;
-		self = ent;
-
-        if(ent.team == COLOR_TEAM1)
-            ent.team = COLOR_TEAM2;
-        else
-            ent.team = COLOR_TEAM1;
-
-		assault_destructible_reset();
-		self = oldself;
+		if(ent.team == COLOR_TEAM1)
+			ent.team = COLOR_TEAM2;
+		else
+			ent.team = COLOR_TEAM1;
 		ent = find(ent, classname, "func_assault_destructible");
 	}
 
-	ent = find(world, classname, "target_assault_roundstart");
-	while (ent)
-	{
-		oldself = self;
-		self = ent;
-		self.use();
-		self = oldself;
-		ent = find(ent, classname, "target_assault_roundstart");
-	}
-
-	// actually restart round... how to do that?
-	ent = find(world, classname, "player");
-	while(ent) {
-		oldself = self;
-		self = ent;
-		PutClientInServer();
-		self = oldself;
-		ent = find(ent, classname, "player");
-
-	}
-
-
+	// reset the level with a countdown
+	cvar_set("timelimit", ftos(ceil(time - game_starttime) / 60));
+	ReadyRestartForce(); // sets game_starttime
 }
-
-

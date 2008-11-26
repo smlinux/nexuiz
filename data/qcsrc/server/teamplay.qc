@@ -284,6 +284,7 @@ void InitGameplayMode()
 		game = GAME_ASSAULT;
 		gamemode_name = "Assault";
 		ActivateTeamplay();
+		ScoreRules_assault();
 	}
 
 	if(g_onslaught)

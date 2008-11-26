@@ -1270,15 +1270,10 @@ float WinningCondition_Assault()
 	{
 		if(ent.winning)	// round end has been triggered by attacking team
 		{
+			bprint("ASSAULT: round completed...\n");
 			SetWinners(team, assault_attacker_team);
-			if(assault_attacker_team == COLOR_TEAM1)
-			{
-				team1_score = team1_score + 50;
-			}
-			else
-			{
-				team2_score = team2_score + 50;
-			}
+
+			TeamScore_AddToTeam(assault_attacker_team, ST_ASSAULT_OBJECTIVES, 666 - TeamScore_AddToTeam(assault_attacker_team, ST_ASSAULT_OBJECTIVES, 0));
 
 			if(ent.cnt == 1) // this was the second round
 			{
@@ -1289,7 +1284,6 @@ float WinningCondition_Assault()
 				local entity oldself;
 				oldself = self;
 				self = ent;
-				cvar_set("timelimit", ftos((2*time)/60)); // FIXME use game_starttime here
 				assault_new_round();
 				self = oldself;
 			}
@@ -1297,7 +1291,6 @@ float WinningCondition_Assault()
 	}
 
 	return status;
-
 }
 
 // LMS winning condition: game terminates if and only if there's at most one
