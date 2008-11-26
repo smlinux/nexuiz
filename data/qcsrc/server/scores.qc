@@ -630,6 +630,9 @@ entity PlayerScore_Sort(.float field)
 		pbest.chain = world;
 
 		pbest.field = ++i;
+
+		print("DEBUG: place ", ftos(i), " is ", pbest.netname, "\n");
+
 		if not(pfirst)
 			pfirst = pbest;
 		if(plast)
