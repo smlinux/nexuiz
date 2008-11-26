@@ -594,6 +594,9 @@ entity PlayerScore_Sort(.float field)
 {
 	entity p, plist, pprev, pbest, pbestprev, pfirst, plast;
 	float i;
+
+	Score_NicePrint(world);
+
 	plist = world;
 
 	FOR_EACH_CLIENT(p)
