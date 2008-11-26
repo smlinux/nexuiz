@@ -1,6 +1,9 @@
 void teamradar_view();
 
+#define MAX_TEAMRADAR_TIMES 32
+
 // to make entities have dots on the team radar
 .float teamradar_icon;
-.float teamradar_time;
+.float teamradar_times[MAX_TEAMRADAR_TIMES];
+.float teamradar_time_index;
 .vector teamradar_color;

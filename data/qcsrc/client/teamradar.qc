@@ -121,20 +121,28 @@ void(vector coord3d, vector pangles, vector rgb) draw_teamradar_player =
 	R_EndPolygon();
 };
 
-void draw_teamradar_icon(vector coord, float icon, float pingtime, vector rgb, float a)
+void draw_teamradar_icon(vector coord, float icon, entity pingdata, vector rgb, float a)
 {
 	float dt;
 	vector v;
+	float i;
 
 	coord = teamradar_texcoord_to_2dcoord(teamradar_3dcoord_to_texcoord(coord));
 	drawpic(coord - '4 4 0', strcat("gfx/teamradar_icon_", ftos(icon)), '8 8 0', rgb, a, 0);
-	if(pingtime != 0)
+
+	if(pingdata)
 	{
-		dt = time - pingtime;
-		if(dt > 1)
-			return;
-		v = '2 2 0' * teamradar_size * dt;
-		drawpic(coord - 0.5 * v, "gfx/teamradar_ping", v, '1 1 1', 1 - dt, DRAWFLAG_ADDITIVE);
+		for(i = 0; i < MAX_TEAMRADAR_TIMES; ++i)
+		{
+			dt = pingdata.(teamradar_times[i]);
+			if(dt == 0)
+				continue;
+			dt = time - dt;
+			if(dt > 1)
+				continue;
+			v = '2 2 0' * teamradar_size * dt;
+			drawpic(coord - 0.5 * v, "gfx/teamradar_ping", v, '1 1 1', 1 - dt, DRAWFLAG_ADDITIVE);
+		}
 	}
 }
 
@@ -325,7 +333,7 @@ void() teamradar_view =
 	for(tm = world; (tm = find(tm, classname, "radarlink")); )
 		draw_teamradar_link(tm.origin, tm.velocity, tm.team);
 	for(tm = world; (tm = findflags(tm, teamradar_icon, 0xFFFFFF)); )
-		draw_teamradar_icon(tm.origin, tm.teamradar_icon, tm.teamradar_time, tm.teamradar_color, tm.alpha);
+		draw_teamradar_icon(tm.origin, tm.teamradar_icon, tm, tm.teamradar_color, tm.alpha);
 	for(tm = world; (tm = find(tm, classname, "entcs_receiver")); )
 	{
 		color2 = GetPlayerColor(tm.sv_entnum);
