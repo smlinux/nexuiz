@@ -467,8 +467,15 @@ void _MapInfo_Map_ApplyGametype(string s, float pWantedType, float pThisType)
 	if(!(pThisType & pWantedType))
 		return;
 	
-	cvar_set("fraglimit", car(s));
-	s = cdr(s);
+	if(pWantedType == MAPINFO_TYPE_ASSAULT || pWantedType == MAPINFO_TYPE_ONSLAUGHT) // these modes don't use fraglimit
+	{
+		cvar_set("fraglimit", "0");
+	}
+	else
+	{
+		cvar_set("fraglimit", car(s));
+		s = cdr(s);
+	}
 
 	cvar_set("timelimit", car(s));
 	s = cdr(s);

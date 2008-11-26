@@ -201,6 +201,7 @@ void spawnfunc_func_assault_wall() {
 
 
 void target_assault_roundend_reset() {
+	print("round end reset\n");
 	self.cnt = self.cnt + 1; // up round counter
 	self.winning = 0; // up round
 }
@@ -210,10 +211,6 @@ void target_assault_roundend_use() {
 }
 
 void spawnfunc_target_assault_roundend() {
-	if(!self.health)
-		self.health = 300; // 5 minutes
-
-	cvar_set("timelimit", ftos(self.health/60));
 	self.winning = 0; // round not yet won by attackers
 	self.classname = "target_assault_roundend";
 	self.use = target_assault_roundend_use;
@@ -267,8 +264,6 @@ void assault_new_round() {
 
 	// up round counter
 	self.winning = self.winning + 1;
-	// set end time for next round
-	self.cnt = time + self.health;
 
 	// swap attacker/defender roles
 	if(assault_attacker_team == COLOR_TEAM1) {
