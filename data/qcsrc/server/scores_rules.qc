@@ -56,7 +56,7 @@ void ScoreRules_ctf()
 {
 	float sp_score, sp_caps;
 	sp_score = sp_caps = 0;
-	switch(cvar("g_ctf_win_mode"))
+	switch(g_ctf_win_mode)
 	{
 		case 0: // caps only
 			sp_caps = SFL_SORT_PRIO_PRIMARY;
