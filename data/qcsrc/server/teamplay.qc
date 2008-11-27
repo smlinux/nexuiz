@@ -228,7 +228,7 @@ void InitGameplayMode()
 		game = GAME_CTF;
 		gamemode_name = "Capture the Flag";
 		ActivateTeamplay();
-		if(g_campaign)
+		if(cvar("g_campaign"))
 			g_ctf_win_mode = 2;
 		else
 			g_ctf_win_mode = cvar("g_ctf_win_mode");
