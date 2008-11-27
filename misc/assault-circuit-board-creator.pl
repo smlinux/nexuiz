@@ -171,10 +171,10 @@ for my $i(0..@objectives - 1)
 			model => [
 				BrushRectangle
 					"dsi/dsiglass",
-					$origin[0] - 128 - 16,
+					$origin[0] - 128 - 32,
 					$origin[1] - 512,
 					$origin[2] - 512,
-					$origin[0] - 128 + 16,
+					$origin[0] - 128 + 32,
 					$origin[1] + 512,
 					$origin[2] + 512
 			];
