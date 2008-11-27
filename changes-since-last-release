@@ -16,12 +16,15 @@ game: crosshairs added
 game: crylink bounce does half damage
 game: crylink primary does 2 cells
 game: crylink weakened
+game: ctf capture records now can only be made on an otherwise empty server, prevents "assisted" records
 game: ctf flag touching when dead bug fixed
 game: ctf win mode 3 = scores, but no frags
 game: cvar cl_weaponpriority* (custom weapon orders)
 game: cvar cl_weaponpriority_useforcycling
 game: cvar g_balance_ctf_damageforcescale
+game: cvar g_balance_electro_combo_speed
 game: cvar g_balance_teams_complain can now be turned off
+game: cvar g_bugrigs*
 game: cvar g_ctf_allow_drop
 game: cvar g_ctf_fullbrightflags
 game: cvar g_instagib REMOVED (no demand)
@@ -30,8 +33,10 @@ game: cvar g_maxplayers
 game: cvar g_spawn_furthest
 game: cvar g_spawnpoints_auto_move_out_of_solid
 game: cvar g_start_delay
+game: cvar g_touchexplode
 game: cvar g_warmup
 game: cvar g_weaponreplace_*
+game: cvar sv_clones
 game: cvar sv_gentle
 game: cvar sv_maxidle
 game: cvar sv_ready_restart_after_countdown
@@ -66,6 +71,7 @@ game: rocket launcher detonation fixed when button was pressed only for a very s
 game: scoreboard improved
 game: scores per-team
 game: sounds: model specific player sounds
+game: strength and shield have better performance now
 game: sv_foginterval
 game: team radar (sv_cmd bbox, sv_cmd radarmap commands to create/debug it!)
 game: teamkill and typekill complaints
@@ -85,32 +91,38 @@ mapping: entity func_pointparticles
 mapping: entity func_sparks
 mapping: entity func_train now supports -1 wait on path_corner, making it NOT wait
 mapping: entity info_null now removes itself (as it should); this DOES break some maps that need fixing now
+mapping: entity info_player_start now triggers other entities when someone spawns
 mapping: entity misc_follow
 mapping: entity misc_laser changed and improved
 mapping: entity misc_gamemodel, func_illusionary replacing misc_models
 mapping: entity target_spawn (BEWARE OF THE)
 mapping: entity trigger_flipflop, trigger_monoflip, trigger_multivibrator
+mapping: entity trigger_heal
 mapping: entity trigger_hurt now can set a message2 as death message for push-kills
 mapping: entity trigger_items
 mapping: field nottargeted overrides targetname checks in e.g. func_door (so it can be used for misc_follow without needing an extra trigger)
 mapping: field team on items
 mapping: LOD for misc_models and similar entities
 mapping: mapname.cfg is deprecated. Use clientsettemp_for_type and cdtrack in mapname.mapinfo
-mapping: turrets
+mapping: target2, target3, target4 as extra target fields
 mapping: triggers now MUST be common/trigger; their exact shape now works (no longer their bbox)
+mapping: turrets
 mapping: zeroradiant support, bugfix patchset updated
 map: reslimed: less distracting fog
 map: some more TDM map settings
 map: starship and silvercity: no CTF
 menu: channel mixer
+menu: demo browser
 menu: game type in server browser
 menu: input box margin now in chars, not percent
-menu: multicampaign
+menu: more settings
 menu: mouse fixed in -game pro
+menu: multicampaign
 menu: new playermodel previews (sev)
 menu: new skin "wickedz"
 menu: play button in map info
 menu: server favorites
+menu: server info
 menu: skin selector
 menu: weapon priority dialog
 menuskins: big buttons as extra graphics
@@ -118,5 +130,6 @@ menuskins: COLOR_SCROLLBAR_C
 menuskins: HEIGHT_DIALOGBORDER
 menu: wicked skins
 misc: +exec benchmark.cfg
+models: specop now knows that she is female
 rcon2irc: disconnect fix
 rcon2irc: irc_trigger
