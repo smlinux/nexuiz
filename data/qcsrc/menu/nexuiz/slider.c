@@ -57,10 +57,16 @@ void setValueNexuizSlider(entity me, float val)
 }
 void loadCvarsNexuizSlider(entity me)
 {
+	if not(me.cvarName)
+		return;
+
 	me.value = cvar(me.cvarName);
 }
 void saveCvarsNexuizSlider(entity me)
 {
+	if not(me.cvarName)
+		return;
+
 	cvar_set(me.cvarName, ftos(me.value));
 }
 #endif

@@ -45,8 +45,7 @@ void configureNexuizInputBoxNexuizInputBox(entity me, float doEditColorCodes, st
 }
 void focusLeaveNexuizInputBox(entity me)
 {
-	if(me.cvarName)
-		me.saveCvars(me);
+	me.saveCvars(me);
 }
 void setTextNexuizInputBox(entity me, string new)
 {
@@ -60,10 +59,14 @@ void setTextNexuizInputBox(entity me, string new)
 }
 void loadCvarsNexuizInputBox(entity me)
 {
+	if not(me.cvarName)
+		return;
 	setTextInputBox(me, cvar_string(me.cvarName));
 }
 void saveCvarsNexuizInputBox(entity me)
 {
+	if not(me.cvarName)
+		return;
 	cvar_set(me.cvarName, me.text);
 }
 float keyDownNexuizInputBox(entity me, float key, float ascii, float shift)

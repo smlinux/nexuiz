@@ -43,10 +43,16 @@ void setCheckedNexuizCrosshairButton(entity me, float val)
 }
 void loadCvarsNexuizCrosshairButton(entity me)
 {
+	if not(me.cvarName)
+		return;
+
 	me.checked = (cvar(me.cvarName) == me.cvarValueFloat);
 }
 void saveCvarsNexuizCrosshairButton(entity me)
 {
+	if not(me.cvarName)
+		return;
+
 	if(me.checked)
 		cvar_set(me.cvarName, ftos(me.cvarValueFloat));
 	// TODO on an apply button, read _cl_color and execute the color command for it

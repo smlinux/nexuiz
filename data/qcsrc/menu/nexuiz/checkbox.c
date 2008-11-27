@@ -79,12 +79,19 @@ void setCheckedNexuizCheckBox(entity me, float val)
 void loadCvarsNexuizCheckBox(entity me)
 {
 	float m, d;
+
+	if not(me.cvarName)
+		return;
+
 	m = (me.yesValue + me.noValue) * 0.5;
 	d = (cvar(me.cvarName) - m) / (me.yesValue - m);
 	me.checked = (d > 0);
 }
 void saveCvarsNexuizCheckBox(entity me)
 {
+	if not(me.cvarName)
+		return;
+
 	if(me.checked)
 		cvar_set(me.cvarName, ftos(me.yesValue));
 	else

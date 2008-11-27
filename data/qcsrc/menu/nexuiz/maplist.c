@@ -34,7 +34,6 @@ CLASS(NexuizMapList) EXTENDS(NexuizListBox)
 
 	ATTRIB(NexuizMapList, startButton, entity, NULL)
 
-	ATTRIB(NexuizMapList, cvarName, string, "dummy")
 	METHOD(NexuizMapList, loadCvars, void(entity))
 
 	ATTRIB(NexuizMapList, typeToSearchString, string, string_null)

@@ -49,10 +49,16 @@ void setValueNexuizTextSlider(entity me, float val)
 }
 void loadCvarsNexuizTextSlider(entity me)
 {
+	if not(me.cvarName)
+		return;
+
 	me.setValueFromIdentifier(me, cvar_string(me.cvarName));
 }
 void saveCvarsNexuizTextSlider(entity me)
 {
+	if not(me.cvarName)
+		return;
+
 	if(me.value >= 0 && me.value < me.nValues)
 		cvar_set(me.cvarName, me.getIdentifier(me));
 }

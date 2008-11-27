@@ -46,6 +46,9 @@ void setCheckedNexuizColorButton(entity me, float val)
 }
 void loadCvarsNexuizColorButton(entity me)
 {
+	if not(me.cvarName)
+		return;
+
 	if(me.cvarPart == 1)
 		me.checked = (cvar(me.cvarName) & 240) == me.cvarValueFloat * 16;
 	else
@@ -53,6 +56,9 @@ void loadCvarsNexuizColorButton(entity me)
 }
 void saveCvarsNexuizColorButton(entity me)
 {
+	if not(me.cvarName)
+		return;
+
 	if(me.checked)
 	{
 		if(me.cvarPart == 1)

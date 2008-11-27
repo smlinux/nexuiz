@@ -51,7 +51,10 @@ void setCheckedNexuizRadioButton(entity me, float val)
 void loadCvarsNexuizRadioButton(entity me)
 {
 	if(me.cvarValue)
-		me.checked = (cvar_string(me.cvarName) == me.cvarValue);
+	{
+		if(me.cvarName)
+			me.checked = (cvar_string(me.cvarName) == me.cvarValue);
+	}
 	else
 	{
 		if(me.cvarName)
@@ -91,10 +94,13 @@ void saveCvarsNexuizRadioButton(entity me)
 {
 	if(me.cvarValue)
 	{
-		if(me.checked)
-			cvar_set(me.cvarName, me.cvarValue);
-		else if(me.cvarOffValue)
-			cvar_set(me.cvarName, me.cvarOffValue);
+		if(me.cvarName)
+		{
+			if(me.checked)
+				cvar_set(me.cvarName, me.cvarValue);
+			else if(me.cvarOffValue)
+				cvar_set(me.cvarName, me.cvarOffValue);
+		}
 	}
 	else
 	{

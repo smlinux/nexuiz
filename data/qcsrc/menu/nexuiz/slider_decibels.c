@@ -58,6 +58,10 @@ entity makeNexuizDecibelsSlider(float theValueMin, float theValueMax, float theV
 void loadCvarsNexuizDecibelsSlider(entity me)
 {
 	float v;
+
+	if not(me.cvarName)
+		return;
+
 	v = cvar(me.cvarName);
 	if(v >= 0.98)
 		me.value = 0;
@@ -68,6 +72,9 @@ void loadCvarsNexuizDecibelsSlider(entity me)
 }
 void saveCvarsNexuizDecibelsSlider(entity me)
 {
+	if not(me.cvarName)
+		return;
+
 	if(me.value >= -0.1)
 		cvar_set(me.cvarName, "1");
 	if(me.value < -33)

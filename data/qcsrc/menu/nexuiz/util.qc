@@ -9,12 +9,12 @@ void SUB_Null_ee(entity e1, entity e2)
 }
 void saveCvarsOf(entity ignore, entity e)
 {
-	if(e.cvarName)
+	if(e.saveCvars)
 		e.saveCvars(e);
 }
 void loadCvarsOf(entity ignore, entity e)
 {
-	if(e.cvarName)
+	if(e.loadCvars)
 		e.loadCvars(e);
 }
 void saveAllCvars(entity root)

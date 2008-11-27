@@ -52,10 +52,16 @@ void setCheckedNexuizGametypeButton(entity me, float val)
 }
 void loadCvarsNexuizGametypeButton(entity me)
 {
+	if not(me.cvarName)
+		return;
+
 	me.checked = cvar(me.cvarName);
 }
 void saveCvarsNexuizGametypeButton(entity me)
 {
+	if not(me.cvarName)
+		return;
+
 	cvar_set(me.cvarName, ftos(me.checked));
 }
 void GameTypeButton_Click(entity me, entity other)

@@ -104,14 +104,15 @@ void loadCvarsLaserWeaponArenaWeaponButton(entity me)
 void saveCvarsLaserWeaponArenaWeaponButton(entity me)
 {
 	string suffix;
+
 	suffix = "";
 	if(me.cvarValue != "laser")
 		if(cvar("menu_weaponarena_with_laser"))
 			suffix = " laser";
 	if(me.checked)
-		cvar_set(me.cvarName, strcat(me.cvarValue, suffix));
+		cvar_set("g_weaponarena", strcat(me.cvarValue, suffix));
 	else
-		cvar_set(me.cvarName, me.cvarOffValue);
+		cvar_set("g_weaponarena", me.cvarOffValue);
 }
 
 .void(entity) draw_weaponarena;
