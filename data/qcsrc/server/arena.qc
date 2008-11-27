@@ -126,19 +126,22 @@ void reset_map()
 		{
 			target_assault_roundend_reset();
 		}
-		else if(self.classname == "target_assault_roundstart")
-		{
-			self.use();
-		}
 	}
 
-	// Waypoints come LAST (keyhunt keys reference them)
+	// Waypoints and assault start come LAST
 	for(self = world; (self = nextent(self)); )
+	if(clienttype(self) == CLIENTTYPE_NOTACLIENT)
+	{
 		if(self.classname == "sprite_waypoint")
 		{
 			if(self.health | g_keyhunt)
 				WaypointSprite_Kill(self);
 		}
+		else if(self.classname == "target_assault_roundstart")
+		{
+			self.use();
+		}
+	}
 
 	// Moving the player reset code here since the player-reset depends
 	// on spawnpoint entities which have to be reset first --blub

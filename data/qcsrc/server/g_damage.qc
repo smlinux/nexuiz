@@ -432,8 +432,8 @@ void Obituary (entity attacker, entity inflictor, entity targ, float deathtype)
 		else
 		{
 			centerprint(targ, "^1Watch your step!\n\n\n");
-			if (deathtype == DEATH_HURTTRIGGER && attacker.message != "")
-				bprint ("^1",s, "^1 ", attacker.message, "\n");
+			if (deathtype == DEATH_HURTTRIGGER && inflictor.message != "")
+				bprint ("^1",s, "^1 ", inflictor.message, "\n");
 			else if (deathtype == DEATH_DROWN)
 				if(sv_gentle)
 					bprint ("^1",s, "^1 was in the water for too long\n");

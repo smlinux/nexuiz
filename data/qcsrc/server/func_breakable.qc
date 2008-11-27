@@ -1,6 +1,9 @@
 .entity sprite;
 
-// TODO add the fields this uses to the entities.def when done
+.float dmg;
+.float dmg_edge;
+.float dmg_radius;
+.float dmg_force;
 
 .string mdl_dead; // or "" to hide when broken
 .string debris; // space separated list of debris models
@@ -117,7 +120,15 @@ void func_breakable_restore()
 void func_breakable_destroy() {
 	float n, i;
 
+	activator = self.owner;
+
 	func_breakable_destroyed();
+
+	if(self.noise)
+		sound (self, CHAN_AUTO, self.noise, VOL_BASE, ATTN_NORM);
+
+	if(self.dmg)
+		RadiusDamage(self, activator, self.dmg, self.dmg_edge, self.dmg_radius, self, self.dmg_force, DEATH_HURTTRIGGER, world);
 
 	// now throw around the debris
 	n = tokenize_sane(self.debris);
@@ -140,12 +151,10 @@ void func_breakable_damage(entity inflictor, entity attacker, float damage, floa
 	if(self.sprite)
 		WaypointSprite_Ping(self.sprite);
 	self.health = self.health - damage;
-	if(self.health < 0)
-	{
-		activator = attacker;
-		func_breakable_destroy();
-	}
 	func_breakable_colormod();
+
+	if(self.health < 0)
+		W_PrepareExplosionByDamage(attacker, func_breakable_destroy);
 }
 
 void func_breakable_reset()
@@ -169,6 +178,15 @@ void spawnfunc_func_breakable() {
 	if(self.count == 0)
 		self.count = 1;
 
+	if(!self.message)
+		self.message = "got too close to an explosion";
+	if(!self.message2)
+		self.message2 = "was pushed into an explosion by";
+	if(!self.dmg_radius)
+		self.dmg_radius = 150;
+	if(!self.dmg_force)
+		self.dmg_force = 200;
+
 	self.mdl = self.model;
 	SetBrushEntityModel();
 	self.mins_save = self.mins;
@@ -182,6 +200,8 @@ void spawnfunc_func_breakable() {
 	n = tokenize_sane(self.debris);
 	for(i = 0; i < n; ++i)
 		precache_model(argv(i));
+	if(self.noise)
+		precache_sound(self.noise);
 
 	func_breakable_reset();
 }

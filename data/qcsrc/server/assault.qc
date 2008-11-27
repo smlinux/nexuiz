@@ -1,7 +1,7 @@
 void spawnfunc_func_breakable();
 void target_objective_decrease_activate();
 .entity assault_decreaser;
-.entity sprite;
+.entity assault_sprite;
 
 void spawnfunc_info_player_attacker() {
 	if(!g_assault)
@@ -64,8 +64,10 @@ void assault_objective_decrease_use() {
 		return;
 	}
 
-	if(other.sprite.classname == "assault_decreaser_sprite")
-		WaypointSprite_Disown(other.sprite, waypointsprite_deadlifetime);
+	if(other.assault_sprite.classname == "assault_decreaser_sprite")
+		WaypointSprite_Disown(other.assault_sprite, waypointsprite_deadlifetime);
+	else
+		return; // already activated! cannot activate again!
 
 	if(self.enemy.health < ASSAULT_VALUE_INACTIVE)
 	{
@@ -129,10 +131,10 @@ void target_objective_decrease_activate()
 	self.owner = world;
 	for(ent = world; (ent = find(ent, target, self.targetname)); )
 	{
-		if(ent.sprite != world)
-			WaypointSprite_Disown(ent.sprite, waypointsprite_deadlifetime);
+		if(ent.assault_sprite != world)
+			WaypointSprite_Disown(ent.assault_sprite, waypointsprite_deadlifetime);
 
-		spr = WaypointSprite_SpawnFixed("<placeholder>", 0.5 * (ent.absmin + ent.absmax), ent, sprite);
+		spr = WaypointSprite_SpawnFixed("<placeholder>", 0.5 * (ent.absmin + ent.absmax), ent, assault_sprite);
 		spr.assault_decreaser = self;
 		spr.waypointsprite_visible_for_player = assault_decreaser_sprite_visible;
 		spr.classname = "assault_decreaser_sprite";
@@ -155,10 +157,6 @@ void target_objective_decrease_findtarget()
 void spawnfunc_target_objective_decrease() {
 
 	self.classname = "target_objective_decrease";
-
-	precache_model("models/sprites/defend.sp2");
-	precache_model("models/sprites/destroy.sp2");
-	precache_model("models/sprites/push.sp2");
 
 	if(!self.dmg) {
 		self.dmg = 101;

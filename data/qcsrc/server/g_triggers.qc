@@ -86,16 +86,17 @@ void SUB_UseTargets()
 		switch(i)
 		{
 			default:
-			case 0: s = self.target; break;
-			case 1: s = self.target2; break;
-			case 2: s = self.target3; break;
-			case 3: s = self.target4; break;
+			case 0: s = stemp.target; break;
+			case 1: s = stemp.target2; break;
+			case 2: s = stemp.target3; break;
+			case 3: s = stemp.target4; break;
 		}
 		if (s != "")
 		{
 			for(t = world; (t = find(t, targetname, s)); )
 			if(t.use)
 			{
+				print(stemp.classname, " ", stemp.targetname, " -> ", t.classname, " ", t.targetname, "\n");
 				self = t;
 				other = stemp;
 				activator = act;

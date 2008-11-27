@@ -1165,6 +1165,13 @@ mdl: particle effect name to show when destroyed
 count: particle effect multiplier
 mdl_dead: optional replacement model to show when destroyed
 debris: names of debris models to show when destroyed, separated by spaces
+noise: sound to play when destroyed
+dmg: damage to deal to the environment when destroyed
+dmg_edge: edge damage to deal to the environment when destroyed
+dmg_radius: damage radius
+dmg_force: damage force
+message: death message when a player gets hit by the explosion
+message2: death message when someone gets pushed into this (default: "was pushed into an explosion by"). The # character is replaced by the attacker name if present (and it instead does not get appended to the end)
 -------- SPAWNFLAGS --------
 DISABLED: do not allow damaging this until it is first activated
 INDICATE: indicate amount of damage already taken by coloring

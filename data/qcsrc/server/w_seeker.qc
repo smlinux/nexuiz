@@ -33,7 +33,7 @@ void Seeker_Missile_Touch()
 void Seeker_Missile_Think()
 {
 	entity e;
-	vector desireddir, olddir, newdir;
+	vector desireddir, olddir, newdir, eorg;
 	float turnrate;
 	float dist;
 
@@ -56,10 +56,11 @@ void Seeker_Missile_Think()
 	if (self.enemy != world)
 	{
 		e               = self.enemy;
+		eorg            = 0.5 * (e.absmin + e.absmax);
 		turnrate        = cvar("g_balance_seeker_missile_turnrate");		    // how fast to turn
-		desireddir      = normalize(e.origin - self.origin);
+		desireddir      = normalize(eorg - self.origin);
 		olddir          = normalize(self.velocity);				            // get my current direction
-		dist            = vlen(e.origin - self.origin);
+		dist            = vlen(eorg - self.origin);
 
 		// Do evasive maneuvers for world objects? ( this should be a cpu hog. :P )
 		if (cvar("g_balance_seeker_missile_smart") && (dist > cvar("g_balance_seeker_missile_smart_mindist")))
@@ -68,7 +69,7 @@ void Seeker_Missile_Think()
 			if ( vlen(self.origin + olddir * self.wait) < dist)
 				traceline(self.origin, self.origin + olddir * self.wait, FALSE, self);
 			else
-				traceline(self.origin, self.enemy.origin, FALSE, self);
+				traceline(self.origin, eorg, FALSE, self);
 
 			// Setup adaptive tracelength
 			self.wait = vlen(self.origin - trace_endpos);
