@@ -1198,6 +1198,9 @@ float WinningCondition_Onslaught()
 {
 	entity head;
 	local float t1, t2, t3, t4;
+
+	WinningConditionHelper(); // set worldstatus
+
 	// first check if the game has ended
 	t1 = t2 = t3 = t4 = 0;
 	head = find(world, classname, "onslaught_generator");
@@ -1252,8 +1255,10 @@ void assault_new_round();
 float WinningCondition_Assault()
 {
 	local float status;
-	status = WINNING_NO;
 
+	WinningConditionHelper(); // set worldstatus
+
+	status = WINNING_NO;
 	// as the timelimit has not yet passed just assume the defending team will win
 	if(assault_attacker_team == COLOR_TEAM1)
 	{
