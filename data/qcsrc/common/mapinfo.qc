@@ -306,6 +306,8 @@ float MapInfo_Get_ByID(float i)
 	return 0;
 }
 
+float _MapInfo_Map_has_worldspawn_music;
+
 float _MapInfo_Generate(string pFilename) // 0: failure, 1: ok ent, 2: ok bsp
 {
 	string fn;
@@ -336,6 +338,7 @@ float _MapInfo_Generate(string pFilename) // 0: failure, 1: ok ent, 2: ok bsp
 	inWorldspawn = 2;
 	MapInfo_Map_supportedGametypes = 0;
 	spawnpoints = 0;
+	_MapInfo_Map_has_worldspawn_music = 0;
 
 	for(;;)
 	{
@@ -354,6 +357,10 @@ float _MapInfo_Generate(string pFilename) // 0: failure, 1: ok ent, 2: ok bsp
 				MapInfo_Map_author = v;
 			else if(k == "_description")
 				MapInfo_Map_description = v;
+			else if(k == "music")
+				_MapInfo_Map_has_worldspawn_music = 1;
+			else if(k == "noise")
+				_MapInfo_Map_has_worldspawn_music = 1;
 			else if(k == "message")
 			{
 				i = strstrofs(v, " by ", 0);
@@ -559,7 +566,10 @@ float MapInfo_Get_ByName(string pFilename, float pAllowGenerate, float pGametype
 		fputs(fh, strcat("title ", MapInfo_Map_title, "\n"));
 		fputs(fh, strcat("description ", MapInfo_Map_description, "\n"));
 		fputs(fh, strcat("author ", MapInfo_Map_author, "\n"));
-		fputs(fh, strcat("cdtrack ", ftos(floor(random() * 9 + 2)), "\n")); // track from 2 to 10
+		if(_MapInfo_Map_has_worldspawn_music)
+			fputs(fh, strcat("// (uses worldspawn.music) // cdtrack ", ftos(floor(random() * 9 + 2)), "\n"));
+		else
+			fputs(fh, strcat("cdtrack ", ftos(floor(random() * 9 + 2)), "\n")); // track from 2 to 10
 		if(MapInfo_Map_supportedFeatures & MAPINFO_FEATURE_WEAPONS)       fputs(fh, "has weapons\n");
 		if(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_DEATHMATCH)      fputs(fh, "type dm 30 20\n");
 		if(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_TEAM_DEATHMATCH) fputs(fh, "type tdm 50 20 2\n");
