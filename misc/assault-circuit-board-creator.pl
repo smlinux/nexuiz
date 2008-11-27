@@ -104,16 +104,17 @@ sub ObjectiveSpawns($@)
 	{
 		my $xx = $x - 32;
 		my $yy = $y + ($_ - 3.5) * 64;
+		my $zz = $z - 8 - 32; # align feet to 64-grid
 		push @l, Entity
 			classname => "info_player_attacker",
 			target => $target,
-			origin => "$xx $yy $z";
+			origin => "$xx $yy $zz";
 
 		$xx = $x + 32;
 		push @l, Entity
 			classname => "info_player_defender",
 			target => $target,
-			origin => "$xx $yy $z";
+			origin => "$xx $yy $zz";
 	}
 
 	return @l;
@@ -124,13 +125,13 @@ my @assault_entities = ();
 my $obj_prev = undef;
 my $des_prev = undef;
 
-my @prevorigin = (-256, 0, 0);
+my @prevorigin = @ofs;
 
 for my $i(0..@objectives - 1)
 {
 	my @origin =
 	(
-		$ofs[0] + $i * 256,
+		$ofs[0] + ($i + 1) * 256,
 		$ofs[1] + 0,
 		$ofs[2] + 0
 	);
@@ -250,7 +251,7 @@ for my $i(0..@objectives - 1)
 my $obj = "roundend";
 my @origin =
 (
-	$ofs[0] + @objectives * 256,
+	$ofs[0] + (@objectives + 1) * 256,
 	$ofs[1] + 0,
 	$ofs[2] + 0
 );
