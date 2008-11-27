@@ -132,9 +132,6 @@ void destroyNexuizCampaignList(entity me)
 
 void loadCvarsNexuizCampaignList(entity me)
 {
-	if not(me.cvarName)
-		return;
-
 	// read campaign cvars
 	if(campaign_name)
 		strunzone(campaign_name);
@@ -158,9 +155,6 @@ void loadCvarsNexuizCampaignList(entity me)
 
 void saveCvarsNexuizCampaignList(entity me)
 {
-	if not(me.cvarName)
-		return;
-
 	// write campaign cvars
 	// no reason to do this!
 	// cvar_set("g_campaign_name", campaign_name);
