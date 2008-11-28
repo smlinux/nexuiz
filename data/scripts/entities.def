@@ -1211,6 +1211,17 @@ FLOATING: the item will float in air, instead of aligning to the floor by fallin
 model="models/weapons/g_seeker.md3"
 */
 
+/*QUAKED weapon_hook (1 0 .5) (-30 -30 0) (30 30 32) FLOATING
+the on-hand Grappling Hook.
+-------- KEYS --------
+respawntime: time till it respawns (default: 30)
+team: out of items with the same value here, only one (random one) will spawn. Useful to put multiple items on one spot.
+-------- SPAWNFLAGS --------
+FLOATING: the item will float in air, instead of aligning to the floor by falling
+-------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
+model="models/weapons/g_hookgun.md3"
+*/
+
 /*QUAKED trigger_heal (.5 .5 .5) ?
 Any object touching this will be healed.
 -------- KEYS --------
