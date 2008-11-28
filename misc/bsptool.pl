@@ -209,7 +209,7 @@ for(@ARGV)
 			print $fh $_->[2];
 		}
 		close $fh;
-		print "Wrote $outfile\n";
+		print STDERR "Wrote $outfile\n";
 	}
 	else
 	{
