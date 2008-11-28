@@ -10,11 +10,15 @@ void TeleportPlayer(entity teleporter, entity player, vector to, vector to_angle
 	else
 		telefragger = player;
 
-	sound (player, CHAN_TRIGGER, "misc/teleport.wav", VOL_BASE, ATTN_NORM);
-	pointparticles(particleeffectnum("teleport"), player.origin, '0 0 0', 1);
-
 	makevectors (to_angles);
-	pointparticles(particleeffectnum("teleport"), to + v_forward * 32, '0 0 0', 1);
+
+	if(self.pushltime < time) // only show one teleport effect per teleporter per 0.2 seconds, for better fps
+	{
+		sound (player, CHAN_TRIGGER, "misc/teleport.wav", VOL_BASE, ATTN_NORM);
+		pointparticles(particleeffectnum("teleport"), player.origin, '0 0 0', 1);
+		pointparticles(particleeffectnum("teleport"), to + v_forward * 32, '0 0 0', 1);
+		self.pushltime = time + 0.2;
+	}
 
 	// Relocate the player
 	// assuming to allows PL_MIN to PL_MAX box and some more

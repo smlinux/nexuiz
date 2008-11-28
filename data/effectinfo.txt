@@ -781,6 +781,7 @@ originjitter 1 1 1
 velocityjitter 1000 1000 1500
 velocitymultiplier 0.5
 airfriction 2
+stretchfactor 0.6
 
 
 
