@@ -7,7 +7,7 @@ void Seeker_Missile_Explode ()
 	vector	org2;
 	float b;
 	org2 = findbetterlocation (self.origin, 12);
-	te_explosion (org2);
+	pointparticles(particleeffectnum("hagar_explode"), org2, '0 0 0', 1);
 
 	b = crandom();
 	if (b<-0.7)
@@ -276,7 +276,7 @@ void Seeker_Tag_Explode ()
 	//    return;
 
 	org2 = findbetterlocation (self.origin, 12);
-	te_explosion (org2);
+	pointparticles(particleeffectnum("hagar_explode"), org2, '0 0 0', 1);
 
 	b = crandom();
 	if (b<-0.7)
@@ -378,7 +378,7 @@ void Seeker_Flac_Explode ()
 	vector	org2;
 	float b;
 	org2 = findbetterlocation (self.origin, 12);
-	te_explosion (org2);
+	pointparticles(particleeffectnum("flac_explode"), org2, '0 0 0', 1);
 
 	b = crandom();
 	if (b<-0.7)
