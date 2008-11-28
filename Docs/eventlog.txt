@@ -14,7 +14,7 @@ ______________
 log format:
 ______________
 
-   :logversion:2
+   :logversion:3
    :gamestart:<gametype>_<mapname>:<matchid>
    :gameinfo:mutators:LIST:mutator1:mutator2:...
 
@@ -93,15 +93,20 @@ itemstring:
          T = player is typing (console, menu or chat)
    
    and weapon IDs are:
-         1 = Shotgun
-         2 = Uzi
+         1 = Laser
+		 2 = Shotgun
+		 3 = Uzi
          4 = Mortar
-         8 = Electro
-        16 = Crylink
-        32 = Nex
-        64 = Hagar
-       128 = Rocket Launcher
-      4096 = Laser
+         5 = Electro
+         6 = Crylink
+         7 = Nex
+         8 = Hagar
+         9 = Rocket Launcher
+        10 = Port-O-Launch
+        11 = MinstaNex
+        12 = Grappling Hook
+        13 = Heavy Laser Assault Cannon
+        14 = T.A.G. Seeker
 
    runes/curses are stored as a bit mask with the following values:
          1 = Strength
@@ -116,7 +121,7 @@ itemstring:
     131072 = Empathy
 
 death type:
-   either a weapon ID (see above), or one of:
+   either a weapon ID ORed with weapon death flags, or one of:
      10000 = fallen to death
      10001 = telefragged
      10002 = drowned
@@ -130,6 +135,15 @@ death type:
      10010 = auto team change
      10011 = camping protection
 	 10012 = player became too fast (should never happen)
+	 10013 = health rot
+	 10014 = mirror damage
+	 10015 = g_touchexplode
+	 10100 = turret
+
+   weapon death flags are:
+       256 = secondary fire
+	   512 = splash damage
+	  1024 = bounced projectile
 
 There will be a log analyzer parsing this file format soon. Note that weapon
 IDs are below 10000.
