@@ -162,7 +162,7 @@ void GameLogEcho(string s)
 				fn = strcat(substring("00000000", 0, 8 - strlen(fn)), fn);
 			fn = strcat(cvar_string("sv_eventlog_files_nameprefix"), fn, cvar_string("sv_eventlog_files_namesuffix"));
 			logfile = fopen(fn, FILE_APPEND);
-			fputs(logfile, ":logversion:2\n");
+			fputs(logfile, ":logversion:3\n");
 		}
 		if(logfile >= 0)
 		{
