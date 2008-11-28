@@ -123,7 +123,7 @@ void RegisterWeapons()
 	register_weapon(WEP_NEX,              w_nex,       IT_CELLS,       7, 1, 0, 10000, "nex",       "nex",             "Nex");
 	register_weapon(WEP_HAGAR,            w_hagar,     IT_ROCKETS,     8, 1, 1,  5000, "hagar",     "hagar",           "Hagar");
 	register_weapon(WEP_ROCKET_LAUNCHER,  w_rlauncher, IT_ROCKETS,     9, 1, 1, 10000, "rl",        "rocketlauncher",  "Rocket Launcher");
-	register_weapon(WEP_PORTO,            w_porto,     IT_SUPERWEAPON, 0, 0, 0,     0, "porto" ,    "porto",           "Port-O-Launch");
+	register_weapon(WEP_PORTO,            w_porto,     0,              0, 0, 0,     0, "porto" ,    "porto",           "Port-O-Launch");
 	register_weapon(WEP_MINSTANEX,        w_minstanex, IT_CELLS,       7, 0, 1, 10000, "minstanex", "minstanex",       "MinstaNex");
 	register_weapon(WEP_HOOK,             w_hook,      IT_CELLS,       0, 0, 1,     0, "hookgun",   "hook",            "Grappling Hook");
 	register_weapon(WEP_SEEKER,           w_seeker,    IT_ROCKETS,     8, 1, 0,     0, "seeker",    "seeker",          "T.A.G. Seeker");
