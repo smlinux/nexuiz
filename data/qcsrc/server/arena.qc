@@ -73,7 +73,7 @@ void reset_map()
 		}
 		else if(self.flags & FL_ITEM)			// reset items
 		{
-			if(self.cnt == 1)
+			if(self.state == 1)
 			{
 				self.model = string_null;
 				self.solid = SOLID_NOT;

@@ -248,7 +248,7 @@ void Item_Touch (void)
 		{
 			RandomSelection_Init();
 			for(head = world; (head = findfloat(head, team, self.team)); ) if(head.flags & FL_ITEM)
-				RandomSelection_Add(head, 0, 1, 0);
+				RandomSelection_Add(head, 0, head.cnt, 0);
 			e = RandomSelection_chosen_ent;
 		}
 		else
@@ -268,9 +268,9 @@ void Item_FindTeam()
 		dprint("Initializing item team ", ftos(self.team), "\n");
 		RandomSelection_Init();
 		for(head = world; (head = findfloat(head, team, self.team)); ) if(head.flags & FL_ITEM)
-			RandomSelection_Add(head, 0, 1, 0);
+			RandomSelection_Add(head, 0, head.cnt, 0);
 		e = RandomSelection_chosen_ent;
-		e.cnt = 0;
+		e.state = 0;
 
 		for(head = world; (head = findfloat(head, team, self.team)); ) if(head.flags & FL_ITEM)
 		{
@@ -279,7 +279,7 @@ void Item_FindTeam()
 				// make it a non-spawned item
 				head.solid = SOLID_NOT;
 				head.model = string_null;
-				head.cnt = 1; // cnt 1 = initially hidden item
+				head.state = 1; // state 1 = initially hidden item
 			}
 			head.effects = head.effects - (head.effects & EF_NODRAW);
 		}
@@ -288,7 +288,7 @@ void Item_FindTeam()
 
 // Savage: used for item garbage-collection
 // TODO: perhaps nice special effect?
-void RemoveItem(void) /*FIXDECL*/
+void RemoveItem(void)
 {
 	remove(self);
 }
@@ -506,8 +506,11 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 	if (cvar("g_fullbrightitems"))
 		self.effects = self.effects | EF_FULLBRIGHT;
 
+	self.state = 0;
 	if(self.team)
 	{
+		if(!self.cnt)
+			self.cnt = 1; // item probability weight
 		self.effects = self.effects | EF_NODRAW; // marker for item team search
 		InitializeEntity(self, Item_FindTeam, INITPRIO_FINDTARGET);
 	}
