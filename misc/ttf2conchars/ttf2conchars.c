@@ -1,9 +1,50 @@
 #include <stdio.h>
-#include <err.h>
+#include <errno.h>
+#include <stdarg.h>
 #include <math.h>
 #include "SDL/SDL.h" 
 #include "SDL/SDL_ttf.h" 
 #include "SDL/SDL_image.h" 
+
+void warn(char *fmt, ...)
+{
+	va_list list;
+	int e = errno;
+	va_start(list, fmt);
+	vfprintf(stderr, fmt, list);
+	fputs(": ", stderr);
+	fputs(strerror(e), stderr);
+	fputs("\n", stderr);
+}
+
+void warnx(char *fmt, ...)
+{
+	va_list list;
+	va_start(list, fmt);
+	vfprintf(stderr, fmt, list);
+	fputs("\n", stderr);
+}
+
+void err(int ex, char *fmt, ...)
+{
+	va_list list;
+	int e = errno;
+	va_start(list, fmt);
+	vfprintf(stderr, fmt, list);
+	fputs(": ", stderr);
+	fputs(strerror(e), stderr);
+	fputs("\n", stderr);
+	exit(ex);
+}
+
+void errx(int ex, char *fmt, ...)
+{
+	va_list list;
+	va_start(list, fmt);
+	vfprintf(stderr, fmt, list);
+	fputs("\n", stderr);
+	exit(ex);
+}
 
 void Image_WriteTGABGRA (const char *filename, int width, int height, const unsigned char *data)
 {
