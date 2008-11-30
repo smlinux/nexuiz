@@ -191,7 +191,7 @@ Uint32 getpixelfilter(SDL_Surface *src, SDL_PixelFormat *fmt, int x, int y, doub
 	double r, g, b, a, f;
 	Uint8 pr, pg, pb, pa;
 	int i, j;
-	int imax = BLURFUNCIMAX(A,B);
+	int imax = (int) BLURFUNCIMAX(A,B);
 
 	// 1. calculate blackened blurred image
 	a = 0;
@@ -239,7 +239,7 @@ Uint32 getpixelfilter(SDL_Surface *src, SDL_PixelFormat *fmt, int x, int y, doub
 	else if(C < 0)
 		r = g = b = MAX(0, 255 + C * a);
 
-	return SDL_MapRGBA(fmt, r, g, b, a);
+	return SDL_MapRGBA(fmt, (unsigned char) r, (unsigned char) g, (unsigned char) b, (unsigned char) a);
 }
 
 void blitfilter(SDL_Surface *src, SDL_Surface *dest, int x0, int y0, double A, double B, double C)
@@ -247,7 +247,7 @@ void blitfilter(SDL_Surface *src, SDL_Surface *dest, int x0, int y0, double A, d
 	// note: x0, y0 is the origin of the UNFILTERED image; it is "transparently" expanded by a BLURFUNCIMAX.
 	int x, y, d;
 
-	d = BLURFUNCIMAX(A,B);
+	d = (int) BLURFUNCIMAX(A,B);
 	SDL_LockSurface(src);
 	SDL_LockSurface(dest);
 	for(y = -d; y < d + src->h; ++y)
@@ -428,7 +428,7 @@ void StretchBlit(SDL_Surface *dst, SDL_Surface *src, SDL_Rect *drec, SDL_Rect *s
 					if(j == (toY))
 						inc *= dtoY;
 
-					int iinc = inc * 256;
+					int iinc = (int) (inc * 256);
 
 					r += (pr * iinc);
 					g += (pg * iinc);
@@ -585,7 +585,7 @@ int main(int argc, char **argv)
 	char widthfilename[512];
 	snprintf(widthfilename, sizeof(widthfilename), "%.*s.width", (int)strlen(outfilename) - 4, outfilename);
 
-	int border=BLURFUNCIMAX(A, B);
+	int border=(int) BLURFUNCIMAX(A, B);
 
 	fprintf(stderr, "Using %d border pixels\n", border);
 
@@ -749,8 +749,8 @@ int main(int argc, char **argv)
 			//   destBottom = referenceBottom / cell * h + y
 
 			dest.x = 0;
-			dest.y = (destBottom * referenceTop - destTop * referenceBottom) / (double) (referenceTop - referenceBottom);
-			dest.h = cell * (destBottom - destTop) / (double) (referenceBottom - referenceTop);
+			dest.y = (int) ((double) (destBottom * referenceTop - destTop * referenceBottom) / (double) (referenceTop - referenceBottom));
+			dest.h = (int) (cell * (double) (destBottom - destTop) / (double) (referenceBottom - referenceTop));
 			dest.w = dest.h;
 
 			/*
@@ -810,7 +810,7 @@ int main(int argc, char **argv)
 
 	fprintf(stderr, "Writing...\n");
 
-	Image_WriteTGABGRA(outfilename, conchars->w, conchars->h, conchars->pixels);
+	Image_WriteTGABGRA(outfilename, conchars->w, conchars->h, (unsigned char *) conchars->pixels);
 
 	SDL_FreeSurface(conchars);
 
