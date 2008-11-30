@@ -17038,7 +17038,6 @@ evil6_trims/e6basegrt_smll
 // entity 57
 {
 "origin" "-2576 -656 280"
-"model" "models/ctf/flag_blue.md3"
 "classname" "item_flag_team2"
 }
 // entity 58
@@ -17086,7 +17085,6 @@ evil6_trims/e6basegrt_smll
 // entity 65
 {
 "origin" "16 272 280"
-"model" "models/ctf/flag_red.md3"
 "classname" "item_flag_team1"
 }
 // entity 66

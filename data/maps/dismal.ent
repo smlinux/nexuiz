@@ -317,12 +317,10 @@
 "origin" "-100 450 10"
 }
 {
-"model" "models/ctf/flag_red.md3"
 "origin" "3260 -670 8"
 "classname" "item_flag_team1"
 }
 {
-"model" "models/ctf/flag_blue.md3"
 "origin" "-520 -120 8"
 "classname" "item_flag_team2"
 }

@@ -26734,13 +26734,11 @@ evil3_metals/mtl_rivplt_wrn
 // entity 218
 {
 "classname" "item_flag_team2"
-"model" "models/ctf/flag_blue.md3"
 "origin" "4232 1152 -72"
 }
 // entity 219
 {
 "classname" "item_flag_team1"
-"model" "models/ctf/flag_red.md3"
 "origin" "1264 2048 -64"
 }
 // entity 220

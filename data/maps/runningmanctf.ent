@@ -588,12 +588,10 @@
 "origin" "-632 1224 -240"
 }
 {
-"model" "models/ctf/flag_blue.md3"
 "origin" "784 768 320"
 "classname" "item_flag_team2"
 }
 {
-"model" "models/ctf/flag_red.md3"
 "origin" "-896 2448 312"
 "classname" "item_flag_team1"
 }

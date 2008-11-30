@@ -606,12 +606,10 @@
 "origin" "1337 1190 216"
 }
 {
-"model" "models/ctf/flag_red.md3"
 "origin" "1440 -740 24"
 "classname" "item_flag_team1"
 }
 {
-"model" "models/ctf/flag_blue.md3"
 "origin" "-1590 1740 24"
 "classname" "item_flag_team2"
 }
