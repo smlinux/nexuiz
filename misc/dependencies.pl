@@ -230,16 +230,25 @@ for(<maps/*.bsp>)
 	AddFile "maps/$b.mapinfo";
 	AddFile "maps/$b.jpg";
 	AddFile "maps/$b.cfg";
+	AddFile "maps/$b.waypoints";
 	AddTexture "gfx/$b\_radar.tga";
 	AddTexture "gfx/$b\_mini.tga";
 
 	my $data = do {
 		undef local $/;
 		open my $fh, "<", "maps/$b.mapinfo"
-			or die "<$_: $!";
+			or warn "<maps/$b.mapinfo: $!";
 		<$fh>;
 	};
 	AddMapinfoDependencies $data;
+
+	$data = do {
+		undef local $/;
+		open my $fh, "<", "maps/$b.cfg"
+			or warn "<maps/$b.cfg: $!";
+		<$fh>;
+	};
+	AddCfgDependencies $data;
 
 	$data = do {
 		undef local $/;
