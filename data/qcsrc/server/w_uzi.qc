@@ -89,7 +89,6 @@ void uzi_fire1_02()
 			w_ready();
 			return;
 		}
-		ATTACK_FINISHED(self) = time + cvar("g_balance_uzi_refire");
 		self.uzi_bulletcounter = self.uzi_bulletcounter + 1;
 		W_Uzi_Attack(WEP_UZI);
 		weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_uzi_sustained_refire"), uzi_fire1_02);
