@@ -12,6 +12,33 @@ my @bsp;
 
 # READ THE BSP
 
+if(!@ARGV || $ARGV[0] eq '-h' || $ARGV[0] eq '--help')
+{
+	print <<EOF;
+Usage:
+  $0 filename.bsp [operations...]
+
+Operations are:
+  Information requests:
+    -i                print info about the BSP file
+    -xlumpname        extract a lump (see -i)
+
+  Changes:
+    -dlumpname        delete a lump (see -i)
+    -gfilename.tga    save the lightgrid as filename.tga (debugging)
+    -Gratio           scale down the lightgrid to reduce BSP file size
+    -ljpgNNN          externalize the lightmaps as JPEG, quality NNN (number from 1 to 100)
+    -lpng             externalize the lightmaps as PNG
+    -ltga             externalize the lightmaps as TGA
+    -mMESSAGE         set the BSP file comment message
+
+  Save commands:
+    -o                actually apply the changes to the BSP
+    -ofilename2.bsp   save the changes to a new BSP file
+EOF
+	exit;
+}
+
 my $fn = shift @ARGV;
 $fn =~ /(.*)\.bsp$/
 	or die "invalid input file name (must be a .bsp): $fn";
