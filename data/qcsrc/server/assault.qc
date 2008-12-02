@@ -35,8 +35,8 @@ void assault_objective_use() {
 
 	// activate objective
 	self.health = 100;
-	print("^2Activated objective ", self.targetname, "=", etos(self), "\n");
-	print("Activator is ", activator.classname, "\n");
+	//print("^2Activated objective ", self.targetname, "=", etos(self), "\n");
+	//print("Activator is ", activator.classname, "\n");
 
 	entity oldself;
 	oldself = self;
@@ -199,7 +199,7 @@ void spawnfunc_func_assault_wall() {
 
 
 void target_assault_roundend_reset() {
-	print("round end reset\n");
+	//print("round end reset\n");
 	self.cnt = self.cnt + 1; // up round counter
 	self.winning = 0; // up round
 }
@@ -258,7 +258,7 @@ void spawnfunc_target_assault_roundstart() {
 // trigger new round
 // reset objectives, toggle spawnpoints, reset triggers, ...
 void assault_new_round() {
-	bprint("ASSAULT: new round\n");
+	//bprint("ASSAULT: new round\n");
 
 	// up round counter
 	self.winning = self.winning + 1;
