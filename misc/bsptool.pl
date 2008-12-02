@@ -159,6 +159,31 @@ sub DecodeDirection($)
 	);
 }
 
+sub IntervalIntersection($$$$)
+{
+	my ($a, $al, $b, $bl) = @_;
+	my $a0 = $a - 0.5 * $al;
+	my $a1 = $a + 0.5 * $al;
+	my $b0 = $b - 0.5 * $bl;
+	my $b1 = $b + 0.5 * $bl;
+	my $left = ($a0 > $b0) ? $a0 : $b0;
+	my $right = ($a1 > $b1) ? $b1 : $a1;
+	die "Non-intersecting intervals $a $al $b $bl"
+		if $right < $left;
+	return $right - $left;
+}
+
+sub BoxIntersection(@)
+{
+	my ($x, $y, $z, $w, $h, $d, $x2, $y2, $z2, $w2, $h2, $d2) = @_;
+	return
+		IntervalIntersection($x, $w, $x2, $w2)
+		*
+		IntervalIntersection($y, $h, $y2, $h2)
+		*
+		IntervalIntersection($z, $d, $z2, $d2);
+}
+
 # OPTIONS
 
 for(@ARGV)
@@ -364,23 +389,29 @@ for(@ARGV)
 							for my $X(@oldx)
 							{
 								my $cell = $gridcells[($X - $imins[0]) + $isize[0] * ($Y - $imins[1]) + $isize[0] * $isize[1] * ($Z - $imins[2])];
-								$dir[$_] += $cell->{directional}->[0] for 0..2;
-								$amb[$_] += $cell->{ambient}->[0] for 0..2;
+
+								my $cellweight = BoxIntersection(
+									$X, $Y, $Z, 1, 1, 1,
+									map { $_ * $decimate } $x, $y, $z, 1, 1, 1
+								);
+
+								$dir[$_] += $cellweight * $cell->{directional}->[$_] for 0..2;
+								$amb[$_] += $cellweight * $cell->{ambient}->[$_] for 0..2;
 								my @norm = DecodeDirection $cell->{dir};
-								$vec[$_] += $norm[$_] for 0..2;
-								++$weight;
+								$vec[$_] += $cellweight * $norm[$_] for 0..2;
+								$weight += $cellweight;
 							}
 						}
 					}
 					if($weight)
 					{
-						$amb[$_] /= $weight for 0..2;
-						$amb[$_] *= $filter for 0..2;
-						$amb[$_] += (1 - $filter) * $innercell->{ambient}->[$_] for 0..2;
-
 						$dir[$_] /= $weight for 0..2;
 						$dir[$_] *= $filter for 0..2;
 						$dir[$_] += (1 - $filter) * $innercell->{directional}->[$_] for 0..2;
+
+						$amb[$_] /= $weight for 0..2;
+						$amb[$_] *= $filter for 0..2;
+						$amb[$_] += (1 - $filter) * $innercell->{ambient}->[$_] for 0..2;
 
 						my @norm = DecodeDirection $innercell->{dir};
 						$vec[$_] /= $weight for 0..2;
