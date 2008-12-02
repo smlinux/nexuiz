@@ -887,6 +887,16 @@ void LinkDoors()
 	if (self.spawnflags & 4)
 	{
 		self.owner = self.enemy = self;
+
+		if (self.health)
+			return;
+		IFTARGETED
+			return;
+		if (self.items)
+			return;
+
+		self.trigger_field = spawn_field(self.mins, self.maxs);
+
 		return;		// don't want to link this door
 	}
 

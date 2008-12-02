@@ -473,6 +473,8 @@ void GameCommand(string command)
 		print("  effectindexdump\n");
 		print("  radarmap [--force] [--quit | --loop] [sharpness]\n");
 		print("  bbox\n");
+		print("  cvar_changes\n");
+		print("  find classname\n");
 		GameCommand_Vote("help", world);
 		GameCommand_Ban("help");
 		GameCommand_Generic("help");
@@ -669,6 +671,12 @@ void GameCommand(string command)
 	if (argv(0) == "cvar_changes")
 	{
 		print(cvar_changes);
+		return;
+	}
+	if (argv(0) == "find") if(argc == 2)
+	{
+		for(client = world; (client = find(client, classname, argv(1))); )
+			print(etos(client), "\n");
 		return;
 	}
 
