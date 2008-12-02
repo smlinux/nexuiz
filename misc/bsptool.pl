@@ -344,7 +344,7 @@ for(@ARGV)
 	elsif(/^-G(.+)$/) # decimate light grid
 	{
 		my $decimate = $1;
-		my $filter = 0.5;
+		my $filter = 1; # 0 = nearest, 1 = box filter
 
 		my @models = DecodeLump $bsp[$lumpid{models}]->[2],
 			qw/mins=f3 maxs=f3 face=V n_faces=V brush=V n_brushes=V/;
