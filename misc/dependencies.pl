@@ -231,6 +231,7 @@ for(<maps/*.bsp>)
 	AddFile "maps/$b.jpg";
 	AddFile "maps/$b.cfg";
 	AddFile "maps/$b.waypoints";
+	AddFile "maps/$b.rtlights";
 	AddTexture "gfx/$b\_radar.tga";
 	AddTexture "gfx/$b\_mini.tga";
 

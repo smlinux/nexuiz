@@ -7,13 +7,13 @@ set -e
 for X in "$@"; do
 	case "$X" in
 		*.jpg)
-			jpegoptim --strip-all "$X"
+			jpegoptim --strip-all -m$qual "$X"
 			;;
 		*.png|*.tga)
 			if convert "$X" -depth 16 RGBA:- | perl -e 'local $/ = \8; while(<>) { substr($_, 6, 2) eq "\xFF\xFF" or exit 1; ++$pix; } END { exit not $pix; }'; then
 				echo "$X has no alpha, converting"
-				convert "$X" -quality $qual "${X%.*}.jpg"
-				jpegoptim --strip-all "${X%.*}.jpg"
+				convert "$X" -quality 100 "${X%.*}.jpg"
+				jpegoptim --strip-all -m$qual "${X%.*}.jpg"
 				rm -f "$X"
 			else
 				echo "$X has alpha, not converting"

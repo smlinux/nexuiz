@@ -29,7 +29,6 @@ for(0..16)
 	read $fh, my $lump, 8;
 	my ($offset, $length) = unpack "VV", $lump;
 
-	print STDERR "BSP lump $_ ($lumpname[$_]): offset $offset length $length\n";
 	push @bsp, [$offset, $length, undef];
 }
 
@@ -95,11 +94,90 @@ sub DecodeLump($@)
 	@decoded;
 }
 
+sub EncodeLump($@)
+{
+	my ($items, @fields) = @_;
+	my @decoded;
+
+	my @encoders;
+
+	my $item;
+	my @data;
+	my $idx;
+	my $data = "";
+
+	for(@fields)
+	{
+		if(/^(\w*)=(.*?)(\d*)$/)
+		{
+			my $spec = "$2$3";
+			my $f = $1;
+			my $n = $3;
+			if($n eq '')
+			{
+				push @encoders, sub { $data .= pack $spec, $item->{$f}; };
+			}
+			else
+			{
+				push @encoders, sub { $data .= pack $spec, @{$item->{$f}}; };
+			}
+		}
+	}
+
+	for my $i(@$items)
+	{
+		$item = $i;
+		$_->() for @encoders;
+	}
+
+	$data;
+}
+
+sub EncodeDirection(@)
+{
+	my ($x, $y, $z) = @_;
+
+	return [
+		map { ($_ / 0.02454369260617025967) & 0xFF }
+		(
+			atan2(sqrt($x * $x + $y * $y), $z),
+			atan2($y, $x)
+		)
+	];
+}
+
+sub DecodeDirection($)
+{
+	my ($dir) = @_;
+
+	my ($pitch, $yaw) = map { $_ * 0.02454369260617025967 } @$dir; # maps 256 to 2pi
+
+	return (
+		cos($yaw) * sin($pitch),
+		sin($yaw) * sin($pitch),
+		cos($pitch)
+	);
+}
+
 # OPTIONS
 
 for(@ARGV)
 {
-	if(/^-d(.+)$/) # delete a lump
+	if(/^-i$/) # info
+	{
+		my $total = 17 * 8 + 8 + length($msg);
+		my $max = 0;
+		for(0..@bsp-1)
+		{
+			my $nl = length $bsp[$_]->[2];
+			$total += $nl;
+			print "BSP lump $_ ($lumpname[$_]): offset $bsp[$_]->[0] length $bsp[$_]->[1] newlength $nl\n";
+			my $endpos = $bsp[$_]->[0] + $bsp[$_]->[1];
+			$max = $endpos if $max < $endpos;
+		}
+		print "BSP file size will change from $max to $total bytes\n";
+	}
+	elsif(/^-d(.+)$/) # delete a lump
 	{
 		my $id = $lumpid{$1};
 		die "invalid lump $1 to remove"
@@ -155,8 +233,9 @@ for(@ARGV)
 		# nullify the lightmap lump
 		$bsp[$lumpid{lightmaps}]->[2] = "";
 	}
-	elsif(/^-g$/) # decimate light grid
+	elsif(/^-g(.+)$/) # export light grid as an image (for debugging)
 	{
+		my $filename = $1;
 		my @models = DecodeLump $bsp[$lumpid{models}]->[2],
 			qw/mins=f3 maxs=f3 face=V n_faces=V brush=V n_brushes=V/;
 		my $entities = $bsp[$lumpid{entities}]->[2];
@@ -178,7 +257,154 @@ for(@ARGV)
 		die "Cannot decode light grid"
 			unless $isize == @gridcells;
 
-		# TODO now decimate it and reinsert the lump (and the changed entity lump for the new size)
+		# sum up the "ambient" light over all pixels
+		my @pixels;
+		my $max = 1;
+		for my $y(0..$isize[1]-1)
+		{
+			for my $x(0..$isize[0]-1)
+			{
+				my ($r, $g, $b) = (0, 0, 0);
+				for my $z(0..$isize[2]-1)
+				{
+					my $cell = $gridcells[$x + $y * $isize[0] + $z * $isize[0] * $isize[1]];
+					$r += $cell->{ambient}->[0];
+					$g += $cell->{ambient}->[1];
+					$b += $cell->{ambient}->[2];
+				}
+				push @pixels, [$r, $g, $b];
+				$max = $r if $max < $r;
+				$max = $g if $max < $g;
+				$max = $b if $max < $b;
+			}
+		}
+		my $pixeldata = "";
+		for my $p(@pixels)
+		{
+			$pixeldata .= pack "CCC", map { 255 * $p->[$_] / $max } 0..2;
+		}
+
+		my $img = Image::Magick->new(size => sprintf("%dx%d", $isize[0], $isize[1]), depth => 8, magick => 'RGB');
+		$img->BlobToImage($pixeldata);
+		$img->Write($filename);
+		print STDERR "Wrote $filename\n";
+	}
+	elsif(/^-G(.+)$/) # decimate light grid
+	{
+		my $decimate = $1;
+		my $filter = 0.5;
+
+		my @models = DecodeLump $bsp[$lumpid{models}]->[2],
+			qw/mins=f3 maxs=f3 face=V n_faces=V brush=V n_brushes=V/;
+		my $entities = $bsp[$lumpid{entities}]->[2];
+		my @entitylines = split /\r?\n/, $entities;
+		my $gridsize = "64 64 128";
+		my $gridsizeindex = undef;
+		for(0..@entitylines-1)
+		{
+			my $l = $entitylines[$_];
+			last if $l eq '}';
+			if($l =~ /^\s*"gridsize"\s+"(.*)"$/)
+			{
+				$gridsize = $1;
+				$gridsizeindex = $_;
+			}
+		}
+		my @scale = map { 1 / $_ } split / /, $gridsize;
+		my @imins = map { ceil($models[0]{mins}[$_] * $scale[$_]) } 0..2;
+		my @imaxs = map { floor($models[0]{maxs}[$_] * $scale[$_]) } 0..2;
+		my @isize = map { $imaxs[$_] - $imins[$_] + 1 } 0..2;
+		my $isize = $isize[0] * $isize[1] * $isize[2];
+		my @gridcells = DecodeLump $bsp[$lumpid{lightgrid}]->[2],
+			qw/ambient=C3 directional=C3 dir=C2/;
+		die "Cannot decode light grid"
+			unless $isize == @gridcells;
+
+		# get the new grid size values
+		my @newscale = map { $_ / $decimate } @scale;
+		my $newgridsize = join " ", map { 1 / $_ } @newscale;
+		my @newimins = map { ceil($models[0]{mins}[$_] * $newscale[$_]) } 0..2;
+		my @newimaxs = map { floor($models[0]{maxs}[$_] * $newscale[$_]) } 0..2;
+		my @newisize = map { $newimaxs[$_] - $newimins[$_] + 1 } 0..2;
+
+		# do the decimation
+		my @newgridcells = ();
+		for my $z($newimins[2]..$newimaxs[2])
+		{
+			# the coords are MIDPOINTS of the grid cells!
+			my @oldz = grep { $_ >= $imins[2] && $_ <= $imaxs[2] } floor(($z - 0.5) * $decimate + 0.5) .. ceil(($z + 0.5) * $decimate - 0.5);
+			my $innerz_raw = $z * $decimate;
+			my $innerz = floor($innerz_raw + 0.5);
+			$innerz = $imins[2] if $innerz < $imins[2];
+			$innerz = $imaxs[2] if $innerz > $imaxs[2];
+			for my $y($newimins[1]..$newimaxs[1])
+			{
+				my @oldy = grep { $_ >= $imins[1] && $_ <= $imaxs[1] } floor(($y - 0.5) * $decimate + 0.5) .. ceil(($y + 0.5) * $decimate - 0.5);
+				my $innery_raw = $y * $decimate;
+				my $innery = floor($innery_raw + 0.5);
+				$innery = $imins[1] if $innery < $imins[1];
+				$innery = $imaxs[1] if $innery > $imaxs[1];
+				for my $x($newimins[0]..$newimaxs[0])
+				{
+					my @oldx = grep { $_ >= $imins[0] && $_ <= $imaxs[0] } floor(($x - 0.5) * $decimate + 0.5) .. ceil(($x + 0.5) * $decimate - 0.5);
+					my $innerx_raw = $x * $decimate;
+					my $innerx = floor($innerx_raw + 0.5);
+					$innerx = $imins[0] if $innerx < $imins[0];
+					$innerx = $imaxs[0] if $innerx > $imaxs[0];
+
+					my @vec = (0, 0, 0);
+					my @dir = (0, 0, 0);
+					my @amb = (0, 0, 0);
+					my $weight = 0;
+					my $innercell = $gridcells[($innerx - $imins[0]) + $isize[0] * ($innery - $imins[1]) + $isize[0] * $isize[1] * ($innerz - $imins[2])];
+					for my $Z(@oldz)
+					{
+						for my $Y(@oldy)
+						{
+							for my $X(@oldx)
+							{
+								my $cell = $gridcells[($X - $imins[0]) + $isize[0] * ($Y - $imins[1]) + $isize[0] * $isize[1] * ($Z - $imins[2])];
+								$dir[$_] += $cell->{directional}->[0] for 0..2;
+								$amb[$_] += $cell->{ambient}->[0] for 0..2;
+								my @norm = DecodeDirection $cell->{dir};
+								$vec[$_] += $norm[$_] for 0..2;
+								++$weight;
+							}
+						}
+					}
+					if($weight)
+					{
+						$amb[$_] /= $weight for 0..2;
+						$amb[$_] *= $filter for 0..2;
+						$amb[$_] += (1 - $filter) * $innercell->{ambient}->[$_] for 0..2;
+
+						$dir[$_] /= $weight for 0..2;
+						$dir[$_] *= $filter for 0..2;
+						$dir[$_] += (1 - $filter) * $innercell->{directional}->[$_] for 0..2;
+
+						my @norm = DecodeDirection $innercell->{dir};
+						$vec[$_] /= $weight for 0..2;
+						$vec[$_] *= $filter for 0..2;
+						$vec[$_] += (1 - $filter) * $norm[$_] for 0..2;
+
+						$innercell = {
+							ambient => \@amb,
+							directional => \@dir,
+							dir => EncodeDirection @norm
+						};
+					}
+
+					push @newgridcells, $innercell;
+				}
+			}
+		}
+
+		$bsp[$lumpid{lightgrid}]->[2] = EncodeLump \@newgridcells,
+			qw/ambient=C3 directional=C3 dir=C2/;
+		splice @entitylines, $gridsizeindex, 1, ()
+			if defined $gridsizeindex;
+		splice @entitylines, 1, 0, qq{"gridsize" "$newgridsize"};
+		$bsp[$lumpid{entities}]->[2] = join "\n", @entitylines;
 	}
 	elsif(/^-x(.+)$/) # extract lump to stdout
 	{
