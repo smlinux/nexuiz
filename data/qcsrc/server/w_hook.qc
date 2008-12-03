@@ -17,6 +17,7 @@ void W_Hook_ExplodeThink (void)
 	self.dmg_last = dmg_remaining_next;
 
 	RadiusDamage (self, self.owner, self.dmg * f, self.dmg_edge * f, self.dmg_radius, self.owner, self.dmg_force * f, self.projectiledeathtype, world);
+	//RadiusDamage (self, world, self.dmg * f, self.dmg_edge * f, self.dmg_radius, world, self.dmg_force * f, self.projectiledeathtype, world);
 
 	if(dt < self.dmg_duration)
 		self.nextthink = time + 0.05; // soon
