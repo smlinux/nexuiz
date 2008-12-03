@@ -46,6 +46,7 @@ void W_Hook_Explode2 (void)
 	self.dmg_duration = cvar("g_balance_hook_secondary_duration");
 	self.teleport_time = time;
 	self.dmg_last = 1;
+	self.movetype = MOVETYPE_NONE;
 }
 
 void W_Hook_Touch2 (void)
