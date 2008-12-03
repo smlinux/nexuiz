@@ -80,7 +80,11 @@ void W_Hook_Attack2()
 	gren.think = adaptor_think2use;
 	gren.use = W_Hook_Explode2;
 	gren.touch = W_Hook_Touch2;
+
 	gren.velocity = '0 0 1' * cvar("g_balance_hook_secondary_speed");
+	if(cvar("g_projectiles_newton_style"))
+		gren.velocity = gren.velocity + self.velocity;
+
 	gren.gravity = cvar("g_balance_hook_secondary_gravity");
 	//W_SetupProjectileVelocity(gren); // just falling down!
 
