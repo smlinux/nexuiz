@@ -245,14 +245,24 @@ Uint32 getpixelfilter(SDL_Surface *src, SDL_PixelFormat *fmt, int x, int y, doub
 void blitfilter(SDL_Surface *src, SDL_Surface *dest, int x0, int y0, double A, double B, double C)
 {
 	// note: x0, y0 is the origin of the UNFILTERED image; it is "transparently" expanded by a BLURFUNCIMAX.
-	int x, y, d;
+	int x, y, d, xa, ya, xb, yb;
 
 	d = (int) BLURFUNCIMAX(A,B);
 	SDL_LockSurface(src);
 	SDL_LockSurface(dest);
-	for(y = -d; y < d + src->h; ++y)
-		for(x = -d; x < d + src->w; ++x)
-			putpixel(dest, x + x0, y + y0, getpixelfilter(src, dest->format, x, y, A, B, C));
+
+	xa = x0 - d;
+	ya = y0 - d;
+	xb = x0 + src->w + d;
+	yb = y0 + src->h + d;
+
+	if(xa < 0) xa = 0;
+	if(ya < 0) ya = 0;
+	if(xa >= dest->w) xa = dest->w - 1;
+	if(ya >= dest->h) ya = dest->h - 1;
+	for(y = ya; y <= yb; ++y)
+		for(x = xa; x <= xb; ++x)
+			putpixel(dest, x, y, getpixelfilter(src, dest->format, x - x0, y - y0, A, B, C));
 	SDL_UnlockSurface(dest);
 	SDL_UnlockSurface(src);
 }
@@ -688,8 +698,10 @@ int main(int argc, char **argv)
 
 		if(differentFonts)
 		{
-			TTF_CloseFont(fonts[2]);
-			TTF_CloseFont(fonts[1]);
+			if(fonts[2])
+				TTF_CloseFont(fonts[2]);
+			if(fonts[1])
+				TTF_CloseFont(fonts[1]);
 		}
 		TTF_CloseFont(fonts[0]);
 	}
