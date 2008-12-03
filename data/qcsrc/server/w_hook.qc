@@ -1,3 +1,29 @@
+.float dmg;
+.float dmg_edge;
+.float dmg_radius;
+.float dmg_force;
+.float dmg_power;
+.float dmg_duration;
+.float dmg_last;
+
+void W_Hook_ExplodeThink (void)
+{
+	float dt, dmg_remaining, dmg_remaining_next, f;
+
+	dt = time - self.teleport_time;
+	dmg_remaining_next = pow(bound(0, 1 - dt / self.dmg_duration, 1), self.dmg_power);
+
+	f = self.dmg_last - dmg_remaining_next;
+	self.dmg_last = dmg_remaining_next;
+
+	RadiusDamage (self, self.owner, self.dmg * f, self.dmg_edge * f, self.dmg_radius, self.owner, self.dmg_force * f, self.projectiledeathtype, world);
+
+	if(dt < self.dmg_duration)
+		self.nextthink = time + 0.05; // soon
+	else
+		remove(self);
+}
+
 void W_Hook_Explode2 (void)
 {
 	vector org2;
@@ -7,9 +33,18 @@ void W_Hook_Explode2 (void)
 	sound (self, CHAN_PROJECTILE, "weapons/hookbomb_impact.wav", VOL_BASE, ATTN_NORM);
 
 	self.event_damage = SUB_Null;
-	RadiusDamage (self, self.owner, cvar("g_balance_hook_secondary_damage"), cvar("g_balance_hook_secondary_edgedamage"), cvar("g_balance_hook_secondary_radius"), self.owner, cvar("g_balance_hook_secondary_force"), self.projectiledeathtype, other);
+	self.touch = SUB_Null;
 
-	remove(self);
+	self.think = W_Hook_ExplodeThink;
+	self.nextthink = time;
+	self.dmg = cvar("g_balance_hook_secondary_damage");
+	self.dmg_edge = cvar("g_balance_hook_secondary_edgedamage");
+	self.dmg_radius = cvar("g_balance_hook_secondary_radius");
+	self.dmg_force = cvar("g_balance_hook_secondary_force");
+	self.dmg_power = cvar("g_balance_hook_secondary_power");
+	self.dmg_duration = cvar("g_balance_hook_secondary_duration");
+	self.teleport_time = time;
+	self.dmg_last = 1;
 }
 
 void W_Hook_Touch2 (void)
