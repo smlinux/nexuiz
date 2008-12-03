@@ -7,4 +7,5 @@ void makeMulti(entity me, string otherCvars);
 void setDependent(entity e, string theCvarName, float theCvarMin, float theCvarMax);
 void setDependentAND(entity e, string theCvarName, float theCvarMin, float theCvarMax, string theCvar2Name, float theCvar2Min, float theCvar2Max);
 void setDependentOR(entity e, string theCvarName, float theCvarMin, float theCvarMax, string theCvar2Name, float theCvar2Min, float theCvar2Max);
+void setDependentAND3(entity e, string theCvarName, float theCvarMin, float theCvarMax, string theCvar2Name, float theCvar2Min, float theCvar2Max, string theCvar3Name, float theCvar3Min, float theCvar3Max);
 void setDependentStringNotEqual(entity e, string theCvarName, string theCvarValue);

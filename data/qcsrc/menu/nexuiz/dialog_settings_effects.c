@@ -128,7 +128,7 @@ void fillNexuizEffectsSettingsTab(entity me)
 		me.TD(me, 1, 1.5, e = makeNexuizCheckBox(0, "r_glsl_deluxemapping", "Deluxe mapping"));
 			setDependent(e, "r_glsl", 1, 1);
 		me.TD(me, 1, 1.5, e = makeNexuizCheckBox(0, "r_shadow_gloss", "Gloss"));
-			setDependentAND(e, "r_glsl", 1, 1, "r_glsl_deluxemapping", 1, 1);
+			setDependentAND3(e, "r_glsl", 1, 1, "r_glsl_deluxemapping", 1, 1, "mod_q3bsp_nolightmaps", 0, 0);
 	
 	me.TR(me);
 	me.TR(me);
