@@ -316,7 +316,12 @@ void W_WeaponFrame()
 		if(wb)
 			weapon_action(self.weapon, WR_THINK);
 		if (time + frametime * 0.5 >= self.weapon_nextthink)
-			self.weapon_think();
+		{
+			if(self.weapon_think)
+				self.weapon_think();
+			else
+				bprint("\{1}^1ERROR: undefined weapon think function for ", self.netname, "\n");
+		}
 	}
 
 	// don't let attack_finished fall behind when not firing (must be after weapon_setup calls!)
