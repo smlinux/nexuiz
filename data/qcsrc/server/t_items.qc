@@ -610,7 +610,7 @@ void weapon_defaultspawnfunc(float wpn)
 		if(e.items == IT_SUPERWEAPON)
 			self.respawntime = g_pickup_respawntime_powerup;
 		else
-			self.respawntime = g_pickup_respawntime_short;
+			self.respawntime = g_pickup_respawntime_weapon;
 	}
 
 	if(self.classname != "droppedweapon" && self.classname != "replacedweapon")
@@ -750,7 +750,7 @@ void spawnfunc_weapon_rocketlauncher (void)
 void spawnfunc_item_rockets (void) {
 	if(!self.ammo_rockets)
 		self.ammo_rockets = g_pickup_rockets;
-	StartItem ("models/items/a_rockets.md3", "misc/itempickup.wav", g_pickup_respawntime_short, "rockets", IT_ROCKETS, 0, 0, commodity_pickupevalfunc, 3000);
+	StartItem ("models/items/a_rockets.md3", "misc/itempickup.wav", g_pickup_respawntime_ammo, "rockets", IT_ROCKETS, 0, 0, commodity_pickupevalfunc, 3000);
 }
 
 void spawnfunc_item_shells (void);
@@ -767,13 +767,13 @@ void spawnfunc_item_bullets (void) {
 
 	if(!self.ammo_nails)
 		self.ammo_nails = g_pickup_nails;
-	StartItem ("models/items/a_bullets.mdl", "misc/itempickup.wav", g_pickup_respawntime_short, "bullets", IT_NAILS, 0, 0, commodity_pickupevalfunc, 2000);
+	StartItem ("models/items/a_bullets.mdl", "misc/itempickup.wav", g_pickup_respawntime_ammo, "bullets", IT_NAILS, 0, 0, commodity_pickupevalfunc, 2000);
 }
 
 void spawnfunc_item_cells (void) {
 	if(!self.ammo_cells)
 		self.ammo_cells = g_pickup_cells;
-	StartItem ("models/items/a_cells.md3", "misc/itempickup.wav", g_pickup_respawntime_short, "cells", IT_CELLS, 0, 0, commodity_pickupevalfunc, 2000);
+	StartItem ("models/items/a_cells.md3", "misc/itempickup.wav", g_pickup_respawntime_ammo, "cells", IT_CELLS, 0, 0, commodity_pickupevalfunc, 2000);
 }
 
 void spawnfunc_item_shells (void) {
@@ -789,7 +789,7 @@ void spawnfunc_item_shells (void) {
 
 	if(!self.ammo_shells)
 		self.ammo_shells = g_pickup_shells;
-	StartItem ("models/items/a_shells.md3", "misc/itempickup.wav", g_pickup_respawntime_short, "shells", IT_SHELLS, 0, 0, commodity_pickupevalfunc, 500);
+	StartItem ("models/items/a_shells.md3", "misc/itempickup.wav", g_pickup_respawntime_ammo, "shells", IT_SHELLS, 0, 0, commodity_pickupevalfunc, 500);
 }
 
 void spawnfunc_item_armor_small (void) {

@@ -28,6 +28,8 @@ float g_ctf_ignore_frags;
 float g_ctf_reverse;
 float g_race_qualifying;
 float inWarmupStage;
+float g_pickup_respawntime_weapon;
+float g_pickup_respawntime_ammo;
 float g_pickup_respawntime_short;
 float g_pickup_respawntime_medium;
 float g_pickup_respawntime_long;
