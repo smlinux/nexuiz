@@ -28,6 +28,14 @@ textures/common/caulk
 	surfaceparm nomarks
 }
 
+textures/common/forcecaulk
+{
+	surfaceparm nodraw
+	surfaceparm nolightmap
+	surfaceparm nomarks
+	surfaceparm structural
+}
+
 textures/common/clip
 {
 	qer_trans 0.40
