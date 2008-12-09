@@ -1335,7 +1335,7 @@ void ClientDisconnect (void)
 
 	// Here, everything has been done that requires this player to be a client.
 
-	self.flags (-) FL_CLIENT;
+	self.flags &~= FL_CLIENT;
 
 	if (self.chatbubbleentity)
 		remove (self.chatbubbleentity);

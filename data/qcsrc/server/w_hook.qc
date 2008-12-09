@@ -136,16 +136,16 @@ float w_hook(float req)
 
 		if (self.BUTTON_CROUCH)
 		{
-			self.hook_state (-) HOOK_PULLING;
+			self.hook_state &~= HOOK_PULLING;
 			if (self.BUTTON_ATCK || self.BUTTON_HOOK)
-				self.hook_state (-) HOOK_RELEASING;
+				self.hook_state &~= HOOK_RELEASING;
 			else
 				self.hook_state |= HOOK_RELEASING;
 		}
 		else
 		{
 			self.hook_state |= HOOK_PULLING;
-			self.hook_state (-) HOOK_RELEASING;
+			self.hook_state &~= HOOK_RELEASING;
 
 			if (self.BUTTON_ATCK || self.BUTTON_HOOK)
 			{
@@ -156,7 +156,7 @@ float w_hook(float req)
 			else
 			{
 				self.hook_state |= HOOK_REMOVING;
-				self.hook_state (-) HOOK_WAITING_FOR_RELEASE;
+				self.hook_state &~= HOOK_WAITING_FOR_RELEASE;
 			}
 		}
 	}

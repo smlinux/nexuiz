@@ -289,7 +289,7 @@ void RaceCarPhysics()
 		else
 		{
 			// now set angles_x so that the car points forward, but is tilted in velocity direction
-			self.flags (-) FL_ONGROUND;
+			self.flags &~= FL_ONGROUND;
 		}
 
 		self.velocity = (neworigin - self.origin) * (1.0 / frametime);

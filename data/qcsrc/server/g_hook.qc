@@ -232,7 +232,7 @@ void GrapplingHookThink()
 					}
 				}
 
-				self.owner.flags (-) FL_ONGROUND;
+				self.owner.flags &~= FL_ONGROUND;
 			}
 		}
 		else
@@ -248,7 +248,7 @@ void GrapplingHookThink()
 			self.owner.velocity = dir*spd;
 			self.owner.movetype = MOVETYPE_FLY;
 
-			self.owner.flags (-) FL_ONGROUND;
+			self.owner.flags &~= FL_ONGROUND;
 		}
 	}
 
@@ -392,25 +392,25 @@ void GrapplingHookFrame()
 		else
 		{
 			self.hook_state |= HOOK_REMOVING;
-			self.hook_state (-) HOOK_WAITING_FOR_RELEASE;
+			self.hook_state &~= HOOK_WAITING_FOR_RELEASE;
 		}
 
-		self.hook_state (-) HOOK_RELEASING;
+		self.hook_state &~= HOOK_RELEASING;
 		if(self.BUTTON_CROUCH)
 		{
-			self.hook_state (-) HOOK_PULLING;
+			self.hook_state &~= HOOK_PULLING;
 			//self.hook_state |= HOOK_RELEASING;
 		}
 		else
 		{
 			self.hook_state |= HOOK_PULLING;
-			//self.hook_state (-) HOOK_RELEASING;
+			//self.hook_state &~= HOOK_RELEASING;
 		}
 	}
 
 	if(!g_grappling_hook && self.weapon != WEP_HOOK)
 	{
-		self.hook_state (-) HOOK_FIRING;
+		self.hook_state &~= HOOK_FIRING;
 		self.hook_state |= HOOK_REMOVING;
 	}
 
@@ -419,13 +419,13 @@ void GrapplingHookFrame()
 		if (self.hook)
 			RemoveGrapplingHook(self);
 		FireGrapplingHook();
-		self.hook_state (-) HOOK_FIRING;
+		self.hook_state &~= HOOK_FIRING;
 	}
 	else if(self.hook_state & HOOK_REMOVING)
 	{
 		if (self.hook)
 			RemoveGrapplingHook(self);
-		self.hook_state (-) HOOK_REMOVING;
+		self.hook_state &~= HOOK_REMOVING;
 	}
 	/*
 	// if I have no hook or it's not pulling yet, make sure I'm not flying!
