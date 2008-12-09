@@ -84,32 +84,14 @@ string W_FixWeaponOrder(string order, float complete)
 	return fixPriorityList(order, WEP_FIRST, WEP_LAST, complete);
 }
 
-// FTEQCC SUCKS // #ifdef SVQC
-// FTEQCC SUCKS // #define register_weapon(id,func,ammotype,i,normalweapon,canclimb,pickupbasevalue,modelname,shortname,wname) \
-// FTEQCC SUCKS // 	register_weapon_real(id,func,ammotype,i,normalweapon,canclimb,pickupbasevalue,modelname,shortname,wname)
-// FTEQCC SUCKS // #else
-// FTEQCC SUCKS // // no weapon funcs here!
-// FTEQCC SUCKS // #define register_weapon(id,func,ammotype,i,normalweapon,canclimb,pickupbasevalue,modelname,shortname,wname) \
-// FTEQCC SUCKS // 	register_weapon_real(id,w_null,ammotype,i,normalweapon,canclimb,pickupbasevalue,modelname,shortname,wname)
-// FTEQCC SUCKS // #endif
-// put this code back in if fteqcc gets fixed
-
-#define register_weapon register_weapon_real
-float(float) w_laser;
-float(float) w_shotgun;
-float(float) w_uzi;
-float(float) w_glauncher;
-float(float) w_electro;
-float(float) w_crylink;
-float(float) w_nex;
-float(float) w_hagar;
-float(float) w_rlauncher;
-float(float) w_porto;
-float(float) w_minstanex;
-float(float) w_hook;
-float(float) w_seeker;
-float(float) w_hlac;
-// I know this causes lots of warnings, but well, alternative code is above - use that code if fteqcc got fixed
+#ifdef SVQC
+#define register_weapon(id,func,ammotype,i,normalweapon,canclimb,pickupbasevalue,modelname,shortname,wname) \
+	register_weapon_real(id,func,ammotype,i,normalweapon,canclimb,pickupbasevalue,modelname,shortname,wname)
+#else
+// no weapon funcs here!
+#define register_weapon(id,func,ammotype,i,normalweapon,canclimb,pickupbasevalue,modelname,shortname,wname) \
+	register_weapon_real(id,w_null,ammotype,i,normalweapon,canclimb,pickupbasevalue,modelname,shortname,wname)
+#endif
 
 void RegisterWeapons()
 {
