@@ -1,3 +1,24 @@
+/*
+ * Protocol of online ban list:
+ *
+ * - Reporting a ban:
+ *     GET g_ban_sync_uri?action=ban&ip=xxx.xxx.xxx&duration=nnnn&why=...................
+ *     (IP 1, 2, 3, or 4 octets, 3 octets for example is a /24 mask)
+ * - Removing a ban:
+ *     GET g_ban_sync_uri?action=unban&ip=xxx.xxx.xxx
+ * - Querying the ban list
+ *     GET g_ban_sync_uri?action=list&servers=xxx.xxx.xxx.xxx:xxx.xxx.xxx.xxx:...
+ *     
+ *     shows the bans from the listed servers, and possibly others.
+ *     Format of a ban is ASCII plain text, four lines per ban, delimited by
+ *     newline ONLY (no carriage return):
+ *
+ *     IP address (also 1, 2, 3, or 4 octets, delimited by dot)
+ *     time left in seconds
+ *     reason of the ban
+ *     server IP that registered the ban
+ */
+
 float Ban_Insert(string ip, float bantime, string reason, float dosync);
 
 void OnlineBanList_SendBan(string ip, float bantime, string reason)
