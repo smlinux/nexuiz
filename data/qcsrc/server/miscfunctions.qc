@@ -1658,3 +1658,17 @@ float SUB_NoImpactCheck()
 #define PROJECTILE_TOUCH do { if(SUB_OwnerCheck()) return; if(SUB_NoImpactCheck()) { remove(self); return; } } while(0)
 const string STR_MISC_NULL_WAV = "misc/null.wav";
 #define PROJECTILE_TOUCH_NOSOUND do { if(SUB_OwnerCheck()) return; if(SUB_NoImpactCheck()) { sound (self, CHAN_PROJECTILE, STR_MISC_NULL_WAV, VOL_BASE, ATTN_NORM); remove(self); return; } } while(0)
+
+void URI_Get_Callback(float id, float status, string data)
+{
+	dprint("Received HTTP request data for id ", ftos(id), "; status is ", ftos(status), "\nData is\n:");
+	dprint(data);
+	dprint("\nEnd of data.\n");
+
+	switch(id)
+	{
+		default:
+			print("Received HTTP request data for an invalid id ", ftos(id), ".\n");
+			break;
+	}
+}
