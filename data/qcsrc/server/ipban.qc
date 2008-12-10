@@ -206,6 +206,7 @@ void Ban_KickBanClient(entity client, float bantime, float masksize, string reas
 {
 	if(!Ban_GetClientIP(client))
 	{
+		sprint(client, "Kickbanned: ", reason, "\n");
 		dropclient(client);
 		return;
 	}
@@ -226,6 +227,7 @@ void Ban_KickBanClient(entity client, float bantime, float masksize, string reas
 			break;
 	}
 	// and kick him
+	sprint(client, "Kickbanned: ", reason, "\n");
 	dropclient(client);
 }
 
