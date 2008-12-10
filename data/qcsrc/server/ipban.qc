@@ -1,3 +1,17 @@
+float Ban_Insert(string ip, float bantime, string reason);
+
+void OnlineBanList_SendBan(string ip, float bantime, string reason)
+{
+	// a stub
+	// fill in your ban list syncing here
+}
+
+void OnlineBanList_Think()
+{
+	// a stub
+	// fill in your ban list syncing here
+}
+
 #define BAN_MAX 64
 float ban_loaded;
 string ban_ip[BAN_MAX];
@@ -65,6 +79,12 @@ void Ban_LoadBans()
 			ban_expire[i] = time + stof(argv(2*i+2));
 		}
 	}
+
+	entity e;
+	e = spawn();
+	e.classname = "bansyncer";
+	e.think = OnlineBanList_Think;
+	e.nextthink = time + 1;
 }
 
 void Ban_View()
@@ -129,15 +149,25 @@ float Ban_MaybeEnforceBan(entity client)
 	return FALSE;
 }
 
-float Ban_Insert(string ip, float bantime)
+float Ban_Insert(string ip, float bantime, string reason)
 {
 	float i;
 	float j;
 	float bestscore;
+
+	if(reason != "")
+		OnlineBanList_SendBan(ip, bantime, reason);
+
 	// already banned?
 	for(i = 0; i < ban_count; ++i)
 		if(ban_ip[i] == ip)
+		{
+			// prolong the ban
+			if(time + bantime > ban_expire[i])
+				ban_expire[i] = time + bantime;
+			// and abort
 			return FALSE;
+		}
 	// do we have a free slot?
 	for(i = 0; i < ban_count; ++i)
 		if(time > ban_expire[i])
@@ -172,7 +202,7 @@ float Ban_Insert(string ip, float bantime)
 	return TRUE;
 }
 
-void Ban_KickBanClient(entity client, float bantime, float masksize)
+void Ban_KickBanClient(entity client, float bantime, float masksize, string reason)
 {
 	if(!Ban_GetClientIP(client))
 	{
@@ -183,16 +213,16 @@ void Ban_KickBanClient(entity client, float bantime, float masksize)
 	switch(masksize)
 	{
 		case 1:
-			Ban_Insert(ban_ip1, bantime);
+			Ban_Insert(ban_ip1, bantime, reason);
 			break;
 		case 2:
-			Ban_Insert(ban_ip2, bantime);
+			Ban_Insert(ban_ip2, bantime, reason);
 			break;
 		case 3:
-			Ban_Insert(ban_ip3, bantime);
+			Ban_Insert(ban_ip3, bantime, reason);
 			break;
 		default:
-			Ban_Insert(ban_ip4, bantime);
+			Ban_Insert(ban_ip4, bantime, reason);
 			break;
 	}
 	// and kick him
@@ -206,6 +236,7 @@ float GameCommand_Ban(string command)
 	entity client;
 	float entno;
 	float masksize;
+	string reason;
 
 	argc = tokenize_sane(command);
 	if(argv(0) == "help")
@@ -232,7 +263,11 @@ float GameCommand_Ban(string command)
 				masksize = stof(argv(4));
 			else
 				masksize = cvar("g_ban_default_masksize");
-			Ban_KickBanClient(client, bantime, masksize);
+			if(argc >= 6)
+				reason = substring(command, argv_start_index(5), strlen(command) - argv_start_index(5));
+			else
+				reason = "";
+			Ban_KickBanClient(client, bantime, masksize, reason);
 			return TRUE;
 		}
 	}
@@ -246,7 +281,11 @@ float GameCommand_Ban(string command)
 				bantime = stof(argv(2));
 			else
 				bantime = cvar("g_ban_default_bantime");
-			Ban_Insert(ip, bantime);
+			if(argc >= 4)
+				reason = substring(command, argv_start_index(3), strlen(command) - argv_start_index(3));
+			else
+				reason = "";
+			Ban_Insert(ip, bantime, reason);
 			return TRUE;
 		}
 	}

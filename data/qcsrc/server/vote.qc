@@ -17,6 +17,7 @@ entity GetKickVoteVictim(string vote, string cmd, entity caller)
 	float n, t;
 	string ns;
 	entity e;
+	string reason;
 
 	tokens = tokenize_sane(vote);
 	ns = "";
@@ -42,6 +43,16 @@ entity GetKickVoteVictim(string vote, string cmd, entity caller)
 		else
 			GetKickVoteVictim_reason = "";
 
+		if(caller)
+			reason = strcat("player ", caller.netname);
+		else
+			reason = "console vote";
+		if(!cvar_value_issafe(reason))
+			reason = "some player";
+		if(GetKickVoteVictim_reason != "")
+			if(cvar_value_issafe(GetKickVoteVictim_reason))
+				reason = strcat(reason, ": ", GetKickVoteVictim_reason);
+
 		n = stof(ns);
 		if(ns == ftos(n)) if(n >= 1) if(n <= maxclients)
 		{
@@ -49,6 +60,14 @@ entity GetKickVoteVictim(string vote, string cmd, entity caller)
 			if(clienttype(e) == CLIENTTYPE_REAL)
 			{
 				GetKickVoteVictim_newcommand = strcat(argv(0), " # ", ns);
+				if(argv(0) == "kickban")
+				{
+					GetKickVoteVictim_newcommand = strcat(GetKickVoteVictim_newcommand, " ", cvar_string("g_ban_default_bantime"), " ", cvar_string("g_ban_default_masksize"), reason);
+				}
+				else if(argv(0) == "kick")
+				{
+					GetKickVoteVictim_newcommand = strcat(GetKickVoteVictim_newcommand, reason);
+				}
 				return e;
 			}
 		}
