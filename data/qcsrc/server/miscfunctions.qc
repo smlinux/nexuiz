@@ -1667,6 +1667,13 @@ void URI_Get_Callback(float id, float status, string data)
 
 	switch(id)
 	{
+		case 0:
+			// 0 is the ID for discarding
+			break;
+		case 1:
+			// 1 is the ID for online ban list
+			OnlineBanList_URI_Get_Callback(status, data);
+			break;
 		default:
 			print("Received HTTP request data for an invalid id ", ftos(id), ".\n");
 			break;

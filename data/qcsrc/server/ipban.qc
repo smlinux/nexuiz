@@ -1,15 +1,152 @@
-float Ban_Insert(string ip, float bantime, string reason);
+float Ban_Insert(string ip, float bantime, string reason, float dosync);
 
 void OnlineBanList_SendBan(string ip, float bantime, string reason)
 {
-	// a stub
-	// fill in your ban list syncing here
+	string uri;
+
+	uri = cvar_string("g_ban_sync_uri");
+
+	if(uri == "")
+		return;
+
+	uri = strcat(uri, "?action=ban");
+	uri = strcat(uri, "&ip=", uri_escape(ip));
+	uri = strcat(uri, "&duration=", ftos(bantime));
+	uri = strcat(uri, "&why=", uri_escape(reason));
+
+	uri_get(uri, 0); // 0 = "discard" callback target
+}
+
+void OnlineBanList_SendUnban(string ip)
+{
+	string uri;
+
+	uri = cvar_string("g_ban_sync_uri");
+
+	if(uri == "")
+		return;
+
+	uri = strcat(uri, "?action=unban");
+	uri = strcat(uri, "&ip=", uri_escape(ip));
+
+	uri_get(uri, 0); // 0 = "discard" callback target
+}
+
+string OnlineBanList_Servers;
+float OnlineBanList_Timeout;
+
+void OnlineBanList_URI_Get_Callback(float status, string data)
+{
+	float n, i, j, l;
+	string ip;
+	float timeleft;
+	string reason;
+	string serverip;
+	float syncinterval;
+
+	if(time > OnlineBanList_Timeout)
+		return;
+	OnlineBanList_Timeout = 0;
+
+	syncinterval = cvar("g_ban_sync_interval");
+	if(syncinterval == 0)
+		return;
+	if(syncinterval > 0)
+		syncinterval *= 60;
+
+	if(status != 0)
+	{
+		print("Error receiving the online ban list.\nStatus is ", ftos(status), "\n");
+		return;
+	}
+
+	if(substring(data, 0, 1) == "<")
+	{
+		print("Error receiving the online ban list.\nReceived HTML instead of a ban list.\n");
+		return;
+	}
+
+	if(strstrofs(data, "\r", 0) != -1)
+	{
+		print("Error receiving the online ban list.\nReceived carriage returns.\n");
+		return;
+	}
+
+	n = tokenizebyseparator(data, "\n");
+	if(mod(n, 4) != 0)
+	{
+		print("Error receiving the online ban list.\nReceived invalid item count.\n");
+		return;
+	}
+
+	for(i = 0; i < n; i += 4)
+	{
+		ip = argv(i);
+		timeleft = stof(argv(i + 1));
+		reason = argv(i + 2);
+		serverip = argv(i + 3);
+
+		timeleft -= 15;
+		if(timeleft < 0)
+			continue;
+
+		l = strlen(ip);
+		for(j = 0; j < l; ++j)
+			if(strstrofs("0123456789.", substring(ip, j, 1), 0) == -1)
+			{
+				print("Invalid character ", substring(ip, j, 1), " in IP address ", ip, ". Skipping this ban.\n");
+				goto skip;
+			}
+
+		if(strstrofs(strcat(":", OnlineBanList_Servers, ":"), strcat(":", serverip, ":"), 0) != -1)
+		{
+			if(syncinterval > 0)
+				timeleft = min(syncinterval + 15, timeleft);
+				// 15 seconds for safety
+				// the ban will be prolonged on the next sync
+			Ban_Insert(ip, timeleft, strcat("ban synced from ", serverip), 0);
+			print("Ban list syncing: accepted ban of ", ip, " by ", serverip, ": ", reason, "\n");
+		}
+
+		continue;
+:skip
+	}
 }
 
 void OnlineBanList_Think()
 {
-	// a stub
-	// fill in your ban list syncing here
+	float argc;
+	string uri;
+	float i;
+	
+	uri = cvar_string("g_ban_sync_uri");
+
+	if(uri == "")
+		return;
+	if(cvar("g_ban_sync_interval") == 0) // < 0 is okay, it means "sync on level start only"
+		return;
+	argc = tokenize_sane(cvar_string("g_ban_sync_trusted_servers"));
+	if(argc == 0)
+		return;
+
+	if(OnlineBanList_Timeout == 0) // only if there is no ongoing request!
+	{
+		if(OnlineBanList_Servers)
+			strunzone(OnlineBanList_Servers);
+		OnlineBanList_Servers = argv(0);
+		for(i = 1; i < argc; ++i)
+			OnlineBanList_Servers = strcat(OnlineBanList_Servers, ":", argv(i));
+		OnlineBanList_Servers = strzone(OnlineBanList_Servers);
+		
+		uri = strcat(uri, "?action=list");
+		uri = strcat(uri, "&servers=", uri_escape(OnlineBanList_Servers));
+
+		OnlineBanList_Timeout = time + 10;
+		uri_get(uri, 1); // 1 = "banlist" callback target
+	}
+	
+	if(cvar("g_ban_sync_interval") > 0)
+		self.nextthink = time + max(60, cvar("g_ban_sync_interval") * 60);
 }
 
 #define BAN_MAX 64
@@ -55,7 +192,10 @@ float Ban_Delete(float i)
 	if(ban_expire[i] == 0)
 		return FALSE;
 	if(ban_expire[i] > 0)
+	{
+		OnlineBanList_SendUnban(ban_ip[i]);
 		strunzone(ban_ip[i]);
+	}
 	ban_expire[i] = 0;
 	ban_ip[i] = "";
 	Ban_SaveBans();
@@ -115,14 +255,24 @@ float Ban_GetClientIP(entity client)
 	return TRUE;
 }
 
-float Ban_IsClientBanned(entity client)
+float Ban_IsClientBanned(entity client, float idx)
 {
-	float i;
+	float i, b, e;
 	if(!ban_loaded)
 		Ban_LoadBans();
 	if(!Ban_GetClientIP(client))
 		return FALSE;
-	for(i = 0; i < ban_count; ++i)
+	if(idx < 0)
+	{
+		b = 0;
+		e = ban_count;
+	}
+	else
+	{
+		b = idx;
+		e = idx + 1;
+	}
+	for(i = b; i < e; ++i)
 	{
 		string s;
 		if(time > ban_expire[i])
@@ -138,7 +288,7 @@ float Ban_IsClientBanned(entity client)
 
 float Ban_MaybeEnforceBan(entity client)
 {
-	if(Ban_IsClientBanned(client))
+	if(Ban_IsClientBanned(client, -1))
 	{
 		string s;
 		s = strcat("^1NOTE:^7 banned client ", client.netaddress, " just tried to enter\n");
@@ -149,13 +299,15 @@ float Ban_MaybeEnforceBan(entity client)
 	return FALSE;
 }
 
-float Ban_Insert(string ip, float bantime, string reason)
+float Ban_Insert(string ip, float bantime, string reason, float dosync)
 {
 	float i;
 	float j;
 	float bestscore;
+	entity e;
+	string s;
 
-	if(reason != "")
+	if(dosync)
 		OnlineBanList_SendBan(ip, bantime, reason);
 
 	// already banned?
@@ -164,7 +316,10 @@ float Ban_Insert(string ip, float bantime, string reason)
 		{
 			// prolong the ban
 			if(time + bantime > ban_expire[i])
+			{
 				ban_expire[i] = time + bantime;
+				print(ip, "'s ban has been prolonged to ", ftos(bantime), " seconds from now\n");
+			}
 			// and abort
 			return FALSE;
 		}
@@ -199,6 +354,16 @@ float Ban_Insert(string ip, float bantime, string reason)
 
 	Ban_SaveBans();
 
+	// Enforce our new ban
+	s = "";
+	FOR_EACH_REALCLIENT(e)
+		if(Ban_IsClientBanned(e, i))
+		{
+			s = strcat(s, "^1NOTE:^7 banned client ", e.netname, "^7 has to go\n");
+			dropclient(e);
+		}
+	bprint(s);
+
 	return TRUE;
 }
 
@@ -214,16 +379,16 @@ void Ban_KickBanClient(entity client, float bantime, float masksize, string reas
 	switch(masksize)
 	{
 		case 1:
-			Ban_Insert(ban_ip1, bantime, reason);
+			Ban_Insert(ban_ip1, bantime, reason, 1);
 			break;
 		case 2:
-			Ban_Insert(ban_ip2, bantime, reason);
+			Ban_Insert(ban_ip2, bantime, reason, 1);
 			break;
 		case 3:
-			Ban_Insert(ban_ip3, bantime, reason);
+			Ban_Insert(ban_ip3, bantime, reason, 1);
 			break;
 		default:
-			Ban_Insert(ban_ip4, bantime, reason);
+			Ban_Insert(ban_ip4, bantime, reason, 1);
 			break;
 	}
 	// and kick him
@@ -287,7 +452,7 @@ float GameCommand_Ban(string command)
 				reason = substring(command, argv_start_index(3), strlen(command) - argv_start_index(3));
 			else
 				reason = "";
-			Ban_Insert(ip, bantime, reason);
+			Ban_Insert(ip, bantime, reason, 1);
 			return TRUE;
 		}
 	}

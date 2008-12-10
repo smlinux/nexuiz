@@ -912,12 +912,15 @@ string(string in) uri_unescape = #511;
 //idea: div0
 //darkplaces implementation: div0
 //loads text from an URL into a string
+//returns 1 on success of initiation, 0 if there are too many concurrent
+//connections already or if the URL is invalid
 //the following callback will receive the data and MUST exist!
 //  void(float id, float status, string data) URI_Get_Callback;
 //status is either
 //  negative for an internal error,
 //  0 for success, or
 //  the HTTP response code on server error (e.g. 404)
+//if 1 is returned by uri_get, the callback will be called in the future
 float(string url, float id) uri_get = #513;
 
 //DP_SV_SPAWNFUNC_PREFIX
