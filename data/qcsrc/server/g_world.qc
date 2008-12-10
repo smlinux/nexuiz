@@ -1458,6 +1458,7 @@ void ShuffleMaplist()
 	cvar_set("g_maplist", result);
 }
 
+float leaderfrags;
 float WinningCondition_Scores(float limit)
 {
 	// TODO make everything use THIS winning condition (except LMS)
@@ -1481,6 +1482,22 @@ float WinningCondition_Scores(float limit)
 	{
 		WinningConditionHelper_topscore = -WinningConditionHelper_topscore;
 		limit = -limit;
+	}
+
+	if(g_dm || (g_ctf && g_ctf_win_mode != 2) || g_tdm || g_arena || (g_race && !g_race_qualifying))
+	// these modes always score in increments of 1, thus this makes sense
+	{
+		if(leaderfrags != WinningConditionHelper_topscore)
+		{
+			leaderfrags = WinningConditionHelper_topscore;
+
+			if (leaderfrags == limit - 1)
+				play2all("announcer/robotic/1fragleft.wav");
+			else if (leaderfrags == limit - 2)
+				play2all("announcer/robotic/2fragsleft.wav");
+			else if (leaderfrags == limit - 3)
+				play2all("announcer/robotic/3fragsleft.wav");
+		}
 	}
 
 	return GetWinningCode(limit && WinningConditionHelper_topscore && (WinningConditionHelper_topscore >= limit), WinningConditionHelper_equality);
