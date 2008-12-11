@@ -449,6 +449,8 @@ void SV_ParseClientCommand(string s) {
 		}
 		else
 			print("Usage: sv_cheats 1; restart; cmd trailparticles effectname shotorigin\n");
+	} else if(argv(0) == "records") {
+		printrecords(self);
 	} else {
 		//if(ctf_clientcommand())
 		//	return;

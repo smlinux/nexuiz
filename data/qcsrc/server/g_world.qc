@@ -1415,14 +1415,6 @@ float WinningCondition_LMS()
 	return WINNING_NO;
 }
 
-void print_to(entity e, string s)
-{
-	if(e)
-		sprint(e, strcat(s, "\n"));
-	else
-		print(s, "\n");
-}
-
 void ShuffleMaplist()
 {
 	string result;

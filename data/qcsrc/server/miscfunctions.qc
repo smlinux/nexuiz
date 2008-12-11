@@ -1679,3 +1679,56 @@ void URI_Get_Callback(float id, float status, string data)
 			break;
 	}
 }
+
+void print_to(entity e, string s)
+{
+	if(e)
+		sprint(e, strcat(s, "\n"));
+	else
+		print(s, "\n");
+}
+
+void printrecords(entity to)
+{
+	float rec;
+	string h;
+	float r;
+	float i;
+
+	rec = 0;
+
+	if(g_ctf)
+	{
+		for(i = 0; i < MapInfo_count; ++i)
+		{
+			if(MapInfo_Get_ByID(i))
+			{
+				r = stof(db_get(ServerProgsDB, strcat(MapInfo_Map_bspname, "/captimerecord/time")));
+				if(r == 0)
+					continue;
+				h = db_get(ServerProgsDB, strcat(MapInfo_Map_bspname, "/captimerecord/netname"));
+				print_to(to, strcat(strpad(32, MapInfo_Map_bspname), " ", strpad(-6, ftos_decimals(r, 2)), " ", h));
+				++rec;
+			}
+		}
+	}
+
+	if(g_race)
+	{
+		for(i = 0; i < MapInfo_count; ++i)
+		{
+			if(MapInfo_Get_ByID(i))
+			{
+				r = stof(db_get(ServerProgsDB, strcat(MapInfo_Map_bspname, "/racerecord/time")));
+				if(r == 0)
+					continue;
+				h = db_get(ServerProgsDB, strcat(MapInfo_Map_bspname, "/racerecord/netname"));
+				print_to(to, strcat(strpad(32, MapInfo_Map_bspname), " ", strpad(-8, mmsss(r)), " ", h));
+				++rec;
+			}
+		}
+	}
+
+	if(!rec)
+		print_to(to, "No records are available on this server.");
+}

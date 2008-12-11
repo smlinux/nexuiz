@@ -679,6 +679,11 @@ void GameCommand(string command)
 			print(etos(client), "\n");
 		return;
 	}
+	if (argv(0) == "records")
+	{
+		printrecords(world);
+		return;
+	}
 
 	print("Invalid command. For a list of supported commands, try sv_cmd help.\n");
 }
