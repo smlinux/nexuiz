@@ -79,6 +79,7 @@ float GameCommand_Generic(string command)
 		print("  maplist add map\n");
 		print("  maplist remove map\n");
 		print("  maplist shuffle\n");
+		print("  suggestmap map\n");
 		return TRUE;
 	}
 	
@@ -561,6 +562,8 @@ float GameCommand_Generic(string command)
 		}
 		return TRUE;
 #endif
+	} else if(argv(0) == "suggestmap") {
+		sprint(self, strcat(MapVote_Suggest(argv(1)), "\n"));
 	}
 
 	return FALSE;
