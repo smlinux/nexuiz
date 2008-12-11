@@ -1688,14 +1688,17 @@ void print_to(entity e, string s)
 		print(s, "\n");
 }
 
-void printrecords(entity to)
+string getrecords()
 {
 	float rec;
 	string h;
 	float r;
 	float i;
+	string s;
 
 	rec = 0;
+	
+	s = "";
 
 	if(g_ctf)
 	{
@@ -1707,7 +1710,7 @@ void printrecords(entity to)
 				if(r == 0)
 					continue;
 				h = db_get(ServerProgsDB, strcat(MapInfo_Map_bspname, "/captimerecord/netname"));
-				print_to(to, strcat(strpad(32, MapInfo_Map_bspname), " ", strpad(-6, ftos_decimals(r, 2)), " ", h));
+				s = strcat(s, strpad(32, MapInfo_Map_bspname), " ", strpad(-6, ftos_decimals(r, 2)), " ", h, "\n");
 				++rec;
 			}
 		}
@@ -1723,12 +1726,14 @@ void printrecords(entity to)
 				if(r == 0)
 					continue;
 				h = db_get(ServerProgsDB, strcat(MapInfo_Map_bspname, "/racerecord/netname"));
-				print_to(to, strcat(strpad(32, MapInfo_Map_bspname), " ", strpad(-8, mmsss(r)), " ", h));
+				s = strcat(s, strpad(32, MapInfo_Map_bspname), " ", strpad(-8, mmsss(r)), " ", h, "\n");
 				++rec;
 			}
 		}
 	}
 
-	if(!rec)
-		print_to(to, "No records are available on this server.");
+	if(s == "")
+		return "No records are available on this server.\n";
+	else
+		return strcat("Records on this server:\n", s);
 }

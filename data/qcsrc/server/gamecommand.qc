@@ -681,7 +681,9 @@ void GameCommand(string command)
 	}
 	if (argv(0) == "records")
 	{
-		printrecords(world);
+		strunzone(records_reply);
+		records_reply = strzone(getrecords());
+		print(records_reply);
 		return;
 	}
 

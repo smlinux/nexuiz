@@ -229,8 +229,8 @@ void RegisterWeapons();
 void Nagger_Init();
 void spawnfunc_worldspawn (void)
 {
-	float fd, l;
-	string s;
+	float fd, l, i, j, n;
+	string s, col;
 
 	dprint_load(); // load dprint status from cvar
 
@@ -443,6 +443,40 @@ void spawnfunc_worldspawn (void)
 	InitializeEntity(self, cvar_changes_init, INITPRIO_CVARS);
 
 	detect_maptype();
+
+	lsmaps_reply = "^7Maps available: ";
+	for(i = 0, j = 0; i < MapInfo_count; ++i)
+	{
+		if(MapInfo_Get_ByID(i))
+			if not(MapInfo_Map_flags & MAPINFO_FLAG_HIDDEN)
+			{
+				if(mod(i, 2))
+					col = "^2";
+				else
+					col = "^3";
+				++j;
+				lsmaps_reply = strcat(lsmaps_reply, col, MapInfo_Map_bspname, " ");
+			}
+	}
+	lsmaps_reply = strzone(strcat(lsmaps_reply, "\n"));
+
+	maplist_reply = "^7Maps in list: ";
+	n = tokenize_sane(cvar_string("g_maplist"));
+	for(i = 0, j = 0; i < n; ++i)
+	{
+		if(MapInfo_CheckMap(argv(i)))
+		{
+			if(mod(j, 2))
+				col = "^2";
+			else
+				col = "^3";
+			maplist_reply = strcat(maplist_reply, col, argv(i), " ");
+			++j;
+		}
+	}
+	maplist_reply = strzone(strcat(maplist_reply, "\n"));
+
+	records_reply = strzone(getrecords());
 
 	world_initialized = 1;
 }

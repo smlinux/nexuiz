@@ -224,7 +224,7 @@ entity GetPlayer(string name)
 float readyrestart_happened;
 void SV_ParseClientCommand(string s) {
 	local string cmd;
-	local float i, j, tokens, f, effectnum;
+	local float tokens, f, effectnum;
 	local vector start, end;
 
 	tokens = tokenize_sane(s);
@@ -345,39 +345,11 @@ void SV_ParseClientCommand(string s) {
 			}
 		}
 	} else if(argv(0) == "maplist") {
-		local float n;
-		local string col;
-		n = tokenize_sane(cvar_string("g_maplist"));
-		sprint(self, "^7Maps in list: ");
-		for(i = 0, j = 0; i < n; ++i)
-		{
-			if(MapInfo_CheckMap(argv(i)))
-			{
-				if(mod(j, 2))
-					col = "^2";
-				else
-					col = "^3";
-				sprint(self, strcat(col, argv(i), " "));
-				++j;
-			}
-		}
-		sprint(self, "\n");
+		sprint(self, maplist_reply);
 	} else if(argv(0) == "lsmaps") {
-		sprint(self, "^7Maps available: ");
-		for(i = 0, j = 0; i < MapInfo_count; ++i)
-		{
-			if(MapInfo_Get_ByID(i))
-			if not(MapInfo_Map_flags & MAPINFO_FLAG_HIDDEN)
-			{
-				if(mod(i, 2))
-					col = "^2";
-				else
-					col = "^3";
-				++j;
-				sprint(self, strcat(col, MapInfo_Map_bspname, " "));
-			}
-		}
-		sprint(self, "\n");
+		sprint(self, lsmaps_reply);
+	} else if(argv(0) == "records") {
+		sprint(self, records_reply);
 	} else if(argv(0) == "voice") {
 		VoiceMessage(argv(1));
 	} else if(argv(0) == "say") {
@@ -449,8 +421,6 @@ void SV_ParseClientCommand(string s) {
 		}
 		else
 			print("Usage: sv_cheats 1; restart; cmd trailparticles effectname shotorigin\n");
-	} else if(argv(0) == "records") {
-		printrecords(self);
 	} else {
 		//if(ctf_clientcommand())
 		//	return;
