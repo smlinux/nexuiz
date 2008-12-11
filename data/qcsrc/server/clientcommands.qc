@@ -56,7 +56,6 @@ void Nagger_ReadyCounted()
 }
 
 void ReadyCount();
-string MapVote_Suggest(string m);
 
 .float floodcontrol_chat;
 .float floodcontrol_team;
