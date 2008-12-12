@@ -54,7 +54,8 @@ entity GetKickVoteVictim(string vote, string cmd, entity caller)
 		if(GetKickVoteVictim_reason != "")
 			reason = strcat(reason, ": ", strdecolorize(GetKickVoteVictim_reason));
 
-		reason = uri_escape(reason); // workaround until we know what to do about the weird extended characters
+		if not(cvar_value_issafe(reason))
+			reason = uri_escape(reason);
 
 		n = stof(ns);
 		if(ns == ftos(n)) if(n >= 1) if(n <= maxclients)
