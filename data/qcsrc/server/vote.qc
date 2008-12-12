@@ -15,7 +15,7 @@ entity GetKickVoteVictim(string vote, string cmd, entity caller)
 {
 	float tokens;
 	float n, t;
-	string ns;
+	string ns, s;
 	entity e;
 	string reason;
 
@@ -49,19 +49,21 @@ entity GetKickVoteVictim(string vote, string cmd, entity caller)
 			reason = "";
 		if(caller)
 		{
-			if(cvar_value_issafe(caller.netname))
-				reason = strcat(reason, "player ", caller.netname);
+			s = strdecolorize(caller.netname);
+			if(cvar_value_issafe(s))
+				reason = strcat(reason, "player ", s);
 			else
-				reason = strcat(reason, "player ", uri_escape(caller.netname));
+				reason = strcat(reason, "player ", uri_escape(s));
 		}
 		else
 			reason = strcat(reason, "console vote");
 		if(GetKickVoteVictim_reason != "")
 		{
-			if(cvar_value_issafe(GetKickVoteVictim_reason))
-				reason = strcat(reason, ": ", GetKickVoteVictim_reason);
+			s = strdecolorize(GetKickVoteVictim_reason);
+			if(cvar_value_issafe(s))
+				reason = strcat(reason, ": ", s);
 			else
-				reason = strcat(reason, ": ", uri_escape(GetKickVoteVictim_reason));
+				reason = strcat(reason, ": ", uri_escape(s));
 		}
 
 		n = stof(ns);
