@@ -1333,6 +1333,9 @@ void precache()
 		}
 	}
 
+#if 0
+	// Disabled this code because it simply does not work (e.g. ignores bgmvolume, overlaps with "cd loop" controlled tracks).
+
 	if (!self.noise && self.music) // quake 3 uses the music field
 		self.noise = self.music;
 
@@ -1342,6 +1345,7 @@ void precache()
 		precache_sound (self.noise);
 		ambientsound ('0 0 0', self.noise, VOL_BASE, ATTN_NONE);
 	}
+#endif
 }
 
 // sorry, but using \ in macros breaks line numbers
