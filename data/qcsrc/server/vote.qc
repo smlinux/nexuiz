@@ -75,7 +75,7 @@ entity GetKickVoteVictim(string vote, string cmd, entity caller)
 				GetKickVoteVictim_newcommand = strcat(argv(0), " # ", ns);
 				if(argv(0) == "kickban")
 				{
-					GetKickVoteVictim_newcommand = strcat(GetKickVoteVictim_newcommand, " ", cvar_string("g_ban_default_bantime"), " ", cvar_string("g_ban_default_masksize"), " \"", reason, "\"");
+					GetKickVoteVictim_newcommand = strcat("sv_cmd ", GetKickVoteVictim_newcommand, " ", cvar_string("g_ban_default_bantime"), " ", cvar_string("g_ban_default_masksize"), " \"", reason, "\"");
 				}
 				else if(argv(0) == "kick")
 				{
