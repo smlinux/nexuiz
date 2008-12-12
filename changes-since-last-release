@@ -10,6 +10,7 @@ game: command allready
 game: command lockteams, unlockteams
 game: command movetoteam_red, ...
 game: command nospectators
+game: command records
 game: command vlogin must be used instead of vdo login now
 game: command weapbest
 game: crosshairs added
@@ -18,7 +19,7 @@ game: crylink primary does 2 cells
 game: crylink weakened
 game: ctf capture records now can only be made on an otherwise empty server, prevents "assisted" records
 game: ctf flag touching when dead bug fixed
-game: ctf win mode 3 = scores, but no frags
+game: ctf scoring now uses flags, not frags
 game: cvar cl_weaponpriority* (custom weapon orders)
 game: cvar cl_weaponpriority_useforcycling
 game: cvar g_balance_ctf_damageforcescale
@@ -27,9 +28,11 @@ game: cvar g_balance_teams_complain can now be turned off
 game: cvar g_bugrigs*
 game: cvar g_ctf_allow_drop
 game: cvar g_ctf_fullbrightflags
+game: cvar g_ctf_ignore_frags
 game: cvar g_instagib REMOVED (no demand)
 game: cvar g_jump_grunt
 game: cvar g_maxplayers
+game: cvar g_pickup_respawntime*
 game: cvar g_spawn_furthest
 game: cvar g_spawnpoints_auto_move_out_of_solid
 game: cvar g_start_delay
@@ -101,7 +104,7 @@ mapping: entity trigger_heal
 mapping: entity trigger_hurt now can set a message2 as death message for push-kills
 mapping: entity trigger_items
 mapping: field nottargeted overrides targetname checks in e.g. func_door (so it can be used for misc_follow without needing an extra trigger)
-mapping: field team on items
+mapping: field team on items, and cnt as weight
 mapping: LOD for misc_models and similar entities
 mapping: mapname.cfg is deprecated. Use clientsettemp_for_type and cdtrack in mapname.mapinfo
 mapping: target2, target3, target4 as extra target fields
