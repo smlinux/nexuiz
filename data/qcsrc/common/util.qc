@@ -641,7 +641,7 @@ void fixedmakevectors(vector a)
 }
 #endif
 
-string fixPriorityList(string order, float from, float to, float complete)
+string fixPriorityList(string order, float from, float to, float subtract, float complete)
 {
 	string neworder;
 	float i, n, w;
@@ -650,8 +650,17 @@ string fixPriorityList(string order, float from, float to, float complete)
 	for(i = 0; i < n; ++i)
 	{
 		w = stof(argv(i));
-		if(w >= from && w <= to && w == floor(w))
-			neworder = strcat(neworder, ftos(w), " ");
+		if(w == floor(w))
+		{
+			if(w >= from && w <= to)
+				neworder = strcat(neworder, ftos(w), " ");
+			else
+			{
+				w -= subtract;
+				if(w >= from && w <= to)
+					neworder = strcat(neworder, ftos(w), " ");
+			}
+		}
 	}
 
 	if(complete)

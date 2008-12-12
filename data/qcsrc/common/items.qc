@@ -81,7 +81,7 @@ entity get_weaponinfo(float id)
 }
 string W_FixWeaponOrder(string order, float complete)
 {
-	return fixPriorityList(order, WEP_FIRST, WEP_LAST, complete);
+	return fixPriorityList(order, WEP_FIRST, WEP_LAST, 230 - WEP_FIRST, complete);
 }
 
 #ifdef SVQC

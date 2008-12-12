@@ -74,7 +74,7 @@ void fixedmakevectors(vector a);
 #define fixedvectoangles vectoangles
 #endif
 
-string fixPriorityList(string pl, float from, float to, float complete);
+string fixPriorityList(string pl, float from, float to, float subtract, float complete);
 string swapInPriorityList(string order, float i, float j);
 
 float cvar_value_issafe(string s);

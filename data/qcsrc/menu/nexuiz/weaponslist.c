@@ -34,7 +34,7 @@ void drawNexuizWeaponsList(entity me)
 	// read in cvar?
 	string s, t;
 	s = cvar_string("cl_weaponpriority");
-	t = fixPriorityList(s, WEP_FIRST, WEP_LAST, 1);
+	t = W_FixWeaponOrder(s, 1);
 	if(t != s)
 	{
 		print("AUTOFIXED\n");
