@@ -48,23 +48,13 @@ entity GetKickVoteVictim(string vote, string cmd, entity caller)
 		else
 			reason = "";
 		if(caller)
-		{
-			s = strdecolorize(caller.netname);
-			if(cvar_value_issafe(s))
-				reason = strcat(reason, "player ", s);
-			else
-				reason = strcat(reason, "player ", uri_escape(s));
-		}
+			reason = strcat(reason, "player ", strdecolorize(caller.netname));
 		else
 			reason = strcat(reason, "console vote");
 		if(GetKickVoteVictim_reason != "")
-		{
-			s = strdecolorize(GetKickVoteVictim_reason);
-			if(cvar_value_issafe(s))
-				reason = strcat(reason, ": ", s);
-			else
-				reason = strcat(reason, ": ", uri_escape(s));
-		}
+			reason = strcat(reason, ": ", strdecolorize(GetKickVoteVictim_reason));
+
+		reason = uri_escape(reason); // workaround until we know what to do about the weird extended characters
 
 		n = stof(ns);
 		if(ns == ftos(n)) if(n >= 1) if(n <= maxclients)
@@ -75,11 +65,11 @@ entity GetKickVoteVictim(string vote, string cmd, entity caller)
 				GetKickVoteVictim_newcommand = strcat(argv(0), " # ", ns);
 				if(argv(0) == "kickban")
 				{
-					GetKickVoteVictim_newcommand = strcat("sv_cmd ", GetKickVoteVictim_newcommand, " ", cvar_string("g_ban_default_bantime"), " ", cvar_string("g_ban_default_masksize"), " \"", reason, "\"");
+					GetKickVoteVictim_newcommand = strcat(GetKickVoteVictim_newcommand, " ", cvar_string("g_ban_default_bantime"), " ", cvar_string("g_ban_default_masksize"), " ", reason);
 				}
 				else if(argv(0) == "kick")
 				{
-					GetKickVoteVictim_newcommand = strcat(GetKickVoteVictim_newcommand, " \"", reason, "\"");
+					GetKickVoteVictim_newcommand = strcat(GetKickVoteVictim_newcommand, " ", reason);
 				}
 				return e;
 			}
