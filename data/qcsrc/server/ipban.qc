@@ -329,7 +329,9 @@ float Ban_Insert(string ip, float bantime, string reason, float dosync)
 	string s;
 
 	if(dosync)
-		OnlineBanList_SendBan(ip, bantime, reason);
+		if(reason != "")
+			if(substring(reason, 0, 1) != "~") // like IRC: unauthenticated banner
+				OnlineBanList_SendBan(ip, bantime, reason);
 
 	// already banned?
 	for(i = 0; i < ban_count; ++i)

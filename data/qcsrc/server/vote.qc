@@ -43,15 +43,26 @@ entity GetKickVoteVictim(string vote, string cmd, entity caller)
 		else
 			GetKickVoteVictim_reason = "";
 
-		if(caller)
-			reason = strcat("player ", caller.netname);
+		if(cmd != "vdo" || GetKickVoteVictim_reason == "")
+			reason = "~"; // by convention, ~ prefixes a "unverified" kickban which will not be networked
 		else
-			reason = "console vote";
-		if(!cvar_value_issafe(reason))
-			reason = "some player";
+			reason = "";
+		if(caller)
+		{
+			if(cvar_value_issafe(caller.netname))
+				reason = strcat(reason, "player ", caller.netname);
+			else
+				reason = strcat(reason, "player ", uri_escape(caller.netname));
+		}
+		else
+			reason = strcat(reason, "console vote");
 		if(GetKickVoteVictim_reason != "")
+		{
 			if(cvar_value_issafe(GetKickVoteVictim_reason))
 				reason = strcat(reason, ": ", GetKickVoteVictim_reason);
+			else
+				reason = strcat(reason, ": ", uri_escape(GetKickVoteVictim_reason));
+		}
 
 		n = stof(ns);
 		if(ns == ftos(n)) if(n >= 1) if(n <= maxclients)
