@@ -24,37 +24,32 @@ float Ban_Insert(string ip, float bantime, string reason, float dosync);
 void OnlineBanList_SendBan(string ip, float bantime, string reason)
 {
 	string uri;
+	float i, n;
 
-	uri = cvar_string("g_ban_sync_uri");
-
-	if(uri == "")
-		return;
-
-	uri = strcat(uri, "?action=ban");
-	uri = strcat(uri, "&ip=", uri_escape(ip));
+	uri = strcat(     "?action=ban&ip=", uri_escape(ip));
 	uri = strcat(uri, "&duration=", ftos(bantime));
 	uri = strcat(uri, "&why=", uri_escape(reason));
 
-	uri_get(uri, 0); // 0 = "discard" callback target
+	n = tokenize_sane(cvar_string("g_ban_sync_uri"));
+	for(i = 0; i < n; ++i)
+		uri_get(strcat(argv(i), uri), 0); // 0 = "discard" callback target
 }
 
 void OnlineBanList_SendUnban(string ip)
 {
 	string uri;
+	float i, n;
 
-	uri = cvar_string("g_ban_sync_uri");
+	uri = strcat(     "?action=unban&ip=", uri_escape(ip));
 
-	if(uri == "")
-		return;
-
-	uri = strcat(uri, "?action=unban");
-	uri = strcat(uri, "&ip=", uri_escape(ip));
-
-	uri_get(uri, 0); // 0 = "discard" callback target
+	n = tokenize_sane(cvar_string("g_ban_sync_uri"));
+	for(i = 0; i < n; ++i)
+		uri_get(strcat(argv(i), uri), 0); // 0 = "discard" callback target
 }
 
 string OnlineBanList_Servers;
 float OnlineBanList_Timeout;
+float OnlineBanList_Requests;
 
 void OnlineBanList_URI_Get_Callback(float status, string data)
 {
@@ -65,9 +60,13 @@ void OnlineBanList_URI_Get_Callback(float status, string data)
 	string serverip;
 	float syncinterval;
 
+	if(OnlineBanList_Requests <= 0)
+		return;
+
+	--OnlineBanList_Requests;
+
 	if(time > OnlineBanList_Timeout)
 		return;
-	OnlineBanList_Timeout = 0;
 
 	syncinterval = cvar("g_ban_sync_interval");
 	if(syncinterval == 0)
@@ -77,26 +76,26 @@ void OnlineBanList_URI_Get_Callback(float status, string data)
 
 	if(status != 0)
 	{
-		print("Error receiving the online ban list.\nStatus is ", ftos(status), "\n");
+		print("Error receiving the online ban list: Status is ", ftos(status), "\n");
 		return;
 	}
 
 	if(substring(data, 0, 1) == "<")
 	{
-		print("Error receiving the online ban list.\nReceived HTML instead of a ban list.\n");
+		print("Error receiving the online ban list: Received HTML instead of a ban list: ");
 		return;
 	}
 
 	if(strstrofs(data, "\r", 0) != -1)
 	{
-		print("Error receiving the online ban list.\nReceived carriage returns.\n");
+		print("Error receiving the online ban list: Received carriage returns: ");
 		return;
 	}
 
 	n = tokenizebyseparator(data, "\n");
 	if(mod(n, 4) != 0)
 	{
-		print("Error receiving the online ban list.\nReceived invalid item count.\n");
+		print("Error receiving the online ban list: Received invalid item count: ");
 		return;
 	}
 
@@ -138,11 +137,9 @@ void OnlineBanList_Think()
 {
 	float argc;
 	string uri;
-	float i;
+	float i, n;
 	
-	uri = cvar_string("g_ban_sync_uri");
-
-	if(uri == "")
+	if(cvar_string("g_ban_sync_uri") == "")
 		return;
 	if(cvar("g_ban_sync_interval") == 0) // < 0 is okay, it means "sync on level start only"
 		return;
@@ -150,7 +147,7 @@ void OnlineBanList_Think()
 	if(argc == 0)
 		return;
 
-	if(OnlineBanList_Timeout == 0) // only if there is no ongoing request!
+	if(OnlineBanList_Requests == 0) // only if there is no ongoing request!
 	{
 		if(OnlineBanList_Servers)
 			strunzone(OnlineBanList_Servers);
@@ -159,11 +156,16 @@ void OnlineBanList_Think()
 			OnlineBanList_Servers = strcat(OnlineBanList_Servers, ":", argv(i));
 		OnlineBanList_Servers = strzone(OnlineBanList_Servers);
 		
-		uri = strcat(uri, "?action=list");
-		uri = strcat(uri, "&servers=", uri_escape(OnlineBanList_Servers));
+		uri = strcat(     "?action=list&servers=", uri_escape(OnlineBanList_Servers));
 
 		OnlineBanList_Timeout = time + 10;
-		uri_get(uri, 1); // 1 = "banlist" callback target
+
+		n = tokenize_sane(cvar_string("g_ban_sync_uri"));
+		for(i = 0; i < n; ++i)
+		{
+			++OnlineBanList_Requests;
+			uri_get(strcat(argv(i), uri), 1); // 1 = "banlist" callback target
+		}
 	}
 	
 	if(cvar("g_ban_sync_interval") > 0)
