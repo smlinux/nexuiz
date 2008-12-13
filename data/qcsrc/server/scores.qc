@@ -595,8 +595,6 @@ entity PlayerScore_Sort(.float field)
 	entity p, plist, pprev, pbest, pbestprev, pfirst, plast;
 	float i;
 
-	DumpStats(0);
-
 	plist = world;
 
 	FOR_EACH_CLIENT(p)
@@ -633,8 +631,6 @@ entity PlayerScore_Sort(.float field)
 		pbest.chain = world;
 
 		pbest.field = ++i;
-
-		print("DEBUG: place ", ftos(i), " is ", pbest.netname, "\n");
 
 		if not(pfirst)
 			pfirst = pbest;
