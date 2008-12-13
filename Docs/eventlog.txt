@@ -144,6 +144,8 @@ death type:
        256 = secondary fire
 	   512 = splash damage
 	  1024 = bounced projectile
+	  2048 = head shot (MinstaNex only)
+	  4096 = unused flag
 
 There will be a log analyzer parsing this file format soon. Note that weapon
 IDs are below 10000.
