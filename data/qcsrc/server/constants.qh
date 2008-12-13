@@ -187,10 +187,12 @@ float	DEATH_TOUCHEXPLODE      = 10015;
 float   DEATH_TURRET            = 10100;
 
 float	DEATH_WEAPONMASK        = 0xFF;
-float	DEATH_HITTYPEMASK		= 0xF00; // which is WAY below 10000 used for normal deaths
+float	DEATH_HITTYPEMASK		= 0x1F00; // which is WAY below 10000 used for normal deaths
 float	HITTYPE_SECONDARY = 0x100;
 float	HITTYPE_SPLASH = 0x200;
 float	HITTYPE_BOUNCE = 0x400;
+float	HITTYPE_HEADSHOT = 0x800;
+float	HITTYPE_RESERVED = 0x1000; // unused yet
 
 // macros to access these
 #define DEATH_ISSPECIAL(t)            ((t) >= DEATH_SPECIAL_START)
