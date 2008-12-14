@@ -333,26 +333,6 @@ float Ban_Insert(string ip, float bantime, string reason, float dosync)
 	entity e;
 	string s;
 
-	// Enforce our new ban
-	s = "";
-	FOR_EACH_REALCLIENT(e)
-		if(Ban_IsClientBanned(e, i))
-		{
-			if(s == "")
-				reason = strcat(reason, ": affects ");
-			else
-				reason = strcat(reason, ", ");
-			reason = strcat(reason, e.netname);
-			s = strcat(s, "^1NOTE:^7 banned client ", e.netname, "^7 has to go\n");
-			dropclient(e);
-		}
-	bprint(s);
-
-	if(dosync)
-		if(reason != "")
-			if(substring(reason, 0, 1) != "~") // like IRC: unauthenticated banner
-				OnlineBanList_SendBan(ip, bantime, reason);
-
 	// already banned?
 	for(i = 0; i < ban_count; ++i)
 		if(ban_ip[i] == ip)
@@ -363,7 +343,13 @@ float Ban_Insert(string ip, float bantime, string reason, float dosync)
 				ban_expire[i] = time + bantime;
 				print(ip, "'s ban has been prolonged to ", ftos(bantime), " seconds from now\n");
 			}
+
 			// and abort
+			if(dosync)
+				if(reason != "")
+					if(substring(reason, 0, 1) != "~") // like IRC: unauthenticated banner
+						OnlineBanList_SendBan(ip, bantime, reason);
+
 			return FALSE;
 		}
 	// do we have a free slot?
@@ -396,6 +382,27 @@ float Ban_Insert(string ip, float bantime, string reason, float dosync)
 	ban_count = max(ban_count, i + 1);
 
 	Ban_SaveBans();
+
+	// Enforce our new ban
+	s = "";
+	FOR_EACH_REALCLIENT(e)
+		if(Ban_IsClientBanned(e, i))
+		{
+			if(s == "")
+				reason = strcat(reason, ": affects ");
+			else
+				reason = strcat(reason, ", ");
+			reason = strcat(reason, e.netname);
+			s = strcat(s, "^1NOTE:^7 banned client ", e.netname, "^7 has to go\n");
+			dropclient(e);
+		}
+	bprint(s);
+
+	// and abort
+	if(dosync)
+		if(reason != "")
+			if(substring(reason, 0, 1) != "~") // like IRC: unauthenticated banner
+				OnlineBanList_SendBan(ip, bantime, reason);
 
 	return TRUE;
 }
