@@ -11,6 +11,9 @@ float VoteCheckNasty(string cmd)
 	return FALSE;
 }
 
+string GetKickVoteVictim_newcommand;
+string GetKickVoteVictim_reason;
+
 entity GetKickVoteVictim(string vote, string cmd, entity caller)
 {
 	float tokens;
@@ -120,7 +123,7 @@ float RemapVote(string vote, string cmd, entity e)
 		if(!(victim = GetKickVoteVictim(vote, cmd, e)))
 			return FALSE;
 		RemapVote_vote = GetKickVoteVictim_newcommand;
-		RemapVote_display = strcat("^1", RemapVote_vote, " (^7", victim.netname, "^1): ", GetKickVoteVictim_reason);
+		RemapVote_display = strcat("^1", vote, " (^7", victim.netname, "^1): ", GetKickVoteVictim_reason);
 	}
 	else
 	{

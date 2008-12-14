@@ -330,6 +330,21 @@ float Ban_Insert(string ip, float bantime, string reason, float dosync)
 	entity e;
 	string s;
 
+	// Enforce our new ban
+	s = "";
+	FOR_EACH_REALCLIENT(e)
+		if(Ban_IsClientBanned(e, i))
+		{
+			if(s == "")
+				reason = strcat(reason, ": affects ");
+			else
+				reason = strcat(reason, ", ");
+			reason = strcat(reason, e.netname);
+			s = strcat(s, "^1NOTE:^7 banned client ", e.netname, "^7 has to go\n");
+			dropclient(e);
+		}
+	bprint(s);
+
 	if(dosync)
 		if(reason != "")
 			if(substring(reason, 0, 1) != "~") // like IRC: unauthenticated banner
@@ -379,16 +394,6 @@ float Ban_Insert(string ip, float bantime, string reason, float dosync)
 
 	Ban_SaveBans();
 
-	// Enforce our new ban
-	s = "";
-	FOR_EACH_REALCLIENT(e)
-		if(Ban_IsClientBanned(e, i))
-		{
-			s = strcat(s, "^1NOTE:^7 banned client ", e.netname, "^7 has to go\n");
-			dropclient(e);
-		}
-	bprint(s);
-
 	return TRUE;
 }
 
@@ -416,9 +421,12 @@ void Ban_KickBanClient(entity client, float bantime, float masksize, string reas
 			Ban_Insert(ban_ip4, bantime, reason, 1);
 			break;
 	}
+	/*
+	 * not needed, as we enforce the ban in Ban_Insert anyway
 	// and kick him
 	sprint(client, strcat("Kickbanned: ", reason, "\n"));
 	dropclient(client);
+	 */
 }
 
 float GameCommand_Ban(string command)
