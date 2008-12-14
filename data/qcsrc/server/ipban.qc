@@ -388,11 +388,14 @@ float Ban_Insert(string ip, float bantime, string reason, float dosync)
 	FOR_EACH_REALCLIENT(e)
 		if(Ban_IsClientBanned(e, i))
 		{
-			if(s == "")
-				reason = strcat(reason, ": affects ");
-			else
-				reason = strcat(reason, ", ");
-			reason = strcat(reason, e.netname);
+			if(reason != "")
+			{
+				if(s == "")
+					reason = strcat(reason, ": affects ");
+				else
+					reason = strcat(reason, ", ");
+				reason = strcat(reason, e.netname);
+			}
 			s = strcat(s, "^1NOTE:^7 banned client ", e.netname, "^7 has to go\n");
 			dropclient(e);
 		}
@@ -447,36 +450,34 @@ float GameCommand_Ban(string command)
 	float entno;
 	float masksize;
 	string reason;
+	float reasonarg;
 
 	argc = tokenize_sane(command);
 	if(argv(0) == "help")
 	{
-		print("  kickban # n m p - kickban player n for m seconds, using mask size p (1 to 4)\n");
-		print("  ban ip m - ban an IP or range (incomplete IP, like 1.2.3) for m seconds\n");
+		print("  kickban # n m p reason - kickban player n for m seconds, using mask size p (1 to 4)\n");
+		print("  ban ip m reason - ban an IP or range (incomplete IP, like 1.2.3) for m seconds\n");
 		print("  bans - list all existing bans\n");
 		print("  unban n - delete the entry #n from the bans list\n");
 		return TRUE;
 	}
 	if(argv(0) == "kickban")
 	{
+#define INITARG(c) reasonarg = c
+#define GETARG(v,d) if((argc > reasonarg) && ((v = stof(argv(reasonarg))) != 0)) ++reasonarg; else v = d
+#define RESTARG(v) if(argc > reasonarg) v = substring(command, argv_start_index(reasonarg), strlen(command) - argv_start_index(reasonarg)); else v = ""
 		if(argc >= 3)
 		{
 			entno = stof(argv(2));
 			if(entno > maxclients || entno < 1)
 				return TRUE;
 			client = edict_num(entno);
-			if(argc >= 4)
-				bantime = stof(argv(3));
-			else
-				bantime = cvar("g_ban_default_bantime");
-			if(argc >= 5)
-				masksize = stof(argv(4));
-			else
-				masksize = cvar("g_ban_default_masksize");
-			if(argc >= 6)
-				reason = substring(command, argv_start_index(5), strlen(command) - argv_start_index(5));
-			else
-				reason = "";
+
+			INITARG(3);
+			GETARG(bantime, cvar("g_ban_default_bantime"));
+			GETARG(masksize, cvar("g_ban_default_masksize"));
+			RESTARG(reason);
+
 			Ban_KickBanClient(client, bantime, masksize, reason);
 			return TRUE;
 		}
@@ -487,17 +488,17 @@ float GameCommand_Ban(string command)
 		{
 			string ip;
 			ip = argv(1);
-			if(argc >= 3)
-				bantime = stof(argv(2));
-			else
-				bantime = cvar("g_ban_default_bantime");
-			if(argc >= 4)
-				reason = substring(command, argv_start_index(3), strlen(command) - argv_start_index(3));
-			else
-				reason = "";
+
+			INITARG(2);
+			GETARG(bantime, cvar("g_ban_default_bantime"));
+			RESTARG(reason);
+
 			Ban_Insert(ip, bantime, reason, 1);
 			return TRUE;
 		}
+#undef INITARG
+#undef GETARG
+#undef RESTARG
 	}
 	else if(argv(0) == "bans")
 	{
