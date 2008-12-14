@@ -498,6 +498,8 @@ COMPAT_FILES="
 	sound/weapons/hagexp3.ogg
 	sound/weapons/hook_fire.ogg
 	sound/weapons/hook_impact.ogg
+	sound/weapons/hookbomb_fire.ogg
+	sound/weapons/hookbomb_impact.ogg
 	sound/weapons/lasergun_fire.ogg
 	sound/weapons/laserimpact.ogg
 	sound/weapons/minstanexfire.ogg
