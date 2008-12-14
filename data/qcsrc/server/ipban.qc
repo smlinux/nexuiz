@@ -2,12 +2,12 @@
  * Protocol of online ban list:
  *
  * - Reporting a ban:
- *     GET g_ban_sync_uri?action=ban&ip=xxx.xxx.xxx&duration=nnnn&why=...................
+ *     GET g_ban_sync_uri?action=ban&hostname=...&ip=xxx.xxx.xxx&duration=nnnn&why=...................
  *     (IP 1, 2, 3, or 4 octets, 3 octets for example is a /24 mask)
  * - Removing a ban:
- *     GET g_ban_sync_uri?action=unban&ip=xxx.xxx.xxx
+ *     GET g_ban_sync_uri?action=unban&hostname=...&ip=xxx.xxx.xxx
  * - Querying the ban list
- *     GET g_ban_sync_uri?action=list&servers=xxx.xxx.xxx.xxx:xxx.xxx.xxx.xxx:...
+ *     GET g_ban_sync_uri?action=list&hostname=...&servers=xxx.xxx.xxx.xxx:xxx.xxx.xxx.xxx:...
  *     
  *     shows the bans from the listed servers, and possibly others.
  *     Format of a ban is ASCII plain text, four lines per ban, delimited by
@@ -26,7 +26,8 @@ void OnlineBanList_SendBan(string ip, float bantime, string reason)
 	string uri;
 	float i, n;
 
-	uri = strcat(     "?action=ban&ip=", uri_escape(ip));
+	uri = strcat(     "?action=ban&hostname=", uri_escape(cvar_string("hostname")));
+	uri = strcat(uri, "&ip=", uri_escape(ip));
 	uri = strcat(uri, "&duration=", ftos(bantime));
 	uri = strcat(uri, "&why=", uri_escape(reason));
 
@@ -40,7 +41,8 @@ void OnlineBanList_SendUnban(string ip)
 	string uri;
 	float i, n;
 
-	uri = strcat(     "?action=unban&ip=", uri_escape(ip));
+	uri = strcat(     "?action=unban&hostname=", uri_escape(cvar_string("hostname")));
+	uri = strcat(uri, "&ip=", uri_escape(ip));
 
 	n = tokenize_sane(cvar_string("g_ban_sync_uri"));
 	for(i = 0; i < n; ++i)
@@ -156,7 +158,8 @@ void OnlineBanList_Think()
 			OnlineBanList_Servers = strcat(OnlineBanList_Servers, ":", argv(i));
 		OnlineBanList_Servers = strzone(OnlineBanList_Servers);
 		
-		uri = strcat(     "?action=list&servers=", uri_escape(OnlineBanList_Servers));
+		uri = strcat(     "?action=list&hostname=", uri_escape(cvar_string("hostname")));
+		uri = strcat(uri, "&servers=", uri_escape(OnlineBanList_Servers));
 
 		OnlineBanList_Timeout = time + 10;
 
