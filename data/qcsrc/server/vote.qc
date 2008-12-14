@@ -46,10 +46,16 @@ entity GetKickVoteVictim(string vote, string cmd, entity caller)
 		else
 			GetKickVoteVictim_reason = "";
 
+		reason = "";
 		if(cmd != "vdo" || GetKickVoteVictim_reason == "")
 			reason = "~"; // by convention, ~ prefixes a "unverified" kickban which will not be networked
-		else
-			reason = "";
+
+		if(substring(GetKickVoteVictim_reason, 0, 1) == "~")
+		{
+			reason = "~";
+			GetKickVoteVictim_reason = substring(GetKickVoteVictim_reason, 1, strlen(GetKickVoteVictim_reason) - 1);
+		}
+
 		if(caller)
 			reason = strcat(reason, "player ", strdecolorize(caller.netname));
 		else
