@@ -10,6 +10,7 @@ my $ignore_re = qr{
 |	g_configversion                  # internal
 |	g_maplist_index                  # internal
 |	halflifebsp                      # internal
+|	cvar_check_.*                    # internal
 
 |	cl_.*	                         # client
 |	con_.*	                         # client
@@ -18,6 +19,7 @@ my $ignore_re = qr{
 |	joy.*	                         # client
 |	menu_.*	                         # client
 |	mod_q3bsp_lightmapmergepower     # client
+|	mod_q3bsp_nolightmaps            # client
 |	net_slist_.*	                 # client
 |	r_.*                             # client
 |	sbar_.*	                         # client
@@ -27,6 +29,7 @@ my $ignore_re = qr{
 |	vid_.*                           # client
 
 |	g_banned_list                    # private
+|	g_ban_sync.*                     # private
 |	log_dest_udp                     # private
 |	log_file                         # private
 |	net_address                      # private
@@ -97,22 +100,40 @@ __DATA__
 List made using:
 nexuiz-dedicated +sys_colortranslation 2 +sys_specialcharactertranslation 0 +cvarlist +quit
 
-Nexuiz Linux 21:05:53 Oct 10 2008 8527 debug
+Nexuiz Linux 10:44:57 Dec 15 2008 8589 debug
 Trying to load library... "libz.so.1" - loaded.
 Added packfile data/common-spog.pk3 (26 files)
+data/zzz_svn-compat-5011:5013.pk3 is not a PK3 file
+unable to load pak "data/zzz_svn-compat-5011:5013.pk3"
+Added packfile data/zzz_svn-compat-5014.pk3 (527 files)
+data/zzz_svn-compat-5209:5214.pk3 is not a PK3 file
+unable to load pak "data/zzz_svn-compat-5209:5214.pk3"
 Trying to load library... "libcurl.so.4" "libcurl.so.3" - loaded.
 execing quake.rc
 execing default.cfg
 execing defaultNexuiz.cfg
-Warning: Could not expand $qport in alias if_dedicated
 execing physicsQBR.cfg
 execing newhook.cfg
-execing ctfscoring-nex242.cfg
+execing ctfscoring-div0.cfg
 execing weapons.cfg
 execing normal.cfg
 Warning: Could not expand $r_showsurfaces
 Warning: Could not expand $gl_finish
 Warning: Could not expand $v_kicktime
+Warning: Could not expand $qport in alias if_dedicated
+execing turrets.cfg
+execing unit_machinegun.cfg
+execing unit_hk.cfg
+execing unit_hellion.cfg
+execing unit_mlrs.cfg
+execing unit_flac.cfg
+execing unit_fusreac.cfg
+execing unit_plasma.cfg
+execing unit_plasma2.cfg
+execing unit_tesla.cfg
+execing unit_phaser.cfg
+execing unit_walker.cfg
+execing unit_ewheel.cfg
 couldn't exec config.cfg
 execing config_update.cfg
 Warning: Could not expand $v_hwgamma in alias _update_configversion_0
@@ -172,6 +193,7 @@ couldn't exec autoexec.cfg
 ^7cl_curl_maxdownloads is "1" ["1"] maximum number of concurrent HTTP/FTP downloads
 ^7cl_curl_maxspeed is "300" ["300"] maximum download speed (KiB/s)
 ^7cl_gravity is "800" ["800"] custom cvar
+^7cl_handicap is "1" ["1"] custom cvar
 ^7cl_hidewaypoints is "0" ["0"] custom cvar
 ^7cl_maxfps is "0" ["0"] maximum fps cap, 0 = unlimited, if game is running faster than this it will wait before running another frame (useful to make cpu time available to other programs)
 ^7cl_maxidlefps is "20" ["20"] maximum fps cap when the game is not the active window (makes cpu time available to other programs
@@ -196,13 +218,13 @@ couldn't exec autoexec.cfg
 ^7cl_teamradar_scale is "4096" ["4096"] custom cvar
 ^7cl_teamradar_size is "128 128" ["128 128"] custom cvar
 ^7cl_teamradar_zoommode is "0" ["0"] custom cvar
-^7cl_weaponpriority is "10 9 8 11 7 6 5 4 3 2 1" ["10 9 8 11 7 6 5 4 3 2 1"] custom cvar
-^7cl_weaponpriority0 is "9 8 4" ["9 8 4"] custom cvar
-^7cl_weaponpriority1 is "7 6 5 1" ["7 6 5 1"] custom cvar
+^7cl_weaponpriority is "14 13 9 8 11 7 6 5 4 3 2 1 10 12" ["14 13 9 8 11 7 6 5 4 3 2 1 10 12"] custom cvar
+^7cl_weaponpriority0 is "14 9 8 4" ["14 9 8 4"] custom cvar
+^7cl_weaponpriority1 is "13 7 6 5 1" ["13 7 6 5 1"] custom cvar
 ^7cl_weaponpriority2 is "7 3" ["7 3"] custom cvar
 ^7cl_weaponpriority3 is "7 3 2" ["7 3 2"] custom cvar
-^7cl_weaponpriority4 is "8 6 5 2" ["8 6 5 2"] custom cvar
-^7cl_weaponpriority5 is "" [""] custom cvar
+^7cl_weaponpriority4 is "13 8 6 5 2" ["13 8 6 5 2"] custom cvar
+^7cl_weaponpriority5 is "1 12 10" ["1 12 10"] custom cvar
 ^7cl_weaponpriority6 is "" [""] custom cvar
 ^7cl_weaponpriority7 is "" [""] custom cvar
 ^7cl_weaponpriority8 is "" [""] custom cvar
@@ -244,6 +266,8 @@ couldn't exec autoexec.cfg
 ^7csqc_progname is "csprogs.dat" ["csprogs.dat"] name of csprogs.dat file to load
 ^7csqc_progsize is "-1" ["-1"] file size of csprogs.dat file to load (-1 is none), only used during level changes and then reset to -1
 ^7cutscene is "1" ["1"] enables cutscenes in nehahra, can be used by other mods
+^7cvar_check_default is "3e222928f6156061e54639483d8961f0" ["3e222928f6156061e54639483d8961f0"] custom cvar
+^7cvar_check_weapons is "bf8a055d6b6b090133b248bccf916024" ["bf8a055d6b6b090133b248bccf916024"] custom cvar
 ^7deathmatch is "1" ["1"] deathmatch mode, values depend on mod but typically 0 = no deathmatch, 1 = normal deathmatch with respawning weapons, 2 = weapons stay (players can only pick up new weapons)
 ^7deathmatch_force_teamplay is "0" ["0"] custom cvar
 ^7developer is "0" ["0"] prints additional debugging messages and information (recommended for modders and level designers)
@@ -253,12 +277,12 @@ couldn't exec autoexec.cfg
 ^7developer_memory is "0" ["0"] prints debugging information about memory allocations
 ^7developer_memorydebug is "0" ["0"] enables memory corruption checks (very slow)
 ^7developer_networking is "0" ["0"] prints all received and sent packets (recommended only for debugging)
-^7edgefriction is "1" ["1"] how much you slow down when nearing a ledge you might fall off
+^7edgefriction is "1" ["1"] how much you slow down when nearing a ledge you might fall off, multiplier of sv_friction (Quake used 2, QuakeWorld used 1 due to a bug in physics code)
 ^7ekg is "0" ["0"] custom cvar
 ^7fraglimit is "0" ["0"] ends level if this many frags is reached by any player
 ^7fraglimit_override is "-1" ["-1"] custom cvar
 ^7fs_empty_files_in_pack_mark_deletions is "1" ["1"] if enabled, empty files in a pak/pk3 count as not existing but cancel the search in further packs, effectively allowing patch pak/pk3 files to 'delete' files
-^7g_antilag is "1" ["1"] custom cvar
+^7g_antilag is "2" ["2"] custom cvar
 ^7g_arena is "0" ["0"] custom cvar
 ^7g_arena_maxspawned is "2" ["2"] custom cvar
 ^7g_arena_powerups is "0" ["0"] custom cvar
@@ -325,6 +349,7 @@ couldn't exec autoexec.cfg
 ^7g_balance_electro_combo_edgedamage is "0" ["0"] custom cvar
 ^7g_balance_electro_combo_force is "200" ["200"] custom cvar
 ^7g_balance_electro_combo_radius is "250" ["250"] custom cvar
+^7g_balance_electro_combo_speed is "2000" ["2000"] custom cvar
 ^7g_balance_electro_primary_ammo is "2" ["2"] custom cvar
 ^7g_balance_electro_primary_animtime is "0.3" ["0.3"] custom cvar
 ^7g_balance_electro_primary_damage is "80" ["80"] custom cvar
@@ -404,6 +429,46 @@ couldn't exec autoexec.cfg
 ^7g_balance_health_rotlinear is "0" ["0"] custom cvar
 ^7g_balance_health_stable is "100" ["100"] custom cvar
 ^7g_balance_health_start is "150" ["150"] custom cvar
+^7g_balance_hlac_primary_ammo is "1" ["1"] custom cvar
+^7g_balance_hlac_primary_animtime is "0.1" ["0.1"] custom cvar
+^7g_balance_hlac_primary_damage is "25" ["25"] custom cvar
+^7g_balance_hlac_primary_edgedamage is "10" ["10"] custom cvar
+^7g_balance_hlac_primary_force is "100" ["100"] custom cvar
+^7g_balance_hlac_primary_lifetime is "5" ["5"] custom cvar
+^7g_balance_hlac_primary_radius is "70" ["70"] custom cvar
+^7g_balance_hlac_primary_refire is "0.1" ["0.1"] custom cvar
+^7g_balance_hlac_primary_speed is "9000" ["9000"] custom cvar
+^7g_balance_hlac_primary_spread_add is "0.0045" ["0.0045"] custom cvar
+^7g_balance_hlac_primary_spread_crouchmod is "0.25" ["0.25"] custom cvar
+^7g_balance_hlac_primary_spread_max is "0.25" ["0.25"] custom cvar
+^7g_balance_hlac_primary_spread_min is "0.01" ["0.01"] custom cvar
+^7g_balance_hlac_secondary_ammo is "10" ["10"] custom cvar
+^7g_balance_hlac_secondary_animtime is "0.3" ["0.3"] custom cvar
+^7g_balance_hlac_secondary_damage is "25" ["25"] custom cvar
+^7g_balance_hlac_secondary_edgedamage is "10" ["10"] custom cvar
+^7g_balance_hlac_secondary_force is "100" ["100"] custom cvar
+^7g_balance_hlac_secondary_lifetime is "5" ["5"] custom cvar
+^7g_balance_hlac_secondary_radius is "70" ["70"] custom cvar
+^7g_balance_hlac_secondary_refire is "1" ["1"] custom cvar
+^7g_balance_hlac_secondary_shots is "6" ["6"] custom cvar
+^7g_balance_hlac_secondary_speed is "9000" ["9000"] custom cvar
+^7g_balance_hlac_secondary_spread is "0.15" ["0.15"] custom cvar
+^7g_balance_hlac_secondary_spread_crouchmod is "0.5" ["0.5"] custom cvar
+^7g_balance_hook_primary_ammo is "0" ["0"] custom cvar
+^7g_balance_hook_primary_animtime is "0.3" ["0.3"] custom cvar
+^7g_balance_hook_primary_refire is "0" ["0"] custom cvar
+^7g_balance_hook_secondary_ammo is "25" ["25"] custom cvar
+^7g_balance_hook_secondary_animtime is "0.3" ["0.3"] custom cvar
+^7g_balance_hook_secondary_damage is "25" ["25"] custom cvar
+^7g_balance_hook_secondary_duration is "1.5" ["1.5"] custom cvar
+^7g_balance_hook_secondary_edgedamage is "5" ["5"] custom cvar
+^7g_balance_hook_secondary_force is "-2000" ["-2000"] custom cvar
+^7g_balance_hook_secondary_gravity is "5" ["5"] custom cvar
+^7g_balance_hook_secondary_lifetime is "30" ["30"] custom cvar
+^7g_balance_hook_secondary_power is "3" ["3"] custom cvar
+^7g_balance_hook_secondary_radius is "500" ["500"] custom cvar
+^7g_balance_hook_secondary_refire is "3" ["3"] custom cvar
+^7g_balance_hook_secondary_speed is "0" ["0"] custom cvar
 ^7g_balance_keyhunt_damageforcescale is "1" ["1"] custom cvar
 ^7g_balance_keyhunt_delay_collect is "1.5" ["1.5"] custom cvar
 ^7g_balance_keyhunt_delay_drop is "0.4" ["0.4"] custom cvar
@@ -517,6 +582,44 @@ couldn't exec autoexec.cfg
 ^7g_balance_rune_vampire_combo_absorb is "-0.1" ["-0.1"] custom cvar
 ^7g_balance_rune_vampire_combo_minhealth is "40" ["40"] custom cvar
 ^7g_balance_rune_vampire_maxhealth is "500" ["500"] custom cvar
+^7g_balance_seeker_flac_ammo is "0.5" ["0.5"] custom cvar
+^7g_balance_seeker_flac_animtime is "0.1" ["0.1"] custom cvar
+^7g_balance_seeker_flac_damage is "15" ["15"] custom cvar
+^7g_balance_seeker_flac_edgedamage is "10" ["10"] custom cvar
+^7g_balance_seeker_flac_force is "50" ["50"] custom cvar
+^7g_balance_seeker_flac_lifetime is "0.1" ["0.1"] custom cvar
+^7g_balance_seeker_flac_lifetime_rand is "0.05" ["0.05"] custom cvar
+^7g_balance_seeker_flac_radius is "100" ["100"] custom cvar
+^7g_balance_seeker_flac_refire is "0.1" ["0.1"] custom cvar
+^7g_balance_seeker_flac_speed is "3000" ["3000"] custom cvar
+^7g_balance_seeker_flac_spread is "0.4" ["0.4"] custom cvar
+^7g_balance_seeker_missile_accel is "1.05" ["1.05"] custom cvar
+^7g_balance_seeker_missile_activate_delay is "0.1" ["0.1"] custom cvar
+^7g_balance_seeker_missile_ammo is "2" ["2"] custom cvar
+^7g_balance_seeker_missile_animtime is "0.25" ["0.25"] custom cvar
+^7g_balance_seeker_missile_count is "4" ["4"] custom cvar
+^7g_balance_seeker_missile_damage is "40" ["40"] custom cvar
+^7g_balance_seeker_missile_decel is "0.9" ["0.9"] custom cvar
+^7g_balance_seeker_missile_delay is "0.25" ["0.25"] custom cvar
+^7g_balance_seeker_missile_edgedamage is "10" ["10"] custom cvar
+^7g_balance_seeker_missile_force is "250" ["250"] custom cvar
+^7g_balance_seeker_missile_lifetime is "15" ["15"] custom cvar
+^7g_balance_seeker_missile_proxy is "0" ["0"] custom cvar
+^7g_balance_seeker_missile_proxy_delay is "0.2" ["0.2"] custom cvar
+^7g_balance_seeker_missile_proxy_maxrange is "45" ["45"] custom cvar
+^7g_balance_seeker_missile_radius is "80" ["80"] custom cvar
+^7g_balance_seeker_missile_refire is "0.5" ["0.5"] custom cvar
+^7g_balance_seeker_missile_smart is "1" ["1"] custom cvar
+^7g_balance_seeker_missile_smart_mindist is "800" ["800"] custom cvar
+^7g_balance_seeker_missile_smart_trace_max is "2500" ["2500"] custom cvar
+^7g_balance_seeker_missile_smart_trace_min is "1000" ["1000"] custom cvar
+^7g_balance_seeker_missile_speed is "700" ["700"] custom cvar
+^7g_balance_seeker_missile_speed_max is "1250" ["1250"] custom cvar
+^7g_balance_seeker_missile_turnrate is "0.65" ["0.65"] custom cvar
+^7g_balance_seeker_tag_ammo is "1" ["1"] custom cvar
+^7g_balance_seeker_tag_animtime is "0.1" ["0.1"] custom cvar
+^7g_balance_seeker_tag_refire is "0.7" ["0.7"] custom cvar
+^7g_balance_seeker_tag_speed is "9000" ["9000"] custom cvar
 ^7g_balance_selfdamagepercent is "0.6" ["0.6"] custom cvar
 ^7g_balance_shotgun_primary_ammo is "1" ["1"] custom cvar
 ^7g_balance_shotgun_primary_animtime is "0.2" ["0.2"] custom cvar
@@ -549,7 +652,25 @@ couldn't exec autoexec.cfg
 ^7g_balance_weaponswitchdelay is "0.15" ["0.15"] custom cvar
 ^7g_ban_default_bantime is "5400" ["5400"] custom cvar
 ^7g_ban_default_masksize is "3" ["3"] custom cvar
+^7g_ban_sync_interval is "5" ["5"] custom cvar
+^7g_ban_sync_trusted_servers is "" [""] custom cvar
+^7g_ban_sync_uri is "" [""] custom cvar
 ^7g_banned_list is "" [""] custom cvar
+^7g_bugrigs is "0" ["0"] custom cvar
+^7g_bugrigs_accel is "800" ["800"] custom cvar
+^7g_bugrigs_air_steering is "1" ["1"] custom cvar
+^7g_bugrigs_angle_smoothing is "5" ["5"] custom cvar
+^7g_bugrigs_friction_air is "0.00001" ["0.00001"] custom cvar
+^7g_bugrigs_friction_brake is "950" ["950"] custom cvar
+^7g_bugrigs_friction_floor is "50" ["50"] custom cvar
+^7g_bugrigs_planar_movement is "1" ["1"] custom cvar
+^7g_bugrigs_planar_movement_car_jumping is "1" ["1"] custom cvar
+^7g_bugrigs_reverse_speeding is "1" ["1"] custom cvar
+^7g_bugrigs_reverse_spinning is "1" ["1"] custom cvar
+^7g_bugrigs_reverse_stopping is "1" ["1"] custom cvar
+^7g_bugrigs_speed_pow is "2" ["2"] custom cvar
+^7g_bugrigs_speed_ref is "400" ["400"] custom cvar
+^7g_bugrigs_steer is "1" ["1"] custom cvar
 ^7g_campaign is "0" ["0"] custom cvar
 ^7g_campaign_index is "0" ["0"] custom cvar
 ^7g_campaign_name is "" [""] custom cvar
@@ -574,35 +695,39 @@ couldn't exec autoexec.cfg
 ^7g_ctf_flag_returntime is "30" ["30"] custom cvar
 ^7g_ctf_flagcarrier_selfdamage is "1" ["1"] custom cvar
 ^7g_ctf_flagcarrier_selfforce is "1" ["1"] custom cvar
-^7g_ctf_flagpenalty_drop is "0" ["0"] custom cvar
-^7g_ctf_flagpenalty_returned is "0" ["0"] custom cvar
-^7g_ctf_flagpenalty_suicidedrop is "1" ["1"] custom cvar
-^7g_ctf_flagscore_capture is "20" ["20"] custom cvar
-^7g_ctf_flagscore_kill is "1" ["1"] custom cvar
-^7g_ctf_flagscore_pickup_base is "1" ["1"] custom cvar
-^7g_ctf_flagscore_pickup_dropped_early is "1" ["1"] custom cvar
-^7g_ctf_flagscore_pickup_dropped_late is "1" ["1"] custom cvar
+^7g_ctf_flagpenalty_drop is "2" ["2"] custom cvar
+^7g_ctf_flagpenalty_returned is "1" ["1"] custom cvar
+^7g_ctf_flagpenalty_suicidedrop is "2" ["2"] custom cvar
+^7g_ctf_flagscore_capture is "28" ["28"] custom cvar
+^7g_ctf_flagscore_kill is "2" ["2"] custom cvar
+^7g_ctf_flagscore_pickup_base is "-3" ["-3"] custom cvar
+^7g_ctf_flagscore_pickup_dropped_early is "2" ["2"] custom cvar
+^7g_ctf_flagscore_pickup_dropped_late is "2" ["2"] custom cvar
 ^7g_ctf_flagscore_return is "5" ["5"] custom cvar
-^7g_ctf_flagscore_return_by_killer is "5" ["5"] custom cvar
+^7g_ctf_flagscore_return_by_killer is "6" ["6"] custom cvar
 ^7g_ctf_flagscore_return_rogue is "10" ["10"] custom cvar
 ^7g_ctf_flagscore_return_rogue_by_killer is "10" ["10"] custom cvar
 ^7g_ctf_fullbrightflags is "1" ["1"] custom cvar
 ^7g_ctf_ignore_frags is "0" ["0"] custom cvar
-^7g_ctf_personalpenalty_drop is "0" ["0"] custom cvar
-^7g_ctf_personalpenalty_returned is "0" ["0"] custom cvar
-^7g_ctf_personalpenalty_suicidedrop is "1" ["1"] custom cvar
-^7g_ctf_personalscore_capture is "20" ["20"] custom cvar
-^7g_ctf_personalscore_kill is "1" ["1"] custom cvar
-^7g_ctf_personalscore_pickup_base is "1" ["1"] custom cvar
-^7g_ctf_personalscore_pickup_dropped_early is "1" ["1"] custom cvar
-^7g_ctf_personalscore_pickup_dropped_late is "1" ["1"] custom cvar
+^7g_ctf_personalpenalty_drop is "2" ["2"] custom cvar
+^7g_ctf_personalpenalty_returned is "1" ["1"] custom cvar
+^7g_ctf_personalpenalty_suicidedrop is "2" ["2"] custom cvar
+^7g_ctf_personalscore_capture is "28" ["28"] custom cvar
+^7g_ctf_personalscore_kill is "2" ["2"] custom cvar
+^7g_ctf_personalscore_pickup_base is "-3" ["-3"] custom cvar
+^7g_ctf_personalscore_pickup_dropped_early is "2" ["2"] custom cvar
+^7g_ctf_personalscore_pickup_dropped_late is "2" ["2"] custom cvar
 ^7g_ctf_personalscore_return is "5" ["5"] custom cvar
-^7g_ctf_personalscore_return_by_killer is "5" ["5"] custom cvar
+^7g_ctf_personalscore_return_by_killer is "6" ["6"] custom cvar
 ^7g_ctf_personalscore_return_rogue is "10" ["10"] custom cvar
 ^7g_ctf_personalscore_return_rogue_by_killer is "10" ["10"] custom cvar
 ^7g_ctf_respawn_delay is "0" ["0"] custom cvar
 ^7g_ctf_respawn_waves is "0" ["0"] custom cvar
-^7g_ctf_win_mode is "2" ["2"] custom cvar
+^7g_ctf_reverse is "0" ["0"] custom cvar
+^7g_ctf_shield_force is "100" ["100"] custom cvar
+^7g_ctf_shield_max_ratio is "0" ["0"] custom cvar
+^7g_ctf_shield_min_negscore is "20" ["20"] custom cvar
+^7g_ctf_win_mode is "0" ["0"] custom cvar
 ^7g_dm is "1" ["1"] custom cvar
 ^7g_dm_respawn_delay is "0" ["0"] custom cvar
 ^7g_dm_respawn_waves is "0" ["0"] custom cvar
@@ -647,6 +772,7 @@ couldn't exec autoexec.cfg
 ^7g_lms_start_armor is "100" ["100"] custom cvar
 ^7g_lms_start_health is "250" ["250"] custom cvar
 ^7g_maplist is "aggressor aneurysm basement basementctf bleach bloodprison bloodprisonctf bluesky darkzone dieselpower dismal downer evilspace farewell final_rage reslimed ruiner runningman_1on1remix runningman runningmanctf silvercity skyway slimepit soylent starship stormkeep strength toxic warfare" ["aggressor aneurysm basement basementctf bleach bloodprison bloodprisonctf bluesky darkzone dieselpower dismal downer evilspace farewell final_rage reslimed ruiner runningman_1on1remix runningman runningmanctf silvercity skyway slimepit soylent starship stormkeep strength toxic warfare"] custom cvar
+^7g_maplist_allow_hidden is "1" ["1"] custom cvar
 ^7g_maplist_check_waypoints is "0" ["0"] custom cvar
 ^7g_maplist_index is "0" ["0"] custom cvar
 ^7g_maplist_mostrecent is "" [""] custom cvar
@@ -701,10 +827,12 @@ couldn't exec autoexec.cfg
 ^7g_pickup_items is "1" ["1"] custom cvar
 ^7g_pickup_nails is "120" ["120"] custom cvar
 ^7g_pickup_nails_max is "999" ["999"] custom cvar
+^7g_pickup_respawntime_ammo is "15" ["15"] custom cvar
 ^7g_pickup_respawntime_long is "30" ["30"] custom cvar
 ^7g_pickup_respawntime_medium is "20" ["20"] custom cvar
 ^7g_pickup_respawntime_powerup is "120" ["120"] custom cvar
 ^7g_pickup_respawntime_short is "15" ["15"] custom cvar
+^7g_pickup_respawntime_weapon is "15" ["15"] custom cvar
 ^7g_pickup_rockets is "15" ["15"] custom cvar
 ^7g_pickup_rockets_max is "999" ["999"] custom cvar
 ^7g_pickup_shells is "15" ["15"] custom cvar
@@ -717,12 +845,11 @@ couldn't exec autoexec.cfg
 ^7g_projectiles_newton_style is "2" ["2"] custom cvar
 ^7g_race is "0" ["0"] custom cvar
 ^7g_race_laps_limit is "-1" ["-1"] custom cvar
-^7g_race_qualifying is "1" ["1"] custom cvar
+^7g_race_qualifying is "2" ["2"] custom cvar
 ^7g_race_teams is "0" ["0"] custom cvar
 ^7g_respawn_delay is "2" ["2"] custom cvar
 ^7g_respawn_mapsettings is "1" ["1"] custom cvar
 ^7g_respawn_waves is "0" ["0"] custom cvar
-^7g_rocketarena is "0" ["0"] custom cvar
 ^7g_rune_respawn_delay is "0" ["0"] custom cvar
 ^7g_rune_respawn_waves is "0" ["0"] custom cvar
 ^7g_runematch is "0" ["0"] custom cvar
@@ -753,15 +880,19 @@ couldn't exec autoexec.cfg
 ^7g_start_ammo_nails is "0" ["0"] custom cvar
 ^7g_start_ammo_rockets is "0" ["0"] custom cvar
 ^7g_start_ammo_shells is "50" ["50"] custom cvar
+^7g_start_delay is "15" ["15"] custom cvar
 ^7g_start_weapon_crylink is "0" ["0"] custom cvar
 ^7g_start_weapon_electro is "0" ["0"] custom cvar
 ^7g_start_weapon_grenadelauncher is "0" ["0"] custom cvar
 ^7g_start_weapon_hagar is "0" ["0"] custom cvar
+^7g_start_weapon_hlac is "0" ["0"] custom cvar
+^7g_start_weapon_hook is "0" ["0"] custom cvar
 ^7g_start_weapon_laser is "1" ["1"] custom cvar
 ^7g_start_weapon_minstanex is "0" ["0"] custom cvar
 ^7g_start_weapon_nex is "0" ["0"] custom cvar
 ^7g_start_weapon_porto is "0" ["0"] custom cvar
 ^7g_start_weapon_rocketlauncher is "0" ["0"] custom cvar
+^7g_start_weapon_seeker is "0" ["0"] custom cvar
 ^7g_start_weapon_shotgun is "1" ["1"] custom cvar
 ^7g_start_weapon_uzi is "0" ["0"] custom cvar
 ^7g_tdm is "0" ["0"] custom cvar
@@ -769,9 +900,367 @@ couldn't exec autoexec.cfg
 ^7g_tdm_respawn_waves is "0" ["0"] custom cvar
 ^7g_tdm_teams is "2" ["2"] custom cvar
 ^7g_throughfloor is "1" ["1"] custom cvar
+^7g_touchexplode is "0" ["0"] custom cvar
+^7g_touchexplode_damage is "10" ["10"] custom cvar
+^7g_touchexplode_edgedamage is "0" ["0"] custom cvar
+^7g_touchexplode_force is "150" ["150"] custom cvar
+^7g_touchexplode_radius is "50" ["50"] custom cvar
+^7g_turrets is "1" ["1"] custom cvar
+^7g_turrets_aimidle_delay is "5" ["5"] custom cvar
+^7g_turrets_nofire is "0" ["0"] custom cvar
+^7g_turrets_reloadcvars is "1" ["1"] custom cvar
+^7g_turrets_targetscan_mindelay is "0.1" ["0.1"] custom cvar
+^7g_turrets_unit_ewheel_std_aim_firetolerance_angle is "16" ["16"] custom cvar
+^7g_turrets_unit_ewheel_std_aim_firetolerance_dist is "200" ["200"] custom cvar
+^7g_turrets_unit_ewheel_std_aim_maxpitch is "45" ["45"] custom cvar
+^7g_turrets_unit_ewheel_std_aim_maxrot is "20" ["20"] custom cvar
+^7g_turrets_unit_ewheel_std_aim_speed is "90" ["90"] custom cvar
+^7g_turrets_unit_ewheel_std_ammo is "500" ["500"] custom cvar
+^7g_turrets_unit_ewheel_std_ammo_max is "4000" ["4000"] custom cvar
+^7g_turrets_unit_ewheel_std_ammo_recharge is "100" ["100"] custom cvar
+^7g_turrets_unit_ewheel_std_health is "200" ["200"] custom cvar
+^7g_turrets_unit_ewheel_std_respawntime is "30" ["30"] custom cvar
+^7g_turrets_unit_ewheel_std_shot_dmg is "10" ["10"] custom cvar
+^7g_turrets_unit_ewheel_std_shot_force is "20" ["20"] custom cvar
+^7g_turrets_unit_ewheel_std_shot_radius is "50" ["50"] custom cvar
+^7g_turrets_unit_ewheel_std_shot_refire is "0.15" ["0.15"] custom cvar
+^7g_turrets_unit_ewheel_std_shot_speed is "7000" ["7000"] custom cvar
+^7g_turrets_unit_ewheel_std_shot_spread is "0.025" ["0.025"] custom cvar
+^7g_turrets_unit_ewheel_std_shot_volly is "2" ["2"] custom cvar
+^7g_turrets_unit_ewheel_std_shot_volly_refire is "0.5" ["0.5"] custom cvar
+^7g_turrets_unit_ewheel_std_target_range is "6000" ["6000"] custom cvar
+^7g_turrets_unit_ewheel_std_target_range_fire is "4000" ["4000"] custom cvar
+^7g_turrets_unit_ewheel_std_target_range_min is "50" ["50"] custom cvar
+^7g_turrets_unit_ewheel_std_target_range_optimal is "1000" ["1000"] custom cvar
+^7g_turrets_unit_ewheel_std_target_select_anglebias is "0.5" ["0.5"] custom cvar
+^7g_turrets_unit_ewheel_std_target_select_missilebias is "0" ["0"] custom cvar
+^7g_turrets_unit_ewheel_std_target_select_playerbias is "1" ["1"] custom cvar
+^7g_turrets_unit_ewheel_std_target_select_rangebias is "0.25" ["0.25"] custom cvar
+^7g_turrets_unit_ewheel_std_target_select_samebias is "0.25" ["0.25"] custom cvar
+^7g_turrets_unit_ewheel_std_track_type is "1" ["1"] custom cvar
+^7g_turrets_unit_ewheel_turnrate is "180" ["180"] custom cvar
+^7g_turrets_unit_flac_std_aim_firetolerance_angle is "5" ["5"] custom cvar
+^7g_turrets_unit_flac_std_aim_firetolerance_dist is "200" ["200"] custom cvar
+^7g_turrets_unit_flac_std_aim_maxpitch is "35" ["35"] custom cvar
+^7g_turrets_unit_flac_std_aim_maxrot is "360" ["360"] custom cvar
+^7g_turrets_unit_flac_std_aim_speed is "100" ["100"] custom cvar
+^7g_turrets_unit_flac_std_ammo is "500" ["500"] custom cvar
+^7g_turrets_unit_flac_std_ammo_max is "1000" ["1000"] custom cvar
+^7g_turrets_unit_flac_std_ammo_recharge is "100" ["100"] custom cvar
+^7g_turrets_unit_flac_std_health is "700" ["700"] custom cvar
+^7g_turrets_unit_flac_std_respawntime is "90" ["90"] custom cvar
+^7g_turrets_unit_flac_std_shot_dmg is "35" ["35"] custom cvar
+^7g_turrets_unit_flac_std_shot_force is "50" ["50"] custom cvar
+^7g_turrets_unit_flac_std_shot_radius is "250" ["250"] custom cvar
+^7g_turrets_unit_flac_std_shot_refire is "0.1" ["0.1"] custom cvar
+^7g_turrets_unit_flac_std_shot_speed is "6000" ["6000"] custom cvar
+^7g_turrets_unit_flac_std_shot_spread is "0.07" ["0.07"] custom cvar
+^7g_turrets_unit_flac_std_shot_volly is "4" ["4"] custom cvar
+^7g_turrets_unit_flac_std_shot_volly_refire is "1.5" ["1.5"] custom cvar
+^7g_turrets_unit_flac_std_target_range is "4000" ["4000"] custom cvar
+^7g_turrets_unit_flac_std_target_range_fire is "3500" ["3500"] custom cvar
+^7g_turrets_unit_flac_std_target_range_min is "500" ["500"] custom cvar
+^7g_turrets_unit_flac_std_target_range_optimal is "1000" ["1000"] custom cvar
+^7g_turrets_unit_flac_std_target_select_anglebias is "0.5" ["0.5"] custom cvar
+^7g_turrets_unit_flac_std_target_select_missilebias is "1" ["1"] custom cvar
+^7g_turrets_unit_flac_std_target_select_playerbias is "0" ["0"] custom cvar
+^7g_turrets_unit_flac_std_target_select_rangebias is "0.25" ["0.25"] custom cvar
+^7g_turrets_unit_flac_std_target_select_samebias is "0.25" ["0.25"] custom cvar
+^7g_turrets_unit_flac_std_track_accel_pitch is "0.45" ["0.45"] custom cvar
+^7g_turrets_unit_flac_std_track_accel_rot is "0.65" ["0.65"] custom cvar
+^7g_turrets_unit_flac_std_track_blendrate is "0.15" ["0.15"] custom cvar
+^7g_turrets_unit_flac_std_track_type is "3" ["3"] custom cvar
+^7g_turrets_unit_fusreac_std_ammo is "0" ["0"] custom cvar
+^7g_turrets_unit_fusreac_std_ammo_max is "250" ["250"] custom cvar
+^7g_turrets_unit_fusreac_std_ammo_recharge is "250" ["250"] custom cvar
+^7g_turrets_unit_fusreac_std_health is "700" ["700"] custom cvar
+^7g_turrets_unit_fusreac_std_respawntime is "90" ["90"] custom cvar
+^7g_turrets_unit_fusreac_std_shot_dmg is "50" ["50"] custom cvar
+^7g_turrets_unit_fusreac_std_shot_refire is "0.1" ["0.1"] custom cvar
+^7g_turrets_unit_fusreac_std_target_range is "1024" ["1024"] custom cvar
+^7g_turrets_unit_fusreac_std_target_range_fire is "1024" ["1024"] custom cvar
+^7g_turrets_unit_fusreac_std_target_range_min is "1" ["1"] custom cvar
+^7g_turrets_unit_hellion_std_aim_firetolerance_angle is "25" ["25"] custom cvar
+^7g_turrets_unit_hellion_std_aim_firetolerance_dist is "200" ["200"] custom cvar
+^7g_turrets_unit_hellion_std_aim_maxpitch is "20" ["20"] custom cvar
+^7g_turrets_unit_hellion_std_aim_maxrot is "360" ["360"] custom cvar
+^7g_turrets_unit_hellion_std_aim_speed is "100" ["100"] custom cvar
+^7g_turrets_unit_hellion_std_ammo is "100" ["100"] custom cvar
+^7g_turrets_unit_hellion_std_ammo_max is "200" ["200"] custom cvar
+^7g_turrets_unit_hellion_std_ammo_recharge is "50" ["50"] custom cvar
+^7g_turrets_unit_hellion_std_health is "500" ["500"] custom cvar
+^7g_turrets_unit_hellion_std_respawntime is "90" ["90"] custom cvar
+^7g_turrets_unit_hellion_std_shot_dmg is "50" ["50"] custom cvar
+^7g_turrets_unit_hellion_std_shot_force is "250" ["250"] custom cvar
+^7g_turrets_unit_hellion_std_shot_radius is "100" ["100"] custom cvar
+^7g_turrets_unit_hellion_std_shot_refire is "0.15" ["0.15"] custom cvar
+^7g_turrets_unit_hellion_std_shot_speed is "750" ["750"] custom cvar
+^7g_turrets_unit_hellion_std_shot_speed_gain is "1.025" ["1.025"] custom cvar
+^7g_turrets_unit_hellion_std_shot_speed_max is "5000" ["5000"] custom cvar
+^7g_turrets_unit_hellion_std_shot_spread is "0.08" ["0.08"] custom cvar
+^7g_turrets_unit_hellion_std_shot_volly is "2" ["2"] custom cvar
+^7g_turrets_unit_hellion_std_shot_volly_refire is "4" ["4"] custom cvar
+^7g_turrets_unit_hellion_std_target_range is "6000" ["6000"] custom cvar
+^7g_turrets_unit_hellion_std_target_range_fire is "5000" ["5000"] custom cvar
+^7g_turrets_unit_hellion_std_target_range_min is "150" ["150"] custom cvar
+^7g_turrets_unit_hellion_std_target_range_optimal is "4500" ["4500"] custom cvar
+^7g_turrets_unit_hellion_std_target_select_anglebias is "0.01" ["0.01"] custom cvar
+^7g_turrets_unit_hellion_std_target_select_missilebias is "0" ["0"] custom cvar
+^7g_turrets_unit_hellion_std_target_select_playerbias is "1" ["1"] custom cvar
+^7g_turrets_unit_hellion_std_target_select_rangebias is "0.7" ["0.7"] custom cvar
+^7g_turrets_unit_hellion_std_target_select_samebias is "0.01" ["0.01"] custom cvar
+^7g_turrets_unit_hellion_std_track_accel_pitch is "0.25" ["0.25"] custom cvar
+^7g_turrets_unit_hellion_std_track_accel_rot is "0.5" ["0.5"] custom cvar
+^7g_turrets_unit_hellion_std_track_blendrate is "0.75" ["0.75"] custom cvar
+^7g_turrets_unit_hellion_std_track_type is "3" ["3"] custom cvar
+^7g_turrets_unit_hk_std_aim_firetolerance_angle is "25" ["25"] custom cvar
+^7g_turrets_unit_hk_std_aim_firetolerance_dist is "250" ["250"] custom cvar
+^7g_turrets_unit_hk_std_aim_maxpitch is "20" ["20"] custom cvar
+^7g_turrets_unit_hk_std_aim_maxrot is "360" ["360"] custom cvar
+^7g_turrets_unit_hk_std_aim_speed is "100" ["100"] custom cvar
+^7g_turrets_unit_hk_std_ammo is "120" ["120"] custom cvar
+^7g_turrets_unit_hk_std_ammo_max is "240" ["240"] custom cvar
+^7g_turrets_unit_hk_std_ammo_recharge is "16" ["16"] custom cvar
+^7g_turrets_unit_hk_std_health is "500" ["500"] custom cvar
+^7g_turrets_unit_hk_std_respawntime is "90" ["90"] custom cvar
+^7g_turrets_unit_hk_std_shot_dmg is "120" ["120"] custom cvar
+^7g_turrets_unit_hk_std_shot_force is "600" ["600"] custom cvar
+^7g_turrets_unit_hk_std_shot_radius is "200" ["200"] custom cvar
+^7g_turrets_unit_hk_std_shot_refire is "5" ["5"] custom cvar
+^7g_turrets_unit_hk_std_shot_speed is "500" ["500"] custom cvar
+^7g_turrets_unit_hk_std_shot_speed_accel is "1.025" ["1.025"] custom cvar
+^7g_turrets_unit_hk_std_shot_speed_accel2 is "1.05" ["1.05"] custom cvar
+^7g_turrets_unit_hk_std_shot_speed_decel is "0.9" ["0.9"] custom cvar
+^7g_turrets_unit_hk_std_shot_speed_max is "1000" ["1000"] custom cvar
+^7g_turrets_unit_hk_std_shot_speed_turnrate is "0.25" ["0.25"] custom cvar
+^7g_turrets_unit_hk_std_shot_spread is "0" ["0"] custom cvar
+^7g_turrets_unit_hk_std_shot_volly is "0" ["0"] custom cvar
+^7g_turrets_unit_hk_std_shot_volly_refire is "0" ["0"] custom cvar
+^7g_turrets_unit_hk_std_target_range is "6000" ["6000"] custom cvar
+^7g_turrets_unit_hk_std_target_range_fire is "5000" ["5000"] custom cvar
+^7g_turrets_unit_hk_std_target_range_min is "220" ["220"] custom cvar
+^7g_turrets_unit_hk_std_target_range_optimal is "5000" ["5000"] custom cvar
+^7g_turrets_unit_hk_std_target_select_anglebias is "0.1" ["0.1"] custom cvar
+^7g_turrets_unit_hk_std_target_select_missilebias is "0" ["0"] custom cvar
+^7g_turrets_unit_hk_std_target_select_playerbias is "1" ["1"] custom cvar
+^7g_turrets_unit_hk_std_target_select_rangebias is "0.5" ["0.5"] custom cvar
+^7g_turrets_unit_hk_std_target_select_samebias is "0.01" ["0.01"] custom cvar
+^7g_turrets_unit_hk_std_track_accel_pitch is "0.25" ["0.25"] custom cvar
+^7g_turrets_unit_hk_std_track_accel_rot is "0.5" ["0.5"] custom cvar
+^7g_turrets_unit_hk_std_track_blendrate is "0.25" ["0.25"] custom cvar
+^7g_turrets_unit_hk_std_track_type is "3" ["3"] custom cvar
+^7g_turrets_unit_machinegun_std_aim_firetolerance_angle is "16" ["16"] custom cvar
+^7g_turrets_unit_machinegun_std_aim_firetolerance_dist is "75" ["75"] custom cvar
+^7g_turrets_unit_machinegun_std_aim_maxpitch is "25" ["25"] custom cvar
+^7g_turrets_unit_machinegun_std_aim_maxrot is "400" ["400"] custom cvar
+^7g_turrets_unit_machinegun_std_aim_speed is "100" ["100"] custom cvar
+^7g_turrets_unit_machinegun_std_ammo is "200" ["200"] custom cvar
+^7g_turrets_unit_machinegun_std_ammo_max is "2000" ["2000"] custom cvar
+^7g_turrets_unit_machinegun_std_ammo_recharge is "95" ["95"] custom cvar
+^7g_turrets_unit_machinegun_std_health is "256" ["256"] custom cvar
+^7g_turrets_unit_machinegun_std_respawntime is "60" ["60"] custom cvar
+^7g_turrets_unit_machinegun_std_shot_dmg is "12" ["12"] custom cvar
+^7g_turrets_unit_machinegun_std_shot_force is "15" ["15"] custom cvar
+^7g_turrets_unit_machinegun_std_shot_radius is "0" ["0"] custom cvar
+^7g_turrets_unit_machinegun_std_shot_refire is "0.1" ["0.1"] custom cvar
+^7g_turrets_unit_machinegun_std_shot_speed is "0" ["0"] custom cvar
+^7g_turrets_unit_machinegun_std_shot_spread is "0.025" ["0.025"] custom cvar
+^7g_turrets_unit_machinegun_std_shot_volly is "5" ["5"] custom cvar
+^7g_turrets_unit_machinegun_std_shot_volly_refire is "1.5" ["1.5"] custom cvar
+^7g_turrets_unit_machinegun_std_target_range is "4500" ["4500"] custom cvar
+^7g_turrets_unit_machinegun_std_target_range_fire is "4000" ["4000"] custom cvar
+^7g_turrets_unit_machinegun_std_target_range_min is "2" ["2"] custom cvar
+^7g_turrets_unit_machinegun_std_target_range_optimal is "2500" ["2500"] custom cvar
+^7g_turrets_unit_machinegun_std_target_select_anglebias is "0.5" ["0.5"] custom cvar
+^7g_turrets_unit_machinegun_std_target_select_missilebias is "0" ["0"] custom cvar
+^7g_turrets_unit_machinegun_std_target_select_playerbias is "1" ["1"] custom cvar
+^7g_turrets_unit_machinegun_std_target_select_rangebias is "0.25" ["0.25"] custom cvar
+^7g_turrets_unit_machinegun_std_target_select_samebias is "0.25" ["0.25"] custom cvar
+^7g_turrets_unit_machinegun_std_track_accel_pitch is "0.25" ["0.25"] custom cvar
+^7g_turrets_unit_machinegun_std_track_accel_rot is "0.5" ["0.5"] custom cvar
+^7g_turrets_unit_machinegun_std_track_blendrate is "0.2" ["0.2"] custom cvar
+^7g_turrets_unit_machinegun_std_track_type is "3" ["3"] custom cvar
+^7g_turrets_unit_mlrs_std_aim_firetolerance_angle is "15" ["15"] custom cvar
+^7g_turrets_unit_mlrs_std_aim_firetolerance_dist is "300" ["300"] custom cvar
+^7g_turrets_unit_mlrs_std_aim_maxpitch is "15" ["15"] custom cvar
+^7g_turrets_unit_mlrs_std_aim_maxrot is "360" ["360"] custom cvar
+^7g_turrets_unit_mlrs_std_aim_speed is "180" ["180"] custom cvar
+^7g_turrets_unit_mlrs_std_ammo is "300" ["300"] custom cvar
+^7g_turrets_unit_mlrs_std_ammo_max is "300" ["300"] custom cvar
+^7g_turrets_unit_mlrs_std_ammo_recharge is "50" ["50"] custom cvar
+^7g_turrets_unit_mlrs_std_health is "500" ["500"] custom cvar
+^7g_turrets_unit_mlrs_std_respawntime is "60" ["60"] custom cvar
+^7g_turrets_unit_mlrs_std_shot_dmg is "50" ["50"] custom cvar
+^7g_turrets_unit_mlrs_std_shot_force is "50" ["50"] custom cvar
+^7g_turrets_unit_mlrs_std_shot_radius is "180" ["180"] custom cvar
+^7g_turrets_unit_mlrs_std_shot_refire is "0.1" ["0.1"] custom cvar
+^7g_turrets_unit_mlrs_std_shot_speed is "2000" ["2000"] custom cvar
+^7g_turrets_unit_mlrs_std_shot_spread is "0.05" ["0.05"] custom cvar
+^7g_turrets_unit_mlrs_std_shot_volly is "3" ["3"] custom cvar
+^7g_turrets_unit_mlrs_std_shot_volly_refire is "1.5" ["1.5"] custom cvar
+^7g_turrets_unit_mlrs_std_target_range is "4000" ["4000"] custom cvar
+^7g_turrets_unit_mlrs_std_target_range_fire is "3000" ["3000"] custom cvar
+^7g_turrets_unit_mlrs_std_target_range_min is "500" ["500"] custom cvar
+^7g_turrets_unit_mlrs_std_target_range_optimal is "2000" ["2000"] custom cvar
+^7g_turrets_unit_mlrs_std_target_select_anglebias is "0.5" ["0.5"] custom cvar
+^7g_turrets_unit_mlrs_std_target_select_missilebias is "0" ["0"] custom cvar
+^7g_turrets_unit_mlrs_std_target_select_playerbias is "1" ["1"] custom cvar
+^7g_turrets_unit_mlrs_std_target_select_rangebias is "0.25" ["0.25"] custom cvar
+^7g_turrets_unit_mlrs_std_target_select_samebias is "0.25" ["0.25"] custom cvar
+^7g_turrets_unit_mlrs_std_track_accel_pitch is "0.25" ["0.25"] custom cvar
+^7g_turrets_unit_mlrs_std_track_accel_rot is "0.5" ["0.5"] custom cvar
+^7g_turrets_unit_mlrs_std_track_blendrate is "0.25" ["0.25"] custom cvar
+^7g_turrets_unit_mlrs_std_track_type is "3" ["3"] custom cvar
+^7g_turrets_unit_phaser_std_aim_firetolerance_angle is "20" ["20"] custom cvar
+^7g_turrets_unit_phaser_std_aim_firetolerance_dist is "100" ["100"] custom cvar
+^7g_turrets_unit_phaser_std_aim_maxpitch is "30" ["30"] custom cvar
+^7g_turrets_unit_phaser_std_aim_maxrot is "360" ["360"] custom cvar
+^7g_turrets_unit_phaser_std_aim_speed is "100" ["100"] custom cvar
+^7g_turrets_unit_phaser_std_ammo is "1000" ["1000"] custom cvar
+^7g_turrets_unit_phaser_std_ammo_max is "2000" ["2000"] custom cvar
+^7g_turrets_unit_phaser_std_ammo_recharge is "100" ["100"] custom cvar
+^7g_turrets_unit_phaser_std_health is "500" ["500"] custom cvar
+^7g_turrets_unit_phaser_std_respawntime is "90" ["90"] custom cvar
+^7g_turrets_unit_phaser_std_shot_dmg is "100" ["100"] custom cvar
+^7g_turrets_unit_phaser_std_shot_force is "5" ["5"] custom cvar
+^7g_turrets_unit_phaser_std_shot_radius is "8" ["8"] custom cvar
+^7g_turrets_unit_phaser_std_shot_refire is "4" ["4"] custom cvar
+^7g_turrets_unit_phaser_std_shot_speed is "4" ["4"] custom cvar
+^7g_turrets_unit_phaser_std_shot_spread is "0" ["0"] custom cvar
+^7g_turrets_unit_phaser_std_shot_volly is "0" ["0"] custom cvar
+^7g_turrets_unit_phaser_std_shot_volly_refire is "5" ["5"] custom cvar
+^7g_turrets_unit_phaser_std_target_range is "3000" ["3000"] custom cvar
+^7g_turrets_unit_phaser_std_target_range_fire is "3000" ["3000"] custom cvar
+^7g_turrets_unit_phaser_std_target_range_min is "0" ["0"] custom cvar
+^7g_turrets_unit_phaser_std_target_range_optimal is "1500" ["1500"] custom cvar
+^7g_turrets_unit_phaser_std_target_select_anglebias is "0.25" ["0.25"] custom cvar
+^7g_turrets_unit_phaser_std_target_select_missilebias is "0" ["0"] custom cvar
+^7g_turrets_unit_phaser_std_target_select_playerbias is "1" ["1"] custom cvar
+^7g_turrets_unit_phaser_std_target_select_rangebias is "0.85" ["0.85"] custom cvar
+^7g_turrets_unit_phaser_std_target_select_samebias is "0" ["0"] custom cvar
+^7g_turrets_unit_phaser_std_track_accel_pitch is "0.5" ["0.5"] custom cvar
+^7g_turrets_unit_phaser_std_track_accel_rot is "0.9" ["0.9"] custom cvar
+^7g_turrets_unit_phaser_std_track_blendrate is "0.1" ["0.1"] custom cvar
+^7g_turrets_unit_phaser_std_track_type is "3" ["3"] custom cvar
+^7g_turrets_unit_plasma_dual_aim_firetolerance_angle is "16" ["16"] custom cvar
+^7g_turrets_unit_plasma_dual_aim_firetolerance_dist is "250" ["250"] custom cvar
+^7g_turrets_unit_plasma_dual_aim_maxpitch is "30" ["30"] custom cvar
+^7g_turrets_unit_plasma_dual_aim_maxrot is "360" ["360"] custom cvar
+^7g_turrets_unit_plasma_dual_aim_speed is "100" ["100"] custom cvar
+^7g_turrets_unit_plasma_dual_ammo is "500" ["500"] custom cvar
+^7g_turrets_unit_plasma_dual_ammo_max is "800" ["800"] custom cvar
+^7g_turrets_unit_plasma_dual_ammo_recharge is "40" ["40"] custom cvar
+^7g_turrets_unit_plasma_dual_health is "500" ["500"] custom cvar
+^7g_turrets_unit_plasma_dual_respawntime is "60" ["60"] custom cvar
+^7g_turrets_unit_plasma_dual_shot_dmg is "80" ["80"] custom cvar
+^7g_turrets_unit_plasma_dual_shot_force is "100" ["100"] custom cvar
+^7g_turrets_unit_plasma_dual_shot_radius is "150" ["150"] custom cvar
+^7g_turrets_unit_plasma_dual_shot_refire is "0.1" ["0.1"] custom cvar
+^7g_turrets_unit_plasma_dual_shot_speed is "2000" ["2000"] custom cvar
+^7g_turrets_unit_plasma_dual_shot_spread is "0.015" ["0.015"] custom cvar
+^7g_turrets_unit_plasma_dual_shot_volly is "2" ["2"] custom cvar
+^7g_turrets_unit_plasma_dual_shot_volly_refire is "0.5" ["0.5"] custom cvar
+^7g_turrets_unit_plasma_dual_target_range is "3000" ["3000"] custom cvar
+^7g_turrets_unit_plasma_dual_target_range_fire is "2500" ["2500"] custom cvar
+^7g_turrets_unit_plasma_dual_target_range_min is "100" ["100"] custom cvar
+^7g_turrets_unit_plasma_dual_target_range_optimal is "2000" ["2000"] custom cvar
+^7g_turrets_unit_plasma_dual_target_select_anglebias is "0.5" ["0.5"] custom cvar
+^7g_turrets_unit_plasma_dual_target_select_missilebias is "0" ["0"] custom cvar
+^7g_turrets_unit_plasma_dual_target_select_playerbias is "1" ["1"] custom cvar
+^7g_turrets_unit_plasma_dual_target_select_rangebias is "0.25" ["0.25"] custom cvar
+^7g_turrets_unit_plasma_dual_target_select_samebias is "0.25" ["0.25"] custom cvar
+^7g_turrets_unit_plasma_dual_track_accel_pitch is "0.25" ["0.25"] custom cvar
+^7g_turrets_unit_plasma_dual_track_accel_rot is "0.5" ["0.5"] custom cvar
+^7g_turrets_unit_plasma_dual_track_blendrate is "0.25" ["0.25"] custom cvar
+^7g_turrets_unit_plasma_dual_track_type is "3" ["3"] custom cvar
+^7g_turrets_unit_plasma_std_aim_firetolerance_angle is "5" ["5"] custom cvar
+^7g_turrets_unit_plasma_std_aim_firetolerance_dist is "200" ["200"] custom cvar
+^7g_turrets_unit_plasma_std_aim_maxpitch is "30" ["30"] custom cvar
+^7g_turrets_unit_plasma_std_aim_maxrot is "360" ["360"] custom cvar
+^7g_turrets_unit_plasma_std_aim_speed is "180" ["180"] custom cvar
+^7g_turrets_unit_plasma_std_ammo is "400" ["400"] custom cvar
+^7g_turrets_unit_plasma_std_ammo_max is "800" ["800"] custom cvar
+^7g_turrets_unit_plasma_std_ammo_recharge is "40" ["40"] custom cvar
+^7g_turrets_unit_plasma_std_health is "500" ["500"] custom cvar
+^7g_turrets_unit_plasma_std_respawntime is "60" ["60"] custom cvar
+^7g_turrets_unit_plasma_std_shot_dmg is "80" ["80"] custom cvar
+^7g_turrets_unit_plasma_std_shot_force is "100" ["100"] custom cvar
+^7g_turrets_unit_plasma_std_shot_radius is "150" ["150"] custom cvar
+^7g_turrets_unit_plasma_std_shot_refire is "0.6" ["0.6"] custom cvar
+^7g_turrets_unit_plasma_std_shot_speed is "2000" ["2000"] custom cvar
+^7g_turrets_unit_plasma_std_shot_spread is "0.0001" ["0.0001"] custom cvar
+^7g_turrets_unit_plasma_std_shot_volly is "0" ["0"] custom cvar
+^7g_turrets_unit_plasma_std_shot_volly_refire is "0" ["0"] custom cvar
+^7g_turrets_unit_plasma_std_target_range is "3500" ["3500"] custom cvar
+^7g_turrets_unit_plasma_std_target_range_fire is "3000" ["3000"] custom cvar
+^7g_turrets_unit_plasma_std_target_range_min is "200" ["200"] custom cvar
+^7g_turrets_unit_plasma_std_target_range_optimal is "1500" ["1500"] custom cvar
+^7g_turrets_unit_plasma_std_target_select_anglebias is "0.25" ["0.25"] custom cvar
+^7g_turrets_unit_plasma_std_target_select_missilebias is "0" ["0"] custom cvar
+^7g_turrets_unit_plasma_std_target_select_playerbias is "1" ["1"] custom cvar
+^7g_turrets_unit_plasma_std_target_select_rangebias is "0.5" ["0.5"] custom cvar
+^7g_turrets_unit_plasma_std_target_select_samebias is "0.01" ["0.01"] custom cvar
+^7g_turrets_unit_plasma_std_track_accel_pitch is "0.25" ["0.25"] custom cvar
+^7g_turrets_unit_plasma_std_track_accel_rot is "0.5" ["0.5"] custom cvar
+^7g_turrets_unit_plasma_std_track_blendrate is "0.25" ["0.25"] custom cvar
+^7g_turrets_unit_plasma_std_track_type is "3" ["3"] custom cvar
+^7g_turrets_unit_tesla_std_ammo is "2500" ["2500"] custom cvar
+^7g_turrets_unit_tesla_std_ammo_max is "5000" ["5000"] custom cvar
+^7g_turrets_unit_tesla_std_ammo_recharge is "100" ["100"] custom cvar
+^7g_turrets_unit_tesla_std_health is "1000" ["1000"] custom cvar
+^7g_turrets_unit_tesla_std_respawntime is "120" ["120"] custom cvar
+^7g_turrets_unit_tesla_std_shot_dmg is "100" ["100"] custom cvar
+^7g_turrets_unit_tesla_std_shot_force is "400" ["400"] custom cvar
+^7g_turrets_unit_tesla_std_shot_refire is "0.5" ["0.5"] custom cvar
+^7g_turrets_unit_tesla_std_shot_volly is "1" ["1"] custom cvar
+^7g_turrets_unit_tesla_std_shot_volly_refire is "2.5" ["2.5"] custom cvar
+^7g_turrets_unit_tesla_std_target_range is "1024" ["1024"] custom cvar
+^7g_turrets_unit_tesla_std_target_select_missilebias is "1" ["1"] custom cvar
+^7g_turrets_unit_tesla_std_target_select_playerbias is "1" ["1"] custom cvar
+^7g_turrets_unit_walker_run_turnrate is "22.5" ["22.5"] custom cvar
+^7g_turrets_unit_walker_std_aim_firetolerance_angle is "16" ["16"] custom cvar
+^7g_turrets_unit_walker_std_aim_firetolerance_dist is "64" ["64"] custom cvar
+^7g_turrets_unit_walker_std_aim_maxpitch is "15" ["15"] custom cvar
+^7g_turrets_unit_walker_std_aim_maxrot is "360" ["360"] custom cvar
+^7g_turrets_unit_walker_std_aim_speed is "90" ["90"] custom cvar
+^7g_turrets_unit_walker_std_ammo is "500" ["500"] custom cvar
+^7g_turrets_unit_walker_std_ammo_max is "4000" ["4000"] custom cvar
+^7g_turrets_unit_walker_std_ammo_recharge is "100" ["100"] custom cvar
+^7g_turrets_unit_walker_std_health is "500" ["500"] custom cvar
+^7g_turrets_unit_walker_std_meele_dmg is "500" ["500"] custom cvar
+^7g_turrets_unit_walker_std_meele_force is "600" ["600"] custom cvar
+^7g_turrets_unit_walker_std_meele_range is "160" ["160"] custom cvar
+^7g_turrets_unit_walker_std_respawntime is "60" ["60"] custom cvar
+^7g_turrets_unit_walker_std_rocket_dmg is "50" ["50"] custom cvar
+^7g_turrets_unit_walker_std_rocket_force is "150" ["150"] custom cvar
+^7g_turrets_unit_walker_std_rocket_radius is "150" ["150"] custom cvar
+^7g_turrets_unit_walker_std_rocket_refire is "10" ["10"] custom cvar
+^7g_turrets_unit_walker_std_rocket_speed is "650" ["650"] custom cvar
+^7g_turrets_unit_walker_std_rocket_speed_add is "2" ["2"] custom cvar
+^7g_turrets_unit_walker_std_rocket_tunrate is "0.5" ["0.5"] custom cvar
+^7g_turrets_unit_walker_std_shot_dmg is "15" ["15"] custom cvar
+^7g_turrets_unit_walker_std_shot_force is "5" ["5"] custom cvar
+^7g_turrets_unit_walker_std_shot_radius is "0" ["0"] custom cvar
+^7g_turrets_unit_walker_std_shot_refire is "0.1" ["0.1"] custom cvar
+^7g_turrets_unit_walker_std_shot_speed is "0" ["0"] custom cvar
+^7g_turrets_unit_walker_std_shot_spread is "0.05" ["0.05"] custom cvar
+^7g_turrets_unit_walker_std_shot_volly is "0" ["0"] custom cvar
+^7g_turrets_unit_walker_std_shot_volly_refire is "0" ["0"] custom cvar
+^7g_turrets_unit_walker_std_target_range is "10000" ["10000"] custom cvar
+^7g_turrets_unit_walker_std_target_range_fire is "1500" ["1500"] custom cvar
+^7g_turrets_unit_walker_std_target_range_min is "64" ["64"] custom cvar
+^7g_turrets_unit_walker_std_target_range_optimal is "500" ["500"] custom cvar
+^7g_turrets_unit_walker_std_target_select_anglebias is "0.5" ["0.5"] custom cvar
+^7g_turrets_unit_walker_std_target_select_missilebias is "0" ["0"] custom cvar
+^7g_turrets_unit_walker_std_target_select_playerbias is "1" ["1"] custom cvar
+^7g_turrets_unit_walker_std_target_select_rangebias is "0.25" ["0.25"] custom cvar
+^7g_turrets_unit_walker_std_target_select_samebias is "0.25" ["0.25"] custom cvar
+^7g_turrets_unit_walker_std_track_type is "1" ["1"] custom cvar
+^7g_turrets_unit_walker_turn_turnrate is "90" ["90"] custom cvar
+^7g_turrets_unit_walker_walk_turnrate is "45" ["45"] custom cvar
 ^7g_use_ammunition is "1" ["1"] custom cvar
 ^7g_vampire is "0" ["0"] custom cvar
-^7g_warmup is "1" ["1"] custom cvar
+^7g_warmup is "0" ["0"] custom cvar
 ^7g_warmup_allguns is "0" ["0"] custom cvar
 ^7g_warmup_allow_timeout is "0" ["0"] custom cvar
 ^7g_warmup_limit is "60" ["60"] custom cvar
@@ -794,17 +1283,21 @@ couldn't exec autoexec.cfg
 ^7g_waypointsprite_stuffbinds is "0" ["0"] custom cvar
 ^7g_waypointsprite_timealphaexponent is "1" ["1"] custom cvar
 ^7g_weapon_stay is "0" ["0"] custom cvar
-^7g_weaponreplace_1 is "" [""] custom cvar
-^7g_weaponreplace_10 is "" [""] custom cvar
-^7g_weaponreplace_11 is "" [""] custom cvar
-^7g_weaponreplace_2 is "" [""] custom cvar
-^7g_weaponreplace_3 is "" [""] custom cvar
-^7g_weaponreplace_4 is "" [""] custom cvar
-^7g_weaponreplace_5 is "" [""] custom cvar
-^7g_weaponreplace_6 is "" [""] custom cvar
-^7g_weaponreplace_7 is "" [""] custom cvar
-^7g_weaponreplace_8 is "" [""] custom cvar
-^7g_weaponreplace_9 is "" [""] custom cvar
+^7g_weaponarena is "0" ["0"] custom cvar
+^7g_weaponreplace_crylink is "" [""] custom cvar
+^7g_weaponreplace_electro is "" [""] custom cvar
+^7g_weaponreplace_grenadelauncher is "" [""] custom cvar
+^7g_weaponreplace_hagar is "" [""] custom cvar
+^7g_weaponreplace_hlac is "" [""] custom cvar
+^7g_weaponreplace_hook is "" [""] custom cvar
+^7g_weaponreplace_laser is "" [""] custom cvar
+^7g_weaponreplace_minstanex is "" [""] custom cvar
+^7g_weaponreplace_nex is "" [""] custom cvar
+^7g_weaponreplace_porto is "" [""] custom cvar
+^7g_weaponreplace_rocketlauncher is "" [""] custom cvar
+^7g_weaponreplace_seeker is "" [""] custom cvar
+^7g_weaponreplace_shotgun is "" [""] custom cvar
+^7g_weaponreplace_uzi is "" [""] custom cvar
 ^7gamecfg is "1" ["1"] unused cvar in quake, can be used by mods
 ^7gameversion is "20000" ["20000"] version of game data (mod-specific), when client and server gameversion mismatch in the server browser the server is shown as incompatible
 ^7gl_finish is "$gl_finish" ["$gl_finish"] custom cvar
@@ -834,14 +1327,18 @@ couldn't exec autoexec.cfg
 ^7menu_maxplayers is "8" ["8"] custom cvar
 ^7menu_mouse_absolute is "0" ["0"] custom cvar
 ^7menu_mouse_speed is "1" ["1"] custom cvar
-^7menu_skin is "wickedblack" ["wickedblack"] custom cvar
+^7menu_skin is "wickedz" ["wickedz"] custom cvar
 ^7menu_slist_showempty is "1" ["1"] custom cvar
 ^7menu_slist_showfull is "1" ["1"] custom cvar
 ^7menu_slowmo is "1" ["1"] custom cvar
+^7menu_use_default_hostname is "1" ["1"] custom cvar
+^7menu_weaponarena_with_laser is "0" ["0"] custom cvar
 ^7minplayers is "0" ["0"] custom cvar
+^7mod_alias_supporttagscale is "1" ["1"] support scaling factors in bone/tag attachment matrices as supported by MD3
 ^7mod_q3bsp_curves_collisions is "1" ["1"] enables collisions with curves (SLOW)
 ^7mod_q3bsp_debugtracebrush is "0" ["0"] selects different tracebrush bsp recursion algorithms (for debugging purposes only)
 ^7mod_q3bsp_lightmapmergepower is "3" ["3"] merges the quake3 128x128 lightmap textures into larger lightmap group textures to speed up rendering, 1 = 256x256, 2 = 512x512, 3 = 1024x1024, 4 = 2048x2048, 5 = 4096x4096, ...
+^7mod_q3bsp_nolightmaps is "0" ["0"] do not load lightmaps in Q3BSP maps (to save video RAM, but be warned: it looks ugly)
 ^7mod_q3bsp_optimizedtraceline is "1" ["1"] whether to use optimized traceline code for line traces (as opposed to tracebox code)
 ^7net_address is "0.0.0.0" ["0.0.0.0"] network address to open ports on
 ^7net_connectfloodblockingtimeout is "5" ["5"] when a connection packet is received, it will block all future connect packets from that IP address for this many seconds (cuts down on connect floods)
@@ -895,7 +1392,7 @@ couldn't exec autoexec.cfg
 ^7r_subdivisions_tolerance is "1000000" ["1000000"] maximum error tolerance on curve subdivision for rendering purposes (in other words, the curves will be given as many polygons as necessary to represent curves at this quality)
 ^7rcon_address is "" [""] server address to send rcon commands to (when not connected to a server)
 ^7rcon_password is "" [""] password to authenticate rcon commands
-^7rcon_restricted_commands is "" [""] allowed commands for rcon when the restricted mode password was used
+^7rcon_restricted_commands is "restart fraglimit chmap gotomap endmatch reducematchtime extendmatchtime allready kick kickban "sv_cmd bans" "sv_cmd unban" status "sv_cmd teamstatus"" ["restart fraglimit chmap gotomap endmatch reducematchtime extendmatchtime allready kick kickban "sv_cmd bans" "sv_cmd unban" status "sv_cmd teamstatus""] allowed commands for rcon when the restricted mode password was used
 ^7rcon_restricted_password is "" [""] password to authenticate rcon commands in restricted mode
 ^7registered is "1" ["1"] indicates if this is running registered quake (whether gfx/pop.lmp was found)
 ^7samelevel is "0" ["0"] repeats same level if level ends (due to timelimit or someone hitting an exit)
@@ -906,7 +1403,7 @@ couldn't exec autoexec.cfg
 ^7savedgamecfg is "0" ["0"] unused cvar in quake that is saved to config.cfg on exit, can be used by mods
 ^7sbar_columns is "default" ["default"] custom cvar
 ^7sbar_fontsize is "11" ["11"] custom cvar
-^7sbar_hudselector is "0" ["0"] custom cvar
+^7sbar_hudselector is "1" ["1"] custom cvar
 ^7sbar_showbinds is "1" ["1"] custom cvar
 ^7sbar_showbinds_limit is "2" ["2"] custom cvar
 ^7sbar_width is "480" ["480"] custom cvar
@@ -943,6 +1440,7 @@ couldn't exec autoexec.cfg
 ^7sv_clmovement_minping is "0" ["0"] if client ping is below this time in milliseconds, then their ability to use cl_movement prediction is disabled for a while (as they don't need it)
 ^7sv_clmovement_minping_disabletime is "1000" ["1000"] when client falls below minping, disable their prediction for this many milliseconds (should be at least 1000 or else their prediction may turn on/off frequently)
 ^7sv_clmovement_waitforinput is "4" ["4"] when a client does not send input for this many frames, force them to move anyway (unlike QuakeWorld)
+^7sv_clones is "0" ["0"] custom cvar
 ^7sv_cullentities_nevercullbmodels is "0" ["0"] if enabled the clients are always notified of moving doors and lifts and other submodels of world (warning: eats a lot of network bandwidth on some levels!)
 ^7sv_cullentities_pvs is "1" ["1"] fast but loose culling of hidden entities
 ^7sv_cullentities_stats is "0" ["0"] displays stats on network entities culled by various methods for each client
@@ -1054,13 +1552,15 @@ couldn't exec autoexec.cfg
 ^7sv_timeout_resumetime is "3" ["3"] custom cvar
 ^7sv_vote_call is "1" ["1"] custom cvar
 ^7sv_vote_change is "0" ["0"] custom cvar
-^7sv_vote_commands is "restart timelimit fraglimit chmap gotomap g_grappling_hook sv_defaultplayer_fbskin_green sv_defaultplayer_fbskin_red sv_defaultplayer_fbskin_orange sv_defaultplayer_fbskin_off endmatch reducematchtime extendmatchtime allready" ["restart timelimit fraglimit chmap gotomap g_grappling_hook sv_defaultplayer_fbskin_green sv_defaultplayer_fbskin_red sv_defaultplayer_fbskin_orange sv_defaultplayer_fbskin_off endmatch reducematchtime extendmatchtime allready"] custom cvar
+^7sv_vote_commands is "restart fraglimit chmap gotomap endmatch reducematchtime extendmatchtime allready kick" ["restart fraglimit chmap gotomap endmatch reducematchtime extendmatchtime allready kick"] custom cvar
 ^7sv_vote_majority_factor is "0.5" ["0.5"] custom cvar
 ^7sv_vote_master is "1" ["1"] custom cvar
+^7sv_vote_master_commands is "" [""] custom cvar
 ^7sv_vote_master_password is "" [""] custom cvar
 ^7sv_vote_nospectators is "0" ["0"] custom cvar
+^7sv_vote_only_commands is "" [""] custom cvar
 ^7sv_vote_override_mostrecent is "0" ["0"] custom cvar
-^7sv_vote_simple_majority is "0" ["0"] custom cvar
+^7sv_vote_simple_majority_factor is "0" ["0"] custom cvar
 ^7sv_vote_singlecount is "0" ["0"] custom cvar
 ^7sv_vote_timeout is "60" ["60"] custom cvar
 ^7sv_vote_wait is "120" ["120"] custom cvar
@@ -1186,4 +1686,4 @@ couldn't exec autoexec.cfg
 ^7v_kicktime is "$v_kicktime" ["$v_kicktime"] custom cvar
 ^7vid_x11_display is "" [""] custom cvar
 ^7welcome_message_time is "8" ["8"] custom cvar
-^71065 cvar(s)
+^71544 cvar(s)
