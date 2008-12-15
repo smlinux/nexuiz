@@ -120,15 +120,16 @@ void OnlineBanList_URI_Get_Callback(float status, string data)
 				goto skip;
 			}
 
-		if(strstrofs(strcat(";", OnlineBanList_Servers, ";"), strcat(";", serverip, ";"), 0) != -1)
-		{
-			if(syncinterval > 0)
-				timeleft = min(syncinterval + 15, timeleft);
-				// 15 seconds for safety
-				// the ban will be prolonged on the next sync
-			Ban_Insert(ip, timeleft, strcat("ban synced from ", serverip), 0);
-			print("Ban list syncing: accepted ban of ", ip, " by ", serverip, ": ", reason, "\n");
-		}
+		if(cvar("g_ban_sync_trusted_servers_verify"))
+			if((strstrofs(strcat(";", OnlineBanList_Servers, ";"), strcat(";", serverip, ";"), 0) == -1))
+				goto skip;
+
+		if(syncinterval > 0)
+			timeleft = min(syncinterval + 15, timeleft);
+			// 15 seconds for safety
+			// the ban will be prolonged on the next sync
+		Ban_Insert(ip, timeleft, strcat("ban synced from ", serverip), 0);
+		print("Ban list syncing: accepted ban of ", ip, " by ", serverip, ": ", reason, "\n");
 
 		continue;
 :skip
