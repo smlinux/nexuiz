@@ -306,7 +306,7 @@ float MapInfo_Get_ByID(float i)
 	return 0;
 }
 
-float _MapInfo_Map_has_worldspawn_music;
+string _MapInfo_Map_worldspawn_music;
 
 float _MapInfo_Generate(string pFilename) // 0: failure, 1: ok ent, 2: ok bsp
 {
@@ -338,7 +338,7 @@ float _MapInfo_Generate(string pFilename) // 0: failure, 1: ok ent, 2: ok bsp
 	inWorldspawn = 2;
 	MapInfo_Map_supportedGametypes = 0;
 	spawnpoints = 0;
-	_MapInfo_Map_has_worldspawn_music = 0;
+	_MapInfo_Map_worldspawn_music = "";
 
 	for(;;)
 	{
@@ -358,9 +358,9 @@ float _MapInfo_Generate(string pFilename) // 0: failure, 1: ok ent, 2: ok bsp
 			else if(k == "_description")
 				MapInfo_Map_description = v;
 			else if(k == "music")
-				_MapInfo_Map_has_worldspawn_music = 1;
+				_MapInfo_Map_worldspawn_music = v;
 			else if(k == "noise")
-				_MapInfo_Map_has_worldspawn_music = 1;
+				_MapInfo_Map_worldspawn_music = v;
 			else if(k == "message")
 			{
 				i = strstrofs(v, " by ", 0);
@@ -566,8 +566,17 @@ float MapInfo_Get_ByName(string pFilename, float pAllowGenerate, float pGametype
 		fputs(fh, strcat("title ", MapInfo_Map_title, "\n"));
 		fputs(fh, strcat("description ", MapInfo_Map_description, "\n"));
 		fputs(fh, strcat("author ", MapInfo_Map_author, "\n"));
-		if(_MapInfo_Map_has_worldspawn_music)
-			fputs(fh, strcat("// (uses worldspawn.music) // cdtrack ", ftos(floor(random() * 9 + 2)), "\n"));
+		if(_MapInfo_Map_worldspawn_music != "")
+		{
+			if(
+				substring(_MapInfo_Map_worldspawn_music, strlen(_MapInfo_Map_worldspawn_music) - 4, 4) == ".wav"
+				||
+				substring(_MapInfo_Map_worldspawn_music, strlen(_MapInfo_Map_worldspawn_music) - 4, 4) == ".ogg"
+			)
+				fputs(fh, strcat("cdtrack ", substring(_MapInfo_Map_worldspawn_music, 0, strlen(_MapInfo_Map_worldspawn_music) - 4), "\n"));
+			else
+				fputs(fh, strcat("cdtrack ", _MapInfo_Map_worldspawn_music, "\n"));
+		}
 		else
 			fputs(fh, strcat("cdtrack ", ftos(floor(random() * 9 + 2)), "\n")); // track from 2 to 10
 		if(MapInfo_Map_supportedFeatures & MAPINFO_FEATURE_WEAPONS)       fputs(fh, "has weapons\n");
