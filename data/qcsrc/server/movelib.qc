@@ -1,5 +1,3 @@
-.float mass;
-
 /**
     Simulate drag
     self.velocity = movelib_vdrag(self.velocity,0.02,0.5);

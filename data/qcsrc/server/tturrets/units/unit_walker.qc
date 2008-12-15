@@ -701,8 +701,6 @@ void walker_diehook()
 //.string target_start;
 void turret_walker_dinit()
 {
-    entity e;
-
     if (self.netname == "")      self.netname     = "Walker Turret";
 
     /*

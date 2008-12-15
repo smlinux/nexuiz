@@ -4,6 +4,6 @@ void teamradar_view();
 
 // to make entities have dots on the team radar
 .float teamradar_icon;
-.float teamradar_times[MAX_TEAMRADAR_TIMES];
+.float teamradar_times[MAX_TEAMRADAR_TIMES]; FTEQCC_YOU_SUCK_THIS_IS_NOT_UNREFERENCED(teamradar_times);
 .float teamradar_time_index;
 .vector teamradar_color;

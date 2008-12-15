@@ -6,6 +6,7 @@ float damage_gooddamage;
 float headshot;
 float damage_headshotbonus; // bonus multiplier for head shots, set to 0 after use
 
+.float dmg_team;
 .float teamkill_complain;
 .float teamkill_soundtime;
 .entity teamkill_soundsource;
@@ -499,6 +500,7 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 {
 	float mirrordamage;
 	float mirrorforce;
+	float teamdamage0;
 	entity attacker_save;
 	mirrordamage = 0;
 	mirrorforce = 0;
@@ -575,7 +577,10 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 					{
 						if(targ.classname == "player" && targ.deadflag == DEAD_NO)
 						{
-							mirrordamage = cvar("g_mirrordamage") * damage;
+							teamdamage0 = max(attacker.dmg_team, cvar("g_teamdamage_threshold"));
+							attacker.dmg_team = attacker.dmg_team + damage;
+							if(attacker.dmg_team > teamdamage0)
+								mirrordamage = cvar("g_mirrordamage") * (attacker.dmg_team - teamdamage0);
 							mirrorforce = cvar("g_mirrordamage") * vlen(force);
 							if(g_minstagib)
 							{
@@ -746,13 +751,14 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 			}
 			else
 			{
-				attacker.typehitsound += 1; // TODO possibly trigger teamkill complain sound!
-				if(time > attacker.teamkill_complain)
-				{
-					attacker.teamkill_complain = time + 5;
-					attacker.teamkill_soundtime = time + 0.4;
-					attacker.teamkill_soundsource = targ;
-				}
+				attacker.typehitsound += 1;
+				if(mirrordamage > 0)
+					if(time > attacker.teamkill_complain)
+					{
+						attacker.teamkill_complain = time + 5;
+						attacker.teamkill_soundtime = time + 0.4;
+						attacker.teamkill_soundsource = targ;
+					}
 			}
 		}
 	}

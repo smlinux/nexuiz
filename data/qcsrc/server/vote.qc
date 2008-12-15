@@ -18,7 +18,7 @@ entity GetKickVoteVictim(string vote, string cmd, entity caller)
 {
 	float tokens;
 	float n, t;
-	string ns, s;
+	string ns;
 	entity e;
 	string reason;
 

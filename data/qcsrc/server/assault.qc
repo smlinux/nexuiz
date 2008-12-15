@@ -115,7 +115,6 @@ void assault_setenemytoobjective()
 float assault_decreaser_sprite_visible(entity e)
 {
 	entity decreaser;
-	entity object;
 
 	decreaser = self.assault_decreaser;
 
@@ -272,7 +271,6 @@ void assault_new_round() {
 
 	// swap spawn point teams
 	local entity ent;
-	local entity oldself;
 	ent = find(world, classname, "info_player_deathmatch");
 	while (ent)
 	{

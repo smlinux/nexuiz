@@ -8,7 +8,7 @@
 
 void W_Hook_ExplodeThink (void)
 {
-	float dt, dmg_remaining, dmg_remaining_next, f;
+	float dt, dmg_remaining_next, f;
 
 	dt = time - self.teleport_time;
 	dmg_remaining_next = pow(bound(0, 1 - dt / self.dmg_duration, 1), self.dmg_power);

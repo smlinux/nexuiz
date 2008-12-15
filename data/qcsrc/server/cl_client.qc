@@ -717,6 +717,7 @@ void PutClientInServer (void)
 		self.think = SUB_Null;
 		self.nextthink = 0;
 		self.hook_time = 0;
+		self.dmg_team = 0;
 
 		self.runes = 0;
 
@@ -2248,6 +2249,8 @@ void PlayerPreThink (void)
 
 		ctf_setstatus();
 		kh_setstatus();
+
+		self.dmg_team = max(0, self.dmg_team - cvar("g_teamdamage_resetspeed") * frametime);
 
 		//self.angles_y=self.v_angle_y + 90;   // temp
 
