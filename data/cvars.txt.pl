@@ -123,7 +123,7 @@ __DATA__
 List made using:
 nexuiz-dedicated +sys_colortranslation 2 +sys_specialcharactertranslation 0 +cvarlist +quit
 
-Nexuiz Linux 10:44:57 Dec 15 2008 8589 debug
+Nexuiz Linux 14:59:25 Dec 15 2008 8589 debug
 Trying to load library... "libz.so.1" - loaded.
 Added packfile data/common-spog.pk3 (26 files)
 data/zzz_svn-compat-5011:5013.pk3 is not a PK3 file
@@ -256,7 +256,7 @@ couldn't exec autoexec.cfg
 ^7cl_zoomfactor is "5" ["5"] custom cvar
 ^7cl_zoomsensitivity is "0" ["0"] custom cvar
 ^7cl_zoomspeed is "3.5" ["3.5"] custom cvar
-^7cmdline is "/nexuiz/haggerCTF/Nexuiz/darkplaces/nexuiz-dedicated +sys_colortranslation 2 +sys_specialcharactertranslation 0 +cvarlist +quit " ["/nexuiz/haggerCTF/Nexuiz/darkplaces/nexuiz-dedicated +sys_colortranslation 2 +sys_specialcharactertranslation 0 +cvarlist +quit "] contains commandline the engine was launched with
+^7cmdline is "/nexuiz/haggerRace/Nexuiz/darkplaces/nexuiz-dedicated +sys_colortranslation 2 +sys_specialcharactertranslation 0 +cvarlist +quit " ["/nexuiz/haggerRace/Nexuiz/darkplaces/nexuiz-dedicated +sys_colortranslation 2 +sys_specialcharactertranslation 0 +cvarlist +quit "] contains commandline the engine was launched with
 ^7collision_endnudge is "0" ["0"] how much to bias collision trace end
 ^7collision_enternudge is "0" ["0"] how much to bias collision entry fraction
 ^7collision_impactnudge is "0.03125" ["0.03125"] how much to back off from the impact
@@ -766,7 +766,7 @@ couldn't exec autoexec.cfg
 ^7g_domination_point_rate is "0" ["0"] custom cvar
 ^7g_footsteps is "0" ["0"] custom cvar
 ^7g_forced_respawn is "0" ["0"] custom cvar
-^7g_friendlyfire is "0.0" ["0.0"] custom cvar
+^7g_friendlyfire is "0.2" ["0.2"] custom cvar
 ^7g_fullbrightitems is "0" ["0"] custom cvar
 ^7g_fullbrightplayers is "0" ["0"] custom cvar
 ^7g_grappling_hook is "0" ["0"] custom cvar
@@ -823,7 +823,7 @@ couldn't exec autoexec.cfg
 ^7g_minstagib_invis_alpha is "0.05" ["0.05"] custom cvar
 ^7g_minstagib_speed_jumpheight is "1.8" ["1.8"] custom cvar
 ^7g_minstagib_speed_moverate is "1.25" ["1.25"] custom cvar
-^7g_mirrordamage is "0.2" ["0.2"] custom cvar
+^7g_mirrordamage is "0.5" ["0.5"] custom cvar
 ^7g_nexuizversion is "2.4svn" ["2.4svn"] custom cvar
 ^7g_nixnex is "0" ["0"] custom cvar
 ^7g_nixnex_with_laser is "0" ["0"] custom cvar
@@ -922,6 +922,8 @@ couldn't exec autoexec.cfg
 ^7g_tdm_respawn_delay is "0" ["0"] custom cvar
 ^7g_tdm_respawn_waves is "0" ["0"] custom cvar
 ^7g_tdm_teams is "2" ["2"] custom cvar
+^7g_teamdamage_resetspeed is "30" ["30"] custom cvar
+^7g_teamdamage_threshold is "50" ["50"] custom cvar
 ^7g_throughfloor is "1" ["1"] custom cvar
 ^7g_touchexplode is "0" ["0"] custom cvar
 ^7g_touchexplode_damage is "10" ["10"] custom cvar
@@ -1709,4 +1711,4 @@ couldn't exec autoexec.cfg
 ^7v_kicktime is "$v_kicktime" ["$v_kicktime"] custom cvar
 ^7vid_x11_display is "" [""] custom cvar
 ^7welcome_message_time is "8" ["8"] custom cvar
-^71544 cvar(s)
+^71546 cvar(s)
