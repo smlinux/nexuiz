@@ -29,7 +29,9 @@ my $ignore_re = qr{
 |	vid_.*                           # client
 
 |	g_banned_list                    # private
-|	g_ban_sync.*                     # private
+|	g_ban_default_.*                 # private
+|	g_ban_sync_.*                    # private
+|	g_chat_flood_.*                  # private
 |	log_dest_udp                     # private
 |	log_file                         # private
 |	net_address                      # private
@@ -71,6 +73,20 @@ my $ignore_re = qr{
 |	sv_motd                          # too long
 }x;
 
+my %descr;
+open my $fh, "<", "cvars.txt"
+	or die "<cvars.txt: $!";
+while(<$fh>)
+{
+	chomp;
+	/^"(.*?)\" \"(.*)\"$/ or next;
+	$descr{$1} = $2;
+}
+close $fh;
+
+open $fh, ">", "cvars.txt"
+	or die ">cvars.txt: $!";
+
 while(<DATA>)
 {
 	chomp;
@@ -87,11 +103,18 @@ while(<DATA>)
 		}
 		if($description eq 'custom cvar')
 		{
-			print "\"$cvar\" \"TODO: describe me\"\n";
+			if(defined $descr{$cvar})
+			{
+				print $fh "\"$cvar\" \"$descr{$cvar}\"\n";
+			}
+			else
+			{
+				print $fh "\"$cvar\" \"TODO: describe me\"\n";
+			}
 		}
 		else
 		{
-			print "\"$cvar\"\n";
+			print $fh "\"$cvar\"\n";
 		}
 	}
 }
