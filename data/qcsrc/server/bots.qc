@@ -1499,6 +1499,89 @@ void bot_setnameandstuff()
  		self.netname = name;
 };
 
+float bot_custom_weapon;
+float bot_distance_far;
+float bot_distance_close;
+
+float bot_weapons_far[WEP_LAST];
+float bot_weapons_mid[WEP_LAST];
+float bot_weapons_close[WEP_LAST];
+
+void bot_custom_weapon_priority_setup()
+{
+	local float tokens, i, c, w;
+
+	bot_custom_weapon = FALSE;
+
+	if(	cvar_string("bot_ai_custom_weapon_priority_far") == "" ||
+		cvar_string("bot_ai_custom_weapon_priority_mid") == "" ||
+		cvar_string("bot_ai_custom_weapon_priority_close") == "" ||
+ 		cvar_string("bot_ai_custom_weapon_priority_distances") == ""
+	)
+		return;
+
+	// Parse distances
+	tokens = tokenizebyseparator(cvar_string("bot_ai_custom_weapon_priority_distances")," ");
+
+	if (tokens!=2)
+		return;
+
+	bot_distance_far = stof(argv(0));
+	bot_distance_close = stof(argv(1));
+	
+	if(bot_distance_far < bot_distance_close){
+		bot_distance_far = stof(argv(1));
+		bot_distance_close = stof(argv(0));	
+	}
+
+	// Initialize list of weapons
+	bot_weapons_far[0] = -1;
+	bot_weapons_mid[0] = -1;
+	bot_weapons_close[0] = -1;
+
+	// Parse far distance weapon priorities
+	tokens = tokenizebyseparator(cvar_string("bot_ai_custom_weapon_priority_far")," ");
+
+	c = 0;
+	for(i=0; i < tokens && i < WEP_LAST; ++i){
+		w = stof(argv(i));
+		if ( w >= WEP_FIRST && w <= WEP_LAST) {
+			bot_weapons_far[c] = w;
+			++c;
+		}
+	}
+	bot_weapons_far[c] = -1;
+
+	// Parse mid distance weapon priorities
+	tokens = tokenizebyseparator(cvar_string("bot_ai_custom_weapon_priority_mid")," ");
+
+	c = 0;
+	for(i=0; i < tokens && i < WEP_LAST; ++i){
+		w = stof(argv(i));
+		if ( w >= WEP_FIRST && w <= WEP_LAST) {
+			bot_weapons_mid[c] = w;
+			++c;
+		}
+	}
+	bot_weapons_mid[c] = -1;
+
+	// Parse close distance weapon priorities
+	tokens = tokenizebyseparator(cvar_string("bot_ai_custom_weapon_priority_close")," ");
+
+	c = 0;
+	for(i=0; i < tokens && i < WEP_LAST; ++i){
+		w = stof(argv(i));
+		if ( w >= WEP_FIRST && w <= WEP_LAST) {
+			bot_weapons_close[c] = w;
+			++c;
+		}
+	}
+	bot_weapons_close[c] = -1;
+
+	bot_custom_weapon = TRUE;
+};
+
+
 void bot_endgame()
 {
 	local entity e;
@@ -2169,6 +2252,7 @@ void autoskill(float factor)
 		head.totalfrags_lastcheck = head.totalfrags;
 }
 
+float bot_cvar_nextthink;
 void bot_serverframe()
 {
 	float realplayers, bots, activerealplayers;
@@ -2288,4 +2372,11 @@ void bot_serverframe()
 
 	if (cvar("g_waypointeditor"))
 		botframe_showwaypointlinks();
+
+	if(time > bot_cvar_nextthink)
+	{
+		if(currentbots>1)
+			bot_custom_weapon_priority_setup();
+		bot_cvar_nextthink = time + 5;
+	}
 };
