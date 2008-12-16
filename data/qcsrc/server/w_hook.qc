@@ -125,7 +125,12 @@ float w_hook(float req)
 			}
 		}
 
-		if (self.BUTTON_ATCK2)
+		if(self.hook)
+		{
+			// if hooked, no bombs, and increase the timer
+			ATTACK_FINISHED(self) = max(ATTACK_FINISHED(self), time + cvar("g_balance_hook_primary_refire"));
+		}
+		else if (self.BUTTON_ATCK2)
 		{
 			if (weapon_prepareattack(1, cvar("g_balance_hook_secondary_refire")))
 			{
