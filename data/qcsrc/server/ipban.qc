@@ -32,8 +32,10 @@ void OnlineBanList_SendBan(string ip, float bantime, string reason)
 	uri = strcat(uri, "&reason=", uri_escape(reason));
 
 	n = tokenize_sane(cvar_string("g_ban_sync_uri"));
+	if(n >= MAX_IPBAN_URIS)
+		n = MAX_IPBAN_URIS;
 	for(i = 0; i < n; ++i)
-		uri_get(strcat(argv(i), uri), 0); // 0 = "discard" callback target
+		uri_get(strcat(argv(i), uri), URI_GET_DISCARD); // 0 = "discard" callback target
 }
 
 void OnlineBanList_SendUnban(string ip)
@@ -45,15 +47,17 @@ void OnlineBanList_SendUnban(string ip)
 	uri = strcat(uri, "&ip=", uri_escape(ip));
 
 	n = tokenize_sane(cvar_string("g_ban_sync_uri"));
+	if(n >= MAX_IPBAN_URIS)
+		n = MAX_IPBAN_URIS;
 	for(i = 0; i < n; ++i)
-		uri_get(strcat(argv(i), uri), 0); // 0 = "discard" callback target
+		uri_get(strcat(argv(i), uri), URI_GET_DISCARD); // 0 = "discard" callback target
 }
 
 string OnlineBanList_Servers;
 float OnlineBanList_Timeout;
-float OnlineBanList_Requests;
+float OnlineBanList_RequestWaiting[MAX_IPBAN_URIS];
 
-void OnlineBanList_URI_Get_Callback(float status, string data)
+void OnlineBanList_URI_Get_Callback(float id, float status, string data)
 {
 	float n, i, j, l;
 	string ip;
@@ -61,45 +65,70 @@ void OnlineBanList_URI_Get_Callback(float status, string data)
 	string reason;
 	string serverip;
 	float syncinterval;
+	string uri;
 
-	if(OnlineBanList_Requests <= 0)
+	id -= URI_GET_IPBAN;
+
+	if(id >= MAX_IPBAN_URIS)
+	{
+		print("Received ban list for invalid ID\n");
 		return;
+	}
 
-	--OnlineBanList_Requests;
+	tokenize_sane(cvar_string("g_ban_sync_uri"));
+	uri = argv(id);
+
+	print("Received ban list from ", uri, ": ");
+
+	if(OnlineBanList_RequestWaiting[id] == 0)
+	{
+		print("rejected (unexpected)\n");
+		return;
+	}
+
+	OnlineBanList_RequestWaiting[id] = 0;
 
 	if(time > OnlineBanList_Timeout)
+	{
+		print("rejected (too late)\n");
 		return;
+	}
 
 	syncinterval = cvar("g_ban_sync_interval");
 	if(syncinterval == 0)
+	{
+		print("rejected (syncing disabled)\n");
 		return;
+	}
 	if(syncinterval > 0)
 		syncinterval *= 60;
-
+	
 	if(status != 0)
 	{
-		print("Error receiving the online ban list: Status is ", ftos(status), "\n");
+		print("error: status is ", ftos(status), "\n");
 		return;
 	}
 
 	if(substring(data, 0, 1) == "<")
 	{
-		print("Error receiving the online ban list: Received HTML instead of a ban list: ");
+		print("error: received HTML instead of a ban list: ");
 		return;
 	}
 
 	if(strstrofs(data, "\r", 0) != -1)
 	{
-		print("Error receiving the online ban list: Received carriage returns: ");
+		print("error: received carriage returns: ");
 		return;
 	}
 
 	n = tokenizebyseparator(data, "\n");
 	if(mod(n, 4) != 0)
 	{
-		print("Error receiving the online ban list: Received invalid item count: ");
+		print("error: eceived invalid item count: ");
 		return;
 	}
+
+	print("OK\n");
 
 	for(i = 0; i < n; i += 4)
 	{
@@ -108,7 +137,7 @@ void OnlineBanList_URI_Get_Callback(float status, string data)
 		reason = argv(i + 2);
 		serverip = argv(i + 3);
 
-		timeleft -= 15;
+		timeleft -= 1.5 * cvar("g_ban_sync_timeout");
 		if(timeleft < 0)
 			continue;
 
@@ -125,11 +154,12 @@ void OnlineBanList_URI_Get_Callback(float status, string data)
 				goto skip;
 
 		if(syncinterval > 0)
-			timeleft = min(syncinterval + 15, timeleft);
-			// 15 seconds for safety
+			timeleft = min(syncinterval + (OnlineBanList_Timeout - time) + 5, timeleft);
 			// the ban will be prolonged on the next sync
-		Ban_Insert(ip, timeleft, strcat("ban synced from ", serverip), 0);
-		print("Ban list syncing: accepted ban of ", ip, " by ", serverip, ": ", reason, "\n");
+			// or expire 5 seconds after the next timeout
+		Ban_Insert(ip, timeleft, strcat("ban synced from ", serverip, " at ", uri), 0);
+		print("Ban list syncing: accepted ban of ", ip, " by ", serverip, " at ", uri, ": ");
+		print(reason, "\n");
 
 		continue;
 :skip
@@ -150,26 +180,27 @@ void OnlineBanList_Think()
 	if(argc == 0)
 		return;
 
-	if(OnlineBanList_Requests == 0) // only if there is no ongoing request!
+	if(OnlineBanList_Servers)
+		strunzone(OnlineBanList_Servers);
+	OnlineBanList_Servers = argv(0);
+	for(i = 1; i < argc; ++i)
+		OnlineBanList_Servers = strcat(OnlineBanList_Servers, ";", argv(i));
+	OnlineBanList_Servers = strzone(OnlineBanList_Servers);
+	
+	uri = strcat(     "?action=list&hostname=", uri_escape(cvar_string("hostname")));
+	uri = strcat(uri, "&servers=", uri_escape(OnlineBanList_Servers));
+
+	OnlineBanList_Timeout = time + cvar("g_ban_sync_timeout");
+
+	n = tokenize_sane(cvar_string("g_ban_sync_uri"));
+	if(n >= MAX_IPBAN_URIS)
+		n = MAX_IPBAN_URIS;
+	for(i = 0; i < n; ++i)
 	{
-		if(OnlineBanList_Servers)
-			strunzone(OnlineBanList_Servers);
-		OnlineBanList_Servers = argv(0);
-		for(i = 1; i < argc; ++i)
-			OnlineBanList_Servers = strcat(OnlineBanList_Servers, ";", argv(i));
-		OnlineBanList_Servers = strzone(OnlineBanList_Servers);
-		
-		uri = strcat(     "?action=list&hostname=", uri_escape(cvar_string("hostname")));
-		uri = strcat(uri, "&servers=", uri_escape(OnlineBanList_Servers));
-
-		OnlineBanList_Timeout = time + 10;
-
-		n = tokenize_sane(cvar_string("g_ban_sync_uri"));
-		for(i = 0; i < n; ++i)
-		{
-			++OnlineBanList_Requests;
-			uri_get(strcat(argv(i), uri), 1); // 1 = "banlist" callback target
-		}
+		if(OnlineBanList_RequestWaiting[i])
+			continue;
+		OnlineBanList_RequestWaiting[i] = 1;
+		uri_get(strcat(argv(i), uri), URI_GET_IPBAN + i); // 1000 = "banlist" callback target
 	}
 	
 	if(cvar("g_ban_sync_interval") > 0)

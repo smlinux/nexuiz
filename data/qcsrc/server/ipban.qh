@@ -3,4 +3,4 @@ void Ban_LoadBans();
 float Ban_MaybeEnforceBan(entity client);
 float GameCommand_Ban(string command);
 
-void OnlineBanList_URI_Get_Callback(float status, string data);
+void OnlineBanList_URI_Get_Callback(float id, float status, string data);

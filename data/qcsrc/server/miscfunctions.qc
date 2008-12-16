@@ -1663,24 +1663,30 @@ float SUB_NoImpactCheck()
 const string STR_MISC_NULL_WAV = "misc/null.wav";
 #define PROJECTILE_TOUCH_NOSOUND do { if(SUB_OwnerCheck()) return; if(SUB_NoImpactCheck()) { sound (self, CHAN_PROJECTILE, STR_MISC_NULL_WAV, VOL_BASE, ATTN_NORM); remove(self); return; } } while(0)
 
+float MAX_IPBAN_URIS = 16;
+
+float URI_GET_DISCARD   = 0;
+float URI_GET_IPBAN     = 1;
+float URI_GET_IPBAN_END = 16;
+
 void URI_Get_Callback(float id, float status, string data)
 {
 	dprint("Received HTTP request data for id ", ftos(id), "; status is ", ftos(status), "\nData is\n:");
 	dprint(data);
 	dprint("\nEnd of data.\n");
 
-	switch(id)
+	if(id == URI_GET_DISCARD)
 	{
-		case 0:
-			// 0 is the ID for discarding
-			break;
-		case 1:
-			// 1 is the ID for online ban list
-			OnlineBanList_URI_Get_Callback(status, data);
-			break;
-		default:
-			print("Received HTTP request data for an invalid id ", ftos(id), ".\n");
-			break;
+		// discard
+	}
+	else if(id >= URI_GET_IPBAN && id <= URI_GET_IPBAN_END)
+	{
+		// online ban list
+		OnlineBanList_URI_Get_Callback(id, status, data);
+	}
+	else
+	{
+		print("Received HTTP request data for an invalid id ", ftos(id), ".\n");
 	}
 }
 
