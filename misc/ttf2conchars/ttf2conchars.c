@@ -246,8 +246,8 @@ void blitfilter(SDL_Surface *src, SDL_Surface *dest, int x0, int y0, double A, d
 {
 	// note: x0, y0 is the origin of the UNFILTERED image; it is "transparently" expanded by a BLURFUNCIMAX.
 	int x, y, d, xa, ya, xb, yb;
+	d = (int) BLURFUNCIMAX(1, B);
 
-	d = (int) BLURFUNCIMAX(A,B);
 	SDL_LockSurface(src);
 	SDL_LockSurface(dest);
 
@@ -572,7 +572,7 @@ int main(int argc, char **argv)
 	SDL_Color white = {255, 255, 255, 255};
 	Uint32 transparent;
 	int maxAscent, maxDescent, maxWidth;
-	int i;
+	int i, j;
 	int currentSize;
 	int isfixed;
 
@@ -591,13 +591,39 @@ int main(int argc, char **argv)
 	double B = atof(argv[10]);
 	double C = atof(argv[11]);
 	int differentFonts;
+	int d;
+
+	double f = 0, a = 0;
+
+	d = (int) BLURFUNCIMAX(1, B);
+	fprintf(stderr, "Translating parameters:\nA=%f B=%f (using %d pixels)\n", A, B, (int) BLURFUNCIMAX(A, B));
+	if(C == 0)
+	{
+		B = A * B;
+		A = A * 1;
+	}
+	else
+	{
+		for(i=-d; i<=d; ++i)
+			for(j=-d; j<=d; ++j)
+			{
+				f = BLURFUNC(i*i+j*j, 1, B);
+				f = MAX(0, f);
+
+				if(C == 0)
+					a = MAX(a, f);
+				else
+					a = a + f;
+			}
+		B = A/a * B;
+		A = A/a * 1;
+	}
+	fprintf(stderr, "A=%f B=%f (using %d pixels)\n", A, B, (int) BLURFUNCIMAX(A, B));
 
 	char widthfilename[512];
 	snprintf(widthfilename, sizeof(widthfilename), "%.*s.width", (int)strlen(outfilename) - 4, outfilename);
 
 	int border=(int) BLURFUNCIMAX(A, B);
-
-	fprintf(stderr, "Using %d border pixels\n", border);
 
 	if(SDL_Init(0) < 0)
 		errx(1, "SDL_Init failed");
