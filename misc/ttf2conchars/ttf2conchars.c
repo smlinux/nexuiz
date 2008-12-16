@@ -251,7 +251,7 @@ void blitfilter(SDL_Surface *src, SDL_Surface *dest, int x0, int y0, double A, d
 {
 	/*  note: x0, y0 is the origin of the UNFILTERED image; it is "transparently" expanded by a BLURFUNCIMAX. */
 	int x, y, d, xa, ya, xb, yb;
-	d = (int) BLURFUNCIMAX(1, B);
+	d = (int) BLURFUNCIMAX(A, B);
 
 	SDL_LockSurface(src);
 	SDL_LockSurface(dest);
