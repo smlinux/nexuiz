@@ -623,7 +623,7 @@ int main(int argc, char **argv)
 	C = atof(argv[11]);
 
 	d = (int) BLURFUNCIMAX(1, B);
-	fprintf(stderr, "Translating parameters:\nA=%f B=%f (using %d pixels)\n", A, B, (int) BLURFUNCIMAX(A, B));
+	fprintf(stderr, "Translating parameters:\nA=%f B=%f (using %d pixels)\n", A, B, (int) BLURFUNCIMAX(1, B));
 	if(C == 0)
 	{
 		B = A * B;
@@ -736,8 +736,8 @@ int main(int argc, char **argv)
 				int baseline = TTF_FontAscent(fonts[fntid]);
 				int asc = baseline - out.y;
 				int desc = (out.y + out.h - 1) - baseline;
-				fprintf(stderr, "%c: rect %d %d %d %d baseline %d\n", (int)i, out.x, out.y, out.w, out.h, baseline);
-				fprintf(stderr, "%c: ascent %d descent %d\n", (int)i, asc, desc);
+				//fprintf(stderr, "%c: rect %d %d %d %d baseline %d\n", (int)i, out.x, out.y, out.w, out.h, baseline);
+				//fprintf(stderr, "%c: ascent %d descent %d\n", (int)i, asc, desc);
 				if(asc > maxAscent)
 					maxAscent = asc;
 				if(desc > maxDescent)
