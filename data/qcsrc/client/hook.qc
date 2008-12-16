@@ -34,6 +34,7 @@ void Draw_GrapplingHook()
 	vector a, b;
 	string tex;
 	vector rgb;
+	float t;
 
 	if(time >= self.HookKillTime)
 		return;
@@ -42,22 +43,25 @@ void Draw_GrapplingHook()
 	else
 		a = self.HookStart;
 	b = self.HookEnd;
-	if(self.team == COLOR_TEAM1)
+
+	t = GetPlayerColorForce(self.sv_entnum);
+
+	if(t == COLOR_TEAM1)
 	{
 		tex = "particles/hook_red";
 		rgb = '1 .3 .3';
 	}
-	else if(self.team == COLOR_TEAM2)
+	else if(t == COLOR_TEAM2)
 	{
 		tex = "particles/hook_blue";
 		rgb = '.3 .3 1';
 	}
-	else if(self.team == COLOR_TEAM3)
+	else if(t == COLOR_TEAM3)
 	{
 		tex = "particles/hook_yellow";
 		rgb = '1 1 .3';
 	}
-	else if(self.team == COLOR_TEAM4)
+	else if(t == COLOR_TEAM4)
 	{
 		tex = "particles/hook_pink";
 		rgb = '1 .3 1';
@@ -75,16 +79,28 @@ void Draw_GrapplingHook()
 
 void Net_GrapplingHook()
 {
-	self.sv_entnum = ReadShort();
-	self.HookEnd_x = ReadCoord();
-	self.HookEnd_y = ReadCoord();
-	self.HookEnd_z = ReadCoord();
-	self.HookStart_x = ReadCoord();
-	self.HookStart_y = ReadCoord();
-	self.HookStart_z = ReadCoord();
+	float i;
+	vector start, end;
+	entity p;
 
-	self.HookKillTime = time + 0.1;
-	self.draw = Draw_GrapplingHook;
+	i = ReadShort();
+	end_x = ReadCoord();
+	end_y = ReadCoord();
+	end_z = ReadCoord();
+	start_x = ReadCoord();
+	start_y = ReadCoord();
+	start_z = ReadCoord();
 
-	self.team = GetPlayerColorForce(self.sv_entnum);
+	if(i <= 0 || i >= 256) // not owned by a client
+		return;
+	--i;
+
+	p = playerslots[i];
+	if(!p)
+		return;
+
+	p.HookKillTime = time + 0.1;
+	p.HookStart = start;
+	p.HookEnd = end;
+	p.draw = Draw_GrapplingHook;
 }
