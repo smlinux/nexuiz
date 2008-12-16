@@ -6,6 +6,11 @@
 #include "SDL/SDL_ttf.h" 
 #include "SDL/SDL_image.h" 
 
+#ifdef _MSC_VER
+#define snprintf _snprintf
+#pragma message("You are using a broken and outdated compiler. Do not expect this to work.")
+#endif
+
 void warn(const char *fmt, ...)
 {
 	va_list list;
@@ -56,7 +61,7 @@ void Image_WriteTGABGRA (const char *filename, int width, int height, const unsi
     buffer = (unsigned char *)malloc(width*height*4 + 18);
 
     memset (buffer, 0, 18);
-    buffer[2] = 2;      // uncompressed type
+    buffer[2] = 2;      /*  uncompressed type */
     buffer[12] = (width >> 0) & 0xFF;
     buffer[13] = (width >> 8) & 0xFF;
     buffer[14] = (height >> 0) & 0xFF;
@@ -68,11 +73,11 @@ void Image_WriteTGABGRA (const char *filename, int width, int height, const unsi
 
     if (y < width*height*4)
     {   
-        // save the alpha channel
-        buffer[16] = 32;    // pixel size
-        buffer[17] = 8; // 8 bits of alpha
+        /*  save the alpha channel */
+        buffer[16] = 32;    /*  pixel size */
+        buffer[17] = 8; /*  8 bits of alpha */
 
-        // flip upside down
+        /*  flip upside down */
         out = buffer + 18;
         for (y = height - 1;y >= 0;y--)
         {   
@@ -82,11 +87,11 @@ void Image_WriteTGABGRA (const char *filename, int width, int height, const unsi
     }
     else
     {   
-        // save only the color channels
-        buffer[16] = 24;    // pixel size
-        buffer[17] = 0; // 8 bits of alpha
+        /*  save only the color channels */
+        buffer[16] = 24;    /*  pixel size */
+        buffer[17] = 0; /*  8 bits of alpha */
 
-        // truncate bgra to bgr and flip upside down
+        /*  truncate bgra to bgr and flip upside down */
         out = buffer + 18;
         for (y = height - 1;y >= 0;y--)
         {
@@ -193,7 +198,7 @@ Uint32 getpixelfilter(SDL_Surface *src, SDL_PixelFormat *fmt, int x, int y, doub
 	int i, j;
 	int imax = (int) BLURFUNCIMAX(A,B);
 
-	// 1. calculate blackened blurred image
+	/*  1. calculate blackened blurred image */
 	a = 0;
 	for(i=-imax; i<=imax; ++i)
 		if(y+i >= 0 && y+i < src->h)
@@ -213,7 +218,7 @@ Uint32 getpixelfilter(SDL_Surface *src, SDL_PixelFormat *fmt, int x, int y, doub
 
 	if(C == 0)
 	{
-		// 2. overlap it with the actual image again
+		/*  2. overlap it with the actual image again */
 		if(y >= 0 && y < src->h && x >= 0 && x < src->w)
 		{
 			SDL_GetRGBA(getpixel(src, x, y), src->format, &pr, &pg, &pb, &pa);
@@ -244,7 +249,7 @@ Uint32 getpixelfilter(SDL_Surface *src, SDL_PixelFormat *fmt, int x, int y, doub
 
 void blitfilter(SDL_Surface *src, SDL_Surface *dest, int x0, int y0, double A, double B, double C)
 {
-	// note: x0, y0 is the origin of the UNFILTERED image; it is "transparently" expanded by a BLURFUNCIMAX.
+	/*  note: x0, y0 is the origin of the UNFILTERED image; it is "transparently" expanded by a BLURFUNCIMAX. */
 	int x, y, d, xa, ya, xb, yb;
 	d = (int) BLURFUNCIMAX(1, B);
 
@@ -287,12 +292,12 @@ int mapFont(int d, char *c_)
 	if(*c >= 0xBA && *c <= 0xDF)
 	{
 		*c &= 0x7F;
-		return 1; // cool
+		return 1; /*  cool */
 	}
 	if(*c >= 0xE0 && *c <= 0xFE)
 	{
 		*c &= 0x5F;
-		return 2; // lcd
+		return 2; /*  lcd */
 	}
 	return -1;
 }
@@ -309,12 +314,18 @@ int mapFont(int d, char *c_)
  */
 void StretchBlit(SDL_Surface *dst, SDL_Surface *src, SDL_Rect *drec, SDL_Rect *srec)
 {
+	unsigned int freeSource;
+	int x, y;
+	double scaleX;
+	double scaleY;
+	
+
 	if(!src)
 		src = dst;
 
-	unsigned int freeSource = 0;
+	freeSource = 0;
 	if(src == dst) {
-		// To avoid copying copied pixels, that would suck :)
+		/*  To avoid copying copied pixels, that would suck :) */
 		src = SDL_ConvertSurface(dst, dst->format, dst->flags);
 		freeSource = 1;
 	}
@@ -327,36 +338,40 @@ void StretchBlit(SDL_Surface *dst, SDL_Surface *src, SDL_Rect *drec, SDL_Rect *s
 	SDL_LockSurface(dst);
 	SDL_LockSurface(src);
 
-	double scaleX = (double)srec->w / (double)drec->w;
-	double scaleY = (double)srec->h / (double)drec->h;
+	scaleX = (double)srec->w / (double)drec->w;
+	scaleY = (double)srec->h / (double)drec->h;
 	
-	int x, y;
-
 	for(y = drec->y; y < (drec->y + drec->h); ++y)
 	{
+		int dy;
 		if(y >= dst->h)
 			break;
-		int dy = y - drec->y;
+		dy = y - drec->y;
 		for(x = drec->x; x < (drec->x + drec->w); ++x)
 		{
-			if(x >= dst->w)
-				break;
-			// dx, dy relative to the drec start
-			int dx = x - drec->x;
-
+			int dx;
 			double dfromX, dfromY, dtoX, dtoY;
 			int fromX, fromY, toX, toY;
-			// Get the pixel range which represents the current pixel
-			// When scaling down this should be a rectangle :)
-			// Otherwise it's just 1 pixel anyway, from==to then
+			int i, j;
+			unsigned int r, g, b, a, ar, ag, ab;
+			unsigned int count;
+
+			if(x >= dst->w)
+				break;
+			/*  dx, dy relative to the drec start */
+			dx = x - drec->x;
+
+			/*  Get the pixel range which represents the current pixel */
+			/*  When scaling down this should be a rectangle :) */
+			/*  Otherwise it's just 1 pixel anyway, from==to then */
 			dfromX = dx * scaleX;
 			dfromY = dy * scaleY;
 			dtoX = (dx+1) * scaleX;
 			dtoY = (dy+1) * scaleY;
-			// The first and last one usually aren't 100% within this space
-			fromX = (int)dfromX; dfromX = 1.0 - (dfromX - fromX); // invert the from percentage
+			/*  The first and last one usually aren't 100% within this space */
+			fromX = (int)dfromX; dfromX = 1.0 - (dfromX - fromX); /*  invert the from percentage */
 			fromY = (int)dfromY; dfromY = 1.0 - (dfromY - fromY);
-			toX = (int)dtoX; dtoX -= toX; // this one is ok
+			toX = (int)dtoX; dtoX -= toX; /*  this one is ok */
 			toY = (int)dtoY; dtoY -= toY;
 						
 			/* Short explanation:
@@ -364,20 +379,18 @@ void StretchBlit(SDL_Surface *dst, SDL_Surface *src, SDL_Rect *drec, SDL_Rect *s
 			 * TO is where it ENDS, so if it's 8.4, then 40% of the 9th pixel is to be used!
 			 */
 						
-			// Now get all the pixels and merge them together...
-			int i, j;
-			unsigned int r, g, b, a, ar, ag, ab;
-			unsigned int count = 0;
+			/*  Now get all the pixels and merge them together... */
+			count = 0;
 			r = g = b = a = ar = ag = ab = 0;
 			/*if(drec->w > 1024)
 			  printf("%i %i - %f %f\n", fromX, toX, dfromX, dtoX);*/
 
-			// when going from one to the next there's usually one
-			// situation where the left pixel has a value of 0.1something and
-			// the right one of 0
-			// so adjust the values here
-			// otherwise we get lines in the image with the original color
-			// of the left pixel
+			/*  when going from one to the next there's usually one */
+			/*  situation where the left pixel has a value of 0.1something and */
+			/*  the right one of 0 */
+			/*  so adjust the values here */
+			/*  otherwise we get lines in the image with the original color */
+			/*  of the left pixel */
 			if(toX - fromX == 1 && drec->w > srec->w) {
 				dfromX = 1.0 - dtoX;
 				++fromX;
@@ -419,6 +432,7 @@ void StretchBlit(SDL_Surface *dst, SDL_Surface *src, SDL_Rect *drec, SDL_Rect *s
 					Uint8 pr, pg, pb, pa;
 					Uint16 par, pag, pab;
 					double inc = 1;
+					int iinc;
 					if(x < 0)
 						continue;
 					if((i+srec->x) >= src->w)
@@ -438,7 +452,7 @@ void StretchBlit(SDL_Surface *dst, SDL_Surface *src, SDL_Rect *drec, SDL_Rect *s
 					if(j == (toY))
 						inc *= dtoY;
 
-					int iinc = (int) (inc * 256);
+					iinc = (int) (inc * 256);
 
 					r += (pr * iinc);
 					g += (pg * iinc);
@@ -447,11 +461,11 @@ void StretchBlit(SDL_Surface *dst, SDL_Surface *src, SDL_Rect *drec, SDL_Rect *s
 					ag += (pag * iinc);
 					ab += (pab * iinc);
 					a += (pa * iinc);
-					//++count;
+					/* ++count; */
 					count += iinc;
 				}
 			}
-			//printf("COLOR VALUE: %i, %i, %i, %i \t COUNT: %f\n", r, g, b, a, count);
+			/* printf("COLOR VALUE: %i, %i, %i, %i \t COUNT: %f\n", r, g, b, a, count); */
 			if(a)
 			{
 				r = ar / a;
@@ -480,17 +494,17 @@ void StretchBlit(SDL_Surface *dst, SDL_Surface *src, SDL_Rect *drec, SDL_Rect *s
 
 void StretchDown(SDL_Surface *srfc, int x, int y, int w, int h, int wtarget)
 {
-	// @"#$ SDL has no StretchBlit
-	// this one is slow, but at least I know how it works
+	/*  @"#$ SDL has no StretchBlit */
+	/*  this one is slow, but at least I know how it works */
 	int r, c;
-	unsigned int stretchedline[8 * wtarget]; // ra ga ba r g b a n
+	unsigned int *stretchedline = (unsigned int *) alloca(8 * wtarget * sizeof(unsigned int)); /*  ra ga ba r g b a n */
 	SDL_LockSurface(srfc);
 
 	for(r = y; r < y + h; ++r)
 	{
-		// each input pixel is wtarget pixels "worth"
-		//memset(stretchedline, sizeof(stretchedline), 0);
-		memset(stretchedline, 0, sizeof(stretchedline));
+		/*  each input pixel is wtarget pixels "worth" */
+		/* memset(stretchedline, sizeof(stretchedline), 0); */
+		memset(stretchedline, 0, 8 * wtarget * sizeof(unsigned int));
 		for(c = 0; c < w * wtarget; ++c)
 		{
 			Uint8 pr, pg, pb, pa;
@@ -522,9 +536,9 @@ void StretchDown(SDL_Surface *srfc, int x, int y, int w, int h, int wtarget)
 
 int GetBoundingBox(SDL_Surface *surf, const SDL_Rect *inbox, SDL_Rect *outbox)
 {
-	int bx = -1, by = -1; // start
-	//int bw = 0, bh = 0;
-	int ex = -1, ey = -1; // end
+	int bx = -1, by = -1; /*  start */
+	/* int bw = 0, bh = 0; */
+	int ex = -1, ey = -1; /*  end */
 	int cx, cy;
 	for(cx = inbox->x; cx < inbox->x + inbox->w; ++cx)
 	{
@@ -532,7 +546,7 @@ int GetBoundingBox(SDL_Surface *surf, const SDL_Rect *inbox, SDL_Rect *outbox)
 		{
 			Uint8 pr, pg, pb, pa;
 			SDL_GetRGBA(getpixel(surf, cx, cy), surf->format, &pr, &pg, &pb, &pa);
-			// include colors, or only care about pa?
+			/*  include colors, or only care about pa? */
 			if(!pa)
 				continue;
 
@@ -542,13 +556,13 @@ int GetBoundingBox(SDL_Surface *surf, const SDL_Rect *inbox, SDL_Rect *outbox)
 				continue;
 			}
 			
-			if(cx < bx) // a pixel more on the left
+			if(cx < bx) /*  a pixel more on the left */
 				bx = cx;
-			/*if(cy < by) // a pixel more above... wait... this cannot happen actually
-			  by = cy;*/
-			if(cx > ex) // a pixel on the right
+			if(cy < by) /*  a pixel more above... */
+			    by = cy;
+			if(cx > ex) /*  a pixel on the right */
 				ex = cx;
-			if(cy > ey) // a pixel on the bottom :)
+			if(cy > ey) /*  a pixel on the bottom :) */
 				ey = cy;
 		}
 	}
@@ -575,25 +589,38 @@ int main(int argc, char **argv)
 	int i, j;
 	int currentSize;
 	int isfixed;
+	const char *infilename;
+	int referenceTop;
+	int referenceBottom;
+	int cell;
+	const char *outfilename;
+	const char *font0;
+	const char *font1;
+	const char *font2;
+	double A;
+	double B;
+	double C;
+	int differentFonts;
+	int d;
+	double f = 0, a = 0;
+	char widthfilename[512];
+	int border;
+	FILE *widthfile;
 
 	if(argc != 12)
 		errx(1, "Usage: %s infile.tga topref bottomref cellheight outfile.tga font.ttf fontCOOL.ttf fontLCD.ttf blurA blurB blurColors\n", argv[0]);
 
-	const char *infilename = argv[1];
-	int referenceTop = atoi(argv[2]);
-	int referenceBottom = atoi(argv[3]);
-	int cell = atoi(argv[4]);
-	const char *outfilename = argv[5];
-	const char *font0 = argv[6];
-	const char *font1 = argv[7];
-	const char *font2 = argv[8];
-	double A = atof(argv[9]);
-	double B = atof(argv[10]);
-	double C = atof(argv[11]);
-	int differentFonts;
-	int d;
-
-	double f = 0, a = 0;
+	infilename = argv[1];
+	referenceTop = atoi(argv[2]);
+	referenceBottom = atoi(argv[3]);
+	cell = atoi(argv[4]);
+	outfilename = argv[5];
+	font0 = argv[6];
+	font1 = argv[7];
+	font2 = argv[8];
+	A = atof(argv[9]);
+	B = atof(argv[10]);
+	C = atof(argv[11]);
 
 	d = (int) BLURFUNCIMAX(1, B);
 	fprintf(stderr, "Translating parameters:\nA=%f B=%f (using %d pixels)\n", A, B, (int) BLURFUNCIMAX(A, B));
@@ -620,10 +647,9 @@ int main(int argc, char **argv)
 	}
 	fprintf(stderr, "A=%f B=%f (using %d pixels)\n", A, B, (int) BLURFUNCIMAX(A, B));
 
-	char widthfilename[512];
 	snprintf(widthfilename, sizeof(widthfilename), "%.*s.width", (int)strlen(outfilename) - 4, outfilename);
 
-	int border=(int) BLURFUNCIMAX(A, B);
+	border=(int) BLURFUNCIMAX(A, B);
 
 	if(SDL_Init(0) < 0)
 		errx(1, "SDL_Init failed");
@@ -681,15 +707,16 @@ int main(int argc, char **argv)
 			differentFonts = 0;
 		}
 
-		//maxAscent = MAX(MAX(TTF_FontAscent(fonts[0]), fonts[1] ? TTF_FontAscent(fonts[1]) : 0), fonts[2] ? TTF_FontAscent(fonts[2]) : 0);
-		//maxDescent = -MIN(MIN(TTF_FontDescent(fonts[0]), fonts[1] ? TTF_FontDescent(fonts[1]) : 0), fonts[2] ? TTF_FontDescent(fonts[2]) : 0);
+		/* maxAscent = MAX(MAX(TTF_FontAscent(fonts[0]), fonts[1] ? TTF_FontAscent(fonts[1]) : 0), fonts[2] ? TTF_FontAscent(fonts[2]) : 0); */
+		/* maxDescent = -MIN(MIN(TTF_FontDescent(fonts[0]), fonts[1] ? TTF_FontDescent(fonts[1]) : 0), fonts[2] ? TTF_FontDescent(fonts[2]) : 0); */
 		maxAscent = 0;
 		maxDescent = 0;
 		maxWidth = 0;
 		for(i = 0; i < 256; ++i)
 		{
-			char str[2]; str[0] = i; str[1] = 0;
+			char str[2];
 			int fntid = mapFont(differentFonts, &str[0]);
+			str[0] = i; str[1] = 0;
 			if(fntid < 0)
 				continue;
 			if(!fonts[fntid])
@@ -709,6 +736,8 @@ int main(int argc, char **argv)
 				int baseline = TTF_FontAscent(fonts[fntid]);
 				int asc = baseline - out.y;
 				int desc = (out.y + out.h - 1) - baseline;
+				fprintf(stderr, "%c: rect %d %d %d %d baseline %d\n", (int)i, out.x, out.y, out.w, out.h, baseline);
+				fprintf(stderr, "%c: ascent %d descent %d\n", (int)i, asc, desc);
 				if(asc > maxAscent)
 					maxAscent = asc;
 				if(desc > maxDescent)
@@ -718,9 +747,12 @@ int main(int argc, char **argv)
 			SDL_FreeSurface(glyph);
 		}
 
+		maxAscent += 10;
+		maxDescent += 10;
+
 		if(border + maxAscent + 1 + maxDescent + border <= cell)
 			if(border + maxWidth + border <= cell)
-				break; // YEAH
+				break; /*  YEAH */
 
 		if(differentFonts)
 		{
@@ -739,11 +771,11 @@ int main(int argc, char **argv)
 	if(getenv("FORCE_FIXED"))
 		isfixed = 1;
 
-	// TODO convert conchars to BGRA (so the TGA writer can reliably use it)
+	/*  TODO convert conchars to BGRA (so the TGA writer can reliably use it) */
 
 	transparent = SDL_MapRGBA(conchars->format, 255, 0, 255, 0);
 
-	FILE *widthfile = fopen(widthfilename, "w");
+	widthfile = fopen(widthfilename, "w");
 	if(!widthfile)
 		err(1, "fopen widthfile");
 	fprintf(widthfile, "extraspacing %f ", 0.0);
@@ -762,6 +794,8 @@ int main(int argc, char **argv)
 		if(fntid < 0 || !fonts[fntid])
 		{
 			SDL_Rect src, src2;
+			int destTop, destBottom;
+
 			src.x = cell * (i % 16);
 			src.y = cell * (i / 16);
 			src.w = cell;
@@ -773,18 +807,18 @@ int main(int argc, char **argv)
 			glyph = SDL_CreateRGBSurface(SDL_SWSURFACE, cell, cell, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000);
 			SDL_FillRect(glyph, &src2, transparent);
 
-			// map:
-			//   referenceTop    -> (cell - (maxAscent + 1 + maxDescent)) / 2
-			//   referenceBottom -> (cell - (maxAscent + 1 + maxDescent)) / 2 + maxAscent
+			/*  map: */
+			/*    referenceTop    -> (cell - (maxAscent + 1 + maxDescent)) / 2 */
+			/*    referenceBottom -> (cell - (maxAscent + 1 + maxDescent)) / 2 + maxAscent */
 
-			int destTop = (cell - (maxAscent + 1 + maxDescent)) / 2;
-			int destBottom = (cell - (maxAscent + 1 + maxDescent)) / 2 + maxAscent;
+			destTop = (cell - (maxAscent + 1 + maxDescent)) / 2;
+			destBottom = (cell - (maxAscent + 1 + maxDescent)) / 2 + maxAscent;
 
-			// map is:
-			//   x' = x / cell * h + y
-			// solve:
-			//   destTop = referenceTop / cell * h + y
-			//   destBottom = referenceBottom / cell * h + y
+			/*  map is: */
+			/*    x' = x / cell * h + y */
+			/*  solve: */
+			/*    destTop = referenceTop / cell * h + y */
+			/*    destBottom = referenceBottom / cell * h + y */
 
 			dest.x = 0;
 			dest.y = (int) ((double) (destBottom * referenceTop - destTop * referenceBottom) / (double) (referenceTop - referenceBottom));
@@ -803,8 +837,8 @@ int main(int argc, char **argv)
 			if(isfixed)
 				dest.w = border + maxWidth + border;
 			StretchBlit(glyph, conchars, &dest, &src);
-			//SDL_FillRect(conchars, &src, transparent);
-			//SDL_BlitSurface(glyph, &src2, conchars, &src);
+			/* SDL_FillRect(conchars, &src, transparent); */
+			/* SDL_BlitSurface(glyph, &src2, conchars, &src); */
 			StretchBlit(conchars, glyph, &src, &src2);
 			SDL_FreeSurface(glyph);
 			fprintf(widthfile, "%f ", dest.w / (double) cell);
