@@ -5,6 +5,7 @@
 .float dmg_power;
 .float dmg_duration;
 .float dmg_last;
+.float hook_refire;
 
 void W_Hook_ExplodeThink (void)
 {
@@ -116,7 +117,8 @@ float w_hook(float req)
 		{
 			if(!self.hook)
 			if not(self.hook_state & HOOK_WAITING_FOR_RELEASE)
-			if (weapon_prepareattack(0, cvar("g_balance_hook_primary_refire")))
+			if (time > self.hook_refire)
+			if (weapon_prepareattack(0, -1))
 			{
 				if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
 					self.ammo_cells = self.ammo_cells - cvar("g_balance_hook_primary_ammo");
@@ -125,18 +127,19 @@ float w_hook(float req)
 			}
 		}
 
-		if(self.hook)
-		{
-			// if hooked, no bombs, and increase the timer
-			ATTACK_FINISHED(self) = max(ATTACK_FINISHED(self), time + cvar("g_balance_hook_primary_refire"));
-		}
-		else if (self.BUTTON_ATCK2)
+		if (self.BUTTON_ATCK2)
 		{
 			if (weapon_prepareattack(1, cvar("g_balance_hook_secondary_refire")))
 			{
 				W_Hook_Attack2();
 				weapon_thinkf(WFRAME_FIRE1, cvar("g_balance_hook_secondary_animtime"), w_ready);
 			}
+		}
+
+		if(self.hook)
+		{
+			// if hooked, no bombs, and increase the timer
+			self.hook_refire = max(self.hook_refire, time + cvar("g_balance_hook_primary_refire"));
 		}
 
 		if (self.BUTTON_CROUCH)
