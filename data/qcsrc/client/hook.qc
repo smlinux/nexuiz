@@ -75,28 +75,16 @@ void Draw_GrapplingHook()
 
 void Net_GrapplingHook()
 {
-	float i;
-	vector start, end;
-	entity p;
+	self.sv_entnum = ReadShort();
+	self.HookEnd_x = ReadCoord();
+	self.HookEnd_y = ReadCoord();
+	self.HookEnd_z = ReadCoord();
+	self.HookStart_x = ReadCoord();
+	self.HookStart_y = ReadCoord();
+	self.HookStart_z = ReadCoord();
 
-	i = ReadShort();
-	end_x = ReadCoord();
-	end_y = ReadCoord();
-	end_z = ReadCoord();
-	start_x = ReadCoord();
-	start_y = ReadCoord();
-	start_z = ReadCoord();
+	self.HookKillTime = time + 0.1;
+	self.draw = Draw_GrapplingHook;
 
-	if(i <= 0 || i >= 256) // not owned by a client
-		return;
-	--i;
-
-	p = playerslots[i];
-	if(!p)
-		return;
-
-	p.HookKillTime = time + 0.1;
-	p.HookStart = start;
-	p.HookEnd = end;
-	p.draw = Draw_GrapplingHook;
+	self.team = GetPlayerColorForce(self.sv_entnum);
 }

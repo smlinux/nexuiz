@@ -14,16 +14,22 @@ float TeamByColor(float color)
 	}
 }
 
+float GetPlayerColorForce(float i)
+{
+	if(!teamplay)
+		return 0;
+	else
+		return stof(getplayerkey(i, "colors")) & 15;
+}
+
 float GetPlayerColor(float i)
 {
 	if not(playerslots[i].gotscores) // unconnected
 		return COLOR_SPECTATOR;
 	else if(getplayerkey(i, "frags") == "-666")
 		return COLOR_SPECTATOR;
-	else if(!teamplay)
-		return 0;
 	else
-		return stof(getplayerkey(i, "colors")) & 15;
+		return GetPlayerColorForce(i);
 }
 
 vector GetTeamRGB(float color)
