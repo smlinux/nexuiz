@@ -6,7 +6,7 @@
 #include "SDL/SDL_ttf.h" 
 #include "SDL/SDL_image.h" 
 
-void warn(char *fmt, ...)
+void warn(const char *fmt, ...)
 {
 	va_list list;
 	int e = errno;
@@ -17,7 +17,7 @@ void warn(char *fmt, ...)
 	fputs("\n", stderr);
 }
 
-void warnx(char *fmt, ...)
+void warnx(const char *fmt, ...)
 {
 	va_list list;
 	va_start(list, fmt);
@@ -25,7 +25,7 @@ void warnx(char *fmt, ...)
 	fputs("\n", stderr);
 }
 
-void err(int ex, char *fmt, ...)
+void err(int ex, const char *fmt, ...)
 {
 	va_list list;
 	int e = errno;
@@ -37,7 +37,7 @@ void err(int ex, char *fmt, ...)
 	exit(ex);
 }
 
-void errx(int ex, char *fmt, ...)
+void errx(int ex, const char *fmt, ...)
 {
 	va_list list;
 	va_start(list, fmt);
