@@ -84,6 +84,7 @@ float LostMovetypeFollow(entity ent)
 }
 
 .float hook_length;
+.float hook_switchweapon;
 
 void RemoveGrapplingHook(entity pl)
 {
@@ -407,6 +408,12 @@ void GrapplingHookFrame()
 			//self.hook_state &~= HOOK_RELEASING;
 		}
 	}
+	else if(!g_grappling_hook && self.switchweapon != WEP_HOOK)
+	{
+		if(self.BUTTON_HOOK && !self.hook_switchweapon)
+			W_SwitchWeapon(WEP_HOOK);
+	}
+	self.hook_switchweapon = self.BUTTON_HOOK;
 
 	if(!g_grappling_hook && self.weapon != WEP_HOOK)
 	{
@@ -427,6 +434,7 @@ void GrapplingHookFrame()
 			RemoveGrapplingHook(self);
 		self.hook_state &~= HOOK_REMOVING;
 	}
+
 	/*
 	// if I have no hook or it's not pulling yet, make sure I'm not flying!
 	if((self.hook == world || !self.hook.state) && self.movetype == MOVETYPE_FLY)
