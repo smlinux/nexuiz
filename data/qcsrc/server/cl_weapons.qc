@@ -6,9 +6,10 @@ void W_SwitchWeapon(float imp)
 		W_SwitchWeapon_Force(self, imp);
 };
 
+.float weaponcomplainindex;
 float W_GetCycleWeapon(entity pl, string weaponorder, float dir, float imp, float complain)
 {
-	float n, i, weaponwant, first_valid, prev_valid, switchtonext, switchtolast;
+	float n, i, weaponwant, first_valid, prev_valid, switchtonext, switchtolast, c;
 	n = tokenize_sane(weaponorder);
 	switchtonext = switchtolast = 0;
 	first_valid = prev_valid = 0;
@@ -16,13 +17,16 @@ float W_GetCycleWeapon(entity pl, string weaponorder, float dir, float imp, floa
 	if(dir == 0)
 		switchtonext = 1;
 
+	c = 0;
+
 	for(i = 0; i < n; ++i)
 	{
 		weaponwant = stof(argv(i));
-
 		if(imp >= 0)
 			if((get_weaponinfo(weaponwant)).impulse != imp)
 				continue;
+
+		++c;
 
 		if(client_hasweapon(pl, weaponwant, TRUE, FALSE))
 		{
@@ -49,16 +53,24 @@ float W_GetCycleWeapon(entity pl, string weaponorder, float dir, float imp, floa
 		else
 			return first_valid;
 	}
-	// complain
+	// complain (but only for one weapon on the button that has been pressed)
 	if(complain)
 	{
+		self.weaponcomplainindex += 1;
+		c = mod(self.weaponcomplainindex, c) + 1;
 		for(i = 0; i < n; ++i)
 		{
 			weaponwant = stof(argv(i));
 			if(imp >= 0)
 				if((get_weaponinfo(weaponwant)).impulse != imp)
 					continue;
-			client_hasweapon(pl, weaponwant, TRUE, TRUE);
+
+			--c;
+			if(c == 0)
+			{
+				client_hasweapon(pl, weaponwant, TRUE, TRUE);
+				break;
+			}
 		}
 	}
 	return 0;

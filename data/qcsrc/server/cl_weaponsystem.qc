@@ -415,7 +415,33 @@ float client_hasweapon(entity cl, float wpn, float andammo, float complain)
 		// DRESK - 3/16/07
 		// Report Proper Weapon Status / Modified Weapon Ownership Message
 		if(weaponsInMap & weaponbit)
+		{
 			sprint(cl, strcat("You do not have the ^2", W_Name(wpn), "\n") );
+
+			entity e;
+			string s;
+
+			if(cvar("g_showweaponspawns"))
+			{
+				e = get_weaponinfo(wpn);
+				s = strcat("wpn-", e.mdl);
+				for(e = world; (e = findfloat(e, weapons, weaponbit)); )
+				{
+					if(e.classname == "droppedweapon")
+						continue;
+					if not(e.flags & FL_ITEM)
+						continue;
+					WaypointSprite_Spawn(
+						s,
+						1, 0,
+						world, e.origin,
+						self, 0,
+						world, enemy,
+						0
+					);
+				}
+			}
+		}
 		else
 			sprint(cl, strcat("The ^2", W_Name(wpn), "^7 is ^1NOT AVAILABLE^7 in this map\n") );
 	}
