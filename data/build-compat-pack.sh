@@ -220,7 +220,6 @@ COMPAT_FILES="
 	sound/player/carni-lycan/coms/incoming.ogg
 	sound/player/carni-lycan/coms/meet.ogg
 	sound/player/carni-lycan/coms/needhelp1.ogg
-	sound/player/carni-lycan/coms/needhelp2.ogg
 	sound/player/carni-lycan/coms/seenflag.ogg
 	sound/player/carni-lycan/coms/taunt1.ogg
 	sound/player/carni-lycan/coms/taunt2.ogg
