@@ -778,7 +778,8 @@ int main(int argc, char **argv)
 	widthfile = fopen(widthfilename, "w");
 	if(!widthfile)
 		err(1, "fopen widthfile");
-	fprintf(widthfile, "extraspacing %f ", 0.0);
+	fprintf(widthfile, "extraspacing %f\n", 0.0);
+	fprintf(widthfile, "scale %f\n", 1.0);
 
 	for(i = 0; i < 256; ++i)
 	{
@@ -787,7 +788,7 @@ int main(int argc, char **argv)
 		SDL_Rect dest;
 		char str[2]; str[0] = i; str[1] = 0;
 
-		if(!(i % 16))
+		if(i && !(i % 16))
 			fprintf(widthfile, "\n");
 
 		fntid = mapFont(differentFonts, &str[0]);
