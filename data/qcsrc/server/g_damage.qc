@@ -738,8 +738,8 @@ void Damage (entity targ, entity inflictor, entity attacker, float damage, float
 						// if above view_ofs and below maxs, and also in the middle half of the bbox, it is head shot
 						vector headmins, headmaxs, org;
 						org = antilag_takebackorigin(targ, time - ANTILAG_LATENCY(attacker));
-						headmins = org + '0.5 0 0' * targ.mins_x + '0 0.5 0' * targ.mins_y + '0 0 1' * targ.view_ofs_z;
-						headmaxs = org + '0.5 0 0' * targ.maxs_x + '0 0.5 0' * targ.maxs_y + '0 0 1' * targ.maxs_z;
+						headmins = org + '0.7 0 0' * targ.mins_x + '0 0.7 0' * targ.mins_y + '0 0 1' * targ.view_ofs_z;
+						headmaxs = org + '0.7 0 0' * targ.maxs_x + '0 0.7 0' * targ.maxs_y + '0 0 1' * targ.maxs_z;
 						if(trace_hits_box(railgun_start, railgun_end, headmins, headmaxs))
 						{
 							damage *= 1 + damage_headshotbonus;
