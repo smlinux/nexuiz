@@ -349,8 +349,13 @@ void havocbot_chooseweapon()
 	local float maxdelaytime=0.5;
 	local float spreadpenalty=10;
 	local float distancefromfloor;
+
+	local float af;
+
 	traceline(self.enemy.origin,self.enemy.origin-'0 0 1000',TRUE,world);
 	distancefromfloor = self.enemy.origin_z - trace_endpos_z;
+	
+	af = ATTACK_FINISHED(self);
 
 	// Custom weapon list based on distance to the enemy
 	local float i; i = 0;
@@ -363,7 +368,7 @@ void havocbot_chooseweapon()
 				if ( client_hasweapon(self, w, TRUE, FALSE) ){
 					if ( self.weapon == w){
 						if( cvar("bot_ai_weapon_combo") && 
-							ATTACK_FINISHED(self) > time + cvar("bot_ai_weapon_combo_threshold"))
+							af > time + cvar("bot_ai_weapon_combo_threshold"))
 							continue;
 					} else {
 						self.switchweapon = w;
@@ -380,7 +385,7 @@ void havocbot_chooseweapon()
 				if ( client_hasweapon(self, w, TRUE, FALSE) ){
 					if ( self.weapon == w){
 						if( cvar("bot_ai_weapon_combo") && 
-							ATTACK_FINISHED(self) > time + cvar("bot_ai_weapon_combo_threshold"))
+							af > time + cvar("bot_ai_weapon_combo_threshold"))
 							continue;
 					} else {
 						self.switchweapon = w;
@@ -396,7 +401,7 @@ void havocbot_chooseweapon()
 			if ( client_hasweapon(self, w, TRUE, FALSE) ){
 				if ( self.weapon == w){
 					if( cvar("bot_ai_weapon_combo") && 
-						ATTACK_FINISHED(self) > time + cvar("bot_ai_weapon_combo_threshold"))
+						af > time + cvar("bot_ai_weapon_combo_threshold"))
 						continue;
 				} else {
 					self.switchweapon = w;
@@ -419,7 +424,7 @@ void havocbot_chooseweapon()
 
 	if (client_hasweapon(self, WEP_ROCKET_LAUNCHER, TRUE, FALSE)  && 
 		!(	cvar("bot_ai_weapon_combo") && self.weapon == WEP_ROCKET_LAUNCHER && 
-			ATTACK_FINISHED(self) > time + cvar("bot_ai_weapon_combo_threshold") 
+			af > time + cvar("bot_ai_weapon_combo_threshold") 
 		)
 	)
 		rocket = (cvar("g_balance_rocketlauncher_damage")/cvar("g_balance_rocketlauncher_refire")*0.75)
@@ -427,7 +432,7 @@ void havocbot_chooseweapon()
 			
 	if (client_hasweapon(self, WEP_NEX, TRUE, FALSE)  && 
 		!( 	cvar("bot_ai_weapon_combo") && self.weapon == WEP_NEX && 
-			ATTACK_FINISHED(self) > time + cvar("bot_ai_weapon_combo_threshold") 
+			af > time + cvar("bot_ai_weapon_combo_threshold") 
 		)
 	)
 		nex = (cvar("g_balance_nex_damage")/cvar("g_balance_nex_refire")*1.0)
@@ -441,7 +446,7 @@ void havocbot_chooseweapon()
 	if (client_hasweapon(self, WEP_GRENADE_LAUNCHER, TRUE, FALSE) && 
 		!( 
 			cvar("bot_ai_weapon_combo") && self.weapon == WEP_GRENADE_LAUNCHER && 
-			ATTACK_FINISHED(self) > time + cvar("bot_ai_weapon_combo_threshold") 
+			af > time + cvar("bot_ai_weapon_combo_threshold") 
 		)
 	)
 		grenade = (cvar("g_balance_grenadelauncher_primary_damage")/cvar("g_balance_grenadelauncher_primary_refire")*1.0)
@@ -449,7 +454,7 @@ void havocbot_chooseweapon()
 			
 	if (client_hasweapon(self, WEP_ELECTRO, TRUE, FALSE) && 
 		!( 	cvar("bot_ai_weapon_combo") && self.weapon == WEP_ELECTRO && 
-			ATTACK_FINISHED(self) > time + cvar("bot_ai_weapon_combo_threshold") 
+			af > time + cvar("bot_ai_weapon_combo_threshold") 
 		)
 	)
 		electro = (cvar("g_balance_electro_primary_damage")/cvar("g_balance_electro_primary_refire")*0.75)
@@ -467,7 +472,7 @@ void havocbot_chooseweapon()
 			
 	if (client_hasweapon(self, WEP_SHOTGUN, TRUE, FALSE) && 
 		!(	cvar("bot_ai_weapon_combo") && self.weapon == WEP_SHOTGUN && 
-			ATTACK_FINISHED(self) > time + cvar("bot_ai_weapon_combo_threshold") 
+			af > time + cvar("bot_ai_weapon_combo_threshold") 
 		)
 	)
 		shotgun = (cvar("g_balance_shotgun_primary_damage")*cvar("g_balance_shotgun_primary_bullets")/cvar("g_balance_shotgun_primary_refire")*1.0)
@@ -475,7 +480,7 @@ void havocbot_chooseweapon()
 			
 	if (client_hasweapon(self, WEP_LASER, FALSE, FALSE) && 
 		!(	cvar("bot_ai_weapon_combo") && self.weapon == WEP_LASER && 
-			ATTACK_FINISHED(self) > time + cvar("bot_ai_weapon_combo_threshold") 
+			af > time + cvar("bot_ai_weapon_combo_threshold") 
 		)
 	)
 		laser = (cvar("g_balance_laser_primary_damage")/cvar("g_balance_laser_primary_refire")*1.0)
