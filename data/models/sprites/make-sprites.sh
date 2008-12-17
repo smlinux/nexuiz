@@ -169,3 +169,18 @@ sprite ons-cp-dfnd-red    "CONTROL POINT" ff0000 000000 0.5 ff0000 ffffff 0.5
 sprite ons-cp-dfnd-blue   "CONTROL POINT" 0000ff 000000 0.5 0000ff ffffff 0.5
 sprite race-checkpoint    "CHECKPOINT"    ff8000 000000 0.0
 sprite race-finish        "FINISH"        ff8000 000000 0.0
+
+sprite wpn-laser          "LASER"         ff8080 000000 0.0 # bright red
+sprite wpn-shotgun        "SG"            804000 000000 0.0 # brown
+sprite wpn-uzi            "MG"            ffff00 000000 0.0 # yellow
+sprite wpn-gl             "GL"            ff0000 000000 0.0 # red
+sprite wpn-electro        "ELECTRO"       0080ff 000000 0.0 # bluish cyan
+sprite wpn-crylink        "CRYLINK"       ff80ff 000000 0.0 # bright pink
+sprite wpn-nex            "NEX"           00ffff 000000 0.0 # cyan
+sprite wpn-hagar          "HAGAR"         ffff80 000000 0.0 # bright yellow
+sprite wpn-rl             "RL"            ffff00 000000 0.0 # yellow
+sprite wpn-porto          "PORTO"         808080 000000 0.0 # grey
+sprite wpn-minstanex      "MINSTANEX"     80ffff 000000 0.0 # bright cyan
+sprite wpn-hookgun        "HOOK"          008000 000000 0.0 # dark green
+sprite wpn-seeker         "SEEKER"        ff8000 000000 0.0 # orange
+sprite wpn-hlac           "HLAC"          00ff00 000000 0.0 # green
