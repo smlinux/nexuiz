@@ -95,6 +95,20 @@ COMPAT_FILES="
 	models/sprites/race-finish.tga
 	models/sprites/redbase.tga
 	models/sprites/waypoint.tga
+	models/sprites/wpn-crylink_frame0.tga
+	models/sprites/wpn-electro_frame0.tga
+	models/sprites/wpn-gl_frame0.tga
+	models/sprites/wpn-hagar_frame0.tga
+	models/sprites/wpn-hlac_frame0.tga
+	models/sprites/wpn-hookgun_frame0.tga
+	models/sprites/wpn-laser_frame0.tga
+	models/sprites/wpn-minstanex_frame0.tga
+	models/sprites/wpn-nex_frame0.tga
+	models/sprites/wpn-porto_frame0.tga
+	models/sprites/wpn-rl_frame0.tga
+	models/sprites/wpn-seeker_frame0.tga
+	models/sprites/wpn-shotgun_frame0.tga
+	models/sprites/wpn-uzi_frame0.tga
     models/tagrocket.md3
     models/tagrocket.tga
 	models/turrets/base-gib1.md3
@@ -496,10 +510,10 @@ COMPAT_FILES="
 	sound/weapons/hagexp1.ogg
 	sound/weapons/hagexp2.ogg
 	sound/weapons/hagexp3.ogg
-	sound/weapons/hook_fire.ogg
-	sound/weapons/hook_impact.ogg
 	sound/weapons/hookbomb_fire.ogg
 	sound/weapons/hookbomb_impact.ogg
+	sound/weapons/hook_fire.ogg
+	sound/weapons/hook_impact.ogg
 	sound/weapons/lasergun_fire.ogg
 	sound/weapons/laserimpact.ogg
 	sound/weapons/minstanexfire.ogg
@@ -525,6 +539,20 @@ COMPAT_FILES="
 	sound/weapons/uzi_fire.ogg
 	sound/weapons/weaponpickup.ogg
 	sound/weapons/weapon_switch.ogg
+	textures/hlac_accessory_gloss.tga
+	textures/hlac_accessory_norm.tga
+	textures/hlac_accessory_pants.tga
+	textures/hlac_accessory_shirt.tga
+	textures/hlac_accessory.tga
+	textures/hlac_body_gloss.tga
+	textures/hlac_body_glow.tga
+	textures/hlac_body_norm.tga
+	textures/hlac_body_pants.tga
+	textures/hlac_body_shirt.tga
+	textures/hlac_body.tga
+	textures/hlac_glass.tga
+	textures/hlac_metal.tga
+	textures/hlac_plasma.tga
 	textures/hlac.tga
 	textures/hookgun_gloss.tga
 	textures/hookgun_norm.tga
