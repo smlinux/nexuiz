@@ -433,6 +433,9 @@ our %config = (
 	dp_server_from_wan => "",
 	irc_local => "",
 
+	irc_admin_password => "",
+	irc_admin_timeout => 3600,
+
 	plugins => "",
 );
 
@@ -719,7 +722,8 @@ sub irc_error()
 		$store{irc_nick} = "";
 		schedule sub {
 			my ($timer) = @_;
-			out dp => 0, 'status', 'log_dest_udp';
+			out dp => 0, 'status 1', 'log_dest_udp';
+			$store{status_waiting} = -1;
 		} => 1;
 		# this will clear irc_error_active
 	} => 30;
@@ -829,6 +833,12 @@ sub irc_joinstage($)
 	return 0;
 }
 
+my $RE_FAIL = qr/$ $/;
+my $RE_SUCCEED = qr//;
+sub cond($)
+{
+	return $_[0] ? $RE_FAIL : $RE_SUCCEED;
+}
 
 
 # List of all handlers on the various sockets. Additional handlers can be added by a plugin.
@@ -859,6 +869,7 @@ sub irc_joinstage($)
 
 	# retrieve hostname from status replies
 	[ dp => q{host:     (.*)} => sub {
+		return 0 unless $store{status_waiting} < 0;
 		my ($name) = @_;
 		$store{dp_hostname} = $name;
 		return 0;
@@ -866,17 +877,21 @@ sub irc_joinstage($)
 
 	# retrieve version from status replies
 	[ dp => q{version:  (.*)} => sub {
+		return 0 unless $store{status_waiting} < 0;
 		my ($version) = @_;
 		$store{dp_version} = $version;
 		return 0;
 	} ],
 
-	# retrieve number of open player slots
+	# retrieve player names
 	[ dp => q{players:  (\d+) active \((\d+) max\)} => sub {
+		return 0 unless $store{status_waiting} < 0;
 		my ($active, $max) = @_;
 		my $full = ($active >= $max);
 		$store{slots_max} = $max;
 		$store{slots_active} = $active;
+		$store{status_waiting} = $active;
+		$store{playerslots_active_new} = [];
 		if($full != ($store{slots_full} || 0))
 		{
 			$store{slots_full} = $full;
@@ -893,6 +908,65 @@ sub irc_joinstage($)
 			}
 		}
 		return 0;
+	} ],
+
+	# retrieve player names
+	[ dp => q{\^\d(\S+)\s+(\d+)\s+(\d+)\s+(\S+)\s+(-?\d+)\s+\#(\d+)\s+\^\d(.*)} => sub {
+		return 0 unless $store{status_waiting} > 0;
+		my ($ip, $pl, $ping, $time, $frags, $no, $name) = ($1, $2, $3, $4, $5, $6, $7);
+		$store{"playerslot_$no"} = { ip => $ip, pl => $pl, ping => $ping, 'time' => $time, frags => $frags, no => $no, name => $name };
+		push @{$store{playerslots_active_new}}, $no;
+		if(--$store{status_waiting} == 0)
+		{
+			$store{playerslots_active} = $store{playerslots_active_new};
+		}
+		return 0;
+	} ],
+
+	# IRC admin commands
+	[ irc => q{:(([^! ]*)![^ ]*) (?i:PRIVMSG) [^&#%]\S* :(.*)} => sub {
+		return 0 unless $config{irc_admin_password} ne '';
+
+		my ($hostmask, $nick, $command) = @_;
+
+		if($command eq "login $config{irc_admin_password}")
+		{
+			$store{logins}{$hostmask} = time() + $config{irc_admin_timeout};
+		}
+
+		if(($store{logins}{$hostmask} || 0) < time())
+		{
+			out irc => 0, "PRIVMSG $nick :authentication required";
+			return -1;
+		}
+
+		if($command eq "status")
+		{
+			for my $slot(@{$store{playerslots_active}})
+			{
+				my $s = $store{"playerslot_$slot"};
+				out irc => 0, "PRIVMSG $nick :$slot $s->{ip} $s->{name}";
+			}
+		}
+
+		if($command =~ /^kick (\d+)$/)
+		{
+			my ($id) = ($1);
+			out dp => 0, "kick # $id";
+			my $slotnik = "playerslot_$id";
+			out irc => 0, "PRIVMSG $nick :kicked $id ($store{$slotnik}{name} @ $store{$slotnik}{ip})";
+		}
+
+		if($command =~ /^kickban (\d+) (\d+) (\d+) (.*)$/)
+		{
+			my ($id, $bantime, $mask, $reason) = ($1, $2, $3, $4);
+			$reason =~ s/(["\\])/\\$1/g;
+			out dp => 0, "kickban # $id $bantime $mask $reason";
+			my $slotnik = "playerslot_$id";
+			out irc => 0, "PRIVMSG $nick :kickbanned $id ($store{$slotnik}{name} @ $store{$slotnik}{ip}), netmask $mask, for $bantime seconds ($reason)";
+		}
+
+		return -1;
 	} ],
 
 	# LMS: detect "no more lives" message
@@ -1290,7 +1364,8 @@ out dp => 0, 'echo "Unknown command \"rcon2irc_eval\""'; # assume the server has
 # not containing our own IP:port, or by rcon2irc_eval not being a defined command).
 schedule sub {
 	my ($timer) = @_;
-	out dp => 0, 'status', 'log_dest_udp', 'rcon2irc_eval set dummy 1';
+	out dp => 0, 'status 1', 'log_dest_udp', 'rcon2irc_eval set dummy 1';
+	$store{status_waiting} = -1;
 	schedule $timer => (exists $store{dp_hostname} ? $config{dp_status_delay} : 1);;
 } => 1;
 
