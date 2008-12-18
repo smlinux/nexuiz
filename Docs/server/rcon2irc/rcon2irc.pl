@@ -1028,7 +1028,7 @@ sub cond($)
 		{
 			my ($id) = ($1);
 			out dp => 0, "unban $id";
-			out irc => 0, "PRIVMSG $nick :removed ban #$id ($store{bans}[$id])";
+			out irc => 0, "PRIVMSG $nick :removed ban #$id ($store{bans}[$id]{ip})";
 			return 0;
 		}
 
