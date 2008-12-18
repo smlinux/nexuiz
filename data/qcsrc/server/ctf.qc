@@ -150,7 +150,7 @@ void place_flag()
 	if(!self.t_width)
 		self.t_width = 0.1; // frame animation rate
 	if(!self.t_length)
-		self.t_length = 119; // maximum frame
+		self.t_length = 58; // maximum frame
 
 	setattachment(self, world, "");
 	self.mdl = self.model;
@@ -700,7 +700,7 @@ void spawnfunc_item_flag_team1()
 	if(self.spawnflags & 1)
 		self.noalign = 1;
 	if (!self.model)
-		self.model = "models/ctf/flag_red.md3";
+		self.model = "models/ctf/flags.md3";
 	if (!self.noise)
 		self.noise = "ctf/take.wav";
 	if (!self.noise1)
@@ -729,6 +729,8 @@ void spawnfunc_item_flag_team1()
 	self.effects = self.effects | EF_LOWPRECISION;
 	if(cvar("g_ctf_fullbrightflags"))
 		self.effects |= EF_FULLBRIGHT;
+	if(cvar("g_ctf_dynamiclights"))
+		self.effects |= EF_RED;
 
 	waypoint_spawnforitem(self);
 
@@ -790,11 +792,11 @@ void spawnfunc_item_flag_team2()
 	}
 	self.netname = "^4BLUE^7 flag";
 	self.target = "###item###";
-	self.skin = 0;
+	self.skin = 1;
 	if(self.spawnflags & 1)
 		self.noalign = 1;
 	if (!self.model)
-		self.model = "models/ctf/flag_blue.md3";
+		self.model = "models/ctf/flags.md3";
 	if (!self.noise)
 		self.noise = "ctf/take.wav";
 	if (!self.noise1)
@@ -823,6 +825,8 @@ void spawnfunc_item_flag_team2()
 	self.effects = self.effects | EF_LOWPRECISION;
 	if(cvar("g_ctf_fullbrightflags"))
 		self.effects |= EF_FULLBRIGHT;
+	if(cvar("g_ctf_dynamiclights"))
+		self.effects |= EF_BLUE;
 
 	waypoint_spawnforitem(self);
 

@@ -16,6 +16,7 @@ evil6_walls
 evil8_base
 eX
 final_rage
+flags
 harlequin_sky
 kaznexctf2
 leiprojectile

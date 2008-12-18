@@ -1,0 +1,3 @@
+replace "flag_red" "textures/flags/flag_red.tga"
+replace "flag_red_cloth" "flag_red_cloth"
+replace "flag_red_laser" "flag_red_laser"
