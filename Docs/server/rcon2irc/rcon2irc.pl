@@ -1032,7 +1032,7 @@ sub cond($)
 			return 0;
 		}
 
-		out irc => 0, "PRIVMSG $nick :unknown command (supported: status [substring], kick # id, kickban # id bantime mask reason, bans, unban banid)";
+		out irc => 0, "PRIVMSG $nick :unknown command (supported: status [substring], kick # id reason, kickban # id bantime mask reason, bans, unban banid)";
 
 		return -1;
 	} ],
