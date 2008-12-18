@@ -964,9 +964,10 @@ sub cond($)
 			my ($match) = $1;
 			my $found = 0;
 			my $foundany = 0;
-			for my $slot(@{$store{playerslots_active}})
+			for my $slot(@{$store{playerslots_active} || []})
 			{
 				my $s = $store{"playerslot_$slot"};
+				next unless $s;
 				if(not defined $match or index(color_dp2none($s->{name}), $match) >= 0)
 				{
 					out irc => 0, sprintf 'PRIVMSG %s :%-21s %2i %4i %8s %4i #%-3u %s', $nick, $s->{ip}, $s->{pl}, $s->{ping}, $s->{time}, $s->{frags}, $slot, color_dp2irc $s->{name};
