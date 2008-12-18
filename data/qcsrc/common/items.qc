@@ -16,6 +16,7 @@ void register_weapon_real(float id, float(float) func, float ammotype, float i, 
 	e.mdl = modelname;
 	e.model = strzone(strcat("models/weapons/g_", modelname, ".md3"));
 	e.spawnflags = 0;
+	e.model2 = strzone(strcat("wpn-", e.mdl));
 	if(normalweapon)
 		e.spawnflags |= WEPSPAWNFLAG_NORMAL;
 	if(canclimb)
@@ -43,6 +44,7 @@ void register_weapons_done()
 	dummy_weapon_info.spawnflags = 0;
 	dummy_weapon_info.impulse = -1;
 	dummy_weapon_info.bot_pickupbasevalue = 0;
+	dummy_weapon_info.model2 = "";
 
 	float i;
 	weaponpriority_hudselector_0 = "";

@@ -418,13 +418,9 @@ float client_hasweapon(entity cl, float wpn, float andammo, float complain)
 		{
 			sprint(cl, strcat("You do not have the ^2", W_Name(wpn), "\n") );
 
-			entity e;
-			string s;
-
 			if(cvar("g_showweaponspawns"))
 			{
-				e = get_weaponinfo(wpn);
-				s = strcat("wpn-", e.mdl);
+				entity e;
 				for(e = world; (e = findfloat(e, weapons, weaponbit)); )
 				{
 					if(e.classname == "droppedweapon")
@@ -432,7 +428,7 @@ float client_hasweapon(entity cl, float wpn, float andammo, float complain)
 					if not(e.flags & FL_ITEM)
 						continue;
 					WaypointSprite_Spawn(
-						s,
+						e.model2,
 						1, 0,
 						world, e.origin,
 						self, 0,
