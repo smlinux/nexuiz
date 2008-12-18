@@ -373,10 +373,17 @@ void CL_SpawnWeaponentity()
 	self.exteriorweaponentity.nextthink = time;
 };
 
+.float hasweapon_complain_spam;
+
 float client_hasweapon(entity cl, float wpn, float andammo, float complain)
 {
 	local float weaponbit, f;
 	local entity oldself;
+
+	if(time < self.hasweapon_complain_spam)
+		complain = 0;
+	if(complain)
+		self.hasweapon_complain_spam = time + 0.2;
 
 	if (wpn < WEP_FIRST || wpn > WEP_LAST)
 	{
@@ -421,6 +428,11 @@ float client_hasweapon(entity cl, float wpn, float andammo, float complain)
 			if(cvar("g_showweaponspawns"))
 			{
 				entity e;
+				string s;
+
+				e = get_weaponinfo(wpn);
+				s = e.model2;
+
 				for(e = world; (e = findfloat(e, weapons, weaponbit)); )
 				{
 					if(e.classname == "droppedweapon")
@@ -428,7 +440,7 @@ float client_hasweapon(entity cl, float wpn, float andammo, float complain)
 					if not(e.flags & FL_ITEM)
 						continue;
 					WaypointSprite_Spawn(
-						e.model2,
+						s,
 						1, 0,
 						world, e.origin,
 						self, 0,
