@@ -997,7 +997,7 @@ sub cond($)
 			$dpreason =~ s/(["\\])/\\$1/g;
 			out dp => 0, "kick # $id $dpreason";
 			my $slotnik = "playerslot_$id";
-			out irc => 0, "PRIVMSG $nick :kicked $id (@{[color_dp2irc $store{$slotnik}{name}]} @ $store{$slotnik}{ip}) ($reason)";
+			out irc => 0, "PRIVMSG $nick :kicked #$id (@{[color_dp2irc $store{$slotnik}{name}]} @ $store{$slotnik}{ip}) ($reason)";
 			return 0;
 		}
 
