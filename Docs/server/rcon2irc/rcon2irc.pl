@@ -722,7 +722,7 @@ sub irc_error()
 		$store{irc_nick} = "";
 		schedule sub {
 			my ($timer) = @_;
-			out dp => 0, 'status 1', 'log_dest_udp';
+			out dp => 0, 'sv_cmd bans', 'status 1', 'log_dest_udp';
 			$store{status_waiting} = -1;
 		} => 1;
 		# this will clear irc_error_active
@@ -867,11 +867,21 @@ sub cond($)
 		return 0;
 	} ],
 
+	# retrieve list of banned hosts
+	[ dp => q{#(\d+): (\S+) is still banned for (\S+) seconds} => sub {
+		return 0 unless $store{status_waiting} < 0;
+		my ($id, $ip, $time) = @_;
+		$store{bans_new} = [] if $id == 0;
+		$store{bans_new}[$id] = { ip => $ip, 'time' => $time };
+		return 0;
+	} ],
+
 	# retrieve hostname from status replies
 	[ dp => q{host:     (.*)} => sub {
 		return 0 unless $store{status_waiting} < 0;
 		my ($name) = @_;
 		$store{dp_hostname} = $name;
+		$store{bans} = $store{bans_new};
 		return 0;
 	} ],
 
@@ -933,6 +943,7 @@ sub cond($)
 		if($command eq "login $config{irc_admin_password}")
 		{
 			$store{logins}{$hostmask} = time() + $config{irc_admin_timeout};
+			out irc => 0, "PRIVMSG $nick :my wish is your command";
 			return -1;
 		}
 
@@ -951,18 +962,33 @@ sub cond($)
 		if($command =~ /^status(?: (.*))?$/)
 		{
 			my ($match) = $1;
+			my $found = 0;
+			my $foundany = 0;
 			for my $slot(@{$store{playerslots_active}})
 			{
 				my $s = $store{"playerslot_$slot"};
 				if(not defined $match or index(color_dp2none($s->{name}), $match) >= 0)
 				{
-					out irc => 0, sprintf 'PRIVMSG %s :%-21s %2i %4i %8s %4i #%-3u %s', $s->{ip}, $s->{pl}, $s->{ping}, $s->{time}, $s->{frags}, $slot, $s->{name};
+					out irc => 0, sprintf 'PRIVMSG %s :%-21s %2i %4i %8s %4i #%-3u %s', $nick, $s->{ip}, $s->{pl}, $s->{ping}, $s->{time}, $s->{frags}, $slot, color_dp2irc $s->{name};
+					++$found;
+				}
+				++$foundany;
+			}
+			if(!$found)
+			{
+				if(!$foundany)
+				{
+					out irc => 0, "PRIVMSG $nick :the server is empty";
+				}
+				else
+				{
+					out irc => 0, "PRIVMSG $nick :no nicknames match";
 				}
 			}
 			return 0;
 		}
 
-		if($command =~ /^kick (\d+) (.*)$/)
+		if($command =~ /^kick # (\d+) (.*)$/)
 		{
 			my ($id, $reason) = ($1, $2);
 			my $dpreason = color_irc2dp $reason;
@@ -974,7 +1000,7 @@ sub cond($)
 			return 0;
 		}
 
-		if($command =~ /^kickban (\d+) (\d+) (\d+) (.*)$/)
+		if($command =~ /^kickban # (\d+) (\d+) (\d+) (.*)$/)
 		{
 			my ($id, $bantime, $mask, $reason) = ($1, $2, $3, $4);
 			my $dpreason = color_irc2dp $reason;
@@ -986,7 +1012,27 @@ sub cond($)
 			return 0;
 		}
 
-		out irc => 0, "PRIVMSG $nick :unknown command";
+		if($command eq "bans")
+		{
+			my $banlist =
+				join ", ",
+				map { "$_ ($store{bans}[$_]{ip}, $store{bans}[$_]{time}s)" }
+				0..@{$store{bans} || []}-1;
+			$banlist = "no bans"
+				if $banlist eq "";
+			out irc => 0, "PRIVMSG $nick :$banlist";
+			return 0;
+		}
+
+		if($command eq "unban")
+		{
+			my ($id) = ($1);
+			out dp => 0, "unban $id";
+			out irc => 0, "PRIVMSG $nick :removed ban #$id ($store{bans}[$id])";
+			return 0;
+		}
+
+		out irc => 0, "PRIVMSG $nick :unknown command (supported: status [substring], kick # id, kickban # id bantime mask reason, bans, unban banid)";
 
 		return -1;
 	} ],
@@ -1386,7 +1432,7 @@ out dp => 0, 'echo "Unknown command \"rcon2irc_eval\""'; # assume the server has
 # not containing our own IP:port, or by rcon2irc_eval not being a defined command).
 schedule sub {
 	my ($timer) = @_;
-	out dp => 0, 'status 1', 'log_dest_udp', 'rcon2irc_eval set dummy 1';
+	out dp => 0, 'sv_cmd bans', 'status 1', 'log_dest_udp', 'rcon2irc_eval set dummy 1';
 	$store{status_waiting} = -1;
 	schedule $timer => (exists $store{dp_hostname} ? $config{dp_status_delay} : 1);;
 } => 1;
