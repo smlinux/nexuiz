@@ -357,6 +357,30 @@ float Ban_MaybeEnforceBan(entity client)
 	return FALSE;
 }
 
+string Ban_Enforce(float i, string reason)
+{
+	string s;
+	entity e;
+
+	// Enforce our new ban
+	s = "";
+	FOR_EACH_REALCLIENT(e)
+		if(Ban_IsClientBanned(e, i))
+		{
+			if(reason != "")
+			{
+				if(s == "")
+					reason = strcat(reason, ": affects ");
+				else
+					reason = strcat(reason, ", ");
+				reason = strcat(reason, e.netname);
+			}
+			s = strcat(s, "^1NOTE:^7 banned client ", e.netname, "^7 has to go\n");
+			dropclient(e);
+		}
+	bprint(s);
+}
+
 float Ban_Insert(string ip, float bantime, string reason, float dosync)
 {
 	float i;
@@ -376,6 +400,9 @@ float Ban_Insert(string ip, float bantime, string reason, float dosync)
 				print(ip, "'s ban has been prolonged to ", ftos(bantime), " seconds from now\n");
 			}
 
+			// and enforce
+			reason = Ban_Enforce(i, reason);
+
 			// and abort
 			if(dosync)
 				if(reason != "")
@@ -384,6 +411,7 @@ float Ban_Insert(string ip, float bantime, string reason, float dosync)
 
 			return FALSE;
 		}
+
 	// do we have a free slot?
 	for(i = 0; i < ban_count; ++i)
 		if(time > ban_expire[i])
@@ -415,23 +443,7 @@ float Ban_Insert(string ip, float bantime, string reason, float dosync)
 
 	Ban_SaveBans();
 
-	// Enforce our new ban
-	s = "";
-	FOR_EACH_REALCLIENT(e)
-		if(Ban_IsClientBanned(e, i))
-		{
-			if(reason != "")
-			{
-				if(s == "")
-					reason = strcat(reason, ": affects ");
-				else
-					reason = strcat(reason, ", ");
-				reason = strcat(reason, e.netname);
-			}
-			s = strcat(s, "^1NOTE:^7 banned client ", e.netname, "^7 has to go\n");
-			dropclient(e);
-		}
-	bprint(s);
+	reason = Ban_Enforce(i, reason);
 
 	// and abort
 	if(dosync)
