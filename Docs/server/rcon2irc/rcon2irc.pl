@@ -1024,7 +1024,7 @@ sub cond($)
 			return 0;
 		}
 
-		if($command eq "unban")
+		if($command =~ /^unban (\d+)$/)
 		{
 			my ($id) = ($1);
 			out dp => 0, "unban $id";
