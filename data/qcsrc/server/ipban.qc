@@ -379,6 +379,8 @@ string Ban_Enforce(float i, string reason)
 			dropclient(e);
 		}
 	bprint(s);
+
+	return reason;
 }
 
 float Ban_Insert(string ip, float bantime, string reason, float dosync)
