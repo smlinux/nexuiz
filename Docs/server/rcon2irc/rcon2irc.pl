@@ -928,10 +928,18 @@ sub cond($)
 		return 0 unless $config{irc_admin_password} ne '';
 
 		my ($hostmask, $nick, $command) = @_;
+		my $dpnick = color_dpfix $nick;
 
 		if($command eq "login $config{irc_admin_password}")
 		{
 			$store{logins}{$hostmask} = time() + $config{irc_admin_timeout};
+			return -1;
+		}
+
+		if($command =~ /^login /)
+		{
+			out irc => 0, "PRIVMSG $nick :invalid password";
+			return -1;
 		}
 
 		if(($store{logins}{$hostmask} || 0) < time())
@@ -940,31 +948,45 @@ sub cond($)
 			return -1;
 		}
 
-		if($command eq "status")
+		if($command =~ /^status(?: (.*))?$/)
 		{
+			my ($match) = $1;
 			for my $slot(@{$store{playerslots_active}})
 			{
 				my $s = $store{"playerslot_$slot"};
-				out irc => 0, "PRIVMSG $nick :$slot $s->{ip} $s->{name}";
+				if(not defined $match or index(color_dp2none($s->{name}), $match) >= 0)
+				{
+					out irc => 0, sprintf 'PRIVMSG %s :%-21s %2i %4i %8s %4i #%-3u %s', $s->{ip}, $s->{pl}, $s->{ping}, $s->{time}, $s->{frags}, $slot, $s->{name};
+				}
 			}
+			return 0;
 		}
 
-		if($command =~ /^kick (\d+)$/)
+		if($command =~ /^kick (\d+) (.*)$/)
 		{
-			my ($id) = ($1);
-			out dp => 0, "kick # $id";
+			my ($id, $reason) = ($1, $2);
+			my $dpreason = color_irc2dp $reason;
+			$dpreason =~ s/^(~?)(.*)/$1irc $dpnick: $2/g;
+			$dpreason =~ s/(["\\])/\\$1/g;
+			out dp => 0, "kick # $id $dpreason";
 			my $slotnik = "playerslot_$id";
-			out irc => 0, "PRIVMSG $nick :kicked $id ($store{$slotnik}{name} @ $store{$slotnik}{ip})";
+			out irc => 0, "PRIVMSG $nick :kicked $id (@{[color_dp2irc $store{$slotnik}{name}]} @ $store{$slotnik}{ip}) ($reason)";
+			return 0;
 		}
 
 		if($command =~ /^kickban (\d+) (\d+) (\d+) (.*)$/)
 		{
 			my ($id, $bantime, $mask, $reason) = ($1, $2, $3, $4);
-			$reason =~ s/(["\\])/\\$1/g;
-			out dp => 0, "kickban # $id $bantime $mask $reason";
+			my $dpreason = color_irc2dp $reason;
+			$dpreason =~ s/^(~?)(.*)/$1irc $dpnick: $2/g;
+			$dpreason =~ s/(["\\])/\\$1/g;
+			out dp => 0, "kickban # $id $bantime $mask $dpreason";
 			my $slotnik = "playerslot_$id";
-			out irc => 0, "PRIVMSG $nick :kickbanned $id ($store{$slotnik}{name} @ $store{$slotnik}{ip}), netmask $mask, for $bantime seconds ($reason)";
+			out irc => 0, "PRIVMSG $nick :kickbanned $id (@{[color_dp2irc $store{$slotnik}{name}]} @ $store{$slotnik}{ip}), netmask $mask, for $bantime seconds ($reason)";
+			return 0;
 		}
+
+		out irc => 0, "PRIVMSG $nick :unknown command";
 
 		return -1;
 	} ],
@@ -1456,6 +1478,7 @@ for(;;)
 				# found one! Check if it matches the regular expression of one of
 				# our handlers...
 				my $handled = 0;
+				my $private = 0;
 				for my $h(@handlers)
 				{
 					my ($chanstr_wanted, $re, $sub) = @$h;
@@ -1469,11 +1492,17 @@ for(;;)
 					# and if it is a match, handle it.
 					++$handled;
 					my $result = $sub->(@matches);
+					$private = 1
+						if $result < 0;
 					last
 						if $result;
 				}
 				# print the message, together with info on whether it has been handled or not
-				if($handled)
+				if($private)
+				{
+					print "           $chanstr >> (private)\n";
+				}
+				elsif($handled)
 				{
 					print "           $chanstr >> $line\n";
 				}
