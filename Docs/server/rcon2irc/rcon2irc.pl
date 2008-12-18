@@ -1009,7 +1009,7 @@ sub cond($)
 			$dpreason =~ s/(["\\])/\\$1/g;
 			out dp => 0, "kickban # $id $bantime $mask $dpreason";
 			my $slotnik = "playerslot_$id";
-			out irc => 0, "PRIVMSG $nick :kickbanned $id (@{[color_dp2irc $store{$slotnik}{name}]} @ $store{$slotnik}{ip}), netmask $mask, for $bantime seconds ($reason)";
+			out irc => 0, "PRIVMSG $nick :kickbanned #$id (@{[color_dp2irc $store{$slotnik}{name}]} @ $store{$slotnik}{ip}), netmask $mask, for $bantime seconds ($reason)";
 			return 0;
 		}
 
@@ -1029,7 +1029,7 @@ sub cond($)
 		{
 			my ($id) = ($1);
 			out dp => 0, "unban $id";
-			out irc => 0, "PRIVMSG $nick :removed ban #$id ($store{bans}[$id]{ip})";
+			out irc => 0, "PRIVMSG $nick :removed ban $id ($store{bans}[$id]{ip})";
 			return 0;
 		}
 
