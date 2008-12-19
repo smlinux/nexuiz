@@ -609,7 +609,7 @@ for F in $COMPAT_FILES; do
 done
 
 cd pack
-find . -type f -print0 | xargs -0 ../../misc/jpeg-if-not-alpha.sh
+find . -type f -print0 | qual=85 xargs -0 ../../misc/jpeg-if-not-alpha.sh
 
 find . -name \*.ogg | while IFS= read -r NAME; do
 	oggdec -o "$NAME.wav" "$NAME"
@@ -617,7 +617,7 @@ find . -name \*.ogg | while IFS= read -r NAME; do
 	rm -f "$NAME.wav"
 done
 
-rev=`svnversion`
+rev=`svnversion ..`
 pack="zzz_svn-compat-$rev"
 echo "Support files to play on svn servers of revision $rev" > "$pack.txt"
 7za a -tzip -mx=9 "../$pack.pk3" .
