@@ -609,7 +609,8 @@ for F in $COMPAT_FILES; do
 done
 
 cd pack
-find . -type f -print0 | qual=85 xargs -0 ../../misc/jpeg-if-not-alpha.sh
+
+find . -type f -print0 | qual=85 scaledown=256x256 xargs -0 ../../misc/jpeg-if-not-alpha.sh
 
 find . -name \*.ogg | while IFS= read -r NAME; do
 	oggdec -o "$NAME.wav" "$NAME"
