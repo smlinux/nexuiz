@@ -435,7 +435,6 @@ COMPAT_FILES="
 	sound/player/specop/coms/incoming.ogg
 	sound/player/specop/coms/meet.ogg
 	sound/player/specop/coms/needhelp1.ogg
-	sound/player/specop/coms/needhelp2.ogg
 	sound/player/specop/coms/seenflag.ogg
 	sound/player/specop/coms/taunt1.ogg
 	sound/player/specop/coms/taunt2.ogg
@@ -619,9 +618,9 @@ find . -name \*.ogg | while IFS= read -r NAME; do
 done
 
 rev=`svnversion`
-pack="../zzz_svn-compat-$rev"
+pack="zzz_svn-compat-$rev"
 echo "Support files to play on svn servers of revision $rev" > "$pack.txt"
-7za a -tzip -mx=9 "$pack.pk3" $COMPAT_FILES "$pack.txt"
+7za a -tzip -mx=9 "../$pack.pk3" .
 rm -f "$pack.txt"
 
 cd ..
