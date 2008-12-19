@@ -602,8 +602,21 @@ COMPAT_FILES="
 	textures/seeker.tga
 "
 
+rm -rf pack
+mkdir pack
+for F in $COMPAT_FILES; do
+	mkdir -p pack/${F%/*}
+	cp "$F" pack/"$F"
+done
+
+cd pack
+find . -type f -print0 | xargs -0 ../../misc/jpeg-if-not-alpha.sh
+
 rev=`svnversion`
-pack="zzz_svn-compat-$rev"
+pack="../zzz_svn-compat-$rev"
 echo "Support files to play on svn servers of revision $rev" > "$pack.txt"
 7za a -tzip -mx=9 "$pack.pk3" $COMPAT_FILES "$pack.txt"
 rm -f "$pack.txt"
+
+cd ..
+rm -rf pack
