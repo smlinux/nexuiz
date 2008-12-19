@@ -612,6 +612,12 @@ done
 cd pack
 find . -type f -print0 | xargs -0 ../../misc/jpeg-if-not-alpha.sh
 
+find . -name \*.ogg | while IFS= read -r NAME; do
+	oggdec -o "$NAME.wav" "$NAME"
+	oggenc -q 0 -o "$NAME" "$NAME.wav"
+	rm -f "$NAME.wav"
+done
+
 rev=`svnversion`
 pack="../zzz_svn-compat-$rev"
 echo "Support files to play on svn servers of revision $rev" > "$pack.txt"
