@@ -38,6 +38,9 @@ COMPAT_FILES="
 	gfx/teamradar_ping.tga
 	gfx/toxic_mini.tga
 	gfx/warfare_mini.tga
+	models/ctf/flags.md3
+	models/ctf/flags.md3_0.skin
+	models/ctf/flags.md3_1.skin
 	models/player/carni.zym.sounds
 	models/player/headhunter.zym.sounds
 	models/player/insurrectionist.zym.sounds
@@ -162,6 +165,7 @@ COMPAT_FILES="
 	models/weapons/w_porto.zym
     models/weapons/w_seeker.zym
 	particles/particlefont.tga
+	scripts/flags.shader
 	scripts/portals.shader
 	sound/announcer/male/airshot.ogg
 	sound/announcer/male/electrobitch.ogg
@@ -538,6 +542,18 @@ COMPAT_FILES="
 	sound/weapons/uzi_fire.ogg
 	sound/weapons/weaponpickup.ogg
 	sound/weapons/weapon_switch.ogg
+	textures/flags/flag_blue_cloth.tga
+	textures/flags/flag_blue_gloss.tga
+	textures/flags/flag_blue_glow.tga
+	textures/flags/flag_blue_laser.tga
+	textures/flags/flag_blue_norm.tga
+	textures/flags/flag_blue.tga
+	textures/flags/flag_red_cloth.tga
+	textures/flags/flag_red_gloss.tga
+	textures/flags/flag_red_glow.tga
+	textures/flags/flag_red_laser.tga
+	textures/flags/flag_red_norm.tga
+	textures/flags/flag_red.tga
 	textures/hlac_accessory_gloss.tga
 	textures/hlac_accessory_norm.tga
 	textures/hlac_accessory_pants.tga
