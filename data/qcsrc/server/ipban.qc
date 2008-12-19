@@ -388,8 +388,6 @@ float Ban_Insert(string ip, float bantime, string reason, float dosync)
 	float i;
 	float j;
 	float bestscore;
-	entity e;
-	string s;
 
 	// already banned?
 	for(i = 0; i < ban_count; ++i)

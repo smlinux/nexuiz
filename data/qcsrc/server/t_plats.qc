@@ -27,8 +27,8 @@ void plat_spawn_inside_trigger()
 	trigger.solid = SOLID_TRIGGER;
 	trigger.enemy = self;
 
-	tmin = self.mins + '25 25 0';
-	tmax = self.maxs - '25 25 -8';
+	tmin = self.absmin + '25 25 0';
+	tmax = self.absmax - '25 25 -8';
 	tmin_z = tmax_z - (self.pos1_z - self.pos2_z + 8);
 	if (self.spawnflags & PLAT_LOW_TRIGGER)
 		tmax_z = tmin_z + 8;
@@ -895,13 +895,13 @@ void LinkDoors()
 		if (self.items)
 			return;
 
-		self.trigger_field = spawn_field(self.mins, self.maxs);
+		self.trigger_field = spawn_field(self.absmin, self.absmax);
 
 		return;		// don't want to link this door
 	}
 
-	cmins = self.mins;
-	cmaxs = self.maxs;
+	cmins = self.absmin;
+	cmaxs = self.absmax;
 
 	starte = self;
 	t = self;
@@ -947,18 +947,18 @@ void LinkDoors()
 			self.enemy = t;
 			self = t;
 
-			if (t.mins_x < cmins_x)
-				cmins_x = t.mins_x;
-			if (t.mins_y < cmins_y)
-				cmins_y = t.mins_y;
-			if (t.mins_z < cmins_z)
-				cmins_z = t.mins_z;
-			if (t.maxs_x > cmaxs_x)
-				cmaxs_x = t.maxs_x;
-			if (t.maxs_y > cmaxs_y)
-				cmaxs_y = t.maxs_y;
-			if (t.maxs_z > cmaxs_z)
-				cmaxs_z = t.maxs_z;
+			if (t.absmin_x < cmins_x)
+				cmins_x = t.absmin_x;
+			if (t.absmin_y < cmins_y)
+				cmins_y = t.absmin_y;
+			if (t.absmin_z < cmins_z)
+				cmins_z = t.absmin_z;
+			if (t.absmax_x > cmaxs_x)
+				cmaxs_x = t.absmax_x;
+			if (t.absmax_y > cmaxs_y)
+				cmaxs_y = t.absmax_y;
+			if (t.absmax_z > cmaxs_z)
+				cmaxs_z = t.absmax_z;
 		}
 	} while (1 );
 
