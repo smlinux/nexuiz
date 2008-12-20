@@ -425,24 +425,36 @@ void SV_ParseClientCommand(string s) {
 		//if(ctf_clientcommand())
 		//	return;
 		cmd = argv(0);
-		/* checks not needed any more since DP has separated clientcommands and regular commands
+		// grep for Cmd_AddCommand_WithClientCommand to find them all
 		if(cmd != "status")
-		if(cmd != "name")
+		if(cmd != "max")
+		if(cmd != "monster")
+		if(cmd != "scrag")
+		if(cmd != "wraith")
+		if(cmd != "gimme")
+		if(cmd != "god")
+		if(cmd != "notarget")
+		if(cmd != "fly")
+		if(cmd != "noclip")
+		if(cmd != "give")
 		//if(cmd != "say") // handled above
 		//if(cmd != "say_team") // handled above
 		if(cmd != "tell")
-		if(cmd != "color")
 		if(cmd != "kill")
 		if(cmd != "pause")
-		if(cmd != "kick")
 		if(cmd != "ping")
-		if(cmd != "pings")
-		if(cmd != "ban")
-		if(cmd != "pmodel")
+		if(cmd != "name")
+		if(cmd != "color")
 		if(cmd != "rate")
+		if(cmd != "pmodel")
 		if(cmd != "playermodel")
 		if(cmd != "playerskin")
-		if(cmd != "god") if(cmd != "notarget") if(cmd != "fly") if(cmd != "give") if(cmd != "noclip")
+		if(cmd != "prespawn")
+		if(cmd != "spawn")
+		if(cmd != "begin")
+		if(cmd != "pings")
+		if(cmd != "sv_startdownload")
+		if(cmd != "download")
 		{
 			print("WARNING: Invalid clientcommand by ", self.netname, ": ", s, "\n");
 			return;
