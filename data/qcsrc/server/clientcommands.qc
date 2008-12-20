@@ -459,7 +459,6 @@ void SV_ParseClientCommand(string s) {
 			print("WARNING: Invalid clientcommand by ", self.netname, ": ", s, "\n");
 			return;
 		}
-		*/
 		clientcommand(self,s);
 	}
 }
