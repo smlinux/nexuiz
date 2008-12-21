@@ -1510,7 +1510,7 @@ float WinningCondition_Scores(float limit)
 		limit = -limit;
 	}
 
-	if(g_dm || (g_ctf && g_ctf_win_mode != 2) || g_tdm || g_arena || (g_race && !g_race_qualifying))
+	if(g_dm || g_tdm || g_arena || (g_race && !g_race_qualifying))
 	// these modes always score in increments of 1, thus this makes sense
 	{
 		if(leaderfrags != WinningConditionHelper_topscore)
