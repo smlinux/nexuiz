@@ -92,12 +92,12 @@ void fillNexuizPlayerSettingsTab(entity me)
 	me.TR(me);
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Crosshair:"));
-		for(i = 1; i <= 9; ++i)
-			me.TDNoMargin(me, 1, 2 / 9, e = makeNexuizCrosshairButton(3, i), '0 0 0');
+		for(i = 1; i <= 10; ++i)
+			me.TDNoMargin(me, 1, 2 / 10, e = makeNexuizCrosshairButton(3, i), '0 0 0');
 	me.TR(me);
 		me.TDempty(me, 1);
-		for(i = 10; i <= 18; ++i)
-			me.TDNoMargin(me, 1, 2 / 9, e = makeNexuizCrosshairButton(3, i), '0 0 0');
+		for(i = 11; i <= 20; ++i)
+			me.TDNoMargin(me, 1, 2 / 10, e = makeNexuizCrosshairButton(3, i), '0 0 0');
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Crosshair Size:"));
 		me.TD(me, 1, 2, e = makeNexuizSlider(0.40, 2, 0.05, "crosshair_size"));
