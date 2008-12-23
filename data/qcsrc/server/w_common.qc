@@ -118,12 +118,12 @@ void W_BallisticBullet_Hit (void)
 {
 	vector org2;
 	float f;
-	org2 = self.origin - 6 * normalize(self.oldvelocity);
 
+	org2 = self.origin - 6 * normalize(self.oldvelocity);
 	if (DEATH_ISWEAPON(self.projectiledeathtype, WEP_SHOTGUN))
-		pointparticles(particleeffectnum("shotgun_impact"), trace_endpos, trace_plane_normal * 1000, 1);
+		pointparticles(particleeffectnum("shotgun_impact"), org2, normalize(self.velocity) * 1000, 1);
 	else
-		pointparticles(particleeffectnum("machinegun_impact"), trace_endpos, trace_plane_normal * 1000, 1);
+		pointparticles(particleeffectnum("machinegun_impact"), org2, normalize(self.velocity) * 1000, 1);
 
 	if(other && other != self.enemy)
 	{
@@ -151,22 +151,30 @@ void W_BallisticBullet_Hit (void)
 	}
 }
 
-.void(void) leave_solid_think_save;
-.float leave_solid_nextthink_save;
-.vector leave_solid_origin;
-.vector leave_solid_velocity;
+.void(void) W_BallisticBullet_LeaveSolid_think_save;
+.float W_BallisticBullet_LeaveSolid_nextthink_save;
+.vector W_BallisticBullet_LeaveSolid_origin;
+.vector W_BallisticBullet_LeaveSolid_velocity;
 
-void leave_solid_think()
+void W_BallisticBullet_LeaveSolid_think()
 {
-	setorigin(self, self.leave_solid_origin);
-	self.velocity = self.leave_solid_velocity;
+	vector org2;
 
-	self.think = self.leave_solid_think_save;
-	self.nextthink = max(time, self.leave_solid_nextthink_save) + 1;
-	self.leave_solid_think_save = SUB_Null;
+	setorigin(self, self.W_BallisticBullet_LeaveSolid_origin);
+	self.velocity = self.W_BallisticBullet_LeaveSolid_velocity;
+
+	self.think = self.W_BallisticBullet_LeaveSolid_think_save;
+	self.nextthink = max(time, self.W_BallisticBullet_LeaveSolid_nextthink_save) + 1;
+	self.W_BallisticBullet_LeaveSolid_think_save = SUB_Null;
 
 	self.flags &~= FL_ONGROUND;
 	self.effects &~= EF_NODRAW;
+
+	org2 = self.origin - 6 * normalize(self.oldvelocity);
+	if (DEATH_ISWEAPON(self.projectiledeathtype, WEP_SHOTGUN))
+		pointparticles(particleeffectnum("shotgun_impact"), org2, normalize(self.velocity) * 1000, 1);
+	else
+		pointparticles(particleeffectnum("machinegun_impact"), org2, normalize(self.velocity) * 1000, 1);
 }
 
 // a fake logarithm function
@@ -179,7 +187,7 @@ float log(float x)
 	return 2 * log(sqrt(x));
 }
 
-float leave_solid(entity e, vector vel, float speedhalflife)
+float W_BallisticBullet_LeaveSolid(entity e, vector vel, float speedhalflife)
 {
 	// move the entity along its velocity until it's out of solid, then let it resume
 	
@@ -238,19 +246,19 @@ float leave_solid(entity e, vector vel, float speedhalflife)
 			{
 				// we managed to leave solid
 				// so trace_endpos is good
-				self.leave_solid_origin = t;
+				self.W_BallisticBullet_LeaveSolid_origin = t;
 				break;
 			}
 		}
 		else
 		{
 			// bad: skiporg is outside solid. Then imagine it's alright.
-			self.leave_solid_origin = skiporg;
+			self.W_BallisticBullet_LeaveSolid_origin = skiporg;
 			break;
 		}
 	}
 
-	dst = vlen(self.leave_solid_origin - org);
+	dst = vlen(self.W_BallisticBullet_LeaveSolid_origin - org);
 	velfactor = (speedhalflife * v0 - dst) / (speedhalflife * v0);
 
 	// t(s) = speedhalflife * log((speedhalflife * v(0)) / (speedhalflife * v(0) - s))
@@ -259,9 +267,9 @@ float leave_solid(entity e, vector vel, float speedhalflife)
 	//print("slowdown by ", ftos(dst), " units = ", ftos(velfactor), "\n");
 	//print("takes time ", ftos(dt), "\n");
 
-	self.leave_solid_think_save = self.think;
-	self.leave_solid_nextthink_save = self.nextthink;
-	self.think = leave_solid_think;
+	self.W_BallisticBullet_LeaveSolid_think_save = self.think;
+	self.W_BallisticBullet_LeaveSolid_nextthink_save = self.nextthink;
+	self.think = W_BallisticBullet_LeaveSolid_think;
 	self.nextthink = time + dt;
 
 	vel = vel * velfactor;
@@ -269,21 +277,21 @@ float leave_solid(entity e, vector vel, float speedhalflife)
 	self.velocity = '0 0 0';
 	self.flags |= FL_ONGROUND; // prevent moving
 	self.effects |= EF_NODRAW;
-	self.leave_solid_velocity = vel;
+	self.W_BallisticBullet_LeaveSolid_velocity = vel;
 
 	return 1;
 }
 
 void W_BallisticBullet_Touch (void)
 {
-	if(self.think == leave_solid_think) // skip this!
+	if(self.think == W_BallisticBullet_LeaveSolid_think) // skip this!
 		return;
 
 	PROJECTILE_TOUCH;
 	W_BallisticBullet_Hit ();
 
 	// go through solid!
-	if(!leave_solid(self, self.velocity, self.dmg_radius))
+	if(!W_BallisticBullet_LeaveSolid(self, self.velocity, self.dmg_radius))
 	{
 		remove(self);
 		return;
