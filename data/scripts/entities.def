@@ -1216,6 +1216,7 @@ NEGATE: trigger if the cvar does NOT match the value.
 /*QUAKED weapon_hlac (1 0 .5) (-30 -30 0) (30 30 32) FLOATING
 the Heavy Laser Assault Cannon.
 -------- KEYS --------
+ammo_cells: initial cells of the weapon (if unset, g_pickup_cells is used)
 respawntime: time till it respawns (default: 30)
 team: out of items with the same value here, only one (random one) will spawn. Useful to put multiple items on one spot.
 cnt: weight of this item for random selection using "team". Set to a lower value for items you want to see less likely.
@@ -1228,6 +1229,7 @@ model="models/weapons/g_hlac.md3"
 /*QUAKED weapon_seeker (1 0 .5) (-30 -30 0) (30 30 32) FLOATING
 the T.A.G. Seeker.
 -------- KEYS --------
+ammo_rockets: initial rockets of the weapon (if unset, g_pickup_rockets is used)
 respawntime: time till it respawns (default: 30)
 team: out of items with the same value here, only one (random one) will spawn. Useful to put multiple items on one spot.
 cnt: weight of this item for random selection using "team". Set to a lower value for items you want to see less likely.
@@ -1240,6 +1242,7 @@ model="models/weapons/g_seeker.md3"
 /*QUAKED weapon_hook (1 0 .5) (-30 -30 0) (30 30 32) FLOATING
 the on-hand Grappling Hook.
 -------- KEYS --------
+ammo_cells: initial cells of the weapon (if unset, g_pickup_cells is used)
 respawntime: time till it respawns (default: 30)
 team: out of items with the same value here, only one (random one) will spawn. Useful to put multiple items on one spot.
 cnt: weight of this item for random selection using "team". Set to a lower value for items you want to see less likely.
@@ -1256,3 +1259,19 @@ health: health to give per second (default 10)
 max_health: max health this trigger will give (default 200)
 noise: sound file to play (use misc/null.wav to make it silent), default = item_health_medium sound
 */
+
+/*QUAKED weapon_campingrifle (1 0 .5) (-30 -30 0) (30 30 32) FLOATING
+the Camping Rifle.
+WARNING: DO NOT PLACE THIS ON MAPS YET.
+The weapon is subject to change in behaviour and appearance, and such a change may break weapon balance on your map. So don't place it yet, use it as server weapon replacement option ONLY.
+-------- KEYS --------
+ammo_nails: initial bullets of the weapon (if unset, g_pickup_nails is used)
+respawntime: time till it respawns (default: 30)
+team: out of items with the same value here, only one (random one) will spawn. Useful to put multiple items on one spot.
+cnt: weight of this item for random selection using "team". Set to a lower value for items you want to see less likely.
+-------- SPAWNFLAGS --------
+FLOATING: the item will float in air, instead of aligning to the floor by falling
+-------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
+model="models/weapons/g_campingrifle.md3"
+*/
+

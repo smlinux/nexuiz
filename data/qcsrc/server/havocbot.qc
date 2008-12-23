@@ -340,6 +340,7 @@ void havocbot_chooseweapon()
 	local float crylink ; crylink  =-1000;
 	local float uzi     ; uzi      =-1000;
 	local float shotgun ; shotgun  =-1000;
+	local float campingrifle ; campingrifle  =-1000;
 	local float laser   ; laser    =-1000;
 	local float minstanex ; minstanex =-1000;
 	local float currentscore;

@@ -18,6 +18,7 @@ COMPAT_FILES="
 	gfx/inv_weapon11.tga
 	gfx/inv_weapon12.tga
 	gfx/inv_weapon13.tga
+	gfx/inv_weapon14.tga
 	gfx/inv_weapon9.tga
 	gfx/reslimed_mini.tga
 	gfx/runningman_1on1remix_mini.tga
@@ -98,6 +99,7 @@ COMPAT_FILES="
 	models/sprites/race-finish.tga
 	models/sprites/redbase.tga
 	models/sprites/waypoint.tga
+	models/sprites/wpn-campingrifle_frame0.tga
 	models/sprites/wpn-crylink_frame0.tga
 	models/sprites/wpn-electro_frame0.tga
 	models/sprites/wpn-gl_frame0.tga
@@ -149,16 +151,19 @@ COMPAT_FILES="
 	models/turrets/walker_mghead.md3
 	models/turrets/walker_props.md3
 	models/turrets/walker_spawn.md3
+	models/weapons/g_campingrifle.md3
     models/weapons/g_hlac.md3
 	models/weapons/g_hookgun.md3
 	models/weapons/g_minstanex.md3
 	models/weapons/g_porto.md3
     models/weapons/g_seeker.md3
+	models/weapons/v_campingrifle.md3
     models/weapons/v_hlac.md3
 	models/weapons/v_hookgun.md3
 	models/weapons/v_minstanex.md3
 	models/weapons/v_porto.md3
     models/weapons/v_seeker.md3
+	models/weapons/w_campingrifle.zym
     models/weapons/w_hlac.zym
 	models/weapons/w_hookgun.zym
 	models/weapons/w_minstanex.zym
@@ -484,6 +489,8 @@ COMPAT_FILES="
 	sound/weapons/brass1.ogg
 	sound/weapons/brass2.ogg
 	sound/weapons/brass3.ogg
+	sound/weapons/campingrifle_fire.ogg
+	sound/weapons/campingrifle_reload.ogg
 	sound/weapons/casings1.ogg
 	sound/weapons/casings2.ogg
 	sound/weapons/casings3.ogg
@@ -541,6 +548,12 @@ COMPAT_FILES="
 	sound/weapons/uzi_fire.ogg
 	sound/weapons/weaponpickup.ogg
 	sound/weapons/weapon_switch.ogg
+	textures/campingrifle_bump.tga
+	textures/campingrifle_gloss.tga
+	textures/campingrifle_glow.tga
+	textures/campingrifle_pants.tga
+	textures/campingrifle_shirt.tga
+	textures/campingrifle.tga
 	textures/flags/flag_blue_cloth.tga
 	textures/flags/flag_blue_gloss.tga
 	textures/flags/flag_blue_glow.tga

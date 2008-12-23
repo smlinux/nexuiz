@@ -112,6 +112,7 @@ void RegisterWeapons()
 	register_weapon(WEP_HOOK,             w_hook,      IT_CELLS,       0, 0, 1,     0, "hookgun",   "hook",            "Grappling Hook");
 	register_weapon(WEP_SEEKER,           w_seeker,    IT_ROCKETS,     8, 1, 0,     0, "seeker",    "seeker",          "T.A.G. Seeker");
 	register_weapon(WEP_HLAC,             w_hlac,      IT_CELLS,       6, 1, 0,     0, "hlac",      "hlac",            "Heavy Laser Assault Cannon");
+	register_weapon(WEP_CAMPINGRIFLE,              w_campingrifle,       IT_NAILS,       3, 1, 0,  5000, "campingrifle",       "campingrifle",             "Camping Rifle");
 
 	register_weapons_done();
 }
