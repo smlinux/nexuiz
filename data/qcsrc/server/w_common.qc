@@ -321,7 +321,7 @@ void fireBallisticBullet(vector start, vector dir, float spread, float pSpeed, f
 	proj.dmg_radius = cvar("g_ballistics_solidspeedhalflife");
 	setmodel(proj, "models/tracer.mdl");
 	setsize(proj, '0 0 0', '0 0 0');
-	setorigin(proj, w_shotorg);
+	setorigin(proj, start);
 	proj.effects = EF_LOWPRECISION | tracereffects;
 	proj.flags = FL_PROJECTILE;
 
@@ -332,9 +332,6 @@ void fireBallisticBullet(vector start, vector dir, float spread, float pSpeed, f
 	proj.projectiledeathtype = dtype;
 
 	proj.oldvelocity = proj.velocity;
-
-	if (cvar("g_casings") >= 2)
-		SpawnCasing (w_shotorg + v_forward * 10, ((random () * 50 + 50) * v_right) - (v_forward * (random () * 25 + 25)) - ((random () * 5 - 70) * v_up), 2, vectoangles(v_forward),'0 250 0', 100, 3);
 }
 
 void fireBullet (vector start, vector dir, float spread, float damage, float force, float dtype, float tracer)

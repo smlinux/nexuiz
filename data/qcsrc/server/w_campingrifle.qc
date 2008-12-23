@@ -29,6 +29,9 @@ void W_CampingRifle_FireBullet(float pSpread, float pDamage, float pHeadshotAdde
 	pointparticles(particleeffectnum("shotgun_muzzleflash"), w_shotorg, w_shotdir * 2000, 1);
 
 	fireBallisticBullet(w_shotorg, v_forward /* no TrueAim for this weapon */, pSpread, pSpeed, pLifetime, pDamage, pHeadshotAddedDamage / pDamage, pForce, deathtype, EF_RED, 1);
+
+	if (cvar("g_casings") >= 2)
+		SpawnCasing (w_shotorg + v_forward * 10, ((random () * 50 + 50) * v_right) - (v_forward * (random () * 25 + 25)) - ((random () * 5 - 70) * v_up), 2, vectoangles(v_forward),'0 250 0', 100, 3);
 	
 	self.campingrifle_bulletcounter = self.campingrifle_bulletcounter + 1;
 	W_Campingrifle_CheckReload();
