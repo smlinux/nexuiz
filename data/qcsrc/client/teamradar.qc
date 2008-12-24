@@ -248,7 +248,7 @@ void() teamradar_view =
 	switch(cl_teamradar_rotation)
 	{
 		case 0:
-			teamradar_angle = input_angles_y - 90;
+			teamradar_angle = view_angles_y - 90;
 			break;
 		default:
 			teamradar_angle = 90 * cl_teamradar_rotation;
@@ -294,7 +294,7 @@ void() teamradar_view =
 		+ (1 - f) * normalsize;
 	teamradar_origin3d_in_texcoord = teamradar_3dcoord_to_texcoord(
 		  f * (mi_min + mi_max) * 0.5
-		+ (1 - f) * pmove_org);
+		+ (1 - f) * view_origin);
 
 	color = GetPlayerColor(player_localentnum-1);
 	rgb = GetTeamRGB(color);
@@ -340,7 +340,7 @@ void() teamradar_view =
 		//if(color == COLOR_SPECTATOR || color == color2)
 			draw_teamradar_player(tm.origin, tm.angles, GetTeamRGB(color2));
 	}
-	draw_teamradar_player(pmove_org, input_angles, '1 1 1');
+	draw_teamradar_player(view_origin, view_angles, '1 1 1');
 
 	drawresetcliparea();
 };

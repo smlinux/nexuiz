@@ -189,6 +189,7 @@ void CSQC_ctf_hud(void);
 void PostInit(void);
 float Sbar_WouldDrawScoreboard ();
 float zoomscript_caught;
+float view_set;
 void CSQC_UpdateView(float w, float h)
 {
 	entity e;
@@ -200,12 +201,16 @@ void CSQC_UpdateView(float w, float h)
 	WaypointSprite_Load();
 
 	// Render the Scene
-	view_origin = pmove_org + '0 0 1' * getstati(STAT_VIEWHEIGHT);
-	view_angles = input_angles;
-	makevectors(view_angles);
-	view_forward = v_forward;
-	view_right = v_right;
-	view_up = v_up;
+	if(!intermission || !view_set)
+	{
+		view_origin = pmove_org + '0 0 1' * getstati(STAT_VIEWHEIGHT);
+		view_angles = input_angles;
+		makevectors(view_angles);
+		view_forward = v_forward;
+		view_right = v_right;
+		view_up = v_up;
+		view_set = 1;
+	}
 
 	f = floor(cvar("v_flipped"));
 	cvar_set("v_flipped", ftos(!f));
