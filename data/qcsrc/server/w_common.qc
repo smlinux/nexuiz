@@ -119,7 +119,7 @@ void W_BallisticBullet_Hit (void)
 	vector org2;
 	float f;
 
-	org2 = self.origin - 6 * normalize(self.oldvelocity);
+	org2 = self.origin - 6 * normalize(self.velocity);
 	if (DEATH_ISWEAPON(self.projectiledeathtype, WEP_SHOTGUN))
 		pointparticles(particleeffectnum("shotgun_impact"), org2, normalize(self.velocity) * 1000, 1);
 	else
@@ -129,7 +129,7 @@ void W_BallisticBullet_Hit (void)
 	{
 		self.enemy = other; // don't hit the same player twice with the same bullet
 
-		f = vlen(self.velocity) / vlen(self.oldvelocity);
+		f = pow(bound(0, vlen(self.velocity) / vlen(self.oldvelocity), 1), 2); // energy multiplier
 
 		headshot = 0;
 		yoda = 0;
@@ -170,7 +170,7 @@ void W_BallisticBullet_LeaveSolid_think()
 	self.flags &~= FL_ONGROUND;
 	self.effects &~= EF_NODRAW;
 
-	org2 = self.origin - 6 * normalize(self.oldvelocity);
+	org2 = self.origin + 6 * normalize(self.velocity);
 	if (DEATH_ISWEAPON(self.projectiledeathtype, WEP_SHOTGUN))
 		pointparticles(particleeffectnum("shotgun_impact"), org2, normalize(self.velocity) * 1000, 1);
 	else
@@ -187,30 +187,22 @@ float log(float x)
 	return 2 * log(sqrt(x));
 }
 
-float W_BallisticBullet_LeaveSolid(entity e, vector vel, float speedhalflife)
+float W_BallisticBullet_LeaveSolid(entity e, vector vel, float constant)
 {
 	// move the entity along its velocity until it's out of solid, then let it resume
 	
 	vector tracevel, org, skiporg, endorg, t;
-	float dt, dst, velfactor, v0;
+	float dt, dst, velfactor, v0, vs;
 	float maxdist;
+	float E0_m, Es_m;
 
-	speedhalflife *= 1.442695040888963; // distance for 1/eth of the speed
+	// E(s) = E0 - constant * s, constant = area of bullet circle * material constant / mass
 	v0 = vlen(vel);
 
-	// maxdist: max distance that CAN be travelled using current velocity and speed halflife
-	//
-	// v(t) = v(0) * e^(-t / speedhalflife)
-	// integrate
-	// V(t) = - v(0) * e^(-t / speedhalflife) * speedhalflife
-	// s(t) = V(t) - V(0)
-	// s(t) = (speedhalflife * v(0)) * (1 - e^(-t / speedhalflife))
-	// lim s = speedhalflife * v(0)
-	// t(s) = speedhalflife * log((speedhalflife * v(0)) / (speedhalflife * v(0) - s))
-	// v(s) = (speedhalflife * v(0) - s) / speedhalflife
-
-	maxdist = speedhalflife * v0;
-	//print("max dist = ", ftos(maxdist), "\n");
+	E0_m = 0.5 * v0 * v0;
+	maxdist = E0_m / constant;
+	// maxdist = 0.5 * v0 * v0 / constant
+	dprint("max dist = ", ftos(maxdist), "\n");
 
 	if(maxdist <= 0)
 		return 0;
@@ -259,13 +251,22 @@ float W_BallisticBullet_LeaveSolid(entity e, vector vel, float speedhalflife)
 	}
 
 	dst = vlen(self.W_BallisticBullet_LeaveSolid_origin - org);
-	velfactor = (speedhalflife * v0 - dst) / (speedhalflife * v0);
+	// E(s) = E0 - constant * s, constant = area of bullet circle * material constant / mass
+	Es_m = E0_m - constant * dst;
+	if(Es_m < 0)
+	{
+		print("ballistics: error condition Es_m < 0\n");
+		print("dst = ", ftos(dst), "\n");
+		print("maxdist = ", ftos(maxdist), "\n");
+		Es_m = 0;
+		return 0;
+	}
+	vs = sqrt(2 * Es_m);
+	velfactor = vs / v0;
 
-	// t(s) = speedhalflife * log((speedhalflife * v(0)) / (speedhalflife * v(0) - s))
-	dt = speedhalflife * log((speedhalflife * v0) / (speedhalflife * v0 - dst));
-
-	//print("slowdown by ", ftos(dst), " units = ", ftos(velfactor), "\n");
-	//print("takes time ", ftos(dt), "\n");
+	dt = dst / (0.5 * (v0 + vs));
+	// this is not correct, but the differential equations have no analytic
+	// solution - and these times are very small anyway
 
 	self.W_BallisticBullet_LeaveSolid_think_save = self.think;
 	self.W_BallisticBullet_LeaveSolid_nextthink_save = self.nextthink;
@@ -300,7 +301,7 @@ void W_BallisticBullet_Touch (void)
 	self.projectiledeathtype |= HITTYPE_BOUNCE;
 }
 
-void fireBallisticBullet(vector start, vector dir, float spread, float pSpeed, float lifetime, float damage, float headshotbonus, float force, float dtype, float tracereffects, float gravityfactor)
+void fireBallisticBullet(vector start, vector dir, float spread, float pSpeed, float lifetime, float damage, float headshotbonus, float force, float dtype, float tracereffects, float gravityfactor, float bulletconstant)
 {
 	entity proj;
 	proj = spawn();
@@ -318,7 +319,8 @@ void fireBallisticBullet(vector start, vector dir, float spread, float pSpeed, f
 	proj.velocity = (dir + randomvec() * spread) * pSpeed;
 	W_SetupProjectileVelocity(proj);
 	proj.angles = vectoangles(proj.velocity);
-	proj.dmg_radius = cvar("g_ballistics_solidspeedhalflife");
+	proj.dmg_radius = cvar("g_ballistics_materialconstant") / bulletconstant;
+	// so: bulletconstant = bullet mass / area of bullet circle
 	setmodel(proj, "models/tracer.mdl");
 	setsize(proj, '0 0 0', '0 0 0');
 	setorigin(proj, start);
@@ -342,9 +344,9 @@ void fireBullet (vector start, vector dir, float spread, float damage, float for
 	if(cvar("g_ballistics_force"))
 	{
 		if (DEATH_ISWEAPON(dtype, WEP_SHOTGUN))
-			fireBallisticBullet(start, dir, spread, cvar("g_ballistics_force_shotgun_speed"), 5, damage, 0, force, dtype, 0, 1);
+			fireBallisticBullet(start, dir, spread, cvar("g_ballistics_force_shotgun_speed"), 5, damage, 0, force, dtype, 0, 1, cvar("g_ballistics_force_shotgun_bulletconstant"));
 		else
-			fireBallisticBullet(start, dir, spread, cvar("g_ballistics_force_uzi_speed"), 5, damage, 0, force, dtype, 0, 1);
+			fireBallisticBullet(start, dir, spread, cvar("g_ballistics_force_uzi_speed"), 5, damage, 0, force, dtype, 0, 1, cvar("g_ballistics_force_shotgun_bulletconstant"));
 		return;
 	}
 
