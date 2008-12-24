@@ -202,9 +202,9 @@ float W_BallisticBullet_LeaveSolid(entity e, vector vel, float constant)
 	E0_m = 0.5 * v0 * v0;
 	maxdist = E0_m / constant;
 	// maxdist = 0.5 * v0 * v0 / constant
-	dprint("max dist = ", ftos(maxdist), "\n");
+	// dprint("max dist = ", ftos(maxdist), "\n");
 
-	if(maxdist <= 0)
+	if(maxdist <= 0.5)
 		return 0;
 
 	tracevel = normalize(vel);
@@ -253,12 +253,9 @@ float W_BallisticBullet_LeaveSolid(entity e, vector vel, float constant)
 	dst = vlen(self.W_BallisticBullet_LeaveSolid_origin - org);
 	// E(s) = E0 - constant * s, constant = area of bullet circle * material constant / mass
 	Es_m = E0_m - constant * dst;
-	if(Es_m < 0)
+	if(Es_m <= 0)
 	{
-		print("ballistics: error condition Es_m < 0\n");
-		print("dst = ", ftos(dst), "\n");
-		print("maxdist = ", ftos(maxdist), "\n");
-		Es_m = 0;
+		// roundoff errors got us
 		return 0;
 	}
 	vs = sqrt(2 * Es_m);
@@ -267,6 +264,7 @@ float W_BallisticBullet_LeaveSolid(entity e, vector vel, float constant)
 	dt = dst / (0.5 * (v0 + vs));
 	// this is not correct, but the differential equations have no analytic
 	// solution - and these times are very small anyway
+	//print("dt = ", ftos(dt), "\n");
 
 	self.W_BallisticBullet_LeaveSolid_think_save = self.think;
 	self.W_BallisticBullet_LeaveSolid_nextthink_save = self.nextthink;
