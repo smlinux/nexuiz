@@ -116,14 +116,12 @@ void FireRailgunBullet (vector start, vector end, float bdamage, float bforce, f
 .float dmg_radius;
 void W_BallisticBullet_Hit (void)
 {
-	vector org2;
 	float f;
 
-	org2 = self.origin - 6 * normalize(self.velocity);
 	if (DEATH_ISWEAPON(self.projectiledeathtype, WEP_SHOTGUN))
-		pointparticles(particleeffectnum("shotgun_impact"), org2, normalize(self.velocity) * 1000, 1);
+		pointparticles(particleeffectnum("shotgun_impact"), self.origin, normalize(self.velocity) * 1000, 1);
 	else
-		pointparticles(particleeffectnum("machinegun_impact"), org2, normalize(self.velocity) * 1000, 1);
+		pointparticles(particleeffectnum("machinegun_impact"), self.origin, normalize(self.velocity) * 1000, 1);
 
 	if(other && other != self.enemy)
 	{
@@ -158,8 +156,6 @@ void W_BallisticBullet_Hit (void)
 
 void W_BallisticBullet_LeaveSolid_think()
 {
-	vector org2;
-
 	setorigin(self, self.W_BallisticBullet_LeaveSolid_origin);
 	self.velocity = self.W_BallisticBullet_LeaveSolid_velocity;
 
@@ -170,11 +166,10 @@ void W_BallisticBullet_LeaveSolid_think()
 	self.flags &~= FL_ONGROUND;
 	self.effects &~= EF_NODRAW;
 
-	org2 = self.origin + 6 * normalize(self.velocity);
 	if (DEATH_ISWEAPON(self.projectiledeathtype, WEP_SHOTGUN))
-		pointparticles(particleeffectnum("shotgun_impact"), org2, normalize(self.velocity) * 1000, 1);
+		pointparticles(particleeffectnum("shotgun_impact"), self.origin, normalize(self.velocity) * 1000, 1);
 	else
-		pointparticles(particleeffectnum("machinegun_impact"), org2, normalize(self.velocity) * 1000, 1);
+		pointparticles(particleeffectnum("machinegun_impact"), self.origin, normalize(self.velocity) * 1000, 1);
 }
 
 // a fake logarithm function
