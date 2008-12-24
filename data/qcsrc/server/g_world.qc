@@ -196,6 +196,7 @@ void cvar_changes_init()
 
 void detect_maptype()
 {
+#if 0
 	vector o, v;
 	float i;
 
@@ -222,6 +223,7 @@ void detect_maptype()
 
 		break;
 	}
+#endif
 }
 
 float world_already_spawned;

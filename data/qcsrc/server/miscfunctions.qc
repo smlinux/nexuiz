@@ -1515,7 +1515,7 @@ void InitializeEntitiesRun()
 			remove_builtin(self);
 			self = e_old;
 		}
-		dprint("Delayed initialization: ", self.classname, "\n");
+		//dprint("Delayed initialization: ", self.classname, "\n");
 		func();
 		self = e;
 	}
