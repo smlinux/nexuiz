@@ -6,6 +6,11 @@ float teamradar_size; // 2D scale factor
 float cl_teamradar_scale; // window size = ...qu
 float v_flipped;
 
+float vlen2d(vector v)
+{
+	return sqrt(v_x * v_x + v_y * v_y);
+}
+
 float vlen_maxnorm2d(vector v)
 {
 	return max4(v_x, v_y, -v_x, -v_y);
@@ -265,7 +270,7 @@ void() teamradar_view =
 	if(cl_teamradar_rotation == 0)
 	{
 		// max-min distance must fit the radar in any rotation
-		bigsize = vlen_minnorm2d(teamradar_size2d) * scale2d / (1.05 * vlen(mi_max - mi_min));
+		bigsize = vlen_minnorm2d(teamradar_size2d) * scale2d / (1.05 * vlen2d(mi_max - mi_min));
 	}
 	else
 	{
