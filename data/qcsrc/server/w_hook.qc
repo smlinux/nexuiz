@@ -219,10 +219,6 @@ float w_hook(float req)
 	}
 	else if (req == WR_CHECKAMMO1)
 	{
-		if ( cvar("g_balance_hook_primary_hooked_ammodecrease_delay") > 0 )
-			if not(cvar("g_balance_hook_primary_ammo"))
-				return self.ammo_cells >= cvar("g_balance_hook_primary_ammo") + 1;
-		
 		return self.ammo_cells >= cvar("g_balance_hook_primary_ammo");			
 	}
 	else if (req == WR_CHECKAMMO2)
