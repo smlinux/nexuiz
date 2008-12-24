@@ -28,9 +28,13 @@ void W_CampingRifle_FireBullet(float pSpread, float pDamage, float pHeadshotAdde
 	W_SetupShot (self, '25 8 -8', FALSE, 2, "weapons/campingrifle_fire.wav");
 	pointparticles(particleeffectnum("shotgun_muzzleflash"), w_shotorg, w_shotdir * 2000, 1);
 
+	if(self.BUTTON_ZOOM) // if zoomed, shoot from the eye
+	{
+		w_shotdir = v_forward;
+		w_shotorg = self.origin + self.view_ofs + ((w_shotorg - self.origin - self.view_ofs) * v_forward) * v_forward;
+	}
+
 	fireBallisticBullet(w_shotorg, w_shotdir, pSpread, pSpeed, pLifetime, pDamage, pHeadshotAddedDamage / pDamage, pForce, deathtype, EF_RED, 1, pBulletConstant);
-	// TODO decide whether to not use TrueAim (w_shotdir or v_forward)? this really is hard. Maybe shoot
-	// from eye when zoomed, use TrueAim when not? So difficult...
 
 	if (cvar("g_casings") >= 2)
 		SpawnCasing (w_shotorg + v_forward * 10, ((random () * 50 + 50) * v_right) - (v_forward * (random () * 25 + 25)) - ((random () * 5 - 70) * v_up), 2, vectoangles(v_forward),'0 250 0', 100, 3);
