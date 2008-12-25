@@ -280,6 +280,58 @@ void traceline_antilag (entity source, vector v1, vector v2, float nomonst, enti
 	traceline_antilag_force(source, v1, v2, nomonst, forent, lag);
 }
 
+void traceline_inverted (vector v1, vector v2, float nomonsters, entity forent)
+{
+	vector pos, dir, t;
+	float nudge;
+
+	//nudge = 2 * cvar("collision_impactnudge"); // why not?
+	nudge = 0.5;
+
+	dir = normalize(v2 - v1);
+
+	pos = v1 + dir * nudge;
+
+	for(;;)
+	{
+		if((pos - v1) * dir >= (v2 - v1) * dir)
+		{
+			// went too far
+			trace_fraction = 1;
+			return;
+		}
+
+		traceline(pos, v2, nomonsters, forent);
+
+		if(trace_startsolid)
+		{
+			// we started inside solid.
+			// then trace from endpos to pos
+			t = trace_endpos;
+			traceline(t, pos, nomonsters, forent);
+			if(trace_startsolid)
+			{
+				// t is inside solid? bad
+				// force advance, then
+				pos = pos + dir * nudge;
+			}
+			else
+			{
+				// we actually LEFT solid!
+				trace_fraction = ((trace_endpos - v1) * dir) / ((v2 - v1) * dir);
+				return;
+			}
+		}
+		else
+		{
+			// pos is outside solid?!? but why?!? never mind, just return it.
+			trace_endpos = pos;
+			trace_fraction = ((trace_endpos - v1) * dir) / ((v2 - v1) * dir);
+			return;
+		}
+	}
+}
+
 /*
 ==================
 findbetterlocation

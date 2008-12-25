@@ -186,7 +186,6 @@ float W_BallisticBullet_LeaveSolid(entity e, vector vel, float constant)
 {
 	// move the entity along its velocity until it's out of solid, then let it resume
 	
-	vector tracevel, org, skiporg, endorg, t;
 	float dt, dst, velfactor, v0, vs;
 	float maxdist;
 	float E0_m, Es_m;
@@ -202,50 +201,14 @@ float W_BallisticBullet_LeaveSolid(entity e, vector vel, float constant)
 	if(maxdist <= 0.5)
 		return 0;
 
-	tracevel = normalize(vel);
+	traceline_inverted (self.origin, self.origin + normalize(vel) * maxdist, MOVE_NORMAL, self);
 
-	org = self.origin;
-	skiporg = org + tracevel;
-	endorg = org + tracevel * maxdist;
+	if(trace_fraction == 1) // 1: we never got out of solid
+		return 0;
 
-	for(;;)
-	{
-		traceline(skiporg, endorg, MOVE_NORMAL, self);
-		t = trace_endpos;
+	self.W_BallisticBullet_LeaveSolid_origin = trace_endpos;
 
-		if(trace_startsolid)
-		{
-			// good: skiporg is actually in solid
-			traceline(t, skiporg, MOVE_NORMAL, self);
-			t = trace_endpos;
-
-			if(trace_startsolid)
-			{
-				// we're stuck inside solid :(
-				// force advance by 1 unit, and retry
-				// CAN we go by 1 unit?
-				if(vlen(skiporg + tracevel - org) < maxdist)
-					skiporg = skiporg + tracevel;
-				else
-					return 0;
-			}
-			else
-			{
-				// we managed to leave solid
-				// so trace_endpos is good
-				self.W_BallisticBullet_LeaveSolid_origin = t;
-				break;
-			}
-		}
-		else
-		{
-			// bad: skiporg is outside solid. Then imagine it's alright.
-			self.W_BallisticBullet_LeaveSolid_origin = skiporg;
-			break;
-		}
-	}
-
-	dst = vlen(self.W_BallisticBullet_LeaveSolid_origin - org);
+	dst = vlen(trace_endpos - self.origin);
 	// E(s) = E0 - constant * s, constant = area of bullet circle * material constant / mass
 	Es_m = E0_m - constant * dst;
 	if(Es_m <= 0)
