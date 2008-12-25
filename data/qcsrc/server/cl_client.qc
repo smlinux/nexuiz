@@ -2027,7 +2027,8 @@ void PlayerPreThink (void)
 	self.stat_sys_ticrate = cvar("sys_ticrate");
 	self.stat_game_starttime = game_starttime;
 
-	if(blockSpectators)
+	if(blockSpectators && frametime)
+		// WORKAROUND: only use dropclient in server frames (frametime set). Never use it in cl_movement frames (frametime zero).
 		checkSpectatorBlock();
 	
 	zoomstate_set = 0;
@@ -2325,8 +2326,9 @@ void PlayerPostThink (void)
 		stuffcmd(self, "seta _cl_name Player\n");
 	}
 
-	if(sv_maxidle)
+	if(sv_maxidle && frametime)
 	{
+		// WORKAROUND: only use dropclient in server frames (frametime set). Never use it in cl_movement frames (frametime zero).
 		float timeleft;
 		timeleft = ceil(sv_maxidle - (time - self.parm_idlesince));
 		if(timeleft <= 0)
