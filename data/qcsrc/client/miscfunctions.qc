@@ -136,11 +136,22 @@ float stringwidth_oldfont(string text, float handleColors)
 			ch = str2chr(text, i+1);
 			if(ch >= '0' && ch <= '9')
 				++i;
-			else
-				++width;
-		}
-		else
-			++width;
+			else if(i+4 < len && ch == 'x')
+			{
+				ch = str2chr(text, i+2);
+				if ( (ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'f') || (ch >= 'A' && ch <= 'F') )
+				{
+					ch = str2chr(text, i+3);
+					if ( (ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'f') || (ch >= 'A' && ch <= 'F') )
+					{
+						ch = str2chr(text, i+4);
+						if ( (ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'f') || (ch >= 'A' && ch <= 'F') )
+							i+=4;
+						else ++width;
+					} else ++width;
+				} else ++width;
+			} else ++width;
+		} else ++width;
 	}
 	return width;
 }
