@@ -23,8 +23,8 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
-
 # parts copied from rcon2irc
+# MISC STRING UTILITY ROUTINES to convert between DarkPlaces and IRC conventions
 
 # convert mIRC color codes to DP color codes
 our @color_irc2dp_table = (7, 0, 4, 2, 1, 1, 6, 1, 3, 2, 5, 5, 4, 6, 7, 7);
@@ -95,60 +95,149 @@ sub text_dp2ascii($)
 	$message = join '', map { $text_qfont_table[ord $_] } split //, $message;
 }
 
+sub color_dp_transform(&$)
+{
+	my ($block, $message) = @_;
+
+	$message =~ s{(?:(\^\^)|\^x([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])|\^([0-9])|(.))(?=([0-9,]?))}{
+		defined $1 ? $block->(char => '^', $7) :
+		defined $2 ? $block->(rgb => [hex $2, hex $3, hex $4], $7) :
+		defined $5 ? $block->(color => $5, $7) :
+		defined $6 ? $block->(char => $6, $7) :
+			die "Invalid match";
+	}esg;
+
+	return $message;
+}
+
 sub color_dp2none($)
 {
 	my ($message) = @_;
-	my $color = -1;
-	$message =~ s{\^(.)(?=([0-9,]?))}{
-		my $c = $1;
-		$c eq '^' ? '^' :
-		$c =~ /^[0-9]$/ ? '' : "^$c";
-	}esg;
-	return text_dp2ascii $message;
+
+	return color_dp_transform
+	{
+		my ($type, $data, $next) = @_;
+		print "$type $data\n";
+		$type eq 'char'
+			? $text_qfont_table[ord $data]
+			: "";
+	}
+	$message;
+}
+
+sub color_rgb2basic($)
+{
+	my ($data) = @_;
+	my ($r, $g, $b) = @$data;
+	my $min = [sort ($r, $g, $b)]->[0];
+	my $max = [sort ($r, $g, $b)]->[-1];
+
+	my $v = $max / 15;
+	my $s = ($max == $min) ? 0 : 1 - $min/$max;
+
+	if($s < 0.2)
+	{
+		return 0 if $v < 0.5;
+		return 7;
+	}
+
+	my $h;
+	if($max == $min)
+	{
+		$h = 0;
+	}
+	elsif($max == $r)
+	{
+		$h = (60 * ($g - $b) / ($max - $min)) % 360;
+	}
+	elsif($max == $g)
+	{
+		$h = (60 * ($b - $r) / ($max - $min)) + 120;
+	}
+	elsif($max == $b)
+	{
+		$h = (60 * ($r - $g) / ($max - $min)) + 240;
+	}
+
+	return 1 if $h < 36;
+	return 3 if $h < 80;
+	return 2 if $h < 150;
+	return 5 if $h < 200;
+	return 4 if $h < 270;
+	return 6 if $h < 330;
+	return 1;
+}
+
+sub color_dp_rgb2basic($)
+{
+	my ($message) = @_;
+	return color_dp_transform
+	{
+		my ($type, $data, $next) = @_;
+		print "$type $data\n";
+		$type eq 'char'  ? ($data eq '^' ? '^^' : $data) :
+		$type eq 'color' ? "^$data" :
+		$type eq 'rgb'   ? "^" . color_rgb2basic $data :
+			die "Invalid type";
+	}
+	$message;
 }
 
 sub color_dp2irc($)
 {
 	my ($message) = @_;
 	my $color = -1;
-	$message =~ s{\^(.)(?=([0-9,]?))}{
-		my $c = $1;
-		my $f = $2;
-		$c eq '^' ? '^' :
-		$c =~ /^[0-9]$/ ? do {
+	return color_dp_transform
+	{
+		my ($type, $data, $next) = @_;
+
+		if($type eq 'rgb')
+		{
+			$type = 'color';
+			$data = color_rgb2basic $data;
+		}
+
+		$type eq 'char'  ? $text_qfont_table[ord $data] :
+		$type eq 'color' ? do {
 			my $oldcolor = $color;
-			$c = 0 if $c >= 7; # map 0, 7, 8, 9 to default (no bright white or such stuff)
-			$color = $color_dp2irc_table[$c];
-			($color == $oldcolor) ? '' :
-			$c == 0 ? "\0001" :
-			$f eq ',' ? "\0003$color\0002\0002" :
-			$f ne ''  ? sprintf "\0003%02d", $color : "\0003$color";
-		} : "^$c";
-	}esg;
-	$message = text_dp2ascii $message;
-	$message =~ s/\0001/\017/g;
-	$message =~ s/\0002/\002/g;
-	$message =~ s/\0003/\003/g;
-	return $message;
+			$data = 0 if $data >= 7; # map 0, 7, 8, 9 to default (no bright white or such stuff)
+			$color = $color_dp2irc_table[$data];
+
+			$color == $oldcolor ? '' :
+			$color == 0         ? "\017" :
+			$next eq ','        ? "\003$color\002\002" :
+			                      sprintf "\003%02d", $color;
+		} :
+			die "Invalid type";
+	}
+	$message;
 }
 
 sub color_dp2ansi($)
 {
 	my ($message) = @_;
 	my $color = -1;
-	$message =~ s{\^(.)}{
-		my $c = $1;
-		$c eq '^' ? '^' :
-		$c =~ /^[0-9]$/ ? do {
+	return color_dp_transform
+	{
+		my ($type, $data, $next) = @_;
+
+		if($type eq 'rgb')
+		{
+			$type = 'color';
+			$data = color_rgb2basic $data;
+		}
+
+		$type eq 'char'  ? $text_qfont_table[ord $data] :
+		$type eq 'color' ? do {
 			my $oldcolor = $color;
-			$color = $color_dp2ansi_table[$c];
-			($color eq $oldcolor) ? '' :
-			"\000[${color}" # "
-		} : "^$c";
-	}esg;
-	$message = text_dp2ascii $message;
-	$message =~ s/\000/\033/g;
-	return $message;
+			$color = $color_dp2ansi_table[$data];
+
+			$color eq $oldcolor ? '' :
+			                      "\033[${color}"
+		} :
+			die "Invalid type";
+	}
+	$message;
 }
 
 sub color_dpfix($)
@@ -158,6 +247,7 @@ sub color_dpfix($)
 	chop $message if $message =~ /(?:^|[^\^])\^(\^\^)*$/;
 	return $message;
 }
+
 
 
 
@@ -258,8 +348,18 @@ sub recv($)
 {
 	my ($self) = @_;
 	my $data = "";
-	$self->{sock}->recv($data, 32768, 0);
-	return $data;
+	if(defined $self->{sock}->recv($data, 32768, 0))
+	{
+		return $data;
+	}
+	elsif($!{EAGAIN})
+	{
+		return "";
+	}
+	else
+	{
+		return undef;
+	}
 }
 
 # $sock->fds() returns the socket file descriptor.
@@ -325,7 +425,10 @@ sub recv($)
 	my ($self) = @_;
 	for(;;)
 	{
-		length(my $s = $self->{connector}->recv())
+		my $s = $self->{connector}->recv();
+		die "read error\n"
+			if not defined $s;
+		length $s
 			or last;
 		next
 			if $s !~ /^\377\377\377\377n(.*)$/s;
