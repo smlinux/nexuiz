@@ -114,6 +114,7 @@ float keyDownNexuizColorpicker(entity me, float key, float ascii, float shift)
 void drawNexuizColorpicker(entity me)
 {
 	drawImage(me);
+
 	float B, C, aC;
 	C = cvar("r_textcontrast");
 	B = cvar("r_textbrightness");
@@ -127,7 +128,7 @@ void drawNexuizColorpicker(entity me)
 
 	aC = 1 - C / (1 - B);
 
-	draw_Fill('0 0 0', '1 1 0', '0 0 0', aC);
-	draw_Fill('0 0 0', '1 1 0', '1 1 1', B);
+	draw_Picture(me.imgOrigin, strcat(me.src, "_m"), me.imgSize, '0 0 0', aC);
+	draw_Picture(me.imgOrigin, strcat(me.src, "_m"), me.imgSize, me.color, B);
 }
 #endif
