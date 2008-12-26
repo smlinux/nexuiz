@@ -29,7 +29,7 @@ our $VERSION = '0.4.2 svn $Revision$';
 
 # convert mIRC color codes to DP color codes
 our @color_irc2dp_table = (7, 0, 4, 2, 1, 1, 6, 1, 3, 2, 5, 5, 4, 6, 7, 7);
-our @color_dp2irc_table = (14, 4, 9, 8, 12, 11, 13, 14, 15, 15); # not accurate, but legible
+our @color_dp2irc_table = (-1, 4, 9, 8, 12, 11, 13, -1, -1, -1); # not accurate, but legible
 our @color_dp2ansi_table = ("m", "1;31m", "1;32m", "1;33m", "1;34m", "1;36m", "1;35m", "m", "1m", "1m"); # not accurate, but legible
 our %color_team2dp_table = (5 => 1, 14 => 4, 13 => 3, 10 => 6);
 our %color_team2irc_table = (5 => 4, 14 => 12, 13 => 8, 10 => 13);
@@ -201,11 +201,10 @@ sub color_dp2irc($)
 		$type eq 'char'  ? $text_qfont_table[ord $data] :
 		$type eq 'color' ? do {
 			my $oldcolor = $color;
-			$data = 0 if $data >= 7; # map 0, 7, 8, 9 to default (no bright white or such stuff)
 			$color = $color_dp2irc_table[$data];
 
 			$color == $oldcolor ? '' :
-			$color == 0         ? "\017" :
+			$color < 0          ? "\017" :
 			$next eq ','        ? "\003$color\002\002" :
 			                      sprintf "\003%02d", $color;
 		} :
