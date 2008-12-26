@@ -961,17 +961,17 @@ float _tokenize_sane(string s)
 	float end;
 	float i;
 
-	_argc_sane = 0;
-	data = 0;
-	end = strlen(s);
-
-	for(i = 0; i < MAX_TOKENS; ++i)
+	for(i = 0; i < _argc_sane; ++i)
 	{
 		if(_argv_sane_buffer[i])
 			strunzone(_argv_sane_buffer[i]);
 		_argv_sane_buffer[i] = string_null;
 		_argv_sane_startpos[i] = 0;
 	}
+
+	_argc_sane = 0;
+	data = 0;
+	end = strlen(s);
 
 	for(;;)
 	{
