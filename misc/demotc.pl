@@ -141,7 +141,14 @@ for(;;)
 	{
 		if(my @l = ($data =~ /$pattern/))
 		{
-			print "$tc:";
+			if(defined $tc)
+			{
+				print "$tc:";
+			}
+			else
+			{
+				print "start:";
+			}
 			for(@l)
 			{
 				print " \"", sanitize($_), "\"";
