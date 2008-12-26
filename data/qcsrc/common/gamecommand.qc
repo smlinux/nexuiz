@@ -144,7 +144,7 @@ float GameCommand_Generic(string command)
 	else if(argv(0) == "BRLOGENSHFEGLE" && argc >= 2)
 	{
 		// test case for terrencehill's color codes
-		s = substring(command, argv_start_index(2), argv_end_index(-1) - argv_start_index(2));
+		s = strdecolorize(substring(command, argv_start_index(2), argv_end_index(-1) - argv_start_index(2)));
 		s2 = "";
 		n = strlen(s);
 		

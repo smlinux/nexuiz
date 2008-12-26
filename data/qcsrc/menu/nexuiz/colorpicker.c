@@ -10,6 +10,7 @@ CLASS(NexuizColorpicker) EXTENDS(Image)
 	ATTRIB(NexuizColorpicker, focusable, float, 1)
 	METHOD(NexuizColorpicker, focusLeave, void(entity))
 	METHOD(NexuizColorpicker, keyDown, float(entity, float, float, float))
+	METHOD(NexuizColorpicker, draw, void(entity))
 ENDCLASS(NexuizColorpicker)
 entity makeNexuizColorpicker(entity theTextbox);
 #endif
@@ -109,5 +110,24 @@ void focusLeaveNexuizColorpicker(entity me)
 float keyDownNexuizColorpicker(entity me, float key, float ascii, float shift)
 {
 	return me.controlledTextbox.keyDown(me.controlledTextbox, key, ascii, shift);
+}
+void drawNexuizColorpicker(entity me)
+{
+	drawImage(me);
+	float B, C, aC;
+	C = cvar("r_textcontrast");
+	B = cvar("r_textbrightness");
+
+	// for this to work, C/(1-B) must be in 0..1
+	// B must be < 1
+	// C must be < 1-B
+	
+	B = bound(0, B, 1);
+	C = bound(0, C, 1-B);
+
+	aC = 1 - C / (1 - B);
+
+	draw_Fill('0 0 0', '1 1 0', '0 0 0', aC);
+	draw_Fill('0 0 0', '1 1 0', '1 1 1', B);
 }
 #endif
