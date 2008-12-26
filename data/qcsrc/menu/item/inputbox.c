@@ -165,15 +165,17 @@ void drawInputBox(entity me)
 		vector theColor;
 		float theAlpha;    //float theVariableAlpha;
 		vector p;
-		float brightness;
+		float brightness, contrast;
 		vector theTempColor;
 		float component;
 		
 		brightness = cvar("r_textbrightness");
+		contrast = cvar("r_textcontrast");
 		p = me.realOrigin - eX * me.scrollPos;
 		theColor = '1 1 1';
 		theAlpha = 1;    //theVariableAlpha = 1; // changes when ^ax found
 		
+		theColor = theColor * contrast + '1 1 1' * brightness;
 		for(i = 0; i < strlen(me.text); ++i)
 		{
 			ch = substring(me.text, i, 1);
@@ -202,13 +204,13 @@ void drawInputBox(entity me)
 						case 8: theColor = '1 1 1'; theAlpha = 0.5; break;
 						case 9: theColor = '0.5 0.5 0.5'; theAlpha = 1; break;
 					}
-					theColor = theColor * (1 - brightness) + brightness * '1 1 1';
+					theColor = theColor * contrast + '1 1 1' * brightness;
 					draw_Fill(p, eX * w + eY * me.realFontSize_y, '1 1 1', 0.5);
 					draw_Text(p, strcat(ch, ch2), me.realFontSize, theColor, theAlpha, 0);
 				}
 				else if(ch2 == "x") // ^x found
 				{
-					theColor = '1 1 1' * (1 - brightness) + brightness * '1 1 1';
+					theColor = '1 1 1';
 					theTempColor = '0 0 0';
 					
 					component = HEXDIGIT_TO_DEC(substring(me.text, i+2, 1));
@@ -225,7 +227,7 @@ void drawInputBox(entity me)
 							if (component >= 0) // ^xrgb found
 							{
 								theTempColor_z = component/15;
-								theColor = '0 0 0' + theTempColor;
+								theColor = theTempColor * contrast + '1 1 1' * brightness;
 								w = draw_TextWidth(substring(me.text, i, 5), 0) * me.realFontSize_x;
 								
 								draw_Fill(p, eX * w + eY * me.realFontSize_y, '1 1 1', 0.5);
