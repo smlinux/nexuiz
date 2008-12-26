@@ -119,3 +119,12 @@ float tokenizebyseparator(string s, string sep);
 
 float power2of(float e);
 float log2of(float x);
+
+string HEXDIGITS = "0123456789ABCDEF0123456789abcdef";
+#define HEXDIGIT_TO_DEC_RAW(d) (strstrofs(HEXDIGITS, (d), 0))
+#define HEXDIGIT_TO_DEC(d) ((HEXDIGIT_TO_DEC_RAW(d) | 0x10) - 0x10)
+#define DEC_TO_HEXDIGIT(d) (substring(HEXDIGITS, (d), 1))
+
+vector rgb_to_hsl(vector rgb);
+vector hsl_to_rgb(vector hsl);
+string rgb_to_hexcolor(vector rgb);

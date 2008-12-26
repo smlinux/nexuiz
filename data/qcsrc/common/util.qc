@@ -1140,3 +1140,110 @@ float log2of(float x)
 					else
 						return 0;
 }
+
+vector rgb_to_hsl(vector rgb)
+{
+	float mi, ma;
+	vector hsl;
+
+	mi = min3(rgb_x, rgb_y, rgb_z);
+	ma = max3(rgb_x, rgb_y, rgb_z);
+
+	if(mi == ma)
+		hsl_x = 0;
+	else if(ma == rgb_x)
+		hsl_x = (rgb_y - rgb_z) / (ma - mi);
+	else if(ma == rgb_y)
+		hsl_x = (rgb_z - rgb_x) / (ma - mi) + 2;
+	else // if(ma == rgb_z)
+		hsl_x = (rgb_x - rgb_y) / (ma - mi) + 4;
+	if(hsl_x < 0)
+		hsl_x += 6;
+	
+	hsl_z = 0.5 * (mi + ma);
+
+	if(mi == ma)
+		hsl_y = 0;
+	else if(hsl_z <= 0.5)
+		hsl_y = (ma - mi) / (2*hsl_z);
+	else // if(hsl_z > 0.5)
+		hsl_y = (ma - mi) / (2 - 2*hsl_z);
+	
+	return hsl;
+}
+
+vector hsl_to_rgb(vector hsl)
+{
+	float mi, ma, maminusmi, h;
+	vector rgb;
+
+	if(hsl_z <= 0.5)
+		maminusmi = hsl_y * 2 * hsl_z;
+	else
+		maminusmi = hsl_y * (2 - 2 * hsl_z);
+	
+	// hsl_z     = 0.5 * mi + 0.5 * ma
+	// maminusmi =     - mi +       ma
+	mi = hsl_z - 0.5 * maminusmi;
+	ma = hsl_z + 0.5 * maminusmi;
+
+	h = hsl_x - 6 * floor(hsl_x / 6);
+
+	//else if(ma == rgb_x)
+	//	h = 60 * (rgb_y - rgb_z) / (ma - mi);
+	if(h <= 1)
+	{
+		rgb_x = ma;
+		rgb_y = h * (ma - mi) + mi;
+		rgb_z = mi;
+	}
+	//else if(ma == rgb_y)
+	//	h = 60 * (rgb_z - rgb_x) / (ma - mi) + 120;
+	else if(h <= 2)
+	{
+		rgb_x = (2 - h) * (ma - mi) + mi;
+		rgb_y = ma;
+		rgb_z = mi;
+	}
+	else if(h <= 3)
+	{
+		rgb_x = mi;
+		rgb_y = ma;
+		rgb_z = (h - 2) * (ma - mi) + mi;
+	}
+	//else // if(ma == rgb_z)
+	//	h = 60 * (rgb_x - rgb_y) / (ma - mi) + 240;
+	else if(h <= 4)
+	{
+		rgb_x = mi;
+		rgb_y = (4 - h) * (ma - mi) + mi;
+		rgb_z = ma;
+	}
+	else if(h <= 5)
+	{
+		rgb_x = (h - 4) * (ma - mi) + mi;
+		rgb_y = mi;
+		rgb_z = ma;
+	}
+	//else if(ma == rgb_x)
+	//	h = 60 * (rgb_y - rgb_z) / (ma - mi);
+	else // if(h <= 6)
+	{
+		rgb_x = ma;
+		rgb_y = mi;
+		rgb_z = (6 - h) * (ma - mi) + mi;
+	}
+
+	return rgb;
+}
+
+string rgb_to_hexcolor(vector rgb)
+{
+	return
+		strcat(
+			"^x",
+			DEC_TO_HEXDIGIT(floor(rgb_x * 15 + 0.5)),
+			DEC_TO_HEXDIGIT(floor(rgb_y * 15 + 0.5)),
+			DEC_TO_HEXDIGIT(floor(rgb_z * 15 + 0.5))
+		);
+}

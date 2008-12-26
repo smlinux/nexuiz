@@ -74,3 +74,4 @@
 #include "nexuiz/dialog_multiplayer_playersetup_radar.c"
 #include "nexuiz/dialog_settings_demo.c"
 #include "nexuiz/demolist.c"
+#include "nexuiz/colorpicker.c"

@@ -70,6 +70,10 @@ COLOR_CHECKBOX_C                '0.5 0.75 1'
 COLOR_CHECKBOX_F                '0.25 0.5 0.75'
 COLOR_CHECKBOX_D                '0.5 0.75 1'
 
+// item: color picker
+//   uses "colorpicker" images
+MARGIN_COLORPICKER              '0 0 0'
+
 // item: credits list
 COLOR_CREDITS_TITLE             '1 1 1'
 ALPHA_CREDITS_TITLE             1

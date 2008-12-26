@@ -30,17 +30,17 @@ void drawNexuizPlayerSettingsTab(entity me)
 }
 void fillNexuizPlayerSettingsTab(entity me)
 {
-	entity e, pms, sl, e0;
+	entity e, pms, sl, e0, box;
 	float i, n;
 
 	me.TR(me);
 		me.TD(me, 1, 1, me.playerNameLabel = makeNexuizTextLabel(0, "Player Name:"));
 			me.playerNameLabelAlpha = me.playerNameLabel.alpha;
-		me.TD(me, 1, 2, e = makeNexuizInputBox(1, "_cl_name"));
-			e.forbiddenCharacters = "\r\n\\\"$"; // don't care, isn't getting saved
+		me.TD(me, 1, 2, box = makeNexuizInputBox(1, "_cl_name"));
+			box.forbiddenCharacters = "\r\n\\\"$"; // don't care, isn't getting saved
 	me.TR(me);
-		me.TDempty(me, 1);
-		me.TD(me, 5, 2, e = makeNexuizCharmap(e));
+		me.TD(me, 5, 1, e = makeNexuizColorpicker(box));
+		me.TD(me, 5, 2, e = makeNexuizCharmap(box));
 	me.TR(me);
 	me.TR(me);
 	me.TR(me);

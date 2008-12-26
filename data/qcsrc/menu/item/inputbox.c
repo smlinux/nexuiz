@@ -211,44 +211,17 @@ void drawInputBox(entity me)
 					theColor = '1 1 1' * (1 - brightness) + brightness * '1 1 1';
 					theTempColor = '0 0 0';
 					
-					component = str2chr(me.text, i+2);
-					if (component >= '0' && component <= '9')
-						component = component - '0';
-					else if (component >= 'a' && component <= 'f')
-						component = component - 87;
-					else if (component >= 'A' && component <= 'F')
-						component = component - 55;
-					else
-						component = -1;
-					
+					component = HEXDIGIT_TO_DEC(substring(me.text, i+2, 1));
 					if (component >= 0) // ^xr found
 					{
 						theTempColor_x = component/15;
 						
-						component = str2chr(me.text, i+3);
-						if (component >= '0' && component <= '9')
-							component = component - '0';
-						else if (component >= 'a' && component <= 'f')
-							component = component - 87;
-						else if (component >= 'A' && component <= 'F')
-							component = component - 55;
-						else
-							component = -1;
-						
+						component = HEXDIGIT_TO_DEC(substring(me.text, i+3, 1));
 						if (component >= 0) // ^xrg found
 						{
 							theTempColor_y = component/15;
 							
-							component = str2chr(me.text, i+4);
-							if (component >= '0' && component <= '9')
-								component = component - '0';
-							else if (component >= 'a' && component <= 'f')
-								component = component - 87;
-							else if (component >= 'A' && component <= 'F')
-								component = component - 55;
-							else
-								component = -1;
-							
+							component = HEXDIGIT_TO_DEC(substring(me.text, i+4, 1));
 							if (component >= 0) // ^xrgb found
 							{
 								theTempColor_z = component/15;

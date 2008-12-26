@@ -48,7 +48,8 @@ float GameCommand_Generic(string command)
 {
 	float argc;
 	float i, j, f, n;
-	string s, s2;
+	vector rgb;
+	string s, s2, c;
 	argc = tokenize_sane(command);
 	if(argv(0) == "help")
 	{
@@ -139,6 +140,33 @@ float GameCommand_Generic(string command)
 			cvar_set("g_maplist", s);
 			return TRUE;
 		}
+	}
+	else if(argv(0) == "BRLOGENSHFEGLE" && argc >= 2)
+	{
+		// test case for terrencehill's color codes
+		s = substring(command, argv_start_index(2), argv_end_index(-1) - argv_start_index(2));
+		s2 = "";
+		n = strlen(s);
+		
+		j = random() * 0.1 + 0.05;
+		f = random();
+
+		for(i = 0; i < n; ++i)
+		{
+			c = substring(s, i, 1);
+			if(c == ";")
+				c = ":";
+			if(c != " ")
+			{
+				rgb = hsl_to_rgb('1 0 0' * (j * i + f) + '0 1 .5');
+				c = strcat(rgb_to_hexcolor(rgb), c);
+			}
+			s2 = strcat(s2, c);
+		}
+
+		localcmd(strcat(argv(1), " ", s2));
+
+		return TRUE;
 	}
 	else if(argv(0) == "rpn")
 	{
