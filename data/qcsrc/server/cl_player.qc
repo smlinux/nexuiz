@@ -74,7 +74,7 @@ vector animparseline(float animfile)
 	if (animfile < 0)
 		return '0 1 2';
 	line = fgets(animfile);
-	c = tokenize_sane(line);
+	c = tokenize_insane(line); // save cycles
 	if (c != 3)
 	{
 		animparseerror = TRUE;
@@ -806,7 +806,7 @@ float GetPlayerSoundSampleField_fixed;
 void PrecacheGlobalSound(string samplestring)
 {
 	float n, i;
-	tokenize_sane(samplestring);
+	tokenize_insane(samplestring); // save cycles
 	n = stof(argv(1));
 	if(n > 0)
 	{
@@ -828,7 +828,7 @@ void PrecachePlayerSounds(string f)
 		return;
 	while((s = fgets(fh)))
 	{
-		if(tokenize_sane(s) != 3)
+		if(tokenize_insane(s) != 3) // save cycles
 		{
 			dprint("Invalid sound info line: ", s, "\n");
 			continue;
@@ -864,7 +864,7 @@ void LoadPlayerSounds(string f, float first)
 		return;
 	while((s = fgets(fh)))
 	{
-		if(tokenize_sane(s) != 3)
+		if(tokenize_insane(s) != 3) // save cycles
 			continue;
 		field = GetPlayerSoundSampleField(argv(0));
 		if(GetPlayerSoundSampleField_notFound)
@@ -899,7 +899,7 @@ void GlobalSound(string sample, float chan, float teamsay)
 	if(sample == "")
 		return;
 
-	tokenize_sane(sample);
+	tokenize_insane(sample); // save cycles
 	n = stof(argv(1));
 	if(n > 0)
 		sample = strcat(argv(0), ftos(floor(random() * n + 1)), ".wav"); // randomization
