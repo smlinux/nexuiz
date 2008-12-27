@@ -176,6 +176,7 @@ void SUB_CalcAngleMoveDone (void)
 		self.think1 ();
 }
 
+// FIXME: I fixed this function only for rotation around the main axes
 void SUB_CalcAngleMove (vector destangle, float tspeed, void() func)
 {
 	vector	delta;
@@ -183,16 +184,26 @@ void SUB_CalcAngleMove (vector destangle, float tspeed, void() func)
 
 	if (!tspeed)
 		objerror ("No speed is defined!");
-
+	
+	// take the shortest distance for the angles
+	self.angles_x -= 360 * floor((self.angles_x - destangle_x) / 360 + 0.5);
+	self.angles_y -= 360 * floor((self.angles_y - destangle_y) / 360 + 0.5);
+	self.angles_z -= 360 * floor((self.angles_z - destangle_z) / 360 + 0.5);
 	delta = destangle - self.angles;
 	traveltime = vlen (delta) / tspeed;
-
-	self.avelocity = delta * (1 / traveltime);
-
+  
 	self.think1 = func;
 	self.finalangle = destangle;
-
 	self.think = SUB_CalcAngleMoveDone;
+
+	if (traveltime < 0.1)
+	{
+		self.avelocity = '0 0 0';
+		self.nextthink = self.ltime + 0.1;
+		return;
+	}
+
+	self.avelocity = delta * (1 / traveltime);
 	self.nextthink = self.ltime + traveltime;
 }
 

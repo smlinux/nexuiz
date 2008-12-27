@@ -611,6 +611,8 @@ THINK FUNCTIONS
 
 void() door_go_down;
 void() door_go_up;
+void() door_rotating_go_down;
+void() door_rotating_go_up;
 
 void door_blocked()
 {
@@ -627,9 +629,21 @@ void door_blocked()
             if (self.wait >= 0)
             {
                 if (self.state == STATE_DOWN)
-                    door_go_up ();
+			if (self.classname == "door")
+			{
+				door_go_up ();
+			} else 
+			{
+				door_rotating_go_up ();
+			}
                 else
-                    door_go_down ();
+			if (self.classname == "door")
+			{
+				door_go_down ();
+			} else 
+			{
+				door_rotating_go_down ();
+			}
             }
         } else {
             //gib dying stuff just to make sure
@@ -659,7 +673,13 @@ void door_hit_top()
 	self.state = STATE_TOP;
 	if (self.spawnflags & DOOR_TOGGLE)
 		return;		// don't come down automatically
-	self.think = door_go_down;
+	if (self.classname == "door")
+	{
+		self.think = door_go_down;
+	} else 
+	{
+		self.think = door_rotating_go_down;
+	}
 	self.nextthink = self.ltime + self.wait;
 };
 
@@ -733,7 +753,14 @@ void door_fire()
 			starte = self;
 			do
 			{
-				door_go_down ();
+				if (self.classname == "door") 
+				{
+					door_go_down ();
+				}
+				else
+				{
+					door_rotating_go_down ();
+				}
 				self = self.enemy;
 			} while ( (self != starte) && (self != world) );
 			self = oself;
@@ -745,7 +772,13 @@ void door_fire()
 	starte = self;
 	do
 	{
-		door_go_up ();
+		if (self.classname == "door")
+		{
+			door_go_up ();
+		} else 
+		{
+			door_rotating_go_up ();
+		}
 		self = self.enemy;
 	} while ( (self != starte) && (self != world) );
 	self = oself;
@@ -824,6 +857,104 @@ void door_touch()
 	}
 };
 
+
+void door_rotating_blocked()
+{
+
+    if((self.spawnflags & 8) && (other.takedamage != DAMAGE_NO)) { // KIll Kill Kill!!
+        Damage (other, self, self, 10000, DEATH_HURTTRIGGER, other.origin, '0 0 0');
+    } else {
+
+        if((self.dmg) && (other.takedamage == DAMAGE_YES))    // Shall we bite?
+            Damage (other, self, self, self.dmg, DEATH_HURTTRIGGER, other.origin, '0 0 0');
+
+         //Dont chamge direction for dead or dying stuff
+        if(other.deadflag != DEAD_NO && (other.takedamage == DAMAGE_NO)) {
+            if (self.wait >= 0)
+            {
+                if (self.state == STATE_DOWN)
+                    door_rotating_go_up ();
+                else
+                    door_rotating_go_down ();
+            }
+        } else {
+            //gib dying stuff just to make sure
+            if((self.dmg) && (other.takedamage != DAMAGE_NO))    // Shall we bite?
+                Damage (other, self, self, 10000, DEATH_HURTTRIGGER, other.origin, '0 0 0');
+        }
+    }
+
+	//T_Damage (other, self, self, self.dmg, self.dmg, self.deathtype, DT_IMPACT, (self.absmin + self.absmax) * 0.5, '0 0 0', Obituary_Generic);
+// if a door has a negative wait, it would never come back if blocked,
+// so let it just squash the object to death real fast
+/*	if (self.wait >= 0)
+	{
+		if (self.state == STATE_DOWN)
+			door_rotating_go_up ();
+		else
+			door_rotating_go_down ();
+	}
+*/
+};
+
+
+void door_rotating_hit_top()
+{
+	if (self.noise1 != "")
+		sound (self, CHAN_TRIGGER, self.noise1, VOL_BASE, ATTN_NORM);
+	self.state = STATE_TOP;
+	if (self.spawnflags & DOOR_TOGGLE)
+		return;		// don't come down automatically
+	self.think = door_rotating_go_down;
+	self.nextthink = self.ltime + self.wait;
+};
+
+void door_rotating_hit_bottom()
+{
+	if (self.noise1 != "")
+		sound (self, CHAN_TRIGGER, self.noise1, VOL_BASE, ATTN_NORM);
+	self.state = STATE_BOTTOM;
+};
+
+void door_rotating_go_down()
+{
+	if (self.noise2 != "")
+		sound (self, CHAN_TRIGGER, self.noise2, VOL_BASE, ATTN_NORM);
+	if (self.max_health)
+	{
+		self.takedamage = DAMAGE_YES;
+		self.health = self.max_health;
+	}
+
+	self.state = STATE_DOWN;
+	SUB_CalcAngleMove (self.pos1, self.speed, door_hit_bottom);
+};
+
+void door_rotating_go_up()
+{
+	if (self.state == STATE_UP)
+		return;		// already going up
+
+	if (self.state == STATE_TOP)
+	{	// reset top wait time
+		self.nextthink = self.ltime + self.wait;
+		return;
+	}
+	if (self.noise2 != "")
+		sound (self, CHAN_TRIGGER, self.noise2, VOL_BASE, ATTN_NORM);
+	self.state = STATE_UP;
+	SUB_CalcAngleMove (self.pos2, self.speed, door_rotating_hit_top);
+
+	string oldmessage;
+	oldmessage = self.message;
+	self.message = "";
+	SUB_UseTargets();
+	self.message = oldmessage;
+};
+
+
+
+
 /*
 =============================================================================
 
@@ -854,17 +985,17 @@ entity spawn_field(vector fmins, vector fmaxs)
 
 float EntitiesTouching(entity e1, entity e2)
 {
-	if (e1.mins_x > e2.maxs_x)
+	if (e1.absmin_x > e2.absmax_x)
 		return FALSE;
-	if (e1.mins_y > e2.maxs_y)
+	if (e1.absmin_y > e2.absmax_y)
 		return FALSE;
-	if (e1.mins_z > e2.maxs_z)
+	if (e1.absmin_z > e2.absmax_z)
 		return FALSE;
-	if (e1.maxs_x < e2.mins_x)
+	if (e1.absmax_x < e2.absmin_x)
 		return FALSE;
-	if (e1.maxs_y < e2.mins_y)
+	if (e1.absmax_y < e2.absmin_y)
 		return FALSE;
-	if (e1.maxs_z < e2.mins_z)
+	if (e1.absmax_z < e2.absmin_z)
 		return FALSE;
 	return TRUE;
 };
@@ -894,13 +1025,12 @@ void LinkDoors()
 			return;
 		if (self.items)
 			return;
-
 		self.trigger_field = spawn_field(self.absmin, self.absmax);
 
 		return;		// don't want to link this door
 	}
 
-	cmins = self.absmin;
+	cmins = self.absmin;			  
 	cmaxs = self.absmax;
 
 	starte = self;
@@ -970,7 +1100,7 @@ if two doors touch, they are assumed to be connected and operate as a unit.
 
 TOGGLE causes the door to wait in both the start and end states for a trigger event.
 
-START_OPEN causes the door to move to its destination when spawned, and operate in reverse.  It is used to temporarily or permanently close off an area when triggered (not usefull for touch or takedamage doors).
+START_OPEN causes the door to move to its destination when spawned, and operate in reverse.  It is used to temporarily or permanently close off an area when triggered (not useful for touch or takedamage doors).
 
 "message"	is printed when the door is touched if it is a trigger door and it hasn't been fired yet
 "angle"		determines the opening direction
@@ -1041,6 +1171,114 @@ void spawnfunc_func_door()
 // but spawn in the open position
 	if (self.spawnflags & DOOR_START_OPEN)
 		InitializeEntity(self, door_init_startopen, INITPRIO_SETLOCATION);
+
+	self.state = STATE_BOTTOM;
+
+	if (self.health)
+	{
+		self.takedamage = DAMAGE_YES;
+		self.event_damage = door_damage;
+	}
+
+	if (self.items)
+		self.wait = -1;
+
+	self.touch = door_touch;
+
+// LinkDoors can't be done until all of the doors have been spawned, so
+// the sizes can be detected properly.
+	InitializeEntity(self, LinkDoors, INITPRIO_LINKDOORS);
+};
+
+/*QUAKED spawnfunc_func_door_rotating (0 .5 .8) ? START_OPEN x DOOR_DONT_LINK x x TOGGLE X_AXIS Y_AXIS BIDIR
+if two doors touch, they are assumed to be connected and operate as a unit.
+
+TOGGLE causes the door to wait in both the start and end states for a trigger event.
+
+BIDIR makes the door work bidirectional, so that the opening direction is always away from the requestor. 
+This feature is NOT YET IMPLEMENTED!
+
+START_OPEN causes the door to move to its destination when spawned, and operate in reverse.  It is used to temporarily or permanently close off an area when triggered (not usefull for touch or takedamage doors).
+
+"message"	is printed when the door is touched if it is a trigger door and it hasn't been fired yet
+"angle"		determines the destination angle for opening. negative values reverse the direction.
+"targetname"    if set, no touch field will be spawned and a remote button or trigger field activates the door.
+"health"	if set, door must be shot open
+"speed"		movement speed (100 default)
+"wait"		wait before returning (3 default, -1 = never return)
+"dmg"		damage to inflict when blocked (2 default)
+"sounds"
+0)	no sound
+1)	stone
+2)	base
+3)	stone chain
+4)	screechy metal
+FIXME: only one sound set available at the time being
+*/
+
+void door_rotating_init_startopen()
+{
+	self.angles = self.movedir;
+	self.pos2 = '0 0 0';
+	self.pos1 = self.movedir;
+}
+
+
+void spawnfunc_func_door_rotating()
+{
+	
+	//if (!self.deathtype) // map makers can override this
+	//	self.deathtype = " got in the way";
+
+	// I abuse "movedir" for denoting the axis for now
+	if (self.spawnflags & 64) // X (untested)
+		self.movedir = '0 0 1';
+	else if (self.spawnflags & 128) // Y (untested)
+		self.movedir = '1 0 0';
+	else // Z
+		self.movedir = '0 1 0';
+
+	if (self.angles_y==0) self.angles_y = 90;
+
+	self.movedir = self.movedir * self.angles_y;
+	self.angles = '0 0 0';
+
+	self.max_health = self.health;
+	InitMovingBrushTrigger();
+	//self.effects |= EF_LOWPRECISION;
+	self.classname = "door_rotating";
+
+	self.blocked = door_blocked;
+	self.use = door_use;
+
+    if(self.spawnflags & 8)
+        self.dmg = 10000;
+
+    if(self.dmg && (!self.message))
+		self.message = "was squished";
+    if(self.dmg && (!self.message2))
+		self.message2 = "was squished by";
+
+    if (self.sounds > 0)
+	{
+		precache_sound ("plats/medplat1.wav");
+		precache_sound ("plats/medplat2.wav");
+		self.noise2 = "plats/medplat1.wav";
+		self.noise1 = "plats/medplat2.wav";
+	}
+
+	if (!self.speed)
+		self.speed = 50;
+	if (!self.wait)
+		self.wait = 1;
+
+	self.pos1 = '0 0 0';
+	self.pos2 = self.movedir;
+
+// DOOR_START_OPEN is to allow an entity to be lighted in the closed position
+// but spawn in the open position
+	if (self.spawnflags & DOOR_START_OPEN)
+		InitializeEntity(self, door_rotating_init_startopen, INITPRIO_SETLOCATION);
 
 	self.state = STATE_BOTTOM;
 
