@@ -74,5 +74,44 @@ void GameCommand(string theCommand)
 		return;
 	}
 
+#if 0
+	if(argv(0) == "tokentest")
+	{
+		string s;
+		float i, n;
+
+		print("SANE tokenizer:\n");
+		s = cvar_string("tokentest");
+		n = tokenize_sane_force_builtin(s);
+		for(i = -n; i < n; ++i)
+		{
+			print("token ", ftos(i), ": '", argv(i), "' = ");
+			print(ftos(argv_start_index(i)), " to ", ftos(argv_end_index(i)), "\n");
+		}
+		print(".\n");
+
+		print("INSANE tokenizer:\n");
+		s = cvar_string("tokentest");
+		n = tokenize_insane(s);
+		for(i = -n; i < n; ++i)
+		{
+			print("token ", ftos(i), ": '", argv(i), "' = ");
+			print(ftos(argv_start_index(i)), " to ", ftos(argv_end_index(i)), "\n");
+		}
+		print(".\n");
+
+		print("EMULATED tokenizer:\n");
+		s = cvar_string("tokentest");
+		n = tokenize_sane_force_emulation(s);
+		for(i = -n; i < n; ++i)
+		{
+			print("token ", ftos(i), ": '", argv(i), "' = ");
+			print(ftos(argv_start_index(i)), " to ", ftos(argv_end_index(i)), "\n");
+		}
+		print(".\n");
+		return;
+	}
+#endif
+
 	print("Invalid theCommand. For a list of supported theCommands, try menu_cmd help.\n");
 }

@@ -819,6 +819,18 @@ float(string s, string separator1, ...) tokenizebyseparator = #479;
 //returns 4 and the tokens are "10" "2" "3" "4"
 //possibly useful for parsing IPv4 addresses (such as "1.2.3.4") and IPv6 addresses (such as "[1234:5678:9abc:def0:1234:5678:9abc:def0]:26000")
 
+//DP_QC_TOKENIZE_CONSOLE
+//idea: div0
+//darkplaces implementation: div0
+//builtin definitions:
+float(string s) tokenize_console = #514;
+float(float i) argv_start_index = #515;
+float(float i) argv_end_index = #516;
+//description:
+//this function returns tokens separated just like the console does
+//also, functions are provided to get the index of the first and last character of each token in the original string
+//Passing negative values to them, or to argv, will be treated as indexes from the LAST token (like lists work in Perl). So argv(-1) will return the LAST token.
+
 //DP_QC_TRACEBOX
 //idea: id Software
 //darkplaces implementation: id Software

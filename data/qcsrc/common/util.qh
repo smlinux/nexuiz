@@ -114,6 +114,8 @@ var string(float) argv;
 var float(float) argv_start_index;
 var float(float) argv_end_index;
 float tokenize_sane(string s);
+float tokenize_sane_force_emulation(string s);
+float tokenize_sane_force_native(string s);
 float tokenize_insane(string s);
 float tokenizebyseparator(string s, string sep);
 

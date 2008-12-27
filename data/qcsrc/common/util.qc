@@ -918,6 +918,9 @@ float (string s) _tokenize_builtin = #441;
 string (float argnum) _argv_builtin = #442;
 float (string s, string sep) _tokenizebyseparator_builtin = #479;
 #endif
+float(string s) _tokenize_console = #514;
+float(float i) _argv_start_index_builtin = #515;
+float(float i) _argv_end_index_builtin = #516;
 
 float MAX_TOKENS = 256;
 string _argv_sane_buffer[MAX_TOKENS];
@@ -1033,12 +1036,18 @@ float _tokenize_sane(string s)
 
 
 
-var void(void) func_null;
-
 // "sane" tokenizer
 // matching the console 1:1
 
-float tokenize_sane(string s)
+float tokenize_sane_force_native(string s)
+{
+	argv = _argv_builtin;
+	argv_start_index = _argv_start_index_builtin;
+	argv_end_index = _argv_end_index_builtin;
+	return _tokenize_console(s);
+}
+
+float tokenize_sane_force_emulation(string s)
 {
 	argv = _argv_sane;
 	argv_start_index = _argv_start_index_sane;
@@ -1046,19 +1055,26 @@ float tokenize_sane(string s)
 	return _tokenize_sane(s);
 }
 
+float tokenize_sane(string s)
+{
+	if(checkextension("DP_QC_TOKENIZE_CONSOLE"))
+		return tokenize_sane_force_native(s);
+	return tokenize_sane_force_emulation(s);
+}
+
 float tokenize_insane(string s)
 {
 	argv = _argv_builtin;
-	argv_start_index = func_null;
-	argv_end_index = func_null;
+	argv_start_index = _argv_start_index_builtin;
+	argv_end_index = _argv_end_index_builtin;
 	return _tokenize_builtin(s);
 }
 
 float tokenizebyseparator(string s, string sep)
 {
 	argv = _argv_builtin;
-	argv_start_index = func_null;
-	argv_end_index = func_null;
+	argv_start_index = _argv_start_index_builtin;
+	argv_end_index = _argv_end_index_builtin;
 	return _tokenizebyseparator_builtin(s, sep);
 }
 
