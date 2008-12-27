@@ -703,7 +703,7 @@ while(<$fh>)
 {
 	chomp;
 	/^#/ and next;
-	/^(.*?)\s+=(?:\s+(.*))?$/ or next;
+	/^(.*?)\s*=(?:\s*(.*))?$/ or next;
 	warn "Undefined config item: $1"
 		unless exists $config{$1};
 	$config{$1} = defined $2 ? $2 : "";
