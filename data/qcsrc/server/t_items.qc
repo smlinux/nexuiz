@@ -495,6 +495,8 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 		setsize (self, '-16 -16 0', '16 16 48');
 	else
 		setsize (self, '-16 -16 0', '16 16 32');
+	if(itemflags & FL_WEAPON)
+		self.modelflags |= MF_ROTATE;
 
 	if (self.classname != "droppedweapon") // if dropped, colormap is already set up nicely
 	if (itemflags & FL_WEAPON)
