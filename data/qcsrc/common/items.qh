@@ -19,6 +19,10 @@ float WEP_CAMPINGRIFLE	    = 15; float WEPBIT_CAMPINGRIFLE     = 16384;
 float WEP_LAST				= 15; float WEPBIT_ALL              = 32767;
 float WEP_COUNT             = 16;
 
+float BOT_PICKUP_RATING_LOW	= 2500;
+float BOT_PICKUP_RATING_MID	= 5000;
+float BOT_PICKUP_RATING_HIGH	= 10000;
+
 float	IT_UNLIMITED_WEAPON_AMMO  = 1;
 // when this bit is set, using a weapon does not reduce ammo. Checkpoints can give this powerup.
 float	IT_UNLIMITED_SUPERWEAPONS = 2;

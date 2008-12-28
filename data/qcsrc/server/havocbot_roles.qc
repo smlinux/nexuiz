@@ -10,25 +10,178 @@ float canreach(entity e)
 	return vlen(self.origin - e.origin) < 1500;
 }
 
+.float max_armorvalue;
+float havocbot_pickupevalfunc(entity item)
+{
+	float i, j, rating, base, position, need_shells, need_nails, need_rockets, need_cells;
+	rating = 0;
+
+	base = item.bot_pickupbasevalue;
+
+	need_shells = self.weapons & WEPBIT_SHOTGUN;
+	need_nails = self.weapons & WEPBIT_UZI;
+	need_cells = self.weapons & ( WEPBIT_HOOK | WEPBIT_HLAC | WEPBIT_MINSTANEX | WEPBIT_NEX | WEPBIT_ELECTRO | WEPBIT_CRYLINK );
+	need_rockets = self.weapons & ( WEPBIT_ROCKET_LAUNCHER | WEPBIT_GRENADE_LAUNCHER | WEPBIT_HAGAR | WEPBIT_SEEKER );
+
+	if( item.weapons )
+	{
+		if( self.weapons & item.weapons == item.weapons )
+			rating = 0.5 + bound(0, skill / 20, 0.5);
+		else
+			rating = 1;
+		
+		if( bot_custom_weapon )
+		{
+			for(i = WEP_FIRST; i < WEP_LAST ; ++i){		
+				if( power2of(i-1) & item.weapons  != item.weapons )
+					continue;
+
+				position = -1;
+				for(j = 0; j < WEP_LAST ; ++j){
+					if(
+						bot_weapons_far[j] == i ||
+						bot_weapons_mid[j] == i ||
+						bot_weapons_close[j] == i
+					)
+					{
+						position = j;
+						break;
+					}
+				}
+
+				if (position >= 0 ) 
+				{
+					position = WEP_LAST - position;
+					// item.bot_pickupbasevalue is overwritten here
+					base = BOT_PICKUP_RATING_LOW + ( (BOT_PICKUP_RATING_HIGH - BOT_PICKUP_RATING_LOW) * (position / WEP_LAST ));
+					break;
+				}
+			}
+		}
+	}
+
+	if (item.ammo_shells)
+	if (self.ammo_shells < g_pickup_shells_max && need_cells )
+		rating = rating + max(0, 1 - self.ammo_shells / g_pickup_shells_max);
+
+	if (item.ammo_nails)
+	if (self.ammo_nails < g_pickup_nails_max && need_nails )
+		rating = rating + max(0, 1 - self.ammo_nails / g_pickup_nails_max);
+
+	if (item.ammo_rockets)
+	if (self.ammo_rockets < g_pickup_rockets_max && need_rockets)
+		rating = rating + max(0, 1 - self.ammo_rockets / g_pickup_rockets_max);
+
+	if (item.ammo_cells)
+	if (self.ammo_cells < g_pickup_cells_max && need_cells)
+		rating = rating + max(0, 1 - self.ammo_cells / g_pickup_cells_max);
+
+	if (item.armorvalue)
+	if (self.armorvalue < item.max_armorvalue)
+		rating = rating + max(0, 1 - self.armorvalue / item.max_armorvalue);
+
+	if (item.health)
+	if (self.health < item.max_health)
+		rating = rating + max(0, 1 - self.health / item.max_health);
+
+	// TODO: if the item is not recognized then default to item.bot_pickupevalfunc(self, item);
+		
+	return base * rating;
+};
+
 void havocbot_goalrating_items(float ratingscale, vector org, float sradius)
 {
 	local entity head;
-	local float t;
+	local entity player;	
+	local float rating, d, discard, distance, friend_distance, enemy_distance;
 	ratingscale = ratingscale * 0.0001; // items are rated around 10000 already
 	head = findchainfloat(bot_pickup, TRUE);
+	
 	while (head)
 	{
-		if (head.solid) // must be possible to pick up (respawning items don't count)
-		if (vlen(head.origin - org) < sradius)
-		{
-			// debugging
-			//if (!head.bot_pickupevalfunc || head.model == "")
-			//	eprint(head);
-			// get the value of the item
-			t = head.bot_pickupevalfunc(self, head);
-			if (t > 0)
-				navigation_routerating(head, t * ratingscale, 2000);
+		distance = vlen(head.origin - org);
+		friend_distance = 10000; enemy_distance = 10000;
+		rating = 0;
+	
+		if(!head.solid || distance > sradius ){
+			head = head.chain;
+			continue;		
 		}
+
+		if(teamplay)
+		{
+			discard = FALSE;
+			
+			FOR_EACH_PLAYER(player)
+			{
+
+				if ( self == player || player.deadflag != DEAD_NO)
+					continue;
+
+				d = vlen(player.origin - head.origin); // distance between player and item
+
+				if ( player.team == self.team )
+				{
+					if ( clienttype(player) != CLIENTTYPE_REAL || discard )
+						continue;
+
+					if( d > friend_distance)
+						continue;
+					
+					friend_distance = d;
+
+					discard = TRUE;
+					
+					if( head.health && player.health > self.health )
+						continue;
+
+					if( head.armorvalue && player.armorvalue > self.armorvalue)
+						continue;
+											
+					if( head.weapons )
+					if( (player.weapons & head.weapons) != head.weapons)
+						continue;
+
+					if (head.ammo_shells && player.ammo_shells > self.ammo_shells)
+						continue;
+
+					if (head.ammo_nails && player.ammo_nails > self.ammo_nails)
+						continue;
+
+					if (head.ammo_rockets && player.ammo_rockets > self.ammo_rockets)
+						continue;
+
+					if (head.ammo_cells && player.ammo_cells > self.ammo_cells )
+						continue;
+
+					discard = FALSE;
+				}
+				else
+				{
+					// If enemy only track distances
+					// TODO: track only if visible ?
+					if( d < enemy_distance )
+						enemy_distance = d;
+				}
+			}
+
+			// Rate the item only if no one needs it, or if an enemy is closer to it
+			if (	(enemy_distance < friend_distance && distance < enemy_distance) ||
+				(friend_distance > cvar("bot_ai_friends_aware_pickup_radius") ) || !discard )
+			{
+			//	rating = head.bot_pickupevalfunc(self, head);
+				rating = havocbot_pickupevalfunc(head);
+			}				
+		}
+		else
+		{
+		//	rating = head.bot_pickupevalfunc(self, head);
+			rating = havocbot_pickupevalfunc(head);
+		}
+
+		if(rating > 0)
+			navigation_routerating(head, rating * ratingscale, 2000);
+			
 		head = head.chain;
 	}
 };
