@@ -141,14 +141,14 @@ float GameCommand_Generic(string command)
 			return TRUE;
 		}
 	}
-	else if(argv(0) == "BRLOGENSHFEGLE" && argc >= 2)
+	else if(crc16(0, argv(0)) == 3029 && argc >= 2)
 	{
 		// test case for terrencehill's color codes
 		s = strdecolorize(substring(command, argv_start_index(2), argv_end_index(-1) - argv_start_index(2)));
 		s2 = "";
 		n = strlen(s);
 		
-		j = random() * 0.1 + 0.05;
+		j = random() * 0.3 + 0.2;
 		f = random();
 
 		for(i = 0; i < n; ++i)
