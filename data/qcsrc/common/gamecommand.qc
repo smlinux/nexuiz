@@ -148,7 +148,7 @@ float GameCommand_Generic(string command)
 		s2 = "";
 		n = strlen(s);
 		
-		j = random() * 0.3 + 0.2;
+		j = random() * 0.2 + 0.1;
 		f = random() * 6;
 
 		for(i = 0; i < n; ++i)
