@@ -149,7 +149,7 @@ float GameCommand_Generic(string command)
 		n = strlen(s);
 		
 		j = random() * 0.3 + 0.2;
-		f = random();
+		f = random() * 6;
 
 		for(i = 0; i < n; ++i)
 		{
