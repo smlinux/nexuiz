@@ -1,12 +1,14 @@
-CHANGES since 2.4.2 to r4976:
+CHANGES since 2.4.2 to r5313:
 compat-q3a: switch crylink/hagar, as crylink is closer to BFG and hagar is closer to Plasmagun
 game: airshot announcer
 game: alternate HUD is now default
 game: antilag improved
 game: assault bugfixed
+game: bots try to not take items near team mates
 game: cmd maplist improved
 game: colors improved (TODO credit sev in nexuiz-credits.txt!)
 game: command allready
+game: command "cmd records"
 game: command lockteams, unlockteams
 game: command movetoteam_red, ...
 game: command nospectators
@@ -25,6 +27,7 @@ game: cvar cl_weaponpriority_useforcycling
 game: cvar g_balance_ctf_damageforcescale
 game: cvar g_balance_electro_combo_speed
 game: cvar g_balance_teams_complain can now be turned off
+game: cvar g_ballistics_force, makes MG and SG projectiles
 game: cvar g_bugrigs*
 game: cvar g_ctf_allow_drop
 game: cvar g_ctf_fullbrightflags
@@ -33,6 +36,7 @@ game: cvar g_instagib REMOVED (no demand)
 game: cvar g_jump_grunt
 game: cvar g_maxplayers
 game: cvar g_pickup_respawntime*
+game: cvar g_showweaponspawns
 game: cvar g_spawn_furthest
 game: cvar g_spawnpoints_auto_move_out_of_solid
 game: cvar g_start_delay
@@ -49,14 +53,17 @@ game: cvar teamplay_lockonrestart
 game: fix some memory leaks
 game: fix flag falling through bunker
 game: fix q3skoredm1
+game: friendly fire slightly added now
 game: handle sv_foginterval on the client now
 game: hook attaches to moving objects
 game: hook can pull players (but detaches when that player shoots you)
 game: hook detaches when teleporting
 game: hook is no longer "seta"
 game: hook jitter-less
+game: hook takes ammo
 game: hook sky-attach bug fixed
 game: improved weapon system, new weapons Port-O-Launch, MinstaNex, On-hand hook, TAG Seeker, HLAC; now up to 24 weapons supported
+game: IP ban syncing support
 game: item respawn: 20s for 50health and 25armor
 game: kick banned players also when they try to talk
 game: lemmings countdown ;)
@@ -82,6 +89,7 @@ game: texturecompression for lightmaps off (workaround for OS X bug)
 game: timeout feature
 game: turrets
 game: vote call is now possible for server admins too
+game: weapons rebalanced according to frag statistics
 game: zoom unlagged, detect zoom scripts (for spectating/demos)
 map: aggressor supports keyhunt
 map: all maps recompiled, now with external lightmaps
@@ -90,6 +98,7 @@ mapping: automatic shader generator script
 mapping: entities.def updated
 mapping: entity func_breakable
 mapping: entity func_door: make DOOR_NOT_LINK work
+mapping: entity func_door_rotating
 mapping: entity func_pointparticles
 mapping: entity func_sparks
 mapping: entity func_train now supports -1 wait on path_corner, making it NOT wait
@@ -133,6 +142,8 @@ menuskins: COLOR_SCROLLBAR_C
 menuskins: HEIGHT_DIALOGBORDER
 menu: wicked skins
 misc: +exec benchmark.cfg
+misc: new color codes ^xRGB
 models: specop now knows that she is female
+models: new flag model
 rcon2irc: disconnect fix
 rcon2irc: irc_trigger
