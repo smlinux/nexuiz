@@ -29,7 +29,7 @@ void WaypointSprite_UpdateOrigin(entity e, vector o)
 {
 	if(o != e.origin)
 	{
-		e.origin = o;
+		setorigin(e, o);
 		e.SendFlags |= 128;
 	}
 }
@@ -242,10 +242,9 @@ entity WaypointSprite_Spawn(
 	wp.max_health = maxdistance;
 	wp.think = WaypointSprite_Think;
 	wp.nextthink = time;
-	wp.effects = EF_NODEPTHTEST | EF_LOWPRECISION;
+	//wp.effects = EF_NODEPTHTEST | EF_LOWPRECISION;
 	wp.model1 = spr;
-	wp.model = "net_entity";
-	wp.modelindex = 1;
+	setmodel(wp, "null");
 	wp.SendEntity = WaypointSprite_SendEntity;
 	wp.customizeentityforclient = WaypointSprite_Customize;
 	wp.waypointsprite_visible_for_player = WaypointSprite_visible_for_player;
@@ -287,7 +286,7 @@ entity WaypointSprite_DeployPersonal(
 	vector ofs
 )
 {
-	return WaypointSprite_Spawn(spr, 0, 0, world, ofs, self, 0, self, waypointsprite_deployed_personal, FALSE);
+	return WaypointSprite_Spawn(spr, 0, 0, world, ofs, world, 0, self, waypointsprite_deployed_personal, FALSE);
 }
 
 .entity waypointsprite_attached;

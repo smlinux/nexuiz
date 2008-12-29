@@ -1148,6 +1148,7 @@ void precache_all_models(string pattern)
 void precache()
 {
 	// gamemode related things
+	precache_model ("null");
 	precache_model ("models/misc/chatbubble.spr");
 	precache_model ("models/misc/teambubble.spr");
 	if (g_runematch)
@@ -1544,8 +1545,7 @@ void SetCustomizer(entity e, float(void) customizer, void(void) uncustomizer)
 
 void Net_LinkEntity(entity e)
 {
-	e.model = "net_entity";
-	e.modelindex = 1;
+	setmodel(e, "null");
 	e.effects = EF_NODEPTHTEST | EF_LOWPRECISION;
 }
 

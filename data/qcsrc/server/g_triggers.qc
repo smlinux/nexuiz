@@ -600,11 +600,13 @@ void spawnfunc_func_pointparticles()
 	self.SendFlags = 7;
 	if(!self.modelindex)
 	{
-		self.modelindex = 4.2;
-		self.origin += self.mins;
-		self.maxs = self.maxs - self.mins;
+		vector misave, masave;
+		misave = self.mins;
+		masave = self.maxs;
+		setmodel(self, "null");
+		setorigin(self, self.origin + misave);
+		setsize(self, '0 0 0', masave - misave);
 	}
-	self.model = "net_entity";
 	if(!self.cnt)
 		self.cnt = particleeffectnum(self.mdl);
 	IFTARGETED
@@ -698,8 +700,7 @@ void spawnfunc_func_rain()
 	self.effects = EF_NODEPTHTEST;
 	self.SendEntity = rainsnow_SendEntity;
 	self.Version = 1;
-	self.modelindex = 1;
-	self.model = "net_entity";
+	setmodel(self, "null");
 };
 
 
@@ -739,8 +740,7 @@ void spawnfunc_func_snow()
 	self.effects = EF_NODEPTHTEST;
 	self.SendEntity = rainsnow_SendEntity;
 	self.Version = 1;
-	self.modelindex = 1;
-	self.model = "net_entity";
+	setmodel(self, "null");
 };
 
 
@@ -957,8 +957,7 @@ void spawnfunc_misc_laser()
 	self.effects = EF_NODEPTHTEST;
 	self.SendEntity = laser_SendEntity;
 	self.SendFlags = 15;
-	self.modelindex = 1;
-	self.model = "net_entity";
+	setmodel(self, "null");
 	self.mangle = self.angles;
 
 	IFTARGETED
