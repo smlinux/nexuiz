@@ -554,6 +554,9 @@ COMPAT_FILES="
 	textures/campingrifle_pants.tga
 	textures/campingrifle_shirt.tga
 	textures/campingrifle.tga
+	textures/crifleflashider_bump.tga
+	textures/crifleflashider_gloss.tga
+	textures/crifleflashider.tga
 	textures/flags/flag_blue_cloth.tga
 	textures/flags/flag_blue_gloss.tga
 	textures/flags/flag_blue_glow.tga
