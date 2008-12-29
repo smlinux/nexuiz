@@ -487,6 +487,15 @@ void(entity e, entity tagentity, string tagname) setattachment = #443; // attach
 //description:
 //MOVETYPE_BOUNCE but without gravity, and with full reflection (no speed loss like grenades have), in other words - bouncing laser bolts.
 
+//DP_NULL_MODEL
+//idea: Chris
+//darkplaces implementation: div0
+//definitions:
+//string dp_null_model = "null";
+//description:
+//setmodel(e, "null"); makes an entity invisible, have a zero bbox, but
+//networked. useful for shared CSQC entities.
+
 //DP_MOVETYPEFOLLOW
 //idea: id Software, LordHavoc (redesigned)
 //darkplaces implementation: LordHavoc
