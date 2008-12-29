@@ -146,9 +146,9 @@ float GameCommand_Generic(string command)
 		// test case for terrencehill's color codes
 		s = strdecolorize(substring(command, argv_start_index(2), argv_end_index(-1) - argv_start_index(2)));
 		s2 = "";
-		n = strlen(s);
 		
-		j = random() * 0.2 + 0.1;
+		n = strlen(s);
+		j = (6 * max(1, floor(strlen(s)/24 + random() * 2 - 1))) / n;
 		f = random() * 6;
 
 		for(i = 0; i < n; ++i)
