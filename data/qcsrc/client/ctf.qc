@@ -48,7 +48,7 @@ void() order_menu_render =
 				++n;
 				if(n == 10)
 					n = 0;
-				drawcolorcodedstring(ps, strcat(ftos(n), ") ", getplayerkey(i, "name"), " : ", ftos(getstatf(STAT_CTF_STATE))), '8 8 0', 1, 0); ps += po;
+				drawcolorcodedstring(ps, strcat(ftos(n), ") ", GetPlayerName(i), " : ", ftos(getstatf(STAT_CTF_STATE))), '8 8 0', 1, 0); ps += po;
 			}
 		}
 		drawstring(ps, "ESC) Exit Menu", '8 8 0', '1 1 0', 1, 0); ps += po;

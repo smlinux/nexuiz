@@ -615,7 +615,7 @@ string Sbar_GetField(entity pl, float field)
 				sbar_field_icon2 = "gfx/sb_playercolor_pants";
 				sbar_field_icon2_rgb = colormapPaletteColor(mod(f, 16), 1);
 			}
-			return getplayerkey(pl.sv_entnum, "name");
+			return GetPlayerName(pl.sv_entnum);
 
 		case SP_FRAGS:
 			f = pl.(scores[SP_KILLS]);
@@ -978,7 +978,6 @@ void Sbar_DrawScoreboard()
 		{
 			if(pl.team != COLOR_SPECTATOR)
 				continue;
-			//drawcolorcodedstring(pos, getplayerkey(pl.sb_player, "name"), '8 8 0', 1, 0);
 			Sbar_PrintScoreboardItem(pos, pl, (pl.sv_entnum == player_localentnum - 1));
 			pos += '0 1.25 0' * sbar_fontsize_y;
 			++specs;
@@ -1335,7 +1334,7 @@ void Sbar_MiniscoreItem(vector pos, entity pl, float is_self)
 		pos_x += 8;
 	} else
 		pos_x += 56;
-	drawcolorcodedstring(pos, getplayerkey(pl.sv_entnum, "name"), '8 8 0', 1, 0);
+	drawcolorcodedstring(pos, GetPlayerName(pl.sv_entnum), '8 8 0', 1, 0);
 }
 
 void Sbar_MiniscoreTeamItem(vector pos, float color, float frags, float is_self)
@@ -1476,7 +1475,7 @@ void Sbar_Draw (void)
 		if(spectatee_status == -1)
 			s = "^1Observing";
 		else
-			s = strcat("^1Spectating ^7", getplayerkey(spectatee_status - 1, "name"));
+			s = strcat("^1Spectating ^7", GetPlayerName(spectatee_status - 1));
 		o = Sbar_DrawNoteLine(o, s);
 
 		if(spectatee_status == -1)

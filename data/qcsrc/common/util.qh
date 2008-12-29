@@ -129,4 +129,6 @@ string HEXDIGITS = "0123456789ABCDEF0123456789abcdef";
 
 vector rgb_to_hsl(vector rgb);
 vector hsl_to_rgb(vector hsl);
+vector rgb_to_hsv(vector rgb);
+vector hsv_to_rgb(vector hsv);
 string rgb_to_hexcolor(vector rgb);

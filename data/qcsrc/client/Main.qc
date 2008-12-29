@@ -200,7 +200,7 @@ void Playerchecker_Think()
 	for(i = 0; i < maxclients; ++i)
 	{
 		e = playerslots[i];
-		if(getplayerkey(i, "name") == "")
+		if(GetPlayerName(i) == "")
 		{
 			if(e.sort_prev)
 			{
@@ -588,12 +588,12 @@ void CSQC_Parse_StuffCmd(string strMessage)
 // CSQC_Parse_Print : Provides the print string in the first parameter that the server provided.  To execute standard behavior, simply execute print with the string.
 void CSQC_Parse_Print(string strMessage)
 {
-	print(strMessage);
+	print(ColorTranslateRGB(strMessage));
 }
 // CSQC_Parse_CenterPrint : Provides the centerprint string in the first parameter that the server provided.  To execute standard behavior, simply execute cprint with the string.
 void CSQC_Parse_CenterPrint(string strMessage)
 {
-	cprint(strMessage);
+	cprint(ColorTranslateRGB(strMessage));
 }
 
 void CSQC_CheckRevision();
@@ -690,7 +690,7 @@ void Net_ReadRace()
 			race_previousbesttime = ReadShort();
 			if(race_previousbestname)
 				strunzone(race_previousbestname);
-			race_previousbestname = strzone(ReadString());
+			race_previousbestname = strzone(ColorTranslateRGB(ReadString()));
 
 			race_checkpointtime = time;
 
@@ -714,7 +714,7 @@ void Net_ReadRace()
 			race_nextbesttime = ReadShort();
 			if(race_nextbestname)
 				strunzone(race_nextbestname);
-			race_nextbestname = strzone(ReadString());
+			race_nextbestname = strzone(ColorTranslateRGB(ReadString()));
 			break;
 
 		case RACE_NET_CHECKPOINT_HIT_RACE:

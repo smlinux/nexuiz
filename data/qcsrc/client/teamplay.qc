@@ -32,6 +32,11 @@ float GetPlayerColor(float i)
 		return GetPlayerColorForce(i);
 }
 
+string GetPlayerName(float i)
+{
+	return ColorTranslateRGB(getplayerkey(i, "name"));
+}
+
 vector GetTeamRGB(float color)
 {
 	switch(color)

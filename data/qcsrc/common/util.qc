@@ -1158,6 +1158,101 @@ float log2of(float x)
 						return 0;
 }
 
+float rgb_mi_ma_to_hue(vector rgb, float mi, float ma)
+{
+	if(mi == ma)
+		return 0;
+	else if(ma == rgb_x)
+	{
+		if(rgb_y >= rgb_z)
+			return (rgb_y - rgb_z) / (ma - mi);
+		else
+			return (rgb_y - rgb_z) / (ma - mi) + 6;
+	}
+	else if(ma == rgb_y)
+		return (rgb_z - rgb_x) / (ma - mi) + 2;
+	else // if(ma == rgb_z)
+		return (rgb_x - rgb_y) / (ma - mi) + 4;
+}
+
+vector hue_mi_ma_to_rgb(float hue, float mi, float ma)
+{
+	vector rgb;
+
+	hue -= 6 * floor(hue / 6);
+
+	//else if(ma == rgb_x)
+	//	hue = 60 * (rgb_y - rgb_z) / (ma - mi);
+	if(hue <= 1)
+	{
+		rgb_x = ma;
+		rgb_y = hue * (ma - mi) + mi;
+		rgb_z = mi;
+	}
+	//else if(ma == rgb_y)
+	//	hue = 60 * (rgb_z - rgb_x) / (ma - mi) + 120;
+	else if(hue <= 2)
+	{
+		rgb_x = (2 - hue) * (ma - mi) + mi;
+		rgb_y = ma;
+		rgb_z = mi;
+	}
+	else if(hue <= 3)
+	{
+		rgb_x = mi;
+		rgb_y = ma;
+		rgb_z = (hue - 2) * (ma - mi) + mi;
+	}
+	//else // if(ma == rgb_z)
+	//	hue = 60 * (rgb_x - rgb_y) / (ma - mi) + 240;
+	else if(hue <= 4)
+	{
+		rgb_x = mi;
+		rgb_y = (4 - hue) * (ma - mi) + mi;
+		rgb_z = ma;
+	}
+	else if(hue <= 5)
+	{
+		rgb_x = (hue - 4) * (ma - mi) + mi;
+		rgb_y = mi;
+		rgb_z = ma;
+	}
+	//else if(ma == rgb_x)
+	//	hue = 60 * (rgb_y - rgb_z) / (ma - mi);
+	else // if(hue <= 6)
+	{
+		rgb_x = ma;
+		rgb_y = mi;
+		rgb_z = (6 - hue) * (ma - mi) + mi;
+	}
+
+	return rgb;
+}
+
+vector rgb_to_hsv(vector rgb)
+{
+	float mi, ma;
+	vector hsv;
+
+	mi = min3(rgb_x, rgb_y, rgb_z);
+	ma = max3(rgb_x, rgb_y, rgb_z);
+
+	hsv_x = rgb_mi_ma_to_hue(rgb, mi, ma);
+	hsv_z = ma;
+
+	if(ma == 0)
+		hsv_y = 0;
+	else
+		hsv_y = 1 - mi/ma;
+	
+	return hsv;
+}
+
+vector hsv_to_rgb(vector hsv)
+{
+	return hue_mi_ma_to_rgb(hsv_x, hsv_z * (1 - hsv_y), hsv_z);
+}
+
 vector rgb_to_hsl(vector rgb)
 {
 	float mi, ma;
@@ -1166,19 +1261,9 @@ vector rgb_to_hsl(vector rgb)
 	mi = min3(rgb_x, rgb_y, rgb_z);
 	ma = max3(rgb_x, rgb_y, rgb_z);
 
-	if(mi == ma)
-		hsl_x = 0;
-	else if(ma == rgb_x)
-		hsl_x = (rgb_y - rgb_z) / (ma - mi);
-	else if(ma == rgb_y)
-		hsl_x = (rgb_z - rgb_x) / (ma - mi) + 2;
-	else // if(ma == rgb_z)
-		hsl_x = (rgb_x - rgb_y) / (ma - mi) + 4;
-	if(hsl_x < 0)
-		hsl_x += 6;
+	hsl_x = rgb_mi_ma_to_hue(rgb, mi, ma);
 	
 	hsl_z = 0.5 * (mi + ma);
-
 	if(mi == ma)
 		hsl_y = 0;
 	else if(hsl_z <= 0.5)
@@ -1191,8 +1276,7 @@ vector rgb_to_hsl(vector rgb)
 
 vector hsl_to_rgb(vector hsl)
 {
-	float mi, ma, maminusmi, h;
-	vector rgb;
+	float mi, ma, maminusmi;
 
 	if(hsl_z <= 0.5)
 		maminusmi = hsl_y * 2 * hsl_z;
@@ -1204,54 +1288,7 @@ vector hsl_to_rgb(vector hsl)
 	mi = hsl_z - 0.5 * maminusmi;
 	ma = hsl_z + 0.5 * maminusmi;
 
-	h = hsl_x - 6 * floor(hsl_x / 6);
-
-	//else if(ma == rgb_x)
-	//	h = 60 * (rgb_y - rgb_z) / (ma - mi);
-	if(h <= 1)
-	{
-		rgb_x = ma;
-		rgb_y = h * (ma - mi) + mi;
-		rgb_z = mi;
-	}
-	//else if(ma == rgb_y)
-	//	h = 60 * (rgb_z - rgb_x) / (ma - mi) + 120;
-	else if(h <= 2)
-	{
-		rgb_x = (2 - h) * (ma - mi) + mi;
-		rgb_y = ma;
-		rgb_z = mi;
-	}
-	else if(h <= 3)
-	{
-		rgb_x = mi;
-		rgb_y = ma;
-		rgb_z = (h - 2) * (ma - mi) + mi;
-	}
-	//else // if(ma == rgb_z)
-	//	h = 60 * (rgb_x - rgb_y) / (ma - mi) + 240;
-	else if(h <= 4)
-	{
-		rgb_x = mi;
-		rgb_y = (4 - h) * (ma - mi) + mi;
-		rgb_z = ma;
-	}
-	else if(h <= 5)
-	{
-		rgb_x = (h - 4) * (ma - mi) + mi;
-		rgb_y = mi;
-		rgb_z = ma;
-	}
-	//else if(ma == rgb_x)
-	//	h = 60 * (rgb_y - rgb_z) / (ma - mi);
-	else // if(h <= 6)
-	{
-		rgb_x = ma;
-		rgb_y = mi;
-		rgb_z = (6 - h) * (ma - mi) + mi;
-	}
-
-	return rgb;
+	return hue_mi_ma_to_rgb(hsl_x, mi, ma);
 }
 
 string rgb_to_hexcolor(vector rgb)

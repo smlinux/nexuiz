@@ -161,7 +161,7 @@ void drawInputBox(entity me)
 	if(me.editColorCodes)
 	{
 		string ch, ch2;
-		float i;
+		float i, n;
 		vector theColor;
 		float theAlpha;    //float theVariableAlpha;
 		vector p;
@@ -172,7 +172,8 @@ void drawInputBox(entity me)
 		theColor = '1 1 1';
 		theAlpha = 1;    //theVariableAlpha = 1; // changes when ^ax found
 		
-		for(i = 0; i < strlen(me.text); ++i)
+		n = strlen(me.text);
+		for(i = 0; i < n; ++i)
 		{
 			ch = substring(me.text, i, 1);
 			if(ch == "^")
