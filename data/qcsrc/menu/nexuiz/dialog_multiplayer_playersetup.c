@@ -38,6 +38,7 @@ void fillNexuizPlayerSettingsTab(entity me)
 			me.playerNameLabelAlpha = me.playerNameLabel.alpha;
 		me.TD(me, 1, 2, box = makeNexuizInputBox(1, "_cl_name"));
 			box.forbiddenCharacters = "\r\n\\\"$"; // don't care, isn't getting saved
+			box.maxLength = 63;
 	me.TR(me);
 		me.TD(me, 5, 1, e = makeNexuizColorpicker(box));
 		me.TD(me, 5, 2, e = makeNexuizCharmap(box));
