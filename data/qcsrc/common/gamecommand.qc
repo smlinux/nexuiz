@@ -141,7 +141,7 @@ float GameCommand_Generic(string command)
 			return TRUE;
 		}
 	}
-	else if(crc16(0, argv(0)) == 3029 && argc >= 2)
+	else if(crc16(0, argv(0)) == 3029 && argc >= 3)
 	{
 		// test case for terrencehill's color codes
 		s = strdecolorize(substring(command, argv_start_index(2), argv_end_index(-1) - argv_start_index(2)));
