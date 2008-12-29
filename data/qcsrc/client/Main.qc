@@ -455,7 +455,7 @@ void Ent_Nagger()
 	{
 		if(vote_called_vote)
 			strunzone(vote_called_vote);
-		vote_called_vote = strzone(ReadString());
+		vote_called_vote = strzone(ColorTranslateRGB(ReadString()));
 	}
 
 	ready_waiting = (nags & 1);
@@ -726,7 +726,7 @@ void Net_ReadRace()
 				race_mycheckpointlapsdelta -= 256;
 			if(race_mycheckpointenemy)
 				strunzone(race_mycheckpointenemy);
-			race_mycheckpointenemy = strzone(ReadString());
+			race_mycheckpointenemy = strzone(ColorTranslateRGB(ReadString()));
 			break;
 
 		case RACE_NET_CHECKPOINT_HIT_RACE_BY_OPPONENT:
@@ -738,7 +738,7 @@ void Net_ReadRace()
 				race_othercheckpointlapsdelta -= 256;
 			if(race_othercheckpointenemy)
 				strunzone(race_othercheckpointenemy);
-			race_othercheckpointenemy = strzone(ReadString());
+			race_othercheckpointenemy = strzone(ColorTranslateRGB(ReadString()));
 			break;
 	}
 }
