@@ -12984,13 +12984,6 @@ dsi_textures/cretebase
 "origin" "2034 -382 434"
 "classname" "info_notnull"
 }
-// entity 321
-{
-// brush 0
-{
-( 0 0 2034 ) ( 0 0 0 ) ( 0 0 0 ) common/caulk 0 0 0 0.500000 0.500000 0 0 0
-}
-}
 // entity 322
 {
 "_color" "1.000000 0.930311 0.704394"
