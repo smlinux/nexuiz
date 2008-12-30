@@ -7,16 +7,16 @@ use warnings;
 # usage:
 #
 #   map -> ent:
-#     perl entmerge.pl             < mapname.map > mapname.ent
+#     perl entmerge.pl $scalefactor             < mapname.map > mapname.ent
 #
 #   ent -> map:
-#     perl entmerge.pl mapname.ent < mapname.map > mapname-merged.map
+#     perl entmerge.pl $scalefactor mapname.ent < mapname.map > mapname-merged.map
 #
 #   bsp -> ent:
-#     perl bsptool.pl mapname.bsp -xentities     > mapname.ent
-#
-#   ent -> bsp:
-#     perl bsptool.pl mapname.bsp -rentities     < mapname.ent
+#     perl bsptool.pl mapname.bsp -xentities                  > mapname.ent
+#                                                          
+#   ent -> bsp:                                            
+#     perl bsptool.pl mapname.bsp -rentities                  < mapname.ent
 
 sub ParseEntity($)
 {
@@ -123,7 +123,10 @@ sub UnparseEntity($$)
 	return $s;
 }
 
-my ($in_ent) = @ARGV;
+my ($scale, $in_ent) = @ARGV;
+
+$scale = 1
+	if not defined $scale;
 
 my @submodels = ();
 my @entities = ();
@@ -176,6 +179,12 @@ for(;;)
 	$first = 0;
 }
 
+if($first)
+{
+	push @entities, { classname => "worldspawn" };
+	@submodels = ([]);
+}
+
 if(defined $in_ent)
 {
 	# translate map using ent to map
@@ -185,24 +194,53 @@ if(defined $in_ent)
 	# THIS part is always an .ent file now
 	my @entities_entfile = ();
 	$first = 1;
-	while(<STDIN>)
+	for(;;)
 	{
 		my ($ent, $brushes) = ParseEntity $fh;
+
+		defined $ent
+			or last;
+		
+		if($first && $ent->{classname} eq 'worldspawn')
+		{
+		}
+		else
+		{
+			if($first)
+			{
+				push @entities_entfile, { classname => "worldspawn" };
+			}
+
+			if($ent->{classname} eq 'worldspawn')
+			{
+				$ent->{classname} = "worldspawn_renamed";
+			}
+		}
+
 		push @entities_entfile, $ent;
 		$first = 0;
 	}
 	close $fh;
 
+	if($first)
+	{
+		push @entities_entfile, { classname => "worldspawn" };
+	}
+
 	$first = 1;
-	for(@entities)
+	for(@entities_entfile)
 	{
 		my %e = %$_;
 		my $submodel = undef;
+
+		$e{lip} /= $scale if exists $e{lip};
+		$e{origin} = join ' ', map { $_ / $scale } split /\s+/, $e{origin} if exists $e{origin};
+
 		if($first)
 		{
 			$submodel = $submodels[0];
 		}
-		elsif($e{model} =~ /^\*(\d+)$/)
+		elsif(defined $e{model} and $e{model} =~ /^\*(\d+)$/)
 		{
 			$submodel = $submodels[$1];
 			delete $e{model};
@@ -222,7 +260,12 @@ else
 	$first = 1;
 	for(@entities)
 	{
-		print UnparseEntity $_, undef;
+		my %e = %$_;
+
+		$e{lip} *= $scale if exists $e{lip};
+		$e{origin} = join ' ', map { $_ * $scale } split /\s+/, $e{origin} if exists $e{origin};
+
+		print UnparseEntity \%e, undef;
 		$first = 0;
 	}
 }
