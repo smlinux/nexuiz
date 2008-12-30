@@ -18,6 +18,12 @@ use warnings;
 #   ent -> bsp:                                            
 #     perl bsptool.pl mapname.bsp -rentities                  < mapname.ent
 
+sub BrushOrigin($)
+{
+	warn "Origin brushes not supported yet";
+	return undef;
+}
+
 sub ParseEntity($)
 {
 	my ($fh) = @_;
@@ -27,14 +33,14 @@ sub ParseEntity($)
 
 	while(<$fh>)
 	{
-		chomp; s/\/\/.*$//; s/^\s+//; s/\s+$//; next if /^$/;
+		chomp; s/\r//g; s/\0//g; s/\/\/.*$//; s/^\s+//; s/\s+$//; next if /^$/;
 
 		if(/^\{$/)
 		{
 			# entity starts
 			while(<$fh>)
 			{
-				chomp; s/\/\/.*$//; s/^\s+//; s/\s+$//; next if /^$/;
+				chomp; s/\r//g; s/\0//g; s/\/\/.*$//; s/^\s+//; s/\s+$//; next if /^$/;
 
 				if(/^"(.*?)" "(.*)"$/)
 				{
@@ -48,7 +54,7 @@ sub ParseEntity($)
 
 					while(<$fh>)
 					{
-						chomp; s/\/\/.*$//; s/^\s+//; s/\s+$//; next if /^$/;
+						chomp; s/\r//g; s/\0//g; s/\/\/.*$//; s/^\s+//; s/\s+$//; next if /^$/;
 
 						if(/^\{$/)
 						{
@@ -57,7 +63,7 @@ sub ParseEntity($)
 
 							while(<$fh>)
 							{
-								chomp; s/\/\/.*$//; s/^\s+//; s/\s+$//; next if /^$/;
+								chomp; s/\r//g; s/\0//g; s/\/\/.*$//; s/^\s+//; s/\s+$//; next if /^$/;
 
 								if(/^\}$/)
 								{
@@ -90,7 +96,7 @@ sub ParseEntity($)
 		}
 		else
 		{
-			die "Unexpected line in top level: $_";
+			die "Unexpected line in top level: >>$_<<";
 		}
 	}
 
@@ -145,6 +151,7 @@ for(;;)
 	if($first && $ent->{classname} eq 'worldspawn')
 	{
 		$keeplights = $ent->{_keeplights};
+		delete $ent->{_keeplights};
 		@submodels = ($brushes);
 	}
 	else
@@ -160,7 +167,13 @@ for(;;)
 			$ent->{classname} = "worldspawn_renamed";
 		}
 
-		if(grep { $_ eq $ent->{classname} } (qw/group_info func_group misc_model _decal _skybox/, ($keeplights ? qw// : qw/light/)))
+		if(grep { $_ eq $ent->{classname} } qw/group_info func_group misc_model _decal _skybox/)
+		{
+			push @entities_skipped, [$ent, $brushes];
+			next;
+		}
+
+		if(!$keeplights && $ent->{classname} =~ /^light/)
 		{
 			push @entities_skipped, [$ent, $brushes];
 			next;
@@ -233,12 +246,16 @@ if(defined $in_ent)
 		my %e = %$_;
 		my $submodel = undef;
 
+		$e{gridsize} = "64 64 128" if not exists $e{gridsize};
 		$e{lip} /= $scale if exists $e{lip};
 		$e{origin} = join ' ', map { $_ / $scale } split /\s+/, $e{origin} if exists $e{origin};
+		$e{gridsize} = join ' ', map { $_ / $scale } split /\s+/, $e{gridsize} if exists $e{gridsize} and $first;
 
 		if($first)
 		{
 			$submodel = $submodels[0];
+			$e{_keeplights} = 1
+				if $keeplights;
 		}
 		elsif(defined $e{model} and $e{model} =~ /^\*(\d+)$/)
 		{
@@ -262,8 +279,17 @@ else
 	{
 		my %e = %$_;
 
+		if(defined $e{model} and $e{model} =~ /^\*(\d+)$/)
+		{
+			my $org = BrushOrigin $submodels{$e{origin}};
+			$e{origin} = $org
+				if defined $org;
+		}
+
+		$e{gridsize} = "64 64 128" if not exists $e{gridsize};
 		$e{lip} *= $scale if exists $e{lip};
 		$e{origin} = join ' ', map { $_ * $scale } split /\s+/, $e{origin} if exists $e{origin};
+		$e{gridsize} = join ' ', map { $_ * $scale } split /\s+/, $e{gridsize} if exists $e{gridsize} and $first;
 
 		print UnparseEntity \%e, undef;
 		$first = 0;
