@@ -25,6 +25,7 @@ Operations are:
 
   Changes:
     -dlumpname        delete a lump (see -i)
+    -rlumpname        replace a lump (see -i) by the data from standard input
     -gfilename.tga    save the lightgrid as filename.tga (debugging)
     -Gratio           scale down the lightgrid to reduce BSP file size
     -ljpgNNN          externalize the lightmaps as JPEG, quality NNN (number from 1 to 100)
@@ -235,6 +236,13 @@ for(@ARGV)
 		die "invalid lump $1 to remove"
 			unless defined $id;
 		$bsp[$id]->[2] = "";
+	}
+	elsif(/^-r(.+)$/) # replace a lump
+	{
+		my $id = $lumpid{$1};
+		die "invalid lump $1 to replace"
+			unless defined $id;
+		$bsp[$id]->[2] = do { undef local $/; scalar <STDIN>; };
 	}
 	elsif(/^-m(.*)$/) # change the message
 	{
