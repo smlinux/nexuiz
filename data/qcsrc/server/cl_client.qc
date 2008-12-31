@@ -646,6 +646,7 @@ void PutClientInServer (void)
 		}
 
 		RemoveGrapplingHook(self); // Wazat's Grappling Hook
+		self.campingrifle_bulletcounter = 0;
 
 		self.classname = "player";
 		self.iscreature = TRUE;
