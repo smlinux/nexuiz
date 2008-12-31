@@ -37,7 +37,7 @@ void showNotifyNexuizTeamSelectDialog(entity me)
 void fillNexuizTeamSelectDialog(entity me)
 {
 	me.TR(me);
-		me.TD(me, 2, 4, makeTeamButton("auto", '0 0 0', "cmd selectteam auto; cmd join"));
+		me.TD(me, 2, 4, makeTeamButton("join 'best' team (auto-select)", '0 0 0', "cmd selectteam auto; cmd join"));
 	me.TR(me);
 	me.TR(me);
 		me.TD(me, 2, 1, me.team1 = makeTeamButton("red", '1 0.5 0.5', "cmd selectteam red; cmd join"));
