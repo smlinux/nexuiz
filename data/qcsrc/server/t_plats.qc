@@ -106,7 +106,7 @@ void plat_outside_touch()
 void plat_trigger_use()
 {
 	if (self.think)
-		return;		// allready activated
+		return;		// already activated
 	plat_go_down();
 };
 
@@ -707,7 +707,7 @@ void door_go_down()
 void door_go_up()
 {
 	if (self.state == STATE_UP)
-		return;		// allready going up
+		return;		// already going up
 
 	if (self.state == STATE_TOP)
 	{	// reset top wait time
@@ -777,7 +777,18 @@ void door_fire()
 			door_go_up ();
 		} else 
 		{
-			door_rotating_go_up ();
+			// if the BIDIR spawnflag (==2) is set and the trigger has set trigger_reverse, reverse the opening direction
+			if ((self.spawnflags & 2) && other.trigger_reverse!=0 && self.lip!=666 && self.state == STATE_BOTTOM) 
+			{ 
+				self.lip = 666; // self.lip is used to remember reverse opening direction for door_rotating
+			  	self.pos2 = '0 0 0' - self.pos2; 
+			}
+			// if BIDIR_IN_DOWN (==8) is set, prevent the door from reoping during closing if it is triggered from the wrong side
+			if (!((self.spawnflags & 2) &&  (self.spawnflags & 8) && self.state == STATE_DOWN
+			    && (((self.lip==666) && (other.trigger_reverse==0)) || ((self.lip!=666) && (other.trigger_reverse!=0)))))
+			{
+				door_rotating_go_up ();
+			}
 		}
 		self = self.enemy;
 	} while ( (self != starte) && (self != world) );
@@ -913,6 +924,11 @@ void door_rotating_hit_bottom()
 {
 	if (self.noise1 != "")
 		sound (self, CHAN_TRIGGER, self.noise1, VOL_BASE, ATTN_NORM);
+	if (self.lip==666) // self.lip is used to remember reverse opening direction for door_rotating
+	{ 
+		self.pos2 = '0 0 0' - self.pos2; 
+		self.lip = 0;
+	}
 	self.state = STATE_BOTTOM;
 };
 
@@ -927,7 +943,7 @@ void door_rotating_go_down()
 	}
 
 	self.state = STATE_DOWN;
-	SUB_CalcAngleMove (self.pos1, self.speed, door_hit_bottom);
+	SUB_CalcAngleMove (self.pos1, self.speed, door_rotating_hit_bottom);
 };
 
 void door_rotating_go_up()
@@ -1190,13 +1206,15 @@ void spawnfunc_func_door()
 	InitializeEntity(self, LinkDoors, INITPRIO_LINKDOORS);
 };
 
-/*QUAKED spawnfunc_func_door_rotating (0 .5 .8) ? START_OPEN x DOOR_DONT_LINK x x TOGGLE X_AXIS Y_AXIS BIDIR
+/*QUAKED spawnfunc_func_door_rotating (0 .5 .8) ? START_OPEN BIDIR DOOR_DONT_LINK BIDIR_IN_DOWN x TOGGLE X_AXIS Y_AXIS
 if two doors touch, they are assumed to be connected and operate as a unit.
 
 TOGGLE causes the door to wait in both the start and end states for a trigger event.
 
-BIDIR makes the door work bidirectional, so that the opening direction is always away from the requestor. 
-This feature is NOT YET IMPLEMENTED!
+BIDIR makes the door work bidirectional, so that the opening direction is always away from the requestor.
+The usage of bidirectional doors requires two manually instantiated triggers (trigger_multiple), the one to open it in the other direction
+must have set trigger_reverse to 1.
+BIDIR_IN_DOWN will the door prevent from reopening while closing if it is triggered from the other side.
 
 START_OPEN causes the door to move to its destination when spawned, and operate in reverse.  It is used to temporarily or permanently close off an area when triggered (not usefull for touch or takedamage doors).
 
@@ -1271,6 +1289,7 @@ void spawnfunc_func_door_rotating()
 		self.speed = 50;
 	if (!self.wait)
 		self.wait = 1;
+	self.lip = 0; // self.lip is used to remember reverse opening direction for door_rotating
 
 	self.pos1 = '0 0 0';
 	self.pos2 = self.movedir;

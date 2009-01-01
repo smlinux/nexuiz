@@ -510,3 +510,4 @@ void target_voicescript_clear(entity pl);
 .string target2;
 .string target3;
 .string target4;
+.float trigger_reverse

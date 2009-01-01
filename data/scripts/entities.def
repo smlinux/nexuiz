@@ -90,11 +90,13 @@ DOOR_DONT_LINK: the door won't link with another door it touches
 TOGGLE: causes the door to wait in both the start and end states for a trigger event.
 */
 
-/*QUAKED func_door_rotating (0 .5 .8) ? START_OPEN - DOOR_DONT_LINK - - TOGGLE X_AXIS Y_AXIS BIDIR
+/*QUAKED func_door_rotating (0 .5 .8) ? START_OPEN BIDIR DOOR_DONT_LINK BIDIR_IN_DOWN - TOGGLE X_AXIS Y_AXIS
 Normal rotating door entity. By default, the door will activate when player walks close to it or when damage is inflicted to it.
 If DOOR_DONT_LINK is not set, the door will be linked with all doors it touches.
 BIDIR makes the door work bidirectional, so that the opening direction is always away from the requestor.
-This feature is NOT YET IMPLEMENTED!
+The usage of bidirectional doors requires two manually instantiated triggers (trigger_multiple), the one to open it in the other direction
+must have set trigger_reverse to 1.
+BIDIR_IN_DOWN will the door prevent from reopening while closing if it is triggered from the other side.
 -------- KEYS --------
 message: is printed when the door is touched if it is a trigger door and it hasn't been fired yet, or death message if dmg is set
 message2: death message when someone gets pushed into this (default: "was thrown into a world of hurt by"). The # character is replaced by the attacker name if present (and it instead does not get appended to the end)
