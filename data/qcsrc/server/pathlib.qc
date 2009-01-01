@@ -185,7 +185,7 @@ void pathlib_path_optimize(entity start,entity end)
 
     while(point != end)
     {
-        c++;
+        ++c;
         if(c > 5000)
         {
             dprint("pathlib_path_optimize runaway!\n");

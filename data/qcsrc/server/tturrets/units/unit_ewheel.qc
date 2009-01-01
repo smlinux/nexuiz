@@ -26,7 +26,7 @@ void ewheel_attack()
     vector v;
     float f,i;
 
-    for(i=0;i<2;i++)
+    for(i=0;i<2;++i)
     {
         f = gettagindex(self.tur_head,"tag_fire");
         v = gettaginfo(self.tur_head,f);
