@@ -2,6 +2,10 @@
 
 use strict;
 use warnings;
+use Carp;
+$SIG{__DIE__} = sub { 
+	Carp::cluck "Exception: $@";
+};
 
 # ent file managing tool
 # usage:
@@ -18,9 +22,225 @@ use warnings;
 #   ent -> bsp:                                            
 #     perl bsptool.pl mapname.bsp -rentities                  < mapname.ent
 
+sub DotProduct($$)
+{
+	my ($a, $b) = @_;
+	return	$a->[0]*$b->[0]
+		+	$a->[1]*$b->[1]
+		+	$a->[2]*$b->[2];
+}
+
+sub CrossProduct($$)
+{
+	my ($a, $b) = @_;
+	return	[
+		$a->[1]*$b->[2] - $a->[2]*$b->[1],
+		$a->[2]*$b->[0] - $a->[0]*$b->[2],
+		$a->[0]*$b->[1] - $a->[1]*$b->[0]
+	];
+}
+
+sub VectorMAM(@)
+{
+	my (@data) = @_;
+	my $out = [0, 0, 0];
+	for my $coord(0..2)
+	{
+		my $c = 0;
+		$c += $data[2*$_ + 0] * $data[2*$_ + 1]->[$coord]
+			for 0..(@data/2 - 1);
+		$out->[$coord] = $c;
+	}
+	return $out;
+}
+
+sub VectorLength2($)
+{
+	my ($v) = @_;
+	return DotProduct $v, $v;
+}
+
+sub VectorLength($)
+{
+	my ($v) = @_;
+	return sqrt VectorLength2 $v;
+}
+
+sub VectorNormalize($)
+{
+	my ($v) = @_;
+	return VectorMAM 1/VectorLength($v), $v;
+}
+
+sub Polygon_QuadForPlane($$)
+{
+	my ($plane, $quadsize) = @_;
+
+	my $quadup;
+	if(abs($plane->[2]) > abs($plane->[0]) && abs($plane->[2]) > abs($plane->[1]))
+	{
+		$quadup = [1, 0, 0];
+	}
+	else
+	{
+		$quadup = [0, 0, 1];
+	}
+
+	$quadup = VectorMAM 1, $quadup, -DotProduct($quadup, $plane), $plane;
+	$quadup = VectorMAM $plane->[3], VectorNormalize $quadup;
+
+	my $quadright = CrossProduct $quadup, $plane;
+
+	return [
+		VectorMAM($plane->[3], $plane, -$quadsize*2, $quadright, +$quadsize*2, $quadup),
+		VectorMAM($plane->[3], $plane, +$quadsize*2, $quadright, +$quadsize*2, $quadup),
+		VectorMAM($plane->[3], $plane, +$quadsize*2, $quadright, -$quadsize*2, $quadup),
+		VectorMAM($plane->[3], $plane, -$quadsize*2, $quadright, -$quadsize*2, $quadup)
+	];
+}
+
+sub Polygon_Clip($$$)
+{
+	my ($points, $plane, $epsilon) = @_;
+
+	if(@$points < 1)
+	{
+		return [];
+	}
+
+	my $n = 0;
+	my $ndist = DotProduct($points->[$n], $plane) - $plane->[3];
+
+	my @outfrontpoints = ();
+
+	for my $i(0..@$points - 1)
+	{
+		my $p = $n;
+		my $pdist = $ndist;
+		$n = ($i+1) % @$points;
+		$ndist = DotProduct($points->[$n], $plane) - $plane->[3];
+		if($pdist >= -$epsilon)
+		{
+			push @outfrontpoints, $points->[$p];
+		}
+		if(($pdist > $epsilon && $ndist < -$epsilon) || ($pdist < -$epsilon && $ndist > $epsilon))
+		{
+			my $frac = $pdist / ($pdist - $ndist);
+			push @outfrontpoints, VectorMAM 1-$frac, $points->[$p], $frac, $points->[$n];
+		}
+	}
+
+	return \@outfrontpoints;
+}
+
+sub MakePlane($$$)
+{
+	my ($p, $q, $r) = @_;
+
+	my $a = VectorMAM 1, $q, -1, $p;
+	my $b = VectorMAM 1, $r, -1, $p;
+	my $n = VectorNormalize CrossProduct $a, $b;
+
+	return [ @$n, DotProduct $n, $p ];
+}
+
+sub GetBrushWindings($)
+{
+	my ($planes) = @_;
+
+	my @windings = ();
+
+	for my $i(0..(@$planes - 1))
+	{
+		my $winding = Polygon_QuadForPlane $planes->[$i], 65536;
+
+		for my $j(0..(@$planes - 1))
+		{
+			next
+				if $i == $j;
+			$winding = Polygon_Clip $winding, $planes->[$j], 1/64.0;
+		}
+
+		push @windings, $winding
+			unless @$winding == 0;
+	}
+
+	return \@windings;
+}
+
+sub GetBrushMinMax($)
+{
+	my ($brush) = @_;
+
+	if($brush->[0] =~ /^\(/)
+	{
+		# plain brush
+		my @planes = ();
+		for(@$brush)
+		{
+			/^\(\s+(\S+)\s+(\S+)\s+(\S+)\s+\)\s+\(\s+(\S+)\s+(\S+)\s+(\S+)\s+\)\s+\(\s+(\S+)\s+(\S+)\s+(\S+)\s+\)\s+/
+				or die "Invalid line in plain brush: $_";
+			push @planes, MakePlane [ $1, $2, $3 ], [ $4, $5, $6 ], [ $7, $8, $9 ];
+			# for any three planes, find their intersection
+			# check if the intersection is inside all other planes
+		}
+		
+		my $windings = GetBrushWindings \@planes;
+
+		my (@mins, @maxs);
+
+		for(@$windings)
+		{
+			for my $v(@$_)
+			{
+				if(@mins)
+				{
+					for(0..2)
+					{
+						$mins[$_] = $v->[$_] if $mins[$_] > $v->[$_];
+						$maxs[$_] = $v->[$_] if $maxs[$_] < $v->[$_];
+					}
+				}
+				else
+				{
+					@mins = @$v;
+					@maxs = @$v;
+				}
+			}
+		}
+
+		return undef
+			unless @mins;
+		return \@mins, \@maxs;
+	}
+
+	die "Cannot decode this brush yet! brush is @$brush";
+}
+
 sub BrushOrigin($)
 {
-	warn "Origin brushes not supported yet";
+	my ($brushes) = @_;
+
+	my @org = ();
+
+	for my $brush(@$brushes)
+	{
+		my $isorigin = 0;
+		for(@$brush)
+		{
+			$isorigin = 1
+				if /\bcommon\/origin\b/;
+		}
+		if($isorigin)
+		{
+			my ($mins, $maxs) = GetBrushMinMax $brush;
+			@org = map { 0.5 * ($mins->[$_] + $maxs->[$_]) } 0..2
+				if defined $mins;
+		}
+	}
+
+	return \@org
+		if @org;
 	return undef;
 }
 
@@ -230,6 +450,18 @@ if(defined $in_ent)
 			}
 		}
 
+		if(defined $ent->{model} and $ent->{model} =~ /^\*(\d+)$/)
+		{
+			my $entfileorigin = [ split /\s+/, ($ent->{origin} || "0 0 0") ];
+			my $baseorigin = BrushOrigin $submodels[$1];
+
+			if(defined $baseorigin)
+			{
+				my $org = VectorMAM 1, $entfileorigin, -1, $baseorigin;
+				$ent->{origin} = sprintf "%.6f %.6f %.6f", @$org;
+			}
+		}
+
 		push @entities_entfile, $ent;
 		$first = 0;
 	}
@@ -281,9 +513,14 @@ else
 
 		if(defined $e{model} and $e{model} =~ /^\*(\d+)$/)
 		{
-			my $org = BrushOrigin $submodels{$e{origin}};
-			$e{origin} = $org
-				if defined $org;
+			my $oldorigin = [ split /\s+/, ($e{origin} || "0 0 0") ];
+			my $org = BrushOrigin $submodels[$1];
+
+			if(defined $org)
+			{
+				$org = VectorMAM 1, $org, 1, $oldorigin;
+				$e{origin} = sprintf "%.6f %.6f %.6f", @$org;
+			}
 		}
 
 		$e{gridsize} = "64 64 128" if not exists $e{gridsize};
