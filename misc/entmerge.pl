@@ -427,6 +427,9 @@ if(defined $in_ent)
 	# THIS part is always an .ent file now
 	my @entities_entfile = ();
 	$first = 1;
+	
+	my $clear_all_worldlights;
+
 	for(;;)
 	{
 		my ($ent, $brushes) = ParseEntity $fh;
@@ -448,6 +451,13 @@ if(defined $in_ent)
 			{
 				$ent->{classname} = "worldspawn_renamed";
 			}
+
+			if(!$keeplights && $ent->{classname} =~ /^light/)
+			{
+				# light entity detected!
+				# so let's replace all light entities
+				$clear_all_worldlights = 1;
+			}
 		}
 
 		if(defined $ent->{model} and $ent->{model} =~ /^\*(\d+)$/)
@@ -467,6 +477,39 @@ if(defined $in_ent)
 	}
 	close $fh;
 
+	if($keeplights && !$entities_entfile[0]->{keeplights})
+	{
+		# PROBLEM:
+		# the .ent file was made without keeplights
+		# merging it with the .map would delete all lights
+		# so insert all light entities here!
+		@entities_skipped = (@entities_skipped,
+			map
+			{
+				my $submodel = undef;
+				if(defined $_->{model} and $_->{model} =~ /^\*(\d+)$/)
+				{
+					$submodel = $submodels[$1];
+				}
+				[ $_, $submodel ]
+			}
+			grep
+			{
+				$_->{classname} =~ /^light/
+			}
+			@entities
+		);
+	}
+
+	if($clear_all_worldlights)
+	{
+		# PROBLEM:
+		# the .ent file was made with keeplights
+		# the .map did not indicate so!
+		# so we must delete all lights from the skipped entity list
+		@entities_skipped = grep { $_->[0]->{classname} !~ /^light/ } @entities_skipped;
+	}
+
 	if($first)
 	{
 		push @entities_entfile, { classname => "worldspawn" };
@@ -478,16 +521,22 @@ if(defined $in_ent)
 		my %e = %$_;
 		my $submodel = undef;
 
-		$e{gridsize} = "64 64 128" if not exists $e{gridsize};
+		$e{gridsize} = "64 64 128" if not exists $e{gridsize} and $first;
 		$e{lip} /= $scale if exists $e{lip};
-		$e{origin} = join ' ', map { $_ / $scale } split /\s+/, $e{origin} if exists $e{origin};
-		$e{gridsize} = join ' ', map { $_ / $scale } split /\s+/, $e{gridsize} if exists $e{gridsize} and $first;
+		$e{origin} = sprintf '%.6f %.6f %.6f', map { $_ / $scale } split /\s+/, $e{origin} if exists $e{origin};
+		$e{gridsize} = sprintf '%.6f %.6f %.6f', map { $_ / $scale } split /\s+/, $e{gridsize} if exists $e{gridsize} and $first;
 
 		if($first)
 		{
 			$submodel = $submodels[0];
-			$e{_keeplights} = 1
-				if $keeplights;
+			if($keeplights)
+			{
+				$e{_keeplights} = 1;
+			}
+			else
+			{
+				delete $e{_keeplights};
+			}
 		}
 		elsif(defined $e{model} and $e{model} =~ /^\*(\d+)$/)
 		{
@@ -511,6 +560,18 @@ else
 	{
 		my %e = %$_;
 
+		if($first)
+		{
+			if($keeplights)
+			{
+				$e{_keeplights} = 1;
+			}
+			else
+			{
+				delete $e{_keeplights};
+			}
+		}
+
 		if(defined $e{model} and $e{model} =~ /^\*(\d+)$/)
 		{
 			my $oldorigin = [ split /\s+/, ($e{origin} || "0 0 0") ];
@@ -523,10 +584,10 @@ else
 			}
 		}
 
-		$e{gridsize} = "64 64 128" if not exists $e{gridsize};
+		$e{gridsize} = "64 64 128" if not exists $e{gridsize} and $first;
 		$e{lip} *= $scale if exists $e{lip};
-		$e{origin} = join ' ', map { $_ * $scale } split /\s+/, $e{origin} if exists $e{origin};
-		$e{gridsize} = join ' ', map { $_ * $scale } split /\s+/, $e{gridsize} if exists $e{gridsize} and $first;
+		$e{origin} = sprintf '%.6f %.6f %.6f', map { $_ * $scale } split /\s+/, $e{origin} if exists $e{origin};
+		$e{gridsize} = sprintf '%.6f %.6f %.6f', map { $_ * $scale } split /\s+/, $e{gridsize} if exists $e{gridsize} and $first;
 
 		print UnparseEntity \%e, undef;
 		$first = 0;
