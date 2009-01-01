@@ -36,6 +36,16 @@ void fillNexuizEffectsSettingsTab(entity me)
 
 	me.TR(me);
 	me.TR(me);
+		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Geometry quality:"));
+		me.TD(me, 1, 2, e = makeNexuizTextSlider("r_subdivisions_tolerance"));
+			e.addValue(e, "Low", "16");
+			e.addValue(e, "Low", "8");
+			e.addValue(e, "Normal", "4");
+			e.addValue(e, "Good", "3");
+			e.addValue(e, "Best", "2");
+			e.addValue(e, "Insane", "1");
+			e.configureNexuizTextSliderValues(e);
+	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Texture quality:"));
 		me.TD(me, 1, 2, e = makeNexuizTextSlider("gl_picmip"));
 			if(cvar("developer"))
@@ -85,7 +95,6 @@ void fillNexuizEffectsSettingsTab(entity me)
 
 	me.TR(me);
 		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "r_coronas", "Coronas"));
-	me.TR(me);
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizCheckBox(0, "r_bloom", "Bloom"));
 			setDependent(e, "r_hdr", 0, 0);
