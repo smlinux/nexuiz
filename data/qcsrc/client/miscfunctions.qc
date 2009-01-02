@@ -176,6 +176,9 @@ void CSQC_CheckEngine()
 		sbar_font = FONT_DEFAULT;
 		sbar_bigfont = FONT_DEFAULT;
 	}
+
+	if(strlennocol("^xFFF") == 0)
+		csqc_flags |= CSQC_FLAG_COLORCODES;
 }
 
 vector Sbar_GetFontsize()
@@ -266,7 +269,7 @@ float ColorTranslateMode;
 string ColorTranslateRGB(string s)
 {
 	if not(ColorTranslateMode & 2)
-	if(csqc_flags & CSQC_FLAG_READPICTURE)
+	if(csqc_flags & CSQC_FLAG_COLORCODES)
 	{
 		if(ColorTranslateMode & 1)
 			return strdecolorize(s);

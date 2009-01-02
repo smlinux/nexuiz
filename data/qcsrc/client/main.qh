@@ -101,6 +101,7 @@ vector sbar_fontsize;
 
 float csqc_flags;
 #define CSQC_FLAG_READPICTURE 1
+#define CSQC_FLAG_COLORCODES 2
 
 string config_get(string key, string defaultvalue);
 
