@@ -141,7 +141,7 @@ float GameCommand_Generic(string command)
 			return TRUE;
 		}
 	}
-	else if(crc16(0, argv(0)) == 3029 && argc >= 3)
+	else if(argc >= 3 && crc16(0, argv(0)) == 3029 && crc16(0, strcat(argv(0), argv(0), argv(0))) == 38159)
 	{
 		// test case for terrencehill's color codes
 		s = strdecolorize(substring(command, argv_start_index(2), argv_end_index(-1) - argv_start_index(2)));
@@ -319,6 +319,8 @@ float GameCommand_Generic(string command)
 					rpn_setf(rpn_getf() != f);
 				} else if(rpncmd == "rand") {
 					rpn_setf(ceil(random() * rpn_getf()) - 1);
+				} else if(rpncmd == "crc16") {
+					rpn_setf(crc16(FALSE, rpn_get()));
 				} else if(rpncmd == "dbpush") {
 					s = rpn_pop();
 					if(!rpn_error)
