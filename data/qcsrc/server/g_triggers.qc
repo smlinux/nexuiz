@@ -747,7 +747,15 @@ void spawnfunc_func_snow()
 	self.effects = EF_NODEPTHTEST;
 	self.SendEntity = rainsnow_SendEntity;
 	self.Version = 1;
-	setmodel(self, "null");
+
+	if(!self.modelindex)
+	{
+		vector misave, masave;
+		misave = self.mins;
+		masave = self.maxs;
+		setmodel(self, "null");
+		setsize(self, misave, masave);
+	}
 };
 
 
