@@ -29,3 +29,12 @@ hlac_glass
 		tcmod scale 4 4
 	}	
 }
+hlac_bullet
+{
+	cull disable
+	deformVertexes autosprite
+	{
+		map models/hlac_bullet.tga
+		blendfunc add
+	}	
+}
