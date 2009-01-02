@@ -19,6 +19,7 @@ void W_SwitchWeapon_Force(entity e, float w)
 float WFRAME_FIRE1 = 0;
 float WFRAME_FIRE2 = 1;
 float WFRAME_IDLE = 2;
+float WFRAME_RELOAD = 3;
 
 void(float fr, float t, void() func) weapon_thinkf;
 
