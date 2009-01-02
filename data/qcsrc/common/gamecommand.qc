@@ -154,8 +154,16 @@ float GameCommand_Generic(string command)
 		for(i = 0; i < n; ++i)
 		{
 			c = substring(s, i, 1);
+
 			if(c == ";")
 				c = ":";
+			else if(c == "^")
+			{
+				c = "^^";
+				if(substring(s, i+1, 1) == "^")
+					++i;
+			}
+
 			if(c != " ")
 			{
 				rgb = hsl_to_rgb('1 0 0' * (j * i + f) + '0 1 .5');
