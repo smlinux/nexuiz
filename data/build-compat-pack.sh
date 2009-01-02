@@ -42,6 +42,8 @@ COMPAT_FILES="
 	models/ctf/flags.md3
 	models/ctf/flags.md3_0.skin
 	models/ctf/flags.md3_1.skin
+    models/hlac_bullet.md3
+    models/hlac_bullet.tga
 	models/player/carni.zym.sounds
 	models/player/headhunter.zym.sounds
 	models/player/insurrectionist.zym.sounds
@@ -171,6 +173,7 @@ COMPAT_FILES="
     models/weapons/w_seeker.zym
 	particles/particlefont.tga
 	scripts/flags.shader
+	scripts/hlac.shader
 	scripts/portals.shader
 	sound/announcer/male/airshot.ogg
 	sound/announcer/male/electrobitch.ogg
