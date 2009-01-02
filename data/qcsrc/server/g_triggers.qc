@@ -544,7 +544,7 @@ float pointparticles_SendEntity(entity to, float fl)
 	}
 	if(fl & 1)
 	{
-		if(self.modelindex != 4.2)
+		if(self.model != "null")
 		{
 			WriteShort(MSG_ENTITY, self.modelindex);
 			WriteCoord(MSG_ENTITY, self.mins_x);
@@ -685,7 +685,6 @@ void spawnfunc_func_rain()
 	self.movetype = MOVETYPE_NONE;
 	self.solid = SOLID_NOT;
 	SetBrushEntityModel();
-	self.model = "";
 	if (!self.cnt)
 		self.cnt = 12;
 	if (!self.count)
@@ -700,7 +699,15 @@ void spawnfunc_func_rain()
 	self.effects = EF_NODEPTHTEST;
 	self.SendEntity = rainsnow_SendEntity;
 	self.Version = 1;
-	setmodel(self, "null");
+
+	if(!self.modelindex)
+	{
+		vector misave, masave;
+		misave = self.mins;
+		masave = self.maxs;
+		setmodel(self, "null");
+		setsize(self, misave, masave);
+	}
 };
 
 
