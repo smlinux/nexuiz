@@ -38,7 +38,7 @@ void fillNexuizEffectsSettingsTab(entity me)
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Geometry quality:"));
 		me.TD(me, 1, 2, e = makeNexuizTextSlider("r_subdivisions_tolerance"));
-			e.addValue(e, "Low", "16");
+			e.addValue(e, "Lowest", "16");
 			e.addValue(e, "Low", "8");
 			e.addValue(e, "Normal", "4");
 			e.addValue(e, "Good", "3");
