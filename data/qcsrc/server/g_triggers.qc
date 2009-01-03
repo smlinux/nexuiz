@@ -732,7 +732,6 @@ void spawnfunc_func_snow()
 	self.movetype = MOVETYPE_NONE;
 	self.solid = SOLID_NOT;
 	SetBrushEntityModel();
-	self.model = "";
 	if (!self.cnt)
 		self.cnt = 12;
 	if (!self.count)
