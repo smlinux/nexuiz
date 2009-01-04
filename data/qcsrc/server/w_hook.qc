@@ -6,8 +6,8 @@
 .float dmg_duration;
 .float dmg_last;
 .float hook_refire;
-.float hook_datehooked;
-.float hook_datehooked_delay;
+.float hook_time_hooked;
+.float hook_time_ammodecrease;
 
 void W_Hook_ExplodeThink (void)
 {
@@ -151,19 +151,19 @@ float w_hook(float req)
 			hooked_time_max = cvar("g_balance_hook_primary_hooked_time_max");			
 			if (hooked_time_max > 0)
 			{
-				if ( time > self.hook_datehooked + hooked_time_max )
+				if ( time > self.hook_time_hooked + hooked_time_max )
 					self.hook_state |= HOOK_REMOVING;
 			}
 			
 			hooked_ammodecrease_delay = cvar("g_balance_hook_primary_hooked_ammodecrease_delay");
 			if (hooked_ammodecrease_delay > 0)
 			{
-				if ( time > self.hook_datehooked_delay + hooked_ammodecrease_delay )
+				if ( time > self.hook_time_ammodecrease )
 				{
 					if ( self.ammo_cells >= 1 )
 					{
 						self.ammo_cells -= 1;
-						self.hook_datehooked_delay = time;
+						self.hook_time_ammodecrease = time + hooked_ammodecrease_delay;
 					}
 					else
 					{
@@ -174,7 +174,10 @@ float w_hook(float req)
 			}
 		}
 		else
-			self.hook_datehooked = self.hook_datehooked_delay = time;				
+		{
+			self.hook_time_hooked = time;				
+			self.hook_time_ammodecrease = time + cvar("g_balance_hook_primary_hooked_time_free");;
+		}
 
 		if (self.BUTTON_CROUCH)
 		{
