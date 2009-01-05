@@ -1322,6 +1322,24 @@ void spawnfunc_misc_follow()
 
 
 
+void gamestart_use() {
+	activator = self;
+	SUB_UseTargets();
+	remove(self);
+}
+
+void spawnfunc_trigger_gamestart() {
+	if(self.wait)
+	{
+		self.think = gamestart_use;
+		self.nextthink = self.wait;
+	}
+	else
+		InitializeEntity(self, gamestart_use, INITPRIO_FINDTARGET);
+}
+
+
+
 
 .entity voicescript; // attached voice script
 .float voicescript_index; // index of next voice, or -1 to use the randomized ones
