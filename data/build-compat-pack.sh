@@ -562,7 +562,6 @@ COMPAT_FILES="
 	textures/crifleflashider_bump.tga
 	textures/crifleflashider_gloss.tga
 	textures/crifleflashider.tga
-	textures/eggandbacon
 	textures/eggandbacon/black.tga
 	textures/eggandbacon/platten_bump.tga
 	textures/eggandbacon/platten_gloss.tga
