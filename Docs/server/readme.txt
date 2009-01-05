@@ -5,7 +5,7 @@ systems and also some tools that help with maintaining your server.
 You will need to copy the right script into your Nexuiz main
 directory, where the normal binaries are.  There are two scrips for
 each sytems, one to start a normal Nexuiz server and one to start a
-Nexuiz 'Pro' server, that differs in movement and weapon settings.
+Nexuiz 'Havoc' server, that differs in movement and weapon settings.
 You then need to copy and ADJUST the config file which is called
 server.cfg.  You can copy it either into the Nexuiz/data directory
 where the big data*.pk3 file is or when running on linux or mac you
