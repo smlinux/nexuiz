@@ -172,7 +172,7 @@ void refreshServerListNexuizServerList(entity me, float mode)
 	else */
 	{
 		float m, o;
-		string s, typestr;
+		string s, typestr, modstr;
 		s = me.filterString;
 
 		m = strstrofs(s, ":", 0);
@@ -186,6 +186,8 @@ void refreshServerListNexuizServerList(entity me, float mode)
 		else
 			typestr = "";
 
+		modstr = cvar_string("menu_slist_modfilter");
+
 		m = SLIST_MASK_AND - 1;
 		resethostcachemasks();
 		if(!me.filterShowFull)
@@ -194,6 +196,13 @@ void refreshServerListNexuizServerList(entity me, float mode)
 			sethostcachemasknumber(++m, SLIST_FIELD_NUMHUMANS, 1, SLIST_TEST_GREATEREQUAL);
 		if(typestr != "")
 			sethostcachemaskstring(++m, SLIST_FIELD_QCSTATUS, strcat(typestr, ":"), SLIST_TEST_STARTSWITH);
+		if(modstr != "")
+		{
+			if(substring(modstr, 0, 1) == "!")
+				sethostcachemaskstring(++m, SLIST_FIELD_MOD, substring(modstr, 1, strlen(modstr) - 1), SLIST_TEST_NOTEQUAL);
+			else
+				sethostcachemaskstring(++m, SLIST_FIELD_MOD, modstr, SLIST_TEST_EQUAL);
+		}
 		m = SLIST_MASK_OR - 1;
 		if(s != "")
 		{
