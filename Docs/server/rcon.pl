@@ -457,6 +457,7 @@ package main;
 use strict;
 use warnings;
 use IO::Select;
+use Time::HiRes;
 
 sub default($$)
 {
@@ -465,15 +466,17 @@ sub default($$)
 	return $default;
 }
 
-my $server   = default '',  $ENV{rcon_address};
-my $password = default '',  $ENV{rcon_password};
-my $timeout  = default '5', $ENV{rcon_timeout};
-my $colors   = default '0', $ENV{rcon_colorcodes_raw};
+my $server   = default '',    $ENV{rcon_address};
+my $password = default '',    $ENV{rcon_password};
+my $timeout  = default '5',   $ENV{rcon_timeout};
+my $timeouti = default '0.2', $ENV{rcon_timeout_inter};
+my $colors   = default '0',   $ENV{rcon_colorcodes_raw};
 
 if(!length $server)
 {
 	print STDERR "Usage: rcon_address=SERVERIP:PORT rcon_password=PASSWORD $0 rconcommands...\n";
 	print STDERR "Optional: rcon_timeout=... (default: 5)\n";
+	print STDERR "          rcon_timeout_inter=... (default: 0.2)\n";
 	print STDERR "          rcon_colorcodes_raw=1 (to disable color codes translation)\n";
 	exit 0;
 }
@@ -486,15 +489,25 @@ if(!$rcon->send($rcon->join_commands(@ARGV)))
 	die "send: $!";
 }
 
-if($timeout)
+if($timeout > 0)
 {
 	my $sel = IO::Select->new($rcon->fds());
-	if($sel->can_read($timeout))
+	my $endtime_max = Time::HiRes::time() + $timeout;
+	my $endtime = $endtime_max;
+
+	while((my $dt = $endtime - Time::HiRes::time()) > 0)
 	{
-		for($rcon->recv())
+		if($sel->can_read($dt))
 		{
-			$_ = (color_dp2ansi $_) . "\033[m" unless $colors;
-			print "$_\n"
+			for($rcon->recv())
+			{
+				$_ = (color_dp2ansi $_) . "\033[m" unless $colors;
+				print "$_\n"
+			}
+			last unless $!{EAGAIN} || $!{EWOULDBLOCK};
+			$endtime = Time::HiRes::time() + $timeouti;
+			$endtime = $endtime_max
+				if $endtime > $endtime_max;
 		}
 	}
 }
