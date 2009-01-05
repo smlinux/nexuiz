@@ -176,7 +176,7 @@ float w_hook(float req)
 		else
 		{
 			self.hook_time_hooked = time;				
-			self.hook_time_ammodecrease = time + cvar("g_balance_hook_primary_hooked_time_free");;
+			self.hook_time_ammodecrease = time + cvar("g_balance_hook_primary_hooked_time_free");
 		}
 
 		if (self.BUTTON_CROUCH)

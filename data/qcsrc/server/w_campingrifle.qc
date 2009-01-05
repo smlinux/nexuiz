@@ -6,13 +6,17 @@
 
 void W_Campingrifle_ReloadedAndReady()
 {
+	float t;
 	self.campingrifle_bulletcounter = 0;
-	ATTACK_FINISHED(self) = time;
+	t = ATTACK_FINISHED(self) - cvar("g_balance_campingrifle_reloadtime") + 1;
+	ATTACK_FINISHED(self) = t;
 	w_ready();
 }
 
 void W_Campingrifle_Reload()
 {
+	float t;
+
 	if (self.campingrifle_bulletcounter == 0)
 		return;
 	
@@ -27,7 +31,8 @@ void W_Campingrifle_Reload()
 
 	sound (self, CHAN_WEAPON2, "weapons/campingrifle_reload.wav", VOL_BASE, ATTN_NORM);
 
-	ATTACK_FINISHED(self) = time + cvar("g_balance_campingrifle_reloadtime") + 1;
+	t = max(time, ATTACK_FINISHED(self)) + cvar("g_balance_campingrifle_reloadtime") + 1;
+	ATTACK_FINISHED(self) = t;
 
 	weapon_thinkf(WFRAME_RELOAD, cvar("g_balance_campingrifle_reloadtime"), W_Campingrifle_ReloadedAndReady);
 }
@@ -188,6 +193,10 @@ float w_campingrifle(float req)
 					w_deathtypestring = "was sniped by #";
 			}
 		}
+	}
+	else if (req == WR_RELOAD)
+	{
+		W_Campingrifle_Reload();
 	}
 	return TRUE;
 };

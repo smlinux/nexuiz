@@ -1,9 +1,22 @@
+void W_Reload()
+{
+	if(self.switchweapon == self.weapon)
+	if(self.weaponentity.state == WS_READY)
+		weapon_action(self.weapon, WR_RELOAD);
+}
+
 // switch between weapons
 void W_SwitchWeapon(float imp)
 {
 	if (self.switchweapon != imp)
-	if (client_hasweapon(self, imp, TRUE, TRUE))
-		W_SwitchWeapon_Force(self, imp);
+	{
+		if (client_hasweapon(self, imp, TRUE, TRUE))
+			W_SwitchWeapon_Force(self, imp);
+	}
+	else
+	{
+		W_Reload();
+	}
 };
 
 .float weaponcomplainindex;

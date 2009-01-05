@@ -70,6 +70,7 @@ void printsurfaceinfo(entity e, vector v)
  * 17: throw weapon
  * 18: next weapon according to sbar_hudselector 1 list
  * 19: previous weapon according to sbar_hudselector 1 list
+ * 20: reload if needed
  *
  * 30 to 39: create waypoints
  * 47: clear personal waypoints
@@ -119,7 +120,7 @@ void ImpulseCommands (void)
 		else
 			self.impulse = imp; // retry in next frame
 	}
-	else if(imp >= 10 && imp <= 19)
+	else if(imp >= 10 && imp <= 20)
 	{
 		if(self.deadflag == DEAD_NO)
 		{
@@ -156,7 +157,10 @@ void ImpulseCommands (void)
 				case 19:
 					W_PreviousWeapon (1);
 					break;
-				}
+				case 20:
+					W_Reload ();
+					break;
+			}
 		}
 		else
 			self.impulse = imp; // retry in next frame
