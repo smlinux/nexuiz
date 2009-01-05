@@ -39,6 +39,7 @@ COMPAT_FILES="
 	gfx/teamradar_ping.tga
 	gfx/toxic_mini.tga
 	gfx/warfare_mini.tga
+	maps/eggandbacon.bsp
 	models/ctf/flags.md3
 	models/ctf/flags.md3_0.skin
 	models/ctf/flags.md3_1.skin
@@ -172,6 +173,7 @@ COMPAT_FILES="
 	models/weapons/w_porto.zym
     models/weapons/w_seeker.zym
 	particles/particlefont.tga
+	scripts/eggandbacon.shader
 	scripts/flags.shader
 	scripts/hlac.shader
 	scripts/portals.shader
@@ -560,6 +562,14 @@ COMPAT_FILES="
 	textures/crifleflashider_bump.tga
 	textures/crifleflashider_gloss.tga
 	textures/crifleflashider.tga
+	textures/eggandbacon
+	textures/eggandbacon/black.tga
+	textures/eggandbacon/platten_bump.tga
+	textures/eggandbacon/platten_gloss.tga
+	textures/eggandbacon/platten.tga
+	textures/eggandbacon/upsign_bump.tga
+	textures/eggandbacon/upsign_gloss.tga
+	textures/eggandbacon/upsign.tga
 	textures/flags/flag_blue_cloth.tga
 	textures/flags/flag_blue_gloss.tga
 	textures/flags/flag_blue_glow.tga
