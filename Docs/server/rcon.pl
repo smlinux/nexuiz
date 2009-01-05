@@ -504,10 +504,10 @@ if($timeout > 0)
 				$_ = (color_dp2ansi $_) . "\033[m" unless $colors;
 				print "$_\n"
 			}
-			last unless $!{EAGAIN} || $!{EWOULDBLOCK};
 			$endtime = Time::HiRes::time() + $timeouti;
 			$endtime = $endtime_max
 				if $endtime > $endtime_max;
 		}
 	}
 }
+exit 0;
