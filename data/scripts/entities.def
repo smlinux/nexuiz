@@ -1114,10 +1114,13 @@ respawntime: "off" cycle time (default: same as wait)
 START_ON: assume it is already turned on (when targeted)
 */
 
-/*QUAKED trigger_gamestart (.5 .5 .5) (-8 -8 -8) (8 8 8) FIXED
+/*QUAKED trigger_gamestart (.5 .5 .5) (-8 -8 -8) (8 8 8)
 Triggers once when the game starts, then no longer does anything.
 -------- KEYS --------
-target: trigger all entities with this targetname when triggered
+target: trigger all entities with this targetname when starting the game
+target2: trigger all entities with this targetname when starting the game
+target3: trigger all entities with this targetname when starting the game
+target4: trigger all entities with this targetname when starting the game
 wait: wait so many seconds before triggering
 */
 
