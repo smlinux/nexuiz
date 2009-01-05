@@ -646,7 +646,7 @@ find . -name \*.ogg | while IFS= read -r NAME; do
 	rm -f "$NAME.wav"
 done
 
-rev=`svnversion ..`
+rev=`svnversion .. | sed 's/M$//g; s/.*://g;'`
 pack="zzz_svn-compat-$rev"
 echo "Support files to play on svn servers of revision $rev" > "$pack.txt"
 7za a -tzip -mx=9 "../$pack.pk3" .
