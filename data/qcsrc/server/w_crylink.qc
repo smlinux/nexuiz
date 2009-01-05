@@ -62,11 +62,15 @@ void W_Crylink_Attack (void)
 	local float counter, shots;
 	local entity proj;
 	local vector s;
+	vector forward, right, up;
 
 	if not(self.items & IT_UNLIMITED_WEAPON_AMMO)
 		self.ammo_cells = self.ammo_cells - cvar("g_balance_crylink_primary_ammo");
 
 	W_SetupShot (self, '25 8 -8', FALSE, 2, "weapons/crylink_fire.wav");
+	forward = v_forward;
+	right = v_right;
+	up = v_up;
 
 	shots = cvar("g_balance_crylink_primary_shots");
 	pointparticles(particleeffectnum("crylink_muzzleflash"), w_shotorg, w_shotdir * 1000, shots);
@@ -87,19 +91,18 @@ void W_Crylink_Attack (void)
 		setsize (proj, '0 0 0', '0 0 0');
 		setorigin (proj, w_shotorg);
 
+
 		s = '0 0 0';
 		if (counter == 0)
 			s = '0 0 0';
-		else if (counter == 1)
-			s = '0 0 1';
-		else if (counter == 2)
-			s = '0 -0.71 -0.71';
-		else if (counter == 3)
-			s = '0 0.71 -0.71';
 		else
-			s = randomvec();
+		{
+			makevectors('0 360 0' * (0.75 + (counter - 0.5) / (shots - 1)));
+			s_y = v_forward_x;
+			s_z = v_forward_y;
+		}
 		s = s * cvar("g_balance_crylink_primary_spread");
-		proj.velocity = (w_shotdir + v_right * s_y + v_up * s_z) * cvar("g_balance_crylink_primary_speed");
+		proj.velocity = (w_shotdir + right * s_y + up * s_z) * cvar("g_balance_crylink_primary_speed");
 //		proj.velocity = (w_shotdir + randomvec() * cvar("g_balance_crylink_primary_spread")) * cvar("g_balance_crylink_primary_speed");
 		W_SetupProjectileVelocity(proj);
 		proj.touch = W_Crylink_Touch;
