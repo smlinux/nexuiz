@@ -21,6 +21,7 @@ harlequin_sky
 kaznexctf2
 leiprojectile
 liquids
+mandelbrotsky
 mflag
 morphed
 nexdm18_rmx
@@ -37,8 +38,8 @@ stralenex8
 strength
 swamp
 terrain_alphafade
-terrain_dotproduct2projected
 terrain_dotproduct2
+terrain_dotproduct2projected
 test3
 toxic
 tree
