@@ -54,7 +54,7 @@
 "menu_showteamselect"                   "team menu"
 "spec"                                  "enter spectator mode"
 "dropweapon"                            "drop weapon"
-"+use"                                  "drop key"
+"+use"                                  "drop key / drop flag"
 ""                                      ""
 ""                                      "User defined"
 "+userbind 1"                           "$userbind1"
