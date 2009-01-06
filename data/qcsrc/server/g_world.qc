@@ -1522,6 +1522,7 @@ float WinningCondition_Scores(float limit)
 		{
 			leaderfrags = WinningConditionHelper_topscore;
 
+			if (limit)
 			if (leaderfrags == limit - 1)
 				play2all("announcer/robotic/1fragleft.wav");
 			else if (leaderfrags == limit - 2)
