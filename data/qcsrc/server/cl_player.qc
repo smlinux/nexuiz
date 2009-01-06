@@ -951,6 +951,15 @@ void GlobalSound(string sample, float chan, float teamsay)
 			sound(self, chan, sample, VOL_BASE, ATTN_NONE);
 		}
 	}
+	else if(teamsay == 4) // auto taunt
+	{
+		float tauntrand = random();
+		FOR_EACH_REALCLIENT(e)
+		if (tauntrand < e.cvar_cl_autotaunt)
+		{
+			soundto(MSG_ONE, self, chan, sample, VOL_BASE, ATTN_NONE);
+		}
+	}
 }
 
 void PlayerSound(.string samplefield, float chan, float teamsay)

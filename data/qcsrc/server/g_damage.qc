@@ -296,6 +296,10 @@ void Obituary (entity attacker, entity inflictor, entity targ, float deathtype)
 				} else {
 					centerprint(attacker, strcat("^4You fragged ^7", s, "\n\n\n"));
 					centerprint(targ, strcat("^1You were fragged by ^7", a, "\n\n\n"));
+					entity oldself = self; // Hackish way to fix taunts, otherwise they play the other way around
+					self = attacker;
+					PlayerSound(playersound_taunt, CHAN_VOICE, 4);
+					self = oldself;
 				}
 
 				if(sv_gentle) {

@@ -20,7 +20,7 @@ entity makeNexuizAudioSettingsTab()
 
 void fillNexuizAudioSettingsTab(entity me)
 {
-	entity e, s;
+	entity e, s, sl;
 
 	me.TR(me);
 		s = makeNexuizDecibelsSlider(-20, 0, 0.5, "bgmvolume");
@@ -121,7 +121,11 @@ void fillNexuizAudioSettingsTab(entity me)
 		me.TDempty(me, 0.2);
 		me.TD(me, 1, 2.8, e = makeNexuizCheckBox(0, "snd_swapstereo", "Swap Stereo"));
 	me.TR(me);
-	
+	me.TR(me);
+		sl = makeNexuizSlider(0.15, 1, 0.05, "cl_autotaunt");
+		me.TD(me, 1, 1, e = makeNexuizSliderCheckBox(0, 1, sl, "Auto taunting:"));
+		me.TD(me, 1, 2, sl);
+	me.TR(me);
 
 	me.gotoRC(me, me.rows - 1, 0);
 		me.TD(me, 1, me.columns, makeNexuizCommandButton("Apply immediately", '0 0 0', "snd_restart", COMMANDBUTTON_APPLY));
