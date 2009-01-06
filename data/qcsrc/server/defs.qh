@@ -450,7 +450,7 @@ float next_pingtime;
 		_VOICEMSG(attacking) \
 		_VOICEMSG(defending) \
 		_VOICEMSG(roaming) \
-		_VOICEMSG(positive) \
+		_VOICEMSG(affirmative) \
 		_VOICEMSG(negative) \
 		_VOICEMSG(onmyway) \
 		_VOICEMSG(seenenemy) \
