@@ -209,10 +209,13 @@ void Ent_WaypointSprite()
 
 	InterpolateOrigin_Undo();
 
-	// unfortunately, this needs to be exact (for the 3D display)
-	self.origin_x = ReadCoord();
-	self.origin_y = ReadCoord();
-	self.origin_z = ReadCoord();
+	if(sendflags & 64)
+	{
+		// unfortunately, this needs to be exact (for the 3D display)
+		self.origin_x = ReadCoord();
+		self.origin_y = ReadCoord();
+		self.origin_z = ReadCoord();
+	}
 
 	if(sendflags & 1)
 	{

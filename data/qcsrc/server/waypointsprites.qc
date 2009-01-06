@@ -30,7 +30,7 @@ void WaypointSprite_UpdateOrigin(entity e, vector o)
 	if(o != e.origin)
 	{
 		setorigin(e, o);
-		e.SendFlags |= 128;
+		e.SendFlags |= 64;
 	}
 }
 
@@ -165,9 +165,13 @@ float WaypointSprite_SendEntity(entity to, float sendflags)
 {
 	WriteByte(MSG_ENTITY, ENT_CLIENT_WAYPOINT);
 	WriteByte(MSG_ENTITY, sendflags);
-	WriteCoord(MSG_ENTITY, self.origin_x);
-	WriteCoord(MSG_ENTITY, self.origin_y);
-	WriteCoord(MSG_ENTITY, self.origin_z);
+
+	if(sendflags & 64)
+	{
+		WriteCoord(MSG_ENTITY, self.origin_x);
+		WriteCoord(MSG_ENTITY, self.origin_y);
+		WriteCoord(MSG_ENTITY, self.origin_z);
+	}
 
 	if(sendflags & 1)
 	{
