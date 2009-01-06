@@ -16,6 +16,7 @@
 "weapnext"                              "next"
 "weaplast"                              "previously used"
 "weapbest"                              "best"
+"reload"                                "reload"
 "impulse 1"                             "laser"
 "impulse 2"                             "shotgun"
 "impulse 3"                             "machine gun"
