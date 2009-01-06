@@ -49,9 +49,10 @@ float Spawn_Score(entity spot, entity playerlist, float teamcheck)
 	// filter out spots for assault
 	if(spot.target != "") {
 		local entity ent;
-		float good;
+		float good, found;
 		ent = find(world, targetname, spot.target);
 		while(ent) {
+			found = 1;
 			if(ent.classname == "target_objective")
 			{
 				if(ent.health < 0 || ent.health >= ASSAULT_VALUE_INACTIVE)
@@ -90,7 +91,7 @@ float Spawn_Score(entity spot, entity playerlist, float teamcheck)
 			ent = find(ent, targetname, spot.target);
 		}
 
-		if(!good)
+		if(found && !good)
 			return -1;
 	}
 
