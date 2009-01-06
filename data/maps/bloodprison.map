@@ -2,7 +2,7 @@
 "_keeplights" "1"
 "_lightmapscale" "0.25"
 "classname" "worldspawn"
-"gridsize" "64.000003 64.000003 128.000005"
+"gridsize" "64 64 128"
 "message" "Blood Prison"
 {
 ( 2080 1472 192 ) ( 2080 1472 128 ) ( 2144 1536 128 ) evil8_trim/e8support05 0 0 -90 0.5 0.5 0 0 0

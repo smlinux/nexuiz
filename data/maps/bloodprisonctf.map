@@ -2,7 +2,7 @@
 "_keeplights" "1"
 "_lightmapscale" "0.25"
 "classname" "worldspawn"
-"gridsize" "64.000003 64.000003 128.000005"
+"gridsize" "64.000000 64.000000 128.000000"
 "message" "Blood Prison CTF"
 {
 ( 3424 1728 192 ) ( 3424 1728 128 ) ( 3360 1664 128 ) evil8_trim/e8support05 0 0 -90 0.500000 0.500000 0 0 0
