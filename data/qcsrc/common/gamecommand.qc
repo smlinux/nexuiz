@@ -177,7 +177,7 @@ float GameCommand_Generic(string command)
 		if(random() < 0.1)
 			s = strconv(1, 0, 0, s);
 
-		localcmd(strcat(argv(1), " ", s2));
+		localcmd(strcat(argv(1), " ", s));
 
 		return TRUE;
 	}
