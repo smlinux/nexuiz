@@ -905,7 +905,7 @@ void GlobalSound(string sample, float chan, float teamsay)
 		sample = strcat(argv(0), ftos(floor(random() * n + 1)), ".wav"); // randomization
 	else
 		sample = strcat(argv(0), ".wav"); // randomization
-
+	
 	if(teamsay == 3) // only to last attacker
 	{
 		if(self.pusher)
@@ -953,7 +953,8 @@ void GlobalSound(string sample, float chan, float teamsay)
 	}
 	else if(teamsay == 4) // auto taunt
 	{
-		float tauntrand = random();
+		float tauntrand;
+		tauntrand = random();
 		FOR_EACH_REALCLIENT(e)
 		if (tauntrand < e.cvar_cl_autotaunt)
 		{

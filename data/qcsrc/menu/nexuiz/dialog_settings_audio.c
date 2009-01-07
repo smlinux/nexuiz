@@ -123,11 +123,17 @@ void fillNexuizAudioSettingsTab(entity me)
 	me.TR(me);
 	me.TR(me);
 		sl = makeNexuizSlider(0.15, 1, 0.05, "cl_autotaunt");
-		me.TD(me, 1, 1, e = makeNexuizSliderCheckBox(0, 1, sl, "Auto taunting:"));
+		me.TD(me, 1, 1, e = makeNexuizSliderCheckBox(0, 1, sl, "Automatic taunts"));
+		if(sl.value != e.savedValue)
+			e.savedValue = 0.65; // default
+		me.TR(me);
+		me.TD(me, 1, 3, e = makeNexuizTextLabel(0.1, "Frequency:"));
 		me.TD(me, 1, 2, sl);
 	me.TR(me);
+	me.TR(me);
+		me.TD(me, 1, 2.8, e = makeNexuizCheckBox(0, "cl_hitsound", "Hit indicator"));
 
 	me.gotoRC(me, me.rows - 1, 0);
-		me.TD(me, 1, me.columns, makeNexuizCommandButton("Apply immediately", '0 0 0', "snd_restart", COMMANDBUTTON_APPLY));
+		me.TD(me, 1, me.columns, makeNexuizCommandButton("Apply immediately", '0 0 0', "snd_restart; sendcvar cl_hitsound; sendcvar cl_autotaunt", COMMANDBUTTON_APPLY));
 }
 #endif

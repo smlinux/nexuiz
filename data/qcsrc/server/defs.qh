@@ -85,6 +85,8 @@ float maxclients;
 .vector	pos1, pos2;
 .vector	mangle;
 
+.float cvar_cl_hitsound;
+
 .float	pain_finished;			//Added by Supajoe
 .float	pain_frame;			//"
 .float	statdraintime;			// record the one-second intervals between draining health and armour when they're over 100

@@ -2336,14 +2336,14 @@ void EndFrame()
 		{
 			if(self.enemy.typehitsound)
 				play2(self, "misc/typehit.wav");
-			else if(self.enemy.hitsound)
+			else if(self.enemy.hitsound && self.cvar_cl_hitsound)
 				play2(self, "misc/hit.wav");
 		}
 		else
 		{
 			if(self.typehitsound)
 				play2(self, "misc/typehit.wav");
-			else if(self.hitsound)
+			else if(self.hitsound && self.cvar_cl_hitsound)
 				play2(self, "misc/hit.wav");
 		}
 	}

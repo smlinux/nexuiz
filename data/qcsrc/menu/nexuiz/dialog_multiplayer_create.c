@@ -145,6 +145,8 @@ void fillNexuizServerCreateTab(entity me)
 			e.addValue(e, "5 choices", "5");
 			e.addValue(e, "6 choices", "6");
 			e.addValue(e, "7 choices", "7");
+			e.addValue(e, "8 choices", "8");
+			e.addValue(e, "9 choices", "9");
 			e.configureNexuizTextSliderValues(e);
 	me.TR(me);
 		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "sv_vote_simple_majority", "Simple majority wins vcall"));
