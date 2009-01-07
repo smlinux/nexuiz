@@ -932,7 +932,7 @@ void GlobalSound(string sample, float chan, float teamsay)
 	else if(teamsay == 0) // to everyone
 	{
 		// broadcast the sound, but it's directional
-		sound(self, chan, sample, VOL_BASE, ATTN_NORM);
+		sound(self, chan, sample, VOL_BASE, ATTN_MIN);
 	}
 	else if(teamsay == 1) // to the same team
 	{
@@ -957,7 +957,8 @@ void GlobalSound(string sample, float chan, float teamsay)
 		FOR_EACH_REALCLIENT(e)
 		if (tauntrand < e.cvar_cl_autotaunt)
 		{
-			soundto(MSG_ONE, self, chan, sample, VOL_BASE, ATTN_NONE);
+			msg_entity = e;
+			soundto(MSG_ONE, self, chan, sample, VOL_BASE, ATTN_MIN);
 		}
 	}
 }
