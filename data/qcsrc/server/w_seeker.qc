@@ -141,7 +141,6 @@ void Seeker_Missile_Damage (entity inflictor, entity attacker, float damage, flo
 		W_PrepareExplosionByDamage(attacker, Seeker_Missile_Explode);
 }
 
-#define EF_ROCKET				16777216
 void Seeker_Missile_Animate()
 {
 	self.frame = self.frame +1;
@@ -155,7 +154,8 @@ void Seeker_Missile_Animate()
 	{
 		self.think           = Seeker_Missile_Think;
 		self.nextthink       = time + cvar("g_balance_seeker_missile_activate_delay");
-		self.effects         = EF_LOWPRECISION | EF_NOSHADOW | EF_ROCKET;
+		self.effects         = EF_LOWPRECISION | EF_NOSHADOW;
+		self.modelflags      = MF_ROCKET;
 
 		if (cvar("g_balance_seeker_guided_proxy"))
 			self.movetype    = MOVETYPE_BOUNCEMISSILE;
@@ -193,7 +193,7 @@ void Seeker_Fire_Missile(vector f_org)
 	missile.cnt             = time + cvar("g_balance_seeker_missile_lifetime");
 	missile.enemy           = self.enemy;
 	missile.switchweapon           = cvar("g_balance_seeker_missile_speed");
-	missile.effects         = EF_LOWPRECISION | EF_NOSHADOW;// | EF_ROCKET;
+	missile.effects         = EF_LOWPRECISION | EF_NOSHADOW;
 	missile.solid           = SOLID_BBOX;
 	missile.scale           = 2;
 	missile.takedamage          = DAMAGE_YES;
