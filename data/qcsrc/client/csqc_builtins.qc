@@ -272,3 +272,5 @@ string(string in) uri_escape = #510;
 
 string	keynumtostring(float keynum) = #520;
 string	findkeysforcommand(string command) = #521;
+
+string(float ccase, float calpha, float cnum, string s, ...) strconv = #224;
