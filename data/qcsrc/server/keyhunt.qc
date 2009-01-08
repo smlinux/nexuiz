@@ -69,7 +69,7 @@ float kh_key_dropped, kh_key_carried;
 void kh_Controller_SetThink(float t, string msg, kh_Think_t func)  // runs occasionaly
 {
 	kh_Controller_Thinkfunc = func;
-	kh_controller.cnt = t;
+	kh_controller.cnt = ceil(t);
 	if(kh_Controller_Waitmsg != "")
 		strunzone(kh_Controller_Waitmsg);
 	if(msg == "")
