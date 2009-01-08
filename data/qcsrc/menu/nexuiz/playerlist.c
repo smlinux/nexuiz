@@ -55,25 +55,14 @@ void setPlayerListNexuizPlayerList(entity me, string plist)
 		{
 			bufstr_set(buf, i * PLAYERPARM_COUNT + PLAYERPARM_SCORE, argv(0)); // -666
 			bufstr_set(buf, i * PLAYERPARM_COUNT + PLAYERPARM_PING,  argv(1)); // 100
-			if(argv(2) == "0")
-				bufstr_set(buf, i * PLAYERPARM_COUNT + PLAYERPARM_TEAM,  "-");
-			else if(argv(2) == "1")
-				bufstr_set(buf, i * PLAYERPARM_COUNT + PLAYERPARM_TEAM,  "Red");
-			else if(argv(2) == "2")
-				bufstr_set(buf, i * PLAYERPARM_COUNT + PLAYERPARM_TEAM,  "Blue");
-			else if(argv(2) == "3")
-				bufstr_set(buf, i * PLAYERPARM_COUNT + PLAYERPARM_TEAM,  "Yellow");
-			else if(argv(2) == "4")
-				bufstr_set(buf, i * PLAYERPARM_COUNT + PLAYERPARM_TEAM,  "Pink");
-			else
-				bufstr_set(buf, i * PLAYERPARM_COUNT + PLAYERPARM_TEAM,  "unknown");
+			bufstr_set(buf, i * PLAYERPARM_COUNT + PLAYERPARM_TEAM,  argv(2)); // 0 for spec, else 1, 2, 3, 4
 			bufstr_set(buf, i * PLAYERPARM_COUNT + PLAYERPARM_NAME,  argv(3)); // ^4Nex ^2Player
 		}
 		else
 		{
 			bufstr_set(buf, i * PLAYERPARM_COUNT + PLAYERPARM_SCORE, argv(0)); // -666
 			bufstr_set(buf, i * PLAYERPARM_COUNT + PLAYERPARM_PING,  argv(1)); // 100
-			bufstr_set(buf, i * PLAYERPARM_COUNT + PLAYERPARM_TEAM,  "N/A");
+			bufstr_set(buf, i * PLAYERPARM_COUNT + PLAYERPARM_TEAM,  "-1");
 			bufstr_set(buf, i * PLAYERPARM_COUNT + PLAYERPARM_NAME,  argv(2)); // ^4Nex ^2Player
 		}
 	}
@@ -102,11 +91,35 @@ void resizeNotifyNexuizPlayerList(entity me, vector relOrigin, vector relSize, v
 void drawListBoxItemNexuizPlayerList(entity me, float i, vector absSize, float isSelected)
 {
 	string s;
+	float t;
+	vector rgb;
 
+	t = stof(me.getPlayerList(me, i, PLAYERPARM_TEAM));
+	if(t == 1)
+		rgb = colormapPaletteColor(4, 0);
+	else if(t == 2)
+		rgb = colormapPaletteColor(13, 0);
+	else if(t == 3)
+		rgb = colormapPaletteColor(12, 0);
+	else if(t == 4)
+		rgb = colormapPaletteColor(9, 0);
+	else
+		rgb = '1 1 1';
+	
 	s = me.getPlayerList(me, i, PLAYERPARM_NAME);
 
-	s = draw_TextShortenToWidth(s, me.columnNameSize / me.realFontSize_x, 1);
-	draw_Text(me.realUpperMargin2 * eY + (me.columnNameOrigin + 0.00 * (me.columnNameSize - draw_TextWidth(s, 1) * me.realFontSize_x)) * eX, s, me.realFontSize, SKINCOLOR_MAPLIST_AUTHOR, 1, 1);
+	print(s, "\n");
+
+	if(rgb != '1 1 1')
+		s = strdecolorize(s);
+
+	print(s, "\n");
+
+	s = draw_TextShortenToWidth(s, me.columnNameSize / me.realFontSize_x, rgb == '1 1 1');
+
+	print(s, "\n");
+
+	draw_Text(me.realUpperMargin2 * eY + (me.columnNameOrigin + 0.00 * (me.columnNameSize - draw_TextWidth(s, 1) * me.realFontSize_x)) * eX, s, me.realFontSize, rgb, 1, rgb == '1 1 1');
 }
 
 #endif

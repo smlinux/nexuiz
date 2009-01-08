@@ -249,7 +249,7 @@ void drawNexuizServerList(entity me)
 		me.refreshServerList(me, 0);
 	}
 
-	owned = (me.selectedServer == me.ipAddressBox.text);
+	owned = ((me.selectedServer == me.ipAddressBox.text) && (me.ipAddressBox.text != ""));
 
 	me.nItems = gethostcachevalue(SLIST_HOSTCACHEVIEWCOUNT);
 
