@@ -41,7 +41,7 @@ float SLIST_FIELD_MAXPLAYERS;
 float SLIST_FIELD_NUMBOTS;
 float SLIST_FIELD_MOD;
 float SLIST_FIELD_PING;
-void Join_Click(entity me);
+void Join_Click(entity btn, entity me);
 #endif
 
 #ifdef IMPLEMENTATION
@@ -176,9 +176,9 @@ void fillNexuizServerInfoDialog(entity me)
 			e.onClickEntity = me;
 }
 
-void Join_Click(entity me, entity dlg)
+void Join_Click(entity btn, entity me)
 {
-	localcmd("connect ", dlg.currentServerCName, "\n");
+	localcmd("connect ", me.currentServerCName, "\n");
 }
 
 #endif
