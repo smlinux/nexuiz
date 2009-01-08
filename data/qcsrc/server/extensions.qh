@@ -1274,15 +1274,15 @@ void(string s, ...) print = #339; // same number as in EXT_CSQC
 //DP_SV_QCSTATUS
 //idea: div0
 //darkplaces implementation: div0
-//Fields whose contents are used instead of frags, or set as "qcstatus" field
-//in the getstatus/getinfo response (limited to 255 characters).
-//Note: qstat currently can't cope with clientstatus being any other than a
-//ftos'ed integer value.
-//Also, when you put the frags in clientstatus, you may want to set the cvar
-//sv_status_use_qcstatus to 1 so this value, converted to an integer, is
-//displayed as frags in "status" replies instead of the "frags" float field.
+//1. A global variable
 string worldstatus;
+//Its content is set as "qcstatus" field in the rules.
+//It may be at most 255 characters, and must not contain newlines or backslashes.
+//2. A per-client field
 .string clientstatus;
+//It is sent instead of the "frags" in status responses.
+//It should always be set in a way so that stof(player.clientstatus) is a meaningful score value. Other info may be appended. If used this way, the cvar sv_status_use_qcstatus may be set to 1, and then this value will replace the frags in "status".
+//Currently, qstat does not support this and will not show player info if used and set to anything other than ftos(some integer).
 
 //DP_SV_ROTATINGBMODEL
 //idea: id Software
