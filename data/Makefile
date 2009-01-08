@@ -50,7 +50,7 @@ $(PK3NAME): qc
 				;; \
 		esac; \
 		TDIR=`mktemp -d -t nexuizpk3.XXXXXX`; \
-		cp -v progs.dat csprogs.dat menu.dat $$TDIR/;
+		cp -v progs.dat csprogs.dat menu.dat $$TDIR/; \
 		svn export --force . $$TDIR; \
 		cd $$TDIR; \
 		$(RM) -r qcsrc common-spog.pk3; \
