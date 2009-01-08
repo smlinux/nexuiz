@@ -587,16 +587,22 @@ void InitSolidBSPTrigger()
 		SetMovedir ();
 	self.solid = SOLID_BSP;
 	SetBrushEntityModel();
-	self.movetype = MOVETYPE_PUSH;
+	self.movetype = MOVETYPE_NONE; // why was this PUSH? -div0
 //	self.modelindex = 0;
 	self.model = "";
 };
 
-void InitMovingBrushTrigger()
+float InitMovingBrushTrigger()
 {
 // trigger angles are used for one-way touches.  An angle of 0 is assumed
 // to mean no restrictions, so use a yaw of 360 instead.
 	self.solid = SOLID_BSP;
 	SetBrushEntityModel();
 	self.movetype = MOVETYPE_PUSH;
+	if(self.modelindex == 0)
+	{
+		objerror("InitMovingBrushTrigger: no brushes found!");
+		return 0;
+	}
+	return 1;
 };

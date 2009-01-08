@@ -119,7 +119,7 @@ void spawnfunc_dynlight()
 	if (self.target)
 //	if (!(self.spawnflags & DFOLLOW))
 	{
-		self.movetype = MOVETYPE_PUSH;
+		self.movetype = MOVETYPE_NOCLIP;
 		if (!self.speed)
 			self.speed = 100;
 		InitializeEntity(self, dynlight_find_path, INITPRIO_FINDTARGET);

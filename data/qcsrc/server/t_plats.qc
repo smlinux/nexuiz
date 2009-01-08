@@ -198,7 +198,8 @@ void spawnfunc_func_plat()
 	self.angles = '0 0 0';
 
 	self.classname = "plat";
-	InitMovingBrushTrigger();
+	if not(InitMovingBrushTrigger())
+		return;
 	self.effects |= EF_LOWPRECISION;
 	setsize (self, self.mins , self.maxs);
 
@@ -282,7 +283,8 @@ void spawnfunc_func_train()
 	if (!self.speed)
 		self.speed = 100;
 
-	InitMovingBrushTrigger();
+	if not(InitMovingBrushTrigger())
+		return;
 	self.effects |= EF_LOWPRECISION;
 
 	// wait for targets to spawn
@@ -346,7 +348,8 @@ void spawnfunc_func_rotating()
 
     self.dmgtime2 = time;
 
-	InitMovingBrushTrigger();
+	if not(InitMovingBrushTrigger())
+		return;
 	// no EF_LOWPRECISION here, as rounding angles is bad
 
     self.blocked = rotating_blocked;
@@ -418,7 +421,8 @@ void spawnfunc_func_bobbing()
 	else // Z
 		self.movedir = '0 0 1' * self.height;
 
-	InitMovingBrushTrigger();
+	if not(InitMovingBrushTrigger())
+		return;
 
 	// wait for targets to spawn
 	controller = spawn();
@@ -550,7 +554,8 @@ void spawnfunc_func_button()
 {
 	SetMovedir ();
 
-	InitMovingBrushTrigger();
+	if not(InitMovingBrushTrigger())
+		return;
 	self.effects |= EF_LOWPRECISION;
 
 	self.blocked = button_blocked;
@@ -1150,7 +1155,8 @@ void spawnfunc_func_door()
 	SetMovedir ();
 
 	self.max_health = self.health;
-	InitMovingBrushTrigger();
+	if not(InitMovingBrushTrigger())
+		return;
 	self.effects |= EF_LOWPRECISION;
 	self.classname = "door";
 
@@ -1262,7 +1268,8 @@ void spawnfunc_func_door_rotating()
 	self.angles = '0 0 0';
 
 	self.max_health = self.health;
-	InitMovingBrushTrigger();
+	if not(InitMovingBrushTrigger())
+		return;
 	//self.effects |= EF_LOWPRECISION;
 	self.classname = "door_rotating";
 
@@ -1517,7 +1524,8 @@ void spawnfunc_func_door_secret()
 	self.mangle = self.angles;
 	self.angles = '0 0 0';
 	self.classname = "door";
-	InitMovingBrushTrigger();
+	if not(InitMovingBrushTrigger())
+		return;
 	self.effects |= EF_LOWPRECISION;
 
 	self.touch = secret_touch;
