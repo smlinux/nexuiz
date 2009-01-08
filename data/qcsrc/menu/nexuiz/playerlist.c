@@ -108,16 +108,16 @@ void drawListBoxItemNexuizPlayerList(entity me, float i, vector absSize, float i
 	
 	s = me.getPlayerList(me, i, PLAYERPARM_NAME);
 
-	print(s, "\n");
+	dprint(s, "\n");
 
 	if(rgb != '1 1 1')
 		s = strdecolorize(s);
 
-	print(s, "\n");
+	dprint(s, "\n");
 
 	s = draw_TextShortenToWidth(s, me.columnNameSize / me.realFontSize_x, rgb == '1 1 1');
 
-	print(s, "\n");
+	dprint(s, "\n");
 
 	draw_Text(me.realUpperMargin2 * eY + (me.columnNameOrigin + 0.00 * (me.columnNameSize - draw_TextWidth(s, 1) * me.realFontSize_x)) * eX, s, me.realFontSize, rgb, 1, rgb == '1 1 1');
 }
