@@ -762,7 +762,7 @@ void UpdateSelectedPlayer()
 float GetVoiceMessageTeamsayType(string type)
 {
 	if(type == "taunt")
-		return 0;
+		return 5;
 	if(type == "teamshoot")
 		return 2;
 	return 1;
@@ -928,7 +928,7 @@ void GlobalSound(string sample, float chan, float teamsay)
 	else if(teamsay == 0) // to everyone
 	{
 		// broadcast the sound, but it's directional
-		sound(self, chan, sample, VOL_BASE, ATTN_MIN);
+		sound(self, chan, sample, VOL_BASE, ATTN_NORM);
 	}
 	else if(teamsay == 1) // to the same team
 	{
@@ -957,6 +957,11 @@ void GlobalSound(string sample, float chan, float teamsay)
 			msg_entity = e;
 			soundto(MSG_ONE, self, chan, sample, VOL_BASE, ATTN_MIN);
 		}
+	}
+	else if(teamsay == 5) // manual taunt
+	{
+		// broadcast the sound, but it's directional
+		sound(self, chan, sample, VOL_BASE, ATTN_MIN);
 	}
 }
 
