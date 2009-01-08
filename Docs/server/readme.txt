@@ -1,15 +1,20 @@
-In this subdirectory you will find scripts and a config file that can
-be used to start a dedicated Nexuiz server on linux, mac or windows
-systems and also some tools that help with maintaining your server.
+This subdirectory contains scripts and a config file that can be used
+to start a dedicated Nexuiz (default) or Nexuiz Havoc server (differs
+in movement and weapon settings) on linux, mac or windows systems and
+also some tools that help with maintaining your server.
 
 You will need to copy the right script into your Nexuiz main
 directory, where the normal binaries are.  There are two scrips for
 each sytems, one to start a normal Nexuiz server and one to start a
-Nexuiz 'Havoc' server, that differs in movement and weapon settings.
-You then need to copy and ADJUST the config file which is called
-server.cfg.  You can copy it either into the Nexuiz/data directory
-where the big data*.pk3 file is or when running on linux or mac you
-can as well copy it into a special directory called ~/.nexuiz/data
+Nexuiz 'Havoc' server.  You then need to copy and ADJUST the config
+file which is called server.cfg.  You can copy it either into the
+Nexuiz/data directory where the big data*.pk3 file is or when running
+on linux or mac you can as well copy it into a special directory
+called ~/.nexuiz/data
+
+After you have setup everything and have adjusted the config file you
+can start the server by running the server script.  The options in the
+config file are only the most interesting and important ones.
 
 Please make sure your server is always uptodate!  Just signup the
 Nexuiz release mailinglist to get informed about new releases.
@@ -26,11 +31,8 @@ If you plan to install custom maps on your server you should read the
 file Docs/mapdownload.txt to learn how to setup automatic map
 download.
 
-After you have setup everything and have adjusted the config file you
-can start the server by running the server script.  The options in the
-config file are only the most interesting and important ones.  You can
-find more information about setting up a dedicated server in the
-Nexuiz Wiki:
+You can find more information about setting up a dedicated server in
+the Nexuiz Wiki:
 http://alientrap.org/wiki/pmwiki.php?n=Main.DedicatedServer
 
 Some more info about the available variables and commands:
