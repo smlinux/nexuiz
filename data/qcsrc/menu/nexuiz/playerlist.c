@@ -20,8 +20,9 @@ entity makeNexuizPlayerList();
 
 #define PLAYERPARM_SCORE 0
 #define PLAYERPARM_PING 1
-#define PLAYERPARM_NAME 2
-#define PLAYERPARM_COUNT 3
+#define PLAYERPARM_TEAM 2
+#define PLAYERPARM_NAME 3
+#define PLAYERPARM_COUNT 4
 
 entity makeNexuizPlayerList()
 {
@@ -35,7 +36,7 @@ void setPlayerListNexuizPlayerList(entity me, string plist)
 {
 	dprint(plist,"------------\n");
 
-	float buf,i;
+	float buf,i,n;
 	string s;
 
 	buf = buf_create();
@@ -48,10 +49,33 @@ void setPlayerListNexuizPlayerList(entity me, string plist)
 	for(i = 0; i < me.nItems; ++i)
 	{
 		s = bufstr_get(buf, i * PLAYERPARM_COUNT + PLAYERPARM_NAME);
-		tokenize_sane(s);
-		bufstr_set(buf, i * PLAYERPARM_COUNT + PLAYERPARM_SCORE, argv(0)); // -666
-		bufstr_set(buf, i * PLAYERPARM_COUNT + PLAYERPARM_PING,  argv(1)); // 100
-		bufstr_set(buf, i * PLAYERPARM_COUNT + PLAYERPARM_NAME,  argv(2)); // ^4Nex ^2Player
+		n = tokenize_sane(s);
+
+		if(n == 4)
+		{
+			bufstr_set(buf, i * PLAYERPARM_COUNT + PLAYERPARM_SCORE, argv(0)); // -666
+			bufstr_set(buf, i * PLAYERPARM_COUNT + PLAYERPARM_PING,  argv(1)); // 100
+			if(argv(2) == "0")
+				bufstr_set(buf, i * PLAYERPARM_COUNT + PLAYERPARM_TEAM,  "-");
+			else if(argv(2) == "1")
+				bufstr_set(buf, i * PLAYERPARM_COUNT + PLAYERPARM_TEAM,  "Red");
+			else if(argv(2) == "2")
+				bufstr_set(buf, i * PLAYERPARM_COUNT + PLAYERPARM_TEAM,  "Blue");
+			else if(argv(2) == "3")
+				bufstr_set(buf, i * PLAYERPARM_COUNT + PLAYERPARM_TEAM,  "Yellow");
+			else if(argv(2) == "4")
+				bufstr_set(buf, i * PLAYERPARM_COUNT + PLAYERPARM_TEAM,  "Pink");
+			else
+				bufstr_set(buf, i * PLAYERPARM_COUNT + PLAYERPARM_TEAM,  "unknown");
+			bufstr_set(buf, i * PLAYERPARM_COUNT + PLAYERPARM_NAME,  argv(3)); // ^4Nex ^2Player
+		}
+		else
+		{
+			bufstr_set(buf, i * PLAYERPARM_COUNT + PLAYERPARM_SCORE, argv(0)); // -666
+			bufstr_set(buf, i * PLAYERPARM_COUNT + PLAYERPARM_PING,  argv(1)); // 100
+			bufstr_set(buf, i * PLAYERPARM_COUNT + PLAYERPARM_TEAM,  "N/A");
+			bufstr_set(buf, i * PLAYERPARM_COUNT + PLAYERPARM_NAME,  argv(2)); // ^4Nex ^2Player
+		}
 	}
 	me.playerList = buf;
 }
