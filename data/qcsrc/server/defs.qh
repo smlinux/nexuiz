@@ -477,6 +477,7 @@ void VoiceMessage(string type);
 
 // autotaunt system
 .float cvar_cl_autotaunt;
+.float cvar_cl_taunt_directional;
 
 .float version_mismatch;
 

@@ -955,13 +955,22 @@ void GlobalSound(string sample, float chan, float teamsay)
 		if (tauntrand < e.cvar_cl_autotaunt)
 		{
 			msg_entity = e;
-			soundto(MSG_ONE, self, chan, sample, VOL_BASE, ATTN_MIN);
+			if (e.cvar_cl_taunt_directional)
+				soundto(MSG_ONE, self, chan, sample, VOL_BASE, ATTN_MIN);
+			else
+				soundto(MSG_ONE, self, chan, sample, VOL_BASE, ATTN_NONE);
 		}
 	}
 	else if(teamsay == 5) // manual taunt
 	{
-		// broadcast the sound, but it's directional
-		sound(self, chan, sample, VOL_BASE, ATTN_MIN);
+		FOR_EACH_REALCLIENT(e)
+		{
+			msg_entity = e;
+			if (e.cvar_cl_taunt_directional)
+				soundto(MSG_ONE, self, chan, sample, VOL_BASE, ATTN_MIN);
+			else
+				soundto(MSG_ONE, self, chan, sample, VOL_BASE, ATTN_NONE);
+		}
 	}
 }
 
