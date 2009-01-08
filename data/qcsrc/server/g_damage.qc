@@ -11,6 +11,7 @@ float damage_headshotbonus; // bonus multiplier for head shots, set to 0 after u
 .float teamkill_soundtime;
 .entity teamkill_soundsource;
 .entity pusher;
+.float taunt_soundtime;
 
 
 float IsDifferentTeam(entity a, entity b)
@@ -296,10 +297,7 @@ void Obituary (entity attacker, entity inflictor, entity targ, float deathtype)
 				} else {
 					centerprint(attacker, strcat("^4You fragged ^7", s, "\n\n\n"));
 					centerprint(targ, strcat("^1You were fragged by ^7", a, "\n\n\n"));
-					entity oldself = self; // Hackish way to fix taunts, otherwise they play the other way around
-					self = attacker;
-					PlayerSound(playersound_taunt, CHAN_VOICE, 4);
-					self = oldself;
+					attacker.taunt_soundtime = time + 1;
 				}
 
 				if(sv_gentle) {

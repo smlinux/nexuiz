@@ -2299,10 +2299,17 @@ void PlayerPreThink (void)
 		oldself = self; self = self.teamkill_soundsource;
 		oldpusher = self.pusher; self.pusher = oldself;
 
-		VoiceMessage("teamshoot_auto");
+		PlayerSound(playersound_teamshoot, CHAN_VOICE, 3);
 
 		self.pusher = oldpusher;
 		self = oldself;
+	}
+
+	if(self.taunt_soundtime)
+	if(time > self.taunt_soundtime)
+	{
+		self.taunt_soundtime = 0;
+		PlayerSound(playersound_taunt, CHAN_VOICE, 4);
 	}
 
 	target_voicescript_next(self);

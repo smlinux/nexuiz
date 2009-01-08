@@ -765,8 +765,6 @@ float GetVoiceMessageTeamsayType(string type)
 		return 0;
 	if(type == "teamshoot")
 		return 2;
-	if(type == "teamshoot_auto")
-		return 3;
 	return 1;
 }
 
@@ -782,8 +780,6 @@ float GetPlayerSoundSampleField_fixed;
 #define _VOICEMSG(m) case #m: return playersound_##m;
 		ALLVOICEMSGS
 #undef _VOICEMSG
-		// exception:
-		case "teamshoot_auto": return playersound_teamshoot;
 	}
 	GetPlayerSoundSampleField_notFound = 1;
 	return playersound_taunt;
