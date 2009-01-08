@@ -850,7 +850,7 @@ size 32 32
 alpha 128 128 128
 // cloud of particles which expand rapidly and then slow to form a ball
 effect item_respawn
-count 64
+count 256
 type spark
 tex 41 41
 color 0x63F2EA 0x63f2EA
