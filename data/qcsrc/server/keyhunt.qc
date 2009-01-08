@@ -820,6 +820,13 @@ string kh_CheckEnoughPlayers()  // checks enough player are present, runs after 
 void kh_WaitForPlayers()  // delay start of the round until enough players are present
 {
 	string teams_missing;
+
+	if(time < game_starttime)
+	{
+		kh_Controller_SetThink(game_starttime - time + 0.1, "", kh_WaitForPlayers);
+		return;
+	}
+
 	teams_missing = kh_CheckEnoughPlayers();
 	if(teams_missing == "")
 		kh_Controller_SetThink(cvar("g_balance_keyhunt_delay_round"), "Round starts in ", kh_StartRound);
@@ -832,6 +839,12 @@ void kh_StartRound()  // runs at the start of each round
 	string teams_missing;
 	float i, players, teem;
 	entity player;
+
+	if(time < game_starttime)
+	{
+		kh_Controller_SetThink(game_starttime - time + 0.1, "", kh_WaitForPlayers);
+		return;
+	}
 
 	teams_missing = kh_CheckEnoughPlayers();
 	if(teams_missing != "")
