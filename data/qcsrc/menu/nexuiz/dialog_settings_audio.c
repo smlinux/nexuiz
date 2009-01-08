@@ -120,6 +120,11 @@ void fillNexuizAudioSettingsTab(entity me)
 	me.TR(me);
 		me.TDempty(me, 0.2);
 		me.TD(me, 1, 2.8, e = makeNexuizCheckBox(0, "snd_swapstereo", "Swap Stereo"));
+		setDependent(e, "snd_channels", 1.5, 0.5);
+	me.TR(me);
+		me.TDempty(me, 0.2);
+		me.TD(me, 1, 2.8, e = makeNexuizCheckBox(0, "snd_spatialization_control", "Headphone friendly mode"));
+		setDependent(e, "snd_channels", 1.5, 0.5);
 	me.TR(me);
 	me.TR(me);
 		sl = makeNexuizSlider(0.15, 1, 0.05, "cl_autotaunt");
