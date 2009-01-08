@@ -161,7 +161,7 @@ void fillNexuizServerCreateTab(entity me)
 			e0.allowCut = 1;
 
 	me.gotoRC(me, me.rows - 1, 0);
-		me.TD(me, 1, me.columns, e = makeNexuizButton("Start!", '0 0 0'));
+		me.TD(me, 1, me.columns, e = makeNexuizButton("Start Multiplayer!", '0 0 0'));
 			e.onClick = MapList_LoadMap;
 			e.onClickEntity = me.mapListBox;
 			me.mapListBox.startButton = e;
