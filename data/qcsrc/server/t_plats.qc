@@ -246,7 +246,7 @@ void train_wait()
 	self.nextthink = self.ltime + self.wait;
 
 	if(self.noise != "")
-		sound(self, CHAN_TRIGGER, STR_MISC_NULL_WAV, VOL_BASE, ATTN_NORM);
+		sound(self, CHAN_TRIGGER, STR_MISC_NULL_WAV, VOL_BASE, ATTN_IDLE);
 };
 
 void train_next()
@@ -275,7 +275,7 @@ void train_next()
 	}
 
 	if(self.noise != "")
-		sound(self, CHAN_TRIGGER, self.noise, VOL_BASE, ATTN_NORM);
+		sound(self, CHAN_TRIGGER, self.noise, VOL_BASE, ATTN_IDLE);
 };
 
 void func_train_find()
@@ -404,7 +404,7 @@ void spawnfunc_func_bobbing()
 	if (self.noise != "")
 	{
 		precache_sound(self.noise);
-		soundto(MSG_INIT, self, CHAN_TRIGGER, self.noise, VOL_BASE, ATTN_NORM);
+		soundto(MSG_INIT, self, CHAN_TRIGGER, self.noise, VOL_BASE, ATTN_IDLE);
 	}
 	if (!self.speed)
 		self.speed = 4;
@@ -1600,7 +1600,7 @@ void spawnfunc_func_fourier()
 	if (self.noise != "")
 	{
 		precache_sound(self.noise);
-		soundto(MSG_INIT, self, CHAN_TRIGGER, self.noise, VOL_BASE, ATTN_NORM);
+		soundto(MSG_INIT, self, CHAN_TRIGGER, self.noise, VOL_BASE, ATTN_IDLE);
 	}
 
 	if (!self.speed)
@@ -1734,7 +1734,7 @@ void spawnfunc_func_vectormamamam()
 	if (self.noise != "")
 	{
 		precache_sound(self.noise);
-		soundto(MSG_INIT, self, CHAN_TRIGGER, self.noise, VOL_BASE, ATTN_NORM);
+		soundto(MSG_INIT, self, CHAN_TRIGGER, self.noise, VOL_BASE, ATTN_IDLE);
 	}
 
 	if(!self.targetfactor)
