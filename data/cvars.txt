@@ -441,7 +441,6 @@
 "g_balance_shotgun_secondary_refire" "TODO: describe me"
 "g_balance_shotgun_secondary_spread" "TODO: describe me"
 "g_balance_teams" "TODO: describe me"
-"g_balance_teams_complain" "TODO: describe me"
 "g_balance_teams_force" "TODO: describe me"
 "g_balance_teams_prevent_imbalance" "TODO: describe me"
 "g_balance_uzi_first_ammo" "TODO: describe me"

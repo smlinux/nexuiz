@@ -165,7 +165,7 @@ void InitGameplayMode()
 	float fraglimit_override, timelimit_override;
 
 	VoteReset();
-	
+
 	teams_matter = 0;
 	cvar_set("teamplay", "0");
 
@@ -179,7 +179,7 @@ void InitGameplayMode()
 	world.maxs = mi_max;
 
 	MapInfo_LoadMapSettings(mapname);
-	
+
 	if not(cvar_value_issafe(world.fog))
 	{
 		print("The current map contains a potentially harmful fog setting, ignored\n");
@@ -482,7 +482,7 @@ void PrintWelcomeMessage(entity pl)
 	if (cache_mutatormsg != "") {
 		s = strcat(s, "\n\n^8special gameplay tips: ^7", cache_mutatormsg);
 	}
-	
+
 	if(cache_lastmotd != cvar_string("sv_motd"))
 	{
 		if(cache_lastmotd)
@@ -1203,42 +1203,12 @@ void ShufflePlayerOutOfTeam (float source_team)
 	centerprint(selected, strcat("You have been moved into a different team to improve team balance\nYou are now on: ", ColoredTeamName(selected.team)));
 }
 
-float lastRebalanceInfo;
 void CauseRebalance(float source_team, float howmany_toomany)
 {
-	float steam;
-	entity head;
-
 	if(IsTeamBalanceForced() == 1)
 	{
 		bprint("Rebalancing Teams\n");
 		ShufflePlayerOutOfTeam(source_team);
-	}
-	else
-	{
-		if(cvar("g_balance_teams_complain"))
-		if(howmany_toomany < cvar("g_balance_teams_complain"))
-			return;
-		if(time < lastRebalanceInfo + 90)
-			return;
-		lastRebalanceInfo = time;
-		if(source_team == 1)
-			steam = COLOR_TEAM1;
-		else if(source_team == 2)
-			steam = COLOR_TEAM2;
-		else if(source_team == 3)
-			steam = COLOR_TEAM3;
-		else if(source_team == 4)
-			steam = COLOR_TEAM4;
-		print("Team ", ftos(source_team), " too large, complaining.\n");
-		FOR_EACH_REALPLAYER(head)
-		{
-			if(head.team == steam)
-			{
-				sprint(head, "\{1}\{13}^3SERVER NOTICE:^7 One of you please change teams!\n");
-				centerprint_atprio(head, CENTERPRIO_REBALANCE, "^3SERVER NOTICE:\n\n^7Someone of you please change teams!");
-			}
-		}
 	}
 }
 
@@ -1313,8 +1283,6 @@ void AuditTeams()
 	// which will happen sooner (keep doing rapid audits until things are in order)
 	audit_teams_time = time + 0.7 + random()*0.3;
 }
-
-
 
 // code from here on is just to support maps that don't have team entities
 void tdm_spawnteam (string teamname, float teamcolor)
