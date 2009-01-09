@@ -1642,73 +1642,84 @@ void spawnfunc_func_fourier()
 .entity wp00, wp01, wp02, wp03;
 
 .float targetfactor, target2factor, target3factor, target4factor;
+.vector targetnormal, target2normal, target3normal, target4normal;
+
+vector func_vectormamamam_origin(entity o, float t)
+{
+	vector v, p;
+	float f;
+	entity e;
+
+	f = o.spawnflags;
+	v = '0 0 0';
+
+	e = o.wp00;
+	if(e)
+	{
+		p = e.origin + t * e.velocity;
+		if(f & 1)
+			v = v + (p * o.targetnormal) * o.targetnormal * o.targetfactor;
+		else
+			v = v + (p - (p * o.targetnormal) * o.targetnormal) * o.targetfactor;
+	}
+
+	e = o.wp01;
+	if(e)
+	{
+		p = e.origin + t * e.velocity;
+		if(f & 2)
+			v = v + (p * o.target2normal) * o.target2normal * o.target2factor;
+		else
+			v = v + (p - (p * o.target2normal) * o.target2normal) * o.target2factor;
+	}
+
+	e = o.wp02;
+	if(e)
+	{
+		p = e.origin + t * e.velocity;
+		if(f & 4)
+			v = v + (p * o.target3normal) * o.target3normal * o.target3factor;
+		else
+			v = v + (p - (p * o.target3normal) * o.target3normal) * o.target3factor;
+	}
+
+	e = o.wp03;
+	if(e)
+	{
+		p = e.origin + t * e.velocity;
+		if(f & 8)
+			v = v + (p * o.target4normal) * o.target4normal * o.target4factor;
+		else
+			v = v + (p - (p * o.target4normal) * o.target4normal) * o.target4factor;
+	}
+
+	return v;
+}
 
 void func_vectormamamam_controller_think()
 {
-	vector v;
-	entity e;
-
 	self.nextthink = time + 0.1;
-
-	v = self.owner.destvec;
-	
-	e = self.owner.wp00;
-	if(e)
-		v = v + e.origin + 0.1 * e.velocity;
-
-	e = self.owner.wp01;
-	if(e)
-		v = v + e.origin + 0.1 * e.velocity;
-
-	e = self.owner.wp02;
-	if(e)
-		v = v + e.origin + 0.1 * e.velocity;
-
-	e = self.owner.wp03;
-	if(e)
-		v = v + e.origin + 0.1 * e.velocity;
-
-	self.owner.velocity = (v - self.owner.origin) * 10;
+	self.owner.velocity = (self.owner.destvec + func_vectormamamam_origin(self.owner, 0.1) - self.owner.origin) * 10;
 }
 
 void func_vectormamamam_findtarget()
 {
-	vector s0;
-
-	s0 = '0 0 0';
-
 	if(self.target != "")
-	{
 		self.wp00 = find(world, targetname, self.target);
-		if(self.wp00)
-			s0 = s0 + self.wp00.origin * self.targetfactor;
-	}
 
 	if(self.target2 != "")
-	{
 		self.wp01 = find(world, targetname, self.target2);
-		if(self.wp01)
-			s0 = s0 + self.wp01.origin * self.target2factor;
-	}
 
 	if(self.target3 != "")
-	{
 		self.wp02 = find(world, targetname, self.target3);
-		if(self.wp02)
-			s0 = s0 + self.wp02.origin * self.target3factor;
-	}
 
 	if(self.target4 != "")
-	{
 		self.wp03 = find(world, targetname, self.target4);
-		if(self.wp03)
-			s0 = s0 + self.wp03.origin * self.target4factor;
-	}
 
 	if(!self.wp00 && !self.wp01 && !self.wp02 && !self.wp03)
 		objerror("No reference entity found, so there is nothing to move. Aborting.");
 
-	self.destvec = self.origin - s0;
+	self.destvec = self.origin - func_vectormamamam_origin(self.owner, 0);
 
 	local entity controller;
 	controller = spawn();
@@ -1737,6 +1748,18 @@ void spawnfunc_func_vectormamamam()
 
 	if(!self.target4factor)
 		self.target4factor = 1;
+
+	if(vlen(self.targetnormal))
+		self.targetnormal = normalize(self.targetnormal);
+
+	if(vlen(self.target2normal))
+		self.target2normal = normalize(self.target2normal);
+
+	if(vlen(self.target3normal))
+		self.target3normal = normalize(self.target3normal);
+
+	if(vlen(self.target4normal))
+		self.target4normal = normalize(self.target4normal);
 
 	self.blocked = generic_plat_blocked;
 	if(self.dmg & (!self.message))

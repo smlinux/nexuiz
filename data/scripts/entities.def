@@ -1333,20 +1333,29 @@ message2: death message when someone gets pushed into this (default: "was thrown
 netname: list of <frequencymultiplier> <phase> <x> <y> <z> quadruples, separated by spaces; note that phase 0 represents a sine wave, and phase 0.25 a cosine wave (by default, it uses 1 0 0 0 1, to match func_bobbing's defaults
 */
 
-/*QUAKED func_vectormamamam (0 .5 .8) ?
+/*QUAKED func_vectormamamam (0 .5 .8) ? PROJECT_ON_TARGETNORMAL TARGET2NORMAL_IS_DIRECTION TARGET3NORMAL_IS_DIRECTION TARGET4NORMAL_IS_DIRECTION
 Solid entity that moves according to the movement of multiple given entities (max 4)
 -------- KEYS --------
 target: first reference entity
 targetfactor: factor by which to take the first reference entity (default 1).
+targetnormal: if set, the first reference entity's location is first projected onto a plane with that normal
 target2: second reference entity
 target2factor: factor by which to take the second reference entity (default 1).
+target2normal: if set, the second reference entity's location is first projected onto a plane with that normal
 target3: third reference entity (optional)
 target3factor: factor by which to take the third reference entity (default 1).
+target3normal: if set, the third reference entity's location is first projected onto a plane with that normal
 target4: fourth reference entity (optional)
 target4factor: factor by which to take the fourth reference entity (default 1).
+target4normal: if set, the fourth reference entity's location is first projected onto a plane with that normal
 noise: path/name of .wav or .ogg file to play. Use looping sounds only (e.g. sound/world/drone6.wav - See Notes).
 dmg: damage a player who gets crushed by it receives
 dmgtime: interval to apply dmg to a player who is s in the way
 message: death message when a player gets crushed
 message2: death message when someone gets pushed into this (default: "was thrown into a world of hurt by"). The # character is replaced by the attacker name if present (and it instead does not get appended to the end)
+-------- SPAWNFLAGS --------
+PROJECT_ON_TARGETNORMAL: target's origin is projected onto the given direction vector, not on the plane perpendicular to it
+PROJECT_ON_TARGET2NORMAL: target2's origin is projected onto the given direction vector, not on the plane perpendicular to it
+PROJECT_ON_TARGET3NORMAL: target3's origin is projected onto the given direction vector, not on the plane perpendicular to it
+PROJECT_ON_TARGET4NORMAL: target4's origin is projected onto the given direction vector, not on the plane perpendicular to it
 */
