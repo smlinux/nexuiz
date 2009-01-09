@@ -631,7 +631,7 @@ our @tasks = (); # list of [time, sub]
 our %channels = ();
 our %store = (
 	irc_nick => "",
-	playernick_0 => "(console)",
+	playernick_byid_0 => "(console)",
 );
 our %config = (
 	irc_server => undef,
@@ -1228,9 +1228,10 @@ sub cond($)
 	[ dp => q{:join:(\d+):(\d+):([^:]*):(.*)} => sub {
 		my ($id, $slot, $ip, $nick) = @_;
 		$nick = color_dp2irc $nick;
-		$store{"playernick_$id"} = $nick;
-		$store{"playerslot_$id"} = $slot;
-		$store{"playerip_$id"} = $ip;
+		$store{"playernick_byid_$id"} = $nick;
+		$store{"playerip_byid_$id"} = $ip;
+		$store{"playerslot_byid_$id"} = $slot;
+		$store{"playerid_byslot_$slot"} = $id;
 		return 0;
 	} ],
 
@@ -1240,7 +1241,7 @@ sub cond($)
 		$nick = color_dp2irc $nick;
 		my $oldnick = $store{"playernick_$id"};
 		out irc => 0, "PRIVMSG $config{irc_channel} :* $oldnick\017 is now known as $nick";
-		$store{"playernick_$id"} = $nick;
+		$store{"playernick_byid_$id"} = $nick;
 		return 0;
 	} ],
 
@@ -1248,7 +1249,7 @@ sub cond($)
 	[ dp => q{:vote:vcall:(\d+):(.*)} => sub {
 		my ($id, $command) = @_;
 		$command = color_dp2irc $command;
-		my $oldnick = $id ? $store{"playernick_$id"} : "(console)";
+		my $oldnick = $id ? $store{"playernick_byid_$id"} : "(console)";
 		out irc => 0, "PRIVMSG $config{irc_channel} :* $oldnick\017 calls a vote for \"$command\017\"";
 		return 0;
 	} ],
@@ -1256,7 +1257,7 @@ sub cond($)
 	# chat: Nexuiz server -> IRC channel, vote stop
 	[ dp => q{:vote:vstop:(\d+)} => sub {
 		my ($id) = @_;
-		my $oldnick = $id ? $store{"playernick_$id"} : "(console)";
+		my $oldnick = $id ? $store{"playernick_byid_$id"} : "(console)";
 		out irc => 0, "PRIVMSG $config{irc_channel} :* $oldnick\017 stopped the vote";
 		return 0;
 	} ],
@@ -1264,7 +1265,7 @@ sub cond($)
 	# chat: Nexuiz server -> IRC channel, master login
 	[ dp => q{:vote:vlogin:(\d+)} => sub {
 		my ($id) = @_;
-		my $oldnick = $id ? $store{"playernick_$id"} : "(console)";
+		my $oldnick = $id ? $store{"playernick_byid_$id"} : "(console)";
 		out irc => 0, "PRIVMSG $config{irc_channel} :* $oldnick\017 logged in as master";
 		return 0;
 	} ],
@@ -1273,7 +1274,7 @@ sub cond($)
 	[ dp => q{:vote:vdo:(\d+):(.*)} => sub {
 		my ($id, $command) = @_;
 		$command = color_dp2irc $command;
-		my $oldnick = $id ? $store{"playernick_$id"} : "(console)";
+		my $oldnick = $id ? $store{"playernick_byid_$id"} : "(console)";
 		out irc => 0, "PRIVMSG $config{irc_channel} :* $oldnick\017 used his master status to do \"$command\017\"";
 		return 0;
 	} ],

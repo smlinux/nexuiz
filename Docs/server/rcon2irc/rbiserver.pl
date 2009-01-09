@@ -82,14 +82,14 @@ sub markmap($$$$;$)
 } ],
 [ dp => q{:recordset:(\d+):.*} => sub {
 	my ($id) = @_;
-	my $ip = $store{"playerip_$id"};
-	my $slot = $store{"playerslot_$id"};
+	my $ip = $store{"playerip_byid_$id"};
+	my $slot = $store{"playerslot_byid_$id"};
 	my $name = $config{irc_nick};
 	$name =~ s/Nex//; # haggerNexCTF -> haggerCTF
 	my $map = $store{map};
 	$map =~ s/^[a-z]*_//;
 	$ip =~ s/\./-/g;
-	my $pattern = "/nexuiz/data/home/.nexuiz/extramaps-$name/sv_autodemos/????-??-??_??-??_${map}_${slot}_${ip}-*.dem";
+	my $pattern = "/nexuiz/data/home-$name/data/sv_autodemos/????-??-??_??-??_${map}_${slot}_${ip}-*.dem";
 	if(my @result = glob $pattern)
 	{
 		for(@result)
