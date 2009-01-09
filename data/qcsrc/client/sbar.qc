@@ -1564,6 +1564,27 @@ void Sbar_Draw (void)
 			o = Sbar_DrawNoteLine(o, s);
 		}
 	}
+	if(teamplay)
+	{
+		entity tm;
+		float scrhigh, scrlow;
+		tm = teams.sort_next;
+		if (tm)
+		{
+			scrhigh = tm.team_size;
+			scrlow = tm.team_size;
+			for(; tm.sort_next; tm = tm.sort_next)
+			{
+				scrhigh = max(scrhigh, tm.team_size);
+				scrlow = min(scrlow, tm.team_size);
+			}
+			if ((scrhigh - scrlow) > 1)
+			{
+				s = strcat(blinkcolor, "Teamnumbers are unbalanced! Press ^3", getcommandkey("team menu", "menu_showteamselect"), blinkcolor, " to adjust");
+				o = Sbar_DrawNoteLine(o, s);
+			}
+		}
+	}
 
 	//Sbar_SortFrags();
 	Sbar_UpdatePlayerTeams();
