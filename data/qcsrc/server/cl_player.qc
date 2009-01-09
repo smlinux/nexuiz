@@ -759,6 +759,142 @@ void UpdateSelectedPlayer()
 		self.last_selected_player = self.selected_player;
 }
 
+.float floodcontrol_chat;
+.float floodcontrol_chatteam;
+void Say(entity source, float teamsay, string msgin)
+{
+	string msgstr, colorstr, cmsgstr, namestr;
+	float flood;
+	entity head;
+
+	if(Ban_MaybeEnforceBan(source))
+		return;
+
+	if(!teamsay)
+		if(substring(msgin, 0, 1) == " ")
+			msgin = substring(msgin, 1, strlen(msgin) - 1); // work around DP say bug (say_team does not have this!)
+
+	msgin = formatmessage(msgin);
+
+	if(msgin == "")
+		return;
+
+	if(source.classname != "player")
+		colorstr = "^0"; // black for spectators
+	else if(teams_matter)
+		colorstr = Team_ColorCode(source.team);
+	else
+		teamsay = FALSE;
+
+	if(intermission_running)
+		teamsay = FALSE;
+
+	/*
+	 * using bprint solves this... me stupid
+	// how can we prevent the message from appearing in a listen server?
+	// for now, just give "say" back and only handle say_team
+	if(!teamsay)
+	{
+		clientcommand(self, strcat("say ", msgin));
+		return;
+	}
+	*/
+
+	if(cvar("g_chat_teamcolors"))
+		namestr = playername(source);
+	else
+		namestr = source.netname;
+	if(teamsay)
+	{
+		msgstr = strzone(strcat("\{1}\{13}", colorstr, "(^3", namestr, colorstr, ") ^7", msgin, "\n"));
+		cmsgstr = strcat(colorstr, "(^3", namestr, colorstr, ")\n^7", wordwrap(msgin, 50));
+	}
+	else
+		msgstr = strzone(strcat("\{1}", namestr, "^7: ", msgin, "\n"));
+
+	// FLOOD CONTROL
+	flood = 0;
+	{
+		float flood_spl;
+		float flood_burst;
+		float flood_lmax;
+		var .float flood_field;
+		float lines;
+		if(teamsay)
+		{
+			flood_spl = cvar("g_chat_flood_spl_team");
+			flood_burst = cvar("g_chat_flood_burst_team");
+			flood_lmax = cvar("g_chat_flood_lmax_team");
+			flood_field = floodcontrol_chatteam;
+		}
+		else
+		{
+			flood_spl = cvar("g_chat_flood_spl");
+			flood_burst = cvar("g_chat_flood_burst");
+			flood_lmax = cvar("g_chat_flood_lmax");
+			flood_field = floodcontrol_chat;
+		}
+		flood_burst = max(0, flood_burst - 1);
+		// to match explanation in default.cfg, a value of 3 must allow three-line bursts and not four!
+		lines = ceil(strlennocol(msgstr) / 75);
+		if(flood_lmax && lines > flood_lmax)
+			flood = 2;
+		else if(time >= self.flood_field)
+			self.flood_field = max(time - flood_burst * flood_spl, self.flood_field) + lines * flood_spl;
+		else
+			flood = 1;
+	}
+
+	if(flood)
+	{
+		if(cvar("g_chat_flood_notify_flooder"))
+		{
+			if(flood == 1)
+				sprint(self, strcat("^3FLOOD CONTROL: ^7wait ^1", ftos(self.flood_field - time), "^3 seconds\n"));
+			else if(flood == 2)
+				sprint(self, "^3FLOOD CONTROL: ^7message too long\n");
+		}
+		else
+			sprint(self, msgstr);
+		print("NOTE: ", playername(self), "^7 is flooding.\n");
+	}
+	else if(teamsay)
+	{
+		if(source.classname == "player")
+		{
+			FOR_EACH_REALPLAYER(head)
+			{
+				if(head.team == source.team)
+				{
+					sprint(head, msgstr);
+					centerprint(head, cmsgstr);
+				}
+			}
+		}
+		else
+		{
+			FOR_EACH_REALCLIENT(head) if(head.classname != "player")
+			{
+				sprint(head, msgstr);
+				centerprint(head, cmsgstr);
+			}
+		}
+	}
+	else
+	{
+		// TODO invent a cvar name for allowing global chat by spectators during warmup anyway
+		if(cvar("g_chat_nospectators") && source.classname != "player") {
+			FOR_EACH_REALCLIENT(head) if(head.classname != "player") {
+				sprint(head, msgstr);
+			}
+		}
+		else
+			bprint(msgstr);
+	}
+
+	strunzone(msgstr);
+}
+
 float GetVoiceMessageTeamsayType(string type)
 {
 	if(type == "taunt")
@@ -981,7 +1117,9 @@ void PlayerSound(.string samplefield, float chan, float teamsay)
 	GlobalSound(sample, chan, teamsay);
 }
 
-void VoiceMessage(string type)
+.float floodcontrol_voice;
+.float floodcontrol_voiceteam;
+void VoiceMessage(string type, string message)
 {
 	var .string sample;
 	var float teamsay;
@@ -995,5 +1133,30 @@ void VoiceMessage(string type)
 
 	teamsay = GetVoiceMessageTeamsayType(type);
 
-	PlayerSound(sample, CHAN_VOICE, teamsay);
+	float flood;
+	float flood_spv;
+	var .float flood_field;
+
+	flood = 0;
+	if(teamsay == 1)
+	{
+		flood_spv = cvar("g_voice_flood_spv_team");
+		flood_field = floodcontrol_voiceteam;
+	}
+	else
+	{
+		flood_spv = cvar("g_voice_flood_spv");
+		flood_field = floodcontrol_voice;
+	}
+
+	if(time >= self.flood_field)
+		self.flood_field = max(time, self.flood_field) + flood_spv;
+	else
+		flood = 1;
+
+	if (message != "")
+		Say(self, teamsay, message);
+
+	if (!flood)
+		PlayerSound(sample, CHAN_VOICE, teamsay);
 }
