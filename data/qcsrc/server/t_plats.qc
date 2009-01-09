@@ -231,6 +231,9 @@ void train_wait()
 {
 	self.think = train_next;
 	self.nextthink = self.ltime + self.wait;
+
+	if(self.noise != "")
+		sound(self, CHAN_TRIGGER, STR_MISC_NULL_WAV, VOL_BASE, ATTN_NORM);
 };
 
 void train_next()
@@ -257,6 +260,9 @@ void train_next()
 		else
 			SUB_CalcMove(targ.origin - self.mins, self.speed, train_wait);
 	}
+
+	if(self.noise != "")
+		sound(self, CHAN_TRIGGER, self.noise, VOL_BASE, ATTN_NORM);
 };
 
 void func_train_find()
@@ -278,6 +284,9 @@ target : targetname of first spawnfunc_path_corner (starts here)
 */
 void spawnfunc_func_train()
 {
+	if (self.noise != "")
+		precache_sound(self.noise);
+
 	if (!self.target)
 		objerror("func_train without a target");
 	if (!self.speed)
@@ -320,7 +329,7 @@ dmgtime : See above.
 
 void spawnfunc_func_rotating()
 {
-	if (self.noise)
+	if (self.noise != "")
 	{
 		precache_sound(self.noise);
 		ambientsound(self.origin, self.noise, VOL_BASE, ATTN_IDLE);
@@ -365,7 +374,7 @@ void func_bobbing_controller_think()
 	local vector v;
 	self.nextthink = time + 0.1;
 	// calculate sinewave using makevectors
-	makevectors((time * self.owner.cnt + self.owner.phase * 360) * '0 1 0');
+	makevectors((self.nextthink * self.owner.cnt + self.owner.phase * 360) * '0 1 0');
 	v = self.owner.destvec + self.owner.movedir * v_forward_y;
 	// * 10 so it will arrive in 0.1 sec
 	self.owner.velocity = (v - self.owner.origin) * 10;
@@ -389,10 +398,10 @@ dmgtime : See above.
 void spawnfunc_func_bobbing()
 {
 	local entity controller;
-	if (self.noise)
+	if (self.noise != "")
 	{
 		precache_sound(self.noise);
-		ambientsound(self.origin, self.noise, VOL_BASE, ATTN_IDLE);
+		soundto(MSG_INIT, self, CHAN_TRIGGER, self.noise, VOL_BASE, ATTN_NORM);
 	}
 	if (!self.speed)
 		self.speed = 4;
@@ -1549,3 +1558,204 @@ void spawnfunc_func_door_secret()
 		self.wait = 5;		// 5 seconds before closing
 };
 
+/*QUAKED spawnfunc_func_fourier (0 .5 .8) ?
+Brush model that moves in a pattern of added up sine waves, can be used e.g. for circular motions.
+netname: list of <frequencymultiplier> <phase> <x> <y> <z> quadruples, separated by spaces; note that phase 0 represents a sine wave, and phase 0.25 a cosine wave (by default, it uses 1 0 0 0 1, to match func_bobbing's defaults
+speed: how long one cycle of frequency multiplier 1 in seconds (default 4)
+height: amplitude modifier (default 1)
+phase: cycle timing adjustment (0-1 as a fraction of the cycle, default 0)
+noise: path/name of looping .wav file to play.
+dmg: Do this mutch dmg every .dmgtime intervall when blocked
+dmgtime: See above.
+*/
+
+void func_fourier_controller_think()
+{
+	local vector v;
+	float n, i, t;
+
+	self.nextthink = time + 0.1;
+
+	n = floor((tokenize_sane(self.owner.netname)) / 5);
+	t = self.nextthink * self.owner.cnt + self.owner.phase * 360;
+
+	v = self.owner.destvec;
+
+	for(i = 0; i < n; ++i)
+	{
+		makevectors((t * stof(argv(i*5)) + stof(argv(i*5+1)) * 360) * '0 1 0');
+		v = v + ('1 0 0' * stof(argv(i*5+2)) + '0 1 0' * stof(argv(i*5+3)) + '0 0 1' * stof(argv(i*5+4))) * self.owner.height * v_forward_y;
+	}
+
+	// * 10 so it will arrive in 0.1 sec
+	self.owner.velocity = (v - self.owner.origin) * 10;
+};
+
+void spawnfunc_func_fourier()
+{
+	local entity controller;
+	if (self.noise != "")
+	{
+		precache_sound(self.noise);
+		soundto(MSG_INIT, self, CHAN_TRIGGER, self.noise, VOL_BASE, ATTN_NORM);
+	}
+
+	if (!self.speed)
+		self.speed = 4;
+	if (!self.height)
+		self.height = 1;
+	self.destvec = self.origin;
+	self.cnt = 360 / self.speed;
+
+	self.blocked = rotating_blocked;
+	if(self.dmg & (!self.message))
+		self.message = " was squished";
+    if(self.dmg && (!self.message2))
+		self.message2 = "was squished by";
+	if(self.dmg && (!self.dmgtime))
+		self.dmgtime = 0.25;
+	self.dmgtime2 = time;
+
+	if(self.netname == "")
+		self.netname = "1 0 0 0 1";
+
+	if not(InitMovingBrushTrigger())
+		return;
+
+	// wait for targets to spawn
+	controller = spawn();
+	controller.classname = "func_fourier_controller";
+	controller.owner = self;
+	controller.nextthink = time + 1;
+	controller.think = func_fourier_controller_think;
+	self.nextthink = self.ltime + 999999999;
+	self.think = SUB_Null;
+
+	// Savage: Reduce bandwith, critical on e.g. nexdm02
+	self.effects |= EF_LOWPRECISION;
+};
+
+// reusing some fields havocbots declared
+.entity wp00, wp01, wp02, wp03;
+
+.float targetfactor, target2factor, target3factor, target4factor;
+
+void func_vectormamamam_controller_think()
+{
+	vector v;
+	entity e;
+
+	self.nextthink = time + 0.1;
+
+	v = self.owner.destvec;
+	
+	e = self.owner.wp00;
+	if(e)
+		v = v + e.origin + 0.1 * e.velocity;
+
+	e = self.owner.wp01;
+	if(e)
+		v = v + e.origin + 0.1 * e.velocity;
+
+	e = self.owner.wp02;
+	if(e)
+		v = v + e.origin + 0.1 * e.velocity;
+
+	e = self.owner.wp03;
+	if(e)
+		v = v + e.origin + 0.1 * e.velocity;
+
+	self.owner.velocity = (v - self.owner.origin) * 10;
+}
+
+void func_vectormamamam_findtarget()
+{
+	vector s0;
+
+	s0 = '0 0 0';
+
+	if(self.target != "")
+	{
+		self.wp00 = find(world, targetname, self.target);
+		if(self.wp00)
+			s0 = s0 + self.wp00.origin * self.targetfactor;
+	}
+
+	if(self.target2 != "")
+	{
+		self.wp01 = find(world, targetname, self.target2);
+		if(self.wp01)
+			s0 = s0 + self.wp01.origin * self.target2factor;
+	}
+
+	if(self.target3 != "")
+	{
+		self.wp02 = find(world, targetname, self.target3);
+		if(self.wp02)
+			s0 = s0 + self.wp02.origin * self.target3factor;
+	}
+
+	if(self.target4 != "")
+	{
+		self.wp03 = find(world, targetname, self.target4);
+		if(self.wp03)
+			s0 = s0 + self.wp03.origin * self.target4factor;
+	}
+
+	if(!self.wp00 && !self.wp01 && !self.wp02 && !self.wp03)
+		objerror("No reference entity found, so there is nothing to move. Aborting.");
+
+	self.destvec = self.origin - s0;
+
+	local entity controller;
+	controller = spawn();
+	controller.classname = "func_vectormamamam_controller";
+	controller.owner = self;
+	controller.nextthink = time + 1;
+	controller.think = func_vectormamamam_controller_think;
+}
+
+void spawnfunc_func_vectormamamam()
+{
+	if (self.noise != "")
+	{
+		precache_sound(self.noise);
+		soundto(MSG_INIT, self, CHAN_TRIGGER, self.noise, VOL_BASE, ATTN_NORM);
+	}
+
+	if(!self.targetfactor)
+		self.targetfactor = 1;
+
+	if(!self.target2factor)
+		self.target2factor = 1;
+
+	if(!self.target3factor)
+		self.target3factor = 1;
+
+	if(!self.target4factor)
+		self.target4factor = 1;
+
+	self.blocked = rotating_blocked;
+	if(self.dmg & (!self.message))
+		self.message = " was squished";
+    if(self.dmg && (!self.message2))
+		self.message2 = "was squished by";
+	if(self.dmg && (!self.dmgtime))
+		self.dmgtime = 0.25;
+	self.dmgtime2 = time;
+
+	if(self.netname == "")
+		self.netname = "1 0 0 0 1";
+
+	if not(InitMovingBrushTrigger())
+		return;
+
+	// wait for targets to spawn
+	self.nextthink = self.ltime + 999999999;
+	self.think = SUB_Null;
+
+	// Savage: Reduce bandwith, critical on e.g. nexdm02
+	self.effects |= EF_LOWPRECISION;
+
+	InitializeEntity(self, func_vectormamamam_findtarget, INITPRIO_FINDTARGET);
+}
