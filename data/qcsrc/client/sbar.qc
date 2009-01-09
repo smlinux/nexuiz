@@ -1584,7 +1584,7 @@ void Sbar_Draw (void)
 			if (init)
 			{
 				tm = GetTeam(GetPlayerColor(player_localentnum), false);
-				if (tm && (tm.team_size - size) > 1)
+				if (tm && tm.team != COLOR_SPECTATOR && (tm.team_size - size) > 1)
 				{
 					s = strcat(blinkcolor, "Teamnumbers are unbalanced! Press ^3", getcommandkey("team menu", "menu_showteamselect"), blinkcolor, " to adjust");
 					o = Sbar_DrawNoteLine(o, s);
