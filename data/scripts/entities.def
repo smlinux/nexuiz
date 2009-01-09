@@ -221,6 +221,11 @@ Trains cannot be block-stopped just by getting in their way, the player must be 
 -------- KEYS --------
 speed: default/initial speed of train (default 100 or overridden by speed value of targeted path_corner)
 target: targetname of first path_corner to move to at the default speed; ideally, this path_corner shall be exactly where the train starts
+noise: path/name of .wav or .ogg file to play while moving. Use looping sounds only (e.g. sound/world/drone6.wav - See Notes).
+dmg: damage a player who gets crushed by it receives
+dmgtime: interval to apply dmg to a player who is s in the way
+message: death message when a player gets crushed
+message2: death message when someone gets pushed into this (default: "was thrown into a world of hurt by"). The # character is replaced by the attacker name if present (and it instead does not get appended to the end)
 */
 
 /*QUAKED info_location (1 1 0) (-8 -8 -8) (8 8 8) 
