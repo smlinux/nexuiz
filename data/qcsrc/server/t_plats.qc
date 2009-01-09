@@ -1,3 +1,18 @@
+.float dmgtime2;
+void generic_plat_blocked()
+{
+    if(self.dmg && other.takedamage != DAMAGE_NO) {
+        if(self.dmgtime2 < time) {
+            Damage (other, self, self, self.dmg, DEATH_HURTTRIGGER, other.origin, '0 0 0');
+            self.dmgtime2 = time + self.dmgtime;
+        }
+
+        // Gib dead/dying stuff
+        if(other.deadflag != DEAD_NO)
+            Damage (other, self, self, 10000, DEATH_HURTTRIGGER, other.origin, '0 0 0');
+    }
+}
+
 
 float	STATE_TOP		= 0;
 float	STATE_BOTTOM	= 1;
@@ -5,8 +20,6 @@ float	STATE_UP		= 2;
 float	STATE_DOWN		= 3;
 
 .entity trigger_field;
-//.float dmgtime;
-.float dmgtime2;
 
 void() plat_center_touch;
 void() plat_outside_touch;
@@ -298,26 +311,16 @@ void spawnfunc_func_train()
 
 	// wait for targets to spawn
 	InitializeEntity(self, func_train_find, INITPRIO_SETLOCATION);
+
+	self.blocked = generic_plat_blocked;
+	if(self.dmg & (!self.message))
+		self.message = " was squished";
+    if(self.dmg && (!self.message2))
+		self.message2 = "was squished by";
+	if(self.dmg && (!self.dmgtime))
+		self.dmgtime = 0.25;
+	self.dmgtime2 = time;
 };
-
-
-
-void rotating_blocked()
-{
-
-    if(self.dmg && other.takedamage != DAMAGE_NO) {
-        if(self.dmgtime2 < time) {
-            Damage (other, self, self, self.dmg, DEATH_HURTTRIGGER, other.origin, '0 0 0');
-            self.dmgtime2 = time + self.dmgtime;
-        }
-
-        // Gib dead/dying stuff
-        if(other.deadflag != DEAD_NO)
-            Damage (other, self, self, 10000, DEATH_HURTTRIGGER, other.origin, '0 0 0');
-    }
-
-
-}
 
 /*QUAKED spawnfunc_func_rotating (0 .5 .8) ? - - X_AXIS Y_AXIS
 Brush model that spins in place on one axis (default Z).
@@ -361,7 +364,7 @@ void spawnfunc_func_rotating()
 		return;
 	// no EF_LOWPRECISION here, as rounding angles is bad
 
-    self.blocked = rotating_blocked;
+    self.blocked = generic_plat_blocked;
 
 	// wait for targets to spawn
 	self.nextthink = self.ltime + 999999999;
@@ -383,7 +386,7 @@ void func_bobbing_controller_think()
 void bobbing_blocked()
 {
 	// no need to duplicate code
-	rotating_blocked();
+	generic_plat_blocked();
 }
 
 /*QUAKED spawnfunc_func_bobbing (0 .5 .8) ? X_AXIS Y_AXIS
@@ -883,7 +886,7 @@ void door_touch()
 };
 
 
-void door_rotating_blocked()
+void door_generic_plat_blocked()
 {
 
     if((self.spawnflags & 8) && (other.takedamage != DAMAGE_NO)) { // KIll Kill Kill!!
@@ -1607,7 +1610,7 @@ void spawnfunc_func_fourier()
 	self.destvec = self.origin;
 	self.cnt = 360 / self.speed;
 
-	self.blocked = rotating_blocked;
+	self.blocked = generic_plat_blocked;
 	if(self.dmg & (!self.message))
 		self.message = " was squished";
     if(self.dmg && (!self.message2))
@@ -1735,7 +1738,7 @@ void spawnfunc_func_vectormamamam()
 	if(!self.target4factor)
 		self.target4factor = 1;
 
-	self.blocked = rotating_blocked;
+	self.blocked = generic_plat_blocked;
 	if(self.dmg & (!self.message))
 		self.message = " was squished";
     if(self.dmg && (!self.message2))
