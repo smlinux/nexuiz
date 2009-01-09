@@ -1565,7 +1565,7 @@ void spawnfunc_func_door_secret()
 Brush model that moves in a pattern of added up sine waves, can be used e.g. for circular motions.
 netname: list of <frequencymultiplier> <phase> <x> <y> <z> quadruples, separated by spaces; note that phase 0 represents a sine wave, and phase 0.25 a cosine wave (by default, it uses 1 0 0 0 1, to match func_bobbing's defaults
 speed: how long one cycle of frequency multiplier 1 in seconds (default 4)
-height: amplitude modifier (default 1)
+height: amplitude modifier (default 32)
 phase: cycle timing adjustment (0-1 as a fraction of the cycle, default 0)
 noise: path/name of looping .wav file to play.
 dmg: Do this mutch dmg every .dmgtime intervall when blocked
@@ -1606,7 +1606,7 @@ void spawnfunc_func_fourier()
 	if (!self.speed)
 		self.speed = 4;
 	if (!self.height)
-		self.height = 1;
+		self.height = 32;
 	self.destvec = self.origin;
 	self.cnt = 360 / self.speed;
 

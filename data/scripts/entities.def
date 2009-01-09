@@ -1323,7 +1323,7 @@ model="models/weapons/g_campingrifle.md3"
 Solid entity that oscillates according to a sum of sine waves.
 -------- KEYS --------
 speed: amount of time in seconds for one complete oscillation cycle in the base frequency (default 4).
-height: sets the amount of travel of the oscillation movement (default 1). 
+height: sets the amount of travel of the oscillation movement (default 32). 
 phase: sets the start offset of the oscillation cycle. Values must be 0 < phase < 1. Any integer phase value is the same as no offset (default 0).
 noise: path/name of .wav or .ogg file to play. Use looping sounds only (e.g. sound/world/drone6.wav - See Notes).
 dmg: damage a player who gets crushed by it receives
