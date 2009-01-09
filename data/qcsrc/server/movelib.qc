@@ -2,13 +2,13 @@
     Simulate drag
     self.velocity = movelib_vdrag(self.velocity,0.02,0.5);
 **/
-vector movelib_drag(float drag, float exp)
+vector movelib_dragvec(float drag, float exp)
 {
     float lspeed,ldrag;
 
     lspeed = vlen(self.velocity);
     ldrag = lspeed * drag;
-    ldrag = ldrag * drag * exp;
+    ldrag = ldrag * (drag * exp);
     ldrag = 1 - (ldrag / lspeed);
 
     return self.velocity * ldrag;
@@ -50,19 +50,82 @@ vector movelib_inertmove(vector new_vel,float new_bias)
     return new_vel * new_bias + self.velocity * (1-new_bias);
 }
 
-
-/**
-    Applies absolute force to a velocity
-**/
-vector movelib_accelerate(vector vel,float force)
+.float  movelib_lastupdate;
+void movelib_move(vector force,float max_velocity,float drag,float mass,float breakforce)
 {
-    return normalize(vel) * (vlen(vel) + force);
-}
-vector movelib_decelerate(vector vel,float force)
-{
-    return normalize(vel) * (vlen(vel) - force);
+    float deltatime;
+    float acceleration;
+    //float mspeed;
+
+    deltatime = time - self.movelib_lastupdate;
+    if (deltatime > 0.15) deltatime = 0;
+    self.movelib_lastupdate = time;
+    if(!deltatime) return;
+
+    //mspeed = vlen(self.velocity);
+
+    if(mass)
+        acceleration = vlen(force) / mass;
+    else
+        acceleration = vlen(force);
+
+    if(self.flags & FL_ONGROUND)
+    {
+        if(breakforce)
+        {
+            breakforce = 1 - ((breakforce / mass) * deltatime);
+            self.velocity = self.velocity * breakforce;
+        }
+
+        self.velocity = self.velocity + force * (acceleration * deltatime);
+    }
+
+    self.velocity = self.velocity + '0 0 -1' * sv_gravity * deltatime;
+
+    if(drag)
+        self.velocity = movelib_dragvec(drag, 1);
+
+    if(max_velocity)
+    if(vlen(self.velocity) > max_velocity)
+        self.velocity = normalize(self.velocity) * max_velocity;
 }
 
+void movelib_move_simple(vector newdir,float velo,float turnrate)
+{
+    vector olddir;
+
+    olddir = normalize(self.velocity);
+
+    self.velocity = normalize(olddir + newdir * turnrate) * velo;
+}
+
+/*
+vector movelib_accelerate(float force)
+{
+    vector vel;
+    vel = self.velocity;
+    vel = normalize(vel) * (vlen(vel) + force);
+    self.velocity = self.velocity  + vel;
+}
+
+
+vector movelib_decelerate(float force,float mass)
+{
+    vector vel;
+    float decel;
+
+    if(mass)
+        decel = force / mass;
+    else
+        decel = force;
+
+    vel = self.velocity;
+    vel = normalize(vel) * max((vlen(vel) - decel),0);
+    self.velocity = self.velocity - vel;
+
+    if(vlen(self.velocity) < 5) self.velocity = '0 0 0';
+}
+*/
 vector movelib_velocity_transfer(entity source,entity destination)
 {
     return '0 0 0';

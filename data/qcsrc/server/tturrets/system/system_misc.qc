@@ -1,5 +1,31 @@
 //--// Some support routines //--//
 
+float shortangle_f(float ang1,float ang2)
+{
+    if(ang1 > ang2)
+    {
+        if(ang1 >= 180)
+            return ang1 - 360;
+    }
+    else
+    {
+        if(ang1 <= -180)
+            return ang1 + 360;
+    }
+
+    return ang1;
+}
+vector shortangle_v(vector ang1,vector ang2)
+{
+    vector vtmp;
+    vtmp_x = shortangle_f(ang1_x,ang2_x);
+    vtmp_y = shortangle_f(ang1_y,ang2_y);
+    vtmp_z = shortangle_f(ang1_z,ang2_z);
+
+    return vtmp;
+}
+
+
 // Get real origin
 vector real_origin(entity ent)
 {

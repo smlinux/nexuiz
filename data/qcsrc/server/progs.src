@@ -52,12 +52,6 @@ havocbot.qc
 g_subs.qc
 
 
-// tZork's libs
-movelib.qc
-steerlib.qc
-pathlib.qc
-
-
 runematch.qc
 arena.qc
 
@@ -67,6 +61,12 @@ g_damage.qc
 teamplay.qc
 
 cl_physics.qc
+
+// tZork's libs
+movelib.qc
+steerlib.qc
+pathlib.qc
+//animation.qc
 
 g_world.qc
 g_decors.qc

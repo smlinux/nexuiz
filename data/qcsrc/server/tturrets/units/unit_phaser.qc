@@ -35,7 +35,7 @@ void turret_phaser_postthink()
 
 void beam_think()
 {
-    if ((time > self.cnt)||(self.owner.deadflag != DEAD_NO))
+    if ((time > self.cnt) || (self.owner.deadflag != DEAD_NO))
     {
         self.owner.attack_finished_single = time + self.owner.shot_refire;
         self.owner.fireflag = 2;

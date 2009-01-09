@@ -177,31 +177,30 @@ void turret_stdproc_track()
         real_angle = wish_angle - (self.angles + self.tur_head.angles);
     else
     {
-        //if(vlen(wish_angle - self.tur_head.angles) > vlen(self.tur_head.angles - wish_angle))
         real_angle = wish_angle - self.tur_head.angles;
-        //else
-        //    real_angle =  self.tur_head.angles - wish_angle;
+
     }
 
-    /*
-    if(real_angle_y > 180)
-        bprint("^3");
-    if(real_angle_y < -180)
-        bprint("^1");
-    string s;
-    s = vtos(real_angle);
-    bprint("RA1: ",s);
-    */
-
-
-    if (real_angle_x < 0) real_angle_x += 360;
-    if (real_angle_x > 180) real_angle_x -= 360;
-
-    if (real_angle_y < 0) real_angle_y += 360;
-    if (real_angle_y >= 180) real_angle_y -= 360;
-
-    //s = vtos(real_angle);
-    //bprint(" RA2: ",s,"\n");
+    if(real_angle_x > self.tur_head.angles_x)
+    {
+        if(real_angle_x >= 180)
+            real_angle_x -= 360;
+    }
+    else
+    {
+        if(real_angle_x <= -180)
+            real_angle_x += 360;
+    }
+    if(real_angle_y > self.tur_head.angles_y)
+    {
+        if(real_angle_y >= 180)
+            real_angle_y -= 360;
+    }
+    else
+    {
+        if(real_angle_y <= -180)
+            real_angle_y += 360;
+    }
 
     // Limit pitch
 
@@ -426,6 +425,7 @@ float turret_validate_target(entity e_turret,entity e_target,float validate_flag
 			return -5.5;
 	}
 
+
     // Missile
     if (e_target.flags & FL_PROJECTILE)
     {
@@ -459,13 +459,13 @@ float turret_validate_target(entity e_turret,entity e_target,float validate_flag
     {
         v_tmp = real_origin(e_target) + ((e_target.mins + e_target.maxs) * 0.5);
         //v_tmp = e_target.origin;
-        traceline(e_turret.origin,v_tmp,0,e_turret);
+        traceline(e_turret.origin + e_turret.tur_aimorg,v_tmp,0,e_turret);
 
         if (e_turret.aim_firetolerance_dist < vlen(v_tmp - trace_endpos))
             return -10;
     }
 
-    // Can we even aim this thing? (anglecheck)
+    // Can we even aim this thing?
     tvt_thadv = angleofs(e_turret.tur_head,e_target);
     tvt_tadv  = angleofs(e_turret,e_target);
     tvt_thadf = vlen(tvt_thadv);
@@ -501,43 +501,38 @@ float turret_validate_target(entity e_turret,entity e_target,float validate_flag
 entity turret_select_target()
 {
     entity e;        // target looper entity
-    entity e_enemy;  // currently best scoreing enemy
-
-    float score;     // current target (e) score
-    float m_score;   // current best target (e_enemy) score
+    float  score;    // target looper entity score
+    entity e_enemy;  // currently best scoreing target
+    float  m_score;  // currently best scoreing target's score
     float f;
-    // string s;
-    e = findradius(self.origin,self.target_range);
-
-    // Nothing to aim at.
-    if (!e) return world;
 
     m_score = 0;
+    if(self.enemy)
+    if(turret_validate_target(self,e,self.target_select_flags) > 0)
+    {
+        e_enemy = self.enemy;
+        m_score = self.turret_score_target(self,e_enemy) * self.target_select_samebias;
+    }
+
+    e = findradius(self.origin,self.target_range);
+
+    // Nothing to aim at?
+    if (!e) return world;
 
     while (e)
     {
         f = turret_validate_target(self,e,self.target_select_flags);
-        //s = ftos(f);
-        //bprint(e.netname, " = ",s,"\n");
         if (f > 0)
         {
-
             score = self.turret_score_target(self,e);
-
             if ((score > m_score) && (score > 0))
             {
                 e_enemy = e;
                 m_score = score;
             }
         }
-
         e = e.chain;
     }
-
-//    self.tur_lastscore = m_score;
-
-    //if (self.enemy != e_enemy)
-    //self.volly_counter = 0;
 
     return e_enemy;
 }
@@ -731,9 +726,13 @@ void turret_stdproc_fire()
     dprint("^1Bang, ^3your dead^7 ",self.enemy.netname,"! ^1(turret with no real firefunc)\n");
 }
 
+/*
+    When .used a turret switched team to activator.team.
+    If activator is world, the turrets goes inactive.
+*/
 void turret_stdproc_use()
 {
-    // bprint("Used:",self.netname, " By ",other.netname,"\n");
+     //bprint("Used:",self.netname, " By ",other.classname,"\n");
 
     self.team = activator.team;
 
@@ -741,38 +740,6 @@ void turret_stdproc_use()
         self.tur_active = 0;
     else
         self.tur_active = 1;
-
-    // ONS Uses _use to communicate.
-    //if (g_onslaught)
-    /*
-    if (1) // if anyone ever figures out why i needed a active toggle here, fix this
-    {
-        entity e;
-
-        if (self.targetname)
-        {
-            e = find(world,target,self.targetname);
-            if (e != world)
-                self.team = e.team;
-        }
-
-        if (self.team != self.tur_head.team)
-            turret_stdproc_respawn();
-
-        if(self.team == 0)
-            self.tur_active = 0;
-        else
-            self.tur_active = 1;
-
-    }
-    else
-    {
-        if (self.tur_active)
-            self.tur_active = 0;
-        else
-            self.tur_active = 1;
-    }
-    */
 
 }
 
@@ -1105,8 +1072,10 @@ float turret_stdproc_init (string cvar_base_name)
 
     self.tur_active = 1;
 
-    if (g_onslaught)
-        self.use();
+    //if (g_onslaught)
+    //    self.use();
+
+    //turret_stdproc_use();
 
     return 1;
 }

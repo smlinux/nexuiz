@@ -39,7 +39,7 @@ float turret_stdproc_targetscore_generic(entity e_turret,entity e_target)
     float d_score;      // Distance score
     //float da_score;     // Distance from aimpoint score
     float a_score;      // Angular score
-    float s_score;      // samescore (same target as last time)
+    //float s_score;      // samescore (same target as last time)
     float m_score;      // missile score
     float p_score;      // player score
 
@@ -47,7 +47,7 @@ float turret_stdproc_targetscore_generic(entity e_turret,entity e_target)
 
     if(!e_target) return 0;
 
-    if (e_target == e_turret.enemy) s_score = 1;
+    //if (e_target == e_turret.enemy) s_score = 1;
 
     if (e_turret.tur_defend)
     {
@@ -84,13 +84,13 @@ float turret_stdproc_targetscore_generic(entity e_turret,entity e_target)
         p_score = 1;
 
     d_score = max(d_score,0);
-    s_score = max(s_score,0);
+    //s_score = max(s_score,0);
     a_score = max(a_score,0);
     m_score = max(m_score,0);
     p_score = max(p_score,0);
 
+    // (s_score * e_turret.target_select_samebias) +
     score = (d_score * e_turret.target_select_rangebias) +
-            (s_score * e_turret.target_select_samebias) +
             (a_score * e_turret.target_select_anglebias) +
             (m_score * e_turret.target_select_missilebias) +
             (p_score * e_turret.target_select_playerbias);

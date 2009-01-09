@@ -289,24 +289,25 @@ void turret_stdproc_damage (entity inflictor, entity attacker, float damage, flo
     self = baseent;
 
     if (teamplay != 0)
+    if (self.team == attacker.team)
     {
-        if (self.team == attacker.team)
+        // This does not happen anymore. Re-enable if you fix that.
+        //if(attacker.flags & FL_CLIENT)
+            //if not(attacker.isbot)
+                //sprint(attacker, "\{1}Turret tells you: I'm on your team!\n");
+
+        if(cvar("g_friendlyfire"))
         {
-            sprint(attacker, "\{1}Turret tells you: I'm on your team!\n");
+            self = oldself;
             return;
         }
         else
         {
-            /*
-            // This will get enoying fast...
-            FOR_EACH_PLAYER(player)
-            	if(player.team == self.team)
-            		sprint(player, "The enemy is attacking your base!");
-            */
+            damage = damage * cvar("g_friendlyfire");
         }
     }
 
-    baseent.health = baseent.health - damage;
+    self.health = self.health - damage;
 
     // thorw head slightly off aim when hit?
     if (oldself.classname == "turret_head")

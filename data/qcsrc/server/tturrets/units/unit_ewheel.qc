@@ -26,7 +26,7 @@ void ewheel_attack()
     vector v;
     float f,i;
 
-    for(i=0;i<2;++i)
+    for (i=0;i<1;i++)
     {
         f = gettagindex(self.tur_head,"tag_fire");
         v = gettaginfo(self.tur_head,f);
@@ -56,61 +56,172 @@ void ewheel_attack()
         proj.enemy           = self.enemy;
         proj.flags           = FL_PROJECTILE | FL_NOTARGET;
 
-        self.tur_head.frame += 1;
+        self.tur_head.frame += 2;
 
         if (self.tur_head.frame > 3)
-        self.tur_head.frame = 0;
-        }
+            self.tur_head.frame = 0;
+    }
 
 }
 
-void ewheel_postthink()
+#define EWHEEL_MASS 50
+#define EWHEEL_MAXSPEED 1500
+#define EWHEEL_ACCEL_SLOW 50
+#define EWHEEL_ACCEL_FAST 150
+#define EWHEEL_BREAK_SLOW 100
+#define EWHEEL_BREAK_FAST 250
+
+void ewheel_enemymove()
 {
-    vector wish_angle,real_angle;
-    float turn_limit;
+    vector wish_angle,real_angle,steer,avoid;
+    float turn_limit,angle_ofs;
 
-    if (!self.enemy)
-    {
-        self.velocity = '0 0 0';
-        return;
-    }
+    //steer = steerlib_attract2(point,0.5,2000,0.95);
+    steer = steerlib_pull(self.enemy.origin);
+    avoid = steerlib_traceavoid(0.3,350);
 
-    wish_angle = normalize(self.enemy.origin - self.origin);
+    wish_angle = normalize(avoid * 0.5 + steer);
     wish_angle = vectoangles(wish_angle);
     real_angle = wish_angle - self.angles;
 
-    if (real_angle_y < 0) real_angle_y += 360;
-    if (real_angle_y > 180) real_angle_y -= 360;
+    if (real_angle_x > self.angles_x)
+    {
+        if (real_angle_x >= 180)
+            real_angle_x -= 360;
+    }
+    else
+    {
+        if (real_angle_x <= -180)
+            real_angle_x += 360;
+    }
+
+    if (real_angle_y > self.tur_head.angles_y)
+    {
+        if (real_angle_y >= 180)
+            real_angle_y -= 360;
+    }
+    else
+    {
+        if (real_angle_y <= -180)
+            real_angle_y += 360;
+    }
+
+    turn_limit = cvar("g_turrets_unit_ewheel_turnrate");
+    // Convert from dgr / sec to dgr / tic
+    turn_limit    = turn_limit / (1 / self.ticrate);
+    angle_ofs     = fabs(real_angle_y);
+    real_angle_y  = bound(turn_limit * -1,real_angle_y,turn_limit);
+    self.angles_y = (self.angles_y + real_angle_y);
+
+    // Simulate banking
+    self.angles_z = bound(-45,real_angle_y * -1,45);
+
+
+    if (self.frame > 40)
+        self.frame = 1;
+
+    makevectors(self.angles);
+
+    if (self.tur_dist_enemy > self.target_range_optimal)
+    {
+        if ( angle_ofs < 10 )
+        {
+            self.frame += 2;
+            movelib_move(v_forward * EWHEEL_ACCEL_FAST,EWHEEL_MAXSPEED,0,EWHEEL_MASS,0);
+        }
+        else if (angle_ofs < 16)
+        {
+            self.frame += 0.5;
+            movelib_move(v_forward,EWHEEL_MAXSPEED,0,EWHEEL_MASS,EWHEEL_BREAK_SLOW);
+        }
+        else
+        {
+            movelib_move('0 0 0',EWHEEL_MAXSPEED,0,EWHEEL_MASS,EWHEEL_BREAK_FAST);
+        }
+    }
+    else
+        movelib_move('0 0 0',EWHEEL_MAXSPEED,0,EWHEEL_MASS,EWHEEL_BREAK_FAST);
+}
+
+void ewheel_roammove()
+{
+    movelib_move(v_forward,EWHEEL_MAXSPEED,0,EWHEEL_MASS,EWHEEL_BREAK_SLOW);
+    self.angles_z = 0;
+
+    /*
+    vector wish_angle,real_angle,steer,avoid;
+    float turn_limit,angle_ofs;
+    float dist;
+
+    return;
+
+    dist = vlen(self.origin - self.pos1);
+
+    //steer = steerlib_attract2(point,0.5,2000,0.95);
+    steer = steerlib_pull(self.pos1);
+    avoid = steerlib_traceavoid(0.3,350);
+
+    wish_angle = normalize(avoid * 0.5 + steer);
+    wish_angle = vectoangles(wish_angle);
+    real_angle = wish_angle - self.angles;
+
+    real_angle_y = shortangle_f(real_angle_y,self.angles_y);
 
     turn_limit = cvar("g_turrets_unit_ewheel_turnrate");
     // Convert from dgr/sec to dgr/tic
     turn_limit  = turn_limit / (1 / self.ticrate);
+    angle_ofs = fabs(real_angle_y);
+
     real_angle_y = bound(turn_limit * -1,real_angle_y,turn_limit);
-    self.angles_y = self.angles_y + real_angle_y;
-    self.angles_z = bound(-10,real_angle_y * -1,10);
+    self.angles_y = (self.angles_y + real_angle_y);
+
+    self.angles_z = bound(-12,real_angle_y * -1,12);
 
     if(self.frame > 40)
         self.frame = 1;
 
-    self.angles_z = 0;
-    if(self.tur_dist_enemy > self.target_range_optimal)
+    makevectors(self.angles);
+    float lspeed;
+    lspeed = vlen(self.velocity);
+
+    if((dist < 64)||(self.phase < time))
     {
-        self.angles_z = bound(-15,real_angle_y * -1,15);
-        makevectors(self.angles);
-        self.velocity = v_forward * 250;
-        self.frame += 2;
-        return;
+        movelib_move('0 0 0',150,0,50,200);
+        self.pos1 = self.origin + v_forward * 256 + randomvec() * 128;
+        self.pos1_z = self.origin_z;
+        self.phase = time + 5;
     }
+    else if(dist < 128)
+    {
+        self.frame += 1;
+        if(lspeed > 100)
+            movelib_move(v_forward * 50,150,0,50,50);
+        else
+            movelib_move(v_forward * 100,150,0,50,0);
+    }
+    else
+    {
+        self.frame += 1;
+        if(angle_ofs > 10)
+            movelib_move(v_forward * 50,150,0,50,50);
+        else
+            movelib_move(v_forward * 250,150,0,50,0);
+    }
+    */
+}
 
-    self.velocity = '0 0 0';
-
+void ewheel_postthink()
+{
+    if (self.enemy)
+        ewheel_enemymove();
+    else
+        ewheel_roammove();
 
 }
 
+
 void ewheel_respawnhook()
 {
-
-
     setorigin(self,self.pos1);
 
     //self.angles = self.wkr_spawn.angles;
@@ -165,6 +276,7 @@ void turret_ewheel_dinit()
     //self.flags      = FL_CLIENT;
     self.iscreature = TRUE;
     self.movetype   = MOVETYPE_WALK;
+    self.gravity = 0.01;
     self.solid      = SOLID_SLIDEBOX;
     self.takedamage = DAMAGE_AIM;
 

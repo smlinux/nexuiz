@@ -1,4 +1,20 @@
 /**
+    Uniform pull towards a point
+**/
+vector steerlib_pull(vector point)
+{
+    return normalize(point - self.origin);
+}
+
+/**
+    Uniform push from a point
+**/
+vector steerlib_push(vector point)
+{
+    return normalize(self.origin - point);
+}
+
+/**
     Pull toward a point, The further away, the stronger the pull.
 **/
 vector steerlib_arrive(vector point,float maximal_distance)
@@ -25,6 +41,51 @@ vector steerlib_attract(vector point, float maximal_distance)
     return  direction * (1-(distance / maximal_distance));
 }
 
+vector steerlib_attract2(vector point, float min_influense,float max_distance,float max_influense)
+{
+    float distance;
+    vector direction;
+    float influense;
+
+    distance  = bound(0.00001,vlen(self.origin - point),max_distance);
+    direction = normalize(point - self.origin);
+
+    influense = 1 - (distance / max_distance);
+    influense = min_influense + (influense * (max_influense - min_influense));
+
+    return  direction * influense;
+}
+
+/*
+vector steerlib_attract2(vector point, float maximal_distance,float min_influense,float max_influense,float distance)
+{
+    //float distance;
+    vector current_direction;
+    vector target_direction;
+    float i_target,i_current;
+
+    if(!distance)
+        distance = vlen(self.origin - point);
+
+    distance = bound(0.001,distance,maximal_distance);
+
+    target_direction = normalize(point - self.origin);
+    current_direction = normalize(self.velocity);
+
+    i_target = bound(min_influense,(1-(distance / maximal_distance)),max_influense);
+    i_current = 1 - i_target;
+
+    // i_target = bound(min_influense,(1-(distance / maximal_distance)),max_influense);
+
+    string s;
+    s = ftos(i_target);
+    bprint("IT: ",s,"\n");
+    s = ftos(i_current);
+    bprint("IC  : ",s,"\n");
+
+    return  normalize((target_direction * i_target) + (current_direction * i_current));
+}
+*/
 /**
     Move away from a point.
 **/
@@ -40,7 +101,7 @@ vector steerlib_repell(vector point,float maximal_distance)
 }
 
 /**
-    Keep at ideal_distance away from point
+    Try to keep at ideal_distance away from point
 **/
 vector steerlib_standoff(vector point,float ideal_distance)
 {
@@ -63,6 +124,11 @@ vector steerlib_standoff(vector point,float ideal_distance)
 
 /**
     A random heading in a forward halfcicrle
+
+    use like:
+    self.target = steerlib_waner(256,32,self.target)
+
+    where range is the cicrle radius and tresh is how close we need to be to pick a new heading.
 **/
 vector steerlib_waner(float range,float tresh,vector oldpoint)
 {
@@ -81,7 +147,7 @@ vector steerlib_waner(float range,float tresh,vector oldpoint)
 }
 
 /**
-    Dodge a point-
+    Dodge a point. dont work to well.
 **/
 vector steerlib_dodge(vector point,vector dodge_dir,float min_distance)
 {
@@ -121,6 +187,8 @@ vector steerlib_flock(float radius, float standoff,float separation_force,float 
 /**
     All members want to be in the center, and keep away from eachother.
     The furtehr form the center the more they want to be there.
+
+    This results in a aligned movement (?!) much like flocking.
 **/
 vector steerlib_swarm(float radius, float standoff,float separation_force,float swarm_force)
 {
@@ -155,52 +223,36 @@ vector steerlib_traceavoid(float pitch,float length)
 {
     vector vup_left,vup_right,vdown_left,vdown_right;
     float fup_left,fup_right,fdown_left,fdown_right;
+    vector upwish,downwish,leftwish,rightwish;
     vector v_left,v_down;
-    //vector point;
-
-    /*
-    traceline(self.origin,self.origin + v_forward * length,MOVE_NOMONSTERS,self);
-    if(trace_fraction == 1)
-        return '0 0 0';
-    */
 
     v_left = v_right * -1;
     v_down = v_up * -1;
 
     vup_left = (v_forward + (v_left * pitch + v_up * pitch)) * length;
     traceline(self.origin, self.origin +  vup_left,MOVE_NOMONSTERS,self);
-    //vup_left = trace_endpos;
     fup_left = trace_fraction;
 
     //te_lightning1(world,self.origin, trace_endpos);
 
     vup_right = (v_forward + (v_right * pitch + v_up * pitch)) * length;
     traceline(self.origin,self.origin + vup_right ,MOVE_NOMONSTERS,self);
-    //vup_right = trace_endpos;
     fup_right = trace_fraction;
 
     //te_lightning1(world,self.origin, trace_endpos);
 
     vdown_left = (v_forward + (v_left * pitch + v_down * pitch)) * length;
     traceline(self.origin,self.origin + vdown_left,MOVE_NOMONSTERS,self);
-    //vdown_left = trace_endpos;
     fdown_left = trace_fraction;
 
     //te_lightning1(world,self.origin, trace_endpos);
 
     vdown_right = (v_forward + (v_right * pitch + v_down * pitch)) * length;
     traceline(self.origin,self.origin + vdown_right,MOVE_NOMONSTERS,self);
-    //vdown_right = trace_endpos;
     fdown_right = trace_fraction;
 
     //te_lightning1(world,self.origin, trace_endpos);
 
-    //(v_for * f_for) +
-
-    //point = self.origin + (vup_left * fup_left) + (vup_right * fup_right) +
-    //        (vdown_left * fdown_left) + (vdown_right * fdown_right);
-
-    vector upwish,downwish,leftwish,rightwish;
     upwish    = v_up    * (fup_left   + fup_right);
     downwish  = v_down  * (fdown_left + fdown_right);
     leftwish  = v_left  * (fup_left   + fdown_left);
@@ -208,9 +260,6 @@ vector steerlib_traceavoid(float pitch,float length)
 
     return (upwish+leftwish+downwish+rightwish) * 0.25;
 
-    //point = point * 0.2; // /5
-
-   // return normalize(point - self.origin) * (1- (fup_left+fup_right+fdown_left+fdown_right) * 0.25);
 }
 
 
@@ -219,7 +268,7 @@ vector steerlib_traceavoid(float pitch,float length)
 //     Testting                             //
 // Everything below this point is a mess :D //
 //////////////////////////////////////////////
-#define TLIBS_TETSLIBS
+//#define TLIBS_TETSLIBS
 #ifdef TLIBS_TETSLIBS
 void flocker_die()
 {
@@ -245,8 +294,8 @@ void flocker_think()
     self.angles_x = self.angles_x * -1;
 
     dodgemove   = steerlib_traceavoid(0.35,1000);
-    swarmmove   = steerlib_swarm(1000,100,150,400);
-    reprellmove = steerlib_repell(self.owner.enemy.origin+self.enemy.velocity,1000) * 700;
+    swarmmove   = steerlib_flock(500,75,700,500);
+    reprellmove = steerlib_repell(self.owner.enemy.origin+self.enemy.velocity,2000) * 700;
 
     if(vlen(dodgemove) == 0)
     {
@@ -256,13 +305,13 @@ void flocker_think()
     else
         self.pos1 = normalize(self.velocity);
 
-    dodgemove = dodgemove * 700;
+    dodgemove = dodgemove * vlen(self.velocity) * 5;
 
     newmove = swarmmove + reprellmove + wandermove + dodgemove;
-    self.velocity = movelib_inertmove_byspeed(newmove,900,0.4,0.8);
+    self.velocity = movelib_inertmove_byspeed(newmove,300,0.2,0.9);
     //self.velocity  = movelib_inertmove(dodgemove,0.65);
 
-    self.velocity = movelib_drag(0.02,0.6);
+    self.velocity = movelib_dragvec(0.01,0.6);
 
     self.angles = vectoangles(self.velocity);
 
@@ -349,15 +398,15 @@ void flocker_hunter_think()
     }
 
     if(self.enemy)
-        attractmove = steerlib_attract(self.enemy.origin,5000) * 1100;
+        attractmove = steerlib_attract(self.enemy.origin+self.enemy.velocity * 0.1,5000) * 1250;
     else
         attractmove = normalize(self.velocity) * 200;
 
-    dodgemove = steerlib_traceavoid(0.35,1500) * 1700;
+    dodgemove = steerlib_traceavoid(0.35,1500) * vlen(self.velocity);
 
     newmove = dodgemove + attractmove;
-    self.velocity = movelib_inertmove_byspeed(newmove,850,0.5,0.9);
-    self.velocity = movelib_drag(0.01,0.5);
+    self.velocity = movelib_inertmove_byspeed(newmove,1250,0.3,0.7);
+    self.velocity = movelib_dragvec(0.01,0.5);
 
 
     self.angles = vectoangles(self.velocity);
@@ -395,3 +444,5 @@ void spawnfunc_flockerspawn()
     self.enemy.owner     = self;
 }
 #endif
+
+
