@@ -1567,7 +1567,7 @@ void Sbar_Draw (void)
 	if(teamplay)
 	{
 		entity tm;
-		float init, size;
+		float size;
 		tm = teams.sort_next;
 		if (tm)
 		{
@@ -1575,13 +1575,11 @@ void Sbar_Draw (void)
 			{
 				if(!tm.team_size || tm.team == COLOR_SPECTATOR)
 					continue;
-				if(!init) {
+				if(!size)
 					size = tm.team_size;
-					init = true;
-				}
 				size = min(size, tm.team_size);
 			}
-			if (init)
+			if (size)
 			{
 				tm = GetTeam(GetPlayerColor(player_localentnum), false);
 				if (tm && tm.team != COLOR_SPECTATOR && (tm.team_size - size) > 1)
