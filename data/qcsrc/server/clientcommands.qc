@@ -225,7 +225,10 @@ void SV_ParseClientCommand(string s) {
 	} else if(argv(0) == "records") {
 		sprint(self, records_reply);
 	} else if(argv(0) == "voice") {
-		VoiceMessage(argv(1), substring(s, argv_start_index(2), argv_end_index(-1) - argv_start_index(2)));
+		if(tokens >= 3)
+			VoiceMessage(argv(1), substring(s, argv_start_index(2), argv_end_index(-1) - argv_start_index(2)));
+		else
+			VoiceMessage(argv(1), "");
 	} else if(argv(0) == "say") {
 		if(tokens >= 2)
 			Say(self, FALSE, substring(s, argv_start_index(1), argv_end_index(-1) - argv_start_index(1)));

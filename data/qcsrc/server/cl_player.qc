@@ -1122,7 +1122,7 @@ void PlayerSound(.string samplefield, float chan, float teamsay)
 void VoiceMessage(string type, string message)
 {
 	var .string sample;
-	var float teamsay;
+	var float teamsay, ownteam;
 	sample = GetVoiceMessageSampleField(type);
 
 	if(GetPlayerSoundSampleField_notFound)
@@ -1132,13 +1132,14 @@ void VoiceMessage(string type, string message)
 	}
 
 	teamsay = GetVoiceMessageTeamsayType(type);
+	ownteam = (teamsay == 1);
 
 	float flood;
 	float flood_spv;
 	var .float flood_field;
 
 	flood = 0;
-	if(teamsay == 1)
+	if(ownteam)
 	{
 		flood_spv = cvar("g_voice_flood_spv_team");
 		flood_field = floodcontrol_voiceteam;
@@ -1155,7 +1156,7 @@ void VoiceMessage(string type, string message)
 		flood = 1;
 
 	if (message != "")
-		Say(self, teamsay, message);
+		Say(self, ownteam, message);
 
 	if (!flood)
 		PlayerSound(sample, CHAN_VOICE, teamsay);
