@@ -506,7 +506,7 @@ COMPAT_FILES="
 	sound/weapons/electro_bounce.ogg
 	sound/weapons/electro_fire2.ogg
 	sound/weapons/electro_fire.ogg
-	sound/weapons/electro_fly.wav
+	sound/weapons/electro_fly.ogg
 	sound/weapons/electro_impact.ogg
 	sound/weapons/flacexp1.ogg
 	sound/weapons/flacexp2.ogg
@@ -535,7 +535,7 @@ COMPAT_FILES="
 	sound/weapons/neximpact.ogg
 	sound/weapons/rocket_det.ogg
 	sound/weapons/rocket_fire.ogg
-	sound/weapons/rocket_fly.wav
+	sound/weapons/rocket_fly.ogg
 	sound/weapons/rocket_impact.ogg
 	sound/weapons/rocket_mode.ogg
 	sound/weapons/seekerexp1.ogg
@@ -549,7 +549,7 @@ COMPAT_FILES="
 	sound/weapons/tagexp3.ogg
 	sound/weapons/tag_fire.ogg
 	sound/weapons/tag_impact.ogg
-	sound/weapons/tag_rocket_fly.wav
+	sound/weapons/tag_rocket_fly.ogg
 	sound/weapons/uzi_fire.ogg
 	sound/weapons/weaponpickup.ogg
 	sound/weapons/weapon_switch.ogg
@@ -641,8 +641,10 @@ cd pack
 find . -type f -print0 | qual=85 scaledown=256x256 xargs -0 ../../misc/jpeg-if-not-alpha.sh
 
 find . -name \*.ogg | while IFS= read -r NAME; do
+	c=`vorbiscomment -l "$NAME"`
 	oggdec -o "$NAME.wav" "$NAME"
 	oggenc -q 0 -o "$NAME" "$NAME.wav"
+	echo "$c" | vorbiscomment -w "$NAME"
 	rm -f "$NAME.wav"
 done
 
