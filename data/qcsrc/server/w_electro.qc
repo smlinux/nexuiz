@@ -15,14 +15,15 @@ void W_Plasma_Explode (void)
 	{
 		pointparticles(particleeffectnum("electro_ballexplode"), org2, '0 0 0', 1);
 		RadiusDamage (self, self.owner, cvar("g_balance_electro_secondary_damage"), cvar("g_balance_electro_secondary_edgedamage"), cvar("g_balance_electro_secondary_radius"), world, cvar("g_balance_electro_secondary_force"), self.projectiledeathtype, other);
+		stopsound (self, CHAN_PAIN);
 	}
 	else
 	{
 		pointparticles(particleeffectnum("electro_impact"), org2, '0 0 0', 1);
 		RadiusDamage (self, self.owner, cvar("g_balance_electro_primary_damage"), cvar("g_balance_electro_primary_edgedamage"), cvar("g_balance_electro_primary_radius"), world, cvar("g_balance_electro_primary_force"), self.projectiledeathtype, other);
+		//stopsound (self, CHAN_PAIN);
 	}
 
-	stopsound (self, CHAN_PAIN);
 	sound (self, CHAN_PROJECTILE, "weapons/electro_impact.wav", VOL_BASE, ATTN_NORM);
 
 	remove (self);
@@ -112,7 +113,8 @@ void W_Electro_Attack()
 	setmodel(proj, "models/elaser.mdl"); // precision set above
 	setsize(proj, '0 0 0', '0 0 0');
 
-	sound (proj, CHAN_PAIN, "weapons/electro_fly.wav", VOL_BASE, ATTN_NORM);
+	//sound (proj, CHAN_PAIN, "weapons/electro_fly.wav", VOL_BASE, ATTN_NORM);
+	//sounds bad
 }
 
 void W_Electro_Attack2()
@@ -151,6 +153,8 @@ void W_Electro_Attack2()
 	proj.health = cvar("g_balance_electro_secondary_health");
 	proj.event_damage = W_Plasma_Damage;
 	proj.flags = FL_PROJECTILE;
+
+	sound (proj, CHAN_PAIN, "weapons/electro_fly.wav", VOL_BASE, ATTN_NORM);
 }
 
 void spawnfunc_weapon_electro (void)
