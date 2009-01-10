@@ -231,6 +231,25 @@ void CSQC_UpdateView(float w, float h)
 		vid_height = h;
 	}
 
+#ifdef BLURTEST
+	if(time > blurtest_time0 && time < blurtest_time1)
+	{
+		float r, t;
+
+		t = (time - blurtest_time0) / (blurtest_time1 - blurtest_time0);
+		r = t * blurtest_radius;
+		f = 1 / pow(t, blurtest_power) - 1;
+
+		cvar_set("r_glsl_postprocess", "1");
+		cvar_set("r_glsl_postprocess_uservec1", strcat(ftos(r), " ", ftos(f), " 0 0"));
+	}
+	else
+	{
+		cvar_set("r_glsl_postprocess", "0");
+		cvar_set("r_glsl_postprocess_uservec1", "0 0 0 0");
+	}
+#endif
+
 	Fog_Force();
 
 	drawframetime = max(0.000001, time - drawtime);

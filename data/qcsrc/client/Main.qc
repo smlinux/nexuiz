@@ -319,6 +319,14 @@ float GameCommand(string msg)
 	else if(cmd == "sbar_columns_help") {
 		Cmd_Sbar_Help(argc);
 	}
+#ifdef BLURTEST
+	else if(cmd == "blurtest") {
+		blurtest_time0 = time;
+		blurtest_time1 = time + stof(argv(1));
+		blurtest_radius = stof(argv(2));
+		blurtest_power = stof(argv(3));
+	}
+#endif
 	
 	return false;
 }
