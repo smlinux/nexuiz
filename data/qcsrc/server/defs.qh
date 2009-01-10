@@ -13,6 +13,7 @@ float require_spawnfunc_prefix; // if this float exists, only functions with spa
 #define BUTTON_USE    buttonuse
 
 #define VOL_BASE 0.7
+#define VOL_BASEVOICE 1.0
 
 // Globals
 
@@ -467,12 +468,20 @@ string globalsound_fall;
 string globalsound_metalfall;
 string globalsound_step;
 string globalsound_metalstep;
+
+#define VOICETYPE_PLAYERSOUND 10
+#define VOICETYPE_TEAMRADIO 11
+#define VOICETYPE_LASTATTACKER 12
+#define VOICETYPE_LASTATTACKER_ONLY 13
+#define VOICETYPE_AUTOTAUNT 14
+#define VOICETYPE_TAUNT 15
+
 void PrecachePlayerSounds(string f);
 void PrecacheGlobalSound(string samplestring);
 void UpdatePlayerSounds();
 void ClearPlayerSounds();
-void PlayerSound(.string samplefield, float channel, float teamsay); // 0 is normal, 1 is team, 2 is last attacker
-void GlobalSound(string samplestring, float channel, float teamsay); // 0 is normal, 1 is team, 2 is last attacker
+void PlayerSound(.string samplefield, float channel, float voicetype);
+void GlobalSound(string samplestring, float channel, float voicetype);
 void VoiceMessage(string type, string message);
 
 // autotaunt system

@@ -76,11 +76,13 @@ void fillNexuizEffectsSettingsTab(entity me)
 	me.TR(me);
 		me.TDempty(me, 0.2);
 		me.TD(me, 1, 0.8, e = makeNexuizTextLabel(0, "Distance:"));
+			setDependent(e, "cl_decals", 1, 1);
 		me.TD(me, 1, 2, e = makeNexuizSlider(200, 500, 20, "r_drawdecals_drawdistance"));
 			setDependent(e, "cl_decals", 1, 1);
 	me.TR(me);
 		me.TDempty(me, 0.2);
 	    me.TD(me, 1, 0.8, e = makeNexuizTextLabel(0, "Time:"));
+	        setDependent(e, "cl_decals", 1, 1);
 	    me.TD(me, 1, 2, e = makeNexuizSlider(1, 20, 1, "cl_decals_time"));
 	        setDependent(e, "cl_decals", 1, 1);
 
@@ -158,10 +160,9 @@ void fillNexuizEffectsSettingsTab(entity me)
 		me.TD(me, 1, 2, e = makeNexuizSlider(0, 0.5, 0.05, "v_kicktime"));
 
 	me.TR(me);
-
-	me.TR(me);
 		if(cvar("developer"))
 			me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "r_showsurfaces", "Show surfaces"));
+				e.yesValue = 3;
 
 	me.gotoRC(me, me.rows - 1, 0);
 		me.TD(me, 1, me.columns, makeNexuizCommandButton("Apply immediately", '0 0 0', "sendcvar cl_nogibs; r_restart", COMMANDBUTTON_APPLY));

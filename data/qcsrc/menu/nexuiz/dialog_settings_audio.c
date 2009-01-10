@@ -127,10 +127,14 @@ void fillNexuizAudioSettingsTab(entity me)
 		setDependent(e, "snd_channels", 1.5, 0.5);
 	me.TR(me);
 	me.TR(me);
-		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "cl_voice_directional", "Play voice messages directionally"));
+		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Directional voices:"));
+		me.TD(me, 1, 2/3, e = makeNexuizRadioButton(1, "cl_voice_directional", "0", "None"));
+		me.TD(me, 1, 2/3, e = makeNexuizRadioButton(1, "cl_voice_directional", "2", "Taunts"));
+		me.TD(me, 1, 2/3, e = makeNexuizRadioButton(1, "cl_voice_directional", "1", "All"));
 	me.TR(me);
 		me.TDempty(me, 0.2);
 		me.TD(me, 1, 0.8, e = makeNexuizTextLabel(0, "Taunt range:"));
+		setDependent(e, "cl_voice_directional", 0.5, -0.5);
 		me.TD(me, 1, 1.8, e = makeNexuizTextSlider("cl_voice_directional_taunt_attenuation"));
 			e.addValue(e, "Very short", "3");
 			e.addValue(e, "Short", "2");
@@ -138,6 +142,7 @@ void fillNexuizAudioSettingsTab(entity me)
 			e.addValue(e, "Long", "0.25");
 			e.addValue(e, "Full", "0.015625");
 			e.configureNexuizTextSliderValues(e);
+		setDependent(e, "cl_voice_directional", 0.5, -0.5);
 	me.TR(me);
 		sl = makeNexuizSlider(0.15, 1, 0.05, "cl_autotaunt");
 			sl.valueDisplayMultiplier = 100;

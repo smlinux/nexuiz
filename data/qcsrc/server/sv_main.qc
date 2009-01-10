@@ -19,7 +19,7 @@ void CreatureFrame (void)
 				if (self.waterlevel != 3)
 				{
 					if(self.air_finished < time + 9)
-						PlayerSound(playersound_gasp, CHAN_PLAYER, 0);
+						PlayerSound(playersound_gasp, CHAN_PLAYER, VOICETYPE_PLAYERSOUND);
 					self.air_finished = time + 12;
 					self.dmg = 2;
 				}
@@ -107,9 +107,9 @@ void CreatureFrame (void)
 					if not(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOSTEPS)
 					{
 						if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_METALSTEPS)
-							GlobalSound(globalsound_metalstep, CHAN_PLAYER, 0);
+							GlobalSound(globalsound_metalstep, CHAN_PLAYER, VOICETYPE_PLAYERSOUND);
 						else
-							GlobalSound(globalsound_step, CHAN_PLAYER, 0);
+							GlobalSound(globalsound_step, CHAN_PLAYER, VOICETYPE_PLAYERSOUND);
 					}
 				}
 			}

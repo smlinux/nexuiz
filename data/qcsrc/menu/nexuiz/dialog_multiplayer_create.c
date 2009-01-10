@@ -108,6 +108,7 @@ void fillNexuizServerCreateTab(entity me)
 	me.TR(me);
 		me.TDempty(me, 0.2);
 		me.TD(me, 1, 0.8, e = makeNexuizTextLabel(0, "Bot skill:"));
+			setDependent(e, "bot_number", 0, -1);
 		me.TD(me, 1, 2, e = makeNexuizTextSlider("skill"));
 			e.addValue(e, "Botlike", "0");
 			e.addValue(e, "Beginner", "1");

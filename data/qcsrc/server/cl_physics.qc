@@ -85,7 +85,7 @@ void PlayerJump (void)
 		player_setanim(self.anim_jump, FALSE, TRUE, TRUE);
 
 	if(g_jump_grunt)
-		PlayerSound(playersound_jump, CHAN_PLAYER, 0);
+		PlayerSound(playersound_jump, CHAN_PLAYER, VOICETYPE_PLAYERSOUND);
 }
 
 void CheckWaterJump()
@@ -497,9 +497,9 @@ void SV_PlayerPhysics()
 			if not(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOSTEPS)
 			{
 				if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_METALSTEPS)
-					GlobalSound(globalsound_metalfall, CHAN_PLAYER, 0);
+					GlobalSound(globalsound_metalfall, CHAN_PLAYER, VOICETYPE_PLAYERSOUND);
 				else
-					GlobalSound(globalsound_fall, CHAN_PLAYER, 0);
+					GlobalSound(globalsound_fall, CHAN_PLAYER, VOICETYPE_PLAYERSOUND);
 			}
 		}
 	}

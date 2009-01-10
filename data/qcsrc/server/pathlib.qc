@@ -265,7 +265,6 @@ float pathlib_path(entity start,entity end,float pathing_method)
         case PT_ASTAR:
             dprint("Pathlib error: A* pathing not implemented!\n");
             return 0;
-            break;
         default:
             subpath_point = pathlib_subpath_quickstar(start,end,start.owner.path_subpathing_size);
             dprint("Pathlib warning: unknown pathing method, using quickstar!\n");
