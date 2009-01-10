@@ -135,7 +135,7 @@ float	CHAN_WEAPON2			= 5; // Nex fire (separated as it is a very long sound)
 float	CHAN_PAIN				= 6; // Pain
 	// on world: UNUSED
 	// on players: pain                              PAIN
-	// on entities: UNUSED
+	// on entities: projectiles flying               SHOTS
 float	CHAN_PLAYER				= 7; // Player body
 	// on world: UNUSED
 	// on players: player sounds                     PLAYER
@@ -159,11 +159,11 @@ float	EF_DIMLIGHT				= 8;
 
 #define EFMASK_CHEAP (EF_ADDITIVE | EF_DOUBLESIDED | EF_FULLBRIGHT | EF_NODEPTHTEST | EF_NODRAW | EF_NOGUNBOB | EF_NOSHADOW | EF_LOWPRECISION | EF_SELECTABLE)
 
-float	MSG_BROADCAST				= 0;
-float	MSG_ONE					= 1;
-float	MSG_ALL					= 2;
-float	MSG_INIT				= 3;
-float	MSG_ENTITY				= 5;
+float	MSG_BROADCAST				= 0; // unreliable
+float	MSG_ONE					= 1; // reliable
+float	MSG_ALL					= 2; // reliable
+float	MSG_INIT				= 3; // initialization
+float	MSG_ENTITY				= 5; // csqc
 
 // Deathtypes (weapon deathtypes are the IT_* constants below)
 // NOTE: when adding death types, please add an explanation to Docs/spamlog.txt too.

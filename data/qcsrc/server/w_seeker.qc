@@ -308,6 +308,7 @@ void Seeker_Tag_Touch()
 	te_knightspike(org2);
 
 	self.event_damage = SUB_Null;
+	stopsound (self, CHAN_PAIN);
 	sound (self, CHAN_PROJECTILE, "weapons/tag_impact.wav", 1, ATTN_NORM);
 
 	if (other.takedamage == DAMAGE_AIM && other.deadflag == DEAD_NO)
@@ -363,7 +364,7 @@ void Seeker_Fire_Tag()
 
 	missile.effects     = EF_FULLBRIGHT | EF_NOSHADOW | EF_LOWPRECISION;
 	missile.modelflags  = MF_TRACER3;
-	sound (missile, CHAN_PROJECTILE, "weapons/tag_rocket_fly.wav", VOL_BASE, ATTN_NORM);
+	sound (missile, CHAN_PAIN, "weapons/tag_rocket_fly.wav", VOL_BASE, ATTN_NORM);
 	missile.flags       = FL_PROJECTILE;
 
 	missile.velocity    = w_shotdir  * cvar("g_balance_seeker_tag_speed");

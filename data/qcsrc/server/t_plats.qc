@@ -246,7 +246,7 @@ void train_wait()
 	self.nextthink = self.ltime + self.wait;
 
 	if(self.noise != "")
-		sound(self, CHAN_TRIGGER, STR_MISC_NULL_WAV, VOL_BASE, ATTN_IDLE);
+		stopsoundto(MSG_BROADCAST, self, CHAN_TRIGGER); // send this as unreliable only, as the train will resume operation shortly anyway
 };
 
 void train_next()

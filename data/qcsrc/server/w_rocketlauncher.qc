@@ -4,6 +4,7 @@
 void W_Rocket_Explode (void)
 {
 	vector	org2;
+	stopsound(self, CHAN_PAIN);
 	sound (self, CHAN_PROJECTILE, "weapons/rocket_impact.wav", VOL_BASE, ATTN_NORM);
 	org2 = findbetterlocation (self.origin, 16);
 
@@ -241,7 +242,7 @@ void W_Rocket_Attack (void)
 	missile.nextthink = time;
 	missile.cnt = time + cvar("g_balance_rocketlauncher_lifetime");
 	missile.effects = EF_LOWPRECISION;
-	sound (missile, CHAN_PROJECTILE, "weapons/rocket_fly.wav", VOL_BASE, ATTN_NORM);
+	sound (missile, CHAN_PAIN, "weapons/rocket_fly.wav", VOL_BASE, ATTN_NORM);
 	missile.flags = FL_PROJECTILE;
 
 	// muzzle flash for 1st person view
