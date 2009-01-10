@@ -24,19 +24,24 @@ string toStringNexuizWeaponsDialog(entity me)
 void fillNexuizWeaponsDialog(entity me)
 {
 	entity e;
+	float h0, h;
+
+	h = me.rows - 6;
+	
 	me.TR(me);
 		me.TD(me, 1, 4, makeNexuizTextLabel(0, "Weapon priority list:"));
 	me.TR(me);
-		me.TD(me, me.rows - 5, 3, e = me.weaponsList = makeNexuizWeaponsList());
-	me.gotoRC(me, (me.rows - 5) / 2, 3);
+		h0 = me.currentRow;
+		me.TD(me, h, 3, e = me.weaponsList = makeNexuizWeaponsList());
+	me.gotoRC(me, h0 + h / 2 - 1, 3);
 		me.TD(me, 1, 1, e = makeNexuizButton("Up", '0 0 0'));
 			e.onClick = WeaponsList_MoveUp_Click;
 			e.onClickEntity = me.weaponsList;
-	me.gotoRC(me, (me.rows - 5) / 2 + 1, 3);
+	me.gotoRC(me, h0 + h / 2, 3);
 		me.TD(me, 1, 1, e = makeNexuizButton("Down", '0 0 0'));
 			e.onClick = WeaponsList_MoveDown_Click;
 			e.onClickEntity = me.weaponsList;
-	me.gotoRC(me, me.rows - 5, 0);
+	me.gotoRC(me, h0 + h, 0);
 		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "cl_weaponpriority_useforcycling", "Use priority list for weapon cycling"));
 	me.TR(me);
 		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "cl_autoswitch", "Auto switch weapons on pickup"));

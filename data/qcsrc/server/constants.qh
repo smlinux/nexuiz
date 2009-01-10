@@ -146,6 +146,7 @@ float	ATTN_MIN				= 0.015625;
 float	ATTN_NORM				= 0.5;
 float	ATTN_IDLE				= 2;
 float	ATTN_STATIC				= 3;
+float	ATTN_MAX   				= 3.984375;
 
 float	UPDATE_GENERAL				= 0;
 float	UPDATE_STATIC				= 1;

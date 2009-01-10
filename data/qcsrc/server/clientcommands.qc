@@ -231,11 +231,11 @@ void SV_ParseClientCommand(string s) {
 			VoiceMessage(argv(1), "");
 	} else if(argv(0) == "say") {
 		if(tokens >= 2)
-			Say(self, FALSE, substring(s, argv_start_index(1), argv_end_index(-1) - argv_start_index(1)));
+			Say(self, FALSE, substring(s, argv_start_index(1), argv_end_index(-1) - argv_start_index(1)), 1);
 		//clientcommand(self, formatmessage(s));
 	} else if(argv(0) == "say_team") {
 		if(tokens >= 2)
-			Say(self, TRUE, substring(s, argv_start_index(1), argv_end_index(-1) - argv_start_index(1)));
+			Say(self, TRUE, substring(s, argv_start_index(1), argv_end_index(-1) - argv_start_index(1)), 1);
 		//clientcommand(self, formatmessage(s));
 	} else if(argv(0) == "info") {
 		cmd = cvar_string(strcat("sv_info_", argv(1)));

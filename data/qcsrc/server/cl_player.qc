@@ -761,7 +761,7 @@ void UpdateSelectedPlayer()
 
 .float floodcontrol_chat;
 .float floodcontrol_chatteam;
-void Say(entity source, float teamsay, string msgin)
+void Say(entity source, float teamsay, string msgin, float floodcontrol)
 {
 	string msgstr, colorstr, cmsgstr, namestr;
 	float flood;
@@ -814,6 +814,7 @@ void Say(entity source, float teamsay, string msgin)
 
 	// FLOOD CONTROL
 	flood = 0;
+	if(floodcontrol)
 	{
 		float flood_spl;
 		float flood_burst;
@@ -1045,7 +1046,12 @@ void GlobalSound(string sample, float chan, float teamsay)
 			{
 				msg_entity = self.pusher;
 				if(clienttype(msg_entity) == CLIENTTYPE_REAL)
-					soundto(MSG_ONE, self, chan, sample, VOL_BASE, ATTN_NONE);
+				{
+					if(msg_entity.cvar_cl_voice_directional)
+						soundto(MSG_ONE, self, chan, sample, VOL_BASE, ATTN_MIN);
+					else
+						soundto(MSG_ONE, self, chan, sample, VOL_BASE, ATTN_NONE);
+				}
 			}
 	}
 	else if(teamsay == 2) // only to last attacker and self
@@ -1055,7 +1061,12 @@ void GlobalSound(string sample, float chan, float teamsay)
 			{
 				msg_entity = self.pusher;
 				if(clienttype(msg_entity) == CLIENTTYPE_REAL)
-					soundto(MSG_ONE, self, chan, sample, VOL_BASE, ATTN_NONE);
+				{
+					if(msg_entity.cvar_cl_voice_directional)
+						soundto(MSG_ONE, self, chan, sample, VOL_BASE, ATTN_MIN);
+					else
+						soundto(MSG_ONE, self, chan, sample, VOL_BASE, ATTN_NONE);
+				}
 				msg_entity = self;
 				if(clienttype(msg_entity) == CLIENTTYPE_REAL)
 					soundto(MSG_ONE, self, chan, sample, VOL_BASE, ATTN_NONE);
@@ -1063,25 +1074,22 @@ void GlobalSound(string sample, float chan, float teamsay)
 	}
 	else if(teamsay == 0) // to everyone
 	{
+		// note: player sound
 		// broadcast the sound, but it's directional
 		sound(self, chan, sample, VOL_BASE, ATTN_NORM);
 	}
 	else if(teamsay == 1) // to the same team
 	{
-		if(teams_matter)
-		{
-			entity e;
-			FOR_EACH_REALCLIENT(e)
-				if(!teams_matter || e.team == self.team)
-				{
-					msg_entity = e;
+		entity e;
+		FOR_EACH_REALCLIENT(e)
+			if(!teams_matter || e.team == self.team)
+			{
+				msg_entity = e;
+				if(msg_entity.cvar_cl_voice_directional)
+					soundto(MSG_ONE, self, chan, sample, VOL_BASE, ATTN_MIN);
+				else
 					soundto(MSG_ONE, self, chan, sample, VOL_BASE, ATTN_NONE);
-				}
-		}
-		else
-		{
-			sound(self, chan, sample, VOL_BASE, ATTN_NONE);
-		}
+			}
 	}
 	else if(teamsay == 4) // auto taunt
 	{
@@ -1091,8 +1099,8 @@ void GlobalSound(string sample, float chan, float teamsay)
 		if (tauntrand < e.cvar_cl_autotaunt)
 		{
 			msg_entity = e;
-			if (e.cvar_cl_taunt_directional)
-				soundto(MSG_ONE, self, chan, sample, VOL_BASE, ATTN_MIN);
+			if (e.cvar_cl_voice_directional)
+				soundto(MSG_ONE, self, chan, sample, VOL_BASE, bound(ATTN_MIN, msg_entity.cvar_cl_voice_directional_taunt_attenuation, ATTN_MAX));
 			else
 				soundto(MSG_ONE, self, chan, sample, VOL_BASE, ATTN_NONE);
 		}
@@ -1102,8 +1110,8 @@ void GlobalSound(string sample, float chan, float teamsay)
 		FOR_EACH_REALCLIENT(e)
 		{
 			msg_entity = e;
-			if (e.cvar_cl_taunt_directional)
-				soundto(MSG_ONE, self, chan, sample, VOL_BASE, ATTN_MIN);
+			if (e.cvar_cl_voice_directional)
+				soundto(MSG_ONE, self, chan, sample, VOL_BASE, bound(ATTN_MIN, msg_entity.cvar_cl_voice_directional_taunt_attenuation, ATTN_MAX));
 			else
 				soundto(MSG_ONE, self, chan, sample, VOL_BASE, ATTN_NONE);
 		}
@@ -1119,7 +1127,7 @@ void PlayerSound(.string samplefield, float chan, float teamsay)
 
 .float floodcontrol_voice;
 .float floodcontrol_voiceteam;
-void VoiceMessage(string type, string message)
+void VoiceMessage(string type, string msg)
 {
 	var .string sample;
 	var float teamsay, ownteam;
@@ -1155,8 +1163,8 @@ void VoiceMessage(string type, string message)
 	else
 		flood = 1;
 
-	if (message != "")
-		Say(self, ownteam, message);
+	if (msg != "")
+		Say(self, ownteam, msg, 0);
 
 	if (!flood)
 		PlayerSound(sample, CHAN_VOICE, teamsay);

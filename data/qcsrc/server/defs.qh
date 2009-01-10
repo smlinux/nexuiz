@@ -477,7 +477,8 @@ void VoiceMessage(string type, string message);
 
 // autotaunt system
 .float cvar_cl_autotaunt;
-.float cvar_cl_taunt_directional;
+.float cvar_cl_voice_directional;
+.float cvar_cl_voice_directional_taunt_attenuation;
 
 .float version_mismatch;
 
