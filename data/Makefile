@@ -13,6 +13,10 @@ FTEQCCFLAGS_CSPROGS ?=
 
 all: qc
 
+.PHONY: update-cvarcount
+update-cvarcount:
+	DO_NOT_RUN_MAKE=1 sh update-cvarcount.sh
+
 .PHONY: qc
 qc: menu.dat progs.dat csprogs.dat
 
@@ -26,13 +30,13 @@ pk3: $(PK3NAME)
 clean:
 	rm -f progs.dat menu.dat csprogs.dat
 
-csprogs.dat: qcsrc/client/*.* qcsrc/common/*.*
+csprogs.dat: qcsrc/client/*.* qcsrc/common/*.* update-cvarcount
 	cd qcsrc/client && $(FTEQCC) $(FTEQCCFLAGS) $(QCFLAGS_CSPROGS)
 
-progs.dat: qcsrc/server/*.* qcsrc/common/*.*
+progs.dat: qcsrc/server/*.* qcsrc/common/*.* update-cvarcount
 	cd qcsrc/server && $(FTEQCC) $(FTEQCCFLAGS) $(QCFLAGS_PROGS)
 
-menu.dat: qcsrc/menu/*.* qcsrc/menu/*/*.* qcsrc/common/*.*
+menu.dat: qcsrc/menu/*.* qcsrc/menu/*/*.* qcsrc/common/*.* update-cvarcount
 	cd qcsrc/menu && $(FTEQCC) $(FTEQCCFLAGS) $(FTEQCCFLAGS_MENU)
 
 gfx/menu/default/skinvalues.txt: qcsrc/menu/skin-customizables.inc

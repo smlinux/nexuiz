@@ -16,6 +16,6 @@ sed -i "s/^set cvar_check_weapons .*/set cvar_check_weapons $countw/" weaponsHav
 sed -i "s/^string CVAR_CHECK_DEFAULT = .*/string CVAR_CHECK_DEFAULT = \"$countd\";/" qcsrc/server/constants.qh
 sed -i "s/^string CVAR_CHECK_WEAPONS = .*/string CVAR_CHECK_WEAPONS = \"$countw\";/" qcsrc/server/constants.qh
 
-make
+[ -z "$DO_NOT_RUN_MAKE" ] && make
 
-echo "New checksums: $countd, $countw"
+echo "New checksums: $countd, $countw; please recompile!"
