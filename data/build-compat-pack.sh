@@ -646,6 +646,8 @@ find . -name \*.ogg | while IFS= read -r NAME; do
 	oggenc -q 0 -o "$NAME" "$NAME.wav"
 	echo "$c" | vorbiscomment -w "$NAME"
 	rm -f "$NAME.wav"
+
+	touch "${NAME%.ogg}.wav" # to disable this file, should the client have it
 done
 
 rev=`svnversion .. | sed 's/M$//g; s/.*://g;'`
