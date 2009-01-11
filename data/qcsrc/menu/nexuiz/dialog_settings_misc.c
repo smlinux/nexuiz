@@ -38,6 +38,8 @@ void fillNexuizMiscSettingsTab(entity me)
 	me.TR(me);
 		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "showfps", "Show frames per second"));
 	me.TR(me);
+		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "shownetgraph", "Show netgraph"));
+	me.TR(me);
 		me.TD(me, 1, 3, e = makeNexuizTextLabel(0, "Speedmeter:"));
 	me.TR(me);
 		me.TDempty(me, 0.2);
