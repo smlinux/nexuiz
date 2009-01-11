@@ -35,6 +35,7 @@ void W_Plasma_Explode_Combo (void) {
 	org2 = findbetterlocation (self.origin, 8);
 	pointparticles(particleeffectnum("electro_combo"), org2, '0 0 0', 1);
 
+	stopsound (self, CHAN_PAIN);
 	sound (self, CHAN_PROJECTILE, "weapons/electro_impact_combo.wav", VOL_BASE, ATTN_NORM);
 
 	self.event_damage = SUB_Null;
@@ -44,7 +45,7 @@ void W_Plasma_Explode_Combo (void) {
 
 void W_Plasma_Touch (void)
 {
-	PROJECTILE_TOUCH_NOSOUND;
+	PROJECTILE_TOUCH;
 	if (other.takedamage == DAMAGE_AIM) {
 		W_Plasma_Explode ();
 	} else {
