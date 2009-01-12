@@ -261,6 +261,7 @@ void fireBallisticBullet(vector start, vector dir, float spread, float pSpeed, f
 {
 	entity proj;
 	proj = spawn();
+	proj.classname = "bullet";
 	proj.owner = self;
 	proj.solid = SOLID_BBOX;
 	if(gravityfactor > 0)
