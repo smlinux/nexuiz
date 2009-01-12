@@ -735,6 +735,7 @@ float warmup_start_ammo_rockets;
 float warmup_start_ammo_cells;
 float warmup_start_health;
 float warmup_start_armorvalue;
+float g_weapon_stay;
 
 entity get_weaponinfo(float w);
 
@@ -917,6 +918,28 @@ void readplayerstartcvars()
 		start_weapons &~= WEPBIT_HOOK;
 		warmup_start_weapons &~= WEPBIT_HOOK;
 	}
+
+	if(g_weapon_stay == 2)
+	{
+		if(!start_ammo_shells) start_ammo_shells = g_pickup_shells;
+		if(!start_ammo_nails) start_ammo_shells = g_pickup_nails;
+		if(!start_ammo_cells) start_ammo_shells = g_pickup_cells;
+		if(!start_ammo_rockets) start_ammo_shells = g_pickup_rockets;
+		if(!warmup_start_ammo_shells) warmup_start_ammo_shells = g_pickup_shells;
+		if(!warmup_start_ammo_nails) warmup_start_ammo_shells = g_pickup_nails;
+		if(!warmup_start_ammo_cells) warmup_start_ammo_shells = g_pickup_cells;
+		if(!warmup_start_ammo_rockets) warmup_start_ammo_shells = g_pickup_rockets;
+	}
+
+	start_ammo_shells = max(0, start_ammo_shells);
+	start_ammo_nails = max(0, start_ammo_nails);
+	start_ammo_cells = max(0, start_ammo_cells);
+	start_ammo_rockets = max(0, start_ammo_rockets);
+
+	warmup_start_ammo_shells = max(0, warmup_start_ammo_shells);
+	warmup_start_ammo_nails = max(0, warmup_start_ammo_nails);
+	warmup_start_ammo_cells = max(0, warmup_start_ammo_cells);
+	warmup_start_ammo_rockets = max(0, warmup_start_ammo_rockets);
 }
 
 float g_bugrigs;
@@ -1028,6 +1051,10 @@ void readlevelcvars(void)
 	g_pickup_healthlarge_max           = cvar("g_pickup_healthlarge_max");
 	g_pickup_healthmega                = cvar("g_pickup_healthmega");
 	g_pickup_healthmega_max            = cvar("g_pickup_healthmega_max");
+
+	g_weapon_stay = cvar("g_weapon_stay");
+	if(!g_weapon_stay && (cvar("deathmatch") == 2))
+		g_weapon_stay = 1;
 
 	if not(inWarmupStage)
 	{

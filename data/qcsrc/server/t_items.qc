@@ -108,12 +108,12 @@ float Item_GiveTo(entity item, entity player)
 	}
 	else
 	{
-		if (cvar("deathmatch") == 2 || cvar("g_weapon_stay"))
+		if (g_weapon_stay == 1)
 		{
 			if (item.flags & FL_WEAPON && player.weapons & item.weapons && item.classname != "droppedweapon")
-				return 0;
+				goto skip;
 			if (player.weapons & item.weapons && item.flags & FL_TOSSED)	// don't let players stack ammo by tossing weapons
-				return 0;
+				goto skip;
 		}
 
 		// in case the player has autoswitch enabled do the following:
@@ -200,6 +200,7 @@ float Item_GiveTo(entity item, entity player)
 		}
 	}
 
+:skip
 	// always eat teamed entities
 	if(item.team)
 		pickedup = TRUE;
@@ -238,7 +239,7 @@ void Item_Touch (void)
 
 	if (self.classname == "droppedweapon")
 		remove (self);
-	else if((self.flags & FL_WEAPON) && !self.team && (cvar("deathmatch") == 2 || cvar("g_weapon_stay")))
+	else if((self.flags & FL_WEAPON) && !self.team && g_weapon_stay)
 		return;
 	else
 	{
@@ -685,6 +686,16 @@ void weapon_defaultspawnfunc(float wpn)
 		ammofield = Item_CounterField(e.items);
 		if(!self.ammofield)
 			self.ammofield = cvar(strcat("g_pickup_", Item_CounterFieldName(e.items)));
+	}
+
+	if(g_weapon_stay == 2)
+	{
+		self.ammo_shells = 0;
+		self.ammo_nails = 0;
+		self.ammo_cells = 0;
+		self.ammo_rockets = 0;
+		// weapon stay 2: don't use ammo on weapon pickups; instead
+		// initialize all ammo types to the pickup ammo unless set by g_start_ammo_*
 	}
 
 	StartItem(e.model, "weapons/weaponpickup.wav", self.respawntime, e.message, 0, e.weapons, FL_WEAPON, weapon_pickupevalfunc, e.bot_pickupbasevalue);
