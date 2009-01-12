@@ -109,11 +109,19 @@ float Item_GiveTo(entity item, entity player)
 	else
 	{
 		if (g_weapon_stay == 1)
+		if not(item.flags & FL_NO_WEAPON_STAY)
+		if (item.flags & FL_WEAPON)
 		{
-			if (item.flags & FL_WEAPON && player.weapons & item.weapons && item.classname != "droppedweapon")
-				goto skip;
-			if (player.weapons & item.weapons && item.flags & FL_TOSSED)	// don't let players stack ammo by tossing weapons
-				goto skip;
+			if(item.classname == "droppedweapon")
+			{
+				if (player.weapons & item.weapons)	// don't let players stack ammo by tossing weapons
+					goto skip;
+			}
+			else
+			{
+				if (player.weapons & item.weapons)
+					goto skip;
+			}
 		}
 
 		// in case the player has autoswitch enabled do the following:
@@ -239,7 +247,7 @@ void Item_Touch (void)
 
 	if (self.classname == "droppedweapon")
 		remove (self);
-	else if((self.flags & FL_WEAPON) && !self.team && g_weapon_stay)
+	else if((self.flags & FL_WEAPON) && !(self.flags & FL_NO_WEAPON_STAY) && g_weapon_stay)
 		return;
 	else
 	{
@@ -687,6 +695,14 @@ void weapon_defaultspawnfunc(float wpn)
 		if(!self.ammofield)
 			self.ammofield = cvar(strcat("g_pickup_", Item_CounterFieldName(e.items)));
 	}
+	else
+	{
+		self.flags |= FL_NO_WEAPON_STAY;
+	}
+
+	// weapon stay isn't supported for teamed weapons
+	if(self.team)
+		self.flags |= FL_NO_WEAPON_STAY;
 
 	if(g_weapon_stay == 2)
 	{
