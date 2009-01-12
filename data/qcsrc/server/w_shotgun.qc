@@ -23,7 +23,7 @@ void W_Shotgun_Attack (void)
 
 	// casing code
 	if (cvar("g_casings") >= 1)
-		SpawnCasing (w_shotorg, ((random () * 50 + 50) * v_right) - (v_forward * (random () * 25 + 25)) - ((random () * 5 - 30) * v_up), 2, vectoangles(v_forward),'0 250 0', 100, 1);
+		SpawnCasing (w_shotorg - v_forward * 10, ((random () * 50 + 50) * v_right) - (v_forward * (random () * 25 + 25)) - ((random () * 5 - 30) * v_up), 2, vectoangles(v_forward),'0 250 0', 100, 1);
 
 	// muzzle flash for 1st person view
 	flash = spawn();
@@ -66,7 +66,7 @@ void W_Shotgun_Attack2 (void)
 
 	// casing code
 	if (cvar("g_casings") >= 1)
-		SpawnCasing (w_shotorg, ((random () * 50 + 50) * v_right) - (v_forward * (random () * 25 + 25)) - ((random () * 5 - 30) * v_up), 2, vectoangles(v_forward),'0 250 0', 100, 1);
+		SpawnCasing (w_shotorg - v_forward * 10, ((random () * 50 + 50) * v_right) - (v_forward * (random () * 25 + 25)) - ((random () * 5 - 30) * v_up), 2, vectoangles(v_forward),'0 250 0', 100, 1);
 
 	flash = spawn();
 	setorigin(flash, '53 5 0');
