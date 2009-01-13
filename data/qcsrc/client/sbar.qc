@@ -1567,7 +1567,7 @@ void Sbar_Draw (void)
 	if(teamplay)
 	{
 		entity tm;
-		float teamsize;
+		float ts_min, ts_max;
 		tm = teams.sort_next;
 		if (tm)
 		{
@@ -1575,20 +1575,21 @@ void Sbar_Draw (void)
 			{
 				if(!tm.team_size || tm.team == COLOR_SPECTATOR)
 					continue;
-				if(!teamsize)
-					teamsize = tm.team_size;
-				teamsize = min(teamsize, tm.team_size);
+				if(!ts_min) ts_min = tm.team_size;
+				else ts_min = min(ts_min, tm.team_size);
+				if(!ts_max) ts_max = tm.team_size;
+				else ts_max = max(ts_max, tm.team_size);
 			}
-			if (teamsize)
+			if ((ts_max - ts_min) > 1)
 			{
-				tm = GetTeam(GetPlayerColor(player_localentnum), false);
+				s = strcat(blinkcolor, "Teamnumbers are unbalanced!");
+				tm = GetTeam(myteam, false);
 				if (tm)
 				if (tm.team != COLOR_SPECTATOR)
-				if ((tm.team_size - teamsize) > 1)
-				{
-					s = strcat(blinkcolor, "Teamnumbers are unbalanced! Press ^3", getcommandkey("team menu", "menu_showteamselect"), blinkcolor, " to adjust");
-					o = Sbar_DrawNoteLine(o, s);
-				}
+				if (tm.team_size == ts_max)
+					s = strcat(s, " Press ^3", getcommandkey("team menu", "menu_showteamselect"), blinkcolor, " to adjust");
+
+				o = Sbar_DrawNoteLine(o, s);
 			}
 		}
 	}
