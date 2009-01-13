@@ -211,13 +211,20 @@ void RadarMap_Think()
 				self.cnt = fopen(strcat("gfx/", mi_shortname, "_radar.png"), FILE_READ);
 			if(self.cnt < 0)
 				self.cnt = fopen(strcat("gfx/", mi_shortname, "_radar.jpg"), FILE_READ);
+			if(self.cnt < 0)
+				self.cnt = fopen(strcat("gfx/", mi_shortname, "_mini.tga"), FILE_READ);
+			if(self.cnt < 0)
+				self.cnt = fopen(strcat("gfx/", mi_shortname, "_mini.png"), FILE_READ);
+			if(self.cnt < 0)
+				self.cnt = fopen(strcat("gfx/", mi_shortname, "_mini.jpg"), FILE_READ);
 			if(self.cnt >= 0)
 			{
+				fclose(self.cnt);
+
 				print(self.netname, " already exists, aborting (you may want to specify --force)\n");
 				RadarMap_Next();
 				return;
 			}
-			fclose(self.cnt);
 		}
 		self.cnt = fopen(self.netname, FILE_WRITE);
 		if(self.cnt < 0)
