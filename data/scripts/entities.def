@@ -91,7 +91,8 @@ TOGGLE: causes the door to wait in both the start and end states for a trigger e
 */
 
 /*QUAKED func_door_rotating (0 .5 .8) ? START_OPEN BIDIR DOOR_DONT_LINK BIDIR_IN_DOWN - TOGGLE X_AXIS Y_AXIS
-Normal rotating door entity. By default, the door will activate when player walks close to it or when damage is inflicted to it.
+Normal rotating door entity that opens by rotating around an axis (default: Z). Use an origin brush to specify the rotation axis.
+By default, the door will activate when player walks close to it or when damage is inflicted to it.
 If DOOR_DONT_LINK is not set, the door will be linked with all doors it touches.
 BIDIR makes the door work bidirectional, so that the opening direction is always away from the requestor.
 The usage of bidirectional doors requires two manually instantiated triggers (trigger_multiple), the one to open it in the other direction
@@ -184,7 +185,7 @@ count: adjusts density, this many particles fall every second for a 1024x1024 ar
 */
 
 /*QUAKED func_rotating (0 .5 .8) ? - - X_AXIS Y_AXIS
-Brush entity that spins in place on one axis (default Z). Use an origin brush to specify define the rotation axis.
+Brush entity that spins in place on one axis (default Z). Use an origin brush to specify the rotation axis.
 To rotate around another axis, make a func_wall with an explicit avelocity given.
 -------- KEYS --------
 speed: speed to rotate (in degrees per second)
