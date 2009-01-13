@@ -380,6 +380,7 @@ void RadarMap(float argc)
 		else
 		{
 			remove(radarmapper);
+			radarmapper = world;
 			print("Usage: sv_cmd radarmap [--force] [--loop] [--quit] [--block | --trace | --sample] [--sharpen N] [--res W H] [--qual Q]\n");
 			print("The quality factor Q is roughly proportional to the time taken.\n");
 			print("--trace supports no quality factor; its result should look like --block with infinite quality factor.\n");
@@ -387,6 +388,8 @@ void RadarMap(float argc)
 			return;
 		}
 	}
+
+	print("Radarmap entity spawned.\n");
 }
 
 void BBox()
