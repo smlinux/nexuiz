@@ -32,28 +32,12 @@ float RadarMapAtPoint_Trace(float x, float y, float w, float h, float zmin, floa
 {
 	vector a, b, mi, ma;
 
-	q *= 0.125;
-
-	q = max(1, floor(0.5 + sqrt(q)));
-
 	mi = '0 0 0';
-	ma = '1 0 0' * (w/q) + '0 1 0' * (h/q);
+	ma = '1 0 0' * w + '0 1 0' * h;
 	a = '1 0 0' * x + '0 1 0' * y + '0 0 1' * zmin;
 	b = '1 0 0' * x + '0 1 0' * y + '0 0 1' * (zsize - zmin);
 
-	float i, j, s;
-	vector d;
-
-	for(i = 0; i < q; ++i)
-		for(j = 0; j < q; ++j)
-		{
-			d_x = ma_x * j;
-			d_y = ma_y * i;
-			s += FullTraceFraction(a + d, mi, ma, b + d);
-		}
-
-	s /= q * q;
-	return s;
+	return FullTraceFraction(a + d, mi, ma, b + d);
 }
 float RadarMapAtPoint_Block(float x, float y, float w, float h, float zmin, float zsize, float q)
 {
@@ -61,7 +45,8 @@ float RadarMapAtPoint_Block(float x, float y, float w, float h, float zmin, floa
 	float i, r;
 	vector dz;
 
-	q *= 255;
+	q = 256 * q - 1;
+	// 256q-1 is the ideal sample count to map equal amount of sample values to one pixel value
 
 	mi = '0 0 0';
 	dz = (zsize / q) * '0 0 1';
@@ -84,13 +69,16 @@ float RadarMapAtPoint_Block(float x, float y, float w, float h, float zmin, floa
 		if(trace_startsolid)
 			++r;
 	}
-	return r / q; // 0 .. 1
+	return r / q;
 }
 float RadarMapAtPoint_Sample(float x, float y, float w, float h, float zmin, float zsize, float q)
 {
 	vector a, b, mi, ma;
 
-	q *= 2048;
+	q *= 4; // choose q so it matches the regular algorithm in speed
+
+	q = 256 * q - 1;
+	// 256q-1 is the ideal sample count to map equal amount of sample values to one pixel value
 
 	mi = '0 0 0';
 	ma = '1 0 0' * w + '0 1 0' * h;
@@ -114,7 +102,9 @@ float RadarMapAtPoint_Sample(float x, float y, float w, float h, float zmin, flo
 	return c / q;
 }
 
-string doublehex = "000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F202122232425262728292A2B2C2D2E2F303132333435363738393A3B3C3D3E3F404142434445464748494A4B4C4D4E4F505152535455565758595A5B5C5D5E5F606162636465666768696A6B6C6D6E6F707172737475767778797A7B7C7D7E7F808182838485868788898A8B8C8D8E8F909192939495969798999A9B9C9D9E9FA0A1A2A3A4A5A6A7A8A9AAABACADAEAFB0B1B2B3B4B5B6B7B8B9BABBBCBDBEBFC0C1C2C3C4C5C6C7C8C9CACBCCCDCECFD0D1D2D3D4D5D6D7D8D9DADBDCDDDEDFE0E1E2E3E4E5E6E7E8E9EAEBECEDEEEFF0F1F2F3F4F5F6F7F8F9FAFBFCFDFEFF";
+// FF is contained twice, to map 256 to FF too
+// removes the need to bound()
+string doublehex = "000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F202122232425262728292A2B2C2D2E2F303132333435363738393A3B3C3D3E3F404142434445464748494A4B4C4D4E4F505152535455565758595A5B5C5D5E5F606162636465666768696A6B6C6D6E6F707172737475767778797A7B7C7D7E7F808182838485868788898A8B8C8D8E8F909192939495969798999A9B9C9D9E9FA0A1A2A3A4A5A6A7A8A9AAABACADAEAFB0B1B2B3B4B5B6B7B8B9BABBBCBDBEBFC0C1C2C3C4C5C6C7C8C9CACBCCCDCECFD0D1D2D3D4D5D6D7D8D9DADBDCDDDEDFE0E1E2E3E4E5E6E7E8E9EAEBECEDEEEFF0F1F2F3F4F5F6F7F8F9FAFBFCFDFEFFFF";
 
 float RADAR_WIDTH_MAX = 2048;
 float RADAR_HEIGHT_MAX = 2048;
@@ -286,7 +276,7 @@ void RadarMap_Think()
 			for(x = 0; x < self.size_x; ++x)
 			{
 				l = sharpen_get(x, self.ltime);
-				fputs(self.cnt, substring(doublehex, 2 * floor(l * 255.0 + 0.5), 2));
+				fputs(self.cnt, substring(doublehex, 2 * floor(l * 256.0), 2));
 			}
 			if(self.frame == self.size_y)
 				fputs(self.cnt, "\"\n");
@@ -306,7 +296,7 @@ void RadarMap_Think()
 			for(x = 0; x < self.size_x; ++x)
 			{
 				l = sharpen_get(x, self.ltime);
-				fputs(self.cnt, substring(doublehex, 2 * floor(l * 255.0 + 0.5), 2));
+				fputs(self.cnt, substring(doublehex, 2 * floor(l * 256.0), 2));
 			}
 			if(self.frame == self.size_y)
 				fputs(self.cnt, "\"\n");
@@ -394,7 +384,8 @@ void RadarMap(float argc)
 			remove(radarmapper);
 			print("Usage: sv_cmd radarmap [--force] [--loop] [--quit] [--block | --trace | --sample] [--sharpen N] [--res W H] [--qual Q]\n");
 			print("The quality factor Q is roughly proportional to the time taken.\n");
-			print("The method --trace only supports the quality factors 8, 32, 72, 128.\n");
+			print("--trace supports no quality factor; its result should look like --block with infinite quality factor.\n");
+			print("--block \n");
 			return;
 		}
 	}
