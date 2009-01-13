@@ -37,7 +37,7 @@ float RadarMapAtPoint_Trace(float x, float y, float w, float h, float zmin, floa
 	a = '1 0 0' * x + '0 1 0' * y + '0 0 1' * zmin;
 	b = '1 0 0' * x + '0 1 0' * y + '0 0 1' * (zsize - zmin);
 
-	return FullTraceFraction(a + d, mi, ma, b + d);
+	return FullTraceFraction(a, mi, ma, b);
 }
 float RadarMapAtPoint_Block(float x, float y, float w, float h, float zmin, float zsize, float q)
 {
