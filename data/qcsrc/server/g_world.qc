@@ -761,7 +761,8 @@ void Maplist_Init()
 	{
 		bprint( "Maplist is empty!  Resetting it to default map list.\n" );
 		cvar_set("g_maplist", MapInfo_ListAllowedMaps(0, MAPINFO_FLAG_HIDDEN));
-		ShuffleMaplist();
+		if(cvar("g_maplist_shuffle"))
+			ShuffleMaplist();
 		localcmd("\nmenu_cmd sync\n");
 		Map_Count = tokenizebyseparator(cvar_string("g_maplist"), " ");
 	}
@@ -880,7 +881,8 @@ void GotoNextMap()
 			{
 				bprint( "Maplist contains no single playable map!  Resetting it to default map list.\n" );
 				cvar_set("g_maplist", MapInfo_ListAllowedMaps(0, MAPINFO_FLAG_HIDDEN));
-				ShuffleMaplist();
+				if(cvar("g_maplist_shuffle"))
+					ShuffleMaplist();
 				localcmd("\nmenu_cmd sync\n");
 			}
 			else
@@ -1902,7 +1904,8 @@ void MapVote_Init()
 	{
 		bprint( "Maplist contains no single playable map!  Resetting it to default map list.\n" );
 		cvar_set("g_maplist", MapInfo_ListAllowedMaps(0, MAPINFO_FLAG_HIDDEN));
-		ShuffleMaplist();
+		if(cvar("g_maplist_shuffle"))
+			ShuffleMaplist();
 		localcmd("\nmenu_cmd sync\n");
 		for(i = 0; i < 100 && mapvote_count < nmax; ++i)
 			MapVote_AddVotable(GetNextMap(), FALSE);
