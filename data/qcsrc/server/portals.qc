@@ -84,6 +84,12 @@ float Portal_TeleportPlayer(entity teleporter, entity player)
 	vector old_yawforward;
 	float planeshift, s, t;
 
+	if not(teleporter.enemy)
+	{
+		backtrace("Portal_TeleportPlayer called without other portal being set. Stop.");
+		return 0;
+	}
+
 	from = teleporter.origin;
 	transform = teleporter.portal_transform;
 
@@ -195,7 +201,20 @@ float Portal_TeleportPlayer(entity teleporter, entity player)
 
 	if(player.flagcarried)
 		DropFlag(player.flagcarried, player, world);
+
+	if not(teleporter.enemy)
+	{
+		backtrace("Portal_TeleportPlayer ended up without other portal being set BEFORE TeleportPlayer. Stop.");
+		return 0;
+	}
+
 	TeleportPlayer(teleporter, player, to, ang, newvel, teleporter.enemy.absmin, teleporter.enemy.absmax);
+
+	if not(teleporter.enemy)
+	{
+		backtrace("Portal_TeleportPlayer ended up without other portal being set AFTER TeleportPlayer. Stop.");
+		return 0;
+	}
 
 	// reset fade counter
 	teleporter.portal_wants_to_vanish = 0;
