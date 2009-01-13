@@ -4,11 +4,9 @@ float FullTraceFraction(vector a, vector mi, vector ma, vector b)
 {
 	vector c;
 	float white, black;
-	if(a_z > b_z)
-		return 0;
 
-	white = 0;
-	black = 0;
+	white = 0.001;
+	black = 0.001;
 
 	c = a;
 
@@ -17,11 +15,11 @@ float FullTraceFraction(vector a, vector mi, vector ma, vector b)
 		tracebox(c, mi, ma, b, MOVE_WORLDONLY, world);
 		if(!trace_startsolid)
 		{
-			black += trace_endpos_z - c_z;
+			black += vlen(trace_endpos - c);
 			c = trace_endpos;
 		}
 		tracebox_inverted(c, mi, ma, b, MOVE_WORLDONLY, world);
-		white += trace_endpos_z - c_z;
+		white += vlen(trace_endpos - c);
 		c = trace_endpos;
 	}
 
