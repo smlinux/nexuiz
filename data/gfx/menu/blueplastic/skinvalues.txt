@@ -1,3 +1,4 @@
+// many thanks to esteel for the correction ideas :)
 title Blue Plastic
 author FraNcoTirAdoR
 
@@ -17,7 +18,7 @@ COLOR_DIALOG_MUTATORS           '1 1 1'
 COLOR_DIALOG_MAPINFO            '1 1 1'
 COLOR_DIALOG_USERBIND           '1 1 1'
 COLOR_DIALOG_SINGLEPLAYER       '1 1 1'
-COLOR_DIALOG_WEAPONS            '1 0.7 0.7'
+COLOR_DIALOG_WEAPONS            '0.7 0.7 0.9'
 COLOR_DIALOG_RADAR              '1 1 1'
 COLOR_DIALOG_CREDITS            '1 1 1'
 COLOR_DIALOG_SERVERINFO         '1 1 1'
@@ -32,17 +33,17 @@ POSITION_DIALOG_QUIT            '0.9 1.2 0'
 
 // mouse
 //   uses "cursor" images
-SIZE_CURSOR                     '32 32 0'
+SIZE_CURSOR                     '26 26 0'
 OFFSET_CURSOR                   '0 0 0'
 ALPHA_CURSOR_INTRO              0
 
 // general
 //   uses "background" images
 //   uses "background_ingame" images
-ALPHA_BACKGROUND_INGAME         0.9
-ALPHA_DISABLED                  0.2
+ALPHA_BACKGROUND_INGAME         0.7
+ALPHA_DISABLED                  0.4
 ALPHA_BEHIND                    0.5
-ALPHA_TEXT                      0.7
+ALPHA_TEXT                      0.8
 
 // item: button
 //   uses "button" images
@@ -55,20 +56,20 @@ COLOR_BUTTON_F                  '1 1 1'
 COLOR_BUTTON_D                  '1 1 1'
 
 // item: campaign
-ALPHA_CAMPAIGN_SELECTABLE       0.8
-COLOR_CAMPAIGN_SELECTABLE       '0.15 0.15 1'
+ALPHA_CAMPAIGN_SELECTABLE       0.7
+COLOR_CAMPAIGN_SELECTABLE       '0.8 0.8 0.75'
 ALPHA_CAMPAIGN_CURRENT          1
-COLOR_CAMPAIGN_CURRENT          '0.75 0.75 0.75'
-ALPHA_CAMPAIGN_FUTURE           0.2
+COLOR_CAMPAIGN_CURRENT          '0.85 0.85 0.4'
+ALPHA_CAMPAIGN_FUTURE           0.15
 COLOR_CAMPAIGN_FUTURE           '0.75 0.75 0.75'
 ALPHA_CAMPAIGN_DESCRIPTION      0.7
 
 // item: checkbox
 //   uses "checkbox" images
-COLOR_CHECKBOX_N                '1 1 1'
-COLOR_CHECKBOX_C                '1 1 1'
-COLOR_CHECKBOX_F                '0.75 0.75 0.75'
-COLOR_CHECKBOX_D                '1 1 1'
+COLOR_CHECKBOX_N                '0.8 0.8 0.8'
+COLOR_CHECKBOX_C                '0.6 0.6 0.9'
+COLOR_CHECKBOX_F                '1 1 1'
+COLOR_CHECKBOX_D                '0.8 0.8 0.8'
 
 // item: color picker
 //   uses "colorpicker" images
@@ -111,7 +112,7 @@ COLOR_KEYGRABBER_KEYS           '1 1 1'
 ALPHA_KEYGRABBER_KEYS           0.7
 
 // item: list box
-COLOR_LISTBOX_SELECTED          '0.15 0.15 1'
+COLOR_LISTBOX_SELECTED          '0.0 0 0.5'
 ALPHA_LISTBOX_SELECTED          1
 COLOR_LISTBOX_WAITING           '0.875 0.875 0.875'
 ALPHA_LISTBOX_WAITING           0.5
@@ -141,28 +142,28 @@ ALPHA_MODELTITLE                1
 
 // item: radio button
 //   uses "radiobutton" images
-COLOR_RADIOBUTTON_N             '0.9 0.9 1'
-COLOR_RADIOBUTTON_C             '1 1 1'
-COLOR_RADIOBUTTON_F             '0.75 0.75 0.75'
+COLOR_RADIOBUTTON_N             '0.8 0.8 0.8'
+COLOR_RADIOBUTTON_C             '0.4 0.4 1'
+COLOR_RADIOBUTTON_F             '1 1 1'
 COLOR_RADIOBUTTON_D             '0.9 0.9 1'
 
 // item: scrollbar
 //   uses "scrollbar" images
-COLOR_SCROLLBAR_N               '1 1 1'
-COLOR_SCROLLBAR_F               '0.75 0.75 0.75'
-COLOR_SCROLLBAR_C               '1 1 1'
+COLOR_SCROLLBAR_N               '0.25 0.25 0.6'
+COLOR_SCROLLBAR_F               '0.25 0.25 0.6'
+COLOR_SCROLLBAR_C               '1 1 0.7'
 COLOR_SCROLLBAR_S               '1 1 1'
-WIDTH_SCROLLBAR                 16
+WIDTH_SCROLLBAR                 12
 
 // item: server list
 ALPHA_SERVERLIST_FULL           0.5
 ALPHA_SERVERLIST_EMPTY          0.45
-COLOR_SERVERLIST_LOWPING        '0 0 1'
+COLOR_SERVERLIST_LOWPING        '0.2 0.2 1'
 COLOR_SERVERLIST_MEDPING        '0.6 0.6 0.6'
 COLOR_SERVERLIST_HIGHPING       '0.1 0.1 0'
 ALPHA_SERVERLIST_HIGHPING       0.7
 ALPHA_SERVERLIST_FAVORITE       1
-COLOR_SERVERLIST_FAVORITE       '0.4 0.4 1'
+COLOR_SERVERLIST_FAVORITE       '0 0.4 0.7'
 
 // item: server info
 COLOR_SERVERINFO_NAME           '1 1 1'
@@ -172,11 +173,12 @@ COLOR_SERVERINFO_IP             '0.15 0.15 1'
 COLOR_SKINLIST_TITLE            '1 1 1'
 COLOR_SKINLIST_AUTHOR           '0.75 0.75 0.75'
 
+
 // item: slider
 //   uses "slider" images
-COLOR_SLIDER_N                  '0.3 0.3 0.7'
-COLOR_SLIDER_C                  '1 1 1'
-COLOR_SLIDER_F                  '0.75 0.75 0.75'
+COLOR_SLIDER_N                  '0.2 0.2 0.8'
+COLOR_SLIDER_C                  '0.5 0.5 0.9'
+COLOR_SLIDER_F                  '0.4 0.4 0.8'
 COLOR_SLIDER_D                  '1 1 1'
 COLOR_SLIDER_S                  '1 1 1'
 WIDTH_SLIDERTEXT                0.37
