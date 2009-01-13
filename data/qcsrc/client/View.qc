@@ -190,6 +190,8 @@ void PostInit(void);
 float Sbar_WouldDrawScoreboard ();
 float zoomscript_caught;
 float view_set;
+float camera_mode;
+vector camera_offset, new_angles;
 void CSQC_UpdateView(float w, float h)
 {
 	entity e;
@@ -305,6 +307,70 @@ void CSQC_UpdateView(float w, float h)
 	R_SetView(VF_DRAWWORLD, 1);
 
 	R_SetView(VF_FOV, GetCurrentFov(fov));
+
+	if (cvar("chase_active") > 1 && isdemo())
+	{
+		float distance, chase_view_angle, step;
+		vector new_origin, m;
+
+		step = cvar("chase_active_direction_step");
+		
+		if( cvar("chase_active_reset") || !camera_mode )
+		{
+			camera_offset = '0 0 0';
+			new_angles = view_angles;
+			camera_offset_z += 20;
+			camera_offset_x -= 20 * cos(new_angles_y * DEG2RAD);
+			camera_offset_y -= 20 * sin(new_angles_y * DEG2RAD);
+		}
+
+		if( cvar("chase_active_roll") )
+			new_angles_z += cvar("chase_active_roll") * cvar("chase_active_rolling_step");
+
+		m = getmousepos() * 0.1;
+		new_angles_x += m_y * cos(new_angles_z * DEG2RAD) + (m_x * sin(new_angles_z * DEG2RAD));
+		new_angles_y -= m_x * cos(new_angles_z * DEG2RAD) + (m_y * -sin(new_angles_z * DEG2RAD));
+
+		if( cvar("chase_active_direction_x") )
+		{
+			camera_offset_x += cvar("chase_active_direction_x") * step * cos(new_angles_y * DEG2RAD);
+			camera_offset_y += cvar("chase_active_direction_x") * step * sin(new_angles_y * DEG2RAD);
+		}
+
+		if( cvar("chase_active_direction_y") )
+		{
+			camera_offset_y += cvar("chase_active_direction_y") * step * cos(new_angles_y * DEG2RAD) * cos(new_angles_z * DEG2RAD);
+			camera_offset_x += cvar("chase_active_direction_y") * step * -sin(new_angles_y * DEG2RAD);
+			camera_offset_z += cvar("chase_active_direction_y") * step * sin(new_angles_z * DEG2RAD);
+		}
+
+		if( cvar("chase_active_direction_z") )
+			camera_offset_z += cvar("chase_active_direction_z") * step * cos(new_angles_z * DEG2RAD);
+
+		if( cvar("chase_active_free") )
+		{
+			if ( camera_mode == CAMERA_CHASE ){
+				camera_offset = view_origin + camera_offset;
+			}
+
+			camera_mode = CAMERA_FREE;
+			
+			new_origin = camera_offset;
+		}
+		else
+		{
+			if ( camera_mode == CAMERA_FREE )
+			{
+				camera_offset = camera_offset - view_origin;
+			}
+
+			camera_mode = CAMERA_CHASE;
+			new_origin = view_origin + camera_offset;
+		}
+
+		R_SetView(VF_ANGLES, new_angles);
+		R_SetView(VF_ORIGIN, new_origin);
+	}
 	
 	// Draw the Crosshair
 	float scoreboard_active;

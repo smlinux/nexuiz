@@ -183,3 +183,6 @@ float MOVE_NOMONSTERS = 1; // same as TRUE
 float MOVE_MISSILE = 2; // save as movement with .movetype == MOVETYPE_FLYMISSILE
 float MOVE_HITMODEL = 4;
 float MOVE_WORLDONLY = 3;
+
+float CAMERA_FREE = 1;
+float CAMERA_CHASE = 2;
