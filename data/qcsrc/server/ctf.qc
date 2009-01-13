@@ -115,7 +115,6 @@ void ctf_captureshield_spawn()
 	setmodel(e, "models/onslaught/generator_shield.md3");
 	e.scale = 0.5;
 	setsize(e, e.scale * e.mins, e.scale * e.maxs);
-	print(etos(e), "\n");
 }
 
 float ctf_score_value(string parameter)
