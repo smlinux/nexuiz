@@ -49,11 +49,11 @@ This happens when the engine can't load the data*.pk3 file or has trouble to ini
 	5. your download might be corrupted, please download Nexuiz again
 
 ** When i start Nexuiz my screen is flickering
-This in known to happen on Windows with Intel grahpic chips and is a bug in the graphics drivers.  A workaround is to set |Flip-Policiy| to |blit|.  Open the control panel, there should be an icon called |Intel(R) GMA driver| (or something like that), double click it. Click on |3D Settings| to find the screen with that settings.
+This is known to happen on Windows with Intel graphic chips and is a bug in the graphics drivers.  A workaround is to set |Flip-Policiy| to |blit|.  Open the control panel, there should be an icon called |Intel(R) GMA driver| (or something like that), double click it. Click on |3D Settings| to find the screen with those settings.
 
 ** How can I speed up my frame rate?
-You can choose predefined performance settings in the |Settings / Video| menu.  |Normal| is the default, |Medium| and |Low| run faster while |High|, |Ultra| and |Ultimate| enable more features you might want to test if you have a high end graphic card.  Or you can dis/enable single features.  The greatest performance boost can be achieved by turning off dynamic lights and shadows in the |Settings / Effects| menu.  Bloom is also quite resource intensive.  Other fps boots include disabling |Deluxemapping| and |Coronas|.  On older graphics cards or on-board/notebook chips with little video ram you can try to lower the texture quality in the |Settings / Video| menu.
-Some graphic cards (mostly ATI or quite old cards) run A LOT faster if you disable the |Vertex Buffer Objects| in the |Settings / Video| menu.  An other thing that can greatly help on such cards is to disable the |OpenGL 2.0 Shaders|.  Having that option enabled is faster on most cards however thats why both are active by default.
+You can choose predefined performance settings in the |Settings / Video| menu.  |Normal| is the default, |Medium| and |Low| run faster while |High|, |Ultra| and |Ultimate| enable more features you might want to test if you have a high end graphic card.  Or you can enable/disable single features.  The greatest performance boost can be achieved by turning off dynamic lights and shadows in the |Settings / Effects| menu.  Bloom is also quite resource intensive.  Other fps boots include disabling |Deluxemapping| and |Coronas|.  On older graphics cards or on-board/notebook chips with little video ram you can try to lower the texture quality in the |Settings / Video| menu.
+Some graphic cards (mostly ATI or quite old cards) run A LOT faster if you disable the |Vertex Buffer Objects| in the |Settings / Video| menu.  An other thing that can greatly help on such cards is to disable the |OpenGL 2.0 Shaders|.  Having that option enabled is faster on most cards however that is why both are active by default.
 
 ** The sound is broken, it crackles and stutters
 Try run |nexuiz-sdl.exe| instead of |nexuiz.exe| (on Windows).  Adding the command line options |-sndspeed 48000| and/or |-sndstereo| can also help on some systems (on Linux, Mac, Windows).
@@ -70,7 +70,7 @@ This is probably because you don't have the map that's running on the server.  A
 For Linux users: you need to have libcurl installed, otherwise you won't be able to download any maps.  libcurl should be available in any Linux distribution, just search for "libcurl" and install it in your distribution's package manager.
 
 ** How to report crashes
-Alientrap wants to ensure everyone has a pleasent time playing Nexuiz, so if you have problems we would like to ask you to report them and thus help solve them.  Especially crash reports can be very helpful.  See below for how to contact Alientrap ([Where can i get more help?])
+Alientrap wants to ensure everyone has a pleasant time playing Nexuiz, so if you have problems we would like to ask you to report them and thus help solve them.  Especially crash reports can be very helpful.  See below for how to contact Alientrap ([Where can i get more help?])
 
 On Mac: IS THERE AN EASY WAY?
 
@@ -85,7 +85,7 @@ Visit [the official Nexuiz forum (http://alientrap.org/forum)] there is a [suppo
 
 ** How do I install new maps?
 Maps usually ship as *.pk3 file.  All you have to do is to copy this file to the |Nexuiz/data/| (on Linux, Mac, Windows) OR |~/.nexuiz/data/| (on Linux, Mac) directory.
-Map packages that were downloaded from a server during playing end up in |Nexuiz/data/dlcache/| or |~/.nexuiz/data/dlcache/| and are only used till you exit Nexuiz. If you want to play them localy or use them to setup a server of your own you can "accept" the packages by moving it one level up - right next to your config.cfg.
+Map packages that were downloaded from a server during playing end up in |Nexuiz/data/dlcache/| or |~/.nexuiz/data/dlcache/| and are only used till you exit Nexuiz. If you want to play them locally or use them to setup a server of your own you can "accept" the packages by moving it one level up - right next to your config.cfg.
 
 ** How can I place a shortcut to Nexuiz on my Linux desktop?
 Use the script |nexuiz-linux-sdl.sh| or |nexuiz-linux-glx.sh| instead of the binaries.  The scripts will use the correct |working directory|,choose the right version (32 or 64 bit) and also allow you to start a extra X server.
@@ -124,7 +124,7 @@ Colors can be used in nicknames and chat messages via two ways: Either the simpl
 	!--------!--------------------------------!
 
 ** How do i watch/record demos?
-Demos are recordings of matches that you have played. To automaticly record a demo each time you play enable the option |Record demos while playing| in the |Settings / Demos| menu. Or if you just want to record some matches open the console and type |rec <demos/name>| before playing. That is before starting a game or connecting to a server. The demo file will then be stored in |Nexuiz/data/demos/<name>.dem| (on Windows) or |~/.nexuiz/data/demos/<name>.dem| (on Linux, Mac).
+Demos are recordings of matches that you have played. To automatically record a demo each time you play enable the option |Record demos while playing| in the |Settings / Demos| menu. Or if you just want to record some matches open the console and type |rec <demos/name>| before playing. That is before starting a game or connecting to a server. The demo file will then be stored in |Nexuiz/data/demos/<name>.dem| (on Windows) or |~/.nexuiz/data/demos/<name>.dem| (on Linux, Mac).
 If you downloaded a demo, copy it to |Nexuiz/data/demos/<name>.dem| (on Linux, Mac, Windows) or |~/.nexuiz/data/demos/<name>.dem| (on Linux, Mac).  You might have to create this directory if you have never recorded a demo before.
 To watch demos you can choose a demo file in the |Settings / Demos| and click the play button. Also you can watch demos typing |ply <demos/name>| in the console ([How do I open the console?]). You can list all your demo files by typing |dem| on the console.Some useful key bindings for viewing demos and making videos are listed [here (http://www.alientrap.org/forum/viewtopic.php?p=357#357)].  A simple way to automatically record demos can be found [here (http://www.alientrap.org/forum/viewtopic.php?t=90)].
 
