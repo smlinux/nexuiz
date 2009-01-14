@@ -157,3 +157,8 @@ target_spawn.qc
 func_breakable.qc
 
 ../common/items.qc
+
+monsters/defs.qc
+monsters/fight.qc
+monsters/ai.qc
+monsters/m_monsters.qc

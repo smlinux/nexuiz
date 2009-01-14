@@ -1,9 +1,47 @@
+void tdeath(entity player, entity teleporter, entity telefragger, vector telefragmin, vector telefragmax)
+{
+	entity head;
+	vector deathmin;
+	vector deathmax;
+	float deathradius;
+	deathmin = player.absmin;
+	deathmax = player.absmax;
+	if(telefragmin != telefragmax)
+	{
+		if(deathmin_x > telefragmin_x) deathmin_x = telefragmin_x;
+		if(deathmin_y > telefragmin_y) deathmin_y = telefragmin_y;
+		if(deathmin_z > telefragmin_z) deathmin_z = telefragmin_z;
+		if(deathmax_x < telefragmax_x) deathmax_x = telefragmax_x;
+		if(deathmax_y < telefragmax_y) deathmax_y = telefragmax_y;
+		if(deathmax_z < telefragmax_z) deathmax_z = telefragmax_z;
+	}
+	deathradius = max(vlen(deathmin), vlen(deathmax));
+	for(head = findradius(player.origin, deathradius); head; head = head.chain)
+		if(head != player)
+			if(head.takedamage)
+				if(boxesoverlap(deathmin, deathmax, head.absmin, head.absmax))
+				{
+					if ((player.classname == "player") && (player.health >= 1))
+						Damage (head, teleporter, telefragger, 10000, DEATH_TELEFRAG, head.origin, '0 0 0');
+					else if (telefragger.health < 1) // corpses gib
+						Damage (head, teleporter, telefragger, 10000, DEATH_TELEFRAG, head.origin, '0 0 0');
+					else // dead bodies and monsters gib themselves instead of telefragging
+						Damage (telefragger, teleporter, telefragger, 10000, DEATH_TELEFRAG, telefragger.origin, '0 0 0');
+				}
+}
+
+void spawn_tdeath(vector v0, entity e, vector v)
+{
+	tdeath(e, e, e, '0 0 0', '0 0 0');
+}
+
 .entity pusher;
 void TeleportPlayer(entity teleporter, entity player, vector to, vector to_angles, vector to_velocity, vector telefragmin, vector telefragmax)
 {
 	entity head;
 	entity oldself;
 	entity telefragger;
+	vector from;
 
 	if(teleporter.owner)
 		telefragger = teleporter.owner;
@@ -22,6 +60,7 @@ void TeleportPlayer(entity teleporter, entity player, vector to, vector to_angle
 
 	// Relocate the player
 	// assuming to allows PL_MIN to PL_MAX box and some more
+	from = player.origin;
 	setorigin (player, to);
 	player.angles = to_angles;
 	player.fixangle = TRUE;
@@ -29,37 +68,8 @@ void TeleportPlayer(entity teleporter, entity player, vector to, vector to_angle
 
 	if(player.classname == "player")
 	{
-		// Kill anyone else in the teleporter box (NO MORE TDEATH)
 		if(player.takedamage && player.deadflag == DEAD_NO && !g_race)
-		{
-			vector deathmin;
-			vector deathmax;
-			float deathradius;
-			deathmin = player.absmin;
-			deathmax = player.absmax;
-			if(telefragmin != telefragmax)
-			{
-				if(deathmin_x > telefragmin_x) deathmin_x = telefragmin_x;
-				if(deathmin_y > telefragmin_y) deathmin_y = telefragmin_y;
-				if(deathmin_z > telefragmin_z) deathmin_z = telefragmin_z;
-				if(deathmax_x < telefragmax_x) deathmax_x = telefragmax_x;
-				if(deathmax_y < telefragmax_y) deathmax_y = telefragmax_y;
-				if(deathmax_z < telefragmax_z) deathmax_z = telefragmax_z;
-			}
-			deathradius = max(vlen(deathmin), vlen(deathmax));
-			for(head = findradius(player.origin, deathradius); head; head = head.chain)
-				if(head != player)
-					if(head.takedamage)
-						if(boxesoverlap(deathmin, deathmax, head.absmin, head.absmax))
-						{
-							if ((player.classname == "player") && (player.health >= 1))
-								Damage (head, teleporter, telefragger, 10000, DEATH_TELEFRAG, head.origin, '0 0 0');
-							else if (telefragger.health < 1) // corpses gib
-								Damage (head, teleporter, telefragger, 10000, DEATH_TELEFRAG, head.origin, '0 0 0');
-							else // dead bodies and monsters gib themselves instead of telefragging
-								Damage (telefragger, teleporter, telefragger, 10000, DEATH_TELEFRAG, telefragger.origin, '0 0 0');
-						}
-		}
+			tdeath(player, teleporter, telefragger, telefragmin, telefragmax);
 
 		// hide myself a tic
 		player.effects = player.effects | EF_NODRAW;
