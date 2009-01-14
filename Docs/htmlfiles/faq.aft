@@ -72,7 +72,7 @@ For Linux users: you need to have libcurl installed, otherwise you won't be able
 ** How to report crashes
 Alientrap wants to ensure everyone has a pleasent time playing Nexuiz, so if you have problems we would like to ask you to report them and thus help solve them.  Especially crash reports can be very helpful.  See below for how to contact Alientrap ([Where can i get more help?])
 
-On Mac: IS THERE A EASY WAY?
+On Mac: IS THERE AN EASY WAY?
 
 On Linux: In a xterm, |cd| into your Nexuiz installation directory, start |catchsegv ./nexuiz-linux-686-sdl -condebug -developer > crash.txt 2>&1| and give the file crash.txt to the developers.  Note that you can also use |./nexuiz-linux-686-glx| or if you have a 64bit system |./nexuiz-linux-x86__64-sdl| and |./nexuiz-linux-x86__64-glx|
 
@@ -96,38 +96,37 @@ Press |\[shift]+\[escape]|.  To close it press |\[escape]|.  While playing ` or 
 ** What console commands/variables are there?
 You can get a list of variables by entering |cvarlist| on the console ([How do I open the console?]).  |cmdlist| will give you a list of available commands.  An annotated version of that output can be found at the [Nexuiz wiki (http://alientrap.org/wiki/pmwiki.php?n=Main.ConsoleCommands)].
 
-** How can I activate colors in my name?
-Colors can be used in nicknames and chat messages by typing ^ followed by a number between 0 and 9.
+** How can I use colors in my nickname and messages?
+Colors can be used in nicknames and chat messages by typing ^x followed by three hexadecimal numbers (0-F) representing red, green and blue components of the color before the text. For example if you type ^xF00message the text "message" will be displayed in red color. More examples:
 
 	!                            !
 	! code   ! color             !
 	!----------------------------!
-	! ^0     ! black             !
+	! ^x000  ! black             !
 	!----------------------------!
-	! ^1     ! red               !
+	! ^xF00  ! red               !
 	!----------------------------!
-	! ^2     ! green             !
+	! ^x0F0  ! green             !
 	!----------------------------!
-	! ^3     ! yellow            !
+	! ^xFF0  ! yellow            !
 	!----------------------------!
-	! ^4     ! blue              !
+	! ^x00F  ! blue              !
 	!----------------------------!
-	! ^5     ! aqua              !
+	! ^x0FF  ! aqua              !
 	!----------------------------!
-	! ^6     ! pink              !
+	! ^xF0C  ! pink              !
 	!----------------------------!
-	! ^7     ! white             !
+	! ^xFFF  ! white             !
 	!----------------------------!
-	! ^8     ! light grey        !
+	! ^xBBB  ! light grey        !
 	!----------------------------!
-	! ^9     ! dark grey         !
+	! ^x444  ! dark grey         !
 	!----------------------------!
 
 ** How do i watch/record demos?
-After the menu redesign in Nexuiz 2.4 there is no demo menu anymore for the time being.  To watch a demo type |ply <demos/name>| in the console ([How do I open the console?]).
-To automaticly record a demo each time you play enable the option |Demo recording| in the |Settings / Misc| menu.  Of if you just want to record some matches open the console and type |rec <demos/name>| before playing.  That is before starting a game or connecting to a server.  The demo file will then be stored in |Nexuiz/data/demos/<name>.dem| (on Windows) or |~/.nexuiz/data/demos/<name>.dem| (on Linux, Mac).
+Demos are recordings of matches that you have played. To automaticly record a demo each time you play enable the option |Record demos while playing| in the |Settings / Demos| menu. Or if you just want to record some matches open the console and type |rec <demos/name>| before playing. That is before starting a game or connecting to a server. The demo file will then be stored in |Nexuiz/data/demos/<name>.dem| (on Windows) or |~/.nexuiz/data/demos/<name>.dem| (on Linux, Mac).
 If you downloaded a demo, copy it to |Nexuiz/data/demos/<name>.dem| (on Linux, Mac, Windows) or |~/.nexuiz/data/demos/<name>.dem| (on Linux, Mac).  You might have to create this directory if you have never recorded a demo before.
-You can list all your demo files by typing |dem| on the console.  Some useful key bindings for viewing demos are listed [here (http://www.alientrap.org/forum/viewtopic.php?p=357#357)].  A simple way to automatically record demos can be found [here (http://www.alientrap.org/forum/viewtopic.php?t=90)]
+To watch demos you can choose a demo file in the |Settings / Demos| and click the play button. Also you can watch demos typing |ply <demos/name>| in the console ([How do I open the console?]). You can list all your demo files by typing |dem| on the console.Some useful key bindings for viewing demos and making videos are listed [here (http://www.alientrap.org/forum/viewtopic.php?p=357#357)].  A simple way to automatically record demos can be found [here (http://www.alientrap.org/forum/viewtopic.php?t=90)].
 
 * Server setup
 
