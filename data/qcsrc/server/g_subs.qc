@@ -318,13 +318,13 @@ float tracebox_inverted (vector v1, vector mi, vector ma, vector v2, float nomon
 		tracebox(pos, mi, ma, v2, nomonsters, forent);
 		++c;
 
-		if(c >= 50)
+		if(c == 50)
 		{
 			// wtf
-			print("When tracing from ", vtos(v1), " to ", vtos(v2), "\n");
-			print("Nudging gets us nowhere at ", vtos(pos), "\n");
-			print("trace_endpos is ", vtos(trace_endpos), "\n");
-			print("trace distance is ", ftos(vlen(pos - trace_endpos)), "\n");
+			print("HOLY SHIT! When tracing from ", vtos(v1), " to ", vtos(v2), "\n");
+			print("  Nudging gets us nowhere at ", vtos(pos), "\n");
+			print("  trace_endpos is ", vtos(trace_endpos), "\n");
+			print("  trace distance is ", ftos(vlen(pos - trace_endpos)), "\n");
 		}
 
 		if(trace_startsolid)
