@@ -353,7 +353,7 @@ void RadarMap(float argc)
 	radarmapper.classname = "radarmapper";
 	radarmapper.think = RadarMap_Think;
 	radarmapper.nextthink = time;
-	radarmapper.count = 0;
+	radarmapper.count = 8; // default to the --trace method, as it is faster now
 	radarmapper.ltime = 1;
 	radarmapper.size_x = 512;
 	radarmapper.size_y = 512;
