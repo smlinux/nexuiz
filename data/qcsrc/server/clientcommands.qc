@@ -245,7 +245,7 @@ void SV_ParseClientCommand(string s) {
 			wordwrap_sprint(cmd, 1111);
 	} else if(argv(0) == "suggestmap") {
 		sprint(self, strcat(MapVote_Suggest(argv(1)), "\n"));
-	} else if(argv(0) == "calltimeout") {
+	} else if(argv(0) == "timeout") {
 		if not(self.flags & FL_CLIENT)
 			return;
 		if(cvar("sv_timeout")) {
@@ -253,16 +253,16 @@ void SV_ParseClientCommand(string s) {
 				if(votecalled)
 					sprint(self, "^7Error: you can not call a timeout while a vote is active!\n");
 				else
-					evaluateTimeoutCall();
+					evaluateTimeout();
 			}
 			else
 				sprint(self, "^7Error: only players can call a timeout!\n");
 		}
-	} else if(argv(0) == "resumegame") {
+	} else if(argv(0) == "timein") {
 		if not(self.flags & FL_CLIENT)
 			return;
 		if(cvar("sv_timeout")) {
-			evaluateResumeGame();
+			evaluateTimein();
 		}
 	} else if(argv(0) == "teamstatus") {
 		Score_NicePrint(self);
@@ -499,7 +499,7 @@ void restartAnnouncer_Think() {
  *
  * This function is called when a player issues the calltimeout command.
  */
-void evaluateTimeoutCall() {
+void evaluateTimeout() {
 	if (inWarmupStage && !g_warmup_allow_timeout)
 		return sprint(self, "^7Error: You can not call a timeout in warmup-stage!\n");
 	if (time < game_starttime )
@@ -547,7 +547,7 @@ void evaluateTimeoutCall() {
  *
  * This function is called when a player issues the resumegame command.
  */
-void evaluateResumeGame() {
+void evaluateTimein() {
 	if (!timeoutStatus)
 		return sprint(self, "^7Error: There is no active timeout which could be aborted!\n");
 	if (self != timeoutInitiator)

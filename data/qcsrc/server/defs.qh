@@ -286,8 +286,8 @@ float orig_slowmo; // contains the value of cvar("slowmo") so that, after timeou
 .vector lastV_angle; //used when pausing the game in order to force the player to keep his old view angle fixed
 entity timeoutHandler; //responsible for centerprinting the timeout countdowns and playing sounds
 void timeoutHandler_Think();
-void evaluateTimeoutCall();
-void evaluateResumeGame();
+void evaluateTimeout();
+void evaluateTimein();
 string getTimeoutText(float addOneSecond);
 
 .float spawnshieldtime;
