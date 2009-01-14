@@ -10,18 +10,29 @@ float FullTraceFraction(vector a, vector mi, vector ma, vector b)
 
 	c = a;
 
+	//float n, m;
+	//n = m = 0;
+
 	while(vlen(c - b) > 1)
 	{
+		//++m;
+
 		tracebox(c, mi, ma, b, MOVE_WORLDONLY, world);
+		//++n;
+
 		if(!trace_startsolid)
 		{
 			black += vlen(trace_endpos - c);
 			c = trace_endpos;
 		}
-		tracebox_inverted(c, mi, ma, b, MOVE_WORLDONLY, world);
+
+		//n += tracebox_inverted(c, mi, ma, b, MOVE_WORLDONLY, world);
+
 		white += vlen(trace_endpos - c);
 		c = trace_endpos;
 	}
+
+	//dprint("FullTraceFraction: ", ftos(n), " total traces, ", ftos(m), " iterations\n");
 
 	return white / (black + white);
 }

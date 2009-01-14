@@ -291,7 +291,7 @@ void traceline_antilag (entity source, vector v1, vector v2, float nomonst, enti
 	traceline_antilag_force(source, v1, v2, nomonst, forent, lag);
 }
 
-void tracebox_inverted (vector v1, vector mi, vector ma, vector v2, float nomonsters, entity forent)
+float tracebox_inverted (vector v1, vector mi, vector ma, vector v2, float nomonsters, entity forent) // returns the number of traces done, for benchmarking
 {
 	vector pos, dir, t;
 	float nudge;
@@ -303,16 +303,29 @@ void tracebox_inverted (vector v1, vector mi, vector ma, vector v2, float nomons
 
 	pos = v1 + dir * nudge;
 
+	float c;
+	c = 0;
+
 	for(;;)
 	{
 		if((pos - v1) * dir >= (v2 - v1) * dir)
 		{
 			// went too far
 			trace_fraction = 1;
-			return;
+			return c;
 		}
 
 		tracebox(pos, mi, ma, v2, nomonsters, forent);
+		++c;
+
+		if(c >= 50)
+		{
+			// wtf
+			print("When tracing from ", vtos(v1), " to ", vtos(v2), "\n");
+			print("Nudging gets us nowhere at ", vtos(pos), "\n");
+			print("trace_endpos is ", vtos(trace_endpos), "\n");
+			print("trace distance is ", ftos(vlen(pos - trace_endpos)), "\n");
+		}
 
 		if(trace_startsolid)
 		{
@@ -320,17 +333,18 @@ void tracebox_inverted (vector v1, vector mi, vector ma, vector v2, float nomons
 			// then trace from endpos to pos
 			t = trace_endpos;
 			tracebox(t, mi, ma, pos, nomonsters, forent);
+			++c;
 			if(trace_startsolid)
 			{
-				// t is inside solid? bad
-				// force advance, then
-				pos = pos + dir * nudge;
+				// t is still inside solid? bad
+				// force advance, then, and retry
+				pos = t + dir * nudge;
 			}
 			else
 			{
 				// we actually LEFT solid!
 				trace_fraction = ((trace_endpos - v1) * dir) / ((v2 - v1) * dir);
-				return;
+				return c;
 			}
 		}
 		else
@@ -338,7 +352,7 @@ void tracebox_inverted (vector v1, vector mi, vector ma, vector v2, float nomons
 			// pos is outside solid?!? but why?!? never mind, just return it.
 			trace_endpos = pos;
 			trace_fraction = ((trace_endpos - v1) * dir) / ((v2 - v1) * dir);
-			return;
+			return c;
 		}
 	}
 }
