@@ -33,7 +33,7 @@ float FullTraceFraction(vector a, vector mi, vector ma, vector b)
 	}
 
 	if(n > 200)
-		print("HOLY SHIT! FullTraceFraction: ", ftos(n), " total traces, ", ftos(m), " iterations\n");
+		dprint("HOLY SHIT! FullTraceFraction: ", ftos(n), " total traces, ", ftos(m), " iterations\n");
 
 	return white / (black + white);
 }
