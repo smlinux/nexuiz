@@ -110,7 +110,7 @@ sub markmap($$$$;$)
 [ dp => q{:end} => sub {
 	my $name = $config{irc_nick};
 	$name =~ s/Nex//; # haggerNexCTF -> haggerCTF
-	my $pattern = "/nexuiz/data/home/.nexuiz/extramaps-$name/sv_autodemos/*.dem";
+	my $pattern = "/nexuiz/data/home-$name/data/sv_autodemos/*.dem";
 	print "Checking $pattern...\n";
 	for(glob $pattern)
 	{

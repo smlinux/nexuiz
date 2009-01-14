@@ -991,6 +991,10 @@ sub cond($)
 		$store{slots_active} = $active;
 		$store{status_waiting} = $active;
 		$store{playerslots_active_new} = [];
+		if($store{status_waiting} == 0)
+		{
+			$store{playerslots_active} = $store{playerslots_active_new};
+		}
 		if($full != ($store{slots_full} || 0))
 		{
 			$store{slots_full} = $full;
