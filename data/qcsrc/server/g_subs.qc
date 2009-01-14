@@ -312,6 +312,7 @@ float tracebox_inverted (vector v1, vector mi, vector ma, vector v2, float nomon
 		{
 			// went too far
 			trace_fraction = 1;
+			trace_endpos = v2;
 			return c;
 		}
 

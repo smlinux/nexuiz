@@ -10,15 +10,15 @@ float FullTraceFraction(vector a, vector mi, vector ma, vector b)
 
 	c = a;
 
-	// float n, m;
-	// n = m = 0;
+	float n, m;
+	n = m = 0;
 
 	while(vlen(c - b) > 1)
 	{
-		//++m;
+		++m;
 
 		tracebox(c, mi, ma, b, MOVE_WORLDONLY, world);
-		//++n;
+		++n;
 
 		if(!trace_startsolid)
 		{
@@ -26,13 +26,14 @@ float FullTraceFraction(vector a, vector mi, vector ma, vector b)
 			c = trace_endpos;
 		}
 
-		/* n += */ tracebox_inverted(c, mi, ma, b, MOVE_WORLDONLY, world);
+		n += tracebox_inverted(c, mi, ma, b, MOVE_WORLDONLY, world);
 
 		white += vlen(trace_endpos - c);
 		c = trace_endpos;
 	}
 
-	//dprint("FullTraceFraction: ", ftos(n), " total traces, ", ftos(m), " iterations\n");
+	if(n > 200)
+		print("HOLY SHIT! FullTraceFraction: ", ftos(n), " total traces, ", ftos(m), " iterations\n");
 
 	return white / (black + white);
 }
