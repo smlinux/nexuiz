@@ -314,11 +314,14 @@ void CSQC_UpdateView(float w, float h)
 		float speed, attenuation;
 		vector new_origin, m;
 
-		speed = ((cvar("camera_free")) ? cvar("camera_speed_free") : cvar("camera_speed_chase"));
+		if(cvar("camera_free"))
+			speed = cvar("camera_speed_free");
+		else
+			speed = cvar("camera_speed_chase");
 			
 		attenuation = cvar("camera_speed_attenuation");
 		
-		attenuation = ((attenuation<1) ? 1 : (1 / attenuation));
+		attenuation = 1 / max(1, attenuation);
 
 		if( cvar("camera_reset") || !camera_mode )
 		{
