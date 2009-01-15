@@ -128,7 +128,7 @@ void turret_stdproc_die()
     self.deadflag           = DEAD_DEAD;
     self.tur_head.deadflag  = self.deadflag;
 
-    sound (self, CHAN_PLAYER, "weapons/rocket_impact.wav", 1, ATTN_NORM);
+    sound (self, CHAN_PLAYER, "weapons/rocket_impact.wav", VOL_BASE, ATTN_NORM);
     org2 = self.origin + '0 0 40';
 
 // Explotion grafix

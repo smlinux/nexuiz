@@ -85,13 +85,13 @@ void turret_hk_attack()
     local entity missile;
     //local entity flash2;
 
-    sound (self, CHAN_WEAPON, "weapons/rocket_fire.wav", 1, ATTN_NORM);
+    sound (self, CHAN_WEAPON, "weapons/rocket_fire.wav", VOL_BASE, ATTN_NORM);
 
     missile                    = spawn ();
     missile.solid            = SOLID_BBOX;
     setmodel (missile, "models/turrets/hunter2.md3"); // precision set below
     setsize (missile, missile.mins,missile.maxs); // give it some size so it can be shot
-    sound    (missile, CHAN_PAIN, "weapons/rocket_fly.wav", 0.4, ATTN_NORM);
+    sound    (missile, CHAN_PAIN, "weapons/rocket_fly.wav", 0.4 * VOL_BASE, ATTN_NORM);
     setorigin(missile, self.tur_shotorg_updated);
 
     missile.scale            = 1;
@@ -304,7 +304,7 @@ void turret_hk_missile_think()
         self.cnt = time + 0.25;
         self.nextthink = 0;
         self.movetype         = MOVETYPE_BOUNCE;
-        sound    (self, CHAN_VOICE, "", 0.4, ATTN_NORM);
+        sound    (self, CHAN_VOICE, "", 0.4 * VOL_BASE, ATTN_NORM);
         return;
     }
 
@@ -364,7 +364,7 @@ void turret_hk_missile_explode()
 
     //vector	org2;
 	stopsound (self, CHAN_PAIN);
-    sound (self, CHAN_PROJECTILE, "weapons/rocket_impact.wav", 1, ATTN_NORM);
+    sound (self, CHAN_PROJECTILE, "weapons/rocket_impact.wav", VOL_BASE, ATTN_NORM);
     org2 = findbetterlocation (self.origin, 16);
 
     // LordHavoc: TE_TEI_BIGEXPLOSION

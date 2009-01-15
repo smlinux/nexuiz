@@ -14,7 +14,7 @@ void turret_ewheel_projectile_explode()
 #else
     RadiusDamage (self, self.owner, self.owner.shot_dmg, 0, self.owner.shot_radius, world, self.owner.shot_force, DEATH_TURRET, world);
 #endif
-    sound (self, CHAN_PROJECTILE, "weapons/electro_impact.wav", 1, ATTN_NORM);
+    sound (self, CHAN_PROJECTILE, "weapons/electro_impact.wav", VOL_BASE, ATTN_NORM);
 
     remove (self);
 }
@@ -34,7 +34,7 @@ void ewheel_attack()
         self.tur_shotorg = v;
         turret_do_updates(self);
 
-        sound (self, CHAN_WEAPON, "weapons/lasergun_fire.wav", 1, ATTN_NORM);
+        sound (self, CHAN_WEAPON, "weapons/lasergun_fire.wav", VOL_BASE, ATTN_NORM);
         pointparticles(particleeffectnum("laser_muzzleflash"), self.tur_shotorg_updated, self.tur_shotdir_updated * 1000, 1);
 
         proj                    = spawn ();

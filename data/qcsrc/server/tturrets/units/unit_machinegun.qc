@@ -7,7 +7,7 @@ void turret_machinegun_attack()
 {
 
     entity flash;
-    sound (self, CHAN_WEAPON, "weapons/uzi_fire.wav", 1, ATTN_NORM);
+    sound (self, CHAN_WEAPON, "weapons/uzi_fire.wav", VOL_BASE, ATTN_NORM);
     fireBullet (self.tur_shotorg_updated, self.tur_shotdir_updated,self.shot_spread, self.shot_dmg, self.shot_force, DEATH_TURRET, FALSE);
 
     te_smallflash(self.tur_shotorg_updated);

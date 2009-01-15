@@ -32,7 +32,7 @@ void turret_plasma_attack()
 
     turret_tag_fire_update();
 
-    sound (self, CHAN_WEAPON, "weapons/hagar_fire.wav", 1, ATTN_NORM);
+    sound (self, CHAN_WEAPON, "weapons/hagar_fire.wav", VOL_BASE, ATTN_NORM);
     pointparticles(particleeffectnum("laser_muzzleflash"), self.tur_shotorg_updated, self.tur_shotdir_updated * 1000, 1);
 
     proj                    = spawn ();
@@ -69,7 +69,7 @@ void turret_plasma_dual_attack()
 
     turret_tag_fire_update();
 
-    sound (self, CHAN_WEAPON, "weapons/hagar_fire.wav", 1, ATTN_NORM);
+    sound (self, CHAN_WEAPON, "weapons/hagar_fire.wav", VOL_BASE, ATTN_NORM);
     proj                    = spawn ();
     setorigin(proj, self.tur_shotorg_updated);
     setsize(proj, '0 0 0', '0 0 0');
@@ -125,7 +125,7 @@ void turret_plasma_projectile_explode()
 #else
     RadiusDamage (self, self.owner, self.owner.shot_dmg, 0, self.owner.shot_radius, world, self.owner.shot_force, DEATH_TURRET, world);
 #endif
-    sound (self, CHAN_PROJECTILE, "weapons/electro_impact.wav", 1, ATTN_NORM);
+    sound (self, CHAN_PROJECTILE, "weapons/electro_impact.wav", VOL_BASE, ATTN_NORM);
 
     remove (self);
 }

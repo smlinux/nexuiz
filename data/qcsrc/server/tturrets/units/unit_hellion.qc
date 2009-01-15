@@ -27,11 +27,11 @@ void turret_hellion_attack()
 {
     local entity missile;
 
-    sound (self, CHAN_WEAPON, "weapons/hagar_fire.wav", 1, ATTN_NORM);
+    sound (self, CHAN_WEAPON, "weapons/hagar_fire.wav", VOL_BASE, ATTN_NORM);
 
     missile = spawn ();
     setorigin(missile, self.tur_shotorg_updated);
-    sound (missile, CHAN_PAIN, "weapons/rocket_fly.wav", 0.4, ATTN_NORM);
+    sound (missile, CHAN_PAIN, "weapons/rocket_fly.wav", 0.4 * VOL_BASE, ATTN_NORM);
     setmodel (missile, "models/turrets/mlrs_rocket.md3"); // precision set below
     setsize (missile, '-3 -3 -3', '3 3 3'); // give it some size so it can be shot
 
@@ -158,7 +158,7 @@ void turret_hellion_missile_explode()
     }
 
 	stopsound (self, CHAN_PAIN);
-    sound (self, CHAN_PROJECTILE, "weapons/rocket_impact.wav", 1, ATTN_NORM);
+    sound (self, CHAN_PROJECTILE, "weapons/rocket_impact.wav", VOL_BASE, ATTN_NORM);
     org2 = findbetterlocation (self.origin, 16);
 
     // LordHavoc: TE_TEI_BIGEXPLOSION
