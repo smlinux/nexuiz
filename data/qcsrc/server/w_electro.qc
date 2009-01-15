@@ -15,13 +15,11 @@ void W_Plasma_Explode (void)
 	{
 		pointparticles(particleeffectnum("electro_ballexplode"), org2, '0 0 0', 1);
 		RadiusDamage (self, self.owner, cvar("g_balance_electro_secondary_damage"), cvar("g_balance_electro_secondary_edgedamage"), cvar("g_balance_electro_secondary_radius"), world, cvar("g_balance_electro_secondary_force"), self.projectiledeathtype, other);
-		stopsound (self, CHAN_PAIN);
 	}
 	else
 	{
 		pointparticles(particleeffectnum("electro_impact"), org2, '0 0 0', 1);
 		RadiusDamage (self, self.owner, cvar("g_balance_electro_primary_damage"), cvar("g_balance_electro_primary_edgedamage"), cvar("g_balance_electro_primary_radius"), world, cvar("g_balance_electro_primary_force"), self.projectiledeathtype, other);
-		//stopsound (self, CHAN_PAIN);
 	}
 
 	sound (self, CHAN_PROJECTILE, "weapons/electro_impact.wav", VOL_BASE, ATTN_NORM);
@@ -35,7 +33,6 @@ void W_Plasma_Explode_Combo (void) {
 	org2 = findbetterlocation (self.origin, 8);
 	pointparticles(particleeffectnum("electro_combo"), org2, '0 0 0', 1);
 
-	stopsound (self, CHAN_PAIN);
 	sound (self, CHAN_PROJECTILE, "weapons/electro_impact_combo.wav", VOL_BASE, ATTN_NORM);
 
 	self.event_damage = SUB_Null;
@@ -47,7 +44,7 @@ void W_Plasma_Touch (void)
 {
 	UpdateCSQCProjectile(self);
 
-	PROJECTILE_TOUCH_NOSOUND;
+	PROJECTILE_TOUCH;
 	if (other.takedamage == DAMAGE_AIM) {
 		W_Plasma_Explode ();
 	} else {

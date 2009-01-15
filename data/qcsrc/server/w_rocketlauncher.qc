@@ -4,7 +4,6 @@
 void W_Rocket_Explode (void)
 {
 	vector	org2;
-	stopsound(self, CHAN_PAIN);
 	sound (self, CHAN_PROJECTILE, "weapons/rocket_impact.wav", VOL_BASE, ATTN_NORM);
 	org2 = findbetterlocation (self.origin, 16);
 
@@ -186,7 +185,7 @@ void W_Rocket_Touch (void)
 {
 	if(self.owner && self.owner.lastrocket == self)
 		self.owner.lastrocket = world;
-	PROJECTILE_TOUCH_NOSOUND;
+	PROJECTILE_TOUCH;
 	W_Rocket_Explode ();
 }
 

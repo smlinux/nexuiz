@@ -300,15 +300,12 @@ void Seeker_Tag_Touch()
 	vector dir;
 	vector org2;
 
-	PROJECTILE_TOUCH_NOSOUND;
-
 	dir     = normalize (self.owner.origin - self.origin);
 	org2    = findbetterlocation (self.origin, 8);
 
 	te_knightspike(org2);
 
 	self.event_damage = SUB_Null;
-	stopsound (self, CHAN_PAIN);
 	sound (self, CHAN_PROJECTILE, "weapons/tag_impact.wav", 1, ATTN_NORM);
 
 	if (other.takedamage == DAMAGE_AIM && other.deadflag == DEAD_NO)
