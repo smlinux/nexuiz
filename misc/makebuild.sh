@@ -192,6 +192,10 @@ svn export . "$tmpdir/havoc"
 cd "$nexdir/Docs"
 svn export . "$tmpdir/Docs"
 
+# prepare server
+cd "$nexdir/server"
+svn export . "$tmpdir/server"
+
 # make gamesource
 cd "$tmpdir/data"
 mkdir -p "$tmpdir/sources"
@@ -270,7 +274,7 @@ mv * Nexuiz/ || true
 find . -name .svn -exec rm -rf {} \; -prune
 
 rm -f "$zipdir/nexuiz$date$ext.zip"
-zip $zipflags -9yr "$zipdir/nexuiz$date$ext.zip"           Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/data/data$tag$date.pk3 Nexuiz/data/common-spog.pk3 Nexuiz/havoc/*
+zip $zipflags -9yr "$zipdir/nexuiz$date$ext.zip"           Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/server Nexuiz/data/data$tag$date.pk3 Nexuiz/data/common-spog.pk3 Nexuiz/havoc/*
 ln -snf nexuiz$date$ext.zip "$zipdir/nexuiz-$newest.zip"
 
 rm -f "$zipdir/nexuizengineonly$date$ext.zip"
@@ -314,11 +318,11 @@ if unzip "Nexuiz/data/data$tag$date.pk3" gfx/brand.tga; then
 fi
 
 rm -f "$zipdir/nexuizpatch$date$ext.zip"
-zip $zipflags -9yr "$zipdir/nexuizpatch$date$ext.zip"      Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/data/datapatch$tag$date.pk3 Nexuiz/havoc/*
+zip $zipflags -9yr "$zipdir/nexuizpatch$date$ext.zip"      Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/server Nexuiz/data/datapatch$tag$date.pk3 Nexuiz/havoc/*
 ln -snf nexuizpatch$date$ext.zip "$zipdir/nexuizpatch-$newest.zip"
 
 [ -n "$hotbasepk3" ] && rm -f "$zipdir/nexuizhotfix$date$ext.zip"
-[ -n "$hotbasepk3" ] && zip $zipflags -9yr "$zipdir/nexuizhotfix$date$ext.zip"      Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/data/datapatch$tag$date""hotfix.pk3 Nexuiz/havoc/*
+[ -n "$hotbasepk3" ] && zip $zipflags -9yr "$zipdir/nexuizhotfix$date$ext.zip"      Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/server Nexuiz/data/datapatch$tag$date""hotfix.pk3 Nexuiz/havoc/*
 [ -n "$hotbasepk3" ] && ln -snf nexuizhotfix$date$ext.zip "$zipdir/nexuizhotfix-$newest.zip"
 
 rm -f "$zipdir/nexuizdocs$date$ext.zip"
