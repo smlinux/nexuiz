@@ -19,7 +19,6 @@ void fillNexuizSettingsDialog(entity me)
 		me.TD(me, 1, 1, mc.makeTabButton(mc, "Video",   makeNexuizVideoSettingsTab()));
 		me.TD(me, 1, 1, mc.makeTabButton(mc, "Effects", makeNexuizEffectsSettingsTab()));
 		me.TD(me, 1, 1, mc.makeTabButton(mc, "Audio",   makeNexuizAudioSettingsTab()));
-		me.TD(me, 1, 1, mc.makeTabButton(mc, "Demos",   makeNexuizDemoSettingsTab()));
 		me.TD(me, 1, 1, mc.makeTabButton(mc, "Misc",    makeNexuizMiscSettingsTab()));
 	me.TR(me);
 	me.TR(me);

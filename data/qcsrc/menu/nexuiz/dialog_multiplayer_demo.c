@@ -1,24 +1,24 @@
 #ifdef INTERFACE
-CLASS(NexuizDemoSettingsTab) EXTENDS(NexuizTab)
-	METHOD(NexuizDemoSettingsTab, fill, void(entity))
-	ATTRIB(NexuizDemoSettingsTab, title, string, "Demo")
-	ATTRIB(NexuizDemoSettingsTab, intendedWidth, float, 0.9)
-	ATTRIB(NexuizDemoSettingsTab, rows, float, 17)
-	ATTRIB(NexuizDemoSettingsTab, columns, float, 6.5)
-	ATTRIB(NexuizDemoSettingsTab, name, string, "DemoBroswer")	
-ENDCLASS(NexuizDemoSettingsTab)
-entity makeNexuizDemoSettingsTab();
+CLASS(NexuizDemoBrowserTab) EXTENDS(NexuizTab)
+	METHOD(NexuizDemoBrowserTab, fill, void(entity))
+	ATTRIB(NexuizDemoBrowserTab, title, string, "Demo")
+	ATTRIB(NexuizDemoBrowserTab, intendedWidth, float, 0.9)
+	ATTRIB(NexuizDemoBrowserTab, rows, float, 22)
+	ATTRIB(NexuizDemoBrowserTab, columns, float, 6.5)
+	ATTRIB(NexuizDemoBrowserTab, name, string, "DemoBroswer")	
+ENDCLASS(NexuizDemoBrowserTab)
+entity makeNexuizDemoBrowserTab();
 #endif
 
 #ifdef IMPLEMENTATION
-entity makeNexuizDemoSettingsTab()
+entity makeNexuizDemoBrowserTab()
 {
 	entity me;
-	me = spawnNexuizDemoSettingsTab();
+	me = spawnNexuizDemoBrowserTab();
 	me.configureDialog(me);
 	return me;
 }
-void fillNexuizDemoSettingsTab(entity me)
+void fillNexuizDemoBrowserTab(entity me)
 {
 	entity e;
 	entity btn;
