@@ -45,7 +45,7 @@ void W_Plasma_Explode_Combo (void) {
 
 void W_Plasma_Touch (void)
 {
-	PROJECTILE_TOUCH;
+	PROJECTILE_TOUCH_NOSOUND;
 	if (other.takedamage == DAMAGE_AIM) {
 		W_Plasma_Explode ();
 	} else {
@@ -56,7 +56,7 @@ void W_Plasma_Touch (void)
 
 void W_Plasma_TouchExplode (void)
 {
-	PROJECTILE_TOUCH_NOSOUND;
+	PROJECTILE_TOUCH;
 	W_Plasma_Explode ();
 }
 
