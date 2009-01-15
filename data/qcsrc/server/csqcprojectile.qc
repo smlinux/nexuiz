@@ -1,3 +1,5 @@
+.float csqcprojectile_type;
+
 float CSQCProjectile_SendEntity(entity to, float sf)
 {
 	sf = sf & 0x3F;
@@ -35,16 +37,28 @@ float CSQCProjectile_SendEntity(entity to, float sf)
 			WriteShort(MSG_ENTITY, self.effects & 65535);
 			WriteByte(MSG_ENTITY, floor(self.effects / 65536));
 		}
-		WriteShort(MSG_ENTITY, self.csqcprojectile_flysound);
+		WriteShort(MSG_ENTITY, self.csqcprojectile_type);
 		WriteByte(MSG_ENTITY, 0); // size category
 	}
 
 	return 1;
 }
 
-void CSQCProjectile(entity e)
+void CSQCProjectile(entity e, float clientanimate, float type)
 {
 	e.SendEntity = CSQCProjectile_SendEntity;
+	
+	e.csqcprojectile_clientanimate = clientanimate;
+	
+	if(e.movetype == MOVETYPE_TOSS || e.movetype == MOVETYPE_BOUNCE)
+	{
+		if(e.gravity == 0)
+			e.gravity = 1;
+	}
+	else
+		e.gravity = 0;
+
+	e.csqcprojectile_type = type;
 }
 
 void UpdateCSQCProjectile(entity e)

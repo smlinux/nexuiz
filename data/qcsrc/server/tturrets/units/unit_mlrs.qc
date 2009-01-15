@@ -25,7 +25,6 @@ void turret_mlrs_attack()
     missile                    = spawn ();
     setmodel (missile, "models/turrets/rocket.md3"); // precision set below
     setsize (missile, '-3 -3 -3', '3 3 3'); // give it some size so it can be shot
-    sound (missile, CHAN_PAIN, "weapons/rocket_fly.wav", 0.4 * VOL_BASE, ATTN_NORM);
     setorigin(missile, self.tur_shotorg_updated);
     missile.classname          = "mlrs_missile";
     missile.owner              = self;
@@ -46,6 +45,8 @@ void turret_mlrs_attack()
     missile.solid              = SOLID_BBOX;
     missile.enemy              = self.enemy;
 
+	CSQCProjectile(self, TRUE, PROJECTILE_ROCKET);
+
     te_explosion (missile.origin);
 
     //self.tur_head.frame = 7 - self.volly_counter;
@@ -64,7 +65,6 @@ void turret_mlrs_rocket_explode()
     }
 
 
-	stopsound (self, CHAN_PAIN);
     sound (self, CHAN_PROJECTILE, "weapons/rocket_impact.wav", VOL_BASE, ATTN_NORM);
     org2 = findbetterlocation (self.origin, 16);
     pointparticles(particleeffectnum("rocket_explode"), org2, '0 0 0', 1);

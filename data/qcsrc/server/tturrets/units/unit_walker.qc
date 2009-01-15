@@ -159,7 +159,7 @@ void walker_rocket_damage (entity inflictor, entity attacker, float damage, floa
 }
 
 //#define WALKER_ROCKET_MOVE movelib_move(newdir * 275,900,0.1,10)
-#define WALKER_ROCKET_MOVE movelib_move_simple(newdir,1000,cvar("g_turrets_unit_walker_std_rocket_tunrate"))
+#define WALKER_ROCKET_MOVE movelib_move_simple(newdir,1000,cvar("g_turrets_unit_walker_std_rocket_tunrate")); UpdateCSQCProjectile(self)
 void walker_rocket_loop();
 void walker_rocket_think()
 {
@@ -311,7 +311,6 @@ void walker_fire_rocket(vector org)
     setorigin(rocket, org);
 
     sound (self, CHAN_WEAPON, "weapons/hagar_fire.wav", VOL_BASE, ATTN_NORM);
-    sound (rocket, CHAN_PAIN, "weapons/rocket_fly.wav", 0.4 * VOL_BASE, ATTN_NORM);
     setmodel (rocket, "models/turrets/rocket.md3"); // precision set below
     setsize (rocket, '-3 -3 -3', '3 3 3'); // give it some size so it can be shot
 
@@ -344,6 +343,8 @@ void walker_fire_rocket(vector org)
     rocket.flags              = FL_PROJECTILE;
     rocket.solid              = SOLID_BBOX;
     rocket.tur_health         = time + 9;
+
+	CSQCProjectile(rocket, TRUE, PROJECTILE_ROCKET);
 
     te_explosion (rocket.origin);
 

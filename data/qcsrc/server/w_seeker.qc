@@ -369,10 +369,7 @@ void Seeker_Fire_Tag()
 	W_SetupProjectileVelocity(missile);
 	missile.angles = vectoangles (missile.velocity);
 
-	CSQCProjectile(missile);
-	missile.csqcprojectile_clientanimate = 1;
-	missile.gravity = 0;
-	missile.csqcprojectile_flysound = 3;
+	CSQCProjectile(missile, TRUE, PROJECTILE_TAG);
 }
 
 

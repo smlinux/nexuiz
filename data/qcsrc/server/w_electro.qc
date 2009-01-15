@@ -154,12 +154,7 @@ void W_Electro_Attack2()
 	proj.event_damage = W_Plasma_Damage;
 	proj.flags = FL_PROJECTILE;
 
-	//sound (proj, CHAN_PAIN, "weapons/electro_fly.wav", VOL_BASE, ATTN_NORM);
-
-	CSQCProjectile(proj);
-	proj.csqcprojectile_clientanimate = 1;
-	proj.gravity = 1;
-	proj.csqcprojectile_flysound = 1;
+	CSQCProjectile(proj, TRUE, PROJECTILE_ELECTRO);
 }
 
 void spawnfunc_weapon_electro (void)

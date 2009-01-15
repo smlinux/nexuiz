@@ -27,16 +27,15 @@ void Projectile_Draw()
 
 	switch(self.cnt)
 	{
-		default:
-		case 0:
-			break;
-		case 1:
+		case PROJECTILE_ELECTRO:
 			break; // electro uses no trail
-		case 2:
+		case PROJECTILE_ROCKET:
 			trailparticles(self, particleeffectnum("TR_ROCKET"), oldorg, self.origin); // rocket
 			break;
-		case 3:
+		case PROJECTILE_TAG:
 			trailparticles(self, particleeffectnum("TR_VORESPIKE"), oldorg, self.origin); // seeker
+			break;
+		default:
 			break;
 	}
 
@@ -48,8 +47,8 @@ void Projectile_Draw()
 
 void Ent_RemoveProjectile()
 {
-	if(self.cnt)
-		if(csqc_flags & CSQC_FLAG_COLORCODES)
+	if(csqc_flags & CSQC_FLAG_COLORCODES)
+		if(self.cnt)
 			sound(self, CHAN_PAIN, "misc/null.wav", VOL_BASE, ATTN_NORM);
 }
 
@@ -112,24 +111,23 @@ void Ent_Projectile()
 		}
 
 		self.cnt = ReadShort();
-		switch(self.cnt)
-		{
-			case 1:
-				// only new engines support sound moving with object
-				if(csqc_flags & CSQC_FLAG_COLORCODES)
+
+		if(csqc_flags & CSQC_FLAG_COLORCODES)
+			switch(self.cnt)
+			{
+				case PROJECTILE_ELECTRO:
+					// only new engines support sound moving with object
 					sound(self, CHAN_PAIN, "weapons/electro_fly.wav", VOL_BASE, ATTN_NORM);
-				break;
-			case 2:
-				if(csqc_flags & CSQC_FLAG_COLORCODES)
+					break;
+				case PROJECTILE_ROCKET:
 					sound(self, CHAN_PAIN, "weapons/rocket_fly.wav", VOL_BASE, ATTN_NORM);
-				break;
-			case 3:
-				if(csqc_flags & CSQC_FLAG_COLORCODES)
+					break;
+				case PROJECTILE_TAG:
 					sound(self, CHAN_PAIN, "weapons/tag_rocket_fly.wav", VOL_BASE, ATTN_NORM);
-				break;
-			default:
-				break;
-		}
+					break;
+				default:
+					break;
+			}
 
 		sz = ReadByte();
 		switch(sz)

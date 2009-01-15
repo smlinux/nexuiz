@@ -247,15 +247,7 @@ void W_Rocket_Attack (void)
 	//sound (missile, CHAN_PAIN, "weapons/rocket_fly.wav", VOL_BASE, ATTN_NORM);
 	missile.flags = FL_PROJECTILE;
 
-	CSQCProjectile(missile);
-
-	if(cvar("g_balance_rocketlauncher_speedaccel") == 0 && cvar("g_laserguided_missiles") == 0)
-		missile.csqcprojectile_clientanimate = 1;
-	else
-		missile.csqcprojectile_clientanimate = 0; // we won't client animate if the missiles may behave weird
-
-	missile.gravity = 0;
-	missile.csqcprojectile_flysound = 2;
+	CSQCProjectile(missile, cvar("g_balance_rocketlauncher_speedaccel") == 0 && cvar("g_laserguided_missiles") == 0, PROJECTILE_ROCKET);
 
 	// muzzle flash for 1st person view
 	flash = spawn ();

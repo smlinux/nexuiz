@@ -352,3 +352,8 @@ float	ATTN_MAX   				= 3.984375;
 
 #define VOL_BASE 0.7
 #define VOL_BASEVOICE 1.0
+
+// this sets sounds and other properties of the projectiles in csqc
+float PROJECTILE_ELECTRO = 1;
+float PROJECTILE_ROCKET = 2;
+float PROJECTILE_TAG = 3;

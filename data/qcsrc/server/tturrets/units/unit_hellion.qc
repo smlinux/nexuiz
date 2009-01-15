@@ -31,7 +31,6 @@ void turret_hellion_attack()
 
     missile = spawn ();
     setorigin(missile, self.tur_shotorg_updated);
-    sound (missile, CHAN_PAIN, "weapons/rocket_fly.wav", 0.4 * VOL_BASE, ATTN_NORM);
     setmodel (missile, "models/turrets/mlrs_rocket.md3"); // precision set below
     setsize (missile, '-3 -3 -3', '3 3 3'); // give it some size so it can be shot
 
@@ -56,6 +55,8 @@ void turret_hellion_attack()
     missile.tur_health         = time + 9;
     missile.tur_aimpos         = randomvec() * 128;
     te_explosion (missile.origin);
+
+	CSQCProjectile(missile, FALSE, PROJECTILE_ROCKET);
 
     // switch tubes
     self.tur_shotorg_y = self.tur_shotorg_y * -1;
@@ -142,6 +143,8 @@ void turret_hellion_missile_think()
         self.think = turret_hellion_missile_explode;
         self.nextthink = time + itime;
     }
+
+	UpdateCSQCProjectile(self);
 }
 
 void turret_hellion_missile_explode()
@@ -157,7 +160,6 @@ void turret_hellion_missile_explode()
         return;
     }
 
-	stopsound (self, CHAN_PAIN);
     sound (self, CHAN_PROJECTILE, "weapons/rocket_impact.wav", VOL_BASE, ATTN_NORM);
     org2 = findbetterlocation (self.origin, 16);
 
