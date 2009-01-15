@@ -1,0 +1,5 @@
+.float csqcprojectile_flysound;
+.float csqcprojectile_clientanimate;
+
+void CSQCProjectile(entity e);
+void UpdateCSQCProjectile(entity e);

@@ -125,6 +125,8 @@ void trigger_push_touch()
 	// reset tracking of oldvelocity for impact damage (sudden velocity changes)
 	other.oldvelocity = other.velocity = self.movedir;
 
+	UpdateCSQCProjectile(other);
+
 	if (other.classname == "player")
 	{
 		if(self.pushltime < time)  // prevent "snorring" sound when a player hits the jumppad more than once
