@@ -746,7 +746,7 @@ void spawnfunc_weapon_nex (void)
 	{
 		minstagib_items(IT_CELLS);
 		self.think = minst_remove_item;
-		self.nextthink = time + cvar("sys_ticrate");
+		self.nextthink = time;
 		return;
 	}
 	weapon_defaultspawnfunc(WEP_NEX);
@@ -758,7 +758,7 @@ void spawnfunc_weapon_minstanex (void)
 	{
 		minstagib_items(IT_CELLS);
 		self.think = minst_remove_item;
-		self.nextthink = time + cvar("sys_ticrate");
+		self.nextthink = time;
 		return;
 	}
 	weapon_defaultspawnfunc(WEP_MINSTANEX);
@@ -770,7 +770,7 @@ void spawnfunc_weapon_rocketlauncher (void)
 	{
 		minstagib_items(IT_CELLS);
 		self.think = minst_remove_item;
-		self.nextthink = time + cvar("sys_ticrate");
+		self.nextthink = time;
 		return;
 	}
 	weapon_defaultspawnfunc(WEP_ROCKET_LAUNCHER);
