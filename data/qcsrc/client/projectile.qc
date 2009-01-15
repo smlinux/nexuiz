@@ -49,7 +49,8 @@ void Projectile_Draw()
 void Ent_RemoveProjectile()
 {
 	if(self.cnt)
-		sound(self, CHAN_PAIN, "misc/null.wav", VOL_BASE, ATTN_NORM);
+		if(csqc_flags & CSQC_FLAG_COLORCODES)
+			sound(self, CHAN_PAIN, "misc/null.wav", VOL_BASE, ATTN_NORM);
 }
 
 void Ent_Projectile()
@@ -114,13 +115,17 @@ void Ent_Projectile()
 		switch(self.cnt)
 		{
 			case 1:
-				sound(self, CHAN_PAIN, "weapons/electro_fly.wav", VOL_BASE, ATTN_NORM);
+				// only new engines support sound moving with object
+				if(csqc_flags & CSQC_FLAG_COLORCODES)
+					sound(self, CHAN_PAIN, "weapons/electro_fly.wav", VOL_BASE, ATTN_NORM);
 				break;
 			case 2:
-				sound(self, CHAN_PAIN, "weapons/rocket_fly.wav", VOL_BASE, ATTN_NORM);
+				if(csqc_flags & CSQC_FLAG_COLORCODES)
+					sound(self, CHAN_PAIN, "weapons/rocket_fly.wav", VOL_BASE, ATTN_NORM);
 				break;
 			case 3:
-				sound(self, CHAN_PAIN, "weapons/tag_rocket_fly.wav", VOL_BASE, ATTN_NORM);
+				if(csqc_flags & CSQC_FLAG_COLORCODES)
+					sound(self, CHAN_PAIN, "weapons/tag_rocket_fly.wav", VOL_BASE, ATTN_NORM);
 				break;
 			default:
 				break;
