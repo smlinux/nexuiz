@@ -191,7 +191,7 @@ float Sbar_WouldDrawScoreboard ();
 float zoomscript_caught;
 float view_set;
 float camera_mode;
-vector camera_offset, new_angles;
+vector camera_offset, current_origin, mouse_angles, current_camera_offset, new_angles;
 void CSQC_UpdateView(float w, float h)
 {
 	entity e;
@@ -308,64 +308,89 @@ void CSQC_UpdateView(float w, float h)
 
 	R_SetView(VF_FOV, GetCurrentFov(fov));
 
-	if (cvar("chase_active") > 1 && isdemo())
+	// Camera for demo playback
+	if (cvar("chase_active") > 1 && cvar("cl_demo_mousegrab") && isdemo())
 	{
-		float distance, chase_view_angle, step;
+		float speed, attenuation;
 		vector new_origin, m;
 
-		step = cvar("chase_active_direction_step");
+		speed = ((cvar("camera_free")) ? cvar("camera_speed_free") : cvar("camera_speed_chase"));
+			
+		attenuation = cvar("camera_speed_attenuation");
 		
-		if( cvar("chase_active_reset") || !camera_mode )
+		attenuation = ((attenuation<1) ? 1 : (1 / attenuation));
+
+		if( cvar("camera_reset") || !camera_mode )
 		{
 			camera_offset = '0 0 0';
 			new_angles = view_angles;
 			camera_offset_z += 20;
 			camera_offset_x -= 20 * cos(new_angles_y * DEG2RAD);
 			camera_offset_y -= 20 * sin(new_angles_y * DEG2RAD);
+			current_origin = view_origin;
 		}
 
-		if( cvar("chase_active_roll") )
-			new_angles_z += cvar("chase_active_roll") * cvar("chase_active_rolling_step");
+		// Camera angles
+		if( cvar("camera_roll") )
+			mouse_angles_z += cvar("camera_roll") * cvar("camera_speed_roll");
 
 		m = getmousepos() * 0.1;
-		new_angles_x += m_y * cos(new_angles_z * DEG2RAD) + (m_x * sin(new_angles_z * DEG2RAD));
-		new_angles_y -= m_x * cos(new_angles_z * DEG2RAD) + (m_y * -sin(new_angles_z * DEG2RAD));
-
-		if( cvar("chase_active_direction_x") )
+		if(vlen(m)>cvar("camera_mouse_treshold"))
 		{
-			camera_offset_x += cvar("chase_active_direction_x") * step * cos(new_angles_y * DEG2RAD);
-			camera_offset_y += cvar("chase_active_direction_x") * step * sin(new_angles_y * DEG2RAD);
+			mouse_angles_x += m_y * cos(mouse_angles_z * DEG2RAD) + (m_x * sin(mouse_angles_z * DEG2RAD));
+			mouse_angles_y -= m_x * cos(mouse_angles_z * DEG2RAD) + (m_y * -sin(mouse_angles_z * DEG2RAD));
+		}
+		
+		new_angles += (mouse_angles - new_angles) * attenuation;
+		
+		// Camera position
+		if( cvar("camera_direction_x") )
+		{
+			camera_offset_x += cvar("camera_direction_x") * speed * cos(new_angles_y * DEG2RAD);
+			camera_offset_y += cvar("camera_direction_x") * speed * sin(new_angles_y * DEG2RAD);
 		}
 
-		if( cvar("chase_active_direction_y") )
+		if( cvar("camera_direction_y") )
 		{
-			camera_offset_y += cvar("chase_active_direction_y") * step * cos(new_angles_y * DEG2RAD) * cos(new_angles_z * DEG2RAD);
-			camera_offset_x += cvar("chase_active_direction_y") * step * -sin(new_angles_y * DEG2RAD);
-			camera_offset_z += cvar("chase_active_direction_y") * step * sin(new_angles_z * DEG2RAD);
+			camera_offset_y += cvar("camera_direction_y") * speed * cos(new_angles_y * DEG2RAD) * cos(new_angles_z * DEG2RAD);
+			camera_offset_x += cvar("camera_direction_y") * speed * -sin(new_angles_y * DEG2RAD);
+			camera_offset_z += cvar("camera_direction_y") * speed * sin(new_angles_z * DEG2RAD);
 		}
 
-		if( cvar("chase_active_direction_z") )
-			camera_offset_z += cvar("chase_active_direction_z") * step * cos(new_angles_z * DEG2RAD);
+		if( cvar("camera_direction_z") )
+			camera_offset_z += cvar("camera_direction_z") * speed * cos(new_angles_z * DEG2RAD);
 
-		if( cvar("chase_active_free") )
+		current_camera_offset += (camera_offset - current_camera_offset) * attenuation;
+
+		// Camera modes
+		if( cvar("camera_free") )
 		{
-			if ( camera_mode == CAMERA_CHASE ){
-				camera_offset = view_origin + camera_offset;
+			if ( camera_mode == CAMERA_CHASE )
+			{
+				current_camera_offset = current_origin + current_camera_offset;
+				camera_offset = current_origin + camera_offset;
 			}
 
 			camera_mode = CAMERA_FREE;
-			
-			new_origin = camera_offset;
+			new_origin = current_camera_offset;
 		}
 		else
 		{
 			if ( camera_mode == CAMERA_FREE )
 			{
-				camera_offset = camera_offset - view_origin;
+				current_origin = view_origin;
+				camera_offset = camera_offset - current_origin;
+				current_camera_offset = current_camera_offset - current_origin;
 			}
 
 			camera_mode = CAMERA_CHASE;
-			new_origin = view_origin + camera_offset;
+			
+			if(cvar("camera_chase_smoothly"))
+				current_origin += (view_origin - current_origin) * attenuation;
+			else
+				current_origin = view_origin;
+				
+			new_origin = current_origin + current_camera_offset;
 		}
 
 		R_SetView(VF_ANGLES, new_angles);
