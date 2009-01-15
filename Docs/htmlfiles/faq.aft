@@ -21,20 +21,16 @@ Just unzip the |%zipname%| file.  You can do this with any archive program (like
 ^<<
 Nexuiz/
 |-- Docs/
-|   |-- *
-|   `-- server/
-|       `-- *
 |-- data/
 |   |-- common-spog.pk3
 |   `-- data*.pk3
-|-- pro/
+|-- havoc/
 |   `-- data*.pk3
 |-- Nexuiz.app/
-|   `-- *
 |-- Nexuiz-SDL.app/
+|-- server/
 |   `-- *
 |-- sources/
-|   `-- *
 |-- *.exe
 |-- *.dll
 `-- nexuiz-linux-*
