@@ -91,6 +91,7 @@ Braden "meoblast001" Walters - Music
 Amos "torus" Dudley - Announcer voices
 William "Willis" Weilep - Master server host
 "sev" - "Wicked" menu skins
+Simon O'Callaghan - "egyptsoc" texture set
 
 Qantourisc
 Tymo
