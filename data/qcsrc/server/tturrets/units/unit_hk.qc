@@ -91,7 +91,7 @@ void turret_hk_attack()
     missile.solid            = SOLID_BBOX;
     setmodel (missile, "models/turrets/hunter2.md3"); // precision set below
     setsize (missile, missile.mins,missile.maxs); // give it some size so it can be shot
-    sound    (missile, CHAN_PROJECTILE, "weapons/rocket_fly.wav", 0.4, ATTN_NORM);
+    sound    (missile, CHAN_PAIN, "weapons/rocket_fly.wav", 0.4, ATTN_NORM);
     setorigin(missile, self.tur_shotorg_updated);
 
     missile.scale            = 1;
@@ -363,6 +363,7 @@ void turret_hk_missile_explode()
         return;
 
     //vector	org2;
+	stopsound (self, CHAN_PAIN);
     sound (self, CHAN_PROJECTILE, "weapons/rocket_impact.wav", 1, ATTN_NORM);
     org2 = findbetterlocation (self.origin, 16);
 
