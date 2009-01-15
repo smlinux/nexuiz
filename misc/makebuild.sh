@@ -13,7 +13,7 @@ base=`pwd`
 basepk3=$base/data20080229.pk3 # 2.4
 hotbasepk3= # hotfix
 nexdir=$base/nexuiz
-nexprodir=$base/nexuiz/pro
+havocdir=$base/nexuiz/havoc
 dpdir=$base/darkplaces
 tmpdir=/tmp/NEX
 zipdir=$base/builds
@@ -184,9 +184,9 @@ svn export . "$tmpdir/data"
 svn info . > "$tmpdir/data/nexuiz-data-base-revision.txt"
 svn log > "$tmpdir/data/ChangeLog"
 
-# prepare pro
-cd "$nexprodir"
-svn export . "$tmpdir/pro"
+# prepare havoc
+cd "$havocdir"
+svn export . "$tmpdir/havoc"
 
 # prepare Docs
 cd "$nexdir/Docs"
@@ -240,14 +240,14 @@ fi
 echo >> default.cfg
 echo "$defaultcfg" >> default.cfg
 mk7z ../data.pk3 .
-cd "$tmpdir/pro"
-perl -pi -e '/^set g_nexuizversion "?([0-9.]*)[^"]*"?/ and $_ = "set g_nexuizversion '$version-pro'\n"' default.cfg
+cd "$tmpdir/havoc"
+perl -pi -e '/^set g_nexuizversion "?([0-9.]*)[^"]*"?/ and $_ = "set g_nexuizversion '$version-havoc'\n"' default.cfg
 if [ -n "$versiontag" ]; then
 	perl -pi -e '/^set g_nexuizversion/ and $_ = "showbrand 3\n$_"' default.cfg
 fi
 echo >> default.cfg
 echo "$defaultcfg" >> default.cfg
-mk7z ../pro.pk3 .
+mk7z ../havoc.pk3 .
 
 # make data pk3
 cd "$tmpdir"
@@ -255,9 +255,9 @@ rm -rf data
 mkdir data
 mv data.pk3 data/data$tag$date.pk3
 mv common-spog.pk3 data/
-rm -rf pro
-mkdir pro
-mv pro.pk3 pro/data$tag${date}pro.pk3
+rm -rf havoc
+mkdir havoc
+mv havoc.pk3 havoc/data$tag${date}havoc.pk3
 
 cp -r "$mingwdlls"/* .
 # fix up permissions
@@ -270,7 +270,7 @@ mv * Nexuiz/ || true
 find . -name .svn -exec rm -rf {} \; -prune
 
 rm -f "$zipdir/nexuiz$date$ext.zip"
-zip $zipflags -9yr "$zipdir/nexuiz$date$ext.zip"           Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/data/data$tag$date.pk3 Nexuiz/data/common-spog.pk3 Nexuiz/pro/*
+zip $zipflags -9yr "$zipdir/nexuiz$date$ext.zip"           Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/data/data$tag$date.pk3 Nexuiz/data/common-spog.pk3 Nexuiz/havoc/*
 ln -snf nexuiz$date$ext.zip "$zipdir/nexuiz-$newest.zip"
 
 rm -f "$zipdir/nexuizengineonly$date$ext.zip"
@@ -314,11 +314,11 @@ if unzip "Nexuiz/data/data$tag$date.pk3" gfx/brand.tga; then
 fi
 
 rm -f "$zipdir/nexuizpatch$date$ext.zip"
-zip $zipflags -9yr "$zipdir/nexuizpatch$date$ext.zip"      Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/data/datapatch$tag$date.pk3 Nexuiz/pro/*
+zip $zipflags -9yr "$zipdir/nexuizpatch$date$ext.zip"      Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/data/datapatch$tag$date.pk3 Nexuiz/havoc/*
 ln -snf nexuizpatch$date$ext.zip "$zipdir/nexuizpatch-$newest.zip"
 
 [ -n "$hotbasepk3" ] && rm -f "$zipdir/nexuizhotfix$date$ext.zip"
-[ -n "$hotbasepk3" ] && zip $zipflags -9yr "$zipdir/nexuizhotfix$date$ext.zip"      Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/data/datapatch$tag$date""hotfix.pk3 Nexuiz/pro/*
+[ -n "$hotbasepk3" ] && zip $zipflags -9yr "$zipdir/nexuizhotfix$date$ext.zip"      Nexuiz/gpl.txt Nexuiz/nexuiz* Nexuiz/Nexuiz* Nexuiz/*.dll Nexuiz/sources Nexuiz/Docs Nexuiz/data/datapatch$tag$date""hotfix.pk3 Nexuiz/havoc/*
 [ -n "$hotbasepk3" ] && ln -snf nexuizhotfix$date$ext.zip "$zipdir/nexuizhotfix-$newest.zip"
 
 rm -f "$zipdir/nexuizdocs$date$ext.zip"
