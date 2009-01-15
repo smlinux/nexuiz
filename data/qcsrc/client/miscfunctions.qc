@@ -21,6 +21,7 @@ void AuditLists()
 		if(prev != e.sort_prev)
 			error(strcat("sort list chain error\nplease submit the output of 'prvm_edicts client' to the developers"));
 	}
+	RegisterWeapons();
 }
 
 

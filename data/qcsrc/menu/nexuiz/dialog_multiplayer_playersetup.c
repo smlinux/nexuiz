@@ -93,28 +93,39 @@ void fillNexuizPlayerSettingsTab(entity me)
 			e0.allowCut = 1;
 	me.TR(me);
 	me.TR(me);
+		me.TD(me, 1, 2.8, e = makeNexuizCheckBox(0, "crosshair_per_weapon", "Per weapon crosshairs"));
+	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Crosshair:"));
-		for(i = 1; i <= 10; ++i)
+		for(i = 1; i <= 10; ++i) {
 			me.TDNoMargin(me, 1, 2 / 10, e = makeNexuizCrosshairButton(3, i), '0 0 0');
+			setDependent(e, "crosshair_per_weapon", 0, 0);
+		}
 	me.TR(me);
 		me.TDempty(me, 1);
-		for(i = 11; i <= 20; ++i)
+		for(i = 11; i <= 20; ++i) {
 			me.TDNoMargin(me, 1, 2 / 10, e = makeNexuizCrosshairButton(3, i), '0 0 0');
+			setDependent(e, "crosshair_per_weapon", 0, 0);
+		}
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Crosshair Size:"));
 		me.TD(me, 1, 2, e = makeNexuizSlider(0.40, 2, 0.05, "crosshair_size"));
+		setDependent(e, "crosshair_per_weapon", 0, 0);
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Crosshair Alpha:"));
 		me.TD(me, 1, 2, e = makeNexuizSlider(0, 1, 0.01, "crosshair_color_alpha"));
+		setDependent(e, "crosshair_per_weapon", 0, 0);
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Crosshair Red:"));
 		me.TD(me, 1, 2, e = makeNexuizSlider(0, 1, 0.01, "crosshair_color_red"));
+		setDependent(e, "crosshair_per_weapon", 0, 0);
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Crosshair Green:"));
 		me.TD(me, 1, 2, e = makeNexuizSlider(0, 1, 0.01, "crosshair_color_green"));
+		setDependent(e, "crosshair_per_weapon", 0, 0);
 	me.TR(me);
 		me.TD(me, 1, 1, e = makeNexuizTextLabel(0, "Crosshair Blue:"));
 		me.TD(me, 1, 2, e = makeNexuizSlider(0, 1, 0.01, "crosshair_color_blue"));
+		setDependent(e, "crosshair_per_weapon", 0, 0);
 	me.TR(me);
 	/*
 	 * not supported by the current csqc code

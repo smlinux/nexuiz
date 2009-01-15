@@ -403,7 +403,7 @@ void CSQC_UpdateView(float w, float h)
 	// Draw the Crosshair
 	float scoreboard_active;
 	scoreboard_active = Sbar_WouldDrawScoreboard();
-	R_SetView(VF_DRAWCROSSHAIR, !scoreboard_active && !ons_showmap);
+	R_SetView(VF_DRAWCROSSHAIR, 0); //Make sure engine crosshairs are always hidden
 	
 	// Draw the Engine Status Bar (the default Quake HUD)
 	R_SetView(VF_DRAWENGINESBAR, 0);
@@ -437,6 +437,27 @@ void CSQC_UpdateView(float w, float h)
 	// then polygon drawing will draw as 2D stuff, and NOT get queued until the
 	// next R_RenderScene call
 	drawstring('0 0 0', "", '1 1 0', '1 1 1', 0, 0);
+
+	// crosshair
+	if(!scoreboard_active && !ons_showmap) {
+		string wcross_wep;
+		float wcross_alpha, wcross_style;
+		vector wcross_color, wcross_size;
+		if (cvar("crosshair_per_weapon")) {
+			e = get_weaponinfo(activeweapon);
+			if (e && e.netname)
+				wcross_wep = strcat("_", e.netname);
+		}
+		wcross_style = cvar(strcat("crosshair", wcross_wep));
+		wcross_color_x = cvar(strcat("crosshair", wcross_wep, "_color_red"));
+		wcross_color_y = cvar(strcat("crosshair", wcross_wep, "_color_green"));
+		wcross_color_z = cvar(strcat("crosshair", wcross_wep, "_color_blue"));
+		wcross_size_x = cvar(strcat("crosshair", wcross_wep, "_size")) * 24;
+		wcross_size_y = cvar(strcat("crosshair", wcross_wep, "_size")) * 24;
+		wcross_alpha = cvar(strcat("crosshair", wcross_wep, "_color_alpha"));
+		
+		drawpic('0.5 0 0' * (vid_conwidth - wcross_size_x) + '0 0.5 0' * (vid_conheight - wcross_size_y), strcat("gfx/crosshair", ftos(wcross_style)), wcross_size, wcross_color, wcross_alpha, DRAWFLAG_NORMAL);
+	}
 
 	// Draw the mouse cursor
 	// NOTE: drawpic must happen after R_RenderScene for some reason
