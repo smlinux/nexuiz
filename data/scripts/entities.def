@@ -573,6 +573,8 @@ colormod: color of the laser beam (default: red, that is, 1 0 0)
 dmg: damage inflicted by the beam per second, or -1 for an instant-death ray
 targetname: name to target this (then its state is toggled)
 alpha: when set, makes a dark laser of the given strength; may be combined with colormod
+scale: scales the beam thickness (default 1)
+modelscale: scales the dynamic light radius at the endpoint (default 1, -1 to turn off)
 -------- SPAWNFLAGS --------
 START_ON: when targeted, the laser will start switched on
 FINITE: the laser does not extend over its target like light would do, but stops there (takes more bandwidth)

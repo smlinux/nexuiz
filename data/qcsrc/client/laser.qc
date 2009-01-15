@@ -7,6 +7,8 @@
 .float count; // flags for the laser
 .vector velocity;
 .float alpha;
+.float scale; // scaling factor of the thickness
+.float modelscale; // scaling factor of the dlight
 
 // TODO move these into a heade file
 float trace_dphitq3surfaceflags;
@@ -29,20 +31,23 @@ void Draw_Laser()
 		if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_SKY)
 			trace_endpos = self.origin + v_forward * 1048576;
 	}
-	if(self.alpha)
+	if(self.scale != 0)
 	{
-		Draw_CylindricLine(self.origin, trace_endpos, 2, "particles/laserbeam", 0, time * 3, self.colormod, self.alpha, DRAWFLAG_NORMAL); // TODO make a texture to make the laser look smoother
-	}
-	else
-	{
-		Draw_CylindricLine(self.origin, trace_endpos, 2, "particles/laserbeam", 0, time * 3, self.colormod, 0.5, DRAWFLAG_ADDITIVE); // TODO make a texture to make the laser look smoother
+		if(self.alpha)
+		{
+			Draw_CylindricLine(self.origin, trace_endpos, self.scale, "particles/laserbeam", 0, time * 3, self.colormod, self.alpha, DRAWFLAG_NORMAL); // TODO make a texture to make the laser look smoother
+		}
+		else
+		{
+			Draw_CylindricLine(self.origin, trace_endpos, self.scale, "particles/laserbeam", 0, time * 3, self.colormod, 0.5, DRAWFLAG_ADDITIVE); // TODO make a texture to make the laser look smoother
+		}
 	}
 	if not(trace_dphitq3surfaceflags & (Q3SURFACEFLAG_SKY | Q3SURFACEFLAG_NOIMPACT))
 	{
 		if(self.cnt >= 0)
 			pointparticles(self.cnt, trace_endpos, trace_plane_normal, drawframetime * 1000);
-		if(self.colormod != '0 0 0')
-			R_AddDynamicLight(trace_endpos + trace_plane_normal * 1, 50, self.colormod * 5);
+		if(self.colormod != '0 0 0' && self.modelscale != 0)
+			R_AddDynamicLight(trace_endpos + trace_plane_normal * 1, self.modelscale, self.colormod * 5);
 	}
 }
 
@@ -53,7 +58,7 @@ void Ent_Laser()
 
 	// 30 bytes, or 13 bytes for just moving
 	f = ReadByte();
-	self.count = (f & 0xC0);
+	self.count = (f & 0xE0);
 
 	if(self.count & 0x80)
 		self.iflags = IFLAG_VELOCITY;
@@ -75,6 +80,13 @@ void Ent_Laser()
 			self.alpha = ReadByte() / 255.0;
 		else
 			self.alpha = 0;
+		self.scale = 2;
+		self.modelscale = 50;
+		if(f & 0x20)
+		{
+			self.scale *= ReadByte() / 16.0; // beam radius
+			self.modelscale *= ReadByte() / 16.0; // dlight radius
+		}
 		self.cnt = ReadShort() - 1; // effect number
 	}
 	if(f & 2)

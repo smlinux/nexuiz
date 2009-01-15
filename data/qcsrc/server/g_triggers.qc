@@ -760,6 +760,7 @@ void spawnfunc_func_snow()
 
 void FireRailgunBullet (vector start, vector end, float bdamage, float bforce, float deathtype);
 
+.float modelscale;
 void misc_laser_aim()
 {
 	vector a;
@@ -874,11 +875,13 @@ void misc_laser_think()
 float laser_SendEntity(entity to, float fl)
 {
 	WriteByte(MSG_ENTITY, ENT_CLIENT_LASER);
-	fl = fl - (fl & 0xC0); // use that bit to indicate finite length laser
+	fl = fl - (fl & 0xE0); // use that bit to indicate finite length laser
 	if(self.spawnflags & 2)
 		fl |= 0x80;
 	if(self.alpha)
 		fl |= 0x40;
+	if(self.scale != 1 || self.modelscale != 1)
+		fl |= 0x20;
 	WriteByte(MSG_ENTITY, fl);
 	if(fl & 1)
 	{
@@ -893,6 +896,11 @@ float laser_SendEntity(entity to, float fl)
 		WriteByte(MSG_ENTITY, self.colormod_z * 255.0);
 		if(fl & 0x40)
 			WriteByte(MSG_ENTITY, self.alpha * 255.0);
+		if(fl & 0x20)
+		{
+			WriteByte(MSG_ENTITY, bound(0, self.scale * 16.0, 255));
+			WriteByte(MSG_ENTITY, bound(0, self.modelscale * 16.0, 255));
+		}
 		WriteShort(MSG_ENTITY, self.cnt + 1);
 	}
 	if(fl & 2)
@@ -964,6 +972,10 @@ void spawnfunc_misc_laser()
 		self.message = "saw the light";
 	if (!self.message2)
 		self.message2 = "was pushed into a laser by";
+	if(!self.scale)
+		self.scale = 1;
+	if(!self.modelscale)
+		self.modelscale = 1;
 	self.think = misc_laser_think;
 	self.nextthink = time;
 	InitializeEntity(self, misc_laser_init, INITPRIO_FINDTARGET);
