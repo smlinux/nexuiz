@@ -140,7 +140,6 @@ void walker_rocket_explode()
         return;
     }
 
-	stopsound (self, CHAN_PAIN);
     sound (self, CHAN_PROJECTILE, "weapons/rocket_impact.wav", VOL_BASE, ATTN_NORM);
     org2 = findbetterlocation (self.origin, 16);
 
