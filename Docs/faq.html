@@ -121,20 +121,16 @@ Just unzip the <tt>nexuiz-&lt;version&gt;.zip</tt> file.  You can do this with a
 <div class="block"><pre>
 Nexuiz/
 |-- Docs/
-|   |-- *
-|   `-- server/
-|       `-- *
 |-- data/
 |   |-- common-spog.pk3
 |   `-- data*.pk3
-|-- pro/
+|-- havoc/
 |   `-- data*.pk3
 |-- Nexuiz.app/
-|   `-- *
 |-- Nexuiz-SDL.app/
+|-- server/
 |   `-- *
 |-- sources/
-|   `-- *
 |-- *.exe
 |-- *.dll
 `-- nexuiz-linux-*
@@ -155,13 +151,13 @@ This happens when the engine can't load the data*.pk3 file or has trouble to ini
 <!--End Section 2-->
 <h3><a name="When i start Nexuiz my screen is flickering" id="When i start Nexuiz my screen is flickering">When i start Nexuiz my screen is flickering</a></h3>
 <p class="Body">
-This in known to happen on Windows with Intel grahpic chips and is a bug in the graphics drivers.  A workaround is to set <tt>Flip-Policiy</tt> to <tt>blit</tt>.  Open the control panel, there should be an icon called <tt>Intel(R) GMA driver</tt> (or something like that), double click it. Click on <tt>3D Settings</tt> to find the screen with that settings.
+This is known to happen on Windows with Intel graphic chips and is a bug in the graphics drivers.  A workaround is to set <tt>Flip-Policiy</tt> to <tt>blit</tt>.  Open the control panel, there should be an icon called <tt>Intel(R) GMA driver</tt> (or something like that), double click it. Click on <tt>3D Settings</tt> to find the screen with those settings.
 </p>
 <!--End Section 2-->
 <h3><a name="How can I speed up my frame rate?" id="How can I speed up my frame rate?">How can I speed up my frame rate?</a></h3>
 <p class="Body">
-You can choose predefined performance settings in the <tt>Settings / Video</tt> menu.  <tt>Normal</tt> is the default, <tt>Medium</tt> and <tt>Low</tt> run faster while <tt>High</tt>, <tt>Ultra</tt> and <tt>Ultimate</tt> enable more features you might want to test if you have a high end graphic card.  Or you can dis/enable single features.  The greatest performance boost can be achieved by turning off dynamic lights and shadows in the <tt>Settings / Effects</tt> menu.  Bloom is also quite resource intensive.  Other fps boots include disabling <tt>Deluxemapping</tt> and <tt>Coronas</tt>.  On older graphics cards or on-board/notebook chips with little video ram you can try to lower the texture quality in the <tt>Settings / Video</tt> menu.
-Some graphic cards (mostly ATI or quite old cards) run A LOT faster if you disable the <tt>Vertex Buffer Objects</tt> in the <tt>Settings / Video</tt> menu.  An other thing that can greatly help on such cards is to disable the <tt>OpenGL 2.0 Shaders</tt>.  Having that option enabled is faster on most cards however thats why both are active by default.
+You can choose predefined performance settings in the <tt>Settings / Video</tt> menu.  <tt>Normal</tt> is the default, <tt>Medium</tt> and <tt>Low</tt> run faster while <tt>High</tt>, <tt>Ultra</tt> and <tt>Ultimate</tt> enable more features you might want to test if you have a high end graphic card.  Or you can enable/disable single features.  The greatest performance boost can be achieved by turning off dynamic lights and shadows in the <tt>Settings / Effects</tt> menu.  Bloom is also quite resource intensive.  Other fps boots include disabling <tt>Deluxemapping</tt> and <tt>Coronas</tt>.  On older graphics cards or on-board/notebook chips with little video ram you can try to lower the texture quality in the <tt>Settings / Video</tt> menu.
+Some graphic cards (mostly ATI or quite old cards) run A LOT faster if you disable the <tt>Vertex Buffer Objects</tt> in the <tt>Settings / Video</tt> menu.  An other thing that can greatly help on such cards is to disable the <tt>OpenGL 2.0 Shaders</tt>.  Having that option enabled is faster on most cards however that is why both are active by default.
 </p>
 <!--End Section 2-->
 <h3><a name="The sound is broken, it crackles and stutters" id="The sound is broken, it crackles and stutters">The sound is broken, it crackles and stutters</a></h3>
@@ -188,7 +184,7 @@ For Linux users: you need to have libcurl installed, otherwise you won't be able
 <!--End Section 2-->
 <h3><a name="How to report crashes" id="How to report crashes">How to report crashes</a></h3>
 <p class="Body">
-Alientrap wants to ensure everyone has a pleasent time playing Nexuiz, so if you have problems we would like to ask you to report them and thus help solve them.  Especially crash reports can be very helpful.  See below for how to contact Alientrap (<a class="link" href="#Where can i get more help?">Where can i get more help?</a>)
+Alientrap wants to ensure everyone has a pleasant time playing Nexuiz, so if you have problems we would like to ask you to report them and thus help solve them.  Especially crash reports can be very helpful.  See below for how to contact Alientrap (<a class="link" href="#Where can i get more help?">Where can i get more help?</a>)
 </p>
 <p class="Body">
 On Mac: IS THERE AN EASY WAY?
@@ -212,7 +208,7 @@ Visit <a class="link" href="http://alientrap.org/forum">the official Nexuiz foru
 <h3><a name="How do I install new maps?" id="How do I install new maps?">How do I install new maps?</a></h3>
 <p class="Body">
 Maps usually ship as *.pk3 file.  All you have to do is to copy this file to the <tt>Nexuiz/data/</tt> (on Linux, Mac, Windows) OR <tt>~/.nexuiz/data/</tt> (on Linux, Mac) directory.
-Map packages that were downloaded from a server during playing end up in <tt>Nexuiz/data/dlcache/</tt> or <tt>~/.nexuiz/data/dlcache/</tt> and are only used till you exit Nexuiz. If you want to play them localy or use them to setup a server of your own you can &quot;accept&quot; the packages by moving it one level up - right next to your config.cfg.
+Map packages that were downloaded from a server during playing end up in <tt>Nexuiz/data/dlcache/</tt> or <tt>~/.nexuiz/data/dlcache/</tt> and are only used till you exit Nexuiz. If you want to play them locally or use them to setup a server of your own you can &quot;accept&quot; the packages by moving it one level up - right next to your config.cfg.
 </p>
 <!--End Section 2-->
 <h3><a name="How can I place a shortcut to Nexuiz on my Linux desktop?" id="How can I place a shortcut to Nexuiz on my Linux desktop?">How can I place a shortcut to Nexuiz on my Linux desktop?</a></h3>
@@ -251,7 +247,7 @@ Colors can be used in nicknames and chat messages via two ways: Either the simpl
 <!--End Section 2-->
 <h3><a name="How do i watch/record demos?" id="How do i watch/record demos?">How do i watch/record demos?</a></h3>
 <p class="Body">
-Demos are recordings of matches that you have played. To automaticly record a demo each time you play enable the option <tt>Record demos while playing</tt> in the <tt>Settings / Demos</tt> menu. Or if you just want to record some matches open the console and type <tt>rec &lt;demos/name&gt;</tt> before playing. That is before starting a game or connecting to a server. The demo file will then be stored in <tt>Nexuiz/data/demos/&lt;name&gt;.dem</tt> (on Windows) or <tt>~/.nexuiz/data/demos/&lt;name&gt;.dem</tt> (on Linux, Mac).
+Demos are recordings of matches that you have played. To automatically record a demo each time you play enable the option <tt>Record demos while playing</tt> in the <tt>Settings / Demos</tt> menu. Or if you just want to record some matches open the console and type <tt>rec &lt;demos/name&gt;</tt> before playing. That is before starting a game or connecting to a server. The demo file will then be stored in <tt>Nexuiz/data/demos/&lt;name&gt;.dem</tt> (on Windows) or <tt>~/.nexuiz/data/demos/&lt;name&gt;.dem</tt> (on Linux, Mac).
 If you downloaded a demo, copy it to <tt>Nexuiz/data/demos/&lt;name&gt;.dem</tt> (on Linux, Mac, Windows) or <tt>~/.nexuiz/data/demos/&lt;name&gt;.dem</tt> (on Linux, Mac).  You might have to create this directory if you have never recorded a demo before.
 To watch demos you can choose a demo file in the <tt>Settings / Demos</tt> and click the play button. Also you can watch demos typing <tt>ply &lt;demos/name&gt;</tt> in the console (<a class="link" href="#How do I open the console?">How do I open the console?</a>). You can list all your demo files by typing <tt>dem</tt> on the console.Some useful key bindings for viewing demos and making videos are listed <a class="link" href="http://www.alientrap.org/forum/viewtopic.php?p=357#357">here</a>.  A simple way to automatically record demos can be found <a class="link" href="http://www.alientrap.org/forum/viewtopic.php?t=90">here</a>.
 </p>
