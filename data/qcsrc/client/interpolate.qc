@@ -10,8 +10,16 @@ void InterpolateOrigin_Note()
 
 	dt = time - self.itime1;
 
+	if(self.iflags & IFLAG_PREVALID)
+		self.iflags |= IFLAG_VALID;
+	else
+		self.iflags |= IFLAG_PREVALID;
+
 	self.iorigin1 = self.iorigin2;
 	self.iorigin2 = self.origin;
+
+	if(self.iflags & IFLAG_AUTOANGLES)
+		self.angles = vectoangles(self.iorigin2 - self.iorigin1);
 
 	if(self.iflags & IFLAG_ANGLES)
 	{

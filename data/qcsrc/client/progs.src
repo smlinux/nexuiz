@@ -28,6 +28,7 @@ mapvoting.qc
 hook.qc
 particles.qc
 laser.qc
+projectile.qc
 
 Main.qc
 View.qc

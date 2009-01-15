@@ -63,16 +63,16 @@ const float		STAT_FRAGLIMIT					= 235;
 const float		STAT_TIMELIMIT					= 236;
 
 // Sound Constants
-const float		CHAN_AUTO						= 0;
-const float		CHAN_WEAPON						= 1;
-const float		CHAN_VOICE						= 2;
-const float		CHAN_ITEM						= 3;
-const float		CHAN_BODY						= 4;
+//const float		CHAN_AUTO						= 0;
+//const float		CHAN_WEAPON						= 1;
+//const float		CHAN_VOICE						= 2;
+//const float		CHAN_ITEM						= 3;
+//const float		CHAN_BODY						= 4;
 
-const float		ATTN_NONE						= 0;
-const float		ATTN_NORM						= 1;
-const float		ATTN_IDLE						= 2;
-const float		ATTN_STATIC						= 3;
+//const float		ATTN_NONE						= 0;
+//const float		ATTN_NORM						= 1;
+//const float		ATTN_IDLE						= 2;
+//const float		ATTN_STATIC						= 3;
 
 // Quake-style Point Contents
 const float		CONTENT_EMPTY					= -1;

@@ -45,6 +45,8 @@ void W_Plasma_Explode_Combo (void) {
 
 void W_Plasma_Touch (void)
 {
+	UpdateCSQCProjectile(self);
+
 	PROJECTILE_TOUCH_NOSOUND;
 	if (other.takedamage == DAMAGE_AIM) {
 		W_Plasma_Explode ();
@@ -155,7 +157,12 @@ void W_Electro_Attack2()
 	proj.event_damage = W_Plasma_Damage;
 	proj.flags = FL_PROJECTILE;
 
-	sound (proj, CHAN_PAIN, "weapons/electro_fly.wav", VOL_BASE, ATTN_NORM);
+	//sound (proj, CHAN_PAIN, "weapons/electro_fly.wav", VOL_BASE, ATTN_NORM);
+
+	CSQCProjectile(proj);
+	proj.csqcprojectile_clientanimate = 1;
+	proj.gravity = 1;
+	proj.csqcprojectile_flysound = 1;
 }
 
 void spawnfunc_weapon_electro (void)

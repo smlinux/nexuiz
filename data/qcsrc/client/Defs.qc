@@ -151,6 +151,7 @@ void		end_sys_fields;			// flag for structure dumping
 float		intermission;
 float		sb_showscores;
 .string		message;
+.float renderflags;
 // float		coop;
 // float		deathmatch;
 

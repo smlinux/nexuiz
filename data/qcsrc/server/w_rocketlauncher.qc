@@ -177,6 +177,9 @@ void W_Rocket_Think (void)
 				W_Rocket_RemoteExplode();
 		}
 	}
+
+	if(self.csqcprojectile_clientanimate == 0)
+		UpdateCSQCProjectile(self);
 }
 
 void W_Rocket_Touch (void)
@@ -242,8 +245,16 @@ void W_Rocket_Attack (void)
 	missile.nextthink = time;
 	missile.cnt = time + cvar("g_balance_rocketlauncher_lifetime");
 	missile.effects = EF_LOWPRECISION;
-	sound (missile, CHAN_PAIN, "weapons/rocket_fly.wav", VOL_BASE, ATTN_NORM);
+	//sound (missile, CHAN_PAIN, "weapons/rocket_fly.wav", VOL_BASE, ATTN_NORM);
 	missile.flags = FL_PROJECTILE;
+
+	CSQCProjectile(missile);
+	if(cvar("g_balance_rocketlauncher_speedaccel") == 0 && cvar("g_laserguided_missiles") == 0)
+		missile.csqcprojectile_clientanimate = 1;
+	else
+		missile.csqcprojectile_clientanimate = 0; // we won't client animate if the missiles may behave weird
+	missile.gravity = 0;
+	missile.csqcprojectile_flysound = 2;
 
 	// muzzle flash for 1st person view
 	flash = spawn ();

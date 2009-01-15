@@ -1,6 +1,9 @@
 .float iflags;
 #define IFLAG_VELOCITY 1
 #define IFLAG_ANGLES 2
+#define IFLAG_AUTOANGLES 4
+#define IFLAG_VALID 8
+#define IFLAG_PREVALID 16
 
 // call this BEFORE reading an entity update
 void InterpolateOrigin_Undo();

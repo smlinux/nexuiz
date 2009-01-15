@@ -54,6 +54,7 @@ const float ENT_CLIENT_LASER = 8;
 const float ENT_CLIENT_NAGGER = 9; // flags [votecalledvote]
 const float ENT_CLIENT_WAYPOINT = 10; // flags origin [team displayrule] [spritename] [spritename2] [spritename3] [lifetime maxdistance hideable]
 const float ENT_CLIENT_RADARLINK = 11; // flags [startorigin] [endorigin] [startcolor+16*endcolor]
+const float ENT_CLIENT_PROJECTILE = 12;
 
 const float SPRITERULE_DEFAULT = 0;
 const float SPRITERULE_TEAMPLAY = 1;
@@ -299,3 +300,47 @@ const float RACE_NET_CHECKPOINT_NEXT_SPEC_QUALIFYING = 5; // byte nextcheckpoint
 #define SP_SUICIDES 2
 #define SP_SCORE 3
 // game mode specific indices are not in common/, but in server/scores_rules.qc!
+
+// this assignment must match menu/nexuiz/dialog_settings_misc.c!
+float	CHAN_AUTO				= 0;
+	// on world: announcers, ...                     INFO
+	// on players: item pickup                       ITEMS
+	// on entities: UNUSED
+float	CHAN_WEAPON				= 1; // Weapon fire
+	// on world: UNUSED
+	// on players: weapon firing                     WEAPONS
+	// on entities: turret firing                    WEAPONS
+float	CHAN_VOICE				= 2; // Voice/Radio
+	// on world: UNUSED
+	// on players: voice                             VOICE
+	// on entities: ambient                          AMBIENT
+float	CHAN_TRIGGER			= 3; // Triggers/Items
+	// on world: UNUSED
+	// on players: item pickup                       ITEMS
+	// on entities: platforms moving etc.            ITEMS
+float	CHAN_PROJECTILE			= 4; // Projectiles
+	// on world: UNUSED
+	// on players: projectiles hitting player        SHOTS
+	// on entities: projectiles                      SHOTS
+float	CHAN_WEAPON2			= 5; // Nex fire (separated as it is a very long sound)
+	// on world: UNUSED
+	// on players: weapon firing                     WEAPONS
+	// on entities: turret firing                    WEAPONS
+float	CHAN_PAIN				= 6; // Pain
+	// on world: UNUSED
+	// on players: pain                              PAIN
+	// on entities: projectiles flying               SHOTS
+float	CHAN_PLAYER				= 7; // Player body
+	// on world: UNUSED
+	// on players: player sounds                     PLAYER
+	// on entities: player sounds                    PLAYER
+
+float	ATTN_NONE				= 0;
+float	ATTN_MIN				= 0.015625;
+float	ATTN_NORM				= 0.5;
+float	ATTN_IDLE				= 2;
+float	ATTN_STATIC				= 3;
+float	ATTN_MAX   				= 3.984375;
+
+#define VOL_BASE 0.7
+#define VOL_BASEVOICE 1.0

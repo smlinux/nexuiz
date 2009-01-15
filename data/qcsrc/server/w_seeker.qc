@@ -364,13 +364,18 @@ void Seeker_Fire_Tag()
 
 	missile.effects     = EF_FULLBRIGHT | EF_NOSHADOW | EF_LOWPRECISION;
 	missile.modelflags  = MF_TRACER3;
-	sound (missile, CHAN_PAIN, "weapons/tag_rocket_fly.wav", VOL_BASE, ATTN_NORM);
+	//sound (missile, CHAN_PAIN, "weapons/tag_rocket_fly.wav", VOL_BASE, ATTN_NORM); // csqc
 	missile.flags       = FL_PROJECTILE;
 
 	missile.velocity    = w_shotdir  * cvar("g_balance_seeker_tag_speed");
 	missile.movetype    = MOVETYPE_BOUNCEMISSILE;
 	W_SetupProjectileVelocity(missile);
 	missile.angles = vectoangles (missile.velocity);
+
+	CSQCProjectile(missile);
+	missile.csqcprojectile_clientanimate = 1;
+	missile.gravity = 0;
+	missile.csqcprojectile_flysound = 3;
 }
 
 

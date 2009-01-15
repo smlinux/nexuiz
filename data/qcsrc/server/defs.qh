@@ -12,9 +12,6 @@ float require_spawnfunc_prefix; // if this float exists, only functions with spa
 #define BUTTON_CHAT   buttonchat
 #define BUTTON_USE    buttonuse
 
-#define VOL_BASE 0.7
-#define VOL_BASEVOICE 1.0
-
 // Globals
 
 string records_reply, lsmaps_reply, maplist_reply; // cached replies

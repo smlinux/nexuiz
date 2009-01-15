@@ -506,6 +506,8 @@ void(float bIsNewEntity) CSQC_Ent_Update =
 		Ent_WaypointSprite();
 	else if(self.enttype == ENT_CLIENT_RADARLINK)
 		Ent_RadarLink();
+	else if(self.enttype == ENT_CLIENT_PROJECTILE)
+		Ent_Projectile();
 	else
 		error(strcat("unknown entity type in CSQC_Ent_Update: ", ftos(self.enttype), "\n"));
 	
@@ -542,6 +544,8 @@ void Ent_Remove()
 	}
 	else if(self.enttype == ENT_CLIENT_WAYPOINT)
 		Ent_RemoveWaypointSprite();
+	else if(self.enttype == ENT_CLIENT_PROJECTILE)
+		Ent_RemoveProjectile();
 
 	self.enttype = 0;
 	self.classname = "";
