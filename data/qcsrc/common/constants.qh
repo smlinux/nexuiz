@@ -306,34 +306,42 @@ float	CHAN_AUTO				= 0;
 	// on world: announcers, ...                     INFO
 	// on players: item pickup                       ITEMS
 	// on entities: UNUSED
+	// on csqc: UNUSED
 float	CHAN_WEAPON				= 1; // Weapon fire
 	// on world: UNUSED
 	// on players: weapon firing                     WEAPONS
 	// on entities: turret firing                    WEAPONS
+	// on csqc: UNUSED
 float	CHAN_VOICE				= 2; // Voice/Radio
 	// on world: UNUSED
 	// on players: voice                             VOICE
 	// on entities: ambient                          AMBIENT
+	// on csqc: UNUSED
 float	CHAN_TRIGGER			= 3; // Triggers/Items
 	// on world: UNUSED
 	// on players: item pickup                       ITEMS
 	// on entities: platforms moving etc.            ITEMS
+	// on csqc: UNUSED
 float	CHAN_PROJECTILE			= 4; // Projectiles
 	// on world: UNUSED
 	// on players: projectiles hitting player        SHOTS
 	// on entities: projectiles                      SHOTS
+	// on csqc: UNUSED
 float	CHAN_WEAPON2			= 5; // Nex fire (separated as it is a very long sound)
 	// on world: UNUSED
 	// on players: weapon firing                     WEAPONS
 	// on entities: turret firing                    WEAPONS
+	// on csqc: UNUSED
 float	CHAN_PAIN				= 6; // Pain
 	// on world: UNUSED
 	// on players: pain                              PAIN
 	// on entities: projectiles flying               SHOTS
+	// on csqc: projectiles flying                   SHOTS
 float	CHAN_PLAYER				= 7; // Player body
 	// on world: UNUSED
 	// on players: player sounds                     PLAYER
 	// on entities: player sounds                    PLAYER
+	// on csqc: UNUSED
 
 float	ATTN_NONE				= 0;
 float	ATTN_MIN				= 0.015625;
