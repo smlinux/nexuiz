@@ -46,6 +46,7 @@ void CSQCProjectile(entity e, float clientanimate, float type)
 		e.gravity = 0;
 
 	e.csqcprojectile_type = type;
+	e.SendFlags = 0xFFFFFF;
 }
 
 void UpdateCSQCProjectile(entity e)

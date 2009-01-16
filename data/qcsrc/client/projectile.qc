@@ -40,13 +40,27 @@ void Projectile_Draw()
 			if(!(self.move_flags & FL_ONGROUND))
 				self.angles += '100 150 100' * time;
 			break;
+		case PROJECTILE_PORTO_RED:
+			// TODO add red dynamic light
+			trailparticles(self, particleeffectnum("TR_WIZSPIKE"), oldorg, self.origin);
+			break;
+		case PROJECTILE_PORTO_BLUE:
+			// TODO add blue dynamic light
+			trailparticles(self, particleeffectnum("TR_WIZSPIKE"), oldorg, self.origin);
+			break;
+		case PROJECTILE_FLAC:
+			trailparticles(self, particleeffectnum("TR_VORESPIKE"), oldorg, self.origin);
+			break;
+		case PROJECTILE_SEEKER:
+			trailparticles(self, particleeffectnum("TR_ROCKET"), oldorg, self.origin);
+			break;
 		default:
 			break;
 	}
 
 	self.renderflags = 0;
 
-	if(self.count & 0x80 || self.iflags & IFLAG_VALID)
+	if((self.count & 0x80) || (self.iflags & IFLAG_VALID))
 		R_AddEntity(self);
 }
 
@@ -84,9 +98,10 @@ void Ent_Projectile()
 	
 	f = ReadByte();
 	self.count = (f & 0x80);
-	self.iflags = IFLAG_AUTOANGLES | IFLAG_ANGLES;
+	self.iflags = (self.iflags & IFLAG_INTERNALMASK) | IFLAG_AUTOANGLES | IFLAG_ANGLES;
 	self.move_flags &~= FL_ONGROUND;
 	self.solid = SOLID_TRIGGER;
+	//self.effects = EF_NOMODELFLAGS;
 
 	// sv_gameplayfix_delayprojectiles
 	if(!self.move_time)
@@ -94,7 +109,7 @@ void Ent_Projectile()
 	else
 		self.move_time = max(self.move_time, time);
 
-	if(self.count & 0x80)
+	if(!(self.count & 0x80))
 		InterpolateOrigin_Undo();
 
 	if(f & 1)
@@ -118,6 +133,7 @@ void Ent_Projectile()
 	{
 		self.cnt = ReadByte();
 
+		self.scale = 1;
 		switch(self.cnt)
 		{
 			case PROJECTILE_ELECTRO: setmodel(self, "models/ebomb.mdl"); break;
@@ -130,14 +146,18 @@ void Ent_Projectile()
 			case PROJECTILE_GRENADE_BOUNCING: setmodel(self, "models/grenademodel.md3"); break;
 			case PROJECTILE_LASER: setmodel(self, "models/laser.mdl"); break;
 			case PROJECTILE_HLAC: setmodel(self, "models/hlac_bullet.md3"); break;
+			case PROJECTILE_SEEKER: setmodel(self, "models/tagrocket.md3"); self.scale = 2; break;
+			case PROJECTILE_FLAC: setmodel(self, "models/hagarmissile.mdl"); self.scale = 0.4; break;
+			case PROJECTILE_PORTO_RED: setmodel(self, "models/grenademodel.md3"); self.scale = 4; break;
+			case PROJECTILE_PORTO_BLUE: setmodel(self, "models/grenademodel.md3"); self.scale = 4; break;
 			default:
 				error("Received invalid CSQC projectile, can't work with this!");
 				break;
 		}
 
-		self.scale = 1;
 		self.mins = '0 0 0';
 		self.maxs = '0 0 0';
+		self.colormod = '0 0 0';
 		self.move_movetype = MOVETYPE_TOSS;
 		self.move_moveflags = MOVEFLAG_STOPONIMPACT;
 
@@ -161,22 +181,28 @@ void Ent_Projectile()
 				self.mins = '-2 -2 -2';
 				self.maxs = '2 2 2';
 				break;
-			case PROJECTILE_GRENADE:
-				self.mins = '0 0 0';
-				self.maxs = '0 0 0';
-				break;
 			case PROJECTILE_GRENADE_BOUNCING:
 				self.mins = '0 0 -3';
 				self.maxs = '0 0 -3';
 				self.move_movetype = MOVETYPE_BOUNCE;
 				self.move_moveflags = 0;
 				break;
+			case PROJECTILE_SEEKER:
+				self.mins = '-2 -2 -2';
+				self.maxs = '2 2 2';
+				break;
+			case PROJECTILE_PORTO_RED:
+				self.colormod = '2 1 1';
+				break;
+			case PROJECTILE_PORTO_BLUE:
+				self.colormod = '1 1 2';
+				break;
 			default:
 				break;
 		}
 	}
 
-	if(self.count)
+	if(!(self.count & 0x80))
 		InterpolateOrigin_Note();
 	
 	self.draw = Projectile_Draw;
@@ -194,4 +220,9 @@ void Projectile_Precache()
 	precache_model("models/grenademodel.md3");
 	precache_model("models/laser.mdl");
 	precache_model("models/hlac_bullet.md3");
+	precache_model("models/hlac_bullet.md3");
+	precache_model("models/tagrocket.md3");
+	precache_model("models/hagarmissile.mdl");
+	precache_model("models/grenademodel.md3");
+	precache_model("models/grenademodel.md3");
 }

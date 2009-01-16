@@ -123,6 +123,7 @@ void W_Porto_Touch (void)
 			trace_plane_normal = norm;
 			W_Porto_Fail(0);
 		}
+		CSQCProjectile(self, TRUE, PROJECTILE_PORTO_BLUE); // change type
 	}
 	else
 	{
@@ -147,7 +148,6 @@ void W_Porto_Touch (void)
 			W_Porto_Fail(0);
 		}
 	}
-
 }
 
 void W_Porto_Attack (void)
@@ -193,6 +193,8 @@ void W_Porto_Attack (void)
 	gren.right_vector = v_right;
 
 	gren.dphitcontentsmask = DPCONTENTS_SOLID | DPCONTENTS_BODY | DPCONTENTS_PLAYERCLIP;
+
+	CSQCProjectile(gren, TRUE, PROJECTILE_PORTO_RED);
 }
 
 void spawnfunc_weapon_porto (void)

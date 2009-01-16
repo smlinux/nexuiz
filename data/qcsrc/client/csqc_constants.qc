@@ -187,3 +187,5 @@ float MOVE_WORLDONLY = 3;
 
 float CAMERA_FREE = 1;
 float CAMERA_CHASE = 2;
+
+float EF_NOMODELFLAGS = 8388608;

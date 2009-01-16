@@ -123,6 +123,7 @@ void Seeker_Missile_Think()
 	self.angles = vectoangles(self.velocity);			// turn model in the new flight direction
 	self.nextthink = time + 0.05;
 
+	UpdateCSQCProjectile(self);
 }
 
 
@@ -162,6 +163,8 @@ void Seeker_Missile_Animate()
 		else
 			self.movetype    = MOVETYPE_FLYMISSILE;
 	}
+
+	UpdateCSQCProjectile(self);
 }
 
 void Seeker_Fire_Missile(vector f_org)
@@ -216,6 +219,7 @@ void Seeker_Fire_Missile(vector f_org)
 	missile.switchweapon = vlen(missile.velocity);
 	missile.angles = vectoangles (missile.velocity);
 
+	CSQCProjectile(missile, FALSE, PROJECTILE_SEEKER);
 }
 
 void Seeker_Vollycontroler_Think()
@@ -460,6 +464,8 @@ void Seeker_Fire_Flac()
 
 	missile.angles = vectoangles (missile.velocity);
 	missile.flags = FL_PROJECTILE;
+
+	CSQCProjectile(missile, TRUE, PROJECTILE_FLAC);
 }
 
 void spawnfunc_weapon_seeker (void)
