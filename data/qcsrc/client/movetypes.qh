@@ -4,6 +4,7 @@
 .vector move_origin;
 .vector move_angles;
 .vector move_velocity;
+.vector move_avelocity;
 
 void Movetype_Physics(float matchserver);
 

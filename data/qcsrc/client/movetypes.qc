@@ -136,7 +136,7 @@ void _Movetype_Physics_Toss(float dt) // SV_Physics_Toss
 		self.move_velocity_z -= dt * self.gravity * getstatf(STAT_MOVEVARS_GRAVITY);
 	}
 
-	self.move_angles = self.move_angles + self.avelocity * dt;
+	self.move_angles = self.move_angles + self.move_avelocity * dt;
 
 	vector move;
 	move = self.move_velocity * dt;
@@ -171,7 +171,7 @@ void _Movetype_Physics_Toss(float dt) // SV_Physics_Toss
 				self.move_flags |= FL_ONGROUND;
 				self.move_groundentity = trace_ent;
 				self.move_velocity = '0 0 0';
-				self.avelocity = '0 0 0';
+				self.move_avelocity = '0 0 0';
 			}
 			else
 				self.move_flags &~= FL_ONGROUND;
@@ -186,7 +186,7 @@ void _Movetype_Physics_Toss(float dt) // SV_Physics_Toss
 				if(trace_ent.solid == SOLID_BSP)
 					self.move_suspendedinair = TRUE;
 				self.move_velocity = '0 0 0';
-				self.avelocity = '0 0 0';
+				self.move_avelocity = '0 0 0';
 			}
 			else
 				self.move_flags &~= FL_ONGROUND;
@@ -237,7 +237,7 @@ void Movetype_Physics(float matchserver) // SV_Physics_Entity
 			case MOVETYPE_NOCLIP:
 				_Movetype_CheckWater();
 				self.move_origin = self.move_origin + ticrate * self.move_velocity;
-				self.move_angles = self.move_angles + ticrate * self.avelocity;
+				self.move_angles = self.move_angles + ticrate * self.move_avelocity;
 				_Movetype_LinkEdict(FALSE);
 				break;
 			case MOVETYPE_STEP:
@@ -255,6 +255,8 @@ void Movetype_Physics(float matchserver) // SV_Physics_Entity
 				break;
 		}
 	}
+
+	self.avelocity = self.move_avelocity;
 
 	if(dt > 0)
 	{
