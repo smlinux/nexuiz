@@ -83,7 +83,7 @@ void Ent_Projectile()
 	// projectiles don't send angles, because they always follow the velocity
 	
 	f = ReadByte();
-	self.count = (f & 0xC0);
+	self.count = (f & 0x80);
 	self.iflags = IFLAG_AUTOANGLES | IFLAG_ANGLES;
 	self.move_flags &~= FL_ONGROUND;
 	self.solid = SOLID_TRIGGER;
@@ -116,15 +116,26 @@ void Ent_Projectile()
 
 	if(f & 2)
 	{
-		self.modelindex = ReadShort();
-
-		if(f & 0x40)
-			self.scale = ReadByte() / 16.0;
-		else
-			self.scale = 1;
-
 		self.cnt = ReadByte();
 
+		switch(self.cnt)
+		{
+			case PROJECTILE_ELECTRO: setmodel(self, "models/ebomb.mdl"); break;
+			case PROJECTILE_ROCKET: setmodel(self, "models/rocket.md3"); break;
+			case PROJECTILE_TAG: setmodel(self, "models/laser.mdl"); break;
+			case PROJECTILE_BULLET: setmodel(self, "models/tracer.mdl"); break;
+			case PROJECTILE_CRYLINK: setmodel(self, "models/plasmatrail.mdl"); break;
+			case PROJECTILE_ELECTRO_BEAM: setmodel(self, "models/elaser.mdl"); break;
+			case PROJECTILE_GRENADE: setmodel(self, "models/grenademodel.md3"); break;
+			case PROJECTILE_GRENADE_BOUNCING: setmodel(self, "models/grenademodel.md3"); break;
+			case PROJECTILE_LASER: setmodel(self, "models/laser.mdl"); break;
+			case PROJECTILE_HLAC: setmodel(self, "models/hlac_bullet.md3"); break;
+			default:
+				error("Received invalid CSQC projectile, can't work with this!");
+				break;
+		}
+
+		self.scale = 1;
 		self.mins = '0 0 0';
 		self.maxs = '0 0 0';
 		self.move_movetype = MOVETYPE_TOSS;
@@ -169,4 +180,18 @@ void Ent_Projectile()
 		InterpolateOrigin_Note();
 	
 	self.draw = Projectile_Draw;
+}
+
+void Projectile_Precache()
+{
+	precache_model("models/ebomb.mdl");
+	precache_model("models/rocket.md3");
+	precache_model("models/laser.mdl");
+	precache_model("models/tracer.mdl");
+	precache_model("models/plasmatrail.mdl");
+	precache_model("models/elaser.mdl");
+	precache_model("models/grenademodel.md3");
+	precache_model("models/grenademodel.md3");
+	precache_model("models/laser.mdl");
+	precache_model("models/hlac_bullet.md3");
 }

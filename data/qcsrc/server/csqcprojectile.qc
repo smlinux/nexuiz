@@ -7,9 +7,6 @@ float CSQCProjectile_SendEntity(entity to, float sf)
 	if(self.csqcprojectile_clientanimate)
 		sf |= 0x80; // client animated, not interpolated
 
-	if(self.scale != 0 && self.scale != 1)
-		sf |= 0x40; // scale used
-
 	WriteByte(MSG_ENTITY, ENT_CLIENT_PROJECTILE);
 	WriteByte(MSG_ENTITY, sf);
 
@@ -29,12 +26,7 @@ float CSQCProjectile_SendEntity(entity to, float sf)
 	}
 
 	if(sf & 2)
-	{
-		WriteShort(MSG_ENTITY, self.modelindex);
-		if(sf & 0x40)
-			WriteByte(MSG_ENTITY, bound(0, self.scale / 16.0, 255));
-		WriteByte(MSG_ENTITY, self.csqcprojectile_type);
-	}
+		WriteByte(MSG_ENTITY, self.csqcprojectile_type); // TODO maybe put this into sf?
 
 	return 1;
 }

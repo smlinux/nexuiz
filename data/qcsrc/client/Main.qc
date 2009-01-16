@@ -131,6 +131,8 @@ void CSQC_Init(void)
 		cs_project_is_b0rked = FALSE;
 
 	WaypointSprite_Load();
+
+	Projectile_Precache();
 }
 
 // CSQC_Shutdown : Called every time the CSQC code is shutdown (changing maps, quitting, etc)

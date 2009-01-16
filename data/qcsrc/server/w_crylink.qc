@@ -116,7 +116,7 @@ void W_Crylink_Attack (void)
 		else
 			SUB_SetFade(proj, time + cvar("g_balance_crylink_primary_other_lifetime"), cvar("g_balance_crylink_primary_other_fadetime"));
 		proj.cnt = cvar("g_balance_crylink_primary_bounces");
-		proj.scale = 1 + 1 * proj.cnt;
+		//proj.scale = 1 + 1 * proj.cnt;
 
 		proj.angles = vectoangles (proj.velocity);
 
@@ -168,7 +168,7 @@ void W_Crylink_Attack2 (void)
 		else
 			SUB_SetFade(proj, time + cvar("g_balance_crylink_secondary_line_lifetime"), cvar("g_balance_crylink_secondary_line_fadetime"));
 		proj.cnt = cvar("g_balance_crylink_secondary_bounces");
-		proj.scale = 1 + 1 * proj.cnt;
+		//proj.scale = 1 + 1 * proj.cnt;
 
 		proj.angles = vectoangles (proj.velocity);
 
