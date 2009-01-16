@@ -445,7 +445,6 @@ void CSQC_UpdateView(float w, float h)
 		string wcross_wep;
 		float wcross_alpha, wcross_style;
 		vector wcross_color, wcross_size;
-		string wcross_name;
 		float wcross_sizefloat;
 
 		wcross_style = cvar("crosshair");
@@ -460,7 +459,6 @@ void CSQC_UpdateView(float w, float h)
 			if (e && e.netname != "")
 			{
 				wcross_wep = strcat("_", e.netname);
-
 				wcross_style = cvar(strcat("crosshair", wcross_wep));
 
 				if(!cvar("crosshair_color_override"))
@@ -471,12 +469,11 @@ void CSQC_UpdateView(float w, float h)
 				}
 
 				wcross_alpha *= cvar(strcat("crosshair", wcross_wep, "_color_alpha"));
-
 				wcross_sizefloat *= cvar(strcat("crosshair", wcross_wep, "_size"));
 			}
 		}
 		
-		wcross_size = drawgetimagesize(wcross_name);
+		wcross_size = drawgetimagesize(strcat("gfx/crosshair", ftos(wcross_style)));
 		wcross_size_x *= wcross_sizefloat;
 		wcross_size_y *= wcross_sizefloat;
 
