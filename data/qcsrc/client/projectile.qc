@@ -75,6 +75,7 @@ void Ent_Projectile()
 	self.count = (f & 0xC0);
 	self.iflags = IFLAG_AUTOANGLES | IFLAG_ANGLES;
 	self.move_flags &~= FL_ONGROUND;
+	self.solid = SOLID_TRIGGER;
 
 	// sv_gameplayfix_delayprojectiles
 	if(!self.move_time)
