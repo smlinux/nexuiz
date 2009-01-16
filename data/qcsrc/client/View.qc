@@ -111,6 +111,7 @@ float atan2(float y, float x)
 	return v_y * 0.01745329251994329576;
 }
 
+float camera_active;
 vector GetCurrentFov(float fov)
 {
 	float zoomsensitivity, zoomspeed, zoomfactor, zoomdir;
@@ -139,7 +140,7 @@ vector GetCurrentFov(float fov)
 	if(zoomdir)
 		zoomin_effect = 0;
 
-	if(zoomin_effect)
+	if(zoomin_effect || camera_active)
 	{
 		current_viewzoom = min(1, current_viewzoom + drawframetime);
 	}
@@ -316,6 +317,9 @@ void CSQC_UpdateView(float w, float h)
 		float speed, attenuation;
 		vector new_origin, m;
 
+		if(!camera_active)
+			camera_active = TRUE;
+		
 		if(cvar("camera_free"))
 			speed = cvar("camera_speed_free");
 		else
@@ -353,6 +357,7 @@ void CSQC_UpdateView(float w, float h)
 		{
 			camera_offset_x += cvar("camera_direction_x") * speed * cos(new_angles_y * DEG2RAD);
 			camera_offset_y += cvar("camera_direction_x") * speed * sin(new_angles_y * DEG2RAD);
+		//	camera_offset_z += cvar("camera_direction_x") * speed * -sin(new_angles_x * DEG2RAD);			
 		}
 
 		if( cvar("camera_direction_y") )
@@ -400,6 +405,11 @@ void CSQC_UpdateView(float w, float h)
 
 		R_SetView(VF_ANGLES, new_angles);
 		R_SetView(VF_ORIGIN, new_origin);
+	}
+	else
+	{
+		if(camera_active)
+			camera_active = FALSE;
 	}
 	
 	// Draw the Crosshair
