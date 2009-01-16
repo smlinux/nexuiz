@@ -238,12 +238,9 @@ void havocbot_goalrating_enemyplayers(float ratingscale, vector org, float sradi
 		if ((noteam && (!bot_ignore_bots || clienttype(head) == CLIENTTYPE_REAL)) || head.team != self.team)
 		if (vlen(head.origin - org) < sradius)
 		{
-			t = 100 / (head.health + head.armorvalue);
-			if (t > 0)
-			{
-				//dprint("found: "); dprint(head.netname); dprint("\n");
-				navigation_routerating(head, t * ratingscale, 500);
-			}
+			t = (self.health + self.armorvalue ) / (head.health + head.armorvalue );
+		//	clientcommand(self, strcat("say rating ", ftos(t*ratingscale)));
+			navigation_routerating(head, t * ratingscale, 2000);
 		}
 	}
 };
@@ -679,7 +676,7 @@ void havocbot_role_dm()
 		self.bot_strategytime = time + cvar("bot_ai_strategyinterval");
 		navigation_goalrating_start();
 		havocbot_goalrating_items(10000, self.origin, 10000);
-		havocbot_goalrating_enemyplayers(5000, self.origin, 20000);
+		havocbot_goalrating_enemyplayers(10000, self.origin, 20000);
 		//havocbot_goalrating_waypoints(1, self.origin, 1000);
 		navigation_goalrating_end();
 	}

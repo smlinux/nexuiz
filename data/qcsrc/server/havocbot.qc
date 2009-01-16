@@ -351,12 +351,17 @@ void havocbot_chooseweapon()
 	local float spreadpenalty=10;
 	local float distancefromfloor;
 
-	local float af;
+	local float af, ct, combo_time;
 
 	traceline(self.enemy.origin,self.enemy.origin-'0 0 1000',TRUE,world);
 	distancefromfloor = self.enemy.origin_z - trace_endpos_z;
 	
 	af = ATTACK_FINISHED(self);
+	ct = cvar("bot_ai_weapon_combo_threshold");
+
+	// Bots with no skill will be 4 times more slower than "godlike" bots when doing weapon combos
+	// Ideally this 4 should be calculated as longest_weapon_refire / bot_ai_weapon_combo_threshold
+	combo_time = time + ct + (ct * ((-0.3*skill)+3));
 
 	// Custom weapon list based on distance to the enemy
 	local float i; i = 0;
@@ -368,8 +373,7 @@ void havocbot_chooseweapon()
 				w = bot_weapons_far[i];
 				if ( client_hasweapon(self, w, TRUE, FALSE) ){
 					if ( self.weapon == w){
-						if( cvar("bot_ai_weapon_combo") && 
-							af > time + cvar("bot_ai_weapon_combo_threshold"))
+						if( cvar("bot_ai_weapon_combo") && af > combo_time)
 							continue;
 					} else {
 						self.switchweapon = w;
@@ -385,8 +389,7 @@ void havocbot_chooseweapon()
 				w = bot_weapons_mid[i];
 				if ( client_hasweapon(self, w, TRUE, FALSE) ){
 					if ( self.weapon == w){
-						if( cvar("bot_ai_weapon_combo") && 
-							af > time + cvar("bot_ai_weapon_combo_threshold"))
+						if( cvar("bot_ai_weapon_combo") && af > combo_time)
 							continue;
 					} else {
 						self.switchweapon = w;
@@ -401,8 +404,7 @@ void havocbot_chooseweapon()
 			w = bot_weapons_close[i];
 			if ( client_hasweapon(self, w, TRUE, FALSE) ){
 				if ( self.weapon == w){
-					if( cvar("bot_ai_weapon_combo") && 
-						af > time + cvar("bot_ai_weapon_combo_threshold"))
+					if( cvar("bot_ai_weapon_combo") && af > combo_time)
 						continue;
 				} else {
 					self.switchweapon = w;
@@ -425,7 +427,7 @@ void havocbot_chooseweapon()
 
 	if (client_hasweapon(self, WEP_ROCKET_LAUNCHER, TRUE, FALSE)  && 
 		!(	cvar("bot_ai_weapon_combo") && self.weapon == WEP_ROCKET_LAUNCHER && 
-			af > time + cvar("bot_ai_weapon_combo_threshold") 
+			af > combo_time
 		)
 	)
 		rocket = (cvar("g_balance_rocketlauncher_damage")/cvar("g_balance_rocketlauncher_refire")*0.75)
@@ -433,7 +435,7 @@ void havocbot_chooseweapon()
 			
 	if (client_hasweapon(self, WEP_NEX, TRUE, FALSE)  && 
 		!( 	cvar("bot_ai_weapon_combo") && self.weapon == WEP_NEX && 
-			af > time + cvar("bot_ai_weapon_combo_threshold") 
+			af > combo_time
 		)
 	)
 		nex = (cvar("g_balance_nex_damage")/cvar("g_balance_nex_refire")*1.0)
@@ -447,7 +449,7 @@ void havocbot_chooseweapon()
 	if (client_hasweapon(self, WEP_GRENADE_LAUNCHER, TRUE, FALSE) && 
 		!( 
 			cvar("bot_ai_weapon_combo") && self.weapon == WEP_GRENADE_LAUNCHER && 
-			af > time + cvar("bot_ai_weapon_combo_threshold") 
+			af > combo_time
 		)
 	)
 		grenade = (cvar("g_balance_grenadelauncher_primary_damage")/cvar("g_balance_grenadelauncher_primary_refire")*1.0)
@@ -455,7 +457,7 @@ void havocbot_chooseweapon()
 			
 	if (client_hasweapon(self, WEP_ELECTRO, TRUE, FALSE) && 
 		!( 	cvar("bot_ai_weapon_combo") && self.weapon == WEP_ELECTRO && 
-			af > time + cvar("bot_ai_weapon_combo_threshold") 
+			af > combo_time
 		)
 	)
 		electro = (cvar("g_balance_electro_primary_damage")/cvar("g_balance_electro_primary_refire")*0.75)
@@ -473,7 +475,7 @@ void havocbot_chooseweapon()
 			
 	if (client_hasweapon(self, WEP_SHOTGUN, TRUE, FALSE) && 
 		!(	cvar("bot_ai_weapon_combo") && self.weapon == WEP_SHOTGUN && 
-			af > time + cvar("bot_ai_weapon_combo_threshold") 
+			af > combo_time
 		)
 	)
 		shotgun = (cvar("g_balance_shotgun_primary_damage")*cvar("g_balance_shotgun_primary_bullets")/cvar("g_balance_shotgun_primary_refire")*1.0)
@@ -481,7 +483,7 @@ void havocbot_chooseweapon()
 			
 	if (client_hasweapon(self, WEP_LASER, FALSE, FALSE) && 
 		!(	cvar("bot_ai_weapon_combo") && self.weapon == WEP_LASER && 
-			af > time + cvar("bot_ai_weapon_combo_threshold") 
+			af > combo_time
 		)
 	)
 		laser = (cvar("g_balance_laser_primary_damage")/cvar("g_balance_laser_primary_refire")*1.0)
