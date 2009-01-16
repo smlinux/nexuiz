@@ -264,7 +264,7 @@ void Movetype_Physics(float matchserver) // SV_Physics_Entity
 
 	self.avelocity = self.move_avelocity;
 
-	if(dt > 0)
+	if(dt > 0 && self.move_movetype != MOVETYPE_NONE)
 	{
 		// now continue the move from move_time to time
 		self.velocity = self.move_velocity;
