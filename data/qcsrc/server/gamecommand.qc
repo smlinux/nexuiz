@@ -810,6 +810,16 @@ void GameCommand(string command)
 		return;
 	}
 
+	if(argv(0) == "cointoss")
+	{
+		bprint("^3Throwing coin... Result: ");
+		if (random() > 0.5)
+			bprint("^1heads ^3!\n");
+		else
+			bprint("^1tails ^3!\n");
+		return;
+	}
+
 	print("Invalid command. For a list of supported commands, try sv_cmd help.\n");
 }
 
