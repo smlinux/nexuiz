@@ -1052,6 +1052,7 @@ void trigger_impulse_touch1()
     if(!pushdeltatime) return;
 
     other.velocity = other.velocity + normalize(targ.origin - self.origin) * self.strength * pushdeltatime;
+	other.flags &~= FL_ONGROUND;
 }
 
 // Directionless (accelerator/decelerator) mode
