@@ -90,7 +90,7 @@ void turret_hk_attack()
     missile                    = spawn ();
     missile.solid            = SOLID_BBOX;
     setmodel (missile, "models/turrets/hunter2.md3"); // precision set below
-    setsize (missile, missile.mins,missile.maxs); // give it some size so it can be shot
+    setsize (missile, '-3 -3 -3', '3 3 3'); // give it some size so it can be shot
     setorigin(missile, self.tur_shotorg_updated);
 
     missile.scale            = 1;

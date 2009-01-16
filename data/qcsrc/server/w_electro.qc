@@ -42,7 +42,7 @@ void W_Plasma_Explode_Combo (void) {
 
 void W_Plasma_Touch (void)
 {
-	UpdateCSQCProjectile(self);
+	//UpdateCSQCProjectile(self);
 
 	PROJECTILE_TOUCH;
 	if (other.takedamage == DAMAGE_AIM) {

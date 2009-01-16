@@ -38,7 +38,6 @@ float CSQCProjectile_SendEntity(entity to, float sf)
 			WriteByte(MSG_ENTITY, floor(self.effects / 65536));
 		}
 		WriteShort(MSG_ENTITY, self.csqcprojectile_type);
-		WriteByte(MSG_ENTITY, 0); // size category
 	}
 
 	return 1;

@@ -13,6 +13,7 @@ csqc_builtins.qc
 interpolate.qh
 teamradar.qh
 waypointsprites.qh
+movetypes.qh
 
 main.qh
 
@@ -35,6 +36,7 @@ View.qc
 interpolate.qc
 teamradar.qc
 waypointsprites.qc
+movetypes.qc
 
 ../common/util.qc
 ../common/gamecommand.qc

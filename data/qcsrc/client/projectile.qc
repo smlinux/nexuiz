@@ -1,23 +1,17 @@
-.float itime;
 .float count; // set if clientside projectile
 .float cnt; // sound index
 .float gravity;
 
 void Projectile_Draw()
 {
-	float dt;
-	vector oldorg, org;
+	vector oldorg;
 
 	oldorg = self.origin;
 
 	if(self.count & 0x80)
 	{
-		dt = time - self.itime;
-		self.velocity_z -= dt * self.gravity * getstatf(242); // STAT_MOVEVARS_GRAVITY
-		org = self.origin + dt * self.velocity;
-		self.itime = time;
-		tracebox(self.origin, self.mins, self.maxs, org, MOVE_NORMAL, self);
-		self.origin = trace_endpos;
+		//self.move_flags &~= FL_ONGROUND;
+		Movetype_Physics(TRUE);
 		self.angles = vectoangles(self.velocity);
 	}
 	else
@@ -45,11 +39,16 @@ void Projectile_Draw()
 		R_AddEntity(self);
 }
 
-void Ent_RemoveProjectile()
+void loopsound(entity e, float ch, string samp, float vol, float attn)
 {
 	if(csqc_flags & CSQC_FLAG_COLORCODES)
-		if(self.cnt)
-			sound(self, CHAN_PAIN, "misc/null.wav", VOL_BASE, ATTN_NORM);
+		sound(e, ch, samp, vol, attn);
+}
+
+void Ent_RemoveProjectile()
+{
+	if(self.cnt)
+		loopsound(self, CHAN_PAIN, "misc/null.wav", VOL_BASE, ATTN_NORM);
 }
 
 void Ent_Projectile()
@@ -76,6 +75,13 @@ void Ent_Projectile()
 	f = ReadByte();
 	self.count = (f & 0xC0);
 	self.iflags = IFLAG_AUTOANGLES | IFLAG_ANGLES;
+	self.move_flags &~= FL_ONGROUND;
+
+	// sv_gameplayfix_delayprojectiles
+	if(!self.move_time)
+		self.move_time = time + ticrate;
+	else
+		self.move_time = max(self.move_time, time);
 
 	if(self.count & 0x80)
 		InterpolateOrigin_Undo();
@@ -87,11 +93,13 @@ void Ent_Projectile()
 		self.origin_z = ReadCoord();
 		if(self.count & 0x80)
 		{
-			self.itime = time;
 			self.velocity_x = ReadCoord();
 			self.velocity_y = ReadCoord();
 			self.velocity_z = ReadCoord();
 			self.gravity = ReadCoord();
+
+			self.move_origin = self.origin;
+			self.move_velocity = self.velocity;
 		}
 	}
 
@@ -112,29 +120,31 @@ void Ent_Projectile()
 
 		self.cnt = ReadShort();
 
-		if(csqc_flags & CSQC_FLAG_COLORCODES)
-			switch(self.cnt)
-			{
-				case PROJECTILE_ELECTRO:
-					// only new engines support sound moving with object
-					sound(self, CHAN_PAIN, "weapons/electro_fly.wav", VOL_BASE, ATTN_NORM);
-					break;
-				case PROJECTILE_ROCKET:
-					sound(self, CHAN_PAIN, "weapons/rocket_fly.wav", VOL_BASE, ATTN_NORM);
-					break;
-				case PROJECTILE_TAG:
-					sound(self, CHAN_PAIN, "weapons/tag_rocket_fly.wav", VOL_BASE, ATTN_NORM);
-					break;
-				default:
-					break;
-			}
-
-		sz = ReadByte();
-		switch(sz)
+		switch(self.cnt)
 		{
-			case 0:
+			case PROJECTILE_ELECTRO:
+				// only new engines support sound moving with object
+				loopsound(self, CHAN_PAIN, "weapons/electro_fly.wav", VOL_BASE, ATTN_NORM);
+				self.mins = '0 0 -3';
+				self.maxs = '0 0 -3';
+				self.move_movetype = MOVETYPE_BOUNCE;
+				break;
+			case PROJECTILE_ROCKET:
+				loopsound(self, CHAN_PAIN, "weapons/rocket_fly.wav", VOL_BASE, ATTN_NORM);
+				self.mins = '-3 -3 -3';
+				self.maxs = '3 3 3';
+				self.move_movetype = MOVETYPE_TOSS;
+				break;
+			case PROJECTILE_TAG:
+				loopsound(self, CHAN_PAIN, "weapons/tag_rocket_fly.wav", VOL_BASE, ATTN_NORM);
+				self.mins = '-2 -2 -2';
+				self.maxs = '2 2 2';
+				self.move_movetype = MOVETYPE_TOSS;
+				break;
 			default:
-				self.mins = self.maxs = '0 0 0';
+				self.mins = '0 0 0';
+				self.maxs = '0 0 0';
+				self.move_movetype = MOVETYPE_TOSS;
 				break;
 		}
 	}

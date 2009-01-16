@@ -1,0 +1,25 @@
+.float move_flags;
+.float move_movetype;
+.float move_time;
+.vector move_origin;
+.vector move_angles;
+.vector move_velocity;
+
+void Movetype_Physics(float matchserver);
+
+float	MOVETYPE_NONE				= 0;
+float	MOVETYPE_ANGLENOCLIP			= 1;
+float	MOVETYPE_ANGLECLIP			= 2;
+float	MOVETYPE_WALK				= 3;
+float	MOVETYPE_STEP				= 4;
+float	MOVETYPE_FLY				= 5;
+float	MOVETYPE_TOSS				= 6;
+float	MOVETYPE_PUSH				= 7;
+float	MOVETYPE_NOCLIP				= 8;
+float	MOVETYPE_FLYMISSILE			= 9;
+float	MOVETYPE_BOUNCE				= 10;
+float	MOVETYPE_BOUNCEMISSILE	= 11;	// Like bounce but doesn't lose speed on bouncing
+float MOVETYPE_FOLLOW = 12;
+float MOVETYPE_FAKEPUSH = 13;
+
+float	FL_ONGROUND				= 512;

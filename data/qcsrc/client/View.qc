@@ -202,6 +202,8 @@ void CSQC_UpdateView(float w, float h)
 	dprint_load();
 	WaypointSprite_Load();
 
+	ticrate = getstatf(STAT_SYS_TICRATE) * getstatf(STAT_MOVEVARS_TIMESCALE);
+
 	// Render the Scene
 	if(!intermission || !view_set)
 	{
