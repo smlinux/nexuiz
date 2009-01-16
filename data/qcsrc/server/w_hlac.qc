@@ -94,6 +94,8 @@ void W_HLAC_Attack (void)
 	missile.effects = EF_LOWPRECISION;
 	missile.flags = FL_PROJECTILE;
 	missile.projectiledeathtype = WEP_HLAC;
+
+	CSQCProjectile(missile, TRUE, PROJECTILE_HLAC);
 }
 
 void W_HLAC_Attack2f (void)
@@ -138,6 +140,8 @@ void W_HLAC_Attack2f (void)
 	missile.effects = EF_LOWPRECISION;
 	missile.flags = FL_PROJECTILE;
 	missile.projectiledeathtype = WEP_HLAC | HITTYPE_SECONDARY;
+
+	CSQCProjectile(missile, TRUE, PROJECTILE_HLAC);
 }
 
 void W_HLAC_Attack2 (void)

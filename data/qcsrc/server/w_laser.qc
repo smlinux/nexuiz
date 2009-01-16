@@ -69,6 +69,8 @@ void W_Laser_Attack (float issecondary)
 
 	missile.effects = EF_LOWPRECISION;
 	missile.flags = FL_PROJECTILE;
+
+	CSQCProjectile(missile, TRUE, PROJECTILE_LASER);
 }
 
 float w_laser(float req)
