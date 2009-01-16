@@ -445,19 +445,26 @@ void CSQC_UpdateView(float w, float h)
 		string wcross_wep;
 		float wcross_alpha, wcross_style;
 		vector wcross_color, wcross_size;
+		string wcross_name;
 		if (cvar("crosshair_per_weapon")) {
 			e = get_weaponinfo(activeweapon);
 			if (e && e.netname)
 				wcross_wep = strcat("_", e.netname);
 		}
+		
+
 		wcross_style = cvar(strcat("crosshair", wcross_wep));
+		wcross_name = strcat("gfx/crosshair", ftos(wcross_style));
+		
 		wcross_color_x = cvar(strcat("crosshair", wcross_wep, "_color_red"));
 		wcross_color_y = cvar(strcat("crosshair", wcross_wep, "_color_green"));
 		wcross_color_z = cvar(strcat("crosshair", wcross_wep, "_color_blue"));
-		wcross_size_x = cvar(strcat("crosshair", wcross_wep, "_size")) * 24;
-		wcross_size_y = cvar(strcat("crosshair", wcross_wep, "_size")) * 24;
 		wcross_alpha = cvar(strcat("crosshair", wcross_wep, "_color_alpha"));
-		
+
+		wcross_size = drawgetimagesize(wcross_name);
+		wcross_size_x *= cvar(strcat("crosshair", wcross_wep, "_size"));
+		wcross_size_y *= cvar(strcat("crosshair", wcross_wep, "_size"));
+
 		drawpic('0.5 0 0' * (vid_conwidth - wcross_size_x) + '0 0.5 0' * (vid_conheight - wcross_size_y), strcat("gfx/crosshair", ftos(wcross_style)), wcross_size, wcross_color, wcross_alpha, DRAWFLAG_NORMAL);
 	}
 
