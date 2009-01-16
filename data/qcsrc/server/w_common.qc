@@ -333,6 +333,8 @@ void fireBullet (vector start, vector dir, float spread, float damage, float for
 		setorigin (e, start);
 		e.effects = EF_LOWPRECISION;
 		e.flags = FL_PROJECTILE;
+
+		CSQCProjectile(e, TRUE, PROJECTILE_BULLET);
 	}
 
 	if ((trace_fraction != 1.0) && (pointcontents (trace_endpos) != CONTENT_SKY))
