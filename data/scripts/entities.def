@@ -697,6 +697,7 @@ targetname: make the trigger_teleporter point to this.
 target: target to activate when a teleporter targeting this is used
 angle: direction in which player will look when teleported, OR use
 angles: pitch and yaw when coming out of the teleporter (also specifies the direction the player will aim when coming out)
+cnt: weight for random selection, in case a teleporter points at multiple misc_teleporter_dest
 */
 
 /*QUAKED onslaught_controlpoint (0 .5 .8) (-32 -32 0) (32 32 128) 
@@ -914,7 +915,7 @@ swamp_slowdown: amount of slowdown caused by the swamp (default is 0.5)
 Touching this will teleport players to the location of the targeted misc_teleporter_dest entity.
 Note that in Nexuiz, teleporters preserve momentum of the player using them.
 -------- KEYS --------
-target: this must point to a misc_teleporter_dest entity.
+target: this must point to a misc_teleporter_dest entity. If it points to more than one, a destination is randomly selected on teleport.
 */
 
 /*QUAKED weapon_crylink (1 0 .5) (-30 -30 0) (30 30 32) FLOATING
