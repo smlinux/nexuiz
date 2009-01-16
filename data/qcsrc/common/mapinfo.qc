@@ -579,7 +579,10 @@ float MapInfo_Get_ByName(string pFilename, float pAllowGenerate, float pGametype
 		}
 		else
 			fputs(fh, strcat("cdtrack ", ftos(floor(random() * 9 + 2)), "\n")); // track from 2 to 10
-		if(MapInfo_Map_supportedFeatures & MAPINFO_FEATURE_WEAPONS)       fputs(fh, "has weapons\n");
+		if(MapInfo_Map_supportedFeatures & MAPINFO_FEATURE_WEAPONS)    
+			fputs(fh, "has weapons\n");
+		else
+			fputs(fh, "// uncomment this if you added weapon pickups: has weapons\n");
 		if(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_DEATHMATCH)      fputs(fh, "type dm 30 20\n");
 		if(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_TEAM_DEATHMATCH) fputs(fh, "type tdm 50 20 2\n");
 		if(MapInfo_Map_supportedGametypes & MAPINFO_TYPE_DOMINATION)      fputs(fh, "type dom 200 20\n");
@@ -760,6 +763,10 @@ float MapInfo_Get_ByName(string pFilename, float pAllowGenerate, float pGametype
 			dprint("Map ", pFilename, " provides unknown info item ", t, ", ignored\n");
 	}
 	fclose(fh);
+
+	if(!MapInfo_Map_supportedGametypes)
+		_MapInfo_Map_ApplyGametype("30 20", pGametypeToSet, MAPINFO_TYPE_DEATHMATCH);
+
 	if(pGametypeToSet)
 		if(!(MapInfo_Map_supportedGametypes & pGametypeToSet))
 			error("Can't select the requested game type. Bailing out.");
