@@ -57,6 +57,9 @@ void W_Hagar_Touch2 (void)
 		self.owner = world;
 		self.projectiledeathtype |= HITTYPE_BOUNCE;
 	}
+
+	if(trace_ent && trace_ent.solid > SOLID_TRIGGER) // CSQC doesn't know about these entities well enough
+		UpdateCSQCProjectile(self);
 }
 
 void W_Hagar_Damage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
@@ -105,6 +108,8 @@ void W_Hagar_Attack (void)
 
 	missile.angles = vectoangles (missile.velocity);
 	missile.flags = FL_PROJECTILE;
+
+	CSQCProjectile(missile, TRUE, PROJECTILE_HAGAR);
 }
 
 void W_Hagar_Attack2 (void)
@@ -148,6 +153,8 @@ void W_Hagar_Attack2 (void)
 
 	missile.angles = vectoangles (missile.velocity);
 	missile.flags = FL_PROJECTILE;
+
+	CSQCProjectile(missile, TRUE, PROJECTILE_HAGAR_BOUNCING);
 }
 
 void spawnfunc_weapon_hagar (void)

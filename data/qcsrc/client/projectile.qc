@@ -32,8 +32,7 @@ void Projectile_Draw()
 			break;
 		case PROJECTILE_GRENADE:
 			trailparticles(self, particleeffectnum("TR_KNIGHTSPIKE"), oldorg, self.origin);
-			if(!(self.move_flags & FL_ONGROUND))
-				self.angles -= '750 0 0' * time;
+			self.angles -= '750 0 0' * time;
 			break;
 		case PROJECTILE_GRENADE_BOUNCING:
 			trailparticles(self, particleeffectnum("TR_KNIGHTSPIKE"), oldorg, self.origin);
@@ -53,6 +52,16 @@ void Projectile_Draw()
 			break;
 		case PROJECTILE_SEEKER:
 			trailparticles(self, particleeffectnum("TR_ROCKET"), oldorg, self.origin);
+			break;
+		case PROJECTILE_HOOKBOMB:
+			trailparticles(self, particleeffectnum("TR_KNIGHTSPIKE"), oldorg, self.origin);
+			self.angles = '0 500 0' * time;
+			break;
+		case PROJECTILE_HAGAR:
+			trailparticles(self, particleeffectnum("TR_GRENADE"), oldorg, self.origin);
+			break;
+		case PROJECTILE_HAGAR_BOUNCING:
+			trailparticles(self, particleeffectnum("TR_GRENADE"), oldorg, self.origin);
 			break;
 		default:
 			break;
@@ -150,6 +159,9 @@ void Ent_Projectile()
 			case PROJECTILE_FLAC: setmodel(self, "models/hagarmissile.mdl"); self.scale = 0.4; break;
 			case PROJECTILE_PORTO_RED: setmodel(self, "models/grenademodel.md3"); self.scale = 4; break;
 			case PROJECTILE_PORTO_BLUE: setmodel(self, "models/grenademodel.md3"); self.scale = 4; break;
+			case PROJECTILE_HOOKBOMB: setmodel(self, "models/grenademodel.md3"); break;
+			case PROJECTILE_HAGAR: setmodel(self, "models/hagarmissile.mdl"); self.scale = 0.4; break;
+			case PROJECTILE_HAGAR_BOUNCING: setmodel(self, "models/hagarmissile.mdl"); self.scale = 0.4; break;
 			default:
 				error("Received invalid CSQC projectile, can't work with this!");
 				break;
@@ -197,6 +209,10 @@ void Ent_Projectile()
 			case PROJECTILE_PORTO_BLUE:
 				self.colormod = '1 1 2';
 				break;
+			case PROJECTILE_HAGAR_BOUNCING:
+				self.move_movetype = MOVETYPE_BOUNCE;
+				self.move_moveflags = 0;
+				break;
 			default:
 				break;
 		}
@@ -225,4 +241,7 @@ void Projectile_Precache()
 	precache_model("models/hagarmissile.mdl");
 	precache_model("models/grenademodel.md3");
 	precache_model("models/grenademodel.md3");
+	precache_model("models/grenademodel.md3");
+	precache_model("models/hagarmissile.mdl");
+	precache_model("models/hagarmissile.mdl");
 }

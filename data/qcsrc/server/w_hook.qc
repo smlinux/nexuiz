@@ -94,6 +94,8 @@ void W_Hook_Attack2()
 
 	gren.angles = '0 0 0';
 	gren.flags = FL_PROJECTILE;
+
+	CSQCProjectile(gren, TRUE, PROJECTILE_HOOKBOMB);
 }
 
 void spawnfunc_weapon_hook (void)
