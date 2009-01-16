@@ -21,13 +21,24 @@ void Projectile_Draw()
 
 	switch(self.cnt)
 	{
-		case PROJECTILE_ELECTRO:
-			break; // electro uses no trail
 		case PROJECTILE_ROCKET:
-			trailparticles(self, particleeffectnum("TR_ROCKET"), oldorg, self.origin); // rocket
+			trailparticles(self, particleeffectnum("TR_ROCKET"), oldorg, self.origin);
 			break;
 		case PROJECTILE_TAG:
-			trailparticles(self, particleeffectnum("TR_VORESPIKE"), oldorg, self.origin); // seeker
+			trailparticles(self, particleeffectnum("TR_VORESPIKE"), oldorg, self.origin);
+			break;
+		case PROJECTILE_ELECTRO_BEAM:
+			trailparticles(self, particleeffectnum("TR_NEXUIZPLASMA"), oldorg, self.origin);
+			break;
+		case PROJECTILE_GRENADE:
+			trailparticles(self, particleeffectnum("TR_KNIGHTSPIKE"), oldorg, self.origin);
+			if(!(self.move_flags & FL_ONGROUND))
+				self.angles -= '750 0 0' * time;
+			break;
+		case PROJECTILE_GRENADE_BOUNCING:
+			trailparticles(self, particleeffectnum("TR_KNIGHTSPIKE"), oldorg, self.origin);
+			if(!(self.move_flags & FL_ONGROUND))
+				self.angles += '100 150 100' * time;
 			break;
 		default:
 			break;
@@ -106,19 +117,18 @@ void Ent_Projectile()
 	if(f & 2)
 	{
 		self.modelindex = ReadShort();
-		if(f & 0x40)
-		{
-			self.scale = ReadByte() / 16.0;
-			self.effects = ReadShort();
-			self.effects |= 65536 * ReadByte();
-		}
-		else
-		{
-			self.scale = 1;
-			self.effects = 0;
-		}
 
-		self.cnt = ReadShort();
+		if(f & 0x40)
+			self.scale = ReadByte() / 16.0;
+		else
+			self.scale = 1;
+
+		self.cnt = ReadByte();
+
+		self.mins = '0 0 0';
+		self.maxs = '0 0 0';
+		self.move_movetype = MOVETYPE_TOSS;
+		self.move_moveflags = MOVEFLAG_STOPONIMPACT;
 
 		switch(self.cnt)
 		{
@@ -128,23 +138,29 @@ void Ent_Projectile()
 				self.mins = '0 0 -3';
 				self.maxs = '0 0 -3';
 				self.move_movetype = MOVETYPE_BOUNCE;
+				self.move_moveflags = 0;
 				break;
 			case PROJECTILE_ROCKET:
 				loopsound(self, CHAN_PAIN, "weapons/rocket_fly.wav", VOL_BASE, ATTN_NORM);
 				self.mins = '-3 -3 -3';
 				self.maxs = '3 3 3';
-				self.move_movetype = MOVETYPE_TOSS;
 				break;
 			case PROJECTILE_TAG:
 				loopsound(self, CHAN_PAIN, "weapons/tag_rocket_fly.wav", VOL_BASE, ATTN_NORM);
 				self.mins = '-2 -2 -2';
 				self.maxs = '2 2 2';
-				self.move_movetype = MOVETYPE_TOSS;
 				break;
-			default:
+			case PROJECTILE_GRENADE:
 				self.mins = '0 0 0';
 				self.maxs = '0 0 0';
-				self.move_movetype = MOVETYPE_TOSS;
+				break;
+			case PROJECTILE_GRENADE_BOUNCING:
+				self.mins = '0 0 -3';
+				self.maxs = '0 0 -3';
+				self.move_movetype = MOVETYPE_BOUNCE;
+				self.move_moveflags = 0;
+				break;
+			default:
 				break;
 		}
 	}

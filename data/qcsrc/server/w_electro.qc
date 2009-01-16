@@ -116,6 +116,8 @@ void W_Electro_Attack()
 
 	//sound (proj, CHAN_PAIN, "weapons/electro_fly.wav", VOL_BASE, ATTN_NORM);
 	//sounds bad
+
+	CSQCProjectile(proj, TRUE, PROJECTILE_ELECTRO_BEAM);
 }
 
 void W_Electro_Attack2()

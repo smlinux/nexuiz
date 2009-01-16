@@ -170,6 +170,8 @@ void W_BallisticBullet_LeaveSolid_think()
 		pointparticles(particleeffectnum("shotgun_impact"), self.origin, normalize(self.velocity) * 1000, 1);
 	else
 		pointparticles(particleeffectnum("machinegun_impact"), self.origin, normalize(self.velocity) * 1000, 1);
+	
+	UpdateCSQCProjectile(self);
 }
 
 // a fake logarithm function
@@ -291,6 +293,8 @@ void fireBallisticBullet(vector start, vector dir, float spread, float pSpeed, f
 	proj.projectiledeathtype = dtype;
 
 	proj.oldvelocity = proj.velocity;
+
+	CSQCProjectile(proj, TRUE, PROJECTILE_BULLET);
 }
 
 void fireBullet (vector start, vector dir, float spread, float damage, float force, float dtype, float tracer)

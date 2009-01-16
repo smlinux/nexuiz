@@ -5,6 +5,7 @@
 .vector move_angles;
 .vector move_velocity;
 .vector move_avelocity;
+.float move_moveflags;
 
 void Movetype_Physics(float matchserver);
 
@@ -24,3 +25,5 @@ float MOVETYPE_FOLLOW = 12;
 float MOVETYPE_FAKEPUSH = 13;
 
 float	FL_ONGROUND				= 512;
+
+float MOVEFLAG_STOPONIMPACT = 1;

@@ -1,5 +1,4 @@
 .float gravity;
-const vector proj_color = '1 1 1';
 
 .entity realowner;
 
@@ -28,6 +27,8 @@ void W_Crylink_Touch (void)
 	self.owner = world;
 	self.projectiledeathtype |= HITTYPE_BOUNCE;
 	//self.scale = 1 + self.cnt;
+
+	UpdateCSQCProjectile(self);
 }
 
 void W_Crylink_Touch2 (void)
@@ -55,6 +56,8 @@ void W_Crylink_Touch2 (void)
 	self.owner = world;
 	self.projectiledeathtype |= HITTYPE_BOUNCE;
 //	self.scale = 1 + 1 * self.cnt;
+
+	UpdateCSQCProjectile(self);
 }
 
 void W_Crylink_Attack (void)
@@ -121,7 +124,9 @@ void W_Crylink_Attack (void)
 
 		proj.effects = EF_LOWPRECISION;
 		proj.flags = FL_PROJECTILE;
-		proj.colormod = proj_color;
+
+		CSQCProjectile(proj, TRUE, PROJECTILE_CRYLINK);
+
 		counter = counter + 1;
 	}
 }
@@ -171,7 +176,9 @@ void W_Crylink_Attack2 (void)
 
 		proj.effects = EF_LOWPRECISION;
 		proj.flags = FL_PROJECTILE;
-		proj.colormod = proj_color;
+
+		CSQCProjectile(proj, TRUE, PROJECTILE_CRYLINK);
+
 		counter = counter + 1;
 	}
 }

@@ -17,6 +17,12 @@ void _Movetype_CheckWaterTransition() // SV_CheckWaterTransition
 
 void _Movetype_Impact(entity oth) // SV_Impact
 {
+	if(self.move_moveflags & MOVEFLAG_STOPONIMPACT)
+	{
+		// don't CLIP the velocity, but stop ENTIRELY
+		self.velocity = '0 0 0';
+		self.avelocity = '0 0 0';
+	}
 }
 
 void _Movetype_LinkEdict(float touch_triggers) // SV_LinkEdict

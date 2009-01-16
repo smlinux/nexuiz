@@ -67,6 +67,9 @@ void W_Grenade_Touch2 (void)
 			sound (self, CHAN_PROJECTILE, "weapons/grenade_bounce6.wav", VOL_BASE, ATTN_NORM);
 		self.projectiledeathtype |= HITTYPE_BOUNCE;
 	}
+
+	if(trace_ent && trace_ent.solid > SOLID_TRIGGER) // CSQC doesn't know about these entities well enough
+		UpdateCSQCProjectile(self);
 }
 
 void W_Grenade_Damage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
@@ -109,10 +112,11 @@ void W_Grenade_Attack (void)
 	gren.touch = W_Grenade_Touch1;
 	gren.velocity = w_shotdir * cvar("g_balance_grenadelauncher_primary_speed") + v_up * cvar("g_balance_grenadelauncher_primary_speed_up");
 	W_SetupProjectileVelocity(gren);
-	gren.avelocity_x = random () * -500 - 500;
 
 	gren.angles = vectoangles (gren.velocity);
 	gren.flags = FL_PROJECTILE;
+
+	CSQCProjectile(gren, TRUE, PROJECTILE_GRENADE);	
 }
 
 void W_Grenade_Attack2 (void)
@@ -150,10 +154,11 @@ void W_Grenade_Attack2 (void)
 	gren.event_damage = W_Grenade_Damage;
 	gren.velocity = w_shotdir * cvar("g_balance_grenadelauncher_secondary_speed") + v_up * cvar("g_balance_grenadelauncher_secondary_speed_up");
 	W_SetupProjectileVelocity(gren);
-	gren.avelocity = '100 150 100';
 
 	gren.angles = vectoangles (gren.velocity);
 	gren.flags = FL_PROJECTILE;
+
+	CSQCProjectile(gren, TRUE, PROJECTILE_GRENADE_BOUNCING);	
 }
 
 void spawnfunc_weapon_grenadelauncher (void)
