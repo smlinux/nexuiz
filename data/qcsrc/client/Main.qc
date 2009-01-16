@@ -478,7 +478,14 @@ void Ent_RadarLink();
 void(float bIsNewEntity) CSQC_Ent_Update =
 {
 	float t;
+	float savetime;
 	t = ReadByte();
+
+	// set up the "time" global for received entities to be correct for interpolation purposes
+	savetime = time;
+	if(servertime)
+		time = servertime;
+
 #ifdef DP_CSQC_ENTITY_REMOVE_IS_B0RKED
 	if(self.enttype)
 		if(t != self.enttype)
@@ -511,6 +518,7 @@ void(float bIsNewEntity) CSQC_Ent_Update =
 	else
 		error(strcat("unknown entity type in CSQC_Ent_Update: ", ftos(self.enttype), "\n"));
 	
+	time = savetime;
 };
 // Destructor, but does NOT deallocate the entity by calling remove(). Also
 // used when an entity changes its type. For an entity that someone interacts
