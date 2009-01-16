@@ -446,6 +446,7 @@ void CSQC_UpdateView(float w, float h)
 		float wcross_alpha, wcross_style;
 		vector wcross_color, wcross_size;
 		float wcross_sizefloat;
+		string wcross_name;
 
 		wcross_style = cvar("crosshair");
 		wcross_color_x = cvar("crosshair_color_red");
@@ -472,12 +473,14 @@ void CSQC_UpdateView(float w, float h)
 				wcross_sizefloat *= cvar(strcat("crosshair", wcross_wep, "_size"));
 			}
 		}
+
+		wcross_name = strcat("gfx/crosshair", ftos(wcross_style));
 		
-		wcross_size = drawgetimagesize(strcat("gfx/crosshair", ftos(wcross_style)));
+		wcross_size = drawgetimagesize(wcross_name);
 		wcross_size_x *= wcross_sizefloat;
 		wcross_size_y *= wcross_sizefloat;
 
-		drawpic('0.5 0 0' * (vid_conwidth - wcross_size_x) + '0 0.5 0' * (vid_conheight - wcross_size_y), strcat("gfx/crosshair", ftos(wcross_style)), wcross_size, wcross_color, wcross_alpha, DRAWFLAG_NORMAL);
+		drawpic('0.5 0 0' * (vid_conwidth - wcross_size_x) + '0 0.5 0' * (vid_conheight - wcross_size_y), wcross_name, wcross_size, wcross_color, wcross_alpha, DRAWFLAG_NORMAL);
 	}
 
 	// Draw the mouse cursor
