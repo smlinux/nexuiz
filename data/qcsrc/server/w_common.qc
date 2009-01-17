@@ -339,10 +339,8 @@ void fireBullet (vector start, vector dir, float spread, float damage, float for
 	if ((trace_fraction != 1.0) && (pointcontents (trace_endpos) != CONTENT_SKY))
 	{
 		if (trace_ent.solid == SOLID_BSP && !(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT))
-		{
 			Damage_DamageInfo(trace_endpos, damage, 0, 0, dir * force, dtype);
-			Damage (trace_ent, self, self, damage, dtype, trace_endpos, dir * force);
-		}
+		Damage (trace_ent, self, self, damage, dtype, trace_endpos, dir * force);
 	}
 }
 
