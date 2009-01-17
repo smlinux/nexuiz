@@ -1,8 +1,8 @@
 float Violence_GibSplash_SendEntity(entity to, float sf)
 {
 	WriteByte(MSG_ENTITY, ENT_CLIENT_GIBSPLASH);
-	WriteByte(MSG_ENTITY, bound(1, self.cnt * 16, 255)); // gibbage amount multiplier
 	WriteByte(MSG_ENTITY, self.state); // actually type
+	WriteByte(MSG_ENTITY, bound(1, self.cnt * 16, 255)); // gibbage amount multiplier
 	WriteShort(MSG_ENTITY, floor(self.origin_x / 4)); // not using a coord here, as gibs don't need this accuracy
 	WriteShort(MSG_ENTITY, floor(self.origin_y / 4)); // not using a coord here, as gibs don't need this accuracy
 	WriteShort(MSG_ENTITY, floor(self.origin_z / 4)); // not using a coord here, as gibs don't need this accuracy
@@ -22,7 +22,7 @@ void Violence_GibSplash_At(vector org, vector mi, vector ma, vector dir, float t
 	e.cnt = amount;
 	e.state = type;
 	if(sv_gentle)
-		e.state |= 0x8000; // "force gentle" bit
+		e.state |= 0x80; // "force gentle" bit
 	e.SendEntity = Violence_GibSplash_SendEntity;
 	e.nextthink = time + 0.2;
 	e.think = SUB_Remove;

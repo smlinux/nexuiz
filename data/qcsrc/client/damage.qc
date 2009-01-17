@@ -49,4 +49,31 @@ void Ent_DamageInfo()
 	self = oldself;
 
 	// TODO spawn particle effects and sounds based on hittype
+	
+	print("hit: ", ftos(hittype), "\n");
+
+	if(!DEATH_ISSPECIAL(hittype))
+	{
+		float hitwep, secondary;
+		hitwep = DEATH_WEAPONOFWEAPONDEATH(hittype);
+		secondary = hittype & HITTYPE_SECONDARY;
+
+		print("hit: ", ftos(hitwep), "\n");
+
+		switch(hitwep)
+		{
+			case WEP_CRYLINK:
+				if(secondary)
+				{
+					sound (self, CHAN_PROJECTILE, "weapons/crylink_impact2.wav", VOL_BASE, ATTN_NORM);
+					pointparticles(particleeffectnum("crylink_impact"), org, '0 0 0', 1);
+				}
+				else
+				{
+					sound (self, CHAN_PROJECTILE, "weapons/crylink_impact.wav", VOL_BASE, ATTN_NORM);
+					pointparticles(particleeffectnum("crylink_impactbig"), org, '0 0 0', 1);
+				}
+				break;
+		}
+	}
 }

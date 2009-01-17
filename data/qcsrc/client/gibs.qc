@@ -62,8 +62,8 @@ void Ent_GibSplash()
 
 	float c, gibfactor, randomvalue;
 
-	amount = ReadByte() / 16.0; // gibbage amount
 	type = ReadByte(); // gibbage type
+	amount = ReadByte() / 16.0; // gibbage amount
 	org_x = ReadShort() * 4 + 2;
 	org_y = ReadShort() * 4 + 2;
 	org_z = ReadShort() * 4 + 2;
@@ -71,8 +71,8 @@ void Ent_GibSplash()
 	mi = decompressShortVector(ReadShort());
 	ma = decompressShortVector(ReadShort());
 
-	isgentle = (type & 0x8000 || cvar("cl_gentle"));
-	type = type & 0x7FFF;
+	isgentle = (type & 0x80 || cvar("cl_gentle"));
+	type = type & 0x7F;
 
 
 	gibfactor = 1 - cvar("cl_nogibs");

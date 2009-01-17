@@ -948,7 +948,7 @@ float RadiusDamage (entity inflictor, entity attacker, float coredamage, float e
 	blastorigin = (inflictor.origin + (inflictor.mins + inflictor.maxs) * 0.5);
 	total_damage_to_creatures = 0;
 
-	if(deathtype == WEP_HOOK | HITTYPE_SECONDARY | HITTYPE_BOUNCE) // only send gravity bomb damage once
+	if(deathtype != (WEP_HOOK | HITTYPE_SECONDARY | HITTYPE_BOUNCE)) // only send gravity bomb damage once
 		Damage_DamageInfo(blastorigin, coredamage, edgedamage, rad, forceintensity * '0 0 1', deathtype);
 
 	targ = findradius (blastorigin, rad);
