@@ -21,6 +21,8 @@ void Violence_GibSplash_At(vector org, vector mi, vector ma, vector dir, float t
 	e.classname = "gibsplash";
 	e.cnt = amount;
 	e.state = type;
+	if(sv_gentle)
+		e.state |= 0x8000; // "force gentle" bit
 	e.SendEntity = Violence_GibSplash_SendEntity;
 	e.nextthink = time + 0.2;
 	e.think = SUB_Remove;

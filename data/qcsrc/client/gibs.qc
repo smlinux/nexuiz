@@ -57,7 +57,7 @@ void TossGib (string mdlname, vector org, vector v, float destroyontouch)
 
 void Ent_GibSplash()
 {
-	float amount, type;
+	float amount, type, isgentle;
 	vector org, vel, mi, ma;
 
 	float c, gibfactor, randomvalue;
@@ -70,6 +70,10 @@ void Ent_GibSplash()
 	vel = decompressShortVector(ReadShort());
 	mi = decompressShortVector(ReadShort());
 	ma = decompressShortVector(ReadShort());
+
+	isgentle = (type & 0x8000 || cvar("cl_gentle"))
+	type = type & 0x7FFF;
+
 
 	gibfactor = 1 - cvar("cl_nogibs");
 	if(gibfactor <= 0)
