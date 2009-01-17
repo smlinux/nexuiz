@@ -425,7 +425,7 @@ vector findbetterlocation (vector org, float mindist)
 {
 	vector	loc;
 	vector vec;
-	float c;
+	float c, h;
 
 	vec = mindist * '1 0 0';
 	c = 0;
@@ -442,9 +442,10 @@ vector findbetterlocation (vector org, float mindist)
 		}
 		if (c & 1)
 		{
-			vec_z = vec_y;
+			h = vec_y;
 			vec_y = vec_x;
 			vec_x = vec_z;
+			vec_z = h;
 		}
 		c = c + 1;
 	}

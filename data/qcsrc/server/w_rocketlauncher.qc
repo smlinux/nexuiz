@@ -3,13 +3,6 @@
 
 void W_Rocket_Explode (void)
 {
-	vector	org2;
-	sound (self, CHAN_PROJECTILE, "weapons/rocket_impact.wav", VOL_BASE, ATTN_NORM);
-	org2 = findbetterlocation (self.origin, 16);
-
-	pointparticles(particleeffectnum("rocket_explode"), org2, '0 0 0', 1);
-
-	//effect (org2, "models/sprites/rockexpl.spr", 0, 12, 35);
 	self.event_damage = SUB_Null;
 	RadiusDamage (self, self.owner, cvar("g_balance_rocketlauncher_damage"), cvar("g_balance_rocketlauncher_edgedamage"), cvar("g_balance_rocketlauncher_radius"), world, cvar("g_balance_rocketlauncher_force"), self.projectiledeathtype, other);
 

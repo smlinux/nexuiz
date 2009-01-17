@@ -1,44 +1,22 @@
 .float HLAC_bulletcounter;
 void W_HLAC_Touch (void)
 {
-	vector	dir;
-	vector org2;
-	vector normal;
-
 	PROJECTILE_TOUCH;
-
-	normal = trace_plane_normal;
-	dir = normalize (self.owner.origin - self.origin);
-	org2 = findbetterlocation (self.origin, 8);
-
-	pointparticles(particleeffectnum("laser_impact"), org2, normal * 1000, 1);
 
 	self.event_damage = SUB_Null;
 
     RadiusDamage (self, self.owner, cvar("g_balance_hlac_primary_damage"), cvar("g_balance_hlac_primary_edgedamage"), cvar("g_balance_hlac_primary_radius"), world, cvar("g_balance_hlac_primary_force"), self.projectiledeathtype, other);
-	sound (self, CHAN_PROJECTILE, "weapons/laserimpact.wav", VOL_BASE, ATTN_NORM);
 
 	remove (self);
 }
 
 void W_HLAC_Touch2 (void)
 {
-	vector	dir;
-	vector org2;
-	vector normal;
-
 	PROJECTILE_TOUCH;
 
-	normal = trace_plane_normal;
-	dir = normalize (self.owner.origin - self.origin);
-	org2 = findbetterlocation (self.origin, 8);
-
-	pointparticles(particleeffectnum("laser_impact"), org2, normal * 1000, 1);
-
-	//self.event_damage = SUB_Null;
+	self.event_damage = SUB_Null;
 
     RadiusDamage (self, self.owner, cvar("g_balance_hlac_secondary_damage"), cvar("g_balance_hlac_secondary_edgedamage"), cvar("g_balance_hlac_secondary_radius"), world, cvar("g_balance_hlac_secondary_force"), self.projectiledeathtype, other);
-	sound (self, CHAN_PROJECTILE, "weapons/laserimpact.wav", VOL_BASE, ATTN_NORM);
 
 	remove (self);
 }

@@ -31,12 +31,6 @@ void W_Hook_ExplodeThink (void)
 
 void W_Hook_Explode2 (void)
 {
-	vector org2;
-
-	org2 = findbetterlocation (self.origin, 12);
-	pointparticles(particleeffectnum("hookbomb_explode"), org2, '0 0 0', 1);
-	sound (self, CHAN_PROJECTILE, "weapons/hookbomb_impact.wav", VOL_BASE, ATTN_NORM);
-
 	self.event_damage = SUB_Null;
 	self.touch = SUB_Null;
 

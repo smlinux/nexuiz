@@ -4,19 +4,6 @@
 
 void Seeker_Missile_Explode ()
 {
-	vector	org2;
-	float b;
-	org2 = findbetterlocation (self.origin, 12);
-	pointparticles(particleeffectnum("hagar_explode"), org2, '0 0 0', 1);
-
-	b = crandom();
-	if (b<-0.7)
-		sound (self, CHAN_PROJECTILE, "weapons/seekerexp1.wav", 1, ATTN_NORM);
-	else if (b<0.4)
-		sound (self, CHAN_PROJECTILE, "weapons/seekerexp2.wav", 1, ATTN_NORM);
-	else if (b<1)
-		sound (self, CHAN_PROJECTILE, "weapons/seekerexp3.wav", 1, ATTN_NORM);
-
 	self.event_damage = SUB_Null;
 	RadiusDamage (self, self.owner, cvar("g_balance_seeker_missile_damage"), cvar("g_balance_seeker_missile_edgedamage"), cvar("g_balance_seeker_missile_radius"), world, cvar("g_balance_seeker_missile_force"), self.projectiledeathtype, other);
 
@@ -278,17 +265,7 @@ void Seeker_Tag_Explode ()
 
 	//if(other==self.owner)
 	//    return;
-
-	org2 = findbetterlocation (self.origin, 12);
-	pointparticles(particleeffectnum("hagar_explode"), org2, '0 0 0', 1);
-
-	b = crandom();
-	if (b<-0.7)
-		sound (self, CHAN_PROJECTILE, "weapons/tagexp1.wav", 1, ATTN_NORM);
-	else if (b<0.4)
-		sound (self, CHAN_PROJECTILE, "weapons/tagexp2.wav", 1, ATTN_NORM);
-	else if (b<1)
-		sound (self, CHAN_PROJECTILE, "weapons/tagexp3.wav", 1, ATTN_NORM);
+	Damage_DamageInfo(self.origin, 0, 0, 0, self.velocity, WEP_SEEKER | HITTYPE_BOUNCE);
 
 	remove (self);
 }
@@ -310,7 +287,7 @@ void Seeker_Tag_Touch()
 	te_knightspike(org2);
 
 	self.event_damage = SUB_Null;
-	sound (self, CHAN_PROJECTILE, "weapons/tag_impact.wav", 1, ATTN_NORM);
+	Damage_DamageInfo(self.origin, 0, 0, 0, self.velocity, WEP_SEEKER | HITTYPE_HEADSHOT);
 
 	if (other.takedamage == DAMAGE_AIM && other.deadflag == DEAD_NO)
 	{
@@ -379,19 +356,6 @@ void Seeker_Fire_Tag()
 
 void Seeker_Flac_Explode ()
 {
-	vector	org2;
-	float b;
-	org2 = findbetterlocation (self.origin, 12);
-	pointparticles(particleeffectnum("flac_explode"), org2, '0 0 0', 1);
-
-	b = crandom();
-	if (b<-0.7)
-		sound (self, CHAN_PROJECTILE, "weapons/flacexp1.wav", 1, ATTN_NORM);
-	else if (b<0.4)
-		sound (self, CHAN_PROJECTILE, "weapons/flacexp2.wav", 1, ATTN_NORM);
-	else if (b<1)
-		sound (self, CHAN_PROJECTILE, "weapons/flacexp3.wav", 1, ATTN_NORM);
-
 	self.event_damage = SUB_Null;
 
 	RadiusDamage (self, self.owner, cvar("g_balance_seeker_flac_damage"), cvar("g_balance_seeker_flac_edgedamage"), cvar("g_balance_seeker_flac_radius"), world, cvar("g_balance_seeker_flac_force"), self.projectiledeathtype, other);
@@ -434,7 +398,7 @@ void Seeker_Fire_Flac()
 	}
 	W_SetupShot (self, f_org, FALSE, 2, "weapons/flac_fire.wav");
 
-		pointparticles(particleeffectnum("hagar_muzzleflash"), w_shotorg, w_shotdir * 1000, 1);
+	pointparticles(particleeffectnum("hagar_muzzleflash"), w_shotorg, w_shotdir * 1000, 1);
 
 	missile = spawn ();
 	missile.owner = missile.realowner = self;

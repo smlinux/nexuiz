@@ -10,17 +10,12 @@ void W_Laser_Touch (void)
 
 	normal = trace_plane_normal;
 	dir = normalize (self.owner.origin - self.origin);
-	org2 = findbetterlocation (self.origin, 8);
-
-	pointparticles(particleeffectnum("laser_impact"), org2, normal * 1000, 1);
-
 
 	self.event_damage = SUB_Null;
 	if (self.dmg)
 		RadiusDamage (self, self.owner, cvar("g_balance_laser_secondary_damage"), cvar("g_balance_laser_secondary_edgedamage"), cvar("g_balance_laser_secondary_radius"), world, cvar("g_balance_laser_secondary_force"), self.projectiledeathtype, other);
 	else
 		RadiusDamage (self, self.owner, cvar("g_balance_laser_primary_damage"), cvar("g_balance_laser_primary_edgedamage"), cvar("g_balance_laser_primary_radius"), world, cvar("g_balance_laser_primary_force"), self.projectiledeathtype, other);
-	sound (self, CHAN_PROJECTILE, "weapons/laserimpact.wav", VOL_BASE, ATTN_NORM);
 
 	remove (self);
 }

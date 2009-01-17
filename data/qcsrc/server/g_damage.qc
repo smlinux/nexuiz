@@ -24,6 +24,8 @@ void Damage_DamageInfo(vector org, float coredamage, float edgedamage, float rad
 
 	entity e;
 
+	org = findbetterlocation(org, 1);
+
 	e = spawn();
 	e.classname = "damageinfo";
 	setorigin(e, org);
@@ -949,7 +951,14 @@ float RadiusDamage (entity inflictor, entity attacker, float coredamage, float e
 	total_damage_to_creatures = 0;
 
 	if(deathtype != (WEP_HOOK | HITTYPE_SECONDARY | HITTYPE_BOUNCE)) // only send gravity bomb damage once
-		Damage_DamageInfo(blastorigin, coredamage, edgedamage, rad, forceintensity * '0 0 1', deathtype);
+	{
+		force = inflictor.velocity;
+		if(vlen(force) == 0)
+			force = '0 0 1';
+		else
+			force = normalize(force) * forceintensity;
+		Damage_DamageInfo(blastorigin, coredamage, edgedamage, rad, forceintensity * force, deathtype);
+	}
 
 	targ = findradius (blastorigin, rad);
 	while (targ)

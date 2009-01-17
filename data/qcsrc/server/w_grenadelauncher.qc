@@ -1,10 +1,5 @@
 void W_Grenade_Explode (void)
 {
-	vector	org2;
-	org2 = findbetterlocation (self.origin, 12);
-	pointparticles(particleeffectnum("grenade_explode"), org2, '0 0 0', 1);
-	sound (self, CHAN_PROJECTILE, "weapons/grenade_impact.wav", VOL_BASE, ATTN_NORM);
-
 	if(other.takedamage == DAMAGE_AIM)
 		if(other.classname == "player")
 			if(IsDifferentTeam(self.owner, other))
@@ -19,19 +14,14 @@ void W_Grenade_Explode (void)
 
 void W_Grenade_Explode2 (void)
 {
-	vector	org2;
-	org2 = findbetterlocation (self.origin, 12);
-	pointparticles(particleeffectnum("grenade_explode"), org2, '0 0 0', 1);
-	sound (self, CHAN_PROJECTILE, "weapons/grenade_impact.wav", VOL_BASE, ATTN_NORM);
-
-	self.event_damage = SUB_Null;
-	RadiusDamage (self, self.owner, cvar("g_balance_grenadelauncher_secondary_damage"), cvar("g_balance_grenadelauncher_secondary_edgedamage"), cvar("g_balance_grenadelauncher_secondary_radius"), world, cvar("g_balance_grenadelauncher_secondary_force"), self.projectiledeathtype, other);
-
 	if(other.takedamage == DAMAGE_AIM)
 		if(other.classname == "player")
 			if(IsDifferentTeam(self.owner, other))
 				if(IsFlying(other))
 					announce(self.owner, "announcer/male/airshot.wav");
+
+	self.event_damage = SUB_Null;
+	RadiusDamage (self, self.owner, cvar("g_balance_grenadelauncher_secondary_damage"), cvar("g_balance_grenadelauncher_secondary_edgedamage"), cvar("g_balance_grenadelauncher_secondary_radius"), world, cvar("g_balance_grenadelauncher_secondary_force"), self.projectiledeathtype, other);
 
 	remove (self);
 }

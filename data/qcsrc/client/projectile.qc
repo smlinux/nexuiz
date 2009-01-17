@@ -73,6 +73,9 @@ void Projectile_Draw()
 		case PROJECTILE_HAGAR_BOUNCING:
 			trailparticles(self, particleeffectnum("TR_GRENADE"), oldorg, self.origin);
 			break;
+		case PROJECTILE_BULLET_GLOWING:
+			R_AddDynamicLight(self.origin, 50, '1 1 0');
+			break;
 		default:
 			break;
 	}
@@ -159,6 +162,7 @@ void Ent_Projectile()
 			case PROJECTILE_ROCKET: setmodel(self, "models/rocket.md3"); break;
 			case PROJECTILE_TAG: setmodel(self, "models/laser.mdl"); break;
 			case PROJECTILE_BULLET: setmodel(self, "models/tracer.mdl"); break;
+			case PROJECTILE_BULLET_GLOWING: setmodel(self, "models/tracer.mdl"); break;
 			case PROJECTILE_CRYLINK: setmodel(self, "models/plasmatrail.mdl"); break;
 			case PROJECTILE_ELECTRO_BEAM: setmodel(self, "models/elaser.mdl"); break;
 			case PROJECTILE_GRENADE: setmodel(self, "models/grenademodel.md3"); break;
@@ -254,6 +258,7 @@ void Projectile_Precache()
 	precache_model("models/ebomb.mdl");
 	precache_model("models/rocket.md3");
 	precache_model("models/laser.mdl");
+	precache_model("models/tracer.mdl");
 	precache_model("models/tracer.mdl");
 	precache_model("models/plasmatrail.mdl");
 	precache_model("models/elaser.mdl");
