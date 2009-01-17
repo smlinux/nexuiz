@@ -130,6 +130,8 @@ void CSQC_Init(void)
 	if(v_y - 240 > -1)
 		cs_project_is_b0rked = FALSE;
 
+	RegisterWeapons();
+
 	WaypointSprite_Load();
 
 	Projectile_Precache();
