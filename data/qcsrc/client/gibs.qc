@@ -15,7 +15,10 @@ void Gib_Draw()
 
 	Movetype_Physics(FALSE);
 	
-	trailparticles(self, particleeffectnum("TR_BLOOD"), oldorg, self.origin);
+	if(self.touch == Gib_Touch) // don't do this for the "chunk" thingie...
+		trailparticles(self, particleeffectnum("TR_SLIGHTBLOOD"), oldorg, self.origin);
+	else
+		trailparticles(self, particleeffectnum("TR_BLOOD"), oldorg, self.origin);
 
 	self.renderflags = 0;
 	self.alpha = bound(0, self.nextthink - time, 1);
@@ -46,7 +49,7 @@ void TossGib (string mdlname, vector org, vector v, float destroyontouch)
 	if(destroyontouch)
 		gib.move_touch = Gib_Touch;
 
-	gib.move_origin = org;
+	gib.move_origin = gib.origin = org;
 	gib.move_velocity = v + randomvec();
 	gib.move_avelocity = randomvec() * vlen(gib.move_velocity);
 	gib.move_time = time;
@@ -92,7 +95,7 @@ void Ent_GibSplash()
 			TossGib("models/gibs/eye.md3", org, vel + randomvec() * 150, 0);
 		te_bloodshower(org + mi, org + ma, 1200, 1000 * amount);
 		if(random() < amount)
-			TossGib("models/gibs/bloodyskull.md3", org, vel, 0);
+			TossGib("models/gibs/bloodyskull.md3", org, vel + randomvec() * 100, 0);
 
 		for(c = 0; c < amount; ++c)
 		{
@@ -128,7 +131,8 @@ void Ent_GibSplash()
 	}
 	else if(type == 3) // single gib
 	{
-		TossGib ("models/gibs/chunk.mdl", org, vel, 1);
+		if(random() < amount)
+			TossGib ("models/gibs/chunk.mdl", org, vel, 1);
 	}
 }
 
