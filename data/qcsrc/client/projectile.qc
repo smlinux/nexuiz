@@ -231,16 +231,16 @@ void Ent_Projectile()
 	if(self.gravity)
 	{
 		if(self.move_movetype == MOVETYPE_FLY)
-			self.movetype = MOVETYPE_TOSS;
+			self.move_movetype = MOVETYPE_TOSS;
 		if(self.move_movetype == MOVETYPE_BOUNCEMISSILE)
-			self.movetype = MOVETYPE_BOUNCE;
+			self.move_movetype = MOVETYPE_BOUNCE;
 	}
 	else
 	{
 		if(self.move_movetype == MOVETYPE_TOSS)
-			self.movetype = MOVETYPE_FLY;
+			self.move_movetype = MOVETYPE_FLY;
 		if(self.move_movetype == MOVETYPE_BOUNCE)
-			self.movetype = MOVETYPE_BOUNCEMISSILE;
+			self.move_movetype = MOVETYPE_BOUNCEMISSILE;
 	}
 
 	if(!(self.count & 0x80))
