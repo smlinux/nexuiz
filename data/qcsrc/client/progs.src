@@ -30,6 +30,8 @@ hook.qc
 particles.qc
 laser.qc
 projectile.qc
+gibs.qc
+damage.qc
 
 Main.qc
 View.qc

@@ -51,7 +51,6 @@ void CopyBody(float keepvelocity)
 	self.solid = oldself.solid;
 	self.takedamage = oldself.takedamage;
 	self.think = oldself.think;
-	self.gibrandom = oldself.gibrandom;
 	self.customizeentityforclient = oldself.customizeentityforclient;
 	if (keepvelocity == 1)
 		self.velocity = oldself.velocity;
@@ -258,8 +257,8 @@ void SpawnThrownWeapon (vector org, float w)
 void PlayerCorpseDamage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
 {
 	local float take, save;
-	if(sv_gentle < 1)	
-		pointparticles(particleeffectnum("blood"), hitloc, force, bound(0, damage, 200));
+	Violence_GibSplash_At(hitloc, '0 0 0', '0 0 0', force, 2, bound(0, damage, 200) / 16);
+
 	// damage resistance (ignore most of the damage from a bullet or similar)
 	damage = max(damage - 5, 1);
 
@@ -273,13 +272,10 @@ void PlayerCorpseDamage (entity inflictor, entity attacker, float damage, float 
 	else if (take > 10)
 		sound (self, CHAN_PROJECTILE, "misc/bodyimpact1.wav", VOL_BASE, ATTN_NORM);
 
-	if(independent_players)
-	if(sv_gentle < 1) {	
-		if (take > 50)
-			TossGib (world, "models/gibs/chunk.mdl", hitloc, force * -0.1,1);
-		if (take > 100)
-			TossGib (world, "models/gibs/chunk.mdl", hitloc, force * -0.2,1);
-	}
+	if (take > 50)
+		Violence_GibSplash_At(hitloc, '0 0 0', '0 0 0', force * -0.1, 3, 1);
+	if (take > 100)
+		Violence_GibSplash_At(hitloc, '0 0 0', '0 0 0', force * -0.2, 3, 1);
 
 	if (!(self.flags & FL_GODMODE))
 	{
@@ -292,7 +288,7 @@ void PlayerCorpseDamage (entity inflictor, entity attacker, float damage, float 
 	self.dmg_take = self.dmg_take + take;//max(take - 10, 0);
 	self.dmg_inflictor = inflictor;
 
-	if (self.health <= -75)
+	if (self.health <= -75 && self.modelindex != 0)
 	{
 		// don't use any animations as a gib
 		self.frame = 0;
@@ -300,61 +296,9 @@ void PlayerCorpseDamage (entity inflictor, entity attacker, float damage, float 
 		// view just above the floor
 		self.view_ofs = '0 0 4';
 
-		// make a juicy mess
-		local float multiplier;
-		multiplier = 1;
-		if (cvar("ekg"))
-			multiplier = 5;
-
-
-		// make a meaty mess
-		if(independent_players)
-		{
-			TossGib (self, "models/gibs/eye.md3", self.origin + self.view_ofs, self.velocity + randomvec() * 150,0);
-			self.solid = SOLID_TRIGGER; // undo SOLID_CORPSE
-			self.takedamage = DAMAGE_NO; // can't damage this gib, to prevent better jumps from it
-		}
-		else
-			TossGib (self, "models/gibs/eye.md3", self.origin + self.view_ofs, self.velocity + randomvec() * 150,0);
-		
-		if not(independent_players)
-		if(sv_gentle < 1) {
-			te_bloodshower (self.origin + self.mins, self.origin + self.maxs, 1200 * multiplier, 1000);
-			TossGib (world, "models/gibs/bloodyskull.md3", self.origin + self.view_ofs, self.velocity,0);
-
-			local float c;
-			c = 0;
-
-			while (c < multiplier)
-			{
-				c = c + 1;
-				//TossGib (world, "models/gibs/gib1.md3", self.origin, self.velocity + randomvec() * 450,0);
-				//TossGib (world, "models/gibs/gib2.md3", self.origin, self.velocity + randomvec() * 450,0);
-				//TossGib (world, "models/gibs/gib3.md3", self.origin, self.velocity + randomvec() * 450,0);
-				//TossGib (world, "models/gibs/gib4.md3", self.origin, self.velocity + randomvec() * 450,0);
-				//TossGib (world, "models/gibs/gib5.md3", self.origin, self.velocity + randomvec() * 450,0);
-				//TossGib (world, "models/gibs/gib6.md3", self.origin, self.velocity + randomvec() * 450,0);
-
-				TossGib (world, "models/gibs/arm.md3", self.origin + self.view_ofs, self.velocity + randomvec() * (random() * 120 + 90),0);
-				TossGib (world, "models/gibs/arm.md3", self.origin + self.view_ofs, self.velocity + randomvec() * (random() * 120 + 90),0);
-				//TossGib (world, "models/gibs/arm.md3", self.origin + self.view_ofs, self.velocity + randomvec() * 150,0);
-				//TossGib (world, "models/gibs/arm.md3", self.origin + self.view_ofs, self.velocity + randomvec() * 150,0);
-				TossGib (world, "models/gibs/chest.md3", self.origin + self.view_ofs * 0.5, self.velocity + randomvec() * (random() * 120 + 80),0);
-				//TossGib (world, "models/gibs/smallchest.md3", self.origin + self.view_ofs, self.velocity + randomvec() * 150,0);
-				TossGib (world, "models/gibs/smallchest.md3", self.origin + self.view_ofs, self.velocity + randomvec() * (random() * 120 + 80),0);
-				TossGib (world, "models/gibs/leg1.md3", self.origin + self.view_ofs * -0.2, self.velocity + randomvec() * (random() * 120 + 85),0);
-				TossGib (world, "models/gibs/leg2.md3", self.origin + self.view_ofs * -0.4, self.velocity + randomvec() * (random() * 120 + 85),0);
-				//TossGib (world, "models/gibs/leg1.md3", self.origin + self.view_ofs * -0.2, self.velocity + randomvec() * 150,0);
-				//TossGib (world, "models/gibs/leg2.md3", self.origin + self.view_ofs * -0.4, self.velocity + randomvec() * 150,0);
-
-				// these splat on impact
-				TossGib (world, "models/gibs/chunk.mdl", self.origin, self.velocity + randomvec() * 450,1);
-				TossGib (world, "models/gibs/chunk.mdl", self.origin, self.velocity + randomvec() * 450,1);
-				TossGib (world, "models/gibs/chunk.mdl", self.origin, self.velocity + randomvec() * 450,1);
-				TossGib (world, "models/gibs/chunk.mdl", self.origin, self.velocity + randomvec() * 450,1);
-			}
-			sound (self, CHAN_PLAYER, "misc/gib.wav", VOL_BASE, ATTN_NORM);
-		}
+		Violence_GibSplash(self, 1, 1);
+		self.modelindex = 0; // restore later
+		self.solid = SOLID_NOT; // restore later
 	}
 }
 
@@ -371,11 +315,7 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 			damage /= sqrt(bound(1.0, attacker.cvar_cl_handicap, 100.0));
 	}
 
-	if(sv_gentle > 0) {
-		pointparticles(particleeffectnum("damage_hit"), hitloc, force, bound(0, damage, 200));
-	} else {
-		pointparticles(particleeffectnum("blood"), hitloc, force, bound(0, damage, 200));
-	}
+	Violence_GibSplash_At(hitloc, '0 0 0', '0 0 0', force, 2, bound(0, damage, 200) / 16);
 
 	if(g_arena)
 	if(numspawned < 2)
@@ -399,14 +339,10 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 	else if (take > 10)
 		sound (self, CHAN_PROJECTILE, "misc/bodyimpact1.wav", VOL_BASE, ATTN_NORM); // FIXME possibly remove them?
 
-	if(sv_gentle < 1)
-	if not(independent_players)
-	{
-		if (take > 50)
-			TossGib (world, "models/gibs/chunk.mdl", hitloc, force * -0.1,1);
-		if (take > 100)
-			TossGib (world, "models/gibs/chunk.mdl", hitloc, force * -0.2,1);
-	}
+	if (take > 50)
+		Violence_GibSplash_At(hitloc, '0 0 0', '0 0 0', force * -0.1, 3, 1);
+	if (take > 100)
+		Violence_GibSplash_At(hitloc, '0 0 0', '0 0 0', force * -0.2, 3, 1);
 
 	if (time > self.spawnshieldtime)
 	{

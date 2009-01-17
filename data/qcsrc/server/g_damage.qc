@@ -1,3 +1,47 @@
+.float dmg;
+.float dmg_edge;
+.float dmg_force;
+.float dmg_radius;
+
+float Damage_DamageInfo_SendEntity(entity to, float sf)
+{
+	WriteByte(MSG_ENTITY, ENT_CLIENT_DAMAGEINFO);
+	WriteShort(MSG_ENTITY, self.projectiledeathtype);
+	WriteCoord(MSG_ENTITY, floor(self.origin_x));
+	WriteCoord(MSG_ENTITY, floor(self.origin_y));
+	WriteCoord(MSG_ENTITY, floor(self.origin_z));
+	WriteByte(MSG_ENTITY, bound(1, self.dmg, 255));
+	WriteByte(MSG_ENTITY, bound(0, self.dmg_radius, 255));
+	WriteByte(MSG_ENTITY, bound(1, self.dmg_edge, 255));
+	WriteShort(MSG_ENTITY, self.oldorigin_x);
+	return TRUE;
+}
+
+void Damage_DamageInfo(vector org, float coredamage, float edgedamage, float rad, vector force, float deathtype)
+{
+	// TODO maybe call this from non-edgedamage too?
+	// TODO maybe make the client do the particle effects for the weapons and the impact sounds using this info?
+
+	entity e;
+
+	e = spawn();
+	e.classname = "damageinfo";
+	setorigin(e, org);
+	setmodel(e, "null");
+	e.think = SUB_Remove;
+	e.nextthink = time + 0.2;
+	e.projectiledeathtype = deathtype;
+	e.dmg = coredamage;
+	e.dmg_edge = edgedamage;
+	e.dmg_radius = rad;
+	e.dmg_force = vlen(force);
+	e.velocity = force;
+
+	e.oldorigin_x = compressShortVector(e.velocity);
+
+	e.SendEntity = Damage_DamageInfo_SendEntity;
+}
+
 #define DAMAGE_CENTERPRINT_SPACER NEWLINES
 
 float checkrules_firstblood;
@@ -898,10 +942,14 @@ float RadiusDamage (entity inflictor, entity attacker, float coredamage, float e
 		return 0;
 	}
 
+
 	RadiusDamage_running = 1;
 
 	blastorigin = (inflictor.origin + (inflictor.mins + inflictor.maxs) * 0.5);
 	total_damage_to_creatures = 0;
+
+	if(deathtype == WEP_HOOK | HITTYPE_SECONDARY | HITTYPE_BOUNCE) // only send gravity bomb damage once
+		Damage_DamageInfo(blastorigin, coredamage, edgedamage, rad, forceintensity * '0 0 1', deathtype);
 
 	targ = findradius (blastorigin, rad);
 	while (targ)

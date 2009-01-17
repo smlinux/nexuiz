@@ -1,3 +1,13 @@
+void SUB_Null()
+{
+}
+
+void SUB_Stop()
+{
+	self.move_velocity = self.move_avelocity = '0 0 0';
+	self.move_movetype = MOVETYPE_NONE;
+}
+
 .float count; // set if clientside projectile
 .float cnt; // sound index
 .float gravity;
@@ -82,7 +92,7 @@ void loopsound(entity e, float ch, string samp, float vol, float attn)
 void Ent_RemoveProjectile()
 {
 	if(self.cnt)
-		loopsound(self, CHAN_PAIN, "misc/null.wav", VOL_BASE, ATTN_NORM);
+		loopsound(self, CHAN_PROJECTILE, "misc/null.wav", VOL_BASE, ATTN_NORM);
 }
 
 void Ent_Projectile()
@@ -170,26 +180,26 @@ void Ent_Projectile()
 		self.mins = '0 0 0';
 		self.maxs = '0 0 0';
 		self.colormod = '0 0 0';
+		self.move_touch = SUB_Stop;
 		self.move_movetype = MOVETYPE_TOSS;
-		self.move_moveflags = MOVEFLAG_STOPONIMPACT;
 
 		switch(self.cnt)
 		{
 			case PROJECTILE_ELECTRO:
 				// only new engines support sound moving with object
-				loopsound(self, CHAN_PAIN, "weapons/electro_fly.wav", VOL_BASE, ATTN_NORM);
+				loopsound(self, CHAN_PROJECTILE, "weapons/electro_fly.wav", VOL_BASE, ATTN_NORM);
 				self.mins = '0 0 -3';
 				self.maxs = '0 0 -3';
 				self.move_movetype = MOVETYPE_BOUNCE;
-				self.move_moveflags = 0;
+				self.move_touch = SUB_Null;
 				break;
 			case PROJECTILE_ROCKET:
-				loopsound(self, CHAN_PAIN, "weapons/rocket_fly.wav", VOL_BASE, ATTN_NORM);
+				loopsound(self, CHAN_PROJECTILE, "weapons/rocket_fly.wav", VOL_BASE, ATTN_NORM);
 				self.mins = '-3 -3 -3';
 				self.maxs = '3 3 3';
 				break;
 			case PROJECTILE_TAG:
-				loopsound(self, CHAN_PAIN, "weapons/tag_rocket_fly.wav", VOL_BASE, ATTN_NORM);
+				loopsound(self, CHAN_PROJECTILE, "weapons/tag_rocket_fly.wav", VOL_BASE, ATTN_NORM);
 				self.mins = '-2 -2 -2';
 				self.maxs = '2 2 2';
 				break;
@@ -197,7 +207,7 @@ void Ent_Projectile()
 				self.mins = '0 0 -3';
 				self.maxs = '0 0 -3';
 				self.move_movetype = MOVETYPE_BOUNCE;
-				self.move_moveflags = 0;
+				self.move_touch = SUB_Null;
 				break;
 			case PROJECTILE_SEEKER:
 				self.mins = '-2 -2 -2';
@@ -211,11 +221,26 @@ void Ent_Projectile()
 				break;
 			case PROJECTILE_HAGAR_BOUNCING:
 				self.move_movetype = MOVETYPE_BOUNCE;
-				self.move_moveflags = 0;
+				self.move_touch = SUB_Null;
 				break;
 			default:
 				break;
 		}
+	}
+
+	if(self.gravity)
+	{
+		if(self.move_movetype == MOVETYPE_FLY)
+			self.movetype = MOVETYPE_TOSS;
+		if(self.move_movetype == MOVETYPE_BOUNCEMISSILE)
+			self.movetype = MOVETYPE_BOUNCE;
+	}
+	else
+	{
+		if(self.move_movetype == MOVETYPE_TOSS)
+			self.movetype = MOVETYPE_FLY;
+		if(self.move_movetype == MOVETYPE_BOUNCE)
+			self.movetype = MOVETYPE_BOUNCEMISSILE;
 	}
 
 	if(!(self.count & 0x80))

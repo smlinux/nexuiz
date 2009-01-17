@@ -1,11 +1,13 @@
-.float move_flags;
 .float move_movetype;
 .float move_time;
 .vector move_origin;
 .vector move_angles;
 .vector move_velocity;
 .vector move_avelocity;
-.float move_moveflags;
+.float move_flags;
+.void(void) move_touch;
+.float move_bounce_factor;
+.float move_bounce_stopspeed;
 
 void Movetype_Physics(float matchserver);
 
@@ -24,6 +26,5 @@ float	MOVETYPE_BOUNCEMISSILE	= 11;	// Like bounce but doesn't lose speed on boun
 float MOVETYPE_FOLLOW = 12;
 float MOVETYPE_FAKEPUSH = 13;
 
+float   FL_ITEM                 = 256;
 float	FL_ONGROUND				= 512;
-
-float MOVEFLAG_STOPONIMPACT = 1;

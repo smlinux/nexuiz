@@ -275,3 +275,5 @@ string	findkeysforcommand(string command) = #521;
 
 string(float ccase, float calpha, float cnum, string s, ...) strconv = #224;
 float(entity ent) wasfreed = #353;
+
+entity(vector org, float rad) findradius = #22;

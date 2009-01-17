@@ -133,6 +133,7 @@ void CSQC_Init(void)
 	WaypointSprite_Load();
 
 	Projectile_Precache();
+	GibSplash_Precache();
 }
 
 // CSQC_Shutdown : Called every time the CSQC code is shutdown (changing maps, quitting, etc)
@@ -517,6 +518,10 @@ void(float bIsNewEntity) CSQC_Ent_Update =
 		Ent_RadarLink();
 	else if(self.enttype == ENT_CLIENT_PROJECTILE)
 		Ent_Projectile();
+	else if(self.enttype == ENT_CLIENT_GIBSPLASH)
+		Ent_GibSplash();
+	else if(self.enttype == ENT_CLIENT_DAMAGEINFO)
+		Ent_DamageInfo();
 	else
 		error(strcat("unknown entity type in CSQC_Ent_Update: ", ftos(self.enttype), "\n"));
 	

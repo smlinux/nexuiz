@@ -1,98 +1,42 @@
-void GibDamage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
+float Violence_GibSplash_SendEntity(entity to, float sf)
 {
-	float r;
-	r = random ();
-	if (r < 0.60)
-		sound (self, CHAN_PROJECTILE, "misc/gib_splat01.wav", VOL_BASE, ATTN_NORM);
-	else if (r < 0.65)
-		sound (self, CHAN_PROJECTILE, "misc/gib_splat02.wav", VOL_BASE, ATTN_NORM);
-	else if (r < 0.70)
-		sound (self, CHAN_PROJECTILE, "misc/gib_splat03.wav", VOL_BASE, ATTN_NORM);
-	else if (r < 0.75)
-		sound (self, CHAN_PROJECTILE, "misc/gib_splat04.wav", VOL_BASE, ATTN_NORM);
-	
-	if(sv_gentle < 1)
-		pointparticles(particleeffectnum("blood"), self.origin + '0 0 1', '0 0 30', 10);
-	self.health = self.health - damage;
-	if (self.health <= -1000)
-	{
-		self.event_damage = SUB_Null;
-		SUB_VanishOrRemove (self);
-	}
+	WriteByte(MSG_ENTITY, ENT_CLIENT_GIBSPLASH);
+	WriteByte(MSG_ENTITY, bound(1, self.cnt * 16, 255)); // gibbage amount multiplier
+	WriteByte(MSG_ENTITY, self.state); // actually type
+	WriteShort(MSG_ENTITY, floor(self.origin_x / 4)); // not using a coord here, as gibs don't need this accuracy
+	WriteShort(MSG_ENTITY, floor(self.origin_y / 4)); // not using a coord here, as gibs don't need this accuracy
+	WriteShort(MSG_ENTITY, floor(self.origin_z / 4)); // not using a coord here, as gibs don't need this accuracy
+	WriteShort(MSG_ENTITY, self.oldorigin_x); // acrually compressed velocity
+	WriteShort(MSG_ENTITY, self.oldorigin_y); // acrually compressed mins
+	WriteShort(MSG_ENTITY, self.oldorigin_z); // acrually compressed maxs
+	return TRUE;
 }
 
-
-void GibTouch ()
+// TODO maybe convert this to a TE?
+void Violence_GibSplash_At(vector org, vector mi, vector ma, vector dir, float type, float amount)
 {
-	if(SUB_NoImpactCheck())
-	{
-		SUB_VanishOrRemove(self);
-		return;
-	}
-	GibDamage (other, other, 1000, 0, self.origin, '0 0 0');
+	entity e;
+
+	e = spawn();
+	e.classname = "gibsplash";
+	e.cnt = amount;
+	e.state = type;
+	e.SendEntity = Violence_GibSplash_SendEntity;
+	e.nextthink = time + 0.2;
+	e.think = SUB_Remove;
+		// 0.2s should be enough time for all clients to receive this ent once, do the gibbage and be done with it
+	setmodel(e, "null");
+	e.effects = EF_NODEPTHTEST; // show gibs from around the corner
+	setorigin(e, org);
+	setsize(e, mi, ma);
+	e.velocity = dir;
+
+	e.oldorigin_x = compressShortVector(e.velocity);
+	e.oldorigin_y = compressShortVector(e.mins);
+	e.oldorigin_z = compressShortVector(e.maxs);
 }
 
-
-.float gibrandom;
-.float gibmodelindex;
-float Gib_customizeentityforclient()
+void Violence_GibSplash(entity source, float type, float amount)
 {
-	if(self.classname == "player") // the eye
-	{
-		if(sv_gentle > 0) {
-			self.model = "";
-			return TRUE;
-		}
-		if(self.gibrandom > other.cvar_cl_nogibs)
-			self.model = self.mdl;
-		else
-			self.model = "";
-		return TRUE;
-	}
-	else // other gibs - don't even need to send them
-		return (self.gibrandom > other.cvar_cl_nogibs);
-};
-
-// changes by LordHavoc on 03/30/04
-// TossGib now takes a gib entity so it can be used for tossing heads
-// gib.velocity now uses randomvec() instead of a bunch of manual random calls
-// merged Gib() into PlayerGib()
-void TossGib (entity gib, string mdlname, vector org, vector v, float destroyontouch)
-{
-	if (gib == world)
-	{
-		gib = spawn ();
-		gib.deadflag = DEAD_DEAD;
-	}
-
-	// don't set his classname to something else or it'll screw up a lot of stuff
-	if(gib.classname != "player")
-		gib.classname = "gib";
-	gib.iscreature = FALSE; // not a creature, because lava sounds on gibs are annoying
-	gib.movetype = MOVETYPE_BOUNCE;
-	gib.solid = SOLID_CORPSE;
-	gib.skin = 0;
-	gib.effects = 0;
-	gib.gibrandom = random(); // used for customize function to reduce gibs
-	gib.customizeentityforclient = Gib_customizeentityforclient;
-	gib.effects = EF_LOWPRECISION; // use less bandwidth
-
-	gib.mdl = mdlname;
-	setmodel (gib, mdlname); // precision set above
-	gib.gibmodelindex = gib.modelindex;
-	setsize (gib, '-8 -8 -8', '8 8 8');
-	setorigin (gib, org);
-
-	gib.health = -1;
-	gib.takedamage = DAMAGE_YES;
-	gib.damageforcescale = 3.5;
-	gib.event_damage = GibDamage;
-	if (destroyontouch == 1)
-		gib.touch = GibTouch;
-
-	gib.velocity = v + randomvec();
-	gib.avelocity = randomvec() * vlen(gib.velocity);
-	gib.oldvelocity = gib.velocity;
-
-	SUB_SetFade (gib, time + 12 + random () * 4, 1);
+	Violence_GibSplash_At(source.origin + source.view_ofs, source.mins - source.view_ofs, source.maxs - source.view_ofs, source.velocity, type, amount);
 }

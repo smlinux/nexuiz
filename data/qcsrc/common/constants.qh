@@ -55,6 +55,8 @@ const float ENT_CLIENT_NAGGER = 9; // flags [votecalledvote]
 const float ENT_CLIENT_WAYPOINT = 10; // flags origin [team displayrule] [spritename] [spritename2] [spritename3] [lifetime maxdistance hideable]
 const float ENT_CLIENT_RADARLINK = 11; // flags [startorigin] [endorigin] [startcolor+16*endcolor]
 const float ENT_CLIENT_PROJECTILE = 12;
+const float ENT_CLIENT_GIBSPLASH = 13;
+const float ENT_CLIENT_DAMAGEINFO = 14;
 
 const float SPRITERULE_DEFAULT = 0;
 const float SPRITERULE_TEAMPLAY = 1;
@@ -326,7 +328,7 @@ float	CHAN_PROJECTILE			= 4; // Projectiles
 	// on world: UNUSED
 	// on players: projectiles hitting player        SHOTS
 	// on entities: projectiles                      SHOTS
-	// on csqc: UNUSED
+	// on csqc: projectile sounds                    SHOTS
 float	CHAN_WEAPON2			= 5; // Nex fire (separated as it is a very long sound)
 	// on world: UNUSED
 	// on players: weapon firing                     WEAPONS
@@ -336,7 +338,7 @@ float	CHAN_PAIN				= 6; // Pain
 	// on world: UNUSED
 	// on players: pain                              PAIN
 	// on entities: projectiles flying               SHOTS
-	// on csqc: projectiles flying                   SHOTS
+	// on csqc: player pain                          PAIN
 float	CHAN_PLAYER				= 7; // Player body
 	// on world: UNUSED
 	// on players: player sounds                     PLAYER

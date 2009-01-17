@@ -351,6 +351,7 @@ void CL_ExteriorWeaponentity_Think()
 void CL_SpawnWeaponentity()
 {
 	self.weaponentity = spawn();
+	self.weaponentity.classname = "weaponentity";
 	self.weaponentity.solid = SOLID_NOT;
 	self.weaponentity.owner = self;
 	self.weaponentity.weaponentity = self.weaponentity;
@@ -365,6 +366,7 @@ void CL_SpawnWeaponentity()
 	self.weaponentity.scale = 0.61;
 
 	self.exteriorweaponentity = spawn();
+	self.exteriorweaponentity.classname = "exteriorweaponentity";
 	self.exteriorweaponentity.solid = SOLID_NOT;
 	self.exteriorweaponentity.exteriorweaponentity = self.exteriorweaponentity;
 	self.exteriorweaponentity.owner = self;

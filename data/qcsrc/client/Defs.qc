@@ -218,3 +218,6 @@ float blurtest_time0, blurtest_time1, blurtest_radius, blurtest_power;
 float servertime, serverprevtime, serverdeltatime;
 
 float ticrate;
+
+.float damageforcescale;
+.void(float thisdmg, float hittype, vector org, vector thisforce) event_damage;

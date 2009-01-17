@@ -17,16 +17,106 @@ void _Movetype_CheckWaterTransition() // SV_CheckWaterTransition
 
 void _Movetype_Impact(entity oth) // SV_Impact
 {
-	if(self.move_moveflags & MOVEFLAG_STOPONIMPACT)
+	entity oldother, oldself;
+
+	oldself = self;
+	oldother = other;
+
+	if(self.move_touch)
 	{
-		// don't CLIP the velocity, but stop ENTIRELY
-		self.velocity = '0 0 0';
-		self.avelocity = '0 0 0';
+		other = oth;
+
+		self.move_touch();
+
+		other = oldother;
 	}
+
+	if(oth.move_touch)
+	{
+		other = self;
+		self = oth;
+
+		self.move_touch();
+
+		self = oldself;
+		other = oldother;
+	}
+}
+
+void _Movetype_LinkEdict_TouchAreaGrid() // SV_LinkEdict_TouchAreaGrid
+{
+	entity e, oldself, oldother;
+
+	oldself = self;
+	oldother = other;
+
+	for(e = findradius(0.5 * (self.absmin + self.absmax), 0.5 * vlen(self.absmax - self.absmin)); e; e = e.chain)
+	{
+		if(e.move_touch)
+		if(boxesoverlap(e.absmin, e.absmax, oldself.absmin, oldself.absmax))
+		{
+			self = e;
+			other = oldself;
+
+			trace_allsolid = FALSE;
+			trace_startsolid = FALSE;
+			trace_fraction = 1;
+			trace_inwater = FALSE;
+			trace_inopen = TRUE;
+			trace_endpos = e.origin;
+			trace_plane_normal = '0 0 1';
+			trace_plane_dist = 0;
+			trace_ent = oldself;
+
+			e.move_touch();
+		}
+	}
+
+	other = oldother;
+	self = oldself;
 }
 
 void _Movetype_LinkEdict(float touch_triggers) // SV_LinkEdict
 {
+	vector mi, ma;
+	if(self.solid == SOLID_BSP)
+	{
+		// TODO set the absolute bbox
+		mi = self.mins;
+		ma = self.maxs;
+	}
+	else
+	{
+		mi = self.mins;
+		ma = self.maxs;
+	}
+	mi = mi + self.origin;
+	ma = ma + self.origin;
+
+	if(self.move_flags & FL_ITEM)
+	{
+		mi_x -= 15;
+		mi_y -= 15;
+		mi_z -= 1;
+		ma_x += 15;
+		ma_y += 15;
+		ma_z += 1;
+	}
+	else
+	{
+		mi_x -= 1;
+		mi_y -= 1;
+		mi_z -= 1;
+		ma_x += 1;
+		ma_y += 1;
+		ma_z += 1;
+	}
+
+	self.absmin = mi;
+	self.absmax = ma;
+
+	if(touch_triggers)
+		_Movetype_LinkEdict_TouchAreaGrid();
 }
 
 float _Movetype_TestEntityPosition(vector ofs) // SV_TestEntityPosition
@@ -111,8 +201,9 @@ float _Movetype_PushEntity(vector push, float failonstartsolid) // SV_PushEntity
 
 	self.move_origin = trace_endpos;
 
-	if(self.solid >= SOLID_TRIGGER && trace_ent && (!(self.move_flags & FL_ONGROUND) || (self.move_groundentity != trace_ent)))
-		_Movetype_Impact(trace_ent);
+	if(trace_fraction < 1)
+		if(self.solid >= SOLID_TRIGGER && (!(self.move_flags & FL_ONGROUND) || (self.move_groundentity != trace_ent)))
+			_Movetype_Impact(trace_ent);
 
 	return trace_fraction;
 }
@@ -139,7 +230,10 @@ void _Movetype_Physics_Toss(float dt) // SV_Physics_Toss
 	if(self.move_movetype == MOVETYPE_BOUNCE || self.move_movetype == MOVETYPE_TOSS)
 	{
 		self.move_didgravity = TRUE;
-		self.move_velocity_z -= dt * self.gravity * getstatf(STAT_MOVEVARS_GRAVITY);
+		if(self.gravity)
+			self.move_velocity_z -= dt * self.gravity * getstatf(STAT_MOVEVARS_GRAVITY);
+		else
+			self.move_velocity_z -= dt * getstatf(STAT_MOVEVARS_GRAVITY);
 	}
 
 	self.move_angles = self.move_angles + self.move_avelocity * dt;
@@ -168,11 +262,15 @@ void _Movetype_Physics_Toss(float dt) // SV_Physics_Toss
 		}
 		else if(self.move_movetype == MOVETYPE_BOUNCE)
 		{
-			self.move_velocity = _Movetype_ClipVelocity(self.move_velocity, trace_plane_normal, 1.5);
+			float d, bouncefac, bouncestop;
 
-			float d;
+			bouncefac = self.move_bounce_factor;     if(!bouncefac)  bouncefac = 0.5;
+			bouncestop = self.move_bounce_stopspeed; if(!bouncestop) bouncestop = 60;
+
+			self.move_velocity = _Movetype_ClipVelocity(self.move_velocity, trace_plane_normal, 1 + bouncefac);
+
 			d = trace_plane_normal * self.move_velocity;
-			if(trace_plane_normal_z > 0.7 && d < 60 && d > -60)
+			if(trace_plane_normal_z > 0.7 && d < bouncestop && d > -bouncestop)
 			{
 				self.move_flags |= FL_ONGROUND;
 				self.move_groundentity = trace_ent;
@@ -269,7 +367,12 @@ void Movetype_Physics(float matchserver) // SV_Physics_Entity
 		// now continue the move from move_time to time
 		self.velocity = self.move_velocity;
 		if(self.move_didgravity)
-			self.velocity_z -= dt * self.gravity * getstatf(STAT_MOVEVARS_GRAVITY);
+		{
+			if(self.gravity)
+				self.velocity_z -= dt * self.gravity * getstatf(STAT_MOVEVARS_GRAVITY);
+			else
+				self.velocity_z -= dt * getstatf(STAT_MOVEVARS_GRAVITY);
+		}
 
 		self.angles = self.move_angles + dt * self.avelocity;
 
@@ -288,4 +391,7 @@ void Movetype_Physics(float matchserver) // SV_Physics_Entity
 		self.angles = self.move_angles;
 		self.origin = self.move_origin;
 	}
+
+	if(!wasfreed(self))
+		setorigin(self, self.origin);
 }

@@ -132,3 +132,6 @@ vector hsl_to_rgb(vector hsl);
 vector rgb_to_hsv(vector rgb);
 vector hsv_to_rgb(vector hsv);
 string rgb_to_hexcolor(vector rgb);
+
+float boxesoverlap(vector m1, vector m2, vector m3, vector m4);
+float boxinsidebox(vector smins, vector smaxs, vector bmins, vector bmaxs);
