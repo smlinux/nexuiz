@@ -71,7 +71,7 @@ void Ent_GibSplash()
 	mi = decompressShortVector(ReadShort());
 	ma = decompressShortVector(ReadShort());
 
-	isgentle = (type & 0x8000 || cvar("cl_gentle"))
+	isgentle = (type & 0x8000 || cvar("cl_gentle"));
 	type = type & 0x7FFF;
 
 
