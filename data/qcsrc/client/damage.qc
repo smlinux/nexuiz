@@ -50,15 +50,11 @@ void Ent_DamageInfo()
 
 	// TODO spawn particle effects and sounds based on hittype
 	
-	print("hit: ", ftos(hittype), "\n");
-
 	if(!DEATH_ISSPECIAL(hittype))
 	{
 		float hitwep, secondary;
 		hitwep = DEATH_WEAPONOFWEAPONDEATH(hittype);
 		secondary = hittype & HITTYPE_SECONDARY;
-
-		print("hit: ", ftos(hitwep), "\n");
 
 		switch(hitwep)
 		{
