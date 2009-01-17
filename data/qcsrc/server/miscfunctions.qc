@@ -1199,7 +1199,7 @@ float announce(entity player, string msg)
 	if(time > player.announcetime)
 	if(clienttype(player) == CLIENTTYPE_REAL)
 	{
-		player.announcetime = time + 1;
+		player.announcetime = time + 0.8;
 		play2(player, msg);
 		return TRUE;
 	}
