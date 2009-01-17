@@ -313,7 +313,6 @@ float default_weapon_alpha;
 .float() customizeentityforclient;
 .float cvar_cl_handicap;
 .float cvar_cl_playerdetailreduction;
-.float cvar_cl_nogibs;
 .float cvar_scr_centertime;
 .float cvar_cl_shownames;
 .string cvar_g_nexuizversion;

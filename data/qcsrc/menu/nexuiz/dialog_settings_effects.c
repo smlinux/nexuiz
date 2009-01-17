@@ -165,6 +165,6 @@ void fillNexuizEffectsSettingsTab(entity me)
 				e.yesValue = 3;
 
 	me.gotoRC(me, me.rows - 1, 0);
-		me.TD(me, 1, me.columns, makeNexuizCommandButton("Apply immediately", '0 0 0', "sendcvar cl_nogibs; r_restart", COMMANDBUTTON_APPLY));
+		me.TD(me, 1, me.columns, makeNexuizCommandButton("Apply immediately", '0 0 0', "r_restart", COMMANDBUTTON_APPLY));
 }
 #endif

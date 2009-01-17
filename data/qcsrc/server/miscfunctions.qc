@@ -533,7 +533,6 @@ void GetCvars(float f)
 		s = strcat1(argv(f));
 	GetCvars_handleFloat(s, f, autoswitch, "cl_autoswitch");
 	GetCvars_handleFloat(s, f, cvar_cl_playerdetailreduction, "cl_playerdetailreduction");
-	GetCvars_handleFloat(s, f, cvar_cl_nogibs, "cl_nogibs");
 	GetCvars_handleFloat(s, f, cvar_scr_centertime, "scr_centertime");
 	GetCvars_handleFloat(s, f, cvar_cl_shownames, "cl_shownames");
 	GetCvars_handleString(s, f, cvar_g_nexuizversion, "g_nexuizversion");
