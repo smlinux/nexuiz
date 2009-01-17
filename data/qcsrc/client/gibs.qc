@@ -135,11 +135,11 @@ void Ent_GibSplash()
 void GibSplash_Precache()
 {
 	precache_model("models/gibs/chunk.mdl");
-	precache_model("models/gibs/leg1.mdl");
-	precache_model("models/gibs/leg2.mdl");
-	precache_model("models/gibs/chest.mdl");
-	precache_model("models/gibs/smallchest.mdl");
-	precache_model("models/gibs/arm.mdl");
-	precache_model("models/gibs/bloodyskull.mdl");
-	precache_model("models/gibs/eye.mdl");
+	precache_model("models/gibs/leg1.md3");
+	precache_model("models/gibs/leg2.md3");
+	precache_model("models/gibs/chest.md3");
+	precache_model("models/gibs/smallchest.md3");
+	precache_model("models/gibs/arm.md3");
+	precache_model("models/gibs/bloodyskull.md3");
+	precache_model("models/gibs/eye.md3");
 }
