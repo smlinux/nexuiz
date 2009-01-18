@@ -58,8 +58,10 @@ void fillNexuizInputSettingsTab(entity me)
 		else if(cvar_type("joystick") & CVAR_TYPEFLAG_ENGINE)
 			me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "joystick", "Use joystick input"));
 	me.TR(me);
-	me.TR(me);
-		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "cl_movement", "Client-side movement prediction"));
+		if(cvar_type("vid_dgamouse") & CVAR_TYPEFLAG_ENGINE)
+			me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "vid_dgamouse", "Turn off OS mouse acceleration"));
+		else if(cvar_type("apple_mouse_noaccel") & CVAR_TYPEFLAG_ENGINE)
+			me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "apple_mouse_noaccel", "Turn off OS mouse acceleration"));
 	me.TR(me);
 		me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "con_closeontoggleconsole", "\"enter console\" also closes"));
 	me.TR(me);
@@ -69,10 +71,5 @@ void fillNexuizInputSettingsTab(entity me)
 			e.addValue(e, "Short", "1");
 			e.addValue(e, "Long", "2");
 			e.configureNexuizTextSliderValues(e);
-	me.TR(me);
-		if(cvar_type("vid_dgamouse") & CVAR_TYPEFLAG_ENGINE)
-			me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "vid_dgamouse", "Turn off OS mouse acceleration"));
-		else if(cvar_type("apple_mouse_noaccel") & CVAR_TYPEFLAG_ENGINE)
-			me.TD(me, 1, 3, e = makeNexuizCheckBox(0, "apple_mouse_noaccel", "Turn off OS mouse acceleration"));
 }
 #endif

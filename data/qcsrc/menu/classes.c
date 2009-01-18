@@ -28,6 +28,7 @@
 #include "nexuiz/dialog_settings_video.c"
 #include "nexuiz/dialog_settings_effects.c"
 #include "nexuiz/dialog_settings_audio.c"
+#include "nexuiz/dialog_settings_network.c"
 #include "nexuiz/dialog_settings_misc.c"
 #include "nexuiz/dialog_multiplayer.c"
 #include "nexuiz/dialog_multiplayer_playersetup.c"
