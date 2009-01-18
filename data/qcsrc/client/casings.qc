@@ -1,0 +1,107 @@
+void Casing_Draw()
+{
+	if(self.move_flags & FL_ONGROUND)
+	{
+		self.move_angles_x = 0;
+		self.move_angles_z = 0;
+		self.flags &~= FL_ONGROUND;
+	}
+
+	Movetype_Physics(FALSE);
+	
+	self.renderflags = 0;
+	self.alpha = bound(0, self.cnt - time, 1);
+
+	if(self.alpha == 0)
+		remove(self);
+	else
+		R_AddEntity(self);
+}
+
+float trace_networkentity;
+void Casing_Touch()
+{
+	if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
+	{
+		remove(self);
+		return;
+	}
+
+	if(trace_ent.solid == SOLID_BSP && !trace_networkentity)
+	{
+		if(vlen(self.velocity) > 50)
+		{
+			if(time >= self.nextthink)
+			{
+				string s;
+				float f;
+
+				f = floor(random() * 3) + 1;
+				switch(self.state)
+				{
+					case 1:
+						s = strcat("weapons/casings", ftos(f), ".wav");
+						break;
+					default:
+						s = strcat("weapons/brass", ftos(f), ".wav");
+						break;
+				}
+				sound (self, CHAN_PROJECTILE, s, VOL_BASE, ATTN_NORM);
+			}
+			self.nextthink = time + 0.2;
+		}
+	}
+}
+
+void Casing_Damage(float thisdmg, float hittype, vector org, vector thisforce)
+{
+	if(thisforce_z < 0)
+		thisforce_z = 0;
+	self.move_velocity = self.move_velocity + thisforce + '0 0 100';
+	self.move_flags &~= FL_ONGROUND;
+}
+
+void Ent_Casing()
+{
+	entity casing;
+
+	casing = spawn();
+	casing.state = ReadByte();
+	casing.origin_x = ReadCoord();
+	casing.origin_y = ReadCoord();
+	casing.origin_z = ReadCoord();
+	casing.velocity = decompressShortVector(ReadShort());
+	casing.angles_x = ReadByte() * 360 / 256;
+	casing.angles_y = ReadByte() * 360 / 256;
+	casing.angles_z = ReadByte() * 360 / 256;
+
+	casing.draw = Casing_Draw;
+	casing.move_origin = casing.origin;
+	casing.move_velocity = casing.velocity + 2 * randomvec();
+	casing.move_angles = casing.angles;
+	casing.move_avelocity = '0 250 0' + 100 * randomvec();
+	casing.move_movetype = MOVETYPE_BOUNCE;
+	casing.move_touch = Casing_Touch;
+	casing.move_time = time;
+	casing.event_damage = Casing_Damage;
+
+	switch(casing.state)
+	{
+		case 1:
+			setmodel(casing, "models/casing_shell.mdl");
+			casing.cnt = time + 30;
+			break;
+		default:
+			setmodel(casing, "models/casing_bronze.mdl");
+			casing.cnt = time + 10;
+			break;
+	}
+
+	setsize(casing, '0 0 -1', '0 0 -1');
+}
+
+void Casings_Precache()
+{
+	precache_model("models/casing_shell.mdl");
+	precache_model("models/casing_bronze.mdl");
+}
