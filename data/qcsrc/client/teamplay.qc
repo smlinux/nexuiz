@@ -26,7 +26,7 @@ float GetPlayerColor(float i)
 {
 	if not(playerslots[i].gotscores) // unconnected
 		return COLOR_SPECTATOR;
-	else if(getplayerkey(i, "frags") == "-666")
+	else if(stof(getplayerkey(i, "frags")) == FRAGS_SPECTATOR)
 		return COLOR_SPECTATOR;
 	else
 		return GetPlayerColorForce(i);

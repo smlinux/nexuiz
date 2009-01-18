@@ -39,7 +39,7 @@ void() order_menu_render =
 			frags = getplayerkey(i, "frags");
 			if(!frags || (i+1) == player_localentnum)
 				continue;
-			if(frags == "-666" || getplayerkey(i, "topcolor") != color)
+			if(frags == "-666" || getplayerkey(i, "topcolor") != color) // FIXME use GetPlayerTeam
 				continue;
 			++p;
 			if(p > (8*order_page))
@@ -75,7 +75,7 @@ float(float bInputType, float nPrimary, float nSecondary) order_menu_action =
 			frags = getplayerkey(i, "frags");
 			if(!frags || (i+1) == player_localentnum)
 				continue;
-			if(frags == "-666" || getplayerkey(i, "topcolor") != color)
+			if(frags == "-666" || getplayerkey(i, "topcolor") != color) // FIXME use GetPlayerTeam
 				continue;
 			++p;
 		}
@@ -89,7 +89,7 @@ float(float bInputType, float nPrimary, float nSecondary) order_menu_action =
 				frags = getplayerkey(i, "frags");
 				if(!frags || (i+1) == player_localentnum)
 					continue;
-				if(frags == "-666" || getplayerkey(i, "topcolor") != color)
+				if(frags == "-666" || getplayerkey(i, "topcolor") != color) // FIXME use GetPlayerTeam
 					continue;
 				++p;
 			}
@@ -104,7 +104,7 @@ float(float bInputType, float nPrimary, float nSecondary) order_menu_action =
 			frags = getplayerkey(i, "frags");
 			if(!frags || (i+1) == player_localentnum)
 				continue;
-			if(frags == "-666" || getplayerkey(i, "topcolor") != color)
+			if(frags == "-666" || getplayerkey(i, "topcolor") != color) // FIXME use GetPlayerTeam
 				continue;
 			++p;
 			if(p > (8*order_page))

@@ -489,7 +489,8 @@ void VoiceMessage(string type, string message);
 
 float independent_players;
 #define IS_INDEPENDENT_PLAYER(e) ((e).solid == SOLID_TRIGGER)
-#define MAKE_INDEPENDENT_PLAYER(e) ((e).solid = SOLID_TRIGGER)
+#define MAKE_INDEPENDENT_PLAYER(e) (((e).solid = SOLID_TRIGGER) + ((e).frags = FRAGS_PLAYER_NONSOLID))
+// we're using + here instead of , because fteqcc sucks
 
 string clientstuff;
 .float stat_sys_ticrate;

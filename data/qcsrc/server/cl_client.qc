@@ -508,12 +508,12 @@ void PutObserverInServer (void)
 	{
 		// Only if the player cannot play at all
 		if(PlayerScore_Add(self, SP_LMS_RANK, 0) == 666)
-			self.frags = -666;
+			self.frags = FRAGS_SPECTATOR;
 		else
-			self.frags = -667;
+			self.frags = FRAGS_SPECTATOR; // this was -667 before, is this okay?
 	}
 	else
-		self.frags = -666;
+		self.frags = FRAGS_SPECTATOR;
 }
 
 float RestrictSkin(float s)
@@ -654,6 +654,7 @@ void PutClientInServer (void)
 		self.movetype = MOVETYPE_WALK;
 		self.solid = SOLID_SLIDEBOX;
 		self.dphitcontentsmask = DPCONTENTS_SOLID | DPCONTENTS_BODY | DPCONTENTS_PLAYERCLIP;
+		self.frags = FRAGS_PLAYER;
 		if(independent_players)
 			MAKE_INDEPENDENT_PLAYER(self);
 		self.flags = FL_CLIENT;
@@ -770,7 +771,6 @@ void PutClientInServer (void)
 		if(self.killcount == -666) {
 			PlayerScore_Clear(self);
 			self.killcount = 0;
-			self.frags = 0;
 		}
 
 		self.cnt = WEP_LASER;
@@ -1293,7 +1293,7 @@ void ClientConnect (void)
 		if(PlayerScore_Add(self, SP_LMS_LIVES, LMS_NewPlayerLives()) <= 0)
 		{
 			PlayerScore_Add(self, SP_LMS_RANK, 666);
-			self.frags = -666; // FIXME do we still need this?
+			self.frags = FRAGS_SPECTATOR; // FIXME do we still need this?
 		}
 	}
 
