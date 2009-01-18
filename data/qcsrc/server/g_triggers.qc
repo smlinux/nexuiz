@@ -597,7 +597,6 @@ void spawnfunc_func_pointparticles()
 
 	self.effects = EF_NODEPTHTEST;
 	self.SendEntity = pointparticles_SendEntity;
-	self.SendFlags = 7;
 	if(!self.modelindex)
 	{
 		vector misave, masave;
@@ -982,7 +981,6 @@ void spawnfunc_misc_laser()
 
 	self.effects = EF_NODEPTHTEST;
 	self.SendEntity = laser_SendEntity;
-	self.SendFlags = 15;
 	setmodel(self, "null");
 	self.mangle = self.angles;
 

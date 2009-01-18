@@ -23,8 +23,16 @@ void Ent_DamageInfo()
 			thisdmg = vlen(self.origin - org) / rad;
 			if(thisdmg >= 1)
 				continue;
-			thisdmg = dmg + (edge - dmg) * thisdmg;
-			thisforce = vlen(force) * normalize(self.origin - org);
+			if(dmg)
+			{
+				thisdmg = dmg + (edge - dmg) * thisdmg;
+				thisforce = vlen(force) * (thisdmg / dmg) * normalize(self.origin - org);
+			}
+			else
+			{
+				thisdmg = 0;
+				thisforce = vlen(force) * normalize(self.origin - org);
+			}
 		}
 		else
 		{

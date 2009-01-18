@@ -1,6 +1,18 @@
+void SUB_RemoveOnNoImpact()
+{
+	if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
+		remove(self);
+}
+
 void Gib_Touch()
 {
 	// TODO maybe bounce of walls, make more gibs, etc.
+
+	if(trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT)
+	{
+		remove(self);
+		return;
+	}
 	
 	sound(self, CHAN_PAIN, strcat("misc/gib_splat0", ftos(floor(random() * 4 + 1)), ".wav"), VOL_BASE, ATTN_NORM);
 	pointparticles(particleeffectnum("blood"), self.origin + '0 0 1', '0 0 30', 10);
@@ -48,6 +60,8 @@ void TossGib (string mdlname, vector org, vector v, float destroyontouch)
 	gib.draw = Gib_Draw;
 	if(destroyontouch)
 		gib.move_touch = Gib_Touch;
+	else
+		gib.move_touch = SUB_RemoveOnNoImpact;
 
 	gib.move_origin = gib.origin = org;
 	gib.move_velocity = v + randomvec();
@@ -76,7 +90,6 @@ void Ent_GibSplash()
 
 	isgentle = (type & 0x80 || cvar("cl_gentle"));
 	type = type & 0x7F;
-
 
 	gibfactor = 1 - cvar("cl_nogibs");
 	if(gibfactor <= 0)

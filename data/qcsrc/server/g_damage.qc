@@ -956,7 +956,7 @@ float RadiusDamage (entity inflictor, entity attacker, float coredamage, float e
 		if(vlen(force) == 0)
 			force = '0 0 -1';
 		else
-			force = normalize(force) * forceintensity;
+			force = normalize(force);
 		Damage_DamageInfo(blastorigin, coredamage, edgedamage, rad, forceintensity * force, deathtype);
 	}
 

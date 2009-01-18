@@ -57,6 +57,7 @@ const float ENT_CLIENT_RADARLINK = 11; // flags [startorigin] [endorigin] [start
 const float ENT_CLIENT_PROJECTILE = 12;
 const float ENT_CLIENT_GIBSPLASH = 13;
 const float ENT_CLIENT_DAMAGEINFO = 14;
+const float ENT_CLIENT_CASING = 15;
 
 const float SPRITERULE_DEFAULT = 0;
 const float SPRITERULE_TEAMPLAY = 1;

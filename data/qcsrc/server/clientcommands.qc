@@ -36,23 +36,22 @@ void Nagger_Init()
 {
 	nagger = spawn();
 	Net_LinkEntity(nagger);
-	nagger.SendFlags = 128;
 	nagger.SendEntity = Nagger_SendEntity;
 }
 void Nagger_VoteChanged()
 {
 	if(nagger)
-		nagger.SendFlags = 128;
+		nagger.SendFlags |= 128;
 }
 void Nagger_VoteCountChanged()
 {
 	if(nagger)
-		nagger.SendFlags = 1;
+		nagger.SendFlags |= 1;
 }
 void Nagger_ReadyCounted()
 {
 	if(nagger)
-		nagger.SendFlags = 1;
+		nagger.SendFlags |= 1;
 }
 
 void ReadyCount();

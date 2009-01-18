@@ -136,6 +136,7 @@ void CSQC_Init(void)
 
 	Projectile_Precache();
 	GibSplash_Precache();
+	Casings_Precache();
 }
 
 // CSQC_Shutdown : Called every time the CSQC code is shutdown (changing maps, quitting, etc)
@@ -524,6 +525,8 @@ void(float bIsNewEntity) CSQC_Ent_Update =
 		Ent_GibSplash();
 	else if(self.enttype == ENT_CLIENT_DAMAGEINFO)
 		Ent_DamageInfo();
+	else if(self.enttype == ENT_CLIENT_CASING)
+		Ent_Casing();
 	else
 		error(strcat("unknown entity type in CSQC_Ent_Update: ", ftos(self.enttype), "\n"));
 	
