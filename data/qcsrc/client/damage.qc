@@ -1,53 +1,3 @@
-/*
-==================
-findbetterlocation
-
-Returns a point at least 12 units away from walls
-(useful for explosion animations, although the blast is performed where it really happened)
-Ripped from DPMod
-==================
-*/
-vector findbetterlocation (vector org, float mindist)
-{
-	vector loc, norm, norm2;
-	vector vec;
-	float c;
-	float h;
-
-	norm = '0 0 1';
-
-	vec = mindist * '1 0 0';
-	c = 0;
-	while (c < 6)
-	{
-		traceline (org, org + vec, MOVE_WORLDONLY, world);
-		vec = vec * -1;
-		if (trace_fraction < 1)
-		{
-			loc = trace_endpos;
-			norm2 = trace_plane_normal;
-			traceline (loc, loc + vec, MOVE_WORLDONLY, world);
-			if (trace_fraction >= 1)
-			{
-				org = loc + vec;
-				norm = norm2;
-			}
-		}
-		if (c & 1)
-		{
-			h = vec_y;
-			vec_y = vec_x;
-			vec_x = vec_z;
-			vec_z = h;
-		}
-		c = c + 1;
-	}
-
-	trace_plane_normal = norm;
-
-	return org;
-}
-
 void Ent_DamageInfo()
 {
 	float hittype, dmg, rad, edge, thisdmg;
@@ -102,7 +52,7 @@ void Ent_DamageInfo()
 	if(!DEATH_ISSPECIAL(hittype))
 	{
 		float hitwep, secondary, bounce, headshot;
-		vector org2;
+		vector org2, backoff;
 		float r;
 
 		hitwep = DEATH_WEAPONOFWEAPONDEATH(hittype);
@@ -111,28 +61,32 @@ void Ent_DamageInfo()
 		headshot = hittype & HITTYPE_HEADSHOT;
 		r = random();
 
+		traceline(org - normalize(force) * 16, org + normalize(force) * 16, MOVE_NOMONSTERS, world);
+		if(trace_fraction < 1)
+			backoff = trace_plane_normal;
+		else
+			backoff = -1 * normalize(force);
+
 		switch(hitwep)
 		{
 			case WEP_LASER:
-				org2 = findbetterlocation (org, 8);
-				pointparticles(particleeffectnum("laser_impact"), org2, trace_plane_normal * 1000, 1);
+				org2 = org + backoff * 8;
+				pointparticles(particleeffectnum("laser_impact"), org2, backoff * 1000, 1);
 				sound (self, CHAN_PROJECTILE, "weapons/laserimpact.wav", VOL_BASE, ATTN_NORM);
 				break;
 			case WEP_SHOTGUN:
-				org2 = findbetterlocation (org, 2);
-				pointparticles(particleeffectnum("shotgun_impact"), org2, trace_plane_normal * 1000, 1);
+				pointparticles(particleeffectnum("shotgun_impact"), org, backoff * 1000, 1);
 				break;
 			case WEP_UZI:
-				org2 = findbetterlocation (org, 2);
-				pointparticles(particleeffectnum("machinegun_impact"), org2, trace_plane_normal * 1000, 1);
+				pointparticles(particleeffectnum("machinegun_impact"), org, backoff * 1000, 1);
 				break;
 			case WEP_GRENADE_LAUNCHER:
-				org2 = findbetterlocation (org, 12);
+				org2 = org + backoff * 12;
 				pointparticles(particleeffectnum("grenade_explode"), org2, '0 0 0', 1);
 				sound (self, CHAN_PROJECTILE, "weapons/grenade_impact.wav", VOL_BASE, ATTN_NORM);
 				break;
 			case WEP_ELECTRO:
-				org2 = findbetterlocation (org, 8);
+				org2 = org + backoff * 8;
 				if(secondary)
 				{
 					sound (self, CHAN_PROJECTILE, "weapons/electro_impact.wav", VOL_BASE, ATTN_NORM);
@@ -169,7 +123,7 @@ void Ent_DamageInfo()
 				pointparticles(particleeffectnum("nex_impact"), org - normalize(force) * 6, '0 0 0', 1);
 				break;
 			case WEP_HAGAR:
-				org2 = findbetterlocation (org, 12);
+				org2 = org + backoff * 12;
 				if (r<0.15)
 					sound (self, CHAN_PROJECTILE, "weapons/hagexp1.wav", VOL_BASE, ATTN_NORM);
 				else if (r<0.7)
@@ -179,7 +133,7 @@ void Ent_DamageInfo()
 				pointparticles(particleeffectnum("hagar_explode"), org2, '0 0 0', 1);
 				break;
 			case WEP_ROCKET_LAUNCHER:
-				org2 = findbetterlocation (org, 16);
+				org2 = org + backoff * 16;
 				sound (self, CHAN_PROJECTILE, "weapons/rocket_impact.wav", VOL_BASE, ATTN_NORM);
 				pointparticles(particleeffectnum("rocket_explode"), org2, '0 0 0', 1);
 				break;
@@ -191,12 +145,12 @@ void Ent_DamageInfo()
 				pointparticles(particleeffectnum("nex_impact"), org - normalize(force) * 6, '0 0 0', 1);
 				break;
 			case WEP_HOOK:
-				org2 = findbetterlocation (org, 12);
+				org2 = org + backoff * 12;
 				sound (self, CHAN_PROJECTILE, "weapons/hookbomb_impact.wav", VOL_BASE, ATTN_NORM);
 				pointparticles(particleeffectnum("hookbomb_explode"), org2, '0 0 0', 1);
 				break;
 			case WEP_SEEKER:
-				org2 = findbetterlocation (org, 12);
+				org2 = org + backoff * 12;
 				if(secondary)
 				{
 					if (r<0.15)
@@ -236,13 +190,12 @@ void Ent_DamageInfo()
 				}
 				break;
 			case WEP_HLAC:
-				org2 = findbetterlocation (org, 12);
+				org2 = org + backoff * 12;
 				sound (self, CHAN_PROJECTILE, "weapons/laserimpact.wav", VOL_BASE, ATTN_NORM);
-				pointparticles(particleeffectnum("laser_impact"), org2, trace_plane_normal * 1000, 1);
+				pointparticles(particleeffectnum("laser_impact"), org2, backoff * 1000, 1);
 				break;
 			case WEP_CAMPINGRIFLE:
-				org2 = findbetterlocation (org, 2);
-				pointparticles(particleeffectnum("machinegun_impact"), org, trace_plane_normal * 1000, 1);
+				pointparticles(particleeffectnum("machinegun_impact"), org, backoff * 1000, 1);
 				break;
 			default:
 				dprint("Unhandled damage of weapon ", ftos(hitwep), "\n");

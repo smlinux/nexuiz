@@ -120,12 +120,11 @@ void W_BallisticBullet_Hit (void)
 
 	f = pow(bound(0, vlen(self.velocity) / vlen(self.oldvelocity), 1), 2); // energy multiplier
 
-	Damage_DamageInfo(self.origin, self.dmg * f, 0, 0, self.dmg_force * normalize(self.velocity) * f, self.projectiledeathtype);
+	if(other.solid == SOLID_BSP)
+		Damage_DamageInfo(self.origin, self.dmg * f, 0, 0, self.dmg_force * normalize(self.velocity) * f, self.projectiledeathtype);
 
 	if(other && other != self.enemy)
 	{
-		self.enemy = other; // don't hit the same player twice with the same bullet
-
 		headshot = 0;
 		yoda = 0;
 		damage_headshotbonus = self.dmg_edge;
@@ -144,6 +143,8 @@ void W_BallisticBullet_Hit (void)
 
 		//sound (self, CHAN_PROJECTILE, "weapons/electro_impact.wav", VOL_BASE, ATTN_NORM);
 	}
+
+	self.enemy = other; // don't hit the same player twice with the same bullet
 }
 
 .void(void) W_BallisticBullet_LeaveSolid_think_save;
@@ -163,9 +164,12 @@ void W_BallisticBullet_LeaveSolid_think()
 	self.flags &~= FL_ONGROUND;
 	self.effects &~= EF_NODRAW;
 
-	float f;
-	f = pow(bound(0, vlen(self.velocity) / vlen(self.oldvelocity), 1), 2); // energy multiplier
-	Damage_DamageInfo(self.origin, 0, 0, 0, self.dmg_force * normalize(self.velocity) * f, self.projectiledeathtype);
+	if(self.enemy.solid == SOLID_BSP)
+	{
+		float f;
+		f = pow(bound(0, vlen(self.velocity) / vlen(self.oldvelocity), 1), 2); // energy multiplier
+		Damage_DamageInfo(self.origin, 0, 0, 0, self.dmg_force * normalize(self.velocity) * f, self.projectiledeathtype);
+	}
 	
 	UpdateCSQCProjectile(self);
 }
