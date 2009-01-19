@@ -24,8 +24,6 @@ void Damage_DamageInfo(vector org, float coredamage, float edgedamage, float rad
 
 	entity e;
 
-	org = findbetterlocation(org, 1);
-
 	e = spawn();
 	e.classname = "damageinfo";
 	setorigin(e, org);
