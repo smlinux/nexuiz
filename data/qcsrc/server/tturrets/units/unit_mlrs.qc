@@ -45,7 +45,7 @@ void turret_mlrs_attack()
     missile.solid              = SOLID_BBOX;
     missile.enemy              = self.enemy;
 
-	CSQCProjectile(self, TRUE, PROJECTILE_ROCKET);
+	CSQCProjectile(missile, TRUE, PROJECTILE_ROCKET);
 
     te_explosion (missile.origin);
 
