@@ -142,8 +142,6 @@ void Seeker_Missile_Animate()
 	{
 		self.think           = Seeker_Missile_Think;
 		self.nextthink       = time + cvar("g_balance_seeker_missile_activate_delay");
-		self.effects         = EF_LOWPRECISION | EF_NOSHADOW;
-		self.modelflags      = MF_ROCKET;
 
 		if (cvar("g_balance_seeker_guided_proxy"))
 			self.movetype    = MOVETYPE_BOUNCEMISSILE;
@@ -183,7 +181,6 @@ void Seeker_Fire_Missile(vector f_org)
 	missile.cnt             = time + cvar("g_balance_seeker_missile_lifetime");
 	missile.enemy           = self.enemy;
 	missile.switchweapon           = cvar("g_balance_seeker_missile_speed");
-	missile.effects         = EF_LOWPRECISION | EF_NOSHADOW;
 	missile.solid           = SOLID_BBOX;
 	missile.scale           = 2;
 	missile.takedamage          = DAMAGE_YES;
@@ -192,7 +189,7 @@ void Seeker_Fire_Missile(vector f_org)
 	missile.projectiledeathtype = WEP_SEEKER;
 
 	setorigin (missile, w_shotorg);
-	setmodel  (missile, "models/tagrocket.md3");
+	setmodel  (missile, "null");
 	setsize (missile, '-2 -2 -2', '2 2 2');
 
 
@@ -336,13 +333,10 @@ void Seeker_Fire_Tag()
 	missile.event_damage    = Seeker_Tag_Explode;
 	missile.health          = 5;
 
-	setmodel (missile, "models/laser.mdl"); // TODO make this seeker specific
+	setmodel (missile, "null");
 	setorigin (missile, w_shotorg);
 	setsize (missile, '0 0 0', '0 0 0');
 
-	missile.effects     = EF_FULLBRIGHT | EF_NOSHADOW | EF_LOWPRECISION;
-	missile.modelflags  = MF_TRACER3;
-	//sound (missile, CHAN_PAIN, "weapons/tag_rocket_fly.wav", VOL_BASE, ATTN_NORM); // csqc
 	missile.flags       = FL_PROJECTILE;
 
 	missile.velocity    = w_shotdir  * cvar("g_balance_seeker_tag_speed");
@@ -351,6 +345,7 @@ void Seeker_Fire_Tag()
 	missile.angles = vectoangles (missile.velocity);
 
 	CSQCProjectile(missile, TRUE, PROJECTILE_TAG);
+	missile.effects = EF_NODEPTHTEST;
 }
 
 
@@ -413,11 +408,10 @@ void Seeker_Fire_Flac()
 	missile.scale = 0.4; // BUG: the model is too big
 	missile.projectiledeathtype = WEP_SEEKER;
 	setorigin (missile, w_shotorg);
-	setmodel (missile, "models/hagarmissile.mdl"); // precision set below
+	setmodel (missile, "null"); // precision set below
 	setsize (missile, '0 0 0', '0 0 0');
 	missile.projectiledeathtype = WEP_SEEKER | HITTYPE_SECONDARY;
 
-	missile.effects = EF_LOWPRECISION;
 	missile.modelflags = MF_TRACER3;
 
 	missile.movetype = MOVETYPE_FLY;
@@ -461,25 +455,12 @@ float w_seeker(float req)
 	}
 	else if (req == WR_PRECACHE)
 	{
-		precache_model ("models/hagarmissile.mdl");
-		precache_model ("models/tagrocket.md3");
 		precache_model ("models/weapons/g_seeker.md3");
 		precache_model ("models/weapons/v_seeker.md3");
 		precache_model ("models/weapons/w_seeker.zym");
 		precache_sound ("weapons/tag_fire.wav");
-		precache_sound ("weapons/tag_impact.wav");
-		precache_sound ("weapons/tagexp1.wav");
-		precache_sound ("weapons/tagexp2.wav");
-		precache_sound ("weapons/tagexp3.wav");
-		precache_sound ("weapons/tag_rocket_fly.wav");
 		precache_sound ("weapons/flac_fire.wav");
-		precache_sound ("weapons/flacexp1.wav");
-		precache_sound ("weapons/flacexp2.wav");
-		precache_sound ("weapons/flacexp3.wav");
 		precache_sound ("weapons/seeker_fire.wav");
-		precache_sound ("weapons/seekerexp1.wav");
-		precache_sound ("weapons/seekerexp2.wav");
-		precache_sound ("weapons/seekerexp3.wav");
 	}
 	else if (req == WR_SETUP)
 		weapon_setup(WEP_SEEKER);

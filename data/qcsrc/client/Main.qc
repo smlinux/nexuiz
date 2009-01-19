@@ -137,6 +137,7 @@ void CSQC_Init(void)
 	Projectile_Precache();
 	GibSplash_Precache();
 	Casings_Precache();
+	DamageInfo_Precache();
 }
 
 // CSQC_Shutdown : Called every time the CSQC code is shutdown (changing maps, quitting, etc)

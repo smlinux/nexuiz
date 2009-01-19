@@ -274,4 +274,8 @@ void Projectile_Precache()
 	precache_model("models/grenademodel.md3");
 	precache_model("models/hagarmissile.mdl");
 	precache_model("models/hagarmissile.mdl");
+
+	precache_sound ("weapons/rocket_fly.wav");
+	precache_sound ("weapons/electro_fly.wav");
+	precache_sound ("weapons/tag_rocket_fly.wav");
 }

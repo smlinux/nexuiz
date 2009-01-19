@@ -1325,20 +1325,6 @@ void precache()
 
 	// gore and miscellaneous sounds
 	//precache_sound ("misc/h2ohit.wav");
-	precache_model ("models/gibs/bloodyskull.md3");
-	precache_model ("models/gibs/chunk.mdl");
-	precache_model ("models/gibs/eye.md3");
-	precache_model ("models/gibs/gib1.md3");
-	precache_model ("models/gibs/gib2.md3");
-	precache_model ("models/gibs/gib3.md3");
-	precache_model ("models/gibs/gib4.md3");
-	precache_model ("models/gibs/gib5.md3");
-	precache_model ("models/gibs/gib6.md3");
-	precache_model ("models/gibs/smallchest.md3");
-	precache_model ("models/gibs/chest.md3");
-	precache_model ("models/gibs/arm.md3");
-	precache_model ("models/gibs/leg1.md3");
-	precache_model ("models/gibs/leg2.md3");
 	precache_model ("models/hook.md3");
 	precache_sound ("misc/armorimpact.wav");
 	precache_sound ("misc/bodyimpact1.wav");

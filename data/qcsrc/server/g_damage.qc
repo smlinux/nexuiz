@@ -38,6 +38,7 @@ void Damage_DamageInfo(vector org, float coredamage, float edgedamage, float rad
 	e.dmg_radius = rad;
 	e.dmg_force = vlen(force);
 	e.velocity = force;
+	e.effects = EF_NODEPTHTEST; // needs to be, sorry
 
 	e.oldorigin_x = compressShortVector(e.velocity);
 

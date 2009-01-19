@@ -170,4 +170,10 @@ void GibSplash_Precache()
 	precache_model("models/gibs/arm.md3");
 	precache_model("models/gibs/bloodyskull.md3");
 	precache_model("models/gibs/eye.md3");
+
+	precache_sound ("misc/gib.wav");
+    precache_sound ("misc/gib_splat01.wav");
+    precache_sound ("misc/gib_splat02.wav");
+    precache_sound ("misc/gib_splat03.wav");
+    precache_sound ("misc/gib_splat04.wav");
 }

@@ -221,7 +221,7 @@ void W_Rocket_Attack (void)
 	missile.movetype = MOVETYPE_FLY;
 	missile.solid = SOLID_BBOX;
 	missile.projectiledeathtype = WEP_ROCKET_LAUNCHER;
-	setmodel (missile, "models/rocket.md3"); // precision set below
+	setmodel (missile, "null"); // precision set below
 	setsize (missile, '-3 -3 -3', '3 3 3'); // give it some size so it can be shot
 
 	setorigin (missile, w_shotorg - v_forward * 3); // move it back so it hits the wall at the right point
@@ -236,11 +236,10 @@ void W_Rocket_Attack (void)
 	missile.think = W_Rocket_Think;
 	missile.nextthink = time;
 	missile.cnt = time + cvar("g_balance_rocketlauncher_lifetime");
-	missile.effects = EF_LOWPRECISION;
-	//sound (missile, CHAN_PAIN, "weapons/rocket_fly.wav", VOL_BASE, ATTN_NORM);
 	missile.flags = FL_PROJECTILE;
 
 	CSQCProjectile(missile, cvar("g_balance_rocketlauncher_speedaccel") == 0 && cvar("g_laserguided_missiles") == 0, PROJECTILE_ROCKET);
+	missile.effects |= EF_NODEPTHTEST; // because of fly sound
 
 	// muzzle flash for 1st person view
 	flash = spawn ();
@@ -434,14 +433,11 @@ float w_rlauncher(float req)
 	else if (req == WR_PRECACHE)
 	{
 		precache_model ("models/flash.md3");
-		precache_model ("models/rocket.md3");
 		precache_model ("models/weapons/g_rl.md3");
 		precache_model ("models/weapons/v_rl.md3");
 		precache_model ("models/weapons/w_rl.zym");
 		precache_sound ("weapons/rocket_det.wav");
 		precache_sound ("weapons/rocket_fire.wav");
-		precache_sound ("weapons/rocket_fly.wav");
-		precache_sound ("weapons/rocket_impact.wav");
 		if (g_laserguided_missile)
 		{
 			precache_model ("models/laser_dot.mdl"); // rocket launcher

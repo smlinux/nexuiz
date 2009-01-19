@@ -211,3 +211,19 @@ void Ent_DamageInfo()
 		}
 	}
 }
+
+void DamageInfo_Precache()
+{
+	precache_sound ("weapons/rocket_impact.wav");
+	precache_sound ("weapons/electro_impact.wav");
+	precache_sound ("weapons/tag_impact.wav");
+	precache_sound ("weapons/tagexp1.wav");
+	precache_sound ("weapons/tagexp2.wav");
+	precache_sound ("weapons/tagexp3.wav");
+	precache_sound ("weapons/flacexp1.wav");
+	precache_sound ("weapons/flacexp2.wav");
+	precache_sound ("weapons/flacexp3.wav");
+	precache_sound ("weapons/seekerexp1.wav");
+	precache_sound ("weapons/seekerexp2.wav");
+	precache_sound ("weapons/seekerexp3.wav");
+}
