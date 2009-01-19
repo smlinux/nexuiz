@@ -86,7 +86,7 @@ void W_Crylink_Attack (void)
 		proj.projectiledeathtype = WEP_CRYLINK;
 		//proj.gravity = 0.001;
 
-		setmodel (proj, "models/plasmatrail.mdl"); // precision set below
+		setmodel (proj, "null"); // precision set below
 		setsize (proj, '0 0 0', '0 0 0');
 		setorigin (proj, w_shotorg);
 
@@ -118,7 +118,6 @@ void W_Crylink_Attack (void)
 
 		//proj.glow_size = 20;
 
-		proj.effects = EF_LOWPRECISION;
 		proj.flags = FL_PROJECTILE;
 
 		CSQCProjectile(proj, TRUE, PROJECTILE_CRYLINK);
@@ -152,7 +151,7 @@ void W_Crylink_Attack2 (void)
 		proj.projectiledeathtype = WEP_CRYLINK | HITTYPE_SECONDARY;
 		//proj.gravity = 0.001;
 
-		setmodel (proj, "models/plasmatrail.mdl"); // precision set below
+		setmodel (proj, "null"); // precision set below
 		setsize (proj, '0 0 0', '0 0 0');
 		setorigin (proj, w_shotorg);
 
@@ -170,7 +169,6 @@ void W_Crylink_Attack2 (void)
 
 		//proj.glow_size = 20;
 
-		proj.effects = EF_LOWPRECISION;
 		proj.flags = FL_PROJECTILE;
 
 		CSQCProjectile(proj, TRUE, PROJECTILE_CRYLINK);
@@ -230,15 +228,11 @@ float w_crylink(float req)
 	}
 	else if (req == WR_PRECACHE)
 	{
-		precache_model ("models/plasma.mdl");
-		precache_model ("models/plasmatrail.mdl");
 		precache_model ("models/weapons/g_crylink.md3");
 		precache_model ("models/weapons/v_crylink.md3");
 		precache_model ("models/weapons/w_crylink.zym");
 		precache_sound ("weapons/crylink_fire.wav");
 		precache_sound ("weapons/crylink_fire2.wav");
-		precache_sound ("weapons/crylink_impact.wav");
-		precache_sound ("weapons/crylink_impact2.wav");
 	}
 	else if (req == WR_SETUP)
 		weapon_setup(WEP_CRYLINK);

@@ -412,8 +412,6 @@ void Seeker_Fire_Flac()
 	setsize (missile, '0 0 0', '0 0 0');
 	missile.projectiledeathtype = WEP_SEEKER | HITTYPE_SECONDARY;
 
-	missile.modelflags = MF_TRACER3;
-
 	missile.movetype = MOVETYPE_FLY;
 	w_shotdir = w_shotdir + '0 0 0.3';
 	missile.velocity    = (w_shotdir  + randomvec() * cvar("g_balance_seeker_flac_spread")) * cvar("g_balance_seeker_flac_speed");

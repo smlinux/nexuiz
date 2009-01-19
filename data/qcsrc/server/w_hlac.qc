@@ -69,7 +69,6 @@ void W_HLAC_Attack (void)
 
     missile.nextthink = time + cvar("g_balance_hlac_primary_lifetime");
 
-	missile.effects = EF_LOWPRECISION;
 	missile.flags = FL_PROJECTILE;
 	missile.projectiledeathtype = WEP_HLAC;
 
@@ -115,7 +114,6 @@ void W_HLAC_Attack2f (void)
 
     missile.nextthink = time + cvar("g_balance_hlac_secondary_lifetime");
 
-	missile.effects = EF_LOWPRECISION;
 	missile.flags = FL_PROJECTILE;
 	missile.projectiledeathtype = WEP_HLAC | HITTYPE_SECONDARY;
 
@@ -202,15 +200,10 @@ float w_hlac(float req)
 	}
 	else if (req == WR_PRECACHE)
 	{
-	    precache_sound ("weapons/laserimpact.wav");
-        precache_sound ("weapons/lasergun_fire.wav");
-
         precache_model ("models/weapons/g_hlac.md3");
 		precache_model ("models/weapons/v_hlac.md3");
 		precache_model ("models/weapons/w_hlac.zym");
 		precache_sound ("weapons/lasergun_fire.wav");
-
-		precache_model ("models/hlac_bullet.md3");
 
 	}
 	else if (req == WR_SETUP)

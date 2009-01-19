@@ -168,10 +168,9 @@ void W_Porto_Attack (void)
 	gren.bot_dodgerating = 200;
 	gren.movetype = MOVETYPE_BOUNCEMISSILE;
 	gren.solid = SOLID_BBOX;
-	gren.effects = EF_LOWPRECISION | EF_RED | EF_ADDITIVE;
+	gren.effects = EF_RED;
 	gren.scale = 4;
-	gren.modelflags = MF_TRACER;
-	setmodel(gren, "models/grenademodel.md3"); // precision set above
+	setmodel(gren, "null"); // precision set above
 	setsize(gren, '0 0 0', '0 0 0');
 	setorigin(gren, w_shotorg);
 
@@ -261,7 +260,6 @@ float w_porto(float req)
 	}
 	else if (req == WR_PRECACHE)
 	{
-		precache_model ("models/grenademodel.md3");
 		precache_model ("models/weapons/g_porto.md3");
 		precache_model ("models/weapons/v_porto.md3");
 		precache_model ("models/weapons/w_porto.zym");

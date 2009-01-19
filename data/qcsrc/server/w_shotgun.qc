@@ -122,22 +122,11 @@ float w_shotgun(float req)
 	else if (req == WR_PRECACHE)
 	{
 		precache_model ("models/uziflash.md3");
-		precache_model ("models/tracer.mdl");
 		precache_model ("models/weapons/g_shotgun.md3");
 		precache_model ("models/weapons/v_shotgun.md3");
 		precache_model ("models/weapons/w_shotgun.zym");
 		precache_sound ("misc/itempickup.wav");
-		precache_sound ("weapons/ric1.wav");
-		precache_sound ("weapons/ric2.wav");
-		precache_sound ("weapons/ric3.wav");
 		precache_sound ("weapons/shotgun_fire.wav");
-		if (cvar("g_casings") >= 1)
-		{
-			precache_sound ("weapons/casings1.wav");
-			precache_sound ("weapons/casings2.wav");
-			precache_sound ("weapons/casings3.wav");
-			precache_model ("models/casing_shell.mdl");
-		}
 	}
 	else if (req == WR_SETUP)
 		weapon_setup(WEP_SHOTGUN);

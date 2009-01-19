@@ -43,7 +43,7 @@ void W_Laser_Attack (float issecondary)
 	if(issecondary)
 		missile.projectiledeathtype |= HITTYPE_SECONDARY;
 
-	setmodel (missile, "models/laser.mdl"); // precision set below
+	setmodel (missile, "null"); // precision set below
 	setsize (missile, '0 0 0', '0 0 0');
 	setorigin (missile, w_shotorg);
 
@@ -62,7 +62,6 @@ void W_Laser_Attack (float issecondary)
 	else
 		missile.nextthink = time + cvar("g_balance_laser_primary_lifetime");
 
-	missile.effects = EF_LOWPRECISION;
 	missile.flags = FL_PROJECTILE;
 
 	CSQCProjectile(missile, TRUE, PROJECTILE_LASER);
@@ -113,11 +112,9 @@ float w_laser(float req)
 	}
 	else if (req == WR_PRECACHE)
 	{
-		precache_model ("models/laser.mdl");
 		precache_model ("models/weapons/v_laser.md3");
 		precache_model ("models/weapons/w_laser.zym");
 		precache_sound ("weapons/lasergun_fire.wav");
-		precache_sound ("weapons/laserimpact.wav");
 	}
 	else if (req == WR_SETUP)
 		weapon_setup(WEP_LASER);

@@ -219,9 +219,11 @@ void Ent_Projectile()
 				break;
 			case PROJECTILE_PORTO_RED:
 				self.colormod = '2 1 1';
+				self.alpha = 0.5;
 				break;
 			case PROJECTILE_PORTO_BLUE:
 				self.colormod = '1 1 2';
+				self.alpha = 0.5;
 				break;
 			case PROJECTILE_HAGAR_BOUNCING:
 				self.move_movetype = MOVETYPE_BOUNCE;
@@ -256,26 +258,16 @@ void Ent_Projectile()
 void Projectile_Precache()
 {
 	precache_model("models/ebomb.mdl");
-	precache_model("models/rocket.md3");
-	precache_model("models/laser.mdl");
-	precache_model("models/tracer.mdl");
-	precache_model("models/tracer.mdl");
-	precache_model("models/plasmatrail.mdl");
 	precache_model("models/elaser.mdl");
 	precache_model("models/grenademodel.md3");
-	precache_model("models/grenademodel.md3");
+	precache_model("models/hagarmissile.mdl");
+	precache_model("models/hlac_bullet.md3");
 	precache_model("models/laser.mdl");
-	precache_model("models/hlac_bullet.md3");
-	precache_model("models/hlac_bullet.md3");
+	precache_model("models/plasmatrail.mdl");
+	precache_model("models/rocket.md3");
 	precache_model("models/tagrocket.md3");
-	precache_model("models/hagarmissile.mdl");
-	precache_model("models/grenademodel.md3");
-	precache_model("models/grenademodel.md3");
-	precache_model("models/grenademodel.md3");
-	precache_model("models/hagarmissile.mdl");
-	precache_model("models/hagarmissile.mdl");
-
-	precache_sound ("weapons/rocket_fly.wav");
-	precache_sound ("weapons/electro_fly.wav");
-	precache_sound ("weapons/tag_rocket_fly.wav");
+	precache_model("models/tracer.mdl");
+	precache_sound("weapons/electro_fly.wav");
+	precache_sound("weapons/rocket_fly.wav");
+	precache_sound("weapons/tag_rocket_fly.wav");
 }

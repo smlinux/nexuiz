@@ -135,22 +135,11 @@ float w_campingrifle(float req)
 	}
 	else if (req == WR_PRECACHE)
 	{		
-		precache_model ("models/tracer.mdl");
 		precache_model ("models/weapons/g_campingrifle.md3");
 		precache_model ("models/weapons/v_campingrifle.md3");
 		precache_model ("models/weapons/w_campingrifle.zym");
 		precache_sound ("weapons/campingrifle_reload.wav");
-		precache_sound ("weapons/ric1.wav");
-		precache_sound ("weapons/ric2.wav");
-		precache_sound ("weapons/ric3.wav");
 		precache_sound ("weapons/campingrifle_fire.wav");
-		if (cvar("g_casings") >= 2)
-		{
-			precache_sound ("weapons/brass1.wav");
-			precache_sound ("weapons/brass2.wav");
-			precache_sound ("weapons/brass3.wav");
-			precache_model ("models/casing_bronze.mdl");
-		}
 	}
 	else if (req == WR_SETUP)
 	{

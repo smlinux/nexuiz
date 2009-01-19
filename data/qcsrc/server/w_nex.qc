@@ -47,7 +47,6 @@ float w_nex(float req)
 		precache_model ("models/weapons/v_nex.md3");
 		precache_model ("models/weapons/w_nex.zym");
 		precache_sound ("weapons/nexfire.wav");
-		precache_sound ("weapons/neximpact.wav");
 	}
 	else if (req == WR_SETUP)
 		weapon_setup(WEP_NEX);

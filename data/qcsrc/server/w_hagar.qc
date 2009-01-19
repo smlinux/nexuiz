@@ -69,14 +69,12 @@ void W_Hagar_Attack (void)
 	missile.scale = 0.4; // BUG: the model is too big
 	missile.projectiledeathtype = WEP_HAGAR;
 	setorigin (missile, w_shotorg);
-	setmodel (missile, "models/hagarmissile.mdl"); // precision set below
+	setmodel (missile, "null"); // precision set below
 	setsize (missile, '0 0 0', '0 0 0');
 	//missile.takedamage = DAMAGE_YES;
 	//missile.damageforcescale = 4;
 	//missile.health = 10;
 	//missile.event_damage = W_Hagar_Damage;
-	missile.effects = EF_LOWPRECISION;
-	missile.modelflags = MF_GRENADE;
 
 	missile.movetype = MOVETYPE_FLY;
 	missile.velocity = (w_shotdir + randomvec() * cvar("g_balance_hagar_primary_spread")) * cvar("g_balance_hagar_primary_speed");
@@ -113,14 +111,12 @@ void W_Hagar_Attack2 (void)
 	missile.scale = 0.4; // BUG: the model is too big
 	missile.projectiledeathtype = WEP_HAGAR | HITTYPE_SECONDARY;
 	setorigin (missile, w_shotorg);
-	setmodel (missile, "models/hagarmissile.mdl"); // precision set below
+	setmodel (missile, "null"); // precision set below
 	setsize (missile, '0 0 0', '0 0 0');
 	//missile.takedamage = DAMAGE_YES;
 	//missile.damageforcescale = 4;
 	//missile.health = 10;
 	//missile.event_damage = W_Hagar_Damage;
-	missile.effects = EF_LOWPRECISION;
-	missile.modelflags = MF_GRENADE;
 
 	missile.movetype = MOVETYPE_BOUNCEMISSILE;
 	missile.velocity = (w_shotdir + randomvec() * cvar("g_balance_hagar_secondary_spread")) * cvar("g_balance_hagar_secondary_speed");
@@ -165,14 +161,10 @@ float w_hagar(float req)
 	}
 	else if (req == WR_PRECACHE)
 	{
-		precache_model ("models/hagarmissile.mdl");
 		precache_model ("models/weapons/g_hagar.md3");
 		precache_model ("models/weapons/v_hagar.md3");
 		precache_model ("models/weapons/w_hagar.zym");
 		precache_sound ("weapons/hagar_fire.wav");
-		precache_sound ("weapons/hagexp1.wav");
-		precache_sound ("weapons/hagexp2.wav");
-		precache_sound ("weapons/hagexp3.wav");
 	}
 	else if (req == WR_SETUP)
 		weapon_setup(WEP_HAGAR);

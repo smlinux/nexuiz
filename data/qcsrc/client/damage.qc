@@ -214,16 +214,29 @@ void Ent_DamageInfo()
 
 void DamageInfo_Precache()
 {
-	precache_sound ("weapons/rocket_impact.wav");
-	precache_sound ("weapons/electro_impact.wav");
-	precache_sound ("weapons/tag_impact.wav");
-	precache_sound ("weapons/tagexp1.wav");
-	precache_sound ("weapons/tagexp2.wav");
-	precache_sound ("weapons/tagexp3.wav");
-	precache_sound ("weapons/flacexp1.wav");
-	precache_sound ("weapons/flacexp2.wav");
-	precache_sound ("weapons/flacexp3.wav");
-	precache_sound ("weapons/seekerexp1.wav");
-	precache_sound ("weapons/seekerexp2.wav");
-	precache_sound ("weapons/seekerexp3.wav");
+	precache_sound("weapons/crylink_impact2.wav");
+	precache_sound("weapons/crylink_impact.wav");
+	precache_sound("weapons/electro_impact.wav");
+	precache_sound("weapons/flacexp1.wav");
+	precache_sound("weapons/flacexp2.wav");
+	precache_sound("weapons/flacexp3.wav");
+	precache_sound("weapons/grenade_impact.wav");
+	precache_sound("weapons/hagexp1.wav");
+	precache_sound("weapons/hagexp2.wav");
+	precache_sound("weapons/hagexp3.wav");
+	precache_sound("weapons/hookbomb_impact.wav");
+	precache_sound("weapons/laserimpact.wav");
+	precache_sound("weapons/neximpact.wav");
+	precache_sound("weapons/rocket_impact.wav");
+	precache_sound("weapons/seekerexp1.wav");
+	precache_sound("weapons/seekerexp2.wav");
+	precache_sound("weapons/seekerexp3.wav");
+	precache_sound("weapons/tagexp1.wav");
+	precache_sound("weapons/tagexp2.wav");
+	precache_sound("weapons/tagexp3.wav");
+	precache_sound("weapons/tag_impact.wav");
+
+	// precache_sound ("weapons/ric1.wav"); // not used by anything
+	// precache_sound ("weapons/ric2.wav"); // not used by anything
+	// precache_sound ("weapons/ric3.wav"); // not used by anything
 }

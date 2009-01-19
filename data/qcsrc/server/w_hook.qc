@@ -68,10 +68,8 @@ void W_Hook_Attack2()
 	gren.bot_dodgerating = cvar("g_balance_hook_secondary_damage");
 	gren.movetype = MOVETYPE_TOSS;
 	gren.solid = SOLID_BBOX;
-	gren.effects = EF_LOWPRECISION;
-	gren.modelflags = MF_TRACER2;
 	gren.projectiledeathtype = WEP_HOOK | HITTYPE_SECONDARY;
-	setmodel(gren, "models/grenademodel.md3"); // precision set above // FIXME replace
+	setmodel(gren, "null"); // precision set above // FIXME replace
 	setsize(gren, '0 0 0', '0 0 0');
 	setorigin(gren, w_shotorg);
 
@@ -207,10 +205,9 @@ float w_hook(float req)
 		precache_model ("models/weapons/g_hookgun.md3");
 		precache_model ("models/weapons/v_hookgun.md3");
 		precache_model ("models/weapons/w_hookgun.zym");
+		precache_sound ("weapons/hook_impact.wav"); // done by g_hook.qc
 		precache_sound ("weapons/hook_fire.wav");
-		precache_sound ("weapons/hook_impact.wav");
 		precache_sound ("weapons/hookbomb_fire.wav");
-		precache_sound ("weapons/hookbomb_impact.wav");
 	}
 	else if (req == WR_SETUP)
 	{
