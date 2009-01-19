@@ -57,6 +57,7 @@ void turret_hellion_attack()
     te_explosion (missile.origin);
 
 	CSQCProjectile(missile, FALSE, PROJECTILE_ROCKET);
+	missile.effects |= EF_NODEPTHTEST; // projectile has a fly sound
 
     // switch tubes
     self.tur_shotorg_y = self.tur_shotorg_y * -1;

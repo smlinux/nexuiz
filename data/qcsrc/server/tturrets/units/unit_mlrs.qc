@@ -46,6 +46,7 @@ void turret_mlrs_attack()
     missile.enemy              = self.enemy;
 
 	CSQCProjectile(missile, TRUE, PROJECTILE_ROCKET);
+	missile.effects |= EF_NODEPTHTEST; // projectile has a fly sound
 
     te_explosion (missile.origin);
 

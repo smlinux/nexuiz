@@ -116,6 +116,7 @@ void turret_hk_attack()
     missile.ticrate          = max(cvar("sys_ticrate"),0.05);
 
 	CSQCProjectile(missile, FALSE, PROJECTILE_ROCKET);
+	missile.effects |= EF_NODEPTHTEST; // projectile has a fly sound
 
     te_explosion (missile.origin);
 

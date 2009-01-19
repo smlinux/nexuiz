@@ -344,6 +344,7 @@ void walker_fire_rocket(vector org)
     rocket.tur_health         = time + 9;
 
 	CSQCProjectile(rocket, TRUE, PROJECTILE_ROCKET);
+	rocket.effects |= EF_NODEPTHTEST; // projectile has a fly sound
 
     te_explosion (rocket.origin);
 
