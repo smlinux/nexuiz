@@ -74,7 +74,7 @@ void TossGib (string mdlname, vector org, vector v, float destroyontouch)
 
 void Ent_GibSplash()
 {
-	float amount, type, isgentle;
+	float amount, type;
 	vector org, vel, mi, ma;
 
 	float c, gibfactor, randomvalue;
@@ -90,7 +90,6 @@ void Ent_GibSplash()
 
 	if(cvar("cl_gentle"))
 		type |= 0x80; // set gentle bit
-	isgentle = (type & 0x80 || cvar("cl_gentle"));
 
 	gibfactor = 1 - cvar("cl_nogibs");
 	if(gibfactor <= 0)
@@ -143,7 +142,7 @@ void Ent_GibSplash()
 			}
 			break;
 		case 0x02:
-			pointparticles(particleeffectnum("blood"), org, vel, amount);
+			pointparticles(particleeffectnum("blood"), org, vel, amount * 16);
 			break;
 		case 0x03:
 			if(random() < amount)
@@ -153,7 +152,7 @@ void Ent_GibSplash()
 			pointparticles(particleeffectnum("damage_dissolve"), org, vel, amount);
 			break;
 		case 0x82:
-			pointparticles(particleeffectnum("damage_hit"), org, vel, amount);
+			pointparticles(particleeffectnum("damage_hit"), org, vel, amount * 16);
 			break;
 		case 0x83:
 			// no gibs in gentle mode, sorry
