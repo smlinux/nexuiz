@@ -198,7 +198,7 @@ void CSQC_UpdateView(float w, float h)
 	entity e;
 	float fov;
 	float f;
-	vector v1, v2;
+	vector v1, v2, delta;
 
 	dprint_load();
 	WaypointSprite_Load();
@@ -334,8 +334,8 @@ void CSQC_UpdateView(float w, float h)
 			camera_offset = '0 0 0';
 			new_angles = view_angles;
 			camera_offset_z += 20;
-			camera_offset_x -= 20 * cos(new_angles_y * DEG2RAD);
-			camera_offset_y -= 20 * sin(new_angles_y * DEG2RAD);
+			camera_offset_x += 20 * -cos(new_angles_y * DEG2RAD);
+			camera_offset_y += 20 * -sin(new_angles_y * DEG2RAD);
 			current_origin = view_origin;
 		}
 
@@ -343,21 +343,40 @@ void CSQC_UpdateView(float w, float h)
 		if( cvar("camera_roll") )
 			mouse_angles_z += cvar("camera_roll") * cvar("camera_speed_roll");
 
-		m = getmousepos() * 0.1;
-		if(vlen(m)>cvar("camera_mouse_treshold"))
+		if(!cvar("camera_look_player"))
 		{
-			mouse_angles_x += m_y * cos(mouse_angles_z * DEG2RAD) + (m_x * sin(mouse_angles_z * DEG2RAD));
-			mouse_angles_y -= m_x * cos(mouse_angles_z * DEG2RAD) + (m_y * -sin(mouse_angles_z * DEG2RAD));
+			m = getmousepos() * 0.1;
+			if(vlen(m)>cvar("camera_mouse_treshold"))
+			{
+				mouse_angles_x += m_y * cos(mouse_angles_z * DEG2RAD) + (m_x * sin(mouse_angles_z * DEG2RAD));
+				mouse_angles_y -= m_x * cos(mouse_angles_z * DEG2RAD) + (m_y * -sin(mouse_angles_z * DEG2RAD));
+			}
+
+			while (mouse_angles_x < -180)
+				mouse_angles_x = mouse_angles_x + 360;
+			while (mouse_angles_x > 180)
+				mouse_angles_x = mouse_angles_x - 360;
+			while (mouse_angles_y < -180)
+				mouse_angles_y = mouse_angles_y + 360;
+			while (mouse_angles_y > 180)
+				mouse_angles_y = mouse_angles_y - 360;
+			
+			delta = '0 0 0';			
+			if( mouse_angles_y < -90 && new_angles_y > 0)
+				delta = '0 360 0';
+			if( mouse_angles_y > 90 && new_angles_y < -90)
+				delta = '0 -360 0';
+
+			new_angles += (mouse_angles - new_angles + delta) * attenuation;
 		}
-		
-		new_angles += (mouse_angles - new_angles) * attenuation;
 		
 		// Camera position
 		if( cvar("camera_direction_x") )
 		{
 			camera_offset_x += cvar("camera_direction_x") * speed * cos(new_angles_y * DEG2RAD);
 			camera_offset_y += cvar("camera_direction_x") * speed * sin(new_angles_y * DEG2RAD);
-		//	camera_offset_z += cvar("camera_direction_x") * speed * -sin(new_angles_x * DEG2RAD);			
+			if( cvar("camera_forward_follows") )
+				camera_offset_z += cvar("camera_direction_x") * speed * -sin(new_angles_x * DEG2RAD);
 		}
 
 		if( cvar("camera_direction_y") )
@@ -402,6 +421,45 @@ void CSQC_UpdateView(float w, float h)
 				
 			new_origin = current_origin + current_camera_offset;
 		}
+
+		if(cvar("camera_look_player"))
+		{
+			local vector dir, delta;
+			local float n;
+			
+			dir = normalize(view_origin - new_origin);
+			n = mouse_angles_z;
+			mouse_angles = vectoangles(dir);
+			mouse_angles_x = mouse_angles_x * -1;
+			mouse_angles_z = n;
+
+			while (mouse_angles_x < -180)
+				mouse_angles_x = mouse_angles_x + 360;
+			while (mouse_angles_x > 180)
+				mouse_angles_x = mouse_angles_x - 360;
+			while (mouse_angles_y < -180)
+				mouse_angles_y = mouse_angles_y + 360;
+			while (mouse_angles_y > 180)
+				mouse_angles_y = mouse_angles_y - 360;
+
+			delta = '0 0 0';
+			if(mouse_angles_y < -90 && new_angles_y > 0)
+				delta = '0 360 0';
+			if(mouse_angles_y > 90 && new_angles_y < -90)
+				delta = '0 -360 0';
+
+			n = 1 / max(1, cvar("camera_look_attenuation"));		
+			new_angles += (mouse_angles - new_angles + delta) * n;
+		}
+
+		while (new_angles_x < -180)
+			new_angles_x = new_angles_x + 360;
+		while (new_angles_x > 180)
+			new_angles_x = new_angles_x - 360;
+		while (new_angles_y < -180)
+			new_angles_y = new_angles_y + 360;
+		while (new_angles_y > 180)
+			new_angles_y = new_angles_y - 360;
 
 		R_SetView(VF_ANGLES, new_angles);
 		R_SetView(VF_ORIGIN, new_origin);
