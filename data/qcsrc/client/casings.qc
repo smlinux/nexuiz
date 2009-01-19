@@ -27,7 +27,7 @@ void Casing_Touch()
 		return;
 	}
 
-	if(trace_ent.solid == SOLID_BSP && !trace_networkentity)
+	if(!trace_ent || trace_ent.solid == SOLID_BSP)
 	{
 		if(vlen(self.velocity) > 50)
 		{
@@ -46,9 +46,10 @@ void Casing_Touch()
 						s = strcat("weapons/brass", ftos(f), ".wav");
 						break;
 				}
+
 				sound (self, CHAN_PROJECTILE, s, VOL_BASE, ATTN_NORM);
+				self.nextthink = time + 0.7;
 			}
-			self.nextthink = time + 0.2;
 		}
 	}
 }
@@ -84,6 +85,7 @@ void Ent_Casing()
 	casing.move_touch = Casing_Touch;
 	casing.move_time = time;
 	casing.event_damage = Casing_Damage;
+	casing.solid = SOLID_TRIGGER;
 
 	switch(casing.state)
 	{
@@ -104,4 +106,10 @@ void Casings_Precache()
 {
 	precache_model("models/casing_shell.mdl");
 	precache_model("models/casing_bronze.mdl");
+	precache_sound("weapons/brass1.wav");
+	precache_sound("weapons/brass2.wav");
+	precache_sound("weapons/brass3.wav");
+	precache_sound("weapons/casings1.wav");
+	precache_sound("weapons/casings2.wav");
+	precache_sound("weapons/casings3.wav");
 }
