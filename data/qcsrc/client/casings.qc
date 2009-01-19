@@ -48,10 +48,11 @@ void Casing_Touch()
 				}
 
 				sound (self, CHAN_PROJECTILE, s, VOL_BASE, ATTN_NORM);
-				self.nextthink = time + 0.7;
 			}
 		}
 	}
+
+	self.nextthink = time + 0.2;
 }
 
 void Casing_Damage(float thisdmg, float hittype, vector org, vector thisforce)
