@@ -88,8 +88,9 @@ void Ent_GibSplash()
 	mi = decompressShortVector(ReadShort());
 	ma = decompressShortVector(ReadShort());
 
+	if(cvar("cl_gentle"))
+		type |= 0x80; // set gentle bit
 	isgentle = (type & 0x80 || cvar("cl_gentle"));
-	type = type & 0x7F;
 
 	gibfactor = 1 - cvar("cl_nogibs");
 	if(gibfactor <= 0)
@@ -99,53 +100,64 @@ void Ent_GibSplash()
 
 	if(cvar("ekg"))
 		amount *= 5;
+	
+	self.origin = org; // for the sounds
 
-	if(type == 1) // full gibbage
+	switch(type)
 	{
-		sound (self, CHAN_PAIN, "misc/gib.wav", VOL_BASE, ATTN_NORM);
+		case 0x01:
+			sound (self, CHAN_PAIN, "misc/gib.wav", VOL_BASE, ATTN_NORM);
 
-		if(random() < amount)
-			TossGib("models/gibs/eye.md3", org, vel + randomvec() * 150, 0);
-		te_bloodshower(org + mi, org + ma, 1200, 1000 * amount);
-		if(random() < amount)
-			TossGib("models/gibs/bloodyskull.md3", org, vel + randomvec() * 100, 0);
+			if(random() < amount)
+				TossGib("models/gibs/eye.md3", org, vel + randomvec() * 150, 0);
+			te_bloodshower(org + mi, org + ma, 1200, 1000 * amount);
+			if(random() < amount)
+				TossGib("models/gibs/bloodyskull.md3", org, vel + randomvec() * 100, 0);
 
-		for(c = 0; c < amount; ++c)
-		{
-			randomvalue = amount - c;
-				
-			if(random() < randomvalue)
-				TossGib ("models/gibs/arm.md3", org, vel + randomvec() * (random() * 120 + 90),0);
-			if(random() < randomvalue)
-				TossGib ("models/gibs/arm.md3", org, vel + randomvec() * (random() * 120 + 90),0);
-			if(random() < randomvalue)
-				TossGib ("models/gibs/chest.md3", org + '0 0 -12', vel + randomvec() * (random() * 120 + 80),0);
-			if(random() < randomvalue)
-				TossGib ("models/gibs/smallchest.md3", org, vel + randomvec() * (random() * 120 + 80),0);
-			if(random() < randomvalue)
-				TossGib ("models/gibs/leg1.md3", org + '0 0 -5', vel + randomvec() * (random() * 120 + 85),0);
-			if(random() < randomvalue)
-				TossGib ("models/gibs/leg2.md3", org + '0 0 -9', vel + randomvec() * (random() * 120 + 85),0);
+			for(c = 0; c < amount; ++c)
+			{
+				randomvalue = amount - c;
+					
+				if(random() < randomvalue)
+					TossGib ("models/gibs/arm.md3", org, vel + randomvec() * (random() * 120 + 90),0);
+				if(random() < randomvalue)
+					TossGib ("models/gibs/arm.md3", org, vel + randomvec() * (random() * 120 + 90),0);
+				if(random() < randomvalue)
+					TossGib ("models/gibs/chest.md3", org + '0 0 -12', vel + randomvec() * (random() * 120 + 80),0);
+				if(random() < randomvalue)
+					TossGib ("models/gibs/smallchest.md3", org, vel + randomvec() * (random() * 120 + 80),0);
+				if(random() < randomvalue)
+					TossGib ("models/gibs/leg1.md3", org + '0 0 -5', vel + randomvec() * (random() * 120 + 85),0);
+				if(random() < randomvalue)
+					TossGib ("models/gibs/leg2.md3", org + '0 0 -9', vel + randomvec() * (random() * 120 + 85),0);
 
-			// these splat on impact
-			if(random() < randomvalue)
-				TossGib ("models/gibs/chunk.mdl", org, vel + randomvec() * 450,1);
-			if(random() < randomvalue)
-				TossGib ("models/gibs/chunk.mdl", org, vel + randomvec() * 450,1);
-			if(random() < randomvalue)
-				TossGib ("models/gibs/chunk.mdl", org, vel + randomvec() * 450,1);
-			if(random() < randomvalue)
-				TossGib ("models/gibs/chunk.mdl", org, vel + randomvec() * 450,1);
-		}
-	}
-	else if(type == 2) // just blood
-	{
-		pointparticles(particleeffectnum("blood"), org, vel, amount);
-	}
-	else if(type == 3) // single gib
-	{
-		if(random() < amount)
-			TossGib ("models/gibs/chunk.mdl", org, vel, 1);
+				// these splat on impact
+				if(random() < randomvalue)
+					TossGib ("models/gibs/chunk.mdl", org, vel + randomvec() * 450,1);
+				if(random() < randomvalue)
+					TossGib ("models/gibs/chunk.mdl", org, vel + randomvec() * 450,1);
+				if(random() < randomvalue)
+					TossGib ("models/gibs/chunk.mdl", org, vel + randomvec() * 450,1);
+				if(random() < randomvalue)
+					TossGib ("models/gibs/chunk.mdl", org, vel + randomvec() * 450,1);
+			}
+			break;
+		case 0x02:
+			pointparticles(particleeffectnum("blood"), org, vel, amount);
+			break;
+		case 0x03:
+			if(random() < amount)
+				TossGib ("models/gibs/chunk.mdl", org, vel, 1);
+			break;
+		case 0x81:
+			pointparticles(particleeffectnum("damage_dissolve"), org, vel, amount);
+			break;
+		case 0x82:
+			pointparticles(particleeffectnum("damage_hit"), org, vel, amount);
+			break;
+		case 0x83:
+			// no gibs in gentle mode, sorry
+			break;
 	}
 }
 

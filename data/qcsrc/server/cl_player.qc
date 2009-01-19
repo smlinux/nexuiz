@@ -547,7 +547,6 @@ void PlayerDamage (entity inflictor, entity attacker, float damage, float deatht
 		if(sv_gentle > 0) {
 			// remove corpse
 			PlayerCorpseDamage (inflictor, attacker, 100.0, deathtype, hitloc, force);
-			pointparticles(particleeffectnum("damage_dissolve"), self.origin, force, 1);
 		}
 	}
 }
