@@ -11,6 +11,7 @@ void SUB_Stop()
 .float count; // set if clientside projectile
 .float cnt; // sound index
 .float gravity;
+.float snd_looping;
 
 void Projectile_Draw()
 {
@@ -89,18 +90,21 @@ void Projectile_Draw()
 void loopsound(entity e, float ch, string samp, float vol, float attn)
 {
 	if(csqc_flags & CSQC_FLAG_COLORCODES)
+	{
 		sound(e, ch, samp, vol, attn);
+		e.snd_looping = 1;
+	}
 }
 
 void Ent_RemoveProjectile()
 {
-	if(self.cnt)
-		loopsound(self, CHAN_PROJECTILE, "misc/null.wav", VOL_BASE, ATTN_NORM);
+	if(self.snd_looping)
+		sound(self, CHAN_PROJECTILE, "misc/null.wav", VOL_BASE, ATTN_NORM);
 }
 
 void Ent_Projectile()
 {
-	float f;
+	float f, r;
 
 	InterpolateOrigin_Undo();
 

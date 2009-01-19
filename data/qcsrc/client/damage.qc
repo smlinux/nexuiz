@@ -79,14 +79,26 @@ void Ent_DamageInfo()
 		{
 			case WEP_LASER:
 				org2 = org + backoff * 8;
-				pointparticles(particleeffectnum("laser_impact"), org2, backoff * 1000, 1);
 				sound (self, CHAN_PROJECTILE, "weapons/laserimpact.wav", VOL_BASE, ATTN_NORM);
+				pointparticles(particleeffectnum("laser_impact"), org2, backoff * 1000, 1);
 				break;
 			case WEP_SHOTGUN:
 				pointparticles(particleeffectnum("shotgun_impact"), org, backoff * 1000, 1);
+				if(r < 0.05)
+					sound(self, CHAN_PROJECTILE, "weapons/ric1.wav", VOL_BASE, ATTN_NORM);
+				else if(r < 0.1)
+					sound(self, CHAN_PROJECTILE, "weapons/ric2.wav", VOL_BASE, ATTN_NORM);
+				else if(r < 0.2)
+					sound(self, CHAN_PROJECTILE, "weapons/ric3.wav", VOL_BASE, ATTN_NORM);
 				break;
 			case WEP_UZI:
 				pointparticles(particleeffectnum("machinegun_impact"), org, backoff * 1000, 1);
+				if(r < 0.05)
+					sound(self, CHAN_PROJECTILE, "weapons/ric1.wav", VOL_BASE, ATTN_NORM);
+				else if(r < 0.1)
+					sound(self, CHAN_PROJECTILE, "weapons/ric2.wav", VOL_BASE, ATTN_NORM);
+				else if(r < 0.2)
+					sound(self, CHAN_PROJECTILE, "weapons/ric3.wav", VOL_BASE, ATTN_NORM);
 				break;
 			case WEP_GRENADE_LAUNCHER:
 				org2 = org + backoff * 12;
@@ -204,6 +216,12 @@ void Ent_DamageInfo()
 				break;
 			case WEP_CAMPINGRIFLE:
 				pointparticles(particleeffectnum("machinegun_impact"), org, backoff * 1000, 1);
+				if(r < 0.2)
+					sound(self, CHAN_PROJECTILE, "weapons/ric1.wav", VOL_BASE, ATTN_NORM);
+				else if(r < 0.4)
+					sound(self, CHAN_PROJECTILE, "weapons/ric2.wav", VOL_BASE, ATTN_NORM);
+				else if(r < 0.5)
+					sound(self, CHAN_PROJECTILE, "weapons/ric3.wav", VOL_BASE, ATTN_NORM);
 				break;
 			default:
 				dprint("Unhandled damage of weapon ", ftos(hitwep), "\n");
@@ -227,6 +245,9 @@ void DamageInfo_Precache()
 	precache_sound("weapons/hookbomb_impact.wav");
 	precache_sound("weapons/laserimpact.wav");
 	precache_sound("weapons/neximpact.wav");
+	precache_sound ("weapons/ric1.wav");
+	precache_sound ("weapons/ric2.wav");
+	precache_sound ("weapons/ric3.wav");
 	precache_sound("weapons/rocket_impact.wav");
 	precache_sound("weapons/seekerexp1.wav");
 	precache_sound("weapons/seekerexp2.wav");
@@ -235,8 +256,4 @@ void DamageInfo_Precache()
 	precache_sound("weapons/tagexp2.wav");
 	precache_sound("weapons/tagexp3.wav");
 	precache_sound("weapons/tag_impact.wav");
-
-	// precache_sound ("weapons/ric1.wav"); // not used by anything
-	// precache_sound ("weapons/ric2.wav"); // not used by anything
-	// precache_sound ("weapons/ric3.wav"); // not used by anything
 }
