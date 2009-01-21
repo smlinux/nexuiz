@@ -761,7 +761,7 @@ type alphastatic
 tex 0 8
 size 25 30
 alpha 100 256 400
-color 0xff0000 0xe62b00
+color 0x000000 0x420000
 originjitter 11 11 11
 
 
@@ -1201,7 +1201,7 @@ gravity -0.11
 //marker
 effect TR_KNIGHTSPIKE // used for MF_TRACER2
 type alphastatic
-color 0xFF0000 0xFF0000
+color 0x666666 0x000000
 tex 62 62
 size 1 1 
 sizeincrease -0.1
