@@ -159,6 +159,7 @@ void func_breakable_damage(entity inflictor, entity attacker, float damage, floa
 
 void func_breakable_reset()
 {
+	self.team = self.team_saved;
 	func_breakable_look_restore();
 	if(self.spawnflags & 1)
 		func_breakable_behave_destroyed();
@@ -205,5 +206,6 @@ void spawnfunc_func_breakable() {
 
 	self.team_saved = self.team;
 
+	self.reset = func_breakable_reset;
 	func_breakable_reset();
 }

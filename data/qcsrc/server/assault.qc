@@ -54,6 +54,7 @@ void spawnfunc_target_objective() {
 	self.classname = "target_objective";
 	self.use = assault_objective_use;
 	assault_objective_reset();
+	self.reset = assault_objective_reset;
 }
 
 
@@ -212,6 +213,7 @@ void spawnfunc_target_assault_roundend() {
 	self.classname = "target_assault_roundend";
 	self.use = target_assault_roundend_use;
 	self.cnt = 0; // first round
+	self.reset = target_assault_roundend_reset;
 }
 
 void assault_roundstart_use() {

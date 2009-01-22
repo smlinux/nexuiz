@@ -639,7 +639,11 @@ void spawnfunc_info_player_team4()
 	spawnfunc_info_player_deathmatch();
 };
 
-
+void item_flag_reset()
+{
+	DropFlag(self, world, world);
+	ReturnFlag(self);
+}
 
 
 /*QUAKED spawnfunc_item_flag_team1 (0 0.5 0.8) (-48 -48 -37) (48 48 37)
@@ -737,6 +741,8 @@ void spawnfunc_item_flag_team1()
 	WaypointSprite_UpdateTeamRadar(self.sprite, RADARICON_FLAG, '1 0 0');
 
 	precache_model("models/onslaught/generator_shield.md3");
+
+	self.reset = item_flag_reset;
 };
 
 /*QUAKED spawnfunc_item_flag_team2 (0 0.5 0.8) (-48 -48 -24) (48 48 64)
@@ -833,6 +839,8 @@ void spawnfunc_item_flag_team2()
 	WaypointSprite_UpdateTeamRadar(self.sprite, RADARICON_FLAG, '0 0 1');
 
 	precache_model("models/onslaught/generator_shield.md3");
+
+	self.reset = item_flag_reset;
 };
 
 

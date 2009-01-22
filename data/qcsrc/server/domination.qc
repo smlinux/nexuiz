@@ -490,6 +490,7 @@ void spawnfunc_dom_controlpoint()
 	}
 	self.think = dom_controlpoint_setup;
 	self.nextthink = time + 0.1;
+	self.reset = dom_controlpoint_setup;
 
 	if(!self.scale)
 		self.scale = 0.6;

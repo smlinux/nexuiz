@@ -305,8 +305,6 @@ float playerid_last;
 .vector death_origin;
 .vector killer_origin;
 
-.float isdecor;
-
 float default_player_alpha;
 float default_weapon_alpha;
 

@@ -446,6 +446,14 @@ void spawn_default_runespawnpoints()
 	}
 }
 
+void rune_reset()
+{
+	if(self.owner)
+		if(self.owner.classname != "runematch_spawn_point")
+			DropAllRunes(self.owner);
+	rune_respawn();
+}
+
 void spawn_runes()
 {
 	float r, num, max_num, rn, cs, numrunes, runes_left, curses_left, tries, prevent_same;
@@ -581,6 +589,7 @@ void spawn_runes()
 		e.movetype = MOVETYPE_TOSS;
 		e.solid = SOLID_TRIGGER;
 		e.flags = FL_ITEM;
+		e.reset = rune_reset;
 		setmodel(e, "models/runematch/rune.mdl"); // precision set below
 		setorigin(e, spot.origin);
 		setsize(e, '0 0 -35', '0 0 0');

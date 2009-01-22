@@ -257,9 +257,6 @@ void Seeker_Tag_Damage (entity inflictor, entity attacker, float damage, float d
 
 void Seeker_Tag_Explode ()
 {
-	vector	org2;
-	float b;
-
 	//if(other==self.owner)
 	//    return;
 	Damage_DamageInfo(self.origin, 0, 0, 0, self.velocity, WEP_SEEKER | HITTYPE_BOUNCE);

@@ -38,7 +38,6 @@ void spawn_tdeath(vector v0, entity e, vector v)
 .entity pusher;
 void TeleportPlayer(entity teleporter, entity player, vector to, vector to_angles, vector to_velocity, vector telefragmin, vector telefragmax)
 {
-	entity head;
 	entity oldself;
 	entity telefragger;
 	vector from;

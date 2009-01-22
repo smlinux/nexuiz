@@ -2,14 +2,7 @@ void(float imp) W_SwitchWeapon;
 
 void W_Laser_Touch (void)
 {
-	vector	dir;
-	vector org2;
-	vector normal;
-
 	PROJECTILE_TOUCH;
-
-	normal = trace_plane_normal;
-	dir = normalize (self.owner.origin - self.origin);
 
 	self.event_damage = SUB_Null;
 	if (self.dmg)

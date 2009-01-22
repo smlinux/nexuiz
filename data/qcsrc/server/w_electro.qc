@@ -1,8 +1,6 @@
 
 void W_Plasma_Explode (void)
 {
-	vector org2;
-
 	if(other.takedamage == DAMAGE_AIM)
 		if(other.classname == "player")
 			if(IsDifferentTeam(self.owner, other))

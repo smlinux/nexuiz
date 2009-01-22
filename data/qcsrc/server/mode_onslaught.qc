@@ -560,6 +560,20 @@ void onslaught_controlpoint_updatesprite(entity e)
 	}
 }
 
+void onslaught_generator_reset()
+{
+	self.team = self.team_saved;
+	self.lasthealth = self.max_health = self.health = cvar("g_onslaught_gen_health");
+	self.takedamage = DAMAGE_AIM;
+	self.bot_attack = TRUE;
+	self.iscaptured = TRUE;
+	self.islinked = TRUE;
+	self.isshielded = TRUE;
+	self.enemy.solid = SOLID_NOT;
+	self.think = onslaught_generator_delayed;
+	self.nextthink = time + 0.2;
+}
+
 /*QUAKED spawnfunc_onslaught_generator (0 .5 .8) (-32 -32 -24) (32 32 64)
 Base generator.
 
@@ -618,21 +632,9 @@ void spawnfunc_onslaught_generator()
 	WaypointSprite_UpdateRule(self.sprite, COLOR_TEAM2, SPRITERULE_TEAMPLAY);
 
 	onslaught_updatelinks();
-};
 
-void onslaught_generator_reset()
-{
-	self.team = self.team_saved;
-	self.lasthealth = self.max_health = self.health = cvar("g_onslaught_gen_health");
-	self.takedamage = DAMAGE_AIM;
-	self.bot_attack = TRUE;
-	self.iscaptured = TRUE;
-	self.islinked = TRUE;
-	self.isshielded = TRUE;
-	self.enemy.solid = SOLID_NOT;
-	self.think = onslaught_generator_delayed;
-	self.nextthink = time + 0.2;
-}
+	self.reset = onslaught_generator_reset;
+};
 
 .float waslinked;
 void onslaught_controlpoint_icon_damage(entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force)
@@ -797,6 +799,27 @@ void onslaught_controlpoint_touch()
 	self.colormap = e.colormap;
 };
 
+void onslaught_controlpoint_reset()
+{
+	if(self.goalentity && self.goalentity != world)
+		remove(self.goalentity);
+	self.goalentity = world;
+	self.team = 0;
+	self.colormap = 1024;
+	self.iscaptured = FALSE;
+	self.islinked = FALSE;
+	self.isshielded = TRUE;
+	self.enemy.solid = SOLID_NOT;
+	self.enemy.colormap = self.colormap;
+	self.think = self.enemy.think = SUB_Null;
+	self.nextthink = 0; // don't like SUB_Null :P
+	
+	onslaught_updatelinks();
+
+	activator = self;
+	SUB_UseTargets(); // to reset the structures, playerspawns etc.
+}
+
 /*QUAKED spawnfunc_onslaught_controlpoint (0 .5 .8) (-32 -32 0) (32 32 128)
 Control point.  Be sure to give this enough clearance so that the shootable part has room to exist
 
@@ -851,28 +874,9 @@ void spawnfunc_onslaught_controlpoint()
 	WaypointSprite_UpdateRule(self.sprite, COLOR_TEAM2, SPRITERULE_TEAMPLAY);
 
 	onslaught_updatelinks();
+
+	self.reset = onslaught_controlpoint_reset;
 };
-
-void onslaught_controlpoint_reset()
-{
-	if(self.goalentity && self.goalentity != world)
-		remove(self.goalentity);
-	self.goalentity = world;
-	self.team = 0;
-	self.colormap = 1024;
-	self.iscaptured = FALSE;
-	self.islinked = FALSE;
-	self.isshielded = TRUE;
-	self.enemy.solid = SOLID_NOT;
-	self.enemy.colormap = self.colormap;
-	self.think = self.enemy.think = SUB_Null;
-	self.nextthink = 0; // don't like SUB_Null :P
-	
-	onslaught_updatelinks();
-
-	activator = self;
-	SUB_UseTargets(); // to reset the structures, playerspawns etc.
-}
 
 float onslaught_link_send(entity to, float sendflags)
 {
