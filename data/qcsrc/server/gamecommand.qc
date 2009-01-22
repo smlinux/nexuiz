@@ -820,6 +820,11 @@ void GameCommand(string command)
 		return;
 	}
 
+	if(argv(0) == "__FORCE_READY_RESTART")
+	{
+		ReadyRestartForce();
+	}
+
 	print("Invalid command. For a list of supported commands, try sv_cmd help.\n");
 }
 
