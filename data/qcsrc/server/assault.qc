@@ -274,11 +274,10 @@ void assault_new_round() {
 	ent = find(world, classname, "info_player_deathmatch");
 	while (ent)
 	{
-		if(ent.team == COLOR_TEAM1) {
+		if(ent.team == COLOR_TEAM1)
 			ent.team = COLOR_TEAM2;
-		} else {
+		else if(ent.team == COLOR_TEAM2)
 			ent.team = COLOR_TEAM1;
-		}
 		ent = find(ent, classname, "info_player_deathmatch");
 	}
 
@@ -288,7 +287,7 @@ void assault_new_round() {
 	{
 		if(ent.team == COLOR_TEAM1)
 			ent.team = COLOR_TEAM2;
-		else
+		else if(ent.team == COLOR_TEAM2)
 			ent.team = COLOR_TEAM1;
 		ent = find(ent, classname, "func_assault_destructible");
 	}
