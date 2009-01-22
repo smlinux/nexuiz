@@ -169,9 +169,6 @@ void multi_trigger()
 	{	// we can't just remove (self) here, because this is a touch function
 		// called wheil C code is looping through area links...
 		self.touch = SUB_Null;
-
-		self.nextthink = time + 0.1;
-		self.think = SUB_Remove;
 	}
 };
 
@@ -219,6 +216,16 @@ void multi_eventdamage (vector hitloc, float damage, entity inflictor, entity at
 	}
 }
 
+void multi_reset()
+{
+	self.touch = multi_touch;
+	self.health = self.max_health;
+	self.takedamage = DAMAGE_YES;
+	self.solid = SOLID_BBOX;
+	self.think = SUB_Null;
+	self.team = self.team_saved;
+}
+
 /*QUAKED spawnfunc_trigger_multiple (.5 .5 .5) ? notouch
 Variable sized repeatable trigger.  Must be targeted at one or more entities.  If "health" is set, the trigger must be killed to activate each time.
 If "delay" is set, the trigger waits some time after activating before firing.
@@ -234,6 +241,7 @@ set "message" to text string
 */
 void spawnfunc_trigger_multiple()
 {
+	self.reset = multi_reset;
 	if (self.sounds == 1)
 	{
 		precache_sound ("misc/secret.wav");
@@ -306,6 +314,7 @@ This fixed size trigger cannot be touched, it can only be fired by other events.
 void spawnfunc_trigger_relay()
 {
 	self.use = SUB_UseTargets;
+	self.reset = spawnfunc_trigger_relay; // this spawnfunc resets fully
 };
 
 void delay_use()
@@ -314,12 +323,18 @@ void delay_use()
     self.nextthink = self.wait;
 }
 
+void delay_reset()
+{
+	self.think = SUB_Null;
+}
+
 void spawnfunc_trigger_delay()
 {
     if(!self.wait)
         self.wait = 1;
 
     self.use = delay_use;
+    self.reset = delay_reset;
 }
 
 //=============================================================================
@@ -355,6 +370,12 @@ void counter_use()
 	multi_trigger ();
 };
 
+void counter_reset()
+{
+	self.count = self.cnt;
+	multi_reset();
+}
+
 /*QUAKED spawnfunc_trigger_counter (.5 .5 .5) ? nomessage
 Acts as an intermediary for an action that takes multiple inputs.
 
@@ -367,8 +388,10 @@ void spawnfunc_trigger_counter()
 	self.wait = -1;
 	if (!self.count)
 		self.count = 2;
+	self.cnt = self.count;
 
 	self.use = counter_use;
+	self.reset = counter_reset;
 };
 
 .float triggerhurttime;
@@ -594,6 +617,14 @@ void pointparticles_think()
 	self.nextthink = time;
 }
 
+void pointparticles_reset()
+{
+	if(self.spawnflags & 1)
+		self.state = 1;
+	else
+		self.state = 0;
+}
+
 void spawnfunc_func_pointparticles()
 {
 	if(self.model != "")
@@ -617,10 +648,8 @@ void spawnfunc_func_pointparticles()
 	IFTARGETED
 	{
 		self.use = pointparticles_use;
-		if(self.spawnflags & 1)
-			self.state = 1;
-		else
-			self.state = 0;
+		self.reset = pointparticles_reset;
+		self.reset();
 	}
 	else
 		self.state = 1;
@@ -946,6 +975,14 @@ void laser_use()
 	misc_laser_aim();
 }
 
+void laser_reset()
+{
+	if(self.spawnflags & 1)
+		self.state = 1;
+	else
+		self.state = 0;
+}
+
 void spawnfunc_misc_laser()
 {
 	if(self.mdl)
@@ -992,11 +1029,9 @@ void spawnfunc_misc_laser()
 
 	IFTARGETED
 	{
+		self.reset = laser_reset;
+		laser_reset();
 		self.use = laser_use;
-		if(self.spawnflags & 1)
-			self.state = 1;
-		else
-			self.state = 0;
 	}
 	else
 		self.state = 1;
@@ -1197,7 +1232,8 @@ void spawnfunc_trigger_flipflop()
 {
 	if(self.spawnflags & 1)
 		self.state = 1;
-    self.use = flipflop_use;
+	self.use = flipflop_use;
+	self.reset = spawnfunc_trigger_flipflop; // perfect resetter
 }
 
 /*QUAKED spawnfunc_trigger_monoflop (.5 .5 .5) (-8 -8 -8) (8 8 8)
@@ -1229,6 +1265,12 @@ void monoflop_think()
 	SUB_UseTargets();
 }
 
+void monoflop_reset()
+{
+	self.state = 0;
+	self.nextthink = 0;
+}
+
 void spawnfunc_trigger_monoflop()
 {
 	if(!self.wait)
@@ -1239,6 +1281,7 @@ void spawnfunc_trigger_monoflop()
 		self.use = monoflop_use;
 	self.think = monoflop_think;
 	self.state = 0;
+	self.reset = monoflop_reset;
 }
 
 void multivibrator_send()
@@ -1278,6 +1321,14 @@ void multivibrator_toggle()
 	}
 }
 
+void multivibrator_reset()
+{
+	if(!(self.spawnflags & 1))
+		self.nextthink = 0; // wait for a trigger event
+	else
+		self.nextthink = max(1, time);
+}
+
 /*QUAKED trigger_multivibrator (.5 .5 .5) (-8 -8 -8) (8 8 8) START_ON
 "Multivibrator" trigger gate... repeatedly sends trigger events. When triggered, turns on or off.
 -------- KEYS --------
@@ -1302,12 +1353,7 @@ void spawnfunc_trigger_multivibrator()
 	self.nextthink = time;
 
 	IFTARGETED
-	{
-		if(!(self.spawnflags & 1))
-			self.nextthink = 0; // wait for a trigger event
-	}
-	else
-		self.nextthink = time;
+		multivibrator_reset();
 }
 
 
@@ -1471,10 +1517,16 @@ void trigger_relay_teamcheck_use()
 	}
 }
 
+void trigger_relay_teamcheck_reset()
+{
+	self.team = self.team_saved;
+}
+
 void spawnfunc_trigger_relay_teamcheck()
 {
 	self.team_saved = self.team;
 	self.use = trigger_relay_teamcheck_use;
+	self.reset = trigger_relay_teamcheck_reset;
 }
 
 

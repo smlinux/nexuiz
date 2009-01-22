@@ -51,14 +51,9 @@ void reset_map()
 		if(self.team_saved)
 			self.team = self.team_saved;
 
-		if(self.use == SUB_DontUseTargets)
-			self.use = SUB_UseTargets;
-
 		if(self.classname == STR_ITEM_KH_KEY)
 		{
 			kh_Key_AssignTo(self, world);
-			//if(self.owner)
-			//	kh_Key_DropAll(self.owner, TRUE);
 			kh_Key_Remove(self);
 		}
 		else if(self.classname == "droppedweapon"		// cleanup
