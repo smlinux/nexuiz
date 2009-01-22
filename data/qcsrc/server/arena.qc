@@ -50,29 +50,7 @@ void reset_map(float norespawn)
 		if(self.team_saved)
 			self.team = self.team_saved;
 
-		if(self.classname == "droppedweapon"		// cleanup
-				|| self.classname == "gib"
-				|| self.classname == "body")
-		{
-			remove(self);
-		}
-		else if(self.flags & FL_ITEM)			// reset items
-		{
-			if(self.state == 1)
-			{
-				self.model = string_null;
-				self.solid = SOLID_NOT;
-			}
-			else
-			{
-				self.model = self.mdl;
-				self.solid = SOLID_TRIGGER;
-			}
-			setorigin (self, self.origin);
-			self.think = SUB_Null;
-			self.nextthink = 0;
-		}
-		else if(self.flags & FL_PROJECTILE)		// remove any projectiles left
+		if(self.flags & FL_PROJECTILE) // remove any projectiles left
 		{
 			stopsound(self, CHAN_PAIN);
 			remove(self);
@@ -83,24 +61,16 @@ void reset_map(float norespawn)
 	for(self = world; (self = nextent(self)); )
 	if(clienttype(self) == CLIENTTYPE_NOTACLIENT)
 	{
+		if(self.reset2)
+		{
+			self.reset2();
+			continue;
+		}
+
 		if(self.classname == "sprite_waypoint")
 		{
-			if(self.health || g_keyhunt)
+			if(self.health || g_keyhunt) // TODO remove this KH workaround somehow
 				WaypointSprite_Kill(self);
-		}
-		else if(self.classname == "target_assault_roundstart")
-		{
-			self.use();
-		}
-		else if(self.classname == "trigger_gamestart")
-		{
-			if(self.wait)
-			{
-				self.think = self.use;
-				self.nextthink = game_starttime + self.wait;
-			}
-			else
-				self.use();
 		}
 	}
 

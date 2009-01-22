@@ -295,6 +295,23 @@ void Item_FindTeam()
 	}
 }
 
+void Item_Reset()
+{
+	if(self.state == 1)
+	{
+		self.model = string_null;
+		self.solid = SOLID_NOT;
+	}
+	else
+	{
+		self.model = self.mdl;
+		self.solid = SOLID_TRIGGER;
+	}
+	setorigin (self, self.origin);
+	self.think = SUB_Null;
+	self.nextthink = 0;
+}
+
 // Savage: used for item garbage-collection
 // TODO: perhaps nice special effect?
 void RemoveItem(void)
@@ -353,6 +370,7 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 	// is it a dropped weapon?
 	if (self.classname == "droppedweapon")
 	{
+		self.reset = SUB_Remove;
 		// it's a dropped weapon
 		self.movetype = MOVETYPE_TOSS;
 		self.solid = SOLID_TRIGGER;
@@ -370,6 +388,7 @@ void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, 
 	}
 	else
 	{
+		self.reset = Item_Reset;
 		// it's a level item
 		if(self.spawnflags & 1)
 			self.noalign = 1;

@@ -1393,6 +1393,7 @@ void gamestart_use() {
 
 void spawnfunc_trigger_gamestart() {
 	self.use = gamestart_use;
+	self.reset2 = spawnfunc_trigger_gamestart;
 
 	if(self.wait)
 	{

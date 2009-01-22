@@ -253,6 +253,7 @@ void spawnfunc_target_assault_roundstart() {
 	assault_attacker_team = COLOR_TEAM1;
 	self.classname = "target_assault_roundstart";
 	self.use = assault_roundstart_use;
+	self.reset2 = assault_roundstart_use;
 	InitializeEntity(self, assault_roundstart_use, INITPRIO_FINDTARGET);
 }
 

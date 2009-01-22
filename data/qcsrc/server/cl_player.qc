@@ -61,6 +61,7 @@ void CopyBody(float keepvelocity)
 	setorigin(self, oldself.origin);
 	setsize(self, oldself.mins, oldself.maxs);
 	self.oldorigin = oldself.origin;
+	self.reset = SUB_Remove;
 	self = oldself;
 }
 
